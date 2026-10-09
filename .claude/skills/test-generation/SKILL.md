@@ -211,7 +211,9 @@ Which checks a clause lists follows from its words, and the analyst is expected 
 - "limit", "once per", "no more than", "up to", "at most" → `L`
 - an optional trigger or a special ability with no cost (a spot is no cost) → one `-` is the board on which its
   whole effect would do nothing: not offered (Q-0034; shapes, "Spot X to <effect>"). With a cost it is offered
-  there and used for nothing, which is read under `F` or `+` as for an event, and is no `-`
+  there and used for nothing, which is read under `F` or `+` as for an event, and is no `-`. A play of a card after
+  the "to" is itself a cost (Q-0062): "add a burden to play a [shire] tale" with no tale in hand that can be
+  played is not offered, and that board is its `C-`
 - "may" → `O`. A response or any other special ability is the player's to use or not without the text saying
   so; list `O` for one only where declining has a consequence worth showing
 - "for each", "X" → `S` (and for an X, the zero case)

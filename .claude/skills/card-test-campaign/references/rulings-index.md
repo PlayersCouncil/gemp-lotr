@@ -310,7 +310,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A number that can only be one number is not asked for (F-0147)
 - "You may make <the other player> do X" (Q-0106)
 - Known shapes from the Dwarven errata (F-0181, F-0194, F-0182) [Q-0034]
-- "You may <do X to a card>" on a required trigger wants its choice 0 to 1 (Q-0010, F-0191)
+- "You may <do X to a card>" on a required trigger wants its choice 0 to 1 (Q-0010, F-0191) [F-0280]
 - A prevention is asked only when the effect will happen (F-0194, Q-0114)
 - A choice made ahead of a preventable exert loses the exert's own check (F-0206) [Q-0114]
 - "Spot X to <effect>" on an optional trigger or ability is no cost for Q-0034 (F-0167, F-0209, F-0211, F-0219)

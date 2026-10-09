@@ -158,6 +158,9 @@ is a response and a phase event (Eye of Barad-dur 5_96) is offered in its phase 
 (`mechanics/ResponseEventsAreNotPlayedByEffectsTests`). For "a [culture] event" a response event of that
 culture is the invalid candidate beside the phase events, and a phase word in the definition's filter beside
 it cannot be told from its absence: say so in Notes.
+Nor is an event of another phase played that way (CR 4.2 "event"): "play a [shire] tale" from hand in the
+regroup phase does not offer a Skirmish event that is a [shire] tale (Nine-fingered Frodo 10_112), and with that
+alone in hand the ability is not offered (Bilbo 59_49).
 
 **A response is offered once per use.** After a response cancels an ability or an event, no response to it is
 offered again (Q-0043), so a pass or decline written to answer a second offer answers the next decision instead.
@@ -218,6 +221,9 @@ the Dead…", null]`; Ferocious Haradrim 11_80 answering a death: `[null, "Requi
 Haradrim"]`). `FreepsResolveRuleFirst()` resolves the rule, the entry that belongs to no card, wherever it is
 listed; `FreepsResolveActionOrder(text)` resolves the entry whose wording contains the text and passes over an
 entry with no wording.
+A trigger added for the skirmish ("if that minion is overwhelmed, ...") raises the decision even when its effect
+will come to nothing (Cirdan 60_8 with one [elven] event: half, rounded down, is none): `FreepsResolveRuleFirst()`
+is still needed, and nothing is asked after it.
 There is no Shadow twin of either and there will not be: by rule the Free Peoples player is the one who orders
 simultaneous actions, whoever's they are.
 A companion whose own text answers his leaving play (Radagast 59_26) raises this decision whenever he is killed,
@@ -471,7 +477,7 @@ number"; the rule is under "modifier".
 
 **A play as a cost can come to nothing.** An ability whose cost is to play a card is offered, takes its other costs and the card's twilight, and does nothing if the card has left play by the time its play is complete, whatever removed it. Read the costs as paid, the effect as not done, and the phase's decision.
 
-**The loss of initiative comes with the play.** When a Free Peoples card played from hand takes the hand below four, `FreepsHasInitiative()` is still true while the card's entering step is being answered and false once its play is announced; a required "lose initiative" trigger and a required "each time you play" trigger for that play come up in one "Required responses" decision.
+**The loss of initiative comes with the play.** When a Free Peoples card played from hand takes the hand below four, `FreepsHasInitiative()` is still true while the card's entering step is being answered and false once its play is announced; a required "lose initiative" trigger and a required "each time you play" trigger for that play come up in one "Required responses" decision. Initiative is read again each time the game goes round its loop: cards cheated into a hand while a decision is pending give it back at the next answer (`FreepsHasInitiative()` is true after the other player's pass), which sets up a second loss in one turn for the `R` of "each time you lose initiative" (Memories of Darkness 60_2).
 
 **A card that discards itself as it is played was not played either.** A card discarded by its own "when you play this ..., or discard it" (the three Dunlendings of set 5, Stampeding Chief) is the same: the Free Peoples player's or the Shadow player's choice in that text is the first thing asked, before any trigger or response to the play, and if the card goes nothing answers its play. Beside the Watcher such a card is discarded first and the choice is not asked at all.
 
