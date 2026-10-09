@@ -484,7 +484,7 @@ Used in `cost: []` and `effect: []` arrays.
 | `Preventable` | player, text, cost[], effect[], instead?[] | "X may Y to prevent Z" |
 | `Multiple` | effects[] | Group subactions |
 | `Repeat` | times, effect[] | Do N times |
-| `DoWhile` | check, effect[] | Loop until check fails |
+| `DoWhile` | check, effect[] | Do the effect, then again while the check holds. The check must go false by what the effect did (`MemoryMatches` on what it memorized), or the game hangs (shapes.md, F-0322) |
 | `ForEachPlayer` | effect[] | Once per player |
 | `SendMessage` | text | Log text (also "do nothing") |
 
@@ -580,7 +580,7 @@ A Race to Mount Doom meta-site's `Trigger` and `Activated` are collected for eve
 `AddCultureTokens` and `ReinforceTokens` do nothing to a hindered card (Q-0070).
 
 **Card Movement:**
-`Discard(select, count?, player?, memorize?)`, `ReturnToHand(select, count?, player?)`, `Transfer(select, where, checkTarget?, memorize*)`, `StackCardsFromPlay/Hand/Deck/Discard(select, where, count?)`, `RemoveFromTheGame(select, count?, player?, memorize?)`
+`Discard(select, count?, player?, memorize?)`, `ReturnToHand(select, count?, player?)`, `Transfer(select, where, checkTarget?, fromSupport?, memorizeTransferred?, memorizeTarget?)`, `StackCardsFromPlay/Hand/Deck/Discard(select, where, count?)`, `RemoveFromTheGame(select, count?, player?, memorize?)`
 
 **Playing Cards:**
 `PlayCardFromHand(select, on?, discount?, memorize?)`, `PlayCardFromDiscard(select, on?, discount?, player?, memorize?)`, `PlayCardFromDrawDeck(select, on?, discount?, shuffle, showAll, memorize?)`, `PlayCardFromDeadPile(select, discount?, memorize?)`, `PlayCardFromStacked(select, on, discount?, memorize?)`, `PlayNextSite(filter?, memorize?)`

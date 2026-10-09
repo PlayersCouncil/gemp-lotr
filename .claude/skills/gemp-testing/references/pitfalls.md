@@ -337,9 +337,13 @@ phase arrives. Make the assertions that matter before the event that ends the ga
 **A starting fellowship.** `StartGame()` skips it. To test "(except in your starting fellowship)": the scenario
 constructor returns with player 1's "Starting fellowship" choice pending; `FreepsChooseCard(card)` plays a
 companion into it and player 2's choice is then pending. End the test there: going on deals opening hands.
-To play on instead, answer player 2's choice too (`ShadowDeclineChoosing()` takes nobody) and then call
+To play on instead, answer player 2's choice too (`ShadowDeclineChoosing()` takes nobody; `FreepsDeclineChoosing()`
+ends player 1's early, never `FreepsChoose("")`) and then call
 `StartGame(true, false)`, which leaves the starting fellowships alone; called while either choice is still
-pending it answers nothing and the game has not begun (Card_91_001_Tests).
+pending it answers nothing and the game has not begun (Card_91_001_Tests). While the choice is pending the game
+keeps the running total of the costs played in the twilight pool: `GetTwilight()` reads it (2 after a cost-2
+companion, a card offered only while the total with its cost is 4 or less), and the pool is emptied as turn 1
+begins (Card_94_003_Tests).
 
 **Archers get in the way.** `SkipToPhase` passes for both players and takes the first choice on required
 triggers, but it does not assign archery wounds. An archer on the table stops it, or kills the minion the test
