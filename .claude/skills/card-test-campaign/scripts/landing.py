@@ -210,9 +210,13 @@ def commit(argv):
 
 
 def main(argv):
-    if len(argv) < 3 or argv[1] in ("-h", "--help"):
+    # Help wherever it is asked for: "finish --help" once landed a batch under the name "--help".
+    if len(argv) < 3 or any(a in ("-h", "--help") for a in argv[1:]):
         print(__doc__)
         return 0
+    if argv[1] in ("finish", "commit") and argv[2].startswith("-"):
+        print("%s: the first word after it is the %s, and '%s' is an option" % (argv[1], "folder" if argv[1] == "finish" else "subject", argv[2]))
+        return 1
     args = list(argv[3:])
     with g.locked():
         if argv[1:3] == ["question", "add"]:
