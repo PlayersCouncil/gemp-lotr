@@ -564,6 +564,10 @@ board against him). Move the card to hand before its refusal is read, and read t
 control board. Race Text 91_15's old test read Barliman so; in an old file, look for the `MoveCardsToHand` that
 goes with each `assertFalse(...PlayAvailable(x))`.
 
+**`AddBurdens`, `RemoveBurdens` and `GetBurdens` are the current player's.** They reach the Ring-bearer of the
+player whose turn it is (`gameState().addBurdens`), so the other player's burdens cannot be laid or read beside
+them: "the other player's burdens are not counted" has no board (92_25), and no check is owed for it.
+
 **The other player's Free Peoples cards are not active on your turn.** A copy of a possession taken from the
 Shadow player's deck (`GetShadowCard`) and cheated onto your companion is inactive (CR 4.2 "active"), so no
 filter sees it. To put a card the opponent owns on a companion, use a Shadow card that is borne by companions:
@@ -746,6 +750,13 @@ hindered (`mechanics/TheOneRingIsNeverDiscardedTests`).
 **Maps and meta-sites cannot be hindered,** as sites cannot: a hinder of "a card" on a PC-Movie or Race to
 Mount Doom table does not offer them (`mechanics/MapsAndMetaSitesCannotBeHinderedTests`). The cheat
 `HinderCard` hinders whatever it is given and asks no rule.
+
+**A fellowship with no unhindered companion is still offered another move (F-0315, open).** CR 5.0 "hinder":
+"During the Regroup phase, if the fellowship has no unhindered companions, the Free Peoples player cannot choose
+to move." The engine asks "Do you want to make another move?" all the same and moves, so a test that hinders
+the Ring-bearer alone (or every companion) and then moves again passes on a board outside play. Before a second
+move with a hindered Ring-bearer, cheat in a plain companion who stays unhindered (Dwarf Guard 1_7) and count 1
+for him in the move's twilight and nothing for the hindered one (92_25).
 
 ## Tables and formats
 
