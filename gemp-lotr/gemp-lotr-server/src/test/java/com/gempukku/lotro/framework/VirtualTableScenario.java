@@ -74,6 +74,15 @@ public class VirtualTableScenario extends VirtualTable implements TestConstants,
         Assert.assertTrue(message, condition);
     }
 
+    /**
+     * A test table has no client at either seat, so it keeps a channel of its own to each: what a seat has been
+     * sent is then there to be read (FreepsHandIsRevealed, ShadowSeesCardInHand and their kin).
+     */
+    @Override
+    protected void BeforeGameStarts() {
+        KeepSeatChannels();
+    }
+
     public VirtualTableScenario(HashMap<String, String> cardIDs) throws CardNotFoundException, DecisionResultInvalidException {
         this(cardIDs, null, null, null, Multipath, null, null, null);
     }
@@ -431,6 +440,29 @@ public class VirtualTableScenario extends VirtualTable implements TestConstants,
      */
     public void UseTestBoosters() {
         _game.setPackOpener(new TestPackOpener(_productLibrary));
+    }
+
+    /**
+     * Has the game's pack opener offer one pack, "Test - Booster", whose contents are exactly the cards given, in
+     * the order given, every time it is opened: the pack for a test that needs a card the fixed test pack of
+     * UseTestBoosters() does not hold.  The pack is offered and opened as any other (the owner chooses it by its
+     * name, the other player is shown its cards, the owner chooses among them); the same blueprint may be given
+     * more than once.  A later call, or UseTestBoosters(), takes this pack's place.  Fails if no card is given, or
+     * if one of the ids is no card.
+     * @param blueprintIds The blueprint ids of the pack's cards, first to last.
+     */
+    public void UseBoosterOf(String... blueprintIds) {
+        Verify(blueprintIds != null && blueprintIds.length > 0, "UseBoosterOf was given no cards: a pack holds at least one.");
+        for (String blueprintId : blueprintIds) {
+            boolean known;
+            try {
+                known = blueprintId != null && _cardLibrary.getLotroCardBlueprint(blueprintId) != null;
+            } catch (CardNotFoundException notFound) {
+                known = false;
+            }
+            Verify(known, "UseBoosterOf was given '" + blueprintId + "', which is not the blueprint id of any card.");
+        }
+        _game.setPackOpener(new NamedPackOpener(List.of(blueprintIds)));
     }
 
 }

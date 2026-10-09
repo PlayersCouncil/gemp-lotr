@@ -159,6 +159,29 @@ public interface GameProperties extends TableBase {
 		return GetGameLogSinceMark().stream().anyMatch(message -> message.toLowerCase().contains(words));
 	}
 
+	/**
+	 * Whether the game has told the clients that the Free Peoples player's hand is revealed.  See HandIsRevealed.
+	 */
+	default boolean FreepsHandIsRevealed() { return HandIsRevealed(P1()); }
+	/**
+	 * Whether the game has told the clients that the Shadow player's hand is revealed.  See HandIsRevealed.
+	 */
+	default boolean ShadowHandIsRevealed() { return HandIsRevealed(P2()); }
+	/**
+	 * Whether the game has told the clients that the given player plays with a revealed hand ("You must play with
+	 * your hand revealed").  This is read from the game stats, where every client is told whose hands are open to
+	 * it, and not from the modifier that reveals the hand: true only if the stats last sent to each seat say so.
+	 * It goes by the player and not by the side that player has this turn.  Which cards of such a hand a seat has
+	 * in fact been sent is another reading: FreepsSeesCardInHand / ShadowSeesCardInHand.
+	 *
+	 * The table reads this from a channel it keeps for each seat from before the game's first step, and from a
+	 * client joined to each seat as the reading is made; it fails, saying which, if any two of them were told
+	 * different things.  It fails as well on a table that keeps no such channels (the unit test table keeps them).
+	 * @param player The player whose hand is asked about.
+	 * @return True if every client has been told that player's hand is revealed.
+	 */
+	default boolean HandIsRevealed(String player) { return SeatChannel.handIsRevealed(this, player); }
+
 	default boolean RBWearingOneRing() { return game().getGameState().isWearingRing(); }
 	default PhysicalCardImpl GetRing() {
 		return (PhysicalCardImpl)gameState().getRing(P1());

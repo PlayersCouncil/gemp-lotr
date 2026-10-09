@@ -32,6 +32,7 @@ The unit test rig: a virtual table with two made-up players, where every card th
 - `void InitializeGameWithDecks(Map<String, LotroDeck> decks, String formatName, String freepsMetaSiteId, String shadowMetaSiteId)` — Starts up a game of LOTR-TCG with the given decks and format.
 - `void InitializeGameWithDecks(Map<String, LotroDeck> decks, String formatName, String freepsMetaSiteId, String shadowMetaSiteId, Map<String, RTMDGameInfo.LeaguePlacement> playerPlacements)` — Starts up a game of LOTR-TCG with the given decks and format.
 - `void UseTestBoosters()` — When testing the live mid-game booster pack opening, we obviously want to be able to have deterministic booster pack results, which requires that we override the default pack opener with a custom one.
+- `void UseBoosterOf(String... blueprintIds)` — Has the game's pack opener offer one pack, "Test - Booster", whose contents are exactly the cards given, in the order given, every time it is opened: the pack for a test that needs a card the fixed test pack of UseTestBoosters() does not hold.
 
 ## The table itself
 
@@ -42,6 +43,7 @@ A game of LOTR-TCG with a headless client attached to both seats.  Everything he
 - `DefaultLotroGame game()`
 - `GameState gameState()`
 - `DefaultUserFeedback userFeedback()`
+- `SeatChannel seatChannel(String player)`
 - `PhysicalCardImpl GetFreepsCard(String cardName)` — Returns a card from the Free Peoples player's deck by its human-readable alias.
 - `PhysicalCardImpl GetShadowCard(String cardName)` — Returns a card from the Shadow player's deck by its human-readable alias.
 - `PhysicalCardImpl GetCard(String player, String cardName)` — Returns a given player's card by its human-readable alias.
@@ -389,6 +391,8 @@ Decisions will always come with at least one choice, even if that single choice 
 - `List<String> GetGameLogSinceMark()`
 - `boolean GameLogSinceMarkMentions(PhysicalCardImpl... cards)` — Whether the game log has named each of the given cards since MarkGameLog() was last called.
 - `boolean GameLogSinceMarkSays(String text)` — Whether the game log has said the given words since MarkGameLog() was last called.
+- `boolean FreepsHandIsRevealed()  ·  ShadowHandIsRevealed` — Whether the game has told the clients that that player's hand is revealed.
+- `boolean HandIsRevealed(String player)` — Whether the game has told the clients that the given player plays with a revealed hand ("You must play with your hand revealed").
 - `boolean RBWearingOneRing()`
 - `PhysicalCardImpl GetRing()`
 - `PhysicalCardImpl GetShadowRing()`
@@ -452,6 +456,8 @@ These functions will help you determine pile counts or add/remove a card to a pi
 - `List<? extends PhysicalCard> GetFreepsHand()`
 - `List<? extends PhysicalCard> GetShadowHand()`
 - `List<? extends PhysicalCard> GetHand(String player)`
+- `boolean FreepsSeesCardInHand(PhysicalCardImpl card)  ·  ShadowSeesCardInHand` — Whether that player's client has the given card before it as a card in a hand: his own hand, or another player's that is revealed to him.
+- `boolean PlayerSeesCardInHand(String player, PhysicalCardImpl card)` — Whether the given player's client has the given card before it as a card in a hand: true when that seat has been sent the card as a card in a hand (the server's own channel for the seat decides what it is sent) and has not since been sent the card's removal.
 - `int GetFreepsDeckCount()`
 - `int GetShadowDeckCount()`
 - `int GetFreepsDeckShuffleCount()`
@@ -520,10 +526,11 @@ This interface holds the handful of accessors that every other virtual table int
 - `DefaultUserFeedback userFeedback()`
 - `String P1()`
 - `String P2()`
+- `SeatChannel seatChannel(String player)` — What the table has kept of all that the given player's seat has been sent by the game.
 - `PhysicalCardImpl GetFreepsCard(String cardName)`
 - `PhysicalCardImpl GetShadowCard(String cardName)`
 - `PhysicalCardImpl GetCard(String player, String cardName)`
 - `void Verify(boolean condition, String message)` — A sanity check on the table's own bookkeeping, used where a procedure has to end up in a known state for whatever follows it to make sense.
 
 ---
-418 entries, 239 of them with no description in the source.
+425 entries, 240 of them with no description in the source.

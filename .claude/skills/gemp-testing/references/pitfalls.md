@@ -781,6 +781,14 @@ words, with no card to name (a reveal from a hand that had nothing to show), `Ga
 is true when some one message since the mark contains the words, whatever their capitals: give the fewest words
 that tell the line from every other. All three readers fail the test if no mark was set.
 
+**A hand played revealed is read from what each seat is sent** (G-0037; Race Text 92_7 is the one card with
+such a hand). `FreepsHandIsRevealed()` / `ShadowHandIsRevealed()` answer whose hand the game stats tell every
+client is revealed; `FreepsSeesCardInHand(card)` / `ShadowSeesCardInHand(card)` answer whether that player's seat
+has been sent the card as a card in a hand (his own, or one revealed to him) and no removal since. Each reads the
+seat's channel at the table and a client joined at that moment, and fails the test if the two differ: a hand
+revealed part-way through a game by an ad hoc modifier is refused so (the cards already in it were sent to
+nobody at the table). Never read `getModifiersQuerying().isHandRevealed` or attach a channel in a test.
+
 **A shuffle into a draw deck always shuffles.** Taking "you may shuffle up to 2 ... from your discard pile
 into your draw deck", or "shuffle any number of ... in play into your draw deck", and choosing none, or with
 nothing there to choose, reads one more shuffle of that deck and its count unchanged; declining an offer reads
@@ -928,5 +936,7 @@ and Foul Things 2_59 (a Shadow-phase event costing 2: selectable, and played for
 and dismisses, and the owner's choice ("Booster pack contents", 0 to 1) is taken by blueprint id or left with
 `ShadowDeclineChoosing()`, not a pass. `ShadowHasBPChoiceAvailable(id, false)` is true only for a card shown and
 NOT selectable (false for a selectable one). An event played from the pack ends in its player's discard pile,
-where `GetLastCreatedCard()` still finds it. The pack has no Shadow-phase event with a cost in its own text
-(G-0038, open: a pack of named cards).
+where `GetLastCreatedCard()` still finds it. The pack has no Shadow-phase event with a cost in its own text.
+For a card the fixed pack does not hold, `scn.UseBoosterOf("1_197", "1_177")` in place of `UseTestBoosters()`
+(G-0038): the one pack offered, still chosen as "Test - Booster", holds exactly those cards in that order
+(`ShadowGetBPChoices()` reads them in order), and it fails for an id that is no card (virtualtable/NamedBoosterTests).
