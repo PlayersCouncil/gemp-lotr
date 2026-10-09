@@ -112,6 +112,9 @@ public interface TestConstants {
 
 	/*
 	 * Some useful Ring-bearer and One Ring references.  This list can be expanded as needed.
+	 *
+	 * Each is the Decipher card.  The errata of a Ring-bearer (59_4, 59_14, 59_30) have no constants: a table
+	 * whose Ring-bearer is to be an erratum is given its blueprint id as the constructor's ringBearerID.
 	 */
 
 	/**
@@ -125,7 +128,8 @@ public interface TestConstants {
 	String FOTRFrodo = "1_290";
 	String MDFrodo = "10_121";
 	/**
-	 * Gimli, Bearer of Grudges
+	 * Gimli, Bearer of Grudges, the Decipher original 9_4: his erratum has no constant, and a table whose
+	 * Ring-bearer is to be the erratum is given "59_4" as the constructor's ringBearerID.
 	 * 6 strength
 	 * 3 vitality
 	 * 4 resistance
@@ -135,7 +139,8 @@ public interface TestConstants {
 	 */
 	String GimliRB = "9_4";
 	/**
-	 * Galadriel, Bearer of Wisdom
+	 * Galadriel, Bearer of Wisdom, the Decipher original 9_14: her erratum has no constant, and a table whose
+	 * Ring-bearer is to be the erratum is given "59_14" as the constructor's ringBearerID.
 	 * 3 strength
 	 * 3 vitality
 	 * 4 resistance
@@ -144,7 +149,8 @@ public interface TestConstants {
 	String GaladrielRB = "9_14";
 
 	/**
-	 * Smeagol, Bearer of Great Secrets
+	 * Smeagol, Bearer of Great Secrets, the Decipher original 9_30: his erratum has no constant, and a table whose
+	 * Ring-bearer is to be the erratum is given "59_30" as the constructor's ringBearerID.
 	 * 3 strength
 	 * 4 vitality
 	 * 8 resistance

@@ -195,7 +195,6 @@ public class Card_07_332_ErrataTests
 		var road = scn.GetCurrentSite();
 		assertEquals(1, scn.GetTwilightCost(armory));
 		scn.FreepsUseCardAction(road);
-		scn.FreepsChooseCard(guard);
 		assertEquals(3, scn.GetTwilightCost(armory));
 
 		scn.MoveMinionsToTable(troop, savage);

@@ -106,12 +106,28 @@ public interface ZoneManipulation extends TableBase {
 	}
 
 
+	/**
+	 * Puts the Free Peoples player's named cards on top of that player's draw deck one at a time, in the order
+	 * given, so the last card named ends as the top card.
+	 * @param names The names the cards were given when the table was set up, the card to be on top last.
+	 */
 	default void MoveCardsToTopOfFreepsDeck(String...names) {
 		Arrays.stream(names).forEach(name -> MoveCardsToTopOfDeck(GetFreepsCard(name)));
 	}
+	/**
+	 * Puts the Shadow player's named cards on top of that player's draw deck one at a time, in the order given,
+	 * so the last card named ends as the top card.
+	 * @param names The names the cards were given when the table was set up, the card to be on top last.
+	 */
 	default void MoveCardsToTopOfShadowDeck(String...names) {
 		Arrays.stream(names).forEach(name -> MoveCardsToTopOfDeck(GetShadowCard(name)));
 	}
+	/**
+	 * Puts the given cards on top of their owners' draw decks one at a time, in the order given, so the last card
+	 * named ends as the top card (the next one drawn) and the first named lies deepest.  Each card is taken from
+	 * wherever it was, without being played, discarded or drawn.
+	 * @param cards The cards to move, the card to be on top last.
+	 */
 	default void MoveCardsToTopOfDeck(PhysicalCardImpl...cards) {
 		Arrays.stream(cards).forEach(card -> {
 			RemoveCardZone(card);
@@ -119,12 +135,28 @@ public interface ZoneManipulation extends TableBase {
 		});
 	}
 
+	/**
+	 * Puts the Free Peoples player's named cards on the bottom of that player's draw deck one at a time, in the
+	 * order given, so the last card named ends as the bottom card.
+	 * @param names The names the cards were given when the table was set up, the card to be at the bottom last.
+	 */
 	default void MoveCardsToBottomOfFreepsDeck(String...names) {
 		Arrays.stream(names).forEach(name -> MoveCardsToBottomOfDeck(GetFreepsCard(name)));
 	}
+	/**
+	 * Puts the Shadow player's named cards on the bottom of that player's draw deck one at a time, in the order
+	 * given, so the last card named ends as the bottom card.
+	 * @param names The names the cards were given when the table was set up, the card to be at the bottom last.
+	 */
 	default void MoveCardsToBottomOfShadowDeck(String...names) {
 		Arrays.stream(names).forEach(name -> MoveCardsToBottomOfDeck(GetShadowCard(name)));
 	}
+	/**
+	 * Puts the given cards on the bottom of their owners' draw decks one at a time, in the order given, so the
+	 * last card named ends as the bottom card.  Each card is taken from wherever it was, without being played,
+	 * discarded or drawn.
+	 * @param cards The cards to move, the card to be at the bottom last.
+	 */
 	default void MoveCardsToBottomOfDeck(PhysicalCardImpl...cards) {
 		Arrays.stream(cards).forEach(card -> {
 			RemoveCardZone(card);

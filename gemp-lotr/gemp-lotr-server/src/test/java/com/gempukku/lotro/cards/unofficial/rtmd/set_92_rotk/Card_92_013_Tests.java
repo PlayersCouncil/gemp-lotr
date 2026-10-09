@@ -75,8 +75,9 @@ public class Card_92_013_Tests
 		assertTrue(scn.ShadowActionAvailable(mod));
 		scn.ShadowUseCardAction(mod);
 
-		// Shadow plays hides as cost
-		scn.ShadowChooseCardBPFromSelection(hides);
+		// Shadow plays hides as cost: the only possession in hand, so no choice is asked.  Hides then offers its
+		// own "when you play this" draw, which is declined.
+		scn.ShadowDeclineOptionalTrigger();
 
 		// FP player chooses which companion to exert
 		assertEquals(0, scn.GetWoundsOn(aragorn));
@@ -103,7 +104,7 @@ public class Card_92_013_Tests
 		assertTrue(scn.ShadowActionAvailable(mod));
 		scn.ShadowUseCardAction(mod);
 
-		scn.ShadowChooseCardBPFromSelection(hides);
+		scn.ShadowDeclineOptionalTrigger();
 
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 		scn.FreepsChooseCard(aragorn);

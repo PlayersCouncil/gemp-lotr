@@ -4,6 +4,7 @@ import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -16,7 +17,8 @@ import static org.junit.Assert.*;
  * Tests of the rig itself: what it says when it is asked to answer or to read something that is not there.  An
  * answer for a player who is not being asked anything, an action of a card that is not on offer, and a reading of
  * a parameter the pending decision does not have each fail the test with a message that names the player, what was
- * attempted and what each player is in fact being asked, and leave whatever is pending as it was.  Also the one
+ * attempted and what each player is in fact being asked, and leave whatever is pending as it was.  So does a choice
+ * of cards given where the game is not asking for cards, or is asking for them the other way.  Also the one
  * reading that is no failure: the maximum of a number the game sets no upper bound on.
  */
 public class RigFailureTests
@@ -31,6 +33,12 @@ public class RigFailureTests
 					// Gathering Wind.  "Maneuver: Exert your Wizard to choose a number.  Make each minion with that
 					// twilight cost strength -2 until the regroup phase."  The number has no upper bound.
 					put("wind", "10_16");
+					// Barliman Butterbur.  "Fellowship: Exert Barliman Butterbur to take a [gandalf] event into hand
+					// from your discard pile."  An ally at home at site 1; with two events there, a choice among
+					// cards the game shows.
+					put("barliman", "1_70");
+					put("sleep", "1_84");           // Sleep, Caradhras: a [gandalf] Fellowship event
+					put("intimidate", "1_76");      // Intimidate: a [gandalf] Response event
 
 					put("runner", "1_178");         // Goblin Runner: cost 1, strength 5
 					put("troop", "1_177");          // Goblin Patrol Troop: cost 6, strength 13, no text
@@ -83,7 +91,7 @@ public class RigFailureTests
 				"Shadow Player was to answer \"" + aragorn.getCardId() + " " + runner.getCardId() + "\", but is not being asked anything.",
 				freepsAsked);
 		assertRefused(() -> scn.ShadowChooseCard(aragorn),
-				"Shadow Player was to answer \"" + aragorn.getCardId() + "\", but is not being asked anything.", freepsAsked);
+				"Shadow Player was to choose Aragorn, Ranger of the North, but that player is not being asked anything.", freepsAsked);
 		assertRefused(scn::ShadowChooseYes,
 				"Shadow Player was to choose \"Yes\", but that player is not being asked anything.", freepsAsked);
 		assertRefused(scn::ShadowDeclineOptionalTrigger,
@@ -209,6 +217,130 @@ public class RigFailureTests
 		// The number is still being asked for.
 		assertTrue(scn.FreepsDecisionAvailable("Choose a minion cost"));
 		assertEquals(0, scn.FreepsGetChoiceMin());
+	}
+
+	@Test
+	public void ACardChosenWhereTheGameIsNotAskingForCardsIsRefusedSayingWhatIsAskedAndNothingIsAnswered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var wind = scn.GetFreepsCard("wind");
+		var runner = scn.GetShadowCard("runner");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCompanionsToTable(aragorn, gandalf);
+		scn.MoveCardsToHand(wind);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner, troop);
+
+		// A choice of actions.  A card's id is a number, and a number here is an action's place in the list; and
+		// the list has blueprints of its own, which a card chosen by blueprint matches none of, so that the answer
+		// is an empty one: a pass.  Neither is given.
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		String notCards = ", but the decision in front of that player is not a choice of cards.";
+		String freepsAsked = "Free Peoples Player is being asked \"Play Fellowship action or Pass\", offering [Use Bag End].";
+		assertRefused(() -> scn.FreepsChooseCard(aragorn),
+				"Free Peoples Player was to choose Aragorn, Ranger of the North" + notCards, freepsAsked,
+				"Shadow Player is not being asked anything.");
+		assertRefused(() -> scn.FreepsChooseCards(aragorn, gandalf),
+				"Free Peoples Player was to choose Aragorn, Ranger of the North, Gandalf, The Grey Wizard" + notCards, freepsAsked);
+		assertRefused(() -> scn.FreepsChooseCards(), "Free Peoples Player was to choose no card" + notCards, freepsAsked);
+		assertRefused(() -> scn.ChooseCards(VirtualTableScenario.P1, aragorn),
+				"Free Peoples Player was to choose Aragorn, Ranger of the North" + notCards, freepsAsked);
+		assertRefused(() -> scn.FreepsChooseCardIDFromSelection(aragorn),
+				"Free Peoples Player was to choose Aragorn, Ranger of the North" + notCards, freepsAsked);
+		assertRefused(() -> scn.FreepsChooseCardBPFromSelection(aragorn),
+				"Free Peoples Player was to choose Aragorn, Ranger of the North from a selection of cards" + notCards, freepsAsked);
+		assertRefused(() -> scn.FreepsChooseCardBPFromSelection("1_89"),
+				"Free Peoples Player was to choose 1_89 from a selection of cards" + notCards, freepsAsked);
+
+		// The fellowship phase has not been passed, and its actions are still on offer.
+		assertEquals(Phase.FELLOWSHIP, scn.GetCurrentPhase());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+
+		// A choice of a number, reached past a choice the game made by itself: Gandalf is the only Wizard there
+		// is to exert, so no card was asked for.  His id is not taken for the number.
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPlayCard(wind);
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+		assertTrue(scn.FreepsDecisionAvailable("Choose a minion cost"));
+		assertRefused(() -> scn.FreepsChooseCard(gandalf),
+				"Free Peoples Player was to choose Gandalf, The Grey Wizard" + notCards,
+				"Free Peoples Player is being asked \"Choose a minion cost\".", "Shadow Player is not being asked anything.");
+		assertTrue(scn.FreepsDecisionAvailable("Choose a minion cost"));
+		assertEquals(13, scn.GetStrength(troop));
+		scn.FreepsChoose("6");
+		assertEquals(11, scn.GetStrength(troop));
+
+		// An assignment, where a lone id would assign nobody to that companion and end the Free Peoples player's
+		// assigning.
+		scn.SkipToAssignments();
+		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+		assertRefused(() -> scn.FreepsChooseCard(aragorn),
+				"Free Peoples Player was to choose Aragorn, Ranger of the North" + notCards,
+				"Free Peoples Player is being asked \"Assign minions to companions or allies at home\".");
+		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+		scn.FreepsAssignToMinions(aragorn, runner);
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, runner));
+		assertTrue(scn.ShadowDecisionAvailable("Assign minions"));
+	}
+
+	@Test
+	public void EachKindOfCardChoiceTakesACardChosenAndRefusesTheAnswerThatFitsTheOtherKind() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var barliman = scn.GetFreepsCard("barliman");
+		var sleep = scn.GetFreepsCard("sleep");
+		var intimidate = scn.GetFreepsCard("intimidate");
+		var runner = scn.GetShadowCard("runner");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCompanionsToTable(aragorn, gimli);
+		scn.MoveAlliesToTable(barliman);
+		scn.MoveCardsToDiscard(sleep, intimidate);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner, troop);
+
+		// Cards the game shows, from the discard pile: answered by their places in the showing, not by card id.
+		scn.FreepsUseCardAction(barliman);
+		assertTrue(scn.FreepsDecisionAvailable("Choose card"));
+		assertEquals(2, scn.FreepsGetSelectableCount());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(sleep, intimidate));
+		String shown = ", but that player is choosing among cards that are shown, which are not answered by card id";
+		assertRefused(() -> scn.ChooseCards(VirtualTableScenario.P1, sleep),
+				"Free Peoples Player was to choose Sleep, Caradhras" + shown, "Free Peoples Player is being asked \"Choose card");
+		assertRefused(() -> scn.FreepsChooseCardIDFromSelection(sleep), "Free Peoples Player was to choose Sleep, Caradhras" + shown);
+		assertInZone(Zone.DISCARD, sleep);
+		assertEquals(2, scn.FreepsGetSelectableCount());
+
+		scn.FreepsChooseCard(sleep);
+		assertInZone(Zone.HAND, sleep);
+		assertInZone(Zone.DISCARD, intimidate);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// Cards where they lie, in play: answered by card id, not by blueprint.  Which skirmish to resolve is
+		// such a choice, and is asked with two to choose between.
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[] { aragorn, runner },
+				new PhysicalCardImpl[] { gimli, troop });
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, gimli));
+		assertRefused(() -> scn.FreepsChooseCardBPFromSelection(aragorn),
+				"Free Peoples Player was to choose Aragorn, Ranger of the North from a selection of cards, but that player is"
+						+ " choosing among cards where they lie, which are not answered by blueprint",
+				"Free Peoples Player is being asked \"Choose next skirmish to resolve\".");
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
+		assertFalse(scn.IsCharSkirmishing(aragorn));
+
+		scn.FreepsChooseCard(aragorn);
+		assertTrue(scn.IsCharSkirmishing(aragorn));
+		assertFalse(scn.IsCharSkirmishing(gimli));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 
 	@Test

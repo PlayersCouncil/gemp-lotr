@@ -11,7 +11,8 @@ onto the table while a decision is pending does not change what that decision of
 playable, complete the pending decision with a real action and look at the next one.
 
 **One candidate is chosen for you; none is skipped.** When a choice has exactly as many valid candidates as it
-needs, the engine makes it without asking. When it has none, that part of the effect is skipped. So a test that
+needs, the engine makes it without asking, and a `FreepsChooseCard` written for it fails, naming the decision
+the game has gone on to (G-0032). When it has none, that part of the effect is skipped. So a test that
 means to inspect a choice has to supply one more valid candidate than the choice needs, and at least one invalid
 one beside them. The same thing hides self-targeting: Celeborn's "exert Celeborn to heal an [elven] ally" heals
 Celeborn himself when no other Elven ally is wounded. An "up to N" choice is the exception: its
@@ -82,10 +83,14 @@ count the cards a player is being shown, 0 if none. `FreepsChooseOptionalTrigger
 card is offering, and with `(card, text)` unless it is offering an action so worded. The plain pass methods are
 not like this: a pass with nothing pending does nothing and says nothing (Ketura, on G-0015: passes stay
 harmless), and `FreepsPass()` and `ShadowPass()` answer whatever is pending with nothing, an optional trigger
-included. Do not write one "to be safe". Nor is `FreepsChooseCard(card)` like this: it answers with the card's id,
-and at a choice of actions the game reads a number as the place of an action in its list, so a card choice
-written for a choice the game made by itself (one candidate) takes whatever action has that number, or fails
-only if there is none. (The older, wordier `FreepsPassCurrentPhaseAction()` and
+included. Do not write one "to be safe". A card choice is refused like the rest since G-0032:
+`FreepsChooseCard(card)`, `FreepsChooseCards`, `ChooseCards`, `...ChooseCardBPFromSelection`,
+`...ChooseCardIDFromSelection` and their Shadow twins fail unless that player is being asked to choose cards,
+with 'Free Peoples Player was to choose <card>, but the decision in front of that player is not a choice of
+cards.  Free Peoples Player is being asked "Play Fellowship action or Pass", offering [...]'. That is where a
+test is when the game chose the one candidate by itself: delete the line (it used to pass the phase in silence,
+decline a trigger, or give the card's id as a number). `FreepsDeclineChoosing()` is still not checked: it
+answers whatever is pending with nothing. (The older, wordier `FreepsPassCurrentPhaseAction()` and
 `ShadowPassCurrentPhaseAction()` were removed from the rig on 2026-10-05 at Ketura's word; old tests you read in
 git history may still show them.)
 

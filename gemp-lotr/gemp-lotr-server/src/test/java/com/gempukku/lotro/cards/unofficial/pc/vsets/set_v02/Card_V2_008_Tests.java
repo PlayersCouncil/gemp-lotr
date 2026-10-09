@@ -252,7 +252,6 @@ public class Card_V2_008_Tests
 		assertEquals(3, scn.GetFreepsArcheryTotal());
 
 		scn.FreepsPlayCard(bow3);
-		scn.FreepsChooseCard(haldir);
 		assertAttachedTo(bow3, haldir);
 		assertTrue(scn.HasKeyword(haldir, Keyword.ARCHER));
 

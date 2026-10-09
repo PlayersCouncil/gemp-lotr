@@ -16,7 +16,25 @@ import java.util.List;
  */
 public interface Choices extends Decisions {
 
+	/**
+	 * Answers the Free Peoples player's pending decision with nothing: at a choice of cards whose minimum is 0 that
+	 * chooses no card, and it is the call to write for that, since FreepsChooseCardBPFromSelection() with no card
+	 * is ambiguous between its two overloads and does not compile.  It answers a showing of cards as readily.
+	 * The game refuses it where at least one card must be chosen.  It does not look at what is pending: at a choice
+	 * of actions the same empty answer is a pass (of a phase's actions, or of an optional trigger, which it
+	 * declines), so one call too many answers whatever comes next.  Unlike FreepsPass(), it fails when the
+	 * player is not being asked anything.
+	 */
 	default void FreepsDeclineChoosing() { PlayerDecided(P1(), ""); }
+	/**
+	 * Answers the Shadow player's pending decision with nothing: at a choice of cards whose minimum is 0 that
+	 * chooses no card, and it is the call to write for that, since ShadowChooseCardBPFromSelection() with no card
+	 * is ambiguous between its two overloads and does not compile.  It answers a showing of cards as readily.
+	 * The game refuses it where at least one card must be chosen.  It does not look at what is pending: at a choice
+	 * of actions the same empty answer is a pass (of a phase's actions, or of an optional trigger, which it
+	 * declines), so one call too many answers whatever comes next.  Unlike ShadowPass(), it fails when the
+	 * player is not being asked anything.
+	 */
 	default void ShadowDeclineChoosing() { PlayerDecided(P2(), ""); }
 
 	default void FreepsDeclineSanctuaryHealing() {
@@ -385,25 +403,60 @@ public interface Choices extends Decisions {
 	default void FreepsChooseAnyCard() { FreepsChoose(FreepsGetCardChoices().getFirst()); }
 	default void ShadowChooseAnyCard() { ShadowChoose(ShadowGetCardChoices().getFirst()); }
 
+	/**
+	 * Causes the Free Peoples player to choose the given card at a choice of cards, and fails, saying what is
+	 * being asked, if that player is not being asked to choose cards.  See {@link #FreepsChooseCards}.
+	 * @param card The card to choose.
+	 */
 	default void FreepsChooseCard(PhysicalCardImpl card) { FreepsChooseCards(card); }
-	default void FreepsChooseCards(PhysicalCardImpl...cards) {
-		if(GetChoiceCount(FreepsGetBPChoices()) > 0) {
-			ChooseCardBPFromSelection(P1(), cards);
-		}
-		else {
-			ChooseCards(P1(), cards);
-		}
-	}
+	/**
+	 * Causes the Free Peoples player to answer a choice of cards with the given cards, whichever way the game is
+	 * asking, and fails, saying what is being asked, if that player is not being asked to choose cards.  The two
+	 * ways: among cards where they lie, in play or in a hand, which are answered by card id; and among cards the
+	 * game shows, from a pile or a hand that is looked at, which are matched by blueprint, the first of each.  No cards is the answer that
+	 * chooses none.  Where it fails nothing is answered: at a choice of actions, a number or an assignment, which
+	 * is where a test finds itself when the game chose the only candidate by itself or never asked for a card.
+	 * @param cards The cards to choose.
+	 */
+	default void FreepsChooseCards(PhysicalCardImpl...cards) { ChooseCardsHoweverAsked(P1(), cards); }
+	/**
+	 * Causes the Shadow player to choose the given card at a choice of cards, and fails, saying what is being
+	 * asked, if that player is not being asked to choose cards.  See {@link #ShadowChooseCards}.
+	 * @param card The card to choose.
+	 */
 	default void ShadowChooseCard(PhysicalCardImpl card) { ShadowChooseCards(card); }
-	default void ShadowChooseCards(PhysicalCardImpl...cards) {
-		if(GetChoiceCount(ShadowGetBPChoices()) > 0) {
-			ChooseCardBPFromSelection(P2(), cards);
+	/**
+	 * Causes the Shadow player to answer a choice of cards with the given cards, whichever way the game is asking,
+	 * and fails, saying what is being asked, if that player is not being asked to choose cards.  The two ways:
+	 * among cards where they lie, in play or in a hand, which are answered by card id; and among cards the game
+	 * shows, from a pile or a hand that is looked at, which are matched by blueprint, the first of each.  No cards is the answer that chooses
+	 * none.  Where it fails nothing is answered: at a choice of actions, a number or an assignment, which is
+	 * where a test finds itself when the game chose the only candidate by itself or never asked for a card.
+	 * @param cards The cards to choose.
+	 */
+	default void ShadowChooseCards(PhysicalCardImpl...cards) { ChooseCardsHoweverAsked(P2(), cards); }
+	// Goes by the kind of decision and not by whether it has blueprints: a choice of actions has those too.
+	private void ChooseCardsHoweverAsked(String player, PhysicalCardImpl...cards) {
+		AwaitingDecision decision = DecisionGuard.requiredCardChoice(this, player,
+				player + " was to choose " + DecisionGuard.names(cards),
+				AwaitingDecisionType.CARD_SELECTION, AwaitingDecisionType.ARBITRARY_CARDS);
+		if(decision.getDecisionType() == AwaitingDecisionType.ARBITRARY_CARDS) {
+			ChooseCardBPFromSelection(player, cards);
 		}
 		else {
-			ChooseCards(P2(), cards);
+			ChooseCards(player, cards);
 		}
 	}
+	/**
+	 * Causes the given player to answer a choice among cards where they lie, in play or in a hand, with the ids
+	 * of the given cards, and fails, saying what is being asked, at any other decision.  An id given to another
+	 * decision would be read as whatever a number means there: an action's place in a list, a number chosen.
+	 * @param player The player to answer for.
+	 * @param cards The cards to choose.
+	 */
 	default void ChooseCards(String player, PhysicalCardImpl...cards) {
+		DecisionGuard.requiredCardChoice(this, player, player + " was to choose " + DecisionGuard.names(cards),
+				AwaitingDecisionType.CARD_SELECTION);
 		String[] ids = new String[cards.length];
 
 		for(int i = 0; i < cards.length; i++)
@@ -417,15 +470,39 @@ public interface Choices extends Decisions {
 	default int FreepsGetCardChoiceCount() { return FreepsGetCardChoices().size(); }
 	default int ShadowGetCardChoiceCount() { return ShadowGetCardChoices().size(); }
 
+	/**
+	 * Causes the Free Peoples player to choose, among cards the game is showing, the first that has each given
+	 * card's blueprint, and fails, saying what is being asked, if that player is not being shown cards
+	 * to choose from.  With no card it does not compile (two overloads fit): FreepsDeclineChoosing() chooses none.
+	 * @param cards The cards to choose, by blueprint.
+	 */
 	default void FreepsChooseCardBPFromSelection(PhysicalCardImpl...cards) {
 		ChooseCardBPFromSelection(P1(), cards);
 	}
+	/**
+	 * Causes the Shadow player to choose, among cards the game is showing, the first that has each given card's
+	 * blueprint, and fails, saying what is being asked, if that player is not being shown cards to
+	 * choose from.  With no card it does not compile (two overloads fit): ShadowDeclineChoosing() chooses none.
+	 * @param cards The cards to choose, by blueprint.
+	 */
 	default void ShadowChooseCardBPFromSelection(PhysicalCardImpl...cards) {
 		ChooseCardBPFromSelection(P2(), cards);
 	}
+	/**
+	 * Causes the Free Peoples player to choose, among cards the game is showing, the first that has each given
+	 * blueprint, and fails, saying what is being asked, if that player is not being shown cards to
+	 * choose from.
+	 * @param bpids The blueprint ids of the cards to choose.
+	 */
 	default void FreepsChooseCardBPFromSelection(String...bpids) {
 		ChooseCardBPFromSelection(P1(), bpids);
 	}
+	/**
+	 * Causes the Shadow player to choose, among cards the game is showing, the first that has each given
+	 * blueprint, and fails, saying what is being asked, if that player is not being shown cards to choose
+	 * from.
+	 * @param bpids The blueprint ids of the cards to choose.
+	 */
 	default void ShadowChooseCardBPFromSelection(String...bpids) {
 		ChooseCardBPFromSelection(P2(), bpids);
 	}
@@ -434,14 +511,16 @@ public interface Choices extends Decisions {
 	 * Causes the given player to issue a decision response composed of a comma-separated list of the provided card
 	 * blueprint IDs. This will only succeed if being used to target currently out-of-play cards such as when selecting
 	 * cards from the reserve deck; it will not work if being presented with a choice of in-play cards to target (such
-	 * as when choosing active cards to target for a card effect).
+	 * as when choosing active cards to target for a card effect).  Fails, saying what each player is being asked, if
+	 * the player is not being shown cards to choose from; a choice of actions, which lists blueprints too, is not that.
 	 * @param player The player to issue a decision for.
 	 * @param cards The cards to include in the decision response.
 	 * IDs.
 	 */
 	default void ChooseCardBPFromSelection(String player, PhysicalCardImpl...cards) {
-		String[] choices = DecisionGuard.requiredParam(this, player, "blueprintId",
-				player + " was to choose " + DecisionGuard.names(cards) + " from a selection of cards");
+		String attempted = player + " was to choose " + DecisionGuard.names(cards) + " from a selection of cards";
+		DecisionGuard.requiredCardChoice(this, player, attempted, AwaitingDecisionType.ARBITRARY_CARDS);
+		String[] choices = DecisionGuard.requiredParam(this, player, "blueprintId", attempted);
 		ArrayList<String> bps = new ArrayList<>();
 		ArrayList<PhysicalCardImpl> found = new ArrayList<>();
 
@@ -471,14 +550,17 @@ public interface Choices extends Decisions {
 	 * Causes the given player to issue a decision response composed of a comma-separated list of the provided card
 	 * blueprint IDs. This will only succeed if being used to target currently out-of-play cards such as when selecting
 	 * cards from the reserve deck; it will not work if being presented with a choice of in-play cards to target (such
-	 * as when choosing active cards to target for a card effect).
+	 * as when choosing active cards to target for a card effect).  Fails, saying what each player is being asked, if
+	 * the player is not being shown cards to choose from; a choice of actions, which lists blueprints too, is not that.
 	 * @param player The player to issue a decision for.
 	 * @param bpids The card blueprint IDs to include in the decision response.
 	 * IDs.
 	 */
 	default void ChooseCardBPFromSelection(String player, String...bpids) {
-		String[] choices = DecisionGuard.requiredParam(this, player, "blueprintId",
-				player + " was to choose " + String.join(", ", bpids) + " from a selection of cards");
+		String attempted = player + " was to choose " + (bpids.length == 0 ? "no card" : String.join(", ", bpids))
+				+ " from a selection of cards";
+		DecisionGuard.requiredCardChoice(this, player, attempted, AwaitingDecisionType.ARBITRARY_CARDS);
+		String[] choices = DecisionGuard.requiredParam(this, player, "blueprintId", attempted);
 		ArrayList<String> bps = new ArrayList<>();
 		ArrayList<String> found = new ArrayList<>();
 
@@ -650,13 +732,16 @@ public interface Choices extends Decisions {
 	/**
 	 * Causes the given player to issue a decision response composed of a comma-separated list of the provided card IDs.
 	 * This will only succeed if being used to target currently live cards; it will not work if being presented with a
-	 * choice of out-of-play cards (such as when choosing from the reserve deck).
+	 * choice of out-of-play cards (such as when choosing from the reserve deck).  Fails, saying what each player is
+	 * being asked, if the player is not being asked to choose among such cards; a choice of actions, which lists
+	 * card ids too, is not that.
 	 * @param player The player to issue a decision for.
 	 * @param cards The cards to include in the decision response.
 	 */
 	default void ChooseCardIDFromSelection(String player, PhysicalCardImpl...cards) {
-		String[] choices = DecisionGuard.requiredParam(this, player, "cardId",
-				player + " was to choose " + DecisionGuard.names(cards));
+		String attempted = player + " was to choose " + DecisionGuard.names(cards);
+		DecisionGuard.requiredCardChoice(this, player, attempted, AwaitingDecisionType.CARD_SELECTION);
+		String[] choices = DecisionGuard.requiredParam(this, player, "cardId", attempted);
 		ArrayList<String> ids = new ArrayList<>();
 		ArrayList<PhysicalCardImpl> found = new ArrayList<>();
 

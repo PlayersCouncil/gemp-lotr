@@ -144,7 +144,6 @@ public class Card_01_338_Tests
         assertTrue(scn.ShadowDecisionAvailable("play a minion"));
         scn.ShadowChooseYes();
 
-        scn.ShadowChooseCardBPFromSelection(twk);
         //TWK costs 8, should not be discounted
         //10 - 8
         assertEquals(2, scn.GetTwilight());

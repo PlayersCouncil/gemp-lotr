@@ -3,6 +3,7 @@ package com.gempukku.lotro.virtualtable;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
+import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 
 import java.util.Arrays;
 
@@ -11,7 +12,8 @@ import java.util.Arrays;
  * player who is not being asked anything, an action of a card that is not on offer, and a reading of a parameter
  * the pending decision does not have each used to die of a NullPointerException somewhere below the call.  Each is
  * now a failed {@link TableBase#Verify}, whose message names the player, what was attempted, and what each player
- * is in fact being asked.
+ * is in fact being asked.  So is a choice of cards given as the answer to a decision that is no choice of cards,
+ * which the game used to take for whatever such an answer means there: a pass, a number, an assignment of nobody.
  *
  * Package-private and not part of the table: nothing here becomes a method of VirtualTable or ScenarioTable.
  */
@@ -45,8 +47,40 @@ final class DecisionGuard {
 				"The '" + paramName + "' of " + player + "'s decision was to be read");
 	}
 
-	/** The full names of the given cards, for a failure message. */
+	/**
+	 * Fails unless the given player is being asked to choose cards in a way that the answer about to be given
+	 * fits, saying what was to be chosen and what each player is in fact being asked.  The game asks for cards in
+	 * two ways: among cards where they lie, in play or in a hand, which are answered by their ids (CARD_SELECTION),
+	 * and among cards it shows, from a pile or a hand that is looked at, which are answered by their places in the
+	 * showing (ARBITRARY_CARDS).  Neither answer means at any other decision what it was meant to mean.
+	 * @param attempted What was being done, as a clause that names the player: "P1 was to choose Aragorn".
+	 * @param fits The ways of asking for cards that the answer fits.
+	 * @return The pending decision, which asks for cards in one of those ways.
+	 */
+	static AwaitingDecision requiredCardChoice(TableBase table, String player, String attempted, AwaitingDecisionType... fits) {
+		AwaitingDecision decision = table.userFeedback().getAwaitingDecision(player);
+		if(decision == null) {
+			table.Verify(false, attempted + ", but that player is not being asked anything." + othersAsked(table, player));
+			return null;
+		}
+		AwaitingDecisionType type = decision.getDecisionType();
+		if(!Arrays.asList(fits).contains(type)) {
+			String why = type == AwaitingDecisionType.ARBITRARY_CARDS
+					? "that player is choosing among cards that are shown, which are not answered by card id"
+							+ " (FreepsChooseCards and ShadowChooseCards answer either kind)."
+					: type == AwaitingDecisionType.CARD_SELECTION
+					? "that player is choosing among cards where they lie, which are not answered by blueprint"
+							+ " (FreepsChooseCards and ShadowChooseCards answer either kind)."
+					: "the decision in front of that player is not a choice of cards.";
+			table.Verify(false, attempted + ", but " + why + "  " + askedOf(table, player) + othersAsked(table, player));
+		}
+		return decision;
+	}
+
+	/** The full names of the given cards, for a failure message; "no card" if none is given. */
 	static String names(PhysicalCardImpl... cards) {
+		if(cards.length == 0)
+			return "no card";
 		String[] names = new String[cards.length];
 		for (int i = 0; i < cards.length; i++)
 			names[i] = GameUtils.getFullName(cards[i]);

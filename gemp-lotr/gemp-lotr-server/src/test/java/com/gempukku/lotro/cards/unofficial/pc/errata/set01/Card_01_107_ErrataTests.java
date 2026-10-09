@@ -145,7 +145,6 @@ public class Card_01_107_ErrataTests
 		assertEquals(1, scn.GetFreepsArcheryTotal());
 
 		scn.FreepsPlayCard(shield);
-		scn.FreepsChooseCard(aragorn);
 		assertAttachedTo(shield, aragorn);
 
 		assertEquals(1, scn.GetShadowArcheryTotal());

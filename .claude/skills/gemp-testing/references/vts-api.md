@@ -81,9 +81,9 @@ This interface holds various convenience constants frequently referenced elsewhe
 - `String KingMap = "102_76"` — Journey of the King: "Your adventure deck must only contain cards from the King site path."
 - `String FOTRFrodo = "1_290"` — Frodo, Son of Drogo.
 - `String MDFrodo = "10_121"`
-- `String GimliRB = "9_4"` — Gimli, Bearer of Grudges 6 strength 3 vitality 4 resistance Damage +1.
-- `String GaladrielRB = "9_14"` — Galadriel, Bearer of Wisdom 3 strength 3 vitality 4 resistance While Galadriel bears an artifact or The One Ring, she is resistance +1 for each [Elven] companion you can spot.
-- `String SmeagolRB = "9_30"` — Smeagol, Bearer of Great Secrets 3 strength 4 vitality 8 resistance Ring-bound.
+- `String GimliRB = "9_4"` — Gimli, Bearer of Grudges, the Decipher original 9_4: his erratum has no constant, and a table whose Ring-bearer is to be the erratum is given "59_4" as the constructor's ringBearerID.
+- `String GaladrielRB = "9_14"` — Galadriel, Bearer of Wisdom, the Decipher original 9_14: her erratum has no constant, and a table whose Ring-bearer is to be the erratum is given "59_14" as the constructor's ringBearerID.
+- `String SmeagolRB = "9_30"` — Smeagol, Bearer of Great Secrets, the Decipher original 9_30: his erratum has no constant, and a table whose Ring-bearer is to be the erratum is given "59_30" as the constructor's ringBearerID.
 - `String SamRB = "13_156"` — Sam, Bearer of Great Need 3 strength 4 vitality 5 resistance Ring-bound.
 - `String RulingRing = "1_2"` — The One Ring, The Ruling Ring +1 strength Response: If bearer is about to take a wound in a skirmish, he wears The One Ring until the regroup phase.
 - `String IsildursBaneRing = "1_1"` — The One Ring, Isildur's Bane +1 strength +1 vitality Response: If bearer is about to take a wound, he wears The One Ring until the regroup phase.
@@ -111,12 +111,12 @@ While the ability to programmatically execute games is a boon to testing efforts
 - `void MoveFreepsCardsToSupportArea(String...names)`
 - `void MoveShadowCardsToSupportArea(String...names)`
 - `void MoveCardsToSupportArea(PhysicalCardImpl...cards)`
-- `void MoveCardsToTopOfFreepsDeck(String...names)`
-- `void MoveCardsToTopOfShadowDeck(String...names)`
-- `void MoveCardsToTopOfDeck(PhysicalCardImpl...cards)`
-- `void MoveCardsToBottomOfFreepsDeck(String...names)`
-- `void MoveCardsToBottomOfShadowDeck(String...names)`
-- `void MoveCardsToBottomOfDeck(PhysicalCardImpl...cards)`
+- `void MoveCardsToTopOfFreepsDeck(String...names)` — Puts the Free Peoples player's named cards on top of that player's draw deck one at a time, in the order given, so the last card named ends as the top card.
+- `void MoveCardsToTopOfShadowDeck(String...names)` — Puts the Shadow player's named cards on top of that player's draw deck one at a time, in the order given, so the last card named ends as the top card.
+- `void MoveCardsToTopOfDeck(PhysicalCardImpl...cards)` — Puts the given cards on top of their owners' draw decks one at a time, in the order given, so the last card named ends as the top card (the next one drawn) and the first named lies deepest.
+- `void MoveCardsToBottomOfFreepsDeck(String...names)` — Puts the Free Peoples player's named cards on the bottom of that player's draw deck one at a time, in the order given, so the last card named ends as the bottom card.
+- `void MoveCardsToBottomOfShadowDeck(String...names)` — Puts the Shadow player's named cards on the bottom of that player's draw deck one at a time, in the order given, so the last card named ends as the bottom card.
+- `void MoveCardsToBottomOfDeck(PhysicalCardImpl...cards)` — Puts the given cards on the bottom of their owners' draw decks one at a time, in the order given, so the last card named ends as the bottom card.
 - `void MoveCardsToFreepsDiscard(String...names)`
 - `void MoveCardsToShadowDiscard(String...names)`
 - `void MoveCardsToDiscard(PhysicalCardImpl...cards)`
@@ -271,7 +271,7 @@ A set of functions within the test rig that pertain to decisions.  Decisions in 
 
 Decisions will always come with at least one choice, even if that single choice is "pass".  These functions will let you inspect the choices available and offer shortcuts for e.g. selecting a physical card which you have previously stored.
 
-- `void FreepsDeclineChoosing()  ·  ShadowDeclineChoosing`
+- `void FreepsDeclineChoosing()  ·  ShadowDeclineChoosing` — Answers that player's pending decision with nothing: at a choice of cards whose minimum is 0 that chooses no card, and it is the call to write for that, since FreepsChooseCardBPFromSelection() with no card is ambiguous between its two overloads and does not compile.
 - `void FreepsDeclineSanctuaryHealing()`
 - `Boolean FreepsChoiceAvailable(String choice)  ·  ShadowChoiceAvailable` — Determines whether that player has any choices on the current decision whose description matches the provided search text.
 - `Boolean ChoiceAvailable(String player, String choice)` — Determines whether the given player has any choices on the current decision whose description matches the provided search text.
@@ -310,12 +310,12 @@ Decisions will always come with at least one choice, even if that single choice 
 - `boolean FreepsHasAssignmentTargetAvailable(PhysicalCardImpl card)  ·  ShadowHasAssignmentTargetAvailable`
 - `boolean HasAssignmentTargetAvailable(String player, PhysicalCardImpl card)` — Reads the decision in front of the player, where FreepsCanAssign and ShadowCanAssign read the game's rule.
 - `void FreepsChooseAnyCard()  ·  ShadowChooseAnyCard`
-- `void FreepsChooseCard(PhysicalCardImpl card)  ·  ShadowChooseCard`
-- `void FreepsChooseCards(PhysicalCardImpl...cards)  ·  ShadowChooseCards`
-- `void ChooseCards(String player, PhysicalCardImpl...cards)`
+- `void FreepsChooseCard(PhysicalCardImpl card)  ·  ShadowChooseCard` — Causes that player to choose the given card at a choice of cards, and fails, saying what is being asked, if that player is not being asked to choose cards.
+- `void FreepsChooseCards(PhysicalCardImpl...cards)  ·  ShadowChooseCards` — Causes that player to answer a choice of cards with the given cards, whichever way the game is asking, and fails, saying what is being asked, if that player is not being asked to choose cards.
+- `void ChooseCards(String player, PhysicalCardImpl...cards)` — Causes the given player to answer a choice among cards where they lie, in play or in a hand, with the ids of the given cards, and fails, saying what is being asked, at any other decision.
 - `int FreepsGetCardChoiceCount()  ·  ShadowGetCardChoiceCount`
-- `void FreepsChooseCardBPFromSelection(PhysicalCardImpl...cards)  ·  ShadowChooseCardBPFromSelection`
-- `void FreepsChooseCardBPFromSelection(String...bpids)  ·  ShadowChooseCardBPFromSelection`
+- `void FreepsChooseCardBPFromSelection(PhysicalCardImpl...cards)  ·  ShadowChooseCardBPFromSelection` — Causes that player to choose, among cards the game is showing, the first that has each given card's blueprint, and fails, saying what is being asked, if that player is not being shown cards to choose from.
+- `void FreepsChooseCardBPFromSelection(String...bpids)  ·  ShadowChooseCardBPFromSelection` — Causes that player to choose, among cards the game is showing, the first that has each given blueprint, and fails, saying what is being asked, if that player is not being shown cards to choose from.
 - `void ChooseCardBPFromSelection(String player, PhysicalCardImpl...cards)` — Causes the given player to issue a decision response composed of a comma-separated list of the provided card blueprint IDs.
 - `void ChooseCardBPFromSelection(String player, String...bpids)` — Causes the given player to issue a decision response composed of a comma-separated list of the provided card blueprint IDs.
 - `boolean FreepsHasCardChoiceAvailable(PhysicalCardImpl card, boolean selectable)  ·  ShadowHasCardChoiceAvailable`
@@ -416,9 +416,9 @@ Functions for checking aspects of a card, such as numeric states and other state
 - `boolean IsExhausted(PhysicalCardImpl card)`
 - `void AddWoundsToChar(PhysicalCardImpl card, int count)`
 - `void RemoveWoundsFromChar(PhysicalCardImpl card, int count)`
-- `int GetCultureTokensOn(PhysicalCardImpl card)`
-- `void AddTokensToCard(PhysicalCardImpl card, int count)`
-- `void RemoveTokensFromCard(PhysicalCardImpl card, int count)`
+- `int GetCultureTokensOn(PhysicalCardImpl card)` — How many culture tokens of the card's own printed culture are on the card: a token of any other culture on it is not counted, and this cannot read one.
+- `void AddTokensToCard(PhysicalCardImpl card, int count)` — Puts culture tokens of the card's own printed culture on the card, the only kind of token this can place.
+- `void RemoveTokensFromCard(PhysicalCardImpl card, int count)` — Takes culture tokens of the card's own printed culture off the card, the only kind of token this can remove, and no more of them than are there.
 - `List<PhysicalCardImpl> GetAttachedCards(PhysicalCardImpl card)`
 - `List<PhysicalCardImpl> GetStackedCards(PhysicalCardImpl card)`
 - `Boolean IsSiteControlled(PhysicalCardImpl card)`
@@ -426,7 +426,7 @@ Functions for checking aspects of a card, such as numeric states and other state
 - `int GetTwilightCost(PhysicalCardImpl card)`
 - `int GetStrength(PhysicalCardImpl card)`
 - `int GetOverwhelmMultiplier(PhysicalCardImpl card)`
-- `int GetVitality(PhysicalCardImpl card)`
+- `int GetVitality(PhysicalCardImpl card)` — The vitality the card has left: its printed vitality and whatever cards add or take away, less the wounds on it, and never less than 0.
 - `int GetResistance(PhysicalCardImpl card)`
 - `int GetMinionSiteNumber(PhysicalCardImpl card)`
 - `boolean HasKeyword(PhysicalCardImpl card, Keyword keyword)`
@@ -523,4 +523,4 @@ This interface holds the handful of accessors that every other virtual table int
 - `void Verify(boolean condition, String message)` — A sanity check on the table's own bookkeeping, used where a procedure has to end up in a known state for whatever follows it to make sense.
 
 ---
-415 entries, 255 of them with no description in the source.
+415 entries, 239 of them with no description in the source.

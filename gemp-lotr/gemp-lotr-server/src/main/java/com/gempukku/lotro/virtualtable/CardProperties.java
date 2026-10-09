@@ -32,12 +32,30 @@ public interface CardProperties extends TableBase {
 	}
 
 
+	/**
+	 * How many culture tokens of the card's own printed culture are on the card: a token of any other culture on
+	 * it is not counted, and this cannot read one.
+	 * @param card The card to inspect.
+	 * @return The number of tokens of that card's culture on it.
+	 */
 	default int GetCultureTokensOn(PhysicalCardImpl card) { return gameState().getTokenCount(card, Token.findTokenForCulture(card.getBlueprint().getCulture())); }
 
+	/**
+	 * Puts culture tokens of the card's own printed culture on the card, the only kind of token this can place.
+	 * Nothing is reinforced and nothing is added by a card: no trigger answers it.
+	 * @param card The card to put tokens on.
+	 * @param count How many.
+	 */
 	default void AddTokensToCard(PhysicalCardImpl card, int count) {
 		gameState().addTokens(card, Token.findTokenForCulture(card.getBlueprint().getCulture()), count);
 	}
 
+	/**
+	 * Takes culture tokens of the card's own printed culture off the card, the only kind of token this can remove,
+	 * and no more of them than are there.
+	 * @param card The card to take tokens from.
+	 * @param count How many.
+	 */
 	default void RemoveTokensFromCard(PhysicalCardImpl card, int count) {
 		gameState().removeTokens(card, Token.findTokenForCulture(card.getBlueprint().getCulture()), count);
 	}
@@ -95,8 +113,11 @@ public interface CardProperties extends TableBase {
 	default int GetOverwhelmMultiplier(PhysicalCardImpl card) { return game().getModifiersQuerying().getOverwhelmMultiplier(game(), card); }
 
 	/**
+	 * The vitality the card has left: its printed vitality and whatever cards add or take away, less the wounds
+	 * on it, and never less than 0.  A character of printed vitality 4 with 3 wounds reads 1.  The printed
+	 * number is the blueprint's.
 	 * @param card The card to inspect.
-	 * @return The modified current vitality of the card, as altered by all current in-game effects.
+	 * @return The modified current vitality of the card, as altered by all current in-game effects and by its wounds.
 	 */
 	default int GetVitality(PhysicalCardImpl card) { return game().getModifiersQuerying().getVitality(game(), card); }
 

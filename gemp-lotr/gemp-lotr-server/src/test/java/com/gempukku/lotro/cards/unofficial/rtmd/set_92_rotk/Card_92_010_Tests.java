@@ -88,9 +88,7 @@ public class Card_92_010_Tests
 		// Discard 3 cards
 		scn.ShadowChooseCards(fodder1, fodder2, fodder3);
 
-		// Should be able to choose runner from discard
-		scn.ShadowChooseCardBPFromSelection(runner);
-
+		// The runner is the only minion in the discard pile that was not just discarded there: no choice is asked.
 		assertInZone(Zone.SHADOW_CHARACTERS, runner);
 	}
 
