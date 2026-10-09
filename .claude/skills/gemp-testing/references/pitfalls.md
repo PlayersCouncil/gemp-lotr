@@ -951,6 +951,8 @@ the limit is reached at n = limit - 1 (3 of 4; 5 of 6 under 92_1, Q-0182 open).
 
 - `0_8018` Test Fork ("Fellowship: Add (1) to exert a companion or heal each companion."): a Free Peoples condition whose second branch is two effects (remember the companions, then heal those remembered), for mechanics/ChoiceWithNothingOnAnyBranchTests: a choice with such a branch always asks.
 
+- `0_8019` Test Tourniquet ("You may not heal minions."): a Shadow condition whose `CantHeal` names its player, for mechanics/HealBarThatNamesAPlayerTests. A heal is asked about with the player who makes it: a `CantHeal` with `player` stops that player's heals alone, one without stops everybody's (Steward's Tomb 10_119), and a heal that is barred as an effect is still offered and heals nothing (Scaling Ladder 5_57 is used and discarded), while one barred as a cost is not offered (Hrethel 6_95).
+
 **The test booster pack.** The test booster pack (`product/Test-Booster.hjson`) holds eight cards: beside the six it had, Drums in the
 Deep 1_168 (a Shadow skirmish event: shown and not selectable when the pack is opened in the Shadow phase)
 and Foul Things 2_59 (a Shadow-phase event costing 2: selectable, and played for nothing; it then plays a

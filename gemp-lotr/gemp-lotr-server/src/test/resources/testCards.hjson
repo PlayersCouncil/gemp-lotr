@@ -551,4 +551,25 @@
 		}
 		gametext: <b>Fellowship:</b> Add (1) to exert a companion or heal each companion.
 	}
+	# HealBarThatNamesAPlayerTests: a bar on healing that names the player who may not heal.  Every printed
+	# "cannot heal" names nobody and stops every heal of the card; the one text that names a player is a Race to
+	# Mount Doom modifier (92_35), which lays its bar by a trigger on each heal.  This is the bar by itself.
+	0_8019: {
+		title: Test Tourniquet
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: modifier
+			modifier: {
+				type: CantHeal
+				filter: minion
+				player: you
+			}
+		}
+		gametext: You may not heal minions.
+	}
 }

@@ -443,8 +443,13 @@ public class Filters {
                 && game.getModifiersQuerying().canBeExerted(game, source, physicalCard);
     }
 
-    public static Filter canHeal =
-            (game, physicalCard) -> game.getGameState().getWounds(physicalCard) > 0 && game.getModifiersQuerying().canBeHealed(game, physicalCard);
+    /**
+     * A wounded card that performingPlayer may heal a wound from.
+     */
+    public static Filter canHeal(final String performingPlayer) {
+        return (game, physicalCard) -> game.getGameState().getWounds(physicalCard) > 0
+                && game.getModifiersQuerying().canBeHealed(game, performingPlayer, physicalCard);
+    }
 
     public static final Filter notAssignedToSkirmish = (game, physicalCard) -> {
         for (Assignment assignment : game.getGameState().getAssignments()) {

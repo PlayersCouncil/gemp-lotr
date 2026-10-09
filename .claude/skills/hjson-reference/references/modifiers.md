@@ -232,8 +232,11 @@ In general, although the names of modifiers are case-insensitive, the names of t
       optional
 * CantHeal
   Prevents cards matching `filter` from healing, so long as the `requires` requirements are met.
+  If `player` is given, only that player's heals of those cards are prevented (the other player heals them as before); if not, every heal is.
     * filter
       required
+    * player
+      optional
     * requires [ ]
       optional
 * CantLookOrRevealHand

@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -34,6 +33,8 @@ public class Card_92_035_Tests
 					                             //   Skirmish: heal a minion skirmishing Hrethel to make Hrethel strength +3 (limit +3)
 					put("savage", "1_151");      // Uruk Savage: [isengard] Uruk-hai, strength 5, vitality 3, damage +1
 					put("shaman", "1_152");      // Uruk Shaman: [isengard] Uruk-hai; Maneuver: remove (2) to heal an Uruk-hai
+					put("ladder", "5_57");       // Scaling Ladder: [isengard] support-area condition; Skirmish: spot an
+					                             //   [isengard] token here to heal an Uruk-hai, and discard this condition
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -314,7 +315,6 @@ public class Card_92_035_Tests
 	}
 
 	@Test
-	@Ignore("F-0319: a minion is a character too, but minions are not counted; the bar names no player, so the engine must change first")
 	public void AMinionTheOwnerHealsAtASanctuaryIsNotHealedASecondTime() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetFreepsScenario();
 
@@ -348,6 +348,83 @@ public class Card_92_035_Tests
 		assertFalse(scn.FreepsActionAvailable(hrethel));
 		assertEquals(1, scn.GetWoundsOn(savage));
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
+
+	@Test
+	public void AMinionTheOwnerHasHealedAtASanctuaryIsStillHealedByTheShadowPlayer() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
+
+		var hrethel = scn.GetFreepsCard("hrethel");
+		var savage = scn.GetShadowCard("savage");
+		var ladder = scn.GetShadowCard("ladder");
+
+		scn.MoveCompanionsToTable(hrethel);
+
+		scn.StartGame();
+		scn.SkipToSite(2);
+		scn.MoveMinionsToTable(savage);
+		scn.AddWoundsToChar(savage, 2);
+		scn.MoveCardsToSupportArea(ladder);
+		scn.AddTokensToCard(ladder, 1);
+
+		// The fellowship moves to site 3, a sanctuary, and fights there.
+		scn.FreepsPass();
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(hrethel, savage);
+		scn.FreepsResolveSkirmish(hrethel);
+
+		// The owner heals the one wound he may heal from the Savage here.
+		assertTrue(scn.FreepsActionAvailable(hrethel));
+		scn.FreepsUseCardAction(hrethel);
+		assertEquals(1, scn.GetWoundsOn(savage));
+
+		// "You may heal no more than one wound": the limit is its owner's.  The Shadow player heals
+		// his own minion of the wound that is left.
+		assertTrue(scn.ShadowActionAvailable(ladder));
+		scn.ShadowUseCardAction(ladder);
+		assertEquals(0, scn.GetWoundsOn(savage));
+		assertInDiscard(ladder);
+
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
+
+	@Test
+	public void AWoundTheShadowPlayerHealsFromHisMinionDoesNotCountAgainstTheOwnersOne() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
+
+		var hrethel = scn.GetFreepsCard("hrethel");
+		var savage = scn.GetShadowCard("savage");
+		var ladder = scn.GetShadowCard("ladder");
+
+		scn.MoveCompanionsToTable(hrethel);
+
+		scn.StartGame();
+		scn.SkipToSite(2);
+		scn.MoveMinionsToTable(savage);
+		scn.AddWoundsToChar(savage, 2);
+		scn.MoveCardsToSupportArea(ladder);
+		scn.AddTokensToCard(ladder, 1);
+
+		// The fellowship moves to site 3, a sanctuary, and fights there.
+		scn.FreepsPass();
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(hrethel, savage);
+		scn.FreepsResolveSkirmish(hrethel);
+
+		// The Shadow player heals his minion first.
+		scn.FreepsPass();
+		assertTrue(scn.ShadowActionAvailable(ladder));
+		scn.ShadowUseCardAction(ladder);
+		assertEquals(1, scn.GetWoundsOn(savage));
+
+		// That wound was not healed by the owner, who may still heal one from the Savage.
+		assertEquals(6, scn.GetStrength(hrethel));
+		assertTrue(scn.FreepsActionAvailable(hrethel));
+		scn.FreepsUseCardAction(hrethel);
+		assertEquals(0, scn.GetWoundsOn(savage));
+		assertEquals(9, scn.GetStrength(hrethel));
+
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
 
 	@Test

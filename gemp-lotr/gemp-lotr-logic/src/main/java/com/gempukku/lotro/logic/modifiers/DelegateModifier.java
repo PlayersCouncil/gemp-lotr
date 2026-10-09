@@ -70,8 +70,8 @@ public class DelegateModifier implements Modifier {
     }
 
     @Override
-    public boolean canBeHealed(LotroGame game, PhysicalCard card) {
-        return delegate.canBeHealed(game, card);
+    public boolean canBeHealed(LotroGame game, String performingPlayer, PhysicalCard card) {
+        return delegate.canBeHealed(game, performingPlayer, card);
     }
 
     @Override

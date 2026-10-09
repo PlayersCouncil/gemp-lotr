@@ -1436,7 +1436,8 @@
 			optional: false
 			trigger: {
 				type: Heals
-				filter: or(companion,ally)
+				filter: character
+				player: owner
 				memorize: healedComp
 			}
 			requires: [
@@ -1453,6 +1454,7 @@
 				modifier: {
 					type: CantHeal
 					filter: Memory(healedComp)
+					player: owner
 					requires: {
 						type: Location
 						filter: sanctuary

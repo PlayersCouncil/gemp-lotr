@@ -121,7 +121,12 @@ public interface Modifier {
 
     boolean canBeReturnedToHand(LotroGame game, PhysicalCard card, PhysicalCard source);
 
-    boolean canBeHealed(LotroGame game, PhysicalCard card);
+    /**
+     * Whether this modifier lets performingPlayer heal a wound from the card.  A bar on healing that names a
+     * player ("you may not heal ...") answers false for that player's heals alone; one that names nobody answers
+     * false whoever heals.
+     */
+    boolean canBeHealed(LotroGame game, String performingPlayer, PhysicalCard card);
 
     boolean canAddBurden(LotroGame game, String performingPlayer, PhysicalCard source);
 

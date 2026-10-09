@@ -117,7 +117,12 @@ public interface ModifiersQuerying {
 
     boolean canBeExerted(LotroGame game, PhysicalCard exertionSource, PhysicalCard exertedCard);
 
-    boolean canBeHealed(LotroGame game, PhysicalCard card);
+    /**
+     * Whether performingPlayer may heal a wound from the card: the card is not hindered and no bar on healing
+     * that reaches it stops this player.  The player is whoever the heal is made by (HealResult's performing
+     * player); a bar that names a player (CantHealModifier with a banned player) stops only that player's heals.
+     */
+    boolean canBeHealed(LotroGame game, String performingPlayer, PhysicalCard card);
 
     boolean canAddBurden(LotroGame game, String performingPlayer, PhysicalCard source);
 

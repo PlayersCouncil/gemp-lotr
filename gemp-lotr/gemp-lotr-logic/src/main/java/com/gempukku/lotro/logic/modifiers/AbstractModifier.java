@@ -298,7 +298,7 @@ public abstract class AbstractModifier implements Modifier {
     }
 
     @Override
-    public boolean canBeHealed(LotroGame game, PhysicalCard card) {
+    public boolean canBeHealed(LotroGame game, String performingPlayer, PhysicalCard card) {
         return true;
     }
 

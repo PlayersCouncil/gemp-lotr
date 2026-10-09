@@ -1114,14 +1114,14 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     }
 
     @Override
-    public boolean canBeHealed(LotroGame game, PhysicalCard card) {
+    public boolean canBeHealed(LotroGame game, String performingPlayer, PhysicalCard card) {
         LoggingThreadLocal.logMethodStart(card, "canBeHealed");
         try {
             if(game.getGameState().isHindered(card))
                 return false;
 
             for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.WOUND_MODIFIER, card))
-                if (!modifier.canBeHealed(game, card))
+                if (!modifier.canBeHealed(game, performingPlayer, card))
                     return false;
             return true;
         } finally {

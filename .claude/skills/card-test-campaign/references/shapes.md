@@ -114,9 +114,11 @@ the healed character for the turn. The place stands in the trigger's `requires` 
 modifier's (where the bar holds), and each owes its own `-`: a heal away from the place earlier in the turn does
 not use up the one wound (healed at site 2, then again at the sanctuary in the regroup phase), and a character
 barred at the place is healed again once the fellowship has left it. With the second alone, the trigger's
-requirement can go and no test notices. CantHeal names no player: it stops every heal of the card whoever makes
-it, so a bar meant for one player's heals ("you may heal") cannot be laid on a card the other player heals too
-(a minion; F-0319, open, the engine).
+requirement can go and no test notices. "You" stands in it twice as well (F-0319, built by engine pass 20):
+`player: owner` on the `Heals` trigger (whose heals count) and on the CantHeal (whose heals the bar stops; with
+no `player` it stops every heal of the card, whoever makes it). Each owes its own `-` on a card both players
+heal, a minion: the Shadow player heals it and its owner then heals his one wound (Scaling Ladder 5_57, then
+Hrethel 6_95), and the owner heals it and the Shadow player then heals it again (Hrethel, then the Ladder).
 
 **"Limit 1 per bearer" is a Restriction that lists `L`.** Typed `Restriction [+ - L]`, as on Frostbite 101_27
 and The Weight of a Legacy 51_282. One test can claim all three: a bearer who has a copy is not

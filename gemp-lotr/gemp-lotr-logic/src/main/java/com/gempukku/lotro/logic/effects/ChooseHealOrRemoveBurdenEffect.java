@@ -35,7 +35,7 @@ public class ChooseHealOrRemoveBurdenEffect extends ChooseActiveCardsEffect {
     }
 
     private Filter canBeHealed() {
-        return (game, physicalCard) -> game.getModifiersQuerying().canBeHealed(game, physicalCard);
+        return (game, physicalCard) -> game.getModifiersQuerying().canBeHealed(game, _playerId, physicalCard);
     }
 
     private Filter hasRemovableBurden() {
