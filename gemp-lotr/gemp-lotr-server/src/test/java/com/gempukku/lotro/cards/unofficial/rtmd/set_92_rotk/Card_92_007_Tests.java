@@ -26,15 +26,15 @@ import static org.junit.Assert.*;
 
 public class Card_92_007_Tests implements TestConstants
 {
-	private final HashMap<String, String> cards = new HashMap<>() {{
-		put("gimli", "1_13");
-		put("legolas", "1_50");
-		put("runner", "1_178");
-		put("enquea", "1_231");
-	}};
-
 	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("gimli", "1_13");       // Gimli, Son of Gloin
+					put("legolas", "1_50");     // Legolas, Greenleaf
+					put("runner", "1_178");     // Goblin Runner
+					put("enquea", "1_231");     // Ulaire Enquea, Lieutenant of Morgul
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -43,11 +43,34 @@ public class Card_92_007_Tests implements TestConstants
 	}
 
 	protected VirtualTableScenario GetShadowScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("gimli", "1_13");       // Gimli, Son of Gloin
+					put("legolas", "1_50");     // Legolas, Greenleaf
+					put("runner", "1_178");     // Goblin Runner
+					put("enquea", "1_231");     // Ulaire Enquea, Lieutenant of Morgul
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
 				null, "92_7"
+		);
+	}
+
+	// The same table with no modifier: the control.
+	protected VirtualTableScenario GetNoModScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("gimli", "1_13");       // Gimli, Son of Gloin
+					put("legolas", "1_50");     // Legolas, Greenleaf
+					put("runner", "1_178");     // Goblin Runner
+					put("enquea", "1_231");     // Ulaire Enquea, Lieutenant of Morgul
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -57,6 +80,7 @@ public class Card_92_007_Tests implements TestConstants
 		 * Set: RTMD 92
 		 * Name: Race Text 92_7
 		 * Type: MetaSite
+		 * Intensity: 4
 		 * Game Text: You must play with your hand revealed.
 		 */
 
@@ -66,6 +90,7 @@ public class Card_92_007_Tests implements TestConstants
 
 		assertEquals("Race Text 92_7", card.getBlueprint().getTitle());
 		assertEquals(CardType.METASITE, card.getBlueprint().getCardType());
+		assertEquals(4, card.getBlueprint().getIntensity());
 	}
 
 	@Test
@@ -152,8 +177,7 @@ public class Card_92_007_Tests implements TestConstants
 
 	@Test
 	public void NoHandIsReportedRevealedWithout92_7() throws Exception {
-		var scn = new VirtualTableScenario(cards, VirtualTableScenario.FellowshipSites,
-				VirtualTableScenario.FOTRFrodo, VirtualTableScenario.RulingRing);
+		var scn = GetNoModScenario();
 		scn.StartGame();
 
 		var stats = new GameStats();
