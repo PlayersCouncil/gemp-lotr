@@ -4,6 +4,7 @@ import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -13,19 +14,45 @@ import static org.junit.Assert.*;
 
 public class Card_92_016_Tests
 {
-	private final HashMap<String, String> cards = new HashMap<>() {{
-		// Sméagol, Old Noser (5_28): FP companion, strength 3, vitality 4, ring-bound
-		put("smeagol", "5_28");
-		// Gollum, Nasty Treacherous Creature (5_24): Shadow minion, strength 5, vitality 4
-		put("gollum", "5_24");
-		// Legolas, Greenleaf (1_50): Elven companion, strength 6, vitality 3, archer
-		put("legolas", "1_50");
-		// Lurtz, Servant of Isengard (1_127): Isengard Uruk-hai minion, strength 13, vitality 3, archer, damage +1
-		put("lurtz", "1_127");
-	}};
+	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("smeagol", "5_28");         // Sméagol, Old Noser: [gollum] companion, strength 3, vitality 4; Ring-bound
+					put("shireSmeagol", "103_116"); // Smeagol, Once Like Us: [shire] companion, strength 3, vitality 4; Ring-bound
+					put("gollum", "5_24");          // Gollum, Nasty Treacherous Creature: [gollum] minion, strength 5, vitality 4
+					put("wraithGollum", "103_66");  // Gollum, Half a Wraith Himself: [wraith] minion, strength 5, vitality 4
+					put("shelob", "8_25");          // Shelob, Eater of Light: [gollum] Spider minion, strength 8, vitality 8; fierce
+					put("sam", "1_311");            // Sam, Son of Hamfast: [shire] Hobbit companion, strength 3, vitality 4; Ring-bound
+					put("aragorn", "1_89");         // Aragorn, Ranger of the North: [gondor] Man companion, strength 8, vitality 4
+					put("legolas", "1_50");         // Legolas, Greenleaf: [elven] Elf companion, strength 6, vitality 3; Archer
+					put("lurtz", "1_127");          // Lurtz, Servant of Isengard: [isengard] Uruk-hai, strength 13, vitality 3; Archer, Damage +1
+					put("savage1", "1_151");        // Uruk Savage: [isengard] Uruk-hai, strength 5, vitality 3; Damage +1 is its whole text
+					put("savage2", "1_151");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
+				"92_16", null
+		);
+	}
 
-	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+	protected VirtualTableScenario GetShadowScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("smeagol", "5_28");         // Sméagol, Old Noser: [gollum] companion, strength 3, vitality 4; Ring-bound
+					put("shireSmeagol", "103_116"); // Smeagol, Once Like Us: [shire] companion, strength 3, vitality 4; Ring-bound
+					put("gollum", "5_24");          // Gollum, Nasty Treacherous Creature: [gollum] minion, strength 5, vitality 4
+					put("wraithGollum", "103_66");  // Gollum, Half a Wraith Himself: [wraith] minion, strength 5, vitality 4
+					put("shelob", "8_25");          // Shelob, Eater of Light: [gollum] Spider minion, strength 8, vitality 8; fierce
+					put("sam", "1_311");            // Sam, Son of Hamfast: [shire] Hobbit companion, strength 3, vitality 4; Ring-bound
+					put("aragorn", "1_89");         // Aragorn, Ranger of the North: [gondor] Man companion, strength 8, vitality 4
+					put("legolas", "1_50");         // Legolas, Greenleaf: [elven] Elf companion, strength 6, vitality 3; Archer
+					put("lurtz", "1_127");          // Lurtz, Servant of Isengard: [isengard] Uruk-hai, strength 13, vitality 3; Archer, Damage +1
+					put("savage1", "1_151");        // Uruk Savage: [isengard] Uruk-hai, strength 5, vitality 3; Damage +1 is its whole text
+					put("savage2", "1_151");
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -39,15 +66,17 @@ public class Card_92_016_Tests
 		 * Set: RTMD 92
 		 * Name: Race Text 92_16
 		 * Type: MetaSite
+		 * Intensity: -1
 		 * Game Text: Gollum and Smeagol cannot take wounds.
 		 */
 
-		var scn = GetScenario();
+		var scn = GetShadowScenario();
 
 		var card = scn.GetShadowCard("mod");
 
 		assertEquals("Race Text 92_16", card.getBlueprint().getTitle());
 		assertEquals(CardType.METASITE, card.getBlueprint().getCardType());
+		assertEquals(-1, card.getBlueprint().getIntensity());
 	}
 
 	@Test
@@ -57,7 +86,7 @@ public class Card_92_016_Tests
 		// Gollum should be immune to the FP archery wound.
 		// Legolas's arrow must go to Lurtz (only valid shadow target).
 		// Lurtz's arrow can go to Frodo or Legolas but NOT Smeagol.
-		var scn = GetScenario();
+		var scn = GetShadowScenario();
 
 		var smeagol = scn.GetFreepsCard("smeagol");
 		var legolas = scn.GetFreepsCard("legolas");
@@ -84,5 +113,83 @@ public class Card_92_016_Tests
 		assertEquals(0, scn.GetWoundsOn(gollum));
 		assertEquals(1, scn.GetWoundsOn(legolas));
 		assertEquals(1, scn.GetWoundsOn(lurtz));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
+
+	@Test
+	public void SmeagolOfTheShireLosesASkirmishUnwoundedWhenHisOwnerHasTheModifier() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
+
+		var smeagol = scn.GetFreepsCard("shireSmeagol");
+		var sam = scn.GetFreepsCard("sam");
+		var savage1 = scn.GetShadowCard("savage1");
+		var savage2 = scn.GetShadowCard("savage2");
+
+		scn.MoveCompanionsToTable(smeagol, sam);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(savage1, savage2);
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{smeagol, savage1}, new PhysicalCardImpl[]{sam, savage2});
+
+		// Each has strength 3 and loses to an Uruk Savage's 5 without being overwhelmed;
+		// Damage +1 makes the loss 2 wounds.
+		scn.FreepsResolveSkirmish(smeagol);
+		scn.PassCurrentPhaseActions();
+		assertEquals(0, scn.GetWoundsOn(smeagol));
+
+		// Sam, a [shire] Ring-bound companion as Smeagol is, takes both.
+		assertEquals(0, scn.GetWoundsOn(sam));
+		scn.FreepsResolveSkirmish(sam);
+		scn.PassCurrentPhaseActions();
+		assertEquals(2, scn.GetWoundsOn(sam));
+		assertEquals(0, scn.GetWoundsOn(smeagol));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void GollumOfTheWraithCultureTakesNoArrowAndNoSkirmishWoundWhenTheFreePeoplesPlayerHasTheModifier() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var legolas = scn.GetFreepsCard("legolas");
+		var gollum = scn.GetShadowCard("wraithGollum");
+		var shelob = scn.GetShadowCard("shelob");
+		var savage = scn.GetShadowCard("savage1");
+
+		scn.MoveCompanionsToTable(aragorn, legolas);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(gollum, shelob, savage);
+
+		// Legolas's arrow: Shelob, of Gollum's old culture and not Gollum, and the Savage may take it.
+		scn.SkipToArcheryWounds();
+		assertTrue(scn.ShadowHasCardChoiceAvailable(shelob, savage));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(gollum));
+		scn.ShadowChooseCard(shelob);
+		assertEquals(1, scn.GetWoundsOn(shelob));
+		assertEquals(0, scn.GetWoundsOn(gollum));
+
+		// Shelob is left out of the skirmishes.
+		scn.PassCurrentPhaseActions();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, gollum}, new PhysicalCardImpl[]{legolas, savage});
+		scn.ShadowDeclineAssignments();
+
+		// Aragorn's 8 beats Gollum's 5 without overwhelming him.
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.PassCurrentPhaseActions();
+		assertEquals(0, scn.GetWoundsOn(gollum));
+
+		// Legolas's 6 beats the Savage's 5, and the Savage is wounded as a loser is.
+		assertEquals(0, scn.GetWoundsOn(savage));
+		scn.FreepsResolveSkirmish(legolas);
+		scn.PassCurrentPhaseActions();
+		assertEquals(1, scn.GetWoundsOn(savage));
+		assertEquals(0, scn.GetWoundsOn(gollum));
+
+		// Shelob is fierce: the fierce assignments are next.
+		assertTrue(scn.InFierceRound());
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
 }
