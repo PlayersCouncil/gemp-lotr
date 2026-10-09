@@ -477,7 +477,10 @@ with cards in his hand he is first asked "Reconcile - choose card to discard or 
 (`ShadowDeclineReconciliation()`); with an empty hand nothing is asked (Radagast 59_26's tests). An empty hand
 does not stay empty over a second move: where his draw deck holds cards the Shadow player draws at the reconcile
 inside `SkipToMovementDecision()`, so the last regroup phase asks him to reconcile again before the turn ends
-and the minions are discarded (Mountain-troll 65_112's tests).
+and the minions are discarded (Mountain-troll 65_112's tests). The old Race to Mount Doom double-move tests reach
+the second move by `SkipToPhase(Phase.REGROUP); PassCurrentPhaseActions(); FreepsChooseToMove()` over empty hands
+(a one-card deck, its other copy put in the discard pile): one more card in the deck and the last call fails on
+the Shadow player's reconcile. Write `SkipToMovementDecision()` for the first two (92_11, 92_14).
 
 **The move limit never reads below 1.** The engine floors it (`ModifiersLogic.getMoveLimit`), so from the base
 of 2 a penalty of 1 and a penalty of 2 both read 1, and a "move limit is -1" card whose every board starts from 2
@@ -539,7 +542,9 @@ companion is in the decks). After `StartGame()` it is player 1's bid less 1 on e
 ## Cards, owners and zones
 
 **Exerting is not wounding.** A character with one vitality left cannot exert and so cannot pay an exertion cost,
-but can still be wounded.
+but can still be wounded. Nor is he offered to an "exert a ..." choice, whatever its filter: an invalid candidate
+there has 2 vitality left or more, or he shows nothing (beside a Goblin Runner, vitality 1, "exert a companion"
+built as `choose(character,not(ally))` passed; beside Goblin Patrol Troop 1_177, vitality 3, it fails: 92_13).
 
 **Allies live in the support area.** `MoveAlliesToTable` puts allies there, where an ally played legally goes.
 `MoveCompanionsToTable` takes companions only and fails the test if handed anything else, as `MoveAlliesToTable`
