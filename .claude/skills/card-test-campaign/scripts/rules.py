@@ -67,6 +67,17 @@ def norm(name: str) -> str:
     return t.strip()
 
 
+def plain(text: str) -> str:
+    """Text with its accents dropped and its apostrophes made straight, capitals kept."""
+    t = unicodedata.normalize("NFKD", text)
+    return "".join(c for c in t if not unicodedata.combining(c)).replace("\u2019", "'").replace("\u2018", "'")
+
+
+def squash(text: str) -> str:
+    """Letters and digits only, for finding one text inside another whatever the punctuation and markup."""
+    return re.sub(r"[^a-z0-9]+", "", plain(text).lower())
+
+
 def clean(text: str) -> str:
     """Wiki markup turned into something that reads as plain text."""
     t = text
@@ -98,6 +109,7 @@ class Rules:
         self.in_force = in_force
         self.lines = path.read_text(encoding="utf-8").replace("\r", "").split("\n")
         self.sections = []  # (level, title, first line index, last line index exclusive)
+        self._card_paragraphs = None
         heads = []
         for i, line in enumerate(self.lines):
             m = _HEADING.match(line)
@@ -184,6 +196,34 @@ class Rules:
                 out.append((name, i))
         return out
 
+    def paragraph(self, section, i):
+        """The first and last line of the paragraph line i stands in, inside its section."""
+        lo = i
+        while lo > section[2] + 1 and self.lines[lo - 1].strip():
+            lo -= 1
+        hi = i
+        while hi + 1 < section[3] and self.lines[hi + 1].strip():
+            hi += 1
+        return lo, hi
+
+    def card_paragraphs(self):
+        """Each paragraph outside the individual rulings that names some card with the Card mark, as (section,
+        first line, last line, its words with every marked card and culture taken out and accents dropped).  The
+        examples of a glossary entry are these, and one may name a second card in plain words."""
+        if self._card_paragraphs is None:
+            self._card_paragraphs, seen = [], set()
+            for _, i in self.mentions():
+                sec = self.section_at(i)
+                if sec is None:
+                    continue
+                lo, hi = self.paragraph(sec, i)
+                if lo in seen:
+                    continue
+                seen.add(lo)
+                bare = re.sub(r"\{\{(?:Card|CI?)\|[^}]*\}\}", " ", "\n".join(self.lines[lo:hi + 1]))
+                self._card_paragraphs.append((sec, lo, hi, plain(bare)))
+        return self._card_paragraphs
+
 
 _books = None
 
@@ -266,44 +306,113 @@ def council_subjects(lines) -> set:
 
 
 TITLE_ONLY = "  (names the title only: check which version it means)"
+NO_MARKS = "  (the name stands in plain words, without the marks: check that the card is meant)"
+OTHER_TITLE = ("Each of these names the card's title, and the words it quotes are in the game text of the card(s) it "
+               "says and not in this card's. Read it for the rule it illustrates: it says nothing of this card's own "
+               "text.")
+
+_QUOTED = re.compile(r"[\"\u201c]([^\"\u201c\u201d]{12,}?)[\"\u201d]")
+_title_texts = None
+
+
+def quotes_another(card_id: str, passage: str) -> list:
+    """The other cards of this card's title whose game text a passage quotes, where no words it quotes from a card
+    of the title are this card's own.  [] where it quotes this card, quotes no card of the title, or no other card
+    has the title.  A quotation cut short with dots is matched piece by piece."""
+    global _title_texts
+    if _title_texts is None:
+        _title_texts = {}
+        for cid, c in g.card_index().items():
+            text = squash(g.plain_text(c.field("gametext", "") or ""))
+            if text:
+                _title_texts.setdefault(norm(c.field("title", "") or ""), {})[cid] = text
+    me = g.card_index().get(card_id)
+    if me is None:
+        return []
+    same = _title_texts.get(norm(me.field("title", "") or ""), {})
+    mine = same.get(card_id, "")
+    others = {cid: text for cid, text in same.items() if cid != card_id and text != mine}
+    found = []
+    for quoted in _QUOTED.findall(passage):
+        pieces = [p for p in (squash(x) for x in re.split(r"\.{3}|\u2026", quoted)) if len(p) >= 10]
+        if not pieces:
+            continue
+        if all(p in mine for p in pieces):
+            return []
+        found += [cid for cid, text in others.items() if all(p in text for p in pieces)]
+    return sorted(set(found), key=g.id_sort_key)
+
+
+def _quoting(ids: list) -> str:
+    return ": quotes %s%s, not this card" % (", ".join(ids[:4]), " and %d more" % (len(ids) - 4) if len(ids) > 4 else "")
 MENTIONS = ("The rest only mention the name: each is a ruling on another card, or a council page about another card, "
             "with this card's title somewhere in its text (often inside another card's name). Read one for whether "
             "it bears on this card; it is not a ruling on it.")
 
 
 def card_rulings(arg: str):
-    """What the rules say of a card, as (named, mentioned), each a list of entries ready to print.  `named` are the
-    rulings on the card and the places that name it in full; `mentioned` are rulings on other cards that only have
-    its title in their text ("the Legolas Starter Deck", The Mirror of Galadriel) and council pages about another
-    card that name it in passing."""
+    """What the rules say of a card, as (named, mentioned, other_title), each a list of entries ready to print.
+    `named` are the rulings on the card and the places that name it in full; `mentioned` are rulings on other
+    cards that only have its title in their text ("the Legolas Starter Deck", The Mirror of Galadriel) and council
+    pages about another card that name it in passing; `other_title` are the passages that name its title and quote
+    the text of another card of that title (the Anduin Banks of another block)."""
     is_id = bool(re.match(r"^\d+_\d+$", arg))
     keys, weak = card_keys(card_id=arg) if is_id else card_keys(name=arg)
-    named, mentioned = [], []
+    named, mentioned, other_title = [], [], []
+    # On a Players' Council erratum the individual rulings are the original's, found by the name the two share.  An
+    # "Erratum" among them is Decipher's corrected text of the original and no ruling (notes-errata.txt).
+    pc_erratum = is_id and g.segment_of(arg) == "errata"
     for book, names, kind, text, line_no in all_rulings():
         normed = [norm(n) for n in names]
         hit = [n for n in normed if n in keys]
         soft = [n for n in normed if n in weak]
         if hit or soft:
+            if pc_erratum and kind.strip().lower() == "erratum":
+                kind += " (the original's text)"
             named.append("### Individual ruling, %s line %d: %s%s\nCards: %s\n%s"
                          % (book.name, line_no, kind, "" if hit else TITLE_ONLY, "; ".join(names), text))
+
+    def passage(book, sec, lo, hi, at, how, note):
+        text = clean("\n".join(book.lines[lo:hi + 1])).strip()
+        others = quotes_another(arg, text) if is_id else []
+        if pc_erratum and g.base_id(arg) in others:
+            # The words quoted are the original's, and this erratum has rewritten them: still a passage about this
+            # card, and whether it reaches the new wording is the question Q-0111 settles case by case.
+            note += ("  (quotes the original %s in words this erratum has rewritten: whether it still binds, `lookup.py Q-0111`)"
+                     % g.base_id(arg))
+            others = []
+        entry = "### %s \"%s\", %s line %d%s%s\n%s" % (how, sec[1], book.label(), at + 1, _quoting(others) if others else "", note, text)
+        (other_title if others else named).append(entry)
+
     seen = set()
     for book in books():
         for name, i in book.mentions():
             n = norm(name)
             if n in keys or n in weak:
                 sec = book.section_at(i)
-                key = (book.name, i)
-                if key in seen or sec is None or re.search(r"[XR]-List", sec[1]):
+                if sec is None or re.search(r"[XR]-List", sec[1]):
                     continue  # the banned and restricted lists name cards without saying anything about them
-                seen.add(key)
-                lo = i
-                while lo > sec[2] + 1 and book.lines[lo - 1].strip():
-                    lo -= 1
-                hi = i
-                while hi + 1 < sec[3] and book.lines[hi + 1].strip():
-                    hi += 1
-                named.append("### Named in \"%s\", %s line %d%s\n%s" % (sec[1], book.label(), i + 1, "" if n in keys else TITLE_ONLY,
-                                                                      clean("\n".join(book.lines[lo:hi + 1])).strip()))
+                lo, hi = book.paragraph(sec, i)
+                if (book.name, lo) in seen:
+                    continue  # a paragraph that names the card twice is printed once
+                seen.add((book.name, lo))
+                passage(book, sec, lo, hi, i, "Named in", "" if n in keys else TITLE_ONLY)
+    # An example that names two cards sometimes marks only one of them ("You cannot use Strange-Looking Men to
+    # transfer «Black Breath»"): the card's whole name in plain words, in a paragraph that marks some card.  The
+    # title alone of a card that has a subtitle is not looked for: "Gandalf" and "Sam" are in every other example.
+    if is_id:
+        me = g.card_index()[arg]
+        whole = plain(g.full_name(me))
+    else:
+        whole = plain(arg)
+    if len(whole) >= 4:
+        word = re.compile(r"(?<![A-Za-z0-9])" + re.escape(whole[0]) + "(?i:" + re.escape(whole[1:]) + r")(?![A-Za-z0-9])")
+        for book in books():
+            for sec, lo, hi, bare in book.card_paragraphs():
+                if (book.name, lo) in seen or re.search(r"[XR]-List", sec[1]) or not word.search(bare):
+                    continue
+                seen.add((book.name, lo))
+                passage(book, sec, lo, hi, lo, "Named without marks in", NO_MARKS)
     # A ruling on another card that speaks of this one in passing.  Where its text gives the card's full name it
     # names the card; where it only has the title as a word ("the Ring passes to Sam", but also "the Legolas
     # Starter Deck" and every card with Galadriel in its name) it is a mention, to be read as one.
@@ -331,20 +440,24 @@ def card_rulings(arg: str):
                 "" if about else "  (the page is about another card and names this one in passing)",
                 council_decision(lines), cid)
             (named if about else mentioned).append(entry)
-    return named, mentioned
+    return named, mentioned, other_title
 
 
 def cmd_card(arg: str, quiet_if_none=False) -> bool:
-    named, mentioned = card_rulings(arg)
+    named, mentioned, other_title = card_rulings(arg)
     for entry in named:
         print(entry + "\n")
+    if other_title:
+        print(("" if named else "No ruling names this card.  ") + "Rules passages that quote another card of this title.  " + OTHER_TITLE + "\n")
+        for entry in other_title:
+            print(entry + "\n")
     if mentioned:
-        print(("" if named else "No ruling names this card.  ") + MENTIONS + "\n")
+        print(("" if named or other_title else "No ruling names this card.  ") + MENTIONS + "\n")
         for entry in mentioned:
             print(entry + "\n")
-    if not named and not mentioned and not quiet_if_none:
+    if not named and not mentioned and not other_title and not quiet_if_none:
         print("The rules do not name this card.")
-    return bool(named or mentioned)
+    return bool(named or mentioned or other_title)
 
 
 def terms_for(card_id: str, include_basic=False):

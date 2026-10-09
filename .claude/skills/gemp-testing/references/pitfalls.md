@@ -244,7 +244,9 @@ copy answers for any other, the other player's copy in his own pile or hand incl
 there, and a card left out of a reveal, needs a blueprint no valid or shown card has (another title, or another
 version of the title); a test that reads where the chosen card went keeps one copy in the pile. The ANSWER need
 not go by blueprint: `ShadowChooseCards(card)` takes that very card out of a discard pile (Mountain-troll
-65_112's tests), and lint's `same-blueprint` warning is only for the `...BPFromSelection` calls.
+65_112's tests), and lint's `same-blueprint` warning is only for the `...BPFromSelection` calls. It says nothing
+where the twin is never named in the test (it lies in the draw deck), the chosen card was cheated out of the draw
+deck, and the card's text takes nothing from a draw deck.
 It cuts both ways: a card read as NOT offered (one still in the hand, say) fails that reading as soon as a valid
 candidate of its blueprint is put in the pile, so a candidate added later takes a blueprint of its own (68_82).
 

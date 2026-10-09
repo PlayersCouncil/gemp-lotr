@@ -177,7 +177,7 @@ All under `scripts/`, run with `python3` from anywhere in the repository. Each p
 
 | Script | For |
 |---|---|
-| `packet.py <id>` | Everything about one card in one place. `--blind` leaves out the implementation; `--terms` adds the rules text its wording touches; `--with-test` adds the current test file and ledger and, for an erratum, the original's definition. |
+| `packet.py <id>` | Everything about one card in one place. `--blind` leaves out the implementation; `--terms` adds the rules text its wording touches; `--with-test` adds the current test file and ledger and, for an erratum, the original's definition. It also prints the picture the client shows, a sheet row of a later revision than the definition's, and the game text a definition had before a commit of the campaign's changed it. `packet.py --find <regex> --skip <ids>` lists cards by what is printed on them (for choosing helpers; the batch's cards and their originals left out), and `--defs <ids>` prints definitions without cardInfo, lore and alternate images. |
 | `rules.py` | Looking things up in Comprehensive Rules 4.2: `term`, `card`, `terms-for`, `grep`, `interactions`. |
 | `reconcile.py` | Reviewed spreadsheet against definitions, field by field. |
 | `cardinfo.py <ids>` | A definition's cardInfo block against the rest of the definition and the other cards of its kind (Q-0145: no test reads it, and it is kept true); `--all`, `--survey`. `packet.py` and `lint.py` print what it finds for a card. |

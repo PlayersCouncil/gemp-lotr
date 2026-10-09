@@ -10,7 +10,9 @@
 An entry is a paragraph (or a list that stands as one block) under a heading, and is printed only when it
 contains EVERY term given: look up separate subjects with separate commands. By default the rulings log, the
 settled shapes and the rig's pitfalls are searched. A term that looks like a finding, question or rig-request
-number (F-0123, Q-0045, G-0012) matches that number only; any other term is a regular expression.
+number (F-0123, Q-0045, G-0012) matches that number only; any other term is a regular expression. Where no entry
+matches that way, the terms are tried again as plain words, whatever the punctuation and markup on either side,
+so that an entry's first words can be given as rulings-index.md prints them: lookup.py "The Hobbit sets (30 to 33)".
 """
 import re
 import sys
@@ -59,13 +61,36 @@ def entries(path):
     return out
 
 
-def matcher(term):
-    if re.fullmatch(r"[QFG]-\d{4}", term):
-        return re.compile(r"\b" + re.escape(term) + r"\b")
-    try:
-        return re.compile(term, re.IGNORECASE)
-    except re.error:  # card text is full of brackets: a term that is not a valid pattern is taken literally
-        return re.compile(re.escape(term), re.IGNORECASE)
+def words(text):
+    """Letters and digits only, in lower case, one space between: what is left of an entry, or of a term, when its
+    punctuation and markup are gone."""
+    return " ".join(re.findall(r"[a-z0-9]+", text.lower()))
+
+
+class matcher:
+    """Whether an entry contains a term: as the regular expression it is, or, when asked, as the plain words it is
+    made of.  The index prints an entry's first words without their markup, cut short with dots, and with the
+    numbers the entry settles after them in square brackets; a term copied from there is matched by its words,
+    without those two additions."""
+
+    def __init__(self, term):
+        self.number = bool(re.fullmatch(r"[QFG]-\d{4}", term))
+        if self.number:
+            self.pattern = re.compile(r"\b" + re.escape(term) + r"\b")
+        else:
+            try:
+                self.pattern = re.compile(term, re.IGNORECASE)
+            except re.error:  # card text is full of brackets: a term that is not a valid pattern is taken literally
+                self.pattern = re.compile(re.escape(term), re.IGNORECASE)
+        copied = re.sub(r"\s*\[(?:[QFG]-\d{4}(?:,\s*)?)+\]\s*$", "", term)
+        copied = re.sub(r"\s*\.\.\.\s*$", "", copied)
+        self.words = "" if self.number else words(copied)
+
+    def search(self, text, as_words=None):
+        """as_words: the entry's plain words, where the term may match by its words as well."""
+        if self.pattern.search(text):
+            return True
+        return bool(as_words is not None and self.words and (" " + self.words + " ") in (" " + as_words + " "))
 
 
 def lead(text, width=150):
@@ -156,10 +181,13 @@ def main(argv):
             i += 1
     pats = [matcher(t) for t in terms]
     hits = []
-    for key in where:
-        for heading, text in entries(FILES[key]):
-            if all(p.search(text) for p in pats):
-                hits.append((key, heading, text))
+    found = [(key, heading, text) for key in where for heading, text in entries(FILES[key])]
+    hits = [e for e in found if all(p.search(e[2]) for p in pats)]
+    if not hits:
+        # Nothing as regular expressions: the terms as plain words (a line copied from the index, brackets and all).
+        hits = [e for e in found if all(p.search(e[2], words(e[2])) for p in pats)]
+        if hits:
+            print("(no entry matches as a regular expression; matched as plain words)\n")
     if not hits:
         print("no entry matches", " and ".join(repr(t) for t in terms), "in", ", ".join(where))
         return 1

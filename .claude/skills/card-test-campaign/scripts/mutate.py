@@ -2,7 +2,8 @@
 """Finds out whether a card's tests would notice if the card were wrong.
 
     mutate.py <id> [--out <name>]           makes its own mistakes and lists the survivors
-    mutate.py <id> --replace <old> <new> [--nth N]   makes one mistake of yours, in the Nth place the old text occurs
+    mutate.py <id> --replace <old> <new> [--nth N]   makes one mistake of yours, in the Nth place the old text occurs,
+                                            and names the tests that noticed it
     mutate.py <id> --all                    lists every mistake and what noticed it
     mutate.py <id> --replace <old> <new> --with-parked
                                             runs the parked (@Ignore) tests too, and says which tests fail and the
@@ -503,7 +504,8 @@ def main(argv):
         counts[verdict] += 1
         if verdict == "survived":
             print("  SURVIVED  line %d: %s" % (card.line + i, what))
-        elif "--all" in argv or with_parked:
+        elif "--all" in argv or with_parked or "--replace" in argv:
+            # One mistake of the caller's own: which tests noticed is what was asked, with or without --all.
             print("  %-9s line %d: %s%s" % (verdict, card.line + i, what, "  (" + failed + ")" if failed else ""))
     print("%d noticed, %d survived, %d made the card unloadable" % (counts["noticed"], counts["survived"], counts["invalid"]))
     if with_parked:

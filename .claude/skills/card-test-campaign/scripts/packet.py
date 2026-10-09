@@ -7,10 +7,26 @@
                                     definition of the card it is a version of
     packet.py <id> --terms          also prints the text of each glossary entry the game text touches
 
-A packet is: where the card lives, what the reviewed spreadsheet says it is (Decipher cards), its definition, where
-the two disagree (and where the definition's cardInfo is out of step with the rest of it, or it has no `side:`),
-every ruling that names it, then under a heading of their own the rulings on other cards that only have its title
-in their text, the glossary entries its text touches, and its other versions.
+    packet.py --find <regex> [--skip <ids>]
+                                    for choosing helper cards: every card whose printed fields and game text
+                                    match (id, name, culture, type, race, numbers, keywords, game text; nothing of
+                                    how it is implemented), without the ids after --skip and the cards they are
+                                    versions of.  The regex is tried, whatever its capitals, against the lines as
+                                    printed, joined by " | ": "\\[gollum\\] condition", "^1_.*\\[gandalf\\].* Man\\b"
+    packet.py --defs <ids> [--skip <ids>]
+                                    the definitions of helper cards and nothing else, without their cardInfo,
+                                    lore and alternate images
+
+--skip takes the ids of your batch (separated by spaces or commas): their definitions and their originals' stay
+shut in stage 1, and neither --find nor --defs will print them.
+
+A packet is: where the card lives, the picture the client shows for it (PC cards), what the reviewed spreadsheet
+says it is (Decipher cards) or the errata sheet's row, a later row of that sheet where it has one above the
+definition's revision, the game text the definition had before a commit of the campaign's changed it, its
+definition, where sheet and definition disagree (and where the definition's cardInfo is out of step with the rest
+of it, or it has no `side:`), every ruling that names it, then under headings of their own the rules passages that
+quote another card of its title and the rulings on other cards that only have its title in their text, the
+glossary entries its text touches, and its other versions.
 """
 import re
 import sys
@@ -70,7 +86,143 @@ def active_test_count(text: str) -> int:
     return len(re.findall(r"^\s*@Test\b", text, re.M))
 
 
+SHEET_FIELDS = ["title", "subtitle", "unique", "culture", "card_type", "card_subtype", "twilight", "strength",
+                "vitality", "resistance", "signet", "site", "rarity"]
+
+
+def print_row(row):
+    """A sheet row's printed fields and game text."""
+    for k in SHEET_FIELDS:
+        if row.get(k):
+            print("- %s: %s" % (k, g.plain_text(row[k]) if k in ("title", "subtitle") else row[k]))
+    print()
+    print("Game text:")
+    for line in re.split(r"<br\s*/?>|\\\\|\\(?![(\[])", row["game_text"]):
+        if line.strip():
+            print("> " + line.strip())
+    print()
+
+
+def printed(card_id: str, card) -> list:
+    """What is printed on a card, as the definition has it, in three lines at most: nothing of its effects."""
+    def has(name):
+        return (card.field(name, "") or "").strip()
+    culture, kind, race = has("culture"), has("type"), has("race")
+    first = "%s  %s  %s%s%s" % (card_id, g.full_name(card), "[%s] " % culture.lower() if culture else "", kind.lower(),
+                                 ", " + race if race else "")
+    if has("unique").lower() == "true":
+        first += "; unique"
+    numbers = [(label, has(name)) for label, name in (("twilight", "twilight"), ("strength", "strength"), ("vitality", "vitality"),
+                                                      ("resistance", "resistance"), ("site", "site"), ("signet", "signet"),
+                                                      ("block", "block"), ("direction", "direction"))]
+    numbers = ["%s %s" % (label, value) for label, value in numbers if value]
+    if numbers:
+        first += "; " + ", ".join(numbers)
+    out = [first]
+    m = re.search(r"^\s*keywords?\s*:\s*(\[.*?\]|[^\n\[]*)", card.raw, re.S | re.M)
+    words = [w.strip() for w in re.split(r"[\n,\[\]]", m.group(1)) if w.strip()] if m else []
+    if words:
+        out.append("keywords: " + ", ".join(words))
+    text = g.plain_text(has("gametext"))
+    if text:
+        out.append(text)
+    return out
+
+
+def take_ids(argv, flag) -> list:
+    """The ids that follow a flag, up to the next option: separated by spaces or by commas."""
+    if flag not in argv:
+        return []
+    out = []
+    for a in argv[argv.index(flag) + 1:]:
+        if a.startswith("--"):
+            break
+        out += [x for x in a.split(",") if x]
+    return out
+
+
+def shut(skipped) -> set:
+    """The ids given to --skip with the cards they are versions of: a batch's cards and their originals."""
+    cards = g.card_index()
+    out = set(skipped)
+    for card_id in skipped:
+        m = re.search(r"^\s*parent\s*:\s*(\d+_\d+)", cards[card_id].raw, re.M) if card_id in cards else None
+        if m:
+            out.add(m.group(1))
+    return out
+
+
+def find(argv) -> int:
+    i = argv.index("--find")
+    if i + 1 >= len(argv) or argv[i + 1].startswith("--"):
+        print("--find: give a regular expression to try against each card's printed lines")
+        return 1
+    try:
+        wanted = re.compile(argv[i + 1], re.I)
+    except re.error as e:
+        print("--find: '%s' is not a regular expression (%s)" % (argv[i + 1], e))
+        return 1
+    skipped = shut(take_ids(argv, "--skip"))
+    found, left_out = 0, []
+    for card_id, card in sorted(g.card_index().items(), key=lambda kv: g.id_sort_key(kv[0])):
+        lines = printed(card_id, card)
+        if not wanted.search(" | ".join(lines)):
+            continue
+        if card_id in skipped:
+            left_out.append(card_id)
+            continue
+        found += 1
+        print(lines[0])
+        for line in lines[1:]:
+            print("    " + line)
+    print("%d card(s) match /%s/%s" % (found, argv[i + 1], "; left out as shut: " + ", ".join(left_out) if left_out else ""))
+    return 0
+
+
+def without_bookkeeping(card) -> str:
+    """A definition without its cardInfo, lore, promotional text and alternate images: what plays, and its name."""
+    out, skipping = [], False
+    for depth, line in card._top_level():
+        if depth == 1:
+            if skipping:
+                skipping = False
+                if line.strip().rstrip(",") in ("}", "]"):
+                    continue
+            if re.match(r"^\s*(cardInfo|alts|lore|promotext)\s*:", line):
+                skipping = line.rstrip().endswith(("{", "["))
+                continue
+        if skipping:
+            continue
+        out.append(line)
+    return "\n".join(out)
+
+
+def defs(argv) -> int:
+    cards = g.card_index()
+    skipped = shut(take_ids(argv, "--skip"))
+    ids = take_ids(argv, "--defs")
+    if not ids:
+        print("--defs: give the ids of the cards whose definitions to print")
+        return 1
+    for card_id in g.resolve_ids(ids):
+        card = cards.get(card_id)
+        if card is None:
+            print("# %s: no card definition\n" % card_id)
+        elif card_id in skipped:
+            print("# %s  %s: shut (one of the ids after --skip, or the card one of them is a version of)\n" % (card_id, g.full_name(card)))
+        else:
+            print("# %s  %s (%s line %d)" % (card_id, g.full_name(card), card.rel_file, card.line))
+            print("```hjson")
+            print(without_bookkeeping(card))
+            print("```\n")
+    return 0
+
+
 def main(argv):
+    if "--find" in argv:
+        return find(argv)
+    if "--defs" in argv:
+        return defs(argv)
     args = [a for a in argv[1:] if not a.startswith("--")]
     if not args:
         print(__doc__)
@@ -107,6 +259,9 @@ def main(argv):
         for relation, other in errata_family(card_id):
             other_card = cards.get(other)
             print("- Versions: %s %s%s" % (relation, other, "  " + g.full_name(other_card) if other_card else ""))
+        image = g.client_image(card_id)
+        if image:
+            print("- Picture the client shows: %s (PC_Cards.js line %d)" % image)
         print()
 
         row, sheet_note = g.sheet_for(card_id)
@@ -121,19 +276,33 @@ def main(argv):
             if row.get("_sheet") == "master_errata":
                 print("The errata sheet is about 95% accurate: some of its rows are errata that were proposed and never "
                       "released. Where it and the definition disagree, flag it; neither is assumed right.")
-            shown = ["title", "subtitle", "unique", "culture", "card_type", "card_subtype", "twilight", "strength",
-                     "vitality", "resistance", "signet", "site", "rarity"]
-            for k in shown:
-                if row.get(k):
-                    print("- %s: %s" % (k, g.plain_text(row[k]) if k in ("title", "subtitle") else row[k]))
-            print()
-            print("Game text:")
-            for line in re.split(r"<br\s*/?>|\\\\|\\(?![(\[])", row["game_text"]):
-                if line.strip():
-                    print("> " + line.strip())
-            print()
+            print_row(row)
         else:
             print("## The card as the sheets have it\nNo sheet has this card.  The definition's own game text is all there is.\n")
+
+        for later in g.later_sheet_rows(card_id, row):
+            print("## A later row of the sheet (%s)" % g.sheet_label(later))
+            print("The definition says `revision: %d` and the sheet has this row above it.  Either the definition is "
+                  "behind the sheet, its labels and `gametext:` stale (F-0294, Shadowfax 67_24: a `gametext` finding, and "
+                  "the later text is the one to test), or the row is an erratum that was never released.  The picture "
+                  "the client shows says which%s: fetch it and read it, and say which in the ledger's Sources line "
+                  "(`lookup.py F-0294`)." % (g.revision_of(card), " (" + image[0] + ")" if image else ""))
+            print_row(later)
+
+        before = g.gametext_before_campaign(card_id)
+        if before:
+            then, commits = before
+            print("## The game text before the campaign changed it")
+            print("The definition's `gametext:` is not what it was when the campaign began; changed by %s.  Until then it read:"
+                  % ("; ".join("%s (%s, \"%s\")" % c for c in commits) or "a commit of the campaign's"))
+            for line in re.split(r"<br\s*/?>|\\\\|\\(?![(\[])", then):
+                if line.strip():
+                    print("> " + line.strip())
+            print("So where the sheet and the definition's game text agree, that may be one witness and not two: a "
+                  "finding, question, note or old test from before that commit took the card by the text above "
+                  "(`lookup.py F-0297`).  The picture the client shows is what was released%s."
+                  % (": " + image[0] if image else ""))
+            print()
 
         print("## The card as defined" + (" (effects withheld)" if blind else ""))
         print("```hjson")
@@ -158,12 +327,17 @@ def main(argv):
                     print("- " + line)
             print()
 
-        named, mentioned = rulebook.card_rulings(card_id)
+        named, mentioned, other_title = rulebook.card_rulings(card_id)
         print("## Rulings that name this card")
         for entry in named:
             print(entry + "\n")
         if not named:
             print("None in either rules document.\n")
+        if other_title:
+            print("## Rules passages that quote another card of this title")
+            print(rulebook.OTHER_TITLE + "\n")
+            for entry in other_title:
+                print(entry + "\n")
         if mentioned:
             print("## Rulings on other cards that only mention its name")
             print(rulebook.MENTIONS.replace("The rest only mention the name: each", "Each") + "\n")

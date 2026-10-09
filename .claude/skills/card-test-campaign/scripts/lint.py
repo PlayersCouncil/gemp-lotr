@@ -79,6 +79,22 @@ ITSELF = re.compile(r"\bthis (?:companion|minion|ally|follower|condition|possess
 SELF_DISCARD = re.compile(r"(?:^|(?P<lead>[:,.])\s+|\bmay\s+)discard this(?:\s+[a-z]+)?(?:\s+from play)?\s+to\b", re.I)
 
 
+# The cheats that take a card out of its owner's draw deck (the ones that only reorder a deck have Deck in their names).
+LEAVES_DECK = re.compile(r"\b(?:Move(?!\w*Deck)\w+|AttachCardsTo|StackCardsOn|Set(?:Freeps|Shadow)?Hand)\s*\(")
+
+
+def taken_out_of_deck(lines, variable: str, alias: str) -> bool:
+    """Whether a test moves a card out of the draw deck by a cheat: its variable, or its alias as a string, among
+    the arguments of a call that puts cards in a hand, a discard pile, play or the like."""
+    named = re.compile(r'\b%s\b|"%s"' % (re.escape(variable), re.escape(alias)))
+    for line in lines:
+        for call in LEAVES_DECK.finditer(line):
+            arguments = line[call.end():].split(";", 1)[0]
+            if "Zone.DECK" not in arguments and named.search(arguments):
+                return True
+    return False
+
+
 def only_cost_is_discarding_itself(text: str) -> bool:
     plain = g.plain_text(text)
     m = SELF_DISCARD.search(plain)
@@ -89,6 +105,11 @@ def only_cost_is_discarding_itself(text: str) -> bool:
         before = re.split(r"[:.]\s+", plain[:m.start()])[-1].strip()
         return bool(re.match(r"(?:if|while|when|each time|at the|during)\b", before, re.I))
     return True
+
+
+# A race, the culture that shares its name, and how game text writes the race.
+RACE_AND_CULTURE = {"elf": ("elven", r"\b(?:elf|elves)\b"), "dwarf": ("dwarven", r"\b(?:dwarf|dwarves)\b"),
+                    "hobbit": ("shire", r"\bhobbits?\b")}
 
 
 def same_title(text: str) -> str:
@@ -501,14 +522,20 @@ def lint_file(path: Path):
         if not is_stats and not re.search(r"\bassert\w+\s*\(", text):
             add("error", "assert", start, "%s: asserts nothing" % name)
         # A choice from a pile goes by blueprint: with a second copy of that blueprint still in the pile the game may
-        # hand over either, and a test that then reads the named copy's zone fails at random.
+        # hand over either, and a test that then reads the named copy's zone fails at random.  A twin the test never
+        # names lies in its owner's draw deck from first to last, so there is nothing to warn of where the test has
+        # cheated the chosen card out of the draw deck and the card under test never chooses from one (its text has
+        # no "draw deck": "from your draw deck or discard pile" lists both piles together).
         rawtext = "\n".join(lines[start:end + 1])
         var_alias = dict(re.findall(r'\bvar\s+(\w+)\s*=\s*scn\.Get(?:Freeps|Shadow)Card\(\s*"([^"]+)"', rawtext))
+        from_a_deck = card is None or bool(re.search(r"draw deck", g.plain_text(card.field("gametext", "") or ""), re.I))
         for chosen in re.findall(r'Choose\w*BPFromSelection\(\s*(\w+)\s*\)', text):
             alias = var_alias.get(chosen)
             bp = alias_bp.get(alias)
             twins = sorted(a for a, b in alias_bp.items() if b == bp and a != alias) if bp else []
             moved = [t for t in twins if re.search(r'GetFreepsCard\(\s*"%s"|GetShadowCard\(\s*"%s"|\b%s\b' % (t, t, t), rawtext)]
+            if twins and not moved and not from_a_deck and taken_out_of_deck(lines[start:end + 1], chosen, alias):
+                continue
             if twins and not moved:
                 add("warning", "same-blueprint", start, "%s: %s is chosen by blueprint, and %s %s the same blueprint (%s): unless "
                     "the twin is out of that pile, either copy may be taken and a reading of %s's zone fails at random"
@@ -541,6 +568,29 @@ def lint_file(path: Path):
                 "an additional culture or race: unless some test's table already holds a %s card that is not of that "
                 "race, the culture written for the race passes every test (F-0019)"
                 % (", ".join(sorted(races)), " / ".join(pairs[r] for r in sorted(races))))
+
+    # The same the other way round (F-0291, Gil-galad 68_12: `elf,companion` for "2 [elven] companions"): the text
+    # names the culture and never the race, and a filter of the definition goes by the race.  The test that tells
+    # them apart gives a card of another culture the race, and it must not count.
+    if card is not None:
+        printed = g.plain_text(card.field("gametext", "") or "")
+        by_race = {}
+        for line in card.raw.split("\n"):
+            m = re.match(r"\s*(\w+)\s*:\s*(.*)", line)
+            if m and re.search(r"(filter|select|target|^on$|bearer|against|where|killer|^from$|^to$)", m.group(1), re.I):
+                value = re.sub(r"\ballyHome\([^)]*\)", "", m.group(2), flags=re.I)
+                for race in re.findall(r"(?<!\w)(elf|dwarf|hobbit)\b", value, re.I):
+                    by_race.setdefault(race.lower(), "%s: %s" % (m.group(1), m.group(2).strip()))
+        for race, where in sorted(by_race.items()):
+            culture, word = RACE_AND_CULTURE[race]
+            if re.search(r"\[%s\]" % culture, printed, re.I) and not re.search(word, printed, re.I) \
+                    and "IsAdditionalRaceModifier" not in raw:
+                add("warning", "race-culture", None, "the text names [%s] and no %s, and the definition goes by the race (`%s`), "
+                    "and no test gives a card a race: show which the game goes by with a card of another race given the "
+                    "culture (IsAdditionalCultureModifier: it must count) and a card of another culture given the race "
+                    "(IsAdditionalRaceModifier: it must not), as Card_18_012_ErrataTests does; where the game goes by "
+                    "the race the definition is wrong (F-0019 the other way round, F-0291)"
+                    % (culture, race.capitalize(), where if len(where) <= 70 else where[:67] + "..."))
 
     # A title that cards of more than one culture or type carry (Gollum is [gollum] and [wraith]; Saruman a minion
     # and a follower): with one kind of it on every table, a culture or type written beside the name in the

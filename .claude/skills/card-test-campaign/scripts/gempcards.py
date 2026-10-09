@@ -216,6 +216,24 @@ class CardDef:
         return "\n".join(out)
 
 
+def definitions_in(text: str):
+    """(blueprint id, the line it starts on, its text) for each card definition in the text of one card file that
+    is not commented out."""
+    current, start, buf, depth = None, 0, [], 0
+    for i, line in enumerate(text.split("\n")):
+        line = line.rstrip("\r")
+        if current is None:
+            m = _KEY.match(line)
+            if m:
+                current, start, buf, depth = m.group(1), i + 1, [line], 1
+        else:
+            buf.append(line)
+            depth += _depth_change(line)
+            if depth <= 0:
+                yield current, start, "\n".join(buf)
+                current = None
+
+
 _card_index = None
 
 
@@ -226,20 +244,8 @@ def card_index() -> dict:
         return _card_index
     index = {}
     for path in sorted(CARDS_DIR.rglob("*.hjson")):
-        lines = path.read_text(encoding="utf-8", errors="replace").split("\n")
-        current, start, buf, depth = None, 0, [], 0
-        for i, line in enumerate(lines):
-            line = line.rstrip("\r")
-            if current is None:
-                m = _KEY.match(line)
-                if m:
-                    current, start, buf, depth = m.group(1), i + 1, [line], 1
-            else:
-                buf.append(line)
-                depth += _depth_change(line)
-                if depth <= 0:
-                    index[current] = CardDef(current, path, start, "\n".join(buf))
-                    current = None
+        for card_id, start, raw in definitions_in(path.read_text(encoding="utf-8", errors="replace")):
+            index[card_id] = CardDef(card_id, path, start, raw)
     _card_index = index
     return index
 
@@ -411,6 +417,21 @@ def sheet_for(card_id: str):
     return None, "no sheet has this card"
 
 
+def later_sheet_rows(card_id: str, shown=None) -> list:
+    """The master errata sheet's rows for this card whose revision is above the definition's `revision:` (and above
+    the row a packet shows for it), lowest first.  A definition can be behind the sheet (F-0294), and a row can be
+    an erratum that was proposed and never released: the card's picture says which.  None for a Decipher card:
+    its errata are cards of their own (51_x), not later revisions of it."""
+    card = card_index().get(card_id)
+    if card is None or segment_of(card_id) not in ("errata", "vset"):
+        return []
+    floor = revision_of(card)
+    if shown is not None and shown.get("_sheet") == "master_errata" and str(shown.get("revision", "")).strip().isdigit():
+        floor = max(floor, int(shown["revision"]))
+    base = base_id(card_id)
+    return [row for (b, r), row in sorted(errata_rows().items(), key=lambda kv: kv[0][1]) if b == base and r > floor]
+
+
 def sheet_label(row) -> str:
     if row is None:
         return ""
@@ -444,6 +465,91 @@ def plain_text(text: str) -> str:
     if len(t) >= 2 and t[0] == t[-1] and t[0] in "\"'":
         t = t[1:-1].strip()
     return t
+
+
+# ----------------------------------------------------------------------------------------------------------------
+# The picture the client shows, and what a definition said before the campaign
+# ----------------------------------------------------------------------------------------------------------------
+
+PC_CARDS_JS = MODULES / "gemp-lotr-async" / "src" / "main" / "web" / "js" / "gemp-022" / "PC_Cards.js"
+_IMAGE = re.compile(r"""^\s*['"](\d+_\d+)['"]\s*:\s*['"]([^'"]+)['"]""")
+
+_images = None
+
+
+def client_image(card_id: str):
+    """(address, line of PC_Cards.js) of the picture the client shows for a Players' Council card: the last entry
+    for the id that is not commented out, which is the one a browser keeps.  None for a card the file does not
+    name (Decipher's cards get their pictures by their numbers)."""
+    global _images
+    if _images is None:
+        _images = {}
+        if PC_CARDS_JS.is_file():
+            for n, line in enumerate(PC_CARDS_JS.read_text(encoding="utf-8", errors="replace").split("\n")):
+                m = _IMAGE.match(line)
+                if m:
+                    _images[m.group(1)] = (m.group(2), n + 1)
+    return _images.get(card_id)
+
+
+def _git(*args) -> str:
+    import subprocess
+    done = subprocess.run(["git"] + list(args), cwd=REPO, capture_output=True, text=True, errors="replace")
+    return done.stdout if done.returncode == 0 else ""
+
+
+_campaign_base = None
+_files_at = {}
+
+
+def campaign_base() -> str:
+    """The commit the campaign started from: the parent of the commit that first added the campaign's skill, or
+    $GEMP_CAMPAIGN_BASE.  "" where git cannot say."""
+    global _campaign_base
+    if _campaign_base is None:
+        base = os.environ.get("GEMP_CAMPAIGN_BASE", "")
+        if not base:
+            first = _git("log", "--diff-filter=A", "--format=%H", "--", ".claude/skills/card-test-campaign/SKILL.md").split()
+            base = first[-1] + "~1" if first else ""
+        _campaign_base = base
+    return _campaign_base
+
+
+def _gametext_at(revision: str, card: CardDef):
+    key = (revision, card.rel_file)
+    if key not in _files_at:
+        _files_at[key] = {cid: raw for cid, _, raw in definitions_in(_git("show", "%s:%s" % key))}
+    raw = _files_at[key].get(card.id)
+    return None if raw is None else CardDef(card.id, card.file, 0, raw).field("gametext", "")
+
+
+def _wording(text: str) -> str:
+    """Game text as its words and punctuation alone: markup (a stray "</>" too), spacing and capitals are not wording."""
+    return re.sub(r"\s+", "", plain_text((text or "").replace("</>", ""))).lower()
+
+
+def gametext_before_campaign(card_id: str):
+    """(the `gametext:` the definition had when the campaign began, [(commit, date, subject)] for each commit of
+    the campaign's that changed its wording since), or None where it reads today as it did then, where the card
+    was not in that file then, or where git cannot say.  Markup, spacing and capitals are not wording."""
+    card = card_index().get(card_id)
+    base = campaign_base()
+    if card is None or not base:
+        return None
+    then = _gametext_at(base, card)
+    if then is None or _wording(then) == _wording(card.field("gametext", "")):
+        return None
+    commits, last = [], then
+    log = _git("log", "--reverse", "--format=%h%x09%ad%x09%s", "--date=short", base + "..HEAD", "--", card.rel_file)
+    for line in log.strip().split("\n"):
+        if line.count("\t") < 2:
+            continue
+        commit, date, subject = line.split("\t", 2)
+        text = _gametext_at(commit, card)
+        if text is not None and _wording(text) != _wording(last):
+            commits.append((commit, date, subject))
+            last = text
+    return then, commits
 
 
 # ----------------------------------------------------------------------------------------------------------------

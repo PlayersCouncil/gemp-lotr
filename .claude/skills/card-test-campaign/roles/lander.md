@@ -156,6 +156,12 @@ runs the gate again, commits the cards that clear it as one commit together with
 second run makes a second commit. If it says `NOT LANDED`, put right what it names and run it again. You run no
 other git command.
 
+Another lander may be finishing at the same moment, with document edits of its own in the tree. The second commit
+("Skills: what <folder> turned up") takes every document change that is there, both landers' under the name of
+whichever folder finishes first, and the other's `finish` then finds nothing left and makes no second commit. That
+is expected and nothing is lost: give it one line in your batch report (which commit carries your document
+changes) and do not return it under `needs_orchestrator`.
+
 Nothing that wants Ketura's word may live only in your report: she reads the tracker on her phone and answers by
 number. A question is filed (step 4); so is anything you did that she might undo, as a question headed "Keep or
 strike: <what>", whole enough to answer without opening anything else.
