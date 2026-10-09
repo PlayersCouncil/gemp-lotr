@@ -280,7 +280,9 @@ in HIS pile of a title that is in none of the chooser's piles (91_11: his Orc Bo
 gets a "Required responses" decision listing the rule and the trigger (a Shadow card's "wins a skirmish" trigger
 beside "Resolve skirmish damage" is the same decision, and so is a Free Peoples companion's own required "each
 time X wins a skirmish", Boromir 59_31: left unanswered, the only sign is that the beaten minion is still in play
-after `PassSkirmishActions()`; it is not only for deaths). The rule's entry may have no action
+after `PassSkirmishActions()`; a companion's own required "each time X loses a skirmish" raises it too, Isildur
+18_54: until `FreepsResolveRuleFirst()` his wound for losing reads 0 after `PassCurrentPhaseActions()`; it is not
+only for deaths). The rule's entry may have no action
 text at all, and it is not always listed first (King of the Dead 103_27 killed: `["Required trigger from King of
 the Dead…", null]`; Ferocious Haradrim 11_80 answering a death: `[null, "Required trigger from Ferocious
 Haradrim"]`). `FreepsResolveRuleFirst()` resolves the rule, the entry that belongs to no card, wherever it is
@@ -412,7 +414,11 @@ that needs a hand of a known size afterwards sets it: `SetFreepsHand(cards...)` 
 that player's hand exactly those cards, in that order, and put the rest of it on top of his draw deck (G-0035;
 `Card_10_012_ErrataTests`); never move the scenario's aliases away one by one. And as
 the fellowship decision is already pending when it returns, a card made playable by cheating is not offered
-until some legal action has been taken. The Free Peoples player reconciles at the end of his turn as well: after
+until some legal action has been taken. Player 2's own fellowship-phase play is offered at once where his
+companions, support area and hand were laid BEFORE `StartGame()`: after `SkipToOtherPlayersTurn()` read
+`ShadowPlayAvailable(card)`, play with `ShadowPlayCard(card)`, and end on
+`ShadowDecisionAvailable("Play Fellowship action or Pass")` (Card_94_020_Tests, Card_94_021_Tests).
+The Free Peoples player reconciles at the end of his turn as well: after
 `SkipToOtherPlayersTurn()` a deck of eight or fewer is all in player 1's hand (8 in hand, 0 in the deck), so a
 draw of his on player 2's turn has cards put back on his deck first (Card_91_005_Tests).
 
