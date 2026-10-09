@@ -416,8 +416,8 @@ Deepest Dungeon 102_39). Read that entry before resting anything on this one.
 trigger; the optional bit is indeed a holdover from the prior version." Changed to `optional: false`. *[2026-10-05, afternoon]*
 
 **"You may" is asked (Q-0021).** Their Eyes Fell Upon Him (101_41) drawing without asking "wasn't intentional,
-that's an oversight." Changed to an optional trigger. 68_50 and 13_75, built the same way, are for their own
-phases (F-0041). *[2026-10-05, evening]*
+that's an oversight." Changed to an optional trigger. 13_75, built the same way, is for its own
+phase (F-0041). (68_50 was counted with it by mistake: its released text has no "you may", F-0297.) *[2026-10-05, evening]*
 
 **"May draw a card for each" is one offer (Q-0029).** "It's better UX for it to be one big batch or not. The
 vast, vast majority of the time, the player will want to draw, and they will not be amused needing to hit yes

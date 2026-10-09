@@ -105,7 +105,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 
 - X of zero that would do nothing is not offered (Q-0015) [Q-0034, F-0067]
 - No "may", no asking (Q-0017). Boromir, Redeemed's defender +1 "should definitely be an automatic required trigger; the optional bit is indeed a ...
-- "You may" is asked (Q-0021). Their Eyes Fell Upon Him (101_41) drawing without asking "wasn't intentional, that's an oversight." Changed to an ... [F-0041]
+- "You may" is asked (Q-0021). Their Eyes Fell Upon Him (101_41) drawing without asking "wasn't intentional, that's an oversight." Changed to an ... [F-0041, F-0297]
 - "May draw a card for each" is one offer (Q-0029) [Q-0033]
 - A draw of nothing because the count is zero is not offered (Q-0033) [Q-0029]
 - 2026-10-05. A parenthesis that is a separate may (Q-0010)
