@@ -94,17 +94,28 @@
 				}
 				effect: [
 					{
-						type: chooseYesOrNo
+						type: Optional
 						player: fp
-						text: Would you like to add a burden to be able to assign Ulaire Nertea to a {chosenRace}?
-						memorize: choice
+						text: Would you like to add a burden to be able to assign Ulaire Nertea to a companion of the named race?
+						cost: {
+							type: addBurdens
+							amount: 1
+						}
+						effect: {
+							type: memorizeInfo
+							memory: choice
+							info: yes
+						}
 					}
 					{
 						type: If
 						check: {
-							type: memoryIs
-							memory: choice
-							value: no
+							type: not
+							requires: {
+								type: memoryIs
+								memory: choice
+								value: yes
+							}
 						}
 						true: {
 							type: addmodifier
@@ -115,18 +126,6 @@
 								fpCharacter: companion,race(stored)
 								minion: self
 							}
-						}
-					}
-					{
-						type: If
-						check: {
-							type: memoryIs
-							memory: choice
-							value: yes
-						}
-						true: {
-							type: addBurdens
-							amount: 1
 						}
 					}
 				]

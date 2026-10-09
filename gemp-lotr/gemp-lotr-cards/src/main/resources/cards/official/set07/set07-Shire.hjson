@@ -564,7 +564,7 @@
 					type: addActivated
 					filter: minion
 					phase: assignment
-					text: Assign this minion to bearer of Reckless Pride.
+					text: Assign this minion to bearer of Slow-kindled Courage.
 					effect: {
 						type: assignFpCharacterToSkirmish
 						fpCharacter: choose(hasAttached(name(Slow-kindled Courage)))
