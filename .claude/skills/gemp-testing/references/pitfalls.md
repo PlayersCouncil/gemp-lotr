@@ -83,6 +83,10 @@ anything else: it names the decision the test is really at.
 The `...NotAvailable` twins answer TRUE there, and at any decision that is no choice of cards:
 `FreepsHasCardChoiceNotAvailable(frodo)` read at "Play Fellowship action or Pass" passes whatever the card does
 (94_7's old `NotOfferedToNonOwner`). Read beside it what the player IS being asked and the thing left undone.
+The commonest shape: `FreepsActionAvailable(...)` or `FreepsAnyActionsAvailable()` read as false straight after the
+Free Peoples player's own action in a phase both players act in. The Shadow player is the one asked there, so it
+shows nothing and lint does not notice: `ShadowPass()` first, then read it beside `AwaitingFreeps...PhaseActions()`
+(94_13's old lock-out assertions; 94_14's old reading of the Free Peoples player in the Shadow phase was dropped).
 
 **A number with no upper bound.** `FreepsGetChoiceMax()` reads `Integer.MAX_VALUE` where a player is choosing a
 number and the game sets no maximum (a `chooseANumber` with no `to`: Gathering Wind 10_16, Beneath the Mountains
@@ -306,6 +310,12 @@ Shadow player's decision is already pending does not make a minion playable. Set
 then pass. The move then adds one for each companion plus the new site's shadow number, so a test that needs an
 exact pool adds those in: `// 10 set + 1 companion + 2 for the site`. A pool that is too small shows only as the rig's
 `<card> is not offering Shadow Player a play.`: count the roaming penalty as well as the cost.
+
+**The engine sends an end of turn once before turn 1 (F-0327, open).** After the mulligans `MulliganProcess` hands on
+to `EndOfTurnGameProcess`, and at that moment the player who will go second counts as the Free Peoples player. A
+modifier in player 2's seat with an `EndOfTurn` trigger under `OwnerIsFreeps` goes off there: `StartGame()` returns
+with player 1 holding its question in BETWEEN_TURNS, and the next skipper fails on it (94_17). Read that nothing is
+asked straight after `StartGame()`; never answer it with an `if`, which is what hid the fault in the old test.
 
 **Both players act in most phases.** Fellowship is the Free Peoples player's alone and Shadow the Shadow
 player's. In maneuver, archery, assignment, skirmish and regroup the Free Peoples player is asked first, then the

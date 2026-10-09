@@ -359,7 +359,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "You may discard up to N (X, any number of) cards from hand to draw as many" on an optional trigger (F-0300, Robin Smallburrow 68_111 and 18_111) [F-0022, Q-0015, Q-0034, Q-0143]
 - "You may" on a Race to Mount Doom modifier names its player (F-0311)
 - "May draw a card for each X over N" requires N+1 of X (Q-0033, F-0320)
-- A phase action on a Race to Mount Doom modifier is its owner's where the text says "your" (F-0312) [Q-0188]
+- A phase action on a Race to Mount Doom modifier is its owner's where the text says "your" (F-0312) [Q-0188, Q-0194]
 - A Race to Mount Doom modifier's own discard from hand writes `forced: true`, and no card can tell (F-0205)
 - Mistakes on a Race to Mount Doom modifier that no board tells apart (92_8, 92_10) [F-0312]
 
@@ -400,7 +400,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Discard this when at / if <where>" on the move that takes the fellowship there (F-0233, Q-0133)
 - "Each time your fellowship moves, ... (or N if at site X or higher)" (Q-0184, open)
 - "When <this card> leaves play, this bonus is lost" as a turn-long added trigger names `self` (F-0270, Radagast 59_26)
-- "Make each ... until" on an ability or event is a snapshot (Q-0011, F-0144)
+- "Make each ... until" on an ability or event is a snapshot (Q-0011, F-0144) [F-0217]
 - Keywords copied "until ..." are a snapshot (Q-0096); race and "unloaded keywords" (Q-0097)
 - "Exert X twice" sets off an "each time ... exerts" trigger twice [F-0145]
 - "Place that event on top of (beneath) your draw deck" on a card that answers the play of an event (F-0287) [Q-0034]
@@ -439,6 +439,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A threshold that is a percentage wants a board large enough to tell the neighbouring numbers apart (94_5) [F-0325]
 - A correction of several lines for mutate.py
 - "Use vitality to resolve that skirmish instead of strength" is two overrides, one for each side (Final Triumph 68_115 and 18_115)
+- "Are not unique" wants three copies in play and the fourth played (94_16)
 - A site can be controlled only once every marker has passed it
 - A required start-of-turn trigger with a 0-to-N choice
 - "At the start of each of your turns" reads BETWEEN_TURNS; read every counter before as well as after
