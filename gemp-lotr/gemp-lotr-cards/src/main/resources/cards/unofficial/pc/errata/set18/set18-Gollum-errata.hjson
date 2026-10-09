@@ -22,7 +22,7 @@
 			type: Response
 			trigger: {
 				type: abouttodiscard
-				source: side(free people)
+				opponent: true
 				filter: your,culture(gollum),another,condition
 			}
 			cost: {

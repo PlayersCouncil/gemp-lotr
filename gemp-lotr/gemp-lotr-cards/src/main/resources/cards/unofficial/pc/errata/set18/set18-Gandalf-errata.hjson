@@ -27,10 +27,16 @@
 					type: WinsSkirmish
 					filter: bearer,title(Grimbeorn)
 				}
-				requires: {
-					type: perTurnLimit
-					limit: 1
-				}
+				requires: [
+					{
+						type: perTurnLimit
+						limit: 1
+					}
+					{
+						type: HasCardInDiscard
+						filter: culture(gandalf),event
+					}
+				]
 				effect: [
 					{
 						type: PutCardsFromDiscardIntoHand
