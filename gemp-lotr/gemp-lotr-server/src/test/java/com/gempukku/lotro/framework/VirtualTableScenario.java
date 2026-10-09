@@ -215,6 +215,8 @@ public class VirtualTableScenario extends VirtualTable implements TestConstants,
         decks.get(P1).setMap(freepsMapId);
         decks.get(P2).setMap(shadowMapId);
 
+        RequireASiteToStartAt(decks.get(P1).getSites(), siteIDs);
+
         InitializeGameWithDecks(decks, format, freepsMetaSiteId, shadowMetaSiteId, playerPlacements);
 
         //We want to handle this at this time before the game start process because certain game properties aren't
@@ -322,6 +324,41 @@ public class VirtualTableScenario extends VirtualTable implements TestConstants,
         }
     }
 
+
+    /**
+     * Refuses a set of sites of which the game could lay none as site 1.  The game lays each site by its printed
+     * site number unless the first card of the adventure deck has none (GameState.usesUnorderedSites, which goes
+     * by the deck and not by the format); deck validation, which a test table does not go through, is what keeps a
+     * player's deck to one site path.  With no site printed as site 1 the game's set-up lays nothing and falls
+     * over two steps later (a NullPointerException out of CheckForCorruptionGameProcess), with nothing to say why.
+     * @param adventureDeck The blueprint IDs of the sites, in the order the game will have them in each
+     *                      adventure deck.
+     * @param siteIDs The site map the tester gave, for naming what is under the key "site1".
+     */
+    private static void RequireASiteToStartAt(List<String> adventureDeck, HashMap<String, String> siteIDs) throws CardNotFoundException {
+        if(adventureDeck.isEmpty())
+            return;
+        var first = _cardLibrary.getLotroCardBlueprint(adventureDeck.getFirst());
+        if(first.getSiteNumber() == 0)
+            return;
+        for(String id : adventureDeck) {
+            if(_cardLibrary.getLotroCardBlueprint(id).getSiteNumber() == 1)
+                return;
+        }
+
+        String message = "These sites cannot be set up: the game would lay no site 1.  The first card of the adventure deck ("
+                + first.getTitle() + ", " + adventureDeck.getFirst() + ") has a printed site number, so the game lays "
+                + "each site by its printed number, and none of these sites is printed as site 1.";
+        String atSite1 = siteIDs.get("site1");
+        if(atSite1 != null) {
+            var blueprint = _cardLibrary.getLotroCardBlueprint(atSite1);
+            message += "  The key \"site1\" holds " + blueprint.getTitle() + " (" + atSite1 + "), which "
+                    + (blueprint.getSiteNumber() != 0 ? "is printed as site " + blueprint.getSiteNumber() + "."
+                    : "has no printed site number: such a site cannot stand as site 1 of a numbered path (see "
+                            + "\"A Shadows-block site path\" in the gemp-testing pitfalls).");
+        }
+        throw new IllegalArgumentException(message);
+    }
 
     /**
      * The Map of the site path that a set of sites is on, for a deck whose Map the tester did not name.

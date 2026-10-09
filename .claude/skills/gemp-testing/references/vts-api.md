@@ -130,6 +130,9 @@ While the ability to programmatically execute games is a boon to testing efforts
 - `void MoveCardsToFreepsHand(String...names)`
 - `void MoveCardsToShadowHand(String...names)`
 - `void MoveCardsToHand(PhysicalCardImpl...cards)`
+- `void SetFreepsHand(PhysicalCardImpl...cards)` — Makes the Free Peoples player's (player 1's) hand exactly the given cards.
+- `void SetShadowHand(PhysicalCardImpl...cards)` — Makes the Shadow player's (player 2's) hand exactly the given cards.
+- `void SetHand(String player, PhysicalCardImpl...cards)` — Makes the given player's hand exactly the given cards, in the order given, whatever the hand held before: for a hand of a known size late in a game, after reconciles have filled it with whatever was on the deck.
 - `void AttachCardsTo(PhysicalCardImpl bearer, PhysicalCardImpl...cards)` — Directly attaches one or more cards to a target card, regardless of legality or costs.
 - `void StackCardsOn(PhysicalCardImpl on, PhysicalCardImpl...cards)` — Directly stacks one or more cards on a target card, regardless of legality or costs.
 - `void FreepsDrawCard()  ·  ShadowDrawCard`
@@ -523,4 +526,4 @@ This interface holds the handful of accessors that every other virtual table int
 - `void Verify(boolean condition, String message)` — A sanity check on the table's own bookkeeping, used where a procedure has to end up in a known state for whatever follows it to make sense.
 
 ---
-415 entries, 239 of them with no description in the source.
+418 entries, 239 of them with no description in the source.

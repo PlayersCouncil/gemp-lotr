@@ -290,6 +290,45 @@ public interface ZoneManipulation extends TableBase {
 		}
 	}
 
+	/**
+	 * Makes the Free Peoples player's (player 1's) hand exactly the given cards.
+	 * See {@link #SetHand(String, PhysicalCardImpl...)}.
+	 * @param cards The cards the hand is to hold, the front of the hand first; none, for an empty hand.
+	 */
+	default void SetFreepsHand(PhysicalCardImpl...cards) { SetHand(P1(), cards); }
+	/**
+	 * Makes the Shadow player's (player 2's) hand exactly the given cards.
+	 * See {@link #SetHand(String, PhysicalCardImpl...)}.
+	 * @param cards The cards the hand is to hold, the front of the hand first; none, for an empty hand.
+	 */
+	default void SetShadowHand(PhysicalCardImpl...cards) { SetHand(P2(), cards); }
+	/**
+	 * Makes the given player's hand exactly the given cards, in the order given, whatever the hand held before:
+	 * for a hand of a known size late in a game, after reconciles have filled it with whatever was on the deck.
+	 * Every other card of that hand is put on top of that player's draw deck, the card that was at the front of
+	 * the hand ending as the top card (the way {@link VirtualTable#StartGame()} puts an opening hand back).  The
+	 * cards given are taken from wherever they were, without being played, drawn or discarded, and one already
+	 * in the hand takes its place in the order given.  The other player's hand is not touched.
+	 * Fails if a card given is not that player's own: it would go to its owner's hand.
+	 * @param player The player whose hand is set.
+	 * @param cards The cards the hand is to hold, the front of the hand first; none, for an empty hand.
+	 */
+	default void SetHand(String player, PhysicalCardImpl...cards) {
+		for(PhysicalCardImpl card : cards) {
+			Verify(card != null && player.equals(card.getOwner()),
+					(card == null ? "Nothing" : GameUtils.getFullName(card) + ", a card of " + card.getOwner() + "'s,")
+							+ " cannot be put in the hand of " + player + ": a hand holds only its owner's cards.");
+		}
+
+		var wanted = Arrays.asList(cards);
+		for(var card : gameState().getHand(player).stream().toList().reversed()) {
+			if(!wanted.contains(card)) {
+				MoveCardsToTopOfDeck((PhysicalCardImpl) card);
+			}
+		}
+		MoveCardsToHand(cards);
+	}
+
 
 	/**
 	 * Directly attaches one or more cards to a target card, regardless of legality or costs.  This is often used once

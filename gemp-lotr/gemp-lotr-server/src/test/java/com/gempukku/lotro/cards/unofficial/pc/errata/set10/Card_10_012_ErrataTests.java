@@ -378,14 +378,8 @@ public class Card_10_012_ErrataTests
 		scn.SkipToOtherPlayersTurn();
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
-		// The reconciles have refilled the hand: every card the Free Peoples player holds or could hold goes to
-		// the discard pile, and four are put back.
-		scn.MoveCardsToDiscard(valor1, valor2, filler1, filler2, filler3,
-				scn.GetFreepsCard("valor3"), scn.GetFreepsCard("filler4"), scn.GetFreepsCard("filler5"),
-				scn.GetFreepsCard("filler6"), scn.GetFreepsCard("legolas"), scn.GetFreepsCard("celeborn"),
-				scn.GetFreepsCard("bow"), scn.GetFreepsCard("gimli"), scn.GetFreepsCard("smeagol"), scn.GetFreepsCard("ranger"),
-				scn.GetFreepsCard("savage"), scn.GetFreepsCard("troop"));
-		scn.MoveCardsToHand(valor2, filler1, filler2, filler3);
+		// The reconciles have refilled the hand: it is cut back to these four cards.
+		scn.SetFreepsHand(valor2, filler1, filler2, filler3);
 		assertEquals(4, scn.GetFreepsHandCount());
 		scn.MoveMinionsToTable(savage, troop);
 		scn.SkipToPhase(Phase.MANEUVER);

@@ -358,7 +358,10 @@ start-of-turn or start-of-fellowship trigger, put into play before `StartGame()`
 **`SkipToSite` plays whole turns, reconciling included.** A small draw deck is drawn into the players' hands on
 the way. `SkipToMovementDecision` and `SkipToOtherPlayersTurn` reconcile too: the Shadow player draws up to 8
 before the second move is asked about, so a test that turns on his hand at the second move empties his draw deck
-first. A test that needs cards in the draw deck afterwards puts them back with `MoveCardsToTopOfDeck`. And as
+first. A test that needs cards in the draw deck afterwards puts them back with `MoveCardsToTopOfDeck`. A test
+that needs a hand of a known size afterwards sets it: `SetFreepsHand(cards...)` / `SetShadowHand(cards...)` make
+that player's hand exactly those cards, in that order, and put the rest of it on top of his draw deck (G-0035;
+`Card_10_012_ErrataTests`); never move the scenario's aliases away one by one. And as
 the fellowship decision is already pending when it returns, a card made playable by cheating is not offered
 until some legal action has been taken.
 
@@ -710,9 +713,12 @@ comes out first (`Card_18_112_ErrataTests`: `bucklandSite` and `redhorn` in plac
 A capital letter is enough to move a key (`Mithlond` is safe with `site9` taken out, `Card_18_136_ErrataTests`).
 `StartGame(site)` with a site named gets past the first question, but the path is still unordered: every move
 asks the Shadow player to lay a site, and `SkipToSite` halts in the fellowship phase.
-A Shadows-block site cannot stand as `site1` of such a path: the
-constructor throws a NullPointerException from `CheckForCorruptionGameProcess` (probed at landing, err-b65_17).
-Where its text is needed in the first fellowship phase, an ad hoc modifier that does what the site does stands in.
+A Shadows-block site cannot stand as `site1` of such a path: the game lays site 1 by its printed number and
+would lay nothing, and the constructor refuses the site map with an IllegalArgumentException that says so
+("These sites cannot be set up: the game would lay no site 1 ..."; virtualtable/FirstSiteTests). Where its text
+is needed in the first fellowship phase, make the whole path unordered: `putAll(ShadowsSites); put("site1", id)`
+(the default format will do) and `StartGame(scn.GetFreepsSite("site1"))` start at that site with its text in
+force; or an ad hoc modifier that does what the site does stands in.
 
 **A battleground or a forest site needs no cheat.** The Towers path has both at site 2: Uruk Camp 4_335
 (Battleground, Plains; each Uruk-hai played must exert) and Derndingle 4_330 (Forest; move limit +1 while an
