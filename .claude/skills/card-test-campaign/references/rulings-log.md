@@ -94,6 +94,12 @@ be helped if they weren't up to the standard. Let em get re-worked I suppose." E
 in form, not rewritten. And of set V0: "make sure the one card in V0 gets in somewhere" (Rath Dínen 100_1, a batch
 of its own beside the RTMD batches).
 
+**Rath Dínen 100_1 and Steward's Tomb (Ketura, 2026-10-09).** "Rath Dinen is actually *sort of* an errata of
+Steward's Tomb. It was too strong on sanctuaries, so we altered Tomb to no longer work at sanctuaries and added Rath
+Dinen as a partial Tomb that does work at sanctuaries." So 18_139, 68_139 ("If this site is not a sanctuary, ...")
+and 100_1 ("When sanctuary healing at this site, ... heals only 3 wounds instead of 5") are one design in three
+cards; 100_1 is still tested from its own text, with no original's definition to read.
+
 **Everything she must review is on the tracker, whole; the chat carries the code (Ketura, 2026-10-08, night).**
 "Please ensure the details are in the Waiting on Ketura page of the report; I will be on my phone for an extended
 period of time, so any details for every item I need to review will need to be there for the foreseeable future.
