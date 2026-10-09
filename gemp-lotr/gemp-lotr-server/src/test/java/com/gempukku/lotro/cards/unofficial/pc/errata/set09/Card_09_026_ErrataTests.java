@@ -366,7 +366,7 @@ public class Card_09_026_ErrataTests
 
 		// The move of the fellowship phase.
 		scn.FreepsPass();
-		assertEquals(1, scn.GetMoveCount());
+		assertEquals(0, scn.GetMoveCount()); // the first move is under way: the marker moves after "the fellowship moves" is answered
 		assertTrue(scn.ShadowDecisionAvailable("discard 2 cards to draw 2 cards"));
 		assertFalse(scn.FreepsAnyDecisionsAvailable());
 		scn.ShadowChooseYes();
@@ -393,7 +393,7 @@ public class Card_09_026_ErrataTests
 		deck = scn.GetShadowDeckCount();
 		assertInZone(Zone.HAND, chaff3, despair);
 		scn.FreepsChooseToMove();
-		assertEquals(2, scn.GetMoveCount());
+		assertEquals(1, scn.GetMoveCount()); // the second move is under way
 		assertTrue(scn.ShadowDecisionAvailable("discard 2 cards to draw 2 cards"));
 		scn.ShadowChooseYes();
 		scn.ShadowChooseCards(chaff3, despair);

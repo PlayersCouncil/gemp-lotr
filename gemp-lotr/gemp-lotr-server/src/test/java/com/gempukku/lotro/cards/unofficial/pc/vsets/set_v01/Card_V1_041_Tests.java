@@ -203,7 +203,7 @@ public class Card_V1_041_Tests
 
 		scn.FreepsPass();
 
-		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertEquals(1, scn.GetCurrentSiteNumber()); // the marker moves after "the fellowship moves" is answered
 		// "You may": the draw is offered, and nothing is drawn until it is taken.
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(eyes));
 		assertEquals(0, scn.GetShadowHandCount());
@@ -299,7 +299,7 @@ public class Card_V1_041_Tests
 
 		scn.FreepsPass();
 
-		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertEquals(1, scn.GetCurrentSiteNumber()); // the marker moves after "the fellowship moves" is answered
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(eyes));
 		scn.ShadowAcceptOptionalTrigger();
 		assertEquals(1, scn.GetShadowHandCount());
@@ -315,7 +315,7 @@ public class Card_V1_041_Tests
 
 		scn.FreepsChooseToMove();
 
-		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertEquals(2, scn.GetCurrentSiteNumber()); // still the site left
 		// Offered again on the second move, and still nothing drawn until it is taken.
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(eyes));
 		assertEquals(8, scn.GetShadowHandCount());

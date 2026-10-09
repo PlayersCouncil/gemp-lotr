@@ -433,6 +433,8 @@ Whether and how many sites a player controls is asked with these two and the `Fo
 ### Movement
 `MovesFrom(filter?)`, `Moves`, `AboutToMoveTo(filter?)`, `MovesTo(filter?)`
 
+Raised in that order within one move. `MovesFrom` and `Moves` are answered before the player marker is moved: a `Location`, site number or region in their blocks reads the site being left. `AboutToMoveTo` and `MovesTo` read the site arrived at, and the move's twilight is added last (CR 4.2 "moving your fellowship"; Q-0184).
+
 ### Timing
 `StartOfTurn`, `StartOfPhase(phase?)`, `EndOfPhase(phase?)`, `EndOfTurn`
 

@@ -6,7 +6,6 @@ import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -173,7 +172,6 @@ public class Card_92_018_Tests
 	}
 
 	@Test
-	@Ignore("Q-0184: on the move from site 6 to site 7 the game counts the site arrived at and discards 2; by the order of a move's steps the fellowship is still at site 6")
 	public void MovingFromSite6DiscardsOneOfTwo() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetFreepsScenario();
 

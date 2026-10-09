@@ -140,7 +140,7 @@ public class Card_V3_057_Tests
 		scn.FreepsPass();
 
 		// The Free Peoples player is the one asked.
-		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertEquals(1, scn.GetCurrentSiteNumber()); // the marker moves after "the fellowship moves" is answered
 		assertFalse(scn.ShadowAnyDecisionsAvailable());
 		assertTrue(scn.FreepsChoiceAvailable("Hinder <"));
 		assertTrue(scn.FreepsChoiceAvailable("Hinder a Free Peoples item on"));
@@ -211,7 +211,7 @@ public class Card_V3_057_Tests
 		scn.FreepsChooseToMove();
 
 		// The bearer is hindered already, so one of the items he bears it must be.
-		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertEquals(2, scn.GetCurrentSiteNumber()); // the marker moves after "the fellowship moves" is answered
 		assertFalse(scn.FreepsChoiceAvailable("Hinder <"));
 		assertTrue(scn.FreepsHasCardChoiceAvailable(athelas, anduril));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn, boromir, harpoon));
@@ -253,7 +253,7 @@ public class Card_V3_057_Tests
 		scn.FreepsChooseToMove();
 
 		// Asked again, with both options open: the bearer is not hindered and one item is left.
-		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertEquals(2, scn.GetCurrentSiteNumber()); // the marker moves after "the fellowship moves" is answered
 		assertTrue(scn.FreepsChoiceAvailable("Hinder <"));
 		assertTrue(scn.FreepsChoiceAvailable("Hinder a Free Peoples item on"));
 
