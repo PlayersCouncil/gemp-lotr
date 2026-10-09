@@ -1098,7 +1098,8 @@ the order of their card ids, the same in every run; no decision is added. *[2026
 **Q-0143, The Palantír of Orthanc 53_67: B.** A yes/no before a choice whose minimum is 0 goes: "The first no
 permits an opt-out, while giving leeway for the player to change their mind after....let's get rid of the pop-up
 and just make sure the message displayed to the user is sufficiently clear." The choice (0 to N) is asked alone,
-and its text says plainly that choosing none is allowed. *[2026-10-08, night]*
+and its text says plainly that choosing none is allowed. Built in engine pass 17 as F-0277; Gwaihir 101_15 has the
+same shape (F-0278). *[2026-10-08, night]*
 
 **Q-0144, revealing an empty hand: no pop-up, a line in the log.** Foul Creation 51_44 / 1_44 against Curse Their
 Foul Feet! 51_36: "Both of these cards should behave the same....not sure which one is better UX. Let's go ahead
@@ -1116,7 +1117,8 @@ where it is met, as a `data` finding, and the tools check it. *[2026-10-08, nigh
 
 **Q-0146, Bill Ferny 52_75: A.** "A sounds good." The erratum is built as the original 2_75 is
 (`CantBeAssignedToSkirmish` for the Free Peoples player), so Bill is not on his list of minions to assign against,
-where the per-pair restriction listed him and refused the answer. *[2026-10-08, night]*
+where the per-pair restriction listed him and refused the answer. Built in engine pass 17 as F-0276.
+*[2026-10-08, night]*
 
 **Q-0147, Streets of Edoras 4_340 with Come Down: B. "Participating in archery fire" has parts, and a bar on it
 bars them all.** "Well, if we follow can't > can, then Streets should I think disallow Come Down's effect from
