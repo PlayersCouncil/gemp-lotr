@@ -421,6 +421,10 @@ companions, support area and hand were laid BEFORE `StartGame()`: after `SkipToO
 The Free Peoples player reconciles at the end of his turn as well: after
 `SkipToOtherPlayersTurn()` a deck of eight or fewer is all in player 1's hand (8 in hand, 0 in the deck), so a
 draw of his on player 2's turn has cards put back on his deck first (Card_91_005_Tests).
+`SkipToSite(n)` rests in the fellowship phase at site n, and `SkipToMovementDecision()` after it has made that
+turn's move: the fellowship is at n + 1, and the regroup move then leaves site n + 1 and not n. Read
+`GetCurrentSiteNumber()` on each side of the move (two old 94_25 tests named the site one too low in their
+comments, and one of them was the move from site 6 into region 3 without saying so).
 
 **A reconcile on the way discards from the front of the hand.** A player over the hand size at a reconcile on the way discards down to it from the front of his hand, however many cards that is (`PassReconcile(player)`, which every turn-skipper uses), so a test may put any number of cards in a hand before skipping. A test that reaches "Choose cards to discard down to 8" by its own passes answers it in one go: `scn.PassReconcile(scn.P1())`, or `FreepsChooseCards(...)` with exactly `FreepsGetChoiceMin()` cards.
 
@@ -915,7 +919,13 @@ fellowship and rests on the mulligan question.
 
 **Validating a deck.** `DeckValidationScenario` (test sources, not in `vts-api.md`) builds a deck round the
 cards a test names and validates it. Its filler is the card as the scenario's format plays it, so a deck that is
-otherwise legal validates with no errors at all: `assertEquals(List.of(), dvs.validate(deck))`. The Ring-bearer,
+otherwise legal validates with no errors at all: `assertEquals(List.of(), dvs.validate(deck))`. That is so only
+in a format that takes the rig's sites, and below 37 filler cards a side: `new DeckValidationScenario()` is
+Multipath, where every `buildDeck` deck draws "Card is X-listed" for Emyn Muil and Ettenmoors among its sites
+(and for Forces of Mordor 1_248 from 37 Shadow filler cards up), and in every format the Free Peoples filler
+reaches Boromir 1_97 beside Boromir 1_96 at its 37th card ("more of the same card than allowed - Boromir (5>4)";
+8>4 at 50). `fotr_block` at 30 and 30 is clean. A deck-size test of 99 or 100 cards therefore reads
+`hasMinimumDeckSizeError` and not the whole list (94_22; probed at landing, rtmd-b94_22). The Ring-bearer,
 Ring, Map and sites are the ones the test names, as named: the rig's `FellowshipSites` have Ettenmoors 1_331 as
 first printed, which the PC formats refuse for its errata. `hasMapError(errors)` says whether a Map objected;
 `getMapErrorSites(errors)` returns the names of the sites its objection lists, for reading that a stray site is
@@ -924,7 +934,12 @@ A Race to Mount Doom modifier of deck building is tied to validation by its own 
 `dvs.validate(deck, VirtualTableScenario.FindCard("92_1").getDeckBuildingOverrides())`, which is what
 `LeagueService.buildDeckValidationContext` merges for the player who has it. A context built by hand with the
 number from the text (`new DeckValidationContext().setMaximumSameNameOverride(6)`) tests the format and not the
-card: a wrong number in the definition passes it (92_1's and 92_19's old tests; 94_22 is written that way too).
+card: a wrong number in the definition passes it (the old tests of 92_1, 92_19 and 94_22, all since rewritten).
+`getDeckBuildingOverrides()` hands back the blueprint's own object, the same one to every test of the run: a test
+of the league's merge calls `merge` on a `new DeckValidationContext()` with the card's overrides as the argument,
+never on the card's overrides (94_22). Whose deck the overrides bind ("Your deck ...") is the league's choice of
+player and nothing in the definition: no card test can show it, the `-` for the other player is the same deck
+validated with no context, and the ledger's Notes say so.
 `hasSiteBlockError(errors)` matches the four block objections and nothing else ("same block", "not allowed in
 Multipath", "does not use supported block", "cannot mix Movie block and Shadows block sites"): not the Map's
 (`hasMapError`: a mixed Movie deck under a Map in PC Movie draws both, so read both), not "Card not from valid
