@@ -447,7 +447,16 @@ is not found by its title (NoSuchElementException, no message). Fetch a site bef
 **`FreepsDeclineSanctuaryHealing()` sends five empty answers, whatever is being asked.** Once one sanctuary heal
 has been taken only four are left to decline, and the fifth answer passes the fellowship phase: the fellowship
 moves. To take some heals and decline the rest, choose each heal and then `FreepsDeclineChoosing()` once for each
-that remains, which fails loudly if it is called once too often (`Card_18_139_ErrataTests`).
+that remains, which fails loudly if it is called once too often (`Card_18_139_ErrataTests`). At Rath Dínen
+100_1, which asks three heals, the untouched call already overshoots: the fourth answer passes the fellowship
+phase and, on a Shadows-block path, the fifth fails ("is not being asked anything", the Shadow player being asked
+"Choose site to play"). Decline there with `FreepsDeclineChoosing()` three times (`Card_V0_001_ErrataTests`).
+
+**Sanctuary healing is asked at any site laid as site 3 or 6, and only when a companion is wounded.** The rule
+makes a sanctuary of every site numbered 3 or 6 whatever its block, a Shadows-block site the Shadow player laid
+there included. A turn that begins there asks one 0-to-1 choice for each heal ("Sanctuary healing - Choose
+companion to heal - remaining heals: N"); with no companion wounded nothing is asked and the turn opens on
+fellowship actions. Put the wounds on in the turn before (`Card_V0_001_ErrataTests`).
 
 **Whose site.** `GetCurrentSiteNumber()` answers for the player whose turn it is: on the other player's turn it
 is his site, not the one player 1's fellowship reached, and there is no reader for one player's position. Read
@@ -710,8 +719,13 @@ Mount Doom table does not offer them (`mechanics/MapsAndMetaSitesCannotBeHindere
 **A Shadows-block site path.** Pass `VirtualTableScenario.Shadows` as the format and a site map of your own;
 `StartGame(scn.GetFreepsSite("site1"))`; after the fellowship phase is passed the Shadow player lays the next
 site with `ShadowChooseCardBPFromSelection(scn.GetShadowSite("site2"))`. `Card_13_164_Tests` is a worked example.
-The turn-skippers cannot walk such a path. For a high site number or a later region (sites 4-6 are region 2,
-7-9 region 3), where the card's text names no block's sites, put the Shadows-block site on a Fellowship-block
+The turn-skippers cannot walk such a path, but it can be walked by hand to any site: each move is `FreepsPass()`
+(a second move in the turn: `SkipToMovementDecision()`, `FreepsChooseToMove()`) and then
+`ShadowChooseCardBPFromSelection(...)`, with `SkipToOtherPlayersTurn()` twice between the first player's turns;
+site 6 takes three of his turns (`Card_V0_001_ErrataTests`). `MoveCardToAdventurePath` works on this path too: the
+card becomes the site ahead, the next move goes to it and the Shadow player is not asked to lay one (the same
+file puts the first player's own copy of a site at site 6 so). For a high site number or a later region (sites 4-6 are region 2,
+7-9 region 3), where the card's text names no block's sites, it is shorter to put the Shadows-block site on a Fellowship-block
 path instead: a site map of `FellowshipSites` with the card in place of site n, `SkipToSite(n - 1)`,
 `MoveCardToAdventurePath(scn.GetShadowSite("siten"))`, `FreepsPass()`, and the fellowship moves to it
 (`Card_11_227_ErrataTests`, site 7; `Card_04_355_ErrataTests`). `MoveCardToAdventurePath` makes the card the

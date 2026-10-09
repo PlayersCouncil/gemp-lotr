@@ -312,7 +312,9 @@ C1 Modifier   [+ - F]    Bill the Pony cannot be assigned to a skirmish against 
 
 `<Name>StatsAndKeywordsAreCorrect` asserts every printed field of the card against the blueprint: title,
 subtitle, uniqueness, side, culture, type, race or item class, twilight cost, strength, vitality, resistance,
-signet, site number or home, and each keyword with its number. Its header comment reproduces the card. The
+signet, site number or home, and each keyword with its number. A site's fields are its block (`getSiteBlock()`),
+its Shadow number (`getTwilightCost()`), its direction, and its site number, which a Shadows-block site does not
+print (`getSiteNumber()` is 0 there). Its header comment reproduces the card. The
 expected values are the sheet's; `reconcile.py <id>` (Decipher cards) and the packet's "Sheet against
 definition" section (every card) show any field where the sheet and the definition disagree (see "When the sheet
 and the definition disagree" above). A strength, vitality or other bonus printed on a card that is borne (a
