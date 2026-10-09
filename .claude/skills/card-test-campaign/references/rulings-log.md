@@ -252,6 +252,13 @@ question how often this will come up, but I think it's fine to keep"), Q-0175. *
 **Every finding below F-0308 that was fixed without her word is approved** ("go ahead and also approve all the F-
 entries lower than F-0308 which were marked as fixed without word"): 62 findings, now `fixed-approved`. *[2026-10-09, later]*
 
+**One entry for one issue (Ketura, 2026-10-09, evening).** "If there is a Q for an F of the same issue, I only need
+to see the Q (the F can be given the same approval status as the Q)." The tracker's waiting list leaves out a
+finding that an open question is filed under or names; when the question is answered, the finding takes the
+answer's status with her words (approved as fixed, to be fixed, or not a bug) without being put to her again. The
+same day: every finding fixed without her word below F-0327 is approved; Q-0193 and Q-0196 kept; Q-0194 and Q-0195
+A; Q-0174 closed as settled by F-0308; F-0324, "I think a 'transferable to' filter is perfectly kosher, go for it."
+
 **Everything she must review is on the tracker, whole; the chat carries the code (Ketura, 2026-10-08, night).**
 "Please ensure the details are in the Waiting on Ketura page of the report; I will be on my phone for an extended
 period of time, so any details for every item I need to review will need to be there for the foreseeable future.
