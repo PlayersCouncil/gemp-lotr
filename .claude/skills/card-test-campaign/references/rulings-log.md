@@ -78,7 +78,8 @@ go look up is sufficient." The tracker is refreshed at every landing.
 
 **After the errata: Race to Mount Doom lightly, then the `at` tests, then the Decipher sets (Ketura, 2026-10-08,
 night).** On RTMD: "These tests were done relatively recently, and so less effort should be required. I think that
-formatting and such may still be required, but these three sets should overall require less attention." On the
+formatting and such may still be required, but these three sets should overall require less attention." (Four sets, 91 to 94: "oh right, it is 4 sets. I forgot
+we added community entries to 94.") On the
 `at` tests, which come next and before the Decipher sets: "we're going to tackle the `at` tests and get those all
 converted and in place, either in the appropriate mechanical folders or within the cards they are most associated
 with. These tests are going to be a bit gnarly and opaque, so it may make more sense to just note what bug or
