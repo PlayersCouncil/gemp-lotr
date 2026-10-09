@@ -5,7 +5,7 @@
 			//id: 8_43.1
 			parent: 8_43
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN08E043.1_card.jpg
 			collInfo: 8R43
@@ -68,7 +68,7 @@
 			//id: 8_48.1
 			parent: 8_48
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN08E048.1.jpg
 			collInfo: 8C48

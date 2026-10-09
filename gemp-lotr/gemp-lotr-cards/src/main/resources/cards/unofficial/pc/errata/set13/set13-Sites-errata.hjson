@@ -2,7 +2,10 @@
 
 	63_188: {
 		cardInfo: {
-			//id: 3_188.1
+			//id: 63_188.1
+			parent: 13_188
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/63_188.jpg
 			collInfo: 13U188

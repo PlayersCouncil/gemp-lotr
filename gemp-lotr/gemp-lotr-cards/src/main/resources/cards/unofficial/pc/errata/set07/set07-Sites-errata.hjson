@@ -5,7 +5,7 @@
 			//id: 7_332.1
 			parent: 7_332
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/57_332.jpg
 			collInfo: 7U332
@@ -53,7 +53,7 @@
 			//id: 7_359.1
 			parent: 7_359
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/57_359.jpg
 			collInfo: 7U359

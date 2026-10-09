@@ -4,10 +4,10 @@
 			//id: 1_126.1
 			parent: 1_126
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E126.1.jpg
-			collInfo: 1C126
+			collInfo: 1U126
 			rarity: U
 		}
 		title: Hunt Them Down!
@@ -89,7 +89,7 @@
 			//id: 1_138.1
 			parent: 1_138
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/51_138.jpg
 			collInfo: 1C138
@@ -237,7 +237,7 @@
 			//id: 1_139.3
 			parent: 1_139
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 3
 			image: errata/LOTR-EN01E139.2.jpg
 			collInfo: 1R139
@@ -297,7 +297,7 @@
 			//id: 1_142.1
 			parent: 1_142
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E142.1.jpg
 			collInfo: 1U142
@@ -369,7 +369,7 @@
 			//id: 1_150.1
 			parent: 1_150
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E150.1.jpg
 			collInfo: 1C150
@@ -473,7 +473,7 @@
 			//id: 1_154.1
 			parent: 1_154
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E154.1.jpg
 			collInfo: 1C154
@@ -672,7 +672,7 @@
 			//id: 1_160.1
 			parent: 1_160
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E160.1.jpg
 			collInfo: 1C160

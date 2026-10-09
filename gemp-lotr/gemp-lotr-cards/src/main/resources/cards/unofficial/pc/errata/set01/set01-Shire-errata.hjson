@@ -206,7 +206,7 @@
 			//id: 1_311.2
 			parent: 1_311
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 2
 			image: errata/LOTR-EN01S311.2_card.jpg
 			collInfo: 1C311
@@ -298,7 +298,7 @@
 			//id: 1_313.1
 			parent: 1_313
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/51_313.jpg
 			collInfo: 1R313
@@ -360,7 +360,7 @@
 			//id: 1_316.1
 			parent: 1_316
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/51_316.jpg
 			collInfo: 1U316

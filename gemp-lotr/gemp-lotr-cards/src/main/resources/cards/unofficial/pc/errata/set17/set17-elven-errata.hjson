@@ -2,6 +2,9 @@
 	67_7: {
 		cardInfo: {
 			//id: 67_7.1
+			parent: 17_7
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN17E007.1_card.jpg
 			collInfo: 17S7
@@ -56,7 +59,10 @@
 	
 	67_10: {
 		cardInfo: {
-			//id: 7_10.1
+			//id: 67_10.1
+			parent: 17_10
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN17E010.1.jpg
 			collInfo: 17U10

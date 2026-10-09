@@ -6,7 +6,7 @@
 			//id: 1_70.1
 			parent: 1_70
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E070.1_card.jpg
 			collInfo: 1U70
@@ -120,7 +120,7 @@
 			//id: 1_80.2
 			parent: 1_80
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 2
 			image: errata/51_80.jpg
 			collInfo: 1R80
@@ -227,7 +227,7 @@
 			//id: 1_87.1
 			parent: 1_87
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E087.1_card.jpg
 			collInfo: 1R87

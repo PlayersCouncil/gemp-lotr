@@ -2,6 +2,9 @@
 	65_14: {
 		cardInfo: {
 			//id: 65_14.1
+			parent: 15_14
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN15E014.1_card.jpg
 			collInfo: 15C14
@@ -53,7 +56,10 @@
 
 	65_15: {
 		cardInfo: {
-			//id: 5_15.1
+			//id: 65_15.1
+			parent: 15_15
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/65_15.jpg
 			collInfo: 15C15
@@ -106,6 +112,9 @@
 	65_17: {
 		cardInfo: {
 			//id: 65_17.1
+			parent: 15_17
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN15E017.1_card.jpg
 			collInfo: 15U17

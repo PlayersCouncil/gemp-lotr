@@ -304,7 +304,7 @@
 			//id: 4_73.2
 			parent: 4_73
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 2
 			image: errata/54_73.jpg
 			collInfo: 4R73

@@ -1,7 +1,10 @@
 {
 	65_148: {
 		cardInfo: {
-			//id: 5_148.1
+			//id: 65_148.1
+			parent: 15_148
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN15E148.1.jpg
 			collInfo: 15R148

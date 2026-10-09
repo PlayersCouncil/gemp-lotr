@@ -2,7 +2,7 @@
 	
 	100_1: {
 		cardInfo: {
-			//id: 101_57
+			//id: 100_1
 			image: errata/LOTR-ENV0E001.0.jpg
 			collInfo: 18U139+
 			rarity: U

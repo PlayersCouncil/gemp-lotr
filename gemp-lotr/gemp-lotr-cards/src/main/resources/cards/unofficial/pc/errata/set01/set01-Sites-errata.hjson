@@ -49,10 +49,10 @@
 			//id: 1_333.1
 			parent: 1_333
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E333.1.jpg
-			collInfo: 1
+			collInfo: 1U333
 			rarity: U
 		}
 		title: Midgewater Moors

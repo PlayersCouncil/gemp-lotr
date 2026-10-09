@@ -4,7 +4,7 @@
 			//id: 3_87.1
 			parent: 3_87
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN03E087.1.jpg
 			collInfo: 3C87
@@ -97,7 +97,7 @@
 			//id: 3_88.1
 			parent: 3_88
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN03E088.1.jpg
 			collInfo: 3U88
@@ -245,7 +245,7 @@
 			//id: 3_90.2
 			parent: 3_90
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 2
 			image: errata/LOTR-EN03E090.2_card.jpg
 			collInfo: 3C90
@@ -321,7 +321,7 @@
 			//id: 3_91.1
 			parent: 3_91
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN03E091.1.jpg
 			collInfo: 3R91
@@ -405,7 +405,7 @@
 			//id: 3_92.1
 			parent: 3_92
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN03E092.1.jpg
 			collInfo: 3U92
@@ -783,7 +783,7 @@
 			//id: 3_104.1
 			parent: 3_104
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN03E104.1.jpg
 			collInfo: 3R104

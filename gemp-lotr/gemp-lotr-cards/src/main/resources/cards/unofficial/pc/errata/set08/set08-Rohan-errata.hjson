@@ -4,7 +4,7 @@
 			//id: 8_91.1
 			parent: 8_91
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN08E091.1.jpg
 			collInfo: 8R91

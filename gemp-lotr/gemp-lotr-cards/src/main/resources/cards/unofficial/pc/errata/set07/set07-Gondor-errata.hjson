@@ -212,16 +212,18 @@
 	
 	57_96: {
 		cardInfo: {
-			//id: 7_96.1
+			//id: 57_96.1
 			parent: 7_96
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/57_96.jpg
 			collInfo: 7C96
 			rarity: C
 		}
 		title: Gondorian Captain
+		unique: false
+		side: Free Peoples
 		culture: gondor
 		twilight: 2
 		type: companion

@@ -62,6 +62,12 @@ The full monolith is also available at `hjson-doc-export.md` if needed.
 }
 ```
 
+`cardInfo` is the block at the head of a definition (`//id`, `parent`, `variant`, `variantPath`, `revision`, `image`,
+`collInfo`, `rarity`). It is not a source of truth, and it is kept true to the rest of the definition (Q-0145): on a
+PC erratum `parent` is the original's id, `variant` ERRATA, `variantPath` errata/pc and `collInfo` / `rarity` the
+original's; on a revised V-set card `variant` is ERRATA and `variantPath` errata/pc. `cardinfo.py <id>` (campaign
+scripts) lists where a block departs, kind by kind; its docstring has every kind's convention.
+
 ---
 
 ## Game Text Types (Effect Types)

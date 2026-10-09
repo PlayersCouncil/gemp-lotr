@@ -65,7 +65,7 @@
 			//id: 8_51.2
 			parent: 8_51
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 2
 			image: errata/LOTR-EN08E051.2_card.jpg
 			collInfo: 8R51
@@ -204,7 +204,7 @@
 			//id: 8_57.2
 			parent: 8_57
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 2
 			image: errata/58_57.jpg
 			collInfo: 8R57
@@ -401,7 +401,7 @@
 			//id: 8_59.2
 			parent: 8_59
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 2
 			image: errata/LOTR-EN08E059.2_card.jpg
 			collInfo: 8U59

@@ -4,7 +4,7 @@
 			//id: 6_16.1
 			parent: 6_16
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN06E016.1_card.jpg
 			collInfo: 6U16

@@ -5,7 +5,7 @@
 			//id: 3_106.1
 			parent: 3_106
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/53_106.jpg
 			collInfo: 3U106
@@ -63,7 +63,7 @@
 			//id: 3_108.1
 			parent: 3_108
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/53_108.jpg
 			collInfo: 3C108
@@ -104,7 +104,7 @@
 			//id: 3_113.1
 			parent: 3_113
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/53_113.jpg
 			collInfo: 3R113

@@ -2,7 +2,10 @@
 
 	61_114: {
 		cardInfo: {
-			//id: 1_114.1
+			//id: 61_114.1
+			parent: 11_114
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/61_114.jpg
 			collInfo: 11U114
@@ -57,7 +60,10 @@
 
 	61_132: {
 		cardInfo: {
-			//id: 1_132.1
+			//id: 61_132.1
+			parent: 11_132
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/61_132.jpg
 			collInfo: 11C132

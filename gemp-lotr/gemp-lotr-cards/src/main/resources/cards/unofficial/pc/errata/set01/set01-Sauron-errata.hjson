@@ -4,7 +4,7 @@
 			//id: 1_240.1
 			parent: 1_240
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E240.1.jpg
 			collInfo: 1R240
@@ -62,7 +62,7 @@
 			//id: 1_245.1
 			parent: 1_245
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E245.1.jpg
 			collInfo: 1R245
@@ -123,7 +123,7 @@
 			//id: 1_248.1
 			parent: 1_248
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/51_248.jpg
 			collInfo: 1C248
@@ -165,7 +165,7 @@
 			//id: 1_252.1
 			parent: 1_252
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E252.1.jpg
 			collInfo: 1R252
@@ -229,7 +229,7 @@
 			//id: 1_254.1
 			parent: 1_254
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/51_254.jpg
 			collInfo: 1R254
@@ -327,7 +327,7 @@
 			//id: 1_265.1
 			parent: 1_265
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E265.1.jpg
 			collInfo: 1R265
@@ -435,7 +435,7 @@
 			//id: 1_268.1
 			parent: 1_268
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E268.1.jpg
 			collInfo: 1C268
@@ -487,7 +487,7 @@
 			//id: 1_280.1
 			parent: 1_280
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E280.1.jpg
 			collInfo: 1U280
@@ -553,7 +553,7 @@
 			//id: 1_282.1
 			parent: 1_282
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/51_282.jpg
 			collInfo: 1R282

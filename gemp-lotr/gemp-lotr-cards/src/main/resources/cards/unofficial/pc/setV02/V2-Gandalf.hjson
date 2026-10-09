@@ -158,7 +158,7 @@
 			variantPath: errata/pc
 			revision: 2
 			image: sets/V2/LOTR-ENV2E013.2_card.jpg
-			collInfo: V213
+			collInfo: V2_13
 			rarity: _
 		}
 		title: Gandalf
@@ -356,7 +356,7 @@
 			variantPath: errata/pc
 			revision: 1
 			image: sets/V2/LOTR-ENV2E077.1_card.jpg
-			collInfo: V277
+			collInfo: V2_77
 			rarity: _
 		}
 		title: Gandalf's Staff

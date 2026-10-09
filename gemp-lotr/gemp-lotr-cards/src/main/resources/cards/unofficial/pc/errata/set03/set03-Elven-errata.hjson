@@ -105,7 +105,7 @@
 			//id: 3_13.1
 			parent: 3_13
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN03E013.1_card.jpg
 			collInfo: 3R13
@@ -395,7 +395,7 @@
 			//id: 3_17.2
 			parent: 3_17
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 2
 			image: errata/53_17.jpg
 			collInfo: 3R17
@@ -620,7 +620,7 @@
 			//id: 3_24.1
 			parent: 3_24
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN03E024.1_card.jpg
 			collInfo: 3U24

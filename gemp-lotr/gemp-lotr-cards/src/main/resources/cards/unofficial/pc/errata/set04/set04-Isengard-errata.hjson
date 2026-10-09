@@ -2,10 +2,10 @@
 	
 	54_146: {
 		cardInfo: {
-			//id: 4_146.1
+			//id: 54_146.1
 			parent: 4_146
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN04E146.1.jpg
 			collInfo: 4R146
@@ -210,10 +210,10 @@
 
 	54_192: {
 		cardInfo: {
-			//id: 4_192.1
+			//id: 54_192.1
 			parent: 4_192
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/54_192.jpg
 			collInfo: 4C192

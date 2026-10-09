@@ -1,7 +1,10 @@
 {
 	69_1: {
 		cardInfo: {
-			//id: 9_1.1
+			//id: 69_1.1
+			parent: 19_1
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN19E001.1.jpg
 			collInfo: 19P1
@@ -97,7 +100,10 @@
 	
 	69_24: {
 		cardInfo: {
-			//id: 9_24.1
+			//id: 69_24.1
+			parent: 19_24
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN19E024.1.jpg
 			collInfo: 19P24
@@ -157,7 +163,10 @@
 	
 	69_30: {
 		cardInfo: {
-			//id: 9_30.1
+			//id: 69_30.1
+			parent: 19_30
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN19E030.1.jpg
 			collInfo: 19P30

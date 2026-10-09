@@ -2,7 +2,10 @@
 
 	68_79: {
 		cardInfo: {
-			//id: 8_79.1
+			//id: 68_79.1
+			parent: 18_79
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/68_79.jpg
 			collInfo: 18U79
@@ -47,7 +50,10 @@
 	
 	68_82: {
 		cardInfo: {
-			//id: 8_82.1
+			//id: 68_82.1
+			parent: 18_82
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN18E082.1.jpg
 			collInfo: 18R82

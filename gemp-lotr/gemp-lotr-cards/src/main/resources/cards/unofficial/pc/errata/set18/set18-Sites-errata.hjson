@@ -2,7 +2,10 @@
 	
 	68_134: {
 		cardInfo: {
-			//id: 8_134.1
+			//id: 68_134.1
+			parent: 18_134
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN18E134.1.jpg
 			collInfo: 18U134
@@ -59,7 +62,10 @@
 
 	68_136: {
 		cardInfo: {
-			//id: 8_136.1
+			//id: 68_136.1
+			parent: 18_136
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN18E136.1.jpg
 			collInfo: 18U136
@@ -105,7 +111,10 @@
 
 	68_139: {
 		cardInfo: {
-			//id: 8_139.1
+			//id: 68_139.1
+			parent: 18_139
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN18E139.1.jpg
 			collInfo: 18U139

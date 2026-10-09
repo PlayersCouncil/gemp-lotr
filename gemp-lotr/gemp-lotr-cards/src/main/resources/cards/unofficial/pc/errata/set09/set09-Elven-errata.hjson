@@ -77,7 +77,7 @@
 			//id: 9_14.1
 			parent: 9_14
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN09E014.1_card.jpg
 			collInfo: 9R+14
@@ -122,7 +122,7 @@
 			//id: 9_16.1
 			parent: 9_16
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/59_16.jpg
 			collInfo: 9R+16

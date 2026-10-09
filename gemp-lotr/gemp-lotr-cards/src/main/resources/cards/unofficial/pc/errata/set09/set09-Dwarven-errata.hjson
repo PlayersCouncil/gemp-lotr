@@ -4,7 +4,7 @@
 			//id: 9_4.1
 			parent: 9_4
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN09E004.1_card.jpg
 			collInfo: 9R+4

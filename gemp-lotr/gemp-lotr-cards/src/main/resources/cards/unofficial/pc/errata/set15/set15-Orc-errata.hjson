@@ -2,7 +2,10 @@
 
 	65_112: {
 		cardInfo: {
-			//id: 5_112.1
+			//id: 65_112.1
+			parent: 15_112
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/65_112.jpg
 			collInfo: 15R112

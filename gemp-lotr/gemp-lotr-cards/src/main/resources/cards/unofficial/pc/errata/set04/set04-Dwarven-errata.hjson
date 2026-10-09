@@ -4,7 +4,7 @@
 			//id: 4_46.1
 			parent: 4_46
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN04E046.1.jpg
 			collInfo: 4R46

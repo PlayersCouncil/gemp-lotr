@@ -1,10 +1,13 @@
 {
 	68_110: {
 		cardInfo: {
-			//id: 8_110.1
+			//id: 68_110.1
+			parent: 18_110
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN18E110.1.jpg
-			collInfo: 18R110
+			collInfo: 18U110
 			rarity: U
 		}
 		title: Prized Lagan
@@ -77,7 +80,10 @@
 	
 	68_111: {
 		cardInfo: {
-			//id: 8_111.1
+			//id: 68_111.1
+			parent: 18_111
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN18E111.1.jpg
 			collInfo: 18U111
@@ -136,7 +142,10 @@
 
 	68_112: {
 		cardInfo: {
-			//id: 8_112.1
+			//id: 68_112.1
+			parent: 18_112
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/68_112.jpg
 			collInfo: 18R112

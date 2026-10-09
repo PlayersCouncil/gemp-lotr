@@ -422,6 +422,13 @@ def lint_file(path: Path):
                 "race, the culture written for the race passes every test (F-0019)"
                 % (", ".join(sorted(races)), " / ".join(pairs[r] for r in sorted(races))))
 
+    if card is not None:
+        import cardinfo
+        for field, there, wanted in cardinfo.check(card_id):
+            add("warning", "cardinfo", None, "the definition's cardInfo has %s %s where the rest of the definition and the "
+                "other cards of its kind say %s: put the definition right (Q-0145; `cardinfo.py %s`), no test reads it"
+                % (field, there, wanted, card_id))
+
     if card is not None and g.sheet_for(card_id)[0] is not None:
         import reconcile
         diffs = reconcile.compare(card_id)

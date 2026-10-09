@@ -337,11 +337,11 @@
 		cardInfo: {
 			//id: 101_49.1
 			parent: 101_49
-			variant: ORIGINAL
-			variantPath: promos/pc
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: sets/vset1/LOTR-ENV1S049.1_card.jpg
-			collInfo: V3_49
+			collInfo: V1R49
 			rarity: R
 		}
 		title: A Shadow of the Past
