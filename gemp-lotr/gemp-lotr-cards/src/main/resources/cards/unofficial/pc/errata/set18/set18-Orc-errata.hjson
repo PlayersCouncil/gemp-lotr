@@ -103,8 +103,12 @@
 						deck: freeps
 						count: 2
 						showAll: true
-						shuffle: true
+						shuffle: false
 						forced: true
+					}
+					{
+						type: ShuffleDeck
+						deck: freeps
 					}
 				]
 			}

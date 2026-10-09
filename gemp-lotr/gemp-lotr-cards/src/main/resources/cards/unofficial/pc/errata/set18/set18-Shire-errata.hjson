@@ -66,7 +66,7 @@
 				]
 			}
 		]
-		gametext: At the start of each turn, you may add (2) to heal a [shire] companion. Maneuver: Add a threat to spot a minion. That minion loses <b>fierce</b> and cannot gain fierce until the regroup phase.  Any Shadow player may remove (2) to prevent this.
+		gametext: At the start of each turn, you may add (2) to heal a [shire] companion.<br><b>Maneuver:</b> Add a threat to spot a minion. That minion loses <b>fierce</b> and cannot gain fierce until the regroup phase.  Any Shadow player may remove (2) to prevent this.
 		lore: ""
 		promotext: ""
 		alts: {
