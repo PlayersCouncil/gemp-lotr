@@ -292,7 +292,9 @@ function start() {
   const Q = DATA.questions || [], G = DATA.rig || [];
   // Findings that have not had her word: mended without it, or filed and waiting.
   const WAITS = { "candidate": "believed wrong, not fixed: waiting on her", "fixed": "fixed without her word", "confirmed": "a fault by her word or the text; the fix is pending", "question": "hangs on an open question" };
-  const W = (DATA.findings || []).filter(f => WAITS[f.status]).slice().reverse();
+  // A finding she has spoken on ("Ketura (2026-10-09): ..." in its outcome) and whose fix is only pending is not waiting on her.
+  const spoken = f => f.status === "confirmed" && /Ketura \(\d{4}-\d\d-\d\d/.test(f.outcome || "");
+  const W = (DATA.findings || []).filter(f => WAITS[f.status] && !spoken(f)).slice().reverse();
   drawOpen(document.getElementById("qlist"), Q, "No question is open.");
   drawOpen(document.getElementById("glist"), G, "No rig request is open.");
   const wlist = document.getElementById("wlist"); wlist.replaceChildren();
