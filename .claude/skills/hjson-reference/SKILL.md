@@ -480,7 +480,7 @@ Used in `cost: []` and `effect: []` arrays.
 | `Choice` | player?, texts[], effects[], requires?[] | Choose one of N options. `requires` is parallel to `texts`, one requirement object per option (`{type: AlwaysAvailable}` for one always offered), each object on its own lines: a one-line `{ type: X }` inside an array does not parse |
 | `CostToEffect` | cost[], effect[], requires? | Sequential cost-then-effect |
 | `If` | check[], true[], false[] | Conditional execution |
-| `Optional` | player?, text, effect[], requires? | "You may" prompt |
+| `Optional` | player?, text, cost?[], effect[], requires? | "You may" prompt. With a `cost`: not asked when the cost cannot be paid, and the effect is not carried out when the cost is not paid (69_38, F-0306) |
 | `Preventable` | player, text, cost[], effect[], instead?[] | "X may Y to prevent Z" |
 | `Multiple` | effects[] | Group subactions |
 | `Repeat` | times, effect[] | Do N times |
@@ -651,4 +651,4 @@ For targeting inactive cards: `hindered`, `stacked`, `out_of_turn`, `attached_to
 
 ## Text Substitution
 
-In `text` fields: `{culture}` → symbol, `{you}` → performing player, `{owner}` → card owner, `{self}` → card link, `{memoryVar}` → stored card(s) or string
+In `text` fields: `{culture}` → symbol, `{you}` → performing player, `{owner}` → card owner, `{self}` → card link, `{memoryVar}` → stored card(s) or string (read from the memory of the action that shows the text: a value another trigger put away with `storeWhileInZone` is not in it and prints `NONE`, F-0307)

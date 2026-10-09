@@ -49,6 +49,12 @@ that (G-0029); a refused assignment is never shown by the rig throwing. A restri
 (`CantBeAssignedToSkirmish` with `player`: Bill Ferny 2_75 and 52_75, Q-0146) shows in the first two: the card is
 off that player's list, and when it is the only minion the Free Peoples player is not asked to assign at all.
 
+**No method names the moment after the assignments.** When every minion is assigned the Free Peoples player is
+asked "Choose next skirmish to resolve", and that is the bookend to assert after `FreepsAssignToMinions` or
+`ShadowAssignToMinions`: `assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"))`. With a
+minion left unassigned the Shadow player is asked "Assign minions" first. After an assignment ACTION in the
+assignment phase the bookend is the other player's `Awaiting...AssignmentPhaseActions()` (69_38).
+
 **One minion to a companion, and the minions left over.** The Free Peoples player may assign one minion to each
 companion (more takes defender): `FreepsAssignToMinions` with two minions in one group is refused by the game
 with a bare `DecisionResultInvalidException`. A minion he leaves unassigned gives the Shadow player an
@@ -266,7 +272,8 @@ Elf 63_23) is asked before the played event's effect chooses anything (CR 4.2 "p
 **Set the twilight pool before the Shadow phase starts.** Because the engine asks once, a pool set while the
 Shadow player's decision is already pending does not make a minion playable. Set it during the fellowship phase,
 then pass. The move then adds one for each companion plus the new site's shadow number, so a test that needs an
-exact pool adds those in: `// 10 set + 1 companion + 2 for the site`.
+exact pool adds those in: `// 10 set + 1 companion + 2 for the site`. A pool that is too small shows only as the rig's
+`<card> is not offering Shadow Player a play.`: count the roaming penalty as well as the cost.
 
 **Both players act in most phases.** Fellowship is the Free Peoples player's alone and Shadow the Shadow
 player's. In maneuver, archery, assignment, skirmish and regroup the Free Peoples player is asked first, then the
