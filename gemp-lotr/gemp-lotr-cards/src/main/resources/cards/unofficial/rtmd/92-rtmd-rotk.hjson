@@ -1436,7 +1436,7 @@
 			optional: false
 			trigger: {
 				type: Heals
-				filter: companion
+				filter: or(companion,ally)
 				memorize: healedComp
 			}
 			requires: [
