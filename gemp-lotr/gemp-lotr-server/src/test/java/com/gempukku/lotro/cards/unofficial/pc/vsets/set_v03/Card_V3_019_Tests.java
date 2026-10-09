@@ -292,8 +292,8 @@ public class Card_V3_019_Tests
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.IsHindered(boromir));
 
-		// Neither can be done in full, so the game leaves the player to name one, and nothing comes of it.
-		scn.FreepsChoose("threat");
+		// Neither can be done at all, so the player is not asked which (F-0116), and nothing comes of it.
+		assertFalse(scn.FreepsDecisionAvailable("Choose action to perform"));
 
 		assertEquals(0, scn.GetThreats());
 		assertEquals(0, scn.GetBurdens());

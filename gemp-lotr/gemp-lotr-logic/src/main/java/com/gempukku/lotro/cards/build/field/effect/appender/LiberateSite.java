@@ -7,6 +7,7 @@ import com.gempukku.lotro.cards.build.PlayerSource;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
@@ -30,6 +31,14 @@ public class LiberateSite implements EffectAppenderProducer {
             public boolean isPlayableInFull(ActionContext actionContext) {
                 String controllerPlayerId = controllerSource != null ? controllerSource.getPlayer(actionContext) : null;
                 return PlayConditions.canLiberateASite(actionContext.getGame(), actionContext.getPerformingPlayer(), actionContext.getSource(), controllerPlayerId);
+            }
+
+            // About to be carried out with no site that can be liberated, it does nothing.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                if (actionContext.isAtResolution() && !isPlayableInFull(actionContext))
+                    return EffectForecast.NOTHING;
+                return EffectForecast.UNKNOWN;
             }
 
             @Override

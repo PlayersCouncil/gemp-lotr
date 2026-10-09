@@ -477,7 +477,7 @@ Used in `cost: []` and `effect: []` arrays.
 ### Control Flow
 | Subaction | Key Params | Purpose |
 |-----------|-----------|---------|
-| `Choice` | player?, texts[], effects[], requires?[] | Choose one of N options. `requires` is parallel to `texts`, one requirement object per option (`{type: AlwaysAvailable}` for one always offered), each object on its own lines: a one-line `{ type: X }` inside an array does not parse |
+| `Choice` | player?, texts[], effects[], requires?[] | Choose one of N options. `requires` is parallel to `texts`, one requirement object per option (`{type: AlwaysAvailable}` for one always offered), each object on its own lines: a one-line `{ type: X }` inside an array does not parse. The one option that can be carried out in full is taken unasked. As an effect with no such option, every option is put to the player, unless each is a single effect certain to do nothing (nobody to exert, no site to liberate): then nothing is asked (F-0116). An option that is a list, or that holds other effects, always keeps the question |
 | `CostToEffect` | cost[], effect[], requires? | Sequential cost-then-effect |
 | `If` | check[], true[], false[] | Conditional execution |
 | `Optional` | player?, text, cost?[], effect[], requires? | "You may" prompt. With a `cost`: not asked when the cost cannot be paid, and the effect is not carried out when the cost is not paid (69_38, F-0306) |

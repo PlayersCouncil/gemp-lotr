@@ -839,8 +839,7 @@ public class IndividualCardAtTest extends AbstractAtTest {
 
         assertEquals(Zone.DISCARD, athelas.getZone());
 
-        //Choices now ask the player which to perform if neither are possible:
-        playerDecided(P1, "0");
+        // Neither branch has anything to act on, so the player is not asked which to perform (F-0116).
 
         // Pass
         playerDecided(P1, "");

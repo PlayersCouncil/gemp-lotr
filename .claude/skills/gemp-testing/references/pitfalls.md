@@ -25,6 +25,8 @@ with one legal bearer it is made without asking.
 
 **A number that can only be one number is not asked for** (F-0147). Where an effect or a cost asks for a number and only one can be named (X from 1 to 1, "how many to spot" with none to spot, "remove X tokens" with none there), the game takes it. A test of such a board does not answer the question, and an answer written "to be safe" goes to the NEXT decision (the symptom is a wrong number later, not an error). To read the bounds of an X, arrange a board where two numbers can be named.
 
+**A choice with nothing on any branch is not asked** (F-0116, F-0293). Where a `choice` comes up as an effect and no branch can be carried out in full, the player is asked to pick among all of them (a branch may still be done in part: Dwarrowdelf Chamber 1_344 with one companion to exert), unless every branch is a single effect that is certain to do nothing: nobody to exert, heal, wound or discard, no burden or threat to remove, no site to liberate. Then nothing is asked and nothing happens, and a test of that board answers no "Choose action to perform" (assert `assertFalse(scn.FreepsDecisionAvailable("Choose action to perform"))`; mechanics/ChoiceWithNothingOnAnyBranchTests). The question is kept by a branch of several effects, by one that holds others (`if`, `costToEffect`, `multiple`), and by one whose effect cannot tell (a play from a pile, `chooseActiveCards`: Here Lies Balin 1_19 with no Orc in play is still asked).
+
 **"Wound each" and "wound every" wound one card at a time.** Each of the wounds has its own "is about to"
 window (`<Wound X> - Optional "is about to" responses`), so a response that picks which card it saves ("prevent
 a wound to an Elf") is offered one card at a time and never a choice among the cards the effect reaches: the F
@@ -746,6 +748,8 @@ named and the valid ones are not.
 - `0_8014` Test Muster ("Shadow or Maneuver: Play a minion; its twilight cost is -1 for each minion you can spot (limit -2).") and `0_8015` Test Barrow (the same in the Shadow phase, from the discard pile): Shadow conditions with no cost, for mechanics/LimitOnADiscountTests.
 
 - `0_8016` Test Shelf ("Response: If you play an event, add (1) to place that event on top of your draw deck.") and `0_8017` Test Cellar (the same, beneath): Free Peoples conditions built on `filter: played`, for mechanics/PlacingTheEventPlayedOnADrawDeckTests. Each is offered again for the same play after it is used (a cost that can be paid): decline it.
+
+- `0_8018` Test Fork ("Fellowship: Add (1) to exert a companion or heal each companion."): a Free Peoples condition whose second branch is two effects (remember the companions, then heal those remembered), for mechanics/ChoiceWithNothingOnAnyBranchTests: a choice with such a branch always asks.
 
 **The test booster pack.** The test booster pack (`product/Test-Booster.hjson`) holds eight cards: beside the six it had, Drums in the
 Deep 1_168 (a Shadow skirmish event: shown and not selectable when the pack is opened in the Shadow phase)

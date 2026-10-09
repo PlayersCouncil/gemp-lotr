@@ -1,6 +1,7 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
 import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
+import com.gempukku.lotro.cards.build.field.effect.NoEffectForesight;
 import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
@@ -13,6 +14,7 @@ import com.gempukku.lotro.logic.decisions.MultipleChoiceAwaitingDecision;
 import com.gempukku.lotro.logic.effects.PlayoutDecisionEffect;
 import com.gempukku.lotro.logic.effects.StackActionEffect;
 import com.gempukku.lotro.logic.timing.Effect;
+import com.gempukku.lotro.logic.timing.FailedEffect;
 import org.json.simple.JSONObject;
 
 import java.util.LinkedList;
@@ -44,6 +46,13 @@ public class Choice implements EffectAppenderProducer {
         Requirement[] possibleRequirements = environment.getRequirementFactory().getRequirements(requirementArray, environment);
 
         final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
+
+        // Whether every branch is a single effect that holds no other: only such branches are asked, when the
+        // choice comes up, whether any of them will do anything.
+        boolean singleEffects = true;
+        for (JSONObject[] branch : effectArrayOfArrays)
+            singleEffects &= NoEffectForesight.isOneEffectHoldingNoOther(branch);
+        final boolean branchesSayForThemselves = singleEffects;
 
         return new DelayedAppender() {
             @Override
@@ -83,6 +92,13 @@ public class Choice implements EffectAppenderProducer {
                     // being no cost at all.
                     if(cost)
                         return null;
+
+                    // A choice whose every branch is certain to do nothing is not put to the player (Ketura on
+                    // F-0116: "the prompt should be smarter"; F-0293).  It comes to nothing, as whichever branch
+                    // was picked would have.  A branch of several effects, or of an effect that holds others,
+                    // is not asked, and keeps the question.
+                    if (branchesSayForThemselves && EffectForecast.isCertainToDoNothing(delegate, possibleEffectAppenders))
+                        return new FailedEffect();
 
                     // If we are an effect however, then we will let "no valid choices" default to the player choosing
                     // which fork to go down; this should eliminate situations like Here Lies Balin doing nothing

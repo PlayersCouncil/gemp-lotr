@@ -505,4 +505,50 @@
 		}
 		gametext: <b>Response:</b> If you play an event, add (1) to place that event beneath your draw deck.
 	}
+	# ChoiceWithNothingOnAnyBranchTests: a choice one of whose branches is two effects, the first remembering the
+	# cards the second then acts on.  Until that branch is taken nothing is remembered, so it cannot be said
+	# beforehand to do nothing, and the question has to be kept.  No real card's choice has a branch that
+	# remembers and then acts.
+	0_8018: {
+		title: Test Fork
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: fellowship
+			cost: {
+				type: AddTwilight
+				amount: 1
+			}
+			effect: {
+				type: choice
+				texts: [
+					Exert a companion
+					Heal each companion
+				]
+				effects: [
+					{
+						type: exert
+						select: choose(companion)
+					}
+					[
+						{
+							type: MemorizeActive
+							filter: companion
+							memory: toHeal
+						}
+						{
+							type: heal
+							select: memory(toHeal)
+						}
+					]
+				]
+			}
+		}
+		gametext: <b>Fellowship:</b> Add (1) to exert a companion or heal each companion.
+	}
 }

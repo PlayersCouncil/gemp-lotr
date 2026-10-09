@@ -165,7 +165,8 @@ public final class EffectForecast {
      * this is asked at the moment the effects come up, so they are asked in a context that says so
      * (ActionContext.isAtResolution) and may read what has been chosen and remembered.  It is what a prevention
      * asks before it is put to a player (PreventableEffectAppender): nobody is asked to pay to prevent what is
-     * not going to happen.
+     * not going to happen.  A choice asks it of its branches when none of them can be carried out in full
+     * (Choice): nobody is asked to pick between things that will not happen.
      *
      * Each effect has to say for itself that it will do nothing.  An effect that cannot tell, and one that only
      * remembers something for the next (whose forecast is then made before that memory is filled), leave the
