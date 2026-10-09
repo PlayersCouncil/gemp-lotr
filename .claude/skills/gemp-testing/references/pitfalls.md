@@ -205,10 +205,15 @@ and a reading written for after the play reads VOID (Shrouded Elf 63_23).
 
 **Two at once, one use.** A required trigger with a limit on uses fires once when one event raises it twice (two companions exerting together): no ordering question is asked for the second.
 
-**A Response ability is never "used".** A Response special ability is built as an optional trigger, which
-does not report itself as an ability used, so no card that answers "a special ability is used" (5_59, 5_64,
-5_114, 13_76, 51_98) is offered against one (F-0201, an engine candidate). A test of such a card uses a phase
-ability of the right phase.
+**A Response ability is a special ability used.** A card's `type: Response` ability is the same kind of action
+as a phase ability and reports itself as used once its costs are paid; its word is Response, whatever phase it
+is used in. So a card that answers "a special ability is used" with no phase named (Storied Homestead 13_76,
+Terrible as the Dawn 53_103) is offered against one, and a card that names a phase's abilities ("a skirmish
+special ability": 5_59, 5_64, and 51_98 by Q-0119; "a regroup special ability": 5_114) is not, though the
+Response was used in that phase (`mechanics/ResponseAbilityIsASpecialAbilityTests`). F-0201 said no card could
+answer one; that was a misreading of the source and no fault. A cancelled "is about to" Response leaves the
+situation standing, and its owner is offered it again for as long as he can pay (CR 4.2 "response"): leave him
+nothing to pay with, or decline for him, before reading that the wound landed.
 
 **A discount with a limit is spent when the card is played.** "Its twilight cost is -1 for each ... (limit -N)"
 on an ability is the card's for the phase (Q-0134): asking what is on offer spends none of it, each play takes

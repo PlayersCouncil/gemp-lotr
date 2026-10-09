@@ -42,6 +42,11 @@ public class Card_13_076_Tests
 					put("hollowing", "3_54");
 					// Mordor Enraged: [sauron] condition a minion bears, "Shadow: Exert bearer to add (1) for each archer companion."
 					put("enraged", "1_254");
+
+					// Isengard Shaman: [isengard] Orc, vitality 2, "Response: If an [isengard] Orc is about to take a wound,
+					// remove (2) to prevent that wound."
+					put("shaman", "3_59");
+					put("legolas", "1_50");         // Legolas, Greenleaf: archer; an archery ability that is never used
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -243,6 +248,42 @@ public class Card_13_076_Tests
 		assertEquals(0, scn.GetWoundsOn(sam));
 		assertEquals(2, scn.GetTwilight());
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+	}
+
+	@Test
+	public void AMinionsResponseAbilityIsAnsweredAndItsEffectCancelled() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var homestead = scn.GetFreepsCard("homestead1");
+		var legolas = scn.GetFreepsCard("legolas");
+		var shaman = scn.GetShadowCard("shaman");
+		scn.MoveCompanionsToTable(legolas);
+		scn.MoveCardsToSupportArea(homestead);
+		scn.AddTokensToCard(homestead, 2);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(shaman);
+		scn.SkipToPhase(Phase.ARCHERY);
+		scn.SetTwilight(2);
+		scn.PassCurrentPhaseActions();
+
+		// Legolas's archery wound goes to the only minion.  The Shaman, about to take it, uses his Response:
+		// a minion's special ability, though it bears no phase's name.
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(shaman));
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(0, scn.GetTwilight());
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(homestead));
+		scn.FreepsAcceptOptionalTrigger();
+		assertTrue(scn.FreepsChoiceAvailable("Remove 2"));
+		scn.FreepsChoose("Discard this condition");
+
+		assertInZone(Zone.DISCARD, homestead);
+		// The (2) stays removed and the wound is not prevented; with nothing left to pay for the Response
+		// again, the Shaman takes it.
+		assertEquals(0, scn.GetTwilight());
+		assertEquals(1, scn.GetWoundsOn(shaman));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
 
 	@Test

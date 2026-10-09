@@ -408,6 +408,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Exert X twice" sets off an "each time ... exerts" trigger twice [F-0145]
 - "Place that event on top of (beneath) your draw deck" on a card that answers the play of an event (F-0287) [Q-0034]
 - "Each time you play a [culture] skirmish event" and an event printed with two phases (F-0292, built by engine pass 20) [Q-0198]
+- "A special ability is used" against "a <phase> special ability is used" (Q-0039, Q-0119, F-0201) [Q-0203]
 - A `DoWhile` is ended by what its effect did, never by what is left on the board (F-0322, Race Text 94_4)
 
 ## Hinder, the support area, sites, Maps and the Ring

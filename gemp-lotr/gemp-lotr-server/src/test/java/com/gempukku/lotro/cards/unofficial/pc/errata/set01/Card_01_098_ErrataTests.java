@@ -360,4 +360,45 @@ public class Card_01_098_ErrataTests
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 
+	@Test
+	public void IsNotOfferedAgainstAResponseAbilityUsedInBoromirsSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var cloak = scn.GetFreepsCard("cloak");
+		var boromir = scn.GetFreepsCard("boromir");
+		var numenor = scn.GetFreepsCard("numenor");
+		var wall = scn.GetFreepsCard("wall");
+		var shaman = scn.GetShadowCard("shaman");
+		scn.MoveCompanionsToTable(boromir);
+		scn.AttachCardsTo(boromir, cloak);
+		scn.MoveCardsToHand(numenor);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(shaman);
+		scn.AttachCardsTo(shaman, wall);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(boromir, shaman);
+		scn.FreepsResolveSkirmish(boromir);
+		scn.SetTwilight(2);
+
+		// Men of Numenor is a skirmish event played in Boromir's skirmish: the Cloak is offered, and kept.
+		scn.FreepsPlayCard(numenor);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(cloak));
+		scn.FreepsDeclineOptionalTrigger();
+
+		// The Shaman, about to take its wound, uses his Response: the Shadow player's special ability, used
+		// during a skirmish involving Boromir, and no Skirmish: ability.
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(shaman));
+		scn.ShadowChooseOptionalTrigger(shaman);
+		assertEquals(0, scn.GetTwilight());
+
+		// Only skirmish special abilities are answered (Ketura on Q-0119, 1B): the Cloak is not offered, and
+		// the wound is prevented.
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(cloak));
+		assertEquals(0, scn.GetWoundsOn(shaman));
+		assertAttachedTo(cloak, boromir);
+		assertInDiscard(numenor);
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
 }
