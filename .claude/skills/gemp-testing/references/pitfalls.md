@@ -822,12 +822,16 @@ hindered (`mechanics/TheOneRingIsNeverDiscardedTests`).
 Mount Doom table does not offer them (`mechanics/MapsAndMetaSitesCannotBeHinderedTests`). The cheat
 `HinderCard` hinders whatever it is given and asks no rule.
 
-**A fellowship with no unhindered companion is still offered another move (F-0315, open).** CR 5.0 "hinder":
-"During the Regroup phase, if the fellowship has no unhindered companions, the Free Peoples player cannot choose
-to move." The engine asks "Do you want to make another move?" all the same and moves, so a test that hinders
-the Ring-bearer alone (or every companion) and then moves again passes on a board outside play. Before a second
-move with a hindered Ring-bearer, cheat in a plain companion who stays unhindered (Dwarf Guard 1_7) and count 1
-for him in the move's twilight and nothing for the hindered one (92_25).
+**A fellowship with no unhindered companion is not asked to move again (F-0315).** CR 5.0 "hinder": "During
+the Regroup phase, if the fellowship has no unhindered companions, the Free Peoples player cannot choose to
+move." With every companion of the player whose turn it is hindered, "Do you want to make another move?" is not
+asked: the fellowship stays, the game log says "<player> has no unhindered companion and cannot choose to move
+again.", and its player reconciles (which restores them). A card that makes the Free Peoples player move again
+(`HasToMoveIfAble`: No Retreat 4_30) gives way too. So `FreepsChooseToMove()` after hindering the Ring-bearer
+alone fails; for a second move with a hindered Ring-bearer, cheat in a plain companion who stays unhindered
+(Dwarf Guard 1_7) and count 1 for him in the move's twilight and nothing for the hindered one (92_25). The move
+of the fellowship phase is no choice and is made whoever is hindered
+(`mechanics/NoUnhinderedCompanionNoRegroupMoveTests`).
 
 ## Tables and formats
 

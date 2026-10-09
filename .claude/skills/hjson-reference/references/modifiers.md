@@ -411,7 +411,7 @@ In general, although the names of modifiers are case-insensitive, the names of t
     * requires [ ]
       optional
 * HasToMoveIfAble
-  Forces the active Free Peoples player to choose to move, so long as the `requires` requirements are met.  The move limit must still permit a move.
+  Forces the active Free Peoples player to choose to move, so long as the `requires` requirements are met.  The move limit must still permit a move, and the fellowship must have an unhindered companion (CR 5.0 "hinder": with none the player cannot choose to move, and stays).
     * requires [ ]
       optional
 * ItemClassSpot

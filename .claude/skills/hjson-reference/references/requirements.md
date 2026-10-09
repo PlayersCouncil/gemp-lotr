@@ -63,7 +63,7 @@ Meta-level operations that modify the output of other requirements or value eval
 ## Function Requirements
 
 * CanMove
-  True if the current Free Peoples player's move count is less than the move limit, i.e. they can voluntarily choose to move again if they so desire.
+  True if the current Free Peoples player's move count is less than the move limit, no `CantMove` is in force and the fellowship has an unhindered companion (CR 5.0 "hinder"), i.e. they can voluntarily choose to move again if they so desire.  The same reading the regroup phase makes before asking (`RuleUtils.canChooseToMoveAgain`).
 * CanSelfBePlayed
   True if this card can be played.  This is normally handled automatically when playing from hand, but if self-playing from other contexts (from discard, from a stack, etc), then this may need used to verify all the fiddly sub-requirements like uniqueness and so on.
 * CanSpot

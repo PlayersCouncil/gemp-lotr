@@ -78,6 +78,27 @@ public class RuleUtils {
     }
 
     /**
+     * Whether the fellowship of the player whose turn it is has a companion who is not hindered.  Only that
+     * player's Free Peoples cards are active, so another player's companions are not counted.
+     */
+    public static boolean fellowshipHasUnhinderedCompanion(LotroGame game) {
+        return Filters.hasActive(game, CardType.COMPANION);
+    }
+
+    /**
+     * Whether the Free Peoples player may choose to move the fellowship again this turn: no card forbids the move
+     * (CANT_MOVE), the move limit has not been reached, and the fellowship has a companion who is not hindered.
+     * Comprehensive Rules 5.0, "hinder", 17: "During the Regroup phase, if the fellowship has no unhindered
+     * companions, the Free Peoples player cannot choose to move."  A card that would make that player choose to
+     * move (HAS_TO_MOVE_IF_POSSIBLE) is read after this, and cannot make a player do what the player may not.
+     */
+    public static boolean canChooseToMoveAgain(LotroGame game) {
+        return !game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.CANT_MOVE)
+                && game.getGameState().getMoveCount() < calculateMoveLimit(game)
+                && fellowshipHasUnhinderedCompanion(game);
+    }
+
+    /**
      * The site the current player's fellowship has to survive in order to win the game.  Normally the last site of the
      * adventure path, site 9; MUST_SURVIVE_SITE_10, scoped to that player, pushes it back to site 10.
      */
