@@ -87,6 +87,13 @@ behavior or interaction the test is handling, and then take that as a design dir
 wholesale new test." So an `at` test is not ported line by line: what it guards is written down, and a new test is
 written from that, in `mechanics/` or in the file of the card it is most about.
 
+**Race to Mount Doom is re-worked to the Standard after all (Q-0178, Ketura, 2026-10-09).** The first batch showed
+the old files had about three tests a card and that the Standard's missing checks find real faults (F-0311). Asked
+whether to keep adding every check no existing test touches or to cut to form and ledger only: "I suppose it can't
+be helped if they weren't up to the standard. Let em get re-worked I suppose." Existing tests are still kept and put
+in form, not rewritten. And of set V0: "make sure the one card in V0 gets in somewhere" (Rath Dínen 100_1, a batch
+of its own beside the RTMD batches).
+
 **Everything she must review is on the tracker, whole; the chat carries the code (Ketura, 2026-10-08, night).**
 "Please ensure the details are in the Waiting on Ketura page of the report; I will be on my phone for an extended
 period of time, so any details for every item I need to review will need to be there for the foreseeable future.

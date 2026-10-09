@@ -25,6 +25,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Code review: "On RingBearerRule, the private filter is not the way to go. Instead add it to be a sibling of Filters.ringBearer." Done: ...
 - Landing is a stage of the pipeline, and reports name numbers only (Ketura, 2026-10-08, evening)
 - After the errata: Race to Mount Doom lightly, then the at tests, then the Decipher sets (Ketura, 2026-10-08, night). On RTMD: "These tests were done ...
+- Race to Mount Doom is re-worked to the Standard after all (Q-0178, Ketura, 2026-10-09) [F-0311]
 - Everything she must review is on the tracker, whole; the chat carries the code (Ketura, 2026-10-08, night)
 
 ## Sources, sheets, revisions and errata
