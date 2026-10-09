@@ -1,7 +1,7 @@
 # Brief: surveying an old `at` test file
 
-The folder `gemp-lotr/gemp-lotr-server/src/test/java/com/gempukku/lotro/at/` holds the game's oldest tests: thirty
-files, 284 test methods. Most were written before the test rig (`VirtualTableScenario`) existed, on a base class
+The folder `gemp-lotr/gemp-lotr-server/src/test/java/com/gempukku/lotro/at/` holds the game's oldest tests: 46
+files (18 of them in its subfolder `effects/`), some 336 test methods. Most were written before the test rig (`VirtualTableScenario`) existed, on a base class
 of their own (`AbstractAtTest`), and drive the engine by hand; a few (`HinderTests`, `RestoreTests`,
 `UniquenessTests`, `RelentlessTests`, `ConcealedExposedAtTest`, `PregameDecisionTests`) already use the rig. All
 of them are to be replaced by tests written to the Card Test Standard, and the folder emptied.

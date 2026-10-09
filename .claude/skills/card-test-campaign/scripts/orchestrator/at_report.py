@@ -19,7 +19,8 @@ def main():
     folder = g.state_dir() / "orchestrator" / "at-survey"
     if not folder.is_dir():
         return 0
-    files = sorted(p for p in AT.glob("*.java") if p.name != "AbstractAtTest.java")
+    files = sorted((p for p in AT.rglob("*.java") if re.search(r"@Test\b", p.read_text(encoding="utf-8", errors="replace"))),
+                   key=lambda p: (p.parent != AT, p.name))   # the files of at/ first, then at/effects/
     total = sum(len(re.findall(r"@Test\b", p.read_text(encoding="utf-8", errors="replace"))) for p in files)
     done, out, waiting = 0, [], []
     for p in files:
