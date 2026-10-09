@@ -138,7 +138,7 @@ into a scenario; a name is not evidence of what a card does.
 | Need | Card | Id | Why |
 |---|---|---|---|
 | A minion that does nothing | Goblin Patrol Troop | 1_177 | Strength 13, vitality 3, cost 6, site 4, no text at all. It overwhelms (kills) any companion of strength 6 or less: see "A companion beaten by double his strength" in the pitfalls |
-| A cheap minion | Goblin Runner | 1_178 | Strength 5, vitality 1; when played, may add (2): harmless if cheated onto the table, and added without asking when it is played for real (F-0009) |
+| A cheap minion | Goblin Runner | 1_178 | Strength 5, vitality 1; when played, may add (2): harmless if cheated onto the table, and added without asking when it is played for real (F-0009). Played beside a card with its own required trigger on a minion being played (The Faithful Stone 68_50), the two come at once and the Free Peoples player orders them in a "Required responses" decision: play Goblin Patrol Troop there |
 | A sturdy companion | Aragorn, Ranger of the North | 1_89 | Strength 8, vitality 4; Ranger; a maneuver ability that is only ever used on purpose |
 | A weak companion | Dwarf Guard | 1_7 | Strength 4, vitality 2; needs a Dwarf spotted to be played, so cheat it in |
 | An archer, when archery is the point | Legolas, Greenleaf | 1_50 | Strength 6, vitality 3; Archer, with an archery ability |

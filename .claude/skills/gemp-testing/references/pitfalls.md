@@ -485,7 +485,10 @@ pending. A count that is 0 before and 0 after shows nothing by itself.
 **What an ally bears is in the support area.** A "support card" is a card in a support area or borne by a card that is (`mechanics/SupportAreaTests`): a Shadow condition on an ally (Weary 4_212 plays on a companion or ally) or on a site the Shadow player controls (Pillage of Rohan 4_167, Wolves of Isengard 5_69, No Retreat 4_30; `ShadowTakeControlOfSite(scn.GetSite(n))` after `SkipToSite(n + 1)`, then `AttachCardsTo(site, card)`) is a valid candidate for "a Shadow support card", and the same card on a companion is the invalid one beside it.
 
 **A follower's Aid is an optional trigger at the start of the maneuver phase.** A follower lies in the support
-area until its Aid is paid. `SkipToPhase(Phase.MANEUVER)` leaves the offer pending:
+area until its Aid is paid, and the offer is made for one a companion already bears as well (cheated on with
+`AttachCardsTo`): a test that stops in the maneuver phase with any follower in play answers it
+first (`FreepsDeclineOptionalTrigger()`; a bare `FreepsPass()` only answers the offer, and the Shadow player is
+not yet asked; Frenzy of Arrows 68_79's tests). `SkipToPhase(Phase.MANEUVER)` leaves the offer pending:
 `FreepsHasOptionalTriggerAvailable(follower)` reads it, and `FreepsAcceptOptionalTrigger()` pays the Aid cost and
 then asks for the companion (`FreepsChooseCard`). Every Free Peoples Aid transfers "to a companion", so no ally
 bears a follower by legal play. `AttachCardsTo(companion, follower)` cheats one on. Most followers give the
