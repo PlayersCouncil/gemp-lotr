@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -49,6 +48,9 @@ public class Card_19_038_ErrataTests
 					// Blade Tip: a [wraith] condition a companion bears; it does nothing before the next
 					// fellowship phase
 					put("tip", "1_209");
+					// Spider Poison: "Each time bearer is assigned to a skirmish, bearer must exert", a required
+					// trigger of another card that comes at the same moment as her burden
+					put("poison", "8_28");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -135,56 +137,7 @@ public class Card_19_038_ErrataTests
 	}
 
 	@Test
-	public void WithoutTheBurdenTheFreePeoplesPlayerCannotAssignHerToACompanionOfTheNamedRace() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var nertea = scn.GetShadowCard("nertea");
-		var nelya = scn.GetShadowCard("nelya");
-		var frodo = scn.GetRingBearer();
-		var pippin = scn.GetFreepsCard("pippin");
-		var sam = scn.GetFreepsCard("sam");
-		var smeagol = scn.GetFreepsCard("smeagol");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		var bounder = scn.GetFreepsCard("bounder");
-		scn.MoveCompanionsToTable(pippin, sam, smeagol, aragorn);
-		scn.MoveAlliesToTable(bounder);
-		scn.MoveCardsToHand(nertea);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.SkipToPhase(Phase.SHADOW);
-		// The race is named as she is played, so she is played
-		scn.ShadowPlayCard(nertea);
-		scn.ShadowChoose("Hobbit");
-		scn.MoveMinionsToTable(nelya);
-		scn.SkipToAssignments();
-
-		assertEquals(0, scn.GetBurdens());
-		assertTrue(scn.FreepsDecisionAvailable("add a burden to be able to assign"));
-		scn.FreepsChooseNo();
-		assertEquals(0, scn.GetBurdens());
-
-		// Hobbit companions: [gondor] and unbound, [shire] and Ring-bound, the Ring-bearer
-		assertFalse(scn.FreepsCanAssignAgainst(pippin, nertea));
-		assertFalse(scn.FreepsCanAssignAgainst(sam, nertea));
-		assertFalse(scn.FreepsCanAssignAgainst(frodo, nertea));
-		// A Man, a [shire] companion who is no Hobbit, and a Hobbit who is an ally
-		assertTrue(scn.FreepsCanAssignAgainst(aragorn, nertea));
-		assertTrue(scn.FreepsCanAssignAgainst(smeagol, nertea));
-		assertTrue(scn.FreepsCanAssignAgainst(bounder, nertea));
-		// The other Nazgul may fight a Hobbit
-		assertTrue(scn.FreepsCanAssignAgainst(pippin, nelya));
-
-		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, nertea}, new PhysicalCardImpl[]{pippin, nelya});
-
-		assertTrue(scn.IsCharAssignedAgainst(aragorn, nertea));
-		assertTrue(scn.IsCharAssignedAgainst(pippin, nelya));
-		assertEquals(0, scn.GetBurdens());
-		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
-	}
-
-	@Test
-	public void AddingABurdenLetsTheFreePeoplesPlayerAssignHerToACompanionOfTheNamedRace() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AssigningHerToACompanionOfTheNamedRaceAddsABurdenWithoutAsking() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var nertea = scn.GetShadowCard("nertea");
@@ -199,27 +152,148 @@ public class Card_19_038_ErrataTests
 		scn.StartGame();
 		scn.SetTwilight(10);
 		scn.SkipToPhase(Phase.SHADOW);
+		// The race is named as she is played, so she is played
 		scn.ShadowPlayCard(nertea);
 		scn.ShadowChoose("Hobbit");
 		scn.MoveMinionsToTable(nelya);
 		scn.SkipToAssignments();
 
+		// Nothing is asked ahead of the assigning, and nothing is barred
 		assertEquals(0, scn.GetBurdens());
-		assertTrue(scn.FreepsDecisionAvailable("add a burden to be able to assign"));
-		scn.FreepsChooseYes();
-		assertEquals(1, scn.GetBurdens());
-
+		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
 		assertTrue(scn.FreepsCanAssignAgainst(pippin, nertea));
 		assertTrue(scn.FreepsCanAssignAgainst(sam, nertea));
 		assertTrue(scn.FreepsCanAssignAgainst(frodo, nertea));
 		assertTrue(scn.FreepsCanAssignAgainst(aragorn, nertea));
 
-		// A second Hobbit, against the other Nazgul, costs nothing more
-		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{pippin, nertea}, new PhysicalCardImpl[]{sam, nelya});
+		// Sam, a Ring-bound Hobbit, to her; the other Hobbit to the other Nazgul, which costs nothing
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{sam, nertea}, new PhysicalCardImpl[]{pippin, nelya});
 
-		assertTrue(scn.IsCharAssignedAgainst(pippin, nertea));
-		assertTrue(scn.IsCharAssignedAgainst(sam, nelya));
+		assertTrue(scn.IsCharAssignedAgainst(sam, nertea));
+		assertTrue(scn.IsCharAssignedAgainst(pippin, nelya));
 		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
+	}
+
+	@Test
+	public void AssigningHerToAnAllyOfTheNamedRaceOrToACompanionOfNoRaceAddsNoBurden() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var nertea = scn.GetShadowCard("nertea");
+		var smeagol = scn.GetFreepsCard("smeagol");
+		var bounder = scn.GetFreepsCard("bounder");
+		scn.MoveCompanionsToTable(smeagol);
+		scn.MoveAlliesToTable(bounder);
+		scn.MoveCardsToHand(nertea);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.SkipToPhase(Phase.SHADOW);
+		scn.ShadowPlayCard(nertea);
+		scn.ShadowChoose("Hobbit");
+		scn.SkipToAssignments();
+
+		// Bounder is a Hobbit and an ally, at home at site 2
+		assertEquals(0, scn.GetBurdens());
+		scn.FreepsAssignToMinions(bounder, nertea);
+
+		assertTrue(scn.IsCharAssignedAgainst(bounder, nertea));
+		assertEquals(0, scn.GetBurdens());
+
+		// His strength of 2 against her 9: he is killed; she is fierce
+		scn.FreepsResolveSkirmish(bounder);
+		scn.PassCurrentPhaseActions();
+
+		assertTrue(scn.InFierceRound());
+		scn.PassFierceAssignmentActions();
+
+		// Smeagol is a [shire] companion and no Hobbit
+		scn.FreepsAssignToMinions(smeagol, nertea);
+
+		assertTrue(scn.IsCharAssignedAgainst(smeagol, nertea));
+		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
+	}
+
+	@Test
+	public void WithManNamedADwarfCostsNothingAndAManCostsABurdenInTheFierceAssignmentPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var nertea = scn.GetShadowCard("nertea");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCompanionsToTable(aragorn, gimli);
+		scn.MoveCardsToHand(nertea);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.SkipToPhase(Phase.SHADOW);
+		scn.ShadowPlayCard(nertea);
+		scn.ShadowChoose("Man");
+		scn.SkipToAssignments();
+
+		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+
+		// Gimli, strength 6, loses to her 9 and lives; she is fierce
+		scn.FreepsAssignToMinions(gimli, nertea);
+
+		assertTrue(scn.IsCharAssignedAgainst(gimli, nertea));
+		assertEquals(0, scn.GetBurdens());
+
+		scn.FreepsResolveSkirmish(gimli);
+		scn.PassCurrentPhaseActions();
+
+		assertTrue(scn.InFierceRound());
+		scn.PassFierceAssignmentActions();
+
+		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+
+		scn.FreepsAssignToMinions(aragorn, nertea);
+
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, nertea));
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
+	}
+
+	@Test
+	public void ABurdenIsAddedEachTimeSheIsAssignedSoTheFierceAssignmentAddsASecond() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var nertea = scn.GetShadowCard("nertea");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCompanionsToTable(aragorn, gimli);
+		scn.MoveCardsToHand(nertea);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.SkipToPhase(Phase.SHADOW);
+		scn.ShadowPlayCard(nertea);
+		scn.ShadowChoose("Man");
+		scn.SkipToAssignments();
+
+		assertEquals(0, scn.GetBurdens());
+		scn.FreepsAssignToMinions(aragorn, nertea);
+		assertEquals(1, scn.GetBurdens());
+
+		// Aragorn, strength 8, loses to her 9 and lives
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.PassCurrentPhaseActions();
+
+		assertTrue(scn.InFierceRound());
+		scn.PassFierceAssignmentActions();
+
+		// The burden of the first assignment does not pay for this one
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.FreepsCanAssignAgainst(aragorn, nertea));
+		assertTrue(scn.FreepsCanAssignAgainst(gimli, nertea));
+
+		scn.FreepsAssignToMinions(aragorn, nertea);
+
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, nertea));
+		assertEquals(2, scn.GetBurdens());
 		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 	}
 
@@ -242,8 +316,6 @@ public class Card_19_038_ErrataTests
 		scn.MoveMinionsToTable(nelya);
 		scn.SkipToAssignments();
 
-		scn.FreepsChooseNo();
-		assertFalse(scn.FreepsCanAssignAgainst(pippin, nertea));
 		// The Free Peoples player leaves her unassigned
 		scn.FreepsAssignToMinions(aragorn, nelya);
 
@@ -291,93 +363,6 @@ public class Card_19_038_ErrataTests
 	}
 
 	@Test
-	public void DecliningTheBurdenBarsOnlyTheNamedRaceAndTheQuestionIsPutAgainInTheFierceAssignmentPhase() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var nertea = scn.GetShadowCard("nertea");
-		var pippin = scn.GetFreepsCard("pippin");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		var gimli = scn.GetFreepsCard("gimli");
-		scn.MoveCompanionsToTable(pippin, aragorn, gimli);
-		scn.MoveCardsToHand(nertea);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.SkipToPhase(Phase.SHADOW);
-		scn.ShadowPlayCard(nertea);
-		scn.ShadowChoose("Man");
-		scn.SkipToAssignments();
-
-		assertEquals(0, scn.GetBurdens());
-		assertTrue(scn.FreepsDecisionAvailable("add a burden to be able to assign"));
-		scn.FreepsChooseNo();
-		assertEquals(0, scn.GetBurdens());
-
-		// With Man named it is the Man who is kept from her, and the Hobbit and the Dwarf who are not
-		assertFalse(scn.FreepsCanAssignAgainst(aragorn, nertea));
-		assertTrue(scn.FreepsCanAssignAgainst(pippin, nertea));
-		assertTrue(scn.FreepsCanAssignAgainst(gimli, nertea));
-
-		// Gimli, strength 6, loses to her 9 and lives; she is fierce
-		scn.FreepsAssignToMinions(gimli, nertea);
-		scn.FreepsResolveSkirmish(gimli);
-		scn.PassCurrentPhaseActions();
-
-		assertTrue(scn.InFierceRound());
-		scn.PassFierceAssignmentActions();
-
-		assertEquals(0, scn.GetBurdens());
-		assertTrue(scn.FreepsDecisionAvailable("add a burden to be able to assign"));
-		scn.FreepsChooseYes();
-		assertEquals(1, scn.GetBurdens());
-		assertTrue(scn.FreepsCanAssignAgainst(aragorn, nertea));
-
-		scn.FreepsAssignToMinions(aragorn, nertea);
-
-		assertTrue(scn.IsCharAssignedAgainst(aragorn, nertea));
-		assertEquals(1, scn.GetBurdens());
-		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
-	}
-
-	@Test
-	public void ABurdenAddedInTheFirstAssignmentPhaseDoesNotPayForTheFierceOne() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var nertea = scn.GetShadowCard("nertea");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		var gimli = scn.GetFreepsCard("gimli");
-		scn.MoveCompanionsToTable(aragorn, gimli);
-		scn.MoveCardsToHand(nertea);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.SkipToPhase(Phase.SHADOW);
-		scn.ShadowPlayCard(nertea);
-		scn.ShadowChoose("Man");
-		scn.SkipToAssignments();
-
-		assertEquals(0, scn.GetBurdens());
-		scn.FreepsChooseYes();
-		assertEquals(1, scn.GetBurdens());
-
-		// Aragorn, strength 8, loses to her 9 and lives
-		scn.FreepsAssignToMinions(aragorn, nertea);
-		scn.FreepsResolveSkirmish(aragorn);
-		scn.PassCurrentPhaseActions();
-
-		assertTrue(scn.InFierceRound());
-		scn.PassFierceAssignmentActions();
-
-		assertTrue(scn.FreepsDecisionAvailable("add a burden to be able to assign"));
-		scn.FreepsChooseNo();
-
-		assertEquals(1, scn.GetBurdens());
-		assertFalse(scn.FreepsCanAssignAgainst(aragorn, nertea));
-		assertTrue(scn.FreepsCanAssignAgainst(gimli, nertea));
-		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
-	}
-
-	@Test
 	public void WhenNoBurdenCanBeAddedTheFreePeoplesPlayerCannotAssignHerToTheNamedRace() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -400,18 +385,64 @@ public class Card_19_038_ErrataTests
 		scn.SkipToAssignments();
 
 		assertTrue(scn.IsHindered(frodo));
-		assertFalse(scn.FreepsDecisionAvailable("add a burden to be able to assign"));
 		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
 		assertFalse(scn.FreepsCanAssignAgainst(pippin, nertea));
 		assertTrue(scn.FreepsCanAssignAgainst(aragorn, nertea));
 		assertTrue(scn.FreepsCanAssignAgainst(pippin, nelya));
+		// The Shadow player owes nothing, and may still assign her to the Hobbit
+		assertTrue(scn.ShadowCanAssignAgainst(pippin, nertea));
+
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, nertea}, new PhysicalCardImpl[]{pippin, nelya});
+
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, nertea));
+		assertTrue(scn.IsCharAssignedAgainst(pippin, nelya));
+		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 	}
 
 	@Test
-	public void TheQuestionPutToTheFreePeoplesPlayerShowsNoUnfilledPlaceholder() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WhenNoBurdenCanBeAddedAShadowCardCannotMakeTheFreePeoplesPlayerAssignHerToTheNamedRace() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var nertea = scn.GetShadowCard("nertea");
+		var mount = scn.GetShadowCard("mount");
+		var tip = scn.GetShadowCard("tip");
+		var frodo = scn.GetRingBearer();
+		var pippin = scn.GetFreepsCard("pippin");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(pippin, aragorn);
+		scn.MoveCardsToHand(nertea);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.SkipToPhase(Phase.SHADOW);
+		scn.ShadowPlayCard(nertea);
+		scn.ShadowChoose("Hobbit");
+		// Pippin is the one unbound companion bearing a [wraith] condition
+		scn.AttachCardsTo(nertea, mount);
+		scn.AttachCardsTo(pippin, tip);
+		scn.HinderCard(frodo);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPass();
+
+		assertTrue(scn.IsHindered(frodo));
+		assertTrue(scn.ShadowActionAvailable(mount));
+
+		// Shadowy Mount has the Free Peoples player assign her, and he cannot: nobody is assigned
+		scn.ShadowUseCardAction(mount);
+
+		assertFalse(scn.IsCharAssigned(nertea));
+		assertFalse(scn.IsCharAssigned(pippin));
+		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
+
+	@Test
+	public void TheNamedRaceIsShownOnTheCardAndNamedWhenTheBurdenIsAdded() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var nertea = scn.GetShadowCard("nertea");
+		var poison = scn.GetShadowCard("poison");
 		var pippin = scn.GetFreepsCard("pippin");
 		scn.MoveCompanionsToTable(pippin);
 		scn.MoveCardsToHand(nertea);
@@ -421,13 +452,33 @@ public class Card_19_038_ErrataTests
 		scn.SkipToPhase(Phase.SHADOW);
 		scn.ShadowPlayCard(nertea);
 		scn.ShadowChoose("Hobbit");
+
+		// What the card shows of itself to either player, for as long as she is in play
+		assertEquals("Named race is Hobbit", scn.GetDisplayableInformation(nertea));
+
+		// Spider Poison's "bearer must exert" answers the same assignment, so the Free Peoples player is asked
+		// which of the two comes first, and hers is named with the race
+		scn.AttachCardsTo(pippin, poison);
 		scn.SkipToAssignments();
 
-		assertTrue(scn.FreepsDecisionAvailable("add a burden to be able to assign"));
-		assertFalse(scn.FreepsDecisionAvailable("NONE"));
+		assertEquals("Named race is Hobbit", scn.GetDisplayableInformation(nertea));
+
+		scn.MarkGameLog();
+		scn.FreepsAssignToMinions(pippin, nertea);
+
+		assertTrue(scn.FreepsDecisionAvailable("Required responses"));
+		assertTrue(scn.FreepsActionAvailable("named race (Hobbit)"));
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(0, scn.GetWoundsOn(pippin));
+
+		scn.FreepsResolveActionOrder("named race (Hobbit)");
+
+		assertEquals(1, scn.GetBurdens());
+		assertEquals(1, scn.GetWoundsOn(pippin));
+		assertTrue(scn.GameLogSinceMarkSays("named race (Hobbit)"));
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 	}
 
-	@Ignore("F-0308: a Free Peoples assignment action assigns her to a companion of the named race and no burden is added")
 	@Test
 	public void TheFreePeoplesPlayerAssigningHerByHisOwnAssignmentActionAddsTheBurden() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -462,7 +513,6 @@ public class Card_19_038_ErrataTests
 		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
 	}
 
-	@Ignore("F-0308: a Shadow card that makes the Free Peoples player assign her to a companion of the named race does so for no burden (whether a forced assignment owes the burden is asked under the same number)")
 	@Test
 	public void TheFreePeoplesPlayerMadeToAssignHerByAShadowCardAddsTheBurden() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();

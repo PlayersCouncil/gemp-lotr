@@ -963,6 +963,8 @@ the limit is reached at n = limit - 1 (3 of 4; 5 of 6 under 92_1, Q-0182 open).
 
 - `0_8019` Test Tourniquet ("You may not heal minions."): a Shadow condition whose `CantHeal` names its player, for mechanics/HealBarThatNamesAPlayerTests. A heal is asked about with the player who makes it: a `CantHeal` with `player` stops that player's heals alone, one without stops everybody's (Steward's Tomb 10_119), and a heal that is barred as an effect is still offered and heals nothing (Scaling Ladder 5_57 is used and discarded), while one barred as a cost is not offered (Hrethel 6_95).
 
+- `0_8020` Test Herald ("When you play this condition, name a race. Fellowship: You may add (1) for the named race."), `0_8021` Test Tally ("Fellowship: If a burden could be added, add (1).") and `0_8022` Test Drum ("Each time the Free Peoples player starts to assign minions, add (1)."): for mechanics/StoredValueInATextTests (`{stored}` and `storeRace`), CanAddBurdensRequirementTests and FreePeoplesPlayerStartsAssigningTriggerTests. A card that names something as it is played has stored nothing when it is cheated into play: its filter on the stored value matches nobody, a `{stored}` in its texts reads "nothing" and `GetDisplayableInformation` returns the definition's line with `{stored}` still in it, so a test of such a card plays it (Ulaire Nertea 69_38)
+
 **The test booster pack.** The test booster pack (`product/Test-Booster.hjson`) holds eight cards: beside the six it had, Drums in the
 Deep 1_168 (a Shadow skirmish event: shown and not selectable when the pack is opened in the Shadow phase)
 and Foul Things 2_59 (a Shadow-phase event costing 2: selectable, and played for nothing; it then plays a

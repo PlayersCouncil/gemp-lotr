@@ -288,6 +288,15 @@ public class GameUtils {
                 else if (memory.equals("bearer")) {
                     found = GameUtils.getAppendedNames(Collections.singleton(context.getSource().getAttachedTo()));
                 }
+                else if (memory.equals("stored")) {
+                    // What the source card has stored on itself for as long as it stays where it is (a race, a
+                    // culture or a keyword named as it was played), in the words its displayableInformation
+                    // shows.  It is read from the card, so any of the card's texts can name it: an action's
+                    // memory is gone when the action that stored the value ends (F-0307).
+                    var source = context.getSource();
+                    var stored = source != null ? source.getWhileInZoneData() : null;
+                    found = stored != null ? stored.getHumanReadable() : "nothing";
+                }
                 else {
                     found = GameUtils.getAppendedNames(context.getCardsFromMemory(memory));
                     if(found.equalsIgnoreCase("none")) {

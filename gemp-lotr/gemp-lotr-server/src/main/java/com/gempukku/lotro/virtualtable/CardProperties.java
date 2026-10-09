@@ -177,6 +177,15 @@ public interface CardProperties extends TableBase {
 		return  game().getModifiersQuerying().isRace(game(), card, race);
 	}
 
+	/**
+	 * What a card adds of its own to what the client shows of it, under "Extra information" in its card info: the
+	 * text of its definition's displayableInformation, with the value the card has stored on itself (a race, a
+	 * culture or a keyword named as it was played) in place of {stored}.
+	 * @param card The card to inspect.
+	 * @return That text; null if the card's definition has none.
+	 */
+	default String GetDisplayableInformation(PhysicalCardImpl card) { return card.getBlueprint().getDisplayableInformation(card); }
+
 	default boolean IsHindered(PhysicalCardImpl card) { return HasKeyword(card, Keyword.HINDERED); }
 	default void HinderCard(PhysicalCardImpl...cards) {
 		for(var card : cards) {

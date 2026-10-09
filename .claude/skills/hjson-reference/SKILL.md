@@ -199,7 +199,7 @@ For event cards. `Event` for phase events, `ResponseEvent` for response events.
 | `CopyCard` | Copies another card's game text |
 | `DeckBuildingRestriction` | Deck validation rules (maps) |
 | `AidCost` | Follower aid cost |
-| `DisplayableInformation` | Log output text |
+| `DisplayableInformation` | text: a line the client shows in the card's info under "Extra information"; `{stored}` in it is the value the card has stored on itself (`Named race is {stored}`, 69_38) |
 
 `SelfRemovedFromPlayTrigger` (fields `method`, `optional`, `source`, `requires`, `cost`, `effect`) is a card's own trigger for having been discarded from play (`method: discarded`), hindered (`method: hinder`), or either (no `method`). It answers after the fact, when the card is already in the discard pile or already hindered. Its requirements, costs and effects are carried out as the removed card and its owner: "you" and `your` are the owner, an optional one is offered to the owner, and `self` and `another` are counted from the removed card, whoever removed it and with whatever card (F-0121). `source:` is a card filter that the card which did the removing must match (`source: side(Free Peoples)`, `source: pipe`); with no `source:` the trigger answers ANY discard from play, the end-of-turn discard of minions and a card lost with its bearer included (Q-0081). A `source:` is a condition on the card that did the removing and is not met by a removal no card did. A killed character goes to the discard pile but was not discarded (CR 4.2 "killed"): the trigger stays unset. Do not name a player on the effect to steer it (`player: shadow`): that was a workaround and is not needed.
 
@@ -385,6 +385,7 @@ Boolean checks. Used in `requires: []` arrays.
 | `Location` | filter | Current site matches filter |
 | `HaveInitiative` | side | Side has initiative |
 | `CanMove` | — | FP can still move |
+| `CanAddBurdens` | player? | A burden could be added by this card now: false while the Ring-bearer is hindered or a `CantAddBurdens` reaches the card. For a standing text that must know ahead whether a burden it adds later can be added (69_38, F-0308) |
 | `FierceSkirmish` | — | In fierce assignment/skirmish |
 | `RingIsOn` | — | Ring-bearer wearing ring |
 | `ControlsSite` | player?, count? | Player controls N sites |
@@ -482,7 +483,7 @@ Used in `cost: []` and `effect: []` arrays.
 | `Choice` | player?, texts[], effects[], requires?[] | Choose one of N options. `requires` is parallel to `texts`, one requirement object per option (`{type: AlwaysAvailable}` for one always offered), each object on its own lines: a one-line `{ type: X }` inside an array does not parse. The one option that can be carried out in full is taken unasked. As an effect with no such option, every option is put to the player, unless each is a single effect certain to do nothing (nobody to exert, no site to liberate): then nothing is asked (F-0116). An option that is a list, or that holds other effects, always keeps the question |
 | `CostToEffect` | cost[], effect[], requires? | Sequential cost-then-effect |
 | `If` | check[], true[], false[] | Conditional execution |
-| `Optional` | player?, text, cost?[], effect[], requires? | "You may" prompt. With a `cost`: not asked when the cost cannot be paid, and the effect is not carried out when the cost is not paid (69_38, F-0306) |
+| `Optional` | player?, text, cost?[], effect[], requires? | "You may" prompt. With a `cost`: not asked when the cost cannot be paid, and the effect is not carried out when the cost is not paid (F-0306) |
 | `Preventable` | player, text, cost[], effect[], instead?[] | "X may Y to prevent Z" |
 | `Multiple` | effects[] | Group subactions |
 | `Repeat` | times, effect[] | Do N times |
@@ -641,7 +642,7 @@ For targeting inactive cards: `hindered`, `stacked`, `out_of_turn`, `attached_to
 ## Memory System
 
 - **Memory**: temporary per-action variables. Set via `memorize` params or `Memorize*` subactions.
-- **In-Zone Data**: persistent per-card data, cleared when card changes zones. Set via `Store*` subactions.
+- **In-Zone Data**: persistent per-card data, cleared when card changes zones. Set via `Store*` subactions. `StoreRace(memory)`, `StoreCulture(memory)` and `StoreKeyword(memory)` keep the printed word beside the name ("Uruk-Hai" for `URUK_HAI`), which is what `DisplayableInformation` and a text's `{stored}` show; `StoreWhileInZone(memory)` keeps the bare string. After a `ChooseARace`, store with `StoreRace` (F-0307).
 - Retrieve memory in filters: `Memory(X)`, `NameFromMemory(X)`, `CultureFromMemory(X)`
 - Retrieve memory in values: `memory(X)`, `FromMemory(memory)`, `ForEachInMemory(memory)`
 - Retrieve memory in requirements: `HasCardInMemory(memory)`, `MemoryIs(memory, value)`
@@ -657,4 +658,4 @@ For targeting inactive cards: `hindered`, `stacked`, `out_of_turn`, `attached_to
 
 ## Text Substitution
 
-In `text` fields: `{culture}` → symbol, `{you}` → performing player, `{owner}` → card owner, `{self}` → card link, `{memoryVar}` → stored card(s) or string (read from the memory of the action that shows the text: a value another trigger put away with `storeWhileInZone` is not in it and prints `NONE`, F-0307)
+In `text` fields: `{culture}` → symbol, `{you}` → performing player, `{owner}` → card owner, `{self}` → card link, `{stored}` → the value the card has stored on itself with a `Store*` subaction, in its printed word ("nothing" when it has stored none), `{memoryVar}` → stored card(s) or string (read from the memory of the action that shows the text: a value another trigger memorized is not in it and prints `NONE`; what a card named as it was played is read with `{stored}`, F-0307)

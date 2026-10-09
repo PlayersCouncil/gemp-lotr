@@ -26,6 +26,7 @@ public class RequirementFactory {
 
         requirementProducers.put("alwaysavailable", new AlwaysAvailableRequirement());
 
+        requirementProducers.put("canaddburdens", new CanAddBurdens());
         requirementProducers.put("canmove", new CanMove());
         requirementProducers.put("canspot", new CanSpot());
         requirementProducers.put("cantspot", new CantSpot());

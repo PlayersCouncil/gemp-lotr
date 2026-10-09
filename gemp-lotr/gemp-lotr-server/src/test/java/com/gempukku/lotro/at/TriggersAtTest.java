@@ -660,18 +660,6 @@ public class TriggersAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void fpStartedAssigning() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard nerteaDarkHorseman = addToZone(createCard(P2, "69_38"), Zone.SHADOW_CHARACTERS);
-
-        passUntil(Phase.ASSIGNMENT);
-        pass(P1);
-        pass(P2);
-        assertNotNull(getMultipleDecisionIndex(getAwaitingDecision(P1), "Yes"));
-    }
-
-    @Test
     public void fpDecidedToStay() throws Exception {
         initializeSimplestGame();
 

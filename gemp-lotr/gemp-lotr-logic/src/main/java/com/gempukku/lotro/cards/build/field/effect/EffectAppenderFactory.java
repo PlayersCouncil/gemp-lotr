@@ -201,6 +201,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("startskirmish", new StartSkirmish());
         effectAppenderProducers.put("storeculture", new StoreCulture());
         effectAppenderProducers.put("storekeyword", new StoreKeyword());
+        effectAppenderProducers.put("storerace", new StoreRace());
         effectAppenderProducers.put("storeracefromcard", new StoreRaceFromCard());
         effectAppenderProducers.put("storewhileinzone", new StoreWhileInZone());
         effectAppenderProducers.put("takecontrolofsite", new TakeControlOfSite());

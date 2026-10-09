@@ -572,4 +572,100 @@
 		}
 		gametext: You may not heal minions.
 	}
+	# StoredValueInATextTests: {stored} in a question that a later action puts, and storeRace.  The one real card
+	# whose texts name its stored value (Ulaire Nertea 69_38) names it where its required trigger is described and
+	# in a line of the game log; a question put by another action than the one that stored the value is the shape
+	# F-0307 was found on, and no card has one now.
+	0_8020: {
+		title: Test Herald
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: [
+					{
+						type: chooseARace
+						memorize: chosenRace
+					}
+					{
+						type: storeRace
+						memory: chosenRace
+					}
+				]
+			}
+			{
+				type: displayableInformation
+				text: Named race is {stored}
+			}
+			{
+				type: activated
+				phase: fellowship
+				effect: {
+					type: Optional
+					text: Would you like to add (1) for the named race ({stored})?
+					effect: {
+						type: addTwilight
+						amount: 1
+					}
+				}
+			}
+		]
+		gametext: When you play this condition, name a race.<br><b>Fellowship:</b> You may add (1) for the named race.
+	}
+	# CanAddBurdensRequirementTests: the requirement canAddBurdens on an action.  The one real card that uses it
+	# (Ulaire Nertea 69_38) has it on a standing bar, which only an assignment can read.
+	0_8021: {
+		title: Test Tally
+		unique: false
+		side: Free Peoples
+		culture: Shire
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: fellowship
+			requires: {
+				type: canAddBurdens
+			}
+			effect: {
+				type: addTwilight
+				amount: 1
+			}
+		}
+		gametext: <b>Fellowship:</b> If a burden could be added, add (1).
+	}
+	# FreePeoplesPlayerStartsAssigningTriggerTests: the trigger fpStartedAssigning.  It was made in 2021 for Ulaire
+	# Nertea 69_38, which no longer uses it (F-0308: her burden is added at the assignment), and no other card has it.
+	0_8022: {
+		title: Test Drum
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: Trigger
+			optional: false
+			trigger: {
+				type: fpStartedAssigning
+			}
+			effect: {
+				type: addTwilight
+				amount: 1
+			}
+		}
+		gametext: Each time the Free Peoples player starts to assign minions, add (1).
+	}
 }

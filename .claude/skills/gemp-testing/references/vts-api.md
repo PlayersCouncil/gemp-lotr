@@ -441,6 +441,7 @@ Functions for checking aspects of a card, such as numeric states and other state
 - `boolean HasTimeword(PhysicalCardImpl card, Timeword timeword)`
 - `boolean IsType(PhysicalCardImpl card, CardType type)`
 - `boolean IsRace(PhysicalCardImpl card, Race race)`
+- `String GetDisplayableInformation(PhysicalCardImpl card)` — What a card adds of its own to what the client shows of it, under "Extra information" in its card info: the text of its definition's displayableInformation, with the value the card has stored on itself (a race, a culture or a keyword named as it was played) in place of {stored}.
 - `boolean IsHindered(PhysicalCardImpl card)`
 - `void HinderCard(PhysicalCardImpl...cards)`
 - `void RestoreCard(PhysicalCardImpl...cards)`
@@ -533,4 +534,4 @@ This interface holds the handful of accessors that every other virtual table int
 - `void Verify(boolean condition, String message)` — A sanity check on the table's own bookkeeping, used where a procedure has to end up in a known state for whatever follows it to make sense.
 
 ---
-425 entries, 240 of them with no description in the source.
+426 entries, 240 of them with no description in the source.
