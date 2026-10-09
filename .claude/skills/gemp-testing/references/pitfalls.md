@@ -199,6 +199,14 @@ on an ability is the card's for the phase (Q-0134): asking what is on offer spen
 what is left, and at the limit the ability stays on offer and plays at full cost, withheld only while the pool
 cannot pay for anything it could play (`mechanics/LimitOnADiscountTests`; Uruk Regular 54_192).
 
+**A meta-site's optional trigger is offered to every player unless its definition names one.** The engine
+collects a Race to Mount Doom modifier's optional triggers for each player, whoever owns it, and `requires:
+OwnerIsFreeps` is true for both: once the owner declines, the other player is offered the same trigger as its
+"you" (F-0311: he took a card from his own deck on 91_2, drew on 91_3, killed the owner's companion on 93_3). Only
+the decline shows it, and a test that accepts never does: every "you may" on a modifier has a test that declines
+and reads `assertFalse(scn.ShadowHasOptionalTriggerAvailable())` before its bookend. The correction is `player:
+owner` on the Trigger (shapes.md, F-0311).
+
 ## Reading and answering an offer
 
 **"Is an optional trigger pending" is a broad question.** `FreepsHasOptionalTriggerAvailable()` is true for any
@@ -310,6 +318,9 @@ phase arrives. Make the assertions that matter before the event that ends the ga
 **A starting fellowship.** `StartGame()` skips it. To test "(except in your starting fellowship)": the scenario
 constructor returns with player 1's "Starting fellowship" choice pending; `FreepsChooseCard(card)` plays a
 companion into it and player 2's choice is then pending. End the test there: going on deals opening hands.
+To play on instead, answer player 2's choice too (`ShadowDeclineChoosing()` takes nobody) and then call
+`StartGame(true, false)`, which leaves the starting fellowships alone; called while either choice is still
+pending it answers nothing and the game has not begun (Card_91_001_Tests).
 
 **Archers get in the way.** `SkipToPhase` passes for both players and takes the first choice on required
 triggers, but it does not assign archery wounds. An archer on the table stops it, or kills the minion the test
@@ -615,6 +626,10 @@ cards that may be taken. So "shown, and cannot be chosen" is read at the showing
 (`ShadowHasCardChoiceAvailable(card, false)`, `ShadowGetTotalRevealedCardCount()`), and at the choice an invalid
 card is simply absent (`ShadowHasCardChoiceNotAvailable(card)`; `(card, false)` fails there). A search of the
 OTHER player's deck (Grond 68_82) is shown to the searching player alone: the deck's owner has no decision.
+A take written with `showAll: false` (Race Text 91_2) has no showing to dismiss: the choice comes at once.
+`FreepsChooseCard(card)` answers a choice from a deck as well, and by blueprint all the same: give the card to be
+taken a blueprint no other card of that deck has (fillers of another kind), or another copy goes to hand and
+`assertInZone(Zone.HAND, card)` fails.
 
 **Whether a deck was shuffled.** `GetFreepsDeckShuffleCount()` and `GetShadowDeckShuffleCount()`, read before and
 after. A draw deck that has been looked through is reshuffled whether or not the card says so (CR 4.2 "draw

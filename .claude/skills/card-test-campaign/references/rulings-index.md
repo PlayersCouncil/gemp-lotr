@@ -320,6 +320,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A choice of cost-to-effect branches with no payable branch is not offered (F-0222, F-0259)
 - "The Free Peoples player must <pay> to assign <this minion> ..." (F-0306, F-0307; F-0308 and Q-0174, open) [Q-0038]
 - "You may discard up to N (X, any number of) cards from hand to draw as many" on an optional trigger (F-0300, Robin Smallburrow 68_111 and 18_111) [F-0022, Q-0015, Q-0034, Q-0143]
+- "You may" on a Race to Mount Doom modifier names its player (F-0311)
 
 ## Limits
 

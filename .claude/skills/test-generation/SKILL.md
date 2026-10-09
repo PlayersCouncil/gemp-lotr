@@ -319,6 +319,8 @@ and the definition disagree" above). A strength, vitality or other bonus printed
 possession's +2) is a printed field: asserted here, and read on the bearer in the test of the Play clause, with
 no clause of its own. Timewords are not a printed field: they are how a
 definition says when an event may be played, and a definition may carry more of them than the card prints.
+A Race to Mount Doom modifier's intensity is one: its header has an `Intensity:` line and the test reads
+`getBlueprint().getIntensity()`, at the definition's value (no sheet has these cards).
 
 On a PC card the header comment already in the file often describes an earlier version of the card, above
 assertions that are current. Rewrite it from the packet; never keep it on trust. The V-set and errata sheets have
