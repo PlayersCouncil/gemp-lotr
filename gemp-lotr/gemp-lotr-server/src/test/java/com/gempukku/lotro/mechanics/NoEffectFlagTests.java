@@ -1481,8 +1481,8 @@ public class NoEffectFlagTests
 		);
 	}
 
-	// A spent cap is read only where it is on a strength bonus, on the amount of a keyword or on a number of cards
-	// drawn (the three tests above), and marks the action only when nothing else the action does would happen
+	// A spent cap is read only where it is on a strength bonus or on the amount of a keyword (the tests above) or
+	// on a number of cards drawn, and marks the action only when nothing else the action does would happen
 	// either.  A cap on anything else is not read, and here the action still does something at its cap: the hand
 	// is revealed.  It is not marked.
 	@Test
