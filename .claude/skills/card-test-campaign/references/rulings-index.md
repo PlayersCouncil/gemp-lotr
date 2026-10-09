@@ -361,7 +361,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "You may discard up to N (X, any number of) cards from hand to draw as many" on an optional trigger (F-0300, Robin Smallburrow 68_111 and 18_111) [F-0022, Q-0015, Q-0034, Q-0143]
 - "You may" on a Race to Mount Doom modifier names its player (F-0311)
 - "May draw a card for each X over N" requires N+1 of X (Q-0033, F-0320)
-- A phase action on a Race to Mount Doom modifier is its owner's where the text says "your" (F-0312) [Q-0194, F-0335, Q-0188, Q-0183]
+- A phase action on a Race to Mount Doom modifier is its owner's where the text says "your" (F-0312) [Q-0194, F-0335, Q-0183, Q-0188]
 - A Race to Mount Doom modifier's own discard from hand writes `forced: true`, and no card can tell (F-0205)
 - Mistakes on a Race to Mount Doom modifier that no board tells apart (92_8, 92_10) [F-0312]
 
