@@ -17,6 +17,7 @@ import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.game.state.Skirmish;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
+import com.gempukku.lotro.logic.actions.PlayEventAction;
 import com.gempukku.lotro.logic.actions.RequiredTriggerAction;
 import com.gempukku.lotro.logic.effects.DiscountEffect;
 import com.gempukku.lotro.logic.effects.IncrementPhaseLimitEffect;
@@ -45,6 +46,9 @@ public class DefaultActionSource implements ActionSource {
     private final List<Requirement> noEffectUnless = new LinkedList<>();
 
     private final List<EffectAppender> costs = new ArrayList<>();
+    // Those of the costs that are left out when the action's card is played "ignoring all costs" (see
+    // addCheckedCost and createAction).
+    private final List<EffectAppender> costsThatCanBePassedOver = new ArrayList<>();
     private final List<EffectAppender> effects = new LinkedList<>();
     // The limits that do not withhold the action ("effectLimitPerPhase", "effectLimitPerTurn" on an ability that
     // has a cost and is the player's to use or not: a limit on what the effect gives, "limit +3"): at its limit
@@ -224,10 +228,15 @@ public class DefaultActionSource implements ActionSource {
     /**
      * Adds a cost the action is not offered without: one of the costs written in its definition.  Whether it
      * can be paid is asked on the board as the costs before it will leave it (see isValid).
+     * @param canBePassedOver Whether the cost is left out when the action's card is played "ignoring all costs":
+     *                        false for a cost the rest of the text reads back, or that holds an effect of the
+     *                        card (EffectUtils.canBePassedOver).
      */
-    public void addCheckedCost(EffectAppender effectAppender) {
+    public void addCheckedCost(EffectAppender effectAppender, boolean canBePassedOver) {
         addPlayRequirement(new OrderedCheck(effectAppender::isPlayableInFull, costs.size()));
         costs.add(effectAppender);
+        if (canBePassedOver)
+            costsThatCanBePassedOver.add(effectAppender);
     }
 
     /**
@@ -347,8 +356,15 @@ public class DefaultActionSource implements ActionSource {
         if (action instanceof RequiredTriggerAction requiredTrigger && !limitRequirements.isEmpty())
             requiredTrigger.setSpentCheck(() -> isLimitReached(actionContext));
 
-        for (EffectAppender cost : costs)
+        // An event that another card plays "ignoring all costs" is not asked for the costs in its own text
+        // (Ketura on F-0316), any more than for its twilight cost.  A cost its text reads back is still
+        // carried out: see EffectUtils.canBePassedOver.
+        final boolean costsIgnored = action instanceof PlayEventAction playEvent && playEvent.isCostsIgnored();
+        for (EffectAppender cost : costs) {
+            if (costsIgnored && costsThatCanBePassedOver.contains(cost))
+                continue;
             cost.appendEffect(true, action, actionContext);
+        }
 
         if (limitGate.isEmpty()) {
             for (EffectAppender actionEffect : effects)

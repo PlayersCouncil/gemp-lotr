@@ -23,6 +23,8 @@ public class Card_92_029_Tests
 					put("enquea", "1_231");
 					// Ulaire Cantea: unique Nazgul minion, twilight 5 — in test booster, for uniqueness test
 					put("cantea", "1_230");
+					// Goblin Patrol Troop: [moria] Orc, vitality 3, no text. The Orc an event's own cost would exert
+					put("troop", "1_177");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -39,6 +41,8 @@ public class Card_92_029_Tests
 					put("enquea", "1_231");
 					// Ulaire Cantea: unique Nazgul minion, twilight 5 — in test booster, for uniqueness test
 					put("cantea", "1_230");
+					// Goblin Patrol Troop: [moria] Orc, vitality 3, no text. The Orc an event's own cost would exert
+					put("troop", "1_177");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -370,6 +374,71 @@ public class Card_92_029_Tests
 		assertEquals("Alive and Unspoiled", aliveAndUnspoiled.getBlueprint().getTitle());
 		assertInZone(Zone.SUPPORT, aliveAndUnspoiled);
 		scn.StopCardCapture();
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void IgnoresTheCostInAnEventsOwnText() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetShadowScenario();
+
+		var mod = scn.GetShadowCard("mod");
+		var troop = scn.GetShadowCard("troop");
+
+		// A pack of one card. Threat of the Unknown (1_197): [moria] event of the Shadow phase, cost 0,
+		// "Exert your [moria] Orc to draw 2 cards."
+		scn.UseBoosterOf("1_197");
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+		scn.FreepsPass();
+
+		// The Shadow player's [moria] Orc is on the table and able to exert
+		assertEquals(0, scn.GetWoundsOn(troop));
+		assertEquals(0, scn.GetShadowHandCount());
+		// 1 companion + 2 for the site
+		assertEquals(3, scn.GetTwilight());
+
+		scn.StartCardCapture();
+		scn.ShadowUseCardAction(mod);
+		scn.ShadowChooseCardBPFromSelection("Test - Booster");
+		scn.FreepsDismissRevealedCards();
+		assertTrue(scn.ShadowHasBPChoiceAvailable("1_197"));
+		scn.ShadowChooseCardBPFromSelection("1_197");
+
+		var threat = scn.GetLastCreatedCard();
+		scn.StopCardCapture();
+		assertEquals("Threat of the Unknown", threat.getBlueprint().getTitle());
+		assertInZone(Zone.DISCARD, threat);
+		// The event did what it says, and the exertion it asks for first was not made
+		assertEquals(2, scn.GetShadowHandCount());
+		assertEquals(0, scn.GetWoundsOn(troop));
+		assertEquals(3, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void AnEventWhoseOwnCostCannotBePaidIsStillPlayedAndDoesWhatItSays() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetShadowScenario();
+
+		var mod = scn.GetShadowCard("mod");
+
+		// Threat of the Unknown again, and no minion on the table: nobody who could exert for it
+		scn.UseBoosterOf("1_197");
+		scn.StartGame();
+		scn.FreepsPass();
+
+		assertEquals(0, scn.GetShadowHandCount());
+
+		scn.StartCardCapture();
+		scn.ShadowUseCardAction(mod);
+		scn.ShadowChooseCardBPFromSelection("Test - Booster");
+		scn.FreepsDismissRevealedCards();
+		assertTrue(scn.ShadowHasBPChoiceAvailable("1_197"));
+		scn.ShadowChooseCardBPFromSelection("1_197");
+
+		var threat = scn.GetLastCreatedCard();
+		scn.StopCardCapture();
+		assertInZone(Zone.DISCARD, threat);
+		assertEquals(2, scn.GetShadowHandCount());
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 

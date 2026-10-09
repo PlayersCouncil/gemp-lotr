@@ -151,7 +151,8 @@ public class PlayUtils {
 
     /**
      * Checks if a card can be played ignoring all costs (twilight, ToPlay requirements, ExtraCosts,
-     * roaming penalty) but still respecting uniqueness, Rule of Nine, and CantPlayCards modifiers.
+     * roaming penalty, and what an event's own text asks before its "to") but still respecting uniqueness,
+     * Rule of Nine, and CantPlayCards modifiers.
      */
     public static boolean checkPlayRequirementsIgnoringCosts(LotroGame game, PhysicalCard card) {
         final LotroCardBlueprint blueprint = card.getBlueprint();
@@ -186,7 +187,8 @@ public class PlayUtils {
 
     /**
      * Creates a play action for a card ignoring all costs — no twilight payment, no extra costs,
-     * no roaming penalty. Used for "play ignoring all costs" effects.
+     * no roaming penalty, and for an event none of the costs in its own text that can be passed over
+     * (DefaultActionSource.createAction). Used for "play ignoring all costs" effects.
      */
     public static CostToEffectAction getPlayCardActionIgnoringCosts(LotroGame game, PhysicalCard card) {
         final LotroCardBlueprint blueprint = card.getBlueprint();
@@ -206,10 +208,9 @@ public class PlayUtils {
                 return action;
             }
         } else {
-            final PlayEventAction action = blueprint.getPlayEventCardAction(card.getOwner(), game, card);
-            // Skip extra costs and discounts, and the event's twilight cost
-            action.setTwilightCostIgnored();
-            return action;
+            // Skip extra costs and discounts, the event's twilight cost, and the costs in its own text
+            // ("Exert your [moria] Orc to draw 2 cards" draws 2 with no Orc exerted: Ketura on F-0316)
+            return blueprint.getPlayEventCardActionIgnoringCosts(card.getOwner(), game, card);
         }
     }
 

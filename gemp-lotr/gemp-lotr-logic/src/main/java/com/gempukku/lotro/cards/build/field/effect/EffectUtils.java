@@ -86,6 +86,50 @@ public class EffectUtils {
     }
 
     /**
+     * Whether a cost of an action can be left out when the action's card is played "ignoring all costs" (Ketura
+     * on F-0316: the cost in an event's own text is one of them).  Two kinds of cost cannot, and are carried out
+     * as written:
+     * <ul>
+     * <li>one that the rest of the text reads back, which the definition shows by filling a memory with it:
+     * "Spot X Nazgul to reveal the top X cards", "Spot a companion to draw a card for each wound on that
+     * companion", "Remove (X) to ... a twilight cost of X".  Left out, the X or the companion would be nothing
+     * at all, and an effect that reads an X nobody named stops the game.  What X ought to be when its cost is
+     * ignored is Q-0201;</li>
+     * <li>one written as a cost-to-effect of its own ("costToEffect"), which holds an effect of the card and not
+     * only a price: an event with a text for each of two phases is written so (We Must Have It 5_30).</li>
+     * </ul>
+     */
+    static boolean canBePassedOver(JSONObject cost) {
+        final Set<String> filled = new HashSet<>();
+        collectMemorized(cost, filled);
+        return filled.isEmpty() && !holdsCostToEffect(cost);
+    }
+
+    private static boolean holdsCostToEffect(Object definition) {
+        if (definition instanceof JSONObject object) {
+            for (Object entryObject : object.entrySet()) {
+                Map.Entry<?, ?> entry = (Map.Entry<?, ?>) entryObject;
+                if (String.valueOf(entry.getKey()).equalsIgnoreCase("type")
+                        && String.valueOf(entry.getValue()).equalsIgnoreCase("costToEffect"))
+                    return true;
+                if (holdsCostToEffect(entry.getValue()))
+                    return true;
+            }
+        } else if (definition instanceof Object[] array) {
+            for (Object element : array) {
+                if (holdsCostToEffect(element))
+                    return true;
+            }
+        } else if (definition instanceof Iterable<?> iterable) {
+            for (Object element : iterable) {
+                if (holdsCostToEffect(element))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Tells an action that a trigger sets off where the trigger remembers what set it off: the trigger's own
      * "memorize".  The other things a trigger may remember ("memorizeLoser", "memorizeBearer") are not what
      * set it off.
@@ -168,7 +212,7 @@ public class EffectUtils {
         final CardGenerationEnvironment costEnvironment = costEnvironmentOfTriggeredAction(environment, value.get("trigger"), costArray);
         for (JSONObject cost : costArray) {
             final EffectAppender effectAppender = effectAppenderFactory.getEffectAppender(true, cost, costEnvironment);
-            actionSource.addCheckedCost(effectAppender);
+            actionSource.addCheckedCost(effectAppender, canBePassedOver(cost));
         }
 
         for (JSONObject effect : effectArray) {

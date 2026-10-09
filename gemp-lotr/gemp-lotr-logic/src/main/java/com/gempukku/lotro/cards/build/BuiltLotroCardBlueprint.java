@@ -813,8 +813,17 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
 
     @Override
     public PlayEventAction getPlayEventCardAction(String playerId, LotroGame game, PhysicalCard self) {
+        return getPlayEventCardAction(playerId, game, self, false);
+    }
+
+    @Override
+    public PlayEventAction getPlayEventCardActionIgnoringCosts(String playerId, LotroGame game, PhysicalCard self) {
+        return getPlayEventCardAction(playerId, game, self, true);
+    }
+
+    private PlayEventAction getPlayEventCardAction(String playerId, LotroGame game, PhysicalCard self, boolean costsIgnored) {
         DefaultActionContext actionContext = new DefaultActionContext(playerId, game, self, null, null);
-        PlayEventAction action = new PlayEventAction(self, playEventAction.requiresRanger());
+        PlayEventAction action = new PlayEventAction(self, playEventAction.requiresRanger(), costsIgnored);
         playEventAction.createAction(action, actionContext);
         return action;
     }

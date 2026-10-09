@@ -389,6 +389,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Hinder/remove X ... to play X cards from your discard pile": X is capped (Q-0094)
 - An action's costs are judged in order, with its own exertions counted (F-0184)
 - Response events are not played by "play an event from ..." (F-0186)
+- "Ignoring all costs" passes over the cost in an event's own text (F-0316, built by engine pass 20) [Q-0201]
 
 ## Triggers, responses and the play of a card
 

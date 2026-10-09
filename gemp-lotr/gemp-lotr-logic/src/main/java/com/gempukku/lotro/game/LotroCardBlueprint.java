@@ -87,6 +87,13 @@ public interface LotroCardBlueprint {
 
     PlayEventAction getPlayEventCardAction(String playerId, LotroGame game, PhysicalCard self);
 
+    /**
+     * The action that plays this event "ignoring all costs": no twilight cost, and none of the costs in its own
+     * text that can be passed over (PlayEventAction.isCostsIgnored).  Whether the event may be played at all is
+     * asked elsewhere (PlayUtils.checkPlayRequirementsIgnoringCosts).
+     */
+    PlayEventAction getPlayEventCardActionIgnoringCosts(String playerId, LotroGame game, PhysicalCard self);
+
     List<? extends Modifier> getInPlayModifiers(LotroGame game, PhysicalCard self);
 
     List<? extends Modifier> getStackedOnModifiers(LotroGame game, PhysicalCard self);

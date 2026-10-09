@@ -28,15 +28,25 @@ public class PlayEventAction extends AbstractCostToEffectAction {
 
     private final Zone _playedFrom;
 
-    private boolean _twilightCostIgnored;
+    private final boolean _costsIgnored;
 
     public PlayEventAction(PhysicalCard card) {
         this(card, false);
     }
 
     public PlayEventAction(PhysicalCard card, boolean requiresRanger) {
+        this(card, requiresRanger, false);
+    }
+
+    /**
+     * @param costsIgnored True for an event that another card plays "ignoring all costs".  Its twilight cost is
+     *                     neither taken from the pool nor added to it, no discount on it is asked about, and
+     *                     the costs in its own text are not asked of it (see isCostsIgnored).
+     */
+    public PlayEventAction(PhysicalCard card, boolean requiresRanger, boolean costsIgnored) {
         _eventPlayed = card;
         _requiresRanger = requiresRanger;
+        _costsIgnored = costsIgnored;
 
         _playedFrom = card.getZone();
 
@@ -48,11 +58,12 @@ public class PlayEventAction extends AbstractCostToEffectAction {
     }
 
     /**
-     * For an event that another card plays "ignoring all costs": its twilight cost is neither taken from the
-     * pool nor added to it, and no discount on it is asked about.
+     * Whether this event is played "ignoring all costs" (Race Text 92_29).  The cost in an event's own text is
+     * one of them (Ketura on F-0316), so what builds this action's costs from the card's definition leaves out
+     * each cost that can be passed over: DefaultActionSource.createAction.
      */
-    public void setTwilightCostIgnored() {
-        _twilightCostIgnored = true;
+    public boolean isCostsIgnored() {
+        return _costsIgnored;
     }
 
     @Override
@@ -100,7 +111,7 @@ public class PlayEventAction extends AbstractCostToEffectAction {
             game.getGameState().eventPlayed(_eventPlayed);
         }
 
-        if (_twilightCostIgnored) {
+        if (_costsIgnored) {
             _discountResolved = true;
             _discountApplied = true;
         }

@@ -984,3 +984,9 @@ where `GetLastCreatedCard()` still finds it. The pack has no Shadow-phase event 
 For a card the fixed pack does not hold, `scn.UseBoosterOf("1_197", "1_177")` in place of `UseTestBoosters()`
 (G-0038): the one pack offered, still chosen as "Test - Booster", holds exactly those cards in that order
 (`ShadowGetBPChoices()` reads them in order), and it fails for an id that is no card (virtualtable/NamedBoosterTests).
+
+**An event played "ignoring all costs" pays nothing in its own text either (F-0316).** From 92_29's pack, Threat
+of the Unknown 1_197 ("Exert your [moria] Orc to draw 2 cards") draws 2 with no Orc exerted and with none on the
+table. A cost the text reads back is still carried out: The Eye of Sauron 2_87 exerts no Orc and still asks "how
+many burdens to spot", and All Life Flees 18_132 still removes its (X) (Q-0201, open). A card the event then
+plays (Foul Things, We Must Have It) is paid for as ever. mechanics/IgnoringAllCostsTests.
