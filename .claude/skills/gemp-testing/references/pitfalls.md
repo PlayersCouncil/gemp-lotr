@@ -80,6 +80,9 @@ asked "Play Fellowship action or Pass", offering [...]", or "<card> is not offer
 on offer. So do `FreepsGetChoiceMin()`, `FreepsGetChoiceMax()` and `FreepsGetSelectableCount()` on a decision
 that has no such thing. A refused answer leaves whatever was pending still pending. Read the message before
 anything else: it names the decision the test is really at.
+The `...NotAvailable` twins answer TRUE there, and at any decision that is no choice of cards:
+`FreepsHasCardChoiceNotAvailable(frodo)` read at "Play Fellowship action or Pass" passes whatever the card does
+(94_7's old `NotOfferedToNonOwner`). Read beside it what the player IS being asked and the thing left undone.
 
 **A number with no upper bound.** `FreepsGetChoiceMax()` reads `Integer.MAX_VALUE` where a player is choosing a
 number and the game sets no maximum (a `chooseANumber` with no `to`: Gathering Wind 10_16, Beneath the Mountains
@@ -477,6 +480,10 @@ makes a sanctuary of every site numbered 3 or 6 whatever its block, a Shadows-bl
 there included. A turn that begins there asks one 0-to-1 choice for each heal ("Sanctuary healing - Choose
 companion to heal - remaining heals: N"); with no companion wounded nothing is asked and the turn opens on
 fellowship actions. Put the wounds on in the turn before (`Card_V0_001_ErrataTests`).
+Under Race Text 94_7 the modifier's owner is asked with nobody wounded as well, when a burden is on: his
+Ring-bearer may be chosen for the burden alone. For player 2's sanctuary, `AddBurdens` adds to the player whose
+turn it is: put them on in his own turn before, and `SkipToOtherPlayersTurn()` stops on his healing decision
+(`ShadowDecisionAvailable("Sanctuary healing")`, then `ShadowChooseCard`; Card_94_007_Tests).
 
 **Whose site.** `GetCurrentSiteNumber()` answers for the player whose turn it is: on the other player's turn it
 is his site, not the one player 1's fellowship reached, and there is no reader for one player's position. Read
@@ -496,6 +503,12 @@ and the minions are discarded (Mountain-troll 65_112's tests). The old Race to M
 the second move by `SkipToPhase(Phase.REGROUP); PassCurrentPhaseActions(); FreepsChooseToMove()` over empty hands
 (a one-card deck, its other copy put in the discard pile): one more card in the deck and the last call fails on
 the Shadow player's reconcile. Write `SkipToMovementDecision()` for the first two (92_11, 92_14).
+A mover who is barred from choosing to move (Race Text 94_5, `CantMove`) is not asked either, and
+`SkipToMovementDecision()` does not stop where its name says: with a hand he is left at his own "Reconcile"
+decision, still in the regroup phase with `GetMoveCount()` 1 of `GetMoveLimit()` 2; with an empty hand the
+skipper runs on into the other player's fellowship phase, where an `assertFalse` of "another move" shows
+nothing. Keep an undrawn card in the mover's deck and read the count, the limit and the reconcile
+(Card_94_005_Tests).
 
 **The move limit never reads below 1.** The engine floors it (`ModifiersLogic.getMoveLimit`), so from the base
 of 2 a penalty of 1 and a penalty of 2 both read 1, and a "move limit is -1" card whose every board starts from 2

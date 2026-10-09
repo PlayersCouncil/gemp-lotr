@@ -229,9 +229,13 @@ new VirtualTableScenario(cards, sites, frodo, ring, "91_3", null);      // playe
 new VirtualTableScenario(cards, sites, frodo, ring, null, "91_3");      // player 2 has it
 new VirtualTableScenario(cards, sites, frodo, ring, "91_18", null,      // a modifier that changes the bid
     scn -> { scn.FreepsChoose("6"); scn.ShadowChoose("0"); scn.FreepsChoose("Go first"); });
+new VirtualTableScenario(cards, sites, frodo, ring, format, "94_5", null, null,   // league standings, the last argument
+    Map.of(VirtualTableScenario.P2, new RTMDGameInfo.LeaguePlacement(10, 100)));  // player 2 is tenth of a hundred
 ```
 
 The last answer is the higher bidder's seat ("Go first" / "Go second"); assertions made inside the handler count.
+A player left out of the standings has no place. The two players' account names are fixed ("Free Peoples Player",
+"Shadow Player"), so a condition on a player's name (`PlayerIs`, 94_5) is met on no table (G-0039).
 A modifier of deck building (92_1, 92_19, 94_22: `DeckBuildingOverride`) drives no game: it is tested with
 `DeckValidationScenario`, validating with the card's own overrides and never a context built by hand (pitfalls,
 "Validating a deck"); its stats test takes the card from a table that has it.
