@@ -158,7 +158,8 @@ def write_now():
 
 def next_launch():
     """What to launch next, with its arguments, for the kinds of work that come off a queue."""
-    engine = [f for f in at_work("repo") if f.startswith("engine-pass")]
+    # Whatever holds the main slot (an engine pass, or a trial that runs a whole suite): batches then go to the second tree.
+    engine = [f for f in at_work("repo") if not f.startswith(("at-", "dec-", "fix-"))]
     out = []
     done, nxt = at_queue()
     if nxt:
@@ -175,7 +176,7 @@ def next_launch():
         elif ids:
             out.append("%s: %d card(s) left; next %s (workflows/card-batch.js, three or four to a batch; HANDOFF.md says with which notes)" % (name, len(ids), " ".join(ids[:4])))
     if not engine:
-        out.append("no engine pass has the main tree: batches may run there, two at a time (pass its path as repo)")
+        out.append("nothing holds the main tree: batches may run there, two at a time (pass its path as repo)")
     return out
 
 
