@@ -232,61 +232,6 @@ public class IndividualCardAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void oElberethGilthoniel() throws DecisionResultInvalidException, CardNotFoundException {
-        Map<String, LotroDeck> decks = new HashMap<>();
-        final LotroDeck p1Deck = createSimplestDeck();
-        p1Deck.setRingBearer("9_49");
-        decks.put(P1, p1Deck);
-
-        decks.put(P2, createSimplestDeck());
-
-        initializeGameWithDecks(decks);
-
-        skipMulligans();
-
-        PhysicalCardImpl oElberethGilthoniel = new PhysicalCardImpl(100, "2_108", P1, _cardLibrary.getLotroCardBlueprint("2_108"));
-        PhysicalCardImpl ulaireToldea = new PhysicalCardImpl(101, "1_236", P2, _cardLibrary.getLotroCardBlueprint("1_236"));
-
-        _game.getGameState().attachCard(_game, oElberethGilthoniel, _game.getGameState().getRingBearer(P1));
-
-        _game.getGameState().addTwilight(3);
-
-        // End fellowship phase
-        playerDecided(P1, "");
-
-        _game.getGameState().addCardToZone(_game, ulaireToldea, Zone.SHADOW_CHARACTERS);
-
-        // End shadow phase
-        playerDecided(P2, "");
-
-        // End maneuvers phase
-        playerDecided(P1, "");
-        playerDecided(P2, "");
-
-        // End archery phase
-        playerDecided(P1, "");
-        playerDecided(P2, "");
-
-        // End assignment phase
-        playerDecided(P1, "");
-        playerDecided(P2, "");
-
-        // Assign
-        playerDecided(P1, _game.getGameState().getRingBearer(P1).getCardId() + " " + ulaireToldea.getCardId());
-
-        // Start skirmish
-        playerDecided(P1, String.valueOf(_game.getGameState().getRingBearer(P1).getCardId()));
-
-        AwaitingDecision playSkirmishEvent = _userFeedback.getAwaitingDecision(P1);
-        assertEquals(AwaitingDecisionType.CARD_ACTION_CHOICE, playSkirmishEvent.getDecisionType());
-        validateContents(new String[]{"" + oElberethGilthoniel.getCardId()}, ((String[]) playSkirmishEvent.getDecisionParameters().get("cardId")));
-        playerDecided(P1, "0");
-
-        // Should not cancel skirmish (since it's a ring-bearer)
-        assertEquals(Phase.SKIRMISH, _game.getGameState().getCurrentPhase());
-    }
-
-    @Test
     public void sentBackAllowsPlayingCardInDeadPile() throws DecisionResultInvalidException, CardNotFoundException {
         initializeSimplestGame();
 

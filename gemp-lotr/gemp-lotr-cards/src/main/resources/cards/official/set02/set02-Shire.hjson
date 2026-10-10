@@ -595,28 +595,32 @@
 				select: self
 			}
 			effect: {
-				type: choice
-				texts: [
-					Cancel a skirmish involving the Ring-bearer and a Nazgul
-					Take off The One Ring
-				]
-				effects: [
-					{ 
-						type: If
-						check: {
-							type: CanSpot
-							filter: ringBearer,InSkirmishAgainst(Nazgul)
-						}
-						true: {
+				type: If
+				check: {
+					type: RingIsOn
+				}
+				true: {
+					type: choice
+					texts: [
+						Cancel a skirmish involving the Ring-bearer and a Nazgul
+						Take off The One Ring
+					]
+					effects: [
+						{
 							type: cancelSkirmish
 							filter: ringBearer
 							involving: nazgul
 						}
-					}
-					{
-						type: takeOffRing
-					}
-				]
+						{
+							type: takeOffRing
+						}
+					]
+				}
+				false: {
+					type: cancelSkirmish
+					filter: ringBearer
+					involving: nazgul
+				}
 			}
 		}
 		gametext: <b>Tale</b>. Bearer must be the Ring-bearer.<br><b>Skirmish:</b> Discard this condition to take off The One Ring or to cancel a skirmish involving the Ring-bearer and a Nazgûl.

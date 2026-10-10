@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_02_094_Tests
@@ -19,7 +20,21 @@ public class Card_02_094_Tests
 				new HashMap<>()
 				{{
 					put("card", "2_94");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetDrawScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("verily", "2_94");
+					// Elrond, Lord of Rivendell: an ally.  "Fellowship: Exert Elrond to draw a card."
+					put("elrond", "1_40");
+					put("sword", "1_299");      // Hobbit Sword: the card on top of the draw deck
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -55,18 +70,31 @@ public class Card_02_094_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void VerilyIComeTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void AddsABurdenWhenTheFreePeoplesPlayerDrawsACardInTheFellowshipPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetDrawScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var verily = scn.GetShadowCard("verily");
+		var frodo = scn.GetRingBearer();
+		var elrond = scn.GetFreepsCard("elrond");
+		var sword = scn.GetFreepsCard("sword");
+		scn.MoveAlliesToTable(elrond);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.AttachCardsTo(frodo, verily);
+		scn.MoveCardsToTopOfDeck(sword);
 
-		assertEquals(0, scn.GetTwilight());
+		assertAttachedTo(verily, frodo);
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertEquals(0, scn.GetWoundsOn(elrond));
+		assertTrue(scn.FreepsActionAvailable(elrond));
+
+		scn.FreepsUseCardAction(elrond);
+		assertEquals(1, scn.GetWoundsOn(elrond));
+		assertInZone(Zone.HAND, sword);
+		assertEquals(1, scn.GetFreepsHandCount());
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

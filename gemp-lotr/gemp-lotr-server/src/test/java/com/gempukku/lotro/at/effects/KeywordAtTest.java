@@ -12,25 +12,6 @@ import static org.junit.Assert.assertTrue;
 
 public class KeywordAtTest extends AbstractAtTest {
     @Test
-    public void removeKeywordEffect() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard merry = addToZone(createCard(P1, "1_302"), Zone.FREE_CHARACTERS);
-        PhysicalCard seekAndHide = addToZone(createCard(P1, "3_112"), Zone.HAND);
-        PhysicalCard urukHaiRaidingParty = addToZone(createCard(P2, "1_158"), Zone.SHADOW_CHARACTERS);
-
-        passUntil(Phase.ASSIGNMENT);
-        pass(P1);
-        pass(P2);
-        playerDecided(P1, merry.getCardId()+" "+urukHaiRaidingParty.getCardId());
-        selectCard(P1, merry);
-
-        assertTrue(hasKeyword(urukHaiRaidingParty, Keyword.DAMAGE));
-        selectCardAction(P1, seekAndHide);
-        assertFalse(hasKeyword(urukHaiRaidingParty, Keyword.DAMAGE));
-    }
-
-    @Test
     public void removeGameText() throws Exception {
         initializeSimplestGame();
 

@@ -261,24 +261,6 @@ public class RequirementsAtTest extends AbstractAtTest {
 
 
     @Test
-    public void loseSkirmishThisTurn() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard aragorn = addToZone(createCard(P1, "1_89"), Zone.FREE_CHARACTERS);
-        PhysicalCard citadelOfMinasTirith = addToZone(createCard(P1, "3_40"), Zone.SUPPORT);
-
-        passUntil(Phase.FELLOWSHIP);
-        addWounds(aragorn, 1);
-
-        passUntil(Phase.REGROUP);
-        pass(P1);
-        pass(P2);
-        selectNo(P1);
-        selectCardAction(P1, citadelOfMinasTirith);
-        assertEquals(0, getWounds(aragorn));
-    }
-
-    @Test
     public void opponentDoesNotControlSite() throws Exception {
         initializeSimplestGame();
 

@@ -130,22 +130,6 @@ public class TriggersAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void playerDrawsCard() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard verilyICome = attachTo(createCard(P2, "2_94"), _game.getGameState().getRingBearer(P1));
-        PhysicalCard elrond = addToZone(createCard(P1, "1_40"), Zone.SUPPORT);
-
-        passUntil(Phase.FELLOWSHIP);
-
-        putOnTopOfDeck(createCard(P1, "1_40"));
-
-        assertEquals(1, getBurdens());
-        selectCardAction(P1, elrond);
-        assertEquals(2, getBurdens());
-    }
-
-    @Test
     public void beforeToil() throws Exception {
         initializeSimplestGame();
 
@@ -289,19 +273,6 @@ public class TriggersAtTest extends AbstractAtTest {
         replaceSite(_game.getGameState().getAdventureDeck(P1).get(0), 2);
         selectCardAction(P2, nelya);
         hasCardAction(P1, riddermarkTactician);
-    }
-
-    @Test
-    public void removesBurden() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard theShireCountryside = addToZone(createCard(P1, "3_113"), Zone.SUPPORT);
-        PhysicalCard elfSong = addToZone(createCard(P1, "1_39"), Zone.HAND);
-        PhysicalCard elrond = addToZone(createCard(P1, "1_40"), Zone.SUPPORT);
-
-        passUntil(Phase.FELLOWSHIP);
-        selectCardAction(P1, elfSong);
-        hasCardAction(P1, theShireCountryside);
     }
 
     @Test
@@ -550,24 +521,5 @@ public class TriggersAtTest extends AbstractAtTest {
         assertEquals(1, getWounds(theGaffer));
         assertEquals(0, getTwilightPool());
         assertEquals(Zone.SHADOW_CHARACTERS, goblinRunner.getZone());
-    }
-
-    @Test
-    public void aboutToAddBurden() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard melilotBrandybuck = addToZone(createCard(P1, "3_110"), Zone.SUPPORT);
-        PhysicalCard ringBearer = getRingBearer(P1);
-        PhysicalCard desperateDefenseOfTheRing = attachTo(createCard(P2, "1_244"), ringBearer);
-        PhysicalCard goblinRunner = addToZone(createCard(P2, "1_178"), Zone.SHADOW_CHARACTERS);
-
-        passUntil(Phase.ASSIGNMENT);
-        pass(P1);
-        pass(P2);
-        assertEquals(1, getBurdens());
-        playerDecided(P1, ringBearer.getCardId() + " " + goblinRunner.getCardId());
-        selectCardAction(P1, melilotBrandybuck);
-        assertEquals(1, getBurdens());
-        assertEquals(1, getWounds(melilotBrandybuck));
     }
 }

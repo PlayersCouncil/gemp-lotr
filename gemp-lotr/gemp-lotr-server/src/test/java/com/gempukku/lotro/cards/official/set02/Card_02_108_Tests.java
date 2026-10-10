@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_02_108_Tests
@@ -26,6 +27,30 @@ public class Card_02_108_Tests
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.IsildursBaneRing,
 				VirtualTableScenario.Fellowship //We need the Ring-bearer's skirmish to be cancelable
+		);
+	}
+
+	// The default format, multipath, in which a skirmish involving the Ring-bearer may not be cancelled, and a
+	// Ring-bearer who is not Frodo, the kind of Ring-bearer the rule was made for.
+	protected VirtualTableScenario GetMultipathScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("elbereth", "2_108");
+					// Ulaire Toldea, Messenger of Morgul: a Nazgul of strength 12; fierce, and an assignment
+					// ability that needs 4 burdens.
+					put("toldea", "1_236");
+					// Goblin Marksman: Archer is its whole text.  Its archery wound is what the Ring is put on for.
+					put("marksman", "1_176");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				// Bilbo, Bearer of Things Burgled: strength 3, resistance 8.  "Each time the fellowship moves, if
+				// the twilight pool has 2 or fewer twilight tokens, add 2 burdens or add (3)."
+				"9_49",
+				// Isildur's Bane: "Response: If bearer is about to take a wound, he wears The One Ring until the
+				// regroup phase", and that wound is 2 burdens instead.
+				VirtualTableScenario.IsildursBaneRing,
+				VirtualTableScenario.Multipath
 		);
 	}
 
@@ -159,8 +184,80 @@ public class Card_02_108_Tests
 		assertEquals(Zone.ATTACHED, elbereth.getZone());
 
 		scn.FreepsUseCardAction(elbereth);
-		scn.FreepsChooseOption("cancel");
+		assertFalse(scn.FreepsDecisionAvailable("Choose action to perform"));
 		assertTrue(scn.IsCharSkirmishing(frodo));
 		assertEquals(Zone.DISCARD, elbereth.getZone());
+	}
+
+	@Test
+	public void InMultipathWearingTheRingItIsTakenOffWithNoQuestionAndASkirmishTheRingBearerIsInIsNotCancelled() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetMultipathScenario();
+
+		var bilbo = scn.GetRingBearer();
+		var elbereth = scn.GetFreepsCard("elbereth");
+		var toldea = scn.GetShadowCard("toldea");
+		var marksman = scn.GetShadowCard("marksman");
+		scn.AttachCardsTo(bilbo, elbereth);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(toldea, marksman);
+		// With 3 in the pool as the fellowship moves, Bilbo's own text asks nothing.
+		scn.SetTwilight(3);
+		scn.SkipToPhase(Phase.ARCHERY);
+		scn.PassArcheryActions();
+		// The Marksman's wound: Bilbo puts the Ring on for it.
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		scn.FreepsAcceptOptionalTrigger();
+		scn.PassAssignmentActions();
+		scn.FreepsAssignToMinions(bilbo, toldea);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(bilbo);
+
+		assertTrue(scn.IsCharSkirmishingAgainst(bilbo, toldea));
+		assertTrue(scn.RBWearingOneRing());
+		assertAttachedTo(elbereth, bilbo);
+		assertTrue(scn.FreepsActionAvailable(elbereth));
+
+		// Of its two things to do only one can be done here, so that one is done and nothing is asked
+		// (Comprehensive Rules 4.2, the ruling on this card: "As skirmishes involving the Ring-bearer cannot be
+		// cancelled, the skirmish action of this condition can only be used to take off The One Ring").
+		scn.FreepsUseCardAction(elbereth);
+		assertFalse(scn.FreepsDecisionAvailable("Choose action to perform"));
+		assertInDiscard(elbereth);
+		assertFalse(scn.RBWearingOneRing());
+		assertTrue(scn.IsCharSkirmishingAgainst(bilbo, toldea));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
+	@Test
+	public void InMultipathIsDiscardedAndDoesNotCancelASkirmishTheRingBearerIsIn() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetMultipathScenario();
+
+		var bilbo = scn.GetRingBearer();
+		var elbereth = scn.GetFreepsCard("elbereth");
+		var toldea = scn.GetShadowCard("toldea");
+		scn.AttachCardsTo(bilbo, elbereth);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(toldea);
+		// With 3 in the pool as the fellowship moves, Bilbo's own text asks nothing.
+		scn.SetTwilight(3);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(bilbo, toldea);
+
+		assertTrue(scn.IsCharSkirmishingAgainst(bilbo, toldea));
+		assertFalse(scn.RBWearingOneRing());
+		assertAttachedTo(elbereth, bilbo);
+		// The ability has a cost that can be paid, so it is offered; its cancel is what the format refuses.
+		assertTrue(scn.FreepsActionAvailable(elbereth));
+
+		// Neither of its two things can be done: the Ring is not on, and the skirmish may not be cancelled.
+		// The condition is discarded for nothing, and nothing is asked.
+		scn.FreepsUseCardAction(elbereth);
+		assertFalse(scn.FreepsDecisionAvailable("Choose action to perform"));
+		assertInDiscard(elbereth);
+		assertFalse(scn.RBWearingOneRing());
+		assertTrue(scn.IsCharSkirmishingAgainst(bilbo, toldea));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
 }

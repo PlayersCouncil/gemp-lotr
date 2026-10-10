@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_02_052_Tests
@@ -18,9 +19,28 @@ public class Card_02_052_Tests
 				new HashMap<>()
 				{{
 					put("card", "2_52");
-					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// The King-block path: its site 3, The Dimholt, is underground (the Balrog is discarded anywhere else) and is
+	// one short of the site number 4 of every [moria] Orc, so an Orc played there pays the roaming penalty.
+	protected VirtualTableScenario GetDimholtScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("balrog", "2_52");
+					// Goblin Sneak: a [moria] Orc of cost 1, site number 4.  "When you play this minion, you may
+					// place a [moria] Orc from your discard pile beneath your draw deck."
+					put("sneak", "1_181");
+					// Goblin Runner: a [moria] Orc of cost 1, site number 4; the other Orc in the discard pile.
+					// (Played, it adds (2); it is not played here.)
+					put("runner", "1_178");
+				}},
+				VirtualTableScenario.KingSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -64,18 +84,52 @@ public class Card_02_052_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void TheBalrogTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void ShadowAbilityIsWithheldUntilThePoolPaysTheTwoItRemovesAndTheOrcAsWell() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetDimholtScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var balrog = scn.GetShadowCard("balrog");
+		var sneak = scn.GetShadowCard("sneak");
+		var runner = scn.GetShadowCard("runner");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToSite(2);
+		// The move to The Dimholt, site 3: underground.
+		scn.FreepsPass();
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 
-		assertEquals(14, scn.GetTwilight());
+		scn.MoveMinionsToTable(balrog);
+		scn.MoveCardsToDiscard(sneak, runner);
+		assertInZone(Zone.SHADOW_CHARACTERS, balrog);
+		assertEquals(0, scn.GetWoundsOn(balrog));
+
+		// Either Orc costs 1 + 2 for roaming at site 3 = 3 from the discard pile.  A pool of 4 pays the (2)
+		// the ability removes, and it pays the Orc, but not one after the other: 2 + 3 = 5.
+		scn.SetTwilight(4);
+		scn.ShadowRefreshDecision();
+		assertFalse(scn.ShadowActionAvailable(balrog));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		scn.SetTwilight(5);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.ShadowActionAvailable(balrog));
+
+		scn.ShadowUseCardAction(balrog);
+		assertEquals(1, scn.GetWoundsOn(balrog));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		assertTrue(scn.ShadowHasCardChoiceAvailable(sneak, runner));
+
+		scn.ShadowChooseCards(sneak);
+		assertInZone(Zone.SHADOW_CHARACTERS, sneak);
+		assertInZone(Zone.DISCARD, runner);
+		// 5 - 2 removed - 1 for the Sneak - 2 for roaming
+		assertEquals(0, scn.GetTwilight());
+		// The Sneak's own offer, to put the Runner beneath the draw deck.
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(sneak));
+		scn.ShadowDeclineOptionalTrigger();
+		assertInZone(Zone.DISCARD, runner);
+		assertEquals(1, scn.GetWoundsOn(balrog));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

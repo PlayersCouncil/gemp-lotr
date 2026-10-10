@@ -30,6 +30,23 @@ public class Card_03_069_Tests
 		);
 	}
 
+	protected VirtualTableScenario GetAssignmentScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("saruman", "3_69");
+					// Uruk-hai Raiding Party: an [isengard] minion; Damage +1 is its whole text
+					put("raiders", "1_158");
+					put("troop", "1_177");      // Goblin Patrol Troop: a [moria] minion with no text
+					put("merry", "1_303");      // Merry, From O'er the Brandywine: his text is about bearing a weapon
+					put("pippin", "1_306");     // Pippin, Friend to Frodo: his text is about [shire] tales
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
 	@Test
 	public void SarumanStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
@@ -140,5 +157,57 @@ public class Card_03_069_Tests
 		scn.FreepsAssignToMinions(frodo, shaman);
 
 		scn.FreepsResolveSkirmish(sam);
+	}
+
+	@Test
+	public void AssignmentAbilityOffersEveryCompanionButTheRingBearerAndASecondUseWithNoMinionLeftAssignsNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetAssignmentScenario();
+
+		var saruman = scn.GetShadowCard("saruman");
+		var raiders = scn.GetShadowCard("raiders");
+		var troop = scn.GetShadowCard("troop");
+		var frodo = scn.GetRingBearer();
+		var merry = scn.GetFreepsCard("merry");
+		var pippin = scn.GetFreepsCard("pippin");
+		scn.MoveCompanionsToTable(merry, pippin);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(saruman, raiders, troop);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPass();
+
+		assertEquals(0, scn.GetWoundsOn(saruman));
+		assertTrue(scn.ShadowActionAvailable(saruman));
+
+		scn.ShadowUseCardAction(saruman);
+		assertEquals(1, scn.GetWoundsOn(saruman));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		assertTrue(scn.ShadowHasCardChoiceAvailable(merry, pippin));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(frodo));
+
+		// The Raiding Party is the one minion that can be taken: Saruman may not be assigned, and the Troop
+		// is not [isengard].  So no minion is asked for.
+		scn.ShadowChooseCard(merry);
+		assertTrue(scn.FreepsDecisionAvailable("Would you like to exert"));
+		scn.FreepsChooseNo();
+		assertTrue(scn.IsCharAssignedAgainst(merry, raiders));
+		assertEquals(0, scn.GetWoundsOn(merry));
+		assertFalse(scn.IsCharAssigned(pippin));
+		assertFalse(scn.IsCharAssigned(troop));
+		assertFalse(scn.IsCharAssigned(saruman));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+
+		// No [isengard] minion is left to assign.  The ability has a cost that can be paid, so it is still
+		// offered: Saruman exerts for nothing, though Pippin and the Troop are both free.
+		scn.FreepsPass();
+		assertTrue(scn.ShadowActionAvailable(saruman));
+		scn.ShadowUseCardAction(saruman);
+		assertEquals(2, scn.GetWoundsOn(saruman));
+		assertFalse(scn.IsCharAssigned(pippin));
+		assertFalse(scn.IsCharAssigned(troop));
+		assertEquals(0, scn.GetWoundsOn(pippin));
+		assertFalse(scn.FreepsDecisionAvailable("Would you like to exert"));
+		assertTrue(scn.IsCharAssignedAgainst(merry, raiders));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
 }
