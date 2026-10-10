@@ -688,6 +688,10 @@ bare `DecisionResultInvalidException` (Card_09_031_ErrataTests).
 The round comes about with nobody assigned at all: where a fierce minion is in play and both players decline to
 assign, the fierce assignment phase follows, which is the cheapest way to stand just before the regroup phase
 (a D check on "until the regroup phase", Prized Lagan 68_110).
+The relentless round (CR 5.0 "relentless"; a third round after the fierce one, or a second where no minion is
+fierce) reads as the first does too, and nothing names it yet (G-0043): `Phase.ASSIGNMENT`, the assignment actions
+pending, `InFierceRound()` FALSE. It is passed with `PassAssignmentActions()` and `PassSkirmishActions()`, not the
+`Fierce` ones; show it by the round before it and by who is on the assignment list (`mechanics/RelentlessTests`).
 
 **Before `StartGame()` the burdens read 1.** The constructor has bid 1 burden for player 1 and placed the
 Ring-bearers; `StartGame()` then takes 1 burden off (`RemoveBurdens(1)`). A burden a card added at set-up would

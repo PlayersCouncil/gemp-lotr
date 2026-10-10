@@ -376,7 +376,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "When you play this ..., you may add (N)" built as a required trigger (F-0009, Q-0165) [Q-0017, Q-0167, F-0328]
 - A prevention is asked only when the effect will happen (F-0194, Q-0114)
 - "<A player> may assign a minion to skirmish the Ring-bearer" on an optional trigger wants a minion that can be assigned to him (F-0337, Race Text 94_26) [Q-0034, Q-0114]
-- "Each minion gains this ability: 'Assignment: Assign this minion to bearer of <this card>'" is offered only while both can be assigned (F-0252, F-0353; Unexpected Visitor 7_126, F-0354, open) [Q-0034, F-0309, F-0351, F-0352, F-0355]
+- "Each minion gains this ability: 'Assignment: Assign this minion to bearer of <this card>'" is offered only while both can be assigned (F-0252, F-0353, F-0354) [Q-0034, F-0309, F-0351, F-0352, F-0355]
 - A choice made ahead of a preventable exert loses the exert's own check (F-0206) [Q-0114]
 - "Spot X to <effect>" on an optional trigger or ability is no cost for Q-0034 (F-0167, F-0209, F-0211, F-0219) [Q-0029, Q-0033, Q-0164]
 - An "or" between two cost-to-effect halves (Q-0034)
@@ -446,6 +446,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A number in a filter and a hindered card (CR 5.0 "hinder", Grond 8_103) [Q-0098]
 - "Borne by a <race or type>" and a hindered bearer (Q-0108, F-0212)
 - "Support" and support(<whose>) (Q-0099, Q-0101)
+- A character hindered while assigned or skirmishing leaves it, and a minion so freed is not a leftover minion (CR 5.0 "hinder"; CR 4.2 "assignment phase")
 - A hindered Ring-bearer cannot be discarded or returned to hand (F-0174)
 - "Discard other <X> he bears ... cannot bear other <X>" on a borne card that is hindered and restored (F-0360; F-0361 and Q-0223, open)
 - Ruled on the night of 2026-10-07, and built by engine pass 12 (Q-0103 to Q-0108, F-0175 to F-0179) [Q-0105, Q-0023, Q-0104, Q-0107, F-0176, F-0178, F-0196]
