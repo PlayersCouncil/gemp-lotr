@@ -753,12 +753,17 @@
 					type: winsSkirmish
 					filter: self
 				}
-				requires: {
-					type: not
-					requires: {
-						type: controlsSite
+				requires: [
+					{
+						type: not
+						requires: {
+							type: controlsSite
+						}
 					}
-				}
+					{
+						type: SiteAvailableToControl
+					}
+				]
 				effect: {
 					type: takeControlOfSite
 				}

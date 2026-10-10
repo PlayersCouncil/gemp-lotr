@@ -19,7 +19,20 @@ public class Card_15_087_Tests
 				new HashMap<>()
 				{{
 					put("card", "15_87");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetSiteControlScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("savage", "15_87");
+					put("dagger", "18_69");     // Henchman's Dagger: a hand weapon a [men] minion bears, strength +1
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, vitality 4
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -62,18 +75,73 @@ public class Card_15_087_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void PrimitiveSavageTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void WithASiteThatCanBeControlledWinningASkirmishWithAHandWeaponOffersItAndAYesTakesIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetSiteControlScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var savage = scn.GetShadowCard("savage");
+		var dagger = scn.GetShadowCard("dagger");
+		var aragorn = scn.GetFreepsCard("aragorn");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// Player 1's second turn: both markers are on site 2, so site 1 is behind every marker.
+		scn.SkipToSite(2);
+		var site1 = scn.GetSite(1);
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveMinionsToTable(savage);
+		scn.AttachCardsTo(savage, dagger);
 
-		assertEquals(5, scn.GetTwilight());
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, savage);
+		scn.FreepsResolveSkirmish(aragorn);
+
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertFalse(scn.IsSiteControlled(site1));
+		assertEquals(0, scn.GetShadowControlledSiteCount());
+
+		scn.PassCurrentPhaseActions();
+		// 13 + 1 for the Dagger against 8: Aragorn loses, and takes a wound.
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(savage));
+		scn.ShadowAcceptOptionalTrigger();
+
+		assertTrue(scn.ShadowControls(site1));
+		assertEquals(1, scn.GetShadowControlledSiteCount());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void WithNoSiteThatCanBeControlledWinningASkirmishWithAHandWeaponOffersNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetSiteControlScenario();
+
+		var savage = scn.GetShadowCard("savage");
+		var dagger = scn.GetShadowCard("dagger");
+		var aragorn = scn.GetFreepsCard("aragorn");
+
+		scn.StartGame();
+		scn.SkipToSite(2);
+		// Site 1 is the only site every marker has passed, and player 1 took it on player 2's turn: there is
+		// nothing a yes could take (Q-0034).
+		scn.FreepsTakeControlOfSite();
+		var site1 = scn.GetSite(1);
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveMinionsToTable(savage);
+		scn.AttachCardsTo(savage, dagger);
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, savage);
+		scn.FreepsResolveSkirmish(aragorn);
+
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.FreepsControls(site1));
+
+		scn.PassCurrentPhaseActions();
+		// The Savage has won, bearing a hand weapon.
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(savage));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+
+		assertEquals(0, scn.GetShadowControlledSiteCount());
+		assertEquals(1, scn.GetFreepsControlledSiteCount());
 	}
 }

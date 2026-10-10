@@ -3122,6 +3122,9 @@
 					killer: urukHai
 					inSkirmish: true
 				}
+				requires: {
+					type: SiteAvailableToControl
+				}
 				effect: {
 					type: takeControlOfSite
 				}

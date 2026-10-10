@@ -18,7 +18,19 @@ public class Card_18_127_Tests
 				new HashMap<>()
 				{{
 					put("card", "18_127");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetSiteControlScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("marshal", "18_127");
+					put("knight", "5_35");      // Gondorian Knight: strength 6, vitality 3, no text
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -63,18 +75,69 @@ public class Card_18_127_Tests
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void WhiteHandMarshalTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void WithASiteThatCanBeControlledWinningASkirmishOffersItAndAYesTakesIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetSiteControlScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var marshal = scn.GetShadowCard("marshal");
+		var knight = scn.GetFreepsCard("knight");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// Player 1's second turn: both markers are on site 2, so site 1 is behind every marker.
+		scn.SkipToSite(2);
+		var site1 = scn.GetSite(1);
+		scn.MoveCompanionsToTable(knight);
+		scn.MoveMinionsToTable(marshal);
 
-		assertEquals(5, scn.GetTwilight());
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(knight, marshal);
+		scn.FreepsResolveSkirmish(knight);
+
+		assertEquals(0, scn.GetWoundsOn(knight));
+		assertFalse(scn.IsSiteControlled(site1));
+		assertEquals(0, scn.GetShadowControlledSiteCount());
+
+		scn.PassCurrentPhaseActions();
+		// 11 against 6: the Knight loses, and takes 2 wounds for damage +1.
+		assertEquals(2, scn.GetWoundsOn(knight));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(marshal));
+		scn.ShadowAcceptOptionalTrigger();
+
+		assertTrue(scn.ShadowControls(site1));
+		assertEquals(1, scn.GetShadowControlledSiteCount());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void WithNoSiteThatCanBeControlledWinningASkirmishOffersNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetSiteControlScenario();
+
+		var marshal = scn.GetShadowCard("marshal");
+		var knight = scn.GetFreepsCard("knight");
+
+		scn.StartGame();
+		scn.SkipToSite(2);
+		// Site 1 is the only site every marker has passed, and player 1 took it on player 2's turn: there is
+		// nothing a yes could take (Q-0034).
+		scn.FreepsTakeControlOfSite();
+		var site1 = scn.GetSite(1);
+		scn.MoveCompanionsToTable(knight);
+		scn.MoveMinionsToTable(marshal);
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(knight, marshal);
+		scn.FreepsResolveSkirmish(knight);
+
+		assertEquals(0, scn.GetWoundsOn(knight));
+		assertTrue(scn.FreepsControls(site1));
+
+		scn.PassCurrentPhaseActions();
+		// The Marshal has won.
+		assertEquals(2, scn.GetWoundsOn(knight));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(marshal));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+
+		assertEquals(0, scn.GetShadowControlledSiteCount());
+		assertEquals(1, scn.GetFreepsControlledSiteCount());
 	}
 }

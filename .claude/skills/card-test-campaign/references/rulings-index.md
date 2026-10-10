@@ -360,6 +360,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Ruled 2026-10-08 and built by engine pass 15 (F-0197, F-0196, Q-0115) [Q-0113, Q-0112]
 - "While ..., the move limit is +1 (-1)" with no "for this turn" lasts the turn (Q-0179: B; F-0333, F-0334) [Q-0122, F-0317]
 - "<Do> N ... If you do, ..." wants all N (Q-0169, F-0330)
+- "Frodo is corrupted" on a card that names Frodo (F-0356, Held 6_109) [Q-0213, Q-0103]
 
 ## What is offered and what is asked
 
@@ -387,6 +388,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Response: If a <kind of card> is discarded from play, stack it here" requires the card still in the discard pile (F-0357, Sword Rack 11_158 and Countless Companies 12_58) [Q-0034, Q-0062]
 - "When you play X, you may reinforce a [culture] token" requires a token to reinforce (F-0359, Brego 13_63) [Q-0034, Q-0215]
 - "When you play X, you may discard a Shadow possession" requires one to discard (F-0362, Erkenbrand 0_59) [F-0359, Q-0034, Q-0224]
+- "You may take control of a site" with no cost requires a site that can be taken (F-0341, Hillman Band 4_21) [F-0336, Q-0034, Q-0062]
 - "May draw a card for each X over N" requires N+1 of X (Q-0033, F-0320)
 - A phase action on a Race to Mount Doom modifier is its owner's where the text says "your" (F-0312) [Q-0194, F-0335, Q-0183, Q-0188]
 - A Race to Mount Doom modifier's own discard from hand writes `forced: true`, and no card can tell (F-0205)

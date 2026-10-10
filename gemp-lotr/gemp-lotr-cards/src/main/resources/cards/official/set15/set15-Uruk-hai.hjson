@@ -115,20 +115,25 @@
 					type: winsSkirmish
 					filter: self
 				}
-				requires: {
-					type: or
-					requires: [
-						{
-							type: canSpot
-							filter: hunter
-							count: 4
-						}
-						{
-							type: canSpot
-							filter: name(Uglúk)
-						}
-					]
-				}
+				requires: [
+					{
+						type: or
+						requires: [
+							{
+								type: canSpot
+								filter: hunter
+								count: 4
+							}
+							{
+								type: canSpot
+								filter: name(Uglúk)
+							}
+						]
+					}
+					{
+						type: SiteAvailableToControl
+					}
+				]
 				effect: {
 					type: takeControlOfSite
 				}
@@ -1201,10 +1206,15 @@
 					type: killed
 					filter: or(companion,ally)
 				}
-				requires: {
-					type: canSpot
-					filter: culture(uruk-hai),minion,inSkirmish
-				}
+				requires: [
+					{
+						type: canSpot
+						filter: culture(uruk-hai),minion,inSkirmish
+					}
+					{
+						type: SiteAvailableToControl
+					}
+				]
 				effect: {
 					type: takeControlOfSite
 				}

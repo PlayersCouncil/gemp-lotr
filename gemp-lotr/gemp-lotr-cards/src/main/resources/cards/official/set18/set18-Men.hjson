@@ -79,10 +79,15 @@
 					type: killed
 					filter: companion
 				}
-				requires: {
-					type: phase
-					phase: archery
-				}
+				requires: [
+					{
+						type: phase
+						phase: archery
+					}
+					{
+						type: SiteAvailableToControl
+					}
+				]
 				effect: {
 					type: takeControlOfSite
 				}
@@ -139,10 +144,15 @@
 					type: killed
 					filter: companion
 				}
-				requires: {
-					type: phase
-					phase: skirmish
-				}
+				requires: [
+					{
+						type: phase
+						phase: skirmish
+					}
+					{
+						type: SiteAvailableToControl
+					}
+				]
 				effect: {
 					type: takeControlOfSite
 				}

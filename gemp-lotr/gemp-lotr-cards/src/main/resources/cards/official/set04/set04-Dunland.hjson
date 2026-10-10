@@ -518,10 +518,15 @@
 						type: winsSkirmish
 						filter: self
 				}
-				requires: {
-						type: canSpot
-						filter: another,culture(dunland),man
-				}
+				requires: [
+						{
+								type: canSpot
+								filter: another,culture(dunland),man
+						}
+						{
+								type: SiteAvailableToControl
+						}
+				]
 				effect: {
 						type: takeControlOfSite
 				}
@@ -862,10 +867,15 @@
 						trigger: {
 								type: moves
 						}
-						requires: {
-								type: canSpot
-								filter: another,culture(dunland),man
-						}
+						requires: [
+								{
+										type: canSpot
+										filter: another,culture(dunland),man
+								}
+								{
+										type: SiteAvailableToControl
+								}
+						]
 						effect: {
 								type: takeControlOfSite
 						}
@@ -1082,10 +1092,15 @@
 						type: winsSkirmish
 						filter: self
 				}
-				requires: {
-						type: canSpot
-						filter: another,culture(dunland),minion
-				}
+				requires: [
+						{
+								type: canSpot
+								filter: another,culture(dunland),minion
+						}
+						{
+								type: SiteAvailableToControl
+						}
+				]
 				effect: {
 						type: takeControlOfSite
 				}

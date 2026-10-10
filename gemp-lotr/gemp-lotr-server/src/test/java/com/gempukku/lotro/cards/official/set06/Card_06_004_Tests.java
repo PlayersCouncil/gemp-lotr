@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_06_004_Tests
@@ -19,7 +20,20 @@ public class Card_06_004_Tests
 				new HashMap<>()
 				{{
 					put("card", "6_4");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetSiteControlScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("headman", "6_4");
+					put("brigand1", "4_10");    // Dunlending Brigand: [dunland] Man with no text; the two other Men
+					put("brigand2", "4_10");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -62,18 +76,68 @@ public class Card_06_004_Tests
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void DunlendingHeadmanTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void WithASiteThatCanBeControlledPlayingTheHeadmanOffersItAndAYesTakesIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetSiteControlScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var headman = scn.GetShadowCard("headman");
+		var brigand1 = scn.GetShadowCard("brigand1");
+		var brigand2 = scn.GetShadowCard("brigand2");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// Player 1's second turn: both markers are on site 2, so site 1 is behind every marker.
+		scn.SkipToSite(2);
+		var site1 = scn.GetSite(1);
+		scn.MoveMinionsToTable(brigand1, brigand2);
+		scn.MoveCardsToHand(headman);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
 
-		assertEquals(4, scn.GetTwilight());
+		assertFalse(scn.IsSiteControlled(site1));
+		assertEquals(0, scn.GetShadowControlledSiteCount());
+
+		scn.ShadowPlayCard(headman);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(headman));
+		scn.ShadowAcceptOptionalTrigger();
+
+		// The Free Peoples player holds the cards the turns before dealt him, and declines to discard 2 of them.
+		assertTrue(scn.FreepsDecisionAvailable("discard 2 cards from hand to prevent"));
+		scn.FreepsChooseNo();
+
+		assertTrue(scn.ShadowControls(site1));
+		assertEquals(1, scn.GetShadowControlledSiteCount());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void WithNoSiteThatCanBeControlledPlayingTheHeadmanOffersNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetSiteControlScenario();
+
+		var headman = scn.GetShadowCard("headman");
+		var brigand1 = scn.GetShadowCard("brigand1");
+		var brigand2 = scn.GetShadowCard("brigand2");
+
+		scn.StartGame();
+		scn.SkipToSite(2);
+		// Site 1 is the only site every marker has passed, and player 1 took it on player 2's turn: there is
+		// nothing a yes could take (Q-0034).
+		scn.FreepsTakeControlOfSite();
+		var site1 = scn.GetSite(1);
+		scn.MoveMinionsToTable(brigand1, brigand2);
+		scn.MoveCardsToHand(headman);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		assertTrue(scn.FreepsControls(site1));
+
+		scn.ShadowPlayCard(headman);
+		// The Headman is in play beside 2 other [dunland] Men.
+		assertInZone(Zone.SHADOW_CHARACTERS, headman);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(headman));
+		assertFalse(scn.FreepsAnyDecisionsAvailable());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		assertEquals(0, scn.GetShadowControlledSiteCount());
+		assertEquals(1, scn.GetFreepsControlledSiteCount());
 	}
 }

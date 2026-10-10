@@ -19,7 +19,20 @@ public class Card_15_078_Tests
 				new HashMap<>()
 				{{
 					put("card", "15_78");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetSiteControlScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("hillman", "15_78");
+					put("knight", "5_35");      // Gondorian Knight: a [gondor] companion with no text
+					put("guard", "1_7");        // Dwarf Guard: a [dwarven] companion; with Frodo, 3 Free Peoples cultures
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -62,18 +75,58 @@ public class Card_15_078_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void EngrossedHillmanTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void WithASiteThatCanBeControlledTheStartOfTheManeuverPhaseOffersItAndAYesTakesIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetSiteControlScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var hillman = scn.GetShadowCard("hillman");
+		var knight = scn.GetFreepsCard("knight");
+		var guard = scn.GetFreepsCard("guard");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// Player 1's second turn: both markers are on site 2, so site 1 is behind every marker.
+		scn.SkipToSite(2);
+		var site1 = scn.GetSite(1);
+		scn.MoveCompanionsToTable(knight, guard);
+		scn.MoveMinionsToTable(hillman);
 
-		assertEquals(4, scn.GetTwilight());
+		assertFalse(scn.IsSiteControlled(site1));
+		assertEquals(0, scn.GetShadowControlledSiteCount());
+
+		scn.SkipToPhase(Phase.MANEUVER);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(hillman));
+		scn.ShadowAcceptOptionalTrigger();
+
+		assertTrue(scn.ShadowControls(site1));
+		assertEquals(1, scn.GetShadowControlledSiteCount());
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+	}
+
+	@Test
+	public void WithNoSiteThatCanBeControlledTheStartOfTheManeuverPhaseOffersNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetSiteControlScenario();
+
+		var hillman = scn.GetShadowCard("hillman");
+		var knight = scn.GetFreepsCard("knight");
+		var guard = scn.GetFreepsCard("guard");
+
+		scn.StartGame();
+		scn.SkipToSite(2);
+		// Site 1 is the only site every marker has passed, and player 1 took it on player 2's turn: there is
+		// nothing a yes could take (Q-0034).
+		scn.FreepsTakeControlOfSite();
+		var site1 = scn.GetSite(1);
+		scn.MoveCompanionsToTable(knight, guard);
+		scn.MoveMinionsToTable(hillman);
+
+		assertTrue(scn.FreepsControls(site1));
+
+		// The Hillman is in play, and [shire], [gondor] and [dwarven] can be spotted.
+		scn.SkipToPhase(Phase.MANEUVER);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(hillman));
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+
+		assertEquals(0, scn.GetShadowControlledSiteCount());
+		assertEquals(1, scn.GetFreepsControlledSiteCount());
 	}
 }
