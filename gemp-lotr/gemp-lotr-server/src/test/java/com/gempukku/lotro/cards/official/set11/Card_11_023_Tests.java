@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_11_023_Tests
@@ -19,7 +20,24 @@ public class Card_11_023_Tests
 				new HashMap<>()
 				{{
 					put("card", "11_23");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetToilScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("bow", "11_23");
+					// Legolas, Companion of the Ring: vitality 3; his own text needs a battleground or a forest
+					put("legolas", "11_21");
+					// Elven Marksmanship: [elven] condition of the support area, cost 6, not unique.  "To play, spot
+					// an Elf.  Toil 2."  Its archery ability is not used.
+					put("marksmanship1", "11_17");
+					put("marksmanship2", "11_17");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -56,18 +74,49 @@ public class Card_11_023_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void LegolasBowTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void ExertingLegolasForToilToPlayAnElvenConditionOffersTheHeal() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetToilScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var bow = scn.GetFreepsCard("bow");
+		var legolas = scn.GetFreepsCard("legolas");
+		var marksmanship1 = scn.GetFreepsCard("marksmanship1");
+		var marksmanship2 = scn.GetFreepsCard("marksmanship2");
+		scn.MoveCompanionsToTable(legolas);
+		scn.AttachCardsTo(legolas, bow);
+		scn.MoveCardsToHand(marksmanship1, marksmanship2);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// One wound to begin with, so that a heal of one wound reads apart from a heal of them all.
+		scn.AddWoundsToChar(legolas, 1);
 
-		assertEquals(2, scn.GetTwilight());
+		assertEquals(0, scn.GetTwilight());
+		assertEquals(1, scn.GetWoundsOn(legolas));
+
+		// Played with nobody exerted for toil: the whole cost, and nothing for the Bow to answer.
+		scn.FreepsPlayCard(marksmanship1);
+		assertEquals(0, scn.FreepsGetChoiceMin());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(legolas));
+		scn.FreepsDeclineChoosing();
+		assertInZone(Zone.SUPPORT, marksmanship1);
+		assertEquals(6, scn.GetTwilight());
+		assertEquals(1, scn.GetWoundsOn(legolas));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(bow));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// Played with Legolas exerted for toil: that exertion is one made to play an [elven] condition, and
+		// the Bow answers it while the condition is still on its way to the table.
+		scn.FreepsPlayCard(marksmanship2);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(legolas));
+		scn.FreepsChooseCard(legolas);
+		assertEquals(2, scn.GetWoundsOn(legolas));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(bow));
+
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(1, scn.GetWoundsOn(legolas));
+		assertInZone(Zone.SUPPORT, marksmanship2);
+		// 6 + (6 - 2)
+		assertEquals(10, scn.GetTwilight());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

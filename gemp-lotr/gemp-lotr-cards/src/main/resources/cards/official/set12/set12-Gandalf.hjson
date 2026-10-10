@@ -86,10 +86,24 @@
 				}
 				{
 					type: reorderTopCardsOfDrawDeck
+					# X is the companions spotted other than the Wizard.  A Wizard who is a companion is one of
+					# those counted (with nobody spotted X is still none); one who is not leaves them all "other"
 					count: {
-						type: subtract
-						firstNumber: memory(spotCount)
-						secondNumber: 1
+						type: max
+						firstNumber: 0
+						secondNumber: {
+							type: subtract
+							firstNumber: memory(spotCount)
+							secondNumber: {
+								type: Conditional
+								requires: {
+									type: canSpot
+									filter: culture(gandalf),wizard,not(companion)
+								}
+								true: 0
+								false: 1
+							}
+						}
 					}
 				}
 			]

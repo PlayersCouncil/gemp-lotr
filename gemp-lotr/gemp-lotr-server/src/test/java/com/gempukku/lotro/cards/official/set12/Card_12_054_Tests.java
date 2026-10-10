@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_12_054_Tests
@@ -18,7 +19,23 @@ public class Card_12_054_Tests
 				new HashMap<>()
 				{{
 					put("card", "12_54");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetCultureScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("saruman", "12_54");
+					// Sam, Son of Hamfast: a [shire] companion beside the Ring-bearer, strength 3; his fellowship
+					// ability is not used
+					put("sam", "1_311");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a [gondor] companion, strength 8
+					put("bounder", "1_286");    // Bounder: a [shire] Hobbit who is an ally, strength 2
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -65,18 +82,45 @@ public class Card_12_054_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SarumanTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void NamingACultureMakesEachCompanionOfThatCultureStrengthMinus1() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetCultureScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var bounder = scn.GetFreepsCard("bounder");
+		scn.MoveCompanionsToTable(sam, aragorn);
+		scn.MoveAlliesToTable(bounder);
+
+		var saruman = scn.GetShadowCard("saruman");
+		scn.MoveCardsToHand(saruman);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
 
-		assertEquals(4, scn.GetTwilight());
+		// 10, and for the move 3 companions and the 2 of Ettenmoors
+		assertEquals(15, scn.GetTwilight());
+		// 3, and 1 for The Ruling Ring
+		assertEquals(4, scn.GetStrength(frodo));
+		assertEquals(3, scn.GetStrength(sam));
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertEquals(2, scn.GetStrength(bounder));
+
+		scn.ShadowPlayCard(saruman);
+		assertInZone(Zone.SHADOW_CHARACTERS, saruman);
+		assertTrue(scn.ShadowDecisionAvailable("Choose a culture"));
+		assertEquals(4, scn.GetStrength(frodo));
+
+		// Each [shire] companion is one less; the [gondor] companion and the [shire] ally are as they were.
+		scn.ShadowChooseOption("Shire");
+		assertEquals(3, scn.GetStrength(frodo));
+		assertEquals(2, scn.GetStrength(sam));
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertEquals(2, scn.GetStrength(bounder));
+		// 15 - 4, and 2 for roaming: his site number is 4 and the fellowship is at site 2
+		assertEquals(9, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

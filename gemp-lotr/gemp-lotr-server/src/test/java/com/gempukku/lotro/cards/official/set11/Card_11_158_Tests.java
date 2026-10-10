@@ -26,6 +26,31 @@ public class Card_11_158_Tests
 		);
 	}
 
+	protected VirtualTableScenario GetShadowDiscardScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("rack", "11_158");
+					put("guard", "5_83");       // Household Guard: [rohan] Man, vitality 3; Valiant is its whole text
+					// Heavy Chain: [rohan] armor possession, "Bearer must be a Man"; its text is about being
+					// overwhelmed
+					put("chain", "4_278");
+					// Rohirrim Shield: [rohan] shield possession on a [rohan] Man; its regroup ability is not used
+					put("shield", "5_91");
+					// Beyond the Height of Men: [isengard] Maneuver event, cost 2.  "Exert an Uruk-hai to discard
+					// an armor possession, helm possession, or shield possession (or all such Free Peoples
+					// possessions if you can spot 6 companions)."
+					put("height", "2_39");
+					// Uruk Scout: [isengard] Uruk-hai, vitality 2.  Its Response answers an event that spots or
+					// exerts a ranger, and nobody here is one.
+					put("scout", "2_47");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
 	protected VirtualTableScenario GetResponseScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
@@ -108,5 +133,50 @@ public class Card_11_158_Tests
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable(rack));
 		assertEquals(1, scn.GetWoundsOn(guard));
 		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+	}
+
+	@Test
+	public void ResponseStacksHereARohanPossessionThatHasJustBeenDiscardedFromPlay() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetShadowDiscardScenario();
+
+		var rack = scn.GetFreepsCard("rack");
+		var guard = scn.GetFreepsCard("guard");
+		var chain = scn.GetFreepsCard("chain");
+		var shield = scn.GetFreepsCard("shield");
+		scn.MoveCompanionsToTable(guard);
+		scn.AttachCardsTo(guard, chain, shield);
+		scn.MoveCardsToSupportArea(rack);
+
+		var height = scn.GetShadowCard("height");
+		var scout = scn.GetShadowCard("scout");
+		scn.MoveCardsToHand(height);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(scout);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+
+		assertAttachedTo(chain, guard);
+		assertAttachedTo(shield, guard);
+		assertEquals(0, scn.GetStackedCards(rack).size());
+		assertTrue(scn.ShadowPlayAvailable(height));
+
+		// The Scout is the one Uruk-hai and exerts with nothing asked; the Chain and the Shield are the two
+		// possessions the event could discard.
+		scn.ShadowPlayCard(height);
+		assertEquals(1, scn.GetWoundsOn(scout));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(chain, shield));
+		scn.ShadowChooseCard(chain);
+
+		// The Chain is in the discard pile already when its owner is offered the Response.
+		assertInZone(Zone.DISCARD, chain);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(rack));
+		scn.FreepsAcceptOptionalTrigger();
+
+		assertInZone(Zone.STACKED, chain);
+		assertEquals(1, scn.GetStackedCards(rack).size());
+		assertTrue(scn.GetStackedCards(rack).contains(chain));
+		assertAttachedTo(shield, guard);
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
 }

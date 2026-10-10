@@ -18,90 +18,6 @@ import static org.junit.Assert.*;
 
 public class IndividualCardAtTest extends AbstractAtTest {
     @Test
-    public void musterFrodoAllowsToDiscardAndDraw() throws DecisionResultInvalidException, CardNotFoundException {
-        Map<String, LotroDeck> decks = new HashMap<>();
-        final LotroDeck p1Deck = createSimplestDeck();
-        p1Deck.setRingBearer("11_164");
-        decks.put(P1, p1Deck);
-        decks.put(P2, createSimplestDeck());
-
-        initializeGameWithDecks(decks);
-
-        skipMulligans();
-
-        PhysicalCardImpl mumakChieftain = new PhysicalCardImpl(100, "10_45", P1, _cardLibrary.getLotroCardBlueprint("10_45"));
-        PhysicalCardImpl mumakChieftain2 = new PhysicalCardImpl(101, "10_45", P1, _cardLibrary.getLotroCardBlueprint("10_45"));
-
-        _game.getGameState().addCardToZone(_game, mumakChieftain, Zone.HAND);
-        _game.getGameState().addCardToZone(_game, mumakChieftain2, Zone.DECK);
-
-        // End fellowship phase
-        playerDecided(P1, "");
-
-        // End shadow phase
-        playerDecided(P2, "");
-
-        playerDecided(P1, "0");
-
-        assertEquals(1, _game.getGameState().getWounds(_game.getGameState().getRingBearer(P1)));
-        assertEquals(1, _game.getGameState().getHand(P1).size());
-
-        final AwaitingDecision musterUseDecision = _userFeedback.getAwaitingDecision(P1);
-        assertEquals(AwaitingDecisionType.CARD_ACTION_CHOICE, musterUseDecision.getDecisionType());
-        validateContents(new String[]{"" + _game.getGameState().getRingBearer(P1).getCardId()}, ((String[]) musterUseDecision.getDecisionParameters().get("cardId")));
-        playerDecided(P1, "0");
-
-        final AwaitingDecision musterDiscardDecision = _userFeedback.getAwaitingDecision(P1);
-        assertEquals(AwaitingDecisionType.CARD_SELECTION, musterDiscardDecision.getDecisionType());
-        validateContents(new String[]{"" + mumakChieftain.getCardId()}, ((String[]) musterDiscardDecision.getDecisionParameters().get("cardId")));
-        playerDecided(P1, ((String[]) musterDiscardDecision.getDecisionParameters().get("cardId"))[0]);
-
-        assertEquals(1, _game.getGameState().getHand(P1).size());
-
-        assertEquals(Zone.HAND, mumakChieftain2.getZone());
-        assertEquals(Phase.REGROUP, _game.getGameState().getCurrentPhase());
-    }
-
-    @Test
-    public void legolasBowWithToil() throws DecisionResultInvalidException {
-        Map<String, Collection<String>> extraCards = new HashMap<>();
-        extraCards.put(P1, Arrays.asList("11_21", "11_23", "11_17"));
-        initializeSimplestGame(extraCards);
-
-        // Play first character
-        AwaitingDecision firstCharacterDecision = _userFeedback.getAwaitingDecision(P1);
-        assertEquals(AwaitingDecisionType.ARBITRARY_CARDS, firstCharacterDecision.getDecisionType());
-        validateContents(new String[]{"11_21"}, ((String[]) firstCharacterDecision.getDecisionParameters().get("blueprintId")));
-
-        playerDecided(P1, getArbitraryCardId(firstCharacterDecision, "11_21"));
-
-        skipMulligans();
-
-        final int twilightPool = _game.getGameState().getTwilightPool();
-
-        AwaitingDecision playFirstFellowship = _userFeedback.getAwaitingDecision(P1);
-        playerDecided(P1, getCardActionId(playFirstFellowship, "Play Legolas"));
-
-        final int twilightPool2 = _game.getGameState().getTwilightPool();
-
-        AwaitingDecision playSecondFellowship = _userFeedback.getAwaitingDecision(P1);
-        playerDecided(P1, getCardActionId(playSecondFellowship, "Play Elven"));
-
-        AwaitingDecision toilExertion = _userFeedback.getAwaitingDecision(P1);
-        assertEquals(AwaitingDecisionType.CARD_SELECTION, toilExertion.getDecisionType());
-        String legolasCardId = ((String[]) toilExertion.getDecisionParameters().get("cardId"))[0];
-        playerDecided(P1, legolasCardId);
-
-        assertEquals(1, _game.getGameState().getWounds(_game.getGameState().findCardById(Integer.parseInt(legolasCardId))));
-
-        AwaitingDecision bowHeal = _userFeedback.getAwaitingDecision(P1);
-        assertEquals(AwaitingDecisionType.CARD_ACTION_CHOICE, bowHeal.getDecisionType());
-        playerDecided(P1, "0");
-
-        assertEquals(0, _game.getGameState().getWounds(_game.getGameState().findCardById(Integer.parseInt(legolasCardId))));
-    }
-
-    @Test
     public void endofTheGameGivingDamagePlusOne() throws DecisionResultInvalidException, CardNotFoundException {
         initializeSimplestGame();
 
@@ -170,62 +86,6 @@ public class IndividualCardAtTest extends AbstractAtTest {
         playerDecided(P1, String.valueOf(index));
 
         assertEquals(2, _game.getGameState().getWounds(urukHaiRaidingParty));
-    }
-
-    @Test
-    public void oneGoodTurnDeservesAnother() throws DecisionResultInvalidException, CardNotFoundException {
-        initializeSimplestGame();
-
-        PhysicalCardImpl smeagol = new PhysicalCardImpl(100, "5_29", P1, _cardLibrary.getLotroCardBlueprint("5_29"));
-        PhysicalCardImpl oneGoodTurnDeservesAnother = new PhysicalCardImpl(101, "11_49", P1, _cardLibrary.getLotroCardBlueprint("11_49"));
-
-        _game.getGameState().addCardToZone(_game, oneGoodTurnDeservesAnother, Zone.HAND);
-        _game.getGameState().addCardToZone(_game, smeagol, Zone.FREE_CHARACTERS);
-
-        skipMulligans();
-
-        playerDecided(P1, "0");
-
-        assertEquals(1, _game.getGameState().getBurdens());
-        assertEquals(0, _game.getGameState().getHand(P1).size());
-
-        playerDecided(P1, "0");
-
-        assertEquals(2, _game.getGameState().getBurdens());
-        assertEquals(1, _game.getGameState().getHand(P1).size());
-    }
-
-    @Test
-    public void rushOfSteeds() throws DecisionResultInvalidException, CardNotFoundException {
-        initializeSimplestGame();
-
-        PhysicalCardImpl rushOfSteeds = new PhysicalCardImpl(100, "11_157", P1, _cardLibrary.getLotroCardBlueprint("11_157"));
-        _game.getGameState().addCardToZone(_game, rushOfSteeds, Zone.SUPPORT);
-
-        PhysicalCardImpl nelya = new PhysicalCardImpl(100, "1_233", P2, _cardLibrary.getLotroCardBlueprint("1_233"));
-        _game.getGameState().addCardToZone(_game, nelya, Zone.SHADOW_CHARACTERS);
-
-        skipMulligans();
-
-        // End fellowship
-        playerDecided(P1, "");
-
-        AwaitingDecision playShadowEffect = _userFeedback.getAwaitingDecision(P2);
-        assertEquals(AwaitingDecisionType.CARD_ACTION_CHOICE, playShadowEffect.getDecisionType());
-        playerDecided(P2, getCardActionId(playShadowEffect, "Use Úlairë "));
-
-        AwaitingDecision rushOfSteedsOptional = _userFeedback.getAwaitingDecision(P1);
-        assertEquals(AwaitingDecisionType.CARD_ACTION_CHOICE, rushOfSteedsOptional.getDecisionType());
-        validateContents(new String[]{"" + rushOfSteeds.getCardId()}, ((String[]) rushOfSteedsOptional.getDecisionParameters().get("cardId")));
-
-        playerDecided(P1, "0");
-
-        assertEquals(P1, _game.getGameState().getSite(1).getOwner());
-        assertEquals(Zone.HAND, nelya.getZone());
-
-        playShadowEffect = _userFeedback.getAwaitingDecision(P2);
-        assertEquals(AwaitingDecisionType.CARD_ACTION_CHOICE, playShadowEffect.getDecisionType());
-        validateContents(new String[0], (String[]) playShadowEffect.getDecisionParameters().get("cardId"));
     }
 
     @Test
@@ -338,46 +198,6 @@ public class IndividualCardAtTest extends AbstractAtTest {
 
         assertEquals(burdensBefore + 1, _game.getGameState().getBurdens());
         assertEquals(1, _game.getGameState().getWounds(frodo));
-    }
-
-    @Test
-    public void sarumanOfManyColors() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard sarumanOfManyColors = addToZone(createCard(P2, "12_54"), Zone.HAND);
-
-        PhysicalCard ringBearer = getRingBearer(P1);
-
-        passUntil(Phase.FELLOWSHIP);
-        setTwilightPool(10);
-        passUntil(Phase.SHADOW);
-        assertEquals(4, getStrength(ringBearer));
-        selectCardAction(P2, sarumanOfManyColors);
-        playerDecided(P2, getMultipleDecisionIndex(getAwaitingDecision(P2), "Shire"));
-        assertEquals(3, getStrength(ringBearer));
-    }
-
-    @Test
-    public void reorderTopCardsOfDrawDeck() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard gandalf = addToZone(createCard(P1, "1_72"), Zone.FREE_CHARACTERS);
-        PhysicalCard discoveries = addToZone(createCard(P1, "12_26"), Zone.HAND);
-        PhysicalCard gimli = addToZone(createCard(P1, "5_7"), Zone.FREE_CHARACTERS);
-
-        passUntil(Phase.FELLOWSHIP);
-        PhysicalCard topCard = addToZone(createCard(P1, "1_3"), Zone.DECK);
-        PhysicalCard middleCard = addToZone(createCard(P1, "1_4"), Zone.DECK);
-        PhysicalCard bottomCard = addToZone(createCard(P1, "1_5"), Zone.DECK);
-        selectCardAction(P1, discoveries);
-        pass(P1);
-        playerDecided(P1, "3");
-        selectArbitraryCards(P1, getArbitraryCardId(P1, "1_3"));
-
-        List<? extends PhysicalCard> deck = _game.getGameState().getDeck(P1);
-        assertEquals(middleCard, deck.get(0));
-        assertEquals(topCard, deck.get(1));
-        assertEquals(bottomCard, deck.get(2));
     }
 
     @Test

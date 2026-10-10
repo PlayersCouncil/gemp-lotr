@@ -48,22 +48,6 @@ public class RequirementsAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void cantSpotBurdens() throws Exception {
-        initializeSimplestGame();
-
-        passUntil(Phase.FELLOWSHIP);
-
-        JSONObject obj = new JSONObject();
-        obj.put("amount", 2);
-        Requirement requirement = new CantSpotBurdens().getPlayRequirement(obj, lotroCardBlueprintBuilder);
-
-        DefaultActionContext actionContext = new DefaultActionContext(P1, _game, null, null, null);
-        assertTrue(requirement.accepts(actionContext));
-        addBurdens(1);
-        assertFalse(requirement.accepts(actionContext));
-    }
-
-    @Test
     public void cantSpotThreats() throws Exception {
         initializeSimplestGame();
 

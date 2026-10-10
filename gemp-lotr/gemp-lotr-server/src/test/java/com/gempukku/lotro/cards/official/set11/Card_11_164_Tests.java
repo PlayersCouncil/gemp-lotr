@@ -8,7 +8,9 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class Card_11_164_Tests
@@ -19,10 +21,23 @@ public class Card_11_164_Tests
 				new HashMap<>()
 				{{
 					put("card", "11_164");
-					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetRingBearerScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("guard", "1_7");        // Dwarf Guard and Axe Strike: the two cards in hand
+					put("strike", "1_3");
+					put("armor", "1_8");        // Dwarven Armor: the top card of the draw deck
+				}},
+				VirtualTableScenario.FellowshipSites,
+				"11_164",                       // Frodo, Protected by Many, as the Ring-bearer
 				VirtualTableScenario.RulingRing
 		);
 	}
@@ -64,18 +79,46 @@ public class Card_11_164_Tests
 		assertEquals(10, card.getBlueprint().getResistance());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void FrodoTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	// CR 4.2 "muster" acts "at the start of the regroup phase", which is when Frodo gains it: the keyword he has
+	// just gained must still be offered in that phase, or his text does nothing.
+	@Test
+	public void MusterGainedAtTheStartOfRegroupIsUsedInThatSameRegroupPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetRingBearerScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var frodo = scn.GetRingBearer();
+		var guard = scn.GetFreepsCard("guard");
+		var strike = scn.GetFreepsCard("strike");
+		var armor = scn.GetFreepsCard("armor");
+		scn.MoveCardsToHand(guard, strike);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveCardsToTopOfDeck(armor);
+		// No minion is in play: nothing is done between the fellowship phase and the regroup phase.
+		scn.SkipToPhase(Phase.REGROUP);
 
-		assertEquals(0, scn.GetTwilight());
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertFalse(scn.HasKeyword(frodo, Keyword.MUSTER));
+		assertEquals(2, scn.GetFreepsHandCount());
+		assertEquals(armor, scn.GetFreepsTopOfDeck());
+		// Frodo's own offer, and none of muster yet: he has not the keyword.
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(frodo));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable("Use Muster"));
+
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertTrue(scn.HasKeyword(frodo, Keyword.MUSTER));
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(frodo, "Use Muster"));
+		scn.FreepsAcceptOptionalTrigger();
+		// One muster character: no card or one.
+		assertEquals(0, scn.FreepsGetChoiceMin());
+		assertEquals(1, scn.FreepsGetChoiceMax());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(guard, strike));
+
+		scn.FreepsChooseCard(guard);
+		assertInZone(Zone.DISCARD, guard);
+		assertInZone(Zone.HAND, strike, armor);
+		assertEquals(2, scn.GetFreepsHandCount());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }

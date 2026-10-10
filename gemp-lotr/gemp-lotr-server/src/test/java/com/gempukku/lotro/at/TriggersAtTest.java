@@ -262,26 +262,6 @@ public class TriggersAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void discardedFromPlay() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard swordRack = addToZone(createCard(P1, "11_158"), Zone.SUPPORT);
-        PhysicalCard beyondTheHeightOfMen = addToZone(createCard(P2, "2_39"), Zone.HAND);
-        PhysicalCard urukScout = addToZone(createCard(P2, "2_47"), Zone.SHADOW_CHARACTERS);
-
-        PhysicalCard ringBearer = getRingBearer(P1);
-        PhysicalCard heavyChain = attachTo(createCard(P1, "4_278"), ringBearer);
-
-        passUntil(Phase.MANEUVER);
-        pass(P1);
-        assertEquals(Zone.ATTACHED, heavyChain.getZone());
-        selectCardAction(P2, beyondTheHeightOfMen);
-        assertEquals(Zone.DISCARD, heavyChain.getZone());
-        selectCardAction(P1, swordRack);
-        assertEquals(Zone.STACKED, heavyChain.getZone());
-    }
-
-    @Test
     public void afterAllSkirmishes() throws Exception {
         initializeSimplestGame();
 

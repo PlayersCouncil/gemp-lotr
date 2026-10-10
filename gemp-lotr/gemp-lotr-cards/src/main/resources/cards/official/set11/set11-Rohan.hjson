@@ -683,6 +683,10 @@
 					type: played
 					filter: side(shadow),condition
 				}
+				requires: {
+					type: canSpot
+					filter: minion,canExert
+				}
 				effect: {
 					type: exert
 					select: choose(minion)

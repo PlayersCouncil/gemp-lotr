@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_12_031_Tests
@@ -18,7 +19,23 @@ public class Card_12_031_Tests
 				new HashMap<>()
 				{{
 					put("card", "12_31");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetSkirmishScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("wizard1", "12_31");
+					put("wizard2", "12_31");
+					// Gandalf, Friend of the Shirefolk: strength 6, and +1 for each of Hobbit, Dwarf, Elf and Man
+					// among the companions: 7 beside the Ring-bearer alone
+					put("gandalf", "1_72");
+					put("troop", "1_177");      // Goblin Patrol Troop: a minion with no text
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -56,18 +73,44 @@ public class Card_12_031_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void MysteriousWizardTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void MakesGandalfStrengthPlus4WithFourBurdensAndPlus2WithFive() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetSkirmishScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var wizard1 = scn.GetFreepsCard("wizard1");
+		var wizard2 = scn.GetFreepsCard("wizard2");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCardsToHand(wizard1, wizard2);
+
+		var troop = scn.GetShadowCard("troop");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(troop);
+		scn.AddBurdens(4);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gandalf, troop);
+		scn.FreepsResolveSkirmish(gandalf);
 
-		assertEquals(2, scn.GetTwilight());
+		assertEquals(4, scn.GetBurdens());
+		// 6, and 1 for the Hobbit who bears the Ring
+		assertEquals(7, scn.GetStrength(gandalf));
+
+		// Four burdens: five cannot be spotted.
+		scn.FreepsPlayCard(wizard1);
+		// 7 + 4
+		assertEquals(11, scn.GetStrength(gandalf));
+		assertInZone(Zone.DISCARD, wizard1);
+
+		// The fifth burden, and the second copy in the same skirmish.
+		scn.ShadowPass();
+		scn.AddBurdens(1);
+		assertEquals(5, scn.GetBurdens());
+
+		scn.FreepsPlayCard(wizard2);
+		// 7 + 4 + 2
+		assertEquals(13, scn.GetStrength(gandalf));
+		assertInZone(Zone.DISCARD, wizard2);
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
 }
