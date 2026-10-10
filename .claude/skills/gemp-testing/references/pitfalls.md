@@ -1103,10 +1103,12 @@ hindered (`mechanics/TheOneRingIsNeverDiscardedTests`).
 **No cheat puts The One Ring on: the Ring's own text does, and which Ring decides how.** `GreatRing` (19_1) is
 put on by its own Maneuver action at no cost (`FreepsUseCardAction(scn.GetRing())`, Card_V2_065_Tests) and
 `ATARRing` (4_1) by a Skirmish action for a burden; `RulingRing` (1_2) and `IsildursBaneRing` (1_1) only in
-answer to a wound (1_2: a wound in a skirmish), so a test with one of those lays an archer (Goblin Marksman
-1_176), accepts the Ring's offer in the archery phase and leaves the archer out of the assignments with
-`ShadowDeclineAssignments()` (Card_02_108_Tests). `RBWearingOneRing()` reads it; every one comes off at the
-regroup phase.
+answer to a wound. `IsildursBaneRing` answers a wound in any phase, so a test with it lays an archer (Goblin
+Marksman 1_176), accepts the Ring's offer in the archery phase and leaves the archer out of the assignments with
+`ShadowDeclineAssignments()` (Card_02_108_Tests). `RulingRing` answers a wound in a skirmish and no other (an
+archery wound offers nothing): the Ring-bearer loses a skirmish, or Orc Soldier 1_271 wounds him in one, and the
+offer is accepted there (Card_01_002_Tests). `RBWearingOneRing()` reads it; every one comes off at the regroup
+phase (1_1 put on IN a regroup phase: at the end of that phase).
 
 **Maps and meta-sites cannot be hindered,** as sites cannot: a hinder of "a card" on a PC-Movie or Race to
 Mount Doom table does not offer them (`mechanics/MapsAndMetaSitesCannotBeHinderedTests`). The cheat

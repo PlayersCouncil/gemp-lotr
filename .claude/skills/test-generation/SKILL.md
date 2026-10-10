@@ -304,7 +304,7 @@ C2 Trigger    [+ F R]    At the start of each of your turns, heal every ally who
 
 The conformance check accepts it and counts it, and the reviewer reads every one. It is for a check that cannot
 be shown at all, not for one that is awkward to arrange. A `no` line's reason may run on to the lines below it.
-Where the reason, or a line in Notes, is that no printed card makes the board, it names the search of the
+Where the reason, or a line in Notes or `Dropped:`, is that no printed card makes the board, it names the search of the
 `gametext:` lines that found none, made for the shape of words wanted ("wound a companion") and not for one card.
 The Hobbit sets (30 to 33) have no `gametext:` lines: search their definitions by field as well (`race:`, `type:`,
 `itemclass:`) before saying none exists (67_24: Glamdring 30_29, an artifact hand weapon, was missed that way).
