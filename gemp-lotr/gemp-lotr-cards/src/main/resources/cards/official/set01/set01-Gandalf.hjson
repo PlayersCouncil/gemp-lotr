@@ -676,7 +676,7 @@
 					type: PutCardsFromDeckIntoHand
 					count: 2
 					select: choose(memory(cardsOnTop))
-					reveal: true
+					reveal: false
 					shuffle: false
 					showAll: false
 				}
@@ -736,7 +736,7 @@
 					type: PutCardsFromDeckIntoHand
 					count: 1
 					select: choose(memory(cardsOnTop))
-					reveal: true
+					reveal: false
 					shuffle: false
 					showAll: false
 				}
