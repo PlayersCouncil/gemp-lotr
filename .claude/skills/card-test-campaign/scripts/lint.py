@@ -4,6 +4,11 @@
     lint.py <what...>               what is a blueprint id, a test file, or a selector (set:1, seg:vset, ...)
     lint.py <what...> --quiet       one line per file
     lint.py --summary <what...>     counts only, by rule
+    lint.py --form <file.java> [--only <Test,Test>]
+                                    only the rules about how a test is written (bookend, reach, exception, adhoc,
+                                    assert, ignore, style, helper, scenario, in-file, alias, same-blueprint), for a
+                                    mechanics class or a card's file that has no ledger yet; with --only, only what
+                                    lies inside the tests named (a lone test added to an old file)
 
 Exit status is 0 when every file given is free of errors.  Warnings do not fail a file.
 
@@ -631,7 +636,17 @@ def lint_file(path: Path):
     return out, lets_off
 
 
+# The rules that are about how a test is written, whatever file it is in (--form).
+FORM_RULES = {"bookend", "reach", "exception", "adhoc", "assert", "ignore", "style", "helper", "scenario", "in-file", "alias",
+              "same-blueprint"}
+
+
 def main(argv):
+    only = set()
+    if "--only" in argv:
+        i = argv.index("--only")
+        only = set(argv[i + 1].split(","))
+        argv = argv[:i] + argv[i + 2:]
     args = [a for a in argv[1:] if not a.startswith("--")]
     if not args:
         print(__doc__)
@@ -641,7 +656,7 @@ def main(argv):
     for a in args:
         p = Path(a)
         if a.endswith(".java"):
-            files.append(p if p.is_file() else g.REPO / a)
+            files.append(p.resolve() if p.is_file() else g.REPO / a)
         else:
             for card_id in g.resolve_ids([a]):
                 if card_id in tests:
@@ -649,6 +664,15 @@ def main(argv):
     failed, by_rule, total_off = 0, {}, 0
     for f in files:
         findings, lets_off = lint_file(f)
+        if "--form" in argv:
+            findings = [x for x in findings if x.rule in FORM_RULES]
+            if only:
+                methods, _ = split_methods(f.read_text(encoding="utf-8", errors="replace").replace("\r", "").split("\n"))
+                spans = [(start + 1, end + 1) for name, start, end, above, ret in methods if name in only]
+                findings = [x for x in findings if any(a <= x.line <= b for a, b in spans)]
+                missing = only - {m[0] for m in methods}
+                if missing:
+                    print("no such test in %s: %s" % (f.name, ", ".join(sorted(missing))))
         total_off += lets_off
         errors = [x for x in findings if x.level == "error"]
         warnings = [x for x in findings if x.level == "warning"]
