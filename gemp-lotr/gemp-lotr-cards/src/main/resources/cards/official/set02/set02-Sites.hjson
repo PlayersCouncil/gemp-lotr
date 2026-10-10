@@ -211,7 +211,8 @@
 			optional: true
 			trigger: {
 				type: movesTo
-				filter: self
+				# "to Valley of the Silverlode" names the site: a card that has this text (Uruviel) answers the same move.
+				filter: name(Valley of the Silverlode)
 			}
 			effect: {
 				type: heal

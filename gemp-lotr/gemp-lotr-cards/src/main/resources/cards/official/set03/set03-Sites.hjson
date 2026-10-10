@@ -160,7 +160,8 @@
 			optional: true
 			trigger: {
 				type: movesTo
-				filter: self
+				# "to House of Elrond" names the site: a card that has this text (Silinde) answers the same move.
+				filter: name(House of Elrond)
 			}
 			player: fp
 			requires: {
