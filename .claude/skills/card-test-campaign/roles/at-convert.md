@@ -61,14 +61,16 @@ as it takes, and say in your report which of your tests stand for which name of 
    reach (no card given a race, culture or type it cannot have; never two cards of one unique title in play; no
    Frodo beside a Ring-bearer who is not Frodo); no test that relies on an exception; a name that says what is
    shown (take the directive's unless it is wrong). Each scenario is a `Get...Scenario()` method of the class.
-   - **In a `mechanics/` class** (read two that are there for the manner, `RuleOfFourTests` and one of the
-     `Hindered...Tests`): the class comment cites the rules passage the class is about; the cards are plain
+   - **In a `mechanics/` class** (read two that are there for the manner, `HinderedSourceTests` and one this
+     conversion has landed, such as `ToilTests`; not every older class passes `lint.py --form`): the class comment cites the rules passage the class is about; the cards are plain
      Decipher cards whose own behaviour is not in question; there is no ledger. Where the class exists, your
      tests join it and its comment is widened if they widen its subject. `lint.py --form <the file>` must pass.
    - **In a card's file** (`Card_<set>_<number>_Tests`): the file is there already, usually holding only the
      stats test and the skeleton's placeholders. Add your test and its scenario; take the skeleton's placeholder
      method and its "put other cards in here" note out when you add the first real test; touch nothing else
-     (not the stats test, not its header). No ledger, no landing: this is a kickstart.
+     (not the stats test, not its header; a test you park needs `import org.junit.Ignore;` added to the
+     skeleton's imports, and the skeleton's commented-out sample test may go with its placeholder). No ledger, no
+     landing: this is a kickstart.
      `lint.py --form <the file> --only <YourTest,YourOtherTest>` must pass. A file the batch marks NEW FILE is
      made in the manner of its neighbours (for a Hobbit-set card the batch file says how).
 3. **Run it**: `python3 .claude/skills/card-test-campaign/scripts/cardtest.py run <the file> --out <your folder>`.
