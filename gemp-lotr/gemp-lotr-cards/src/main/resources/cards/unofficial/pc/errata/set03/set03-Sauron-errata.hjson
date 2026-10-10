@@ -1,7 +1,7 @@
 {
 	53_87: {
 		cardInfo: {
-			//id: 3_87.1
+			//id: 53_87.1
 			parent: 3_87
 			variant: ERRATA
 			variantPath: errata/pc
@@ -12,10 +12,11 @@
 		}
 		title: The Dark Lord Advances
 		unique: false
-		culture: sauron
+		side: Shadow
+		culture: Sauron
 		twilight: 2
-		type: event
-		timeword: regroup
+		type: Event
+		timewords: Regroup
 		effects: {
 			type: event
 			cost: {
@@ -94,7 +95,7 @@
 	
 	53_88: {
 		cardInfo: {
-			//id: 3_88.1
+			//id: 53_88.1
 			parent: 3_88
 			variant: ERRATA
 			variantPath: errata/pc
@@ -105,12 +106,13 @@
 		}
 		title: Get Off the Road!
 		unique: false
-		culture: sauron
+		side: Shadow
+		culture: Sauron
 		twilight: 0
-		type: event
-		timeword: maneuver
-		keyword: [
-			search
+		type: Event
+		timewords: Maneuver
+		keywords: [
+			Search
 		]
 		effects: {
 			type: event
@@ -242,7 +244,7 @@
 	
 	53_90: {
 		cardInfo: {
-			//id: 3_90.2
+			//id: 53_90.2
 			parent: 3_90
 			variant: ERRATA
 			variantPath: errata/pc
@@ -257,7 +259,7 @@
 		culture: Sauron
 		twilight: 0
 		type: Event
-		timeword: maneuver
+		timewords: Maneuver
 		effects: {
 			type: event
 			requires: {
@@ -318,7 +320,7 @@
 	
 	53_91: {
 		cardInfo: {
-			//id: 3_91.1
+			//id: 53_91.1
 			parent: 3_91
 			variant: ERRATA
 			variantPath: errata/pc
@@ -329,10 +331,11 @@
 		}
 		title: His Cruelty and Malice
 		unique: false
-		culture: sauron
+		side: Shadow
+		culture: Sauron
 		twilight: 1
-		type: condition
-		keyword: [
+		type: Condition
+		keywords: [
 			Support Area
 		]
 		effects: {
@@ -402,7 +405,7 @@
 	
 	53_92: {
 		cardInfo: {
-			//id: 3_92.1
+			//id: 53_92.1
 			parent: 3_92
 			variant: ERRATA
 			variantPath: errata/pc
@@ -413,10 +416,11 @@
 		}
 		title: Massing in the East
 		unique: false
-		culture: sauron
+		side: Shadow
+		culture: Sauron
 		twilight: 1
-		type: event
-		timeword: regroup
+		type: Event
+		timewords: Regroup
 		effects: {
 			type: event
 			cost: {
@@ -725,7 +729,7 @@
 	
 	53_103: {
 		cardInfo: {
-			//id: 3_103.4
+			//id: 53_103.4
 			parent: 3_103
 			variant: ERRATA
 			variantPath: errata/pc
@@ -780,7 +784,7 @@
 	
 	53_104: {
 		cardInfo: {
-			//id: 3_104.1
+			//id: 53_104.1
 			parent: 3_104
 			variant: ERRATA
 			variantPath: errata/pc
@@ -791,10 +795,11 @@
 		}
 		title: Tower of Barad-dur
 		unique: false
-		culture: sauron
+		side: Shadow
+		culture: Sauron
 		twilight: 1
-		type: condition
-		keyword: [
+		type: Condition
+		keywords: [
 			Support Area
 		]
 		

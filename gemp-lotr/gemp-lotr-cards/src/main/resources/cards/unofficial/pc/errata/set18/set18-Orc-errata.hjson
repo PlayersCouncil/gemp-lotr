@@ -13,10 +13,11 @@
 		}
 		title: Frenzy of Arrows
 		unique: false
+		side: Shadow
 		culture: Orc
 		twilight: 2
 		type: Event
-		timeword: archery
+		timewords: Archery
 		effects: {
 			type: event
 			effect: [
@@ -62,10 +63,11 @@
 		title: Grond
 		subtitle: Forged With Black Steel
 		unique: true
+		side: Shadow
 		culture: Orc
 		twilight: 3
-		type: possession
-		keyword: [
+		type: Possession
+		keywords: [
 			Support Area
 		]
 		effects: [

@@ -14,16 +14,17 @@
 		title: Faramir
 		subtitle: Captain of Ithilien
 		unique: true
-		culture: gondor
+		side: Free Peoples
+		culture: Gondor
 		twilight: 3
-		type: companion
-		race: man
+		type: Companion
+		race: Man
 		strength: 7
 		vitality: 3
 		resistance: 7
-		keyword: [
-			ranger
-			hunter+2
+		keywords: [
+			Ranger
+			Hunter+2
 		]
 		effects: [
 			{
@@ -77,10 +78,11 @@
 		}
 		title: The Faithful Stone
 		unique: true
+		side: Free Peoples
 		culture: Gondor
 		twilight: 3
 		type: Condition
-		keyword: [
+		keywords: [
 			Support Area
 			Tale
 		]

@@ -146,7 +146,7 @@
 	
 	57_256: {
 		cardInfo: {
-			//id: 7_256.1
+			//id: 57_256.1
 			parent: 7_256
 			variant: ERRATA
 			variantPath: errata/pc
@@ -156,10 +156,12 @@
 			rarity: C
 		}
 		title: They Sang as They Slew
-		culture: rohan
+		unique: false
+		side: Free Peoples
+		culture: Rohan
 		twilight: 1
-		type: event
-		timeword: regroup
+		type: Event
+		timewords: Regroup
 		effects: {
 			type: event
 			cost: {

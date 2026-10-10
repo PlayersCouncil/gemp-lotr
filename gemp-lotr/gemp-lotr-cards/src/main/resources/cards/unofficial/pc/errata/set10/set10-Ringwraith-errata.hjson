@@ -19,7 +19,7 @@
 		twilight: 6
 		type: Minion
 		race: Nazgul
-		keyword: enduring
+		keywords: Enduring
 		strength: 11
 		vitality: 4
 		site: 3

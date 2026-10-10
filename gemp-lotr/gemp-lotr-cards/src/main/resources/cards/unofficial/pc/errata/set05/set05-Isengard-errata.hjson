@@ -141,7 +141,7 @@
 	
 	55_57: {
 		cardInfo: {
-			//id: 5_57.1
+			//id: 55_57.1
 			parent: 5_57
 			variant: ERRATA
 			variantPath: errata/pc
@@ -152,12 +152,13 @@
 		}
 		title: Scaling Ladder
 		unique: false
-		culture: isengard
+		side: Shadow
+		culture: Isengard
 		twilight: 0
-		type: condition
-		keyword: [
-			support area
-			machine
+		type: Condition
+		keywords: [
+			Support Area
+			Machine
 		]
 		effects: [
 			{

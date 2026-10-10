@@ -59,7 +59,7 @@
 
 	51_234: {
 		cardInfo: {
-			//id: 1_234.1
+			//id: 51_234.1
 			parent: 1_234
 			variant: ERRATA
 			variantPath: errata/pc
@@ -71,10 +71,11 @@
 		title: Úlairë Nertëa
 		subtitle: Messenger of Dol Guldur
 		unique: true
-		culture: wraith
+		side: Shadow
+		culture: Wraith
 		twilight: 4
-		type: minion
-		race: nazgul
+		type: Minion
+		race: Nazgul
 		strength: 9
 		vitality: 2
 		site: 3

@@ -12,10 +12,11 @@
 		}
 		title: Little Golden Flower
 		unique: true
-		culture: shire
+		side: Free Peoples
+		culture: Shire
 		twilight: 3
-		type: condition
-		keyword: [
+		type: Condition
+		keywords: [
 			Support Area
 		]
 		effects: [

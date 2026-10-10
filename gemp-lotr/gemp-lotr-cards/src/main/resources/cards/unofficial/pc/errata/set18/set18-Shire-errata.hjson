@@ -12,10 +12,11 @@
 		}
 		title: Prized Lagan
 		unique: false
+		side: Free Peoples
 		culture: Shire
 		twilight: 0
 		type: Condition
-		keyword: [
+		keywords: [
 			Support Area
 		]
 		effects:[
@@ -92,9 +93,10 @@
 		title: Robin Smallburrow
 		subtitle: Shirriff Cock-Robin
 		unique: true
-		culture: shire
+		side: Free Peoples
+		culture: Shire
 		twilight: 2
-		type: follower
+		type: Follower
 		resistance: 1
 		effects: [
 			{
@@ -153,10 +155,11 @@
 		}
 		title: Scouring of the Shire
 		unique: true
+		side: Free Peoples
 		culture: Shire
 		twilight: 1
 		type: Condition
-		keyword: [
+		keywords: [
 			Support Area
 			Tale
 		]

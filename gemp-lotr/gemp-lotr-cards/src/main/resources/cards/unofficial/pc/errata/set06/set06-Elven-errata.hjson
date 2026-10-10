@@ -1,7 +1,7 @@
 {
 	56_16: {
 		cardInfo: {
-			//id: 6_16.1
+			//id: 56_16.1
 			parent: 6_16
 			variant: ERRATA
 			variantPath: errata/pc
@@ -16,7 +16,7 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
 			cost: {
@@ -66,7 +66,7 @@
 	
 	56_22: {
 		cardInfo: {
-			//id: 6_22.1
+			//id: 56_22.1
 			parent: 6_22
 			variant: ERRATA
 			variantPath: errata/pc
@@ -137,7 +137,7 @@
 
 	56_23: {
 		cardInfo: {
-			//id: 6_23.1
+			//id: 56_23.1
 			parent: 6_23
 			variant: ERRATA
 			variantPath: errata/pc

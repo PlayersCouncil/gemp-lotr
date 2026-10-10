@@ -59,10 +59,11 @@
 		}
 		title: Galadriel's Silver Ewer
 		unique: true
-		culture: elven
+		side: Free Peoples
+		culture: Elven
 		twilight: 2
-		type: artifact
-		keyword: support area
+		type: Artifact
+		keywords: Support Area
 		effects: [
 			{
 				type: toPlay
@@ -139,9 +140,9 @@
 		title: Gil-galad
 		subtitle: High King of the Noldor
 		unique: true
-		side: free_people
+		side: Free Peoples
 		culture: Elven
-		type: companion
+		type: Companion
 		race: Elf
 		twilight: 5
 		strength: 9

@@ -1,7 +1,7 @@
 {
 	51_331: {
 		cardInfo: {
-			//id: 1_331.1
+			//id: 51_331.1
 			parent: 1_331
 			variant: ERRATA
 			variantPath: errata/pc
@@ -46,7 +46,7 @@
 	
 	51_333: {
 		cardInfo: {
-			//id: 1_333.1
+			//id: 51_333.1
 			parent: 1_333
 			variant: ERRATA
 			variantPath: errata/pc
@@ -56,12 +56,13 @@
 			rarity: U
 		}
 		title: Midgewater Moors
+		unique: false
 		twilight: 1
-		type: site
+		type: Site
 		site: 2
-		block: fellowship
-		keyword: plains
-		direction: left
+		block: Fellowship
+		keywords: Plains
+		direction: Left
 		effects: {
 			type: Trigger
 			optional: false

@@ -13,6 +13,7 @@
 		}
 		title: Erkenbrand's Horn
 		unique: true
+		side: Free Peoples
 		culture: Rohan
 		twilight: 1
 		type: Possession

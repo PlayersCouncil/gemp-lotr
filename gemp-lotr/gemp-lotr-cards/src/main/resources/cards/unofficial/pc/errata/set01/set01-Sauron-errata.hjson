@@ -1,7 +1,7 @@
 {
 	51_240: {
 		cardInfo: {
-			//id: 1_240.1
+			//id: 51_240.1
 			parent: 1_240
 			variant: ERRATA
 			variantPath: errata/pc
@@ -11,10 +11,12 @@
 			rarity: R
 		}
 		title: Band of the Eye
-		culture: sauron
+		unique: false
+		side: Shadow
+		culture: Sauron
 		twilight: 4
-		type: minion
-		race: orc
+		type: Minion
+		race: Orc
 		strength: 12
 		vitality: 3
 		site: 6
@@ -59,7 +61,7 @@
 	
 	51_245: {
 		cardInfo: {
-			//id: 1_245.1
+			//id: 51_245.1
 			parent: 1_245
 			variant: ERRATA
 			variantPath: errata/pc
@@ -69,10 +71,12 @@
 			rarity: R
 		}
 		title: Desperate Measures
-		culture: sauron
+		unique: false
+		side: Shadow
+		culture: Sauron
 		twilight: 2
-		type: event
-		timeword: maneuver
+		type: Event
+		timewords: Maneuver
 		effects: {
 			type: event
 			requires: {
@@ -120,7 +124,7 @@
 	
 	51_248: {
 		cardInfo: {
-			//id: 1_248.1
+			//id: 51_248.1
 			parent: 1_248
 			variant: ERRATA
 			variantPath: errata/pc
@@ -130,10 +134,12 @@
 			rarity: C
 		}
 		title: Forces of Mordor
-		culture: sauron
+		unique: false
+		side: Shadow
+		culture: Sauron
 		twilight: 0
-		type: event
-		timeword: shadow
+		type: Event
+		timewords: Shadow
 		effects: {
 			type: event
 			cost: {
@@ -162,7 +168,7 @@
 	
 	51_252: {
 		cardInfo: {
-			//id: 1_252.1
+			//id: 51_252.1
 			parent: 1_252
 			variant: ERRATA
 			variantPath: errata/pc
@@ -173,10 +179,11 @@
 		}
 		title: The Irresistible Shadow
 		unique: true
-		culture: sauron
+		side: Shadow
+		culture: Sauron
 		twilight: 0
-		type: condition
-		keyword: support area
+		type: Condition
+		keywords: Support Area
 		effects: [
 			{
 				type: extraCost
@@ -226,7 +233,7 @@
 	
 	51_254: {
 		cardInfo: {
-			//id: 1_254.1
+			//id: 51_254.1
 			parent: 1_254
 			variant: ERRATA
 			variantPath: errata/pc
@@ -236,9 +243,11 @@
 			rarity: R
 		}
 		title: Mordor Enraged
-		culture: sauron
+		unique: false
+		side: Shadow
+		culture: Sauron
 		twilight: 1
-		type: condition
+		type: Condition
 		target: archer,companion
 		effects: [
 			{
@@ -324,7 +333,7 @@
 	
 	51_265: {
 		cardInfo: {
-			//id: 1_265.1
+			//id: 51_265.1
 			parent: 1_265
 			variant: ERRATA
 			variantPath: errata/pc
@@ -334,10 +343,12 @@
 			rarity: R
 		}
 		title: Orc Butchery
-		culture: sauron
+		unique: false
+		side: Shadow
+		culture: Sauron
 		twilight: 0
-		type: event
-		timeword: response
+		type: Event
+		timewords: Response
 		effects: [
 			{
 				type: responseEvent
@@ -432,7 +443,7 @@
 	
 	51_268: {
 		cardInfo: {
-			//id: 1_268.1
+			//id: 51_268.1
 			parent: 1_268
 			variant: ERRATA
 			variantPath: errata/pc
@@ -442,10 +453,12 @@
 			rarity: C
 		}
 		title: Orc Inquisitor
-		culture: sauron
+		unique: false
+		side: Shadow
+		culture: Sauron
 		twilight: 3
-		type: minion
-		race: orc
+		type: Minion
+		race: Orc
 		strength: 9
 		vitality: 3
 		site: 6
@@ -484,7 +497,7 @@
 	
 	51_280: {
 		cardInfo: {
-			//id: 1_280.1
+			//id: 51_280.1
 			parent: 1_280
 			variant: ERRATA
 			variantPath: errata/pc
@@ -495,10 +508,11 @@
 		}
 		title: Tower Lieutenant
 		unique: true
-		culture: sauron
+		side: Shadow
+		culture: Sauron
 		twilight: 4
-		type: minion
-		race: orc
+		type: Minion
+		race: Orc
 		strength: 10
 		vitality: 3
 		site: 6
@@ -550,7 +564,7 @@
 
 	51_282: {
 		cardInfo: {
-			//id: 1_282.1
+			//id: 51_282.1
 			parent: 1_282
 			variant: ERRATA
 			variantPath: errata/pc
@@ -560,9 +574,11 @@
 			rarity: R
 		}
 		title: The Weight of a Legacy
-		culture: sauron
+		unique: false
+		side: Shadow
+		culture: Sauron
 		twilight: 0
-		type: condition
+		type: Condition
 		strength: -1
 		target: culture(gondor),companion,not(hasAttached(name(The Weight of a Legacy)))
 		effects: [

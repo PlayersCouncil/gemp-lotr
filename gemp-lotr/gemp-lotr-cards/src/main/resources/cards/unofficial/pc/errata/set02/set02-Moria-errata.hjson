@@ -1,7 +1,7 @@
 {
 	52_59: {
 		cardInfo: {
-			//id: 2_59.1
+			//id: 52_59.1
 			parent: 2_59
 			variant: ERRATA
 			variantPath: errata/pc
@@ -11,10 +11,12 @@
 			rarity: U
 		}
 		title: Foul Things
-		culture: moria
+		unique: false
+		side: Shadow
+		culture: Moria
 		twilight: 2
-		type: event
-		timeword: shadow
+		type: Event
+		timewords: Shadow
 		effects: {
 			type: event
 			effect: {

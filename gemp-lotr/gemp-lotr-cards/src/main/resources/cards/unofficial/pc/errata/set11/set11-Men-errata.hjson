@@ -12,10 +12,12 @@
 			rarity: R
 		}
 		title: Strange-looking Men
-		culture: men
+		unique: false
+		side: Shadow
+		culture: Men
 		twilight: 4
-		type: minion
-		race: man
+		type: Minion
+		race: Man
 		strength: 10
 		vitality: 2
 		site: 4

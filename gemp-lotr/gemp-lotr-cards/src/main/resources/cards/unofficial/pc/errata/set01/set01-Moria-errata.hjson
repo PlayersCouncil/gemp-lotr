@@ -168,7 +168,7 @@
 	# }
 	51_177: {
 		cardInfo: {
-			//id: 1_177.2
+			//id: 51_177.2
 			parent: 1_177
 			variant: ERRATA
 			variantPath: errata/pc
@@ -214,7 +214,7 @@
 	
 	51_195: {
 		cardInfo: {
-			//id: 1_195.1
+			//id: 51_195.1
 			parent: 1_195
 			variant: ERRATA
 			variantPath: errata/pc
@@ -225,10 +225,11 @@
 		}
 		title: Relics of Moria
 		unique: true
-		culture: moria
+		side: Shadow
+		culture: Moria
 		twilight: 1
-		type: condition
-		keyword: support area
+		type: Condition
+		keywords: Support Area
 		effects: {
 			type: activated
 			phase: shadow
@@ -255,7 +256,7 @@
 	
 	51_198: {
 		cardInfo: {
-			//id: 1_198.1
+			//id: 51_198.1
 			parent: 1_198
 			variant: ERRATA
 			variantPath: errata/pc
@@ -265,12 +266,14 @@
 			rarity: U
 		}
 		title: Through the Misty Mountains
-		culture: moria
+		unique: false
+		side: Shadow
+		culture: Moria
 		twilight: 1
-		type: condition
-		keyword: [
-			search
-			support area
+		type: Condition
+		keywords: [
+			Search
+			Support Area
 		]
 		effects: [
 			{

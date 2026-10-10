@@ -224,14 +224,14 @@
 		title: Gondorian Captain
 		unique: false
 		side: Free Peoples
-		culture: gondor
+		culture: Gondor
 		twilight: 2
-		type: companion
-		race: man
+		type: Companion
+		race: Man
 		strength: 6
 		vitality: 3
 		resistance: 6
-		keyword: knight
+		keywords: Knight
 		effects: {
 			type: activated
 			phase: maneuver

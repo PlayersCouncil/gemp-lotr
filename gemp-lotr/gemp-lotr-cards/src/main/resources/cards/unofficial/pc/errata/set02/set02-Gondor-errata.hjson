@@ -83,7 +83,7 @@
 
 	52_32: {
 		cardInfo: {
-			//id: 2_32.2
+			//id: 52_32.2
 			parent: 2_32
 			variant: ERRATA
 			variantPath: errata/pc
@@ -93,10 +93,11 @@
 			rarity: R
 		}
 		title: Flaming Brand
-		side: free_people
+		unique: false
+		side: Free Peoples
 		culture: Gondor
-		type: possession
-		itemclass: Hand Weapon
+		type: Possession
+		itemclass: Hand weapon
 		twilight: 1
 		strength: 1
 		target: ranger
@@ -170,7 +171,7 @@
 	
 	52_38: {
 		cardInfo: {
-			//id: 2_38.1
+			//id: 52_38.1
 			parent: 2_38
 			variant: ERRATA
 			variantPath: errata/pc

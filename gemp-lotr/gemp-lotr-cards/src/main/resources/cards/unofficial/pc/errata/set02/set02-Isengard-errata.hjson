@@ -126,7 +126,7 @@
 	
 	52_43: {
 		cardInfo: {
-			//id: 2_43.1
+			//id: 52_43.1
 			parent: 2_43
 			variant: ERRATA
 			variantPath: errata/pc
@@ -135,14 +135,14 @@
 			collInfo: 2R43
 			rarity: R
 		}
-		side: shadow
+		side: Shadow
 		twilight: 1
 		strength: 2
 		culture: Isengard
-		itemclass: Hand Weapon
+		itemclass: Hand weapon
 		title: Lurtz's Sword
 		unique: true
-		type: possession
+		type: Possession
 		target: uruk-hai,unique
 		effects: [
 			{
@@ -199,7 +199,7 @@
 	
 	52_44: {
 		cardInfo: {
-			//id: 2_44.1
+			//id: 52_44.1
 			parent: 2_44
 			variant: ERRATA
 			variantPath: errata/pc
@@ -208,12 +208,13 @@
 			collInfo: 2C44
 			rarity: C
 		}
-		side: shadow
+		unique: false
+		side: Shadow
 		twilight: 3
 		culture: Isengard
 		title: No Business of Ours
-		type: condition
-		keyword: Support Area
+		type: Condition
+		keywords: Support Area
 		effects: [
 			{
 				type: ModifyOwnCost
@@ -245,7 +246,7 @@
 	
 	52_45: {
 		cardInfo: {
-			//id: 2_45.1
+			//id: 52_45.1
 			parent: 2_45
 			variant: ERRATA
 			variantPath: errata/pc
@@ -254,12 +255,13 @@
 			collInfo: 2R45
 			rarity: R
 		}
-		side: shadow
+		unique: false
+		side: Shadow
 		twilight: 1
 		culture: Isengard
 		title: Too Much Attention
-		type: event
-		timeword: response
+		type: Event
+		timewords: Response
 		effects: {
 			type: responseEvent
 			requires: {

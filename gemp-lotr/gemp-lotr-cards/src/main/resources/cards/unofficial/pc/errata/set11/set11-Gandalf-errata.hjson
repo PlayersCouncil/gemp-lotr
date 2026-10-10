@@ -12,10 +12,12 @@
 			rarity: C
 		}
 		title: Final Account
-		culture: gandalf
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
 		twilight: 1
-		type: event
-		timeword: fellowship
+		type: Event
+		timewords: Fellowship
 		effects: {
 			type: event
 			cost: [

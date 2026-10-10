@@ -2,7 +2,7 @@
 
 	53_106: {
 		cardInfo: {
-			//id: 3_106.1
+			//id: 53_106.1
 			parent: 3_106
 			variant: ERRATA
 			variantPath: errata/pc
@@ -14,12 +14,12 @@
 		title: Bill the Pony
 		unique: true
 		culture: Shire
-		side: free_people
+		side: Free Peoples
 		twilight: 0
-		type: possession
+		type: Possession
 		itemclass: Pony
-		keyword: [
-			stealth
+		keywords: [
+			Stealth
 		]
 		target: name(Sam)
 		effects: [
@@ -60,7 +60,7 @@
 
 	53_108: {
 		cardInfo: {
-			//id: 3_108.1
+			//id: 53_108.1
 			parent: 3_108
 			variant: ERRATA
 			variantPath: errata/pc
@@ -70,10 +70,12 @@
 			rarity: C
 		}
 		title: Frying Pan
+		unique: false
+		side: Free Peoples
 		culture: Shire
 		twilight: 1
-		type: possession
-		itemclass: hand weapon
+		type: Possession
+		itemclass: Hand weapon
 		strength: 1
 		target: hobbit
 		effects: {
@@ -101,7 +103,7 @@
 
 	53_113: {
 		cardInfo: {
-			//id: 3_113.1
+			//id: 53_113.1
 			parent: 3_113
 			variant: ERRATA
 			variantPath: errata/pc
@@ -112,10 +114,11 @@
 		}
 		title: The Shire Countryside
 		unique: true
-		culture: shire
+		side: Free Peoples
+		culture: Shire
 		twilight: 1
-		type: condition
-		keyword: support area
+		type: Condition
+		keywords: Support Area
 		effects: [
 			{
 				type: toPlay

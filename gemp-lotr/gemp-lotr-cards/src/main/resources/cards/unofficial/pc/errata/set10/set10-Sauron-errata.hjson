@@ -12,10 +12,12 @@
 			rarity: C
 		}
 		title: Mordor Fiend
-		culture: sauron
+		unique: false
+		side: Shadow
+		culture: Sauron
 		twilight: 3
-		type: minion
-		race: orc
+		type: Minion
+		race: Orc
 		strength: 9
 		vitality: 3
 		site: 6

@@ -1,7 +1,7 @@
 {
 	51_92: {
 		cardInfo: {
-			//id: 1_92.1
+			//id: 51_92.1
 			parent: 1_92
 			variant: ERRATA
 			variantPath: errata/pc
@@ -40,7 +40,7 @@
 	
 	51_98: {
 		cardInfo: {
-			//id: 1_98.1
+			//id: 51_98.1
 			parent: 1_98
 			variant: ERRATA
 			variantPath: errata/pc
@@ -121,7 +121,7 @@
 	
 	51_101: {
 		cardInfo: {
-			//id: 1_101.1
+			//id: 51_101.1
 			parent: 1_101
 			variant: ERRATA
 			variantPath: errata/pc
@@ -158,7 +158,7 @@
 	
 	51_107: {
 		cardInfo: {
-			//id: 1_107.1
+			//id: 51_107.1
 			parent: 1_107
 			variant: ERRATA
 			variantPath: errata/pc
@@ -197,7 +197,7 @@
 	
 	51_108: {
 		cardInfo: {
-			//id: 1_108.1
+			//id: 51_108.1
 			parent: 1_108
 			variant: ERRATA
 			variantPath: errata/pc
@@ -208,11 +208,12 @@
 		}
 		title: No Stranger to the Shadows
 		unique: true
-		culture: gondor
+		side: Free Peoples
+		culture: Gondor
 		twilight: 0
-		type: condition
-		keyword: [
-			stealth
+		type: Condition
+		keywords: [
+			Stealth
 		]
 		target: ranger
 		effects: {
@@ -236,7 +237,7 @@
 	
 	51_115: {
 		cardInfo: {
-			//id: 1_115.1
+			//id: 51_115.1
 			parent: 1_115
 			variant: ERRATA
 			variantPath: errata/pc
@@ -251,7 +252,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		timeword: response
+		timewords: Response
 		effects: {
 			type: responseEvent
 			requires: {

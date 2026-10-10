@@ -1,7 +1,7 @@
 {
 	53_7: {
 		cardInfo: {
-			//id: 3_7.1
+			//id: 53_7.1
 			parent: 3_7
 			variant: ERRATA
 			variantPath: errata/pc
@@ -54,7 +54,7 @@
 	
 	53_8: {
 		cardInfo: {
-			//id: 3_8.1
+			//id: 53_8.1
 			parent: 3_8
 			variant: ERRATA
 			variantPath: errata/pc
@@ -102,7 +102,7 @@
 	
 	53_13: {
 		cardInfo: {
-			//id: 3_13.1
+			//id: 53_13.1
 			parent: 3_13
 			variant: ERRATA
 			variantPath: errata/pc
@@ -392,7 +392,7 @@
 	
 	53_17: {
 		cardInfo: {
-			//id: 3_17.2
+			//id: 53_17.2
 			parent: 3_17
 			variant: ERRATA
 			variantPath: errata/pc
@@ -617,7 +617,7 @@
 	
 	53_24: {
 		cardInfo: {
-			//id: 3_24.1
+			//id: 53_24.1
 			parent: 3_24
 			variant: ERRATA
 			variantPath: errata/pc

@@ -3,7 +3,7 @@
 	# History: 51_70 has one released revision, revision 1 (errata sheet date 2024.04.21, batch "07: 2023 Yuletide"), which is the live block below. It was trial D of four (A to D) put to a vote; the live block was labelled revision 4 after its trial number until 2026-10-05. Trials A to C were never released and are not kept here; they can be read in git at cfa8f0717 (2023-12-16), gemp-lotr/gemp-lotr-cards/src/main/resources/cards/unofficial/pc/errata/yuletide/set01-Gandalf-errata-playtest.hjson (71_70, 71_402 and the first 71_403; the second 71_403 is trial D).
 		51_70: {
 		cardInfo: {
-			//id: 1_70.1
+			//id: 51_70.1
 			parent: 1_70
 			variant: ERRATA
 			variantPath: errata/pc
@@ -117,7 +117,7 @@
 	
 	51_80: {
 		cardInfo: {
-			//id: 1_80.2
+			//id: 51_80.2
 			parent: 1_80
 			variant: ERRATA
 			variantPath: errata/pc
@@ -224,7 +224,7 @@
 	
 	51_87: {
 		cardInfo: {
-			//id: 1_87.1
+			//id: 51_87.1
 			parent: 1_87
 			variant: ERRATA
 			variantPath: errata/pc
@@ -239,7 +239,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		timeword: fellowship
+		timewords: Fellowship
 		effects: {
 			type: event
 			effect: {

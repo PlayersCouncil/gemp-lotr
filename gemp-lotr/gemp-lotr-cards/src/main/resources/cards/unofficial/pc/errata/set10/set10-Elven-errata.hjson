@@ -423,10 +423,11 @@
 		}
 		title: Glimpse of Fate
 		unique: true
-		culture: elven
+		side: Free Peoples
+		culture: Elven
 		twilight: 0
-		type: condition
-		keyword: support area
+		type: Condition
+		keywords: Support Area
 		effects: [
 			{
 				type: toPlay

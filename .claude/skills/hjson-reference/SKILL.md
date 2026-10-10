@@ -64,9 +64,15 @@ The full monolith is also available at `hjson-doc-export.md` if needed.
 
 `cardInfo` is the block at the head of a definition (`//id`, `parent`, `variant`, `variantPath`, `revision`, `image`,
 `collInfo`, `rarity`). It is not a source of truth, and it is kept true to the rest of the definition (Q-0145): on a
-PC erratum `parent` is the original's id, `variant` ERRATA, `variantPath` errata/pc and `collInfo` / `rarity` the
-original's; on a revised V-set card `variant` is ERRATA and `variantPath` errata/pc. `cardinfo.py <id>` (campaign
-scripts) lists where a block departs, kind by kind; its docstring has every kind's convention.
+PC erratum `//id` is the erratum's own id and revision (`54_192.1`, never `4_192.1`: Q-0158), `parent` is the
+original's id, `variant` ERRATA, `variantPath` errata/pc and `collInfo` / `rarity` the original's; on a revised
+V-set card `variant` is ERRATA and `variantPath` errata/pc. `cardinfo.py <id>` (campaign scripts) lists where a
+block departs, kind by kind; its docstring has every kind's convention.
+
+An erratum is written out as the Decipher definitions are (Q-0158): `unique:` on every card, `side:` on every card
+with a culture, values with the Decipher capitals (`type: Companion`, `race: Uruk-hai`, `itemclass: Hand weapon`,
+`keywords: Support Area`), and the keys `keywords:` and `timewords:`. The game reads the older, shorter style the
+same (the side from the culture, not unique by default, any capitals); the Hobbit sets still use it throughout.
 
 ---
 

@@ -1,7 +1,7 @@
 {
 	54_46: {
 		cardInfo: {
-			//id: 4_46.1
+			//id: 54_46.1
 			parent: 4_46
 			variant: ERRATA
 			variantPath: errata/pc
@@ -12,10 +12,11 @@
 		}
 		title: Ever My Heart Rises
 		unique: true
+		side: Free Peoples
 		culture: Dwarven
 		twilight: 3
-		type: condition
-		keyword: [
+		type: Condition
+		keywords: [
 			Support Area
 			Tale
 		]

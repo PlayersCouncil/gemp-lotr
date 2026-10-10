@@ -94,7 +94,7 @@
 
 	57_49: {
 		cardInfo: {
-			//id: 7_49.1
+			//id: 57_49.1
 			parent: 7_49
 			variant: ERRATA
 			variantPath: errata/pc
@@ -105,9 +105,10 @@
 		}
 		title: Steadfast Champion
 		unique: true
-		culture: gandalf
+		side: Free Peoples
+		culture: Gandalf
 		twilight: 2
-		type: condition
+		type: Condition
 		target: name(gandalf)
 		effects: [
 			{

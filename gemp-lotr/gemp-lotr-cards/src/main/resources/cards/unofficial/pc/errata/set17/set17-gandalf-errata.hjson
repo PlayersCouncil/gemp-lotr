@@ -12,12 +12,13 @@
 		}
 		title: A New Light
 		unique: false
-		culture: gandalf
+		side: Free Peoples
+		culture: Gandalf
 		twilight: 1
-		type: event
-		timeword: fellowship
-		keyword: [
-			spell
+		type: Event
+		timewords: Fellowship
+		keywords: [
+			Spell
 		]
 		effects: [
 			{

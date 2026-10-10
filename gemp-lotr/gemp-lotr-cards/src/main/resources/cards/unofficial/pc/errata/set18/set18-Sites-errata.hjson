@@ -16,7 +16,7 @@
 		twilight: 1
 		type: Site
 		block: Shadows
-		keyword: mountain
+		keywords: Mountain
 		direction: Right
 		effects: [
 			{

@@ -2,7 +2,7 @@
 	
 	55_10: {
 		cardInfo: {
-			//id: 5_10.1
+			//id: 55_10.1
 			parent: 5_10
 			variant: ERRATA
 			variantPath: errata/pc
@@ -58,7 +58,7 @@
 
 	55_13: {
 		cardInfo: {
-			//id: 5_13.1
+			//id: 55_13.1
 			parent: 5_13
 			variant: ERRATA
 			variantPath: errata/pc

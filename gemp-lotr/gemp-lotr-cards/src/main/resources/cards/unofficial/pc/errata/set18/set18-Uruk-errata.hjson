@@ -11,10 +11,12 @@
 			rarity: R
 		}
 		title: Final Triumph
-		culture: uruk-hai
+		unique: false
+		side: Shadow
+		culture: Uruk-hai
 		twilight: 4
-		type: event
-		timeword: skirmish
+		type: Event
+		timewords: Skirmish
 		effects: {
 			type: event
 			requires: {

@@ -17,7 +17,7 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		keyword: river
+		keywords: River
 		effects: [
 			{
 				type: modifier
@@ -233,7 +233,7 @@
 		block: Shadows
 		direction: Left
 		keywords: [
-			marsh
+			Marsh
 		]
 		effects: [
 			{

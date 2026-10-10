@@ -70,10 +70,11 @@
 		}
 		title: Namárië
 		unique: true
-		culture: elven
+		side: Free Peoples
+		culture: Elven
 		twilight: 2
-		type: condition
-		keyword: [
+		type: Condition
+		keywords: [
 			Support Area
 		]
 		effects: [

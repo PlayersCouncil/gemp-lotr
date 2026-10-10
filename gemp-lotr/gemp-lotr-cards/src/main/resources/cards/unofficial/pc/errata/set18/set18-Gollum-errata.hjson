@@ -17,7 +17,7 @@
 		side: Shadow
 		twilight: 1
 		type: Condition
-		keyword: Support Area
+		keywords: Support Area
 		effects: {
 			type: Response
 			trigger: {

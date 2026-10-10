@@ -2,7 +2,7 @@
 
 	58_24: {
 		cardInfo: {
-			//id: 8_24.1
+			//id: 58_24.1
 			parent: 8_24
 			variant: ERRATA
 			variantPath: errata/pc
@@ -13,11 +13,11 @@
 		}
 		title: Promise Keeping
 		unique: true
-		side: shadow
-		culture: gollum
+		side: Shadow
+		culture: Gollum
 		twilight: 4
-		type: condition
-		keyword: support area
+		type: Condition
+		keywords: Support Area
 		effects: {
 			type: Trigger
 			optional: false

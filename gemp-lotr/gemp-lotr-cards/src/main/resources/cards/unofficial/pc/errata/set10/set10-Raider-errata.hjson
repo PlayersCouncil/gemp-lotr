@@ -17,7 +17,7 @@
 		culture: Raider
 		twilight: 1
 		type: Condition
-		keyword: support area
+		keywords: Support Area
 		effects: [
 			{
 				type: activated

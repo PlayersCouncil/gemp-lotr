@@ -2,7 +2,7 @@
 
 	58_1: {
 		cardInfo: {
-			//id: 8_1.1
+			//id: 58_1.1
 			parent: 8_1
 			variant: ERRATA
 			variantPath: errata/pc
@@ -12,10 +12,12 @@
 			rarity: C
 		}
 		title: Aggression
-		culture: dwarven
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
 		twilight: 1
-		type: condition
-		keyword: support area
+		type: Condition
+		keywords: Support Area
 		effects: [
 			{
 				type: modifier

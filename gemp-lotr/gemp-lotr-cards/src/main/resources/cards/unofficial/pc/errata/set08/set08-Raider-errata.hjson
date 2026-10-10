@@ -62,7 +62,7 @@
 
 	58_51: {
 		cardInfo: {
-			//id: 8_51.2
+			//id: 58_51.2
 			parent: 8_51
 			variant: ERRATA
 			variantPath: errata/pc
@@ -81,7 +81,7 @@
 		strength: 14
 		vitality: 4
 		site: 4
-		keyword: [
+		keywords: [
 			Enduring
 			Corsair
 		]
@@ -201,7 +201,7 @@
 	
 	58_57: {
 		cardInfo: {
-			//id: 8_57.2
+			//id: 58_57.2
 			parent: 8_57
 			variant: ERRATA
 			variantPath: errata/pc
@@ -220,7 +220,7 @@
 		strength: 9
 		vitality: 2
 		site: 4
-		keyword: Corsair
+		keywords: Corsair
 		effects: {
 			type: Trigger
 			optional: true
@@ -398,7 +398,7 @@
 	
 	58_59: {
 		cardInfo: {
-			//id: 8_59.2
+			//id: 58_59.2
 			parent: 8_59
 			variant: ERRATA
 			variantPath: errata/pc
@@ -413,7 +413,7 @@
 		culture: Raider
 		twilight: 1
 		type: Possession
-		keyword: Support Area
+		keywords: Support Area
 		effects: [
 			{
 				type: Trigger

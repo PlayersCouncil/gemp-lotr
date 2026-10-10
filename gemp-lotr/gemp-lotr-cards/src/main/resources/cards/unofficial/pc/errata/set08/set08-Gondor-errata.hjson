@@ -2,7 +2,7 @@
 	
 	58_43: {
 		cardInfo: {
-			//id: 8_43.1
+			//id: 58_43.1
 			parent: 8_43
 			variant: ERRATA
 			variantPath: errata/pc
@@ -18,7 +18,7 @@
 		twilight: 5
 		type: Companion
 		race: Wraith
-		keyword: enduring
+		keywords: Enduring
 		strength: 9
 		vitality: 3
 		signet: Aragorn
@@ -65,7 +65,7 @@
 	
 	58_48: {
 		cardInfo: {
-			//id: 8_48.1
+			//id: 58_48.1
 			parent: 8_48
 			variant: ERRATA
 			variantPath: errata/pc
@@ -76,11 +76,12 @@
 		}
 		title: Swept Away
 		unique: false
-		culture: gondor
+		side: Free Peoples
+		culture: Gondor
 		twilight: 0
-		type: condition
-		keyword: [
-			support area
+		type: Condition
+		keywords: [
+			Support Area
 		]
 		effects: [
 			{

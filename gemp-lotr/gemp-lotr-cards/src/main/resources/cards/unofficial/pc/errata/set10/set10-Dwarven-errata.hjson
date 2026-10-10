@@ -13,10 +13,11 @@
 		}
 		title: Memories of Darkness
 		unique: true
-		culture: dwarven
+		side: Free Peoples
+		culture: Dwarven
 		twilight: 1
-		type: condition
-		keyword: support area
+		type: Condition
+		keywords: Support Area
 		effects: [
 			{
 				type: toPlay

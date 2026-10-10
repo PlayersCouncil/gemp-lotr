@@ -1,7 +1,7 @@
 {
 	59_49: {
 		cardInfo: {
-			//id: 9_49.1
+			//id: 59_49.1
 			parent: 9_49
 			variant: ERRATA
 			variantPath: errata/pc
@@ -22,8 +22,8 @@
 		vitality: 4
 		resistance: 9
 		canStartWithRing: true
-		keyword: [
-			ring-bound
+		keywords: [
+			Ring-bound
 		]
 		effects: [
 			{

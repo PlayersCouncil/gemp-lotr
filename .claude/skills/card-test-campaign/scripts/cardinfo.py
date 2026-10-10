@@ -15,11 +15,11 @@ kind (Decipher sets, the Hobbit sets, PC errata, V-sets, Race to Mount Doom), as
                            (A printed card with no definition under its own number is named by the definitions
                            that stand in for it: 15_204 to 15_206 all say 15C60.)
   Hobbit, sets 30 to 33    where there is a block: image hobbit/HDG<set><number>.jpg, collInfo the id, rarity _.
-  PC errata, sets 50 to 69 //id <id>.<revision> (143 older blocks have <parent>.<revision>, which is let pass:
-                           see ERRATA_ID_MAY_NAME_THE_ORIGINAL), parent the original's id, variant ERRATA,
-                           variantPath errata/pc, revision 1 or more, an image under errata/ that names this card
-                           (errata/<id>.jpg) or the original (LOTR-EN<ss>E<nnn>...), collInfo and rarity the
-                           original's.
+  PC errata, sets 50 to 69 //id <id>.<revision>, the erratum's own id and never the original's (Q-0158: "id is
+                           for the card's unique identifier, and parent is supposed to point to the original"),
+                           parent the original's id, variant ERRATA, variantPath errata/pc, revision 1 or more,
+                           an image under errata/ that names this card (errata/<id>.jpg) or the original
+                           (LOTR-EN<ss>E<nnn>...), collInfo and rarity the original's.
   V-sets, sets 100 to 103  //id <id> or <id>.<revision>; image under sets/ naming the set and number; collInfo
                            V<n><rarity><number>, the rarity being _ where the set has none.  Where the block says
                            more (all of V3 does): parent the card itself, variant ORIGINAL at revision 0 and
@@ -39,10 +39,6 @@ import gempcards as g
 FIELDS = ("//id", "parent", "variant", "variantPath", "revision", "image", "collInfo", "rarity")
 PLAIN = ("image", "collInfo", "rarity")
 V_FOLDERS = {100: None, 101: "sets/vset1/", 102: "sets/V2/", 103: "sets/V3/"}
-# Q-0145 called "//id: 4_192.1" on 54_192 a copy-paste error, and engine pass 17 made it 54_192.1.  But the question
-# said the card's neighbours had 54_x.1, and most did not: 143 errata of sets 1 to 9 still name their original there
-# (as the RTMD cards of set 90 name RT_1, not 90_1).  Until Ketura says which is meant, both pass.  False: <id> only.
-ERRATA_ID_MAY_NAME_THE_ORIGINAL = True
 
 
 def kind_of(card_id: str) -> str:
@@ -118,8 +114,7 @@ def check(card_id: str) -> list:
         only(*FIELDS)
         base = g.base_id(card_id)
         bs, bn = g.split_id(base)
-        if not (ERRATA_ID_MAY_NAME_THE_ORIGINAL and info.get("//id") == "%s.%s" % (base, revision)):
-            want("//id", "%s.%s" % (card_id, revision))
+        want("//id", "%s.%s" % (card_id, revision))
         want("parent", base)
         want("variant", "ERRATA")
         want("variantPath", "errata/pc")

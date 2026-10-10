@@ -14,14 +14,15 @@
 		title: Úlairë Lemenya
 		subtitle: Dark Enemy
 		unique: true
-		culture: wraith
+		side: Shadow
+		culture: Wraith
 		twilight: 4
-		type: minion
-		race: nazgul
+		type: Minion
+		race: Nazgul
 		strength: 9
 		vitality: 2
 		site: 3
-		keyword: fierce
+		keywords: Fierce
 		effects: {
 			type: modifier
 			modifier: {
@@ -59,14 +60,15 @@
 		title: Ulaire Nertea
 		subtitle: Dark Horseman
 		unique: true
+		side: Shadow
 		culture: Wraith
 		twilight: 4
-		type: minion
-		race: nazgul
+		type: Minion
+		race: Nazgul
 		strength: 9
 		vitality: 2
 		site: 3
-		keyword: fierce
+		keywords: Fierce
 		effects: [
 			{
 				type: Trigger

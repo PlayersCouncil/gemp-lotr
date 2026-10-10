@@ -1,7 +1,7 @@
 {
 	51_126: {
 		cardInfo: {
-			//id: 1_126.1
+			//id: 51_126.1
 			parent: 1_126
 			variant: ERRATA
 			variantPath: errata/pc
@@ -11,10 +11,12 @@
 			rarity: U
 		}
 		title: Hunt Them Down!
-		culture: isengard
+		unique: false
+		side: Shadow
+		culture: Isengard
 		twilight: 2
-		type: event
-		timeword: maneuver
+		type: Event
+		timewords: Maneuver
 		effects: {
 			type: event
 			effect: {
@@ -86,7 +88,7 @@
 	
 	51_138: {
 		cardInfo: {
-			//id: 1_138.1
+			//id: 51_138.1
 			parent: 1_138
 			variant: ERRATA
 			variantPath: errata/pc
@@ -96,12 +98,14 @@
 			rarity: C
 		}
 		title: Saruman's Snows
-		culture: isengard
+		unique: false
+		side: Shadow
+		culture: Isengard
 		twilight: 2
-		type: condition
-		keyword: [
-			spell
-			weather
+		type: Condition
+		keywords: [
+			Spell
+			Weather
 		]
 		target: site
 		effects: [
@@ -234,7 +238,7 @@
 	
 	51_139: {
 		cardInfo: {
-			//id: 1_139.3
+			//id: 51_139.3
 			parent: 1_139
 			variant: ERRATA
 			variantPath: errata/pc
@@ -244,10 +248,12 @@
 			rarity: R
 		}
 		title: Savagery to Match Their Numbers
-		culture: isengard
+		unique: false
+		side: Shadow
+		culture: Isengard
 		twilight: 1
-		type: event
-		timeword: skirmish
+		type: Event
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
@@ -294,7 +300,7 @@
 	
 	51_142: {
 		cardInfo: {
-			//id: 1_142.1
+			//id: 51_142.1
 			parent: 1_142
 			variant: ERRATA
 			variantPath: errata/pc
@@ -366,7 +372,7 @@
 	
 	51_150: {
 		cardInfo: {
-			//id: 1_150.1
+			//id: 51_150.1
 			parent: 1_150
 			variant: ERRATA
 			variantPath: errata/pc
@@ -376,14 +382,16 @@
 			rarity: C
 		}
 		title: Uruk Rager
-		culture: isengard
+		unique: false
+		side: Shadow
+		culture: Isengard
 		twilight: 4
-		type: minion
-		race: uruk-hai
+		type: Minion
+		race: Uruk-hai
 		strength: 9
 		vitality: 2
 		site: 5
-		keyword: damage+1
+		keywords: Damage+1
 		effects: {
 			type: Trigger
 			optional: false
@@ -470,7 +478,7 @@
 	
 	51_154: {
 		cardInfo: {
-			//id: 1_154.1
+			//id: 51_154.1
 			parent: 1_154
 			variant: ERRATA
 			variantPath: errata/pc
@@ -480,14 +488,16 @@
 			rarity: C
 		}
 		title: Uruk Soldier
-		culture: isengard
+		unique: false
+		side: Shadow
+		culture: Isengard
 		twilight: 2
-		type: minion
-		race: uruk-hai
+		type: Minion
+		race: Uruk-hai
 		strength: 7
 		vitality: 1
 		site: 5
-		keyword: damage+1
+		keywords: Damage+1
 		effects: {
 			type: Trigger
 			optional: false
@@ -669,7 +679,7 @@
 	
 	51_160: {
 		cardInfo: {
-			//id: 1_160.1
+			//id: 51_160.1
 			parent: 1_160
 			variant: ERRATA
 			variantPath: errata/pc
@@ -679,10 +689,12 @@
 			rarity: C
 		}
 		title: Uruk-hai Sword
-		culture: isengard
+		unique: false
+		side: Shadow
+		culture: Isengard
 		twilight: 1
-		type: possession
-		itemclass: hand weapon
+		type: Possession
+		itemclass: Hand weapon
 		strength: 2
 		target: uruk-hai
 		effects: {

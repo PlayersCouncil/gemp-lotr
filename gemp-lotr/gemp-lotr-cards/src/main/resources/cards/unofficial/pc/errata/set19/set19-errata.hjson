@@ -14,7 +14,7 @@
 		subtitle: The Great Ring
 		unique: true
 		twilight: 0
-		type: the one ring
+		type: The One Ring
 		effects: [
 			{
 				type: modifier
@@ -119,9 +119,10 @@
 		}
 		title: Brought Down from Inside
 		unique: true
-		culture: rohan
+		side: Free Peoples
+		culture: Rohan
 		twilight: 2
-		type: condition
+		type: Condition
 		strength: 1
 		target: culture(rohan),man
 		effects: [
@@ -187,14 +188,15 @@
 		title: Pippin
 		subtitle: Steadfast Friend
 		unique: true
-		culture: shire
+		side: Free Peoples
+		culture: Shire
 		twilight: 1
-		type: companion
-		race: hobbit
+		type: Companion
+		race: Hobbit
 		strength: 3
 		vitality: 4
 		resistance: 8
-		keyword: fellowship
+		keywords: Fellowship
 		effects: {
 			type: modifier
 			modifier: {

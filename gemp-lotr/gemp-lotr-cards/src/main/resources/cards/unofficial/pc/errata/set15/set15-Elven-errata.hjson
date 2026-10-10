@@ -67,10 +67,11 @@
 		}
 		title: Focus
 		unique: true
+		side: Free Peoples
 		culture: Elven
 		twilight: 1
 		type: Condition
-		keyword: Support Area
+		keywords: Support Area
 		effects: [
 			{
 				type: Trigger

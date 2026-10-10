@@ -13,10 +13,11 @@
 		}
 		title: Demoralized
 		unique: true
-		culture: orc
+		side: Shadow
+		culture: Orc
 		twilight: 1
-		type: condition
-		keyword: support area
+		type: Condition
+		keywords: Support Area
 		effects: [
 			{
 				type: toPlay
@@ -70,10 +71,12 @@
 			rarity: C
 		}
 		title: Orkish Smith
-		culture: orc
+		unique: false
+		side: Shadow
+		culture: Orc
 		twilight: 2
-		type: minion
-		race: orc
+		type: Minion
+		race: Orc
 		strength: 6
 		vitality: 1
 		site: 4

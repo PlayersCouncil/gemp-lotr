@@ -1,7 +1,7 @@
 {
 	53_82: {
 		cardInfo: {
-			//id: 3_82.1
+			//id: 53_82.1
 			parent: 3_82
 			variant: ERRATA
 			variantPath: errata/pc
@@ -11,10 +11,12 @@
 			rarity: U
 		}
 		title: News of Mordor
-		culture: wraith
+		unique: false
+		side: Shadow
+		culture: Wraith
 		twilight: 1
-		type: event
-		timeword: maneuver
+		type: Event
+		timewords: Maneuver
 		effects: {
 			type: event
 			requires: {

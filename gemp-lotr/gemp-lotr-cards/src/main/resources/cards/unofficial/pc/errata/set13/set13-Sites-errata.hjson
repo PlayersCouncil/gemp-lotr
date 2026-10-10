@@ -12,11 +12,12 @@
 			rarity: U
 		}
 		title: Courtyard Parapet
-		type: site
+		unique: false
+		type: Site
 		block: Shadows
 		twilight: 0
-		keyword: Dwelling
-		direction: left
+		keywords: Dwelling
+		direction: Left
 		effects: [
 			{
 				type: Trigger

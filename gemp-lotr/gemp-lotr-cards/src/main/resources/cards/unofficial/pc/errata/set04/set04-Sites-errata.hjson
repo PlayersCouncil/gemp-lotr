@@ -1,7 +1,7 @@
 {
 	54_355: {
 		cardInfo: {
-			//id: 4_355.1
+			//id: 54_355.1
 			parent: 4_355
 			variant: ERRATA
 			variantPath: errata/pc

@@ -12,11 +12,13 @@
 			rarity: R
 		}
 		title: Come Down
-		culture: isengard
+		unique: false
+		side: Shadow
+		culture: Isengard
 		twilight: 0
-		type: condition
-		keyword: [
-			support area
+		type: Condition
+		keywords: [
+			Support Area
 		]
 		effects: [
 			{
@@ -221,15 +223,15 @@
 		}
 		title: Uruk Regular
 		unique: false
-		side: shadow
+		side: Shadow
 		culture: Isengard
-		type: minion
-		race: Uruk-Hai
+		type: Minion
+		race: Uruk-hai
 		twilight: 3
 		strength: 8
 		vitality: 2
 		site: 5
-		keyword: Damage+1
+		keywords: Damage+1
 		effects: {
 			type: activated
 			phase: shadow

@@ -149,7 +149,7 @@
 	
 	53_50: {
 		cardInfo: {
-			//id: 3_50.3
+			//id: 53_50.3
 			parent: 3_50
 			variant: ERRATA
 			variantPath: errata/pc
@@ -272,7 +272,7 @@
 	
 	53_54: {
 		cardInfo: {
-			//id: 3_54.1
+			//id: 53_54.1
 			parent: 3_54
 			variant: ERRATA
 			variantPath: errata/pc
@@ -283,10 +283,11 @@
 		}
 		title: Hollowing of Isengard
 		unique: false
-		culture: isengard
+		side: Shadow
+		culture: Isengard
 		twilight: 2
-		type: condition
-		keyword: support area
+		type: Condition
+		keywords: Support Area
 		effects: [
 			{
 				type: toPlay
@@ -554,7 +555,7 @@
 	
 	53_68: {
 		cardInfo: {
-			//id: 3_68.2
+			//id: 53_68.2
 			parent: 3_68
 			variant: ERRATA
 			variantPath: errata/pc
@@ -566,9 +567,9 @@
 		title: Saruman
 		subtitle: Keeper of Isengard
 		unique: true
-		side: shadow
+		side: Shadow
 		culture: Isengard
-		type: minion
+		type: Minion
 		race: Wizard
 		twilight: 4
 		strength: 8

@@ -1,7 +1,7 @@
 {
 	58_91: {
 		cardInfo: {
-			//id: 8_91.1
+			//id: 58_91.1
 			parent: 8_91
 			variant: ERRATA
 			variantPath: errata/pc
@@ -12,10 +12,11 @@
 		}
 		title: Rohirrim Army
 		unique: true
-		culture: rohan
+		side: Free Peoples
+		culture: Rohan
 		twilight: 5
-		type: companion
-		race: man
+		type: Companion
+		race: Man
 		strength: 9
 		vitality: 3
 		resistance: 6

@@ -13,10 +13,11 @@
 		}
 		title: Ithilien Blade
 		unique: false
+		side: Free Peoples
 		culture: Gondor
 		twilight: 1
 		type: Possession
-		itemclass: Hand Weapon
+		itemclass: Hand weapon
 		strength: 2
 		target: culture(gondor),man
 		effects: [
@@ -152,14 +153,15 @@
 		title: Madril
 		subtitle: Defender of Osgiliath
 		unique: true
-		culture: gondor
+		side: Free Peoples
+		culture: Gondor
 		twilight: 2
-		type: companion
-		race: man
+		type: Companion
+		race: Man
 		strength: 5
 		vitality: 3
 		resistance: 6
-		keyword: [
+		keywords: [
 			Ranger
 			Hunter
 		]

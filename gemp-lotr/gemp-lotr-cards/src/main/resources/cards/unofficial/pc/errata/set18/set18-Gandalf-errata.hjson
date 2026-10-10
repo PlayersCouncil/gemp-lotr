@@ -12,10 +12,11 @@
 		}
 		title: Beorning Axe
 		unique: false
-		culture: gandalf
+		side: Free Peoples
+		culture: Gandalf
 		twilight: 2
-		type: possession
-		itemclass: hand weapon
+		type: Possession
+		itemclass: Hand weapon
 		strength: 2
 		vitality: 1
 		target: culture(gandalf),man

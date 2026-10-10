@@ -2,7 +2,7 @@
 	
 	51_303: {
 		cardInfo: {
-			//id: 1_303.1
+			//id: 51_303.1
 			parent: 1_303
 			variant: ERRATA
 			variantPath: errata/pc
@@ -63,7 +63,7 @@
 	
 		51_310: {
 		cardInfo: {
-			//id: 1_310.1
+			//id: 51_310.1
 			parent: 1_310
 			variant: ERRATA
 			variantPath: errata/pc
@@ -203,7 +203,7 @@
 	
 	51_311: {
 		cardInfo: {
-			//id: 1_311.2
+			//id: 51_311.2
 			parent: 1_311
 			variant: ERRATA
 			variantPath: errata/pc
@@ -223,7 +223,7 @@
 		#keyword: damage+1
 		strength: 3
 		vitality: 4
-		signet: aragorn
+		signet: Aragorn
 		resistance: 5
 		effects: [
 			{
@@ -295,7 +295,7 @@
 
 	51_313: {
 		cardInfo: {
-			//id: 1_313.1
+			//id: 51_313.1
 			parent: 1_313
 			variant: ERRATA
 			variantPath: errata/pc
@@ -306,10 +306,11 @@
 		}
 		title: Sting
 		unique: true
-		culture: shire
+		side: Free Peoples
+		culture: Shire
 		twilight: 1
-		type: possession
-		itemclass: hand weapon
+		type: Possession
+		itemclass: Hand weapon
 		strength: 2
 		target: name(Frodo)
 		effects: {
@@ -357,7 +358,7 @@
 
 	51_316: {
 		cardInfo: {
-			//id: 1_316.1
+			//id: 51_316.1
 			parent: 1_316
 			variant: ERRATA
 			variantPath: errata/pc
@@ -367,12 +368,14 @@
 			rarity: U
 		}
 		title: A Talent for Not Being Seen
-		culture: shire
+		unique: false
+		side: Free Peoples
+		culture: Shire
 		twilight: 0
-		type: condition
+		type: Condition
 		target: or(name(Merry),name(Pippin)),not(hasAttached(name(A Talent for Not Being Seen)))
-		keyword: [
-			stealth
+		keywords: [
+			Stealth
 		]
 		effects: {
 			type: modifier

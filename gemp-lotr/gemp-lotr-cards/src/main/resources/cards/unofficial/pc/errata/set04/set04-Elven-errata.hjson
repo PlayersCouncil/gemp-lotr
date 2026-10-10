@@ -2,7 +2,7 @@
 	
 	54_65: {
 		cardInfo: {
-			//id: 4_65.1
+			//id: 54_65.1
 			parent: 4_65
 			variant: ERRATA
 			variantPath: errata/pc
@@ -69,7 +69,7 @@
 
 	54_67: {
 		cardInfo: {
-			//id: 4_67.1
+			//id: 54_67.1
 			parent: 4_67
 			variant: ERRATA
 			variantPath: errata/pc
@@ -131,7 +131,7 @@
 
 	54_68: {
 		cardInfo: {
-			//id: 4_68.1
+			//id: 54_68.1
 			parent: 4_68
 			variant: ERRATA
 			variantPath: errata/pc
@@ -187,7 +187,7 @@
 
 	54_71: {
 		cardInfo: {
-			//id: 4_71.1
+			//id: 54_71.1
 			parent: 4_71
 			variant: ERRATA
 			variantPath: errata/pc
@@ -301,7 +301,7 @@
 	
 	54_73: {
 		cardInfo: {
-			//id: 4_73.2
+			//id: 54_73.2
 			parent: 4_73
 			variant: ERRATA
 			variantPath: errata/pc
@@ -318,10 +318,10 @@
 		twilight: 2
 		type: Companion
 		race: Elf
-		keyword: Archer
+		keywords: Archer
 		strength: 6
 		vitality: 3
-		signet: aragorn
+		signet: Aragorn
 		resistance: 6
 		effects: {
 			type: Trigger
@@ -351,7 +351,7 @@
 
 	54_76: {
 		cardInfo: {
-			//id: 4_76.1
+			//id: 54_76.1
 			parent: 4_76
 			variant: ERRATA
 			variantPath: errata/pc
@@ -399,7 +399,7 @@
 
 	54_78: {
 		cardInfo: {
-			//id: 4_78.1
+			//id: 54_78.1
 			parent: 4_78
 			variant: ERRATA
 			variantPath: errata/pc
@@ -445,7 +445,7 @@
 
 	54_80: {
 		cardInfo: {
-			//id: 4_80.1
+			//id: 54_80.1
 			parent: 4_80
 			variant: ERRATA
 			variantPath: errata/pc
@@ -497,7 +497,7 @@
 
 	54_81: {
 		cardInfo: {
-			//id: 4_81.1
+			//id: 54_81.1
 			parent: 4_81
 			variant: ERRATA
 			variantPath: errata/pc
@@ -555,7 +555,7 @@
 
 	54_85: {
 		cardInfo: {
-			//id: 4_85.1
+			//id: 54_85.1
 			parent: 4_85
 			variant: ERRATA
 			variantPath: errata/pc
@@ -611,7 +611,7 @@
 
 	54_86: {
 		cardInfo: {
-			//id: 4_86.1
+			//id: 54_86.1
 			parent: 4_86
 			variant: ERRATA
 			variantPath: errata/pc

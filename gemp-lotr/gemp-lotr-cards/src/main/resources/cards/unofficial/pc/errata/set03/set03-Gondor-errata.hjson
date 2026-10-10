@@ -1,7 +1,7 @@
 {
 	53_38: {
 		cardInfo: {
-			//id: 3_38.1
+			//id: 53_38.1
 			parent: 3_38
 			variant: ERRATA
 			variantPath: errata/pc
@@ -13,15 +13,16 @@
 		title: Aragorn
 		subtitle: Heir to the White City
 		unique: true
+		side: Free Peoples
 		culture: Gondor
-		type: companion
+		type: Companion
 		race: Man
 		twilight: 4
 		strength: 8
 		vitality: 4
 		resistance: 6
-		signet: frodo
-		keyword: [
+		signet: Frodo
+		keywords: [
 			Ranger
 		]
 		effects: {
@@ -52,7 +53,7 @@
 	
 	53_41: {
 		cardInfo: {
-			//id: 3_41.1
+			//id: 53_41.1
 			parent: 3_41
 			variant: ERRATA
 			variantPath: errata/pc
@@ -67,9 +68,9 @@
 		culture: Gondor
 		twilight: 1
 		type: Condition
-		keyword: [
-			tale
-			support area
+		keywords: [
+			Tale
+			Support Area
 		]
 		effects: [
 			{
@@ -105,7 +106,7 @@
 	
 	53_42: {
 		cardInfo: {
-			//id: 3_42.1
+			//id: 53_42.1
 			parent: 3_42
 			variant: ERRATA
 			variantPath: errata/pc
@@ -116,9 +117,9 @@
 		}
 		title: Horn of Boromir
 		unique: true
-		side: free_people
+		side: Free Peoples
 		culture: Gondor
-		type: possession
+		type: Possession
 		twilight: 1
 		target: name(Boromir)
 		effects: {

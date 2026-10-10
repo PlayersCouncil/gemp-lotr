@@ -2,7 +2,7 @@
 
 	52_75: {
 		cardInfo: {
-			//id: 2_75.1
+			//id: 52_75.1
 			parent: 2_75
 			variant: ERRATA
 			variantPath: errata/pc
@@ -14,10 +14,11 @@
 		title: Bill Ferny
 		subtitle: Swarthy Sneering Fellow
 		unique: true
-		culture: wraith
+		side: Shadow
+		culture: Wraith
 		twilight: 2
-		type: minion
-		race: man
+		type: Minion
+		race: Man
 		strength: 4
 		vitality: 1
 		site: 2
@@ -218,7 +219,7 @@
 	
 	52_76: {
 		cardInfo: {
-			//id: 2_76.3
+			//id: 52_76.3
 			parent: 2_76
 			variant: ERRATA
 			variantPath: errata/pc
@@ -274,7 +275,7 @@
 	
 	52_85: {
 		cardInfo: {
-			//id: 2_85.1
+			//id: 52_85.1
 			parent: 2_85
 			variant: ERRATA
 			variantPath: errata/pc
