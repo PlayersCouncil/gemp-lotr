@@ -51,6 +51,9 @@ when the assignment is answered. `FreepsCanAssignAgainst(character, minion)` and
 that (G-0029); a refused assignment is never shown by the rig throwing. A restriction on one card for one player
 (`CantBeAssignedToSkirmish` with `player`: Bill Ferny 2_75 and 52_75, Q-0146) shows in the first two: the card is
 off that player's list, and when it is the only minion the Free Peoples player is not asked to assign at all.
+`FreepsCanAssign` and `FreepsCanAssignAgainst` say more than is true of a companion with defender: they answer
+true for a defender +1 companion who already has both his minions (F-0355), so "one more and not any number"
+rests on neither. Several minions against one character have no reader yet (G-0041).
 
 **No method names the moment after the assignments.** When every minion is assigned the Free Peoples player is
 asked "Choose next skirmish to resolve", and that is the bookend to assert after `FreepsAssignToMinions` or
@@ -64,6 +67,9 @@ with a bare `DecisionResultInvalidException`. A minion he leaves unassigned give
 assignment decision of his own, whoever else is assigned, the Ring-bearer included, and that is how a companion
 comes to face two: `ShadowAssignToMinions(companion, secondMinion)` after the Free Peoples player's assignment.
 `ShadowDeclineAssignments()` passes that decision; with no minion left over he is not asked.
+Defender shows in the Free Peoples player's own decision without any refusal: a companion who already has a
+minion from an assignment action is on his list only if he has defender (`FreepsHasAssignmentTargetAvailable`;
+`mechanics/DefenderTests`, with Unexpected Visitor 7_126 and Reckless Pride 7_13 as the assignment actions).
 
 **`IsCharAssigned` reads only the skirmishes still waiting.** The game takes an assignment off its list as that
 skirmish begins, so `IsCharAssigned(card)` is false for the characters of the skirmish being fought
@@ -760,7 +766,12 @@ not yet asked; Frenzy of Arrows 68_79's tests). `SkipToPhase(Phase.MANEUVER)` le
 then asks for the companion (`FreepsChooseCard`). Every Free Peoples Aid transfers "to a companion", so no ally
 bears a follower by legal play. `AttachCardsTo(companion, follower)` cheats one on. Most followers give the
 bearer a printed strength or resistance; see the helper table for two that leave a reading alone (Little Golden
-Flower 65_148's tests).
+Flower 65_148's tests). The rule itself is in `mechanics/AidTests`: in a second maneuver phase of the turn the
+offer is made again for a follower already borne, and declined it costs nothing and leaves him borne (CR 4.2
+"aid": borne "for the rest of the turn"). He goes back to the support area as the turn ends: when the turn ends at
+the move limit that is after `PassCurrentPhaseActions()`, `PassReconcile(scn.P2())`, `PassReconcile(scn.P1())`,
+with the game at the other player's "Play Fellowship action or Pass", where the bearer is an inactive card (read
+the return by zone, not by his strength).
 
 **Whose support area.** A card borne by a card in a support area is in THAT support area, whoever owns it
 (`mechanics/WhoseSupportAreaTests`): the Shadow player's Weary on your ally is in your support area ("a
