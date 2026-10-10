@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -27,7 +26,7 @@ public class Card_04_073_ErrataTests
 					put("trollslayer", "103_31"); // Pippin, Trollslayer: unbound [gondor] Hobbit, so a Hobbit need not be [shire]; his only text is a skirmish ability
 					put("sam", "1_311");        // Sam, Son of Hamfast: a Hobbit who is Ring-bound by rule
 					put("bounder", "1_286");    // Bounder: a Hobbit ally, which can never be unbound
-					put("aragorn", "1_89");     // Aragorn, Ranger of the North: an unbound Man, given [shire] in one test
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: an unbound Man, vitality 4
 
 					// The Shadow player's cards.
 					put("swordsman", "3_98");   // Orc Swordsman: [sauron] Orc minion, cost 3, site 6; +2 strength with a weapon
@@ -125,9 +124,8 @@ public class Card_04_073_ErrataTests
 		scn.MoveCardsToHand(curse, enraged, fear, hate);
 
 		scn.StartGame();
-		// Aragorn is of [shire] as well as [gondor], but no Hobbit. Frodo and Sam are Ring-bound Hobbits, the
-		// Bounder a Hobbit ally, Legolas and Aragorn unbound companions who are not Hobbits: Merry alone counts.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.SHIRE));
+		// Frodo and Sam are Ring-bound Hobbits, the Bounder a Hobbit ally, Legolas and Aragorn unbound companions
+		// who are not Hobbits: Merry alone counts.
 		scn.MoveMinionsToTable(swordsman);
 		scn.FreepsPass();
 

@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -23,6 +22,7 @@ public class Card_03_054_ErrataTests
 					put("raiding", "1_158");    // Uruk-hai Raiding Party: [isengard] Uruk-hai, Damage +1 and nothing else
 					put("servant", "3_58");     // Isengard Servant: [isengard] Orc, a regroup ability used only on purpose
 					put("servant2", "3_58");
+					put("goblinman", "2_42");   // Goblin Man: [isengard] Orc of another title, cost 2, site 2; discarded underground, a Shadow ability used only on purpose
 					put("armory", "1_157");     // Uruk-hai Armory: [isengard] condition, support area
 					put("runner", "1_178");     // Goblin Runner: [moria] Orc
 					put("troop", "1_177");      // Goblin Patrol Troop: [moria] Orc minion, no text
@@ -185,16 +185,16 @@ public class Card_03_054_ErrataTests
 	}
 
 	@Test
-	public void AnOrcOfAnotherCultureMadeIsengardIsOfferedAndAdds5() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AnIsengardOrcOfAnotherTitleIsOfferedAndAdds5() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var hollowing = scn.GetShadowCard("hollowing");
 		var armory = scn.GetShadowCard("armory");
-		var runner = scn.GetShadowCard("runner");
+		var goblinman = scn.GetShadowCard("goblinman");
 		scn.MoveCardsToSupportArea(hollowing);
-		scn.MoveCardsToHand(armory, runner);
-		// Goblin Runner is a [moria] Orc, here [isengard] as well: the 5 goes by race.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, runner, null, Culture.ISENGARD));
+		// Goblin Man is an [isengard] Orc as the Isengard Servant is, of another title, cost and site number: the
+		// 5 goes by the race.
+		scn.MoveCardsToHand(armory, goblinman);
 
 		scn.StartGame();
 		scn.FreepsPass();
@@ -203,9 +203,9 @@ public class Card_03_054_ErrataTests
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(hollowing));
 
 		scn.ShadowAcceptOptionalTrigger();
-		assertTrue(scn.ShadowHasCardChoiceAvailable(armory, runner));
-		scn.ShadowChooseCard(runner);
-		assertInDiscard(runner);
+		assertTrue(scn.ShadowHasCardChoiceAvailable(armory, goblinman));
+		scn.ShadowChooseCard(goblinman);
+		assertInDiscard(goblinman);
 		assertInHand(armory);
 		// 3 + 5
 		assertEquals(8, scn.GetTwilight());

@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -25,11 +24,12 @@ public class Card_03_108_ErrataTests
 					put("sam", "1_311");        // Sam, Son of Hamfast: Hobbit companion, strength 3, vitality 4
 					put("bilbo", "1_284");      // Bilbo, Retired Adventurer: Hobbit ally, home 3
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: Man companion, vitality 4
+					put("smeagol", "103_116");  // Smeagol, Once Like Us: [shire] companion with no race, Ring-bound; to play, add a burden (cheated in); an assignment ability only
 
 					put("troop", "1_177");      // Goblin Patrol Troop: [moria] Orc, vitality 3, no text
 					put("troop2", "1_177");
 					put("taskmaster", "2_90");  // Orc Taskmaster: [sauron] Orc, vitality 3; Shadow: exert to add (1)
-					put("raiders", "1_158");    // Uruk-hai Raiding Party: [isengard] Uruk-hai, vitality 3, damage +1
+					put("troll", "1_165");      // Cave Troll of Moria: [moria] Troll, vitality 4, damage +1 and fierce; its other texts are about playing it
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -77,12 +77,11 @@ public class Card_03_108_ErrataTests
 		var pan = scn.GetFreepsCard("pan");
 		var sam = scn.GetFreepsCard("sam");
 		var bilbo = scn.GetFreepsCard("bilbo");
-		var aragorn = scn.GetFreepsCard("aragorn");
+		var smeagol = scn.GetFreepsCard("smeagol");
 		scn.MoveCardsToHand(pan);
-		scn.MoveCompanionsToTable(sam, aragorn);
+		// Smeagol is a [shire] companion but no Hobbit.
+		scn.MoveCompanionsToTable(sam, smeagol);
 		scn.MoveAlliesToTable(bilbo);
-		// Aragorn is of the [shire] culture but no Hobbit.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.SHIRE));
 
 		scn.StartGame();
 
@@ -92,7 +91,7 @@ public class Card_03_108_ErrataTests
 
 		scn.FreepsPlayCard(pan);
 		assertTrue(scn.FreepsHasCardChoiceAvailable(sam, bilbo));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(smeagol));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		scn.FreepsChooseCard(sam);
 
@@ -115,16 +114,15 @@ public class Card_03_108_ErrataTests
 		var troop = scn.GetShadowCard("troop");
 		var troop2 = scn.GetShadowCard("troop2");
 		var taskmaster = scn.GetShadowCard("taskmaster");
-		var raiders = scn.GetShadowCard("raiders");
+		var troll = scn.GetShadowCard("troll");
 		scn.MoveCompanionsToTable(sam, aragorn);
 		scn.AttachCardsTo(sam, pan);
 		// Another Hobbit with a pan of his own, to show it is the bearer of the pan used who exerts.
 		scn.AttachCardsTo(frodo, pan2);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(troop, troop2, taskmaster, raiders);
-		// The Uruk-hai is of the [moria] culture, as the Goblin Patrol Troop is, but no Orc.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, raiders, null, Culture.MORIA));
+		// The Cave Troll is of the [moria] culture, as the Goblin Patrol Troop is, but no Orc.
+		scn.MoveMinionsToTable(troop, troop2, taskmaster, troll);
 
 		scn.SkipToPhase(Phase.MANEUVER);
 		// A skirmish action: not in the maneuver phase.
@@ -135,22 +133,22 @@ public class Card_03_108_ErrataTests
 				new PhysicalCardImpl[]{sam, troop},
 				new PhysicalCardImpl[]{aragorn, troop2});
 		// The Shadow player puts his other two minions on Sam.
-		scn.ShadowAssignToMinions(sam, taskmaster, raiders);
+		scn.ShadowAssignToMinions(sam, taskmaster, troll);
 		scn.FreepsResolveSkirmish(sam);
 
 		assertEquals(0, scn.GetWoundsOn(sam));
 		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertEquals(0, scn.GetWoundsOn(troop));
 		assertEquals(0, scn.GetWoundsOn(taskmaster));
-		assertEquals(0, scn.GetWoundsOn(raiders));
+		assertEquals(0, scn.GetWoundsOn(troll));
 		assertEquals(0, scn.GetWoundsOn(troop2));
 		assertTrue(scn.FreepsActionAvailable(pan));
 
 		scn.FreepsUseCardAction(pan);
-		// Orcs of two cultures skirmishing Sam are offered; the Uruk-hai skirmishing him is not, and neither is
+		// Orcs of two cultures skirmishing Sam are offered; the Troll skirmishing him is not, and neither is
 		// the Orc assigned to Aragorn, whose skirmish has not begun.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(troop, taskmaster));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(raiders, troop2));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(troll, troop2));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		scn.FreepsChooseCard(taskmaster);
 
@@ -158,7 +156,7 @@ public class Card_03_108_ErrataTests
 		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertEquals(1, scn.GetWoundsOn(taskmaster));
 		assertEquals(0, scn.GetWoundsOn(troop));
-		assertEquals(0, scn.GetWoundsOn(raiders));
+		assertEquals(0, scn.GetWoundsOn(troll));
 		assertEquals(0, scn.GetWoundsOn(troop2));
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 
@@ -173,7 +171,7 @@ public class Card_03_108_ErrataTests
 		assertEquals(1, scn.GetWoundsOn(sam));
 		assertEquals(1, scn.GetWoundsOn(taskmaster));
 		assertEquals(0, scn.GetWoundsOn(troop));
-		assertEquals(0, scn.GetWoundsOn(raiders));
+		assertEquals(0, scn.GetWoundsOn(troll));
 		assertEquals(0, scn.GetWoundsOn(troop2));
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}

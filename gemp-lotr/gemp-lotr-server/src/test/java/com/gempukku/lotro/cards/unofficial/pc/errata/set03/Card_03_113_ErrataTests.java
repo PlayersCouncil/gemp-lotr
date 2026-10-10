@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -25,6 +24,7 @@ public class Card_03_113_ErrataTests
 					put("bilbo", "1_284");      // Bilbo, Retired Adventurer: [shire] Hobbit ally
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion, vitality 4
 					put("legolas", "1_50");     // Legolas, Greenleaf: [elven] Elf companion, vitality 3
+					put("smeagol", "103_116");  // Smeagol, Once Like Us: [shire] companion with no race, Ring-bound; to play, add a burden (cheated in); an assignment ability only
 
 					put("elfsong", "1_39");     // Elf-song: [elven] Fellowship event, spot an Elf to remove a burden
 					put("salt", "11_171");      // Salt from the Shire: [shire] possession on a Hobbit; Fellowship: discard it to remove a burden
@@ -104,16 +104,17 @@ public class Card_03_113_ErrataTests
 		var scn = GetScenario();
 
 		var countryside = scn.GetFreepsCard("countryside");
-		var aragorn = scn.GetFreepsCard("aragorn");
+		var smeagol = scn.GetFreepsCard("smeagol");
 		scn.MoveCardsToHand(countryside);
-		scn.MoveCompanionsToTable(aragorn);
-		// Aragorn is of the [shire] culture but no Hobbit.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.SHIRE));
+		// Smeagol is a [shire] companion but no Hobbit: with Frodo, two [shire] companions and one Hobbit.
+		scn.MoveCompanionsToTable(smeagol);
 
 		scn.StartGame();
 
+		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(countryside));
 		scn.FreepsPlayCard(countryside);
+		assertEquals(1, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, countryside);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

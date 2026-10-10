@@ -6,7 +6,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -27,17 +26,39 @@ public class Card_03_004_ErrataTests
 
 					put("gimli", "1_13");       // Gimli, Son of Glóin: [dwarven] companion, strength 6, vitality 3, damage +1; a skirmish ability only used on purpose
 					put("guard", "1_7");        // Dwarf Guard: [dwarven] companion, strength 4, vitality 2, no text that matters
-					put("guard2", "1_7");       // a second Dwarf Guard, made Ring-bound where a test needs a bound [dwarven] companion
-					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] companion, made a Dwarf where a test needs one who is not [dwarven]
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] companion, vitality 4: the companion who is not [dwarven]
 					put("grimir", "1_17");      // Grimir, Dwarven Elder: [dwarven] ally, strength 3, vitality 3; a fellowship ability only used on purpose
 					put("thrarin", "1_27");     // Thrarin, Dwarven Smith: [dwarven] ally, strength 4, vitality 2; a maneuver ability only used on purpose
-					put("bilbo", "1_284");      // Bilbo, Retired Adventurer: [shire] ally, vitality 3, made a Dwarf where a test needs one who is not [dwarven]
+					put("bilbo", "1_284");      // Bilbo, Retired Adventurer: [shire] ally, vitality 3: the ally who is not [dwarven]
 
 					put("troop", "1_177");      // Goblin Patrol Troop: minion with no text, strength 13
 					put("troop2", "1_177");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// Gimli, Bearer of Grudges bears the Ring: the one [dwarven] companion who is Ring-bound. No Frodo is on this
+	// table, and no other Gimli is ever put in play on it.
+	protected VirtualTableScenario GetGimliRBScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("welcome", "53_4");
+
+					put("thorin", "17_6");      // Thorin III, Stonehelm: [dwarven] companion, strength 6, vitality 3, damage +1; his trigger answers a minion losing a skirmish to him
+					put("guard", "1_7");        // Dwarf Guard: [dwarven] companion, strength 4, vitality 2, no text that matters
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] companion: the companion who is not [dwarven]
+					put("grimir", "1_17");      // Grimir, Dwarven Elder: [dwarven] ally, strength 3, vitality 3; a fellowship ability only used on purpose
+					put("thrarin", "1_27");     // Thrarin, Dwarven Smith: [dwarven] ally, strength 4, vitality 2; a maneuver ability only used on purpose
+					put("bilbo", "1_284");      // Bilbo, Retired Adventurer: [shire] ally, vitality 3: the ally who is not [dwarven]
+
+					put("troop", "1_177");      // Goblin Patrol Troop: minion with no text, strength 13
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.GimliRB,
 				VirtualTableScenario.RulingRing
 		);
 	}
@@ -107,9 +128,7 @@ public class Card_03_004_ErrataTests
 		scn.MoveAlliesToTable(grimir, thrarin, bilbo);
 
 		scn.StartGame();
-		// Aragorn and Bilbo are Dwarves, but not [dwarven]
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, aragorn, null, Race.DWARF));
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, bilbo, null, Race.DWARF));
+		// Aragorn is a companion and Bilbo a wounded ally, neither of them [dwarven]
 		scn.AddWoundsToChar(grimir, 2);
 		scn.AddWoundsToChar(thrarin, 1);
 		scn.AddWoundsToChar(bilbo, 1);
@@ -154,7 +173,6 @@ public class Card_03_004_ErrataTests
 		scn.MoveCardsToSupportArea(welcome);
 		scn.MoveCompanionsToTable(gimli, guard, aragorn);
 		scn.MoveAlliesToTable(grimir);
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, aragorn, null, Race.DWARF));
 		scn.AddWoundsToChar(gimli, 2);
 		scn.AddWoundsToChar(guard, 1);
 		scn.AddWoundsToChar(grimir, 1);
@@ -169,37 +187,34 @@ public class Card_03_004_ErrataTests
 
 	@Test
 	public void SkirmishActionExertsADwarvenAllyToAddItsStrengthToAnUnboundDwarvenCompanion() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
+		var scn = GetGimliRBScenario();
 
 		var welcome = scn.GetFreepsCard("welcome");
-		var gimli = scn.GetFreepsCard("gimli");
+		var gimli = scn.GetRingBearer();
+		var thorin = scn.GetFreepsCard("thorin");
 		var guard = scn.GetFreepsCard("guard");
-		var guard2 = scn.GetFreepsCard("guard2");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var grimir = scn.GetFreepsCard("grimir");
 		var thrarin = scn.GetFreepsCard("thrarin");
 		var bilbo = scn.GetFreepsCard("bilbo");
 		var troop = scn.GetShadowCard("troop");
 		scn.MoveCardsToSupportArea(welcome);
-		scn.MoveCompanionsToTable(gimli, guard, guard2, aragorn);
+		scn.MoveCompanionsToTable(thorin, guard, aragorn);
 		scn.MoveAlliesToTable(grimir, thrarin, bilbo);
 
 		scn.StartGame();
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, aragorn, null, Race.DWARF));
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, bilbo, null, Race.DWARF));
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, guard2, null, Keyword.RING_BOUND));
 		scn.MoveMinionsToTable(troop);
 		scn.SkipToAssignments();
-		scn.FreepsAssignAndResolve(gimli, troop);
+		scn.FreepsAssignAndResolve(thorin, troop);
 
-		assertEquals(6, scn.GetStrength(gimli));
-		assertEquals(1, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
+		assertEquals(6, scn.GetStrength(thorin));
+		assertEquals(1, scn.GetKeywordCount(thorin, Keyword.DAMAGE));
 		assertEquals(4, scn.GetStrength(guard));
 		assertTrue(scn.FreepsActionAvailable(welcome));
 		scn.FreepsUseCardAction(welcome);
 
 		assertTrue(scn.FreepsHasCardChoiceAvailable(grimir, thrarin));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(bilbo, gimli, guard));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(bilbo, thorin, guard, gimli));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		assertEquals(0, scn.GetWoundsOn(thrarin));
 		scn.FreepsChooseCard(thrarin);
@@ -209,60 +224,63 @@ public class Card_03_004_ErrataTests
 		// Thrarin has no damage bonus, so his strength is added without asking (Q-0129)
 		assertFalse(scn.FreepsChoiceAvailable("damage"));
 
-		// Dwarf Guard is not in a skirmish; the Ring-bound Dwarf Guard, the Dwarf Aragorn and the allies are out
-		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli, guard));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(guard2, aragorn, thrarin, grimir));
+		// Dwarf Guard is not in a skirmish; Gimli, a [dwarven] companion who bears the Ring and so is Ring-bound,
+		// Aragorn of another culture and the allies are out
+		assertTrue(scn.FreepsHasCardChoiceAvailable(thorin, guard));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(gimli, aragorn, thrarin, grimir));
 		assertEquals(1, scn.FreepsGetChoiceMin());
-		scn.FreepsChooseCard(gimli);
+		scn.FreepsChooseCard(thorin);
 
 		// 6 + Thrarin's 4
-		assertEquals(10, scn.GetStrength(gimli));
-		assertEquals(1, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
+		assertEquals(10, scn.GetStrength(thorin));
+		assertEquals(1, scn.GetKeywordCount(thorin, Keyword.DAMAGE));
 		assertEquals(4, scn.GetStrength(guard));
+		// 6 + 1 for The Ruling Ring
+		assertEquals(7, scn.GetStrength(gimli));
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
 
 	@Test
 	public void SkirmishActionCanAddTheExertedAllysDamageBonusInstead() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
+		var scn = GetGimliRBScenario();
 
 		var welcome = scn.GetFreepsCard("welcome");
-		var gimli = scn.GetFreepsCard("gimli");
+		var gimli = scn.GetRingBearer();
+		var thorin = scn.GetFreepsCard("thorin");
 		var guard = scn.GetFreepsCard("guard");
-		var guard2 = scn.GetFreepsCard("guard2");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var thrarin = scn.GetFreepsCard("thrarin");
 		var grimir = scn.GetFreepsCard("grimir");
 		var troop = scn.GetShadowCard("troop");
 		scn.MoveCardsToSupportArea(welcome);
-		scn.MoveCompanionsToTable(gimli, guard, guard2, aragorn);
+		scn.MoveCompanionsToTable(thorin, guard, aragorn);
 		scn.MoveAlliesToTable(thrarin, grimir);
 
 		scn.StartGame();
 		scn.ApplyAdHocModifier(new AddKeywordModifier(null, thrarin, null, Keyword.DAMAGE, 2));
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, aragorn, null, Race.DWARF));
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, guard2, null, Keyword.RING_BOUND));
 		scn.MoveMinionsToTable(troop);
 		scn.SkipToAssignments();
-		scn.FreepsAssignAndResolve(gimli, troop);
+		scn.FreepsAssignAndResolve(thorin, troop);
 
-		assertEquals(6, scn.GetStrength(gimli));
+		assertEquals(6, scn.GetStrength(thorin));
+		assertEquals(1, scn.GetKeywordCount(thorin, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
 		scn.FreepsUseCardAction(welcome);
 		scn.FreepsChooseCard(thrarin);
 		scn.FreepsChoose("damage");
 
-		// As for the strength: Dwarf Guard is not in a skirmish; the Ring-bound Dwarf Guard, the Dwarf Aragorn and
-		// the allies are out
-		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli, guard));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(guard2, aragorn, thrarin, grimir));
+		// As for the strength: Dwarf Guard is not in a skirmish; Gimli, the Ring-bound [dwarven] companion, Aragorn
+		// of another culture and the allies are out
+		assertTrue(scn.FreepsHasCardChoiceAvailable(thorin, guard));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(gimli, aragorn, thrarin, grimir));
 		assertEquals(1, scn.FreepsGetChoiceMin());
-		scn.FreepsChooseCard(gimli);
+		scn.FreepsChooseCard(thorin);
 
 		// Damage +1 of his own and Thrarin's damage +2
-		assertEquals(3, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
-		assertEquals(6, scn.GetStrength(gimli));
+		assertEquals(3, scn.GetKeywordCount(thorin, Keyword.DAMAGE));
+		assertEquals(6, scn.GetStrength(thorin));
 		assertEquals(0, scn.GetKeywordCount(guard, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
 		assertEquals(1, scn.GetWoundsOn(thrarin));
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
@@ -366,7 +384,6 @@ public class Card_03_004_ErrataTests
 		scn.MoveAlliesToTable(grimir, thrarin, bilbo);
 
 		scn.StartGame();
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, bilbo, null, Race.DWARF));
 		scn.AddWoundsToChar(grimir, 2);
 		scn.AddWoundsToChar(thrarin, 1);
 		scn.MoveMinionsToTable(troop);
@@ -395,8 +412,6 @@ public class Card_03_004_ErrataTests
 		scn.MoveAlliesToTable(grimir, thrarin, bilbo);
 
 		scn.StartGame();
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, aragorn, null, Race.DWARF));
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, bilbo, null, Race.DWARF));
 		scn.AddWoundsToChar(gimli, 2);
 		scn.AddWoundsToChar(guard, 1);
 		scn.AddWoundsToChar(aragorn, 1);
@@ -443,7 +458,6 @@ public class Card_03_004_ErrataTests
 		scn.MoveAlliesToTable(grimir, thrarin, bilbo);
 
 		scn.StartGame();
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, bilbo, null, Race.DWARF));
 		scn.AddWoundsToChar(gimli, 1);
 		scn.AddWoundsToChar(grimir, 2);
 		scn.AddWoundsToChar(thrarin, 1);

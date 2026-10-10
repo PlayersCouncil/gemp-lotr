@@ -4,7 +4,6 @@ import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -30,7 +29,8 @@ public class Card_03_079_ErrataTests
 					put("troop", "1_177");        // Goblin Patrol Troop: [moria] Orc, no text
 					put("taskmaster", "2_90");    // Orc Taskmaster: [sauron] Orc, a Shadow ability used only on purpose
 					put("forger", "3_56");        // Isengard Forger: [isengard] Orc, a Shadow ability used only on purpose
-					put("savage", "1_151");       // Uruk Savage: [isengard] Uruk-hai, given another culture where a non-Orc is needed
+					put("guard", "10_81");        // Cirith Ungol Guard: [sauron] Uruk-hai, Damage +1 and nothing else: a [sauron] minion that is no Orc
+					put("troll", "1_165");        // Cave Troll of Moria: [moria] Troll, damage +1 and fierce; its other texts are about playing it: a [moria] minion that is no Orc
 
 					put("axe", "1_190");          // Moria Axe: [moria] possession, cost 1, bearer must be a [moria] Orc
 					put("spear", "1_182");        // Goblin Spear: [moria] possession, cost 1, bearer must be a [moria] minion
@@ -278,16 +278,16 @@ public class Card_03_079_ErrataTests
 		var malice = scn.GetShadowCard("malice");
 		var bowman = scn.GetShadowCard("bowman");
 		var forger = scn.GetShadowCard("forger");
-		var savage = scn.GetShadowCard("savage");
+		var guard = scn.GetShadowCard("guard");
 		var taskmaster = scn.GetShadowCard("taskmaster");
 		var axe = scn.GetShadowCard("axe");
 		scn.MoveCardsToHand(malice);
 		scn.MoveCardsToDiscard(axe);
 
 		scn.StartGame();
-		// A [moria] Orc, an Orc of another culture, and a [sauron] minion that is no Orc.
-		scn.MoveMinionsToTable(bowman, forger, savage);
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, savage, null, Culture.SAURON));
+		// A [moria] Orc, an Orc of another culture, and a [sauron] minion that is no Orc: Cirith Ungol Guard, an
+		// Uruk-hai.
+		scn.MoveMinionsToTable(bowman, forger, guard);
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.SetTwilight(5);
 		scn.FreepsPass();
@@ -307,16 +307,16 @@ public class Card_03_079_ErrataTests
 		var malice = scn.GetShadowCard("malice");
 		var taskmaster = scn.GetShadowCard("taskmaster");
 		var forger = scn.GetShadowCard("forger");
-		var savage = scn.GetShadowCard("savage");
+		var troll = scn.GetShadowCard("troll");
 		var bowman = scn.GetShadowCard("bowman");
 		var orcscimitar = scn.GetShadowCard("orcscimitar");
 		scn.MoveCardsToHand(malice);
 		scn.MoveCardsToDiscard(orcscimitar);
 
 		scn.StartGame();
-		// A [sauron] Orc, an Orc of another culture, and a [moria] minion that is no Orc.
-		scn.MoveMinionsToTable(taskmaster, forger, savage);
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, savage, null, Culture.MORIA));
+		// A [sauron] Orc, an Orc of another culture, and a [moria] minion that is no Orc: the Cave Troll, cheated in
+		// (the [moria] Orc it was played beside is gone).
+		scn.MoveMinionsToTable(taskmaster, forger, troll);
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.SetTwilight(5);
 		scn.FreepsPass();
