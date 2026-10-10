@@ -50,7 +50,8 @@ to write). The names are the survey's: where a directive offers "N tests or N pa
 and the board cannot hold the passes (a card played in one changes what the next would read), write as many tests
 as it takes, and say in your report which of your tests stand for which name of the batch file.
 
-1. **Read the directive**, and the cards' texts it names (`packet.py <id> --blind`), and any ruling it cites.
+1. **Read the directive**, and the cards' texts it names (`packet.py <id> --blind`; a Hobbit-set card, sets 30 to
+   33, has no sheet and often no game text, so read its definition: `packet.py --defs <id>`), and any ruling it cites.
    (A directive that reads the twilight pool or the mulligan question after a starting fellowship was written
    before the pitfall "A starting fellowship" was sharpened: `lookup.py "A starting fellowship"` first.)
    Read the old method too, once: not to copy its lines, but to see that the directive lost nothing it asserted.
