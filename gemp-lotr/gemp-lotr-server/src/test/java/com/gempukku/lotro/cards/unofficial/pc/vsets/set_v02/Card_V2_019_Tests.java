@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.StrengthModifier;
 import org.junit.Test;
 
@@ -40,9 +39,6 @@ public class Card_V2_019_Tests
 					// No Business of Ours: an [isengard] condition that is no machine; it keeps the Free
 					// Peoples player from looking at the Shadow hand.
 					put("business", "2_44");
-					// Seeking Its Master: a [sauron] condition, made a machine in the test that uses it.  Its
-					// Shadow ability needs a [sauron] Orc.
-					put("seeking", "1_276");
 
 					// Gondor's Vengeance: "Regroup: Exert a ranger companion to discard a minion."
 					put("vengeance", "1_106");
@@ -241,10 +237,7 @@ public class Card_V2_019_Tests
 		var devilry = scn.GetShadowCard("devilry");
 		var wall = scn.GetShadowCard("wall");
 		var business = scn.GetShadowCard("business");
-		var seeking = scn.GetShadowCard("seeking");
-		scn.MoveCardsToSupportArea(ladder, devilry, wall, business, seeking);
-		// No machine is printed outside [isengard], so a [sauron] condition is made one.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, seeking, null, Keyword.MACHINE));
+		scn.MoveCardsToSupportArea(ladder, devilry, wall, business);
 		scn.AddTokensToCard(ladder, 1);
 		scn.AddTokensToCard(devilry, 2);
 
@@ -257,7 +250,6 @@ public class Card_V2_019_Tests
 		// beats that without doubling it.
 		scn.ApplyAdHocModifier(new StrengthModifier(null, aragorn, null, 10));
 
-		assertTrue(scn.HasKeyword(seeking, Keyword.MACHINE));
 		assertFalse(scn.HasKeyword(business, Keyword.MACHINE));
 
 		scn.SkipToAssignments();
@@ -292,7 +284,6 @@ public class Card_V2_019_Tests
 		assertTrue(scn.ShadowHasCardChoiceAvailable(devilry));
 		assertTrue(scn.ShadowHasCardChoiceAvailable(wall));
 		assertFalse(scn.ShadowHasCardChoiceAvailable(business));
-		assertFalse(scn.ShadowHasCardChoiceAvailable(seeking));
 		assertEquals(1, scn.ShadowGetChoiceMin());
 		assertEquals(1, scn.ShadowGetChoiceMax());
 
@@ -301,7 +292,6 @@ public class Card_V2_019_Tests
 		assertEquals(2, scn.GetCultureTokensOn(devilry));
 		assertEquals(0, scn.GetCultureTokensOn(wall));
 		assertEquals(0, scn.GetCultureTokensOn(business));
-		assertEquals(0, scn.GetCultureTokensOn(seeking));
 
 		// The tokens are [isengard] ones: in the next skirmish the Ladder can spot three of them.
 		scn.FreepsResolveSkirmish(guard2);

@@ -1,11 +1,9 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -33,10 +31,9 @@ public class Card_V2_032_Tests
 					put("spotter2", "102_60");
 					put("lugburz", "102_63");    // Orc of Lugburz: cost 3, strength 9
 
-					// Desert Wind Initiate: a [raider] tracker and a Man, cost 1, strength 7, site 4.  Never played
-					// from hand, so its "when you play" never happens; its other text is about Southrons and ambush.
-					// Every [sauron] tracker in print is an Orc and every [isengard] tracker an Uruk-hai, so where
-					// it matters the Initiate is made both: a tracker of either race and of neither culture.
+					// Desert Wind Initiate: a [raider] tracker and a Man, cost 1, strength 7, site 4: the tracker of
+					// neither culture.  Never played from hand, so its "when you play" never happens; its other
+					// text is about Southrons and ambush.
 					put("initiate", "103_47");
 					put("initiate2", "103_47");
 
@@ -87,7 +84,7 @@ public class Card_V2_032_Tests
 	}
 
 	@Test
-	public void IsPlayedForOneAndTrackersAreStrengthPlus1OnlyOnceASauronTrackerJoinsTheIsengardOnes() throws DecisionResultInvalidException, CardNotFoundException, InvalidCardDefinitionException {
+	public void IsPlayedForOneAndTrackersAreStrengthPlus1OnlyOnceASauronTrackerJoinsTheIsengardOnes() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var alliance = scn.GetShadowCard("alliance");
@@ -98,11 +95,11 @@ public class Card_V2_032_Tests
 		var savage = scn.GetShadowCard("savage");
 		var chieftain = scn.GetShadowCard("chieftain");
 		scn.MoveCardsToHand(alliance, spotter);
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, scn.GenerateShadowFilter("name(Desert Wind Initiate)"), null, Race.ORC));
 
 		scn.StartGame();
 
-		// Two [isengard] trackers, a [raider] tracker who is an Orc, and a [sauron] Orc who is no tracker.
+		// Two [isengard] trackers, a [raider] tracker, an [isengard] Uruk-hai who is no tracker and a [sauron]
+		// Orc who is no tracker.
 		scn.MoveMinionsToTable(seeker, runner, initiate, savage, chieftain);
 		scn.SetTwilight(2);
 		scn.FreepsPass();
@@ -141,7 +138,7 @@ public class Card_V2_032_Tests
 	}
 
 	@Test
-	public void SauronTrackersAloneGetNothingUntilAnIsengardTrackerIsPlayed() throws DecisionResultInvalidException, CardNotFoundException, InvalidCardDefinitionException {
+	public void SauronTrackersAloneGetNothingUntilAnIsengardTrackerIsPlayed() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var alliance = scn.GetShadowCard("alliance");
@@ -152,12 +149,10 @@ public class Card_V2_032_Tests
 		var savage = scn.GetShadowCard("savage");
 		scn.MoveCardsToSupportArea(alliance);
 		scn.MoveCardsToHand(seeker);
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, scn.GenerateShadowFilter("name(Desert Wind Initiate)"), null, Race.URUK_HAI));
 
 		scn.StartGame();
 
-		// Two [sauron] trackers, a [raider] tracker who is an Uruk-hai, and an [isengard] Uruk-hai who is no
-		// tracker.
+		// Two [sauron] trackers, a [raider] tracker, and an [isengard] Uruk-hai who is no tracker.
 		scn.MoveMinionsToTable(spotter, lugburz, initiate, savage);
 		scn.SetTwilight(1);
 		scn.FreepsPass();
@@ -213,7 +208,7 @@ public class Card_V2_032_Tests
 	}
 
 	@Test
-	public void ShadowActionDiscardsASauronTrackerFromHandToPlayAnIsengardTrackerFromTheDiscardPileAndDiscardsThatCopy() throws DecisionResultInvalidException, CardNotFoundException, InvalidCardDefinitionException {
+	public void ShadowActionDiscardsASauronTrackerFromHandToPlayAnIsengardTrackerFromTheDiscardPileAndDiscardsThatCopy() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var alliance = scn.GetShadowCard("alliance");
@@ -231,15 +226,12 @@ public class Card_V2_032_Tests
 		var chieftain = scn.GetShadowCard("chieftain");
 		var theirPlains = scn.GetFreepsCard("plains");
 		scn.MoveCardsToSupportArea(alliance, alliance2, lastChild);
-		// In hand: two [sauron] trackers, an [isengard] tracker, a [raider] tracker who is an Orc, and a
-		// [sauron] Orc who is no tracker.
+		// In hand: two [sauron] trackers, an [isengard] tracker, a [raider] tracker, and a [sauron] Orc who is
+		// no tracker.
 		scn.MoveCardsToHand(spotter, lugburz, plains, initiate2, chieftain);
 		// In the discard pile: two [isengard] trackers, an [isengard] Uruk-hai who is no tracker and a
-		// [raider] tracker who is an Uruk-hai.  The other player's discard pile holds an [isengard] tracker
-		// of his own.
+		// [raider] tracker.  The other player's discard pile holds an [isengard] tracker of his own.
 		scn.MoveCardsToDiscard(seeker, runner, savage, initiate, theirPlains);
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, scn.GenerateShadowFilter("name(Desert Wind Initiate)"), null, Race.ORC));
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, scn.GenerateShadowFilter("name(Desert Wind Initiate)"), null, Race.URUK_HAI));
 
 		scn.StartGame();
 
@@ -316,7 +308,7 @@ public class Card_V2_032_Tests
 	}
 
 	@Test
-	public void IsNotOfferedWhenThePoolIsOneShortOfTheOnlyIsengardTrackerInTheDiscardPile() throws DecisionResultInvalidException, CardNotFoundException, InvalidCardDefinitionException {
+	public void IsNotOfferedWhenThePoolIsOneShortOfTheOnlyIsengardTrackerInTheDiscardPile() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var alliance = scn.GetShadowCard("alliance");
@@ -328,9 +320,8 @@ public class Card_V2_032_Tests
 		scn.MoveCardsToSupportArea(alliance);
 		scn.MoveCardsToHand(spotter);
 		// The Uruk Runner needs 3 + 2 roaming.  The Uruk Savage and the second Lugburz Spotter need 2 + 2 and
-		// the Initiate, a tracker made an Uruk-hai, 1 + 2: the pool has that, and none is an [isengard] tracker.
+		// the Initiate, a [raider] tracker, 1 + 2: the pool has that, and none is an [isengard] tracker.
 		scn.MoveCardsToDiscard(runner, savage, spotter2, initiate);
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, scn.GenerateShadowFilter("name(Desert Wind Initiate)"), null, Race.URUK_HAI));
 
 		scn.StartGame();
 

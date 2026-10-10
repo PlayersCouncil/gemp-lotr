@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,6 +31,11 @@ public class Card_V2_013_Tests
 					put("legolas", "1_50");      // Legolas, Greenleaf: an archer, for one wound in the archery phase
 					// Ecglaf, Courageous Farmer: a [rohan] Man who is an ally.  A fellowship ability.
 					put("ecglaf", "5_81");
+					// Northern Signal-fire, Flame of Calenhad: a [rohan] possession of the support area.
+					// "Maneuver: Hinder this beacon and exert an unbound Man.  Until the regroup phase, each of
+					// your other Men gain each of the unloaded keywords (except race) on that Man."  How an
+					// ally comes to be valiant in play: none is in print.
+					put("flame", "103_86");
 
 					// Mounts.  Shadowfax goes on Gandalf only; Rider's Mount on a [rohan] Man; Horse of Rohan on
 					// a Man, Elf or Wizard.  The two horses make minions exert at the start of their bearer's
@@ -522,45 +526,57 @@ public class Card_V2_013_Tests
 		var scn = GetScenario();
 
 		var gandalf = scn.GetFreepsCard("gandalf");
-		var aragorn = scn.GetFreepsCard("aragorn");
+		var guard = scn.GetFreepsCard("guard");
+		var legolas = scn.GetFreepsCard("legolas");
 		var shadowfax = scn.GetFreepsCard("shadowfax");
 		var ecglaf = scn.GetFreepsCard("ecglaf");
-		// Two valiant companions, and two companions who are not: Aragorn and Gandalf himself.
-		scn.MoveCompanionsToTable(gandalf, scn.GetFreepsCard("guard"), scn.GetFreepsCard("defender"), aragorn);
-		// No ally is valiant in print, so one is made valiant: valiant, and not a companion.
+		var flame = scn.GetFreepsCard("flame");
+		// Two valiant companions, and two companions who are not: Legolas and Gandalf himself.  Neither is a
+		// Man.
+		scn.MoveCompanionsToTable(gandalf, guard, scn.GetFreepsCard("defender"), legolas);
 		scn.MoveAlliesToTable(ecglaf);
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, ecglaf, null, Keyword.VALIANT));
+		scn.MoveCardsToSupportArea(flame);
 
-		var taskmaster = scn.GetShadowCard("taskmaster");
+		var lurtz = scn.GetShadowCard("lurtz");
+		var savage = scn.GetShadowCard("savage");
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(taskmaster);
-		scn.FreepsPass();
+		scn.MoveMinionsToTable(lurtz, savage);
+		scn.SkipToPhase(Phase.MANEUVER);
 
-		int twilight = scn.GetTwilight();
-		assertFalse(scn.HasKeyword(aragorn, Keyword.VALIANT));
-		assertFalse(scn.HasKeyword(gandalf, Keyword.VALIANT));
+		// No ally is valiant in print.  The Flame of Calenhad makes one: the Household Guard, the only unbound
+		// Man, exerts, and until the regroup phase the player's other Men have his keyword.  Ecglaf is the
+		// only other Man: valiant, and not a companion.
+		assertFalse(scn.HasKeyword(ecglaf, Keyword.VALIANT));
+		scn.FreepsUseCardAction(flame);
+		assertEquals(1, scn.GetWoundsOn(guard));
 		assertTrue(scn.HasKeyword(ecglaf, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(legolas, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(gandalf, Keyword.VALIANT));
 
-		scn.ShadowUseCardAction(taskmaster);
+		// Lurtz's ability costs him nothing, and with two valiant companions and a valiant ally nothing
+		// answers it.
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+		scn.ShadowUseCardAction(lurtz);
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
-		assertEquals(twilight + 1, scn.GetTwilight());
-		assertEquals(1, scn.GetWoundsOn(taskmaster));
+		assertTrue(scn.HasKeyword(lurtz, Keyword.FIERCE));
+		assertEquals(0, scn.GetWoundsOn(lurtz));
 		assertEquals(0, scn.GetWoundsOn(gandalf));
-		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 
 		// Shadowfax is put on Gandalf, who is now the third valiant companion by his own text.
 		scn.AttachCardsTo(gandalf, shadowfax);
 		assertTrue(scn.HasKeyword(gandalf, Keyword.VALIANT));
+		scn.FreepsPass();
 
-		scn.ShadowUseCardAction(taskmaster);
-		assertEquals(2, scn.GetWoundsOn(taskmaster));
+		scn.ShadowUseCardAction(lurtz);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(gandalf));
 
 		scn.FreepsChooseOptionalTrigger(gandalf);
 		assertEquals(2, scn.GetWoundsOn(gandalf));
-		assertEquals(twilight + 1, scn.GetTwilight());
-		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertEquals(1, scn.GetWoundsOn(lurtz));
+		assertEquals(0, scn.GetWoundsOn(savage));
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
 
 	@Test

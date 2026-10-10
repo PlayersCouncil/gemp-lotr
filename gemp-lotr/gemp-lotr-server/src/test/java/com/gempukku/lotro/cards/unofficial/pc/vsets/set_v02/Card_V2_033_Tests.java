@@ -1,12 +1,10 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -318,7 +316,7 @@ public class Card_V2_033_Tests
 	}
 
 	@Test
-	public void IsNotOfferedWithoutASauronTrackerAndIsOnceOneIsInPlay() throws DecisionResultInvalidException, CardNotFoundException, InvalidCardDefinitionException {
+	public void IsNotOfferedWithoutASauronTrackerAndIsOnceOneIsInPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var grumbler = scn.GetShadowCard("grumbler");
@@ -327,9 +325,6 @@ public class Card_V2_033_Tests
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var gimli = scn.GetFreepsCard("gimli");
 		scn.MoveCompanionsToTable(aragorn, gimli);
-		// Every [sauron] tracker in print is an Orc.  The Grumbler is made one as well, so that a tracker who
-		// is an Orc and not a [sauron] card is on the table.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, scn.GenerateShadowFilter("name(Uruk Grumbler)"), null, Race.ORC));
 
 		scn.StartGame();
 

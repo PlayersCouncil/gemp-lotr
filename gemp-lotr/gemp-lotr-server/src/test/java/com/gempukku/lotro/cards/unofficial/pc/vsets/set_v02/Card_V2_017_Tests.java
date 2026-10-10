@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -40,7 +39,14 @@ public class Card_V2_017_Tests
 					// can be spotted, and no test has one.
 					put("defender", "68_9");
 					put("rider", "4_286");       // Rider of Rohan: a [rohan] Man who is not valiant, strength 5; his ability needs a mount
-					put("grimir", "1_17");       // Grimir, Dwarven Elder: an ally, strength 3, not valiant
+					// Guma, Plains Farmer: a [rohan] Man who is an ally, strength 4, vitality 2, not valiant; a
+					// fellowship ability.
+					put("guma", "4_277");
+					// Northern Signal-fire, Flame of Calenhad: a [rohan] possession of the support area.
+					// "Maneuver: Hinder this beacon and exert an unbound Man.  Until the regroup phase, each of
+					// your other Men gain each of the unloaded keywords (except race) on that Man."  How an
+					// ally comes to be valiant in play: none is in print.
+					put("flame", "103_86");
 
 					put("marksman", "1_176");    // Goblin Marksman: strength 7, vitality 1; "Archer" is its whole text
 					// Morgul Slayer: strength 7, vitality 2; "Regroup: Exert this minion to wound a companion
@@ -103,25 +109,17 @@ public class Card_V2_017_Tests
 		var guard = scn.GetFreepsCard("guard1");
 		var defender = scn.GetFreepsCard("defender");
 		var rider = scn.GetFreepsCard("rider");
-		var grimir = scn.GetFreepsCard("grimir");
 		scn.MoveCompanionsToTable(aragorn, guard, defender, rider);
-		// No ally is valiant in print, so Grimir is made valiant: valiant, and not a companion.
-		scn.MoveAlliesToTable(grimir);
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, grimir, null, Keyword.VALIANT));
 		scn.MoveCardsToHand(die);
 
 		var troop = scn.GetShadowCard("troop");
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(troop);
-		// Nor is any minion.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, troop, null, Keyword.VALIANT));
 		scn.SkipToPhase(Phase.MANEUVER);
 
 		assertTrue(scn.HasKeyword(guard, Keyword.VALIANT));
 		assertTrue(scn.HasKeyword(defender, Keyword.VALIANT));
-		assertTrue(scn.HasKeyword(grimir, Keyword.VALIANT));
-		assertTrue(scn.HasKeyword(troop, Keyword.VALIANT));
 		assertFalse(scn.HasKeyword(aragorn, Keyword.VALIANT));
 		assertFalse(scn.HasKeyword(rider, Keyword.VALIANT));
 		assertFalse(scn.HasKeyword(frodo, Keyword.VALIANT));
@@ -132,7 +130,6 @@ public class Card_V2_017_Tests
 		assertEquals(5, scn.GetStrength(rider));
 		// Frodo's 3 + 1 for the Ring.
 		assertEquals(4, scn.GetStrength(frodo));
-		assertEquals(3, scn.GetStrength(grimir));
 		assertEquals(13, scn.GetStrength(troop));
 
 		int twilight = scn.GetTwilight();
@@ -150,16 +147,14 @@ public class Card_V2_017_Tests
 		assertEquals(0, scn.GetWoundsOn(defender));
 		assertEquals(0, scn.GetWoundsOn(rider));
 		assertEquals(0, scn.GetWoundsOn(frodo));
-		assertEquals(0, scn.GetWoundsOn(grimir));
 
 		// The valiant companions, a Man and an Elf, with nothing asked.
 		assertEquals(8, scn.GetStrength(guard));
 		assertEquals(7, scn.GetStrength(defender));
-		// Not the companions who are not valiant, nor the valiant ally, nor the valiant minion.
+		// Not the companions who are not valiant, nor the minion.
 		assertEquals(8, scn.GetStrength(aragorn));
 		assertEquals(5, scn.GetStrength(rider));
 		assertEquals(4, scn.GetStrength(frodo));
-		assertEquals(3, scn.GetStrength(grimir));
 		assertEquals(13, scn.GetStrength(troop));
 
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
@@ -264,25 +259,38 @@ public class Card_V2_017_Tests
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var guard = scn.GetFreepsCard("guard1");
 		var defender = scn.GetFreepsCard("defender");
-		var rider = scn.GetFreepsCard("rider");
-		var grimir = scn.GetFreepsCard("grimir");
-		scn.MoveCompanionsToTable(aragorn, guard, defender, rider);
-		// A valiant ally and a valiant minion, neither in print.
-		scn.MoveAlliesToTable(grimir);
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, grimir, null, Keyword.VALIANT));
+		var guma = scn.GetFreepsCard("guma");
+		var flame = scn.GetFreepsCard("flame");
+		scn.MoveCompanionsToTable(aragorn, guard, defender);
+		scn.MoveAlliesToTable(guma);
+		scn.MoveCardsToSupportArea(flame);
 		scn.MoveCardsToHand(die);
 
 		var marksman = scn.GetShadowCard("marksman");
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(marksman);
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, marksman, null, Keyword.VALIANT));
 		scn.SkipToPhase(Phase.MANEUVER);
+
+		// No ally is valiant in print.  The Flame of Calenhad makes one: the Household Guard exerts, and until
+		// the regroup phase the player's other Men have his keyword: Guma, valiant and not a companion, and
+		// Aragorn with him.
+		assertFalse(scn.HasKeyword(guma, Keyword.VALIANT));
+		scn.FreepsUseCardAction(flame);
+		scn.FreepsChooseCard(guard);
+		assertEquals(1, scn.GetWoundsOn(guard));
+		assertTrue(scn.HasKeyword(guma, Keyword.VALIANT));
+		assertTrue(scn.HasKeyword(aragorn, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(frodo, Keyword.VALIANT));
+		assertEquals(4, scn.GetStrength(guma));
+		scn.ShadowPass();
 
 		scn.FreepsPlayCard(die);
 		assertEquals(3, scn.GetWoundsOn(aragorn));
 		assertEquals(8, scn.GetStrength(guard));
 		assertEquals(7, scn.GetStrength(defender));
+		// The valiant ally is not made stronger.
+		assertEquals(4, scn.GetStrength(guma));
 
 		// The Marksman's one arrow goes to Aragorn, who has a single vitality left.
 		scn.SkipToArcheryWounds();
@@ -296,10 +304,10 @@ public class Card_V2_017_Tests
 		// 6 + 2 + 1 and 5 + 2 + 1.
 		assertEquals(9, scn.GetStrength(guard));
 		assertEquals(8, scn.GetStrength(defender));
-		// Not the companions who are not valiant, nor the valiant ally, nor the valiant minion.
-		assertEquals(5, scn.GetStrength(rider));
+		// Not the companion who is not valiant, nor the valiant ally, nor the minion.
 		assertEquals(4, scn.GetStrength(frodo));
-		assertEquals(3, scn.GetStrength(grimir));
+		assertTrue(scn.HasKeyword(guma, Keyword.VALIANT));
+		assertEquals(4, scn.GetStrength(guma));
 		assertEquals(7, scn.GetStrength(marksman));
 
 		// The Household Guard fights the Marksman at 9 and kills it.
@@ -315,7 +323,7 @@ public class Card_V2_017_Tests
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 		assertEquals(7, scn.GetStrength(guard));
 		assertEquals(6, scn.GetStrength(defender));
-		assertEquals(5, scn.GetStrength(rider));
+		assertEquals(4, scn.GetStrength(guma));
 
 		// The fellowship moves again, and at the second site of the turn it is still +1.
 		scn.SkipToMovementDecision();

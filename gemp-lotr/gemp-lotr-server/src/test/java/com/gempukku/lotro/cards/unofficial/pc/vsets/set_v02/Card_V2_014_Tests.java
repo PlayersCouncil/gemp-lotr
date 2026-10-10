@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -42,7 +41,11 @@ public class Card_V2_014_Tests
 					// Elite Rider: a [rohan] Man like Theoden, strength 6, not valiant; stronger only while
 					// skirmishing a wounded minion.
 					put("rider", "4_265");
-					put("sam", "1_311");         // Sam, Son of Hamfast: Ring-bound, strength 3, not valiant
+					put("sam", "1_311");         // Sam, Son of Hamfast: Ring-bound, strength 3, vitality 4, not valiant
+					// Erkenbrand, Kinsman of the House of Eorl: a [rohan] Man like Theoden, strength 7, not
+					// valiant.  "Each exhausted companion gains valiant", which is how a Ring-bound companion
+					// comes to be valiant: none is in print.  His other text answers his being played.
+					put("erkenbrand", "102_47");
 					put("grimir", "1_17");       // Grimir, Dwarven Elder: an ally, strength 3, not valiant
 					// Radagast, The Brown: a [gandalf] Wizard who is not Gandalf.  The move limit is +1.
 					put("radagast", "9_26");
@@ -100,13 +103,11 @@ public class Card_V2_014_Tests
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var rider = scn.GetFreepsCard("rider");
 		var sam = scn.GetFreepsCard("sam");
-		var grimir = scn.GetFreepsCard("grimir");
-		scn.MoveCompanionsToTable(gandalf, theoden, guard, defender, aragorn, rider, sam);
-		// No ally is valiant in print, so Grimir is made valiant: valiant, and not a companion.
-		scn.MoveAlliesToTable(grimir);
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, grimir, null, Keyword.VALIANT));
-		// Nor is any Ring-bound companion, so Sam is made valiant: a valiant companion who is not unbound.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, sam, null, Keyword.VALIANT));
+		var erkenbrand = scn.GetFreepsCard("erkenbrand");
+		scn.MoveCompanionsToTable(gandalf, theoden, guard, defender, aragorn, rider, sam, erkenbrand);
+		// No Ring-bound companion is valiant in print.  Beside Erkenbrand each exhausted companion is, and
+		// Sam is exhausted: a valiant companion who is not unbound.
+		scn.AddWoundsToChar(sam, 3);
 		scn.MoveCardsToHand(remember);
 
 		var troop = scn.GetShadowCard("troop");
@@ -115,13 +116,14 @@ public class Card_V2_014_Tests
 		scn.MoveMinionsToTable(troop);
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		assertTrue(scn.HasKeyword(grimir, Keyword.VALIANT));
 		assertFalse(scn.HasKeyword(theoden, Keyword.VALIANT));
 		assertTrue(scn.HasKeyword(guard, Keyword.VALIANT));
 		assertTrue(scn.HasKeyword(defender, Keyword.VALIANT));
+		assertTrue(scn.IsExhausted(sam));
 		assertTrue(scn.HasKeyword(sam, Keyword.VALIANT));
 		assertFalse(scn.HasKeyword(aragorn, Keyword.VALIANT));
 		assertFalse(scn.HasKeyword(rider, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(erkenbrand, Keyword.VALIANT));
 		assertFalse(scn.HasKeyword(gandalf, Keyword.VALIANT));
 		assertFalse(scn.HasKeyword(frodo, Keyword.VALIANT));
 
@@ -130,11 +132,11 @@ public class Card_V2_014_Tests
 		assertEquals(5, scn.GetStrength(defender));
 		assertEquals(8, scn.GetStrength(aragorn));
 		assertEquals(6, scn.GetStrength(rider));
+		assertEquals(7, scn.GetStrength(erkenbrand));
 		assertEquals(7, scn.GetStrength(gandalf));
 		assertEquals(3, scn.GetStrength(sam));
 		// Frodo's 3 + 1 for the Ring.
 		assertEquals(4, scn.GetStrength(frodo));
-		assertEquals(3, scn.GetStrength(grimir));
 		assertEquals(13, scn.GetStrength(troop));
 
 		int twilight = scn.GetTwilight();
@@ -151,12 +153,13 @@ public class Card_V2_014_Tests
 		assertEquals(0, scn.GetWoundsOn(defender));
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(rider));
-		assertEquals(0, scn.GetWoundsOn(sam));
+		assertEquals(0, scn.GetWoundsOn(erkenbrand));
+		assertEquals(3, scn.GetWoundsOn(sam));
 		assertEquals(0, scn.GetWoundsOn(frodo));
 
 		// Theoden by his name, and the valiant companions: two who are unbound and Sam, who is Ring-bound.
-		// Aragorn, the Elite Rider and Gandalf are unbound companions who are not valiant, so it is +1 and
-		// not +2.
+		// Aragorn, the Elite Rider, Erkenbrand and Gandalf are unbound companions who are not valiant, so it
+		// is +1 and not +2.
 		assertEquals(7, scn.GetStrength(theoden));
 		assertEquals(7, scn.GetStrength(guard));
 		assertEquals(6, scn.GetStrength(defender));
@@ -164,9 +167,9 @@ public class Card_V2_014_Tests
 		// Nobody else: not a [rohan] Man who is neither Theoden nor valiant.
 		assertEquals(8, scn.GetStrength(aragorn));
 		assertEquals(6, scn.GetStrength(rider));
+		assertEquals(7, scn.GetStrength(erkenbrand));
 		assertEquals(7, scn.GetStrength(gandalf));
 		assertEquals(4, scn.GetStrength(frodo));
-		assertEquals(3, scn.GetStrength(grimir));
 		assertEquals(13, scn.GetStrength(troop));
 
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());

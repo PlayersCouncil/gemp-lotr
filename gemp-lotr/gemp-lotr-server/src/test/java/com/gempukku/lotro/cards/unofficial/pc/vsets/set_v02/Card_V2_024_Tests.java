@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -26,8 +25,6 @@ public class Card_V2_024_Tests
 					put("wargrider", "5_67");    // Warg-rider: strength 5, vitality 2
 					// Isengard Worker: an [isengard] Orc who is no warg-rider; a regroup ability.
 					put("worker", "3_62");
-					put("troop", "1_177");       // Goblin Patrol Troop: a [moria] Orc, strength 13, vitality 3, no text
-					put("savage", "1_151");      // Uruk Savage: an [isengard] Uruk-hai, strength 5, vitality 3, damage +1
 
 					// [isengard] skirmish events.
 					put("bred", "1_121");        // Bred for Battle
@@ -85,20 +82,15 @@ public class Card_V2_024_Tests
 		var frodo = scn.GetRingBearer();
 		var hound = scn.GetShadowCard("hound1");
 		var rider = scn.GetShadowCard("rider");
+		var wargrider = scn.GetShadowCard("wargrider");
 		var worker = scn.GetShadowCard("worker");
-		var troop = scn.GetShadowCard("troop");
-		var savage = scn.GetShadowCard("savage");
 		var bred = scn.GetShadowCard("bred");
 		scn.MoveCardsToHand(hound);
 		scn.MoveCardsToDiscard(bred);
 
 		scn.StartGame();
 
-		scn.MoveMinionsToTable(rider, worker, troop, savage);
-		// Every warg-rider there is is an [isengard] Orc, so a minion of another culture and one of another
-		// race are made warg-riders by hand.  The text names the keyword and nothing else.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, troop, null, Keyword.WARG_RIDER));
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, savage, null, Keyword.WARG_RIDER));
+		scn.MoveMinionsToTable(rider, wargrider, worker);
 		scn.SetTwilight(10);
 		scn.FreepsPass();
 
@@ -110,8 +102,8 @@ public class Card_V2_024_Tests
 
 		scn.ShadowPlayCard(hound);
 
-		// The three warg-riders; not the [isengard] Orc who is none, and not Frodo.
-		assertTrue(scn.ShadowHasCardChoiceAvailable(rider, troop, savage));
+		// The two warg-riders; not the [isengard] Orc who is none, and not Frodo.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(rider, wargrider));
 		assertTrue(scn.ShadowHasCardChoiceNotAvailable(worker, frodo));
 		assertEquals(1, scn.ShadowGetChoiceMin());
 		scn.ShadowChooseCard(rider);
@@ -120,8 +112,8 @@ public class Card_V2_024_Tests
 		assertEquals(11, scn.GetTwilight());
 		assertEquals(9, scn.GetStrength(rider));
 		assertEquals(4, scn.GetVitality(rider));
-		assertEquals(13, scn.GetStrength(troop));
-		assertEquals(3, scn.GetVitality(troop));
+		assertEquals(5, scn.GetStrength(wargrider));
+		assertEquals(2, scn.GetVitality(wargrider));
 
 		scn.ShadowDeclineOptionalTrigger();
 		assertTrue(scn.AwaitingShadowPhaseActions());

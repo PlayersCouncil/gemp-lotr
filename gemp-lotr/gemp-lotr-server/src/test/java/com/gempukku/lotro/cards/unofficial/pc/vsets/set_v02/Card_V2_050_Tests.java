@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -30,9 +29,13 @@ public class Card_V2_050_Tests
 					put("aragorn", "17_93");
 					// Rider of Rohan: a [rohan] companion who is not valiant, strength 5.  His ability needs a mount.
 					put("rider", "4_286");
-					// Guma, Plains Farmer: a [rohan] ally, vitality 2.  No ally is valiant in print, so the tests
-					// make him valiant to have a valiant character who is not a companion.
+					// Guma, Plains Farmer: a [rohan] Man who is an ally, vitality 2; a fellowship ability.
 					put("guma", "4_277");
+					// Northern Signal-fire, Flame of Calenhad: a [rohan] possession of the support area.
+					// "Maneuver: Hinder this beacon and exert an unbound Man.  Until the regroup phase, each of
+					// your other Men gain each of the unloaded keywords (except race) on that Man."  No ally is
+					// valiant in print; this is how one comes to be: a valiant character who is not a companion.
+					put("flame", "103_86");
 
 					put("runner1", "1_178");     // Goblin Runner: [moria], strength 5, vitality 1
 					put("runner2", "1_178");
@@ -86,17 +89,28 @@ public class Card_V2_050_Tests
 		var haldir = scn.GetFreepsCard("haldir");
 		var rider = scn.GetFreepsCard("rider");
 		var guma = scn.GetFreepsCard("guma");
+		var flame = scn.GetFreepsCard("flame");
 		var runner1 = scn.GetShadowCard("runner1");
 		var runner2 = scn.GetShadowCard("runner2");
 		var savage = scn.GetShadowCard("savage");
 		scn.MoveCardsToHand(hour);
 		scn.MoveCompanionsToTable(guard, haldir, rider);
-		// An ally, made valiant: valiant as the two are, and no companion.
 		scn.MoveAlliesToTable(guma);
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, CardType.ALLY, null, Keyword.VALIANT));
+		scn.MoveCardsToSupportArea(flame);
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(runner1, runner2, savage);
+
+		// In the maneuver phase the Flame of Calenhad has the Household Guard exert, and until the regroup
+		// phase the player's other Men have his keyword: the Rider of Rohan, a companion, and Guma, an ally.
+		scn.SkipToPhase(Phase.MANEUVER);
+		assertFalse(scn.HasKeyword(rider, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(guma, Keyword.VALIANT));
+		scn.FreepsUseCardAction(flame);
+		scn.FreepsChooseCard(guard);
+		assertEquals(1, scn.GetWoundsOn(guard));
+		assertTrue(scn.HasKeyword(rider, Keyword.VALIANT));
+		assertTrue(scn.HasKeyword(guma, Keyword.VALIANT));
 
 		// An assignment event: not to be played in the phase before.
 		scn.SkipToPhase(Phase.ARCHERY);
@@ -108,22 +122,24 @@ public class Card_V2_050_Tests
 		assertTrue(scn.FreepsPlayAvailable(hour));
 		var pool = scn.GetTwilight();
 		assertTrue(scn.HasKeyword(guma, Keyword.VALIANT));
-		assertEquals(0, scn.GetWoundsOn(guard));
+		assertEquals(1, scn.GetWoundsOn(guard));
 		assertEquals(0, scn.GetWoundsOn(haldir));
 		assertFalse(scn.HasKeyword(guard, Keyword.DEFENDER));
 		assertFalse(scn.HasKeyword(haldir, Keyword.DEFENDER));
 		assertEquals(6, scn.GetStrength(guard));
 		assertEquals(6, scn.GetStrength(haldir));
 
+		// The companions who are valiant, in print or by the Flame; not the ally who is, nor Frodo, who is
+		// not.
 		scn.FreepsPlayCard(hour);
-		assertTrue(scn.FreepsHasCardChoiceAvailable(guard, haldir));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(rider, guma, frodo));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(guard, haldir, rider));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(guma, frodo));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		scn.FreepsChooseCard(guard);
 
 		assertInZone(Zone.DISCARD, hour);
 		assertEquals(pool + 2, scn.GetTwilight());
-		assertEquals(1, scn.GetWoundsOn(guard));
+		assertEquals(2, scn.GetWoundsOn(guard));
 		assertTrue(scn.HasKeyword(guard, Keyword.DEFENDER));
 		assertEquals(1, scn.GetKeywordCount(guard, Keyword.DEFENDER));
 		// Nobody is skirmishing him yet.
@@ -229,26 +245,33 @@ public class Card_V2_050_Tests
 		var scn = GetScenario();
 
 		var hour = scn.GetFreepsCard("hour");
+		var frodo = scn.GetRingBearer();
 		var guard = scn.GetFreepsCard("guard");
-		var rider = scn.GetFreepsCard("rider");
 		var guma = scn.GetFreepsCard("guma");
+		var flame = scn.GetFreepsCard("flame");
 		var savage = scn.GetShadowCard("savage");
 		scn.MoveCardsToHand(hour);
-		scn.MoveCompanionsToTable(guard, rider);
+		scn.MoveCompanionsToTable(guard);
 		scn.MoveAlliesToTable(guma);
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, CardType.ALLY, null, Keyword.VALIANT));
-		// Vitality 3 with 2 wounds: the valiant companion cannot exert.  The companion who is not
-		// valiant and the valiant ally both can.
-		scn.AddWoundsToChar(guard, 2);
+		scn.MoveCardsToSupportArea(flame);
+		scn.AddWoundsToChar(guard, 1);
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(savage);
+
+		// In the maneuver phase the Flame of Calenhad has the Household Guard, the only unbound Man, exert:
+		// vitality 3 with 2 wounds, he cannot exert again.  Until the regroup phase Guma, the player's other
+		// Man, has his keyword: a valiant ally, who can exert, as Frodo can, who is not valiant.
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsUseCardAction(flame);
+		assertTrue(scn.IsExhausted(guard));
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 
 		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 		assertTrue(scn.HasKeyword(guard, Keyword.VALIANT));
 		assertTrue(scn.HasKeyword(guma, Keyword.VALIANT));
-		assertEquals(0, scn.GetWoundsOn(rider));
+		assertFalse(scn.HasKeyword(frodo, Keyword.VALIANT));
+		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertEquals(0, scn.GetWoundsOn(guma));
 		assertFalse(scn.FreepsPlayAvailable(hour));
 	}

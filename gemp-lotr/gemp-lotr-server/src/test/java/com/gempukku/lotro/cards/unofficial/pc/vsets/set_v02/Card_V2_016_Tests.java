@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -24,7 +23,13 @@ public class Card_V2_016_Tests
 					put("guard", "5_83");       // Household Guard: [rohan] Man, strength 6, vitality 3; "Valiant." is its whole text
 					put("haldir", "102_8");     // Haldir, Naith Commander: a valiant [elven] Elf, strength 6; his text needs a ranged weapon or an [elven] possession
 					put("rider", "4_286");      // Rider of Rohan: [rohan] Man, strength 5, not valiant; his ability needs a mount
-					put("aldor", "4_262");      // Aldor, Soldier of Edoras: [rohan] ally; his ability needs a villager
+					// Bounder: a [shire] Hobbit ally whose home is site 2, where the skirmishes here are fought.
+					// Strength 2, vitality 2; his own skirmish ability is never used.
+					put("bounder", "1_286");
+					// Royal Guard: a [rohan] ally.  "Skirmish: Exert this ally to add his strength to a
+					// skirmishing Hobbit and make that Hobbit gain valiant until the regroup phase (limit once
+					// per phase)."  Strength 3, vitality 3.  How an ally comes to be valiant: none is in print.
+					put("royalguard", "102_54");
 
 					put("savage", "1_151");     // Uruk Savage: strength 5, vitality 3; Damage +1
 					put("runner1", "1_178");    // Goblin Runner: strength 5, vitality 1
@@ -141,19 +146,13 @@ public class Card_V2_016_Tests
 
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var rider = scn.GetFreepsCard("rider");
-		var aldor = scn.GetFreepsCard("aldor");
 		scn.MoveCompanionsToTable(aragorn, rider);
-		scn.MoveAlliesToTable(aldor);
-		// No ally is printed valiant, so one is made valiant: a valiant character who is no companion.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, aldor, null, Keyword.VALIANT));
 
 		scn.StartGame();
 
-		// Aragorn is valiant and is not "another"; the Rider is another companion and is not valiant;
-		// Aldor is another valiant character and is not a companion.
+		// Aragorn is valiant and is not "another"; the Rider is another companion and is not valiant.
 		assertTrue(scn.HasKeyword(aragorn, Keyword.VALIANT));
 		assertFalse(scn.HasKeyword(rider, Keyword.VALIANT));
-		assertTrue(scn.HasKeyword(aldor, Keyword.VALIANT));
 
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 		assertEquals(0, scn.GetFreepsHandCount());
@@ -277,38 +276,67 @@ public class Card_V2_016_Tests
 	}
 
 	@Test
-	public void SkirmishActionStrengthensNoOneWhenTheSkirmishingCompanionIsNotValiant() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SkirmishActionStrengthensNoOneWhenTheOneSkirmishingIsAValiantAllyOrACompanionWhoIsNotValiant() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var guard = scn.GetFreepsCard("guard");
 		var rider = scn.GetFreepsCard("rider");
+		var bounder = scn.GetFreepsCard("bounder");
+		var royalguard = scn.GetFreepsCard("royalguard");
 		scn.MoveCompanionsToTable(guard, rider);
+		scn.MoveAlliesToTable(bounder, royalguard);
 
 		var savage = scn.GetShadowCard("savage");
 		var runner1 = scn.GetShadowCard("runner1");
+		var runner2 = scn.GetShadowCard("runner2");
 
 		scn.StartGame();
 		// Aragorn goes down after the start of the turn, so that his draw is not in the way.
 		scn.MoveCompanionsToTable(aragorn);
-		scn.MoveMinionsToTable(savage, runner1);
-		// Only companions are printed valiant, so the minion is made valiant: someone in the skirmish who
-		// is valiant and is no companion.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, savage, null, Keyword.VALIANT));
+		scn.MoveMinionsToTable(savage, runner1, runner2);
 
+		// Site 2 is the Bounder's home, so he may be assigned.
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(
+				new PhysicalCardImpl[] { bounder, runner2 },
 				new PhysicalCardImpl[] { rider, savage },
 				new PhysicalCardImpl[] { guard, runner1 }
 		);
 
-		// The Rider of Rohan is skirmishing and is not valiant. The Guard is valiant and his skirmish has
-		// not begun; Aragorn is valiant and in no skirmish.
-		scn.FreepsResolveSkirmish(rider);
-		assertFalse(scn.HasKeyword(rider, Keyword.VALIANT));
-		assertTrue(scn.HasKeyword(savage, Keyword.VALIANT));
+		// Only companions are printed valiant.  The Royal Guard makes the skirmishing Bounder valiant:
+		// someone in the skirmish who is valiant and is no companion.
+		scn.FreepsResolveSkirmish(bounder);
+		assertFalse(scn.HasKeyword(bounder, Keyword.VALIANT));
+		assertEquals(2, scn.GetStrength(bounder));
+		scn.FreepsUseCardAction(royalguard);
+		assertEquals(1, scn.GetWoundsOn(royalguard));
+		assertTrue(scn.HasKeyword(bounder, Keyword.VALIANT));
+		assertEquals(2 + 3, scn.GetStrength(bounder));
+		scn.ShadowPass();
+
 		assertTrue(scn.FreepsActionAvailable(aragorn));
 		assertEquals(0, scn.GetWoundsOn(aragorn));
+
+		// The cost is paid and the effect finds no one: not the valiant ally who is skirmishing, nor the
+		// valiant companions who are not.
+		scn.FreepsUseCardAction(aragorn);
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(5, scn.GetStrength(bounder));
+		assertEquals(6, scn.GetStrength(guard));
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+
+		// The Bounder's 5 does not beat the Runner's 5: one wound of his two.
+		scn.PassSkirmishActions();
+		assertEquals(1, scn.GetWoundsOn(bounder));
+
+		// The Rider of Rohan is skirmishing and is not valiant. The Guard is valiant and his skirmish has
+		// not begun; Aragorn is valiant and in no skirmish; the Bounder is still valiant and his is over.
+		scn.FreepsResolveSkirmish(rider);
+		assertFalse(scn.HasKeyword(rider, Keyword.VALIANT));
+		assertTrue(scn.HasKeyword(bounder, Keyword.VALIANT));
+		assertTrue(scn.FreepsActionAvailable(aragorn));
 		assertEquals(5, scn.GetStrength(rider));
 		assertEquals(5, scn.GetStrength(savage));
 		assertEquals(6, scn.GetStrength(guard));
@@ -316,11 +344,12 @@ public class Card_V2_016_Tests
 
 		// The cost is paid and the effect finds no one.
 		scn.FreepsUseCardAction(aragorn);
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(2, scn.GetWoundsOn(aragorn));
 		assertEquals(5, scn.GetStrength(rider));
 		assertEquals(5, scn.GetStrength(savage));
 		assertEquals(6, scn.GetStrength(guard));
 		assertEquals(8, scn.GetStrength(aragorn));
+		assertEquals(2, scn.GetStrength(bounder));
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
 }

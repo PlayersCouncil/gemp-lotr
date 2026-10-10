@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -121,11 +120,6 @@ public class Card_V2_018_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(ambusher, assassin, swordsman, scout, runner, savage);
-		// Every [sauron] tracker in print is an Orc and every [isengard] tracker an Uruk-hai.  The Uruk Scout is
-		// made an Orc as well and the Orc Assassin an Uruk-hai as well: each then has the other culture's
-		// race and still not its culture.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, scout, null, Race.ORC));
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, assassin, null, Race.URUK_HAI));
 
 		// Not in the assignment phase, the last in which the Shadow player is asked before a skirmish.
 		scn.SkipToPhase(Phase.ASSIGNMENT);
@@ -213,11 +207,6 @@ public class Card_V2_018_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(ambusher, assassin, swordsman, scout, runner, savage);
-		// Every [sauron] tracker in print is an Orc and every [isengard] tracker an Uruk-hai.  The Uruk Scout is
-		// made an Orc as well and the Orc Assassin an Uruk-hai as well: each then has the other culture's
-		// race and still not its culture.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, scout, null, Race.ORC));
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, assassin, null, Race.URUK_HAI));
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		scn.FreepsPass();

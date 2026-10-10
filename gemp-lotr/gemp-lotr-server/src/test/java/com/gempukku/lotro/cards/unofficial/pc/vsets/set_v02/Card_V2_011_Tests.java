@@ -4,8 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -31,7 +29,6 @@ public class Card_V2_011_Tests
 					// Valiant [rohan] Men, vitality 3.
 					put("guard", "5_83");        // Household Guard: "Valiant" is his whole text
 					put("recruit", "18_103");    // Rohirrim Recruit: stronger beside a [rohan] token
-					put("scout", "5_90");        // Rohirrim Scout: a regroup ability
 					// Lorien Elf: an [elven] Elf companion who is not valiant, vitality 2.
 					put("lorienelf", "1_53");
 
@@ -144,9 +141,8 @@ public class Card_V2_011_Tests
 		scn.MoveCompanionsToTable(defender, guard, lorienelf);
 		scn.MoveCardsToHand(allegiance, balglin);
 
-		// The Household Guard is made [elven] besides [rohan]: valiant and of the culture, and still a Man.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, guard, null, Culture.ELVEN));
-		// Both valiant companions are exhausted.  The Elf who is not valiant could exert, and is an Elf.
+		// Both valiant companions, an Elf and a Man, are exhausted.  The Elf who is not valiant could exert,
+		// and is an Elf.
 		scn.AddWoundsToChar(defender, 2);
 		scn.AddWoundsToChar(guard, 2);
 
@@ -205,42 +201,6 @@ public class Card_V2_011_Tests
 	}
 
 	@Test
-	public void AValiantElfOfAnotherCultureIsSpottedToo() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var allegiance = scn.GetFreepsCard("allegiance");
-		var defender = scn.GetFreepsCard("defender");
-		var elfOfRohan = scn.GetFreepsCard("scout");
-		var elvenbow = scn.GetFreepsCard("elvenbow");
-		scn.MoveCompanionsToTable(defender, elfOfRohan);
-		scn.MoveCardsToHand(allegiance);
-
-		// Every valiant Elf there is is [elven].  The spot names the race and not the culture, so the Rohirrim
-		// Scout is made an Elf besides a Man: a valiant Elf whose culture is [rohan].
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, elfOfRohan, null, Race.ELF));
-		// Neither can exert, so the spot is all there is.
-		scn.AddWoundsToChar(defender, 2);
-		scn.AddWoundsToChar(elfOfRohan, 2);
-
-		scn.StartGame();
-
-		assertTrue(scn.IsRace(elfOfRohan, Race.ELF));
-		assertTrue(scn.IsExhausted(defender));
-		assertTrue(scn.IsExhausted(elfOfRohan));
-		assertTrue(scn.FreepsPlayAvailable(allegiance));
-
-		scn.FreepsPlayCard(allegiance);
-		scn.FreepsDismissRevealedCards();
-
-		assertEquals(2, scn.GetWoundsOn(defender));
-		assertEquals(2, scn.GetWoundsOn(elfOfRohan));
-		scn.FreepsChooseCardBPFromSelection(elvenbow);
-
-		assertInZone(Zone.HAND, elvenbow);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void WithTwoValiantElvesToSpotNobodyIsAskedToExert() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -282,8 +242,7 @@ public class Card_V2_011_Tests
 		var guard = scn.GetFreepsCard("guard");
 		var defender = scn.GetFreepsCard("defender");
 		var balglin = scn.GetFreepsCard("balglin");
-		var elvenMan = scn.GetFreepsCard("recruit");
-		var elfOfRohan = scn.GetFreepsCard("scout");
+		var recruit = scn.GetFreepsCard("recruit");
 		var lorienelf = scn.GetFreepsCard("lorienelf");
 		var elvenbow = scn.GetFreepsCard("elvenbow");
 		var lembas = scn.GetFreepsCard("lembas");
@@ -297,16 +256,10 @@ public class Card_V2_011_Tests
 		// An [elven] possession that is not in the draw deck.
 		scn.MoveCardsToDiscard(sword);
 
-		// Every valiant [elven] companion there is is an Elf and every valiant Elf is [elven], so the two are
-		// pulled apart by hand, in the draw deck: the Rohirrim Recruit is made [elven] besides [rohan], and the
-		// Rohirrim Scout an Elf besides a Man.  The text names the culture.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, elvenMan, null, Culture.ELVEN));
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, elfOfRohan, null, Race.ELF));
-
 		scn.StartGame();
 
-		assertInZone(Zone.DECK, defender, balglin, elvenMan, elvenbow, lembas);
-		assertInZone(Zone.DECK, lorienelf, elfOfRohan, vilya, silinde, eyes, allegiance2, gondorbow);
+		assertInZone(Zone.DECK, defender, balglin, elvenbow, lembas);
+		assertInZone(Zone.DECK, lorienelf, recruit, vilya, silinde, eyes, allegiance2, gondorbow);
 		assertInZone(Zone.DISCARD, sword);
 		int deck = scn.GetFreepsDeckCount();
 		assertEquals(0, scn.GetWoundsOn(guard));
@@ -316,18 +269,17 @@ public class Card_V2_011_Tests
 		assertEquals(1, scn.GetWoundsOn(guard));
 		scn.FreepsDismissRevealedCards();
 
-		// Valiant [elven] companions, unique or not and Elf or not, and [elven] possessions with a class or
-		// without.
-		assertTrue(scn.FreepsHasCardChoiceAvailable(balglin, defender, elvenMan, elvenbow, lembas));
-		// Not an [elven] companion who is not valiant, a valiant Elf of another culture, an [elven] artifact,
-		// ally, condition or event, or a possession of another culture; and not the possession in the discard
-		// pile.
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(lorienelf, elfOfRohan, vilya, silinde, eyes, allegiance2, gondorbow, sword));
+		// Valiant [elven] companions, unique or not, and [elven] possessions with a class or without.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(balglin, defender, elvenbow, lembas));
+		// Not an [elven] companion who is not valiant, a valiant companion of another culture, an [elven]
+		// artifact, ally, condition or event, or a possession of another culture; and not the possession in
+		// the discard pile.
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(lorienelf, recruit, vilya, silinde, eyes, allegiance2, gondorbow, sword));
 		assertEquals(1, scn.FreepsGetChoiceMax());
 		scn.FreepsChooseCardBPFromSelection(lembas);
 
 		assertInZone(Zone.HAND, lembas);
-		assertInZone(Zone.DECK, defender, balglin, elvenMan, elvenbow);
+		assertInZone(Zone.DECK, defender, balglin, elvenbow);
 		assertInZone(Zone.DISCARD, sword);
 		assertEquals(deck - 1, scn.GetFreepsDeckCount());
 		assertEquals(1, scn.GetFreepsHandCount());

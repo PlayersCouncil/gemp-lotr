@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -43,10 +42,13 @@ public class Card_V2_046_Tests
 					// Eomer, Third Marshal of Riddermark: a [rohan] companion who is not valiant, strength 7.
 					// He is stronger for each wound on a minion he is skirmishing; no minion here is wounded.
 					put("eomer", "4_267");
-					// Guma, Plains Farmer: a [rohan] Man who is an ally, strength 4.  No ally is valiant in
-					// print (Royal Guard's text would make a skirmishing Hobbit one), so one test makes him
-					// valiant to have a valiant character who is not a companion.
-					put("guma", "4_277");
+					// Bounder: a [shire] Hobbit ally whose home is site 2, where every test here is fought.
+					// Strength 2, vitality 2; his own skirmish ability is never used.
+					put("bounder", "1_286");
+					// Royal Guard: a [rohan] ally, strength 3, vitality 3.  "Skirmish: Exert this ally to add his
+					// strength to a skirmishing Hobbit and make that Hobbit gain valiant until the regroup phase
+					// (limit once per phase)."  No ally is valiant in print; this is how one comes to be.
+					put("royalguard", "102_54");
 
 					// Goblin Runner: strength 5, vitality 1.
 					put("runner1", "1_178");
@@ -104,14 +106,14 @@ public class Card_V2_046_Tests
 		var defender = scn.GetFreepsCard("defender");
 		var guardian = scn.GetFreepsCard("guardian");
 		var eomer = scn.GetFreepsCard("eomer");
-		var guma = scn.GetFreepsCard("guma");
+		var bounder = scn.GetFreepsCard("bounder");
+		var royalguard = scn.GetFreepsCard("royalguard");
 		var runner = scn.GetShadowCard("runner1");
+		var runner2 = scn.GetShadowCard("runner2");
 		scn.MoveCardsToHand(end);
 		scn.MoveCardsToSupportArea(none, doom1, doom2, cast, path);
 		scn.MoveCompanionsToTable(guard1, guard2, defender, guardian, eomer);
-		// An ally, made valiant: valiant as the four are, and no companion.
-		scn.MoveAlliesToTable(guma);
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, CardType.ALLY, null, Keyword.VALIANT));
+		scn.MoveAlliesToTable(bounder, royalguard);
 		// [rohan] conditions with exactly two tokens, with three, and with twice two; one with a single
 		// token; and a [gondor] condition with two.
 		scn.AddTokensToCard(doom1, 2);
@@ -121,10 +123,24 @@ public class Card_V2_046_Tests
 		scn.AddTokensToCard(path, 2);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(runner);
+		scn.MoveMinionsToTable(runner, runner2);
+		// Site 2 is the Bounder's home, so he may be assigned.
 		scn.SkipToAssignments();
-		scn.FreepsAssignAndResolve(guard1, runner);
+		scn.FreepsAssignToMinions(
+				new PhysicalCardImpl[] { bounder, runner2 },
+				new PhysicalCardImpl[] { guard1, runner });
 
+		// No ally is valiant in print.  In the Bounder's own skirmish the Royal Guard makes him valiant until
+		// the regroup phase: valiant as the four are, and no companion.
+		scn.FreepsResolveSkirmish(bounder);
+		assertFalse(scn.HasKeyword(bounder, Keyword.VALIANT));
+		scn.FreepsUseCardAction(royalguard);
+		assertTrue(scn.HasKeyword(bounder, Keyword.VALIANT));
+		// The Bounder's 2 + 3 does not beat the Runner's 5: one wound of his two.
+		scn.PassSkirmishActions();
+		assertEquals(1, scn.GetWoundsOn(bounder));
+
+		scn.FreepsResolveSkirmish(guard1);
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 		// 6 companions + 2 for the site.
 		assertEquals(8, scn.GetTwilight());
@@ -133,8 +149,8 @@ public class Card_V2_046_Tests
 		assertEquals(5, scn.GetStrength(defender));
 		assertEquals(5, scn.GetStrength(guardian));
 		assertEquals(7, scn.GetStrength(eomer));
-		assertTrue(scn.HasKeyword(guma, Keyword.VALIANT));
-		assertEquals(4, scn.GetStrength(guma));
+		assertTrue(scn.HasKeyword(bounder, Keyword.VALIANT));
+		assertEquals(2, scn.GetStrength(bounder));
 		var frodoStrength = scn.GetStrength(frodo);
 		assertTrue(scn.FreepsPlayAvailable(end));
 
@@ -156,7 +172,7 @@ public class Card_V2_046_Tests
 		// Three of the four valiant companions, of either culture and in the skirmish or out of it.  Not a
 		// [rohan] companion who is not valiant, nor the Ring-bearer, nor a valiant ally.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(guard1, guard2, defender, guardian));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(eomer, frodo, guma));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(eomer, frodo, bounder));
 		assertEquals(3, scn.FreepsGetChoiceMin());
 		assertEquals(3, scn.FreepsGetChoiceMax());
 
@@ -166,7 +182,7 @@ public class Card_V2_046_Tests
 		assertEquals(5 + 2, scn.GetStrength(guardian));
 		assertEquals(6, scn.GetStrength(guard2));
 		assertEquals(7, scn.GetStrength(eomer));
-		assertEquals(4, scn.GetStrength(guma));
+		assertEquals(2, scn.GetStrength(bounder));
 		assertEquals(frodoStrength, scn.GetStrength(frodo));
 		assertEquals(8 + 2, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, end);
