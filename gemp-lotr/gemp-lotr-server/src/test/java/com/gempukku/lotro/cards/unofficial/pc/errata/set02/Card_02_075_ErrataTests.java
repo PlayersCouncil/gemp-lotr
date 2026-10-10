@@ -1,8 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set02;
 
 import com.gempukku.lotro.common.*;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
@@ -42,6 +40,9 @@ public class Card_02_075_ErrataTests
 					put("troop", "1_177");      // Goblin Patrol Troop: a minion with no text
 
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a companion who is not a Hobbit
+					// Smeagol, Once Like Us: a [shire] companion with no race, strength 3, vitality 4, Ring-bound. His
+					// assignment ability needs a fellowship of [shire] companions only; to play, add a burden.
+					put("smeagol", "103_116");
 					put("bilbo", "1_284");      // Bilbo, Retired Adventurer: a Hobbit ally, home site 3
 					put("sam", "1_310");        // Sam, Faithful Companion: a Hobbit companion, strength 3
 				}},
@@ -188,23 +189,22 @@ public class Card_02_075_ErrataTests
 		var scn = GetNoHobbitScenario();
 
 		var galadriel = scn.GetRingBearer();
-		var aragorn = scn.GetFreepsCard("aragorn");
+		var smeagol = scn.GetFreepsCard("smeagol");
 		var sam = scn.GetFreepsCard("sam");
 		var ferny = scn.GetShadowCard("ferny");
-		scn.MoveCompanionsToTable(aragorn, sam);
+		// Smeagol is a [shire] companion as printed and no Hobbit: the text names a race (F-0019).
+		scn.MoveCompanionsToTable(smeagol, sam);
 
 		// Bill is made fierce and strong enough to overwhelm Sam, so that Sam dies by play and a fierce
 		// assignment follows with no Hobbit left.
 		scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.name("Bill Ferny"), null, Keyword.FIERCE));
 		scn.ApplyAdHocModifier(new StrengthModifier(null, Filters.name("Bill Ferny"), null, 5));
-		// Aragorn is of the [shire] culture but no Hobbit: the text names a race (F-0019).
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.SHIRE));
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(ferny);
 
 		scn.SkipToAssignments();
-		// Sam is the one Hobbit: Galadriel and Aragorn are not. While he lives Bill is not the Free Peoples
+		// Sam is the one Hobbit: Galadriel and Smeagol are not. While he lives Bill is not the Free Peoples
 		// player's to assign, and with no other minion that player is asked nothing: the Shadow player assigns.
 		assertFalse(scn.FreepsCanAssign(ferny));
 		assertFalse(scn.FreepsDecisionAvailable("Assign minions"));
@@ -224,10 +224,10 @@ public class Card_02_075_ErrataTests
 		assertTrue(scn.FreepsCanAssign(ferny));
 		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
 		assertTrue(scn.FreepsHasAssignmentTargetAvailable(ferny));
-		assertTrue(scn.FreepsHasAssignmentTargetAvailable(aragorn));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(smeagol));
 		assertTrue(scn.FreepsHasAssignmentTargetAvailable(galadriel));
-		scn.FreepsAssignToMinions(aragorn, ferny);
-		assertTrue(scn.IsCharAssignedAgainst(aragorn, ferny));
+		scn.FreepsAssignToMinions(smeagol, ferny);
+		assertTrue(scn.IsCharAssignedAgainst(smeagol, ferny));
 		assertTrue(scn.FreepsDecisionAvailable("skirmish"));
 	}
 

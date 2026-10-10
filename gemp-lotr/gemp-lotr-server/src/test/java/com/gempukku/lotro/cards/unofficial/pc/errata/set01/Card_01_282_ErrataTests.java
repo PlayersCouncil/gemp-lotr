@@ -86,13 +86,13 @@ public class Card_01_282_ErrataTests
 		var cuguard = scn.GetShadowCard("cuguard");
 		var troop = scn.GetShadowCard("troop");
 		var frodo = scn.GetRingBearer();
-		var aragorn = scn.GetFreepsCard("aragorn");
 		var boromir = scn.GetFreepsCard("boromir");
 		var knight = scn.GetFreepsCard("knight");
 		var rohirrim = scn.GetFreepsCard("rohirrim");
 		var merchant = scn.GetFreepsCard("merchant");
 		scn.MoveCardsToHand(legacy);
-		scn.MoveCompanionsToTable(aragorn, boromir, knight, rohirrim);
+		// Aragorn is unique, so one Aragorn to a table: the [rohan] one here, who is no [gondor] companion.
+		scn.MoveCompanionsToTable(boromir, knight, rohirrim);
 		scn.MoveAlliesToTable(merchant);
 
 		scn.StartGame();
@@ -101,14 +101,15 @@ public class Card_01_282_ErrataTests
 
 		assertTrue(scn.AwaitingShadowPhaseActions());
 		int twilight = scn.GetTwilight();
-		assertEquals(8, scn.GetStrength(aragorn));
 		assertEquals(7, scn.GetStrength(boromir));
 		assertEquals(6, scn.GetStrength(knight));
+		assertEquals(8, scn.GetStrength(rohirrim));
 		assertTrue(scn.ShadowPlayAvailable(legacy));
 
 		scn.ShadowPlayCard(legacy);
-		// Plays on a [gondor] companion: not a companion of another culture, nor a [gondor] ally, nor the Ring-bearer.
-		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, boromir, knight));
+		// Plays on a [gondor] companion: not a companion of another culture, Aragorn though he is, nor a [gondor]
+		// ally, nor the Ring-bearer.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(boromir, knight));
 		assertTrue(scn.ShadowHasCardChoiceNotAvailable(rohirrim, merchant, frodo));
 		scn.ShadowChooseCard(boromir);
 
@@ -124,11 +125,11 @@ public class Card_01_282_ErrataTests
 		assertEquals(0, scn.GetWoundsOn(troop));
 		assertEquals(twilight, scn.GetTwilight());
 		assertAttachedTo(legacy, boromir);
-		assertNotAttachedTo(legacy, aragorn);
+		assertNotAttachedTo(legacy, knight);
 		// No tales: the printed -1 alone.
 		assertEquals(6, scn.GetStrength(boromir));
-		assertEquals(8, scn.GetStrength(aragorn));
 		assertEquals(6, scn.GetStrength(knight));
+		assertEquals(8, scn.GetStrength(rohirrim));
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 

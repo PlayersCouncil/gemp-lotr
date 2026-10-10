@@ -1,8 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set02;
 
 import com.gempukku.lotro.common.*;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
@@ -25,6 +23,9 @@ public class Card_02_107_ErrataTests
 
 					put("bilbo", "1_284");      // Bilbo, Retired Adventurer: a Hobbit ally, cost 2; an ability only used on purpose
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a companion who is not a Hobbit, strength 8
+					// Smeagol, Once Like Us: a [shire] companion with no race, Ring-bound. His assignment ability is
+					// never reached; to play, add a burden.
+					put("smeagol", "103_116");
 					put("guard", "1_7");        // Dwarf Guard: a companion with no text that matters, strength 4, vitality 2
 
 					put("nelya", "2_84");       // Úlairë Nelya: [ringwraith] Nazgûl, strength 10; fierce only at 2 burdens or 2 wounds on the Ring-bearer
@@ -75,14 +76,14 @@ public class Card_02_107_ErrataTests
 		var sunlight = scn.GetFreepsCard("sunlight");
 		var bilbo = scn.GetFreepsCard("bilbo");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionsToTable(aragorn);
+		var smeagol = scn.GetFreepsCard("smeagol");
+		// Smeagol is a [shire] companion as printed and no Hobbit: the text names a race (F-0019).
+		scn.MoveCompanionsToTable(aragorn, smeagol);
 		scn.MoveCardsToHand(sunlight, bilbo);
-		// Aragorn is of the [shire] culture but no Hobbit: the text names a race (F-0019).
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.SHIRE));
 
 		scn.StartGame();
 
-		// Frodo is one Hobbit; Aragorn is a [shire] companion but no Hobbit.
+		// Frodo is one Hobbit; Aragorn is a Man, and Smeagol a [shire] companion but no Hobbit.
 		assertFalse(scn.FreepsPlayAvailable(sunlight));
 
 		scn.FreepsPlayCard(bilbo);

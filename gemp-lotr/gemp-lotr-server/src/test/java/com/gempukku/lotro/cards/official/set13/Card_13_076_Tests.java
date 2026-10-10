@@ -19,7 +19,10 @@ public class Card_13_076_Tests
 				new HashMap<>()
 				{{
 					put("homestead1", "13_76");
-					put("homestead2", "13_76");
+					// New Authority: unique [gandalf] condition in the support area, "Response: If a minion uses its
+					// special ability, discard this condition to cancel the effect of that special ability." Its
+					// other trigger answers a burden added by a Shadow card; to play, spot a [gandalf] Wizard.
+					put("authority", "11_37");
 
 					// Madril, Ranger of Ithilien: [gondor] companion, resistance 7. His fellowship ability needs a forest site.
 					put("madril", "11_62");
@@ -351,15 +354,15 @@ public class Card_13_076_Tests
 	}
 
 	@Test
-	public void ASecondCopyIsNotOfferedOnceTheFirstHasCancelledTheEffectAndIsOfferedForTheNextUse() throws DecisionResultInvalidException, CardNotFoundException {
+	public void IsNotOfferedOnceAnotherCardHasCancelledTheEffectAndIsOfferedForTheNextUse() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var homestead1 = scn.GetFreepsCard("homestead1");
-		var homestead2 = scn.GetFreepsCard("homestead2");
+		var homestead = scn.GetFreepsCard("homestead1");
+		var authority = scn.GetFreepsCard("authority");
 		var taskmaster = scn.GetShadowCard("taskmaster");
-		// The card is unique; the second copy is put down beside the first to show what any second response meets.
-		scn.MoveCardsToSupportArea(homestead1, homestead2);
-		scn.AddTokensToCard(homestead1, 2);
+		// New Authority answers the same use of a minion's special ability by a Response of its own.
+		scn.MoveCardsToSupportArea(homestead, authority);
+		scn.AddTokensToCard(homestead, 2);
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(taskmaster);
@@ -369,29 +372,32 @@ public class Card_13_076_Tests
 
 		scn.ShadowUseCardAction(taskmaster);
 		assertEquals(1, scn.GetWoundsOn(taskmaster));
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(homestead1));
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(homestead2));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(homestead));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(authority));
 
-		// The first copy has its two tokens and is discarded all the same: either may be chosen.
-		scn.FreepsChooseOptionalTrigger(homestead1);
+		// The other card cancels the effect, by discarding itself.
+		scn.FreepsChooseOptionalTrigger(authority);
+
+		assertInZone(Zone.DISCARD, authority);
+		assertInZone(Zone.SUPPORT, homestead);
+		assertEquals(2, scn.GetCultureTokensOn(homestead));
+		assertEquals(twilight, scn.GetTwilight());
+		// The Homestead could pay either cost, and there is nothing left for it to cancel.
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(homestead));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		// The next use of the ability is a new one, and the Homestead answers it.
+		scn.ShadowUseCardAction(taskmaster);
+		assertEquals(2, scn.GetWoundsOn(taskmaster));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(homestead));
+		scn.FreepsAcceptOptionalTrigger();
+
+		// It has its two tokens and is discarded all the same: either may be chosen.
 		assertTrue(scn.FreepsChoiceAvailable("Discard this condition"));
 		assertTrue(scn.FreepsChoiceAvailable("Remove 2"));
 		scn.FreepsChoose("Discard this condition");
 
-		assertInZone(Zone.DISCARD, homestead1);
-		assertInZone(Zone.SUPPORT, homestead2);
-		assertEquals(twilight, scn.GetTwilight());
-		// The second copy could discard itself, and there is nothing left for it to cancel.
-		assertFalse(scn.FreepsHasOptionalTriggerAvailable(homestead2));
-		assertTrue(scn.AwaitingShadowPhaseActions());
-
-		// The next use of the ability is a new one, and the copy that is left answers it.
-		scn.ShadowUseCardAction(taskmaster);
-		assertEquals(2, scn.GetWoundsOn(taskmaster));
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(homestead2));
-		scn.FreepsAcceptOptionalTrigger();
-
-		assertInZone(Zone.DISCARD, homestead2);
+		assertInZone(Zone.DISCARD, homestead);
 		assertEquals(twilight, scn.GetTwilight());
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}

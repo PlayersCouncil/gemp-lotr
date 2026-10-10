@@ -21,12 +21,17 @@ public class Card_01_303_ErrataTests
 					put("merry", "51_303");
 
 					put("sword", "1_299");      // Hobbit Sword: hand weapon, strength +2, bearer must be a Hobbit, no other text
+					put("sword2", "1_299");
+					// Merry's Dagger: unique [elven] hand weapon, strength +2, cost 1, bearer must be Merry; a skirmish
+					// ability used only on purpose
+					put("dagger", "9_18");
 					put("pan", "3_108");        // Frying Pan: hand weapon for a Hobbit; here it stays in hand
 					put("pipe", "1_285");       // Bilbo's Pipe: a pipe, not a weapon, bearer must be a Hobbit; a fellowship ability used only on purpose
-					put("bow", "1_41");         // Elven Bow: ranged weapon, bearer is an archer; Elf only, so it is cheated onto Merry
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: companion, strength 8; a maneuver ability used only on purpose
 					put("rsword", "1_112");     // Ranger's Sword: hand weapon, strength +2, Aragorn is damage +1
-					put("rbow", "4_131");       // Ranger's Bow: ranged weapon that makes nobody an archer; a skirmish ability used only on purpose
+					// Gondor Bow: ranged weapon on a [gondor] Man; it makes nobody an archer, gives strength only to a
+					// knight, and its skirmish ability (used only on purpose) needs a minion bearing a fortification
+					put("gbow", "7_94");
 
 					put("soldier", "1_271");    // Orc Soldier: [sauron] Orc, strength 7, vitality 2; a skirmish ability used only on purpose
 					put("soldier2", "1_271");
@@ -87,19 +92,18 @@ public class Card_01_303_ErrataTests
 		var sword = scn.GetFreepsCard("sword");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var rsword = scn.GetFreepsCard("rsword");
-		var bow = scn.GetFreepsCard("bow");
+		var sword2 = scn.GetFreepsCard("sword2");
 		var frodo = scn.GetRingBearer();
 		scn.MoveCardsToHand(merry, pipe, sword);
 		scn.MoveCompanionsToTable(aragorn);
 		scn.AttachCardsTo(aragorn, rsword);
-		// Frodo, another Hobbit, bears a weapon all the while: Merry's bonus is not every Hobbit's. The Elven Bow
-		// is cheated on (no ranged weapon may be played on a Hobbit) and changes no strength.
-		scn.AttachCardsTo(frodo, bow);
+		// Frodo, another Hobbit, bears a weapon all the while: Merry's bonus is not every Hobbit's.
+		scn.AttachCardsTo(frodo, sword2);
 
 		scn.StartGame();
 
-		// Frodo is strength 3, +1 from The Ruling Ring.
-		assertEquals(4, scn.GetStrength(frodo));
+		// Frodo is strength 3, +1 from The Ruling Ring, +2 from his Hobbit Sword.
+		assertEquals(6, scn.GetStrength(frodo));
 
 		assertEquals(0, scn.GetTwilight());
 		scn.FreepsPlayCard(merry);
@@ -114,36 +118,34 @@ public class Card_01_303_ErrataTests
 		// A pipe is not a weapon.
 		assertEquals(3, scn.GetStrength(merry));
 
+		// Frodo has his hand weapon: Merry is the only Hobbit who can bear this one, and nothing is asked.
 		scn.FreepsPlayCard(sword);
-		scn.FreepsChooseCard(merry);
 		assertAttachedTo(sword, merry);
 		// 3 + 2 from the sword + 2 for bearing a weapon
 		assertEquals(7, scn.GetStrength(merry));
-		// Frodo is strength 3, +1 from The Ruling Ring.
-		assertEquals(4, scn.GetStrength(frodo));
+		// Frodo is as he was.
+		assertEquals(6, scn.GetStrength(frodo));
 		assertEquals(10, scn.GetStrength(aragorn));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	public void ARangedWeaponAloneMakesHimStrength2MoreAndAHandWeaponBesideItAddsOnlyItsOwnBonus() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AWeaponOfAnotherCultureMakesHimStrength2MoreAsWell() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var merry = scn.GetFreepsCard("merry");
-		var bow = scn.GetFreepsCard("bow");
-		var sword = scn.GetFreepsCard("sword");
+		var dagger = scn.GetFreepsCard("dagger");
 		scn.MoveCompanionsToTable(merry);
-		// No ranged weapon may be played on a Hobbit, so the Elven Bow is cheated on. It changes no strength.
-		scn.AttachCardsTo(merry, bow);
-		scn.MoveCardsToHand(sword);
+		scn.MoveCardsToHand(dagger);
 
 		scn.StartGame();
 
-		assertEquals(5, scn.GetStrength(merry));
+		assertEquals(3, scn.GetStrength(merry));
 
-		scn.FreepsPlayCard(sword);
-		scn.FreepsChooseCard(merry);
-		// 3 + 2 from the sword + 2 for bearing a weapon, once for two weapons
+		// Merry's Dagger is an [elven] hand weapon that Merry alone bears: it goes on him with nothing asked.
+		scn.FreepsPlayCard(dagger);
+		assertAttachedTo(dagger, merry);
+		// 3 + 2 from the dagger + 2 for bearing a weapon
 		assertEquals(7, scn.GetStrength(merry));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -186,13 +188,13 @@ public class Card_01_303_ErrataTests
 		var pipe = scn.GetFreepsCard("pipe");
 		var pan = scn.GetFreepsCard("pan");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		var rbow = scn.GetFreepsCard("rbow");
+		var gbow = scn.GetFreepsCard("gbow");
 		var soldier = scn.GetShadowCard("soldier");
 		var scimitar = scn.GetShadowCard("scimitar");
 		scn.MoveCompanionsToTable(merry, aragorn);
 		scn.AttachCardsTo(merry, sword, pipe);
-		// Aragorn is not Ring-bound, so the bow is cheated on: a ranged weapon, not a hand weapon.
-		scn.AttachCardsTo(aragorn, rbow);
+		// Aragorn, a [gondor] Man, bears a Gondor Bow: a ranged weapon, not a hand weapon.
+		scn.AttachCardsTo(aragorn, gbow);
 		scn.MoveCardsToHand(pan);
 
 		scn.StartGame();

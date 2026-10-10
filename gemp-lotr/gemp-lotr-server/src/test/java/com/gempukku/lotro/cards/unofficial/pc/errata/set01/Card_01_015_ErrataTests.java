@@ -22,7 +22,7 @@ public class Card_01_015_ErrataTests
 					put("helm", "51_15");
 
 					put("gimli", "1_12");         // Gimli, Dwarf of Erebor: strength 6, vitality 3; a fellowship ability only
-					put("gimli2", "1_13");        // Gimli, Son of Gloin: the other Gimli of set 1
+					put("gimli2", "1_13");        // Gimli, Son of Gloin: the other Gimli of set 1; damage +1 and a skirmish ability, never used
 					put("guard", "1_7");          // Dwarf Guard: Dwarf companion, strength 4, vitality 2
 					put("sam", "1_311");          // Sam, Son of Hamfast: strength 3, vitality 4
 
@@ -94,27 +94,23 @@ public class Card_01_015_ErrataTests
 	}
 
 	@Test
-	public void EitherGimliIsOfferedAsBearerAndNoOtherCompanion() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AGimliOfAnotherSubtitleBearsItAndNoOtherCompanionIsOffered() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var helm = scn.GetFreepsCard("helm");
-		var gimli = scn.GetFreepsCard("gimli");
 		var gimli2 = scn.GetFreepsCard("gimli2");
 		var guard = scn.GetFreepsCard("guard");
-		var frodo = scn.GetRingBearer();
-		// Gimli is unique: only cheating puts two of him on one table, which is done here to see the choice.
-		scn.MoveCompanionsToTable(gimli, gimli2, guard);
+		// Gimli is unique, so one Gimli to a table: Son of Glóin here, as Dwarf of Erebor in the test above.
+		scn.MoveCompanionsToTable(gimli2, guard);
 		scn.MoveCardsToHand(helm);
 
 		scn.StartGame();
-
+		assertTrue(scn.FreepsPlayAvailable(helm));
 		scn.FreepsPlayCard(helm);
-		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli, gimli2));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(guard, frodo));
 
-		scn.FreepsChooseCard(gimli2);
+		// He is the only bearer there is: nothing is asked, with a Dwarf companion of another title and Frodo beside him.
 		assertAttachedTo(helm, gimli2);
-		assertNotAttachedTo(helm, gimli);
+		assertNotAttachedTo(helm, guard);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

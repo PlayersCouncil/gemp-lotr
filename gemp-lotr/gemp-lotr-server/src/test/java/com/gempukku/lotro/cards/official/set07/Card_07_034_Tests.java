@@ -6,7 +6,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,7 +27,9 @@ public class Card_07_034_Tests
 					// Gandalf, Friend of the Shirefolk: strength 6, vitality 4, and +1 for each of Hobbit, Dwarf,
 					// Elf and Man in the fellowship: 7 beside Frodo
 					put("friend", "1_72");
-					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, vitality 4; a maneuver ability never used
+					// Ent Avenger: a [gandalf] Ent companion, strength 6, vitality 4, not unique; strength +2 only
+					// while 3 Ents can be spotted. The printed companion of Gandalf's culture who is not Gandalf.
+					put("avenger", "6_27");
 					put("savage", "1_151");     // Uruk Savage: strength 5, vitality 3; "Damage +1." is its whole text
 					put("party", "1_158");      // Uruk-hai Raiding Party: strength 9, vitality 3; "Damage +1." is its whole text
 
@@ -159,21 +160,21 @@ public class Card_07_034_Tests
 
 		var echoes = scn.GetFreepsCard("echoes1");
 		var gandalf = scn.GetFreepsCard("grey");
-		var aragorn = scn.GetFreepsCard("aragorn");
+		var avenger = scn.GetFreepsCard("avenger");
 		var savage = scn.GetShadowCard("savage");
 		var party = scn.GetShadowCard("party");
 		scn.MoveCardsToSupportArea(echoes);
-		scn.MoveCompanionsToTable(gandalf, aragorn);
+		// The Ent Avenger is a [gandalf] companion as printed: of Gandalf's culture, and not Gandalf.
+		scn.MoveCompanionsToTable(gandalf, avenger);
 
 		scn.StartGame();
-		// Aragorn made a [gandalf] companion as well: of Gandalf's culture, and not Gandalf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.GANDALF));
 		scn.MoveMinionsToTable(savage, party);
 		scn.SkipToAssignments();
-		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, savage}, new PhysicalCardImpl[]{gandalf, party});
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{avenger, savage}, new PhysicalCardImpl[]{gandalf, party});
 
-		// Aragorn's 8 against the Savage's 5: he wins, and nothing is offered.
-		scn.FreepsResolveSkirmish(aragorn);
+		// The Ent Avenger's 6 against the Savage's 5: it wins, and nothing is offered.
+		assertEquals(6, scn.GetStrength(avenger));
+		scn.FreepsResolveSkirmish(avenger);
 		scn.FreepsPass();
 		scn.ShadowPass();
 		assertEquals(1, scn.GetWoundsOn(savage));
@@ -185,7 +186,7 @@ public class Card_07_034_Tests
 		scn.ShadowPass();
 		assertEquals(2, scn.GetWoundsOn(gandalf));
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
-		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(avenger));
 		assertEquals(0, scn.GetFreepsHandCount());
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}

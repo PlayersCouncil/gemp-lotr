@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -90,9 +89,8 @@ public class Card_01_055_ErrataTests
 		var aldor = scn.GetFreepsCard("aldor");
 		scn.MoveAlliesToTable(galadriel, orophin, silinde, aldor);
 		scn.MoveCompanionsToTable(arwen);
-		// No Elf ally has a home of 6 on another path, so one is made: one of Aldor's homes is site 6 of the
-		// Towers block, and here he is an Elf as well as a Man.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, aldor, null, Race.ELF));
+		// No Elf ally is printed with a home of 6 on another path. Aldor, a Man, is the ally of another path's
+		// site 6 there is.
 		scn.MoveCardsToHand(mirror, celeborn);
 
 		scn.StartGame();
@@ -113,7 +111,7 @@ public class Card_01_055_ErrataTests
 		// The two Elf allies of site 6...
 		assertEquals(4, scn.GetStrength(galadriel));
 		assertEquals(4, scn.GetStrength(orophin));
-		// ...and not the Elf ally of site 3, the Elf companion, or the Elf ally of another path's site 6.
+		// ...and not the Elf ally of site 3, the Elf companion, or the Man who is an ally of another path's site 6.
 		assertEquals(5, scn.GetStrength(silinde));
 		assertEquals(6, scn.GetStrength(arwen));
 		assertEquals(3, scn.GetStrength(aldor));
@@ -263,15 +261,14 @@ public class Card_01_055_ErrataTests
 	}
 
 	@Test
-	public void EitherGaladrielMayExertAndNoOtherElfAllyOfSite6() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AGaladrielWhoIsACompanionExertsAndNoOtherElfAllyOfSite6() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var mirror = scn.GetFreepsCard("mirror");
-		var galadriel = scn.GetFreepsCard("galadriel");
 		var lady = scn.GetFreepsCard("lady");
 		var celeborn = scn.GetFreepsCard("celeborn");
-		// Two Galadriels at one table, an ally and a companion, is a board only cheating gives.
-		scn.MoveAlliesToTable(galadriel, celeborn);
+		// Galadriel is unique, so one Galadriel to a table: the companion here, as the ally in the other tests.
+		scn.MoveAlliesToTable(celeborn);
 		scn.MoveCompanionsToTable(lady);
 		scn.MoveCardsToSupportArea(mirror);
 
@@ -282,22 +279,15 @@ public class Card_01_055_ErrataTests
 		scn.MoveMinionsToTable("runner");
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		assertEquals(0, scn.GetWoundsOn(galadriel));
 		assertEquals(0, scn.GetWoundsOn(lady));
 		assertEquals(0, scn.GetWoundsOn(celeborn));
 		assertEquals(1, scn.GetShadowHandCount());
 		int shadowDeck = scn.GetShadowDeckCount();
 		assertTrue(scn.FreepsActionAvailable(mirror));
 
+		// She is the only one who can pay: nothing is asked, with an unwounded Elf ally of site 6 beside her.
 		scn.FreepsUseCardAction(mirror);
-		assertTrue(scn.FreepsHasCardChoiceAvailable(galadriel, lady));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(celeborn));
-		assertEquals(1, scn.FreepsGetChoiceMin());
-		assertEquals(1, scn.FreepsGetChoiceMax());
-
-		scn.FreepsChooseCard(lady);
 		assertEquals(1, scn.GetWoundsOn(lady));
-		assertEquals(0, scn.GetWoundsOn(galadriel));
 		assertEquals(0, scn.GetWoundsOn(celeborn));
 
 		// A hand of one card: it is revealed, and as the only card revealed it is the one placed.
