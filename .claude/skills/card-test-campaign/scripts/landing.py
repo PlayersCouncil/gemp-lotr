@@ -187,6 +187,15 @@ def users(ids, how=None) -> list:
 
 def finish(argv):
     note = take(argv, "--note")
+    # --changed takes its ids with commas between them; ids given with spaces after it are taken too (a lander once
+    # gave them so, and two corrected definitions were left out of the commit without a word).
+    if "--changed" in argv:
+        i = argv.index("--changed")
+        j = i + 2
+        while j < len(argv) and re.fullmatch(r"V?\d+_\d+", argv[j]):
+            argv[i + 1] += "," + argv[j]
+            j += 1
+        del argv[i + 2:j]
     changed_cards = [c for c in (take(argv, "--changed") or "").split(",") if c]
     extra = []
     while "--with" in argv:
