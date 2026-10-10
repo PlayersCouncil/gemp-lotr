@@ -423,6 +423,40 @@ for the authors' notes. *[2026-10-10]*
 no "may" and the definition asks, the definition is corrected with no question each time. Goblin Runner 1_178
 is the one exception already ruled. *[2026-10-10]*
 
+**The Q-0034 offers are withheld by the engine, with the effects taught to say they will do nothing (Q-0224: A2).**
+"if I am understanding things correctly: you would like to "teach" a variety of game effects how to report
+noeffect, to 80/20 the work so that it's majority not work held only in the card definitions? If that's an
+accurate read of the report, then yes, I approve it. I think I agree with your rec for A2." (It is an accurate
+read.) The trial's rule comes onto the campaign's branch with its thirteen taught kinds; the part that reached a
+"you may" inside another action comes out. And Q-0231, B: "I agree with B": a no-cost "you may" that ANOTHER
+card's bar makes empty (Orc Inquisitor 1_268 against Frodo, Courteous Halfling 4_301) is not offered either; the
+random discard is one more kind taught. *[2026-10-10]*
+
+**Setting a board up early is no board out of play (Q-0228: A; Q-0230: A).** On a minion laid on the table in a
+fellowship phase so that a standing text can be read on it there: "A for sure. The pre-game cheating is meant to
+keep setup concise and specific to the scenario so that we're not wasting a bunch of time going through setup
+that doesn't matter for the test. There's definitely tension between that and "keeping it real", but it's a
+matter of striking the right balance." On Dunlending Looter 4_11 read stacked on a controlled site with the
+fellowship at site 2: "this card has two halves. *By itself* the card cannot get stacked on a site you control,
+but there are myriad ways of stacking other minions around, and it's reasonable to treat these two abilities
+entirely separately: one set of tests that is about the stacking, and another that is about the Shadow ability.
+The two do not have to be tested in tandem. I think that A is the sane way to handle it. The test doesn't
+teleport a site into the Shadow control area and try to do a bunch of weird shit around that, it just arranges
+the board state a little early." *[2026-10-10]*
+
+**Tests of the definition language go in a place of their own (Q-0233: C).** "it actually makes a lot of sense to
+have nuts-and-bolts testing of the HJSON layer (when performed) sequestered into a separate place. I think I lean
+towards C; gemp-lotr-server is the only module with real tests ... But yes, feel free to alter the scripts you
+use during testing to only run relevant sections (I doubt you need the league/tournament tests either)." Plain
+JUnit, in the server module, in a package of their own (`definitions/`), run by the suite; `mechanics/` holds
+tests of the game only. *[2026-10-10]*
+
+**Site text is not active while the starting fellowships are played.** "I believe there was an earlier item that
+ensured that site text worked during starting fellowships, but this text is in the `active` section of the CR:
+"Site text is not active when the starting fellowships are played." So we'll need to dig out that change and axe
+it. I expect that I will be back with a more broken-down version of the game rules for us to do a pass on for
+things like this." *[2026-10-10]*
+
 ## Sources, sheets, revisions and errata
 
 **2026-10-04. Comprehensive Rules 4.2** should contain all the official rulings.
@@ -1092,6 +1126,19 @@ where the 5.0 excerpts leave a detail of hinder open.
 CardsBorneByAHinderedCardTests, TokensOnAHinderedCardTests, ReconcilingRestoresHinderedCardsTests and
 UniquenessTests. Read those; `at/HinderTests.java` is gone, with the whole of `at/`.)
 
+**A "Discard X" beside a bar on X is a CONTINUOUS discard, on every such card (Q-0229: C).** "Hearken to Me is the
+proto-Anduril, which codified its sort of effect. You'll note that later cards use "cannot bear" on the second
+clause, because it famously became apparent that Blade Tip and Black Breath could still go on Theoden, because
+they weren't *played* but *transferred*. In this case we will apply that same GOTM ruling: the discard will be
+continuous and the poor-mans-cannot-bear poorly keeps them off. Oh, I do want to make sure: on GOTM you can see
+that there is a ConstantlyCheck trigger, but it has to specify the CanSpot requirement so that it doesn't
+constantly blip in the client on every action; that same structure and requirement will need to be used on all
+of these related cards. ConstantlyCheck in general should be carefully restricted like this lest it be a
+nuisance to play with. So, C, and I would like C to be applied to all the related cards." So Hearken to Me 4_94,
+Andúril 7_79, Shadowfax 4_100 and their like discard a matching card whenever one is on the bearer (as it lands
+by a transfer; at a restore), built as that card is: a `ConstantlyCheck` trigger with a `CanSpot` requirement.
+*[2026-10-10]*
+
 **"Discard X" and "cannot bear X" are two standing effects; only the first discards on a restore (Q-0223: B).**
 "Anduril's interpretation was altered with the Legacy Ruling on GOTM: we see in GOTM a situation where both
 clauses exist but they *don't* match the same target. We therefore decided that both are in force as ongoing
@@ -1560,3 +1607,23 @@ Betrayal of Isengard 3_29 and 12_25 then say). G-0051, a follower's Aid cost rea
 `GetAidTwilightCost` to emphasize that it's only managing the case of twilight; if a more generic
 effect-returning function is needed I could also see `GetAidCost` as that more generic version." G-0053 and
 G-0054: "Approved." *[2026-10-10]*
+
+**Card by card (2026-10-10, fourth notes).** Q-0225, a Free Peoples player's own assignment action is not offered
+for a companion who already has a minion, whatever his defender bonus: "Very good, keep. That's one of the more
+common mistakes people make, that assignment actions can't actually be used like normal assignments due to the
+rules restricting their use." Q-0226, may a site be replaced by another player's copy of the same site
+(Pathfinder 1_110): PARKED by her: "I think this was added in 2005, i.e. around set 12-13. We may need to add a
+new format rule switch for this as a result. For now park this while the analysis continues and while I inquire
+at the PC; we may have a whole slew of such rulings to add to the pile." Q-0227, Held 6_109 does not corrupt a
+hindered Frodo at site 9: "I think for now we'll go with A until someone complains, lol. Held has always been a
+card about utilizing it until you counter it at the end, and hinder is one potential counter." Q-0232, The One
+Ring when its bearer is killed: "If the Ring-bearer is killed, let's ensure the One Ring is moved to the same
+position the Ring-bearer previously occupied, including in skirmishes (as the skirmish UI will very frequently
+leave a finished game in the state of the last skirmish with a blank spot where the One Ring used to be). Don't
+worry about the front-end for this, just take a stab at ensuring the server issues the proper PCIP etc events
+down the chain. When Frodo dies and Sam is in play with his ability, there should thus be a brief moment (until
+the response is accepted by the player) where the Ring is where Frodo once was, before Sam's ability kicks in
+and transfers, with gameplay resuming as normal. So I guess this is B+, haha." Q-0234, Many Miles 13_21: "if
+"current site" is meant to literally be the site the fellowship is currently at (which seems beyond reasonable),
+then I think A is it." Q-0235, the three old tests kept in 2022 as Legacy classes in 1_31's and 1_9's files:
+"those transferred tests were good to delete with A; they are now covered better elsewhere." *[2026-10-10]*
