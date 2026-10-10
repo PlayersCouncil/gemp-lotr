@@ -166,20 +166,6 @@ public class RequirementsAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void hasCardInAdventureDeck() throws Exception {
-        initializeSimplestGame();
-
-        passUntil(Phase.FELLOWSHIP);
-
-        JSONObject obj = new JSONObject();
-        obj.put("player", "fp");
-        obj.put("filter", "any");
-
-        Requirement requirement = new HasCardInAdventureDeck().getPlayRequirement(obj, lotroCardBlueprintBuilder);
-        assertTrue(requirement.accepts(new DefaultActionContext(P1, _game, null, null, null)));
-    }
-
-    @Test
     public void hasInMemory() throws Exception {
         initializeSimplestGame();
 

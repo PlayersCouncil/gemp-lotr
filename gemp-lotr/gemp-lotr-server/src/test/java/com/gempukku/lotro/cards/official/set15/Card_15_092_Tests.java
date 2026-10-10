@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_15_092_Tests
@@ -19,11 +20,30 @@ public class Card_15_092_Tests
 				new HashMap<>()
 				{{
 					put("card", "15_92");
-					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// The card's own block: a path whose sites are laid from the adventure decks as the game goes.
+	protected VirtualTableScenario GetReplacedSiteScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("southron", "15_92");
+					// Corps of Harad: a [men] Man of vitality 3; fierce only at a battleground, and none of
+					// these sites is one
+					put("corps1", "11_73");
+					put("corps2", "11_73");
+				}},
+				// Nine different sites: site1 is Fangorn Glade and site2 Abandoned Mine Shaft.  None of them
+				// does anything when it replaces site 2 in a maneuver phase.
+				VirtualTableScenario.ShadowsSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
+				VirtualTableScenario.Shadows
 		);
 	}
 
@@ -62,18 +82,71 @@ public class Card_15_092_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SavageSouthronTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void ManeuverAbilityExertsTwoMenMenToReplaceTheCurrentSiteWithOneFromTheFreePeoplesAdventureDeck() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetReplacedSiteScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var southron = scn.GetShadowCard("southron");
+		var corps1 = scn.GetShadowCard("corps1");
+		var corps2 = scn.GetShadowCard("corps2");
+		var shaft = scn.GetShadowSite("site2");
 
-		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.StartGame(scn.GetFreepsSite("site1"));
+		scn.FreepsPass();
+		scn.ShadowChooseCardBPFromSelection(shaft);
+		scn.MoveMinionsToTable(southron, corps1, corps2);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
 
-		assertEquals(3, scn.GetTwilight());
+		// The fellowship is at the Shadow player's site, and the Free Peoples player's other eight sites are
+		// in his adventure deck.
+		assertEquals(shaft, scn.GetCurrentSite());
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		PhysicalCardImpl[] freepsSites = {
+				scn.GetFreepsSite("site2"), scn.GetFreepsSite("site3"), scn.GetFreepsSite("site4"),
+				scn.GetFreepsSite("site5"), scn.GetFreepsSite("site6"), scn.GetFreepsSite("site7"),
+				scn.GetFreepsSite("site8"), scn.GetFreepsSite("site9")
+		};
+		assertInZone(Zone.ADVENTURE_DECK, freepsSites);
+		assertTrue(scn.ShadowActionAvailable(southron));
+
+		scn.ShadowUseCardAction(southron);
+		// "Exert 2 [men] Men": three can, and two are chosen.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(southron, corps1, corps2));
+		assertEquals(2, scn.ShadowGetChoiceMin());
+		assertEquals(2, scn.ShadowGetChoiceMax());
+		scn.ShadowChooseCards(corps1, corps2);
+		assertEquals(1, scn.GetWoundsOn(corps1));
+		assertEquals(1, scn.GetWoundsOn(corps2));
+		assertEquals(0, scn.GetWoundsOn(southron));
+
+		// The game shows both players the site it has picked before it is laid.
+		scn.FreepsDismissRevealedCards();
+		scn.ShadowDismissRevealedCards();
+
+		// Which site is chance.  It is one of the eight that were in the Free Peoples player's adventure deck,
+		// it lies where the Shadow player's did, and the other seven are in that deck still.  One time in
+		// eight it is his own Abandoned Mine Shaft, the twin of the site replaced, which the game allows as
+		// built (Q-0226, open: under its answer B a twin may not replace a twin, and this test wants
+		// looking at).
+		var laid = scn.GetCurrentSite();
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertNotSame(shaft, laid);
+		assertEquals(scn.P1(), laid.getOwner());
+		assertInZone(Zone.ADVENTURE_PATH, laid);
+		assertInZone(Zone.ADVENTURE_DECK, shaft);
+		int laidOfTheEight = 0;
+		for (var site : freepsSites) {
+			if (site == laid)
+				laidOfTheEight++;
+			else
+				assertInZone(Zone.ADVENTURE_DECK, site);
+		}
+		assertEquals(1, laidOfTheEight);
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+
+		// waits: G-0054 no cheat takes the sites out of a player's adventure deck, so the other half of the
+		// sentence is not read: with no site in the Free Peoples player's adventure deck the ability is not
+		// offered, though two [men] Men can still exert
 	}
 }

@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_15_148_Tests
@@ -18,7 +19,30 @@ public class Card_15_148_Tests
 				new HashMap<>()
 				{{
 					put("card", "15_148");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetVitalityScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("flower", "15_148");
+					// Hobbits of vitality 4, as the Ring-bearer is.  Sam, Son of Hamfast: his fellowship ability
+					// is not used.  Merry, Friend to Sam: a skirmish ability only.
+					put("sam", "1_311");
+					put("merry", "1_302");
+					put("aragorn", "1_89");         // Aragorn, Ranger of the North: a Man of vitality 4
+					put("sword", "1_299");          // Hobbit Sword: a hand weapon, strength +2, on a Hobbit; no other text
+					put("ranger", "1_112");         // Ranger's Sword: a hand weapon on Aragorn, strength +2 and damage +1
+					// Ted Sandyman: a [men] minion who is a Hobbit, vitality 4; maneuver and regroup abilities only
+					put("ted", "18_75");
+					// Long Battle Bow: a ranged weapon on a [men] minion, strength +1, and bearer is an archer.
+					// Its when-played text is not used: it is cheated on.
+					put("bow", "11_89");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -55,18 +79,58 @@ public class Card_15_148_Tests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void LittleGoldenFlowerTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void AHobbitBearingAHandWeaponIsVitalityPlus1() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetVitalityScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var flower = scn.GetFreepsCard("flower");
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		var merry = scn.GetFreepsCard("merry");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var sword = scn.GetFreepsCard("sword");
+		var ranger = scn.GetFreepsCard("ranger");
+		scn.MoveCompanionsToTable(sam, merry, aragorn);
+		scn.MoveCardsToSupportArea(flower);
+		scn.AttachCardsTo(aragorn, ranger);
+		scn.MoveCardsToHand(sword);
+
+		var ted = scn.GetShadowCard("ted");
+		var bow = scn.GetShadowCard("bow");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// A Hobbit who bears a weapon that is no hand weapon: the only one there is sits on the other side.
+		scn.MoveMinionsToTable(ted);
+		scn.AttachCardsTo(ted, bow);
 
-		assertEquals(3, scn.GetTwilight());
+		assertEquals(4, scn.GetVitality(sam));
+		assertEquals(4, scn.GetVitality(merry));
+		assertEquals(4, scn.GetVitality(frodo));
+		assertEquals(4, scn.GetVitality(aragorn));
+		assertEquals(4, scn.GetVitality(ted));
+
+		scn.FreepsPlayCard(sword);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, sam, merry));
+		scn.FreepsChooseCard(sam);
+		assertAttachedTo(sword, sam);
+
+		// The Hobbit with the hand weapon and nobody else: not the Hobbits without one, not the Man with
+		// one, not the Hobbit with a bow.
+		assertEquals(5, scn.GetVitality(sam));
+		assertEquals(4, scn.GetVitality(merry));
+		assertEquals(4, scn.GetVitality(frodo));
+		assertEquals(4, scn.GetVitality(aragorn));
+		assertEquals(4, scn.GetVitality(ted));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// The extra point is real: with three wounds on him, Sam takes a fourth from Ted's bow and lives.
+		scn.AddWoundsToChar(sam, 3);
+		assertEquals(2, scn.GetVitality(sam));
+		scn.SkipToArcheryWounds();
+		scn.FreepsChooseCard(sam);
+		assertEquals(4, scn.GetWoundsOn(sam));
+		assertEquals(1, scn.GetVitality(sam));
+		assertInZone(Zone.FREE_CHARACTERS, sam);
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
 }

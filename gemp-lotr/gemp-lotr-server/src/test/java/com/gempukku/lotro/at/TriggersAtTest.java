@@ -74,24 +74,6 @@ public class TriggersAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void startOfSkirmishInvolving() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard gimli = addToZone(createCard(P1, "5_7"), Zone.FREE_CHARACTERS);
-        PhysicalCard hopelessGollum = addToZone(createCard(P2, "15_43"), Zone.SHADOW_CHARACTERS);
-
-        passUntil(Phase.ASSIGNMENT);
-        pass(P1);
-        pass(P2);
-
-        playerDecided(P1, gimli.getCardId() + " " + hopelessGollum.getCardId());
-
-        assertEquals(0, getStrength(hopelessGollum));
-        selectCard(P1, gimli);
-        assertEquals(4, getStrength(hopelessGollum));
-    }
-
-    @Test
     public void takesOffRing() throws Exception {
         initializeSimplestGame();
 
@@ -164,20 +146,6 @@ public class TriggersAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void replacesSite() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard riddermarkTactician = addToZone(createCard(P1, "13_133"), Zone.FREE_CHARACTERS);
-        PhysicalCard theoden = addToZone(createCard(P1, "13_137"), Zone.FREE_CHARACTERS);
-        PhysicalCard nelya = addToZone(createCard(P2, "11_222"), Zone.SHADOW_CHARACTERS);
-
-        passUntil(Phase.SHADOW);
-        replaceSite(_game.getGameState().getAdventureDeck(P1).get(0), 2);
-        selectCardAction(P2, nelya);
-        hasCardAction(P1, riddermarkTactician);
-    }
-
-    @Test
     public void fpDecidedToStay() throws Exception {
         initializeSimplestGame();
 
@@ -204,18 +172,5 @@ public class TriggersAtTest extends AbstractAtTest {
         assertEquals(0, getTwilightPool());
         selectCardAction(P1, theGaffer);
         assertEquals(1, getTwilightPool());
-    }
-
-    @Test
-    public void aboutToDrawCard() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard mirrorDangerousGuide = addToZone(createCard(P1, "15_22"), Zone.SUPPORT);
-        PhysicalCard elrond = addToZone(createCard(P1, "1_40"), Zone.SUPPORT);
-
-        passUntil(Phase.FELLOWSHIP);
-        PhysicalCard elrondCopy = putOnTopOfDeck(createCard(P1, "1_40"));
-        selectCardAction(P1, elrond);
-        hasCardAction(P1, mirrorDangerousGuide);
     }
 }

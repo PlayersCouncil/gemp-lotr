@@ -4,10 +4,12 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_07_195_Tests
@@ -18,7 +20,26 @@ public class Card_07_195_Tests
 				new HashMap<>()
 				{{
 					put("card", "7_195");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetDrawScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("march", "7_195");
+					// Elrond, Lord of Rivendell: an ally; "Fellowship: Exert Elrond to draw a card."
+					put("elrond", "1_40");
+					// Barliman Butterbur, Prancing Pony Proprietor: an ally; "Fellowship: Exert Barliman Butterbur
+					// to take a [gandalf] event into hand from your discard pile."
+					put("barliman", "1_70");
+					put("wizard", "1_78");          // Mysterious Wizard: a [gandalf] event, for the discard pile
+					// Aragorn, Ranger of the North: a second companion, so that two threats have room
+					put("aragorn", "1_89");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -55,18 +76,35 @@ public class Card_07_195_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void MorgulontheMarchTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	@Ignore("F-0376: Morgul on the March adds a threat for a card taken into hand from the discard pile, which is not drawn")
+	public void ACardTakenIntoHandFromTheDiscardPileIsNotACardDrawn() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetDrawScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var elrond = scn.GetFreepsCard("elrond");
+		var barliman = scn.GetFreepsCard("barliman");
+		var wizard = scn.GetFreepsCard("wizard");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveAlliesToTable(elrond, barliman);
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToDiscard(wizard);
+		scn.MoveCardsToSupportArea(scn.GetShadowCard("march"));
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		assertEquals(0, scn.GetThreats());
+		assertEquals(0, scn.GetFreepsHandCount());
 
-		assertEquals(1, scn.GetTwilight());
+		// A card drawn: one threat.
+		scn.FreepsUseCardAction(elrond);
+		assertEquals(1, scn.GetFreepsHandCount());
+		assertEquals(1, scn.GetThreats());
+
+		// A card taken into hand from the discard pile is in hand and was not drawn: no second threat,
+		// though two companions leave room for one.
+		scn.FreepsUseCardAction(barliman);
+		assertInHand(wizard);
+		assertEquals(2, scn.GetFreepsHandCount());
+		assertEquals(1, scn.GetThreats());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

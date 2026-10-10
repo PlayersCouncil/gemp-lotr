@@ -131,25 +131,6 @@ public class ModifiersAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void cantTakeWoundsFromLosingSkirmish() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard ringBearer = getRingBearer(P1);
-
-        JSONObject obj = new JSONObject();
-        obj.put("filter", "ringBearer");
-
-        ModifierSource modifierSource = new CantTakeWoundsFromLosingSkirmish().getModifierSource(obj, lotroCardBlueprintBuilder);
-        DefaultActionContext actionContext = new DefaultActionContext(P1, _game, null, null, null);
-
-        passUntil(Phase.FELLOWSHIP);
-
-        assertTrue(_game.getModifiersQuerying().canTakeWoundsFromLosingSkirmish(_game, ringBearer));
-        addModifier(modifierSource.getModifier(actionContext));
-        assertFalse(_game.getModifiersQuerying().canTakeWoundsFromLosingSkirmish(_game, ringBearer));
-    }
-
-    @Test
     public void cantUseSpecialAbilities() throws Exception {
         initializeSimplestGame();
 
@@ -232,25 +213,6 @@ public class ModifiersAtTest extends AbstractAtTest {
         assertFalse(PlayConditions.hasInitiative(_game, Side.FREE_PEOPLE));
         addModifier(modifierSource.getModifier(actionContext));
         assertTrue(PlayConditions.hasInitiative(_game, Side.FREE_PEOPLE));
-    }
-
-    @Test
-    public void modifyVitality() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard ringBearer = getRingBearer(P1);
-
-        JSONObject obj = new JSONObject();
-        obj.put("filter", "ringBearer");
-        obj.put("amount", 1);
-
-        ModifierSource modifierSource = new ModifyVitality().getModifierSource(obj, lotroCardBlueprintBuilder);
-        DefaultActionContext actionContext = new DefaultActionContext(P1, _game, null, null, null);
-
-        passUntil(Phase.FELLOWSHIP);
-        assertEquals(4, _game.getModifiersQuerying().getVitality(_game, ringBearer));
-        addModifier(modifierSource.getModifier(actionContext));
-        assertEquals(5, _game.getModifiersQuerying().getVitality(_game, ringBearer));
     }
 
     @Test
