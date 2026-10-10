@@ -166,8 +166,7 @@ public class Card_01_338_Tests
         // as Nertea should have consumed the only discount
         assertTrue(scn.ShadowHasOptionalTriggerAvailable());
         scn.ShadowAcceptOptionalTrigger();
-        assertTrue(scn.ShadowDecisionAvailable("play a minion"));
-        scn.ShadowChooseYes();
+        // Taking the offer is the play (F-0387): the Witch-king, the one minion there, is played without a second question.
 
         //TWK costs 8, should not be discounted
         //10 - 8
