@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_01_012_Tests
@@ -19,9 +20,14 @@ public class Card_01_012_Tests
 				{{
 					put("gimli", "1_12");
 
-					put("card1", "1_191");
-					put("card2", "1_178");
-					put("card3", "1_179");
+					// Cards to hold and to place. None of them is played.
+					put("lord", "1_21");          // Lord of Moria: Free Peoples condition
+					put("armor", "1_8");          // Dwarven Armor: Free Peoples possession
+					put("strike", "1_3");         // Axe Strike: Free Peoples event
+					put("runner", "1_178");       // Goblin Runner: Shadow minion
+					put("troop", "1_177");        // Goblin Patrol Troop: Shadow minion
+					put("savage", "1_151");       // Uruk Savage: Shadow minion
+					put("aragorn", "1_89");       // Aragorn, Ranger of the North: companion
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -45,11 +51,11 @@ public class Card_01_012_Tests
 		 * Vitality: 3
 		 * Resistance: 6
 		 * Signet: Aragorn
-		 * Game Text: <b>Damage +1</b>
-		 * 	 <b>Fellowship: </b> If the twilight pool has fewer than 2 twilight tokens, add (2) and place a card from hand beneath your draw deck.
+		 * Game Text: <b>Damage +1</b>.
+		 * 	<b>Fellowship:</b> If the twilight pool has fewer than 2 twilight tokens, add (2) to place a card from hand
+		 * 	beneath your draw deck.
 		 */
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("gimli");
@@ -71,50 +77,151 @@ public class Card_01_012_Tests
 	}
 
 	@Test
-	public void GimliAbilityDoesntWorkWith2Twilight() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void PlayedForTwoWhichLeavesThePoolTooFullForHisAbilityUntilItIsBelowTwo() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var gimli = scn.GetFreepsCard("gimli");
-		var card1 = scn.GetFreepsCard("card1");
-		var card2 = scn.GetFreepsCard("card2");
-		scn.MoveCardsToHand(gimli);
-		scn.MoveCardsToHand(card1);
+		var lord = scn.GetFreepsCard("lord");
+		// A card to place: only the pool stands in the ability's way.
+		scn.MoveCardsToHand(gimli, lord);
 
 		scn.StartGame();
 
+		assertEquals(0, scn.GetTwilight());
 		scn.FreepsPlayCard(gimli);
-		//the 2 twilight from his cost should disqualify his own action
+		assertEquals(2, scn.GetTwilight());
+		assertInZone(Zone.FREE_CHARACTERS, gimli);
+		assertEquals(6, scn.GetStrength(gimli));
+		assertEquals(3, scn.GetVitality(gimli));
+
+		// Exactly 2 twilight tokens are not fewer than 2.
+		assertInZone(Zone.HAND, lord);
 		assertFalse(scn.FreepsActionAvailable(gimli));
+
+		scn.SetTwilight(1);
+		scn.FreepsRefreshDecision();
+		assertTrue(scn.FreepsActionAvailable(gimli));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	public void GimliAbilityAdds2TwilightAndPlacesOnBottom() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void AtOneTwilightTokenAddsTwoAndPlacesTheChosenCardFromHandBeneathTheDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var gimli = scn.GetFreepsCard("gimli");
-		var card1 = scn.GetFreepsCard("card1");
-		var card2 = scn.GetFreepsCard("card2");
-		var card3 = scn.GetFreepsCard("card3");
+		var lord = scn.GetFreepsCard("lord");
+		var armor = scn.GetFreepsCard("armor");
+		var strike = scn.GetFreepsCard("strike");
+		var runner = scn.GetFreepsCard("runner");
+		var troop = scn.GetFreepsCard("troop");
+		var savage = scn.GetFreepsCard("savage");
+		var aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveCompanionsToTable(gimli);
-		scn.MoveCardsToHand(card1);
+		// In hand: a condition, a possession, an event and a Shadow minion. Not in hand: Aragorn in the discard
+		// pile, Gimli in play, two minions in the draw deck.
+		scn.MoveCardsToHand(lord, armor, strike, runner);
+		scn.MoveCardsToDiscard(aragorn);
 
 		scn.StartGame();
-		scn.MoveCardsToBottomOfDeck(card3);
 
+		scn.MoveCardsToTopOfDeck(troop);
+		scn.MoveCardsToBottomOfDeck(savage);
+		scn.SetTwilight(1);
+		scn.FreepsRefreshDecision();
+
+		assertEquals(1, scn.GetTwilight());
+		assertEquals(4, scn.GetFreepsHandCount());
+		assertEquals(2, scn.GetFreepsDeckCount());
+		assertSame(troop, scn.GetFreepsTopOfDeck());
+		assertSame(savage, scn.GetFreepsBottomOfDeck());
 		assertTrue(scn.FreepsActionAvailable(gimli));
-		assertEquals(Zone.HAND, card1.getZone());
-		assertEquals(Zone.DECK, card2.getZone());
-		assertEquals(scn.GetFreepsTopOfDeck().getBlueprintId(), card2.getBlueprintId());
-		assertEquals(Zone.DECK, card3.getZone());
-		assertEquals(scn.GetFreepsBottomOfDeck().getBlueprintId(), card3.getBlueprintId());
 
 		scn.FreepsUseCardAction(gimli);
-		//card from hand placed on the bottom of the deck
-		assertEquals(Zone.DECK, card1.getZone());
-		assertEquals(scn.GetFreepsBottomOfDeck().getBlueprintId(), card1.getBlueprintId());
-		//card from the deck was not drawn (as it is in the errata)
-		assertEquals(Zone.DECK, card2.getZone());
+		// The (2) is the cost: it is in the pool by the time the card is chosen.
+		assertEquals(3, scn.GetTwilight());   // 1 + 2
+		assertTrue(scn.FreepsHasCardChoiceAvailable(lord, armor, strike, runner));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn, gimli, troop, savage));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		assertEquals(1, scn.FreepsGetChoiceMax());
+
+		scn.FreepsChooseCard(runner);
+		assertEquals(3, scn.GetTwilight());
+		// The Runner lies under the card that was the bottom one. Nothing is drawn: the top card is where it was.
+		assertInZone(Zone.DECK, runner, savage, troop);
+		assertSame(runner, scn.GetFreepsBottomOfDeck());
+		assertSame(savage, scn.GetFromBottomOfFreepsDeck(2));
+		assertSame(troop, scn.GetFreepsTopOfDeck());
+		assertInZone(Zone.HAND, lord, armor, strike);
+		assertEquals(3, scn.GetFreepsHandCount());   // 4 - 1 placed
+		assertEquals(3, scn.GetFreepsDeckCount());   // 2 + 1 placed
+		assertInZone(Zone.DISCARD, aragorn);
+
+		// 3 twilight tokens: the ability has shut itself, with cards still in hand to place.
+		assertFalse(scn.FreepsActionAvailable(gimli));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void AtAnEmptyPoolTheOnlyCardInHandIsPlacedBeneathTheDrawDeckWithoutAChoice() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gimli = scn.GetFreepsCard("gimli");
+		var runner = scn.GetFreepsCard("runner");
+		var troop = scn.GetFreepsCard("troop");
+		var savage = scn.GetFreepsCard("savage");
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveCardsToHand(runner);
+
+		scn.StartGame();
+
+		scn.MoveCardsToTopOfDeck(troop);
+		scn.MoveCardsToBottomOfDeck(savage);
+		int deck = scn.GetFreepsDeckCount();
+
+		assertEquals(0, scn.GetTwilight());
+		assertEquals(1, scn.GetFreepsHandCount());
+		assertSame(savage, scn.GetFreepsBottomOfDeck());
+		assertTrue(scn.FreepsActionAvailable(gimli));
+
+		scn.FreepsUseCardAction(gimli);
+		assertEquals(2, scn.GetTwilight());
+		assertInZone(Zone.DECK, runner);
+		assertSame(runner, scn.GetFreepsBottomOfDeck());
+		assertSame(savage, scn.GetFromBottomOfFreepsDeck(2));
+		assertSame(troop, scn.GetFreepsTopOfDeck());
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertEquals(deck + 1, scn.GetFreepsDeckCount());
+
+		assertFalse(scn.FreepsActionAvailable(gimli));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void WithNoCardInHandTheTwoTwilightTokensAreAddedAndNothingIsPlaced() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gimli = scn.GetFreepsCard("gimli");
+		var troop = scn.GetFreepsCard("troop");
+		var savage = scn.GetFreepsCard("savage");
+		scn.MoveCompanionsToTable(gimli);
+
+		scn.StartGame();
+
+		scn.MoveCardsToTopOfDeck(troop);
+		scn.MoveCardsToBottomOfDeck(savage);
+		int deck = scn.GetFreepsDeckCount();
+
+		assertEquals(0, scn.GetTwilight());
+		assertEquals(0, scn.GetFreepsHandCount());
+		// The (2) can be paid, so the ability is on offer though there is no card to place.
+		assertTrue(scn.FreepsActionAvailable(gimli));
+
+		scn.FreepsUseCardAction(gimli);
+		assertEquals(2, scn.GetTwilight());
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertEquals(deck, scn.GetFreepsDeckCount());
+		assertSame(savage, scn.GetFreepsBottomOfDeck());
+		assertSame(troop, scn.GetFreepsTopOfDeck());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }
