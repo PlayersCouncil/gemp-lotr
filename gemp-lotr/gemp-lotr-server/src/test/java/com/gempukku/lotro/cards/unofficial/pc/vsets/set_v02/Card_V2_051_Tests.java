@@ -1,12 +1,9 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -46,9 +43,12 @@ public class Card_V2_051_Tests
 					// The Red Arrow: the [rohan] artifact that needs no Theoden.  "Assignment: Exert a [gondor]
 					// Man to play a [rohan] Man. ... Discard this artifact."
 					put("arrow", "9_46");
+					// The Red Arrow as its erratum has it, in the support area: "Fellowship: Discard this and
+					// exert a Man to take a Free Peoples Man of a different culture into hand from your draw
+					// deck."  The two share a unique title, so no test lays both.
+					put("errataarrow", "59_46");
 					// Athelas: a [gondor] possession.  "Fellowship: Discard this possession to heal a companion..."
 					put("athelas1", "1_94");
-					put("athelas2", "1_94");
 					// Naith Longbow: "Archery: Exert bearer to discard the top card of your draw deck."
 					put("longbow", "6_21");
 
@@ -57,6 +57,10 @@ public class Card_V2_051_Tests
 					put("castout1", "12_108");
 					put("castout2", "12_108");
 					put("doom", "8_86");         // Doom Drove Them: another [rohan] condition that holds [rohan] tokens
+					// Northern Signal-fire, Flame of Calenhad: a [rohan] possession in the support area.  "Maneuver:
+					// Hinder this beacon and exert an unbound Man.  Until the regroup phase, each of your other Men
+					// gain each of the unloaded keywords (except race) on that Man."
+					put("flame", "103_86");
 					// For the Mark: a [rohan] regroup event. "Spot a [rohan] Man to discard a possession from play."
 					put("mark", "12_114");
 					put("mark2", "12_114");
@@ -460,7 +464,7 @@ public class Card_V2_051_Tests
 	}
 
 	@Test
-	public void NothingIsAddedDuringTheFellowshipPhase() throws DecisionResultInvalidException, CardNotFoundException, InvalidCardDefinitionException {
+	public void NothingIsAddedDuringTheFellowshipPhase() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var wrath = scn.GetFreepsCard("wrath");
@@ -468,20 +472,16 @@ public class Card_V2_051_Tests
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var deor = scn.GetFreepsCard("deor");
 		var deor2 = scn.GetFreepsCard("deor2");
-		var athelas1 = scn.GetFreepsCard("athelas1");
-		var athelas2 = scn.GetFreepsCard("athelas2");
+		var arrow = scn.GetFreepsCard("errataarrow");
+		var chain = scn.GetFreepsCard("chain");
 		var mark = scn.GetFreepsCard("mark");
-		scn.MoveCardsToSupportArea(wrath);
-		scn.MoveCompanionsToTable(guard, aragorn);
+		scn.MoveCardsToSupportArea(wrath, arrow);
+		scn.MoveCompanionsToTable(guard);
 		scn.MoveAlliesToTable(deor);
 		scn.AddWoundsToChar(deor, 1);
-		scn.AddWoundsToChar(aragorn, 1);
 		scn.MoveCardsToHand(deor2, mark);
-		// No [rohan] possession discards itself in the fellowship phase, so Athelas, which does, is
-		// made a [rohan] card as well.  Aragorn bears two: one goes in the fellowship phase and the
-		// other in the regroup phase.
-		scn.AttachCardsTo(aragorn, athelas1, athelas2);
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, scn.GenerateFreepsFilter("name(Athelas)"), null, Culture.ROHAN));
+		// The Guard bears a [rohan] possession for the regroup phase.
+		scn.AttachCardsTo(guard, chain);
 
 		scn.StartGame();
 
@@ -494,17 +494,23 @@ public class Card_V2_051_Tests
 		assertEquals(0, scn.GetWoundsOn(deor));
 		assertEquals(0, scn.GetCultureTokensOn(wrath));
 
-		// A [rohan] item discarded from play.
-		scn.FreepsUseCardAction(athelas1);
-		assertInZone(Zone.DISCARD, athelas1);
-		assertEquals(0, scn.GetWoundsOn(aragorn));
+		// A [rohan] item discarded from play: The Red Arrow, a [rohan] artifact, discards itself as the cost of
+		// its own fellowship ability.  The Guard exerts for it, and Aragorn, a Man of [gondor], comes from
+		// the draw deck.
+		scn.FreepsUseCardAction(arrow);
+		scn.FreepsChooseCard(guard);
+		scn.FreepsDismissRevealedCards();
+		scn.FreepsChooseCardBPFromSelection(aragorn);
+		assertInZone(Zone.DISCARD, arrow);
+		assertEquals(1, scn.GetWoundsOn(guard));
+		assertInZone(Zone.HAND, aragorn);
 		assertEquals(0, scn.GetCultureTokensOn(wrath));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
-		// The other Athelas, discarded by For the Mark in the regroup phase, adds a token.
+		// A [rohan] possession discarded by For the Mark in the regroup phase of the same turn adds a token.
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.FreepsPlayCard(mark);
-		assertInZone(Zone.DISCARD, athelas2);
+		assertInZone(Zone.DISCARD, chain);
 		assertEquals(1, scn.GetCultureTokensOn(wrath));
 		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 	}
@@ -550,23 +556,33 @@ public class Card_V2_051_Tests
 		var haldir = scn.GetFreepsCard("haldir");
 		var rguard = scn.GetFreepsCard("rguard");
 		var deor = scn.GetFreepsCard("deor");
+		var flame = scn.GetFreepsCard("flame");
 		var troop = scn.GetShadowCard("troop");
 		var savage = scn.GetShadowCard("savage");
-		scn.MoveCardsToSupportArea(wrath, doom, castout);
+		scn.MoveCardsToSupportArea(wrath, doom, castout, flame);
 		scn.AddTokensToCard(wrath, 3);
 		scn.AddTokensToCard(doom, 2);
 		scn.MoveCompanionsToTable(guard, haldir, rguard);
-		// An ally, made valiant: valiant as the two are, and no companion.
 		scn.MoveAlliesToTable(deor);
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, CardType.ALLY, null, Keyword.VALIANT));
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(troop, savage);
 		scn.SkipToPhase(Phase.MANEUVER);
 
+		// No ally is valiant in print.  The Flame of Calenhad has the Household Guard exert, and until the
+		// regroup phase the player's other Men have his keyword: the Rohirrim Guard, a companion, and Deor,
+		// an ally.
+		assertFalse(scn.HasKeyword(rguard, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(deor, Keyword.VALIANT));
+		scn.FreepsUseCardAction(flame);
+		scn.FreepsChooseCard(guard);
+		assertTrue(scn.HasKeyword(rguard, Keyword.VALIANT));
 		assertTrue(scn.HasKeyword(deor, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(frodo, Keyword.VALIANT));
+		scn.ShadowPass();
+
 		assertEquals(3, scn.GetCultureTokensOn(wrath));
-		assertEquals(0, scn.GetWoundsOn(guard));
+		assertEquals(1, scn.GetWoundsOn(guard));
 		assertEquals(0, scn.GetWoundsOn(haldir));
 		assertEquals(0, scn.GetWoundsOn(savage));
 		assertEquals(0, scn.GetWoundsOn(troop));
@@ -579,8 +595,10 @@ public class Card_V2_051_Tests
 
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(wrath));
 		scn.FreepsAcceptOptionalTrigger();
-		assertTrue(scn.FreepsHasCardChoiceAvailable(guard, haldir));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(rguard, deor, frodo));
+		// The valiant companions, of two cultures, in print or by the Flame.  Not the ally who is valiant by
+		// the Flame as the Rohirrim Guard is, nor Frodo, who is not valiant.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(guard, haldir, rguard));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(deor, frodo));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		scn.FreepsChooseCard(haldir);
 
@@ -588,7 +606,8 @@ public class Card_V2_051_Tests
 		assertEquals(1, scn.GetCultureTokensOn(wrath));
 		assertEquals(2, scn.GetCultureTokensOn(doom));
 		assertEquals(1, scn.GetWoundsOn(haldir));
-		assertEquals(0, scn.GetWoundsOn(guard));
+		assertEquals(1, scn.GetWoundsOn(guard));
+		assertEquals(0, scn.GetWoundsOn(rguard));
 		// The exertion and the wound, on the minion that was exerted and not the other.
 		assertEquals(2, scn.GetWoundsOn(savage));
 		assertEquals(0, scn.GetWoundsOn(troop));
@@ -741,32 +760,38 @@ public class Card_V2_051_Tests
 	public void IsNotOfferedWhenTheOnlyValiantCompanionIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
+		var frodo = scn.GetRingBearer();
 		var wrath = scn.GetFreepsCard("wrath");
 		var castout = scn.GetFreepsCard("castout1");
 		var guard = scn.GetFreepsCard("guard");
-		var rguard = scn.GetFreepsCard("rguard");
 		var deor = scn.GetFreepsCard("deor");
+		var flame = scn.GetFreepsCard("flame");
 		var troop = scn.GetShadowCard("troop");
-		scn.MoveCardsToSupportArea(wrath, castout);
+		scn.MoveCardsToSupportArea(wrath, castout, flame);
 		scn.AddTokensToCard(wrath, 2);
-		scn.MoveCompanionsToTable(guard, rguard);
+		scn.MoveCompanionsToTable(guard);
 		scn.MoveAlliesToTable(deor);
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, CardType.ALLY, null, Keyword.VALIANT));
-		// Vitality 3 with 2 wounds: the valiant companion cannot exert.  The companion who is not
-		// valiant and the valiant ally both can.
-		scn.AddWoundsToChar(guard, 2);
+		scn.AddWoundsToChar(guard, 1);
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(troop);
 		scn.SkipToPhase(Phase.MANEUVER);
 
+		// The Flame of Calenhad has the Household Guard, the only unbound Man, exert: vitality 3 with 2
+		// wounds, the valiant companion cannot exert again.  Until the regroup phase Deor, the player's
+		// other Man, has his keyword: a valiant ally, who can exert, as Frodo can, who is not valiant.
+		scn.FreepsUseCardAction(flame);
+		assertTrue(scn.IsExhausted(guard));
 		assertTrue(scn.HasKeyword(deor, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(frodo, Keyword.VALIANT));
+		scn.ShadowPass();
+
 		scn.FreepsUseCardAction(castout);
 
 		assertEquals(1, scn.GetWoundsOn(troop));
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 		assertEquals(2, scn.GetCultureTokensOn(wrath));
-		assertEquals(0, scn.GetWoundsOn(rguard));
+		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertEquals(0, scn.GetWoundsOn(deor));
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}

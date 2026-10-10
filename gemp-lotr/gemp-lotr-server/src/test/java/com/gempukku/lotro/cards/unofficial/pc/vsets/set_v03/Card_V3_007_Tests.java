@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -76,7 +75,7 @@ public class Card_V3_007_Tests
 	}
 
 	@Test
-	public void PlayedForTwoOnAWizardOfAnyCultureAndOnNobodyElse() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedForTwoOnAWizardCompanionOrAllyAndOnNobodyElse() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var stash = scn.GetFreepsCard("stash");
@@ -90,9 +89,6 @@ public class Card_V3_007_Tests
 		// A Wizard who is an ally: the text does not say "companion".
 		scn.MoveAlliesToTable(whitesaruman);
 		scn.MoveCardsToHand(stash);
-		// Every Free Peoples Wizard there is belongs to the [gandalf] culture, so a [gondor] Man is made a Wizard
-		// to tell "a Wizard" from "a [gandalf] companion".
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, aragorn, null, Race.WIZARD));
 
 		scn.StartGame();
 
@@ -102,9 +98,10 @@ public class Card_V3_007_Tests
 
 		scn.FreepsPlayCard(stash);
 
-		assertTrue(scn.FreepsHasCardChoiceAvailable(gandalf, radagast, aragorn, whitesaruman));
-		// Quickbeam is [gandalf] and no Wizard; Frodo is neither.
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(quickbeam, frodo));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(gandalf, radagast, whitesaruman));
+		// Quickbeam is [gandalf] and no Wizard; Aragorn and Frodo are neither.
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(quickbeam, aragorn, frodo));
+		assertEquals(3, scn.FreepsGetCardChoiceCount());
 		assertEquals(1, scn.FreepsGetChoiceMin());
 
 		scn.FreepsChooseCard(radagast);

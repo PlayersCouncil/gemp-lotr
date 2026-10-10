@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.StrengthModifier;
 import org.junit.Test;
 
@@ -29,8 +28,12 @@ public class Card_V2_052_Tests
 					put("haldir", "102_8");      // Haldir, Naith Commander: [elven] Elf, strength 6; his text needs a ranged weapon or an [elven] possession
 					// Rider of Rohan: a [rohan] companion who is not valiant, strength 5, vitality 3.  His ability needs a mount.
 					put("rider", "4_286");
-					// Deor: a [rohan] ally.  No ally is valiant in print; one test makes him valiant.
+					// Deor: a [rohan] ally, a Man.  No ally is valiant in print; in one test the Flame makes him valiant.
 					put("deor", "7_222");
+					// Northern Signal-fire, Flame of Calenhad: a [rohan] possession in the support area.  "Maneuver:
+					// Hinder this beacon and exert an unbound Man.  Until the regroup phase, each of your other Men
+					// gain each of the unloaded keywords (except race) on that Man."
+					put("flame", "103_86");
 					// Eowyn, Restless Warrior: "Each time the fellowship moves during the regroup phase, you may
 					// reinforce a [rohan] token".  Not valiant.
 					put("eowyn", "13_124");
@@ -200,25 +203,34 @@ public class Card_V2_052_Tests
 	public void NoTokenIsAddedWithOnlyOneValiantCompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
+		var frodo = scn.GetRingBearer();
 		var ruin = scn.GetFreepsCard("ruin");
 		var guard = scn.GetFreepsCard("guard1");
-		var rider = scn.GetFreepsCard("rider");
 		var deor = scn.GetFreepsCard("deor");
+		var flame = scn.GetFreepsCard("flame");
 		var runner = scn.GetShadowCard("runner1");
-		scn.MoveCardsToSupportArea(ruin);
-		// One valiant companion.  Beside him a companion who is not valiant, and an ally made valiant.
-		scn.MoveCompanionsToTable(guard, rider);
+		scn.MoveCardsToSupportArea(ruin, flame);
+		// One valiant companion.  Beside him Frodo, a companion who is not valiant, and an ally.
+		scn.MoveCompanionsToTable(guard);
 		scn.MoveAlliesToTable(deor);
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, CardType.ALLY, null, Keyword.VALIANT));
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(runner);
+
+		// No ally is valiant in print.  In the maneuver phase the Flame of Calenhad has the Household Guard,
+		// the only unbound Man, exert, and until the regroup phase Deor, the player's other Man, has his
+		// keyword: a second valiant character, and no companion.
+		scn.SkipToPhase(Phase.MANEUVER);
+		assertFalse(scn.HasKeyword(deor, Keyword.VALIANT));
+		scn.FreepsUseCardAction(flame);
+		assertEquals(1, scn.GetWoundsOn(guard));
+
 		scn.SkipToAssignments();
 		scn.FreepsAssignAndResolve(guard, runner);
 
 		assertTrue(scn.HasKeyword(guard, Keyword.VALIANT));
 		assertTrue(scn.HasKeyword(deor, Keyword.VALIANT));
-		assertFalse(scn.HasKeyword(rider, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(frodo, Keyword.VALIANT));
 		assertEquals(0, scn.GetCultureTokensOn(ruin));
 		scn.PassSkirmishActions();
 

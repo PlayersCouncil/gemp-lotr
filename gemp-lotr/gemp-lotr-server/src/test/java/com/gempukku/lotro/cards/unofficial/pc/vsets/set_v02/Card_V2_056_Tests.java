@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -36,12 +35,19 @@ public class Card_V2_056_Tests
 					// assigned to a skirmish.  The V2 card spells the name without its accent.
 					put("lasttheoden", "102_55");
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor], strength 8, not valiant; a maneuver ability
-					put("sam", "1_311");        // Sam, Son of Hamfast: Ring-bound and not the Ring-bearer; strength 3
-					put("grimir", "1_17");      // Grimir, Dwarven Elder: an ally; a fellowship ability
+					put("sam", "1_311");        // Sam, Son of Hamfast: Ring-bound and not the Ring-bearer; strength 3, vitality 4
+					// Erkenbrand, Kinsman of the House of Eorl: a [rohan] Man, strength 7, vitality 3, not valiant.
+					// "Each exhausted companion gains valiant."
+					put("erkenbrand", "102_47");
+					put("bounder", "1_286");    // Bounder: a Hobbit ally whose home is site 2, strength 2, vitality 2; a skirmish ability
+					// Royal Guard: a [rohan] ally, strength 3, vitality 3, not valiant.  "Skirmish: Exert this ally to add
+					// his strength to a skirmishing Hobbit and make that Hobbit gain valiant until the regroup phase."
+					put("royalguard", "102_54");
 
 					put("savage1", "1_151");    // Uruk Savage: strength 5, vitality 3; Damage +1 is its whole text
 					put("savage2", "1_151");
 					put("savage3", "1_151");
+					put("runner", "1_178");     // Goblin Runner: strength 5, vitality 1
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -89,16 +95,14 @@ public class Card_V2_056_Tests
 		var assignedGuard = scn.GetFreepsCard("guard2");
 		var defender = scn.GetFreepsCard("defender");
 		var rider = scn.GetFreepsCard("rider1");
-		var idleRider = scn.GetFreepsCard("rider2");
+		var erkenbrand = scn.GetFreepsCard("erkenbrand");
 		var theoden = scn.GetFreepsCard("theoden");
 		var sam = scn.GetFreepsCard("sam");
-		var grimir = scn.GetFreepsCard("grimir");
-		scn.MoveCompanionsToTable(guard, assignedGuard, defender, rider, idleRider, theoden, sam);
-		scn.MoveAlliesToTable(grimir);
-		// No ally and no Ring-bound companion is valiant in print, so these two are made valiant: one is
-		// valiant and no companion, the other a valiant companion who is not unbound.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, grimir, null, Keyword.VALIANT));
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, sam, null, Keyword.VALIANT));
+		scn.MoveCompanionsToTable(guard, assignedGuard, defender, rider, erkenbrand, theoden, sam);
+		// No Ring-bound companion is valiant in print.  Sam is exhausted beside Erkenbrand ("Each exhausted
+		// companion gains valiant"): a valiant companion who is not unbound.  Erkenbrand himself is a
+		// [rohan] Man who is not valiant.
+		scn.AddWoundsToChar(sam, 3);
 		scn.MoveCardsToHand(event);
 
 		var savage1 = scn.GetShadowCard("savage1");
@@ -120,17 +124,19 @@ public class Card_V2_056_Tests
 		assertTrue(scn.IsCharAssignedAgainst(assignedGuard, savage2));
 		assertTrue(scn.IsCharAssignedAgainst(theoden, savage3));
 		assertFalse(scn.IsCharAssigned(guard));
-		assertTrue(scn.HasKeyword(grimir, Keyword.VALIANT));
+		assertTrue(scn.IsExhausted(sam));
 		assertTrue(scn.HasKeyword(sam, Keyword.VALIANT));
-		assertFalse(scn.HasKeyword(idleRider, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(erkenbrand, Keyword.VALIANT));
+		assertFalse(scn.IsCharAssigned(erkenbrand));
 		int twilight = scn.GetTwilight();
 		assertTrue(scn.FreepsPlayAvailable(event));
 
 		scn.FreepsPlayCard(event);
 		// Valiant companions nobody is assigned to, whatever their culture and whether Ring-bound or not.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(guard, defender, sam));
-		// Not valiant; valiant and assigned to a skirmish that has not begun; valiant and an ally.
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(idleRider, assignedGuard, grimir, rider, theoden, frodo));
+		// Not valiant and unassigned; valiant and assigned to a skirmish that has not begun; not valiant
+		// and fighting, assigned, or the Ring-bearer.
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(erkenbrand, assignedGuard, rider, theoden, frodo));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		assertEquals(1, scn.FreepsGetChoiceMax());
 
@@ -171,30 +177,44 @@ public class Card_V2_056_Tests
 		var defender = scn.GetFreepsCard("defender");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var idleRider = scn.GetFreepsCard("rider2");
-		var grimir = scn.GetFreepsCard("grimir");
+		var bounder = scn.GetFreepsCard("bounder");
+		var royalguard = scn.GetFreepsCard("royalguard");
 		scn.MoveCompanionsToTable(defender, aragorn, idleRider);
-		scn.MoveAlliesToTable(grimir);
-		// No ally is valiant in print, so Grimir is made valiant: valiant, unassigned, and no companion.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, grimir, null, Keyword.VALIANT));
+		scn.MoveAlliesToTable(bounder, royalguard);
 		scn.MoveCardsToHand(event);
 
+		var runner = scn.GetShadowCard("runner");
 		var savage1 = scn.GetShadowCard("savage1");
 		var savage2 = scn.GetShadowCard("savage2");
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(savage1, savage2);
+		scn.MoveMinionsToTable(runner, savage1, savage2);
+		// Site 2 is the Bounder's home, so he may be assigned.
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(
+				new PhysicalCardImpl[] { bounder, runner },
 				new PhysicalCardImpl[] { defender, savage1 },
 				new PhysicalCardImpl[] { aragorn, savage2 }
 		);
 
-		// The one valiant companion is the one fighting; an Elite Rider who is not valiant is unassigned.
+		// No ally is valiant in print.  In the Bounder's own skirmish, fought first, the Royal Guard makes him
+		// valiant until the regroup phase.  The Bounder's 2 + 3 does not beat the Runner's 5: one wound of his
+		// two, and his skirmish is over.
+		scn.FreepsResolveSkirmish(bounder);
+		assertFalse(scn.FreepsPlayAvailable(event));
+		scn.FreepsUseCardAction(royalguard);
+		assertTrue(scn.HasKeyword(bounder, Keyword.VALIANT));
+		scn.PassSkirmishActions();
+		assertEquals(1, scn.GetWoundsOn(bounder));
+
+		// The one valiant companion is the one fighting.  Unassigned are an Elite Rider who is not valiant
+		// and the Bounder: valiant, unassigned, and no companion.
 		scn.FreepsResolveSkirmish(defender);
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 		assertTrue(scn.IsCharSkirmishingAgainst(defender, savage1));
 		assertFalse(scn.IsCharAssigned(idleRider));
-		assertTrue(scn.HasKeyword(grimir, Keyword.VALIANT));
+		assertFalse(scn.IsCharAssigned(bounder));
+		assertTrue(scn.HasKeyword(bounder, Keyword.VALIANT));
 		assertFalse(scn.FreepsPlayAvailable(event));
 
 		// The Defender's 5 ties the Savage's 5 and loses: one wound, and one more for the Savage's damage +1.

@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -26,7 +25,11 @@ public class Card_V2_053_Tests
 					put("guardian", "54_76");   // Lorien Guardian: valiant [elven] Elf, vitality 3; a regroup ability
 					put("elite", "4_265");      // Elite Rider: [rohan] Man who is not valiant; stronger against a wounded minion
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor], not valiant; Maneuver: exert him to make him defender +1
-					put("herdsman", "7_247");   // Rohirrim Herdsman: [rohan] ally, vitality 2; a regroup ability
+					put("herdsman", "7_247");   // Rohirrim Herdsman: [rohan] ally, a Man, vitality 2; a regroup ability
+					// Northern Signal-fire, Flame of Calenhad: a [rohan] possession in the support area.  "Maneuver:
+					// Hinder this beacon and exert an unbound Man.  Until the regroup phase, each of your other Men
+					// gain each of the unloaded keywords (except race) on that Man."
+					put("flame", "103_86");
 
 					put("valor", "1_103");      // Elendil's Valor: Free Peoples event. Maneuver: make a [gondor] companion defender +1
 					put("valor2", "1_103");
@@ -105,33 +108,40 @@ public class Card_V2_053_Tests
 		var guard = scn.GetFreepsCard("guard");
 		var guard2 = scn.GetFreepsCard("guard2");
 		var guardian = scn.GetFreepsCard("guardian");
-		var elite = scn.GetFreepsCard("elite");
-		var aragorn = scn.GetFreepsCard("aragorn");
+		var dwarf = scn.GetFreepsCard("dwarf");
 		var herdsman = scn.GetFreepsCard("herdsman");
-		var valor = scn.GetFreepsCard("valor");
+		var flame = scn.GetFreepsCard("flame");
 		var spear = scn.GetFreepsCard("spear");
-		// Two valiant companions, of two cultures; with Frodo, three companions who are not valiant.
-		scn.MoveCompanionsToTable(guard, guardian, elite, aragorn);
+		// Two valiant companions, of two cultures; a Dwarf Guard and Frodo are two companions who are not valiant.
+		scn.MoveCompanionsToTable(guard, guardian, dwarf);
 		scn.MoveAlliesToTable(herdsman);
-		scn.MoveCardsToSupportArea(dawn);
-		scn.MoveCardsToHand(valor, spear);
+		scn.MoveCardsToSupportArea(dawn, flame);
+		scn.MoveCardsToHand(spear);
 
 		var troop = scn.GetShadowCard("troop");
 
 		scn.StartGame();
-		// A valiant character who is no companion: no ally is valiant in print.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, herdsman, null, Keyword.VALIANT));
 		scn.MoveMinionsToTable(troop);
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		assertTrue(scn.HasKeyword(herdsman, Keyword.VALIANT));
-		assertTrue(scn.FreepsPlayAvailable(valor));
+		assertFalse(scn.HasKeyword(herdsman, Keyword.VALIANT));
 		assertFalse(scn.FreepsActionAvailable(dawn));
 
-		// A third valiant companion arrives; the next time this player is asked, the action is there.
-		scn.MoveCompanionsToTable(guard2);
-		scn.FreepsPlayCard(valor);
+		// A valiant character who is no companion: no ally is valiant in print.  The Flame of Calenhad has the
+		// Household Guard, the only unbound Man, exert, and until the regroup phase the Herdsman, the player's
+		// other Man, has his keyword.  Two valiant companions and a valiant ally are not three valiant companions.
+		scn.FreepsUseCardAction(flame);
 		scn.ShadowPass();
+
+		assertEquals(1, scn.GetWoundsOn(guard));
+		assertTrue(scn.HasKeyword(herdsman, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(dwarf, Keyword.VALIANT));
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(dawn));
+
+		// A third valiant companion arrives, and the action is there.
+		scn.MoveCompanionsToTable(guard2);
+		scn.FreepsRefreshDecision();
 
 		assertTrue(scn.FreepsActionAvailable(dawn));
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
@@ -167,8 +177,7 @@ public class Card_V2_053_Tests
 		var savage = scn.GetShadowCard("savage");
 
 		scn.StartGame();
-		// The ally is [rohan] and valiant, so that only his being an ally keeps him from being healed.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, herdsman, null, Keyword.VALIANT));
+		// The ally is [rohan] and wounded, so that only his being an ally keeps him from being healed.
 		scn.AddWoundsToChar(guard, 2);
 		scn.AddWoundsToChar(guardian, 2);
 		scn.AddWoundsToChar(elite, 1);
@@ -178,7 +187,6 @@ public class Card_V2_053_Tests
 		scn.MoveMinionsToTable(troop, savage);
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		assertTrue(scn.HasKeyword(herdsman, Keyword.VALIANT));
 		assertEquals(5, scn.GetFreepsHandCount());
 		assertEquals(2, scn.GetShadowHandCount());
 		assertEquals(0, scn.GetWoundsOn(troop));

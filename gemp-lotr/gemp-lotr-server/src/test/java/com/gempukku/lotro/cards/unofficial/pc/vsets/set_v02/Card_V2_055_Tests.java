@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -26,7 +25,10 @@ public class Card_V2_055_Tests
 					put("guard2", "5_83");
 					put("guardian", "54_76");   // Lorien Guardian: valiant [elven] Elf, strength 5, vitality 3; a regroup ability
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, not valiant
-					put("bounder", "1_286");    // Bounder: Hobbit ally whose home is site 2, strength 2; a skirmish ability
+					put("bounder", "1_286");    // Bounder: Hobbit ally whose home is site 2, strength 2, vitality 2; a skirmish ability
+					// Royal Guard: [rohan] ally, strength 3, vitality 3, not valiant.  "Skirmish: Exert this ally to add his
+					// strength to a skirmishing Hobbit and make that Hobbit gain valiant until the regroup phase."
+					put("royalguard", "102_54");
 
 					put("runner1", "1_178");    // Goblin Runner: strength 5, vitality 1
 					put("runner2", "1_178");
@@ -109,8 +111,9 @@ public class Card_V2_055_Tests
 		var guardian = scn.GetFreepsCard("guardian");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var bounder = scn.GetFreepsCard("bounder");
+		var royalguard = scn.GetFreepsCard("royalguard");
 		scn.MoveCompanionsToTable(theoden, guard, guard2, guardian, aragorn);
-		scn.MoveAlliesToTable(bounder);
+		scn.MoveAlliesToTable(bounder, royalguard);
 
 		var runner1 = scn.GetShadowCard("runner1");
 		var runner2 = scn.GetShadowCard("runner2");
@@ -119,8 +122,6 @@ public class Card_V2_055_Tests
 		var runner5 = scn.GetShadowCard("runner5");
 
 		scn.StartGame();
-		// No ally is valiant in print.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, bounder, null, Keyword.VALIANT));
 		scn.MoveMinionsToTable(runner1, runner2, runner3, runner4, runner5);
 
 		// The fellowship moves to site 2, the Bounder's home, where he may be assigned.
@@ -135,7 +136,7 @@ public class Card_V2_055_Tests
 				new PhysicalCardImpl[]{aragorn, runner4},
 				new PhysicalCardImpl[]{bounder, runner5});
 
-		// Assigned: Theoden himself, two other valiant companions, a companion who is not valiant and a valiant ally.
+		// Assigned: Theoden himself, two other valiant companions, a companion who is not valiant and an ally.
 		// Not assigned: a third valiant companion.
 		assertTrue(scn.IsCharAssigned(theoden));
 		assertTrue(scn.IsCharAssigned(guard));
@@ -143,7 +144,7 @@ public class Card_V2_055_Tests
 		assertTrue(scn.IsCharAssigned(aragorn));
 		assertFalse(scn.HasKeyword(aragorn, Keyword.VALIANT));
 		assertTrue(scn.IsCharAssigned(bounder));
-		assertTrue(scn.HasKeyword(bounder, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(bounder, Keyword.VALIANT));
 		assertFalse(scn.IsCharAssigned(guard2));
 		assertTrue(scn.HasKeyword(guard2, Keyword.VALIANT));
 		// 6 + 1 for the Household Guard + 1 for the Lorien Guardian
@@ -151,6 +152,19 @@ public class Card_V2_055_Tests
 		// Only Theoden: the valiant companions beside him are as printed.
 		assertEquals(6, scn.GetStrength(guard));
 		assertEquals(6, scn.GetStrength(guard2));
+
+		// No ally is valiant in print.  In the Bounder's own skirmish the Royal Guard makes him valiant until the
+		// regroup phase: valiant and in a skirmish as the two are, and no companion.
+		scn.FreepsResolveSkirmish(bounder);
+		scn.FreepsUseCardAction(royalguard);
+		assertTrue(scn.IsCharSkirmishing(bounder));
+		assertTrue(scn.HasKeyword(bounder, Keyword.VALIANT));
+		assertEquals(8, scn.GetStrength(theoden));
+		// The Bounder's 2 + 3 does not beat the Runner's 5: one wound of his two.
+		scn.PassSkirmishActions();
+		assertEquals(1, scn.GetWoundsOn(bounder));
+		assertTrue(scn.HasKeyword(bounder, Keyword.VALIANT));
+		assertEquals(8, scn.GetStrength(theoden));
 
 		// A companion whose skirmish is being fought is still assigned to it.
 		scn.FreepsResolveSkirmish(guard);
@@ -174,9 +188,8 @@ public class Card_V2_055_Tests
 		assertEquals(7, scn.GetStrength(theoden));
 		scn.PassSkirmishActions();
 
-		// Aragorn and the Bounder are still waiting for their skirmishes.
+		// Aragorn is still waiting for his skirmish.
 		assertTrue(scn.IsCharAssigned(aragorn));
-		assertTrue(scn.IsCharAssigned(bounder));
 		assertEquals(6, scn.GetStrength(theoden));
 		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 	}

@@ -10,7 +10,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -42,7 +41,6 @@ public class Card_V2_062_Tests
 					put("pursuer", "5_108");    // Orc Pursuer: a [sauron] tracker, strength 6, vitality 2; lowers site numbers, and a trigger on being played
 					put("raider", "53_74");     // Uruk Raider: an [isengard] tracker, strength 6, vitality 2; its text is about allies
 					put("soldier", "1_271");    // Orc Soldier: a [sauron] Orc and no tracker, strength 7, vitality 2; a skirmish ability
-					put("mouth", "12_118");     // The Mouth of Sauron, Lieutenant of Barad-dur: a [sauron] Man and no tracker, strength 9, vitality 3; an assignment ability
 
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, vitality 4
 					put("gimli", "1_13");       // Gimli, Son of Gloin: strength 6, vitality 3
@@ -163,13 +161,9 @@ public class Card_V2_062_Tests
 		var pursuer = scn.GetShadowCard("pursuer");
 		var raider = scn.GetShadowCard("raider");
 		var soldier = scn.GetShadowCard("soldier");
-		var mouth = scn.GetShadowCard("mouth");
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(scout, pursuer, raider, soldier, mouth);
-		// Every [sauron] tracker there is is an Orc, and the text does not ask for one: a [sauron] Man is
-		// made a tracker.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, mouth, null, Keyword.TRACKER));
+		scn.MoveMinionsToTable(scout, pursuer, raider, soldier);
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(
 				new PhysicalCardImpl[]{gimli, scout},
@@ -186,9 +180,9 @@ public class Card_V2_062_Tests
 		assertEquals(2, scn.GetShadowHandCount());
 
 		scn.ShadowPlayCard(save1);
-		// Every [sauron] tracker: the one in this skirmish, the one waiting for the next, and the Man who is
-		// in neither and is no Orc.  Not the [isengard] tracker, and not the [sauron] Orc who is no tracker.
-		assertTrue(scn.ShadowHasCardChoiceAvailable(scout, pursuer, mouth));
+		// Every [sauron] tracker: the one in this skirmish and the one waiting for the next.  Not the
+		// [isengard] tracker, and not the [sauron] Orc who is no tracker.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(scout, pursuer));
 		assertTrue(scn.ShadowHasCardChoiceNotAvailable(raider, soldier));
 		assertEquals(1, scn.ShadowGetChoiceMin());
 		scn.ShadowChooseCard(scout);

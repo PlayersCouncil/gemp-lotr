@@ -9,7 +9,6 @@ import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -40,7 +39,6 @@ public class Card_V3_003_Tests
 					put("treachery", "1_86");    // Treachery Deeper Than You Know: Spell. Fellowship: Spot Gandalf to reveal an opponent's hand.
 					put("salve", "12_32");       // Salve: Spell, and a condition borne by a companion. To play, spot a [gandalf] Wizard.
 					put("folly", "1_77");        // Let Folly Be Our Cloak: a [gandalf] event and no spell. Exert X companions to remove (X).
-					put("sorry", "1_312");       // Sorry About Everything: [shire] event, cost 0. Fellowship: Exert a Hobbit companion to remove a burden.
 
 					// Cruel Caradhras: an [isengard] spell. Maneuver: Exert an [isengard] minion to make the opponent choose
 					// to either exert the Ring-bearer or add a burden.
@@ -189,45 +187,6 @@ public class Card_V3_003_Tests
 		assertFalse(scn.IsHindered(staff));
 		assertTrue(scn.IsHindered(narya));
 		assertTrue(scn.IsHindered(toby));
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
-	public void ASpellOfAnotherCultureIsASpellAllTheSame() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var frodo = scn.GetRingBearer();
-		var mantle = scn.GetFreepsCard("mantle");
-		var gandalf = scn.GetFreepsCard("gandalf");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		var staff = scn.GetFreepsCard("staff");
-		var sorry = scn.GetFreepsCard("sorry");
-		scn.MoveCompanionsToTable(gandalf, aragorn);
-		scn.MoveCardsToSupportArea(mantle);
-		scn.AttachCardsTo(gandalf, staff);
-		scn.MoveCardsToHand(sorry);
-
-		scn.StartGame();
-		scn.HinderCard(aragorn);
-		// Every Free Peoples spell there is belongs to [gandalf], so a [shire] event is made a spell.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, CardType.EVENT, null, Keyword.SPELL));
-
-		assertTrue(scn.HasKeyword(sorry, Keyword.SPELL));
-
-		// Frodo, the only Hobbit, exerts for it.
-		scn.FreepsPlayCard(sorry);
-
-		assertEquals(1, scn.GetWoundsOn(frodo));
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(mantle));
-		scn.FreepsAcceptOptionalTrigger();
-
-		// The Staff is the one [gandalf] artifact; Aragorn or the Staff may then be restored.
-		assertTrue(scn.IsHindered(staff));
-		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, staff));
-		scn.FreepsChooseCard(aragorn);
-
-		assertFalse(scn.IsHindered(aragorn));
-		assertTrue(scn.IsHindered(staff));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

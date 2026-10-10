@@ -11,7 +11,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -199,14 +198,11 @@ public class Card_V2_064_Tests
 		var searcher1 = scn.GetShadowCard("searcher1");
 		var searcher2 = scn.GetShadowCard("searcher2");
 		var uscout = scn.GetShadowCard("uscout");
-		var worker = scn.GetShadowCard("worker");
+		var raider = scn.GetShadowCard("raider");
 		var savage = scn.GetShadowCard("savage");
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(searcher1, searcher2, uscout, worker, savage);
-		// Every [isengard] tracker there is is an Uruk-hai, and the text does not ask for one: an [isengard]
-		// Orc is made a tracker.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, worker, null, Keyword.TRACKER));
+		scn.MoveMinionsToTable(searcher1, searcher2, uscout, raider, savage);
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 
 		// Not an assignment action.
@@ -217,7 +213,7 @@ public class Card_V2_064_Tests
 
 		scn.FreepsAssignToMinions(
 				new PhysicalCardImpl[]{aragorn, uscout},
-				new PhysicalCardImpl[]{gimli, worker});
+				new PhysicalCardImpl[]{gimli, raider});
 		// The Shadow player adds the Savage to Gimli's skirmish and leaves the Searchers out.
 		scn.ShadowAssignToMinions(gimli, savage);
 
@@ -240,23 +236,26 @@ public class Card_V2_064_Tests
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(uscout));
 		// Gimli's is untouched.
-		assertTrue(scn.IsCharAssignedAgainst(gimli, worker));
+		assertTrue(scn.IsCharAssignedAgainst(gimli, raider));
 		assertTrue(scn.IsCharAssignedAgainst(gimli, savage));
 		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 
-		// Gimli against the Isengard Worker and an Uruk Savage: one tracker among the minions is enough.
+		// Gimli against an Uruk Raider, a second [isengard] tracker, and an Uruk Savage, who is none: one
+		// tracker among the minions is enough.
 		scn.FreepsResolveSkirmish(gimli);
 		scn.FreepsPass();
-		assertTrue(scn.IsCharSkirmishingAgainst(gimli, worker));
+		assertTrue(scn.IsCharSkirmishingAgainst(gimli, raider));
+		assertTrue(scn.IsCharSkirmishingAgainst(gimli, savage));
+		assertFalse(scn.HasKeyword(savage, Keyword.TRACKER));
 		assertTrue(scn.ShadowActionAvailable(searcher2));
 
 		scn.ShadowUseCardAction(searcher2);
 		assertInDiscard(searcher2);
-		assertFalse(scn.IsCharSkirmishing(worker));
+		assertFalse(scn.IsCharSkirmishing(raider));
 		assertFalse(scn.IsCharSkirmishing(savage));
 		assertFalse(scn.IsCharAssigned(gimli));
 		assertEquals(0, scn.GetWoundsOn(gimli));
-		assertEquals(0, scn.GetWoundsOn(worker));
+		assertEquals(0, scn.GetWoundsOn(raider));
 		assertEquals(0, scn.GetWoundsOn(savage));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}

@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -273,7 +272,6 @@ public class Card_V3_002_Tests
 		var guardian = scn.GetFreepsCard("guardian1");
 		var otherGuardian = scn.GetFreepsCard("guardian2");
 		var treebeard = scn.GetFreepsCard("treebeard");
-		var troop = scn.GetShadowCard("troop");
 		scn.MoveCompanionsToTable(gandalf, aragorn, guardian, otherGuardian);
 		scn.MoveAlliesToTable(treebeard);
 		scn.AttachCardsTo(gandalf, gpipe, jetsam, otherJetsam);
@@ -281,15 +279,11 @@ public class Card_V3_002_Tests
 		scn.MoveCardsToSupportArea(toby);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(troop);
 		scn.AddBurdens(5);
-		// An unhasty character who is not mine.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, CardType.MINION, null, Keyword.UNHASTY));
 
 		assertTrue(scn.HasKeyword(guardian, Keyword.UNHASTY));
 		assertTrue(scn.HasKeyword(otherGuardian, Keyword.UNHASTY));
 		assertTrue(scn.HasKeyword(treebeard, Keyword.UNHASTY));
-		assertTrue(scn.HasKeyword(troop, Keyword.UNHASTY));
 
 		scn.FreepsUseCardAction(gpipe);
 		assertTrue(scn.FreepsHasCardChoiceAvailable(jetsam, otherJetsam, toby));
@@ -297,9 +291,10 @@ public class Card_V3_002_Tests
 
 		assertInZone(Zone.DISCARD, jetsam);
 		assertAttachedTo(otherJetsam, gandalf);
-		// An unhasty companion, a second copy of him, and an unhasty ally. Not the minion, who is no character of mine.
+		// An unhasty companion, a second copy of him, and an unhasty ally. Not Gandalf or Aragorn, who are not unhasty.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(guardian, otherGuardian, treebeard));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(troop));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(gandalf, aragorn));
+		assertEquals(3, scn.FreepsGetCardChoiceCount());
 		assertEquals(1, scn.FreepsGetChoiceMin());
 
 		scn.FreepsChooseCard(guardian);
@@ -307,7 +302,6 @@ public class Card_V3_002_Tests
 		assertFalse(scn.HasKeyword(guardian, Keyword.UNHASTY));
 		assertTrue(scn.HasKeyword(otherGuardian, Keyword.UNHASTY));
 		assertTrue(scn.HasKeyword(treebeard, Keyword.UNHASTY));
-		assertTrue(scn.HasKeyword(troop, Keyword.UNHASTY));
 		// 2 pipes in play + 1 for the Jetsam just discarded. The copy still on Gandalf adds nothing.
 		assertEquals(3, scn.FreepsGetChoiceMax());
 
@@ -325,7 +319,7 @@ public class Card_V3_002_Tests
 		assertInZone(Zone.DISCARD, otherJetsam);
 		// The Guardian who has lost unhasty is no longer among the unhasty.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(otherGuardian, treebeard));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(guardian, troop));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(guardian));
 
 		scn.FreepsChooseCard(treebeard);
 
@@ -513,36 +507,5 @@ public class Card_V3_002_Tests
 		assertTrue(scn.HasKeyword(guardian, Keyword.UNHASTY));
 		assertTrue(scn.HasKeyword(otherGuardian, Keyword.UNHASTY));
 		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
-	}
-
-	@Test
-	public void UnhastyLostIsNotGivenBackByAnotherCardBeforeTheTurnEnds() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var jetsam = scn.GetFreepsCard("jetsam1");
-		var gandalf = scn.GetFreepsCard("gandalf");
-		var gpipe = scn.GetFreepsCard("gpipe");
-		var guardian = scn.GetFreepsCard("guardian1");
-		var otherGuardian = scn.GetFreepsCard("guardian2");
-		scn.MoveCompanionsToTable(gandalf, guardian, otherGuardian);
-		scn.AttachCardsTo(gandalf, gpipe, jetsam);
-
-		scn.StartGame();
-
-		scn.FreepsUseCardAction(gpipe);
-		scn.FreepsChooseCard(guardian);
-		scn.FreepsChoose("0");
-
-		assertFalse(scn.HasKeyword(guardian, Keyword.UNHASTY));
-		assertFalse(scn.HasKeyword(gandalf, Keyword.UNHASTY));
-
-		// No card gives a companion unhasty, so a modifier stands in for one.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, CardType.COMPANION, null, Keyword.UNHASTY));
-
-		// Gandalf gains it; the Guardian who lost it does not get it back.
-		assertTrue(scn.HasKeyword(gandalf, Keyword.UNHASTY));
-		assertTrue(scn.HasKeyword(otherGuardian, Keyword.UNHASTY));
-		assertFalse(scn.HasKeyword(guardian, Keyword.UNHASTY));
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

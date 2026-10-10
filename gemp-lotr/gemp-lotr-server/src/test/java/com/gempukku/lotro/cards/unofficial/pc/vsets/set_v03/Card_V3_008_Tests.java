@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -209,9 +208,6 @@ public class Card_V3_008_Tests
 		scn.MoveAlliesToTable(whitesaruman);
 		scn.AttachCardsTo(radagast, staff);
 		scn.MoveCardsToHand(words);
-		// Every Free Peoples Wizard there is belongs to the [gandalf] culture, so a [gondor] Man is made a Wizard
-		// to tell "your Wizard" from "your [gandalf] companion".
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, aragorn, null, Race.WIZARD));
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(saruman, troop);
@@ -224,9 +220,10 @@ public class Card_V3_008_Tests
 
 		scn.FreepsPlayCard(words);
 
-		assertTrue(scn.FreepsHasCardChoiceAvailable(gandalf, radagast, aragorn, whitesaruman));
-		// Quickbeam is [gandalf] and no Wizard; the minion Saruman is a Wizard and not yours.
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(quickbeam, saruman));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(gandalf, radagast, whitesaruman));
+		// Quickbeam is [gandalf] and no Wizard; Aragorn is neither; the minion Saruman is a Wizard and not yours.
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(quickbeam, aragorn, saruman));
+		assertEquals(3, scn.FreepsGetCardChoiceCount());
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		assertEquals(1, scn.FreepsGetChoiceMax());
 

@@ -8,7 +8,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -116,30 +115,28 @@ public class Card_V2_068_Tests
 		var tomb = scn.GetCurrentSite();
 		assertEquals("Theodred's Tomb", tomb.getBlueprint().getTitle());
 
-		// In hand: three valiant companions, an ally and a possession made valiant for the test, and a companion who
-		// is not valiant.  A valiant companion lies in the discard pile and two more in the draw deck, under the
-		// three cards that are to be drawn.
+		// In hand: three valiant companions, of two cultures, and a companion, an ally and a possession that are
+		// not valiant (no ally and no possession is valiant in print).  A valiant companion lies in the discard
+		// pile and two more in the draw deck, the first of them under the two cards that are to be drawn first.
 		scn.MoveCardsToHand(rider1, guard1, eomer1, swordsman, aldor, spear, rider2);
-		scn.MoveCardsToDiscard(guard2);
-		scn.MoveCardsToTopOfDeck(guard3, eomer2, runner3, runner2, runner1);
-		// No ally and no possession is valiant in print.  "Character" takes in an ally and leaves out a possession.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, aldor, null, Keyword.VALIANT));
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, spear, null, Keyword.VALIANT));
+		scn.MoveCardsToDiscard(guard2, runner3);
+		scn.MoveCardsToTopOfDeck(guard3, eomer2, runner2, runner1);
 
-		// The Rider is a [rohan] Man for the Spear to go on, so the Spear is a card that could be played.
+		// The Rider is a [rohan] Man for the Spear to go on, so each card that is not valiant could be played.
 		scn.FreepsPlayCard(rider1);
 		assertTrue(scn.FreepsPlayAvailable(spear));
+		assertTrue(scn.FreepsPlayAvailable(aldor));
 		assertTrue(scn.FreepsPlayAvailable(rider2));
 
 		assertTrue(scn.FreepsActionAvailable(tomb));
 		assertEquals(2, scn.GetTwilight());     // the Rider
 		assertEquals(6, scn.GetFreepsHandCount());
-		assertEquals(5, scn.GetFreepsDeckCount());
+		assertEquals(4, scn.GetFreepsDeckCount());
 		assertEquals(runner1, scn.GetFreepsTopOfDeck());
 
 		scn.FreepsUseCardAction(tomb);
-		assertTrue(scn.FreepsHasCardChoiceAvailable(guard1, eomer1, swordsman, aldor));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(rider2, spear, guard2, guard3, eomer2));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(guard1, eomer1, swordsman));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(rider2, aldor, spear, guard2, guard3, eomer2));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		scn.FreepsChooseCard(guard1);
 
@@ -147,30 +144,20 @@ public class Card_V2_068_Tests
 		assertInZone(Zone.FREE_CHARACTERS, guard1);
 		assertEquals(4, scn.GetTwilight());     // 2 + 2 for the Household Guard
 		assertInZone(Zone.HAND, runner1);
-		assertEquals(4, scn.GetFreepsDeckCount());
+		assertEquals(3, scn.GetFreepsDeckCount());
 		assertEquals(6, scn.GetFreepsHandCount());
 		assertEquals(runner2, scn.GetFreepsTopOfDeck());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
-		// There is no limit.  An ally who is valiant is a valiant character, and goes to the support area.
-		assertTrue(scn.FreepsActionAvailable(tomb));
-		scn.FreepsUseCardAction(tomb);
-		assertTrue(scn.FreepsHasCardChoiceAvailable(eomer1, swordsman, aldor));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(rider2, spear, runner1));
-		scn.FreepsChooseCard(aldor);
-		assertInZone(Zone.SUPPORT, aldor);
-		assertEquals(5, scn.GetTwilight());     // 4 + 1 for Aldor
-		assertInZone(Zone.HAND, runner2);
-		assertEquals(3, scn.GetFreepsDeckCount());
-		assertEquals(6, scn.GetFreepsHandCount());
-
+		// There is no limit.  A valiant companion of another culture.
 		assertTrue(scn.FreepsActionAvailable(tomb));
 		scn.FreepsUseCardAction(tomb);
 		assertTrue(scn.FreepsHasCardChoiceAvailable(eomer1, swordsman));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(rider2, aldor, spear, runner1));
 		scn.FreepsChooseCard(swordsman);
 		assertInZone(Zone.FREE_CHARACTERS, swordsman);
-		assertEquals(7, scn.GetTwilight());     // 5 + 2 for the Lorien Swordsman
-		assertInZone(Zone.HAND, runner3);
+		assertEquals(6, scn.GetTwilight());     // 4 + 2 for the Lorien Swordsman
+		assertInZone(Zone.HAND, runner2);
 		assertEquals(2, scn.GetFreepsDeckCount());
 		assertEquals(6, scn.GetFreepsHandCount());
 
@@ -178,14 +165,14 @@ public class Card_V2_068_Tests
 		assertTrue(scn.FreepsActionAvailable(tomb));
 		scn.FreepsUseCardAction(tomb);
 		assertInZone(Zone.FREE_CHARACTERS, eomer1);
-		assertEquals(10, scn.GetTwilight());    // 7 + 3 for Eomer
+		assertEquals(9, scn.GetTwilight());     // 6 + 3 for Eomer
 		// The card drawn is the other Eomer, a valiant character in hand again, and he cannot be played.
 		assertInZone(Zone.HAND, eomer2);
 		assertEquals(1, scn.GetFreepsDeckCount());
 		assertEquals(6, scn.GetFreepsHandCount());
 
 		assertFalse(scn.FreepsActionAvailable(tomb));
-		assertInZone(Zone.HAND, rider2, spear);
+		assertInZone(Zone.HAND, rider2, aldor, spear);
 		assertInZone(Zone.DISCARD, guard2);
 		assertInZone(Zone.DECK, guard3);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
@@ -217,13 +204,11 @@ public class Card_V2_068_Tests
 
 		var tomb = scn.GetCurrentSite();
 
-		// In hand: a companion who is not valiant, an ally who is not valiant, a possession made valiant for the
-		// test, and a valiant companion who cannot be played.  Valiant companions who could be played lie in the
-		// discard pile and on top of the draw deck.
+		// In hand: a companion, an ally and a possession that are not valiant, and a valiant companion who cannot
+		// be played.  Valiant companions who could be played lie in the discard pile and on top of the draw deck.
 		scn.MoveCardsToHand(rider1, rider2, aldor, spear, eomer2);
 		scn.MoveCardsToDiscard(guard2, swordsman);
 		scn.MoveCardsToTopOfDeck(runner3, runner2, runner1, guard3, guard1);
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, spear, null, Keyword.VALIANT));
 
 		scn.FreepsPlayCard(rider1);
 		assertTrue(scn.FreepsPlayAvailable(rider2));
