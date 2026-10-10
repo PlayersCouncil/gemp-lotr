@@ -322,6 +322,13 @@ going to be reused, and it's just for fun on the RTMD card"). Q-0202, Race Text 
 should say "draw deck". I'll adjust the wording"). Q-0197, Rath Dínen 100_1: the arrow stays Right ("I'll change the
 image"). Kept: Q-0198 ("well done"), Q-0200. *[2026-10-10]*
 
+**The old hinder suite (Ketura, 2026-10-10).** "Really the entire Hinder suite was tdd for the hinder mechanic; it was
+developed before any of the cards were implemented, thus the hacked Frodo. But yeah I do approve of altering them
+to use real cards now." Its three tests of a hindered card's strength, vitality and resistance stay as they are in
+kind, on a construct of the tests' own: "leave those stat tests, as there's engine code that this was used to
+enforce." Hinder does not reach inactive cards: a stacked card is not hindered (the stub about Courtesy of My Hall
+4_44 came from a draft that had it, "but later we altered it to not affect inactive cards, so that's obsolete").
+
 **The bid reads resistance in force (Ketura, 2026-10-09, late; Galadriel 9_14 as Ring-bearer).** "The game text on
 the ring and Ring-bearer are active enough for resistance calculations during the bidding process, otherwise
 Galadriel would never get to bid much at all." CR 4.2 "bid" (a bid equal to or higher than the Ring-bearer's
