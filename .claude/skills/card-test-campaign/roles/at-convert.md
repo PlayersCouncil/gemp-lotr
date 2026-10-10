@@ -98,7 +98,8 @@ as it takes, and say in your report which of your tests stand for which name of 
    definition's correction, like any other. Look the ruling up first (`lookup.py Q-0034`, and the entries near
    it): not every "may" with nothing to act on is withheld. An optional DRAW is still offered with an empty draw
    deck (Q-0029), and an action with a COST is offered and flagged, not withheld.
-   **A fault met in passing**, in the definition of a card that is none of your homes (a helper that shows the
+   **A fault met in passing**, in the definition of a card that is none of your homes, or in a HOME card outside
+   its directive (a helper that shows the
    wrong words, a sister card with the same wrong lines): report it under `findings` with the lines and the
    correction. If the board that shows it is already in your hands, you may write the lone test in that card's
    own file, parked with `@Ignore("F-0000: ...")`; if not, write none: the lander writes it when it corrects the
