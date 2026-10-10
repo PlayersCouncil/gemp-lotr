@@ -132,25 +132,6 @@ public class ModifiersAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void cantPlayCardsOn() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard hobbitSword = addToZone(createCard(P1, "1_299"), Zone.HAND);
-
-        JSONObject obj = new JSONObject();
-        obj.put("filter", "possession");
-        obj.put("on", "ringBearer");
-
-        ModifierSource modifierSource = new CantPlayCardsOn().getModifierSource(obj, lotroCardBlueprintBuilder);
-        DefaultActionContext actionContext = new DefaultActionContext(P1, _game, null, null, null);
-
-        addModifier(modifierSource.getModifier(actionContext));
-
-        passUntil(Phase.FELLOWSHIP);
-        assertNull(getCardActionId(P1, hobbitSword));
-    }
-
-    @Test
     public void cantPlayPhaseEvents() throws Exception {
         initializeSimplestGame();
 

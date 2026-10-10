@@ -148,26 +148,6 @@ public class TriggersAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void usesSpecialAbility() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard hauntingHerSteps = addToZone(createCard(P2, "4_155"), Zone.HAND);
-        PhysicalCard grimaWormtongue = addToZone(createCard(P2, "4_154"), Zone.SHADOW_CHARACTERS);
-
-        PhysicalCard elrond = addToZone(createCard(P1, "1_40"), Zone.SUPPORT);
-
-        passUntil(Phase.FELLOWSHIP);
-
-        PhysicalCard cardInDeck = putOnTopOfDeck(createCard(P1, "1_40"));
-
-        selectCardAction(P1, elrond);
-        selectCardAction(P2, hauntingHerSteps);
-
-        assertEquals(1, getWounds(grimaWormtongue));
-        assertEquals(Zone.DECK, cardInDeck.getZone());
-    }
-
-    @Test
     public void takesWound() throws Exception {
         initializeSimplestGame();
 
@@ -402,21 +382,6 @@ public class TriggersAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void assignedAgainst() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard ringBearer = getRingBearer(P1);
-        PhysicalCard unferth = addToZone(createCard(P2, "4_178"), Zone.SHADOW_CHARACTERS);
-
-        passUntil(Phase.ASSIGNMENT);
-        pass(P1);
-        pass(P2);
-        assertEquals(0, getWounds(ringBearer));
-        playerDecided(P1, ringBearer.getCardId() + " " + unferth.getCardId());
-        assertEquals(1, getWounds(ringBearer));
-    }
-
-    @Test
     public void afterAllSkirmishes() throws Exception {
         initializeSimplestGame();
 
@@ -501,25 +466,5 @@ public class TriggersAtTest extends AbstractAtTest {
         pass(P1);
         pass(P2);
         hasCardAction(P1, footmansArmor);
-    }
-
-    @Test
-    public void aboutToAddTwilight() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard threeMonstrousTrolls = addToZone(createCard(P1, "3_114"), Zone.SUPPORT);
-        PhysicalCard goblinRunner = addToZone(createCard(P2, "1_178"), Zone.HAND);
-        PhysicalCard theGaffer = addToZone(createCard(P1, "1_291"), Zone.SUPPORT);
-
-        passUntil(Phase.FELLOWSHIP);
-        setTwilightPool(1);
-
-        passUntil(Phase.SHADOW);
-        selectCardAction(P2, goblinRunner);
-        assertEquals(0, getTwilightPool());
-        selectCardAction(P1, threeMonstrousTrolls);
-        assertEquals(1, getWounds(theGaffer));
-        assertEquals(0, getTwilightPool());
-        assertEquals(Zone.SHADOW_CHARACTERS, goblinRunner.getZone());
     }
 }

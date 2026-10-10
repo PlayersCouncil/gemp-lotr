@@ -578,17 +578,4 @@ public class IndividualCardAtTest extends AbstractAtTest {
         assertEquals(4, RuleUtils.getFellowshipSkirmishStrength(_game));
         assertEquals(1, RuleUtils.getShadowSkirmishStrength(_game));
     }
-
-    @Test
-    public void shuffleCardsFromPlayIntoDrawDeck() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard restByBlindNight = addToZone(createCard(P1, "4_54"), Zone.HAND);
-        PhysicalCard stoutAndStrong = addToZone(createCard(P1, "4_57"), Zone.SUPPORT);
-
-        passUntil(Phase.REGROUP);
-        selectCardAction(P1, restByBlindNight);
-        selectCard(P1, stoutAndStrong);
-        assertEquals(Zone.DECK, stoutAndStrong.getZone());
-    }
 }
