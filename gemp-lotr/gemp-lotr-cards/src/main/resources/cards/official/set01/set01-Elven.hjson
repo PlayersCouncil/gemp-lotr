@@ -116,7 +116,7 @@
 				type: modifier
 				modifier: {
 					type: modifyStrength
-					filter: bearer
+					filter: bearer,companion
 					requires: {
 						type: location
 						filter: plains
