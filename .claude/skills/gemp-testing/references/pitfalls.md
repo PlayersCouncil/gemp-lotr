@@ -332,13 +332,14 @@ then pass. The move then adds one for each companion plus the new site's shadow 
 exact pool adds those in: `// 10 set + 1 companion + 2 for the site`. A pool that is too small shows only as the rig's
 `<card> is not offering Shadow Player a play.`: count the roaming penalty as well as the cost.
 
-**The engine sends an end of turn once before turn 1 (F-0327, open).** After the mulligans `MulliganProcess` hands on
-to `EndOfTurnGameProcess`, and at that moment the player who will go second counts as the Free Peoples player. A
-modifier in player 2's seat with an `EndOfTurn` trigger under `OwnerIsFreeps` goes off there: `StartGame()` returns
-with player 1 holding its question in BETWEEN_TURNS, and the next skipper fails on it. Read that nothing is
-asked straight after `StartGame()`; never answer it with an `if`, which is what hid the fault in the old test.
-Race Text 94_17, where it was found, no longer shows it: its trigger now also requires `SiteAvailableToControl`
-(Q-0195), and no site can be controlled before the first turn. The engine still sends that end of turn.
+**No end of turn is sent before turn 1 (F-0327).** After the mulligans `MulliganProcess` ends what the starting
+fellowships left "until the end of the turn" and hands on to `BetweenTurnsProcess`: no `EndOfTurnResult` is sent,
+and the log has no "End of turn" line, before the first turn (mechanics/NoEndOfTurnBeforeTheFirstTurnTests). Until
+engine pass 21 the whole end-of-turn step ran there, with the player who goes second counting as the Free Peoples
+player: an `EndOfTurn` trigger on a card of his in play (Race Text 94_3 lets conditions into a starting
+fellowship) or on a meta-site went off, and `StartGame()` could return with a question pending in BETWEEN_TURNS.
+A test of such a card still reads that nothing is asked straight after `StartGame()`, and never answers a stray
+question with an `if`, which is what hid the fault in the old test of Race Text 94_17.
 
 **Both players act in most phases.** Fellowship is the Free Peoples player's alone and Shadow the Shadow
 player's. In maneuver, archery, assignment, skirmish and regroup the Free Peoples player is asked first, then the
