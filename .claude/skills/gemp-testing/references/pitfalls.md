@@ -768,7 +768,9 @@ vitality 4 with 3 wounds reads 1. The printed number is the blueprint's, as the 
 
 **Culture tokens are of the card's own culture.** `AddTokensToCard`, `RemoveTokensFromCard` and
 `GetCultureTokensOn` deal only in the token of the culture of the card they are given, so the invalid candidate
-for "an [elven] token" is a card of another culture carrying its own tokens.
+for "an [elven] token" is a card of another culture carrying its own tokens. Put tokens only on a card that
+some card gives tokens to (Q-0213: I): a possession with tokens no card puts there is a board no game reaches
+(F-0073 was found on one, and is moot in play).
 
 **The Ring is attached to the Ring-bearer.** `GetAttachedCards(ringBearer)` includes The One Ring, so "nothing
 else attached" is a size of 1. `assertNotAttachedTo` is the safer reading.
@@ -820,10 +822,16 @@ the minion's site number is above the current site's, and it follows a site-numb
 (`Card_15_062_ErrataTests`, `Card_15_064_ErrataTests`).
 
 **Making a card something it is not.** `ApplyAdHocModifier` with `IsAdditionalCultureModifier` or
-`IsAdditionalRaceModifier` gives a card a second culture or race, and filters see it. That is how to tell a
-filter written with a race from one written with a culture when every card of the race has the culture.
-`AddKeywordModifier` does the same for a keyword (an [isengard] minion made a tentacle; every site made a marsh
-with `new AddKeywordModifier(null, CardType.SITE, null, Keyword.MARSH)`).
+`IsAdditionalRaceModifier` gives a card a second culture or race, `AddKeywordModifier` a keyword, and filters see
+them. The rig can; a card test no longer does (Ketura on Q-0213, 2026-10-10). No card is given a culture or a
+race: a race is told from its culture by a printed card that has the one without the other (SKILL.md's helper
+table, "A culture without its race"), and where none exists (Elf, Dwarf, a Free Peoples Wizard, a Free Peoples
+Wraith) it is not told at all: `lint.py` reports a definition that goes by the one where its text names the other
+(`race-culture`), and that is a finding to file. No keyword is given to a card no printed card with it resembles
+(an Orc made a Southron, an ally made valiant, an [isengard] minion made a tentacle). No site is given a terrain:
+lay a real site of it ("A battleground or a forest site needs no cheat"; the helper table's marshes). What stays
+is the keyword or number that only arranges a board (fierce, archer, damage +1, a strength), and a new test takes
+the printed card that gives it where the helper table has one.
 
 **An ad hoc modifier aimed at one card goes on after that card is in play.** A card is given a new id each time
 it enters play, and a modifier whose filter is a physical card holds the id it had when the modifier was built.

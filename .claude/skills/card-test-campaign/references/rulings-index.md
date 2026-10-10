@@ -488,4 +488,5 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - lint's `second-copy` and `ruled` warnings
 - lint's `not-asked`, `not-in-hand` and `conditional` warnings (engine pass 21)
 - lint's `title-kinds` warning, and a `no C-` it passes over
+- lint's `race-culture` warning (Q-0213: B) [F-0019, F-0291]
 - lint's `cardinfo` warning (Q-0145) [Q-0158]

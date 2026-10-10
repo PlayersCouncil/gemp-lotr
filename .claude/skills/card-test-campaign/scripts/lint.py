@@ -123,9 +123,55 @@ def only_cost_is_discarding_itself(text: str) -> bool:
     return True
 
 
-# A race, the culture that shares its name, and how game text writes the race.
+# A race, the culture every printed card of that race has on the Free Peoples side (all of them, for Elf and
+# Dwarf), and how game text writes the race.  For Elf, Dwarf, Wizard and Wraith no printed card has the one without
+# the other, so no board can show which a definition goes by (Q-0213: B).
 RACE_AND_CULTURE = {"elf": ("elven", r"\b(?:elf|elves)\b"), "dwarf": ("dwarven", r"\b(?:dwarf|dwarves)\b"),
-                    "hobbit": ("shire", r"\bhobbits?\b")}
+                    "hobbit": ("shire", r"\bhobbits?\b"), "wizard": ("gandalf", r"\bwizards?\b"),
+                    "wraith": ("gondor", r"\bwraiths?\b")}
+# The lines of a definition that say which cards something reaches.
+_FILTER_KEY = re.compile(r"(filter|select|target|^on$|bearer|against|where|killer|^from$|^to$)", re.I)
+# What stands in a filter and is no race or culture word of the filter's own.
+_NOT_THE_FILTER = re.compile(r"\b(?:name|title|memory|nameFromMemory|titleFromMemory|allyHome|signet|siteBlock|hasAttachedCount)"
+                             r"\([^()]*\)", re.I)
+
+
+def race_culture_slips(card, raw=None):
+    """What to say of a definition that goes by a race where its text names the culture and never the race, or
+    by the culture where its text names the race and never the culture (F-0019, F-0291): one message for each.
+    Nothing where the two agree.  `raw` is the definition's text where it is not the card's own (an old revision)."""
+    raw = card.raw if raw is None else raw
+    text = re.search(r"^\s*gametext\s*:\s*(.*?)\s*$", raw, re.M)
+    printed = g.plain_text(text.group(1) if text else "")
+    by_race, by_culture = {}, {}
+    for line in raw.split("\n"):
+        m = re.match(r"\s*(\w+)\s*:\s*(.*)", line)
+        if not m or not _FILTER_KEY.search(m.group(1)):
+            continue
+        where = "%s: %s" % (m.group(1), m.group(2).strip())
+        value = _NOT_THE_FILTER.sub("", m.group(2))
+        for culture in re.findall(r"\bculture\(\s*(\w+)\s*\)", value, re.I):
+            by_culture.setdefault(culture.lower(), where)
+        value = re.sub(r"\bculture\(\s*\w+\s*\)", "", value, flags=re.I)
+        for race in re.findall(r"(?<![\w-])(%s)\b(?!-)" % "|".join(RACE_AND_CULTURE), value, re.I):
+            by_race.setdefault(race.lower(), where)
+    out = []
+
+    def shown(where):
+        return where if len(where) <= 70 else where[:67] + "..."
+
+    for race, (culture, word) in sorted(RACE_AND_CULTURE.items()):
+        names_culture = bool(re.search(r"\[%s\]" % culture, printed, re.I))
+        names_race = bool(re.search(word, printed, re.I))
+        if race in by_race and names_culture and not names_race:
+            out.append("the text names [%s] and no %s, and the definition goes by the race (`%s`): the definition is at "
+                       "fault, which is a finding to file (F-0019, F-0291) and not a board to lay (Q-0213: B)"
+                       % (culture, race.capitalize(), shown(by_race[race])))
+        if culture in by_culture and names_race and not names_culture:
+            out.append("the text names %s and no [%s], and the definition goes by the culture (`%s`): the definition is "
+                       "at fault, which is a finding to file (F-0019) and not a board to lay (Q-0213: B)"
+                       % ("an Elf" if race == "elf" else "a " + race.capitalize(), culture, shown(by_culture[culture])))
+    return out
 
 
 def same_title(text: str) -> str:
@@ -737,43 +783,12 @@ def lint_file(path: Path):
                 "or came from, a modifier tied to those words not stacking), or Notes say why none could"
                 % (says.group(0).lower(), card_id))
 
-    # A race that shares its name with a culture (F-0019): unless the table holds a card of that culture outside the
-    # race, culture(elven) written for elf passes every test. The usual board is a Man given the culture ad hoc.
+    # A race and the culture that goes with it (F-0019, F-0291).  No board is asked for any more (Q-0213: B): the
+    # slip is read off the definition, and what is reported is the definition, as a finding to file.  Where the
+    # text and the definition agree, nothing is said.
     if card is not None:
-        races = set()
-        for line in card.raw.split("\n"):
-            m = re.match(r"\s*(\w+)\s*:\s*(.*)", line)
-            if m and re.search(r"(filter|select|target|^on$|bearer)", m.group(1), re.I):
-                races.update(r.lower() for r in re.findall(r"(?<![\w(])(elf|dwarf|hobbit)\b", m.group(2), re.I))
-        if races and not re.search(r"IsAdditional(Culture|Race)Modifier", raw):
-            pairs = {"elf": "[elven]", "dwarf": "[dwarven]", "hobbit": "[shire]"}
-            add("warning", "race-culture", None, "the definition chooses or counts by race (%s), and no test gives a card "
-                "an additional culture or race: unless some test's table already holds a %s card that is not of that "
-                "race, the culture written for the race passes every test (F-0019)"
-                % (", ".join(sorted(races)), " / ".join(pairs[r] for r in sorted(races))))
-
-    # The same the other way round (F-0291, Gil-galad 68_12: `elf,companion` for "2 [elven] companions"): the text
-    # names the culture and never the race, and a filter of the definition goes by the race.  The test that tells
-    # them apart gives a card of another culture the race, and it must not count.
-    if card is not None:
-        printed = g.plain_text(card.field("gametext", "") or "")
-        by_race = {}
-        for line in card.raw.split("\n"):
-            m = re.match(r"\s*(\w+)\s*:\s*(.*)", line)
-            if m and re.search(r"(filter|select|target|^on$|bearer|against|where|killer|^from$|^to$)", m.group(1), re.I):
-                value = re.sub(r"\ballyHome\([^)]*\)", "", m.group(2), flags=re.I)
-                for race in re.findall(r"(?<!\w)(elf|dwarf|hobbit)\b", value, re.I):
-                    by_race.setdefault(race.lower(), "%s: %s" % (m.group(1), m.group(2).strip()))
-        for race, where in sorted(by_race.items()):
-            culture, word = RACE_AND_CULTURE[race]
-            if re.search(r"\[%s\]" % culture, printed, re.I) and not re.search(word, printed, re.I) \
-                    and "IsAdditionalRaceModifier" not in raw:
-                add("warning", "race-culture", None, "the text names [%s] and no %s, and the definition goes by the race (`%s`), "
-                    "and no test gives a card a race: show which the game goes by with a card of another race given the "
-                    "culture (IsAdditionalCultureModifier: it must count) and a card of another culture given the race "
-                    "(IsAdditionalRaceModifier: it must not), as Card_18_012_ErrataTests does; where the game goes by "
-                    "the race the definition is wrong (F-0019 the other way round, F-0291)"
-                    % (culture, race.capitalize(), where if len(where) <= 70 else where[:67] + "..."))
+        for slip in race_culture_slips(card):
+            add("warning", "race-culture", None, slip)
 
     # A title that cards of more than one culture or type carry (Gollum is [gollum] and [wraith]; Saruman a minion
     # and a follower): with one kind of it on every table, a culture or type written beside the name in the
