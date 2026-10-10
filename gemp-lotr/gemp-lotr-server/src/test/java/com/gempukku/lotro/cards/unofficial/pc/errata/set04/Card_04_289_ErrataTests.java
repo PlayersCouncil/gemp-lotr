@@ -4,8 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,8 +30,31 @@ public class Card_04_289_ErrataTests
 					put("fight", "4_273");      // Fight for the Villagers: [rohan] Skirmish event
 					put("coat", "1_101");       // Coat of Mail: [gondor] possession, cost 1, bearer must be a Man
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion
-					put("boromir", "1_96");     // Boromir, Lord of Gondor: [gondor] Man companion, made valiant below
-					put("legolas", "1_50");     // Legolas, Greenleaf: [elven] Elf companion, made [rohan] and valiant below
+				}},
+				// Bag End at site 1: no discount on [rohan] possessions, as Edoras Hall would give.
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// The table of the near misses.  It is apart from the other so that Merry, a [rohan] character, is in no
+	// other test's draw deck to be found there.
+	protected VirtualTableScenario GetNearMissScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("simbelmyne", "54_289");
+					put("eored1", "12_113");    // Éored Warrior: [rohan] Man companion, not valiant, cost 2
+					put("guard", "5_83");       // Household Guard: valiant [rohan] Man companion, cost 2, no other text
+					put("aldor", "4_262");      // Aldor, Soldier of Edoras: [rohan] Man ally, not valiant, cost 1
+					// Aragorn, Last Hope of Men: the printed valiant Man who is not [rohan] ([gondor]); an optional trigger at the
+					// start of each turn beside another valiant companion, so he is put down after StartGame()
+					put("lasthope", "102_16");
+					// Merry, Master Holbytla: the printed valiant [rohan] character who is no Man, a Hobbit companion.  He is a
+					// [rohan] Man as well while 3 [rohan] companions or Eowyn can be spotted; his other texts answer an
+					// exertion and a skirmish
+					put("merry", "103_85");
 				}},
 				// Bag End at site 1: no discount on [rohan] possessions, as Edoras Hall would give.
 				VirtualTableScenario.FellowshipSites,
@@ -194,32 +215,36 @@ public class Card_04_289_ErrataTests
 
 	@Test
 	public void CannotBePlayedWithOneRohanManWhoIsNotValiantUntilASecondIsPlayedAndThenMayPlayNothing() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
+		var scn = GetNearMissScenario();
 
 		var simbelmyne = scn.GetFreepsCard("simbelmyne");
 		var eored1 = scn.GetFreepsCard("eored1");
-		var eored2 = scn.GetFreepsCard("eored2");
+		var aldor = scn.GetFreepsCard("aldor");
 		var guard = scn.GetFreepsCard("guard");
-		var boromir = scn.GetFreepsCard("boromir");
-		var legolas = scn.GetFreepsCard("legolas");
-		scn.MoveCardsToHand(simbelmyne, eored2);
-		scn.MoveCompanionsToTable(eored1, boromir, legolas);
-		// Near misses: a valiant Man who is not [rohan], and a valiant [rohan] character who is not a Man.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, boromir, null, Keyword.VALIANT));
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, legolas, null, Keyword.VALIANT));
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, legolas, null, Culture.ROHAN));
+		var lasthope = scn.GetFreepsCard("lasthope");
+		var merry = scn.GetFreepsCard("merry");
+		scn.MoveCardsToHand(simbelmyne, aldor);
+		scn.MoveCompanionsToTable(eored1, merry);
 
 		scn.StartGame();
+		// Near misses: a valiant Man who is not [rohan], and a valiant [rohan] character who is not a Man.  With
+		// two [rohan] companions on the table Merry is a Hobbit only.
+		scn.MoveCompanionsToTable(lasthope);
+		scn.FreepsRefreshDecision();
 
-		assertTrue(scn.HasKeyword(boromir, Keyword.VALIANT));
-		assertTrue(scn.HasKeyword(legolas, Keyword.VALIANT));
+		assertTrue(scn.HasKeyword(lasthope, Keyword.VALIANT));
+		assertTrue(scn.HasKeyword(merry, Keyword.VALIANT));
+		assertFalse(scn.IsRace(merry, Race.MAN));
 		assertFalse(scn.HasKeyword(eored1, Keyword.VALIANT));
-		assertTrue(scn.FreepsPlayAvailable(eored2));
+		assertTrue(scn.FreepsPlayAvailable(aldor));
 		// One [rohan] Man, and he is not valiant.
 		assertFalse(scn.FreepsPlayAvailable(simbelmyne));
 
-		scn.FreepsPlayCard(eored2);
-		assertEquals(2, scn.GetTwilight());
+		// The second [rohan] Man is an ally, so that Merry is still no Man: a third [rohan] companion would make
+		// him one, and a valiant one.
+		scn.FreepsPlayCard(aldor);
+		assertEquals(1, scn.GetTwilight());
+		assertFalse(scn.IsRace(merry, Race.MAN));
 
 		// Two [rohan] Men.
 		assertTrue(scn.FreepsPlayAvailable(simbelmyne));
@@ -234,7 +259,7 @@ public class Card_04_289_ErrataTests
 		assertEquals(0, scn.FreepsGetChoiceMin());
 		scn.FreepsDeclineChoosing();
 
-		assertEquals(3, scn.GetTwilight()); // 2 for Éored Warrior + 1 for the event, and nothing more
+		assertEquals(2, scn.GetTwilight()); // 1 for Aldor + 1 for the event, and nothing more
 		assertInZone(Zone.DECK, guard);
 		assertEquals(deck, scn.GetFreepsDeckCount());
 		assertInDiscard(simbelmyne);
@@ -300,34 +325,6 @@ public class Card_04_289_ErrataTests
 		scn.FreepsDeclineChoosing();
 
 		assertEquals(3, scn.GetTwilight()); // 2 for Éored Warrior + 1 for the event
-		assertInDiscard(simbelmyne);
-		assertInZone(Zone.DECK, guard);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
-	public void OneValiantRohanManWhoIsAnAllyIsEnoughToSpot() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var simbelmyne = scn.GetFreepsCard("simbelmyne");
-		var aldor = scn.GetFreepsCard("aldor");
-		var guard = scn.GetFreepsCard("guard");
-		scn.MoveCardsToHand(simbelmyne);
-		scn.MoveAlliesToTable(aldor);
-		// No ally is valiant in print, so he is made so.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, aldor, null, Keyword.VALIANT));
-
-		scn.StartGame();
-
-		assertTrue(scn.HasKeyword(aldor, Keyword.VALIANT));
-		assertTrue(scn.FreepsPlayAvailable(simbelmyne));
-
-		scn.FreepsPlayCard(simbelmyne);
-		scn.FreepsDismissRevealedCards();
-		assertTrue(scn.FreepsHasCardChoiceAvailable(guard));
-		scn.FreepsDeclineChoosing();
-
-		assertEquals(1, scn.GetTwilight()); // the event only
 		assertInDiscard(simbelmyne);
 		assertInZone(Zone.DECK, guard);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());

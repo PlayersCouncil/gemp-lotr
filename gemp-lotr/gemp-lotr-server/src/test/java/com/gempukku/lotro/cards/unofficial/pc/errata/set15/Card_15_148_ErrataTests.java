@@ -6,7 +6,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -115,8 +114,6 @@ public class Card_15_148_ErrataTests
 		scn.MoveCardsToHand(sword);
 
 		scn.StartGame();
-		// The Man is given the [shire] culture: "Hobbit" is a race, not a culture.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.SHIRE));
 
 		scn.FreepsPlayCard(sword);
 		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, sam, merry));

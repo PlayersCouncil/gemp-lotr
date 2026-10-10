@@ -6,7 +6,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import com.gempukku.lotro.logic.modifiers.StrengthModifier;
 import org.junit.Test;
 
@@ -26,12 +25,16 @@ public class Card_04_276_ErrataTests
 					put("guard", "5_83");       // Household Guard: [rohan] Man companion, strength 6; Valiant and no other text
 					put("rider", "4_286");      // Rider of Rohan: [rohan] Man companion, strength 5; a skirmish ability only if mounted
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion, strength 8
-					put("gimli", "1_13");       // Gimli, Son of Gloin: Dwarf companion, strength 6, damage +1
+					// Merry, Master Holbytla: the one printed [rohan] character who is no Man, a Hobbit companion of strength 3
+					// and vitality 4; enduring (strength +2 for each wound on him).  He is a [rohan] Man as well while 3 [rohan]
+					// companions or Eowyn can be spotted; a skirmish ability used only on purpose
+					put("merry", "103_85");
 
 					put("runner1", "1_178");    // Goblin Runner: strength 5, vitality 1; its play trigger does nothing when cheated in
 					put("runner2", "1_178");
 					put("runner3", "1_178");
 					put("savage", "1_151");     // Uruk Savage: strength 5, vitality 3, damage +1 and no other text
+					put("troop", "1_177");      // Goblin Patrol Troop: strength 13, vitality 3, no text
 
 					// Shadow conditions of three cultures, in the support area and on a companion.
 					put("armory", "1_157");     // Uruk-hai Armory: [isengard] support area condition; fellowship archery -1 while an Uruk-hai is spotted
@@ -107,15 +110,15 @@ public class Card_04_276_ErrataTests
 		var guard = scn.GetFreepsCard("guard");
 		var rider = scn.GetFreepsCard("rider");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		var gimli = scn.GetFreepsCard("gimli");
+		var merry = scn.GetFreepsCard("merry");
 		var runner1 = scn.GetShadowCard("runner1");
 		var runner2 = scn.GetShadowCard("runner2");
 		var runner3 = scn.GetShadowCard("runner3");
-		var savage = scn.GetShadowCard("savage");
+		var troop = scn.GetShadowCard("troop");
 		scn.MoveCardsToHand(fortress);
-		scn.MoveCompanionsToTable(guard, rider, aragorn, gimli);
-		// Gimli is [rohan] as well as [dwarven] here: a [rohan] character who is no Man.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, gimli, null, Culture.ROHAN));
+		scn.MoveCompanionsToTable(guard, rider, aragorn, merry);
+		// Enduring: 3 + 2 for each of his two wounds is 7, against a Goblin Runner's 5.
+		scn.AddWoundsToChar(merry, 2);
 
 		scn.StartGame();
 		assertEquals(0, scn.GetTwilight());
@@ -123,19 +126,19 @@ public class Card_04_276_ErrataTests
 		assertEquals(2, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, fortress);
 
-		scn.MoveMinionsToTable(runner1, runner2, runner3, savage);
+		scn.MoveMinionsToTable(runner1, runner2, runner3, troop);
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(
 				new PhysicalCardImpl[]{guard, runner1},
-				new PhysicalCardImpl[]{rider, savage},
+				new PhysicalCardImpl[]{rider, troop},
 				new PhysicalCardImpl[]{aragorn, runner2},
-				new PhysicalCardImpl[]{gimli, runner3});
+				new PhysicalCardImpl[]{merry, runner3});
 
-		// A [rohan] Man loses (a tie goes to the minion): nothing is offered.
+		// A [rohan] Man loses: nothing is offered.  The Troop's 13 is more than double the Rider's 5, so he is
+		// killed, which leaves two [rohan] companions: Merry is a Hobbit and no Man from here on.
 		scn.FreepsResolveSkirmish(rider);
 		scn.PassSkirmishActions();
-		// 1 wound + damage +1
-		assertEquals(2, scn.GetWoundsOn(rider));
+		assertInZone(Zone.DEAD, rider);
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable(fortress));
 
 		// A [gondor] Man wins: nothing is offered.
@@ -144,8 +147,11 @@ public class Card_04_276_ErrataTests
 		assertInDiscard(runner2);
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable(fortress));
 
-		// A [rohan] Dwarf wins: nothing is offered.
-		scn.FreepsResolveSkirmish(gimli);
+		// A [rohan] Hobbit wins: nothing is offered.
+		assertTrue(scn.IsRace(merry, Race.HOBBIT));
+		assertFalse(scn.IsRace(merry, Race.MAN));
+		scn.FreepsResolveSkirmish(merry);
+		assertEquals(7, scn.GetStrength(merry));
 		scn.PassSkirmishActions();
 		assertInDiscard(runner3);
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable(fortress));

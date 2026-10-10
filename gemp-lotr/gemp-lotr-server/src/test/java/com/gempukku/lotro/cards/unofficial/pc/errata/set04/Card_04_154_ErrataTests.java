@@ -34,7 +34,8 @@ public class Card_04_154_ErrataTests
 					put("aragornsbow", "1_90"); // Aragorn's Bow: ranged weapon, bearer must be Aragorn; an archery ability never used here
 					put("axe", "1_14");         // Gimli's Battle Axe: hand weapon, bearer must be Gimli
 					put("gondorsword", "4_134");// Sword of Gondor: hand weapon, bearer must be a [gondor] Man
-					put("hobbitsword", "1_299");// Hobbit Sword: hand weapon, bearer must be a Hobbit
+					put("hobbitsword", "1_299");// Hobbit Sword: hand weapon, bearer must be a Hobbit, companion or ally
+					put("hobbitsword2", "1_299");
 					put("broadsword", "4_142"); // Broad-bladed Sword: Shadow hand weapon, bearer must be an Uruk-hai
 
 					// Free Peoples cards that are not weapons.
@@ -44,6 +45,15 @@ public class Card_04_154_ErrataTests
 					put("coat2", "1_101");
 					put("shield", "1_107");     // Great Shield: a shield; minion archery total -1
 					put("shield2", "1_107");
+					// Cards a Hobbit may bear, one of each class: no skirmish or archery phase is reached, so their texts stay idle.
+					put("orcarmor", "10_113");  // Orc Armor: armor, bearer must be a Hobbit; about Orcs and Uruk-hai skirmishing bearer
+					put("orcarmor2", "10_113");
+					put("pipe", "1_285");       // Bilbo's Pipe: a pipe, bearer must be a Hobbit; a fellowship ability never used here
+					put("gafferspipe", "1_292");// The Gaffer's Pipe: a pipe, bearer must be a Hobbit; a fellowship ability never used here
+					put("salt", "11_171");      // Salt from the Shire: a box, bearer must be a Hobbit; abilities never used here
+					// Cards any companion may bear.
+					put("cloak", "1_42");       // Elven Cloak: a cloak, bearer must be a companion; minion archery total -1
+					put("brooch", "4_63");      // Elven Brooch: a brooch, bearer must be a companion; a response to a discard by a Shadow card
 					put("saga", "1_114");       // The Saga of Elendil: condition on a [gondor] companion; a skirmish ability
 					put("endurance", "2_4");    // Endurance of Dwarves: condition on a Dwarf; a skirmish ability
 
@@ -323,13 +333,13 @@ public class Card_04_154_ErrataTests
 		var shield2 = scn.GetFreepsCard("shield2");
 		var saga = scn.GetFreepsCard("saga");
 		var armor1 = scn.GetFreepsCard("armor");
-		var armor2 = scn.GetFreepsCard("armor2");
+		var endurance = scn.GetFreepsCard("endurance");
 		var axe = scn.GetFreepsCard("axe");
 		scn.MoveCompanionsToTable(aragorn, gimli, boromir);
-		// Aragorn bears three cards of which one will be hindered, and no weapon; Gimli bears three (the second
-		// armor is put there by the rig); Boromir bears two.
+		// Aragorn bears three cards of which one will be hindered, and no weapon; Gimli bears three (his armor, a
+		// condition and his axe); Boromir bears two.
 		scn.AttachCardsTo(aragorn, coat1, saga, shield1);
-		scn.AttachCardsTo(gimli, armor1, armor2, axe);
+		scn.AttachCardsTo(gimli, armor1, endurance, axe);
 		scn.AttachCardsTo(boromir, coat2, shield2);
 
 		scn.StartGame();
@@ -356,7 +366,7 @@ public class Card_04_154_ErrataTests
 		assertTrue(scn.IsHindered(saga));
 		assertTrue(scn.IsHindered(shield1));
 		assertFalse(scn.IsHindered(armor1));
-		assertFalse(scn.IsHindered(armor2));
+		assertFalse(scn.IsHindered(endurance));
 		assertFalse(scn.IsHindered(axe));
 		assertFalse(scn.IsHindered(coat2));
 		assertFalse(scn.IsHindered(shield2));
@@ -375,20 +385,20 @@ public class Card_04_154_ErrataTests
 		var sword = scn.GetFreepsCard("sword");
 		var bow = scn.GetFreepsCard("bow");
 		var hobbitsword = scn.GetFreepsCard("hobbitsword");
-		var armor = scn.GetFreepsCard("armor");
-		var coat = scn.GetFreepsCard("coat");
-		var shield = scn.GetFreepsCard("shield");
-		var armor2 = scn.GetFreepsCard("armor2");
-		var coat2 = scn.GetFreepsCard("coat2");
+		var orcarmor = scn.GetFreepsCard("orcarmor");
+		var cloak = scn.GetFreepsCard("cloak");
+		var hobbitsword2 = scn.GetFreepsCard("hobbitsword2");
+		var orcarmor2 = scn.GetFreepsCard("orcarmor2");
+		var pipe = scn.GetFreepsCard("pipe");
 
 		scn.MoveCompanionsToTable(aragorn, legolas, sam);
 		scn.MoveAlliesToTable(maggot);
-		// Two unbound companions bear one weapon each and no one else.
+		// Two unbound companions bear one weapon each and nothing else.
 		scn.AttachCardsTo(aragorn, sword);
 		scn.AttachCardsTo(legolas, bow);
-		// Sam is Ring-bound and bears three cards, one of them a weapon; Maggot is an ally and bears three.
-		scn.AttachCardsTo(sam, hobbitsword, armor, coat);
-		scn.AttachCardsTo(maggot, shield, armor2, coat2);
+		// Sam is Ring-bound and Maggot, a Hobbit too, is an ally: each bears three cards, one of them a weapon.
+		scn.AttachCardsTo(sam, hobbitsword, orcarmor, cloak);
+		scn.AttachCardsTo(maggot, hobbitsword2, orcarmor2, pipe);
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(grima);
@@ -407,11 +417,11 @@ public class Card_04_154_ErrataTests
 		assertTrue(scn.IsHindered(bow));
 		assertFalse(scn.IsHindered(sword));
 		assertFalse(scn.IsHindered(hobbitsword));
-		assertFalse(scn.IsHindered(armor));
-		assertFalse(scn.IsHindered(coat));
-		assertFalse(scn.IsHindered(shield));
-		assertFalse(scn.IsHindered(armor2));
-		assertFalse(scn.IsHindered(coat2));
+		assertFalse(scn.IsHindered(orcarmor));
+		assertFalse(scn.IsHindered(cloak));
+		assertFalse(scn.IsHindered(hobbitsword2));
+		assertFalse(scn.IsHindered(orcarmor2));
+		assertFalse(scn.IsHindered(pipe));
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
 
@@ -426,20 +436,21 @@ public class Card_04_154_ErrataTests
 		var axe = scn.GetFreepsCard("axe");
 		var armor = scn.GetFreepsCard("armor");
 		var poison = scn.GetShadowCard("poison");
-		var coat = scn.GetFreepsCard("coat");
-		var shield = scn.GetFreepsCard("shield");
-		var saga = scn.GetFreepsCard("saga");
-		var armor2 = scn.GetFreepsCard("armor2");
-		var coat2 = scn.GetFreepsCard("coat2");
-		var shield2 = scn.GetFreepsCard("shield2");
+		var orcarmor = scn.GetFreepsCard("orcarmor");
+		var cloak = scn.GetFreepsCard("cloak");
+		var pipe = scn.GetFreepsCard("pipe");
+		var orcarmor2 = scn.GetFreepsCard("orcarmor2");
+		var gafferspipe = scn.GetFreepsCard("gafferspipe");
+		var salt = scn.GetFreepsCard("salt");
 
 		scn.MoveCompanionsToTable(gimli, sam);
 		scn.MoveAlliesToTable(maggot);
 		// Gimli is the one unbound companion bearing three cards or a weapon, so he is spotted without asking.
-		// Sam and Maggot bear three Free Peoples cards each and no weapon.
+		// Sam and Maggot bear three Free Peoples cards each and no weapon: an armor, a cloak and a pipe; an
+		// armor, a pipe and a box.
 		scn.AttachCardsTo(gimli, axe, armor, poison);
-		scn.AttachCardsTo(sam, coat, shield, saga);
-		scn.AttachCardsTo(maggot, armor2, coat2, shield2);
+		scn.AttachCardsTo(sam, orcarmor, cloak, pipe);
+		scn.AttachCardsTo(maggot, orcarmor2, gafferspipe, salt);
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(grima);
@@ -453,12 +464,12 @@ public class Card_04_154_ErrataTests
 		assertTrue(scn.IsHindered(axe));
 		assertTrue(scn.IsHindered(armor));
 		assertFalse(scn.IsHindered(poison));
-		assertFalse(scn.IsHindered(coat));
-		assertFalse(scn.IsHindered(shield));
-		assertFalse(scn.IsHindered(saga));
-		assertFalse(scn.IsHindered(armor2));
-		assertFalse(scn.IsHindered(coat2));
-		assertFalse(scn.IsHindered(shield2));
+		assertFalse(scn.IsHindered(orcarmor));
+		assertFalse(scn.IsHindered(cloak));
+		assertFalse(scn.IsHindered(pipe));
+		assertFalse(scn.IsHindered(orcarmor2));
+		assertFalse(scn.IsHindered(gafferspipe));
+		assertFalse(scn.IsHindered(salt));
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
 
@@ -523,8 +534,8 @@ public class Card_04_154_ErrataTests
 		var armor2 = scn.GetFreepsCard("armor2");
 		var endurance = scn.GetFreepsCard("endurance");
 		var bow = scn.GetFreepsCard("bow");
-		var coat = scn.GetFreepsCard("coat");
-		var shield = scn.GetFreepsCard("shield");
+		var cloak = scn.GetFreepsCard("cloak");
+		var brooch = scn.GetFreepsCard("brooch");
 		var hobbitsword = scn.GetFreepsCard("hobbitsword");
 		var poison = scn.GetShadowCard("poison");
 		var poison2 = scn.GetShadowCard("poison2");
@@ -538,8 +549,8 @@ public class Card_04_154_ErrataTests
 		scn.AttachCardsTo(guard, armor2, poison3, evil2);
 		// Gimli bears two cards and no weapon.
 		scn.AttachCardsTo(gimli, armor, endurance);
-		// Legolas bears three cards, a weapon among them, all of which will be hindered.
-		scn.AttachCardsTo(legolas, bow, coat, shield);
+		// Legolas bears three cards (his bow, a cloak and a brooch), a weapon among them, all of which will be hindered.
+		scn.AttachCardsTo(legolas, bow, cloak, brooch);
 		// Boromir bears three Shadow cards.
 		scn.AttachCardsTo(boromir, poison, poison2, evil);
 		// Sam is Ring-bound.
@@ -547,7 +558,7 @@ public class Card_04_154_ErrataTests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(grima);
-		scn.HinderCard(bow, coat, shield);
+		scn.HinderCard(bow, cloak, brooch);
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPass();
 

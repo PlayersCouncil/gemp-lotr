@@ -4,8 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -23,7 +21,9 @@ public class Card_04_304_ErrataTests
 					put("getaway", "54_304");
 					put("sam", "1_311");        // Sam, Son of Hamfast: Ring-bound Hobbit companion, cost 2
 					put("merry", "1_302");      // Merry, Friend to Sam: Hobbit companion, not Ring-bound
-					put("aragorn", "1_89");     // Aragorn, Ranger of the North: Man companion, made Ring-bound and [shire] below
+					// Faramir, Captain of Gondor: a Ring-bound companion who is a [gondor] Man; his texts are about a starting
+					// fellowship and a skirmish
+					put("faramir", "4_116");
 					put("gollum", "10_21");     // Gollum, Mad Thing: [gollum] minion, not Sméagol
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -155,14 +155,12 @@ public class Card_04_304_ErrataTests
 		var getaway = scn.GetFreepsCard("getaway");
 		var sam = scn.GetFreepsCard("sam");
 		var merry = scn.GetFreepsCard("merry");
-		var aragorn = scn.GetFreepsCard("aragorn");
+		var faramir = scn.GetFreepsCard("faramir");
 		var gollum = scn.GetShadowCard("gollum");
 		var frodo = scn.GetRingBearer();
 		scn.MoveCardsToHand(getaway, sam);
-		scn.MoveCompanionsToTable(merry, aragorn);
-		// A Ring-bound [shire] companion who is not a Hobbit.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, aragorn, null, Keyword.RING_BOUND));
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.SHIRE));
+		// A Hobbit who is not Ring-bound, and a Ring-bound companion who is not a Hobbit.
+		scn.MoveCompanionsToTable(merry, faramir);
 
 		scn.StartGame();
 		// A [gollum] character who is not Sméagol.
@@ -177,7 +175,7 @@ public class Card_04_304_ErrataTests
 
 		assertTrue(scn.HasKeyword(frodo, Keyword.RING_BOUND));
 		assertFalse(scn.HasKeyword(merry, Keyword.RING_BOUND));
-		assertTrue(scn.HasKeyword(aragorn, Keyword.RING_BOUND));
+		assertTrue(scn.HasKeyword(faramir, Keyword.RING_BOUND));
 		assertTrue(scn.FreepsPlayAvailable(sam));
 		// One Ring-bound Hobbit: Frodo.
 		assertFalse(scn.FreepsPlayAvailable(getaway));

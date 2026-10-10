@@ -6,7 +6,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -24,8 +23,10 @@ public class Card_07_332_ErrataTests
 					put("guard", "5_83");       // Household Guard: [rohan] Man companion, strength 6, vitality 3, Valiant and nothing else
 					put("deor", "7_222");       // Deor: [rohan] Man ally, vitality 2; a skirmish ability that needs initiative
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion, strength 8, vitality 4; a maneuver ability
-					put("gimli", "1_13");       // Gimli, Son of Gloin: [dwarven] Dwarf companion; given [rohan] where a test needs a [rohan] non-Man
-												// where a test needs the opponent's [rohan] Man
+					// Merry, Master Holbytla: the one printed [rohan] character who is no Man, a Hobbit companion of vitality 4.
+					// He is a [rohan] Man as well while 3 [rohan] companions or Eowyn can be spotted; each time another
+					// [rohan] Man exerts he may exert to heal that Man (declined); a skirmish ability used only on purpose
+					put("merry", "103_85");
 
 					// Cards whose cost is read in hand.
 					put("armory", "1_157");     // Uruk-hai Armory: [isengard] Shadow condition, cost 1, support area
@@ -98,7 +99,7 @@ public class Card_07_332_ErrataTests
 		var guard = scn.GetFreepsCard("guard");
 		var deor = scn.GetFreepsCard("deor");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		var gimli = scn.GetFreepsCard("gimli");
+		var merry = scn.GetFreepsCard("merry");
 		var frodo = scn.GetRingBearer();
 		var armory = scn.GetShadowCard("armory");
 		var sword = scn.GetShadowCard("sword");
@@ -108,11 +109,10 @@ public class Card_07_332_ErrataTests
 		var store = scn.GetFreepsCard("store");
 		var rohansword = scn.GetFreepsCard("rohansword");
 
-		scn.MoveCompanionsToTable(guard, aragorn, gimli);
+		// Merry is of the [rohan] culture but no Man: the Guard and he are two [rohan] companions, not three.
+		scn.MoveCompanionsToTable(guard, aragorn, merry);
 		scn.MoveAlliesToTable(deor);
 		scn.MoveCardsToHand(armory, sword, runner, bred, freepsArmory, store, rohansword);
-		// Gimli is of the [rohan] culture but no Man.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, gimli, null, Culture.ROHAN));
 
 		scn.StartGame();
 
@@ -128,13 +128,17 @@ public class Card_07_332_ErrataTests
 		assertTrue(scn.FreepsActionAvailable(road));
 
 		scn.FreepsUseCardAction(road);
-		// A [rohan] Man companion or ally; not a [gondor] Man, nor a [rohan] Dwarf, nor the Ring-bearer.
+		// A [rohan] Man companion or ally; not a [gondor] Man, nor a [rohan] Hobbit, nor the Ring-bearer.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(guard, deor));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn, gimli, frodo));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn, merry, frodo));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		scn.FreepsChooseCard(deor);
+		// Merry's own text answers a [rohan] Man exerting: he is not exerted to heal Deor.
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(merry));
+		scn.FreepsDeclineOptionalTrigger();
 		assertEquals(1, scn.GetWoundsOn(deor));
 		assertEquals(0, scn.GetWoundsOn(guard));
+		assertEquals(0, scn.GetWoundsOn(merry));
 
 		// Shadow conditions and possessions of two cultures, whoever holds them, cost 2 more.
 		assertEquals(3, scn.GetTwilightCost(armory));
@@ -223,19 +227,20 @@ public class Card_07_332_ErrataTests
 
 		var guard = scn.GetFreepsCard("guard");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		var gimli = scn.GetFreepsCard("gimli");
+		var merry = scn.GetFreepsCard("merry");
 
-		scn.MoveCompanionsToTable(guard, aragorn, gimli);
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, gimli, null, Culture.ROHAN));
+		scn.MoveCompanionsToTable(guard, aragorn, merry);
 		// Vitality 3 with 2 wounds: exhausted.
 		scn.AddWoundsToChar(guard, 2);
 
 		scn.StartGame();
 
 		var road = scn.GetCurrentSite();
-		// A fresh [gondor] Man and a fresh [rohan] Dwarf cannot pay.
+		// A fresh [gondor] Man and a fresh [rohan] Hobbit (Merry is no Man beside one other [rohan] companion)
+		// cannot pay.
 		assertEquals(0, scn.GetWoundsOn(aragorn));
-		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertEquals(0, scn.GetWoundsOn(merry));
+		assertFalse(scn.IsRace(merry, Race.MAN));
 		assertFalse(scn.FreepsActionAvailable(road));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

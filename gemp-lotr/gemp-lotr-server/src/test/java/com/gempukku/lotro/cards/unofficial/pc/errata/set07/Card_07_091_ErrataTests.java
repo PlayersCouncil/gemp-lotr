@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -163,8 +162,6 @@ public class Card_07_091_ErrataTests
 
 		scn.StartGame();
 
-		// A [shire] Man: of the Hobbits' culture, and no Hobbit.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.SHIRE));
 		scn.MoveMinionsToTable(runner1, runner2);
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{pippin, runner1}, new PhysicalCardImpl[]{sam, runner2});
@@ -183,7 +180,7 @@ public class Card_07_091_ErrataTests
 		scn.FreepsUseCardAction(faramir, "unbound Hobbit");
 		assertEquals(2, scn.GetWoundsOn(faramir));
 		// Pippin in this skirmish and Merry in none; not the Ring-bearer, not Ring-bound Sam, not the Hobbit ally,
-		// not the [shire] Man, not Faramir.
+		// not Aragorn (an unbound companion who is no Hobbit), not Faramir.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(pippin, merry));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(frodo, sam, bounder, aragorn, faramir));
 		assertEquals(1, scn.FreepsGetChoiceMin());

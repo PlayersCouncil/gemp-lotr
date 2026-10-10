@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import com.gempukku.lotro.logic.modifiers.StrengthModifier;
 import org.junit.Test;
 
@@ -24,7 +23,13 @@ public class Card_06_008_ErrataTests
 					put("peasants", "56_8");
 					put("brigand", "4_10");    // Dunlending Brigand: [dunland] Man, strength 8, vitality 1, no text
 					put("footman", "11_82");   // Footman of Dunland: a [men] Man, strength 7, vitality 3; the current site gains plains
-					put("savage", "1_151");    // Uruk Savage: [isengard] Uruk-hai, strength 5, vitality 3, damage +1
+					// Saruman, Rabble-rouser: the printed [dunland] minion who is no Man, a Wizard of strength 8 and vitality 4.
+					// He may not be assigned to a skirmish; each time the fellowship moves the Free Peoples player exerts a
+					// companion for each [dunland] Man, so he is put down after the move
+					put("saruman", "4_33");
+					// Saruman's Staff, Wizard's Device: plays on Saruman, strength +2, fierce and damage +1.  Maneuver: the
+					// first sentence of Saruman's game text does not apply until the regroup phase
+					put("staff", "4_174");
 					put("ned", "1_220");       // Not Easily Destroyed: [wraith] condition, support area
 					put("wielding", "11_105"); // Wielding the Ring: [men] condition borne by a companion, no other text
 
@@ -140,21 +145,29 @@ public class Card_06_008_ErrataTests
 		var peasants = scn.GetShadowCard("peasants");
 		var brigand = scn.GetShadowCard("brigand");
 		var footman = scn.GetShadowCard("footman");
-		var savage = scn.GetShadowCard("savage");
+		var saruman = scn.GetShadowCard("saruman");
+		var staff = scn.GetShadowCard("staff");
 		var ned = scn.GetShadowCard("ned");
 		scn.MoveCardsToHand(peasants);
 		scn.MoveCardsToSupportArea(ned);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(brigand, footman, savage);
+		scn.MoveMinionsToTable(brigand, footman);
 		scn.SetTwilight(5);
-		// An Uruk-hai given [dunland]: of the culture but no Man.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, savage, null, Culture.DUNLAND));
 		// Aragorn 11 beats the Brigand 8.
 		scn.ApplyAdHocModifier(new StrengthModifier(null, aragorn, null, 3));
 
+		scn.SkipToPhase(Phase.MANEUVER);
+		// A Wizard of the [dunland] culture: of the culture but no Man.  With his Staff's ability used he may be
+		// assigned to a skirmish until the regroup phase.
+		scn.MoveMinionsToTable(saruman);
+		scn.AttachCardsTo(saruman, staff);
+		scn.FreepsPass();
+		assertTrue(scn.ShadowActionAvailable(staff));
+		scn.ShadowUseCardAction(staff);
+
 		scn.SkipToAssignments();
-		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{knight, footman}, new PhysicalCardImpl[]{guard, savage},
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{knight, footman}, new PhysicalCardImpl[]{guard, saruman},
 				new PhysicalCardImpl[]{aragorn, brigand});
 		int twilight = scn.GetTwilight();
 		assertTrue(twilight >= 2); // enough to pay for the event throughout
@@ -165,10 +178,11 @@ public class Card_06_008_ErrataTests
 		assertEquals(1, scn.GetWoundsOn(knight));
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable(peasants));
 
-		// The [dunland] Uruk Savage 5 beats the Dwarf Guard 4.
+		// The [dunland] Wizard, 8 + 2 for his Staff, beats the Dwarf Guard 4.
+		assertEquals(10, scn.GetStrength(saruman));
 		scn.FreepsResolveSkirmish(guard);
 		scn.PassSkirmishActions();
-		assertInZone(Zone.DEAD, guard); // 2 wounds with the Savage's damage +1
+		assertInZone(Zone.DEAD, guard); // more than double his strength
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable(peasants));
 
 		// The [dunland] Brigand loses to Aragorn.
@@ -176,6 +190,11 @@ public class Card_06_008_ErrataTests
 		scn.PassSkirmishActions();
 		assertInDiscard(brigand);
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable(peasants));
+
+		// The Staff makes Saruman fierce: nobody is assigned to him a second time.
+		scn.PassFierceAssignmentActions();
+		scn.FreepsDeclineAssignments();
+		scn.ShadowDeclineAssignments();
 
 		assertInHand(peasants);
 		assertEquals(twilight, scn.GetTwilight());
