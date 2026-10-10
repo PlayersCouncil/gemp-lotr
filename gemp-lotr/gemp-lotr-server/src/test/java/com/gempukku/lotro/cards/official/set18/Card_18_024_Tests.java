@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_18_024_Tests
@@ -18,7 +19,20 @@ public class Card_18_024_Tests
 				new HashMap<>()
 				{{
 					put("card", "18_24");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetManeuverPhaseScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("ourtime", "18_24");
+					put("gandalf", "1_72");     // Gandalf, Friend of the Shirefolk: the Gandalf who exerted to play it
+					put("runner", "1_178");     // Goblin Runner: a minion, so that there is a maneuver phase
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -56,18 +70,32 @@ public class Card_18_024_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void OurTimeTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void AtTheStartOfTheManeuverPhaseAddsFourTwilightAndIsRemovedFromTheGame() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetManeuverPhaseScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var ourTime = scn.GetFreepsCard("ourtime");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.MoveCompanionsToTable(gandalf);
+		// Put there, so that the (3) it removes when it is played is no part of the readings.
+		scn.MoveCardsToSupportArea(ourTime);
+
+		var runner = scn.GetShadowCard("runner");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(runner);
+		scn.FreepsPass();
 
-		assertEquals(0, scn.GetTwilight());
+		// The last decision before the maneuver phase.
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertInZone(Zone.SUPPORT, ourTime);
+		int twilight = scn.GetTwilight();
+
+		scn.ShadowPass();
+		// Nobody was asked anything: the first decision of the maneuver phase finds it done.
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+		assertEquals(twilight + 4, scn.GetTwilight());
+		assertInZone(Zone.REMOVED, ourTime);
+		assertEquals(0, scn.GetFreepsDiscardCount());
 	}
 }

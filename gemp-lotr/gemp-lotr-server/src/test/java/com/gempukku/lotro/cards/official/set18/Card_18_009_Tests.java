@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_18_009_Tests
@@ -19,7 +20,26 @@ public class Card_18_009_Tests
 				new HashMap<>()
 				{{
 					put("card", "18_9");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetCultureTokensScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("defender", "18_9");
+					put("defender2", "18_9");
+					put("legolas", "1_50");     // Legolas, Greenleaf: an [elven] Elf companion, strength 6; an archery ability only
+					// Elven Supplies: [elven] condition. "Fellowship: Remove a culture token from a Free Peoples
+					// card to add an [elven] token here." Its other ability is a skirmish one.
+					put("supplies", "18_10");
+					// Wish For Our Kinfolk: [dwarven] condition that holds [dwarven] tokens; its abilities need a Dwarf
+					// to exert (fellowship) or a skirmish.
+					put("wish", "8_8");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -62,18 +82,50 @@ public class Card_18_009_Tests
 		assertEquals(7, card.getBlueprint().getResistance());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void ElvenDefenderTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void IsStrengthPlus2WhileAnElvenTokenCanBeSpottedAndNoMoreForASecondToken() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetCultureTokensScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var defender = scn.GetFreepsCard("defender");
+		var defender2 = scn.GetFreepsCard("defender2");
+		var legolas = scn.GetFreepsCard("legolas");
+		var supplies = scn.GetFreepsCard("supplies");
+		var wish = scn.GetFreepsCard("wish");
+		var opponentsSupplies = scn.GetShadowCard("supplies");
+		scn.MoveCompanionsToTable(defender, defender2, legolas);
+		scn.MoveCardsToSupportArea(supplies, wish, opponentsSupplies);
+		scn.AddTokensToCard(wish, 2);
+		// The other player's Free Peoples cards are not active on this turn, so his token cannot be spotted.
+		scn.AddTokensToCard(opponentsSupplies, 1);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(2, scn.GetTwilight());
+		// Two [dwarven] tokens, an [elven] card that could hold a token and holds none, and a token of the
+		// opponent's: no [elven] token to spot.
+		assertEquals(0, scn.GetCultureTokensOn(supplies));
+		assertEquals(2, scn.GetCultureTokensOn(wish));
+		assertEquals(1, scn.GetCultureTokensOn(opponentsSupplies));
+		assertEquals(5, scn.GetStrength(defender));
+		assertEquals(5, scn.GetStrength(defender2));
+		assertEquals(6, scn.GetStrength(legolas));
+
+		// Elven Supplies turns a [dwarven] token into the first [elven] token.
+		scn.FreepsUseCardAction(supplies);
+		assertEquals(1, scn.GetCultureTokensOn(supplies));
+		assertEquals(1, scn.GetCultureTokensOn(wish));
+		// 5 + 2, each copy for itself; Legolas is no Elven Defender.
+		assertEquals(7, scn.GetStrength(defender));
+		assertEquals(7, scn.GetStrength(defender2));
+		assertEquals(6, scn.GetStrength(legolas));
+
+		// A second [elven] token adds nothing: "an [elven] token", not "for each".
+		scn.FreepsUseCardAction(supplies);
+		scn.FreepsChooseCard(wish);
+		assertEquals(2, scn.GetCultureTokensOn(supplies));
+		assertEquals(0, scn.GetCultureTokensOn(wish));
+		assertEquals(7, scn.GetStrength(defender));
+		assertEquals(7, scn.GetStrength(defender2));
+		assertEquals(6, scn.GetStrength(legolas));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

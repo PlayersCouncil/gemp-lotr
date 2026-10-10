@@ -621,7 +621,7 @@
 					{
 						type: putCardsFromDeckOnBottomOfDeck
 						select: memory(cards)
-						reveal: true
+						reveal: false
 					}
 				]
 			}

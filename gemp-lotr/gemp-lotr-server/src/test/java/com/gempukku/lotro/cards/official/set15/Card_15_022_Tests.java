@@ -265,4 +265,45 @@ public class Card_15_022_Tests
 		assertEquals(1, scn.GetThreats());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
+
+	// "Look at" and "place the other cards on the bottom": nothing is revealed, so the other player learns which
+	// card was taken (it had to be a Free Peoples card, and the log line is what shows that: Q-0025) and not
+	// which cards went beneath the deck (Q-0176).  The log used to name those too (F-0378).
+	@Test
+	public void TheCardsPlacedBeneathTheDrawDeckAreNotNamedInTheGameLog() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetDrawScenario();
+
+		var mirror = scn.GetFreepsCard("mirror");
+		var elrond = scn.GetFreepsCard("elrond");
+		var legolas = scn.GetFreepsCard("legolas");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var runner = scn.GetFreepsCard("runner");
+		var sword = scn.GetFreepsCard("sword");
+		var axe = scn.GetFreepsCard("axe");
+		var blow = scn.GetFreepsCard("blow");
+		scn.MoveCardsToSupportArea(mirror);
+		scn.MoveAlliesToTable(elrond);
+		scn.MoveCompanionsToTable(legolas, aragorn);
+
+		scn.StartGame();
+		// The draw deck from the top: Goblin Runner, Hobbit Sword, Axe Strike, Cleaving Blow.
+		scn.MoveCardsToTopOfDeck(blow, axe, sword, runner);
+
+		scn.FreepsUseCardAction(elrond);
+		scn.MarkGameLog();
+		scn.FreepsAcceptOptionalTrigger();
+		scn.FreepsChooseCard(legolas);
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+		scn.FreepsChooseCardBPFromSelection(axe);
+		scn.FreepsChooseCardBPFromSelection(sword);
+
+		assertInHand(axe);
+		assertSame(runner, scn.GetFreepsBottomOfDeck());
+		assertSame(sword, scn.GetFromBottomOfFreepsDeck(2));
+		assertTrue(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkMentions(axe));
+		assertFalse(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkMentions(sword));
+		assertFalse(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkMentions(runner));
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
 }

@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_18_063_Tests
@@ -19,7 +20,22 @@ public class Card_18_063_Tests
 				new HashMap<>()
 				{{
 					put("card", "18_63");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetCompanionsInTheDeadPileScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("halberd", "18_63");
+					// Ruffian: a [men] minion to bear it; his text is about his own strength
+					put("ruffian", "18_72");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a companion for the dead pile
+					put("gimli", "1_13");       // Gimli, Son of Gloin: another
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -58,18 +74,46 @@ public class Card_18_063_Tests
 		assertEquals(2, card.getBlueprint().getStrength());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void CorsairHalberdTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void RemovesACompanionInTheDeadPileFromTheGameToControlASite() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetCompanionsInTheDeadPileScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCardsToDeadPile(aragorn, gimli);
 
+		var halberd = scn.GetShadowCard("halberd");
+		var ruffian = scn.GetShadowCard("ruffian");
+
+		// Both markers are at site 2 when the fellowship moves on to site 3: site 1 can be controlled.
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToSite(2);
+		scn.MoveMinionsToTable(ruffian);
+		scn.AttachCardsTo(ruffian, halberd);
+		scn.FreepsPass();
 
-		assertEquals(3, scn.GetTwilight());
+		var site1 = scn.GetSite(1);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertInZone(Zone.DEAD, aragorn, gimli);
+		assertEquals(0, scn.GetShadowControlledSiteCount());
+		assertFalse(scn.IsSiteControlled(site1));
+		assertTrue(scn.ShadowActionAvailable(halberd));
+
+		// One of the two dead companions is the price.
+		scn.ShadowUseCardAction(halberd);
+		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, gimli));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		assertEquals(1, scn.ShadowGetChoiceMax());
+
+		scn.ShadowChooseCardBPFromSelection(gimli);
+		assertInZone(Zone.REMOVED, gimli);
+		assertInZone(Zone.DEAD, aragorn);
+		assertEquals(1, scn.GetFreepsDeadCount());
+		assertEquals(0, scn.GetFreepsDiscardCount());
+		assertEquals(1, scn.GetShadowControlledSiteCount());
+		assertTrue(scn.IsSiteControlled(site1));
+		assertAttachedTo(halberd, ruffian);
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

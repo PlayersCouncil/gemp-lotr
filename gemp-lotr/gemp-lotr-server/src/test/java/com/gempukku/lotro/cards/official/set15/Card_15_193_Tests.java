@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_15_193_Tests
@@ -35,6 +36,34 @@ public class Card_15_193_Tests
 					put("site7", "11_239");
 					put("site8", "11_239");
 					put("site9", "11_239");
+				}},
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
+				VirtualTableScenario.Shadows
+		);
+	}
+
+	// Mount Doom lies behind the fellowship here, as site 2, and the path runs on into region 2.
+	protected VirtualTableScenario GetMountDoomBehindTheFellowshipScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// Traveled Leader: [gandalf] Maneuver or Regroup event, cost 1. "Spot a [gandalf] Wizard to
+					// replace a site in the fellowship's current region with a site from your adventure deck."
+					put("leader1", "12_34");
+					put("leader2", "12_34");
+					put("gandalf", "1_72");     // Gandalf, Friend of the Shirefolk: the [gandalf] Wizard; his text is about his strength
+				}},
+				new HashMap<>() {{
+					put("glade", "11_239");     // Fangorn Glade: adds (1) for each Free Peoples weapon when moved to
+					put("mountdoom", "15_193");
+					put("ruins", "18_138");     // Sirannon Ruins: River, no text
+					put("nurn", "17_148");      // Nurn: its text is about controlling it
+					put("angle", "12_185");     // The Angle: a Shadow ability that plays a Nazgul
+					put("homestead", "11_230"); // Buckland Homestead: a Shadow ability that plays a Nazgul
+					put("crags", "11_234");     // Crags of Emyn Muil: wounds on a regroup move from it in region 2
+					put("emynmuil", "12_187");  // Emyn Muil: a Maneuver ability for a minion
+					put("rauros", "17_146");    // Falls of Rauros: acts when moved to in region 2
 				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -160,5 +189,80 @@ public class Card_15_193_Tests
 		scn.FreepsUseCardAction(anotherway);
 		assertEquals(scn.GetCurrentSite(), mountdoom);
 		assertFalse(scn.FreepsAnyDecisionsAvailable());
+	}
+
+	@Test
+	public void OnceTheFellowshipHasLeftMountDoomASiteChosenInItsRegionIsNotReplacedAndASiteInTheNextRegionIs() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetMountDoomBehindTheFellowshipScenario();
+
+		var leader1 = scn.GetFreepsCard("leader1");
+		var leader2 = scn.GetFreepsCard("leader2");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCardsToHand(leader1, leader2);
+
+		var glade = scn.GetFreepsSite("glade");
+		var mountDoom = scn.GetShadowSite("mountdoom");
+		var ruins = scn.GetShadowSite("ruins");
+		var nurn = scn.GetShadowSite("nurn");
+		var angle = scn.GetFreepsSite("angle");
+
+		// Two moves in the first turn: the Shadow player lays Mount Doom as site 2 and Sirannon Ruins as site 3,
+		// both in region 1.
+		scn.StartGame(glade);
+		scn.FreepsPass();
+		scn.ShadowChooseCardBPFromSelection(mountDoom);
+		assertSame(mountDoom, scn.GetCurrentSite());
+		scn.SkipToMovementDecision();
+		scn.FreepsChooseToMove();
+		scn.ShadowChooseCardBPFromSelection(ruins);
+		scn.SkipToPhase(Phase.REGROUP);
+
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertSame(glade, scn.GetSite(1));
+		assertSame(mountDoom, scn.GetSite(2));
+		assertSame(ruins, scn.GetSite(3));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		assertTrue(scn.FreepsPlayAvailable(leader1));
+
+		// The three sites of region 1 may be chosen, Mount Doom among them; the one chosen is not replaced, and
+		// the Free Peoples player is not asked for a site from his adventure deck.
+		scn.FreepsPlayCard(leader1);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(glade, mountDoom, ruins));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+
+		scn.FreepsChooseCard(glade);
+		assertSame(glade, scn.GetSite(1));
+		assertSame(mountDoom, scn.GetSite(2));
+		assertSame(ruins, scn.GetSite(3));
+		assertInZone(Zone.ADVENTURE_DECK, angle);
+		assertInDiscard(leader1);
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+
+		// The first player's next turn: on to site 4, the first site of region 2, where Mount Doom's text does
+		// not reach.
+		scn.SkipToOtherPlayersTurn();
+		scn.SkipToOtherPlayersTurn();
+		scn.FreepsPass();
+		scn.ShadowChooseCardBPFromSelection(nurn);
+		scn.SkipToPhase(Phase.REGROUP);
+
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		assertSame(nurn, scn.GetCurrentSite());
+		assertSame(mountDoom, scn.GetSite(2));
+		assertTrue(scn.FreepsPlayAvailable(leader2));
+
+		// Site 4 is the only site of region 2 on the path, so the game takes it without asking which; the Free
+		// Peoples player picks its replacement from his adventure deck.
+		scn.FreepsPlayCard(leader2);
+		scn.FreepsChooseCardBPFromSelection(angle);
+		assertSame(angle, scn.GetSite(4));
+		assertSame(angle, scn.GetCurrentSite());
+		assertInZone(Zone.ADVENTURE_DECK, nurn);
+		assertSame(glade, scn.GetSite(1));
+		assertSame(mountDoom, scn.GetSite(2));
+		assertSame(ruins, scn.GetSite(3));
+		assertInDiscard(leader2);
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 	}
 }
