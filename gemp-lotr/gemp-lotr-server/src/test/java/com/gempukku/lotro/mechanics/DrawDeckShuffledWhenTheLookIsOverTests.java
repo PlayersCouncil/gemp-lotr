@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,10 +31,11 @@ import static org.junit.Assert.*;
  * of the deck as it lay, and a starting fellowship's deck is shuffled once, when the fellowships are down.
  *
  * The deck that is reshuffled is the deck that was looked through.  A search of another player's draw deck that
- * writes its own shuffle (`deck:` names the other player, with `shuffle: true`) shuffles the deck of the player
- * who searched and leaves the deck he looked through as he saw it (F-0369: the two tests at the end, parked).
- * The two real cards of that shape, Grond 18_82 and 68_82, were corrected to write `shuffle: false` and a
- * ShuffleDeck of the deck named (F-0298), so the shape is laid here with two test cards.
+ * writes its own shuffle (`deck:` names the other player, with `shuffle: true`) shuffles the deck that `deck:`
+ * names and leaves the searcher's own alone (the two tests at the end).  It used to shuffle the deck of the
+ * player who searched and leave the deck he had looked through as he saw it (F-0369).  The two real cards of
+ * that shape, Grond 18_82 and 68_82, write `shuffle: false` and a ShuffleDeck of the deck named (F-0298), which
+ * plays the same, so the shape is laid here with two test cards.
  */
 public class DrawDeckShuffledWhenTheLookIsOverTests
 {
@@ -210,7 +210,6 @@ public class DrawDeckShuffledWhenTheLookIsOverTests
 	}
 
 	@Test
-	@Ignore("F-0369: `shuffle: true` on a DiscardCardsFromDrawDeck that names another player's deck shuffles the deck of the player who searched, and the deck he looked through is left as he saw it")
 	public void ASearchOfTheOtherPlayersDeckThatDiscardsFromItShufflesTheDeckSearched() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -243,7 +242,6 @@ public class DrawDeckShuffledWhenTheLookIsOverTests
 	}
 
 	@Test
-	@Ignore("F-0369: `shuffle: true` on a RemoveCardsInDeckFromGame that names another player's deck shuffles the deck of the player who searched, and the deck he looked through is left as he saw it")
 	public void ASearchOfTheOtherPlayersDeckThatRemovesFromTheGameShufflesTheDeckSearched() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
