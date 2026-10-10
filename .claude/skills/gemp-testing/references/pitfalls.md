@@ -256,6 +256,10 @@ and a reading written for after the play reads VOID (Shrouded Elf 63_23). Not so
 that prevents what it answers ("... is about to ..., exert X to prevent this") leaves nothing to answer, and the
 game goes straight on though the cost could be paid again (Ceorl 4_264 against a site taken, Sam 4_316 against a
 burden: the regroup actions, "Choose next skirmish to resolve"). A decline written there answers the wrong decision.
+A Response to "is about to be overwhelmed" that only adds strength (Footman's Armor 7_93) is offered again while
+its bearer is still doubled (CR 4.2, the ruling on the card) and not once he is not, though the cost could be
+paid: the skirmish then resolves at once and the bonus ends with it, so the bonus itself is read only between two
+offers, on a board where one use is not enough (`Card_07_093_Tests`).
 
 **Two at once, one use.** A required trigger with a limit on uses fires once when one event raises it twice (two companions exerting together): no ordering question is asked for the second.
 
@@ -320,6 +324,9 @@ whose definition gives it its own `text:` (Library of Rivendell's "Stack your ta
 well as one the game words "Use <card name>". Where a card offers several actions, name the one meant:
 `FreepsActionAvailable(card, "from hand")` and `FreepsUseCardAction(card, "from hand")`. Both read a use: a
 card in hand that can be played, an event included, is read with `FreepsPlayAvailable(card)`.
+A card's own "you may play this ... from your discard pile" is a use too (Gollum, Plotting Deceiver 7_58: "Use
+Gollum, Plotting Deceiver"): `ShadowPlayAvailable(card)` is false for the card lying in the pile, and
+`ShadowActionAvailable(card)` and `ShadowUseCardAction(card)` read and take it (`Card_07_058_Tests`).
 
 **Using a card's action.** `FreepsUseCardAction(card)` and `ShadowUseCardAction(card)` take the action `FreepsActionAvailable(card)` sees, even where the game lists another of the card's actions first (a possession that another companion could bear lists "Transfer" before "Use"). A card that offers no such action has the first action listed for it taken, as before: an optional trigger or a response is accepted this way. `FreepsUseCardAction(card, "Use")` is no longer needed to get past a transfer.
 
@@ -798,6 +805,14 @@ turn, and read `FreepsGetBurdens()` at the other player's first decision (Card_0
 threats as companions in play). A board that is to read N threats needs N companions: the control in
 `Card_00_060_Tests` (War Towers 7_173's 1 threat, then the 2 of Sméagol 7_71's assignment ability) stands on three.
 
+**Threat wounds are asked for one at a time, and the threats are gone before the first.** When a companion is
+killed with threats on the table, the Shadow player first has 'Before threat wounds are placed - Optional "is
+about to" responses' where a card answers it (Mordor Assassin 7_284: `ShadowHasOptionalTriggerAvailable(card)`).
+Then `GetThreats()` reads 0 at once, and the Free Peoples player is asked "Choose characters to wound" once for
+each threat there was, a choice of one companion each time (minimum 1). A threat removed in that window as a cost
+is therefore read in the wounds asked for (2 threats, one removed: one question and one wound; declined: two),
+never as "2 to 1" (`Card_07_284_Tests`).
+
 **The other player's Free Peoples cards are not active on your turn.** A copy of a possession taken from the
 Shadow player's deck (`GetShadowCard`) and cheated onto your companion is inactive (CR 4.2 "active"), so no
 filter sees it. To put a card the opponent owns on a companion, use a Shadow card that is borne by companions:
@@ -879,6 +894,13 @@ test on a bare board notices. To show the size of a discount on a cheap card, ra
 `TwilightCostModifier(null, CardType.COMPANION, null, new ConstantEvaluator(2))` does what East Road 11_236
 does ("Each companion is twilight cost +2"), and the card reads 4 without its discount and 2 with it
 (`Card_15_064_ErrataTests`).
+
+**"When you play X, you may remove N threats to make its twilight cost -N" asks for N as the card is played.**
+The card is offered when the pool and the threats together cover it (roaming counted), and the number asked for
+runs from what the pool is short by up to the threats there are (`ShadowGetChoiceMin()`, `ShadowGetChoiceMax()`;
+Host of Udûn 7_282 with the pool 1 short and 2 threats: 1 to 2). Where only one number can be named (the pool 1
+short and 1 threat) nothing is asked (F-0147), so a test that reads the bounds lays one threat more than is owed
+(`Card_07_282_Tests`).
 
 **Whether a minion is roaming is read as a keyword.** `scn.HasKeyword(minion, Keyword.ROAMING)` is true while
 the minion's site number is above the current site's, and it follows a site-number modifier: Úlairë Nelya 2_84
