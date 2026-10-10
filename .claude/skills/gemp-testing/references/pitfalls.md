@@ -1038,8 +1038,8 @@ number from the text (`new DeckValidationContext().setMaximumSameNameOverride(6)
 card: a wrong number in the definition passes it (the old tests of 92_1, 92_19 and 94_22, all since rewritten).
 `getDeckBuildingOverrides()` hands back the blueprint's own object, the same one to every test of the run: a test
 of the league's merge calls `merge` on a `new DeckValidationContext()` with the card's overrides as the argument,
-never on the card's overrides (94_22). Whose deck the overrides bind ("Your deck ...") is the league's choice of
-player and nothing in the definition: no card test can show it, the `-` for the other player is the same deck
+never on the card's overrides (94_22). Whose deck the overrides bind ("Your draw deck ...") is the league's choice
+of player and nothing in the definition: no card test can show it, the `-` for the other player is the same deck
 validated with no context, and the ledger's Notes say so.
 `hasSiteBlockError(errors)` matches the four block objections and nothing else ("same block", "not allowed in
 Multipath", "does not use supported block", "cannot mix Movie block and Shadows block sites"): not the Map's

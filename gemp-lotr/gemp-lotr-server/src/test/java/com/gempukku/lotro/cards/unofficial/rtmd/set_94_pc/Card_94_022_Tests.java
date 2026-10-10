@@ -38,7 +38,7 @@ public class Card_94_022_Tests
 		 * Name: Race Text 94_22
 		 * Type: MetaSite
 		 * Intensity: 3
-		 * Game Text: Your deck must have at least 100 cards.
+		 * Game Text: Your draw deck must have at least 100 cards.
 		 */
 
 		var scn = GetFreepsScenario();

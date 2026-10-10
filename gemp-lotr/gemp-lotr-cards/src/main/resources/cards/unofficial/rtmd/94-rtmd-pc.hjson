@@ -1036,7 +1036,7 @@
 				minimumDeckSize: 100
 			}
 		]
-		gametext: Your deck must have at least 100 cards.
+		gametext: Your draw deck must have at least 100 cards.
 		lore: ""
 		promotext: ""
 		helptext: ""
