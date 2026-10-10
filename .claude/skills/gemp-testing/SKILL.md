@@ -28,6 +28,7 @@ scenario and tutorial system drives games the same way:
 | `Actions`, `Choices`, `Decisions`, `GameProcedures`, `GameProperties`, `CardProperties`, `PileProperties`, `Skirmishes`, `ZoneManipulation` | same folder | Interfaces of default methods that `VirtualTable` implements: partial classes in all but name. `TableBase` holds the handful of accessors they are built on. |
 | `VirtualTableScenario` | `gemp-lotr-server/src/test/java/com/gempukku/lotro/framework/` | The unit-test table: two made-up players, every named card put in both decks, the shared card library, Race to Mount Doom set-up. This is the `scn` in every test. |
 | `TestConstants`, `Assertions`, `AdHocEffects` | same test folder | Canned sites, Ring-bearers, Rings, Maps and formats; zone assertions; ad hoc modifiers and effects. Test sources only. |
+| `LoadedLibraries` | same test folder | No part of the rig: the base class of the server tests that play no game (leagues, tournaments, merchants, packs, formats). Three static fields, `_cardLibrary`, `_formatLibrary`, `_productLibrary`, loaded once as the server loads them; its card library holds the real cards only, not the tests' own. It took the place of `at/AbstractAtTest`. |
 | `ScenarioTable` | `gemp-lotr-server/src/main/java/com/gempukku/lotro/scenario/` | The other subclass of `VirtualTable`: a table laid out from a scenario file, for tutorials and puzzles, with a person in one seat. |
 
 The consequence to keep in mind: **anything added under `virtualtable/` ships in the server and becomes a public

@@ -1090,7 +1090,7 @@ his name." Bears on: every Sam with "make Sam the Ring-bearer (resistance 5)".
 where the 5.0 excerpts leave a detail of hinder open.
 (Since 2026-10-10 that set is converted: the rule-by-rule tests are the `mechanics/Hindered*Tests` classes, with
 CardsBorneByAHinderedCardTests, TokensOnAHinderedCardTests, ReconcilingRestoresHinderedCardsTests and
-UniquenessTests. Read those; `at/HinderTests.java` is going.)
+UniquenessTests. Read those; `at/HinderTests.java` is gone, with the whole of `at/`.)
 
 **"Discard X" and "cannot bear X" are two standing effects; only the first discards on a restore (Q-0223: B).**
 "Anduril's interpretation was altered with the Legacy Ruling on GOTM: we see in GOTM a situation where both
