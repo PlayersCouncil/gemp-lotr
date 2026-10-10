@@ -250,7 +250,10 @@ Optional triggers are still offered. A Response special ability with a cost is t
 it is offered again for the same play for as long as its cost can still be paid (CR 4.2 "response": "You may
 respond more than once to the same situation"; Q-0034), though a second use gains nothing. That second "Optional
 responses" decision stands in front of whatever comes next: decline it, or the played event stays in the void
-and a reading written for after the play reads VOID (Shrouded Elf 63_23).
+and a reading written for after the play reads VOID (Shrouded Elf 63_23). Not so after a PREVENTION: a Response
+that prevents what it answers ("... is about to ..., exert X to prevent this") leaves nothing to answer, and the
+game goes straight on though the cost could be paid again (Ceorl 4_264 against a site taken, Sam 4_316 against a
+burden: the regroup actions, "Choose next skirmish to resolve"). A decline written there answers the wrong decision.
 
 **Two at once, one use.** A required trigger with a limit on uses fires once when one event raises it twice (two companions exerting together): no ordering question is asked for the second.
 
