@@ -6,7 +6,6 @@ import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -43,7 +42,8 @@ public class Card_94_030_Tests
 					// Host of Thousands: Shadow event, plays a [moria] Orc from the discard pile
 					put("host", "1_187");
 					put("backstabber", "1_174"); // Goblin Backstabber: the [moria] Orc sitting in the discard pile
-					// Delving: Fellowship event, exert a Dwarf companion to draw 3 cards (ordinary draw)
+					// Delving: Fellowship event, exert a Dwarf companion to draw 3 cards: a card drawn is
+					// a card taken into hand from the draw deck
 					put("delving", "1_6");
 					// Library of Orthanc: takes a card stacked on it into hand -- not deck or discard
 					put("library", "9_39");
@@ -129,7 +129,7 @@ public class Card_94_030_Tests
 		 * Type: MetaSite
 		 * Intensity: 5
 		 * Game Text: You may not play or take into hand cards from your discard pile or draw deck (except
-		 * when reconciling).
+		 * when reconciling or starting fellowship).
 		 */
 
 		var scn = GetFreepsScenario();
@@ -298,6 +298,8 @@ public class Card_94_030_Tests
 
 	@Test
 	public void ReconciliationDrawsAreUnaffected() throws DecisionResultInvalidException, CardNotFoundException {
+		// "(except when reconciling ...)": every other draw of the owner's draws nothing, and the reconcile at
+		// the end of his own turn still fills his hand to eight.
 		var scn = GetFreepsScenario();
 		var gimli = scn.GetFreepsCard("gimli");
 		var shaft = scn.GetFreepsCard("shaft");
@@ -316,30 +318,9 @@ public class Card_94_030_Tests
 	}
 
 	@Test
-	public void OrdinaryDrawEffectIsNotBlocked() throws DecisionResultInvalidException, CardNotFoundException {
-		// Delving's "exert a Dwarf to draw 3 cards" is an ordinary top-of-deck draw, unrelated to 94_30's
-		// discard-pile/draw-deck play-and-take restriction.
-		var scn = GetFreepsScenario();
-		var gimli = scn.GetFreepsCard("gimli");
-		var delving = scn.GetFreepsCard("delving");
-
-		scn.MoveCompanionsToTable(gimli);
-		scn.MoveCardsToHand(delving);
-		scn.StartGame();
-
-		int deckBefore = scn.GetFreepsDeckCount();
-		assertTrue(scn.FreepsPlayAvailable(delving));
-		scn.FreepsPlayCard(delving);
-
-		assertEquals(deckBefore - 3, scn.GetFreepsDeckCount());
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
-	@Ignore("Q-0206: is a draw a card taken into hand from the draw deck? As built it is not, and OrdinaryDrawEffectIsNotBlocked asserts that")
 	public void ADrawOutsideAReconcileTakesNoCardFromTheDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
-		// The other reading of the same board: the text's one exception, reconciling, is a draw, so any
-		// other draw is a card taken into hand from the draw deck and is barred.
+		// A card drawn is a card taken into hand from the draw deck, and the text's one exception in play is
+		// reconciling: Delving's "exert a Dwarf companion to draw 3 cards" is played, paid for, and draws nothing.
 		var scn = GetFreepsScenario();
 		var gimli = scn.GetFreepsCard("gimli");
 		var delving = scn.GetFreepsCard("delving");
@@ -355,8 +336,29 @@ public class Card_94_030_Tests
 
 		// The event is played and its exertion paid, and no card has left the draw deck
 		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertInDiscard(delving);
 		assertEquals(deckBefore, scn.GetFreepsDeckCount());
 		assertEquals(0, scn.GetFreepsHandCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void WithoutTheModADrawTakesCardsFromTheDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetControlScenario();
+		var gimli = scn.GetFreepsCard("gimli");
+		var delving = scn.GetFreepsCard("delving");
+
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveCardsToHand(delving);
+		scn.StartGame();
+
+		int deckBefore = scn.GetFreepsDeckCount();
+		assertTrue(scn.FreepsPlayAvailable(delving));
+		scn.FreepsPlayCard(delving);
+
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertEquals(deckBefore - 3, scn.GetFreepsDeckCount());
+		assertEquals(3, scn.GetFreepsHandCount());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
@@ -399,11 +401,10 @@ public class Card_94_030_Tests
 	}
 
 	@Test
-	@Ignore("Q-0207: does the bar on taking into hand from your discard pile reach the OPPONENT's card that returns your minion to your hand? As built it does (the flag is read for the card's owner, not for the player acting)")
 	public void AnOpponentsCardCanReturnTheOwnersMinionFromHisDiscardPileToHisHand() throws DecisionResultInvalidException, CardNotFoundException {
-		// The other reading of the same board with the modifier in the Shadow player's seat: "You may not ...
-		// take into hand cards from your discard pile" is about the owner's own taking, and here it is the
-		// Free Peoples player's A New Light that puts the Shadow player's minion into his hand.
+		// The same board with the modifier in the Shadow player's seat: "You may not ... take into hand cards
+		// from your discard pile" is about the owner's own taking, and here it is the Free Peoples player's
+		// A New Light that puts the Shadow player's minion into his hand.
 		var scn = GetShadowScenario();
 		var gandalf = scn.GetFreepsCard("gandalf");
 		var light = scn.GetFreepsCard("light");
@@ -471,7 +472,8 @@ public class Card_94_030_Tests
 		var scn = GetFreepsScenario();
 		var merry = scn.GetFreepsCard("merry");
 
-		// The modifier is in play from set-up, and a starting fellowship is played from the draw deck
+		// "(except when ... starting fellowship)": the modifier is in play from set-up, and a starting
+		// fellowship is played from the draw deck.  The opening hand is set-up as well, and is dealt.
 		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
 		assertInZone(Zone.DECK, merry);
 		assertTrue(scn.FreepsHasCardChoiceAvailable(merry));

@@ -5,17 +5,23 @@ import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.GameUtils;
-import com.gempukku.lotro.logic.modifiers.ModifierFlag;
 import com.gempukku.lotro.logic.timing.AbstractEffect;
 import com.gempukku.lotro.logic.timing.Effect;
+import com.gempukku.lotro.logic.timing.RuleUtils;
 import com.gempukku.lotro.logic.timing.results.DrawCardOrPutIntoHandResult;
 
 import java.util.Collections;
 
 public class PutCardFromDiscardIntoHandEffect extends AbstractEffect {
+    private final String _takingPlayer;
     private final PhysicalCard _card;
 
-    public PutCardFromDiscardIntoHandEffect(PhysicalCard card) {
+    /**
+     * @param takingPlayer the player carrying the effect out, who need not be the owner of the card: a bar on
+     *                     taking cards into hand is read for this player (RuleUtils.isBarredFromTakingIntoHand)
+     */
+    public PutCardFromDiscardIntoHandEffect(String takingPlayer, PhysicalCard card) {
+        _takingPlayer = takingPlayer;
         _card = card;
     }
 
@@ -35,8 +41,7 @@ public class PutCardFromDiscardIntoHandEffect extends AbstractEffect {
     }
 
     private boolean cantTakeIntoHand(LotroGame game) {
-        return game.getModifiersQuerying().hasFlagActive(game,
-                ModifierFlag.CANT_TAKE_INTO_HAND_FROM_DISCARD_OR_DECK, _card.getOwner());
+        return RuleUtils.isBarredFromTakingIntoHand(game, _takingPlayer, _card);
     }
 
     @Override

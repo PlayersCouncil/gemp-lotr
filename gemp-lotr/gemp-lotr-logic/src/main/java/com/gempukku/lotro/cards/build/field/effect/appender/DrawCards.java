@@ -12,6 +12,7 @@ import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import com.gempukku.lotro.logic.effects.DrawCardsEffect;
 import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import com.gempukku.lotro.logic.timing.Effect;
+import com.gempukku.lotro.logic.timing.RuleUtils;
 import org.json.simple.JSONObject;
 
 public class DrawCards implements EffectAppenderProducer {
@@ -30,7 +31,8 @@ public class DrawCards implements EffectAppenderProducer {
                 final String drawPlayer = playerSource.getPlayer(actionContext);
                 final Evaluator evaluator = count.getEvaluator(null);
                 final int cardCount = evaluator.evaluateExpression(actionContext.getGame(), null);
-                return actionContext.getGame().getGameState().getDeck(drawPlayer).size() >= cardCount;
+                return actionContext.getGame().getGameState().getDeck(drawPlayer).size() >= cardCount
+                        && !RuleUtils.isBarredFromDrawing(actionContext.getGame(), drawPlayer);
             }
 
             // From an empty draw deck nothing is drawn.  How many cards it would draw is not worked out, beyond
@@ -39,6 +41,10 @@ public class DrawCards implements EffectAppenderProducer {
             public EffectForecast forecast(ActionContext actionContext) {
                 final String drawPlayer = playerSource.getPlayer(actionContext);
                 if (actionContext.getGame().getGameState().getDeck(drawPlayer).isEmpty())
+                    return EffectForecast.NOTHING;
+                // Nor by a player who may not take cards into hand from the draw deck (a draw written on a card
+                // is never a reconcile's).
+                if (RuleUtils.isBarredFromDrawing(actionContext.getGame(), drawPlayer))
                     return EffectForecast.NOTHING;
                 // Nor is anything drawn past the Rule of 4.  That is said only of a draw that is about to be
                 // made (to a prevention, which then is not put to anybody): the no-effect flag of an action

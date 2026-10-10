@@ -76,9 +76,10 @@ public class PutCardsFromDeckIntoHand implements EffectAppenderProducer {
                     protected List<? extends Effect> createEffects(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                         final Collection<? extends PhysicalCard> cards = actionContext.getCardsFromMemory("_temp");
                         List<Effect> result = new LinkedList<>();
+                        // The player whose action this is takes the cards.
                         for (PhysicalCard card : cards) {
                             result.add(
-                                    new PutCardFromDeckIntoHandEffect(card, reveal));
+                                    new PutCardFromDeckIntoHandEffect(actionContext.getPerformingPlayer(), card, reveal));
                         }
 
                         return result;

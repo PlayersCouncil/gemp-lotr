@@ -875,6 +875,15 @@ the exception, not this.
 **The Rule of 4.** No more than 4 cards are drawn or taken into hand in a player's fellowship phase. A test of a
 fellowship-phase draw that repeats has to stay within four, or its fifth reading is the rule and not the card.
 
+**A player barred from taking cards into hand draws only when reconciling.** At a table where a player holds
+Race Text 94_30 (`CantTakeCardsIntoHandFromDeckOrDiscardPile`), a card drawn is a card taken into hand from the
+draw deck (Q-0206): every "draw N" that player makes draws nothing, its costs paid, and the play reads `"effect"`
+on the no-effect flag. His reconciles draw as ever (the regroup one and a card's "reconcile your hand"), and the
+opening hand is dealt. The bar is read for the player the text has draw or take, whoever's card it is on, and
+only for a card of that player's own (Q-0207): his opponent's A New Light 17_15 returns his minion to his hand;
+his opponent's Change of Plans 1_99 has him shuffle his hand in and draw none (Q-0216, kept unless struck).
+Nobody is asked to prevent a draw that is barred. `mechanics/BarOnTakingCardsIntoHandTests`.
+
 **A card being shown is listed as not selectable.** A real reveal from a deck or from play gives every player,
 the owner included, a "Revealed card(s)" decision to dismiss. A reveal from a HAND (the whole hand, or cards at
 random) gives the pop-up to the other players only: the hand's owner is shown nothing and has nothing to dismiss

@@ -325,6 +325,14 @@ In general, although the names of modifiers are case-insensitive, the names of t
       required
     * requires [ ]
       optional
+* CantTakeCardsIntoHandFromDeckOrDiscardPile
+  Prevents `player` from taking cards into hand from that player's own draw deck or discard pile, so long as the `requires` requirements are met.  See Race Text 94_30.
+  A card drawn is a card taken into hand from the draw deck: the player's draws draw nothing, except those of a reconcile.  The bar is on the player doing the taking: another player's card that returns that player's card to hand still does.
+  If `player` is omitted, the bar is on every player.
+    * player
+      optional
+    * requires [ ]
+      optional
 * CantTakeMoreWoundsThan
   Makes cards matching `filter` take no more than `amount` wounds during the given `phase`, so long as the `requires` requirements are met.
   Used for cards which cause a character to "take no more than X wounds".  This is different from preventing wounds, as it disallows wounds from even being assigned (such as from archery or threats).  See Armor).

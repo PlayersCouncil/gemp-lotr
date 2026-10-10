@@ -1362,7 +1362,7 @@
 				}
 			}
 		]
-		gametext: You may not play or take into hand cards from your discard pile or draw deck (except when reconciling).
+		gametext: You may not play or take into hand cards from your discard pile or draw deck (except when reconciling or starting fellowship).
 		lore: ""
 		promotext: ""
 		helptext: ""

@@ -99,6 +99,33 @@ public class RuleUtils {
     }
 
     /**
+     * Whether a player is barred from taking this card into hand from a draw deck or discard pile
+     * (CANT_TAKE_INTO_HAND_FROM_DISCARD_OR_DECK: "You may not ... take into hand cards from your discard pile or
+     * draw deck").  The bar is on the player doing the taking, and it reaches that player's own piles.  A card that
+     * another player's effect returns to its owner's hand is not taken by its owner (A New Light 17_15: "search a
+     * Shadow player's discard pile and choose a minion, then return that minion to its owner's hand"), and a card
+     * the barred player takes out of another player's pile is not from "your" pile.
+     * @param takingPlayer the player carrying the effect out: the one the text has take the card, whoever's card
+     *                     the text is on
+     */
+    public static boolean isBarredFromTakingIntoHand(LotroGame game, String takingPlayer, PhysicalCard card) {
+        return takingPlayer != null && takingPlayer.equals(card.getOwner())
+                && game.getModifiersQuerying().hasFlagActive(game,
+                        ModifierFlag.CANT_TAKE_INTO_HAND_FROM_DISCARD_OR_DECK, takingPlayer);
+    }
+
+    /**
+     * Whether a player is barred from drawing.  A card drawn is a card taken into hand from the draw deck, so the
+     * same bar stops the player's draws.  The draws of a reconcile are the exception such a text names ("except
+     * when reconciling"): DrawOneCardEffect does not ask this of them.  The opening hand and the mulligan are
+     * dealt in set-up, by no effect, and are not asked either.
+     */
+    public static boolean isBarredFromDrawing(LotroGame game, String drawingPlayer) {
+        return game.getModifiersQuerying().hasFlagActive(game,
+                ModifierFlag.CANT_TAKE_INTO_HAND_FROM_DISCARD_OR_DECK, drawingPlayer);
+    }
+
+    /**
      * The site the current player's fellowship has to survive in order to win the game.  Normally the last site of the
      * adventure path, site 9; MUST_SURVIVE_SITE_10, scoped to that player, pushes it back to site 10.
      */
