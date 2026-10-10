@@ -412,6 +412,7 @@ Whether and how many sites a player controls is asked with these two and the `Fo
 | `HasCardInDiscard` | player?, filter?, count? | Cards in discard |
 | `HasCardInDrawDeck` | player?, filter?, count? | Cards in deck |
 | `HasCardInDeadPile` | filter?, count? | Cards in dead pile |
+| `HasCardInRemoved` | player?, filter?, count? | Cards removed from the game, in ONE player's pile: `player` defaults to `you`. A text that names no owner writes an `or` over players (13_50, F-0375) |
 | `HasCardStacked` | filter, on?, count? | Stacked cards |
 | `HasCardInAdventureDeck` | player?, filter?, count? | Adventure deck cards |
 | `CardsInHandMoreThan` | player?, count | Hand size check |

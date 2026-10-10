@@ -580,6 +580,12 @@ and then the draw up to 8; with an empty hand nothing is asked; with more than 8
 hand minus 8 cards, minimum and maximum equal, with no optional discard first and no declining (`ShadowChooseCards`).
 Under Foot 60_52's tests read all three.
 
+**"Each time you reconcile" is answered after the hand is made up.** The offer comes once the reconciling
+player has discarded (or declined) and drawn to 8, so with the offer pending a hand laid at 6 reads 8 and the
+draw deck two shorter; read both there and again after the answer. The other player's reconcile, which comes
+first in the regroup phase, sets off nothing: read the offer as absent at the "another move" question
+(Isildur 13_71, Card_13_071_Tests).
+
 **A deck's order is set after `StartGame()`.** The game shuffles each deck to deal the opening hands, so a card
 moved to the top or bottom of a draw deck before `StartGame()` does not stay there. `MoveCardsToTopOfDeck(a, b,
 c)` puts each on top in turn, so the last one named is the top card.
@@ -661,7 +667,9 @@ turn it is: put them on in his own turn before, and `SkipToOtherPlayersTurn()` s
 (`ShadowDecisionAvailable("Sanctuary healing")`, then `ShadowChooseCard`; Card_94_007_Tests).
 
 **Whose site.** `GetCurrentSiteNumber()` answers for the player whose turn it is: on the other player's turn it
-is his site, not the one player 1's fellowship reached, and there is no reader for one player's position. Read
+is his site, not the one player 1's fellowship reached, and there is no reader for one player's position
+(G-0053, open: where a text compares the two markers, "ahead on the adventure path", leave a
+`// waits: G-0053 ...` comment where the other player's would be read; Card_13_003_Tests). Read
 player 1's site before his turn ends. The card on the path is the copy of whoever laid it: from site 2 on, on
 player 1's first turn, the Shadow player's. `GetCurrentSite()` and `GetSite(n)` return that card and
 `GetFreepsSite(n)` a different one, so compare with `GetSite(n)` or by blueprint.
@@ -867,6 +875,13 @@ else attached" is a size of 1. `assertNotAttachedTo` is the safer reading.
 **A card that passes through a zone.** Where an effect takes a card out of a place it has only just arrived in
 (a tentacle killed by a wound and then stacked from the discard pile), read it there while the decision is
 pending. A count that is 0 before and 0 after shows nothing by itself.
+
+**The removed-from-game pile.** `scn.MoveCardToZone(card, Zone.REMOVED)` lays a card there (a cheat) and
+`assertInZone(Zone.REMOVED, cards...)` reads it. Two printed cards put cards there by play: Defiled 13_105
+(four [orc] cards in its owner's discard pile, in place of its twilight cost) and Gollum, Her Sneak 13_50 (a
+Déagol in his owner's discard pile, to play himself from it). Déagol 13_46 is a Free Peoples follower: in the
+Shadow player's deck he is `GetShadowCard`, and the Free Peoples player's own copy is the other player's
+(Card_13_050_Tests, Card_13_105_Tests).
 
 **What an ally bears is in the support area.** A "support card" is a card in a support area or borne by a card that is (`mechanics/SupportAreaTests`): a Shadow condition on an ally (Weary 4_212 plays on a companion or ally) or on a site the Shadow player controls (Pillage of Rohan 4_167, Wolves of Isengard 5_69, No Retreat 4_30; `ShadowTakeControlOfSite(scn.GetSite(n))` after `SkipToSite(n + 1)`, then `AttachCardsTo(site, card)`) is a valid candidate for "a Shadow support card", and the same card on a companion is the invalid one beside it.
 
@@ -1134,6 +1149,14 @@ would lay nothing, and the constructor refuses the site map with an IllegalArgum
 is needed in the first fellowship phase, make the whole path unordered: `putAll(ShadowsSites); put("site1", id)`
 (the default format will do) and `StartGame(scn.GetFreepsSite("site1"))` start at that site with its text in
 force; or an ad hoc modifier that does what the site does stands in.
+
+**"Replace the fellowship's current site with a site from your adventure deck" wants a Shadows-block path.** On
+a numbered path the site under the fellowship on player 1's first turn is the Shadow player's own, and his
+adventure deck holds no other site of that number: Úlairë Nelya 11_222's ability is offered, he exerts, and
+nothing is replaced. On a Shadows-block path the Shadow player holds the sites not yet laid:
+`ShadowUseCardAction(nelya)`, `ShadowChooseCardBPFromSelection(site)`, and `GetCurrentSite()` is the new one
+(Card_13_021_Tests). The only Free Peoples card that replaces the current site is There's Another Way 12_40, in
+the regroup phase.
 
 **A battleground or a forest site needs no cheat.** The Towers path has both at site 2: Uruk Camp 4_335
 (Battleground, Plains; each Uruk-hai played must exert) and Derndingle 4_330 (Forest; move limit +1 while an
