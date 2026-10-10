@@ -581,10 +581,6 @@ If updating this enum, be sure to update `Token` as well.
     * WISE
     * BURGLAR
 * PC keywords:
-    * CONCEALED
-      Unused
-    * EXPOSED
-      Unused
     * RELENTLESS
 
 ## Kill Cause
@@ -1792,7 +1788,7 @@ In general, although the names of modifiers are case-insensitive, the names of t
     * unloaded
       default: false
 * AddNoTwilightForCompanionMove
- Companions matching `filter` add 0 twilight when moving instead of the default 1.  Used by the obsolete Second Edition and the nascent PC concealed keyword.
+ Companions matching `filter` add 0 twilight when moving instead of the default 1.  Used by the obsolete Second Edition.
     * filter
       required
 * AddCulture
