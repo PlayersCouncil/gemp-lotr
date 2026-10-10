@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """wf.py status            where each tracked batch workflow has got to
    wf.py show <folder>     everything its agents reported
-   wf.py track <folder> <run id>"""
+   wf.py track <folder> <run id> [<a,b,c> [repo|cards]]   (close.py --launched does this)"""
 import json, sys
 from pathlib import Path
 def _workflows_dir():
@@ -73,7 +73,12 @@ cmd = sys.argv[1] if len(sys.argv) > 1 else "status"
 if cmd == "track":
     tracked[sys.argv[2]] = {"run": sys.argv[3], "landed": False, "lean": True}   # everything tracked from 2026-10-05 18:40Z is the cut-down pipeline
     if len(sys.argv) > 4: tracked[sys.argv[2]]["cards"] = sys.argv[4].split(",")
+    # Which working tree it runs in ("repo", the main one, or "cards", the second) and when it was launched.
+    import datetime
+    tracked[sys.argv[2]]["tree"] = sys.argv[5] if len(sys.argv) > 5 else ("repo" if sys.argv[2].startswith("engine-pass") else "cards")
+    tracked[sys.argv[2]]["at"] = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%MZ")
     TRACK.write_text(json.dumps(tracked, indent=1))
+    print("tracking %s (%s) in the tree '%s'" % (sys.argv[2], sys.argv[3], tracked[sys.argv[2]]["tree"]))
 elif cmd == "landed":
     tracked[sys.argv[2]]["landed"] = True
     TRACK.write_text(json.dumps(tracked, indent=1))

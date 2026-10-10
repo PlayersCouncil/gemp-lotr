@@ -29,10 +29,12 @@ As it is being worked (Ketura, 2026-10-08): the V-sets (done), the PC errata, th
 tests are recent and want less attention (layout and the standard's form more than new coverage), then the tests
 under `at/`, then the Decipher sets, the Hobbit sets last.
 
-The tests under `at/` (written before the rig; thirty-odd files) are not ported line by line. For each, what it
-guards is written down (the bug, the behaviour, the interaction), and that is the brief for a new test written to
-the standard, in `mechanics/` if it is about a rule or in the file of the card it is most about. The dormant test
-files for earlier iterations of PC cards are kept compiling in step.
+The tests under `at/` (written before the rig; 46 files, 336 methods) are not ported line by line. For each, what
+it guards is written down (the bug, the behaviour, the interaction), and that is the brief for a new test written
+to the standard, in `mechanics/` if it is about a rule or, as a lone test, in the file of the card it is most
+about, where it is a start for that card's own batch. A survey wrote the directives and a report for Ketura;
+batches of them are converted and landed (`roles/orchestrator.md`, "The old `at` tests"). The dormant test files
+for earlier iterations of PC cards are kept compiling in step.
 
 A chunk is one culture file of one set (`file:set01-Elven`), or one V-set, small enough for Ketura to review in a
 sitting. Nothing in a chunk is finished until she has approved it.
@@ -43,6 +45,9 @@ sitting. Nothing in a chunk is finished until she has approved it.
 Ketura's repository, publishes the tracker, changes the engine, the rig and the tools between waves, and talks to
 Ketura. It does not read the agents' reports: its context is re-read on every step for the whole session, so
 whatever a batch puts into it is paid for until the session ends. A batch comes back to it as a few lines.
+Brief: `roles/orchestrator.md`, the craft of it (what the work costs and why it is paced as it is, a landing in
+four steps, the two working trees, writing an engine pass's queue, filing Ketura's answers, what to do after a
+restart or a compacted context, and what has bitten). Read it whole before the first launch of a session.
 
 **An author** takes a few cards and writes each one's test file, in two stages that must stay in order: first
 working out what the card should do from its text and the rules alone, then writing and running the tests. Brief:
@@ -128,17 +133,22 @@ pipelines, land what has finished, launch the next cards and schedule the next m
 wakes a session that has gone quiet. `scripts/orchestrator/wf.py` (`track`, `status`, `show`, `landed`) reads the
 journals, which it finds by itself in a new session.
 
-**When a pipeline returns**, the orchestrator does five small things and reads nothing:
+**When a pipeline returns**, the orchestrator takes four steps and reads nothing (`scripts/orchestrator/close.py`
+has them in its header, `roles/orchestrator.md` the reasons):
 
-1. `scripts/orchestrator/postland.py <folder>`: the batch's usage row, the tracker's data, a bundle of the new
-   commits and one zip of the state files that changed.
-2. Carries the two files it names to `Claude outputs/card-tests/transport/` on her machine.
-3. There: `python3 ".../transport/apply-sync.py" <head>`, which unpacks the state and fetches the bundle into her
-   branch, and answers with the head.
-4. `postland.py --mark`, and publishes the tracker (the page and `tracker-data.js` from the working folder's
-   `publish/`, to the same artifact).
-5. Launches the next batch from the queue, and tells Ketura what landed in a line: the cards, and the numbers
-   filed. She reads the registers; nothing in them is repeated to her.
+1. `close.py <folder>`: brings a batch made in the second tree onto the branch, then `postland.py` (the batch's
+   usage row, the tracker's data, a bundle of the new commits and one zip of the state files that changed), and
+   prints what to carry, what to run on her machine and what to launch next.
+2. In one step: carries the files it names to `Claude outputs/card-tests/transport/` on her machine, publishes the
+   tracker (the page and `tracker-data.js` from the working folder's `publish/`, to the same artifact), and
+   launches the next batch from the queue.
+3. On her machine: `python3 ".../transport/apply-sync.py" <head>`, which unpacks the state and fetches the bundle
+   into her branch, and answers with the head.
+4. `close.py --launched <new folder> <run> <ids> --synced <head>`: tracks the new run, records that the sync
+   arrived, and rewrites the "Running now" block of `HANDOFF.md`.
+
+Then it tells Ketura what landed in a line: the cards, and the numbers filed. She reads the registers; nothing in
+them is repeated to her.
 
 What the lander could not settle comes back under `needs_orchestrator`, and is the only thing to look into. What
 authors and reviewers report under "documentation issues" and "standard issues" used to pile up in a file for the
@@ -150,7 +160,7 @@ file between waves, with the tools and the briefs open.
 
 1. Author, blind: `packet.py <id> --blind --terms`. Write the ledger file and, for each check, the situation and
    the outcome the text calls for. Write down every doubt as a question.
-2. Author, sighted: `packet.py <id> --with-test`. For an existing test file, account for every existing test: it
+2. Author, sighted: `packet.py <id> --only-withheld`. For an existing test file, account for every existing test: it
    claims a check, or it is redundant, or it knows something the ledger missed (then the ledger is what changes),
    or it contradicts the ledger (then it is a question; existing PC tests often encode a ruling).
 3. Author: write the file; `lint.py <id>`; `cardtest.py run <id> --out <name>`. (The run of stock mistakes,
@@ -309,17 +319,25 @@ The cloud clone does not outlive the session. `scripts/orchestrator/bootstrap.sh
 say what to bundle and zip on her machine and stage here first. It clones `PlayersCouncil/gemp-lotr`, fetches
 the branch from the bundle, unpacks the state folder and `generator_sheets/`, records her branch head as the
 last one sent and the state files as already hers, and runs `cardtest.py setup`. Then `cardtest.py suite all`
-to confirm the starting point is green, before anything is launched. The workspace can also restart in the
-middle of a session: files survive, running processes do not, so the landers commit and the orchestrator sends
+to confirm the starting point is green, before anything is launched. `HANDOFF.md` in the state folder says what
+was running and what Ketura has said that no queue holds yet: read it after `roles/orchestrator.md`. The
+workspace can also restart in the middle of a session (`roles/orchestrator.md`, "After the workspace has
+restarted"): files survive, running processes do not, so the landers commit and the orchestrator sends
 at every landing. The scripts under `scripts/orchestrator/` take the working folder from `$GEMP_WORK`
 (`/home/claude/work`) and find the session's workflow journals by themselves.
 
 ## Reference
 
+- `roles/orchestrator.md`: the orchestrator's own brief.
 - `roles/author.md`, `roles/review-and-fix.md`, `roles/fixer.md`, `roles/lander.md`: the briefs given to sub-agents.
-- `scripts/orchestrator/`: `postland.py` and `apply-sync.py` (after a landing), `wf.py` (where each run stands, and
-  its reports), `bootstrap.sh` (a fresh session), `suite-run.sh` (the suite on the committed head, in a second clone).
+- `scripts/orchestrator/`: `close.py` (a landing, start to finish; it runs `integrate.sh` and `postland.py`),
+  `apply-sync.py` (on her machine), `answers.py` (filing a set of her answers), `wf.py` (where each run stands, and
+  its reports), `integrate.sh` with `resolve_made.py` (the second working tree), `bootstrap.sh` (a fresh session),
+  `suite-run.sh` (the suite on the committed head, in a second clone), `cost.py` (what a run's steps cost),
+  `at_batches.py` and `at_report.py` (the `at` conversion's batches, and Ketura's report on the old tests).
 - `workflows/card-batch.js`: one batch, start to finish, as a Workflow script.
+- `workflows/at-survey.js` with `roles/at-survey.md`, and `workflows/at-convert.js` with `roles/at-convert.md` and
+  `roles/at-land.md`: the old `at` tests, surveyed and then converted batch by batch.
 - `workflows/engine-pass.js` with `roles/engine.md`: an engine pass between waves. The orchestrator writes the
   queue of items as a file in the state (`orchestrator/engine-pass-<n>.md`, one section an item); one agent takes
   each in turn, commits it with `landing.py commit`, and writes a report beside the queue. `roles/doc-triage.md`

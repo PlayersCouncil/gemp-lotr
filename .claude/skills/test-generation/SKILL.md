@@ -238,7 +238,9 @@ Which checks a clause lists follows from its words, and the analyst is expected 
 - "make each…", "make all… until…" on an event or a special ability → a `Rule` clause citing CR 4.2 "event"
   (some effects affect only what was there when they were used): a test that a card which becomes one of them
   afterwards is not affected. The game writes this into each definition, not into the engine, so it is each
-  card's to show. (Ketura has confirmed it for special abilities as for events.)
+  card's to show. (For an EVENT it is the rule. For an ability of a card in play Ketura has ruled it card by card: a
+  snapshot where the cards it names are on the table when it is used, the standing filter where its text could do
+  nothing as a snapshot, as Not Feared in Sunlight 52_107, F-0217: `lookup.py "make each"`.)
 - "lose…", "cannot…" for a time → a `Ruling` clause: "can't" beats "can", so what was lost is not given back
   by another card before the time is up. Where the card's own text says so ("loses fierce and cannot gain fierce
   until ...", Prized Lagan 68_110), the "cannot gain" half may stand as an `Effect` clause of its own listing
@@ -361,6 +363,11 @@ on: `AwaitingFellowshipPhaseActions()` and its kin, a named decision, a pending 
 `GameIsFinished()`. This is what catches a trigger left dangling or a response window nobody expected, and it is
 the proof in a test that something did *not* happen. The conformance check also takes the phase read on its own
 (`assertEquals(Phase.REGROUP, scn.GetCurrentPhase())`), which says less: it does not show that nothing is pending.
+A test that makes no play and gives no answer after `StartGame()` (a standing modifier read in the fellowship
+phase), or whose last rig call is a skip to a phase followed only by readings, owes none: there is no last
+action for the game to have come to rest after. Adding one does no harm. What such a test may not do is read an
+offer as ABSENT with nothing beside it that shows the player was being asked (the conformance check's `not-asked`
+warning): put his `Awaiting...PhaseActions()` or his decision beside that reading.
 
 **Expected values come from the text.** Work out what should happen, write it down, then run it. Do not run the
 game and copy what it did. Where a number is a sum, the comment spells the sum:

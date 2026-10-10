@@ -1,0 +1,36 @@
+NOTES FOR THE DECIPHER SETS (begun 2026-10-10, before the phase: things earlier work left for it. The orchestrator
+adds to this file; a batch's `notes` argument points its agents here.)
+
+WHAT IS ALREADY IN A DECIPHER CARD'S FILE
+- The conversion of the old `at` tests put LONE TESTS into many Decipher cards' files (a test of an interaction,
+  written to the Standard, with no ledger): `orchestrator/at-convert/PLAN.md` lists every home. They are existing
+  tests: account for each in stage 2 as the brief says (it claims a check, or it is a clause of its own, usually
+  `Interaction`), keep it active, and do not rewrite one that passes the conformance check.
+- A rule shown in a `mechanics/` class is not shown again card by card unless the Standard asks for it on the card
+  (`ls mechanics/`; the class comment says what each is about).
+
+DEFINITIONS ALREADY CORRECTED, WITH NO CARD TESTS YET
+- 13_75, 13_52, 4_18, 4_15 (engine pass 21, on Ketura's rulings F-0041, F-0058, F-0283): corrected, and shown only
+  by three mechanics classes (YouMayOnAStandingTriggerIsAskedTests, EventThatPlaysFromADiscardPileNeedsBothCostsTests,
+  MinionThatAssignsItselfToAnAllyTests). Do not report them as findings again; `packet.py` prints the text a
+  definition had before a campaign commit changed it.
+- 5_7, 7_88, 1_365 (F-0347 to F-0349, at landing of the batch at-mech-triggers): the Q-0034 requirement is in.
+- Candidates filed and not yet answered: F-0345 (Boromir 18_40, "a possession" fetched only if [gondor]) and
+  F-0346 (Wish For Our Kinfolk 8_8, a Dwarf ally pays "Exert a Dwarf companion").
+
+WHAT THE EARLIER PHASES GOT WRONG MORE THAN ONCE
+- Read every helper card's definition before resting a board on it (`packet.py --defs <ids>`); comments in older
+  test files name helpers wrongly in places.
+- Where a player is read as NOT offered an ability that has a cost, he must be able to PAY that cost on that
+  board, or the reading shows nothing.
+- A phase action whose text has no "your" is open to both players on purpose where an older test asserts it; that
+  is no finding (`lookup.py F-0312`).
+- An optional trigger or ability with no cost that is offered when it would do nothing is the commonest finding
+  there is (Q-0034; about one card in eleven so far). Look the ruling and its exceptions up before filing it: an
+  optional DRAW is still offered with an empty draw deck (Q-0029), and an action with a cost is offered and flagged.
+
+TO ASK KETURA WHEN THE SET COMES UP
+- Set 7: the three `assignmentCost` cards (7_197, Morgul Spawn 7_200, 7_201: "The Free Peoples player must exert
+  a companion to assign this minion") still ask ahead of the assigning and cannot be taken by Éowyn 17_96's
+  action. Whether her reading of F-0308 (the cost is paid as he assigns, by a card too, and not asked ahead)
+  reaches them has not been put to her.

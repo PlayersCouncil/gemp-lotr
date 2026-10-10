@@ -65,8 +65,11 @@ them: to look for a helper or a printed text in stage 1, use `packet.py --find <
 that card is neither one of your batch nor the Decipher original of one. Only those are shut: another card that
 shares a title with one of yours (a second Denethor) may be read as a helper like any other.
 
-**Stage 2, with everything.** Run `packet.py <id> --with-test`, which prints the definition and the test file and
-so ends stage 1 for that card: its plan is saved first. If the card already has behavioural tests, go
+**Stage 2, with everything.** Run `packet.py <id> --only-withheld`, which prints what the blind packet held back
+(the definition in full, sheet against definition, an erratum's original, the test file) and so ends stage 1 for
+that card: its plan is saved first. (`--with-test` prints the blind packet and the glossary over again in front
+of it.) A long test file overruns the output limit and the middle of it is cut out of the print: where the print
+says so, read the test file itself for the rest. If the card already has behavioural tests, go
 through them one by one against your plan: each either claims one of your checks (keep it, adapted to the
 standard), or duplicates another, or covers something your ledger missed (then your ledger was wrong: fix it), or
 asserts something your plan contradicts. That last kind is a question, not a mistake to overwrite: existing tests
@@ -96,7 +99,9 @@ card's definition is fine at any stage; it is only the card under test whose imp
 If an existing test asserts one reading of something you wrote down as a question, keep that test active, and
 report the question with a note that the existing test takes that reading. A new question where no old test takes a reading gets one test,
 of the likelier reading: active if the game already passes it, parked on the question if it does not. No test of
-the other reading is written until she answers.
+the other reading is written until she answers, with the one exception the Standard names: where an existing
+test's reading goes against the plain words of the text, the existing test stays active AND a test of the text's
+reading is written and parked on the question, ready to go live on her ruling.
 
 ## When a test fails
 
