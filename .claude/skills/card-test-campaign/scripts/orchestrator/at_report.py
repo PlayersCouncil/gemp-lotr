@@ -43,6 +43,7 @@ def main():
                 state = {"covered": "already covered by", "part": "partly covered; the rest goes to", "new": "goes to"}.get(covered, "goes to")
                 fate = "%s %s%s" % (state, Path(home).stem, (" as " + new_name) if new_name and new_name != "-" and covered != "covered" else "")
             out.append("- **%s**: %s\n  [%s; %s]" % (method, sentence.strip() or "(no sentence written)", KIND.get(kind, kind), fate))
+    total = max(total, done + sum(int(re.search(r"\((\d+)\)", w).group(1)) for w in waiting))   # methods already converted are gone from at/
     head = ["# The old at/ tests: what each one checks",
             "",
             "One line for each of the %d test methods in the %d files of `at/`, written by the survey that comes before their conversion "
