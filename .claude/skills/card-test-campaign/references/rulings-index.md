@@ -491,6 +491,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Check D on "until the regroup phase" for an effect that can begin in a regroup phase (Q-0160, open)
 - Check D on a delayed "at the start of the regroup phase" that an ability sets up: fight a skirmish between (Under Foot 60_52, Flaming Brand 52_32) [Q-0164]
 - A filter that feeds a count. Where a filter feeds a COUNT ("for each X stacked here", "for each X you can spot"), lay the board so the count under ...
+- "Each site" on a modifier: the sites laid, and a path of a second block (No Stranger to the Shadows 1_108)
 - A count "this phase" against the same count this turn
 - A threshold that is a percentage wants a board large enough to tell the neighbouring numbers apart (94_5) [F-0325]
 - A correction of several lines for mutate.py [F-0379]
