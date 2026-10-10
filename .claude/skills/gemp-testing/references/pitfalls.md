@@ -1067,7 +1067,10 @@ nobody at the table). Never read `getModifiersQuerying().isHandRevealed` or atta
 **A shuffle into a draw deck always shuffles.** Taking "you may shuffle up to 2 ... from your discard pile
 into your draw deck", or "shuffle any number of ... in play into your draw deck", and choosing none, or with
 nothing there to choose, reads one more shuffle of that deck and its count unchanged; declining an offer reads
-none (Q-0102, Q-0112).
+none (Q-0102, Q-0112). A shuffle of exactly one behind a cost does the same: Grimir 1_17 ("Exert Grimir to
+shuffle a [dwarven] event from your discard pile into your draw deck", `shuffleCardsFromDiscardIntoDrawDeck`
+with a `choose(...)`) is offered with no such event in the pile (Q-0034: it has a cost); taken, he exerts,
+nobody is asked for a card, and the deck is shuffled once more with its count unchanged (`Card_01_017_Tests`).
 
 ## Hinder, The One Ring and Maps
 
