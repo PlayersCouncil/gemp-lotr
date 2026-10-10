@@ -169,8 +169,10 @@ def next_launch():
             out.append("next `at` batch: workflows/at-convert.js with args\n  %s\n  then: close.py --launched at-%s <run id> %s --tree %s --synced <head>" % (
                 json.dumps(args), nxt, nxt, "cards" if engine else "repo"))
     for name, ids in card_queues().items():
-        if ids:
-            out.append("%s: %d card(s) left; next %s (workflows/card-batch.js, three or four to a batch)" % (name, len(ids), " ".join(ids[:4])))
+        if ids and (nxt or [f for f in at_work("cards") + at_work("repo") if f.startswith("at-")]):
+            out.append("%s: %d card(s) left, WAITING until the `at` conversion is finished (HANDOFF.md, \"Next\")" % (name, len(ids)))
+        elif ids:
+            out.append("%s: %d card(s) left; next %s (workflows/card-batch.js, three or four to a batch; HANDOFF.md says with which notes)" % (name, len(ids), " ".join(ids[:4])))
     if not engine:
         out.append("no engine pass has the main tree: batches may run there, two at a time (pass its path as repo)")
     return out

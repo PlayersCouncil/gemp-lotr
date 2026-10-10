@@ -51,6 +51,8 @@ and the board cannot hold the passes (a card played in one changes what the next
 as it takes, and say in your report which of your tests stand for which name of the batch file.
 
 1. **Read the directive**, and the cards' texts it names (`packet.py <id> --blind`), and any ruling it cites.
+   (A directive that reads the twilight pool or the mulligan question after a starting fellowship was written
+   before the pitfall "A starting fellowship" was sharpened: `lookup.py "A starting fellowship"` first.)
    Read the old method too, once: not to copy its lines, but to see that the directive lost nothing it asserted.
    If it did (the old method reads something the directive does not), your test reads it as well, or you say why
    it should not (a ruling contradicts it; it asserted the rig, not the game).
@@ -91,7 +93,9 @@ as it takes, and say in your report which of your tests stand for which name of 
    deck (Q-0029), and an action with a COST is offered and flagged, not withheld.
    **A fault met in passing**, in the definition of a card that is none of your homes (a helper that shows the
    wrong words, a sister card with the same wrong lines): report it under `findings` with the lines and the
-   correction, and write no test for it. The lander writes the lone test when it corrects the card.
+   correction. If the board that shows it is already in your hands, you may write the lone test in that card's
+   own file, parked with `@Ignore("F-0000: ...")`; if not, write none: the lander writes it when it corrects the
+   card.
 4. **A reading the rig cannot give** is not worked round: no helper method, no reaching into the engine, no
    exception relied on. Leave that one reading out, put a comment where it would stand
    (`// waits: G-0000 <what the rig lacks>`), and report it under `rig` with the method you would want.
@@ -106,7 +110,9 @@ as it takes, and say in your report which of your tests stand for which name of 
 
 ## What you may touch
 
-The homes your batch names; the `at/` files your batch's old methods are in; scratch files under `/tmp/<your folder>/`
+The homes your batch names; the `at/` files your batch's old methods are in (and a file under
+`src/test/resources/` that only a deleted old method loaded, which goes with it once a grep shows nothing else
+loads it); scratch files under `/tmp/<your folder>/`
 (or the scratchpad directory your session names, if it names one).
 Nothing else: not a card's definition (show the correction, the lander applies it), not the engine, not the rig,
 not a script, not a document, not git.
