@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_01_332_Tests
@@ -18,9 +19,32 @@ public class Card_01_332_Tests
 				new HashMap<>()
 				{{
 					put("card", "1_332");
-					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// Midgewater Marshes is site 2; the rest is the usual Fellowship path.
+	protected VirtualTableScenario GetMarshesScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("merry", "1_303");      // Merry, From O'er the Brandywine: a second Hobbit; his text needs a weapon
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a companion who is no Hobbit
+				}},
+				new HashMap<>() {{
+					put("site1", "1_319");
+					put("site2", "1_332");
+					put("site3", "1_341");
+					put("site4", "1_343");
+					put("site5", "1_349");
+					put("site6", "1_351");
+					put("site7", "1_353");
+					put("site8", "1_356");
+					put("site9", "1_360");
+				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -57,18 +81,29 @@ public class Card_01_332_Tests
 		assertEquals(2, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void MidgewaterMarshesTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void EachHobbitMovingToMidgewaterMarshesExerts() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetMarshesScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var frodo = scn.GetRingBearer();
+		var merry = scn.GetFreepsCard("merry");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(merry, aragorn);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(1, scn.GetCurrentSiteNumber());
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(merry));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+
+		scn.FreepsPass();
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertEquals("Midgewater Marshes", scn.GetCurrentSite().getBlueprint().getTitle());
+		// Each Hobbit has exerted once, and the Man not at all.
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(1, scn.GetWoundsOn(merry));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

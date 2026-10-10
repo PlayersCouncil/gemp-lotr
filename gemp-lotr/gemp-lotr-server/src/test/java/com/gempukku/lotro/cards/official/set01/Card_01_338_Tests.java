@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_01_338_Tests
@@ -25,6 +26,30 @@ public class Card_01_338_Tests
                     put("guard2", "1_7");
                     put("guard3", "1_7");
                     put("guard4", "1_7");
+                }},
+                new HashMap<>() {{
+                    put("site1", "1_319");
+                    put("site2", "1_327");
+                    put("site3", "1_338");
+                    put("site4", "1_343");
+                    put("site5", "1_349");
+                    put("site6", "1_351");
+                    put("site7", "1_353");
+                    put("site8", "1_356");
+                    put("site9", "1_360");
+                }},
+                VirtualTableScenario.FOTRFrodo,
+                VirtualTableScenario.RulingRing
+        );
+    }
+
+    // The Ford is site 3, after Bree Gate at site 2 (Shadow number 2; its text needs a ranger).
+    protected VirtualTableScenario GetTwoMarkersScenario() throws CardNotFoundException, DecisionResultInvalidException {
+        return new VirtualTableScenario(
+                new HashMap<>()
+                {{
+                    // Úlairë Attëa, Keeper of Dol Guldur: a Nazgûl of cost 6, site number 3; a skirmish ability only
+                    put("attea", "1_229");
                 }},
                 new HashMap<>() {{
                     put("site1", "1_319");
@@ -147,5 +172,46 @@ public class Card_01_338_Tests
         //TWK costs 8, should not be discounted
         //10 - 8
         assertEquals(2, scn.GetTwilight());
+    }
+
+    @Test
+    public void ANazgulPlayedWhileTheFellowshipIsAtAnotherSiteIsNotDiscountedThoughTheFordIsOnThePath() throws DecisionResultInvalidException, CardNotFoundException {
+        var scn = GetTwoMarkersScenario();
+
+        // Each player's own Attëa, for the turn on which that player is the Shadow player
+        var firstPlayersAttea = scn.GetFreepsCard("attea");
+        var secondPlayersAttea = scn.GetShadowCard("attea");
+
+        // The first player's fellowship moves twice in its first turn and comes to rest on the Ford.
+        scn.StartGame();
+        scn.FreepsPass();
+        scn.SkipToMovementDecision();
+        scn.FreepsChooseToMove();
+        assertTrue(scn.AwaitingShadowPhaseActions());
+        assertEquals(3, scn.GetCurrentSiteNumber());
+        assertEquals("Ford of Bruinen", scn.GetCurrentSite().getBlueprint().getTitle());
+        // The control: played to the Ford, a Nazgûl would cost 6 - 5.
+        scn.MoveCardsToHand(secondPlayersAttea);
+        assertEquals(1, scn.GetTwilightCost(secondPlayersAttea));
+
+        // The second player's turn.  His fellowship moves from site 1 to site 2; the first player's marker
+        // stands on the Ford, a site ahead.
+        scn.SkipToOtherPlayersTurn();
+        assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
+        scn.MoveCardsToHand(firstPlayersAttea);
+        scn.SetTwilight(7);
+        scn.ShadowPass();
+
+        assertEquals(2, scn.GetCurrentSiteNumber());
+        // 7 set + 1 companion + 2 for Bree Gate
+        assertEquals(10, scn.GetTwilight());
+        assertEquals(6, scn.GetTwilightCost(firstPlayersAttea));
+        assertTrue(scn.FreepsPlayAvailable(firstPlayersAttea));
+
+        scn.FreepsPlayCard(firstPlayersAttea);
+        // 6 to play + 2 roaming (site number 3, played at site 2), and nothing off for the Ford
+        assertEquals(2, scn.GetTwilight());
+        assertInZone(Zone.SHADOW_CHARACTERS, firstPlayersAttea);
+        assertTrue(scn.FreepsDecisionAvailable("Play Shadow action or Pass"));
     }
 }

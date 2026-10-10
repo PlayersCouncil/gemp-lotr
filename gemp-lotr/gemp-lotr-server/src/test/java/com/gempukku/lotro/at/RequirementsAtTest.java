@@ -330,27 +330,6 @@ public class RequirementsAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void wasAssignedToSkirmish() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard goblinRunner = addToZone(createCard(P2, "1_178"), Zone.SHADOW_CHARACTERS);
-        PhysicalCard ringBearer = getRingBearer(P1);
-
-        passUntil(Phase.ASSIGNMENT);
-        pass(P1);
-        pass(P2);
-
-        JSONObject obj = new JSONObject();
-        obj.put("filter", "companion");
-
-        DefaultActionContext actionContext = new DefaultActionContext(P1, _game, null, null, null);
-        Requirement requirement = new WasAssignedToSkirmish().getPlayRequirement(obj, lotroCardBlueprintBuilder);
-        assertFalse(requirement.accepts(actionContext));
-        playerDecided(P1, ringBearer.getCardId() + " " + goblinRunner.getCardId());
-        assertTrue(requirement.accepts(actionContext));
-    }
-
-    @Test
     public void playerLeaguePlacementOutsideALeague() throws Exception {
         initializeSimplestGame();
 

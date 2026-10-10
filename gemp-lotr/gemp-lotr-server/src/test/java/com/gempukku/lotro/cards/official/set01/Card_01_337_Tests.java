@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_01_337_Tests
@@ -18,9 +19,28 @@ public class Card_01_337_Tests
 				new HashMap<>()
 				{{
 					put("card", "1_337");
-					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// Council Courtyard is site 3; the rest is the usual Fellowship path.  Site 4 is Balin's Tomb, Shadow number 3.
+	protected VirtualTableScenario GetCourtyardScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>(),
+				new HashMap<>() {{
+					put("site1", "1_319");
+					put("site2", "1_331");
+					put("site3", "1_337");
+					put("site4", "1_343");
+					put("site5", "1_349");
+					put("site6", "1_351");
+					put("site7", "1_353");
+					put("site8", "1_356");
+					put("site9", "1_360");
+				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -57,18 +77,42 @@ public class Card_01_337_Tests
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void CouncilCourtyardTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+	@Test
+	public void MovingFromCouncilCourtyardRemovesTwoTwilightBeforeTheMoveAddsItsOwn() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetCourtyardScenario();
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToSite(3);
 
-		assertEquals(0, scn.GetTwilight());
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertEquals("Council Courtyard", scn.GetCurrentSite().getBlueprint().getTitle());
+		scn.SetTwilight(3);
+		assertEquals(3, scn.GetTwilight());
+
+		scn.FreepsPass();
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		// 3 in the pool - 2 on leaving the Courtyard, then 1 companion + 3 for Balin's Tomb
+		assertEquals(5, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void MovingFromCouncilCourtyardWithOneTwilightRemovesItAndTheMovesOwnTwilightIsUntouched() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetCourtyardScenario();
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertEquals("Council Courtyard", scn.GetCurrentSite().getBlueprint().getTitle());
+		scn.SetTwilight(1);
+		assertEquals(1, scn.GetTwilight());
+
+		scn.FreepsPass();
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		// "When you move from" comes before the move's twilight is added: the 1 in the pool is all there is to
+		// remove, and then 1 companion + 3 for Balin's Tomb.  Removed after the move it would be 1 + 4 - 2 = 3.
+		assertEquals(4, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

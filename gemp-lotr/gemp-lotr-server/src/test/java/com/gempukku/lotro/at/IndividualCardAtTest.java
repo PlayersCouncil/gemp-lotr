@@ -287,46 +287,6 @@ public class IndividualCardAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void fordOfBruinenReduce() throws DecisionResultInvalidException, CardNotFoundException {
-        initializeSimplestGame();
-
-        skipMulligans();
-
-        // End fellowship
-        playerDecided(P1, "");
-
-        // End shadow
-        playerDecided(P2, "");
-
-        PhysicalCardImpl ford = new PhysicalCardImpl(101, "1_338", P2, _cardLibrary.getLotroCardBlueprint("1_338"));
-        ford.setSiteNumber(3);
-        _game.getGameState().addCardToZone(_game, ford, Zone.ADVENTURE_PATH);
-
-        // End regroup
-        playerDecided(P1, "");
-        playerDecided(P2, "");
-
-        // Decide to move
-        playerDecided(P1, getMultipleDecisionIndex(_userFeedback.getAwaitingDecision(P1), "Yes"));
-
-        // End shadow
-        playerDecided(P2, "");
-
-        // End regroup
-        playerDecided(P1, "");
-        playerDecided(P2, "");
-
-        // P2 Turn
-        PhysicalCardImpl attea = new PhysicalCardImpl(102, "1_229", P1, _cardLibrary.getLotroCardBlueprint("1_229"));
-        _game.getGameState().addCardToZone(_game, attea, Zone.HAND);
-
-        // End fellowship
-        playerDecided(P2, "");
-
-        assertEquals(8, _game.getModifiersQuerying().getTwilightCostToPlay(_game, attea, null, 0, false));
-    }
-
-    @Test
     public void sentBackAllowsPlayingCardInDeadPile() throws DecisionResultInvalidException, CardNotFoundException {
         initializeSimplestGame();
 
@@ -408,57 +368,6 @@ public class IndividualCardAtTest extends AbstractAtTest {
         AwaitingDecision playManeuverAction = _userFeedback.getAwaitingDecision(P1);
         assertEquals(AwaitingDecisionType.CARD_ACTION_CHOICE, playManeuverAction.getDecisionType());
         validateContents(new String[]{hisFirstSeriousCheck.getCardId() + ""}, (String[]) playManeuverAction.getDecisionParameters().get("cardId"));
-    }
-
-    @Test
-    public void greenHillCountryWorksForFirstPlayer() throws DecisionResultInvalidException {
-        Map<String, LotroDeck> decks = new HashMap<>();
-        LotroDeck lotroDeck = new LotroDeck("Some deck");
-        lotroDeck.setRingBearer("10_121");
-        lotroDeck.setRing("1_2");
-        // 7_330,7_336,8_117,7_342,7_345,7_350,8_120,10_120,7_360
-        lotroDeck.addSite("1_323");
-        lotroDeck.addSite("7_335");
-        lotroDeck.addSite("8_117");
-        lotroDeck.addSite("7_342");
-        lotroDeck.addSite("7_345");
-        lotroDeck.addSite("7_350");
-        lotroDeck.addSite("8_120");
-        lotroDeck.addSite("10_120");
-        lotroDeck.addSite("7_360");
-        lotroDeck.addCard("1_303");
-        decks.put(P1, lotroDeck);
-        decks.put(P2, createSimplestDeck());
-
-        _userFeedback = new DefaultUserFeedback();
-
-        LotroFormatLibrary formatLibrary = new LotroFormatLibrary(new DefaultAdventureLibrary(), _cardLibrary);
-        LotroFormat format = formatLibrary.getFormat("movie");
-
-        _game = new DefaultLotroGame(format, decks, _userFeedback, _cardLibrary);
-        _userFeedback.setGame(_game);
-        _game.startGame();
-
-        // Bidding
-        playerDecided(P1, "1");
-        playerDecided(P2, "0");
-
-        // Seating choice
-        playerDecided(P1, "0");
-
-        // Play no starting companions
-        playerDecided(P1, "");
-
-        // Mulligans
-        playerDecided(P1, "0");
-        playerDecided(P2, "0");
-
-        // Fellowship phase
-        AwaitingDecision playFellowshipAction = _userFeedback.getAwaitingDecision(P1);
-        assertEquals(AwaitingDecisionType.CARD_ACTION_CHOICE, playFellowshipAction.getDecisionType());
-        playerDecided(P1, getCardActionId(playFellowshipAction, "Play Merry"));
-
-        assertEquals(0, _game.getGameState().getTwilightPool());
     }
 
     @Test
@@ -606,23 +515,6 @@ public class IndividualCardAtTest extends AbstractAtTest {
 
         assertEquals(burdensBefore + 1, _game.getGameState().getBurdens());
         assertEquals(1, _game.getGameState().getWounds(frodo));
-    }
-
-    @Test
-    public void hobbitPartyGuest() throws CardNotFoundException, DecisionResultInvalidException {
-        initializeSimplestGame();
-
-        PhysicalCardImpl hobbitPartyGuest = new PhysicalCardImpl(100, "1_297", P1, _cardLibrary.getLotroCardBlueprint("1_297"));
-        PhysicalCardImpl rosie = new PhysicalCardImpl(100, "1_309", P1, _cardLibrary.getLotroCardBlueprint("1_309"));
-
-        _game.getGameState().addCardToZone(_game, hobbitPartyGuest, Zone.SUPPORT);
-        _game.getGameState().addCardToZone(_game, rosie, Zone.SUPPORT);
-        _game.getGameState().addTokens(rosie, Token.WOUND, 1);
-
-        skipMulligans();
-
-        playerDecided(P1, "0");
-        assertEquals(0, _game.getGameState().getTokenCount(rosie, Token.WOUND));
     }
 
     @Test

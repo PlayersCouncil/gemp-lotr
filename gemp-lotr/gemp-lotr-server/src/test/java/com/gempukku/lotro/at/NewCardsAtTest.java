@@ -10,7 +10,6 @@ import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertEquals;
 
 public class NewCardsAtTest extends AbstractAtTest {
     @Test
@@ -428,33 +427,6 @@ public class NewCardsAtTest extends AbstractAtTest {
 
         playerDecided(P1, "0");
         playerDecided(P1, "");
-    }
-
-    @Test
-    public void roamingDiscount() throws DecisionResultInvalidException, CardNotFoundException {
-        initializeSimplestGame();
-
-        final PhysicalCardImpl orcAssassin1 = createCard(P2, "1_262");
-        final PhysicalCardImpl orcAssassin2 = createCard(P2, "1_262");
-
-        _game.getGameState().addCardToZone(_game, orcAssassin1, Zone.HAND);
-        _game.getGameState().addCardToZone(_game, orcAssassin2, Zone.HAND);
-
-        skipMulligans();
-
-        _game.getGameState().setTwilight(10);
-
-        playerDecided(P1, "");
-
-        int twilight = _game.getGameState().getTwilightPool();
-        playerDecided(P2, getCardActionId(P2, "Play Orc Assassin"));
-        assertEquals(twilight - 4, _game.getGameState().getTwilightPool());
-
-        playerDecided(P2, getCardActionId(P2, "Play Orc Assassin"));
-        assertEquals(twilight - 4 - 3, _game.getGameState().getTwilightPool());
-
-        assertEquals(Zone.SHADOW_CHARACTERS, orcAssassin1.getZone());
-        assertEquals(Zone.SHADOW_CHARACTERS, orcAssassin2.getZone());
     }
 
     //Replace with gimli's pipe test

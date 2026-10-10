@@ -8,12 +8,9 @@ import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.vo.LotroDeck;
 import org.junit.Test;
 
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -327,47 +324,6 @@ public class TriggersAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void movesTo() throws Exception {
-        Map<String, LotroDeck> decks = new HashMap<>();
-        decks.put(P1, createSpecialMovesToDeck());
-        decks.put(P2, createSpecialMovesToDeck());
-        initializeGameWithDecks(decks);
-
-        passUntil(Phase.SHADOW);
-        assertEquals(1, getWounds(getRingBearer(P1)));
-    }
-
-    public LotroDeck createSpecialMovesToDeck() {
-        LotroDeck lotroDeck = new LotroDeck("Some deck");
-        lotroDeck.setRingBearer("10_121");
-        lotroDeck.setRing("1_2");
-        lotroDeck.addSite("7_330");
-        lotroDeck.addSite("1_332");
-        lotroDeck.addSite("8_117");
-        lotroDeck.addSite("7_342");
-        lotroDeck.addSite("7_345");
-        lotroDeck.addSite("7_350");
-        lotroDeck.addSite("8_120");
-        lotroDeck.addSite("10_120");
-        lotroDeck.addSite("7_360");
-        return lotroDeck;
-    }
-
-    @Test
-    public void movesFrom() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard councilCourtyard = addToZone(createCard(P1, "1_337"), Zone.ADVENTURE_DECK);
-
-        passUntil(Phase.FELLOWSHIP);
-        replaceSite(councilCourtyard, 1);
-        setTwilightPool(2);
-
-        passUntil(Phase.SHADOW);
-        assertEquals(2, getTwilightPool());
-    }
-
-    @Test
     public void losesInitiative() throws Exception {
         initializeSimplestGame();
 
@@ -539,25 +495,6 @@ public class TriggersAtTest extends AbstractAtTest {
         pass(P2);
         selectCardAction(P2, whiteHandIntruder);
         hasCardAction(P1, ceorl);
-    }
-
-    @Test
-    public void aboutToHeal() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard frodo = getRingBearer(P1);
-
-        PhysicalCard extraordinaryResilience = addToZone(createCard(P1, "1_287"), Zone.HAND);
-        PhysicalCard theGaffer = addToZone(createCard(P1, "1_291"), Zone.SUPPORT);
-
-        addWounds(frodo, 1);
-
-        passUntil(Phase.FELLOWSHIP);
-        assertEquals(1, getBurdens());
-        selectCardAction(P1, theGaffer);
-        selectCardAction(P1, extraordinaryResilience);
-        assertEquals(1, getWounds(frodo));
-        assertEquals(0, getBurdens());
     }
 
     @Test

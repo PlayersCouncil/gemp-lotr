@@ -5,12 +5,14 @@ import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_01_287_Tests
@@ -21,7 +23,20 @@ public class Card_01_287_Tests
 				new HashMap<>()
 				{{
 					put("card", "1_287");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetHealScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("resilience", "1_287");
+					// The Gaffer, Sam's Father: "Fellowship: Exert The Gaffer to heal Frodo or Sam."
+					put("gaffer", "1_291");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -58,18 +73,39 @@ public class Card_01_287_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void ExtraordinaryResilienceTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void ResponseRemovesABurdenInsteadOfTheRingBearerHealing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetHealScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var resilience = scn.GetFreepsCard("resilience");
+		var gaffer = scn.GetFreepsCard("gaffer");
+		var frodo = scn.GetRingBearer();
+		scn.MoveAlliesToTable(gaffer);
+		scn.MoveCardsToHand(resilience);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.AddWoundsToChar(frodo, 1);
+		// Two burdens, so that "a burden" is told from every burden.
+		scn.AddBurdens(2);
 
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(2, scn.GetBurdens());
+		assertEquals(0, scn.GetWoundsOn(gaffer));
+		assertTrue(scn.FreepsActionAvailable(gaffer));
+
+		// Frodo is the only Frodo or Sam, so the Gaffer's heal is his without a choice.
+		scn.FreepsUseCardAction(gaffer);
+		assertEquals(1, scn.GetWoundsOn(gaffer));
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertTrue(scn.FreepsPlayAvailable(resilience));
+
+		scn.FreepsPlayCard(resilience);
+		// The wound stays, a burden goes, and what the Gaffer paid stays paid.
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(1, scn.GetBurdens());
+		assertEquals(1, scn.GetWoundsOn(gaffer));
+		assertInZone(Zone.DISCARD, resilience);
 		assertEquals(0, scn.GetTwilight());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

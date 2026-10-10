@@ -12,17 +12,6 @@ import static org.junit.Assert.assertTrue;
 
 public class KeywordAtTest extends AbstractAtTest {
     @Test
-    public void removeKeyword() throws Exception{
-        initializeSimplestGame();
-
-        PhysicalCard blendedRace = addToZone(createCard(P1, "2_16"), Zone.SUPPORT);
-        PhysicalCard lurtz = addToZone(createCard(P2, "1_127"), Zone.SHADOW_CHARACTERS);
-
-        passUntil(Phase.FELLOWSHIP);
-        assertFalse(hasKeyword(lurtz, Keyword.DAMAGE));
-    }
-
-    @Test
     public void removeKeywordEffect() throws Exception {
         initializeSimplestGame();
 

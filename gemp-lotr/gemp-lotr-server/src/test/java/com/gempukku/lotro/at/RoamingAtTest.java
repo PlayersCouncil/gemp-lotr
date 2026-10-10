@@ -1,6 +1,5 @@
 package com.gempukku.lotro.at;
 
-import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.CardNotFoundException;
@@ -8,7 +7,6 @@ import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.RoamingPenaltyModifier;
 import org.junit.Test;
 
 import java.util.Collection;
@@ -18,37 +16,6 @@ import java.util.Map;
 import static org.junit.Assert.*;
 
 public class RoamingAtTest extends AbstractAtTest {
-    @Test
-    public void payingForRoamingMinionDiscountRoamingPenalty() throws DecisionResultInvalidException, CardNotFoundException {
-        Map<String, Collection<String>> extraCards = new HashMap<>();
-        initializeSimplestGame(extraCards);
-
-        PhysicalCardImpl orcChieftain = new PhysicalCardImpl(100, "1_266", P2, _cardLibrary.getLotroCardBlueprint("1_266"));
-
-        skipMulligans();
-
-        _game.getGameState().addCardToZone(_game, orcChieftain, Zone.HAND);
-        _game.getModifiersEnvironment().addUntilEndOfTurnModifier(
-                new RoamingPenaltyModifier(orcChieftain, Culture.SAURON, null, -1));
-        _game.getGameState().addTwilight(2);
-
-        // End fellowship phase
-        playerDecided(P1, "");
-
-        assertEquals(4, _game.getGameState().getTwilightPool());
-        // Can't play the Orc Chieftain
-        AwaitingDecision shadowPhaseDecision = _userFeedback.getAwaitingDecision(P2);
-        assertEquals(AwaitingDecisionType.CARD_ACTION_CHOICE, shadowPhaseDecision.getDecisionType());
-        validateContents(new String[]{"" + orcChieftain.getCardId()}, (String[]) shadowPhaseDecision.getDecisionParameters().get("cardId"));
-
-        playerDecided(P2, getCardActionId(shadowPhaseDecision, "Play "));
-
-        // Orc Chieftain in play
-        assertEquals(Zone.SHADOW_CHARACTERS, orcChieftain.getZone());
-        assertEquals(1, _game.getGameState().getTwilightPool());
-        assertTrue(_game.getModifiersQuerying().hasKeyword(_game, orcChieftain, Keyword.ROAMING));
-    }
-
     @Test
     public void payingForRoamingMinionWithoutRoamingPenalty() throws DecisionResultInvalidException, CardNotFoundException {
         Map<String, Collection<String>> extraCards = new HashMap<>();

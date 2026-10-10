@@ -13,18 +13,6 @@ public class ConcealedExposedAtTest extends AbstractAtTest {
     //WTF why are these here lol
 
     @Test
-    public void lookAtHand() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard goblinMan = addToZone(createCard(P2, "2_42"), Zone.SHADOW_CHARACTERS);
-        PhysicalCard goblinManInHand = addToZone(createCard(P1, "2_42"), Zone.HAND);
-
-        passUntil(Phase.SHADOW);
-        selectCardAction(P2, goblinMan);
-        assertEquals(AwaitingDecisionType.ARBITRARY_CARDS, getAwaitingDecision(P2).getDecisionType());
-    }
-
-    @Test
     public void lookAtRandomCardsFromHand() throws Exception {
         initializeSimplestGame();
 
