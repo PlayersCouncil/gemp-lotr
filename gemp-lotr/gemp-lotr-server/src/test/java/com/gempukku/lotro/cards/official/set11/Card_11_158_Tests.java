@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_11_158_Tests
@@ -18,7 +19,22 @@ public class Card_11_158_Tests
 				new HashMap<>()
 				{{
 					put("card", "11_158");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetResponseScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("rack", "11_158");
+					put("guard", "5_83");       // Household Guard: [rohan] Man, vitality 3; Valiant is its whole text
+					// Rohirrim Shield: [rohan] possession on a [rohan] Man.  "Regroup: Discard this possession to
+					// heal bearer."
+					put("shield", "5_91");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -55,18 +71,42 @@ public class Card_11_158_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SwordRackTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	// Ketura on Q-0034: an optional action with no cost whose whole effect would do nothing is not offered.  Once
+	// the discarded possession is stacked here it is no longer in the discard pile, and a second use of the
+	// Response for the same discard would stack nothing.  The game used to offer it again each time it was taken,
+	// for as long as the player went on taking it (F-0357).
+	@Test
+	public void OnceTheDiscardedPossessionIsStackedHereTheResponseIsNotOfferedForItAgain() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetResponseScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var rack = scn.GetFreepsCard("rack");
+		var guard = scn.GetFreepsCard("guard");
+		var shield = scn.GetFreepsCard("shield");
+		scn.MoveCompanionsToTable(guard);
+		scn.AttachCardsTo(guard, shield);
+		scn.MoveCardsToSupportArea(rack);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.AddWoundsToChar(guard, 2);
+		scn.SkipToPhase(Phase.REGROUP);
 
-		assertEquals(1, scn.GetTwilight());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		assertEquals(0, scn.GetStackedCards(rack).size());
+
+		// The shield is discarded from play as the cost of its own ability
+		scn.FreepsUseCardAction(shield);
+		assertInZone(Zone.DISCARD, shield);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(rack));
+
+		scn.FreepsAcceptOptionalTrigger();
+		assertInZone(Zone.STACKED, shield);
+		assertEquals(1, scn.GetStackedCards(rack).size());
+		assertTrue(scn.GetStackedCards(rack).contains(shield));
+
+		// Nothing is left in the discard pile for the Response to stack: the shield's own ability goes on, one
+		// wound of the two is healed, and it is the Shadow player's turn to act
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(rack));
+		assertEquals(1, scn.GetWoundsOn(guard));
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 	}
 }

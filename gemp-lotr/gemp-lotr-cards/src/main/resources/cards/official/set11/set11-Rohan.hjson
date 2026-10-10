@@ -743,15 +743,23 @@
 					filter: culture(rohan),possession
 					memorize: discardedPossession
 				}
-				requires: {
-					type: not
-					requires: {
-						type: hasCardStacked
-						filter: possession
-						on: self
-						count: 2
+				requires: [
+					{
+						type: not
+						requires: {
+							type: hasCardStacked
+							filter: possession
+							on: self
+							count: 2
+						}
 					}
-				}
+					# Once the possession has been stacked (here or on another copy) it is no longer in the
+					# discard pile, and the response is not offered for it again
+					{
+						type: HasCardInDiscard
+						filter: memory(discardedPossession)
+					}
+				]
 				effect: {
 					type: stackCardsFromDiscard
 					select: memory(discardedPossession)

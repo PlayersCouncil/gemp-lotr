@@ -172,10 +172,10 @@
 					filter: culture(men),possession
 					memorize: discardedPossession
 				}
-				# If this is true, then the possession must have been caught by a copy of Countless Companies
-				# so we shouldn't continue pestering the user
+				# If the possession is no longer in the discard pile, then it must have been caught by a copy of
+				# Countless Companies so we shouldn't continue pestering the user
 				requires: {
-					type: CantSpot
+					type: HasCardInDiscard
 					filter: memory(discardedPossession)
 				}
 				effect: {

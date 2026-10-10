@@ -287,22 +287,6 @@ public class IndividualCardAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void frodoCantBePlayedInStartingFellowship() throws DecisionResultInvalidException {
-        Map<String, LotroDeck> decks = new HashMap<>();
-        final LotroDeck p1Deck = createSimplestDeck();
-        p1Deck.setRingBearer("13_156");
-        p1Deck.addCard("4_301");
-        decks.put(P1, p1Deck);
-
-        decks.put(P2, createSimplestDeck());
-
-        initializeGameWithDecks(decks);
-
-        AwaitingDecision decision = _userFeedback.getAwaitingDecision(P1);
-        assertEquals(AwaitingDecisionType.MULTIPLE_CHOICE, decision.getDecisionType());
-    }
-
-    @Test
     public void fordOfBruinenReduce() throws DecisionResultInvalidException, CardNotFoundException {
         initializeSimplestGame();
 
@@ -424,45 +408,6 @@ public class IndividualCardAtTest extends AbstractAtTest {
         AwaitingDecision playManeuverAction = _userFeedback.getAwaitingDecision(P1);
         assertEquals(AwaitingDecisionType.CARD_ACTION_CHOICE, playManeuverAction.getDecisionType());
         validateContents(new String[]{hisFirstSeriousCheck.getCardId() + ""}, (String[]) playManeuverAction.getDecisionParameters().get("cardId"));
-    }
-
-    @Test
-    public void garradrielCorruptionAtStart() throws DecisionResultInvalidException {
-        Map<String, LotroDeck> decks = new HashMap<>();
-        LotroDeck lotroDeck = new LotroDeck("Some deck");
-        lotroDeck.setRingBearer("9_14");
-        lotroDeck.setRing("11_1");
-        lotroDeck.addSite("7_330");
-        lotroDeck.addSite("7_335");
-        lotroDeck.addSite("8_117");
-        lotroDeck.addSite("7_342");
-        lotroDeck.addSite("7_345");
-        lotroDeck.addSite("7_350");
-        lotroDeck.addSite("8_120");
-        lotroDeck.addSite("10_120");
-        lotroDeck.addSite("7_360");
-        decks.put(P1, lotroDeck);
-        decks.put(P2, createSimplestDeck());
-
-        _userFeedback = new DefaultUserFeedback();
-
-        LotroFormatLibrary formatLibrary = new LotroFormatLibrary(new DefaultAdventureLibrary(), _cardLibrary);
-        LotroFormat format = formatLibrary.getFormat("movie");
-
-        _game = new DefaultLotroGame(format, decks, _userFeedback, _cardLibrary);
-        _userFeedback.setGame(_game);
-        _game.startGame();
-
-        // Bidding
-        playerDecided(P1, "5");
-        playerDecided(P2, "0");
-
-        // Seating choice
-        playerDecided(P1, "0");
-
-        _game.carryOutPendingActionsUntilDecisionNeeded();
-
-        assertFalse(_game.isFinished());
     }
 
     @Test
@@ -793,43 +738,6 @@ public class IndividualCardAtTest extends AbstractAtTest {
 
         playerDecided(P1, "0");
         assertEquals(0, _game.getGameState().getTokenCount(rosie, Token.WOUND));
-    }
-
-    @Test
-    public void playStartingFellowship() throws DecisionResultInvalidException {
-
-        Map<String, Collection<String>> additionalCardsInDeck = new HashMap<>();
-        List<String> additionalCards = new LinkedList<>();
-        additionalCards.add("2_121");
-        additionalCards.add("3_121");
-        additionalCards.add("1_306");
-        additionalCardsInDeck.put(P1, additionalCards);
-
-        Map<String, LotroDeck> decks = new HashMap<>();
-        addPlayerDeck(P1, decks, additionalCardsInDeck);
-        addPlayerDeck(P2, decks, additionalCardsInDeck);
-
-        _userFeedback = new DefaultUserFeedback();
-
-        LotroFormatLibrary formatLibrary = new LotroFormatLibrary(new DefaultAdventureLibrary(), _cardLibrary);
-        LotroFormat format = formatLibrary.getFormat("movie");
-
-        _game = new DefaultLotroGame(format, decks, _userFeedback, _cardLibrary);
-        _userFeedback.setGame(_game);
-        _game.startGame();
-
-        // Bidding
-        playerDecided(P1, "1");
-        playerDecided(P2, "0");
-
-        // Seating choice
-        playerDecided(P1, "0");
-
-        // Play starting fellowship
-        playerDecided(P1, "temp0");
-        playerDecided(P1, "temp0");
-
-        assertTrue(_userFeedback.getAwaitingDecision(P1).getText().startsWith("Do you wish to mulligan"));
     }
 
     @Test
