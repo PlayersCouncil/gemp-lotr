@@ -251,6 +251,11 @@
 					type: played
 					filter: self
 				}
+				# Not offered with no [gondor] token to reinforce: it has no cost (Q-0034).
+				requires: {
+					type: CanSpot
+					filter: HasCultureToken(gondor)
+				}
 				effect: {
 					type: reinforceTokens
 					culture: gondor
