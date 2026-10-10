@@ -438,7 +438,16 @@ ends player 1's early, never `FreepsChoose("")`) and then call
 pending it answers nothing and the game has not begun (Card_91_001_Tests). While the choice is pending the game
 keeps the running total of the costs played in the twilight pool: `GetTwilight()` reads it (2 after a cost-2
 companion, a card offered only while the total with its cost is 4 or less), and the pool is emptied as turn 1
-begins (Card_94_003_Tests). A starting fellowship is Free Peoples cards: where a card lets other card types in
+begins (Card_94_003_Tests). The total begins again at 0 as the next player's choice begins and the LAST player's
+total is still in the pool at the mulligan question: a pool read as 0 there, after `ShadowDeclineChoosing()`,
+shows nothing. Read "no tokens for a starting fellowship" in the first fellowship phase, with player 2 having
+played somebody too (mechanics/StartingFellowshipTests). Every rig table gives both players the same deck, so a
+directive's "the game goes on to the mulligan question" is: player 1 asked nothing
+(`FreepsAnyDecisionsAvailable()` false), player 2's "Starting fellowship" pending, and the mulligan question
+only after his answer. While a player chooses, only HIS cards on the table are in force, and `GetBurdens()` is
+his: Éomer 4_267 reads 2 with his own player's Elite Rider 4_265 down and 3 again once the other player is
+choosing. Read a cost, a spot or a resistance while its player is the one being asked. A starting fellowship
+is Free Peoples cards: where a card lets other card types in
 (Race Text 94_3), a Shadow card of those types in the draw deck is never offered, whatever the running total
 (Q-0189, F-0343; mechanics/StartingFellowshipIsFreePeoplesCardsTests).
 
