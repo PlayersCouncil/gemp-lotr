@@ -563,6 +563,18 @@
 				}
 			}
 			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: restored
+					filter: self
+				}
+				effect: {
+					type: discard
+					select: all(hand weapon,attachedTo(bearer))
+				}
+			}
+			{
 				type: modifier
 				modifier: {
 					type: cantBear

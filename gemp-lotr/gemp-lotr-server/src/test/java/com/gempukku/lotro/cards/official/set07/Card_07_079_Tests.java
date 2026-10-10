@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_07_079_Tests
@@ -19,7 +20,21 @@ public class Card_07_079_Tests
 				new HashMap<>()
 				{{
 					put("card", "7_79");
-					// put other cards in here as needed for the test case
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North
+					// Aragorn's Bow: a ranged weapon, cost 1.  "Bearer must be Aragorn."
+					put("bow", "1_90");
+
+					// What restores Anduril by legal play:
+					// Mantle of the White Wizard, [gandalf] condition in the support area: "Each time you
+					// play a spell, you may hinder a [gandalf] artifact to restore a Free Peoples card."
+					put("mantle", "103_3");
+					// Gandalf, Friend of the Shirefolk, bearing Gandalf's Staff, a [gandalf] artifact ("The
+					// twilight cost of each [gandalf] spell is -1")
+					put("gandalf", "1_72");
+					put("staff", "2_22");
+					// A New Light: [gandalf] Fellowship event, a spell, cost 1.  To play, spot a [gandalf]
+					// Wizard.  It takes a minion from the Shadow player's discard pile, where there is none.
+					put("light", "17_15");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -60,18 +75,50 @@ public class Card_07_079_Tests
 		assertEquals(1, card.getBlueprint().getVitality());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void AndurilTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	// Comprehensive Rules 5.0, "hinder": "If Anduril is hindered, a Ranger's Sword cannot be played on Aragorn due
+	// to passive item class restrictions.  But because Anduril's game text does not apply, Aragorn's Bow can now
+	// be played.  Upon being restored, Anduril's game text resumes being applied, upon which Aragorn's Bow would
+	// be discarded."  (F-0360.)  Here a card restores it; mechanics/HinderedBorneCardTests has the same board with
+	// a reconcile doing the restoring, parked on F-0361.
+	@Test
+	public void WhenRestoredDiscardsAWeaponAragornTookUpWhileItWasHindered() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var anduril = scn.GetFreepsCard("card");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var bow = scn.GetFreepsCard("bow");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var staff = scn.GetFreepsCard("staff");
+		var mantle = scn.GetFreepsCard("mantle");
+		var light = scn.GetFreepsCard("light");
+		scn.MoveCompanionsToTable(aragorn, gandalf);
+		scn.AttachCardsTo(aragorn, anduril);
+		scn.AttachCardsTo(gandalf, staff);
+		scn.MoveCardsToSupportArea(mantle);
+		scn.MoveCardsToHand(bow, light);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(3, scn.GetTwilight());
+		// "Cannot bear other weapons"
+		assertFalse(scn.FreepsPlayAvailable(bow));
+
+		scn.HinderCard(anduril);
+		scn.FreepsRefreshDecision();
+		assertTrue(scn.FreepsPlayAvailable(bow));
+		scn.FreepsPlayCard(bow);
+		assertAttachedTo(bow, aragorn);
+
+		// The spell is played, and the Mantle hinders the Staff (the one [gandalf] artifact) to restore Anduril
+		scn.FreepsPlayCard(light);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(mantle));
+		scn.FreepsAcceptOptionalTrigger();
+		assertTrue(scn.IsHindered(staff));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(anduril));
+		scn.FreepsChooseCard(anduril);
+
+		assertFalse(scn.IsHindered(anduril));
+		assertAttachedTo(anduril, aragorn);
+		assertInZone(Zone.DISCARD, bow);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

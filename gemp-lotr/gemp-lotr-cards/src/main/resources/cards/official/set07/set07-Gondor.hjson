@@ -31,6 +31,18 @@
 				}
 			}
 			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: restored
+					filter: self
+				}
+				effect: {
+					type: discard
+					select: all(another,weapon,attachedTo(bearer))
+				}
+			}
+			{
 				type: modifier
 				modifier: {
 					type: addKeyword
