@@ -308,6 +308,9 @@ short by, 0 when it pays in full; the maximum is every candidate; `ShadowDecline
 the exertions owed are all the candidates there are, they are made without a question. A toil card played ON a
 bearer (Berserker Torch 12_136, the only Shadow one) is held to the same arithmetic on each bearer it could go on,
 and its "not offered" reading one short is asserted like a minion's (F-0350, fixed by engine pass 23).
+A trigger that answers a toil exertion ("each time you exert him to play ...", Legolas' Bow 11_23) is put before
+the card lands: at the offer the card is on its way (`VOID_FROM_HAND`) and its cost is not yet in the pool, so read
+where it lies and the pool after the offer is answered.
 
 **Muster is one optional trigger for all of a player's muster characters** (CR 4.2 "muster";
 mechanics/MusterTests). At the start of the regroup phase a player with a muster character and a card in hand has
