@@ -5,6 +5,10 @@
     packet.py <id> --blind          the analyst's packet: what the card says, without how it was implemented
     packet.py <id> --with-test      also prints the card's current test file and ledger, and for an erratum the
                                     definition of the card it is a version of
+    packet.py <id> --only-withheld  only what a blind packet held back, for the second stage: the definition in
+                                    full, where sheet and definition disagree, for an erratum the original's
+                                    definition, and the current test file; not the sheet, the rulings and the
+                                    glossary again
     packet.py <id> --terms          also prints the text of each glossary entry the game text touches
 
     packet.py --find <regex> [--skip <ids>]
@@ -12,7 +16,14 @@
                                     match (id, name, culture, type, race, numbers, keywords, game text; nothing of
                                     how it is implemented), without the ids after --skip and the cards they are
                                     versions of.  The regex is tried, whatever its capitals, against the lines as
-                                    printed, joined by " | ": "\\[gollum\\] condition", "^1_.*\\[gandalf\\].* Man\\b"
+                                    printed, joined by " | ": "\\[gollum\\] condition", "^1_.*\\[gandalf\\].* Man\\b".
+                                    A race or an item class stands after the type and a comma, with no label, in
+                                    whatever capitals the definition has: "companion, Dwarf\\b" finds the Dwarf
+                                    companions and "possession, pipe\\b" the pipes ("race: Dwarf" finds nothing).
+                                    Each card prints up to three lines (the id line, "keywords:", the game text):
+                                    to leave cards out, write it into the regex ("^(?!.*\\[elven\\]).*companion, Elf")
+                                    or filter the id lines only (grep -E '^[0-9]' first), since grep -v on the
+                                    whole output keeps the other two lines of a card it drops
     packet.py --defs <ids> [--skip <ids>]
                                     the definitions of helper cards and nothing else, without their cardInfo,
                                     lore and alternate images
@@ -22,9 +33,10 @@ shut in stage 1, and neither --find nor --defs will print them.
 
 A packet is: where the card lives, the picture the client shows for it (PC cards), what the reviewed spreadsheet
 says it is (Decipher cards) or the errata sheet's row, a later row of that sheet where it has one above the
-definition's revision, the game text the definition had before a commit of the campaign's changed it, its
+definition's revision (a row known never to have been released is named in one line and not printed:
+references/unreleased-sheet-rows.tsv), the game text the definition had before a commit of the campaign's changed it, its
 definition, where sheet and definition disagree (and where the definition's cardInfo is out of step with the rest
-of it, or it has no `side:`), every ruling that names it, then under headings of their own the rules passages that
+of it, it has no `side:`, or an erratum of a site points the other way from its original), every ruling that names it, then under headings of their own the rules passages that
 quote another card of its title and the rulings on other cards that only have its title in their text, the
 glossary entries its text touches, and its other versions.
 """
@@ -75,6 +87,22 @@ def beyond_the_sheet(card_id: str, card) -> list:
         out.append("side: the definition has no `side:` line, and the game takes the side from the culture (%s, so %s). "
                    "Nothing plays differently for it: say so in the ledger's Notes and in your report, and raise no "
                    "finding." % (culture, side))
+    if (card.field("type", "") or "").strip().lower() == "site":
+        # No sheet has a site's direction, so an erratum's is compared with its original's (Doorway to Doom 68_134
+        # had Left where 18_134 has Right: F-0302).
+        mine = (card.field("direction", "") or "").strip()
+        for relation, other in errata_family(card_id):
+            original = g.card_index().get(other)
+            if relation != "this is a version of" or original is None:
+                continue
+            theirs = (original.field("direction", "") or "").strip()
+            if mine.lower() == theirs.lower():
+                out.append("direction: `%s`, as the original %s has it (no sheet has a site's direction)." % (mine or "(none)", other))
+            else:
+                out.append("direction: this erratum has `%s` and the original %s has `%s`. No sheet has a site's direction "
+                           "and no erratum has changed one, so one of the two definitions is wrong: the two card "
+                           "pictures say which was printed. Assert the definition's value in the stats test and report "
+                           "it as a finding (F-0302, Doorway to Doom 68_134)." % (mine or "(none)", other, theirs or "(none)"))
     for field, there, wanted in cardinfo.check(card_id):
         out.append("cardInfo %s: the definition has `%s` where the rest of the definition and the other cards of its kind "
                    "say `%s`. No test reads cardInfo; report it as a `data` finding (Q-0145; `cardinfo.py %s`)."
@@ -84,6 +112,11 @@ def beyond_the_sheet(card_id: str, card) -> list:
 
 def active_test_count(text: str) -> int:
     return len(re.findall(r"^\s*@Test\b", text, re.M))
+
+
+def parked_test_count(text: str) -> int:
+    """The @Ignores among a file's annotations, whether one has a line to itself or shares it with @Test."""
+    return sum(len(re.findall(r"@Ignore\b", line)) for line in text.split("\n") if line.lstrip().startswith("@"))
 
 
 SHEET_FIELDS = ["title", "subtitle", "unique", "culture", "card_type", "card_subtype", "twilight", "strength",
@@ -108,8 +141,11 @@ def printed(card_id: str, card) -> list:
     def has(name):
         return (card.field(name, "") or "").strip()
     culture, kind, race = has("culture"), has("type"), has("race")
-    first = "%s  %s  %s%s%s" % (card_id, g.full_name(card), "[%s] " % culture.lower() if culture else "", kind.lower(),
-                                 ", " + race if race else "")
+    # A race or an item class after the type: "[shire] possession, Pipe", "[gondor] possession, Hand weapon, Shield".
+    m = re.search(r"^\s*itemclass\s*:\s*(\[.*?\]|[^\n\[]*)", card.raw, re.S | re.M)
+    classes = [w.strip() for w in re.split(r"[\n,\[\]]", m.group(1)) if w.strip()] if m else []
+    first = "%s  %s  %s%s%s%s" % (card_id, g.full_name(card), "[%s] " % culture.lower() if culture else "", kind.lower(),
+                                   ", " + race if race else "", "".join(", " + c for c in classes))
     if has("unique").lower() == "true":
         first += "; unique"
     numbers = [(label, has(name)) for label, name in (("twilight", "twilight"), ("strength", "strength"), ("vitality", "vitality"),
@@ -227,7 +263,10 @@ def main(argv):
     if not args:
         print(__doc__)
         return 0
-    blind = "--blind" in argv
+    # --only-withheld: the second stage's packet, what the blind one held back and nothing it has already shown.
+    only_withheld = "--only-withheld" in argv
+    blind = "--blind" in argv and not only_withheld
+    with_test = "--with-test" in argv or only_withheld
     cards = g.card_index()
     tests = g.test_index()
     for n, card_id in enumerate(g.resolve_ids(args)):
@@ -245,7 +284,7 @@ def main(argv):
         if test:
             text = test.read_text(encoding="utf-8", errors="replace")
             n = active_test_count(text)
-            parked = len(re.findall(r"^\s*@Ignore\b", text, re.M))
+            parked = parked_test_count(text)
             print("- Test file: %s (%d active tests, the stat check included%s)"
                   % (g.rel(test), n - parked, ", and %d parked" % parked if parked else ""))
         else:
@@ -262,10 +301,24 @@ def main(argv):
         image = g.client_image(card_id)
         if image:
             print("- Picture the client shows: %s (PC_Cards.js line %d)" % image)
+        for unreleased, why in g.unreleased_rows_of(card_id):
+            print("- A row of the master errata sheet is left out as never released: %s. %s"
+                  % (g.sheet_label(unreleased).replace("master errata sheet, ", ""), why))
+        for reminder in g.reminders_outside_helper(card.field("gametext", "")):
+            elsewhere = [c for c in g.reminder_in_helper_elsewhere(reminder) if c != card_id]
+            print("- Reminder text: the game text writes the reminder %s in `<i>` and not in `<helper>`. The conformance "
+                  "check leaves a reminder out of the ledger's clauses only where it stands in `<helper>`, so this one is "
+                  "written into its clause as printed, with a line in Notes saying so. %s"
+                  % (reminder if len(reminder) <= 90 else reminder[:87] + "...)",
+                     ("%d other definition(s) write the same reminder in `<helper>` (%s): the markup is a `gametext` "
+                      "finding to report (F-0301, Robin Smallburrow 68_111)." % (len(elsewhere), ", ".join(sorted(elsewhere, key=g.id_sort_key)[:4]) + (" ..." if len(elsewhere) > 4 else "")))
+                     if elsewhere else "No definition writes this reminder in `<helper>`, so there is none to bring it into line with."))
         print()
 
         row, sheet_note = g.sheet_for(card_id)
-        if row:
+        if only_withheld:
+            pass
+        elif row:
             print("## The card as the sheets have it (%s)" % g.sheet_label(row))
             if sheet_note:
                 print("Not an exact match: %s." % sheet_note)
@@ -280,7 +333,7 @@ def main(argv):
         else:
             print("## The card as the sheets have it\nNo sheet has this card.  The definition's own game text is all there is.\n")
 
-        for later in g.later_sheet_rows(card_id, row):
+        for later in ([] if only_withheld else g.later_sheet_rows(card_id, row)):
             print("## A later row of the sheet (%s)" % g.sheet_label(later))
             print("The definition says `revision: %d` and the sheet has this row above it.  Either the definition is "
                   "behind the sheet, its labels and `gametext:` stale (F-0294, Shadowfax 67_24: a `gametext` finding, and "
@@ -289,7 +342,7 @@ def main(argv):
                   "(`lookup.py F-0294`)." % (g.revision_of(card), " (" + image[0] + ")" if image else ""))
             print_row(later)
 
-        before = g.gametext_before_campaign(card_id)
+        before = None if only_withheld else g.gametext_before_campaign(card_id)
         if before:
             then, commits = before
             print("## The game text before the campaign changed it")
@@ -327,11 +380,12 @@ def main(argv):
                     print("- " + line)
             print()
 
-        named, mentioned, other_title = rulebook.card_rulings(card_id)
-        print("## Rulings that name this card")
+        named, mentioned, other_title = ([], [], []) if only_withheld else rulebook.card_rulings(card_id)
+        if not only_withheld:
+            print("## Rulings that name this card")
         for entry in named:
             print(entry + "\n")
-        if not named:
+        if not named and not only_withheld:
             print("None in either rules document.\n")
         if other_title:
             print("## Rules passages that quote another card of this title")
@@ -344,8 +398,9 @@ def main(argv):
             for entry in mentioned:
                 print(entry + "\n")
 
-        secs = rulebook.terms_for(card_id)
-        print("## Glossary entries the game text touches")
+        secs = [] if only_withheld else rulebook.terms_for(card_id)
+        if not only_withheld:
+            print("## Glossary entries the game text touches")
         if secs:
             if "--terms" in argv:
                 for book, sec in secs:
@@ -356,18 +411,18 @@ def main(argv):
                 print(", ".join("%s%s" % (sec[1], " (5.0)" if book.in_force else "") for book, sec in secs))
                 print("(read one with: rules.py term \"<name>\")")
                 print()
-        else:
+        elif not only_withheld:
             print("None beyond the basics.\n")
 
         text = (g.plain_text(card.field("gametext", "")) or "").lower()
-        hints = [msg for pat, msg in FORMAT_HINTS if re.search(pat, text)]
+        hints = [] if only_withheld else [msg for pat, msg in FORMAT_HINTS if re.search(pat, text)]
         if hints:
             print("## Format-sensitive rules to consider")
             for h in hints:
                 print("- " + h)
             print()
 
-        if "--with-test" in argv:
+        if with_test:
             # An erratum is usually its original with a few words changed, and its definition a copy with the
             # change made: the original's definition is read beside it in stage 2 (never in a blind packet).
             for relation, other in errata_family(card_id):
@@ -378,13 +433,13 @@ def main(argv):
                     print(original.raw)
                     print("```")
                     print()
-        if "--with-test" in argv and ledger.is_file():
+        if with_test and ledger.is_file() and not only_withheld:
             print("## Current ledger")
             print("```")
             print(ledger.read_text(encoding="utf-8").rstrip())
             print("```")
             print()
-        if "--with-test" in argv and test:
+        if with_test and test:
             print("## Current test file")
             print("```java")
             print(test.read_text(encoding="utf-8", errors="replace"))

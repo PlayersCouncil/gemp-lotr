@@ -6,9 +6,10 @@
     lint.py --summary <what...>     counts only, by rule
     lint.py --form <file.java> [--only <Test,Test>]
                                     only the rules about how a test is written (bookend, reach, exception, adhoc,
-                                    assert, ignore, style, helper, scenario, in-file, alias, same-blueprint), for a
-                                    mechanics class or a card's file that has no ledger yet; with --only, only what
-                                    lies inside the tests named (a lone test added to an old file)
+                                    assert, ignore, style, helper, field, scenario, in-file, alias, same-blueprint,
+                                    conditional, not-asked, not-in-hand), for a mechanics class or a card's file
+                                    that has no ledger yet; with --only, only what lies inside the tests named (a
+                                    lone test added to an old file)
 
 Exit status is 0 when every file given is free of errors.  Warnings do not fail a file.
 
@@ -55,6 +56,10 @@ CLAIM_LINE = re.compile(r"^\s+((?:C-|[+\-CFDLOSRBZK])(?:\s+(?:C-|[+\-CFDLOSRBZK]
 CLAIM_AND_WORDS = re.compile(r"^\s+((?:C-|[+\-CFDLOSRBZK])(?:\s+(?:C-|[+\-CFDLOSRBZK]))*)\s*->\s*([A-Za-z_]\w*)\s+(\S.*?)\s*$")
 TAG_LINE = re.compile(r"^\s*//\s*((?:[A-Z]\d+\s*:\s*[^;]+;?\s*)+)$")
 METHOD = re.compile(r"^\s*(public|protected|private)\s+(?:static\s+)?([\w<>\[\], .]+?)\s+(\w+)\s*\(([^)]*)\)")
+# The same with its parameters running on to the lines below (94_5: two league placements, one to a line).
+METHOD_OPENS = re.compile(r"^\s*(public|protected|private)\s+(?:static\s+)?([\w<>\[\], .]+?)\s+(\w+)\s*\([^)]*$")
+# A field of the class: a declaration at the class's own depth that is no method.
+FIELD = re.compile(r"^\s*(?:(?:public|protected|private|static|final|volatile|transient)\s+)*[\w<>\[\], .?]+?\s+(\w+)\s*(?:=|;)")
 
 FORBIDDEN = [
     (r"\bscn\s*\.\s*(game|gameState|userFeedback)\s*\(\s*\)", "reaches past the rig into the engine; ask for a rig method instead"),
@@ -65,8 +70,14 @@ FORBIDDEN = [
     (r"\bThread\s*\.\s*sleep\b|\bnew\s+Random\b|\bMath\s*\.\s*random\b", "a test may not wait or roll dice"),
     (r"\bsetAccessible\b|java\.lang\.reflect", "reflection is a way round the rig; ask for a rig method instead"),
 ]
+# Looked for in the line as written (the others are tried against the line with its strings emptied).
+FORBIDDEN_AS_WRITTEN = [
+    (r'\b(Freeps|Shadow)Choose\s*\(\s*""\s*\)', "answers a decision with an empty string; FreepsDeclineChoosing() and "
+                                                "ShadowDeclineChoosing() choose nothing, and fail where nothing may be chosen"),
+]
 JUSTIFY = [
-    (r"\b(ApplyAdHocAction|\w*ExecuteAdHocEffect\w*|ApplyAdHoc\w*AutoDiscard)\s*\(", "an ad hoc effect needs its reason on the same line (// lint-ok: ...)"),
+    (r"\b(ApplyAdHocAction|\w*ExecuteAdHocEffect\w*|ApplyAdHoc\w*AutoDiscard|carryOutEffectInPhaseActionByPlayer)\s*\(",
+     "an ad hoc effect needs its reason on the same line (// lint-ok: ...)"),
 ]
 ACTS = re.compile(r"\b(Freeps|Shadow)(PlayCard|UseCardAction|TransferCard|DiscardToHeal|Choose\w*|Accept\w*|Decline\w*|"
                   r"Pass\w*|Assign\w*|Resolve\w*)\s*\(|\b(Pass\w+Actions|BothPass\w*|PassResponses|PassCurrentPhaseActions)\s*\(")
@@ -196,8 +207,14 @@ def split_methods(lines):
         code.append(strip_code(text))
     while i < len(lines):
         if depth == 1:
-            m = METHOD.match(code[i])
-            if m and "(" in code[i]:
+            signature = code[i]
+            if METHOD_OPENS.match(signature):
+                k = i
+                while ")" not in code[k] and k + 1 < len(lines) and k - i < 12:
+                    k += 1
+                    signature += " " + code[k].strip()
+            m = METHOD.match(signature)
+            if m:
                 start, name = i, m.group(3)
                 # Find the opening brace, then its match.
                 d, j, opened = 0, i, False
@@ -221,6 +238,77 @@ def split_methods(lines):
         depth += code[i].count("{") - code[i].count("}")
         i += 1
     return methods, code
+
+
+def under(body, n) -> list:
+    """The lines an `if` or `while` on line n of a test governs: the rest of that line, and its block (with the
+    `else` that follows it) or, where it has no braces, the statement below."""
+    opens = re.search(r"\b(?:if|while)\s*\(", body[n])
+    depth, i = 0, opens.end()
+    while i < len(body[n]):  # to the bracket that closes the condition
+        depth += {"(": 1, ")": -1}.get(body[n][i], 0)
+        i += 1
+        if depth < 0:
+            break
+    rest = body[n][i:]
+    out = [rest]
+    if "{" not in rest:
+        if not rest.strip().rstrip(";") and n + 1 < len(body):
+            out.append(body[n + 1])
+        if rest.strip() or "{" not in (body[n + 1] if n + 1 < len(body) else ""):
+            return out
+        rest = ""
+    depth, k = rest.count("{") - rest.count("}"), n
+    while k + 1 < len(body) and (depth > 0 or (k == n and "{" not in rest) or re.match(r"\s*\}?\s*else\b", body[k + 1])):
+        k += 1
+        out.append(body[k])
+        depth += body[k].count("{") - body[k].count("}")
+    return out
+
+
+def class_fields(code, methods) -> list:
+    """(line index, name) of each field of the class: what is declared at the class's own depth and is no method."""
+    inside = set()
+    for name, start, end, above, ret in methods:
+        inside.update(range(start, end + 1))
+    out, depth = [], 0
+    for i, line in enumerate(code):
+        if depth == 1 and i not in inside:
+            m = FIELD.match(line)
+            if m:
+                out.append((i, m.group(1)))
+        depth += line.count("{") - line.count("}")
+    return out
+
+
+# The moments of a test: a play, an answer, a pass or a skip moves the game on to another decision, and what is read
+# between two of them is read at one decision.
+MOVES_ON = re.compile(r"\b(Freeps|Shadow)(PlayCard|UseCardAction|TransferCard|DiscardToHeal|Choose\w*|Accept\w*|Decline\w*|"
+                      r"Pass\w*|Assign\w*|Resolve\w*|Dismiss\w*)\s*\(|"
+                      r"\b(Pass\w+Actions|BothPass\w*|PassResponses|PassCurrentPhaseActions|Skip\w+|StartGame|Dismiss\w+)\s*\(")
+# An offer read as absent: nothing is offered to a player who is not being asked, whatever the card does.
+NOT_OFFERED = re.compile(r"\bassertFalse\s*\(\s*scn\s*\.\s*(Freeps|Shadow)(\w*(?:Action|Play|Transfer)\w*Available)\s*\(|"
+                         r"\bassertTrue\s*\(\s*scn\s*\.\s*(Freeps|Shadow)(HasCardChoiceNotAvailable)\s*\(")
+# The phase-action bookends are fixed to their seats.
+SEAT_OF_AWAITING = (("Freeps", re.compile(r"\bAwaiting(?:Fellowship|Freeps\w+)PhaseActions\s*\(")),
+                    ("Shadow", re.compile(r"\bAwaitingShadow\w*PhaseActions\s*\(")))
+
+
+def is_asked(side: str, lines) -> bool:
+    """Whether some line among these shows that the player is being asked something: his phase-action bookend, a
+    decision or an optional trigger of his read as there, or an offer to him read as made (he is then at a choice
+    of actions, and another offer read as absent beside it means something)."""
+    for line in lines:
+        if any(seat == side and pattern.search(line) for seat, pattern in SEAT_OF_AWAITING):
+            return True
+        if re.search(r"\b%s(?:\w*DecisionAvailable|AnyDecisionsAvailable|HasOptionalTriggerAvailable|AnyActionsAvailable|"
+                     r"AwaitingRequiredResponseOrder|GetChoiceMin|GetChoiceMax|GetSelectableCount|HasCardChoiceAvailable|"
+                     r"HasBPChoiceAvailable|GetCardChoiceCount|GetBPChoiceCount)\s*\(" % side, line) \
+                and not re.search(r"\bassertFalse\s*\(", line):
+            return True
+        if re.search(r"\bassertTrue\s*\(\s*scn\s*\.\s*%s\w*Available\s*\(" % side, line) and "NotAvailable" not in line:
+            return True
+    return False
 
 
 _baseline = None
@@ -397,12 +485,23 @@ def lint_file(path: Path):
             add("error", "helper", start, "'%s' is neither a test nor a Get...Scenario() method: what it does belongs in the rig" % name)
     if not scenario_methods:
         add("error", "scenario", None, "no Get...Scenario() method")
+    for at, name in class_fields(code, methods):
+        add("error", "field", at, "'%s' is a field: a test class has no fields (a deck kept in one is written into each "
+                                  "Get...Scenario() method, a constant where it is used)" % name)
     if re.search(r"^\s*public\s+class\s+\w+\s+extends\b", raw, re.M):
         add("error", "helper", None, "a card's test class does not extend anything")
 
     stats = [m for m in tests if re.search(r"Stats(AndKeywords)?AreCorrect$", m[0])]
     if not stats:
         add("error", "stats", None, "no ...StatsAndKeywordsAreCorrect test")
+    # A Race to Mount Doom modifier's intensity is a printed field of it (the Standard, "The stats test").
+    if card is not None and (card.field("type", "") or "").strip().lower() == "metasite":
+        for name, start, end, above, ret in stats:
+            if not any(re.match(r"^\s*/?\*+\s*Intensity\s*:", line) for line in lines[start:end + 1]):
+                add("error", "stats", start, "%s: the header has no `Intensity:` line, which a Race to Mount Doom modifier's has" % name)
+            if not any(re.search(r"\bgetIntensity\s*\(", line) for line in code[start:end + 1]):
+                add("error", "stats", start, "%s: never reads getBlueprint().getIntensity(), which a Race to Mount Doom "
+                                             "modifier's stats test asserts at the definition's value" % name)
 
     for i, line in enumerate(lines):
         if re.match(r"^\s*/?\*+\s*LEDGER\b", line):
@@ -455,7 +554,7 @@ def lint_file(path: Path):
                 claimed_tests.add(name)
                 if name not in test_names:
                     add("error", "claim", None, "%s: the ledger gives check %s to %s, which is not a test in the file" % (cid, check, name))
-    parked_tests = {m[0] for m in tests if any(t.startswith("@Ignore") for _, t in m[3])}
+    parked_tests = {m[0] for m in tests if any(t.startswith("@") and re.search(r"@Ignore\b", t) for _, t in m[3])}
     for cid, (ctype, codes, text, line, waived) in clauses.items():
         for check, names in sorted(claims.get(cid, {}).items()):
             if names and all(n in parked_tests for n in names):
@@ -493,8 +592,12 @@ def lint_file(path: Path):
         if clauses and name not in claimed_tests and name not in [x[0] for x in stats]:
             add("error", "claim", start, "%s: the ledger gives this test nothing to claim" % name)
         for _, t in above:
-            if t.startswith("@Ignore") and not re.search(r"\b[FQG]-\d{4}\b", t):
+            parks = t.startswith("@") and re.search(r"@Ignore\b", t)
+            if parks and not re.search(r"\b[FQG]-\d{4}\b", t):
                 add("error", "ignore", start, "%s: @Ignore must name the finding (F-0000), question (Q-0000) or rig request (G-0000) it is parked on" % name)
+            if parks and not t.startswith("@Ignore"):
+                add("error", "ignore", start, "%s: @Ignore shares its line with another annotation: it goes on a line of its own, "
+                                              "where every tool that counts or switches on parked tests looks for it" % name)
             if re.search(r"@Test\s*\(.*expected\s*=", t):
                 add("error", "exception", start, "%s: %s" % (name, NO_EXCEPTIONS))
 
@@ -511,9 +614,19 @@ def lint_file(path: Path):
             for pat, why in FORBIDDEN:
                 if re.search(pat, line) and not let_off(i):
                     add("error", "reach", i, "%s: %s" % (name, why))
+            for pat, why in FORBIDDEN_AS_WRITTEN:
+                if re.search(pat, lines[i]) and re.search(pat.replace('""', '"[^"]*"'), line) and not let_off(i):
+                    add("error", "reach", i, "%s: %s" % (name, why))
             for pat, why in JUSTIFY:
                 if re.search(pat, line) and not let_off(i):
                     add("error", "adhoc", i, "%s: %s" % (name, why))
+            # An answer that is given only if the game asks, or for as long as it asks, lets the test pass whether or
+            # not it does (93_4, 94_17: taken out, the test failed and showed F-0327).
+            if re.search(r"\b(?:if|while)\s*\(.*\bscn\s*\.", line) and any(MOVES_ON.search(x) for x in under(body, offset)) \
+                    and not let_off(i):
+                add("warning", "conditional", i, "%s: an answer is given under a condition (`if` or `while` on a reading of the "
+                    "table), so the test passes whether or not the game asks: a test knows what is asked, asserts it, "
+                    "and answers it" % name)
             if re.search(r"\bassert(DoesNot)?Throws?\w*\s*\(|\btry\s*\{|\bcatch\s*\(", line):
                 add("error", "exception", i, "%s: %s" % (name, NO_EXCEPTIONS))
             if re.search(r"\.getZone\s*\(\s*\)", line) and not let_off(i):
@@ -526,6 +639,47 @@ def lint_file(path: Path):
                 add("error", "bookend", start, "%s: after its last play or answer, never checks what the game is waiting for" % name)
         if not is_stats and not re.search(r"\bassert\w+\s*\(", text):
             add("error", "assert", start, "%s: asserts nothing" % name)
+        # An offer read as absent at a moment when nothing shows that the player is being asked (pitfalls, "A check on
+        # a player who is not being asked anything answers false"): 91_13, 92_24, 94_7 and 94_8's old tests.
+        moves = [n for n, line in enumerate(body) if MOVES_ON.search(line)]
+        for n, line in enumerate(body):
+            for m in NOT_OFFERED.finditer(line):
+                side, read, twin = m.group(1) or m.group(3), m.group(2) or m.group(4), bool(m.group(4))
+                first = max([a for a in moves if a < n], default=-1) + 1
+                last = min([a for a in moves if a > n], default=len(body))
+                beside = body[first:last]
+                then = body[last] if last < len(body) else ""
+                if twin:
+                    # The NotAvailable twin answers true at any decision that is no choice of cards.
+                    asked = any(re.search(r"\b%s(?:HasCardChoiceAvailable|HasBPChoiceAvailable|GetChoiceMin|GetChoiceMax|"
+                                          r"GetCardChoiceCount|GetBPChoiceCount|GetSelectableCount|\w*Revealed\w*|"
+                                          r"\w*DecisionAvailable)\s*\(" % side, x)
+                                and not re.search(r"\bassertFalse\s*\(", x) for x in beside) \
+                        or bool(re.search(r"\b%s(?:Choose\w*|Decline\w*|Dismiss\w*)\s*\(" % side, then))
+                else:
+                    asked = is_asked(side, beside) or bool(re.search(r"\b%s(?!Pass)\w+\s*\(" % side, MOVES_ON.search(then).group(0) if then else ""))
+                if not asked and not let_off(start + n):
+                    add("warning", "not-asked", start + n, "%s: %s%s is read as %s with nothing beside it that shows the %s player "
+                        "is being asked %s (%s): read at any other moment it comes out the same whatever the card does (pitfalls, "
+                        "\"A check on a player who is not being asked anything answers false\")"
+                        % (name, side, read, "true" if twin else "false", "Free Peoples" if side == "Freeps" else "Shadow",
+                           "to choose cards" if twin else "anything",
+                           "a card read as offered in that choice, its minimum, or the decision by its words" if twin else
+                           "his Awaiting...PhaseActions(), a decision of his, or another offer to him read as made"))
+        # A play read as refused for a card the test never puts in a hand (pitfalls, "A play read as not offered for a
+        # card that is not in hand shows nothing": 91_15's old test read Barliman so, from the draw deck).
+        rawtext_of_test = "\n".join(lines[start:end + 1])
+        plays_from_a_deck = card is not None and bool(re.search(r"draw deck", g.plain_text(card.field("gametext", "") or ""), re.I))
+        for refused in dict.fromkeys(re.findall(r"\bassertFalse\s*\(\s*scn\s*\.\s*(?:Freeps|Shadow)PlayAvailable\s*\(\s*(\w+)\s*\)", text)):
+            alias = dict(re.findall(r'\bvar\s+(\w+)\s*=\s*scn\.Get(?:Freeps|Shadow)Card\(\s*"([^"]+)"', rawtext_of_test)).get(refused)
+            one_statement = re.sub(r"\s*\n\s*", " ", rawtext_of_test).split(";")
+            if alias and not plays_from_a_deck and not taken_out_of_deck(one_statement, refused, alias):
+                at = next(n for n, line in enumerate(body) if re.search(r"PlayAvailable\s*\(\s*%s\s*\)" % re.escape(refused), line))
+                if not let_off(start + at):
+                    add("warning", "not-in-hand", start + at, "%s: %s is read as not playable, and no cheat in the test takes it out "
+                        "of its owner's draw deck, where a table leaves every card: there it reads as not playable whatever "
+                        "the card under test does (pitfalls, \"A play read as not offered for a card that is not in hand "
+                        "shows nothing\")" % (name, refused))
         # A choice from a pile goes by blueprint: with a second copy of that blueprint still in the pile the game may
         # hand over either, and a test that then reads the named copy's zone fails at random.  A twin the test never
         # names lies in its owner's draw deck from first to last, so there is nothing to warn of where the test has
@@ -545,6 +699,30 @@ def lint_file(path: Path):
                 add("warning", "same-blueprint", start, "%s: %s is chosen by blueprint, and %s %s the same blueprint (%s): unless "
                     "the twin is out of that pile, either copy may be taken and a reading of %s's zone fails at random"
                     % (name, chosen, ", ".join(twins), "has" if len(twins) == 1 else "have", bp, chosen))
+
+        # It cuts both ways (68_82): at such a choice a card read as NOT offered fails that reading as soon as a card
+        # of its blueprint is offered there.  Cards in play are read one by one (a second copy read as not offered
+        # beside the first is what the Standard asks for), so this is only for a choice the test goes on to answer by
+        # blueprint, which is one among cards that are not in play.
+        moments = [n for n, line in enumerate(body) if MOVES_ON.search(line)]
+        for n, line in enumerate(body):
+            refused = [v for call in re.findall(r"HasCardChoiceNotAvailable\s*\(([^()]*)\)", line) for v in re.findall(r"\w+", call)]
+            if not refused:
+                continue
+            first = max([a for a in moments if a < n], default=-1) + 1
+            last = min([a for a in moments if a > n], default=len(body))
+            by_bp = bool(re.search(r"BPFromSelection\s*\(", body[last])) if last < len(body) else False
+            offered = [v for x in body[first:min(last + 1, len(body))]
+                       for call in re.findall(r"(?:HasCardChoiceAvailable|BPFromSelection)\s*\(([^()]*)\)", x) for v in re.findall(r"\w+", call)]
+            for no in dict.fromkeys(refused):
+                same = sorted({yes for yes in offered if yes != no and var_alias.get(yes) and var_alias.get(no)
+                               and alias_bp.get(var_alias[yes]) and alias_bp.get(var_alias[yes]) == alias_bp.get(var_alias[no])})
+                if same and by_bp:
+                    add("warning", "same-blueprint", start + n, "%s: %s is read as not offered and %s, of the same blueprint (%s), "
+                        "as offered: where the choice is among cards that are not in play (a search of a deck, a discard "
+                        "pile, a reveal) both are read by blueprint, and the reading of %s fails as soon as the other "
+                        "holds; a card read as not offered there has a blueprint no offered card has"
+                        % (name, no, ", ".join(same), alias_bp[var_alias[no]], no))
 
     # A card that is not unique and speaks of itself ("this condition", "here"): the Standard's F asks for a second
     # copy in play wherever it could change a reading, and no scenario can hold one with a single alias of the
@@ -637,8 +815,8 @@ def lint_file(path: Path):
 
 
 # The rules that are about how a test is written, whatever file it is in (--form).
-FORM_RULES = {"bookend", "reach", "exception", "adhoc", "assert", "ignore", "style", "helper", "scenario", "in-file", "alias",
-              "same-blueprint"}
+FORM_RULES = {"bookend", "reach", "exception", "adhoc", "assert", "ignore", "style", "helper", "field", "scenario", "in-file",
+              "alias", "same-blueprint", "conditional", "not-asked", "not-in-hand"}
 
 
 def main(argv):
@@ -662,7 +840,19 @@ def main(argv):
                 if card_id in tests:
                     files.append(tests[card_id])
     failed, by_rule, total_off = 0, {}, 0
+
+    def shown(f):
+        """A file as the repository names it, or by its whole path where it lies outside (a probe under /tmp)."""
+        try:
+            return g.rel(f)
+        except ValueError:
+            return str(f)
+
     for f in files:
+        if not f.is_file():
+            print("FAIL: %s: no such file" % f)
+            failed += 1
+            continue
         findings, lets_off = lint_file(f)
         if "--form" in argv:
             findings = [x for x in findings if x.rule in FORM_RULES]
@@ -687,13 +877,13 @@ def main(argv):
                                                           ", %d let off" % lets_off if lets_off else ""))
             continue
         if findings or lets_off:
-            print("%s: %s" % ("FAIL" if errors else "ok", g.rel(f)))
+            print("%s: %s" % ("FAIL" if errors else "ok", shown(f)))
             for x in sorted(findings, key=lambda x: x.line):
                 print("  %-7s %-11s line %-4d %s" % (x.level, x.rule, x.line, x.message))
             if lets_off:
                 print("  note    %d line(s) let off with lint-ok" % lets_off)
         else:
-            print("ok: %s" % g.rel(f))
+            print("ok: %s" % shown(f))
     if "--summary" in argv or len(files) > 1:
         print("\n%d of %d files pass.  %d line(s) let off." % (len(files) - failed, len(files), total_off))
         for (level, rule), n in sorted(by_rule.items(), key=lambda kv: -kv[1]):

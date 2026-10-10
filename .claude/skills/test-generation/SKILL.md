@@ -327,7 +327,7 @@ possession's +2) is a printed field: asserted here, and read on the bearer in th
 no clause of its own. Timewords are not a printed field: they are how a
 definition says when an event may be played, and a definition may carry more of them than the card prints.
 A Race to Mount Doom modifier's intensity is one: its header has an `Intensity:` line and the test reads
-`getBlueprint().getIntensity()`, at the definition's value (no sheet has these cards).
+`getBlueprint().getIntensity()`, at the definition's value (no sheet has these cards); lint asks for both.
 
 On a PC card the header comment already in the file often describes an earlier version of the card, above
 assertions that are current. Rewrite it from the packet; never keep it on trust. The V-set and errata sheets have
@@ -383,9 +383,10 @@ definition read. Prefer cards with no text.
 
 **Only the rig.** No `scn.game()`, `scn.gameState()`, `getModifiersQuerying`, raw `FreepsDecided("0")`, decision
 parameters, reflection, sleeping or randomness. (The rig's own getters for a decision's bounds,
-`FreepsGetChoiceMin()` and `FreepsGetChoiceMax()`, are the rig and are fine.) `ApplyAdHocModifier` is allowed for arranging a board (a strength
-the test needs, a keyword). Any other ad hoc effect needs its reason on the same line as a `// lint-ok: ...`
-comment, which the reviewer reads.
+`FreepsGetChoiceMin()` and `FreepsGetChoiceMax()`, are the rig and are fine.) An empty answer, `FreepsChoose("")`, is a raw
+string too: `FreepsDeclineChoosing()` chooses nothing. `ApplyAdHocModifier` is allowed for arranging a board (a strength
+the test needs, a keyword). Any other ad hoc effect (`carryOutEffectInPhaseActionByPlayer` among them) needs its
+reason on the same line as a `// lint-ok: ...` comment, which the reviewer reads.
 
 ## Rulings, interactions and formats
 
@@ -468,7 +469,10 @@ Stop work on the card, record what is in the way, and move to the next. Do not f
   looks like: a typo in the definition, an oversight in the implementation, wrong displayed text, an engine bug, a
   rig bug, a wrong spreadsheet row. Do not edit the definition or the engine.
 
-A parked card is committed as far as it got and marked parked, with the id that is holding it.
+A parked card is committed as far as it got and marked parked, with the id that is holding it. `@Ignore` stands
+on a line of its own, above or below `@Test` (the tools that count and switch on parked tests look for it there, and
+lint refuses it on `@Test`'s line). A parked test whose failure is that the game never returns is written
+`@Test(timeout = 20000)` and keeps the limit once it is live (shapes.md, F-0322).
 
 ## Tests that are not about a card
 
@@ -476,7 +480,9 @@ Some behaviour belongs to the rules and not to any card: how fierce works, the R
 skirmish when a side is removed. A card may be how it was noticed, but the test is not that card's. These go in
 `gemp-lotr-server/src/test/java/com/gempukku/lotro/mechanics/`, beside `cards/`, one class per mechanic, named for
 it (`FierceTests`, `RuleOfFourTests`). They follow every rule above except the ledger; the class comment cites
-the rules section instead. The old tests under `at/` are rewritten into one place or the other.
+the rules section instead. `lint.py --form <file.java>` holds such a class to those rules (how a test is written,
+with nothing of ledger, stats test or card), and with `--only <Test,Test>` a lone test added to a card's file
+that has no ledger. The old tests under `at/` are rewritten into one place or the other.
 
 What every card of a kind obeys is a mechanic and is not retested card by card: that exerting is not taking a
 wound and a wound is not an exertion, that an exhausted character cannot exert, how a keyword works.
@@ -491,7 +497,9 @@ else to them.
 ## What a reviewer checks that the conformance check cannot
 
 Run `lint.py <id>` first; it settles layout, the ledger's claims, coverage of listed checks, forbidden calls and
-bookends, and that none of the ledger has leaked into the test file. Then:
+bookends, and that none of the ledger has leaked into the test file. Its warnings are yours to settle one by one:
+`not-asked`, `not-in-hand` and `conditional` each mark a reading or an answer that may show nothing (shapes.md,
+"lint's `not-asked`, `not-in-hand` and `conditional` warnings"). Then:
 
 1. Is the ledger right? Each clause's type, and above all whether a check was left off that the wording calls
    for. Read the card, not the tests.

@@ -286,6 +286,34 @@ def _sheet_set(value: str):
 
 _tsv = None
 _errata = None
+_unreleased = None
+_withheld_rows = {}
+
+UNRELEASED_ROWS = SKILLS / "card-test-campaign" / "references" / "unreleased-sheet-rows.tsv"
+
+
+def unreleased_rows() -> dict:
+    """The rows of the master errata sheet that are known never to have been released, by (blueprint id of the card
+    as first released, revision), each with who said so and in what words: references/unreleased-sheet-rows.tsv in
+    the campaign skill (id, revision, why).  Such a row is no version of the card: no tool matches a definition to
+    it, compares a definition with it or prints it as a later row."""
+    global _unreleased
+    if _unreleased is None:
+        _unreleased = {}
+        if UNRELEASED_ROWS.is_file():
+            for line in UNRELEASED_ROWS.read_text(encoding="utf-8").split("\n")[1:]:
+                cells = line.split("\t")
+                if len(cells) >= 3 and re.match(r"^\d+_\d+$", cells[0].strip()) and cells[1].strip().isdigit():
+                    _unreleased[(base_id(cells[0].strip()), int(cells[1]))] = cells[2].strip()
+    return _unreleased
+
+
+def unreleased_rows_of(card_id: str) -> list:
+    """(the sheet's row, why it is known to be unreleased) for each such row of this card, lowest revision first."""
+    errata_rows()
+    base = base_id(card_id)
+    return [(_withheld_rows[key], why) for key, why in sorted(unreleased_rows().items(), key=lambda kv: kv[0][1])
+            if key[0] == base and key in _withheld_rows]
 
 
 def tsv_rows() -> dict:
@@ -317,7 +345,8 @@ def errata_rows() -> dict:
     """The master errata sheet, by (blueprint id of the card as first released, revision number).
     Ketura's caution about this sheet: it was assembled from some twenty sheets, some of them holding errata
     that were proposed and never released or were held back a release, and is about 95% accurate.  Where it and a
-    definition disagree, that is something to flag, not necessarily an error on either side."""
+    definition disagree, that is something to flag, not necessarily an error on either side.  The rows she has said
+    were never released (unreleased_rows) are left out."""
     global _errata
     if _errata is not None:
         return _errata
@@ -331,7 +360,11 @@ def errata_rows() -> dict:
         except ValueError:
             continue
         row["_sheet"] = "master_errata"
-        rows[("%d_%d" % (card_set, int(row["card_num"])), revision)] = row
+        key = ("%d_%d" % (card_set, int(row["card_num"])), revision)
+        if key in unreleased_rows():
+            _withheld_rows[key] = row
+            continue
+        rows[key] = row
     _errata = rows
     return rows
 
@@ -443,6 +476,27 @@ def sheet_label(row) -> str:
             bits.append("batch \"%s\"" % row["batch"])
         return ", ".join(bits)
     return {"gen_en_standard": "reviewed spreadsheet of Decipher cards"}.get(row.get("_sheet"), "%s sheet" % row.get("_sheet"))
+
+
+def reminders_outside_helper(text: str) -> list:
+    """The reminders a game text writes in italics and brackets, "<i>(...)</i>", where the definitions' way is
+    <helper>(...)</helper>.  plain_text drops what stands in <helper> and keeps these, so a ledger's clause has
+    their words (Robin Smallburrow 68_111, F-0301; the relentless reminders of V3)."""
+    return [m.strip() for m in re.findall(r"<i>\s*(\(.*?\))\s*</i>", text or "", flags=re.S | re.I)]
+
+
+_helper_reminders = None
+
+
+def reminder_in_helper_elsewhere(reminder: str) -> list:
+    """The cards whose definitions write this same reminder in <helper>."""
+    global _helper_reminders
+    if _helper_reminders is None:
+        _helper_reminders = {}
+        for card_id, card in card_index().items():
+            for inner in re.findall(r"<helper>(.*?)</helper>", card.field("gametext", "") or "", flags=re.S | re.I):
+                _helper_reminders.setdefault(_wording("<x>" + inner + "</x>"), []).append(card_id)
+    return _helper_reminders.get(_wording("<x>" + reminder + "</x>"), [])
 
 
 def plain_text(text: str) -> str:

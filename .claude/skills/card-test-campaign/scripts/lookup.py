@@ -13,6 +13,13 @@ settled shapes and the rig's pitfalls are searched. A term that looks like a fin
 number (F-0123, Q-0045, G-0012) matches that number only; any other term is a regular expression. Where no entry
 matches that way, the terms are tried again as plain words, whatever the punctuation and markup on either side,
 so that an entry's first words can be given as rulings-index.md prints them: lookup.py "The Hobbit sets (30 to 33)".
+
+A number looked up by itself (no other term, no --in) is also read in the campaign's registers, after the entries:
+a finding's row of findings.tsv (its status, what was found and its outcome, which may leave something open that
+no ruling says), and a question's entry in questions.md: whole while it is open, and Ketura's answer once it has one.
+
+The exit status is 0 whether or not anything matched: "no entry matches" is an answer, and a chain of lookups in
+one step is not cut short by it.
 """
 import re
 import sys
@@ -130,6 +137,44 @@ def build_index():
 RIG_SKILL = SKILLS / "gemp-testing" / "SKILL.md"
 
 
+def in_registers(number: str) -> str:
+    """What the campaign's registers say under a finding's or a question's number, or "" where they say nothing
+    (or there is no state folder to read)."""
+    try:
+        import gempcards
+        state = gempcards.state_dir()
+    except BaseException:  # run from a copy of the skill with no repository round it
+        return ""
+    if number.startswith("F-"):
+        path = state / "findings.tsv"
+        rows = path.read_text(encoding="utf-8").split("\n") if path.is_file() else []
+        head = rows[0].split("\t") if rows else []
+        for row in rows[1:]:
+            cells = row.split("\t")
+            if cells[0] == number and len(cells) == len(head):
+                f = dict(zip(head, cells))
+                out = ["== findings.tsv > %s: %s %s, %s, %s (%s)" % (number, f.get("card", ""), f.get("name", ""), f.get("kind", ""),
+                                                                   f.get("status", ""), f.get("date", "")), f.get("summary", "")]
+                out += ["%s: %s" % (label, f[key]) for label, key in (("Found", "found"), ("Outcome", "outcome")) if f.get(key)]
+                return "\n".join(out) + "\n"
+        return ""
+    if number.startswith("Q-"):
+        path = state / "questions.md"
+        text = path.read_text(encoding="utf-8") if path.is_file() else ""
+        m = re.search(r"^### %s\b[^\n]*\n(.*?)(?=^#{2,3} |\Z)" % re.escape(number), text, re.S | re.M)
+        if not m:
+            return ""
+        title = m.group(0).split("\n", 1)[0].lstrip("# ").strip()
+        section = (re.findall(r"^## (.+)$", text[:m.start()], re.M) or ["?"])[-1].strip()
+        body = m.group(1).strip("\n")
+        if section.lower().startswith("open"):
+            return "== questions.md > Open (not yet answered: nothing rests on either reading)\n%s\n\n%s\n" % (title, body)
+        said = [para for para in re.split(r"\n\s*\n", body) if re.match(r"\*\*(?:Ketura|Answer|Ruled)", para.strip())]
+        return "== questions.md > %s\n%s\n\n%s\n" % (section, title, "\n\n".join(said) if said else
+                                                     "(the whole question and her answer are in questions.md)")
+    return ""
+
+
 def build_pitfall_index():
     """The rig skill lists every pitfall by its first words, group by group: rebuild that list."""
     groups, order = {}, []
@@ -167,11 +212,12 @@ def main(argv):
         build_index()
         build_pitfall_index()
         return 0
-    where, terms, limit = DEFAULT, [], 8
+    where, terms, limit, narrowed = DEFAULT, [], 8, False
     i = 0
     while i < len(argv):
         if argv[i] == "--in":
             where = list(FILES) if argv[i + 1] == "all" else argv[i + 1].split(",")
+            narrowed = True
             i += 2
         elif argv[i] == "--max":
             limit = int(argv[i + 1])
@@ -188,15 +234,18 @@ def main(argv):
         hits = [e for e in found if all(p.search(e[2], words(e[2])) for p in pats)]
         if hits:
             print("(no entry matches as a regular expression; matched as plain words)\n")
+    # A number asked for by itself is read in the registers too.
+    registers = [r for r in (in_registers(t) for t in terms if narrowed is False and len(terms) == 1 and pats[0].number) if r]
     if not hits:
         print("no entry matches", " and ".join(repr(t) for t in terms), "in", ", ".join(where))
-        return 1
     for key, heading, text in hits[:limit]:
         print(f"== {key} > {heading}\n{text}\n")
     if len(hits) > limit:
         print(f"... and {len(hits) - limit} more (narrow the search, or --max N):")
         for key, heading, text in hits[limit:]:
             print(f"   {key} > {heading}: {lead(text, 100)}")
+    for register in registers:
+        print(("\n" if not hits else "") + register)
     return 0
 
 

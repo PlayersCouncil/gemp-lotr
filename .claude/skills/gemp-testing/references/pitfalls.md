@@ -86,8 +86,11 @@ The `...NotAvailable` twins answer TRUE there, and at any decision that is no ch
 (94_7's old `NotOfferedToNonOwner`). Read beside it what the player IS being asked and the thing left undone.
 The commonest shape: `FreepsActionAvailable(...)` or `FreepsAnyActionsAvailable()` read as false straight after the
 Free Peoples player's own action in a phase both players act in. The Shadow player is the one asked there, so it
-shows nothing and lint does not notice: `ShadowPass()` first, then read it beside `AwaitingFreeps...PhaseActions()`
+shows nothing: `ShadowPass()` first, then read it beside `AwaitingFreeps...PhaseActions()`
 (94_13's old lock-out assertions; 94_14's old reading of the Free Peoples player in the Shadow phase was dropped).
+lint warns `not-asked` where an offer is read as absent (or the `...NotAvailable` twin as true) and nothing between
+the test's last play, answer or skip and its next shows that player being asked: his own `Awaiting...PhaseActions()`,
+a decision of his by its words, another offer to him read as made, or his answer coming next (a pass shows nothing).
 
 **A number with no upper bound.** `FreepsGetChoiceMax()` reads `Integer.MAX_VALUE` where a player is choosing a
 number and the game sets no maximum (a `chooseANumber` with no `to`: Gathering Wind 10_16, Beneath the Mountains
@@ -299,7 +302,8 @@ not go by blueprint: `ShadowChooseCards(card)` takes that very card out of a dis
 65_112's tests), and lint's `same-blueprint` warning is only for the `...BPFromSelection` calls. It says nothing
 where the twin is never named in the test (it lies in the draw deck), the chosen card was cheated out of the draw
 deck, and the card's text takes nothing from a draw deck.
-It cuts both ways: a card read as NOT offered (one still in the hand, say) fails that reading as soon as a valid
+It cuts both ways (and `same-blueprint` warns of this too, at a choice the test goes on to answer by blueprint):
+a card read as NOT offered (one still in the hand, say) fails that reading as soon as a valid
 candidate of its blueprint is put in the pile, so a candidate added later takes a blueprint of its own (68_82).
 The other player's pile can be told apart all the same: the invalid candidate for "your discard pile" is a card
 in HIS pile of a title that is in none of the chooser's piles (91_11: his Orc Bowmen, the chooser's left in the deck).
@@ -699,7 +703,8 @@ leave the card in its owner's draw deck, and there `FreepsPlayAvailable(card)` a
 under test does (probed: Barliman Butterbur 1_70 false from the deck and true from the hand, with nothing on the
 board against him). Move the card to hand before its refusal is read, and read the same card as offered on the
 control board. Race Text 91_15's old test read Barliman so; in an old file, look for the `MoveCardsToHand` that
-goes with each `assertFalse(...PlayAvailable(x))`.
+goes with each `assertFalse(...PlayAvailable(x))`. lint warns `not-in-hand` where no cheat in the test takes the
+card out of its draw deck (not for a card whose own text plays from a draw deck).
 
 **`AddBurdens`, `RemoveBurdens` and `GetBurdens` are the current player's.** They reach the Ring-bearer of the
 player whose turn it is (`gameState().addBurdens`), so the other player's burdens cannot be laid or read beside
@@ -800,7 +805,7 @@ twin run the effect as that player's answer to a choice of actions, whatever els
 the test if the effect was not carried out. Where being stopped is what the test is about (a wound aimed at a
 character who is to be unable to take wounds), `FreepsExecuteAdHocEffectUnchecked(effect)` does not assert, and
 the test reads the board (G-0028; Long I Fell 54_97). A `WoundCharactersEffect` needs a source card, and either
-call needs its reason on the line (`// lint-ok: ...`).
+call needs its reason on the line (`// lint-ok: ...`), as `carryOutEffectInPhaseActionByPlayer` does.
 
 **A value modified below zero counts as zero** (CR 4.2 "modifier"): a site's Shadow number lowered past 0 reads
 0 (Rivendell Valley stays 0 under No Stranger to the Shadows 51_108). `rules.py term` has no entry for "Shadow

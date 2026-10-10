@@ -30,8 +30,8 @@ The unit test rig: a virtual table with two made-up players, where every card th
 - `String P1()`
 - `String P2()`
 - `void Verify(boolean condition, String message)` — In a test, a failed sanity check inside the rig is a test failure like any other.
-- `void InitializeGameWithDecks(Map<String, LotroDeck> decks, String formatName, String freepsMetaSiteId, String shadowMetaSiteId)` — Starts up a game of LOTR-TCG with the given decks and format.
-- `void InitializeGameWithDecks(Map<String, LotroDeck> decks, String formatName, String freepsMetaSiteId, String shadowMetaSiteId, Map<String, RTMDGameInfo.LeaguePlacement> playerPlacements)` — Starts up a game of LOTR-TCG with the given decks and format.
+- `void InitializeGameWithDecks(Map<String, LotroDeck> decks, String formatName, String freepsMetaSiteId, String shadowMetaSiteId)` — Starts up a game of LOTR-TCG with the given decks and format.  `decks`: A map of decks for each player in the game; key is the player name.  `formatName`: Name of the format this table should be following.  `freepsMetaSiteId`: Blueprint ID of the Race to Mount Doom meta-sites used by player 1, or else null  `shadowMetaSiteId`: Blueprint ID of the Race to Mount Doom meta-sites used by player 2, or else null
+- `void InitializeGameWithDecks(Map<String, LotroDeck> decks, String formatName, String freepsMetaSiteId, String shadowMetaSiteId, Map<String, RTMDGameInfo.LeaguePlacement> playerPlacements)` — Starts up a game of LOTR-TCG with the given decks and format.  `decks`: A map of decks for each player in the game; key is the player name.  `formatName`: Name of the format this table should be following.  `freepsMetaSiteId`: Blueprint ID of the Race to Mount Doom meta-sites used by player 1, or else null  `shadowMetaSiteId`: Blueprint ID of the Race to Mount Doom meta-sites used by player 2, or else null  `playerPlacements`: Race to Mount Doom league placements per player (keyed by P1() / P2()), or else null
 - `void UseTestBoosters()` — When testing the live mid-game booster pack opening, we obviously want to be able to have deterministic booster pack results, which requires that we override the default pack opener with a custom one.
 - `void UseBoosterOf(String... blueprintIds)` — Has the game's pack opener offer one pack, "Test - Booster", whose contents are exactly the cards given, in the order given, every time it is opened: the pack for a test that needs a card the fixed test pack of UseTestBoosters() does not hold.
 
@@ -59,9 +59,9 @@ A game of LOTR-TCG with a headless client attached to both seats.  Everything he
 - `PhysicalCardImpl GetLastCreatedCard()` — Returns the most recently captured card, or null if none were captured.
 - `void BidAndSeatPlayers()` — Handles the bidding and seating placement of both players, then removes the burdens that were bid for consistency.
 - `void StartGame()` — Passes through certain setup steps at the start of the game so play may begin at the Free Peoples player's Fellowship phase.
-- `void StartGame(PhysicalCardImpl site1)` — Passes through certain setup steps at the start of the game so play may begin at the Free Peoples player's Fellowship phase.
-- `void StartGame(boolean resetHand)` — Passes through certain setup steps at the start of the game so play may begin at the Free Peoples player's Fellowship phase.
-- `void StartGame(boolean resetHand, boolean skipStartingFellowships)` — Passes through certain setup steps at the start of the game so play may begin at the Free Peoples player's Fellowship phase.
+- `void StartGame(PhysicalCardImpl site1)` — Passes through certain setup steps at the start of the game so play may begin at the Free Peoples player's Fellowship phase.  `site1`: The site that Free Peoples should start on.
+- `void StartGame(boolean resetHand)` — Passes through certain setup steps at the start of the game so play may begin at the Free Peoples player's Fellowship phase.  `resetHand`: If true, any cards drawn at the start of the game will be placed back on top of the draw deck, ensuring that each player only has the cards in their hand that were manually placed there before calling StartGame.
+- `void StartGame(boolean resetHand, boolean skipStartingFellowships)` — Passes through certain setup steps at the start of the game so play may begin at the Free Peoples player's Fellowship phase.  `resetHand`: If true, any cards drawn at the start of the game will be placed back on top of the draw deck.  `skipStartingFellowships`: If true, auto-skips the starting fellowship selection for both players.
 - `void SkipStartingFellowships()` — When both players are asked to select a starting fellowship, this can be used to skip past the prompt and choose 0 companions to go down (since you can cheat in any companions you may need anyway).
 - `void SkipMulligans()` — When both players are prompted to mulligan their hand, this can be used to choose "no" for both players.
 - `void PlayerDecided(String player, String answer)` — Low-level function used by the rest of the virtual table to return a decision result back to the server.
@@ -194,11 +194,11 @@ Actions are top-level decisions that involve legal game operations available to 
 
 - `List<String> FreepsGetAvailableActions()  ·  ShadowGetAvailableActions`
 - `List<String> GetAvailableActions(String playerID)`
-- `Boolean FreepsAnyActionsAvailable()  ·  ShadowAnyActionsAvailable`
+- `Boolean FreepsAnyActionsAvailable()  ·  ShadowAnyActionsAvailable` — Returns whether that player has any action at all available as part of the currently pending decision.
 - `Boolean AnyActionsAvailable(String player)` — Returns whether the given player has any action at all available as part of the currently pending decision.
-- `Boolean FreepsActionAvailable(PhysicalCardImpl card)  ·  ShadowActionAvailable`
-- `Boolean FreepsPlayAvailable(PhysicalCardImpl card)  ·  ShadowPlayAvailable`
-- `Boolean FreepsTransferAvailable(PhysicalCardImpl card)  ·  ShadowTransferAvailable`
+- `Boolean FreepsActionAvailable(PhysicalCardImpl card)  ·  ShadowActionAvailable` — Checks whether that player is currently being offered an action of the given kind on one particular card, and not on another copy of it.  Here `verb` is "Use".
+- `Boolean FreepsPlayAvailable(PhysicalCardImpl card)  ·  ShadowPlayAvailable` — Checks whether that player is currently being offered an action of the given kind on one particular card, and not on another copy of it.  Here `verb` is "Play".
+- `Boolean FreepsTransferAvailable(PhysicalCardImpl card)  ·  ShadowTransferAvailable` — Checks whether that player is currently being offered an action of the given kind on one particular card, and not on another copy of it.  Here `verb` is "Transfer".
 - `Boolean CardActionAvailable(String player, PhysicalCardImpl card, String verb)` — Checks whether the given player is currently being offered an action of the given kind on one particular card, and not on another copy of it.
 - `int FindCardActionIndex(String player, PhysicalCardImpl card, String verb)` — Finds the action that `CardActionAvailable` recognises, by the same reading.
 - `Boolean FreepsActionAvailable(String action)  ·  ShadowActionAvailable` — Checks whether that player has an action available containing the provided text.
@@ -209,8 +209,8 @@ Actions are top-level decisions that involve legal game operations available to 
 - `void UseCardAction(String player, PhysicalCardImpl card, String text)` — Causes the given player to take the action of the given card whose description contains the given words.
 - `Boolean FreepsActionAvailable(PhysicalCardImpl card, String text)  ·  ShadowActionAvailable`
 - `String FindCardAction(String player, PhysicalCardImpl card, String text)` — Finds the action of one particular card whose description contains the given words, among the actions the given player is being offered.
-- `String FreepsActionNoEffect(PhysicalCardImpl card)  ·  ShadowActionNoEffect`
-- `String FreepsActionNoEffect(PhysicalCardImpl card, String text)  ·  ShadowActionNoEffect`
+- `String FreepsActionNoEffect(PhysicalCardImpl card)  ·  ShadowActionNoEffect` — Reads the no-effect flag of one action of one particular card in the choice of actions that player is facing.  Here `text` is null.
+- `String FreepsActionNoEffect(PhysicalCardImpl card, String text)  ·  ShadowActionNoEffect` — Reads the no-effect flag of one action of one particular card in the choice of actions that player is facing.
 - `String CardActionNoEffect(String player, PhysicalCardImpl card, String text)` — Reads the no-effect flag of one action of one particular card in the choice of actions the given player is facing.
 - `void FreepsTransferCard(PhysicalCardImpl card)  ·  ShadowTransferCard`
 - `void FreepsPlayCard(PhysicalCardImpl card)  ·  ShadowPlayCard` — Causes that player to play that card from hand as if they had clicked it in the UI.
@@ -226,12 +226,12 @@ Actions are top-level decisions that involve legal game operations available to 
 
 A set of functions within the test rig that pertain to decisions.  Decisions in Gemp are a catch-all term referring to any point where the game simulation cannot continue until a player makes a choice.  Thus, awaiting passes, choosing targets, selecting cards from a group, or initiating actions are all "decisions". These functions should give you everything you need to assert that a decision is or is not available, or give you the tools to make a decision properly.  See Choices for selecting among multiple options, and see Actions for top-level card actions.
 
-- `AwaitingDecision FreepsGetAwaitingDecision()  ·  ShadowGetAwaitingDecision`
+- `AwaitingDecision FreepsGetAwaitingDecision()  ·  ShadowGetAwaitingDecision` — Gets a decision for that player that Gemp is currently waiting on.
 - `AwaitingDecision GetAwaitingDecision(String playerID)` — Gets a decision for a given player that Gemp is currently waiting on.
 - `AwaitingDecision GetCurrentDecision()`
 - `Boolean FreepsDecisionAvailable(String text)  ·  ShadowDecisionAvailable` — Determines if that player is currently presented with a decision which contains the given text.
 - `Boolean DecisionAvailable(String playerID, String text)` — Determines if the given player is currently presented with a decision which contains the given text.
-- `Boolean FreepsAnyDecisionsAvailable()  ·  ShadowAnyDecisionsAvailable`
+- `Boolean FreepsAnyDecisionsAvailable()  ·  ShadowAnyDecisionsAvailable` — Returns whether that player is currently presented with any decision at all.
 - `boolean AwaitingFellowshipPhaseActions()`
 - `void FreepsRefreshDecision()  ·  ShadowRefreshDecision` — Has that player's pending choice of phase actions worked out afresh and sent again, so that it offers what the board allows now.
 - `void RefreshDecision(String player)` — Has the given player's pending choice of phase actions worked out afresh and sent again.
@@ -250,10 +250,10 @@ A set of functions within the test rig that pertain to decisions.  Decisions in 
 - `void FreepsPass()  ·  ShadowPass`
 - `void FreepsPass(String text)  ·  ShadowPass`
 - `void PlayerPass(String player)` — Causes the given player to pass whatever decision they are currently being presented with, if any.
-- `void FreepsDecided(int answer)  ·  ShadowDecided` — Causes Free Peoples to decide to use the given answer.
-- `void FreepsDecided(String answer)  ·  ShadowDecided` — Causes Free Peoples to decide to use the given answer.
+- `void FreepsDecided(int answer)  ·  ShadowDecided` — Causes Free Peoples to decide to use the given answer.  `answer`: The integer answer to return to the server decision.
+- `void FreepsDecided(String answer)  ·  ShadowDecided` — Causes Free Peoples to decide to use the given answer.  `answer`: The answer to return to the server decision.
 - `boolean FreepsHasOptionalTriggerAvailable()  ·  ShadowHasOptionalTriggerAvailable`
-- `boolean FreepsHasOptionalTriggerAvailable(PhysicalCardImpl card)  ·  ShadowHasOptionalTriggerAvailable`
+- `boolean FreepsHasOptionalTriggerAvailable(PhysicalCardImpl card)  ·  ShadowHasOptionalTriggerAvailable` — Checks by the physical card each offered action belongs to, so a trigger whose definition words its own prompt is found, and another copy of the same card does not answer for this one.
 - `boolean HasOptionalTriggerAvailable(String player, PhysicalCardImpl card)` — Checks by the physical card each offered action belongs to, so a trigger whose definition words its own prompt is found, and another copy of the same card does not answer for this one.
 - `boolean FreepsHasOptionalTriggerAvailable(PhysicalCardImpl card, String text)  ·  ShadowHasOptionalTriggerAvailable` — For a card that offers more than one optional action at the same moment (a trigger and a response to the same win, say), where the card alone does not say which is meant.
 - `boolean HasOptionalTriggerAvailable(String player, PhysicalCardImpl card, String text)`
@@ -266,7 +266,7 @@ A set of functions within the test rig that pertain to decisions.  Decisions in 
 - `List<String> FreepsGetADParamAsList(String paramName)  ·  ShadowGetADParamAsList`
 - `List<String> GetADParamAsList(String playerID, String paramName)`
 - `int GetADParamEqualsCount(String playerID, String paramName, String value)` — How many of the entries of the given parameter of the given player's decision equal the given value.
-- `String[] FreepsGetADParam(String paramName)  ·  ShadowGetADParam`
+- `String[] FreepsGetADParam(String paramName)  ·  ShadowGetADParam` — Gets all of the options for a particular parameter of that player's current decision.
 - `String FreepsGetFirstADParam(String paramName)  ·  ShadowGetFirstADParam` — The first entry of the given parameter of that player's decision.
 - `String[] GetAwaitingDecisionParam(String playerID, String paramName)` — Gets all of the options for a particular parameter of the given player's current decision.
 - `Map<String, String[]> GetAwaitingDecisionParams(String playerID)`
@@ -313,7 +313,7 @@ Decisions will always come with at least one choice, even if that single choice 
 - `int GetChoiceCount(List<String> list)`
 - `List<String> FreepsGetFreepsAssignmentTargets()  ·  ShadowGetFreepsAssignmentTargets`
 - `List<String> FreepsGetShadowAssignmentTargets()  ·  ShadowGetShadowAssignmentTargets`
-- `boolean FreepsHasAssignmentTargetAvailable(PhysicalCardImpl card)  ·  ShadowHasAssignmentTargetAvailable`
+- `boolean FreepsHasAssignmentTargetAvailable(PhysicalCardImpl card)  ·  ShadowHasAssignmentTargetAvailable` — Reads the decision in front of the player, where FreepsCanAssign and ShadowCanAssign read the game's rule.
 - `boolean HasAssignmentTargetAvailable(String player, PhysicalCardImpl card)` — Reads the decision in front of the player, where FreepsCanAssign and ShadowCanAssign read the game's rule.
 - `void FreepsChooseAnyCard()  ·  ShadowChooseAnyCard`
 - `void FreepsChooseCard(PhysicalCardImpl card)  ·  ShadowChooseCard` — Causes that player to choose the given card at a choice of cards, and fails, saying what is being asked, if that player is not being asked to choose cards.
@@ -322,16 +322,16 @@ Decisions will always come with at least one choice, even if that single choice 
 - `int FreepsGetCardChoiceCount()  ·  ShadowGetCardChoiceCount`
 - `void FreepsChooseCardBPFromSelection(PhysicalCardImpl...cards)  ·  ShadowChooseCardBPFromSelection` — Causes that player to choose, among cards the game is showing, the first that has each given card's blueprint, and fails, saying what is being asked, if that player is not being shown cards to choose from.
 - `void FreepsChooseCardBPFromSelection(String...bpids)  ·  ShadowChooseCardBPFromSelection` — Causes that player to choose, among cards the game is showing, the first that has each given blueprint, and fails, saying what is being asked, if that player is not being shown cards to choose from.
-- `void ChooseCardBPFromSelection(String player, PhysicalCardImpl...cards)` — Causes the given player to issue a decision response composed of a comma-separated list of the provided card blueprint IDs.
-- `void ChooseCardBPFromSelection(String player, String...bpids)` — Causes the given player to issue a decision response composed of a comma-separated list of the provided card blueprint IDs.
-- `boolean FreepsHasCardChoiceAvailable(PhysicalCardImpl card, boolean selectable)  ·  ShadowHasCardChoiceAvailable`
+- `void ChooseCardBPFromSelection(String player, PhysicalCardImpl...cards)` — Causes the given player to issue a decision response composed of a comma-separated list of the provided card blueprint IDs.  `player`: The player to issue a decision for.  `cards`: The cards to include in the decision response.
+- `void ChooseCardBPFromSelection(String player, String...bpids)` — Causes the given player to issue a decision response composed of a comma-separated list of the provided card blueprint IDs.  `player`: The player to issue a decision for.  `bpids`: The card blueprint IDs to include in the decision response.
+- `boolean FreepsHasCardChoiceAvailable(PhysicalCardImpl card, boolean selectable)  ·  ShadowHasCardChoiceAvailable` — Checks whether the given card is one of the options being presented to the player.
 - `boolean FreepsHasCardChoiceAvailable(PhysicalCardImpl...cards)  ·  ShadowHasCardChoiceAvailable`
 - `boolean FreepsHasCardChoiceNotAvailable(PhysicalCardImpl...cards)  ·  ShadowHasCardChoiceNotAvailable`
-- `boolean HasCardChoiceAvailable(String player, PhysicalCardImpl card)` — Checks whether the given card is one of the options being presented to the player.
-- `boolean FreepsHasBPChoiceAvailable(String blueprintId)  ·  ShadowHasBPChoiceAvailable`
-- `boolean FreepsHasBPChoiceAvailable(String blueprintId, boolean selectable)  ·  ShadowHasBPChoiceAvailable`
+- `boolean HasCardChoiceAvailable(String player, PhysicalCardImpl card)` — Checks whether the given card is one of the options being presented to the player.  `player`: The player currently presented with a decision  `card`: The card to search for
+- `boolean FreepsHasBPChoiceAvailable(String blueprintId)  ·  ShadowHasBPChoiceAvailable` — Checks whether a card with the given blueprint ID is among the selectable options presented to the player.  Here `selectable` is true.
+- `boolean FreepsHasBPChoiceAvailable(String blueprintId, boolean selectable)  ·  ShadowHasBPChoiceAvailable` — Checks whether a card with the given blueprint ID is among the selectable options presented to the player.
 - `boolean HasBPChoiceAvailable(String player, String blueprintId, boolean selectable)` — Checks whether a card with the given blueprint ID is among the selectable options presented to the player.
-- `boolean HasCardChoiceAvailable(String player, PhysicalCardImpl card, boolean selectable)` — Checks whether the given card is one of the options being presented to the player.
+- `boolean HasCardChoiceAvailable(String player, PhysicalCardImpl card, boolean selectable)` — Checks whether the given card is one of the options being presented to the player.  `player`: The player currently presented with a decision  `card`: The card to search for  `selectable`: True if we are looking for a selectable card, false otherwise
 - `void FreepsChooseCardIDFromSelection(PhysicalCardImpl...cards)  ·  ShadowChooseCardIDFromSelection` — Causes that player to issue a decision response composed of a comma-separated list of the provided card IDs.
 - `void ChooseCardIDFromSelection(String player, PhysicalCardImpl...cards)` — Causes the given player to issue a decision response composed of a comma-separated list of the provided card IDs.
 
@@ -535,4 +535,4 @@ This interface holds the handful of accessors that every other virtual table int
 - `void Verify(boolean condition, String message)` — A sanity check on the table's own bookkeeping, used where a procedure has to end up in a known state for whatever follows it to make sense.
 
 ---
-427 entries, 240 of them with no description in the source.
+427 entries, 226 of them with no description in the source.

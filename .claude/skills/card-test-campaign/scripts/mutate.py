@@ -4,6 +4,10 @@
     mutate.py <id> [--out <name>]           makes its own mistakes and lists the survivors
     mutate.py <id> --replace <old> <new> [--nth N]   makes one mistake of yours, in the Nth place the old text occurs,
                                             and names the tests that noticed it
+    mutate.py <id> --replace <old> <new> --every     the same mistake in every place the old text occurs, as one mistake
+    mutate.py <id> --replace <a> <b> --replace <c> <d>
+                                            several changes made together as one mistake, one after another, each in
+                                            the first place its old text occurs (or in every place, with --every)
     mutate.py <id> --all                    lists every mistake and what noticed it
     mutate.py <id> --replace <old> <new> --with-parked
                                             runs the parked (@Ignore) tests too, and says which tests fail and the
@@ -11,6 +15,9 @@
                                             "mistake", a sound parked test is one that passes here and fails
                                             against the card as it is
     mutate.py <id> --show                   lists the mistakes it would make, and runs nothing
+    --timeout <seconds>                     how long one run of the card's tests may take (180): a run that does not
+                                            return is stopped and reported, so a parked test whose failure is a hang
+                                            cannot hold the tool (such a test is written @Test(timeout = 20000))
 
 Makes small, deliberate mistakes in a copy of the card's definition, one at a time (a number one off either way, a
 word dropped from a filter, a filter narrowed to the card's own culture or to companions, a phase changed, a cost
@@ -371,10 +378,34 @@ def failures(out: str, test_class: str) -> dict:
     return found
 
 
+LIMIT = 180  # seconds one run of a card's tests may take (--timeout)
+
+
+def without_ignores(text: str) -> str:
+    """A test file with every @Ignore taken out, whether it has a line to itself or shares one with @Test.  A line
+    that held nothing else is left empty, so that a failure's line number is still the line in the file itself."""
+    out = []
+    for line in text.split("\n"):
+        if line.lstrip().startswith("@") and re.search(r"@Ignore\b", line):
+            line = re.sub(r'@Ignore\b(?:[ \t]*\((?:"(?:[^"\\]|\\.)*"|[^()"])*\))?', "", line)
+            line = line if line.strip() else ""
+        out.append(line)
+    return "\n".join(out)
+
+
+def parked_tests(text: str) -> list:
+    """The names of the tests that have an @Ignore among the annotations above them."""
+    return [m.group(2) for m in re.finditer(r"(?m)^((?:[ \t]*(?:@\w+|//).*\n)+)[ \t]*public\s+void\s+(\w+)", text)
+            if any(line.lstrip().startswith("@") and re.search(r"@Ignore\b", line) for line in m.group(1).split("\n"))]
+
+
 def run_tests_in_full(cwd: Path, cp: str, test_class: str):
     """(verdict, what to say beside it, {failing test: the first lines of its failure})."""
-    proc = subprocess.run(["java", "-cp", cp, "org.junit.runner.JUnitCore", test_class], cwd=cwd, env=cardtest.env(),
-                          capture_output=True, text=True, errors="replace")
+    try:
+        proc = subprocess.run(["java", "-cp", cp, "org.junit.runner.JUnitCore", test_class], cwd=cwd, env=cardtest.env(),
+                              capture_output=True, text=True, errors="replace", timeout=LIMIT)
+    except subprocess.TimeoutExpired:
+        return "hung", "the run did not return in %d seconds and was stopped: some test never ends" % LIMIT, {}
     out = proc.stdout + proc.stderr
     if re.search(r"^OK \(\d+ tests?\)", out, re.M):
         return "survived", "", {}
@@ -400,13 +431,34 @@ def run_tests(cwd: Path, cp: str, test_class: str):
     return run_tests_in_full(cwd, cp, test_class)[:2]
 
 
+def replace_flags(argv) -> list:
+    """Where each --replace stands on the command line: a "--replace" that is itself the old or new text of the one
+    before it is not one."""
+    out, i = [], 1
+    while i < len(argv):
+        if argv[i] == "--replace":
+            out.append(i)
+            i += 3
+        else:
+            i += 1
+    return out
+
+
 def main(argv):
+    global LIMIT
     skip = set()
     with_parked = "--with-parked" in argv
-    for flag, width in (("--out", 1), ("--replace", 2), ("--nth", 1)):
-        if flag in argv:
-            i = argv.index(flag)
-            skip.update(range(i, i + width + 1))
+    for i in replace_flags(argv):
+        if i + 2 >= len(argv):
+            raise SystemExit("--replace takes two values after it: the old text and the new.")
+        skip.update(range(i, i + 3))
+    for flag in ("--out", "--nth", "--timeout"):
+        if flag in argv and argv.index(flag) not in skip:
+            if argv.index(flag) + 1 >= len(argv):
+                raise SystemExit("%s takes a value after it." % flag)
+            skip.update((argv.index(flag), argv.index(flag) + 1))
+    if "--timeout" in argv:
+        LIMIT = int(argv[argv.index("--timeout") + 1])
     args = [a for n, a in enumerate(argv) if n > 0 and n not in skip and not a.startswith("--")]
     out_name = argv[argv.index("--out") + 1] if "--out" in argv else "default"
     if not args:
@@ -423,16 +475,37 @@ def main(argv):
     card_lines = card.raw.split("\n")
     todo = mistakes(card_lines, (card.field("culture", "") or "").strip().lower())
     if "--replace" in argv:
-        i = argv.index("--replace")
-        old_text, new_text = argv[i + 1], argv[i + 2]
+        # One mistake, however many changes it is made of: each --replace pair in turn, in the definition as the
+        # pairs before it left it.
+        pairs = [(argv[i + 1], argv[i + 2]) for i in replace_flags(argv)]
         nth = int(argv[argv.index("--nth") + 1]) if "--nth" in argv else 1
-        at = -1
-        for _ in range(nth):
-            at = card.raw.find(old_text, at + 1)
-            if at < 0:
-                raise SystemExit("'%s' is not in the definition of %s %d time(s)." % (old_text, card_id, nth))
-        todo = [(card.raw[:at].count("\n"), "'%s' becomes '%s'%s" % (old_text, new_text, " (occurrence %d)" % nth if nth > 1 else ""),
-                 (card.raw[:at] + new_text + card.raw[at + len(old_text):]).split("\n"))]
+        every = "--every" in argv
+        if "--nth" in argv and (every or len(pairs) > 1):
+            raise SystemExit("--nth goes with a single --replace: several are each made in the first place their old text "
+                             "occurs, or in every place with --every.")
+        changed, line, said = card.raw, None, []
+        for old_text, new_text in pairs:
+            if not old_text:
+                raise SystemExit("--replace: the old text is empty.")
+            if every:
+                times = changed.count(old_text)
+                if not times:
+                    raise SystemExit("'%s' is not in the definition of %s." % (old_text, card_id))
+                at = changed.find(old_text)
+                after = changed.replace(old_text, new_text)
+                said.append("'%s' becomes '%s'%s" % (old_text, new_text, " (all %d occurrences)" % times if times > 1 else ""))
+            else:
+                at = -1
+                for _ in range(nth):
+                    at = changed.find(old_text, at + 1)
+                    if at < 0:
+                        raise SystemExit("'%s' is not in the definition of %s %d time(s)%s." % (
+                            old_text, card_id, nth, " once the changes before it are made" if said else ""))
+                after = changed[:at] + new_text + changed[at + len(old_text):]
+                said.append("'%s' becomes '%s'%s" % (old_text, new_text, " (occurrence %d)" % nth if nth > 1 else ""))
+            line = changed[:at].count("\n") if line is None else min(line, changed[:at].count("\n"))
+            changed = after
+        todo = [(line, " and ".join(said), changed.split("\n"))]
     repeats = repeated_keys(card_lines)
     if "--replace" not in argv:
         shadowed = {earlier for _, _, earlier in repeats}
@@ -454,11 +527,11 @@ def main(argv):
     cp = cardtest.classpath(classes)
     source = test
     if with_parked:
-        # A copy of the test file with its @Ignore lines emptied, so that the parked tests run too and a failure's
+        # A copy of the test file with its @Ignores taken out, so that the parked tests run too and a failure's
         # line number is still the line in the file itself.
         source = base / "src" / test.name
         source.parent.mkdir(parents=True)
-        source.write_text(re.sub(r"(?m)^[ \t]*@Ignore\b.*$", "", test.read_text(encoding="utf-8")), encoding="utf-8")
+        source.write_text(without_ignores(test.read_text(encoding="utf-8")), encoding="utf-8")
     javac = subprocess.run(["javac", "-nowarn", "-proc:none", "-encoding", "UTF-8", "-d", str(classes), "-cp", cp, str(source)],
                            cwd=g.SERVER, env=cardtest.env(), capture_output=True, text=True)
     if javac.returncode != 0:
@@ -476,10 +549,15 @@ def main(argv):
                 for line in why[name][1:]:
                     print("        " + line)
 
-    parked = re.findall(r"(?m)^\s*@Ignore\b.*\n(?:\s*@\w+.*\n)*\s*public\s+void\s+(\w+)", test.read_text(encoding="utf-8")) if with_parked else []
-    if with_parked:
+    parked = parked_tests(test.read_text(encoding="utf-8")) if with_parked else []
+    if with_parked and verdict == "hung":
+        print("With the parked tests switched on, against the card as it is: %s (a parked test whose failure is a hang is "
+              "written @Test(timeout = 20000), which fails where this one hangs)" % failing)
+    elif with_parked:
         print("With the parked tests switched on, against the card as it is: %s" % ("all pass" if verdict == "survived" else "failing: " + failing))
         say_why(why)
+    elif verdict == "hung":
+        raise SystemExit("Against the card as it is, %s; fix that first." % failing)
     elif verdict != "survived":
         raise SystemExit("The tests do not pass against the card as it is; fix that first.")
 
@@ -498,7 +576,7 @@ def main(argv):
             whys[n] = why
 
     print("%s  %s: %d mistakes made in the definition" % (card_id, g.full_name(card), len(todo)))
-    counts = {"noticed": 0, "survived": 0, "invalid": 0}
+    counts = {"noticed": 0, "survived": 0, "invalid": 0, "hung": 0}
     for n, (i, what, _) in enumerate(todo):
         verdict, failed = results[n]
         counts[verdict] += 1
@@ -507,7 +585,8 @@ def main(argv):
         elif "--all" in argv or with_parked or "--replace" in argv:
             # One mistake of the caller's own: which tests noticed is what was asked, with or without --all.
             print("  %-9s line %d: %s%s" % (verdict, card.line + i, what, "  (" + failed + ")" if failed else ""))
-    print("%d noticed, %d survived, %d made the card unloadable" % (counts["noticed"], counts["survived"], counts["invalid"]))
+    print("%d noticed, %d survived, %d made the card unloadable%s" % (counts["noticed"], counts["survived"], counts["invalid"],
+                                                                       ", %d never returned" % counts["hung"] if counts["hung"] else ""))
     if with_parked:
         # Read as a correction: what the parked tests do under it is the point.
         for n, (i, what, _) in enumerate(todo):
@@ -515,6 +594,9 @@ def main(argv):
             failed_set = set(x.strip() for x in failed.split(",") if x.strip())
             if verdict == "invalid":
                 print("As a correction (line %d): the card no longer loads%s." % (card.line + i, ": " + failed if failed else ""))
+                continue
+            if verdict == "hung":
+                print("As a correction (line %d): %s." % (card.line + i, failed))
                 continue
             now_pass = [t for t in parked if t not in failed_set]
             still = [t for t in parked if t in failed_set]

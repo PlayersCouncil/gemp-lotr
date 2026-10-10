@@ -177,16 +177,16 @@ All under `scripts/`, run with `python3` from anywhere in the repository. Each p
 
 | Script | For |
 |---|---|
-| `packet.py <id>` | Everything about one card in one place. `--blind` leaves out the implementation; `--terms` adds the rules text its wording touches; `--with-test` adds the current test file and ledger and, for an erratum, the original's definition. It also prints the picture the client shows, a sheet row of a later revision than the definition's, and the game text a definition had before a commit of the campaign's changed it. `packet.py --find <regex> --skip <ids>` lists cards by what is printed on them (for choosing helpers; the batch's cards and their originals left out), and `--defs <ids>` prints definitions without cardInfo, lore and alternate images. |
+| `packet.py <id>` | Everything about one card in one place. `--blind` leaves out the implementation; `--terms` adds the rules text its wording touches; `--with-test` adds the current test file and ledger and, for an erratum, the original's definition. `--only-withheld` is the second stage's packet: only what the blind one held back (the definition in full, sheet against definition, the original's definition, the test file). It also prints the picture the client shows, a sheet row of a later revision than the definition's (not one listed as never released in `references/unreleased-sheet-rows.tsv`), the game text a definition had before a commit of the campaign's changed it, a reminder written in `<i>` and not `<helper>`, and for an erratum of a site its direction beside the original's. `packet.py --find <regex> --skip <ids>` lists cards by what is printed on them, race or item class after the type (for choosing helpers; the batch's cards and their originals left out), and `--defs <ids>` prints definitions without cardInfo, lore and alternate images. |
 | `rules.py` | Looking things up in Comprehensive Rules 4.2: `term`, `card`, `terms-for`, `grep`, `interactions`. |
 | `reconcile.py` | Reviewed spreadsheet against definitions, field by field. |
 | `cardinfo.py <ids>` | A definition's cardInfo block against the rest of the definition and the other cards of its kind (Q-0145: no test reads it, and it is kept true); `--all`, `--survey`. `packet.py` and `lint.py` print what it finds for a card. |
 | `cardtest.py` | `setup` once, then `run <ids> --out <name>` in seconds; `suite` for everything. |
-| `lint.py` | The conformance check. |
+| `lint.py` | The conformance check. `lint.py --form <file.java> [--only <Test,Test>]` applies only the rules about how a test is written, for a class under `mechanics/` or a card's file with no ledger (`--only`: the tests named, a lone test added to an old file). |
 | `rules.py council [LR 6]` | The Rules Councils' rulings since CR 4.2 (eight Legacy, two Modern), which `rules.py card` and `grep` also search. |
-| `mutate.py <id>` | Makes deliberate mistakes in a copy of the definition and reports the ones no test notices. |
+| `mutate.py <id>` | Makes deliberate mistakes in a copy of the definition and reports the ones no test notices. `--replace <old> <new>` makes one of yours (several pairs, or `--every`, for a mistake in several places); `--with-parked` runs the parked tests too. A run that does not return is stopped (`--timeout`, 180 seconds). |
 | `land.py <ids>` | The gate: re-runs the conformance check and the tests on each card, and commits the cards that clear them (`--batch <folder>`: as one commit). `--check` to look without committing. |
-| `landing.py` | The lander's tools: `question add` and `rig add` number an entry into its register; `users <id>` lists the cards whose tests use a card as a helper; `finish` runs the gate and makes the batch's commits. |
+| `landing.py` | The lander's tools: `question add` and `rig add` number an entry into its register; `users <id>` lists the cards whose tests use a card as a helper (by its id, by the rig's constant for it, or as what a table has when none is named); `finish` runs the gate and makes the batch's commits. |
 | `tracker.py` | The campaign's state: statuses, findings, the tracker. |
 | `gen_vts_api.py` | Rewrites the rig's API reference from source; `--check` says whether it has drifted. |
 
@@ -198,7 +198,9 @@ points). They are not in git.
 - `gen_en_standard.tsv`: every Decipher card's current official text, Decipher's own errata included. Reviewed.
 - `V1.tsv`, `V2.tsv`, `V3.tsv`: the V-sets as first released.
 - `master_errata.tsv`: every PC erratum by revision, assembled from some twenty older sheets. About 95% accurate:
-  some rows are errata that were proposed and never released, or held back a release.
+  some rows are errata that were proposed and never released, or held back a release. A row Ketura has said was
+  never released goes into `references/unreleased-sheet-rows.tsv` (id, revision, her words), and the tools then
+  leave it out: `reconcile.py` and the packet read the sheet without it.
 
 The tools match a definition to its sheet row by the definition's revision number. `reconcile.py --all --report`
 writes every disagreement as a document (`sheet-discrepancies.md` in the campaign's state); for PC cards those
@@ -325,5 +327,6 @@ at every landing. The scripts under `scripts/orchestrator/` take the working fol
 - `references/rulings-log.md`: what Ketura has ruled, grouped by subject.
 - `references/shapes.md`: what the rulings and the engine's fixes mean for a definition and a test.
 - `references/rulings-index.md`: both of the above, entry by entry; generated by `scripts/lookup.py --index`.
-- `scripts/lookup.py`: prints whole entries of the rulings, the shapes, the rig's pitfalls and the skills.
+- `scripts/lookup.py`: prints whole entries of the rulings, the shapes, the rig's pitfalls and the skills; for a
+  number by itself also the finding's row of `findings.tsv` or the question's entry in `questions.md`.
 - `assets/tracker_template.html`: the tracker page; `tracker.py html` fills it.

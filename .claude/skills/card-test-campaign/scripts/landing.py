@@ -9,11 +9,15 @@
 
     landing.py rig add "<title>" <body file>
         Files a rig request at the end of "## Open" in rig-requests.md and prints its number (G-0000).  The body
-        says which batch and card it came from, what the test needed, and the method proposed.
+        says which batch and card it came from, what the test needed, and the method proposed.  The heading is
+        ended with ": open" here: the title says what is wanted and nothing of its state.
 
     landing.py users <id...>
         Lists the other cards whose tests put one of these cards on the table as a helper.  A correction to a
-        definition can break them: run their tests after applying one (finish does, with --changed).
+        definition can break them: run their tests after applying one (finish does, with --changed).  A card the
+        rig keeps under a constant (TestConstants: the Rings, the Ring-bearers, the Maps, the site paths) is found
+        by the constant's name as well as by its id, and where it is what a table has when the test names none
+        (Frodo 10_121, The Ruling Ring, the King-block sites), in every file that builds such a table.
 
     landing.py finish <folder> <id...> [--with <path>]... [--changed <id,id>] [--note "<a line for the commit>"]
         Runs the gate on the cards and commits the ones that clear it as one commit (land.py --batch), then commits
@@ -109,17 +113,74 @@ def rig_add(argv):
         raise SystemExit("rig-requests.md has no '## Open' section followed by another")
     cut = opened.end() + following.start()   # the end of the Open section, whatever heading comes next
     number = "G-%04d" % (1 + highest("G", text))
-    entry = "### %s %s: open\n\n%s\n\n" % (number, title.strip().rstrip(":"), body)
+    entry = "### %s %s: open\n\n%s\n\n" % (number, re.sub(r"(?i)(?:\s*:\s*open)+\s*$", "", title.strip()).rstrip(": "), body)
     path.write_text(text[:cut].rstrip("\n") + "\n\n" + entry + text[cut:], encoding="utf-8")
     print(number)
 
 
-def users(ids) -> list:
-    """The cards, other than these, whose test files name one of these blueprints in a scenario's card map."""
-    wanted = re.compile(r'"(?:%s)"' % "|".join(re.escape(i) for i in ids))
+def rig_constants() -> tuple:
+    """({blueprint id: the names of the rig's constants that hold it}, {a table's argument, counted from 0: the
+    constant it takes when the test gives none}).  TestConstants keeps the Rings, the Ring-bearers and the Maps as
+    one id each and the site paths as maps of nine; VirtualTableScenario's constructor says which of them stand in
+    for an argument that is left out or null."""
+    held = {}
+    constants = (g.FRAMEWORK_DIR / "TestConstants.java").read_text(encoding="utf-8", errors="replace") \
+        if (g.FRAMEWORK_DIR / "TestConstants.java").is_file() else ""
+    for name, card_id in re.findall(r'\bString\s+(\w+)\s*=\s*"(\d+_\d+)"\s*;', constants):
+        held.setdefault(card_id, []).append(name)
+    for name, body in re.findall(r"\bHashMap<String,\s*String>\s+(\w+)\s*=\s*new\s+HashMap<>\(\)\s*\{\{(.*?)\}\}", constants, re.S):
+        for card_id in re.findall(r'put\(\s*"[^"]*"\s*,\s*"(\d+_\d+)"\s*\)', body):
+            held.setdefault(card_id, []).append(name)
+    table = (g.FRAMEWORK_DIR / "VirtualTableScenario.java").read_text(encoding="utf-8", errors="replace") \
+        if (g.FRAMEWORK_DIR / "VirtualTableScenario.java").is_file() else ""
+    place = {"siteIDs": 1, "ringBearerID": 2, "ringID": 3}
+    defaults = {place[arg]: name for arg, name in
+                re.findall(r"if\s*\(\s*(siteIDs|ringBearerID|ringID)\s*==\s*null\s*\)\s*\{\s*\1\s*=\s*(\w+)\s*;", table)}
+    return held, defaults
+
+
+def table_arguments(text: str) -> list:
+    """The arguments of each `new VirtualTableScenario(...)` in a test file, as written."""
+    code = re.sub(r'"(?:[^"\\\n]|\\.)*"', '""', text)
+    code = re.sub(r"//[^\n]*", "", code)
+    out = []
+    for m in re.finditer(r"\bnew\s+VirtualTableScenario\s*\(", code):
+        depth, args, cur = 1, [], ""
+        for c in code[m.end():]:
+            if c in "([{":
+                depth += 1
+            elif c in ")]}":
+                depth -= 1
+                if depth == 0:
+                    break
+            if c == "," and depth == 1:
+                args.append(cur.strip())
+                cur = ""
+            else:
+                cur += c
+        out.append(args + [cur.strip()])
+    return out
+
+
+def users(ids, how=None) -> list:
+    """The cards, other than these, whose test files put one of these blueprints on a table: named by its id in a
+    scenario's card map, by the rig's constant for it (VirtualTableScenario.GreatRing is 19_1), or, where it is
+    what a table has when the test names none, by building such a table.  `how`, if given, is filled with the
+    constants and defaults that were looked for."""
+    held, defaults = rig_constants()
+    names = sorted({name for i in ids for name in held.get(i, [])})
+    left_out = sorted(at for at, name in defaults.items() if name in names)
+    if how is not None:
+        how += ["%s is the rig's %s" % (i, " and ".join(held[i])) for i in ids if i in held]
+        how += ["a table that names no %s has %s" % ({1: "sites", 2: "Ring-bearer", 3: "Ring"}[at], defaults[at]) for at in left_out]
+    wanted = re.compile(r'"(?:%s)"' % "|".join(re.escape(i) for i in ids) + ("|\\b(?:%s)\\b" % "|".join(names) if names else ""))
     out = []
     for card_id, path in g.test_index().items():
-        if card_id not in ids and wanted.search(path.read_text(encoding="utf-8", errors="replace")):
+        if card_id in ids:
+            continue
+        text = path.read_text(encoding="utf-8", errors="replace")
+        if wanted.search(text) or (left_out and any(len(args) <= at or args[at] == "null"
+                                                    for args in table_arguments(text) for at in left_out)):
             out.append(card_id)
     return sorted(out, key=g.id_sort_key)
 
@@ -228,7 +289,10 @@ def main(argv):
         elif argv[1] == "commit":
             return commit(list(argv[2:]))
         elif argv[1] == "users":
-            print(" ".join(users(argv[2:])) or "(none)")
+            how = []
+            print(" ".join(users(argv[2:], how)) or "(none)")
+            if how:
+                print("(%s)" % "; ".join(how))
         else:
             print(__doc__)
             return 1
