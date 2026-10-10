@@ -56,6 +56,9 @@ Q-0034 in the engine decide whether these are corrected card by card, in a sweep
   (the same sentence), and 13_28, 13_124, 15_9, 15_69, 17_17, 17_36, 17_86, 18_11, 18_62.
 - The lists in `orchestrator/trials/patterns.md`, sections 2 and 5 (38 definitions).
 
+TO LOOK AT WHEN THE SET COMES UP (seen in passing by an earlier batch; not looked into, not filed)
+- Set 17, Shadowfax 17_24 (from the batch at-mech-hinder-c): "Discard all other possessions on bearer and bearer may not bear a hand weapon" is built as a standing check that discards every other possession or weapon the bearer has at any time, so nothing but artifacts can ever be played on him afterwards and stay; Shadowfax 4_100 and Andúril 7_79 have the same kind of sentence built as a discard when played (and, since F-0360, when restored)
+
 TO ASK KETURA WHEN THE SET COMES UP
 - Set 7: the three `assignmentCost` cards (7_197, Morgul Spawn 7_200, 7_201: "The Free Peoples player must exert
   a companion to assign this minion") still ask ahead of the assigning and cannot be taken by Éowyn 17_96's
