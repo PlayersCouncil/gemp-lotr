@@ -202,7 +202,7 @@ For event cards. `Event` for phase events, `ResponseEvent` for response events.
 | `InHandTrigger` | Triggers that work from hand |
 | `KilledTrigger` | Self-reacts to being killed |
 | `SelfRemovedFromPlayTrigger` | Triggers on own discard/hinder |
-| `CopyCard` | Copies another card's game text |
+| `CopyCard` | Copies another card's game text: its actions, triggers and modifiers, looked up live, and no keyword. `self` in the copied text is the copying card (shapes.md, F-0381) |
 | `DeckBuildingRestriction` | Deck validation rules (maps) |
 | `AidCost` | Follower aid cost |
 | `DisplayableInformation` | text: a line the client shows in the card's info under "Extra information"; `{stored}` in it is the value the card has stored on itself (`Named race is {stored}`, 69_38) |

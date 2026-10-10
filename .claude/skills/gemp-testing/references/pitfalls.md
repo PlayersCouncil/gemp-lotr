@@ -748,6 +748,9 @@ to a shared `Get...Scenario()` moves every hand and deck count the file's other 
 The Shadow player's deck runs short too: the turns `SkipToSite` plays draw a small one into his hand (the
 entry on `SkipToSite`, above), so a board taken from an erratum's file whose text never read that deck can find nothing in it
 (Card_01_023_Tests puts four cards back before "discard 3 cards from the top of his or her draw deck").
+A short scenario runs short as well. `SetFreepsHand(...)` after a skipper puts the rest of the hand back on the
+draw deck, and once a test moves the last of those into hand or play a "draw a card" draws nothing and the hand
+reads one short: keep one named card in the deck and read it in hand after the draw (Card_01_060_Tests, Gimli).
 
 **A random or whole-hand effect takes whatever is there.** Where a test sets off anything that acts on a hand or
 a deck by chance or as a whole (a random look, reveal or discard from a hand; a discard "for each X revealed"; a
