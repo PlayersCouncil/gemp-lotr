@@ -83,6 +83,12 @@ has started). `close.py` runs it, and `integrate.sh --renew` when the second tre
 
 - A change to a tool or a brief made in the main tree reaches the second tree only at the next `--renew`: a batch
   in flight works to the older one.
+- When `close.py <folder>` says the batch could not be brought onto the branch (the engine agent has one of its
+  files open; common while an item is changing the documents), do not wait and do not schedule a retry:
+  `integrate.sh --renew` (it keeps the waiting commits and rebuilds), launch the next batch,
+  `close.py --launched ...` without `--synced`, and at the NEXT landing run `close.py` for the waiting folder
+  first and then for the new one. The first brings every waiting commit across. Ketura gets them one batch
+  late, which costs nothing; a retry every quarter of an hour costs a turn each time.
 - When no engine pass is running, batches run in the main tree, two at a time (`--tree repo`).
 - Do not run the suite or a build in a tree where a pipeline is at work.
 
