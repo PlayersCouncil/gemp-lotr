@@ -462,7 +462,9 @@ effect and not on the ability (a `CardPhaseLimit` or `CardAffectedLimitPerPhase`
 the game flags some of those at the cap and not others (hjson-reference, "Limits"), and which is the
 mechanic's to show, not the card's. An ability
 or optional trigger with no cost that is offered though it would do nothing is not a flag matter: by Q-0034 it
-should be withheld, and offering it is a finding.
+should be withheld, and offering it is a finding. So is a "you may" with no cost of its own inside an
+event's or ability's text that is asked when yes would do nothing: the event is still offered, the question
+inside it is not (shapes, F-0379).
 
 ## When something is in the way
 

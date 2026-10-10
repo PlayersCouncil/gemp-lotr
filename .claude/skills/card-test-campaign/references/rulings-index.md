@@ -379,6 +379,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A number that can only be one number is not asked for (F-0147)
 - "You may make <the other player> do X" (Q-0106)
 - Known shapes from the Dwarven errata (F-0181, F-0194, F-0182) [Q-0034, F-0295, F-0304, F-0323, F-0324, F-0303, F-0314, F-0349, F-0347, F-0348]
+- A "you may" inside an event's or ability's text is not asked when yes would do nothing (F-0379, Halls of My Home 1_18) [Q-0034, F-0057, F-0117]
 - "You may <do X to a card>" on a required trigger wants its choice 0 to 1 (Q-0010, F-0191) [F-0280, F-0289, Q-0021, F-0041, Q-0034]
 - "When you play this ..., you may add (N)" built as a required trigger (F-0009, Q-0165) [Q-0017, Q-0167, F-0328]
 - A prevention is asked only when the effect will happen (F-0194, Q-0114)
@@ -484,7 +485,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A filter that feeds a count. Where a filter feeds a COUNT ("for each X stacked here", "for each X you can spot"), lay the board so the count under ...
 - A count "this phase" against the same count this turn
 - A threshold that is a percentage wants a board large enough to tell the neighbouring numbers apart (94_5) [F-0325]
-- A correction of several lines for mutate.py
+- A correction of several lines for mutate.py [F-0379]
 - "Use vitality to resolve that skirmish instead of strength" is two overrides, one for each side (Final Triumph 68_115 and 18_115)
 - "Are not unique" wants three copies in play and the fourth played (94_16)
 - A site can be controlled only once every marker has passed it [Q-0230]

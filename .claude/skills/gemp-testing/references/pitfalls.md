@@ -743,6 +743,9 @@ second use, and a choice that cannot be carried out in full then disappears (CR 
 deck's size where a discard or a draw must be possible. Both players' decks hold every alias, so an alias added
 to a shared `Get...Scenario()` moves every hand and deck count the file's other tests read by one (60_52: 15 and
 7 became 16 and 8); where the file reads such counts, give a filler alias the new card's id instead.
+The Shadow player's deck runs short too: the turns `SkipToSite` plays draw a small one into his hand (the
+entry on `SkipToSite`, above), so a board taken from an erratum's file whose text never read that deck can find nothing in it
+(Card_01_023_Tests puts four cards back before "discard 3 cards from the top of his or her draw deck").
 
 **A random or whole-hand effect takes whatever is there.** Where a test sets off anything that acts on a hand or
 a deck by chance or as a whole (a random look, reveal or discard from a hand; a discard "for each X revealed"; a
