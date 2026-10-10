@@ -698,7 +698,8 @@
 			optional: false
 			trigger: {
 				type: movesFrom
-				filter: self
+				# "from Council Courtyard" names the site: a card that has this text (Silinde) answers the same move.
+				filter: name(Council Courtyard)
 			}
 			effect: {
 				type: removeTwilight
@@ -738,10 +739,18 @@
 				type: modifier
 				modifier: {
 					type: modifyCost
-					requires: {
-						type: perTurnLimit
-						limit: 1
-					}
+					requires: [
+						{
+							type: perTurnLimit
+							limit: 1
+						}
+						{
+							# "played to Ford of Bruinen" names the site: a card that has this text (Silinde)
+							# discounts, and counts, only a Nazgul played while the fellowship is at a Ford of Bruinen.
+							type: location
+							filter: name(Ford of Bruinen)
+						}
+					]
 					filter: nazgul
 					amount: -5
 				}
@@ -752,6 +761,10 @@
 				trigger: {
 					type: played
 					filter: nazgul
+				}
+				requires: {
+					type: location
+					filter: name(Ford of Bruinen)
 				}
 				effect: {
 					type: incrementPerTurnLimit
