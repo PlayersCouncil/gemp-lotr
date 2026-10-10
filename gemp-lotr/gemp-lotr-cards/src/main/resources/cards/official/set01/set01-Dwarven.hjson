@@ -720,6 +720,11 @@
 						{
 							type: optional
 							text: Would you like to discard 1 Shadow card revealed?
+							requires: {
+								type: MemoryMatches
+								memory: revealedFreepsCards
+								filter: side(shadow)
+							}
 							effect: {
 								type: discardCardsFromDrawDeck
 								select: choose(side(shadow),memory(revealedFreepsCards))
@@ -751,6 +756,11 @@
 						{
 							type: optional
 							text: Would you like to discard 1 Shadow card revealed?
+							requires: {
+								type: MemoryMatches
+								memory: revealedShadowCards
+								filter: side(shadow)
+							}
 							effect: {
 								type: discardCardsFromDrawDeck
 								deck: shadow
