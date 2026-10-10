@@ -82,12 +82,6 @@ Q-0034 in the engine decide whether these are corrected card by card, in a sweep
 TO LOOK AT WHEN THE SET COMES UP (seen in passing by an earlier batch; not looked into, not filed)
 - Set 17, Shadowfax 17_24 (from the batch at-mech-hinder-c): "Discard all other possessions on bearer and bearer may not bear a hand weapon" is built as a standing check that discards every other possession or weapon the bearer has at any time, so nothing but artifacts can ever be played on him afterwards and stay; Shadowfax 4_100 and Andúril 7_79 have the same kind of sentence built as a discard when played (and, since F-0360, when restored)
 
-OWED BY A CARD THAT IS NOT YET WORKED
-- Return to Its Master 1_224 ("The One Ring's game text does not apply during this skirmish") is where a Ring
-  definition's `ringIsActive` requirement is shown: its own tests, with a Ring worn whose text would otherwise act
-  in that skirmish. The Rings' own files do not show it (taking the requirement out of 1_1 or 1_2 passes all
-  their tests, and that is accepted until 1_224 is worked).
-
 TO ASK KETURA WHEN THE SET COMES UP
 - Set 7: the three `assignmentCost` cards (7_197, Morgul Spawn 7_200, 7_201: "The Free Peoples player must exert
   a companion to assign this minion") still ask ahead of the assigning and cannot be taken by Éowyn 17_96's

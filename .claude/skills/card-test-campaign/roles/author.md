@@ -95,8 +95,10 @@ And, once a card at most, where only a changed definition can tell whether an in
 a Shadow possession in its owner's support area seen by a bare `possession`? A probe cannot change a definition),
 one `--replace` run tries that one mistake, and the ledger's Notes say what was tried (92_26).
 
-A parked test is run only by `mutate.py <id> --with-parked` (no mutant is needed to see it fail against the
-card as it is); `cardtest.py run` leaves parked tests out. A line in ANOTHER card's definition (one already corrected that
+A parked test is run only through `mutate.py`, and always with a `--replace`: `mutate.py <id> --replace <wrong>
+<right> --with-parked` runs the card as it is with the parked tests in (that is the run that shows a parked test
+failing) and then against the correction. `cardtest.py run` leaves parked tests out, and `--with-parked` with no
+`--replace` would run the stock mistakes, which are cut. A line in ANOTHER card's definition (one already corrected that
 your card's file owes a test for, or one a finding proposes to change) is tried against your tests with
 `mutate.py <that card's id> --replace <old> <new> --test <your card's test file>`.
 
