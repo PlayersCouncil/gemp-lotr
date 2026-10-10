@@ -9,7 +9,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -267,6 +266,21 @@ public class NoEffectFlagTests
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// The same table with a Ring that is put on at will: The Great Ring, "Maneuver: Wear The One Ring until the
+	// regroup phase", at no cost.  The Ruling Ring goes on only in answer to a wound in a skirmish.
+	protected VirtualTableScenario GetTakeOffRingWornScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("elbereth", "2_108");
+					put("runner", "1_178");     // Goblin Runner: strength 5, vitality 1; no Nazgul
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.GreatRing
 		);
 	}
 
@@ -682,7 +696,6 @@ public class NoEffectFlagTests
 	}
 
 	@Test
-	@Ignore("F-0370: 'take off The One Ring' has no forecast, so an ability that can do nothing else is not flagged while the Ring is not on; it reads \"false\"")
 	public void TakingOffTheRingIsFlaggedWhileTheRingIsNotOnAndNothingElseTheAbilityDoesCanBeDone() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetTakeOffRingScenario();
 
@@ -703,6 +716,41 @@ public class NoEffectFlagTests
 		assertFalse(scn.RBWearingOneRing());
 		assertTrue(scn.FreepsActionAvailable(elbereth));
 		assertEquals("effect", scn.FreepsActionNoEffect(elbereth));
+
+		scn.FreepsUseCardAction(elbereth);
+		assertInZone(Zone.DISCARD, elbereth);
+		assertFalse(scn.RBWearingOneRing());
+		assertTrue(scn.IsCharSkirmishingAgainst(frodo, runner));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
+	@Test
+	public void TakingOffTheRingIsNotFlaggedWhileTheRingIsOn() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetTakeOffRingWornScenario();
+
+		var frodo = scn.GetRingBearer();
+		var ring = scn.GetRing();
+		var elbereth = scn.GetFreepsCard("elbereth");
+		scn.AttachCardsTo(frodo, elbereth);
+
+		var runner = scn.GetShadowCard("runner");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner);
+		scn.SkipToPhase(Phase.MANEUVER);
+		assertFalse(scn.RBWearingOneRing());
+		scn.FreepsUseCardAction(ring);
+		assertTrue(scn.RBWearingOneRing());
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(frodo, runner);
+
+		// The board of the test above but for the Ring: still no Nazgul in the skirmish and nothing to cancel,
+		// and now a Ring to take off.
+		assertTrue(scn.IsCharSkirmishingAgainst(frodo, runner));
+		assertTrue(scn.RBWearingOneRing());
+		assertTrue(scn.FreepsActionAvailable(elbereth));
+		assertEquals("false", scn.FreepsActionNoEffect(elbereth));
 
 		scn.FreepsUseCardAction(elbereth);
 		assertInZone(Zone.DISCARD, elbereth);

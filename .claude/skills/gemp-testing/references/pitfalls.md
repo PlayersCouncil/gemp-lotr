@@ -206,9 +206,9 @@ and the action does nothing else; a cap on anything else reads `"false"` (Sting 
 reveal from a draw deck and what is done with the cards revealed reads `"effect"` while that deck is empty
 (Q-0163; `mechanics/RevealFromAnEmptyDrawDeckTests`; shapes, "A reveal that a cost buys"). The flag is worked out when the decision is sent, so after cheating the board get a new decision
 before reading it (`FreepsRefreshDecision()`). At site 2 of `FellowshipSites` (Ettenmoors) each player
-is also offered the site's own skirmish action in every skirmish. "Take off The One Ring" cannot say that it will
-do nothing: an ability with nothing else it can do reads `"false"` while the Ring is not on (O Elbereth!
-Gilthoniel! 2_108; F-0370, not fixed, one test of `mechanics/NoEffectFlagTests` parked on it). Which cards assert the flag: test-generation,
+is also offered the site's own skirmish action in every skirmish. "Take off The One Ring" says that it will
+do nothing while the Ring is not on: an ability with nothing else it can do then reads `"effect"`, and `"false"`
+once the Ring is on (O Elbereth! Gilthoniel! 2_108; F-0370, engine pass 25; two tests of `mechanics/NoEffectFlagTests`). Which cards assert the flag: test-generation,
 "Rulings, interactions and formats".
 
 **An action's own exertions count against what it then needs.** "Exert X twice to play ... from your discard
