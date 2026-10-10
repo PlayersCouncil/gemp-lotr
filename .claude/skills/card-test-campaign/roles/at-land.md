@@ -65,6 +65,9 @@ As `lander.md`, steps 3 to 6, with these differences:
   corrected there too. Where that card is LANDED (it has a ledger), its landed tests must pass afterwards and you
   add no test to its file (its ledger would have to follow): say in your report that it was corrected under the
   same finding and that its own tests do not yet read it, and add one line to its ledger's Notes saying so.
+- A correction that reaches several definitions is made with the editor, block by block, each read before it is
+  changed: not by a script that rewrites the files. Scratch files go under `/tmp/<batch>-l/` or the scratchpad
+  directory your session names.
 - There is no ledger. A reading the rig cannot give stays a comment in the test
   (`// waits: G-0031 <what the rig lacks>`, with the request's real number).
 - A question's parked test carries the question's number in its `@Ignore`.

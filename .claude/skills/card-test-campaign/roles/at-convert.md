@@ -89,6 +89,9 @@ as it takes, and say in your report which of your tests stand for which name of 
    definition's correction, like any other. Look the ruling up first (`lookup.py Q-0034`, and the entries near
    it): not every "may" with nothing to act on is withheld. An optional DRAW is still offered with an empty draw
    deck (Q-0029), and an action with a COST is offered and flagged, not withheld.
+   **A fault met in passing**, in the definition of a card that is none of your homes (a helper that shows the
+   wrong words, a sister card with the same wrong lines): report it under `findings` with the lines and the
+   correction, and write no test for it. The lander writes the lone test when it corrects the card.
 4. **A reading the rig cannot give** is not worked round: no helper method, no reaching into the engine, no
    exception relied on. Leave that one reading out, put a comment where it would stand
    (`// waits: G-0000 <what the rig lacks>`), and report it under `rig` with the method you would want.

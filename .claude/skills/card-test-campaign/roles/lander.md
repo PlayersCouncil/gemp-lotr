@@ -174,7 +174,8 @@ and the three lists of step 6. Keep it to what happened.
 
 You may edit: the test files and ledger files of the batch's cards; the definitions of the batch's cards and of
 any card a finding of this batch is also true of, inside that card's block only; the one line of another card's
-test that step 3 allows; the documents named in step 6; files under `/tmp/<folder>-l/`. The registers
+test that step 3 allows; the documents named in step 6; files under `/tmp/<folder>-l/` (or the scratchpad
+directory your session names, wherever this brief says `/tmp/<folder>-l/`). The registers
 (`findings.tsv`, `questions.md`, `rig-requests.md`, `status.tsv`) are written only through the scripts above.
 Nothing else: not the engine, not the rig, not a script, not a role brief, not git but through `finish`.
 
