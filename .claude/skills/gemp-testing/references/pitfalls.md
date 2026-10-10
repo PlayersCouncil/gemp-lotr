@@ -365,6 +365,12 @@ blueprint id, `ShadowHasBPChoiceAvailable("1_361")` and `ShadowChooseCardBPFromS
 with more than one card to place, `all(...)` included, asks its player which goes first (a choice of one, minimum
 1) and places the last unasked: Breeding Pit 1_122 with two copies in the discard pile asks once
 (`ShadowChooseCards(copy)`; `Card_01_122_Tests`). Read no order between identical copies.
+`putCardsFromDeckOnBottomOfDeck` asks the same way, as a choice among cards shown ("Choose card to put beneath
+draw deck", `FreepsChooseCardBPFromSelection(card)`): The Mirror of Galadriel 15_22 with two cards left asks once
+and with three twice; the first chosen lies highest and the last, unasked, is the bottom card
+(`GetFreepsBottomOfDeck()`, `GetFromBottomOfFreepsDeck(2)`; `Card_15_022_Tests`). Before it, a
+`chooseArbitraryCards` whose filter takes none of the cards looked at is still put, as a choice of 0 to 0 with
+all of them shown: `FreepsDeclineChoosing()`.
 
 **Two offers of one response.** When the same card offers the same trigger or response twice in one decision (two Nazgul winning one skirmish), each offer's text ends with " (for <the cards its trigger memorized>)". A single offer reads as before. Choose between them by that text.
 
@@ -1156,7 +1162,13 @@ adventure deck holds no other site of that number: Úlairë Nelya 11_222's abili
 nothing is replaced. On a Shadows-block path the Shadow player holds the sites not yet laid:
 `ShadowUseCardAction(nelya)`, `ShadowChooseCardBPFromSelection(site)`, and `GetCurrentSite()` is the new one
 (Card_13_021_Tests). The only Free Peoples card that replaces the current site is There's Another Way 12_40, in
-the regroup phase.
+the regroup phase. `VirtualTableScenario.ShadowsSites` is a ready site map for such a path, nine different sites
+under `site1` to `site9` (Fangorn Glade 11_239, Abandoned Mine Shaft 13_185, ... ; Sirannon Ruins 18_138,
+`site5`, has no text): `StartGame(scn.GetFreepsSite("site1"))`, `scn.GetShadowSite("site2")`
+(Card_13_133_Tests). Savage Southron 15_92 lays a site of the FREE PEOPLES player's adventure deck, picked at
+random: the game shows the pick to each player first (`FreepsDismissRevealedCards()`,
+`ShadowDismissRevealedCards()`), and a test reads whose site lies there and that the others are still in his
+deck, never which (one time in eight it is the twin of the site replaced: Q-0226; Card_15_092_Tests).
 
 **A battleground or a forest site needs no cheat.** The Towers path has both at site 2: Uruk Camp 4_335
 (Battleground, Plains; each Uruk-hai played must exert) and Derndingle 4_330 (Forest; move limit +1 while an
