@@ -14,7 +14,8 @@ held more than a stat check before the campaign (509 tests between them, most fi
   keeping what it shows.
 - Many of these cards have a PC ERRATUM that is landed already (51_x for 1_x, 54_x for 4_x and so on). Stage 1 is
   blind as always. In stage 2 read the erratum's landed test file and its ledger
-  (`/mnt/user-data/outputs/card-tests/ledgers/`): where the original has the same sentence, the rulings, the
+  (`/mnt/user-data/outputs/card-tests/ledgers/<set>/<id>.txt`: `ledgers/51/51_11.txt` for the erratum of 1_11,
+  `ledgers/1/1_11.txt` for the original): where the original has the same sentence, the rulings, the
   boards and the helper cards are settled there, and a finding the erratum's batch fixed "in the original too" is
   already in your card's definition (`packet.py` prints the text a definition had before a campaign commit).
   Where the two differ, the difference is the erratum's and not a finding on your card.

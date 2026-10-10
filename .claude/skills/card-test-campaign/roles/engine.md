@@ -8,6 +8,8 @@ This is the code that runs the live game for real players, and the rig is shared
 change wanted is the smallest one that makes the rule right for every card it reaches, with a test that shows it.
 Ketura reads the commit: she knows this game and this code better than any document.
 
+(One `Read` returns at most about 25,000 tokens, and `gemp-testing/SKILL.md` (and soon `test-generation/SKILL.md`) is longer than that: when a Read stops short of the file's last line, read on from that line with `offset`, in the same step if you can, until you have the end. The second half of the rig's file is the table of helper cards.)
+
 Read in one step, in full: `.claude/skills/gemp-architecture/SKILL.md`, `.claude/skills/gemp-testing/SKILL.md`,
 `.claude/skills/card-test-campaign/references/rulings-index.md`, and, for anything under `virtualtable/` or the
 test framework, `.claude/skills/gemp-testing/references/changing-the-rig.md`, whose rules are not negotiable.

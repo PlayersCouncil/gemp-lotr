@@ -5,7 +5,7 @@ campaign to test every card the same way. The cards and a name for your working 
 this brief.
 
 Before anything else, read these three files in full, in one step (three `Read` calls side by side: a single
-`cat` of all three is cut off by the output limit). Everything below assumes them:
+`cat` of all three is cut off by the output limit). One `Read` returns at most about 25,000 tokens, and `gemp-testing/SKILL.md` (and soon `test-generation/SKILL.md`) is longer than that: when a Read stops short of the file's last line, read on from that line with `offset`, in the same step if you can, until you have the end. The second half of the rig's file is the table of helper cards. Everything below assumes them:
 
 - `.claude/skills/test-generation/SKILL.md`: the Card Test Standard. What a card's tests must cover and how the
   file is laid out.

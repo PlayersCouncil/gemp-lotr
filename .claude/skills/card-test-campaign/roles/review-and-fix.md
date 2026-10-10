@@ -13,6 +13,8 @@ the card's own tests) stands between what you leave and what is committed.
 You have not seen how the tests were written and should not go looking for the author's notes. Read these first,
 in one step:
 
+(One `Read` returns at most about 25,000 tokens, and `gemp-testing/SKILL.md` (and soon `test-generation/SKILL.md`) is longer than that: when a Read stops short of the file's last line, read on from that line with `offset`, in the same step if you can, until you have the end. The second half of the rig's file is the table of helper cards.)
+
 - `.claude/skills/test-generation/SKILL.md`: the Card Test Standard, including the reviewer's checklist at its end
 - `.claude/skills/gemp-testing/SKILL.md`: the test rig, and an index of the behaviours that catch people out
 - `.claude/skills/card-test-campaign/references/rulings-index.md`: every ruling of Ketura's and every settled
