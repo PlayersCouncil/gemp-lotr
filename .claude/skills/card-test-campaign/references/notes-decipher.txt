@@ -26,9 +26,9 @@ held more than a stat check before the campaign (509 tests between them, most fi
   `mechanics/HinderedCardCannotBeSpottedTests`, and laying it again on every card that spots is the kind of
   test Ketura ruled out under Q-0213 ("a waste of time to continue searching for *theoretical* malformed targets
   in places and arrangements where they have been historically sparse"). The Notes of the ledger say so in a
-  line. (Put to her as Q-0236; this is how it stands unless she strikes it.)
+  line. (Put to her as Q-0237; this is how it stands unless she strikes it.)
 - A site's BLOCK is the same: a text that says "a site" or "each site" with no block named owes no second
-  scenario on another block's path (also Q-0236).
+  scenario on another block's path (also Q-0237).
 
 WHAT IS ALREADY IN A DECIPHER CARD'S FILE
 - The conversion of the old `at` tests put LONE TESTS into many Decipher cards' files (a test of an interaction,
