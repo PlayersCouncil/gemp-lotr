@@ -41,6 +41,7 @@ SECOND_TREE_NOTE = (
 AT_NOTE = (
     " Where a mechanics class exists already and `lint.py --form` faults tests that were in it before this batch, "
     "use `--only <the batch's tests>` and leave the older tests as they are (a later fixer has them).")
+# (The brief itself now says which imports a lone test in a skeleton file needs.)
 
 
 def run(*cmd, cwd=REPO, timeout=900):

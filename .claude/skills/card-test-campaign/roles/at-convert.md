@@ -69,8 +69,9 @@ as it takes, and say in your report which of your tests stand for which name of 
    - **In a card's file** (`Card_<set>_<number>_Tests`): the file is there already, usually holding only the
      stats test and the skeleton's placeholders. Add your test and its scenario; take the skeleton's placeholder
      method and its "put other cards in here" note out when you add the first real test; touch nothing else
-     (not the stats test, not its header; a test you park needs `import org.junit.Ignore;` added to the
-     skeleton's imports, and the skeleton's commented-out sample test may go with its placeholder). No ledger, no
+     (not the stats test, not its header; the skeleton lacks imports a real test needs: add
+     `import static com.gempukku.lotro.framework.Assertions.*;`, `import org.junit.Ignore;` if you park one, and
+     whatever else your test uses, and the skeleton's commented-out sample test may go with its placeholder). No ledger, no
      landing: this is a kickstart.
      `lint.py --form <the file> --only <YourTest,YourOtherTest>` must pass. A file the batch marks NEW FILE is
      made in the manner of its neighbours (for a Hobbit-set card the batch file says how).
