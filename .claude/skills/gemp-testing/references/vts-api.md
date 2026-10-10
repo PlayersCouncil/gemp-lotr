@@ -22,6 +22,7 @@ The unit test rig: a virtual table with two made-up players, where every card th
 - `new VirtualTableScenario(HashMap<String, String> cardIDs, HashMap<String, String> siteIDs, String ringBearerID, String ringID, String freepsMetaSiteId, String shadowMetaSiteId, Consumer<VirtualTableScenario> bidHandler)`
 - `new VirtualTableScenario(HashMap<String, String> cardIDs, HashMap<String, String> siteIDs, String ringBearerID, String ringID, String format, String freepsMetaSiteId, String shadowMetaSiteId, Consumer<VirtualTableScenario> bidHandler)`
 - `new VirtualTableScenario(HashMap<String, String> cardIDs, HashMap<String, String> siteIDs, String ringBearerID, String ringID, String format, String freepsMetaSiteId, String shadowMetaSiteId, Consumer<VirtualTableScenario> bidHandler, Map<String, RTMDGameInfo.LeaguePlacement> playerPlacements)`
+- `new VirtualTableScenario(HashMap<String, String> cardIDs, HashMap<String, String> siteIDs, String ringBearerID, String ringID, String format, String freepsMetaSiteId, String shadowMetaSiteId, Consumer<VirtualTableScenario> bidHandler, Map<String, RTMDGameInfo.LeaguePlacement> playerPlacements, String freepsPlayerName, String shadowPlayerName)` — A table whose players are seated under account names of the test's choosing, for a test of something that reads a player's name (the requirement PlayerIs).
 - `static LotroCardBlueprint FindCard(String bpid)`
 - `static LotroFormat FindFormat(String code)`
 - `static PackBox FindProduct(String name)`
@@ -534,4 +535,4 @@ This interface holds the handful of accessors that every other virtual table int
 - `void Verify(boolean condition, String message)` — A sanity check on the table's own bookkeeping, used where a procedure has to end up in a known state for whatever follows it to make sense.
 
 ---
-426 entries, 240 of them with no description in the source.
+427 entries, 240 of them with no description in the source.

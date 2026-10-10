@@ -129,7 +129,7 @@ surprises in this campaign were one of these.
 - **Hidden zones, reveals, shuffles and the game log:** Searching a deck shows the deck first · Whether a deck was shuffled · The Rule of 4 · A card being shown is listed as not selectable · A card made known by the game log alone · A hand played revealed is read from what each seat is sent · A shuffle into a draw deck always shuffles.
 - **Hinder, The One Ring and Maps:** The Ring-bearer is the rules' to protect, hindered or not · A hindered card that is shuffled into a draw deck is hindered no longer · A hindered card is still borne · The One Ring is never discarded · Maps and meta-sites cannot be hindered · A fellowship with no unhindered companion is not asked to move again (F-0315).
 - **Tables and formats:** A Shadows-block site path · A battleground or a forest site needs no cheat · A table in a format that uses Maps · Validating a deck.
-- **Test cards and the test booster pack:** Definitions of the tests' own · Test cards · Test Seal 0_8004 · Test Mirror 0_8005 · Test Undertow 0_8006 · Test Riptide 0_8008 · Test Fog 0_8010 · Test Archive 0_8011 · Test Whetstone 0_8013 · Test Muster 0_8014 · Test Shelf 0_8016 · Test Fork 0_8018 · Test Tourniquet 0_8019 · Test Herald 0_8020 · Test Porter 0_8023 · The test booster pack · An event played "ignoring all costs" pays nothing in its own text either (F-0316).
+- **Test cards and the test booster pack:** Definitions of the tests' own · Test cards · Test Seal 0_8004 · Test Mirror 0_8005 · Test Undertow 0_8006 · Test Riptide 0_8008 · Test Fog 0_8010 · Test Archive 0_8011 · Test Whetstone 0_8013 · Test Muster 0_8014 · Test Shelf 0_8016 · Test Fork 0_8018 · Test Tourniquet 0_8019 · Test Herald 0_8020 · Test Porter 0_8023 · Test Roster 0_8024 · The test booster pack · An event played "ignoring all costs" pays nothing in its own text either (F-0316).
 
 ## Choosing helper cards
 
@@ -240,8 +240,12 @@ new VirtualTableScenario(cards, sites, frodo, ring, format, "94_5", null, null, 
 ```
 
 The last answer is the higher bidder's seat ("Go first" / "Go second"); assertions made inside the handler count.
-A player left out of the standings has no place. The two players' account names are fixed ("Free Peoples Player",
-"Shadow Player"), so a condition on a player's name (`PlayerIs`, 94_5) is met on no table (G-0039).
+A player left out of the standings has no place. The two players' account names are "Free Peoples Player" and
+"Shadow Player" (the constants `P1`, `P2`) unless the constructor's last two arguments seat them under others
+(G-0039: `..., bidHandler, placements, freepsPlayerName, shadowPlayerName`, null for the usual name). That is for
+the mechanic test of a condition on a player's name (`PlayerIs`: mechanics/PlayerIsRequirementTests, with made-up
+names); a card's own tests do not read the account names in its definition (Q-0190: B, 94_5). At such a table the
+players are `scn.P1()` and `scn.P2()`, never the constants, and placements are keyed by the names given.
 A modifier of deck building (92_1, 92_19, 94_22: `DeckBuildingOverride`) drives no game: it is tested with
 `DeckValidationScenario`, validating with the card's own overrides and never a context built by hand (pitfalls,
 "Validating a deck"); its stats test takes the card from a table that has it.

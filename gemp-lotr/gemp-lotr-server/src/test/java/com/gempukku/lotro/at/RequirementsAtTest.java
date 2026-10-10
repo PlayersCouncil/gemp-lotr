@@ -10,7 +10,6 @@ import com.gempukku.lotro.common.Token;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.RTMDGameInfo;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.Test;
 
@@ -367,51 +366,6 @@ public class RequirementsAtTest extends AbstractAtTest {
         assertFalse(requirement.accepts(actionContext));
         playerDecided(P1, ringBearer.getCardId() + " " + goblinRunner.getCardId());
         assertTrue(requirement.accepts(actionContext));
-    }
-
-    @Test
-    public void playerIs() throws Exception {
-        initializeSimplestGame();
-
-        passUntil(Phase.FELLOWSHIP);
-
-        JSONArray names = new JSONArray();
-        names.add(P1.toUpperCase());
-
-        JSONObject obj = new JSONObject();
-        obj.put("player", "you");
-        obj.put("names", names);
-
-        Requirement requirement = new PlayerIs().getPlayRequirement(obj, lotroCardBlueprintBuilder);
-        assertTrue(requirement.accepts(new DefaultActionContext(P1, _game, null, null, null)));
-        assertFalse(requirement.accepts(new DefaultActionContext(P2, _game, null, null, null)));
-
-        obj.put("player", "freeps");
-        requirement = new PlayerIs().getPlayRequirement(obj, lotroCardBlueprintBuilder);
-        assertTrue(requirement.accepts(new DefaultActionContext(P2, _game, null, null, null)));
-    }
-
-    @Test
-    public void playerIsAny() throws Exception {
-        initializeSimplestGame();
-
-        passUntil(Phase.FELLOWSHIP);
-
-        JSONArray names = new JSONArray();
-        names.add(P2);
-
-        JSONObject obj = new JSONObject();
-        obj.put("player", "any");
-        obj.put("names", names);
-
-        Requirement requirement = new PlayerIs().getPlayRequirement(obj, lotroCardBlueprintBuilder);
-        assertTrue(requirement.accepts(new DefaultActionContext(P1, _game, null, null, null)));
-
-        JSONArray nobody = new JSONArray();
-        nobody.add("nobody at this table");
-        obj.put("names", nobody);
-        requirement = new PlayerIs().getPlayRequirement(obj, lotroCardBlueprintBuilder);
-        assertFalse(requirement.accepts(new DefaultActionContext(P1, _game, null, null, null)));
     }
 
     @Test

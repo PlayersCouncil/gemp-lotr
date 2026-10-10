@@ -52,19 +52,25 @@ public class VirtualTableScenario extends VirtualTable implements TestConstants,
         return _productLibrary.GetProduct(name);
     }
 
-    private final ActionContext _freepsFilterContext = new DefaultActionContext(P1, _game, null, null, null);
-    private final ActionContext _shadowFilterContext = new DefaultActionContext(P2, _game, null, null, null);
+    // The account names the two players are seated under: the constants P1 and P2 unless the test chose others.
+    private final String _freepsPlayerName;
+    private final String _shadowPlayerName;
+
+    private final ActionContext _freepsFilterContext;
+    private final ActionContext _shadowFilterContext;
 
     public ActionContext FreepsFilterContext() { return _freepsFilterContext; }
     public ActionContext ShadowFilterContext() { return _shadowFilterContext; }
 
     /*
-     * The two players at a test table are always the same made-up pair.
+     * The two players at a test table are the same made-up pair, the constants P1 and P2, unless the test seated
+     * them under names of its choosing (the constructor that takes the two names).  Everything the table keys by
+     * player goes by these two methods, never by the constants.
      */
     @Override
-    public String P1() { return P1; }
+    public String P1() { return _freepsPlayerName; }
     @Override
-    public String P2() { return P2; }
+    public String P2() { return _shadowPlayerName; }
 
     /**
      * In a test, a failed sanity check inside the rig is a test failure like any other.
@@ -110,7 +116,7 @@ public class VirtualTableScenario extends VirtualTable implements TestConstants,
             String ringBearerID, String ringID,
             String format,
             String freepsMapId, String shadowMapId) throws CardNotFoundException, DecisionResultInvalidException {
-        this(cardIDs, siteIDs, ringBearerID, ringID, format, freepsMapId, shadowMapId, null, null, null, null);
+        this(cardIDs, siteIDs, ringBearerID, ringID, format, freepsMapId, shadowMapId, null, null, null, null, null, null);
     }
 
     public VirtualTableScenario(HashMap<String, String> cardIDs,
@@ -148,14 +154,42 @@ public class VirtualTableScenario extends VirtualTable implements TestConstants,
             String freepsMetaSiteId, String shadowMetaSiteId,
             Consumer<VirtualTableScenario> bidHandler,
             Map<String, RTMDGameInfo.LeaguePlacement> playerPlacements) throws CardNotFoundException, DecisionResultInvalidException {
-        this(cardIDs, siteIDs, ringBearerID, ringID, format, null, null, freepsMetaSiteId, shadowMetaSiteId, bidHandler, playerPlacements);
+        this(cardIDs, siteIDs, ringBearerID, ringID, format, null, null, freepsMetaSiteId, shadowMetaSiteId, bidHandler, playerPlacements, null, null);
+    }
+
+    /**
+     * A table whose players are seated under account names of the test's choosing, for a test of something that
+     * reads a player's name (the requirement PlayerIs).  At every other table the two players are P1, "Free Peoples
+     * Player", and P2, "Shadow Player".  The names given are the players' names to the game and to everything the
+     * table keys by player: P1() and P2() return them, each player's cards, deck and meta-site are his under them,
+     * and the Freeps and Shadow methods act for them as at any table.  The constants P1 and P2 are then not the
+     * players: a test at such a table names a player with scn.P1() or scn.P2().
+     * @param playerPlacements Race to Mount Doom league placements per player, or else null.  Keyed by the names
+     *                         the players are seated under.
+     * @param freepsPlayerName The account name player 1 is seated under, or null for the usual one (P1).
+     * @param shadowPlayerName The account name player 2 is seated under, or null for the usual one (P2).  The game
+     *                         tells its players apart by name, so two seats under one name are refused.
+     */
+    public VirtualTableScenario(HashMap<String, String> cardIDs,
+            HashMap<String, String> siteIDs,
+            String ringBearerID, String ringID,
+            String format,
+            String freepsMetaSiteId, String shadowMetaSiteId,
+            Consumer<VirtualTableScenario> bidHandler,
+            Map<String, RTMDGameInfo.LeaguePlacement> playerPlacements,
+            String freepsPlayerName, String shadowPlayerName) throws CardNotFoundException, DecisionResultInvalidException {
+        this(cardIDs, siteIDs, ringBearerID, ringID, format, null, null, freepsMetaSiteId, shadowMetaSiteId, bidHandler, playerPlacements,
+                freepsPlayerName, shadowPlayerName);
     }
 
     /**
      * The constructor every other one comes to.
      * @param freepsMapId Blueprint ID of the Map in player 1's deck, or null.  See the constructor that names Maps.
      * @param shadowMapId Blueprint ID of the Map in player 2's deck, or null.
-     * @param playerPlacements Race to Mount Doom league placements per player (keyed by P1 / P2), or else null.
+     * @param playerPlacements Race to Mount Doom league placements per player (keyed by P1() / P2()), or else null.
+     * @param freepsPlayerName The account name player 1 is seated under, or null for P1.  See the constructor that
+     *                         names the players.
+     * @param shadowPlayerName The account name player 2 is seated under, or null for P2.
      */
     private VirtualTableScenario(HashMap<String, String> cardIDs,
             HashMap<String, String> siteIDs,
@@ -164,7 +198,18 @@ public class VirtualTableScenario extends VirtualTable implements TestConstants,
             String freepsMapId, String shadowMapId,
             String freepsMetaSiteId, String shadowMetaSiteId,
             Consumer<VirtualTableScenario> bidHandler,
-            Map<String, RTMDGameInfo.LeaguePlacement> playerPlacements) throws CardNotFoundException, DecisionResultInvalidException {
+            Map<String, RTMDGameInfo.LeaguePlacement> playerPlacements,
+            String freepsPlayerName, String shadowPlayerName) throws CardNotFoundException, DecisionResultInvalidException {
+
+        _freepsPlayerName = freepsPlayerName != null ? freepsPlayerName : P1;
+        _shadowPlayerName = shadowPlayerName != null ? shadowPlayerName : P2;
+        if(_freepsPlayerName.equals(_shadowPlayerName)) {
+            throw new IllegalArgumentException("Both players cannot be seated under one name (\"" + _freepsPlayerName
+                    + "\"): the game tells its players apart by name.");
+        }
+        // As they have always been made: before the game exists, so neither holds one.
+        _freepsFilterContext = new DefaultActionContext(_freepsPlayerName, _game, null, null, null);
+        _shadowFilterContext = new DefaultActionContext(_shadowPlayerName, _game, null, null, null);
 
         if(siteIDs == null ) {
             siteIDs = KingSites;
@@ -179,8 +224,8 @@ public class VirtualTableScenario extends VirtualTable implements TestConstants,
         }
 
         Map<String, LotroDeck> decks = new HashMap<>();
-        decks.put(P1, new LotroDeck(P1 + "'s deck"));
-        decks.put(P2, new LotroDeck(P2 + "'s deck"));
+        decks.put(P1(), new LotroDeck(P1() + "'s deck"));
+        decks.put(P2(), new LotroDeck(P2() + "'s deck"));
 
         // Strictly speaking, the names don't matter all that much, but in the event that the tester wants to retrieve
         // a specific card from deck by name, then if there are any duplicates the one returned will be random, which
@@ -188,23 +233,23 @@ public class VirtualTableScenario extends VirtualTable implements TestConstants,
 
         for(String name : siteIDs.keySet()) {
             String id = siteIDs.get(name);
-            decks.get(P1).addSite(id);
-            decks.get(P2).addSite(id);
+            decks.get(P1()).addSite(id);
+            decks.get(P2()).addSite(id);
         }
 
         for(String name : cardIDs.keySet()) {
             String id = cardIDs.get(name);
-            decks.get(P1).addCard(id);
-            decks.get(P2).addCard(id);
+            decks.get(P1()).addCard(id);
+            decks.get(P2()).addCard(id);
         }
 
         // Now that all the helper parameters have been stuffed into the decklist, we now populate an actual deck for each player.
 
-        decks.get(P1).setRingBearer(ringBearerID);
-        decks.get(P2).setRingBearer(ringBearerID);
+        decks.get(P1()).setRingBearer(ringBearerID);
+        decks.get(P2()).setRingBearer(ringBearerID);
 
-        decks.get(P1).setRing(ringID);
-        decks.get(P2).setRing(ringID);
+        decks.get(P1()).setRing(ringID);
+        decks.get(P2()).setRing(ringID);
 
         // A format that uses Maps cannot seat a deck that has none.  A Map only announces its deck's site path, so
         // where the tester names none each deck gets the Map of the path its sites are on.
@@ -221,10 +266,10 @@ public class VirtualTableScenario extends VirtualTable implements TestConstants,
                 shadowMapId = MapOfSitePath(siteIDs);
             }
         }
-        decks.get(P1).setMap(freepsMapId);
-        decks.get(P2).setMap(shadowMapId);
+        decks.get(P1()).setMap(freepsMapId);
+        decks.get(P2()).setMap(shadowMapId);
 
-        RequireASiteToStartAt(decks.get(P1).getSites(), siteIDs);
+        RequireASiteToStartAt(decks.get(P1()).getSites(), siteIDs);
 
         InitializeGameWithDecks(decks, format, freepsMetaSiteId, shadowMetaSiteId, playerPlacements);
 
@@ -236,54 +281,54 @@ public class VirtualTableScenario extends VirtualTable implements TestConstants,
             BidAndSeatPlayers();
         }
 
-        Cards.put(P1, new HashMap<>());
-        Cards.put(P2, new HashMap<>());
+        Cards.put(P1(), new HashMap<>());
+        Cards.put(P2(), new HashMap<>());
 
         // Now that the game has been initialized, we reset any automatic drawing that was performed as part of startup
-        for(var card : _gameState.getHand(P2).stream().toList()) {
+        for(var card : _gameState.getHand(P2()).stream().toList()) {
             MoveCardsToTopOfDeck((PhysicalCardImpl)card);
         }
 
         // Next we associate all the physically-instantiated cards with the human-readable names they were given by the
         // tester.  This will now permit us to nab the exact card from anywhere without searching or collisions.
         if(cardIDs != null) {
-            for(var card : _game.getGameState().getHand(P1).stream().toList()) {
+            for(var card : _game.getGameState().getHand(P1()).stream().toList()) {
                 MoveCardsToTopOfDeck((PhysicalCardImpl)card);
             }
 
-            for (var card : _game.getGameState().getDeck(P1)) {
+            for (var card : _game.getGameState().getDeck(P1())) {
                 String name = cardIDs.entrySet()
                         .stream()
-                        .filter(x -> x.getValue().equals(card.getBlueprintId()) && !Cards.get(P1).containsKey(x.getKey()))
+                        .filter(x -> x.getValue().equals(card.getBlueprintId()) && !Cards.get(P1()).containsKey(x.getKey()))
                         .map(Map.Entry::getKey)
                         .findFirst().get();
 
-                Cards.get(P1).put(name, (PhysicalCardImpl) card);
+                Cards.get(P1()).put(name, (PhysicalCardImpl) card);
             }
 
-            for(var card : _game.getGameState().getHand(P2).stream().toList()) {
+            for(var card : _game.getGameState().getHand(P2()).stream().toList()) {
                 MoveCardsToTopOfDeck((PhysicalCardImpl)card);
             }
 
-            for (var card : _game.getGameState().getDeck(P2)) {
+            for (var card : _game.getGameState().getDeck(P2())) {
                 String name = cardIDs.entrySet()
                         .stream()
-                        .filter(x -> x.getValue().equals(card.getBlueprintId()) && !Cards.get(P2).containsKey(x.getKey()))
+                        .filter(x -> x.getValue().equals(card.getBlueprintId()) && !Cards.get(P2()).containsKey(x.getKey()))
                         .map(Map.Entry::getKey)
                         .findFirst().get();
 
-                Cards.get(P2).put(name, (PhysicalCardImpl) card);
+                Cards.get(P2()).put(name, (PhysicalCardImpl) card);
             }
         }
 
         if(siteIDs != null) {
-            for (var card : _game.getGameState().getAdventureDeck(P1)) {
+            for (var card : _game.getGameState().getAdventureDeck(P1())) {
                 String name = null;
 
                 if(cardIDs != null) {
                     name = cardIDs.entrySet()
                             .stream()
-                            .filter(x -> x.getValue().equals(card.getBlueprintId()) && !Cards.get(P1).containsKey(x.getKey()))
+                            .filter(x -> x.getValue().equals(card.getBlueprintId()) && !Cards.get(P1()).containsKey(x.getKey()))
                             .map(Map.Entry::getKey)
                             .findFirst().orElse(null);
                 }
@@ -296,16 +341,16 @@ public class VirtualTableScenario extends VirtualTable implements TestConstants,
                             .findFirst().get();
                 }
 
-                Cards.get(P1).put(name, (PhysicalCardImpl) card);
+                Cards.get(P1()).put(name, (PhysicalCardImpl) card);
             }
 
-            for (var card : _game.getGameState().getAdventureDeck(P2)) {
+            for (var card : _game.getGameState().getAdventureDeck(P2())) {
                 String name = null;
 
                 if(cardIDs != null) {
                     name = cardIDs.entrySet()
                             .stream()
-                            .filter(x -> x.getValue().equals(card.getBlueprintId()) && !Cards.get(P2).containsKey(x.getKey()))
+                            .filter(x -> x.getValue().equals(card.getBlueprintId()) && !Cards.get(P2()).containsKey(x.getKey()))
                             .map(Map.Entry::getKey)
                             .findFirst().orElse(null);
                 }
@@ -318,18 +363,18 @@ public class VirtualTableScenario extends VirtualTable implements TestConstants,
                             .findFirst().get();
                 }
 
-                Cards.get(P2).put(name, (PhysicalCardImpl) card);
+                Cards.get(P2()).put(name, (PhysicalCardImpl) card);
             }
         }
 
         // Create and place meta-site modifiers in SUPPORT zone if provided
         if (freepsMetaSiteId != null) {
-            var freepsMod = _gameState.getMetaSites(P1).getFirst();
-            Cards.get(P1).put("mod", (PhysicalCardImpl)freepsMod);
+            var freepsMod = _gameState.getMetaSites(P1()).getFirst();
+            Cards.get(P1()).put("mod", (PhysicalCardImpl)freepsMod);
         }
         if (shadowMetaSiteId != null) {
-            var shadowMod = _gameState.getMetaSites(P2).getFirst();
-            Cards.get(P2).put("mod", (PhysicalCardImpl)shadowMod);
+            var shadowMod = _gameState.getMetaSites(P2()).getFirst();
+            Cards.get(P2()).put("mod", (PhysicalCardImpl)shadowMod);
         }
     }
 
@@ -412,7 +457,7 @@ public class VirtualTableScenario extends VirtualTable implements TestConstants,
      * @param formatName Name of the format this table should be following.
      * @param freepsMetaSiteId Blueprint ID of the Race to Mount Doom meta-sites used by player 1, or else null
      * @param shadowMetaSiteId Blueprint ID of the Race to Mount Doom meta-sites used by player 2, or else null
-     * @param playerPlacements Race to Mount Doom league placements per player (keyed by P1 / P2), or else null
+     * @param playerPlacements Race to Mount Doom league placements per player (keyed by P1() / P2()), or else null
      */
     public void InitializeGameWithDecks(Map<String, LotroDeck> decks, String formatName, String freepsMetaSiteId, String shadowMetaSiteId,
             Map<String, RTMDGameInfo.LeaguePlacement> playerPlacements) {
@@ -422,10 +467,10 @@ public class VirtualTableScenario extends VirtualTable implements TestConstants,
         if(freepsMetaSiteId != null || shadowMetaSiteId != null) {
             var playerMetaSites = new HashMap<String, List<RTMDGameInfo.MetaSitePair>>();
             if(freepsMetaSiteId != null) {
-                playerMetaSites.put(P1, Collections.singletonList(new RTMDGameInfo.MetaSitePair("90_1", freepsMetaSiteId)));
+                playerMetaSites.put(P1(), Collections.singletonList(new RTMDGameInfo.MetaSitePair("90_1", freepsMetaSiteId)));
             }
             if(shadowMetaSiteId != null) {
-                playerMetaSites.put(P2, Collections.singletonList(new RTMDGameInfo.MetaSitePair("90_1", shadowMetaSiteId)));
+                playerMetaSites.put(P2(), Collections.singletonList(new RTMDGameInfo.MetaSitePair("90_1", shadowMetaSiteId)));
             }
             info = new RTMDGameInfo(playerMetaSites, playerPlacements);
         }

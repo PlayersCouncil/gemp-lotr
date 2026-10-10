@@ -702,4 +702,87 @@
 		}
 		gametext: <b>Fellowship:</b> If a possession could be transferred to a Man, choose up to 1 such possession and add (1).
 	}
+	# PlayerIsRequirementTests: the requirement playerIs, which asks whether a player's account name is one of a
+	# list written in the definition.  The one real card that uses it (Race Text 94_5) lists the accounts of the
+	# Dark Lord and of a World Champion, which change hands (Q-0190): these three list names that are nobody's.
+	# An account name is letters, digits, "-" and "_" (DbPlayerDAO), so a name with a space in it can be no
+	# account.  Shadow cards, so that the player who uses one ("you") is not the Free Peoples player.
+	# With no "player" the requirement is asked of the player using the card, and any name of the list will do.
+	0_8024: {
+		title: Test Roster
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: shadow
+			requires: {
+				type: playerIs
+				names: [
+					Warden of the Test Table
+					Reeve of the Test Table
+				]
+			}
+			effect: {
+				type: addTwilight
+				amount: 1
+			}
+		}
+		gametext: <b>Shadow:</b> If you are the Warden of the Test Table or the Reeve of the Test Table, add (1).
+	}
+	# Asked of this turn's Free Peoples player, as Race Text 94_5 asks it.
+	0_8025: {
+		title: Test Summons
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: shadow
+			requires: {
+				type: playerIs
+				player: freeps
+				names: [
+					Warden of the Test Table
+				]
+			}
+			effect: {
+				type: addTwilight
+				amount: 1
+			}
+		}
+		gametext: <b>Shadow:</b> If the Free Peoples player is the Warden of the Test Table, add (1).
+	}
+	# Asked of "any" player: met when either player at the table has the name.  No real card asks it so.
+	0_8026: {
+		title: Test Census
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: shadow
+			requires: {
+				type: playerIs
+				player: any
+				names: [
+					Warden of the Test Table
+				]
+			}
+			effect: {
+				type: addTwilight
+				amount: 1
+			}
+		}
+		gametext: <b>Shadow:</b> If any player is the Warden of the Test Table, add (1).
+	}
 }

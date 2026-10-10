@@ -78,7 +78,7 @@ public interface AdHocEffects extends TableBase, TestConstants, Decisions {
 	 * @param effect The effect to execute.  Details are determined by the effect itself.
 	 * executed as part of the current player decision.
 	 */
-	default void FreepsExecuteAdHocEffect(Effect effect) { ExecuteAdHocEffect(P1, effect); }
+	default void FreepsExecuteAdHocEffect(Effect effect) { ExecuteAdHocEffect(P1(), effect); }
 	/**
 	 * Causes the Shadow player to execute an arbitrary effect.  The player must be at a choice of
 	 * phase actions ("Play ... action or Pass"): the effect is run in place of that player's answer to it, whatever
@@ -88,7 +88,7 @@ public interface AdHocEffects extends TableBase, TestConstants, Decisions {
 	 * @param effect The effect to execute.  Details are determined by the effect itself.
 	 * executed as part of the current player decision.
 	 */
-	default void ShadowExecuteAdHocEffect(Effect effect) { ExecuteAdHocEffect(P2, effect); }
+	default void ShadowExecuteAdHocEffect(Effect effect) { ExecuteAdHocEffect(P2(), effect); }
 
 	/**
 	 * Causes the given player to execute an arbitrary effect.  The player must be at a choice of
@@ -112,14 +112,14 @@ public interface AdHocEffects extends TableBase, TestConstants, Decisions {
 	 * The test reads what became of it from the board.  See {@link #ExecuteAdHocEffectUnchecked}.
 	 * @param effect The effect to execute.  Details are determined by the effect itself.
 	 */
-	default void FreepsExecuteAdHocEffectUnchecked(Effect effect) { ExecuteAdHocEffectUnchecked(P1, effect); }
+	default void FreepsExecuteAdHocEffectUnchecked(Effect effect) { ExecuteAdHocEffectUnchecked(P1(), effect); }
 	/**
 	 * Causes the Shadow player to execute an arbitrary effect whose outcome the test is about, without asserting
 	 * that it was carried out: a wound aimed at a character who may turn out to be protected from it.  The test
 	 * reads what became of it from the board.  See {@link #ExecuteAdHocEffectUnchecked}.
 	 * @param effect The effect to execute.  Details are determined by the effect itself.
 	 */
-	default void ShadowExecuteAdHocEffectUnchecked(Effect effect) { ExecuteAdHocEffectUnchecked(P2, effect); }
+	default void ShadowExecuteAdHocEffectUnchecked(Effect effect) { ExecuteAdHocEffectUnchecked(P2(), effect); }
 	/**
 	 * Causes the given player to execute an arbitrary effect, as ExecuteAdHocEffect does, but without asserting
 	 * that the effect was carried out.  It is for an effect that something on the board may stop (a wound that a
@@ -197,7 +197,7 @@ public interface AdHocEffects extends TableBase, TestConstants, Decisions {
 					LotroGame game, EffectResult effectResult)  {
 				RequiredTriggerAction action = new RequiredTriggerAction(null);
 				action.appendEffect(
-						new DiscardCardsFromPlayEffect(P2, null, filterables));
+						new DiscardCardsFromPlayEffect(P2(), null, filterables));
 				return Collections.singletonList(action);
 			}
 		});
