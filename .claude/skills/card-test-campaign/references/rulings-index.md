@@ -478,7 +478,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A correction of several lines for mutate.py
 - "Use vitality to resolve that skirmish instead of strength" is two overrides, one for each side (Final Triumph 68_115 and 18_115)
 - "Are not unique" wants three copies in play and the fourth played (94_16)
-- A site can be controlled only once every marker has passed it
+- A site can be controlled only once every marker has passed it [Q-0230]
 - A required start-of-turn trigger with a 0-to-N choice
 - "At the start of each of your turns" reads BETWEEN_TURNS; read every counter before as well as after
 - The turn-skippers do not lay sites
