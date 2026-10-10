@@ -1,11 +1,9 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -38,10 +36,6 @@ public class Card_V1_027_Tests
 					// Saruman, Black Traitor: cost 4, site 4.  "When you play Saruman, you may discard a condition."
 					put("saruman", "4_173");
 					put("savage", "1_151");     // Uruk Savage: [isengard] minion, strength 5, vitality 3; damage +1 is its whole text
-					// Goblin Armory: [moria] condition, cost 0, support area.  Its text is about [moria] weapons
-					// and [moria] Orcs, and there are none here.  Every real weather card is [isengard], so
-					// where a test wants weather of another culture it makes this one weather.
-					put("armory", "1_173");
 
 					// Aragorn, Ranger of the North: a Man; a maneuver ability never used here
 					put("aragorn", "1_89");
@@ -127,32 +121,25 @@ public class Card_V1_027_Tests
 	}
 
 	@Test
-	public void CannotBePlayedUntilAWeatherConditionIsSpotted() throws DecisionResultInvalidException, CardNotFoundException, InvalidCardDefinitionException {
+	public void CannotBePlayedUntilAWeatherConditionIsSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var frostbite = scn.GetShadowCard("frostbite");
 		var urgency = scn.GetShadowCard("urgency");
 		var chill = scn.GetShadowCard("chill");
 		var ambition = scn.GetShadowCard("ambition");
-		var savage = scn.GetShadowCard("savage");
 		scn.MoveCardsToHand(frostbite, urgency);
 		scn.MoveCardsToSupportArea(ambition);
 		scn.MoveCardsToDiscard(chill);
-		// The only real weather cards that are not conditions are events, which are never in play.  This
-		// makes a minion weather.  It goes by name: a modifier given the card itself is left behind when
-		// the card comes into play.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, scn.GenerateShadowFilter("name(Uruk Savage)"), null, Keyword.WEATHER));
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(savage);
 		scn.SetTwilight(3);
 		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
-		// In play: an [isengard] condition that is not weather, and a weather card that is not a condition.
-		// One weather condition is in hand and another is in the discard pile.
-		assertInPlay(ambition, savage);
-		assertTrue(scn.HasKeyword(savage, Keyword.WEATHER));
+		// In play: an [isengard] condition that is not weather.  One weather condition is in hand and another is
+		// in the discard pile.
+		assertInPlay(ambition);
 		assertInZone(Zone.HAND, urgency);
 		assertInZone(Zone.DISCARD, chill);
 		assertFalse(scn.ShadowPlayAvailable(frostbite));
@@ -165,21 +152,20 @@ public class Card_V1_027_Tests
 	}
 
 	@Test
-	public void PlaysForOneTwilightOnAChosenCompanion() throws DecisionResultInvalidException, CardNotFoundException, InvalidCardDefinitionException {
+	public void PlaysForOneTwilightOnAChosenCompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
 		var frostbite = scn.GetShadowCard("frostbite");
-		var armory = scn.GetShadowCard("armory");
+		var urgency = scn.GetShadowCard("urgency");
 		var savage = scn.GetShadowCard("savage");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var thrarin = scn.GetFreepsCard("thrarin");
 		scn.MoveCompanionsToTable(aragorn);
 		scn.MoveAlliesToTable(thrarin);
-		// The text asks for a weather condition and names no culture: the one spotted is [moria], made
-		// weather by name.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, scn.GenerateShadowFilter("name(Goblin Armory)"), null, Keyword.WEATHER));
-		scn.MoveCardsToSupportArea(armory);
+		// The weather condition spotted: Urgency, in the support area.  With no Ent in play it adds nothing
+		// when the fellowship moves.
+		scn.MoveCardsToSupportArea(urgency);
 		scn.MoveCardsToHand(frostbite);
 
 		scn.StartGame();
@@ -190,8 +176,8 @@ public class Card_V1_027_Tests
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 3 set + 2 companions + 2 for the shadow number of site 2
 		assertEquals(7, scn.GetTwilight());
-		assertInPlay(armory);
-		assertTrue(scn.HasKeyword(armory, Keyword.WEATHER));
+		assertInPlay(urgency);
+		assertTrue(scn.HasKeyword(urgency, Keyword.WEATHER));
 		assertInZone(Zone.HAND, frostbite);
 
 		scn.ShadowPlayCard(frostbite);
@@ -257,7 +243,7 @@ public class Card_V1_027_Tests
 	}
 
 	@Test
-	public void EachWeatherConditionPlayedAddsTwoTwilightAndOtherCardsAddNothing() throws DecisionResultInvalidException, CardNotFoundException, InvalidCardDefinitionException {
+	public void EachWeatherConditionPlayedAddsTwoTwilightAndOtherCardsAddNothing() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
@@ -266,14 +252,11 @@ public class Card_V1_027_Tests
 		var urgency = scn.GetShadowCard("urgency");
 		var chill = scn.GetShadowCard("chill");
 		var ambition = scn.GetShadowCard("ambition");
-		var armory = scn.GetShadowCard("armory");
 		var savage = scn.GetShadowCard("savage");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveCompanionsToTable(aragorn);
 		scn.AttachCardsTo(aragorn, frostbite);
-		scn.MoveCardsToHand(urgency, chill, ambition, armory, frostbite2);
-		// A weather card that is not [isengard].  By name, so that it is still weather once it has been played.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, scn.GenerateShadowFilter("name(Goblin Armory)"), null, Keyword.WEATHER));
+		scn.MoveCardsToHand(urgency, chill, ambition, frostbite2);
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(savage);
@@ -301,16 +284,10 @@ public class Card_V1_027_Tests
 		assertInPlay(ambition);
 		assertEquals(11, scn.GetTwilight());
 
-		// A [moria] condition that costs nothing and has been made weather: 11 + 2
-		assertTrue(scn.HasKeyword(armory, Keyword.WEATHER));
-		scn.ShadowPlayCard(armory);
-		assertInPlay(armory);
-		assertEquals(13, scn.GetTwilight());
-
-		// Another Frostbite, which goes to Frodo as the only companion without one: 13 - 1, and nothing added.
+		// Another Frostbite, which goes to Frodo as the only companion without one: 11 - 1, and nothing added.
 		scn.ShadowPlayCard(frostbite2);
 		assertAttachedTo(frostbite2, frodo);
-		assertEquals(12, scn.GetTwilight());
+		assertEquals(10, scn.GetTwilight());
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 

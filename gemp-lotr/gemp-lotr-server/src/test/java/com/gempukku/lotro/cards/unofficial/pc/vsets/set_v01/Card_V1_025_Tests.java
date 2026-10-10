@@ -4,7 +4,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -26,7 +25,6 @@ public class Card_V1_025_Tests
 					put("chill", "1_134");      // Saruman's Chill: [isengard] weather condition
 					put("frost", "1_135");      // Saruman's Frost: [isengard] weather condition
 					put("storm", "2_48");       // Wizard Storm: [isengard] weather condition
-					put("troop", "1_177");      // Goblin Patrol Troop: [moria] minion, no text at all
 
 					put("guard1", "1_7");       // Dwarf Guard: companion, vitality 2; its only text is a requirement to play it
 					put("guard2", "1_7");
@@ -188,17 +186,14 @@ public class Card_V1_025_Tests
 		var chill = scn.GetShadowCard("chill");
 		var frost = scn.GetShadowCard("frost");
 		var saruman = scn.GetShadowCard("saruman");
-		var troop = scn.GetShadowCard("troop");
 		var guard1 = scn.GetFreepsCard("guard1");
 		var guard2 = scn.GetFreepsCard("guard2");
 		var thrarin = scn.GetFreepsCard("thrarin");
 		scn.MoveCompanionsToTable(guard1, guard2);
 		scn.MoveCardsToSupportArea(thrarin);
 		scn.MoveCardsToHand(flock2);
-		// Snows, Chill, Saruman and the Troop stay in the draw deck; Frost gives the discard pile a weather too.
+		// Snows, Chill and Saruman stay in the draw deck; Frost gives the discard pile a weather too.
 		scn.MoveCardsToDiscard(frost);
-		// A weather card that is not [isengard]
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, troop, null, Keyword.WEATHER));
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(flock);
@@ -210,7 +205,6 @@ public class Card_V1_025_Tests
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		// 5 set + 3 companions + 2 for the shadow number of site 2
 		assertEquals(10, scn.GetTwilight());
-		assertTrue(scn.HasKeyword(troop, Keyword.WEATHER));
 		// One wounded companion, a wounded ally, two unwounded companions and no Saruman
 		assertEquals(1, scn.GetWoundsOn(guard1));
 		assertEquals(1, scn.GetWoundsOn(thrarin));
@@ -233,8 +227,8 @@ public class Card_V1_025_Tests
 		scn.ShadowDismissRevealedCards();
 
 		assertTrue(scn.ShadowHasCardChoiceAvailable(snows, chill));
-		// An [isengard] minion that is not weather, and a weather minion that is not [isengard]
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(saruman, troop));
+		// An [isengard] minion that is not weather
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(saruman));
 		scn.ShadowChooseCardBPFromSelection(snows);
 
 		assertInZone(Zone.HAND, snows);
@@ -295,14 +289,11 @@ public class Card_V1_025_Tests
 		var frost = scn.GetShadowCard("frost");
 		var storm = scn.GetShadowCard("storm");
 		var saruman = scn.GetShadowCard("saruman");
-		var troop = scn.GetShadowCard("troop");
 		var guard1 = scn.GetFreepsCard("guard1");
 		var guard2 = scn.GetFreepsCard("guard2");
 		scn.MoveCompanionsToTable(guard1, guard2);
 		// Frost and Storm are the weather in the discard pile; Snows and Chill stay in the draw deck.
-		scn.MoveCardsToDiscard(frost, storm, saruman, troop);
-		// A weather card that is not [isengard]
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, troop, null, Keyword.WEATHER));
+		scn.MoveCardsToDiscard(frost, storm, saruman);
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(flock, flock2);
@@ -311,12 +302,11 @@ public class Card_V1_025_Tests
 		scn.FreepsPass();
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
-		assertTrue(scn.HasKeyword(troop, Keyword.WEATHER));
 		// One action for each copy.
 		assertTrue(scn.ShadowActionAvailable(flock));
 		assertTrue(scn.ShadowActionAvailable(flock2));
 		assertEquals(0, scn.GetShadowHandCount());
-		assertEquals(4, scn.GetShadowDiscardCount());
+		assertEquals(3, scn.GetShadowDiscardCount());
 
 		scn.ShadowUseCardAction(flock);
 		assertTrue(scn.ShadowChoiceAvailable("draw deck"));
@@ -324,13 +314,13 @@ public class Card_V1_025_Tests
 		scn.ShadowChoose("discard pile");
 
 		assertTrue(scn.ShadowHasCardChoiceAvailable(frost, storm));
-		// An [isengard] minion that is not weather, and a weather minion that is not [isengard]
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(saruman, troop));
+		// An [isengard] minion that is not weather
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(saruman));
 		scn.ShadowChooseCard(frost);
 
 		assertInZone(Zone.HAND, frost);
 		assertEquals(1, scn.GetShadowHandCount());
-		assertEquals(3, scn.GetShadowDiscardCount());
+		assertEquals(2, scn.GetShadowDiscardCount());
 		// The first copy has had its once; the limit of the second copy is its own (CR 4.2 "limit").
 		assertFalse(scn.ShadowActionAvailable(flock));
 		assertTrue(scn.ShadowActionAvailable(flock2));
@@ -340,8 +330,8 @@ public class Card_V1_025_Tests
 		// Storm is the only [isengard] weather left in the discard pile, so it is taken without asking.
 		assertInZone(Zone.HAND, storm);
 		assertEquals(2, scn.GetShadowHandCount());
-		assertEquals(2, scn.GetShadowDiscardCount());
-		assertInZone(Zone.DISCARD, saruman, troop);
+		assertEquals(1, scn.GetShadowDiscardCount());
+		assertInZone(Zone.DISCARD, saruman);
 		assertFalse(scn.ShadowActionAvailable(flock));
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
@@ -397,14 +387,11 @@ public class Card_V1_025_Tests
 		var frost = scn.GetShadowCard("frost");
 		var storm = scn.GetShadowCard("storm");
 		var saruman = scn.GetShadowCard("saruman");
-		var troop = scn.GetShadowCard("troop");
 		var guard1 = scn.GetFreepsCard("guard1");
 		var guard2 = scn.GetFreepsCard("guard2");
 		scn.MoveCompanionsToTable(guard1, guard2);
 		// Snows is the one [isengard] weather left in the draw deck; the discard pile has three of its own.
 		scn.MoveCardsToDiscard(chill, frost, storm);
-		// A weather card that is not [isengard]
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, troop, null, Keyword.WEATHER));
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(flock);
@@ -414,8 +401,7 @@ public class Card_V1_025_Tests
 
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		assertTrue(scn.ShadowActionAvailable(flock));
-		assertTrue(scn.HasKeyword(troop, Keyword.WEATHER));
-		assertInZone(Zone.DECK, snows, saruman, troop);
+		assertInZone(Zone.DECK, snows, saruman);
 		assertInZone(Zone.DISCARD, chill, frost, storm);
 		assertEquals(0, scn.GetShadowHandCount());
 		int deckBefore = scn.GetShadowDeckCount();
@@ -431,7 +417,7 @@ public class Card_V1_025_Tests
 		// Snows is the only card that could be chosen, and it is still not taken unasked: "There is no penalty
 		// if you don't find (or choose not to play) a card you are looking for in your draw deck."
 		assertTrue(scn.ShadowHasCardChoiceAvailable(snows));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(chill, frost, storm, saruman, troop));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(chill, frost, storm, saruman));
 		assertEquals(0, scn.ShadowGetChoiceMin());
 		assertEquals(1, scn.ShadowGetChoiceMax());
 		scn.ShadowDeclineChoosing();

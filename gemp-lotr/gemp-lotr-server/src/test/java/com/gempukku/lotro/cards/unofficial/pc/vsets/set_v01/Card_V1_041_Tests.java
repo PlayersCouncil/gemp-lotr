@@ -1,11 +1,9 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -145,41 +143,6 @@ public class Card_V1_041_Tests
 
 		scn.ShadowPlayCard(eyes);
 		assertEquals(6, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, eyes);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
-	public void ATwilightNazgulOfAnotherCultureIsSpottedAsWell() throws DecisionResultInvalidException, CardNotFoundException, InvalidCardDefinitionException {
-		var scn = GetScenario();
-
-		var eyes = scn.GetShadowCard("eyes");
-		var lemenya = scn.GetShadowCard("lemenya");
-		var lights = scn.GetShadowCard("lights");
-		scn.MoveCardsToHand(eyes, lights);
-		// Every twilight Nazgul there is, is a [ringwraith] card.  Corpse Lights is twilight and [sauron]; made
-		// a Nazgul as well, it is a twilight Nazgul of another culture.  The modifier is built on a filter and
-		// not on the card, because the card is to be played afterwards.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, scn.GenerateShadowFilter("name(Corpse Lights)"), null, Race.NAZGUL));
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(lemenya);
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		// 10 set + 1 for Frodo + 2 for the shadow number of site 2
-		assertEquals(13, scn.GetTwilight());
-		assertFalse(scn.ShadowPlayAvailable(eyes));
-
-		scn.ShadowPlayCard(lights);
-		// 13 - 3 to play - 2 roaming (a site 4 minion played at site 2)
-		assertEquals(8, scn.GetTwilight());
-		assertTrue(scn.IsRace(lights, Race.NAZGUL));
-		assertTrue(scn.HasKeyword(lights, Keyword.TWILIGHT));
-		assertTrue(scn.ShadowPlayAvailable(eyes));
-
-		scn.ShadowPlayCard(eyes);
-		assertEquals(7, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, eyes);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}

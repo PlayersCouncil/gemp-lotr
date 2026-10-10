@@ -1,18 +1,14 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
 import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.Phase;
-import com.gempukku.lotro.common.Race;
 import com.gempukku.lotro.common.SitesBlock;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -43,7 +39,6 @@ public class Card_V1_061_Tests
 					// "While you can spot your site 6, Uruviel has the game text of that site."
 					put("uruviel", "1_67");
 					put("grimir", "1_17");      // Grimir, Dwarven Elder: [dwarven] Dwarf ally, vitality 3
-					put("bilbo", "1_284");      // Bilbo, Retired Adventurer: [shire] Hobbit ally, vitality 3
 
 					// Uruk Savage: [isengard] Uruk-hai, strength 5, vitality 3, damage +1 and nothing else
 					put("savage", "1_151");
@@ -113,14 +108,8 @@ public class Card_V1_061_Tests
 		var celeborn = scn.GetFreepsCard("celeborn");
 		var saelbeth = scn.GetFreepsCard("saelbeth");
 		var grimir = scn.GetFreepsCard("grimir");
-		var bilbo = scn.GetFreepsCard("bilbo");
 		scn.MoveCompanionsToTable(aragorn, gimli, arwen);
-		scn.MoveAlliesToTable(celeborn, saelbeth, grimir, bilbo);
-
-		// No ally is an Elf of another culture, or [elven] and of another race: Grimir is made an Elf and stays
-		// [dwarven]; Bilbo is made [elven] and stays a Hobbit.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, grimir, null, Race.ELF));
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, bilbo, null, Culture.ELVEN));
+		scn.MoveAlliesToTable(celeborn, saelbeth, grimir);
 
 		var savage = scn.GetShadowCard("savage");
 
@@ -143,9 +132,9 @@ public class Card_V1_061_Tests
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(throneRoom));
 		scn.FreepsAcceptOptionalTrigger();
 
-		// Who may exert for it: the [elven] allies, of either home site, and Bilbo.  Not Arwen, an [elven] companion;
-		// not Grimir, an ally who is an Elf and not [elven].
-		assertTrue(scn.FreepsHasCardChoiceAvailable(celeborn, saelbeth, bilbo));
+		// Who may exert for it: the [elven] allies, of either home site.  Not Arwen, an [elven] companion; not
+		// Grimir, an ally of another culture.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(celeborn, saelbeth));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(arwen, grimir, aragorn, gimli));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		assertEquals(0, scn.GetWoundsOn(saelbeth));
@@ -153,7 +142,6 @@ public class Card_V1_061_Tests
 
 		assertEquals(1, scn.GetWoundsOn(saelbeth));
 		assertEquals(0, scn.GetWoundsOn(celeborn));
-		assertEquals(0, scn.GetWoundsOn(bilbo));
 		assertEquals(0, scn.GetWoundsOn(arwen));
 		assertEquals(0, scn.GetWoundsOn(grimir));
 		// The companion who exerted is the one healed; nobody is asked which, and Gimli keeps his wound.

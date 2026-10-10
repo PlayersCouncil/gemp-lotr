@@ -1,11 +1,9 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
-import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -26,6 +24,9 @@ public class Card_V1_051_Tests
 					put("gaffer", "1_291");     // The Gaffer: a unique [shire] ally, (1); Bag End plays him from the draw deck
 					put("merry", "1_302");      // Merry, Friend to Sam: a [shire] companion, (1)
 					put("grimir", "1_17");      // Grimir, Dwarven Elder: a [dwarven] ally, (1), with nothing to spot to play him
+					// Goldberry, River-daughter: a unique [shire] ally who is no Hobbit (she has no race), (3), home
+					// site 2; her two texts need a river
+					put("goldberry", "9_51");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -215,17 +216,15 @@ public class Card_V1_051_Tests
 	}
 
 	@Test
-	public void AShireCompanionOrAnAllyOfAnotherCultureOffersNothing() throws DecisionResultInvalidException, CardNotFoundException, InvalidCardDefinitionException {
+	public void AShireCompanionOrAnAllyOfAnotherCultureOffersNothingAndAShireAllyWhoIsNoHobbitOffersTheDraw() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var griffo = scn.GetFreepsCard("griffo");
 		var merry = scn.GetFreepsCard("merry");
 		var grimir = scn.GetFreepsCard("grimir");
-		var bounder = scn.GetFreepsCard("bounder");
+		var goldberry = scn.GetFreepsCard("goldberry");
 		scn.MoveAlliesToTable(griffo);
-		scn.MoveCardsToHand(merry, grimir, bounder);
-		// Every [shire] ally is a Hobbit, so the [dwarven] ally is made one: it is the culture that the text names.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, scn.GenerateFreepsFilter("name(Grimir)"), null, Race.HOBBIT));
+		scn.MoveCardsToHand(merry, grimir, goldberry);
 
 		scn.StartGame();
 
@@ -249,14 +248,16 @@ public class Card_V1_051_Tests
 		assertEquals(1, scn.GetFreepsHandCount());
 		assertEquals(deck, scn.GetFreepsDeckCount());
 
-		// On the same board a [shire] ally does offer it.
-		scn.FreepsPlayCard(bounder);
+		// On the same board a [shire] ally does offer it, and this one is no Hobbit: it is the culture that the
+		// text names.
+		scn.FreepsPlayCard(goldberry);
 
-		assertEquals(3, scn.GetTwilight());
+		assertInZone(Zone.SUPPORT, goldberry);
+		assertEquals(5, scn.GetTwilight());
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(griffo));
 		scn.FreepsDeclineOptionalTrigger();
 
-		assertEquals(3, scn.GetTwilight());
+		assertEquals(5, scn.GetTwilight());
 		assertEquals(0, scn.GetFreepsHandCount());
 		assertEquals(deck, scn.GetFreepsDeckCount());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());

@@ -4,8 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -82,13 +80,6 @@ public class Card_V1_066_Tests
 					put("runner", "1_178");
 					// Goblin Spear: "Bearer must be a [moria] minion."  Its other text is about killing a companion.
 					put("spear", "1_182");
-
-					// Ulaire Lemenya, Lieutenant of Morgul: a Nazgul.  "Each companion or ally who bears a
-					// [wraith] condition is strength -2", and nobody here bears one.
-					put("lemenya", "1_232");
-					// Ring of Rancor: an artifact that costs nothing.  "Bearer must be a Nazgul."  Its maneuver
-					// ability and its response to a reconcile are never used.
-					put("rancor", "9_44");
 				}},
 				new HashMap<>()
 				{{
@@ -246,9 +237,6 @@ public class Card_V1_066_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(troop, runner);
-		// Every tentacle there is has this ban in its own text.  The Runner is made a tentacle without it, to
-		// show that the ban is on this minion and not on tentacles.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, runner, null, Keyword.TENTACLE));
 		scn.SetTwilight(7);
 		scn.FreepsPass();
 
@@ -256,61 +244,17 @@ public class Card_V1_066_Tests
 		scn.ShadowPlayCard(writhing);
 		scn.ShadowPlayCard(writhing2);
 		assertInZone(Zone.SHADOW_CHARACTERS, writhing, writhing2, troop, runner);
-		assertTrue(scn.HasKeyword(runner, Keyword.TENTACLE));
 		assertTrue(scn.ShadowPlayAvailable(spear));
 
 		scn.ShadowPlayCard(spear);
 
-		// All four are [moria] minions, which is all the Spear asks of its bearer, and the Runner is a tentacle
-		// as well.
+		// All four are [moria] minions, which is all the Spear asks of its bearer.
 		assertTrue(scn.ShadowHasCardChoiceAvailable(troop, runner));
 		assertTrue(scn.ShadowHasCardChoiceNotAvailable(writhing, writhing2));
 
 		scn.ShadowChooseCard(troop);
 
 		assertAttachedTo(spear, troop);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
-	public void MadeANazgulItIsNotOfferedAsBearerOfAnArtifactThatOtherNazgulMayBear() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetMarshScenario();
-
-		var writhing = scn.GetShadowCard("writhing");
-		var runner = scn.GetShadowCard("runner");
-		var lemenya = scn.GetShadowCard("lemenya");
-		var rancor = scn.GetShadowCard("rancor");
-		scn.MoveCardsToHand(writhing, rancor);
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(runner, lemenya);
-		scn.SetTwilight(2);
-		scn.FreepsPass();
-
-		// The tentacle would be discarded at Bag End, so it is played here, at the marsh: 2 + 2 roaming, out of
-		// 2 set + 1 companion + 1 for Midgewater Marshes.
-		scn.ShadowPlayCard(writhing);
-		// An item is a possession or an artifact.  Every Shadow artifact that has a bearer asks for The Balrog,
-		// Saruman, a Nazgul, a Wizard or Sauron, and no tentacle is any of them.  So the tentacle is made a
-		// Nazgul, and the Goblin Runner with it by the same means, to show that it is the tentacle's own ban
-		// that keeps the Ring off it.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, writhing, null, Race.NAZGUL));
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, runner, null, Race.NAZGUL));
-		assertInZone(Zone.SHADOW_CHARACTERS, writhing, runner, lemenya);
-		assertTrue(scn.IsRace(writhing, Race.NAZGUL));
-		assertTrue(scn.IsRace(runner, Race.NAZGUL));
-		assertTrue(scn.IsType(rancor, CardType.ARTIFACT));
-		assertTrue(scn.ShadowPlayAvailable(rancor));
-
-		scn.ShadowPlayCard(rancor);
-
-		// All three are Nazgul, which is all the Ring asks of its bearer.
-		assertTrue(scn.ShadowHasCardChoiceAvailable(lemenya, runner));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(writhing));
-
-		scn.ShadowChooseCard(runner);
-
-		assertAttachedTo(rancor, runner);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 

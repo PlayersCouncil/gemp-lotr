@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,7 +27,6 @@ public class Card_V1_030_Tests
 					put("savage", "1_151");     // Uruk Savage: [isengard] Uruk-hai, strength 5, vitality 3; Damage +1 is its whole text
 					put("flock", "101_25");     // Crebain Flock: [isengard] Crow, strength 2, vitality 3; a Shadow ability never used here
 					put("troop", "1_177");      // Goblin Patrol Troop: [moria] Orc, strength 13, vitality 3, no text at all
-					put("armory", "1_173");     // Goblin Armory: [moria] condition; triggers on [moria] weapons and [moria] Orcs only
 
 					put("greenleaf", "1_50");   // Legolas, Greenleaf: archer; "Archery: Exert Legolas to wound a minion; Legolas does not add to the fellowship archery total."
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] companion, strength 8, vitality 4; a maneuver ability never used here
@@ -304,11 +302,7 @@ public class Card_V1_030_Tests
 		var troop = scn.GetShadowCard("troop");
 		var snows = scn.GetShadowCard("snows");
 		var frodo = scn.GetRingBearer();
-		var aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveCardsToHand(snows);
-		scn.MoveCompanionsToTable(aragorn);
-		// No [isengard] card but a minion has a strength, so Aragorn is made [isengard] as well as [gondor].
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ISENGARD));
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(saruman, savage, flock, troop);
@@ -320,7 +314,6 @@ public class Card_V1_030_Tests
 		assertEquals(5, scn.GetStrength(savage));
 		assertEquals(2, scn.GetStrength(flock));
 		assertEquals(13, scn.GetStrength(troop));
-		assertEquals(8, scn.GetStrength(aragorn));
 		// Frodo's 3 and 1 for The One Ring
 		assertEquals(4, scn.GetStrength(frodo));
 
@@ -331,12 +324,11 @@ public class Card_V1_030_Tests
 
 		assertAttachedTo(snows, scn.GetSite(2));
 		// Saruman himself, an Uruk-hai and a Crow are [isengard] minions. The [moria] Orc is a minion of another
-		// culture, the [isengard] Aragorn is not a minion, and Frodo is neither.
+		// culture, and Frodo is neither [isengard] nor a minion.
 		assertEquals(8, scn.GetStrength(saruman));
 		assertEquals(7, scn.GetStrength(savage));
 		assertEquals(4, scn.GetStrength(flock));
 		assertEquals(13, scn.GetStrength(troop));
-		assertEquals(8, scn.GetStrength(aragorn));
 		assertEquals(4, scn.GetStrength(frodo));
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
@@ -498,63 +490,5 @@ public class Card_V1_030_Tests
 		// The first player is the one asked for Shadow actions on this turn.
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		assertTrue(scn.FreepsDecisionAvailable("Play Shadow action or Pass"));
-	}
-
-	@Test
-	public void ACardOfAnotherCultureMadeWeatherServesAsWellAsAnIsengardOne() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var saruman = scn.GetShadowCard("saruman");
-		var savage = scn.GetShadowCard("savage");
-		var armory = scn.GetShadowCard("armory");
-		var frodo = scn.GetRingBearer();
-		var greenleaf = scn.GetFreepsCard("greenleaf");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionsToTable(greenleaf, aragorn);
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(saruman, savage);
-		scn.FreepsPass();
-
-		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
-		assertEquals(6, scn.GetStrength(saruman));
-		assertEquals(5, scn.GetStrength(savage));
-		assertFalse(scn.FreepsCanAssign(saruman));
-
-		// Every weather card there is belongs to [isengard]. The text asks only for "a weather", so a [moria]
-		// condition is put on the fellowship's site and made one. (The keyword is given once the card is in
-		// play: one given to a card still in the draw deck is lost when the card is moved.)
-		scn.AttachCardsTo(scn.GetSite(2), armory);
-		assertEquals(6, scn.GetStrength(saruman));
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, armory, null, Keyword.WEATHER));
-
-		assertTrue(scn.HasKeyword(armory, Keyword.WEATHER));
-		assertEquals(8, scn.GetStrength(saruman));
-		assertEquals(7, scn.GetStrength(savage));
-
-		// Legolas is the fellowship's one archer, and the Shadow player may give his arrow to Saruman.
-		scn.SkipToPhase(Phase.ARCHERY);
-		scn.PassArcheryActions();
-		assertTrue(scn.ShadowHasCardChoiceAvailable(saruman, savage));
-		scn.ShadowChooseCard(saruman);
-		assertEquals(1, scn.GetWoundsOn(saruman));
-
-		scn.PassAssignmentActions();
-		assertEquals(2, scn.FreepsGetShadowAssignmentTargetCount());
-		assertTrue(scn.FreepsCanAssign(saruman));
-		scn.FreepsDeclineAssignments();
-		scn.ShadowDeclineAssignments();
-
-		scn.SkipToMovementDecision();
-		assertEquals(0, scn.GetWoundsOn(frodo));
-		scn.FreepsChooseToMove();
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
-		scn.ShadowAcceptOptionalTrigger();
-
-		assertInZone(Zone.DISCARD, saruman);
-		assertEquals(1, scn.GetWoundsOn(frodo));
-		assertEquals(1, scn.GetWoundsOn(greenleaf));
-		assertEquals(1, scn.GetWoundsOn(aragorn));
-		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

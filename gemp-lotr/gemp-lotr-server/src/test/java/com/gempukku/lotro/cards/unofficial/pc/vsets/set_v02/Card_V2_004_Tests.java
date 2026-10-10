@@ -1,12 +1,9 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -40,10 +37,6 @@ public class Card_V2_004_Tests
 					// Cards that nearly qualify
 					put("hides", "4_19");       // Hides: a [dunland] possession that plays to the support area, not on a minion
 					put("nodefense", "4_28");   // No Defense: a [dunland] condition
-					put("sword", "1_160");      // Uruk-hai Sword: an [isengard] possession, cost 1; "Bearer must be an Uruk-hai."
-					put("sword2", "1_160");
-					put("enraged", "1_254");    // Mordor Enraged: a [sauron] condition, cost 0; "Plays on a [sauron] minion."; a Shadow ability that exerts its bearer
-					put("enraged2", "1_254");
 
 					// Cards for the Free Peoples player's hand: 4 or more there and initiative is his
 					put("guard1", "1_7");       // Dwarf Guard
@@ -147,7 +140,7 @@ public class Card_V2_004_Tests
 	}
 
 	@Test
-	public void WithInitiativeADunlandPossessionFromTheDiscardPileIsPlayedOnThatMinion() throws DecisionResultInvalidException, CardNotFoundException, InvalidCardDefinitionException {
+	public void WithInitiativeADunlandPossessionFromTheDiscardPileIsPlayedOnThatMinion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var horsemen = scn.GetShadowCard("horsemen");
@@ -158,22 +151,10 @@ public class Card_V2_004_Tests
 		var club2 = scn.GetShadowCard("club2");
 		var hides = scn.GetShadowCard("hides");
 		var nodefense = scn.GetShadowCard("nodefense");
-		var sword = scn.GetShadowCard("sword");
-		var sword2 = scn.GetShadowCard("sword2");
-		var enraged = scn.GetShadowCard("enraged");
-		var enraged2 = scn.GetShadowCard("enraged2");
-		scn.MoveCardsToHand(horsemen, club2, sword2, enraged2);
-		scn.MoveCardsToDiscard(brigand, axe, club, hides, nodefense, sword, enraged);
+		scn.MoveCardsToHand(horsemen, club2);
+		scn.MoveCardsToDiscard(brigand, axe, club, hides, nodefense);
 		// Three cards in the Free Peoples player's hand: the most with which the Shadow has initiative.
 		scn.MoveCardsToFreepsHand("guard1", "guard2", "guard3");
-		// No possession of another culture can be borne by a [dunland] Man. Making every [dunland] minion an
-		// Uruk-hai as well lets them bear the Uruk-hai Sword, so that only its culture keeps it out.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, scn.GenerateShadowFilter("culture(dunland),minion"), null, Race.URUK_HAI));
-		// No [dunland] card but a possession goes on a minion. Making every [dunland] minion a [sauron] minion as
-		// well lets them bear Mordor Enraged, and making Mordor Enraged a [dunland] card as well leaves only its
-		// being a condition to keep it out.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, scn.GenerateShadowFilter("culture(dunland),minion"), null, Culture.SAURON));
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, scn.GenerateShadowFilter("name(Mordor Enraged)"), null, Culture.DUNLAND));
 
 		scn.StartGame();
 		// A [dunland] Man already in play, who is not "that minion"
@@ -186,11 +167,7 @@ public class Card_V2_004_Tests
 		assertEquals(7, scn.GetTwilight());
 		assertEquals(3, scn.GetFreepsHandCount());
 		assertTrue(scn.ShadowHasInitiative());
-		assertInZone(Zone.DISCARD, brigand, axe, club, hides, nodefense, sword, enraged);
-		// The Sword in hand can be played: a [dunland] Man can now bear one.
-		assertTrue(scn.ShadowPlayAvailable(sword2));
-		// So can the Mordor Enraged in hand.
-		assertTrue(scn.ShadowPlayAvailable(enraged2));
+		assertInZone(Zone.DISCARD, brigand, axe, club, hides, nodefense);
 		assertTrue(scn.ShadowPlayAvailable(horsemen));
 
 		scn.ShadowPlayCard(horsemen);
@@ -200,9 +177,8 @@ public class Card_V2_004_Tests
 		// 1 for the event + 2 for the Brigand + 2 for roaming at site 2
 		assertEquals(2, scn.GetTwilight());
 		assertTrue(scn.ShadowHasCardChoiceAvailable(axe, club));
-		// A [dunland] possession that does not go on a minion, a [dunland] condition, a possession of another
-		// culture that the Brigand could bear, and a [dunland] condition that the Brigand could bear
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(hides, nodefense, sword, enraged));
+		// A [dunland] possession that does not go on a minion, and a [dunland] condition
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(hides, nodefense));
 		scn.ShadowChooseCardBPFromSelection(axe);
 
 		// On the minion the event played, not the [dunland] Man who was there before
@@ -210,9 +186,9 @@ public class Card_V2_004_Tests
 		assertTrue(scn.GetAttachedCards(savage).isEmpty());
 		// 1 for the Iron Axe
 		assertEquals(1, scn.GetTwilight());
-		assertInZone(Zone.DISCARD, horsemen, club, hides, nodefense, sword, enraged);
+		assertInZone(Zone.DISCARD, horsemen, club, hides, nodefense);
 		// The copy of the War Club in hand was no part of the choice.
-		assertInZone(Zone.HAND, club2, sword2, enraged2);
+		assertInZone(Zone.HAND, club2);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 

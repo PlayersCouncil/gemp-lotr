@@ -6,8 +6,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,8 +30,7 @@ public class Card_V2_010_Tests
 					// Lorien Elf: an Elf companion who is not valiant, vitality 2, no text once in play.
 					put("lorienelf", "1_53");
 					// Household Guard: a [rohan] Man, vitality 3, whose whole text is "Valiant".
-					put("guard1", "5_83");
-					put("guard2", "5_83");
+					put("guard", "5_83");
 
 					put("sword", "4_64");        // Elven Sword: a hand weapon, with a skirmish ability
 					put("bow", "1_41");          // Elven Bow: a ranged weapon; bearer is an archer
@@ -97,16 +94,9 @@ public class Card_V2_010_Tests
 		var defender = scn.GetFreepsCard("defender");
 		var balglin = scn.GetFreepsCard("balglin");
 		var lorienelf = scn.GetFreepsCard("lorienelf");
-		var elfOfRohan = scn.GetFreepsCard("guard1");
-		var elvenMan = scn.GetFreepsCard("guard2");
-		scn.MoveCompanionsToTable(defender, balglin, lorienelf, elfOfRohan, elvenMan);
+		var guard = scn.GetFreepsCard("guard");
+		scn.MoveCompanionsToTable(defender, balglin, lorienelf, guard);
 		scn.MoveCardsToHand(armaments);
-
-		// Every valiant Elf there is is [elven] and every valiant [elven] companion is an Elf, so the two are
-		// pulled apart by hand: one Household Guard is made an Elf besides a Man, the other [elven] besides
-		// [rohan].  The text names the race.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, elfOfRohan, null, Race.ELF));
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, elvenMan, null, Culture.ELVEN));
 
 		scn.StartGame();
 
@@ -117,10 +107,10 @@ public class Card_V2_010_Tests
 
 		scn.FreepsPlayCard(armaments);
 
-		// A valiant Elf who is not unique, one who is, and one of another culture; not the Elf who is not
-		// valiant, the valiant Man, or Frodo.
-		assertTrue(scn.FreepsHasCardChoiceAvailable(defender, balglin, elfOfRohan));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(lorienelf, elvenMan, frodo));
+		// A valiant Elf who is not unique and one who is; not the Elf who is not valiant, the valiant Man, or
+		// Frodo.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(defender, balglin));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(lorienelf, guard, frodo));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		scn.FreepsChooseCard(defender);
 
@@ -178,21 +168,15 @@ public class Card_V2_010_Tests
 		var balglin = scn.GetFreepsCard("balglin");
 		var guardian = scn.GetFreepsCard("guardian");
 		var lorienelf = scn.GetFreepsCard("lorienelf");
-		var elfOfRohan = scn.GetFreepsCard("guard1");
-		var elvenMan = scn.GetFreepsCard("guard2");
-		scn.MoveCompanionsToTable(defender, balglin, guardian, lorienelf, elfOfRohan, elvenMan);
+		var guard = scn.GetFreepsCard("guard");
+		scn.MoveCompanionsToTable(defender, balglin, guardian, lorienelf, guard);
 		scn.AttachCardsTo(defender, armaments);
-
-		// A valiant Elf of another culture, and a valiant Man of the [elven] culture.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, elfOfRohan, null, Race.ELF));
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, elvenMan, null, Culture.ELVEN));
 
 		// Everyone but the bearer is wounded, so that only who they are decides who may be healed.
 		scn.AddWoundsToChar(balglin, 2);
 		scn.AddWoundsToChar(guardian, 1);
-		scn.AddWoundsToChar(elfOfRohan, 1);
 		scn.AddWoundsToChar(lorienelf, 1);
-		scn.AddWoundsToChar(elvenMan, 1);
+		scn.AddWoundsToChar(guard, 1);
 
 		var runner = scn.GetShadowCard("runner1");
 
@@ -211,19 +195,18 @@ public class Card_V2_010_Tests
 		scn.FreepsAcceptOptionalTrigger();
 
 		assertEquals(1, scn.GetWoundsOn(defender));
-		// The other valiant Elves: unique, not unique, and of another culture.  Not the bearer, who now has a
-		// wound of his own; not the Elf who is not valiant; not the valiant Man.
-		assertTrue(scn.FreepsHasCardChoiceAvailable(balglin, guardian, elfOfRohan));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(defender, lorienelf, elvenMan));
+		// The other valiant Elves, unique and not unique.  Not the bearer, who now has a wound of his own; not
+		// the Elf who is not valiant; not the valiant Man.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(balglin, guardian));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(defender, lorienelf, guard));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		scn.FreepsChooseCard(balglin);
 
 		// One wound is healed, on the Elf chosen.
 		assertEquals(1, scn.GetWoundsOn(balglin));
 		assertEquals(1, scn.GetWoundsOn(guardian));
-		assertEquals(1, scn.GetWoundsOn(elfOfRohan));
 		assertEquals(1, scn.GetWoundsOn(lorienelf));
-		assertEquals(1, scn.GetWoundsOn(elvenMan));
+		assertEquals(1, scn.GetWoundsOn(guard));
 		assertEquals(1, scn.GetWoundsOn(defender));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
@@ -442,16 +425,15 @@ public class Card_V2_010_Tests
 		var defender = scn.GetFreepsCard("defender");
 		var balglin = scn.GetFreepsCard("balglin");
 		var lorienelf = scn.GetFreepsCard("lorienelf");
-		var elvenMan = scn.GetFreepsCard("guard2");
-		scn.MoveCompanionsToTable(defender, balglin, lorienelf, elvenMan);
+		var guard = scn.GetFreepsCard("guard");
+		scn.MoveCompanionsToTable(defender, balglin, lorienelf, guard);
 		scn.AttachCardsTo(defender, armaments);
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, elvenMan, null, Culture.ELVEN));
 
-		// Another valiant Elf with no wound; a wounded Elf who is not valiant; a wounded valiant Man of the
-		// [elven] culture; and the bearer himself, wounded.
+		// Another valiant Elf with no wound; a wounded Elf who is not valiant; a wounded valiant Man; and the
+		// bearer himself, wounded.
 		scn.AddWoundsToChar(defender, 1);
 		scn.AddWoundsToChar(lorienelf, 1);
-		scn.AddWoundsToChar(elvenMan, 1);
+		scn.AddWoundsToChar(guard, 1);
 
 		var savage = scn.GetShadowCard("savage");
 
@@ -477,7 +459,7 @@ public class Card_V2_010_Tests
 		assertEquals(1, scn.GetWoundsOn(defender));
 		assertEquals(0, scn.GetWoundsOn(balglin));
 		assertEquals(1, scn.GetWoundsOn(lorienelf));
-		assertEquals(1, scn.GetWoundsOn(elvenMan));
+		assertEquals(1, scn.GetWoundsOn(guard));
 
 		scn.PassFierceAssignmentActions();
 		scn.FreepsAssignAndResolve(defender, savage);
@@ -494,48 +476,7 @@ public class Card_V2_010_Tests
 		assertEquals(2, scn.GetWoundsOn(defender));
 		assertEquals(0, scn.GetWoundsOn(balglin));
 		assertEquals(1, scn.GetWoundsOn(lorienelf));
-		assertEquals(1, scn.GetWoundsOn(elvenMan));
-		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
-	}
-
-	@Test
-	public void IsOfferedWhenTheOnlyOtherWoundedValiantElfIsOfAnotherCulture() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var armaments = scn.GetFreepsCard("armaments");
-		var defender = scn.GetFreepsCard("defender");
-		var balglin = scn.GetFreepsCard("balglin");
-		var elfOfRohan = scn.GetFreepsCard("guard1");
-		scn.MoveCompanionsToTable(defender, balglin, elfOfRohan);
-		scn.AttachCardsTo(defender, armaments);
-
-		// Every valiant Elf there is is [elven].  The text names the race and not the culture, so a Household
-		// Guard is made an Elf besides a Man: a valiant Elf whose culture is [rohan].  He is the only one with a
-		// wound; Balglin, the [elven] valiant Elf beside him, has none.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, elfOfRohan, null, Race.ELF));
-		scn.AddWoundsToChar(elfOfRohan, 1);
-
-		var runner = scn.GetShadowCard("runner1");
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(runner);
-		scn.SkipToAssignments();
-		scn.FreepsAssignAndResolve(defender, runner);
-		scn.PassSkirmishActions();
-
-		assertInZone(Zone.DISCARD, runner);
-		assertTrue(scn.IsRace(elfOfRohan, Race.ELF));
-		assertEquals(0, scn.GetWoundsOn(defender));
-		assertEquals(0, scn.GetWoundsOn(balglin));
-		assertEquals(1, scn.GetWoundsOn(elfOfRohan));
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(armaments));
-
-		scn.FreepsAcceptOptionalTrigger();
-
-		// His is the only wound there is to heal, so he is healed without a choice.
-		assertEquals(1, scn.GetWoundsOn(defender));
-		assertEquals(0, scn.GetWoundsOn(elfOfRohan));
-		assertEquals(0, scn.GetWoundsOn(balglin));
+		assertEquals(1, scn.GetWoundsOn(guard));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }

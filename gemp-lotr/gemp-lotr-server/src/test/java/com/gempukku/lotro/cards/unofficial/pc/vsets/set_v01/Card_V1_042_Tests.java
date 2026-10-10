@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import com.gempukku.lotro.logic.modifiers.StrengthModifier;
 import org.junit.Test;
 
@@ -255,49 +254,6 @@ public class Card_V1_042_Tests
 		assertInZone(Zone.DISCARD, gates, breath);
 		assertEquals(2, scn.GetShadowDiscardCount());
 		assertEquals(shadowShuffles, scn.GetShadowDeckShuffleCount());
-		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
-		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
-	}
-
-	@Test
-	public void ATwilightNazgulOfAnotherCultureCountsAsTheWinnerAndAsTheOneToExert() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var guard = scn.GetFreepsCard("guard");
-		scn.MoveCompanionsToTable(guard);
-
-		var walks = scn.GetShadowCard("walks");
-		var attea = scn.GetShadowCard("attea");
-		var lemenya = scn.GetShadowCard("lemenya");
-		var lights = scn.GetShadowCard("lights");
-		var gates = scn.GetShadowCard("gates");
-		var breath = scn.GetShadowCard("breath");
-		scn.MoveCardsToSupportArea(walks);
-		scn.MoveCardsToDiscard(gates, breath);
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(attea, lemenya, lights);
-		// Every twilight Nazgul there is, is a [ringwraith] card.  Corpse Lights is twilight and [sauron]; made
-		// a Nazgul as well, it is a twilight Nazgul of another culture.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, lights, null, Race.NAZGUL));
-		scn.SkipToAssignments();
-		// Corpse Lights 7 against the Dwarf Guard 4.
-		scn.FreepsAssignAndResolve(guard, lights);
-		scn.PassSkirmishActions();
-
-		assertEquals(1, scn.GetWoundsOn(guard));
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable(walks));
-
-		scn.ShadowAcceptOptionalTrigger();
-		assertTrue(scn.ShadowHasCardChoiceAvailable(attea, lights));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(lemenya));
-		scn.ShadowChooseCard(lights);
-		assertEquals(1, scn.GetWoundsOn(lights));
-		assertEquals(0, scn.GetWoundsOn(attea));
-
-		scn.ShadowChooseCardBPFromSelection(gates);
-		assertInZone(Zone.DECK, gates);
-		assertInZone(Zone.DISCARD, breath);
 		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}

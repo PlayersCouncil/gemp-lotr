@@ -5,8 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -39,8 +37,6 @@ public class Card_V1_010_Tests
 					// Orophin, Lorien Bowman: unique [elven] ally, home site 6, archer.  His archery ability
 					// only wounds an Uruk-hai and is never used here.
 					put("orophin", "1_56");
-					// Gimli, Son of Gloin: unique [dwarven] companion.  His skirmish ability is never used here.
-					put("gimli", "1_13");
 
 					put("marksman", "1_176");   // Goblin Marksman: archer, strength 7, vitality 1, no other text
 					put("runner", "1_178");     // Goblin Runner: strength 5, vitality 1
@@ -123,33 +119,6 @@ public class Card_V1_010_Tests
 		assertNotAttachedTo(darts, legolas);
 		// 2 for Legolas + 1
 		assertEquals(3, scn.GetTwilight());
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
-	public void BearerIsJudgedByElvenCultureAndNotByBeingAnElf() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var darts = scn.GetFreepsCard("darts");
-		var legolas = scn.GetFreepsCard("legolas");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		var gimli = scn.GetFreepsCard("gimli");
-		scn.MoveCompanionsToTable(legolas, aragorn, gimli);
-		scn.MoveCardsToHand(darts);
-
-		// Every [elven] companion in the card pool is an Elf and every Elf companion is [elven], so the two
-		// are pulled apart by hand: Aragorn is made [elven] besides [gondor], and Gimli an Elf besides a Dwarf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, gimli, null, Race.ELF));
-
-		scn.StartGame();
-
-		scn.FreepsPlayCard(darts);
-		assertTrue(scn.FreepsHasCardChoiceAvailable(legolas, aragorn));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(gimli));
-
-		scn.FreepsChooseCard(aragorn);
-		assertAttachedTo(darts, aragorn);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

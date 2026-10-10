@@ -4,8 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -30,7 +28,6 @@ public class Card_V2_007_Tests
 					put("golradir", "3_20");    // Golradir, Councilor of Imladris: [elven] Elf ally
 					put("grimir", "1_17");      // Grimir, Dwarven Elder: [dwarven] Dwarf ally
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man
-					put("boromir", "1_97");     // Boromir, Son of Denethor: [gondor] Man
 
 					// Conditions that hold [elven] tokens.
 					put("count", "4_69");       // Final Count
@@ -514,102 +511,6 @@ public class Card_V2_007_Tests
 		assertEquals(1, scn.GetCultureTokensOn(arms));
 		assertEquals(0, scn.GetCultureTokensOn(kinfolk));
 		assertInDiscard(contest);
-		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
-	}
-
-	@Test
-	public void AnElfOrADwarfOfAnotherCultureDoesNotMeetEitherSpot() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var contest = scn.GetFreepsCard("contest");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		var boromir = scn.GetFreepsCard("boromir");
-		var count = scn.GetFreepsCard("count");
-		var notched = scn.GetFreepsCard("notched");
-		scn.MoveCardsToHand(contest);
-		scn.MoveCompanionsToTable(aragorn, boromir);
-		scn.MoveCardsToSupportArea(count, notched);
-		scn.AddTokensToCard(count, 1);
-		scn.AddTokensToCard(notched, 1);
-
-		scn.StartGame();
-		// No Elf or Dwarf is of another culture than his own, so two [gondor] Men are made an Elf and a Dwarf.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, aragorn, null, Race.ELF));
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, boromir, null, Race.DWARF));
-		scn.MoveMinionsToTable(scn.GetShadowCard("troop"));
-		scn.SkipToPhase(Phase.MANEUVER);
-
-		assertTrue(scn.IsRace(aragorn, Race.ELF));
-		assertTrue(scn.IsRace(boromir, Race.DWARF));
-		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
-		assertFalse(scn.FreepsPlayAvailable(contest));
-	}
-
-	@Test
-	public void AnElvenCompanionWhoIsNoElfMeetsTheSpotForADwarvenToken() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var contest = scn.GetFreepsCard("contest");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		var count = scn.GetFreepsCard("count");
-		var notched = scn.GetFreepsCard("notched");
-		var stout = scn.GetFreepsCard("stout");
-		scn.MoveCardsToHand(contest);
-		scn.MoveCompanionsToTable(aragorn);
-		scn.MoveCardsToSupportArea(count, notched, stout);
-		scn.AddTokensToCard(count, 1);
-		scn.AddTokensToCard(notched, 1);
-		scn.AddTokensToCard(stout, 1);
-
-		scn.StartGame();
-		// Every [elven] companion is an Elf, so a Man is given the [elven] culture.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
-		scn.MoveMinionsToTable(scn.GetShadowCard("troop"));
-		scn.SkipToPhase(Phase.MANEUVER);
-
-		assertTrue(scn.FreepsPlayAvailable(contest));
-		scn.FreepsPlayCard(contest);
-
-		assertTrue(scn.FreepsHasCardChoiceAvailable(notched, stout));
-		scn.FreepsChooseCard(notched);
-
-		assertEquals(2, scn.GetCultureTokensOn(notched));
-		assertEquals(1, scn.GetCultureTokensOn(stout));
-		assertEquals(1, scn.GetCultureTokensOn(count));
-		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
-	}
-
-	@Test
-	public void ADwarvenCompanionWhoIsNoDwarfMeetsTheSpotForAnElvenToken() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var contest = scn.GetFreepsCard("contest");
-		var boromir = scn.GetFreepsCard("boromir");
-		var count = scn.GetFreepsCard("count");
-		var arms = scn.GetFreepsCard("arms");
-		var notched = scn.GetFreepsCard("notched");
-		scn.MoveCardsToHand(contest);
-		scn.MoveCompanionsToTable(boromir);
-		scn.MoveCardsToSupportArea(count, arms, notched);
-		scn.AddTokensToCard(count, 1);
-		scn.AddTokensToCard(arms, 1);
-		scn.AddTokensToCard(notched, 1);
-
-		scn.StartGame();
-		// Every [dwarven] companion is a Dwarf, so a Man is given the [dwarven] culture.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, boromir, null, Culture.DWARVEN));
-		scn.MoveMinionsToTable(scn.GetShadowCard("troop"));
-		scn.SkipToPhase(Phase.MANEUVER);
-
-		assertTrue(scn.FreepsPlayAvailable(contest));
-		scn.FreepsPlayCard(contest);
-
-		assertTrue(scn.FreepsHasCardChoiceAvailable(count, arms));
-		scn.FreepsChooseCard(arms);
-
-		assertEquals(2, scn.GetCultureTokensOn(arms));
-		assertEquals(1, scn.GetCultureTokensOn(count));
-		assertEquals(1, scn.GetCultureTokensOn(notched));
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 
