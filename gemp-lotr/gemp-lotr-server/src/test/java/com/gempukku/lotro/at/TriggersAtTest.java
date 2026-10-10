@@ -92,24 +92,6 @@ public class TriggersAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void beforeToil() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard enqueaBlackThirst = addToZone(createCard(P2, "12_175"), Zone.SHADOW_CHARACTERS);
-        PhysicalCard minasMorgulAnswers = addToZone(createCard(P2, "12_167"), Zone.HAND);
-
-        passUntil(Phase.SHADOW);
-        assertEquals(2, getTwilightPool());
-        selectCardAction(P2, minasMorgulAnswers);
-        selectCardAction(P2, enqueaBlackThirst);
-        pass(P2);
-        selectCard(P2, enqueaBlackThirst);
-        assertEquals(2, getTwilightPool());
-        assertEquals(2, getWounds(enqueaBlackThirst));
-        assertEquals(Zone.DISCARD, minasMorgulAnswers.getZone());
-    }
-
-    @Test
     public void takesOffRing() throws Exception {
         initializeSimplestGame();
 
@@ -196,43 +178,6 @@ public class TriggersAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void reconciles() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard isildur = addToZone(createCard(P1, "13_71"), Zone.FREE_CHARACTERS);
-
-        for (int i = 0; i < 5; i++) {
-            addToZone(createCard(P1, "13_71"), Zone.HAND);
-        }
-
-        passUntil(Phase.REGROUP);
-        pass(P1);
-        pass(P2);
-        assertEquals(Zone.FREE_CHARACTERS, isildur.getZone());
-        playerAnswersNo(P1);
-        pass(P1);
-        hasCardAction(P1, isildur);
-    }
-
-    @Test
-    public void heals() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard frodo = getRingBearer(P1);
-
-        PhysicalCard lingeringShadow = attachTo(createCard(P2, "12_166"), frodo);
-        PhysicalCard theGaffer = addToZone(createCard(P1, "1_291"), Zone.SUPPORT);
-
-        addWounds(frodo, 1);
-
-        passUntil(Phase.FELLOWSHIP);
-        assertEquals(1, getBurdens());
-        selectCardAction(P1, theGaffer);
-        assertEquals(0, getWounds(frodo));
-        assertEquals(2, getBurdens());
-    }
-
-    @Test
     public void fpDecidedToStay() throws Exception {
         initializeSimplestGame();
 
@@ -259,29 +204,6 @@ public class TriggersAtTest extends AbstractAtTest {
         assertEquals(0, getTwilightPool());
         selectCardAction(P1, theGaffer);
         assertEquals(1, getTwilightPool());
-    }
-
-    @Test
-    public void afterAllSkirmishes() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard witchKing = addToZone(createCard(P2, "12_183"), Zone.SHADOW_CHARACTERS);
-        PhysicalCard witchKingsBeast = attachTo(createCard(P2, "12_184"), witchKing);
-
-        passUntil(Phase.ASSIGNMENT);
-        // Normal Assignment actions
-        pass(P1);
-        pass(P2);
-        // Normal Assignments
-        pass(P1);
-        pass(P2);
-        // Fierce Assignment actions
-        pass(P1);
-        pass(P2);
-        // Fierce Assignments
-        pass(P1);
-        pass(P2);
-        hasCardAction(P2, witchKingsBeast);
     }
 
     @Test

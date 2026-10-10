@@ -360,9 +360,21 @@
 				type: modifier
 				modifier: {
 					type: modifyStrength
+					# "a card titled Déagol is removed from the game" names no owner: Gollum's
+					# own player's removed pile, or the Free Peoples player's (F-0375)
 					requires: {
-						type: hasCardInRemoved
-						filter: name(Déagol)
+						type: or
+						requires: [
+							{
+								type: hasCardInRemoved
+								filter: name(Déagol)
+							}
+							{
+								type: hasCardInRemoved
+								player: free people
+								filter: name(Déagol)
+							}
+						]
 					}
 					filter: self
 					amount: 2
@@ -373,8 +385,18 @@
 				modifier: {
 					type: addKeyword
 					requires: {
-						type: hasCardInRemoved
-						filter: name(Déagol)
+						type: or
+						requires: [
+							{
+								type: hasCardInRemoved
+								filter: name(Déagol)
+							}
+							{
+								type: hasCardInRemoved
+								player: free people
+								filter: name(Déagol)
+							}
+						]
 					}
 					filter: self
 					keyword: fierce

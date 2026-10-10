@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_13_071_Tests
@@ -18,7 +19,30 @@ public class Card_13_071_Tests
 				new HashMap<>()
 				{{
 					put("card", "13_71");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetReconcileScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("isildur", "13_71");
+					// Goblin Patrol Troop, a card with no text, ten times over: six for a hand that keeps
+					// Isildur's resistance up, four for a draw deck deep enough to reconcile from and draw again
+					put("card1", "1_177");
+					put("card2", "1_177");
+					put("card3", "1_177");
+					put("card4", "1_177");
+					put("card5", "1_177");
+					put("card6", "1_177");
+					put("card7", "1_177");
+					put("card8", "1_177");
+					put("card9", "1_177");
+					put("card10", "1_177");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -62,18 +86,72 @@ public class Card_13_071_Tests
 		assertEquals(1, card.getBlueprint().getResistance());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void IsildurTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void ReconcilingOffersIsildursOwnerACardAndTakingItDrawsOne() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetReconcileScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var isildur = scn.GetFreepsCard("isildur");
+		scn.MoveCardsToHand(scn.GetFreepsCard("card1"), scn.GetFreepsCard("card2"), scn.GetFreepsCard("card3"),
+				scn.GetFreepsCard("card4"), scn.GetFreepsCard("card5"), scn.GetFreepsCard("card6"));
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveCompanionsToTable(isildur);
 
-		assertEquals(3, scn.GetTwilight());
+		// No minion is played: the regroup phase follows the Shadow phase.
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.PassRegroupActions();
+
+		// The Shadow player has reconciled, and that is not Isildur's owner reconciling: nothing is offered.
+		assertTrue(scn.FreepsDecisionAvailable("another move"));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(isildur));
+		scn.FreepsChooseToStay();
+
+		assertEquals(6, scn.GetFreepsHandCount());
+		assertEquals(4, scn.GetFreepsDeckCount());
+		scn.FreepsDeclineReconciliation();
+
+		// He has reconciled, a hand of 6 made up to 8, and now Isildur makes his offer.
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(isildur));
+		assertEquals(8, scn.GetFreepsHandCount());
+		assertEquals(2, scn.GetFreepsDeckCount());
+
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(9, scn.GetFreepsHandCount());
+		assertEquals(1, scn.GetFreepsDeckCount());
+		assertInZone(Zone.FREE_CHARACTERS, isildur);
+
+		// The turn is over: the other player's begins.
+		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
+	}
+
+	@Test
+	public void WithAnEmptyDrawDeckTheDrawIsStillOffered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetReconcileScenario();
+
+		var isildur = scn.GetFreepsCard("isildur");
+		// A hand of eight, and the two cards left over out of the draw deck.
+		scn.MoveCardsToHand(scn.GetFreepsCard("card1"), scn.GetFreepsCard("card2"), scn.GetFreepsCard("card3"),
+				scn.GetFreepsCard("card4"), scn.GetFreepsCard("card5"), scn.GetFreepsCard("card6"),
+				scn.GetFreepsCard("card7"), scn.GetFreepsCard("card8"));
+		scn.MoveCardsToDiscard(scn.GetFreepsCard("card9"), scn.GetFreepsCard("card10"));
+
+		scn.StartGame();
+		scn.MoveCompanionsToTable(isildur);
+
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.PassRegroupActions();
+		scn.FreepsChooseToStay();
+
+		assertEquals(8, scn.GetFreepsHandCount());
+		assertEquals(0, scn.GetFreepsDeckCount());
+		scn.FreepsDeclineReconciliation();
+
+		// An optional draw is offered though there is no card to draw (Ketura's ruling on Q-0029).
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(isildur));
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(8, scn.GetFreepsHandCount());
+		assertEquals(0, scn.GetFreepsDeckCount());
+		assertInZone(Zone.FREE_CHARACTERS, isildur);
+		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
 	}
 }

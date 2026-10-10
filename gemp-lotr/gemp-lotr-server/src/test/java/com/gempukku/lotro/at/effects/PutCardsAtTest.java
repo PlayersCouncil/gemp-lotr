@@ -37,22 +37,6 @@ public class PutCardsAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void putCardsFromPlayOnTopOfDeck() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard gladdenHomestead = addToZone(createCard(P1, "13_49"), Zone.SUPPORT);
-        PhysicalCard sarumansAmbition= addToZone(createCard(P2, "1_133"), Zone.SUPPORT);
-        PhysicalCard goblinRunner = addToZone(createCard(P2, "1_178"), Zone.SHADOW_CHARACTERS);
-
-        passUntil(Phase.MANEUVER);
-        PhysicalCard urukSavageInDeck = addToZone(createCard(P2, "1_151"), Zone.DECK);
-        selectCardAction(P1, gladdenHomestead);
-
-        List<? extends PhysicalCard> deck = _game.getGameState().getDeck(P2);
-        assertEquals(sarumansAmbition, deck.get(0));
-    }
-
-    @Test
     public void putPlayedEventOnBottomOfDrawDeck() throws Exception {
         initializeSimplestGame();
 

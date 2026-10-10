@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_13_003_Tests
@@ -18,7 +19,18 @@ public class Card_13_003_Tests
 				new HashMap<>()
 				{{
 					put("card", "13_3");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetAheadScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("hatred", "13_3");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -55,18 +67,59 @@ public class Card_13_003_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void DeepHatredTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void IsDiscardedWhenTheFellowshipMovesAheadOfTheOtherPlayerAndStaysWhileLevelOrBehind() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetAheadScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		// Deep Hatred is the second player's.
+		var hatred = scn.GetShadowCard("hatred");
+		scn.MoveCardsToSupportArea(hatred);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(0, scn.GetTwilight());
+		// The first player moves to site 2, and his turn ends there.
+		scn.FreepsPass();
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		scn.SkipToOtherPlayersTurn();
+
+		// The second player's fellowship is at site 1, behind.
+		// waits: G-0053 no reader for the marker of the player whose turn it is not (the first player's, read at 2 above)
+		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
+		assertEquals(1, scn.GetCurrentSiteNumber());
+		assertInZone(Zone.SUPPORT, hatred);
+
+		// It moves to site 2: level with the other player, which is not ahead.
+		scn.ShadowPass();
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertInZone(Zone.SUPPORT, hatred);
+
+		// It moves again in the regroup phase, to site 3: ahead.
+		scn.SkipToMovementDecision();
+		assertInZone(Zone.SUPPORT, hatred);
+		scn.ShadowChooseToMove();
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertInDiscard(hatred);
+		assertTrue(scn.FreepsDecisionAvailable("Play Shadow action or Pass"));
+	}
+
+	@Test
+	public void IsDiscardedAsTheFirstPlayerMovesOnFromSite1WhereBothPlayersBegin() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetAheadScenario();
+
+		var hatred = scn.GetFreepsCard("hatred");
+		scn.MoveCardsToSupportArea(hatred);
+
+		scn.StartGame();
+
+		// Both players' markers are at site 1: level.
+		// waits: G-0053 no reader for the marker of the player whose turn it is not (the second player's, at site 1)
+		assertEquals(1, scn.GetCurrentSiteNumber());
+		assertInZone(Zone.SUPPORT, hatred);
+
+		// The first player moves to site 2 while the other is still at site 1.
+		scn.FreepsPass();
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertInDiscard(hatred);
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

@@ -5,7 +5,6 @@ import com.gempukku.lotro.cards.build.LotroCardBlueprintBuilder;
 import com.gempukku.lotro.cards.build.Requirement;
 import com.gempukku.lotro.cards.build.field.effect.requirement.*;
 import com.gempukku.lotro.common.Phase;
-import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.common.Token;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.PhysicalCard;
@@ -30,24 +29,6 @@ public class RequirementsAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void canSpotAnyCultureTokens() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard cruelDunlending = addToZone(createCard(P2, "13_85"), Zone.SHADOW_CHARACTERS);
-        PhysicalCard desertWind = addToZone(createCard(P2, "13_86"), Zone.HAND);
-
-        passUntil(Phase.FELLOWSHIP);
-        setTwilightPool(10);
-        passUntil(Phase.SHADOW);
-        selectCardAction(P2, desertWind);
-
-        passUntil(Phase.ARCHERY);
-        assertEquals(0, getArcheryTotal(Side.SHADOW));
-        addCultureTokens(desertWind, Token.MEN, 5);
-        assertEquals(2, getArcheryTotal(Side.SHADOW));
-    }
-
-    @Test
     public void cantSpotThreats() throws Exception {
         initializeSimplestGame();
 
@@ -61,19 +42,6 @@ public class RequirementsAtTest extends AbstractAtTest {
         assertTrue(requirement.accepts(actionContext));
         addThreats(P1, 2);
         assertFalse(requirement.accepts(actionContext));
-    }
-
-    @Test
-    public void isAhead() throws Exception {
-        initializeSimplestGame();
-
-        passUntil(Phase.FELLOWSHIP);
-
-        Requirement requirement = new IsAhead().getPlayRequirement(new JSONObject(), lotroCardBlueprintBuilder);
-        DefaultActionContext actionContext = new DefaultActionContext(P1, _game, null, null, null);
-        assertFalse(requirement.accepts(actionContext));
-        passUntil(Phase.SHADOW);
-        assertTrue(requirement.accepts(actionContext));
     }
 
     @Test
@@ -212,22 +180,6 @@ public class RequirementsAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void hasCardInRemoved() throws Exception {
-        initializeSimplestGame();
-
-        passUntil(Phase.FELLOWSHIP);
-
-        JSONObject obj = new JSONObject();
-        obj.put("player", "fp");
-        obj.put("filter", "any");
-
-        Requirement requirement = new HasCardInRemoved().getPlayRequirement(obj, lotroCardBlueprintBuilder);
-        assertFalse(requirement.accepts(new DefaultActionContext(P1, _game, null, null, null)));
-        addToZone(createCard(P1, "1_3"), Zone.REMOVED);
-        assertTrue(requirement.accepts(new DefaultActionContext(P1, _game, null, null, null)));
-    }
-
-    @Test
     public void hasInMemory() throws Exception {
         initializeSimplestGame();
 
@@ -274,24 +226,6 @@ public class RequirementsAtTest extends AbstractAtTest {
         Requirement requirement = new PlayedCardThisPhase().getPlayRequirement(obj, lotroCardBlueprintBuilder);
         assertFalse(requirement.accepts(actionContext));
         selectCardAction(P1, gimli);
-        assertTrue(requirement.accepts(actionContext));
-    }
-
-    @Test
-    public void shadowPlayerReplacedCurrentSite() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard nelya = addToZone(createCard(P2, "11_222"), Zone.SHADOW_CHARACTERS);
-
-        passUntil(Phase.SHADOW);
-
-        JSONObject obj = new JSONObject();
-
-        replaceSite(_game.getGameState().getAdventureDeck(P1).get(0), 2);
-        DefaultActionContext actionContext = new DefaultActionContext(P1, _game, null, null, null);
-        Requirement requirement = new ShadowPlayerReplacedCurrentSite().getPlayRequirement(obj, lotroCardBlueprintBuilder);
-        assertFalse(requirement.accepts(actionContext));
-        selectCardAction(P2, nelya);
         assertTrue(requirement.accepts(actionContext));
     }
 

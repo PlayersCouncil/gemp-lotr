@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class Card_12_184_Tests
@@ -24,6 +25,24 @@ public class Card_12_184_Tests
 					put("fodder1", "1_302");
 					put("fodder2", "1_307");
 					put("fodder3", "1_310");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetNobodyAssignedScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("beast", "12_184");
+					// The Witch-king, Black Lord: fierce, vitality 4; his other texts are about his cost and about
+					// being revealed from hand
+					put("witchking", "12_183");
+					// Black Rider: another fierce [wraith] Nazgûl, who bears no Beast (strength +1 for each companion)
+					put("rider", "12_161");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a companion beside the Ring-bearer
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -111,5 +130,56 @@ public class Card_12_184_Tests
 		scn.PassCurrentPhaseActions();
 
 		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
+	}
+
+	@Test
+	public void TheExtraAssignmentPhaseIsOfferedThoughNobodyWasAssignedInEitherRound() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetNobodyAssignedScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		var witchking = scn.GetShadowCard("witchking");
+		var rider = scn.GetShadowCard("rider");
+		var beast = scn.GetShadowCard("beast");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(witchking, rider);
+		scn.AttachCardsTo(witchking, beast);
+
+		// The first round: nobody is assigned by either player, so no skirmish is fought.
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.PassAssignmentActions();
+		scn.FreepsDeclineAssignments();
+		scn.ShadowDeclineAssignments();
+
+		// The fierce round: nobody again.
+		assertTrue(scn.InFierceRound());
+		scn.PassFierceAssignmentActions();
+		scn.FreepsDeclineAssignments();
+		scn.ShadowDeclineAssignments();
+
+		// With no skirmish left of either kind the Beast makes its offer, the phase still the assignment phase.
+		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(beast));
+		assertEquals(0, scn.GetWoundsOn(witchking));
+		assertEquals(0, scn.GetWoundsOn(rider));
+
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(2, scn.GetWoundsOn(witchking));
+		assertEquals(0, scn.GetWoundsOn(rider));
+
+		// One more assignment phase, for him: the other fierce Nazgûl has no part in it.  It is no fierce round;
+		// the game runs it as the round that follows the fierce one (CR 5.0 "relentless").
+		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
+		assertFalse(scn.InFierceRound());
+		assertTrue(scn.InRelentlessRound());
+		scn.PassAssignmentActions();
+		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+		assertTrue(scn.FreepsCanAssign(witchking));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(witchking));
+		assertFalse(scn.FreepsCanAssign(rider));
+		assertFalse(scn.FreepsHasAssignmentTargetAvailable(rider));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(aragorn));
 	}
 }

@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_12_166_Tests
@@ -18,7 +19,25 @@ public class Card_12_166_Tests
 				new HashMap<>()
 				{{
 					put("card", "12_166");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetHealScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("shadow", "12_166");
+					// Sam, Son of Hamfast: a companion who bears no Lingering Shadow; his fellowship ability is not used
+					put("sam", "1_311");
+					// The Gaffer, Sam's Father: ally, vitality 2.  "Fellowship: Exert The Gaffer to heal Frodo or Sam."
+					put("gaffer", "1_291");
+					// Rosie Cotton, Hobbiton Lass: ally, vitality 2.  "Fellowship: Exert Rosie Cotton to heal Sam."
+					// (Sam is strength +1 beside her, which no test reads.)
+					put("rosie", "1_309");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -55,18 +74,45 @@ public class Card_12_166_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void LingeringShadowTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void AWoundRemovedFromBearerAddsABurden() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetHealScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		var gaffer = scn.GetFreepsCard("gaffer");
+		var rosie = scn.GetFreepsCard("rosie");
+		scn.MoveCompanionsToTable(sam);
+		scn.MoveAlliesToTable(gaffer, rosie);
+
+		// The Shadow player's condition, on Frodo as it would be after his skirmish with a Nazgûl.
+		var shadow = scn.GetShadowCard("shadow");
+		scn.AttachCardsTo(frodo, shadow);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.AddWoundsToChar(frodo, 2);
+		scn.AddWoundsToChar(sam, 1);
 
-		assertEquals(0, scn.GetTwilight());
+		assertAttachedTo(shadow, frodo);
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(2, scn.GetWoundsOn(frodo));
+		assertEquals(1, scn.GetWoundsOn(sam));
+
+		// The Gaffer heals Frodo or Sam, and both are wounded: Frodo, the bearer, is chosen.
+		scn.FreepsUseCardAction(gaffer);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, sam));
+		scn.FreepsChooseCard(frodo);
+
+		// One wound is gone from the bearer, and one burden has come for it.
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(1, scn.GetBurdens());
+		assertEquals(1, scn.GetWoundsOn(sam));
+
+		// A wound removed from Sam, who bears no Lingering Shadow, adds none.
+		scn.FreepsUseCardAction(rosie);
+		assertEquals(0, scn.GetWoundsOn(sam));
+		assertEquals(1, scn.GetBurdens());
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }
