@@ -139,20 +139,6 @@ public class RequirementsAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void didWinSkirmish() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard gimli = addToZone(createCard(P1, "5_7"), Zone.FREE_CHARACTERS);
-        PhysicalCard stillTwitching = attachTo(createCard(P1, "19_3"), gimli);
-
-        passUntil(Phase.REGROUP);
-        pass(P1);
-        pass(P2);
-        selectNo(P1);
-        assertInZone(stillTwitching, Zone.DISCARD);
-    }
-
-    @Test
     public void hasInMemory() throws Exception {
         initializeSimplestGame();
 

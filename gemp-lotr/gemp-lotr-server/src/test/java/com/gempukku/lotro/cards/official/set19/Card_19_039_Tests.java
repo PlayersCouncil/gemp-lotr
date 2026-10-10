@@ -18,7 +18,21 @@ public class Card_19_039_Tests
 				new HashMap<>()
 				{{
 					put("card", "19_39");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetFierceScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("toldea", "19_39");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, vitality 4; a maneuver ability never used
+					// Boromir, Son of Denethor: strength 7, vitality 3; a skirmish ability never used
+					put("boromir", "1_97");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -62,18 +76,44 @@ public class Card_19_039_Tests
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void UlaireToldeaTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void InTheFierceRoundToldeaCannotBeAssignedToTheCompanionHeWasAssignedToEarlierThisTurn() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFierceScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var toldea = scn.GetShadowCard("toldea");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		scn.MoveCompanionsToTable(aragorn, boromir);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(toldea);
+		scn.SkipToAssignments();
 
-		assertEquals(6, scn.GetTwilight());
+		// The first round: either player may assign him to either companion.
+		assertFalse(scn.InFierceRound());
+		assertTrue(scn.FreepsCanAssignAgainst(aragorn, toldea));
+		assertTrue(scn.ShadowCanAssignAgainst(aragorn, toldea));
+		assertTrue(scn.FreepsCanAssignAgainst(boromir, toldea));
+		assertTrue(scn.ShadowCanAssignAgainst(boromir, toldea));
+
+		// Aragorn's 8 loses to 12, and he takes a wound.
+		scn.FreepsAssignAndResolve(aragorn, toldea);
+		scn.PassSkirmishActions();
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(toldea));
+
+		// The fierce round. He was assigned to Aragorn this turn and to Boromir he was not: neither player
+		// may give him Aragorn again.
+		assertTrue(scn.InFierceRound());
+		scn.PassFierceAssignmentActions();
+		assertFalse(scn.FreepsCanAssignAgainst(aragorn, toldea));
+		assertFalse(scn.ShadowCanAssignAgainst(aragorn, toldea));
+		assertTrue(scn.FreepsCanAssignAgainst(boromir, toldea));
+		assertTrue(scn.ShadowCanAssignAgainst(boromir, toldea));
+
+		scn.FreepsAssignToMinions(boromir, toldea);
+		assertTrue(scn.IsCharAssignedAgainst(boromir, toldea));
+		assertFalse(scn.IsCharAssigned(aragorn));
+		assertTrue(scn.FreepsAwaitingSkirmishChoice());
 	}
 }

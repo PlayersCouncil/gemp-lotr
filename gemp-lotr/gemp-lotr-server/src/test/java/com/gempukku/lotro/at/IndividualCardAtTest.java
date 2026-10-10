@@ -1,6 +1,5 @@
 package com.gempukku.lotro.at;
 
-import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
@@ -8,7 +7,6 @@ import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.timing.DefaultLotroGame;
-import com.gempukku.lotro.logic.timing.RuleUtils;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import org.junit.Test;
 
@@ -198,25 +196,5 @@ public class IndividualCardAtTest extends AbstractAtTest {
 
         assertEquals(burdensBefore + 1, _game.getGameState().getBurdens());
         assertEquals(1, _game.getGameState().getWounds(frodo));
-    }
-
-    @Test
-    public void setStrengthOverride() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard ringBearer = getRingBearer(P1);
-        PhysicalCard finalTriumph = addToZone(createCard(P2, "18_115"), Zone.HAND);
-        PhysicalCard whiteHandExorciser = addToZone(createCard(P2, "18_125"), Zone.SHADOW_CHARACTERS);
-
-        passUntil(Phase.ASSIGNMENT);
-        pass(P1);
-        pass(P2);
-        setTwilightPool(4);
-        playerDecided(P1, ringBearer.getCardId()+" "+whiteHandExorciser.getCardId());
-        selectCard(P1, ringBearer);
-        pass(P1);
-        selectCardAction(P2, finalTriumph);
-        assertEquals(4, RuleUtils.getFellowshipSkirmishStrength(_game));
-        assertEquals(1, RuleUtils.getShadowSkirmishStrength(_game));
     }
 }

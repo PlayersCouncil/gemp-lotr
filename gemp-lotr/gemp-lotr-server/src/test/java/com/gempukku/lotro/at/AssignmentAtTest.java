@@ -3,7 +3,6 @@ package com.gempukku.lotro.at;
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.game.state.Assignment;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
@@ -110,29 +109,5 @@ public class AssignmentAtTest extends AbstractAtTest {
         // Start skirmish
         playerDecided(P1, String.valueOf(gimli.getCardId()));
         pass(P1);
-    }
-
-    @Test
-    public void toldeaDarkShadowCantBeAssignedTwiceToSameCompanion() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard toldeaDarkShadow = addToZone(createCard(P2, "19_39"), Zone.SHADOW_CHARACTERS);
-        PhysicalCard aragorn = addToZone(createCard(P1, "1_89"), Zone.FREE_CHARACTERS);
-
-        passUntil(Phase.ASSIGNMENT);
-        pass(P1);
-        pass(P2);
-        playerDecided(P1, aragorn.getCardId() + " " + toldeaDarkShadow.getCardId());
-        selectCard(P1, aragorn);
-        pass(P1);
-        pass(P2);
-        // Fierce assignment
-        pass(P1);
-        pass(P2);
-        try {
-            playerDecided(P1, aragorn.getCardId() + " " + toldeaDarkShadow.getCardId());
-            fail();
-        } catch (DecisionResultInvalidException e) {
-        }
     }
 }
