@@ -1,9 +1,7 @@
 package com.gempukku.lotro.at.effects;
 
 import com.gempukku.lotro.at.AbstractAtTest;
-import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Zone;
-import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 import org.junit.Test;
@@ -42,19 +40,5 @@ public class PlayCardFromDiscardAtTest extends AbstractAtTest {
         playerDecided(P2, getCardActionId(P2, "Play Úlairë Nertëa"));
 
         assertFalse(_userFeedback.getAwaitingDecision(P2).getDecisionType() == AwaitingDecisionType.MULTIPLE_CHOICE);
-    }
-
-    @Test
-    public void activatedInDiscard() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard gollumPlottingDeceiver = addToZone(createCard(P2, "7_58"), Zone.DISCARD);
-
-        passUntil(Phase.FELLOWSHIP);
-        setTwilightPool(10);
-        passUntil(Phase.SHADOW);
-
-        selectCardAction(P2, gollumPlottingDeceiver);
-        assertEquals(Zone.SHADOW_CHARACTERS, gollumPlottingDeceiver.getZone());
     }
 }

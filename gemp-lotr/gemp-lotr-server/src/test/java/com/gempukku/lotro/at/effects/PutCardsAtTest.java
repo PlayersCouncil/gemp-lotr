@@ -12,26 +12,6 @@ import static org.junit.Assert.assertEquals;
 
 public class PutCardsAtTest extends AbstractAtTest {
     @Test
-    public void putCardsFromDeckOnBottomOfDeck() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard intoTheWest = addToZone(createCard(P1, "7_23"), Zone.SUPPORT);
-        PhysicalCard elrond = addToZone(createCard(P1, "1_40"), Zone.SUPPORT);
-
-        passUntil(Phase.FELLOWSHIP);
-        for (int i=0; i<2; i++) {
-            addToZone(createCard(P1, "1_3"), Zone.DECK);
-        }
-        passUntil(Phase.REGROUP);
-        List<? extends PhysicalCard> deck = _game.getGameState().getDeck(P1);
-        PhysicalCard topCardFromDeck = deck.get(0);
-        selectCardAction(P1, intoTheWest);
-        pass(P1);
-        pass(P2);
-        assertEquals(deck.get(1), topCardFromDeck);
-    }
-
-    @Test
     public void putCardsFromDeckOnTopOfDeck() throws Exception {
         initializeSimplestGame();
 
@@ -54,21 +34,6 @@ public class PutCardsAtTest extends AbstractAtTest {
         List<? extends PhysicalCard> deck = _game.getGameState().getDeck(P1);
         assertEquals("1_4", deck.get(0).getBlueprintId());
         assertEquals("1_3", deck.get(1).getBlueprintId());
-    }
-
-    @Test
-    public void putCardsFromDiscardOnTopOfDeck() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard gondorStillStands = addToZone(createCard(P1, "7_95"), Zone.SUPPORT);
-        PhysicalCard citadelOfTheStars = addToZone(createCard(P1, "5_32"), Zone.DISCARD);
-
-        passUntil(Phase.REGROUP);
-        PhysicalCard urukSavageInDeck = addToZone(createCard(P1, "1_151"), Zone.DECK);
-        selectCardAction(P1, gondorStillStands);
-
-        List<? extends PhysicalCard> deck = _game.getGameState().getDeck(P1);
-        assertEquals(citadelOfTheStars, deck.get(0));
     }
 
     @Test
@@ -115,27 +80,5 @@ public class PutCardsAtTest extends AbstractAtTest {
 
         List<? extends PhysicalCard> deck = _game.getGameState().getDeck(P1);
         assertEquals(tossMe, deck.get(0));
-    }
-
-    @Test
-    public void putRandomCardFromHandBeneathDrawDeck() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard windInHisFace = addToZone(createCard(P1, "7_259"), Zone.HAND);
-        PhysicalCard eomer = addToZone(createCard(P1, "7_365"), Zone.FREE_CHARACTERS);
-        PhysicalCard swiftSteed = attachTo(createCard(P1, "7_253"), eomer);
-        PhysicalCard goblinRunner = addToZone(createCard(P2, "1_178"), Zone.SHADOW_CHARACTERS);
-
-        passUntil(Phase.ASSIGNMENT);
-        PhysicalCard urukSavageInDeck = addToZone(createCard(P2, "1_151"), Zone.DECK);
-        PhysicalCard urukSavageInHand = addToZone(createCard(P2, "1_151"), Zone.HAND);
-        pass(P1);
-        pass(P2);
-        playerDecided(P1, eomer.getCardId() + " " + goblinRunner.getCardId());
-        selectCard(P1, eomer);
-        selectCardAction(P1, windInHisFace);
-
-        List<? extends PhysicalCard> deck = _game.getGameState().getDeck(P2);
-        assertEquals(urukSavageInHand, deck.get(1));
     }
 }

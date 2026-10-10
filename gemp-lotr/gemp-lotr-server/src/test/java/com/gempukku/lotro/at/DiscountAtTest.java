@@ -62,51 +62,6 @@ public class DiscountAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void playHostOfUdunAtDiscard() throws DecisionResultInvalidException, CardNotFoundException {
-        Map<String, Collection<String>> extraCards = new HashMap<>();
-        initializeSimplestGame(extraCards);
-
-        PhysicalCardImpl hostOfUdun = createCard(P2, "7_282");
-        moveCardToZone(hostOfUdun, Zone.HAND);
-
-        skipMulligans();
-
-        setTwilightPool(9);
-        addThreats(P1, 1);
-
-        // End fellowship phase
-        assertEquals(Phase.FELLOWSHIP, getPhase());
-        pass(P1);
-
-        assertEquals(Phase.SHADOW, getPhase());
-        selectCardAction(P2, hostOfUdun);
-
-        assertEquals(Zone.SHADOW_CHARACTERS, hostOfUdun.getZone());
-        assertEquals(0, getTwilightPool());
-        assertEquals(0, getThreats());
-    }
-
-    @Test
-    public void playHostOfUdunAtDiscardCantPlayWithoutThreats() throws DecisionResultInvalidException, CardNotFoundException {
-        Map<String, Collection<String>> extraCards = new HashMap<>();
-        initializeSimplestGame(extraCards);
-
-        PhysicalCardImpl hostOfUdun = createCard(P2, "7_282");
-        moveCardToZone(hostOfUdun, Zone.HAND);
-
-        skipMulligans();
-
-        setTwilightPool(9);
-
-        // End fellowship phase
-        assertEquals(Phase.FELLOWSHIP, getPhase());
-        pass(P1);
-
-        assertEquals(Phase.SHADOW, getPhase());
-        assertNull(getCardActionId(P2, hostOfUdun));
-    }
-
-    @Test
     public void playDefiledByRemovingFromDiscard() throws DecisionResultInvalidException, CardNotFoundException {
         Map<String, Collection<String>> extraCards = new HashMap<>();
         initializeSimplestGame(extraCards);

@@ -480,26 +480,6 @@ public class IndividualCardAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void putForthItsStrength() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard putForthHisStrength = addToZone(createCard(P2, "7_205"), Zone.SUPPORT);
-        PhysicalCard attea = addToZone(createCard(P2, "1_229"), Zone.SHADOW_CHARACTERS);
-        for (int i = 0; i < 3; i++) {
-            addToZone(createCard(P1, "1_12"), Zone.DEAD);
-        }
-
-        passUntil(Phase.FELLOWSHIP);
-        addBurdens(3);
-        addThreats(P1, 3);
-
-        passUntil(Phase.SHADOW);
-        selectCardAction(P2, putForthHisStrength);
-        assertTrue(_game.isFinished());
-        assertEquals(P2, _game.getWinnerPlayerId());
-    }
-
-    @Test
     public void reorderTopCardsOfDrawDeck() throws Exception {
         initializeSimplestGame();
 

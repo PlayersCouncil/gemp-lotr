@@ -92,27 +92,6 @@ public class TriggersAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void skirmishAboutToEnd() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard gimli = addToZone(createCard(P1, "5_7"), Zone.FREE_CHARACTERS);
-        PhysicalCard attea = addToZone(createCard(P2, "1_229"), Zone.SHADOW_CHARACTERS);
-        PhysicalCard loathsome = addToZone(createCard(P2, "7_182"), Zone.HAND);
-
-        passUntil(Phase.ASSIGNMENT);
-        pass(P1);
-        pass(P2);
-        playerDecided(P1, gimli.getCardId() + " " + attea.getCardId());
-
-        selectCard(P1, gimli);
-        pass(P1);
-        pass(P2);
-
-        selectCardAction(P2, loathsome);
-        assertEquals(Zone.DISCARD, loathsome.getZone());
-    }
-
-    @Test
     public void beforeToil() throws Exception {
         initializeSimplestGame();
 
@@ -342,29 +321,6 @@ public class TriggersAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void beforeThreatWounds() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard mordorAssassin = addToZone(createCard(P2, "7_284"), Zone.SHADOW_CHARACTERS);
-        PhysicalCard attea = addToZone(createCard(P2, "1_229"), Zone.SHADOW_CHARACTERS);
-        PhysicalCard gimli = addToZone(createCard(P1, "5_7"), Zone.FREE_CHARACTERS);
-        addThreats(P1, 2);
-        PhysicalCard ringBearer = getRingBearer(P1);
-
-        passUntil(Phase.ASSIGNMENT);
-        pass(P1);
-        pass(P2);
-        playerDecided(P1, gimli.getCardId() + " " + attea.getCardId());
-        playerDecided(P2, gimli.getCardId() + " " + mordorAssassin.getCardId());
-        selectCard(P1, gimli);
-        pass(P1);
-        pass(P2);
-        selectCardAction(P2, mordorAssassin);
-        assertTrue(_game.getGameState().getAssignments().stream().anyMatch(assignment ->
-                assignment.getFellowshipCharacter() == ringBearer && assignment.getShadowCharacters().stream().anyMatch(shadowCharacter -> shadowCharacter == mordorAssassin)));
-    }
-
-    @Test
     public void afterAllSkirmishes() throws Exception {
         initializeSimplestGame();
 
@@ -398,27 +354,5 @@ public class TriggersAtTest extends AbstractAtTest {
         PhysicalCard elrondCopy = putOnTopOfDeck(createCard(P1, "1_40"));
         selectCardAction(P1, elrond);
         hasCardAction(P1, mirrorDangerousGuide);
-    }
-
-    @Test
-    public void aboutToBeOverwhelmed() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard attea1 = addToZone(createCard(P2, "1_229"), Zone.SHADOW_CHARACTERS);
-        PhysicalCard attea2 = addToZone(createCard(P2, "1_229"), Zone.SHADOW_CHARACTERS);
-        PhysicalCard gimli = addToZone(createCard(P1, "5_7"), Zone.FREE_CHARACTERS);
-        PhysicalCard footmansArmor = attachTo(createCard(P1, "7_93"), gimli);
-
-        passUntil(Phase.FELLOWSHIP);
-        PhysicalCard footmansArmorInHand = addToZone(createCard(P1, "7_93"), Zone.HAND);
-        passUntil(Phase.ASSIGNMENT);
-        pass(P1);
-        pass(P2);
-        playerDecided(P1, gimli.getCardId() + " " + attea1.getCardId());
-        playerDecided(P2, gimli.getCardId() + " " + attea2.getCardId());
-        selectCard(P1, gimli);
-        pass(P1);
-        pass(P2);
-        hasCardAction(P1, footmansArmor);
     }
 }

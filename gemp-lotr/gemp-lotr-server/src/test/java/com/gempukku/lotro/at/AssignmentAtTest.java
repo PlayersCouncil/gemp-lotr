@@ -158,49 +158,6 @@ public class AssignmentAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void assignMorgulSpawnByPayingCostCantAssignWhenNotPaid() throws DecisionResultInvalidException, CardNotFoundException {
-        Map<String, Collection<String>> extraCards = new HashMap<>();
-        initializeSimplestGame(extraCards);
-
-        PhysicalCardImpl gimli = createCard(P1, "5_7");
-        addToZone(gimli, Zone.FREE_CHARACTERS);
-        PhysicalCardImpl morgulSpawn = createCard(P2, "7_200");
-        addToZone(morgulSpawn, Zone.HAND);
-        PhysicalCardImpl attea = createCard(P2, "7_210");
-        addToZone(attea, Zone.SHADOW_CHARACTERS);
-
-        skipMulligans();
-
-        setTwilightPool(100);
-
-        // End fellowship phase
-        assertEquals(Phase.FELLOWSHIP, getPhase());
-        pass(P1);
-
-
-        // End shadow phase
-        assertEquals(Phase.SHADOW, getPhase());
-        selectCardAction(P2, morgulSpawn);
-        pass(P2);
-
-        // End maneuver phase
-        pass(P1);
-        pass(P2);
-
-        // End archery phase
-        pass(P1);
-        pass(P2);
-
-        // End assignment phase
-        pass(P1);
-        pass(P2);
-
-        // Assign
-        selectNo(P1);
-        validateContents(new String[]{String.valueOf(attea.getCardId())}, getAwaitingDecision(P1).getDecisionParameters().get("minions"));
-    }
-
-    @Test
     public void toldeaDarkShadowCantBeAssignedTwiceToSameCompanion() throws Exception {
         initializeSimplestGame();
 

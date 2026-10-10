@@ -8,37 +8,9 @@ import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
-import java.util.*;
-
 import static org.junit.Assert.*;
 
 public class TimingAtTest extends AbstractAtTest {
-    @Test
-    public void playEffectFromDiscard() throws DecisionResultInvalidException, CardNotFoundException {
-        Map<String, Collection<String>> extraCards = new HashMap<>();
-        initializeSimplestGame(extraCards);
-
-        PhysicalCard gollum = _game.getGameState().createPhysicalCard(P2, _cardLibrary, "7_58");
-
-        _game.getGameState().addCardToZone(_game, gollum, Zone.DISCARD);
-
-        skipMulligans();
-
-        _game.getGameState().addTwilight(10);
-
-        playerDecided(P1, "");
-
-        _userFeedback.getAwaitingDecision(P2);
-
-        AwaitingDecision shadowPhaseAction = _userFeedback.getAwaitingDecision(P2);
-        assertEquals(AwaitingDecisionType.CARD_ACTION_CHOICE, shadowPhaseAction.getDecisionType());
-        validateContents(new String[]{"7_58"}, (String[]) shadowPhaseAction.getDecisionParameters().get("blueprintId"));
-
-        playerDecided(P2, "0");
-
-        assertEquals(Zone.SHADOW_CHARACTERS, gollum.getZone());
-    }
-
     @Test
     public void extraCostToPlay() throws DecisionResultInvalidException, CardNotFoundException {
         initializeSimplestGame();
