@@ -73,6 +73,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Úlairë Nertëa 69_38 when her burden is prevented (Q-0199)
 - The deck builder under Race Text 92_19 (F-0342)
 - Card by card: Q-0201, "ignoring all costs" where a cost names X: A, as built ("this isn't a mechanic that's going to be reused, and it's just for fun ... [Q-0202, Q-0197, Q-0198, Q-0200]
+- Concealed and exposed are no part of the game (Ketura, 2026-10-10)
 - The old hinder suite (Ketura, 2026-10-10)
 - The bid reads resistance in force (Ketura, 2026-10-09, late; Galadriel 9_14 as Ring-bearer)
 - The `at` tests, what is kept (Ketura, 2026-10-09, late)

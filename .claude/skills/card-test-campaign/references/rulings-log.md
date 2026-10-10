@@ -322,6 +322,10 @@ going to be reused, and it's just for fun on the RTMD card"). Q-0202, Race Text 
 should say "draw deck". I'll adjust the wording"). Q-0197, Rath Dínen 100_1: the arrow stays Right ("I'll change the
 image"). Kept: Q-0198 ("well done"), Q-0200. *[2026-10-10]*
 
+**Concealed and exposed are no part of the game (Ketura, 2026-10-10).** "Let's go ahead and nix the
+concealed/exposed and rip out those keywords and their uses. It was a mechanic proposal that never manifested."
+Removed from the engine in engine pass 23; no card or test names them.
+
 **The old hinder suite (Ketura, 2026-10-10).** "Really the entire Hinder suite was tdd for the hinder mechanic; it was
 developed before any of the cards were implemented, thus the hacked Frodo. But yeah I do approve of altering them
 to use real cards now." Its three tests of a hindered card's strength, vitality and resistance stay as they are in
