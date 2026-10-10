@@ -322,6 +322,13 @@ error; the test fails some lines later. Read what is pending before answering (s
 for every response to a play, not only a response event in hand: a Response ability on a card in play (Shrouded
 Elf 63_23) is asked before the played event's effect chooses anything (CR 4.2 "playing a card", steps 5 and 6).
 
+**The entries of a required-response ordering are actions, not choices.** While `FreepsAwaitingRequiredResponseOrder()`
+is true, read what is to be ordered with `FreepsGetActionCount()` and `FreepsActionAvailable("<card title>")` (each
+entry carries its card's name: "Elrond", "Dwarven Heart", "The One Ring", "Gimli's Helm"), and name the first with
+`FreepsResolveActionOrder("<card title>")`. `FreepsChoiceAvailable(text)` reads only a multiple choice's answers and is
+false there. Two required answers to one "is about to take a wound" are put to the player again for every wound of
+the same skirmish (`mechanics/RequiredActionsAnsweringOneTriggerTests`).
+
 ## Getting to the moment: set-up, the skippers and turns
 
 **Set the twilight pool before the Shadow phase starts.** Because the engine asks once, a pool set while the

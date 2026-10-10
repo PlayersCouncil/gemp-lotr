@@ -365,13 +365,13 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A yes/no before a choice whose minimum is 0 (Q-0143, F-0277) [F-0278, F-0285, Q-0102]
 - A number that can only be one number is not asked for (F-0147)
 - "You may make <the other player> do X" (Q-0106)
-- Known shapes from the Dwarven errata (F-0181, F-0194, F-0182) [Q-0034, F-0295, F-0304, F-0323, F-0324, F-0303, F-0314]
+- Known shapes from the Dwarven errata (F-0181, F-0194, F-0182) [Q-0034, F-0295, F-0304, F-0323, F-0324, F-0303, F-0314, F-0349, F-0347, F-0348]
 - "You may <do X to a card>" on a required trigger wants its choice 0 to 1 (Q-0010, F-0191) [F-0280, F-0289, Q-0021, F-0041, Q-0034]
 - "When you play this ..., you may add (N)" built as a required trigger (F-0009, Q-0165) [Q-0017, Q-0167, F-0328]
 - A prevention is asked only when the effect will happen (F-0194, Q-0114)
 - "<A player> may assign a minion to skirmish the Ring-bearer" on an optional trigger wants a minion that can be assigned to him (F-0337, Race Text 94_26) [Q-0034, Q-0114]
 - A choice made ahead of a preventable exert loses the exert's own check (F-0206) [Q-0114]
-- "Spot X to <effect>" on an optional trigger or ability is no cost for Q-0034 (F-0167, F-0209, F-0211, F-0219) [Q-0164]
+- "Spot X to <effect>" on an optional trigger or ability is no cost for Q-0034 (F-0167, F-0209, F-0211, F-0219) [Q-0029, Q-0033, Q-0164]
 - An "or" between two cost-to-effect halves (Q-0034)
 - A choice of cost-to-effect branches with no payable branch is not offered (F-0222, F-0259)
 - "The Free Peoples player must <pay> to assign <this minion> ..." (F-0306, F-0307, F-0308; Q-0174 settled by F-0308) [Q-0199]
