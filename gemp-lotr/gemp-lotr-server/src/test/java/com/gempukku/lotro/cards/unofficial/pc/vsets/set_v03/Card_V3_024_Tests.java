@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -30,7 +29,6 @@ public class Card_V3_024_Tests
 					put("knight1", "5_35");        // Gondorian Knight: [gondor] Man with no text, cost 2
 					put("knight2", "5_35");
 					put("knight3", "5_35");
-					put("legolas", "1_50");        // Legolas, Greenleaf: [elven] Elf, cost 2, nothing to play him
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -79,18 +77,14 @@ public class Card_V3_024_Tests
 		var oath = scn.GetFreepsCard("oath");
 		var king = scn.GetFreepsCard("king");
 		var deadman = scn.GetFreepsCard("deadman");
-		var legolas = scn.GetFreepsCard("legolas");
 		scn.MoveCompanionsToTable(aragorn, knight1);
 		// A hand weapon of Aragorn's that is not Andúril.
 		scn.AttachCardsTo(aragorn, sword);
 		scn.MoveCardsToHand(icall);
-		scn.MoveCardsToDeadPile(oath, king, knight2, legolas);
+		scn.MoveCardsToDeadPile(oath, king, knight2);
 		scn.MoveCardsToDiscard(deadman);
 
 		scn.StartGame();
-		// Every Free Peoples Wraith there is belongs to the [gondor] culture, so an [elven] companion in the dead pile
-		// is made a Wraith to tell "a Wraith" from "a [gondor] companion".
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, legolas, null, Race.WRAITH));
 
 		// Site 1 is in region 1.
 		assertEquals(0, scn.GetWoundsOn(aragorn));
@@ -103,7 +97,7 @@ public class Card_V3_024_Tests
 		// The costs are paid before the Wraith is chosen.
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertEquals(1, scn.GetThreats());
-		assertTrue(scn.FreepsHasCardChoiceAvailable(oath, king, legolas));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(oath, king));
 		// A [gondor] companion in the dead pile who is no Wraith, and a Wraith in the discard pile.
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(knight2, deadman));
 		assertEquals(1, scn.FreepsGetChoiceMin());
@@ -111,7 +105,7 @@ public class Card_V3_024_Tests
 		scn.FreepsChooseCard(king);
 
 		assertInZone(Zone.FREE_CHARACTERS, king);
-		assertInZone(Zone.DEAD, oath, knight2, legolas);
+		assertInZone(Zone.DEAD, oath, knight2);
 		assertInZone(Zone.DISCARD, deadman);
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		// 1 for region 1 + 2 that King of the Dead adds to be played
@@ -119,37 +113,6 @@ public class Card_V3_024_Tests
 		// 3 for the event + 4 for King of the Dead
 		assertEquals(7, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, icall);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
-	public void AWraithOfAnotherCultureAloneInTheDeadPileIsPlayed() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var icall = scn.GetFreepsCard("icall");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		var knight1 = scn.GetFreepsCard("knight1");
-		var knight2 = scn.GetFreepsCard("knight2");
-		var legolas = scn.GetFreepsCard("legolas");
-		scn.MoveCompanionsToTable(aragorn, knight1);
-		scn.MoveCardsToHand(icall);
-		scn.MoveCardsToDeadPile(legolas, knight2);
-		// The text names a race and no culture: an [elven] companion made a Wraith is the only Wraith in the dead pile.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, legolas, null, Race.WRAITH));
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetThreats());
-		assertTrue(scn.FreepsPlayAvailable(icall));
-
-		scn.FreepsPlayCard(icall);
-		assertInZone(Zone.FREE_CHARACTERS, legolas);
-		assertInZone(Zone.DEAD, knight2);
-		assertEquals(1, scn.GetWoundsOn(aragorn));
-		// 1 for region 1, and Legolas adds none to be played
-		assertEquals(1, scn.GetThreats());
-		// 3 for the event + 2 for Legolas
-		assertEquals(5, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

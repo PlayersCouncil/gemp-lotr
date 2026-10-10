@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -24,7 +23,7 @@ public class Card_V3_036_Tests
 					put("deadman1", "10_27");   // Dead Man of Dunharrow: a [gondor] Wraith, strength 6, vitality 3, enduring; his text is about being played
 					put("deadman2", "10_27");
 					put("deadman3", "10_27");
-					put("gimli", "1_13");       // Gimli, Son of Glóin: a [dwarven] Dwarf, made a Wraith where a test says so; a skirmish ability never used here
+					put("gimli", "1_13");       // Gimli, Son of Glóin: a [dwarven] Dwarf, strength 6; a skirmish ability never used here
 					put("knight", "5_35");      // Gondorian Knight: a [gondor] Man with no text, strength 6
 					put("wall", "5_33");        // City Wall: a Free Peoples condition that a minion can come to bear; bearer is strength -3
 
@@ -83,7 +82,6 @@ public class Card_V3_036_Tests
 		var deadman1 = scn.GetFreepsCard("deadman1");
 		var deadman2 = scn.GetFreepsCard("deadman2");
 		var deadman3 = scn.GetFreepsCard("deadman3");
-		var gimli = scn.GetFreepsCard("gimli");
 		var knight = scn.GetFreepsCard("knight");
 		var wall = scn.GetFreepsCard("wall");
 		var frodo = scn.GetRingBearer();
@@ -92,16 +90,17 @@ public class Card_V3_036_Tests
 		var lether = scn.GetShadowCard("lether");
 		var ships = scn.GetShadowCard("ships");
 		var savage = scn.GetShadowCard("savage");
-		// Exactly 3 [gondor] Wraiths, one of them with 1 vitality left; a [dwarven] companion made a Wraith; a [gondor] Man.
-		scn.MoveCompanionsToTable(deadman1, deadman2, deadman3, gimli, knight);
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, gimli, null, Race.WRAITH));
+		var corpse = scn.GetShadowCard("corpse");
+		// Exactly 3 [gondor] Wraiths, one of them with 1 vitality left, and a [gondor] Man.
+		scn.MoveCompanionsToTable(deadman1, deadman2, deadman3, knight);
 		scn.AddWoundsToChar(deadman3, 2);
 		scn.MoveCardsToHand(shut);
 		// Shadow conditions of two cultures in the support area, and a Shadow possession beside them.
 		scn.MoveCardsToSupportArea(pinned, burden, ships);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(savage);
+		// A Wraith who is not [gondor] is the Shadow player's: Corpse Lights, a [sauron] minion.
+		scn.MoveMinionsToTable(savage, corpse);
 		// On the minion: a Shadow condition, and a condition that is the Free Peoples player's own.
 		scn.AttachCardsTo(savage, lether, wall);
 		// Threats are for the skirmish half, and change nothing here.
@@ -110,7 +109,7 @@ public class Card_V3_036_Tests
 
 		int twilight = scn.GetTwilight();
 		assertEquals(6, scn.GetStrength(deadman1));
-		assertEquals(6, scn.GetStrength(gimli));
+		assertEquals(7, scn.GetStrength(corpse));
 		assertTrue(scn.FreepsPlayAvailable(shut));
 		scn.FreepsPlayCard(shut);
 
@@ -128,15 +127,16 @@ public class Card_V3_036_Tests
 		assertTrue(scn.FreepsDecisionAvailable("exert a Wraith"));
 		scn.FreepsChooseYes();
 
-		// A Wraith: the two [gondor] Wraiths able to exert and the [dwarven] one.
-		assertTrue(scn.FreepsHasCardChoiceAvailable(deadman1, deadman2, gimli));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(deadman3, knight, frodo));
+		// A Wraith: the two [gondor] Wraiths able to exert and the [sauron] one. Not the exhausted Wraith, the Man,
+		// Frodo, or the minion who is no Wraith.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(deadman1, deadman2, corpse));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(deadman3, knight, frodo, savage));
 		assertEquals(1, scn.FreepsGetChoiceMin());
-		assertEquals(0, scn.GetWoundsOn(gimli));
-		scn.FreepsChooseCard(gimli);
-		assertEquals(1, scn.GetWoundsOn(gimli));
-		assertEquals(0, scn.GetWoundsOn(deadman1));
 		assertEquals(0, scn.GetWoundsOn(deadman2));
+		scn.FreepsChooseCard(deadman2);
+		assertEquals(1, scn.GetWoundsOn(deadman2));
+		assertEquals(0, scn.GetWoundsOn(deadman1));
+		assertEquals(0, scn.GetWoundsOn(corpse));
 
 		// Another Shadow condition: the two left, a [moria] one in the support area and a [gollum] one on the minion.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(pinned, lether));
@@ -153,9 +153,9 @@ public class Card_V3_036_Tests
 		assertInZone(Zone.SUPPORT, pinned);
 		assertInDiscard(shut);
 		assertEquals(twilight + 1, scn.GetTwilight());
+		// The skirmish half is not carried out in the maneuver phase: nobody is stronger for the 2 threats.
 		assertEquals(6, scn.GetStrength(deadman1));
-		// Gimli took a wound and is not enduring.
-		assertEquals(6, scn.GetStrength(gimli));
+		assertEquals(7, scn.GetStrength(corpse));
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 
@@ -201,21 +201,22 @@ public class Card_V3_036_Tests
 		var shut = scn.GetFreepsCard("shut1");
 		var deadman1 = scn.GetFreepsCard("deadman1");
 		var deadman2 = scn.GetFreepsCard("deadman2");
-		var gimli = scn.GetFreepsCard("gimli");
 		var knight = scn.GetFreepsCard("knight");
 		var pinned = scn.GetShadowCard("pinned");
 		var savage = scn.GetShadowCard("savage");
-		// Two [gondor] Wraiths, a Wraith who is not [gondor], and a [gondor] companion who is no Wraith.
-		scn.MoveCompanionsToTable(deadman1, deadman2, gimli, knight);
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, gimli, null, Race.WRAITH));
+		var corpse = scn.GetShadowCard("corpse");
+		// Two [gondor] Wraiths and a [gondor] companion who is no Wraith.
+		scn.MoveCompanionsToTable(deadman1, deadman2, knight);
 		scn.MoveCardsToHand(shut);
 		scn.MoveCardsToSupportArea(pinned);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(savage);
+		// A third Wraith who is not [gondor]: a spot names no side, and Corpse Lights are the Shadow player's
+		// [sauron] Wraith.
+		scn.MoveMinionsToTable(savage, corpse);
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		assertTrue(scn.IsRace(gimli, Race.WRAITH));
+		assertTrue(scn.IsRace(corpse, Race.WRAITH));
 		assertFalse(scn.FreepsPlayAvailable(shut));
 		assertInZone(Zone.SUPPORT, pinned);
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
@@ -475,15 +476,13 @@ public class Card_V3_036_Tests
 		var shut = scn.GetFreepsCard("shut1");
 		var deadman1 = scn.GetFreepsCard("deadman1");
 		var deadman2 = scn.GetFreepsCard("deadman2");
-		var gimli = scn.GetFreepsCard("gimli");
 		var knight = scn.GetFreepsCard("knight");
 		var frodo = scn.GetRingBearer();
 		var pinned = scn.GetShadowCard("pinned");
 		var savage = scn.GetShadowCard("savage");
 		var corpse = scn.GetShadowCard("corpse");
 		// Only two [gondor] Wraiths: the spot of 3 belongs to the maneuver half.
-		scn.MoveCompanionsToTable(deadman1, deadman2, gimli, knight);
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, gimli, null, Race.WRAITH));
+		scn.MoveCompanionsToTable(deadman1, deadman2, knight);
 		scn.MoveCardsToHand(shut);
 		scn.MoveCardsToSupportArea(pinned);
 
@@ -503,8 +502,8 @@ public class Card_V3_036_Tests
 		assertTrue(scn.FreepsPlayAvailable(shut));
 		scn.FreepsPlayCard(shut);
 
-		// Your Wraith: the one in the skirmish, one that is not, and the [dwarven] one. Not the Man, and not the Shadow player's Wraith.
-		assertTrue(scn.FreepsHasCardChoiceAvailable(deadman1, deadman2, gimli));
+		// Your Wraith: the one in the skirmish and one that is not. Not the Man, and not the Shadow player's Wraith.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(deadman1, deadman2));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(knight, corpse, frodo, savage));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		scn.FreepsChooseCard(deadman1);
@@ -512,7 +511,7 @@ public class Card_V3_036_Tests
 		// 6 + 2 threats
 		assertEquals(8, scn.GetStrength(deadman1));
 		assertEquals(6, scn.GetStrength(deadman2));
-		assertEquals(6, scn.GetStrength(gimli));
+		assertEquals(7, scn.GetStrength(corpse));
 		assertEquals(twilight + 1, scn.GetTwilight());
 		assertInDiscard(shut);
 		// The maneuver half is not carried out in a skirmish.

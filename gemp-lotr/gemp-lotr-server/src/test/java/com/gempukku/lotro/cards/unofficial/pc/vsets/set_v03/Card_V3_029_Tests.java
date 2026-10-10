@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -382,42 +381,36 @@ public class Card_V3_029_Tests
 	}
 
 	@Test
-	public void KindsOnAnAllyCountAndSoDoesARingBoundManOfAnotherCulture() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AManWhoIsAnAllyCountsAsAMountedManAndAsAnExhaustedMan() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var eilenach = scn.GetFreepsCard("eilenach1");
 		var boromir = scn.GetFreepsCard("boromir");
-		var eomer = scn.GetFreepsCard("eomer");
 		var guma = scn.GetFreepsCard("guma");
 		var horse = scn.GetFreepsCard("horse1");
 		var runner = scn.GetShadowCard("runner");
-		scn.MoveCompanionsToTable(boromir, eomer);
+		scn.MoveCompanionsToTable(boromir);
+		// "You can spot" names no card type. Of the six kinds an ally can be two: Guma, a Man, bears a horse, and
+		// with 1 wound of his vitality 2 he is exhausted. Nobody else on the table is of any kind.
 		scn.MoveAlliesToTable(guma);
 		scn.AttachCardsTo(guma, horse);
 		scn.MoveCardsToSupportArea(eilenach);
 
 		scn.StartGame();
-		// No ranger, knight or valiant Man in print is an ally (Flame of Calenhad can make one of a Man ally for a
-		// time), and every Ring-bound Man in print is a [gondor] ranger.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, guma, null, Keyword.RANGER));
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, guma, null, Keyword.KNIGHT));
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, guma, null, Keyword.VALIANT));
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, eomer, null, Keyword.RING_BOUND));
+		scn.AddWoundsToChar(guma, 1);
 		scn.MoveMinionsToTable(runner);
 		scn.SkipToAssignments();
 		scn.FreepsAssignAndResolve(boromir, runner);
 
+		assertTrue(scn.IsExhausted(guma));
 		assertEquals(7, scn.GetStrength(boromir));
-		assertEquals(7, scn.GetStrength(eomer));
 		assertEquals(4, scn.GetStrength(guma));
 
-		// Boromir is the only unbound Man of mine now, so nothing is asked.
+		// Boromir is the only unbound Man of mine, so nothing is asked.
 		scn.FreepsUseCardAction(eilenach);
 
-		// ranger 1 + knight 1 + mounted Man 1 + valiant Man 1 (Guma, an ally, for all four)
-		// + Ring-bound Man 1 (Eomer, of [rohan]) = 5
-		assertEquals(12, scn.GetStrength(boromir));
-		assertEquals(7, scn.GetStrength(eomer));
+		// mounted Man 1 + exhausted Man 1, Guma for both
+		assertEquals(9, scn.GetStrength(boromir));
 		assertEquals(4, scn.GetStrength(guma));
 		assertTrue(scn.IsHindered(eilenach));
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());

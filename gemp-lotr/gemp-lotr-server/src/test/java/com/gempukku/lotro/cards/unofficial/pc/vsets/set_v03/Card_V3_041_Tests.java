@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.StrengthModifier;
 import org.junit.Test;
 
@@ -34,7 +33,6 @@ public class Card_V3_041_Tests
 					put("explorer2", "4_250");
 					put("scout", "4_252");        // Southron Scout: Southron Man, ambush (2) and nothing else
 					put("infantry", "4_227");     // Easterling Infantry: a [raider] Man who is no Southron; strength 8; its text needs 3 burdens
-					put("savage", "4_17");        // Dunlending Savage: a [dunland] Man with no text
 
 					put("aragorn", "1_89");       // Aragorn, Ranger of the North: strength 8, vitality 4
 					put("boromir", "1_97");       // Boromir, Son of Denethor: strength 7
@@ -122,7 +120,7 @@ public class Card_V3_041_Tests
 		var explorer = scn.GetShadowCard("explorer");
 		var scout = scn.GetShadowCard("scout");
 		var infantry = scn.GetShadowCard("infantry");
-		var savage = scn.GetShadowCard("savage");
+		var explorer2 = scn.GetShadowCard("explorer2");
 		var aragorn = scn.GetFreepsCard("aragorn");
 
 		scn.MoveCardsToSupportArea(charger, charger2);
@@ -130,9 +128,7 @@ public class Card_V3_041_Tests
 		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(warrior1, warrior2, explorer, infantry, savage);
-		// A Southron Man who is not [raider]
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, Culture.DUNLAND, null, Keyword.SOUTHRON));
+		scn.MoveMinionsToTable(warrior1, warrior2, explorer, explorer2, infantry);
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPass();
 
@@ -156,9 +152,9 @@ public class Card_V3_041_Tests
 		assertEquals(0, scn.GetStackedCards(charger).size());
 
 		scn.ShadowUseCardAction(charger);
-		// Southron Men in play, whatever their culture. Not the Easterling (a [raider] Man), not the other
-		// Charger (now a Southron minion, and no Man), not the Southron Man in hand.
-		assertTrue(scn.ShadowHasCardChoiceAvailable(warrior1, explorer, savage));
+		// The Southron Men in play. Not the Easterling (a [raider] Man), not the other Charger (now a Southron
+		// minion, and no Man), not the Southron Man in hand.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(warrior1, explorer, explorer2));
 		assertFalse(scn.ShadowHasCardChoiceAvailable(infantry));
 		assertFalse(scn.ShadowHasCardChoiceAvailable(charger2));
 		assertFalse(scn.ShadowHasCardChoiceAvailable(scout));
@@ -170,7 +166,7 @@ public class Card_V3_041_Tests
 		assertEquals(2, scn.GetStackedCards(charger).size());
 		assertTrue(scn.GetStackedCards(charger).contains(warrior1));
 		assertTrue(scn.GetStackedCards(charger).contains(explorer));
-		assertInZone(Zone.SHADOW_CHARACTERS, savage);
+		assertInZone(Zone.SHADOW_CHARACTERS, explorer2);
 
 		assertInZone(Zone.SHADOW_CHARACTERS, charger);
 		assertTrue(scn.IsType(charger, CardType.MINION));

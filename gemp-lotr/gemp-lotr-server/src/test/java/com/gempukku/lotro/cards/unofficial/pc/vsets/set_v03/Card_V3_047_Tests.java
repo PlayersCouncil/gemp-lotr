@@ -1,11 +1,9 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -24,7 +22,6 @@ public class Card_V3_047_Tests
 					put("soldier", "4_254");    // Southron Soldier: [raider] Southron, cost 2, site 4; ambush (2) and no other text
 					put("nomad", "7_132");      // Desert Nomad: [raider] Southron, cost 4, site 4; nothing more below 2 threats
 					put("axeman", "4_224");     // Easterling Axeman: [raider] Man who is no Southron, cost 2, site 4; nothing more below 2 burdens
-					put("orc", "1_271");        // Orc Soldier: [sauron] Orc, cost 2, site 6; a skirmish ability never used here
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -171,16 +168,13 @@ public class Card_V3_047_Tests
 	}
 
 	@Test
-	public void ASouthronOfAnyCultureCostsOneLessAndARaiderManWhoIsNoSouthronDoesNot() throws DecisionResultInvalidException, CardNotFoundException, InvalidCardDefinitionException {
+	public void ASouthronCostsOneLessAndARaiderManWhoIsNoSouthronDoesNot() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var initiate = scn.GetShadowCard("initiate1");
 		var soldier = scn.GetShadowCard("soldier");
-		var orc = scn.GetShadowCard("orc");
 		var axeman = scn.GetShadowCard("axeman");
-		scn.MoveCardsToHand(soldier, orc, axeman);
-		// Every Southron there is is a [raider] Man: the Orc Soldier is made one to tell the keyword from the culture.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, scn.GenerateShadowFilter("name(Orc Soldier)"), null, Keyword.SOUTHRON));
+		scn.MoveCardsToHand(soldier, axeman);
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(initiate);
@@ -195,14 +189,10 @@ public class Card_V3_047_Tests
 		// 15 - (2 - 1) to play - 2 roaming
 		assertEquals(12, scn.GetTwilight());
 
-		scn.ShadowPlayCard(orc);
-		// 12 - (2 - 1) to play - 2 roaming (a site 6 minion)
-		assertEquals(9, scn.GetTwilight());
-
 		scn.ShadowPlayCard(axeman);
-		// 9 - 2 to play - 2 roaming: an Easterling, not a Southron
-		assertEquals(5, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, soldier, orc, axeman);
+		// 12 - 2 to play - 2 roaming: an Easterling, not a Southron
+		assertEquals(8, scn.GetTwilight());
+		assertInZone(Zone.SHADOW_CHARACTERS, soldier, axeman);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 

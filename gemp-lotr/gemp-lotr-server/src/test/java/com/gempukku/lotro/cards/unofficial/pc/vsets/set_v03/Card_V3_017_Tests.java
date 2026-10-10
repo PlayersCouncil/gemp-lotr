@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,7 +27,7 @@ public class Card_V3_017_Tests
 					put("pass", "103_12");      // Pass of the Spider: [gollum] possession, cost 2; a skirmish ability the Shadow player passes on
 					put("strands", "103_14");   // Sticky Strands of Spider-silk: [gollum] possession, cost 2; a skirmish ability only
 					put("larder", "8_23");      // Larder: [gollum] possession, cost 1
-					put("crown", "101_39");     // Pale Crown: a [wraith] artifact, cost 1, with no requirement to play; there is no [gollum] artifact
+					put("crown", "101_39");     // Pale Crown: a [wraith] artifact, cost 1, with no requirement to play: an item that is not [gollum] (no artifact is)
 					put("burden", "7_60");      // Heavy Burden: a [gollum] condition, cost 1; a regroup ability only
 					put("ships", "8_65");       // Ships of Great Draught: a [raider] possession, cost 2; Shadow and regroup abilities only
 					put("runner1", "1_178");    // Goblin Runner: a [moria] minion
@@ -121,8 +120,6 @@ public class Card_V3_017_Tests
 		scn.MoveCardsToSupportArea(get);
 		scn.MoveCardsToDiscard(web, poison, crown, burden, ships, theirLarder);
 		scn.MoveCardsToHand(strands);
-		// An item is a possession or an artifact, and no artifact is [gollum]: every artifact is made one.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, CardType.ARTIFACT, null, Culture.GOLLUM));
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(shelob);
@@ -139,20 +136,20 @@ public class Card_V3_017_Tests
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(get));
 		scn.ShadowChooseOptionalTrigger(get);
 
-		// Two [gollum] possessions and the artifact.
-		assertTrue(scn.ShadowHasCardChoiceAvailable(web, poison, crown));
-		// Not a [gollum] condition or a [raider] possession in the discard pile, nor a [gollum] possession in hand,
-		// in the draw deck or in the other player's discard pile.
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(burden, ships, strands, pass, theirLarder));
+		// The two [gollum] possessions. (An item is a possession or an artifact; no artifact is [gollum].)
+		assertTrue(scn.ShadowHasCardChoiceAvailable(web, poison));
+		// Not a [gollum] condition, a [raider] possession or a [wraith] artifact in the discard pile, nor a [gollum]
+		// possession in hand, in the draw deck or in the other player's discard pile.
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(burden, ships, crown, strands, pass, theirLarder));
 		assertEquals(1, scn.ShadowGetChoiceMin());
 		assertEquals(1, scn.ShadowGetChoiceMax());
 
-		scn.ShadowChooseCardBPFromSelection(crown);
+		scn.ShadowChooseCardBPFromSelection(web);
 
-		assertInZone(Zone.SUPPORT, crown);
-		// 5 in the pool less the Crown's 1
+		assertInZone(Zone.SUPPORT, web);
+		// 5 in the pool less the Web's 1
 		assertEquals(4, scn.GetTwilight());
-		assertInZone(Zone.DISCARD, web, poison, burden, ships);
+		assertInZone(Zone.DISCARD, poison, crown, burden, ships);
 		assertEquals(1, scn.GetWoundsOn(shelob));
 		// Shelob is fierce: a second assignment phase follows.
 		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
@@ -325,19 +322,16 @@ public class Card_V3_017_Tests
 		var shelob = scn.GetShadowCard("shelob");
 		var web = scn.GetShadowCard("web");
 		var pass = scn.GetShadowCard("pass");
-		var crown = scn.GetShadowCard("crown");
 		var runner1 = scn.GetShadowCard("runner1");
 		var runner2 = scn.GetShadowCard("runner2");
 		var savage1 = scn.GetShadowCard("savage1");
 		var savage2 = scn.GetShadowCard("savage2");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveCompanionsToTable(aragorn);
-		scn.MoveCardsToSupportArea(get, web, pass, crown);
-		// Minions of two cultures on two [gollum] possessions and an artifact made [gollum]: four in all.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, CardType.ARTIFACT, null, Culture.GOLLUM));
+		scn.MoveCardsToSupportArea(get, web, pass);
+		// Minions of two cultures on two [gollum] possessions, two on each: four in all.
 		scn.StackCardsOn(web, runner1, savage1);
-		scn.StackCardsOn(pass, runner2);
-		scn.StackCardsOn(crown, savage2);
+		scn.StackCardsOn(pass, runner2, savage2);
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(shelob);

@@ -6,7 +6,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -24,11 +23,9 @@ public class Card_V3_021_Tests
 					put("king", "8_38");        // King of the Dead, Oathbreaker: a [gondor] Wraith, strength 7, vitality 4, enduring; his response is about Aragorn
 					put("deadman", "10_27");    // Dead Man of Dunharrow: a [gondor] Wraith, strength 6, vitality 3, enduring; his text is about being played
 					put("boromir", "1_97");     // Boromir, Son of Denethor: a [gondor] Man, strength 7; a skirmish ability never used here
-					put("gimli", "1_13");       // Gimli, Son of Glóin: a [dwarven] Dwarf, strength 6, made a Wraith where a test says so
 
 					put("savage1", "1_151");    // Uruk Savage: an [isengard] minion, strength 5, vitality 3; damage +1 is its whole text
 					put("savage2", "1_151");
-					put("savage3", "1_151");
 					put("runner", "1_178");     // Goblin Runner: a [moria] minion, strength 5, vitality 1
 					put("troop", "1_177");      // Goblin Patrol Troop: a [moria] minion, strength 13, vitality 3, no text
 					put("corpse", "6_99");      // Corpse Lights: a [sauron] minion who is a Wraith, vitality 2; a skirmish ability the Shadow player never uses here
@@ -80,24 +77,21 @@ public class Card_V3_021_Tests
 		var king = scn.GetFreepsCard("king");
 		var deadman = scn.GetFreepsCard("deadman");
 		var boromir = scn.GetFreepsCard("boromir");
-		var gimli = scn.GetFreepsCard("gimli");
 		var frodo = scn.GetRingBearer();
-		scn.MoveCompanionsToTable(king, deadman, boromir, gimli);
-		// No Free Peoples Wraith is of another culture, so a [dwarven] companion is made one.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, gimli, null, Race.WRAITH));
+		scn.MoveCompanionsToTable(king, deadman, boromir);
 		scn.MoveCardsToHand(banner);
 
 		scn.StartGame();
 
-		assertTrue(scn.IsRace(gimli, Race.WRAITH));
 		assertEquals(0, scn.GetTwilight());
 		assertEquals(3, scn.GetVitality(deadman));
 		assertEquals(4, scn.GetVitality(king));
 		assertTrue(scn.FreepsPlayAvailable(banner));
 		scn.FreepsPlayCard(banner);
 
+		// The two [gondor] Wraiths; not the [gondor] Man, and not Frodo.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(king, deadman));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(boromir, gimli, frodo));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(boromir, frodo));
 		scn.FreepsChooseCard(deadman);
 
 		assertEquals(1, scn.GetTwilight());
@@ -115,26 +109,22 @@ public class Card_V3_021_Tests
 		var king = scn.GetFreepsCard("king");
 		var deadman = scn.GetFreepsCard("deadman");
 		var boromir = scn.GetFreepsCard("boromir");
-		var gimli = scn.GetFreepsCard("gimli");
 		var frodo = scn.GetRingBearer();
 		var savage1 = scn.GetShadowCard("savage1");
 		var savage2 = scn.GetShadowCard("savage2");
-		var savage3 = scn.GetShadowCard("savage3");
 		var troop = scn.GetShadowCard("troop");
-		var runner = scn.GetShadowCard("runner");
-		scn.MoveCompanionsToTable(king, deadman, boromir, gimli);
-		// A Wraith who is not [gondor].
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, gimli, null, Race.WRAITH));
+		var corpse = scn.GetShadowCard("corpse");
+		scn.MoveCompanionsToTable(king, deadman, boromir);
 		scn.AttachCardsTo(king, banner);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(savage1, savage2, savage3, troop, runner);
+		// A Wraith who is not [gondor]: the text names no side, and Corpse Lights are the Shadow player's [sauron] Wraith.
+		scn.MoveMinionsToTable(savage1, savage2, troop, corpse);
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(
 				new PhysicalCardImpl[] { king, savage1 },
 				new PhysicalCardImpl[] { deadman, savage2 },
-				new PhysicalCardImpl[] { gimli, savage3 },
-				new PhysicalCardImpl[] { boromir, runner }
+				new PhysicalCardImpl[] { boromir, corpse }
 		);
 		// The Shadow player puts the minion left over on the Dead Man as well: he has an [isengard] minion and a [moria] one.
 		scn.ShadowAssignToMinions(deadman, troop);
@@ -149,25 +139,24 @@ public class Card_V3_021_Tests
 		assertEquals(0, scn.GetWoundsOn(troop));
 		scn.FreepsChooseOptionalTrigger(banner);
 
-		// A Wraith: the bearer, the other [gondor] Wraith and the [dwarven] one; not the Man, not Frodo.
-		assertTrue(scn.FreepsHasCardChoiceAvailable(king, deadman, gimli));
+		// A Wraith: the bearer, the other [gondor] Wraith and the [sauron] one; not the Man, not Frodo.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(king, deadman, corpse));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(boromir, frodo));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		scn.FreepsChooseCard(deadman);
 
-		// A minion the Dead Man is assigned to skirmish: either of his two, and no other Wraith's or companion's.
+		// A minion the Dead Man is assigned to skirmish: either of his two, and no other Wraith's or companion's
+		// (the Savage is the King's; the Corpse Lights are assigned to Boromir, a Man).
 		assertTrue(scn.FreepsHasCardChoiceAvailable(savage2, troop));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(savage1, savage3, runner));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(savage1, corpse));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		scn.FreepsChooseCard(troop);
 
 		assertEquals(1, scn.GetWoundsOn(deadman));
 		assertEquals(1, scn.GetWoundsOn(troop));
 		assertEquals(0, scn.GetWoundsOn(savage2));
-		assertEquals(0, scn.GetWoundsOn(savage3));
-		assertEquals(0, scn.GetWoundsOn(runner));
+		assertEquals(0, scn.GetWoundsOn(corpse));
 		assertEquals(0, scn.GetWoundsOn(king));
-		assertEquals(0, scn.GetWoundsOn(gimli));
 		// Only the wound for losing the skirmish.
 		assertEquals(1, scn.GetWoundsOn(savage1));
 		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));

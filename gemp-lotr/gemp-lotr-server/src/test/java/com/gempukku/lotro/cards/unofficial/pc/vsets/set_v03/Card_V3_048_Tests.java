@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -24,7 +23,7 @@ public class Card_V3_048_Tests
 					put("axeman", "4_224");     // Easterling Axeman: [raider] Man who is no Southron; nothing more below 2 burdens
 					put("soldier", "4_254");    // Southron Soldier: [raider] Southron; ambush (2) and no other text
 					put("nomad", "7_132");      // Desert Nomad: [raider] Southron; nothing more below 2 threats
-					put("brigand", "4_10");     // Dunlending Brigand: [dunland] Man, no text at all
+					put("brigand", "4_10");     // Dunlending Brigand: [dunland] Man, a minion of another culture; no text at all
 					put("ships", "8_65");       // Ships of Great Draught: [raider] possession in the support area; abilities never used here
 					put("helmsman", "103_46");  // Corsair Helmsman: [raider]; Response: exert or hinder it to prevent a [raider] card being hindered
 
@@ -131,14 +130,11 @@ public class Card_V3_048_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(scoutB, axeman, soldier, brigand);
-		// A Man of another culture is made a Southron, to tell the culture from the keyword.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, brigand, null, Keyword.SOUTHRON));
 		scn.SetTwilight(7);
 		scn.FreepsPass();
 
 		// 7 set + 1 for Frodo + 2 for the shadow number of site 2
 		assertEquals(10, scn.GetTwilight());
-		assertTrue(scn.HasKeyword(brigand, Keyword.SOUTHRON));
 
 		scn.ShadowPlayCard(scoutA);
 
@@ -152,7 +148,8 @@ public class Card_V3_048_Tests
 		scn.ShadowChooseOptionalTrigger(scoutA);
 
 		// No other [raider] minion is hindered, so there is nothing to restore: a minion to hinder is chosen. A Southron,
-		// an Easterling and another Scout are [raider] minions; the Dunlending Southron and the Ships are not.
+		// an Easterling and another Scout are [raider] minions; the Dunlending, a Man and a minion of another culture,
+		// and the Ships, a [raider] possession, are not.
 		assertTrue(scn.ShadowHasCardChoiceAvailable(soldier, axeman, scoutB));
 		assertTrue(scn.ShadowHasCardChoiceNotAvailable(brigand, ships, scoutA));
 		assertFalse(scn.IsHindered(axeman));

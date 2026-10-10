@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -24,7 +23,7 @@ public class Card_V3_020_Tests
 					put("deadman1", "10_27");   // Dead Man of Dunharrow: a [gondor] Wraith, vitality 3; his text is about being played
 					put("deadman2", "10_27");
 					put("boromir", "1_97");     // Boromir, Son of Denethor: a [gondor] Man, vitality 3; a skirmish ability never used here
-					put("gimli", "1_13");       // Gimli, Son of Glóin: a [dwarven] Dwarf, vitality 3, made a Wraith where a test says so
+					put("legolas", "1_50");     // Legolas, Greenleaf: an archer, for a fellowship archery total of 1; an archery ability never used here
 					put("guard", "1_7");        // Dwarf Guard: vitality 2, no text in play; the companion who is killed
 
 					put("slayer1", "3_93");     // Morgul Slayer: Regroup: exert this minion to wound a companion (except the Ring-bearer)
@@ -33,6 +32,7 @@ public class Card_V3_020_Tests
 					put("savage", "1_151");     // Uruk Savage: an [isengard] minion, vitality 3; damage +1 is its whole text
 					put("marksman1", "1_176");  // Goblin Marksman: archer and nothing else
 					put("marksman2", "1_176");
+					put("corpse", "6_99");      // Corpse Lights: a [sauron] minion who is a Wraith, vitality 2; a skirmish ability never used here
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -104,21 +104,18 @@ public class Card_V3_020_Tests
 	}
 
 	@Test
-	public void PlayedWithOnlyAGondorManAndAWraithOfAnotherCultureToSpotNoThreatIsRemoved() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedWithOnlyAGondorManToSpotNoThreatIsRemoved() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var domain = scn.GetFreepsCard("domain");
 		var boromir = scn.GetFreepsCard("boromir");
-		var gimli = scn.GetFreepsCard("gimli");
-		scn.MoveCompanionsToTable(boromir, gimli);
-		// No Free Peoples Wraith is of another culture, so a [dwarven] companion is made one.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, gimli, null, Race.WRAITH));
+		// A [gondor] companion who is no Wraith. (Every Wraith a fellowship phase can have in play is [gondor].)
+		scn.MoveCompanionsToTable(boromir);
 		scn.MoveCardsToHand(domain);
 
 		scn.StartGame();
 		scn.AddThreats(2);
 
-		assertTrue(scn.IsRace(gimli, Race.WRAITH));
 		assertTrue(scn.FreepsPlayAvailable(domain));
 		scn.FreepsPlayCard(domain);
 
@@ -196,14 +193,12 @@ public class Card_V3_020_Tests
 		var domain = scn.GetFreepsCard("domain");
 		var deadman = scn.GetFreepsCard("deadman1");
 		var boromir = scn.GetFreepsCard("boromir");
-		var gimli = scn.GetFreepsCard("gimli");
 		var guard = scn.GetFreepsCard("guard");
+		var frodo = scn.GetRingBearer();
 		var slayer1 = scn.GetShadowCard("slayer1");
 		var slayer2 = scn.GetShadowCard("slayer2");
 		var troop = scn.GetShadowCard("troop");
-		scn.MoveCompanionsToTable(deadman, boromir, gimli, guard);
-		// A Wraith who is not [gondor].
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, gimli, null, Race.WRAITH));
+		scn.MoveCompanionsToTable(deadman, boromir, guard);
 		scn.MoveCardsToSupportArea(domain);
 
 		scn.StartGame();
@@ -211,7 +206,6 @@ public class Card_V3_020_Tests
 		scn.AddThreats(2);
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.MoveMinionsToTable(slayer1, slayer2, troop);
-		assertTrue(scn.IsRace(gimli, Race.WRAITH));
 
 		scn.FreepsPass();
 		scn.ShadowUseCardAction(slayer1);
@@ -222,12 +216,12 @@ public class Card_V3_020_Tests
 		// One threat wound for the [gondor] Man: the next thing asked is where the second goes.
 		scn.FreepsChooseCard(boromir);
 		assertEquals(1, scn.GetWoundsOn(boromir));
-		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli, deadman));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, deadman));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(troop, slayer2));
 
-		// And one for the [dwarven] Wraith.
-		scn.FreepsChooseCard(gimli);
-		assertEquals(1, scn.GetWoundsOn(gimli));
+		// And one for Frodo, a companion who is neither [gondor] nor a Wraith.
+		scn.FreepsChooseCard(frodo);
+		assertEquals(1, scn.GetWoundsOn(frodo));
 		assertEquals(0, scn.GetWoundsOn(troop));
 		assertEquals(0, scn.GetWoundsOn(slayer2));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
@@ -336,29 +330,36 @@ public class Card_V3_020_Tests
 		var domain = scn.GetFreepsCard("domain");
 		var deadman = scn.GetFreepsCard("deadman1");
 		var boromir = scn.GetFreepsCard("boromir");
-		var gimli = scn.GetFreepsCard("gimli");
-		var marksman1 = scn.GetShadowCard("marksman1");
-		var marksman2 = scn.GetShadowCard("marksman2");
-		scn.MoveCompanionsToTable(deadman, boromir, gimli);
-		// A Wraith who is not [gondor].
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, gimli, null, Race.WRAITH));
+		var legolas = scn.GetFreepsCard("legolas");
+		var corpse = scn.GetShadowCard("corpse");
+		var marksman = scn.GetShadowCard("marksman1");
+		scn.MoveCompanionsToTable(deadman, boromir, legolas);
 		scn.MoveCardsToSupportArea(domain);
 
 		scn.StartGame();
-		// Vitality 3 with 2 wounds: exhausted, each of them.
+		// Vitality 3 with 2 wounds: exhausted.
 		scn.AddWoundsToChar(boromir, 2);
-		scn.AddWoundsToChar(gimli, 2);
-		scn.MoveMinionsToTable(marksman1, marksman2);
+		// The text names no side, and the only Wraiths who are not [gondor] are the Shadow player's: Corpse Lights
+		// are a [sauron] Wraith. Vitality 2 with 1 wound: exhausted.
+		scn.MoveMinionsToTable(corpse, marksman);
+		scn.AddWoundsToChar(corpse, 1);
 		scn.SkipToArcheryWounds();
-		assertTrue(scn.IsRace(gimli, Race.WRAITH));
 
+		assertTrue(scn.IsExhausted(corpse));
+		assertTrue(scn.IsExhausted(boromir));
+		assertEquals(0, scn.GetThreats());
+
+		// The Marksman's archery wound, placed on the exhausted [gondor] Man.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(boromir, deadman));
 		scn.FreepsChooseCard(boromir);
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 		assertInZone(Zone.DEAD, boromir);
 
-		scn.FreepsChooseCard(gimli);
+		// Legolas's, placed by the Shadow player on his exhausted Wraith.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(corpse, marksman));
+		scn.ShadowChooseCard(corpse);
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
-		assertInZone(Zone.DEAD, gimli);
+		assertInZone(Zone.DISCARD, corpse);
 
 		assertFalse(scn.IsHindered(domain));
 		assertEquals(0, scn.GetThreats());

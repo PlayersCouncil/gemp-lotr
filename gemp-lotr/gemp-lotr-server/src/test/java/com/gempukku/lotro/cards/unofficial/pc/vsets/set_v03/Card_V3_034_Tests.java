@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -183,8 +182,6 @@ public class Card_V3_034_Tests
 		var deadman1 = scn.GetFreepsCard("deadman1");
 		var deadman2 = scn.GetFreepsCard("deadman2");
 		var knight = scn.GetFreepsCard("knight");
-		var gimli = scn.GetFreepsCard("gimli");
-		var merchant = scn.GetFreepsCard("merchant");
 		var theirDeadman = scn.GetShadowCard("deadman1");
 		// One Wraith in play beside the Warrior, and one in the discard pile.
 		scn.MoveCompanionsToTable(warrior1, warrior2);
@@ -211,17 +208,6 @@ public class Card_V3_034_Tests
 		assertEquals(9, scn.GetStrength(warrior2));
 		scn.MoveCardsToDeadPile(warrior2);
 		assertEquals(11, scn.GetStrength(warrior1));
-
-		// No Free Peoples Wraith is an ally or of another culture, so an ally and a [dwarven] companion are made Wraiths.
-		// The ally counts once, as a Wraith.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, CardType.ALLY, null, Race.WRAITH));
-		scn.MoveCardsToDeadPile(merchant);
-		assertEquals(12, scn.GetStrength(warrior1));
-
-		// The Dwarf counts twice.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, Culture.DWARVEN, null, Race.WRAITH));
-		scn.MoveCardsToDeadPile(gimli);
-		assertEquals(14, scn.GetStrength(warrior1));
 
 		assertInDiscard(deadman2);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());

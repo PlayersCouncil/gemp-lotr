@@ -1,11 +1,9 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
 import com.gempukku.lotro.common.*;
-import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -21,13 +19,14 @@ public class Card_V3_043_Tests
 				{{
 					put("rearguard", "103_43");
 					put("rearguard2", "103_43");
+					put("rearguard3", "103_43");
 					put("scout", "4_252");      // Southron Scout: [raider] Man, Southron, ambush (2), strength 3; keywords only
 					put("scout2", "4_252");
 					put("soldier", "4_254");    // Southron Soldier: [raider] Man, Southron, ambush (2), strength 4; keywords only
+					put("soldier2", "4_254");
 					put("attacker", "7_141");   // Easterling Attacker: [raider] Man and no Southron; a skirmish ability never used here
 					put("attacker2", "7_141");
 					put("troop", "1_177");      // Goblin Patrol Troop: [moria] Orc, strength 13, no text at all
-					put("troop2", "1_177");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -101,22 +100,27 @@ public class Card_V3_043_Tests
 
 		var rearguard = scn.GetShadowCard("rearguard");
 		var rearguard2 = scn.GetShadowCard("rearguard2");
+		var rearguard3 = scn.GetShadowCard("rearguard3");
 		var scout = scn.GetShadowCard("scout");
 		var soldier = scn.GetShadowCard("soldier");
 		var scoutInHand = scn.GetShadowCard("scout2");
 		var attacker = scn.GetShadowCard("attacker");
-		var troop = scn.GetShadowCard("troop");
-		scn.MoveCardsToSupportArea(rearguard, rearguard2);
+		scn.MoveCardsToSupportArea(rearguard, rearguard2, rearguard3);
 		scn.MoveCardsToHand(scoutInHand);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(scout, soldier, attacker, troop);
-		// There is no Southron who is not a Man, so the Orc is made one.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.changeToFilter(Race.ORC), null, Keyword.SOUTHRON));
+		scn.MoveMinionsToTable(scout, soldier, attacker);
+		// No card is printed a Southron and not a Man. A third copy is one for the turn: its own Maneuver ability
+		// makes it a Southron minion until the end of the turn.
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.SetTwilight(5);
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(rearguard3);
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.FreepsPass();
 
-		assertTrue(scn.HasKeyword(troop, Keyword.SOUTHRON));
+		assertTrue(scn.IsType(rearguard3, CardType.MINION));
+		assertTrue(scn.HasKeyword(rearguard3, Keyword.SOUTHRON));
 		assertEquals(0, scn.GetStackedCards(rearguard).size());
 		assertEquals(0, scn.GetStackedCards(rearguard2).size());
 		assertTrue(scn.ShadowActionAvailable(rearguard));
@@ -124,10 +128,10 @@ public class Card_V3_043_Tests
 
 		scn.ShadowUseCardAction(rearguard);
 
-		// The two Southron Men in play; not the Man who is no Southron, the Southron who is no Man, or the
+		// The two Southron Men in play; not the Man who is no Southron, the Southron minion who is no Man, or the
 		// Southron Man in hand.
 		assertTrue(scn.ShadowHasCardChoiceAvailable(scout, soldier));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(attacker, troop, scoutInHand));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(attacker, rearguard3, scoutInHand));
 		assertEquals(2, scn.ShadowGetCardChoiceCount());
 		assertEquals(1, scn.ShadowGetChoiceMin());
 
@@ -137,7 +141,7 @@ public class Card_V3_043_Tests
 		assertEquals(1, scn.GetStackedCards(rearguard).size());
 		assertTrue(scn.GetStackedCards(rearguard).contains(scout));
 		assertEquals(0, scn.GetStackedCards(rearguard2).size());
-		assertInZone(Zone.SHADOW_CHARACTERS, soldier, attacker, troop);
+		assertInZone(Zone.SHADOW_CHARACTERS, soldier, attacker, rearguard3);
 		assertInZone(Zone.HAND, scoutInHand);
 
 		// The other copy takes the one Southron Man left, who is chosen without asking.
@@ -151,11 +155,13 @@ public class Card_V3_043_Tests
 		assertEquals(1, scn.GetStackedCards(rearguard2).size());
 		assertTrue(scn.GetStackedCards(rearguard2).contains(soldier));
 
-		// With no Southron Man in play there is nothing to stack, and neither copy offers its action.
+		// With no Southron Man in play there is nothing to stack, and no copy offers its action: the Man who is
+		// no Southron and the Southron who is no Man are still there.
 		scn.FreepsPass();
-		assertInZone(Zone.SHADOW_CHARACTERS, attacker, troop);
+		assertInZone(Zone.SHADOW_CHARACTERS, attacker, rearguard3);
 		assertFalse(scn.ShadowActionAvailable(rearguard));
 		assertFalse(scn.ShadowActionAvailable(rearguard2));
+		assertFalse(scn.ShadowActionAvailable(rearguard3));
 		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 	}
 
@@ -191,18 +197,17 @@ public class Card_V3_043_Tests
 		var soldier = scn.GetShadowCard("soldier");
 		var attacker = scn.GetShadowCard("attacker");
 		var attacker2 = scn.GetShadowCard("attacker2");
-		var troop = scn.GetShadowCard("troop");
-		var southronOrc = scn.GetShadowCard("troop2");
+		var soldier2 = scn.GetShadowCard("soldier2");
+		var scoutInPlay = scn.GetShadowCard("scout2");
 		scn.MoveCardsToSupportArea(rearguard, rearguard2);
-		// On the one used: a Southron Man, a Southron who is no Man (the Orc, made one below) and two Men who
-		// are no Southrons, so that two Southrons are stacked there beside three Men and three [raider] cards.
-		// On the other copy: a Southron, who is not stacked on the one used.
-		scn.StackCardsOn(rearguard, scout, southronOrc, attacker, attacker2);
+		// On the one used: two Southron Men and two Men who are no Southrons, so that two Southrons are stacked
+		// there among four Men and four [raider] cards.
+		// On the other copy: a Southron, who is not stacked on the one used. In play: another, who is not stacked.
+		scn.StackCardsOn(rearguard, scout, soldier2, attacker, attacker2);
 		scn.StackCardsOn(rearguard2, soldier);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(troop);
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.changeToFilter(Race.ORC), null, Keyword.SOUTHRON));
+		scn.MoveMinionsToTable(scoutInPlay);
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.SetTwilight(10);
 		scn.FreepsPass();
@@ -224,8 +229,8 @@ public class Card_V3_043_Tests
 		assertTrue(scn.HasKeyword(rearguard, Keyword.FIERCE));
 		assertTrue(scn.HasKeyword(rearguard, Keyword.MOUNTED));
 		assertTrue(scn.HasKeyword(rearguard, Keyword.SOUTHRON));
-		// 5 + 3 for the Scout + 3 for the Southron Orc, and nothing for either Easterling or for the other copy's
-		// stack. Counting Men, or [raider] cards, would make it 14.
+		// 5 + 3 for the Scout + 3 for the Soldier, and nothing for either Easterling, for the other copy's stack
+		// or for the Southron in play. Counting Men, or [raider] cards, or the cards stacked, would make it 17.
 		assertEquals(11, scn.GetStrength(rearguard));
 		assertEquals(5, scn.GetVitality(rearguard));
 		assertEquals(2, scn.GetKeywordCount(rearguard, Keyword.AMBUSH));
