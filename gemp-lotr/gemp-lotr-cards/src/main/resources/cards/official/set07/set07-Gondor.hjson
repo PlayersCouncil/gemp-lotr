@@ -505,6 +505,10 @@
 						type: canSpot
 						filter: another,culture(gondor),man
 					}
+					{
+						type: canSpot
+						filter: minion
+					}
 				]
 				effect: {
 					type: discard

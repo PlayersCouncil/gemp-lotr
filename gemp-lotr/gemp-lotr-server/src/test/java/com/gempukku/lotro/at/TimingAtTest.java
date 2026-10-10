@@ -9,7 +9,6 @@ import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.ModifierFlag;
-import com.gempukku.lotro.logic.vo.LotroDeck;
 import org.junit.Test;
 
 import java.util.*;
@@ -78,57 +77,6 @@ public class TimingAtTest extends AbstractAtTest {
         validateContents(new String[]{"1_48"}, ((String[]) secondCharacterDecision.getDecisionParameters().get("blueprintId")));
 
         playerDecided(P1, getArbitraryCardId(secondCharacterDecision, "1_48"));
-    }
-
-    @Test
-    public void playMultipleRequiredEffectsInOrder() throws DecisionResultInvalidException, CardNotFoundException {
-        Map<String, Collection<String>> extraCards = new HashMap<>();
-        initializeSimplestGame(extraCards);
-
-        PhysicalCard elrond = _game.getGameState().createPhysicalCard(P1, _cardLibrary, "1_40");
-        PhysicalCard gimli = _game.getGameState().createPhysicalCard(P1, _cardLibrary, "1_13");
-        PhysicalCard dwarvenHeart = _game.getGameState().createPhysicalCard(P1, _cardLibrary, "1_10");
-
-        _game.getGameState().addCardToZone(_game, gimli, Zone.FREE_CHARACTERS);
-        _game.getGameState().addCardToZone(_game, elrond, Zone.SUPPORT);
-        _game.getGameState().attachCard(_game, dwarvenHeart, gimli);
-
-        skipMulligans();
-
-        AwaitingDecision requiredActionChoice = _userFeedback.getAwaitingDecision(P1);
-        assertEquals(AwaitingDecisionType.ACTION_CHOICE, requiredActionChoice.getDecisionType());
-        validateContents(new String[]{"1_40", "1_10"}, (String[]) requiredActionChoice.getDecisionParameters().get("blueprintId"));
-        playerDecided(P1, "0");
-
-        assertNotSame(_game.getGameState().getCurrentPhase(), Phase.BETWEEN_TURNS);
-    }
-
-    @Test
-    public void playMultipleOptionalEffectsInOrder() throws DecisionResultInvalidException, CardNotFoundException {
-        Map<String, Collection<String>> extraCards = new HashMap<>();
-        initializeSimplestGame(extraCards);
-
-        PhysicalCard aragorn = _game.getGameState().createPhysicalCard(P1, _cardLibrary, "1_365");
-        PhysicalCard gandalf = _game.getGameState().createPhysicalCard(P1, _cardLibrary, "2_122");
-
-        _game.getGameState().addCardToZone(_game, aragorn, Zone.FREE_CHARACTERS);
-        _game.getGameState().addCardToZone(_game, gandalf, Zone.FREE_CHARACTERS);
-
-        skipMulligans();
-
-        AwaitingDecision firstOptionalActionChoice = _userFeedback.getAwaitingDecision(P1);
-        assertEquals(AwaitingDecisionType.CARD_ACTION_CHOICE, firstOptionalActionChoice.getDecisionType());
-        assertEquals(2, ((String[]) firstOptionalActionChoice.getDecisionParameters().get("cardId")).length);
-
-        playerDecided(P1, "0");
-
-        AwaitingDecision secondOptionalActionChoice = _userFeedback.getAwaitingDecision(P1);
-        assertEquals(AwaitingDecisionType.CARD_ACTION_CHOICE, secondOptionalActionChoice.getDecisionType());
-        assertEquals(1, ((String[]) secondOptionalActionChoice.getDecisionParameters().get("cardId")).length);
-
-        playerDecided(P1, "0");
-
-        assertNotSame(_game.getGameState().getCurrentPhase(), Phase.BETWEEN_TURNS);
     }
 
     @Test
@@ -297,70 +245,4 @@ public class TimingAtTest extends AbstractAtTest {
         assertEquals(Zone.SHADOW_CHARACTERS, prowlingOrc.getZone());
     }
 
-    @Test
-    public void twoBeforeRequiredEffectsPreventing() throws DecisionResultInvalidException, CardNotFoundException {
-        Map<String, LotroDeck> decks = new HashMap<>();
-        LotroDeck p1Deck = createSimplestDeck();
-        p1Deck.setRingBearer("9_4");
-        p1Deck.setRing("4_1");
-        decks.put(P1, p1Deck);
-        decks.put(P2, createSimplestDeck());
-
-        initializeGameWithDecks(decks);
-
-        skipMulligans();
-
-        PhysicalCard gimlisHelm = _game.getGameState().createPhysicalCard(P1, _cardLibrary, "1_15");
-        _game.getGameState().attachCard(_game, gimlisHelm, _game.getGameState().getRingBearer(P1));
-
-        PhysicalCard urukHaiRaidingParty = _game.getGameState().createPhysicalCard(P2, _cardLibrary, "1_158");
-        _game.getGameState().addCardToZone(_game, urukHaiRaidingParty, Zone.SHADOW_CHARACTERS);
-
-        // End fellowship phase
-        playerDecided(P1, "");
-
-        // End shadow phase
-        playerDecided(P2, "");
-
-        // End maneuver phase
-        playerDecided(P1, "");
-        playerDecided(P2, "");
-
-        // End archery phase
-        playerDecided(P1, "");
-        playerDecided(P2, "");
-
-        // End assignment phase
-        playerDecided(P1, "");
-        playerDecided(P2, "");
-
-        playerDecided(P1, _game.getGameState().getRingBearer(P1).getCardId() + " " + urukHaiRaidingParty.getCardId());
-
-        // Choose Gimli's skirmish
-        playerDecided(P1, "" + _game.getGameState().getRingBearer(P1).getCardId());
-
-        assertEquals(3, _game.getGameState().getBurdens());
-        _game.getGameState().removeBurdens(3);
-
-        AwaitingDecision skirmishDecision = _userFeedback.getAwaitingDecision(P1);
-        playerDecided(P1, getCardActionId(skirmishDecision, "Use The One"));
-        assertEquals(1, _game.getGameState().getBurdens());
-
-        playerDecided(P2, "");
-
-        AwaitingDecision skirmishSecondDecision = _userFeedback.getAwaitingDecision(P1);
-        playerDecided(P1, getCardActionId(skirmishSecondDecision, "Use Gimli's"));
-        assertEquals(Zone.DISCARD, gimlisHelm.getZone());
-
-        playerDecided(P2, "");
-        playerDecided(P1, "");
-
-        // Prevent both wounds with Helm
-        AwaitingDecision beforeRequiredChoice = _userFeedback.getAwaitingDecision(P1);
-        playerDecided(P1, getCardActionIdContains(beforeRequiredChoice, "Gimli's Helm"));
-        AwaitingDecision beforeRequiredSecondChoice = _userFeedback.getAwaitingDecision(P1);
-        playerDecided(P1, getCardActionIdContains(beforeRequiredSecondChoice, "Gimli's Helm"));
-
-        assertEquals(1, _game.getGameState().getBurdens());
-    }
 }

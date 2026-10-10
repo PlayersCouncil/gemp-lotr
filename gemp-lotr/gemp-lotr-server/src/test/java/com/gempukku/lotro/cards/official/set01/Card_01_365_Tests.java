@@ -18,9 +18,24 @@ public class Card_01_365_Tests
 				new HashMap<>()
 				{{
 					put("card", "1_365");
-					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetHealScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("aragorn", "1_365");
+					put("arwen", "1_30");       // Arwen, Daughter of Elrond: Aragorn signet, vitality 3; her text is about Nazgul
+					put("sam", "1_311");        // Sam, Son of Hamfast: Aragorn signet, vitality 4; nothing of his is used
+					put("gandalf", "1_72");     // Gandalf, Friend of the Shirefolk: Frodo signet, vitality 4; a strength bonus only
+				}},
+				VirtualTableScenario.FellowshipSites,
+				// Frodo, Son of Drogo: Frodo signet
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -64,18 +79,62 @@ public class Card_01_365_Tests
 		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void AragornTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void AtTheStartOfTheTurnAnotherCompanionWithTheAragornSignetMayBeHealed() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetHealScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var arwen = scn.GetFreepsCard("arwen");
+		var sam = scn.GetFreepsCard("sam");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.MoveCompanionsToTable(aragorn, arwen, sam, gandalf);
+		// Two wounds on Arwen, so that one heal is told from two.
+		scn.AddWoundsToChar(arwen, 2);
+		scn.AddWoundsToChar(sam, 1);
+		scn.AddWoundsToChar(gandalf, 1);
+		scn.AddWoundsToChar(aragorn, 1);
+
+		// The turn begins, and the game stops at the offer.
+		scn.StartGame();
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(aragorn));
+		assertEquals(2, scn.GetWoundsOn(arwen));
+
+		// Arwen and Sam have the Aragorn signet.  Gandalf has Frodo's, and Aragorn is not "another companion".
+		scn.FreepsAcceptOptionalTrigger();
+		assertTrue(scn.FreepsHasCardChoiceAvailable(arwen, sam));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(gandalf, aragorn));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		scn.FreepsChooseCard(arwen);
+
+		assertEquals(1, scn.GetWoundsOn(arwen));
+		assertEquals(1, scn.GetWoundsOn(sam));
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	// Ketura on Q-0034: an optional trigger with no cost whose whole effect would do nothing is not offered
+	// (F-0349).  The old at/ test (TimingAtTest.playMultipleOptionalEffectsInOrder) had this offer made with nobody
+	// wounded.
+	@Test
+	public void WithNoOtherCompanionOfTheAragornSignetWoundedTheHealIsNotOffered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetHealScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var arwen = scn.GetFreepsCard("arwen");
+		var sam = scn.GetFreepsCard("sam");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.MoveCompanionsToTable(aragorn, arwen, sam, gandalf);
+		// The wounded are a companion of another signet and Aragorn himself: nobody his text could heal.
+		scn.AddWoundsToChar(gandalf, 1);
+		scn.AddWoundsToChar(aragorn, 1);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(4, scn.GetTwilight());
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(aragorn));
+		assertEquals(0, scn.GetWoundsOn(arwen));
+		assertEquals(0, scn.GetWoundsOn(sam));
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

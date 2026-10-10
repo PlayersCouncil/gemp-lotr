@@ -19,7 +19,19 @@ public class Card_02_122_Tests
 				new HashMap<>()
 				{{
 					put("card", "2_122");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetDrawScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("gandalf", "2_122");
+					put("axe", "1_3");          // Axe Strike: the one card of the draw deck
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -64,18 +76,26 @@ public class Card_02_122_Tests
 		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GandalfTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	// Ketura on Q-0029: an optional draw is still offered with no card in the draw deck ("a bit of a chance for
+	// them to *realize* they have no cards in their deck ... I'd say let it ask with 0 cards in deck"), and her
+	// later rule that an optional action which would do nothing is withheld (Q-0034) left that standing.  The old
+	// at/ test (TimingAtTest.playMultipleOptionalEffectsInOrder) read this offer with an empty draw deck.
+	@Test
+	public void AtTheStartOfTheTurnTheDrawIsOfferedEvenWithAnEmptyDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetDrawScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCardsToDiscard(scn.GetFreepsCard("axe"));
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		assertEquals(0, scn.GetFreepsDeckCount());
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(gandalf));
 
-		assertEquals(4, scn.GetTwilight());
+		// Taken, it draws nothing, and the turn goes on.
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

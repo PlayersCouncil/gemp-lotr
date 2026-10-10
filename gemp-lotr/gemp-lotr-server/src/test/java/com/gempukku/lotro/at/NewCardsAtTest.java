@@ -205,52 +205,6 @@ public class NewCardsAtTest extends AbstractAtTest {
 //    }
 
 //    @Test
-//    public void preventableEffect() throws DecisionResultInvalidException, CardNotFoundException {
-//        initializeSimplestGame();
-//
-//        PhysicalCardImpl boromir = createCard(P1, "40_101");
-//        PhysicalCardImpl gauntlets = createCard(P1, "40_103");
-//        PhysicalCardImpl nazgul = createCard(P2, "40_211");
-//
-//        _game.getGameState().addCardToZone(_game, boromir, Zone.SUPPORT);
-//        _game.getGameState().attachCard(_game, gauntlets, boromir);
-//        _game.getGameState().addCardToZone(_game, nazgul, Zone.SHADOW_CHARACTERS);
-//
-//        skipMulligans();
-//
-//        // Pass in fellowship
-//        playerDecided(P1, "");
-//
-//        // Pass in shadow
-//        playerDecided(P2, "");
-//
-//        // Pass in maneuver
-//        playerDecided(P1, "");
-//        playerDecided(P2, "");
-//
-//        // Pass in archery
-//        playerDecided(P1, "");
-//        playerDecided(P2, "");
-//
-//        // Pass in assignment
-//        playerDecided(P1, "");
-//        playerDecided(P2, "");
-//
-//        playerDecided(P1, boromir.getCardId() + " " + nazgul.getCardId());
-//
-//        playerDecided(P1, "" + boromir.getCardId());
-//
-//        final int twilightPool = _game.getGameState().getTwilightPool();
-//
-//        // Use Gauntlets
-//        playerDecided(P1, "0");
-//
-//        playerDecided(P2, "0");
-//
-//        assertEquals(twilightPool - 1, _game.getGameState().getTwilightPool());
-//    }
-
-//    @Test
 //    public void costToEffect() throws DecisionResultInvalidException, CardNotFoundException {
 //        initializeSimplestGame();
 //
