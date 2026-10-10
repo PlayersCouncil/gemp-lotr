@@ -20,15 +20,15 @@ public class Card_V2_077_Tests
 				{{
 					put("staff", "102_77");
 					put("gandalf", "1_364");      // Gandalf, The Grey Wizard: "Fellowship: Exert Gandalf to play a companion who has the Gandalf signet", at -2
-					put("shirefolk", "1_72");     // Gandalf, Friend of the Shirefolk: a second Gandalf; his text is a strength bonus of his own
+					put("shirefolk", "1_72");     // Gandalf, Friend of the Shirefolk: another Gandalf, cost 4; his text is a strength bonus of his own
 					put("mithrandir", "6_30");    // Gandalf, Mithrandir: strength 10; "Each time the fellowship moves, wound Gandalf."
 					put("radagast", "9_26");      // Radagast, The Brown: a [gandalf] Wizard companion who is not Gandalf
 					put("aragorn", "1_89");       // Aragorn, Ranger of the North: Gandalf signet; "Maneuver: Exert Aragorn to make him defender +1"
 
-					put("glamdring", "1_75");     // Glamdring: possession, hand weapon, bearer must be Gandalf
+					// Glamdring (The Hobbit): an artifact that is a hand weapon, bearer must be Gandalf.  Its trigger
+					// answers a skirmish its bearer wins.
+					put("glamdring", "30_29");
 					put("brand", "6_31");         // Glamdring, Lightning Brand: possession, hand weapon, bearer must be Gandalf, cost 2
-					put("narsil", "17_31");       // Narsil, Forged by Telchar: an artifact that is a hand weapon
-					put("bow", "1_33");           // Bow of the Galadhrim: a ranged weapon
 					put("pipe", "1_74");          // Gandalf's Pipe: a possession that is no weapon
 					put("sword", "1_112");        // Ranger's Sword: hand weapon, bearer must be Aragorn
 
@@ -84,37 +84,40 @@ public class Card_V2_077_Tests
 		var scn = GetScenario();
 
 		var staff = scn.GetFreepsCard("staff");
-		var gandalf = scn.GetFreepsCard("gandalf");
 		var shirefolk = scn.GetFreepsCard("shirefolk");
 		var radagast = scn.GetFreepsCard("radagast");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		var frodo = scn.GetRingBearer();
-		// Two Gandalfs can only share a table by cheating: Gandalf is unique.
-		scn.MoveCompanionsToTable(gandalf, shirefolk, radagast, aragorn);
-		scn.MoveCardsToHand(staff);
+		// A [gandalf] Wizard with the Gandalf signet who is not Gandalf, and a Man with that signet.
+		scn.MoveCompanionsToTable(radagast, aragorn);
+		scn.MoveCardsToHand(staff, shirefolk);
 
 		scn.StartGame();
 
+		// With Radagast, Aragorn and Frodo on the table and no Gandalf, there is nobody to bear it.
 		assertEquals(0, scn.GetTwilight());
-		assertEquals(4, scn.GetVitality(gandalf));
+		assertInHand(staff);
+		assertFalse(scn.FreepsPlayAvailable(staff));
+
+		scn.FreepsPlayCard(shirefolk);
+		assertInZone(Zone.FREE_CHARACTERS, shirefolk);
+		// 4 for Gandalf
+		assertEquals(4, scn.GetTwilight());
 		assertEquals(4, scn.GetVitality(shirefolk));
+		assertEquals(4, scn.GetVitality(radagast));
 		assertTrue(scn.FreepsPlayAvailable(staff));
 
+		// Gandalf is the only one who may bear it, so nobody is asked.
 		scn.FreepsPlayCard(staff);
-		assertTrue(scn.FreepsHasCardChoiceAvailable(gandalf, shirefolk));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(radagast, aragorn, frodo));
-		assertEquals(1, scn.FreepsGetChoiceMin());
-
-		scn.FreepsChooseCard(shirefolk);
 		assertAttachedTo(staff, shirefolk);
-		assertEquals(2, scn.GetTwilight());
+		// 4 + 2 for the Staff
+		assertEquals(6, scn.GetTwilight());
 		assertEquals(5, scn.GetVitality(shirefolk));
-		assertEquals(4, scn.GetVitality(gandalf));
+		assertEquals(4, scn.GetVitality(radagast));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	public void DiscardsEveryWeaponGandalfBearsWhenPlayedAndAnyWeaponPlayedOnHimAfterwards() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DiscardsTheWeaponGandalfBearsWhenPlayedAndAnyWeaponPlayedOnHimAfterwards() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var staff = scn.GetFreepsCard("staff");
@@ -122,13 +125,11 @@ public class Card_V2_077_Tests
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var glamdring = scn.GetFreepsCard("glamdring");
 		var brand = scn.GetFreepsCard("brand");
-		var narsil = scn.GetFreepsCard("narsil");
-		var bow = scn.GetFreepsCard("bow");
 		var pipe = scn.GetFreepsCard("pipe");
 		var sword = scn.GetFreepsCard("sword");
 		scn.MoveCompanionsToTable(gandalf, aragorn);
-		// Narsil and the Bow are not Gandalf's to bear, and are cheated onto him.
-		scn.AttachCardsTo(gandalf, glamdring, narsil, bow, pipe);
+		// Gandalf bears the one weapon he may, a hand weapon that is an artifact, and his Pipe.
+		scn.AttachCardsTo(gandalf, glamdring, pipe);
 		scn.AttachCardsTo(aragorn, sword);
 		scn.MoveCardsToHand(staff, brand);
 
@@ -137,24 +138,23 @@ public class Card_V2_077_Tests
 
 		scn.StartGame();
 
-		// Without the Staff he bears all three weapons.
+		// Without the Staff he bears his weapon.
 		assertAttachedTo(glamdring, gandalf);
-		assertAttachedTo(narsil, gandalf);
-		assertAttachedTo(bow, gandalf);
 		assertAttachedTo(pipe, gandalf);
 		assertAttachedTo(sword, aragorn);
 		assertEquals(0, scn.GetTwilight());
 
 		scn.FreepsPlayCard(staff);
 		assertAttachedTo(staff, gandalf);
-		assertInDiscard(glamdring, narsil, bow);
+		assertInDiscard(glamdring);
 		// His Pipe is no weapon, and Aragorn's sword is not his.
 		assertAttachedTo(pipe, gandalf);
 		assertAttachedTo(sword, aragorn);
 		assertEquals(2, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
-		// A weapon can still be played on him: it is paid for, and discarded as it arrives.
+		// A weapon can still be played on him, this one a possession: it is paid for, and discarded as it
+		// arrives.
 		assertTrue(scn.FreepsPlayAvailable(brand));
 		scn.FreepsPlayCard(brand);
 		// 2 for the Staff + 2 for Glamdring

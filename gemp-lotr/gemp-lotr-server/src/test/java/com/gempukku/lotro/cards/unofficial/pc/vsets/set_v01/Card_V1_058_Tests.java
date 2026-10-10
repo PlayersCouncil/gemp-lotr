@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Phase;
-import com.gempukku.lotro.common.Race;
 import com.gempukku.lotro.common.SitesBlock;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
@@ -11,7 +10,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import com.gempukku.lotro.logic.modifiers.StrengthModifier;
 import org.junit.Test;
 
@@ -36,6 +34,10 @@ public class Card_V1_058_Tests
 					put("spearman", "2_65");
 					// Orc Soldier: [sauron] Orc, strength 7, vitality 2; a skirmish ability that is never used
 					put("soldier", "1_271");
+					// Saruman, Keeper of Isengard: an [isengard] Wizard, strength 8, vitality 4.  His text is about
+					// himself (no archery wounds, no assignment) and about Uruk-hai (fierce; a response to their
+					// wounds), and nothing here is an Uruk-hai beside him.
+					put("saruman", "3_68");
 
 					put("merry", "1_302");          // Merry, Friend to Sam: a companion of strength 3 and cost 1
 					// Aragorn, Ranger of the North: a [gondor] companion of strength 8 and vitality 4, with the Gandalf
@@ -43,7 +45,6 @@ public class Card_V1_058_Tests
 					put("aragorn", "1_89");
 					// Boromir, Son of Denethor: strength 7, vitality 3; a skirmish ability that is never used
 					put("boromir", "1_97");
-					put("guard", "1_7");            // Dwarf Guard: a [dwarven] companion with no text in play
 
 					put("gandalf", "1_72");         // Gandalf, Friend of the Shirefolk: a [gandalf] Wizard companion
 					// Gandalf's Cart: a [gandalf] possession that sits in the support area; a fellowship ability only
@@ -311,33 +312,36 @@ public class Card_V1_058_Tests
 		var scn = GetScenario();
 
 		var aragorn = scn.GetFreepsCard("aragorn");
-		var guard = scn.GetFreepsCard("guard");
 		var gandalf = scn.GetFreepsCard("gandalf");
 		var cart = scn.GetFreepsCard("cart");
 		var wisdom = scn.GetFreepsCard("wisdom");
 		var backstabber1 = scn.GetShadowCard("backstabber1");
+		var saruman = scn.GetShadowCard("saruman");
 		// Aragorn has the Gandalf signet and is a [gondor] card.  Gandalf himself is dead, his Cart is in the
 		// discard pile and Gandalf's Wisdom is in hand.
-		scn.MoveCompanionsToTable(aragorn, guard);
+		scn.MoveCompanionsToTable(aragorn);
 		scn.MoveCardsToDeadPile(gandalf);
 		scn.MoveCardsToDiscard(cart);
 		scn.MoveCardsToHand(wisdom);
 		scn.MoveCardsToHand(backstabber1);
 
 		scn.StartGame();
-		// A Wizard who is no [gandalf] card.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, guard, null, Race.WIZARD));
 		scn.SetTwilight(20);
 		scn.FreepsPass();
+		// A Wizard who is no [gandalf] card: every Free Peoples Wizard is one, so he is the Shadow player's.
+		scn.MoveMinionsToTable(saruman);
 
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		assertInZone(Zone.DEAD, gandalf);
 		assertInDiscard(cart);
 		assertInHand(wisdom);
+		assertInZone(Zone.SHADOW_CHARACTERS, saruman);
 		assertEquals(5, scn.GetStrength(backstabber1));
 
 		scn.ShadowPlayCard(backstabber1);
 		assertEquals(8, scn.GetStrength(backstabber1));
+		// Saruman was put on the table and never played.
+		assertEquals(8, scn.GetStrength(saruman));
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 

@@ -4,8 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -29,7 +27,10 @@ public class Card_V2_048_Tests
 					put("herdsman", "7_247");   // Rohirrim Herdsman: [rohan] ally, vitality 2; a regroup ability
 					put("haldir", "102_8");     // Haldir, Naith Commander: valiant [elven] companion
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a [gondor] Man
-					put("dwarf", "1_7");        // Dwarf Guard: [dwarven] companion, vitality 2, no text in play
+					// Merry, Master Holbytla: a [rohan] Hobbit companion, vitality 4, valiant.  He is a Man as well
+					// only while 3 [rohan] companions (or Eowyn) can be spotted; his trigger answers another [rohan]
+					// Man exerting, and his skirmish ability is never used.
+					put("merry", "103_85");
 
 					put("chain", "4_278");      // Heavy Chain: [rohan] armor, bearer must be a Man
 					put("spear", "4_288");      // Rider's Spear: [rohan] hand weapon, strength +2
@@ -122,18 +123,13 @@ public class Card_V2_048_Tests
 		var haldir = scn.GetFreepsCard("haldir");
 		var elite = scn.GetFreepsCard("elite");
 		var guard = scn.GetFreepsCard("guard");
-		var herdsman = scn.GetFreepsCard("herdsman");
-		// One valiant companion (an Elf), one [rohan] companion who is not valiant, and an ally made valiant:
-		// no ally is valiant in print.
+		// One valiant companion (an Elf) and one [rohan] companion who is not valiant.
 		scn.MoveCompanionsToTable(haldir, elite);
-		scn.MoveAlliesToTable(herdsman);
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, herdsman, null, Keyword.VALIANT));
 		scn.MoveCardsToHand(stronghold, guard);
 
 		scn.StartGame();
 
 		assertTrue(scn.HasKeyword(haldir, Keyword.VALIANT));
-		assertTrue(scn.HasKeyword(herdsman, Keyword.VALIANT));
 		assertFalse(scn.HasKeyword(elite, Keyword.VALIANT));
 		assertFalse(scn.FreepsPlayAvailable(stronghold));
 
@@ -282,17 +278,17 @@ public class Card_V2_048_Tests
 		var stronghold = scn.GetFreepsCard("stronghold");
 		var guard = scn.GetFreepsCard("guard");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		var dwarf = scn.GetFreepsCard("dwarf");
+		var merry = scn.GetFreepsCard("merry");
 		var herdsman = scn.GetFreepsCard("herdsman");
 		var spear = scn.GetFreepsCard("spear");
 		var helm = scn.GetFreepsCard("helm");
-		scn.MoveCompanionsToTable(guard, aragorn, dwarf);
+		// Merry, Master Holbytla is the one [rohan] companion in print who is no Man: with only two [rohan]
+		// companions on the table he is a Hobbit and nothing else.
+		scn.MoveCompanionsToTable(guard, aragorn, merry);
 		scn.MoveAlliesToTable(herdsman);
 		// Either cost can be paid.
 		scn.AttachCardsTo(guard, spear, helm);
 		scn.MoveCardsToSupportArea(stronghold);
-		// A [rohan] companion who is no Man: every [rohan] companion in print is one.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, dwarf, null, Culture.ROHAN));
 
 		var assassin = scn.GetShadowCard("assassin");
 		var slayer = scn.GetShadowCard("slayer");
@@ -319,17 +315,20 @@ public class Card_V2_048_Tests
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 
+		// A [rohan] companion who is a Hobbit and no Man.
 		scn.FreepsPass();
-		assertEquals(0, scn.GetWoundsOn(dwarf));
+		assertTrue(scn.IsRace(merry, Race.HOBBIT));
+		assertFalse(scn.IsRace(merry, Race.MAN));
+		assertEquals(0, scn.GetWoundsOn(merry));
 		scn.ShadowUseCardAction(slayer2);
-		scn.ShadowChooseCard(dwarf);
+		scn.ShadowChooseCard(merry);
 
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(stronghold));
 		scn.FreepsChooseOptionalTrigger(stronghold);
 		scn.FreepsChoose("Discard Stronghold");
 
 		assertInDiscard(stronghold);
-		assertEquals(0, scn.GetWoundsOn(dwarf));
+		assertEquals(0, scn.GetWoundsOn(merry));
 		assertAttachedTo(spear, guard);
 		assertAttachedTo(helm, guard);
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());

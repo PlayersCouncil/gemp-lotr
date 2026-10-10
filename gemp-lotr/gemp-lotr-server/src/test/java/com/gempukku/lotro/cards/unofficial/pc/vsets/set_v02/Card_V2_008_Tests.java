@@ -5,8 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -27,19 +25,19 @@ public class Card_V2_008_Tests
 					put("guardian", "4_76");    // Lorien Guardian: Elf companion who is not valiant, strength 5
 					put("guard", "5_83");       // Household Guard: valiant [rohan] Man, strength 6; Valiant is its whole text
 					put("guard2", "5_83");
-					put("guard3", "5_83");
-					put("golradir", "3_20");    // Golradir, Councilor of Imladris: Elf ally, strength 4
-					put("orophin", "1_56");     // Orophin, Lorien Bowman: Elf ally and archer, home site 6
+					put("dwarf", "1_7");        // Dwarf Guard: [dwarven] Dwarf companion, no text in play
 
 					put("bow", "1_41");         // Elven Bow: [elven] ranged weapon; bearer is an archer
 					put("bow2", "1_41");
 					put("bow3", "1_41");
-					put("rangerbow", "4_131");  // Ranger's Bow: [gondor] ranged weapon with no bonus of its own
+					// Naith Longbow: [elven] ranged weapon for an Elf companion, strength +1; it does not make its
+					// bearer an archer, and its archery ability is never used
+					put("longbow", "6_21");
 					put("sword", "4_64");       // Elven Sword: [elven] hand weapon, strength +1
 					put("cloak", "1_42");       // Elven Cloak: [elven] possession that is no weapon
 					put("lembas", "4_75");      // Lembas: [elven] possession; Regroup: discard it to reconcile your hand
-					put("aiglos", "9_12");      // Aiglos: [elven] artifact, a hand weapon
-					put("axe", "1_9");          // Dwarven Axe: [dwarven] hand weapon
+					put("aiglos", "9_12");      // Aiglos: [elven] artifact, a hand weapon; bearer must be an Elf
+					put("axe", "1_9");          // Dwarven Axe: [dwarven] hand weapon; bearer must be a Dwarf
 					put("slits", "5_80");       // Arrow-slits: Maneuver: spot 2 [rohan] Men to discard a possession
 
 					put("smith", "3_60");       // Isengard Smith: Regroup: exert to discard a weapon (or all Free
@@ -59,10 +57,11 @@ public class Card_V2_008_Tests
 					put("haldir", "102_8");
 					put("swordsman", "54_78");  // Lorien Swordsman: valiant Elf companion
 					put("guardian", "4_76");    // Lorien Guardian: Elf companion
+					put("dwarf", "1_7");        // Dwarf Guard: Dwarf companion, no text in play
 					put("bow", "1_41");         // Elven Bow: [elven] possession, a ranged weapon
 					put("sword", "4_64");       // Elven Sword: [elven] possession, a hand weapon
-					put("aiglos", "9_12");      // Aiglos: [elven] artifact, a hand weapon
-					put("axe", "1_9");          // Dwarven Axe: [dwarven] possession, a hand weapon
+					put("aiglos", "9_12");      // Aiglos: [elven] artifact, a hand weapon; bearer must be an Elf
+					put("axe", "1_9");          // Dwarven Axe: [dwarven] possession, a hand weapon; bearer must be a Dwarf
 				}},
 				new HashMap<>()
 				{{
@@ -154,58 +153,44 @@ public class Card_V2_008_Tests
 		var swordsman = scn.GetFreepsCard("swordsman");
 		var guardian = scn.GetFreepsCard("guardian");
 		var guard = scn.GetFreepsCard("guard");
-		var elvenGuard = scn.GetFreepsCard("guard2");
-		var elfGuard = scn.GetFreepsCard("guard3");
-		var golradir = scn.GetFreepsCard("golradir");
 		var bow = scn.GetFreepsCard("bow");
 		scn.MoveCardsToHand(bow);
-		scn.MoveCompanionsToTable(haldir, swordsman, guardian, guard, elvenGuard, elfGuard);
-		scn.MoveAlliesToTable(golradir);
+		scn.MoveCompanionsToTable(haldir, swordsman, guardian, guard);
 
 		scn.StartGame();
-		// No valiant Elf is an ally and none is of another culture, so: an Elf ally is made valiant, one valiant
-		// Man is made [elven] and another is made an Elf.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, golradir, null, Keyword.VALIANT));
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, elvenGuard, null, Culture.ELVEN));
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, elfGuard, null, Race.ELF));
 
 		assertEquals(6, scn.GetStrength(haldir));
 		assertEquals(5, scn.GetStrength(swordsman));
-		assertEquals(4, scn.GetStrength(golradir));
-		assertEquals(6, scn.GetStrength(elfGuard));
 		assertEquals(5, scn.GetStrength(guardian));
 		assertEquals(6, scn.GetStrength(guard));
-		assertEquals(6, scn.GetStrength(elvenGuard));
 
 		scn.FreepsPlayCard(bow);
 		scn.FreepsChooseCard(haldir);
 		assertAttachedTo(bow, haldir);
 
-		// Valiant Elves: Haldir himself, a companion, an ally, and the Man who is an Elf.  The Elven Bow adds no strength.
+		// Valiant Elves: Haldir himself and another companion.  The Elven Bow adds no strength.
 		assertEquals(7, scn.GetStrength(haldir));
 		assertEquals(6, scn.GetStrength(swordsman));
-		assertEquals(5, scn.GetStrength(golradir));
-		assertEquals(7, scn.GetStrength(elfGuard));
-		// An Elf who is not valiant, a valiant Man, and a valiant Man who is [elven] and no Elf.
+		// An Elf who is not valiant, and a valiant Man.
 		assertEquals(5, scn.GetStrength(guardian));
 		assertEquals(6, scn.GetStrength(guard));
-		assertEquals(6, scn.GetStrength(elvenGuard));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	public void TheRangedWeaponMustBeHaldirsOwnAndMayBeOfAnyCulture() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheRangedWeaponMustBeHaldirsOwnAndNeedNotMakeHimAnArcher() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var haldir = scn.GetFreepsCard("haldir");
 		var swordsman = scn.GetFreepsCard("swordsman");
 		var sword = scn.GetFreepsCard("sword");
 		var bow = scn.GetFreepsCard("bow");
-		var rangerbow = scn.GetFreepsCard("rangerbow");
+		var longbow = scn.GetFreepsCard("longbow");
 		scn.MoveCompanionsToTable(haldir, swordsman);
 		// Haldir bears a hand weapon; another valiant Elf bears the ranged weapon.
 		scn.AttachCardsTo(haldir, sword);
 		scn.AttachCardsTo(swordsman, bow);
+		scn.MoveCardsToHand(longbow);
 
 		scn.StartGame();
 
@@ -213,11 +198,14 @@ public class Card_V2_008_Tests
 		assertEquals(7, scn.GetStrength(haldir));
 		assertEquals(5, scn.GetStrength(swordsman));
 
-		// The rig gives Haldir a [gondor] ranged weapon, which no play could put on an Elf.
-		scn.AttachCardsTo(haldir, rangerbow);
+		// A Naith Longbow: a ranged weapon that is no Elven Bow and makes nobody an archer.  The Lorien Swordsman
+		// has a ranged weapon already, so Haldir is the only Elf companion who can take it.
+		scn.FreepsPlayCard(longbow);
+		assertAttachedTo(longbow, haldir);
+		assertFalse(scn.HasKeyword(haldir, Keyword.ARCHER));
 
-		// 6 + 1 for the Elven Sword + 1.
-		assertEquals(8, scn.GetStrength(haldir));
+		// 6 + 1 for the Elven Sword + 1 for the Naith Longbow + 1.
+		assertEquals(9, scn.GetStrength(haldir));
 		assertEquals(6, scn.GetStrength(swordsman));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -230,13 +218,11 @@ public class Card_V2_008_Tests
 		var swordsman = scn.GetFreepsCard("swordsman");
 		var guardian = scn.GetFreepsCard("guardian");
 		var guard = scn.GetFreepsCard("guard");
-		var elvenGuard = scn.GetFreepsCard("guard2");
-		var elfGuard = scn.GetFreepsCard("guard3");
 		var bow = scn.GetFreepsCard("bow");
 		var bow2 = scn.GetFreepsCard("bow2");
 		var bow3 = scn.GetFreepsCard("bow3");
 		scn.MoveCardsToHand(bow3);
-		scn.MoveCompanionsToTable(haldir, swordsman, guardian, guard, elvenGuard, elfGuard);
+		scn.MoveCompanionsToTable(haldir, swordsman, guardian, guard);
 		// An Elven Bow makes its bearer an archer.
 		scn.AttachCardsTo(swordsman, bow);
 		scn.AttachCardsTo(guardian, bow2);
@@ -255,53 +241,12 @@ public class Card_V2_008_Tests
 		assertAttachedTo(bow3, haldir);
 		assertTrue(scn.HasKeyword(haldir, Keyword.ARCHER));
 
-		// Four archers now, and the two valiant Elves among them, Haldir included, add nothing.
+		// Four archers now, and the two valiant Elves among them, Haldir included, add nothing: the Elf who is
+		// not valiant and the valiant Man go on adding.
 		assertEquals(2, scn.GetFreepsArcheryTotal());
 
-		// No valiant Elf is of another culture and nothing valiant and [elven] is not an Elf, so two more valiant
-		// Men are made archers.  The one who is then made [elven] is still no Elf, and goes on adding.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, elvenGuard, null, Keyword.ARCHER));
-		assertEquals(3, scn.GetFreepsArcheryTotal());
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, elvenGuard, null, Culture.ELVEN));
-		assertEquals(3, scn.GetFreepsArcheryTotal());
-
-		// The one who is then made an Elf, and stays [rohan], stops adding.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, elfGuard, null, Keyword.ARCHER));
-		assertEquals(4, scn.GetFreepsArcheryTotal());
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, elfGuard, null, Race.ELF));
-		assertEquals(3, scn.GetFreepsArcheryTotal());
-
 		scn.SkipToPhase(Phase.ARCHERY);
-		assertEquals(3, scn.GetFreepsArcheryTotal());
-		assertTrue(scn.AwaitingFreepsArcheryPhaseActions());
-	}
-
-	@Test
-	public void AValiantElfAllyAtHisHomeSiteDoesNotAddToTheFellowshipArcheryTotalEither() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var haldir = scn.GetFreepsCard("haldir");
-		var orophin = scn.GetFreepsCard("orophin");
-		var bow = scn.GetFreepsCard("bow");
-		scn.MoveCompanionsToTable(haldir);
-		scn.MoveAlliesToTable(orophin);
-		scn.AttachCardsTo(haldir, bow);
-
-		scn.StartGame();
-		scn.SkipToSite(5);
-		scn.MoveMinionsToTable(scn.GetShadowCard("troop"));
-		// The fellowship moves to site 6, Orophin's home, where an archer ally counts.
-		scn.SkipToPhase(Phase.ARCHERY);
-
-		assertEquals(6, scn.GetCurrentSiteNumber());
-		assertTrue(scn.HasKeyword(haldir, Keyword.ARCHER));
-		// Two archers.  Haldir is a valiant Elf and adds nothing; Orophin is not valiant.
-		assertEquals(1, scn.GetFreepsArcheryTotal());
-
-		// No valiant Elf is an ally, so Orophin is made one.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, orophin, null, Keyword.VALIANT));
-
-		assertEquals(0, scn.GetFreepsArcheryTotal());
+		assertEquals(2, scn.GetFreepsArcheryTotal());
 		assertTrue(scn.AwaitingFreepsArcheryPhaseActions());
 	}
 
@@ -365,12 +310,17 @@ public class Card_V2_008_Tests
 
 		var haldir = scn.GetFreepsCard("haldir");
 		var guardian = scn.GetFreepsCard("guardian");
+		var dwarf = scn.GetFreepsCard("dwarf");
 		var aiglos = scn.GetFreepsCard("aiglos");
 		var axe = scn.GetFreepsCard("axe");
 		var sword = scn.GetFreepsCard("sword");
-		scn.MoveCompanionsToTable(haldir, guardian);
-		// One Elf bears all three: an [elven] artifact, a [dwarven] possession and an [elven] possession.
-		scn.AttachCardsTo(guardian, aiglos, axe, sword);
+		// Frodo and three more: the Smith does not spot 5 companions, and discards one weapon at a time.
+		scn.MoveCompanionsToTable(haldir, guardian, dwarf);
+		// Three hand weapons, each on a bearer of its own: an [elven] artifact on an Elf, a [dwarven] possession
+		// on a Dwarf, and an [elven] possession on Haldir himself.
+		scn.AttachCardsTo(guardian, aiglos);
+		scn.AttachCardsTo(dwarf, axe);
+		scn.AttachCardsTo(haldir, sword);
 
 		var smith = scn.GetShadowCard("smith");
 		var smith2 = scn.GetShadowCard("smith2");
@@ -420,11 +370,14 @@ public class Card_V2_008_Tests
 		var cloak = scn.GetFreepsCard("cloak");
 		var axe = scn.GetFreepsCard("axe");
 		var aiglos = scn.GetFreepsCard("aiglos");
+		var dwarf = scn.GetFreepsCard("dwarf");
 		// Frodo and four more: the Smith spots 5 companions.
-		scn.MoveCompanionsToTable(haldir, swordsman, guardian, scn.GetFreepsCard("guard"));
+		scn.MoveCompanionsToTable(haldir, swordsman, guardian, dwarf);
 		scn.AttachCardsTo(haldir, bow);
 		scn.AttachCardsTo(swordsman, sword, cloak);
-		scn.AttachCardsTo(guardian, axe, aiglos);
+		// The Dwarven Axe is on a Dwarf, and the Elf beside him bears the [elven] artifact.
+		scn.AttachCardsTo(dwarf, axe);
+		scn.AttachCardsTo(guardian, aiglos);
 
 		var smith = scn.GetShadowCard("smith");
 
@@ -473,10 +426,13 @@ public class Card_V2_008_Tests
 		var sword = scn.GetFreepsCard("sword");
 		var aiglos = scn.GetFreepsCard("aiglos");
 		var axe = scn.GetFreepsCard("axe");
-		scn.MoveCompanionsToTable(haldir, swordsman, guardian);
+		var dwarf = scn.GetFreepsCard("dwarf");
+		scn.MoveCompanionsToTable(haldir, swordsman, guardian, dwarf);
 		scn.AttachCardsTo(haldir, bow);
 		scn.AttachCardsTo(swordsman, sword);
-		scn.AttachCardsTo(guardian, aiglos, axe);
+		// The [elven] artifact on an Elf and the [dwarven] possession on a Dwarf.
+		scn.AttachCardsTo(guardian, aiglos);
+		scn.AttachCardsTo(dwarf, axe);
 
 		scn.StartGame();
 		scn.SkipToSite(2);

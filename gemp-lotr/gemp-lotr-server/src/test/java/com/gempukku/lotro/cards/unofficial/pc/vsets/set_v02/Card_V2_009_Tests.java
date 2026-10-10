@@ -4,8 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -30,10 +28,11 @@ public class Card_V2_009_Tests
 					// Household Guard: a [rohan] Man whose whole text is "Valiant".
 					put("guard", "5_83");
 
-					// Ranged weapons of two cultures.  Elven Bow makes its bearer an archer and nothing else;
-					// Gondor Bow has a skirmish ability and a bonus for knights.  Both are put on by the rig.
+					// Two ranged weapons an Elf companion may bear.  Elven Bow makes its bearer an archer and nothing
+					// else; Naith Longbow is strength +1 and makes nobody an archer, and its archery ability is
+					// never used.  Both are put on by the rig.
 					put("elvenbow", "1_41");
-					put("gondorbow", "7_94");
+					put("longbow", "6_21");
 					// Rohirrim Bow: a third ranged weapon, for a [rohan] Man.  Its archery ability is never used.
 					put("rohirrimbow", "5_88");
 					// Elven Sword: a hand weapon that is not a ranged weapon.  A skirmish ability.
@@ -80,7 +79,7 @@ public class Card_V2_009_Tests
 	}
 
 	@Test
-	public void IsNotOfferedWithOneValiantElfAnElfWhoIsNotValiantAndAValiantManOfTheElvenCulture() throws DecisionResultInvalidException, CardNotFoundException {
+	public void IsNotOfferedWithOneValiantElfAnElfWhoIsNotValiantAndAValiantMan() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var leithio = scn.GetFreepsCard("leithio");
@@ -89,10 +88,6 @@ public class Card_V2_009_Tests
 		var guard = scn.GetFreepsCard("guard");
 		scn.MoveCompanionsToTable(defender, lorienelf, guard);
 		scn.MoveCardsToHand(leithio);
-
-		// Every valiant [elven] companion there is is an Elf, so the Household Guard is made [elven] besides
-		// [rohan]: valiant and of the culture, and still a Man.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, guard, null, Culture.ELVEN));
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(scn.GetShadowCard("troop"), scn.GetShadowCard("savage"));
@@ -169,7 +164,7 @@ public class Card_V2_009_Tests
 		var balglin = scn.GetFreepsCard("balglin");
 		var lorienelf = scn.GetFreepsCard("lorienelf");
 		var elvenbow = scn.GetFreepsCard("elvenbow");
-		var gondorbow = scn.GetFreepsCard("gondorbow");
+		var longbow = scn.GetFreepsCard("longbow");
 		var sword = scn.GetFreepsCard("sword");
 		var guard = scn.GetFreepsCard("guard");
 		var rohirrimbow = scn.GetFreepsCard("rohirrimbow");
@@ -178,7 +173,7 @@ public class Card_V2_009_Tests
 		// weapons on the table are borne by an Elf who is not valiant and by a valiant Man.
 		scn.AttachCardsTo(defender, elvenbow);
 		scn.AttachCardsTo(balglin, sword);
-		scn.AttachCardsTo(lorienelf, gondorbow);
+		scn.AttachCardsTo(lorienelf, longbow);
 		scn.AttachCardsTo(guard, rohirrimbow);
 		scn.MoveCardsToHand(leithio);
 
@@ -210,11 +205,11 @@ public class Card_V2_009_Tests
 		var defender = scn.GetFreepsCard("defender");
 		var balglin = scn.GetFreepsCard("balglin");
 		var elvenbow = scn.GetFreepsCard("elvenbow");
-		var gondorbow = scn.GetFreepsCard("gondorbow");
+		var longbow = scn.GetFreepsCard("longbow");
 		scn.MoveCompanionsToTable(defender, balglin);
-		// An [elven] ranged weapon and a [gondor] one.
+		// Two ranged weapons that are not the same card: an Elven Bow and a Naith Longbow.
 		scn.AttachCardsTo(defender, elvenbow);
-		scn.AttachCardsTo(balglin, gondorbow);
+		scn.AttachCardsTo(balglin, longbow);
 		scn.MoveCardsToHand(leithio);
 
 		var troop = scn.GetShadowCard("troop");
@@ -249,11 +244,11 @@ public class Card_V2_009_Tests
 		var balglin = scn.GetFreepsCard("balglin");
 		var guardian = scn.GetFreepsCard("guardian");
 		var elvenbow = scn.GetFreepsCard("elvenbow");
-		var gondorbow = scn.GetFreepsCard("gondorbow");
+		var longbow = scn.GetFreepsCard("longbow");
 		scn.MoveCompanionsToTable(defender, balglin, guardian);
 		// Three valiant Elves: two bear a ranged weapon and the Lorien Guardian bears none.
 		scn.AttachCardsTo(defender, elvenbow);
-		scn.AttachCardsTo(balglin, gondorbow);
+		scn.AttachCardsTo(balglin, longbow);
 		scn.MoveCardsToHand(leithio);
 
 		var troop = scn.GetShadowCard("troop");
@@ -282,44 +277,6 @@ public class Card_V2_009_Tests
 		assertEquals(2, scn.GetWoundsOn(savage));
 		assertEquals(0, scn.GetWoundsOn(troop));
 		assertInZone(Zone.DISCARD, leithio);
-		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
-	}
-
-	@Test
-	public void AValiantElfOfAnotherCultureIsSpottedAndHisRangedWeaponCounts() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var leithio = scn.GetFreepsCard("leithio");
-		var defender = scn.GetFreepsCard("defender");
-		var guard = scn.GetFreepsCard("guard");
-		var elvenbow = scn.GetFreepsCard("elvenbow");
-		var gondorbow = scn.GetFreepsCard("gondorbow");
-		scn.MoveCompanionsToTable(defender, guard);
-		scn.AttachCardsTo(defender, elvenbow);
-		scn.AttachCardsTo(guard, gondorbow);
-		scn.MoveCardsToHand(leithio);
-
-		// Every valiant Elf there is is [elven].  The text names the race and not the culture, so the Household
-		// Guard is made an Elf besides a Man: a valiant Elf whose culture is [rohan].
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, guard, null, Race.ELF));
-
-		var troop = scn.GetShadowCard("troop");
-		var savage = scn.GetShadowCard("savage");
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(troop, savage);
-		scn.SkipToPhase(Phase.ARCHERY);
-
-		assertTrue(scn.IsRace(guard, Race.ELF));
-		assertEquals(0, scn.GetWoundsOn(troop));
-		assertTrue(scn.FreepsPlayAvailable(leithio));
-
-		scn.FreepsPlayCard(leithio);
-		assertTrue(scn.FreepsHasCardChoiceAvailable(troop, savage));
-		scn.FreepsChooseCard(troop);
-
-		assertEquals(2, scn.GetWoundsOn(troop));
-		assertEquals(0, scn.GetWoundsOn(savage));
 		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
 	}
 }

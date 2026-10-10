@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -104,6 +103,39 @@ public class Card_V1_065_Tests
 				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// A Shadows-block path, for the three terrain keywords that no site of the Fellowship block has alone at a
+	// number the path above can spare.  The Shadow player lays each next site as the fellowship moves to it.
+	protected VirtualTableScenario GetShadowsTerrainScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("dam", "101_65");
+				}},
+				new HashMap<>() {{
+					// Fangorn Glade: forest.  "When the fellowship moves to this site, add (1) for each Free Peoples
+					// weapon": the game starts here, and nobody bears a weapon.
+					put("glade", "11_239");
+					// Slag Mounds: battleground.  "Each time a companion is killed, add a burden"; none is.
+					put("mounds", "11_258");
+					// Buckland Homestead: dwelling.  "Shadow: Play a Nazgul to discard a condition from play"; no
+					// Nazgul is in any hand.
+					put("homestead", "11_230");
+					// Valley of the Silverlode: dwelling and river.  "When your fellowship moves to this site, you
+					// may heal each Hobbit companion"; Frodo has no wound.
+					put("silverlode", "11_261");
+					// Expanding Marshland.  Never laid, and never named.
+					put("site5", "11_238");
+					put("site6", "11_238");
+					put("site7", "11_238");
+					put("site8", "11_238");
+					put("site9", "11_238");
+				}},
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
+				VirtualTableScenario.Shadows
 		);
 	}
 
@@ -246,42 +278,53 @@ public class Card_V1_065_Tests
 	}
 
 	@Test
-	public void ASiteGivenForestBattlegroundOrDwellingIsNoLongerAMarshAndARiverGivenOneStillIs() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetTerrainScenario();
+	public void AForestABattlegroundAndADwellingGainNoMarshAndARiverThatIsADwellingAsWellDoes() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetShadowsTerrainScenario();
 
 		var dam = scn.GetShadowCard("dam");
+		var glade = scn.GetFreepsSite("glade");
+		var mounds = scn.GetShadowSite("mounds");
+		var homestead = scn.GetShadowSite("homestead");
+		var silverlode = scn.GetShadowSite("silverlode");
 
-		scn.StartGame();
-		scn.SkipToSite(8);
+		// The fellowship walks the first four sites of the path: two moves on its first turn and one on its
+		// second, the Shadow player laying each site as it is moved to.
+		scn.StartGame(glade);
+		scn.FreepsPass();
+		scn.ShadowChooseCardBPFromSelection(mounds);
+		scn.SkipToMovementDecision();
+		scn.FreepsChooseToMove();
+		scn.ShadowChooseCardBPFromSelection(homestead);
+		scn.SkipToOtherPlayersTurn();
+		scn.SkipToOtherPlayersTurn();
+		scn.FreepsPass();
+		scn.ShadowChooseCardBPFromSelection(silverlode);
+
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		assertEquals(glade, scn.GetSite(1));
+		assertEquals(mounds, scn.GetSite(2));
+		assertEquals(homestead, scn.GetSite(3));
+		assertEquals(silverlode, scn.GetCurrentSite());
+		// Each of the first three has one terrain keyword, and the fourth has two.
+		assertTrue(scn.HasKeyword(glade, Keyword.FOREST));
+		assertTrue(scn.HasKeyword(mounds, Keyword.BATTLEGROUND));
+		assertTrue(scn.HasKeyword(homestead, Keyword.DWELLING));
+		assertTrue(scn.HasKeyword(silverlode, Keyword.DWELLING));
+		assertTrue(scn.HasKeyword(silverlode, Keyword.RIVER));
+		assertFalse(scn.HasKeyword(glade, Keyword.MARSH));
+		assertFalse(scn.HasKeyword(mounds, Keyword.MARSH));
+		assertFalse(scn.HasKeyword(homestead, Keyword.MARSH));
+		assertFalse(scn.HasKeyword(silverlode, Keyword.MARSH));
+
 		scn.MoveCardsToSupportArea(dam);
 
-		var bagEnd = scn.GetSite(1);
-		var rivendell = scn.GetSite(3);
-		var glade = scn.GetSite(6);
-		var banks = scn.GetCurrentSite();
-		assertTrue(scn.HasKeyword(bagEnd, Keyword.MARSH));
-		assertTrue(scn.HasKeyword(rivendell, Keyword.MARSH));
-		assertTrue(scn.HasKeyword(glade, Keyword.MARSH));
-		assertTrue(scn.HasKeyword(banks, Keyword.MARSH));
-
-		// The path has plains, a mountain and an underground site of its own.  No site of the Fellowship block
-		// is a forest and nothing else at a number this path can spare, and none at all is a battleground or a
-		// dwelling, so the three sites with no terrain keyword are each given one.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, bagEnd, null, Keyword.FOREST));
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, rivendell, null, Keyword.BATTLEGROUND));
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, glade, null, Keyword.DWELLING));
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, banks, null, Keyword.DWELLING));
-
-		assertTrue(scn.HasKeyword(bagEnd, Keyword.FOREST));
-		assertTrue(scn.HasKeyword(rivendell, Keyword.BATTLEGROUND));
-		assertTrue(scn.HasKeyword(glade, Keyword.DWELLING));
-		assertFalse(scn.HasKeyword(bagEnd, Keyword.MARSH));
-		assertFalse(scn.HasKeyword(rivendell, Keyword.MARSH));
+		// A forest, a battleground and a dwelling are no marshes for it.
 		assertFalse(scn.HasKeyword(glade, Keyword.MARSH));
-		// Anduin Banks is a river, and a river is a marsh whatever else it becomes.
-		assertTrue(scn.HasKeyword(banks, Keyword.DWELLING));
-		assertTrue(scn.HasKeyword(banks, Keyword.MARSH));
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertFalse(scn.HasKeyword(mounds, Keyword.MARSH));
+		assertFalse(scn.HasKeyword(homestead, Keyword.MARSH));
+		// Valley of the Silverlode is a dwelling too, and a river is a marsh whatever else it is.
+		assertTrue(scn.HasKeyword(silverlode, Keyword.MARSH));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test

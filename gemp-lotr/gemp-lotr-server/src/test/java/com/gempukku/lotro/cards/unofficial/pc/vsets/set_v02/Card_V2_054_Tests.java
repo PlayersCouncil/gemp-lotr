@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -25,10 +24,14 @@ public class Card_V2_054_Tests
 					put("theoden", "4_292");    // Theoden, Son of Thengel: [rohan] Man, cost 2; a regroup ability
 					put("theodred", "13_138");  // Theodred, Second Marshal of the Mark: a [rohan] Man who is not Theoden
 					put("elite", "4_265");      // Elite Rider: [rohan] Man; stronger against a wounded minion
-					put("rider", "4_286");      // Rider of Rohan: [rohan] Man; a skirmish ability while mounted
+					// Guma, Plains Farmer: [rohan] Man who is an ally (home 4T); a fellowship ability, never used
+					put("guma", "4_277");
 					put("herdsman", "7_247");   // Rohirrim Herdsman: [rohan] Man who is an ally, cost 1; to play, spot 2 [rohan] Men
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a [gondor] Man, strength 8
-					put("dwarf", "1_7");        // Dwarf Guard: no text in play
+					// Merry, Master Holbytla: a [rohan] Hobbit companion.  He is a Man as well only while 3 [rohan]
+					// companions (or Eowyn) can be spotted; his trigger answers another [rohan] Man exerting, and
+					// his skirmish ability is never used.
+					put("holbytla", "103_85");
 					put("spear", "4_288");      // Rider's Spear: hand weapon for a [rohan] Man, strength +2
 
 					put("merry", "1_303");      // Merry, From O'er the Brandywine: strength 3; stronger only with a weapon
@@ -117,23 +120,27 @@ public class Card_V2_054_Tests
 
 		var guard = scn.GetFreepsCard("guard");
 		var elite = scn.GetFreepsCard("elite");
-		var rider = scn.GetFreepsCard("rider");
+		var guma = scn.GetFreepsCard("guma");
 		var herdsman = scn.GetFreepsCard("herdsman");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		var dwarf = scn.GetFreepsCard("dwarf");
-		scn.MoveCompanionsToTable(elite, rider, aragorn, dwarf);
-		// A [rohan] character who is no Man: every [rohan] character in print is one.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, dwarf, null, Culture.ROHAN));
+		var holbytla = scn.GetFreepsCard("holbytla");
+		// Merry, Master Holbytla is the one [rohan] character in print who is no Man: he and the Elite Rider are
+		// only two [rohan] companions, so he is a Hobbit and nothing else.  The second [rohan] Man is an ally.
+		scn.MoveCompanionsToTable(elite, holbytla, aragorn);
+		scn.MoveAlliesToTable(guma);
 		scn.MoveCardsToHand(guard, herdsman);
 
 		scn.StartGame();
 
-		// Two [rohan] Men, a [rohan] Dwarf and a [gondor] Man.
+		// Two [rohan] Men, a [rohan] Hobbit and a [gondor] Man.
+		assertTrue(scn.IsRace(holbytla, Race.HOBBIT));
+		assertFalse(scn.IsRace(holbytla, Race.MAN));
 		assertFalse(scn.FreepsPlayAvailable(guard));
 
-		// The third [rohan] Man is an ally.
+		// The third [rohan] Man is an ally too, so Merry is still no Man.
 		scn.FreepsPlayCard(herdsman);
 
+		assertFalse(scn.IsRace(holbytla, Race.MAN));
 		assertTrue(scn.FreepsPlayAvailable(guard));
 		assertEquals(1, scn.GetTwilight());
 

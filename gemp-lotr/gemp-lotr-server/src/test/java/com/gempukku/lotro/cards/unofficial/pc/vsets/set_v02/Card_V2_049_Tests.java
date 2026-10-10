@@ -6,7 +6,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -26,7 +25,10 @@ public class Card_V2_049_Tests
 					put("eomer", "12_112");     // Eomer, Eored Leader: strength 7, vitality 3; a maneuver ability used only on purpose
 					put("northman", "17_95");   // Eomer, Northman: strength 7, damage +1 in print
 					put("guard", "5_83");       // Household Guard: [rohan] Man, strength 6; Valiant is its whole text
-					put("dwarf", "1_7");        // Dwarf Guard: [dwarven] companion with no text in play
+					// Merry, Master Holbytla: a [rohan] Hobbit companion, strength 3, valiant.  He is a Man as well
+					// only while 3 [rohan] companions (or Eowyn) can be spotted; his trigger answers another [rohan]
+					// Man exerting, and his skirmish ability is never used.
+					put("merry", "103_85");
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a [gondor] Man
 					put("herdsman", "7_247");   // Rohirrim Herdsman: a [rohan] ally
 
@@ -112,32 +114,33 @@ public class Card_V2_049_Tests
 		var frodo = scn.GetRingBearer();
 		var guthwine = scn.GetFreepsCard("guthwine");
 		var eomer = scn.GetFreepsCard("eomer");
-		var guard = scn.GetFreepsCard("guard");
-		var dwarf = scn.GetFreepsCard("dwarf");
+		var merry = scn.GetFreepsCard("merry");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var herdsman = scn.GetFreepsCard("herdsman");
-		scn.MoveCompanionsToTable(eomer, guard, dwarf, aragorn);
+		// Merry, Master Holbytla is the one [rohan] companion in print who is no Man: with only two [rohan]
+		// companions on the table he is a Hobbit and nothing else.
+		scn.MoveCompanionsToTable(eomer, merry, aragorn);
 		scn.MoveAlliesToTable(herdsman);
-		// A [rohan] companion who is no Man: every [rohan] companion in print is one.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, dwarf, null, Culture.ROHAN));
 		scn.MoveCardsToHand(guthwine);
 
 		scn.StartGame();
 
-		assertEquals(6, scn.GetStrength(guard));
-		assertFalse(scn.HasKeyword(guard, Keyword.DAMAGE));
+		assertTrue(scn.IsRace(merry, Race.HOBBIT));
+		assertFalse(scn.IsRace(merry, Race.MAN));
+		assertEquals(3, scn.GetStrength(merry));
+		assertFalse(scn.HasKeyword(merry, Keyword.DAMAGE));
 
 		scn.FreepsPlayCard(guthwine);
 
-		assertTrue(scn.FreepsHasCardChoiceAvailable(eomer, guard, dwarf));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(eomer, merry));
 		// A Man of another culture, a [rohan] ally, and the Ring-bearer.
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn, herdsman, frodo));
 
-		scn.FreepsChooseCard(guard);
+		scn.FreepsChooseCard(merry);
 
-		assertAttachedTo(guthwine, guard);
-		assertEquals(8, scn.GetStrength(guard));
-		assertFalse(scn.HasKeyword(guard, Keyword.DAMAGE));
+		assertAttachedTo(guthwine, merry);
+		assertEquals(5, scn.GetStrength(merry));
+		assertFalse(scn.HasKeyword(merry, Keyword.DAMAGE));
 		// Nor is Eomer damage +1 while another bears it.
 		assertFalse(scn.HasKeyword(eomer, Keyword.DAMAGE));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
