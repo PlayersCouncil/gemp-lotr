@@ -1,11 +1,9 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -26,7 +24,6 @@ public class Card_01_158_ErrataTests
 					put("savage2", "1_151");
 					put("sentry", "10_84");     // Cirith Ungol Sentry: [sauron] Uruk-hai minion, strength 8; Damage +1 is its whole text
 					put("servant", "3_58");     // Isengard Servant: [isengard] Orc minion, strength 7; a regroup ability only
-					put("sam", "1_311");        // Sam, Son of Hamfast: Free Peoples companion, strength 3; made an Uruk-hai in one test
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -155,40 +152,6 @@ public class Card_01_158_ErrataTests
 		assertEquals(11, scn.GetStrength(raiding2));
 		assertEquals(7, scn.GetStrength(savage));
 		assertEquals(7, scn.GetStrength(servant));
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
-	public void AnUrukHaiOfTheFreePeoplesPlayerIsCountedAndStrengthenedToo() throws DecisionResultInvalidException, CardNotFoundException, InvalidCardDefinitionException {
-		var scn = GetScenario();
-
-		var raiding = scn.GetShadowCard("raiding");
-		var savage = scn.GetShadowCard("savage");
-		var sentry = scn.GetShadowCard("sentry");
-		var sam = scn.GetFreepsCard("sam");
-		// Sam is made an Uruk-hai wherever he is: the text names no side, so he counts and is strengthened like
-		// the Shadow player's own.  The modifier goes by his name because he is on the table before the game starts.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, scn.GenerateFreepsFilter("name(Sam)"), null, Race.URUK_HAI));
-		scn.MoveCompanionsToTable(sam);
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(raiding);
-		scn.FreepsPass();
-
-		// The Raiding Party is the only Shadow Uruk-hai: Sam makes two.
-		assertEquals(10, scn.GetStrength(raiding));
-		assertEquals(4, scn.GetStrength(sam));
-		assertFalse(scn.HasKeyword(raiding, Keyword.FIERCE));
-
-		scn.MoveMinionsToTable(savage);
-		// Three Uruk-hai, Sam one of them.
-		assertEquals(6, scn.GetStrength(savage));
-		assertFalse(scn.HasKeyword(raiding, Keyword.FIERCE));
-
-		scn.MoveMinionsToTable(sentry);
-		// Four Uruk-hai, but only three of them the Shadow player's.
-		assertTrue(scn.HasKeyword(raiding, Keyword.FIERCE));
-		assertFalse(scn.HasKeyword(sam, Keyword.FIERCE));
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 

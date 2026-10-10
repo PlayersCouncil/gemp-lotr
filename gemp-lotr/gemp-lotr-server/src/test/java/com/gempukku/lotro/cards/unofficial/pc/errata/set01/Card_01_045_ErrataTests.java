@@ -1,12 +1,9 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -31,7 +28,6 @@ public class Card_01_045_ErrataTests
 					put("elrond", "1_40");      // Elrond, Lord of Rivendell: [elven] Elf ally, cost 4; to play, spot Gandalf or an Elf
 					put("arwen", "1_30");       // Arwen, Daughter of Elrond: [elven] Elf companion, cost 2
 					put("lorienelf", "1_53");   // Lorien Elf: [elven] Elf companion, cost 1; to play, spot an Elf
-					put("thrarin", "1_27");     // Thrarin, Dwarven Smith: [dwarven] Dwarf ally, cost 1
 					put("gimli", "1_13");       // Gimli, Son of Gloin: [dwarven] Dwarf companion, cost 2
 					put("bow", "1_41");         // Elven Bow: [elven] possession, bearer must be an Elf
 					// Shadow condition: the twilight cost of each companion played to a site that is not a sanctuary is +2
@@ -215,25 +211,21 @@ public class Card_01_045_ErrataTests
 	}
 
 	@Test
-	public void FellowshipActionExertsGaladrielToPlayAnElfFromHandForOneLessUntilSheIsExhausted() throws DecisionResultInvalidException, CardNotFoundException, InvalidCardDefinitionException {
+	public void FellowshipActionExertsGaladrielToPlayAnElfFromHandForOneLessUntilSheIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var galadriel = scn.GetFreepsCard("galadriel");
 		var elrond = scn.GetFreepsCard("elrond");
 		var arwen = scn.GetFreepsCard("arwen");
 		var lorienelf = scn.GetFreepsCard("lorienelf");
-		var thrarin = scn.GetFreepsCard("thrarin");
+		var orophin = scn.GetFreepsCard("orophin");
 		var gimli = scn.GetFreepsCard("gimli");
 		var bow = scn.GetFreepsCard("bow");
 		var rumil = scn.GetFreepsCard("rumil");
 		var celeborn = scn.GetFreepsCard("celeborn");
 		scn.MoveAlliesToTable(galadriel);
-		// Thrarin is made an Elf while still a [dwarven] card, and Gimli an [elven] card while still a Dwarf.
-		// The modifiers go by name because both cards are in hand.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, scn.GenerateFreepsFilter("name(Thrarin)"), null, Race.ELF));
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, scn.GenerateFreepsFilter("name(Gimli)"), null, Culture.ELVEN));
-		// In hand: an Elf ally, two Elf companions, a Dwarf ally who is an Elf, an [elven] Dwarf and an [elven] possession.
-		scn.MoveCardsToHand(elrond, arwen, lorienelf, thrarin, gimli, bow);
+		// In hand: two Elf allies, two Elf companions, a companion who is no Elf and an [elven] possession.
+		scn.MoveCardsToHand(elrond, arwen, lorienelf, orophin, gimli, bow);
 		// An Elf in the discard pile; Celeborn, another, stays in the draw deck.
 		scn.MoveCardsToDiscard(rumil);
 
@@ -249,7 +241,7 @@ public class Card_01_045_ErrataTests
 
 		scn.FreepsUseCardAction(galadriel);
 		assertEquals(1, scn.GetWoundsOn(galadriel));
-		assertTrue(scn.FreepsHasCardChoiceAvailable(elrond, arwen, lorienelf, thrarin));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(elrond, arwen, lorienelf, orophin));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(gimli, bow, rumil, celeborn));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		assertEquals(1, scn.FreepsGetChoiceMax());
@@ -271,22 +263,22 @@ public class Card_01_045_ErrataTests
 		assertTrue(scn.FreepsActionAvailable(galadriel));
 		scn.FreepsUseCardAction(galadriel);
 		assertEquals(2, scn.GetWoundsOn(galadriel));
-		assertTrue(scn.FreepsHasCardChoiceAvailable(lorienelf, thrarin));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(lorienelf, orophin));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(gimli, bow));
 
-		scn.FreepsChooseCard(thrarin);
-		assertInZone(Zone.SUPPORT, thrarin);
-		// 5 + (1 for Thrarin - 1)
+		scn.FreepsChooseCard(lorienelf);
+		assertInZone(Zone.FREE_CHARACTERS, lorienelf);
+		// 5 + (1 for the Lorien Elf - 1)
 		assertEquals(5, scn.GetTwilight());
 
 		// Vitality 3 with 2 wounds: exhausted, so she can no longer exert, though an Elf in hand could be played.
-		assertTrue(scn.FreepsPlayAvailable(lorienelf));
+		assertTrue(scn.FreepsPlayAvailable(orophin));
 		assertFalse(scn.FreepsActionAvailable(galadriel));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	public void FellowshipActionIsNotOfferedUntilAnElfInHandCanBePlayed() throws DecisionResultInvalidException, CardNotFoundException, InvalidCardDefinitionException {
+	public void FellowshipActionIsNotOfferedUntilAnElfInHandCanBePlayed() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var galadriel = scn.GetFreepsCard("galadriel");
@@ -297,8 +289,7 @@ public class Card_01_045_ErrataTests
 		var bow = scn.GetFreepsCard("bow");
 		var arwen = scn.GetFreepsCard("arwen");
 		scn.MoveAlliesToTable(galadriel, orophin);
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, scn.GenerateFreepsFilter("name(Gimli)"), null, Culture.ELVEN));
-		// In hand: a copy of the unique Orophin who is already in play, an [elven] Dwarf and an [elven] possession.
+		// In hand: a copy of the unique Orophin who is already in play, a companion who is no Elf and an [elven] possession.
 		scn.MoveCardsToHand(orophin2, gimli, bow);
 		// An Elf who could be played, but from the discard pile.
 		scn.MoveCardsToDiscard(arwen);

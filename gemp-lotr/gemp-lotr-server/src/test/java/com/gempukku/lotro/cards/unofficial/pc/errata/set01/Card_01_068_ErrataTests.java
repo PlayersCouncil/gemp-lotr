@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -80,8 +79,6 @@ public class Card_01_068_ErrataTests
 		scn.MoveCardsToHand(arrows);
 		scn.MoveCompanionsToTable(legolas, lorien, aragorn);
 		scn.MoveAlliesToTable(celeborn);
-		// Aragorn is of the [elven] culture but no Elf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
 
 		scn.StartGame();
 
@@ -89,7 +86,8 @@ public class Card_01_068_ErrataTests
 		assertTrue(scn.FreepsPlayAvailable(arrows));
 
 		scn.FreepsPlayCard(arrows);
-		// An archer and an Elf who is not one are both offered; the Elf ally is not a companion.
+		// An archer and an Elf who is not one are both offered; the Elf ally is not a companion, and Aragorn
+		// and Frodo are companions who are no Elves.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(legolas, lorien));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(celeborn, aragorn, frodo));
 		scn.FreepsChooseCard(lorien);

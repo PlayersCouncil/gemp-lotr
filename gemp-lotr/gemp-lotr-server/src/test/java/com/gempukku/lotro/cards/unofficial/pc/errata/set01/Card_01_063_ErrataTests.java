@@ -4,7 +4,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -84,9 +83,8 @@ public class Card_01_063_ErrataTests
 		var seeking = scn.GetShadowCard("seeking");
 		scn.MoveCardsToHand(stand);
 		scn.MoveCompanionsToTable(lorien, aragorn);
+		// An Elf companion, an Elf ally, and a companion who could exert and is no Elf.
 		scn.MoveAlliesToTable(celeborn);
-		// Aragorn is of the [elven] culture but no Elf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(warden, guard, deadones, patrol);

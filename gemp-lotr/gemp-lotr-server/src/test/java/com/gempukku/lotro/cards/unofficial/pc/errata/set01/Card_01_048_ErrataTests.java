@@ -1,12 +1,9 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -24,8 +21,10 @@ public class Card_01_048_ErrataTests
 					put("haldir", "51_48");
 
 					put("arwen", "1_30");       // Arwen, Daughter of Elrond: [elven] Elf companion, cost 2, strength 6
+					put("orophin", "1_56");     // Orophin, Lorien Bowman: [elven] Elf ally, cost 2; an archery ability only
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion
-					put("thrarin", "1_27");     // Thrarin, Dwarven Smith: [dwarven] Dwarf ally, cost 1
+					put("thrarin", "1_27");     // Thrarin, Dwarven Smith: [dwarven] Dwarf ally; a maneuver ability only
+					put("shoulder", "1_59");    // Shoulder to Shoulder: [elven] condition in the support area; a maneuver ability only
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -117,9 +116,10 @@ public class Card_01_048_ErrataTests
 		var haldir = scn.GetFreepsCard("haldir");
 		var arwen = scn.GetFreepsCard("arwen");
 		var aragorn = scn.GetFreepsCard("aragorn");
+		var shoulder = scn.GetFreepsCard("shoulder");
+		// In play: a companion who is no Elf, and a card of the [elven] culture that is no Elf.
 		scn.MoveCompanionsToTable(aragorn);
-		// A Man of the [elven] culture is still no Elf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
+		scn.MoveCardsToSupportArea(shoulder);
 		scn.MoveCardsToHand(haldir, arwen);
 
 		scn.StartGame();
@@ -140,28 +140,31 @@ public class Card_01_048_ErrataTests
 	}
 
 	@Test
-	public void AnAllyOfAnotherCultureWhoIsAnElfLetsHaldirBePlayed() throws DecisionResultInvalidException, CardNotFoundException, InvalidCardDefinitionException {
+	public void AnElfAllyLetsHaldirBePlayedOnceHeIsInPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var haldir = scn.GetFreepsCard("haldir");
+		var orophin = scn.GetFreepsCard("orophin");
 		var thrarin = scn.GetFreepsCard("thrarin");
-		// Thrarin is made an Elf wherever he is: a [dwarven] ally, so neither an [elven] card nor a companion.
-		// The modifier goes by his name because he is still to be played.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, scn.GenerateFreepsFilter("name(Thrarin)"), null, Race.ELF));
-		scn.MoveCardsToHand(haldir, thrarin);
+		// An ally who is no Elf is in play; the Elf ally is still in hand.
+		scn.MoveAlliesToTable(thrarin);
+		scn.MoveCardsToHand(haldir, orophin);
 
 		scn.StartGame();
 
+		assertEquals(0, scn.GetTwilight());
 		assertFalse(scn.FreepsPlayAvailable(haldir));
 
-		scn.FreepsPlayCard(thrarin);
-		assertEquals(1, scn.GetTwilight());
+		// An Elf to spot need not be a companion.
+		scn.FreepsPlayCard(orophin);
+		assertInZone(Zone.SUPPORT, orophin);
+		assertEquals(2, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(haldir));
 
 		scn.FreepsPlayCard(haldir);
 		assertInZone(Zone.FREE_CHARACTERS, haldir);
-		// 1 for Thrarin + 2 for Haldir
-		assertEquals(3, scn.GetTwilight());
+		// 2 for Orophin + 2 for Haldir
+		assertEquals(4, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

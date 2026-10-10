@@ -4,8 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -77,7 +75,6 @@ public class Card_01_044_ErrataTests
 		var arwen = scn.GetFreepsCard("arwen");
 		var silinde = scn.GetFreepsCard("silinde");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		var boromir = scn.GetFreepsCard("boromir");
 		// An [isengard] minion in my own hand is not in "an opponent's hand".
 		var ownSavage = scn.GetFreepsCard("savage");
 		// The Shadow player's hand of five: an [isengard] card that is no minion, two minions of another
@@ -89,11 +86,9 @@ public class Card_01_044_ErrataTests
 		var shadowLorien = scn.GetShadowCard("lorien");
 		// His [isengard] minions stay in his draw deck.
 		var worker = scn.GetShadowCard("worker");
-		scn.MoveCompanionsToTable(arwen, aragorn, boromir);
+		// An Elf companion, an Elf ally, and a companion who could exert and is no Elf.
+		scn.MoveCompanionsToTable(arwen, aragorn);
 		scn.MoveAlliesToTable(silinde);
-		// An Elf of the [gondor] culture, and a Man of the [elven] culture who is still no Elf.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, aragorn, null, Race.ELF));
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, boromir, null, Culture.ELVEN));
 		scn.MoveCardsToHand(foul, ownSavage);
 		scn.MoveCardsToHand(ambition, runner, troop, shadowArwen, shadowLorien);
 
@@ -107,8 +102,8 @@ public class Card_01_044_ErrataTests
 
 		scn.MarkGameLog();
 		scn.FreepsPlayCard(foul);
-		assertTrue(scn.FreepsHasCardChoiceAvailable(arwen, silinde, aragorn));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(boromir));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(arwen, silinde));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		assertEquals(1, scn.FreepsGetChoiceMax());
 
@@ -154,9 +149,8 @@ public class Card_01_044_ErrataTests
 		var boromir = scn.GetFreepsCard("boromir");
 		var runner = scn.GetShadowCard("runner");
 		scn.MoveCompanionsToTable(arwen, boromir);
-		// Arwen, vitality 3, is exhausted; a healthy Man of the [elven] culture stands beside her.
+		// Arwen, vitality 3, is exhausted; a healthy Man stands beside her.
 		scn.AddWoundsToChar(arwen, 2);
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, boromir, null, Culture.ELVEN));
 		scn.MoveCardsToHand(foul, lorien);
 		scn.MoveCardsToHand(runner);
 

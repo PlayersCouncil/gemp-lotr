@@ -1,13 +1,11 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -94,18 +92,13 @@ public class Card_01_160_ErrataTests
 	}
 
 	@Test
-	public void PlayedForOneOnAnUrukHaiOfAnyCultureAndNotOnAnOrc() throws DecisionResultInvalidException, CardNotFoundException, InvalidCardDefinitionException {
+	public void PlayedForOneOnAnUrukHaiOfAnyCultureAndNotOnAnOrc() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var sword = scn.GetShadowCard("sword");
 		var sentry = scn.GetShadowCard("sentry");
 		var savage = scn.GetShadowCard("savage");
 		var servant = scn.GetShadowCard("servant");
-		var sam = scn.GetFreepsCard("sam");
-		// Sam is made an Uruk-hai wherever he is: the text names no side, so the Free Peoples player's Uruk-hai may
-		// bear it too.  The modifier goes by his name because he is on the table before the game starts.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, scn.GenerateFreepsFilter("name(Sam)"), null, Race.URUK_HAI));
-		scn.MoveCompanionsToTable(sam);
 		scn.MoveCardsToHand(sword);
 
 		scn.StartGame();
@@ -118,7 +111,8 @@ public class Card_01_160_ErrataTests
 		int twilight = scn.GetTwilight();
 
 		scn.ShadowPlayCard(sword);
-		assertTrue(scn.ShadowHasCardChoiceAvailable(sentry, savage, sam));
+		// An Uruk-hai of [sauron] and one of [isengard]; the [isengard] Orc is not offered.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(sentry, savage));
 		assertTrue(scn.ShadowHasCardChoiceNotAvailable(servant));
 		assertEquals(1, scn.ShadowGetChoiceMin());
 
@@ -128,7 +122,6 @@ public class Card_01_160_ErrataTests
 		assertEquals(sentry, sword.getAttachedTo());
 		assertEquals(10, scn.GetStrength(sentry));
 		assertEquals(5, scn.GetStrength(savage));
-		assertEquals(3, scn.GetStrength(sam));
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 

@@ -4,8 +4,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -26,8 +24,8 @@ public class Card_01_059_ErrataTests
 					put("legolas", "1_50");       // Legolas, Greenleaf: Elf companion, vitality 3; an archery ability only
 					put("rumil", "1_57");         // Rumil, Elven Protector: Elf ally, vitality 3; an archery ability only
 					put("aragorn", "1_89");       // Aragorn, Ranger of the North: a Man, vitality 4
-					put("boromir", "1_97");       // Boromir, Son of Denethor: a [gondor] Man, vitality 3; a skirmish ability only
-					put("pippin", "1_306");       // Pippin, Friend to Frodo: a [shire] Hobbit, vitality 4; his text is about tales
+					put("farin", "1_11");         // Farin, Dwarven Emissary: Dwarf companion, vitality 3; a requirement to play, and strength against an Orc
+					put("arwen", "1_30");         // Arwen, Daughter of Elrond: Elf companion, vitality 3; strength against a Nazgul only
 
 					put("runner", "1_178");       // Goblin Runner: a minion on the table, so that there is a maneuver phase
 				}},
@@ -103,25 +101,19 @@ public class Card_01_059_ErrataTests
 		var legolas = scn.GetFreepsCard("legolas");
 		var rumil = scn.GetFreepsCard("rumil");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		var boromir = scn.GetFreepsCard("boromir");
-		var pippin = scn.GetFreepsCard("pippin");
-		scn.MoveCompanionsToTable(gimli, legolas, aragorn, boromir, pippin);
+		var farin = scn.GetFreepsCard("farin");
+		var arwen = scn.GetFreepsCard("arwen");
+		scn.MoveCompanionsToTable(gimli, legolas, aragorn, farin, arwen);
 		scn.MoveAlliesToTable(grimir, rumil);
 		scn.MoveCardsToSupportArea(sts);
-		// Every Dwarf there is belongs to the [dwarven] culture and every Elf to the [elven], so one of each
-		// from elsewhere is made: Boromir of [gondor] is a Dwarf as well as a Man, Pippin of [shire] an Elf as
-		// well as a Hobbit. Aragorn is given both cultures and is still neither a Dwarf nor an Elf.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, boromir, null, Race.DWARF));
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, pippin, null, Race.ELF));
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.DWARVEN));
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
+		// Three Dwarves and three Elves, companions and allies, and Aragorn, who is neither. All are wounded.
 		scn.AddWoundsToChar(gimli, 1);
 		scn.AddWoundsToChar(grimir, 1);
 		scn.AddWoundsToChar(legolas, 1);
 		scn.AddWoundsToChar(rumil, 1);
 		scn.AddWoundsToChar(aragorn, 1);
-		scn.AddWoundsToChar(boromir, 1);
-		scn.AddWoundsToChar(pippin, 1);
+		scn.AddWoundsToChar(farin, 1);
+		scn.AddWoundsToChar(arwen, 1);
 
 		scn.StartGame();
 
@@ -131,13 +123,13 @@ public class Card_01_059_ErrataTests
 		assertEquals(1, scn.GetWoundsOn(legolas));
 		assertEquals(1, scn.GetWoundsOn(rumil));
 		assertEquals(1, scn.GetWoundsOn(aragorn));
-		assertEquals(1, scn.GetWoundsOn(boromir));
-		assertEquals(1, scn.GetWoundsOn(pippin));
+		assertEquals(1, scn.GetWoundsOn(farin));
+		assertEquals(1, scn.GetWoundsOn(arwen));
 		assertTrue(scn.FreepsActionAvailable(sts));
 
 		// Who exerts: any Dwarf or Elf, companion or ally, and nobody else.
 		scn.FreepsUseCardAction(sts);
-		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli, grimir, boromir, legolas, rumil, pippin));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli, grimir, farin, legolas, rumil, arwen));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		assertEquals(1, scn.FreepsGetChoiceMax());
@@ -147,36 +139,36 @@ public class Card_01_059_ErrataTests
 		assertEquals(2, scn.GetWoundsOn(gimli));
 
 		// A Dwarf exerted, so an Elf is healed: not another Dwarf, not the Dwarf who exerted, not the Man.
-		assertTrue(scn.FreepsHasCardChoiceAvailable(legolas, rumil, pippin));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(gimli, grimir, boromir, aragorn));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(legolas, rumil, arwen));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(gimli, grimir, farin, aragorn));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		assertEquals(1, scn.FreepsGetChoiceMax());
 
 		scn.FreepsChooseCard(rumil);
 		assertEquals(0, scn.GetWoundsOn(rumil));
 		assertEquals(1, scn.GetWoundsOn(legolas));
-		assertEquals(1, scn.GetWoundsOn(pippin));
+		assertEquals(1, scn.GetWoundsOn(arwen));
 		assertEquals(2, scn.GetWoundsOn(gimli));
 		assertEquals(1, scn.GetWoundsOn(grimir));
-		assertEquals(1, scn.GetWoundsOn(boromir));
+		assertEquals(1, scn.GetWoundsOn(farin));
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertEquals(1, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
-		// Gimli, vitality 3 with 2 wounds, is exhausted and cannot exert again. The Dwarf of [gondor] does,
-		// and the Elf of [shire] is healed; Rumil, with no wound left, is not among the Elves to heal.
+		// Gimli, vitality 3 with 2 wounds, is exhausted and cannot exert again. Farin does, and Arwen is
+		// healed; Rumil, with no wound left, is not among the Elves to heal.
 		scn.FreepsUseCardAction(sts);
-		assertTrue(scn.FreepsHasCardChoiceAvailable(grimir, boromir, legolas, rumil, pippin));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(grimir, farin, legolas, rumil, arwen));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(gimli, aragorn));
 
-		scn.FreepsChooseCard(boromir);
+		scn.FreepsChooseCard(farin);
 		assertEquals(2, scn.GetTwilight());
-		assertEquals(2, scn.GetWoundsOn(boromir));
-		assertTrue(scn.FreepsHasCardChoiceAvailable(legolas, pippin));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(rumil, gimli, grimir, boromir, aragorn));
+		assertEquals(2, scn.GetWoundsOn(farin));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(legolas, arwen));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(rumil, gimli, grimir, farin, aragorn));
 
-		scn.FreepsChooseCard(pippin);
-		assertEquals(0, scn.GetWoundsOn(pippin));
+		scn.FreepsChooseCard(arwen);
+		assertEquals(0, scn.GetWoundsOn(arwen));
 		assertEquals(1, scn.GetWoundsOn(legolas));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
@@ -200,24 +192,19 @@ public class Card_01_059_ErrataTests
 		var legolas = scn.GetFreepsCard("legolas");
 		var rumil = scn.GetFreepsCard("rumil");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		var boromir = scn.GetFreepsCard("boromir");
-		var pippin = scn.GetFreepsCard("pippin");
-		scn.MoveCompanionsToTable(gimli, legolas, aragorn, boromir, pippin);
+		var farin = scn.GetFreepsCard("farin");
+		var arwen = scn.GetFreepsCard("arwen");
+		scn.MoveCompanionsToTable(gimli, legolas, aragorn, farin, arwen);
 		scn.MoveAlliesToTable(grimir, rumil);
 		scn.MoveCardsToSupportArea(sts);
-		// Boromir of [gondor] is a Dwarf as well as a Man, Pippin of [shire] an Elf as well as a Hobbit;
-		// Aragorn is of the [dwarven] and [elven] cultures and still neither a Dwarf nor an Elf.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, boromir, null, Race.DWARF));
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, pippin, null, Race.ELF));
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.DWARVEN));
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
+		// Three Dwarves and three Elves, companions and allies, and Aragorn, who is neither. All are wounded.
 		scn.AddWoundsToChar(gimli, 1);
 		scn.AddWoundsToChar(grimir, 1);
 		scn.AddWoundsToChar(legolas, 1);
 		scn.AddWoundsToChar(rumil, 1);
 		scn.AddWoundsToChar(aragorn, 1);
-		scn.AddWoundsToChar(boromir, 1);
-		scn.AddWoundsToChar(pippin, 1);
+		scn.AddWoundsToChar(farin, 1);
+		scn.AddWoundsToChar(arwen, 1);
 
 		scn.StartGame();
 
@@ -227,12 +214,12 @@ public class Card_01_059_ErrataTests
 		assertEquals(1, scn.GetWoundsOn(legolas));
 		assertEquals(1, scn.GetWoundsOn(rumil));
 		assertEquals(1, scn.GetWoundsOn(aragorn));
-		assertEquals(1, scn.GetWoundsOn(boromir));
-		assertEquals(1, scn.GetWoundsOn(pippin));
+		assertEquals(1, scn.GetWoundsOn(farin));
+		assertEquals(1, scn.GetWoundsOn(arwen));
 		assertTrue(scn.FreepsActionAvailable(sts));
 
 		scn.FreepsUseCardAction(sts);
-		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli, grimir, boromir, legolas, rumil, pippin));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli, grimir, farin, legolas, rumil, arwen));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		assertEquals(1, scn.FreepsGetChoiceMax());
@@ -242,36 +229,36 @@ public class Card_01_059_ErrataTests
 		assertEquals(2, scn.GetWoundsOn(legolas));
 
 		// An Elf exerted, so a Dwarf is healed: not another Elf, not the Elf who exerted, not the Man.
-		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli, grimir, boromir));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(legolas, rumil, pippin, aragorn));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli, grimir, farin));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(legolas, rumil, arwen, aragorn));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		assertEquals(1, scn.FreepsGetChoiceMax());
 
 		scn.FreepsChooseCard(gimli);
 		assertEquals(0, scn.GetWoundsOn(gimli));
 		assertEquals(1, scn.GetWoundsOn(grimir));
-		assertEquals(1, scn.GetWoundsOn(boromir));
+		assertEquals(1, scn.GetWoundsOn(farin));
 		assertEquals(2, scn.GetWoundsOn(legolas));
 		assertEquals(1, scn.GetWoundsOn(rumil));
-		assertEquals(1, scn.GetWoundsOn(pippin));
+		assertEquals(1, scn.GetWoundsOn(arwen));
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertEquals(1, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
-		// Legolas, vitality 3 with 2 wounds, is exhausted and cannot exert again. The Elf of [shire] does,
-		// and the Dwarf of [gondor] is healed; Gimli, with no wound left, is not among the Dwarves to heal.
+		// Legolas, vitality 3 with 2 wounds, is exhausted and cannot exert again. Arwen does, and Farin is
+		// healed; Gimli, with no wound left, is not among the Dwarves to heal.
 		scn.FreepsUseCardAction(sts);
-		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli, grimir, boromir, rumil, pippin));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli, grimir, farin, rumil, arwen));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(legolas, aragorn));
 
-		scn.FreepsChooseCard(pippin);
+		scn.FreepsChooseCard(arwen);
 		assertEquals(2, scn.GetTwilight());
-		assertEquals(2, scn.GetWoundsOn(pippin));
-		assertTrue(scn.FreepsHasCardChoiceAvailable(grimir, boromir));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(gimli, legolas, rumil, pippin, aragorn));
+		assertEquals(2, scn.GetWoundsOn(arwen));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(grimir, farin));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(gimli, legolas, rumil, arwen, aragorn));
 
-		scn.FreepsChooseCard(boromir);
-		assertEquals(0, scn.GetWoundsOn(boromir));
+		scn.FreepsChooseCard(farin);
+		assertEquals(0, scn.GetWoundsOn(farin));
 		assertEquals(1, scn.GetWoundsOn(grimir));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
@@ -295,15 +282,13 @@ public class Card_01_059_ErrataTests
 		var aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveCompanionsToTable(gimli, legolas, aragorn);
 		scn.MoveCardsToSupportArea(sts);
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.DWARVEN));
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
 		// Vitality 3 with 2 wounds: the one Dwarf and the one Elf are both exhausted.
 		scn.AddWoundsToChar(gimli, 2);
 		scn.AddWoundsToChar(legolas, 2);
 
 		scn.StartGame();
 
-		// Aragorn, of both cultures and with no wound on him, cannot exert in their place.
+		// Aragorn, a Man with no wound on him, cannot exert in their place.
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertFalse(scn.FreepsActionAvailable(sts));
 
@@ -344,8 +329,7 @@ public class Card_01_059_ErrataTests
 		scn.MoveCompanionsToTable(gimli, legolas, aragorn);
 		scn.MoveAlliesToTable(grimir);
 		scn.MoveCardsToSupportArea(sts);
-		// The wounded on this board are another Dwarf and a Man of the [elven] culture.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
+		// The wounded on this board are another Dwarf and a Man.
 		scn.AddWoundsToChar(grimir, 1);
 		scn.AddWoundsToChar(aragorn, 1);
 
@@ -384,8 +368,7 @@ public class Card_01_059_ErrataTests
 		scn.MoveCompanionsToTable(gimli, legolas, aragorn);
 		scn.MoveAlliesToTable(rumil);
 		scn.MoveCardsToSupportArea(sts);
-		// The wounded on this board are another Elf and a Man of the [dwarven] culture.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.DWARVEN));
+		// The wounded on this board are another Elf and a Man.
 		scn.AddWoundsToChar(rumil, 1);
 		scn.AddWoundsToChar(aragorn, 1);
 

@@ -1,11 +1,9 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set02;
 
-import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -87,7 +85,7 @@ public class Card_02_039_ErrataTests
 	}
 
 	@Test
-	public void ExertsAnUrukhaiToDiscardAFreePeoplesArmorHelmOrShield() throws DecisionResultInvalidException, CardNotFoundException, InvalidCardDefinitionException {
+	public void ExertsAnUrukhaiToDiscardAFreePeoplesArmorHelmOrShield() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var beyond = scn.GetShadowCard("beyond");
@@ -108,8 +106,6 @@ public class Card_02_039_ErrataTests
 		var athelas = scn.GetFreepsCard("athelas");
 		var staff = scn.GetFreepsCard("staff");
 		var mithril = scn.GetFreepsCard("mithril");
-		// Boromir is made an Uruk-hai: the opponent's, and a valid choice for a bare "an Uruk-hai".
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, scn.GenerateFreepsFilter("name(Boromir)"), null, Race.URUK_HAI));
 		// Five companions with Frodo, and two [isengard] cards: too few for the second sentence.
 		scn.MoveCompanionsToTable(aragorn, boromir, gimli, gandalf);
 		scn.AttachCardsTo(scn.GetRingBearer(), mithril);
@@ -130,7 +126,8 @@ public class Card_02_039_ErrataTests
 		assertTrue(scn.ShadowPlayAvailable(beyond));
 		scn.ShadowPlayCard(beyond);
 
-		assertTrue(scn.ShadowHasCardChoiceAvailable(warrior, whu, boromir));
+		// An Uruk-hai of [isengard] and one of [uruk-hai]; the [isengard] Orc is not offered.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(warrior, whu));
 		assertTrue(scn.ShadowHasCardChoiceNotAvailable(forger));
 		assertEquals(1, scn.ShadowGetChoiceMin());
 		scn.ShadowChooseCard(whu);

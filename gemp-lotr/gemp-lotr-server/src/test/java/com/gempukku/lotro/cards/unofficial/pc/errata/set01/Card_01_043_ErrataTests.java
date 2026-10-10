@@ -1,12 +1,9 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -92,54 +89,46 @@ public class Card_01_043_ErrataTests
 	}
 
 	@Test
-	public void EachElfPlayedDrawsACardWhileTheShadowPlayerHoldsNoCard() throws DecisionResultInvalidException, CardNotFoundException, InvalidCardDefinitionException {
+	public void EachElfPlayedDrawsACardWhileTheShadowPlayerHoldsNoCard() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var eyes = scn.GetFreepsCard("eyes");
 		var arwen = scn.GetFreepsCard("arwen");
 		var orophin = scn.GetFreepsCard("orophin");
-		var thrarin = scn.GetFreepsCard("thrarin");
-		// Thrarin is made an Elf wherever he is: an Elf who is a [dwarven] card. The modifier goes by his
-		// name because he is still to be played.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, scn.GenerateFreepsFilter("name(Thrarin)"), null, Race.ELF));
-		scn.MoveCardsToHand(eyes, arwen, orophin, thrarin);
+		scn.MoveCardsToHand(eyes, arwen, orophin);
 
 		scn.StartGame();
 
 		int deck = scn.GetFreepsDeckCount();
 		assertEquals(0, scn.GetTwilight());
-		assertEquals(4, scn.GetFreepsHandCount());
+		assertEquals(3, scn.GetFreepsHandCount());
 		assertEquals(0, scn.GetShadowHandCount());
 
-		// The condition itself is no Elf: nothing is drawn for it.
+		// The condition itself, an [elven] card in play by the time its play is announced, is no Elf: nothing
+		// is drawn for it.
 		scn.FreepsPlayCard(eyes);
 		assertInZone(Zone.SUPPORT, eyes);
 		assertEquals(2, scn.GetTwilight());
-		assertEquals(3, scn.GetFreepsHandCount());
+		assertEquals(2, scn.GetFreepsHandCount());
 		assertEquals(deck, scn.GetFreepsDeckCount());
 
 		// An Elf companion: one card out of the hand, one drawn.
 		scn.FreepsPlayCard(arwen);
 		assertFalse(scn.ShadowAnyDecisionsAvailable());
-		assertEquals(3, scn.GetFreepsHandCount());
+		assertEquals(2, scn.GetFreepsHandCount());
 		assertEquals(deck - 1, scn.GetFreepsDeckCount());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
 		// An Elf ally
 		scn.FreepsPlayCard(orophin);
-		assertEquals(3, scn.GetFreepsHandCount());
-		assertEquals(deck - 2, scn.GetFreepsDeckCount());
-
-		// An Elf of another culture
-		scn.FreepsPlayCard(thrarin);
 		assertFalse(scn.ShadowAnyDecisionsAvailable());
-		assertEquals(3, scn.GetFreepsHandCount());
-		assertEquals(deck - 3, scn.GetFreepsDeckCount());
+		assertEquals(2, scn.GetFreepsHandCount());
+		assertEquals(deck - 2, scn.GetFreepsDeckCount());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	public void TheShadowPlayerMayDiscardACardOfHisChoiceFromHandToPreventTheDraw() throws DecisionResultInvalidException, CardNotFoundException, InvalidCardDefinitionException {
+	public void TheShadowPlayerMayDiscardACardOfHisChoiceFromHandToPreventTheDraw() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var eyes = scn.GetFreepsCard("eyes");
@@ -152,8 +141,6 @@ public class Card_01_043_ErrataTests
 		var troop = scn.GetShadowCard("troop");
 		var shadowThrarin = scn.GetShadowCard("thrarin");
 		scn.MoveCardsToSupportArea(eyes);
-		// A Man of the [elven] culture is still no Elf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, scn.GenerateFreepsFilter("name(Aragorn)"), null, Culture.ELVEN));
 		scn.MoveCardsToHand(aragorn, arwen, orophin, axe);
 		scn.MoveCardsToHand(runner, troop, shadowThrarin);
 
@@ -164,7 +151,7 @@ public class Card_01_043_ErrataTests
 		assertEquals(3, scn.GetShadowHandCount());
 		assertEquals(0, scn.GetShadowDiscardCount());
 
-		// No Elf played: nothing to draw and nothing to prevent.
+		// A companion who is no Elf: nothing to draw and nothing to prevent.
 		scn.FreepsPlayCard(aragorn);
 		assertFalse(scn.ShadowAnyDecisionsAvailable());
 		assertEquals(3, scn.GetFreepsHandCount());

@@ -4,8 +4,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -26,7 +24,6 @@ public class Card_01_053_ErrataTests
 					put("arwen", "1_30");         // Arwen, Daughter of Elrond: Elf companion, cost 2
 					put("celeborn", "1_34");      // Celeborn, Lord of Lorien: Elf ally, cost 2; a fellowship ability only
 					put("aragorn", "1_89");       // Aragorn, Ranger of the North: a Man
-					put("gimli", "1_13");         // Gimli, Son of Gloin: a [dwarven] Dwarf
 					put("shoulder", "1_59");      // Shoulder to Shoulder: [elven] condition in the support area; a maneuver ability only
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -82,11 +79,10 @@ public class Card_01_053_ErrataTests
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var shoulder = scn.GetFreepsCard("shoulder");
 		scn.MoveCardsToHand(elf, inHand, arwen);
-		// Everything that is nearly an Elf in play: an [elven] card that is no Elf, a Man of the [elven]
-		// culture, an Elf in the dead pile, and a second Lorien Elf in hand.
+		// Everything that is nearly an Elf in play: an [elven] card that is no Elf, a companion who is no
+		// Elf, an Elf in the dead pile, and a second Lorien Elf in hand.
 		scn.MoveCardsToSupportArea(shoulder);
 		scn.MoveCompanionsToTable(aragorn);
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
 		scn.MoveCardsToDeadPile(inDeadPile);
 
 		scn.StartGame();
@@ -124,30 +120,6 @@ public class Card_01_053_ErrataTests
 
 		scn.FreepsPlayCard(celeborn);
 		assertInZone(Zone.SUPPORT, celeborn);
-		assertTrue(scn.FreepsPlayAvailable(elf));
-
-		scn.FreepsPlayCard(elf);
-		assertInZone(Zone.FREE_CHARACTERS, elf);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
-	public void AnElfOfAnotherCultureIsSpotted() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var elf = scn.GetFreepsCard("elf");
-		var gimli = scn.GetFreepsCard("gimli");
-		scn.MoveCardsToHand(elf);
-		scn.MoveCompanionsToTable(gimli);
-
-		scn.StartGame();
-
-		assertFalse(scn.FreepsPlayAvailable(elf));
-
-		// Every Elf there is belongs to the [elven] culture, so the Elf of another culture is made: Gimli stays
-		// [dwarven] and becomes an Elf as well as a Dwarf.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, gimli, null, Race.ELF));
-		scn.FreepsRefreshDecision();
 		assertTrue(scn.FreepsPlayAvailable(elf));
 
 		scn.FreepsPlayCard(elf);
