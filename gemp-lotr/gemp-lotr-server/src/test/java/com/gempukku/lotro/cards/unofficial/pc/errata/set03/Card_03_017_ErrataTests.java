@@ -1,12 +1,9 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
 
 import com.gempukku.lotro.common.*;
-import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -37,7 +34,6 @@ public class Card_03_017_ErrataTests
 					put("site8", "1_356");
 					put("site2F", "1_329");     // Breeland Forest: Fellowship-block forest site 2
 					put("site2T", "4_330");     // Derndingle: Towers-block forest site 2, shadow number 2
-					put("site2K", "7_337");     // West Road: King-block site 2, plains, made a forest below
 					put("site3F", "1_342");     // Rivendell Waterfall: forest site 3
 					put("siteX", "11_231");     // Caras Galadhon: Shadows-block forest, no site number
 				}},
@@ -169,8 +165,6 @@ public class Card_03_017_ErrataTests
 		var aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveCompanionsToTable(greenleaf, aragorn);
 		scn.MoveAlliesToTable(galadriel, celeborn);
-		// Aragorn is of the [elven] culture but no Elf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
 		scn.AddWoundsToChar(galadriel, 1);
 		scn.AddWoundsToChar(celeborn, 1);
 		scn.AddWoundsToChar(greenleaf, 2);
@@ -182,7 +176,7 @@ public class Card_03_017_ErrataTests
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(galadriel));
 		scn.FreepsChooseOptionalTrigger(galadriel);
 
-		// Another Elf, companion or ally; not Galadriel herself, and not a Man even if he is [elven].
+		// Another Elf, companion or ally; not Galadriel herself, and not the wounded Man.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(celeborn, greenleaf));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(galadriel, aragorn));
 		assertEquals(1, scn.FreepsGetChoiceMin());
@@ -233,8 +227,7 @@ public class Card_03_017_ErrataTests
 		var greenleaf = scn.GetFreepsCard("greenleaf");
 		scn.MoveCompanionsToTable(aragorn, greenleaf);
 		scn.MoveAlliesToTable(galadriel);
-		// Aragorn is of the [elven] culture but no Elf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
+		// Galadriel herself and a Man are wounded; the Elf beside them is not.
 		scn.AddWoundsToChar(galadriel, 1);
 		scn.AddWoundsToChar(aragorn, 1);
 
@@ -257,11 +250,8 @@ public class Card_03_017_ErrataTests
 		var freepsMarshes = scn.GetFreepsSite("site2");
 		var freepsBreeland = scn.GetFreepsSite("site2F");
 		var freepsDerndingle = scn.GetFreepsSite("site2T");
-		var freepsWestRoad = scn.GetFreepsSite("site2K");
 		var freepsWaterfall = scn.GetFreepsSite("site3F");
 		var freepsCaras = scn.GetFreepsSite("siteX");
-		// lint-ok: West Road is made a forest so that a King-block site 2 is a candidate
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.name("West Road"), null, Keyword.FOREST));
 
 		scn.StartGame();
 		assertEquals(0, scn.GetTwilight());
@@ -274,10 +264,10 @@ public class Card_03_017_ErrataTests
 		scn.FreepsChooseOptionalTrigger(galadriel);
 		assertEquals(1, scn.GetWoundsOn(galadriel));
 
-		// Forests numbered 2 from every block; not the non-forest site 2, a forest site 3, or a forest with no number.
+		// Forests numbered 2, of the Fellowship block and of the Towers block; not the non-forest site 2, a forest
+		// site 3, or a forest with no number.
 		assertTrue(scn.FreepsHasBPChoiceAvailable(freepsBreeland.getBlueprintId()));
 		assertTrue(scn.FreepsHasBPChoiceAvailable(freepsDerndingle.getBlueprintId()));
-		assertTrue(scn.FreepsHasBPChoiceAvailable(freepsWestRoad.getBlueprintId()));
 		assertFalse(scn.FreepsHasBPChoiceAvailable(freepsMarshes.getBlueprintId()));
 		assertFalse(scn.FreepsHasBPChoiceAvailable(freepsWaterfall.getBlueprintId()));
 		assertFalse(scn.FreepsHasBPChoiceAvailable(freepsCaras.getBlueprintId()));

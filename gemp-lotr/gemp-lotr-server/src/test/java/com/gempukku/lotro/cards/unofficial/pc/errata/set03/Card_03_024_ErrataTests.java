@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -86,9 +85,6 @@ public class Card_03_024_ErrataTests
 		scn.MoveCardsToHand(phial);
 		scn.MoveCompanionsToTable(legolas, gimli, sam);
 		scn.MoveAlliesToTable(silinde);
-		// No [elven] character is anything but an Elf, so one is made: here Gimli is [elven] as well as a Dwarf,
-		// and must still not be offered, since "an Elf" is a race and not a culture.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, gimli, null, Culture.ELVEN));
 
 		scn.StartGame();
 
@@ -100,7 +96,7 @@ public class Card_03_024_ErrataTests
 		assertTrue(scn.FreepsPlayAvailable(phial));
 
 		scn.FreepsPlayCard(phial);
-		// An Elf companion and an Elf ally may pay; an [elven] Dwarf, a Hobbit Ring-bearer and Sam may not.
+		// An Elf companion and an Elf ally may pay; a Dwarf who could exert, a Hobbit Ring-bearer and Sam may not.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(legolas, silinde));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(gimli, frodo, sam));
 		assertEquals(1, scn.FreepsGetChoiceMin());

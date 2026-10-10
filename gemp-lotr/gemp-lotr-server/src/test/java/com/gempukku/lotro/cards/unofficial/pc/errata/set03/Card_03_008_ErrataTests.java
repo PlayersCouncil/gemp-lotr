@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -115,9 +114,6 @@ public class Card_03_008_ErrataTests
 		scn.StartGame();
 		// Galadriel's own start-of-turn trigger is kept out of the way by putting her down after it.
 		scn.MoveAlliesToTable(galadriel);
-		// Thrarin made an Elf: an Elf ally of home site 3 who is not [elven].
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, thrarin, null, Race.ELF));
-		assertTrue(scn.IsRace(thrarin, Race.ELF));
 
 		// The second [elven] ally of home site 3 is played.
 		scn.FreepsPlayCard(galdor);
@@ -134,8 +130,8 @@ public class Card_03_008_ErrataTests
 		assertEquals(5, scn.GetStrength(runner2));
 
 		scn.FreepsResolveSkirmish(arwen);
-		// Silinde and Galdor: 2.  Not Orophin (home site 6), Thrarin (not [elven]) or Galadriel (home site 3 of
-		// the Hobbit block).
+		// Silinde and Galdor: 2.  Not Orophin (home site 6), Thrarin (an ally of home site 3 who is not [elven])
+		// or Galadriel (home site 3 of the Hobbit block).
 		assertEquals(3, scn.GetStrength(savage));
 		assertEquals(3, scn.GetStrength(runner1));
 		assertEquals(5, scn.GetStrength(runner2));

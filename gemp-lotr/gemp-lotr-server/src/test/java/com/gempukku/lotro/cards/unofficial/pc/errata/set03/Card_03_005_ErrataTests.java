@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -24,7 +23,7 @@ public class Card_03_005_ErrataTests
 
 					put("gimli", "1_13");       // Gimli, Son of Glóin: Dwarf companion, vitality 3; a skirmish ability only used on purpose
 					put("grimir", "1_17");      // Grimir, Dwarven Elder: Dwarf ally, vitality 3; a fellowship ability only used on purpose
-					put("aragorn", "1_89");     // Aragorn, Ranger of the North: made [dwarven] where a test needs a [dwarven] companion who is not a Dwarf
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion, vitality 4: a companion who could exert and is no Dwarf
 
 					put("spear", "1_182");      // Goblin Spear: [moria] possession, hand weapon, cost 1, bearer a [moria] minion
 					put("sword", "2_50");       // The Balrog's Sword: [moria] artifact, hand weapon, cost 1
@@ -91,8 +90,6 @@ public class Card_03_005_ErrataTests
 		scn.MoveCardsToHand(song, spear, sword, chain, scimitar);
 		scn.MoveCompanionsToTable(gimli, aragorn);
 		scn.MoveAlliesToTable(grimir);
-		// Aragorn is [dwarven], but not a Dwarf
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.DWARVEN));
 
 		scn.StartGame();
 
@@ -105,6 +102,7 @@ public class Card_03_005_ErrataTests
 		assertEquals(0, scn.GetWoundsOn(grimir));
 		assertTrue(scn.FreepsPlayAvailable(song));
 		scn.FreepsPlayCard(song);
+		// A Dwarf companion and a Dwarf ally; not Aragorn, a companion who could exert and is no Dwarf
 		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli, grimir));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn));
 		assertEquals(1, scn.FreepsGetChoiceMin());
@@ -134,7 +132,6 @@ public class Card_03_005_ErrataTests
 		var aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveCardsToHand(song);
 		scn.MoveCompanionsToTable(gimli, aragorn);
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.DWARVEN));
 		scn.AddWoundsToChar(gimli, 2);
 
 		scn.StartGame();

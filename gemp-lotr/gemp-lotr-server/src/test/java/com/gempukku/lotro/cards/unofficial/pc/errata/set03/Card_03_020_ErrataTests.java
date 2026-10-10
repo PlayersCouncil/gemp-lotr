@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -24,6 +23,7 @@ public class Card_03_020_ErrataTests
 					put("silinde", "1_60");     // Silinde, Elf of Mirkwood: Elf ally; her text needs Freeps' site 3 in play
 					put("barliman", "1_70");    // Barliman Butterbur: Man ally
 					put("eyes", "1_43");        // Far-seeing Eyes: [elven] condition that is not an Elf; acts only when an Elf is played
+					put("shoulder", "1_59");    // Shoulder to Shoulder: [elven] support-area condition, a card of the culture that is no Elf; a maneuver ability only
 
 					put("troop", "1_177");      // Goblin Patrol Troop: [moria] Orc, strength 13, vitality 3, no text
 					put("soldier", "1_271");    // Orc Soldier: [sauron] Orc, strength 7, vitality 2; a skirmish ability used only on purpose
@@ -80,15 +80,15 @@ public class Card_03_020_ErrataTests
 		var arwen = scn.GetFreepsCard("arwen");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var barliman = scn.GetFreepsCard("barliman");
+		var shoulder = scn.GetFreepsCard("shoulder");
 		scn.MoveCompanionsToTable(aragorn);
 		scn.MoveAlliesToTable(barliman);
+		scn.MoveCardsToSupportArea(shoulder);
 		scn.MoveCardsToHand(arwen, golradir);
-		// Aragorn is of the [elven] culture but no Elf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
 
 		scn.StartGame();
 
-		// An [elven] Man companion and a Man ally, and no Elf.
+		// A Man companion, a Man ally and an [elven] condition in play, and no Elf.
 		assertFalse(scn.FreepsPlayAvailable(golradir));
 
 		scn.FreepsPlayCard(arwen);

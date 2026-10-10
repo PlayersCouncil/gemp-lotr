@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -21,7 +20,7 @@ public class Card_04_046_ErrataTests
 					put("emhr", "54_46");
 					put("guard", "1_7");        // Dwarf Guard: Dwarf companion, no text but its own play requirement
 					put("thrarin", "1_27");     // Thrarin: Dwarf ally, a maneuver ability only
-					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a Man companion, given [dwarven] where a test says so
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion: a companion who is no Dwarf
 					put("mountains", "52_1");   // Beneath the Mountains: another [dwarven] support condition, abilities used only on purpose
 					// Cards to stack: no text that acts from a stack.
 					put("guard2", "1_7");       // Dwarf Guard: a [dwarven] companion
@@ -197,16 +196,15 @@ public class Card_04_046_ErrataTests
 	}
 
 	@Test
-	public void NeitherAbilityIsOfferedWhenTheOnlyDwarvenCharacterIsNotADwarf() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NeitherAbilityIsOfferedWithNoDwarfToSpot() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var emhr = scn.GetFreepsCard("emhr");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var sword = scn.GetFreepsCard("sword");
 		scn.MoveCardsToSupportArea(emhr);
+		// A companion who is no Dwarf, beside this condition, itself a [dwarven] card that is no Dwarf.
 		scn.MoveCompanionsToTable(aragorn);
-		// Aragorn is of the [dwarven] culture but no Dwarf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.DWARVEN));
 		scn.StackCardsOn(emhr, sword);
 
 		scn.StartGame();

@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -22,7 +21,7 @@ public class Card_04_067_ErrataTests
 					put("fereveldir", "54_67");
 					put("lorien", "1_53");      // Lorien Elf: Elf companion, vitality 2, no text in play
 					put("orophin", "1_56");     // Orophin, Lorien Bowman: Elf ally, no requirement to play; an archery ability used only on purpose
-					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a Man companion, given [elven] where a test says so
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion: a companion who is no Elf
 
 					put("finalcount", "4_69");  // Final Count: [elven] condition in the support area; nothing without Legolas
 					put("uncertain", "11_26");  // Uncertain Future: [elven] condition in the support area; a maneuver ability only
@@ -83,13 +82,14 @@ public class Card_04_067_ErrataTests
 		var fereveldir = scn.GetFreepsCard("fereveldir");
 		var orophin = scn.GetFreepsCard("orophin");
 		var aragorn = scn.GetFreepsCard("aragorn");
+		var finalcount = scn.GetFreepsCard("finalcount");
 		scn.MoveCompanionsToTable(aragorn);
-		// Aragorn is of the [elven] culture but no Elf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
+		scn.MoveCardsToSupportArea(finalcount);
 		scn.MoveCardsToHand(fereveldir, orophin);
 
 		scn.StartGame();
 
+		// A companion who is no Elf and an [elven] condition in play, and no Elf.
 		assertFalse(scn.FreepsPlayAvailable(fereveldir));
 		scn.FreepsPlayCard(orophin);
 		assertEquals(2, scn.GetTwilight());

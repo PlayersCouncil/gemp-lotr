@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -21,7 +20,8 @@ public class Card_04_080_ErrataTests
 					put("ordulus", "54_80");
 					put("legolas", "1_50");     // Legolas, Greenleaf: Elf companion and archer, no requirement to play; an archery ability used only on purpose
 					put("orophin", "1_56");     // Orophin, Lorien Bowman: Elf ally, an archery ability used only on purpose
-					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a Man companion, given [elven] where a test says so
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion: a companion who is no Elf
+					put("finalcount", "4_69");  // Final Count: [elven] condition in the support area, a card of the culture that is no Elf; its texts name Legolas and need a skirmish won or its tokens
 					put("arwensbow", "18_4");   // Arwen's Bow: unique [elven] ranged weapon, cost 2, strength +1; bearer must be an [elven] companion; an archery ability for Arwen only
 					put("bow", "1_41");         // Elven Bow: [elven] ranged weapon, cost 1, bearer must be an Elf, bearer is an archer
 					put("sword", "4_64");       // Elven Sword: [elven] hand weapon, cost 1, strength +1; a skirmish ability used only on purpose
@@ -76,13 +76,14 @@ public class Card_04_080_ErrataTests
 		var ordulus = scn.GetFreepsCard("ordulus");
 		var legolas = scn.GetFreepsCard("legolas");
 		var aragorn = scn.GetFreepsCard("aragorn");
+		var finalcount = scn.GetFreepsCard("finalcount");
 		scn.MoveCompanionsToTable(aragorn);
-		// Aragorn is of the [elven] culture but no Elf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
+		scn.MoveCardsToSupportArea(finalcount);
 		scn.MoveCardsToHand(ordulus, legolas);
 
 		scn.StartGame();
 
+		// A companion who is no Elf and an [elven] condition in play, and no Elf.
 		assertFalse(scn.FreepsPlayAvailable(ordulus));
 		scn.FreepsPlayCard(legolas);
 		assertEquals(2, scn.GetTwilight());

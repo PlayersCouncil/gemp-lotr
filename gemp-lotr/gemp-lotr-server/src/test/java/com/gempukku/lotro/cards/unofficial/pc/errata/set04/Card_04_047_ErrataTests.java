@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -23,7 +22,7 @@ public class Card_04_047_ErrataTests
 					put("gimli", "1_12");       // Gimli, Dwarf of Erebor: Dwarf companion, strength 6, vitality 3; damage +1 and a fellowship ability
 					put("guard", "1_7");        // Dwarf Guard: Dwarf companion, no text but its own play requirement
 					put("thrarin", "1_27");     // Thrarin: Dwarf ally, a maneuver ability only
-					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a Man companion, given [dwarven] where a test says so
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion, vitality 4: a companion who could exert and is no Dwarf
 					// Cards for the hand.
 					put("guard2", "1_7");       // Dwarf Guard: a [dwarven] companion
 					put("sword", "1_299");      // Hobbit Sword: a [shire] possession
@@ -101,8 +100,6 @@ public class Card_04_047_ErrataTests
 		scn.MoveCardsToSupportArea(armory, armory2);
 		scn.MoveCompanionsToTable(gimli, guard, aragorn);
 		scn.MoveAlliesToTable(thrarin);
-		// Aragorn is of the [dwarven] culture but no Dwarf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.DWARVEN));
 		scn.MoveCardsToHand(guard2, sword, runner);
 
 		scn.StartGame();
@@ -115,7 +112,7 @@ public class Card_04_047_ErrataTests
 		assertTrue(scn.FreepsActionAvailable(armory));
 		scn.FreepsUseCardAction(armory);
 
-		// Any Dwarf may exert, in the skirmish or not, companion or ally.
+		// Any Dwarf may exert, in the skirmish or not, companion or ally; not Aragorn, who could exert and is no Dwarf.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli, guard, thrarin));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn));
 		assertEquals(1, scn.FreepsGetChoiceMin());

@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -22,7 +21,7 @@ public class Card_04_071_ErrataTests
 					put("haldir", "54_71");
 					put("lorien", "1_53");      // Lorien Elf: Elf companion, vitality 2, no text in play
 					put("orophin", "1_56");     // Orophin, Lorien Bowman: Elf ally, vitality 3; an archery ability used only on purpose
-					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a Man companion, given [elven] where a test says so
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion, vitality 4: a companion who could exert and is no Elf
 				}},
 				VirtualTableScenario.TowersSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -120,8 +119,6 @@ public class Card_04_071_ErrataTests
 		var aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveCompanionsToTable(haldir, lorien, aragorn);
 		scn.MoveAlliesToTable(orophin);
-		// Aragorn is of the [elven] culture but no Elf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
 
 		scn.StartGame();
 		scn.SkipToSite(4);
@@ -146,6 +143,7 @@ public class Card_04_071_ErrataTests
 
 		scn.FreepsUseCardAction(haldir);
 		assertEquals(1, scn.GetWoundsOn(haldir));
+		// Another Elf, companion or ally; not Aragorn, who could exert and is no Elf, and not Haldir himself.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(lorien, orophin));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn, haldir));
 		assertEquals(1, scn.FreepsGetChoiceMin());
@@ -231,13 +229,12 @@ public class Card_04_071_ErrataTests
 		var lorien = scn.GetFreepsCard("lorien");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveCompanionsToTable(haldir, lorien, aragorn);
-		// Aragorn is of the [elven] culture but no Elf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
 
 		scn.StartGame();
 		scn.SkipToSite(4);
 		scn.ShadowTakeControlOfSite(scn.GetSite(1));
-		// Vitality 2 with 1 wound: Lorien Elf cannot exert. Haldir himself could exert twice, but he is not another Elf.
+		// Vitality 2 with 1 wound: Lorien Elf cannot exert. Haldir himself could exert twice, but he is not another Elf,
+		// and Aragorn could exert, but he is no Elf.
 		scn.AddWoundsToChar(lorien, 1);
 		scn.SkipToPhase(Phase.REGROUP);
 

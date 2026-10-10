@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -23,6 +22,7 @@ public class Card_03_014_ErrataTests
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion
 					put("orophin", "1_56");     // Orophin, Lorien Bowman: Elf ally, vitality 3
 					put("barliman", "1_70");    // Barliman Butterbur: [gandalf] Man ally, vitality 2
+					put("shoulder", "1_59");    // Shoulder to Shoulder: [elven] support-area condition, a card of the culture that is no Elf; a maneuver ability only
 
 					put("hate1", "1_250");      // Hate: [sauron] Maneuver event, exert a [sauron] Orc to wound a companion (except the Ring-bearer)
 					put("hate2", "1_250");
@@ -86,15 +86,15 @@ public class Card_03_014_ErrataTests
 		var arwen = scn.GetFreepsCard("arwen");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var barliman = scn.GetFreepsCard("barliman");
+		var shoulder = scn.GetFreepsCard("shoulder");
 		scn.MoveCompanionsToTable(aragorn);
 		scn.MoveAlliesToTable(barliman);
+		scn.MoveCardsToSupportArea(shoulder);
 		scn.MoveCardsToHand(arwen, erestor);
-		// Aragorn is of the [elven] culture but no Elf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
 
 		scn.StartGame();
 
-		// An [elven] Man companion and a Man ally, and no Elf.
+		// A Man companion, a Man ally and an [elven] condition in play, and no Elf.
 		assertFalse(scn.FreepsPlayAvailable(erestor));
 
 		scn.FreepsPlayCard(arwen);
@@ -136,8 +136,6 @@ public class Card_03_014_ErrataTests
 		var aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveCompanionsToTable(arwen, aragorn);
 		scn.MoveAlliesToTable(erestor);
-		// Aragorn is of the [elven] culture but no Elf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
 
 		var hate1 = scn.GetShadowCard("hate1");
 		var hate2 = scn.GetShadowCard("hate2");
@@ -153,7 +151,7 @@ public class Card_03_014_ErrataTests
 		scn.ShadowPlayCard(hate1);
 		scn.ShadowChooseCard(orc1);
 		scn.ShadowChooseCard(aragorn);
-		// Aragorn is a Man, [elven] or not: nothing is offered and he takes the wound.
+		// Aragorn is a Man: nothing is offered and he takes the wound.
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable(erestor));
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(erestor));
