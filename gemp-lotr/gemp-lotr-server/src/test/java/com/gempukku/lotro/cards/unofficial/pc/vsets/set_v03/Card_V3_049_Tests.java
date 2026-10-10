@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -25,7 +24,10 @@ public class Card_V3_049_Tests
 					put("scout", "4_252");        // Southron Scout: Southron, ambush (2), no other text
 					put("easterling", "7_141");   // Easterling Attacker: [raider] Man, Easterling and no Southron; a skirmish ability never used here
 					put("troop", "1_177");        // Goblin Patrol Troop: [moria] Orc, no text at all
-					put("southronOrc", "1_177");  // another Troop, made a Southron by the test
+					// Bladetusk Rearguard: [raider] artifact in the support area. Maneuver: remove (5) to make it a fierce
+					// mounted Southron minion until the end of the turn, strength 5, vitality 5, no race; ambush only for
+					// Southrons stacked on it, and none is
+					put("rearguard", "103_43");
 					put("trap", "103_56");        // Sandcraft Trap: Assignment event, cost 3, "Restore all trackers and minions with ambush."
 					put("aragorn", "1_89");       // Aragorn, Ranger of the North
 				}},
@@ -264,19 +266,26 @@ public class Card_V3_049_Tests
 		var soldier = scn.GetShadowCard("soldier");
 		var easterling = scn.GetShadowCard("easterling");
 		var troop = scn.GetShadowCard("troop");
-		var southronOrc = scn.GetShadowCard("southronOrc");
+		var rearguard = scn.GetShadowCard("rearguard");
+		scn.MoveCardsToSupportArea(rearguard);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(explorer, soldier, easterling, troop, southronOrc);
-		// A Southron that is neither [raider] nor a Man, to show that the text goes by the keyword.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, southronOrc, null, Keyword.SOUTHRON));
+		scn.MoveMinionsToTable(explorer, soldier, easterling, troop);
+		// Every card printed a Southron is a [raider] Man. The Southron who is no Man is a Bladetusk Rearguard that
+		// has made itself a Southron minion for the turn by its own Maneuver ability, with nothing stacked on it.
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.SetTwilight(5);
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(rearguard);
 
-		assertTrue(scn.HasKeyword(southronOrc, Keyword.SOUTHRON));
+		assertTrue(scn.IsType(rearguard, CardType.MINION));
+		assertTrue(scn.HasKeyword(rearguard, Keyword.SOUTHRON));
+		assertFalse(scn.IsRace(rearguard, Race.MAN));
 		assertFalse(scn.HasKeyword(troop, Keyword.SOUTHRON));
 		assertFalse(scn.HasKeyword(easterling, Keyword.SOUTHRON));
 		assertEquals(0, scn.GetKeywordCount(explorer, Keyword.AMBUSH));
 		assertEquals(2, scn.GetKeywordCount(soldier, Keyword.AMBUSH));
-		assertEquals(0, scn.GetKeywordCount(southronOrc, Keyword.AMBUSH));
+		assertEquals(0, scn.GetKeywordCount(rearguard, Keyword.AMBUSH));
 		assertEquals(0, scn.GetKeywordCount(easterling, Keyword.AMBUSH));
 		assertEquals(0, scn.GetKeywordCount(troop, Keyword.AMBUSH));
 
@@ -288,13 +297,13 @@ public class Card_V3_049_Tests
 		assertEquals(3, scn.GetKeywordCount(soldier, Keyword.AMBUSH));
 		// The Stalker is a Southron itself
 		assertEquals(1, scn.GetKeywordCount(stalker, Keyword.AMBUSH));
-		// A [moria] Orc that is a Southron
-		assertEquals(1, scn.GetKeywordCount(southronOrc, Keyword.AMBUSH));
+		// A Southron minion that is no Man
+		assertEquals(1, scn.GetKeywordCount(rearguard, Keyword.AMBUSH));
 		// A [raider] Man who is no Southron
 		assertEquals(0, scn.GetKeywordCount(easterling, Keyword.AMBUSH));
 		// A minion that is no Southron
 		assertEquals(0, scn.GetKeywordCount(troop, Keyword.AMBUSH));
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
 
 	@Test

@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,7 +31,8 @@ public class Card_V3_086_Tests
 
 					put("aragorn", "1_89");      // Aragorn, Ranger of the North: a [gondor] Man, ranger, strength 8, vitality 4; a maneuver ability never used here
 					put("heir", "4_109");        // Aragorn, Heir of Elendil: defender +1 and nothing else
-					put("eomer", "15_123");      // Eomer, Horsemaster: a [rohan] Man, valiant and hunter 2; a skirmish ability never used here
+					put("prowler", "15_61");     // Gondorian Prowler: a [gondor] Man, ranger and hunter 1, vitality 3; a skirmish ability never used here
+					put("armor", "18_39");       // Armor of the White City: [gondor] armor, strength +1. Bearer must be a [gondor] Man. Bearer is a knight
 					put("boromir", "1_97");      // Boromir, Son of Denethor: a [gondor] Man with no keyword, strength 7; skirmish: exert him to make a Hobbit stronger
 					// Rider of Rohan: a [rohan] Man with no keyword, cost 2, nothing to play him; his skirmish ability needs a mount
 					put("rider", "4_286");
@@ -301,45 +301,47 @@ public class Card_V3_086_Tests
 
 		var calenhad1 = scn.GetFreepsCard("calenhad1");
 		var calenhad2 = scn.GetFreepsCard("calenhad2");
-		var eomer = scn.GetFreepsCard("eomer");
+		var prowler = scn.GetFreepsCard("prowler");
+		var armor = scn.GetFreepsCard("armor");
 		var heir = scn.GetFreepsCard("heir");
 		var boromir = scn.GetFreepsCard("boromir");
 		var explorer = scn.GetShadowCard("explorer");
-		scn.MoveCompanionsToTable(eomer, heir, boromir);
+		scn.MoveCompanionsToTable(prowler, heir, boromir);
+		// The Prowler is a ranger and hunter 1 in print; the armor he bears makes him a knight as well.
+		scn.AttachCardsTo(prowler, armor);
 		scn.MoveCardsToSupportArea(calenhad1, calenhad2);
 
 		scn.StartGame();
-		// Eomer is valiant and hunter 2 in print; another effect makes him a knight as well.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, eomer, null, Keyword.KNIGHT));
 		scn.MoveMinionsToTable(explorer);
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		assertTrue(scn.HasKeyword(eomer, Keyword.VALIANT));
-		assertTrue(scn.HasKeyword(eomer, Keyword.KNIGHT));
-		assertTrue(scn.HasKeyword(eomer, Keyword.HUNTER));
-		assertFalse(scn.HasKeyword(boromir, Keyword.VALIANT));
+		assertTrue(scn.HasKeyword(prowler, Keyword.RANGER));
+		assertTrue(scn.HasKeyword(prowler, Keyword.KNIGHT));
+		assertTrue(scn.HasKeyword(prowler, Keyword.HUNTER));
+		assertFalse(scn.HasKeyword(boromir, Keyword.RANGER));
 		assertFalse(scn.HasKeyword(boromir, Keyword.KNIGHT));
 		assertFalse(scn.HasKeyword(boromir, Keyword.HUNTER));
-		assertFalse(scn.HasKeyword(heir, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(heir, Keyword.RANGER));
+		assertFalse(scn.HasKeyword(heir, Keyword.KNIGHT));
 
 		scn.FreepsUseCardAction(calenhad1);
-		scn.FreepsChooseCard(eomer);
+		scn.FreepsChooseCard(prowler);
 
-		assertEquals(1, scn.GetWoundsOn(eomer));
-		assertTrue(scn.HasKeyword(boromir, Keyword.VALIANT));
+		assertEquals(1, scn.GetWoundsOn(prowler));
+		assertTrue(scn.HasKeyword(boromir, Keyword.RANGER));
 		assertTrue(scn.HasKeyword(boromir, Keyword.KNIGHT));
 		assertFalse(scn.HasKeyword(boromir, Keyword.HUNTER));
-		assertTrue(scn.HasKeyword(heir, Keyword.VALIANT));
+		assertTrue(scn.HasKeyword(heir, Keyword.RANGER));
 		assertTrue(scn.HasKeyword(heir, Keyword.KNIGHT));
 		assertFalse(scn.HasKeyword(heir, Keyword.HUNTER));
-		assertFalse(scn.HasKeyword(explorer, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(explorer, Keyword.RANGER));
 		assertFalse(scn.HasKeyword(explorer, Keyword.KNIGHT));
 
 		scn.ShadowPass();
 
 		assertTrue(scn.HasKeyword(heir, Keyword.DEFENDER));
 		assertFalse(scn.HasKeyword(boromir, Keyword.DEFENDER));
-		assertFalse(scn.HasKeyword(eomer, Keyword.DEFENDER));
+		assertFalse(scn.HasKeyword(prowler, Keyword.DEFENDER));
 
 		// Defender +1 is all this Aragorn has: he may be exerted all the same, and nobody gains anything.
 		scn.FreepsUseCardAction(calenhad2);
@@ -348,7 +350,7 @@ public class Card_V3_086_Tests
 		assertTrue(scn.IsHindered(calenhad2));
 		assertEquals(1, scn.GetWoundsOn(heir));
 		assertFalse(scn.HasKeyword(boromir, Keyword.DEFENDER));
-		assertFalse(scn.HasKeyword(eomer, Keyword.DEFENDER));
+		assertFalse(scn.HasKeyword(prowler, Keyword.DEFENDER));
 		assertFalse(scn.HasKeyword(explorer, Keyword.DEFENDER));
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}

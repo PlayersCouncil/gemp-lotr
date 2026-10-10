@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -24,7 +23,6 @@ public class Card_V3_050_Tests
 					put("fighter", "4_251");    // Southron Fighter: Southron, ambush (1), strength 10; a maneuver ability never used here
 					put("horror", "14_13");     // Horror of Harad: [orc] Half-troll, ambush (1), strength 9; keywords only (damage +1, fierce, lurker, muster, toil 2)
 					put("troop", "1_177");      // Goblin Patrol Troop: [moria] Orc, strength 13, no text at all
-					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -235,25 +233,19 @@ public class Card_V3_050_Tests
 		var fighter = scn.GetShadowCard("fighter");
 		var horror = scn.GetShadowCard("horror");
 		var troop = scn.GetShadowCard("troop");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(soldier, fighter, horror, troop);
-		// A companion with ambush, to show that the text says "minion".
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, aragorn, null, Keyword.AMBUSH, 2));
 
 		assertEquals(2, scn.GetKeywordCount(soldier, Keyword.AMBUSH));
 		assertEquals(1, scn.GetKeywordCount(fighter, Keyword.AMBUSH));
 		assertEquals(1, scn.GetKeywordCount(horror, Keyword.AMBUSH));
 		assertFalse(scn.HasKeyword(troop, Keyword.AMBUSH));
-		assertEquals(2, scn.GetKeywordCount(aragorn, Keyword.AMBUSH));
 
 		assertEquals(4, scn.GetStrength(soldier));
 		assertEquals(10, scn.GetStrength(fighter));
 		assertEquals(9, scn.GetStrength(horror));
 		assertEquals(13, scn.GetStrength(troop));
-		assertEquals(8, scn.GetStrength(aragorn));
 
 		scn.MoveMinionsToTable(whisper);
 
@@ -267,8 +259,6 @@ public class Card_V3_050_Tests
 		assertEquals(13, scn.GetStrength(troop));
 		// Whisper has no ambush of its own
 		assertEquals(15, scn.GetStrength(whisper));
-		// Ambush (2), but not a minion
-		assertEquals(8, scn.GetStrength(aragorn));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

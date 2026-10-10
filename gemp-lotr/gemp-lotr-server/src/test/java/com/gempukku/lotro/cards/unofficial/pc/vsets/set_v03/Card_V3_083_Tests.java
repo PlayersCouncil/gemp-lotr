@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -33,7 +32,9 @@ public class Card_V3_083_Tests
 					put("aldor", "4_262");       // Aldor, Soldier of Edoras: [rohan] Man ally; an archery ability
 					put("ghan", "0_56");         // Ghân-buri-Ghân: a [gandalf] Man companion
 					put("pippin", "103_31");     // Pippin, Trollslayer: a [gondor] companion who is a Hobbit
-					put("sam", "1_311");         // Sam, Son of Hamfast: a Hobbit, made [rohan] for the test that needs a [rohan] companion who is no Man
+					// Merry, Master Holbytla: a [rohan] companion who is a Hobbit, and a Man as well only while 3 [rohan]
+					// companions (or Eowyn) can be spotted; his trigger answers a [rohan] Man exerting, and none does
+					put("merry", "103_85");
 					put("legolas", "1_50");      // Legolas, Greenleaf: an Elf, whom Brego could carry
 
 					put("athelas1", "1_94");     // Athelas: [gondor] possession, cost 1. Bearer must be a [gondor] Man. Fellowship: discard it to heal a companion
@@ -247,48 +248,52 @@ public class Card_V3_083_Tests
 		var scn = GetScenario();
 
 		var gcfa = scn.GetFreepsCard("gcfa");
-		var aragorn = scn.GetFreepsCard("aragorn");
 		var rider = scn.GetFreepsCard("rider");
-		var sam = scn.GetFreepsCard("sam");
+		var merry = scn.GetFreepsCard("merry");
 		var ghan = scn.GetFreepsCard("ghan");
 		var merchant = scn.GetFreepsCard("merchant");
 		var aldor = scn.GetFreepsCard("aldor");
 		var athelas1 = scn.GetFreepsCard("athelas1");
 		var athelas2 = scn.GetFreepsCard("athelas2");
 		var pipe = scn.GetFreepsCard("pipe");
-		scn.MoveCompanionsToTable(aragorn, rider, sam, ghan);
+		// The one [rohan] companion who is no Man is Merry, Master Holbytla, and he is a Man while there are three
+		// [rohan] companions. So the [gondor] Man here is an ally: with this card in play a [gondor] Man companion
+		// would be a [rohan] companion too, the third beside the Rider and Merry.
+		scn.MoveCompanionsToTable(rider, merry, ghan);
 		scn.MoveAlliesToTable(merchant, aldor);
-		// The one [rohan] companion who is no Man is Merry, Master Holbytla, and on this board he would be one:
-		// with Aragorn counted there are three [rohan] companions. So Sam is made [rohan].
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, sam, null, Culture.ROHAN));
 		scn.MoveCardsToSupportArea(scn.GetFreepsCard("war1"), scn.GetFreepsCard("war2"), scn.GetFreepsCard("war3"), scn.GetFreepsCard("calenhad"));
 		scn.MoveCardsToHand(gcfa, athelas1, athelas2, pipe);
 
 		scn.StartGame();
 
-		// Athelas: bearer must be a [gondor] Man.
+		assertFalse(scn.IsRace(merry, Race.MAN));
+		// Aragorn's Pipe: bearer must be a [gondor] companion, and there is none.
+		assertFalse(scn.FreepsPlayAvailable(pipe));
+
+		// Athelas: bearer must be a [gondor] Man. The Merchant is the only one, so nothing is asked: neither
+		// [rohan] Man may bear it yet.
 		scn.FreepsPlayCard(athelas1);
-		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, merchant));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(rider, aldor, ghan, sam));
-		scn.FreepsChooseCard(merchant);
+		assertAttachedTo(athelas1, merchant);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
 		// The four beacons are the only ones, so they are hindered without a choice.
 		scn.FreepsPlayCard(gcfa);
 		assertInZone(Zone.SUPPORT, gcfa);
+		// Still two [rohan] companions: the Merchant, a [rohan] Man now, is an ally.
+		assertFalse(scn.IsRace(merry, Race.MAN));
 
-		// The [rohan] Men, companion and ally, may now bear it; a Man of another culture may not. Aragorn is
-		// still a [gondor] Man.
+		// The [rohan] Men, companion and ally, may now bear it; a Man of another culture and a [rohan] companion
+		// who is no Man may not. The Merchant is still a [gondor] Man.
 		scn.FreepsPlayCard(athelas2);
-		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, rider, aldor));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(ghan, sam));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(merchant, rider, aldor));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(ghan, merry));
 		scn.FreepsChooseCard(aldor);
 		assertAttachedTo(athelas2, aldor);
 
-		// Aragorn's Pipe: bearer must be a [gondor] companion. Sam is a [rohan] companion here, but a Hobbit.
+		// The Pipe can be played now. The Rider is the only [gondor] companion, so nothing is asked: Merry is a
+		// [rohan] companion and no Man, and has not become a [gondor] companion.
+		assertTrue(scn.FreepsPlayAvailable(pipe));
 		scn.FreepsPlayCard(pipe);
-		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, rider));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(sam, ghan));
-		scn.FreepsChooseCard(rider);
 		assertAttachedTo(pipe, rider);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

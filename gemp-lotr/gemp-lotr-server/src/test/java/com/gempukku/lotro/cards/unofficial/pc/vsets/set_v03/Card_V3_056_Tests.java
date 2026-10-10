@@ -30,6 +30,10 @@ public class Card_V3_056_Tests
 					put("stalker", "103_49");     // Desert Wind Stalker: Southron, tracker, strength 12; "Southrons gain ambush (1)"
 					put("galley", "8_59");        // Corsair War Galley: a [raider] possession; its text is not used here
 					put("troop", "1_177");        // Goblin Patrol Troop: [moria] Orc, strength 13, no text at all
+					// Bladetusk Rearguard: [raider] artifact in the support area. Maneuver: remove (5) to make it a fierce
+					// mounted Southron minion until the end of the turn, strength 5, vitality 5, no race; stronger and
+					// ambush only for Southrons stacked on it, and none is
+					put("rearguard", "103_43");
 
 					put("aragorn", "1_89");       // Aragorn, Ranger of the North: strength 8, vitality 4
 					put("guard", "1_7");          // Dwarf Guard: strength 4, vitality 2, no text in play
@@ -83,21 +87,31 @@ public class Card_V3_056_Tests
 		var infantry = scn.GetShadowCard("infantry");
 		var troop = scn.GetShadowCard("troop");
 		var galley = scn.GetShadowCard("galley");
+		var rearguard = scn.GetShadowCard("rearguard");
 		scn.MoveCardsToHand(trap);
-		scn.MoveCardsToSupportArea(galley);
+		scn.MoveCardsToSupportArea(galley, rearguard);
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(band, scout, dunlending, explorer, explorer2, infantry, troop);
-		// Every Southron there is is a [raider] Man: an Orc is made one, to show that the text goes by the keyword.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, troop, null, Keyword.SOUTHRON));
 		// Hindered: a tracker with no ambush, a Southron with ambush who is no tracker, a minion with ambush
 		// who is no Southron, and two cards that are neither: a Southron minion and a [raider] possession.
 		scn.HinderCard(band, scout, dunlending, explorer2, galley);
+		// Every card printed a Southron is a [raider] Man. The Southron who is no Man is a Bladetusk Rearguard that
+		// has made itself a Southron minion for the turn by its own Maneuver ability, with nothing stacked on it.
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.SetTwilight(5);
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(rearguard);
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		scn.SetTwilight(5);
 		scn.FreepsPass();
 
 		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+		assertTrue(scn.IsType(rearguard, CardType.MINION));
+		assertTrue(scn.HasKeyword(rearguard, Keyword.SOUTHRON));
+		assertFalse(scn.IsRace(rearguard, Race.MAN));
+		assertEquals(5, scn.GetStrength(rearguard));
+		assertEquals(0, scn.GetKeywordCount(rearguard, Keyword.AMBUSH));
 		assertTrue(scn.IsHindered(band));
 		assertTrue(scn.IsHindered(scout));
 		assertTrue(scn.IsHindered(dunlending));
@@ -129,12 +143,14 @@ public class Card_V3_056_Tests
 		// A Southron this event restored: strength 3 + 1, and ambush (1) beside the ambush (2) printed on him
 		assertEquals(4, scn.GetStrength(scout));
 		assertEquals(3, scn.GetKeywordCount(scout, Keyword.AMBUSH));
-		// A Southron who is neither [raider] nor a Man: strength 13 + 1
-		assertEquals(14, scn.GetStrength(troop));
-		assertEquals(1, scn.GetKeywordCount(troop, Keyword.AMBUSH));
-		// A [raider] Man who is no Southron
+		// A Southron minion that is no Man: strength 5 + 1, and ambush (1)
+		assertEquals(6, scn.GetStrength(rearguard));
+		assertEquals(1, scn.GetKeywordCount(rearguard, Keyword.AMBUSH));
+		// A [raider] Man who is no Southron, and an Orc
 		assertEquals(8, scn.GetStrength(infantry));
 		assertFalse(scn.HasKeyword(infantry, Keyword.AMBUSH));
+		assertEquals(13, scn.GetStrength(troop));
+		assertFalse(scn.HasKeyword(troop, Keyword.AMBUSH));
 		// Restored, and no Southron
 		assertEquals(8, scn.GetStrength(band));
 		assertFalse(scn.HasKeyword(band, Keyword.AMBUSH));

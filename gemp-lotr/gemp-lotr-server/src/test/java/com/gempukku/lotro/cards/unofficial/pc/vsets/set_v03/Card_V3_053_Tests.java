@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -23,7 +22,9 @@ public class Card_V3_053_Tests
 					put("nomad", "7_132");        // Desert Nomad: Southron, strength 9, vitality 2; damage +1 only while there are 2 threats
 					put("easterling", "7_141");   // Easterling Attacker: [raider] Man, Easterling and no Southron, vitality 2; a skirmish ability never used here
 					put("troop", "1_177");        // Goblin Patrol Troop: [moria] Orc, no text at all
-					put("southronOrc", "1_177");  // another Troop, made a Southron by the test
+					// Bladetusk Rearguard: [raider] artifact in the support area. Maneuver: remove (5) to make it a fierce
+					// mounted Southron minion until the end of the turn, strength 5, vitality 5, no race
+					put("rearguard", "103_43");
 
 					put("aragorn", "1_89");       // Aragorn, Ranger of the North: unbound [gondor] Man, strength 8, vitality 4
 					put("gimli", "1_13");         // Gimli, Son of Gloin: unbound [dwarven] Dwarf
@@ -76,7 +77,7 @@ public class Card_V3_053_Tests
 		var nomad = scn.GetShadowCard("nomad");
 		var easterling = scn.GetShadowCard("easterling");
 		var troop = scn.GetShadowCard("troop");
-		var southronOrc = scn.GetShadowCard("southronOrc");
+		var rearguard = scn.GetShadowCard("rearguard");
 		var frodo = scn.GetRingBearer();
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var gimli = scn.GetFreepsCard("gimli");
@@ -85,12 +86,19 @@ public class Card_V3_053_Tests
 		scn.MoveCompanionsToTable(aragorn, gimli, sam);
 		scn.MoveAlliesToTable(bounder);
 		scn.MoveCardsToHand(honor);
+		scn.MoveCardsToSupportArea(rearguard);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(explorer, nomad, easterling, troop, southronOrc);
-		// A Southron that is neither [raider] nor a Man, to show that the text goes by the keyword.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, southronOrc, null, Keyword.SOUTHRON));
-		scn.SetTwilight(3);
+		scn.MoveMinionsToTable(explorer, nomad, easterling, troop);
+		// Every card printed a Southron is a [raider] Man. The Southron who is no Man is a Bladetusk Rearguard that
+		// has made itself a Southron minion for the turn by its own Maneuver ability.
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.SetTwilight(14);
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(rearguard);
+		assertTrue(scn.IsType(rearguard, CardType.MINION));
+		assertTrue(scn.HasKeyword(rearguard, Keyword.SOUTHRON));
+		assertFalse(scn.IsRace(rearguard, Race.MAN));
 
 		// An Assignment event: the Shadow player cannot play it in the archery phase before.
 		scn.SkipToPhase(Phase.ARCHERY);
@@ -103,14 +111,14 @@ public class Card_V3_053_Tests
 		scn.FreepsPass();
 
 		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
-		// 3 set + 4 for Frodo, Aragorn, Gimli and Sam + 2 for the shadow number of site 2
+		// 14 set in the maneuver phase - 5 for the Rearguard's ability
 		assertEquals(9, scn.GetTwilight());
 		assertEquals(1, scn.GetShadowHandCount());
 		assertEquals(0, scn.GetWoundsOn(explorer));
 		assertFalse(scn.IsHindered(nomad));
 		assertFalse(scn.IsHindered(easterling));
 		assertFalse(scn.IsHindered(troop));
-		assertFalse(scn.IsHindered(southronOrc));
+		assertFalse(scn.IsHindered(rearguard));
 		assertTrue(scn.ShadowPlayAvailable(honor));
 
 		scn.ShadowPlayCard(honor);
@@ -118,8 +126,8 @@ public class Card_V3_053_Tests
 		// 9 - 2 to play
 		assertEquals(7, scn.GetTwilight());
 		assertEquals(0, scn.GetShadowHandCount());
-		// A Southron: two [raider] Southrons and the Orc made one; not the Easterling, not the plain Orc.
-		assertTrue(scn.ShadowHasCardChoiceAvailable(explorer, nomad, southronOrc));
+		// A Southron: two Southron Men and the Southron minion that is no Man; not the Easterling, not the Orc.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(explorer, nomad, rearguard));
 		assertTrue(scn.ShadowHasCardChoiceNotAvailable(easterling, troop));
 		assertEquals(1, scn.ShadowGetChoiceMin());
 
@@ -127,11 +135,11 @@ public class Card_V3_053_Tests
 
 		assertEquals(1, scn.GetWoundsOn(explorer));
 		assertFalse(scn.IsHindered(explorer));
-		// All other minions, Southron or not, [raider] or not.
+		// All other minions, Southron or not, [raider] or not, Man or not.
 		assertTrue(scn.IsHindered(nomad));
 		assertTrue(scn.IsHindered(easterling));
 		assertTrue(scn.IsHindered(troop));
-		assertTrue(scn.IsHindered(southronOrc));
+		assertTrue(scn.IsHindered(rearguard));
 		assertEquals(0, scn.GetWoundsOn(nomad));
 
 		// An unbound companion: not the Ring-bearer, not Ring-bound Sam, and not an ally,

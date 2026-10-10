@@ -27,7 +27,10 @@ public class Card_V3_084_Tests
 					put("maiden", "7_229");      // Éowyn, Restless Maiden: an Éowyn who is not valiant; her ability needs a possession
 					put("aragorn", "1_89");      // Aragorn, Ranger of the North: not valiant, strength 8
 					put("rider", "4_286");       // Rider of Rohan: a bystander; his ability needs a mount
-					put("elrond", "1_40");       // Elrond, Lord of Rivendell: ally, strength 8, vitality 4, at home at site 3
+					put("ottar", "51_80");       // Ottar, Man of Laketown: [gandalf] Man ally, strength 2, vitality 4, at home at site 3; a fellowship ability never used here
+					// Northern Signal-fire, Flame of Calenhad. Maneuver: hinder it and exert an unbound Man; until the
+					// regroup phase your other Men gain his unloaded keywords
+					put("calenhad", "103_86");
 					put("beacon", "103_35");     // War-beacon: a Free Peoples possession in the support area, there to be hindered
 
 					put("troop", "1_177");       // Goblin Patrol Troop: [moria], strength 13, vitality 3, no text
@@ -283,11 +286,12 @@ public class Card_V3_084_Tests
 		var scn = GetScenario();
 
 		var iamnoman = scn.GetFreepsCard("iamnoman");
-		var elrond = scn.GetFreepsCard("elrond");
-		scn.MoveAlliesToTable(elrond);
-		// No ally is valiant in print, though one may be made so (Flame of Calenhad gives a Man's keywords to
-		// the player's other Men).
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, elrond, null, Keyword.VALIANT));
+		var ottar = scn.GetFreepsCard("ottar");
+		var scout = scn.GetFreepsCard("scout");
+		var calenhad = scn.GetFreepsCard("calenhad");
+		scn.MoveCompanionsToTable(scout);
+		scn.MoveAlliesToTable(ottar);
+		scn.MoveCardsToSupportArea(calenhad);
 
 		var savage = scn.GetShadowCard("savage");
 
@@ -295,15 +299,24 @@ public class Card_V3_084_Tests
 		scn.SkipToSite(2);
 		scn.MoveCardsToHand(iamnoman);
 		scn.MoveMinionsToTable(savage);
-		// The fellowship moves to site 3, Elrond's home, where he may skirmish.
-		scn.SkipToAssignments();
+		// The fellowship moves to site 3, Ottar's home, where he may skirmish.
+		scn.SkipToPhase(Phase.MANEUVER);
 		assertEquals(3, scn.GetCurrentSiteNumber());
-		scn.FreepsAssignAndResolve(elrond, savage);
+		assertFalse(scn.HasKeyword(ottar, Keyword.VALIANT));
 
-		assertTrue(scn.IsCharSkirmishing(elrond));
-		assertTrue(scn.HasKeyword(elrond, Keyword.VALIANT));
+		// No ally is valiant in print. The Flame of Calenhad exerts the Scout, the only unbound Man, and until the
+		// regroup phase the player's other Men are valiant as he is: Ottar, an ally, is one of them.
+		scn.FreepsUseCardAction(calenhad);
+		assertEquals(1, scn.GetWoundsOn(scout));
+		assertTrue(scn.HasKeyword(ottar, Keyword.VALIANT));
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(ottar, savage);
+
+		assertTrue(scn.IsCharSkirmishing(ottar));
+		assertTrue(scn.HasKeyword(ottar, Keyword.VALIANT));
 		// Vitality 4 and unwounded: he could exert twice.
-		assertEquals(0, scn.GetWoundsOn(elrond));
+		assertEquals(0, scn.GetWoundsOn(ottar));
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 		assertFalse(scn.FreepsPlayAvailable(iamnoman));
 	}

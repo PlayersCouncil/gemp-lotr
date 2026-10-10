@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -116,8 +115,6 @@ public class Card_V3_061_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(attea, attacker, guard, troop, soldier, lemenya);
-		// An Easterling who is neither a [raider] card nor a Man.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, troop, null, Keyword.EASTERLING));
 		scn.AddBurdens(2);
 		scn.SkipToAssignments();
 
@@ -136,17 +133,16 @@ public class Card_V3_061_Tests
 		scn.ShadowChooseOptionalTrigger(guard);
 
 		assertEquals(3, scn.GetBurdens());
-		// Attea himself is an Easterling: 12 + 3
+		// Attea himself is an Easterling, and the one who is no Man: 12 + 3
 		assertEquals(15, scn.GetStrength(attea));
 		// 6 + 3
 		assertEquals(9, scn.GetStrength(attacker));
 		// 9 + 3
 		assertEquals(12, scn.GetStrength(guard));
-		// 13 + 3
-		assertEquals(16, scn.GetStrength(troop));
-		// A [raider] Man who is a Southron and a Nazgul who is no Easterling gain nothing.
+		// A [raider] Man who is a Southron, a Nazgul who is no Easterling and an Orc gain nothing.
 		assertEquals(4, scn.GetStrength(soldier));
 		assertEquals(9, scn.GetStrength(lemenya));
+		assertEquals(13, scn.GetStrength(troop));
 		// 3 burdens are not 5: nobody is damage +1.
 		assertEquals(0, scn.GetKeywordCount(attea, Keyword.DAMAGE));
 		assertEquals(0, scn.GetKeywordCount(attacker, Keyword.DAMAGE));
@@ -170,8 +166,6 @@ public class Card_V3_061_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(attea, attacker, guard, troop, soldier, lemenya);
-		// An Easterling who is neither a [raider] card nor a Man.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, troop, null, Keyword.EASTERLING));
 		scn.AddBurdens(4);
 		scn.SkipToAssignments();
 
@@ -196,17 +190,17 @@ public class Card_V3_061_Tests
 		assertEquals(1, scn.GetKeywordCount(attea, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(attacker, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(guard, Keyword.DAMAGE));
-		assertEquals(1, scn.GetKeywordCount(troop, Keyword.DAMAGE));
-		// A [raider] Man who is a Southron and a Nazgul who is no Easterling gain nothing.
+		// A [raider] Man who is a Southron, a Nazgul who is no Easterling and an Orc gain nothing.
 		assertEquals(0, scn.GetKeywordCount(soldier, Keyword.DAMAGE));
 		assertEquals(0, scn.GetKeywordCount(lemenya, Keyword.DAMAGE));
-		// The strength bonus is 3 whatever the number of burdens: 12 + 3, 6 + 3, 9 + 3, 13 + 3
+		assertEquals(0, scn.GetKeywordCount(troop, Keyword.DAMAGE));
+		// The strength bonus is 3 whatever the number of burdens: 12 + 3, 6 + 3, 9 + 3
 		assertEquals(15, scn.GetStrength(attea));
 		assertEquals(9, scn.GetStrength(attacker));
 		assertEquals(12, scn.GetStrength(guard));
-		assertEquals(16, scn.GetStrength(troop));
 		assertEquals(4, scn.GetStrength(soldier));
 		assertEquals(9, scn.GetStrength(lemenya));
+		assertEquals(13, scn.GetStrength(troop));
 		assertTrue(scn.ShadowDecisionAvailable("assign"));
 	}
 }

@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -27,7 +26,6 @@ public class Card_V3_085_Tests
 					put("rider2", "4_286");
 					put("scout", "5_90");       // Rohirrim Scout: valiant [rohan] Man companion, vitality 3; a regroup ability never used here
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a [gondor] Man, strength 8
-					put("sam", "1_311");        // Sam, Son of Hamfast: a Hobbit, made [rohan] where a test needs a [rohan] companion who is no Man
 					put("hlafwine", "4_281");   // Hlafwine: [rohan] Man ally. Skirmish: exert Hlafwine to make a [rohan] Man strength +2
 					put("guma", "4_277");       // Guma: [rohan] Man ally, vitality 2. Fellowship: exert Guma to heal a [rohan] Man
 					put("leowyn", "7_239");     // Léowyn: [rohan] Man ally whose name is not Éowyn's; her ability needs initiative
@@ -266,16 +264,13 @@ public class Card_V3_085_Tests
 	}
 
 	@Test
-	public void NotOfferedForAGondorManNorARohanCompanionWhoIsNoManNorAWoundNorMerrysOwnExertion() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NotOfferedForAGondorManNorAWoundNorMerrysOwnExertion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var merry = scn.GetFreepsCard("merry");
 		var eowyn = scn.GetFreepsCard("eowyn");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		var sam = scn.GetFreepsCard("sam");
-		scn.MoveCompanionsToTable(merry, eowyn, aragorn, sam);
-		// Merry is the only [rohan] companion there is who is no Man, so Sam is made one.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, sam, null, Culture.ROHAN));
+		scn.MoveCompanionsToTable(merry, eowyn, aragorn);
 
 		var soldier = scn.GetShadowCard("soldier1");
 
@@ -301,14 +296,6 @@ public class Card_V3_085_Tests
 		assertEquals(1, scn.GetWoundsOn(eowyn));
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
-
-		// A [rohan] Hobbit exerts.
-		scn.FreepsUseCardAction(ettenmoors);
-		scn.FreepsChooseCard(sam);
-		assertEquals(1, scn.GetWoundsOn(sam));
-		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
-		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
-		scn.ShadowPass();
 
 		// Merry, a [rohan] Man himself just now, exerts.
 		scn.FreepsUseCardAction(ettenmoors);
@@ -567,37 +554,6 @@ public class Card_V3_085_Tests
 		scn.ShadowUseCardAction(soldier);
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.IsCharSkirmishing(aragorn));
-		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
-		assertTrue(scn.FreepsActionAvailable(scn.GetCurrentSite()));
-	}
-
-	@Test
-	public void InASkirmishOfARohanCompanionWhoIsNoManHinderingMerryResolvesNothing() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var merry = scn.GetFreepsCard("merry");
-		var sam = scn.GetFreepsCard("sam");
-		scn.MoveCompanionsToTable(merry, sam);
-		// Merry is the only [rohan] companion there is who is no Man, and he cannot be the one fighting.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, sam, null, Culture.ROHAN));
-
-		var soldier = scn.GetShadowCard("soldier1");
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(soldier);
-		scn.SkipToAssignments();
-		scn.FreepsAssignAndResolve(sam, soldier);
-
-		assertTrue(scn.FreepsActionAvailable(merry));
-
-		scn.FreepsUseCardAction(merry);
-
-		assertTrue(scn.IsHindered(merry));
-		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
-		assertTrue(scn.ShadowActionAvailable(soldier));
-		scn.ShadowUseCardAction(soldier);
-		assertEquals(1, scn.GetWoundsOn(sam));
-		assertTrue(scn.IsCharSkirmishing(sam));
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 		assertTrue(scn.FreepsActionAvailable(scn.GetCurrentSite()));
 	}

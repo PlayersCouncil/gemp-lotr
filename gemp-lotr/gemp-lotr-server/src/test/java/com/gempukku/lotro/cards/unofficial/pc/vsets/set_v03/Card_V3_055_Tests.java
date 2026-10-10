@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -124,7 +123,7 @@ public class Card_V3_055_Tests
 	}
 
 	@Test
-	public void GetsNoTokenWithNoCorsairToSpotAndOneOnceACorsairOfAnyCultureIsInPlay() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GetsNoTokenWithNoCorsairToSpotAndOneOnceTheHinderedCorsairIsRestored() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var schooner1 = scn.GetShadowCard("schooner1");
@@ -156,8 +155,8 @@ public class Card_V3_055_Tests
 		assertEquals(0, scn.GetCultureTokensOn(galley));
 		assertTrue(scn.AwaitingShadowPhaseActions());
 
-		// Every Corsair there is is a [raider] Man: the Orc is made one, to show that the text goes by the keyword.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, troop, null, Keyword.CORSAIR));
+		// Restored, the Corsair can be spotted.
+		scn.RestoreCard(gunners);
 
 		scn.ShadowPlayCard(schooner2);
 
@@ -491,7 +490,7 @@ public class Card_V3_055_Tests
 		var schooner2 = scn.GetShadowCard("schooner2");
 		var schooner3 = scn.GetShadowCard("schooner3");
 		var galley = scn.GetShadowCard("galley");
-		var troop = scn.GetShadowCard("troop");
+		var gunners = scn.GetShadowCard("gunners");
 		var shards = scn.GetFreepsCard("shards");
 		scn.MoveCardsToSupportArea(shards);
 		// Two dots allow two copies in play, so legal play never gives a choice here. A third copy is cheated
@@ -500,9 +499,7 @@ public class Card_V3_055_Tests
 		scn.AddTokensToCard(schooner1, 3);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(troop);
-		// The Corsair spotted here is an Orc made one: every Corsair there is is a [raider] Man.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, troop, null, Keyword.CORSAIR));
+		scn.MoveMinionsToTable(gunners);
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPass();
 

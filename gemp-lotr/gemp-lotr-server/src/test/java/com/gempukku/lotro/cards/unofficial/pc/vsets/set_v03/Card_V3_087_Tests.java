@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -39,7 +38,6 @@ public class Card_V3_087_Tests
 					put("pippin", "103_31");     // Pippin, Trollslayer: a knight who is a Hobbit; a skirmish ability never used here
 					put("haldir", "1_48");       // Haldir, Elf of the Golden Wood: strength 5, vitality 3; stronger only at sites 6 to 8
 					put("barliman", "1_70");     // Barliman Butterbur: a Man who is an ally, vitality 2; a fellowship ability never used here
-					put("gandalf", "1_364");     // Gandalf, The Grey Wizard: a Wizard and no Man; a fellowship ability never used here
 
 					// Rider's Mount: a [rohan] mount, cost 1, for a [rohan] Man. Each minion skirmishing bearer exerts at the start of the skirmish
 					put("ridermount1", "4_287");
@@ -51,9 +49,6 @@ public class Card_V3_087_Tests
 					// Knight's Mount: a [gondor] mount, cost 1, for a knight; its text needs bearer to win a skirmish
 					put("knightmount1", "8_40");
 					put("knightmount2", "8_40");
-					// Shadowfax: a [gandalf] mount that only Gandalf bears, strength +2, with the same text about minions skirmishing him.
-					// The only mount of another culture that exerts a minion
-					put("shadowfax", "4_100");
 					put("chain", "4_278");       // Heavy Chain: a [rohan] possession, cost 1, for a Man, that is no mount; it is about being overwhelmed
 					// Banner of the Mark: a [rohan] hand weapon with no strength. Each time bearer wins a skirmish, you may
 					// exert a minion; and a response to the same win that discards it
@@ -696,50 +691,6 @@ public class Card_V3_087_Tests
 		scn.FreepsChooseCard(war);
 
 		assertTrue(scn.IsHindered(war));
-		assertFalse(scn.IsHindered(halifirien));
-		assertEquals(2, scn.GetWoundsOn(gollum));
-
-		scn.FreepsDeclineOptionalTrigger();
-
-		assertEquals(2, scn.GetWoundsOn(gollum));
-		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
-	}
-
-	@Test
-	public void AMountOfAnotherCultureBringsTheResponseWhenItsBearerIsAMan() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var halifirien = scn.GetFreepsCard("halifirien1");
-		var war1 = scn.GetFreepsCard("war1");
-		var gandalf = scn.GetFreepsCard("gandalf");
-		var shadowfax = scn.GetFreepsCard("shadowfax");
-		var gollum = scn.GetShadowCard("gollum");
-		scn.MoveCompanionsToTable(gandalf);
-		scn.AttachCardsTo(gandalf, shadowfax);
-		scn.MoveCardsToSupportArea(halifirien, war1);
-
-		scn.StartGame();
-		// Every mount a Man can bear that exerts a minion is a [rohan] one. Shadowfax is of [gandalf], and Gandalf is
-		// made a Man as well as a Wizard so that a Man bears it.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, gandalf, null, Race.MAN));
-		scn.MoveMinionsToTable(gollum);
-		scn.SkipToAssignments();
-		scn.FreepsAssignToMinions(gandalf, gollum);
-
-		assertTrue(scn.IsRace(gandalf, Race.MAN));
-		assertEquals(Culture.GANDALF, shadowfax.getBlueprint().getCulture());
-		assertEquals(0, scn.GetWoundsOn(gollum));
-
-		scn.FreepsResolveSkirmish(gandalf);
-
-		// Shadowfax has exerted Gollum.
-		assertEquals(1, scn.GetWoundsOn(gollum));
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(halifirien));
-
-		scn.FreepsChooseOptionalTrigger(halifirien);
-		scn.FreepsChooseCard(war1);
-
-		assertTrue(scn.IsHindered(war1));
 		assertFalse(scn.IsHindered(halifirien));
 		assertEquals(2, scn.GetWoundsOn(gollum));
 

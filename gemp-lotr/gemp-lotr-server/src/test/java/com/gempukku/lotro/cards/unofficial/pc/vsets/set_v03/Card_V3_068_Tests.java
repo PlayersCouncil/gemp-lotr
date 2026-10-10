@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -511,10 +510,6 @@ public class Card_V3_068_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(lemenya, hound, mongrel, whelp, soldier);
-		// No [sauron] possession can be borne by a [wraith] Orc as printed, so two of the [wraith] Orcs
-		// are made [sauron] as well: the Orc Scimitar can then go on them, as it can on the Orc Soldier.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, hound, null, Culture.SAURON));
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, whelp, null, Culture.SAURON));
 		scn.SetTwilight(10);
 		scn.FreepsPass();
 
@@ -523,11 +518,12 @@ public class Card_V3_068_Tests
 		assertTrue(scn.ShadowActionAvailable(legions));
 		scn.ShadowUseCardAction(legions);
 
-		// Offered: two [wraith] possessions and a [sauron] one. Not offered: a possession only a Nazgul
-		// bears, a condition a [wraith] minion bears, and possessions in hand, in the draw deck and in
-		// the other player's discard pile.
-		assertTrue(scn.ShadowHasCardChoiceAvailable(axe, scimitar, orcscimitar));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(nazgulsword, intwilight, gorbagsword, pike, othersVileblade));
+		// Offered: the two [wraith] possessions a [wraith] Orc may bear. Not offered: a [sauron] possession
+		// that only a [sauron] Orc bears, though the Orc Soldier is one; a possession only a Nazgul bears; a
+		// condition a [wraith] minion bears; and possessions in hand, in the draw deck and in the other
+		// player's discard pile.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(axe, scimitar));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(orcscimitar, nazgulsword, intwilight, gorbagsword, pike, othersVileblade));
 		assertEquals(0, scn.ShadowGetChoiceMin());
 		assertInZone(Zone.SUPPORT, legions);
 
@@ -540,26 +536,21 @@ public class Card_V3_068_Tests
 		assertEquals(12, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, legions);
 
-		// The Orc Scimitar's own text would let the [sauron] Orc Soldier bear it. The Mongrel has its hand weapon.
-		assertTrue(scn.ShadowHasCardChoiceAvailable(axe, orcscimitar));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(scimitar, nazgulsword, intwilight));
-		scn.ShadowChooseCard(orcscimitar);
+		// The Morgul Axe is the one possession left that could be played. The Mongrel has its hand weapon.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(axe));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(scimitar, orcscimitar, nazgulsword, intwilight));
+		assertEquals(0, scn.ShadowGetChoiceMin());
+		scn.ShadowChooseCard(axe);
 		assertTrue(scn.ShadowHasCardChoiceAvailable(hound, whelp));
 		assertTrue(scn.ShadowHasCardChoiceNotAvailable(soldier, mongrel, lemenya));
 		scn.ShadowChooseCard(hound);
-		assertAttachedTo(orcscimitar, hound);
+		assertAttachedTo(axe, hound);
 		assertEquals(11, scn.GetTwilight());
 
-		// The Whelp is the one [wraith] Orc left without a hand weapon.
-		assertTrue(scn.ShadowHasCardChoiceAvailable(axe));
-		assertEquals(0, scn.ShadowGetChoiceMin());
-		scn.ShadowChooseCard(axe);
-		assertAttachedTo(axe, whelp);
-		assertEquals(10, scn.GetTwilight());
-
-		// Nothing is left that could be played, and the condition is discarded.
+		// Nothing is left that could be played, though the Whelp bears nothing and the Orc Scimitar lies in the
+		// discard pile: the condition is discarded.
 		assertInDiscard(legions);
-		assertInDiscard(nazgulsword, intwilight);
+		assertInDiscard(orcscimitar, nazgulsword, intwilight);
 		assertInHand(gorbagsword);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
