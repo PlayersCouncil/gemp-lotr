@@ -21,8 +21,14 @@ held more than a stat check before the campaign (509 tests between them, most fi
   Where the two differ, the difference is the erratum's and not a finding on your card.
   An erratum's board is settled only for the zones the ERRATUM's text reads: where the original's text reads
   another zone (a draw deck, a discard pile), lay that zone yourself; the erratum's scenario may leave it empty.
-- Hindering and beacons will seldom concern you, as on the errata: no hindered card unless the text speaks of one
-  or says "you can spot".
+- Hindering: NO hindered candidate is owed on a Decipher card, whether its text says "spot", "you can spot" or
+  counts. No Decipher text speaks of hinder; that a hindered card cannot be spotted is shown once, in
+  `mechanics/HinderedCardCannotBeSpottedTests`, and laying it again on every card that spots is the kind of
+  test Ketura ruled out under Q-0213 ("a waste of time to continue searching for *theoretical* malformed targets
+  in places and arrangements where they have been historically sparse"). The Notes of the ledger say so in a
+  line. (Put to her as Q-0236; this is how it stands unless she strikes it.)
+- A site's BLOCK is the same: a text that says "a site" or "each site" with no block named owes no second
+  scenario on another block's path (also Q-0236).
 
 WHAT IS ALREADY IN A DECIPHER CARD'S FILE
 - The conversion of the old `at` tests put LONE TESTS into many Decipher cards' files (a test of an interaction,

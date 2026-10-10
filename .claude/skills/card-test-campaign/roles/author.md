@@ -79,10 +79,6 @@ standard), or duplicates another, or covers something your ledger missed (then y
 asserts something your plan contradicts. That last kind is a question, not a mistake to overwrite: existing tests
 for PC cards were written with Ketura and often encode a ruling. Then write the test file, add to the ledger
 file the line for each test under each clause it claims checks of, and run
-A parked test is run only by `mutate.py <id> --with-parked` (no mutant is needed to see it fail against the
-card as it is); `cardtest.py run` leaves parked tests out. A line in ANOTHER card's definition (one already corrected that
-your card's file owes a test for, or one a finding proposes to change) is tried against your tests with
-`mutate.py <that card's id> --replace <old> <new> --test <your card's test file>`.
 
     python3 .claude/skills/card-test-campaign/scripts/lint.py <id>
     python3 .claude/skills/card-test-campaign/scripts/cardtest.py run <id> --out <your folder name>
@@ -98,6 +94,11 @@ against the card as it is and passes against the correction, with one run of
 And, once a card at most, where only a changed definition can tell whether an invalid candidate is one at all (is
 a Shadow possession in its owner's support area seen by a bare `possession`? A probe cannot change a definition),
 one `--replace` run tries that one mistake, and the ledger's Notes say what was tried (92_26).
+
+A parked test is run only by `mutate.py <id> --with-parked` (no mutant is needed to see it fail against the
+card as it is); `cardtest.py run` leaves parked tests out. A line in ANOTHER card's definition (one already corrected that
+your card's file owes a test for, or one a finding proposes to change) is tried against your tests with
+`mutate.py <that card's id> --replace <old> <new> --test <your card's test file>`.
 
 Every step you take re-reads everything you have read so far, so steps are what cost. Read several files in one
 step where you can (the packets of all your cards, the helper cards you mean to use), and do not look at the same
