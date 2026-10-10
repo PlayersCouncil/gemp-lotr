@@ -777,13 +777,14 @@ public class DefaultLotroFormat implements LotroFormat {
             for (String site : sites) {
                 try {
                     LotroCardBlueprint bp = _library.getLotroCardBlueprint(site);
-                    if (bp.getCardType() != CardType.SITE) {
-                        result += "Card assigned as Site is not really a site.\n";
-                        continue;
-                    }
-                    String invalid = validateCard(site, false);
+                    // The one reading of a single site under the override: the deck builder's card list
+                    // asks it too, so the list offers the sites that validate here
+                    String invalid = validateSite(site, context);
                     if (invalid != null && !invalid.isEmpty()) {
                         result += invalid + "\n";
+                    }
+                    if (bp.getCardType() != CardType.SITE) {
+                        continue;
                     }
                     SitesBlock block = bp.getSiteBlock();
                     if (block == SitesBlock.SHADOWS) {
@@ -830,6 +831,20 @@ public class DefaultLotroFormat implements LotroFormat {
 
     @Override
     public String validateSite(String blueprintId) {
+        return validateSite(blueprintId, null);
+    }
+
+    /**
+     * What this format has against one site, or null if nothing.
+     * @param context The deck building overrides of the player whose adventure deck the site is for, or null.
+     * Where they say his sites may be of any block (skipSiteBlockValidation), the site need not be of this
+     * format's block nor from one of its sets; the X-list and the errata are read against it all the same.
+     * This is the one reading of a single site: deck validation and the deck builder's card list both ask it.
+     */
+    @Override
+    public String validateSite(String blueprintId, DeckValidationContext context) {
+        boolean anyBlock = context != null && context.shouldSkipSiteBlockValidation();
+
         LotroCardBlueprint bp;
         try {
             bp = _library.getLotroCardBlueprint(blueprintId);
@@ -842,14 +857,14 @@ public class DefaultLotroFormat implements LotroFormat {
         if (bp.getCardType() != CardType.SITE) {
             return "Card assigned as Site is not really a site.";
         }
-        else if (bp.getSiteBlock() != _siteBlock && _siteBlock != SitesBlock.MULTIPATH) {
+        else if (!anyBlock && bp.getSiteBlock() != _siteBlock && _siteBlock != SitesBlock.MULTIPATH) {
             return "Site does not use supported block: " + GameUtils.getFullName(bp);
         }
 //        else if (_siteBlock == SitesBlock.MULTIPATH && bp.getSiteBlock() == SitesBlock.SHADOWS) {
 //            return "Post-Shadows site not allowed in Multipath: " + GameUtils.getFullName(bp);
 //        }
         else {
-            String invalid = validateCard(blueprintId);
+            String invalid = validateCard(blueprintId, !anyBlock);
             if(invalid != null && !invalid.isEmpty()) {
                 return invalid;
             }

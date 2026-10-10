@@ -1059,6 +1059,9 @@ The format has no Ring-bearer rule of its own: it counts the Ring-bearer, the Ri
 deck, by title, against the one copy limit (CR 4.2 "building your deck", the exception). Every deck the scenario
 builds has Frodo 1_290 as Ring-bearer, so `buildDeckWithCopies("1_290", n, true)` puts n Frodos beside him and
 the limit is reached at n = limit - 1 (3 of 4; 5 of 6 under 92_1, Q-0182 open).
+What the deck builder LISTS for such a player is no card's test: the list asks the format the same question of
+each site as validation does (`LotroFormat.validateSite(id, context)`), and is tested by filter string in
+`game/SortAndFilterCardsTest` (`format:pc_movie cardType:SITE siteOverride:true`; F-0342).
 
 ## Test cards and the test booster pack
 

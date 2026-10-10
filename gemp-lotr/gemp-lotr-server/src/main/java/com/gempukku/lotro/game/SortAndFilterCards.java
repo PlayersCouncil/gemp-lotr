@@ -53,7 +53,13 @@ public class SortAndFilterCards {
         var signets = getEnumFilter(Signet.values(), Signet.class, params.get("signet"), true);
         
         var canStartWithRing = getBoolean(params.get("canstartwithring"));
-        var siteOverride = Boolean.TRUE.equals(getBoolean(params.get("siteoverride")));
+        // siteOverride:true is sent for a player whose adventure deck may hold sites of any block (the deck
+        // building override skipSiteBlockValidation).  The format filter then asks of a site what deck validation
+        // asks for that player.  A block or a set the player picks to narrow the list narrows it as ever.
+        DeckValidationContext siteOverrides = null;
+        if (Boolean.TRUE.equals(getBoolean(params.get("siteoverride")))) {
+            siteOverrides = new DeckValidationContext().setSkipSiteBlockValidation(true);
+        }
 
         var blueprints = params.getOrDefault("blueprints", new ArrayList<>());
         var okNames = new ArrayList<String>();
@@ -104,13 +110,13 @@ public class SortAndFilterCards {
             // able to see the ones they hold, so those three filters do not apply to them (everything else does).
             boolean placeholder = LotroCardBlueprintLibrary.isPlaceholderId(strippedId);
 
-            if(!placeholder && !formats.isEmpty() && !isInSetOrFormat(blueprintId, card, formats, currentFormat, cardLibrary, formatLibrary, siteOverride))
+            if(!placeholder && !formats.isEmpty() && !isInSetOrFormat(blueprintId, card, formats, currentFormat, cardLibrary, formatLibrary, siteOverrides))
                 continue;
 
-            if(!placeholder && !blocks.isEmpty() && !isInSetOrFormat(blueprintId, card, blocks, currentFormat, cardLibrary, formatLibrary, siteOverride))
+            if(!placeholder && !blocks.isEmpty() && !isInSetOrFormat(blueprintId, card, blocks, currentFormat, cardLibrary, formatLibrary, null))
                 continue;
 
-            if(!placeholder && !sets.isEmpty() && !isInSetOrFormat(blueprintId, card, sets, currentFormat, cardLibrary, formatLibrary, siteOverride))
+            if(!placeholder && !sets.isEmpty() && !isInSetOrFormat(blueprintId, card, sets, currentFormat, cardLibrary, formatLibrary, null))
                 continue;
 
             if(!isFlagAccepted(canStartWithRing, card.canStartWithRing()))
@@ -306,7 +312,7 @@ public class SortAndFilterCards {
 
     private boolean isInSetOrFormat(String blueprintId, LotroCardBlueprint card, List<String> setFilters,
             LotroFormat currentFormat, LotroCardBlueprintLibrary library, LotroFormatLibrary formatLibrary,
-            boolean siteOverride) {
+            DeckValidationContext siteOverrides) {
 
         for (String set : setFilters) {
             if(isJSInvalidString(set))
@@ -317,10 +323,7 @@ public class SortAndFilterCards {
             if (format != null) {
                 String invalid = "";
                 if (card.getCardType() == CardType.SITE) {
-                    if(siteOverride)
-                        continue;
-
-                    invalid = format.validateSite(blueprintId);
+                    invalid = format.validateSite(blueprintId, siteOverrides);
                 }
                 else {
                     invalid = format.validateCard(blueprintId);
