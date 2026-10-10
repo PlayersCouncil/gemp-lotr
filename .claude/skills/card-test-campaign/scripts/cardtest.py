@@ -8,7 +8,9 @@
                                          finding out what the game does without adding a test to the repository;
                                          a card test class the probe names is compiled with it as it now stands
 
-<what> is a blueprint id (1_40), a test file's path, or a selector (set:1, file:set01-Elven, seg:vset).
+<what> is a blueprint id (1_40), a test file's path, or a selector (set:1, file:set01-Elven, seg:vset).  The file
+may be a test of a module the server is built on (gemp-lotr-logic, gemp-lotr-common): its class is named by the
+package in its source.  A test of gemp-lotr-async cannot be run here (the classpath is the server module's).
 
 `run` compiles into a folder of its own (--out <name>, default "default"), so several people or agents can each
 run their own cards at once without treading on each other; give each a different --out.  It needs Java 21 and a
@@ -93,6 +95,20 @@ def resolve_files(what) -> list:
     return files
 
 
+def beyond_the_classpath(files) -> list:
+    """The test files of a module whose classes the classpath does not hold.  It is the server module's: it reaches
+    the modules the server is built on, and not one that is built on the server (gemp-lotr-async)."""
+    out = []
+    for f in files:
+        try:
+            module = f.resolve().relative_to(g.MODULES).parts[0]
+        except ValueError:
+            continue  # a file kept outside the modules is compiled against whatever it names
+        if module not in ("gemp-lotr-server", "gemp-lotr-logic", "gemp-lotr-common", "gemp-lotr-cards"):
+            out.append("%s (%s)" % (f.name, module))
+    return out
+
+
 def run(argv) -> int:
     out_name = "default"
     if "--out" in argv:
@@ -113,6 +129,10 @@ def run(argv) -> int:
     if javac.returncode != 0:
         sys.stdout.write("\n".join(l for l in (javac.stdout + javac.stderr).split("\n") if not NOISE.search(l)))
         print("\nDid not compile.")
+        beyond = beyond_the_classpath(files)
+        if beyond:
+            print("The classpath here is the server module's, which does not hold the classes of a module built on the "
+                  "server: %s.  Maven runs such a test (`mvn test` in its module)." % ", ".join(beyond))
         return 2
     return run_junit([g.test_class_name(f.resolve()) for f in files], cp)
 

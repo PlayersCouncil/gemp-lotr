@@ -15,6 +15,10 @@
                                             "mistake", a sound parked test is one that passes here and fails
                                             against the card as it is
     mutate.py <id> --show                   lists the mistakes it would make, and runs nothing
+    mutate.py <id> ... --test <file.java>   runs the tests of that file (a mechanics class, say) in place of the
+                                            card's own test file, with any of the above: for a test parked on this
+                                            card's definition that is kept somewhere else.  The card then needs no
+                                            test file of its own
     --timeout <seconds>                     how long one run of the card's tests may take (180): a run that does not
                                             return is stopped and reported, so a parked test whose failure is a hang
                                             cannot hold the tool (such a test is written @Test(timeout = 20000))
@@ -344,12 +348,13 @@ def sandbox(root: Path, card: g.CardDef, new_text: str) -> Path:
 FRAME = re.compile(r"^\s+at ([\w.$]+)\.([\w$<>]+)\(([\w$]+\.java):(\d+)\)")
 
 
-def failures(out: str, test_class: str) -> dict:
+def failures(out: str, test_class: str, test_file: Path = None) -> dict:
     """What JUnit printed about each failing test, cut down to what says why: {test name: [lines]}.  The lines are
     the exception with its message, its deepest cause where it has one, and where it was thrown: the rig's or the
-    game's frames nearest the throw, and the line of the test file that led there, with what that line says."""
+    game's frames nearest the throw, and the line of the test file that led there, with what that line says.  The
+    test file is found by its class's name under the server module's tests unless it is given."""
     found = {}
-    test = g.SERVER / "src" / "test" / "java" / Path(*test_class.split(".")).with_suffix(".java")
+    test = test_file or g.SERVER / "src" / "test" / "java" / Path(*test_class.split(".")).with_suffix(".java")
     source = test.read_text(encoding="utf-8", errors="replace").split("\n") if test.is_file() else []
     blocks = re.split(r"(?m)^\d+\) (\w+)\(.*\)\n", out.split("\nFAILURES!!!")[0])
     own = test_class.rsplit(".", 1)[-1] + ".java"
@@ -399,7 +404,7 @@ def parked_tests(text: str) -> list:
             if any(line.lstrip().startswith("@") and re.search(r"@Ignore\b", line) for line in m.group(1).split("\n"))]
 
 
-def run_tests_in_full(cwd: Path, cp: str, test_class: str):
+def run_tests_in_full(cwd: Path, cp: str, test_class: str, test_file: Path = None):
     """(verdict, what to say beside it, {failing test: the first lines of its failure})."""
     try:
         proc = subprocess.run(["java", "-cp", cp, "org.junit.runner.JUnitCore", test_class], cwd=cwd, env=cardtest.env(),
@@ -409,7 +414,7 @@ def run_tests_in_full(cwd: Path, cp: str, test_class: str):
     out = proc.stdout + proc.stderr
     if re.search(r"^OK \(\d+ tests?\)", out, re.M):
         return "survived", "", {}
-    why = failures(out, test_class)
+    why = failures(out, test_class, test_file)
     if "CardNotFoundException" in out or "Error while loading file" in out or "InvalidCardDefinitionException" in out:
         said = re.search(r"(InvalidCardDefinitionException|CardNotFoundException|Error while loading file)[:\s]*([^\n]{0,160})", out)
         return "invalid", (said.group(1) + ": " + said.group(2).strip()) if said else "", why
@@ -452,7 +457,7 @@ def main(argv):
         if i + 2 >= len(argv):
             raise SystemExit("--replace takes two values after it: the old text and the new.")
         skip.update(range(i, i + 3))
-    for flag in ("--out", "--nth", "--timeout"):
+    for flag in ("--out", "--nth", "--timeout", "--test"):
         if flag in argv and argv.index(flag) not in skip:
             if argv.index(flag) + 1 >= len(argv):
                 raise SystemExit("%s takes a value after it." % flag)
@@ -467,8 +472,19 @@ def main(argv):
     card_id = args[0]
     card = g.card_index().get(card_id)
     test = g.test_index().get(card_id)
-    if card is None or test is None:
-        raise SystemExit("%s needs both a definition and a test file." % card_id)
+    other_test = "--test" in argv
+    if other_test:
+        # Another file's tests in place of the card's own: a mechanics class, or a test of this card's definition
+        # that is kept in some other card's file.
+        named = argv[argv.index("--test") + 1]
+        test = Path(named).resolve() if Path(named).is_file() else g.REPO / named
+        if not named.endswith(".java") or not test.is_file():
+            raise SystemExit("--test takes the path of a test's .java file, from here or from the repository's root: "
+                             "%s is not one." % named)
+        if card is None:
+            raise SystemExit("%s has no definition." % card_id)
+    elif card is None or test is None:
+        raise SystemExit("%s needs both a definition and a test file (or another file's tests, with --test)." % card_id)
     file_text = card.file.read_text(encoding="utf-8")
     file_lines = file_text.replace("\r", "").split("\n")
     first = card.line - 1
@@ -539,7 +555,7 @@ def main(argv):
         raise SystemExit("The test file does not compile.")
     test_class = g.test_class_name(test)
 
-    verdict, failing, why = run_tests_in_full(g.SERVER, cp, test_class)
+    verdict, failing, why = run_tests_in_full(g.SERVER, cp, test_class, test)
 
     def say_why(why, only=None):
         """The first lines of each failing test's failure, indented under the line that named the tests."""
@@ -565,7 +581,7 @@ def main(argv):
         i, what, new_card = todo[n]
         new_file = "\n".join(file_lines[:first] + new_card + file_lines[first + len(card_lines):])
         cwd = sandbox(base / ("m%03d" % n), card, new_file)
-        verdict, failed, why = run_tests_in_full(cwd, cp, test_class)
+        verdict, failed, why = run_tests_in_full(cwd, cp, test_class, test)
         shutil.rmtree(base / ("m%03d" % n), ignore_errors=True)
         return n, verdict, failed, why
 
@@ -575,7 +591,8 @@ def main(argv):
             results[n] = (verdict, failed)
             whys[n] = why
 
-    print("%s  %s: %d mistakes made in the definition" % (card_id, g.full_name(card), len(todo)))
+    print("%s  %s: %d mistakes made in the definition%s" % (card_id, g.full_name(card), len(todo),
+                                                           ", and the tests of %s run against each" % test.name if other_test else ""))
     counts = {"noticed": 0, "survived": 0, "invalid": 0, "hung": 0}
     for n, (i, what, _) in enumerate(todo):
         verdict, failed = results[n]

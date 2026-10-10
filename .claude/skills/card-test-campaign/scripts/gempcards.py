@@ -670,8 +670,13 @@ def rel(path: Path) -> str:
 
 
 def test_class_name(path: Path) -> str:
-    """The fully qualified class name of a test file."""
-    relp = path.relative_to(SERVER / "src" / "test" / "java")
+    """The fully qualified class name of a test file: read from its place under the server module's test sources,
+    and for a file that lies anywhere else (a test of another module, a probe) from the package its source names."""
+    try:
+        relp = path.relative_to(SERVER / "src" / "test" / "java")
+    except ValueError:
+        package = re.search(r"^\s*package\s+([\w.]+)\s*;", path.read_text(encoding="utf-8", errors="replace"), re.M)
+        return (package.group(1) + "." if package else "") + path.stem
     return ".".join(relp.with_suffix("").parts)
 
 

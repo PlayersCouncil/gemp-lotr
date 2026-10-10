@@ -66,8 +66,8 @@ companion who has a minion, whatever his defender bonus.
 asked "Choose next skirmish to resolve", and that is the bookend to assert after `FreepsAssignToMinions` or
 `ShadowAssignToMinions`: `assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"))`.
 `FreepsAwaitingSkirmishChoice()` reads the same moment by name, and `ShadowAwaitingSkirmishChoice()` on player 2's
-turn (engine pass 24); `lint.py` does not yet count them as a test's closing reading, so where the reading is the
-LAST thing in a test keep the `...DecisionAvailable` form until it does. With a
+turn (engine pass 24); `lint.py` takes either form as a test's closing reading, and as showing that the player is
+being asked. With a
 minion left unassigned the Shadow player is asked "Assign minions" first. After an assignment ACTION in the
 assignment phase the bookend is the other player's `Awaiting...AssignmentPhaseActions()` (69_38).
 
@@ -475,7 +475,8 @@ of his seventh; his move then reaches site 9 before player 1 has (Card_94_031_Te
 **The game ends when it ends.** When the Ring-bearer dies or is corrupted the game stops at once and no later
 phase arrives. Make the assertions that matter before the event that ends the game. Who lost is read with
 `FreepsHasLost()` / `ShadowHasLost()` (and `FreepsHasWon()` / `ShadowHasWon()`; all four false while the game
-goes on; `mechanics/CorruptionBeforeTheGameStartsTests`). WHY is read from
+goes on; `mechanics/CorruptionBeforeTheGameStartsTests`). One of the four asserted TRUE is a closing reading for
+`lint.py`, as `GameIsFinished()` is; read as false it is not, since a game still going on answers the same. WHY is read from
 the game log, in the game's own words: `MarkGameLog()` before the act that ends it, then
 `GameLogSinceMarkSays(scn.P1() + " lost due to: The Ring-Bearer is corrupted")` (`mechanics/HinderedRingBearerTests`,
 Card_01_252_Tests): neither `GameIsFinished()` nor who lost tells a corruption from any other end.

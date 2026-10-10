@@ -81,9 +81,13 @@ JUSTIFY = [
 ]
 ACTS = re.compile(r"\b(Freeps|Shadow)(PlayCard|UseCardAction|TransferCard|DiscardToHeal|Choose\w*|Accept\w*|Decline\w*|"
                   r"Pass\w*|Assign\w*|Resolve\w*)\s*\(|\b(Pass\w+Actions|BothPass\w*|PassResponses|PassCurrentPhaseActions)\s*\(")
-# What counts as saying what the game is waiting for once a test has done its last thing.
+# What counts as saying what the game is waiting for once a test has done its last thing.  The choice of the next
+# skirmish has a reader of its own (G-0047).  Who won or lost (G-0042) says the game is over only where it is read
+# as true: false is also what a game still going on answers, for either player.
 BOOKEND = re.compile(r"\bAwaiting\w+PhaseActions\s*\(|\bGameIsFinished\s*\(|\b\w*DecisionAvailable\s*\(|"
                      r"\b\w*HasOptionalTriggerAvailable\s*\(|\b\w*AnyDecisionsAvailable\s*\(|"
+                     r"\b\w*AwaitingSkirmishChoice\s*\(|"
+                     r"\bassertTrue\s*\(\s*(?:\"[^\"]*\"\s*,\s*)?scn\s*\.\s*(?:Freeps|Shadow)Has(?:Won|Lost)\s*\(|"
                      r"\bassertEquals\s*\(\s*Phase\s*\.\s*\w+\s*,\s*scn\s*\.\s*GetCurrentPhase\s*\(")
 # How a card that stays in play speaks of itself.  Where it is not unique, a second copy is what shows that the
 # words mean this copy and not every copy (the Standard's F).
@@ -348,7 +352,7 @@ def is_asked(side: str, lines) -> bool:
         if any(seat == side and pattern.search(line) for seat, pattern in SEAT_OF_AWAITING):
             return True
         if re.search(r"\b%s(?:\w*DecisionAvailable|AnyDecisionsAvailable|HasOptionalTriggerAvailable|AnyActionsAvailable|"
-                     r"AwaitingRequiredResponseOrder|GetChoiceMin|GetChoiceMax|GetSelectableCount|HasCardChoiceAvailable|"
+                     r"AwaitingRequiredResponseOrder|AwaitingSkirmishChoice|GetChoiceMin|GetChoiceMax|GetSelectableCount|HasCardChoiceAvailable|"
                      r"HasBPChoiceAvailable|GetCardChoiceCount|GetBPChoiceCount)\s*\(" % side, line) \
                 and not re.search(r"\bassertFalse\s*\(", line):
             return True
@@ -699,7 +703,7 @@ def lint_file(path: Path):
                     # The NotAvailable twin answers true at any decision that is no choice of cards.
                     asked = any(re.search(r"\b%s(?:HasCardChoiceAvailable|HasBPChoiceAvailable|GetChoiceMin|GetChoiceMax|"
                                           r"GetCardChoiceCount|GetBPChoiceCount|GetSelectableCount|\w*Revealed\w*|"
-                                          r"\w*DecisionAvailable)\s*\(" % side, x)
+                                          r"\w*DecisionAvailable|AwaitingSkirmishChoice)\s*\(" % side, x)
                                 and not re.search(r"\bassertFalse\s*\(", x) for x in beside) \
                         or bool(re.search(r"\b%s(?:Choose\w*|Decline\w*|Dismiss\w*)\s*\(" % side, then))
                 else:

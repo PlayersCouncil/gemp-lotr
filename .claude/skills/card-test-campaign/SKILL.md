@@ -193,10 +193,10 @@ All under `scripts/`, run with `python3` from anywhere in the repository. Each p
 | `rules.py` | Looking things up in Comprehensive Rules 4.2: `term`, `card`, `terms-for`, `grep`, `interactions`. |
 | `reconcile.py` | Reviewed spreadsheet against definitions, field by field. |
 | `cardinfo.py <ids>` | A definition's cardInfo block against the rest of the definition and the other cards of its kind (Q-0145: no test reads it, and it is kept true); `--all`, `--survey`. `packet.py` and `lint.py` print what it finds for a card. |
-| `cardtest.py` | `setup` once, then `run <ids> --out <name>` in seconds; `suite` for everything. |
+| `cardtest.py` | `setup` once, then `run <ids> --out <name>` in seconds (ids, or test files: the server's, or the logic or common module's); `suite` for everything. |
 | `lint.py` | The conformance check. `lint.py --form <file.java> [--only <Test,Test>]` applies only the rules about how a test is written, for a class under `mechanics/` or a card's file with no ledger (`--only`: the tests named, a lone test added to an old file). |
 | `rules.py council [LR 6]` | The Rules Councils' rulings since CR 4.2 (eight Legacy, two Modern), which `rules.py card` and `grep` also search. |
-| `mutate.py <id>` | Makes deliberate mistakes in a copy of the definition and reports the ones no test notices. `--replace <old> <new>` makes one of yours (several pairs, or `--every`, for a mistake in several places); `--with-parked` runs the parked tests too. A run that does not return is stopped (`--timeout`, 180 seconds). |
+| `mutate.py <id>` | Makes deliberate mistakes in a copy of the definition and reports the ones no test notices. `--replace <old> <new>` makes one of yours (several pairs, or `--every`, for a mistake in several places); `--with-parked` runs the parked tests too; `--test <file.java>` runs another file's tests (a mechanics class) in place of the card's own. A run that does not return is stopped (`--timeout`, 180 seconds). |
 | `land.py <ids>` | The gate: re-runs the conformance check and the tests on each card, and commits the cards that clear them (`--batch <folder>`: as one commit). `--check` to look without committing. |
 | `landing.py` | The lander's tools: `question add` and `rig add` number an entry into its register; `users <id>` lists the cards whose tests use a card as a helper (by its id, by the rig's constant for it, or as what a table has when none is named); `finish` runs the gate and makes the batch's commits. |
 | `tracker.py` | The campaign's state: statuses, findings, the tracker. |
