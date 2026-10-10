@@ -52,8 +52,8 @@ FAMILIES = OrderedDict([
     ("mech-hinder-d", ["HinderedCharacterCannotSkirmishTests", "UniquenessTests", "RelentlessTests"]),
 ])
 NOTES = {
-    "mech-triggers": "InsteadTests is the orchestrator's class (CR 4.2 \"instead\"), for two old methods the survey put in card files: Ketura's rule is that \"instead\" converts a cost and neither prevents nor cancels (`lookup.py instead`). Both are among the tests she calls the tricky ones. Three old boards assert an offer Q-0034 says is not made (Gimli 5_7, Dervorin 7_88, Aragorn 1_365 / Gandalf 2_122): write by the ruling.",
-    "mech-toil": "Toil against roaming: try whether the game offers a toil card from a pool under the roaming penalty; a finding if the game differs from the two rules' wording. RoamingTests takes the two extra cases its directive offers.",
+    "mech-triggers": "InsteadTests is the orchestrator's class (CR 4.2 \"instead\"), for two old methods the survey put in card files: Ketura's rule is that \"instead\" converts a cost and neither prevents nor cancels (`lookup.py instead`). Both are among the tests she calls the tricky ones. Three old boards assert an offer Q-0034 says is not made (Gimli 5_7, Dervorin 7_88, Aragorn 1_365): write by the ruling. (Gandalf 2_122's draw from an empty deck IS offered, by Q-0029.)",
+    "mech-toil": "Toil against roaming: try whether the game offers a toil card from a pool under the roaming penalty; a finding if the game differs from the two rules' wording. RoamingTests takes the two extra cases its directive offers. ALSO for this batch, though its file is not listed below: `mechanics/MusterTests.java` (landed by the batch mech-triggers with one test) gains the three cases `at-survey/TriggersAtTest.md` offers under its muster entry: two muster characters discard 0 to 2 cards all at once and draw as many (the CR's own example); with no card in hand there is no offer; declined, nothing changes.",
     "mech-skirmish": "DefenderTests: the negative (two minions may not be given to a companion WITHOUT defender) cannot be read with the rig today and the old test showed it by the game throwing, which no test may rely on: write the positive tests, and return that negative under `rig` with what the rig would have to read. ArcheryFireTests is a new class unless both its tests are plainly AlliesTakeArcheryWoundsTests' subject.",
     "mech-setup": "FrodoBesideAnotherRingBearerTests: Q-0159 is answered B (no Frodo is ever on the table beside another Ring-bearer); the test shows the RULE that keeps him off (he cannot be played), and its class name should say that (FrodoCannotJoinAnotherRingBearerTests, say). The bid before the game reads resistance in force (Ketura on Galadriel 9_14).",
     "mech-hinder-a": "Ketura, 2026-10-10: the three methods about a hindered card's strength, vitality and resistance STAY, on a construct of the tests' own (\"there's engine code that this was used to enforce\"): no real card can show them. Everywhere else in the family the hack on Frodo gives way to `scn.HinderCard` or a real card, as each directive says.",
@@ -160,11 +160,13 @@ def main(argv):
                     continue
                 surveys = sorted({r["survey"] for r in rs})
                 lines.append("- **%s**" % name)
-                lines.append("  - directive: `at-survey/%s`, the entry headed with this test's name%s" %
-                             ("`, `at-survey/".join(surveys), "" if len(surveys) == 1 else " (one entry in each: they are one test)"))
+                lines.append("  - directive: in `at-survey/%s`, the entry whose \"Replaces:\" line names the old method%s below (its "
+                             "heading may give another name, or several tests under one)%s" %
+                             ("`, `at-survey/".join(surveys), "" if len(rs) == 1 else "s",
+                              "" if len(surveys) == 1 else "; one entry in each file: they are one test"))
                 for r in rs:
                     lines.append("  - replaces `at/%s`: `%s`  (%s; %s)" % (r["at"], r["method"], r["kind"], r["status"]))
-                lines.append("  - in a sentence: %s" % rs[0]["sentence"])
+                lines.append("  - what the OLD method checked (from Ketura's report; the directive, not this, says what to write): %s" % rs[0]["sentence"])
             lines.append("")
         (out / (key + ".md")).write_text("\n".join(lines) + "\n", encoding="utf-8")
     # The sweep: what is covered or dropped, and whatever else is left in at/ at the end.

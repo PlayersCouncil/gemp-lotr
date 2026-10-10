@@ -83,7 +83,7 @@ def resolve_files(what) -> list:
     for w in what:
         p = Path(w)
         if w.endswith(".java") and (p.is_file() or (g.REPO / w).is_file()):
-            files.append(p if p.is_file() else g.REPO / w)
+            files.append(p.resolve() if p.is_file() else g.REPO / w)
             continue
         for card_id in g.resolve_ids([w]):
             if card_id in tests:

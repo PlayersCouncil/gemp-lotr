@@ -27,7 +27,8 @@ ONE Java process at a time, and never the whole suite.
 `git status --short` and `git diff` show what the converter did. For each test the batch file lists:
 
 - It is there, under the name given (or a better one, with the reason), in the home given.
-- **It reads what its directive says** (the entry of `at-survey/<File>.md` headed with the test's name) and what
+- **It reads what its directive says** (the entry of `at-survey/<File>.md` whose "Replaces:" line names the old
+  method; the batch file's one sentence describes the OLD method and is no specification) and what
   DECISIONS.md says where that differs: the board, what is done, and every reading. For a test of an
   interaction, a rule or a bug, be exact: would the test fail if the thing it guards were broken? If a control
   is missing that would tell it from a test that passes for another reason, add it.
@@ -55,6 +56,15 @@ As `lander.md`, steps 3 to 6, with these differences:
   as a helper (`landing.py users <id>`, then `cardtest.py run <ids> --out <batch>-users`). A correction that
   breaks another card's test in a way you cannot put right in one line comes back out and the finding is
   recorded `confirmed`.
+- **The ruling's own assertion.** Where an old board asserted something a ruling contradicts, the converter was
+  told to write the ruling's assertion as a lone test in the card's own file, parked on the finding if the game
+  differs. Where that test is missing and you correct the definition, write it yourself (one test, the board on
+  which the ruling bites), so that the correction is held by a test. Look the ruling up before you correct
+  anything: an optional draw is still offered with an empty draw deck (Q-0029).
+- **The same lines in an erratum or an original.** As `lander.md` says, a finding that holds there too is
+  corrected there too. Where that card is LANDED (it has a ledger), its landed tests must pass afterwards and you
+  add no test to its file (its ledger would have to follow): say in your report that it was corrected under the
+  same finding and that its own tests do not yet read it, and add one line to its ledger's Notes saying so.
 - There is no ledger. A reading the rig cannot give stays a comment in the test
   (`// waits: G-0031 <what the rig lacks>`, with the request's real number).
 - A question's parked test carries the question's number in its `@Ignore`.

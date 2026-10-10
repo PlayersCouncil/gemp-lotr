@@ -43,8 +43,10 @@ machine is small and has restarted under load: run ONE Java process at a time, a
 ## For each test in your batch file
 
 The batch file lists your homes (a `mechanics/` class, or a card's test file) and, under each, the tests to
-write: the test's name, where its directive is (an entry of `at-survey/<File>.md`, headed with the test's name),
-the old methods it replaces, and one sentence on what it checks.
+write: the test's name, where its directive is (the entry of `at-survey/<File>.md` whose "Replaces:" line names the old
+method; its heading may give another name, or put several tests under one), the old methods it replaces, and one
+sentence on what the OLD method checked (that sentence is from Ketura's report: the directive, not it, says what
+to write).
 
 1. **Read the directive**, and the cards' texts it names (`packet.py <id> --blind`), and any ruling it cites.
    Read the old method too, once: not to copy its lines, but to see that the directive lost nothing it asserted.
@@ -74,14 +76,24 @@ the old methods it replaces, and one sentence on what it checks.
    says, park it with `@Ignore("F-0000: <one line>")`, and report it as a finding with what the text says, what
    happened, and the correction if it is a definition's: the lines to change, tried with
    `mutate.py <id> --replace "<wrong>" "<right>" --with-parked --out <your folder>` where the card has a test
-   file). Where a directive says "by the ruling" (an old board asserted an offer Q-0034 says is not made, and
-   the like), the new test asserts the ruling, and if the game still does the old thing that is a finding.
-   Be slow to conclude the game is wrong; and never make a test pass by asserting what you did not expect.
+   file). Be slow to conclude the game is wrong; and never make a test pass by asserting what you did not
+   expect.
+   **Where an old board asserted something a ruling now contradicts** (the directive says "by the ruling": most
+   often an offer made with nothing for it to act on, which Q-0034 says is not made): the mechanics test is
+   written on a board where the thing has something to do, and stays active. The ruling's own assertion is about
+   ONE CARD, and you write it as a lone test in that card's own file (you may touch that file for this, though
+   your batch does not name it): the board on which the ruling bites, asserting what the ruling says. If the game
+   does not do it, that test is parked with `@Ignore("F-0000: ...")` and reported as a finding with the
+   definition's correction, like any other. Look the ruling up first (`lookup.py Q-0034`, and the entries near
+   it): not every "may" with nothing to act on is withheld. An optional DRAW is still offered with an empty draw
+   deck (Q-0029), and an action with a COST is offered and flagged, not withheld.
 4. **A reading the rig cannot give** is not worked round: no helper method, no reaching into the engine, no
    exception relied on. Leave that one reading out, put a comment where it would stand
    (`// waits: G-0000 <what the rig lacks>`), and report it under `rig` with the method you would want.
 5. **Take the old methods out.** When a test of yours is written and runs (or is parked as above), delete from
-   `at/` the old methods the batch file says it replaces, with any import and helper only they used. Delete an
+   `at/` the old methods the batch file says it replaces, with any import and helper only they used. An old
+   method that is commented out goes with its commented `@Test` line. Keep each file's line endings as they are
+   (`at/TriggersAtTest.java` is CRLF throughout; a cut made in text mode would rewrite every line of it). Delete an
    `at` file that has no test left (never `AbstractAtTest.java` or `effects/IncrementEffect.java`: the last batch
    takes those). Then make sure what is left of each file you cut still compiles and passes:
    `cardtest.py run <the at file> --out <your folder>`. An old method whose replacement you could not write
