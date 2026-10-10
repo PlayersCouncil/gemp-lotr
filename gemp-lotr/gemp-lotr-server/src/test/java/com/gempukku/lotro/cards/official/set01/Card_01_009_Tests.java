@@ -22,13 +22,25 @@ public class Card_01_009_Tests
 				new HashMap<>()
 				{{
 					put("axe", "1_9");
+					put("axe2", "1_9");
+					put("guard", "1_7");          // Dwarf Guard: Dwarf companion, strength 4, vitality 2, no damage bonus
+					// Gimli, Son of Gloin: Dwarf companion, strength 6, vitality 3, damage +1.
+					// "Skirmish: Exert Gimli to make him strength +2."
 					put("gimli", "1_13");
+					put("grimir", "1_17");        // Grimir, Dwarven Elder: Dwarf ally, home site 3, strength 3; a fellowship ability only
+					put("aragorn", "1_89");       // Aragorn, Ranger of the North: a Man
+					// Preparations: [dwarven] condition in the support area.  "Skirmish: Wound a minion skirmishing a
+					// Dwarf once for each [dwarven] card stacked here. Discard this condition."  Its regroup ability
+					// is how a card comes to be stacked there.
 					put("preparations", "7_12");
-					put("dcard", "2_10");
+					put("handaxe", "2_10");       // Hand Axe: a [dwarven] possession; here only ever the card stacked on Preparations
 
-					put("orc1", "1_178");
-					put("orc2", "1_181");
-					put("orc3", "1_184");
+					put("savage", "1_151");       // Uruk Savage: [isengard] Uruk-hai, strength 5, vitality 3
+					put("savage2", "1_151");
+					put("soldier", "1_271");      // Orc Soldier: [sauron] Orc, strength 7, vitality 2; a skirmish ability used only on purpose
+					put("runner", "1_178");       // Goblin Runner: [moria] Orc, strength 5, vitality 1
+					put("sneak", "1_181");        // Goblin Sneak: [moria] Orc, strength 5, vitality 1; its text is about being played
+					put("wallcrawler", "1_184");  // Goblin Wallcrawler: [moria] Orc, strength 6, vitality 1; stronger only underground
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,10 +59,11 @@ public class Card_01_009_Tests
 		 * Culture: Dwarven
 		 * Twilight Cost: 0
 		 * Type: Possession
-		 * Subtype: Hand Weapon
-		 * Strength: 2
+		 * Subtype: Hand weapon
+		 * Strength: +2
 		 * Game Text: Bearer must be a Dwarf.
-		 * Each time a minion loses a skirmish to bearer, that minion's owner must discard the top card of their draw deck.
+		 * Each time a player's minion loses a skirmish to bearer, that player discards the top card from his or her
+		 * draw deck.
 		 */
 
 		var scn = GetScenario();
@@ -68,101 +81,183 @@ public class Card_01_009_Tests
 	}
 
 	@Test
-	public void AxeMustBeBorneByDwarf() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void CanOnlyBePlayedOnADwarfCompanionOrAllyWhoIsThenStrengthPlus2() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var axe = scn.GetFreepsCard("axe");
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.MoveCardsToHand(axe, gimli);
+		var grimir = scn.GetFreepsCard("grimir");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCardsToHand(axe, gimli, grimir);
+		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
+
+		// Aragorn is a companion and no Dwarf: beside him and Frodo there is nobody to bear the Axe.
 		assertFalse(scn.FreepsPlayAvailable(axe));
 		scn.FreepsPlayCard(gimli);
 		assertTrue(scn.FreepsPlayAvailable(axe));
+		scn.FreepsPlayCard(grimir);
+
+		// 2 for Gimli + 1 for Grimir
+		assertEquals(3, scn.GetTwilight());
+		assertEquals(3, scn.GetStrength(grimir));
+
+		scn.FreepsPlayCard(axe);
+		// A Dwarf companion and a Dwarf ally; not Aragorn.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli, grimir));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		scn.FreepsChooseCard(grimir);
+
+		// The Axe costs nothing: a cost of 1 would read 4.
+		assertEquals(3, scn.GetTwilight());
+		assertAttachedTo(axe, grimir);
+		assertEquals(5, scn.GetStrength(grimir));
+		assertEquals(6, scn.GetStrength(gimli));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	public void AxeCausesDeckDiscardOnSkirmishVictory() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void AMinionLosingASkirmishToBearerMakesItsOwnerDiscardTheTopCardOfHisDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var axe = scn.GetFreepsCard("axe");
+		var otherAxe = scn.GetFreepsCard("axe2");
+		var guard = scn.GetFreepsCard("guard");
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.MoveCompanionsToTable(gimli);
-		scn.AttachCardsTo(gimli, axe);
-
-		var orc1 = scn.GetShadowCard("orc1");
-		scn.MoveMinionsToTable(orc1);
+		var grimir = scn.GetFreepsCard("grimir");
+		var savage = scn.GetShadowCard("savage");
+		var savage2 = scn.GetShadowCard("savage2");
+		var top = scn.GetShadowCard("runner");
+		var next = scn.GetShadowCard("soldier");
+		scn.MoveCompanionsToTable(guard, gimli);
+		scn.MoveAlliesToTable(grimir);
+		scn.AttachCardsTo(guard, axe);
+		// A second Axe, on a Dwarf who fights nobody this turn: it has nothing to say about the Guard's win.
+		scn.AttachCardsTo(grimir, otherAxe);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(savage, savage2);
+		// The Shadow player's own Runner is the top card of his draw deck, his Soldier the one beneath it.
+		scn.MoveCardsToTopOfDeck(next, top);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{guard, savage}, new PhysicalCardImpl[]{gimli, savage2});
+		scn.FreepsResolveSkirmish(guard);
 
-		scn.SkipToPhase(Phase.ASSIGNMENT);
-
-		scn.PassCurrentPhaseActions();
-		scn.FreepsAssignToMinions(gimli, orc1);
-
-		scn.FreepsResolveSkirmish(gimli);
-		scn.PassCurrentPhaseActions();
-
-		var topcard = scn.GetShadowTopOfDeck();
-		assertEquals(Zone.DECK, topcard.getZone());
-		assertEquals(6, scn.GetShadowDeckCount());
+		int shadowDeck = scn.GetShadowDeckCount();
+		int freepsDeck = scn.GetFreepsDeckCount();
 		assertEquals(0, scn.GetShadowDiscardCount());
+		assertEquals(0, scn.GetFreepsDiscardCount());
+		assertEquals(top, scn.GetShadowTopOfDeck());
+		// 4 + 2 for the Axe, against the Savage's 5.
+		assertEquals(6, scn.GetStrength(guard));
 
-		scn.FreepsResolveActionOrder("Axe");
-		assertEquals(Zone.DISCARD, topcard.getZone());
-		assertEquals(5, scn.GetShadowDeckCount());
-		assertEquals(2, scn.GetShadowDiscardCount());//orc1, and a card discarded from the deck
+		scn.PassSkirmishActions();
 
+		// The wound for losing and the Axe's discard come at the one moment; the discard is carried out first.
+		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
+		scn.FreepsResolveActionOrder("Dwarven Axe");
+		assertEquals(1, scn.GetWoundsOn(savage));
+		// The Savage's owner discards the top card of his own draw deck: one card, and nobody else any.
+		assertInZone(Zone.DISCARD, top);
+		assertInZone(Zone.DECK, next);
+		assertEquals(shadowDeck - 1, scn.GetShadowDeckCount());
+		assertEquals(1, scn.GetShadowDiscardCount());
+		assertEquals(freepsDeck, scn.GetFreepsDeckCount());
+		assertEquals(0, scn.GetFreepsDiscardCount());
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
+
+		// Gimli bears no Axe: the second Savage loses to him, takes 2 wounds for his damage +1, and nothing
+		// more is discarded.
+		scn.FreepsResolveSkirmish(gimli);
+		scn.PassSkirmishActions();
+		assertEquals(2, scn.GetWoundsOn(savage2));
+		assertInZone(Zone.DECK, next);
+		assertEquals(shadowDeck - 1, scn.GetShadowDeckCount());
+		assertEquals(1, scn.GetShadowDiscardCount());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void NothingIsDiscardedWhenBearerLosesTheSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var axe = scn.GetFreepsCard("axe");
+		var guard = scn.GetFreepsCard("guard");
+		var soldier = scn.GetShadowCard("soldier");
+		scn.MoveCompanionsToTable(guard);
+		scn.AttachCardsTo(guard, axe);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(soldier);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(guard, soldier);
+		scn.FreepsResolveSkirmish(guard);
+
+		int shadowDeck = scn.GetShadowDeckCount();
+		int freepsDeck = scn.GetFreepsDeckCount();
+		assertEquals(6, scn.GetStrength(guard));
+		assertEquals(7, scn.GetStrength(soldier));
+
+		// 6 against 7: the Guard loses to the Soldier.
+		scn.PassSkirmishActions();
+		assertEquals(1, scn.GetWoundsOn(guard));
+		assertEquals(0, scn.GetWoundsOn(soldier));
+		assertEquals(shadowDeck, scn.GetShadowDeckCount());
+		assertEquals(0, scn.GetShadowDiscardCount());
+		assertEquals(freepsDeck, scn.GetFreepsDeckCount());
+		assertEquals(0, scn.GetFreepsDiscardCount());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
 	@Test
 	public void AxeAffectsMaxOneMinionDuringSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var axe = scn.GetFreepsCard("axe");
 		var gimli = scn.GetFreepsCard("gimli");
+		var runner = scn.GetShadowCard("runner");
+		var sneak = scn.GetShadowCard("sneak");
+		var top = scn.GetShadowCard("soldier");
+		var next = scn.GetShadowCard("wallcrawler");
 		scn.MoveCompanionsToTable(gimli);
 		scn.AttachCardsTo(gimli, axe);
 
-		var orc1 = scn.GetShadowCard("orc1");
-		var orc2 = scn.GetShadowCard("orc2");
-		scn.MoveMinionsToTable(orc1, orc2);
-
 		scn.StartGame();
-
-		scn.SkipToPhase(Phase.ASSIGNMENT);
-
-		scn.PassCurrentPhaseActions();
-		scn.FreepsDeclineAssignments();
-		scn.ShadowAssignToMinions(gimli, orc1, orc2);
-
+		scn.MoveMinionsToTable(runner, sneak);
+		scn.MoveCardsToTopOfDeck(next, top);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gimli, runner);
+		scn.ShadowAssignToMinions(gimli, sneak);
 		scn.FreepsResolveSkirmish(gimli);
+
 		scn.FreepsUseCardAction(gimli);
 		scn.ShadowPass();
 		scn.FreepsUseCardAction(gimli);
 		scn.ShadowPass();
+		// 6 + 2 for the Axe + 2 and 2 for his own ability, against 5 + 5.
+		assertEquals(12, scn.GetStrength(gimli));
+		int shadowDeck = scn.GetShadowDeckCount();
+		assertEquals(0, scn.GetShadowDiscardCount());
 		scn.FreepsPass();
 
 		// Comprehensive Rules 4.2, Section Three, DWARVEN AXE: "This card can trigger only once for each Shadow
 		// player with a minion in that skirmish, regardless of how many minions that player had."
 		// Both minions lost at the one moment, so the wounds for losing and a trigger for each minion are put to
 		// the Free Peoples player to be ordered.
-		assertEquals(3, scn.FreepsGetAvailableActions().size());
-
-		var topcard = scn.GetShadowTopOfDeck();
-		assertEquals(Zone.DECK, topcard.getZone());
-		assertEquals(5, scn.GetShadowDeckCount());
-		assertEquals(0, scn.GetShadowDiscardCount());
+		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
+		assertEquals(3, scn.FreepsGetActionCount());
+		assertInZone(Zone.DECK, top, next);
 
 		// The first trigger carried out takes the Axe's one use for this skirmish.  The second is dropped: it is
-		// not put to the player again, and nothing more is discarded (F-0199).
-		scn.FreepsResolveActionOrder("Axe");
-		assertEquals(Zone.DISCARD, topcard.getZone());
-		assertEquals(4, scn.GetShadowDeckCount());
-		assertEquals(3, scn.GetShadowDiscardCount());//2 dead minions, and a card discarded from the deck
+		// not put to the player again, and nothing more is discarded.
+		scn.FreepsResolveActionOrder("Dwarven Axe");
+		assertInZone(Zone.DISCARD, top, runner, sneak);
+		assertInZone(Zone.DECK, next);
+		assertEquals(shadowDeck - 1, scn.GetShadowDeckCount());
+		// 2 dead minions, and one card discarded from the deck
+		assertEquals(3, scn.GetShadowDiscardCount());
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
@@ -223,63 +318,98 @@ public class Card_01_009_Tests
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
-
-	/**
-	 * https://github.com/PlayersCouncil/gemp-lotr/issues/571
-	 * Basic issue is that based on the last CRD:
-	 * 	 > A losing character is any character on the losing side when a skirmish revolves.
-	 * 	 > If a character is removed from his or her skirmish and there are still one or more characters
-	 * 	 > on each side of that skirmish, the removed character is neither a losing nor a winning character.
-	 * 	 > A character removed from a skirmish is not wounded (or overwhelmed) when that skirmish resolves.
-	 * This supercedes the Comprehensive Rules 4.0, which states:
-	 *   > A losing character is any character on the losing side in a skirmish when it resolves.
-	 *   > Also, any character removed during his or her skirmish is a losing character, even if
-	 *   > that character’s side eventually wins.
-	 *
-	 * From a basic functionality standpoint, killed characters should not stick around as part of the
-	 * tracked losing characters lists, or at the very least the skirmish resolution should check to see
-	 * if they are still in the skirmish and disqualify them for trigger emission if so.
-	 */
-
+	// Council ruling LR 2, which this card's bug report led to (https://github.com/PlayersCouncil/gemp-lotr/issues/571):
+	// "A character removed from his or her skirmish is a losing character, unless there are still one or more
+	// characters on each side of that skirmish, in which case the removed character is neither a losing nor a
+	// winning character."
 	@Test
 	public void AxeDoesNotTriggerOnMinionKilledBeforeSkirmishResolves() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var axe = scn.GetFreepsCard("axe");
-		var dcard = scn.GetFreepsCard("dcard");
 		var gimli = scn.GetFreepsCard("gimli");
 		var preparations = scn.GetFreepsCard("preparations");
+		var handaxe = scn.GetFreepsCard("handaxe");
+		var runner = scn.GetShadowCard("runner");
+		var sneak = scn.GetShadowCard("sneak");
+		var wallcrawler = scn.GetShadowCard("wallcrawler");
 		scn.MoveCompanionsToTable(gimli);
 		scn.AttachCardsTo(gimli, axe);
 		scn.MoveCardsToSupportArea(preparations);
-		scn.StackCardsOn(preparations, dcard);
-
-		var orc1 = scn.GetShadowCard("orc1");
-		var orc2 = scn.GetShadowCard("orc2");
-		var orc3 = scn.GetShadowCard("orc3");
-		scn.MoveMinionsToTable(orc1, orc2, orc3);
+		scn.StackCardsOn(preparations, handaxe);
 
 		scn.StartGame();
-
-		scn.SkipToPhase(Phase.ASSIGNMENT);
-
-		scn.PassCurrentPhaseActions();
-		scn.FreepsDeclineAssignments();
-		scn.ShadowAssignToMinions(gimli, orc1, orc2, orc3);
-
+		scn.MoveMinionsToTable(runner, sneak, wallcrawler);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gimli, runner);
+		scn.ShadowAssignToMinions(gimli, sneak, wallcrawler);
 		scn.FreepsResolveSkirmish(gimli);
-		scn.FreepsUseCardAction(preparations);
-		scn.FreepsChooseCard(orc3);
-		assertEquals(Zone.DISCARD, orc3.getZone());
 
+		int shadowDeck = scn.GetShadowDeckCount();
+		assertEquals(0, scn.GetShadowDiscardCount());
+
+		// One [dwarven] card is stacked on Preparations: one wound, which kills the Wallcrawler in the middle of
+		// the skirmish.  The Runner and the Sneak fight on, so the Wallcrawler neither won nor lost.
+		scn.FreepsUseCardAction(preparations);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(runner, sneak, wallcrawler));
+		scn.FreepsChooseCard(wallcrawler);
+		assertInZone(Zone.DISCARD, wallcrawler);
+		assertEquals(shadowDeck, scn.GetShadowDeckCount());
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+
+		// 6 + 2 against 5 + 5: Gimli loses, and no minion has lost a skirmish to him.
 		scn.ShadowPass();
 		scn.FreepsPass();
-
-		//There should not be any axe trigger here; we should go straight to regroup
-
 		assertEquals(1, scn.GetWoundsOn(gimli));
-		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
+		assertEquals(shadowDeck, scn.GetShadowDeckCount());
+		// the Wallcrawler alone
+		assertEquals(1, scn.GetShadowDiscardCount());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void TheLastMinionKilledDuringTheSkirmishHasLostToBearerAndItsOwnerDiscards() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var axe = scn.GetFreepsCard("axe");
+		var gimli = scn.GetFreepsCard("gimli");
+		var preparations = scn.GetFreepsCard("preparations");
+		var handaxe = scn.GetFreepsCard("handaxe");
+		var runner = scn.GetShadowCard("runner");
+		var top = scn.GetShadowCard("soldier");
+		var next = scn.GetShadowCard("sneak");
+		scn.MoveCompanionsToTable(gimli);
+		scn.AttachCardsTo(gimli, axe);
+		scn.MoveCardsToSupportArea(preparations);
+		scn.StackCardsOn(preparations, handaxe);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner);
+		scn.MoveCardsToTopOfDeck(next, top);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gimli, runner);
+		scn.FreepsResolveSkirmish(gimli);
+
+		int shadowDeck = scn.GetShadowDeckCount();
+		assertEquals(0, scn.GetShadowDiscardCount());
+		assertInZone(Zone.DECK, top, next);
+
+		// Gimli's only opponent dies before strengths are compared: the skirmish is over and the Runner lost it.
+		scn.FreepsUseCardAction(preparations);
+		assertInZone(Zone.DISCARD, runner);
+		// The skirmish's own resolution and the Axe's discard come at the one moment.
+		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
+		assertTrue(scn.FreepsActionAvailable("Dwarven Axe"));
+		assertInZone(Zone.DECK, top);
+		scn.FreepsResolveRuleFirst();
+
+		assertInZone(Zone.DISCARD, top);
+		assertInZone(Zone.DECK, next);
+		assertEquals(shadowDeck - 1, scn.GetShadowDeckCount());
+		// the Runner, and the card from the top of the deck
+		assertEquals(2, scn.GetShadowDiscardCount());
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
 	protected VirtualTableScenario GetKilledMinionScenario() throws CardNotFoundException, DecisionResultInvalidException {
