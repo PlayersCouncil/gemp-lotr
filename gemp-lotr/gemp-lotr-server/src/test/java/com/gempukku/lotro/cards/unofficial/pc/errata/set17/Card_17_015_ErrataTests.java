@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -24,7 +23,6 @@ public class Card_17_015_ErrataTests
 					put("radagast", "9_26");    // Radagast, The Brown: the [gandalf] Wizard who is not Gandalf; move limit +1, and a trigger on a regroup move
 					put("saruman", "32_24");    // Saruman, The White: the [gandalf] Wizard who is an ally, cost 4; abilities used only on purpose
 					put("avenger", "6_27");     // Ent Avenger: a [gandalf] companion who is no Wizard
-					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a [gondor] Man, made a Wizard by the test
 
 					// Minions of four cultures and four races.
 					put("runner", "1_178");     // Goblin Runner: [moria] Orc
@@ -151,19 +149,16 @@ public class Card_17_015_ErrataTests
 
 		var light = scn.GetFreepsCard("light");
 		var gandalf = scn.GetFreepsCard("gandalf");
-		var aragorn = scn.GetFreepsCard("aragorn");
 		var runner = scn.GetShadowCard("runner");
 		var savage = scn.GetShadowCard("savage");
 		scn.MoveCompanionsToTable("avenger");
-		scn.MoveCompanionsToTable(aragorn);
-		// A Wizard who is not a [gandalf] card: every Free Peoples Wizard there is, is one.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, aragorn, null, Race.WIZARD));
 		scn.MoveCardsToHand(light, gandalf);
 		scn.MoveCardsToDiscard(runner, savage);
 
 		scn.StartGame();
 
-		// Ent Avenger is a [gandalf] companion and no Wizard; Aragorn is a Wizard here and no [gandalf] card.
+		// Ent Avenger is a [gandalf] companion and no Wizard.  Every printed Free Peoples Wizard is a
+		// [gandalf] card, so no Wizard of another culture stands beside him (Q-0213).
 		assertFalse(scn.FreepsPlayAvailable(light));
 
 		scn.FreepsPlayCard(gandalf);

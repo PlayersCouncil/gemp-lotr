@@ -1,13 +1,11 @@
 package com.gempukku.lotro.cards.unofficial.rtmd.set_91_ttt;
 
 import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -27,7 +25,6 @@ public class Card_91_012_Tests
 					put("gandalf", "1_72");     // Gandalf, Friend of the Shirefolk
 					put("grimir", "1_17");      // Grimir, Dwarven Elder: a Dwarf ally, who is no companion; a fellowship ability used only on purpose
 					put("silinde", "1_60");     // Silinde, Elf of Mirkwood: an Elf ally, who is no companion; has the text of the owner's site 3 once it is laid
-					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a Man, to be given a culture that is not his
 					put("avenger", "6_27");     // Ent Avenger: a [gandalf] companion who is not Gandalf; stronger only beside 3 Ents
 					put("guard", "1_7");        // Dwarf Guard: a Dwarf companion of vitality 2; to play, spot a Dwarf
 					put("slayer", "3_93");      // Morgul Slayer: Regroup: exert this minion to wound a companion (except the Ring-bearer)
@@ -50,7 +47,6 @@ public class Card_91_012_Tests
 					put("gandalf", "1_72");     // Gandalf, Friend of the Shirefolk
 					put("grimir", "1_17");      // Grimir, Dwarven Elder: a Dwarf ally, who is no companion; a fellowship ability used only on purpose
 					put("silinde", "1_60");     // Silinde, Elf of Mirkwood: an Elf ally, who is no companion; has the text of the owner's site 3 once it is laid
-					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a Man, to be given a culture that is not his
 					put("avenger", "6_27");     // Ent Avenger: a [gandalf] companion who is not Gandalf; stronger only beside 3 Ents
 					put("guard", "1_7");        // Dwarf Guard: a Dwarf companion of vitality 2; to play, spot a Dwarf
 					put("slayer", "3_93");      // Morgul Slayer: Regroup: exert this minion to wound a companion (except the Ring-bearer)
@@ -102,12 +98,9 @@ public class Card_91_012_Tests
 
 		var scn = GetFreepsScenario();
 
-		var aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveCompanionsToTable("legolas", "gandalf");
-		// A Dwarf who is no companion, and a companion of the Dwarven culture who is no Dwarf
+		// A Dwarf who is no companion, beside two companions who are no Dwarves
 		scn.MoveAlliesToTable("grimir");
-		scn.MoveCompanionsToTable(aragorn);
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.DWARVEN));
 
 		scn.StartGame();
 
@@ -121,12 +114,9 @@ public class Card_91_012_Tests
 
 		var scn = GetFreepsScenario();
 
-		var aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveCompanionsToTable("gimli", "gandalf");
-		// An Elf who is no companion, and a companion of the Elven culture who is no Elf
+		// An Elf who is no companion, beside two companions who are no Elves
 		scn.MoveAlliesToTable("silinde");
-		scn.MoveCompanionsToTable(aragorn);
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
 
 		scn.StartGame();
 

@@ -1,7 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.rtmd.set_92_rotk;
 
 import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Zone;
@@ -10,7 +9,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -201,7 +199,7 @@ public class Card_92_015_Tests
 	}
 
 	@Test
-	public void ADwarfAllyIsStrengthPlusOneAndAManOfTheDwarvenCultureIsNot() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ADwarfAllyIsStrengthPlusOneAndAManAndAnElfAreNot() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetFreepsScenario();
 
 		var gimli = scn.GetFreepsCard("gimli");
@@ -213,13 +211,11 @@ public class Card_92_015_Tests
 		scn.MoveAlliesToTable(grimir);
 
 		scn.StartGame();
-		// Aragorn made a [dwarven] companion as well: of the Dwarves' culture, and no Dwarf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.DWARVEN));
 
 		// A Dwarf companion and a Dwarf ally: Gimli 6 + 1, Grimir 3 + 1.
 		assertEquals(7, scn.GetStrength(gimli));
 		assertEquals(4, scn.GetStrength(grimir));
-		// The Man of their culture and the Elf keep their printed strength.
+		// The Man and the Elf keep their printed strength.
 		assertEquals(8, scn.GetStrength(aragorn));
 		assertEquals(6, scn.GetStrength(legolas));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
@@ -251,7 +247,7 @@ public class Card_92_015_Tests
 	}
 
 	@Test
-	public void ADwarfAllyInASkirmishTakesOneWoundAndAManOfTheDwarvenCultureTakesBoth() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ADwarfAllyInASkirmishTakesOneWoundAndAManTakesBoth() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetFreepsScenario();
 
 		var grimir = scn.GetFreepsCard("grimir");
@@ -265,8 +261,6 @@ public class Card_92_015_Tests
 		scn.MoveCardsToHand(follow);
 
 		scn.StartGame();
-		// Aragorn made a [dwarven] companion as well: of the Dwarves' culture, and no Dwarf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.DWARVEN));
 		scn.MoveMinionsToTable(party1, party2);
 
 		// One Whom Men Would Follow: Aragorn exerts, and Grimir fights until the regroup phase
@@ -288,7 +282,7 @@ public class Card_92_015_Tests
 
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassCurrentPhaseActions();
-		// The Man of their culture takes both: 1 from his exertion + 2.
+		// The Man, a companion who is no Dwarf, takes both: 1 from his exertion + 2.
 		assertEquals(3, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}

@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -91,13 +90,13 @@ public class Card_10_012_ErrataTests
 		var bow = scn.GetFreepsCard("bow");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveCompanionsToTable(legolas, aragorn);
-		// One Elf, and two more [elven] cards that are not Elves: a possession, and Aragorn given the culture.
+		// One Elf, who bears an [elven] card that is no Elf, and a companion who is no Elf.
 		scn.AttachCardsTo(legolas, bow);
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
 		scn.MoveCardsToHand(glimpse, celeborn);
 
 		scn.StartGame();
 
+		assertAttachedTo(bow, legolas);
 		assertFalse(scn.FreepsPlayAvailable(glimpse));
 
 		// An Elf ally beside the Elf companion makes two.

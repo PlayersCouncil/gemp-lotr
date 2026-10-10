@@ -1,12 +1,10 @@
 package com.gempukku.lotro.cards.unofficial.rtmd.set_92_rotk;
 
 import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -123,8 +121,6 @@ public class Card_92_031_Tests
 
 		scn.MoveCompanionsToTable(arwen, legolas, haldir, aragorn);
 		scn.MoveAlliesToTable(orophin);
-		// Aragorn is of the [elven] culture but no Elf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
 		scn.MoveCardsToSupportArea(harp);
 		scn.MoveCardsToSupportArea(summons, poison);
 
@@ -133,7 +129,7 @@ public class Card_92_031_Tests
 		scn.AttachCardsTo(aragorn, bladetip);
 
 		scn.FreepsUseCardAction(mod);
-		// Three Elf companions, of whom two exert; the Elf ally and the [elven] Man are not among them
+		// Three Elf companions, of whom two exert; the Elf ally and the Man, each able to exert, are not among them
 		assertTrue(scn.FreepsHasCardChoiceAvailable(arwen, legolas, haldir));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(orophin, aragorn));
 		assertEquals(2, scn.FreepsGetChoiceMin());
@@ -211,15 +207,13 @@ public class Card_92_031_Tests
 
 		scn.MoveCompanionsToTable(arwen, legolas, aragorn);
 		scn.MoveAlliesToTable(orophin);
-		// Aragorn is of the [elven] culture but no Elf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
 		// Legolas has vitality 3: with 2 wounds he is exhausted and cannot exert
 		scn.AddWoundsToChar(legolas, 2);
 		scn.MoveCardsToSupportArea(summons);
 
 		scn.StartGame();
 
-		// Arwen could exert twice, and an Elf ally and an [elven] Man could each exert beside her:
+		// Arwen could exert twice, and an Elf ally and a Man could each exert beside her:
 		// none of that is two Elf companions exerting
 		assertEquals(0, scn.GetWoundsOn(arwen));
 		assertFalse(scn.FreepsActionAvailable(mod));

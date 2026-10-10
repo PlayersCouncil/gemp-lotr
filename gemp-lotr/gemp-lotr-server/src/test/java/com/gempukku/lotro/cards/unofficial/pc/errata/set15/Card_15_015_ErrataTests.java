@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -104,10 +103,7 @@ public class Card_15_015_ErrataTests
 		var uruk = scn.GetShadowCard("uruk");
 		scn.MoveCompanionsToTable(legolas, gimli, aragorn, guard, boromir, gamling);
 		scn.MoveCardsToSupportArea(scn.GetFreepsCard("focus"));
-		// Legolas is a hunter. With the [dwarven] and [gondor] cultures as well he is a hunter of both
-		// cultures who is neither a Dwarf nor a Man.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, legolas, null, Culture.DWARVEN));
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, legolas, null, Culture.GONDOR));
+		// Legolas is a hunter too, of another culture and another race, and wounded like the rest.
 		scn.AddWoundsToChar(gimli, 2);
 		scn.AddWoundsToChar(aragorn, 2);
 		scn.AddWoundsToChar(guard, 1);
@@ -134,7 +130,7 @@ public class Card_15_015_ErrataTests
 		assertEquals(1, scn.FreepsGetChoiceMax());
 		assertEquals(2, scn.FreepsGetCardChoiceCount());
 		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli, aragorn));
-		// No hunter; no hunter; a hunter Man of another culture; a hunter of both cultures and neither race.
+		// No hunter; no hunter; a hunter Man of another culture; a hunter Elf of another culture.
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(guard, boromir, gamling, legolas));
 		scn.FreepsChooseCard(gimli);
 
@@ -283,9 +279,8 @@ public class Card_15_015_ErrataTests
 		var savage2 = scn.GetShadowCard("savage2");
 		scn.MoveCompanionsToTable(legolas, arwen, aragorn);
 		scn.MoveAlliesToTable(celeborn);
+		// Songs of the Blessed Realm is an [elven] card that is no Elf; Aragorn is a companion who is none.
 		scn.MoveCardsToSupportArea(focus, songs);
-		// Aragorn is of the [elven] culture but no Elf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(savage, savage2);
@@ -314,7 +309,7 @@ public class Card_15_015_ErrataTests
 		assertEquals(1, scn.FreepsGetChoiceMax());
 		assertEquals(3, scn.FreepsGetCardChoiceCount());
 		assertTrue(scn.FreepsHasCardChoiceAvailable(legolas, arwen, celeborn));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn, frodo, savage, savage2));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(songs, aragorn, frodo, savage, savage2));
 		scn.FreepsChooseCard(arwen);
 
 		assertEquals(8, scn.GetStrength(arwen));

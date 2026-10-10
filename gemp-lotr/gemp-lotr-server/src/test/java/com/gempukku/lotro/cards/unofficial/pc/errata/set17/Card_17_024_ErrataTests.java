@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -24,7 +23,6 @@ public class Card_17_024_ErrataTests
 					put("radagast", "9_26");     // Radagast, The Brown: the [gandalf] Wizard who is not Gandalf; move limit +1, and a trigger on a regroup move
 					put("saruman", "32_24");     // Saruman, The White: the [gandalf] Wizard who is an ally; gives Gandalf defender +1 and has abilities used only on purpose
 					put("avenger", "6_27");      // Ent Avenger: a [gandalf] companion who is no Wizard
-					put("aragorn", "1_89");      // Aragorn, Ranger of the North: a [gondor] Man, made a Wizard by the test
 
 					put("glamdring", "1_75");    // Glamdring: possession, hand weapon, cost 2; bearer must be Gandalf
 					put("hobbitglamdring", "30_29"); // Glamdring (The Hobbit): [gandalf] artifact, hand weapon, bearer must be Gandalf; its trigger needs a skirmish won
@@ -87,11 +85,9 @@ public class Card_17_024_ErrataTests
 		var radagast = scn.GetFreepsCard("radagast");
 		var saruman = scn.GetFreepsCard("saruman");
 		var avenger = scn.GetFreepsCard("avenger");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionsToTable(gandalf, radagast, avenger, aragorn);
+		var frodo = scn.GetRingBearer();
+		scn.MoveCompanionsToTable(gandalf, radagast, avenger);
 		scn.MoveAlliesToTable(saruman);
-		// A Wizard who is not a [gandalf] card: every Free Peoples Wizard there is, is one.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, aragorn, null, Race.WIZARD));
 		scn.MoveCardsToHand(shadowfax);
 
 		scn.StartGame();
@@ -103,10 +99,11 @@ public class Card_17_024_ErrataTests
 		assertTrue(scn.FreepsPlayAvailable(shadowfax));
 		scn.FreepsPlayCard(shadowfax);
 
-		// Ent Avenger is a [gandalf] companion and no Wizard; Aragorn is a Wizard here and no [gandalf] card.
+		// Ent Avenger is a [gandalf] companion and no Wizard; Frodo is neither.  Every printed Free Peoples
+		// Wizard is a [gandalf] card, so no Wizard of another culture stands here (Q-0213).
 		// Saruman is a [gandalf] Wizard who is an ally, not a companion.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(gandalf, radagast, saruman));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(avenger, aragorn));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(avenger, frodo));
 		scn.FreepsChooseCard(gandalf);
 
 		assertEquals(2, scn.GetTwilight());

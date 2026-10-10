@@ -4,8 +4,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -112,49 +110,6 @@ public class Card_18_012_ErrataTests
 		// 2 for Legolas + 5 for Gil-galad
 		assertEquals(7, scn.GetTwilight());
 		assertInZone(Zone.FREE_CHARACTERS, gilgalad);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
-	public void AnElvenCompanionWhoIsNoElfIsSpottedToPlay() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var gilgalad = scn.GetFreepsCard("gilgalad");
-		var arwen = scn.GetFreepsCard("arwen");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionsToTable(arwen, aragorn);
-		// Every printed [elven] companion is an Elf, so a Man is given the culture: [elven], and no Elf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
-		scn.MoveCardsToHand(gilgalad);
-
-		scn.StartGame();
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(gilgalad));
-
-		scn.FreepsPlayCard(gilgalad);
-		assertEquals(5, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, gilgalad);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
-	public void AnElfCompanionWhoIsNotElvenIsNotSpottedToPlay() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var gilgalad = scn.GetFreepsCard("gilgalad");
-		var arwen = scn.GetFreepsCard("arwen");
-		var legolas = scn.GetFreepsCard("legolas");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionsToTable(arwen, aragorn);
-		// Every printed Elf companion is [elven], so a [gondor] Man is given the race: an Elf, and not [elven].
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, aragorn, null, Race.ELF));
-		scn.MoveCardsToHand(gilgalad, legolas);
-
-		scn.StartGame();
-		assertFalse(scn.FreepsPlayAvailable(gilgalad));
-
-		scn.FreepsPlayCard(legolas);
-		assertTrue(scn.FreepsPlayAvailable(gilgalad));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

@@ -4,7 +4,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -29,7 +28,7 @@ public class Card_10_002_ErrataTests
 					put("disquiet2", "2_2");
 					put("bracers", "2_3");      // Dwarven Bracers: [dwarven] possession, cost 1, bearer must be a Dwarf; a response only when its bearer is about to take a wound
 					put("lord", "1_21");        // Lord of Moria: [dwarven] condition, cost 2, to the support area: each Dwarf is damage +1
-					put("stairs", "1_24");      // Stairs of Khazad-dum: [dwarven] condition, cost 0, to the support area
+					put("stairs", "1_24");      // Stairs of Khazad-dum: [dwarven] condition, cost 0, to the support area; a Dwarf skirmishing a [moria] minion is strength +1
 					put("armor", "1_8");        // Dwarven Armor: [dwarven] possession, cost 0, bearer must be a Dwarf
 					put("ring", "9_9");         // Ring of Retribution: [dwarven] artifact, cost 0, bearer must be a Dwarf; a response only when its bearer wins a skirmish
 					put("sword", "1_299");      // Hobbit Sword: [shire] possession, cost 1, bearer must be a Hobbit; no other text
@@ -79,12 +78,14 @@ public class Card_10_002_ErrataTests
 		var memories = scn.GetFreepsCard("memories");
 		var gimli = scn.GetFreepsCard("gimli");
 		var aragorn = scn.GetFreepsCard("aragorn");
+		var stairs = scn.GetFreepsCard("stairs");
+		// A companion who is no Dwarf, and a [dwarven] card that is no Dwarf.
 		scn.MoveCompanionsToTable(aragorn);
-		// Aragorn is of the [dwarven] culture but no Dwarf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.DWARVEN));
+		scn.MoveCardsToSupportArea(stairs);
 		scn.MoveCardsToHand(memories, gimli);
 
 		scn.StartGame();
+		assertInZone(Zone.SUPPORT, stairs);
 		assertFalse(scn.FreepsPlayAvailable(memories));
 
 		scn.FreepsPlayCard(gimli);

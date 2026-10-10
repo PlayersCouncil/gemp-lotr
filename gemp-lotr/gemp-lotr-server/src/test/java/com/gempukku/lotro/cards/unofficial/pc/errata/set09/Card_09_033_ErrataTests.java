@@ -25,7 +25,6 @@ public class Card_09_033_ErrataTests
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man, strength 8, no knight; a maneuver ability used only on purpose
 					put("knight", "5_35");      // Gondorian Knight: [gondor] Man, strength 6; Knight is its whole text
 					put("pippin", "103_31");    // Pippin, Trollslayer: [gondor] Hobbit, strength 3; Knight; a skirmish ability used only on purpose
-					put("guard", "5_83");       // Household Guard: [rohan] Man, strength 6; Valiant is its whole text
 					put("dwarf", "1_7");        // Dwarf Guard: [dwarven] Dwarf, strength 4, vitality 2, no text in play
 					put("narsil", "17_31");     // Narsil, Forged by Telchar: [gondor] artifact for Elendil or Isildur, cost 3; strength +3, damage +1
 					put("faithful", "9_34");    // Narsil, Blade of the Faithful: [gondor] artifact for a [gondor] Man; Isildur is strength +1 for each [gondor] artifact
@@ -354,16 +353,14 @@ public class Card_09_033_ErrataTests
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var knight = scn.GetFreepsCard("knight");
 		var pippin = scn.GetFreepsCard("pippin");
-		var guard = scn.GetFreepsCard("guard");
 		var narsil = scn.GetFreepsCard("narsil");
 		var armor = scn.GetFreepsCard("armor");
 		var barahir = scn.GetFreepsCard("barahir");
-		scn.MoveCompanionsToTable(isildur, aragorn, knight, pippin, guard);
+		// Every printed knight is a [gondor] card, so no knight of another culture stands here (Q-0213).
+		scn.MoveCompanionsToTable(isildur, aragorn, knight, pippin);
 		// A [gondor] card that Isildur bears and that is no artifact.
 		scn.AttachCardsTo(isildur, armor);
 		scn.MoveCardsToHand(narsil);
-		// Every knight there is is a [gondor] card: this makes a [rohan] Man one.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, guard, null, Keyword.KNIGHT));
 
 		scn.StartGame();
 		// An artifact that another companion bears (put on after the start of the turn, where its own
@@ -371,10 +368,8 @@ public class Card_09_033_ErrataTests
 		scn.AttachCardsTo(aragorn, barahir);
 
 		// Frodo bears The One Ring, Aragorn an artifact, Isildur only his Armor: nobody is stronger.
-		assertTrue(scn.HasKeyword(guard, Keyword.KNIGHT));
 		assertEquals(6, scn.GetStrength(knight));
 		assertEquals(3, scn.GetStrength(pippin));
-		assertEquals(6, scn.GetStrength(guard));
 		assertEquals(8, scn.GetStrength(aragorn));
 		assertEquals(7, scn.GetStrength(isildur));
 		assertEquals(0, scn.GetTwilight());
@@ -387,9 +382,7 @@ public class Card_09_033_ErrataTests
 		// The Man and the Hobbit who are [gondor] knights are each 1 stronger.
 		assertEquals(7, scn.GetStrength(knight));
 		assertEquals(4, scn.GetStrength(pippin));
-		// A knight who is not [gondor], a [gondor] Man who is no knight, and Isildur himself (7 + 3 for
-		// Narsil) are not.
-		assertEquals(6, scn.GetStrength(guard));
+		// A [gondor] Man who is no knight, and Isildur himself (7 + 3 for Narsil), are not.
 		assertEquals(8, scn.GetStrength(aragorn));
 		assertEquals(10, scn.GetStrength(isildur));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
@@ -431,21 +424,17 @@ public class Card_09_033_ErrataTests
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var knight = scn.GetFreepsCard("knight");
 		var pippin = scn.GetFreepsCard("pippin");
-		var guard = scn.GetFreepsCard("guard");
 		var narsil = scn.GetFreepsCard("narsil");
-		scn.MoveCompanionsToTable(aragorn, knight, pippin, guard);
+		// Every printed knight is a [gondor] card, so no knight of another culture stands here (Q-0213).
+		scn.MoveCompanionsToTable(aragorn, knight, pippin);
 		scn.MoveCardsToHand(narsil);
-		// Every knight there is is a [gondor] card: this makes a [rohan] Man one.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, guard, null, Keyword.KNIGHT));
 
 		scn.StartGame();
 
 		// Isildur bears The One Ring and nothing else.  Printed strengths: Gondorian Knight 6, Pippin 3,
-		// Household Guard 6, Aragorn 8, Isildur 7.
-		assertTrue(scn.HasKeyword(guard, Keyword.KNIGHT));
+		// Aragorn (a [gondor] Man who is no knight) 8, Isildur 7.
 		assertEquals(7, scn.GetStrength(knight));
 		assertEquals(4, scn.GetStrength(pippin));
-		assertEquals(6, scn.GetStrength(guard));
 		assertEquals(8, scn.GetStrength(aragorn));
 		assertEquals(7, scn.GetStrength(isildur));
 
@@ -455,7 +444,6 @@ public class Card_09_033_ErrataTests
 		// The Ring and an artifact together are still one +1.
 		assertEquals(7, scn.GetStrength(knight));
 		assertEquals(4, scn.GetStrength(pippin));
-		assertEquals(6, scn.GetStrength(guard));
 		assertEquals(8, scn.GetStrength(aragorn));
 		assertEquals(10, scn.GetStrength(isildur));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());

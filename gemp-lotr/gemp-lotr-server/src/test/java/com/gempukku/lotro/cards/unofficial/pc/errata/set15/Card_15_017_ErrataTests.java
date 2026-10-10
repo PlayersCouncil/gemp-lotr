@@ -4,7 +4,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -26,6 +25,7 @@ public class Card_15_017_ErrataTests
 					put("celeborn", "1_34");    // Celeborn, Lord of Lorien: an Elf ally, cost 2; a fellowship ability never used here
 					put("lorienelf", "1_53");   // Lorien Elf: an Elf companion of strength 4 with no text but a requirement to play
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a [gondor] Man
+					put("finalcount", "4_69");  // Final Count: [elven] condition in the support area; its texts act only for a Legolas, and none is here
 				}},
 				new HashMap<>()
 				{{
@@ -103,13 +103,15 @@ public class Card_15_017_ErrataTests
 		var haldir = scn.GetFreepsCard("haldir");
 		var arwen = scn.GetFreepsCard("arwen");
 		var aragorn = scn.GetFreepsCard("aragorn");
+		var finalcount = scn.GetFreepsCard("finalcount");
+		// A companion who is no Elf, and an [elven] card that is no Elf.
 		scn.MoveCompanionsToTable(aragorn);
-		// Aragorn is of the [elven] culture but no Elf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
+		scn.MoveCardsToSupportArea(finalcount);
 		scn.MoveCardsToHand(haldir, arwen);
 
 		scn.StartGame();
 
+		assertInZone(Zone.SUPPORT, finalcount);
 		assertFalse(scn.FreepsPlayAvailable(haldir));
 
 		scn.FreepsPlayCard(arwen);
@@ -131,13 +133,15 @@ public class Card_15_017_ErrataTests
 		var haldir = scn.GetFreepsCard("haldir");
 		var celeborn = scn.GetFreepsCard("celeborn");
 		var aragorn = scn.GetFreepsCard("aragorn");
+		var finalcount = scn.GetFreepsCard("finalcount");
+		// A companion who is no Elf, and an [elven] card that is no Elf.
 		scn.MoveCompanionsToTable(aragorn);
-		// Aragorn is of the [elven] culture but no Elf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
+		scn.MoveCardsToSupportArea(finalcount);
 		scn.MoveCardsToHand(haldir, celeborn);
 
 		scn.StartGame();
 
+		assertInZone(Zone.SUPPORT, finalcount);
 		assertFalse(scn.FreepsPlayAvailable(haldir));
 
 		scn.FreepsPlayCard(celeborn);

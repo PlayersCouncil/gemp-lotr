@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import com.gempukku.lotro.logic.modifiers.StrengthModifier;
 import org.junit.Test;
 
@@ -35,7 +34,7 @@ public class Card_10_008_ErrataTests
 					put("lightfoot", "1_52");   // Lightfootedness
 					put("supporting", "4_83");  // Supporting Fire
 
-					put("gilgalad", "1_66");    // The Tale of Gil-galad: [elven] condition; an [elven] card that is no event
+					put("gilgalad", "1_66");    // The Tale of Gil-galad: [elven] condition an Elf bears; an [elven] card that is no event and no Elf; a skirmish ability used only on purpose
 					put("axestrike", "1_3");    // Axe Strike: [dwarven] Skirmish event; an event that is not [elven]
 
 					put("men", "5_37");         // Men of Numenor: [gondor] Skirmish event, cost 0: wound a minion bearing a [gondor] fortification
@@ -95,13 +94,15 @@ public class Card_10_008_ErrataTests
 		var lorien = scn.GetFreepsCard("lorien");
 		var celeborn = scn.GetFreepsCard("celeborn");
 		var aragorn = scn.GetFreepsCard("aragorn");
+		var gilgalad = scn.GetFreepsCard("gilgalad");
 		scn.MoveCompanionsToTable(lorien, aragorn);
-		// Aragorn is of the [elven] culture but no Elf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
+		// The Elf bears an [elven] card that is no Elf; Aragorn is a companion who is no Elf.
+		scn.AttachCardsTo(lorien, gilgalad);
 		scn.MoveCardsToHand(cirdan, celeborn);
 
 		scn.StartGame();
 		// One Elf, a companion.
+		assertAttachedTo(gilgalad, lorien);
 		assertFalse(scn.FreepsPlayAvailable(cirdan));
 
 		// A second Elf, an ally.
