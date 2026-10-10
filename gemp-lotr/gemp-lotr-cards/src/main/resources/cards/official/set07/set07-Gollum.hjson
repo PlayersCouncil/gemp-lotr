@@ -1277,7 +1277,11 @@
 					type: addActivated
 					filter: minion
 					phase: assignment
-					text: Assign this minion to bearer of Reckless Pride.
+					text: Assign this minion to Sméagol.
+					requires: {
+						type: canSpot
+						filter: name(Sméagol),assignableToSkirmishAgainst(self)
+					}
 					effect: {
 						type: assignFpCharacterToSkirmish
 						fpCharacter: choose(name(Sméagol))

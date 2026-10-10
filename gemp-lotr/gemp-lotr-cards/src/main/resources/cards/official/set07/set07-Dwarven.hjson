@@ -589,6 +589,10 @@
 					filter: minion
 					phase: assignment
 					text: Assign this minion to bearer of Reckless Pride.
+					requires: {
+						type: canSpot
+						filter: hasAttached(name(Reckless Pride)),assignableToSkirmishAgainst(self)
+					}
 					effect: {
 						type: assignFpCharacterToSkirmish
 						fpCharacter: choose(hasAttached(name(Reckless Pride)))

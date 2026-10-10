@@ -55,18 +55,68 @@ public class Card_07_049_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SteadfastChampionTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	protected VirtualTableScenario GetAssignmentScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("champion", "7_49");
+					put("gandalf", "1_72");     // Gandalf, Friend of the Shirefolk: a strength bonus and no ability
+					// Reckless Pride: the same ability for its own bearer, a [dwarven] companion
+					put("pride", "7_13");
+					put("gimli", "1_13");       // Gimli, Son of Gloin: a skirmish ability, not used here
+					put("troop1", "1_177");     // Goblin Patrol Troop: no text at all
+					put("troop2", "1_177");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+	// The ability costs nothing, so it is not offered where it would assign nobody (Ketura on Q-0034, F-0353; the
+	// erratum 57_49 was corrected the same way, F-0252; CR 4.2 "assignment phase": "Many assignment actions assign
+	// a minion to a companion.  You cannot do this unless both of them are unassigned").
+	@Test
+	public void EachMinionMayAssignItselfToGandalfAndNotOnceEitherIsAssigned() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetAssignmentScenario();
+
+		var champion = scn.GetFreepsCard("champion");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var pride = scn.GetFreepsCard("pride");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCompanionsToTable(gandalf, gimli);
+		scn.AttachCardsTo(gandalf, champion);
+		scn.AttachCardsTo(gimli, pride);
+
+		var troop1 = scn.GetShadowCard("troop1");
+		var troop2 = scn.GetShadowCard("troop2");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(troop1, troop2);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPass();
 
-		assertEquals(2, scn.GetTwilight());
+		// Each minion has the ability, in the words of this card.
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+		assertTrue(scn.ShadowActionAvailable(troop1, "Steadfast Champion"));
+		assertTrue(scn.ShadowActionAvailable(troop2, "Steadfast Champion"));
+		assertFalse(scn.IsCharAssigned(gandalf));
+		assertFalse(scn.IsCharAssigned(troop1));
+
+		scn.ShadowUseCardAction(troop1, "Steadfast Champion");
+
+		assertTrue(scn.IsCharAssignedAgainst(gandalf, troop1));
+		assertFalse(scn.IsCharAssigned(gimli));
+		assertFalse(scn.IsCharAssigned(troop2));
+
+		scn.FreepsPass();
+
+		// The assigned minion has the ability no longer, and neither has the other minion now that Gandalf is
+		// assigned.  Reckless Pride's, whose bearer is not, is still the unassigned minion's to use.
+		assertFalse(scn.ShadowActionAvailable(troop1, "Steadfast Champion"));
+		assertFalse(scn.ShadowActionAvailable(troop2, "Steadfast Champion"));
+		assertFalse(scn.ShadowActionAvailable(troop1, "Reckless Pride"));
+		assertTrue(scn.ShadowActionAvailable(troop2, "Reckless Pride"));
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
 	}
 }

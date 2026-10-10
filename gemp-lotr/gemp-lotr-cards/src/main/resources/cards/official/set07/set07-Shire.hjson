@@ -565,6 +565,10 @@
 					filter: minion
 					phase: assignment
 					text: Assign this minion to bearer of Slow-kindled Courage.
+					requires: {
+						type: canSpot
+						filter: hasAttached(name(Slow-kindled Courage)),assignableToSkirmishAgainst(self)
+					}
 					effect: {
 						type: assignFpCharacterToSkirmish
 						fpCharacter: choose(hasAttached(name(Slow-kindled Courage)))

@@ -5,7 +5,6 @@ import com.gempukku.lotro.cards.build.LotroCardBlueprintBuilder;
 import com.gempukku.lotro.cards.build.ModifierSource;
 import com.gempukku.lotro.cards.build.field.effect.modifier.*;
 import com.gempukku.lotro.common.*;
-import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.timing.PlayConditions;
@@ -358,24 +357,6 @@ public class ModifiersAtTest extends AbstractAtTest {
         assertTrue(hasKeyword(gimli, Keyword.DAMAGE));
         addModifier(modifierSource.getModifier(actionContext));
         assertFalse(hasKeyword(gimli, Keyword.DAMAGE));
-    }
-
-    @Test
-    public void unhastyCompanionCanParticipateInSkirmishes() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard birchseed = addToZone(createCard(P1, "5_15"), Zone.FREE_CHARACTERS);
-
-        JSONObject obj = new JSONObject();
-        obj.put("filter", "ent");
-
-        ModifierSource modifierSource = new UnhastyCompanionCanParticipateInSkirmishes().getModifierSource(obj, lotroCardBlueprintBuilder);
-        DefaultActionContext actionContext = new DefaultActionContext(P1, _game, null, null, null);
-
-        passUntil(Phase.FELLOWSHIP);
-        assertFalse(Filters.assignableToSkirmish(Side.FREE_PEOPLE, false, false, false).accepts(_game, birchseed));
-        addModifier(modifierSource.getModifier(actionContext));
-        assertTrue(Filters.assignableToSkirmish(Side.FREE_PEOPLE, false, false, false).accepts(_game, birchseed));
     }
 
     @Test

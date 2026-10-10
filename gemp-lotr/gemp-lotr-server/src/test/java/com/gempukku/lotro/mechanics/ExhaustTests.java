@@ -17,6 +17,8 @@ import static org.junit.Assert.*;
  *
  * Comprehensive Rules 4.2, "exhausted": a character with only 1 vitality remaining is exhausted; no player may exert
  * an exhausted character; "to exhaust a character means to exert that character as many times as you can".
+ * "Cost": "If a card or special ability has a cost, you must pay that cost or you cannot use that card or special
+ * ability."  So an ability whose cost is to exert a character is not his to use once he is exhausted.
  *
  * Player's Council ruling (Ketura, 2026-10-04): an exhausted character may not be exhausted.  Decipher's cards
  * never ask for exhausting as a cost, so the ruling shows on PC cards that do, and in which characters may be
@@ -37,6 +39,20 @@ public class ExhaustTests
 					put("taskmaster", "2_90");      // Orc Taskmaster: vitality 3
 					put("soldier", "1_271");        // Orc Soldier: vitality 2
 					put("troll", "1_165");          // Cave Troll of Moria: vitality 4
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetExertCostScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// Gimli, Son of Gloin: strength 6, vitality 3.  "Skirmish: Exert Gimli to make him strength +2."
+					put("gimli", "1_13");
+					put("troop", "1_177");          // Goblin Patrol Troop: strength 13, no text at all
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -173,5 +189,42 @@ public class ExhaustTests
 		assertTrue(scn.IsExhausted(gandalf));
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 		assertFalse(scn.FreepsPlayAvailable(words));
+	}
+
+	@Test
+	public void AnAbilityWhoseCostIsToExertIsNotOfferedOnceTheCharacterIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetExertCostScenario();
+
+		var gimli = scn.GetFreepsCard("gimli");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCompanionsToTable(gimli);
+		// Vitality 3 with 1 wound: one exertion left.
+		scn.AddWoundsToChar(gimli, 1);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gimli, troop);
+		scn.FreepsResolveSkirmish(gimli);
+
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertFalse(scn.IsExhausted(gimli));
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertEquals(6, scn.GetStrength(gimli));
+		assertTrue(scn.FreepsActionAvailable(gimli));
+
+		scn.FreepsUseCardAction(gimli);
+
+		assertEquals(2, scn.GetWoundsOn(gimli));
+		assertEquals(8, scn.GetStrength(gimli));
+		assertTrue(scn.IsExhausted(gimli));
+
+		// The Shadow player passes, and the Free Peoples player is asked for skirmish actions again: the same
+		// ability, in the same skirmish, is no longer among them.
+		scn.ShadowPass();
+
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(gimli));
+		assertEquals(2, scn.GetWoundsOn(gimli));
 	}
 }

@@ -55,18 +55,68 @@ public class Card_07_328_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SlowkindledCourageTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	protected VirtualTableScenario GetAssignmentScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("courage", "7_328");
+					put("merry", "1_303");      // Merry, From O'er the Brandywine: no weapon here, so no text
+					// Reckless Pride: the same ability for its own bearer, a [dwarven] companion
+					put("pride", "7_13");
+					put("gimli", "1_13");       // Gimli, Son of Gloin: a skirmish ability, not used here
+					put("troop1", "1_177");     // Goblin Patrol Troop: no text at all
+					put("troop2", "1_177");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+	// The ability costs nothing, so it is not offered where it would assign nobody (Ketura on Q-0034, F-0353;
+	// CR 4.2 "assignment phase": "Many assignment actions assign a minion to a companion.  You cannot do this
+	// unless both of them are unassigned").
+	@Test
+	public void EachMinionMayAssignItselfToTheBearerOfSlowKindledCourageAndNotOnceEitherIsAssigned() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetAssignmentScenario();
+
+		var courage = scn.GetFreepsCard("courage");
+		var merry = scn.GetFreepsCard("merry");
+		var pride = scn.GetFreepsCard("pride");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCompanionsToTable(merry, gimli);
+		scn.AttachCardsTo(merry, courage);
+		scn.AttachCardsTo(gimli, pride);
+
+		var troop1 = scn.GetShadowCard("troop1");
+		var troop2 = scn.GetShadowCard("troop2");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(troop1, troop2);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPass();
 
-		assertEquals(2, scn.GetTwilight());
+		// Each minion has the ability, in the words of this card.
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+		assertTrue(scn.ShadowActionAvailable(troop1, "Slow-kindled Courage"));
+		assertTrue(scn.ShadowActionAvailable(troop2, "Slow-kindled Courage"));
+		assertFalse(scn.IsCharAssigned(merry));
+		assertFalse(scn.IsCharAssigned(troop1));
+
+		scn.ShadowUseCardAction(troop1, "Slow-kindled Courage");
+
+		assertTrue(scn.IsCharAssignedAgainst(merry, troop1));
+		assertFalse(scn.IsCharAssigned(gimli));
+		assertFalse(scn.IsCharAssigned(troop2));
+
+		scn.FreepsPass();
+
+		// The assigned minion has the ability no longer, and neither has the other minion now that the bearer is
+		// assigned.  Reckless Pride's, whose bearer is not, is still the unassigned minion's to use.
+		assertFalse(scn.ShadowActionAvailable(troop1, "Slow-kindled Courage"));
+		assertFalse(scn.ShadowActionAvailable(troop2, "Slow-kindled Courage"));
+		assertFalse(scn.ShadowActionAvailable(troop1, "Reckless Pride"));
+		assertTrue(scn.ShadowActionAvailable(troop2, "Reckless Pride"));
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
 	}
 }

@@ -935,6 +935,10 @@
 					filter: minion
 					phase: assignment
 					text: Assign this minion to bearer of Steadfast Champion.
+					requires: {
+						type: canSpot
+						filter: hasAttached(name(Steadfast Champion)),assignableToSkirmishAgainst(self)
+					}
 					effect: {
 						type: assignFpCharacterToSkirmish
 						fpCharacter: choose(hasAttached(name(Steadfast Champion)))
