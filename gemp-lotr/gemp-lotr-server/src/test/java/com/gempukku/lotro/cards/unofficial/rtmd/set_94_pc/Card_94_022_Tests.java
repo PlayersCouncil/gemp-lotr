@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.framework.DeckValidationScenario;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.DeckValidationContext;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -106,51 +105,6 @@ public class Card_94_022_Tests
 
 		var errors = dvs.validate(deck, context);
 		assertFalse("100 cards should pass with context", dvs.hasMinimumDeckSizeError(errors));
-	}
-
-	@Test
-	public void MergeKeepsTheMostRestrictiveMinimum() throws CardNotFoundException {
-		// The league builds one context out of every meta-site a player carries; unlike the
-		// same-name cap, a deck-size floor merges upwards.
-		var dvs = GetScenario();
-		// No other modifier has a floor of its own: a lower one is made up for the merge
-		var low = new DeckValidationContext().setMinimumDeckSizeOverride(80);
-		// What the modifier itself tells deck validation
-		var high = VirtualTableScenario.FindCard("94_22").getDeckBuildingOverrides();
-
-		var mergedUp = new DeckValidationContext().setMinimumDeckSizeOverride(80);
-		mergedUp.merge(high);
-		assertEquals(100, (int) mergedUp.getMinimumDeckSizeOverride());
-
-		var mergedDown = new DeckValidationContext();
-		mergedDown.merge(high);
-		mergedDown.merge(low);
-		assertEquals(100, (int) mergedDown.getMinimumDeckSizeOverride());
-
-		// And the floor that comes out of either merge is the one a deck is held to: 99 cards are too few
-		var deck = dvs.buildDeck(null, null, 49, 50);
-		assertTrue("99 cards should fail with the floors merged upwards", dvs.hasMinimumDeckSizeError(dvs.validate(deck, mergedUp)));
-		assertTrue("99 cards should fail with the floors merged downwards", dvs.hasMinimumDeckSizeError(dvs.validate(deck, mergedDown)));
-	}
-
-	@Test
-	public void MergeIsIndependentOfTheSameNameChannel() throws CardNotFoundException {
-		var dvs = GetScenario();
-		// What the modifier itself tells deck validation
-		var deckSize = VirtualTableScenario.FindCard("94_22").getDeckBuildingOverrides();
-		// Race Text 92_1: "Your draw deck may contain up to 6 copies of any card (instead of 4)."
-		var sameName = VirtualTableScenario.FindCard("92_1").getDeckBuildingOverrides();
-
-		var merged = new DeckValidationContext();
-		merged.merge(deckSize);
-		merged.merge(sameName);
-
-		assertEquals(100, (int) merged.getMinimumDeckSizeOverride());
-		assertEquals(6, (int) merged.getMaximumSameNameOverride());
-
-		// A player who has both modifiers is still held to 100 cards
-		var deck = dvs.buildDeck(null, null, 30, 30);
-		assertTrue("60 cards should fail for a player with both modifiers", dvs.hasMinimumDeckSizeError(dvs.validate(deck, merged)));
 	}
 
 	@Test

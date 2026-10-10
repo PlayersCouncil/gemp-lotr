@@ -239,16 +239,28 @@ public class Card_94_007_Tests
 	public void NotOfferedToNonOwner() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetShadowScenario();
 		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
 
+		scn.MoveCompanionsToTable(aragorn);
 		scn.StartGame();
+		// A wound on Aragorn, so that the sanctuary's healing is asked at all.
+		scn.AddWoundsToChar(aragorn, 1);
 		scn.AddBurdens(1);
 		scn.SkipToSite(3);
 
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(1, scn.GetBurdens());
 		// The mod's default "player" scope is "owner" (Shadow here); the Free Peoples player, who is
 		// doing the healing at this Sanctuary site, is not offered the burden-removal option, so the
-		// unwounded Ring-bearer is not made selectable by the burden alone.
+		// unwounded Ring-bearer is not made selectable by the burden alone: wounded Aragorn is.
+		assertTrue(scn.FreepsDecisionAvailable("Sanctuary healing"));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(frodo));
-		// With nobody wounded and no burden he may take off, no sanctuary healing is asked at all.
+		scn.FreepsChooseCard(aragorn);
+
+		// With nobody wounded any longer and no burden he may take off, the other four heals are not asked about.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(1, scn.GetBurdens());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

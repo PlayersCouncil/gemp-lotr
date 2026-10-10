@@ -22,6 +22,8 @@ public class Card_92_024_Tests
 					// Ulaire Enquea, Lieutenant of Morgul: a unique [wraith] Nazgul, cost 6
 					put("enquea1", "1_231");
 					put("enquea2", "1_231");
+					put("enquea3", "1_231");
+					put("enquea4", "1_231");
 					// Ulaire Attea, Khamul of the East: a unique Nazgul who is [raider], cost 6
 					put("khamul1", "103_61");
 					put("khamul2", "103_61");
@@ -56,6 +58,8 @@ public class Card_92_024_Tests
 					// Ulaire Enquea, Lieutenant of Morgul: a unique [wraith] Nazgul, cost 6
 					put("enquea1", "1_231");
 					put("enquea2", "1_231");
+					put("enquea3", "1_231");
+					put("enquea4", "1_231");
 					// Ulaire Attea, Khamul of the East: a unique Nazgul who is [raider], cost 6
 					put("khamul1", "103_61");
 					put("khamul2", "103_61");
@@ -104,29 +108,35 @@ public class Card_92_024_Tests
 
 	@Test
 	public void CanPlayDuplicateNazgulWhenModifierActive() throws DecisionResultInvalidException, CardNotFoundException {
-		// With the modifier, two copies of Enquëa should both be playable; and two of Khamul,
-		// the Nazgul who is not [wraith]
+		// With the modifier, three copies of Enquëa are in play and a fourth is played beside them:
+		// "non-unique" is no cap of two or three. And two of Khamul, the Nazgul who is not [wraith]
 		var scn = GetShadowScenario();
 
 		var enquea1 = scn.GetShadowCard("enquea1");
 		var enquea2 = scn.GetShadowCard("enquea2");
+		var enquea3 = scn.GetShadowCard("enquea3");
+		var enquea4 = scn.GetShadowCard("enquea4");
 		var khamul1 = scn.GetShadowCard("khamul1");
 		var khamul2 = scn.GetShadowCard("khamul2");
 
-		scn.MoveMinionsToTable(enquea1, khamul1);
-		scn.MoveCardsToHand(enquea2, khamul2);
+		scn.MoveMinionsToTable(enquea1, enquea2, enquea3, khamul1);
+		scn.MoveCardsToHand(enquea4, khamul2);
 
 		scn.StartGame();
 		scn.SetTwilight(30);
 		scn.SkipToPhase(Phase.SHADOW);
 
 		assertInZone(Zone.SHADOW_CHARACTERS, enquea1);
-		assertInZone(Zone.HAND, enquea2);
-		assertTrue(scn.ShadowPlayAvailable(enquea2));
-		scn.ShadowPlayCard(enquea2);
+		assertInZone(Zone.SHADOW_CHARACTERS, enquea2);
+		assertInZone(Zone.SHADOW_CHARACTERS, enquea3);
+		assertInZone(Zone.HAND, enquea4);
+		assertTrue(scn.ShadowPlayAvailable(enquea4));
+		scn.ShadowPlayCard(enquea4);
 
 		assertInZone(Zone.SHADOW_CHARACTERS, enquea1);
 		assertInZone(Zone.SHADOW_CHARACTERS, enquea2);
+		assertInZone(Zone.SHADOW_CHARACTERS, enquea3);
+		assertInZone(Zone.SHADOW_CHARACTERS, enquea4);
 
 		assertInZone(Zone.SHADOW_CHARACTERS, khamul1);
 		assertInZone(Zone.HAND, khamul2);

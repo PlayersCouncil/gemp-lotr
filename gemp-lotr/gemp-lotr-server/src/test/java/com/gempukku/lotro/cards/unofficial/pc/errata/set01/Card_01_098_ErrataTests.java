@@ -296,6 +296,57 @@ public class Card_01_098_ErrataTests
 	}
 
 	@Test
+	public void AnswersASitesSkirmishAbilityUsedByTheShadowPlayerAndNotTheSameOneUsedByTheFreePeoplesPlayer() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var cloak = scn.GetFreepsCard("cloak");
+		var boromir = scn.GetFreepsCard("boromir");
+		var savage = scn.GetShadowCard("savage1");
+		scn.MoveCompanionsToTable(boromir);
+		scn.AttachCardsTo(boromir, cloak);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(savage);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(boromir, savage);
+		scn.FreepsResolveSkirmish(boromir);
+
+		// Site 2 is Ettenmoors: "Skirmish: Exert your companion or minion to make that character strength +2."
+		// A site has no side, and each player may use its ability on a character of his own.
+		var ettenmoors = scn.GetCurrentSite();
+		assertEquals("Ettenmoors", ettenmoors.getBlueprint().getTitle());
+		assertEquals(7, scn.GetStrength(boromir));
+		assertEquals(0, scn.GetWoundsOn(boromir));
+		assertTrue(scn.FreepsActionAvailable(ettenmoors));
+
+		// The Free Peoples player uses it on Boromir, in Boromir's own skirmish.  Only the Shadow player's special
+		// abilities are answered (Ketura on F-0200): the Cloak is not offered, and the ability goes through.
+		scn.FreepsUseCardAction(ettenmoors);
+		scn.FreepsChooseCard(boromir);
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(cloak));
+		assertEquals(1, scn.GetWoundsOn(boromir));
+		assertEquals(9, scn.GetStrength(boromir));
+		assertAttachedTo(cloak, boromir);
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+
+		// The Shadow player uses the same ability on his minion in the same skirmish: the Cloak is offered, and
+		// taken it prevents that.
+		assertEquals(5, scn.GetStrength(savage));
+		assertEquals(0, scn.GetWoundsOn(savage));
+		assertTrue(scn.ShadowActionAvailable(ettenmoors));
+		scn.ShadowUseCardAction(ettenmoors);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(cloak));
+		scn.FreepsChooseOptionalTrigger(cloak);
+
+		assertInDiscard(cloak);
+		// The exertion was the ability's cost and stays paid; the +2 does not happen.
+		assertEquals(1, scn.GetWoundsOn(savage));
+		assertEquals(5, scn.GetStrength(savage));
+		assertEquals(9, scn.GetStrength(boromir));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
+
+	@Test
 	public void IsOfferedAgainstAFreePeoplesSkirmishEventInBoromirsSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

@@ -25,6 +25,9 @@ public class Card_07_359_ErrataTests
 					// Gollum, Old Villain: [gollum] minion, cost 2; a skirmish ability.  The Free Peoples player's own
 					// Gollum, of a version no other test card is: an offer from a discard pile is read by version.
 					put("gollum4", "6_40");
+					// Gollum, Half a Wraith Himself: the one Gollum who is not [gollum]: a [wraith] minion, cost 2, site 3.
+					// His trigger answers a Nazgul being played and his ability is an assignment action.
+					put("wraithgollum", "103_66");
 					put("shelob", "8_25");      // Shelob, Eater of Light: [gollum] minion that is not Gollum, cost 6, site 8
 					put("runner", "1_178");     // Goblin Runner: [moria] minion, cost 1; adds (2) when played, without asking
 					put("refuge", "4_29");      // No Refuge: [dunland] Shadow condition, cost 0, support area; nothing without a stacked Man
@@ -88,15 +91,16 @@ public class Card_07_359_ErrataTests
 		var gollum = scn.GetShadowCard("gollum");
 		var gollum2 = scn.GetShadowCard("gollum2");
 		var gollum3 = scn.GetShadowCard("gollum3");
+		var wraithGollum = scn.GetShadowCard("wraithgollum");
 		var shelob = scn.GetShadowCard("shelob");
 		var freepsGollum = scn.GetFreepsCard("gollum4");
 		scn.MoveCompanionsToTable(scn.GetFreepsCard("aragorn"), scn.GetFreepsCard("gimli"), scn.GetFreepsCard("sam"));
 
 		scn.StartGame();
 		scn.SkipToSite(7);
-		// Two Gollums in the Shadow player's discard pile; Shelob, who is no Gollum, beside them; a Gollum in his
-		// hand; and a Gollum in the other player's discard pile.
-		scn.MoveCardsToDiscard(gollum, gollum2, shelob, freepsGollum);
+		// Three Gollums in the Shadow player's discard pile, two of them [gollum] and one [wraith]; Shelob, who is
+		// [gollum] and no Gollum, beside them; a Gollum in his hand; and a Gollum in the other player's discard pile.
+		scn.MoveCardsToDiscard(gollum, gollum2, wraithGollum, shelob, freepsGollum);
 		scn.MoveCardsToHand(gollum3);
 		scn.AddThreats(4);
 		scn.SetTwilight(20);
@@ -111,13 +115,14 @@ public class Card_07_359_ErrataTests
 
 		scn.ShadowUseCardAction(site);
 		assertEquals(2, scn.GetThreats());
-		assertTrue(scn.ShadowHasCardChoiceAvailable(gollum, gollum2));
+		// "Gollum" is the title and nothing more: the [wraith] Gollum is one of them.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(gollum, gollum2, wraithGollum));
 		assertTrue(scn.ShadowHasCardChoiceNotAvailable(shelob, gollum3, freepsGollum));
-		scn.ShadowChooseCard(gollum2);
+		scn.ShadowChooseCard(wraithGollum);
 
-		assertInZone(Zone.SHADOW_CHARACTERS, gollum2);
-		assertInDiscard(gollum, shelob);
-		// Gollum, Vile Creature costs 2; site 3 is not roaming at site 8.
+		assertInZone(Zone.SHADOW_CHARACTERS, wraithGollum);
+		assertInDiscard(gollum, gollum2, shelob);
+		// Gollum, Half a Wraith Himself costs 2; site 3 is not roaming at site 8.
 		assertEquals(twilight - 2, scn.GetTwilight());
 		assertEquals(burdens + 2, scn.GetBurdens());
 		assertTrue(scn.AwaitingShadowPhaseActions());

@@ -34,6 +34,14 @@ public class Card_V1_014_Tests
 					// Saruman, Keeper of Isengard: [isengard] minion, cost 4, site 4.  With no Uruk-hai about, his
 					// text does nothing.
 					put("saruman", "3_68");
+					// The three Elves again, each as the other kind of character, and never beside a namesake.
+					// Celeborn, Lord of the Galadhrim: a companion, cost 2; his trigger is at the start of his skirmishes.
+					put("celeborncompanion", "10_7");
+					// Elrond, Lord of Rivendell: an ally, cost 4, played by spotting Gandalf; he heals allies of
+					// site 3 at the start of a turn, and his ability is a fellowship action never used here.
+					put("elrondally", "1_40");
+					// Galadriel, Bearer of Wisdom: a companion, cost 3; no text unless she bears an artifact or the Ring.
+					put("galadrielcompanion", "9_14");
 					// Saruman, Servant of Sauron: [isengard] Shadow follower, unique, cost 1.  A follower is not a
 					// character (CR 4.2 "follower", "character"), and its own text does nothing in the support area.
 					put("servant", "17_38");
@@ -369,6 +377,39 @@ public class Card_V1_014_Tests
 		scn.MoveAlliesToTable(galadriel);
 		assertEquals(8, scn.GetStrength(gandalf));
 		assertEquals(4, scn.GetStrength(lorien));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void CelebornAndGaladrielAsCompanionsAndElrondAsAnAllyAreEachWorthOneToo() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gandalf = scn.GetFreepsCard("gandalf");
+		// "These characters" are named by title alone: a Celeborn and a Galadriel who are companions and an
+		// Elrond who is an ally count as the ally Celeborn, the ally Galadriel and the companion Elrond do.
+		var celeborn = scn.GetFreepsCard("celeborncompanion");
+		var elrond = scn.GetFreepsCard("elrondally");
+		var galadriel = scn.GetFreepsCard("galadrielcompanion");
+
+		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCardsToHand(celeborn, elrond, galadriel);
+
+		scn.StartGame();
+
+		assertEquals(7, scn.GetStrength(gandalf));
+
+		scn.FreepsPlayCard(celeborn);
+		assertInZone(Zone.FREE_CHARACTERS, celeborn);
+		assertEquals(8, scn.GetStrength(gandalf));
+
+		scn.FreepsPlayCard(elrond);
+		assertInZone(Zone.SUPPORT, elrond);
+		assertEquals(9, scn.GetStrength(gandalf));
+
+		scn.FreepsPlayCard(galadriel);
+		assertInZone(Zone.FREE_CHARACTERS, galadriel);
+		// 7 + 1 for each of the three
+		assertEquals(10, scn.GetStrength(gandalf));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

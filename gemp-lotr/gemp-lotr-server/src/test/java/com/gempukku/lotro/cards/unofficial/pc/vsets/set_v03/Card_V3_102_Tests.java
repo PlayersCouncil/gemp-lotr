@@ -340,12 +340,10 @@ public class Card_V3_102_Tests
 
 		scn.FreepsPass();
 		scn.ShadowPass();
-		// Whether the trigger is still listed beside the skirmish's wound depends on how the question comes to
-		// be withheld; either way no choice of a threat or a burden follows.
-		if (scn.FreepsAwaitingRequiredResponseOrder()) {
-			scn.FreepsResolveRuleFirst();
-		}
 
+		// The trigger does not happen at all: the skirmish's wound has nothing beside it to be put in order
+		// with (on the other boards the Free Peoples player orders the two), and no choice of a threat or a
+		// burden follows it.
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertFalse(scn.FreepsChoiceAvailable("Add a threat"));
 		assertFalse(scn.FreepsChoiceAvailable("Add a burden"));

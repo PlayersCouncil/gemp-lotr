@@ -102,6 +102,7 @@ public class Card_94_003_Tests
 					put("betsy", "33_19");      // Betsy Butterbur: twilight 0 ally of another title, a fellowship ability used only on purpose
 					put("army", "18_47");       // Elendil's Army: twilight 0 follower, whose Aid is made at the start of the maneuver phase
 					put("servant", "18_52");    // Gondorian Servant: twilight 0 follower of another title, whose Aid is made at the start of the maneuver phase
+					put("gimli", "1_13");       // Gimli, Son of Glóin: twilight 2 companion, still on offer when every cap is used up
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -315,6 +316,7 @@ public class Card_94_003_Tests
 		var betsy = scn.GetFreepsCard("betsy");
 		var army = scn.GetFreepsCard("army");
 		var servant = scn.GetFreepsCard("servant");
+		var gimli = scn.GetFreepsCard("gimli");
 
 		assertTrue(scn.FreepsHasCardChoiceAvailable(smeagol, trolls, stairs, barliman, betsy, army, servant));
 
@@ -334,11 +336,17 @@ public class Card_94_003_Tests
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(stairs, betsy));
 		assertTrue(scn.FreepsHasCardChoiceAvailable(army, servant));
 
+		// With all three used up he is still asked, for Gimli, who costs 2 of the 4; the second card of cost 0 of
+		// each type is refused.
 		scn.FreepsChooseCard(army);
 		assertInPlay(army);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(stairs, betsy, servant));
 		assertEquals(0, scn.GetTwilight());
-		// Nothing is left that he may play, so his starting fellowship is complete and the other player's is asked.
+
+		// He takes nobody else: his starting fellowship is complete and the other player's is asked.
+		scn.FreepsDeclineChoosing();
+		assertInPlay(smeagol, trolls, barliman, army);
 		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
 	}
 

@@ -371,6 +371,9 @@ A trigger added for the skirmish ("if that minion is overwhelmed, ...") raises t
 will come to nothing (Cirdan 60_8 with one [elven] event: half, rounded down, is none): `FreepsResolveRuleFirst()`
 is still needed, and nothing is asked after it. So does a card's standing required "each time X wins a
 skirmish" with nothing to act on (Focus 65_15 with nobody to heal, before F-0289 made it optional).
+A required trigger whose `requires` is unmet is not listed at all: no ordering is asked and the rule's wound
+lands alone (The Mouth of Sauron 103_102 with neither a threat nor a burden possible, F-0154). A test knows which
+board it is on and asserts it: `FreepsResolveRuleFirst()` under an `if` passes whichever the game does.
 There is no Shadow twin of either and there will not be: by rule the Free Peoples player is the one who orders
 simultaneous actions, whoever's they are.
 A companion whose own text answers his leaving play (Radagast 59_26) raises this decision whenever he is killed,
@@ -1155,7 +1158,8 @@ number from the text (`new DeckValidationContext().setMaximumSameNameOverride(6)
 card: a wrong number in the definition passes it (the old tests of 92_1, 92_19 and 94_22, all since rewritten).
 `getDeckBuildingOverrides()` hands back the blueprint's own object, the same one to every test of the run: a test
 of the league's merge calls `merge` on a `new DeckValidationContext()` with the card's overrides as the argument,
-never on the card's overrides (94_22). Whose deck the overrides bind ("Your draw deck ...") is the league's choice
+never on the card's overrides (`mechanics/DeckBuildingOverridesMergeTests`, 94_22's two merge tests until engine
+pass 24). Whose deck the overrides bind ("Your draw deck ...") is the league's choice
 of player and nothing in the definition: no card test can show it, the `-` for the other player is the same deck
 validated with no context, and the ledger's Notes say so.
 `hasSiteBlockError(errors)` matches the four block objections and nothing else ("same block", "not allowed in

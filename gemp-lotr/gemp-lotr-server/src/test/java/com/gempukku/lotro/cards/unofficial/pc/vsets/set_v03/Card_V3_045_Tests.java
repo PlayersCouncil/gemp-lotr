@@ -33,6 +33,7 @@ public class Card_V3_045_Tests
 					put("poison", "8_28");      // Spider Poison: Shadow possession a companion bears; bearer exerts when assigned to a skirmish
 					put("elrond", "1_40");      // Elrond, Lord of Rivendell: ally whose home is site 3, strength 8, vitality 4
 					put("vilya", "3_27");       // Vilya: Free Peoples artifact on Elrond, vitality +1; a maneuver ability never used here
+					put("pipe", "1_285");       // Bilbo's Pipe: Free Peoples possession on a Hobbit, with no numbers; a fellowship ability
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -286,6 +287,8 @@ public class Card_V3_045_Tests
 		var quartermaster = scn.GetShadowCard("quartermaster");
 		var frodo = scn.GetRingBearer();
 		var ring = scn.GetRing();
+		var pipe = scn.GetFreepsCard("pipe");
+		scn.AttachCardsTo(frodo, pipe);
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(quartermaster);
@@ -293,12 +296,22 @@ public class Card_V3_045_Tests
 		scn.FreepsAssignToMinions(frodo, quartermaster);
 		scn.FreepsResolveSkirmish(frodo);
 
-		// The Ring is all Frodo bears. It has no side and is neither possession nor artifact.
+		// Frodo bears the Ring and a pipe. The Ring has no side and is neither possession nor artifact: the Free
+		// Peoples player is asked about the pipe alone, and the pipe alone is counted.
 		assertAttachedTo(ring, frodo);
+		assertAttachedTo(pipe, frodo);
 		assertTrue(scn.IsCharSkirmishing(quartermaster));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(pipe));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(ring));
+		assertEquals(1, scn.FreepsGetCardChoiceCount());
+		assertEquals(1, scn.GetKeywordCount(quartermaster, Keyword.DAMAGE));
+
+		scn.FreepsChooseCard(pipe);
+
+		assertTrue(scn.IsHindered(pipe));
 		assertFalse(scn.IsHindered(ring));
-		assertFalse(scn.HasKeyword(quartermaster, Keyword.DAMAGE));
+		// With the pipe hindered the Ring is all that is left on him, and it is worth nothing.
+		assertEquals(0, scn.GetKeywordCount(quartermaster, Keyword.DAMAGE));
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 
