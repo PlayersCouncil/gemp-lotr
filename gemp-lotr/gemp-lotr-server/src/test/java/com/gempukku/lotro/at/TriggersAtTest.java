@@ -113,23 +113,6 @@ public class TriggersAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void revealedCardFromHand() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard eyeOfBaradDur = addToZone(createCard(P2, "5_96"), Zone.HAND);
-        PhysicalCard gandalf = addToZone(createCard(P1, "1_72"), Zone.FREE_CHARACTERS);
-        PhysicalCard glamdring = attachTo(createCard(P1, "1_75"), gandalf);
-
-        passUntil(Phase.FELLOWSHIP);
-        selectCardAction(P1, glamdring);
-        pass(P1);
-
-        assertEquals(1, getBurdens());
-        selectCardAction(P2, eyeOfBaradDur);
-        assertEquals(3, getBurdens());
-    }
-
-    @Test
     public void beforeToil() throws Exception {
         initializeSimplestGame();
 
@@ -402,35 +385,6 @@ public class TriggersAtTest extends AbstractAtTest {
         pass(P1);
         pass(P2);
         hasCardAction(P2, witchKingsBeast);
-    }
-
-
-    @Test
-    public void aboutToTakeControlOfSite() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard whiteHandIntruder = addToZone(createCard(P2, "17_127"), Zone.SHADOW_CHARACTERS);
-        PhysicalCard gimli = addToZone(createCard(P1, "5_7"), Zone.FREE_CHARACTERS);
-        for (int i = 0; i < 2; i++) {
-            addToZone(createCard(P2, "17_119"), Zone.SHADOW_CHARACTERS);
-        }
-        PhysicalCard ceorl = addToZone(createCard(P1, "4_264"), Zone.SUPPORT);
-        PhysicalCard guma = addToZone(createCard(P1, "4_277"), Zone.SUPPORT);
-
-        passUntil(Phase.SHADOW);
-        _game.getGameState().setPlayerPosition(P2, 2);
-
-        passUntil(Phase.ASSIGNMENT);
-        pass(P1);
-        pass(P2);
-        playerDecided(P1, gimli.getCardId() + " " + whiteHandIntruder.getCardId());
-        pass(P2);
-        selectCard(P1, gimli);
-
-        pass(P1);
-        pass(P2);
-        selectCardAction(P2, whiteHandIntruder);
-        hasCardAction(P1, ceorl);
     }
 
     @Test

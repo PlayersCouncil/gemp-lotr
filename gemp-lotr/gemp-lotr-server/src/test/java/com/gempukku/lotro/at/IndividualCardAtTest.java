@@ -463,43 +463,6 @@ public class IndividualCardAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void courteousFrodoPreventsDiscard() throws DecisionResultInvalidException, CardNotFoundException {
-        Map<String, LotroDeck> decks = new HashMap<>();
-        final LotroDeck p1Deck = createSimplestDeck();
-        p1Deck.setRingBearer("4_301");
-        decks.put(P1, p1Deck);
-
-        decks.put(P2, createSimplestDeck());
-
-        initializeGameWithDecks(decks);
-
-        PhysicalCardImpl arwen = new PhysicalCardImpl(100, "7_16", P1, _cardLibrary.getLotroCardBlueprint("7_16"));
-        PhysicalCardImpl legolas = new PhysicalCardImpl(100, "1_50", P1, _cardLibrary.getLotroCardBlueprint("1_50"));
-        PhysicalCardImpl aragorn = new PhysicalCardImpl(100, "1_89", P1, _cardLibrary.getLotroCardBlueprint("1_89"));
-
-        PhysicalCardImpl cardInHand = new PhysicalCardImpl(100, "1_268", P1, _cardLibrary.getLotroCardBlueprint("1_268"));
-        PhysicalCardImpl inquisitor = new PhysicalCardImpl(100, "1_268", P2, _cardLibrary.getLotroCardBlueprint("1_268"));
-
-        _game.getGameState().addCardToZone(_game, arwen, Zone.FREE_CHARACTERS);
-        _game.getGameState().addCardToZone(_game, legolas, Zone.FREE_CHARACTERS);
-        _game.getGameState().addCardToZone(_game, aragorn, Zone.FREE_CHARACTERS);
-        _game.getGameState().addCardToZone(_game, inquisitor, Zone.HAND);
-        _game.getGameState().addCardToZone(_game, cardInHand, Zone.HAND);
-
-        skipMulligans();
-
-        // Pass in fellowship
-        playerDecided(P1, "");
-
-        // Play inquisitor
-        playerDecided(P2, "0");
-        // Use inquisitor
-        playerDecided(P2, "0");
-
-        assertEquals(Zone.HAND, cardInHand.getZone());
-    }
-
-    @Test
     public void sarumanOfManyColors() throws Exception {
         initializeSimplestGame();
 

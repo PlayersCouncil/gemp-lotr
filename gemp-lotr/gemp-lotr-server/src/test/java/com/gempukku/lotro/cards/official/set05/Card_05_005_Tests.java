@@ -3,6 +3,7 @@ package com.gempukku.lotro.cards.official.set05;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.common.Timeword;
 import com.gempukku.lotro.game.CardNotFoundException;
@@ -11,6 +12,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_05_005_Tests
@@ -21,7 +23,25 @@ public class Card_05_005_Tests
 				new HashMap<>()
 				{{
 					put("card", "5_5");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetManeuverScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("baruk", "5_5");
+					put("gimli", "5_7");        // Gimli, Skilled Defender: a Dwarf, vitality 3; his own text answers a skirmish he wins
+					put("guard", "1_7");        // Dwarf Guard: a second Dwarf, so that who exerts is a choice
+					// Aragorn, Ranger of the North: no Dwarf.  "Maneuver: Exert Aragorn to make him defender +1 until
+					// the regroup phase": a second maneuver action for the Free Peoples player to take.
+					put("aragorn", "1_89");
+					put("savage", "1_151");     // Uruk Savage: vitality 3, so the wound leaves it in play and the phase goes on
+					put("troop", "1_177");      // Goblin Patrol Troop: a second minion, so that who is wounded is a choice
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -58,18 +78,53 @@ public class Card_05_005_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void BarukKhazadTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void AfterItThePlayerTakesTheNextManeuverActionBeforeTheShadowPlayer() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetManeuverScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var baruk = scn.GetFreepsCard("baruk");
+		var gimli = scn.GetFreepsCard("gimli");
+		var guard = scn.GetFreepsCard("guard");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var savage = scn.GetShadowCard("savage");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCompanionsToTable(gimli, guard, aragorn);
+		scn.MoveCardsToHand(baruk);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(savage, troop);
+		scn.SkipToPhase(Phase.MANEUVER);
 
-		assertEquals(0, scn.GetTwilight());
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertEquals(0, scn.GetWoundsOn(savage));
+		assertTrue(scn.FreepsPlayAvailable(baruk));
+		scn.FreepsPlayCard(baruk);
+
+		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli, guard));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		scn.FreepsChooseCard(gimli);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(savage, troop));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		scn.FreepsChooseCard(savage);
+
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertEquals(0, scn.GetWoundsOn(guard));
+		assertEquals(1, scn.GetWoundsOn(savage));
+		assertEquals(0, scn.GetWoundsOn(troop));
+		assertInDiscard(baruk);
+		// By the action procedure the Shadow player would act now.  The next maneuver action is the Free Peoples
+		// player's again, and the Shadow player is asked nothing.
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+
+		// He takes it.  That was the one action the event gave: after it the Shadow player is the one asked.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.FreepsActionAvailable(aragorn));
+		scn.FreepsUseCardAction(aragorn);
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+		assertFalse(scn.FreepsAnyDecisionsAvailable());
 	}
 }

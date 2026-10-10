@@ -1354,6 +1354,11 @@
 				type: played
 				filter: self
 			}
+			requires: {
+				type: cardsInHandMoreThan
+				player: fp
+				count: 0
+			}
 			effect: {
 				type: discardCardAtRandomFromHand
 				hand: fp

@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_06_076_Tests
@@ -18,7 +19,22 @@ public class Card_06_076_Tests
 				new HashMap<>()
 				{{
 					put("card", "6_76");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetAssignmentScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("balrog", "6_76");
+					put("troop", "1_177");              // Goblin Patrol Troop: a minion with no text
+					// Two [gondor] Men who differ in strength and in nothing that bears on an assignment:
+					put("gondorianKnight", "5_35");     // Gondorian Knight: strength 6; "Knight" is his whole text
+					put("knightOfGondor", "5_36");      // Knight of Gondor: strength 5; a Knight with a fellowship ability
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -63,18 +79,65 @@ public class Card_06_076_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void TheBalrogTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void NeitherPlayerMayAssignTheBalrogToACompanionOfStrengthUnderSix() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetAssignmentScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var balrog = scn.GetShadowCard("balrog");
+		var troop = scn.GetShadowCard("troop");
+		var six = scn.GetFreepsCard("gondorianKnight");
+		var five = scn.GetFreepsCard("knightOfGondor");
+		var frodo = scn.GetRingBearer();
+		scn.MoveCompanionsToTable(six, five);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(balrog, troop);
+		scn.SkipToAssignments();
 
-		assertEquals(14, scn.GetTwilight());
+		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+		// Frodo is 3 + 1 for The Ruling Ring.
+		assertEquals(4, scn.GetStrength(frodo));
+		assertEquals(5, scn.GetStrength(five));
+		assertEquals(6, scn.GetStrength(six));
+
+		// The bar is on a pair and not on a card: everybody is still on the Free Peoples player's lists.
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(balrog));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(troop));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(frodo));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(five));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(six));
+
+		// Strength 4 and strength 5 are less than 6; strength 6 is not.
+		assertFalse(scn.FreepsCanAssignAgainst(frodo, balrog));
+		assertFalse(scn.FreepsCanAssignAgainst(five, balrog));
+		assertTrue(scn.FreepsCanAssignAgainst(six, balrog));
+		// The text names no player: the Shadow player may not make those assignments either.
+		assertFalse(scn.ShadowCanAssignAgainst(frodo, balrog));
+		assertFalse(scn.ShadowCanAssignAgainst(five, balrog));
+		assertTrue(scn.ShadowCanAssignAgainst(six, balrog));
+		// The same three against a minion with no text.
+		assertTrue(scn.FreepsCanAssignAgainst(frodo, troop));
+		assertTrue(scn.FreepsCanAssignAgainst(five, troop));
+		assertTrue(scn.FreepsCanAssignAgainst(six, troop));
+		assertTrue(scn.ShadowCanAssignAgainst(frodo, troop));
+		assertTrue(scn.ShadowCanAssignAgainst(five, troop));
+		assertTrue(scn.ShadowCanAssignAgainst(six, troop));
+
+		// The Free Peoples player leaves the Balrog alone, and the Shadow player has it to assign.
+		scn.FreepsAssignToMinions(five, troop);
+		assertTrue(scn.IsCharAssignedAgainst(five, troop));
+		assertTrue(scn.ShadowDecisionAvailable("Assign minions"));
+		assertTrue(scn.ShadowHasAssignmentTargetAvailable(balrog));
+		assertTrue(scn.ShadowHasAssignmentTargetAvailable(frodo));
+		assertTrue(scn.ShadowHasAssignmentTargetAvailable(six));
+		assertFalse(scn.ShadowCanAssignAgainst(frodo, balrog));
+		assertFalse(scn.ShadowCanAssignAgainst(five, balrog));
+		assertTrue(scn.ShadowCanAssignAgainst(six, balrog));
+
+		// The companion of strength 6 is assigned to the Balrog, and it stands.
+		scn.ShadowAssignToMinions(six, balrog);
+		assertTrue(scn.IsCharAssignedAgainst(six, balrog));
+		assertFalse(scn.IsCharAssigned(frodo));
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 	}
 }

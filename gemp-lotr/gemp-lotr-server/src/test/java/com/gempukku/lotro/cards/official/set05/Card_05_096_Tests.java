@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_05_096_Tests
@@ -22,6 +23,23 @@ public class Card_05_096_Tests
 				{{
 					put("eye", "5_96");
 					put("orc", "1_266");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetRevealScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("eye", "5_96");
+					put("gandalf", "1_72");     // Gandalf, Friend of the Shirefolk: he bears Glamdring
+					// Glamdring: "Fellowship or Regroup: Exert Gandalf to reveal an opponent's hand.  Remove (1) for
+					// each Orc revealed."  How a Free Peoples player reveals a card from a Shadow player's hand.
+					put("glamdring", "1_75");
+					put("savage", "1_151");     // Uruk Savage: a second card in the Shadow hand, and no Orc
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -78,5 +96,44 @@ public class Card_05_096_Tests
 		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(eye));
+	}
+
+	@Test
+	public void ResponseIsPlayedWhenAFreePeoplesPlayerRevealsItFromHandAndAddsTwoBurdens() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetRevealScenario();
+
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var glamdring = scn.GetFreepsCard("glamdring");
+		var eye = scn.GetShadowCard("eye");
+		var savage = scn.GetShadowCard("savage");
+		scn.MoveCompanionsToTable(gandalf);
+		scn.AttachCardsTo(gandalf, glamdring);
+		scn.MoveCardsToHand(eye, savage);
+
+		scn.StartGame();
+
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+		assertEquals(2, scn.GetShadowHandCount());
+		assertTrue(scn.FreepsActionAvailable(glamdring));
+
+		scn.FreepsUseCardAction(glamdring);
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+		// The Shadow hand is shown to the Free Peoples player, the Eye in it.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(eye, false));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(savage, false));
+		scn.FreepsDismissRevealedCards();
+
+		// The response is the event played from hand (CR 4.2, the ruling on this card: it "must be played in
+		// order to use its response text"; "discard this card to" is superfluous).
+		assertTrue(scn.ShadowPlayAvailable(eye));
+		assertEquals(0, scn.GetBurdens());
+		scn.ShadowPlayCard(eye);
+
+		assertEquals(2, scn.GetBurdens());
+		assertInDiscard(eye);
+		assertInHand(savage);
+		assertEquals(1, scn.GetShadowHandCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

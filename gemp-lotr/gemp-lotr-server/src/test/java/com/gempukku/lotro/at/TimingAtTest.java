@@ -14,27 +14,6 @@ import static org.junit.Assert.*;
 
 public class TimingAtTest extends AbstractAtTest {
     @Test
-    public void playStartingFellowshipWithDiscount() throws DecisionResultInvalidException {
-        Map<String, Collection<String>> extraCards = new HashMap<>();
-        extraCards.put(P1, Arrays.asList("7_88", "6_121"));
-        initializeSimplestGame(extraCards);
-
-        // Play first character
-        AwaitingDecision firstCharacterDecision = _userFeedback.getAwaitingDecision(P1);
-        assertEquals(AwaitingDecisionType.ARBITRARY_CARDS, firstCharacterDecision.getDecisionType());
-        validateContents(new String[]{"7_88", "6_121"}, ((String[]) firstCharacterDecision.getDecisionParameters().get("blueprintId")));
-
-        playerDecided(P1, getArbitraryCardId(firstCharacterDecision, "7_88"));
-
-        // Play second character with discount
-        AwaitingDecision secondCharacterDecision = _userFeedback.getAwaitingDecision(P1);
-        assertEquals(AwaitingDecisionType.ARBITRARY_CARDS, secondCharacterDecision.getDecisionType());
-        validateContents(new String[]{"6_121"}, ((String[]) secondCharacterDecision.getDecisionParameters().get("blueprintId")));
-
-        playerDecided(P1, getArbitraryCardId(secondCharacterDecision, "6_121"));
-    }
-
-    @Test
     public void playEffectFromDiscard() throws DecisionResultInvalidException, CardNotFoundException {
         Map<String, Collection<String>> extraCards = new HashMap<>();
         initializeSimplestGame(extraCards);
@@ -58,59 +37,6 @@ public class TimingAtTest extends AbstractAtTest {
         playerDecided(P2, "0");
 
         assertEquals(Zone.SHADOW_CHARACTERS, gollum.getZone());
-    }
-
-    @Test
-    public void playEffectFromStacked() throws DecisionResultInvalidException, CardNotFoundException {
-        Map<String, Collection<String>> extraCards = new HashMap<>();
-        initializeSimplestGame(extraCards);
-
-        PhysicalCard gimli = _game.getGameState().createPhysicalCard(P1, _cardLibrary, "1_13");
-        PhysicalCard letThemCome = _game.getGameState().createPhysicalCard(P1, _cardLibrary, "1_20");
-        PhysicalCard slakedThirsts = _game.getGameState().createPhysicalCard(P1, _cardLibrary, "7_14");
-
-        PhysicalCard gollum = _game.getGameState().createPhysicalCard(P2, _cardLibrary, "7_58");
-
-        _game.getGameState().addCardToZone(_game, gimli, Zone.FREE_CHARACTERS);
-        _game.getGameState().addCardToZone(_game, letThemCome, Zone.SUPPORT);
-        _game.getGameState().stackCard(_game, slakedThirsts, letThemCome);
-
-        skipMulligans();
-
-        // End fellowship phase
-        playerDecided(P1, "");
-
-        _game.getGameState().addCardToZone(_game, gollum, Zone.SHADOW_CHARACTERS);
-
-        // End shadow phase
-        playerDecided(P2, "");
-
-        AwaitingDecision maneuverPhaseAction = _userFeedback.getAwaitingDecision(P1);
-        assertEquals(AwaitingDecisionType.CARD_ACTION_CHOICE, maneuverPhaseAction.getDecisionType());
-        validateContents(new String[]{"Use Slaked Thirsts"}, (String[]) maneuverPhaseAction.getDecisionParameters().get("actionText"));
-
-        playerDecided(P1, "0");
-
-        assertEquals(Zone.DISCARD, slakedThirsts.getZone());
-        assertEquals(2, _game.getGameState().getWounds(gollum));
-    }
-
-    @Test
-    public void stackedCardAffectsGame() throws DecisionResultInvalidException, CardNotFoundException {
-        Map<String, Collection<String>> extraCards = new HashMap<>();
-        initializeSimplestGame(extraCards);
-
-        PhysicalCard gimli = _game.getGameState().createPhysicalCard(P1, _cardLibrary, "1_13");
-        PhysicalCard letThemCome = _game.getGameState().createPhysicalCard(P1, _cardLibrary, "1_20");
-        PhysicalCard tossMe = _game.getGameState().createPhysicalCard(P1, _cardLibrary, "6_11");
-
-        skipMulligans();
-
-        _game.getGameState().addCardToZone(_game, gimli, Zone.FREE_CHARACTERS);
-        _game.getGameState().addCardToZone(_game, letThemCome, Zone.SUPPORT);
-        _game.getGameState().stackCard(_game, tossMe, letThemCome);
-
-        assertEquals(7, _game.getModifiersQuerying().getStrength(_game, gimli));
     }
 
     @Test

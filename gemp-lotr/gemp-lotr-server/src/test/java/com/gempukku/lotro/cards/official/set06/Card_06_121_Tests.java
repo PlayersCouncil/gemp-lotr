@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_06_121_Tests
@@ -18,7 +19,22 @@ public class Card_06_121_Tests
 				new HashMap<>()
 				{{
 					put("card", "6_121");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetStartingFellowshipScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("faramir", "6_121");
+					// Three companions whose texts touch no card's cost
+					put("gimli", "1_13");       // Gimli, Son of Glóin: cost 2
+					put("pippin", "1_306");     // Pippin, Friend to Frodo: cost 1
+					put("boromir", "1_97");     // Boromir, Son of Denethor: a [gondor] Man who costs 3, as Faramir is printed
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -65,18 +81,41 @@ public class Card_06_121_Tests
 		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void FaramirTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void InTheStartingFellowshipFaramirCostsOneLessAndSoFitsBesideACompanionCostingTwo() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetStartingFellowshipScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var faramir = scn.GetFreepsCard("faramir");
+		var gimli = scn.GetFreepsCard("gimli");
+		var pippin = scn.GetFreepsCard("pippin");
+		var boromir = scn.GetFreepsCard("boromir");
 
-		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// The table is made with the first player's starting fellowship still to choose, from his draw deck.
+		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
+		assertInZone(Zone.DECK, faramir, gimli, pippin, boromir);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(faramir, gimli, pippin, boromir));
+		// Printed 3; what he would cost to play now is 3 - 1.
+		assertEquals(2, scn.GetTwilightCost(faramir));
+		// While a player chooses, the game keeps the total of what he has played in the twilight pool.
+		assertEquals(0, scn.GetTwilight());
 
-		assertEquals(3, scn.GetTwilight());
+		scn.FreepsChooseCard(gimli);
+
+		assertInZone(Zone.FREE_CHARACTERS, gimli);
+		assertEquals(2, scn.GetTwilight());
+		// A starting fellowship may cost 4.  2 + 3 would be 5, and Boromir is no longer offered; 2 + (3 - 1) is
+		// the 4, and Faramir still is.
+		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(faramir, pippin));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(boromir));
+
+		scn.FreepsChooseCard(faramir);
+
+		assertInZone(Zone.FREE_CHARACTERS, faramir);
+		// The total stands at 4 and not at 3: Pippin's 1 no longer fits, nobody is left to offer and the choice
+		// ends.  The other player is choosing now.
+		assertInZone(Zone.DECK, pippin, boromir);
+		assertFalse(scn.FreepsAnyDecisionsAvailable());
+		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
 	}
 }
