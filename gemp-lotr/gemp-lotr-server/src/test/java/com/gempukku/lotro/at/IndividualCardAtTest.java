@@ -1,7 +1,6 @@
 package com.gempukku.lotro.at;
 
 import com.gempukku.lotro.common.Phase;
-import com.gempukku.lotro.common.Token;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
@@ -313,67 +312,6 @@ public class IndividualCardAtTest extends AbstractAtTest {
         AwaitingDecision playManeuverAction = _userFeedback.getAwaitingDecision(P1);
         assertEquals(AwaitingDecisionType.CARD_ACTION_CHOICE, playManeuverAction.getDecisionType());
         validateContents(new String[]{hisFirstSeriousCheck.getCardId() + ""}, (String[]) playManeuverAction.getDecisionParameters().get("cardId"));
-    }
-
-    @Test
-    public void cannotExertExhaustedFrodoToPayForCost() throws CardNotFoundException, DecisionResultInvalidException {
-        Map<String, LotroDeck> decks = new HashMap<>();
-        LotroDeck lotroDeck = new LotroDeck("Some deck");
-        lotroDeck.setRingBearer("10_121");
-        lotroDeck.setRing("9_1");
-        // 7_330,7_336,8_117,7_342,7_345,7_350,8_120,10_120,7_360
-        lotroDeck.addSite("1_323");
-        lotroDeck.addSite("7_335");
-        lotroDeck.addSite("8_117");
-        lotroDeck.addSite("7_342");
-        lotroDeck.addSite("7_345");
-        lotroDeck.addSite("7_350");
-        lotroDeck.addSite("8_120");
-        lotroDeck.addSite("10_120");
-        lotroDeck.addSite("7_360");
-        decks.put(P1, lotroDeck);
-        decks.put(P2, createSimplestDeck());
-
-        _userFeedback = new DefaultUserFeedback();
-
-        LotroFormatLibrary formatLibrary = new LotroFormatLibrary(new DefaultAdventureLibrary(), _cardLibrary);
-        LotroFormat format = formatLibrary.getFormat("movie");
-
-        _game = new DefaultLotroGame(format, decks, _userFeedback, _cardLibrary);
-        _userFeedback.setGame(_game);
-        _game.startGame();
-
-        PhysicalCardImpl cheapMinion = createCard(P2, "1_174");
-        PhysicalCardImpl randomCard1 = createCard(P1, "2_65");
-
-        // Bidding
-        playerDecided(P1, "1");
-        playerDecided(P2, "0");
-
-        // Seating choice
-        playerDecided(P1, "0");
-
-        // Mulligans
-        playerDecided(P1, "0");
-        playerDecided(P2, "0");
-
-        final PhysicalCard frodo = _game.getGameState().getRingBearer(P1);
-        _game.getGameState().addCardToZone(_game, cheapMinion, Zone.HAND);
-        _game.getGameState().addCardToZone(_game, randomCard1, Zone.HAND);
-
-        _game.getGameState().addTokens(frodo, Token.WOUND, 4);
-        _game.getGameState().addTwilight(3);
-
-        // Pass in fellowship
-        playerDecided(P1, "");
-
-        // Play minion
-        playerDecided(P2, "0");
-        playerDecided(P2, "");
-
-        // Put on the ring
-        var actions = _userFeedback.getAwaitingDecision(P1).getDecisionParameters().get("actionText");
-        assertFalse(Arrays.stream(actions).anyMatch(x -> x.toLowerCase().contains("use the one ring")));
     }
 
     @Test

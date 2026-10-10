@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_09_016_Tests
@@ -19,7 +20,21 @@ public class Card_09_016_Tests
 				new HashMap<>()
 				{{
 					put("card", "9_16");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetSkirmishScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("glorfindel", "9_16");
+					put("bow", "1_41");         // Elven Bow: twilight cost 1, here only as the card on top of the draw deck
+					// Úlairë Cantëa, Lieutenant of Dol Guldur: Nazgûl, strength 10; fierce, and an ability that needs a weapon to discard
+					put("cantea", "1_230");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -62,18 +77,55 @@ public class Card_09_016_Tests
 		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GlorfindelTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void ExhaustedHeStillRevealsTheTopCardAndIsNotAskedToExert() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetSkirmishScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var glorfindel = scn.GetFreepsCard("glorfindel");
+		var bow = scn.GetFreepsCard("bow");
+		scn.MoveCompanionsToTable(glorfindel);
+
+		var cantea = scn.GetShadowCard("cantea");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(cantea);
+		// The card on top costs 1 and not 0, or a penalty wrongly given would not show in the Nazgûl's strength.
+		scn.MoveCardsToTopOfDeck(bow);
+		// Vitality 3: with 1 wound he can exert once more.
+		scn.AddWoundsToChar(glorfindel, 1);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(glorfindel, cantea);
+		scn.FreepsResolveSkirmish(glorfindel);
 
-		assertEquals(4, scn.GetTwilight());
+		// The control: able to exert, he is asked, and exerting makes the Nazgûl 10 - 1.
+		assertEquals(10, scn.GetStrength(cantea));
+		scn.FreepsUseCardAction(glorfindel);
+		scn.DismissRevealedCards();
+		scn.FreepsChooseYes();
+		assertEquals(2, scn.GetWoundsOn(glorfindel));
+		assertEquals(9, scn.GetStrength(cantea));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		scn.ShadowPass();
+
+		// With 2 wounds he is exhausted.  The reveal has no price, so the ability is still his to use.
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertTrue(scn.FreepsActionAvailable(glorfindel));
+		scn.FreepsUseCardAction(glorfindel);
+
+		// The top card is shown to both players.
+		assertEquals(1, scn.FreepsGetTotalRevealedCardCount());
+		assertEquals(1, scn.ShadowGetTotalRevealedCardCount());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(bow, false));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(bow, false));
+		scn.DismissRevealedCards();
+
+		// No question follows: he is not exerted (a third wound would have killed him) and the Nazgûl is not
+		// weakened a second time (9, where another exertion would have read 9 - 1).
+		assertFalse(scn.FreepsAnyDecisionsAvailable());
+		assertEquals(2, scn.GetWoundsOn(glorfindel));
+		assertInZone(Zone.FREE_CHARACTERS, glorfindel);
+		assertEquals(9, scn.GetStrength(cantea));
+		assertEquals(bow, scn.GetFreepsTopOfDeck());
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
 }

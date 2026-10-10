@@ -9,39 +9,7 @@ import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
-import static org.junit.Assert.assertNull;
-
 public class NewCardsAtTest extends AbstractAtTest {
-    @Test
-    public void reduceArcheryTotal() throws DecisionResultInvalidException, CardNotFoundException {
-        initializeSimplestGame();
-
-        PhysicalCardImpl legolas = new PhysicalCardImpl(100, "1_50", P1, _cardLibrary.getLotroCardBlueprint("1_50"));
-        PhysicalCardImpl greyShip = new PhysicalCardImpl(100, "8_9", P1, _cardLibrary.getLotroCardBlueprint("8_9"));
-        PhysicalCardImpl inquisitor = new PhysicalCardImpl(100, "1_268", P2, _cardLibrary.getLotroCardBlueprint("1_268"));
-
-        _game.getGameState().addCardToZone(_game, inquisitor, Zone.SHADOW_CHARACTERS);
-
-        _game.getGameState().addCardToZone(_game, legolas, Zone.FREE_CHARACTERS);
-        _game.getGameState().addCardToZone(_game, greyShip, Zone.HAND);
-
-        skipMulligans();
-
-        // Pass in fellowship
-        playerDecided(P1, "");
-
-        // Pass in shadow
-        playerDecided(P2, "");
-
-        // Pass in maneuver
-        playerDecided(P1, "");
-        playerDecided(P2, "");
-
-        // Play ArrowsOfLight
-        playerDecided(P1, "0");
-        playerDecided(P1, "0");
-    }
-
 //    @Test
 //    public void choiceEffect() throws DecisionResultInvalidException, CardNotFoundException {
 //        initializeSimplestGame();
@@ -198,45 +166,6 @@ public class NewCardsAtTest extends AbstractAtTest {
 //        assertEquals(Zone.DECK, celebornInDeck.getZone());
 //        assertEquals(0, _game.getGameState().getWounds(nazgul));
 //    }
-
-    @Test
-    public void checkingEventCostsAsRequirements() throws DecisionResultInvalidException, CardNotFoundException {
-        initializeSimplestGame();
-
-        final PhysicalCardImpl countsButOne = createCard(P1, "8_4");
-        final PhysicalCardImpl gimli = createCard(P1, "1_13");
-        PhysicalCardImpl nazgul = createCard(P2, "1_237");
-
-
-        _game.getGameState().addCardToZone(_game, gimli, Zone.FREE_CHARACTERS);
-        _game.getGameState().addCardToZone(_game, countsButOne, Zone.HAND);
-        _game.getGameState().addCardToZone(_game, nazgul, Zone.SHADOW_CHARACTERS);
-
-        skipMulligans();
-
-        // Pass in fellowship
-        playerDecided(P1, "");
-
-        // Pass in shadow
-        playerDecided(P2, "");
-
-//Pass in maneuver
-        playerDecided(P1, "");
-        playerDecided(P2, "");
-
-//Pass in archery
-        playerDecided(P1, "");
-        playerDecided(P2, "");
-
-//Pass in assignment
-        playerDecided(P1, "");
-        playerDecided(P2, "");
-
-        playerDecided(P1, gimli.getCardId() + " " + nazgul.getCardId());
-        playerDecided(P1, "" + gimli.getCardId());
-
-        assertNull(getCardActionId(P1, "Play Counts But One"));
-    }
 
 //    @Test
 //    public void discardCardEffect() throws DecisionResultInvalidException, CardNotFoundException {

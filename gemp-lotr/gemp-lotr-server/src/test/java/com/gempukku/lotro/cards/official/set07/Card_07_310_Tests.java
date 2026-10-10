@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_07_310_Tests
@@ -18,7 +19,23 @@ public class Card_07_310_Tests
 				new HashMap<>()
 				{{
 					put("card", "7_310");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetRoamingScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("hatred", "7_310");
+					put("chieftain", "1_266");  // Orc Chieftain: [sauron] Orc, cost 2, site 6; its text answers a weapon played on it
+					put("soldier", "1_271");    // Orc Soldier: [sauron] Orc, cost 2, site 6; a skirmish ability only
+					put("sentry", "10_84");     // Cirith Ungol Sentry: a [sauron] Uruk-hai, cost 2, site 6; Damage +1 is its whole text
+					put("runner", "1_178");     // Goblin Runner: a [moria] Orc, cost 1, site 4; its text is about being played
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a second companion, so that 2 threats can lie
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -55,18 +72,59 @@ public class Card_07_310_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SauronsHatredTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void ShadowAbilityRemovesAThreatToPlayASauronOrcForItsPrintedCostAndTheOrcIsStillRoaming() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetRoamingScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		var hatred = scn.GetShadowCard("hatred");
+		var chieftain = scn.GetShadowCard("chieftain");
+		var soldier = scn.GetShadowCard("soldier");
+		var sentry = scn.GetShadowCard("sentry");
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveCardsToSupportArea(hatred);
+		scn.MoveCardsToHand(chieftain, soldier, sentry, runner);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// Two companions hold the 2 threats.
+		scn.AddThreats(2);
+		// The fellowship moves to site 2, where every minion in the Shadow hand is roaming (sites 6, 6, 6 and 4).
+		scn.FreepsPass();
+		assertEquals(2, scn.GetCurrentSiteNumber());
 
+		// With 4 in the pool the Chieftain is played from hand in the ordinary way: 2 to play + 2 roaming.
+		scn.SetTwilight(4);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.ShadowPlayAvailable(chieftain));
+
+		// With exactly its printed cost in the pool it is not, and the Hatred's ability is offered all the same.
+		scn.SetTwilight(2);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertFalse(scn.ShadowPlayAvailable(chieftain));
+		assertFalse(scn.ShadowPlayAvailable(soldier));
+		assertTrue(scn.ShadowActionAvailable(hatred));
+		assertEquals(2, scn.GetThreats());
+		assertInZone(Zone.HAND, chieftain);
+
+		scn.ShadowUseCardAction(hatred);
+		// The two [sauron] Orcs are the choice.  The [sauron] Uruk-hai (cost 2) and the [moria] Orc (cost 1) are
+		// not, though the pool would pay for either once the penalty is waived.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(chieftain, soldier));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(sentry, runner));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		scn.ShadowChooseCard(chieftain);
+
+		// One threat is the cost.
+		assertEquals(1, scn.GetThreats());
+		assertInZone(Zone.SHADOW_CHARACTERS, chieftain);
+		assertInZone(Zone.HAND, soldier, sentry, runner);
+		// 2 to play and no roaming penalty: 2 - 2.
 		assertEquals(0, scn.GetTwilight());
+		// The penalty is waived, not the roaming: a minion of site 6 at site 2.
+		assertTrue(scn.HasKeyword(chieftain, Keyword.ROAMING));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

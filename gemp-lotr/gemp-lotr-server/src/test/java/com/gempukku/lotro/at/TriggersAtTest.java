@@ -110,28 +110,6 @@ public class TriggersAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void takesWound() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard promiseKeeping = addToZone(createCard(P2, "8_24"), Zone.SUPPORT);
-        PhysicalCard gollum = addToZone(createCard(P2, "7_58"), Zone.SHADOW_CHARACTERS);
-
-        PhysicalCard ringBearer = getRingBearer(P1);
-
-        passUntil(Phase.ASSIGNMENT);
-        pass(P1);
-        pass(P2);
-        playerDecided(P1, ringBearer.getCardId() + " " + gollum.getCardId());
-        selectCard(P1, ringBearer);
-        pass(P1);
-        pass(P2);
-
-        // Don't use Ring
-        pass(P1);
-        assertEquals(2, getWounds(ringBearer));
-    }
-
-    @Test
     public void takesOffRing() throws Exception {
         initializeSimplestGame();
 

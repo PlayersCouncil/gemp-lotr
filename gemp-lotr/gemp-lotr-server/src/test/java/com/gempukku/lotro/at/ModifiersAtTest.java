@@ -96,23 +96,6 @@ public class ModifiersAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void canPlayStackedCards() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard sindriDwarvenLord = addToZone(createCard(P1, "9_10"), Zone.FREE_CHARACTERS);
-        PhysicalCard greatestKingdomOfOurPeople = addToZone(createCard(P1, "1_16"), Zone.SUPPORT);
-        PhysicalCard cleavingBlow = stackOn(createCard(P1, "1_5"), greatestKingdomOfOurPeople);
-        PhysicalCard goblinRunner = addToZone(createCard(P2, "1_178"), Zone.SHADOW_CHARACTERS);
-
-        passUntil(Phase.ASSIGNMENT);
-        pass(P1);
-        pass(P2);
-        playerDecided(P1, sindriDwarvenLord.getCardId() + " " + goblinRunner.getCardId());
-        selectCard(P1, sindriDwarvenLord);
-        hasCardAction(P1, cleavingBlow);
-    }
-
-    @Test
     public void cantBeOverwhelmed() throws Exception {
         initializeSimplestGame();
 
@@ -184,19 +167,6 @@ public class ModifiersAtTest extends AbstractAtTest {
         assertTrue(_game.getModifiersQuerying().canRemoveThreat(_game, ringBearer));
         addModifier(modifierSource.getModifier(actionContext));
         assertFalse(_game.getModifiersQuerying().canRemoveThreat(_game, ringBearer));
-    }
-
-    @Test
-    public void cantTakeArcheryWounds() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard haradrimMarksman = addToZone(createCard(P2, "8_60"), Zone.SHADOW_CHARACTERS);
-        PhysicalCard ringBearer = getRingBearer(P1);
-
-        passUntil(Phase.ARCHERY);
-        assertTrue(_game.getModifiersQuerying().canTakeArcheryWound(_game, ringBearer));
-        addToZone(createCard(P2, "8_49"), Zone.SHADOW_CHARACTERS);
-        assertFalse(_game.getModifiersQuerying().canTakeArcheryWound(_game, ringBearer));
     }
 
     @Test

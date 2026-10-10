@@ -236,4 +236,33 @@ public class Card_09_001_Tests
 		assertEquals(Zone.DECK, ring2.getZone());
 		assertTrue(scn.FreepsActionAvailable(ring));
 	}
+
+	@Test
+	public void ManeuverAbilityIsNotOfferedWhileTheBearerIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var ring = scn.GetRing();
+
+		var soldier = scn.GetShadowCard("soldier");
+
+		scn.StartGame();
+		// Orc Soldier is there only so that the maneuver phase happens.
+		scn.MoveMinionsToTable(soldier);
+		// Frodo's vitality of 4 and the Ring's +1: with 3 wounds he has 2 left and can exert.
+		scn.AddWoundsToChar(frodo, 3);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+		assertTrue(scn.FreepsActionAvailable(ring));
+
+		// A fourth wound leaves him 1: exhausted, he cannot exert (CR 4.2 "exhausted"), and the cost cannot be paid.
+		scn.AddWoundsToChar(frodo, 1);
+		scn.FreepsRefreshDecision();
+
+		assertEquals(4, scn.GetWoundsOn(frodo));
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(ring));
+		assertFalse(scn.RBWearingOneRing());
+	}
 }

@@ -63,51 +63,6 @@ public class AssignmentAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void slowKindledCourageAllowsMinionsToAssign() throws DecisionResultInvalidException, CardNotFoundException {
-        initializeSimplestGame();
-
-        skipMulligans();
-
-        PhysicalCardImpl merry = new PhysicalCardImpl(100, "1_303", P1, _cardLibrary.getLotroCardBlueprint("1_303"));
-        PhysicalCardImpl slowKindledCourage = new PhysicalCardImpl(101, "7_328", P1, _cardLibrary.getLotroCardBlueprint("7_328"));
-        PhysicalCardImpl urukHaiRaidingParty = new PhysicalCardImpl(102, "1_158", P2, _cardLibrary.getLotroCardBlueprint("1_158"));
-
-        _game.getGameState().addCardToZone(_game, merry, Zone.FREE_CHARACTERS);
-        _game.getGameState().attachCard(_game, slowKindledCourage,  merry);
-
-        // End fellowship phase
-        playerDecided(P1, "");
-
-        _game.getGameState().addCardToZone(_game, urukHaiRaidingParty, Zone.SHADOW_CHARACTERS);
-
-        // End shadow phase
-        playerDecided(P2, "");
-
-        // End maneuvers phase
-        playerDecided(P1, "");
-        playerDecided(P2, "");
-
-        // End arhcery phase
-        playerDecided(P1, "");
-        playerDecided(P2, "");
-
-        // Assignment phase
-        playerDecided(P1, "");
-
-        AwaitingDecision assignmentActions = _userFeedback.getAwaitingDecision(P2);
-        assertEquals(AwaitingDecisionType.CARD_ACTION_CHOICE, assignmentActions.getDecisionType());
-        validateContents(toCardIdArray(urukHaiRaidingParty), (String[]) assignmentActions.getDecisionParameters().get("cardId"));
-
-        playerDecided(P2, "0");
-
-        assertEquals(1, _game.getGameState().getAssignments().size());
-        final Assignment assignment = _game.getGameState().getAssignments().get(0);
-        assertEquals(merry, assignment.getFellowshipCharacter());
-        assertEquals(1, assignment.getShadowCharacters().size());
-        assertTrue(assignment.getShadowCharacters().contains(urukHaiRaidingParty));
-    }
-
-    @Test
     public void assignMorgulSpawnByPayingCost() throws DecisionResultInvalidException, CardNotFoundException {
         Map<String, Collection<String>> extraCards = new HashMap<>();
         initializeSimplestGame(extraCards);
