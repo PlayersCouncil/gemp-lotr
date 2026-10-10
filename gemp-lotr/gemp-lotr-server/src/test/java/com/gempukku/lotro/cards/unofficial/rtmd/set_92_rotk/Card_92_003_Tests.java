@@ -75,8 +75,8 @@ public class Card_92_003_Tests
 	public void GameStartsWhenTheOpponentHoldsAShadowConditionedModifier() throws DecisionResultInvalidException, CardNotFoundException {
 		// #1023 setup: the reported game had the first player holding 92_24 (Your Nazgul are non-unique,
 		// conditioned on OwnerIsShadow) while the second player held this modifier.  The crash itself turned out
-		// to be a pre-game decision problem (see PregameDecisionTests); this pins down that the modifiers
-		// themselves start up cleanly in that arrangement.
+		// to be a pre-game decision problem (see MultipleChoiceAwaitingDecisionTest in gemp-lotr-logic); this pins
+		// down that the modifiers themselves start up cleanly in that arrangement.
 		var scn = GetShadowScenarioAgainstRaceText92_24();
 
 		scn.StartGame();

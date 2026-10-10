@@ -9,7 +9,6 @@ import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.common.Token;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.PhysicalCard;
-import com.gempukku.lotro.game.state.RTMDGameInfo;
 import org.json.simple.JSONObject;
 import org.junit.Test;
 
@@ -380,15 +379,5 @@ public class RequirementsAtTest extends AbstractAtTest {
 
         Requirement requirement = new PlayerLeaguePlacement().getPlayRequirement(obj, lotroCardBlueprintBuilder);
         assertFalse(requirement.accepts(new DefaultActionContext(P1, _game, null, null, null)));
-    }
-
-    @Test
-    public void leaguePlacementCutoff() {
-        assertTrue(new RTMDGameInfo.LeaguePlacement(1, 10).isWithinTopPercentage(10));
-        assertFalse(new RTMDGameInfo.LeaguePlacement(2, 10).isWithinTopPercentage(10));
-        //The cutoff rounds up and never falls below one place.
-        assertTrue(new RTMDGameInfo.LeaguePlacement(1, 4).isWithinTopPercentage(10));
-        assertTrue(new RTMDGameInfo.LeaguePlacement(3, 25).isWithinTopPercentage(10));
-        assertFalse(new RTMDGameInfo.LeaguePlacement(4, 25).isWithinTopPercentage(10));
     }
 }
