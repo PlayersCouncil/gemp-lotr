@@ -253,6 +253,22 @@ and its response, on an overwhelm), add words from the action's description:
 `FreepsHasOptionalTriggerAvailable(card, text)` and `FreepsChooseOptionalTrigger(card, text)`, as
 `FreepsUseCardAction(card, text)` does for phase actions.
 
+**Toil is a choice of cards, asked only when there is something to choose** (CR 4.2 "toil"; mechanics/ToilTests).
+A toil card is offered when the pool covers its cost less the toil number for each character of its culture its
+player could exert (an exhausted one is not counted), and any roaming penalty on top: exertions never pay the
+penalty. Played, it asks for the characters to exert (`ShadowGetChoiceMin()` is the number of exertions the pool is
+short by, 0 when it pays in full; the maximum is every candidate; `ShadowDeclineChoosing()` exerts nobody). Where
+the exertions owed are all the candidates there are, they are made without a question. A toil card played ON a
+bearer (Berserker Torch 12_136) is offered one toil number too far and discarded when played from there: F-0350,
+open. Its nearest "not offered" reading is parked on that number, not filed again.
+
+**Muster is one optional trigger for all of a player's muster characters** (CR 4.2 "muster";
+mechanics/MusterTests). At the start of the regroup phase a player with a muster character and a card in hand has
+one offer, "Use Muster" (`ShadowHasOptionalTriggerAvailable(card, "Use Muster")`), the Free Peoples player's first.
+Taken, it is one choice of 0 to N cards from hand, N the number of his muster characters, and as many are drawn
+after. With an empty hand there is no offer. `SkipToPhase(Phase.REGROUP)` rests on the offer: a test that only
+passes through takes or declines it.
+
 **A yes/no in the middle of a trigger is not an optional trigger.** A definition's `Optional` effect for a named
 player ("the first Shadow player may discard 2 cards from hand to add a burden" inside a site's required trigger,
 Courtyard Parapet 63_188) asks that player a yes/no in the definition's own `text`. `ShadowHasOptionalTriggerAvailable()`
@@ -336,6 +352,9 @@ Shadow player's decision is already pending does not make a minion playable. Set
 then pass. The move then adds one for each companion plus the new site's shadow number, so a test that needs an
 exact pool adds those in: `// 10 set + 1 companion + 2 for the site`. A pool that is too small shows only as the rig's
 `<card> is not offering Shadow Player a play.`: count the roaming penalty as well as the cost.
+To read both sides of a cost in one Shadow phase, set the pool there and refresh: `SetTwilight(3)`,
+`ShadowRefreshDecision()`, not offered; `SetTwilight(4)`, `ShadowRefreshDecision()`, offered. No sum for the move is
+then needed (mechanics/RoamingTests, ToilTests).
 
 **No end of turn is sent before turn 1 (F-0327).** After the mulligans `MulliganProcess` ends what the starting
 fellowships left "until the end of the turn" and hands on to `BetweenTurnsProcess`: no `EndOfTurnResult` is sent,
