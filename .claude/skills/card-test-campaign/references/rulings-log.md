@@ -399,6 +399,15 @@ more patterns we should try and pre-empt before the big chunk." Briefs: `orchest
 pipeline can be mentioned, but also note that once complete it's unlikely to be revisited, since it is a one-time
 lift-and-shift upgrade. The rest of this suite is likely to be used with future cards, however." *[2026-10-10]*
 
+**After the `at` conversion: the cards with existing tests, then a stop (2026-10-10).** "After the at suite
+conversion has been completed, resume upgrading the existing non-stat tests, which I believe now only has about
+150ish remaining. At that point however, if you finish those, please wind down the card agents (you may continue
+doing engine upgrades as needed). We will stop at that point to take stock and put together a massive set of patch
+notes from the findings list, as well as cross our i's and dot our t's pending near-future deployment. And only
+after that will we begin tackling the big 3K." The 152 are the Decipher cards whose files had behavioural tests
+before the campaign (`orchestrator/queue-decipher-existing.json`). No card batch is launched after them without
+her word. *[2026-10-10]*
+
 ## Sources, sheets, revisions and errata
 
 **2026-10-04. Comprehensive Rules 4.2** should contain all the official rulings.

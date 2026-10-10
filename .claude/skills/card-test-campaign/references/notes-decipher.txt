@@ -1,6 +1,26 @@
 NOTES FOR THE DECIPHER SETS (begun 2026-10-10, before the phase: things earlier work left for it. The orchestrator
 adds to this file; a batch's `notes` argument points its agents here.)
 
+THE FIRST DECIPHER CARDS: THE 152 THAT ALREADY HAD BEHAVIOURAL TESTS (queue-decipher-existing.json)
+Ketura, 2026-10-10: "After the at suite conversion has been completed, resume upgrading the existing non-stat
+tests, which I believe now only has about 150ish remaining." These are Decipher cards of sets 1 to 19 whose files
+held more than a stat check before the campaign (509 tests between them, most files fewer than five).
+- The text is the card's row of `gen_en_standard.tsv` (reviewed; Decipher's own errata are in it). The packet
+  prints it against the definition.
+- Every existing test is accounted for in stage 2, as the brief says: it claims a check, or is redundant, or knows
+  something your ledger missed, or contradicts it (then it is a question: an old test often encodes a ruling).
+  Many of these tests were written before the rig had its present methods: bring each to the Standard's form
+  (the rig's own methods, a reading of what the game is waiting for, real cards on a board a game could reach),
+  keeping what it shows.
+- Many of these cards have a PC ERRATUM that is landed already (51_x for 1_x, 54_x for 4_x and so on). Stage 1 is
+  blind as always. In stage 2 read the erratum's landed test file and its ledger
+  (`/mnt/user-data/outputs/card-tests/ledgers/`): where the original has the same sentence, the rulings, the
+  boards and the helper cards are settled there, and a finding the erratum's batch fixed "in the original too" is
+  already in your card's definition (`packet.py` prints the text a definition had before a campaign commit).
+  Where the two differ, the difference is the erratum's and not a finding on your card.
+- Hindering and beacons will seldom concern you, as on the errata: no hindered card unless the text speaks of one
+  or says "you can spot".
+
 WHAT IS ALREADY IN A DECIPHER CARD'S FILE
 - The conversion of the old `at` tests put LONE TESTS into many Decipher cards' files (a test of an interaction,
   written to the Standard, with no ledger): `orchestrator/at-convert/PLAN.md` lists every home. They are existing

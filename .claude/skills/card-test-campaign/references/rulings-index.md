@@ -82,6 +82,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A Frodo who is not the Ring-bearer, where a test needs one, is Frodo, Frenzied Fighter 13_149 (Q-0212: keep)
 - Before the Decipher sets: a trial of Q-0034 in the engine, and a search for other patterns (Q-0215)
 - The `at` conversion is a one-time job
+- After the `at` conversion: the cards with existing tests, then a stop (2026-10-10)
 
 ## Sources, sheets, revisions and errata
 

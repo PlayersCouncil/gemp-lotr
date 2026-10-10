@@ -25,9 +25,11 @@ work is organised.
 3. **PC errata** that only have a stat check or no test.
 4. **Decipher cards**, one set at a time and one culture file at a time within a set.
 
-As it is being worked (Ketura, 2026-10-08): the V-sets (done), the PC errata, then Race to Mount Doom, whose
-tests are recent and want less attention (layout and the standard's form more than new coverage), then the tests
-under `at/`, then the Decipher sets, the Hobbit sets last.
+As it is being worked (Ketura, 2026-10-08 and 2026-10-10): the V-sets, the PC errata and Race to Mount Doom
+(done), the tests under `at/`, then the 152 Decipher cards that already had behavioural tests. THERE THE CARD
+BATCHES STOP ("wind down the card agents"; engine passes may go on): she takes stock, the patch notes are made
+from the findings, and a deployment is prepared. "Only after that" the rest of the Decipher sets (some 2,900
+cards), the Hobbit sets last. No card batch beyond the 152 is launched without her word.
 
 The tests under `at/` (written before the rig; 46 files, 336 methods) are not ported line by line. For each, what
 it guards is written down (the bug, the behaviour, the interaction), and that is the brief for a new test written
