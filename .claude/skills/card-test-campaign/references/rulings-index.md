@@ -83,6 +83,8 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Before the Decipher sets: a trial of Q-0034 in the engine, and a search for other patterns (Q-0215)
 - The `at` conversion is a one-time job
 - After the `at` conversion: the cards with existing tests, then a stop (2026-10-10)
+- Before the Decipher sets, every proposal of the pattern search is taken (Q-0220) [Q-0034, Q-0224, Q-0108]
+- "You may" on a trigger against a definition that cannot be declined, or the reverse, is corrected where found (Q-0220 G: yes). Where a trigger's own ...
 
 ## Sources, sheets, revisions and errata
 
@@ -242,6 +244,8 @@ finding an entry, not for applying one: read the entry itself before an expectat
 
 - 2026-10-05. Sam as Ring-bearer (Q-0008)
 - 2026-10-05. Hinder. at/HinderTests.java has an exhaustive set of tests for the hinder mechanic; read it where the 5.0 excerpts leave a detail of ...
+- "Discard X" and "cannot bear X" are two standing effects; only the first discards on a restore (Q-0223: B)
+- What was laid on a card for a time is back in force when the card is restored (Q-0222: A)
 - Hinder and restore. A card hindered in the middle of its own ability still carries the ability out, and an effect that names its bearer still finds ... [F-0099, Q-0070, Q-0059, Q-0060, Q-0061]
 - A choice by side alone may take a hindered card [Q-0098, Q-0060]
 - "All Shadow cards borne by ..." and "each Free Peoples card borne by ..." reach hindered cards [Q-0098]
@@ -336,6 +340,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Q-0150, Streets of Edoras 4_340 against cards that have an ally take part: the bar wins (A) [Q-0011]
 - F-0278, Gwaihir 101_15, and the Palantír's prompt [F-0285]
 - Card by card (2026-10-10, second notes) [Q-0211, Q-0214, F-0341, Q-0034, F-0340, F-0350, F-0355, G-0041]
+- Card by card (2026-10-10, third notes) [Q-0216, Q-0217, Q-0218, Q-0219, Q-0221, F-0345, F-0346, F-0364, F-0363, F-0376, G-0051, G-0053, G-0054]
 
 # Settled shapes (shapes.md)
 

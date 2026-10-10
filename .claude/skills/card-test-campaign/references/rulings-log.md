@@ -408,6 +408,21 @@ after that will we begin tackling the big 3K." The 152 are the Decipher cards wh
 before the campaign (`orchestrator/queue-decipher-existing.json`). No card batch is launched after them without
 her word. *[2026-10-10]*
 
+**Before the Decipher sets, every proposal of the pattern search is taken (Q-0220).** "A-J are all yes. I is
+"generate"". By its letters (`orchestrator/trials/patterns.md` has each in full): A, the Q-0034 offers once, in
+the engine as far as the trial reaches and the rest in a sweep (how far the engine goes is Q-0224); B, a
+"census" check in lint (what a text names against what its definition names) and a sweep of what it found; C,
+`mechanics/` classes for the rules only Decipher cards use, then a first batch of 59 chosen cards; D, a choice's
+branches able to say they will do nothing, once in the engine; E, `attachedTo(<a kind>)` and a hindered bearer
+(Q-0108), once in the engine; F, one list of 21 definitions in shapes already ruled; G, a ruling (next entry);
+H, cards that share a text kept in one batch; I, the Play clause's test written by a generator; J, seven lines
+for the authors' notes. *[2026-10-10]*
+
+**"You may" on a trigger against a definition that cannot be declined, or the reverse, is corrected where found
+(Q-0220 G: yes).** Where a trigger's own sentence says "you may" and the definition cannot be declined, or says
+no "may" and the definition asks, the definition is corrected with no question each time. Goblin Runner 1_178
+is the one exception already ruled. *[2026-10-10]*
+
 ## Sources, sheets, revisions and errata
 
 **2026-10-04. Comprehensive Rules 4.2** should contain all the official rulings.
@@ -1077,6 +1092,30 @@ where the 5.0 excerpts leave a detail of hinder open.
 CardsBorneByAHinderedCardTests, TokensOnAHinderedCardTests, ReconcilingRestoresHinderedCardsTests and
 UniquenessTests. Read those; `at/HinderTests.java` is going.)
 
+**"Discard X" and "cannot bear X" are two standing effects; only the first discards on a restore (Q-0223: B).**
+"Anduril's interpretation was altered with the Legacy Ruling on GOTM: we see in GOTM a situation where both
+clauses exist but they *don't* match the same target. We therefore decided that both are in force as ongoing
+effects: the discard removes any cards matching the description that end up on the bearer, while the "cannot
+bear" prevents them from getting there in the first place (makes the targeting invalid). In GOTM's case, an
+artifact hand weapon that was on bearer before GOTM was played would therefore not be discarded: the discard
+effect only hits possessions, and "cannot bear" only prevents new bearings. In Anduril's case, both clauses target
+the same kind, so it's a little more moot, but we still interpret them as two separate, unrelated effects that
+just so happen to share a target. So. When restoring, Anduril in particular has a "discard" clause that
+immediately kicks in and banishes other cards (say, an Aragorn's Bow) that were played on him while Anduril was
+hindered, but in the case of something like Elven Armaments, because it only has the cannot-bear clause and
+lacks a discard clause, it will have to begrudgingly co-exist with other possessions played while it was
+hindered. The other examples you list (including Black Dart), I would interpret as matching Anduril, where they
+all contain an ongoing discard effect that makes the cannot-bear moot for the purposes of hinder/restore.
+Disarmed however also lacks an ongoing discard (it explicitly makes it an on-transfer trigger), so it would also
+permit the shadow cards to stay. So all that to say, B." So: a card whose text has a discard sentence of its own
+(Andúril 7_79, Shadowfax 4_100, Black Dart and the like) discards what matches whenever it comes back into
+force, by a card's restore or a reconcile's; a card that says only "cannot bear" (Elven Armaments), or whose
+discard is tied to its transfer (Disarmed), refuses new bearings and leaves what is there. *[2026-10-10]*
+
+**What was laid on a card for a time is back in force when the card is restored (Q-0222: A).** "A was intended,
+yeah." Hindering switches a card off and takes nothing from it: Aragorn 1_89 made defender +1 until the regroup
+phase, hindered and restored in the same phase, is defender +1 again until the regroup phase. *[2026-10-10]*
+
 **Hinder and restore.** A card hindered in the middle of its own ability still carries the ability out, and an
 effect that names its bearer still finds him (F-0099: "the -1 strength should still apply"; the old stub
 HinderingACompanionMidAbilityAlsoCancelsTheAbility "was the old design but it was altered"). But a token is not
@@ -1496,3 +1535,28 @@ cannot use: "I believe the internal functions used for assignment checks have ad
 whether or not defender etc should be considered, for just this use case. Likely the HJSON or test rig needs
 expanded to support the use of those flags." G-0041, the rig method for a refused assignment: "Looks good to me".
 *[2026-10-10]*
+
+**Card by card (2026-10-10, third notes).** Q-0216, Race Text 94_30 stops a draw an opponent's card has its owner
+make (Change of Plans 1_99): "I approve of your reasoning; Keep." Q-0217, a companion EXCHANGED out of the
+discard pile into hand (Borne Far Away 10_14) under 94_30: "we treat this like the persona replacement of the V3
+gollum cards, where a swap isn't a play/discard, so here it's not taken into hand. I may come to regret this,
+but we gotta start somewhere. B." Q-0218, a Block or Set the player picks still narrows his site list under
+Race Text 92_19: "Keep." Q-0219, the 29 Hobbit sites under 92_19 in PC Movie: "Let's do B" (held out: a site
+must be of the Fellowship, Towers, King or Shadows block, or of the format's own). Q-0221, Úlairë Nertëa 69_38
+and the three Morgul Orcs of set 7, a cost of assigning paid as the assignment is made: "Excellent work. A."
+(built for all four, `assignmentCost` retired). F-0345, Boromir 18_40 fetches only a [gondor] possession: "this
+is an oversight, should have permitted any possession that can be played on Boromir." F-0346, Wish For Our
+Kinfolk 8_8 lets a Dwarf ally pay "Exert a Dwarf companion": "Yup, clearly a bug." F-0364, Gamling 18_99 offers
+possessions he cannot bear: "definitely laziness in the implementation, approved." F-0363, a follower's Aid at
+Streets of Bree 18_140, where followers cannot be transferred: "B is the right call; such followers should be
+marked as noeffect when their aid is offered, so that the UI can indicate it won't do anything, but if they
+*want* the burden or whatever (and many such decks do), they can still attempt to pay it and get nothing out of
+it, just like any other legal cost-with-no-effect action." F-0376, Morgul on the March 7_195 counting a card
+taken into hand as a card drawn: "this pattern has happened with Decipher cards before, where two related
+actions are bound by the hip in their templating and always go together, to the point that they're treated like
+synonyms...until they aren't. I think I approve of the definition change that literally adds orTakesIntoHand"
+(the word answers a draw alone unless the definition says `orTakesIntoHand`, which Verily I Come 2_94 and
+Betrayal of Isengard 3_29 and 12_25 then say). G-0051, a follower's Aid cost read by a test: "I would make it
+`GetAidTwilightCost` to emphasize that it's only managing the case of twilight; if a more generic
+effect-returning function is needed I could also see `GetAidCost` as that more generic version." G-0053 and
+G-0054: "Approved." *[2026-10-10]*
