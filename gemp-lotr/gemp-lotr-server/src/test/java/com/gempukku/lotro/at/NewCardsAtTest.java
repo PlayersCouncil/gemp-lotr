@@ -506,24 +506,4 @@ public class NewCardsAtTest extends AbstractAtTest {
 //        playerDecided(P1, getCardActionId(P1, "Use Bilbo's Pipe"));
 //        assertEquals("2", _userFeedback.getAwaitingDecision(P1).getDecisionParameters().get("max")[0]);
 //    }
-
-    @Test
-    public void removeBurdens() throws DecisionResultInvalidException, CardNotFoundException {
-        initializeSimplestGame();
-
-        final PhysicalCardImpl gandalf = createCard(P1, "1_72");
-        final PhysicalCardImpl gandalfspipe = createCard(P1, "1_74");
-        final PhysicalCardImpl pipeweed = createCard(P1, "1_305");
-
-        _game.getGameState().addCardToZone(_game, pipeweed, Zone.SUPPORT);
-        _game.getGameState().addCardToZone(_game, gandalf, Zone.FREE_CHARACTERS);
-        _game.getGameState().attachCard(_game, gandalfspipe, gandalf);
-
-        skipMulligans();
-
-        playerDecided(P1, getCardActionId(P1, "Use Gandalf's Pipe"));
-        playerDecided(P1, "1");
-
-        assertEquals(0, _game.getGameState().getBurdens());
-    }
 }

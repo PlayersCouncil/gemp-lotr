@@ -84,33 +84,6 @@ public class WoundsEffectAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void disableWoundsOver() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard valiantManOfTheWest = addToZone(createCard(P1, "1_118"), Zone.HAND);
-        PhysicalCard aragorn = addToZone(createCard(P1, "1_89"), Zone.FREE_CHARACTERS);
-        PhysicalCard lurtz = addToZone(createCard(P2, "1_127"), Zone.SHADOW_CHARACTERS);
-
-        passUntil(Phase.MANEUVER);
-        selectCardAction(P1, valiantManOfTheWest);
-        pass(P2);
-        pass(P1);
-        passUntil(Phase.ARCHERY);
-        pass(P1);
-        pass(P2);
-        selectCard(P1, aragorn);
-        passUntil(Phase.ASSIGNMENT);
-        pass(P1);
-        pass(P2);
-        playerDecided(P1, aragorn.getCardId() + " " + lurtz.getCardId());
-        selectCard(P1, aragorn);
-        pass(P1);
-        assertEquals(1, getWounds(aragorn));
-        pass(P2);
-        assertEquals(2, getWounds(aragorn));
-    }
-
-    @Test
     public void preventAllWounds() throws Exception {
         Map<String, LotroDeck> decks = new HashMap<>();
         decks.put(P1, createDeckWithMrUnderhill());

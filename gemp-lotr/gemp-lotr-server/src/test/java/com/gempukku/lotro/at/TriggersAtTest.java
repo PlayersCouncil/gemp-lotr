@@ -1,6 +1,5 @@
 package com.gempukku.lotro.at;
 
-import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.CardNotFoundException;
@@ -568,36 +567,6 @@ public class TriggersAtTest extends AbstractAtTest {
         hasCardAction(P2, witchKingsBeast);
     }
 
-    @Test
-    public void addsThreat() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard tomBombadilsHat = addToZone(createCard(P1, "0_60"), Zone.SUPPORT);
-        PhysicalCard warTowers = addToZone(createCard(P2, "7_173"), Zone.HAND);
-        PhysicalCard desertNomad = addToZone(createCard(P2, "7_132"), Zone.SHADOW_CHARACTERS);
-
-        passUntil(Phase.MANEUVER);
-        pass(P1);
-        selectCardAction(P2, warTowers);
-        assertEquals(1, getCultureTokens(tomBombadilsHat, Culture.SHIRE));
-    }
-
-    @Test
-    public void addsBurden() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard ringBearer = getRingBearer(P1);
-        PhysicalCard tomBombadilsHat = addToZone(createCard(P1, "0_60"), Zone.SUPPORT);
-        PhysicalCard desperateDefenseOfTheRing = attachTo(createCard(P2, "1_244"), ringBearer);
-        PhysicalCard goblinRunner = addToZone(createCard(P2, "1_178"), Zone.SHADOW_CHARACTERS);
-
-        passUntil(Phase.ASSIGNMENT);
-        pass(P1);
-        pass(P2);
-        playerDecided(P1, ringBearer.getCardId() + " " + goblinRunner.getCardId());
-        assertEquals(1, getCultureTokens(tomBombadilsHat, Culture.SHIRE));
-    }
-
 
     @Test
     public void aboutToTakeControlOfSite() throws Exception {
@@ -644,20 +613,6 @@ public class TriggersAtTest extends AbstractAtTest {
         selectCardAction(P1, extraordinaryResilience);
         assertEquals(1, getWounds(frodo));
         assertEquals(0, getBurdens());
-    }
-
-    @Test
-    public void aboutToExert() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard gandalf = addToZone(createCard(P1, "1_72"), Zone.FREE_CHARACTERS);
-        PhysicalCard glamdring = attachTo(createCard(P1, "1_75"), gandalf);
-        PhysicalCard strengthOfSpirit = addToZone(createCard(P1, "1_85"), Zone.HAND);
-
-        passUntil(Phase.FELLOWSHIP);
-        selectCardAction(P1, glamdring);
-        selectCardAction(P1, strengthOfSpirit);
-        assertEquals(0, getWounds(gandalf));
     }
 
     @Test

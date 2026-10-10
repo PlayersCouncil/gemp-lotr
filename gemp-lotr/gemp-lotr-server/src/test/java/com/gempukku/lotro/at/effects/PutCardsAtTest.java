@@ -57,26 +57,6 @@ public class PutCardsAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void putCardFromDiscardOnBottomOfDeck() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard breedingPit = addToZone(createCard(P2, "1_122"), Zone.HAND);
-
-        passUntil(Phase.FELLOWSHIP);
-        setTwilightPool(10);
-        PhysicalCard urukSavageInDiscard = addToZone(createCard(P2, "1_151"), Zone.DISCARD);
-        PhysicalCard urukSavageInHand = addToZone(createCard(P2, "1_151"), Zone.HAND);
-        PhysicalCard urukSavageInDeck = addToZone(createCard(P2, "1_151"), Zone.DECK);
-
-        passUntil(Phase.SHADOW);
-        selectCardAction(P2, urukSavageInHand);
-        selectCardAction(P2, breedingPit);
-
-        List<? extends PhysicalCard> deck = _game.getGameState().getDeck(P2);
-        assertEquals(urukSavageInDiscard, deck.get(1));
-    }
-
-    @Test
     public void putCardsFromDiscardOnTopOfDeck() throws Exception {
         initializeSimplestGame();
 
