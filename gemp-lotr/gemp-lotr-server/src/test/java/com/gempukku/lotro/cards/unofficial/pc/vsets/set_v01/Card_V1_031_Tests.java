@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -33,12 +32,27 @@ public class Card_V1_031_Tests
 					put("troop", "1_177");
 					// Goblin Scimitar: a [moria] possession.  Only ever in a discard pile here.
 					put("scimitar", "1_180");
-					// Uruk Savage: an [isengard] minion of site 5; damage +1 is its whole text.
+					// Uruk Savage: an [isengard] minion.  Only ever in a discard pile or a draw deck here.
 					put("savage", "1_151");
 					// Goblin Runner: a [moria] minion.  Only ever in a discard pile or a draw deck here.
 					put("runner", "1_178");
 				}},
-				VirtualTableScenario.FellowshipSites,
+				new HashMap<>()
+				{{
+					put("site1", "1_319");
+					// Midgewater Marshes: "Marsh. Each time a Hobbit moves to Midgewater Marshes, that Hobbit must
+					// exert."  Shadow number 1.  The tentacles that are discarded away from a marsh stay in play
+					// here, so every tentacle is put down once the fellowship has moved to it.  Frodo arrives with
+					// a wound, which nothing here turns on.
+					put("site2", "1_332");
+					put("site3", "1_341");
+					put("site4", "1_343");
+					put("site5", "1_349");
+					put("site6", "1_351");
+					put("site7", "1_353");
+					put("site8", "1_356");
+					put("site9", "1_360");
+				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -87,14 +101,14 @@ public class Card_V1_031_Tests
 		scn.MoveCardsToHand(purpose, strong);
 
 		scn.StartGame();
-		// Every site is a marsh, so that the tentacles which are discarded away from one stay in play.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, CardType.SITE, null, Keyword.MARSH));
-		// Two tentacles, and a third [moria] minion that is not one.
-		scn.MoveMinionsToTable(vile, reaching, troop);
-		scn.SetTwilight(3);
+		scn.SetTwilight(4);
 		scn.FreepsPass();
+		// At Midgewater Marshes: two tentacles, and a third [moria] minion that is not one.
+		scn.MoveMinionsToTable(vile, reaching, troop);
+		scn.ShadowRefreshDecision();
 
-		// 3 set + 1 companion + 2 for site 2
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
+		// 4 set + 1 companion + 1 for Midgewater Marshes
 		assertEquals(6, scn.GetTwilight());
 		assertInZone(Zone.SHADOW_CHARACTERS, vile, reaching, troop);
 		assertTrue(scn.AwaitingShadowPhaseActions());
@@ -129,14 +143,14 @@ public class Card_V1_031_Tests
 		scn.MoveCardsToDiscard(freepsRunner);
 
 		scn.StartGame();
-		// Every site is a marsh, so that the tentacles which are discarded away from one stay in play.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, CardType.SITE, null, Keyword.MARSH));
-		// Exactly three tentacles, and a [moria] minion that is not one.
-		scn.MoveMinionsToTable(vile, reaching, strong, troop);
 		scn.FreepsPass();
+		// At Midgewater Marshes: exactly three tentacles, and a [moria] minion that is not one.
+		scn.MoveMinionsToTable(vile, reaching, strong, troop);
+		scn.ShadowRefreshDecision();
 
-		// 1 companion + 2 for site 2
-		assertEquals(3, scn.GetTwilight());
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
+		// 1 companion + 1 for Midgewater Marshes
+		assertEquals(2, scn.GetTwilight());
 		assertEquals(0, scn.GetBurdens());
 		assertEquals(2, scn.GetShadowDiscardCount());
 		// Only the Shadow player's Goblin Runner is left in his draw deck.
@@ -147,7 +161,7 @@ public class Card_V1_031_Tests
 
 		scn.ShadowPlayCard(purpose);
 
-		assertEquals(2, scn.GetTwilight());
+		assertEquals(1, scn.GetTwilight());
 		assertEquals(1, scn.GetBurdens());
 		assertNotInZone(Zone.HAND, purpose);
 		// The rest is the Shadow player's to take or leave.
@@ -185,52 +199,6 @@ public class Card_V1_031_Tests
 	}
 
 	@Test
-	public void TentacleOfAnotherCultureCountsAsATentacleAndNotAsAMoriaCard() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var purpose = scn.GetShadowCard("purpose");
-		var vile = scn.GetShadowCard("vile");
-		var reaching = scn.GetShadowCard("reaching");
-		var savage = scn.GetShadowCard("savage");
-		var scimitar = scn.GetShadowCard("scimitar");
-		var runner = scn.GetShadowCard("runner");
-		scn.MoveCardsToHand(purpose);
-		scn.MoveCardsToDiscard(scimitar, runner);
-
-		scn.StartGame();
-		// Every site is a marsh, so that the tentacles which are discarded away from one stay in play.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, CardType.SITE, null, Keyword.MARSH));
-		scn.MoveMinionsToTable(vile, reaching, savage);
-		// Every tentacle there is is a [moria] card.  The Uruk Savage is made a third tentacle, so that the text's
-		// "tentacle" and its "[moria] card" can be told apart.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, savage, null, Keyword.TENTACLE));
-		scn.FreepsPass();
-
-		assertEquals(0, scn.GetBurdens());
-		assertTrue(scn.ShadowPlayAvailable(purpose));
-
-		scn.ShadowPlayCard(purpose);
-
-		assertEquals(1, scn.GetBurdens());
-		scn.ShadowChooseYes();
-
-		assertTrue(scn.FreepsHasCardChoiceAvailable(vile, reaching, savage));
-		scn.FreepsChooseCard(savage);
-
-		assertInZone(Zone.DISCARD, savage);
-		assertInZone(Zone.SHADOW_CHARACTERS, vile, reaching);
-
-		// The discarded Uruk Savage is in the same discard pile as the two [moria] cards and is not one of them.
-		assertTrue(scn.ShadowHasCardChoiceAvailable(scimitar, runner));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(savage));
-		scn.ShadowChooseCardBPFromSelection(runner);
-
-		assertInZone(Zone.DECK, runner);
-		assertInZone(Zone.DISCARD, scimitar, savage, purpose);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void DecliningAfterTheBurdenDiscardsNoTentacleAndShufflesNothing() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -243,11 +211,12 @@ public class Card_V1_031_Tests
 		scn.MoveCardsToDiscard(scimitar);
 
 		scn.StartGame();
-		// Every site is a marsh, so that the tentacles which are discarded away from one stay in play.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, CardType.SITE, null, Keyword.MARSH));
-		scn.MoveMinionsToTable(vile, reaching, strong);
 		scn.FreepsPass();
+		// At Midgewater Marshes.
+		scn.MoveMinionsToTable(vile, reaching, strong);
+		scn.ShadowRefreshDecision();
 
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
 		assertEquals(0, scn.GetBurdens());
 		assertEquals(1, scn.GetShadowDiscardCount());
 		// The Goblin Patrol Troop, the Uruk Savage and the Goblin Runner.

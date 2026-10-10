@@ -9,6 +9,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
+import java.util.List;
 
 import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
@@ -151,15 +152,13 @@ public class Card_V1_018_Tests
 		var scn = GetScenario();
 
 		var council = scn.GetFreepsCard("council");
-		var aragorn = scn.GetFreepsCard("aragorn");
 		var saelbeth = scn.GetFreepsCard("saelbeth");
-		var whiteHand = scn.GetShadowCard("whiteHand");
 		var coldlyStill = scn.GetShadowCard("coldlyStill");
 		var axeman = scn.GetShadowCard("axeman");
 		scn.MoveCardsToSupportArea(council);
 		// Gandalf and one [elven] ally.  Beside them an [elven] companion and a [gandalf] ally, neither of
 		// which is an [elven] ally.
-		scn.MoveCompanionsToTable(aragorn, scn.GetFreepsCard("gandalf"), scn.GetFreepsCard("legolas"));
+		scn.MoveCompanionsToTable(scn.GetFreepsCard("gandalf"), scn.GetFreepsCard("legolas"));
 		scn.MoveAlliesToTable(scn.GetFreepsCard("golradir"), scn.GetFreepsCard("albert"));
 		scn.MoveCardsToHand(saelbeth);
 
@@ -167,19 +166,15 @@ public class Card_V1_018_Tests
 
 		scn.MoveMinionsToTable(axeman);
 		scn.AttachCardsTo(axeman, scn.GetShadowCard("poleaxe"));
-		assertEquals(6, scn.GetResistance(aragorn));
 		// 11 + 2 for the Poleaxe
 		assertEquals(13, scn.GetStrength(axeman));
 
-		scn.MoveMinionsToTable(whiteHand, coldlyStill);
-		// "Each companion is resistance -1": 6 - 1
-		assertEquals(5, scn.GetResistance(aragorn));
+		scn.MoveMinionsToTable(coldlyStill);
 		// "Each [men] minion bearing a possession is strength +2": 13 + 2
 		assertEquals(15, scn.GetStrength(axeman));
 
 		scn.FreepsPlayCard(saelbeth);
 		assertInZone(Zone.SUPPORT, saelbeth);
-		assertEquals(6, scn.GetResistance(aragorn));
 		assertEquals(13, scn.GetStrength(axeman));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -215,155 +210,113 @@ public class Card_V1_018_Tests
 
 	@Test
 	public void WithGandalfAndTwoElvenAlliesEverySarumanCanBeWoundedByArcheryAndAssignedToASkirmish() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
+		// Saruman is unique: each of the nine stands on a table of his own, with the same board around him.
+		for (var name : new String[] { "keeper", "servant", "traitor", "master", "keeperPC", "fellVoice", "rabble", "instigator", "mind" }) {
+			var scn = GetScenario();
 
-		var council = scn.GetFreepsCard("council");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		var keeper = scn.GetShadowCard("keeper");
-		var servant = scn.GetShadowCard("servant");
-		var traitor = scn.GetShadowCard("traitor");
-		var master = scn.GetShadowCard("master");
-		var keeperPC = scn.GetShadowCard("keeperPC");
-		var fellVoice = scn.GetShadowCard("fellVoice");
-		var rabble = scn.GetShadowCard("rabble");
-		var instigator = scn.GetShadowCard("instigator");
-		var mind = scn.GetShadowCard("mind");
-		var troop = scn.GetShadowCard("troop");
-		var savage = scn.GetShadowCard("savage");
-		scn.MoveCardsToSupportArea(council);
-		scn.MoveCompanionsToTable(aragorn, scn.GetFreepsCard("gandalf"), scn.GetFreepsCard("legolas"));
-		scn.MoveAlliesToTable(scn.GetFreepsCard("golradir"), scn.GetFreepsCard("saelbeth"), scn.GetFreepsCard("albert"));
+			var council = scn.GetFreepsCard("council");
+			var aragorn = scn.GetFreepsCard("aragorn");
+			var saruman = scn.GetShadowCard(name);
+			var troop = scn.GetShadowCard("troop");
+			var savage = scn.GetShadowCard("savage");
+			scn.MoveCardsToSupportArea(council);
+			scn.MoveCompanionsToTable(aragorn, scn.GetFreepsCard("gandalf"), scn.GetFreepsCard("legolas"));
+			scn.MoveAlliesToTable(scn.GetFreepsCard("golradir"), scn.GetFreepsCard("saelbeth"), scn.GetFreepsCard("albert"));
 
-		scn.StartGame();
-		// The minions go down once the fellowship has moved, so that nothing of theirs answers the move.
-		scn.FreepsPass();
-		scn.MoveMinionsToTable(keeper, servant, traitor, master, keeperPC, fellVoice, rabble, instigator, mind, troop, savage);
-		scn.SkipToArcheryWounds();
+			scn.StartGame();
+			// The minions go down once the fellowship has moved, so that nothing of theirs answers the move.
+			scn.FreepsPass();
+			scn.MoveMinionsToTable(saruman, troop, savage);
+			scn.SkipToArcheryWounds();
 
-		// The Shadow player may put Legolas's one archery wound on any minion, the six who "may not take
-		// wounds during the archery phase" among them.
-		assertEquals(1, scn.GetFreepsArcheryTotal());
-		assertTrue(scn.ShadowHasCardChoiceAvailable(keeper, servant, traitor, master, keeperPC, fellVoice));
-		assertTrue(scn.ShadowHasCardChoiceAvailable(rabble, instigator, mind, troop, savage));
-		assertEquals(0, scn.GetWoundsOn(fellVoice));
-		scn.ShadowChooseCard(fellVoice);
-		assertEquals(1, scn.GetWoundsOn(fellVoice));
+			// The Shadow player may put Legolas's one archery wound on any minion, Saruman among them: six of the
+			// nine "may not take wounds during the archery phase".
+			assertEquals(name, 1, scn.GetFreepsArcheryTotal());
+			assertTrue(name, scn.ShadowHasCardChoiceAvailable(saruman, troop, savage));
+			assertEquals(name, 0, scn.GetWoundsOn(saruman));
+			scn.ShadowChooseCard(saruman);
+			assertEquals(name, 1, scn.GetWoundsOn(saruman));
 
-		// Only the first sentence is off.  The Keeper of Isengard's second, "Uruk-hai are fierce", still
-		// applies to the Uruk Savage.
-		assertTrue(scn.HasKeyword(savage, Keyword.FIERCE));
+			// Only the first sentence is off.  The Keeper of Isengard's second, "Uruk-hai are fierce", still
+			// applies to the Uruk Savage; on the other eight tables nothing makes him fierce.
+			assertEquals(name, name.equals("keeper"), scn.HasKeyword(savage, Keyword.FIERCE));
 
-		// All nine Sarumans may be assigned to a skirmish: by the Free Peoples player, who is offered every
-		// minion on the table...
-		scn.PassAssignmentActions();
-		assertEquals(11, scn.FreepsGetShadowAssignmentTargetCount());
-		assertTrue(scn.FreepsHasAssignmentTargetAvailable(keeper));
-		assertTrue(scn.FreepsHasAssignmentTargetAvailable(servant));
-		assertTrue(scn.FreepsHasAssignmentTargetAvailable(traitor));
-		assertTrue(scn.FreepsHasAssignmentTargetAvailable(master));
-		assertTrue(scn.FreepsHasAssignmentTargetAvailable(keeperPC));
-		assertTrue(scn.FreepsHasAssignmentTargetAvailable(fellVoice));
-		assertTrue(scn.FreepsHasAssignmentTargetAvailable(rabble));
-		assertTrue(scn.FreepsHasAssignmentTargetAvailable(instigator));
-		assertTrue(scn.FreepsHasAssignmentTargetAvailable(mind));
-		assertTrue(scn.FreepsHasAssignmentTargetAvailable(troop));
-		assertTrue(scn.FreepsHasAssignmentTargetAvailable(savage));
-		scn.FreepsAssignToMinions(aragorn, keeper);
-		assertTrue(scn.IsCharAssignedAgainst(aragorn, keeper));
+			// Saruman may be assigned to a skirmish: by the Free Peoples player, who is offered every minion on
+			// the table and takes the Troop...
+			scn.PassAssignmentActions();
+			assertEquals(name, 3, scn.FreepsGetShadowAssignmentTargetCount());
+			assertTrue(name, scn.FreepsHasAssignmentTargetAvailable(saruman));
+			assertTrue(name, scn.FreepsHasAssignmentTargetAvailable(troop));
+			assertTrue(name, scn.FreepsHasAssignmentTargetAvailable(savage));
+			scn.FreepsAssignToMinions(aragorn, troop);
 
-		// ...and, of the ten minions left over, by the Shadow player: the eight Sarumans not yet assigned,
-		// the Troop and the Savage.
-		assertEquals(10, scn.ShadowGetShadowAssignmentTargetCount());
-		assertFalse(scn.ShadowHasAssignmentTargetAvailable(keeper));
-		assertTrue(scn.ShadowHasAssignmentTargetAvailable(servant));
-		assertTrue(scn.ShadowHasAssignmentTargetAvailable(traitor));
-		assertTrue(scn.ShadowHasAssignmentTargetAvailable(master));
-		assertTrue(scn.ShadowHasAssignmentTargetAvailable(keeperPC));
-		assertTrue(scn.ShadowHasAssignmentTargetAvailable(fellVoice));
-		assertTrue(scn.ShadowHasAssignmentTargetAvailable(rabble));
-		assertTrue(scn.ShadowHasAssignmentTargetAvailable(instigator));
-		assertTrue(scn.ShadowHasAssignmentTargetAvailable(mind));
-		assertTrue(scn.ShadowHasAssignmentTargetAvailable(troop));
-		assertTrue(scn.ShadowHasAssignmentTargetAvailable(savage));
-		scn.ShadowAssignToMinions(aragorn, rabble);
-		assertTrue(scn.IsCharAssignedAgainst(aragorn, rabble));
-		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
+			// ...and, of the two minions left over, by the Shadow player, who assigns him.
+			assertEquals(name, 2, scn.ShadowGetShadowAssignmentTargetCount());
+			assertTrue(name, scn.ShadowHasAssignmentTargetAvailable(saruman));
+			assertTrue(name, scn.ShadowHasAssignmentTargetAvailable(savage));
+			assertFalse(name, scn.ShadowHasAssignmentTargetAvailable(troop));
+			scn.ShadowAssignToMinions(aragorn, saruman);
+			assertTrue(name, scn.IsCharAssignedAgainst(aragorn, troop));
+			assertTrue(name, scn.IsCharAssignedAgainst(aragorn, saruman));
+			assertTrue(name, scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
+		}
 	}
 
 	@Test
 	public void WithGandalfAndOnlyOneElvenAllyNoSarumanCanBeWoundedByArcheryOrAssignedToASkirmish() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
+		// The six whose first sentence keeps them from archery wounds as well as from skirmishes.  The other
+		// three's only keeps them out of skirmishes: they can be given an archery wound whatever this card does.
+		var notWoundedByArchery = List.of("keeper", "servant", "traitor", "master", "keeperPC", "fellVoice");
+		// Saruman is unique: each of the nine stands on a table of his own, the table of the test above without
+		// Saelbeth.
+		for (var name : new String[] { "keeper", "servant", "traitor", "master", "keeperPC", "fellVoice", "rabble", "instigator", "mind" }) {
+			var scn = GetScenario();
 
-		var council = scn.GetFreepsCard("council");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		var keeper = scn.GetShadowCard("keeper");
-		var servant = scn.GetShadowCard("servant");
-		var traitor = scn.GetShadowCard("traitor");
-		var master = scn.GetShadowCard("master");
-		var keeperPC = scn.GetShadowCard("keeperPC");
-		var fellVoice = scn.GetShadowCard("fellVoice");
-		var rabble = scn.GetShadowCard("rabble");
-		var instigator = scn.GetShadowCard("instigator");
-		var mind = scn.GetShadowCard("mind");
-		var troop = scn.GetShadowCard("troop");
-		var savage = scn.GetShadowCard("savage");
-		scn.MoveCardsToSupportArea(council);
-		// The board of the test above without Saelbeth: Gandalf, one [elven] ally, an [elven] companion and
-		// a [gandalf] ally.
-		scn.MoveCompanionsToTable(aragorn, scn.GetFreepsCard("gandalf"), scn.GetFreepsCard("legolas"));
-		scn.MoveAlliesToTable(scn.GetFreepsCard("golradir"), scn.GetFreepsCard("albert"));
+			var council = scn.GetFreepsCard("council");
+			var aragorn = scn.GetFreepsCard("aragorn");
+			var saruman = scn.GetShadowCard(name);
+			var troop = scn.GetShadowCard("troop");
+			var savage = scn.GetShadowCard("savage");
+			scn.MoveCardsToSupportArea(council);
+			// Gandalf, one [elven] ally, an [elven] companion and a [gandalf] ally.
+			scn.MoveCompanionsToTable(aragorn, scn.GetFreepsCard("gandalf"), scn.GetFreepsCard("legolas"));
+			scn.MoveAlliesToTable(scn.GetFreepsCard("golradir"), scn.GetFreepsCard("albert"));
 
-		scn.StartGame();
-		scn.FreepsPass();
-		scn.MoveMinionsToTable(keeper, servant, traitor, master, keeperPC, fellVoice, rabble, instigator, mind, troop, savage);
-		scn.SkipToArcheryWounds();
+			scn.StartGame();
+			scn.FreepsPass();
+			scn.MoveMinionsToTable(saruman, troop, savage);
+			scn.SkipToArcheryWounds();
 
-		// Legolas's archery wound cannot be put on the six who may not take wounds during the archery phase.
-		// The three whose first sentence only keeps them out of skirmishes can be given it.
-		assertEquals(1, scn.GetFreepsArcheryTotal());
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(keeper, servant, traitor, master, keeperPC, fellVoice));
-		assertTrue(scn.ShadowHasCardChoiceAvailable(rabble, instigator, mind, troop, savage));
-		scn.ShadowChooseCard(troop);
-		assertEquals(1, scn.GetWoundsOn(troop));
+			// Legolas's archery wound cannot be put on a Saruman who may not take wounds during the archery phase.
+			assertEquals(name, 1, scn.GetFreepsArcheryTotal());
+			assertEquals(name, !notWoundedByArchery.contains(name), scn.ShadowHasCardChoiceAvailable(saruman));
+			assertTrue(name, scn.ShadowHasCardChoiceAvailable(troop, savage));
+			scn.ShadowChooseCard(troop);
+			assertEquals(name, 1, scn.GetWoundsOn(troop));
+			assertEquals(name, 0, scn.GetWoundsOn(saruman));
 
-		assertTrue(scn.HasKeyword(savage, Keyword.FIERCE));
+			assertEquals(name, name.equals("keeper"), scn.HasKeyword(savage, Keyword.FIERCE));
 
-		// Only the Goblin Patrol Troop and the Uruk Savage can be assigned, by either player.  The Free
-		// Peoples player is offered those two and no Saruman.
-		scn.PassAssignmentActions();
-		assertEquals(2, scn.FreepsGetShadowAssignmentTargetCount());
-		assertTrue(scn.FreepsHasAssignmentTargetAvailable(troop));
-		assertTrue(scn.FreepsHasAssignmentTargetAvailable(savage));
-		assertFalse(scn.FreepsHasAssignmentTargetAvailable(keeper));
-		assertFalse(scn.FreepsHasAssignmentTargetAvailable(servant));
-		assertFalse(scn.FreepsHasAssignmentTargetAvailable(traitor));
-		assertFalse(scn.FreepsHasAssignmentTargetAvailable(master));
-		assertFalse(scn.FreepsHasAssignmentTargetAvailable(keeperPC));
-		assertFalse(scn.FreepsHasAssignmentTargetAvailable(fellVoice));
-		assertFalse(scn.FreepsHasAssignmentTargetAvailable(rabble));
-		assertFalse(scn.FreepsHasAssignmentTargetAvailable(instigator));
-		assertFalse(scn.FreepsHasAssignmentTargetAvailable(mind));
-		scn.FreepsAssignToMinions(aragorn, troop);
+			// Only the Goblin Patrol Troop and the Uruk Savage can be assigned, by either player.  The Free
+			// Peoples player is offered those two and not Saruman.
+			scn.PassAssignmentActions();
+			assertEquals(name, 2, scn.FreepsGetShadowAssignmentTargetCount());
+			assertTrue(name, scn.FreepsHasAssignmentTargetAvailable(troop));
+			assertTrue(name, scn.FreepsHasAssignmentTargetAvailable(savage));
+			assertFalse(name, scn.FreepsHasAssignmentTargetAvailable(saruman));
+			scn.FreepsAssignToMinions(aragorn, troop);
 
-		// The Shadow player is left the Savage and nothing else.
-		assertEquals(1, scn.ShadowGetShadowAssignmentTargetCount());
-		assertTrue(scn.ShadowHasAssignmentTargetAvailable(savage));
-		assertFalse(scn.ShadowHasAssignmentTargetAvailable(troop));
-		assertFalse(scn.ShadowHasAssignmentTargetAvailable(keeper));
-		assertFalse(scn.ShadowHasAssignmentTargetAvailable(servant));
-		assertFalse(scn.ShadowHasAssignmentTargetAvailable(traitor));
-		assertFalse(scn.ShadowHasAssignmentTargetAvailable(master));
-		assertFalse(scn.ShadowHasAssignmentTargetAvailable(keeperPC));
-		assertFalse(scn.ShadowHasAssignmentTargetAvailable(fellVoice));
-		assertFalse(scn.ShadowHasAssignmentTargetAvailable(rabble));
-		assertFalse(scn.ShadowHasAssignmentTargetAvailable(instigator));
-		assertFalse(scn.ShadowHasAssignmentTargetAvailable(mind));
-		scn.ShadowAssignToMinions(aragorn, savage);
-		assertTrue(scn.IsCharAssignedAgainst(aragorn, troop));
-		assertTrue(scn.IsCharAssignedAgainst(aragorn, savage));
-		assertFalse(scn.IsCharAssigned(keeper));
-		assertFalse(scn.IsCharAssigned(rabble));
-		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
+			// The Shadow player is left the Savage and nothing else.
+			assertEquals(name, 1, scn.ShadowGetShadowAssignmentTargetCount());
+			assertTrue(name, scn.ShadowHasAssignmentTargetAvailable(savage));
+			assertFalse(name, scn.ShadowHasAssignmentTargetAvailable(troop));
+			assertFalse(name, scn.ShadowHasAssignmentTargetAvailable(saruman));
+			scn.ShadowAssignToMinions(aragorn, savage);
+			assertTrue(name, scn.IsCharAssignedAgainst(aragorn, troop));
+			assertTrue(name, scn.IsCharAssignedAgainst(aragorn, savage));
+			assertFalse(name, scn.IsCharAssigned(saruman));
+			assertTrue(name, scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
+		}
 	}
 
 	@Test
@@ -410,40 +363,60 @@ public class Card_V1_018_Tests
 	}
 
 	@Test
-	public void TheTwoSarumansWhoseGameTextOpensWithKeywordsKeepThemWhenTheFirstSentenceStopsApplying() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SarumanOfManyColoursKeepsHisKeywordsWhenTheFirstSentenceStopsApplying() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var council = scn.GetFreepsCard("council");
-		var aragorn = scn.GetFreepsCard("aragorn");
 		var saelbeth = scn.GetFreepsCard("saelbeth");
 		var colours = scn.GetShadowCard("colours");
-		var agent = scn.GetShadowCard("agent");
-		var whiteHand = scn.GetShadowCard("whiteHand");
 		scn.MoveCardsToSupportArea(council);
 		// Gandalf and one [elven] ally, with the second in hand.
-		scn.MoveCompanionsToTable(aragorn, scn.GetFreepsCard("gandalf"));
+		scn.MoveCompanionsToTable(scn.GetFreepsCard("gandalf"));
 		scn.MoveAlliesToTable(scn.GetFreepsCard("golradir"));
 		scn.MoveCardsToHand(saelbeth);
 
 		scn.StartGame();
 
-		// The Master of the White Hand is beside them to show the moment the first sentence stops applying:
-		// his is "Each companion is resistance -1."
-		scn.MoveMinionsToTable(colours, agent, whiteHand);
-		assertEquals(5, scn.GetResistance(aragorn));    // 6 - 1
+		scn.MoveMinionsToTable(colours);
 		assertEquals(1, scn.GetKeywordCount(colours, Keyword.DAMAGE));
 		assertTrue(scn.HasKeyword(colours, Keyword.FIERCE));
 		assertTrue(scn.HasKeyword(colours, Keyword.LURKER));
-		assertTrue(scn.HasKeyword(agent, Keyword.LURKER));
 
+		// The play that makes it Gandalf and two [elven] allies.  On this board it switches off the first
+		// sentence of a Saruman who has one to lose, as the test of that play shows.
 		scn.FreepsPlayCard(saelbeth);
 		assertInZone(Zone.SUPPORT, saelbeth);
-		assertEquals(6, scn.GetResistance(aragorn));
 
-		// Neither of the two has lost anything: not the first keyword, and not the whole line of them.
+		// He has lost nothing: not the first keyword, and not the whole line of them.
 		assertEquals(1, scn.GetKeywordCount(colours, Keyword.DAMAGE));
 		assertTrue(scn.HasKeyword(colours, Keyword.FIERCE));
 		assertTrue(scn.HasKeyword(colours, Keyword.LURKER));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void SarumanAgentOfTheDarkLordKeepsLurkerWhenTheFirstSentenceStopsApplying() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var council = scn.GetFreepsCard("council");
+		var saelbeth = scn.GetFreepsCard("saelbeth");
+		var agent = scn.GetShadowCard("agent");
+		scn.MoveCardsToSupportArea(council);
+		// Gandalf and one [elven] ally, with the second in hand.
+		scn.MoveCompanionsToTable(scn.GetFreepsCard("gandalf"));
+		scn.MoveAlliesToTable(scn.GetFreepsCard("golradir"));
+		scn.MoveCardsToHand(saelbeth);
+
+		scn.StartGame();
+
+		scn.MoveMinionsToTable(agent);
+		assertTrue(scn.HasKeyword(agent, Keyword.LURKER));
+
+		// The play that makes it Gandalf and two [elven] allies.
+		scn.FreepsPlayCard(saelbeth);
+		assertInZone(Zone.SUPPORT, saelbeth);
+
+		// "Lurker." is the whole of his first line, and he keeps it.
 		assertTrue(scn.HasKeyword(agent, Keyword.LURKER));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

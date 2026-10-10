@@ -4,8 +4,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -25,6 +23,9 @@ public class Card_V1_050_Tests
 					put("sam", "1_311");        // Sam, Son of Hamfast: [shire] companion, Ring-bound, with the Aragorn signet
 					put("legolas", "1_50");     // Legolas, Greenleaf: [elven] companion with the Frodo signet, (2); an Elf to exert for the Phial
 					put("guard", "1_7");        // Dwarf Guard: a companion with no signet
+					// Pippin, Trollslayer: a [gondor] companion who is a Hobbit, with the Gandalf signet.  "To play,
+					// spot a [gondor] companion", so he is cheated in; his skirmish ability is never used.
+					put("trollslayer", "103_31");
 
 					put("coat", "13_153");      // Mithril-coat, Dwarf-mail: [shire] artifact, (2); bearer must be a Ring-bound Hobbit
 					put("sting", "1_313");      // Sting: [shire] possession, (1); bearer must be Frodo
@@ -213,17 +214,22 @@ public class Card_V1_050_Tests
 		var armor = scn.GetFreepsCard("armor");
 		scn.MoveAlliesToTable(bilbo);
 		scn.MoveCompanionsToTable(sam, legolas);
-		// Items that are not in the draw deck.
-		scn.MoveCardsToHand(pan);
-		scn.MoveCardsToDiscard(pipe);
-		// Site 1 is no sanctuary; every site is made one, which saves playing two turns to reach site 3.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, CardType.SITE, null, Keyword.SANCTUARY));
 
 		scn.StartGame();
+		// Rivendell Valley, site 3: a sanctuary, and Bilbo's home.
+		scn.SkipToSite(3);
+		// The turns played on the way have drawn the deck into hand.  The hand is made the Frying Pan alone, which
+		// puts the rest of it back on the draw deck, and Bilbo's Pipe goes to the discard pile: two items that are
+		// not in the draw deck.
+		scn.SetFreepsHand(pan);
+		scn.MoveCardsToDiscard(pipe);
+		scn.FreepsRefreshDecision();
 
 		int freepsShuffles = scn.GetFreepsDeckShuffleCount();
 		int shadowShuffles = scn.GetShadowDeckShuffleCount();
 		int deck = scn.GetFreepsDeckCount();
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.SANCTUARY));
 		assertEquals(0, scn.GetTwilight());
 		assertEquals(0, scn.GetWoundsOn(bilbo));
 		assertEquals(0, scn.GetWoundsOn(legolas));
@@ -274,19 +280,25 @@ public class Card_V1_050_Tests
 		var frodo = scn.GetRingBearer();
 		var bilbo = scn.GetFreepsCard("bilbo");
 		var sam = scn.GetFreepsCard("sam");
-		var legolas = scn.GetFreepsCard("legolas");
+		var trollslayer = scn.GetFreepsCard("trollslayer");
 		var sword = scn.GetFreepsCard("sword");
 		var pipe = scn.GetFreepsCard("pipe");
 		var pan = scn.GetFreepsCard("pan");
 		scn.MoveAlliesToTable(bilbo);
-		scn.MoveCompanionsToTable(sam, legolas);
-		scn.MoveCardsToHand(pan);
-		// A Hobbit companion who is not [shire].  Bilbo is a [shire] Hobbit who is not a companion.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, legolas, null, Race.HOBBIT));
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, CardType.SITE, null, Keyword.SANCTUARY));
+		// Pippin, Trollslayer is a Hobbit companion who is not [shire].  Bilbo is a [shire] Hobbit who is not a
+		// companion.
+		scn.MoveCompanionsToTable(sam, trollslayer);
 
 		scn.StartGame();
+		// Rivendell Valley, site 3: a sanctuary.  The turns played on the way have drawn the deck into hand: the
+		// hand is made the Frying Pan alone, which puts the rest of it back on the draw deck.
+		scn.SkipToSite(3);
+		scn.SetFreepsHand(pan);
+		scn.FreepsRefreshDecision();
 
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.SANCTUARY));
+		assertInZone(Zone.DECK, sword, pipe);
 		assertEquals(0, scn.GetTwilight());
 		scn.FreepsUseCardAction(bilbo);
 		scn.FreepsDismissRevealedCards();
@@ -295,7 +307,7 @@ public class Card_V1_050_Tests
 
 		// The Sword's bearer must be a Hobbit, and all four are.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, sam));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(bilbo, legolas));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(bilbo, trollslayer));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		assertEquals(1, scn.FreepsGetChoiceMax());
 		scn.FreepsChooseCard(sam);
@@ -309,7 +321,7 @@ public class Card_V1_050_Tests
 
 		// So must the Pipe's, and Sam is offered again.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, sam));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(bilbo, legolas));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(bilbo, trollslayer));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		assertEquals(1, scn.FreepsGetChoiceMax());
 		scn.FreepsChooseCard(sam);
@@ -320,14 +332,14 @@ public class Card_V1_050_Tests
 		assertEquals(2, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
-		// Played from hand, an item whose bearer must be a Hobbit may go on Bilbo or on Legolas.  Sam has a
+		// Played from hand, an item whose bearer must be a Hobbit may go on Bilbo or on Pippin.  Sam has a
 		// hand weapon already.
 		scn.FreepsPlayCard(pan);
-		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, bilbo, legolas));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, bilbo, trollslayer));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(sam));
-		scn.FreepsChooseCard(legolas);
+		scn.FreepsChooseCard(trollslayer);
 
-		assertAttachedTo(pan, legolas);
+		assertAttachedTo(pan, trollslayer);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
@@ -339,11 +351,16 @@ public class Card_V1_050_Tests
 		var bilbo = scn.GetFreepsCard("bilbo");
 		var pan = scn.GetFreepsCard("pan");
 		scn.MoveAlliesToTable(bilbo);
-		scn.MoveCardsToHand(pan);
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, CardType.SITE, null, Keyword.SANCTUARY));
 
 		scn.StartGame();
+		// Rivendell Valley, site 3: a sanctuary.  The turns played on the way have drawn the deck into hand: the
+		// hand is made the Frying Pan alone.
+		scn.SkipToSite(3);
+		scn.SetFreepsHand(pan);
+		scn.FreepsRefreshDecision();
 
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.SANCTUARY));
 		assertEquals(0, scn.GetWoundsOn(bilbo));
 		assertTrue(scn.FreepsActionAvailable(bilbo));
 
@@ -376,10 +393,16 @@ public class Card_V1_050_Tests
 		// Every item a [shire] companion could bear but the Hobbit Sword.
 		scn.MoveCardsToDiscard(scn.GetFreepsCard("coat"), scn.GetFreepsCard("sting"), scn.GetFreepsCard("phial"),
 				scn.GetFreepsCard("pipe"), scn.GetFreepsCard("pan"));
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, CardType.SITE, null, Keyword.SANCTUARY));
 
 		scn.StartGame();
+		// Rivendell Valley, site 3: a sanctuary.  The turns played on the way have drawn the deck into hand, and an
+		// empty hand puts it all back on the draw deck.
+		scn.SkipToSite(3);
+		scn.SetFreepsHand();
+		scn.FreepsRefreshDecision();
 
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.SANCTUARY));
 		int deck = scn.GetFreepsDeckCount();
 		assertInZone(Zone.DECK, sword, tale, toby, armor);
 		assertEquals(0, scn.GetTwilight());
@@ -421,10 +444,16 @@ public class Card_V1_050_Tests
 		// area and a possession for a Dwarf are still in the deck.
 		scn.MoveCardsToDiscard(scn.GetFreepsCard("coat"), scn.GetFreepsCard("sting"), scn.GetFreepsCard("phial"),
 				scn.GetFreepsCard("pipe"), scn.GetFreepsCard("pan"), scn.GetFreepsCard("sword"));
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, CardType.SITE, null, Keyword.SANCTUARY));
 
 		scn.StartGame();
+		// Rivendell Valley, site 3: a sanctuary.  The turns played on the way have drawn the deck into hand, and an
+		// empty hand puts it all back on the draw deck.
+		scn.SkipToSite(3);
+		scn.SetFreepsHand();
+		scn.FreepsRefreshDecision();
 
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.SANCTUARY));
 		int freepsShuffles = scn.GetFreepsDeckShuffleCount();
 		int shadowShuffles = scn.GetShadowDeckShuffleCount();
 		int deck = scn.GetFreepsDeckCount();

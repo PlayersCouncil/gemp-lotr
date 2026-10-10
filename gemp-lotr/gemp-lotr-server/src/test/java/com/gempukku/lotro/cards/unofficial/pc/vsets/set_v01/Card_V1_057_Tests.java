@@ -1,16 +1,12 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
 import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Race;
 import com.gempukku.lotro.common.SitesBlock;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -26,7 +22,12 @@ public class Card_V1_057_Tests
 				new HashMap<>()
 				{{
 					put("merry", "1_302");      // Merry, Friend to Sam: [shire] Hobbit companion, vitality 4
-					put("guard", "1_7");        // Dwarf Guard: [dwarven] Dwarf companion with no text in play
+					// Smeagol, Once Like Us: a [shire] companion with no race, Ring-bound, vitality 4.  "To play, add a
+					// burden", so he is cheated in; his assignment ability is never used.
+					put("smeagol", "103_116");
+					// Pippin, Trollslayer: a [gondor] companion who is a Hobbit.  "To play, spot a [gondor] companion",
+					// so he is cheated in; his skirmish ability is never used.
+					put("trollslayer", "103_31");
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion
 					put("bounder", "1_286");    // Bounder: [shire] Hobbit ally; a skirmish ability and nothing else
 					// Hobbit Farmer: [shire] Hobbit ally.  "While you can spot your site 1, this ally has the game
@@ -100,8 +101,8 @@ public class Card_V1_057_Tests
 
 		var frodo = scn.GetRingBearer();
 		var merry = scn.GetFreepsCard("merry");
-		var guard = scn.GetFreepsCard("guard");
-		var aragorn = scn.GetFreepsCard("aragorn");
+		var smeagol = scn.GetFreepsCard("smeagol");
+		var trollslayer = scn.GetFreepsCard("trollslayer");
 		var bounder = scn.GetFreepsCard("bounder");
 		var imitation = scn.GetFreepsCard("imitation");
 		var tale = scn.GetFreepsCard("tale");
@@ -111,15 +112,13 @@ public class Card_V1_057_Tests
 		var sword = scn.GetFreepsCard("sword");
 		var deftness = scn.GetFreepsCard("deftness");
 		var wisdom = scn.GetFreepsCard("wisdom");
-		scn.MoveCompanionsToTable(merry, guard, aragorn);
+		// Smeagol is a [shire] companion who is no Hobbit, and Pippin, Trollslayer a Hobbit who is a [gondor] card.
+		scn.MoveCompanionsToTable(merry, smeagol, trollslayer);
 		scn.MoveAlliesToTable(bounder);
 		scn.MoveCardsToHand(promise);
 		scn.MoveCardsToDiscard(monstrous);
 
 		scn.StartGame();
-		// A Dwarf who is a [shire] card, and a [gondor] Man who is a Hobbit.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, guard, null, Culture.SHIRE));
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, aragorn, null, Race.HOBBIT));
 
 		var study = scn.GetCurrentSite();
 		assertEquals("Bag End Study", study.getBlueprint().getTitle());
@@ -136,18 +135,18 @@ public class Card_V1_057_Tests
 		assertEquals(0, scn.GetTwilight());
 
 		scn.FreepsChooseOptionalTrigger(study);
-		// The Ring-bearer, another Hobbit, and the Dwarf who is a [shire] card.  Not the Man who is a Hobbit and
-		// no [shire] card, and not the [shire] ally.
-		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, merry, guard));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn, bounder));
+		// The Ring-bearer, another Hobbit, and the [shire] companion who is no Hobbit.  Not the Hobbit who is no
+		// [shire] card, and not the [shire] ally.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, merry, smeagol));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(trollslayer, bounder));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		assertEquals(0, scn.GetWoundsOn(merry));
 
 		scn.FreepsChooseCard(merry);
 		assertEquals(1, scn.GetWoundsOn(merry));
 		assertEquals(0, scn.GetWoundsOn(frodo));
-		assertEquals(0, scn.GetWoundsOn(guard));
-		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(smeagol));
+		assertEquals(0, scn.GetWoundsOn(trollslayer));
 		assertEquals(0, scn.GetWoundsOn(bounder));
 
 		// Looking through the draw deck shows the whole of it first.

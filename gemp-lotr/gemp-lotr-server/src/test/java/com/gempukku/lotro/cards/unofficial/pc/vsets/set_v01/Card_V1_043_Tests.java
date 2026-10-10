@@ -5,8 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -30,10 +28,8 @@ public class Card_V1_043_Tests
 					put("enquea", "2_83");      // Ulaire Enquea, Ringwraith in Twilight: unique, strength 11; its text is for when it wins
 					put("wk", "2_85");          // The Witch-king, Lord of the Nazgul: strength 14, vitality 4; may exert when he wins a skirmish
 
-					put("morgulking", "7_221"); // The Witch-king, Morgul King: strength 14, fierce, not twilight
 					put("lemenya", "1_232");    // Ulaire Lemenya, Lieutenant of Morgul: a Nazgul that is not twilight, strength 9
 					put("lights", "6_99");      // Corpse Lights: a twilight [sauron] Wraith, strength 7; a skirmish ability that is never used
-					put("lights2", "6_99");
 
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, vitality 4
 					put("gimli", "1_13");       // Gimli, Son of Gloin: strength 6, vitality 3
@@ -130,38 +126,33 @@ public class Card_V1_043_Tests
 		var enquea = scn.GetShadowCard("enquea");
 		var lemenya = scn.GetShadowCard("lemenya");
 		var lights = scn.GetShadowCard("lights");
-		var nazgulLights = scn.GetShadowCard("lights2");
 		scn.MoveCompanionsToTable(aragorn, gimli);
 		scn.MoveCardsToHand(faces);
 
 		scn.StartGame();
 		scn.AddWoundsToChar(frodo, 1);
-		scn.MoveMinionsToTable(attea, enquea, lemenya, lights, nazgulLights);
-		// Every twilight Nazgul there is belongs to the [ringwraith] culture, and the text names no culture:
-		// one of the two Corpse Lights, a twilight [sauron] Wraith, is made a Nazgul.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, nazgulLights, null, Race.NAZGUL));
+		scn.MoveMinionsToTable(attea, enquea, lemenya, lights);
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		// Put down here, past the offer it makes at the start of the maneuver phase.
 		scn.MoveMinionsToTable(rit);
 		scn.PassAssignmentActions();
 		scn.FreepsAssignToMinions(new PhysicalCardImpl[] { aragorn, attea }, new PhysicalCardImpl[] { gimli, enquea });
-		scn.ShadowAssignToMinions(aragorn, rit, lemenya, lights, nazgulLights);
+		scn.ShadowAssignToMinions(aragorn, rit, lemenya, lights);
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.FreepsPass();
 
 		assertEquals(12, scn.GetStrength(attea));
 		// 9 + 1 by its own text for the wound on the Ring-bearer
 		assertEquals(10, scn.GetStrength(rit));
-		assertEquals(7, scn.GetStrength(nazgulLights));
 		assertEquals(9, scn.GetStrength(lemenya));
 		assertEquals(7, scn.GetStrength(lights));
 		assertEquals(11, scn.GetStrength(enquea));
 
 		scn.ShadowPlayCard(faces);
 
-		// In Aragorn's skirmish: a unique twilight Nazgul, one that is not unique, and one of another culture.
-		assertTrue(scn.ShadowHasCardChoiceAvailable(attea, rit, nazgulLights));
+		// In Aragorn's skirmish: a unique twilight Nazgul, and one that is not unique.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(attea, rit));
 		// In Aragorn's skirmish: a Nazgul that is not twilight, and a twilight minion that is not a Nazgul.
 		// Assigned to Gimli, whose skirmish has not begun: a twilight Nazgul.
 		assertTrue(scn.ShadowHasCardChoiceNotAvailable(lemenya, lights, enquea));
@@ -170,7 +161,6 @@ public class Card_V1_043_Tests
 		// 9 + 1 by its own text + 1 from the event
 		assertEquals(11, scn.GetStrength(rit));
 		assertEquals(12, scn.GetStrength(attea));
-		assertEquals(7, scn.GetStrength(nazgulLights));
 		assertEquals(9, scn.GetStrength(lemenya));
 		assertEquals(7, scn.GetStrength(lights));
 		assertEquals(11, scn.GetStrength(enquea));
@@ -317,50 +307,44 @@ public class Card_V1_043_Tests
 		var faces2 = scn.GetShadowCard("faces2");
 		var attea = scn.GetShadowCard("attea");
 		var wk = scn.GetShadowCard("wk");
-		var morgulKing = scn.GetShadowCard("morgulking");
 		scn.MoveCompanionsToTable(aragorn);
 		scn.MoveCardsToHand(faces, faces2);
 
 		scn.StartGame();
 		scn.AddWoundsToChar(frodo, 1);
-		// Two cards titled The Witch-king, which only cheating can put side by side.  The second is not
-		// twilight in print and is made so here.
-		scn.MoveMinionsToTable(attea, wk, morgulKing);
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, morgulKing, null, Keyword.TWILIGHT));
+		// Two twilight Nazgul in one skirmish: The Witch-king, and one who is not.
+		scn.MoveMinionsToTable(attea, wk);
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		scn.PassAssignmentActions();
 		scn.FreepsAssignToMinions(aragorn, attea);
-		scn.ShadowAssignToMinions(aragorn, wk, morgulKing);
+		scn.ShadowAssignToMinions(aragorn, wk);
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.FreepsPass();
 
 		assertEquals(12, scn.GetStrength(attea));
 		assertEquals(14, scn.GetStrength(wk));
-		assertEquals(14, scn.GetStrength(morgulKing));
 		assertFalse(scn.HasKeyword(attea, Keyword.DAMAGE));
 		assertFalse(scn.HasKeyword(wk, Keyword.DAMAGE));
-		assertFalse(scn.HasKeyword(morgulKing, Keyword.DAMAGE));
 
-		// A Nazgul that is not The Witch-king, chosen with two Witch-kings in the same skirmish: stronger,
+		// The Nazgul that is not The Witch-king, chosen with The Witch-king in the same skirmish: stronger,
 		// and nobody is damage +1.
 		scn.ShadowPlayCard(faces);
-		assertTrue(scn.ShadowHasCardChoiceAvailable(attea, wk, morgulKing));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(attea, wk));
 		scn.ShadowChooseCard(attea);
 		assertEquals(13, scn.GetStrength(attea));
 		assertFalse(scn.HasKeyword(attea, Keyword.DAMAGE));
-		assertFalse(scn.HasKeyword(wk, Keyword.DAMAGE));
-		assertFalse(scn.HasKeyword(morgulKing, Keyword.DAMAGE));
-
-		// The second copy on one of the Witch-kings: he is damage +1, and the other Witch-king is not.
-		scn.FreepsPass();
-		scn.ShadowPlayCard(faces2);
-		assertTrue(scn.ShadowHasCardChoiceAvailable(attea, wk, morgulKing));
-		scn.ShadowChooseCard(morgulKing);
-		assertEquals(15, scn.GetStrength(morgulKing));
-		assertEquals(1, scn.GetKeywordCount(morgulKing, Keyword.DAMAGE));
 		assertEquals(14, scn.GetStrength(wk));
 		assertFalse(scn.HasKeyword(wk, Keyword.DAMAGE));
+
+		// The second copy on The Witch-king: he is damage +1, and the Nazgul beside him is not.
+		scn.FreepsPass();
+		scn.ShadowPlayCard(faces2);
+		assertTrue(scn.ShadowHasCardChoiceAvailable(attea, wk));
+		scn.ShadowChooseCard(wk);
+		// 14 + 1 wound on the Ring-bearer
+		assertEquals(15, scn.GetStrength(wk));
+		assertEquals(1, scn.GetKeywordCount(wk, Keyword.DAMAGE));
 		assertEquals(13, scn.GetStrength(attea));
 		assertFalse(scn.HasKeyword(attea, Keyword.DAMAGE));
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());

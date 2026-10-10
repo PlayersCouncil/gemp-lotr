@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.VitalityModifier;
 import org.junit.Test;
 
@@ -47,6 +46,51 @@ public class Card_V1_034_Tests
 					put("song2", "3_5");
 				}},
 				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// The same path with a marsh for site 2.  Every tentacle but the Vile Tentacle is discarded away from a marsh,
+	// so the tests that have one of the others in play go there and put it down once the fellowship has arrived.
+	protected VirtualTableScenario GetMarshScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>() {{
+					put("waters", "101_34");
+					put("waters2", "101_34");
+
+					// Tentacles: [moria] minions of site 4.
+					// Vile Tentacle: cost 2, vitality 2.  Its Shadow ability is never used here.
+					put("vile", "101_36");
+					// Reaching Tentacle: cost 2, vitality 2.  Stronger for each tentacle; nothing when played.
+					put("reaching", "19_19");
+					// Strong Tentacle: cost 3, vitality 2.  The same text as Reaching Tentacle.
+					put("strong", "19_20");
+					// Foul Tentacle: vitality 1.  May fetch a tentacle when played, so it is never played here.
+					put("foul", "2_58");
+					// Huge Tentacle: vitality 2, damage +1.  May fetch the Watcher when played, so never played here.
+					put("huge", "2_66");
+
+					// Goblin Patrol Troop: a [moria] minion with no text, vitality 3, and not a tentacle.
+					put("troop", "1_177");
+
+					// Legolas, Greenleaf: an archer.  "Archery: Exert Legolas to wound a minion; Legolas does not add
+					// to the fellowship archery total."  Vitality 3, so he can do that twice.
+					put("legolas", "1_50");
+				}},
+				new HashMap<>() {{
+					put("site1", "1_319");
+					// Midgewater Marshes: "Marsh. Each time a Hobbit moves to Midgewater Marshes, that Hobbit must
+					// exert."  Shadow number 1.  Frodo arrives with a wound, which nothing here turns on.
+					put("site2", "1_332");
+					put("site3", "1_341");
+					put("site4", "1_343");
+					put("site5", "1_349");
+					put("site6", "1_351");
+					put("site7", "1_353");
+					put("site8", "1_356");
+					put("site9", "1_360");
+				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -107,7 +151,7 @@ public class Card_V1_034_Tests
 
 	@Test
 	public void WoundedTentacleMayBeStackedHereAndAWoundedOrcIsNotOffered() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
+		var scn = GetMarshScenario();
 
 		var waters = scn.GetShadowCard("waters");
 		var waters2 = scn.GetShadowCard("waters2");
@@ -120,11 +164,13 @@ public class Card_V1_034_Tests
 		scn.MoveCompanionsToTable(legolas);
 
 		scn.StartGame();
-		// Every site is a marsh, so that the tentacles which are discarded away from one stay in play.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, CardType.SITE, null, Keyword.MARSH));
+		scn.FreepsPass();
+		// At Midgewater Marshes, where the Reaching Tentacle stays in play.
 		scn.MoveMinionsToTable(vile, reaching, troop);
 		scn.SkipToPhase(Phase.ARCHERY);
 
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
+		assertInZone(Zone.SHADOW_CHARACTERS, vile, reaching, troop);
 		assertTrue(scn.AwaitingFreepsArcheryPhaseActions());
 		assertEquals(0, scn.GetWoundsOn(troop));
 		assertEquals(0, scn.GetWoundsOn(vile));
@@ -176,7 +222,7 @@ public class Card_V1_034_Tests
 
 	@Test
 	public void ArcheryWoundOnATentacleMayBeStackedHereToo() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
+		var scn = GetMarshScenario();
 
 		var waters = scn.GetShadowCard("waters");
 		var huge = scn.GetShadowCard("huge");
@@ -185,11 +231,12 @@ public class Card_V1_034_Tests
 		scn.MoveCompanionsToTable(legolas);
 
 		scn.StartGame();
-		// Every site is a marsh, so that the tentacles which are discarded away from one stay in play.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, CardType.SITE, null, Keyword.MARSH));
+		scn.FreepsPass();
+		// At Midgewater Marshes, where the Huge Tentacle stays in play.
 		scn.MoveMinionsToTable(huge);
 		scn.SkipToPhase(Phase.ARCHERY);
 
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
 		assertEquals(0, scn.GetWoundsOn(huge));
 		assertInZone(Zone.SHADOW_CHARACTERS, huge);
 		assertEquals(1, scn.GetFreepsArcheryTotal());
@@ -210,7 +257,7 @@ public class Card_V1_034_Tests
 
 	@Test
 	public void TentacleKilledByTheWoundMayStillBeStackedHere() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
+		var scn = GetMarshScenario();
 
 		var waters = scn.GetShadowCard("waters");
 		var waters2 = scn.GetShadowCard("waters2");
@@ -221,11 +268,12 @@ public class Card_V1_034_Tests
 		scn.MoveCompanionsToTable(legolas);
 
 		scn.StartGame();
-		// Every site is a marsh, so that the tentacles which are discarded away from one stay in play.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, CardType.SITE, null, Keyword.MARSH));
+		scn.FreepsPass();
+		// At Midgewater Marshes, where the Foul Tentacle stays in play.
 		scn.MoveMinionsToTable(foul);
 		scn.SkipToPhase(Phase.ARCHERY);
 
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
 		// The Foul Tentacle has 1 vitality: the fellowship's archery wound is its last.
 		assertEquals(1, scn.GetVitality(foul));
 		assertInZone(Zone.SHADOW_CHARACTERS, foul);
@@ -345,7 +393,7 @@ public class Card_V1_034_Tests
 
 	@Test
 	public void ShadowActionPlaysAChosenTentacleFromHereForItsCostAndRoamingPenalty() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
+		var scn = GetMarshScenario();
 
 		var waters = scn.GetShadowCard("waters");
 		var waters2 = scn.GetShadowCard("waters2");
@@ -363,16 +411,16 @@ public class Card_V1_034_Tests
 		scn.MoveCardsToDiscard(huge);
 
 		scn.StartGame();
-		// Every site is a marsh, so that the tentacles which are discarded away from one stay in play.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, CardType.SITE, null, Keyword.MARSH));
 		// Enough that every card kept out of the choice below could be paid for, and is kept out only for what
 		// or where it is: the 8 this comes to is exactly the Goblin Patrol Troop's 6 + 2 roaming, and covers the
 		// Strong Tentacle's 3 + 2 and the Huge Tentacle's 2 + 2 as well.  With less, the Orc would be out of
 		// reach anyway and its absence from the choice would show nothing.
-		scn.SetTwilight(5);
+		scn.SetTwilight(6);
 		scn.FreepsPass();
 
-		// 5 set + 1 companion + 2 for site 2
+		// Site 2 is Midgewater Marshes, where the Reaching Tentacle stays in play once it is played.
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
+		// 6 set + 1 companion + 1 for Midgewater Marshes
 		assertEquals(8, scn.GetTwilight());
 		assertEquals(3, scn.GetStackedCards(waters).size());
 		assertEquals(1, scn.GetStackedCards(waters2).size());
@@ -446,15 +494,13 @@ public class Card_V1_034_Tests
 		var troop = scn.GetShadowCard("troop");
 		scn.MoveCardsToSupportArea(waters, waters2);
 		// Here: three tentacles, one more than the cost, and a minion that is not a tentacle.
-		scn.StackCardsOn(waters, foul, huge, vile, troop);
+		scn.StackCardsOn(waters, foul, huge, reaching, troop);
 		// A tentacle stacked on the other copy.
 		scn.StackCardsOn(waters2, strong);
 
 		scn.StartGame();
-		// Every site is a marsh, so that the tentacles which are discarded away from one stay in play.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, CardType.SITE, null, Keyword.MARSH));
-		// A tentacle in play.
-		scn.MoveMinionsToTable(reaching);
+		// A tentacle in play: the Vile Tentacle, the one that is not discarded away from a marsh.
+		scn.MoveMinionsToTable(vile);
 
 		assertEquals(4, scn.GetStackedCards(waters).size());
 		assertEquals(0, scn.GetShadowDiscardCount());
@@ -467,8 +513,8 @@ public class Card_V1_034_Tests
 		assertInZone(Zone.SUPPORT, waters);
 		scn.ShadowAcceptOptionalTrigger();
 
-		assertTrue(scn.ShadowHasCardChoiceAvailable(foul, huge, vile));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(troop, strong, reaching));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(foul, huge, reaching));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(troop, strong, vile));
 		assertEquals(2, scn.ShadowGetChoiceMin());
 		assertEquals(2, scn.ShadowGetChoiceMax());
 		scn.ShadowChooseCards(foul, huge);
@@ -477,10 +523,10 @@ public class Card_V1_034_Tests
 		assertEquals(2, scn.GetShadowDiscardCount());
 		// The condition is still in play, with what was not discarded still on it.
 		assertInZone(Zone.SUPPORT, waters, waters2);
-		assertInZone(Zone.STACKED, vile, troop, strong);
+		assertInZone(Zone.STACKED, reaching, troop, strong);
 		assertEquals(2, scn.GetStackedCards(waters).size());
 		assertEquals(1, scn.GetStackedCards(waters2).size());
-		assertInZone(Zone.SHADOW_CHARACTERS, reaching);
+		assertInZone(Zone.SHADOW_CHARACTERS, vile);
 		// The Free Peoples player's cost is paid all the same.
 		assertInZone(Zone.DISCARD, song);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());

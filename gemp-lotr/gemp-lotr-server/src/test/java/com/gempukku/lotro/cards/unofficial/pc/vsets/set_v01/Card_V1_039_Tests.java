@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -35,7 +34,6 @@ public class Card_V1_039_Tests
 					put("nazgulsword", "1_218"); // Nazgul Sword: possession, bearer must be a Nazgul, strength +2; damage +1 only with 3 burdens
 					put("cur", "7_189");        // Morgul Cur: a [ringwraith] Orc, stronger while a Nazgul can be spotted
 
-					put("lost", "11_212");      // Lost in the Woods: [ringwraith] condition borne by a companion: "Each [ringwraith] minion skirmishing bearer is strength +1 for each forest site you can spot."
 					put("legacy", "1_282");     // The Weight of a Legacy: [sauron] condition, plays on Aragorn, strength -1 and no other text
 
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, vitality 4
@@ -52,6 +50,37 @@ public class Card_V1_039_Tests
 					put("hearken", "4_94");     // Hearken to Me: [gandalf] condition, bearer must be Theoden, strength +2 and vitality +1; the rest of its text is about Shadow conditions on him
 				}},
 				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// The same path with a forest for site 2, for the one test that turns on a count of forest sites.
+	protected VirtualTableScenario GetForestScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("crown", "101_39");
+
+					put("nelya", "2_84");       // Ulaire Nelya, Ringwraith in Twilight: strength 10, vitality 3; fierce and damage +1 only with 2 burdens or a twice-wounded Ring-bearer
+					put("lost", "11_212");      // Lost in the Woods: [ringwraith] condition borne by a companion: "Each [ringwraith] minion skirmishing bearer is strength +1 for each forest site you can spot."
+
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, vitality 4
+					put("rangersword", "1_112"); // Ranger's Sword: possession, strength +2, "He is damage +1."
+				}},
+				new HashMap<>()
+				{{
+					put("site1", "1_319");
+					// Breeland Forest: "Forest. Stealth events may not be played."  Shadow number 1.
+					put("site2", "1_329");
+					put("site3", "1_341");
+					put("site4", "1_343");
+					put("site5", "1_349");
+					put("site6", "1_351");
+					put("site7", "1_353");
+					put("site8", "1_356");
+					put("site9", "1_360");
+				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -413,7 +442,7 @@ public class Card_V1_039_Tests
 
 	@Test
 	public void TheCrownedNazgulKeepsTheStrengthBonusItGetsFromAConditionItsOpponentBears() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
+		var scn = GetForestScenario();
 
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var rangersword = scn.GetFreepsCard("rangersword");
@@ -424,8 +453,6 @@ public class Card_V1_039_Tests
 		scn.AttachCardsTo(aragorn, rangersword);
 
 		scn.StartGame();
-		// Lost in the Woods counts forest sites, and this path has none.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, CardType.SITE, null, Keyword.FOREST));
 		scn.MoveMinionsToTable(nelya);
 		scn.MoveCardsToSupportArea(crown);
 		scn.AttachCardsTo(aragorn, lost);
@@ -433,13 +460,15 @@ public class Card_V1_039_Tests
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		scn.PassCurrentPhaseActions();
 
+		// Lost in the Woods counts forest sites.  Site 2, Breeland Forest, is the one in play.
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.FOREST));
 		assertEquals(10, scn.GetStrength(nelya));
 
 		scn.FreepsAssignToMinions(aragorn, nelya);
 		scn.FreepsResolveSkirmish(aragorn);
 
-		// Sites 1 and 2 are the forest sites in play: 10 + 2
-		assertEquals(12, scn.GetStrength(nelya));
+		// 10 + 1 for the one forest site
+		assertEquals(11, scn.GetStrength(nelya));
 		assertEquals(10, scn.GetStrength(aragorn));
 
 		scn.FreepsPass();
@@ -449,7 +478,7 @@ public class Card_V1_039_Tests
 		// Aragorn is the character skirmishing the bearer, and he loses his Sword's +2.
 		assertEquals(8, scn.GetStrength(aragorn));
 		// The Nazgul is the bearer. What Lost in the Woods gives him is not a bonus Aragorn receives.
-		assertEquals(12, scn.GetStrength(nelya));
+		assertEquals(11, scn.GetStrength(nelya));
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 

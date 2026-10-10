@@ -5,8 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,7 +26,10 @@ public class Card_V1_053_Tests
 					put("sam", "1_311");
 					// Gandalf, Friend of the Shirefolk: [gandalf] Wizard with the Frodo signet
 					put("gandalf", "1_72");
-					put("guard", "1_7");            // Dwarf Guard: [dwarven] Dwarf, strength 4, vitality 2, no signet
+					// Merry, Master Holbytla: a [rohan] companion who is a Hobbit, strength 3, vitality 4, with the
+					// Aragorn signet.  He is a Man as well only while 3 [rohan] companions or Eowyn can be spotted,
+					// and his other texts answer a [rohan] Man.  Never on the table with the other Merry.
+					put("holbytla", "103_85");
 					// Bounder: [shire] Hobbit ally, strength 2, vitality 2, whose home is site 2.  His own skirmish
 					// ability is never used here.
 					put("bounder", "1_286");
@@ -62,6 +63,10 @@ public class Card_V1_053_Tests
 					// Gandalf, Friend of the Shirefolk: [gandalf] Wizard with the Frodo signet
 					put("gandalf", "1_72");
 					put("guard", "1_7");            // Dwarf Guard: [dwarven] Dwarf, strength 4, vitality 2, no signet
+					// Smeagol, Once Like Us: a [shire] companion with no race, strength 3, vitality 4, Ring-bound,
+					// with the Frodo signet.  "To play, add a burden", so he is cheated in; his assignment
+					// ability is never used.
+					put("smeagol", "103_116");
 					// Bounder: [shire] Hobbit ally, strength 2, vitality 2, whose home is site 2.  His own skirmish
 					// ability is never used here.
 					put("bounder", "1_286");
@@ -344,47 +349,48 @@ public class Card_V1_053_Tests
 
 	@Test
 	public void DoesNothingForAHobbitOfAnotherCultureAShireAllyOrAShireCompanionWhoseSkirmishHasNotBegun() throws DecisionResultInvalidException, CardNotFoundException {
-		// Frodo, Son of Drogo is the Ring-bearer here: with Pippin and Merry, three have the Frodo signet, so a
+		// Frodo, Son of Drogo is the Ring-bearer here: with Pippin and Gandalf, three have the Frodo signet, so a
 		// strength +1 is there to be given if anybody is protected.
 		var scn = GetScenario();
 
 		var pippin = scn.GetFreepsCard("pippin");
-		var merry = scn.GetFreepsCard("merry");
-		var guard = scn.GetFreepsCard("guard");
+		var holbytla = scn.GetFreepsCard("holbytla");
+		var sam = scn.GetFreepsCard("sam");
 		var bounder = scn.GetFreepsCard("bounder");
 		var brigand1 = scn.GetShadowCard("brigand1");
 		var brigand2 = scn.GetShadowCard("brigand2");
 		var runner = scn.GetShadowCard("runner");
-		scn.MoveCompanionsToTable(pippin, merry, guard);
+		// Merry, Master Holbytla is a Hobbit and a [rohan] card.  Sam is the [shire] companion who waits.
+		scn.MoveCompanionsToTable(pippin, holbytla, sam, scn.GetFreepsCard("gandalf"));
 		scn.MoveAlliesToTable(bounder);
 
 		scn.StartGame();
-		// The Dwarf Guard becomes a Hobbit who is still a [dwarven] card.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, guard, null, Race.HOBBIT));
 		scn.MoveMinionsToTable(brigand1, brigand2, runner);
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		// The fellowship has moved to site 2, the Bounder's home, where he may be assigned.
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		scn.PassAssignmentActions();
 		scn.FreepsAssignToMinions(
-				new PhysicalCardImpl[]{guard, brigand1},
+				new PhysicalCardImpl[]{holbytla, brigand1},
 				new PhysicalCardImpl[]{bounder, runner},
-				new PhysicalCardImpl[]{merry, brigand2});
+				new PhysicalCardImpl[]{sam, brigand2});
 
-		// The Guard's skirmish: 4 against 8.  Merry and the Bounder are assigned and not yet skirmishing.
-		scn.FreepsResolveSkirmish(guard);
-		assertEquals(4, scn.GetStrength(guard));
-		assertEquals(2, scn.GetOverwhelmMultiplier(merry));
+		// Merry's skirmish: 3 against 8.  Sam and the Bounder are assigned and not yet skirmishing.
+		scn.FreepsResolveSkirmish(holbytla);
+		assertEquals(3, scn.GetStrength(holbytla));
+		assertEquals(2, scn.GetOverwhelmMultiplier(holbytla));
+		assertEquals(2, scn.GetOverwhelmMultiplier(sam));
 		assertTrue(scn.FreepsActionAvailable(pippin));
 		scn.FreepsUseCardAction(pippin);
 		assertEquals(1, scn.GetWoundsOn(pippin));
 		// Nobody is there to be chosen, and the Shadow player has the next action.
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
-		// Nobody is protected, so nobody is made stronger either; and Merry, who is only waiting, is not protected.
-		assertEquals(4, scn.GetStrength(guard));
-		assertEquals(2, scn.GetOverwhelmMultiplier(merry));
+		// Nobody is protected, so nobody is made stronger either; and Sam, who is only waiting, is not protected.
+		assertEquals(3, scn.GetStrength(holbytla));
+		assertEquals(2, scn.GetOverwhelmMultiplier(holbytla));
+		assertEquals(2, scn.GetOverwhelmMultiplier(sam));
 		scn.PassCurrentPhaseActions();
-		assertInZone(Zone.DEAD, guard);
+		assertInZone(Zone.DEAD, holbytla);
 
 		// The Bounder's skirmish: 2 against 5, doubled and not tripled.
 		scn.FreepsResolveSkirmish(bounder);
@@ -394,45 +400,47 @@ public class Card_V1_053_Tests
 		assertEquals(2, scn.GetWoundsOn(pippin));
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 		assertEquals(2, scn.GetStrength(bounder));
-		assertEquals(2, scn.GetOverwhelmMultiplier(merry));
+		assertEquals(2, scn.GetOverwhelmMultiplier(sam));
 		scn.PassCurrentPhaseActions();
 		assertInZone(Zone.DEAD, bounder);
 
-		// Merry's own skirmish, 3 against 8: neither earlier use was for him.
-		scn.FreepsResolveSkirmish(merry);
-		assertEquals(3, scn.GetStrength(merry));
+		// Sam's own skirmish, 3 against 8: neither earlier use was for him.
+		scn.FreepsResolveSkirmish(sam);
+		assertEquals(3, scn.GetStrength(sam));
 		scn.PassCurrentPhaseActions();
-		assertInZone(Zone.DEAD, merry);
+		assertInZone(Zone.DEAD, sam);
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
 	@Test
-	public void ProtectsPippinHimselfAndACompanionOfAnotherRaceWhoIsAShireCard() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ProtectsPippinHimselfAndAShireCompanionWhoIsNoHobbit() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetFrodoWithTheAragornSignetScenario();
 
 		var pippin = scn.GetFreepsCard("pippin");
-		var guard = scn.GetFreepsCard("guard");
+		var smeagol = scn.GetFreepsCard("smeagol");
 		var brigand1 = scn.GetShadowCard("brigand1");
 		var brigand2 = scn.GetShadowCard("brigand2");
-		scn.MoveCompanionsToTable(pippin, guard);
+		// Smeagol, Once Like Us is a [shire] companion and no Hobbit.
+		scn.MoveCompanionsToTable(pippin, smeagol);
 
 		scn.StartGame();
-		// The Dwarf Guard becomes a [shire] card who is still a Dwarf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, guard, null, Culture.SHIRE));
 		scn.MoveMinionsToTable(brigand1, brigand2);
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		scn.PassAssignmentActions();
-		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{guard, brigand1}, new PhysicalCardImpl[]{pippin, brigand2});
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{smeagol, brigand1}, new PhysicalCardImpl[]{pippin, brigand2});
 
-		// 4 against 8.
-		scn.FreepsResolveSkirmish(guard);
-		assertEquals(4, scn.GetStrength(guard));
+		// 3 against 8.
+		scn.FreepsResolveSkirmish(smeagol);
+		assertEquals(3, scn.GetStrength(smeagol));
+		assertEquals(2, scn.GetOverwhelmMultiplier(smeagol));
 		scn.FreepsUseCardAction(pippin);
 		assertEquals(1, scn.GetWoundsOn(pippin));
-		assertEquals(4, scn.GetStrength(guard));
+		assertEquals(3, scn.GetOverwhelmMultiplier(smeagol));
+		// Pippin and Smeagol are the only two with the Frodo signet: this Frodo has Aragorn's.
+		assertEquals(3, scn.GetStrength(smeagol));
 		scn.PassCurrentPhaseActions();
-		assertInZone(Zone.FREE_CHARACTERS, guard);
-		assertEquals(1, scn.GetWoundsOn(guard));
+		assertInZone(Zone.FREE_CHARACTERS, smeagol);
+		assertEquals(1, scn.GetWoundsOn(smeagol));
 
 		// 3 against 8, and Pippin is the one skirmishing.
 		scn.FreepsResolveSkirmish(pippin);
