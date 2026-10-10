@@ -105,7 +105,8 @@ as it takes, and say in your report which of your tests stand for which name of 
    (`// waits: G-0000 <what the rig lacks>`), and report it under `rig` with the method you would want.
 5. **Take the old methods out.** When a test of yours is written and runs (or is parked as above), delete from
    `at/` the old methods the batch file says it replaces, with any import and helper only they used. An old
-   method that is commented out goes with its commented `@Test` line. Keep each file's line endings as they are
+   method that is commented out goes with its commented `@Test` line. Tidy what a cut leaves: a blank line after
+   the class brace, a doubled blank line, a note that stood above the method, an import only it used. Keep each file's line endings as they are
    (`at/TriggersAtTest.java` is CRLF throughout; a cut made in text mode would rewrite every line of it). Delete an
    `at` file that has no test left (never `AbstractAtTest.java` or `effects/IncrementEffect.java`: the last batch
    takes those). Then make sure what is left of each file you cut still compiles and passes:
