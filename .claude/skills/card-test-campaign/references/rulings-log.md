@@ -1073,6 +1073,9 @@ his name." Bears on: every Sam with "make Sam the Ring-bearer (resistance 5)".
 
 **2026-10-05. Hinder.** `at/HinderTests.java` has an exhaustive set of tests for the hinder mechanic; read it
 where the 5.0 excerpts leave a detail of hinder open.
+(Since 2026-10-10 that set is converted: the rule-by-rule tests are the `mechanics/Hindered*Tests` classes, with
+CardsBorneByAHinderedCardTests, TokensOnAHinderedCardTests, ReconcilingRestoresHinderedCardsTests and
+UniquenessTests. Read those; `at/HinderTests.java` is going.)
 
 **Hinder and restore.** A card hindered in the middle of its own ability still carries the ability out, and an
 effect that names its bearer still finds him (F-0099: "the -1 strength should still apply"; the old stub
