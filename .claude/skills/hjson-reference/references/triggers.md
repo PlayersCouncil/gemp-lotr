@@ -88,21 +88,24 @@ Before triggers occur before the action they are keyed to, which means that they
     * filter
       required
 * AboutToHinder
-  Triggers before a card matching `filter` is hindered` by player `using a card matching `source`.  
+  Triggers before a card matching `filter` is hindered by `player` using a card matching `source`.  
     * filter
-      default: any
+      required
     * source
       default: any
+      A hinder that no card makes passes whatever is written here (as built; the game makes no such hinder today).  
     * player
       optional
 * AboutToRestore
   Triggers before a card matching `filter` is restored by `player` using a card matching `source`.  
     * filter
-      default: any
+      required
     * source
       default: any
+      A restore that no card makes (every reconcile's) passes whatever is written here (as built): unlike `Restored`, a `source` does not keep a reconcile's restore out.  No definition uses this trigger yet.  
     * player
       optional
+      For a reconcile's restore, the player reconciling.  
 * AboutToTakeControlOfSite
   Triggers before a card matching `filter` causes any player to take control of a site.
     * filter
@@ -247,16 +250,17 @@ After triggers occur after the action they are keyed to, which means they cannot
     * memorize
       optional
 * Hindered
-  Triggers after a card matching `filter` in the given `zone` is hindered` by player `using a card matching `source`, and optionally `memorize`s the hindered card.  
+  Triggers after a card matching `filter` is hindered by `player` using a card matching `source`, and optionally `memorize`s the hindered card.  
     * filter
       default: any
     * source
-      default: any
+      optional
+      With none written, every hinder is answered, one that no card made included.  One written is a condition on the card that did the hindering, and a hinder by no card does not meet it (as `Discarded` reads its `source`).  
     * player
       optional
     * zone
       optional
-      Out-of-play zones will result in an error. 
+      Out-of-play zones will result in an error.  The value is read and checked and nothing more: the trigger answers wherever in play the card is.  
     * memorize
       optional
 * Killed
@@ -345,16 +349,18 @@ After triggers occur after the action they are keyed to, which means they cannot
     * number
       default: 0 (any)
 * Restored
-  Triggers after a card matching `filter` in the given `zone` is restored by `player` using a card matching `source`, and optionally `memorize`s the restored card.  
+  Triggers after a card matching `filter` is restored by `player` using a card matching `source`, and optionally `memorize`s the restored card.  
     * filter
       default: any
     * source
-      default: any
+      optional
+      With none written, every restore is answered, the one no card makes included: a reconcile's (CR 5.0 "reconcile"; F-0361).  One written is a condition on the card that did the restoring, and a reconcile's restore does not meet it.  "When this is restored" writes none.  
     * player
       optional
+      For a reconcile's restore, the player reconciling.  
     * zone
       optional
-      Out-of-play zones will result in an error. 
+      Out-of-play zones will result in an error.  The value is read and checked and nothing more: the trigger answers wherever in play the card is.  
     * memorize
       optional
 * RevealsCardFromDrawDeck

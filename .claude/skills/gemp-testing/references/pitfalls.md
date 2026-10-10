@@ -540,7 +540,9 @@ comments, and one of them was the move from site 6 into region 3 without saying 
 
 **A reconcile restores first.** By the time a reconcile's discard decision is pending, the reconciling player's
 hindered cards have been restored (CR 5.0 "reconcile"; Q-0059). That is so for both players' regroup reconciles
-and for "reconcile your hand" effects.
+and for "reconcile your hand" effects. A card's own "when this is restored" (`restored`, no `source`) has been
+carried out by then as well: Andúril 7_79 has discarded the Bow taken up while it was hindered (F-0361;
+`mechanics/HinderedBorneCardTests`).
 
 **A card's "reconcile your hand" asks what the regroup reconcile asks, in the middle of the phase.** With fewer
 than 8 cards in hand it is one card choice of 0 to 1 (`ShadowChooseCard(card)` or `ShadowDeclineReconciliation()`)

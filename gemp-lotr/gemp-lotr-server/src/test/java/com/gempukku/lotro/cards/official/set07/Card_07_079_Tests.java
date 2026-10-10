@@ -79,7 +79,7 @@ public class Card_07_079_Tests
 	// to passive item class restrictions.  But because Anduril's game text does not apply, Aragorn's Bow can now
 	// be played.  Upon being restored, Anduril's game text resumes being applied, upon which Aragorn's Bow would
 	// be discarded."  (F-0360.)  Here a card restores it; mechanics/HinderedBorneCardTests has the same board with
-	// a reconcile doing the restoring, parked on F-0361.
+	// a reconcile doing the restoring (F-0361).
 	@Test
 	public void WhenRestoredDiscardsAWeaponAragornTookUpWhileItWasHindered() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();

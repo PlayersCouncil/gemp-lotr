@@ -17,7 +17,11 @@ public class Restored implements TriggerCheckerProducer {
         FieldUtils.validateAllowedFields(value, "filter", "source", "player", "zone", "memorize");
 
         final String filter = FieldUtils.getString(value.get("filter"), "filter", "any");
-        final String source = FieldUtils.getString(value.get("source"), "source", "any");
+        // With no "source:", every restore sets the trigger off, the ones no card made included: a reconcile's
+        // (CR 5.0 "reconcile": "When any player reconciles ..., restore all cards owned by that player"; F-0361).
+        // A "source:" is a condition on the card that did the restoring, and a restore by no card does not meet
+        // it.  The Discarded trigger reads its "source:" the same way.
+        final String source = FieldUtils.getString(value.get("source"), "source");
         final String discardingPlayer = FieldUtils.getString(value.get("player"), "player");
         Zone zone = FieldUtils.getEnum(Zone.class, value.get("zone"), "zone");
         final String memorize = FieldUtils.getString(value.get("memorize"), "memorize");

@@ -77,7 +77,7 @@ public class Card_04_100_Tests
 	// restrictions that come from the game text of a hindered card are ignored", with Anduril, Flame of the West
 	// 7_79 as the example: "Upon being restored, Anduril's game text resumes being applied, upon which Aragorn's
 	// Bow would be discarded."  Shadowfax has the same two sentences, "Discard any hand weapon he bears.  Gandalf
-	// may not bear a hand weapon" (F-0360).  A card restores it here; a reconcile's restore waits on F-0361.
+	// may not bear a hand weapon" (F-0360).  A card restores it here, and a reconcile in the test after.
 	@Test
 	public void WhenRestoredDiscardsAHandWeaponGandalfTookUpWhileItWasHindered() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -118,5 +118,46 @@ public class Card_04_100_Tests
 		// The Staff is no hand weapon: it stays on him
 		assertAttachedTo(staff, gandalf);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	// The same board with the Free Peoples player's own reconcile doing the restoring, which has no card behind it
+	// (Comprehensive Rules 5.0, "reconcile": "When any player reconciles (before they discard any cards from
+	// hand), restore all cards owned by that player"; F-0361).
+	@Test
+	public void WhenRestoredByAReconcileDiscardsAHandWeaponGandalfTookUpWhileItWasHindered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var shadowfax = scn.GetFreepsCard("card");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var glamdring = scn.GetFreepsCard("glamdring");
+		var staff = scn.GetFreepsCard("staff");
+		var light = scn.GetFreepsCard("light");
+		scn.MoveCompanionsToTable(gandalf);
+		scn.AttachCardsTo(gandalf, shadowfax, staff);
+		// The spell stays in hand, so that the reconcile has a discard to ask about
+		scn.MoveCardsToHand(glamdring, light);
+
+		scn.StartGame();
+		scn.HinderCard(shadowfax);
+		scn.FreepsRefreshDecision();
+		scn.FreepsPlayCard(glamdring);
+		assertAttachedTo(glamdring, gandalf);
+		assertTrue(scn.IsHindered(shadowfax));
+
+		// No minion: the Shadow phase is followed by the regroup phase
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.PassRegroupActions();
+		assertTrue(scn.FreepsDecisionAvailable("another move"));
+		assertTrue(scn.IsHindered(shadowfax));
+		assertAttachedTo(glamdring, gandalf);
+
+		scn.FreepsChooseToStay();
+		assertTrue(scn.FreepsDecisionAvailable("Reconcile"));
+		assertFalse(scn.IsHindered(shadowfax));
+		assertAttachedTo(shadowfax, gandalf);
+		assertInZone(Zone.DISCARD, glamdring);
+		// The Staff is no hand weapon: it stays on him
+		assertAttachedTo(staff, gandalf);
+		assertInZone(Zone.HAND, light);
 	}
 }

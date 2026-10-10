@@ -6,7 +6,6 @@ import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -213,9 +212,9 @@ public class HinderedBorneCardTests
 	}
 
 	// The last sentence of the rules' example.  The restoring is the Free Peoples player's own reconcile, which has
-	// no card behind it.  Where a card restores Anduril the Bow is discarded (F-0360; Card_07_079_Tests reads it).
+	// no card behind it (F-0361).  Where a card restores Anduril the Bow is discarded as well (F-0360;
+	// Card_07_079_Tests reads it).
 	@Test
-	@Ignore("F-0361: a card's 'restored' trigger does not answer a reconcile's restore, so Anduril 7_79 restored by its player's reconcile leaves on Aragorn the Bow he took up while it was hindered")
 	public void AWeaponTakenUpWhileAnItemThatBarsItWasHinderedIsDiscardedWhenThatItemIsRestored() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

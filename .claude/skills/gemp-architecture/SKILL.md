@@ -278,7 +278,7 @@ Decision types:
 
 ### Where Particular Rules Live
 
-- **Reconcile.** Every reconcile (both players' in regroup, and `ReconcileHand` effects) is a `PlayerReconcilesAction`. Its first effect restores the player's hindered cards, before the discard is asked. `RestoreRule` no longer exists.
+- **Reconcile.** Every reconcile (both players' in regroup, and `ReconcileHand` effects) is a `PlayerReconcilesAction`. Its first effect restores the player's hindered cards, before the discard is asked. `RestoreRule` no longer exists. That restore has no source card (`RestoredResult.getSource()` is null): a `Restored` trigger with no `source` answers it, and one with a `source` does not (F-0361; `Hindered` reads its `source` the same way).
 - **Overwhelm.** `RuleUtils.getMinionsFacingOverwhelm(game)` is the one place that decides which minions an overwhelm kills; `ResolveSkirmishEffect.getUpcomingOverwhelmed(game)` gives the characters about to be overwhelmed on either side.
 - **Replacing a character.** `GameState.replaceCharacterOnTable` puts the new card in play under the old card's id; borne and stacked cards are handed to it in place and keep their ids. The old card is left in the void under a new id, and the caller removes it from there (`removeCardsFromZone`) before adding it anywhere.
 - **Threats an action has still to add.** `ActionContext.getUnpaidThreatCost()` is the threats the action's own costs will add, non-zero only while the action is asked whether it can be used; pass it as `withThreatsAdded` to `Filters.playable`. `GameState.withThreatsToCome` is the scope that carries it and is zero outside a check.
