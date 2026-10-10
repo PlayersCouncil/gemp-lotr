@@ -454,6 +454,8 @@ On `AboutToDiscard`, `source` filters the CARD that causes the discard ("a Free 
 ### After
 `Played(filter, on?, from?, memorize?)`, `TakesWound(filter, source?, memorize?)`, `Exerted(filter, source?, memorize?)`, `Heals(filter, player?, memorize?)`, `Killed(filter, killer?, cause?, inSkirmish?, memorize?)`, `Discarded(filter, source, fromZone?, memorize?)`, `WinsSkirmish(filter, against?, memorize?, memorizeLoser?)`, `LosesSkirmish(filter, against?, overwhelm?, memorize?)`, `AssignedAgainst(filter, against?, side?, memorize*)`, `AssignedToSkirmish(filter, side?, memorize?)`, `StartOfSkirmishInvolving(filter, against?)`, `AfterAllSkirmishes`, `AddsBurden(filter?, player?)`, `AddsThreat(filter?)`, `AddsTwilight(filter?, cause?)`, `PlayerDrawsCard(player)`, `PutsOnRing`, `TakesOffRing`, `Reconciles(player?)`, `Transferred(filter?, to?)`, `SiteControlled(player?, filter?)`, `SiteLiberated(player?, filter?)`, `Hindered(filter?)`, `Restored(filter?)`, `RemovedFromPlay(filter?)`, `FPDecidedToMove`, `FPDecidedToStay`, `FPDecidedIfMoving`, `ConstantlyCheck(requires)`, `CancelledSkirmish(filter?)`
 
+`Restored(filter?, source?, player?)` answers a restore that a CARD makes and not the one every reconcile makes: with no `source` written it still wants a source card, and a reconcile's restore has none (F-0361, engine, open). Andúril 7_79 and Shadowfax 4_100 are the definitions that use it (F-0360).
+
 ---
 
 ## Modifiers

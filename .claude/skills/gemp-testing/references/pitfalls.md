@@ -960,6 +960,10 @@ card by a printed trait, CR 5.0 "restore") and a defender +1 he gave himself fal
 printed keyword by what it does: the archery total for an archer (Legolas 1_50: 1, hindered 0), another card's
 spot (`mechanics/HinderedCardHasNoGameTextTests`). A bonus given "until ..." is back when the card is restored
 before then (as built; Q-0222 asks).
+What a borne card gives is not its hindered bearer's either: Aragorn's Bow 1_90 on a hindered Aragorn reads the
+fellowship archery total 0 (1 again on restoring), and a bonus that a borne card's ability aims at its hindered
+bearer is never laid (Gwemegil 1_47 used by discarding two cards: Arwen reads 6 + 2 once `RestoreCard` has brought
+her back). That is not Q-0222's bonus, which was laid before the hindering (`mechanics/CardsBorneByAHinderedCardTests`).
 
 **The One Ring is never discarded.** A discard that could name it (Doom Causeway 103_127, "each time a card is
 hindered, discard it") neither offers nor takes it, hindered or not; hindered there, it stays on its bearer,
