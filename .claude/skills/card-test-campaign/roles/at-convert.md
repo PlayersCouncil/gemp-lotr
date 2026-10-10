@@ -71,7 +71,8 @@ as it takes, and say in your report which of your tests stand for which name of 
      method and its "put other cards in here" note out when you add the first real test; touch nothing else
      (not the stats test, not its header; the skeleton lacks imports a real test needs: add
      `import static com.gempukku.lotro.framework.Assertions.*;`, `import org.junit.Ignore;` if you park one, and
-     whatever else your test uses, and the skeleton's commented-out sample test may go with its placeholder). No ledger, no
+     whatever else your test uses (some skeletons import the common classes one by one, so `Zone`, `Phase` and
+     their like are added by name), and the skeleton's commented-out sample test may go with its placeholder). No ledger, no
      landing: this is a kickstart.
      `lint.py --form <the file> --only <YourTest,YourOtherTest>` must pass. A file the batch marks NEW FILE is
      made in the manner of its neighbours (for a Hobbit-set card the batch file says how).
