@@ -62,7 +62,6 @@
 				type: Response
 				trigger: {
 					type: usesSpecialAbility
-					phase: skirmish
 					player: shadow
 				}
 				requires: {

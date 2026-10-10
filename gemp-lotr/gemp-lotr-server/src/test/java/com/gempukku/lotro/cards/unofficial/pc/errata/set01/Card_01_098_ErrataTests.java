@@ -361,7 +361,7 @@ public class Card_01_098_ErrataTests
 	}
 
 	@Test
-	public void IsNotOfferedAgainstAResponseAbilityUsedInBoromirsSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PreventsAShadowResponseAbilityUsedInBoromirsSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var cloak = scn.GetFreepsCard("cloak");
@@ -379,7 +379,7 @@ public class Card_01_098_ErrataTests
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(boromir, shaman);
 		scn.FreepsResolveSkirmish(boromir);
-		scn.SetTwilight(2);
+		scn.SetTwilight(4);
 
 		// Men of Numenor is a skirmish event played in Boromir's skirmish: the Cloak is offered, and kept.
 		scn.FreepsPlayCard(numenor);
@@ -387,16 +387,27 @@ public class Card_01_098_ErrataTests
 		scn.FreepsDeclineOptionalTrigger();
 
 		// The Shaman, about to take its wound, uses his Response: the Shadow player's special ability, used
-		// during a skirmish involving Boromir, and no Skirmish: ability.
+		// during a skirmish involving Boromir, though no Skirmish: ability.
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(shaman));
 		scn.ShadowChooseOptionalTrigger(shaman);
-		assertEquals(0, scn.GetTwilight());
+		assertEquals(2, scn.GetTwilight());
 
-		// Only skirmish special abilities are answered (Ketura on Q-0119, 1B): the Cloak is not offered, and
-		// the wound is prevented.
-		assertFalse(scn.FreepsHasOptionalTriggerAvailable(cloak));
+		// "A skirmish event or special ability" takes in a Response ability (Ketura on Q-0203, 1A): the Cloak
+		// is offered, and is discarded to prevent that.
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(cloak));
+		scn.FreepsChooseOptionalTrigger(cloak);
+		assertInDiscard(cloak);
+
+		// The Shaman's (2) stays removed and his Response does nothing: the wound is still about to be taken,
+		// and he may respond to it again (CR 4.2 "response").  With the Cloak gone nothing would answer a
+		// second use; the Shadow player lets the wound land.
+		assertEquals(2, scn.GetTwilight());
 		assertEquals(0, scn.GetWoundsOn(shaman));
-		assertAttachedTo(cloak, boromir);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(shaman));
+		scn.ShadowDeclineOptionalTrigger();
+
+		assertEquals(1, scn.GetWoundsOn(shaman));
+		assertEquals(2, scn.GetTwilight());
 		assertInDiscard(numenor);
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}

@@ -1345,6 +1345,9 @@ Strange-looking Men could move it to a Shadow Man." *[2026-10-08, afternoon]*
 well. Given that it requires an engine-level alteration, let's just go with 1B for now. Heh, for question 2, it
 was meant to go against Shadow abilities, and would be pointless to block one's own intentionally-used ability
 that presumably helps Boromir. Let's keep the Shadow restriction and I'll update the wording." *[2026-10-08, afternoon]*
+1B was replaced on 2026-10-10 by 1A (Q-0203, under "How the campaign is run": no engine change was needed after
+all): the Cloak answers a Response ability used during a skirmish involving Boromir. The Shadow restriction
+stands. *[2026-10-10]*
 
 **Q-0117, Sleep, Caradhras 51_84:** "Yup, that's a more general ruling about activity in a nascent game that wasn't
 clear yet that this wouldn't discard your own inactive Shadow conditions. One of the only actual Decipher
