@@ -1020,6 +1020,14 @@ her back). That is not Q-0222's bonus, which was laid before the hindering (`mec
 hindered, discard it") neither offers nor takes it, hindered or not; hindered there, it stays on its bearer,
 hindered (`mechanics/TheOneRingIsNeverDiscardedTests`).
 
+**No cheat puts The One Ring on: the Ring's own text does, and which Ring decides how.** `GreatRing` (19_1) is
+put on by its own Maneuver action at no cost (`FreepsUseCardAction(scn.GetRing())`, Card_V2_065_Tests) and
+`ATARRing` (4_1) by a Skirmish action for a burden; `RulingRing` (1_2) and `IsildursBaneRing` (1_1) only in
+answer to a wound (1_2: a wound in a skirmish), so a test with one of those lays an archer (Goblin Marksman
+1_176), accepts the Ring's offer in the archery phase and leaves the archer out of the assignments with
+`ShadowDeclineAssignments()` (Card_02_108_Tests). `RBWearingOneRing()` reads it; every one comes off at the
+regroup phase.
+
 **Maps and meta-sites cannot be hindered,** as sites cannot: a hinder of "a card" on a PC-Movie or Race to
 Mount Doom table does not offer them (`mechanics/MapsAndMetaSitesCannotBeHinderedTests`). The cheat
 `HinderCard` hinders whatever it is given and asks no rule.
