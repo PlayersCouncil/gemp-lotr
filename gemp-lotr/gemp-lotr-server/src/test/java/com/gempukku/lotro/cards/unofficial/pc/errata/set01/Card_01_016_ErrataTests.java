@@ -4,8 +4,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -83,8 +81,6 @@ public class Card_01_016_ErrataTests
 		scn.MoveCardsToHand(kingdom);
 		scn.MoveCompanionsToTable(gimli, aragorn);
 		scn.MoveAlliesToTable(grimir);
-		// A Man of the [dwarven] culture is still no Dwarf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.DWARVEN));
 
 		scn.StartGame();
 
@@ -93,6 +89,7 @@ public class Card_01_016_ErrataTests
 		assertTrue(scn.FreepsPlayAvailable(kingdom));
 
 		scn.FreepsPlayCard(kingdom);
+		// A Dwarf companion and a Dwarf ally; not Aragorn, a companion who is no Dwarf.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli, grimir));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn));
 		assertEquals(1, scn.FreepsGetChoiceMin());
@@ -117,10 +114,8 @@ public class Card_01_016_ErrataTests
 		var aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveCompanionsToTable(gimli, aragorn);
 		scn.MoveCardsToHand(kingdom, guard);
-		// Vitality 3 with 2 wounds: Gimli is exhausted.  Aragorn could exert, and is of the Dwarves' culture,
-		// but is no Dwarf.
+		// Vitality 3 with 2 wounds: Gimli is exhausted.  Aragorn could exert, but is no Dwarf.
 		scn.AddWoundsToChar(gimli, 2);
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.DWARVEN));
 
 		scn.StartGame();
 
@@ -155,11 +150,10 @@ public class Card_01_016_ErrataTests
 		var worker = scn.GetShadowCard("worker");
 		var troop = scn.GetShadowCard("troop");
 		scn.MoveCardsToSupportArea(kingdom);
+		// Three [dwarven] cards of three types, and Aragorn, a card of another culture.
 		scn.MoveCardsToDiscard(gimli, strike, armor, aragorn);
 		// A [dwarven] card in the other player's discard pile, of a blueprint this player's pile does not hold.
 		scn.MoveCardsToDiscard(shadowHeart);
-		// A Dwarf of another culture is no [dwarven] card.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, aragorn, null, Race.DWARF));
 		scn.MoveCardsToHand(savage, worker, troop);
 
 		scn.StartGame();
@@ -275,10 +269,9 @@ public class Card_01_016_ErrataTests
 		var shadowGimli = scn.GetShadowCard("gimli");
 		var troop = scn.GetShadowCard("troop");
 		scn.MoveCardsToSupportArea(kingdom);
-		// Aragorn in this player's pile and a [dwarven] card in the other player's: nothing to take.
+		// A card of another culture in this player's pile and a [dwarven] card in the other player's: nothing
+		// to take.
 		scn.MoveCardsToDiscard(aragorn, shadowGimli);
-		// A Dwarf of another culture is no [dwarven] card.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, aragorn, null, Race.DWARF));
 		scn.MoveCardsToHand(troop);
 
 		scn.StartGame();

@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import com.gempukku.lotro.logic.modifiers.StrengthModifier;
 import org.junit.Test;
 
@@ -284,8 +283,6 @@ public class Card_01_023_ErrataTests
 		var soldier = scn.GetShadowCard("soldier");
 		scn.MoveCardsToHand(nobody);
 		scn.MoveCompanionsToTable(gimli, aragorn);
-		// A Man of the [dwarven] culture is still no Dwarf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.DWARVEN));
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(savage, soldier);
@@ -293,7 +290,7 @@ public class Card_01_023_ErrataTests
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, savage}, new PhysicalCardImpl[]{gimli, soldier});
 
-		// 8 against 5: Aragorn wins.
+		// 8 against 5: Aragorn, a Man, wins beside a Dwarf.
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.FreepsPass();
 		scn.ShadowPass();

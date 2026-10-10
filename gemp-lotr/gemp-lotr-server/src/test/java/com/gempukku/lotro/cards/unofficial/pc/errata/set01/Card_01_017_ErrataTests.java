@@ -4,8 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -217,25 +215,25 @@ public class Card_01_017_ErrataTests
 		var scn = GetScenario();
 
 		var grimir = scn.GetFreepsCard("grimir");
+		var gimli = scn.GetFreepsCard("gimli");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var blow = scn.GetFreepsCard("blow");
 		var savage = scn.GetShadowCard("savage");
 		scn.MoveCompanionsToTable(aragorn);
 		scn.MoveAlliesToTable(grimir);
 		scn.MoveCardsToDiscard(blow);
-		// Grimir is himself a [dwarven] character, but an ally.  Aragorn is made a Dwarf who is not [dwarven].
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, aragorn, null, Race.DWARF));
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(savage);
 		scn.SkipToAssignments();
 		scn.FreepsAssignAndResolve(aragorn, savage);
 
+		// Grimir is himself a [dwarven] character, but an ally; Aragorn is a companion, but a [gondor] one.
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 		assertFalse(scn.FreepsActionAvailable(grimir));
 
-		// The same companion, now of the [dwarven] culture as well.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.DWARVEN));
+		// Gimli, a [dwarven] companion, is put beside them and the decision asked again.
+		scn.MoveCompanionsToTable(gimli);
 		scn.FreepsRefreshDecision();
 		assertTrue(scn.FreepsActionAvailable(grimir));
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());

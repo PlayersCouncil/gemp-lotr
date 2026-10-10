@@ -6,8 +6,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import com.gempukku.lotro.logic.modifiers.StrengthModifier;
 import org.junit.Test;
 
@@ -214,7 +212,7 @@ public class Card_01_025_ErrataTests
 	}
 
 	@Test
-	public void ADwarfWhoLosesAndAManOfTheDwarvenCultureWhoWinsAreNotOfferedTheHeal() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ADwarfWhoLosesAndAManWhoWinsAreNotOfferedTheHeal() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var breath = scn.GetFreepsCard("breath");
@@ -226,9 +224,8 @@ public class Card_01_025_ErrataTests
 		var runner2 = scn.GetShadowCard("runner2");
 		scn.MoveCardsToSupportArea(breath);
 		scn.MoveCompanionsToTable(guard, aragorn);
+		// A wounded companion who is no Dwarf.
 		scn.AddWoundsToChar(aragorn, 1);
-		// A Man of the [dwarven] culture is still no Dwarf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.DWARVEN));
 		scn.MoveCardsToHand(armor, heart);
 
 		scn.StartGame();
@@ -256,21 +253,19 @@ public class Card_01_025_ErrataTests
 	}
 
 	@Test
-	public void ADwarfAllyAndADwarfOfAnotherCultureAreEachHealedByTheirOwnWin() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ADwarfAllyAndADwarfCompanionAreEachHealedByTheirOwnWin() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var breath = scn.GetFreepsCard("breath");
 		var grimir = scn.GetFreepsCard("grimir");
-		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
 		var armor = scn.GetFreepsCard("armor");
 		var heart = scn.GetFreepsCard("heart");
 		var runner = scn.GetShadowCard("runner");
 		var runner2 = scn.GetShadowCard("runner2");
 		scn.MoveCardsToSupportArea(breath);
 		scn.MoveAlliesToTable(grimir);
-		scn.MoveCompanionsToTable(aragorn);
-		// A Dwarf of the [gondor] culture.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, aragorn, null, Race.DWARF));
+		scn.MoveCompanionsToTable(gimli);
 		// Grimir, 3 + 3, can beat a Runner, 5.
 		scn.ApplyAdHocModifier(new StrengthModifier(null, grimir, null, 3));
 
@@ -278,11 +273,11 @@ public class Card_01_025_ErrataTests
 		// Grimir's home is site 3: the fellowship moves there from site 2.
 		scn.SkipToSite(2);
 		scn.AddWoundsToChar(grimir, 1);
-		scn.AddWoundsToChar(aragorn, 1);
+		scn.AddWoundsToChar(gimli, 1);
 		scn.MoveCardsToHand(armor, heart);
 		scn.MoveMinionsToTable(runner, runner2);
 		scn.SkipToAssignments();
-		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{grimir, runner}, new PhysicalCardImpl[]{aragorn, runner2});
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{grimir, runner}, new PhysicalCardImpl[]{gimli, runner2});
 		scn.FreepsResolveSkirmish(grimir);
 		int hand = scn.GetFreepsHandCount();
 
@@ -294,11 +289,13 @@ public class Card_01_025_ErrataTests
 		scn.FreepsChooseCard(armor);
 		assertInZone(Zone.DISCARD, armor);
 		assertEquals(hand - 1, scn.GetFreepsHandCount());
+		// The ally who won is healed; Gimli, wounded and waiting for his own skirmish, is not.
 		assertEquals(0, scn.GetWoundsOn(grimir));
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(gimli));
 		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 
-		scn.FreepsResolveSkirmish(aragorn);
+		// Gimli, 6, beats the other Runner.
+		scn.FreepsResolveSkirmish(gimli);
 		scn.PassSkirmishActions();
 		assertInZone(Zone.DISCARD, runner2);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(breath));
@@ -307,7 +304,7 @@ public class Card_01_025_ErrataTests
 		scn.FreepsChooseCard(heart);
 		assertInZone(Zone.DISCARD, heart);
 		assertEquals(hand - 2, scn.GetFreepsHandCount());
-		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(gimli));
 		assertEquals(0, scn.GetWoundsOn(grimir));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}

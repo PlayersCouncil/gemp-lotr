@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import com.gempukku.lotro.logic.modifiers.StrengthModifier;
 import org.junit.Test;
 
@@ -234,7 +233,7 @@ public class Card_04_079_Tests
 	}
 
 	@Test
-	public void IsNotOfferedWhenACompanionOfElvenCultureWhoIsNoElfWinsOrAnElfLoses() throws DecisionResultInvalidException, CardNotFoundException {
+	public void IsNotOfferedWhenACompanionWhoIsNoElfWinsOrAnElfLoses() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var night = scn.GetFreepsCard("night");
@@ -246,15 +245,14 @@ public class Card_04_079_Tests
 		scn.MoveCardsToHand(night);
 
 		scn.StartGame();
-		// Aragorn made an [elven] companion as well: of the Elves' culture, and a Man.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
 		scn.MoveMinionsToTable(savage, runner);
 		// The Runner at 8, to beat an Elf of strength 6 with no damage bonus and without overwhelming him.
 		scn.ApplyAdHocModifier(new StrengthModifier(null, runner, null, 3));
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, savage}, new PhysicalCardImpl[]{pengedhel, runner});
 
-		// Aragorn's 8 against the Savage's 5: he wins, and the event is not offered.
+		// Aragorn's 8 against the Savage's 5: a Man wins beside an Elf who could exert, and the event is not
+		// offered.
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.FreepsPass();
 		scn.ShadowPass();

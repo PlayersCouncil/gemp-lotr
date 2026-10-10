@@ -4,7 +4,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -80,11 +79,10 @@ public class Card_01_007_ErrataTests
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var lord = scn.GetFreepsCard("lord");
 		scn.MoveCardsToHand(guard, inHand, gimli);
-		// Everything that is nearly a Dwarf in play: a [dwarven] card that is no Dwarf, a Man of the [dwarven]
-		// culture, a Dwarf in the dead pile, and a second Guard in hand.
+		// Everything that is nearly a Dwarf in play: a [dwarven] card that is no Dwarf, a companion who is no
+		// Dwarf, a Dwarf in the dead pile, and a second Guard in hand.
 		scn.MoveCardsToSupportArea(lord);
 		scn.MoveCompanionsToTable(aragorn);
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.DWARVEN));
 		scn.MoveCardsToDeadPile(inDeadPile);
 
 		scn.StartGame();

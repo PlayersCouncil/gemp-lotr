@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -166,8 +165,6 @@ public class Card_01_005_ErrataTests
 		scn.MoveCardsToHand(blow);
 		scn.MoveCompanionsToTable(guard, gimli, aragorn);
 		scn.MoveAlliesToTable(grimir);
-		// A Man of the [dwarven] culture is still no Dwarf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.DWARVEN));
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(soldier1, soldier2);
@@ -185,7 +182,8 @@ public class Card_01_005_ErrataTests
 		assertEquals(1, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
 
 		scn.FreepsPlayCard(blow);
-		// The Dwarf in the skirmish, the Dwarf waiting for his own, and the Dwarf ally in the support area.
+		// The Dwarf in the skirmish, the Dwarf waiting for his own, and the Dwarf ally in the support area;
+		// not Aragorn, a companion who is no Dwarf.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(guard, gimli, grimir));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn));
 		assertEquals(1, scn.FreepsGetChoiceMin());

@@ -1,12 +1,9 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 
-import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -84,8 +81,7 @@ public class Card_01_040_ErrataTests
 		var radagast = scn.GetFreepsCard("radagast");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveCompanionsToTable(radagast, aragorn);
-		// A Man of the [elven] culture is still no Elf, and a [gandalf] Wizard of another name is not Gandalf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
+		// A companion who is no Elf, and a [gandalf] Wizard of another name, who is not Gandalf.
 		scn.MoveCardsToHand(elrond, gandalf);
 
 		scn.StartGame();
@@ -112,8 +108,8 @@ public class Card_01_040_ErrataTests
 		var arwen = scn.GetFreepsCard("arwen");
 		var radagast = scn.GetFreepsCard("radagast");
 		var aragorn = scn.GetFreepsCard("aragorn");
+		// Two companions in play, neither of them an Elf or Gandalf.
 		scn.MoveCompanionsToTable(radagast, aragorn);
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
 		scn.MoveCardsToHand(elrond, arwen);
 
 		scn.StartGame();
@@ -132,29 +128,27 @@ public class Card_01_040_ErrataTests
 	}
 
 	@Test
-	public void AnAllyOfAnotherCultureWhoIsAnElfLetsElrondBePlayed() throws DecisionResultInvalidException, CardNotFoundException, InvalidCardDefinitionException {
+	public void AnElfAllyLetsElrondBePlayedOnceHeIsInPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var elrond = scn.GetFreepsCard("elrond");
-		var thrarin = scn.GetFreepsCard("thrarin");
-		// Thrarin is made an Elf wherever he is: a [dwarven] ally, so neither an [elven] card nor a companion.
-		// The modifier goes by his name because he is still to be played.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, scn.GenerateFreepsFilter("name(Thrarin)"), null, Race.ELF));
-		scn.MoveCardsToHand(elrond, thrarin);
+		var silinde = scn.GetFreepsCard("silinde");
+		// Silinde is an Elf and an ally, not a companion.
+		scn.MoveCardsToHand(elrond, silinde);
 
 		scn.StartGame();
 
 		// An Elf in hand is not spotted.
 		assertFalse(scn.FreepsPlayAvailable(elrond));
 
-		scn.FreepsPlayCard(thrarin);
-		assertEquals(1, scn.GetTwilight());
+		scn.FreepsPlayCard(silinde);
+		assertEquals(2, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(elrond));
 
 		scn.FreepsPlayCard(elrond);
 		assertInZone(Zone.SUPPORT, elrond);
-		// 1 for Thrarin + 4 for Elrond
-		assertEquals(5, scn.GetTwilight());
+		// 2 for Silinde + 4 for Elrond
+		assertEquals(6, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
@@ -281,11 +275,10 @@ public class Card_01_040_ErrataTests
 		var silinde = scn.GetFreepsCard("silinde");
 		var thrarin = scn.GetFreepsCard("thrarin");
 		var arwen = scn.GetFreepsCard("arwen");
-		// One other [elven] ally. Beside him: Elrond himself, an [elven] companion, and an ally who is an Elf
-		// but not of the [elven] culture. None of those makes a second.
+		// One other [elven] ally. Beside him: Elrond himself, an [elven] companion, and an ally of another
+		// culture. None of those makes a second.
 		scn.MoveAlliesToTable(elrond, silinde, thrarin);
 		scn.MoveCompanionsToTable(arwen);
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, thrarin, null, Race.ELF));
 
 		scn.StartGame();
 
@@ -313,11 +306,9 @@ public class Card_01_040_ErrataTests
 
 		var elrond = scn.GetFreepsCard("elrond");
 		var orophin = scn.GetFreepsCard("orophin");
-		var thrarin = scn.GetFreepsCard("thrarin");
-		// Exactly two other [elven] allies: an Elf whose home is site 6, and a Dwarf whose home is site 3
-		// given the [elven] culture.
-		scn.MoveAlliesToTable(elrond, orophin, thrarin);
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, thrarin, null, Culture.ELVEN));
+		var silinde = scn.GetFreepsCard("silinde");
+		// Exactly two other [elven] allies, of two homes: site 6 and site 3.
+		scn.MoveAlliesToTable(elrond, orophin, silinde);
 
 		scn.StartGame();
 
@@ -332,7 +323,7 @@ public class Card_01_040_ErrataTests
 		assertEquals(1, scn.GetFreepsHandCount());
 		assertEquals(deck - 1, scn.GetFreepsDeckCount());
 		assertEquals(0, scn.GetWoundsOn(orophin));
-		assertEquals(0, scn.GetWoundsOn(thrarin));
+		assertEquals(0, scn.GetWoundsOn(silinde));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
 		scn.FreepsUseCardAction(elrond);

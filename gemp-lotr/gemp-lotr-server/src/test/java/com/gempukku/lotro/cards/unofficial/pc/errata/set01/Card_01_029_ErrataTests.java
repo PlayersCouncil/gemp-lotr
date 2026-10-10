@@ -5,8 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import com.gempukku.lotro.logic.modifiers.StrengthModifier;
 import org.junit.Test;
 
@@ -81,18 +79,14 @@ public class Card_01_029_ErrataTests
 		var arwen = scn.GetFreepsCard("arwen");
 		var silinde = scn.GetFreepsCard("silinde");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		var boromir = scn.GetFreepsCard("boromir");
 		var runner = scn.GetShadowCard("runner");
-		scn.MoveCompanionsToTable(haldir, arwen, aragorn, boromir);
+		// Two Elf companions and an Elf ally, and Aragorn, a companion who is no Elf: each with a wound.
+		scn.MoveCompanionsToTable(haldir, arwen, aragorn);
 		scn.MoveAlliesToTable(silinde);
-		// An Elf of the [gondor] culture, and a Man of the [elven] culture who is still no Elf.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, aragorn, null, Race.ELF));
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, boromir, null, Culture.ELVEN));
 		scn.AddWoundsToChar(haldir, 1);
 		scn.AddWoundsToChar(arwen, 1);
 		scn.AddWoundsToChar(silinde, 1);
 		scn.AddWoundsToChar(aragorn, 1);
-		scn.AddWoundsToChar(boromir, 1);
 		scn.MoveCardsToHand(enmity);
 
 		scn.StartGame();
@@ -109,8 +103,8 @@ public class Card_01_029_ErrataTests
 
 		scn.FreepsPlayCard(enmity);
 		// Any Elf, in the skirmish or out of it.
-		assertTrue(scn.FreepsHasCardChoiceAvailable(haldir, arwen, silinde, aragorn));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(boromir));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(haldir, arwen, silinde));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		assertEquals(1, scn.FreepsGetChoiceMax());
 
@@ -128,8 +122,8 @@ public class Card_01_029_ErrataTests
 		scn.FreepsResolveRuleFirst();
 		assertInZone(Zone.DISCARD, runner);
 		assertTrue(scn.FreepsDecisionAvailable("Choose Elf to heal"));
-		assertTrue(scn.FreepsHasCardChoiceAvailable(haldir, arwen, silinde, aragorn));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(boromir));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(haldir, arwen, silinde));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn));
 		assertEquals(1, scn.FreepsGetChoiceMax());
 
 		// The Shadow player has no card in hand, so he is not asked.
@@ -138,7 +132,6 @@ public class Card_01_029_ErrataTests
 		assertEquals(1, scn.GetWoundsOn(haldir));
 		assertEquals(1, scn.GetWoundsOn(arwen));
 		assertEquals(1, scn.GetWoundsOn(aragorn));
-		assertEquals(1, scn.GetWoundsOn(boromir));
 		assertEquals(5, scn.GetStrength(haldir));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
@@ -366,9 +359,8 @@ public class Card_01_029_ErrataTests
 		var enmity = scn.GetFreepsCard("enmity");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var runner = scn.GetShadowCard("runner");
+		// Aragorn, a Man, is the only companion beside the Ring-bearer: no Elf is in play.
 		scn.MoveCompanionsToTable(aragorn);
-		// A Man of the [elven] culture is no Elf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
 		scn.AddWoundsToChar(aragorn, 1);
 		scn.MoveCardsToHand(enmity);
 
@@ -441,8 +433,7 @@ public class Card_01_029_ErrataTests
 		var shadowSavage = scn.GetShadowCard("savage");
 		var shadowLorien = scn.GetShadowCard("lorien");
 		scn.MoveCompanionsToTable(haldir, arwen, boromir);
-		// The only wounded character of the [elven] culture is a Man.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, boromir, null, Culture.ELVEN));
+		// The only wounded companion is a Man.
 		scn.AddWoundsToChar(boromir, 1);
 		scn.MoveCardsToHand(enmity);
 		scn.MoveCardsToHand(shadowSavage, shadowLorien);
