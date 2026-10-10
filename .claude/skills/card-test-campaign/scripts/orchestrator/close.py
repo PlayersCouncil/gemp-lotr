@@ -5,7 +5,7 @@ Every step the orchestrator takes re-reads its whole context, so a landing is ma
 
   1.  close.py <folder>
           When a pipeline's notification has come.  Brings a second-tree batch onto the branch (integrate.sh),
-          marks an `at` batch done, runs postland.py (usage row, tracker, bundle, state zip), brings the second
+          runs postland.py (usage row, tracker, bundle, state zip), brings the second
           tree up to the branch and builds it if nothing else is at work there, and prints: what to carry, what
           to run on her machine, and what comes next with its launch arguments.  Give it ten minutes
           (`timeout 600`): the tracker and the build are slow on a cold machine.
@@ -38,10 +38,9 @@ TRACK = WORK / "workflows.json"
 SECOND_TREE_NOTE = (
     "You work in a second working tree, /home/claude/work/cards (branch cards-wip, its own build): use only that "
     "path and never /home/claude/work/repo, where an engine pass is rebuilding the game.")
-AT_NOTE = (
-    " Where a mechanics class exists already and `lint.py --form` faults tests that were in it before this batch, "
-    "use `--only <the batch's tests>` and leave the older tests as they are (a later fixer has them).")
-# (The brief itself now says which imports a lone test in a skeleton file needs.)
+NOTES_SENTENCE = (
+    "The orchestrator's notes for this batch are in the file %s/.claude/skills/card-test-campaign/references/%s. "
+    "Read the whole of it together with the files your role names; it binds as if it were written here.")
 
 
 def run(*cmd, cwd=REPO, timeout=900):
@@ -62,18 +61,6 @@ def at_work(tree, but=None):
 
 def head(ref=BRANCH, cwd=REPO):
     return run("git", "rev-parse", "--short=9", ref, cwd=cwd).stdout.strip()
-
-
-def at_queue():
-    """(done keys, the next key or None) of the `at` conversion."""
-    q = STATE / "orchestrator/at-convert/queue.json"
-    if not q.is_file():
-        return [], None
-    done = run(sys.executable, HERE / "at_batches.py", "--done").stdout.strip().replace("done:", "").split()
-    done = [d for d in done if d != "(none)"]
-    running = [f[3:] for f in at_work("cards") + at_work("repo") if f.startswith("at-")]
-    left = [k for k in json.loads(q.read_text()) if k not in done and k not in running]
-    return done, (left[0] if left else None)
 
 
 def card_queues():
@@ -109,10 +96,6 @@ def now_block():
     ahead = str(sum(1 for x in run("git", "cherry", BRANCH, "cards-wip", cwd=CARDS).stdout.split("\n") if x.startswith("+"))) if CARDS.is_dir() else "0"
     lines.append("- The branch is at %s; the last head carried to Ketura is %s%s." % (
         head(), last, "" if ahead in ("", "0") else "; the second tree holds %s commit(s) the branch has not taken" % ahead))
-    done, nxt = at_queue()
-    if done or nxt:
-        total = len(json.loads((STATE / "orchestrator/at-convert/queue.json").read_text()))
-        lines.append("- The `at` conversion: %d of %d batches done; next `%s`." % (len(done), total, nxt or "none left"))
     queues = {k: v for k, v in card_queues().items() if v}
     if queues:
         lines.append("- Card queues: " + "; ".join("%s %d (next %s)" % (k, len(v), " ".join(v[:4])) for k, v in queues.items()) + ".")
@@ -157,27 +140,41 @@ def write_now():
     return block
 
 
+def notes_file(queue_name):
+    """queue-decipher-existing -> notes-decipher.txt, if there is such a file."""
+    word = queue_name.replace("queue-", "").split("-")[0]
+    name = "notes-%s.txt" % word
+    return name if (REPO / ".claude/skills/card-test-campaign/references" / name).is_file() else None
+
+
 def next_launch():
-    """What to launch next, with its arguments, for the kinds of work that come off a queue."""
+    """What to launch next, with its arguments, for the work that comes off a queue of cards."""
     # Whatever holds the main slot (an engine pass, or a trial that runs a whole suite): batches then go to the second tree.
-    engine = [f for f in at_work("repo") if not f.startswith(("at-", "dec-", "fix-"))]
+    held = [f for f in at_work("repo") if f.startswith(("engine-pass", "noeffect", "trial"))]
     out = []
-    done, nxt = at_queue()
-    if nxt:
-        if at_work("cards") and engine:
-            out.append("next `at` batch: %s, when the second tree is free (%s is at work there)" % (nxt, ", ".join(at_work("cards"))))
-        else:
-            tree = CARDS if engine else REPO
-            args = {"repo": str(tree), "batch": nxt, "note": ((SECOND_TREE_NOTE if engine else "") + AT_NOTE).strip()}
-            out.append("next `at` batch: workflows/at-convert.js with args\n  %s\n  then: close.py --launched at-%s <run id> %s --tree %s --synced <head>" % (
-                json.dumps(args), nxt, nxt, "cards" if engine else "repo"))
     for name, ids in card_queues().items():
-        if ids and (nxt or [f for f in at_work("cards") + at_work("repo") if f.startswith("at-")]):
-            out.append("%s: %d card(s) left, WAITING until the `at` conversion is finished (HANDOFF.md, \"Next\")" % (name, len(ids)))
-        elif ids:
-            out.append("%s: %d card(s) left; next %s (workflows/card-batch.js, three or four to a batch; HANDOFF.md says with which notes)" % (name, len(ids), " ".join(ids[:4])))
-    if not engine:
-        out.append("nothing holds the main tree: batches may run there, two at a time (pass its path as repo)")
+        if not ids:
+            continue
+        prefix = {"decipher": "dec"}.get(name.replace("queue-", "").split("-")[0], name.replace("queue-", "")[:4])
+        notes = notes_file(name)
+        if held:
+            trees = [] if at_work("cards") else [(CARDS, "cards")]
+            if not trees:
+                out.append("%s: %d card(s) left; the second tree is in use (%s)" % (name, len(ids), ", ".join(at_work("cards"))))
+        else:
+            free = 2 - len([f for f in at_work("repo")]) - len(at_work("cards"))
+            trees = [(REPO, "repo")] * max(free, 0)
+        for n, (tree, label) in enumerate(trees):
+            batch = ids[n * 4:n * 4 + 4]
+            if not batch:
+                break
+            folder = "%s-b%s" % (prefix, batch[0])
+            args = {"repo": str(tree), "cards": batch, "folder": folder,
+                    "notes": ((NOTES_SENTENCE % (tree, notes)) if notes else "") + (" " + SECOND_TREE_NOTE if label == "cards" else "")}
+            out.append("%s (%d left): workflows/card-batch.js with args\n  %s\n  then: close.py --launched %s <run id> %s --tree %s --synced <head>" % (
+                name, len(ids), json.dumps(args), folder, ",".join(batch), label))
+    if not held:
+        out.append("nothing holds the main tree: batches may run there, two at a time")
     return out
 
 

@@ -45,8 +45,7 @@ yours. Everything below follows from that, and from a machine of 8 GB and two pr
 
 The turn a pipeline's notification starts. `scripts/orchestrator/close.py` has the routine in its header:
 
-1. `timeout 600 python3 .../close.py <folder>`: brings a second-tree batch onto the branch, marks an `at` batch
-   done, makes the bundle, the state zip and the tracker, renews the second tree if it is free, and prints what to
+1. `timeout 600 python3 .../close.py <folder>`: brings a second-tree batch onto the branch, makes the bundle, the state zip and the tracker, renews the second tree if it is free, and prints what to
    carry, what to run on her machine and what to launch next, with its arguments.
 2. In one step: carry the files (device_commit_files, `force`), publish the tracker to the same artifact, and
    launch the next pipeline.
@@ -74,8 +73,8 @@ need to repeat it every turn"): nothing is ever pushed, and the uncommitted file
 
 ## Two working trees
 
-An engine pass has the main tree (`<work>/repo`) for hours and rebuilds the game in it, so batches of cards and of
-`at` tests run meanwhile in the second (`<work>/cards`, branch `cards-wip`, its own build), ONE at a time.
+An engine pass has the main tree (`<work>/repo`) for hours and rebuilds the game in it, so batches of cards run
+meanwhile in the second (`<work>/cards`, branch `cards-wip`, its own build), ONE at a time.
 `integrate.sh` brings each landed batch onto the branch; its header has the three things that can happen (a
 conflict in text a script makes, which it settles itself; a conflict anywhere else, which is yours; a
 fast-forward refused while the engine agent has a file open, where you wait, or it cherry-picks if the next batch
@@ -134,27 +133,18 @@ by letter with what each changes, what you do not know, and which you lean to.
 Before you tell her a fact about a card, look it up (`packet.py <id> --blind`). A collector's label read as a
 pointer made Rath Dínen 100_1 "an erratum of 18_139" for one message.
 
-## The old `at` tests (a one-time job)
+## A one-time job, and how it was run (the old `at` tests, finished 2026-10-10)
 
-Ketura, 2026-10-10: "once complete it's unlikely to be revisited, since it is a one-time lift-and-shift upgrade.
-The rest of this suite is likely to be used with future cards." So this section, its three briefs, two workflows
-and two scripts are for finishing that job and may be taken out of the skill when the `at` folder is gone; nothing
-else should come to depend on them. Not ported line by line (her words are in `roles/at-convert.md`). How it is
-done:
-
-1. **Survey** (`workflows/at-survey.js`, `roles/at-survey.md`; reading only, no Java): for every old method, what
-   it guards, its kind, whether something covers it, and a directive for its replacement, in
-   `<state>/orchestrator/at-survey/<File>.md` and `.tsv`.
-2. **Her report**: `at_report.py` (run by postland.py) makes `at-survey/REPORT.md` from the `.tsv` files, one
-   sentence a method, first on the tracker's Reports tab.
-3. **`at-survey/DECISIONS.md`**: every point the survey raised with its answer, hers or yours, and what later
-   batches found. It overrides a directive.
-4. **Batches**: `at_batches.py` makes `at-convert/<key>.md`, `PLAN.md` and `queue.json` from the `.tsv` files; its
-   OVERRIDES hold your re-homings and its NOTES what a batch must know. `--done` lists the finished ones.
-5. **Conversion**: `workflows/at-convert.js` with `{repo, batch, note}`: a converter (`roles/at-convert.md`) writes
-   the replacements and deletes the old methods, a lander (`roles/at-land.md`) checks, files and commits. One
-   batch at a time, in `queue.json`'s order; `close.py` prints the next with its arguments.
-6. The last batch, `sweep`, deletes what is left of the folder.
+Kept as a pattern for any other body of old tests, since its briefs and scripts are no longer in the skill
+(Ketura: "a one-time lift-and-shift upgrade"; they are in the branch's history). A SURVEY first, by agents that
+only read: for every old method what it guards, whether something covers it already, and a directive for its
+replacement, with one sentence a method for Ketura (her report, on the tracker). Then the orchestrator's
+DECISIONS file: every point the survey raised with its answer, hers or the orchestrator's, added to after every
+batch (what was tried with no finding, so that nobody tries it again). Then BATCHES made by a script from the
+survey's tables, a handful of homes each, converted by one agent and landed by another, one batch at a time.
+Last a SWEEP, which had to show for every method still there what covered it before deleting it. 336 methods
+became 372 tests in 25 batches, about 35 minutes and 600K tokens a batch, and turned up 25 findings, most of
+them an offer the old tests had been asserting that does nothing.
 
 ## After the workspace has restarted
 
@@ -163,7 +153,7 @@ happened three times, each under two or more Java processes.
 
 1. `wf.py status`, and `git status --short` in both trees.
 2. A stage that had finished is in the run's journal (`wf.py show <folder>`). A stage cut off in the middle left
-   its work uncommitted. For a batch of cards or `at` tests: look at what is uncommitted (it should be that
+   its work uncommitted. For a batch of cards: look at what is uncommitted (it should be that
    batch's files and nothing else), discard it, and run the batch again. For an engine item: leave the work where
    it is and put a note about it at the top of the queue file, for the agent that takes the item up.
 3. Launch again from a scheduled turn, with only the batches or items that are left. (`resumeFromRunId` picks a

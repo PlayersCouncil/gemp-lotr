@@ -26,17 +26,19 @@ work is organised.
 4. **Decipher cards**, one set at a time and one culture file at a time within a set.
 
 As it is being worked (Ketura, 2026-10-08 and 2026-10-10): the V-sets, the PC errata and Race to Mount Doom
-(done), the tests under `at/`, then the 152 Decipher cards that already had behavioural tests. THERE THE CARD
+and the tests under `at/` (done), then the 152 Decipher cards that already had behavioural tests. THERE THE CARD
 BATCHES STOP ("wind down the card agents"; engine passes may go on): she takes stock, the patch notes are made
 from the findings, and a deployment is prepared. "Only after that" the rest of the Decipher sets (some 2,900
 cards), the Hobbit sets last. No card batch beyond the 152 is launched without her word.
 
-The tests under `at/` (written before the rig; 46 files, 336 methods) are not ported line by line. For each, what
-it guards is written down (the bug, the behaviour, the interaction), and that is the brief for a new test written
-to the standard, in `mechanics/` if it is about a rule or, as a lone test, in the file of the card it is most
-about, where it is a start for that card's own batch. A survey wrote the directives and a report for Ketura;
-batches of them are converted and landed (`roles/orchestrator.md`, "The old `at` tests"). The dormant test files
-for earlier iterations of PC cards are kept compiling in step.
+The tests under `at/` (written before the rig; 46 files, 336 methods) were not ported line by line. For each,
+what it guarded was written down (the bug, the behaviour, the interaction), and that was the brief for a new test
+written to the standard: in `mechanics/` if it was about a rule, or as a lone test in the file of the card it was
+most about, where it is a start for that card's own batch. That conversion was finished on 2026-10-10 and the
+folder is gone; its record (the survey, Ketura's report on what each old test checked, the decisions, each
+batch's report) is in the state under `orchestrator/at-survey/`, `at-convert/` and `batches/at-*.md`, and its
+briefs and scripts are in the branch's history before the commit that took them out. The dormant test files for
+earlier iterations of PC cards are kept compiling in step.
 
 A chunk is one culture file of one set (`file:set01-Elven`), or one V-set, small enough for Ketura to review in a
 sitting. Nothing in a chunk is finished until she has approved it.
@@ -335,12 +337,8 @@ at every landing. The scripts under `scripts/orchestrator/` take the working fol
 - `scripts/orchestrator/`: `close.py` (a landing, start to finish; it runs `integrate.sh` and `postland.py`),
   `apply-sync.py` (on her machine), `answers.py` (filing a set of her answers), `wf.py` (where each run stands, and
   its reports), `integrate.sh` with `resolve_made.py` (the second working tree), `bootstrap.sh` (a fresh session),
-  `suite-run.sh` (the suite on the committed head, in a second clone), `cost.py` (what a run's steps cost),
-  `at_batches.py` and `at_report.py` (the `at` conversion's batches, and Ketura's report on the old tests).
+  `suite-run.sh` (the suite on the committed head, in a second clone), `cost.py` (what a run's steps cost).
 - `workflows/card-batch.js`: one batch, start to finish, as a Workflow script.
-- `workflows/at-survey.js` with `roles/at-survey.md`, and `workflows/at-convert.js` with `roles/at-convert.md` and
-  `roles/at-land.md`: the old `at` tests, surveyed and then converted batch by batch. A one-time job (Ketura,
-  2026-10-10): these may go when the `at` folder is gone.
 - `workflows/engine-pass.js` with `roles/engine.md`: an engine pass between waves. The orchestrator writes the
   queue of items as a file in the state (`orchestrator/engine-pass-<n>.md`, one section an item); one agent takes
   each in turn, commits it with `landing.py commit`, and writes a report beside the queue. `roles/doc-triage.md`
