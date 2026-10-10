@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_10_045_Tests
@@ -18,7 +19,8 @@ public class Card_10_045_Tests
 				new HashMap<>()
 				{{
 					put("card", "10_45");
-					// put other cards in here as needed for the test case
+					// Mûmak: a [raider] mount, cost 2, strength +3; "Bearer must be a Southron."  Bearer is fierce.
+					put("mumak", "5_73");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -62,18 +64,36 @@ public class Card_10_045_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void MumakChieftainTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void AMountCostingTwoIsPlayedOnHimFromTheDiscardPileForNothingWithAnEmptyPool() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var chieftain = scn.GetShadowCard("card");
+		var mumak = scn.GetShadowCard("mumak");
+		scn.MoveCardsToHand(chieftain);
+		scn.MoveCardsToDiscard(mumak);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// 4 set + 1 companion + 2 for the site make 7: the 5 he costs and 2 for roaming, a site 4 minion at site 2.
+		scn.SetTwilight(4);
+		scn.FreepsPass();
 
-		assertEquals(5, scn.GetTwilight());
+		assertEquals(7, scn.GetTwilight());
+		assertTrue(scn.ShadowPlayAvailable(chieftain));
+		scn.ShadowPlayCard(chieftain);
+		assertEquals(0, scn.GetTwilight());
+		assertInZone(Zone.SHADOW_CHARACTERS, chieftain);
+		assertInZone(Zone.DISCARD, mumak);
+		// 11 in print
+		assertEquals(11, scn.GetStrength(chieftain));
+
+		// The pool is empty and the mount costs 2 - 2: it is offered, and played for nothing.
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(chieftain));
+		scn.ShadowAcceptOptionalTrigger();
+		assertAttachedTo(mumak, chieftain);
+		// 11 + 3 for the Mûmak
+		assertEquals(14, scn.GetStrength(chieftain));
+		assertEquals(0, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

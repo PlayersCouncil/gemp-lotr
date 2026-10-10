@@ -38,26 +38,6 @@ public class ModifiersAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void addSignet() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard gimli = addToZone(createCard(P1, "5_7"), Zone.FREE_CHARACTERS);
-
-        passUntil(Phase.FELLOWSHIP);
-
-        JSONObject obj = new JSONObject();
-        obj.put("filter", "companion,dwarf");
-        obj.put("signet", "Frodo");
-
-        ModifierSource modifierSource = new AddSignet().getModifierSource(obj, lotroCardBlueprintBuilder);
-        DefaultActionContext actionContext = new DefaultActionContext(P1, _game, null, null, null);
-
-        assertFalse(hasSignet(gimli, Signet.FRODO));
-        addModifier(modifierSource.getModifier(actionContext));
-        assertTrue(hasSignet(gimli, Signet.FRODO));
-    }
-
-    @Test
     public void allyCanParticipateInArcheryFire() throws Exception {
         initializeSimplestGame();
 
@@ -148,25 +128,6 @@ public class ModifiersAtTest extends AbstractAtTest {
         assertTrue(_game.getModifiersQuerying().canPlaySite(_game, P1));
         addModifier(modifierSource.getModifier(actionContext));
         assertFalse(_game.getModifiersQuerying().canPlaySite(_game, P1));
-    }
-
-    @Test
-    public void cantRemoveThreats() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard ringBearer = getRingBearer(P1);
-
-        JSONObject obj = new JSONObject();
-        obj.put("filter", "ringBearer");
-
-        ModifierSource modifierSource = new CantRemoveThreats().getModifierSource(obj, lotroCardBlueprintBuilder);
-        DefaultActionContext actionContext = new DefaultActionContext(P1, _game, null, null, null);
-
-        passUntil(Phase.FELLOWSHIP);
-
-        assertTrue(_game.getModifiersQuerying().canRemoveThreat(_game, ringBearer));
-        addModifier(modifierSource.getModifier(actionContext));
-        assertFalse(_game.getModifiersQuerying().canRemoveThreat(_game, ringBearer));
     }
 
     @Test

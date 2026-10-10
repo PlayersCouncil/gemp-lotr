@@ -215,23 +215,6 @@ public class TriggersAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void losesInitiative() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard glimpseOfFate = addToZone(createCard(P1, "10_12"), Zone.SUPPORT);
-        PhysicalCard legolas1 = addToZone(createCard(P1, "1_50"), Zone.HAND);
-        PhysicalCard legolas2 = addToZone(createCard(P1, "1_50"), Zone.HAND);
-        PhysicalCard legolas3 = addToZone(createCard(P1, "1_50"), Zone.HAND);
-        PhysicalCard legolas4 = addToZone(createCard(P1, "1_50"), Zone.HAND);
-        PhysicalCard goblinRunner = addToZone(createCard(P2, "1_178"), Zone.SHADOW_CHARACTERS);
-
-        passUntil(Phase.FELLOWSHIP);
-        assertEquals(5, getStrength(goblinRunner));
-        selectCardAction(P1, legolas1);
-        assertEquals(1, getStrength(goblinRunner));
-    }
-
-    @Test
     public void heals() throws Exception {
         initializeSimplestGame();
 

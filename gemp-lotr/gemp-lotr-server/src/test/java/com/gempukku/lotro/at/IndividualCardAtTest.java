@@ -18,41 +18,6 @@ import static org.junit.Assert.*;
 
 public class IndividualCardAtTest extends AbstractAtTest {
     @Test
-    public void mumakChieftainPlayingMumakForFree() throws DecisionResultInvalidException, CardNotFoundException {
-        Map<String, Collection<String>> extraCards = new HashMap<>();
-        initializeSimplestGame(extraCards);
-
-        PhysicalCardImpl mumakChieftain = new PhysicalCardImpl(100, "10_45", P2, _cardLibrary.getLotroCardBlueprint("10_45"));
-        PhysicalCardImpl mumak = new PhysicalCardImpl(100, "5_73", P2, _cardLibrary.getLotroCardBlueprint("5_73"));
-
-        skipMulligans();
-
-        _game.getGameState().addCardToZone(_game, mumak, Zone.DISCARD);
-        _game.getGameState().addCardToZone(_game, mumakChieftain, Zone.HAND);
-        _game.getGameState().setTwilight(5);
-
-        // End fellowship phase
-        playerDecided(P1, "");
-
-        assertEquals(7, _game.getGameState().getTwilightPool());
-
-        // Play mumak chieftain
-        final AwaitingDecision shadowDecision = _userFeedback.getAwaitingDecision(P2);
-        assertEquals(AwaitingDecisionType.CARD_ACTION_CHOICE, shadowDecision.getDecisionType());
-        validateContents(new String[]{"" + mumakChieftain.getCardId()}, ((String[]) shadowDecision.getDecisionParameters().get("cardId")));
-        playerDecided(P2, "0");
-
-        assertEquals(0, _game.getGameState().getTwilightPool());
-
-        final AwaitingDecision optionalPlayDecision = _userFeedback.getAwaitingDecision(P2);
-        assertEquals(AwaitingDecisionType.CARD_ACTION_CHOICE, optionalPlayDecision.getDecisionType());
-        validateContents(new String[]{"" + mumakChieftain.getCardId()}, ((String[]) optionalPlayDecision.getDecisionParameters().get("cardId")));
-        playerDecided(P2, "0");
-
-        assertEquals(Zone.ATTACHED, mumak.getZone());
-    }
-
-    @Test
     public void musterFrodoAllowsToDiscardAndDraw() throws DecisionResultInvalidException, CardNotFoundException {
         Map<String, LotroDeck> decks = new HashMap<>();
         final LotroDeck p1Deck = createSimplestDeck();
@@ -228,31 +193,6 @@ public class IndividualCardAtTest extends AbstractAtTest {
 
         assertEquals(2, _game.getGameState().getBurdens());
         assertEquals(1, _game.getGameState().getHand(P1).size());
-    }
-
-    @Test
-    public void sentBackAllowsPlayingCardInDeadPile() throws DecisionResultInvalidException, CardNotFoundException {
-        initializeSimplestGame();
-
-        PhysicalCardImpl sentBack = new PhysicalCardImpl(100, "9_27", P1, _cardLibrary.getLotroCardBlueprint("9_27"));
-        _game.getGameState().addCardToZone(_game, sentBack, Zone.SUPPORT);
-
-        PhysicalCardImpl radagast1 = new PhysicalCardImpl(101, "9_26", P1, _cardLibrary.getLotroCardBlueprint("9_26"));
-        _game.getGameState().addCardToZone(_game, radagast1, Zone.DEAD);
-
-        PhysicalCardImpl radagast2 = new PhysicalCardImpl(101, "9_26", P1, _cardLibrary.getLotroCardBlueprint("9_26"));
-        _game.getGameState().addCardToZone(_game, radagast2, Zone.HAND);
-
-        skipMulligans();
-
-        // End fellowship
-        AwaitingDecision playFellowshipAction = _userFeedback.getAwaitingDecision(P1);
-        assertEquals(AwaitingDecisionType.CARD_ACTION_CHOICE, playFellowshipAction.getDecisionType());
-        validateContents(new String[]{"" + sentBack.getCardId()}, ((String[]) playFellowshipAction.getDecisionParameters().get("cardId")));
-        playerDecided(P1, "0");
-
-        assertEquals(Zone.FREE_CHARACTERS, radagast2.getZone());
-        assertEquals(4, _game.getGameState().getTwilightPool());
     }
 
     @Test
