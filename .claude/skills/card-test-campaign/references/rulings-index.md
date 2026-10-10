@@ -381,7 +381,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "<Do X> or <do Y>": each branch is written as the effect itself (F-0310, Here Lies Balin 1_19) [Q-0209, F-0222]
 - A parenthesis with its own price (Q-0089)
 - One thing left to do is done without a second question (Q-0090)
-- A yes/no before a choice whose minimum is 0 (Q-0143, F-0277) [F-0278, F-0285, Q-0102]
+- A yes/no before a choice whose minimum is 0 (Q-0143, F-0277) [F-0278, F-0285, Q-0102, F-0385]
 - A number that can only be one number is not asked for (F-0147)
 - "You may make <the other player> do X" (Q-0106)
 - Known shapes from the Dwarven errata (F-0181, F-0194, F-0182) [Q-0034, F-0295, F-0304, F-0323, F-0324, F-0303, F-0314, F-0349, F-0347, F-0348]
@@ -476,7 +476,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 ## Reveals, draw decks and shuffles
 
 - A stacked card shuffled in goes to its own owner's deck (F-0172)
-- A take from a draw deck with no "reveal" and no kind of card named writes `reveal: false` (Q-0176, F-0332) [Q-0025, F-0378]
+- A take from a draw deck with no "reveal" and no kind of card named writes `reveal: false` (Q-0176, F-0332) [Q-0025, F-0378, F-0384]
 - A card taken into hand in place of a draw is a card drawn; a card taken from anywhere else is not (Q-0205: B; F-0376, open)
 - revealHand of an empty hand (Q-0144)
 - FreepsGetCardChoiceCount() while cards are only shown

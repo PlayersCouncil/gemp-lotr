@@ -1006,6 +1006,18 @@ cards that may be taken. So "shown, and cannot be chosen" is read at the showing
 card is simply absent (`ShadowHasCardChoiceNotAvailable(card)`; `(card, false)` fails there). A search of the
 OTHER player's deck (Grond 68_82) is shown to the searching player alone: the deck's owner has no decision.
 A take written with `showAll: false` (Race Text 91_2) has no showing to dismiss: the choice comes at once.
+
+**"Look at an opponent's hand" is a showing to the looker alone.** Once the cost is paid, a `lookAtHand`
+(Galadriel's Glade 1_351, "Fellowship: Exert an Elf to look at an opponent's hand") shows the hand to the player
+who looks: read each card with `FreepsHasCardChoiceAvailable(card, false)` and the number with
+`FreepsGetTotalRevealedCardCount()`, and answer with `FreepsDismissRevealedCards()`. The hand's owner is asked
+nothing, and his hand keeps its count (`Card_01_067_Tests`).
+
+**A look at the top cards of an EMPTY draw deck still shows, with nothing in it.** `LookAtTopCardsOfDrawDeck`
+(Questions That Need Answering 1_81) gives its player "Cards on top of deck" with no card: the count of cards
+shown reads 0 and `FreepsDismissRevealedCards()` answers it (there it does not fail, though no card is shown);
+until it is answered the event lies in the void. This is the game as built, with Q-0104's "showing nothing" the
+nearest ruling and none on the card itself; the play is not flagged no-effect (`Card_01_081_Tests`).
 `FreepsChooseCard(card)` answers a choice from a deck as well, and by blueprint all the same: give the card to be
 taken a blueprint no other card of that deck has (fillers of another kind), or another copy goes to hand and
 `assertInZone(Zone.HAND, card)` fails.
