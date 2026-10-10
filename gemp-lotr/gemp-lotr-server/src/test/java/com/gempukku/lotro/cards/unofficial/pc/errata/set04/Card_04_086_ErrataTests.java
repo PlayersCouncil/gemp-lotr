@@ -6,7 +6,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -22,7 +21,8 @@ public class Card_04_086_ErrataTests
 				new HashMap<>()
 				{{
 					put("thonnas", "54_86");
-					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion, given [elven] where a test needs an Elf that is not
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion: a companion who is no Elf
+					put("finalcount", "4_69");  // Final Count: [elven] condition in the support area, a card of the culture that is no Elf; nothing without Legolas
 					put("orophin", "1_56");     // Orophin, Lorien Bowman: Elf ally, cost 2, archer
 					put("guardian", "4_76");    // Lorien Guardian: Elf companion; a regroup ability used only on purpose
 					put("legolas", "1_50");     // Legolas, Greenleaf: Elf companion, archer
@@ -78,19 +78,20 @@ public class Card_04_086_ErrataTests
 	}
 
 	@Test
-	public void CannotBePlayedUntilAnElfIsSpottedAndAnElvenManIsNoElf() throws DecisionResultInvalidException, CardNotFoundException {
+	public void CannotBePlayedUntilAnElfIsSpottedAndThenPlaysForTwo() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var thonnas = scn.GetFreepsCard("thonnas");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var orophin = scn.GetFreepsCard("orophin");
+		var finalcount = scn.GetFreepsCard("finalcount");
 		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToSupportArea(finalcount);
 		scn.MoveCardsToHand(thonnas, orophin);
-		// An [elven] card that is a Man, not an Elf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
 
 		scn.StartGame();
 
+		// A companion who is no Elf and an [elven] condition in play, and no Elf.
 		assertEquals(0, scn.GetTwilight());
 		assertFalse(scn.FreepsPlayAvailable(thonnas));
 

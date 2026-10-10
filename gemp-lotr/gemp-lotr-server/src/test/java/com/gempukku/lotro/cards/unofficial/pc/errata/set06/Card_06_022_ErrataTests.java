@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -27,7 +26,7 @@ public class Card_06_022_ErrataTests
 					put("elf2", "1_53");
 					put("elf3", "1_53");
 					put("orophin", "1_56");     // Orophin, Lórien Bowman: Elf ally (an archery ability)
-					put("aragorn", "4_109");    // Aragorn, Heir of Elendil: Man companion, Defender +1 and no other text
+					put("aragorn", "4_109");    // Aragorn, Heir of Elendil: [gondor] Man companion, Defender +1 and no other text: a companion who is no Elf
 					put("elfsong", "1_39");     // Elf-song: an [elven] event
 					put("sleep", "1_84");       // Sleep, Caradhras: a [gandalf] event
 
@@ -94,10 +93,8 @@ public class Card_06_022_ErrataTests
 		scn.MoveCardsToHand(troop, elf2);
 
 		scn.StartGame();
-		// An [elven] Man companion: of the culture, not of the race.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
 
-		// Two Elf companions (one unique, one not), an Elf ally and an [elven] Man companion: not 3 Elf companions.
+		// Two Elf companions (one unique, one not), an Elf ally and a Man companion: not 3 Elf companions.
 		assertFalse(scn.FreepsPlayAvailable(troop));
 
 		scn.FreepsPlayCard(elf2);

@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -30,7 +29,7 @@ public class Card_08_102_ErrataTests
 					put("companies", "8_107");   // Their Marching Companies: [sauron] engine condition; abilities need threats or stacked minions
 
 					put("bowmen", "1_264");      // Orc Bowmen: [sauron] support condition that is no engine; archery only
-					put("ladder", "6_58");       // Assault Ladder: [isengard] support condition, made an engine in the tests that need one of another culture
+					put("ladder", "6_58");       // Assault Ladder: [isengard] machine, a support condition that is no engine; abilities used only on purpose
 
 					put("legolas", "1_50");      // Legolas, Greenleaf: Elf companion, to bear The Tale of Gil-galad
 					put("lord", "1_21");         // Lord of Moria: [dwarven] support condition, each Dwarf damage +1
@@ -100,11 +99,10 @@ public class Card_08_102_ErrataTests
 		scn.SkipToSite(4);
 		scn.MoveCardsToHand(troll, towers);
 		scn.MoveCardsToSupportArea(bowmen, ladder);
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, ladder, null, Keyword.ENGINE));
 		scn.SetTwilight(10);
 		scn.FreepsPass();
 
-		// At site 5: no roaming.  An [isengard] engine and a [sauron] condition that is no engine do not count.
+		// At site 5: no roaming.  An [isengard] machine and a [sauron] condition that is no engine do not count.
 		assertTrue(scn.AwaitingShadowPhaseActions());
 		assertEquals(9, scn.GetTwilightCost(troll));
 
@@ -158,7 +156,6 @@ public class Card_08_102_ErrataTests
 		scn.MoveCardsToSupportArea(lord);
 		scn.MoveCardsToHand(troll);
 		scn.MoveCardsToSupportArea(grond, towers, bowmen, ladder);
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, ladder, null, Keyword.ENGINE));
 		scn.SetTwilight(10);
 		scn.FreepsPass();
 
@@ -169,17 +166,17 @@ public class Card_08_102_ErrataTests
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable(troll2));
 		scn.ShadowAcceptOptionalTrigger();
 
-		// "An engine": any engine, the [isengard] one included; a [sauron] condition that is no engine is not offered.
-		assertTrue(scn.ShadowHasCardChoiceAvailable(grond, towers, ladder));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(bowmen));
+		// "An engine": a possession or a condition; a [sauron] condition that is no engine and an [isengard] machine are not offered.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(grond, towers));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(bowmen, ladder));
 		assertEquals(1, scn.ShadowGetChoiceMin());
-		scn.ShadowChooseCard(ladder);
-		assertInDiscard(ladder);
-		assertInZone(Zone.SUPPORT, grond, towers, bowmen);
+		scn.ShadowChooseCard(grond);
+		assertInDiscard(grond);
+		assertInZone(Zone.SUPPORT, towers, bowmen, ladder);
 
 		// Free Peoples conditions in the support area and borne; not a Free Peoples possession, nor a Shadow condition.
 		assertTrue(scn.ShadowHasCardChoiceAvailable(lord, tale));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(sword, bowmen, grond, towers));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(sword, bowmen, towers, ladder));
 		assertEquals(1, scn.ShadowGetChoiceMin());
 		scn.ShadowChooseCard(tale);
 

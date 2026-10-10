@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -25,7 +24,7 @@ public class Card_08_003_ErrataTests
 					put("axe", "1_14");        // Gimli's Battle Axe: bearer must be Gimli, he is damage +1; an optional trigger on winning a skirmish
 					put("thrarin", "1_27");    // Thrarin, Dwarven Smith: Dwarf ally, no damage of his own; a maneuver ability only
 					put("guard", "1_7");       // Dwarf Guard: Dwarf companion, no damage bonus
-					put("aragorn", "1_89");    // Aragorn, Ranger of the North: [gondor] Man; a maneuver ability used only on purpose
+					put("aragorn", "1_89");    // Aragorn, Ranger of the North: [gondor] Man companion, no Dwarf; a maneuver ability used only on purpose
 
 					put("troop", "1_177");     // Goblin Patrol Troop: [moria] minion, no text
 					put("pinned", "1_192");    // Pinned Down: [moria] condition in the support area; nothing without a [moria] archer
@@ -84,8 +83,7 @@ public class Card_08_003_ErrataTests
 		scn.MoveAlliesToTable(thrarin);
 		// Thrarin is a Dwarf ally who is damage +1.
 		scn.ApplyAdHocModifier(new AddKeywordModifier(null, thrarin, null, Keyword.DAMAGE, 1));
-		// Aragorn is a [dwarven] Man who is damage +1, and no Dwarf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.DWARVEN));
+		// Aragorn is a Man who is damage +1, and no Dwarf.
 		scn.ApplyAdHocModifier(new AddKeywordModifier(null, aragorn, null, Keyword.DAMAGE, 1));
 		scn.MoveCardsToHand(brc);
 
@@ -192,15 +190,14 @@ public class Card_08_003_ErrataTests
 	}
 
 	@Test
-	public void NotOfferedWithAnExhaustedDwarfAndADwarvenManWhoIsDamagePlusOne() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NotOfferedWithAnExhaustedDwarfAndAManWhoIsDamagePlusOne() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var brc = scn.GetFreepsCard("brc");
 		var gimli = scn.GetFreepsCard("gimli");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveCompanionsToTable(gimli, aragorn);
-		// Aragorn is a [dwarven] Man who is damage +1, and no Dwarf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.DWARVEN));
+		// Aragorn is a Man who is damage +1, and no Dwarf.
 		scn.ApplyAdHocModifier(new AddKeywordModifier(null, aragorn, null, Keyword.DAMAGE, 1));
 		scn.MoveCardsToHand(brc);
 

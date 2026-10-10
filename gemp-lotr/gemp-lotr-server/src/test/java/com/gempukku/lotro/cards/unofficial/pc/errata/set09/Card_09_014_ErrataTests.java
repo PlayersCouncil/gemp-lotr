@@ -4,7 +4,6 @@ import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -118,20 +117,18 @@ public class Card_09_014_ErrataTests
 		scn.MoveCardsToHand(nenya, lorienelf);
 
 		scn.StartGame();
-		// A Man of the [elven] culture is an [elven] companion
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
 
 		assertEquals(0, scn.GetBurdens());
 		assertEquals(4, scn.GetResistance(galadriel));
 
 		scn.FreepsPlayCard(nenya);
 		assertAttachedTo(nenya, galadriel);
-		// 4 printed + Galadriel, Legolas and the [elven] Aragorn; not Dwarf Guard, the ally Elrond or the Elven Bow
-		assertEquals(7, scn.GetResistance(galadriel));
+		// 4 printed + Galadriel and Legolas; not Aragorn or Dwarf Guard (companions of other cultures), the ally Elrond or the Elven Bow
+		assertEquals(6, scn.GetResistance(galadriel));
 
 		scn.FreepsPlayCard(lorienelf);
 		assertInZone(Zone.FREE_CHARACTERS, lorienelf);
-		assertEquals(8, scn.GetResistance(galadriel));
+		assertEquals(7, scn.GetResistance(galadriel));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

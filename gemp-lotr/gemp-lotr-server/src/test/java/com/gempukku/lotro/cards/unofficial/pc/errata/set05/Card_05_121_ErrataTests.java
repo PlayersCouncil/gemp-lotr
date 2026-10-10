@@ -6,7 +6,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import com.gempukku.lotro.logic.modifiers.StrengthModifier;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -28,8 +27,7 @@ public class Card_05_121_ErrataTests
 					put("haldir", "1_48");     // Haldir: Elf companion, vitality 3; strength +2 only at sites 6 to 8
 					put("grimir", "1_17");     // Grimir: Dwarf ally, a fellowship ability used only on purpose
 					put("silinde", "1_60");    // Silinde: Elf ally; copies site 3's text only while site 3 can be spotted
-					put("knight1", "5_35");    // Gondorian Knight: Man companion with no text but Knight
-					put("knight2", "5_35");
+					put("knight", "5_35");     // Gondorian Knight: [gondor] Man companion with no text but Knight: a companion who is neither a Dwarf nor an Elf
 
 					put("savage1", "1_151");   // Uruk Savage: strength 5, vitality 3, damage +1 and nothing else
 					put("savage2", "1_151");
@@ -107,24 +105,20 @@ public class Card_05_121_ErrataTests
 		var haldir = scn.GetFreepsCard("haldir");
 		var grimir = scn.GetFreepsCard("grimir");
 		var silinde = scn.GetFreepsCard("silinde");
-		var knight1 = scn.GetFreepsCard("knight1");
-		var knight2 = scn.GetFreepsCard("knight2");
-		scn.MoveCompanionsToTable(legolas, farin, haldir, knight1, knight2);
+		var knight = scn.GetFreepsCard("knight");
+		scn.MoveCompanionsToTable(legolas, farin, haldir, knight);
 		scn.MoveAlliesToTable(grimir, silinde);
 
 		var savage = scn.GetShadowCard("savage1");
 
 		scn.StartGame();
-		// Men given the cultures of the two races: Elven and Dwarven, but neither an Elf nor a Dwarf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, knight1, null, Culture.ELVEN));
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, knight2, null, Culture.DWARVEN));
+		// The Knight is a wounded companion who is neither a Dwarf nor an Elf.
 		scn.AddWoundsToChar(legolas, 1);
 		scn.AddWoundsToChar(farin, 2);
 		scn.AddWoundsToChar(haldir, 2);
 		scn.AddWoundsToChar(grimir, 1);
 		scn.AddWoundsToChar(silinde, 1);
-		scn.AddWoundsToChar(knight1, 1);
-		scn.AddWoundsToChar(knight2, 1);
+		scn.AddWoundsToChar(knight, 1);
 
 		scn.MoveMinionsToTable(savage);
 		// Fierce, so that Legolas can win a second skirmish against it in the same turn.
@@ -142,7 +136,7 @@ public class Card_05_121_ErrataTests
 		scn.FreepsAcceptOptionalTrigger();
 
 		assertTrue(scn.FreepsHasCardChoiceAvailable(farin, haldir));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(legolas, grimir, silinde, knight1, knight2));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(legolas, grimir, silinde, knight));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		scn.FreepsChooseCard(farin);
 
@@ -151,8 +145,7 @@ public class Card_05_121_ErrataTests
 		assertEquals(1, scn.GetWoundsOn(legolas));
 		assertEquals(1, scn.GetWoundsOn(grimir));
 		assertEquals(1, scn.GetWoundsOn(silinde));
-		assertEquals(1, scn.GetWoundsOn(knight1));
-		assertEquals(1, scn.GetWoundsOn(knight2));
+		assertEquals(1, scn.GetWoundsOn(knight));
 
 		// The fierce skirmish: Legolas wins again and is asked again.
 		scn.PassFierceAssignmentActions();
@@ -164,7 +157,7 @@ public class Card_05_121_ErrataTests
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(legolas));
 		scn.FreepsAcceptOptionalTrigger();
 		assertTrue(scn.FreepsHasCardChoiceAvailable(farin, haldir));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(legolas, grimir, silinde, knight1, knight2));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(legolas, grimir, silinde, knight));
 		scn.FreepsChooseCard(haldir);
 
 		assertEquals(1, scn.GetWoundsOn(haldir));
@@ -247,18 +240,17 @@ public class Card_05_121_ErrataTests
 		var farin = scn.GetFreepsCard("farin");
 		var haldir = scn.GetFreepsCard("haldir");
 		var grimir = scn.GetFreepsCard("grimir");
-		var knight1 = scn.GetFreepsCard("knight1");
-		scn.MoveCompanionsToTable(legolas, farin, haldir, knight1);
+		var knight = scn.GetFreepsCard("knight");
+		scn.MoveCompanionsToTable(legolas, farin, haldir, knight);
 		scn.MoveAlliesToTable(grimir);
 
 		var savage = scn.GetShadowCard("savage1");
 
 		scn.StartGame();
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, knight1, null, Culture.ELVEN));
-		// Only Legolas himself, an ally and an Elven Man are wounded: nothing the trigger could heal.
+		// Only Legolas himself, a Dwarf ally and a Man companion are wounded: nothing the trigger could heal.
 		scn.AddWoundsToChar(legolas, 1);
 		scn.AddWoundsToChar(grimir, 1);
-		scn.AddWoundsToChar(knight1, 1);
+		scn.AddWoundsToChar(knight, 1);
 		scn.MoveMinionsToTable(savage);
 
 		scn.SkipToAssignments();

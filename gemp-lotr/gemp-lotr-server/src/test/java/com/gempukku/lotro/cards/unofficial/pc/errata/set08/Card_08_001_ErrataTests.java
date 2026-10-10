@@ -4,7 +4,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -25,7 +24,7 @@ public class Card_08_001_ErrataTests
 					put("guard2", "1_7");
 					put("gimli", "1_13");      // Gimli, Son of Gloin: Dwarf companion, printed damage +1; a skirmish ability only
 					put("thrarin", "1_27");    // Thrarin, Dwarven Smith: Dwarf ally; a maneuver ability only
-					put("aragorn", "1_89");    // Aragorn, Ranger of the North: [gondor] Man; a maneuver ability used only on purpose
+					put("aragorn", "1_89");    // Aragorn, Ranger of the North: [gondor] Man companion, no Dwarf; a maneuver ability used only on purpose
 
 					put("filler1", "1_177");   // Goblin Patrol Troop: no text; only ever held in hand
 					put("filler2", "1_177");
@@ -98,8 +97,6 @@ public class Card_08_001_ErrataTests
 		scn.MoveCardsToSupportArea(aggression);
 		scn.MoveCompanionsToTable(guard, gimli, aragorn);
 		scn.MoveAlliesToTable(thrarin);
-		// Aragorn is of the [dwarven] culture but no Dwarf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.DWARVEN));
 		scn.MoveCardsToHand(guard2, scn.GetFreepsCard("filler1"), scn.GetFreepsCard("filler2"), scn.GetFreepsCard("filler3"));
 
 		scn.StartGame();
@@ -111,6 +108,7 @@ public class Card_08_001_ErrataTests
 		assertEquals(1, scn.GetKeywordCount(thrarin, Keyword.DAMAGE));
 		// Printed damage +1, and +1 more.
 		assertEquals(2, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
+		// Aragorn is a companion who is no Dwarf.
 		assertEquals(0, scn.GetKeywordCount(aragorn, Keyword.DAMAGE));
 
 		// Playing the second Dwarf Guard takes the hand to 3 and the initiative away.
@@ -164,12 +162,11 @@ public class Card_08_001_ErrataTests
 		var aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveCardsToSupportArea(aggression);
 		scn.MoveCompanionsToTable(aragorn);
-		// Aragorn is of the [dwarven] culture but no Dwarf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.DWARVEN));
 		scn.MoveCardsToHand(thrarin);
 
 		scn.StartGame();
 
+		// A companion who is no Dwarf, and Aggression itself, a [dwarven] card that is no Dwarf: no Dwarf to spot.
 		assertFalse(scn.FreepsActionAvailable(aggression));
 
 		scn.FreepsPlayCard(thrarin);

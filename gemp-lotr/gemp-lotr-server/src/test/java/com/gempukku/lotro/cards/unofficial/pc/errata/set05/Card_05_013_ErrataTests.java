@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -24,7 +23,8 @@ public class Card_05_013_ErrataTests
 					put("taurnil", "55_13");
 					put("arwen", "1_30");       // Arwen, Daughter of Elrond: Elf companion; Ranger, +3 only against a Nazgul
 					put("elrond", "1_40");      // Elrond, Lord of Rivendell: Elf ally
-					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a Man, given [elven] where a test needs it
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion: a companion who is no Elf
+					put("finalcount", "4_69");  // Final Count: [elven] condition in the support area, a card of the culture that is no Elf; nothing without Legolas
 					put("bow", "1_41");         // Elven Bow: ranged weapon, cost 1, bearer must be an Elf, bearer is an archer
 					put("bow2", "4_62");        // Elven Bow: the same text, a different card
 					put("longbow", "6_21");     // Naith Longbow: ranged weapon, cost 1, an archery ability, no archer keyword
@@ -88,13 +88,14 @@ public class Card_05_013_ErrataTests
 		var taurnil = scn.GetFreepsCard("taurnil");
 		var arwen = scn.GetFreepsCard("arwen");
 		var aragorn = scn.GetFreepsCard("aragorn");
+		var finalcount = scn.GetFreepsCard("finalcount");
 		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToSupportArea(finalcount);
 		scn.MoveCardsToHand(taurnil, arwen);
-		// An [elven] Man: of the culture, not of the race.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
 
 		scn.StartGame();
 
+		// A companion who is no Elf and an [elven] condition in play, and no Elf.
 		assertFalse(scn.FreepsPlayAvailable(taurnil));
 
 		scn.FreepsPlayCard(arwen);

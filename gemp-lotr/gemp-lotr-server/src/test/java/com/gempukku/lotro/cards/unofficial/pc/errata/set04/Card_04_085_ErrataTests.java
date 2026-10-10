@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -21,7 +20,7 @@ public class Card_04_085_ErrataTests
 					put("thandronen", "54_85");
 					put("legolas", "1_50");     // Legolas, Greenleaf: Elf companion and archer, no requirement to play; an archery ability used only on purpose
 					put("orophin", "1_56");     // Orophin, Lorien Bowman: Elf ally, an archery ability used only on purpose
-					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a Man companion, given [elven] where a test says so
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion: a companion who is no Elf
 					put("mallorn", "1_54");     // Mallorn-trees: [elven] condition in the support area; a fellowship ability used only on purpose
 					put("seeking", "1_276");    // Seeking Its Master: [sauron] condition in the support area; a Shadow ability used only on purpose
 					put("seeking2", "1_276");   // a second copy, stacked as a Shadow card that is no minion
@@ -83,13 +82,14 @@ public class Card_04_085_ErrataTests
 		var thandronen = scn.GetFreepsCard("thandronen");
 		var legolas = scn.GetFreepsCard("legolas");
 		var aragorn = scn.GetFreepsCard("aragorn");
+		var mallorn = scn.GetFreepsCard("mallorn");
 		scn.MoveCompanionsToTable(aragorn);
-		// Aragorn is of the [elven] culture but no Elf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
+		scn.MoveCardsToSupportArea(mallorn);
 		scn.MoveCardsToHand(thandronen, legolas);
 
 		scn.StartGame();
 
+		// A companion who is no Elf and an [elven] condition in play, and no Elf.
 		assertFalse(scn.FreepsPlayAvailable(thandronen));
 		scn.FreepsPlayCard(legolas);
 		assertEquals(2, scn.GetTwilight());

@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -25,7 +24,7 @@ public class Card_06_023_ErrataTests
 					put("elf1", "1_53");        // Lórien Elf: Elf companion, not unique, cost 1, "To play, spot an Elf."
 					put("elf2", "1_53");
 					put("orophin", "1_56");     // Orophin, Lórien Bowman: Elf ally (an archery ability)
-					put("aragorn", "4_109");    // Aragorn, Heir of Elendil: Man companion, Defender +1 and no other text
+					put("aragorn", "4_109");    // Aragorn, Heir of Elendil: [gondor] Man companion, Defender +1 and no other text: a companion who is no Elf
 					put("bow", "1_41");         // Elven Bow: ranged weapon, bearer must be an Elf, bearer is an archer
 					put("bow2", "4_62");        // Elven Bow: the same text, printed again
 					put("longbow", "6_21");     // Naith Longbow: ranged weapon, strength +1, makes no archer; an archery ability
@@ -94,10 +93,8 @@ public class Card_06_023_ErrataTests
 		scn.MoveCardsToHand(warband, elf2);
 
 		scn.StartGame();
-		// An [elven] Man companion: of the culture, not of the race.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
 
-		// Two Elf companions (one unique, one not), an Elf ally and an [elven] Man companion: not 3 Elf companions.
+		// Two Elf companions (one unique, one not), an Elf ally and a Man companion: not 3 Elf companions.
 		assertFalse(scn.FreepsPlayAvailable(warband));
 
 		scn.FreepsPlayCard(elf2);

@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -229,39 +228,6 @@ public class Card_06_016_ErrataTests
 
 		assertEquals(4, scn.GetStrength(savage));
 		assertInDiscard(guard);
-		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
-	}
-
-	@Test
-	public void AMinionSkirmishingAManOfElvenCultureIsNotMadeWeaker() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var forearmed = scn.GetFreepsCard("forearmed");
-		var knight = scn.GetFreepsCard("knight");
-		var guard = scn.GetFreepsCard("guard");
-		scn.MoveCompanionsToTable(knight);
-		scn.MoveCardsToHand(forearmed);
-
-		var savage = scn.GetShadowCard("savage");
-
-		scn.StartGame();
-		// A Man given [elven]: of the culture, but no Elf.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, knight, null, Culture.ELVEN));
-		scn.MoveMinionsToTable(savage);
-		scn.MoveCardsToTopOfDeck(guard);
-
-		scn.SkipToAssignments();
-		scn.FreepsAssignAndResolve(knight, savage);
-
-		int twilight = scn.GetTwilight();
-		// An event is offered though its effect has nothing to act on.
-		assertTrue(scn.FreepsPlayAvailable(forearmed));
-		scn.FreepsPlayCard(forearmed);
-		scn.DismissRevealedCards();
-
-		assertEquals(twilight + 1, scn.GetTwilight());
-		assertInDiscard(forearmed);
-		assertEquals(5, scn.GetStrength(savage));
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
 

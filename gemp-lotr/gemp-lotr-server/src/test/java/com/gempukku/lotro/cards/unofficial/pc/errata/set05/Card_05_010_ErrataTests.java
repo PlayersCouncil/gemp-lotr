@@ -6,7 +6,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import com.gempukku.lotro.logic.modifiers.StrengthModifier;
 import org.junit.Test;
 
@@ -25,7 +24,8 @@ public class Card_05_010_ErrataTests
 					put("balglin", "55_10");
 					put("arwen", "1_30");       // Arwen, Daughter of Elrond: Elf companion, strength 6, vitality 3; Ranger, +3 only against a Nazgul
 					put("elrond", "1_40");      // Elrond, Lord of Rivendell: Elf ally
-					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a Man, given [elven] where a test needs it
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion: a companion who is no Elf
+					put("finalcount", "4_69");  // Final Count: [elven] condition in the support area, a card of the culture that is no Elf; nothing without Legolas
 
 					put("savage", "1_151");     // Uruk Savage: strength 5, vitality 3, damage +1 and nothing else
 					put("savage2", "1_151");
@@ -81,13 +81,14 @@ public class Card_05_010_ErrataTests
 		var balglin = scn.GetFreepsCard("balglin");
 		var arwen = scn.GetFreepsCard("arwen");
 		var aragorn = scn.GetFreepsCard("aragorn");
+		var finalcount = scn.GetFreepsCard("finalcount");
 		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToSupportArea(finalcount);
 		scn.MoveCardsToHand(balglin, arwen);
-		// An [elven] Man: of the culture, not of the race.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
 
 		scn.StartGame();
 
+		// A companion who is no Elf and an [elven] condition in play, and no Elf.
 		assertFalse(scn.FreepsPlayAvailable(balglin));
 
 		scn.FreepsPlayCard(arwen);
