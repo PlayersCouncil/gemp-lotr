@@ -2491,6 +2491,10 @@
 					filter: minion
 					phase: assignment
 					text: Assign this minion to bearer of Unexpected Visitor.
+					requires: {
+						type: canSpot
+						filter: hasAttached(name(Unexpected Visitor)),assignableToSkirmishAgainst(self)
+					}
 					effect: {
 						type: assignFpCharacterToSkirmish
 						fpCharacter: choose(hasAttached(name(Unexpected Visitor)))
