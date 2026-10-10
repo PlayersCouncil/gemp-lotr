@@ -6,7 +6,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -23,6 +22,9 @@ public class Card_V3_011_Tests
 					put("fickle", "103_11");
 					put("pippin", "1_306");         // Pippin, Friend to Frodo: [shire] companion, unbound, cost 1; his text is about [shire] tales
 					put("gaffer", "1_291");         // The Gaffer: a [shire] Hobbit who is an ally
+					// Merry, Master Holbytla: a [rohan] companion who is a Hobbit (a Man as well only beside 3 [rohan]
+					// companions or Eowyn); his trigger answers another [rohan] Man exerting, and there is none here
+					put("holbytla", "103_85");
 					put("aragorn", "1_89");         // Aragorn, Ranger of the North: [gondor] Man, strength 8, vitality 4
 					put("glorfindel", "9_16");      // Glorfindel, Revealed in Wrath: strength 9, vitality 3; his skirmish ability is never used
 					put("gimli", "1_13");           // Gimli, Son of Gloin: strength 6, vitality 3
@@ -80,18 +82,17 @@ public class Card_V3_011_Tests
 		var fickle = scn.GetFreepsCard("fickle");
 		var pippin = scn.GetFreepsCard("pippin");
 		var gaffer = scn.GetFreepsCard("gaffer");
-		var aragorn = scn.GetFreepsCard("aragorn");
+		var holbytla = scn.GetFreepsCard("holbytla");
 		var frodo = scn.GetRingBearer();
-		scn.MoveCompanionsToTable(aragorn);
-		scn.MoveAlliesToTable(gaffer);
-		scn.MoveCardsToHand(fickle, pippin);
 		// Frodo is the one [shire] companion. Beside him are a [shire] Hobbit who is an ally, and a
 		// companion who is a Hobbit and not [shire]. The second to count is unbound, as Frodo is not.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, aragorn, null, Race.HOBBIT));
+		scn.MoveCompanionsToTable(holbytla);
+		scn.MoveAlliesToTable(gaffer);
+		scn.MoveCardsToHand(fickle, pippin);
 
 		scn.StartGame();
 
-		assertTrue(scn.IsRace(aragorn, Race.HOBBIT));
+		assertInZone(Zone.FREE_CHARACTERS, holbytla);
 		assertInZone(Zone.SUPPORT, gaffer);
 		assertInZone(Zone.HAND, fickle);
 		assertFalse(scn.FreepsPlayAvailable(fickle));

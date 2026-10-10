@@ -20,7 +20,9 @@ public class Card_V3_005_Tests
 				{{
 					put("shadowfax", "103_5");
 					put("gandalf", "1_364");        // Gandalf, The Grey Wizard: strength 7, vitality 4
-					put("shirefolk", "1_72");       // Gandalf, Friend of the Shirefolk: a second Gandalf, only ever cheated in
+					// Gandalf, Friend of the Shirefolk: a Gandalf of another subtitle (strength 6, +1 for each of Hobbit,
+					// Dwarf, Elf and Man in the fellowship), on a table with no other Gandalf
+					put("shirefolk", "1_72");
 					put("radagast", "9_26");        // Radagast, The Brown: a [gandalf] Wizard companion who is not Gandalf
 					put("aragorn", "1_89");         // Aragorn, Ranger of the North: strength 8, vitality 4
 					put("guard", "5_83");           // Household Guard: a [rohan] Man, valiant and nothing else
@@ -99,36 +101,38 @@ public class Card_V3_005_Tests
 		var scn = GetScenario();
 
 		var shadowfax = scn.GetFreepsCard("shadowfax");
-		var gandalf = scn.GetFreepsCard("gandalf");
-		var shirefolk = scn.GetFreepsCard("shirefolk");
+		var gandalf = scn.GetFreepsCard("shirefolk");
 		var radagast = scn.GetFreepsCard("radagast");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var frodo = scn.GetRingBearer();
-		// Two Gandalfs can only share a table by cheating: Gandalf is unique.
-		scn.MoveCompanionsToTable(gandalf, shirefolk, radagast, aragorn);
+		// One Gandalf, and not the one who bears Shadowfax in the other tests. Radagast is a [gandalf] Wizard who
+		// is not Gandalf.
+		scn.MoveCompanionsToTable(gandalf, radagast, aragorn);
 		scn.MoveCardsToHand(shadowfax);
 
 		scn.StartGame();
 
 		assertEquals(0, scn.GetTwilight());
-		assertEquals(7, scn.GetStrength(gandalf));
 		// 6 + 1 for the Hobbit (Frodo) + 1 for the Man (Aragorn)
-		assertEquals(8, scn.GetStrength(shirefolk));
+		assertEquals(8, scn.GetStrength(gandalf));
+		assertEquals(8, scn.GetStrength(radagast));
+		assertEquals(8, scn.GetStrength(aragorn));
 		assertTrue(scn.FreepsPlayAvailable(shadowfax));
 
 		scn.FreepsPlayCard(shadowfax);
-		assertTrue(scn.FreepsHasCardChoiceAvailable(gandalf, shirefolk));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(radagast, aragorn, frodo));
-		assertEquals(1, scn.FreepsGetChoiceMin());
 
-		scn.FreepsChooseCard(gandalf);
+		// Gandalf is the only bearer there is, so nobody is asked: it is on him, and on none of the other three.
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 		assertEquals(2, scn.GetTwilight());
 		assertAttachedTo(shadowfax, gandalf);
-		// 7 + 3 while unwounded
-		assertEquals(10, scn.GetStrength(gandalf));
-		// The other Gandalf, unwounded too, is not its bearer.
-		assertEquals(8, scn.GetStrength(shirefolk));
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertNotAttachedTo(shadowfax, radagast);
+		assertNotAttachedTo(shadowfax, aragorn);
+		assertNotAttachedTo(shadowfax, frodo);
+		// 8 + 3 while unwounded
+		assertEquals(11, scn.GetStrength(gandalf));
+		// The Wizard and the Man beside him, unwounded too, do not bear it.
+		assertEquals(8, scn.GetStrength(radagast));
+		assertEquals(8, scn.GetStrength(aragorn));
 	}
 
 	@Test

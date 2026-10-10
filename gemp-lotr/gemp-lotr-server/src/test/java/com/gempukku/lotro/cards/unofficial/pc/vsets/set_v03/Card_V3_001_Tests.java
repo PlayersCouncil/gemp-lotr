@@ -4,8 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -26,7 +24,8 @@ public class Card_V3_001_Tests
 					// Bilbo, Melancholy Hobbit: a Ring-bound Hobbit who is never the Ring-bearer; an offer at the start of
 					// a skirmish involving him and nothing else
 					put("bilbo", "12_119");
-					put("smeagol", "6_45");     // Smeagol, Poor Creature: Ring-bound, [gollum], no race; a skirmish ability
+					// Smeagol, Once Like Us: a [shire] companion, Ring-bound, with no race; an assignment ability and nothing else
+					put("smeagol", "103_116");
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: "Maneuver: Exert Aragorn to make him defender +1"
 					put("gimli", "1_13");       // Gimli, Son of Gloin: a skirmish ability
 					put("gandalf", "1_72");     // Gandalf, Friend of the Shirefolk: a strength modifier and nothing else
@@ -96,9 +95,6 @@ public class Card_V3_001_Tests
 		scn.MoveCardsToHand(phial);
 
 		scn.StartGame();
-		// Smeagol is Ring-bound and no Hobbit. Made [shire] as well, he would be let through by a card that took
-		// "Hobbit" to mean the culture.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, smeagol, null, Culture.SHIRE));
 
 		assertEquals(0, scn.GetTwilight());
 		assertEquals(4, scn.GetVitality(sam));
@@ -106,7 +102,9 @@ public class Card_V3_001_Tests
 
 		scn.FreepsPlayCard(phial);
 
-		// Frodo, the Ring-bearer, and Sam are the Ring-bound Hobbits. Pippin is a Hobbit and unbound.
+		// Frodo, the Ring-bearer, and Sam are the Ring-bound Hobbits. Pippin is a Hobbit and unbound. This Smeagol
+		// is Ring-bound and a [shire] companion, and no Hobbit: a card that took "Hobbit" to mean the culture
+		// would let him through.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, sam));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(pippin, smeagol));
 		assertEquals(1, scn.FreepsGetChoiceMin());
@@ -458,23 +456,18 @@ public class Card_V3_001_Tests
 		var phial = scn.GetFreepsCard("phial");
 		var sam = scn.GetFreepsCard("sam");
 		var bilbo = scn.GetFreepsCard("bilbo");
-		var pippin = scn.GetFreepsCard("pippin");
 		var marksman = scn.GetShadowCard("marksman");
-		scn.MoveCompanionsToTable(sam, bilbo, pippin);
+		scn.MoveCompanionsToTable(sam, bilbo);
 		scn.AttachCardsTo(bilbo, phial);
 
 		scn.StartGame();
-		// With Frodo dead, Sam the Ring-bearer and Bilbo bearing the Phial, no card is a Ring-bound Hobbit besides, so
-		// Pippin is made one: a Hobbit the Phial could go to, and not the one its response names.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, pippin, null, Keyword.RING_BOUND));
 		scn.MoveMinionsToTable(marksman);
 		// Vitality 4: three wounds leave Frodo one from death.
 		scn.AddWoundsToChar(frodo, 3);
 		scn.SkipToArcheryWounds();
 
-		assertTrue(scn.HasKeyword(pippin, Keyword.RING_BOUND));
-		// 4 companions + 2 for the shadow number of site 2
-		assertEquals(6, scn.GetTwilight());
+		// 3 companions + 2 for the shadow number of site 2
+		assertEquals(5, scn.GetTwilight());
 
 		// The Marksman's one archery wound
 		scn.FreepsChooseCard(frodo);
@@ -494,14 +487,13 @@ public class Card_V3_001_Tests
 
 		scn.FreepsChooseOptionalTrigger(phial);
 
-		// On Sam without a choice: Pippin was not a candidate.
+		// On Sam, with nothing asked. Frodo is dead, and Sam and Bilbo are every Ring-bound Hobbit left.
 		assertAttachedTo(phial, sam);
 		assertNotAttachedTo(phial, bilbo);
-		assertNotAttachedTo(phial, pippin);
 		assertEquals(4, scn.GetVitality(bilbo));
 		assertEquals(5, scn.GetVitality(sam));
 		// A card moved from one bearer to another by an effect is transferred, and costs nothing.
-		assertEquals(6, scn.GetTwilight());
+		assertEquals(5, scn.GetTwilight());
 		assertFalse(scn.ShadowAnyDecisionsAvailable());
 	}
 

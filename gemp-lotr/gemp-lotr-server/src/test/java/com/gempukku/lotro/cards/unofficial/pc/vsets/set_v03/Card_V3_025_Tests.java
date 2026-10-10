@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.filters.Filters;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.CantHinderModifier;
 import org.junit.Test;
 
@@ -31,8 +30,13 @@ public class Card_V3_025_Tests
 					put("pippin", "103_31");    // Pippin, Trollslayer: a [gondor] knight who is a Hobbit, vitality 4; a skirmish ability only
 					put("rider", "4_286");      // Rider of Rohan: a [rohan] Man, vitality 3, no knight; his ability needs a mount and a skirmish
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: an unbound [gondor] Man who is no knight; Maneuver: exert him to make him defender +1
-					put("sam", "1_311");        // Sam, Son of Hamfast: Ring-bound and not the Ring-bearer; a fellowship ability and a response to Frodo dying
-					put("barliman", "1_70");    // Barliman Butterbur: an ally, vitality 2; a fellowship ability only
+					put("boromir", "0_65");     // Boromir, Steward's Heir: a [gondor] Man, vitality 3; "Ring-bound. Knight. Ranger." is his whole text
+					put("gimli", "1_13");       // Gimli, Son of Gloin: an unbound companion who is no Man and no knight; a skirmish ability only
+					put("barliman", "1_70");    // Barliman Butterbur: a [gandalf] Man who is an ally, vitality 2; a fellowship ability only
+					// Northern Signal-fire, Flame of Calenhad: "Maneuver: Hinder this beacon and exert an unbound Man. Until
+					// the regroup phase, each of your other Men gain each of the unloaded keywords (except race) on that
+					// Man." To play it hinders 2 beacons, so it is cheated in.
+					put("flame", "103_86");
 
 					put("troop", "1_177");      // Goblin Patrol Troop: a [moria] minion, strength 13, no text
 					put("savage", "1_151");     // Uruk Savage: an [isengard] minion, strength 5, vitality 3; Damage +1 is its whole text
@@ -134,22 +138,18 @@ public class Card_V3_025_Tests
 		var knight2 = scn.GetFreepsCard("knight2");
 		var pippin = scn.GetFreepsCard("pippin");
 		var rider = scn.GetFreepsCard("rider");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		var sam = scn.GetFreepsCard("sam");
+		var boromir = scn.GetFreepsCard("boromir");
+		var gimli = scn.GetFreepsCard("gimli");
 		var barliman = scn.GetFreepsCard("barliman");
+		var flame = scn.GetFreepsCard("flame");
 		var troop = scn.GetShadowCard("troop");
 		var savage = scn.GetShadowCard("savage");
 		var runner = scn.GetShadowCard("runner");
 		var armory = scn.GetShadowCard("armory");
 		var frodo = scn.GetRingBearer();
-		scn.MoveCompanionsToTable(knight1, knight2, pippin, rider, aragorn, sam);
+		scn.MoveCompanionsToTable(knight1, knight2, pippin, rider, boromir, gimli);
 		scn.MoveAlliesToTable(barliman);
-		scn.MoveCardsToSupportArea(gate1, gate2, armory);
-		// Every knight there is belongs to the [gondor] culture, so a [rohan] Man is made one. Sam and an ally
-		// are made knights too: neither is unbound.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, rider, null, Keyword.KNIGHT));
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, sam, null, Keyword.KNIGHT));
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, barliman, null, Keyword.KNIGHT));
+		scn.MoveCardsToSupportArea(gate1, gate2, flame, armory);
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(troop, savage, runner);
@@ -157,7 +157,23 @@ public class Card_V3_025_Tests
 		scn.HinderCard(runner);
 		scn.SkipToPhase(Phase.MANEUVER);
 
+		// Every knight in print is a [gondor] companion. The Flame of Calenhad makes knights of the player's
+		// other Men for the rest of the maneuver phase: a [rohan] Man, and a Man who is an ally.
+		assertFalse(scn.HasKeyword(rider, Keyword.KNIGHT));
+		assertFalse(scn.HasKeyword(barliman, Keyword.KNIGHT));
+		scn.FreepsUseCardAction(flame);
+		scn.FreepsChooseCard(knight1);
+		scn.ShadowPass();
+
+		assertTrue(scn.HasKeyword(rider, Keyword.KNIGHT));
+		assertTrue(scn.HasKeyword(barliman, Keyword.KNIGHT));
+		assertTrue(scn.HasKeyword(boromir, Keyword.KNIGHT));
+		assertFalse(scn.HasKeyword(gimli, Keyword.KNIGHT));
+
 		int twilight = scn.GetTwilight();
+		// The Flame's exertion.
+		assertEquals(1, scn.GetWoundsOn(knight1));
+		assertEquals(0, scn.GetWoundsOn(knight2));
 		assertEquals(0, scn.GetWoundsOn(pippin));
 		assertEquals(0, scn.GetWoundsOn(rider));
 		assertFalse(scn.IsHindered(pippin));
@@ -169,9 +185,10 @@ public class Card_V3_025_Tests
 
 		scn.FreepsUseCardAction(gate1);
 
+		// [gondor] Men, a [gondor] Hobbit, and a [rohan] Man who is a knight for now.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(knight1, knight2, pippin, rider));
-		// Aragorn is unbound and no knight; Sam is a knight and Ring-bound; Barliman is a knight and an ally.
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn, sam, barliman, frodo));
+		// Gimli is unbound and no knight; Boromir is a knight and Ring-bound; Barliman is a knight and an ally.
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(gimli, boromir, barliman, frodo));
 		assertEquals(2, scn.FreepsGetChoiceMin());
 		assertEquals(2, scn.FreepsGetChoiceMax());
 
@@ -182,13 +199,13 @@ public class Card_V3_025_Tests
 		assertEquals(1, scn.GetWoundsOn(rider));
 		assertTrue(scn.IsHindered(pippin));
 		assertTrue(scn.IsHindered(rider));
-		assertEquals(0, scn.GetWoundsOn(knight1));
+		assertEquals(1, scn.GetWoundsOn(knight1));
 		assertEquals(0, scn.GetWoundsOn(knight2));
 		assertFalse(scn.IsHindered(knight1));
 		assertFalse(scn.IsHindered(knight2));
 
 		assertTrue(scn.FreepsHasCardChoiceAvailable(troop, savage));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(runner, armory, aragorn, knight1));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(runner, armory, gimli, knight1));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		assertEquals(1, scn.FreepsGetChoiceMax());
 
@@ -252,28 +269,27 @@ public class Card_V3_025_Tests
 	}
 
 	@Test
-	public void NotOfferedWithOneUnboundKnightBesideAnUnboundManARingBoundKnightAndAKnightWhoIsAnAlly() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NotOfferedWithOneUnboundKnightBesideAnUnboundManAndARingBoundKnight() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var gate1 = scn.GetFreepsCard("gate1");
 		var knight1 = scn.GetFreepsCard("knight1");
 		var knight2 = scn.GetFreepsCard("knight2");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		var sam = scn.GetFreepsCard("sam");
-		var barliman = scn.GetFreepsCard("barliman");
+		var boromir = scn.GetFreepsCard("boromir");
 		var troop = scn.GetShadowCard("troop");
-		scn.MoveCompanionsToTable(knight1, aragorn, sam);
-		scn.MoveAlliesToTable(barliman);
+		// One unbound knight. Aragorn is an unbound Man and no knight; Boromir is a knight and Ring-bound.
+		scn.MoveCompanionsToTable(knight1, aragorn, boromir);
 		scn.MoveCardsToSupportArea(gate1);
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, sam, null, Keyword.KNIGHT));
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, barliman, null, Keyword.KNIGHT));
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(troop);
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		assertTrue(scn.HasKeyword(sam, Keyword.KNIGHT));
-		assertTrue(scn.HasKeyword(barliman, Keyword.KNIGHT));
+		assertTrue(scn.HasKeyword(boromir, Keyword.KNIGHT));
+		assertTrue(scn.HasKeyword(boromir, Keyword.RING_BOUND));
+		assertEquals(0, scn.GetWoundsOn(boromir));
+		assertFalse(scn.HasKeyword(aragorn, Keyword.KNIGHT));
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 		assertFalse(scn.FreepsActionAvailable(gate1));
 

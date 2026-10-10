@@ -81,41 +81,40 @@ public class Card_V3_018_Tests
 	}
 
 	@Test
-	public void PlayedForThreeOnAnAragornOfEitherCultureWhoGainsThreeStrengthAndDamagePlusOne() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedForThreeOnAnAragornWhoIsNoGondorCardWhoGainsThreeStrengthAndDamagePlusOne() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var anduril = scn.GetFreepsCard("anduril");
-		var aragorn = scn.GetFreepsCard("aragorn");
 		var rohanAragorn = scn.GetFreepsCard("rohanaragorn");
 		var boromir = scn.GetFreepsCard("boromir");
 		var frodo = scn.GetRingBearer();
-		// Two Aragorns can only stand together by cheating; they are here to be told apart from a [gondor] Man.
-		scn.MoveCompanionsToTable(aragorn, rohanAragorn, boromir);
+		// One Aragorn, the [rohan] one (the [gondor] Aragorn bears it in the other tests), beside a [gondor] Man
+		// who is not Aragorn.
+		scn.MoveCompanionsToTable(rohanAragorn, boromir);
 		scn.MoveCardsToHand(anduril);
 
 		scn.StartGame();
 
 		assertEquals(0, scn.GetTwilight());
 		assertEquals(8, scn.GetStrength(rohanAragorn));
+		assertEquals(7, scn.GetStrength(boromir));
 		assertFalse(scn.HasKeyword(rohanAragorn, Keyword.DAMAGE));
 		assertTrue(scn.FreepsPlayAvailable(anduril));
 
 		scn.FreepsPlayCard(anduril);
 
-		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, rohanAragorn));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(boromir, frodo));
-		scn.FreepsChooseCard(rohanAragorn);
-
+		// Aragorn is the only bearer there is, so nobody is asked: it is on him, and not on Boromir or Frodo.
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 		assertEquals(3, scn.GetTwilight());
 		assertAttachedTo(anduril, rohanAragorn);
+		assertNotAttachedTo(anduril, boromir);
+		assertNotAttachedTo(anduril, frodo);
 		// 8 + 3
 		assertEquals(11, scn.GetStrength(rohanAragorn));
 		assertEquals(1, scn.GetKeywordCount(rohanAragorn, Keyword.DAMAGE));
-		// The Aragorn who does not bear it, and Boromir, are as they were.
-		assertEquals(8, scn.GetStrength(aragorn));
-		assertFalse(scn.HasKeyword(aragorn, Keyword.DAMAGE));
+		// Boromir, who does not bear it, is as he was.
+		assertEquals(7, scn.GetStrength(boromir));
 		assertFalse(scn.HasKeyword(boromir, Keyword.DAMAGE));
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test

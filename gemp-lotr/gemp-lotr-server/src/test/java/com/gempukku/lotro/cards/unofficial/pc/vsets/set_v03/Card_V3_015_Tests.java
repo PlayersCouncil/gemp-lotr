@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -38,7 +37,7 @@ public class Card_V3_015_Tests
 					put("letdeal", "7_63");         // Let Her Deal With Them: [gollum] condition borne by a minion, who is damage +1
 					put("runner", "1_178");         // Goblin Runner: [moria], strength 5, vitality 1
 					put("runner2", "1_178");
-					put("lemenya", "1_232");        // Ulaire Lemenya, Lieutenant of Morgul: a [wraith] Nazgul; weakens only bearers of [wraith] conditions
+					put("lemenya", "1_232");        // Ulaire Lemenya, Lieutenant of Morgul: a [wraith] Nazgul; her strength bonus needs a [wraith] condition on a companion
 					put("hunter", "6_86");          // Ulaire Lemenya, Winged Hunter: a Lemenya of another subtitle, only ever in a discard pile
 
 					put("aragorn", "1_89");         // Aragorn, Ranger of the North: strength 8, vitality 4; a maneuver ability never used here
@@ -90,7 +89,7 @@ public class Card_V3_015_Tests
 		var twofaced = scn.GetShadowCard("twofaced");
 		var burden = scn.GetShadowCard("burden");
 		var burden2 = scn.GetShadowCard("burden2");
-		var gollum = scn.GetShadowCard("gollum");
+		var shelob = scn.GetShadowCard("shelob");
 		var wraithgollum = scn.GetShadowCard("wraithgollum");
 		var runner = scn.GetShadowCard("runner");
 		var aragorn = scn.GetFreepsCard("aragorn");
@@ -101,12 +100,12 @@ public class Card_V3_015_Tests
 		scn.MoveCardsToHand(twofaced);
 
 		scn.StartGame();
-		// Two Gollums at once, which only cheating allows: one of each culture.
-		scn.MoveMinionsToTable(gollum, wraithgollum, runner);
+		// The one Gollum on this table is the [wraith] minion, so the [gollum] minion is Shelob.
+		scn.MoveMinionsToTable(shelob, wraithgollum, runner);
 		scn.SetTwilight(5);
 		scn.FreepsPass();
 
-		scn.HinderCard(gollum, wraithgollum, runner, burden, aragorn, smeagol);
+		scn.HinderCard(shelob, wraithgollum, runner, burden, aragorn, smeagol);
 		int twilight = scn.GetTwilight();
 		assertEquals(1, scn.GetShadowHandCount());
 		assertTrue(scn.ShadowPlayAvailable(twofaced));
@@ -116,7 +115,7 @@ public class Card_V3_015_Tests
 
 		// A hindered [gollum] minion, a hindered [gollum] condition, and the other player's hindered [gollum]
 		// companion: the text says "a [gollum] card" and no more.
-		assertTrue(scn.ShadowHasCardChoiceAvailable(gollum, burden, smeagol));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(shelob, burden, smeagol));
 		// A hindered Gollum who is a [wraith] minion, a hindered [moria] minion, a hindered [gondor] companion,
 		// and a [gollum] condition that is not hindered.
 		assertTrue(scn.ShadowHasCardChoiceNotAvailable(wraithgollum, runner, aragorn, burden2));
@@ -126,7 +125,7 @@ public class Card_V3_015_Tests
 
 		scn.ShadowChooseCard(smeagol);
 		assertFalse(scn.IsHindered(smeagol));
-		assertTrue(scn.IsHindered(gollum));
+		assertTrue(scn.IsHindered(shelob));
 		assertTrue(scn.IsHindered(burden));
 		assertTrue(scn.IsHindered(wraithgollum));
 		assertTrue(scn.IsHindered(runner));
@@ -574,7 +573,7 @@ public class Card_V3_015_Tests
 	}
 
 	@Test
-	public void AGollumMinionThatNothingInMyDiscardPileCouldReplaceIsNotOfferedToBeSpottedAndOnesThatCouldBeAre() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AGollumMinionThatNothingInMyDiscardPileCouldReplaceIsNotOfferedToBeSpottedAndTheOneThatCouldBeIsTakenUnasked() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var twofaced = scn.GetShadowCard("twofaced");
@@ -591,32 +590,30 @@ public class Card_V3_015_Tests
 		scn.MoveCardsToDiscard(ladyship, hunter, gollumcopy);
 
 		scn.StartGame();
+		// Every [gollum] minion is a Gollum or a Shelob.  The Nazgul could be replaced as Shelob could, and is
+		// a [wraith] minion.
 		scn.MoveMinionsToTable(gollum, shelob, lemenya);
-		// Every [gollum] minion is a Gollum or a Shelob.  The Nazgul is made a [gollum] minion so that two
-		// minions can be replaced and the Shadow player is asked which, beside one who cannot be.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, lemenya, null, Culture.GOLLUM));
 		scn.AddWoundsToChar(shelob, 1);
 		scn.AddThreats(1);
 		scn.SetTwilight(5);
 		scn.FreepsPass();
+
+		assertEquals(1, scn.GetThreats());
+		assertInZone(Zone.SHADOW_CHARACTERS, gollum, shelob, lemenya);
 
 		scn.ShadowPlayCard(twofaced);
 		assertTrue(scn.ShadowDecisionAvailable("remove a threat"));
 		scn.ShadowChooseYes();
 		assertEquals(0, scn.GetThreats());
 
-		// Replacing from the discard pile is treated as playing from it: a minion that nothing there could
-		// replace is not offered to be spotted.
-		assertTrue(scn.ShadowHasCardChoiceAvailable(shelob, lemenya));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(gollum));
-		assertEquals(2, scn.ShadowGetCardChoiceCount());
-		scn.ShadowChooseCard(shelob);
-
+		// Replacing from the discard pile is treated as playing from it: Gollum, whom nothing there could
+		// replace, is not offered to be spotted, and the Nazgul is no [gollum] minion.  That leaves Shelob, and
+		// with one minion to spot nobody is asked which: either of the others offered would have put the choice.
+		assertTrue(scn.AwaitingShadowPhaseActions());
 		assertInZone(Zone.SHADOW_CHARACTERS, ladyship, gollum, lemenya);
 		assertInZone(Zone.DISCARD, shelob, hunter, gollumcopy);
 		assertEquals(1, scn.GetWoundsOn(ladyship));
 		assertInZone(Zone.DISCARD, twofaced);
-		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test

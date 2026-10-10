@@ -22,7 +22,10 @@ public class Card_V3_010_Tests
 					put("gandalf", "1_364");    // Gandalf, The Grey Wizard: vitality 4; a fellowship ability never used here
 					put("staff", "2_22");       // Gandalf's Staff: an artifact Gandalf bears; vitality +1; a skirmish ability never used here
 					put("glamdring", "1_75");   // Glamdring: a possession Gandalf bears, and no artifact
-					put("coat", "2_105");       // Mithril-coat: a [shire] artifact, an armor; Frodo bears it, or the rig puts it on Gandalf
+					put("coat", "2_105");       // Mithril-coat: a [shire] artifact, an armor; Frodo bears it
+					// Narya, Ring of Fire: an [elven] artifact, a ring; bearer must be Cirdan or Gandalf; vitality +1; its
+					// fellowship ability is never used here
+					put("narya", "9_19");
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, vitality 4; takes the skirmishes
 					put("catapult", "8_32");    // Catapult: a Free Peoples possession in the support area
 					put("sapling", "9_35");     // Sapling of the White Tree: a Free Peoples artifact in the support area
@@ -329,14 +332,14 @@ public class Card_V3_010_Tests
 
 		var broken = scn.GetFreepsCard("broken");
 		var gandalf = scn.GetFreepsCard("gandalf");
-		var coat = scn.GetFreepsCard("coat");
+		var narya = scn.GetFreepsCard("narya");
 		var catapult = scn.GetFreepsCard("catapult");
 		var runner = scn.GetShadowCard("runner");
 		var armory = scn.GetShadowCard("armory");
 		scn.MoveCompanionsToTable(gandalf);
-		// Any artifact will do: the one he bears here is no staff and not [gandalf]. Only Frodo may be
-		// given the Mithril-coat by legal play, so the rig puts it on Gandalf.
-		scn.AttachCardsTo(gandalf, coat);
+		// Any artifact will do: the one he bears here is no staff and not [gandalf]. Narya, Ring of Fire is
+		// the one artifact of another culture that a Gandalf may bear.
+		scn.AttachCardsTo(gandalf, narya);
 		scn.MoveCardsToSupportArea(broken, catapult);
 
 		scn.StartGame();
@@ -346,7 +349,7 @@ public class Card_V3_010_Tests
 		scn.HinderCard(catapult);
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 
-		assertAttachedTo(coat, gandalf);
+		assertAttachedTo(narya, gandalf);
 		assertEquals(0, scn.GetWoundsOn(gandalf));
 		// The cost can be paid, so the trigger is offered though it will discard nothing.
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(broken));

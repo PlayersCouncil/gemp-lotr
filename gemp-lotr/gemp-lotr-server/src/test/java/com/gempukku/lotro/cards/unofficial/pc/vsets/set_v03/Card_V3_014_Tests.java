@@ -293,29 +293,25 @@ public class Card_V3_014_Tests
 		var strands = scn.GetShadowCard("strands");
 		var burden = scn.GetShadowCard("burden");
 		var gollum = scn.GetShadowCard("gollum");
-		var wraithgollum = scn.GetShadowCard("wraithgollum");
 		var shelob = scn.GetShadowCard("shelob");
 		var runner = scn.GetShadowCard("runner");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var glorfindel = scn.GetFreepsCard("glorfindel");
-		var sam = scn.GetFreepsCard("sam");
 		var elrond = scn.GetFreepsCard("elrond");
 
-		scn.MoveCompanionsToTable(aragorn, glorfindel, sam);
+		scn.MoveCompanionsToTable(aragorn, glorfindel);
 		scn.MoveAlliesToTable(elrond);
 
 		scn.StartGame();
 		// Site 3 is Elrond's home, where an ally may be assigned to a skirmish.
 		scn.SkipToSite(2);
 		scn.MoveCardsToSupportArea(strands, burden);
-		// Two Gollums at once, which only cheating allows: one of each culture.
-		scn.MoveMinionsToTable(gollum, wraithgollum, shelob, runner);
+		scn.MoveMinionsToTable(gollum, shelob, runner);
 		scn.SkipToAssignments();
 		assertEquals(3, scn.GetCurrentSiteNumber());
 
 		scn.FreepsAssignToMinions(
 				new PhysicalCardImpl[] { aragorn, runner },
-				new PhysicalCardImpl[] { sam, wraithgollum },
 				new PhysicalCardImpl[] { elrond, shelob },
 				new PhysicalCardImpl[] { glorfindel, gollum }
 		);
@@ -327,14 +323,6 @@ public class Card_V3_014_Tests
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 		assertTrue(scn.IsCharSkirmishingAgainst(aragorn, runner));
 		assertTrue(scn.IsCharAssignedAgainst(glorfindel, gollum));
-		assertFalse(scn.ShadowActionAvailable(strands));
-		scn.ShadowPass();
-
-		// A companion against a minion named Gollum who is a [wraith] minion.
-		scn.FreepsResolveSkirmish(sam);
-		scn.FreepsPass();
-		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
-		assertTrue(scn.IsCharSkirmishingAgainst(sam, wraithgollum));
 		assertFalse(scn.ShadowActionAvailable(strands));
 		scn.ShadowPass();
 
@@ -356,6 +344,54 @@ public class Card_V3_014_Tests
 
 		assertTrue(scn.IsHindered(burden));
 		assertAttachedTo(strands, glorfindel);
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
+
+	@Test
+	public void ACompanionSkirmishingAGollumWhoIsNoGollumCultureMinionCannotBeSpotted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var strands = scn.GetShadowCard("strands");
+		var burden = scn.GetShadowCard("burden");
+		var wraithgollum = scn.GetShadowCard("wraithgollum");
+		var shelob = scn.GetShadowCard("shelob");
+		var sam = scn.GetFreepsCard("sam");
+		var glorfindel = scn.GetFreepsCard("glorfindel");
+
+		scn.MoveCompanionsToTable(sam, glorfindel);
+		scn.MoveCardsToSupportArea(strands, burden);
+
+		scn.StartGame();
+		// The one Gollum on this table is the [wraith] minion; Shelob is the [gollum] minion beside him.
+		scn.MoveMinionsToTable(wraithgollum, shelob);
+		scn.SkipToAssignments();
+
+		scn.FreepsAssignToMinions(
+				new PhysicalCardImpl[] { sam, wraithgollum },
+				new PhysicalCardImpl[] { glorfindel, shelob }
+		);
+
+		// A companion against a minion named Gollum who is a [wraith] minion: a culture is asked for, not a
+		// name.  Glorfindel is assigned to a [gollum] minion, and his skirmish has not begun.
+		scn.FreepsResolveSkirmish(sam);
+		scn.FreepsPass();
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		assertTrue(scn.IsCharSkirmishingAgainst(sam, wraithgollum));
+		assertTrue(scn.IsCharAssignedAgainst(glorfindel, shelob));
+		assertFalse(scn.ShadowActionAvailable(strands));
+		scn.ShadowPass();
+
+		// The same Strands on the same table, once the companion against the [gollum] minion is skirmishing.
+		scn.FreepsResolveSkirmish(glorfindel);
+		scn.FreepsPass();
+		assertTrue(scn.IsCharSkirmishingAgainst(glorfindel, shelob));
+		assertTrue(scn.ShadowActionAvailable(strands));
+		scn.ShadowUseCardAction(strands);
+		scn.ShadowChooseCard(burden);
+
+		assertTrue(scn.IsHindered(burden));
+		assertAttachedTo(strands, glorfindel);
+		assertNotAttachedTo(strands, sam);
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 
