@@ -36,13 +36,13 @@ public class Card_03_066_ErrataTests
 	}
 
 	// Sam, Bearer of Great Need as the Ring-bearer (resistance 5, 6 with a Hobbit spotted, so 4 burdens do not
-	// corrupt him), and Frodo, Son of Drogo a companion who is not.
+	// corrupt him): a Ring-bearer who is not Frodo, with no Frodo beside him.
 	protected VirtualTableScenario GetSamRingBearerScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("berserker", "53_66");
-					put("frodo", "1_290");     // Frodo, Son of Drogo: cheated in as an ordinary companion, vitality 4
+					put("gimli", "1_13");      // Gimli, Son of Gloin: companion, vitality 3; a skirmish ability used only on purpose
 					put("aragorn", "1_89");    // Aragorn, Ranger of the North: companion, vitality 4
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -174,14 +174,14 @@ public class Card_03_066_ErrataTests
 	}
 
 	@Test
-	public void ExhaustsAFrodoWhoIsNotTheRingBearerButNeverTheRingBearerWhoeverThatIs() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NeverExhaustsTheRingBearerWhoeverThatIs() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetSamRingBearerScenario();
 
 		var berserker = scn.GetShadowCard("berserker");
-		var frodo = scn.GetFreepsCard("frodo");
+		var gimli = scn.GetFreepsCard("gimli");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var samRB = scn.GetRingBearer();
-		scn.MoveCompanionsToTable(frodo, aragorn);
+		scn.MoveCompanionsToTable(gimli, aragorn);
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(berserker);
@@ -191,7 +191,7 @@ public class Card_03_066_ErrataTests
 
 		assertEquals(4, scn.GetBurdens());
 		assertEquals(0, scn.GetWoundsOn(berserker));
-		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(gimli));
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(samRB));
 		assertTrue(scn.ShadowActionAvailable(berserker));
@@ -199,15 +199,15 @@ public class Card_03_066_ErrataTests
 		scn.ShadowUseCardAction(berserker);
 		assertEquals(2, scn.GetWoundsOn(berserker));
 		assertEquals(2, scn.ShadowGetCardChoiceCount());
-		assertTrue(scn.ShadowHasCardChoiceAvailable(frodo, aragorn));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(gimli, aragorn));
 		assertTrue(scn.ShadowHasCardChoiceNotAvailable(samRB));
 		assertEquals(1, scn.ShadowGetChoiceMin());
 
-		scn.ShadowChooseCard(frodo);
+		scn.ShadowChooseCard(aragorn);
 		// Vitality 4: exhausted at 3 wounds.
-		assertEquals(3, scn.GetWoundsOn(frodo));
-		assertTrue(scn.IsExhausted(frodo));
-		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(3, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.IsExhausted(aragorn));
+		assertEquals(0, scn.GetWoundsOn(gimli));
 		assertEquals(0, scn.GetWoundsOn(samRB));
 		assertEquals(4, scn.GetBurdens());
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());

@@ -74,7 +74,7 @@ public class Card_V3_115_Tests
 				new HashMap<>()
 				{{
 					put("sam", "103_115");
-					put("frodo", "1_290");        // Frodo, Son of Drogo: resistance 10; here a companion who does not bear the Ring
+					put("frodo", "13_149");     // Frodo, Frenzied Fighter: the one Frodo who cannot bear the Ring, so the one who may be in play beside another Ring-bearer (Q-0159); resistance 8, and his texts want more minions than companions, or a skirmish he is not in
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.GimliRB,
@@ -162,13 +162,13 @@ public class Card_V3_115_Tests
 
 		scn.StartGame();
 
-		assertEquals(10, scn.GetResistance(frodo));
+		assertEquals(8, scn.GetResistance(frodo));
 		// 4, and 1 for his damage +1
 		assertEquals(5, scn.GetResistance(gimli));
 
 		scn.MoveCompanionsToTable(sam);
 
-		assertEquals(12, scn.GetResistance(frodo));
+		assertEquals(10, scn.GetResistance(frodo));
 		assertEquals(5, scn.GetResistance(gimli));
 		assertEquals(6, scn.GetResistance(sam));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());

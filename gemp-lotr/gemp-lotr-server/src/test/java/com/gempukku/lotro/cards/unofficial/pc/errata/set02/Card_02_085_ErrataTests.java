@@ -26,7 +26,7 @@ public class Card_02_085_ErrataTests
 		return GetScenario(VirtualTableScenario.Fellowship);
 	}
 
-	// Galadriel as Ring-bearer, so that a Frodo can stand in play who is not the Ring-bearer.
+	// Galadriel as Ring-bearer: a Ring-bearer who is not Frodo, with no Frodo beside her.
 	protected VirtualTableScenario GetNonFrodoRingBearerScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return GetScenario(VirtualTableScenario.Multipath, VirtualTableScenario.GaladrielRB);
 	}
@@ -48,7 +48,6 @@ public class Card_02_085_ErrataTests
 
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, vitality 4
 					put("sam", "1_311");        // Sam, Son of Hamfast: Ring-bound, not the Ring-bearer
-					put("frodo", "1_290");      // Frodo, Son of Drogo: Ring-bound, and a companion who is not the Ring-bearer when Galadriel is
 					put("merry", "1_303");      // Merry, From O'er the Brandywine: a Hobbit companion, strength 3
 					put("stealth1", "1_298");   // Hobbit Stealth: Skirmish event, at sites 1 to 5 cancel a skirmish involving a Hobbit
 					put("stealth2", "1_298");
@@ -288,12 +287,11 @@ public class Card_02_085_ErrataTests
 		var scn = GetNonFrodoRingBearerScenario();
 
 		var galadriel = scn.GetRingBearer();
-		var frodo = scn.GetFreepsCard("frodo");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var sam = scn.GetFreepsCard("sam");
 		var witchking = scn.GetShadowCard("witchking");
 		var lemenya = scn.GetShadowCard("lemenya");
-		scn.MoveCompanionsToTable(frodo, aragorn, sam);
+		scn.MoveCompanionsToTable(aragorn, sam);
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(witchking, lemenya);
@@ -318,9 +316,8 @@ public class Card_02_085_ErrataTests
 		scn.FreepsDeclineOptionalTrigger();
 		scn.FreepsDeclineOptionalTrigger();
 
-		// The Ring-bearer takes both wounds: not Frodo, who shares the name the Ring-bearer usually has, nor Sam.
+		// The Ring-bearer takes both wounds, though she is not Frodo: not Sam, who is Ring-bound and no Ring-bearer.
 		assertEquals(2, scn.GetWoundsOn(galadriel));
-		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertEquals(0, scn.GetWoundsOn(sam));
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());

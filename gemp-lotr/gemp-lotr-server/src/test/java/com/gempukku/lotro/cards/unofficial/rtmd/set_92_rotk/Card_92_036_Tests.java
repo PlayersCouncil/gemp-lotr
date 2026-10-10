@@ -54,12 +54,11 @@ public class Card_92_036_Tests
 		);
 	}
 
-	// Galadriel bears the Ring, and Frodo is a companion like any other.
+	// Galadriel bears the Ring: a Ring-bearer who is not Frodo, with no Frodo beside her.
 	protected VirtualTableScenario GetGaladrielScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("frodo", "1_290");       // Frodo, Son of Drogo: [shire] Hobbit companion; here he is not the Ring-bearer
 					put("sam", "1_311");         // Sam, Son of Hamfast: [shire] Hobbit companion; Ring-bound, and not the Ring-bearer
 					put("aragorn", "1_89");      // Aragorn, Ranger of the North: [gondor] Man companion
 					put("bounder", "1_286");     // Bounder: [shire] Hobbit ally
@@ -293,17 +292,16 @@ public class Card_92_036_Tests
 	}
 
 	@Test
-	public void ARingBearerWhoIsNotFrodoExertsAndFrodoMayBeTheCompanionDiscarded() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ARingBearerWhoIsNotFrodoExertsAndACompanionOfAnyCultureMayBeDiscarded() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetGaladrielScenario();
 
 		var galadriel = scn.GetRingBearer();
-		var frodo = scn.GetFreepsCard("frodo");
 		var sam = scn.GetFreepsCard("sam");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var bounder = scn.GetFreepsCard("bounder");
 		var mod = scn.GetFreepsCard("mod");
 
-		scn.MoveCompanionsToTable(frodo, sam, aragorn);
+		scn.MoveCompanionsToTable(sam, aragorn);
 		scn.MoveAlliesToTable(bounder);
 
 		scn.StartGame();
@@ -312,21 +310,19 @@ public class Card_92_036_Tests
 		assertTrue(scn.FreepsActionAvailable(mod));
 		scn.FreepsUseCardAction(mod);
 
-		// Sam is Ring-bound and no Ring-bearer: it is Galadriel who exerts, not he and not Frodo.
+		// Sam is Ring-bound and no Ring-bearer: it is Galadriel who exerts, not he.
 		assertEquals(1, scn.GetWoundsOn(galadriel));
-		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertEquals(0, scn.GetWoundsOn(sam));
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 
-		// Any other companion may go, of whatever culture, Frodo among them; the Ring-bearer
-		// herself and an ally may not.
-		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, sam, aragorn));
+		// Any other companion may go, of whatever culture; the Ring-bearer herself and an ally
+		// may not.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(sam, aragorn));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(galadriel, bounder));
 		assertEquals(1, scn.FreepsGetChoiceMin());
-		scn.FreepsChooseCard(frodo);
+		scn.FreepsChooseCard(sam);
 
-		assertInDiscard(frodo);
-		assertInPlay(sam);
+		assertInDiscard(sam);
 		assertInPlay(aragorn);
 		assertInPlay(bounder);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());

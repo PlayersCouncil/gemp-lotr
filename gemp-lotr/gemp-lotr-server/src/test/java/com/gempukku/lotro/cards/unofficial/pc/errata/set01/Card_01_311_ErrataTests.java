@@ -47,7 +47,7 @@ public class Card_01_311_ErrataTests
 				new HashMap<>()
 				{{
 					put("sam", "51_311");
-					put("frodo", "1_290");      // Frodo, Son of Drogo, here only a companion: strength 3
+					put("frodo", "13_149");     // Frodo, Frenzied Fighter: the one Frodo who cannot bear the Ring, so the one who may be in play beside another Ring-bearer (Q-0159); strength 3, and his texts want more minions than companions, or a skirmish he is not in
 					put("troop", "1_177");      // Goblin Patrol Troop: strength 13, vitality 3, no text
 				}},
 				VirtualTableScenario.FellowshipSites,

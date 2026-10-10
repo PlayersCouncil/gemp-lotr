@@ -26,7 +26,6 @@ public class Card_09_030_ErrataTests
 					put("gaffer", "1_291");     // The Gaffer: [shire] ally, home site 1; a fellowship ability used only on purpose
 					put("runner", "1_178");     // Goblin Runner: [moria] Orc, strength 5; its text is about being played
 					put("savage", "1_151");     // Uruk Savage: [isengard] Uruk-hai, strength 5; damage +1 and nothing else
-					put("seal", "0_8004");      // Test Seal (the tests' own card): "Burdens cannot be added."
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -38,7 +37,6 @@ public class Card_09_030_ErrataTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("frodo", "1_290");      // Frodo, Son of Drogo: here a plain companion, Ring-bound by rule; a fellowship ability used only on purpose
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man, unbound
 					put("gimli", "1_13");       // Gimli, Son of Gloin: [dwarven] Dwarf, unbound
 					put("runner", "1_178");     // Goblin Runner: [moria] Orc, strength 5; its text is about being played
@@ -46,7 +44,6 @@ public class Card_09_030_ErrataTests
 					put("troop", "1_177");      // Goblin Patrol Troop: strength 13, no text
 					put("fear", "1_278");       // Strength Born of Fear: [sauron] condition in the support area; a skirmish ability used only on purpose
 					put("city", "7_56");        // The Dead City: bearer must be Smeagol; if he is about to be killed in a skirmish, he is discarded instead
-					put("seal", "0_8004");      // Test Seal (the tests' own card): "Burdens cannot be added."
 				}},
 				VirtualTableScenario.FellowshipSites,
 				"59_30",                        // Smeagol is the Ring-bearer
@@ -119,17 +116,18 @@ public class Card_09_030_ErrataTests
 		var scn = GetScenario();
 
 		var smeagol = scn.GetFreepsCard("smeagol");
-		var seal = scn.GetFreepsCard("seal");
+		var frodo = scn.GetRingBearer();
 		scn.MoveCardsToHand(smeagol);
 
 		scn.StartGame();
 
 		assertTrue(scn.FreepsPlayAvailable(smeagol));
 
-		scn.MoveCardsToSupportArea(seal);
+		scn.HinderCard(frodo);
 		scn.FreepsRefreshDecision();
 
-		// The burden is a cost of playing him, and with the Seal it cannot be paid.
+		// The burden is a cost of playing him, and while the Ring-bearer is hindered no burden can be added.
+		assertTrue(scn.IsHindered(frodo));
 		assertFalse(scn.FreepsPlayAvailable(smeagol));
 		assertEquals(0, scn.GetBurdens());
 		assertInZone(Zone.HAND, smeagol);
@@ -248,28 +246,27 @@ public class Card_09_030_ErrataTests
 	}
 
 	@Test
-	public void WhileSmeagolIsTheRingBearerTheMoveTakesAnUnboundCompanionAndNeverFrodo() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WhileSmeagolIsTheRingBearerTheMoveTakesAnUnboundCompanionAndNotHim() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetRingBearerScenario();
 
 		var smeagol = scn.GetRingBearer();
-		var frodo = scn.GetFreepsCard("frodo");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var gimli = scn.GetFreepsCard("gimli");
-		scn.MoveCompanionsToTable(frodo, aragorn, gimli);
+		scn.MoveCompanionsToTable(aragorn, gimli);
 
 		scn.StartGame();
 
 		scn.FreepsPass();
 
-		// Every Frodo is Ring-bound, Ring-bearer or not.
+		// The Ring-bearer is Ring-bound, whoever he is.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, gimli));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(frodo, smeagol));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(smeagol));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 
 		scn.FreepsChooseCard(aragorn);
 
 		assertInZone(Zone.DEAD, aragorn);
-		assertInZone(Zone.FREE_CHARACTERS, gimli, frodo, smeagol);
+		assertInZone(Zone.FREE_CHARACTERS, gimli, smeagol);
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
@@ -337,31 +334,6 @@ public class Card_09_030_ErrataTests
 		assertFalse(scn.FreepsActionAvailable(smeagol));
 		assertEquals(0, scn.GetBurdens());
 		assertInZone(Zone.SHADOW_CHARACTERS, runner, savage);
-	}
-
-	@Test
-	public void RegroupActionIsNotOfferedWhileBurdensCannotBeAdded() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetRingBearerScenario();
-
-		var smeagol = scn.GetRingBearer();
-		var runner = scn.GetShadowCard("runner");
-		var savage = scn.GetShadowCard("savage");
-		var seal = scn.GetFreepsCard("seal");
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(runner, savage);
-
-		scn.SkipToPhase(Phase.REGROUP);
-		assertTrue(scn.FreepsActionAvailable(smeagol));
-
-		scn.MoveCardsToSupportArea(seal);
-		scn.FreepsRefreshDecision();
-
-		// The 2 burdens are the cost, and with the Seal they cannot be paid.
-		assertFalse(scn.FreepsActionAvailable(smeagol));
-		assertEquals(0, scn.GetBurdens());
-		assertInZone(Zone.SHADOW_CHARACTERS, runner, savage);
-		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
 	@Test

@@ -19,7 +19,7 @@ public class Card_02_108_ErrataTests
 		return GetScenario(VirtualTableScenario.FOTRFrodo);
 	}
 
-	// Galadriel as Ring-bearer, with a Frodo and a Sam beside her who are Ring-bound and not the Ring-bearer.
+	// Galadriel as Ring-bearer, with a Sam beside her who is Ring-bound and not the Ring-bearer.
 	protected VirtualTableScenario GetGaladrielScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return GetScenario(VirtualTableScenario.GaladrielRB);
 	}
@@ -30,7 +30,6 @@ public class Card_02_108_ErrataTests
 				{{
 					put("elbereth", "52_108");
 
-					put("frodo", "1_290");      // Frodo, Son of Drogo: Ring-bound; a companion only when Galadriel is the Ring-bearer
 					put("sam", "1_311");        // Sam, Son of Hamfast: Ring-bound, not the Ring-bearer
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a second companion to skirmish, strength 8
 
@@ -79,14 +78,13 @@ public class Card_02_108_ErrataTests
 	}
 
 	@Test
-	public void PlaysOnTheRingBearerAndNotOnAnotherFrodoOrSam() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlaysOnARingBearerWhoIsNotFrodoAndNotOnSam() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetGaladrielScenario();
 
 		var galadriel = scn.GetRingBearer();
 		var elbereth = scn.GetFreepsCard("elbereth");
-		var frodo = scn.GetFreepsCard("frodo");
 		var sam = scn.GetFreepsCard("sam");
-		scn.MoveCompanionsToTable(frodo, sam);
+		scn.MoveCompanionsToTable(sam);
 		scn.MoveCardsToHand(elbereth);
 
 		scn.StartGame();
@@ -101,7 +99,6 @@ public class Card_02_108_ErrataTests
 
 		assertEquals(1, scn.GetTwilight());
 		assertAttachedTo(elbereth, galadriel);
-		assertNotAttachedTo(elbereth, frodo);
 		assertNotAttachedTo(elbereth, sam);
 		assertEquals(5, scn.GetStrength(galadriel));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());

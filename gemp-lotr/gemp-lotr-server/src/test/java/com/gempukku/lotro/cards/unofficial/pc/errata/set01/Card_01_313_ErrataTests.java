@@ -40,7 +40,7 @@ public class Card_01_313_ErrataTests
 				new HashMap<>()
 				{{
 					put("sting", "51_313");
-					put("frodo", "1_290");      // Frodo, Son of Drogo, here only a companion: strength 3
+					put("frodo", "13_149");     // Frodo, Frenzied Fighter: the one Frodo who cannot bear the Ring, so the one who may be in play beside another Ring-bearer (Q-0159); strength 3, vitality 4, and his texts want more minions than companions, or a skirmish he is not in
 					// Sam, Son of Hamfast: a Ring-bound Hobbit companion who is not Frodo; his abilities are never used
 					put("sam", "1_311");
 					put("runner", "1_178");     // Goblin Runner: [moria] Orc

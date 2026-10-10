@@ -35,13 +35,12 @@ public class Card_03_007_ErrataTests
 		);
 	}
 
-	// Galadriel, Bearer of Wisdom as the Ring-bearer, and Frodo, Son of Drogo a companion who is not.
+	// Galadriel, Bearer of Wisdom as the Ring-bearer: a Ring-bearer who is not Frodo, with no Frodo beside her.
 	protected VirtualTableScenario GetGaladrielScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("arwen", "53_7");
-					put("frodo", "1_290");      // Frodo, Son of Drogo: cheated in as an ordinary companion
 					put("marksman1", "1_176");  // Goblin Marksman: archer minion, nothing else
 					put("marksman2", "1_176");
 					put("troop1", "1_177");     // Goblin Patrol Troop: no text; cards for the hand
@@ -261,17 +260,16 @@ public class Card_03_007_ErrataTests
 	}
 
 	@Test
-	public void ARingBearerWhoIsNotFrodoIsProtectedAndFrodoIsNot() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ARingBearerWhoIsNotFrodoIsProtectedAndTheCompanionBesideHerIsNot() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetGaladrielScenario();
 
 		var galadriel = scn.GetRingBearer();
 		var arwen = scn.GetFreepsCard("arwen");
-		var frodo = scn.GetFreepsCard("frodo");
 		var marksman1 = scn.GetShadowCard("marksman1");
 		var marksman2 = scn.GetShadowCard("marksman2");
 		var troop1 = scn.GetFreepsCard("troop1");
 		var troop2 = scn.GetFreepsCard("troop2");
-		scn.MoveCompanionsToTable(arwen, frodo);
+		scn.MoveCompanionsToTable(arwen);
 		scn.MoveCardsToHand(troop1, troop2);
 
 		scn.StartGame();
@@ -279,10 +277,10 @@ public class Card_03_007_ErrataTests
 		scn.SkipToArcheryWounds();
 		assertEquals(2, scn.GetShadowArcheryTotal());
 
-		assertEquals(0, scn.GetWoundsOn(frodo));
-		scn.FreepsChooseCard(frodo);
+		assertEquals(0, scn.GetWoundsOn(arwen));
+		scn.FreepsChooseCard(arwen);
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable(arwen));
-		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(1, scn.GetWoundsOn(arwen));
 
 		assertEquals(0, scn.GetWoundsOn(galadriel));
 		assertEquals(2, scn.GetFreepsHandCount());

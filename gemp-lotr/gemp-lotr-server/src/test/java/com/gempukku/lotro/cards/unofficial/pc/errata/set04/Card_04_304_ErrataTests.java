@@ -25,7 +25,6 @@ public class Card_04_304_ErrataTests
 					put("merry", "1_302");      // Merry, Friend to Sam: Hobbit companion, not Ring-bound
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: Man companion, made Ring-bound and [shire] below
 					put("gollum", "10_21");     // Gollum, Mad Thing: [gollum] minion, not Sméagol
-					put("seal", "0_8004");      // Test Seal (the tests' own card): "Burdens cannot be added."
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -235,23 +234,26 @@ public class Card_04_304_ErrataTests
 
 	@Test
 	public void CannotBePlayedWhileBurdensCannotBeAdded() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
+		var scn = GetGaladrielScenario();
 
 		var getaway = scn.GetFreepsCard("getaway");
-		var sam = scn.GetFreepsCard("sam");
-		var seal = scn.GetFreepsCard("seal");
+		var smeagol = scn.GetFreepsCard("smeagol");
+		var galadriel = scn.GetRingBearer();
 		scn.MoveCardsToHand(getaway);
-		scn.MoveCompanionsToTable(sam);
+		scn.MoveCompanionsToTable(smeagol);
 
 		scn.StartGame();
 
 		assertEquals(0, scn.GetBurdens());
 		assertTrue(scn.FreepsPlayAvailable(getaway));
 
-		scn.MoveCardsToSupportArea(seal);
+		scn.HinderCard(galadriel);
 		scn.FreepsRefreshDecision();
 
-		// The 2 burdens to be added are a cost, and with the Seal they cannot be paid.
+		// The 2 burdens to be added are a cost, and while the Ring-bearer is hindered no burden can be added.
+		// Smeagol, who is not hindered, is still there to be spotted.
+		assertTrue(scn.IsHindered(galadriel));
+		assertFalse(scn.IsHindered(smeagol));
 		assertFalse(scn.FreepsPlayAvailable(getaway));
 		assertEquals(0, scn.GetBurdens());
 		assertNull(scn.GetSite(2));

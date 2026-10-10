@@ -27,7 +27,6 @@ public class Card_01_240_ErrataTests
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: companion, strength 8, vitality 4; a maneuver ability used only on purpose
 					put("guard", "1_7");        // Dwarf Guard: companion, strength 4, vitality 2, no text in play
 					put("swordsman", "3_98");   // Orc Swordsman: [sauron] Orc, strength 9, vitality 3; strength +2 only while bearing a weapon
-					put("seal", "0_8004");      // Test Seal: Free Peoples condition, "Burdens cannot be added."
 					put("filler1", "1_177");    // Goblin Patrol Troop: no text; only ever cards in the Free Peoples player's hand
 					put("filler2", "1_177");
 					put("filler3", "1_177");
@@ -376,14 +375,16 @@ public class Card_01_240_ErrataTests
 	public void WhenBurdensCannotBeAddedTheFreePeoplesPlayerIsNotAskedToPrevent() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
+		var frodo = scn.GetRingBearer();
 		var aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveCompanionsToTable(aragorn);
-		scn.MoveCardsToSupportArea(scn.GetFreepsCard("seal"));
 		scn.MoveCardsToHand(scn.GetFreepsCard("filler1"), scn.GetFreepsCard("filler2"), scn.GetFreepsCard("filler3"));
 
 		var band = scn.GetShadowCard("band");
 
 		scn.StartGame();
+		// While the Ring-bearer is hindered no burden can be added.
+		scn.HinderCard(frodo);
 		scn.MoveMinionsToTable(band);
 		scn.FreepsPass();
 		scn.SetTwilight(3);
@@ -394,6 +395,7 @@ public class Card_01_240_ErrataTests
 		scn.PassCurrentPhaseActions();
 
 		// The trigger has a cost, so it is offered though its effect will do nothing.
+		assertTrue(scn.IsHindered(frodo));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(band));
 		scn.ShadowChooseOptionalTrigger(band);
 

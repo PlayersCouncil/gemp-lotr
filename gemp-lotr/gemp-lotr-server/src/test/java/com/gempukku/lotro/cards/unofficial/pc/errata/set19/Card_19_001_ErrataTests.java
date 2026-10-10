@@ -41,12 +41,13 @@ public class Card_19_001_ErrataTests
 		);
 	}
 
-	// The Ring on a bearer who is not Frodo, with a Frodo beside her who is a companion like any other.
+	// The Ring on a bearer who is not Frodo, with a Hobbit beside her who does not bear it (and no Frodo: none who
+	// may bear the Ring is played beside another Ring-bearer).
 	protected VirtualTableScenario GetGaladrielScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("frodo", "1_290");        // Frodo, Son of Drogo: strength 3, vitality 4; a fellowship ability only
+					put("sam", "1_311");          // Sam, Son of Hamfast: Hobbit, Ring-bound, strength 3, vitality 4; a fellowship ability only, and a response when Frodo dies
 					put("runner1", "1_178");      // Goblin Runner: strength 5, vitality 1
 					put("runner2", "1_178");
 				}},
@@ -455,16 +456,16 @@ public class Card_19_001_ErrataTests
 	}
 
 	@Test
-	public void TheBearerIsWhoeverBearsTheRingAndAFrodoWhoDoesNotIsWoundedAndNoStronger() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheBearerIsWhoeverBearsTheRingAndACompanionWhoDoesNotIsWoundedAndNoStronger() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetGaladrielScenario();
 
 		var galadriel = scn.GetRingBearer();
 		var ring = scn.GetRing();
-		var frodo = scn.GetFreepsCard("frodo");
+		var sam = scn.GetFreepsCard("sam");
 		var runner1 = scn.GetShadowCard("runner1");
 		var runner2 = scn.GetShadowCard("runner2");
 
-		scn.MoveCompanionsToTable(frodo);
+		scn.MoveCompanionsToTable(sam);
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(runner1, runner2);
@@ -474,21 +475,21 @@ public class Card_19_001_ErrataTests
 		assertTrue(scn.RBWearingOneRing());
 
 		scn.SkipToAssignments();
-		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{frodo, runner1}, new PhysicalCardImpl[]{galadriel, runner2});
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{sam, runner1}, new PhysicalCardImpl[]{galadriel, runner2});
 
-		// Frodo's skirmish. The Ring's ability strengthens Galadriel, who bears it, and not him.
-		scn.FreepsResolveSkirmish(frodo);
+		// Sam's skirmish. The Ring's ability strengthens Galadriel, who bears it, and not him.
+		scn.FreepsResolveSkirmish(sam);
 		assertEquals(3, scn.GetStrength(galadriel));
-		assertEquals(3, scn.GetStrength(frodo));
+		assertEquals(3, scn.GetStrength(sam));
 		scn.FreepsUseCardAction(ring);
 		assertEquals(1, scn.GetBurdens());
 		assertEquals(6, scn.GetStrength(galadriel));
-		assertEquals(3, scn.GetStrength(frodo));
+		assertEquals(3, scn.GetStrength(sam));
 
 		// His 3 loses to the Runner's 5: a wound on him, and no burden for it.
 		scn.ShadowPass();
 		scn.FreepsPass();
-		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(1, scn.GetWoundsOn(sam));
 		assertEquals(1, scn.GetBurdens());
 
 		// Galadriel's 3 loses to the other Runner's 5: a burden instead.

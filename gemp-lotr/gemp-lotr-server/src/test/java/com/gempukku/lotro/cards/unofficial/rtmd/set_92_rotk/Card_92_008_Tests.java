@@ -44,12 +44,11 @@ public class Card_92_008_Tests
 		);
 	}
 
-	// Galadriel bears the Ring (vitality 3), and Frodo is a companion like any other.
+	// Galadriel bears the Ring (vitality 3): a Ring-bearer who is not Frodo, with no Frodo beside her.
 	protected VirtualTableScenario GetGaladrielScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("frodo", "1_290");      // Frodo, Son of Drogo: [shire] Hobbit companion; here he is not the Ring-bearer
 					put("sam", "1_311");        // Sam, Son of Hamfast: [shire] Hobbit companion, cost 2; Ring-bound, and not the Ring-bearer
 					put("gimli", "1_13");       // Gimli, Son of Gloin: [dwarven] Dwarf companion, cost 2
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion, cost 4
@@ -161,30 +160,24 @@ public class Card_92_008_Tests
 		var scn = GetGaladrielScenario();
 
 		var galadriel = scn.GetRingBearer();
-		var frodo = scn.GetFreepsCard("frodo");
 		var sam = scn.GetFreepsCard("sam");
 		var gimli = scn.GetFreepsCard("gimli");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		// Frodo is a companion like any other here. He is put into play directly: while another
-		// character bears the Ring no Frodo may be played.
-		scn.MoveCompanionsToTable(frodo);
 		scn.MoveCardsToHand(sam, gimli, aragorn);
 
 		scn.StartGame();
 
 		assertEquals(0, scn.GetWoundsOn(galadriel));
-		assertEquals(0, scn.GetWoundsOn(frodo));
 
-		// Sam is Ring-bound and no Ring-bearer: it is Galadriel who exerts, not he and not Frodo.
+		// Sam is Ring-bound and no Ring-bearer: it is Galadriel who exerts, not he.
 		scn.FreepsPlayCard(sam);
 		assertEquals(1, scn.GetWoundsOn(galadriel));
 		assertEquals(0, scn.GetWoundsOn(sam));
-		assertEquals(0, scn.GetWoundsOn(frodo));
 
 		scn.FreepsPlayCard(gimli);
 		assertEquals(2, scn.GetWoundsOn(galadriel));
 		assertEquals(0, scn.GetWoundsOn(gimli));
-		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(sam));
 
 		// Vitality 3 with 2 wounds: exhausted. She cannot exert, which does not stop a companion
 		// being played, and an exertion is no wound: she takes none.
@@ -192,8 +185,8 @@ public class Card_92_008_Tests
 		scn.FreepsPlayCard(aragorn);
 		assertInZone(Zone.FREE_CHARACTERS, aragorn);
 		assertEquals(2, scn.GetWoundsOn(galadriel));
-		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertEquals(0, scn.GetWoundsOn(sam));
+		assertEquals(0, scn.GetWoundsOn(gimli));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

@@ -36,7 +36,6 @@ public class Card_03_024_ErrataTests
 				{{
 					put("phial", "53_24");
 					put("legolas", "1_50");     // Legolas, Greenleaf: Elf companion, vitality 3; archery ability only
-					put("frodo", "1_290");      // Frodo, Son of Drogo: a Frodo who is not the Ring-bearer here
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.GaladrielRB,
@@ -151,34 +150,32 @@ public class Card_03_024_ErrataTests
 	}
 
 	@Test
-	public void GoesOnARingBearerWhoIsNotFrodoAndNotOnFrodo() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GoesOnARingBearerWhoIsNotFrodoAndNotOnTheCompanionBesideHer() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetGaladrielScenario();
 
 		var phial = scn.GetFreepsCard("phial");
 		var legolas = scn.GetFreepsCard("legolas");
-		var frodo = scn.GetFreepsCard("frodo");
 		var galadriel = scn.GetRingBearer();
 		scn.MoveCardsToHand(phial);
-		scn.MoveCompanionsToTable(legolas, frodo);
+		scn.MoveCompanionsToTable(legolas);
 
 		scn.StartGame();
 
 		// Galadriel bears The One Ring, so her own text already gives her +1 for each [elven] companion:
 		// 3 + 2 (herself and Legolas). The Phial is no companion and does not add to that count.
 		assertEquals(5, scn.GetResistance(galadriel));
-		assertEquals(10, scn.GetResistance(frodo));
+		assertEquals(6, scn.GetResistance(legolas));
 
 		scn.FreepsPlayCard(phial);
 		assertTrue(scn.FreepsHasCardChoiceAvailable(legolas, galadriel));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(frodo));
 		scn.FreepsChooseCard(legolas);
 
 		assertEquals(1, scn.GetWoundsOn(legolas));
 		assertEquals(0, scn.GetWoundsOn(galadriel));
 		assertAttachedTo(phial, galadriel);
-		assertNotAttachedTo(phial, frodo);
+		assertNotAttachedTo(phial, legolas);
 		assertEquals(7, scn.GetResistance(galadriel));
-		assertEquals(10, scn.GetResistance(frodo));
+		assertEquals(6, scn.GetResistance(legolas));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }
