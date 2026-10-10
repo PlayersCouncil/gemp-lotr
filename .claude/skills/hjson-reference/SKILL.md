@@ -295,6 +295,7 @@ The filters in a list are asked in order. Put exclusions ahead of `Playable`: as
 | `HighestStrength(filter)` | filter | Tied for highest strength |
 | `LowestStrength(filter)` | filter | Tied for lowest strength |
 | `SiteBlock(X)` | block | Site from block X |
+| `AllyHome(block,N)` | block, int | Ally one of whose homes is site N of that block, wherever the fellowship is. The block is `F`, `T`, `K`, `H`, or the name `Fellowship`, `Towers`, `King`, `Hobbit`, `TWO_TOWERS`: any other word (`tower`) loads without complaint and matches nothing |
 | `Timeword(X)` | phase | Event phase matches: the phases printed on the card, except that an event printed with several phases is, while it is being played or priced for its play (a `played` trigger, a `modifyCost`), an event of the phase it is played in alone (F-0292) |
 | `ReplaceableFromDiscard(filter)` | filter | Performing player's discard pile holds a card matching `filter` with this card's title and another subtitle: what `ReplaceCardInPlayWithCardInDiscard` can act on. Use it in both the requirement and the choice of the card to replace |
 
