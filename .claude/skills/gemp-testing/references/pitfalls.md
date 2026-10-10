@@ -47,13 +47,17 @@ after other skirmishes, call `FreepsResolveSkirmish(companion)`.
 assignment decision in front of the player. `FreepsCanAssign(card)` and `ShadowCanAssign(card)` read the game's
 rule, whatever is being asked. A restriction on a pair ("may not assign a character to skirmish this minion",
 `cantBeAssignedToSkirmishAgainst`) shows in neither: both cards stay listed, and the game refuses the pair only
-when the assignment is answered. `FreepsCanAssignAgainst(character, minion)` and `ShadowCanAssignAgainst` read
-that (G-0029); a refused assignment is never shown by the rig throwing. A restriction on one card for one player
+when the assignment is answered. `FreepsCanAssignAgainst(character, minions...)` and `ShadowCanAssignAgainst` read
+that, for one minion or for several given in one answer (G-0029, G-0041); a refused assignment is never shown by
+the rig throwing. A restriction on one card for one player
 (`CantBeAssignedToSkirmish` with `player`: Bill Ferny 2_75 and 52_75, Q-0146) shows in the first two: the card is
 off that player's list, and when it is the only minion the Free Peoples player is not asked to assign at all.
-`FreepsCanAssign` and `FreepsCanAssignAgainst` say more than is true of a companion with defender: they answer
-true for a defender +1 companion who already has both his minions (F-0355), so "one more and not any number"
-rests on neither. Several minions against one character have no reader yet (G-0041).
+Defender is counted against the minions a character already has (F-0355, engine pass 24): for a defender +1
+companion `FreepsCanAssignAgainst(aragorn, m1, m2)` is true and `(aragorn, m1, m2, m3)` false, and once he has two
+`FreepsCanAssign(aragorn)` is false, while `ShadowCanAssignAgainst` has no such count (`mechanics/DefenderTests`).
+Defender is the Free Peoples player's own when he assigns: an assignment a card makes, either player's, needs
+both characters unassigned, and an action written with `assignableToSkirmishAgainst` is not offered for a
+companion who has a minion, whatever his defender bonus.
 
 **No method names the moment after the assignments.** When every minion is assigned the Free Peoples player is
 asked "Choose next skirmish to resolve", and that is the bookend to assert after `FreepsAssignToMinions` or

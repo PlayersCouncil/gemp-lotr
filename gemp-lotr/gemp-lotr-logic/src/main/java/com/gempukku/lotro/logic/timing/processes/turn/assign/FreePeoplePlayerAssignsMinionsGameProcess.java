@@ -1,11 +1,9 @@
 package com.gempukku.lotro.logic.timing.processes.turn.assign;
 
 import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
-import com.gempukku.lotro.game.state.Assignment;
 import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.GameUtils;
@@ -14,6 +12,7 @@ import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.decisions.PlayerAssignMinionsDecision;
 import com.gempukku.lotro.logic.effects.AssignmentPhaseEffect;
 import com.gempukku.lotro.logic.effects.TriggeringResultEffect;
+import com.gempukku.lotro.logic.timing.RuleUtils;
 import com.gempukku.lotro.logic.timing.UnrespondableEffect;
 import com.gempukku.lotro.logic.timing.processes.GameProcess;
 import com.gempukku.lotro.logic.timing.results.FreePlayerStartsAssigningResult;
@@ -73,7 +72,7 @@ public class FreePeoplePlayerAssignsMinionsGameProcess implements GameProcess {
                                             // (while incidentally double-checking that freeps did not violate assignment boundaries)
                                             for (PhysicalCard freeCard : assignments.keySet()) {
                                                 Set<PhysicalCard> minionsAssigned = assignments.get(freeCard);
-                                                if (minionsAssigned.size() + getMinionsAssignedBeforeCount(freeCard, gameState) > 1 + game.getModifiersQuerying().getKeywordCount(game, freeCard, Keyword.DEFENDER))
+                                                if (!RuleUtils.hasRoomForAssignments(game, freeCard, minionsAssigned.size()))
                                                     throw new DecisionResultInvalidException(GameUtils.getFullName(freeCard) + " can't have so many minions assigned");
                                                 unassignedMinions.removeAll(minionsAssigned);
                                             }
@@ -93,14 +92,6 @@ public class FreePeoplePlayerAssignsMinionsGameProcess implements GameProcess {
                     }
                 });
         game.getActionsEnvironment().addActionToStack(action);
-    }
-
-    private int getMinionsAssignedBeforeCount(PhysicalCard freeCard, GameState gameState) {
-        for (Assignment assignment : gameState.getAssignments()) {
-            if (assignment.getFellowshipCharacter() == freeCard)
-                return assignment.getShadowCharacters().size();
-        }
-        return 0;
     }
 
     @Override

@@ -349,8 +349,8 @@ Decisions will always come with at least one choice, even if that single choice 
 - `Boolean FreepsCanAssign(PhysicalCardImpl card)  ·  ShadowCanAssign` — Asks the game's own rule for who may be assigned, not the decision in front of the player.
 - `Boolean CanBeAssignedViaAction(PhysicalCardImpl card, Side side)`
 - `Boolean CanBeAssignedNormally(PhysicalCardImpl card, Side side)`
-- `Boolean FreepsCanAssignAgainst(PhysicalCardImpl character, PhysicalCardImpl minion)  ·  ShadowCanAssignAgainst` — Asks the game's own rule whether one character may be assigned to one minion, which is what the game checks when an assignment is answered.
-- `Boolean CanBeAssignedAgainst(PhysicalCardImpl character, PhysicalCardImpl minion, Side side)` — Whether the player of the given side could assign the one character to the one minion in the ordinary assignment of the assignment phase: each of the two may be assigned by that side at all (as CanBeAssignedNormally reads it for the character), and no restriction on the pair forbids it.
+- `Boolean FreepsCanAssignAgainst(PhysicalCardImpl character, PhysicalCardImpl...minions)  ·  ShadowCanAssignAgainst` — Asks the game's own rule whether that player may assign one character to these minions in one answer, which is what the game checks when an assignment is answered.
+- `Boolean CanBeAssignedAgainst(Side side, PhysicalCardImpl character, PhysicalCardImpl...minions)` — Whether the player of the given side could assign the one character to all of the minions in one answer to the ordinary assignment of the assignment phase: each card may be assigned by that side at all (as CanBeAssignedNormally reads it for the character), the character has room for that many more where the Free Peoples player is assigning (one to one, and one more for each defender +1: the count the game makes of his answer, RuleUtils.hasRoomForAssignments), and no restriction on the group forbids it.
 - `Skirmish GetActiveSkirmish()`
 - `int FreepsGetFreepsAssignmentTargetCount()  ·  ShadowGetFreepsAssignmentTargetCount`
 - `int FreepsGetShadowAssignmentTargetCount()  ·  ShadowGetShadowAssignmentTargetCount`

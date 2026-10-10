@@ -14,7 +14,6 @@ import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import com.gempukku.lotro.logic.timing.RuleUtils;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Filters {
     private static final Map<CardType, Filter> _typeFilterMap = new HashMap<>();
@@ -345,11 +344,9 @@ public class Filters {
 
                         if (assignedToSkirmish) {
                             if(!ignoreDefender) {
-                                int defender = game.getModifiersQuerying().getKeywordCount(game, physicalCard, Keyword.DEFENDER);
-                                var assignments = game.getGameState().getAssignments()
-                                        .stream().filter(x -> x.getFellowshipCharacter() == physicalCard || x.getShadowCharacters().contains(physicalCard)).collect(
-                                                Collectors.toSet());
-                                if(1 + defender <= assignments.size())
+                                // One more, with defender counted against the minions the character already
+                                // has (F-0355: not against the Assignment records naming him, never more than 1).
+                                if(!RuleUtils.hasRoomForAssignments(game, physicalCard, 1))
                                     return false;
                             }
                             else {

@@ -272,12 +272,17 @@ public class FilterFactory {
                     return (actionContext) -> Filters.isAllyInRegion(number, sitesBlock);
                 });
 
+        // Whether a card's own text could assign the two to each other: what AssignFpCharacterToSkirmish goes on
+        // to ask, with the flags that effect has when its definition names none.  An assignment already made is
+        // not ignored and defender is, whichever player asks: an assignment action assigns only if "both of
+        // them are unassigned" (CR 4.2 "assignment phase"), and defender +X is for the Free Peoples player's own
+        // assigning, which no definition asks about (F-0355).
         parameterFilters.put("assignabletoskirmishagainst",
                 (parameter, environment) -> {
                     final FilterableSource againstFilterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
                     return actionContext -> {
                         final Side side = GameUtils.getSide(actionContext.getGame(), actionContext.getPerformingPlayer());
-                        return Filters.assignableToSkirmishAgainst(side, againstFilterableSource.getFilterable(actionContext));
+                        return Filters.assignableToSkirmishAgainst(side, againstFilterableSource.getFilterable(actionContext), false, true, false);
                     };
                 });
         // As "assignableToSkirmishAgainst", asked of an ally as if a card had already made him participate in

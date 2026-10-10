@@ -5,6 +5,7 @@ import com.gempukku.lotro.filters.Filter;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.game.PhysicalCard;
+import com.gempukku.lotro.game.state.Assignment;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.game.state.Skirmish;
 import com.gempukku.lotro.logic.GameUtils;
@@ -123,6 +124,35 @@ public class RuleUtils {
     public static boolean isBarredFromDrawing(LotroGame game, String drawingPlayer) {
         return game.getModifiersQuerying().hasFlagActive(game,
                 ModifierFlag.CANT_TAKE_INTO_HAND_FROM_DISCARD_OR_DECK, drawingPlayer);
+    }
+
+    /**
+     * How many characters of the other side a character is assigned to skirmish, by the assignments still waiting
+     * for their skirmish: the minions a companion or ally has, and 1 for a minion that is assigned.
+     */
+    public static int countAssignedAgainst(LotroGame game, PhysicalCard character) {
+        for (Assignment assignment : game.getGameState().getAssignments()) {
+            if (assignment.getFellowshipCharacter() == character)
+                return assignment.getShadowCharacters().size();
+            if (assignment.getShadowCharacters().contains(character))
+                return 1;
+        }
+        return 0;
+    }
+
+    /**
+     * Whether a character has room for this many more of the other side where assignments are one to one and
+     * defender is counted, which is the Free Peoples player's own assigning.  Comprehensive Rules 4.2, "defender
+     * +X": "if your assigned companion has the keyword defender +1, you may assign that character to one
+     * additional unassigned minion."  The minions the character already has are counted, whoever assigned them.
+     * The one reading of that count: the answer to the Free Peoples player's assignment decision
+     * (FreePeoplePlayerAssignsMinionsGameProcess) and Filters.assignableToSkirmish, where it is not told to
+     * ignore defender, both ask it.  An assignment a card makes does not: it needs both characters unassigned.
+     * @param more how many more characters of the other side are to be assigned to the character
+     */
+    public static boolean hasRoomForAssignments(LotroGame game, PhysicalCard character, int more) {
+        return countAssignedAgainst(game, character) + more
+                <= 1 + game.getModifiersQuerying().getKeywordCount(game, character, Keyword.DEFENDER);
     }
 
     /**

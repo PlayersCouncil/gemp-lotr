@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -144,7 +143,6 @@ public class Card_07_013_Tests
 	// character to one additional unassigned minion").  So once the bearer has a minion the ability would assign
 	// nobody, whatever his defender bonus, and by Q-0034 it is not offered.
 	@Test
-	@Ignore("F-0355: with its bearer defender +1 and already assigned, the ability is still offered to another minion (and not flagged); used, it assigns nobody. The word assignableToSkirmishAgainst counts a defender bonus that an assignment action cannot use.")
 	public void WithItsBearerAssignedTheAbilityIsNotOfferedThoughHeHasDefender() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetDefenderScenario();
 

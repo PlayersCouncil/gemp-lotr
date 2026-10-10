@@ -1,5 +1,6 @@
 package com.gempukku.lotro.virtualtable;
 
+import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
@@ -12,8 +13,8 @@ import static org.junit.Assert.*;
 
 /**
  * Tests of the rig itself: FreepsCanAssignAgainst and ShadowCanAssignAgainst, which read whether one character may
- * be assigned to one minion, and InFierceRound, which tells the fierce assignment and skirmish phases from the
- * first.
+ * be assigned to one minion or to several in one answer, and InFierceRound, which tells the fierce assignment and
+ * skirmish phases from the first.
  */
 public class AssignmentReadingTests
 {
@@ -104,6 +105,70 @@ public class AssignmentReadingTests
 
 		scn.ShadowAssignToMinions(aragorn, runner);
 		assertTrue(scn.IsCharAssignedAgainst(aragorn, runner));
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, balrog));
+	}
+
+	// Comprehensive Rules 4.2, "assignment phase": the Free Peoples player's assignments are one to one, but for
+	// "defender +X" (one more minion for each +1); the Shadow player may add any leftover minions to any companion.
+	@Test
+	public void SeveralMinionsAgainstOneCharacterAreReadForEitherPlayerAndAgreeWithTheGame() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var guard = scn.GetFreepsCard("guard");
+		var balrog = scn.GetShadowCard("balrog");
+		var runner = scn.GetShadowCard("runner");
+		var toldea = scn.GetShadowCard("toldea");
+		scn.MoveCompanionsToTable(aragorn, guard);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(balrog, runner, toldea);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		// "Maneuver: Exert Aragorn to make him defender +1 until the regroup phase."
+		scn.FreepsUseCardAction(aragorn);
+		assertEquals(1, scn.GetKeywordCount(aragorn, Keyword.DEFENDER));
+		assertEquals(0, scn.GetKeywordCount(guard, Keyword.DEFENDER));
+
+		scn.SkipToAssignments();
+		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+
+		// The Free Peoples player: two minions for the companion with defender +1 and not three; one for the
+		// companion without.
+		assertTrue(scn.FreepsCanAssignAgainst(aragorn, runner, toldea));
+		assertFalse(scn.FreepsCanAssignAgainst(aragorn, runner, toldea, balrog));
+		assertTrue(scn.FreepsCanAssignAgainst(guard, runner));
+		assertFalse(scn.FreepsCanAssignAgainst(guard, runner, toldea));
+		// The Shadow player has no such count; a restriction on a pair still refuses the group it is in.
+		assertTrue(scn.ShadowCanAssignAgainst(aragorn, runner, toldea, balrog));
+		assertTrue(scn.ShadowCanAssignAgainst(guard, runner, toldea));
+		assertFalse(scn.ShadowCanAssignAgainst(guard, runner, balrog));
+
+		// It is asked of a companion or ally and then of minions: at least one, each named once.
+		assertTrue(Refused(() -> scn.FreepsCanAssignAgainst(aragorn)));
+		assertTrue(Refused(() -> scn.FreepsCanAssignAgainst(aragorn, runner, runner)));
+		assertTrue(Refused(() -> scn.FreepsCanAssignAgainst(aragorn, runner, guard)));
+
+		// The game agrees: it takes neither group that reads false, and takes the one that reads true.
+		assertTrue(Refused(() -> scn.FreepsAssignToMinions(guard, runner, toldea)));
+		assertFalse(scn.IsCharAssigned(guard));
+		assertTrue(Refused(() -> scn.FreepsAssignToMinions(aragorn, runner, toldea, balrog)));
+		assertFalse(scn.IsCharAssigned(aragorn));
+		scn.FreepsAssignToMinions(aragorn, runner, toldea);
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, runner));
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, toldea));
+
+		// Aragorn has his two.  The minions he has are counted, so the Free Peoples player could give him no
+		// third (F-0355: this read true); the Shadow player may, and cannot assign a minion that is assigned.
+		assertTrue(scn.ShadowDecisionAvailable("Assign minions"));
+		assertFalse(scn.FreepsCanAssign(aragorn));
+		assertFalse(scn.FreepsCanAssignAgainst(aragorn, balrog));
+		assertTrue(scn.FreepsCanAssign(guard));
+		assertTrue(scn.ShadowCanAssign(aragorn));
+		assertTrue(scn.ShadowCanAssignAgainst(aragorn, balrog));
+		assertFalse(scn.ShadowCanAssignAgainst(aragorn, balrog, runner));
+
+		scn.ShadowAssignToMinions(aragorn, balrog);
 		assertTrue(scn.IsCharAssignedAgainst(aragorn, balrog));
 	}
 
