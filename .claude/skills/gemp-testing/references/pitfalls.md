@@ -274,8 +274,8 @@ player could exert (an exhausted one is not counted), and any roaming penalty on
 penalty. Played, it asks for the characters to exert (`ShadowGetChoiceMin()` is the number of exertions the pool is
 short by, 0 when it pays in full; the maximum is every candidate; `ShadowDeclineChoosing()` exerts nobody). Where
 the exertions owed are all the candidates there are, they are made without a question. A toil card played ON a
-bearer (Berserker Torch 12_136) is offered one toil number too far and discarded when played from there: F-0350,
-open. Its nearest "not offered" reading is parked on that number, not filed again.
+bearer (Berserker Torch 12_136, the only Shadow one) is held to the same arithmetic on each bearer it could go on,
+and its "not offered" reading one short is asserted like a minion's (F-0350, fixed by engine pass 23).
 
 **Muster is one optional trigger for all of a player's muster characters** (CR 4.2 "muster";
 mechanics/MusterTests). At the start of the regroup phase a player with a muster character and a card in hand has

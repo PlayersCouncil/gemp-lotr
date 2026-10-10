@@ -108,12 +108,14 @@ public class PlayUtils {
         if (!blueprint.checkPlayRequirements(game, card))
             return false;
 
-        twilightModifier -= game.getModifiersQuerying().getPotentialDiscount(game, card);
-
         // Check if there exists a legal target (if needed)
         final Filterable validTargetFilter = blueprint.getValidTargetFilter(card.getOwner(), game, card);
         Filterable finalTargetFilter = null;
         if (validTargetFilter != null) {
+            // The filter is handed the modifier whole, as getPlayCardAction hands it: it takes what the card's
+            // discounts (toil, a definition's discount) could cover off the cost on each bearer itself, and a
+            // modifier already less by that would count them twice (F-0350).  For a card played on a bearer this
+            // filter is the check of the pool.
             finalTargetFilter = Filters.and(getFullAttachValidTargetFilter(game, card, twilightModifier, withTwilightRemoved), additionalAttachmentFilter);
             if (Filters.countActive(game, finalTargetFilter) == 0)
                 return false;
@@ -146,7 +148,10 @@ public class PlayUtils {
                 return false;
         }
 
-        return (blueprint.getSide() != Side.SHADOW || canPayForShadowCard(game, card, finalTargetFilter, withTwilightRemoved, twilightModifier, ignoreRoamingPenalty));
+        // What the card's discounts could cover at the most comes off its cost; never off the roaming penalty.
+        final int leastTwilightModifier = twilightModifier - game.getModifiersQuerying().getPotentialDiscount(game, card);
+
+        return (blueprint.getSide() != Side.SHADOW || canPayForShadowCard(game, card, finalTargetFilter, withTwilightRemoved, leastTwilightModifier, ignoreRoamingPenalty));
     }
 
     /**

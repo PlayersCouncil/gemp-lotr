@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -34,7 +33,9 @@ import static org.junit.Assert.*;
  *
  * The last three tests are the keyword on a card that is played on a bearer, Berserker Torch 12_136: the old test
  * they replace was written in 2021 for a fault of just such a card (played from a pool one exertion short, it was
- * discarded).  That board passes; the pool one further short is F-0350.
+ * discarded).  The pool one further short is F-0350: the Torch was offered there, the exertion counted twice over,
+ * and was discarded when played.  It is the only Shadow card with toil that is played on a bearer, and no card
+ * played on a bearer has a discount of its definition's own.
  */
 public class ToilTests
 {
@@ -435,7 +436,6 @@ public class ToilTests
 	}
 
 	@Test
-	@Ignore("F-0350: a toil card that is played on a bearer is offered with the pool short by twice what toil can cover, and playing it then discards it")
 	public void APossessionWithToilIsNotOfferedFromAPoolShortByMoreThanItsBearersExertionCovers() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
