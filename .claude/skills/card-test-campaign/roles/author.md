@@ -51,15 +51,19 @@ So the order matters and is not a formality.
 
     python3 .claude/skills/card-test-campaign/scripts/packet.py <id> --blind --terms
 
-and from that alone write the card's ledger file: the clauses, their types, the checks each one's wording calls
+(for several cards, each into a file of its own, `> /tmp/<your folder name>/<id>.packet.txt`, and the files read
+side by side: printed in one step the packets overrun the output limit and the middle of them is cut out) and
+from that alone write the card's ledger file: the clauses, their types, the checks each one's wording calls
 for (the claim lines come later, when the tests exist). Then, for each check, write one line: the situation, and
 what the text and rules say happens. Save this as `/tmp/<your folder name>/<id>.plan.md` before going on. Do not open the card's `.hjson` file or its existing test
 file during this stage. If the text leaves a real doubt about what should happen, write the doubt down as a
 question with both readings; do not settle it by guessing, and do not settle it in stage 2 by seeing what the game
 does.
 
-A `grep` of a `.hjson` file prints whatever lines match, those of your other cards and their originals among
-them: to look for a helper or a printed text in stage 1, use `packet.py --find <regex> --skip <your batch's ids>`
+A `grep` of a `.hjson` file prints whatever lines match, and a line range of one (`sed -n`, a `Read` with an
+offset) whatever cards lie there, those of your other cards and their originals among them. One card's block is
+read with its packet (`--only-withheld`, in stage 2), never out of the file; and to look for a helper or a
+printed text in stage 1, use `packet.py --find <regex> --skip <your batch's ids>`
 (printed fields and game text with ids, nothing of the implementation, your batch and its originals left out) and
 `packet.py --defs <ids> --skip <your batch's ids>` for a chosen helper's definition. You may read another card's finished test file of the same shape, so long as
 that card is neither one of your batch nor the Decipher original of one. Only those are shut: another card that
@@ -83,10 +87,13 @@ until both are clean. Do **not** run `mutate.py <id>` on its own: the run of sto
 campaign on 2026-10-06 (it cost about a sixth of every agent's steps and found no fault in the game). What shows
 that a test would fail if the card were wrong is now your own reading of it: for each filter imagine it one word
 wider and one word narrower, for each number one off, for each trigger the neighbouring event, and make sure a
-valid and an invalid candidate on the table tell them apart. `mutate.py` has one use left for you: where you
+valid and an invalid candidate on the table tell them apart. `mutate.py` has two uses left for you. Where you
 park a test on a finding whose correction is a change to the definition, show that the parked test fails
 against the card as it is and passes against the correction, with one run of
 `mutate.py <id> --replace "<the wrong text>" "<the correction>" --with-parked --out <your folder name>`.
+And, once a card at most, where only a changed definition can tell whether an invalid candidate is one at all (is
+a Shadow possession in its owner's support area seen by a bare `possession`? A probe cannot change a definition),
+one `--replace` run tries that one mistake, and the ledger's Notes say what was tried (92_26).
 
 Every step you take re-reads everything you have read so far, so steps are what cost. Read several files in one
 step where you can (the packets of all your cards, the helper cards you mean to use), and do not look at the same
@@ -145,6 +152,12 @@ ledger under its clause as `waits <check>: G-0000 <what the rig lacks>` in place
 rig request: what the test needed to do, the method signature you would propose, and which rig interface it
 belongs in. Such a card lands parked on the request until the rig can show the check; report it as `READY` if
 everything else is done.
+
+An EXISTING test that reaches past the rig or leans on a helper method is no exception. It is rewritten with the
+rig's own methods, keeping what it shows. A reading the rig has no method for is taken out of it (the whole test,
+if nothing is then left) and waits in the same way: the `waits` line, a rig request that quotes the old lines so
+that whoever builds the method can put the reading back, and the test's name with the request's number on the
+ledger's `Dropped:` line. The card lands parked; it is not held back with `reach` or `helper` errors in it.
 
 Keep your scratch files under `/tmp/<your folder name>/` whatever else you have been told about scratch space:
 the reviewer and the orchestrator look for probes there.

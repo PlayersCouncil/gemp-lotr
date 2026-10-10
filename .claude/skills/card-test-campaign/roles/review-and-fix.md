@@ -54,7 +54,8 @@ step where you can, and do not look at the same thing twice.
    Several mistakes may go in one run where a script of yours makes that possible; each is still reported
    singly). A mistake that survives is a gap;
    one that is noticed is not. Settle what the game really does with a throwaway
-   test: `cardtest.py probe /tmp/<your folder name>/Probe.java`.
+   test: `cardtest.py probe /tmp/<your folder name>/Probe.java --out <your folder name>` (without `--out` a probe
+   is built in a folder every agent shares).
 
 4. **Try to knock down every finding and every parked test.** For a test parked with `@Ignore("F-...")`, the
    claim is that the game is wrong. Look for the rule or ruling that would make the game right:
