@@ -442,6 +442,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "A card", "a Shadow card", "a Free Peoples card" may pick a hindered card (Q-0098) [Q-0060, F-0000]
 - A card hindered as its own cost still carries its ability out (F-0151)
 - Q-0098 as built: the words in a definition [F-0160]
+- A number in a filter and a hindered card (CR 5.0 "hinder", Grond 8_103) [Q-0098]
 - "Borne by a <race or type>" and a hindered bearer (Q-0108, F-0212)
 - "Support" and support(<whose>) (Q-0099, Q-0101)
 - A hindered Ring-bearer cannot be discarded or returned to hand (F-0174)

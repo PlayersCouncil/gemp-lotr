@@ -945,6 +945,13 @@ none (Q-0102, Q-0112).
 hindered card; "for each possession" does not. Hinder one of the counted cards with `HinderCard` and read
 the count unchanged.
 
+**The rig reads a hindered card's printed numbers.** `GetStrength`, `GetVitality`, `GetResistance` and
+`GetTwilightCost` of a hindered Aragorn 1_89 read 8, 4, 6 and 4: nothing that applies to him is counted, and
+the print is not hidden. So a hindered card's own number shows nothing about hinder. Read what the rule changes:
+the choice, spot or count that leaves him out (before, hindered, and again once `RestoreCard` has brought him
+back), or, for a bonus he should have missed, his number after he is restored
+(`mechanics/HinderedCardCannotBeSpottedTests`).
+
 **The One Ring is never discarded.** A discard that could name it (Doom Causeway 103_127, "each time a card is
 hindered, discard it") neither offers nor takes it, hindered or not; hindered there, it stays on its bearer,
 hindered (`mechanics/TheOneRingIsNeverDiscardedTests`).
