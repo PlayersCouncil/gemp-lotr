@@ -43,10 +43,16 @@ DEFINITIONS ALREADY CORRECTED, WITH NO CARD TESTS YET
 - 5_7, 7_88, 1_365 (F-0347 to F-0349, at landing of the batch at-mech-triggers): the Q-0034 requirement is in.
 - Sites whose text Silinde 1_60 takes on ("has the game text of his owner's site 3"): a site's trigger written to
   answer a move to or from THE CARD ITSELF never fires on him. Corrected under F-0382 and F-0383 (the batch
-  dec-b1_53): Council Courtyard 1_337, House of Elrond 3_119 and Valley of the Silverlode 2_120. 2_120's
-  correction was made on a probe and has no test yet: Uruviel 1_67's file owes it (her text reads that site).
+  dec-b1_53): Council Courtyard 1_337, House of Elrond 3_119 and Valley of the Silverlode 2_120 (2_120's is held
+  by Uruviel 1_67's Valley test).
+- Risk a Little Light 1_82 (F-0384, the batch dec-b1_67): `reveal: false` on its take, so that the game log does
+  not name the cards taken into hand; shown on a probe only. Its own file owes the test, as
+  Card_01_081_Tests.TheCardsTakenIntoHandAreNotNamedInTheGameLog. The same leak on another "look at ... take into
+  hand" card is the same finding.
   Any other site 3 of sets 1 to 3 built the same way is the same finding: say F-0383 and correct it.
-- Candidates filed and not yet answered: F-0345 (Boromir 18_40, "a possession" fetched only if [gondor]) and
+- A candidate filed and not yet answered: F-0385 (Valley of the Silverlode 2_120, Bilbo 1_300 and 14_14: an optional
+  trigger whose effect is then a choice of 0 to N, so the player can say no twice). Do not correct it on another card.
+- Candidates since answered (now faults, queued for engine pass 26): F-0345 (Boromir 18_40, "a possession" fetched only if [gondor]) and
   F-0346 (Wish For Our Kinfolk 8_8, a Dwarf ally pays "Exert a Dwarf companion").
 
 WHAT THE EARLIER PHASES GOT WRONG MORE THAN ONCE

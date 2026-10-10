@@ -80,7 +80,9 @@ asserts something your plan contradicts. That last kind is a question, not a mis
 for PC cards were written with Ketura and often encode a ruling. Then write the test file, add to the ledger
 file the line for each test under each clause it claims checks of, and run
 A parked test is run only by `mutate.py <id> --with-parked` (no mutant is needed to see it fail against the
-card as it is); `cardtest.py run` leaves parked tests out.
+card as it is); `cardtest.py run` leaves parked tests out. A line in ANOTHER card's definition (one already corrected that
+your card's file owes a test for, or one a finding proposes to change) is tried against your tests with
+`mutate.py <that card's id> --replace <old> <new> --test <your card's test file>`.
 
     python3 .claude/skills/card-test-campaign/scripts/lint.py <id>
     python3 .claude/skills/card-test-campaign/scripts/cardtest.py run <id> --out <your folder name>
