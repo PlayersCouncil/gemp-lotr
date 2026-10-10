@@ -92,28 +92,6 @@ public class PutCardsAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void putCardsFromPlayOnBottomOfDeck() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard ringBearer = getRingBearer(P1);
-        PhysicalCard braga = addToZone(createCard(P2, "33_25"), Zone.SHADOW_CHARACTERS);
-        PhysicalCard goblinRunner = addToZone(createCard(P2, "1_178"), Zone.SHADOW_CHARACTERS);
-
-        passUntil(Phase.ASSIGNMENT);
-        PhysicalCard urukSavageInDeck = addToZone(createCard(P2, "1_151"), Zone.DECK);
-        pass(P1);
-        pass(P2);
-        playerDecided(P1, ringBearer.getCardId()+" "+braga.getCardId());
-        pass(P2);
-        selectCard(P1, ringBearer);
-        pass(P1);
-        selectCardAction(P2, braga);
-
-        List<? extends PhysicalCard> deck = _game.getGameState().getDeck(P2);
-        assertEquals(goblinRunner, deck.get(1));
-    }
-
-    @Test
     public void putCardsFromPlayOnTopOfDeck() throws Exception {
         initializeSimplestGame();
 

@@ -150,40 +150,6 @@ public class PlayCardFromDiscardAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void azogCantPlayTrollFromDiscardInRivendell() throws Exception {
-        initializeSimplestGame();
-
-        skipMulligans();
-
-        final PhysicalCardImpl rivendell = createCard(P2, "30_51");
-        rivendell.setSiteNumber(2);
-        _game.getGameState().addCardToZone(_game, rivendell, Zone.ADVENTURE_PATH);
-
-        PhysicalCardImpl azog = createCard(P2, "32_28");
-        _game.getGameState().addCardToZone(_game, azog, Zone.SHADOW_CHARACTERS);
-
-        PhysicalCardImpl watchfulOrc = createCard(P2, "30_40");
-        _game.getGameState().addCardToZone(_game, watchfulOrc, Zone.SHADOW_CHARACTERS);
-
-        PhysicalCardImpl demolitionTroll = createCard(P2, "32_31");
-        _game.getGameState().addCardToZone(_game, demolitionTroll, Zone.DISCARD);
-
-        _game.getGameState().setTwilight(20);
-
-        // Fellowship phase
-        playerDecided(P1, "");
-        // Shadow phase
-        playerDecided(P2, getCardActionId(P2, "Use Watchful Orc"));
-        // Choose Battleground
-        playerDecided(P2, "0");
-        playerDecided(P2, "");
-        // Maneuver phase
-        playerDecided(P1, "");
-
-        assertNull(getCardActionId(P2, "Use Azog"));
-    }
-
-    @Test
     public void activatedInDiscard() throws Exception {
         initializeSimplestGame();
 

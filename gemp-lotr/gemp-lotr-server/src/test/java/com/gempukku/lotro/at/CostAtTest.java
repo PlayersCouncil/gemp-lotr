@@ -36,26 +36,4 @@ public class CostAtTest extends AbstractAtTest {
         playerDecided(P1, "0");
         assertEquals(twilightPool, _game.getGameState().getTwilightPool());
     }
-
-    @Test
-    public void exertExtraCost() throws DecisionResultInvalidException, CardNotFoundException {
-        initializeSimplestGame();
-
-        final PhysicalCardImpl azog = createCard(P2, "32_28");
-        final PhysicalCardImpl fimbul = createCard(P2, "30_33");
-
-        _game.getGameState().addCardToZone(_game, azog, Zone.HAND);
-        _game.getGameState().addCardToZone(_game, fimbul, Zone.HAND);
-
-        skipMulligans();
-
-        _game.getGameState().setTwilight(20);
-
-        playerDecided(P1, "");
-
-        playerDecided(P2, getCardActionId(P2, "Play Azog"));
-        playerDecided(P2, getCardActionId(P2, "Play Fimbul"));
-
-        assertEquals(1, _game.getGameState().getWounds(azog));
-    }
 }

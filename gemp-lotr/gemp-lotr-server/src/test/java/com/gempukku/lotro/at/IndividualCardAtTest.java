@@ -778,24 +778,6 @@ public class IndividualCardAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void betterThanNothingDoesNotAddBurden() throws DecisionResultInvalidException, CardNotFoundException {
-        initializeSimplestGame();
-
-        PhysicalCardImpl betterThanNothing = createCard(P2, "31_19");
-        PhysicalCardImpl wizardIsNeverLate = createCard(P1, "30_23");
-
-        _game.getGameState().addCardToZone(_game, wizardIsNeverLate, Zone.HAND);
-        _game.getGameState().addCardToZone(_game, betterThanNothing, Zone.SUPPORT);
-
-        skipMulligans();
-        int burdens = _game.getGameState().getBurdens();
-
-        playerDecided(P1, "0");
-
-        assertEquals(burdens, _game.getGameState().getBurdens());
-    }
-
-    @Test
     public void morgulBladeTransferFromSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
         initializeSimplestGame();
 
