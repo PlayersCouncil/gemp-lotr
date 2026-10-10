@@ -17,7 +17,7 @@
 		type: Site
 		block: Shadows
 		keyword: mountain
-		direction: Left
+		direction: Right
 		effects: [
 			{
 				type: Trigger

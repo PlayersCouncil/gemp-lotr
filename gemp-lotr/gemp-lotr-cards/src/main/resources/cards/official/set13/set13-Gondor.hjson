@@ -936,20 +936,24 @@
 			}
 			{
 				type: Trigger
-				optional: false
+				optional: true
 				trigger: {
 					type: exerted
 					filter: name(Boromir)
 				}
+				# No cost, so not offered when no minion could be exerted (Q-0034).
+				requires: {
+					type: canSpot
+					filter: minion,canExert
+				}
 				effect: {
 					type: exert
 					select: choose(minion)
-					count: 0-1
 				}
 			}
 			{
 				type: Trigger
-				optional: false
+				optional: true
 				trigger: {
 					type: exerted
 					filter: name(Faramir)
@@ -957,7 +961,6 @@
 				cost: {
 					type: spot
 					select: choose(minion)
-					count: 0-1
 					memorize: spottedMinion
 				}
 				effect: {

@@ -2,6 +2,7 @@ package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
 
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.common.Timeword;
@@ -33,6 +34,8 @@ public class Card_03_103_ErrataTests
 					put("taskmaster", "2_90");  // Orc Taskmaster: [sauron] minion; Shadow: exert this minion to add (1)
 					put("troop", "1_177");      // Goblin Patrol Troop: [moria] Orc with no text
 					put("filler", "1_7");       // a card for Gimli's ability to put beneath the draw deck
+					put("eowyn", "4_270");      // Éowyn, Lady of Rohan: Response: if an unbound companion is about to take a wound, exert Éowyn and add (1) to prevent that wound
+					put("marksman", "1_176");   // Goblin Marksman: [moria] Orc; Archer is its whole text
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -135,6 +138,50 @@ public class Card_03_103_ErrataTests
 		assertEquals(3, scn.GetWoundsOn(elrond)); // 2 exertions + 1 wound
 		assertInDiscard(dawn);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void CompanionUsingAResponseSpecialAbilityIsWounded() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var dawn = scn.GetShadowCard("dawn");
+		var eowyn = scn.GetFreepsCard("eowyn");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var frodo = scn.GetRingBearer();
+		scn.MoveCardsToHand(dawn);
+		scn.MoveCompanionsToTable(eowyn, aragorn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable("taskmaster", "marksman");
+		scn.SkipToPhase(Phase.ARCHERY);
+		scn.PassCurrentPhaseActions();
+		int twilight = scn.GetTwilight();
+
+		// One archery wound, placed on Aragorn: an unbound companion is about to take a wound.
+		scn.FreepsChooseCard(aragorn);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(eowyn));
+		scn.FreepsChooseOptionalTrigger(eowyn);
+
+		// Her Response's costs are paid, and a companion's special ability has been used (CR 4.2 "response").
+		assertEquals(1, scn.GetWoundsOn(eowyn));
+		assertEquals(twilight + 1, scn.GetTwilight());
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(dawn));
+		scn.ShadowChooseOptionalTrigger(dawn);
+
+		assertTrue(scn.FreepsDecisionAvailable("prevent"));
+		scn.FreepsChooseNo();
+
+		// "That character" is Éowyn, about to take a wound herself: her own Response is offered for it, and left.
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(eowyn));
+		scn.FreepsDeclineOptionalTrigger();
+		assertEquals(2, scn.GetWoundsOn(eowyn)); // 1 exertion + 1 wound
+		assertInDiscard(dawn);
+
+		// The Response she used is carried out all the same: the archery wound is prevented.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertInZone(Zone.FREE_CHARACTERS, eowyn, aragorn);
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
 
 	@Test

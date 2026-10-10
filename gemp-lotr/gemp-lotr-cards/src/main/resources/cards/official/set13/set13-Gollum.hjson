@@ -462,6 +462,27 @@
 		effects: [
 			{
 				type: event
+				# In region 3 the play is the whole of the event, and a play from the discard pile is treated
+				# as a cost: with no [gollum] minion there that the pool can pay for once the event's own
+				# cost has left it, the event is not offered (F-0046, F-0058).  The play itself sits inside
+				# an If inside a choice, where the engine does not ask beforehand.
+				requires: {
+					type: Or
+					requires: [
+						{
+							type: Not
+							requires: {
+								type: location
+								filter: regionNumber(3)
+							}
+						}
+						{
+							type: Playable
+							fromZone: DISCARD
+							filter: culture(gollum),minion
+						}
+					]
+				}
 				cost: [
 					{
 						type: choice

@@ -47,7 +47,7 @@ public class Card_10_091_ErrataTests
 		 * Vitality: 3
 		 * Site Number: 6
 		 * Game Text: When you play this minion, if you cannot spot another minion and there are 3 or fewer
-		 * twilight tokens, you may add (3) (or (5) if this minion is roaming).
+		 * twilight tokens, add (3) (or (5) if this minion is roaming).
 		 */
 
 		var scn = GetScenario();

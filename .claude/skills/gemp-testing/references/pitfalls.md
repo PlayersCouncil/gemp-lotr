@@ -156,7 +156,10 @@ which is also what tells a wound from an exertion (F-0148).
 **A play inside an `If` does not gate its action.** The engine refuses an action it can see will play nothing
 only when the play is the action's top-level effect. Wrapped in an `If`, the action is always offered and does
 nothing when used (F-0036, Out of Dark Waters). A definition written that way is a finding, not a quirk to test
-round.
+round. Its correction is a requirement of the definition's own for the play: on an event, `Playable` with
+`fromZone: DISCARD`, which counts the event's own cost as gone from the pool (Little Snuffler 13_52, F-0058: not
+offered in region 3 with the pool one short of event and minion together, or with no [gollum] minion in the
+discard pile; `mechanics/EventThatPlaysFromADiscardPileNeedsBothCostsTests`).
 
 **The no-effect flag.** Every action a player is offered carries a word saying whether the game expects it to do
 nothing. `FreepsActionNoEffect(card)` and `ShadowActionNoEffect(card)`, and the same with words of the action's

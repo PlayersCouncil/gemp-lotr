@@ -52,7 +52,7 @@
 				}
 			}
 		}
-		gametext: When you play this minion, if you cannot spot another minion and there are 3 or fewer twilight tokens, you may add (3) (or (5) if this minion is roaming).
+		gametext: When you play this minion, if you cannot spot another minion and there are 3 or fewer twilight tokens, add (3) (or (5) if this minion is roaming).
 		lore: "The onslaught of Mordor broke like a wave on the beleaguered hills...."
 		promotext: ""
 		alts: {

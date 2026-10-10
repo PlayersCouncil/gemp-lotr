@@ -71,7 +71,7 @@ public class Card_18_134_ErrataTests
 		 * Type: Site
 		 * Block: Shadows
 		 * Shadow Number: 1
-		 * Direction: Left
+		 * Direction: Right
 		 * Game Text: <b>Mountain.</b> When the fellowship moves to this site, each player wounds 2 of their
 		 * 	characters.  This site cannot be replaced.
 		 */
@@ -88,7 +88,7 @@ public class Card_18_134_ErrataTests
 		// A Shadows-block site has no site number of its own.
 		assertEquals(0, card.getBlueprint().getSiteNumber());
 		assertEquals(1, card.getBlueprint().getTwilightCost());
-		assertEquals(LotroCardBlueprint.Direction.LEFT, card.getBlueprint().getSiteDirection());
+		assertEquals(LotroCardBlueprint.Direction.RIGHT, card.getBlueprint().getSiteDirection());
 		assertTrue(scn.HasKeyword(card, Keyword.MOUNTAIN));
 	}
 

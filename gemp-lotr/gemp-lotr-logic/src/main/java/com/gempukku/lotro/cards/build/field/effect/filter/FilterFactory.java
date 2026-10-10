@@ -280,6 +280,21 @@ public class FilterFactory {
                         return Filters.assignableToSkirmishAgainst(side, againstFilterableSource.getFilterable(actionContext));
                     };
                 });
+        // As "assignableToSkirmishAgainst", asked of an ally as if a card had already made him participate in
+        // skirmishes: where his home is does not count, and everything else that stops an assignment does (a
+        // card that bars him from skirmishes, an assignment he or the other character already has, a card that
+        // says either cannot be assigned).  It is what AssignFpCharacterToSkirmish goes on to ask once an
+        // EnableParticipationInSkirmishes before it has been carried out, so a requirement and a choice written
+        // with it withhold "make that ally participate in skirmishes and assign this minion to skirmish that
+        // ally" when it could assign the minion to nobody, and offer only the allies it could (F-0283).
+        parameterFilters.put("assignabletoskirmishagainstignoringallylocation",
+                (parameter, environment) -> {
+                    final FilterableSource againstFilterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
+                    return actionContext -> {
+                        final Side side = GameUtils.getSide(actionContext.getGame(), actionContext.getPerformingPlayer());
+                        return Filters.assignableToSkirmishAgainst(side, againstFilterableSource.getFilterable(actionContext), false, true, true);
+                    };
+                });
         parameterFilters.put("assignedtoskirmish",
                 (parameter, environment) -> {
                     final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);

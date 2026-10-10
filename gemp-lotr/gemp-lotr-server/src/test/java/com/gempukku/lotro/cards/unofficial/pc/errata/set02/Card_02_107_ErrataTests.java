@@ -7,7 +7,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -198,30 +197,49 @@ public class Card_02_107_ErrataTests
 	}
 
 	@Test
-	public void ANazgulPlayedAfterTheActionIsUsedIsNotWeakened() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ANazgulPlayedAfterTheActionIsUsedIsWeakenedTooUntilTheRegroupPhase() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var sunlight = scn.GetFreepsCard("sunlight");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
 		scn.MoveCardsToSupportArea(sunlight);
 
-		var nelya = scn.GetShadowCard("nelya");
 		var lemenya = scn.GetShadowCard("lemenya");
-		scn.MoveCardsToShadowHand("lemenya");
+		var ambusher = scn.GetShadowCard("ambusher");
+		scn.MoveCardsToHand(lemenya, ambusher);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(nelya);
 
+		// As in a game: no Nazgûl is on the table in the fellowship phase when the condition is discarded.
 		scn.FreepsUseCardAction(sunlight);
-		assertEquals(6, scn.GetStrength(nelya));
+		assertInDiscard(sunlight);
 
 		scn.SetTwilight(10);
 		scn.FreepsPass();
 		assertTrue(scn.AwaitingShadowPhaseActions());
 
+		// Not a snapshot (Ketura on F-0217): a Nazgûl played afterwards is strength -4 as he comes into play.
 		scn.ShadowPlayCard(lemenya);
 		assertInZone(Zone.SHADOW_CHARACTERS, lemenya);
+		assertEquals(5, scn.GetStrength(lemenya));
+
+		// A [ringwraith] Orc played afterwards is no Nazgûl.
+		scn.ShadowPlayCard(ambusher);
+		assertInZone(Zone.SHADOW_CHARACTERS, ambusher);
+		assertEquals(8, scn.GetStrength(ambusher));
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, lemenya);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
+		assertEquals(5, scn.GetStrength(lemenya));
+		scn.PassCurrentPhaseActions();
+
+		// Aragorn (8) beat a Nazgûl of 5 (one wound of his 2 vitality), and the regroup phase ends the -4.
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		assertEquals(1, scn.GetWoundsOn(lemenya));
 		assertEquals(9, scn.GetStrength(lemenya));
-		assertEquals(6, scn.GetStrength(nelya));
-		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertEquals(8, scn.GetStrength(ambusher));
 	}
 }

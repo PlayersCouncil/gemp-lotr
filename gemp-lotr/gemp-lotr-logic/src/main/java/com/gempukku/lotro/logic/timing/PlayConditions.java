@@ -75,9 +75,18 @@ public class PlayConditions {
     }
 
     public static boolean canPlayFromDiscard(String playerId, LotroGame game, int modifier, Filterable... filters) {
+        return canPlayFromDiscard(playerId, game, modifier, 0, filters);
+    }
+
+    /**
+     * @param withTwilightRemoved twilight that will have left the pool before the card is played: the cost of
+     *                            the event that plays it, while that event is asked whether it can be played
+     */
+    public static boolean canPlayFromDiscard(String playerId, LotroGame game, int modifier, int withTwilightRemoved, Filterable... filters) {
         if (game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.CANT_PLAY_FROM_DISCARD_OR_DECK, playerId))
             return false;
-        return Filters.acceptsAny(game, game.getGameState().getDiscard(playerId), Filters.and(filters, Filters.playable(modifier)));
+        return Filters.acceptsAny(game, game.getGameState().getDiscard(playerId),
+                Filters.and(filters, Filters.playable(modifier, withTwilightRemoved, false, false, true)));
     }
 
     public static boolean canPlayFromDrawDeck(String playerId, LotroGame game, int modifier, Filterable... filters) {

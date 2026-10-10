@@ -189,22 +189,15 @@
 					type: discard
 					select: self
 				}
-				effect: [
-					{
-						type: MemorizeActive
+				effect: {
+					type: addModifier
+					modifier: {
+						type: ModifyStrength
+						amount: -4
 						filter: Nazgul
-						memory: nazgul
 					}
-					{
-						type: addModifier
-						modifier: {
-							type: ModifyStrength
-							amount: -4
-							filter: memory(nazgul)
-						}
-						until: start(regroup)
-					}
-				]
+					until: start(regroup)
+				}
 			}
 		]
 		gametext: To play, spot 2 Hobbits. Fellowship: Discard this condition to make each Nazgûl strength -4 until the regroup phase.

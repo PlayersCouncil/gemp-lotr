@@ -30,7 +30,9 @@ import static org.junit.Assert.*;
  * "can", and a bar on participating bars every part of it (Q-0147).  So at the Streets a [rohan] ally whom another
  * card has participate adds nothing to the fellowship archery total, is assigned no archery wound, is assigned to
  * no minion and fights no skirmish.  What else the other card does to him (the strength bonus) still happens.  The
- * game used to let the allowing card win in all four.
+ * game used to let the allowing card win in all four.  A minion whose own text would have such an ally fight
+ * and assign itself to him is not offered that text when the barred ally is the only one it could take (Ketura on
+ * F-0283: A; MinionThatAssignsItselfToAnAllyTests has the other boards).
  *
  * Each test at the Streets has its control beside it: an ally who is not [rohan], away from home, whom the same
  * card does have participate there.  The tests at site 2 are the other control: the same [rohan] ally, away from
@@ -310,10 +312,11 @@ public class AllyBarredFromTakingPartTests
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var aldor = scn.GetFreepsCard("aldor");
 		var celeborn = scn.GetFreepsCard("celeborn");
+		var calaglin = scn.GetFreepsCard("calaglin");
 		var warrior1 = scn.GetShadowCard("warrior1");
 		var warrior2 = scn.GetShadowCard("warrior2");
 		scn.MoveCompanionsToTable(aragorn);
-		scn.MoveAlliesToTable(aldor, celeborn);
+		scn.MoveAlliesToTable(aldor);
 
 		scn.StartGame();
 		scn.SkipToSite(2);
@@ -323,20 +326,25 @@ public class AllyBarredFromTakingPartTests
 		scn.FreepsPass();
 
 		// "Spot an ally to make that ally participate in skirmishes and assign this minion to skirmish that ally."
-		scn.ShadowUseCardAction(warrior1);
-		scn.ShadowChooseCard(aldor);
-		assertFalse(scn.IsCharAssigned(aldor));
-		assertFalse(scn.IsCharAssigned(warrior1));
+		// The only ally is barred from skirmishes: the ability could assign the Warrior to nobody, and an
+		// ability with no cost that would do nothing is not offered (Ketura on F-0283: A).
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(warrior1));
+		assertFalse(scn.ShadowActionAvailable(warrior2));
 		assertFalse(scn.ShadowCanAssign(aldor));
-		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 
-		// The control: the other Warrior's text does assign it to an ally away from home whom nothing bars.
-		scn.FreepsPass();
-		scn.ShadowUseCardAction(warrior2);
+		// The control: two allies away from home whom nothing bars.  The ability is offered, and the barred ally
+		// is not among those it may take.
+		scn.MoveAlliesToTable(celeborn, calaglin);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.ShadowActionAvailable(warrior1));
+		scn.ShadowUseCardAction(warrior1);
+		assertTrue(scn.ShadowHasCardChoiceAvailable(celeborn, calaglin));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(aldor));
 		scn.ShadowChooseCard(celeborn);
-		assertTrue(scn.IsCharAssignedAgainst(celeborn, warrior2));
+		assertTrue(scn.IsCharAssignedAgainst(celeborn, warrior1));
 		assertFalse(scn.IsCharAssigned(aldor));
-		assertFalse(scn.IsCharAssigned(warrior1));
+		assertFalse(scn.IsCharAssigned(warrior2));
 		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
 

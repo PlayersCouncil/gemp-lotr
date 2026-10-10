@@ -566,14 +566,17 @@
 			{
 				type: activated
 				phase: assignment
+				# An ally this minion could be assigned to once the ally participates in skirmishes: with
+				# none (no ally, every ally assigned already or barred from skirmishes, or this minion
+				# assigned already) the ability would do nothing and is not offered (Q-0034, F-0283).
 				requires: {
 						type: canSpot
-						filter: ally
+						filter: ally,AssignableToSkirmishAgainstIgnoringAllyLocation(self)
 				}
 				effect: [
 						{
 								type: enableParticipationInSkirmishes
-								select: choose(ally)
+								select: choose(ally,AssignableToSkirmishAgainstIgnoringAllyLocation(self))
 								memorize: chosenAlly
 						}
 						{
@@ -693,14 +696,17 @@
 			{
 				type: activated
 				phase: assignment
+				# An ally this minion could be assigned to once the ally participates in skirmishes: with
+				# none (no ally, every ally assigned already or barred from skirmishes, or this minion
+				# assigned already) the ability would do nothing and is not offered (Q-0034, F-0283).
 				requires: {
 						type: canSpot
-						filter: ally
+						filter: ally,AssignableToSkirmishAgainstIgnoringAllyLocation(self)
 				}
 				effect: [
 						{
 								type: enableParticipationInSkirmishes
-								select: choose(ally)
+								select: choose(ally,AssignableToSkirmishAgainstIgnoringAllyLocation(self))
 								memorize: chosenAlly
 						}
 						{
