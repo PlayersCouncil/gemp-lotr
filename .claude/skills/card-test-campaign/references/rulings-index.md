@@ -386,6 +386,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "You may" on a Race to Mount Doom modifier names its player (F-0311)
 - "Response: If a <kind of card> is discarded from play, stack it here" requires the card still in the discard pile (F-0357, Sword Rack 11_158 and Countless Companies 12_58) [Q-0034, Q-0062]
 - "When you play X, you may reinforce a [culture] token" requires a token to reinforce (F-0359, Brego 13_63) [Q-0034, Q-0215]
+- "When you play X, you may discard a Shadow possession" requires one to discard (F-0362, Erkenbrand 0_59) [F-0359, Q-0034, Q-0224]
 - "May draw a card for each X over N" requires N+1 of X (Q-0033, F-0320)
 - A phase action on a Race to Mount Doom modifier is its owner's where the text says "your" (F-0312) [Q-0194, F-0335, Q-0183, Q-0188]
 - A Race to Mount Doom modifier's own discard from hand writes `forced: true`, and no card can tell (F-0205)

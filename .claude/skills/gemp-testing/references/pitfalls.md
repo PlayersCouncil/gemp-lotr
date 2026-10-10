@@ -330,6 +330,11 @@ A choice among cards that lie in no zone at all (94_31's "site from outside the 
 blueprint id, `ShadowHasBPChoiceAvailable("1_361")` and `ShadowChooseCardBPFromSelection("1_361")`, and
 `ShadowGetChoiceMin()` reads its minimum as for any choice of cards (Card_94_031_Tests).
 
+**Several cards placed beneath a draw deck are asked for one at a time.** `putCardsFromDiscardOnBottomOfDeck`
+with more than one card to place, `all(...)` included, asks its player which goes first (a choice of one, minimum
+1) and places the last unasked: Breeding Pit 1_122 with two copies in the discard pile asks once
+(`ShadowChooseCards(copy)`; `Card_01_122_Tests`). Read no order between identical copies.
+
 **Two offers of one response.** When the same card offers the same trigger or response twice in one decision (two Nazgul winning one skirmish), each offer's text ends with " (for <the cards its trigger memorized>)". A single offer reads as before. Choose between them by that text.
 
 **When a wound kills and something answers the same wound.** The Free Peoples player, whoever owns the trigger,
@@ -745,6 +750,10 @@ card out of its draw deck (not for a card whose own text plays from a draw deck)
 player whose turn it is (`gameState().addBurdens`), so the other player's burdens cannot be laid or read beside
 them: "the other player's burdens are not counted" has no board (92_25), and no check is owed for it.
 
+**Threats stop at the number of companions** (CR 4.2 "threats": none can be added while there are as many
+threats as companions in play). A board that is to read N threats needs N companions: the control in
+`Card_00_060_Tests` (War Towers 7_173's 1 threat, then the 2 of Sméagol 7_71's assignment ability) stands on three.
+
 **The other player's Free Peoples cards are not active on your turn.** A copy of a possession taken from the
 Shadow player's deck (`GetShadowCard`) and cheated onto your companion is inactive (CR 4.2 "active"), so no
 filter sees it. To put a card the opponent owns on a companion, use a Shadow card that is borne by companions:
@@ -1053,6 +1062,13 @@ Hobbit Draft Game's Ring-bearer is a Bilbo (30_43 to 30_46, `canStartWithRing`) 
 a Hobbit path written out in the file (30_49 to 30_57, `Card_30_051_Tests`: the skippers walk it, and its only
 battleground is site 9, Battle of the Five Armies 30_57). Such a card has no sheet and no game text, and
 `packet.py <id> --blind` withholds its effects: read it with `packet.py --defs <id>`.
+
+**Both players hold the same nine sites.** The rig gives both seats the one site map, so a card that plays "your"
+site where the other player's lies replaces it with its twin, a card of the same title: read whose it is, not
+what it is (`assertSame(freepsSite2, scn.GetSite(2))`, each player's site fetched with `GetFreepsSite(2)` and
+`GetShadowSite(2)` before it is laid; `Card_01_110_Tests`). Whether a twin may replace a twin at all is Q-0226
+(CR 4.2 "site": "You can't replace a site card with the same site card"; the game allows it): a new test that
+replaces a site reads the game as built, stays active, and names that question.
 
 **A table in a format that uses Maps.** `VirtualTableScenario.PCMovie` works with every constructor: each deck is
 given the Map of the path its sites are on (`FellowshipMap` 102_74, `TowersMap` 102_75, `KingMap` 102_76). The
