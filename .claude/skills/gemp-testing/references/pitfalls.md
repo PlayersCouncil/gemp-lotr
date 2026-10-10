@@ -657,6 +657,9 @@ F-0233).
 the marker moved first). At a decision raised by a `Moves` trigger `GetCurrentSiteNumber()` is the site being
 left, `GetMoveCount()` does not yet count the move, the text of the site left is the one in force, and a
 `Location` requirement in that trigger's block reads that site (`mechanics/StepsOfAMoveTests`; Race Text 92_18).
+The pool is the one from before the move too: "each time the fellowship moves, remove (2)" (Aragorn 3_38) on
+turn 1 removes nothing from an empty pool, and the move's twilight is then added in full. `SetTwilight(3)`
+first, and spell the sum: 3 - 2 + 2 for the site + 2 companions.
 
 **A draw deck runs short in a long file.** Every Free Peoples card a scenario names and a test does not place
 sits in the Free Peoples draw deck. A "discard the top N cards" with few such cards can find fewer than N by a
@@ -951,6 +954,12 @@ the print is not hidden. So a hindered card's own number shows nothing about hin
 the choice, spot or count that leaves him out (before, hindered, and again once `RestoreCard` has brought him
 back), or, for a bonus he should have missed, his number after he is restored
 (`mechanics/HinderedCardCannotBeSpottedTests`).
+Keywords go the same way for what is printed and not for what was given: `HasKeyword` of a hindered Aragorn
+reads RANGER true (the engine answers from the print before it looks at hinder; a restore may pick a hindered
+card by a printed trait, CR 5.0 "restore") and a defender +1 he gave himself false. Read a hindered card's
+printed keyword by what it does: the archery total for an archer (Legolas 1_50: 1, hindered 0), another card's
+spot (`mechanics/HinderedCardHasNoGameTextTests`). A bonus given "until ..." is back when the card is restored
+before then (as built; Q-0222 asks).
 
 **The One Ring is never discarded.** A discard that could name it (Doom Causeway 103_127, "each time a card is
 hindered, discard it") neither offers nor takes it, hindered or not; hindered there, it stays on its bearer,
