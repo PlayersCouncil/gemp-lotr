@@ -327,32 +327,6 @@ public class TriggersAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void putsOnRing() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard theTwilightWorld = addToZone(createCard(P2, "1_228"), Zone.HAND);
-        PhysicalCard nelya = addToZone(createCard(P2, "11_222"), Zone.SHADOW_CHARACTERS);
-        PhysicalCard goblinRunner = addToZone(createCard(P2, "1_178"), Zone.SHADOW_CHARACTERS);
-
-        PhysicalCard ringBearer = getRingBearer(P1);
-        PhysicalCard ring = getRing(P1);
-
-        passUntil(Phase.ASSIGNMENT);
-        pass(P1);
-        pass(P2);
-        playerDecided(P1, ringBearer.getCardId() + " " + goblinRunner.getCardId());
-        pass(P2);
-        selectCard(P1, ringBearer);
-        pass(P1);
-        pass(P2);
-        selectCardAction(P1, ring);
-        assertEquals(1, getBurdens());
-        selectCardAction(P2, theTwilightWorld);
-        assertEquals(4, getBurdens());
-        assertEquals(1, getWounds(nelya));
-    }
-
-    @Test
     public void movesTo() throws Exception {
         Map<String, LotroDeck> decks = new HashMap<>();
         decks.put(P1, createSpecialMovesToDeck());
@@ -458,19 +432,6 @@ public class TriggersAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void endOfTurn() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard sarumansChill = addToZone(createCard(P2, "1_134"), Zone.SUPPORT);
-
-        passUntil(Phase.REGROUP);
-        pass(P1);
-        pass(P2);
-        selectNo(P1);
-        assertEquals(Zone.DISCARD, sarumansChill.getZone());
-    }
-
-    @Test
     public void discardedFromPlay() throws Exception {
         initializeSimplestGame();
 
@@ -511,22 +472,6 @@ public class TriggersAtTest extends AbstractAtTest {
         selectCardAction(P2, mordorAssassin);
         assertTrue(_game.getGameState().getAssignments().stream().anyMatch(assignment ->
                 assignment.getFellowshipCharacter() == ringBearer && assignment.getShadowCharacters().stream().anyMatch(shadowCharacter -> shadowCharacter == mordorAssassin)));
-    }
-
-    @Test
-    public void assignedToSkirmish() throws Exception {
-        initializeSimplestGame();
-
-        PhysicalCard ringBearer = getRingBearer(P1);
-        PhysicalCard desperateDefenseOfTheRing = attachTo(createCard(P2, "1_244"), ringBearer);
-        PhysicalCard goblinRunner = addToZone(createCard(P2, "1_178"), Zone.SHADOW_CHARACTERS);
-
-        passUntil(Phase.ASSIGNMENT);
-        pass(P1);
-        pass(P2);
-        assertEquals(1, getBurdens());
-        playerDecided(P1, ringBearer.getCardId() + " " + goblinRunner.getCardId());
-        assertEquals(2, getBurdens());
     }
 
     @Test

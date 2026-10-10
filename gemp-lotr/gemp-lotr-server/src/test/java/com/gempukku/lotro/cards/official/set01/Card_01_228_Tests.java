@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_01_228_Tests
@@ -21,7 +22,26 @@ public class Card_01_228_Tests
 				new HashMap<>()
 				{{
 					put("card", "1_228");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetRingScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("world", "1_228");
+					// Two Nazgûl of strength 9 and vitality 2 who are not fierce.  Lemenya's text needs a companion
+					// bearing a [wraith] condition, Nertëa's only answers his being played.
+					put("lemenya", "1_232");    // Úlairë Lemenya, Lieutenant of Morgul
+					put("nertea", "1_234");     // Úlairë Nertëa, Messenger of Dol Guldur
+					// Morgul Hound: a [wraith] minion that is no Nazgûl (an Orc), strength 5, vitality 2, so it
+					// could exert; stronger and fierce only at 2 wounds on the Ring-bearer.  It beats Frodo (3, and
+					// 1 for the Ring) by one.
+					put("hound", "7_192");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -58,18 +78,52 @@ public class Card_01_228_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void TheTwilightWorldTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void ResponseExertsANazgulToAddTwoBurdensWhenTheRingBearerPutsOnTheOneRing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetRingScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var world = scn.GetShadowCard("world");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var nertea = scn.GetShadowCard("nertea");
+		var hound = scn.GetShadowCard("hound");
+		var frodo = scn.GetRingBearer();
+		var ring = scn.GetRing();
+		scn.MoveCardsToHand(world);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.AddBurdens(1);
+		scn.MoveMinionsToTable(lemenya, nertea, hound);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(frodo, hound);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(frodo);
+		scn.PassSkirmishActions();
 
-		assertEquals(0, scn.GetTwilight());
+		// Frodo has lost and is about to take the wound: the Ring's own response.
+		assertFalse(scn.RBWearingOneRing());
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(ring));
+
+		scn.FreepsChooseOptionalTrigger(ring);
+		// He has put it on, and the wound has not yet been made a burden.
+		assertTrue(scn.RBWearingOneRing());
+		assertEquals(1, scn.GetBurdens());
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(world));
+
+		scn.ShadowChooseOptionalTrigger(world);
+		assertTrue(scn.ShadowHasCardChoiceAvailable(lemenya, nertea));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(hound));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+
+		scn.ShadowChooseCard(lemenya);
+		assertEquals(1, scn.GetWoundsOn(lemenya));
+		assertEquals(0, scn.GetWoundsOn(nertea));
+		assertEquals(0, scn.GetWoundsOn(hound));
+		// 1 before + 2 from the event + 1 for the wound the Ring turns into a burden
+		assertEquals(4, scn.GetBurdens());
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertInDiscard(world);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }

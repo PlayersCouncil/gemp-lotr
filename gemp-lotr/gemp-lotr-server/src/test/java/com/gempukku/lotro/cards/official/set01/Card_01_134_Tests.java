@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_01_134_Tests
@@ -18,7 +19,18 @@ public class Card_01_134_Tests
 				new HashMap<>()
 				{{
 					put("card", "1_134");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetEndOfTurnScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("chill", "1_134");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -56,18 +68,29 @@ public class Card_01_134_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SarumansChillTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void IsDiscardedAtTheEndOfTheTurn() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetEndOfTurnScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var chill = scn.GetShadowCard("chill");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.FreepsPass();
+		// Laid on the site the fellowship has just come to, so that no Hobbit moves from it this turn.
+		var site = scn.GetCurrentSite();
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		scn.AttachCardsTo(site, chill);
 
-		assertEquals(1, scn.GetTwilight());
+		// The last thing asked in the turn: the Chill has stayed through every phase of it.
+		scn.SkipToMovementDecision();
+		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
+		assertAttachedTo(chill, site);
+		assertTrue(scn.FreepsDecisionAvailable("another move"));
+
+		scn.FreepsChooseToStay();
+		// The first thing asked in the next turn, which is the other player's.
+		assertInDiscard(chill);
+		assertEquals(Phase.FELLOWSHIP, scn.GetCurrentPhase());
+		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
 	}
 }

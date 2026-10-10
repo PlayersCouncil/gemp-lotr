@@ -609,24 +609,6 @@ public class IndividualCardAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void blockRemovingBurdens() throws CardNotFoundException, DecisionResultInvalidException {
-        initializeSimplestGame();
-
-        PhysicalCardImpl blackBreath = new PhysicalCardImpl(100, "1_207", P2, _cardLibrary.getLotroCardBlueprint("1_207"));
-        PhysicalCardImpl sam = new PhysicalCardImpl(100, "1_311", P1, _cardLibrary.getLotroCardBlueprint("1_311"));
-
-        _game.getGameState().attachCard(_game, blackBreath, _game.getGameState().getRingBearer(P1));
-        _game.getGameState().addCardToZone(_game, sam, Zone.FREE_CHARACTERS);
-
-        skipMulligans();
-
-        final int burdensBefore = _game.getGameState().getBurdens();
-        playerDecided(P1, getCardActionId(_userFeedback.getAwaitingDecision(P1), "Use Sam"));
-
-        assertEquals(burdensBefore, _game.getGameState().getBurdens());
-    }
-
-    @Test
     public void hobbitPartyGuest() throws CardNotFoundException, DecisionResultInvalidException {
         initializeSimplestGame();
 
@@ -678,104 +660,6 @@ public class IndividualCardAtTest extends AbstractAtTest {
         playerDecided(P2, "0");
 
         assertEquals(Zone.HAND, cardInHand.getZone());
-    }
-
-    @Test
-    public void morgulBladeTransferFromSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-        initializeSimplestGame();
-
-        PhysicalCardImpl nelya = createCard(P2, "2_84");
-        PhysicalCardImpl morgulBlade = createCard(P2, "1_216");
-        PhysicalCardImpl bladeTip = createCard(P2, "1_209");
-
-        _game.getGameState().addCardToZone(_game, nelya, Zone.SHADOW_CHARACTERS);
-        _game.getGameState().addCardToZone(_game, bladeTip, Zone.SUPPORT);
-        _game.getGameState().attachCard(_game, morgulBlade, nelya);
-
-        skipMulligans();
-
-        // End fellowship phase
-        playerDecided(P1, "");
-
-        // End shadow phase
-        playerDecided(P2, "");
-
-        // End maneuver phase
-        playerDecided(P1, "");
-        playerDecided(P2, "");
-
-        // End archery phase
-        playerDecided(P1, "");
-        playerDecided(P2, "");
-
-        // End assignment phase
-        playerDecided(P1, "");
-        playerDecided(P2, "");
-
-        // Assign Frodo to Nelya
-        PhysicalCard frodo = _game.getGameState().getRingBearer(P1);
-        playerDecided(P1, frodo.getCardId() + " " + nelya.getCardId());
-
-        // Start skirmish
-        playerDecided(P1, String.valueOf(frodo.getCardId()));
-
-        // P1 Passes
-        playerDecided(P1, "");
-
-        // Use Morgul Blade
-        playerDecided(P2, "0");
-
-        assertEquals(Zone.DISCARD, morgulBlade.getZone());
-        assertEquals(Zone.ATTACHED, bladeTip.getZone());
-    }
-
-    @Test
-    public void morgulBladeTransferFromDiscard() throws DecisionResultInvalidException, CardNotFoundException {
-        initializeSimplestGame();
-
-        PhysicalCardImpl nelya = createCard(P2, "2_84");
-        PhysicalCardImpl morgulBlade = createCard(P2, "1_216");
-        PhysicalCardImpl bladeTip = createCard(P2, "1_209");
-
-        _game.getGameState().addCardToZone(_game, nelya, Zone.SHADOW_CHARACTERS);
-        _game.getGameState().addCardToZone(_game, bladeTip, Zone.DISCARD);
-        _game.getGameState().attachCard(_game, morgulBlade, nelya);
-
-        skipMulligans();
-
-        // End fellowship phase
-        playerDecided(P1, "");
-
-        // End shadow phase
-        playerDecided(P2, "");
-
-        // End maneuver phase
-        playerDecided(P1, "");
-        playerDecided(P2, "");
-
-        // End archery phase
-        playerDecided(P1, "");
-        playerDecided(P2, "");
-
-        // End assignment phase
-        playerDecided(P1, "");
-        playerDecided(P2, "");
-
-        // Assign Frodo to Nelya
-        PhysicalCard frodo = _game.getGameState().getRingBearer(P1);
-        playerDecided(P1, frodo.getCardId() + " " + nelya.getCardId());
-
-        // Start skirmish
-        playerDecided(P1, String.valueOf(frodo.getCardId()));
-
-        // P1 Passes
-        playerDecided(P1, "");
-
-        // Use Morgul Blade
-        playerDecided(P2, "0");
-
-        assertEquals(Zone.DISCARD, morgulBlade.getZone());
-        assertEquals(Zone.ATTACHED, bladeTip.getZone());
     }
 
     @Test

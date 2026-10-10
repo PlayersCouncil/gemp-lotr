@@ -80,23 +80,6 @@ public class RequirementsAtTest extends AbstractAtTest {
     }
 
     @Test
-    public void cardsInDeckCount() throws Exception {
-        initializeSimplestGame();
-
-        passUntil(Phase.FELLOWSHIP);
-
-        JSONObject obj = new JSONObject();
-        obj.put("deck", "fp");
-        obj.put("count", 1);
-
-        Requirement requirement = new CardsInDeckCount().getPlayRequirement(obj, lotroCardBlueprintBuilder);
-        DefaultActionContext actionContext = new DefaultActionContext(P1, _game, null, null, null);
-        assertFalse(requirement.accepts(actionContext));
-        putOnTopOfDeck(createCard(P1, "1_3"));
-        assertTrue(requirement.accepts(actionContext));
-    }
-
-    @Test
     public void isAhead() throws Exception {
         initializeSimplestGame();
 

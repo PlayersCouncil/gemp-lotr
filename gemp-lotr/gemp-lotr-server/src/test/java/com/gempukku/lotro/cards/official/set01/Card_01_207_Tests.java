@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_01_207_Tests
@@ -18,7 +19,19 @@ public class Card_01_207_Tests
 				new HashMap<>()
 				{{
 					put("card", "1_207");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetBurdenScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("breath", "1_207");
+					put("sam", "1_311");        // Sam, Son of Hamfast: "Fellowship: Exert Sam to remove a burden."
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -55,18 +68,53 @@ public class Card_01_207_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void BlackBreathTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void NoBurdenIsRemovedWhileItIsOnTheRingBearer() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetBurdenScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var breath = scn.GetShadowCard("breath");
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		scn.MoveCompanionsToTable(sam);
+		scn.AttachCardsTo(frodo, breath);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.AddBurdens(2);
 
-		assertEquals(1, scn.GetTwilight());
+		assertAttachedTo(breath, frodo);
+		assertEquals(2, scn.GetBurdens());
+		assertEquals(0, scn.GetWoundsOn(sam));
+		// An ability with a cost is offered though its effect will do nothing.
+		assertTrue(scn.FreepsActionAvailable(sam));
+
+		scn.FreepsUseCardAction(sam);
+		assertEquals(1, scn.GetWoundsOn(sam));
+		assertEquals(2, scn.GetBurdens());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void ABurdenIsRemovedWhileItIsOnACompanionWhoIsNotTheRingBearer() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetBurdenScenario();
+
+		var breath = scn.GetShadowCard("breath");
+		var sam = scn.GetFreepsCard("sam");
+		scn.MoveCompanionsToTable(sam);
+		// The burdens are the Ring-bearer's, and Sam is not he: on Sam it keeps no burden where it is.  Nor
+		// does it stop him exerting, which adds a wound and removes none.
+		scn.AttachCardsTo(sam, breath);
+
+		scn.StartGame();
+		scn.AddBurdens(2);
+
+		assertAttachedTo(breath, sam);
+		assertEquals(2, scn.GetBurdens());
+		assertEquals(0, scn.GetWoundsOn(sam));
+		assertTrue(scn.FreepsActionAvailable(sam));
+
+		scn.FreepsUseCardAction(sam);
+		assertEquals(1, scn.GetWoundsOn(sam));
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

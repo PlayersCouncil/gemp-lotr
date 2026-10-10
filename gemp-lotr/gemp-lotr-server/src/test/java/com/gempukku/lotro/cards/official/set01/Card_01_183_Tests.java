@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_01_183_Tests
@@ -18,7 +19,22 @@ public class Card_01_183_Tests
 				new HashMap<>()
 				{{
 					put("card", "1_183");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetStackedOrcsScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("swarms", "1_183");
+					// Goblin Runner: [moria] Orc, cost 1, site 4.  "When you play this minion, you may add (2)",
+					// which the game adds without asking: something that happens only to a card that is played.
+					put("runner", "1_178");
+					put("troop", "1_177");      // Goblin Patrol Troop: [moria] Orc, cost 6, site 4, no text
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -55,18 +71,35 @@ public class Card_01_183_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GoblinSwarmsTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void ShadowAbilityPlaysAnOrcStackedHereAsIfFromHand() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetStackedOrcsScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var swarms = scn.GetShadowCard("swarms");
+		var runner = scn.GetShadowCard("runner");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCardsToSupportArea(swarms);
+		scn.StackCardsOn(swarms, runner, troop);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SetTwilight(7);
+		scn.FreepsPass();
 
-		assertEquals(1, scn.GetTwilight());
+		// 7 set + 1 companion + 2 for Ettenmoors: enough for either Orc (the Troop is 6 + 2 roaming)
+		assertEquals(10, scn.GetTwilight());
+		assertInZone(Zone.STACKED, runner, troop);
+		assertTrue(scn.ShadowActionAvailable(swarms));
+
+		scn.ShadowUseCardAction(swarms);
+		assertTrue(scn.ShadowHasCardChoiceAvailable(runner, troop));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+
+		scn.ShadowChooseCard(runner);
+		// 10 - 1 for the Runner - 2 roaming (a site 4 minion at site 2) + 2 the Runner adds on being played
+		assertEquals(9, scn.GetTwilight());
+		assertInZone(Zone.SHADOW_CHARACTERS, runner);
+		assertInZone(Zone.STACKED, troop);
+		assertEquals(1, scn.GetStackedCards(swarms).size());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

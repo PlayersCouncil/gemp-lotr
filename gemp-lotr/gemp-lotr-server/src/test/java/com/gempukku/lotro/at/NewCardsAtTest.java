@@ -43,33 +43,6 @@ public class NewCardsAtTest extends AbstractAtTest {
         playerDecided(P1, "0");
     }
 
-    //Replace with Goblin Domain
-
-//    @Test
-//    public void playedTrigger() throws DecisionResultInvalidException, CardNotFoundException {
-//        initializeSimplestGame();
-//
-//        PhysicalCardImpl bruinenUnleashed = new PhysicalCardImpl(100, "40_37", P1, _cardLibrary.getLotroCardBlueprint("40_37"));
-//        PhysicalCardImpl legolas = new PhysicalCardImpl(100, "1_50", P1, _cardLibrary.getLotroCardBlueprint("40_52"));
-//        PhysicalCardImpl nazgul = new PhysicalCardImpl(100, "1_237", P2, _cardLibrary.getLotroCardBlueprint("40_211"));
-//
-//        _game.getGameState().addCardToZone(_game, legolas, Zone.FREE_CHARACTERS);
-//        _game.getGameState().addCardToZone(_game, bruinenUnleashed, Zone.SUPPORT);
-//        _game.getGameState().addCardToZone(_game, nazgul, Zone.HAND);
-//
-//        skipMulligans();
-//
-//        _game.getGameState().setTwilight(10);
-//
-//        // Pass in fellowship
-//        playerDecided(P1, "");
-//
-//        // Pass in shadow
-//        playerDecided(P2, "0");
-//
-//        assertEquals(1, _game.getGameState().getWounds(nazgul));
-//    }
-
 //    @Test
 //    public void choiceEffect() throws DecisionResultInvalidException, CardNotFoundException {
 //        initializeSimplestGame();

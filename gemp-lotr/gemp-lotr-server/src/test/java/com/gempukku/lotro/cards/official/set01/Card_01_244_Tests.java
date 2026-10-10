@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_01_244_Tests
@@ -19,7 +20,25 @@ public class Card_01_244_Tests
 				new HashMap<>()
 				{{
 					put("card", "1_244");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetAssignmentScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("defense", "1_244");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: the bearer, a companion who is not the Ring-bearer
+					put("savage", "1_151");     // Uruk Savage: the minion the bearer is assigned to
+					put("runner", "1_178");     // Goblin Runner: a minion for the Ring-bearer, who does not bear the condition
+
+					// Two cards for the Free Peoples hand, one short of the three a discard would take
+					put("gimli", "1_13");
+					put("sam", "1_311");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -55,18 +74,36 @@ public class Card_01_244_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void DesperateDefensebroftheRingTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void WithFewerThanThreeCardsInHandBearerAssignedToASkirmishAddsABurdenUnasked() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetAssignmentScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var defense = scn.GetShadowCard("defense");
+		var savage = scn.GetShadowCard("savage");
+		var runner = scn.GetShadowCard("runner");
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var sam = scn.GetFreepsCard("sam");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.AttachCardsTo(aragorn, defense);
+		scn.MoveCardsToHand(gimli, sam);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(savage, runner);
+		scn.SkipToAssignments();
 
-		assertEquals(1, scn.GetTwilight());
+		assertAttachedTo(defense, aragorn);
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(2, scn.GetFreepsHandCount());
+
+		// The bearer and the Ring-bearer are assigned in the one answer.  Three cards cannot be discarded from
+		// a hand of two, so there is nothing to choose: one burden, for the bearer's assignment and not for
+		// the other, and the game has gone on to the skirmishes.
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[] { aragorn, savage }, new PhysicalCardImpl[] { frodo, runner });
+		assertEquals(1, scn.GetBurdens());
+		assertEquals(2, scn.GetFreepsHandCount());
+		assertInHand(gimli, sam);
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 	}
 }
