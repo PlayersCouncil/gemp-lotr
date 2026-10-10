@@ -808,6 +808,9 @@ turn, and read `FreepsGetBurdens()` at the other player's first decision (Card_0
 **Threats stop at the number of companions** (CR 4.2 "threats": none can be added while there are as many
 threats as companions in play). A board that is to read N threats needs N companions: the control in
 `Card_00_060_Tests` (War Towers 7_173's 1 threat, then the 2 of Sméagol 7_71's assignment ability) stands on three.
+A companion whose own cost is a threat ("To play, add a threat": Cursed of Erech 10_26) is not counted while he
+is being paid for: beside the Ring-bearer alone with 1 threat he is not offered, and with none he is
+(`Card_10_026_Tests`).
 
 **Threat wounds are asked for one at a time, and the threats are gone before the first.** When a companion is
 killed with threats on the table, the Shadow player first has 'Before threat wounds are placed - Optional "is
