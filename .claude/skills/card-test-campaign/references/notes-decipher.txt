@@ -19,6 +19,8 @@ held more than a stat check before the campaign (509 tests between them, most fi
   boards and the helper cards are settled there, and a finding the erratum's batch fixed "in the original too" is
   already in your card's definition (`packet.py` prints the text a definition had before a campaign commit).
   Where the two differ, the difference is the erratum's and not a finding on your card.
+  An erratum's board is settled only for the zones the ERRATUM's text reads: where the original's text reads
+  another zone (a draw deck, a discard pile), lay that zone yourself; the erratum's scenario may leave it empty.
 - Hindering and beacons will seldom concern you, as on the errata: no hindered card unless the text speaks of one
   or says "you can spot".
 
