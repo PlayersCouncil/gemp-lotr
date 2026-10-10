@@ -37,8 +37,10 @@ Nobody has checked the reviewer's changes but you. Look at `git diff -- <the car
   of its side can have (a Shadow minion made an Elf or [rohan]; a Free Peoples Man made [dunland]; a companion made
   a Wraith; an Elf made a [gondor] Man to bear a [gondor] bow), or two cards of one unique title in play. Take the
   candidate or the test out, bring the ledger's claim lines and Notes into line ("the two definitions cannot
-  differ in play"), and run the card again. Another culture given for race against culture (F-0019) is ruled and
-  stays; an ad hoc keyword, strength or vitality that printed cards can grant is fine.
+  differ in play"), and run the card again. A culture or a race is never given by hand either (Q-0213, 2026-10-10): where a text names
+  one and the definition might go by the other, a PRINTED card that has it against type shows it (the helper table
+  names them), and for Elf, Dwarf, Wizard and Wraith, where no such card exists, nothing is shown and lint reports
+  the definition; an ad hoc keyword, strength or vitality that printed cards can grant is fine.
 - **A test that relies on an exception** (`assertThrows`, a `try`): lint refuses it. It is a rig request (step 5).
 
 ## 3. Findings: every `F-0000`

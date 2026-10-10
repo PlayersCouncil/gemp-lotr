@@ -99,8 +99,10 @@ to you.
   no gap: say in Notes that the two definitions cannot differ in play. Never give a card a race, culture, type or
   side no printed card of its side can have (a Shadow minion made an Elf or [rohan]; a Free Peoples Man made
   [dunland]; a companion made a Wraith; an Elf made a [gondor] Man to bear a [gondor] bow), and never put two
-  cards of one unique title in play. Giving a card another culture for race against culture (F-0019) is ruled
-  and stays; an ad hoc keyword, strength or vitality that printed cards can grant is fine.
+  cards of one unique title in play. A culture or a race is never given by hand either (Q-0213, 2026-10-10): where a text names
+  one and the definition might go by the other, a PRINTED card that has it against type shows it (the helper table
+  names them), and for Elf, Dwarf, Wizard and Wraith, where no such card exists, nothing is shown and lint reports
+  the definition; an ad hoc keyword, strength or vitality that printed cards can grant is fine.
 - **A gap** gets the candidate, reading or test that closes it. The one mistake that proved the gap must be
   noticed afterwards: run it again. A run that confirms a gap just closed does not count towards the two.
 - **A fix that changes what a test claims changes the ledger too.** Keep the claim lines, `Findings:`,

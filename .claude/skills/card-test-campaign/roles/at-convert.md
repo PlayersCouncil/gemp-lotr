@@ -76,7 +76,9 @@ as it takes, and say in your report which of your tests stand for which name of 
      landing: this is a kickstart.
      `lint.py --form <the file> --only <YourTest,YourOtherTest>` must pass. A file the batch marks NEW FILE is
      made in the manner of its neighbours (for a Hobbit-set card the batch file says how).
-3. **Run it**: `python3 .claude/skills/card-test-campaign/scripts/cardtest.py run <the file> --out <your folder>`.
+3. **Run it**: `python3 .claude/skills/card-test-campaign/scripts/cardtest.py run <the file> --out <your folder>`. (It takes a
+   test file of the logic or common module too. `mutate.py <id> --test <file.java>` tries a correction against a
+   mechanics class. A home that is not on the rig owes no `lint.py --form`.)
    When it fails, decide which of three things is wrong, in this order: the test (you drove the rig wrongly, or
    a helper card did something you did not account for: fix it); your expectation (check the rules and the
    rulings; if they settle it, fix the test; if they do not, it is a question: write the test for the reading
