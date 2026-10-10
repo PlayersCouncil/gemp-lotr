@@ -37,6 +37,20 @@ import static org.junit.Assert.*;
  * "Wound 2 Orcs" can be performed in full with two Orcs in play; "wound 1 Orc twice" with an Orc that has 2
  * vitality left.
  *
+ * Ketura on Q-0209 (2026-10-10): "while the choice is valid (i.e. both sides are 'fully capable' of happening),
+ * the eventual secondary choices (who to wound etc) are an extension of that choice and thus must be restricted
+ * to only 'fully executed' choices; picking 'wound one Orc twice' means you can't pick a 1-vitality Orc.  However
+ * once a choice is broken by having no 'fully capable' branches, then we are free of that restriction and
+ * instead fall back on 'do what you can and ignore the rest', which *does* permit us to wound a 1-vitality Orc
+ * twice."
+ *
+ * So, for what is picked once a branch has been taken:
+ * 4. under rule 1, "wound X twice" is aimed only at an X able to take both wounds; "wound 2 Orcs" on the same
+ *    board may still take an Orc of 1 vitality, which takes the whole of its one wound;
+ * 5. under rule 2 any X may be picked, and takes the wound it can;
+ * 6. a "wound X twice" that is no branch of a choice is as it was: any X may be picked (Fury of the White
+ *    Rider: "Maneuver: Spot 3 twilight tokens and exert Gandalf to wound a minion twice.").
+ *
  * The last test is of the branch the game takes without a question: it is the one remembered as chosen, which
  * what follows the choice may read (Halls of My Home).
  */
@@ -58,6 +72,23 @@ public class ChoiceOfWhatCanBeDoneInFullTests
 					put("troop1", "1_177");     // Goblin Patrol Troop: an Orc, vitality 3, no text
 					put("troop2", "1_177");
 					put("savage", "1_151");     // Uruk Savage: an Uruk-hai and no Orc, vitality 3
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetNoChoiceScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// Fury of the White Rider: "Spell.  Maneuver: Spot 3 twilight tokens and exert Gandalf to
+					// wound a minion twice."
+					put("fury", "5_18");
+					put("gandalf", "1_72");     // Gandalf, Friend of the Shirefolk: vitality 4
+					put("runner", "1_178");     // Goblin Runner: vitality 1
+					put("troop", "1_177");      // Goblin Patrol Troop: vitality 3, no text
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -261,7 +292,7 @@ public class ChoiceOfWhatCanBeDoneInFullTests
 	}
 
 	@Test
-	public void WithAnOrcOfOneVitalityAndAnOrcOfThreeBothCanBeDoneInFull() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WithAnOrcOfOneVitalityAndAnOrcOfThreeWoundOneOrcTwiceGoesToTheOrcAbleToTakeBoth() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var balin = scn.GetFreepsCard("balin");
@@ -281,10 +312,112 @@ public class ChoiceOfWhatCanBeDoneInFullTests
 		assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
 		assertEquals(List.of(WOUND_TWO, WOUND_TWICE), scn.FreepsGetMultipleChoices());
 		scn.FreepsChoose(WOUND_TWICE);
-		scn.FreepsChooseCard(troop1);
 
+		// The branch was open because it can be done in full, so it is done in full: the Orc of 1 vitality is
+		// no part of it, and the one Orc who is takes both wounds without a question.
 		assertEquals(2, scn.GetWoundsOn(troop1));
 		assertInZone(Zone.SHADOW_CHARACTERS, runner1);
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Test
+	public void WithBothBranchesOpenWoundOneOrcTwiceOffersOnlyTheOrcsAbleToTakeBothWounds() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var balin = scn.GetFreepsCard("balin");
+		var gimli = scn.GetFreepsCard("gimli");
+		var runner1 = scn.GetShadowCard("runner1");
+		var troop1 = scn.GetShadowCard("troop1");
+		var troop2 = scn.GetShadowCard("troop2");
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveCardsToHand(balin);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner1, troop1, troop2);
+		// One Patrol Troop has 2 vitality left, the fewest that can take both wounds.
+		scn.AddWoundsToChar(troop2, 1);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		scn.FreepsPlayCard(balin);
+
+		assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
+		assertEquals(List.of(WOUND_TWO, WOUND_TWICE), scn.FreepsGetMultipleChoices());
+		scn.FreepsChoose(WOUND_TWICE);
+
+		// Whom to wound is part of the choice made: only an Orc able to take both wounds.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(troop1, troop2));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(runner1));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		assertEquals(1, scn.FreepsGetChoiceMax());
+		scn.FreepsChooseCard(troop2);
+
+		assertInZone(Zone.DISCARD, troop2);
+		assertEquals(0, scn.GetWoundsOn(troop1));
+		assertInZone(Zone.SHADOW_CHARACTERS, runner1);
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Test
+	public void WithBothBranchesOpenWoundTwoOrcsMayStillTakeAnOrcOfOneVitality() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var balin = scn.GetFreepsCard("balin");
+		var gimli = scn.GetFreepsCard("gimli");
+		var runner1 = scn.GetShadowCard("runner1");
+		var troop1 = scn.GetShadowCard("troop1");
+		var troop2 = scn.GetShadowCard("troop2");
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveCardsToHand(balin);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner1, troop1, troop2);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		scn.FreepsPlayCard(balin);
+
+		assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
+		scn.FreepsChoose(WOUND_TWO);
+
+		// One wound each is the whole of this branch, and an Orc of 1 vitality can take it.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(runner1, troop1, troop2));
+		assertEquals(2, scn.FreepsGetChoiceMin());
+		scn.FreepsChooseCards(runner1, troop1);
+
+		assertInZone(Zone.DISCARD, runner1);
+		assertEquals(1, scn.GetWoundsOn(troop1));
+		assertEquals(0, scn.GetWoundsOn(troop2));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Test
+	public void WoundAMinionTwiceThatIsNoBranchOfAChoiceMayBeAimedAtAMinionOfOneVitality() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetNoChoiceScenario();
+
+		var fury = scn.GetFreepsCard("fury");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var runner = scn.GetShadowCard("runner");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCardsToHand(fury);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner, troop);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.SetTwilight(3);
+
+		assertTrue(scn.FreepsPlayAvailable(fury));
+		scn.FreepsPlayCard(fury);
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+
+		// No choice between two things to do was made here, so there is nothing to hold the player to: the
+		// minion of 1 vitality stands beside the one able to take both wounds, and takes what it can.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(runner, troop));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		scn.FreepsChooseCard(runner);
+
+		assertInZone(Zone.DISCARD, runner);
+		assertEquals(0, scn.GetWoundsOn(troop));
+		assertInZone(Zone.DISCARD, fury);
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 

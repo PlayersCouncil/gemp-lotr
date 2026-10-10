@@ -27,6 +27,7 @@ public class Card_01_063_ErrataTests
 					put("warden", "1_259");       // Morgul Warden: [sauron] Orc, vitality 3; strength +1 for each other [sauron] Orc
 					put("guard", "10_81");        // Cirith Ungol Guard: [sauron] Uruk-hai, vitality 2; damage +1 is its whole text
 					put("soldier", "1_271");      // Orc Soldier: [sauron] Orc, vitality 2; a skirmish ability only
+					put("deadones", "6_100");     // Dead Ones: [sauron] Wraith, vitality 1; twilight and damage +1, and a cost to play (cheated in)
 					put("patrol", "1_177");       // Goblin Patrol Troop: [moria] Orc, vitality 3, no text
 					put("seeking", "1_276");      // Seeking Its Master: [sauron] condition in the support area; a Shadow ability only
 					put("pinned", "1_192");       // Pinned Down: [moria] condition in the support area; nothing without a [moria] archer
@@ -78,6 +79,7 @@ public class Card_01_063_ErrataTests
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var warden = scn.GetShadowCard("warden");
 		var guard = scn.GetShadowCard("guard");
+		var deadones = scn.GetShadowCard("deadones");
 		var patrol = scn.GetShadowCard("patrol");
 		var seeking = scn.GetShadowCard("seeking");
 		scn.MoveCardsToHand(stand);
@@ -87,7 +89,7 @@ public class Card_01_063_ErrataTests
 		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.ELVEN));
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(warden, guard, patrol);
+		scn.MoveMinionsToTable(warden, guard, deadones, patrol);
 		// A [sauron] condition in play, so that the discard could be chosen too.
 		scn.MoveCardsToSupportArea(seeking);
 		scn.SkipToPhase(Phase.MANEUVER);
@@ -115,13 +117,16 @@ public class Card_01_063_ErrataTests
 		assertTrue(scn.FreepsChoiceAvailable("Discard"));
 		scn.FreepsChooseOption("Wound");
 
+		// The wound was open to choose because it can be done in full, so whom to wound is held to that too
+		// (Q-0209): the [sauron] minions of 3 and of 2 vitality, and not the one of 1.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(warden, guard));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(patrol));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(deadones, patrol));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		scn.FreepsChooseCard(warden);
 
 		assertEquals(2, scn.GetWoundsOn(warden));
 		assertEquals(0, scn.GetWoundsOn(guard));
+		assertInZone(Zone.SHADOW_CHARACTERS, deadones);
 		assertEquals(0, scn.GetWoundsOn(patrol));
 		assertInZone(Zone.SUPPORT, seeking);
 		assertInDiscard(stand);

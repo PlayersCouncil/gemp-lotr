@@ -103,4 +103,9 @@ public class DelegateActionContext implements ActionContext {
     public boolean isAtResolution() {
         return delegate.isAtResolution();
     }
+
+    @Override
+    public boolean isBranchChosenAsDoableInFull() {
+        return delegate.isBranchChosenAsDoableInFull();
+    }
 }

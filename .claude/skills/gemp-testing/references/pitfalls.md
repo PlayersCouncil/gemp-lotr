@@ -160,7 +160,13 @@ the text of the branch taken, asked or not.
 wound him twice" (Boromir 59_31) only the first of the two wounds could be placed, so the game carries out the
 other branch and asks nothing (CR 4.2 "effect": a choice must be one the player is fully capable of performing;
 Ketura's ruling on F-0310, in the entry above). With 2 vitality left the branch is offered and kills him,
-which is also what tells a wound from an exertion (F-0148).
+which is also what tells a wound from an exertion (F-0148). Where X is chosen and the branch is open because
+some X can take both wounds, an X with 1 vitality left is not offered for it either: whom to wound is an
+extension of the choice (Q-0209: B; Stand Against Darkness 51_63, a [sauron] minion of 1 vitality beside ones of
+2 and 3), and a lone X able to take both takes them with no question. Where no branch can be done in full and
+both are offered all the same, any X may be picked and takes the wound it can. A "wound X twice" that is no
+branch of a choice offers every X able to take a wound, as it always did (Fury of the White Rider 5_18;
+mechanics/ChoiceOfWhatCanBeDoneInFullTests has all three).
 
 **A play inside an `If` does not gate its action.** The engine refuses an action it can see will play nothing
 only when the play is the action's top-level effect. Wrapped in an `If`, the action is always offered and does

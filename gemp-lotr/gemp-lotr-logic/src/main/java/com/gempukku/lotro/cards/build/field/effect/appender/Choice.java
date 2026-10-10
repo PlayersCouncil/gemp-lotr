@@ -78,12 +78,26 @@ public class Choice implements EffectAppenderProducer {
                     }
                 }
 
+                // The branch taken is carried out in a context that says whether it was open because it can be
+                // carried out in full: what is then picked within it is an extension of the choice, and is held
+                // to what can be done in full as well (Ketura on Q-0209).  Where no branch can be and they are
+                // offered all the same, it says not, whatever a choice this one is a branch of had said.
+                final boolean doableInFull = !playableEffectAppenders.isEmpty();
+                final ActionContext branchContext = new DelegateActionContext(actionContext,
+                        choosingPlayer, actionContext.getGame(), actionContext.getSource(),
+                        actionContext.getEffectResult(), actionContext.getEffect()) {
+                    @Override
+                    public boolean isBranchChosenAsDoableInFull() {
+                        return doableInFull;
+                    }
+                };
+
                 // Exactly one branch can be carried out in full: that is the one the player is capable of choosing
                 // (CR 4.2 "effect"; Ketura on F-0310), so it is taken without a question, and it is the one
                 // remembered as chosen, in the words the question would have shown.
                 if (playableEffectAppenders.size() == 1) {
                     SubAction subAction = new SubAction(action);
-                    playableEffectAppenders.getFirst().appendEffect(cost, subAction, delegate);
+                    playableEffectAppenders.getFirst().appendEffect(cost, subAction, branchContext);
                     actionContext.setValueToMemory(memorize, effectTexts.getFirst());
                     return new StackActionEffect(subAction);
                 }
@@ -120,7 +134,7 @@ public class Choice implements EffectAppenderProducer {
                                 new MultipleChoiceAwaitingDecision(1, "Choose action to perform", effectTexts.toArray(new String[0])) {
                                     @Override
                                     protected void validDecisionMade(int index, String result) {
-                                        playableEffectAppenders.get(index).appendEffect(cost, subAction, delegate);
+                                        playableEffectAppenders.get(index).appendEffect(cost, subAction, branchContext);
                                         actionContext.setValueToMemory(memorize, result);
                                     }
                                 }));

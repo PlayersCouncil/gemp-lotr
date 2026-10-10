@@ -66,4 +66,17 @@ public interface ActionContext {
     default boolean isAtResolution() {
         return false;
     }
+
+    /**
+     * Whether what this context carries out is a branch of a choice between things to do ("wound 2 Orcs or
+     * wound 1 Orc twice") that was open to the player because it can be carried out in full (CR 4.2 "effect":
+     * "you must choose an action that you are fully capable of performing (if possible)").  What the player then
+     * picks within the branch is an extension of that choice (Ketura on Q-0209), so an effect that asks whom it
+     * is to be done to more than once ("wound X twice") offers only those it can be done to in full.  False where
+     * no branch of the choice could be carried out in full and they were offered all the same (do what you can and
+     * ignore the rest), and in every context that is not a branch of a choice (Choice sets it for its branches).
+     */
+    default boolean isBranchChosenAsDoableInFull() {
+        return false;
+    }
 }

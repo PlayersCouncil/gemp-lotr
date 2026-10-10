@@ -365,7 +365,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 
 - The no-effect flag: which cards assert it [Q-0034]
 - A choice whose every branch has nothing to act on (F-0116) [F-0293]
-- "<Do X> or <do Y>": each branch is written as the effect itself (F-0310, Here Lies Balin 1_19) [F-0222]
+- "<Do X> or <do Y>": each branch is written as the effect itself (F-0310, Here Lies Balin 1_19) [Q-0209, F-0222]
 - A parenthesis with its own price (Q-0089)
 - One thing left to do is done without a second question (Q-0090)
 - A yes/no before a choice whose minimum is 0 (Q-0143, F-0277) [F-0278, F-0285, Q-0102]
