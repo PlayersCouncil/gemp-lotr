@@ -491,6 +491,12 @@ the rules section instead. `lint.py --form <file.java>` holds such a class to th
 with nothing of ledger, stats test or card), and with `--only <Test,Test>` a lone test added to a card's file
 that has no ledger. The old tests under `at/` are rewritten into one place or the other.
 
+A test of a server class that no player sees and no rule describes (the league-placement arithmetic, a decision
+checking its own answer) is neither kind: it is plain JUnit beside the class it tests, in that class's module
+(`RTMDGameInfoTest`, `MultipleChoiceAwaitingDecisionTest`), or, where it must have a game, in the server module
+under the class's package and on the rig (`logic/GameUtilsAllPlayersTests`). The rules above and `--form` are for
+tests of the game: only in a unit test whose subject IS a class's exception does `assertThrows` belong.
+
 What every card of a kind obeys is a mechanic and is not retested card by card: that exerting is not taking a
 wound and a wound is not an exertion, that an exhausted character cannot exert, how a keyword works.
 
