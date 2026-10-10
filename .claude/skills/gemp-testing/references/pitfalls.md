@@ -86,7 +86,10 @@ skirmish begins, so `IsCharAssigned(card)` is false for the characters of the sk
 (`IsCharSkirmishing` is true of them), while the definition word `assignedToSkirmish` counts them until the
 skirmish phase ends, which is after its win and lose triggers have been carried out (CR 4.2 "skirmish
 phase(s)"). A test of "assigned to a skirmish" at a win or lose trigger rests on that rule and reads the
-card's effect, not `IsCharAssigned` (Lorien Protector 63_20, with two Orkish Skirmishers 18_90).
+card's effect, not `IsCharAssigned` (Lorien Protector 63_20, with two Orkish Skirmishers 18_90). Once his own
+skirmish is over the word counts him no longer, in the same turn: Counts But One 8_4 ("If Gimli is not assigned to
+a skirmish") is not offered in a skirmish fought before Gimli's and is offered in one fought after it, which is
+the control for the first reading (Card_08_004_Tests, three skirmishes on one table).
 
 **A check on a player who is not being asked anything answers false.** The availability and card-choice checks
 return false, `FreepsGetAvailableActions()` returns an empty list, and the raw readers of a decision's
