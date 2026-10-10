@@ -16,7 +16,7 @@ public class Playable implements RequirementProducer {
 
         final String playerName = FieldUtils.getString(object.get("player"), "player", "you");
         final String filterDef = FieldUtils.getString(object.get("filter"), "filter");
-        final ValueSource discountValue = ValueResolver.resolveDiscount(object.get("discount"), environment);
+        final ValueSource discountValue = ValueResolver.resolveEvaluator(object.get("discount"), 0, environment);
         final Zone zone = FieldUtils.getEnum(Zone.class, object.get("fromZone"), "fromZone");
 
         if(zone != null && zone != Zone.HAND && zone != Zone.DISCARD && zone != Zone.DECK && zone != Zone.STACKED) {
@@ -34,7 +34,7 @@ public class Playable implements RequirementProducer {
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filterDef, environment);
         return (actionContext) -> {
             final var game = actionContext.getGame();
-            final int discount = discountValue.getEvaluator(actionContext).evaluateWithoutSpending(game, null);
+            final int discount = discountValue.getEvaluator(actionContext).evaluateExpression(game, null);
             final var player = playerSource.getPlayer(actionContext);
             final var filter = filterableSource.getFilterable(actionContext);
 

@@ -229,11 +229,6 @@ answer one; that was a misreading of the source and no fault. A cancelled "is ab
 situation standing, and its owner is offered it again for as long as he can pay (CR 4.2 "response"): leave him
 nothing to pay with, or decline for him, before reading that the wound landed.
 
-**A discount with a limit is spent when the card is played.** "Its twilight cost is -1 for each ... (limit -N)"
-on an ability is the card's for the phase (Q-0134): asking what is on offer spends none of it, each play takes
-what is left, and at the limit the ability stays on offer and plays at full cost, withheld only while the pool
-cannot pay for anything it could play (`mechanics/LimitOnADiscountTests`; Uruk Regular 54_192).
-
 **A meta-site's optional trigger is offered to every player unless its definition names one.** The engine
 collects a Race to Mount Doom modifier's optional triggers for each player, whoever owns it, and `requires:
 OwnerIsFreeps` is true for both: once the owner declines, the other player is offered the same trigger as its
@@ -1018,8 +1013,6 @@ the limit is reached at n = limit - 1 (3 of 4; 5 of 6 under 92_1, Q-0182 open).
 - `0_8011` Test Archive ("Shadow or Skirmish: Play an event from your discard pile.") and `0_8012` Test Lectern ("Shadow or Skirmish: Play an event stacked here."): Shadow conditions for mechanics/ResponseEventsAreNotPlayedByEffectsTests. The test booster pack (`product/Test-Booster.hjson`) holds a Shadow response event, Enheartened Foe 1_247, which Race Text 92_29 shows and does not let be chosen. A choice from a stack is answered with `ShadowChooseCard`, not `ShadowChooseCardBPFromSelection`.
 
 - `0_8013` Test Whetstone ("Skirmish: Exert a Dwarf to play a [dwarven] event from your discard pile."): mechanics/CostsAreJudgedInTheOrderPrintedTests.
-
-- `0_8014` Test Muster ("Shadow or Maneuver: Play a minion; its twilight cost is -1 for each minion you can spot (limit -2).") and `0_8015` Test Barrow (the same in the Shadow phase, from the discard pile): Shadow conditions with no cost, for mechanics/LimitOnADiscountTests.
 
 - `0_8016` Test Shelf ("Response: If you play an event, add (1) to place that event on top of your draw deck.") and `0_8017` Test Cellar (the same, beneath): Free Peoples conditions built on `filter: played`, for mechanics/PlacingTheEventPlayedOnADrawDeckTests. Each is offered again for the same play after it is used (a cost that can be paid): decline it.
 

@@ -240,15 +240,11 @@
 			effect: {
 				type: PlayCardFromHand
 				select: choose(uruk-hai)
-				// "(limit -2)" is this card's for the whole Shadow phase, over all its uses (Q-0134, F-0245).
 				discount: {
-					type: cardPhaseLimit
+					type: forEachYouCanSpot
+					filter: not(self),uruk-hai
 					limit: 2
-					amount: {
-						type: forEachYouCanSpot
-						filter: not(self),uruk-hai
-						multiplier: -1
-					}
+					multiplier: -1
 				}
 			}
 		}

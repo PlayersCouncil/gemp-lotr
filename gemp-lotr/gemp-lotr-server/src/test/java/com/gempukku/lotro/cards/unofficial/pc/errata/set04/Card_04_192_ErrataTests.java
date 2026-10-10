@@ -245,7 +245,7 @@ public class Card_04_192_ErrataTests
 	}
 
 	@Test
-	public void UsedTwiceInOnePhaseTheSameCopyTakesNoMoreThanTwoOffInAll() throws DecisionResultInvalidException, CardNotFoundException {
+	public void UsedTwiceInOnePhaseTheSameCopyTakesTwoOffEachTime() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var regular = scn.GetShadowCard("regular");
@@ -270,11 +270,12 @@ public class Card_04_192_ErrataTests
 		// 4 to play + 2 roaming - 2
 		assertEquals(9, scn.GetTwilight());
 
-		// Three other Uruk-hai now.  The ability is still there to be used, and takes nothing more off.
+		// Three other Uruk-hai now.  "(limit -2)" caps the reduction of each play, and is not a total for the
+		// phase (Q-0152): the second play takes 2 off as the first did.
 		assertTrue(scn.ShadowActionAvailable(regular));
 		scn.ShadowUseCardAction(regular);
-		// 2 to play + 2 roaming: this copy's -2 is spent for the phase.
-		assertEquals(5, scn.GetTwilight());
+		// 2 to play + 2 roaming - 2
+		assertEquals(7, scn.GetTwilight());
 		assertInZone(Zone.SHADOW_CHARACTERS, warrior2);
 		assertEquals(2, scn.GetWoundsOn(regular));
 		assertTrue(scn.AwaitingShadowPhaseActions());

@@ -33,8 +33,8 @@ public class PlayCardFromDiscard implements EffectAppenderProducer {
         final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final String onFilter = FieldUtils.getString(effectObject.get("on"), "on");
 
-        final ValueSource costModifierSource = ValueResolver.resolveDiscount(effectObject.get("discount"), environment);
-        final ValueSource maxDiscountSource = effectObject.get("maxDiscount") == null ? costModifierSource : ValueResolver.resolveDiscount(effectObject.get("maxDiscount"), environment);
+        final ValueSource costModifierSource = ValueResolver.resolveEvaluator(effectObject.get("discount"), 0, environment);
+        final ValueSource maxDiscountSource = effectObject.get("maxDiscount") == null ? costModifierSource : ValueResolver.resolveEvaluator(effectObject.get("maxDiscount"), 0, environment);
         final int removedTwilight = FieldUtils.getInteger(effectObject.get("removedTwilight"), "removedTwilight", 0);
 
         final boolean optional = FieldUtils.getBoolean(effectObject.get("optional"), "optional", false);
@@ -54,7 +54,7 @@ public class PlayCardFromDiscard implements EffectAppenderProducer {
                 CardResolver.resolveCardsInDiscard(select,
                         (actionContext) -> {
                             final LotroGame game = actionContext.getGame();
-                            final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateWithoutSpending(game, actionContext.getSource());
+                            final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
                             if (onFilterableSource != null) {
                                 final Filterable onFilterable = onFilterableSource.getFilterable(actionContext);
                                 return Filters.and(Filters.playable(costModifier), ExtraFilters.attachableTo(game, costModifier, onFilterable));
@@ -64,7 +64,7 @@ public class PlayCardFromDiscard implements EffectAppenderProducer {
                         },
                         (actionContext) -> {
                             final LotroGame game = actionContext.getGame();
-                            final int maxDiscountModifier = maxDiscountSource.getEvaluator(actionContext).evaluateWithoutSpending(game, actionContext.getSource());
+                            final int maxDiscountModifier = maxDiscountSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
                             // This filter is the one asked BEFORE the action is paid for, so whatever the action
                             // will take from the pool first is counted as gone: the twilight an ability removes as
                             // its own cost (which its definition states) and the twilight cost of an event that is

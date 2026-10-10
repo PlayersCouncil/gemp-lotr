@@ -23,17 +23,4 @@ public interface Evaluator {
     default boolean isSpent(LotroGame game, PhysicalCard cardAffected) {
         return false;
     }
-
-    /**
-     * What evaluateExpression would answer now, worked out without changing anything.  A capped amount spends its
-     * cap as it is worked out, so whoever has to know the amount before it is given (a play's discount, which
-     * decides what can be played before anything is) asks this, and asks evaluateExpression once, when it is
-     * given.  CardPhaseLimitEvaluator is the one amount that answers this for itself.  Every other amount works
-     * itself out as evaluateExpression does, a value built round a capped amount (a sum, a multiplication)
-     * included: such a value does not pass the question on, so it must not be asked this, and
-     * ValueResolver.resolveDiscount refuses a definition that would need it to be.
-     */
-    default int evaluateWithoutSpending(LotroGame game, PhysicalCard cardAffected) {
-        return evaluateExpression(game, cardAffected);
-    }
 }

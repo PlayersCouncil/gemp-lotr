@@ -103,16 +103,17 @@ costs) is a finding, fixable at landing.
 
 **"(limit +N)" is the card's for the whole phase (F-0135, F-0125).** "(limit +N)" is the card's for the whole phase: cumulative over uses (F-0135, a per-use cap is a finding) and counted per source card, not per target (F-0125, FIXED in this clone). A cap built as `cardAffectedLimitPerPhase` counts for each card affected wherever it is used outside ModifyStrength (on AddKeyword it gave each Dwarf its own +3 damage, F-0213): a "(limit +N)" keyword bonus built so is a finding, fixable at landing with a `cardPhaseLimit` (limit N, amount 1).
 
-**A printed "(limit (N))" or "(limit -N)" is the card's for the whole phase; "(limit X)" is per use (Q-0134,
-Q-0141).** A printed limit on a count inside an effect reads like "(limit +N)" (F-0135): the card's limit for the
-whole phase. A cap built per use is a finding, fixed with a cardPhaseLimit wrapper. Since engine pass 16 (F-0245)
-the wrapper reaches a play's `discount` too, where it must be the whole of the discount (Uruk Regular 54_192:
-`discount: { type: cardPhaseLimit, limit: 2, amount: { type: forEachYouCanSpot, ..., multiplier: -1 } }`; the
-limit is a size, the amount keeps its sign). At its limit such an ability stays on offer and plays the card at
-full cost; it is withheld only while nothing can be afforded. An event is one card played once, and an ability
-that discards its own card is used once by each copy (Strength of Arms 4_82, Fortress Never Fallen 54_276), so
-the readings agree there: nothing is parked and a line in Notes says so. A "(limit X)" where X is what that use
-paid caps that use only (Merry's Sword 57_242).
+**A printed "(limit (N))" or "(limit -N)" is the card's for the whole phase, but not on a play's discount;
+"(limit X)" is per use (Q-0134, Q-0141, Q-0152).** A printed limit on a count inside an effect reads like
+"(limit +N)" (F-0135): the card's limit for the whole phase. A cap built per use is a finding, fixed with a
+cardPhaseLimit wrapper. A limit on a play's twilight discount is the exception ("its twilight cost is -1 for each
+... (limit -2)", Uruk Regular 54_192): Ketura struck F-0245 on Q-0152 ("I'm not convinced that a restriction on
+a discount is treated the same as a strength bonus limit"), so it is tested as built, a cap on each play (the
+count's own `limit` in the `discount`), and a per-use cap there is no finding. A cardPhaseLimit is not written in
+a `discount`: the engine works a discount out every time it asks what can be played, and the asking would spend
+the limit. An event is one card played once, and an ability that discards its own card is used once by each copy
+(Strength of Arms 4_82, Fortress Never Fallen 54_276), so the readings agree there: nothing is parked and a line
+in Notes says so. A "(limit X)" where X is what that use paid caps that use only (Merry's Sword 57_242).
 
 **A bar that a trigger lays "while at <a place>" has the place in it twice (92_35).** "While at a sanctuary, you
 may heal no more than one wound from each character" is built as a trigger on each heal that lays a CantHeal on

@@ -26,7 +26,7 @@ public class PlayCardFromStacked implements EffectAppenderProducer {
 
         final String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
         final String onFilter = FieldUtils.getString(effectObject.get("on"), "on", "any");
-        final ValueSource costModifierSource = ValueResolver.resolveDiscount(effectObject.get("discount"), environment);
+        final ValueSource costModifierSource = ValueResolver.resolveEvaluator(effectObject.get("discount"), 0, environment);
         final int removedTwilight = FieldUtils.getInteger(effectObject.get("removedTwilight"), "removedTwilight", 0);
         final boolean assumePlayable = FieldUtils.getBoolean(effectObject.get("assumePlayable"), "assumePlayable", false);
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
@@ -40,12 +40,12 @@ public class PlayCardFromStacked implements EffectAppenderProducer {
                 CardResolver.resolveStackedCards(select,
                         actionContext -> {
                             LotroGame game = actionContext.getGame();
-                            final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateWithoutSpending(game, actionContext.getSource());
+                            final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
                             return Filters.playable(costModifier);
                         },
                         assumePlayable ? null : actionContext -> {
                             LotroGame game = actionContext.getGame();
-                            final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateWithoutSpending(game, actionContext.getSource());
+                            final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
                             return Filters.playable(costModifier, removedTwilight, actionContext.getUnpaidThreatCost(), false, false, true);
                         },
                         actionContext -> new ConstantEvaluator(1), onFilterableSource, memory, "you", "Choose card to play", environment));
