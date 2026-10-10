@@ -437,7 +437,8 @@ turn finds nobody being asked anything and throws: `SkipToOtherPlayersTurn()` fr
 site 8 ends in `NoSuchElementException` out of `GetDecidingPlayer` (probed, rtmd-b94_29). Under a modifier that
 keeps the game going at site 9 (Race Text 94_31) `SkipToSite(9)` returns in the REGROUP phase of the turn that
 reached site 9, not in a fellowship phase, with player 1 asked for regroup actions (Card_94_031_Tests). The rig
-reads that a game is over (`GameIsFinished()`), not who won it.
+reads that a game is over (`GameIsFinished()`), not who won it; who LOST, and why, is in the game log ("The game
+ends when it ends", below).
 
 **Player 2 on site 9 with the game still going.** Player 1 wins at site 9 a turn before player 2 can stand
 there, so a text that bites only at site 9 ("your fellowship cannot win until ...", 94_31) is shown for player 2
@@ -447,7 +448,11 @@ SkipToOtherPlayersTurn();` has him move twice on his sixth turn and leaves him a
 of his seventh; his move then reaches site 9 before player 1 has (Card_94_031_Tests, the last test).
 
 **The game ends when it ends.** When the Ring-bearer dies or is corrupted the game stops at once and no later
-phase arrives. Make the assertions that matter before the event that ends the game.
+phase arrives. Make the assertions that matter before the event that ends the game. Who lost and why is read from
+the game log, in the game's own words: `MarkGameLog()` before the act that ends it, then
+`GameLogSinceMarkSays(scn.P1() + " lost due to: The Ring-Bearer is corrupted")`, and
+`assertFalse(scn.GameLogSinceMarkSays(scn.P2() + " lost"))` beside it (`mechanics/HinderedRingBearerTests`,
+Card_01_252_Tests): `GameIsFinished()` alone does not tell a corruption from any other end.
 
 **A starting fellowship.** `StartGame()` skips it. To test "(except in your starting fellowship)": the scenario
 constructor returns with player 1's "Starting fellowship" choice pending; `FreepsChooseCard(card)` plays a
@@ -789,6 +794,10 @@ with or without "Response" (Eye of Barad-dûr 5_96), is never narrowed
 
 **`GetVitality` is the vitality left.** Printed vitality and what cards add, less wounds: a character of
 vitality 4 with 3 wounds reads 1. The printed number is the blueprint's, as the stats test reads it.
+
+**`GetResistance` is the resistance left.** Printed resistance and what cards add, less the burdens, and for every
+companion, not the Ring-bearer alone: with 3 burdens Frodo 1_290 (resistance 10) reads 7 and Sam 1_311 (5) reads 2
+(`mechanics/RingBearerSuccessionTests`).
 
 **Culture tokens are of the card's own culture.** `AddTokensToCard`, `RemoveTokensFromCard` and
 `GetCultureTokensOn` deal only in the token of the culture of the card they are given, so the invalid candidate
