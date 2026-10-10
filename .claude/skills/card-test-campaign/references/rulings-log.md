@@ -274,6 +274,54 @@ alternate currency--not preventing or canceling the effect, just providing a con
 realized in the engine (nor with the rules interpretation gestalt)." A cost paid in the other currency is paid,
 and what it buys happens; where the game does not do that it is an engine finding, not a question.
 
+**Her notes of 2026-10-10 (the whole of them: `orchestrator/answers/2026-10-10-a.md`).** By number:
+
+**A branch chosen because it can be done in full is carried out in full (Q-0209: B, with a caveat; Here Lies Balin
+1_19, Stand Against Darkness 51_63).** "B is correct, with one caveat: while the choice is valid (i.e. both sides
+are "fully capable" of happening), the eventual secondary choices (who to wound etc) are an extension of that
+choice and thus must be restricted to only "fully executed" choices; picking "wound one Orc twice" means you can't
+pick a 1-vitality Orc. However once a choice is broken by having no "fully capable" branches, then we are free of
+that restriction and instead fall back on "do what you can and ignore the rest", which *does* permit us to wound a
+1-vitality Orc twice. Having the Choice structure somehow encode this strictness would be nice, but if we have to
+contort half a dozen cards instead of making the engine significantly twistier, that might be preferred." *[2026-10-10]*
+
+**The rules' order of a move stands, with what it changes (Q-0210: keep).** "This is a big keep. Those situations you
+mention are *different*, but now they are in line with what the rules dictate." *[2026-10-10]*
+
+**Race Text 94_30, "You may not play or take into hand cards from your discard pile or draw deck (except when
+reconciling)" (Q-0206: A; Q-0207: A; Q-0208).** A card DRAWN is a card taken into hand from the draw deck: "I
+intended for it to include standard card draw; the reconcile exception was so that the player didn't just sit down
+to play with their starting fellowship and nothing else." The bar is on the player doing the taking, not on an
+opponent's card that returns his card to him: "Besides restricting your opponent when it's not meant to, such
+restrictions almost always get ruled to be treated differently when the opponent is acting (see discard prevention
+and the "forced" stuff)." And set-up is untouched: "No, it shouldn't affect the starting fellowship. I will add "or
+starting fellowship" to the text, go ahead and do the same." *[2026-10-10]*
+
+**Race Text 94_28: the card taken in place of a draw is still a card drawn (Q-0205: B), and set-up is left alone
+(Q-0204: B).** "I intended the "instead" use to pay card draw costs...but then I suppose if I take a burden instead
+of a wound, I don't trigger a wound trigger. Hmm. Viewing it as a draw filter is helpful; after all that card *did*
+come from the top of your draw deck. Let's say B for this one." "Let's leave it out of the game setup for the same
+reason that reconcile is left out (8+ choices would slow eeeeverything down)." *[2026-10-10]*
+
+**Boromir's Cloak 51_98 reaches Response abilities after all (Q-0203: 1A; it replaces 1B of Q-0119).** "Ha, in that
+case let's 1A. I'm nothing if not consistently inconsistent. And yeah, address TATD's gap with it." (Terrible as the
+Dawn 53_103's test was added in engine pass 21.) *[2026-10-10]*
+
+**Úlairë Nertëa 69_38 when her burden is prevented (Q-0199).** "The solution is closer to B, but I think needs what
+is essentially an "add additional cost" modifier; I'm pretty sure that already exists in some form, and it will
+need applied to this somehow. So that it targets "any assignment action that lets free peoples assign to Nertea".
+Dunno how involved this might be, let's look before we leap." A design is written up for her before anything is
+built. *[2026-10-10]*
+
+**The deck builder under Race Text 92_19 (F-0342).** "Let's amend this. I think it will warrant a few different
+sortandfilter tests emulating different formats and contexts, and yeah I also think that if possible it should only
+actually open up the site filter if the player is currently using that meta-site, which I *thought* was the case." *[2026-10-10]*
+
+**Card by card:** Q-0201, "ignoring all costs" where a cost names X: A, as built ("this isn't a mechanic that's
+going to be reused, and it's just for fun on the RTMD card"). Q-0202, Race Text 94_22: A, the draw deck ("that
+should say "draw deck". I'll adjust the wording"). Q-0197, Rath Dínen 100_1: the arrow stays Right ("I'll change the
+image"). Kept: Q-0198 ("well done"), Q-0200. *[2026-10-10]*
+
 **The bid reads resistance in force (Ketura, 2026-10-09, late; Galadriel 9_14 as Ring-bearer).** "The game text on
 the ring and Ring-bearer are active enough for resistance calculations during the bidding process, otherwise
 Galadriel would never get to bid much at all." CR 4.2 "bid" (a bid equal to or higher than the Ring-bearer's

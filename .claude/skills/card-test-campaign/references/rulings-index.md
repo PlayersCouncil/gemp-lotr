@@ -64,6 +64,15 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - One entry for one issue (Ketura, 2026-10-09, evening) [F-0327, Q-0193, Q-0196, Q-0194, Q-0195, Q-0174, F-0308, F-0324]
 - An `at` test about a Decipher card becomes a lone test in that card's file (Ketura, 2026-10-09, late)
 - "Instead" converts a cost; it does not prevent or cancel (Ketura, 2026-10-09, late; Merry 4_311 with Treebeard, Earthborn 4_103). "The main thing ...
+- Her notes of 2026-10-10 (the whole of them: `orchestrator/answers/2026-10-10-a.md`)
+- A branch chosen because it can be done in full is carried out in full (Q-0209: B, with a caveat; Here Lies Balin 1_19, Stand Against Darkness 51_63). ...
+- The rules' order of a move stands, with what it changes (Q-0210: keep)
+- Race Text 94_30, "You may not play or take into hand cards from your discard pile or draw deck (except when reconciling)" (Q-0206: A; Q-0207: A; ... [Q-0208]
+- Race Text 94_28: the card taken in place of a draw is still a card drawn (Q-0205: B), and set-up is left alone (Q-0204: B). "I intended the "instead" ...
+- Boromir's Cloak 51_98 reaches Response abilities after all (Q-0203: 1A; it replaces 1B of Q-0119)
+- Úlairë Nertëa 69_38 when her burden is prevented (Q-0199)
+- The deck builder under Race Text 92_19 (F-0342)
+- Card by card: Q-0201, "ignoring all costs" where a cost names X: A, as built ("this isn't a mechanic that's going to be reused, and it's just for fun ... [Q-0202, Q-0197, Q-0198, Q-0200]
 - The bid reads resistance in force (Ketura, 2026-10-09, late; Galadriel 9_14 as Ring-bearer)
 - The `at` tests, what is kept (Ketura, 2026-10-09, late)
 - Everything she must review is on the tracker, whole; the chat carries the code (Ketura, 2026-10-08, night)
@@ -376,7 +385,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Limits on uses and limits on what the effect gives, as built [Q-0041, Q-0082, Q-0093]
 - "Limit once per site" (Q-0084, F-0146, F-0145)
 - "(limit +N)" is the card's for the whole phase (F-0135, F-0125) [F-0213]
-- A printed "(limit (N))" or "(limit -N)" is the card's for the whole phase; "(limit X)" is per use (Q-0134, Q-0141). A printed limit on a count inside ... [F-0135, F-0245]
+- A printed "(limit (N))" or "(limit -N)" is the card's for the whole phase, but not on a play's discount; "(limit X)" is per use (Q-0134, Q-0141, ... [Q-0152, F-0135, F-0245]
 - A bar that a trigger lays "while at <a place>" has the place in it twice (92_35) [F-0319]
 - "Limit 1 per bearer" is a Restriction that lists `L`
 
