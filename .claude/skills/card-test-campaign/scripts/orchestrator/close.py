@@ -104,7 +104,8 @@ def now_block():
     if not any(not v.get("landed") for v in t.values()):
         lines.append("- Nothing is running.")
     last = (WORK / "last_synced").read_text().strip()[:9] if (WORK / "last_synced").exists() else "?"
-    ahead = run("git", "rev-list", "--count", "%s..cards-wip" % BRANCH, cwd=CARDS).stdout.strip() if CARDS.is_dir() else "0"
+    # Commits of cards-wip whose change the branch does not have (a cherry-picked one is on both, and not counted).
+    ahead = str(sum(1 for x in run("git", "cherry", BRANCH, "cards-wip", cwd=CARDS).stdout.split("\n") if x.startswith("+"))) if CARDS.is_dir() else "0"
     lines.append("- The branch is at %s; the last head carried to Ketura is %s%s." % (
         head(), last, "" if ahead in ("", "0") else "; the second tree holds %s commit(s) the branch has not taken" % ahead))
     done, nxt = at_queue()
