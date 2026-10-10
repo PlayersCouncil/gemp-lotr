@@ -46,7 +46,9 @@ The batch file lists your homes (a `mechanics/` class, or a card's test file) an
 write: the test's name, where its directive is (the entry of `at-survey/<File>.md` whose "Replaces:" line names the old
 method; its heading may give another name, or put several tests under one), the old methods it replaces, and one
 sentence on what the OLD method checked (that sentence is from Ketura's report: the directive, not it, says what
-to write).
+to write). The names are the survey's: where a directive offers "N tests or N passes over one board"
+and the board cannot hold the passes (a card played in one changes what the next would read), write as many tests
+as it takes, and say in your report which of your tests stand for which name of the batch file.
 
 1. **Read the directive**, and the cards' texts it names (`packet.py <id> --blind`), and any ruling it cites.
    Read the old method too, once: not to copy its lines, but to see that the directive lost nothing it asserted.
@@ -101,7 +103,8 @@ to write).
 
 ## What you may touch
 
-The homes your batch names; the `at/` files your batch's old methods are in; files under `/tmp/<your folder>/`.
+The homes your batch names; the `at/` files your batch's old methods are in; scratch files under `/tmp/<your folder>/`
+(or the scratchpad directory your session names, if it names one).
 Nothing else: not a card's definition (show the correction, the lander applies it), not the engine, not the rig,
 not a script, not a document, not git.
 
