@@ -79,6 +79,8 @@ standard), or duplicates another, or covers something your ledger missed (then y
 asserts something your plan contradicts. That last kind is a question, not a mistake to overwrite: existing tests
 for PC cards were written with Ketura and often encode a ruling. Then write the test file, add to the ledger
 file the line for each test under each clause it claims checks of, and run
+A parked test is run only by `mutate.py <id> --with-parked` (no mutant is needed to see it fail against the
+card as it is); `cardtest.py run` leaves parked tests out.
 
     python3 .claude/skills/card-test-campaign/scripts/lint.py <id>
     python3 .claude/skills/card-test-campaign/scripts/cardtest.py run <id> --out <your folder name>
