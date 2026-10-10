@@ -221,6 +221,14 @@ or the assertion holds whatever the game does.
 An effect that will happen in part (draw 3 with one card left) is still asked. For a rider "X may Y to
 prevent this", the board on which the effect cannot happen is a `-` worth one test where the card can reach it.
 
+**A card that cannot be transferred is not offered to a `Transfer` effect.** A possession borne by Warrior of
+Rohan 17_104 (`CantBeTransferred`) is never among the cards a card's `Transfer` takes or offers, with
+`checkTarget` or without (F-0340, engine pass 24); a possession may still be transferred TO him. With nothing
+else to take, an ability with a cost is offered all the same (Q-0034): the cost is paid, nobody is asked for a
+card or a bearer, and the flag reads `"false"`. Strange-looking Men 11_100 are Men: they are offered as bearers
+of an Armor themselves (Q-0058). `mechanics/CardThatCannotBeTransferredTests`. A follower's Aid does not ask
+yet: at Streets of Bree 18_140 it is paid and nothing moves (F-0363, open).
+
 **A response event is not played by another card's effect.** "Play a(n) ... event from your discard pile /
 stacked here / from hand" neither offers a response event nor counts one towards being usable; an event that
 is a response and a phase event (Eye of Barad-dur 5_96) is offered in its phase only

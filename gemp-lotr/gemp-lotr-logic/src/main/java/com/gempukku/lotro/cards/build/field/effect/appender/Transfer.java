@@ -36,6 +36,9 @@ public class Transfer implements EffectAppenderProducer {
 
         MultiEffectAppender result = new MultiEffectAppender();
 
+        // A card that something says cannot be transferred (ModifiersQuerying.canBeTransferred: "Possessions cannot
+        // be transferred from this companion", Warrior of Rohan 17_104) is never the card taken, whoever it would
+        // go to: TransferPermanentEffect would refuse it, after its new bearer had been asked for (F-0340).
         final boolean whereIsFilter = where.startsWith("choose(") || where.startsWith("all(");
         if (checkTarget && whereIsFilter) {
             // Only offer cards that have at least one eligible bearer to go to; a card with no bearer definition at
@@ -44,13 +47,14 @@ public class Transfer implements EffectAppenderProducer {
                     where.substring(where.indexOf("(") + 1, where.lastIndexOf(")")), environment);
             result.addEffectAppender(
                     CardResolver.resolveCard(select,
-                            actionContext -> (Filter) (game, candidate) ->
-                                    Filters.countActive(game, whereSource.getFilterable(actionContext),
-                                            RuleUtils.getTransferTargetFilter(game, candidate)) > 0,
+                            actionContext -> Filters.transferableTo(whereSource.getFilterable(actionContext)),
                             memorizeTransferred, "you", "Choose card to transfer", environment));
         } else {
             result.addEffectAppender(
-                    CardResolver.resolveCard(select, memorizeTransferred, "you", "Choose card to transfer", environment));
+                    CardResolver.resolveCard(select,
+                            actionContext -> (Filter) (game, candidate) ->
+                                    game.getModifiersQuerying().canBeTransferred(game, candidate),
+                            memorizeTransferred, "you", "Choose card to transfer", environment));
         }
         result.addEffectAppender(
                 CardResolver.resolveCards(where,

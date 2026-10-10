@@ -527,8 +527,9 @@ public class Filters {
      * A card in play that a card's effect could transfer now to one of the cards the filters accept (the
      * definition word TransferableTo): nothing says the card cannot be transferred, and among those cards there
      * is an active one it may go to (RuleUtils.getTransferTargetFilter: an eligible bearer other than the one it
-     * has).  It is what the Transfer effect with checkTarget goes on to ask, so a requirement written with it
-     * withholds "you may transfer ... to another eligible bearer" when a yes would move nothing (F-0324).
+     * has).  It is the choice the Transfer effect makes of the card to transfer where it has checkTarget and a
+     * bearer to be chosen (F-0340), so a requirement written with it withholds "you may transfer ... to another
+     * eligible bearer" when a yes would move nothing (F-0324).
      */
     public static Filter transferableTo(final Filterable... to) {
         final Filter toFilter = Filters.and(to);
