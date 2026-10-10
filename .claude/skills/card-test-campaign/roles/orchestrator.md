@@ -128,9 +128,13 @@ by letter with what each changes, what you do not know, and which you lean to.
 Before you tell her a fact about a card, look it up (`packet.py <id> --blind`). A collector's label read as a
 pointer made Rath Dínen 100_1 "an erratum of 18_139" for one message.
 
-## The old `at` tests
+## The old `at` tests (a one-time job)
 
-Not ported line by line (her words are in `roles/at-convert.md`). How it is done:
+Ketura, 2026-10-10: "once complete it's unlikely to be revisited, since it is a one-time lift-and-shift upgrade.
+The rest of this suite is likely to be used with future cards." So this section, its three briefs, two workflows
+and two scripts are for finishing that job and may be taken out of the skill when the `at` folder is gone; nothing
+else should come to depend on them. Not ported line by line (her words are in `roles/at-convert.md`). How it is
+done:
 
 1. **Survey** (`workflows/at-survey.js`, `roles/at-survey.md`; reading only, no Java): for every old method, what
    it guards, its kind, whether something covers it, and a directive for its replacement, in

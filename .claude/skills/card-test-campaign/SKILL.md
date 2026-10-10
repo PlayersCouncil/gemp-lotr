@@ -337,7 +337,8 @@ at every landing. The scripts under `scripts/orchestrator/` take the working fol
   `at_batches.py` and `at_report.py` (the `at` conversion's batches, and Ketura's report on the old tests).
 - `workflows/card-batch.js`: one batch, start to finish, as a Workflow script.
 - `workflows/at-survey.js` with `roles/at-survey.md`, and `workflows/at-convert.js` with `roles/at-convert.md` and
-  `roles/at-land.md`: the old `at` tests, surveyed and then converted batch by batch.
+  `roles/at-land.md`: the old `at` tests, surveyed and then converted batch by batch. A one-time job (Ketura,
+  2026-10-10): these may go when the `at` folder is gone.
 - `workflows/engine-pass.js` with `roles/engine.md`: an engine pass between waves. The orchestrator writes the
   queue of items as a file in the state (`orchestrator/engine-pass-<n>.md`, one section an item); one agent takes
   each in turn, commits it with `landing.py commit`, and writes a report beside the queue. `roles/doc-triage.md`

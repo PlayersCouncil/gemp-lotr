@@ -154,7 +154,9 @@ erratum's `//id:` is its own id everywhere (`54_192.1`); the older definitions a
 illegitimate to put both ring bearers in play like that. B for sure. In addition please look for other standards
 which are twisting the game board state past the point of breaking for that, and in particular try to see if
 they're jumping at shadows; how many card definitions accidentally said "title(Frodo)" instead of "Ring-bearer"?"
-The board comes out of the Standard and the helper table, and tests that use it lose that candidate. *[2026-10-09]*
+The board comes out of the Standard and the helper table, and tests that use it lose that candidate. Where the
+Frodo who is not the Ring-bearer is what a test is ABOUT, he is Frodo, Frenzied Fighter 13_149 (Q-0212, below).
+*[2026-10-09]*
 
 **"Until the X phase", begun in the X phase (Q-0160: A, as built).** "'Until X phase' is definitely 'until the
 start of X phase', but it's definitely a bit muddy when you're doing that *in* X phase. The One Ring I believe
@@ -352,6 +354,50 @@ sufficient." So every item that wants her word has a number (Q-, F-, G-) and its
 questions, changes an agent made beyond its brief ("Keep or strike" questions; unanswered, the change stays),
 findings mended or filed without her word, open rig requests; and the reports are on the page in full. Nothing for
 her lives only in a report or in the chat.
+
+**The boards no game could reach: what stays and what goes (Q-0213).** "So in general I approve of the approaches
+recommended for each item. In particular I think it's a waste of time to continue searching for *theoretical*
+malformed targets in places and arrangements where they have been historically sparse or even outright
+nonexistent." By the letters of the audit (`orchestrator/engine-pass-21/audit.md`): **A**, a lone Ring-bearer who
+is not Frodo on every card that says "the Ring-bearer": the requirement is dropped (no definition has ever said
+Frodo for the Ring-bearer); tests written stay. **B**, a card given a culture or a race it does not have: a
+printed card where one exists (Pippin 103_31, Merry 103_85, Sméagol 103_116, Khamûl 103_61 and their like);
+dropped for Elf, Dwarf, Wizard and Wraith, where none can exist, and lint reports the definition in place of
+asking for a board. **C**, a keyword given to a card no printed card with it resembles: dropped, no new ones.
+**D**, a keyword given only to set a board up, and **E**, a number given by hand: kept; a new test takes the
+printed card where there is one. **F**, sites given a terrain: real sites. **G**, two cards of one unique title
+(struck 2026-10-08): the 13 files that still have it are relaid. **H**, items where they could not be: items of
+different classes on lawful bearers. **I**, tokens on a card nothing gives tokens to: no new ones. **J**, a site
+of another block put into a path: kept. **K**, the files already written with B and C, where the audit proposed
+leaving them: "I would like a pass to alter the tests that have utilized those methodologies: if the case is
+legitimate (i.e. can be represented in a real card, such as the V3 Attea who is also an Easterling), then use
+such an example, but in the case where it's only theoretical and can't actually exist in the current card
+base...? See if there's a nearby concept, but if not, delete the test." **L**, Held 6_109, built to corrupt the
+Ring-bearer where the text names Frodo: "looks like a bad implementation; it should be "Ring-bearer,
+title(Frodo)"". *[2026-10-10]*
+
+**A Frodo who is not the Ring-bearer, where a test needs one, is Frodo, Frenzied Fighter 13_149 (Q-0212: keep).**
+"I had forgotten about Frenzied Fighter, and he is a valid use case in scenarios where we legitimately need to use
+Frodo contrasting with the Ring-bearer. The principle is that I objected to exhaustively testing and re-testing
+every instance of "Ring-bearer" (which is a lot!) using cases that can't arise naturally, and which so far have
+found no actual bugs. But you have found the right balance of adherence to the principle and practical
+application." The tests of 51_310, 51_311, 101_54, 51_313 and 103_115 that are about that contrast stand.
+*[2026-10-10]*
+
+**Before the Decipher sets: a trial of Q-0034 in the engine, and a search for other patterns (Q-0215).** On
+withholding by the engine, from its own no-effect flag, what Q-0034 says is not offered: "I'm down for a trial on
+a separate branch. I would want it specifically aiming to try to evaluate how widespread of a fix it would be; if
+it requires the engine fix and still a bunch of card edits then we're right back to where we started." And
+beyond it: "I'm more concerned about trying to ensure that such ideas like this have been ferreted out before we
+do the big 3K. The PC cards cover a large swathe of functionality, between the ~256 V-cards and hundreds of
+errata, so it seems like problem patterns we've found here should probably generalize, tho it seems apparent
+that more are likely lurking. In addition to the trial, let's pencil in a brainstorm task to see if there are
+more patterns we should try and pre-empt before the big chunk." Briefs: `orchestrator/briefs/` in the state.
+*[2026-10-10]*
+
+**The `at` conversion is a one-time job.** On what of the running of the campaign belongs in the skill: "the at
+pipeline can be mentioned, but also note that once complete it's unlikely to be revisited, since it is a one-time
+lift-and-shift upgrade. The rest of this suite is likely to be used with future cards, however." *[2026-10-10]*
 
 ## Sources, sheets, revisions and errata
 
@@ -1421,3 +1467,17 @@ wounds, assignment and skirmishes alike. *[2026-10-08, night]*
 ahead and skip the prompt and just do the 0-1 choices." On the wording written for The Palantír of Orthanc 53_67
 ("Choose any number of cards from your hand to place on top of your draw deck (you may choose none). Your hand will
 then be revealed."): "looks good". Gwaihir built in engine pass 18 (F-0278, with F-0285). *[2026-10-08, night]*
+
+**Card by card (2026-10-10, second notes).** Q-0211, the Playable requirement counts an event's own twilight cost
+(Little Snuffler 13_52): "keep, no notes." Q-0214, the errata's `keywords:` and `timewords:` and five values in
+the Decipher spelling: "I approve of all of those changes. The keyword/keywords thing is because many cards have
+just the one keyword, and with array support on those fields it felt strange to me to have a singular field hold
+multiple values. But I appreciate the standarization." F-0341, Hillman Band 4_21 offers to take control of a site
+when none can be taken: "yeah this is correct" (taken as: the finding is right; the offer is withheld by a
+requirement, Q-0034). F-0340, a Transfer effect offers a possession borne by Warrior of Rohan 17_104: "good to
+fix". F-0350, a toil card played on a bearer is offered from a pool short by twice what toil covers: "good to
+fix". F-0355, the definition word `assignableToSkirmishAgainst` counting a defender bonus an assignment action
+cannot use: "I believe the internal functions used for assignment checks have additional fields for flagging
+whether or not defender etc should be considered, for just this use case. Likely the HJSON or test rig needs
+expanded to support the use of those flags." G-0041, the rig method for a refused assignment: "Looks good to me".
+*[2026-10-10]*

@@ -37,7 +37,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Approved as found, to be fixed [F-0041, F-0058, F-0201, Q-0203, F-0313, F-0315, F-0318, F-0319, G-0037]
 - A limit on a discount is not a limit on a strength bonus (Q-0152: struck) [F-0245]
 - cardInfo (Q-0158). "The intent is that id is for the card's unique identifier, and parent is supposed to point to the original (in the case of an ...
-- No Frodo beside a Ring-bearer who is not Frodo (Q-0159: B)
+- No Frodo beside a Ring-bearer who is not Frodo (Q-0159: B) [Q-0212]
 - "Until the X phase", begun in the X phase (Q-0160: A, as built)
 - Can't beats can (Q-0161: keep)
 - The words of a choice from a discard pile (Q-0162: keep)
@@ -78,6 +78,10 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - The bid reads resistance in force (Ketura, 2026-10-09, late; Galadriel 9_14 as Ring-bearer)
 - The `at` tests, what is kept (Ketura, 2026-10-09, late)
 - Everything she must review is on the tracker, whole; the chat carries the code (Ketura, 2026-10-08, night)
+- The boards no game could reach: what stays and what goes (Q-0213)
+- A Frodo who is not the Ring-bearer, where a test needs one, is Frodo, Frenzied Fighter 13_149 (Q-0212: keep)
+- Before the Decipher sets: a trial of Q-0034 in the engine, and a search for other patterns (Q-0215)
+- The `at` conversion is a one-time job
 
 ## Sources, sheets, revisions and errata
 
@@ -330,6 +334,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Q-0149, unordered card collections in other effects: left alone (B) [Q-0142, F-0268]
 - Q-0150, Streets of Edoras 4_340 against cards that have an ally take part: the bar wins (A) [Q-0011]
 - F-0278, Gwaihir 101_15, and the Palantír's prompt [F-0285]
+- Card by card (2026-10-10, second notes) [Q-0211, Q-0214, F-0341, Q-0034, F-0340, F-0350, F-0355, G-0041]
 
 # Settled shapes (shapes.md)
 
