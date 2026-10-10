@@ -5,6 +5,7 @@ import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -29,6 +30,12 @@ import static org.junit.Assert.*;
  * through, and PlayCardFromDrawDeck tells it so where the definition writes `showAll: true`, which is the look.
  * It is told nothing where no one looked: a card revealed from the top of a deck and then played leaves the rest
  * of the deck as it lay, and a starting fellowship's deck is shuffled once, when the fellowships are down.
+ *
+ * The deck that is reshuffled is the deck that was looked through.  A search of another player's draw deck that
+ * writes its own shuffle (`deck:` names the other player, with `shuffle: true`) shuffles the deck of the player
+ * who searched and leaves the deck he looked through as he saw it (F-0369: the two tests at the end, parked).
+ * The two real cards of that shape, Grond 18_82 and 68_82, were corrected to write `shuffle: false` and a
+ * ShuffleDeck of the deck named (F-0298), so the shape is laid here with two test cards.
  */
 public class DrawDeckShuffledWhenTheLookIsOverTests
 {
@@ -47,6 +54,13 @@ public class DrawDeckShuffledWhenTheLookIsOverTests
 					put("poison1", "8_28");     // Spider Poison: [gollum] possession with the Support Area keyword; its texts need Shelob or a bearer
 					put("poison2", "8_28");
 					put("troop", "1_177");      // Goblin Patrol Troop: [moria] minion, cost 6, site 4, no text
+
+					// Test cards (testCards.hjson), Shadow conditions in the support area, each a search of the
+					// other player's deck that writes `shuffle: true`:
+					// "Shadow: Remove (1) to search the Free Peoples player's draw deck and discard a Free Peoples card found there."
+					put("dredge", "0_8027");
+					// "Shadow: Remove (1) to search the Free Peoples player's draw deck and remove a Free Peoples card found there from the game."
+					put("trawl", "0_8028");
 
 					put("aragorn", "1_89");
 					put("gimli", "1_13");
@@ -190,5 +204,69 @@ public class DrawDeckShuffledWhenTheLookIsOverTests
 
 		assertInZone(Zone.FREE_CHARACTERS, aragorn);
 		assertEquals(shuffles, scn.GetFreepsDeckShuffleCount());
+	}
+
+	@Test
+	@Ignore("F-0369: `shuffle: true` on a DiscardCardsFromDrawDeck that names another player's deck shuffles the deck of the player who searched, and the deck he looked through is left as he saw it")
+	public void ASearchOfTheOtherPlayersDeckThatDiscardsFromItShufflesTheDeckSearched() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var dredge = scn.GetShadowCard("dredge");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCardsToSupportArea(dredge);
+
+		scn.StartGame();
+		scn.SetTwilight(3);
+		scn.FreepsPass();
+
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		int freepsShuffles = scn.GetFreepsDeckShuffleCount();
+		int shadowShuffles = scn.GetShadowDeckShuffleCount();
+		int twilight = scn.GetTwilight();
+		assertInZone(Zone.DECK, aragorn);
+
+		assertTrue(scn.ShadowActionAvailable(dredge));
+		scn.ShadowUseCardAction(dredge);
+		scn.ShadowDismissRevealedCards();
+		scn.ShadowChooseCardBPFromSelection(aragorn);
+
+		assertEquals(twilight - 1, scn.GetTwilight());
+		assertInZone(Zone.DISCARD, aragorn);
+		// The Free Peoples deck is the one that was looked through, so it is the one reshuffled; nobody looked
+		// at the Shadow player's own
+		assertEquals(freepsShuffles + 1, scn.GetFreepsDeckShuffleCount());
+		assertEquals(shadowShuffles, scn.GetShadowDeckShuffleCount());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	@Ignore("F-0369: `shuffle: true` on a RemoveCardsInDeckFromGame that names another player's deck shuffles the deck of the player who searched, and the deck he looked through is left as he saw it")
+	public void ASearchOfTheOtherPlayersDeckThatRemovesFromTheGameShufflesTheDeckSearched() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var trawl = scn.GetShadowCard("trawl");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCardsToSupportArea(trawl);
+
+		scn.StartGame();
+		scn.SetTwilight(3);
+		scn.FreepsPass();
+
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		int freepsShuffles = scn.GetFreepsDeckShuffleCount();
+		int shadowShuffles = scn.GetShadowDeckShuffleCount();
+		int twilight = scn.GetTwilight();
+		assertInZone(Zone.DECK, aragorn);
+
+		assertTrue(scn.ShadowActionAvailable(trawl));
+		scn.ShadowUseCardAction(trawl);
+		scn.ShadowDismissRevealedCards();
+		scn.ShadowChooseCardBPFromSelection(aragorn);
+
+		assertEquals(twilight - 1, scn.GetTwilight());
+		assertInZone(Zone.REMOVED, aragorn);
+		assertEquals(freepsShuffles + 1, scn.GetFreepsDeckShuffleCount());
+		assertEquals(shadowShuffles, scn.GetShadowDeckShuffleCount());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

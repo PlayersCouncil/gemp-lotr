@@ -723,4 +723,61 @@
 		}
 		gametext: <b>Shadow:</b> If any player is the Warden of the Test Table, add (1).
 	}
+	# DrawDeckShuffledWhenTheLookIsOverTests: a search of ANOTHER player's draw deck that writes its own shuffle
+	# (`deck:` names the other player, with `shuffle: true`), once as a discard and once as a removal from the
+	# game.  The two Gronds (18_82, 68_82) were the only real cards of that shape; they were corrected to
+	# `shuffle: false` and a ShuffleDeck of the deck named (F-0298), so no real card has it now.
+	0_8027: {
+		title: Test Dredge
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: shadow
+			cost: {
+				type: removeTwilight
+				amount: 1
+			}
+			effect: {
+				type: DiscardCardsFromDrawDeck
+				deck: freeps
+				select: choose(side(freeps))
+				count: 1
+				showAll: true
+				shuffle: true
+				forced: true
+			}
+		}
+		gametext: <b>Shadow:</b> Remove (1) to search the Free Peoples player's draw deck and discard a Free Peoples card found there.
+	}
+	0_8028: {
+		title: Test Trawl
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: shadow
+			cost: {
+				type: removeTwilight
+				amount: 1
+			}
+			effect: {
+				type: RemoveCardsInDeckFromGame
+				deck: freeps
+				select: choose(side(freeps))
+				count: 1
+				showAll: true
+				shuffle: true
+			}
+		}
+		gametext: <b>Shadow:</b> Remove (1) to search the Free Peoples player's draw deck and remove a Free Peoples card found there from the game.
+	}
 }

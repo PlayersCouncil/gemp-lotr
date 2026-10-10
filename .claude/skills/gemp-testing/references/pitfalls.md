@@ -203,7 +203,9 @@ and the action does nothing else; a cap on anything else reads `"false"` (Sting 
 reveal from a draw deck and what is done with the cards revealed reads `"effect"` while that deck is empty
 (Q-0163; `mechanics/RevealFromAnEmptyDrawDeckTests`; shapes, "A reveal that a cost buys"). The flag is worked out when the decision is sent, so after cheating the board get a new decision
 before reading it (`FreepsRefreshDecision()`). At site 2 of `FellowshipSites` (Ettenmoors) each player
-is also offered the site's own skirmish action in every skirmish. Which cards assert the flag: test-generation,
+is also offered the site's own skirmish action in every skirmish. "Take off The One Ring" cannot say that it will
+do nothing: an ability with nothing else it can do reads `"false"` while the Ring is not on (O Elbereth!
+Gilthoniel! 2_108; F-0370, not fixed, one test of `mechanics/NoEffectFlagTests` parked on it). Which cards assert the flag: test-generation,
 "Rulings, interactions and formats".
 
 **An action's own exertions count against what it then needs.** "Exert X twice to play ... from your discard
@@ -1209,6 +1211,8 @@ each site as validation does (`LotroFormat.validateSite(id, context)`), and is t
 - `0_8023` Test Porter ("Fellowship: If a possession could be transferred to a Man, choose up to 1 such possession and add (1)."): a Free Peoples condition whose requirement and choice are both `possession,transferableTo(man)`, for mechanics/TransferableToFilterTests (F-0324). The word asks what a `Transfer` with `checkTarget: true` would then find, and moves nothing: a possession on Warrior of Rohan 17_104 is never accepted, and a possession with an item class is refused its present bearer by the class alone, so the board that shows "not the bearer it has" uses one with no class (Athelas 1_94).
 
 - `0_8024` Test Roster ("Shadow: If you are the Warden of the Test Table or the Reeve of the Test Table, add (1)."), `0_8025` Test Summons ("... If the Free Peoples player is the Warden of the Test Table ...") and `0_8026` Test Census ("... If any player is ..."): Shadow conditions whose one ability requires `PlayerIs`, for mechanics/PlayerIsRequirementTests. The names are nobody's: an account name has no space in it. A table seats a player under one with the last two arguments of the `VirtualTableScenario` constructor that takes league placements (G-0039; virtualtable/NamedSeatTests); every other table's players are "Free Peoples Player" and "Shadow Player", who meet no card's list. A card whose definition lists real accounts (Race Text 94_5) is not tested by those names (Q-0190: B).
+
+- `0_8027` Test Dredge ("Shadow: Remove (1) to search the Free Peoples player's draw deck and discard a Free Peoples card found there.") and `0_8028` Test Trawl ("... and remove a Free Peoples card found there from the game."): Shadow conditions whose search names the other player's deck and writes `shuffle: true`, the shape the two Gronds had (F-0298), for the two tests of mechanics/DrawDeckShuffledWhenTheLookIsOverTests parked on F-0369: the engine shuffles the searcher's own deck there. A definition still writes `shuffle: false` and a `ShuffleDeck` of the deck named (shapes, "A search of another player's draw deck").
 
 **The test booster pack.** The test booster pack (`product/Test-Booster.hjson`) holds eight cards: beside the six it had, Drums in the
 Deep 1_168 (a Shadow skirmish event: shown and not selectable when the pack is opened in the Shadow phase)

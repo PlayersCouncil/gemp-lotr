@@ -9,6 +9,7 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -221,6 +222,24 @@ public class NoEffectFlagTests
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
 				VirtualTableScenario.Fellowship
+		);
+	}
+
+	// O Elbereth! Gilthoniel! on the Ring-bearer, in the default format: the only real card that takes off The
+	// One Ring (its erratum 52_108 apart).
+	protected VirtualTableScenario GetTakeOffRingScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// O Elbereth! Gilthoniel!: a [shire] condition, bearer must be the Ring-bearer.  "Skirmish:
+					// Discard this condition to take off The One Ring or to cancel a skirmish involving the
+					// Ring-bearer and a Nazgul."
+					put("elbereth", "2_108");
+					put("runner", "1_178");     // Goblin Runner: strength 5, vitality 1; no Nazgul
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -636,6 +655,36 @@ public class NoEffectFlagTests
 		assertFalse(scn.IsCharAssigned(frodo));
 		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	@Ignore("F-0370: 'take off The One Ring' has no forecast, so an ability that can do nothing else is not flagged while the Ring is not on; it reads \"false\"")
+	public void TakingOffTheRingIsFlaggedWhileTheRingIsNotOnAndNothingElseTheAbilityDoesCanBeDone() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetTakeOffRingScenario();
+
+		var frodo = scn.GetRingBearer();
+		var elbereth = scn.GetFreepsCard("elbereth");
+		scn.AttachCardsTo(frodo, elbereth);
+
+		var runner = scn.GetShadowCard("runner");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(frodo, runner);
+
+		// The Ring is not on, and no Nazgul is in the skirmish: neither of the two things the ability does can
+		// be done.  Its cost can be paid, so it is offered all the same (Q-0034), and flagged.
+		assertTrue(scn.IsCharSkirmishingAgainst(frodo, runner));
+		assertFalse(scn.RBWearingOneRing());
+		assertTrue(scn.FreepsActionAvailable(elbereth));
+		assertEquals("effect", scn.FreepsActionNoEffect(elbereth));
+
+		scn.FreepsUseCardAction(elbereth);
+		assertInZone(Zone.DISCARD, elbereth);
+		assertFalse(scn.RBWearingOneRing());
+		assertTrue(scn.IsCharSkirmishingAgainst(frodo, runner));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
 
 	@Test

@@ -462,7 +462,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A take from a draw deck with no "reveal" and no kind of card named writes `reveal: false` (Q-0176, F-0332) [Q-0025]
 - revealHand of an empty hand (Q-0144)
 - FreepsGetCardChoiceCount() while cards are only shown
-- A search of another player's draw deck writes its own shuffle (F-0298, Grond 68_82 and 18_82) [Q-0172]
+- A search of another player's draw deck writes its own shuffle (F-0298, Grond 68_82 and 18_82) [F-0369, Q-0172]
 
 ## Boards, readings and tools
 
