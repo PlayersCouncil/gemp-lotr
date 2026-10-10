@@ -19,8 +19,11 @@ one beside them. The same thing hides self-targeting: Celeborn's "exert Celeborn
 Celeborn himself when no other Elven ally is wounded. An "up to N" choice is the exception: its
 minimum is 0, so it asks even with one candidate left (Song of Durin's "discard up to 2 [moria] conditions").
 A choice between piles goes the same way: "from your draw deck or discard pile" is not asked when only one pile
-has a candidate, and a `ShadowChoose("draw deck")` then fails inside the next decision. So does a transfer:
-with one legal bearer it is made without asking.
+has a candidate, and a `ShadowChoose("draw deck")` then fails inside the next decision. That holds for the
+discard pile always, and for the draw deck only where its branch says `mustExist: true`: without it a play from
+a draw deck can always be tried (Q-0019), so with the one candidate in the discard pile both piles are still
+offered and the test answers `FreepsChoose("discard pile")` (A Wizard Is Never Late 30_23, `Card_31_019_Tests`).
+So does a transfer: with one legal bearer it is made without asking.
 
 **A board changed under a pending decision.** The game works out what a decision offers when it sends it. After a cheat that changes the board while a player is at a choice of phase actions, call `FreepsRefreshDecision()` / `ShadowRefreshDecision()` before reading what is on offer; they fail unless that player is at such a choice.
 
@@ -1042,6 +1045,14 @@ unbound Hobbit is there). `TowersSites` has neither word at site 1 (4_325) or si
 `putAll(TowersSites); put("site2", "4_335")` and the fellowship's own two moves (`FreepsPass()`, then
 `SkipToMovementDecision()` and `FreepsChooseToMove()`) show "while at a battleground site" off, on and off again
 (`Card_15_017_ErrataTests`). The Fellowship path has forests and no battleground.
+
+**A Hobbit-set card (sets 30 to 33) stands on the usual table for now.** The rig has no Hobbit constants: the
+Hobbit Draft Game's Ring-bearer is a Bilbo (30_43 to 30_46, `canStartWithRing`) and its One Ring 30_48 is a
+[shire] artifact borne by Bilbo, not a card for the Ring slot. The four kickstarts under
+`cards/unofficial/hobbit/` use `FOTRFrodo` and `RulingRing` with `FellowshipSites`, or, where the card is a site,
+a Hobbit path written out in the file (30_49 to 30_57, `Card_30_051_Tests`: the skippers walk it, and its only
+battleground is site 9, Battle of the Five Armies 30_57). Such a card has no sheet and no game text, and
+`packet.py <id> --blind` withholds its effects: read it with `packet.py --defs <id>`.
 
 **A table in a format that uses Maps.** `VirtualTableScenario.PCMovie` works with every constructor: each deck is
 given the Map of the path its sites are on (`FellowshipMap` 102_74, `TowersMap` 102_75, `KingMap` 102_76). The
