@@ -388,7 +388,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "You may" on a Race to Mount Doom modifier names its player (F-0311)
 - "Response: If a <kind of card> is discarded from play, stack it here" requires the card still in the discard pile (F-0357, Sword Rack 11_158 and Countless Companies 12_58) [Q-0034, Q-0062]
 - "When you play X, you may reinforce a [culture] token" requires a token to reinforce (F-0359, Brego 13_63) [Q-0034, Q-0215]
-- "When you play X, you may discard a Shadow possession" requires one to discard (F-0362, Erkenbrand 0_59) [F-0359, Q-0034, Q-0224, F-0367, F-0373, F-0368, Q-0231]
+- "When you play X, you may discard a Shadow possession" requires one to discard (F-0362, Erkenbrand 0_59) [F-0359, Q-0034, Q-0224, F-0367, F-0373, F-0377, F-0368, Q-0231]
 - "Exchange the cards stacked here with your hand" is carried out with either side empty, and not offered with both (F-0371, F-0372, Hall of Our Fathers 11_11) [Q-0034]
 - "Spot a <Wizard> and X other companions": a number taken off a spot count wants a floor, and "other" wants the one spotted to be a companion (F-0374, Discoveries 12_26)
 - "You may take control of a site" with no cost requires a site that can be taken (F-0341, Hillman Band 4_21) [F-0336, Q-0034, Q-0062]
@@ -462,7 +462,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 ## Reveals, draw decks and shuffles
 
 - A stacked card shuffled in goes to its own owner's deck (F-0172)
-- A take from a draw deck with no "reveal" and no kind of card named writes `reveal: false` (Q-0176, F-0332) [Q-0025]
+- A take from a draw deck with no "reveal" and no kind of card named writes `reveal: false` (Q-0176, F-0332) [Q-0025, F-0378]
 - A card taken into hand in place of a draw is a card drawn; a card taken from anywhere else is not (Q-0205: B; F-0376, open)
 - revealHand of an empty hand (Q-0144)
 - FreepsGetCardChoiceCount() while cards are only shown

@@ -370,7 +370,9 @@ draw deck", `FreepsChooseCardBPFromSelection(card)`): The Mirror of Galadriel 15
 and with three twice; the first chosen lies highest and the last, unasked, is the bottom card
 (`GetFreepsBottomOfDeck()`, `GetFromBottomOfFreepsDeck(2)`; `Card_15_022_Tests`). Before it, a
 `chooseArbitraryCards` whose filter takes none of the cards looked at is still put, as a choice of 0 to 0 with
-all of them shown: `FreepsDeclineChoosing()`.
+all of them shown: `FreepsDeclineChoosing()`. `putCardsFromDeckOnTopOfDeck` asks the same way ("Choose card to put
+on top of deck"): Back to the Light 18_6 with two cards set aside asks once; the first chosen is put down first
+and the last, unasked, lies on top (`GetFreepsTopOfDeck()`, `GetFromTopOfFreepsDeck(2)`; `Card_18_006_Tests`).
 
 **Two offers of one response.** When the same card offers the same trigger or response twice in one decision (two Nazgul winning one skirmish), each offer's text ends with " (for <the cards its trigger memorized>)". A single offer reads as before. Choose between them by that text.
 
