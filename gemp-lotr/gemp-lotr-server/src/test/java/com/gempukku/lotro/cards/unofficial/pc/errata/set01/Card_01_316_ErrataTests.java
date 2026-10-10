@@ -33,6 +33,23 @@ public class Card_01_316_ErrataTests
 		);
 	}
 
+	protected VirtualTableScenario GetOtherCulturesScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("talent", "51_316");
+					put("talent2", "51_316");
+					put("merry", "103_85");     // Merry, Master Holbytla: a [rohan] Hobbit companion; his text answers another [rohan] Man exerting
+					put("pippin", "103_31");    // Pippin, Trollslayer: a [gondor] Hobbit companion; his skirmish ability is only used on purpose
+					// Bounder: [shire] Hobbit ally; a skirmish ability that is never used here
+					put("bounder", "1_286");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,     // Frodo, Son of Drogo: a [shire] Hobbit companion
+				VirtualTableScenario.RulingRing
+		);
+	}
+
 	@Test
 	public void TalentStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
@@ -168,5 +185,40 @@ public class Card_01_316_ErrataTests
 		// 3 companions + 3 for the site - 2
 		assertEquals(4, scn.GetTwilight());
 		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void PlaysOnTheRohanMerryAndTheGondorPippinAsOnTheShireOnes() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetOtherCulturesScenario();
+
+		var frodo = scn.GetRingBearer();
+		var talent = scn.GetFreepsCard("talent");
+		var talent2 = scn.GetFreepsCard("talent2");
+		var merry = scn.GetFreepsCard("merry");
+		var pippin = scn.GetFreepsCard("pippin");
+		var bounder = scn.GetFreepsCard("bounder");
+		scn.MoveCompanionsToTable(merry, pippin);
+		scn.MoveAlliesToTable(bounder);
+		scn.MoveCardsToHand(talent, talent2);
+
+		scn.StartGame();
+
+		// Neither is a [shire] card; the title is all the text names.
+		assertEquals(Culture.ROHAN, merry.getBlueprint().getCulture());
+		assertEquals(Culture.GONDOR, pippin.getBlueprint().getCulture());
+
+		assertTrue(scn.FreepsPlayAvailable(talent));
+		scn.FreepsPlayCard(talent);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(merry, pippin));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(frodo, bounder));
+		scn.FreepsChooseCard(merry);
+		assertAttachedTo(talent, merry);
+
+		// Merry bears one already, so the [gondor] Pippin is the only bearer left and nobody is asked.
+		assertTrue(scn.FreepsPlayAvailable(talent2));
+		scn.FreepsPlayCard(talent2);
+		assertAttachedTo(talent2, pippin);
+		assertNotAttachedTo(talent2, merry);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

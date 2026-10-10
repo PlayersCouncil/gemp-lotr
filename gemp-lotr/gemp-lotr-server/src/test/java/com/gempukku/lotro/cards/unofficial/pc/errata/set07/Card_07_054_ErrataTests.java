@@ -39,6 +39,21 @@ public class Card_07_054_ErrataTests
 		);
 	}
 
+	protected VirtualTableScenario GetShireSmeagolScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("hobbits", "57_54");
+					put("smeagol", "103_116");  // Smeagol, Once Like Us: a [shire] companion, strength 3, vitality 4; an assignment ability used only on purpose
+					put("daysdark", "7_55");    // Days Growing Dark: [gollum] condition in the support area, a fellowship ability
+					put("savage", "1_151");     // Uruk Savage: strength 5, vitality 3, damage +1 only
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
 	@Test
 	public void CleverHobbitsStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
@@ -228,6 +243,40 @@ public class Card_07_054_ErrataTests
 		assertEquals(0, scn.GetKeywordCount(smeagol, Keyword.DAMAGE));
 		assertInPlay(daysdark, itsmine);
 		assertFalse(scn.IsHindered(itsmine));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
+	@Test
+	public void TheShireSmeagolIsMadeStrongerAsTheGollumOneIs() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetShireSmeagolScenario();
+
+		var hobbits = scn.GetFreepsCard("hobbits");
+		var smeagol = scn.GetFreepsCard("smeagol");
+		var daysdark = scn.GetFreepsCard("daysdark");
+		var savage = scn.GetShadowCard("savage");
+		scn.MoveCardsToHand(hobbits);
+		scn.MoveCompanionsToTable(smeagol);
+		scn.MoveCardsToSupportArea(daysdark);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(savage);
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(smeagol, savage);
+
+		// This Smeagol is [shire], not [gollum]; the text names only the title.
+		assertEquals(Culture.SHIRE, smeagol.getBlueprint().getCulture());
+		assertEquals(3, scn.GetStrength(smeagol));
+		assertEquals(0, scn.GetKeywordCount(smeagol, Keyword.DAMAGE));
+
+		scn.FreepsPlayCard(hobbits);
+		scn.FreepsChooseCards(daysdark);
+
+		assertInDiscard(hobbits, daysdark);
+		// 3 + 3 for the one condition spotted.
+		assertEquals(6, scn.GetStrength(smeagol));
+		assertEquals(1, scn.GetKeywordCount(smeagol, Keyword.DAMAGE));
+		assertEquals(5, scn.GetStrength(savage));
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
 }

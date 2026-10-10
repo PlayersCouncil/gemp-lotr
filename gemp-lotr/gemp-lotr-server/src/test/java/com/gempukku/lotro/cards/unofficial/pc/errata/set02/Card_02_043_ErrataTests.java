@@ -58,6 +58,19 @@ public class Card_02_043_ErrataTests
 		);
 	}
 
+	protected VirtualTableScenario GetUrukHaiLurtzScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("sword", "52_43");
+					put("lurtz", "11_194");     // Lurtz, Minion of the White Wizard: unique [uruk-hai] Uruk-hai, archer, damage +1; strength bonus only for exhausted companions
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
 	@Test
 	public void LurtzsSwordStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
@@ -386,5 +399,27 @@ public class Card_02_043_ErrataTests
 		assertEquals(3, scn.GetWoundsOn(sam));
 		assertEquals(2, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void AnUrukHaiCultureLurtzBearingItIsDamagePlus1Too() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetUrukHaiLurtzScenario();
+
+		var sword = scn.GetShadowCard("sword");
+		var lurtz = scn.GetShadowCard("lurtz");
+		scn.MoveCardsToHand(sword);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(lurtz);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		// This Lurtz is [uruk-hai], not [isengard], and the text names only the title. He is printed damage +1.
+		assertEquals(Culture.URUK_HAI, lurtz.getBlueprint().getCulture());
+		assertEquals(1, scn.GetKeywordCount(lurtz, Keyword.DAMAGE));
+		scn.ShadowPlayCard(sword);
+		assertAttachedTo(sword, lurtz);
+		assertEquals(2, scn.GetKeywordCount(lurtz, Keyword.DAMAGE));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

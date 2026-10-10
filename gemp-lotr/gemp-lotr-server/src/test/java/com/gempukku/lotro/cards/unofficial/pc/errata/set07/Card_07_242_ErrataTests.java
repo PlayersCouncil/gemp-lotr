@@ -36,6 +36,22 @@ public class Card_07_242_ErrataTests
 		);
 	}
 
+	protected VirtualTableScenario GetRohanMerryScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("sword", "57_242");
+					put("merry", "103_85");     // Merry, Master Holbytla: a [rohan] Hobbit companion, strength 3, vitality 4, enduring; his text answers another [rohan] Man exerting
+					put("guard", "5_83");       // Household Guard: [rohan] Man companion, Valiant and nothing else
+					put("savage", "1_151");     // Uruk Savage: [isengard] minion, vitality 3, damage +1 and nothing else
+					put("troop", "1_177");      // Goblin Patrol Troop: [moria] minion, vitality 3, no text
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
 	@Test
 	public void MerrysSwordStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
@@ -355,5 +371,47 @@ public class Card_07_242_ErrataTests
 
 		assertFalse(scn.FreepsActionAvailable(sword));
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+	}
+
+	@Test
+	public void TheRohanMerryBearsItAndExertsForItAsTheShireOnesDo() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetRohanMerryScenario();
+
+		var sword = scn.GetFreepsCard("sword");
+		var merry = scn.GetFreepsCard("merry");
+		var guard = scn.GetFreepsCard("guard");
+		scn.MoveCompanionsToTable(merry, guard);
+		scn.MoveCardsToHand(sword);
+
+		var savage = scn.GetShadowCard("savage");
+		var troop = scn.GetShadowCard("troop");
+
+		scn.StartGame();
+
+		// This Merry is [rohan], not [shire]; the text names only the title.
+		assertEquals(Culture.ROHAN, merry.getBlueprint().getCulture());
+		assertEquals(3, scn.GetStrength(merry));
+		assertTrue(scn.FreepsPlayAvailable(sword));
+		scn.FreepsPlayCard(sword);
+		assertAttachedTo(sword, merry);
+		assertEquals(5, scn.GetStrength(merry));
+
+		scn.MoveMinionsToTable(savage, troop);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertTrue(scn.FreepsActionAvailable(sword));
+		scn.FreepsUseCardAction(sword);
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		assertEquals(3, scn.FreepsGetChoiceMax());
+		assertEquals(0, scn.GetWoundsOn(merry));
+		scn.FreepsChoose("3");
+		assertEquals(3, scn.GetWoundsOn(merry));
+
+		// Two [rohan] companions (this Merry is one of them, and the Household Guard) against an X of 3: two exertions.
+		scn.FreepsChooseCard(troop);
+		scn.FreepsChooseCard(savage);
+		assertEquals(1, scn.GetWoundsOn(troop));
+		assertEquals(1, scn.GetWoundsOn(savage));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 }
