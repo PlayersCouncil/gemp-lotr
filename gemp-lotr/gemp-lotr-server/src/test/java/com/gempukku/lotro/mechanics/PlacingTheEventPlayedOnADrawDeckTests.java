@@ -1,15 +1,11 @@
 package com.gempukku.lotro.mechanics;
 
-import com.gempukku.lotro.cards.build.LotroCardBlueprintBuilder;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 import static com.gempukku.lotro.framework.Assertions.*;
@@ -28,7 +24,8 @@ import static org.junit.Assert.*;
  *
  * Both now take a field "filter": "self" (the default) is the card they are written on, and "played" is the card
  * whose play is being answered, as PutPlayedEventIntoHand and RemovePlayedEventFromTheGame already had.  Any
- * other word is refused when the card is loaded.
+ * other word is refused when the card is loaded (PlacingTheEventPlayedOnADrawDeckDefinitionTests, beside the
+ * builder in the logic module: no game is played there).
  *
  * The two test cards (testCards.hjson) are Free Peoples conditions: "Response: If you play an event, add (1) to
  * place that event on top of (beneath) your draw deck."  With a cost, such a response is offered again for the
@@ -199,47 +196,5 @@ public class PlacingTheEventPlayedOnADrawDeckTests
 		assertEquals(deck + 2, scn.GetFreepsDeckCount());
 		assertEquals(0, scn.GetFreepsDiscardCount());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	// The definition of a Free Peoples condition: "Response: If you play an event, place <a card> on top of
-	// (beneath) your draw deck", the card being the one the filter names.  With no filter given, none is written.
-	private static String response(String id, String type, String filter) {
-		return "\"" + id + "\": { \"title\": \"Test Card\", \"unique\": false, \"side\": \"Free Peoples\", \"culture\": \"Shire\","
-				+ " \"twilight\": 0, \"type\": \"Condition\", \"keywords\": \"Support Area\","
-				+ " \"effects\": { \"type\": \"Response\", \"trigger\": { \"type\": \"played\", \"filter\": \"your,event\" },"
-				+ " \"effect\": { \"type\": \"" + type + "\""
-				+ (filter == null ? "" : ", \"filter\": \"" + filter + "\"") + " } } }";
-	}
-
-	@Test
-	public void ADefinitionNamesTheCardItselfOrTheCardPlayedAndNothingElse() throws Exception {
-		final String top = "PutPlayedEventOnTopOfDrawDeck";
-		final String bottom = "PutPlayedEventOnBottomOfDrawDeck";
-		final String definitions = "{"
-				+ response("0_9201", top, null) + ","
-				+ response("0_9202", top, "self") + ","
-				+ response("0_9203", top, "played") + ","
-				// Case does not matter.
-				+ response("0_9204", top, "Played") + ","
-				+ response("0_9205", bottom, null) + ","
-				+ response("0_9206", bottom, "self") + ","
-				+ response("0_9207", bottom, "played") + ","
-				+ response("0_9208", bottom, "Played") + ","
-				// Neither effect chooses a card, reads one from memory or takes a filter of cards.
-				+ response("0_9211", top, "memory(playedEvent)") + ","
-				+ response("0_9212", top, "choose(event)") + ","
-				+ response("0_9213", top, "event") + ","
-				+ response("0_9214", bottom, "memory(playedEvent)") + ","
-				+ response("0_9215", bottom, "choose(event)") + ","
-				+ response("0_9216", bottom, "event")
-				+ "}";
-
-		var loaded = LotroCardBlueprintLibrary.loadCardsFromFile(new LotroCardBlueprintBuilder(),
-				new ByteArrayInputStream(definitions.getBytes(StandardCharsets.UTF_8)));
-
-		for (int i = 1; i <= 8; i++)
-			assertTrue("0_920" + i, loaded.containsKey("0_920" + i));
-		for (int i = 1; i <= 6; i++)
-			assertFalse("0_921" + i, loaded.containsKey("0_921" + i));
 	}
 }

@@ -107,5 +107,6 @@ public class FreePeoplesPlayerStartsAssigningTriggerTests
 
 		assertTrue(scn.IsCharAssignedAgainst(aragorn, rider));
 		assertEquals(pool + 1, scn.GetTwilight());
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 	}
 }

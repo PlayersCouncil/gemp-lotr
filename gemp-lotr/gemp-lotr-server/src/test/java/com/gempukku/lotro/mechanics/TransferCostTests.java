@@ -30,33 +30,30 @@ import static org.junit.Assert.*;
  */
 public class TransferCostTests
 {
-	protected HashMap<String, String> Cards() {
-		return new HashMap<>()
-		{{
-			put("rider1", "4_286");     // Rider of Rohan: [rohan] Man, cost 2; a skirmish ability that is never used
-			put("rider2", "4_286");
-			put("spear1", "4_288");     // Rider's Spear: [rohan] possession, hand weapon, cost 1, for a [rohan] Man
-			put("spear2", "4_288");
-			put("legolas", "1_50");     // Legolas, Greenleaf: an Elf, vitality 3; an archery ability that is never used
-			put("arwen", "3_7");        // Arwen, Elven Rider: an Elf; a response about the Ring-bearer's wounds
-			// Asfaloth: [elven] possession, mount, cost 2.  "Bearer must be an Elf.  When played on Arwen,
-			// Asfaloth's twilight cost is -2."
-			put("asfaloth", "1_31");
-			// Heavy Axe: [dwarven] possession, hand weapon, cost 4.  "Bearer must be a Dwarf.  This is twilight
-			// cost -1 for each [dwarven] card that has a culture token on it."
-			put("axe1", "15_7");
-			put("axe2", "15_7");
-			put("gimli", "1_13");       // Gimli, Son of Gloin: a Dwarf; a skirmish ability that is never used
-			put("guard", "1_7");        // Dwarf Guard: a Dwarf with no text once in play
-			// Chamber of Records: a [dwarven] condition for the support area that holds [dwarven] tokens.
-			put("chamber", "15_3");
-		}};
-	}
-
 	// Site 1 of the King block sites every scenario gets by default is Edoras Hall (7_330): "The twilight cost
 	// of each [rohan] possession is -1."
 	protected VirtualTableScenario GetEdorasHallScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(Cards(),
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("rider1", "4_286");     // Rider of Rohan: [rohan] Man, cost 2; a skirmish ability that is never used
+					put("rider2", "4_286");
+					put("spear1", "4_288");     // Rider's Spear: [rohan] possession, hand weapon, cost 1, for a [rohan] Man
+					put("spear2", "4_288");
+					put("legolas", "1_50");     // Legolas, Greenleaf: an Elf, vitality 3; an archery ability that is never used
+					put("arwen", "3_7");        // Arwen, Elven Rider: an Elf; a response about the Ring-bearer's wounds
+					// Asfaloth: [elven] possession, mount, cost 2.  "Bearer must be an Elf.  When played on Arwen,
+					// Asfaloth's twilight cost is -2."
+					put("asfaloth", "1_31");
+					// Heavy Axe: [dwarven] possession, hand weapon, cost 4.  "Bearer must be a Dwarf.  This is twilight
+					// cost -1 for each [dwarven] card that has a culture token on it."
+					put("axe1", "15_7");
+					put("axe2", "15_7");
+					put("gimli", "1_13");       // Gimli, Son of Gloin: a Dwarf; a skirmish ability that is never used
+					put("guard", "1_7");        // Dwarf Guard: a Dwarf with no text once in play
+					// Chamber of Records: a [dwarven] condition for the support area that holds [dwarven] tokens.
+					put("chamber", "15_3");
+				}},
 				VirtualTableScenario.KingSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
@@ -66,7 +63,27 @@ public class TransferCostTests
 	// Rohirrim Road (7_332), the other King block site 1: "Fellowship: Exert an Elf to make the twilight cost of
 	// each condition and possession +2 until the end of the turn."
 	protected VirtualTableScenario GetRohirrimRoadScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(Cards(),
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("rider1", "4_286");     // Rider of Rohan: [rohan] Man, cost 2; a skirmish ability that is never used
+					put("rider2", "4_286");
+					put("spear1", "4_288");     // Rider's Spear: [rohan] possession, hand weapon, cost 1, for a [rohan] Man
+					put("spear2", "4_288");
+					put("legolas", "1_50");     // Legolas, Greenleaf: an Elf, vitality 3; an archery ability that is never used
+					put("arwen", "3_7");        // Arwen, Elven Rider: an Elf; a response about the Ring-bearer's wounds
+					// Asfaloth: [elven] possession, mount, cost 2.  "Bearer must be an Elf.  When played on Arwen,
+					// Asfaloth's twilight cost is -2."
+					put("asfaloth", "1_31");
+					// Heavy Axe: [dwarven] possession, hand weapon, cost 4.  "Bearer must be a Dwarf.  This is twilight
+					// cost -1 for each [dwarven] card that has a culture token on it."
+					put("axe1", "15_7");
+					put("axe2", "15_7");
+					put("gimli", "1_13");       // Gimli, Son of Gloin: a Dwarf; a skirmish ability that is never used
+					put("guard", "1_7");        // Dwarf Guard: a Dwarf with no text once in play
+					// Chamber of Records: a [dwarven] condition for the support area that holds [dwarven] tokens.
+					put("chamber", "15_3");
+				}},
 				new HashMap<>()
 				{{
 					put("site1", "7_332");

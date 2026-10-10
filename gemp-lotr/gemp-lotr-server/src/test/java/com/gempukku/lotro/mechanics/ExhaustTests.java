@@ -85,6 +85,7 @@ public class ExhaustTests
 		assertTrue(scn.IsExhausted(troll));
 		assertInZone(Zone.SHADOW_CHARACTERS, troll);
 		assertEquals(0, scn.GetFreepsHandCount());
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 	}
 
 	@Test
@@ -109,6 +110,7 @@ public class ExhaustTests
 		assertEquals(3, scn.GetWoundsOn(troll));
 		assertTrue(scn.IsExhausted(troll));
 		assertInZone(Zone.SHADOW_CHARACTERS, troll);
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 	}
 
 	@Test
@@ -143,6 +145,7 @@ public class ExhaustTests
 		assertTrue(scn.IsExhausted(soldier));
 		assertEquals(0, scn.GetWoundsOn(troll));
 		assertEquals(2, scn.GetWoundsOn(taskmaster));
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 	}
 
 	@Test
@@ -168,6 +171,7 @@ public class ExhaustTests
 
 		assertEquals(3, scn.GetWoundsOn(gandalf));
 		assertTrue(scn.IsExhausted(gandalf));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 
 	@Test

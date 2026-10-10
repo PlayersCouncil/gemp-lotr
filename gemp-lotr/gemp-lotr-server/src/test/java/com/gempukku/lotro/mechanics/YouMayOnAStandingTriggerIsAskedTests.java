@@ -244,6 +244,7 @@ public class YouMayOnAStandingTriggerIsAskedTests
 		scn.ShadowUseCardAction(slayer1);
 		assertEquals(2, scn.GetTwilight());
 		assertEquals(10, scn.GetStrength(slayer1));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 
 	@Test

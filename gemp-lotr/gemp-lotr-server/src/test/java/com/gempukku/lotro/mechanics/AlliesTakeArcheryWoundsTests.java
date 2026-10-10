@@ -58,12 +58,12 @@ public class AlliesTakeArcheryWoundsTests
 		);
 	}
 
-	public static final String BarrowsOfEdoras = "4_337";  // site 3T, a sanctuary; a fellowship ability used only on purpose
-	public static final String StreetsOfEdoras = "4_340";  // site 3T, a sanctuary; bars each [rohan] ally from archery fire and skirmishes
-
 	/**
 	 * The Towers path with the site 3 named.  Aldor and the Gondorian Merchant are at home there; Celeborn, whose
 	 * home is on the Fellowship path, is at home nowhere on it.
+	 *
+	 * The tests name one of two sites 3T, both sanctuaries: Barrows of Edoras 4_337 (a fellowship ability used only
+	 * on purpose) and Streets of Edoras 4_340 (bars each [rohan] ally from archery fire and skirmishes).
 	 */
 	protected VirtualTableScenario GetTowersScenario(String site3) throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
@@ -292,6 +292,7 @@ public class AlliesTakeArcheryWoundsTests
 		assertEquals(1, scn.GetFreepsArcheryTotal());
 		scn.ShadowUseCardAction(comedown);
 		assertEquals(1, scn.GetFreepsArcheryTotal());
+		assertTrue(scn.AwaitingFreepsArcheryPhaseActions());
 	}
 
 	@Test
@@ -318,7 +319,7 @@ public class AlliesTakeArcheryWoundsTests
 	@Test
 	public void OnTheTowersPathAnAllyAtHisHomeSiteIsOfferedAnArcheryWound() throws DecisionResultInvalidException, CardNotFoundException {
 		// The control for the tests at Streets of Edoras below: the same board at a site 3T that bars nobody.
-		var scn = GetTowersScenario(BarrowsOfEdoras);
+		var scn = GetTowersScenario("4_337");    // Barrows of Edoras
 
 		var assassin = scn.GetShadowCard("assassin");
 		var crossbow1 = scn.GetShadowCard("crossbow1");
@@ -350,7 +351,7 @@ public class AlliesTakeArcheryWoundsTests
 
 	@Test
 	public void AnAllyACardBarsFromArcheryFireIsNotOfferedAnArcheryWoundAtHisHomeSite() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetTowersScenario(StreetsOfEdoras);
+		var scn = GetTowersScenario("4_340");    // Streets of Edoras
 
 		var assassin = scn.GetShadowCard("assassin");
 		var crossbow1 = scn.GetShadowCard("crossbow1");
@@ -384,7 +385,7 @@ public class AlliesTakeArcheryWoundsTests
 
 	@Test
 	public void WhileAlliesTakeThemAnAllyBarredFromArcheryFireIsNotOfferedAndTheOtherAlliesAre() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetTowersScenario(StreetsOfEdoras);
+		var scn = GetTowersScenario("4_340");    // Streets of Edoras
 
 		var comedown = scn.GetShadowCard("comedown");
 		var assassin = scn.GetShadowCard("assassin");
@@ -424,7 +425,7 @@ public class AlliesTakeArcheryWoundsTests
 
 	@Test
 	public void AWoundThatOnlyABarredAllyIsLeftToTakeIsAssignedToACompanion() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetTowersScenario(StreetsOfEdoras);
+		var scn = GetTowersScenario("4_340");    // Streets of Edoras
 
 		var comedown = scn.GetShadowCard("comedown");
 		var assassin = scn.GetShadowCard("assassin");
@@ -462,7 +463,7 @@ public class AlliesTakeArcheryWoundsTests
 
 	@Test
 	public void WithOnlyABarredAllyLeftWhenTheArchersFireEveryWoundIsAssignedToCompanions() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetTowersScenario(StreetsOfEdoras);
+		var scn = GetTowersScenario("4_340");    // Streets of Edoras
 
 		var comedown = scn.GetShadowCard("comedown");
 		var assassin = scn.GetShadowCard("assassin");
@@ -503,7 +504,7 @@ public class AlliesTakeArcheryWoundsTests
 	public void ComeDownIsNotOfferedWhenTheOnlyAllyInPlayIsBarredFromArcheryFire() throws DecisionResultInvalidException, CardNotFoundException {
 		// With no ally it can send a wound to, the ability would do nothing, and it has no cost (Q-0034; Q-0147:
 		// "meaning Come Down is ineffectual").
-		var scn = GetTowersScenario(StreetsOfEdoras);
+		var scn = GetTowersScenario("4_340");    // Streets of Edoras
 
 		var comedown = scn.GetShadowCard("comedown");
 		var assassin = scn.GetShadowCard("assassin");
@@ -528,7 +529,7 @@ public class AlliesTakeArcheryWoundsTests
 	@Test
 	public void TheSameAllyAtHomeWhereNoCardBarsHimIsWhoComeDownSendsTheWoundsTo() throws DecisionResultInvalidException, CardNotFoundException {
 		// The control for the two tests above: one [rohan] ally, at home, at a site 3T that bars nobody.
-		var scn = GetTowersScenario(BarrowsOfEdoras);
+		var scn = GetTowersScenario("4_337");    // Barrows of Edoras
 
 		var comedown = scn.GetShadowCard("comedown");
 		var assassin = scn.GetShadowCard("assassin");

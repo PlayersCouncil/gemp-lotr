@@ -1,6 +1,5 @@
-package com.gempukku.lotro.mechanics;
+package com.gempukku.lotro.cards.build;
 
-import com.gempukku.lotro.cards.build.LotroCardBlueprintBuilder;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import org.junit.Test;
 
@@ -23,7 +22,8 @@ import static org.junit.Assert.*;
  * the Fellowship phase").
  *
  * Nothing is played here: each test hands the library a few definitions and reads which of them it kept.  The
- * texts are JSON, which the library reads as it reads HJSON.
+ * texts are JSON, which the library reads as it reads HJSON.  No game and no table: plain JUnit, beside the
+ * builder that reads a definition.
  */
 public class UnknownPhaseInADefinitionTests
 {

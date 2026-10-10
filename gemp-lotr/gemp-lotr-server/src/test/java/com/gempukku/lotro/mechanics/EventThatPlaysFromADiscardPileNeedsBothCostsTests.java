@@ -132,6 +132,7 @@ public class EventThatPlaysFromADiscardPileNeedsBothCostsTests
 		scn.MoveCardsToDiscard(gollum);
 		scn.ShadowRefreshDecision();
 		assertTrue(scn.ShadowPlayAvailable(snuffler));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test

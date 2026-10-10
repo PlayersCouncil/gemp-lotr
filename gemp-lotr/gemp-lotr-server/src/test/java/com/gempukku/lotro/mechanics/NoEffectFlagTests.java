@@ -65,110 +65,104 @@ public class NoEffectFlagTests
 		);
 	}
 
-	protected HashMap<String, String> EffectCards() {
-		return new HashMap<>()
-		{{
-			put("boromir", "1_97");     // Boromir, Son of Denethor: strength 7, vitality 3
-			// Boromir's Cloak: "Bearer must be Boromir.  Maneuver: Exert Boromir to discard a weather condition."
-			put("cloak", "1_98");
-			// Saruman's Chill: an [isengard] weather condition that plays on a site.  "Each Hobbit who
-			// moves from this site must exert.  Discard this condition at the end of the turn."
-			put("chill", "1_134");
-			// Devilry of Orthanc: an [isengard] condition that is no weather.  Its abilities need an
-			// Uruk-hai to exert in the Shadow phase, or 8 tokens.
-			put("devilry", "5_49");
-
-			// Celeborn, Lord of Lorien: an [elven] ally, vitality 3.  "Fellowship: Exert Celeborn to heal
-			// an [elven] ally."
-			put("celeborn", "1_34");
-			put("orophin", "1_56");     // Orophin, Lorien Bowman: an [elven] ally; an archery ability
-			// Uruk Shaman: an Uruk-hai, strength 8, vitality 2.  "Maneuver: Remove (2) to heal an Uruk-hai."
-			put("shaman", "1_152");
-
-			put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, vitality 4
-			put("sam", "1_311");        // Sam, Son of Hamfast: a Hobbit companion, strength 3, vitality 4
-			// Cliffs of Emyn Muil: a [shire] condition.  "Skirmish: Discard this condition to wound a
-			// minion a Hobbit companion is skirmishing."  Its other text is about site 1 of another block.
-			put("cliffs", "4_299");
-
-			// Ulaire Attea, Keeper of Dol Guldur: strength 12, vitality 3, fierce.  "Skirmish: Remove (1) to
-			// make Ulaire Attea strength +1 (limit +5)."
-			put("attea", "1_229");
-
-			put("runner", "1_178");     // Goblin Runner: strength 5, vitality 1
-			put("runner2", "1_178");
-		}};
-	}
-
 	protected VirtualTableScenario GetEffectScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(EffectCards(),
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("boromir", "1_97");     // Boromir, Son of Denethor: strength 7, vitality 3
+					// Boromir's Cloak: "Bearer must be Boromir.  Maneuver: Exert Boromir to discard a weather condition."
+					put("cloak", "1_98");
+					// Saruman's Chill: an [isengard] weather condition that plays on a site.  "Each Hobbit who
+					// moves from this site must exert.  Discard this condition at the end of the turn."
+					put("chill", "1_134");
+					// Devilry of Orthanc: an [isengard] condition that is no weather.  Its abilities need an
+					// Uruk-hai to exert in the Shadow phase, or 8 tokens.
+					put("devilry", "5_49");
+
+					// Celeborn, Lord of Lorien: an [elven] ally, vitality 3.  "Fellowship: Exert Celeborn to heal
+					// an [elven] ally."
+					put("celeborn", "1_34");
+					put("orophin", "1_56");     // Orophin, Lorien Bowman: an [elven] ally; an archery ability
+					// Uruk Shaman: an Uruk-hai, strength 8, vitality 2.  "Maneuver: Remove (2) to heal an Uruk-hai."
+					put("shaman", "1_152");
+
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, vitality 4
+					put("sam", "1_311");        // Sam, Son of Hamfast: a Hobbit companion, strength 3, vitality 4
+					// Cliffs of Emyn Muil: a [shire] condition.  "Skirmish: Discard this condition to wound a
+					// minion a Hobbit companion is skirmishing."  Its other text is about site 1 of another block.
+					put("cliffs", "4_299");
+
+					// Ulaire Attea, Keeper of Dol Guldur: strength 12, vitality 3, fierce.  "Skirmish: Remove (1) to
+					// make Ulaire Attea strength +1 (limit +5)."
+					put("attea", "1_229");
+
+					put("runner", "1_178");     // Goblin Runner: strength 5, vitality 1
+					put("runner2", "1_178");
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
 	}
 
-	protected HashMap<String, String> SkirmishCards() {
-		return new HashMap<>()
-		{{
-			// Boromir, Son of Denethor: strength 7, vitality 3.  "Skirmish: Exert Boromir to make a Hobbit
-			// strength +3."
-			put("boromir", "1_97");
-			// Gimli, Son of Gloin: strength 6, vitality 3.  "Skirmish: Exert Gimli to make him strength +2."
-			put("gimli", "1_13");
-			put("aragorn", "1_89");     // Aragorn, Ranger of the North: a [gondor] Man, strength 8, vitality 4
-			put("sam", "1_311");        // Sam, Son of Hamfast: a Hobbit, strength 3, vitality 4
-			// Golradir, Councilor of Imladris: an [elven] ally, vitality 3.  "Skirmish: Exert Golradir to
-			// make an Orc strength -1."
-			put("golradir", "3_20");
-			// Bounder: a [shire] ally, a Hobbit, vitality 2.  "Skirmish: Exert this ally to prevent a Hobbit
-			// from being overwhelmed unless that Hobbit's strength is tripled."
-			put("bounder", "1_286");
-			put("bounder2", "1_286");
-			// Arwen, Daughter of Elrond: strength 6, vitality 3; stronger while skirmishing a Nazgul.
-			put("arwen", "1_30");
-			// Asfaloth, Elven Steed: strength +2.  "Bearer must be an Elf.  Skirmish: If bearer is Arwen,
-			// exert her to make each minion skirmishing her strength -2."
-			put("asfaloth", "7_17");
-			// Durability: a [dwarven] event, cost 0.  "Skirmish: Make a Dwarf strength +2.  Then, if that
-			// Dwarf is at a battleground or mountain site, draw a card."
-			put("durability", "12_4");
-			put("durability2", "12_4");
-			// Henneth Annun: a [gondor] condition.  "Skirmish: Spot a [gondor] Man and discard this
-			// condition to wound a roaming minion."  Its other text is about site 6 of another block.
-			put("henneth", "4_125");
-			put("henneth2", "4_125");
-			// Warmed Up a Bit: a [shire] event, cost 0.  "Skirmish: Discard an unbound Hobbit."
-			put("warmed", "4_322");
-			put("warmed2", "4_322");
-			// Merry, Friend to Sam: an unbound Hobbit.  His skirmish ability adds his strength to another
-			// companion, and is not used.
-			put("merry", "1_302");
-
-			put("runner", "1_178");     // Goblin Runner: a [moria] Orc, strength 5, vitality 1, site 4
-			put("runner2", "1_178");
-			put("savage", "1_151");     // Uruk Savage: an Uruk-hai, strength 5, vitality 3; Damage +1 is its whole text
-			// Goblin Patrol Troop: a [moria] Orc, strength 13, vitality 3, no text.
-			put("troop", "1_177");
-			// Moria Axe: strength +2, damage +1.  "Bearer must be a [moria] Orc.  Skirmish: Exert bearer to
-			// make him strength +2."
-			put("axe", "1_190");
-			// Goblin Man: an [isengard] Orc, strength 6, vitality 2, site 2, so not roaming at site 2.  It is
-			// discarded if underground; its ability is a Shadow one.
-			put("goblinman", "2_42");
-			// Armored Easterling: strength 10, vitality 3.  Three skirmish abilities, each "Remove (2) to
-			// make a lurker ...": strength +1; fierce until the regroup phase; damage +1.
-			put("easterling", "11_68");
-			// Emboldened Orc: a lurker, strength 11, vitality 2, stronger for each companion who is not
-			// assigned to a skirmish.  It has no ability to use.
-			put("emboldened", "11_119");
-		}};
-	}
-
 	// Site 2 of the Fellowship block is Ettenmoors: "Skirmish: Exert your companion or minion to make that
 	// character strength +2."  Each player is offered it in every skirmish there.
 	protected VirtualTableScenario GetSkirmishScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(SkirmishCards(),
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// Boromir, Son of Denethor: strength 7, vitality 3.  "Skirmish: Exert Boromir to make a Hobbit
+					// strength +3."
+					put("boromir", "1_97");
+					// Gimli, Son of Gloin: strength 6, vitality 3.  "Skirmish: Exert Gimli to make him strength +2."
+					put("gimli", "1_13");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a [gondor] Man, strength 8, vitality 4
+					put("sam", "1_311");        // Sam, Son of Hamfast: a Hobbit, strength 3, vitality 4
+					// Golradir, Councilor of Imladris: an [elven] ally, vitality 3.  "Skirmish: Exert Golradir to
+					// make an Orc strength -1."
+					put("golradir", "3_20");
+					// Bounder: a [shire] ally, a Hobbit, vitality 2.  "Skirmish: Exert this ally to prevent a Hobbit
+					// from being overwhelmed unless that Hobbit's strength is tripled."
+					put("bounder", "1_286");
+					put("bounder2", "1_286");
+					// Arwen, Daughter of Elrond: strength 6, vitality 3; stronger while skirmishing a Nazgul.
+					put("arwen", "1_30");
+					// Asfaloth, Elven Steed: strength +2.  "Bearer must be an Elf.  Skirmish: If bearer is Arwen,
+					// exert her to make each minion skirmishing her strength -2."
+					put("asfaloth", "7_17");
+					// Durability: a [dwarven] event, cost 0.  "Skirmish: Make a Dwarf strength +2.  Then, if that
+					// Dwarf is at a battleground or mountain site, draw a card."
+					put("durability", "12_4");
+					put("durability2", "12_4");
+					// Henneth Annun: a [gondor] condition.  "Skirmish: Spot a [gondor] Man and discard this
+					// condition to wound a roaming minion."  Its other text is about site 6 of another block.
+					put("henneth", "4_125");
+					put("henneth2", "4_125");
+					// Warmed Up a Bit: a [shire] event, cost 0.  "Skirmish: Discard an unbound Hobbit."
+					put("warmed", "4_322");
+					put("warmed2", "4_322");
+					// Merry, Friend to Sam: an unbound Hobbit.  His skirmish ability adds his strength to another
+					// companion, and is not used.
+					put("merry", "1_302");
+
+					put("runner", "1_178");     // Goblin Runner: a [moria] Orc, strength 5, vitality 1, site 4
+					put("runner2", "1_178");
+					put("savage", "1_151");     // Uruk Savage: an Uruk-hai, strength 5, vitality 3; Damage +1 is its whole text
+					// Goblin Patrol Troop: a [moria] Orc, strength 13, vitality 3, no text.
+					put("troop", "1_177");
+					// Moria Axe: strength +2, damage +1.  "Bearer must be a [moria] Orc.  Skirmish: Exert bearer to
+					// make him strength +2."
+					put("axe", "1_190");
+					// Goblin Man: an [isengard] Orc, strength 6, vitality 2, site 2, so not roaming at site 2.  It is
+					// discarded if underground; its ability is a Shadow one.
+					put("goblinman", "2_42");
+					// Armored Easterling: strength 10, vitality 3.  Three skirmish abilities, each "Remove (2) to
+					// make a lurker ...": strength +1; fierce until the regroup phase; damage +1.
+					put("easterling", "11_68");
+					// Emboldened Orc: a lurker, strength 11, vitality 2, stronger for each companion who is not
+					// assigned to a skirmish.  It has no ability to use.
+					put("emboldened", "11_119");
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
@@ -178,37 +172,52 @@ public class NoEffectFlagTests
 	// A site path that is not the Fellowship block's, so that Hobbit Stealth's "at any other site" is the
 	// clause in force.  Site 2 is King's Tent, whose ability is a Shadow one.
 	protected VirtualTableScenario GetOtherSitesScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(CancelCards(),
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// Hobbit Stealth: a [shire] event, cost 1.  "Skirmish: At sites 1 to 5, cancel a skirmish
+					// involving a Hobbit.  At any other site, make a Hobbit strength +2."
+					put("stealth", "1_298");
+					put("stealth2", "1_298");
+					put("sam", "1_311");        // Sam, Son of Hamfast: a Hobbit, strength 3, vitality 4
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, vitality 4
+
+					// Gandalf, Friend of the Shirefolk: vitality 4; stronger for each race in the fellowship.
+					put("gandalf", "1_72");
+					// Gandalf's Staff: "Bearer must be Gandalf. ... Skirmish: Exert Gandalf twice to cancel a
+					// skirmish involving him."
+					put("staff", "2_22");
+
+					put("runner", "1_178");     // Goblin Runner: strength 5, vitality 1
+					put("runner2", "1_178");
+				}},
 				VirtualTableScenario.KingSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
 	}
 
-	protected HashMap<String, String> CancelCards() {
-		return new HashMap<>()
-		{{
-			// Hobbit Stealth: a [shire] event, cost 1.  "Skirmish: At sites 1 to 5, cancel a skirmish
-			// involving a Hobbit.  At any other site, make a Hobbit strength +2."
-			put("stealth", "1_298");
-			put("stealth2", "1_298");
-			put("sam", "1_311");        // Sam, Son of Hamfast: a Hobbit, strength 3, vitality 4
-			put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, vitality 4
-
-			// Gandalf, Friend of the Shirefolk: vitality 4; stronger for each race in the fellowship.
-			put("gandalf", "1_72");
-			// Gandalf's Staff: "Bearer must be Gandalf. ... Skirmish: Exert Gandalf twice to cancel a
-			// skirmish involving him."
-			put("staff", "2_22");
-
-			put("runner", "1_178");     // Goblin Runner: strength 5, vitality 1
-			put("runner2", "1_178");
-		}};
-	}
-
 	// The default format, in which a skirmish involving the Ring-bearer may not be cancelled.
 	protected VirtualTableScenario GetCancelScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(CancelCards(),
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// Hobbit Stealth: a [shire] event, cost 1.  "Skirmish: At sites 1 to 5, cancel a skirmish
+					// involving a Hobbit.  At any other site, make a Hobbit strength +2."
+					put("stealth", "1_298");
+					put("stealth2", "1_298");
+					put("sam", "1_311");        // Sam, Son of Hamfast: a Hobbit, strength 3, vitality 4
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, vitality 4
+
+					// Gandalf, Friend of the Shirefolk: vitality 4; stronger for each race in the fellowship.
+					put("gandalf", "1_72");
+					// Gandalf's Staff: "Bearer must be Gandalf. ... Skirmish: Exert Gandalf twice to cancel a
+					// skirmish involving him."
+					put("staff", "2_22");
+
+					put("runner", "1_178");     // Goblin Runner: strength 5, vitality 1
+					put("runner2", "1_178");
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
@@ -217,7 +226,25 @@ public class NoEffectFlagTests
 
 	// A format in which a skirmish involving the Ring-bearer may be cancelled.
 	protected VirtualTableScenario GetFellowshipBlockCancelScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(CancelCards(),
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// Hobbit Stealth: a [shire] event, cost 1.  "Skirmish: At sites 1 to 5, cancel a skirmish
+					// involving a Hobbit.  At any other site, make a Hobbit strength +2."
+					put("stealth", "1_298");
+					put("stealth2", "1_298");
+					put("sam", "1_311");        // Sam, Son of Hamfast: a Hobbit, strength 3, vitality 4
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, vitality 4
+
+					// Gandalf, Friend of the Shirefolk: vitality 4; stronger for each race in the fellowship.
+					put("gandalf", "1_72");
+					// Gandalf's Staff: "Bearer must be Gandalf. ... Skirmish: Exert Gandalf twice to cancel a
+					// skirmish involving him."
+					put("staff", "2_22");
+
+					put("runner", "1_178");     // Goblin Runner: strength 5, vitality 1
+					put("runner2", "1_178");
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -243,52 +270,49 @@ public class NoEffectFlagTests
 		);
 	}
 
-	protected HashMap<String, String> LimitCards() {
-		return new HashMap<>()
-		{{
-			// Dark Tidings: a [raider] condition.  "Regroup: Spot 2 [raider] Men and remove (3) to add a
-			// threat (limit 1)."
-			put("tidings", "7_130");
-			// Easterling Axeman: a [raider] Man, strength 6, vitality 2; stronger and fierce at 2 burdens.
-			put("axeman", "4_224");
-			put("axeman2", "4_224");
-			// More to My Liking: a [dwarven] condition.  "Maneuver: Stack the top card from your draw deck
-			// here (limit once per phase)."  Its other ability needs a Dwarf to spot.
-			put("liking", "5_9");
-			// Uruk Slayer: strength 9, vitality 2.  "Skirmish: Remove (1) to make this minion strength +1
-			// (limit +3)."
-			put("slayer", "1_153");
-			// Realm of Dwarrowdelf: a [dwarven] condition.  "Skirmish: Discard the top 3 cards from your
-			// draw deck to make a Dwarf strength +1 (limit +3) and, if underground, damage +1 (limit +3)."
-			put("realm", "2_12");
-			put("gimli", "1_13");       // Gimli, Son of Gloin: a Dwarf, strength 6, vitality 3
-			put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, vitality 4
-			// Anduril, King's Blade, as the Players' Council has it: "Bearer must be Aragorn. ...
-			// Assignment: Add a threat to make Aragorn defender +1 (limit +1)."
-			put("anduril", "57_80");
-			// Shadowplay: a [shire] condition.  "Each time a minion is played, you may exert a Hobbit
-			// companion to exert that minion (limit once per turn)."
-			put("shadowplay", "10_114");
-			put("sam", "1_311");        // Sam, Son of Hamfast: a Hobbit companion, vitality 4
-			// Sam, Son of Hamfast, as the Players' Council has him: vitality 4.  "Fellowship: Exert Sam to
-			// take a [shire] item into hand from your draw deck (limit once per turn)."
-			put("gardener", "51_310");
-			put("sword", "1_299");      // Hobbit Sword: a [shire] possession
-			put("pipe", "1_285");       // Bilbo's Pipe: a [shire] possession
-
-			put("runner", "1_178");     // Goblin Runner: strength 5, vitality 1, cost 1
-			put("troop", "1_177");      // Goblin Patrol Troop: strength 13, vitality 3, cost 6, no text
-			put("troop2", "1_177");
-			// Cards for the draw deck: Realm of Dwarrowdelf discards three of them at each use.
-			put("deck1", "1_178");
-			put("deck2", "1_178");
-			put("deck3", "1_178");
-			put("deck4", "1_178");
-		}};
-	}
-
 	protected VirtualTableScenario GetLimitScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(LimitCards(),
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// Dark Tidings: a [raider] condition.  "Regroup: Spot 2 [raider] Men and remove (3) to add a
+					// threat (limit 1)."
+					put("tidings", "7_130");
+					// Easterling Axeman: a [raider] Man, strength 6, vitality 2; stronger and fierce at 2 burdens.
+					put("axeman", "4_224");
+					put("axeman2", "4_224");
+					// More to My Liking: a [dwarven] condition.  "Maneuver: Stack the top card from your draw deck
+					// here (limit once per phase)."  Its other ability needs a Dwarf to spot.
+					put("liking", "5_9");
+					// Uruk Slayer: strength 9, vitality 2.  "Skirmish: Remove (1) to make this minion strength +1
+					// (limit +3)."
+					put("slayer", "1_153");
+					// Realm of Dwarrowdelf: a [dwarven] condition.  "Skirmish: Discard the top 3 cards from your
+					// draw deck to make a Dwarf strength +1 (limit +3) and, if underground, damage +1 (limit +3)."
+					put("realm", "2_12");
+					put("gimli", "1_13");       // Gimli, Son of Gloin: a Dwarf, strength 6, vitality 3
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, vitality 4
+					// Anduril, King's Blade, as the Players' Council has it: "Bearer must be Aragorn. ...
+					// Assignment: Add a threat to make Aragorn defender +1 (limit +1)."
+					put("anduril", "57_80");
+					// Shadowplay: a [shire] condition.  "Each time a minion is played, you may exert a Hobbit
+					// companion to exert that minion (limit once per turn)."
+					put("shadowplay", "10_114");
+					put("sam", "1_311");        // Sam, Son of Hamfast: a Hobbit companion, vitality 4
+					// Sam, Son of Hamfast, as the Players' Council has him: vitality 4.  "Fellowship: Exert Sam to
+					// take a [shire] item into hand from your draw deck (limit once per turn)."
+					put("gardener", "51_310");
+					put("sword", "1_299");      // Hobbit Sword: a [shire] possession
+					put("pipe", "1_285");       // Bilbo's Pipe: a [shire] possession
+
+					put("runner", "1_178");     // Goblin Runner: strength 5, vitality 1, cost 1
+					put("troop", "1_177");      // Goblin Patrol Troop: strength 13, vitality 3, cost 6, no text
+					put("troop2", "1_177");
+					// Cards for the draw deck: Realm of Dwarrowdelf discards three of them at each use.
+					put("deck1", "1_178");
+					put("deck2", "1_178");
+					put("deck3", "1_178");
+					put("deck4", "1_178");
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing

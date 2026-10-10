@@ -188,6 +188,7 @@ public class DrawDeckShuffledWhenTheLookIsOverTests
 		assertEquals(creeper, scn.GetShadowTopOfDeck());
 		scn.MoveCardsToHand(creeper);
 		assertEquals(lemenya, scn.GetShadowTopOfDeck());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
@@ -204,6 +205,8 @@ public class DrawDeckShuffledWhenTheLookIsOverTests
 
 		assertInZone(Zone.FREE_CHARACTERS, aragorn);
 		assertEquals(shuffles, scn.GetFreepsDeckShuffleCount());
+		// The game has gone on to the other player's starting fellowship
+		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
 	}
 
 	@Test

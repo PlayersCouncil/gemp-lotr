@@ -21,33 +21,30 @@ import static org.junit.Assert.*;
  */
 public class RuleOfFourTests
 {
-	protected HashMap<String, String> Cards() {
-		return new HashMap<>()
-		{{
-			put("gimli", "1_13");       // Gimli, Son of Gloin: Dwarf companion, vitality 3
-			put("delving1", "1_6");     // Delving.  Fellowship: Exert a Dwarf companion to draw 3 cards.
-			put("delving2", "1_6");
-			put("elrond", "1_40");      // Elrond, Lord of Rivendell.  Fellowship: Exert Elrond to draw a card.
-			// Barliman Butterbur.  Fellowship: Exert Barliman Butterbur to take a [gandalf] event into hand from
-			// your discard pile.
-			put("barliman", "1_70");
-			put("sleep", "1_84");       // Sleep, Caradhras: a [gandalf] event, never played here
-
-			put("deck1", "1_3");        // ten cards to draw
-			put("deck2", "1_3");
-			put("deck3", "1_3");
-			put("deck4", "1_3");
-			put("deck5", "1_3");
-			put("deck6", "1_3");
-			put("deck7", "1_3");
-			put("deck8", "1_3");
-			put("deck9", "1_3");
-			put("deck10", "1_3");
-		}};
-	}
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(Cards(),
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("gimli", "1_13");       // Gimli, Son of Gloin: Dwarf companion, vitality 3
+					put("delving1", "1_6");     // Delving.  Fellowship: Exert a Dwarf companion to draw 3 cards.
+					put("delving2", "1_6");
+					put("elrond", "1_40");      // Elrond, Lord of Rivendell.  Fellowship: Exert Elrond to draw a card.
+					// Barliman Butterbur.  Fellowship: Exert Barliman Butterbur to take a [gandalf] event into hand from
+					// your discard pile.
+					put("barliman", "1_70");
+					put("sleep", "1_84");       // Sleep, Caradhras: a [gandalf] event, never played here
+
+					put("deck1", "1_3");        // ten cards to draw
+					put("deck2", "1_3");
+					put("deck3", "1_3");
+					put("deck4", "1_3");
+					put("deck5", "1_3");
+					put("deck6", "1_3");
+					put("deck7", "1_3");
+					put("deck8", "1_3");
+					put("deck9", "1_3");
+					put("deck10", "1_3");
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
@@ -55,7 +52,29 @@ public class RuleOfFourTests
 	}
 
 	protected VirtualTableScenario GetScenarioWithoutTheRule() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(Cards(),
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("gimli", "1_13");       // Gimli, Son of Gloin: Dwarf companion, vitality 3
+					put("delving1", "1_6");     // Delving.  Fellowship: Exert a Dwarf companion to draw 3 cards.
+					put("delving2", "1_6");
+					put("elrond", "1_40");      // Elrond, Lord of Rivendell.  Fellowship: Exert Elrond to draw a card.
+					// Barliman Butterbur.  Fellowship: Exert Barliman Butterbur to take a [gandalf] event into hand from
+					// your discard pile.
+					put("barliman", "1_70");
+					put("sleep", "1_84");       // Sleep, Caradhras: a [gandalf] event, never played here
+
+					put("deck1", "1_3");        // ten cards to draw
+					put("deck2", "1_3");
+					put("deck3", "1_3");
+					put("deck4", "1_3");
+					put("deck5", "1_3");
+					put("deck6", "1_3");
+					put("deck7", "1_3");
+					put("deck8", "1_3");
+					put("deck9", "1_3");
+					put("deck10", "1_3");
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,

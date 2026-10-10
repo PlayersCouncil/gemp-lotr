@@ -369,7 +369,7 @@ For `until` field on ongoing effects:
 - `EndOfTurn` — end of turn
 - `EndOfGame` / `Permanent` — never expires
 
-These are the only forms. A `start(...)` or `end(...)` whose word is not a phase is refused and the card is not loaded: the turn is not a phase, so the end of the turn is `EndOfTurn`, never `end(turn)` (which used to be read, silently, as `end(current)`). The `oldPhase` and `newPhase` of a `DuplicateActionFromPhase` modifier are refused the same way (`mechanics/UnknownPhaseInADefinitionTests`).
+These are the only forms. A `start(...)` or `end(...)` whose word is not a phase is refused and the card is not loaded: the turn is not a phase, so the end of the turn is `EndOfTurn`, never `end(turn)` (which used to be read, silently, as `end(current)`). The `oldPhase` and `newPhase` of a `DuplicateActionFromPhase` modifier are refused the same way (`cards/build/UnknownPhaseInADefinitionTests`, among the logic module's tests).
 
 ---
 

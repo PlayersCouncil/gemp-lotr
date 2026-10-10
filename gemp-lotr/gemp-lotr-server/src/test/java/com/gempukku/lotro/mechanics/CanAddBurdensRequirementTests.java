@@ -62,6 +62,7 @@ public class CanAddBurdensRequirementTests
 		scn.FreepsRefreshDecision();
 
 		assertTrue(scn.FreepsActionAvailable(tally));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test

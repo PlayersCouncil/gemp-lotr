@@ -1176,6 +1176,9 @@ Ring, Map and sites are the ones the test names, as named: the rig's `Fellowship
 first printed, which the PC formats refuse for its errata. `hasMapError(errors)` says whether a Map objected;
 `getMapErrorSites(errors)` returns the names of the sites its objection lists, for reading that a stray site is
 named and the valid ones are not.
+`getErrorLines(errors)` returns every line of every objection, one to an entry and in alphabetical order (the
+sites' objections come as one entry of several lines, in whatever order the deck holds its sites): set it beside
+`List.of(...)` of the objections expected (`mechanics/SitesFromAnyBlockTests`).
 A Race to Mount Doom modifier of deck building is tied to validation by its own overrides:
 `dvs.validate(deck, VirtualTableScenario.FindCard("92_1").getDeckBuildingOverrides())`, which is what
 `LeagueService.buildDeckValidationContext` merges for the player who has it. A context built by hand with the
@@ -1211,7 +1214,7 @@ each site as validation does (`LotroFormat.validateSite(id, context)`), and is t
 
 ## Test cards and the test booster pack
 
-- **Definitions of the tests' own.** `gemp-lotr-server/src/test/resources/testCards.hjson` holds card definitions known to every table by set-0 ids (`0_8001` on), read by `framework/TestCardLibrary`. They are for mechanic tests that need a shape no real card has. A card's own tests use real cards. The file is a test resource: after editing it, `target/test-classes` needs it (a `mvn test-compile`, or copy it there).
+- **Definitions of the tests' own.** `gemp-lotr-server/src/test/resources/testCards.hjson` holds card definitions known to every table by set-0 ids (`0_8001` on), read by `framework/TestCardLibrary`. They are for mechanic tests that need a shape no real card has. A card's own tests use real cards. The file is a test resource: after editing it, `target/test-classes` needs it (a `mvn test-compile`, or copy it there). A test that only reads whether a definition is LOADED (a word the builder must refuse) plays no game and is no mechanic test: it is plain JUnit beside the builder, in `gemp-lotr-logic/src/test/java/com/gempukku/lotro/cards/build/` (`UnknownPhaseInADefinitionTests`, `PlacingTheEventPlayedOnADrawDeckDefinitionTests`, `PlayerIsRequirementDefinitionTests`), where its helper methods may stay. `mvn test` runs those; `cardtest.py suite` runs the server module's tests only.
 
 - **Test cards.** `0_8002` Test War-horn copies every keyword of an exerted minion to your other minions until the regroup phase, as a snapshot (mechanics/KeywordSnapshotTests); `0_8003` Test Waystone is the per-site limit's test card (see the comment above it in testCards.hjson).
 

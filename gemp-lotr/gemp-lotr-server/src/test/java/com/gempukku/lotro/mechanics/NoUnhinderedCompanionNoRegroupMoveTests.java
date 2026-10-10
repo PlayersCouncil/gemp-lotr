@@ -143,6 +143,7 @@ public class NoUnhinderedCompanionNoRegroupMoveTests
 		// Nobody reconciled: the hindered companions go on hindered
 		assertTrue(scn.IsHindered(frodo));
 		assertTrue(scn.IsHindered(aragorn));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
@@ -272,6 +273,7 @@ public class NoUnhinderedCompanionNoRegroupMoveTests
 		// The turn ended: the minions are gone and the other player's turn has begun
 		assertInZone(Zone.DISCARD, brigand1, brigand2);
 		assertEquals(VirtualTableScenario.P2, scn.GetCurrentPlayer());
+		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
 	}
 
 	@Test

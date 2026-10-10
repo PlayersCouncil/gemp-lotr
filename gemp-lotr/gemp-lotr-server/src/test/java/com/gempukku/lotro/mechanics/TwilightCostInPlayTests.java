@@ -29,43 +29,40 @@ import static org.junit.Assert.*;
  */
 public class TwilightCostInPlayTests
 {
-	protected HashMap<String, String> Cards() {
-		return new HashMap<>()
-		{{
-			put("arwen", "1_30");       // Arwen, Daughter of Elrond: an Elf and no archer; her text is about skirmishing a Nazgul
-			// Mighty Shot: "Spot an Elf to make the fellowship archery total +1 for each minion with a twilight
-			// cost of 2 or less that you can spot."  An archery event.
-			put("shot", "15_21");
-			put("savage", "1_151");     // Uruk Savage: [isengard], twilight cost 2, site number 5; "Damage +1." is its whole text
-			put("fighter", "1_146");    // Uruk Fighter: [isengard], twilight cost 3, site number 5; a maneuver ability that needs 5 companions
-			put("runner", "1_178");     // Goblin Runner: [moria], twilight cost 1; its text is about being played
-
-			// Catapult: a [gondor] possession for the support area.  "Maneuver: Discard 2 cards from hand to reveal
-			// the top card of an opponent's draw deck. Choose an opponent who must discard a Shadow card that has a
-			// twilight cost that is the same as the twilight cost of the revealed card."
-			put("catapult", "8_32");
-			put("guard1", "1_7");       // Dwarf Guards: two cards to discard from hand
-			put("guard2", "1_7");
-			put("seeking", "1_276");    // Seeking Its Master: a Shadow condition for the support area, twilight cost 1
-			put("coming", "1_196");     // They Are Coming: a Shadow condition for the support area, twilight cost 3
-			put("fear", "1_278");       // Strength Born of Fear: another Shadow condition, twilight cost 1
-
-			// Chaotic Clash: an [orc] condition.  "Each time you play a minion, it is twilight cost +1."  The rest
-			// of its text is about being played and about [orc] minions.
-			put("clash", "17_68");
-
-			// Eomer, Third Marshal of Riddermark: twilight cost 3.  "While you can spot a [rohan] Man, Eomer's
-			// twilight cost is -1."
-			put("eomer", "4_267");
-			put("rider", "4_286");      // Rider of Rohan: a [rohan] Man; a skirmish ability that is never used
-			// Surrounded by Wraiths: "Each time the Free Peoples player plays a companion, that companion is
-			// exhausted unless the Free Peoples player pays its twilight cost again."
-			put("surrounded", "11_218");
-		}};
-	}
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(Cards(),
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("arwen", "1_30");       // Arwen, Daughter of Elrond: an Elf and no archer; her text is about skirmishing a Nazgul
+					// Mighty Shot: "Spot an Elf to make the fellowship archery total +1 for each minion with a twilight
+					// cost of 2 or less that you can spot."  An archery event.
+					put("shot", "15_21");
+					put("savage", "1_151");     // Uruk Savage: [isengard], twilight cost 2, site number 5; "Damage +1." is its whole text
+					put("fighter", "1_146");    // Uruk Fighter: [isengard], twilight cost 3, site number 5; a maneuver ability that needs 5 companions
+					put("runner", "1_178");     // Goblin Runner: [moria], twilight cost 1; its text is about being played
+
+					// Catapult: a [gondor] possession for the support area.  "Maneuver: Discard 2 cards from hand to reveal
+					// the top card of an opponent's draw deck. Choose an opponent who must discard a Shadow card that has a
+					// twilight cost that is the same as the twilight cost of the revealed card."
+					put("catapult", "8_32");
+					put("guard1", "1_7");       // Dwarf Guards: two cards to discard from hand
+					put("guard2", "1_7");
+					put("seeking", "1_276");    // Seeking Its Master: a Shadow condition for the support area, twilight cost 1
+					put("coming", "1_196");     // They Are Coming: a Shadow condition for the support area, twilight cost 3
+					put("fear", "1_278");       // Strength Born of Fear: another Shadow condition, twilight cost 1
+
+					// Chaotic Clash: an [orc] condition.  "Each time you play a minion, it is twilight cost +1."  The rest
+					// of its text is about being played and about [orc] minions.
+					put("clash", "17_68");
+
+					// Eomer, Third Marshal of Riddermark: twilight cost 3.  "While you can spot a [rohan] Man, Eomer's
+					// twilight cost is -1."
+					put("eomer", "4_267");
+					put("rider", "4_286");      // Rider of Rohan: a [rohan] Man; a skirmish ability that is never used
+					// Surrounded by Wraiths: "Each time the Free Peoples player plays a companion, that companion is
+					// exhausted unless the Free Peoples player pays its twilight cost again."
+					put("surrounded", "11_218");
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
@@ -75,7 +72,39 @@ public class TwilightCostInPlayTests
 	// Rohirrim Road (7_332), a King block site 1: "Fellowship: Exert an Elf to make the twilight cost of each
 	// condition and possession +2 until the end of the turn."  Site 2 is King's Tent, shadow number 1.
 	protected VirtualTableScenario GetRohirrimRoadScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(Cards(),
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("arwen", "1_30");       // Arwen, Daughter of Elrond: an Elf and no archer; her text is about skirmishing a Nazgul
+					// Mighty Shot: "Spot an Elf to make the fellowship archery total +1 for each minion with a twilight
+					// cost of 2 or less that you can spot."  An archery event.
+					put("shot", "15_21");
+					put("savage", "1_151");     // Uruk Savage: [isengard], twilight cost 2, site number 5; "Damage +1." is its whole text
+					put("fighter", "1_146");    // Uruk Fighter: [isengard], twilight cost 3, site number 5; a maneuver ability that needs 5 companions
+					put("runner", "1_178");     // Goblin Runner: [moria], twilight cost 1; its text is about being played
+
+					// Catapult: a [gondor] possession for the support area.  "Maneuver: Discard 2 cards from hand to reveal
+					// the top card of an opponent's draw deck. Choose an opponent who must discard a Shadow card that has a
+					// twilight cost that is the same as the twilight cost of the revealed card."
+					put("catapult", "8_32");
+					put("guard1", "1_7");       // Dwarf Guards: two cards to discard from hand
+					put("guard2", "1_7");
+					put("seeking", "1_276");    // Seeking Its Master: a Shadow condition for the support area, twilight cost 1
+					put("coming", "1_196");     // They Are Coming: a Shadow condition for the support area, twilight cost 3
+					put("fear", "1_278");       // Strength Born of Fear: another Shadow condition, twilight cost 1
+
+					// Chaotic Clash: an [orc] condition.  "Each time you play a minion, it is twilight cost +1."  The rest
+					// of its text is about being played and about [orc] minions.
+					put("clash", "17_68");
+
+					// Eomer, Third Marshal of Riddermark: twilight cost 3.  "While you can spot a [rohan] Man, Eomer's
+					// twilight cost is -1."
+					put("eomer", "4_267");
+					put("rider", "4_286");      // Rider of Rohan: a [rohan] Man; a skirmish ability that is never used
+					// Surrounded by Wraiths: "Each time the Free Peoples player plays a companion, that companion is
+					// exhausted unless the Free Peoples player pays its twilight cost again."
+					put("surrounded", "11_218");
+				}},
 				new HashMap<>()
 				{{
 					put("site1", "7_332");
@@ -96,7 +125,39 @@ public class TwilightCostInPlayTests
 	// The Fellowship path with Slopes of Amon Hen (1_361) as site 9, shadow number 9: "The twilight cost of each
 	// [isengard] minion is -1." is its whole text.
 	protected VirtualTableScenario GetAmonHenScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(Cards(),
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("arwen", "1_30");       // Arwen, Daughter of Elrond: an Elf and no archer; her text is about skirmishing a Nazgul
+					// Mighty Shot: "Spot an Elf to make the fellowship archery total +1 for each minion with a twilight
+					// cost of 2 or less that you can spot."  An archery event.
+					put("shot", "15_21");
+					put("savage", "1_151");     // Uruk Savage: [isengard], twilight cost 2, site number 5; "Damage +1." is its whole text
+					put("fighter", "1_146");    // Uruk Fighter: [isengard], twilight cost 3, site number 5; a maneuver ability that needs 5 companions
+					put("runner", "1_178");     // Goblin Runner: [moria], twilight cost 1; its text is about being played
+
+					// Catapult: a [gondor] possession for the support area.  "Maneuver: Discard 2 cards from hand to reveal
+					// the top card of an opponent's draw deck. Choose an opponent who must discard a Shadow card that has a
+					// twilight cost that is the same as the twilight cost of the revealed card."
+					put("catapult", "8_32");
+					put("guard1", "1_7");       // Dwarf Guards: two cards to discard from hand
+					put("guard2", "1_7");
+					put("seeking", "1_276");    // Seeking Its Master: a Shadow condition for the support area, twilight cost 1
+					put("coming", "1_196");     // They Are Coming: a Shadow condition for the support area, twilight cost 3
+					put("fear", "1_278");       // Strength Born of Fear: another Shadow condition, twilight cost 1
+
+					// Chaotic Clash: an [orc] condition.  "Each time you play a minion, it is twilight cost +1."  The rest
+					// of its text is about being played and about [orc] minions.
+					put("clash", "17_68");
+
+					// Eomer, Third Marshal of Riddermark: twilight cost 3.  "While you can spot a [rohan] Man, Eomer's
+					// twilight cost is -1."
+					put("eomer", "4_267");
+					put("rider", "4_286");      // Rider of Rohan: a [rohan] Man; a skirmish ability that is never used
+					// Surrounded by Wraiths: "Each time the Free Peoples player plays a companion, that companion is
+					// exhausted unless the Free Peoples player pays its twilight cost again."
+					put("surrounded", "11_218");
+				}},
 				new HashMap<>()
 				{{
 					put("site1", "1_319");

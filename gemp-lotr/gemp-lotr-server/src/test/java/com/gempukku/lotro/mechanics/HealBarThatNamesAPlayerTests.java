@@ -30,20 +30,17 @@ import static org.junit.Assert.*;
  */
 public class HealBarThatNamesAPlayerTests
 {
-	private HashMap<String, String> Cards() {
-		return new HashMap<>()
-		{{
-			put("tourniquet", "0_8019"); // Test Tourniquet (the tests' own card): "You may not heal minions."
-			put("hrethel", "6_95");      // Hrethel, Rider of Rohan: strength 6; Skirmish: heal a minion skirmishing
-			                             //   Hrethel to make Hrethel strength +3 (limit +3)
-			put("savage", "1_151");      // Uruk Savage: Uruk-hai, strength 5, vitality 3; damage +1 is its whole text
-			put("ladder1", "5_57");      // Scaling Ladder: Shadow support-area condition; Skirmish: spot an [isengard]
-			put("ladder2", "5_57");      //   token here to heal an Uruk-hai, and discard this condition
-		}};
-	}
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(Cards(),
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("tourniquet", "0_8019"); // Test Tourniquet (the tests' own card): "You may not heal minions."
+					put("hrethel", "6_95");      // Hrethel, Rider of Rohan: strength 6; Skirmish: heal a minion skirmishing
+					                             //   Hrethel to make Hrethel strength +3 (limit +3)
+					put("savage", "1_151");      // Uruk Savage: Uruk-hai, strength 5, vitality 3; damage +1 is its whole text
+					put("ladder1", "5_57");      // Scaling Ladder: Shadow support-area condition; Skirmish: spot an [isengard]
+					put("ladder2", "5_57");      //   token here to heal an Uruk-hai, and discard this condition
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
@@ -52,7 +49,16 @@ public class HealBarThatNamesAPlayerTests
 
 	// The King-block sites of the rig, with Steward's Tomb as site 5.
 	protected VirtualTableScenario GetStewardsTombScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(Cards(),
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("tourniquet", "0_8019"); // Test Tourniquet (the tests' own card): "You may not heal minions."
+					put("hrethel", "6_95");      // Hrethel, Rider of Rohan: strength 6; Skirmish: heal a minion skirmishing
+					                             //   Hrethel to make Hrethel strength +3 (limit +3)
+					put("savage", "1_151");      // Uruk Savage: Uruk-hai, strength 5, vitality 3; damage +1 is its whole text
+					put("ladder1", "5_57");      // Scaling Ladder: Shadow support-area condition; Skirmish: spot an [isengard]
+					put("ladder2", "5_57");      //   token here to heal an Uruk-hai, and discard this condition
+				}},
 				new HashMap<>()
 				{{
 					put("site1", "7_330");
@@ -144,6 +150,7 @@ public class HealBarThatNamesAPlayerTests
 		scn.FreepsResolveSkirmish(hrethel);
 
 		// The Free Peoples player cannot heal the Savage, so Hrethel's cost cannot be paid.
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 		assertFalse(scn.FreepsActionAvailable(hrethel));
 		scn.FreepsPass();
 

@@ -316,6 +316,8 @@ public class DefenderTests
 		assertTrue(scn.IsCharAssignedAgainst(aragorn, troop2));
 		assertFalse(scn.IsCharAssigned(troop3));
 		assertFalse(scn.FreepsCanAssign(aragorn));
+		// The minion left over is the Shadow player's to assign
+		assertTrue(scn.ShadowDecisionAvailable("Assign minions"));
 	}
 
 	protected VirtualTableScenario GetRingBearerScenario() throws CardNotFoundException, DecisionResultInvalidException {
@@ -389,5 +391,6 @@ public class DefenderTests
 		scn.FreepsAssignToMinions(gimli, savage2);
 		assertTrue(scn.IsCharAssignedAgainst(gimli, savage1));
 		assertTrue(scn.IsCharAssignedAgainst(gimli, savage2));
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 	}
 }

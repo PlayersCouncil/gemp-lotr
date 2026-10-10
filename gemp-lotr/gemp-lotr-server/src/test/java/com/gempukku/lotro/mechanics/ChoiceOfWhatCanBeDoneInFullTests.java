@@ -56,9 +56,6 @@ import static org.junit.Assert.*;
  */
 public class ChoiceOfWhatCanBeDoneInFullTests
 {
-	private static final String WOUND_TWO = "Wound 2 Orcs";
-	private static final String WOUND_TWICE = "Wound 1 Orc twice";
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
@@ -157,13 +154,14 @@ public class ChoiceOfWhatCanBeDoneInFullTests
 
 		// There are not two Orcs, and the one there is cannot take two wounds.
 		assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
-		assertEquals(List.of(WOUND_TWO, WOUND_TWICE), scn.FreepsGetMultipleChoices());
-		scn.FreepsChoose(WOUND_TWO);
+		assertEquals(List.of("Wound 2 Orcs", "Wound 1 Orc twice"), scn.FreepsGetMultipleChoices());
+		scn.FreepsChoose("Wound 2 Orcs");
 
 		// As much as can be done is done: the one Orc is wounded.
 		assertEquals(1, scn.GetWoundsOn(gimli));
 		assertInZone(Zone.DISCARD, runner1);
 		assertInZone(Zone.DISCARD, balin);
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 
 	@Test
@@ -183,11 +181,12 @@ public class ChoiceOfWhatCanBeDoneInFullTests
 		scn.FreepsPlayCard(balin);
 
 		assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
-		scn.FreepsChoose(WOUND_TWICE);
+		scn.FreepsChoose("Wound 1 Orc twice");
 
 		assertEquals(1, scn.GetWoundsOn(gimli));
 		assertInZone(Zone.DISCARD, runner1);
 		assertInZone(Zone.DISCARD, balin);
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 
 	@Test
@@ -257,8 +256,8 @@ public class ChoiceOfWhatCanBeDoneInFullTests
 		scn.FreepsPlayCard(balin);
 
 		assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
-		assertEquals(List.of(WOUND_TWO, WOUND_TWICE), scn.FreepsGetMultipleChoices());
-		scn.FreepsChoose(WOUND_TWO);
+		assertEquals(List.of("Wound 2 Orcs", "Wound 1 Orc twice"), scn.FreepsGetMultipleChoices());
+		scn.FreepsChoose("Wound 2 Orcs");
 
 		assertEquals(1, scn.GetWoundsOn(troop1));
 		assertEquals(1, scn.GetWoundsOn(troop2));
@@ -283,7 +282,7 @@ public class ChoiceOfWhatCanBeDoneInFullTests
 		scn.FreepsPlayCard(balin);
 
 		assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
-		scn.FreepsChoose(WOUND_TWICE);
+		scn.FreepsChoose("Wound 1 Orc twice");
 		scn.FreepsChooseCard(troop2);
 
 		assertEquals(0, scn.GetWoundsOn(troop1));
@@ -310,8 +309,8 @@ public class ChoiceOfWhatCanBeDoneInFullTests
 
 		// Two Orcs for the one branch, and one Orc able to take two wounds for the other.
 		assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
-		assertEquals(List.of(WOUND_TWO, WOUND_TWICE), scn.FreepsGetMultipleChoices());
-		scn.FreepsChoose(WOUND_TWICE);
+		assertEquals(List.of("Wound 2 Orcs", "Wound 1 Orc twice"), scn.FreepsGetMultipleChoices());
+		scn.FreepsChoose("Wound 1 Orc twice");
 
 		// The branch was open because it can be done in full, so it is done in full: the Orc of 1 vitality is
 		// no part of it, and the one Orc who is takes both wounds without a question.
@@ -341,8 +340,8 @@ public class ChoiceOfWhatCanBeDoneInFullTests
 		scn.FreepsPlayCard(balin);
 
 		assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
-		assertEquals(List.of(WOUND_TWO, WOUND_TWICE), scn.FreepsGetMultipleChoices());
-		scn.FreepsChoose(WOUND_TWICE);
+		assertEquals(List.of("Wound 2 Orcs", "Wound 1 Orc twice"), scn.FreepsGetMultipleChoices());
+		scn.FreepsChoose("Wound 1 Orc twice");
 
 		// Whom to wound is part of the choice made: only an Orc able to take both wounds.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(troop1, troop2));
@@ -376,7 +375,7 @@ public class ChoiceOfWhatCanBeDoneInFullTests
 		scn.FreepsPlayCard(balin);
 
 		assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
-		scn.FreepsChoose(WOUND_TWO);
+		scn.FreepsChoose("Wound 2 Orcs");
 
 		// One wound each is the whole of this branch, and an Orc of 1 vitality can take it.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(runner1, troop1, troop2));

@@ -231,6 +231,7 @@ public class ChoiceWithNothingOnAnyBranchTests
 
 		assertFalse(scn.IsSiteControlled(site1));
 		assertEquals(0, scn.GetWoundsOn(savage));
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 	}
 
 	@Test
@@ -293,6 +294,7 @@ public class ChoiceWithNothingOnAnyBranchTests
 
 		assertEquals(1, scn.GetWoundsOn(frodo));
 		assertEquals(4, scn.GetCurrentSiteNumber());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
@@ -373,5 +375,7 @@ public class ChoiceWithNothingOnAnyBranchTests
 		scn.FreepsChoose("opponent's deck");
 		assertTrue(scn.FreepsHasCardChoiceAvailable(sword, false));
 		assertTrue(scn.ShadowHasCardChoiceAvailable(sword, false));
+		// The card is being shown to both players
+		assertTrue(scn.FreepsDecisionAvailable("revealed card(s) from top of deck"));
 	}
 }

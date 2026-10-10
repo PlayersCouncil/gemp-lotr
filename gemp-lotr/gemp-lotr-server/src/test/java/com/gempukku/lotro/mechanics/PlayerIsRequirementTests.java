@@ -1,14 +1,10 @@
 package com.gempukku.lotro.mechanics;
 
-import com.gempukku.lotro.cards.build.LotroCardBlueprintBuilder;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
@@ -32,6 +28,9 @@ import static org.junit.Assert.*;
  * 0_8026, "If any player is the Warden of the Test Table, add (1)".  They are Shadow cards so that the player
  * using one is not the Free Peoples player.  The table seats a player under a chosen name by the last two
  * arguments of its constructor (G-0039); null is the usual name, "Free Peoples Player" or "Shadow Player".
+ *
+ * That a definition which lists no name is not loaded is the builder's to show, with no game played:
+ * PlayerIsRequirementDefinitionTests, beside the builder in the logic module.
  */
 public class PlayerIsRequirementTests
 {
@@ -76,6 +75,7 @@ public class PlayerIsRequirementTests
 		scn.ShadowUseCardAction(roster);
 
 		assertEquals(twilight + 1, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
@@ -226,28 +226,5 @@ public class PlayerIsRequirementTests
 
 		assertTrue(scn.AwaitingShadowPhaseActions());
 		assertTrue(scn.ShadowActionAvailable(census));
-	}
-
-	@Test
-	public void ADefinitionThatListsNoNameIsNotLoaded() throws Exception {
-		// Nothing is played here: the library is handed three definitions and is read for which it kept.  The
-		// text is JSON, which the library reads as it reads HJSON.
-		final String card = "{ \"title\": \"Test Card\", \"unique\": false, \"side\": \"Shadow\", \"culture\": \"Isengard\","
-				+ " \"twilight\": 0, \"type\": \"Condition\", \"keywords\": \"Support Area\","
-				+ " \"effects\": { \"type\": \"activated\", \"phase\": \"shadow\","
-				+ " \"requires\": { \"type\": \"playerIs\" NAMES },"
-				+ " \"effect\": { \"type\": \"addTwilight\", \"amount\": 1 } } }";
-		final String definitions = "{"
-				+ "\"0_9201\": " + card.replace("NAMES", ", \"names\": [ \"Warden of the Test Table\" ]") + ","
-				+ "\"0_9202\": " + card.replace("NAMES", ", \"names\": [ ]") + ","
-				+ "\"0_9203\": " + card.replace("NAMES", "")
-				+ "}";
-
-		var loaded = LotroCardBlueprintLibrary.loadCardsFromFile(new LotroCardBlueprintBuilder(),
-				new ByteArrayInputStream(definitions.getBytes(StandardCharsets.UTF_8)));
-
-		assertTrue(loaded.containsKey("0_9201"));
-		assertFalse(loaded.containsKey("0_9202"));
-		assertFalse(loaded.containsKey("0_9203"));
 	}
 }

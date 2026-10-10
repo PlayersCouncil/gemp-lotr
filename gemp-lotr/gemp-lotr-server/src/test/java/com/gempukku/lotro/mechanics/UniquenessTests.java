@@ -20,8 +20,13 @@ import static org.junit.Assert.*;
  * same thing if they have the same card title (even if their subtitles or collector's info are different) ...  Two
  * cards can have the same card title even if they are in different languages."
  *
+ * Comprehensive Rules 4.2, "dead pile": "When you have a unique companion or ally in your dead pile, you cannot
+ * play another copy of that card, or any other card with the same title.  You may play another copy of a
+ * non-unique card that is in your dead pile."
+ *
  * Comprehensive Rules 5.0, "non-unique": "All cards that do not have a single dot before their card title are
- * non-unique.  This means that all players may have multiple copies of those cards in play at one time."
+ * non-unique.  This means that all players may have multiple copies of those cards in play at one time.  If a card
+ * has 2 dots it is restricted to 2 copies in play".
  *
  * Comprehensive Rules 5.0, "hinder": "If a hindered card is unique, you cannot play another copy of that card with
  * the same title.  ...  If you have a hindered Aragorn, and play a second Aragorn, this would be an inconsistent
@@ -61,6 +66,13 @@ public class UniquenessTests
 					put("enquea", "1_231");     // Úlairë Enquëa, Lieutenant of Morgul: unique Nazgul, cost 6, site 3
 					put("thrall", "60_68");     // Ulaire Enquea, Thrall of The One: the title without its accents; cost 6, site 3
 					put("attea", "1_229");      // Úlairë Attëa, Keeper of Dol Guldur: a unique Nazgul of another title; cost 6, site 3
+
+					put("gate1", "103_25");     // Inner Gate: two dots; a Free Peoples condition for the support area, cost 2
+					put("gate2", "103_25");
+					put("gate3", "103_25");
+					put("fury1", "103_39");     // Savage Fury: two dots; a Shadow condition for the support area, cost 1
+					put("fury2", "103_39");
+					put("fury3", "103_39");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -140,6 +152,45 @@ public class UniquenessTests
 
 		assertInZone(Zone.DISCARD, aragorn);
 		assertTrue(scn.FreepsPlayAvailable(heir));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void ACardOfAUniqueTitleInItsOwnersDeadPileBarsAnotherAndOneThatIsNotUniqueDoesNot() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn1 = scn.GetFreepsCard("aragorn1");
+		var aragorn2 = scn.GetFreepsCard("aragorn2");
+		var exile = scn.GetFreepsCard("exile");
+		var merry = scn.GetFreepsCard("merry");
+		var guest1 = scn.GetFreepsCard("guest1");
+		var guest2 = scn.GetFreepsCard("guest2");
+		var othersAragorn = scn.GetShadowCard("aragorn1");
+		// Neither a discard pile nor the other player's dead pile is "your dead pile".
+		scn.MoveCardsToDiscard(aragorn1, guest1);
+		scn.MoveCardsToDeadPile(othersAragorn);
+		scn.MoveCardsToHand(aragorn2, exile, merry, guest2);
+
+		scn.StartGame();
+
+		assertInZone(Zone.DISCARD, aragorn1, guest1);
+		assertInZone(Zone.DEAD, othersAragorn);
+		assertTrue(scn.FreepsPlayAvailable(aragorn2));
+		assertTrue(scn.FreepsPlayAvailable(exile));
+		assertTrue(scn.FreepsPlayAvailable(merry));
+		assertTrue(scn.FreepsPlayAvailable(guest2));
+
+		scn.MoveCardsToDeadPile(aragorn1, guest1);
+		scn.FreepsRefreshDecision();
+
+		assertInZone(Zone.DEAD, aragorn1, guest1);
+		// The unique companion in his owner's dead pile bars his other copy and the Aragorn of another subtitle.
+		assertFalse(scn.FreepsPlayAvailable(aragorn2));
+		assertFalse(scn.FreepsPlayAvailable(exile));
+		// The unique companion of another title is still to be played, and so is another copy of the ally that is
+		// not unique, though a copy of it is in the dead pile too.
+		assertTrue(scn.FreepsPlayAvailable(merry));
+		assertTrue(scn.FreepsPlayAvailable(guest2));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
@@ -225,6 +276,72 @@ public class UniquenessTests
 		// 4 Guests and 2 Swords at 1 each
 		assertEquals(6, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void ACardWithTwoDotsMayHaveTwoCopiesInPlayAndNoThird() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gate1 = scn.GetFreepsCard("gate1");
+		var gate2 = scn.GetFreepsCard("gate2");
+		var gate3 = scn.GetFreepsCard("gate3");
+		var fury1 = scn.GetShadowCard("fury1");
+		var fury2 = scn.GetShadowCard("fury2");
+		var fury3 = scn.GetShadowCard("fury3");
+		scn.MoveCardsToHand(gate1, gate2, gate3);
+		scn.MoveCardsToHand(fury1, fury2, fury3);
+
+		scn.StartGame();
+
+		// A Free Peoples card.
+		assertEquals(0, scn.GetTwilight());
+		assertTrue(scn.FreepsPlayAvailable(gate1));
+		scn.FreepsPlayCard(gate1);
+
+		assertTrue(scn.FreepsPlayAvailable(gate2));
+		assertTrue(scn.FreepsPlayAvailable(gate3));
+		scn.FreepsPlayCard(gate2);
+
+		assertInZone(Zone.SUPPORT, gate1, gate2);
+		// 2 Gates at 2 each
+		assertEquals(4, scn.GetTwilight());
+		assertFalse(scn.FreepsPlayAvailable(gate3));
+		assertInZone(Zone.HAND, gate3);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// It is the two in play that bar the third: with one of them gone from play, it can be played.
+		scn.MoveCardsToDiscard(gate1);
+		scn.FreepsRefreshDecision();
+
+		assertInZone(Zone.DISCARD, gate1);
+		assertTrue(scn.FreepsPlayAvailable(gate3));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// A Shadow card.
+		scn.FreepsPass();
+
+		// 4 + 2 for the Shadow number of site 2 + 1 for the one companion
+		assertEquals(7, scn.GetTwilight());
+		assertTrue(scn.ShadowPlayAvailable(fury1));
+		scn.ShadowPlayCard(fury1);
+
+		assertTrue(scn.ShadowPlayAvailable(fury2));
+		assertTrue(scn.ShadowPlayAvailable(fury3));
+		scn.ShadowPlayCard(fury2);
+
+		assertInZone(Zone.SUPPORT, fury1, fury2);
+		// 2 Furies at 1 each: the pool would still pay for the third.
+		assertEquals(5, scn.GetTwilight());
+		assertFalse(scn.ShadowPlayAvailable(fury3));
+		assertInZone(Zone.HAND, fury3);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		scn.MoveCardsToDiscard(fury1);
+		scn.ShadowRefreshDecision();
+
+		assertInZone(Zone.DISCARD, fury1);
+		assertTrue(scn.ShadowPlayAvailable(fury3));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test

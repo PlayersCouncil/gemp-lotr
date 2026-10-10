@@ -125,5 +125,6 @@ public class ChoiceFromADiscardPileTests
 		assertTrue(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkSays(scn.P2() + " chooses"));
 		assertFalse(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkSays(scn.P1() + " chooses"));
 		assertTrue(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkMentions(runner));
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 	}
 }

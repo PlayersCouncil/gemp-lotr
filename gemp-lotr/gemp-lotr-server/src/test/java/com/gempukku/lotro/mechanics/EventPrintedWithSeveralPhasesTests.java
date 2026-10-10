@@ -312,5 +312,6 @@ public class EventPrintedWithSeveralPhasesTests
 		scn.FreepsAcceptOptionalTrigger();
 		assertEquals(1, scn.GetWoundsOn(bilbo));
 		assertInZone(Zone.HAND, stout);
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 }

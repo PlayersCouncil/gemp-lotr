@@ -6,6 +6,7 @@ import com.gempukku.lotro.game.formats.DefaultLotroFormat;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -205,6 +206,17 @@ public class DeckValidationScenario implements TestConstants {
 
     public List<String> validate(LotroDeck deck, DeckValidationContext context) {
         return _format.validateDeck(deck, context);
+    }
+
+    /**
+     * Every line of every objection, one to an entry and in alphabetical order.  validate() gives the sites'
+     * objections as one entry of several lines, in whatever order the deck holds its sites: this is the reading to
+     * set beside a list of the objections expected, whichever order they came in.
+     * @param errors What validate() returned.
+     * @return Each line of each entry that is not empty, sorted.
+     */
+    public List<String> getErrorLines(List<String> errors) {
+        return errors.stream().flatMap(e -> Arrays.stream(e.split("\n"))).filter(l -> !l.isEmpty()).sorted().toList();
     }
 
     public boolean hasMaxSameNameError(List<String> errors) {
