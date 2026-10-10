@@ -231,8 +231,10 @@ public class VirtualTableScenario extends VirtualTable implements TestConstants,
         // a specific card from deck by name, then if there are any duplicates the one returned will be random, which
         // can lead to stochastic tests that randomly fail.
 
-        for(String name : siteIDs.keySet()) {
-            String id = siteIDs.get(name);
+        final HashMap<String, String> siteMap = siteIDs;
+        final List<String> siteKeys = SiteKeysInDeckOrder(siteMap);
+        for(String name : siteKeys) {
+            String id = siteMap.get(name);
             decks.get(P1()).addSite(id);
             decks.get(P2()).addSite(id);
         }
@@ -334,10 +336,10 @@ public class VirtualTableScenario extends VirtualTable implements TestConstants,
                 }
 
                 if(name == null) {
-                    name = siteIDs.entrySet()
-                            .stream()
-                            .filter(x -> x.getValue().equals(card.getBlueprintId()))
-                            .map(Map.Entry::getKey)
+                    // Each key names one site: a key already given is passed over, so two keys that hold one
+                    // blueprint name its two copies.
+                    name = siteKeys.stream()
+                            .filter(key -> siteMap.get(key).equals(card.getBlueprintId()) && !Cards.get(P1()).containsKey(key))
                             .findFirst().get();
                 }
 
@@ -356,10 +358,10 @@ public class VirtualTableScenario extends VirtualTable implements TestConstants,
                 }
 
                 if(name == null) {
-                    name = siteIDs.entrySet()
-                            .stream()
-                            .filter(x -> x.getValue().equals(card.getBlueprintId()))
-                            .map(Map.Entry::getKey)
+                    // Each key names one site: a key already given is passed over, so two keys that hold one
+                    // blueprint name its two copies.
+                    name = siteKeys.stream()
+                            .filter(key -> siteMap.get(key).equals(card.getBlueprintId()) && !Cards.get(P2()).containsKey(key))
                             .findFirst().get();
                 }
 
@@ -378,6 +380,33 @@ public class VirtualTableScenario extends VirtualTable implements TestConstants,
         }
     }
 
+
+    /**
+     * The keys of a site map in the order their sites go into each adventure deck: the sites printed with a site
+     * number first, then the sites printed with none (the Shadows-block sites), each group in the order the map
+     * gives its keys.  The game takes a player's sites as unordered, to be laid by choice, whenever the FIRST card
+     * of the adventure deck has no printed number (GameState.usesUnorderedSites, which is asked again at every
+     * move), and a HashMap gives its keys in an order no tester chose: a Shadows-block site standing on a numbered
+     * path under a key that happened to come out first made the whole path unordered, and the game then rested on
+     * "Choose site to play" where a site 1 was expected.  With the numbered sites first a path that has any is laid
+     * by number for as long as one is left in the deck; a path of Shadows-block sites alone is as it was.
+     * @param siteIDs The site map the tester gave.
+     * @return Its keys, numbered sites first.
+     */
+    private static List<String> SiteKeysInDeckOrder(HashMap<String, String> siteIDs) throws CardNotFoundException {
+        List<String> numbered = new java.util.ArrayList<>();
+        List<String> unnumbered = new java.util.ArrayList<>();
+        for(String name : siteIDs.keySet()) {
+            if(_cardLibrary.getLotroCardBlueprint(siteIDs.get(name)).getSiteNumber() != 0) {
+                numbered.add(name);
+            }
+            else {
+                unnumbered.add(name);
+            }
+        }
+        numbered.addAll(unnumbered);
+        return numbered;
+    }
 
     /**
      * Refuses a set of sites of which the game could lay none as site 1.  The game lays each site by its printed
@@ -402,7 +431,8 @@ public class VirtualTableScenario extends VirtualTable implements TestConstants,
 
         String message = "These sites cannot be set up: the game would lay no site 1.  The first card of the adventure deck ("
                 + first.getTitle() + ", " + adventureDeck.getFirst() + ") has a printed site number, so the game lays "
-                + "each site by its printed number, and none of these sites is printed as site 1.";
+                + "each site by its printed number, and none of these sites is printed as site 1.  (The table puts "
+                + "the sites that have a printed number into the adventure deck ahead of those that have none.)";
         String atSite1 = siteIDs.get("site1");
         if(atSite1 != null) {
             var blueprint = _cardLibrary.getLotroCardBlueprint(atSite1);

@@ -123,7 +123,7 @@ While the ability to programmatically execute games is a boon to testing efforts
 - `void MoveCardsToFreepsDiscard(String...names)`
 - `void MoveCardsToShadowDiscard(String...names)`
 - `void MoveCardsToDiscard(PhysicalCardImpl...cards)`
-- `void MoveCardToAdventurePath(PhysicalCardImpl card)`
+- `void MoveCardToAdventurePath(PhysicalCardImpl card)` — Lays the given card on the adventure path as the site after the one the fellowship is at, whatever number is printed on it and whatever block it is of: its site number becomes the current site's plus one.
 - `void MoveCardsToAdventureDeck(PhysicalCardImpl...cards)`
 - `void MoveCardsToDeadPile(PhysicalCardImpl...cards)`
 - `void FreepsTakeControlOfSite()  ·  ShadowTakeControlOfSite` — Gives that player (player 1) control of the first site that can be controlled, without any card taking it.
@@ -157,7 +157,7 @@ These functions are for progressing through the game itself.  For instance, if y
 - `void SkipToArcheryWounds()`
 - `void SkipToAssignments()`
 - `void FreepsResolveSkirmish(PhysicalCardImpl comp)  ·  ShadowResolveSkirmish`
-- `void SkipToMovementDecision()` — Stops at the regroup "do you want to make another move?" decision of whichever player's turn is under way.
+- `void SkipToMovementDecision()` — Stops at the regroup "do you want to make another move?" decision of whichever player's turn is under way or, where the mover is not asked that, at his reconcile or in the other player's fellowship phase.
 - `void SkipToOtherPlayersTurn()` — Plays out the rest of the turn that is under way and stops at the start of the other player's fellowship phase; the moving fellowship declines the optional regroup move.
 - `void PassManeuverActions()` — Causes both players to pass during the Maneuver phase.
 - `void PassArcheryActions()` — Causes both players to pass during the Archery phase.
@@ -178,7 +178,7 @@ These functions are for progressing through the game itself.  For instance, if y
 - `void BothPassInverted()` — Causes both players to pass, but makes the opponent pass before the current player.
 - `void BothPassInverted(String text)` — Causes both players to pass any decisions that contain the provided text.
 - `void SkipToPhase(Phase target)` — Causes players to spam pass until the provided target phase is current.
-- `void SkipToPhaseInverted(Phase target)`
+- `void SkipToPhaseInverted(Phase target)` — SkipToPhase for player 2's turn, when player 2 is the one moving a fellowship and player 1 is the Shadow player: both players pass until the given phase is current, player 2 passing the fellowship phase and player 1 the Shadow phase, and in every other phase whoever is being asked and then the other.
 - `void SkipToSite(int siteNum)`
 - `void SkipCurrentSite()`
 - `void FreepsDismissRevealedCards()  ·  ShadowDismissRevealedCards` — Dismisses the cards that player is being shown.
@@ -244,6 +244,8 @@ A set of functions within the test rig that pertain to decisions.  Decisions in 
 - `boolean AwaitingShadowAssignmentPhaseActions()`
 - `boolean AwaitingFreepsSkirmishPhaseActions()`
 - `boolean AwaitingShadowSkirmishPhaseActions()`
+- `boolean FreepsAwaitingSkirmishChoice()  ·  ShadowAwaitingSkirmishChoice` — Whether that player is being asked "Choose next skirmish to resolve": the moment after the assignment phase, when every assignment has been made, and again after each skirmish while another is waiting.
+- `boolean AwaitingSkirmishChoice(String player)` — Whether the given player is being asked "Choose next skirmish to resolve": the moment after the assignment phase, when every assignment has been made, and again after each skirmish while another is waiting.
 - `boolean AwaitingFreepsRegroupPhaseActions()`
 - `boolean AwaitingShadowRegroupPhaseActions()`
 - `Boolean AnyDecisionsAvailable(String player)` — Returns whether the given player is currently presented with any decision at all.
@@ -278,10 +280,10 @@ A set of functions within the test rig that pertain to decisions.  Decisions in 
 Decisions will always come with at least one choice, even if that single choice is "pass".  These functions will let you inspect the choices available and offer shortcuts for e.g. selecting a physical card which you have previously stored.
 
 - `void FreepsDeclineChoosing()  ·  ShadowDeclineChoosing` — Causes that player to choose no card at a choice of cards whose minimum is 0, and fails, saying what is being asked, at any other decision.
-- `void FreepsDeclineSanctuaryHealing()`
+- `void FreepsDeclineSanctuaryHealing()` — Declines every sanctuary heal the Free Peoples player (player 1) has still to choose: while that player is being asked "Sanctuary healing - Choose companion to heal", no companion is chosen, and it stops at the first decision that is anything else, which it leaves unanswered.
 - `Boolean FreepsChoiceAvailable(String choice)  ·  ShadowChoiceAvailable` — Determines whether that player has any choices on the current decision whose description matches the provided search text.
 - `Boolean ChoiceAvailable(String player, String choice)` — Determines whether the given player has any choices on the current decision whose description matches the provided search text.
-- `void FreepsChoose(String choice)  ·  ShadowChoose` — Causes that player to choose the given option.
+- `void FreepsChoose(String choice)  ·  ShadowChoose` — Causes that player to choose the given option of a multiple choice, or to give it as the answer where something else is asked (a number, say); it takes no action, and fails at a choice of actions.
 - `void FreepsChoose(String...choices)  ·  ShadowChoose` — Causes that player to choose the given options.
 - `void FreepsChooseYes()  ·  ShadowChooseYes` — Causes that player to return a canned "Yes" response to a Yes or No question.
 - `void FreepsChooseNo()  ·  ShadowChooseNo` — Causes that player to return a canned "No" response to a Yes or No question.
@@ -365,7 +367,9 @@ Decisions will always come with at least one choice, even if that single choice 
 
 `virtualtable/GameProperties.java` (main sources)
 
-- `int GetBurdens()`
+- `int GetBurdens()` — The burdens of the player whose turn it is, the player AddBurdens and RemoveBurdens go by as well; one player's burdens whoever's turn it is are read with FreepsGetBurdens() and ShadowGetBurdens().
+- `int FreepsGetBurdens()  ·  ShadowGetBurdens` — The burdens of that player, whoever's turn it is: the burdens on his own Ring-bearer.
+- `int GetBurdens(String player)` — The burdens of one player, read whoever's turn it is: the burdens on that player's own Ring-bearer.
 - `void AddBurdens(int count)`
 - `void RemoveBurdens(int count)`
 - `int GetFreepsCultureCount()`
@@ -382,11 +386,16 @@ Decisions will always come with at least one choice, even if that single choice 
 - `int GetMoveCount()`
 - `int GetMoveLimit()`
 - `boolean GameIsFinished()`
+- `boolean FreepsHasWon()  ·  ShadowHasWon` — Whether that player has won the game: false while it is going on, and for both players of a game that was cancelled.
+- `boolean PlayerHasWon(String player)` — Whether the given player has won the game: false while the game is going on, and false for both players of a game that was cancelled.
+- `boolean FreepsHasLost()  ·  ShadowHasLost` — Whether that player has lost the game: false while it is going on, and true exactly when the other player has won.
+- `boolean PlayerHasLost(String player)` — Whether the given player has lost the game: false while the game is going on, and false for both players of a game that was cancelled.
 - `Phase GetCurrentPhase()`
 - `boolean InFierceRound()` — Whether the game is in its fierce round: true from the game's "Fierce skirmishes" until the last fierce skirmish is over, and false in the first assignment and skirmish phases and in every other phase.
+- `boolean InRelentlessRound()` — Whether the game is in its relentless round: true from the game's "Relentless skirmishes" until the last relentless skirmish is over, and false in the first round, in the fierce round and in every other phase.
 - `String GetCurrentPlayer()`
 - `String GetOffPlayer()`
-- `String GetDecidingPlayer()`
+- `String GetDecidingPlayer()` — The player who is currently making a decision; fails, saying whether the game is over and who won it, when nobody is being asked anything.
 - `String GetNextDecider()`
 - `void MarkGameLog()` — Starts reading the game log from here: the messages the game sends from now on are kept, and any kept before are dropped.
 - `List<String> GetGameLogSinceMark()`
@@ -535,4 +544,4 @@ This interface holds the handful of accessors that every other virtual table int
 - `void Verify(boolean condition, String message)` — A sanity check on the table's own bookkeeping, used where a procedure has to end up in a known state for whatever follows it to make sense.
 
 ---
-427 entries, 226 of them with no description in the source.
+436 entries, 221 of them with no description in the source.

@@ -1,10 +1,13 @@
 package com.gempukku.lotro.framework;
 
+import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.DeckValidationContext;
 import com.gempukku.lotro.game.formats.DefaultLotroFormat;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -14,9 +17,19 @@ import java.util.regex.Pattern;
  * Provides deck building utilities with auto-filler to meet minimum deck sizes.
  *
  * The filler is as the scenario's format plays it: where the format has errata for a filler card (the PC formats
- * have, for a few), the errata'd card goes into the deck, so the filler itself is never what a format objects to.
- * A deck that is otherwise legal therefore validates with no errors at all.  The Ring-bearer, the Ring, the Map and
- * the sites are the ones the test names, as it names them.
+ * have, for a few), the errata'd card goes into the deck; a card the format refuses on its own account (one on its
+ * X-list: Forces of Mordor 1_248 in Multipath) or allows fewer than four copies of (one on its R-list: the same
+ * card in Expanded) is passed over; and so is a card whose title an earlier filler card has (Boromir 1_97 after
+ * Boromir 1_96: the format counts copies by title).  So the filler itself is never what a format objects to, at
+ * any size up to four copies of every card left in its range (100 a side and more).  The filler knows nothing of the
+ * cards a test names: a test that names a card of the filler's range (1_88 to 1_119, 1_239 to 1_283), or another
+ * card of one of their titles, may find its copies added to.
+ *
+ * A deck that is otherwise legal therefore validates with no errors at all, in a format that takes the sites.
+ * The Ring-bearer, the Ring, the Map and the sites are the ones the test names, as it names them; buildDeck and
+ * buildDeckWithCopies use the rig's FellowshipSites, of which Multipath, the format of the constructor with no
+ * argument, X-lists two (Emyn Muil 1_360 and Ettenmoors 1_331): every such deck draws "Card is X-listed" for
+ * each there, and a test in Multipath reads the objection it is about and not the whole list.
  */
 public class DeckValidationScenario implements TestConstants {
 
@@ -170,7 +183,10 @@ public class DeckValidationScenario implements TestConstants {
     }
 
     /**
-     * Simplified deck builder for when you only need to test copies of a single card.
+     * Simplified deck builder for when you only need to test copies of a single card: the copies, and filler to
+     * make 30 cards of each side.  The deck's Ring-bearer is Frodo, Son of Drogo 1_290 and its Ring The Ruling Ring
+     * 1_2, as in every deck built here, and a format counts the Ring-bearer and the Ring with the draw deck and the
+     * sites when it counts copies of one title: four copies of any Frodo in the draw deck are five of "Frodo".
      */
     public LotroDeck buildDeckWithCopies(String cardId, int copies, boolean isFP) {
         var cards = new HashMap<String, Integer>();
@@ -200,24 +216,31 @@ public class DeckValidationScenario implements TestConstants {
     }
 
     /**
-     * Adds filler cards, cycling through IDs in groups of 4 copies each.
+     * Adds filler cards, cycling through IDs in groups of 4 copies each.  An ID is passed over if the format has
+     * something against the card itself (it is X-listed), if the format allows fewer than four copies of it (it
+     * is R-listed, or limited to two or three), or if an earlier filler card has its title; past four copies of
+     * every card left, the cycle starts again and the format will object to the copies.
      */
     private void addFiller(LotroDeck deck, String prefix, int startId, int endId, int count) {
-        int currentId = startId;
-        int copiesOfCurrent = 0;
+        var fillerIds = new ArrayList<String>();
+        var titles = new HashSet<String>();
+        for (int id = startId; id <= endId; id++) {
+            String blueprintId = _format.applyErrata(prefix + id);
+            try {
+                String title = VirtualTableScenario.FindCard(blueprintId).getTitle();
+                String baseId = VirtualTableScenario._cardLibrary.getBaseBlueprintId(blueprintId);
+                boolean limited = _format.getRestrictedCards().contains(baseId) || _format.getRestrictedCardNames().contains(title)
+                        || _format.getLimit2Cards().contains(baseId) || _format.getLimit3Cards().contains(baseId);
+                if (_format.validateCard(blueprintId) == null && !limited && titles.add(title)) {
+                    fillerIds.add(blueprintId);
+                }
+            } catch (CardNotFoundException notACard) {
+                // No such card: nothing to fill with.
+            }
+        }
 
         for (int i = 0; i < count; i++) {
-            deck.addCard(_format.applyErrata(prefix + currentId));
-            copiesOfCurrent++;
-
-            if (copiesOfCurrent >= 4) {
-                currentId++;
-                copiesOfCurrent = 0;
-
-                if (currentId > endId) {
-                    currentId = startId;
-                }
-            }
+            deck.addCard(fillerIds.get((i / 4) % fillerIds.size()));
         }
     }
 }

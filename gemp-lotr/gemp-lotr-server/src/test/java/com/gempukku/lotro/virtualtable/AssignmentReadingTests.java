@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 
 /**
  * Tests of the rig itself: FreepsCanAssignAgainst and ShadowCanAssignAgainst, which read whether one character may
- * be assigned to one minion or to several in one answer, and InFierceRound, which tells the fierce assignment and
- * skirmish phases from the first.
+ * be assigned to one minion or to several in one answer, and InFierceRound and InRelentlessRound, which tell the
+ * fierce and the relentless assignment and skirmish phases from the first and from each other.
  */
 public class AssignmentReadingTests
 {
@@ -32,6 +32,10 @@ public class AssignmentReadingTests
 					// Ulaire Toldea, Wraith on Wings: fierce, strength 12.  Its other text is a twilight
 					// discount, which does nothing to a minion that is cheated in.
 					put("toldea", "7_219");
+					// Ulaire Enquea, Magnified through Suffering: fierce and relentless, strength 12, vitality 4.
+					// At the start of his skirmish with a wounded companion he may exert to heal that companion
+					// and exert a companion: declined wherever it is offered.
+					put("enquea", "103_74");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -214,6 +218,63 @@ public class AssignmentReadingTests
 		scn.PassFierceSkirmishActions();
 		assertEquals(2, scn.GetWoundsOn(aragorn));
 		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
+		assertFalse(scn.InFierceRound());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void TheRelentlessRoundIsToldFromTheFirstAndFromTheFierceRound() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var enquea = scn.GetShadowCard("enquea");
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(enquea);
+		assertFalse(scn.InRelentlessRound());
+
+		// The first round.  12 against 8: Aragorn loses and lives.
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		assertFalse(scn.InFierceRound());
+		assertFalse(scn.InRelentlessRound());
+		scn.PassAssignmentActions();
+		scn.FreepsAssignAndResolve(aragorn, enquea);
+		assertEquals(Phase.SKIRMISH, scn.GetCurrentPhase());
+		assertFalse(scn.InRelentlessRound());
+		scn.PassSkirmishActions();
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+
+		// The fierce round is not the relentless one, though the minion fighting it is both.
+		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
+		assertTrue(scn.InFierceRound());
+		assertFalse(scn.InRelentlessRound());
+		scn.PassFierceAssignmentActions();
+		scn.FreepsAssignAndResolve(aragorn, enquea);
+		scn.ShadowDeclineOptionalTrigger();
+		assertFalse(scn.InRelentlessRound());
+		scn.PassFierceSkirmishActions();
+		assertEquals(2, scn.GetWoundsOn(aragorn));
+
+		// The relentless round: the phase reads as it did both times before, and the fierce round is over.
+		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+		assertFalse(scn.InFierceRound());
+		assertTrue(scn.InRelentlessRound());
+
+		scn.PassAssignmentActions();
+		assertTrue(scn.InRelentlessRound());
+		scn.FreepsAssignAndResolve(aragorn, enquea);
+		scn.ShadowDeclineOptionalTrigger();
+		assertEquals(Phase.SKIRMISH, scn.GetCurrentPhase());
+		assertTrue(scn.InRelentlessRound());
+		assertFalse(scn.InFierceRound());
+
+		// When the relentless skirmish is over, so is the round.
+		scn.PassSkirmishActions();
+		assertEquals(3, scn.GetWoundsOn(aragorn));
+		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
+		assertFalse(scn.InRelentlessRound());
 		assertFalse(scn.InFierceRound());
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}

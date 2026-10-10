@@ -44,12 +44,23 @@ public interface Choices extends Decisions {
 		PlayerDecided(player, "");
 	}
 
+	/**
+	 * Declines every sanctuary heal the Free Peoples player (player 1) has still to choose: while that player is
+	 * being asked "Sanctuary healing - Choose companion to heal", no companion is chosen, and it stops at the
+	 * first decision that is anything else, which it leaves unanswered.  So it declines all the heals of a
+	 * sanctuary (five, or as many as a card has made them), or those left once some have been taken, and it
+	 * never passes the fellowship phase that follows.  Fails if that player is not being asked to choose a
+	 * sanctuary heal when it is called.  (The game asks only while some companion can be healed, and makes the
+	 * rest of the choices itself once none can.)
+	 */
 	default void FreepsDeclineSanctuaryHealing() {
-		PlayerDecided(P1(), "");
-		PlayerDecided(P1(), "");
-		PlayerDecided(P1(), "");
-		PlayerDecided(P1(), "");
-		PlayerDecided(P1(), "");
+		final String asked = "Sanctuary healing - Choose companion to heal";
+		Verify(DecisionAvailable(P1(), asked), P1() + " was to decline sanctuary healing, but is not being asked to "
+				+ "choose a sanctuary heal.  " + DecisionGuard.askedOf(this, P1()));
+		// A sanctuary has a fixed number of heals, so this ends; the bound is only against a game that never stops asking.
+		for(int declined = 0; declined < 100 && DecisionAvailable(P1(), asked); declined++) {
+			PlayerDecided(P1(), "");
+		}
 	}
 
 	/**
@@ -82,22 +93,16 @@ public interface Choices extends Decisions {
 	}
 
 	/**
-	 * Causes the Free Peoples player to choose the given option.
+	 * Causes the Free Peoples player to choose the given option of a multiple choice, or to give it as the answer
+	 * where something else is asked (a number, say); it takes no action, and fails at a choice of actions.
 	 * This is a catch-all that either selects the provided choice if part of a multiple choice decision, or else
-	 * falls back on providing the provided choice as a top-level response to the current decision.
+	 * falls back on providing the provided choice as a top-level response to the current decision.  At a choice
+	 * of actions that has any on offer (phase actions, optional triggers, required responses to order) it fails,
+	 * saying what is being asked, and answers nothing.  An action is taken by its card (FreepsUseCardAction,
+	 * FreepsPlayCard) or by its words (FreepsChooseAction), and the phase is passed with FreepsPass.
 	 * @param choice The choice (or decision response)
 	 */
-	default void FreepsChoose(String choice) {
-		if(FreepsGetMultipleChoiceCount() > 0) {
-			FreepsChooseOption(choice);
-		}
-		else if(FreepsGetActionCount() > 0) {
-			FreepsChooseAction(choice);
-		}
-		else {
-			PlayerDecided(P1(), choice);
-		}
-	}
+	default void FreepsChoose(String choice) { Choose(P1(), choice); }
 	/**
 	 * Causes the Free Peoples player to choose the given options.  This will automatically format the response to contain
 	 * all the provided options in a comma-separated list.
@@ -107,22 +112,16 @@ public interface Choices extends Decisions {
 			P1(), String.join(",", choices)); }
 
 	/**
-	 * Causes the Shadow player to choose the given option.
+	 * Causes the Shadow player to choose the given option of a multiple choice, or to give it as the answer
+	 * where something else is asked (a number, say); it takes no action, and fails at a choice of actions.
 	 * This is a catch-all that either selects the provided choice if part of a multiple choice decision, or else
-	 * falls back on providing the provided choice as a top-level response to the current decision.
+	 * falls back on providing the provided choice as a top-level response to the current decision.  At a choice
+	 * of actions that has any on offer (phase actions, optional triggers, required responses to order) it fails,
+	 * saying what is being asked, and answers nothing.  An action is taken by its card (ShadowUseCardAction,
+	 * ShadowPlayCard) or by its words (ShadowChooseAction), and the phase is passed with ShadowPass.
 	 * @param choice The choice (or decision response)
 	 */
-	default void ShadowChoose(String choice) {
-		if(ShadowGetMultipleChoiceCount() > 0) {
-			ShadowChooseOption(choice);
-		}
-		else if(ShadowGetActionCount() > 0) {
-			ShadowChooseAction(choice);
-		}
-		else {
-			PlayerDecided(P2(), choice);
-		}
-	}
+	default void ShadowChoose(String choice) { Choose(P2(), choice); }
 	/**
 	 * Causes the Shadow player to choose the given options.  This will automatically format the response to contain
 	 * all the provided options in a comma-separated list.
@@ -130,6 +129,23 @@ public interface Choices extends Decisions {
 	 */
 	default void ShadowChoose(String...choices) { PlayerDecided(
 			P2(), String.join(",", choices)); }
+
+	// The catch-all behind FreepsChoose(text) and ShadowChoose(text).  It used to go on, where no multiple choice was
+	// pending and the player had actions on offer, to take whichever action had the words in its wording: an answer
+	// written for a choice the game never asked then did something else, in silence.
+	private void Choose(String player, String choice) {
+		if(GetChoiceCount(GetADParamAsList(player, "results")) > 0) {
+			ChooseOption(player, choice);
+			return;
+		}
+		if(GetChoiceCount(GetADParamAsList(player, "actionId")) > 0) {
+			Verify(false, player + " was to choose \"" + choice + "\", but no multiple choice is in front of that player, "
+					+ "and an action is not taken this way (take it by its card, or with FreepsChooseAction / "
+					+ "ShadowChooseAction by its words).  " + DecisionGuard.askedOf(this, player));
+			return;
+		}
+		PlayerDecided(player, choice);
+	}
 
 
 

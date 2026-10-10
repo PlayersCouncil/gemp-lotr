@@ -12,7 +12,34 @@ import com.gempukku.lotro.logic.timing.RuleUtils;
 import java.util.List;
 
 public interface GameProperties extends TableBase {
+	/**
+	 * The burdens of the player whose turn it is, the player AddBurdens and RemoveBurdens go by as well; one
+	 * player's burdens whoever's turn it is are read with FreepsGetBurdens() and ShadowGetBurdens().
+	 */
 	default int GetBurdens() { return gameState().getBurdens(); }
+	/**
+	 * The burdens of the Free Peoples player, whoever's turn it is: the burdens on his own Ring-bearer.  This is
+	 * player 1 on every turn.  See GetBurdens(String).
+	 */
+	default int FreepsGetBurdens() { return GetBurdens(P1()); }
+	/**
+	 * The burdens of the Shadow player, whoever's turn it is: the burdens on his own Ring-bearer.  This is
+	 * player 2 on every turn.  See GetBurdens(String).
+	 */
+	default int ShadowGetBurdens() { return GetBurdens(P2()); }
+	/**
+	 * The burdens of one player, read whoever's turn it is: the burdens on that player's own Ring-bearer.
+	 * GetBurdens() with no player reads the burdens of the player whose turn it is, so from the moment a turn ends
+	 * it reads the other player's; this is the reading for a burden added as a turn ends ("at the end of each
+	 * turn"), and for one player's bid before the game starts.
+	 * @param player The player whose burdens are wanted.
+	 * @return The number of burdens that player has.
+	 */
+	default int GetBurdens(String player) {
+		Verify(P1().equals(player) || P2().equals(player),
+				"GetBurdens was asked for the burdens of '" + player + "', who is not a player at this table.");
+		return gameState().getPlayerBurdens(player);
+	}
 	default void AddBurdens(int count) {
 		gameState().addBurdens(count);
 	}
@@ -58,6 +85,55 @@ public interface GameProperties extends TableBase {
 	default boolean GameIsFinished() { return game().isFinished(); }
 
 	/**
+	 * Whether the Free Peoples player has won the game: false while it is going on, and for both players of a
+	 * game that was cancelled.  This is player 1, whichever side he had on the turn the game ended.  See PlayerHasWon.
+	 */
+	default boolean FreepsHasWon() { return PlayerHasWon(P1()); }
+	/**
+	 * Whether the Shadow player has won the game: false while it is going on, and for both players of a
+	 * game that was cancelled.  This is player 2, whichever side he had on the turn the game ended.  See PlayerHasWon.
+	 */
+	default boolean ShadowHasWon() { return PlayerHasWon(P2()); }
+	/**
+	 * Whether the given player has won the game: false while the game is going on, and false for both players
+	 * of a game that was cancelled.  GameIsFinished() says that a game is over; this says for whom it ended well.
+	 * It goes by the player and not by the side that player had on the turn the game ended.  Why the game ended
+	 * is in the game log, in the game's own words ("... lost due to: ...", "... is the winner due to: ...").
+	 * @param player The player asked about.
+	 * @return True if the game is over and that player is its winner.
+	 */
+	default boolean PlayerHasWon(String player) {
+		Verify(P1().equals(player) || P2().equals(player),
+				"PlayerHasWon was asked about '" + player + "', who is not a player at this table.");
+		return player.equals(game().getWinnerPlayerId());
+	}
+
+	/**
+	 * Whether the Free Peoples player has lost the game: false while it is going on, and true exactly when the
+	 * other player has won.  This is player 1, whichever side he had on the turn the game ended.  See PlayerHasLost.
+	 */
+	default boolean FreepsHasLost() { return PlayerHasLost(P1()); }
+	/**
+	 * Whether the Shadow player has lost the game: false while it is going on, and true exactly when the
+	 * other player has won.  This is player 2, whichever side he had on the turn the game ended.  See PlayerHasLost.
+	 */
+	default boolean ShadowHasLost() { return PlayerHasLost(P2()); }
+	/**
+	 * Whether the given player has lost the game: false while the game is going on, and false for both players
+	 * of a game that was cancelled.  At a table of two the game is over the moment one player loses and the other
+	 * is then its winner, so a player has lost exactly when the other has won.  It goes by the player and not by
+	 * the side that player had on the turn the game ended.
+	 * @param player The player asked about.
+	 * @return True if the game is over and the other player is its winner.
+	 */
+	default boolean PlayerHasLost(String player) {
+		Verify(P1().equals(player) || P2().equals(player),
+				"PlayerHasLost was asked about '" + player + "', who is not a player at this table.");
+		String winner = game().getWinnerPlayerId();
+		return winner != null && !winner.equals(player);
+	}
+
+	/**
 	 * @return Gets the current game phase
 	 */
 	default Phase GetCurrentPhase() { return gameState().getCurrentPhase(); }
@@ -70,6 +146,16 @@ public interface GameProperties extends TableBase {
 	 * first time: this is what tells the two apart.
 	 */
 	default boolean InFierceRound() { return gameState().isFierceSkirmishes(); }
+
+	/**
+	 * Whether the game is in its relentless round: true from the game's "Relentless skirmishes" until the last
+	 * relentless skirmish is over, and false in the first round, in the fierce round and in every other phase.
+	 * The relentless round is the assignment phase and skirmish phases that follow the last of the others while a
+	 * relentless minion is in play (after the fierce round, or after the first where no minion is fierce), and
+	 * GetCurrentPhase() reads ASSIGNMENT and then SKIRMISH there as it did before, with InFierceRound() false:
+	 * this is what tells it from the first round.
+	 */
+	default boolean InRelentlessRound() { return gameState().isRelentlessSkirmishes(); }
 
 	/**
 	 * @return Gets the player who is currently playing their turn.
@@ -90,9 +176,22 @@ public interface GameProperties extends TableBase {
 	}
 
 	/**
+	 * The player who is currently making a decision; fails, saying whether the game is over and who won it, when
+	 * nobody is being asked anything.  Every helper that passes for both players starts here.
 	 * @return Gets the player who is currently making a decision.
 	 */
-	default String GetDecidingPlayer() { return userFeedback().getUsersPendingDecision().stream().findFirst().get(); }
+	default String GetDecidingPlayer() {
+		var deciding = userFeedback().getUsersPendingDecision().stream().findFirst();
+		if(deciding.isEmpty()) {
+			String winner = game().getWinnerPlayerId();
+			Verify(false, "Nobody is being asked anything, so no player can be passed for or answered for: "
+					+ (!GameIsFinished() ? "the game is at rest with no decision pending."
+						: winner != null ? "the game is over (" + winner + " has won).  A helper that plays a turn out cannot "
+								+ "play on through the turn that ends the game."
+						: "the game is over (it was cancelled)."));
+		}
+		return deciding.orElse(null);
+	}
 
 	/**
 	 * @return Gets the player who is not currently making a decision.

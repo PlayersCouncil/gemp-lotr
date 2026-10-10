@@ -19,8 +19,9 @@ import static org.junit.Assert.*;
  * a parameter the pending decision does not have each fail the test with a message that names the player, what was
  * attempted and what each player is in fact being asked, and leave whatever is pending as it was.  So does a choice
  * of cards given where the game is not asking for cards, or is asking for them the other way, and so does
- * declining to choose where the game is not asking for cards or will not take none.  Also the one reading that is
- * no failure: the maximum of a number the game sets no upper bound on.
+ * declining to choose where the game is not asking for cards or will not take none, and so does the catch-all
+ * FreepsChoose(text) at a choice of actions, where it used to take whichever action had the words.  Also the one
+ * reading that is no failure: the maximum of a number the game sets no upper bound on.
  */
 public class RigFailureTests
 {
@@ -543,5 +544,47 @@ public class RigFailureTests
 		assertEquals(11, scn.GetStrength(troop));
 		assertEquals(7, scn.GetStrength(slayer1));
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Test
+	public void TheCatchAllChooseTakesNoActionAtAChoiceOfActionsAndStillAnswersAMultipleChoice() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gimli = scn.GetFreepsCard("gimli");
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveCardsToHand(gimli, runner);
+
+		scn.StartGame();
+
+		// Player 1 could play Gimli.  Words that are in that action's wording, given to the catch-all, used to
+		// play him: an answer written for a choice the game never asked did something else in silence.
+		assertTrue(scn.FreepsPlayAvailable(gimli));
+		assertRefused(() -> scn.FreepsChoose("Gimli"),
+				"Free Peoples Player was to choose \"Gimli\", but no multiple choice is in front of that player",
+				"an action is not taken this way",
+				"Free Peoples Player is being asked \"Play Fellowship action or Pass\", offering [");
+		assertInZone(Zone.HAND, gimli);
+		assertEquals(0, scn.GetTwilight());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// The same for the second player.
+		scn.SetTwilight(5);
+		scn.FreepsPass();
+		assertTrue(scn.ShadowPlayAvailable(runner));
+		assertRefused(() -> scn.ShadowChoose("Runner"),
+				"Shadow Player was to choose \"Runner\", but no multiple choice is in front of that player",
+				"Shadow Player is being asked \"Play Shadow action or Pass\", offering [");
+		assertInZone(Zone.HAND, runner);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		// A multiple choice is answered by its words as before: "Do you want to make another move?", No.
+		scn.SkipToMovementDecision();
+		assertTrue(scn.FreepsDecisionAvailable("another move"));
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		scn.FreepsChoose("No");
+		assertFalse(scn.FreepsDecisionAvailable("another move"));
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertEquals(1, scn.GetMoveCount());
+		assertTrue(scn.FreepsDecisionAvailable("Reconcile"));
 	}
 }

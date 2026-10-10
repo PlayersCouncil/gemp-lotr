@@ -1,6 +1,7 @@
 package com.gempukku.lotro.virtualtable;
 
 import com.gempukku.lotro.common.Phase;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -16,6 +17,10 @@ import static org.junit.Assert.*;
  * (GameState.usesUnorderedSites), so a Shadows-block site, which has no printed number, cannot take the place of
  * site 1 on a numbered path: the game's set-up lays nothing there, and used to fall over two steps later with a
  * NullPointerException before any line of the test ran.  The same site starts a path that is unordered throughout.
+ *
+ * Also the order the table gives a site map's sites in each adventure deck (those with a printed number first, so
+ * that the key a Shadows-block site stands under cannot turn a numbered path into an unordered one), and the
+ * names it gives two sites of one blueprint (each its own key).
  */
 public class FirstSiteTests
 {
@@ -91,6 +96,82 @@ public class FirstSiteTests
 		scn.StartGame();
 		assertEquals(1, scn.GetCurrentSiteNumber());
 		assertEquals("1_319", scn.GetCurrentSite().getBlueprintId());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void ASiteWithNoPrintedNumberLeavesANumberedPathNumberedWhateverKeyItStandsUnder() throws DecisionResultInvalidException, CardNotFoundException {
+		// East Road in place of site 9, under a key that a HashMap hands out ahead of every "siteN": it was then
+		// the first card of each adventure deck, the game took the whole path for an unordered one, and
+		// StartGame() came to rest on "Choose site to play".
+		var sites = new HashMap<String, String>() {{
+			putAll(VirtualTableScenario.FellowshipSites);
+			remove("site9");
+			put("homestead", EastRoad);
+		}};
+		assertEquals("homestead", sites.keySet().iterator().next());
+
+		var scn = GetScenario(sites, VirtualTableScenario.Multipath);
+		var homestead = scn.GetFreepsSite("homestead");
+		assertEquals(EastRoad, homestead.getBlueprintId());
+
+		scn.StartGame();
+		assertEquals(1, scn.GetCurrentSiteNumber());
+		assertEquals("1_319", scn.GetCurrentSite().getBlueprintId());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// And at the move: the game lays site 2 by its number and asks the Shadow player for no site.
+		scn.FreepsPass();
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertEquals("1_331", scn.GetCurrentSite().getBlueprintId());
+		assertEquals(Zone.ADVENTURE_DECK, homestead.getZone());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void ANumberedSiteAmongSitesWithNoPrintedNumberMakesThePathNumberedAndWithNoSiteOneItIsRefused() throws DecisionResultInvalidException, CardNotFoundException {
+		// The other way about: Ettenmoors, printed as site 2, among Shadows-block sites.  It goes into the
+		// adventure deck first whatever its key, so the game would lay by number, and there is no site 1.
+		assertRefused(new HashMap<>() {{
+					putAll(VirtualTableScenario.ShadowsSites);
+					put("site5", "1_331");
+				}}, VirtualTableScenario.Shadows,
+				"the game would lay no site 1",
+				"The first card of the adventure deck (Ettenmoors, 1_331) has a printed site number",
+				"The table puts the sites that have a printed number into the adventure deck ahead of those that have none.");
+	}
+
+	@Test
+	public void TwoKeysThatHoldOneBlueprintNameItsTwoCopies() throws DecisionResultInvalidException, CardNotFoundException {
+		// Two keys of the site map with one blueprint used to be given one alias between them: the first of the
+		// two keys named one copy, the other key named nothing, and looking it up threw.
+		var scn = GetScenario(new HashMap<>() {{
+			putAll(VirtualTableScenario.ShadowsSites);
+			put("site1", EastRoad);
+			put("road", EastRoad);
+		}}, VirtualTableScenario.Shadows);
+
+		var site1 = scn.GetFreepsSite("site1");
+		var road = scn.GetFreepsSite("road");
+		assertEquals(EastRoad, site1.getBlueprintId());
+		assertEquals(EastRoad, road.getBlueprintId());
+		assertNotSame(site1, road);
+		assertEquals(scn.P1(), site1.getOwner());
+		assertEquals(scn.P1(), road.getOwner());
+
+		// The second player's two copies have the same two names, and are his own.
+		var shadowSite1 = scn.GetShadowSite("site1");
+		var shadowRoad = scn.GetShadowSite("road");
+		assertNotSame(shadowSite1, shadowRoad);
+		assertEquals(scn.P2(), shadowSite1.getOwner());
+		assertEquals(scn.P2(), shadowRoad.getOwner());
+
+		// One is laid as the first site and the other is still in the adventure deck.  StartGame(site) chooses
+		// the site by its blueprint, so which of two copies the game lays is not the test's to say.
+		scn.StartGame(site1);
+		var laid = scn.GetCurrentSite();
+		assertTrue(laid == site1 || laid == road);
+		assertEquals(Zone.ADVENTURE_DECK, (laid == site1 ? road : site1).getZone());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

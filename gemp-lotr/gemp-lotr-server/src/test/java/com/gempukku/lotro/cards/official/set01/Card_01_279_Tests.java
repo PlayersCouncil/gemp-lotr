@@ -99,10 +99,13 @@ public class Card_01_279_Tests
 		assertTrue(scn.FreepsDecisionAvailable("another move"));
 
 		scn.FreepsChooseToStay();
-		// The turn has ended and the other player's has begun.
+		// The turn has ended and the other player's has begun: the burden came as it ended, and it is the first
+		// player's.
 		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
-		// waits: G-0044 no reader of one player's burdens during the other player's turn
-		// Nothing is played in the other player's turn; the first player's burdens are read as his next begins.
+		assertEquals(1, scn.FreepsGetBurdens());
+		assertEquals(0, scn.ShadowGetBurdens());
+		// Nothing is played in the other player's turn, and nobody is assigned to a skirmish in it: the first
+		// player's burdens read the same as his next turn begins.
 		scn.SkipToOtherPlayersTurn();
 		assertEquals(1, scn.GetBurdens());
 		assertAttachedTo(thin, frodo);
@@ -141,9 +144,9 @@ public class Card_01_279_Tests
 
 		scn.FreepsChooseToStay();
 		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
-		// waits: G-0044 no reader of one player's burdens during the other player's turn
+		// Another companion was assigned, and so was the bearer: no burden as the turn ended.
+		assertEquals(0, scn.FreepsGetBurdens());
 		scn.SkipToOtherPlayersTurn();
-		// Another companion was assigned, and so was the bearer: no burden.
 		assertEquals(0, scn.GetBurdens());
 		assertAttachedTo(thin, frodo);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
@@ -177,9 +180,9 @@ public class Card_01_279_Tests
 
 		scn.FreepsChooseToStay();
 		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
-		// waits: G-0044 no reader of one player's burdens during the other player's turn
+		// The bearer was not assigned, and no other companion was either: no burden as the turn ended.
+		assertEquals(0, scn.FreepsGetBurdens());
 		scn.SkipToOtherPlayersTurn();
-		// The bearer was not assigned, and no other companion was either: no burden.
 		assertEquals(0, scn.GetBurdens());
 		assertAttachedTo(thin, frodo);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());

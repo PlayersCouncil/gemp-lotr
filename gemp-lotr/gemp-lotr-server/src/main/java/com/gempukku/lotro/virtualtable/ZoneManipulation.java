@@ -176,6 +176,14 @@ public interface ZoneManipulation extends TableBase {
 		Arrays.stream(cards).forEach(card -> MoveCardToZone(card, Zone.DISCARD));
 	}
 
+	/**
+	 * Lays the given card on the adventure path as the site after the one the fellowship is at, whatever number is
+	 * printed on it and whatever block it is of: its site number becomes the current site's plus one.  The
+	 * fellowship's next move goes to it, and on a Shadows-block path the Shadow player is then not asked to lay a
+	 * site for that move.  A cheat like the rest: nothing that answers a site being played is set off, and a
+	 * site already lying at that number is not taken away.
+	 * @param card The site to lay, from an adventure deck.
+	 */
 	default void MoveCardToAdventurePath(PhysicalCardImpl card) {
 		int num = gameState().getCurrentSiteNumber() + 1;
 		MoveCardToZone(card, Zone.ADVENTURE_PATH);

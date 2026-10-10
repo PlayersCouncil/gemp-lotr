@@ -34,8 +34,15 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 
 	/**
 	 * Stops at the regroup "do you want to make another move?" decision of whichever player's turn is
-	 * under way.  On player 2's turn the roles are swapped, so the inverted primitives are used; on
+	 * under way or, where the mover is not asked that, at his reconcile or in the other player's fellowship phase.
+	 * On player 2's turn the roles are swapped, so the inverted primitives are used; on
 	 * player 1's turn the behaviour is unchanged.
+	 *
+	 * The question is asked only of a mover who may choose to move again.  Where he may not (the fellowship is
+	 * at the move limit, a card says it cannot move, no companion of his is unhindered) the game goes straight
+	 * on to his reconcile, and this does not stop where its name says: with cards in hand the mover is left at
+	 * his own "Reconcile" decision, still in the regroup phase; with an empty hand nothing is asked of him, the
+	 * turn ends, and this returns in the other player's fellowship phase.  Read which it was before answering.
 	 */
 	default void SkipToMovementDecision() {
 		if(GetCurrentPlayer().equals(P1())) {
@@ -303,6 +310,14 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 		}
     }
 
+	/**
+	 * SkipToPhase for player 2's turn, when player 2 is the one moving a fellowship and player 1 is the Shadow
+	 * player: both players pass until the given phase is current, player 2 passing the fellowship phase and
+	 * player 1 the Shadow phase, and in every other phase whoever is being asked and then the other.  It is the
+	 * plainer of the two: it takes no required response for either player and lays no site on a Shadows-block
+	 * path, so a turn that asks for either is driven by hand.  Only 20 rounds of passing are attempted.
+	 * @param target The phase of player 2's turn that the tester wants to be in.
+	 */
 	default void SkipToPhaseInverted(Phase target) {
 		for(int attempts = 1; attempts <= 20; attempts++)
 		{

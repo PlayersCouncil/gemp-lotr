@@ -62,9 +62,12 @@ Defender is the Free Peoples player's own when he assigns: an assignment a card 
 both characters unassigned, and an action written with `assignableToSkirmishAgainst` is not offered for a
 companion who has a minion, whatever his defender bonus.
 
-**No method names the moment after the assignments.** When every minion is assigned the Free Peoples player is
+**The moment after the assignments is the choice of the next skirmish.** When every minion is assigned the Free Peoples player is
 asked "Choose next skirmish to resolve", and that is the bookend to assert after `FreepsAssignToMinions` or
-`ShadowAssignToMinions`: `assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"))`. With a
+`ShadowAssignToMinions`: `assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"))`.
+`FreepsAwaitingSkirmishChoice()` reads the same moment by name, and `ShadowAwaitingSkirmishChoice()` on player 2's
+turn (engine pass 24); `lint.py` does not yet count them as a test's closing reading, so where the reading is the
+LAST thing in a test keep the `...DecisionAvailable` form until it does. With a
 minion left unassigned the Shadow player is asked "Assign minions" first. After an assignment ACTION in the
 assignment phase the bookend is the other player's `Awaiting...AssignmentPhaseActions()` (69_38).
 
@@ -135,14 +138,16 @@ must be chosen there'). A pass is `FreepsPass()`, a trigger declined `FreepsDecl
 `ShadowPassCurrentPhaseAction()` were removed from the rig on 2026-10-05 at Ketura's word; old tests you read in
 git history may still show them.)
 
-**`FreepsChoose(text)` takes a phase action when no multiple choice is pending.** `FreepsChoose(text)` and
-`ShadowChoose(text)` answer a multiple choice if one is in front of the player. If none is and he has actions on
-offer, they go on to `FreepsChooseAction(text)` and take whichever action has the words in its wording, in
-silence. So an answer written for a choice the game never asks (an "X or Y" with nothing on either branch,
-F-0116) does something else: 92_35's old test answered `FreepsChoose("heal")` after an Athelas with nobody left
-to heal, and discarded a card from hand to heal with instead; it failed only once the hand held other cards.
-Read that the choice is pending before answering it by text (`FreepsDecisionAvailable("Choose action to
-perform")`).
+**`FreepsChoose(text)` takes no action: at a choice of actions it fails.** `FreepsChoose(text)` and
+`ShadowChoose(text)` answer a multiple choice if one is in front of the player, and give a number or a raw answer
+where one is asked. With no multiple choice pending and actions on offer they fail, saying what is asked, and
+answer nothing (engine pass 24). They used to go on to `FreepsChooseAction(text)` and take whichever action had
+the words in its wording, in silence, so an answer written for a choice the game never asks (an "X or Y" with
+nothing on either branch, F-0116) did something else: 92_35's old test answered `FreepsChoose("heal")` after an
+Athelas with nobody left to heal, and discarded a card from hand to heal with instead. An action is taken by its
+card, or by its words with `FreepsChooseAction(text)`. Still read that the choice is pending before answering it
+by text (`FreepsDecisionAvailable("Choose action to perform")`): with no action on offer the answer goes to
+whatever is asked.
 
 ## What is offered, and what an offer does
 
@@ -433,12 +438,14 @@ down after `SkipToSite`, not before.
 **Site 9 ends the game.** A fellowship that survives the skirmishes at site 9 has won, so `SkipToSite(9)` returns
 with the game over. To test something at site 9, `SkipToSite(8)` and then pass the fellowship phase: the
 fellowship moves, and the test is in the Shadow phase at site 9. A skipper that plays on through the winning
-turn finds nobody being asked anything and throws: `SkipToOtherPlayersTurn()` from player 1's fellowship phase at
-site 8 ends in `NoSuchElementException` out of `GetDecidingPlayer` (probed, rtmd-b94_29). Under a modifier that
+turn finds nobody being asked anything and fails, saying that the game is over and who won it:
+`SkipToOtherPlayersTurn()` from player 1's fellowship phase at site 8 (it was a bare `NoSuchElementException`
+until engine pass 24). Under a modifier that
 keeps the game going at site 9 (Race Text 94_31) `SkipToSite(9)` returns in the REGROUP phase of the turn that
 reached site 9, not in a fellowship phase, with player 1 asked for regroup actions (Card_94_031_Tests). The rig
-reads that a game is over (`GameIsFinished()`), not who won it; who LOST, and why, is in the game log ("The game
-ends when it ends", below).
+reads that a game is over (`GameIsFinished()`) and for whom it ended well or badly (`FreepsHasWon()`,
+`ShadowHasWon()`, `FreepsHasLost()`, `ShadowHasLost()`: by the player, not the side he had that turn; G-0042);
+why is in the game log ("The game ends when it ends", below).
 
 **Player 2 on site 9 with the game still going.** Player 1 wins at site 9 a turn before player 2 can stand
 there, so a text that bites only at site 9 ("your fellowship cannot win until ...", 94_31) is shown for player 2
@@ -448,11 +455,12 @@ SkipToOtherPlayersTurn();` has him move twice on his sixth turn and leaves him a
 of his seventh; his move then reaches site 9 before player 1 has (Card_94_031_Tests, the last test).
 
 **The game ends when it ends.** When the Ring-bearer dies or is corrupted the game stops at once and no later
-phase arrives. Make the assertions that matter before the event that ends the game. Who lost and why is read from
+phase arrives. Make the assertions that matter before the event that ends the game. Who lost is read with
+`FreepsHasLost()` / `ShadowHasLost()` (and `FreepsHasWon()` / `ShadowHasWon()`; all four false while the game
+goes on; `mechanics/CorruptionBeforeTheGameStartsTests`). WHY is read from
 the game log, in the game's own words: `MarkGameLog()` before the act that ends it, then
-`GameLogSinceMarkSays(scn.P1() + " lost due to: The Ring-Bearer is corrupted")`, and
-`assertFalse(scn.GameLogSinceMarkSays(scn.P2() + " lost"))` beside it (`mechanics/HinderedRingBearerTests`,
-Card_01_252_Tests): `GameIsFinished()` alone does not tell a corruption from any other end.
+`GameLogSinceMarkSays(scn.P1() + " lost due to: The Ring-Bearer is corrupted")` (`mechanics/HinderedRingBearerTests`,
+Card_01_252_Tests): neither `GameIsFinished()` nor who lost tells a corruption from any other end.
 
 **A starting fellowship.** `StartGame()` skips it. To test "(except in your starting fellowship)": the scenario
 constructor returns with player 1's "Starting fellowship" choice pending; `FreepsChooseCard(card)` plays a
@@ -601,21 +609,24 @@ other card has him participate or assigns a minion to him: he adds nothing to th
 archery wound, is on neither player's assignment list, and an effect that would assign a minion to him assigns
 nobody. The rest of that other card (a strength bonus) still reaches him (Q-0150, F-0281).
 
-**One blueprint under two site keys gets one alias.** The rig names each site of an adventure deck by the FIRST
-key of the site map that has its blueprint, and does not pass over a key already given (as it does for the
-card map): `put("site1", "18_138"); put("ruins", "18_138")` leaves one of the two aliases unset, and
-`GetFreepsSite("site1")` throws NoSuchElementException. Give every site a test names a blueprint of its own;
-fillers that are never looked up may share one (`Card_18_134_ErrataTests`). `GetFreepsSite(String)` and
+**One blueprint under two site keys: each key names a copy.** `put("site1", "18_138"); put("ruins", "18_138")`
+puts two copies in each adventure deck, and `GetFreepsSite("site1")` and `GetFreepsSite("ruins")` are those two
+(engine pass 24; until then the two keys were given one alias between them and looking up the other threw
+NoSuchElementException). Which of two copies the GAME lays is not the test's to say: `StartGame(site)` and
+`ShadowChooseCardBPFromSelection(site)` choose by blueprint, so read the site laid with `GetCurrentSite()` and
+not by the alias (`virtualtable/FirstSiteTests`). `GetFreepsSite(String)` and
 `GetShadowSite(String)` look for the alias and then for a title in the ADVENTURE DECK only: a site already laid
 is not found by its title (NoSuchElementException, no message). Fetch a site before it is laid.
 
-**`FreepsDeclineSanctuaryHealing()` sends five empty answers, whatever is being asked.** Once one sanctuary heal
-has been taken only four are left to decline, and the fifth answer passes the fellowship phase: the fellowship
-moves. To take some heals and decline the rest, choose each heal and then `FreepsDeclineChoosing()` once for each
-that remains, which fails loudly if it is called once too often (`Card_18_139_ErrataTests`). At Rath Dínen
-100_1, which asks three heals, the untouched call already overshoots: the fourth answer passes the fellowship
-phase and, on a Shadows-block path, the fifth fails ("is not being asked anything", the Shadow player being asked
-"Choose site to play"). Decline there with `FreepsDeclineChoosing()` three times (`Card_V0_001_ErrataTests`).
+**`FreepsDeclineSanctuaryHealing()` declines the sanctuary heals still asked, and nothing else.** It answers
+"Sanctuary healing - Choose companion to heal" with no companion for as long as that is what player 1 is asked,
+and stops at the first decision that is anything else: all five heals, the four left once one has been taken,
+the three of Rath Dínen 100_1; the fellowship phase that follows is not passed. It fails if no sanctuary heal is
+being asked when it is called (engine pass 24, `virtualtable/SanctuaryHealingTests`). Until then it sent five
+empty answers whatever was asked, and the fifth passed the fellowship phase once a heal had been taken: the
+landed tests that take some heals and decline the rest do it with `FreepsDeclineChoosing()` once for each that
+remains (`Card_18_139_ErrataTests`, `Card_V0_001_ErrataTests`), which works as before. There is no Shadow twin:
+on player 2's turn decline each with `ShadowDeclineChoosing()`.
 
 **Sanctuary healing is asked at any site laid as site 3 or 6, and only when a companion is wounded.** The rule
 makes a sanctuary of every site numbered 3 or 6 whatever its block, a Shadows-block site the Shadow player laid
@@ -716,9 +727,11 @@ The round comes about with nobody assigned at all: where a fierce minion is in p
 assign, the fierce assignment phase follows, which is the cheapest way to stand just before the regroup phase
 (a D check on "until the regroup phase", Prized Lagan 68_110).
 The relentless round (CR 5.0 "relentless"; a third round after the fierce one, or a second where no minion is
-fierce) reads as the first does too, and nothing names it yet (G-0043): `Phase.ASSIGNMENT`, the assignment actions
-pending, `InFierceRound()` FALSE. It is passed with `PassAssignmentActions()` and `PassSkirmishActions()`, not the
-`Fierce` ones; show it by the round before it and by who is on the assignment list (`mechanics/RelentlessTests`).
+fierce) reads as the first does too: `Phase.ASSIGNMENT`, the assignment actions
+pending, `InFierceRound()` FALSE. `InRelentlessRound()` names it (G-0043): true from the game's "Relentless
+skirmishes" until the last relentless skirmish is over, and false in the first round and in the fierce one. It is
+passed with `PassAssignmentActions()` and `PassSkirmishActions()`, not the
+`Fierce` ones (`mechanics/RelentlessTests`).
 
 **Before `StartGame()` the burdens read 1.** The constructor has bid 1 burden for player 1 and placed the
 Ring-bearers; `StartGame()` then takes 1 burden off (`RemoveBurdens(1)`). A burden a card added at set-up would
@@ -728,6 +741,8 @@ reads the player set-up has reached: with no companion in the decks the game has
 and it reads PLAYER 2's bid (0 on a default table; with a bid handler of 7 and 2 it reads 2, and 7 where a
 companion is in the decks). After `StartGame()` it is player 1's bid less 1 on every table (7 reads 6; 0 reads
 0): read a bid there (Race Text 91_18), and player 2's on his own turn, where nothing has been taken off.
+`FreepsGetBurdens()` and `ShadowGetBurdens()` (G-0044) read each player's own burdens wherever set-up or the turn
+has got to: before `StartGame()` they are the two bids as bid.
 
 **A skirmish, or any later phase, on player 2's turn: `SkipToPhaseInverted`.** The drive that works: `SkipToOtherPlayersTurn(); ShadowPass();` (player 2's
 fellowship moves) `MoveMinionsToTable(<player 1's minion>); SkipToPhaseInverted(Phase.ASSIGNMENT);
@@ -762,12 +777,14 @@ goes with each `assertFalse(...PlayAvailable(x))`. lint warns `not-in-hand` wher
 card out of its draw deck (not for a card whose own text plays from a draw deck).
 
 **`AddBurdens`, `RemoveBurdens` and `GetBurdens` are the current player's.** They reach the Ring-bearer of the
-player whose turn it is (`gameState().addBurdens`), so the other player's burdens cannot be laid or read beside
-them: "the other player's burdens are not counted" has no board (92_25), and no check is owed for it.
-A burden added as a turn ENDS (Thin and Stretched 1_279, "at the end of each turn") is therefore not read at the
-next decision, which is the other player's: read 0 at the mover's last decision ("another move"), end the turn,
-`SkipToOtherPlayersTurn()` through the other player's empty turn, and read `GetBurdens()` as the first player's
-next turn begins (Card_01_279_Tests; the reading just after the turn ends waits on G-0044).
+player whose turn it is (`gameState().addBurdens`). One player's burdens are READ whoever's turn it is with
+`FreepsGetBurdens()` and `ShadowGetBurdens()` (player 1's and player 2's; G-0044, engine pass 24); they are LAID
+only for the player whose turn it is, so the other player's are laid on his own turn or come of his bid. "The
+other player's burdens are not counted" landed without a board on that account, and no check was owed for it
+(92_25); a later card that needs one lays the other player's burdens a turn earlier and reads both.
+A burden added as a turn ENDS (Thin and Stretched 1_279, "at the end of each turn") is not read by `GetBurdens()`
+at the next decision, which is the other player's: read 0 at the mover's last decision ("another move"), end the
+turn, and read `FreepsGetBurdens()` at the other player's first decision (Card_01_279_Tests).
 
 **Threats stop at the number of companions** (CR 4.2 "threats": none can be added while there are as many
 threats as companions in play). A board that is to read N threats needs N companions: the control in
@@ -1061,15 +1078,14 @@ path instead: a site map of `FellowshipSites` with the card in place of site n, 
 site after the current one whatever key the map gave it, so one scenario with the card in place of a site no
 test reaches (`putAll(FellowshipSites); remove("site9"); put("parapet", "63_188")`) serves every site number
 (`Card_13_188_ErrataTests`: sites 4 to 7).
-The key matters, though: the rig builds the adventure deck in the site map's HashMap order, and the path is
-ordered only while the FIRST card of that deck has a site number (`GameState.usesUnorderedSites`). A key that
-comes out ahead of every `siteN` (`homestead`, `redhornSite`, `redhornPass`, `anduin`, `path`; with `site9` taken
-out also `buckland`, `redhorn`, `banks`, `mithlond`) makes the whole path unordered: `StartGame()` is left resting on "Choose
-site to play", and the next `FreepsPass()` throws DecisionResultInvalidException from an
-ArbitraryCardsSelectionDecision. If that is where a new scenario stops, rename the key (`parapet`,
-`bucklandSite` and `shadowsSite` are safe either way), and never put the card under the key `site9` itself, which
-comes out first (`Card_18_112_ErrataTests`: `bucklandSite` and `redhorn` in place of sites 7 and 8, `site9` kept).
-A capital letter is enough to move a key (`Mithlond` is safe with `site9` taken out, `Card_18_136_ErrataTests`).
+The key no longer matters (engine pass 24): the path is ordered only while the FIRST card of the adventure deck
+has a site number (`GameState.usesUnorderedSites`), and the rig now puts the sites that have a printed number
+into each adventure deck ahead of those that have none, so a Shadows-block site on a numbered path may stand
+under any key, `site9` included. (The deck used to be built in the site map's HashMap order, and a key that came
+out ahead of every `siteN`, `homestead` or `path` say, made the whole path unordered: `StartGame()` was left
+resting on "Choose site to play". The landed scenarios chose their keys round that and are unchanged.) The other
+way about, one numbered site among Shadows-block sites makes the path a numbered one, and with no site 1 in it
+the table is refused when it is built, saying so (`virtualtable/FirstSiteTests`).
 `StartGame(site)` with a site named gets past the first question, but the path is still unordered: every move
 asks the Shadow player to lay a site, and `SkipToSite` halts in the fellowship phase.
 A Shadows-block site cannot stand as `site1` of such a path: the game lays site 1 by its printed number and
@@ -1115,12 +1131,14 @@ fellowship and rests on the mulligan question.
 **Validating a deck.** `DeckValidationScenario` (test sources, not in `vts-api.md`) builds a deck round the
 cards a test names and validates it. Its filler is the card as the scenario's format plays it, so a deck that is
 otherwise legal validates with no errors at all: `assertEquals(List.of(), dvs.validate(deck))`. That is so only
-in a format that takes the rig's sites, and below 37 filler cards a side: `new DeckValidationScenario()` is
-Multipath, where every `buildDeck` deck draws "Card is X-listed" for Emyn Muil and Ettenmoors among its sites
-(and for Forces of Mordor 1_248 from 37 Shadow filler cards up), and in every format the Free Peoples filler
-reaches Boromir 1_97 beside Boromir 1_96 at its 37th card ("more of the same card than allowed - Boromir (5>4)";
-8>4 at 50). `fotr_block` at 30 and 30 is clean. A deck-size test of 99 or 100 cards therefore reads
-`hasMinimumDeckSizeError` and not the whole list (94_22; probed at landing, rtmd-b94_22). The Ring-bearer,
+in a format that takes the rig's sites: `new DeckValidationScenario()` is
+Multipath, where every `buildDeck` deck draws "Card is X-listed" for Emyn Muil and Ettenmoors among its sites;
+`fotr_block` is clean. The filler itself draws no objection at any size up to 100 a side (engine pass 24,
+`virtualtable/DeckFillerTests`): it passes over a card whose title an earlier filler card has (Boromir 1_97
+after Boromir 1_96, which made five of one title at the 37th card) and a card the format X-lists or allows fewer
+than four of (Forces of Mordor 1_248 in Multipath and Expanded). 94_22's deck-size tests of 99 and 100 cards were
+written before that and read `hasMinimumDeckSizeError` alone. The filler knows nothing of the cards a test
+names: name a card of its ranges (1_88 to 1_119, 1_239 to 1_283) and its copies are added to. The Ring-bearer,
 Ring, Map and sites are the ones the test names, as named: the rig's `FellowshipSites` have Ettenmoors 1_331 as
 first printed, which the PC formats refuse for its errata. `hasMapError(errors)` says whether a Map objected;
 `getMapErrorSites(errors)` returns the names of the sites its objection lists, for reading that a stray site is

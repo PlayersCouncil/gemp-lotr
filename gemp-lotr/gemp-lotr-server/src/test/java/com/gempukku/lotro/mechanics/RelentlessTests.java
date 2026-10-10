@@ -80,6 +80,7 @@ public class RelentlessTests
 		// The first round: both minions are there to be defended against.
 		scn.SkipToAssignments();
 		assertFalse(scn.InFierceRound());
+		assertFalse(scn.InRelentlessRound());
 		assertEquals(2, scn.FreepsGetShadowAssignmentTargetCount());
 		assertTrue(scn.FreepsHasAssignmentTargetAvailable(enquea));
 		assertTrue(scn.FreepsHasAssignmentTargetAvailable(runner));
@@ -106,6 +107,7 @@ public class RelentlessTests
 		// The fierce round: an assignment phase again, and only the fierce minion in it.
 		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
 		assertTrue(scn.InFierceRound());
+		assertFalse(scn.InRelentlessRound());
 		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 		scn.PassFierceAssignmentActions();
 
@@ -128,10 +130,9 @@ public class RelentlessTests
 
 		// The relentless round: a third assignment phase, after the fierce skirmishes are over, and again only
 		// Enquea in it.  The Runner is alive and has no part in it.
-		// waits: G-0043 a reader that names the relentless round (InRelentlessRound()); until then it is known
-		// by the fierce round before it, by InFierceRound() being false again, and by who is on the list.
 		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
 		assertFalse(scn.InFierceRound());
+		assertTrue(scn.InRelentlessRound());
 		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 		scn.PassAssignmentActions();
 
@@ -156,6 +157,7 @@ public class RelentlessTests
 		assertInZone(Zone.SHADOW_CHARACTERS, enquea);
 		assertInZone(Zone.SHADOW_CHARACTERS, runner);
 		assertTrue(scn.HasKeyword(enquea, Keyword.RELENTLESS));
+		assertFalse(scn.InRelentlessRound());
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
@@ -208,6 +210,7 @@ public class RelentlessTests
 		// No minion is fierce: the round that follows is the relentless one, and no fierce round came between.
 		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
 		assertFalse(scn.InFierceRound());
+		assertTrue(scn.InRelentlessRound());
 		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 		scn.PassAssignmentActions();
 
@@ -279,6 +282,7 @@ public class RelentlessTests
 		// The fierce round: the Rider alone.  A relentless minion is not fierce for being relentless.
 		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
 		assertTrue(scn.InFierceRound());
+		assertFalse(scn.InRelentlessRound());
 		scn.PassFierceAssignmentActions();
 
 		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
@@ -295,6 +299,7 @@ public class RelentlessTests
 		// The relentless round: the Savage alone.  The Rider, fierce and alive, has no part in it.
 		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
 		assertFalse(scn.InFierceRound());
+		assertTrue(scn.InRelentlessRound());
 		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 		scn.PassAssignmentActions();
 

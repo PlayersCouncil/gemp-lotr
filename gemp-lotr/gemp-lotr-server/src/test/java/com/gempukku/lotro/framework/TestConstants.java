@@ -143,7 +143,7 @@ public interface TestConstants {
 	 * Ring-bearer is to be the erratum is given "59_14" as the constructor's ringBearerID.
 	 * 3 strength
 	 * 3 vitality
-	 * 4 resistance
+	 * 3 resistance (it reads 4 while she bears the Ring: she is an [Elven] companion herself)
 	 * While Galadriel bears an artifact or The One Ring, she is resistance +1 for each [Elven] companion you can spot.
 	 */
 	String GaladrielRB = "9_14";
@@ -153,7 +153,7 @@ public interface TestConstants {
 	 * Ring-bearer is to be the erratum is given "59_30" as the constructor's ringBearerID.
 	 * 3 strength
 	 * 4 vitality
-	 * 8 resistance
+	 * 7 resistance
 	 * Ring-bound. To play, add a burden.
 	 * Each time the fellowship moves, place an unbound companion in the dead pile.
 	 * Regroup: If Sméagol is the Ring-bearer, add 2 burdens to discard each minion.

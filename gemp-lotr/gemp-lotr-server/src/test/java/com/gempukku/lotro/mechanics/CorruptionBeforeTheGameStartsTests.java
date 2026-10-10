@@ -28,7 +28,7 @@ import static org.junit.Assert.*;
  * a burden is placed.  The game once corrupted her at the start on the printed number.
  *
  * Each table here makes its own bids, so no test removes the burdens bid, and the game is left where the bids
- * leave it.  The rig has no reading of who has lost a game (G-0042): the game log's line is read for it.
+ * leave it.  Who has lost is read from the game (FreepsHasLost, ShadowHasLost); why, from the game log's line.
  */
 public class CorruptionBeforeTheGameStartsTests
 {
@@ -108,6 +108,8 @@ public class CorruptionBeforeTheGameStartsTests
 		// 3 printed + 2 for The Ring of Rings + 1 for herself, an [elven] companion, while she bears The One
 		// Ring: 6, less the 5 burdens.  On the printed 3, or with either bonus left out, 5 burdens corrupt her.
 		assertEquals(1, scn.GetResistance(galadriel));
+		assertFalse(scn.FreepsHasLost());
+		assertFalse(scn.ShadowHasLost());
 		assertFalse(scn.GameLogSinceMarkSays("lost"));
 		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
 	}
@@ -119,7 +121,11 @@ public class CorruptionBeforeTheGameStartsTests
 		// "Equal to or higher": 6 burdens against 3 + 2 + 1.  The game is over before a companion is played.
 		assertTrue(scn.GameIsFinished());
 		assertEquals(0, scn.GetResistance(scn.GetRingBearer()));
-		assertTrue(scn.GameLogSinceMarkSays(scn.P1() + " lost"));
+		assertTrue(scn.FreepsHasLost());
+		assertFalse(scn.ShadowHasLost());
+		assertTrue(scn.ShadowHasWon());
+		// The game's own words for why
+		assertTrue(scn.GameLogSinceMarkSays(scn.P1() + " lost due to: Corrupted before game started"));
 		assertFalse(scn.GameLogSinceMarkSays(scn.P2() + " lost"));
 		assertFalse(scn.FreepsAnyDecisionsAvailable());
 		assertFalse(scn.ShadowAnyDecisionsAvailable());
@@ -132,7 +138,12 @@ public class CorruptionBeforeTheGameStartsTests
 		// Both Ring-bearers are Galadriel at 6.  Player 2's 6 burdens corrupt his; player 1's 5 leave hers at 1,
 		// though the higher bid at the table was 6.
 		assertTrue(scn.GameIsFinished());
-		assertTrue(scn.GameLogSinceMarkSays(scn.P2() + " lost"));
+		assertTrue(scn.ShadowHasLost());
+		assertFalse(scn.FreepsHasLost());
+		assertTrue(scn.FreepsHasWon());
+		assertEquals(5, scn.FreepsGetBurdens());
+		assertEquals(6, scn.ShadowGetBurdens());
+		assertTrue(scn.GameLogSinceMarkSays(scn.P2() + " lost due to: Corrupted before game started"));
 		assertFalse(scn.GameLogSinceMarkSays(scn.P1() + " lost"));
 		assertFalse(scn.FreepsAnyDecisionsAvailable());
 		assertFalse(scn.ShadowAnyDecisionsAvailable());

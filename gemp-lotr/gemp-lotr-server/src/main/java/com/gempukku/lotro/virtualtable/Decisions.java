@@ -172,6 +172,26 @@ public interface Decisions extends TableBase {
 	default boolean AwaitingShadowSkirmishPhaseActions() { return ShadowDecisionAvailable("Choose action to play or Pass"); }
 
 	/**
+	 * @return True if the Free Peoples player (player 1) is being asked which skirmish to resolve next.  See
+	 * AwaitingSkirmishChoice.
+	 */
+	default boolean FreepsAwaitingSkirmishChoice() { return AwaitingSkirmishChoice(P1()); }
+	/**
+	 * @return True if the Shadow player (player 2) is being asked which skirmish to resolve next, as he is on his
+	 * own turn, when his is the fellowship that is fighting.  See AwaitingSkirmishChoice.
+	 */
+	default boolean ShadowAwaitingSkirmishChoice() { return AwaitingSkirmishChoice(P2()); }
+	/**
+	 * Whether the given player is being asked "Choose next skirmish to resolve": the moment after the assignment
+	 * phase, when every assignment has been made, and again after each skirmish while another is waiting.  The
+	 * game asks it of the player whose fellowship is fighting, and asks even when one skirmish is all there is.
+	 * It is answered with FreepsResolveSkirmish or ShadowResolveSkirmish.
+	 * @param player The player who may be choosing.
+	 * @return True if that is the decision in front of that player; false at any other, or with nothing asked.
+	 */
+	default boolean AwaitingSkirmishChoice(String player) { return DecisionAvailable(player, "Choose next skirmish to resolve"); }
+
+	/**
 	 * @return True if the Free Peoples player is currently deciding on a top-level phase action to use during the Regroup phase, or else false.
 	 */
 	default boolean AwaitingFreepsRegroupPhaseActions() { return FreepsDecisionAvailable("Play Regroup action or Pass"); }
