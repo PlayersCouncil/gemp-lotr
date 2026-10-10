@@ -764,6 +764,10 @@ card out of its draw deck (not for a card whose own text plays from a draw deck)
 **`AddBurdens`, `RemoveBurdens` and `GetBurdens` are the current player's.** They reach the Ring-bearer of the
 player whose turn it is (`gameState().addBurdens`), so the other player's burdens cannot be laid or read beside
 them: "the other player's burdens are not counted" has no board (92_25), and no check is owed for it.
+A burden added as a turn ENDS (Thin and Stretched 1_279, "at the end of each turn") is therefore not read at the
+next decision, which is the other player's: read 0 at the mover's last decision ("another move"), end the turn,
+`SkipToOtherPlayersTurn()` through the other player's empty turn, and read `GetBurdens()` as the first player's
+next turn begins (Card_01_279_Tests; the reading just after the turn ends waits on G-0044).
 
 **Threats stop at the number of companions** (CR 4.2 "threats": none can be added while there are as many
 threats as companions in play). A board that is to read N threats needs N companions: the control in
