@@ -1,6 +1,6 @@
 package com.gempukku.lotro.game.formats;
 
-import com.gempukku.lotro.at.AbstractAtTest;
+import com.gempukku.lotro.framework.LoadedLibraries;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.cards.build.LotroCardBlueprintBuilder;
 import com.gempukku.lotro.game.CardNotFoundException;
@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
  * say "max: 0"), so the Maps here are built from definitions written for the test: "between min and max sites
  * of the Fellowship path".
  */
-public class DeckBuildingRestrictionTest extends AbstractAtTest {
+public class DeckBuildingRestrictionTest extends LoadedLibraries {
 
     // Sites 1 to 9 of the Fellowship path, and of the King path.
     private static final String[] FellowshipPath = {"1_319", "1_331", "1_341", "1_343", "1_349", "1_351", "1_353", "1_356", "1_360"};

@@ -1,11 +1,11 @@
 package com.gempukku.lotro.library;
 
-import com.gempukku.lotro.at.AbstractAtTest;
+import com.gempukku.lotro.framework.LoadedLibraries;
 import com.gempukku.lotro.packs.ProductLibrary;
 import org.junit.Test;
 
 
-public class PackTests extends AbstractAtTest {
+public class PackTests extends LoadedLibraries {
 
     protected static ProductLibrary _productLib = new ProductLibrary(_cardLibrary);
 

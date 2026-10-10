@@ -1,6 +1,6 @@
 package com.gempukku.lotro.tournament;
 
-import com.gempukku.lotro.at.AbstractAtTest;
+import com.gempukku.lotro.framework.LoadedLibraries;
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.common.DateUtils;
@@ -25,7 +25,7 @@ import static org.junit.Assert.*;
  * The configurable prize tiers of a tournament ({@link TournamentParams#prizeTiers}) are stored with the tournament's
  * parameters and handed to the PrizeService, with the final standings, when the tournament finishes.
  */
-public class TournamentPrizeTiersTest extends AbstractAtTest {
+public class TournamentPrizeTiersTest extends LoadedLibraries {
 
     private static final String TIERS_JSON = """
             [

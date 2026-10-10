@@ -1,6 +1,6 @@
 package com.gempukku.lotro.tournament;
 
-import com.gempukku.lotro.at.AbstractAtTest;
+import com.gempukku.lotro.framework.LoadedLibraries;
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.db.vo.CollectionType;
@@ -19,7 +19,7 @@ import java.sql.SQLException;
 
 import static org.junit.Assert.*;
 
-public class SingleEliminationRecurringQueueTest extends AbstractAtTest {
+public class SingleEliminationRecurringQueueTest extends LoadedLibraries {
 
     private static LotroFormat _testFormat;
     static {

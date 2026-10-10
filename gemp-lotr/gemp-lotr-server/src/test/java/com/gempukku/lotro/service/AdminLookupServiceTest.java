@@ -1,6 +1,6 @@
 package com.gempukku.lotro.service;
 
-import com.gempukku.lotro.at.AbstractAtTest;
+import com.gempukku.lotro.framework.LoadedLibraries;
 import com.gempukku.lotro.competitive.BestOfOneStandingsProducer;
 import com.gempukku.lotro.competitive.ModifiedMedianStandingsProducer;
 import com.gempukku.lotro.competitive.PlayerStanding;
@@ -30,7 +30,7 @@ import static org.junit.Assert.*;
  * The matching and ranking behind the admin add-items form: synthetic entries for the ranking rules, the real card
  * and product libraries for "does the admin find what they are looking for".
  */
-public class AdminLookupServiceTest extends AbstractAtTest {
+public class AdminLookupServiceTest extends LoadedLibraries {
 
     private static ItemEntry card(String id, String title, String subtitle) {
         return new ItemEntry(id, ItemKind.CARD, title, subtitle, null, false);

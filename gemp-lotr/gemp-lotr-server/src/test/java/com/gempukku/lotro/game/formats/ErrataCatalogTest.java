@@ -1,6 +1,6 @@
 package com.gempukku.lotro.game.formats;
 
-import com.gempukku.lotro.at.AbstractAtTest;
+import com.gempukku.lotro.framework.LoadedLibraries;
 import com.gempukku.lotro.common.AppConfig;
 import com.gempukku.lotro.game.LotroFormat;
 import com.gempukku.util.JsonUtils;
@@ -17,7 +17,7 @@ import java.util.*;
 import static org.junit.Assert.*;
 
 /** The rows behind Help › PC Errata (GET /hall/errata/json: entries, formats, counts). */
-public class ErrataCatalogTest extends AbstractAtTest {
+public class ErrataCatalogTest extends LoadedLibraries {
 
     @SuppressWarnings("unchecked")
     private static List<Map<String, Object>> entries(Map<String, Object> catalog) {

@@ -157,4 +157,47 @@ public class Card_07_200_Tests
 		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 	}
+
+	// The same table, and the price paid: with a second companion beside the Ring-bearer, which of them exerts is
+	// the Free Peoples player's to choose, and the Spawn is then his to assign.  Like the test above, this reads
+	// the price as the game asks it today, ahead of the assigning (Q-0221).
+	@Test
+	public void ExertingACompanionOfHisChoiceLetsTheFreePeoplesPlayerAssignMorgulSpawn() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetDeclineScenario();
+
+		var spawn = scn.GetShadowCard("spawn");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var frodo = scn.GetRingBearer();
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(spawn, lemenya);
+		scn.SkipToAssignments();
+
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertTrue(scn.FreepsDecisionAvailable(
+				"Would you like to exert a companion to be able to assign Morgul Spawn to skirmish?"));
+		scn.FreepsChooseYes();
+
+		// "Exert a companion": either of the two, and one of them must.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, frodo));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		scn.FreepsChooseCard(aragorn);
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+
+		// His assignment now lists the Spawn beside the Nazgûl, and he gives it to the companion who paid.
+		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(spawn));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(lemenya));
+		scn.FreepsAssignToMinions(aragorn, spawn);
+
+		// One exertion was the whole price.  The Nazgûl is left over for the Shadow player to assign.
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, spawn));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertTrue(scn.ShadowDecisionAvailable("Assign minions"));
+	}
 }

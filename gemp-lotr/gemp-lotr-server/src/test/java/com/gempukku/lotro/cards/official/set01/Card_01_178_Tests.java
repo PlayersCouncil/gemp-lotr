@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_01_178_Tests
@@ -19,7 +20,6 @@ public class Card_01_178_Tests
 				new HashMap<>()
 				{{
 					put("card", "1_178");
-					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -62,18 +62,30 @@ public class Card_01_178_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GoblinRunnerTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	// "When you play this minion, you may add (2)": the game adds the 2 without asking, and is meant to (F-0009).
+	// Read here as the first of the old `at` tests read it in passing (dwarvenAxeDoesNotFreeze, 2011), with the
+	// Runner roaming.
+	@Test
+	public void PlayedWhileRoamingItPaysItsCostAndThePenaltyAndAddsItsTwoWithoutBeingAsked() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var runner = scn.GetShadowCard("card");
+		scn.MoveCardsToHand(runner);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.FreepsPass();
 
-		assertEquals(1, scn.GetTwilight());
+		// Site 2, and the Runner's site number is 4.  The move left 2 for the site and 1 for the Ring-bearer.
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertEquals(3, scn.GetTwilight());
+		assertTrue(scn.ShadowPlayAvailable(runner));
+
+		scn.ShadowPlayCard(runner);
+
+		// 3 - 1 to play - 2 roaming + the 2 it adds
+		assertEquals(2, scn.GetTwilight());
+		assertInZone(Zone.SHADOW_CHARACTERS, runner);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

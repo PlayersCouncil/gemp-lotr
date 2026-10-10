@@ -1,6 +1,6 @@
 package com.gempukku.lotro.tournament;
 
-import com.gempukku.lotro.at.AbstractAtTest;
+import com.gempukku.lotro.framework.LoadedLibraries;
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.common.DateUtils;
@@ -23,7 +23,7 @@ import java.util.*;
 import static com.gempukku.lotro.tournament.Tournament.getPairingMechanism;
 import static org.junit.Assert.assertEquals;
 
-public class ConstructedTournamentTest extends AbstractAtTest {
+public class ConstructedTournamentTest extends LoadedLibraries {
     private final int _waitForPairingsTime = 100;
 
     static {

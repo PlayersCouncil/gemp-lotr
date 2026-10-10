@@ -1,20 +1,17 @@
 package com.gempukku.lotro.cards.official.set01;
 
-import com.gempukku.lotro.at.AbstractAtTest;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
-import com.gempukku.lotro.logic.decisions.AwaitingDecision;
-import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_01_009_Tests
@@ -285,77 +282,101 @@ public class Card_01_009_Tests
 		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
 	}
 
-	@Test
-	public void Legacy_dwarvenAxeDoesNotFreeze() throws DecisionResultInvalidException, CardNotFoundException {
-		var legacy = new LegacyAtTest();
-
-		legacy.dwarvenAxeDoesNotFreeze();
+	protected VirtualTableScenario GetKilledMinionScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("axe", "1_9");
+					put("gimli", "1_13");       // Gimli, Son of Glóin: strength 6, vitality 3, damage +1; a skirmish ability used only on purpose
+					put("runner", "1_178");     // Goblin Runner: strength 5, vitality 1, so the wound for losing kills it
+					put("troop", "1_177");      // Goblin Patrol Troop: no text; only ever a card in the draw deck here
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
 	}
 
-	public static class LegacyAtTest extends AbstractAtTest {
+	// The oldest of the old `at` tests (dwarvenAxeDoesNotFreeze, 2011): the minion that lost dies of the very loss
+	// the Axe answers.  Here the wound is carried out first, so the minion is gone before the Axe's trigger is.
+	@Test
+	public void TheDiscardIsStillMadeWhenTheWoundForLosingIsCarriedOutFirstAndKillsTheMinion() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetKilledMinionScenario();
 
-		public void dwarvenAxeDoesNotFreeze() throws DecisionResultInvalidException, CardNotFoundException {
-			Map<String, Collection<String>> extraCards = new HashMap<>();
-			initializeSimplestGame(extraCards);
+		var axe = scn.GetFreepsCard("axe");
+		var gimli = scn.GetFreepsCard("gimli");
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveCompanionsToTable(gimli);
+		scn.AttachCardsTo(gimli, axe);
 
-			var gimli = new PhysicalCardImpl(100, "1_13", P1, _cardLibrary.getLotroCardBlueprint("1_13"));
-			var dwarvenAxe = new PhysicalCardImpl(101, "1_9", P1, _cardLibrary.getLotroCardBlueprint("1_9"));
-			var goblinRunner = new PhysicalCardImpl(102, "1_178", P2, _cardLibrary.getLotroCardBlueprint("1_178"));
-			var cardInDeck = new PhysicalCardImpl(103, "1_178", P2, _cardLibrary.getLotroCardBlueprint("1_178"));
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gimli, runner);
+		scn.FreepsResolveSkirmish(gimli);
 
-			skipMulligans();
+		var top = scn.GetShadowTopOfDeck();
+		int deck = scn.GetShadowDeckCount();
+		int freepsDeck = scn.GetFreepsDeckCount();
+		assertTrue(deck >= 2);
+		// 6 + 2 for the Axe, against the Runner's 5.
+		assertEquals(8, scn.GetStrength(gimli));
 
-			_game.getGameState().addCardToZone(_game, gimli, Zone.FREE_CHARACTERS);
-			_game.getGameState().attachCard(_game, dwarvenAxe, gimli);
-			_game.getGameState().addCardToZone(_game, goblinRunner, Zone.HAND);
-			_game.getGameState().putCardOnTopOfDeck(cardInDeck);
+		scn.PassSkirmishActions();
 
-			// End fellowship phase
-			assertEquals(Phase.FELLOWSHIP, _game.getGameState().getCurrentPhase());
-			playerDecided(P1, "");
+		// The wound for losing and the Axe's trigger come at the one moment, and the Free Peoples player is asked
+		// which to carry out first.
+		assertTrue(scn.FreepsDecisionAvailable("Required responses"));
+		assertEquals(2, scn.FreepsGetAvailableActions().size());
+		assertTrue(scn.FreepsActionAvailable("Dwarven Axe"));
+		assertInZone(Zone.SHADOW_CHARACTERS, runner);
+		assertInZone(Zone.DECK, top);
 
-			// Play Goblin Runner
-			assertEquals(Phase.SHADOW, _game.getGameState().getCurrentPhase());
-			int twilight = _game.getGameState().getTwilightPool();
-			playerDecided(P2, "0");
-			// Twilight is -1-2+2 (cost, roaming, effect)
-			assertEquals(twilight - 1 - 2 + 2, _game.getGameState().getTwilightPool());
+		scn.FreepsResolveRuleFirst();
 
-			// End shadow phase
-			playerDecided(P2, "");
+		// The Runner is dead, and its owner still discards: the top card of his own draw deck and no other.
+		assertInZone(Zone.DISCARD, runner);
+		assertInZone(Zone.DISCARD, top);
+		assertEquals(deck - 1, scn.GetShadowDeckCount());
+		assertEquals(freepsDeck, scn.GetFreepsDeckCount());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
 
-			// End maneuver phase
-			playerDecided(P1, "");
-			playerDecided(P2, "");
+	// The same loss with no card left in the minion's owner's draw deck, which is the table the 2011 test stood on:
+	// there is nothing to discard, and the game goes on.
+	@Test
+	public void WithNoCardInItsOwnersDrawDeckTheLosingMinionsOwnerDiscardsNothingAndTheGameGoesOn() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetKilledMinionScenario();
 
-			// End archery phase
-			playerDecided(P1, "");
-			playerDecided(P2, "");
+		var axe = scn.GetFreepsCard("axe");
+		var gimli = scn.GetFreepsCard("gimli");
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveCompanionsToTable(gimli);
+		scn.AttachCardsTo(gimli, axe);
 
-			// End assignment phase
-			playerDecided(P1, "");
-			playerDecided(P2, "");
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner);
+		scn.MoveCardsToDiscard(new ArrayList<>(scn.GetShadowDrawDeck()).toArray(new PhysicalCardImpl[0]));
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gimli, runner);
+		scn.FreepsResolveSkirmish(gimli);
 
-			// Assign
-			playerDecided(P1, gimli.getCardId() + " " + goblinRunner.getCardId());
+		int discard = scn.GetShadowDiscardCount();
+		int freepsDeck = scn.GetFreepsDeckCount();
+		assertEquals(0, scn.GetShadowDeckCount());
+		assertTrue(freepsDeck > 0);
 
-			// Start skirmish
-			playerDecided(P1, String.valueOf(gimli.getCardId()));
+		scn.PassSkirmishActions();
 
-			// End skirmish phase
-			playerDecided(P1, "");
-			playerDecided(P2, "");
+		// The Axe's trigger is carried out first, and finds no card: nothing is discarded from either deck.
+		assertTrue(scn.FreepsDecisionAvailable("Required responses"));
+		scn.FreepsResolveActionOrder("Dwarven Axe");
+		assertEquals(0, scn.GetShadowDeckCount());
+		assertEquals(freepsDeck, scn.GetFreepsDeckCount());
 
-			final AwaitingDecision awaitingDecision = _userFeedback.getAwaitingDecision(P1);
-			assertEquals(AwaitingDecisionType.ACTION_CHOICE, awaitingDecision.getDecisionType());
-			validateContents(new String[]{"1_9", "rules"}, (String[]) awaitingDecision.getDecisionParameters().get("blueprintId"));
-
-			playerDecided(P1, "0");
-
-			assertEquals(Phase.REGROUP, _game.getGameState().getCurrentPhase());
-			assertEquals(Zone.DISCARD, goblinRunner.getZone());
-
-			assertEquals(Zone.DISCARD, cardInDeck.getZone());
-		}
+		// The wound for losing follows without a question, and the Runner is the one card added to the pile.
+		assertInZone(Zone.DISCARD, runner);
+		assertEquals(discard + 1, scn.GetShadowDiscardCount());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }

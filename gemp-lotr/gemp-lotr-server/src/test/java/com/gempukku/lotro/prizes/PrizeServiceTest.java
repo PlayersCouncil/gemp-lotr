@@ -1,6 +1,6 @@
 package com.gempukku.lotro.prizes;
 
-import com.gempukku.lotro.at.AbstractAtTest;
+import com.gempukku.lotro.framework.LoadedLibraries;
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.common.DateUtils;
@@ -27,7 +27,7 @@ import static org.junit.Assert.*;
 /**
  * Exercises {@link PrizeService} against in-memory prize tables and a mocked collections manager.
  */
-public class PrizeServiceTest extends AbstractAtTest {
+public class PrizeServiceTest extends LoadedLibraries {
     private static final ZonedDateTime START = ZonedDateTime.of(2026, 3, 1, 0, 0, 0, 0, DateUtils.UTC);
 
     private CollectionsManager _collectionsManager;

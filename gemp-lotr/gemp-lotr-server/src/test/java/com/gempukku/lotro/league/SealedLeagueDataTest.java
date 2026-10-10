@@ -1,6 +1,6 @@
 package com.gempukku.lotro.league;
 
-import com.gempukku.lotro.at.AbstractAtTest;
+import com.gempukku.lotro.framework.LoadedLibraries;
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.db.vo.CollectionType;
@@ -22,7 +22,7 @@ import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
-public class SealedLeagueDataTest extends AbstractAtTest {
+public class SealedLeagueDataTest extends LoadedLibraries {
 
     private static ZonedDateTime JanuaryFirst2012 = ZonedDateTime.of(2012, 1, 1, 0, 0, 0, 0, DateUtils.UTC);
     private static LeagueParams FOTRSealedTestParams = new LeagueParams() {{

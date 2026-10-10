@@ -1,6 +1,6 @@
 package com.gempukku.lotro.library;
 
-import com.gempukku.lotro.at.AbstractAtTest;
+import com.gempukku.lotro.framework.LoadedLibraries;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.LotroCardBlueprint;
@@ -15,7 +15,7 @@ import java.util.Set;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class LotroCardBlueprintLibraryTests extends AbstractAtTest {
+public class LotroCardBlueprintLibraryTests extends LoadedLibraries {
     @Test
     public void LibraryLoadsWithNoDuplicates() throws CardNotFoundException {
         Map<String, String> cardNames = new HashMap<>();

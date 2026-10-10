@@ -1,6 +1,6 @@
 package com.gempukku.lotro.game;
 
-import com.gempukku.lotro.at.AbstractAtTest;
+import com.gempukku.lotro.framework.LoadedLibraries;
 import com.gempukku.lotro.framework.DeckValidationScenario;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import org.junit.Test;
@@ -28,7 +28,7 @@ import static org.junit.Assert.*;
  * override deck validation takes them and so the list offers them; whether it should is Q-0219, and no list read
  * here holds one.  That a block the player picks still narrows his sites is Q-0218.
  */
-public class SortAndFilterCardsTest extends AbstractAtTest {
+public class SortAndFilterCardsTest extends LoadedLibraries {
 	// Fellowship sites
 	private static final String BreeGate = "1_327";                // site 2
 	private static final String Ettenmoors = "1_331";              // site 2; X-listed in Multipath, errata'd in the PC formats

@@ -1,23 +1,16 @@
 
 package com.gempukku.lotro.cards.official.set01;
 
-import com.gempukku.lotro.at.AbstractAtTest;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCard;
-import com.gempukku.lotro.logic.decisions.AwaitingDecision;
-import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map;
 
 import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
@@ -111,6 +104,7 @@ public class Card_01_031_Tests
 		scn.FreepsPlayCard(asfaloth);
 		scn.FreepsChooseCard(erestor);
 		assertEquals(2, scn.GetTwilight());
+		assertAttachedTo(asfaloth, erestor);
 	}
 
 	@Test
@@ -132,6 +126,7 @@ public class Card_01_031_Tests
 		scn.FreepsPlayCard(asfaloth);
 		scn.FreepsChooseCard(arwen);
 		assertEquals(0, scn.GetTwilight());
+		assertAttachedTo(asfaloth, arwen);
 	}
 
 	@Test
@@ -243,83 +238,4 @@ public class Card_01_031_Tests
 		assertEquals(2, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
-
-	@Test
-	public void Legacy_playDiscountAsfalothOnArwen() throws DecisionResultInvalidException, CardNotFoundException {
-		var legacy = new LegacyAtTest();
-		legacy.playDiscountAsfalothOnArwen();
-	}
-
-	@Test
-	public void Legacy_playDiscountAsfalothOnOtherElf() throws DecisionResultInvalidException, CardNotFoundException {
-		var legacy = new LegacyAtTest();
-		legacy.playDiscountAsfalothOnOtherElf();
-	}
-
-	//These particular tests are pretty redundant with the new ones that check for twilight results above
-	// (not to mention somewhat less rigorous about it), but I am hesitant to delete these entirely only
-	// because they check for certain things around the guts that I do not--for instance, the specific
-	// existence of arguments instead of just card id counts, or the existence of the specific kind of
-	// card action choice.
-	//As I do not understand enough about the system to know what can and cannot be safely discarded, these
-	// will simply have to stay.
-	public static class LegacyAtTest extends AbstractAtTest {
-
-		public void playDiscountAsfalothOnArwen() throws DecisionResultInvalidException {
-			Map<String, Collection<String>> extraCards = new HashMap<>();
-			extraCards.put(P1, Arrays.asList("1_30", "1_31"));
-			initializeSimplestGame(extraCards);
-
-			// Play first character
-			AwaitingDecision firstCharacterDecision = _userFeedback.getAwaitingDecision(P1);
-			assertEquals(AwaitingDecisionType.ARBITRARY_CARDS, firstCharacterDecision.getDecisionType());
-			validateContents(new String[]{"1_30"}, ((String[]) firstCharacterDecision.getDecisionParameters().get("blueprintId")));
-
-			playerDecided(P1, getArbitraryCardId(firstCharacterDecision, "1_30"));
-
-			skipMulligans();
-
-			PhysicalCard asfaloth = _game.getGameState().getHand(P1).get(0);
-
-			final AwaitingDecision awaitingDecision = _userFeedback.getAwaitingDecision(P1);
-			assertEquals(AwaitingDecisionType.CARD_ACTION_CHOICE, awaitingDecision.getDecisionType());
-			validateContents(new String[]{"" + asfaloth.getCardId()}, (String[]) awaitingDecision.getDecisionParameters().get("cardId"));
-
-			assertEquals(0, _game.getGameState().getTwilightPool());
-
-			playerDecided(P1, "0");
-
-			assertEquals(0, _game.getGameState().getTwilightPool());
-			assertEquals(Zone.ATTACHED, asfaloth.getZone());
-		}
-
-		public void playDiscountAsfalothOnOtherElf() throws DecisionResultInvalidException {
-			Map<String, Collection<String>> extraCards = new HashMap<>();
-			extraCards.put(P1, Arrays.asList("1_51", "1_31"));
-			initializeSimplestGame(extraCards);
-
-			// Play first character
-			AwaitingDecision firstCharacterDecision = _userFeedback.getAwaitingDecision(P1);
-			assertEquals(AwaitingDecisionType.ARBITRARY_CARDS, firstCharacterDecision.getDecisionType());
-			validateContents(new String[]{"1_51"}, ((String[]) firstCharacterDecision.getDecisionParameters().get("blueprintId")));
-
-			playerDecided(P1, getArbitraryCardId(firstCharacterDecision, "1_51"));
-
-			skipMulligans();
-
-			PhysicalCard asfaloth = _game.getGameState().getHand(P1).get(0);
-
-			final AwaitingDecision awaitingDecision = _userFeedback.getAwaitingDecision(P1);
-			assertEquals(AwaitingDecisionType.CARD_ACTION_CHOICE, awaitingDecision.getDecisionType());
-			validateContents(new String[]{"" + asfaloth.getCardId()}, (String[]) awaitingDecision.getDecisionParameters().get("cardId"));
-
-			assertEquals(0, _game.getGameState().getTwilightPool());
-
-			playerDecided(P1, "0");
-
-			assertEquals(2, _game.getGameState().getTwilightPool());
-			assertEquals(Zone.ATTACHED, asfaloth.getZone());
-		}
-	}
-
 }
