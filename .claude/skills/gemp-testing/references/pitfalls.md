@@ -1351,6 +1351,10 @@ in PC Movie (its errata has seven sites: 1_331, 1_333, 1_361, 3_120, 4_355, 7_33
 (`skipSiteBlockValidation`) a site is let off the format's block, its sets and the Map, and is still held to the
 format's X-list and errata (Q-0185: A; `mechanics/SitesFromAnyBlockTests`): a mixed deck read as wholly legal
 with the override wants Bree Gate 1_327 or Ettenmoors 51_331 at 2, and in Multipath no Emyn Muil 1_360 at 9.
+The override opens the Fellowship, Towers, King and Shadows blocks and no other (Q-0219: B): a Hobbit site (sets 30
+to 33) under it draws "Site does not use supported block: <site>" in every format that does not play the Hobbit
+sites with no override (The Hobbit Draft Game, Limited - Hobbit, Anything Goes and Debug do), PC Movie and
+Multipath included, where without the override the same site draws "Card not from valid set".
 The format has no Ring-bearer rule of its own: it counts the Ring-bearer, the Ring and the sites with the draw
 deck, by title, against the one copy limit (CR 4.2 "building your deck", the exception). Every deck the scenario
 builds has Frodo 1_290 as Ring-bearer, so `buildDeckWithCopies("1_290", n, true)` puts n Frodos beside him and

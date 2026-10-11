@@ -24,6 +24,12 @@ import static org.junit.Assert.*;
  * nor of the path the deck's Map names, nor from a set the format plays.  What it never lifted (nine sites, one of
  * each number where sites have numbers, Movie sites and Shadows sites not in one deck) is not gone over again.
  *
+ * "Any block" is the blocks the text's parenthesis names: "(You may either mix any Movie block sites together, or
+ * use any Shadow sites, but not both.)"  So the override opens the Fellowship, Towers, King and Shadows blocks and
+ * no other.  A site of another block (the Hobbit sites of sets 30 to 33 are the only ones there are) is refused,
+ * "Site does not use supported block", unless it is of the format's own: one the format plays with no override at
+ * all.  Ketura on Q-0219 (2026-10-10), B being the Hobbit sites held out: "Let's do B."  The last two tests.
+ *
  * These tests hand the format the override itself (anyBlock in each test: sites of any block, as a deck building
  * override hands it to the format).  That a card sets it is that card's test (Card_92_019_Tests).
  *
@@ -52,6 +58,16 @@ public class SitesFromAnyBlockTests
 	// Fellowship block: the Fellowship site path and sets 1 to 3 only, with no X-list and no errata.
 	protected DeckValidationScenario GetFellowshipScenario() {
 		return new DeckValidationScenario(DeckValidationScenario.Fellowship);
+	}
+
+	// The Hobbit Draft Game: the Hobbit site path and sets 30 to 33 only.
+	protected DeckValidationScenario GetHobbitScenario() {
+		return new DeckValidationScenario("hobbit");
+	}
+
+	// Anything Goes: any one site path, from every set there is, the Hobbit sets among them.
+	protected DeckValidationScenario GetAnythingGoesScenario() {
+		return new DeckValidationScenario("rev_tow_sta");
 	}
 
 	@Test
@@ -171,5 +187,115 @@ public class SitesFromAnyBlockTests
 		sites.put("site2", "1_331");
 		deck = dvs.buildDeckWithSites(sites);
 		assertEquals(List.of(), dvs.validate(deck, anyBlock));
+	}
+
+	@Test
+	public void ASiteOfABlockTheOverrideDoesNotOpenIsRefused() {
+		var anyBlock = new DeckValidationContext().setSkipSiteBlockValidation(true);
+
+		// PC Movie.  Sites of all three Movie blocks under the Fellowship Map: with the override nothing at all is
+		// said against the deck
+		var dvs = GetPCMovieScenario();
+		var sites = new HashMap<>(DeckValidationScenario.FellowshipSites);
+		sites.put("site2", "1_327");    // Bree Gate
+		sites.put("site3", "4_337");    // Barrows of Edoras: a Towers site
+		sites.put("site6", "7_350");    // Minas Tirith Seventh Circle: a King site
+		var deck = dvs.buildDeckWithMap(DeckValidationScenario.FellowshipMap, sites);
+		assertEquals(List.of(), dvs.validate(deck, anyBlock));
+
+		// Dol Guldur 32_46 in place of The Bridge of Khazad-dûm at 5: a site 5 of the Hobbit block, which PC Movie
+		// does not play.  Its block is the one thing said against the deck.
+		sites.put("site5", "32_46");
+		deck = dvs.buildDeckWithMap(DeckValidationScenario.FellowshipMap, sites);
+		assertEquals(List.of("Site does not use supported block: Dol Guldur"),
+				dvs.getErrorLines(dvs.validate(deck, anyBlock)));
+		// Without the override the deck is refused as it was before Dol Guldur went in, and for more
+		assertNotEquals(List.of(), dvs.validate(deck));
+
+		// The same among eight Fellowship sites, a deck of one block but for it
+		sites = new HashMap<>(DeckValidationScenario.FellowshipSites);
+		sites.put("site2", "1_327");
+		deck = dvs.buildDeckWithMap(DeckValidationScenario.FellowshipMap, sites);
+		assertEquals(List.of(), dvs.validate(deck));
+		assertEquals(List.of(), dvs.validate(deck, anyBlock));
+		sites.put("site5", "32_46");
+		deck = dvs.buildDeckWithMap(DeckValidationScenario.FellowshipMap, sites);
+		assertEquals(List.of("Site does not use supported block: Dol Guldur"),
+				dvs.getErrorLines(dvs.validate(deck, anyBlock)));
+
+		// Two Hobbit sites are each named: Town Hall 32_47 is a site 6
+		sites.put("site6", "32_47");
+		deck = dvs.buildDeckWithMap(DeckValidationScenario.FellowshipMap, sites);
+		assertEquals(List.of("Site does not use supported block: Dol Guldur",
+				"Site does not use supported block: Town Hall"), dvs.getErrorLines(dvs.validate(deck, anyBlock)));
+
+		// Fellowship block, a format of one block: the eight Fellowship sites and Dol Guldur are refused in the
+		// same words with the override as without it
+		dvs = GetFellowshipScenario();
+		sites = new HashMap<>(DeckValidationScenario.FellowshipSites);
+		sites.put("site5", "32_46");
+		deck = dvs.buildDeckWithSites(sites);
+		assertEquals(List.of("Site does not use supported block: Dol Guldur"), dvs.getErrorLines(dvs.validate(deck)));
+		assertEquals(List.of("Site does not use supported block: Dol Guldur"),
+				dvs.getErrorLines(dvs.validate(deck, anyBlock)));
+
+		// Multipath, which like PC Movie has no one block of its own and does not play the Hobbit sets
+		dvs = GetMultipathScenario();
+		sites = new HashMap<>(DeckValidationScenario.FellowshipSites);
+		sites.put("site2", "1_327");
+		sites.put("site9", "1_361");
+		sites.put("site5", "32_46");
+		deck = dvs.buildDeckWithSites(sites);
+		assertEquals(List.of("Site does not use supported block: Dol Guldur"),
+				dvs.getErrorLines(dvs.validate(deck, anyBlock)));
+	}
+
+	@Test
+	public void ASiteOfTheFormatsOwnIsTakenWithTheOverrideWhateverItsBlock() {
+		var anyBlock = new DeckValidationContext().setSkipSiteBlockValidation(true);
+
+		// The Hobbit Draft Game plays the Hobbit sites: Dol Guldur 32_46 is its own, with the override as without
+		var hobbit = GetHobbitScenario().getFormat();
+		assertNull(hobbit.validateSite("32_46"));
+		assertNull(hobbit.validateSite("32_46", anyBlock));
+
+		// and there as anywhere the override opens the four blocks its text names: Bree Gate 1_327 (Fellowship),
+		// Barrows of Edoras 4_337 (Towers), Minas Tirith Seventh Circle 7_350 (King), Fangorn Glade 11_239 (Shadows)
+		assertEquals("Site does not use supported block: Bree Gate", hobbit.validateSite("1_327"));
+		assertEquals("Site does not use supported block: Barrows of Edoras", hobbit.validateSite("4_337"));
+		assertEquals("Site does not use supported block: Minas Tirith Seventh Circle", hobbit.validateSite("7_350"));
+		assertEquals("Site does not use supported block: Fangorn Glade", hobbit.validateSite("11_239"));
+		assertNull(hobbit.validateSite("1_327", anyBlock));
+		assertNull(hobbit.validateSite("4_337", anyBlock));
+		assertNull(hobbit.validateSite("7_350", anyBlock));
+		assertNull(hobbit.validateSite("11_239", anyBlock));
+
+		// Anything Goes has no one block of its own: it plays any one path from the sets it plays, and it plays
+		// the Hobbit sets.  Dol Guldur is its own, and the override does not take it away.
+		var dvs = GetAnythingGoesScenario();
+		assertNull(dvs.getFormat().validateSite("32_46"));
+		assertNull(dvs.getFormat().validateSite("32_46", anyBlock));
+
+		// Nine Hobbit sites there, one of each number: nothing at all is said against the deck, with the override
+		// as without it
+		var sites = new HashMap<String, String>();
+		sites.put("site1", "30_49");    // Bag End
+		sites.put("site2", "30_50");    // The Troll Hoard
+		sites.put("site3", "30_51");    // Rivendell
+		sites.put("site4", "30_52");    // Goblin Town
+		sites.put("site5", "32_46");    // Dol Guldur
+		sites.put("site6", "30_54");    // Esgaroth
+		sites.put("site7", "30_55");    // Erebor
+		sites.put("site8", "30_56");    // Smaug's Den
+		sites.put("site9", "30_57");    // Battle of the Five Armies
+		var deck = dvs.buildDeckWithSites(sites);
+		assertEquals(List.of(), dvs.validate(deck));
+		assertEquals(List.of(), dvs.validate(deck, anyBlock));
+
+		// PC Movie has no one block of its own either, and does not play the Hobbit sets: without the override
+		// the site is refused for its set, and with it the single site reads as the deck of the test above does
+		var pcMovie = GetPCMovieScenario().getFormat();
+		assertEquals("Card not from valid set: Dol Guldur", pcMovie.validateSite("32_46"));
+		assertEquals("Site does not use supported block: Dol Guldur", pcMovie.validateSite("32_46", anyBlock));
 	}
 }

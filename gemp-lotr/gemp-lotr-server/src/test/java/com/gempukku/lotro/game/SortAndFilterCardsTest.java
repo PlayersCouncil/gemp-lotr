@@ -24,9 +24,12 @@ import static org.junit.Assert.*;
  *
  * Each test filters a handful of cards named below, by the filter strings the client builds.
  *
- * Not gone into: Hobbit-block sites, and printings from errata or V sets the format does not play.  Under the
- * override deck validation takes them and so the list offers them; whether it should is Q-0219, and no list read
- * here holds one.  That a block the player picks still narrows his sites is Q-0218.
+ * "Any block" is the Fellowship, Towers, King and Shadows blocks, the ones the text's parenthesis names: a site of
+ * the Hobbit block is listed with the override only in a format that lists it without (Q-0219: B; the last test).
+ *
+ * Not gone into: printings from errata or V sets the format does not play.  Under the override deck validation
+ * takes them and so the list offers them (Q-0219, where B left them as they are), and no list read here holds
+ * one.  That a block the player picks still narrows his sites is Q-0218.
  */
 public class SortAndFilterCardsTest extends LoadedLibraries {
 	// Fellowship sites
@@ -46,6 +49,9 @@ public class SortAndFilterCardsTest extends LoadedLibraries {
 	private static final String AnduinBanksErrata = "61_227";
 	private static final String FangornGlade = "11_239";
 	private static final String CourtyardParapet = "13_188";       // X-listed in Standard, errata'd in PC Expanded
+	// Hobbit sites, of sets no format here plays but The Hobbit Draft Game and Anything Goes
+	private static final String TrollHoard = "30_50";              // site 2
+	private static final String DolGuldur = "32_46";               // site 5
 
 	// Cards that are not sites
 	private static final String Aragorn = "1_89";                  // a companion of set 1
@@ -324,5 +330,51 @@ public class SortAndFilterCardsTest extends LoadedLibraries {
 		sites.put("site2", Ettenmoors);
 		deck = dvs.buildDeckWithMap(DeckValidationScenario.FellowshipMap, sites);
 		assertNotEquals(List.of(), dvs.validate(deck, overrides));
+	}
+
+	@Test
+	public void WithTheOverrideAHobbitSiteIsListedOnlyWhereItIsListedWithout() throws CardNotFoundException {
+		var pool = Pool(EttenmoorsErrata, BagEndStudy, TrollHoard, DolGuldur);
+
+		// PC Movie does not play the Hobbit sets.  With the override its list gains the Shadows sites, as it does
+		// with no Hobbit site to choose from, and neither Hobbit site.
+		assertEquals(Sorted(BreeGate, EttenmoorsErrata, EmynMuil, BagEndStudy, BarrowsOfEdoras, GoldenHall,
+				SeventhCircle),
+				Listed("format:pc_movie cardType:SITE", pool));
+		assertEquals(Sorted(BreeGate, EttenmoorsErrata, EmynMuil, BagEndStudy, BarrowsOfEdoras, GoldenHall,
+				SeventhCircle, AnduinBanks, FangornGlade, CourtyardParapet),
+				Listed("format:pc_movie cardType:SITE siteOverride:true", pool));
+
+		// The same in a format of one block, and in a Shadows format
+		assertEquals(Sorted(BreeGate, Ettenmoors, EttenmoorsErrata, EmynMuil, SlopesOfAmonHen, BagEndStudy,
+				BarrowsOfEdoras, GoldenHall, SeventhCircle, AnduinBanks, FangornGlade, CourtyardParapet),
+				Listed("format:fotr_block cardType:SITE siteOverride:true", pool));
+		assertEquals(Sorted(BreeGate, Ettenmoors, EttenmoorsErrata, EmynMuil, SlopesOfAmonHen, BagEndStudy,
+				BarrowsOfEdoras, GoldenHall, SeventhCircle, AnduinBanks, FangornGlade, CourtyardParapet),
+				Listed("format:expanded cardType:SITE siteOverride:true", pool));
+
+		// The Hobbit Draft Game lists the Hobbit sites as its own, and with the override the sites of the four
+		// blocks beside them
+		assertEquals(Sorted(TrollHoard, DolGuldur), Listed("format:hobbit cardType:SITE", pool));
+		assertEquals(Sorted(TrollHoard, DolGuldur, BreeGate, Ettenmoors, EttenmoorsErrata, EmynMuil, SlopesOfAmonHen,
+				BagEndStudy, BarrowsOfEdoras, GoldenHall, SeventhCircle, AnduinBanks, FangornGlade, CourtyardParapet),
+				Listed("format:hobbit cardType:SITE siteOverride:true", pool));
+
+		// A set the player picks: the Hobbit sites are not PC Movie's with the override either
+		assertEquals(List.of(), Listed("format:pc_movie set:32 cardType:SITE siteOverride:true", pool));
+
+		// What the list leaves out, deck validation refuses for the player who has Race Text 92_19: eight
+		// Fellowship sites that PC Movie takes, which validate for him, and then Dol Guldur at 5
+		var sites = new HashMap<>(DeckValidationScenario.FellowshipSites);
+		sites.put("site2", BreeGate);
+		var dvs = new DeckValidationScenario(DeckValidationScenario.PCMovie);
+		var overrides = VirtualTableScenario.FindCard(RaceText).getDeckBuildingOverrides();
+		var deck = dvs.buildDeckWithMap(DeckValidationScenario.FellowshipMap, sites);
+		assertEquals(List.of(), dvs.validate(deck, overrides));
+
+		sites.put("site5", DolGuldur);
+		deck = dvs.buildDeckWithMap(DeckValidationScenario.FellowshipMap, sites);
+		assertEquals(List.of("Site does not use supported block: Dol Guldur"),
+				dvs.getErrorLines(dvs.validate(deck, overrides)));
 	}
 }

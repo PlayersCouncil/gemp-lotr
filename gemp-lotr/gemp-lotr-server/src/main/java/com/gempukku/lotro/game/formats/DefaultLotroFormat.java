@@ -835,10 +835,33 @@ public class DefaultLotroFormat implements LotroFormat {
     }
 
     /**
+     * The blocks that "sites from any block" opens to an adventure deck: the three of the Movie and Shadows, the
+     * ones the parenthesis of that text names ("You may either mix any Movie block sites together, or use any
+     * Shadow sites, but not both"; Q-0219).
+     */
+    private static final Set<SitesBlock> BLOCKS_OPENED_BY_ANY_BLOCK =
+            EnumSet.of(SitesBlock.FELLOWSHIP, SitesBlock.TWO_TOWERS, SitesBlock.KING, SitesBlock.SHADOWS);
+
+    /**
+     * Whether a site is of a block this format plays on its own account, with no override: a site of its one
+     * block, or, for a format of any one path (Multipath), a site it has as a card of its own (what validateCard
+     * does not call "not from valid set").
+     */
+    private boolean isOfOwnBlock(String blueprintId, LotroCardBlueprint site) {
+        if (_siteBlock != SitesBlock.MULTIPATH)
+            return site.getSiteBlock() == _siteBlock;
+        String baseId = _library.getBaseBlueprintId(blueprintId);
+        return _validCards.contains(baseId) || _errataCardMap.containsValue(baseId)
+                || _validSets.isEmpty() || isValidInSets(baseId);
+    }
+
+    /**
      * What this format has against one site, or null if nothing.
      * @param context The deck building overrides of the player whose adventure deck the site is for, or null.
      * Where they say his sites may be of any block (skipSiteBlockValidation), the site need not be of this
      * format's block nor from one of its sets; the X-list and the errata are read against it all the same.
+     * "Any block" is the Fellowship, Towers, King and Shadows blocks: a site of another block (a Hobbit site) is
+     * refused for its block unless this format plays it with no override (Q-0219).
      * This is the one reading of a single site: deck validation and the deck builder's card list both ask it.
      */
     @Override
@@ -858,6 +881,9 @@ public class DefaultLotroFormat implements LotroFormat {
             return "Card assigned as Site is not really a site.";
         }
         else if (!anyBlock && bp.getSiteBlock() != _siteBlock && _siteBlock != SitesBlock.MULTIPATH) {
+            return "Site does not use supported block: " + GameUtils.getFullName(bp);
+        }
+        else if (anyBlock && !BLOCKS_OPENED_BY_ANY_BLOCK.contains(bp.getSiteBlock()) && !isOfOwnBlock(blueprintId, bp)) {
             return "Site does not use supported block: " + GameUtils.getFullName(bp);
         }
 //        else if (_siteBlock == SitesBlock.MULTIPATH && bp.getSiteBlock() == SitesBlock.SHADOWS) {
