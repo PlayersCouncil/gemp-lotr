@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_17_089_Tests
@@ -20,6 +21,22 @@ public class Card_17_089_Tests
 				{{
 					put("card", "17_89");
 					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// An [orc] Orc to bear the Warg, a Hobbit ally at his home site and a Hobbit companion.
+	protected VirtualTableScenario GetHobbitAllyAndCompanionScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("warg", "17_89");
+					put("goblin", "11_137");
+					put("bounder", "1_286");
+					put("sam", "1_311");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -58,6 +75,50 @@ public class Card_17_089_Tests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 		assertEquals(2, card.getBlueprint().getStrength());
 		assertEquals(2, card.getBlueprint().getVitality());
+	}
+
+	// "While bearer is skirmishing a companion of that race": the definition counted an ally of that race as well.
+	@Test
+	public void TheBonusIsForSkirmishingACompanionOfTheRaceAndNotAnAlly() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetHobbitAllyAndCompanionScenario();
+
+		var bounder = scn.GetFreepsCard("bounder");
+		var sam = scn.GetFreepsCard("sam");
+		scn.MoveAlliesToTable(bounder);
+		scn.MoveCompanionsToTable(sam);
+
+		var warg = scn.GetShadowCard("warg");
+		var goblin = scn.GetShadowCard("goblin");
+		scn.MoveCardsToHand(warg);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(goblin);
+		scn.SkipToPhase(Phase.SHADOW);
+
+		// The Goblin is the only [orc] Orc; the race spotted is Sam's, Hobbit.
+		scn.ShadowPlayCard(warg);
+		assertAttachedTo(warg, goblin);
+		scn.ShadowChooseCard(sam);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		// Site 2 is Bounder's home.  He is a Hobbit and an ally: the Goblin is 5 + 2 for the Warg and no more.
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(bounder, goblin);
+		scn.FreepsResolveSkirmish(bounder);
+		assertEquals(7, scn.GetStrength(goblin));
+		assertFalse(scn.HasKeyword(goblin, Keyword.DAMAGE));
+
+		// 2 against 7: Bounder is killed, and the Goblin, fierce for the Warg, skirmishes again.
+		scn.PassSkirmishActions();
+		assertInZone(Zone.DEAD, bounder);
+		scn.PassFierceAssignmentActions();
+		scn.FreepsAssignToMinions(sam, goblin);
+		scn.FreepsResolveSkirmish(sam);
+
+		// Sam is a Hobbit and a companion.
+		assertEquals(10, scn.GetStrength(goblin));
+		assertTrue(scn.HasKeyword(goblin, Keyword.DAMAGE));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

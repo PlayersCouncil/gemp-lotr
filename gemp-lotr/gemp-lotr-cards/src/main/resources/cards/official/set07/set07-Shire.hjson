@@ -413,10 +413,16 @@
 			{
 				type: activated
 				phase: regroup
-				cost: {
-					type: discard
-					select: self
-				}
+				cost: [
+					{
+						type: discard
+						select: self
+					}
+					{
+						type: exert
+						select: choose(hobbit,companion)
+					}
+				]
 				effect: {
 					type: playNextSite
 				}

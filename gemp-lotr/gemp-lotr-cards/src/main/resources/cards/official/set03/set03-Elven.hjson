@@ -973,6 +973,10 @@
 		effects: {
 			type: activated
 			phase: maneuver
+			requires: {
+				type: canSpot
+				filter: side(shadow),condition
+			}
 			cost: {
 				type: exert
 				select: bearer

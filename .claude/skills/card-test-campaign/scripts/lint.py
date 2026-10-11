@@ -812,6 +812,18 @@ def lint_file(path: Path):
         for slip in race_culture_slips(card):
             add("warning", "race-culture", None, slip)
 
+    # The census (Q-0220: B): a word of the text that nothing in the definition holds ("a [rohan] ally" healed as
+    # any ally, 4_290; "exert a Hobbit companion" with no exertion, 7_325).  Like race-culture it is read off the
+    # definition and asks for no board; unlike it, a match is only a place to read, since the word may be carried by
+    # something the check cannot see.  Where text and definition agree, nothing is said.
+    if card is not None:
+        import census
+        for which, words, message in census.check(card_id):
+            add("warning", "census", None, "%s: read the definition against the text there; where the definition is at "
+                "fault that is a finding to file (`hjson-logic`), and where something else carries the words (a trigger "
+                "only such a card can set off, a rule of the game) the ledger's Notes say what (Q-0220: B; `census.py %s`)"
+                % (message, card_id))
+
     # A title that cards of more than one culture or type carry (Gollum is [gollum] and [wraith]; Saruman a minion
     # and a follower): with one kind of it on every table, a culture or type written beside the name in the
     # definition passes every test (60_20).  Like second-copy, this reads which cards the file names at all, not

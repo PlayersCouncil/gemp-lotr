@@ -963,6 +963,15 @@ else attached" is a size of 1. `assertNotAttachedTo` is the safer reading.
 (a tentacle killed by a wound and then stacked from the discard pile), read it there while the decision is
 pending. A count that is 0 before and 0 after shows nothing by itself.
 
+**A minion that is killed sets off another card's "is discarded" trigger (F-0444, open).** The definition language's
+`discarded` trigger answers every card the engine puts in a discard pile from play, a KILLED minion among them:
+Wildman's Oath 17_66 ("Each time a [men] minion is discarded during the maneuver phase, you may stack it here")
+offers to stack a Man of Bree killed by a wound there, against CR 4.2 "killed". Only a card's OWN "when this is
+discarded" tells the two apart (Q-0081). Last Days 12_71 and Throne of Minas Tirith 17_36 ("killed or discarded
+from play") are built on that trigger alone and answer a kill because of it, as their text asks (each has a test
+that holds it). A test of a text that says only "discarded" asserts that a kill is not answered and is parked
+on F-0444.
+
 **The removed-from-game pile.** `scn.MoveCardToZone(card, Zone.REMOVED)` lays a card there (a cheat) and
 `assertInZone(Zone.REMOVED, cards...)` reads it. Two printed cards put cards there by play: Defiled 13_105
 (four [orc] cards in its owner's discard pile, in place of its twilight cost) and Gollum, Her Sneak 13_50 (a

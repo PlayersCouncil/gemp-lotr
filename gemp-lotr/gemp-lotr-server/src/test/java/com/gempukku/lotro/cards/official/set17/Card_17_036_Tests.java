@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_17_036_Tests
@@ -19,6 +20,22 @@ public class Card_17_036_Tests
 				{{
 					put("card", "17_36");
 					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// A minion of 1 vitality to be killed in a skirmish, and a [gondor] card with a token to reinforce.
+	protected VirtualTableScenario GetKilledMinionScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("throne", "17_36");
+					put("heirs", "13_69");
+					put("aragorn", "1_89");
+					put("runner", "1_178");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -53,6 +70,38 @@ public class Card_17_036_Tests
 		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
+	}
+
+	// "Each time a minion is killed or discarded from play during a skirmish".  The definition has the `discarded`
+	// trigger alone, which as the engine stands answers a killed minion as well (F-0444): this holds the kill, so
+	// that it is not lost if that is put right.
+	@Test
+	public void AMinionKilledInASkirmishLetsAGondorTokenBeReinforced() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetKilledMinionScenario();
+
+		var throne = scn.GetFreepsCard("throne");
+		var heirs = scn.GetFreepsCard("heirs");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToSupportArea(throne, heirs);
+		// Heirs of Gondor is played with one token on it.
+		scn.AddTokensToCard(heirs, 1);
+
+		var runner = scn.GetShadowCard("runner");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, runner);
+		scn.FreepsResolveSkirmish(aragorn);
+
+		// 8 against 5: the Goblin Runner takes a wound and is killed.
+		scn.PassSkirmishActions();
+		assertInZone(Zone.DISCARD, runner);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(throne));
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(2, scn.GetCultureTokensOn(heirs));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

@@ -414,7 +414,7 @@
 						type: canSpotThreats
 						amount: 3
 					}
-					filter: culture(sauron),orc
+					filter: culture(sauron),orc,not(roaming)
 					amount: 1
 				}
 			}

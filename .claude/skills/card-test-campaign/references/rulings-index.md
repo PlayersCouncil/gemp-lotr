@@ -528,3 +528,4 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - lint's `title-kinds` warning, and a `no C-` it passes over
 - lint's `race-culture` warning (Q-0213: B) [F-0019, F-0291]
 - lint's `cardinfo` warning (Q-0145) [Q-0158]
+- lint's `census` warning (Q-0220: B) [F-0430, F-0443]

@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_04_290_Tests
@@ -19,6 +20,22 @@ public class Card_04_290_Tests
 				{{
 					put("card", "4_290");
 					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// A wounded [rohan] ally and a wounded [shire] ally, with a villager in hand to pay with.
+	protected VirtualTableScenario GetTwoWoundedAlliesScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("supplies", "4_290");
+					put("guma", "4_277");
+					put("hlafwine", "4_281");
+					put("bounder", "1_286");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -53,6 +70,33 @@ public class Card_04_290_Tests
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
+	}
+
+	// "to heal a [rohan] ally": the definition healed any ally.
+	@Test
+	public void OnlyARohanAllyIsHealed() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetTwoWoundedAlliesScenario();
+
+		var supplies = scn.GetFreepsCard("supplies");
+		var guma = scn.GetFreepsCard("guma");
+		var hlafwine = scn.GetFreepsCard("hlafwine");
+		var bounder = scn.GetFreepsCard("bounder");
+		scn.MoveCardsToSupportArea(supplies);
+		scn.MoveAlliesToTable(guma, bounder);
+		scn.MoveCardsToHand(hlafwine);
+		scn.AddWoundsToChar(guma, 1);
+		scn.AddWoundsToChar(bounder, 1);
+
+		scn.StartGame();
+		assertTrue(scn.FreepsActionAvailable(supplies));
+		scn.FreepsUseCardAction(supplies);
+
+		// Hlafwine is the only villager in hand and Guma the only [rohan] ally: nothing is asked.
+		assertEquals(2, scn.GetTwilight());
+		assertInZone(Zone.DECK, hlafwine);
+		assertEquals(0, scn.GetWoundsOn(guma));
+		assertEquals(1, scn.GetWoundsOn(bounder));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

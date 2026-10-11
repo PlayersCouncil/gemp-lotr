@@ -1092,7 +1092,7 @@
 					keyword: damage
 					amount: {
 						type: forEachYouCanSpot
-						filter: hunter,assignedToSkirmish(any)
+						filter: culture(uruk-hai),hunter,assignedToSkirmish(any)
 					}
 				}
 			}

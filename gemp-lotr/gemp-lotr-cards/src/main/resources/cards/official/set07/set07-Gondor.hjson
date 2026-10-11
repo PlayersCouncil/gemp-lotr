@@ -1605,7 +1605,7 @@
 				}
 				effect: {
 					type: wound
-					select: choose(minion,inSkirmishAgainst(memory(exertedMan)))
+					select: choose(roaming,minion,inSkirmishAgainst(memory(exertedMan)))
 				}
 			}
 			{

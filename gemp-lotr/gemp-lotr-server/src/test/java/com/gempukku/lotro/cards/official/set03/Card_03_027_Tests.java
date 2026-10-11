@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_03_027_Tests
@@ -20,6 +21,22 @@ public class Card_03_027_Tests
 				{{
 					put("card", "3_27");
 					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// Elrond bearing Vilya, a minion so that there is a maneuver phase, and a Shadow condition to put down later.
+	protected VirtualTableScenario GetShadowConditionScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("vilya", "3_27");
+					put("elrond", "1_40");
+					put("fear", "1_278");
+					put("savage", "1_151");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -56,6 +73,39 @@ public class Card_03_027_Tests
 		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.RING));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 		assertEquals(1, card.getBlueprint().getVitality());
+	}
+
+	// "Exert Elrond twice and spot a Shadow condition to return that condition to its owner's hand": the
+	// definition asked for no Shadow condition, and Elrond could exert twice for nothing.
+	@Test
+	public void TheAbilityWantsAShadowConditionToSpot() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetShadowConditionScenario();
+
+		var vilya = scn.GetFreepsCard("vilya");
+		var elrond = scn.GetFreepsCard("elrond");
+		scn.MoveAlliesToTable(elrond);
+		scn.AttachCardsTo(elrond, vilya);
+
+		var fear = scn.GetShadowCard("fear");
+		var savage = scn.GetShadowCard("savage");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(savage);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		// Elrond could exert twice, and there is no Shadow condition.
+		assertEquals(0, scn.GetWoundsOn(elrond));
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(vilya));
+
+		// Strength Born of Fear is put down in the Shadow player's support area.
+		scn.MoveCardsToSupportArea(fear);
+		scn.FreepsRefreshDecision();
+		assertTrue(scn.FreepsActionAvailable(vilya));
+		scn.FreepsUseCardAction(vilya);
+		assertEquals(2, scn.GetWoundsOn(elrond));
+		assertInZone(Zone.HAND, fear);
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

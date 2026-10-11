@@ -143,7 +143,7 @@
 						}
 						{
 							type: spot
-							filter: culture(gondor),wraith
+							filter: culture(gondor),wraith,exhausted
 						}
 					]
 				}

@@ -955,7 +955,7 @@
 					type: choice
 					texts: [
 						Exert Théoden
-						Exert 2 companions
+						Exert 2 other companions
 					]
 					effects: [
 						{
@@ -964,7 +964,7 @@
 						}
 						{
 							type: exert
-							select: choose(companion)
+							select: choose(not(name(Théoden)),companion)
 							count: 2
 						}
 					]

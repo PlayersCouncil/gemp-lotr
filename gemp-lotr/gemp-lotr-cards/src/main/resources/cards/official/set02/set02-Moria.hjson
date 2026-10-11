@@ -987,7 +987,7 @@
 			type: event
 			effect: {
 				type: modifyStrength
-				select: choose(or(Elf,Dwarf))
+				select: choose(or(Elf,Dwarf),inSkirmishAgainst(culture(moria),orc))
 				amount: {
 					type: Conditional
 					requires: [
