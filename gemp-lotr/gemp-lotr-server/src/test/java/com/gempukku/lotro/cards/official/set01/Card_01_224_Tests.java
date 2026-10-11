@@ -139,6 +139,30 @@ public class Card_01_224_Tests
 		);
 	}
 
+	// The Ring of Rings 11_1: resistance +2 (printed).  "Response: If the Ring-bearer is about to take a wound, he or
+	// she wears The One Ring until the regroup phase.  While the Ring-bearer is wearing The One Ring, each time he or
+	// she is about to take a wound, add a burden instead."
+	protected VirtualTableScenario GetTheRingOfRingsScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("rtim", "1_224");
+					put("lemenya", "1_232");   // Ulaire Lemenya, Lieutenant of Morgul: Nazgul, strength 9, not fierce
+					put("marksman", "1_176");  // Goblin Marksman: a [moria] Orc; Archer is its whole text
+
+					// Hobbit Sword: strength +2 and nothing else.  This Ring prints no strength, and Frodo at 3 would
+					// be overwhelmed by Lemenya's 9.
+					put("sword", "1_299");
+					// O Elbereth! Gilthoniel!: [shire] tale on the Ring-bearer, strength +1.  "Skirmish: Discard this
+					// condition to take off The One Ring or to cancel a skirmish involving the Ring-bearer and a Nazgul."
+					put("elbereth", "2_108");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				"11_1"
+		);
+	}
+
 	@Test
 	public void ReturntoItsMasterStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
@@ -641,6 +665,113 @@ public class Card_01_224_Tests
 		// A wound, and no burden.
 		assertEquals(2, scn.GetWoundsOn(frodo));
 		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void TheRingOfRingsWornSinceTheArcheryPhaseAddsNoBurdenInThatSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetTheRingOfRingsScenario();
+
+		var frodo = scn.GetRingBearer();
+		var ring = scn.GetRing();
+		var sword = scn.GetFreepsCard("sword");
+		scn.AttachCardsTo(frodo, sword);
+
+		var rtim = scn.GetShadowCard("rtim");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var marksman = scn.GetShadowCard("marksman");
+		scn.MoveCardsToHand(rtim);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(lemenya, marksman);
+
+		// The Marksman's archery wound: Frodo puts the Ring on, for a burden.
+		scn.SkipToArcheryWounds();
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(ring));
+		scn.FreepsAcceptOptionalTrigger();
+		assertTrue(scn.RBWearingOneRing());
+		assertEquals(1, scn.GetBurdens());
+		assertEquals(0, scn.GetWoundsOn(frodo));
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(frodo, lemenya);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(frodo);
+		// 3 + 2 for the Sword, against 9: the wound for losing is a burden.
+		assertEquals(5, scn.GetStrength(frodo));
+		scn.PassSkirmishActions();
+		assertEquals(2, scn.GetBurdens());
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		// 10 + 2 printed on the Ring - 2 burdens
+		assertEquals(10, scn.GetResistance(frodo));
+
+		assertTrue(scn.ShadowPlayAvailable(rtim));
+		scn.ShadowPlayCard(rtim);
+		// Lemenya is the one Nazgul; the Marksman, an Orc who has not fought, is not assigned.
+		assertTrue(scn.IsCharAssignedAgainst(frodo, lemenya));
+		assertFalse(scn.IsCharAssigned(marksman));
+
+		scn.FreepsResolveSkirmish(frodo);
+		// The Ring's printed resistance +2 is no game text: he is still 10.
+		assertEquals(10, scn.GetResistance(frodo));
+		assertEquals(5, scn.GetStrength(frodo));
+		scn.PassSkirmishActions();
+
+		// A wound, and no burden.
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(2, scn.GetBurdens());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void TakenOffInThatSkirmishTheRingOfRingsDoesNotAnswerTheWound() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetTheRingOfRingsScenario();
+
+		var frodo = scn.GetRingBearer();
+		var ring = scn.GetRing();
+		var sword = scn.GetFreepsCard("sword");
+		var elbereth = scn.GetFreepsCard("elbereth");
+		scn.AttachCardsTo(frodo, sword, elbereth);
+
+		var rtim = scn.GetShadowCard("rtim");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var marksman = scn.GetShadowCard("marksman");
+		scn.MoveCardsToHand(rtim);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(lemenya, marksman);
+
+		scn.SkipToArcheryWounds();
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(ring));
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(1, scn.GetBurdens());
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(frodo, lemenya);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(frodo);
+		scn.PassSkirmishActions();
+		assertEquals(2, scn.GetBurdens());
+		assertEquals(0, scn.GetWoundsOn(frodo));
+
+		scn.ShadowPlayCard(rtim);
+		scn.FreepsResolveSkirmish(frodo);
+
+		// The skirmish of the Ring-bearer cannot be cancelled, so the tale takes the Ring off with nothing asked.
+		assertTrue(scn.RBWearingOneRing());
+		scn.FreepsUseCardAction(elbereth);
+		assertFalse(scn.RBWearingOneRing());
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+
+		// 3 + 2 against 9.  Off, this Ring answers a wound in any other skirmish; in this one its text does not
+		// apply, and nothing is offered.
+		scn.ShadowPass();
+		scn.FreepsPass();
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(2, scn.GetBurdens());
+		assertFalse(scn.RBWearingOneRing());
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 

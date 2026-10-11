@@ -364,23 +364,20 @@
 						memorize: chosenCompanions
 					}
 				}
+				{
+					type: exert
+					select: memory(chosenCompanions)
+					ignoreCostCheckFailure: true
+				}
 			]
 			effect: [
 				{
-					type: CostToEffect
-					cost: {
-						type: exert
-						select: memory(chosenCompanions)
-						ignoreCostCheckFailure: true
-					}
-					effect: {
-						type: modifyStrength
-						select: choose(minion,inSkirmishAgainst(culture(gondor),companion))
-						amount: {
-							type: forEachInMemory
-							memory: chosenCompanions
-							multiplier: -3
-						}
+					type: modifyStrength
+					select: choose(minion,inSkirmishAgainst(culture(gondor),companion))
+					amount: {
+						type: forEachInMemory
+						memory: chosenCompanions
+						multiplier: -3
 					}
 				}
 			]
