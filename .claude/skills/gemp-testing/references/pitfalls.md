@@ -596,7 +596,10 @@ directive's "the game goes on to the mulligan question" is: player 1 asked nothi
 (`FreepsAnyDecisionsAvailable()` false), player 2's "Starting fellowship" pending, and the mulligan question
 only after his answer. While a player chooses, only HIS cards on the table are in force, and `GetBurdens()` is
 his: Éomer 4_267 reads 2 with his own player's Elite Rider 4_265 down and 3 again once the other player is
-choosing. Read a cost, a spot or a resistance while its player is the one being asked. The cost of the
+choosing. Read a cost, a spot or a resistance while its player is the one being asked. Site 1's text is not in
+force while either player chooses, and its keyword is not counted (CR 4.2 "starting fellowship"; F-0470;
+mechanics/SiteTextIsNotActiveWhileStartingFellowshipsArePlayedTests): at East Road 1_320 a companion in the draw
+deck reads its printed cost, and 2 more in the first fellowship phase. The cost of the
 companion whose play ends the first player's choice cannot be read from the pool, which reads 0 again as the
 next choice begins: read `GetTwilightCost(card)` of a card still in the draw deck while its owner chooses, which
 answers with a starting-fellowship discount in force (Gondorian Knight 5_35 reads 2 before Alcarin 5_31 is chosen and 1 after;
