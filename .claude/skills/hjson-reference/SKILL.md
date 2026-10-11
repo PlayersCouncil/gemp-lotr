@@ -584,7 +584,7 @@ A Race to Mount Doom meta-site's `Trigger` and `Activated` are collected for eve
 
 `OverrideUniqueness(filter, uniqueness, loosen?, requires?)`: `uniqueness` 1 to 4 is how many cards of the title may be in play and in the owner's dead pile together; 4 is no limit at all (`PlayUtils.checkUniqueness`), so "not unique" is `uniqueness: 4` with `loosen: true` (92_24, 94_16). Without `loosen` the override restricts, and a restricting override beats a loosening one.
 
-`cantAddBurdens` (modifier): burdens cannot be added by the cards `filter` names (default `any`); `requires` as usual. As an effect the burden is simply not added; as a cost it cannot be paid, so the action is not offered. (Until 2026-10-07 the word built `cantRemoveBurdens`: F-0159.)
+`cantAddBurdens` (modifier): burdens cannot be added by the cards `filter` names (default `any`); `requires` as usual. As an effect the burden is simply not added; as a cost it cannot be paid, so the action is not offered. (Until 2026-10-07 the word built `cantRemoveBurdens`: F-0159.) No printed card uses the word, and since engine pass 27 no test exercises it.
 
 `Memorize` / `MemorizeActive` take `hindered: true` to take hindered cards into the memory (default false), as on `ChooseActiveCards`. `ReturnToHand` takes `override: hindered`, as `Discard` does. So for a text that names its cards by side alone (Q-0098): `override: hindered` on Discard and ReturnToHand, `hindered: true` on ChooseActiveCards, Memorize, CanSpot and ForEachYouCanSpot. "All ..." and "each ..." by side alone reach hindered cards as "a ..." does (Ketura, 2026-10-07: "Good call on all/each").
 

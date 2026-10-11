@@ -1524,11 +1524,13 @@ public class NoEffectFlagTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					// A definition of the tests' own (testCards.hjson): "Fellowship: Add (1) to make a companion
-					// strength +1 (limit +2, or +4 if you can spot a Dwarf)."  Its cap is a value, not a number.
-					put("banner", "0_8001");
-					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8
-					put("gimli", "1_13");       // Gimli, Son of Gloin: a Dwarf
+					// Ulaire Nelya, Glorified to Conquer: fierce, strength 11, vitality 3.  "Skirmish: Exert this
+					// minion to make a Nazgul strength +1 for each of your sites on the adventure path (limit +2,
+					// or limit +5 if you can spot another Nazgul)."  Its cap is a value, not a plain number: the
+					// one printed card whose cap is.
+					put("nelya", "103_76");
+					put("attea", "103_61");     // Ulaire Attea, Khamul of the East: a [raider] Nazgul; his text needs 3 burdens
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, vitality 4
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -1540,47 +1542,44 @@ public class NoEffectFlagTests
 	public void ABonusWhoseCapIsAValueIsFlaggedOnceTheCapAsItStandsIsSpent() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetValueLimitScenario();
 
-		var banner = scn.GetFreepsCard("banner");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		var gimli = scn.GetFreepsCard("gimli");
+		var nelya = scn.GetShadowCard("nelya");
+		var attea = scn.GetShadowCard("attea");
 		scn.MoveCompanionsToTable(aragorn);
-		scn.MoveCardsToSupportArea(banner);
 
 		scn.StartGame();
+		scn.SkipToSite(3);
+		scn.MoveMinionsToTable(nelya);
+		scn.SkipToAssignments();
 
-		assertEquals(8, scn.GetStrength(aragorn));
-		// No Dwarf: the limit is +2.  Two uses, each +1, neither of them marked.
-		for (int used = 0; used < 2; used++) {
-			assertEquals("false", scn.FreepsActionNoEffect(banner));
-			scn.FreepsUseCardAction(banner);
-			scn.FreepsChooseCard(aragorn);
-			assertEquals(8 + used + 1, scn.GetStrength(aragorn));
-		}
+		// At site 4 the Shadow player's sites 2, 3 and 4 are on the adventure path: 3 a use, were there no limit.
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		scn.FreepsAssignToMinions(aragorn, nelya);
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.FreepsPass();
 
-		// At +2 the ability is still offered, and marked as at its limit: used, it costs its (1) and adds nothing.
-		assertEquals("limit", scn.FreepsActionNoEffect(banner));
-		assertEquals(2, scn.GetTwilight());
-		scn.FreepsUseCardAction(banner);
-		scn.FreepsChooseCard(aragorn);
-		assertEquals(3, scn.GetTwilight());
-		assertEquals(10, scn.GetStrength(aragorn));
-		assertEquals("limit", scn.FreepsActionNoEffect(banner));
+		// No other Nazgul: the limit is +2.  Nothing has been given, and the ability is not marked.
+		assertEquals(11, scn.GetStrength(nelya));
+		assertEquals("false", scn.ShadowActionNoEffect(nelya));
+		scn.ShadowUseCardAction(nelya);
+		assertEquals(13, scn.GetStrength(nelya));
+		assertEquals(1, scn.GetWoundsOn(nelya));
+		scn.FreepsPass();
 
-		// With a Dwarf to spot the limit is +4, of which 2 are left: the mark goes.
-		scn.MoveCompanionsToTable(gimli);
-		scn.FreepsRefreshDecision();
-		assertEquals("false", scn.FreepsActionNoEffect(banner));
-		scn.FreepsUseCardAction(banner);
-		scn.FreepsChooseCard(aragorn);
-		assertEquals(11, scn.GetStrength(aragorn));
-		assertEquals("false", scn.FreepsActionNoEffect(banner));
-		scn.FreepsUseCardAction(banner);
-		scn.FreepsChooseCard(aragorn);
-		assertEquals(12, scn.GetStrength(aragorn));
+		// At +2 the ability is still offered, and marked as at its limit.
+		assertTrue(scn.ShadowActionAvailable(nelya));
+		assertEquals("limit", scn.ShadowActionNoEffect(nelya));
 
-		// And at +4 it is marked again.
-		assertEquals("limit", scn.FreepsActionNoEffect(banner));
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		// With another Nazgul to spot the limit is +5, of which 3 are left: the mark goes.
+		scn.MoveMinionsToTable(attea);
+		scn.ShadowRefreshDecision();
+		assertEquals("false", scn.ShadowActionNoEffect(nelya));
+
+		scn.ShadowUseCardAction(nelya);
+		scn.ShadowChooseCard(nelya);
+		assertEquals(2, scn.GetWoundsOn(nelya));
+		assertEquals(16, scn.GetStrength(nelya));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 
 	protected VirtualTableScenario GetCapOnSomethingElseScenario() throws CardNotFoundException, DecisionResultInvalidException {

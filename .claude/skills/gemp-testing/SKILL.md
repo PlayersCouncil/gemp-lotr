@@ -28,7 +28,7 @@ scenario and tutorial system drives games the same way:
 | `Actions`, `Choices`, `Decisions`, `GameProcedures`, `GameProperties`, `CardProperties`, `PileProperties`, `Skirmishes`, `ZoneManipulation` | same folder | Interfaces of default methods that `VirtualTable` implements: partial classes in all but name. `TableBase` holds the handful of accessors they are built on. |
 | `VirtualTableScenario` | `gemp-lotr-server/src/test/java/com/gempukku/lotro/framework/` | The unit-test table: two made-up players, every named card put in both decks, the shared card library, Race to Mount Doom set-up. This is the `scn` in every test. |
 | `TestConstants`, `Assertions`, `AdHocEffects` | same test folder | Canned sites, Ring-bearers, Rings, Maps and formats; zone assertions; ad hoc modifiers and effects. Test sources only. |
-| `LoadedLibraries` | same test folder | No part of the rig: the base class of the server tests that play no game (leagues, tournaments, merchants, packs, formats). Three static fields, `_cardLibrary`, `_formatLibrary`, `_productLibrary`, loaded once as the server loads them; its card library holds the real cards only, not the tests' own. It took the place of `at/AbstractAtTest`. |
+| `LoadedLibraries` | same test folder | No part of the rig: the base class of the server tests that play no game (leagues, tournaments, merchants, packs, formats). Three static fields, `_cardLibrary`, `_formatLibrary`, `_productLibrary`, loaded once as the server loads them. It took the place of `at/AbstractAtTest`. |
 | `ScenarioTable` | `gemp-lotr-server/src/main/java/com/gempukku/lotro/scenario/` | The other subclass of `VirtualTable`: a table laid out from a scenario file, for tutorials and puzzles, with a person in one seat. |
 
 The consequence to keep in mind: **anything added under `virtualtable/` ships in the server and becomes a public
@@ -153,7 +153,7 @@ surprises in this campaign were one of these.
 - **Hidden zones, reveals, shuffles and the game log:** Searching a deck shows the deck first · "Look at an opponent's hand" is a showing to the looker alone · A bar on looking at or revealing a hand is asked by each definition word for itself, and one word does not ask it · A look at the top cards of an EMPTY draw deck still shows, with nothing in it · Whether a deck was shuffled · A "play ... from your draw deck" action with no cost is offered whatever the deck holds, and a look that plays nothing is a use · The Rule of 4 · A player barred from taking cards into hand draws only when reconciling · A card being shown is listed as not selectable · A card made known by the game log alone · A hand played revealed is read from what each seat is sent · A shuffle into a draw deck always shuffles.
 - **Hinder, The One Ring and Maps:** The Ring-bearer is the rules' to protect, hindered or not · A guard for a thing no card should be able to do is stapled on, never an invented card · A hindered card that is shuffled into a draw deck is hindered no longer · A hindered card is still borne · A card on a hindered bearer is not borne by "a companion" · The rig reads a hindered card's printed numbers · The One Ring is never discarded · No cheat puts The One Ring on: the Ring's own text does, and which Ring decides how · Maps and meta-sites cannot be hindered · A fellowship with no unhindered companion is not asked to move again (F-0315).
 - **Tables and formats:** A Shadows-block site path · "Replace the fellowship's current site with a site from your adventure deck" wants a Shadows-block path · The sites of `TowersSites` have texts that reach a test · A battleground or a forest site needs no cheat · A Hobbit-set card (sets 30 to 33) stands on the usual table for now · Both players hold the same nine sites · A table in a format that uses Maps · Validating a deck.
-- **Test cards and the test booster pack:** Definitions of the tests' own · Test cards · Test Seal 0_8004 · Test Mirror 0_8005 · Test Whetstone 0_8013 · Test Shelf 0_8016 · Test Fork 0_8018 · Test Tourniquet 0_8019 · Test Herald 0_8020 · Test Porter 0_8023 · Test Roster 0_8024 · Test Dredge 0_8027 · Test Muster 0_8029 · The test booster pack · An event played "ignoring all costs" pays nothing in its own text either (F-0316).
+- **No test cards, and the test booster pack:** No card is invented for a test · A test of whether a definition is LOADED · A burden that cannot be added · Who heals · A card that names something as it is played has stored nothing when it is cheated into play · `transferableTo(<filter>)` · A player's account name · A search of another player's draw deck · The test booster pack · An event played "ignoring all costs" pays nothing in its own text either (F-0316).
 
 ## Choosing helper cards
 
@@ -218,9 +218,10 @@ new VirtualTableScenario(cards, sites, frodo, ring, format, "94_5", null, null, 
 The last answer is the higher bidder's seat ("Go first" / "Go second"); assertions made inside the handler count.
 A player left out of the standings has no place. The two players' account names are "Free Peoples Player" and
 "Shadow Player" (the constants `P1`, `P2`) unless the constructor's last two arguments seat them under others
-(G-0039: `..., bidHandler, placements, freepsPlayerName, shadowPlayerName`, null for the usual name). That is for
-the mechanic test of a condition on a player's name (`PlayerIs`: mechanics/PlayerIsRequirementTests, with made-up
-names); a card's own tests do not read the account names in its definition (Q-0190: B, 94_5). At such a table the
+(G-0039: `..., bidHandler, placements, freepsPlayerName, shadowPlayerName`, null for the usual name). That was built
+for the mechanic test of a condition on a player's name (`PlayerIs`), which laid invented cards and went with them
+in engine pass 27; the rig's own test of it stays (virtualtable/NamedSeatTests). A card's own tests do not read the
+account names in its definition (Q-0190: B, 94_5). At such a table the
 players are `scn.P1()` and `scn.P2()`, never the constants, and placements are keyed by the names given.
 A modifier of deck building (92_1, 92_19, 94_22: `DeckBuildingOverride`) drives no game: it is tested with
 `DeckValidationScenario`, validating with the card's own overrides and never a context built by hand (pitfalls,

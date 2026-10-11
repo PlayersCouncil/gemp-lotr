@@ -9,9 +9,9 @@ import com.gempukku.lotro.packs.ProductLibrary;
  * The card, format and product libraries as the server loads them, built once for a run of tests.
  *
  * The base of a test of a server class that needs the real libraries and no game: a league, a tournament, a
- * merchant, a pack, a format definition, the libraries themselves.  The card library here holds the real cards
- * and nothing else.  A test that plays a game stands on VirtualTableScenario instead, whose own card library has
- * the tests' cards beside the real ones (TestCardLibrary).
+ * merchant, a pack, a format definition, the libraries themselves.  A test that plays a game stands on
+ * VirtualTableScenario instead, which loads the same libraries for itself.  Either way the card library holds
+ * the printed cards and nothing else.
  */
 public abstract class LoadedLibraries {
     public static LotroCardBlueprintLibrary _cardLibrary;

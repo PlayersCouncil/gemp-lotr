@@ -25,8 +25,9 @@ import static org.junit.Assert.*;
  *
  * The rule is IdleOffers.  Most effects could already say that they are certain to do nothing (nobody to heal,
  * no threat that can be added, no site to take): that is the forecast the no-effect flag and the preventions are
- * judged from.  Some kinds of effect were taught one thing more, for this rule alone.  Each has its tests
- * here, both ways: the offer made on a board where the effect can do something, and not made where it cannot.
+ * judged from.  Some kinds of effect were taught one thing more, for this rule alone.  Each but the four named
+ * below has its tests here, both ways: the offer made on a board where the effect can do something, and not made
+ * where it cannot.
  * <ul>
  * <li>reinforcing a token: no card bears a token of that culture, or a card says that culture tokens cannot be
  * reinforced (Redhorn Pass 13_194);</li>
@@ -49,9 +50,14 @@ import static org.junit.Assert.*;
  * <li>a card placed from a discard pile beneath a draw deck: no such card in the pile.</li>
  * </ul>
  *
- * Four of the kinds are shown with the tests' own cards (Test Muster, Test Salve, Test Almanac, Test Refrain):
- * every real card that has one of them in an offer that costs nothing carries a requirement written by hand
- * before the rule was built, which answers first.  Those requirements stay.
+ * Four of the kinds have no test: making an ally take part in skirmishes, a restore, a card chosen from a
+ * discard pile, and an effect that is repeated.  Every printed card that has one of them in an offer that costs
+ * nothing carries a requirement written by hand before the rule was built, which answers first (Dunlending
+ * Warrior 4_18 and Dunlending Ravager 4_15; Desert Wind Scout 103_48; Greatest Kingdom of My People 51_16; Race
+ * Text 94_4), so no printed card shows what the effect says of itself, and no card is invented to show it
+ * (Ketura, 2026-10-11).  Those requirements stay, and so does the engine's teaching of the four.  (Crown of Erebor
+ * 32_1 has the first kind with no such requirement; it is of the Hobbit sets, which have no recorded game text
+ * and are worked last.)
  *
  * What the rule leaves alone is here too: an ability with a cost is offered though its effect will do nothing
  * (it is flagged), and an optional draw is offered with the draw deck empty (Ketura on Q-0029: "let it ask with
@@ -103,29 +109,6 @@ public class AnOfferThatCostsNothingAndWouldDoNothingIsNotMadeTests
 				{{
 					put("toldea", "1_236");
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a companion who is not the Ring-bearer
-				}},
-				VirtualTableScenario.FellowshipSites,
-				VirtualTableScenario.FOTRFrodo,
-				VirtualTableScenario.RulingRing
-		);
-	}
-
-	// The tests' own cards, each an ability with no cost and no requirement:
-	// Test Muster, "Maneuver: Make an ally participate in skirmishes until the regroup phase."
-	// Test Salve, "Fellowship: Restore a Free Peoples card."
-	// Test Almanac, "Fellowship: Choose a Free Peoples card in your discard pile and take it into hand."
-	// Test Refrain, "Fellowship: Heal a companion, and again for as long as a companion was healed."
-	protected VirtualTableScenario GetTestCardScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(
-				new HashMap<>()
-				{{
-					put("muster", "0_8029");
-					put("salve", "0_8030");
-					put("almanac", "0_8031");
-					put("refrain", "0_8032");
-					put("aragorn", "1_89");     // Aragorn, Ranger of the North: vitality 4; a Maneuver ability used only on purpose
-					put("elrond", "1_40");      // Elrond, Lord of Rivendell: an ally, home site 3; at site 2 he takes no part in skirmishes
-					put("runner", "1_178");     // Goblin Runner: a minion, so that the maneuver phase is played
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -641,111 +624,6 @@ public class AnOfferThatCostsNothingAndWouldDoNothingIsNotMadeTests
 		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
 		assertFalse(scn.ShadowActionAvailable(toldea));
 		assertFalse(scn.IsCharAssigned(frodo));
-	}
-
-	@Test
-	public void MakingAnAllyTakePartInSkirmishesIsOfferedWhereThereIsAnAllyAndNotWhereThereIsNone() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetTestCardScenario();
-
-		var muster = scn.GetFreepsCard("muster");
-		var elrond = scn.GetFreepsCard("elrond");
-		var runner = scn.GetShadowCard("runner");
-		scn.MoveCardsToSupportArea(muster);
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(runner);
-		scn.SkipToPhase(Phase.MANEUVER);
-
-		// No ally is in play.
-		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
-		assertFalse(scn.FreepsActionAvailable(muster));
-
-		scn.MoveAlliesToTable(elrond);
-		scn.FreepsRefreshDecision();
-		assertTrue(scn.FreepsActionAvailable(muster));
-		assertFalse(scn.FreepsCanAssign(elrond));
-
-		scn.FreepsUseCardAction(muster);
-		assertTrue(scn.FreepsCanAssign(elrond));
-		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
-	}
-
-	@Test
-	public void ARestoreIsOfferedWhereACardCanBeRestoredAndNotWhereNoneCan() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetTestCardScenario();
-
-		var salve = scn.GetFreepsCard("salve");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCardsToSupportArea(salve);
-		scn.MoveCompanionsToTable(aragorn);
-
-		scn.StartGame();
-
-		// No card is hindered.
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-		assertFalse(scn.FreepsActionAvailable(salve));
-
-		scn.HinderCard(aragorn);
-		scn.FreepsRefreshDecision();
-		assertTrue(scn.FreepsActionAvailable(salve));
-
-		scn.FreepsUseCardAction(salve);
-		assertFalse(scn.IsHindered(aragorn));
-		// Nothing is hindered again, and the offer has gone.
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-		assertFalse(scn.FreepsActionAvailable(salve));
-	}
-
-	@Test
-	public void ACardChosenFromADiscardPileIsOfferedWhereThereIsOneToChooseAndNotWhereThereIsNone() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetTestCardScenario();
-
-		var almanac = scn.GetFreepsCard("almanac");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCardsToSupportArea(almanac);
-
-		scn.StartGame();
-
-		// The discard pile is empty.
-		assertEquals(0, scn.GetFreepsDiscardCount());
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-		assertFalse(scn.FreepsActionAvailable(almanac));
-
-		scn.MoveCardsToDiscard(aragorn);
-		scn.FreepsRefreshDecision();
-		assertTrue(scn.FreepsActionAvailable(almanac));
-
-		scn.FreepsUseCardAction(almanac);
-		assertInHand(aragorn);
-		// The pile is empty again, and the offer has gone.
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-		assertFalse(scn.FreepsActionAvailable(almanac));
-	}
-
-	@Test
-	public void ARepeatedEffectIsOfferedWhereItWouldDoSomethingTheFirstTimeAndNotWhereItWouldNot() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetTestCardScenario();
-
-		var refrain = scn.GetFreepsCard("refrain");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCardsToSupportArea(refrain);
-		scn.MoveCompanionsToTable(aragorn);
-
-		scn.StartGame();
-
-		// No companion is wounded.
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-		assertFalse(scn.FreepsActionAvailable(refrain));
-
-		scn.AddWoundsToChar(aragorn, 2);
-		scn.FreepsRefreshDecision();
-		assertTrue(scn.FreepsActionAvailable(refrain));
-
-		// One wound is healed, and then the other.
-		scn.FreepsUseCardAction(refrain);
-		assertEquals(0, scn.GetWoundsOn(aragorn));
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-		assertFalse(scn.FreepsActionAvailable(refrain));
 	}
 
 	@Test

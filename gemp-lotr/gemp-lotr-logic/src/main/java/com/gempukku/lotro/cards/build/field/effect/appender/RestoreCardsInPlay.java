@@ -55,6 +55,8 @@ public class RestoreCardsInPlay implements EffectAppenderProducer {
                 });
 
         // Taught for Q-0224 (IdleOffers): with no card that can be restored nothing is restored.
+        // No test exercises this (engine pass 27): where a printed card has it in an offer that pays nothing
+        // (Desert Wind Scout 103_48), a requirement written by hand answers first (IdleOffers).
         return TaughtForecast.actsOnWhatItFinds(result, cardResolver);
     }
 

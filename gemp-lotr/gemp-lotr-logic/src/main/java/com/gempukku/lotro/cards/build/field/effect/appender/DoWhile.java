@@ -28,6 +28,8 @@ public class DoWhile implements EffectAppenderProducer {
 
         // Taught for Q-0224 (IdleOffers): what is done at least once, and would do nothing the first time, does
         // nothing (it is repeated only for what it did: shapes.md, F-0322).
+        // No test exercises this (engine pass 27): where a printed card has it in an offer that pays nothing
+        // (Race Text 94_4), a requirement written by hand answers first (IdleOffers).
         return TaughtForecast.teach(new DelayedAppender() {
             private boolean conditionsMatch(ActionContext actionContext) {
                 for (Requirement condition : conditions) {

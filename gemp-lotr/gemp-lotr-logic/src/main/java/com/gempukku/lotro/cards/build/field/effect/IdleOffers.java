@@ -32,6 +32,16 @@ import java.util.Set;
  * an action whose definition names its own "noEffectUnless"; and an effect that does nothing only because a draw
  * deck is empty (an optional draw is still offered then: Q-0029).
  *
+ * Four of the kinds taught are exercised by no test (engine pass 27; Ketura, 2026-10-11: no card is invented for
+ * a test).  Every printed card that has one of them in an offer that pays nothing carries a requirement written by
+ * hand, which answers before this rule is asked, so no printed card shows what the effect says of itself: an ally
+ * made to take part in skirmishes (EnableParticipationInSkirmishes: Dunlending Warrior 4_18, Dunlending Ravager
+ * 4_15), a restore (RestoreCardsInPlay: Desert Wind Scout 103_48), a card chosen from a discard pile
+ * (ChooseCardsFromDiscard: Greatest Kingdom of My People 51_16) and a repeated effect (DoWhile: Race Text 94_4).
+ * One card has the first of them with no such requirement, Crown of Erebor 32_1 of the Hobbit sets, which have no
+ * recorded game text to test against and are worked last.  The teaching of the four stays; the other kinds have
+ * their tests on printed cards (mechanics/AnOfferThatCostsNothingAndWouldDoNothingIsNotMadeTests).
+ *
  * The switch (the system property gemp.idleOffers, or the environment variable GEMP_IDLE_OFFERS) is kept for
  * tests and for measuring; the game runs in the mode TAUGHT.
  */

@@ -29,6 +29,8 @@ public class Card_94_004_Tests
 					put("armor2", "1_92");
 					put("rsword", "1_112");     // Ranger's Sword: a possession; "Bearer must be Aragorn."
 					put("barahir", "6_55");     // Ring of Barahir: an artifact; "Bearer must be Aragorn."
+					put("bow", "7_94");         // Gondor Bow: a possession (ranged weapon); "Bearer must be a [gondor] Man."; its Skirmish ability is never used
+					put("anduril", "7_79");     // Anduril, Flame of the West: an artifact (hand weapon); "Bearer must be Aragorn. ... He ... cannot bear other weapons."; its Regroup ability is never used
 					put("slayer", "3_93");      // Morgul Slayer: an Orc minion, vitality 2; "Regroup: Exert this minion to wound a companion (except the Ring-bearer)."
 					put("slayer2", "3_93");
 					put("brigand", "4_10");     // Dunlending Brigand: a Man minion with no text
@@ -464,6 +466,104 @@ public class Card_94_004_Tests
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 		assertInZone(Zone.DEAD, warrior);
 		assertInZone(Zone.DISCARD, cloak);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void NotOfferedWhenTheOnlyOtherBearerItsTextAllowsAlreadyBearsAnItemOfItsClass() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var knight = scn.GetFreepsCard("knight");
+		var gimli = scn.GetFreepsCard("gimli");
+		var armor = scn.GetFreepsCard("armor");
+		var knightsArmor = scn.GetFreepsCard("armor2");
+		var slayer = scn.GetShadowCard("slayer");
+
+		scn.MoveCompanionsToTable(aragorn, knight, gimli);
+		scn.AttachCardsTo(aragorn, armor);
+		scn.AttachCardsTo(knight, knightsArmor);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(slayer);
+		scn.AddWoundsToChar(aragorn, 3);
+		scn.SkipToPhase(Phase.REGROUP);
+
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(slayer);
+		scn.ShadowChooseCard(aragorn);
+
+		// "Bearer must be a Man": the Knight is the only other Man, and a character bears one armor (CR 4.2
+		// "bearer").  Gimli and Frodo are no Men.
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertInZone(Zone.DEAD, aragorn);
+		assertInZone(Zone.DISCARD, armor);
+		assertAttachedTo(knightsArmor, knight);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void NotOfferedWhenTheOnlyOtherBearerItsTextAllowsIsKeptFromBearingItByAnotherCard() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
+
+		var knight = scn.GetFreepsCard("knight");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var bow = scn.GetFreepsCard("bow");
+		var anduril = scn.GetFreepsCard("anduril");
+		var slayer = scn.GetShadowCard("slayer");
+
+		scn.MoveCompanionsToTable(knight, aragorn, gimli);
+		scn.AttachCardsTo(knight, bow);
+		scn.AttachCardsTo(aragorn, anduril);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(slayer);
+		// Vitality 3 with 2 wounds: the Slayer's wound kills him.
+		scn.AddWoundsToChar(knight, 2);
+		scn.SkipToPhase(Phase.REGROUP);
+
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(slayer);
+		scn.ShadowChooseCard(knight);
+
+		// "Bearer must be a [gondor] Man": Aragorn is the only other one, and Anduril's "cannot bear other weapons"
+		// keeps the Bow from him.
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertInZone(Zone.DEAD, knight);
+		assertInZone(Zone.DISCARD, bow);
+		assertAttachedTo(anduril, aragorn);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void NotOfferedWhileTheOnlyOtherBearerItsTextAllowsIsHindered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var knight = scn.GetFreepsCard("knight");
+		var gimli = scn.GetFreepsCard("gimli");
+		var armor = scn.GetFreepsCard("armor");
+		var slayer = scn.GetShadowCard("slayer");
+
+		scn.MoveCompanionsToTable(aragorn, knight, gimli);
+		scn.AttachCardsTo(aragorn, armor);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(slayer);
+		scn.AddWoundsToChar(aragorn, 3);
+		scn.SkipToPhase(Phase.REGROUP);
+		// The Knight, the only other Man, is hindered by the rig (CR 5.0 "hinder").
+		scn.HinderCard(knight);
+
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(slayer);
+		scn.ShadowChooseCard(aragorn);
+
+		assertTrue(scn.IsHindered(knight));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertInZone(Zone.DEAD, aragorn);
+		assertInZone(Zone.DISCARD, armor);
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 

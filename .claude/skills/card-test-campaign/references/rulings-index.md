@@ -44,7 +44,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A reveal that a cost buys, from an empty draw deck (Q-0163: B)
 - A sentence after a phase action belongs to that action (Q-0164: A, as built)
 - Mordor Fiend 60_91 loses its "you may" (Q-0165)
-- Real cards and real mechanics before invented ones (Q-0166: A)
+- Real cards and real mechanics before invented ones (Q-0166: A) [Q-0241]
 - Kept as built: Q-0151, Q-0153, Q-0154, Q-0156, Q-0157 ("Keep both"), and Q-0155 ("I'm okay with keeping I think but the order really doesn't matter ... [F-0283]
 - Her third notes of 2026-10-09 (the whole of them: `orchestrator/answers/2026-10-09-c.md`)
 - A meta-site that says "you" or "your" anywhere binds its owner alone (Q-0183, Race Text 92_9; Q-0188)

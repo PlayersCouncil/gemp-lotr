@@ -26,9 +26,11 @@ import static org.junit.Assert.*;
  * of them, so that a branch that can be done in part still is (Dwarrowdelf Chamber with one companion to exert
  * where it wants two).  What has gone is the question in that second case when each branch says for itself that
  * it is certain to do nothing: nobody to exert, heal or wound, no burden to remove, no site to liberate.  A
- * branch that cannot tell keeps the question, and so does a branch whose first effect only remembers something
- * for the next: the later effect cannot be asked before that memory is filled.  (Until engine pass 26 every
- * branch of several effects, and every one that holds others, kept it: ChoiceWithABranchThatHoldsOthersTests.)
+ * branch that cannot tell keeps the question.  So does a branch whose first effect only remembers something for
+ * the next, since the later effect cannot be asked before that memory is filled: no printed card's choice has
+ * such a branch, and that is built and not tested (Ketura, 2026-10-11: a test shows what a card that exists
+ * does).  (Until engine pass 26 every branch of several effects, and every one that holds others, kept the
+ * question: ChoiceWithABranchThatHoldsOthersTests.)
  *
  * A reveal from a draw deck with nothing in it is certain to do nothing as well (engine pass 21, Q-0163), so a
  * choice of which deck to reveal from is not put while every such deck is empty.
@@ -102,21 +104,6 @@ public class ChoiceWithNothingOnAnyBranchTests
 					put("site8", "1_356");
 					put("site9", "1_360");
 				}},
-				VirtualTableScenario.FOTRFrodo,
-				VirtualTableScenario.RulingRing
-		);
-	}
-
-	protected VirtualTableScenario GetRememberingScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(
-				new HashMap<>()
-				{{
-					// Test Fork (the tests' own card): "Fellowship: Add (1) to exert a companion or heal each
-					// companion", the second branch built of two effects: "remember the companions", then
-					// "heal those remembered".
-					put("fork", "0_8018");
-				}},
-				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -314,29 +301,6 @@ public class ChoiceWithNothingOnAnyBranchTests
 		assertFalse(scn.FreepsDecisionAvailable("Choose action to perform"));
 		assertEquals(3, scn.GetWoundsOn(frodo));
 		assertEquals(4, scn.GetCurrentSiteNumber());
-	}
-
-	@Test
-	public void ABranchThatFirstRemembersSomethingKeepsTheQuestion() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetRememberingScenario();
-
-		var fork = scn.GetFreepsCard("fork");
-		var frodo = scn.GetRingBearer();
-		scn.MoveCardsToSupportArea(fork);
-
-		scn.StartGame();
-		scn.AddWoundsToChar(frodo, 3);
-
-		// Frodo is exhausted, so nobody can exert; and until the second branch is taken "those remembered"
-		// are nobody, so its heal, asked now, would find nobody to heal.  Neither branch can be carried out
-		// in full as things stand, and the second will heal Frodo.
-		scn.FreepsUseCardAction(fork);
-
-		assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
-		scn.FreepsChoose("Heal each companion");
-
-		assertEquals(2, scn.GetWoundsOn(frodo));
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test

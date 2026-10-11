@@ -130,6 +130,7 @@ public class Card_13_023_ErrataTests
 		scn.ShadowPass();
 		// A [gondor] event on Aragorn, who is in no skirmish. The response is offered again and taken.
 		assertEquals(8, scn.GetStrength(aragorn));
+		scn.MarkGameLog();
 		scn.FreepsPlayCard(sentinels);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(elf));
 		scn.FreepsAcceptOptionalTrigger();
@@ -144,6 +145,9 @@ public class Card_13_023_ErrataTests
 		assertInZone(Zone.DECK, sentinels);
 		assertSame(sentinels, scn.GetFreepsTopOfDeck());
 		assertEquals(deck + 1, scn.GetFreepsDeckCount());
+		// It went there from its play, not by way of the hand.
+		assertTrue(scn.GameLogSinceMarkSays("on top of their deck"));
+		assertFalse(scn.GameLogSinceMarkSays("back into hand"));
 		// The event still does what it says.
 		assertEquals(10, scn.GetStrength(aragorn));
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());

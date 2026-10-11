@@ -523,6 +523,50 @@ public class Card_V3_076_Tests
 	}
 
 	@Test
+	public void WhenTheOtherNazgulHasLeftPlayASecondUseAddsNothingToTheThreeAlreadyGivenAndTakesNoneBack() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var nelya = scn.GetShadowCard("nelya");
+		var attea = scn.GetShadowCard("attea");
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+		scn.MoveMinionsToTable(nelya, attea);
+		scn.SkipToAssignments();
+
+		// At site 4 the Shadow player's sites 2, 3 and 4 are on the path.
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		scn.FreepsAssignToMinions(aragorn, nelya);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.FreepsPass();
+
+		// Another Nazgul to spot: the limit is +5, and the first use gives 3.
+		scn.ShadowUseCardAction(nelya);
+		scn.ShadowChooseCard(nelya);
+		// 11 + 3
+		assertEquals(14, scn.GetStrength(nelya));
+		assertEquals(1, scn.GetWoundsOn(nelya));
+
+		// The other Nazgul leaves play (taken off the table by the rig): the limit is +2 now, and 3 have been
+		// given in this skirmish.
+		scn.MoveCardsToDiscard(attea);
+		scn.FreepsPass();
+		assertInZone(Zone.DISCARD, attea);
+		assertTrue(scn.ShadowActionAvailable(nelya));
+
+		// She is the only Nazgul left, so she is the one named.  The use exerts her and adds nothing; what was
+		// given under the larger limit stays.
+		scn.ShadowUseCardAction(nelya);
+
+		assertEquals(2, scn.GetWoundsOn(nelya));
+		assertEquals(14, scn.GetStrength(nelya));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
+
+	@Test
 	public void IsNotOfferedWhenSheIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

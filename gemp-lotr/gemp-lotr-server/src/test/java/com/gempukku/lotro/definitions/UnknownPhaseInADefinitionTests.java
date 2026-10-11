@@ -22,9 +22,10 @@ import static org.junit.Assert.*;
  * The same holds for the phases of a DuplicateActionFromPhase modifier ("use special abilities ... as if it were
  * the Fellowship phase").
  *
- * Nothing is played here: each test hands the library a few definitions and reads which of them it kept.  The
- * texts are JSON, which the library reads as it reads HJSON.  No game and no table: plain JUnit, in the package
- * for tests of the definition language (Q-0233).
+ * Kept as a guard of the loader (engine pass 27; Q-0273): no printed card can show a definition being refused, so
+ * the definitions are written here, in the test, and reach no library and no table.  Nothing is played: each
+ * test hands the library a few definitions and reads which of them it kept.  The texts are JSON, which the
+ * library reads as it reads HJSON.  Plain JUnit, in the package for tests of the definition language (Q-0233).
  */
 public class UnknownPhaseInADefinitionTests
 {

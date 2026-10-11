@@ -372,7 +372,7 @@ Which checks a clause lists follows from its words, and the analyst is expected 
   text stays on while its bearer is hindered, and the board holds (4_1: not offered in another companion's
   skirmish, and offered there once the cost is changed in the definition). So too where the burden is the price of preventing something done to
   the Ring-bearer (an assignment to him, 94_26): hindered, he cannot be assigned, and the prevention is never put
-  (Q-0114). Test Seal 0_8004 is the mechanics' card only (Q-0166: A). A hindered Ring-bearer is not spotted
+  (Q-0114). No card is invented for the board (Q-0166: A; Q-0241). A hindered Ring-bearer is not spotted
   either: where the action also spots or counts him, the board keeps that met without him (Get On and Get Away
   54_304: Sméagol beside a hindered Galadriel). An "assign <this character> to a minion" cost: its `C-` board
   is the character already assigned (CR 4.2 "assignment phase": both must be unassigned), by a minion's own

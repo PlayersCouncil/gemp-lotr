@@ -34,8 +34,8 @@ public class VirtualTableScenario extends VirtualTable implements TestConstants,
     protected static ProductLibrary _productLibrary;
 
     static {
-        // The real cards, and beside them the tests' own definitions (see TestCardLibrary).
-        _cardLibrary = new TestCardLibrary();
+        // The printed cards and nothing else: no card is invented for a test (Ketura, 2026-10-11).
+        _cardLibrary = new LotroCardBlueprintLibrary();
         _formatLibrary = new LotroFormatLibrary(new DefaultAdventureLibrary(), _cardLibrary);
         _productLibrary = new ProductLibrary(_cardLibrary);
     }

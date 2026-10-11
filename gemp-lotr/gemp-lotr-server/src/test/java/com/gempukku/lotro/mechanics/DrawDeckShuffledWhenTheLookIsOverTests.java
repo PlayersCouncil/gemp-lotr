@@ -30,12 +30,11 @@ import static org.junit.Assert.*;
  * It is told nothing where no one looked: a card revealed from the top of a deck and then played leaves the rest
  * of the deck as it lay, and a starting fellowship's deck is shuffled once, when the fellowships are down.
  *
- * The deck that is reshuffled is the deck that was looked through.  A search of another player's draw deck that
- * writes its own shuffle (`deck:` names the other player, with `shuffle: true`) shuffles the deck that `deck:`
- * names and leaves the searcher's own alone (the two tests at the end).  It used to shuffle the deck of the
- * player who searched and leave the deck he had looked through as he saw it (F-0369).  The two real cards of
- * that shape, Grond 18_82 and 68_82, write `shuffle: false` and a ShuffleDeck of the deck named (F-0298), which
- * plays the same, so the shape is laid here with two test cards.
+ * The deck that is reshuffled is the deck that was looked through.  A search of ANOTHER player's draw deck is
+ * Grond's (18_82 and 68_82), whose definitions write `shuffle: false` and a ShuffleDeck of the deck named
+ * (F-0298): that card's own tests show the deck searched shuffled and the searcher's left alone.  No printed
+ * card writes `shuffle: true` beside a `deck:` that names the other player; the engine shuffles the deck named
+ * there too (F-0369), and that is not tested (Ketura, 2026-10-11: a test shows what a card that exists does).
  */
 public class DrawDeckShuffledWhenTheLookIsOverTests
 {
@@ -54,13 +53,6 @@ public class DrawDeckShuffledWhenTheLookIsOverTests
 					put("poison1", "8_28");     // Spider Poison: [gollum] possession with the Support Area keyword; its texts need Shelob or a bearer
 					put("poison2", "8_28");
 					put("troop", "1_177");      // Goblin Patrol Troop: [moria] minion, cost 6, site 4, no text
-
-					// Test cards (testCards.hjson), Shadow conditions in the support area, each a search of the
-					// other player's deck that writes `shuffle: true`:
-					// "Shadow: Remove (1) to search the Free Peoples player's draw deck and discard a Free Peoples card found there."
-					put("dredge", "0_8027");
-					// "Shadow: Remove (1) to search the Free Peoples player's draw deck and remove a Free Peoples card found there from the game."
-					put("trawl", "0_8028");
 
 					put("aragorn", "1_89");
 					put("gimli", "1_13");
@@ -207,67 +199,5 @@ public class DrawDeckShuffledWhenTheLookIsOverTests
 		assertEquals(shuffles, scn.GetFreepsDeckShuffleCount());
 		// The game has gone on to the other player's starting fellowship
 		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
-	}
-
-	@Test
-	public void ASearchOfTheOtherPlayersDeckThatDiscardsFromItShufflesTheDeckSearched() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var dredge = scn.GetShadowCard("dredge");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCardsToSupportArea(dredge);
-
-		scn.StartGame();
-		scn.SetTwilight(3);
-		scn.FreepsPass();
-
-		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
-		int freepsShuffles = scn.GetFreepsDeckShuffleCount();
-		int shadowShuffles = scn.GetShadowDeckShuffleCount();
-		int twilight = scn.GetTwilight();
-		assertInZone(Zone.DECK, aragorn);
-
-		assertTrue(scn.ShadowActionAvailable(dredge));
-		scn.ShadowUseCardAction(dredge);
-		scn.ShadowDismissRevealedCards();
-		scn.ShadowChooseCardBPFromSelection(aragorn);
-
-		assertEquals(twilight - 1, scn.GetTwilight());
-		assertInZone(Zone.DISCARD, aragorn);
-		// The Free Peoples deck is the one that was looked through, so it is the one reshuffled; nobody looked
-		// at the Shadow player's own
-		assertEquals(freepsShuffles + 1, scn.GetFreepsDeckShuffleCount());
-		assertEquals(shadowShuffles, scn.GetShadowDeckShuffleCount());
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
-	public void ASearchOfTheOtherPlayersDeckThatRemovesFromTheGameShufflesTheDeckSearched() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var trawl = scn.GetShadowCard("trawl");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCardsToSupportArea(trawl);
-
-		scn.StartGame();
-		scn.SetTwilight(3);
-		scn.FreepsPass();
-
-		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
-		int freepsShuffles = scn.GetFreepsDeckShuffleCount();
-		int shadowShuffles = scn.GetShadowDeckShuffleCount();
-		int twilight = scn.GetTwilight();
-		assertInZone(Zone.DECK, aragorn);
-
-		assertTrue(scn.ShadowActionAvailable(trawl));
-		scn.ShadowUseCardAction(trawl);
-		scn.ShadowDismissRevealedCards();
-		scn.ShadowChooseCardBPFromSelection(aragorn);
-
-		assertEquals(twilight - 1, scn.GetTwilight());
-		assertInZone(Zone.REMOVED, aragorn);
-		assertEquals(freepsShuffles + 1, scn.GetFreepsDeckShuffleCount());
-		assertEquals(shadowShuffles, scn.GetShadowDeckShuffleCount());
-		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

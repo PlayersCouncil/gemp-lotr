@@ -47,7 +47,7 @@ held more than a stat check before the campaign (509 tests between them, most fi
   copies included (Q-0239, 2026-10-11: "no cheating in more copies of a card than their uniqueness level
   allows"): one of a unique title,
   two of a two-dot title. A board that needs more is not a board; say so in the ledger's Notes.
-- No invented card. Nothing is added to `testCards.hjson` or to any definition file for a test (Q-0241,
+- No invented card. Nothing is added to any definition file, in the cards or in the tests, for a test (Q-0241,
   2026-10-11), and no definition text is stapled onto a card to stand in for one. A card test uses printed cards;
   if no printed card can make the board, the test is not written and the Notes say what could not be shown. A
   test shows what a card that exists does ("we're trying to make the cards robust, not *necessarily* the design

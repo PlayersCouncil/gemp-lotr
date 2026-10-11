@@ -184,7 +184,8 @@ required in the text and alter the definition to match." *[2026-10-09]*
 
 **Real cards and real mechanics before invented ones (Q-0166: A).** "Always prefer using real mechanics or cards;
 if we have to invent cards we need to scrutize whether or not we have gotten lost in the weeds." An unpayable "add
-a burden" is shown with a hindered Ring-bearer; Test Seal is the mechanics' card only. *[2026-10-09]*
+a burden" is shown with a hindered Ring-bearer. (The invented card the mechanics tests then kept for it went with
+the rest in engine pass 27: Q-0241.) *[2026-10-09]*
 
 **Kept as built:** Q-0151, Q-0153, Q-0154, Q-0156, Q-0157 ("Keep both"), and Q-0155 ("I'm okay with keeping I
 think but the order really doesn't matter unless a specific counterexample is brought to my attention").
@@ -628,8 +629,8 @@ Hinder at tests established the way to do this: staple the ability you want to s
 text (frodo or a minion depending on side) and invoke it that way. This establishes the artificial test nature of
 the card while also including its creation right there, plus does not expose us to potential issues surrounding
 test cards infecting the ecosystem. If there are any other tests which have invented their own cards, please set
-up a task to convert them to test frankensteins." So: no invented card with an id of its own (none in
-`testCards.hjson` or any definition file); where a mechanics or engine test needs an ability no printed card
+up a task to convert them to test frankensteins." So: no invented card with an id of its own (none in any
+definition file, of the cards or of the tests); where a mechanics or engine test needs an ability no printed card
 shows, the ability is stapled, in the test, onto a card with no usual text. Q-0239, no third copy of a two-dot
 title in play in a card test: "A. Yeah, the standing idea is "no cheating in more copies of a card than their
 uniqueness level allows" for that." (A: the three relaid tests are kept as built.) Q-0237, no hindered candidate
@@ -646,7 +647,8 @@ answers it shows, in its own tests, that it does. *[2026-10-11]*
 **The campaign tests cards, not the definition language (2026-10-11, second and third notes; Q-0241 carried
 further).** "I think the main thing we want to worry about with this campaign is the testing of *cards*. The
 HJSON definition spec, while clearly related to cards, isn't really what we're trying to exhaustively test, and
-it's in flux to serve the cards and the rules." Shown what the 30 invented cards of `testCards.hjson` were for:
+it's in flux to serve the cards and the rules." Shown what the 30 invented cards of the tests' own definitions
+file were for:
 "the only ones that make sense to me are the ones which are testing guards for things that shouldn't happen--not
 being able to discard the One Ring, not being able to hinder Maps, etc. Obviously no card *should* exist that
 does those things, so we have to invent one, but that is the exact situation the ad-hoc actions can handle just

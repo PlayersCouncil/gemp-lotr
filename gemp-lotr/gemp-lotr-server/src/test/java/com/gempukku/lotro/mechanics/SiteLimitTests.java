@@ -36,9 +36,6 @@ public class SiteLimitTests
 					put("sam", "1_311");        // Sam, Son of Hamfast: vitality 4; Fellowship: exert Sam to remove a burden
 					put("runner1", "1_178");    // Goblin Runner: strength 5, a minion so that there are a maneuver phase and a skirmish
 					put("runner2", "1_178");
-					// Test Waystone (the tests' own card), the limit written with the requirement and the count:
-					// "Fellowship or Regroup: Add (1) to heal a companion (limit once per site)."
-					put("waystone", "0_8003");
 					// Cards for the Shadow player's draw deck.
 					put("troop1", "1_177");
 					put("troop2", "1_177");
@@ -159,41 +156,5 @@ public class SiteLimitTests
 		assertEquals(hand + 1, scn.GetShadowHandCount());
 		assertEquals(deck - 1, scn.GetShadowDeckCount());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-	@Test
-	public void ALimitPerSiteWrittenAsARequirementAndACountWithholdsTheAbilityUntilTheFellowshipMoves() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var waystone = scn.GetFreepsCard("waystone");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCardsToSupportArea(waystone);
-		scn.MoveCompanionsToTable(aragorn);
-		scn.AddWoundsToChar(aragorn, 3);
-
-		scn.StartGame();
-
-		// Site 1, the fellowship phase.  Frodo is unwounded, so Aragorn is the one healed.
-		assertEquals(1, scn.GetCurrentSiteNumber());
-		assertTrue(scn.FreepsActionAvailable(waystone));
-
-		scn.FreepsUseCardAction(waystone);
-
-		assertEquals(2, scn.GetWoundsOn(aragorn));
-		assertEquals(1, scn.GetTwilight());
-		// Once at this site: (1) could be added again and Aragorn is still wounded, and it is not offered.
-		assertFalse(scn.FreepsActionAvailable(waystone));
-
-		// With no minion in play the game goes from the move straight to the regroup phase, at site 2.
-		scn.SkipToPhase(Phase.REGROUP);
-
-		assertEquals(2, scn.GetCurrentSiteNumber());
-		assertTrue(scn.FreepsActionAvailable(waystone));
-
-		scn.FreepsUseCardAction(waystone);
-
-		assertEquals(1, scn.GetWoundsOn(aragorn));
-		scn.ShadowPass();
-		assertFalse(scn.FreepsActionAvailable(waystone));
-		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }

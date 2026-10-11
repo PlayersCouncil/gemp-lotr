@@ -45,6 +45,9 @@ public class EnableParticipationInSkirmishes implements EffectAppenderProducer {
                 });
 
         // Taught for Q-0224 (IdleOffers): with nobody to give it to nothing is given.
+        // No test exercises this (engine pass 27): where a printed card has it in an offer that pays nothing
+        // (Dunlending Warrior 4_18, Dunlending Ravager 4_15), a requirement written by hand answers first
+        // (IdleOffers).  Crown of Erebor 32_1 has none, and is of the Hobbit sets, which are worked last.
         return TaughtForecast.actsOnWhatItFinds(result, cardResolver);
     }
 }
