@@ -11,7 +11,7 @@
                                     glossary again
     packet.py <id> --terms          also prints the text of each glossary entry the game text touches
 
-    packet.py --find <regex> [--skip <ids>]
+    packet.py --find <regex> [--title <name>] [--skip <ids>]
                                     for choosing helper cards: every card whose printed fields and game text
                                     match (id, name, culture, type, race, numbers, keywords, game text; nothing of
                                     how it is implemented), without the ids after --skip and their other versions.
@@ -23,14 +23,27 @@
                                     is a [shire] tale), "^" is the start of the id line, and the text has no
                                     markup in it (no <b>, no </b>): "\\[gollum\\] condition",
                                     "^1_.*\\[gandalf\\].* Man\\b".
+                                    The id line opens with the id, two spaces, the name, two spaces, so "^Saruman"
+                                    finds nothing: a title is "^\\S+  Saruman(,|  )" (every Saruman, whatever
+                                    its subtitle), or --title.
+                                    "keywords:" is the card's own keywords, as printed on it: a keyword one of
+                                    its effects gives to another card is not there.
                                     A race or an item class stands after the type and a comma, with no label, in
                                     whatever capitals the definition has: "companion, Dwarf\\b" finds the Dwarf
                                     companions and "possession, pipe\\b" the pipes ("race: Dwarf" finds nothing).
+                                    An event's phase stands there likewise: "event, Skirmish", or "event,
+                                    Maneuver or Skirmish" for one of two phases, so "\\[sauron\\] event,.*Skirmish"
+                                    finds the [sauron] Skirmish events whether or not the game text has the word.
                                     An ally's home stands among the numbers as "home 3F" ("home 3T/6T" for two):
                                     "ally.*home \\S*6" finds the allies whose home is a site 6.
                                     To leave cards out, write it into the regex ("^(?!.*\\[elven\\]).*companion, Elf")
                                     or filter the id lines only (grep -E '^[0-9]' first), since grep -v on the
                                     whole output keeps the other two lines of a card it drops
+    packet.py --title <name> [--find <regex>] [--skip <ids>]
+                                    every card whose title is exactly that, whatever its subtitle, culture or
+                                    type ("--title Sting", "--title Cover of Darkness"): titles are compared as
+                                    the game compares them, without accents or capitals.  With --find as well,
+                                    the cards of that title that also match the regex
     packet.py --defs <ids> [--skip <ids>]
                                     the definitions of helper cards and nothing else, without their cardInfo,
                                     lore and alternate images
@@ -156,8 +169,12 @@ def printed(card_id: str, card) -> list:
     # A race or an item class after the type: "[shire] possession, Pipe", "[gondor] possession, Hand weapon, Shield".
     m = re.search(r"^\s*itemclass\s*:\s*(\[.*?\]|[^\n\[]*)", card.raw, re.S | re.M)
     classes = [w.strip() for w in re.split(r"[\n,\[\]]", m.group(1)) if w.strip()] if m else []
-    first = "%s  %s  %s%s%s%s" % (card_id, g.full_name(card), "[%s] " % culture.lower() if culture else "", kind.lower(),
-                                   ", " + race if race else "", "".join(", " + c for c in classes))
+    # An event's phase, as printed beside its type: "[gondor] event, Skirmish", "event, Maneuver or Skirmish".  No
+    # event of sets 7 to 19 has the word in its game text.
+    phases = g.list_field(card, "timewords?") if kind.lower() == "event" else []
+    first = "%s  %s  %s%s%s%s%s" % (card_id, g.full_name(card), "[%s] " % culture.lower() if culture else "", kind.lower(),
+                                     ", " + race if race else "", "".join(", " + c for c in classes),
+                                     ", " + " or ".join(phases) if phases else "")
     if has("unique").lower() == "true":
         first += "; unique"
     # An ally's home: one site ("allyHome: 3F") or a list of them, one to a line (Aldor 4_262: 3T and 6T).
@@ -171,14 +188,59 @@ def printed(card_id: str, card) -> list:
     if numbers:
         first += "; " + ", ".join(numbers)
     out = [first]
-    m = re.search(r"^\s*keywords?\s*:\s*(\[.*?\]|[^\n\[]*)", card.raw, re.S | re.M)
-    words = [w.strip() for w in re.split(r"[\n,\[\]]", m.group(1)) if w.strip()] if m else []
+    # The card's own keywords: a `keyword:` inside an effect is what the card gives another, and is not printed
+    # as the card's (Royal Guard 102_54 is no valiant ally).
+    words = g.list_field(card, "keywords?")
     if words:
         out.append("keywords: " + ", ".join(words))
     text = g.plain_text(has("gametext"))
     if text:
         out.append(text)
     return out
+
+
+_by_name = None
+
+
+def cards_named(name: str) -> list:
+    """The cards a ruling's heading names: the card of that full name, or every card of the title where the
+    heading gives a title alone ("SIEGE ENGINE")."""
+    global _by_name
+    if _by_name is None:
+        _by_name = {}
+        for cid, c in g.card_index().items():
+            for key in {rulebook.norm(g.full_name(c)), rulebook.norm(c.field("title", "") or "")}:
+                _by_name.setdefault(key, []).append(cid)
+    return sorted(_by_name.get(rulebook.norm(name), ()), key=g.id_sort_key)
+
+
+def held_elsewhere(card_id: str):
+    """For rules.card_rulings: what to say under a ruling on another card that names this one, where that card's
+    ledger already has a Ruling clause for it and a test that claims the clause (Siege Engine 5_60's R1, for Blood
+    Runs Chill 8_3).  The clause is known by the ruling's line number where the ledger cites it, and otherwise by
+    this card's title standing in its text."""
+    title = rulebook.plain(g.plain_text(g.card_index()[card_id].field("title", "") or ""))
+    names_me = re.compile(r"(?<![A-Za-z])" + re.escape(title) + r"(?![A-Za-z])", re.I) if len(title) > 2 else None
+
+    def held(names, line_no) -> str:
+        import lint
+        out = []
+        for other in dict.fromkeys(cid for name in names for cid in cards_named(name) if cid != card_id):
+            clauses, claims, _, _ = lint.parse_ledger(g.ledger_path(other))
+            test = g.test_index().get(other)
+            for clause, (kind, codes, text, _, _) in (clauses or {}).items():
+                cites = bool(re.search(r"\bline %d\b" % line_no, text))
+                if kind != "Ruling" or not (cites or (names_me and names_me.search(rulebook.plain(text)))):
+                    continue
+                tests = list(dict.fromkeys(t for ts in claims.get(clause, {}).values() for t in ts))
+                if not tests or test is None:
+                    continue
+                out.append("Already tested as that card's: %s's ledger has it as %s (%s), claimed by %s. Cite it under "
+                           "Sources and do not test it again."
+                           % (other, clause, "it cites this line" if cites else "a Ruling clause that names this card: read it",
+                              ", ".join("%s.%s" % (test.stem, t) for t in tests)))
+        return "\n".join(out)
+    return held
 
 
 def take_ids(argv, flag) -> list:
@@ -237,21 +299,44 @@ def sister_of(card, skipped):
     return None
 
 
+def take_words(argv, flag) -> str:
+    """What follows a flag, up to the next option, as one string: a title of several words needs no quotes."""
+    if flag not in argv:
+        return ""
+    out = []
+    for a in argv[argv.index(flag) + 1:]:
+        if a.startswith("--"):
+            break
+        out.append(a)
+    return " ".join(out)
+
+
 def find(argv) -> int:
-    i = argv.index("--find")
-    if i + 1 >= len(argv) or argv[i + 1].startswith("--"):
-        print("--find: give a regular expression to try against each card's printed lines")
-        return 1
+    pattern, title = None, None
+    if "--title" in argv:
+        title = take_words(argv, "--title")
+        if not title:
+            print("--title: give the title to look for (--title Sting)")
+            return 1
+    if "--find" in argv:
+        i = argv.index("--find")
+        if i + 1 < len(argv) and not argv[i + 1].startswith("--"):
+            pattern = argv[i + 1]
+        elif title is None:
+            print("--find: give a regular expression to try against each card's printed lines")
+            return 1
     try:
-        wanted = re.compile(argv[i + 1], re.I)
+        wanted = re.compile(pattern, re.I) if pattern is not None else None
     except re.error as e:
-        print("--find: '%s' is not a regular expression (%s)" % (argv[i + 1], e))
+        print("--find: '%s' is not a regular expression (%s)" % (pattern, e))
         return 1
     skipped = shut(take_ids(argv, "--skip"))
     found, left_out = 0, []
     for card_id, card in sorted(g.card_index().items(), key=lambda kv: g.id_sort_key(kv[0])):
+        if title is not None and g.sanitized_title(card.field("title", "")) != g.sanitized_title(title):
+            continue
         lines = printed(card_id, card)
-        if not wanted.search("\n".join(lines)):
+        if wanted is not None and not wanted.search("\n".join(lines)):
             continue
         if card_id in skipped:
             left_out.append(card_id)
@@ -260,14 +345,28 @@ def find(argv) -> int:
         print(lines[0])
         for line in lines[1:]:
             print("    " + line)
-    print("%d card(s) match /%s/%s" % (found, argv[i + 1], "; left out as shut: " + ", ".join(left_out) if left_out else ""))
+    asked = " and ".join(([] if title is None else ["have the title \"%s\"" % title]) + ([] if pattern is None else ["match /%s/" % pattern]))
+    print("%d card(s) %s%s" % (found, asked, "; left out as shut: " + ", ".join(left_out) if left_out else ""))
     if not found and not left_out:
-        # What a pattern that finds nothing most often got wrong about the text it is tried against.
-        if re.search(r"</?[A-Za-z]+>", argv[i + 1]):
+        # What a search that finds nothing most often got wrong about the text it is tried against.
+        if title is not None:
+            near = sorted({g.plain_text(c.field("title", "")) for c in g.card_index().values()
+                           if g.sanitized_title(title) in g.sanitized_title(c.field("title", ""))})
+            print("(--title is the whole title, without the subtitle%s)"
+                  % ("; titles that have those words in them: " + ", ".join(near[:8]) + (" ..." if len(near) > 8 else "") if near and pattern is None
+                     else ("; %d card(s) have the title, and none of them matches the regex" % sum(
+                         1 for c in g.card_index().values() if g.sanitized_title(c.field("title", "")) == g.sanitized_title(title))
+                           if pattern is not None else "")))
+        if pattern is None:
+            return 0
+        if re.search(r"</?[A-Za-z]+>", pattern):
             print("(the text searched has no markup: a pattern with a tag in it, like <b> or </b>, matches nothing)")
-        if re.search(r" \\?\| ", argv[i + 1]):
+        if re.match(r"\^\(?[A-Za-z]", pattern):
+            print("(\"^\" is the start of the id line, which opens with the card's id and not its name: for a title, "
+                  "--title <name>, or '^\\S+  <title>(,|  )')")
+        if re.search(r" \\?\| ", pattern):
             print("(a card's lines are joined by a newline, not by \" | \": write \\n to step from one line to the next)")
-        elif re.search(r"\.[*+]", argv[i + 1]) and "\\n" not in argv[i + 1] and "[\\s\\S]" not in argv[i + 1]:
+        elif re.search(r"\.[*+]", pattern) and "\\n" not in pattern and "[\\s\\S]" not in pattern:
             print("(\".\" stays inside one of a card's lines: where the pattern names things from two of them, the id "
                   "line and the keywords say, write \\n between: \"\\[shire\\].*\\n.*keywords:.*Tale\")")
     return 0
@@ -318,7 +417,7 @@ def defs(argv) -> int:
 
 
 def main(argv):
-    if "--find" in argv:
+    if "--find" in argv or "--title" in argv:
         return find(argv)
     if "--defs" in argv:
         return defs(argv)
@@ -443,7 +542,7 @@ def main(argv):
                     print("- " + line)
             print()
 
-        named, mentioned, other_title = ([], [], []) if only_withheld else rulebook.card_rulings(card_id)
+        named, mentioned, other_title = ([], [], []) if only_withheld else rulebook.card_rulings(card_id, held=held_elsewhere(card_id))
         if not only_withheld:
             print("## Rulings that name this card")
         for entry in named:

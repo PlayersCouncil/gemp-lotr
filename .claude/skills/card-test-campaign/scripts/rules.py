@@ -350,12 +350,44 @@ MENTIONS = ("The rest only mention the name: each is a ruling on another card, o
             "it bears on this card; it is not a ruling on it.")
 
 
-def card_rulings(arg: str):
+def decision_names(lines, keys) -> bool:
+    """Whether a council page's decision names a card by one of its full names, with the marks or in plain words."""
+    at = next((i for i, l in enumerate(lines) if re.match(r"^=+.*Decision.*=+\s*$", l.strip())), None)
+    if at is None:
+        return False
+    decision = " %s " % norm(council_text(lines[at:]))
+    return any(" %s " % key in decision for key in keys)
+
+
+def named_outside_decision(lines, keys) -> str:
+    """For a council page that names a card in full: the first line of prose that does, where neither the page's
+    head nor its decision names the card ("" otherwise).  A packet prints the decision alone, and LR 6's rules on
+    two other Sarumans while the page names Saruman, Servant of the Eye as the card the Staff was written for: the
+    line says why the page is listed under this card."""
+    def names(line, marks):
+        return {norm(n) for n in re.findall(r"\{\{(?:%s)\|([^}|]*)\}\}" % marks, line)}
+
+    if any(names(line, "CardSplashImage") & keys for line in lines):
+        return ""
+    if decision_names(lines, keys):
+        return ""
+    at = next((i for i, l in enumerate(lines) if re.match(r"^=+.*Decision.*=+\s*$", l.strip())), len(lines))
+    for line in lines[:at]:
+        if names(line, "Card") & keys:
+            said = re.sub(r"\s+", " ", council_text([line])).strip()
+            return said if len(said) <= 240 else said[:237] + "..."
+    return ""
+
+
+def card_rulings(arg: str, held=None):
     """What the rules say of a card, as (named, mentioned, other_title), each a list of entries ready to print.
     `named` are the rulings on the card and the places that name it in full; `mentioned` are rulings on other
     cards that only have its title in their text ("the Legolas Starter Deck", The Mirror of Galadriel) and council
     pages about another card that name it in passing; `other_title` are the passages that name its title and quote
-    the text of another card of that title (the Anduin Banks of another block)."""
+    the text of another card of that title (the Anduin Banks of another block).
+    `held`, where given, is asked of each ruling on another card that names this one in full, as held(the names
+    of the cards the ruling is on, the ruling's line number), and what it answers is printed under the ruling:
+    packet.py says there which test of the other card already holds it."""
     is_id = bool(re.match(r"^\d+_\d+$", arg))
     keys, weak = card_keys(card_id=arg) if is_id else card_keys(name=arg)
     named, mentioned, other_title = [], [], []
@@ -429,17 +461,26 @@ def card_rulings(arg: str):
                     entry = "### A ruling on another card %s, %s line %d: %s\nCards: %s\n%s" % (
                         "names this card" if in_full else "has the word \"%s\" in it" % title,
                         book.name, line_no, kind, "; ".join(names), text)
+                    where = held(names, line_no) if in_full and held is not None else ""
+                    if where:
+                        entry += "\n" + where
                     (named if in_full else mentioned).append(entry)
     for cid, title, status, lines in council():
         names = council_names(lines)
         strong = bool(names & keys)
         if strong or (names & weak):
             about = bool(council_subjects(lines) & (keys | weak))
-            entry = "### Council ruling %s, \"%s\" (%s)%s%s\n%s\n(the whole page: rules.py council %s)" % (
+            # A page headed by another card whose DECISION names this one in full is a ruling on this one too
+            # (LR 6, headed by Saruman's Staff: "does not have any effect when used on Saruman, Of Many Colours").
+            ruled = not about and decision_names(lines, keys)
+            said = named_outside_decision(lines, keys) if strong and about else ""
+            entry = "### Council ruling %s, \"%s\" (%s)%s%s\n%s%s\n(the whole page: rules.py council %s)" % (
                 cid, title, status, "" if strong else TITLE_ONLY,
-                "" if about else "  (the page is about another card and names this one in passing)",
+                "" if about else ("  (the page is headed by another card, and its decision names this one)" if ruled else
+                                  "  (the page is about another card and names this one in passing)"),
+                "The decision below does not name this card. The page does: \"%s\"\n" % said if said else "",
                 council_decision(lines), cid)
-            (named if about else mentioned).append(entry)
+            (named if about or ruled else mentioned).append(entry)
     return named, mentioned, other_title
 
 

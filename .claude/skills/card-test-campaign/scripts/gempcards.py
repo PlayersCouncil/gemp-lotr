@@ -256,6 +256,36 @@ def full_name(card: CardDef) -> str:
     return title + (", " + subtitle if subtitle else "")
 
 
+def sanitized_title(text: str) -> str:
+    """A title as the game compares titles (Names.SanitizeName, which `name(...)` filters and the uniqueness check go
+    by): no accents, no capitals, no spaces or underscores, straight quotes."""
+    import unicodedata
+    t = unicodedata.normalize("NFD", plain_text(text or ""))
+    t = "".join(c for c in t if not unicodedata.combining(c))
+    return t.replace(" ", "").replace("_", "").lower()
+
+
+def list_field(card: CardDef, names: str) -> list:
+    """The values of one of the card's OWN fields (depth 1), whether it is written on one line ("keywords: Fierce",
+    "keywords: [Fierce, Damage+1]") or as a list with a value to a line.  `names` is the field's name as a regular
+    expression ("keywords?").  A field of the same name inside an effect (the keyword a modifier gives) is not the
+    card's own and is never read."""
+    opens = re.compile(r"^\s*(?:%s)\s*:\s*(.*?)\s*$" % names)
+    out, reading = [], False
+    for depth, line in card._top_level():
+        if reading:
+            if depth <= 1:
+                break
+            out += [w.strip() for w in re.split(r"[,\[\]]", line) if w.strip()]
+        elif depth == 1:
+            m = opens.match(line)
+            if m and m.group(1) == "[":
+                reading = True
+            elif m:
+                return [w.strip() for w in re.split(r"[,\[\]]", m.group(1)) if w.strip()]
+    return out
+
+
 # ----------------------------------------------------------------------------------------------------------------
 # The generator sheets: what each card is, independently of its definition
 # ----------------------------------------------------------------------------------------------------------------

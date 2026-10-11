@@ -104,6 +104,26 @@ SITE_LEFT = re.compile(r"unless the fellowship is at that site|behind the fellow
                        r"Legacy Ruling 3\b|\bLR 3\b", re.I)
 
 
+# A sentence that opens "If <a noun phrase> is ..." or "... are ...": a condition on the state of the thing named
+# ("If the Ring-bearer is then exhausted", "If bearer is Boromir"), not on what a player does ("If you ...").
+IF_IS = re.compile(r"(?:^|[.:]\s+)(?:Then,?\s+)?If\s+(?!you\b|there\b|no\b)([^.,:;()]{1,60}?)\s+(is|are)\b")
+# Where such words stand between "If" and "is", what stands there is a sentence of its own and no noun phrase
+# ("If Shelob wins a skirmish and there are 4 minions ...").
+_A_VERB = re.compile(r"\b(?:wins?|loses?|plays?|moves?|takes?|exerts?|dies?|kills?|has|have|bears?|can|cannot|spots?|"
+                     r"discards?|adds?|removes?|heals?|uses?|reveals?|draws?|would|does|do|and)\b", re.I)
+
+
+def unowned_condition(kind: str, text: str):
+    """The (noun phrase, verb) of a clause's "If <a noun phrase> is ..." sentence, or None.  A Trigger's or a
+    Response's "If" opens the event it answers, whose nearest miss is that clause's `-`, so those are left out."""
+    if kind in ("Trigger", "Response"):
+        return None
+    for m in IF_IS.finditer(text):
+        if not _A_VERB.search(m.group(1)):
+            return m.group(1), m.group(2)
+    return None
+
+
 # The cheats that take a card out of its owner's draw deck (the ones that only reorder a deck have Deck in their names).
 LEAVES_DECK = re.compile(r"\b(?:Move(?!\w*Deck)\w+|AttachCardsTo|StackCardsOn|Set(?:Freeps|Shadow)?Hand)\s*\(")
 
@@ -118,6 +138,218 @@ def taken_out_of_deck(lines, variable: str, alias: str) -> bool:
             if "Zone.DECK" not in arguments and named.search(arguments):
                 return True
     return False
+
+
+# ----------------------------------------------------------------------------------------------------------------
+# Copies of one title in play (Q-0239): as far as a test's cheats can be followed without running it
+# ----------------------------------------------------------------------------------------------------------------
+
+# The zones of Zone that are in play.
+_IN_PLAY_ZONES = {"FREE_CHARACTERS", "SHADOW_CHARACTERS", "SUPPORT", "ATTACHED"}
+# The cheats that put cards into play, with whose card a name given as a string is (None: cards only).
+_INTO_PLAY = [(re.compile(r"^Move(?:Companions?|All(?:y|ies))ToTable$"), "Freeps"), (re.compile(r"^MoveMinions?ToTable$"), "Shadow"),
+              (re.compile(r"^MoveFreepsCardsToSupportArea$"), "Freeps"), (re.compile(r"^MoveShadowCardsToSupportArea$"), "Shadow"),
+              (re.compile(r"^MoveCardsToSupportArea$"), None)]
+# The cheats that take cards out of play, likewise.
+_OUT_OF_PLAY = [(re.compile(r"^MoveCards?To(?:Hand|Discard|DeadPile|TopOfDeck|BottomOfDeck|AdventureDeck)$|^RemoveCardZone$|^Set(?:Freeps|Shadow)Hand$"), None),
+                (re.compile(r"^MoveCardsTo(?:TopOf|BottomOf)?Freeps(?:Hand|Discard|Deck)$"), "Freeps"),
+                (re.compile(r"^MoveCardsTo(?:TopOf|BottomOf)?Shadow(?:Hand|Discard|Deck)$"), "Shadow")]
+COPIES_WORDS = {1: "one dot: the title is unique", 2: "two dots", 3: "three dots"}
+
+
+def dots(card):
+    """How many cards of its title a card's dots allow in play: 1 for a unique card, 2 or 3 for a card of two or
+    three dots, None for one that is not unique."""
+    value = (card.field("unique", "") or "").strip().lower()
+    return {"true": 1, "1": 1, "2": 2, "3": 3}.get(value)
+
+
+def java_statements(lines):
+    """(index of the line it starts on, its text) for each statement of a stretch of Java: comments taken out,
+    cut at the semicolons that are not inside a string."""
+    out, text, at, quoted = [], [], None, False
+    for n, line in enumerate(lines):
+        i = 0
+        while i < len(line):
+            c = line[i]
+            if quoted:
+                text.append(c)
+                if c == "\\" and i + 1 < len(line):
+                    text.append(line[i + 1])
+                    i += 1
+                elif c == '"':
+                    quoted = False
+            elif line.startswith("//", i):
+                break
+            elif c == ";":
+                if at is not None:
+                    out.append((at, "".join(text)))
+                text, at = [], None
+            else:
+                if at is None and not c.isspace():
+                    at = n
+                if c == '"':
+                    quoted = True
+                text.append(c)
+            i += 1
+        text.append(" ")
+    return out
+
+
+def call_arguments(text: str, opens: int) -> list:
+    """The arguments of the call whose bracket opens at text[opens], split at the commas that are its own."""
+    out, depth, start, quoted = [], 0, opens + 1, False
+    for i in range(opens, len(text)):
+        c = text[i]
+        if c == '"' and text[i - 1] != "\\":
+            quoted = not quoted
+        if quoted:
+            continue
+        if c in "({[":
+            depth += 1
+        elif c in ")}]":
+            depth -= 1
+            if depth == 0:
+                out.append(text[start:i])
+                break
+        elif c == "," and depth == 1:
+            out.append(text[start:i])
+            start = i + 1
+    return [a.strip() for a in out if a.strip()]
+
+
+def scenario_tables(lines, methods) -> dict:
+    """For each Get...Scenario() method of a test file: ({alias: blueprint id} of its deck, the blueprint id of its
+    Ring-bearer or None where that cannot be read)."""
+    import gen_play
+    consts = gen_play.test_constants()
+    out = {}
+    for name, start, end, above, ret in methods:
+        if not re.match(r"^Get\w*Scenario\w*$", name):
+            continue
+        body = " ".join(text for _, text in java_statements(lines[start:end + 1]))
+        bearer = None
+        built = re.search(r"\bnew\s+VirtualTableScenario\s*\(", body)
+        if built:
+            args = call_arguments(body, built.end() - 1)
+            arg = args[2] if len(args) > 2 else "null"
+            literal = re.match(r'^"(\d+_\d+)"$', arg)
+            named = re.match(r"^(?:VirtualTableScenario\.)?(\w+)$", arg)
+            if arg == "null":
+                bearer = consts.get("MDFrodo")
+            elif literal:
+                bearer = literal.group(1)
+            elif named and isinstance(consts.get(named.group(1)), str):
+                bearer = consts[named.group(1)]
+        out[name] = (dict(re.findall(r'put\(\s*"([^"]+)"\s*,\s*"(\d+_\d+)"\s*\)', body)), bearer)
+    return out
+
+
+def copies_over_the_dots(test_lines, tables) -> list:
+    """Where a test cheats into play more copies of one title, for one player, than the title's dots allow (CR 5.0
+    "non-unique"; Ketura on Q-0239: "no cheating in more copies of a card than their uniqueness level allows"):
+    (line offset, the alias that tips it over, the title, the copies then in play, the dots) for each title, once.
+    A card is followed by the variable or the alias it is fetched by, into play by the cheats that put it there and
+    by a play, out again by the cheats that take it away and by the test's own reading of it in a hand or a discard
+    pile.  A play the game allowed is taken as the game's word that the copies before it had room for one more.
+    What the game takes out of play and the test never reads is not seen."""
+    cards = g.card_index()
+    out, said = [], set()
+    scenes, fetched = {}, {}  # scenario variable -> [deck, bearer, {(owner, alias): True} in play]; card variable -> (scenario variable, owner, alias)
+
+    def restriction(card_id):
+        card = cards.get(card_id)
+        if card is None or (card.field("type", "") or "").strip().lower() not in PLAYED:
+            return None, None
+        return g.sanitized_title(card.field("title", "")), dots(card)
+
+    def tokens(scene, args, owner_of_names):
+        found = []
+        for arg in args:
+            inline = re.match(r'^(\w+)\s*\.\s*Get(Freeps|Shadow)Card\(\s*"([^"]+)"\s*\)$', arg)
+            name = re.match(r'^"([^"]+)"$', arg)
+            if inline and inline.group(1) == scene:
+                found.append((inline.group(2), inline.group(3)))
+            elif name and owner_of_names:
+                found.append((owner_of_names, name.group(1)))
+            elif arg in fetched and fetched[arg][0] == scene:
+                found.append(fetched[arg][1:])
+        return found
+
+    def copies_of(scene, owner, title):
+        deck, bearer, in_play = scenes[scene]
+        there = [(token, restriction(deck.get(token[1]))[1]) for token in in_play
+                 if token[0] == owner and restriction(deck.get(token[1]))[0] == title]
+        if bearer and restriction(bearer)[0] == title:
+            there.insert(0, ((owner, "the Ring-bearer"), restriction(bearer)[1]))
+        return there
+
+    def over(copies) -> bool:
+        # The board is reached by playing the most restricted first: the k-th card played finds k copies there.
+        limits = sorted(limit for _, limit in copies if limit is not None)
+        return any(k >= limit for k, limit in enumerate(limits))
+
+    for at, text in java_statements(test_lines):
+        got = re.search(r"\b(\w+)\s*=\s*(Get\w*Scenario\w*)\s*\(", text)
+        if got and got.group(2) in tables:
+            deck, bearer = tables[got.group(2)]
+            scenes[got.group(1)] = [deck, bearer, {}]
+            continue
+        card = re.search(r'\b(\w+)\s*=\s*(\w+)\s*\.\s*Get(Freeps|Shadow)Card\(\s*"([^"]+)"\s*\)\s*$', text)
+        if card and card.group(2) in scenes:
+            fetched[card.group(1)] = (card.group(2), card.group(3), card.group(4))
+            continue
+        # The test's own word that a card is no longer in play: read in a hand, a discard pile or another such zone.
+        for read in re.finditer(r"\b(assertInZone|assertInDiscard|assertInHand)\s*\(", text):
+            args = call_arguments(text, read.end() - 1)
+            if read.group(1) == "assertInZone":
+                if not args or args[0].split(".")[-1] in _IN_PLAY_ZONES:
+                    continue
+                args = args[1:]
+            for arg in args:
+                if arg in fetched and fetched[arg][0] in scenes:
+                    scenes[fetched[arg][0]][2].pop(fetched[arg][1:], None)
+        for call in re.finditer(r"\b(\w+)\s*\.\s*(\w+)\s*\(", text):
+            scene, method = call.group(1), call.group(2)
+            if scene not in scenes:
+                continue
+            deck, bearer, in_play = scenes[scene]
+            args = call_arguments(text, call.end() - 1)
+            coming, going, played = [], [], False
+            for pattern, owner in _INTO_PLAY:
+                if pattern.match(method):
+                    coming = tokens(scene, args, owner)
+            for pattern, owner in _OUT_OF_PLAY:
+                if pattern.match(method):
+                    going = tokens(scene, args, owner)
+            if method == "AttachCardsTo":
+                coming = tokens(scene, args[1:], None)
+            elif method in ("StackCardsOn", "SetHand"):
+                going = tokens(scene, args[1:], None)
+            elif method == "MoveCardToZone" and len(args) == 2:
+                zone = args[1].split(".")[-1]
+                coming, going = (tokens(scene, args[:1], None), []) if zone in _IN_PLAY_ZONES else ([], tokens(scene, args[:1], None))
+            elif method in ("FreepsPlayCard", "ShadowPlayCard"):
+                coming, played = tokens(scene, args[:1], method[:6]), True
+            for token in going:
+                in_play.pop(token, None)
+            for token in coming:
+                title, limit = restriction(deck.get(token[1]))
+                if title is None or token in in_play:
+                    continue
+                in_play[token] = True
+                while played and over(copies_of(scene, token[0], title)):
+                    # The game let the card be played, so an earlier copy has left play unseen: the oldest goes.
+                    oldest = next((t for t, _ in copies_of(scene, token[0], title) if t in in_play and t != token), None)
+                    if oldest is None:
+                        break
+                    del in_play[oldest]
+                there = copies_of(scene, token[0], title)
+                if not played and over(there) and (scene, token[0], title) not in said:
+                    said.add((scene, token[0], title))
+                    out.append((at, token[1], g.plain_text(cards[deck[token[1]]].field("title", "")),
+                                [t[1] for t, _ in there], min(limit for _, limit in there if limit is not None)))
+    return out
 
 
 def only_cost_is_discarding_itself(text: str) -> bool:
@@ -592,6 +824,16 @@ def lint_file(path: Path):
             missing = CORE[ctype] - codes - waived
             if missing:
                 add("error", "ledger", None, "%s: a %s clause must list at least %s" % (cid, ctype, " ".join(sorted(CORE[ctype]))))
+            # A condition on the state of a thing named owes the thing's nearest neighbour that is in that state
+            # (2_79: `ringBearer,exhausted` written `companion,exhausted` passed every test until an exhausted
+            # Aragorn stood beside Frodo).  The Standard owes the candidate; this says where none is listed.
+            named = unowned_condition(ctype, text) if cid.startswith("C") else None
+            if named and "F" not in codes and "F" not in waived and "F" not in waived.waits:
+                add("warning", "if-is", None, "%s: \"If %s %s ...\" is a condition on the state of what it names, and the clause "
+                    "lists no F: the nearest invalid candidate is another card in that state while the one named is not "
+                    "(the Standard, \"A condition inside a modifier; 'bearer' or 'self' with a requirement\"; 2_79, an "
+                    "exhausted companion beside a Ring-bearer who is not), in a test that claims F, or a `no F:` line "
+                    "under the clause says why none can stand" % (cid, named[0], named[1]))
         if card is not None and (card.field("type", "") or "").lower() in PLAYED and not any(c[0] == "Play" for c in clauses.values()):
             add("error", "ledger", None, "no Play clause (P1 Play [+] ...): a card that is played from hand has a test that plays it")
         if card is not None:
@@ -657,6 +899,10 @@ def lint_file(path: Path):
                 add("error", "exception", start, "%s: %s" % (name, NO_EXCEPTIONS))
 
     alias_bp = dict(re.findall(r'put\(\s*"([^"]+)"\s*,\s*"(\d+_\d+)"\s*\)', raw))
+    # Copies of one title in play (Q-0239).  Not followed in a file that names a card which changes how many copies
+    # a title may have (Race Text 94_16, "Minions are not unique"): what its tables allow is the card's own text.
+    tables = scenario_tables(lines, others)
+    loosened = any("OverrideUniqueness" in g.card_index()[x].raw for x in set(re.findall(r'"(\d+_\d+)"', raw)) if x in g.card_index())
     # Inside the tests.
     for name, start, end, above, ret in tests:
         body = code[start:end + 1]
@@ -721,6 +967,14 @@ def lint_file(path: Path):
                            "to choose cards" if twin else "anything",
                            "a card read as offered in that choice, its minimum, or the decision by its words" if twin else
                            "his Awaiting...PhaseActions(), a decision of his, or another offer to him read as made"))
+        for offset, alias, title, there, limit in ([] if loosened else copies_over_the_dots(lines[start:end + 1], tables)):
+            if not let_off(start + offset):
+                add("warning", "copies", start + offset, "%s: with %s there are %d cards titled %s in play for one player (%s), "
+                    "more than the dots on them allow (%s): no game reaches that board, and no test cheats in more copies "
+                    "of a title than its dots allow, whatever the subtitles (CR 5.0 \"non-unique\"; Ketura on Q-0239).  Lint follows "
+                    "the cheats, the plays and the zones the test reads, not what else the game takes out of play: where "
+                    "an earlier copy has left by the game's own doing, say so on this line (// lint-ok: ...)"
+                    % (name, alias, len(there), title, ", ".join(there), COPIES_WORDS[limit]))
         # A play read as refused for a card the test never puts in a hand (pitfalls, "A play read as not offered for a
         # card that is not in hand shows nothing": 91_15's old test read Barliman so, from the draw deck).
         rawtext_of_test = "\n".join(lines[start:end + 1])

@@ -37,7 +37,10 @@ It leaves to the author, saying which:
     discount, "roaming"), and toil;
   - a text that says when or whether the card may be played, or that acts from the hand;
   - a card that answers its own play or its being in play (a "played", "enters play" or continuously checked
-    trigger or response, "about to add twilight"): the test of that clause has an offer or a result to read;
+    trigger or response, "about to add twilight"): the test of that clause has an offer or a result to read.
+    A "played" trigger whose filter plainly leaves the card itself out (another side, culture, type or title
+    than its own, "another", an event's phase) is not one of these: on a table of the Ring-bearer alone
+    nothing else is played;
   - a card that cannot be played beside the scenario's Ring-bearer (a Frodo), a card with no test file, a
     GetScenario() it cannot read or that seats a Race to Mount Doom modifier, a site under the play whose text
     is about costs (Edoras Hall), a sheet row that disagrees with the definition on cost, type or site number,
@@ -159,6 +162,63 @@ def _trigger_types(effect) -> list:
     return [str(x.get("type", "?")).lower() if isinstance(x, dict) else "?" for x in (t if isinstance(t, list) else [t]) if x is not None]
 
 
+CARD_TYPES = {"companion", "ally", "minion", "possession", "artifact", "condition", "follower", "event", "site"}
+
+
+def _shadow_side(value: str):
+    """A side as a filter names it (Side.Parse): True for the Shadow, False for the Free Peoples, None for neither."""
+    value = re.sub(r"[\s_\-]", "", value.lower())
+    return True if "shadow" in value else False if ("free" in value or "people" in value) else None
+
+
+def _culture(value: str) -> str:
+    """A culture as the game finds it by name (Culture.findCulture): [ringwraith] is [wraith], and "Uruk-hai",
+    "uruk_hai" and "uruk hai" are one."""
+    value = re.sub(r"[\s_\-]", "", _fold(value))
+    return "wraith" if value == "ringwraith" else value
+
+
+def _terms(filter_text: str) -> list:
+    """A filter cut at the commas that are its own: the things a card must ALL be to pass it."""
+    out, depth, start = [], 0, 0
+    for i, ch in enumerate(filter_text):
+        if ch == "(":
+            depth += 1
+        elif ch == ")":
+            depth -= 1
+        elif ch == "," and depth == 0:
+            out.append(filter_text[start:i])
+            start = i + 1
+    out.append(filter_text[start:])
+    return [re.sub(r"\s+", "", t).lower() for t in out if t.strip()]
+
+
+def never_its_own_play(trigger, card) -> bool:
+    """Whether a `played` trigger's filter can be seen to leave the card itself out, so that its own play from hand
+    never sets the trigger off: a word of the filter names another card ("another", "not(self)"), another owner,
+    another side, culture, type or title than the card's own, or an event's phase.  Anything it cannot read (a
+    race, a keyword, an `or(...)`) is taken to be a filter the card might pass.  Rush of Steeds 11_157, a Free
+    Peoples condition, answers `side(shadow),condition`."""
+    if not isinstance(trigger, dict) or not isinstance(trigger.get("filter"), str):
+        return False
+    for term in _terms(trigger["filter"]):
+        if term in ("another", "other", "not(self)", "not(your)") or term.startswith("timeword("):
+            return True
+        if term in CARD_TYPES and term != card.type:
+            return True
+        inside = re.match(r"^(side|culture|name|title)\((.*)\)$", term)
+        if not inside:
+            continue
+        what, value = inside.group(1), inside.group(2)
+        if what == "side" and card.side_known and _shadow_side(value) == (not card.shadow):
+            return True
+        if what == "culture" and card.culture and _culture(value) != _culture(card.culture):
+            return True
+        if what in ("name", "title") and g.sanitized_title(value) != g.sanitized_title(card.title):
+            return True
+    return False
+
+
 def _keywords(parsed) -> list:
     k = parsed.get("keywords") or parsed.get("keyword") or []
     return [str(x).lower() for x in (k if isinstance(k, list) else [k])]
@@ -181,6 +241,8 @@ class Card:
         # ally a Free Peoples one by their types; for any other type the side has to be written.
         side = _fold(d.field("side")) or {"minion": "shadow", "companion": "free peoples", "ally": "free peoples"}.get(self.type, "")
         self.shadow = side == "shadow"
+        self.side_known = bool(side)
+        self.culture = _fold(d.field("culture"))
         self.unique = _fold(d.field("unique")) == "true"
         self.row, _ = g.sheet_for(card_id)
         self.from_sheet = self.row is not None
@@ -242,7 +304,10 @@ class Card:
             elif kind not in QUIET_EFFECTS:
                 say("its definition has an effect the generator does not know (%s)" % kind)
             if kind in ("trigger", "response"):
-                loud = sorted(set(t for t in _trigger_types(effect) if t not in QUIET_TRIGGERS))
+                heard = effect.get("trigger")
+                heard = [x for x in (heard if isinstance(heard, list) else [heard]) if x is not None]
+                loud = sorted(set(t for t, x in zip(_trigger_types(effect), heard)
+                                  if t not in QUIET_TRIGGERS and not (t == "played" and never_its_own_play(x, self))))
                 if loud:
                     say("it has a %s that its own play or its being in play may set off (%s): the test of that clause "
                         "plays it, reads what is then asked or done, and claims P1" % (kind, ", ".join(loud)))

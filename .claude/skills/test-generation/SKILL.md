@@ -340,7 +340,9 @@ candidate is not assigned to a skirmish.
 **A condition inside a modifier; "bearer" or "self" with a requirement.** Where the excluded thing is part of a
 condition inside a modifier ("in a skirmish involving an [isengard] minion"), the candidates are in skirmishes, not
 merely on the table. For "bearer" or "self" with a requirement ("if bearer is an archer"), the nearest invalid
-candidate is another card that meets the requirement. That holds where the requirement is the condition of a
+candidate is another card that meets the requirement (lint warns `if-is` where a clause with an "If <the thing
+named> is ..." sentence lists no `F`: 2_79's "If the Ring-bearer is then exhausted" wanted an exhausted companion
+beside a Ring-bearer who is not). That holds where the requirement is the condition of a
 trigger and not of an ability: for "While Boromir is the Ring-bearer, at the start of each skirmish involving him"
 it is the real Ring-bearer in a skirmish of his own while Boromir is a plain companion (59_31).
 
@@ -588,7 +590,7 @@ printed card that gives it where `helpers.md` has one. A terrain is a real site 
 never a keyword given to a site. No more copies of a title in play than its dots allow, counted by title whatever
 the subtitle, hindered copies included (Ketura on Q-0239: "no cheating in more copies of a card than their
 uniqueness level allows"): never two cards of one unique title, never a third of a two-dot title, and a board that
-needs more is no board. Items are cheated only onto bearers
+needs more is no board (lint warns `copies` where a test's cheats, as far as it can follow them, lay one). Items are cheated only onto bearers
 their text allows, one of each class to a bearer: for "bears 3 cards" or "each weapon", items of different classes.
 No culture token is put on a card that nothing gives tokens to. A site of another block may stand in a path where
 its own text is what the test reads. The tests that landed with such a board before the ruling are relaid by a
