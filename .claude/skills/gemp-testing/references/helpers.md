@@ -60,6 +60,16 @@ or keeps fierce).** Black Rider 12_161; White Hand Destroyer 17_124. Black Rider
 5, strength 8, vitality 3, site 3; strength +1 for each companion. Destroyer: unique [uruk-hai] Uruk-hai, cost 5,
 strength 10, vitality 3, site 5; hunter 3 only for each site controlled.
 
+**A hunter and nothing else, with a small number and a large one; a hunter who is no minion; a minion that is
+damage +1 only while it bears a possession.** Tracking Uruk 15_171; White Hand Butcher 17_122; Faramir, Captain
+of Ithilien 18_48; Uruk Decimator 12_150. Tracking Uruk: [uruk-hai] Uruk-hai, not unique, cost 5, strength 14,
+vitality 3, site 5; Hunter 1 is its whole text. Butcher: [uruk-hai] Uruk-hai, not unique, cost 4, strength 5,
+vitality 2, site 5; Hunter 6 is its whole text. Faramir: unique [gondor] Man companion, cost 3 (2 in a starting
+fellowship), strength 7, vitality 3; ranger, hunter 2; a Maneuver heal of another companion. Decimator:
+[uruk-hai] Uruk-hai, not unique, cost 4, strength 12 (+2 at a battleground), vitality 3, site 5. In print (the
+keyword lines of sets 1 to 19) no ally is a hunter and no Free Peoples character is fierce: "a hunter" that is no
+minion is a companion, and "fierce, and no minion" has no candidate (`Card_15_170_Tests`).
+
 **A weak minion PRINTED fierce (a companion of strength 5 or 6 beats it or outlasts it in the fierce round).** Uruk
 Pursuer 4_190; Uruk Seeker 4_195; Charging Uruk 15_156; Shelob, Eater of Light 8_25. Pursuer: [isengard] Uruk-hai,
 not unique, cost 2, strength 5, vitality 3, site 5; Tracker; his texts are about unbound Hobbits (none may be
@@ -951,3 +961,8 @@ that is NOT the next: There's Another Way 12_40 ([gollum] condition, spot Sméag
 to replace the fellowship's current site"). Speak "Friend" and Enter 2_26 (spot Gandalf; Fellowship or Regroup)
 also draws a card if the site played is underground (Abandoned Mine Shaft 13_185, `site2` of `ShadowsSites`, is):
 choose another (`Card_13_164_Tests`).
+A Free Peoples card that replaces a CHOSEN site of the fellowship's region, wherever in it the site lies: Traveled
+Leader 12_34 ([gandalf] Maneuver or Regroup event, cost 1, "Spot a [gandalf] Wizard to replace a site in the
+fellowship's current region with a site from your adventure deck"). The next site laid by a card that is no
+ranger's: One Good Turn Deserves Another 11_49 ([gollum] Fellowship or Regroup event, cost 0, spot Sméagol; then
+"you may add a burden to take this card back into hand", asked each time). Both in `Card_15_193_Tests`.

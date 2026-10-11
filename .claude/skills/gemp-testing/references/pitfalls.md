@@ -764,6 +764,9 @@ NoSuchElementException). Which of two copies the GAME lays is not the test's to 
 not by the alias (`virtualtable/FirstSiteTests`). `GetFreepsSite(String)` and
 `GetShadowSite(String)` look for the alias and then for a title in the ADVENTURE DECK only: a site already laid
 is not found by its title (NoSuchElementException, no message). Fetch a site before it is laid.
+The title is matched as a part of it, in lower case with the spaces out (`"mountdoom"` finds Mount Doom), so a
+string that is no key of the map still answers with a site and nothing fails: fetch by the key, and give each
+key the name of the site it holds (the old Card_15_193_Tests had Expanding Marshland under "Fangorn Glade").
 
 **`FreepsDeclineSanctuaryHealing()` declines the sanctuary heals still asked, and nothing else.** It answers
 "Sanctuary healing - Choose companion to heal" with no companion for as long as that is what player 1 is asked,
@@ -1173,6 +1176,8 @@ runs from what the pool is short by up to the threats there are (`ShadowGetChoic
 Host of Udûn 7_282 with the pool 1 short and 2 threats: 1 to 2). Where only one number can be named (the pool 1
 short and 1 threat) nothing is asked (F-0147), so a test that reads the bounds lays one threat more than is owed
 (`Card_07_282_Tests`).
+A discount that is all or nothing ("you may discard 5 [orc] minions from play to make it twilight cost -10",
+Mountain-troll 15_112) is asked as a yes/no: shapes.md, "When you play this minion, you may discard N".
 
 **Whether a minion is roaming is read as a keyword.** `scn.HasKeyword(minion, Keyword.ROAMING)` is true while
 the minion's site number is above the current site's, and it follows a site-number modifier: Úlairë Nelya 2_84
@@ -1458,6 +1463,10 @@ path instead: a site map of `FellowshipSites` with the card in place of site n, 
 site after the current one whatever key the map gave it, so one scenario with the card in place of a site no
 test reaches (`putAll(FellowshipSites); remove("site9"); put("parapet", "63_188")`) serves every site number
 (`Card_13_188_ErrataTests`: sites 4 to 7).
+Mount Doom 15_193 is the one site the cheat cannot lay: it puts the card on the path before it gives it a site
+number, and Mount Doom's bar reads its own number as it comes into force (a NullPointerException; F-0484, the
+rig's). Lay it by legal play: the Shadow player on a move, or as the next site in the regroup phase with
+Pathfinder 1_110 or One Good Turn Deserves Another 11_49 (`Card_15_193_Tests`).
 The key no longer matters (engine pass 24): the path is ordered only while the FIRST card of the adventure deck
 has a site number (`GameState.usesUnorderedSites`), and the rig now puts the sites that have a printed number
 into each adventure deck ahead of those that have none, so a Shadows-block site on a numbered path may stand
