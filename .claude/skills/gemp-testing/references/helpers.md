@@ -29,6 +29,14 @@ and fierce; "To play, spot a [moria] Orc" and a cost of -3 underground are about
 (Card_02_016_Tests). The race without the culture: Saruman, Of Many Colours 12_54, an [isengard] Wizard with damage
 +1, fierce and lurker, whose named-culture strength -1 comes only when he is played.
 
+**Two Wizard minions in one skirmish, with one Saruman (Q-0239).** Saruman, Coldly Still 17_48 beside Pallando
+Deceived 13_79. Saruman: unique [men] Wizard, strength 8, vitality 4, site 4; he may be assigned, and his texts are
+about [men] possessions. Pallando Deceived: unique [isengard] condition, support area; at the start of the maneuver
+phase its owner may exert a Wizard (Saruman, the only one, with no choice asked) and it is a fierce Wizard minion of
+strength 10 and vitality 1 until the regroup phase, taking no wounds. The Free Peoples player assigns one to a
+companion and the Shadow player the other; Aragorn 1_89 at Ettenmoors (8 + 2) is not overwhelmed by their 18, and
+both win (`Card_13_078_Tests.TwoWizardsWhoWinOneSkirmishMakeItAMinionOnce`).
+
 **A minion with damage +2, to tell an X of 1 from 2.** Easterling Berserker 10_40. [raider] Man, strength 11,
 vitality 3, cost 6, site 4, not unique. Damage +2 only while he is unwounded. "To play, spot an Easterling": cheat
 him in. His Skirmish ability wounds 2 other [raider] Men, so with fewer than two beside him it cannot be paid.
@@ -301,7 +309,8 @@ exertion or a vitality threshold: Narsil 9_34 (hand weapon) and Ranger's Cloak 1
 **An ally in a skirmish away from any home site (a Shadows-block path).** One Whom Men Would Follow 1_109. [gondor]
 Maneuver event, cost 0: exert Aragorn (any Aragorn; he keeps the wound), and a chosen ally is strength +2 and takes
 part in archery fire and skirmishes until the regroup phase. Nothing else; the ally is then assigned like a
-companion.
+companion. A Wizard who is an ally and WINS a skirmish is Radagast, The Brown 31_17 by this event: 8 + 2 beats Uruk
+Shaman 1_152 (8, vitality 2) without killing it (`Card_13_078_Tests.AWizardWhoIsAnAllyAndWinsASkirmishMakesItAMinion`).
 
 **A special ability of an ally in a phase that has minions.** Rúmil, Elven Protector 1_57; Calaglin, Elf of Lórien
 3_10; Albert Dreary, Entertainer from Bree 1_69. Each unique, vitality 3, and used away from home. Rúmil (Elf,
@@ -364,7 +373,11 @@ race; to play, add a burden (cheat him in); an assignment ability only. He can f
 **A [gandalf] Wizard who is an ally; a weapon that is no possession.** Saruman, The White 32_24; Glamdring (The
 Hobbit) 30_29. Saruman is an ally (home 3H, cost 4, strength 8, vitality 4, wise); a Gandalf is defender +1 beside
 him, and his two abilities are used only on purpose. Without him "a [gandalf] Wizard" narrowed to companions passes
-every test (67_15, 67_24); Radagast 31_17 is the other. Glamdring 30_29 is a [gandalf] artifact hand weapon
+every test (67_15, 67_24); Radagast, The Brown 31_17 is the other (home 5H, cost 4, strength 8, vitality 4, wise;
+his fellowship ability plays a Gandalf from the discard pile and is used only on purpose). For a Shadow card's bare
+"a Wizard" ("exert a Wizard", "Bearer must be a Wizard") the candidates are the Shadow player's Saruman, the other
+player's Gandalf and this ally, and all three are offered (CR 4.2 "Shadow phase(s)", Q-0058; `Card_13_079_Tests`,
+and Staff of Saruman 13_81 in `Card_13_080_Tests`). Glamdring 30_29 is a [gandalf] artifact hand weapon
 (strength +2, on Gandalf by name; an optional trigger when he wins a skirmish): it tells `weapon` from
 `possession`, and shares its unique title with Glamdring 1_75, so never both on one board.
 
@@ -612,12 +625,16 @@ and the skirmish is cancelled (`Card_02_040_Tests`).
 Heal a minion skirmishing Hrethel to make Hrethel strength +3 (limit +3)"; to play, spot a [rohan] Man); Uruk
 Shaman 1_152 ("Maneuver: Remove (2) to heal an Uruk-hai"; damage +1). Hrethel is the only printed card by which a
 Free Peoples player heals a minion: the minion candidate for a text that counts or limits "your" heals of "a
-character" (92_35).
+character" (92_35). A Wizard minion who heals, by his own text: Saruman, Agent of the Dark Lord 12_144 (unique
+[uruk-hai] Wizard, strength 8, vitality 4, lurker; "Each time a companion is killed, you may heal Saruman"), laid
+wounded, when Gandalf, Mithrandir 6_30 ("Each time the fellowship moves, wound Gandalf") with 3 wounds dies at the
+move (`Card_13_080_Tests.ASarumanWhoHealsMakesItAMinion`).
 
 **A heal of "a companion" with a before and an after.** Master of Healing 3_22, twice, beside Elrond, Lord of
 Rivendell 1_40. [elven] Fellowship or Regroup event, cost 1: "Spot Elrond (or 2 [elven] allies) to heal a companion
 or ally". Only the wounded are offered. Elrond is an ally (his start-of-turn heal reaches allies of site 3 only:
-wound the companions after `StartGame()`).
+wound the companions after `StartGame()`). It is also the heal of a Wizard by legal play, in the fellowship phase
+or the regroup phase: Gandalf 1_364, or the ally Radagast 31_17 (`Card_13_080_Tests`).
 
 **A way to discard a [moria] condition.** Song of Durin 3_5. Free Peoples event: "discard up to 2 [moria]
 conditions".

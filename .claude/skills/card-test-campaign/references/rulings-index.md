@@ -361,6 +361,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 
 - Any X of exertions is at least 1 (Q-0076)
 - A card that makes itself a minion (Q-0077, Q-0078)
+- "This condition becomes a <keyword> <race> minion until the start of the regroup phase that has N strength and M vitality, and cannot take wounds or bear other cards. This card is still a condition." (the Deceived conditions 13_78, 13_79, 13_80; A Shadow Rises 11_216 has it with no wound bar) [Q-0077]
 - Reinforcing more than one token (F-0113)
 - "Its skirmish" on a minion (F-0114) [F-0321]
 - "By another card" (Q-0079). "By another card" in a card's text is a card other than THAT card (Q-0079, Corsair Helmsman 103_46): a [raider] minion ...
