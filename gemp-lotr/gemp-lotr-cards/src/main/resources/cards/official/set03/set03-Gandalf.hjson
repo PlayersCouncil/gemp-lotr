@@ -20,6 +20,7 @@
 				trigger: {
 					type: playerDrawsCard
 					player: shadow
+					orTakesIntoHand: true
 				}
 				requires: {
 					type: phase

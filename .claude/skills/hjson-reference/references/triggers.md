@@ -313,9 +313,11 @@ After triggers occur after the action they are keyed to, which means they cannot
     * exertsRanger
       default:false
 * PlayerDrawsCard
-  Triggers after `player` draws a card from their draw deck or takes a card into hand.
+  Triggers after `player` draws a card.  A card taken into hand (from a discard pile, or from a draw deck by a look, a reveal or a search) is not a card drawn: where the text says "draws a card (or takes a card into hand)", write `orTakesIntoHand: true` (Verily I Come 2_94, Betrayal of Isengard 3_29; F-0376).  A card taken in place of a draw is a card drawn (see `inPlaceOfDraw` on PutCardsFromDeckIntoHand).
     * player
       required
+    * orTakesIntoHand
+      default: false
 * PutsOnRing
   Triggers after the Ring-bearer "puts on" The One Ring.
 * Reconciles

@@ -482,7 +482,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 
 - A stacked card shuffled in goes to its own owner's deck (F-0172)
 - A take from a draw deck with no "reveal" and no kind of card named writes `reveal: false` (Q-0176, F-0332) [Q-0025, F-0378, F-0384]
-- A card taken into hand in place of a draw is a card drawn; a card taken from anywhere else is not (Q-0205: B; F-0376, open)
+- A card taken into hand in place of a draw is a card drawn; a card taken from anywhere else is not (Q-0205: B; F-0376)
 - revealHand of an empty hand (Q-0144)
 - FreepsGetCardChoiceCount() while cards are only shown
 - A search of another player's draw deck shuffles the deck searched (F-0298, F-0369; Grond 68_82 and 18_82) [Q-0172]

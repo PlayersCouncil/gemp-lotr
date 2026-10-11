@@ -617,6 +617,7 @@
 						reveal: true
 						shuffle: false
 						showAll: false
+						inPlaceOfDraw: true
 					}
 					{
 						type: putCardsFromDeckOnBottomOfDeck

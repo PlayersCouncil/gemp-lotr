@@ -27,13 +27,16 @@ import java.util.List;
 public class PutCardsFromDeckIntoHand implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "count", "select", "shuffle", "reveal", "showAll");
+        FieldUtils.validateAllowedFields(effectObject, "count", "select", "shuffle", "reveal", "showAll", "inPlaceOfDraw");
 
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final String select = FieldUtils.getString(effectObject.get("select"), "select", "choose(any)");
         final boolean shuffle = FieldUtils.getBoolean(effectObject.get("shuffle"), "shuffle");
         final boolean reveal = FieldUtils.getBoolean(effectObject.get("reveal"), "reveal");
         boolean showAll = FieldUtils.getBoolean(effectObject.get("showAll"), "showAll");
+        // "About to draw a card ... instead ... take [one] into hand": the card taken is the card drawn, for a
+        // text that answers a draw (Q-0205: B).  Left out, the card is taken into hand and not drawn.
+        final boolean inPlaceOfDraw = FieldUtils.getBoolean(effectObject.get("inPlaceOfDraw"), "inPlaceOfDraw", false);
 
         // A card looked for in the draw deck need not be found ("There is no penalty if you don't find ... a card
         // you are looking for in your draw deck"), so a count of N chosen from the deck by a filter is "up to N".
@@ -79,7 +82,7 @@ public class PutCardsFromDeckIntoHand implements EffectAppenderProducer {
                         // The player whose action this is takes the cards.
                         for (PhysicalCard card : cards) {
                             result.add(
-                                    new PutCardFromDeckIntoHandEffect(actionContext.getPerformingPlayer(), card, reveal));
+                                    new PutCardFromDeckIntoHandEffect(actionContext.getPerformingPlayer(), card, reveal, inPlaceOfDraw));
                         }
 
                         return result;

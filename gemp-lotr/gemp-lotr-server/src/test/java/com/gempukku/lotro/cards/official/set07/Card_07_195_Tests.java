@@ -4,7 +4,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -77,7 +76,6 @@ public class Card_07_195_Tests
 	}
 
 	@Test
-	@Ignore("F-0376: Morgul on the March adds a threat for a card taken into hand from the discard pile, which is not drawn")
 	public void ACardTakenIntoHandFromTheDiscardPileIsNotACardDrawn() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetDrawScenario();
 

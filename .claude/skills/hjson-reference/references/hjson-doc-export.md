@@ -2990,9 +2990,11 @@ After triggers occur after the action they are keyed to, which means they cannot
     * exertsRanger
       default:false
 * PlayerDrawsCard
-  Triggers after `player` draws a card from their draw deck or takes a card into hand.
+  Triggers after `player` draws a card.  A card taken into hand (from a discard pile, or from a draw deck by a look, a reveal or a search) is not a card drawn: where the text says "draws a card (or takes a card into hand)", write `orTakesIntoHand: true` (Verily I Come 2_94, Betrayal of Isengard 3_29; F-0376).  A card taken in place of a draw is a card drawn (see `inPlaceOfDraw` on PutCardsFromDeckIntoHand).
     * player
       required
+    * orTakesIntoHand
+      default: false
 * PutsOnRing
   Triggers after the Ring-bearer "puts on" The One Ring.
 * Reconciles
@@ -4128,6 +4130,8 @@ The primary difference is that discrete effects can be undone by an opposite dis
       required; boolean
     * showAll
       required; boolean
+    * inPlaceOfDraw
+      default: false.  `true` where the card is taken in place of a card its owner was about to draw ("about to draw a card ... look at the top three cards of your draw deck instead. Take [one] into your hand": The Mirror of Galadriel 15_22, beside its `preventEffect` of the draw): that card is the card drawn, and `PlayerDrawsCard` answers it (Q-0205: B).
 * PutCardsFromDeckOnTopOfDeck
   Causes the current player to `select count` cards from their draw deck and place them on top of their draw deck, optionally `reveal`ing the card to their opponent.  (The reveal is required RAW when it is a specific card, but is not required when the operation is indistinct, such as "look at a card and place it on top of your draw deck".)
   See Back to the Light).
