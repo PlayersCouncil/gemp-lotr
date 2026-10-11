@@ -1032,6 +1032,15 @@ who looks: read each card with `FreepsHasCardChoiceAvailable(card, false)` and t
 `FreepsGetTotalRevealedCardCount()`, and answer with `FreepsDismissRevealedCards()`. The hand's owner is asked
 nothing, and his hand keeps its count (`Card_01_067_Tests`).
 
+**A bar on looking at or revealing a hand is asked by each definition word for itself, and one word does not ask
+it** (F-0391, open). `cantLookOrRevealHand` (No Business of Ours 2_44 and 52_44) is asked by `revealHand`,
+`lookAtHand`, `lookAtRandomCardsFromHand` and `revealRandomCardsFromHand`. `revealCardsFromHand` given another
+player's `hand:` (Storm of Argument 3_6, the one definition that has it) shows the card all the same. Two cards
+with one sentence may be written with two words (3_6 against Friends of Old 3_16, "Reveal a card at random from
+an opponent's hand"): before two cards that do a barred act are called the same check, read which word each is
+written with (`Card_02_044_Tests`). Under the bar the action is still offered and its cost paid; nothing is
+shown and the hand keeps its count.
+
 **A look at the top cards of an EMPTY draw deck still shows, with nothing in it.** `LookAtTopCardsOfDrawDeck`
 (Questions That Need Answering 1_81) gives its player "Cards on top of deck" with no card: the count of cards
 shown reads 0 and `FreepsDismissRevealedCards()` answers it (there it does not fail, though no card is shown);

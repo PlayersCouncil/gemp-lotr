@@ -392,6 +392,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "<A player> may assign a minion to skirmish the Ring-bearer" on an optional trigger wants a minion that can be assigned to him (F-0337, Race Text 94_26) [Q-0034, Q-0114]
 - "Each minion gains this ability: 'Assignment: Assign this minion to bearer of <this card>'" is offered only while both can be assigned (F-0252, F-0353, F-0354) [Q-0034, F-0309, F-0351, F-0352, F-0355, F-0388, Q-0224]
 - A choice made ahead of a preventable exert loses the exert's own check (F-0206) [Q-0114]
+- A `preventable` around an effect that has its own choice asks the prevention first (Wielder of the Flame 2_28) [F-0206]
 - "Spot X to <effect>" on an optional trigger or ability is no cost for Q-0034 (F-0167, F-0209, F-0211, F-0219) [Q-0029, Q-0033, Q-0164]
 - An "or" between two cost-to-effect halves (Q-0034)
 - A choice of cost-to-effect branches with no payable branch is not offered (F-0222, F-0259)
