@@ -2893,7 +2893,7 @@ After triggers occur after the action they are keyed to, which means they cannot
     * memorize
       optional
 * ExertsForSpecialAbility
-  Triggers after a card matching `filter` exerts as part of executing a special ability of a card matching `source`, and optionally `memorize`s the exerted character.
+  Triggers after a card matching `filter` exerts as a cost of a special ability of a card matching `source`, and optionally `memorize`s the exerted character.  An exertion that is an effect of the ability is not answered (F-0478).
   If `itsOwn` is true, `source` is ignored and the source is checked to be the same as the exerting card.
  See Rush of Steeds).
     * filter

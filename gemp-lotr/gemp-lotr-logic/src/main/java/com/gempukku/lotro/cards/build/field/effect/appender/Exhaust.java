@@ -72,7 +72,12 @@ public class Exhaust implements EffectAppenderProducer {
                     @Override
                     protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                         final Collection<? extends PhysicalCard> cardsFromMemory = actionContext.getCardsFromMemory(memory);
-                        return new ExhaustCharacterEffect(actionContext.getSource(), action, Filters.in(cardsFromMemory));
+                        final ExhaustCharacterEffect exhaustion = new ExhaustCharacterEffect(actionContext.getSource(), action, Filters.in(cardsFromMemory));
+                        // An exhaustion is exertions, and says of each what `Exert` says of its own (F-0478).  No
+                        // card shows it: no minion's special ability exhausts that minion as a cost, and "exerts as
+                        // a cost of its special ability" (Rush of Steeds 11_157) is the one text that asks.
+                        exhaustion.setPaidAsCost(cost);
+                        return exhaustion;
                     }
                 });
 

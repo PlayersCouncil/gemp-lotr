@@ -4,7 +4,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -481,7 +480,6 @@ public class Card_11_157_Tests
 	// "As a cost of its special ability": the Giant's first exertion is the cost and is answered (declined here); its
 	// second is the effect of the same ability, and is not.
 	@Test
-	@Ignore("F-0478: Rush of Steeds' Response (exertsForSpecialAbility) is offered when a minion exerts as the EFFECT of its own special ability (Lavastone Giant 33_44's second exertion), not only as its cost; the trigger never tells a cost from an effect")
 	public void AMinionWhoExertsAgainAsTheEffectOfItsOwnAbilityIsNotAnswered() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetHobbitSetScenario();
 

@@ -100,8 +100,13 @@ public class Exert implements EffectAppenderProducer {
 
                         final int times = timesSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
                         List<Effect> result = new LinkedList<>();
-                        for (int i = 0; i < times; i++)
-                            result.add(new ExertCharactersEffect(action, actionContext.getSource(), cardsFromMemory.toArray(new PhysicalCard[0])));
+                        for (int i = 0; i < times; i++) {
+                            final ExertCharactersEffect exertion = new ExertCharactersEffect(action, actionContext.getSource(), cardsFromMemory.toArray(new PhysicalCard[0]));
+                            // "Exerts as a cost of its special ability" (Rush of Steeds 11_157; F-0478): the
+                            // result of the exertion says whether it was paid as a cost.
+                            exertion.setPaidAsCost(cost);
+                            result.add(exertion);
+                        }
                         return result;
                     }
                 });
