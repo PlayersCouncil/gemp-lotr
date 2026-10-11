@@ -3,38 +3,61 @@ package com.gempukku.lotro.cards.official.set17;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static com.gempukku.lotro.framework.Assertions.*;
+import static org.junit.Assert.*;
 
-// Wielder of the Flame
 public class Card_17_140_Tests
 {
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>() {{
-					put("appetite", "1_294");
 					put("enquea", "17_140");
-					put("dt", "12_163");
-					put("rider", "12_161");
 
-					put("moria1", "1_21");
-					put("moria2", "1_21");
-					put("moria3", "1_21");
-					put("moria4", "1_21");
-					put("moria5", "1_21");
-					put("moria6", "1_21");
-
+					// Heals the Free Peoples player makes
+					put("healing1", "3_22");   // Master of Healing: [elven] Fellowship or Regroup event, cost 1: spot Elrond to heal a companion or ally
+					put("healing2", "3_22");
+					put("healing3", "3_22");
+					put("elrond", "1_40");     // Elrond, Lord of Rivendell: ally, vitality 4; heals allies of site 3 as a turn starts
+					put("peace", "7_46");      // Peace of Mind: [gandalf] Regroup event, cost 4: spot Gandalf to heal an unbound Hobbit 3 times
+					put("gandalf", "1_364");   // Gandalf, The Grey Wizard: a fellowship ability only
+					put("merry", "1_302");     // Merry, Friend to Sam: unbound Hobbit, vitality 4; a skirmish ability used only on purpose
+					// End of the Game: [gondor] Skirmish event, cost 0: an exhausted [gondor] companion is strength +2,
+					// and if he wins the skirmish he is healed or made damage +1
 					put("endgame", "10_30");
-					put("aragorn", "1_89");
-					put("troop", "1_143");
-				}}
+					put("aragorn", "1_89");    // Aragorn, Ranger of the North: strength 8, vitality 4, resistance 6
+					put("troop", "1_143");     // Troop of Uruk-hai: strength 9, vitality 4, damage +1; weapons give no strength against it
+					// Faramir, Captain of Ithilien: strength 7, vitality 3.  "Maneuver: Exert Faramir to heal another
+					// companion with resistance 5 or more."
+					put("faramir", "18_48");
+					put("harp", "18_3");       // Thorin's Harp: [dwarven] support-area condition, a tale; its ability needs a [dwarven] companion
+					// Hrethel, Rider of Rohan: strength 6.  "Skirmish: Heal a minion skirmishing Hrethel to make
+					// Hrethel strength +3 (limit +3)."
+					put("hrethel", "6_95");
+					put("savage", "1_151");    // Uruk Savage: strength 5, vitality 3; damage +1 and nothing else
+
+					// A heal the Shadow player makes
+					put("dt", "12_163");       // Dark Temptation: "Each time you play a Nazgul, you may heal the Ring-bearer twice to add a burden."
+					put("rider", "12_161");    // Black Rider: [wraith] Nazgul, cost 5, site 3
+
+					// Conditions, and cards that are none
+					put("moria", "1_21");      // Lord of Moria: [dwarven] support-area condition; each Dwarf is damage +1, and there is none
+					put("path", "8_42");       // A Path Appointed: [gondor] support-area condition; abilities used only on purpose
+					put("doom", "8_86");       // Doom Drove Them: [rohan] support-area condition; abilities used only on purpose
+					put("shake", "8_13");      // Shake Off the Shadow: [elven] support-area condition; abilities used only on purpose
+					put("saga", "1_114");      // The Saga of Elendil: [gondor] condition borne by a [gondor] companion; a skirmish ability
+					put("weary", "4_212");     // Weary: [isengard] Shadow condition borne by a companion; its text needs an [isengard] tracker
+					put("bowmen", "1_264");    // Orc Bowmen: [sauron] Shadow support-area condition, inert without a [sauron] Orc
+					put("sword", "1_299");     // Hobbit Sword: a possession, strength +2 and no text
+				}},
+				// Site 4 is Balin's Tomb: "Maneuver: Discard your tale from play or from hand to heal your companion."
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -46,19 +69,19 @@ public class Card_17_140_Tests
 		 * Name: Úlairë Enquëa, Duplicitous Lieutenant
 		 * Unique: True
 		 * Side: Shadow
-		 * Culture: Wraith
+		 * Culture: Ringwraith
 		 * Twilight Cost: 6
 		 * Type: Minion
 		 * Subtype: Nazgûl
 		 * Strength: 11
 		 * Vitality: 4
-		 * Site: 3
-		 * Game Text: Fierce.
-		 * Each time the Free Peoples player heals a companion, you may add a burden.
-		 * Maneuver: Exert Ulaire Enquea twice to discard a condition (or 2 conditions if you can spot 5 Free Peoples player's conditions).
+		 * Site Number: 3
+		 * Game Text: <b>Fierce</b>.
+		 * 	Each time the Free Peoples player heals a companion, you may add a burden.
+		 * 	<b>Maneuver:</b> Exert Úlairë Enquëa twice to discard a condition (or two conditions if you can spot 5
+		 * 	Free Peoples player's conditions).
 		 */
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("enquea");
@@ -78,141 +101,423 @@ public class Card_17_140_Tests
 	}
 
 	@Test
-	public void HealingFromShadowSourcesDoesNothing() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void PlayedFromHandForSixAndTwoMoreWhileRoaming() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var frodo = scn.GetRingBearer();
-		var appetite = scn.GetFreepsCard("appetite");
-		scn.MoveCardsToHand(appetite);
-
 		var enquea = scn.GetShadowCard("enquea");
-		var rider = scn.GetShadowCard("rider");
-		var dt = scn.GetShadowCard("dt");
-		scn.MoveMinionsToTable(enquea);
-		scn.MoveCardsToHand(rider);
-		scn.MoveCardsToHand(dt);
+		scn.MoveCardsToHand(enquea);
 
 		scn.StartGame();
-
-		scn.RemoveBurdens(1); //To compensate for the bid
-		scn.AddWoundsToChar(frodo, 3);
-
-		assertEquals(0, scn.GetBurdens());
-		scn.FreepsPlayCard(appetite);
-		scn.FreepsChoose("2");
-		scn.ShadowAcceptOptionalTrigger();
-		scn.ShadowAcceptOptionalTrigger();
-
-		//Two burdens added from enquea's game text from freeps healing
-		assertEquals(2, scn.GetBurdens());
-
-		scn.AddWoundsToChar(frodo, 2);
 		scn.SetTwilight(10);
-
-		//moving
 		scn.FreepsPass();
 
-		scn.ShadowPlayCard(dt);
-		assertEquals(2, scn.GetBurdens());
-		scn.ShadowPlayCard(rider);
-		scn.ShadowAcceptOptionalTrigger();
-		//We should have the DT trigger, but no Enquea triggers
-		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
-		//We should see +1 burden from Dark Temptation, but no burdens added from Enquea as DT is a shadow card.
-		assertEquals(3, scn.GetBurdens());
-		assertEquals(1, scn.GetWoundsOn(frodo));
+		int twilight = scn.GetTwilight();
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertInZone(Zone.HAND, enquea);
+		assertTrue(scn.ShadowPlayAvailable(enquea));
+
+		scn.ShadowPlayCard(enquea);
+
+		// 6 to play + 2 roaming: its site number is 3 and the fellowship is at site 2
+		assertEquals(twilight - 8, scn.GetTwilight());
+		assertInZone(Zone.SHADOW_CHARACTERS, enquea);
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
-	public void ManeuverActionDiscardsOneOrTwoConditions() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void EachHealOfACompanionByTheFreePeoplesPlayerOffersABurdenAndAHealOfAnAllyDoesNot() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var frodo = scn.GetRingBearer();
-		var appetite = scn.GetFreepsCard("appetite");
-
-		var moria1 = scn.GetFreepsCard("moria1");
-		var moria2 = scn.GetFreepsCard("moria2");
-		var moria3 = scn.GetFreepsCard("moria3");
-		var moria4 = scn.GetFreepsCard("moria4");
-		var moria5 = scn.GetFreepsCard("moria5");
-		var moria6 = scn.GetFreepsCard("moria6");
-
-		scn.MoveCardsToSupportArea(moria1);
-		scn.MoveCardsToSupportArea(moria2);
-		scn.MoveCardsToSupportArea(moria3);
-		scn.MoveCardsToSupportArea(moria4);
-
-		PhysicalCardImpl enquea = scn.GetShadowCard("enquea");
-		scn.MoveMinionsToTable(enquea);
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var elrond = scn.GetFreepsCard("elrond");
+		var healing1 = scn.GetFreepsCard("healing1");
+		var healing2 = scn.GetFreepsCard("healing2");
+		var healing3 = scn.GetFreepsCard("healing3");
+		var enquea = scn.GetShadowCard("enquea");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveAlliesToTable(elrond);
+		scn.MoveCardsToHand(healing1, healing2, healing3);
 
 		scn.StartGame();
+		scn.AddWoundsToChar(aragorn, 2);
+		scn.AddWoundsToChar(elrond, 1);
+		scn.MoveMinionsToTable(enquea);
+		scn.SkipToPhase(Phase.REGROUP);
 
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(2, scn.GetWoundsOn(aragorn));
+
+		// A companion healed: the Shadow player may add a burden, and does.
+		scn.FreepsPlayCard(healing1);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, elrond));
+		scn.FreepsChooseCard(aragorn);
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(enquea));
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+		scn.ShadowPass();
+
+		// An ally healed by the same event: nothing is offered.
+		scn.FreepsPlayCard(healing2);
+		scn.FreepsChooseCard(elrond);
+		assertEquals(0, scn.GetWoundsOn(elrond));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+		scn.ShadowPass();
+
+		// The companion healed a second time: offered again, and declined.
+		scn.FreepsPlayCard(healing3);
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(enquea));
+		scn.ShadowDeclineOptionalTrigger();
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+	}
+
+	@Test
+	public void ACompanionHealedThreeTimesByOneEventOffersABurdenThreeTimes() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var merry = scn.GetFreepsCard("merry");
+		var peace = scn.GetFreepsCard("peace");
+		var enquea = scn.GetShadowCard("enquea");
+		scn.MoveCompanionsToTable(gandalf, merry);
+		scn.MoveCardsToHand(peace);
+
+		scn.StartGame();
+		scn.AddWoundsToChar(merry, 3);
+		scn.MoveMinionsToTable(enquea);
+		scn.SkipToPhase(Phase.REGROUP);
+
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(3, scn.GetWoundsOn(merry));
+
+		// Merry is the one unbound Hobbit: "heal ... 3 times" is three heals, each of them answered.
+		scn.FreepsPlayCard(peace);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(enquea));
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(enquea));
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(2, scn.GetBurdens());
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(enquea));
+		scn.ShadowDeclineOptionalTrigger();
+
+		assertEquals(0, scn.GetWoundsOn(merry));
+		assertEquals(2, scn.GetBurdens());
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+	}
+
+	@Test
+	public void AHealByACompanionsAbilityAndAHealByASitesTextEachOfferABurden() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var faramir = scn.GetFreepsCard("faramir");
+		var harp = scn.GetFreepsCard("harp");
+		var saga = scn.GetFreepsCard("saga");
+		var enquea = scn.GetShadowCard("enquea");
+		scn.MoveCompanionsToTable(aragorn, faramir);
+		scn.MoveCardsToSupportArea(harp);
+		// The other tale of this deck is kept out of the hands the turns on the way deal: with a tale in hand the
+		// site would ask which of the two to discard
+		scn.MoveCardsToDiscard(saga);
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+		scn.AddWoundsToChar(aragorn, 2);
+		scn.MoveMinionsToTable(enquea);
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPass();
 
-		assertTrue(scn.ShadowActionAvailable("Use Úlairë Enquëa, Duplicitous Lieutenant"));
+		// Balin's Tomb
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		assertEquals(0, scn.GetBurdens());
 
-		scn.ShadowUseCardAction(enquea);
-		assertTrue(scn.ShadowDecisionAvailable("Choose cards to discard"));
-		scn.ShadowChooseCard(moria4);
+		// Faramir's own ability: Aragorn is the one wounded companion of resistance 5 or more beside him.
+		scn.FreepsUseCardAction(faramir);
+		assertEquals(1, scn.GetWoundsOn(faramir));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(enquea));
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(1, scn.GetBurdens());
+		scn.ShadowPass();
 
-		//with only 4 conditions in play, Enquea should only be requesting a single condition to be discarded.
-		assertFalse(scn.ShadowAnyDecisionsAvailable());
-
-		scn.RemoveWoundsFromChar(enquea, 2);
-		scn.MoveCardsToSupportArea(moria5);
-		scn.MoveCardsToSupportArea(moria6);
-		scn.FreepsPass();
-		//There should now be 4 - 1 + 2 = 5 freeps conditions in play.
-
-		scn.ShadowUseCardAction(enquea);
-		assertTrue(scn.ShadowDecisionAvailable("Choose cards to discard"));
-		scn.ShadowChooseCards(moria5, moria6);
+		// The site's ability, which is no card of the Free Peoples player's side: he discards his tale and heals
+		// his companion.
+		var tomb = scn.GetCurrentSite();
+		assertTrue(scn.FreepsActionAvailable(tomb));
+		scn.FreepsUseCardAction(tomb);
+		assertInDiscard(harp);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, faramir));
+		scn.FreepsChooseCard(aragorn);
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(enquea));
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(2, scn.GetBurdens());
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 
 	@Test
 	public void EndOfTheGameTriggersEnquea() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
 		var scn = GetScenario();
 
-		var frodo = scn.GetRingBearer();
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var endgame = scn.GetFreepsCard("endgame");
+		var troop = scn.GetShadowCard("troop");
+		var enquea = scn.GetShadowCard("enquea");
 		scn.MoveCompanionsToTable(aragorn);
 		scn.MoveCardsToHand(endgame);
 
-		var troop = scn.GetShadowCard("troop");
-		scn.MoveMinionsToTable(troop);
-
-		var enquea = scn.GetShadowCard("enquea");
-		scn.MoveMinionsToTable(enquea);
-
 		scn.StartGame();
-
-		scn.RemoveBurdens(1); //To compensate for the bid
+		// Vitality 4 with 3 wounds: exhausted
 		scn.AddWoundsToChar(aragorn, 3);
-
-		//moving
-		scn.SkipToPhase(Phase.ASSIGNMENT);
-
-		scn.PassCurrentPhaseActions();
+		scn.MoveMinionsToTable(troop, enquea);
+		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(aragorn, troop);
-		scn.ShadowPass();
+		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(aragorn);
 
+		// 8 + 2 against 9: Aragorn wins, and the event has him healed or made damage +1.
 		scn.FreepsPlayCard(endgame);
-
+		assertEquals(10, scn.GetStrength(aragorn));
 		scn.ShadowPass();
 		scn.FreepsPass();
 
+		// The event's trigger is taken ahead of the skirmish's own wound on the Troop.
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(3, scn.GetWoundsOn(aragorn));
 		scn.FreepsResolveActionOrder("Required trigger from");
 		scn.FreepsChooseOption("Heal");
 		assertEquals(2, scn.GetWoundsOn(aragorn));
 
-		//As a Freeps healing source, we should have the Enquea trigger
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		// As a Freeps healing source, we should have the Enquea trigger
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(enquea));
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(1, scn.GetBurdens());
+		assertEquals(1, scn.GetWoundsOn(troop));
+		// Enquëa, who was assigned to nobody, is fierce: the fierce assignment phase follows.
+		assertTrue(scn.InFierceRound());
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
 
+	@Test
+	public void HealingFromShadowSourcesDoesNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var enquea = scn.GetShadowCard("enquea");
+		var rider = scn.GetShadowCard("rider");
+		var dt = scn.GetShadowCard("dt");
+		scn.MoveCardsToHand(rider, dt);
+
+		scn.StartGame();
+		scn.AddWoundsToChar(frodo, 3);
+		scn.MoveMinionsToTable(enquea);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		scn.ShadowPlayCard(dt);
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(3, scn.GetWoundsOn(frodo));
+
+		// Dark Temptation answers the Nazgul played: the Shadow player heals the Ring-bearer twice to add a burden.
+		scn.ShadowPlayCard(rider);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(dt));
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(1, scn.GetWoundsOn(frodo));
+
+		// We should see +1 burden from Dark Temptation, but no burdens added from Enquea as DT is a shadow card.
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void AMinionHealedByTheFreePeoplesPlayerOffersNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var hrethel = scn.GetFreepsCard("hrethel");
+		var savage = scn.GetShadowCard("savage");
+		var enquea = scn.GetShadowCard("enquea");
+		scn.MoveCompanionsToTable(hrethel);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(savage, enquea);
+		scn.AddWoundsToChar(savage, 1);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(hrethel, savage);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(hrethel);
+
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(1, scn.GetWoundsOn(savage));
+		assertEquals(6, scn.GetStrength(hrethel));
+
+		scn.FreepsUseCardAction(hrethel);
+		assertEquals(0, scn.GetWoundsOn(savage));
+		assertEquals(6 + 3, scn.GetStrength(hrethel));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
+	@Test
+	public void IsNotOfferedWhileNoBurdenCanBeAddedToAHinderedRingBearer() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var elrond = scn.GetFreepsCard("elrond");
+		var healing1 = scn.GetFreepsCard("healing1");
+		var enquea = scn.GetShadowCard("enquea");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveAlliesToTable(elrond);
+		scn.MoveCardsToHand(healing1);
+
+		scn.StartGame();
+		scn.AddWoundsToChar(aragorn, 1);
+		scn.MoveMinionsToTable(enquea);
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.HinderCard(frodo);
+
+		// Aragorn is the one wounded character.  The heal is made; the offer costs nothing and would add nothing.
+		scn.FreepsPlayCard(healing1);
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+	}
+
+	@Test
+	public void ManeuverActionExertsEnqueaTwiceToDiscardOneConditionWhileFourFreePeoplesConditionsCanBeSpotted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var elrond = scn.GetFreepsCard("elrond");
+		var moria = scn.GetFreepsCard("moria");
+		var path = scn.GetFreepsCard("path");
+		var doom = scn.GetFreepsCard("doom");
+		var saga = scn.GetFreepsCard("saga");
+		var sword = scn.GetFreepsCard("sword");
+		var enquea = scn.GetShadowCard("enquea");
+		var weary = scn.GetShadowCard("weary");
+		var bowmen = scn.GetShadowCard("bowmen");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveAlliesToTable(elrond);
+		// Four Free Peoples conditions, three in the support area and one on a companion
+		scn.MoveCardsToSupportArea(moria, path, doom);
+		scn.AttachCardsTo(aragorn, saga);
+		scn.AttachCardsTo(frodo, sword);
+		// Two Shadow conditions: with them six conditions can be spotted, and four of the Free Peoples player's
+		scn.MoveCardsToSupportArea(bowmen);
+		scn.AttachCardsTo(aragorn, weary);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(enquea);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+
+		assertEquals(0, scn.GetWoundsOn(enquea));
+		assertTrue(scn.ShadowActionAvailable(enquea));
+		scn.ShadowUseCardAction(enquea);
+		assertEquals(2, scn.GetWoundsOn(enquea));
+
+		// Exactly one condition, of either side, in a support area or on a character; a possession and an ally are none.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(moria, path, doom, saga, bowmen, weary));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(sword, elrond));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		assertEquals(1, scn.ShadowGetChoiceMax());
+		scn.ShadowChooseCard(saga);
+
+		assertInDiscard(saga);
+		assertInZone(Zone.SUPPORT, moria);
+		assertInZone(Zone.SUPPORT, path);
+		assertInZone(Zone.SUPPORT, doom);
+		assertInZone(Zone.SUPPORT, bowmen);
+		assertAttachedTo(weary, aragorn);
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+	}
+
+	@Test
+	public void ManeuverActionDiscardsTwoConditionsWhileFiveFreePeoplesConditionsCanBeSpotted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var elrond = scn.GetFreepsCard("elrond");
+		var moria = scn.GetFreepsCard("moria");
+		var path = scn.GetFreepsCard("path");
+		var doom = scn.GetFreepsCard("doom");
+		var shake = scn.GetFreepsCard("shake");
+		var saga = scn.GetFreepsCard("saga");
+		var sword = scn.GetFreepsCard("sword");
+		var enquea = scn.GetShadowCard("enquea");
+		var weary = scn.GetShadowCard("weary");
+		var bowmen = scn.GetShadowCard("bowmen");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveAlliesToTable(elrond);
+		// Five Free Peoples conditions, four in the support area and one on a companion
+		scn.MoveCardsToSupportArea(moria, path, doom, shake);
+		scn.AttachCardsTo(aragorn, saga);
+		scn.AttachCardsTo(frodo, sword);
+		scn.MoveCardsToSupportArea(bowmen);
+		scn.AttachCardsTo(aragorn, weary);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(enquea);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+
+		assertEquals(0, scn.GetWoundsOn(enquea));
+		assertTrue(scn.ShadowActionAvailable(enquea));
+		scn.ShadowUseCardAction(enquea);
+		assertEquals(2, scn.GetWoundsOn(enquea));
+
+		// Exactly two, of any of the conditions, a Shadow one among them.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(moria, path, doom, shake, saga, bowmen, weary));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(sword, elrond));
+		assertEquals(2, scn.ShadowGetChoiceMin());
+		assertEquals(2, scn.ShadowGetChoiceMax());
+		scn.ShadowChooseCards(path, bowmen);
+
+		assertInDiscard(path);
+		assertInDiscard(bowmen);
+		assertInZone(Zone.SUPPORT, moria);
+		assertInZone(Zone.SUPPORT, doom);
+		assertInZone(Zone.SUPPORT, shake);
+		assertAttachedTo(saga, aragorn);
+		assertAttachedTo(weary, aragorn);
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+	}
+
+	@Test
+	public void ManeuverActionIsNotOfferedOnceEnqueaCannotExertTwice() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var moria = scn.GetFreepsCard("moria");
+		var enquea = scn.GetShadowCard("enquea");
+		scn.MoveCardsToSupportArea(moria);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(enquea);
+		scn.AddWoundsToChar(enquea, 1);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+
+		// Vitality 4 with 1 wound: two exertions can be paid.
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+		assertTrue(scn.ShadowActionAvailable(enquea));
+
+		// With 2 wounds a second exertion would be her last point of vitality.
+		scn.AddWoundsToChar(enquea, 1);
+		scn.ShadowRefreshDecision();
+		assertEquals(2, scn.GetVitality(enquea));
+		assertInZone(Zone.SUPPORT, moria);
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(enquea));
 	}
 }
