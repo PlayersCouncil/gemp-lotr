@@ -388,6 +388,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A choice whose every branch has nothing to act on (F-0116) [F-0293, Q-0220, F-0370, F-0366]
 - "<Do X> or <do Y>": each branch is written as the effect itself (F-0310, Here Lies Balin 1_19) [Q-0209, F-0222]
 - "Discard his or her hand or <do Y>": with no card in hand the choice is still asked (as built; Pelennor Flat 7_345; Q-0255, open) [Q-0224]
+- "<Do X> or choose an opponent who may <do Y>": with nothing for the opponent to do the choice is still asked (as built; Crashed Gate 8_119; Q-0257, open) [F-0341, F-0310, Q-0255]
 - A parenthesis with its own price (Q-0089)
 - One thing left to do is done without a second question (Q-0090) [Q-0121, F-0387]
 - A yes/no before a choice whose minimum is 0 (Q-0143, F-0277) [F-0278, F-0285, Q-0102, F-0385]

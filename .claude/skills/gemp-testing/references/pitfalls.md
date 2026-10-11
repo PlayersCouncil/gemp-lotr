@@ -1176,6 +1176,9 @@ Where nothing in the zone can be chosen, the showing is the only decision ("... 
 selectable; Saved From the Fire 8_20 with no card of the culture in the deck): answer it once. `FreepsDeclineChoosing()`
 answers a showing as readily as a choice, so one too few leaves "Choose cards from deck" pending. One too many
 fails the test, saying what is being asked instead (G-0034; it used to pass the phase in silence): delete the line.
+`FreepsAcceptOptionalTrigger()` sends its answer whatever is asked, and a showing takes it: in an old test an accept
+that follows a search may be the dismissal (Card_08_092_Tests' old threat test passed so). Write it as
+`FreepsDismissRevealedCards()`.
 The showing lists every card of the zone and none of them can be chosen; the choice that follows lists only the
 cards that may be taken. So "shown, and cannot be chosen" is read at the showing
 (`ShadowHasCardChoiceAvailable(card, false)`, `ShadowGetTotalRevealedCardCount()`), and at the choice an invalid

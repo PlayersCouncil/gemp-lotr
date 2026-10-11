@@ -508,7 +508,9 @@ Stop work on the card, record what is in the way, and move to the next. Do not f
   away the one thing that notices a mistake there. A doubt that no reachable board can raise (two cards of one
   title, possible only with sets outside the campaign) is a line in Notes and not a question. So is a doubt the
   glossary settles once two entries are read together, or one whose two readings leave the players the same
-  outcomes (an offer made or withheld is an outcome: Q-0034). A doubt that hangs on a question already open is a rider to that question, not a new one.
+  outcomes (an offer made or withheld is an outcome: Q-0034). A doubt that hangs on a question already open is a rider to that question, not a new one. It hangs on it only where that
+  question's answer would settle it: the same kind of doubt about another card's sentence is reported as a question
+  that names the open one, and the lander says whether it takes a number of its own (8_119 beside Q-0255).
   Where a general ruling in the log reaches the card by its own scope, the game departs from it on this card,
   and the card's old test asserts what the game does, it is still a question: the old test is evidence that the
   departure was meant. Park the ruling's reading, keep the old reading active, and name the other cards built
