@@ -241,13 +241,23 @@ with no bonus.** The erratum Blood Runs Chill 58_3 remembers the bonus BEFORE th
 commit of 2026-09-14, #1026: "X is part of the cost, so it is locked in before the exertion happens"). The
 original 8_3, and Great Day, Great Hour 10_1 ("exert a Dwarf who is damage +X to exert that minion X times"),
 count it when the effect is carried out. The two differ only for a Dwarf whose bonus the exertion moves: Gimli,
-Counter of Foes 8_5 (damage +1 more for each wound) gives 3 on 8_3 where the spot gives 1. Which the originals
+Counter of Foes 8_5 (damage +1 more for each wound) gives 3 on 8_3 where the spot gives 1, and 2 on 10_1 where
+the text's reading gives 1 (10_1's own old test, with this Gimli and a Great Hill Troll exerted twice, reads the 2
+and is active; `XIsTheDamageBonusTheDwarfHadBeforeHeExerted` is parked on Q-0256). Which the originals
 should do is asked: until it is answered such a card keeps the reading its tests have, parks the other on
 Q-0256 as a rider, and asks nothing new. A Dwarf with NO damage bonus is not "damage +X" and is not offered (as
 built on 8_3, 58_3 and 10_1, `choose(dwarf,damage,...)`; an event's X of zero may be offered or withheld,
 Q-0015, so this is no question): the `-` for the word "damage" is such a Dwarf able to pay, beside a character
 who has the bonus and is no Dwarf, with the event not playable (Grimir 1_17 and Huorn 9_25 in 8_3's tests; the
 filter without `damage` passed every test until that board was laid).
+
+**"Exert your Wizard to choose a number. Make each minion with that twilight cost ..." (Gathering Wind 10_16): the
+number is part of the cost (F-0474).** By the words alone the choice stands after "to" and would be an effect;
+CR 4.2's ruling on the card says "Exerting a Wizard and choosing a number are part of the cost of this card", and
+the definition has `chooseANumber` in `cost` beside the exertion. What tells the two apart is a response to the
+play of the event: with The Mouth of Sauron 103_70 in play the number is asked for with the Shadow player asked
+nothing, and only then is his response offered (`Card_10_016_Tests`). A ruling of this kind on another card is
+shown the same way.
 
 **"Discard a <kind> from hand to take a <kind> into hand from the discard pile" does not take back the card just discarded (Q-0192: A).** Race Text 94_12 leaves the minion discarded for the cost out of the choice (`not(memory(<the discarded card>))`), and its old test asserts that, citing the They Are Coming ruling. CR 4.2 "effect" speaks there of a card PLAYED from a pile, and this text plays nothing and has no "another", so it was asked; Ketura: "the ruling for They Are Coming applies here: discarding a card from hand to retrieve a card is not allowed to pull the card just discarded." As built, and no test of the other reading is kept. With no other card of the kind in the discard pile the action is offered (it has a cost: Q-0034), the card goes and nothing comes back; whether it should be withheld there was asked with Q-0192 and not answered, and no test lays that board. Another card of the shape is built the same way and is no question.
 

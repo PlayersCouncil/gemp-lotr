@@ -976,6 +976,15 @@ bonuses" the count reads 0, and a bonus given later does not land though its eve
 (Seek and Hide 3_112, then Lurtz's Battle Cry 1_128). The rule is shown in mechanics/DamageBonusTests: a card that
 gives or takes a bonus shows the count and one skirmish's wounds, not the arithmetic again.
 
+**The wounds of a lost skirmish are placed in rounds, one on every loser, from one count (F-0475, open).**
+`ResolveSkirmishDamageAction` wounds each loser once, then each again, 1 + the winners' damage bonuses times in
+all, and a kill is answered between two rounds: a loser who dies early has the later rounds "left over", which is
+what More Yet to Come 10_3 assigns elsewhere. Its requirement reads the rounds still to come and its effect ends
+them for EVERY loser, so a second minion in that skirmish loses the wounds still coming to it (2 with the event
+declined, 1 with it played: the test is parked on F-0475). An overwhelm has no such action and leaves nothing
+over (CR 4.2 "overwhelmed"). A card that reads or spends something a whole skirmish shares is tested with a
+second loser in the skirmish, read as untouched (`Card_10_003_Tests`).
+
 **A site is controlled lowest first and only behind every marker; it is liberated highest first** (CR 4.2
 "control", "liberate"). An effect that takes control of a site takes the lowest-numbered site that nobody
 controls and that EVERY player's marker has moved beyond, and asks nothing; on the first turn of a game there is
@@ -1013,7 +1022,9 @@ engine pass 26). Where a test reads a number on player 2's turn, lay his cards a
 
 **An event is in the void while it is being played.** From its play until its last decision is answered an
 event, a response event included, is in `Zone.VOID`; only then is it in the discard pile. `assertInDiscard(event)`
-while a choice or a prevention of its effect is still pending fails.
+while a choice or a prevention of its effect is still pending fails. An event whose effect begins a skirmish
+(A Dark Shape Sprang 10_19) lies in the void through the whole of that skirmish: read it in the discard pile
+once the skirmish has resolved and the suspended phase has resumed.
 
 **An event printed with several phases is an event of the phase it is played in (F-0292).** While it is being
 played, and when its cost to play is read (`GetTwilightCost` of the card in hand, the play itself), a "Skirmish
@@ -1119,7 +1130,11 @@ hand, or play the card and read the pool. A transfer costs the printed number an
 test on a bare board notices. To show the size of a discount on a cheap card, raise the cost first: an ad hoc
 `TwilightCostModifier(null, CardType.COMPANION, null, new ConstantEvaluator(2))` does what East Road 11_236
 does ("Each companion is twilight cost +2"), and the card reads 4 without its discount and 2 with it
-(`Card_15_064_ErrataTests`).
+(`Card_15_064_ErrataTests`). For a MINION a printed card does it: Chaotic Clash 17_68 ([orc] support-area
+condition, cost 0, "To play, spot no minions. Each time you play a minion, it is twilight cost +1"), put in the
+Shadow support area, reaches a minion played from hand and one played from the discard pile; its "each companion
+is strength -1" needs an [orc] minion in play. Gollum (2) played at "twilight cost -2" beside it costs 1 and his
+roaming penalty, so a pool one short withholds the play and -1 or -3 reads another number (`Card_10_019_Tests`).
 
 **"When you play X, you may remove N threats to make its twilight cost -N" asks for N as the card is played.**
 The card is offered when the pool and the threats together cover it (roaming counted), and the number asked for
