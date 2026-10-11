@@ -26,8 +26,9 @@ import static org.junit.Assert.*;
  * of them, so that a branch that can be done in part still is (Dwarrowdelf Chamber with one companion to exert
  * where it wants two).  What has gone is the question in that second case when each branch says for itself that
  * it is certain to do nothing: nobody to exert, heal or wound, no burden to remove, no site to liberate.  A
- * branch that cannot tell keeps the question, and so does a branch that is more than a single effect: the later
- * of several effects cannot be asked before the earlier have been carried out.
+ * branch that cannot tell keeps the question, and so does a branch whose first effect only remembers something
+ * for the next: the later effect cannot be asked before that memory is filled.  (Until engine pass 26 every
+ * branch of several effects, and every one that holds others, kept it: ChoiceWithABranchThatHoldsOthersTests.)
  *
  * A reveal from a draw deck with nothing in it is certain to do nothing as well (engine pass 21, Q-0163), so a
  * choice of which deck to reveal from is not put while every such deck is empty.
@@ -316,7 +317,7 @@ public class ChoiceWithNothingOnAnyBranchTests
 	}
 
 	@Test
-	public void ABranchOfSeveralEffectsKeepsTheQuestion() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ABranchThatFirstRemembersSomethingKeepsTheQuestion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetRememberingScenario();
 
 		var fork = scn.GetFreepsCard("fork");

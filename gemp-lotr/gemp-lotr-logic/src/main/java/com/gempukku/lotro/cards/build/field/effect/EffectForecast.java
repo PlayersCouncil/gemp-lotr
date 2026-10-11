@@ -217,8 +217,9 @@ public final class EffectForecast {
      * this is asked at the moment the effects come up, so they are asked in a context that says so
      * (ActionContext.isAtResolution) and may read what has been chosen and remembered.  It is what a prevention
      * asks before it is put to a player (PreventableEffectAppender): nobody is asked to pay to prevent what is
-     * not going to happen.  A choice asks it of its branches when none of them can be carried out in full
-     * (Choice): nobody is asked to pick between things that will not happen.
+     * not going to happen.  A choice asks it of each branch that is a single effect, when none of its branches
+     * can be carried out in full (Choice, by way of EffectAppender.isCertainToDoNothingIfChosen): nobody is
+     * asked to pick between things that will not happen.
      *
      * Each effect has to say for itself that it will do nothing.  An effect that cannot tell, and one that only
      * remembers something for the next (whose forecast is then made before that memory is filled), leave the
@@ -244,6 +245,47 @@ public final class EffectForecast {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Whether each of the given effects, carried out one after another from now, is certain to do nothing: what
+     * an effect that holds others answers a choice it is a branch of (EffectAppender.isCertainToDoNothingIfChosen).
+     * They are asked in the order they would be carried out, and the asking stops at the first that may do
+     * something.  An effect that is certain to do nothing leaves the board, and what is remembered, as the next
+     * will find them; one that only remembers something for the next is not certain to do nothing, so what
+     * follows it is never asked before its memory is filled.  No effects at all do nothing.
+     */
+    public static boolean areCertainToDoNothingIfChosen(ActionContext actionContext, EffectAppender[] effectAppenders) {
+        if (effectAppenders == null)
+            return true;
+        try {
+            for (EffectAppender effectAppender : effectAppenders) {
+                if (!effectAppender.isCertainToDoNothingIfChosen(actionContext))
+                    return false;
+            }
+        } catch (RuntimeException exp) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Whether a card resolver, asked as it is when its effect is about to be carried out, finds no card at all:
+     * what a play answers a choice it is a branch of, with no card that can be played.
+     */
+    public static boolean findsNoCardNow(ActionContext actionContext, EffectAppender cardResolver) {
+        final ActionContext atResolution = new DelegateActionContext(actionContext, actionContext.getPerformingPlayer()) {
+            @Override
+            public boolean isAtResolution() {
+                return true;
+            }
+        };
+        try {
+            final Collection<PhysicalCard> found = cardResolver.forecast(atResolution).getReach();
+            return found != null && found.isEmpty();
+        } catch (RuntimeException exp) {
+            return false;
+        }
     }
 
     /**

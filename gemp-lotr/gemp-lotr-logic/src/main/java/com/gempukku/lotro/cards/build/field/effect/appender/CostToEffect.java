@@ -1,6 +1,7 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
 import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
+import com.gempukku.lotro.cards.build.field.effect.IdleOffers;
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
@@ -26,6 +27,11 @@ public class CostToEffect implements EffectAppenderProducer {
         final EffectAppender[] costAppenders = environment.getEffectAppenderFactory().getEffectAppenders(true, costArray, environment);
         final EffectAppender[] effectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(false, effectArray, environment);
         final Requirement[] requirements = environment.getRequirementFactory().getRequirements(conditionArray, environment);
+        // Which of the costs remember something (a card chosen, a number): a cost that stands after one of
+        // those may read that memory, and cannot be asked whether it can be paid before the first is paid.
+        final boolean[] costRemembers = new boolean[costArray.length];
+        for (int i = 0; i < costArray.length; i++)
+            costRemembers[i] = IdleOffers.remember(new JSONObject[]{costArray[i]});
 
         return new DelayedAppender() {
             @Override
@@ -48,6 +54,30 @@ public class CostToEffect implements EffectAppenderProducer {
             @Override
             public EffectForecast forecast(ActionContext actionContext) {
                 return EffectForecast.together(actionContext, effectAppenders);
+            }
+
+            // As a branch of a choice it goes by its cost alone (F-0222; CR 4.2 "cost": "you must pay that cost
+            // or you cannot use that card or special ability"): with a cost that cannot be paid nothing is
+            // bought, and the branch is not one to be chosen.  With a cost that can be paid it is never certain
+            // to do nothing, whatever the effect comes to (Q-0034): paying is doing something.  The costs are
+            // asked in order, as isPlayableInFull asks them, and the asking stops at one that remembers
+            // something, since the cost after it may read that memory.
+            @Override
+            public boolean isCertainToDoNothingIfChosen(ActionContext actionContext) {
+                if (!checkConditions(actionContext))
+                    return true;
+                // With no cost written it is only what it holds.
+                if (costAppenders.length == 0)
+                    return EffectForecast.areCertainToDoNothingIfChosen(actionContext, effectAppenders);
+
+                for (int i = 0; i < costAppenders.length; i++) {
+                    if (!costAppenders[i].isPlayableInFull(actionContext))
+                        return true;
+                    if (costRemembers[i])
+                        return false;
+                }
+
+                return false;
             }
 
             private boolean checkConditions(ActionContext actionContext) {

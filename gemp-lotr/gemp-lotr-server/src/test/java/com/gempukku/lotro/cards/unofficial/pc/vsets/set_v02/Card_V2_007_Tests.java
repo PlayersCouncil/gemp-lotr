@@ -215,8 +215,8 @@ public class Card_V2_007_Tests
 		scn.FreepsPlayCard(contest);
 		assertEquals(twilight + 2, scn.GetTwilight());
 
-		// The game asks which half to attempt, though neither has anything to reinforce.
-		scn.FreepsChooseOption("Spot an");
+		// Neither half has anything to reinforce, so the game does not ask which to attempt (F-0116).
+		assertFalse(scn.FreepsDecisionAvailable("Choose action to perform"));
 
 		assertEquals(0, scn.GetCultureTokensOn(shake));
 		assertEquals(0, scn.GetCultureTokensOn(kinfolk));
@@ -537,9 +537,9 @@ public class Card_V2_007_Tests
 		scn.FreepsPlayCard(contest);
 		assertEquals(twilight + 2, scn.GetTwilight());
 
-		// Neither half can be carried out, and the game asks which to attempt.  The half that spots a [dwarven]
-		// companion has no such companion to spot, so it reinforces nothing.
-		scn.FreepsChooseOption("Spot a ");
+		// One half has no [dwarven] token to reinforce and the other no [dwarven] companion to spot: neither
+		// can do anything, the game does not ask which to attempt (F-0116), and nothing is reinforced.
+		assertFalse(scn.FreepsDecisionAvailable("Choose action to perform"));
 
 		assertEquals(1, scn.GetCultureTokensOn(count));
 		assertEquals(0, scn.GetCultureTokensOn(kinfolk));
@@ -569,9 +569,9 @@ public class Card_V2_007_Tests
 		scn.FreepsPlayCard(contest);
 		assertEquals(twilight + 2, scn.GetTwilight());
 
-		// Asked which half to attempt, the player takes the one that spots an [elven] companion: there is none,
-		// so it reinforces nothing.
-		scn.FreepsChooseOption("Spot an");
+		// One half has no [elven] token to reinforce and the other no [elven] companion to spot: neither can do
+		// anything, the game does not ask which to attempt (F-0116), and nothing is reinforced.
+		assertFalse(scn.FreepsDecisionAvailable("Choose action to perform"));
 
 		assertEquals(1, scn.GetCultureTokensOn(notched));
 		assertEquals(0, scn.GetCultureTokensOn(shake));
@@ -636,8 +636,8 @@ public class Card_V2_007_Tests
 		// An event may be played though it will do nothing.
 		assertTrue(scn.FreepsPlayAvailable(contest));
 		scn.FreepsPlayCard(contest);
-		// The game asks which half to attempt, though neither has anything to reinforce.
-		scn.FreepsChooseOption("Spot an");
+		// Neither half has anything to reinforce, so the game does not ask which to attempt (F-0116).
+		assertFalse(scn.FreepsDecisionAvailable("Choose action to perform"));
 
 		// An additional reinforcement would do nothing either, and a "may" that costs nothing and can do nothing
 		// is not put to the player.

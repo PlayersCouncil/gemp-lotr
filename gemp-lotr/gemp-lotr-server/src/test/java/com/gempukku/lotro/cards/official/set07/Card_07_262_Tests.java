@@ -205,10 +205,9 @@ public class Card_07_262_Tests
 		assertTrue(scn.ShadowPlayAvailable(battlements));
 
 		scn.ShadowPlayCard(battlements);
-		// With no branch playable in full, Choice falls back to offering every option (see Choice.java).
-		// Picking the burden branch must still fail its cost rather than play the Orc for free.
-		assertEquals(2, scn.ShadowGetMultipleChoiceCount());
-		scn.ShadowChooseOption("burden");
+		// Neither branch can be paid for, so neither is one to choose: nothing is asked (F-0116, F-0222), and the
+		// Orc is not played for free.
+		assertFalse(scn.ShadowDecisionAvailable("Choose action to perform"));
 
 		assertEquals(Zone.DISCARD, assassin.getZone());
 		assertEquals(0, scn.GetBurdens());

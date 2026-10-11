@@ -4,6 +4,7 @@ import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.CardResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.filters.Filters;
@@ -33,10 +34,7 @@ public class PlayCardFromStacked implements EffectAppenderProducer {
 
         final FilterableSource onFilterableSource = environment.getFilterFactory().generateFilter(onFilter, environment);
 
-        MultiEffectAppender result = new MultiEffectAppender();
-        result.setPlayabilityCheckedForEffect(true);
-
-        result.addEffectAppender(
+        final EffectAppender cardToPlay =
                 CardResolver.resolveStackedCards(select,
                         actionContext -> {
                             LotroGame game = actionContext.getGame();
@@ -48,7 +46,18 @@ public class PlayCardFromStacked implements EffectAppenderProducer {
                             final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
                             return Filters.playable(costModifier, removedTwilight, actionContext.getUnpaidThreatCost(), false, false, true);
                         },
-                        actionContext -> new ConstantEvaluator(1), onFilterableSource, memory, "you", "Choose card to play", environment));
+                        actionContext -> new ConstantEvaluator(1), onFilterableSource, memory, "you", "Choose card to play", environment);
+
+        // As a branch of a choice: with no card stacked there that can be played, nothing is played.
+        MultiEffectAppender result = new MultiEffectAppender() {
+            @Override
+            public boolean isCertainToDoNothingIfChosen(ActionContext actionContext) {
+                return EffectForecast.findsNoCardNow(actionContext, cardToPlay);
+            }
+        };
+        result.setPlayabilityCheckedForEffect(true);
+
+        result.addEffectAppender(cardToPlay);
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

@@ -1,7 +1,6 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
 import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
-import com.gempukku.lotro.cards.build.field.effect.NoEffectForesight;
 import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
@@ -46,13 +45,6 @@ public class Choice implements EffectAppenderProducer {
         Requirement[] possibleRequirements = environment.getRequirementFactory().getRequirements(requirementArray, environment);
 
         final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
-
-        // Whether every branch is a single effect that holds no other: only such branches are asked, when the
-        // choice comes up, whether any of them will do anything.
-        boolean singleEffects = true;
-        for (JSONObject[] branch : effectArrayOfArrays)
-            singleEffects &= NoEffectForesight.isOneEffectHoldingNoOther(branch);
-        final boolean branchesSayForThemselves = singleEffects;
 
         return new DelayedAppender() {
             @Override
@@ -112,9 +104,10 @@ public class Choice implements EffectAppenderProducer {
 
                     // A choice whose every branch is certain to do nothing is not put to the player (Ketura on
                     // F-0116: "the prompt should be smarter"; F-0293).  It comes to nothing, as whichever branch
-                    // was picked would have.  A branch of several effects, or of an effect that holds others,
-                    // is not asked, and keeps the question.
-                    if (branchesSayForThemselves && EffectForecast.isCertainToDoNothing(delegate, possibleEffectAppenders))
+                    // was picked would have.  Each branch says for itself: a single effect by its forecast, one
+                    // that holds others (an "if", a cost and what it buys, several effects, a play) from what
+                    // it holds (Q-0220: D).  A branch that cannot tell keeps the question.
+                    if (EffectForecast.areCertainToDoNothingIfChosen(delegate, possibleEffectAppenders))
                         return new FailedEffect();
 
                     // If we are an effect however, then we will let "no valid choices" default to the player choosing
@@ -149,6 +142,17 @@ public class Choice implements EffectAppenderProducer {
                         choosingPlayer, actionContext.getGame(), actionContext.getSource(),
                         actionContext.getEffectResult(), actionContext.getEffect());
                 return EffectForecast.together(delegate, possibleEffectAppenders);
+            }
+
+            // As a branch of another choice: it comes to nothing only if every option of its own would.
+            @Override
+            public boolean isCertainToDoNothingIfChosen(ActionContext actionContext) {
+                final String choosingPlayer = playerSource.getPlayer(actionContext);
+                ActionContext delegate = new DelegateActionContext(actionContext,
+                        choosingPlayer, actionContext.getGame(), actionContext.getSource(),
+                        actionContext.getEffectResult(), actionContext.getEffect());
+                return possibleEffectAppenders.length > 0
+                        && EffectForecast.areCertainToDoNothingIfChosen(delegate, possibleEffectAppenders);
             }
 
             @Override

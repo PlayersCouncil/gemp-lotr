@@ -286,6 +286,11 @@ public class EffectAppenderFactory {
                 public EffectForecast forecast(ActionContext actionContext) {
                     return effectAppender.forecast(actionContext);
                 }
+
+                @Override
+                public boolean isCertainToDoNothingIfChosen(ActionContext actionContext) {
+                    return effectAppender.isCertainToDoNothingIfChosen(actionContext);
+                }
             };
         } else {
             return effectAppender;

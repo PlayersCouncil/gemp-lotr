@@ -385,7 +385,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 
 - The no-effect flag: which cards assert it [Q-0034]
 - An optional trigger or ability that costs nothing and would do nothing is withheld by the engine (Q-0224: A2; Q-0231: B; engine pass 26) [Q-0034, F-0407, F-0408, F-0402, F-0406, Q-0033, F-0411, F-0417, F-0428, F-0413, Q-0104, F-0410, F-0426, F-0423, Q-0102, Q-0243, Q-0245, Q-0029, F-0429, F-0379, Q-0107]
-- A choice whose every branch has nothing to act on (F-0116) [F-0293, F-0370, F-0366]
+- A choice whose every branch has nothing to act on (F-0116) [F-0293, Q-0220, F-0370, F-0366]
 - "<Do X> or <do Y>": each branch is written as the effect itself (F-0310, Here Lies Balin 1_19) [Q-0209, F-0222]
 - A parenthesis with its own price (Q-0089)
 - One thing left to do is done without a second question (Q-0090) [Q-0121, F-0387]
@@ -403,7 +403,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A `preventable` around an effect that has its own choice asks the prevention first (Wielder of the Flame 2_28) [F-0206]
 - "Spot X to <effect>" on an optional trigger or ability is no cost for Q-0034 (F-0167, F-0209, F-0211, F-0219) [Q-0224, Q-0029, Q-0033, F-0401, Q-0164]
 - An "or" between two cost-to-effect halves (Q-0034)
-- A choice of cost-to-effect branches with no payable branch is not offered (F-0222, F-0259)
+- A choice of cost-to-effect branches with no payable branch is not offered (F-0222, F-0259) [Q-0220]
 - "The Free Peoples player must <pay> to assign <this minion> ..." (Q-0221: A, built by engine pass 26; F-0306, F-0307, F-0308, Q-0174 and Q-0199 before it) [Q-0038, F-0425]
 - "You may discard up to N (X, any number of) cards from hand to draw as many" on an optional trigger (F-0300, Robin Smallburrow 68_111 and 18_111) [F-0022, Q-0015, Q-0034, Q-0143, F-0448, F-0449]
 - "You may" on a Race to Mount Doom modifier names its player (F-0311)

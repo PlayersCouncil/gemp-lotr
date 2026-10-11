@@ -87,17 +87,6 @@ public final class NoEffectForesight {
     }
 
     /**
-     * @param effects Effects that are carried out one after another, as the definition writes them.
-     * @return Whether they are one effect, and one that holds no other.  Such an effect, about to be carried out,
-     * can say for itself whether it will do anything (EffectForecast.isCertainToDoNothing).  Of several effects,
-     * or of one that holds others (a cost and what it buys, the branches of an "if"), the later cannot be asked
-     * before the earlier have been carried out: those may make, or remember, the very thing it needs.
-     */
-    public static boolean isOneEffectHoldingNoOther(JSONObject[] effects) {
-        return effects.length == 1 && !WRAPPERS.contains(String.valueOf(effects[0].get("type")).toLowerCase());
-    }
-
-    /**
      * Settles whether an action is a reveal from a draw deck and what is then done with the cards revealed, and
      * nothing else: "Exert a Man and hinder a beacon to reveal the top 4 cards of your draw deck.  You may take any
      * [gondor] or [rohan] cards revealed into hand.  Replace the rest in any order."  With nothing in that deck such

@@ -4,6 +4,7 @@ import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.CardResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.common.Filterable;
@@ -45,9 +46,6 @@ public class PlayCardFromDrawDeck implements EffectAppenderProducer {
 
         final FilterableSource onFilterableSource = (onFilter != null) ? environment.getFilterFactory().generateFilter(onFilter, environment) : null;
 
-        MultiEffectAppender result = new MultiEffectAppender();
-        result.setPlayabilityCheckedForEffect(true);
-
         final FilterableSource playableFilterSource = (actionContext) -> {
             final LotroGame game = actionContext.getGame();
             final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
@@ -68,6 +66,16 @@ public class PlayCardFromDrawDeck implements EffectAppenderProducer {
         final EffectAppender existenceCheck = !mustExist ? null :
                 CardResolver.resolveCardsInDeck(select, playableFilterSource,
                         actionContext -> new ConstantEvaluator(1), memorize, "you", "you", showAll, "Choose card to play", environment);
+
+        // As a branch of a choice: a deck may always be looked through for the card, so the play is certain to do
+        // nothing only where the deck is asked to hold such a card (mustExist) and holds none.
+        MultiEffectAppender result = new MultiEffectAppender() {
+            @Override
+            public boolean isCertainToDoNothingIfChosen(ActionContext actionContext) {
+                return existenceCheck != null && EffectForecast.findsNoCardNow(actionContext, existenceCheck);
+            }
+        };
+        result.setPlayabilityCheckedForEffect(true);
 
         result.addEffectAppender(
                 CardResolver.resolveCardsInDeck(select, playableFilterSource,

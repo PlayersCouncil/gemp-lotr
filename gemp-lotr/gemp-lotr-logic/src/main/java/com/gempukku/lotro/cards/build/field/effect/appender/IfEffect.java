@@ -63,6 +63,15 @@ public class IfEffect implements EffectAppenderProducer {
                 return EffectForecast.together(actionContext, trueEffectAppenders, falseEffectAppenders);
             }
 
+            // As a branch of a choice it is asked as the choice comes up, and the check made now is the one
+            // that will be made if the branch is taken: it does what the side the check picks does, and
+            // nothing where that side has nothing in it.
+            @Override
+            public boolean isCertainToDoNothingIfChosen(ActionContext actionContext) {
+                return EffectForecast.areCertainToDoNothingIfChosen(actionContext,
+                        checkRequirements(actionContext) ? trueEffectAppenders : falseEffectAppenders);
+            }
+
             private boolean checkRequirements(ActionContext actionContext) {
                 for (Requirement condition : conditions) {
                     if (!condition.accepts(actionContext))

@@ -93,6 +93,13 @@ public class PreventableEffectAppender extends DelayedAppender {
         }
     }
 
+    // As a branch of a choice it keeps the choice asked: what is paid to prevent it, and what is done in its
+    // place, are another player's to choose.
+    @Override
+    public boolean isCertainToDoNothingIfChosen(ActionContext actionContext) {
+        return false;
+    }
+
     // What would happen if it were not prevented.  Where preventing it puts something else in its place,
     // nothing is said: that is the other player's to bring about.
     @Override

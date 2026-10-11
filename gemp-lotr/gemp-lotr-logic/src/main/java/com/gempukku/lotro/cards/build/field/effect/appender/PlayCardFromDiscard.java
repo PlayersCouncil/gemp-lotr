@@ -4,6 +4,7 @@ import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.CardResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.common.Filterable;
@@ -45,12 +46,9 @@ public class PlayCardFromDiscard implements EffectAppenderProducer {
 
         final FilterableSource onFilterableSource = (onFilter != null) ? environment.getFilterFactory().generateFilter(onFilter, environment) : null;
 
-        MultiEffectAppender result = new MultiEffectAppender();
-        result.setPlayabilityCheckedForEffect(true);
-
         Evaluator countEvaluator = optional ? new RangeEvaluator(0, 1) : new ConstantEvaluator(1);
 
-        result.addEffectAppender(
+        final EffectAppender cardToPlay =
                 CardResolver.resolveCardsInDiscard(select,
                         (actionContext) -> {
                             final LotroGame game = actionContext.getGame();
@@ -81,7 +79,18 @@ public class PlayCardFromDiscard implements EffectAppenderProducer {
 
                             return Filters.playable(maxDiscountModifier, twilightGoneFirst, threatsAddedFirst, false, false, true);
                         },
-                        actionContext -> countEvaluator, memorize, player, "Choose card to play from discard", environment));
+                        actionContext -> countEvaluator, memorize, player, "Choose card to play from discard", environment);
+
+        // As a branch of a choice: with no card in the discard pile that can be played, nothing is played.
+        MultiEffectAppender result = new MultiEffectAppender() {
+            @Override
+            public boolean isCertainToDoNothingIfChosen(ActionContext actionContext) {
+                return EffectForecast.findsNoCardNow(actionContext, cardToPlay);
+            }
+        };
+        result.setPlayabilityCheckedForEffect(true);
+
+        result.addEffectAppender(cardToPlay);
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

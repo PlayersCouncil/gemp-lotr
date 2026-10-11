@@ -48,4 +48,19 @@ public interface EffectAppender extends PreEvaluateAble {
     default EffectForecast forecast(ActionContext actionContext) {
         return EffectForecast.UNKNOWN;
     }
+
+    /**
+     * Whether this effect, were it carried out now, is certain to do nothing.  A choice asks it of each of its
+     * branches as the choice comes up, when none of them can be carried out in full (Choice): nobody is asked to
+     * pick between things none of which will happen.
+     *
+     * An effect answers for itself by its forecast, asked as it is when the effect is about to be carried out
+     * (EffectForecast.isCertainToDoNothing).  An effect that holds others answers from what it holds: an "if" by
+     * the side its check picks, a cost and what it buys by whether the cost can be paid, several effects by each
+     * of them in turn, a play by whether there is a card to play.  One that holds others and has not been taught
+     * to say (a "you may", a repeat, a prevention) answers false, and the choice it is a branch of is asked.
+     */
+    default boolean isCertainToDoNothingIfChosen(ActionContext actionContext) {
+        return EffectForecast.isCertainToDoNothing(actionContext, new EffectAppender[]{this});
+    }
 }

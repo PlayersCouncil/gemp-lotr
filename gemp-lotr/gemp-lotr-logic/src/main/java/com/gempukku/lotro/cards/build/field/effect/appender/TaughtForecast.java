@@ -71,6 +71,11 @@ public final class TaughtForecast implements EffectAppender {
     }
 
     @Override
+    public boolean isCertainToDoNothingIfChosen(ActionContext actionContext) {
+        return effect.isCertainToDoNothingIfChosen(actionContext);
+    }
+
+    @Override
     public void appendEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
         effect.appendEffect(cost, action, actionContext);
     }

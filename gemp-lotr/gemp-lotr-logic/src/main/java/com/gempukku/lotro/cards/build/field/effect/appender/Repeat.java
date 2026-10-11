@@ -59,6 +59,13 @@ public class Repeat implements EffectAppenderProducer {
                 return Arrays.stream(effectAppenders).anyMatch(EffectAppender::isPlayabilityCheckedForEffect);
             }
 
+            // As a branch of a choice it keeps the choice asked: what is done one time round may be what the
+            // next acts on.
+            @Override
+            public boolean isCertainToDoNothingIfChosen(ActionContext actionContext) {
+                return false;
+            }
+
             // However many times: nothing done once is nothing done each time.
             @Override
             public EffectForecast forecast(ActionContext actionContext) {

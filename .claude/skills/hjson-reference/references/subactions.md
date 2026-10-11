@@ -18,10 +18,13 @@ Choice
 
     Only the options that can be carried out in full are offered, and a lone one is taken without asking.  With none,
     a Choice that is a cost comes to nothing, and a Choice that is an effect offers every option (one of them may still
-    be done in part), unless each option is a single effect that is certain to do nothing (nobody to exert or
-    heal, no burden to remove, no site to liberate): then the player is not asked and nothing happens (F-0116).
-    An option that is a nested array, or an effect that holds others (If, CostToEffect, Multiple, Choice), is not
-    judged and keeps the question.
+    be done in part), unless each option is certain to do nothing (nobody to exert or heal, no burden to remove, no
+    site to liberate): then the player is not asked and nothing happens (F-0116).
+    An option that holds others is judged from what it holds (engine pass 26): an If by the side its check picks; a
+    CostToEffect by whether its cost can be paid and its `requires` holds (one that cannot be paid for is nothing;
+    one that can never is, whatever it buys); a play by whether a card can be played; a nested array, a Multiple or
+    a Choice by each effect in turn.  An option with an Optional, a Repeat or a Preventable in it, or one that
+    begins by remembering something for its next effect, is not judged and keeps the question.
 
     * player
       default: you

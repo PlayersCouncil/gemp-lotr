@@ -96,6 +96,13 @@ public class Optional implements EffectAppenderProducer {
                 return false;
             }
 
+            // As a branch of a choice it keeps the choice asked: its yes may pay a cost, and what that buys
+            // cannot be asked before it is paid.
+            @Override
+            public boolean isCertainToDoNothingIfChosen(ActionContext actionContext) {
+                return false;
+            }
+
             // What the player would be saying yes to.
             @Override
             public EffectForecast forecast(ActionContext actionContext) {
