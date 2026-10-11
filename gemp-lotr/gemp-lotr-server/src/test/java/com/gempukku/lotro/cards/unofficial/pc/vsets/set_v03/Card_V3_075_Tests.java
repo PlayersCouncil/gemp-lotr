@@ -24,8 +24,8 @@ public class Card_V3_075_Tests
 					put("nertea", "1_234");     // Ulaire Nertea, Messenger of Dol Guldur: [wraith], strength 9, vitality 2, not fierce; text about being played
 					put("attea", "103_61");     // Ulaire Attea, Khamul of the East: a [raider] Nazgul, fierce; his text needs 3 burdens
 					put("otsea", "1_235");      // Ulaire Otsea, Lieutenant of Morgul: [wraith], not fierce; a Shadow ability
-					put("otsea2", "12_179");    // Ulaire Otsea, Black Specter: [wraith], not fierce; a Shadow ability
-					put("nertea2", "7_217");    // Ulaire Nertea, Black-Mantled Wraith: [wraith], not fierce; a regroup ability that needs initiative
+					put("nelya", "2_84");       // Ulaire Nelya, Ringwraith in Twilight: [wraith], twilight; fierce and damage +1 only at 2 burdens or 2 wounds on the Ring-bearer
+					put("toldea", "12_180");    // Ulaire Toldea, Black Shadow: [wraith], fierce; his text is for when he is played
 					put("cantea", "1_230");     // Ulaire Cantea, Lieutenant of Dol Guldur: [wraith], fierce; a skirmish ability of his own skirmishes
 					// A [wraith] minion who is not a Nazgul; his text needs 3 wounds on the Ring-bearer.
 					put("mongrel1", "7_194");   // Morgul Mongrel: [wraith] Orc, strength 7
@@ -195,16 +195,16 @@ public class Card_V3_075_Tests
 		var nertea = scn.GetShadowCard("nertea");
 		var attea = scn.GetShadowCard("attea");
 		var otsea = scn.GetShadowCard("otsea");
-		var otsea2 = scn.GetShadowCard("otsea2");
-		var nertea2 = scn.GetShadowCard("nertea2");
+		var nelya = scn.GetShadowCard("nelya");
+		var toldea = scn.GetShadowCard("toldea");
 		var cantea = scn.GetShadowCard("cantea");
 		// Six companions with Frodo, and an ally.
 		scn.MoveCompanionsToTable(aragorn, gimli, guard, elf, sam);
 		scn.MoveAlliesToTable(bounder);
 
 		scn.StartGame();
-		// Six other Nazgul: more of them than there are other companions.
-		scn.MoveMinionsToTable(lemenya, nertea, attea, otsea, otsea2, nertea2, cantea);
+		// Six other Nazgul, each of another name: more of them than there are other companions.
+		scn.MoveMinionsToTable(lemenya, nertea, attea, otsea, nelya, toldea, cantea);
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(gimli, lemenya);
 		scn.ShadowDeclineAssignments();

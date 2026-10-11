@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -26,7 +25,9 @@ public class Card_V3_089_Tests
 					put("guard", "5_83");          // Household Guard: [rohan] Man companion, vitality 3, valiant and nothing else
 					put("guard2", "5_83");
 					put("aragorn", "1_89");        // Aragorn, Ranger of the North: a [gondor] Man
-					put("dwarf", "1_7");           // Dwarf Guard: vitality 2, no text in play; made [rohan] where a [rohan] companion who is no Man is wanted
+					// Merry, Master Holbytla: a [rohan] companion who is a Hobbit, vitality 4; he is a Man too with 3 [rohan] companions
+					// or Eowyn to spot, and each time another [rohan] Man exerts he may exert to heal that Man
+					put("merry", "103_85");
 					put("guma", "4_277");          // Guma, Plains Farmer: [rohan] Man ally, vitality 2; a fellowship ability
 					put("mount", "4_287");         // Rider's Mount: makes a companion mounted; its text needs its bearer in a skirmish
 					put("delvings", "101_2");      // Deepest Delvings: a Free Peoples condition, here only to have cards stacked on it
@@ -294,17 +295,14 @@ public class Card_V3_089_Tests
 		var guard = scn.GetFreepsCard("guard");
 		var guard2 = scn.GetFreepsCard("guard2");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		var dwarf = scn.GetFreepsCard("dwarf");
 		var guma = scn.GetFreepsCard("guma");
 		var delvings = scn.GetFreepsCard("delvings");
 		var myRunner = scn.GetFreepsCard("runner");
 		var myKing = scn.GetFreepsCard("king");
-		scn.MoveCompanionsToTable(theoden, eomer, guard, guard2, aragorn, dwarf);
+		scn.MoveCompanionsToTable(theoden, eomer, guard, guard2, aragorn);
 		scn.MoveAlliesToTable(guma);
 		// Vitality 3: exhausted.
 		scn.AddWoundsToChar(guard2, 2);
-		// A [rohan] companion who is no Man.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, dwarf, null, Culture.ROHAN));
 		// A Shadow card and a Free Peoples card of my own, stacked on a Free Peoples card of mine.
 		scn.MoveCardsToSupportArea(delvings);
 		scn.StackCardsOn(delvings, myRunner, myKing);
@@ -333,19 +331,19 @@ public class Card_V3_089_Tests
 		assertEquals(1, scn.GetWoundsOn(theoden));
 		assertEquals(2, scn.GetWoundsOn(rider));
 		assertEquals(0, scn.GetWoundsOn(eomer));
-		assertEquals(0, scn.GetWoundsOn(dwarf));
+		assertEquals(0, scn.GetWoundsOn(guard));
 		// Théoden has exerted once and can again.  Not the exhausted Guard, the [gondor] Man, the [rohan] ally
 		// or Frodo.
-		assertTrue(scn.FreepsHasCardChoiceAvailable(theoden, eomer, guard, dwarf));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(theoden, eomer, guard));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(guard2, aragorn, guma, frodo));
 		assertEquals(0, scn.FreepsGetChoiceMin());
-		assertEquals(4, scn.FreepsGetChoiceMax());
-		scn.FreepsChooseCards(eomer, dwarf);
+		assertEquals(3, scn.FreepsGetChoiceMax());
+		scn.FreepsChooseCards(eomer, guard);
 
 		assertEquals(1, scn.GetWoundsOn(eomer));
-		assertEquals(1, scn.GetWoundsOn(dwarf));
+		assertEquals(1, scn.GetWoundsOn(guard));
 		assertEquals(1, scn.GetWoundsOn(theoden));
-		assertEquals(0, scn.GetWoundsOn(guard));
+		assertEquals(2, scn.GetWoundsOn(guard2));
 		assertEquals(0, scn.GetWoundsOn(guma));
 		// Two of the three stacked Shadow cards; not a stacked Free Peoples card, nor a Shadow card in play.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(runner, scimitar, myRunner));
@@ -361,6 +359,74 @@ public class Card_V3_089_Tests
 		assertTrue(scn.GetStackedCards(swarms).contains(hisAragorn));
 		assertEquals(1, scn.GetStackedCards(delvings).size());
 		assertTrue(scn.GetStackedCards(delvings).contains(myKing));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
+	@Test
+	public void ARohanCompanionWhoIsNoManMayExertForItAndARohanManWhoIsAnAllyMayNot() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var takeitdown = scn.GetFreepsCard("takeitdown");
+		var theoden = scn.GetFreepsCard("theoden");
+		var merry = scn.GetFreepsCard("merry");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var guma = scn.GetFreepsCard("guma");
+		// Two [rohan] companions and no Eowyn: Merry, Master Holbytla is a Hobbit and no Man. Guma is a [rohan]
+		// Man who is an ally.
+		scn.MoveCompanionsToTable(theoden, merry, aragorn);
+		scn.MoveAlliesToTable(guma);
+		scn.MoveCardsToHand(takeitdown);
+
+		var rider = scn.GetShadowCard("rider");
+		var hound = scn.GetShadowCard("hound");
+		var swarms = scn.GetShadowCard("swarms");
+		var runner = scn.GetShadowCard("runner");
+		var scimitar = scn.GetShadowCard("scimitar");
+		scn.MoveCardsToSupportArea(swarms);
+		scn.StackCardsOn(swarms, runner, scimitar);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(rider);
+		scn.AttachCardsTo(rider, hound);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(theoden, rider);
+		scn.FreepsResolveSkirmish(theoden);
+
+		assertTrue(scn.IsRace(merry, Race.HOBBIT));
+		assertFalse(scn.IsRace(merry, Race.MAN));
+
+		// Théoden is the only one who can pay for the event, and the Rider the only mounted minion.
+		scn.FreepsPlayCard(takeitdown);
+
+		// Merry's own text answers the exertion of another [rohan] Man, and is not taken up.
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(merry));
+		scn.FreepsDeclineOptionalTrigger();
+
+		assertEquals(1, scn.GetWoundsOn(theoden));
+		assertEquals(2, scn.GetWoundsOn(rider));
+		assertEquals(0, scn.GetWoundsOn(merry));
+		// Théoden, who can exert again, and the [rohan] Hobbit.  Not the [gondor] Man, the [rohan] Man who is an
+		// ally, or Frodo.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(theoden, merry));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn, guma, frodo));
+		assertEquals(0, scn.FreepsGetChoiceMin());
+		assertEquals(2, scn.FreepsGetChoiceMax());
+		scn.FreepsChooseCards(merry);
+
+		assertEquals(1, scn.GetWoundsOn(merry));
+		assertEquals(1, scn.GetWoundsOn(theoden));
+		assertEquals(0, scn.GetWoundsOn(guma));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		// One companion exerted: one of the two stacked Shadow cards.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(runner, scimitar));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		assertEquals(1, scn.FreepsGetChoiceMax());
+		scn.FreepsChooseCard(scimitar);
+
+		assertInZone(Zone.DISCARD, scimitar);
+		assertEquals(1, scn.GetStackedCards(swarms).size());
+		assertTrue(scn.GetStackedCards(swarms).contains(runner));
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
 

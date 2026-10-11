@@ -96,35 +96,55 @@ public class Card_V3_088_Tests
 
 		var snowmane = scn.GetFreepsCard("snowmane");
 		var theoden = scn.GetFreepsCard("theoden");
-		var theoden2 = scn.GetFreepsCard("theoden2");
 		var guard = scn.GetFreepsCard("guard1");
 		var boromir = scn.GetFreepsCard("boromir");
-		var frodo = scn.GetRingBearer();
-		// Two Theodens can only share a table by cheating: Theoden is unique.
-		scn.MoveCompanionsToTable(theoden, theoden2, guard, boromir);
+		// Beside Theoden: a [rohan] Man who is not Theoden, a [gondor] Man and the Ring-bearer.
+		scn.MoveCompanionsToTable(theoden, guard, boromir);
 		scn.MoveCardsToHand(snowmane);
 
 		scn.StartGame();
 
 		assertEquals(0, scn.GetTwilight());
 		assertEquals(3, scn.GetVitality(theoden));
+		assertEquals(3, scn.GetVitality(guard));
+		assertTrue(scn.FreepsPlayAvailable(snowmane));
+
+		scn.FreepsPlayCard(snowmane);
+
+		// Theoden is the one bearer there is: nobody is asked which of the four companions is to bear it.
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertEquals(1, scn.GetTwilight());
+		assertAttachedTo(snowmane, theoden);
+		assertEquals(4, scn.GetVitality(theoden));
+		assertEquals(3, scn.GetVitality(guard));
+		assertEquals(3, scn.GetVitality(boromir));
+	}
+
+	@Test
+	public void IsPlayedOnTheTheodenWhoseTitleIsWrittenWithoutItsAccent() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var snowmane = scn.GetFreepsCard("snowmane");
+		// Theoden, Last of His House: the one Theoden to a table, here the one printed "Theoden" and not "Théoden".
+		var theoden2 = scn.GetFreepsCard("theoden2");
+		var guard = scn.GetFreepsCard("guard1");
+		var boromir = scn.GetFreepsCard("boromir");
+		scn.MoveCompanionsToTable(theoden2, guard, boromir);
+		scn.MoveCardsToHand(snowmane);
+
+		scn.StartGame();
+
+		assertEquals(0, scn.GetTwilight());
 		assertEquals(3, scn.GetVitality(theoden2));
 		assertTrue(scn.FreepsPlayAvailable(snowmane));
 
 		scn.FreepsPlayCard(snowmane);
 
-		assertEquals(1, scn.FreepsGetChoiceMin());
-		assertTrue(scn.FreepsHasCardChoiceAvailable(theoden, theoden2));
-		// A [rohan] Man who is not Theoden, a [gondor] Man and the Ring-bearer
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(guard, boromir, frodo));
-
-		scn.FreepsChooseCard(theoden);
-
-		assertEquals(1, scn.GetTwilight());
-		assertAttachedTo(snowmane, theoden);
-		assertEquals(4, scn.GetVitality(theoden));
-		assertEquals(3, scn.GetVitality(theoden2));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertEquals(1, scn.GetTwilight());
+		assertAttachedTo(snowmane, theoden2);
+		assertEquals(4, scn.GetVitality(theoden2));
+		assertEquals(3, scn.GetVitality(guard));
 	}
 
 	@Test

@@ -30,11 +30,12 @@ public class Card_V3_052_Tests
 					put("warrior", "4_222");      // Desert Warrior: Southron Man, not unique; only ever stacked here
 					put("stalker", "103_49");     // Desert Wind Stalker: Southron with two dots, cost 3; when played, remove (3) or hinder it
 					put("captain", "4_225");      // Easterling Captain: unique [raider] Man who is no Southron, cost 5; skirmish abilities that need burdens
-					put("axeman", "4_224");       // Easterling Axeman: [raider] Man who is no Southron, strength 6; its text needs 2 burdens
+					put("khamul", "103_61");      // Ulaire Attea, Khamul of the East: unique [raider] Nazgul, an Easterling and no Southron, strength 12, fierce; the rest of his text needs 3 burdens
 					put("plunderer", "8_58");     // Corsair Plunderer: [raider] minion who is no Southron, not unique
 					put("runner", "1_178");       // Goblin Runner: [moria] minion, not unique
 					put("warmumak", "5_78");      // War Mumak: [raider] mount, not unique; bearer is strength +4 and fierce; may add (5) on an overwhelm
 					put("mumakil", "8_64");       // Mumakil: [raider] mount, not unique; bearer is strength +3 and fierce (and damage +1 with initiative)
+					put("fellbeast", "6_83");     // Fell Beast: [wraith] mount, bearer must be a Nazgul; bearer is strength +2 and fierce
 					put("spear", "4_255");        // Southron Spear: [raider] possession, not unique
 					put("harpoon", "103_57");     // Savage Harpoon: [raider] possession with two dots
 					put("rearguard", "103_43");   // Bladetusk Rearguard: [raider] artifact, not unique
@@ -468,57 +469,62 @@ public class Card_V3_052_Tests
 		var boromir = scn.GetFreepsCard("boromir");
 		var gimli = scn.GetFreepsCard("gimli");
 		scn.MoveCompanionsToTable(aragorn, boromir, gimli);
-		// A tie goes to the Shadow side, so Aragorn is given the strength to beat a mounted Southron outright.
-		scn.ApplyAdHocModifier(new StrengthModifier(null, aragorn, null, 2));
+		// A tie goes to the Shadow side, so Boromir is given the strength to beat a mounted Southron outright.
+		scn.ApplyAdHocModifier(new StrengthModifier(null, boromir, null, 2));
 
 		var hailing = scn.GetShadowCard("hailing");
 		var explorer = scn.GetShadowCard("explorer");
 		var lancers = scn.GetShadowCard("lancers");
-		var axeman = scn.GetShadowCard("axeman");
+		var khamul = scn.GetShadowCard("khamul");
 		var mumakil = scn.GetShadowCard("mumakil");
-		var warmumak = scn.GetShadowCard("warmumak");
+		var fellbeast = scn.GetShadowCard("fellbeast");
 		scn.MoveCardsToSupportArea(hailing);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(explorer, lancers, axeman);
+		scn.MoveMinionsToTable(explorer, lancers, khamul);
 		scn.AttachCardsTo(explorer, mumakil);
-		// A mount no Easterling could bear by legal play, put on one by the rig.
-		scn.AttachCardsTo(axeman, warmumak);
+		// Every [raider] mount says "bearer must be a Southron". The one [raider] minion who is no Southron and
+		// may be mounted is Khamul, a Nazgul and an Easterling, on a Nazgul's mount.
+		scn.AttachCardsTo(khamul, fellbeast);
 		scn.SkipToAssignments();
 
 		scn.FreepsAssignToMinions(
-				new PhysicalCardImpl[] { aragorn, explorer },
-				new PhysicalCardImpl[] { boromir, lancers },
-				new PhysicalCardImpl[] { gimli, axeman }
+				new PhysicalCardImpl[] { boromir, explorer },
+				new PhysicalCardImpl[] { gimli, lancers },
+				new PhysicalCardImpl[] { aragorn, khamul }
 		);
 
-		// A mounted Southron loses: Aragorn's 8 + 2 beats the Explorer's 5 + 3 for the Mumakil.
-		scn.FreepsResolveSkirmish(aragorn);
-		assertEquals(10, scn.GetStrength(aragorn));
+		// A mounted Southron loses: Boromir's 7 + 2 beats the Explorer's 5 + 3 for the Mumakil.
+		scn.FreepsResolveSkirmish(boromir);
+		assertEquals(9, scn.GetStrength(boromir));
 		assertEquals(8, scn.GetStrength(explorer));
 		scn.PassSkirmishActions();
 		assertEquals(1, scn.GetWoundsOn(explorer));
-		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(boromir));
 		assertFalse(scn.ShadowAnyDecisionsAvailable());
 
-		// A Southron who bears no mount wins: Desert Lancers 11 beat Boromir 7.
-		scn.FreepsResolveSkirmish(boromir);
-		scn.PassSkirmishActions();
-		assertEquals(1, scn.GetWoundsOn(boromir));
-		assertFalse(scn.ShadowAnyDecisionsAvailable());
-
-		// A mounted [raider] Man who is no Southron wins: the Axeman's 6 + 4 for the War Mumak beats Gimli 6.
+		// A Southron who bears no mount wins: Desert Lancers 11 beat Gimli 6.
 		scn.FreepsResolveSkirmish(gimli);
-		assertEquals(10, scn.GetStrength(axeman));
 		scn.PassSkirmishActions();
 		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+
+		// A mounted [raider] minion who is an Easterling and no Southron wins: Khamul's 12 + 2 for the Fell
+		// Beast beats Aragorn 8.
+		scn.FreepsResolveSkirmish(aragorn);
+		assertAttachedTo(fellbeast, khamul);
+		assertTrue(scn.HasKeyword(khamul, Keyword.EASTERLING));
+		assertFalse(scn.HasKeyword(khamul, Keyword.SOUTHRON));
+		assertEquals(14, scn.GetStrength(khamul));
+		scn.PassSkirmishActions();
+		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
 
 		assertFalse(scn.IsHindered(hailing));
 		assertFalse(scn.HasKeyword(explorer, Keyword.RELENTLESS));
 		assertFalse(scn.HasKeyword(lancers, Keyword.RELENTLESS));
-		assertFalse(scn.HasKeyword(axeman, Keyword.RELENTLESS));
-		// Both mounts make their bearers fierce: the fierce round is next.
+		assertFalse(scn.HasKeyword(khamul, Keyword.RELENTLESS));
+		// The Mumakil makes its bearer fierce, and Khamul is fierce himself: the fierce round is next.
 		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
 		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}

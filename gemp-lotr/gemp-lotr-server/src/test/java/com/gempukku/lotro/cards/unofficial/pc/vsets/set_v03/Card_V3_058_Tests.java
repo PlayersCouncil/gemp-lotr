@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,7 +31,8 @@ public class Card_V3_058_Tests
 					put("plunderer", "8_58");     // Corsair Plunderer: [raider] Man who is no Southron, strength 6, vitality 2; its text is for when it is played
 					put("buccaneer", "8_53");     // Corsair Buccaneer: [raider] Man who is no Southron; only ever stacked here
 					put("axeman", "4_224");       // Easterling Axeman: [raider] Man who is no Southron; only ever in the discard pile here
-					put("troop", "1_177");        // Goblin Patrol Troop: [moria] Orc, strength 13, vitality 3, no text at all
+					put("dunlending", "11_79");   // Fearsome Dunlending: [men] Man, strength 9, vitality 2, ambush (1); its other text is for when it is played
+					put("horror", "14_13");       // Horror of Harad: unique [orc] Half-troll, strength 9, vitality 3; ambush (1), damage +1, fierce, lurker, muster, toil 2 and no other text
 					put("charger", "103_41");     // Bladetusk Charger: [raider] possession
 					put("rearguard", "103_43");   // Bladetusk Rearguard: [raider] artifact. Maneuver: remove (5) to make it a Southron minion of strength 5, vitality 5
 					put("ships", "8_65");         // Ships of Great Draught: [raider] possession
@@ -184,20 +184,19 @@ public class Card_V3_058_Tests
 
 		var battlelines = scn.GetShadowCard("battlelines");
 		var legion = scn.GetShadowCard("legion");
-		var troop = scn.GetShadowCard("troop");
+		var horror = scn.GetShadowCard("horror");
 		scn.MoveCardsToSupportArea(battlelines);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(legion, troop);
-		// A [moria] Orc that has ambush from elsewhere.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, troop, null, Keyword.AMBUSH, 1));
+		// A [raider] Southron Man and an [orc] Half-troll, each with ambush (1) in print.
+		scn.MoveMinionsToTable(legion, horror);
 		scn.SetTwilight(3);
 		scn.SkipToAssignments();
 
 		scn.FreepsAssignToMinions(aragorn, legion);
 		// The Legion's own ambush (1) is not taken up.
 		scn.ShadowDeclineOptionalTrigger();
-		scn.ShadowAssignToMinions(boromir, troop);
+		scn.ShadowAssignToMinions(boromir, horror);
 
 		// 3 set + 3 companions + 1 for site 2, whose shadow number of 2 is -1 for No Stranger to the Shadows
 		assertEquals(7, scn.GetTwilight());
@@ -218,7 +217,10 @@ public class Card_V3_058_Tests
 
 		scn.FreepsResolveSkirmish(boromir);
 
-		assertTrue(scn.IsCharSkirmishing(troop));
+		// The Horror, alone against Boromir: a minion with ambush that is neither a [raider] card nor a Man.
+		assertTrue(scn.IsCharSkirmishing(horror));
+		assertFalse(scn.IsCharSkirmishing(legion));
+		assertTrue(scn.HasKeyword(horror, Keyword.AMBUSH));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(battlelines));
 		scn.ShadowAcceptOptionalTrigger();
 		assertEquals(5, scn.GetTwilight());
@@ -240,8 +242,6 @@ public class Card_V3_058_Tests
 		var moria = scn.GetFreepsCard("moria");
 		scn.MoveCompanionsToTable(aragorn, boromir);
 		scn.MoveCardsToSupportArea(moria);
-		// A companion with ambush is no minion with ambush.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, aragorn, null, Keyword.AMBUSH, 2));
 
 		var battlelines = scn.GetShadowCard("battlelines");
 		var explorer = scn.GetShadowCard("explorer");
@@ -297,18 +297,17 @@ public class Card_V3_058_Tests
 
 		var battlelines = scn.GetShadowCard("battlelines");
 		var legion = scn.GetShadowCard("legion");
-		var troop = scn.GetShadowCard("troop");
+		var dunlending = scn.GetShadowCard("dunlending");
 		scn.MoveCardsToSupportArea(battlelines);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(legion, troop);
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, troop, null, Keyword.AMBUSH, 1));
+		scn.MoveMinionsToTable(legion, dunlending);
 		scn.SkipToAssignments();
 
 		scn.FreepsAssignToMinions(aragorn, legion);
 		// The Legion's own ambush (1) is not taken up.
 		scn.ShadowDeclineOptionalTrigger();
-		scn.ShadowAssignToMinions(boromir, troop);
+		scn.ShadowAssignToMinions(boromir, dunlending);
 
 		scn.SetTwilight(1);
 		scn.FreepsResolveSkirmish(aragorn);
@@ -346,19 +345,19 @@ public class Card_V3_058_Tests
 		var battlelines = scn.GetShadowCard("battlelines");
 		var raiders = scn.GetShadowCard("raiders");
 		var soldier = scn.GetShadowCard("soldier");
-		var troop = scn.GetShadowCard("troop");
+		var dunlending = scn.GetShadowCard("dunlending");
 		scn.MoveCardsToSupportArea(battlelines, raiders);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(soldier, troop);
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, troop, null, Keyword.AMBUSH, 1));
+		// A [raider] Southron with ambush (2) and a [men] Man with ambush (1), both in print.
+		scn.MoveMinionsToTable(soldier, dunlending);
 		scn.SetTwilight(3);
 		scn.SkipToAssignments();
 
 		scn.FreepsAssignToMinions(aragorn, soldier);
 		// The Soldier's own ambush (2) is not taken up.
 		scn.ShadowDeclineOptionalTrigger();
-		scn.ShadowAssignToMinions(aragorn, troop);
+		scn.ShadowAssignToMinions(aragorn, dunlending);
 
 		// 3 set + 2 companions + 2 for the shadow number of site 2
 		assertEquals(7, scn.GetTwilight());
@@ -366,7 +365,9 @@ public class Card_V3_058_Tests
 		scn.FreepsResolveSkirmish(aragorn);
 
 		assertTrue(scn.IsCharSkirmishing(soldier));
-		assertTrue(scn.IsCharSkirmishing(troop));
+		assertTrue(scn.IsCharSkirmishing(dunlending));
+		assertTrue(scn.HasKeyword(soldier, Keyword.AMBUSH));
+		assertTrue(scn.HasKeyword(dunlending, Keyword.AMBUSH));
 		// The removal is a cost that can be paid, so the offer is made though no Free Peoples condition is in play.
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(battlelines));
 

@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -23,12 +22,13 @@ public class Card_V3_054_Tests
 					put("explorer2", "4_250");
 					put("lancers", "4_217");      // Desert Lancers: Southron, strength 11; a regroup ability never used here
 					put("infantry", "4_227");     // Easterling Infantry: [raider] Man, Easterling and no Southron, strength 8; no text below 3 burdens
-					put("troop", "1_177");        // Goblin Patrol Troop: [moria] Orc, strength 13, no text at all
+					put("khamul", "103_61");      // Ulaire Attea, Khamul of the East: unique [raider] Nazgul, an Easterling and no Southron, fierce; the rest of his text needs 3 burdens
 					put("mumakil", "8_64");       // Mumakil: [raider] mount for a Southron, strength +3, fierce; damage +1 with initiative
-					put("mumakil2", "8_64");
 					put("warmumak", "5_78");      // War Mumak: [raider] mount for a Southron, cost 3, strength +4, fierce; an optional trigger on an overwhelm only
 					put("mumak", "5_73");         // Mumak: [raider] mount for a Southron, cost 2, strength +3, fierce; an optional trigger on a win only
+					put("fellbeast", "6_83");     // Fell Beast: [wraith] mount, bearer must be a Nazgul; bearer is strength +2 and fierce
 					put("charger", "103_41");     // Bladetusk Charger: a possession its Maneuver ability makes a fierce mounted Southron minion until the end of the turn
+					put("rearguard", "103_43");   // Bladetusk Rearguard: an artifact; Maneuver: remove (5) to make it a fierce mounted Southron minion of strength 5 and vitality 5 until the end of the turn
 
 					put("aragorn", "1_89");       // Aragorn, Ranger of the North: strength 8, vitality 4
 					put("horse", "4_283");        // Horse of Rohan: [rohan] mount; exerts minions at the start of its bearer's skirmishes
@@ -115,12 +115,10 @@ public class Card_V3_054_Tests
 		var explorer = scn.GetShadowCard("explorer");
 		var explorer2 = scn.GetShadowCard("explorer2");
 		var lancers = scn.GetShadowCard("lancers");
-		var infantry = scn.GetShadowCard("infantry");
-		var troop = scn.GetShadowCard("troop");
+		var khamul = scn.GetShadowCard("khamul");
 		var mumakil = scn.GetShadowCard("mumakil");
-		var mumakil2 = scn.GetShadowCard("mumakil2");
 		var warmumak = scn.GetShadowCard("warmumak");
-		var mumak = scn.GetShadowCard("mumak");
+		var fellbeast = scn.GetShadowCard("fellbeast");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var horse = scn.GetFreepsCard("horse");
 		var sword = scn.GetFreepsCard("sword");
@@ -133,16 +131,12 @@ public class Card_V3_054_Tests
 		scn.MoveCardsToHand(horn);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(explorer, explorer2, lancers, infantry, troop);
+		scn.MoveMinionsToTable(explorer, explorer2, lancers, khamul);
 		scn.AttachCardsTo(explorer, mumakil);
 		scn.AttachCardsTo(lancers, warmumak);
-		// No Easterling can be given a mount by legal play. This one is cheated on, to have a mounted
-		// [raider] Man who is not a Southron.
-		scn.AttachCardsTo(infantry, mumak);
-		// Every Southron there is is a [raider] Man. An Orc is made a Southron and given a mount, to show that
-		// the text goes by the keyword.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, troop, null, Keyword.SOUTHRON));
-		scn.AttachCardsTo(troop, mumakil2);
+		// Every [raider] mount says "bearer must be a Southron". The one [raider] minion who is no Southron and
+		// may be mounted is Khamul, a Nazgul and an Easterling, on a Nazgul's mount.
+		scn.AttachCardsTo(khamul, fellbeast);
 		scn.SetTwilight(10);
 		scn.FreepsPass();
 
@@ -156,9 +150,12 @@ public class Card_V3_054_Tests
 
 		scn.ShadowPlayCard(horn);
 
-		// Three mounted Southrons to choose from; the Southron with no mount and the mounted Easterling are not.
-		assertTrue(scn.ShadowHasCardChoiceAvailable(explorer, lancers, troop));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(explorer2, infantry));
+		// Two mounted Southrons to choose from; the Southron with no mount and the mounted Easterling are not.
+		assertAttachedTo(fellbeast, khamul);
+		assertTrue(scn.HasKeyword(khamul, Keyword.EASTERLING));
+		assertFalse(scn.HasKeyword(khamul, Keyword.SOUTHRON));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(explorer, lancers));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(explorer2, khamul));
 		assertEquals(1, scn.ShadowGetChoiceMin());
 
 		scn.ShadowChooseCard(lancers);
@@ -172,9 +169,8 @@ public class Card_V3_054_Tests
 		// Not the possession that is no mount, not the Shadow player's own mounts, not the riders
 		assertFalse(scn.IsHindered(sword));
 		assertFalse(scn.IsHindered(mumakil));
-		assertFalse(scn.IsHindered(mumakil2));
 		assertFalse(scn.IsHindered(warmumak));
-		assertFalse(scn.IsHindered(mumak));
+		assertFalse(scn.IsHindered(fellbeast));
 		assertFalse(scn.IsHindered(aragorn));
 		assertFalse(scn.IsHindered(orophin));
 		assertFalse(scn.IsHindered(horn));
@@ -291,17 +287,29 @@ public class Card_V3_054_Tests
 		var explorer = scn.GetShadowCard("explorer");
 		var explorer2 = scn.GetShadowCard("explorer2");
 		var infantry = scn.GetShadowCard("infantry");
-		var troop = scn.GetShadowCard("troop");
+		var rearguard = scn.GetShadowCard("rearguard");
 		var mumakil = scn.GetShadowCard("mumakil");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToSupportArea(rearguard);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(explorer, explorer2, infantry, troop);
+		scn.MoveMinionsToTable(explorer, explorer2, infantry);
 		scn.AttachCardsTo(explorer, mumakil, horn);
-		// Every Southron there is is a [raider] Man: an Orc is made one, to show that the text goes by the keyword.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, troop, null, Keyword.SOUTHRON));
 		scn.AddThreats(1);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.SetTwilight(5);
+		scn.FreepsPass();
+
+		// Every Southron card there is is a [raider] Man. A Bladetusk Rearguard that has made itself a minion
+		// is a Southron by its own text and no Man: the Horn's text goes by the keyword.
+		scn.ShadowUseCardAction(rearguard);
+
+		assertInZone(Zone.SHADOW_CHARACTERS, rearguard);
+		assertTrue(scn.HasKeyword(rearguard, Keyword.SOUTHRON));
+		assertFalse(scn.IsRace(rearguard, Race.MAN));
+		assertEquals(0, scn.GetTwilight());
+
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(aragorn, explorer2);
 		scn.ShadowDeclineAssignments();
@@ -313,13 +321,14 @@ public class Card_V3_054_Tests
 		assertEquals(8, scn.GetStrength(explorer));
 		assertEquals(5, scn.GetStrength(explorer2));
 		assertEquals(8, scn.GetStrength(infantry));
+		assertEquals(5, scn.GetStrength(rearguard));
 		assertTrue(scn.ShadowActionAvailable(horn));
 
 		scn.ShadowUseCardAction(horn);
 
 		// The bearer, mounted and out of the skirmish; the Southron fighting Aragorn, who has no mount; and the
-		// Orc who was made a Southron. The Easterling is a [raider] Man and no Southron.
-		assertTrue(scn.ShadowHasCardChoiceAvailable(explorer, explorer2, troop));
+		// Bladetusk that is a Southron and no Man. The Easterling is a [raider] Man and no Southron.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(explorer, explorer2, rearguard));
 		assertTrue(scn.ShadowHasCardChoiceNotAvailable(infantry));
 		assertEquals(1, scn.ShadowGetChoiceMin());
 
@@ -329,6 +338,7 @@ public class Card_V3_054_Tests
 		assertEquals(10, scn.GetStrength(explorer));
 		assertEquals(5, scn.GetStrength(explorer2));
 		assertEquals(8, scn.GetStrength(infantry));
+		assertEquals(5, scn.GetStrength(rearguard));
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 

@@ -6,7 +6,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -27,6 +26,9 @@ public class Card_V3_105_Tests
 					put("sam", "1_311");          // Sam, Son of Hamfast: Hobbit, strength 3, vitality 4
 					put("merry", "1_302");        // Merry, Friend to Sam: Hobbit, strength 3, vitality 4; his ability needs him unassigned
 					put("pippin", "1_306");       // Pippin, Friend to Frodo: Hobbit, strength 3, vitality 4
+					// Pippin, Trollslayer: a [gondor] companion who is a Hobbit, strength 3, vitality 4; knight, enduring, and a
+					// skirmish ability used only on purpose
+					put("trollslayer", "103_31");
 					put("aragorn", "1_89");       // Aragorn, Ranger of the North: Man, strength 8, vitality 4
 					put("gimli", "1_13");         // Gimli, Son of Gloin: a fifth companion
 					put("elrond", "1_40");        // Elrond, Lord of Rivendell: an ally, who is no companion
@@ -35,13 +37,16 @@ public class Card_V3_105_Tests
 					put("sword2", "1_299");
 					put("sword3", "1_299");
 					put("ranger", "1_112");       // Ranger's Sword: hand weapon for Aragorn, strength +2, damage +1
-					put("bow", "1_41");           // Elven Bow: a ranged weapon; bearer is an archer
+					put("battlebow", "11_89");    // Long Battle Bow: a ranged weapon for a [men] minion, strength +1; bearer is an archer
+
+					// Ted Sandyman, Chief's Men's Ally: a [men] minion who is a Hobbit, strength 3, vitality 4, site 2; a maneuver
+					// ability that needs a site he controls and a regroup ability used only on purpose
+					put("ted", "18_75");
 
 					put("troop", "1_177");        // Goblin Patrol Troop: [moria], strength 13, vitality 3, no text at all
 					put("taskmaster", "2_90");    // Orc Taskmaster: [sauron], strength 8, vitality 3; a Shadow-phase ability only
 					put("taskmaster2", "2_90");
 					put("runner", "1_178");       // Goblin Runner: strength 5, vitality 1; its only text is for when it is played
-					put("runner2", "1_178");
 					put("runner3", "1_178");
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -347,6 +352,38 @@ public class Card_V3_105_Tests
 	}
 
 	@Test
+	public void AHobbitWhoIsNoShireCardIsStrengthenedToo() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var driven = scn.GetFreepsCard("driven");
+		// Pippin, Trollslayer: a Hobbit of the [gondor] culture.
+		var trollslayer = scn.GetFreepsCard("trollslayer");
+		var sword = scn.GetFreepsCard("sword");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCompanionsToTable(trollslayer);
+		scn.AttachCardsTo(trollslayer, sword);
+		scn.MoveCardsToHand(driven);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(trollslayer, troop);
+		scn.FreepsResolveSkirmish(trollslayer);
+
+		assertTrue(scn.IsRace(trollslayer, Race.HOBBIT));
+		// 3 + 2 for the sword
+		assertEquals(5, scn.GetStrength(trollslayer));
+		assertTrue(scn.FreepsPlayAvailable(driven));
+
+		scn.FreepsPlayCard(driven);
+
+		// X: Pippin 4 + the Troop 3. The text says "Hobbit": it names the race and no culture.
+		assertEquals(5 + 7, scn.GetStrength(trollslayer));
+		assertInZone(Zone.DISCARD, driven);
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
+	@Test
 	public void DoesNothingForAManWithAHandWeaponAHobbitWithARangedWeaponOrTheRingBearer() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -359,10 +396,10 @@ public class Card_V3_105_Tests
 		var sam = scn.GetFreepsCard("sam");
 		var gimli = scn.GetFreepsCard("gimli");
 		var ranger = scn.GetFreepsCard("ranger");
-		var bow = scn.GetFreepsCard("bow");
 		var sword3 = scn.GetFreepsCard("sword3");
 		var runner = scn.GetShadowCard("runner");
-		var runner2 = scn.GetShadowCard("runner2");
+		var ted = scn.GetShadowCard("ted");
+		var battlebow = scn.GetShadowCard("battlebow");
 		var runner3 = scn.GetShadowCard("runner3");
 		// Five companions with Frodo, so that no skirmish here could end with a minion hindered.
 		scn.MoveCompanionsToTable(aragorn, pippin, sam, gimli);
@@ -371,14 +408,12 @@ public class Card_V3_105_Tests
 		scn.MoveCardsToHand(driven, driven2, driven3);
 
 		scn.StartGame();
-		// Aragorn is a Man. Made [shire] as well, he would be strengthened by a card that took "Hobbit" to mean
-		// the culture.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.SHIRE));
-		scn.MoveMinionsToTable(runner, runner2, runner3);
+		scn.MoveMinionsToTable(runner, ted, runner3);
 		scn.SkipToAssignments();
-		// The bow makes its bearer an archer, so Pippin is handed it once the archery phase is over.
-		scn.AttachCardsTo(pippin, bow);
-		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, runner}, new PhysicalCardImpl[]{pippin, runner2}, new PhysicalCardImpl[]{frodo, runner3});
+		// No ranged weapon goes on a Free Peoples Hobbit. Ted Sandyman is a Hobbit and a [men] minion, and bears
+		// the [men] minions' bow. It makes its bearer an archer, so he is handed it once the archery phase is over.
+		scn.AttachCardsTo(ted, battlebow);
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, runner}, new PhysicalCardImpl[]{pippin, ted}, new PhysicalCardImpl[]{frodo, runner3});
 
 		// A Man bearing a hand weapon.
 		scn.FreepsResolveSkirmish(aragorn);
@@ -393,11 +428,16 @@ public class Card_V3_105_Tests
 		scn.ShadowPass();
 		scn.FreepsPass();
 
-		// A Hobbit bearing a weapon that is not a hand weapon.
+		// A Hobbit bearing a weapon that is not a hand weapon, and the Hobbit he fights, who bears nothing.
 		scn.FreepsResolveSkirmish(pippin);
+		assertTrue(scn.IsRace(ted, Race.HOBBIT));
+		assertAttachedTo(battlebow, ted);
 		assertEquals(3, scn.GetStrength(pippin));
+		// 3 + 1 for the Long Battle Bow
+		assertEquals(4, scn.GetStrength(ted));
 		scn.FreepsPlayCard(driven2);
 		assertEquals(3, scn.GetStrength(pippin));
+		assertEquals(4, scn.GetStrength(ted));
 		assertInZone(Zone.DISCARD, driven2);
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 		scn.ShadowPass();
