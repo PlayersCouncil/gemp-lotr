@@ -25,6 +25,12 @@ import static org.junit.Assert.*;
  * [Dwarven] culture token.'  When you play this card, you may choose any of your Dwarven cards that currently has
  * one or more [Dwarven] culture tokens and add another token to that card."  (Arod, Rohirrim Steed.)
  *
+ * Whose cards: the first sentence names no owner and the second says "any of your cards".  Ketura, 2026-10-11
+ * (F-0468): the two disagree and the rules council is being asked; until it answers, either player may choose
+ * either player's card ("there are some cards whose tokens 'count up' and then self-discard upon accumulation ...
+ * which is why someone might want the option to reinforce an opponent's card").  Morannon Plains 18_137 is where
+ * that shows; a different answer from the council turns its test round.
+ *
  * "Leaving play": "When a card (other than a site) leaves play for any reason ...  Any tokens on that card are
  * removed."  "Active": "Inactive cards are not affected by the game and do not affect the game.  Any tokens on
  * them are ignored (such as burdens, culture tokens, threats, and wounds)."
@@ -288,14 +294,15 @@ public class CultureTokensTests
 	}
 
 	@Test
-	public void APlayerReinforcesATokenOnACardOfHisOwnAndNeverOnAnotherPlayers() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AtMorannonPlainsEachPlayerMayReinforceATokenOnACardOfEitherPlayers() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetMorannonScenario();
 
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var garrison = scn.GetFreepsCard("garrison");
 		var heirs = scn.GetFreepsCard("heirs");
+		var leaders = scn.GetFreepsCard("leaders");
 		scn.MoveCompanionsToTable(aragorn);
-		scn.MoveCardsToSupportArea(garrison, heirs);
+		scn.MoveCardsToSupportArea(garrison, heirs, leaders);
 
 		var ships1 = scn.GetShadowCard("ships1");
 		var ships2 = scn.GetShadowCard("ships2");
@@ -303,10 +310,11 @@ public class CultureTokensTests
 		var morannon = scn.GetShadowSite("site2");
 
 		scn.StartGame(scn.GetFreepsSite("site1"));
+		// Two of the Free Peoples player's cards with [gondor] tokens, and Noble Leaders with none
 		scn.AddTokensToCard(garrison, 2);
 		scn.AddTokensToCard(heirs, 1);
 
-		// To The Angle, where the Shadow player has his own cards with tokens in play ...
+		// To The Angle, where the Shadow player has two cards of his own with [raider] tokens in play ...
 		scn.FreepsPass();
 		scn.ShadowChooseCardBPFromSelection(angle);
 		scn.MoveCardsToSupportArea(ships1, ships2);
@@ -318,29 +326,31 @@ public class CultureTokensTests
 		scn.FreepsChooseToMove();
 		scn.ShadowChooseCardBPFromSelection(morannon);
 
-		// "You may choose any of your cards": the Free Peoples player's two, and neither of the Ships
+		// The Free Peoples player is offered every card that has a culture token, the Shadow player's Ships
+		// beside his own two, and puts his token on one of the Ships.
 		assertTrue(scn.FreepsDecisionAvailable("Would you like to reinforce a culture token"));
 		scn.FreepsChooseYes();
 		assertTrue(scn.FreepsDecisionAvailable("Choose card to reinforce"));
-		assertEquals(2, scn.FreepsGetCardChoiceCount());
-		assertTrue(scn.FreepsHasCardChoiceAvailable(garrison, heirs));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(ships1, ships2));
-		scn.FreepsChooseCard(heirs);
-		assertEquals(2, scn.GetCultureTokensOn(heirs));
+		assertEquals(4, scn.FreepsGetCardChoiceCount());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(garrison, heirs, ships1, ships2));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(leaders));
+		scn.FreepsChooseCard(ships1);
+		assertEquals(2, scn.GetCultureTokensOn(ships1));
 
-		// The Shadow player's two, and neither of the Free Peoples player's
+		// The Shadow player is offered the same four, and puts his on the Free Peoples player's Heirs of Gondor.
 		assertTrue(scn.ShadowDecisionAvailable("Would you like to reinforce a culture token"));
 		scn.ShadowChooseYes();
 		assertTrue(scn.ShadowDecisionAvailable("Choose card to reinforce"));
-		assertEquals(2, scn.ShadowGetCardChoiceCount());
-		assertTrue(scn.ShadowHasCardChoiceAvailable(ships1, ships2));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(garrison, heirs));
-		scn.ShadowChooseCard(ships1);
+		assertEquals(4, scn.ShadowGetCardChoiceCount());
+		assertTrue(scn.ShadowHasCardChoiceAvailable(garrison, heirs, ships1, ships2));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(leaders));
+		scn.ShadowChooseCard(heirs);
 
 		assertEquals(2, scn.GetCultureTokensOn(ships1));
 		assertEquals(1, scn.GetCultureTokensOn(ships2));
 		assertEquals(2, scn.GetCultureTokensOn(garrison));
 		assertEquals(2, scn.GetCultureTokensOn(heirs));
+		assertEquals(0, scn.GetCultureTokensOn(leaders));
 		assertEquals(3, scn.GetCurrentSiteNumber());
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}

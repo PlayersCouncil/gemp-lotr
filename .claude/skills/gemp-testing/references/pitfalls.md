@@ -1078,10 +1078,15 @@ companion, not the Ring-bearer alone: with 3 burdens Frodo 1_290 (resistance 10)
 for "an [elven] token" is a card of another culture carrying its own tokens. Put tokens only on a card that
 some card gives tokens to (Q-0213: I): a possession with tokens no card puts there is a board no game reaches
 (F-0073 was found on one, and is moot in play).
-A reinforcement is chosen among the reinforcing player's OWN cards that already have a token of the culture (CR
-4.2 "reinforce"; F-0468: until engine pass 26 Morannon Plains 18_137 offered the other player's too), several
-tokens are chosen for one at a time, and a card that leaves play keeps none of its tokens. The rule is shown in
-`mechanics/CultureTokensTests`: a card's own file reads its own candidates and count and no more.
+A reinforcement is chosen among every active card that already has a token of the culture, EITHER player's (CR
+4.2 "reinforce" says "a card that already has a token" and then "any of your cards"; Ketura, 2026-10-11, is
+asking the rules council, and until it answers the choice is not held to one's own cards: F-0468, mended by
+engine pass 26 and reverted by pass 28). Another player's card is among them only where both players have such a
+card active: at Morannon Plains 18_137, which names no culture, and in the [gollum] culture, the one culture with
+cards on both sides (Larder 8_23 against Gladden Homestead 13_49 and Nice Fish 15_46). Several tokens are chosen
+for one at a time, and a card that leaves play keeps none of its tokens. The rule is shown in
+`mechanics/CultureTokensTests`: a card's own file reads its own candidates and count and no more, and never
+asserts that another player's card with such a token is NOT offered.
 
 **A stacked card is not in play** (CR 4.2 "stack"). It cannot be spotted, does not count for uniqueness (a copy
 of a stacked unique card is played, and a third copy stacked beside it), is no companion for a move's twilight

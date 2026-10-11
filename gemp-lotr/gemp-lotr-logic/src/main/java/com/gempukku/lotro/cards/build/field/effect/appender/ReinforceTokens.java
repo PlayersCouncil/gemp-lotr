@@ -3,14 +3,12 @@ package com.gempukku.lotro.cards.build.field.effect.appender;
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
-import com.gempukku.lotro.cards.build.PlayerSource;
 import com.gempukku.lotro.cards.build.ValueSource;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
 import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.CardResolver;
-import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Token;
@@ -42,14 +40,14 @@ public class ReinforceTokens implements EffectAppenderProducer {
         String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
 
         Filter tokenFilter = token != null ? Filters.hasToken(token, 1) : Filters.hasAnyCultureTokens(1);
-        final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
 
         MultiEffectAppender result = new MultiEffectAppender();
 
-        // CR 4.2 "reinforce": "You may choose any of your cards with the appropriate culture token": the cards of
-        // the player who reinforces, never another player's, whatever the text leaves unsaid about the culture.
-        final EffectAppender cardResolver = CardResolver.resolveCard(select,
-                        (actionContext) -> Filters.and(tokenFilter, Filters.owner(playerSource.getPlayer(actionContext))),
+        // Any active card with such a token may be chosen, either player's.  CR 4.2 "reinforce" says "a card that
+        // already has a token of the same culture" and then "any of your cards"; Ketura is asking the rules
+        // council which governs, and until it answers the choice is not held to the reinforcing player's own
+        // cards (F-0468, 2026-10-11).
+        final EffectAppender cardResolver = CardResolver.resolveCard(select, (actionContext) -> tokenFilter,
                         memory, player, "Choose card to reinforce tokens on", environment);
         result.addEffectAppender(cardResolver);
         result.addEffectAppender(
