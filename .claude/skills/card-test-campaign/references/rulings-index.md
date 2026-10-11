@@ -476,6 +476,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "While at a <terrain> site" on a card an ally may bear: an ally is at his home site (F-0380, Asfaloth 1_31)
 - "<Do X>; <Y> during this skirmish" on an event that makes the skirmish: Y is laid only if the skirmish was made (F-0386, Return to Its Master 1_224)
 - A Ring's `ringIsActive` requirement is shown in Return to Its Master 1_224's file, not the Ring's own
+- The CR 4.2 "response" example (Isildur wearing Answer To All Riddles 4_1, Sapling of the White Tree 9_35) is shown in the Ring's file
 
 ## Reveals, draw decks and shuffles
 

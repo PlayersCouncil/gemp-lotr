@@ -1184,8 +1184,13 @@ answer to a wound. `IsildursBaneRing` answers a wound in any phase, so a test wi
 Marksman 1_176), accepts the Ring's offer in the archery phase and leaves the archer out of the assignments with
 `ShadowDeclineAssignments()` (Card_02_108_Tests). `RulingRing` answers a wound in a skirmish and no other (an
 archery wound offers nothing): the Ring-bearer loses a skirmish, or Orc Soldier 1_271 wounds him in one, and the
-offer is accepted there (Card_01_002_Tests). `RBWearingOneRing()` reads it; every one comes off at the regroup
-phase (1_1 put on IN a regroup phase: at the end of that phase).
+offer is accepted there (Card_01_002_Tests). Three printed cards put ANY Ring on outside a skirmish, for no
+burden: Saruman's Reach 1_137 in the maneuver phase ([isengard] event, cost 0, exert an Uruk-hai: the Free Peoples
+player chooses between exerting 2 companions and the Ring, and with the Ring-bearer the only companion nothing is
+asked and it goes on; Card_04_001_Tests reads maneuver and archery wounds with the Ring worn that way),
+Resistance Becomes Unbearable 2_79 (Maneuver: a twilight Nazgûl exerts to exert the Ring-bearer, and it goes on if
+he is then exhausted) and Narchost 7_362 (Shadow, 8 burdens spotted). `RBWearingOneRing()` reads it; every one
+comes off at the regroup phase (1_1 put on IN a regroup phase: at the end of that phase).
 
 **Maps and meta-sites cannot be hindered,** as sites cannot: a hinder of "a card" on a PC-Movie or Race to
 Mount Doom table does not offer them (`mechanics/MapsAndMetaSitesCannotBeHinderedTests`). The cheat

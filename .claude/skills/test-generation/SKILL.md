@@ -153,7 +153,10 @@ Notes: Elrond is himself an ally whose home is site 3, so C2 heals him too.
   effect in parentheses that is game text ("(and heal a companion if you can spot 3 rings)") may be cut off as an
   `Effect` clause of its own, since it has checks of its own. A sentence whose "and" joins two predicates of
   different types ("This minion may not bear possessions and is discarded if not at a marsh") is cut at the
-  "and": left whole, a claim for either half satisfies the conformance check for both. Every word of the
+  "and": left whole, a claim for either half satisfies the conformance check for both. So is one whose "and"
+  joins two predicates of ONE type that are shown on different boards ("Saruman may not take wounds during the
+  archery phase and may not be assigned to a skirmish": two Restrictions, 53_68, 3_69); one condition with two
+  results ("is strength +3 and fierce", read together in every test) stays whole. Every word of the
   game text is in exactly one `C` clause, keyword lines included; reminder text in brackets is left out. The
   conformance check joins the `C` clauses and compares them with the definition's game text.
 - **`P1` is the card being played.** Every companion, ally, minion, possession, artifact, condition and follower
@@ -215,7 +218,9 @@ Which checks a clause lists follows from its words, and the analyst is expected 
   An "add a burden" cost: no printed card stops a burden being added, but a hindered Ring-bearer does
   (CR 5.0 "hinder"), so its `C-` board is `scn.HinderCard(<the Ring-bearer>)` (103_115). Where the card must
   itself be the Ring-bearer to pay (Sméagol 59_30's regroup ability), hindering him shuts its text off and no
-  board in play is left: a `no C-:` line. So too where the burden is the price of preventing something done to
+  board in play is left: a `no C-:` line. The One Ring's own "add a burden to wear" is NOT such a card: its
+  text stays on while its bearer is hindered, and the board holds (4_1: not offered in another companion's
+  skirmish, and offered there once the cost is changed in the definition). So too where the burden is the price of preventing something done to
   the Ring-bearer (an assignment to him, 94_26): hindered, he cannot be assigned, and the prevention is never put
   (Q-0114). Test Seal 0_8004 is the mechanics' card only (Q-0166: A). A hindered Ring-bearer is not spotted
   either: where the action also spots or counts him, the board keeps that met without him (Get On and Get Away
