@@ -910,7 +910,7 @@
 				effect: [
 					{
 						type: playCardFromDiscard
-						removedTwilight: 2
+						removedTwilight: 3
 						select: choose(culture(orc), orc)
 						memorize: PlayedOrc
 						discount: -2
