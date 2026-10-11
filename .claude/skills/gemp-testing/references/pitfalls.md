@@ -93,7 +93,8 @@ unasked) and `IsCharAssigned` is false until the last is settled. A cost not pai
 nobody left to exert) leaves that one minion unassigned and a leftover for the Shadow player, who assigns it for
 nothing; the log says "did not pay to assign" and he is not asked again. A card that has him assign (Éowyn
 17_96, The End Comes 1_169, Shadowy Mount 12_171) charges him once the minion is chosen, and cannot take a
-minion he could not pay for. The Shadow player's own assignments are never charged
+minion he could not pay for. Where the charged minion is the card's only candidate it is taken unasked, and the
+first thing asked is who exerts: the choice then reads the companions, not the minions (Alcarin 5_31). The Shadow player's own assignments are never charged
 (`mechanics/CostOfAssigningTests`).
 
 **`IsCharAssigned` reads only the skirmishes still waiting.** The game takes an assignment off its list as that
@@ -567,7 +568,11 @@ directive's "the game goes on to the mulligan question" is: player 1 asked nothi
 (`FreepsAnyDecisionsAvailable()` false), player 2's "Starting fellowship" pending, and the mulligan question
 only after his answer. While a player chooses, only HIS cards on the table are in force, and `GetBurdens()` is
 his: Éomer 4_267 reads 2 with his own player's Elite Rider 4_265 down and 3 again once the other player is
-choosing. Read a cost, a spot or a resistance while its player is the one being asked. A starting fellowship
+choosing. Read a cost, a spot or a resistance while its player is the one being asked. The cost of the
+companion whose play ends the first player's choice cannot be read from the pool, which reads 0 again as the
+next choice begins: read `GetTwilightCost(card)` of a card still in the draw deck while its owner chooses, which
+answers with a starting-fellowship discount in force (Gondorian Knight 5_35 reads 2 before Alcarin 5_31 is chosen and 1 after;
+Card_05_031_Tests). A starting fellowship
 is Free Peoples cards: where a card lets other card types in
 (Race Text 94_3), a Shadow card of those types in the draw deck is never offered, whatever the running total
 (Q-0189, F-0343; mechanics/StartingFellowshipIsFreePeoplesCardsTests).

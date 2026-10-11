@@ -224,7 +224,10 @@ Which checks a clause lists follows from its words, and the analyst is expected 
   the Ring-bearer (an assignment to him, 94_26): hindered, he cannot be assigned, and the prevention is never put
   (Q-0114). Test Seal 0_8004 is the mechanics' card only (Q-0166: A). A hindered Ring-bearer is not spotted
   either: where the action also spots or counts him, the board keeps that met without him (Get On and Get Away
-  54_304: Sméagol beside a hindered Galadriel)
+  54_304: Sméagol beside a hindered Galadriel). An "assign <this character> to a minion" cost: its `C-` board
+  is the character already assigned (CR 4.2 "assignment phase": both must be unassigned), by a minion's own
+  assignment action after the Free Peoples player's pass (the helper table's Unexpected Visitor 7_126 and its
+  kin; Alcarin 5_31). A minion he must pay to assign and cannot is Q-0221's check, under an `R` clause
 - a noun phrase that picks things out ("a Dwarf", "each [moria] Orc", "another companion", "bearer") → `F`. Not
   "the Ring-bearer" in a bare count of burdens ("for each burden on the Ring-bearer"): burdens lie on nobody
   else, so there is no other candidate to lay (Q-0186). A NAMED bearer, "on Frodo", is a phrase like any other (Q-0103)
@@ -374,7 +377,8 @@ carries more than the effect should change: one wound healed from two reads 1, w
 beside them (see "One candidate is chosen for you" in gemp-testing). Assert the offer with
 `FreepsHasCardChoiceAvailable(...)` and `FreepsHasCardChoiceNotAvailable(...)` before choosing. Where the text
 says neither "may" nor "up to", read the minimum of one such choice (`FreepsGetChoiceMin()`): a choice that has
-wrongly become optional looks the same otherwise. A text with two choices (one for its cost, another for its
+wrongly become optional looks the same otherwise. A "may" that the game asks as a yes/no ("a minion may exert
+to prevent this") is answered by the yes: the choice of who does it has its minimum read too (5_89). A text with two choices (one for its cost, another for its
 effect) has the minimum of each read, once.
 
 **Say what the game is waiting for.** After a test's last action, assert the decision the game has come to rest
