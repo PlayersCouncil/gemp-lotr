@@ -4,7 +4,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -225,7 +224,6 @@ public class Card_03_017_Tests
 	}
 
 	@Test
-	@Ignore("F-0393: the start-of-turn heal is offered with no wounded Elf (Q-0034); withheld by the engine since Q-0224 (engine pass 26), which this branch does not have yet")
 	public void HealIsNotOfferedWhenNoElfIsWounded() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
