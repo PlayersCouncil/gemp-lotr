@@ -136,10 +136,10 @@ game as built and file nothing.)
   (Gildor Inglorion 14_4) and the like, 20 definitions. No board tells the two apart. It IS one where the filter
   reaches a card that is not in play: "your [isengard] mounts are twilight cost -1" was read off a mount in the
   other player's hand (Strength of the Pack 102_30, F-0065).
-- F-0444: until engine pass 26's `engine` item is on the branch a killed minion sets off "each time a minion is
-  discarded"; do not file it again, and test a card's "discarded" trigger with a discard. Last Days 12_71 and
-  Throne of Minas Tirith 17_36 ("killed or discarded from play") answer a kill today and are no fault, whatever
-  the pattern search's section 5 says of them.
+- F-0444, CORRECTED (engine pass 26, item engine, 2026-10-11): a killed minion does not set off another card's
+  "each time a minion is discarded" (CR 4.2 "killed"); Last Days 12_71 and Throne of Minas Tirith 17_36, whose
+  texts say "killed or discarded", answer both by two triggers. Test a "discarded" trigger with a discard and
+  with a kill that does not set it off; a test parked on F-0444 in a card's file goes live.
 - `shuffle: false` on a take, a discard or a putting back of cards that a reveal or a look at the top of a draw
   deck has just named (`select` on a `memory(...)`) is right: that is no search of the deck, and only a look
   through the whole of it is followed by a shuffle. (Q-0013, F-0034.)
