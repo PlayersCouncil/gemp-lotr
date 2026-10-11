@@ -181,6 +181,12 @@ context is compacted, and the summary that replaces it is somebody's recollectio
 - The outputs folder writes through to its store some seconds after a file is closed, and its modification times
   cannot be trusted: postland.py waits and goes by content; `apply-sync.py` says when it was handed an old file.
 - postland.py takes over two minutes on a cold machine: give it five (`close.py`: ten).
+- The state's network mount can die while the machine lives (2026-10-10: every read and write under
+  `/mnt/user-data/outputs` answered "Input/output error" for hours). Its cache under `/dev/shm/rclone-vfscache/`
+  held the whole state, current: copy it out at once, check it against `state_hashes.json`, put the copy on
+  local disk and point `/mnt/user-data/outputs` at it, and write at the top of HANDOFF.md how to go back. The
+  carrying tool reads the store, not the path, so the sync goes by `SendUserFile` and the `fileUuid` it returns
+  until the mount is back. A lander that meets the errors leaves its report in its scratch folder and says so.
 - `tracker.py html` wants an output path; use postland.py, which also copies the page for publishing.
 - A rebase that stops in the Standard's one-line row `F` must keep both sides' words. Committing with the conflict
   markers still in the file happened once (the script's own check had failed and the next command ran anyway):
