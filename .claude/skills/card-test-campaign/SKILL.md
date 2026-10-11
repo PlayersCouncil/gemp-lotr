@@ -167,7 +167,9 @@ file between waves, with the tools and the briefs open.
 2. Author, sighted: `packet.py <id> --only-withheld`. For an existing test file, account for every existing test: it
    claims a check, or it is redundant, or it knows something the ledger missed (then the ledger is what changes),
    or it contradicts the ledger (then it is a question; existing PC tests often encode a ruling).
-3. Author: write the file; `lint.py <id>`; `cardtest.py run <id> --out <name>`. (The run of stock mistakes,
+3. Author: `gen_play.py <id> --write` first, which writes the Play clause's test where the play is a plain one
+   and says why where it is not (Q-0220: I); then write the rest of the file; `lint.py <id>`;
+   `cardtest.py run <id> --out <name>`. (The run of stock mistakes,
    `mutate.py <id>` on its own, was cut on 2026-10-06: see below.) A test that fails is looked at three ways before anything else: is the test wrong,
    is the expectation wrong, or is the game wrong.
 4. Reviewer: `lint.py`, `cardtest.py run`, then the checklist at the end of the test-generation skill, with
@@ -196,6 +198,7 @@ All under `scripts/`, run with `python3` from anywhere in the repository. Each p
 | `reconcile.py` | Reviewed spreadsheet against definitions, field by field. |
 | `cardinfo.py <ids>` | A definition's cardInfo block against the rest of the definition and the other cards of its kind (Q-0145: no test reads it, and it is kept true); `--all`, `--survey`. `packet.py` and `lint.py` print what it finds for a card. |
 | `census.py <ids>` | What a card's game text names against what its definition names (Q-0220: B): a "[culture] <kind>" no one filter holds, a kind of card no filter names, a thing done that nothing in the effects is of; `--all`, `--tsv`. Quiet where they agree. `lint.py` gives each match as a `census` warning (shapes.md says what to do with one). |
+| `gen_play.py <ids>` | Writes the test of the Play clause (`P1`) from the card's sheet row, for a card whose play is a plain one: a companion, an ally, a minion, a follower, a card played to the support area, with nothing in its text or definition about its being played (Q-0220: I, "generate"). Prints the test and its ledger lines; `--write` puts them into the card's file and ledger, `--alias <name>` names a card the skeleton calls "card", `--census` counts what it writes and what it leaves, by the reason (on 2026-10-11 it wrote for 1,130 of the 2,187 Decipher cards that are played from hand). It says why it leaves a card: a bearer, a requirement or extra cost to play, a cost the text changes, a card that answers its own play. The Standard, "`P1` is the card being played". |
 | `cardtest.py` | `setup` once, then `run <ids> --out <name>` in seconds (ids, or test files: the server's, or the logic or common module's); `suite` for what the campaign works on (`cards/`, `mechanics/`, `definitions/`, the rig's own `virtualtable/`: after a change to definitions or tests), `suite all` for every test of the server module (after a change to the engine or the rig, and at the end of a chunk: Q-0233), `suite cards` or `suite <package>` for one tree; `probe <file.java>` for a throwaway class. JUnit 4 runs them; a class of JUnit 5 `@ParameterizedTest` rows over a `@CsvSource` is run too, a row a test (`junit5/RowsRunner.java`). |
 | `lint.py` | The conformance check. `lint.py --form <file.java> [--only <Test,Test>]` applies only the rules about how a test is written, for a class under `mechanics/` or a card's file with no ledger (`--only`: the tests named, a lone test added to an old file). |
 | `rules.py council [LR 6]` | The Rules Councils' rulings since CR 4.2 (eight Legacy, two Modern), which `rules.py card` and `grep` also search. |

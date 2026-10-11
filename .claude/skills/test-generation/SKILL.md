@@ -162,6 +162,23 @@ Notes: Elrond is himself an ally whose home is site 3, so C2 heals him too.
 - **`P1` is the card being played.** Every companion, ally, minion, possession, artifact, condition and follower
   has one: the card is played from hand by legal play, and the test reads what it cost and where it ended up. An
   event is played by its own `Event` clause and needs no `P1`. Nor does The One Ring, which is never played (69_1).
+  **Where the play is a plain one, its test is generated and not written** (Q-0220: I, "generate"):
+  `card-test-campaign/scripts/gen_play.py <id> --write` puts a test named `PlayedFromHandFor...` after the stats
+  test and the `P1` clause and its claim into the ledger, expecting what the card's sheet row says (cost, type, a
+  minion's site number). The author runs it before writing any test, and writes `P1`'s test by hand only for a
+  card it leaves, for the reason it prints: a card played on a bearer, a requirement or an extra cost to play, a
+  cost the card's own text changes or speaks of (and toil), a text about when the card may be played, a card
+  that answers its own play or its being in play, a card of the Ring-bearer's own title. For those nothing has
+  changed: the test of the clause that got in the way plays the card and claims `P1` as well. The generated test
+  stands on the file's `GetScenario()` with nothing in play but the Ring-bearer (a Free Peoples card in the
+  fellowship phase of turn 1, a Shadow card in the Shadow phase at site 2) and reads the card in hand and
+  offered, the pool before and after, the zone the card ends in, and what the game then waits for. It is left as
+  written. Anything more that the card's play would show (a possible bearer on the table left bare, a strength
+  in play, an offer that is or is not made as it arrives) is read in the test of the clause it belongs to; a
+  second test may claim `P1` beside the generated one. A generated test that fails is a finding, or a card the
+  generator should have left, and is reported either way: it is never adjusted until it passes. `GetScenario()`
+  may gain cards freely; a change of its site path or Ring-bearer is run against the generated test.
+  `gen_play.py <id>` with no `--write` prints the test, for a reviewer to lay beside the one in the file.
 - **`R` clauses are everything that is not printed on the card**: a ruling that names it, an interaction from a
   rules example, a rule that differs by format. Their text says where they come from.
 - A clause line is `ID Type [checks] text`. Long text continues on following lines, indented.
@@ -285,7 +302,7 @@ The type says what kind of statement the clause is, and sets the checks it must 
 
 | Type | The clause is | At least | Notes |
 |---|---|---|---|
-| `Play` | the card being played from hand (`P1`) | `+` | Twilight moves by the cost (plus roaming for a minion, and say so in the comment); the card ends in play, in the support area, or on its bearer. May share a test with a `ToPlay` or `PlayOn` clause. The sentence "Plays to your support area." is a `C` clause of this type, claimed by `P1`'s test, which reads the card in the support area and on no character. |
+| `Play` | the card being played from hand (`P1`) | `+` | Twilight moves by the cost (plus roaming for a minion, and say so in the comment); the card ends in play, in the support area, or on its bearer. May share a test with a `ToPlay` or `PlayOn` clause. The sentence "Plays to your support area." is a `C` clause of this type, claimed by `P1`'s test, which reads the card in the support area and on no character. Written by `gen_play.py` where the play is a plain one ("`P1` is the card being played", above), which puts its claim under such a `C` clause as well; what is said here is what a test written by hand reads. |
 | `Keyword` | a keyword line: "Ranger.", "Damage +1.", "Fierce." | `K` | How the keyword works is the rules' business and is tested once, as a mechanic. A keyword the text grants under a condition is a `Modifier`. A keyword the card has by rule and not in print (every Sam is Ring-bound) is an `R` clause of this type. A follower's "Aid - (N)." is of this type, its reminder in brackets left out; the Aid's cost is an `aidCost` effect and no keyword: where it is twilight the stats test reads the N with `scn.GetAidTwilightCost(card)` (G-0051), and where it is anything else (a burden, a threat, an exertion) nothing reads it and the header carries it. Either way `K` is claimed by the stats test and by a test that takes the Aid and reads what was paid, the pool N higher (Robin Smallburrow 68_111). |
 | `ToPlay` | "To play, spot…" | `+ -` | Show the change: not playable, then one legal play later, playable. |
 | `ExtraCost` | "To play, exert…" / "add a burden" | `+ - C` | `-` is the cost being unpayable, and that board is the cost's `C-` as well: `C-` is not listed again beside it (a ledger that does list it claims it on the same test and is not wrong). A cost another player must pay to do something with this card while it is in play ("The Free Peoples player must add a burden to assign this minion to …") is a `Modifier` that lists `C` and `C-` as well (69_38). |

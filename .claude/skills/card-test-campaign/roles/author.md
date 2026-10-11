@@ -55,7 +55,8 @@ So the order matters and is not a formality.
 side by side: printed in one step the packets overrun the output limit and the middle of them is cut out) and
 from that alone write the card's ledger file: the clauses, their types, the checks each one's wording calls
 for (the claim lines come later, when the tests exist). Then, for each check, write one line: the situation, and
-what the text and rules say happens. Save this as `/tmp/<your folder name>/<id>.plan.md` before going on. Do not open the card's `.hjson` file or its existing test
+what the text and rules say happens (none for `P1`: stage 2 begins by having its test generated, and where the
+generator leaves the card, `P1` rides on the test of the clause that got in its way). Save this as `/tmp/<your folder name>/<id>.plan.md` before going on. Do not open the card's `.hjson` file or its existing test
 file during this stage. If the text leaves a real doubt about what should happen, write the doubt down as a
 question with both readings; do not settle it by guessing, and do not settle it in stage 2 by seeing what the game
 does.
@@ -73,7 +74,24 @@ shares a title with one of yours (a second Denethor) may be read as a helper lik
 (the definition in full, sheet against definition, an erratum's original, the test file) and so ends stage 1 for
 that card: its plan is saved first. (`--with-test` prints the blind packet and the glossary over again in front
 of it.) A long test file overruns the output limit and the middle of it is cut out of the print: where the print
-says so, read the test file itself for the rest. If the card already has behavioural tests, go
+says so, read the test file itself for the rest.
+
+Before writing any test, have the Play clause's test written for you (Ketura on Q-0220: the tests of that clause
+have never had a finding beside them, and are generated):
+
+    python3 .claude/skills/card-test-campaign/scripts/gen_play.py <ids> --write
+
+For each card whose play is a plain one it puts `PlayedFromHandFor...` into the test file after the stats test
+and the claim under the ledger's `P1` (and under a "Plays to your support area." clause typed `Play`); in a file
+that is still the skeleton it also gives the card a name in place of "card" (`--alias <name>` chooses it, one card
+at a time) and takes out the commented-out placeholder, which was this test unwritten. Leave that test as it is
+written, and plan no board for `P1`. For every other card it prints why it left the card to you (a bearer, a
+requirement or an extra cost to play, a cost its text changes, a card that answers its own play, a Frodo beside
+Frodo): there you write `P1`'s test by hand as before, which is nearly always the test of the clause it names,
+claiming `P1` too. If a generated test fails, do not mend it: report it as a finding, or as a card the generator
+should have left. It refuses a card whose ledger already gives `P1` to a test, and never writes over a test.
+
+If the card already has behavioural tests, go
 through them one by one against your plan: each either claims one of your checks (keep it, adapted to the
 standard), or duplicates another, or covers something your ledger missed (then your ledger was wrong: fix it), or
 asserts something your plan contradicts. That last kind is a question, not a mistake to overwrite: existing tests
