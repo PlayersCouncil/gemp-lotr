@@ -175,6 +175,15 @@ public interface LotroCardBlueprint {
 
     void appendAidCosts(LotroGame game, CostToEffectAction action, PhysicalCard self);
 
+    /**
+     * The N of a follower's printed "Aid - (N)": the twilight its Aid costs, which a Free Peoples follower adds
+     * and a Shadow follower removes.  A reading of the card and nothing more: the Aid is paid through
+     * appendAidCosts.
+     * @return That number; null for a card with no Aid, and for a follower whose Aid is not a plain amount of
+     * twilight and nothing else ("Aid - Add a burden.", "Aid - Exert a [gondor] companion.").
+     */
+    default Integer getAidTwilightCost() { return null; }
+
     boolean skipUniquenessCheck();
 
     default Result validatePreGameDeckCheck(List<PhysicalCardImpl> freeps, List<PhysicalCardImpl> shadow,

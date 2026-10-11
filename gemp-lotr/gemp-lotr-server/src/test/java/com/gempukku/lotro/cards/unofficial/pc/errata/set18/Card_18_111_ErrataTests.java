@@ -77,7 +77,8 @@ public class Card_18_111_ErrataTests
 		assertEquals(0, card.getBlueprint().getStrength());
 		assertEquals(0, card.getBlueprint().getVitality());
 		assertEquals(1, card.getBlueprint().getResistance());
-		// The cost of his Aid is not a field of the card: the tests that transfer him read the (2) as it is paid.
+		// Aid - (2): the number the card carries; the tests that transfer him read it again as it is paid.
+		assertEquals(2, scn.GetAidTwilightCost(card));
 	}
 
 	@Test

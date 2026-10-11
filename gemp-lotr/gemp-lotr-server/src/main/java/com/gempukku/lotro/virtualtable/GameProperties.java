@@ -302,7 +302,36 @@ public interface GameProperties extends TableBase {
 	default int GetShadowControlledSiteCount() { return Filters.countActive(game(), Filters.siteControlledByPlayer(P2())); }
 
 	default PhysicalCardImpl GetCurrentSite() { return (PhysicalCardImpl)gameState().getCurrentSite(); }
+	/**
+	 * The number of the site the fellowship is at: the site of the player whose turn it is.  One player's marker
+	 * whoever's turn it is is read with FreepsGetSiteNumber() and ShadowGetSiteNumber().
+	 */
 	default int GetCurrentSiteNumber() { return GetCurrentSite().getSiteNumber(); }
+	/**
+	 * The site number the Free Peoples player's marker is at, whoever's turn it is.  This is player 1 on every
+	 * turn.  See GetSiteNumber(String).
+	 */
+	default int FreepsGetSiteNumber() { return GetSiteNumber(P1()); }
+	/**
+	 * The site number the Shadow player's marker is at, whoever's turn it is.  This is player 2 on every turn.
+	 * See GetSiteNumber(String).
+	 */
+	default int ShadowGetSiteNumber() { return GetSiteNumber(P2()); }
+	/**
+	 * The site number one player's marker is at on the adventure path, read whoever's turn it is.
+	 * GetCurrentSiteNumber() reads the site of the player whose turn it is, so on the other player's turn it is
+	 * his and not the one the first player's fellowship reached; this is the reading for a text that sets the
+	 * two markers side by side ("ahead on the adventure path", CR 4.2 "ahead"), and for the marker of the player
+	 * who is the Shadow player this turn.
+	 * @param player The player whose marker is wanted.
+	 * @return The number of the site that player's marker is at; 0 until set-up has laid the first site and put
+	 * the markers on it.
+	 */
+	default int GetSiteNumber(String player) {
+		Verify(P1().equals(player) || P2().equals(player),
+				"GetSiteNumber was asked for the site of '" + player + "', who is not a player at this table.");
+		return gameState().getPlayerPosition(player);
+	}
 
 	default PhysicalCardImpl GetFreepsSite(int siteNum) { return GetSite(P1(), siteNum); }
 	default PhysicalCardImpl GetShadowSite(int siteNum) { return GetSite(P2(), siteNum); }

@@ -144,9 +144,52 @@ public class Card_15_092_Tests
 		}
 		assertEquals(1, laidOfTheEight);
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+	}
 
-		// waits: G-0054 no cheat takes the sites out of a player's adventure deck, so the other half of the
-		// sentence is not read: with no site in the Free Peoples player's adventure deck the ability is not
-		// offered, though two [men] Men can still exert
+	@Test
+	public void ManeuverAbilityIsOfferedWithOneSiteLeftInTheFreePeoplesAdventureDeckAndNotWithNone() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetReplacedSiteScenario();
+
+		var southron = scn.GetShadowCard("southron");
+		var corps1 = scn.GetShadowCard("corps1");
+		var corps2 = scn.GetShadowCard("corps2");
+		var shaft = scn.GetShadowSite("site2");
+		var last = scn.GetFreepsSite("site5");
+		PhysicalCardImpl[] otherFreepsSites = {
+				scn.GetFreepsSite("site2"), scn.GetFreepsSite("site3"), scn.GetFreepsSite("site4"),
+				scn.GetFreepsSite("site6"), scn.GetFreepsSite("site7"), scn.GetFreepsSite("site8"),
+				scn.GetFreepsSite("site9")
+		};
+
+		scn.StartGame(scn.GetFreepsSite("site1"));
+		scn.FreepsPass();
+		scn.ShadowChooseCardBPFromSelection(shaft);
+		scn.MoveMinionsToTable(southron, corps1, corps2);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+
+		// "At least 1 site": one site is left in the Free Peoples player's adventure deck, the board late in a
+		// game in which the sites laid have been his own.  The ability is offered.
+		scn.SetFreepsAdventureDeck(last);
+		scn.ShadowRefreshDecision();
+		assertInZone(Zone.ADVENTURE_DECK, last);
+		assertNotInZone(Zone.ADVENTURE_DECK, otherFreepsSites);
+		assertTrue(scn.ShadowActionAvailable(southron));
+
+		// None is left there.  All three [men] Men are unwounded, so two could still exert, and the Shadow
+		// player's own adventure deck holds his other sites: it is the Free Peoples player's deck that is read,
+		// and the ability is not offered.
+		scn.SetFreepsAdventureDeck();
+		scn.ShadowRefreshDecision();
+		assertNotInZone(Zone.ADVENTURE_DECK, last);
+		assertNotInZone(Zone.ADVENTURE_DECK, otherFreepsSites);
+		assertInZone(Zone.ADVENTURE_DECK, scn.GetShadowSite("site3"), scn.GetShadowSite("site9"));
+		assertEquals(0, scn.GetWoundsOn(southron));
+		assertEquals(0, scn.GetWoundsOn(corps1));
+		assertEquals(0, scn.GetWoundsOn(corps2));
+		assertFalse(scn.ShadowActionAvailable(southron));
+		assertEquals(shaft, scn.GetCurrentSite());
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 }

@@ -13,7 +13,8 @@ import static org.junit.Assert.*;
 /**
  * Tests of the rig itself: readings of the game that go by the player and not by whose turn it is.  Each player's
  * burdens whoever has the turn (FreepsGetBurdens, ShadowGetBurdens; GetBurdens() alone is the burdens of the
- * player whose turn it is); who has won and who has lost a game that is over (FreepsHasWon, ShadowHasWon,
+ * player whose turn it is); each player's site marker whoever has the turn (FreepsGetSiteNumber,
+ * ShadowGetSiteNumber; GetCurrentSiteNumber() alone is the site of the player whose turn it is); who has won and who has lost a game that is over (FreepsHasWon, ShadowHasWon,
  * FreepsHasLost, ShadowHasLost; GameIsFinished() alone says only that it is over); and which player is being asked
  * to choose the next skirmish (FreepsAwaitingSkirmishChoice, ShadowAwaitingSkirmishChoice).  Also what the rig
  * says when a helper that plays a turn out is asked to play on through the turn that ends the game.
@@ -114,6 +115,52 @@ public class GameReadingTests
 		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
 		assertEquals(4, scn.FreepsGetBurdens());
 		assertEquals(2, scn.ShadowGetBurdens());
+	}
+
+	@Test
+	public void EachPlayersSiteMarkerIsReadWhoeverHasTheTurn() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		// Set-up has laid site 1 and put both markers on it before the starting fellowships are chosen.
+		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
+		assertEquals(1, scn.FreepsGetSiteNumber());
+		assertEquals(1, scn.ShadowGetSiteNumber());
+
+		scn.StartGame();
+		assertEquals(1, scn.GetCurrentSiteNumber());
+		assertEquals(1, scn.FreepsGetSiteNumber());
+		assertEquals(1, scn.ShadowGetSiteNumber());
+
+		// Player 1's fellowship moves to site 2: his marker moves, and player 2's stays at site 1.
+		scn.FreepsPass();
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertEquals(2, scn.FreepsGetSiteNumber());
+		assertEquals(1, scn.ShadowGetSiteNumber());
+		assertEquals(2, scn.GetSiteNumber(scn.P1()));
+		assertEquals(1, scn.GetSiteNumber(scn.P2()));
+
+		// On player 2's turn the current site is his, site 1; player 1's marker is still there to be read.
+		scn.SkipToOtherPlayersTurn();
+		assertEquals(scn.P2(), scn.GetCurrentPlayer());
+		assertEquals(1, scn.GetCurrentSiteNumber());
+		assertEquals(2, scn.FreepsGetSiteNumber());
+		assertEquals(1, scn.ShadowGetSiteNumber());
+
+		// Player 2 moves twice, level with player 1 and then past him.
+		scn.ShadowPass();
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertEquals(2, scn.FreepsGetSiteNumber());
+		assertEquals(2, scn.ShadowGetSiteNumber());
+
+		scn.SkipToMovementDecision();
+		scn.ShadowChooseToMove();
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertEquals(2, scn.FreepsGetSiteNumber());
+		assertEquals(3, scn.ShadowGetSiteNumber());
+
+		// A name that is nobody's at the table is refused, not read as site 0.
+		assertRefused(() -> scn.GetSiteNumber("Nobody"), "GetSiteNumber was asked for the site of 'Nobody', who is not a player at this table.");
+		assertTrue(scn.FreepsDecisionAvailable("Play Shadow action or Pass"));
 	}
 
 	@Test

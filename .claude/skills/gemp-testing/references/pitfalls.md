@@ -712,10 +712,10 @@ turn it is: put them on in his own turn before, and `SkipToOtherPlayersTurn()` s
 (`ShadowDecisionAvailable("Sanctuary healing")`, then `ShadowChooseCard`; Card_94_007_Tests).
 
 **Whose site.** `GetCurrentSiteNumber()` answers for the player whose turn it is: on the other player's turn it
-is his site, not the one player 1's fellowship reached, and there is no reader for one player's position
-(G-0053, open: where a text compares the two markers, "ahead on the adventure path", leave a
-`// waits: G-0053 ...` comment where the other player's would be read; Card_13_003_Tests). Read
-player 1's site before his turn ends. The card on the path is the copy of whoever laid it: from site 2 on, on
+is his site, not the one player 1's fellowship reached. One player's marker, whoever's turn it is, is
+`FreepsGetSiteNumber()` (player 1's) and `ShadowGetSiteNumber()` (player 2's) (G-0053, engine pass 26): where a
+text compares the two markers ("ahead on the adventure path", CR 4.2 "ahead"), read both at each step
+(Card_13_003_Tests). The card on the path is the copy of whoever laid it: from site 2 on, on
 player 1's first turn, the Shadow player's. `GetCurrentSite()` and `GetSite(n)` return that card and
 `GetFreepsSite(n)` a different one, so compare with `GetSite(n)` or by blueprint.
 `GetSite(n)` is null for a site not yet laid (site 6 on turn 1), and `HasKeyword(null, ...)` then throws: read a
@@ -949,7 +949,10 @@ area until its Aid is paid, and the offer is made for one a companion already be
 first (`FreepsDeclineOptionalTrigger()`; a bare `FreepsPass()` only answers the offer, and the Shadow player is
 not yet asked; Frenzy of Arrows 68_79's tests). `SkipToPhase(Phase.MANEUVER)` leaves the offer pending:
 `FreepsHasOptionalTriggerAvailable(follower)` reads it, and `FreepsAcceptOptionalTrigger()` pays the Aid cost and
-then asks for the companion (`FreepsChooseCard`). Every Free Peoples Aid transfers "to a companion", so no ally
+then asks for the companion (`FreepsChooseCard`). The N of a printed "Aid - (N)" is read off the card, wherever
+it lies, with `GetAidTwilightCost(follower)` (G-0051, engine pass 26; for the stats test): a Free Peoples Aid
+adds it and a Shadow one (Saruman 17_38) removes it. It fails, saying so, for an Aid that is not a plain amount
+of twilight (a burden, a threat, an exertion, a card from hand): for those the header carries the cost. Every Free Peoples Aid transfers "to a companion", so no ally
 bears a follower by legal play. `AttachCardsTo(companion, follower)` cheats one on. Most followers give the
 bearer a printed strength or resistance; see the helper table for two that leave a reading alone (Little Golden
 Flower 65_148's tests). The rule itself is in `mechanics/AidTests`: in a second maneuver phase of the turn the
@@ -1250,6 +1253,12 @@ under `site1` to `site9` (Fangorn Glade 11_239, Abandoned Mine Shaft 13_185, ...
 random: the game shows the pick to each player first (`FreepsDismissRevealedCards()`,
 `ShadowDismissRevealedCards()`), and a test reads whose site lies there and that the others are still in his
 deck, never which (one time in eight it is the twin of the site replaced: Q-0226; Card_15_092_Tests).
+`SetFreepsAdventureDeck(sites...)` and `SetShadowAdventureDeck(sites...)` leave a player's adventure deck holding
+exactly the sites named, none named being an empty deck (G-0054, engine pass 26): the board for "if the Free
+Peoples player has at least 1 site in his or her adventure deck". The other sites are set aside in no zone
+(`assertNotInZone(Zone.ADVENTURE_DECK, ...)` reads them); follow it with `ShadowRefreshDecision()` where a choice
+of actions is already pending, and let no move follow that needs a site from a deck left without one (the game
+throws).
 
 **A battleground or a forest site needs no cheat.** The Towers path has both at site 2: Uruk Camp 4_335
 (Battleground, Plains; each Uruk-hai played must exert) and Derndingle 4_330 (Forest; move limit +1 while an

@@ -82,15 +82,18 @@ public class Card_13_003_Tests
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		scn.SkipToOtherPlayersTurn();
 
-		// The second player's fellowship is at site 1, behind.
-		// waits: G-0053 no reader for the marker of the player whose turn it is not (the first player's, read at 2 above)
+		// The second player's fellowship is at site 1 and the first player's marker at site 2: behind.
 		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
 		assertEquals(1, scn.GetCurrentSiteNumber());
+		assertEquals(1, scn.ShadowGetSiteNumber());
+		assertEquals(2, scn.FreepsGetSiteNumber());
 		assertInZone(Zone.SUPPORT, hatred);
 
 		// It moves to site 2: level with the other player, which is not ahead.
 		scn.ShadowPass();
 		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertEquals(2, scn.ShadowGetSiteNumber());
+		assertEquals(2, scn.FreepsGetSiteNumber());
 		assertInZone(Zone.SUPPORT, hatred);
 
 		// It moves again in the regroup phase, to site 3: ahead.
@@ -98,6 +101,8 @@ public class Card_13_003_Tests
 		assertInZone(Zone.SUPPORT, hatred);
 		scn.ShadowChooseToMove();
 		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertEquals(3, scn.ShadowGetSiteNumber());
+		assertEquals(2, scn.FreepsGetSiteNumber());
 		assertInDiscard(hatred);
 		assertTrue(scn.FreepsDecisionAvailable("Play Shadow action or Pass"));
 	}
@@ -112,13 +117,16 @@ public class Card_13_003_Tests
 		scn.StartGame();
 
 		// Both players' markers are at site 1: level.
-		// waits: G-0053 no reader for the marker of the player whose turn it is not (the second player's, at site 1)
 		assertEquals(1, scn.GetCurrentSiteNumber());
+		assertEquals(1, scn.FreepsGetSiteNumber());
+		assertEquals(1, scn.ShadowGetSiteNumber());
 		assertInZone(Zone.SUPPORT, hatred);
 
 		// The first player moves to site 2 while the other is still at site 1.
 		scn.FreepsPass();
 		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertEquals(2, scn.FreepsGetSiteNumber());
+		assertEquals(1, scn.ShadowGetSiteNumber());
 		assertInDiscard(hatred);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}

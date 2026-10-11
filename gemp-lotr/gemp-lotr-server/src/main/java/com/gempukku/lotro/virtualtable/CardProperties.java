@@ -2,6 +2,7 @@ package com.gempukku.lotro.virtualtable;
 
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.PhysicalCardImpl;
+import com.gempukku.lotro.logic.GameUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -108,6 +109,27 @@ public interface CardProperties extends TableBase {
 	default int GetStrength(PhysicalCardImpl card)
 	{
 		return game().getModifiersQuerying().getStrength(game(), card);
+	}
+
+	/**
+	 * The N of a follower's printed "Aid - (N)": the twilight its Aid costs, as the card's definition has it.  A
+	 * Free Peoples follower's Aid adds that much to the twilight pool and a Shadow follower's removes it.  This
+	 * reads the card, wherever it lies, and takes no Aid: the pool read before and after an Aid is taken shows
+	 * what was paid.
+	 * Only for an Aid that is a plain amount of twilight and nothing else.  Fails, saying so, for a follower whose
+	 * Aid is paid in anything else ("Aid - Add a burden.", "Aid - Exert a [gondor] companion.") and for a card
+	 * that is no follower.
+	 * @param follower The follower to inspect.
+	 * @return The twilight cost of its Aid.
+	 */
+	default int GetAidTwilightCost(PhysicalCardImpl follower) {
+		Verify(follower != null && follower.getBlueprint().getCardType() == CardType.FOLLOWER,
+				(follower == null ? "Nothing" : GameUtils.getFullName(follower))
+						+ " is not a follower, so it has no Aid whose twilight cost could be read.");
+		Integer cost = follower.getBlueprint().getAidTwilightCost();
+		Verify(cost != null, "The Aid of " + GameUtils.getFullName(follower)
+				+ " is not a plain amount of twilight, so it has no twilight cost to read.");
+		return cost;
 	}
 
 	default int GetOverwhelmMultiplier(PhysicalCardImpl card) { return game().getModifiersQuerying().getOverwhelmMultiplier(game(), card); }

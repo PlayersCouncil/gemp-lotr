@@ -125,6 +125,9 @@ While the ability to programmatically execute games is a boon to testing efforts
 - `void MoveCardsToDiscard(PhysicalCardImpl...cards)`
 - `void MoveCardToAdventurePath(PhysicalCardImpl card)` — Lays the given card on the adventure path as the site after the one the fellowship is at, whatever number is printed on it and whatever block it is of: its site number becomes the current site's plus one.
 - `void MoveCardsToAdventureDeck(PhysicalCardImpl...cards)`
+- `void SetFreepsAdventureDeck(PhysicalCardImpl...sites)` — Makes the Free Peoples player's (player 1's) adventure deck exactly the given sites.
+- `void SetShadowAdventureDeck(PhysicalCardImpl...sites)` — Makes the Shadow player's (player 2's) adventure deck exactly the given sites.
+- `void SetAdventureDeck(String player, PhysicalCardImpl...sites)` — Makes the given player's adventure deck exactly the given sites: for the board on which a player has few sites left in it, or none, which a game reaches when the sites on the path are his own.
 - `void MoveCardsToDeadPile(PhysicalCardImpl...cards)`
 - `void FreepsTakeControlOfSite()  ·  ShadowTakeControlOfSite` — Gives that player (player 1) control of the first site that can be controlled, without any card taking it.
 - `void FreepsTakeControlOfSite(PhysicalCardImpl site)  ·  ShadowTakeControlOfSite` — Gives that player (player 1) control of the given site, without any card taking it.
@@ -413,7 +416,9 @@ Decisions will always come with at least one choice, even if that single choice 
 - `int GetFreepsControlledSiteCount()`
 - `int GetShadowControlledSiteCount()`
 - `PhysicalCardImpl GetCurrentSite()`
-- `int GetCurrentSiteNumber()`
+- `int GetCurrentSiteNumber()` — The number of the site the fellowship is at: the site of the player whose turn it is.
+- `int FreepsGetSiteNumber()  ·  ShadowGetSiteNumber` — The site number that player's marker is at, whoever's turn it is.
+- `int GetSiteNumber(String player)` — The site number one player's marker is at on the adventure path, read whoever's turn it is.
 - `PhysicalCardImpl GetFreepsSite(int siteNum)`
 - `PhysicalCardImpl GetShadowSite(int siteNum)`
 - `PhysicalCardImpl GetSite(String playerID, int siteNum)`
@@ -442,6 +447,7 @@ Functions for checking aspects of a card, such as numeric states and other state
 - `Boolean FreepsControls(PhysicalCardImpl card)  ·  ShadowControls`
 - `int GetTwilightCost(PhysicalCardImpl card)`
 - `int GetStrength(PhysicalCardImpl card)`
+- `int GetAidTwilightCost(PhysicalCardImpl follower)` — The N of a follower's printed "Aid - (N)": the twilight its Aid costs, as the card's definition has it.
 - `int GetOverwhelmMultiplier(PhysicalCardImpl card)`
 - `int GetVitality(PhysicalCardImpl card)` — The vitality the card has left: its printed vitality and whatever cards add or take away, less the wounds on it, and never less than 0.
 - `int GetResistance(PhysicalCardImpl card)`
@@ -544,4 +550,4 @@ This interface holds the handful of accessors that every other virtual table int
 - `void Verify(boolean condition, String message)` — A sanity check on the table's own bookkeeping, used where a procedure has to end up in a known state for whatever follows it to make sense.
 
 ---
-436 entries, 221 of them with no description in the source.
+442 entries, 220 of them with no description in the source.

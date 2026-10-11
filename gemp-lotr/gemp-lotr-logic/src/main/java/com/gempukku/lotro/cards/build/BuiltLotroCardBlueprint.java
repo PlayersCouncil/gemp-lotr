@@ -1463,6 +1463,11 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     }
 
     @Override
+    public Integer getAidTwilightCost() {
+        return aidCostSource == null ? null : aidCostSource.getTwilightCost();
+    }
+
+    @Override
     public boolean skipUniquenessCheck() {
         return false;
     }

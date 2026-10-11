@@ -194,6 +194,60 @@ public interface ZoneManipulation extends TableBase {
 		Arrays.stream(cards).forEach(card -> MoveCardToZone(card, Zone.ADVENTURE_DECK));
 	}
 
+	/**
+	 * Makes the Free Peoples player's (player 1's) adventure deck exactly the given sites.
+	 * See {@link #SetAdventureDeck(String, PhysicalCardImpl...)}.
+	 * @param sites The sites the adventure deck is to hold; none, for an empty adventure deck.
+	 */
+	default void SetFreepsAdventureDeck(PhysicalCardImpl...sites) { SetAdventureDeck(P1(), sites); }
+	/**
+	 * Makes the Shadow player's (player 2's) adventure deck exactly the given sites.
+	 * See {@link #SetAdventureDeck(String, PhysicalCardImpl...)}.
+	 * @param sites The sites the adventure deck is to hold; none, for an empty adventure deck.
+	 */
+	default void SetShadowAdventureDeck(PhysicalCardImpl...sites) { SetAdventureDeck(P2(), sites); }
+	/**
+	 * Makes the given player's adventure deck exactly the given sites: for the board on which a player has few
+	 * sites left in it, or none, which a game reaches when the sites on the path are his own.  Every other site of
+	 * that adventure deck is set aside, in no zone at all, where no card and no rule finds it: it is not on the
+	 * adventure path, not in a pile, and not removed from the game.  The sites that stay keep the order they lay
+	 * in.  A site set aside by an earlier call may be named again and goes back in, after the sites that stayed;
+	 * it is still found by the name it was given when the table was set up, and not by its number.
+	 * A cheat like the rest: nothing is played and nothing answers it, the adventure path and the other player's
+	 * adventure deck are not touched, and a decision already pending does not change what it offers.  The game
+	 * lays sites from this deck when its player is the Shadow player and the fellowship moves to a site not yet
+	 * on the path: a move that finds no site there to lay breaks the game (it throws), so take sites away only
+	 * where no such move follows.
+	 * Fails if a card given is not a site of that player's own, or is anywhere but in his adventure deck or set
+	 * aside from it (a site on the adventure path is not taken off it by this).
+	 * @param player The player whose adventure deck is set.
+	 * @param sites The sites the adventure deck is to hold; none, for an empty adventure deck.
+	 */
+	default void SetAdventureDeck(String player, PhysicalCardImpl...sites) {
+		Verify(P1().equals(player) || P2().equals(player),
+				"SetAdventureDeck was asked to set the adventure deck of '" + player + "', who is not a player at this table.");
+		for(PhysicalCardImpl site : sites) {
+			Verify(site != null && site.getBlueprint().getCardType() == CardType.SITE && player.equals(site.getOwner()),
+					(site == null ? "Nothing" : GameUtils.getFullName(site) + ", a card of " + site.getOwner() + "'s,")
+							+ " cannot be put in the adventure deck of " + player + ": an adventure deck holds only its owner's sites.");
+			Verify(site.getZone() == Zone.ADVENTURE_DECK || site.getZone() == null,
+					GameUtils.getFullName(site) + " is in play or in another pile (" + site.getZone() + "), and is not taken from "
+							+ "there: SetAdventureDeck keeps or puts back only sites of the adventure deck itself.");
+		}
+
+		var wanted = Arrays.asList(sites);
+		for(var card : gameState().getAdventureDeck(player).stream().toList()) {
+			if(!wanted.contains(card)) {
+				RemoveCardZone((PhysicalCardImpl) card);
+			}
+		}
+		for(PhysicalCardImpl site : sites) {
+			if(site.getZone() == null) {
+				gameState().addCardToZone(game(), site, Zone.ADVENTURE_DECK);
+			}
+		}
+	}
+
 	default void MoveCardsToDeadPile(PhysicalCardImpl...cards) {
 		Arrays.stream(cards).forEach(card -> MoveCardToZone(card, Zone.DEAD));
 	}
