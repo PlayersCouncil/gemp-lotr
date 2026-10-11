@@ -546,6 +546,13 @@ read "until the regroup phase" at its boundary.
 0: exert a [gondor] Man to wound a minion once, or twice if it is an Uruk-hai. Kills a minion of 1 vitality to
 leave a board with no minion to spot.
 
+**The only minion of a skirmish removed during it, where the companion is neither the Ring-bearer nor a
+signet-bearer.** Long I Fell 4_97. [gandalf] Skirmish event (Spell), cost 2: "Spot Gandalf to prevent all wounds to
+him. Any Shadow player may make you wound a minion to prevent this." Played in any companion's skirmish with
+Gandalf in play: `FreepsPlayCard(fell)`, `ShadowChooseYes()`, `FreepsChooseCard(minion)`. A minion one wound from
+death is killed, the skirmish ends at once with the companion its winner (LR 2: the minion is the losing
+character), and a win trigger of his raises the "Required responses" ordering (`Card_15_038_Tests`).
+
 **A minion killed, and a minion discarded and not killed, by the Free Peoples player in the maneuver phase (the two
 sides of "each time a minion is discarded", "is killed").** Defend It and Hope 4_115; What Are They? 1_119 (with
 Aragorn, Ranger of the North 1_89 and Man of Bree 11_90). Defend It and Hope: [gondor] Maneuver event, cost 0,
@@ -888,6 +895,12 @@ another card, to show it out of force on the stack: Grishnákh 5_100 beside Orc 
 discard 3 cards from hand to reconcile your hand." With five other cards in hand: `FreepsChooseCards` of three,
 then the reconcile's own 0-to-1 discard and the draw to 8 (mechanics/ReconcilingTests).
 
+**A companion's twilight cost raised (to show the size of a discount on a cheap companion).** The Misadventure of
+Mr. Underhill 1_129. [isengard] support-area condition, cost 2 ("To play, exert an Uruk-hai": cheat it into the
+Shadow player's support area before the game). "The twilight cost of each companion played to a site which is not
+a sanctuary is +2": at Bag End a companion of cost 2 reads 4 in hand, and 2 with a discount of 2, where a discount
+of 3 would read 1 (`Card_15_064_Tests`; pitfalls, "A twilight cost never reads below 0").
+
 ## Sites and moves
 
 **Two sites whose standing texts read as one number.** Weatherhills 1_335; Ford of Bruinen 1_338; The Witch-king,
@@ -931,3 +944,10 @@ chooses, and a site lying next is replaced. Nelya 1_233 ("Shadow: Exert ... and 
 it with your site of the same number") replaces site 1 on the first turn; Nelya 11_222 ("Shadow: Exert ... to
 replace the fellowship's current site with a site from your adventure deck") any site, on a Shadows-block path.
 Duilin 14_7 reads the terrain under the fellowship before and after (mechanics/PlayingSitesTests).
+By a SITE's own text, a doer that is no card of the player's side: Mere of Dead Faces 11_246 ("Regroup: Exert
+your Gollum or your Sméagol to play the fellowship's next site"), with Sméagol, Slinker 5_29 in play and the
+fellowship there: `FreepsUseCardAction(site)`, `FreepsChooseCardBPFromSelection(next)`. A Free Peoples site played
+that is NOT the next: There's Another Way 12_40 ([gollum] condition, spot Sméagol; "Regroup: Discard this condition
+to replace the fellowship's current site"). Speak "Friend" and Enter 2_26 (spot Gandalf; Fellowship or Regroup)
+also draws a card if the site played is underground (Abandoned Mine Shaft 13_185, `site2` of `ShadowsSites`, is):
+choose another (`Card_13_164_Tests`).

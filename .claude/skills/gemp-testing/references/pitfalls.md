@@ -460,6 +460,10 @@ simultaneous actions, whoever's they are.
 A companion whose own text answers his leaving play (Radagast 59_26) raises this decision whenever he is killed,
 by a wound or by a card that places him in the dead pile (not when he is discarded or returned to hand), and his
 text is carried out only once it is answered: as a helper to be killed in another card's test he leaves it pending.
+Which is taken first can change what the trigger does: a win trigger that measures the loser (`forEachStrength`
+over the remembered losers) counts only cards still in play, so with the rule's kill taken first the loser reads 0
+(Treebeard 15_38, F-0480, asked: take the trigger's entry first where the skirmish kills the loser). And an exert of "X minions" with X
+above the number able to exert asks nobody and exerts every one that can.
 
 **A card's standing check is a required action, ordered with the others of its moment and looked at again as it
 is carried out.** "While ..., the move limit is +1" and "discard this if ..." are `ConstantlyCheck` triggers. Alone,
@@ -1152,7 +1156,9 @@ hand, or play the card and read the pool. A transfer costs the printed number an
 test on a bare board notices. To show the size of a discount on a cheap card, raise the cost first: an ad hoc
 `TwilightCostModifier(null, CardType.COMPANION, null, new ConstantEvaluator(2))` does what East Road 11_236
 does ("Each companion is twilight cost +2"), and the card reads 4 without its discount and 2 with it
-(`Card_15_064_ErrataTests`). For a MINION a printed card does it: Chaotic Clash 17_68 ([orc] support-area
+(`Card_15_064_ErrataTests`). For a COMPANION a printed card does it, and is what a game has: The Misadventure of
+Mr. Underhill 1_129, in the Shadow player's support area (`Card_15_064_Tests`; helpers, "A companion's twilight
+cost raised"). For a MINION a printed card does it too: Chaotic Clash 17_68 ([orc] support-area
 condition, cost 0, "To play, spot no minions. Each time you play a minion, it is twilight cost +1"), put in the
 Shadow support area, reaches a minion played from hand and one played from the discard pile; its "each companion
 is strength -1" needs an [orc] minion in play. Gollum (2) played at "twilight cost -2" beside it costs 1 and his
@@ -1426,7 +1432,10 @@ of the fellowship phase is no choice and is made whoever is hindered
 
 **A Shadows-block site path.** Pass `VirtualTableScenario.Shadows` as the format and a site map of your own;
 `StartGame(scn.GetFreepsSite("site1"))`; after the fellowship phase is passed the Shadow player lays the next
-site with `ShadowChooseCardBPFromSelection(scn.GetShadowSite("site2"))`. `Card_13_164_Tests` is a worked example.
+site with `ShadowChooseCardBPFromSelection(scn.GetShadowSite("site2"))`. `Card_13_164_Tests` is a worked example:
+it also lays cards while the Shadow player's decision is pending (`ShadowRefreshDecision()` before a play is read
+or made) and walks to the first player's second turn with a site controlled (`SkipToOtherPlayersTurn()` twice,
+`ShadowTakeControlOfSite(site1)`, then the move), the board for a site that is no longer on the adventure path.
 The turn-skippers (`SkipToSite`, `SkipCurrentSite`) cannot walk such a path, but it can be walked by hand to any site: each move is `FreepsPass()`
 (a second move in the turn: `SkipToMovementDecision()`, `FreepsChooseToMove()`) and then
 `ShadowChooseCardBPFromSelection(...)`, with `SkipToOtherPlayersTurn()` twice between the first player's turns;

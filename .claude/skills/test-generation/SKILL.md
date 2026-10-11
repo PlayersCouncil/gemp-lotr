@@ -408,7 +408,8 @@ Which checks a clause lists follows from its words, and the analyst is expected 
   afterwards is not affected. The game writes this into each definition, not into the engine, so it is each
   card's to show. (For an EVENT it is the rule. For an ability of a card in play Ketura has ruled it card by card: a
   snapshot where the cards it names are on the table when it is used, the standing filter where its text could do
-  nothing as a snapshot, as Not Feared in Sunlight 52_107, F-0217: `lookup.py "make each"`.)
+  nothing as a snapshot, as Not Feared in Sunlight 52_107, F-0217: `lookup.py "make each"`. A trigger of a card in
+  play that lays "each X is ... until ..." is read as an ability is: Madril 15_64.)
 - "lose…", "cannot…" for a time → a `Ruling` clause: "can't" beats "can", so what was lost is not given back
   by another card before the time is up. Where the card's own text says so ("loses fierce and cannot gain fierce
   until ...", Prized Lagan 68_110), the "cannot gain" half may stand as an `Effect` clause of its own listing

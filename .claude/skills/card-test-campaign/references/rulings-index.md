@@ -462,16 +462,18 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Built on 2026-10-06: assert as ruled, park nothing [F-0083, F-0084, F-0099, Q-0070, Q-0043, F-0100, F-0101, F-0107, Q-0053, Q-0044, Q-0059, F-0097]
 - "If a minion exerts as a cost of its special ability" is also answered where the minion exerts as the EFFECT of its own ability (Rush of Steeds 11_157; F-0478, confirmed, engine)
 - "If the <side> player is about to discard ..." asks who discards (F-0296; Q-0171: A)
+- "Each time the Free Peoples player plays the fellowship's next site" asks who plays it (F-0479, Fearless Approach 13_164 and Caravan From the South 13_83) [F-0302]
 - "If a Free Peoples player reveals this card from your hand" asks whose CARD revealed (Eye of Barad-dûr 5_96; Q-0251, open) [Q-0171]
 - "Each time your condition is hindered or discarded" (Q-0075)
 - "Each time this is hindered/discarded" is answered after the removal (F-0120, F-0121)
-- memorizeLoser holds everyone in the skirmish but the winner (F-0115, F-0136) [F-0422]
+- memorizeLoser holds everyone in the skirmish but the winner (F-0115, F-0136) [F-0422, F-0480]
 - Built by engine pass 7 (F-0126, F-0131, F-0137, F-0140, Q-0081)
 - A card that leaves play as it comes into play was not played (F-0139, built)
 - "Discard this when at / if <where>" on the move that takes the fellowship there (F-0233, Q-0133)
 - "Each time your fellowship moves, ... (or N if at site X or higher)" reads the site left (Q-0184: A; built by engine pass 21)
 - "When <this card> leaves play, this bonus is lost" as a turn-long added trigger names `self` (F-0270, Radagast 59_26)
 - "Make each ... until" is a snapshot on an event; on an ability only where the cards it names are on the table when it is used (Q-0011, F-0144, F-0217)
+- "Each X is <number> +1 for each Y you can spot until <a time>" on a trigger: the count is taken once, as the trigger is carried out (as built; Madril 15_64; Q-0270, open)
 - Keywords copied "until ..." are a snapshot (Q-0096); race and "unloaded keywords" (Q-0097)
 - "Exert X twice" sets off an "each time ... exerts" trigger twice [F-0145]
 - "Place that event on top of (beneath) your draw deck" on a card that answers the play of an event (F-0287) [Q-0034]
