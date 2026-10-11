@@ -176,7 +176,7 @@ These filters require parameters to be passed in, in the form of "name(param1,pa
     Matches all cards which are currently assigned to (or actively skirmishing against) the cards matching `filter`.
 * AttachedTo
     * [0]: filter
-    Matches all cards currently attached to the cards matched by `filter`.
+    Matches all cards currently attached to the cards matched by `filter`.  A hindered bearer is matched only where `filter` is one word that names it as a card (`self`, `bearer`, `memory(...)`, `ring-bearer`, `any`); a type, race, culture, title, keyword or number, an `or(...)` or `not(...)`, or a second word of any sort leaves a hindered bearer out (CR 5.0 "hinder", Q-0108).
 * CardTypeFromMemory
     * [0]: memory
     Matches all cards which share a card type with any card in the given `memory` location.

@@ -474,7 +474,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A card hindered as its own cost still carries its ability out (F-0151)
 - Q-0098 as built: the words in a definition [F-0160]
 - A number in a filter and a hindered card (CR 5.0 "hinder", Grond 8_103) [Q-0098]
-- "Borne by a <race or type>" and a hindered bearer (Q-0108, F-0212)
+- "Borne by a <race or type>" and a hindered bearer (Q-0108, F-0212; in the engine since engine pass 26, Q-0220: E) [Q-0237]
 - "Support" and support(<whose>) (Q-0099, Q-0101)
 - A character hindered while assigned or skirmishing leaves it, and a minion so freed is not a leftover minion (CR 5.0 "hinder"; CR 4.2 "assignment phase")
 - A hindered Ring-bearer cannot be discarded or returned to hand (F-0174)

@@ -1215,6 +1215,13 @@ nobody is asked for a card, and the deck is shuffled once more with its count un
 hindered card; "for each possession" does not. Hinder one of the counted cards with `HinderCard` and read
 the count unchanged.
 
+**A card on a hindered bearer is not borne by "a companion".** Nor by "a Hobbit", "a [rohan] Man" or "Gandalf":
+a hindered bearer is found by no kind and no title (CR 5.0 "hinder"; Q-0108), so "discard a condition borne by a
+Hobbit" does not offer the condition on a hindered Hobbit, and it is offered again once he is restored. The
+engine does this for every `attachedTo(<a kind>)`; no definition needs `not(hindered)` for it. What names the
+bearer as a card still finds what he bears: "bearer", a companion the ability has chosen, the Ring-bearer, "each
+attached follower" (`mechanics/BorneByAHinderedBearerTests`).
+
 **The rig reads a hindered card's printed numbers.** `GetStrength`, `GetVitality`, `GetResistance` and
 `GetTwilightCost` of a hindered Aragorn 1_89 read 8, 4, 6 and 4: nothing that applies to him is counted, and
 the print is not hidden. So a hindered card's own number shows nothing about hinder. Read what the rule changes:

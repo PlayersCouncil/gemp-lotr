@@ -368,7 +368,7 @@ public class Filters {
     public static final Filter item = Filters.or(CardType.ARTIFACT, CardType.POSSESSION);
     public static final Filter character = Filters.or(CardType.ALLY, CardType.COMPANION, CardType.MINION);
 
-    public static final Filter ringBearer = (game, physicalCard) -> game.getGameState().getRingBearer(game.getGameState().getCurrentPlayerId()) == physicalCard;
+    public static final Filter ringBearer = (NamesNoKind) (game, physicalCard) -> game.getGameState().getRingBearer(game.getGameState().getCurrentPlayerId()) == physicalCard;
     /**
      * The One Ring, by what is printed on it and not by what the game currently takes it for: a hindered card has
      * no card type to be found by (CR 5.0 "hinder"), and the rules must still find a hindered Ring (Q-0109).
@@ -546,7 +546,7 @@ public class Filters {
         return (game, physicalCard) -> PlayUtils.checkPlayRequirementsIgnoringCosts(game, physicalCard);
     }
 
-    public static final Filter any = (game, physicalCard) -> true;
+    public static final Filter any = (NamesNoKind) (game, physicalCard) -> true;
     public static final Filter none = (game, physicalCard) -> false;
     public static final Filter unique = (game, physicalCard) -> game.getModifiersQuerying().getUniqueness(game, physicalCard) == 1;
 
@@ -695,7 +695,7 @@ public class Filters {
      * hindered card starts by this: its modifiers, triggers and abilities are stopped where the card is hindered.
      */
     public static Filter bearerOf(final PhysicalCard attachment) {
-        return (game, physicalCard) -> {
+        return (NamesNoKind) (game, physicalCard) -> {
             List<PhysicalCard> physicalCardList = game.getGameState().getAttachedCards(physicalCard);
             return !Filters.filterActive(game, SpotOverride.INCLUDE_HINDERED, physicalCardList, attachment).isEmpty();
         };
@@ -727,7 +727,7 @@ public class Filters {
         final Set<Integer> cardIds = new HashSet<>();
         for (PhysicalCard card : cards)
             cardIds.add(card.getCardId());
-        return (game, physicalCard) -> cardIds.contains(physicalCard.getCardId());
+        return (NamesNoKind) (game, physicalCard) -> cardIds.contains(physicalCard.getCardId());
     }
 
     public static Filter zone(final Zone zone) {
@@ -805,8 +805,51 @@ public class Filters {
         return (game, physicalCard) -> game.getModifiersQuerying().isCardType(game, physicalCard, cardType);
     }
 
+    /**
+     * Borne by a card that every one of the filters accepts.  A hindered bearer has no title, culture, card type,
+     * race or number to be found by (CR 5.0 "hinder"), so a card it bears is not "borne by a companion" or "borne
+     * by a Hobbit" (Ketura on Q-0108): a hindered bearer is found only where no filter given names a kind of card
+     * (namesNoKind).  The card borne is still in play and still borne, and "the cards this card bears", "a card on
+     * bearer" and "each attached follower" go on finding it.
+     */
     public static Filter attachedTo(final Filterable... filters) {
-        return (game, physicalCard) -> physicalCard.getAttachedTo() != null && Filters.and(filters).accepts(game, physicalCard.getAttachedTo());
+        final boolean findsAHinderedBearer = namesNoKind(filters);
+        return (game, physicalCard) -> {
+            final PhysicalCard bearer = physicalCard.getAttachedTo();
+            if (bearer == null)
+                return false;
+            if (!findsAHinderedBearer && game.getGameState().isHindered(bearer))
+                return false;
+            return Filters.and(filters).accepts(game, bearer);
+        };
+    }
+
+    /**
+     * A filter that says which card is meant and nothing of what kind of card it is: the cards given (in), the
+     * card that bears a given card (bearerOf), the Ring-bearer, who is that by the rules and not by anything
+     * printed on him, and any card at all.  A hindered card is still found by these.  A filter is given this type
+     * where it is made.  Every other filter is taken to go by something a hindered card has not got: its title,
+     * culture, card type, race, item class, keywords and numbers "do not apply" (CR 5.0 "hinder").  That takes in
+     * any filter built with and, or or not, which cannot be seen into, and so every attachedTo of a definition
+     * that gives more than one word for the bearer: FilterFactory joins them before they come here.  Two things a
+     * hindered card does keep are not marked, because no definition writes either inside attachedTo: its side,
+     * and being hindered.
+     */
+    private interface NamesNoKind extends Filter {
+    }
+
+    /**
+     * Whether none of these filters names a kind of card: each is a card itself or a filter made as NamesNoKind.
+     * A card given as itself is a card's own "self": its text is not in force while it is hindered, so this is
+     * reached only by a text being carried out "until fulfilled" after its card was hindered in the middle of it
+     * (CR 5.0 "hinder"), and no card in print shows it.
+     */
+    private static boolean namesNoKind(final Filterable... filters) {
+        for (Filterable filter : filters) {
+            if (!(filter instanceof PhysicalCard || filter instanceof NamesNoKind))
+                return false;
+        }
+        return true;
     }
 
     public static Filter stackedOn(final Filterable... filters) {
