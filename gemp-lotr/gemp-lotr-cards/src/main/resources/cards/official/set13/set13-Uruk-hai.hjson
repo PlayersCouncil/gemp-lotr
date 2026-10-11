@@ -377,7 +377,8 @@
 				optional: true
 				trigger: {
 					type: played
-					filter: not(your),site,nextSiteNumber
+					player: free people
+					filter: site,nextSiteNumber
 				}
 				effect: {
 					type: discard

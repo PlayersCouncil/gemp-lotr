@@ -163,6 +163,24 @@ public class Card_01_224_Tests
 		);
 	}
 
+	// The Ring of Doom 15_1: "While wearing The One Ring, the Ring-bearer gains hunter 3, and each time he or she
+	// is about to take a wound in a skirmish, add a burden instead.  Skirmish: Add a burden to wear The One Ring
+	// until the regroup phase."
+	protected VirtualTableScenario GetTheRingOfDoomScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("rtim", "1_224");
+					put("lemenya", "1_232");   // Ulaire Lemenya, Lieutenant of Morgul: Nazgul, strength 9, not fierce
+
+					put("sword", "1_299");     // Hobbit Sword: strength +2, no text
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				"15_1"
+		);
+	}
+
 	@Test
 	public void ReturntoItsMasterStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
@@ -772,6 +790,65 @@ public class Card_01_224_Tests
 		assertEquals(1, scn.GetWoundsOn(frodo));
 		assertEquals(2, scn.GetBurdens());
 		assertFalse(scn.RBWearingOneRing());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void TheRingOfDoomGivesNoHunterAndTurnsNoWoundIntoABurdenInThatSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetTheRingOfDoomScenario();
+
+		var frodo = scn.GetRingBearer();
+		var ring = scn.GetRing();
+		var sword = scn.GetFreepsCard("sword");
+		scn.AttachCardsTo(frodo, sword);
+
+		var rtim = scn.GetShadowCard("rtim");
+		var lemenya = scn.GetShadowCard("lemenya");
+		scn.MoveCardsToHand(rtim);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(lemenya);
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(frodo, lemenya);
+		scn.FreepsResolveSkirmish(frodo);
+
+		// Frodo is 3 + 2 for the sword, and vitality 4 + 2 printed on this Ring.  He puts the Ring on: hunter 3, and
+		// against a Nazgul who is no hunter, 8.
+		assertEquals(5, scn.GetStrength(frodo));
+		assertEquals(6, scn.GetVitality(frodo));
+		scn.FreepsUseCardAction(ring);
+		assertTrue(scn.RBWearingOneRing());
+		assertEquals(1, scn.GetBurdens());
+		assertEquals(3, scn.GetKeywordCount(frodo, Keyword.HUNTER));
+		assertEquals(8, scn.GetStrength(frodo));
+		scn.ShadowPass();
+		// The Ring's own skirmish ability has a cost, and is still on offer while the Ring is worn.
+		assertTrue(scn.FreepsActionAvailable(ring));
+		scn.FreepsPass();
+
+		// 8 against 9: the wound for losing is a burden.
+		assertEquals(2, scn.GetBurdens());
+		assertEquals(0, scn.GetWoundsOn(frodo));
+
+		assertTrue(scn.ShadowPlayAvailable(rtim));
+		scn.ShadowPlayCard(rtim);
+		assertTrue(scn.IsCharAssignedAgainst(frodo, lemenya));
+
+		scn.FreepsResolveSkirmish(frodo);
+		// The Ring is worn and its text does not apply: no hunter, and its skirmish ability is not offered.  The
+		// vitality printed on it is no game text.
+		assertTrue(scn.RBWearingOneRing());
+		assertFalse(scn.HasKeyword(frodo, Keyword.HUNTER));
+		assertEquals(5, scn.GetStrength(frodo));
+		assertEquals(6, scn.GetVitality(frodo));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(ring));
+
+		scn.PassSkirmishActions();
+		// 5 against 9: a wound, and no burden.
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(2, scn.GetBurdens());
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
