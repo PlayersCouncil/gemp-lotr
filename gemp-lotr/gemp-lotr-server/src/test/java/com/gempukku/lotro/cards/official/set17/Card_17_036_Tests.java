@@ -72,9 +72,9 @@ public class Card_17_036_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// "Each time a minion is killed or discarded from play during a skirmish".  The definition has the `discarded`
-	// trigger alone, which as the engine stands answers a killed minion as well (F-0444): this holds the kill, so
-	// that it is not lost if that is put right.
+	// "Each time a minion is killed or discarded from play during a skirmish".  A killed minion is not discarded
+	// (CR 4.2 "killed"; F-0444), so the definition has a `killed` trigger beside its `discarded` one: this holds
+	// the kill.
 	@Test
 	public void AMinionKilledInASkirmishLetsAGondorTokenBeReinforced() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetKilledMinionScenario();

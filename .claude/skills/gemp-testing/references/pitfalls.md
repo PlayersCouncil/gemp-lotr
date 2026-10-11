@@ -976,14 +976,15 @@ bonuses" the count reads 0, and a bonus given later does not land though its eve
 (Seek and Hide 3_112, then Lurtz's Battle Cry 1_128). The rule is shown in mechanics/DamageBonusTests: a card that
 gives or takes a bonus shows the count and one skirmish's wounds, not the arithmetic again.
 
-**The wounds of a lost skirmish are placed in rounds, one on every loser, from one count (F-0475, open).**
+**The wounds of a lost skirmish are placed in rounds, one on every loser; a loser killed early leaves his own later wounds over.**
 `ResolveSkirmishDamageAction` wounds each loser once, then each again, 1 + the winners' damage bonuses times in
 all, and a kill is answered between two rounds: a loser who dies early has the later rounds "left over", which is
-what More Yet to Come 10_3 assigns elsewhere. Its requirement reads the rounds still to come and its effect ends
-them for EVERY loser, so a second minion in that skirmish loses the wounds still coming to it (2 with the event
-declined, 1 with it played: the test is parked on F-0475). An overwhelm has no such action and leaves nothing
-over (CR 4.2 "overwhelmed"). A card that reads or spends something a whole skirmish shares is tested with a
-second loser in the skirmish, read as untouched (`Card_10_003_Tests`).
+what More Yet to Come 10_3 assigns elsewhere. The share is that loser's own: the event reads and spends only the
+wounds of the minion whose kill it answers, and the rounds go on for the losers still in play (a second minion
+in that skirmish takes 2 whether the event is played or declined; F-0475, mended by engine pass 26). Two losers
+killed by the same wound each leave their own, and a copy of the event assigns one minion's. An overwhelm has no
+such action and leaves nothing over (CR 4.2 "overwhelmed"). A card that reads or spends something a whole
+skirmish shares is tested with a second loser in the skirmish, read as untouched (`Card_10_003_Tests`).
 
 **A site is controlled lowest first and only behind every marker; it is liberated highest first** (CR 4.2
 "control", "liberate"). An effect that takes control of a site takes the lowest-numbered site that nobody
@@ -996,8 +997,12 @@ its other text. A liberation takes the highest-numbered site that an OPPONENT of
 over a site of his own, and asks nothing; the site goes back on the path, and what was stacked on it and what was
 played on it goes to the discard pile. With no such site it liberates nothing, its cost paid. A card that replaces
 a controlled site (Úlairë Nelya 1_233 by "an opponent's site": a controlled site is still its owner's) leaves the
-new site controlled, with the stacked cards on it once each (F-0466); a card PLAYED on a site that is replaced is
-left on the old one, controlled or not (F-0467, open). mechanics/ControlOfSitesTests.
+new site controlled, with the stacked cards on it once each (F-0466). A card PLAYED on a site that is replaced,
+controlled or not, lies on the new site afterwards (CR 4.2 "site": "all cards played on or stacked on the old site
+are moved to the new site"; F-0467, mended by engine pass 26): it is the same card and never leaves play
+(`assertAttachedTo(card, newSite)`, `PlayerSeesCardBorneBy`), and its "this site" is the new one from then on
+(Saruman's Frost 1_135 on a current site that Úlairë Nelya 11_222 replaces still takes 2 from each Hobbit).
+mechanics/ControlOfSitesTests, mechanics/PlayingSitesTests.
 
 **The other player's Free Peoples cards are not active on your turn.** A copy of a possession taken from the
 Shadow player's deck (`GetShadowCard`) and cheated onto your companion is inactive (CR 4.2 "active"), so no
@@ -1064,20 +1069,23 @@ else attached" is a size of 1. `assertNotAttachedTo` is the safer reading.
 (a tentacle killed by a wound and then stacked from the discard pile), read it there while the decision is
 pending. A count that is 0 before and 0 after shows nothing by itself.
 
-**A minion that is killed sets off another card's "is discarded" trigger (F-0444, open).** The definition language's
-`discarded` trigger answers every card the engine puts in a discard pile from play, a KILLED minion among them:
-Wildman's Oath 17_66 ("Each time a [men] minion is discarded during the maneuver phase, you may stack it here")
-offers to stack a Man of Bree killed by a wound there, against CR 4.2 "killed". Only a card's OWN "when this is
-discarded" tells the two apart (Q-0081). Last Days 12_71 and Throne of Minas Tirith 17_36 ("killed or discarded
-from play") are built on that trigger alone and answer a kill because of it, as their text asks (each has a test
-that holds it). A test of a text that says only "discarded" asserts that a kill is not answered and is parked
-on F-0444, IF the game fails it. It does not fail where the trigger carries a `source:` filter, `source: any`
-included: `source` filters the card that did the discarding, and a discard the engine emits with no source card is
-refused by it (a kill; the discard of the minions as the turn ends; the cards that go with a card that is
-stacked, returned to hand, shuffled in or put on a deck from play). Gnawing, Biting, Hacking, Burning 6_63 is
-built so, and Iron Fist of the Orc 6_64 and Scaffolding 6_73 the same way (read, not run): its kill test and its
-end-of-turn test pass and are ACTIVE (Card_06_063_Tests), and it is `source: any`, not its `phase: regroup`, that
-keeps the end-of-turn discard off it (the phase still reads regroup then).
+**A minion that is killed was not discarded, and no card's "is discarded" trigger answers the kill.** A killed
+minion is placed in the discard pile, and until engine pass 26 the definition language's `discarded` trigger
+answered it like any discard from play (F-0444, mended): CR 4.2 "killed", "Cards that trigger when a character is
+killed will not trigger when a character is discarded, and vice-versa." Wildman's Oath 17_66 ("Each time a [men]
+minion is discarded during the maneuver phase, you may stack it here") is not offered a Man of Bree 11_90 killed
+by the wound of Defend It and Hope 4_115 there, and is offered him discarded by What Are They? 1_119 (a ranger
+spotted; he is roaming at site 2): the pair of legal plays for the two sides. A text that says "killed or
+discarded" has a `killed` trigger beside its `discarded` one (Last Days 12_71, Throne of Minas Tirith 17_36) and
+is offered ONCE for a kill: a definition with `discarded` alone under such a text no longer answers a kill, and
+one with both that offers twice is a finding too (read the second offer after ACCEPTING the first, with
+something left for it to do: two offers in one window are declined by one pass). A card's OWN "when this is
+discarded" told the two apart already (Q-0081). A `source:` filter on the trigger, `source: any` included,
+still refuses every discard the engine emits with no source card: the discard of the minions as the turn ends,
+and the cards that go with a card that is stacked, returned to hand, shuffled in or put on a deck from play.
+Gnawing, Biting, Hacking, Burning 6_63 is built so, and Iron Fist of the Orc 6_64 and Scaffolding 6_73 the same
+way (read, not run): it is `source: any`, not its `phase: regroup`, that keeps the end-of-turn discard off it
+(the phase still reads regroup then). mechanics/KilledIsNotDiscardedTests.
 
 **The removed-from-game pile.** `scn.MoveCardToZone(card, Zone.REMOVED)` lays a card there (a cheat) and
 `assertInZone(Zone.REMOVED, cards...)` reads it. Two printed cards put cards there by play: Defiled 13_105

@@ -109,6 +109,7 @@ public class PlaySiteEffect extends AbstractEffect {
                             Zone zone = null;
                             String controlled = null;
                             List<PhysicalCard> stacked = null;
+                            List<PhysicalCard> playedOn = Collections.emptyList();
 
                             if (oldSite != null) {
                                 controlled = oldSite.getCardController();
@@ -118,6 +119,7 @@ public class PlaySiteEffect extends AbstractEffect {
                                     gameState.loseControlOfCard(oldSite, Zone.ADVENTURE_PATH);
                                 }
                                 stacked = new LinkedList<>(gameState.getStackedCards(oldSite));
+                                playedOn = new LinkedList<>(gameState.getAttachedCards(oldSite));
 
                                 gameState.removeCardsFromZone(_playerId, Collections.singleton(oldSite));
                                 oldSite.setSiteNumber(null);
@@ -146,6 +148,18 @@ public class PlaySiteEffect extends AbstractEffect {
                                 gameState.removeCardsFromZone(_playerId, stacked);
                                 for (PhysicalCard physicalCard : stacked)
                                     gameState.stackCard(game, physicalCard, newSite);
+                            }
+
+                            //"When a site is replaced, all cards played on or stacked on the old site are moved to
+                            //the new site" (CR 4.2 "site"), on a controlled site and on the adventure path alike.
+                            //A card played on the old site never leaves play: it is handed to the new site as a
+                            //card that changes bearer is, keeping its card id and its tokens, and a text that is
+                            //in force (not that of a card inactive this turn, or hindered) is stopped and started
+                            //once so that it answers for the new site (F-0467)
+                            for (PhysicalCard physicalCard : playedOn) {
+                                gameState.transferCard(physicalCard, newSite);
+                                if (gameState.isCardInPlayActive(physicalCard))
+                                    gameState.reapplyAffectingForCard(game, physicalCard);
                             }
 
                             sitePlayedCallback(newSite);

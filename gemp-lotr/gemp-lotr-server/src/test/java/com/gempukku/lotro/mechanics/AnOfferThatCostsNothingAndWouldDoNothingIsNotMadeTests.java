@@ -28,7 +28,9 @@ import static org.junit.Assert.*;
  * judged from.  Some kinds of effect were taught one thing more, for this rule alone.  Each has its tests
  * here, both ways: the offer made on a board where the effect can do something, and not made where it cannot.
  * <ul>
- * <li>reinforcing a token: no card bears a token of that culture;</li>
+ * <li>reinforcing a token: no card bears a token of that culture, or a card says that culture tokens cannot be
+ * reinforced (Redhorn Pass 13_194);</li>
+ * <li>placing a culture token: a card says that culture tokens cannot be added (the same site; F-0423);</li>
  * <li>a transfer: no card to transfer, nobody for it to go to, or a card that is to go "from your support
  * area" and has left it;</li>
  * <li>an assignment to a skirmish: nobody the minion could be assigned to;</li>
@@ -383,6 +385,32 @@ public class AnOfferThatCostsNothingAndWouldDoNothingIsNotMadeTests
 		);
 	}
 
+	// Stout and Strong: [dwarven] support-area condition.  "Each time a Dwarf wins a skirmish, you may place a
+	// [dwarven] token on this card."  Its Skirmish ability discards it, and no test here reaches it.
+	// Arod, Rohirrim Steed: [dwarven] mount, cost 1.  "Bearer must be a Dwarf.  When you play Arod, you may
+	// reinforce a [dwarven] token."  Its Response removes 2 [dwarven] tokens, and no test here reaches it.
+	// Redhorn Pass, a Shadows-block site, stands in place of site 9 and is laid as site 2 where a test wants
+	// it: "Culture tokens cannot be added, removed, or reinforced."  Otherwise site 2 is Ettenmoors.
+	protected VirtualTableScenario GetTokensBarredScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("stout", "4_57");
+					put("arod", "13_1");
+					put("gimli", "1_13");       // Gimli, Son of Gloin: a Dwarf, strength 6, vitality 3
+					put("runner", "1_178");     // Goblin Runner: strength 5, vitality 1
+				}},
+				new HashMap<>()
+				{{
+					putAll(VirtualTableScenario.FellowshipSites);
+					remove("site9");
+					put("redhorn", "13_194");
+				}},
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
 	@Test
 	public void ReinforcingATokenIsOfferedWhereACardBearsOneAndNotWhereNoneDoes() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetReinforceScenario();
@@ -427,6 +455,113 @@ public class AnOfferThatCostsNothingAndWouldDoNothingIsNotMadeTests
 		assertAttachedTo(pony, frodo);
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable(pony));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void ReinforcingATokenIsOfferedWhereCultureTokensCanBeReinforced() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetTokensBarredScenario();
+
+		var gimli = scn.GetFreepsCard("gimli");
+		var stout = scn.GetFreepsCard("stout");
+		var arod = scn.GetFreepsCard("arod");
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveCardsToSupportArea(stout);
+
+		scn.StartGame();
+		scn.AddTokensToCard(stout, 1);
+		scn.SkipToSite(2);
+		scn.MoveCardsToHand(arod);
+		scn.FreepsRefreshDecision();
+		assertEquals("Ettenmoors", scn.GetCurrentSite().getBlueprint().getTitle());
+
+		scn.FreepsPlayCard(arod);
+		assertAttachedTo(arod, gimli);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(arod));
+
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(2, scn.GetCultureTokensOn(stout));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void ReinforcingATokenIsNotOfferedWhereNoCultureTokenCanBeReinforced() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetTokensBarredScenario();
+
+		var gimli = scn.GetFreepsCard("gimli");
+		var stout = scn.GetFreepsCard("stout");
+		var arod = scn.GetFreepsCard("arod");
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveCardsToSupportArea(stout);
+
+		scn.StartGame();
+		scn.AddTokensToCard(stout, 1);
+		scn.MoveCardToAdventurePath(scn.GetShadowSite("redhorn"));
+		scn.SkipToSite(2);
+		scn.MoveCardsToHand(arod);
+		scn.FreepsRefreshDecision();
+		assertEquals("Redhorn Pass", scn.GetCurrentSite().getBlueprint().getTitle());
+
+		// A card bears a [dwarven] token, as where the offer is made; the site lets none be reinforced.
+		scn.FreepsPlayCard(arod);
+		assertAttachedTo(arod, gimli);
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(arod));
+		assertEquals(1, scn.GetCultureTokensOn(stout));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void PlacingACultureTokenIsOfferedWhereCultureTokensCanBeAdded() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetTokensBarredScenario();
+
+		var gimli = scn.GetFreepsCard("gimli");
+		var stout = scn.GetFreepsCard("stout");
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveCardsToSupportArea(stout);
+
+		var runner = scn.GetShadowCard("runner");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner);
+		scn.SkipToAssignments();
+		assertEquals("Ettenmoors", scn.GetCurrentSite().getBlueprint().getTitle());
+		scn.FreepsAssignToMinions(gimli, runner);
+		scn.FreepsResolveSkirmish(gimli);
+
+		// 6 against 5: a Dwarf wins.
+		scn.PassSkirmishActions();
+		assertInZone(Zone.DISCARD, runner);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(stout));
+
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(1, scn.GetCultureTokensOn(stout));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void PlacingACultureTokenIsNotOfferedWhereNoCultureTokenCanBeAdded() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetTokensBarredScenario();
+
+		var gimli = scn.GetFreepsCard("gimli");
+		var stout = scn.GetFreepsCard("stout");
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveCardsToSupportArea(stout);
+
+		var runner = scn.GetShadowCard("runner");
+
+		scn.StartGame();
+		scn.MoveCardToAdventurePath(scn.GetShadowSite("redhorn"));
+		scn.MoveMinionsToTable(runner);
+		scn.SkipToAssignments();
+		assertEquals("Redhorn Pass", scn.GetCurrentSite().getBlueprint().getTitle());
+		scn.FreepsAssignToMinions(gimli, runner);
+		scn.FreepsResolveSkirmish(gimli);
+
+		// 6 against 5: a Dwarf wins, as where the offer is made; the site lets no token be added.
+		scn.PassSkirmishActions();
+		assertInZone(Zone.DISCARD, runner);
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(stout));
+		assertEquals(0, scn.GetCultureTokensOn(stout));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
 	@Test

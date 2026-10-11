@@ -8,6 +8,7 @@ import com.gempukku.lotro.cards.build.ValueSource;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.CardResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
@@ -81,8 +82,15 @@ public class ReinforceTokens implements EffectAppenderProducer {
                     }
                 });
 
-        // Taught for Q-0224 (IdleOffers): with no card that has such a token there is nothing to reinforce.
-        return TaughtForecast.actsOnWhatItFinds(result, cardResolver);
+        // Taught for Q-0224 (IdleOffers): with no card that has such a token there is nothing to reinforce, and
+        // where culture tokens cannot be reinforced (Redhorn Pass 13_194) nothing is reinforced either.
+        return TaughtForecast.teach(result, actionContext -> {
+            final LotroGame game = actionContext.getGame();
+            if (game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.CANT_TOUCH_CULTURE_TOKENS))
+                return EffectForecast.NOTHING;
+            final EffectForecast found = cardResolver.forecast(actionContext);
+            return found.getReach() != null && found.getReach().isEmpty() ? EffectForecast.NOTHING : EffectForecast.UNKNOWN;
+        });
     }
 
     private Token getFirstCultureToken(Map<Token, Integer> tokens) {

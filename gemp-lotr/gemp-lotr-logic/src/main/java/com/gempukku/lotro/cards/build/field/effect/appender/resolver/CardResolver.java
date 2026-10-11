@@ -205,7 +205,9 @@ public class CardResolver {
                 @Override
                 public boolean isPlayableInFull(ActionContext actionContext) {
                     final String playerDeck = playerDeckSource.getPlayer(actionContext);
-                    return actionContext.getGame().getGameState().getHand(playerDeck).size() >= count;
+                    // The adventure deck the sites are picked from, not that player's hand (F-0421).  No card
+                    // writes this pick as a cost, so no board tells the two apart today.
+                    return actionContext.getGame().getGameState().getAdventureDeck(playerDeck).size() >= count;
                 }
 
                 @Override

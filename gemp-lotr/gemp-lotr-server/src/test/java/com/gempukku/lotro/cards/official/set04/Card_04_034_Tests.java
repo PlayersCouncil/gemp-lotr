@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -283,7 +282,6 @@ public class Card_04_034_Tests
 		assertEquals(0, scn.GetCultureTokensOn(folk));
 	}
 
-	@Ignore("F-0423: the token is offered at Redhorn Pass, where no culture token can be added and a yes places none")
 	@Test
 	public void WhereNoCultureTokenCanBeAddedTheTokenIsNotOffered() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetRedhornPassScenario();

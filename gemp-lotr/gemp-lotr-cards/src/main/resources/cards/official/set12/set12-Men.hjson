@@ -766,10 +766,11 @@
 				type: Trigger
 				optional: true
 				trigger: [
-					# {
-					# 	type: killed
-					# 	filter: culture(men),minion
-					# }
+					# "killed or discarded from play": a killed minion is not discarded (CR 4.2 "killed"; F-0444)
+					{
+						type: killed
+						filter: culture(men),minion
+					}
 					{
 						type: discarded
 						filter: culture(men),minion

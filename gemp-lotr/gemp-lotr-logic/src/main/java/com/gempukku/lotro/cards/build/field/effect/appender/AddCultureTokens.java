@@ -7,6 +7,7 @@ import com.gempukku.lotro.cards.build.ValueSource;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.CardResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.common.Culture;
@@ -66,7 +67,13 @@ public class AddCultureTokens implements EffectAppenderProducer {
                     }
                 });
 
-        return result;
+        // Taught for Q-0224 (IdleOffers): where culture tokens cannot be added (Redhorn Pass 13_194) no token is
+        // placed, so a "you may place a [culture] token" that costs nothing is not offered there (F-0423).
+        return TaughtForecast.teach(result, actionContext -> {
+            final LotroGame game = actionContext.getGame();
+            return game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.CANT_TOUCH_CULTURE_TOKENS)
+                    ? EffectForecast.NOTHING : EffectForecast.UNKNOWN;
+        });
     }
 
 }

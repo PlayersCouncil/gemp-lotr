@@ -6,7 +6,6 @@ import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -415,7 +414,6 @@ public class ControlOfSitesTests
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
-	@Ignore("F-0467: a card played on a site stays on the old site when that site is replaced; CR 4.2 \"site\" moves it to the new site")
 	@Test
 	public void ACardPlayedOnAControlledSiteThatIsReplacedMovesToTheNewSite() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -441,8 +439,11 @@ public class ControlOfSitesTests
 
 		// "When a site is replaced, all cards played on or stacked on the old site are moved to the new site."
 		assertAttachedTo(retreat, newSite);
+		assertInZone(Zone.ATTACHED, retreat);
 		assertEquals(1, scn.GetAttachedCards(newSite).size());
 		assertEquals(0, scn.GetAttachedCards(oldSite).size());
+		assertTrue(scn.PlayerSeesCardBorneBy(scn.P1(), retreat, newSite));
+		assertTrue(scn.PlayerSeesCardBorneBy(scn.P2(), retreat, newSite));
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

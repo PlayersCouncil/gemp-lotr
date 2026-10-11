@@ -6,7 +6,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.StrengthModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -358,7 +357,6 @@ public class Card_10_003_Tests
 	}
 
 	@Test
-	@Ignore("F-0475: assigning the Runner's remaining wound also takes away the wound of damage +1 that the other minion in the same skirmish was still to take; the text speaks only of the wounds that minion did not take (CR 4.2 \"damage bonus\": each losing character takes the additional wounds)")
 	public void AnotherMinionInTheSameSkirmishStillTakesItsOwnDamageBonusWound() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -402,6 +400,58 @@ public class Card_10_003_Tests
 		assertEquals(2, scn.GetWoundsOn(savage));
 		assertInZone(Zone.SHADOW_CHARACTERS, savage);
 		assertInDiscard(more);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void TwoMinionsKilledByTheSameWoundEachLeaveAWoundOfTheirOwnToAssign() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gimli = scn.GetFreepsCard("gimli");
+		var more = scn.GetFreepsCard("more");
+		var more2 = scn.GetFreepsCard("more2");
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveCardsToHand(more, more2);
+
+		var runner = scn.GetShadowCard("runner");
+		var scrabbler = scn.GetShadowCard("scrabbler");
+		var savage = scn.GetShadowCard("savage");
+		var patrol = scn.GetShadowCard("patrol");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner, scrabbler, savage, patrol);
+		// Gimli, 6 + 6, beats the Runner and the Scrabbler, 5 + 4, without doubling them.
+		scn.ApplyAdHocModifier(new StrengthModifier(null, gimli, null, 6));
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gimli, runner);
+		scn.ShadowAssignToMinions(gimli, scrabbler);
+		scn.FreepsResolveSkirmish(gimli);
+		assertEquals(1, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
+		scn.PassSkirmishActions();
+
+		// Two wounds for each loser, and the first has killed them both: each left one of his own untaken.
+		assertInDiscard(runner, scrabbler);
+		assertTrue(scn.FreepsPlayAvailable(more));
+		assertTrue(scn.FreepsPlayAvailable(more2));
+		scn.FreepsPlayCard(more);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(savage, patrol));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		assertEquals(1, scn.FreepsGetChoiceMax());
+		scn.FreepsChooseCard(patrol);
+		assertEquals(1, scn.GetWoundsOn(patrol));
+		assertEquals(0, scn.GetWoundsOn(savage));
+
+		// One minion's wound is assigned.  The other's is still to assign, by the second copy, and is one wound.
+		assertInDiscard(more);
+		assertTrue(scn.FreepsPlayAvailable(more2));
+		scn.FreepsPlayCard(more2);
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		assertEquals(1, scn.FreepsGetChoiceMax());
+		scn.FreepsChooseCard(savage);
+		assertEquals(1, scn.GetWoundsOn(patrol));
+		assertEquals(1, scn.GetWoundsOn(savage));
+		assertInDiscard(more2);
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }

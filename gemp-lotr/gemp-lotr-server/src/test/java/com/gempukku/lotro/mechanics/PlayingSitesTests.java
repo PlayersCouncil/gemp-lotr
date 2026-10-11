@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -555,7 +554,6 @@ public class PlayingSitesTests
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
-	@Ignore("F-0467: a card played on a site stays on the old site when that site is replaced; CR 4.2 \"site\" moves it to the new site")
 	@Test
 	public void ACardPlayedOnASiteThatIsReplacedMovesToTheNewSite() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetFellowshipBlockScenario();
@@ -580,8 +578,49 @@ public class PlayingSitesTests
 
 		// "When a site is replaced, all cards played on or stacked on the old site are moved to the new site."
 		assertAttachedTo(frost, newSite);
+		assertInZone(Zone.ATTACHED, frost);
 		assertEquals(1, scn.GetAttachedCards(newSite).size());
 		assertEquals(0, scn.GetAttachedCards(oldSite).size());
+		// Each seat is told of its new bearer, as of any card that changes bearer.
+		assertTrue(scn.PlayerSeesCardBorneBy(scn.P1(), frost, newSite));
+		assertTrue(scn.PlayerSeesCardBorneBy(scn.P2(), frost, newSite));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void ACardPlayedOnTheFellowshipsCurrentSiteGoesOnActingAtTheSiteThatReplacesIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetShadowsBlockScenario();
+
+		var frodo = scn.GetRingBearer();
+
+		var nelya = scn.GetShadowCard("thirdOfTheNine");
+		var frost = scn.GetShadowCard("frost");
+		var angle = scn.GetShadowSite("site8");
+		var mineShaft = scn.GetShadowSite("site2");
+
+		scn.StartGame(scn.GetFreepsSite("site1"));
+		// 3, and 1 for The Ruling Ring
+		assertEquals(4, scn.GetStrength(frodo));
+
+		scn.FreepsPass();
+		scn.ShadowChooseCardBPFromSelection(angle);
+		scn.MoveMinionsToTable(nelya);
+		// "Plays on a site. ...  Each Hobbit at this site is strength -2."
+		scn.AttachCardsTo(angle, frost);
+		scn.ShadowRefreshDecision();
+		assertSame(angle, scn.GetCurrentSite());
+		assertEquals(2, scn.GetStrength(frodo));
+
+		scn.ShadowUseCardAction(nelya);
+		scn.ShadowChooseCardBPFromSelection(mineShaft);
+		assertSame(mineShaft, scn.GetCurrentSite());
+		assertInZone(Zone.ADVENTURE_DECK, angle);
+
+		// The Frost has not left play: it lies on the new site, and "this site" is the site it now lies on.
+		assertAttachedTo(frost, mineShaft);
+		assertInZone(Zone.ATTACHED, frost);
+		assertEquals(0, scn.GetAttachedCards(angle).size());
+		assertEquals(2, scn.GetStrength(frodo));
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
