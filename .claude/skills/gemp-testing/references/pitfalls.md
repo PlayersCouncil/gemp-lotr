@@ -401,6 +401,19 @@ A companion whose own text answers his leaving play (Radagast 59_26) raises this
 by a wound or by a card that places him in the dead pile (not when he is discarded or returned to hand), and his
 text is carried out only once it is answered: as a helper to be killed in another card's test he leaves it pending.
 
+**A card's standing check is a required action, ordered with the others of its moment and looked at again as it
+is carried out.** "While ..., the move limit is +1" and "discard this if ..." are `ConstantlyCheck` triggers. Alone,
+one is carried out with nobody asked. Beside another required trigger of the same moment (Blade Tip 1_209's wound
+at the start of the fellowship phase; Silinde 1_60's copy of the site's text on the move there) the Free Peoples
+player gets "Required responses" with the check listed under its card's name
+(`FreepsResolveActionOrder("Rivendell Waterfall")`), and it is collected again for whatever is carried out ahead
+of it: after a wound that kills, the next ordering lists the death and the card twice. What the check gives is not
+there until it is carried out (the move limit reads 2 at the turn's sanctuary-healing decision and while an
+ordering waits, the ranger standing at the site), and its requirements are run again at that moment, so a check
+whose condition has ended by then does nothing: right for a standing discard, wrong for a "+1 for this turn"
+(F-0389, open, the engine's: the death taken ahead of the Waterfall's check leaves the limit at 2). Read what it
+gives after the ordering is answered; `Card_01_342_Tests`.
+
 **A response window can come before the target.** Where the Free Peoples player holds a response event that
 can answer an event being played, the game may put an "Optional responses" decision to him before the played
 event's target is chosen, and an answer written for the target choice then answers the response window, with no
@@ -1176,6 +1189,9 @@ way about, one numbered site among Shadows-block sites makes the path a numbered
 the table is refused when it is built, saying so (`virtualtable/FirstSiteTests`).
 `StartGame(site)` with a site named gets past the first question, but the path is still unordered: every move
 asks the Shadow player to lay a site, and `SkipToSite` halts in the fellowship phase.
+On a numbered path nobody is asked "Choose site to play" at all: each player's deck has one site of each number
+and the next is laid without a question, so an old test's helper that answers it under an `if` answers nothing
+and goes (Card_01_342_Tests had two).
 A Shadows-block site cannot stand as `site1` of such a path: the game lays site 1 by its printed number and
 would lay nothing, and the constructor refuses the site map with an IllegalArgumentException that says so
 ("These sites cannot be set up: the game would lay no site 1 ..."; virtualtable/FirstSiteTests). Where its text
