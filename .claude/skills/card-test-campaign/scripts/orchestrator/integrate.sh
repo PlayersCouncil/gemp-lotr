@@ -37,7 +37,14 @@ if [ -n "$(git status --porcelain)" ]; then
   # Case 3, second half: a batch is at work here.
   PICK=$(git cherry "$BRANCH" cards-wip | awk '$1=="+"{print $2}')
   [ -n "$PICK" ] || { echo "nothing to integrate (the branch already has every commit of cards-wip)"; exit 0; }
+  # Ask before picking anything: a pick that stops on its second commit leaves the first to be undone under an
+  # engine agent's feet.  If a file these commits change has uncommitted changes in the main tree, wait.
+  TOUCHED=$(for c in $PICK; do git diff-tree --no-commit-id --name-only -r "$c"; done | sort -u)
   cd "$WORK/repo"
+  OPEN=$(git status --porcelain | cut -c4- | sort -u | comm -12 - <(echo "$TOUCHED"))
+  if [ -n "$OPEN" ]; then
+    echo "the branch could not be moved up (case 3 above: a file in the main tree is being changed):"; echo "$OPEN" | sed 's/^/\t/' | head -5; exit 3
+  fi
   if git cherry-pick $PICK >/tmp/integrate.err 2>&1; then
     echo "integrated $(echo $PICK | wc -w) commit(s) by cherry-pick (a batch is at work in the second tree); branch at $(git rev-parse --short=9 $BRANCH)"
     exit 0
