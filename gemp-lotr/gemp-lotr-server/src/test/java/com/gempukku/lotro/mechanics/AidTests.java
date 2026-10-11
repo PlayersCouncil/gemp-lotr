@@ -29,6 +29,15 @@ import static org.junit.Assert.*;
  * The follower here is Pallando, Far-travelling One 13_37: strength +1, "Aid - (2)".  Transferred to a [gandalf]
  * companion his own text asks nothing ("Each time you transfer this to a companion, except a [gandalf] companion,
  * exert bearer twice"), so Gandalf is who bears him.
+ *
+ * Aid is an action with a cost, and is offered whether or not the follower can then go anywhere (F-0363; Ketura,
+ * 2026-10-10: "such followers should be marked as noeffect when their aid is offered, so that the UI can indicate
+ * it won't do anything, but if they *want* the burden or whatever (and many such decks do), they can still attempt
+ * to pay it and get nothing out of it, just like any other legal cost-with-no-effect action").  While no character
+ * can be given the follower the offer carries the no-effect flag; taken, its cost is paid, nobody is asked for a
+ * character and nothing moves.  Shown at Streets of Bree 18_140 ("While the fellowship is at this site, followers
+ * cannot be transferred to a character"), and with the follower already borne by its owner's only character
+ * (Q-0244).
  */
 public class AidTests
 {
@@ -46,6 +55,29 @@ public class AidTests
 					put("troop", "1_177");      // Goblin Patrol Troop: no text at all; there so that there is a maneuver phase
 				}},
 				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// The same cards on the same path, with Streets of Bree in each adventure deck in place of a site no test
+	// reaches.  It has no number: MoveCardToAdventurePath lays it as the site ahead.
+	protected VirtualTableScenario GetStreetsOfBreeScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("pallando", "13_37");
+					put("gandalf", "1_72");     // strength 7 beside Frodo alone
+					put("troop", "1_177");
+				}},
+				new HashMap<>()
+				{{
+					putAll(VirtualTableScenario.FellowshipSites);
+					remove("site9");
+					// Streets of Bree: Shadows-block site, dwelling.  "While the fellowship is at this site,
+					// followers cannot be transferred to a character."
+					put("streets", "18_140");
+				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -81,6 +113,7 @@ public class AidTests
 		// At the start of the maneuver phase its owner may pay the aid cost.
 		int pool = scn.GetTwilight();
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(pallando));
+		assertEquals("false", scn.FreepsActionNoEffect(pallando));
 		assertFalse(scn.ShadowAnyDecisionsAvailable());
 
 		scn.FreepsAcceptOptionalTrigger();
@@ -156,6 +189,8 @@ public class AidTests
 		scn.SkipToPhase(Phase.MANEUVER);
 		int pool = scn.GetTwilight();
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(pallando));
+		// Frodo and Aragorn could each be given him.
+		assertEquals("false", scn.FreepsActionNoEffect(pallando));
 		scn.FreepsDeclineOptionalTrigger();
 
 		assertEquals(pool, scn.GetTwilight());
@@ -176,5 +211,120 @@ public class AidTests
 		assertInZone(Zone.SUPPORT, pallando);
 		assertNotAttachedTo(pallando, gandalf);
 		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
+	}
+
+	@Test
+	public void WhereFollowersCannotBeTransferredTheAidIsOfferedWithTheNoEffectFlagAndItsCostBuysNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetStreetsOfBreeScenario();
+
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var pallando = scn.GetFreepsCard("pallando");
+		var streets = scn.GetShadowSite("streets");
+		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCardsToSupportArea(pallando);
+
+		scn.StartGame();
+		scn.MoveCardToAdventurePath(streets);
+		scn.MoveMinionsToTable("troop");
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertSame(streets, scn.GetCurrentSite());
+
+		// The Aid is offered all the same, and says beforehand that it will do nothing.
+		int pool = scn.GetTwilight();
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(pallando));
+		assertEquals("effect", scn.FreepsActionNoEffect(pallando));
+
+		scn.FreepsAcceptOptionalTrigger();
+
+		// Its cost is paid, nobody is asked for a character, and the follower stays where it was.
+		assertEquals(pool + 2, scn.GetTwilight());
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+		assertInZone(Zone.SUPPORT, pallando);
+		assertNotAttachedTo(pallando, gandalf);
+		assertEquals(7, scn.GetStrength(gandalf));
+	}
+
+	@Test
+	public void OnceTheFellowshipHasLeftThatSiteTheAidIsNotFlaggedAndTransfersTheFollower() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetStreetsOfBreeScenario();
+
+		var frodo = scn.GetRingBearer();
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var pallando = scn.GetFreepsCard("pallando");
+		var streets = scn.GetShadowSite("streets");
+		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCardsToSupportArea(pallando);
+
+		scn.StartGame();
+		scn.MoveCardToAdventurePath(streets);
+		scn.MoveMinionsToTable("troop");
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertSame(streets, scn.GetCurrentSite());
+		assertEquals("effect", scn.FreepsActionNoEffect(pallando));
+		scn.FreepsDeclineOptionalTrigger();
+		assertInZone(Zone.SUPPORT, pallando);
+
+		// Nobody is assigned to the Troop, and the fellowship moves on in the same turn.
+		scn.SkipToMovementDecision();
+		scn.FreepsChooseToMove();
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertNotSame(streets, scn.GetCurrentSite());
+
+		scn.SkipToPhase(Phase.MANEUVER);
+		int pool = scn.GetTwilight();
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(pallando));
+		assertEquals("false", scn.FreepsActionNoEffect(pallando));
+
+		scn.FreepsAcceptOptionalTrigger();
+
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, gandalf));
+		scn.FreepsChooseCard(gandalf);
+
+		assertEquals(pool + 2, scn.GetTwilight());
+		assertAttachedTo(pallando, gandalf);
+		assertEquals(8, scn.GetStrength(gandalf));
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+	}
+
+	@Test
+	public void AFollowerBorneByItsOwnersOnlyCharacterHasNobodyToGoToAndItsAidIsFlaggedAndMovesNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var pallando = scn.GetFreepsCard("pallando");
+		scn.MoveCardsToSupportArea(pallando);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable("troop");
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		// The first maneuver phase.  Frodo is the only character there is, so nobody is asked who is to bear the
+		// follower.  He is no [gandalf] companion: Pallando's own text exerts him twice.
+		assertEquals("false", scn.FreepsActionNoEffect(pallando));
+		scn.FreepsAcceptOptionalTrigger();
+
+		assertAttachedTo(pallando, frodo);
+		assertEquals(2, scn.GetWoundsOn(frodo));
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+
+		// A second maneuver phase in the same turn.  The Aid is offered again, and there is nobody else to give
+		// the follower to.
+		scn.SkipToMovementDecision();
+		scn.FreepsChooseToMove();
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		int pool = scn.GetTwilight();
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(pallando));
+		assertEquals("effect", scn.FreepsActionNoEffect(pallando));
+
+		scn.FreepsAcceptOptionalTrigger();
+
+		assertEquals(pool + 2, scn.GetTwilight());
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+		assertAttachedTo(pallando, frodo);
+		assertEquals(2, scn.GetWoundsOn(frodo));
 	}
 }

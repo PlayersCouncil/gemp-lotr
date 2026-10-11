@@ -252,8 +252,8 @@ Rohan 17_104 (`CantBeTransferred`) is never among the cards a card's `Transfer` 
 `checkTarget` or without (F-0340, engine pass 24); a possession may still be transferred TO him. With nothing
 else to take, an ability with a cost is offered all the same (Q-0034): the cost is paid, nobody is asked for a
 card or a bearer, and the flag reads `"false"`. Strange-looking Men 11_100 are Men: they are offered as bearers
-of an Armor themselves (Q-0058). `mechanics/CardThatCannotBeTransferredTests`. A follower's Aid does not ask
-yet: at Streets of Bree 18_140 it is paid and nothing moves (F-0363, open).
+of an Armor themselves (Q-0058). `mechanics/CardThatCannotBeTransferredTests`. A follower's Aid asks the
+same (F-0363, engine pass 26): see "A follower's Aid" below.
 
 **A response event is not played by another card's effect.** "Play a(n) ... event from your discard pile /
 stacked here / from hand" neither offers a response event nor counts one towards being usable; an event that
@@ -961,6 +961,12 @@ offer is made again for a follower already borne, and declined it costs nothing 
 the move limit that is after `PassCurrentPhaseActions()`, `PassReconcile(scn.P2())`, `PassReconcile(scn.P1())`,
 with the game at the other player's "Play Fellowship action or Pass", where the bearer is an inactive card (read
 the return by zone, not by his strength).
+While the follower has nobody to go to the Aid is offered all the same and reads `"effect"` on the no-effect flag
+(`FreepsActionNoEffect(follower)`); taken, its cost is paid, nobody is asked for a character and nothing moves
+(F-0363; Ketura: "they can still attempt to pay it and get nothing out of it"). That is at Streets of Bree 18_140
+("followers cannot be transferred to a character"; laid with `MoveCardToAdventurePath`), under any other
+`CantBeTransferred` that reaches the follower, and in a second maneuver phase when the follower's bearer is its
+owner's only character (Q-0244). Anywhere else it reads `"false"`. `mechanics/AidTests`.
 
 **Whose support area.** A card borne by a card in a support area is in THAT support area, whoever owns it
 (`mechanics/WhoseSupportAreaTests`): the Shadow player's Weary on your ally is in your support area ("a
