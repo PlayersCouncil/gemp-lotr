@@ -1869,9 +1869,15 @@
 			{
 				type: activated
 				phase: maneuver
-				requires: {
-					type: sarumanFirstSentenceActive
-				}
+				requires: [
+					{
+						type: sarumanFirstSentenceActive
+					}
+					{
+						type: cantSpot
+						filter: bearer,or(subtitle(Of Many Colours),subtitle(Agent of the Dark Lord))
+					}
+				]
 				effect: {
 					type: addModifier
 					modifier: {
