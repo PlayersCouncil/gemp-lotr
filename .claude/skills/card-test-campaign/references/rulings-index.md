@@ -377,7 +377,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 ## What is offered and what is asked
 
 - The no-effect flag: which cards assert it [Q-0034]
-- An optional trigger or ability that costs nothing and would do nothing is withheld by the engine (Q-0224: A2; Q-0231: B; engine pass 26) [Q-0034, Q-0033, Q-0104, Q-0029, F-0379, Q-0107]
+- An optional trigger or ability that costs nothing and would do nothing is withheld by the engine (Q-0224: A2; Q-0231: B; engine pass 26) [Q-0034, F-0407, F-0408, F-0402, F-0406, Q-0033, F-0411, F-0417, F-0413, Q-0104, F-0410, Q-0102, Q-0243, Q-0029, F-0379, Q-0107]
 - A choice whose every branch has nothing to act on (F-0116) [F-0293, F-0370, F-0366]
 - "<Do X> or <do Y>": each branch is written as the effect itself (F-0310, Here Lies Balin 1_19) [Q-0209, F-0222]
 - A parenthesis with its own price (Q-0089)
@@ -402,7 +402,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "You may" on a Race to Mount Doom modifier names its player (F-0311)
 - "Response: If a <kind of card> is discarded from play, stack it here" requires the card still in the discard pile (F-0357, Sword Rack 11_158 and Countless Companies 12_58) [Q-0034, Q-0062]
 - "When you play X, you may reinforce a [culture] token" requires a token to reinforce (F-0359, Brego 13_63) [Q-0034, Q-0224, F-0398, F-0399]
-- "When you play X, you may discard a Shadow possession" requires one to discard (F-0362, Erkenbrand 0_59) [F-0359, Q-0034, Q-0224, F-0367, F-0373, F-0377, F-0368, Q-0231]
+- "When you play X, you may discard a Shadow possession" requires one to discard (F-0362, Erkenbrand 0_59) [F-0359, Q-0034, Q-0224, F-0367, F-0373, F-0377, F-0368, Q-0231, F-0408]
 - "Exchange the cards stacked here with your hand" is carried out with either side empty, and not offered with both (F-0371, F-0372, Hall of Our Fathers 11_11) [Q-0034]
 - "Spot a <Wizard> and X other companions": a number taken off a spot count wants a floor, and "other" wants the one spotted to be a companion (F-0374, Discoveries 12_26)
 - "You may take control of a site" with no cost requires a site that can be taken (F-0341, Hillman Band 4_21) [F-0336, Q-0034, Q-0062]

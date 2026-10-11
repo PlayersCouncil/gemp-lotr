@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_18_034_Tests
@@ -19,6 +20,19 @@ public class Card_18_034_Tests
 				{{
 					put("card", "18_34");
 					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetThreatScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("shelob", "18_34");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, vitality 4: he loses a tie twice and lives
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -60,6 +74,44 @@ public class Card_18_034_Tests
 		assertEquals(8, card.getBlueprint().getStrength());
 		assertEquals(8, card.getBlueprint().getVitality());
 		assertEquals(8, card.getBlueprint().getSiteNumber());
+	}
+
+	// Ketura on Q-0034: an optional action with no cost that would do nothing is not offered.  "Threats up to the
+	// number of burdens you can spot" is no threat with no burden.
+	@Test
+	public void TheThreatsAreOfferedWhileThereIsABurdenToSpotAndNotWithNone() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetThreatScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+		var shelob = scn.GetShadowCard("shelob");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(shelob);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, shelob);
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.PassSkirmishActions();
+
+		// Shelob (8) has beaten Aragorn (8).  No burden; two companions, so a threat could be added.  No Gollum
+		// is in the discard pile, so her other offer is not made either.
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetBurdens());
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(shelob));
+		assertEquals(0, scn.GetThreats());
+
+		// A burden, before she wins the fierce skirmish.
+		scn.AddBurdens(1);
+		scn.PassAssignmentActions();
+		scn.FreepsAssignToMinions(aragorn, shelob);
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.PassSkirmishActions();
+
+		assertEquals(2, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(shelob));
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(1, scn.GetThreats());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

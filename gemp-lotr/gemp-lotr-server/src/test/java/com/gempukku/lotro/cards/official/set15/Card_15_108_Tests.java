@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_15_108_Tests
@@ -20,6 +21,24 @@ public class Card_15_108_Tests
 				{{
 					put("card", "15_108");
 					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetFortificationScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("destructive", "15_108");
+					// Parapet: a [rohan] fortification in the support area; its Archery ability needs 2 [rohan] Men
+					put("parapet", "5_87");
+					put("goblin", "11_137");    // Scurrying Goblin: an [orc] Orc of strength 5, to bear the mount
+					// Threatening Warg: an [orc] possession (a mount) on an [orc] Orc of strength 10 or less; its own
+					// offer comes only when it is played
+					put("warg", "17_91");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -60,6 +79,58 @@ public class Card_15_108_Tests
 		assertEquals(14, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
 		assertEquals(4, card.getBlueprint().getSiteNumber());
+	}
+
+	// Ketura on Q-0034: an optional action with no cost that would do nothing is not offered.  "A fortification
+	// for each [orc] possession and each [orc] artifact" is no fortification where there is neither.
+	@Test
+	public void TheDiscardIsNotOfferedWithNoOrcPossessionOrArtifact() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFortificationScenario();
+
+		var parapet = scn.GetFreepsCard("parapet");
+		scn.MoveCardsToSupportArea(parapet);
+
+		var destructive = scn.GetShadowCard("destructive");
+		var goblin = scn.GetShadowCard("goblin");
+		scn.MoveCardsToHand(destructive);
+
+		scn.StartGame();
+		// An [orc] minion that bears nothing
+		scn.MoveMinionsToTable(goblin);
+		scn.SetTwilight(20);
+		scn.FreepsPass();
+
+		// A fortification is there to discard.
+		scn.ShadowPlayCard(destructive);
+		assertInZone(Zone.SHADOW_CHARACTERS, destructive);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(destructive));
+		assertInZone(Zone.SUPPORT, parapet);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void TheDiscardIsOfferedWithAnOrcPossession() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFortificationScenario();
+
+		var parapet = scn.GetFreepsCard("parapet");
+		scn.MoveCardsToSupportArea(parapet);
+
+		var destructive = scn.GetShadowCard("destructive");
+		var goblin = scn.GetShadowCard("goblin");
+		var warg = scn.GetShadowCard("warg");
+		scn.MoveCardsToHand(destructive);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(goblin);
+		scn.AttachCardsTo(goblin, warg);
+		scn.SetTwilight(20);
+		scn.FreepsPass();
+
+		scn.ShadowPlayCard(destructive);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(destructive));
+		scn.ShadowAcceptOptionalTrigger();
+		assertInDiscard(parapet);
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

@@ -170,6 +170,16 @@
 			{
 				type: activated
 				phase: skirmish
+				requires: [
+					{
+						type: canSpot
+						filter: self,zone(support)
+					}
+					{
+						type: canSpot
+						filter: character,inSkirmishAgainst(nazgul)
+					}
+				]
 				effect: [
 					{
 						type: transfer

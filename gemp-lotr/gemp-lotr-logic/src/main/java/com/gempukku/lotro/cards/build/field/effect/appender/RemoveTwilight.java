@@ -6,6 +6,7 @@ import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.cards.build.ValueSource;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.game.state.LotroGame;
@@ -74,6 +75,12 @@ public class RemoveTwilight implements EffectAppenderProducer {
                     }
                 });
 
-        return result;
+        // Taught for Q-0224 (IdleOffers): nothing is removed from an empty twilight pool ("you may remove (1)").
+        // The amount is not worked out: one token that can be removed is something done.  Left untaught where the
+        // definition remembers the number removed, which a later effect is then written to read.
+        if (effectObject.get("memorize") != null)
+            return result;
+        return TaughtForecast.teach(result, actionContext ->
+                actionContext.getGame().getGameState().getTwilightPool() == 0 ? EffectForecast.NOTHING : EffectForecast.UNKNOWN);
     }
 }

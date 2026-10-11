@@ -1,6 +1,7 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
 import com.gempukku.lotro.cards.build.ActionContext;
+import com.gempukku.lotro.cards.build.PlayerSource;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.field.effect.IdleOffers;
@@ -41,6 +42,24 @@ public final class TaughtForecast implements EffectAppender {
                     return EffectForecast.NOTHING;
             }
             return EffectForecast.UNKNOWN;
+        });
+    }
+
+    /**
+     * Teaches an effect that acts on cards chosen from a hand, and on nothing else.  With that hand empty it does
+     * nothing.  With cards in it and none that the choice could take it does nothing either, but that is said
+     * only of the hand of the player the offer would be made to: what another player holds is not to be learned
+     * from whether an offer is made.
+     */
+    public static EffectAppender actsOnWhatItFindsInHand(EffectAppender effect, PlayerSource hand, EffectAppender cardResolver) {
+        return new TaughtForecast(effect, actionContext -> {
+            final String handPlayer = hand.getPlayer(actionContext);
+            if (actionContext.getGame().getGameState().getHand(handPlayer).isEmpty())
+                return EffectForecast.NOTHING;
+            if (!handPlayer.equals(actionContext.getPerformingPlayer()))
+                return EffectForecast.UNKNOWN;
+            final EffectForecast found = cardResolver.forecast(actionContext);
+            return found.getReach() != null && found.getReach().isEmpty() ? EffectForecast.NOTHING : EffectForecast.UNKNOWN;
         });
     }
 

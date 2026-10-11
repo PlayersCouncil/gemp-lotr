@@ -167,7 +167,9 @@ and nothing else happens; with no cost it is not offered at that limit either.
 game withholds an optional trigger, a special ability or Response of a card in play, and an ability one card
 gives another, where nothing is paid for it (a spot is no cost) and every one of its effects says it will do
 nothing: nobody to heal, no token to reinforce, nobody a minion could be assigned to, a hand that card may not
-discard from. Such a card has no "Optional responses" to decline and no action to find: a helper's "when you
+discard from, an empty twilight pool to "remove (1)" from, no card in hand to stack, discard or place on a deck,
+no such card in a discard pile to place beneath a deck, a condition "transferred from your support area" that
+has left it. Such a card has no "Optional responses" to decline and no action to find: a helper's "when you
 play this, you may ..." is simply not asked on a board where it has nothing to do (Brego 4_263 on an unwounded
 bearer, Bill the Pony 13_143 with no [shire] token), so `FreepsDeclineOptionalTrigger()` there fails with nobody
 being asked. Read it with `assertFalse(scn.FreepsHasOptionalTriggerAvailable(card))` and what the game is

@@ -283,4 +283,36 @@ public class Card_V1_038_Tests
 		assertInZone(Zone.SHADOW_CHARACTERS, harry);
 		assertFalse(scn.ShadowActionAvailable(harry));
 	}
+
+	// Ketura on Q-0034: an optional action with no cost that would do nothing is not offered; the game withholds
+	// it itself (Q-0224).  CR 4.2 "assignment phase": an assignment action cannot be done "unless both of them
+	// are unassigned".
+	@Test
+	public void OnceHarryIsAssignedTheAbilityIsNotOfferedAgainThoughACompanionOfStrengthFiveIsUnassigned() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var harry = scn.GetShadowCard("harry");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var farin = scn.GetFreepsCard("farin");
+		scn.MoveCompanionsToTable(aragorn, farin);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(harry, lemenya);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPass();
+
+		assertTrue(scn.ShadowActionAvailable(harry));
+		scn.ShadowUseCardAction(harry);
+		scn.FreepsChooseCard(farin);
+		assertTrue(scn.IsCharAssignedAgainst(farin, harry));
+
+		scn.FreepsPass();
+		// Aragorn, strength 8, is assigned to nobody, and neither is the Nazgul beside Harry.  Harry is.
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertFalse(scn.IsCharAssigned(aragorn));
+		assertFalse(scn.IsCharAssigned(lemenya));
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(harry));
+	}
 }

@@ -216,6 +216,10 @@
 					type: played
 					filter: self
 				}
+				requires: {
+					type: canSpot
+					filter: side(free people),or(possession,artifact)
+				}
 				effect: {
 					type: addThreats
 					amount: {
@@ -666,6 +670,10 @@
 				trigger: {
 					type: played
 					filter: self
+				}
+				requires: {
+					type: canSpot
+					filter: culture(orc),or(possession,artifact)
 				}
 				effect: {
 					type: discard

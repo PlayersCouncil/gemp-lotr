@@ -632,6 +632,10 @@
 						type: canSpot
 						filter: another,culture(wraith)
 					}
+					{
+						type: canSpot
+						filter: companion,inSkirmishAgainst(self)
+					}
 				]
 				effect: {
 					type: kill

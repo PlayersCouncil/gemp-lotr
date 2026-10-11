@@ -25,21 +25,26 @@ import static org.junit.Assert.*;
  *
  * The rule is IdleOffers.  Most effects could already say that they are certain to do nothing (nobody to heal,
  * no threat that can be added, no site to take): that is the forecast the no-effect flag and the preventions are
- * judged from.  Fourteen kinds of effect were taught one thing more, for this rule alone.  Each has its tests
+ * judged from.  Some kinds of effect were taught one thing more, for this rule alone.  Each has its tests
  * here, both ways: the offer made on a board where the effect can do something, and not made where it cannot.
  * <ul>
  * <li>reinforcing a token: no card bears a token of that culture;</li>
- * <li>a transfer: no card to transfer, or nobody for it to go to;</li>
+ * <li>a transfer: no card to transfer, nobody for it to go to, or a card that is to go "from your support
+ * area" and has left it;</li>
  * <li>an assignment to a skirmish: nobody the minion could be assigned to;</li>
  * <li>making an ally take part in skirmishes: no ally;</li>
  * <li>stacking a card from play, and from a discard pile: nothing to stack, or nothing to stack it on;</li>
  * <li>a restore: no card that can be restored;</li>
  * <li>putting on The One Ring: it is worn already;</li>
- * <li>a discard from the top of a draw deck: the deck is empty;</li>
+ * <li>a discard from the top of a draw deck: the deck is empty, or the card may not discard from it;</li>
  * <li>a card in play chosen for a later effect, and a card chosen from a discard pile: nothing to choose;</li>
  * <li>an effect that is repeated: what is repeated would do nothing the first time;</li>
  * <li>a number that is named: naming it changes nothing, so it does not keep the offer by itself;</li>
- * <li>a discard at random from a hand: the hand is empty, or the card may not discard from it.</li>
+ * <li>a discard at random from a hand: the hand is empty, or the card may not discard from it;</li>
+ * <li>twilight removed as an effect: the pool is empty;</li>
+ * <li>a card stacked from hand, a chosen discard from hand, a card placed from a hand on a draw deck: no card in
+ * that hand to take (of another player's hand, only that it is empty);</li>
+ * <li>a card placed from a discard pile beneath a draw deck: no such card in the pile.</li>
  * </ul>
  *
  * Four of the kinds are shown with the tests' own cards (Test Muster, Test Salve, Test Almanac, Test Refrain):
@@ -77,6 +82,7 @@ public class AnOfferThatCostsNothingAndWouldDoNothingIsNotMadeTests
 				{{
 					put("late", "7_209");
 					put("lemenya", "1_232");    // Ulaire Lemenya, Lieutenant of Morgul: a Nazgul, strength 9; her text needs a [wraith] condition on a companion
+					put("nelya", "2_84");       // Ulaire Nelya, Ringwraith in Twilight: a second Nazgul, strength 10; her text needs 2 burdens or 2 wounds on the Ring-bearer
 					put("savage", "1_151");     // Uruk Savage: strength 5, vitality 3, no Nazgul
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, vitality 4
 					put("gimli", "1_13");       // Gimli, Son of Gloin: strength 6, vitality 3
@@ -238,6 +244,111 @@ public class AnOfferThatCostsNothingAndWouldDoNothingIsNotMadeTests
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: an unbound companion
 					put("gimli", "1_13");       // Gimli, Son of Gloin: the third unbound companion
 					put("sam", "1_311");        // Sam, Son of Hamfast: the card in hand
+				}},
+				VirtualTableScenario.FellowshipSites,
+				"4_301",
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// Sleeping Quarters, site 1 of the King block: "When the fellowship moves from this site, the Free Peoples
+	// player may spot 3 Hobbits to remove (2)."  The other sites are the usual King-block ones.
+	protected VirtualTableScenario GetTwilightScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("sam", "1_311");        // Sam, Son of Hamfast: a Hobbit; a Fellowship ability used only on purpose
+					put("merry", "1_303");      // Merry, From O'er the Brandywine: a Hobbit; stronger only while he bears a weapon
+				}},
+				new HashMap<>() {{
+					putAll(VirtualTableScenario.KingSites);
+					put("site1", "7_333");
+				}},
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// The Shards of Narsil: [gondor] artifact in the support area.  "Fellowship: Stack a [gondor] card from hand
+	// here."  Its other Fellowship ability, "Add (1) to take a card stacked here into hand", has a cost.
+	protected VirtualTableScenario GetStackFromHandScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("shards", "3_44");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a [gondor] card
+					put("gimli", "1_13");       // Gimli, Son of Gloin: a [dwarven] card
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// Longbottom Leaf: [shire] possession, cost 1.  "Pipeweed.  Plays to your support area.  When you play this
+	// possession, you may discard up to 2 cards from hand."
+	protected VirtualTableScenario GetDiscardFromHandScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("leaf1", "1_300");
+					put("leaf2", "1_300");
+					put("gimli", "1_13");       // Gimli, Son of Gloin: a card in hand
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// Orkish Warg-master: unique [orc] Orc, strength 8, vitality 2.  "Each time a mounted [orc] minion wins a
+	// skirmish, you may make the Free Peoples player place a card from his or her hand on top of his or her draw
+	// deck."  His Shadow ability exerts him, and no test here reaches it.
+	protected VirtualTableScenario GetPlaceFromHandScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("master", "17_87");
+					// Threatening Warg: [orc] mount, strength +2, vitality +1, on an [orc] Orc of strength 10 or less;
+					// "Bearer is fierce."  Its own offer comes only when it is played.
+					put("warg", "17_91");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, vitality 4: he loses to 10 twice and lives
+					put("gimli", "1_13");       // Gimli, Son of Gloin: the card in hand
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// Goblin Sneak: [moria] Orc, cost 1.  "When you play this minion, you may place a [moria] Orc from your
+	// discard pile beneath your draw deck."
+	protected VirtualTableScenario GetPlaceFromDiscardScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("sneak1", "1_181");
+					put("sneak2", "1_181");
+					put("runner", "1_178");     // Goblin Runner: a [moria] Orc, for the discard pile
+					put("savage", "1_151");     // Uruk Savage: an [isengard] Uruk-hai, for the discard pile
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// Uruk Soldier again, with Frodo, Courteous Halfling as the Ring-bearer: "While you can spot 3 unbound
+	// companions, Shadow cards may not discard cards from your hand or from the top of your draw deck."
+	protected VirtualTableScenario GetBarredDiscardFromDeckScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("soldier1", "1_154");
+					put("soldier2", "1_154");
+					put("arwen", "7_16");       // Arwen, Fair Elf Maiden: an unbound companion
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: an unbound companion
+					put("gimli", "1_13");       // Gimli, Son of Gloin: the third unbound companion
 				}},
 				VirtualTableScenario.FellowshipSites,
 				"4_301",
@@ -766,6 +877,258 @@ public class AnOfferThatCostsNothingAndWouldDoNothingIsNotMadeTests
 		assertInZone(Zone.SHADOW_CHARACTERS, inquisitor2);
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable(inquisitor2));
 		assertInHand(sam);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void ATransferFromASupportAreaIsNotOfferedOnceTheCardHasLeftIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetTransferScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCompanionsToTable(aragorn, gimli);
+
+		var late = scn.GetShadowCard("late");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var nelya = scn.GetShadowCard("nelya");
+		scn.MoveCardsToSupportArea(late);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(lemenya, nelya);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, lemenya}, new PhysicalCardImpl[]{gimli, nelya});
+
+		// Aragorn's skirmish is against a Nazgul, and Too Late goes to him from the support area.
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.FreepsPass();
+		assertInZone(Zone.SUPPORT, late);
+		assertTrue(scn.ShadowActionAvailable(late));
+		scn.ShadowUseCardAction(late);
+		assertAttachedTo(late, aragorn);
+		scn.PassSkirmishActions();
+
+		// Gimli's is against a Nazgul too: there is somebody for the condition to go to, and it is no longer in
+		// the support area it is to be transferred from.
+		scn.FreepsResolveSkirmish(gimli);
+		scn.FreepsPass();
+		assertTrue(scn.IsCharSkirmishingAgainst(gimli, nelya));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(late));
+		assertAttachedTo(late, aragorn);
+	}
+
+	@Test
+	public void TwilightRemovedAsAnEffectIsOfferedWhileThePoolHoldsAToken() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetTwilightScenario();
+
+		var sam = scn.GetFreepsCard("sam");
+		var merry = scn.GetFreepsCard("merry");
+		scn.MoveCompanionsToTable(sam, merry);
+
+		scn.StartGame();
+		var quarters = scn.GetCurrentSite();
+		assertEquals("Sleeping Quarters", quarters.getBlueprint().getTitle());
+		scn.SetTwilight(2);
+
+		// The fellowship moves from Sleeping Quarters with three Hobbits and (2) in the pool.
+		scn.FreepsPass();
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(quarters));
+		assertEquals(2, scn.GetTwilight());
+
+		scn.FreepsAcceptOptionalTrigger();
+		// The (2) are gone; what is in the pool is what the move added: 3 for the companions and 1, the Shadow
+		// number of King's Tent.
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertEquals(4, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void TwilightRemovedAsAnEffectIsNotOfferedWhereThePoolIsEmpty() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetTwilightScenario();
+
+		var sam = scn.GetFreepsCard("sam");
+		var merry = scn.GetFreepsCard("merry");
+		scn.MoveCompanionsToTable(sam, merry);
+
+		scn.StartGame();
+		var quarters = scn.GetCurrentSite();
+		assertEquals("Sleeping Quarters", quarters.getBlueprint().getTitle());
+
+		// The three Hobbits are there to spot, and the pool is empty.
+		assertEquals(0, scn.GetTwilight());
+		scn.FreepsPass();
+
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(quarters));
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		// 3 for the companions and 1, the Shadow number of King's Tent.
+		assertEquals(4, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void StackingACardFromHandIsOfferedWhereTheHandHoldsSuchACardAndNotWhereItHoldsNone() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetStackFromHandScenario();
+
+		var shards = scn.GetFreepsCard("shards");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCardsToSupportArea(shards);
+		// A card in hand that is not a [gondor] card.
+		scn.MoveCardsToHand(gimli);
+
+		scn.StartGame();
+
+		assertEquals(1, scn.GetFreepsHandCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(shards, "Stack"));
+
+		scn.MoveCardsToHand(aragorn);
+		scn.FreepsRefreshDecision();
+		assertTrue(scn.FreepsActionAvailable(shards, "Stack"));
+
+		scn.FreepsUseCardAction(shards, "Stack");
+		assertInZone(Zone.STACKED, aragorn);
+		assertTrue(scn.GetStackedCards(shards).contains(aragorn));
+		assertInHand(gimli);
+		// No [gondor] card is left in hand, and the offer has gone.
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(shards, "Stack"));
+	}
+
+	@Test
+	public void ADiscardFromHandIsOfferedWhileTheHandHoldsACardAndNotOnceItIsEmpty() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetDiscardFromHandScenario();
+
+		var leaf1 = scn.GetFreepsCard("leaf1");
+		var leaf2 = scn.GetFreepsCard("leaf2");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCardsToHand(leaf1, leaf2, gimli);
+
+		scn.StartGame();
+
+		scn.FreepsPlayCard(leaf1);
+		assertInZone(Zone.SUPPORT, leaf1);
+		assertEquals(2, scn.GetFreepsHandCount());
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(leaf1));
+
+		scn.FreepsAcceptOptionalTrigger();
+		scn.FreepsChooseCard(gimli);
+		assertInDiscard(gimli);
+		assertEquals(1, scn.GetFreepsHandCount());
+
+		// The second Leaf is the last card in hand: once it is played there is nothing to discard.
+		scn.FreepsPlayCard(leaf2);
+		assertInZone(Zone.SUPPORT, leaf2);
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(leaf2));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void ACardPlacedFromAHandOnADrawDeckIsOfferedWhileThatHandHoldsACardAndNotOnceItIsEmpty() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetPlaceFromHandScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToHand(gimli);
+		var master = scn.GetShadowCard("master");
+		var warg = scn.GetShadowCard("warg");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(master);
+		scn.AttachCardsTo(master, warg);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, master);
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.PassSkirmishActions();
+
+		// The mounted Warg-master (8 + 2) has beaten Aragorn (8), and the Free Peoples player holds one card.
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetFreepsHandCount());
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(master));
+
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertSame(gimli, scn.GetFreepsTopOfDeck());
+
+		// The Warg makes its bearer fierce: he fights Aragorn again, wins again, and that hand is now empty.
+		scn.PassAssignmentActions();
+		scn.FreepsAssignToMinions(aragorn, master);
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.PassSkirmishActions();
+
+		assertEquals(2, scn.GetWoundsOn(aragorn));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(master));
+		assertSame(gimli, scn.GetFreepsTopOfDeck());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void ACardPlacedFromADiscardPileBeneathADrawDeckIsOfferedWhereThePileHoldsSuchACardAndNotWhereItHoldsNone() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetPlaceFromDiscardScenario();
+
+		var sneak1 = scn.GetShadowCard("sneak1");
+		var sneak2 = scn.GetShadowCard("sneak2");
+		var runner = scn.GetShadowCard("runner");
+		var savage = scn.GetShadowCard("savage");
+		scn.MoveCardsToHand(sneak1, sneak2);
+		scn.MoveCardsToDiscard(runner, savage);
+
+		scn.StartGame();
+		scn.SetTwilight(20);
+		scn.FreepsPass();
+
+		// A [moria] Orc and an Uruk-hai are in the Shadow player's discard pile.
+		scn.ShadowPlayCard(sneak1);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(sneak1));
+		scn.ShadowAcceptOptionalTrigger();
+		assertSame(runner, scn.GetShadowBottomOfDeck());
+		assertInDiscard(savage);
+
+		// Only the Uruk-hai is left there: no [moria] Orc to place.
+		scn.ShadowPlayCard(sneak2);
+		assertInZone(Zone.SHADOW_CHARACTERS, sneak2);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(sneak2));
+		assertInDiscard(savage);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void ADiscardFromTheTopOfADrawDeckIsOfferedWhereTheCardMayDiscardFromThatDeckAndNotWhereItMayNot() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetBarredDiscardFromDeckScenario();
+
+		var arwen = scn.GetFreepsCard("arwen");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var soldier1 = scn.GetShadowCard("soldier1");
+		var soldier2 = scn.GetShadowCard("soldier2");
+		scn.MoveCompanionsToTable(arwen, aragorn);
+		scn.MoveCardsToHand(soldier1, soldier2);
+
+		scn.StartGame();
+		scn.SetTwilight(20);
+		scn.FreepsPass();
+
+		// Two unbound companions: Frodo's bar is not in force, and the Soldier may discard from the deck.
+		int deck = scn.GetFreepsDeckCount();
+		assertTrue(deck > 0);
+		scn.ShadowPlayCard(soldier1);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(soldier1));
+		scn.ShadowDeclineOptionalTrigger();
+		assertEquals(deck, scn.GetFreepsDeckCount());
+
+		// A third: "Shadow cards may not discard cards ... from the top of your draw deck".  The deck still has
+		// its cards, and the second Soldier's offer is not made.
+		scn.MoveCompanionsToTable(gimli);
+		scn.ShadowRefreshDecision();
+		deck = scn.GetFreepsDeckCount();
+		assertTrue(deck > 0);
+		scn.ShadowPlayCard(soldier2);
+		assertInZone(Zone.SHADOW_CHARACTERS, soldier2);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(soldier2));
+		assertEquals(deck, scn.GetFreepsDeckCount());
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 

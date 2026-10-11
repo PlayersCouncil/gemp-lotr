@@ -293,10 +293,17 @@
 					type: played
 					filter: self
 				}
-				requires: {
-					type: canSpot
-					filter: another,easterling
-				}
+				requires: [
+					{
+						type: canSpot
+						filter: another,easterling
+					}
+					{
+						type: canSpot
+						filter: companion
+						count: 6
+					}
+				]
 				effect: [
 					{
 						type: chooseHowManyToSpot

@@ -99,7 +99,8 @@ public class Transfer implements EffectAppenderProducer {
 
         // Q-0224: with no card to transfer, or with nowhere for any such card to go (the bearers the effect itself
         // would offer for it: not the one it is on, an eligible one where "checkTarget" asks for that, and one it
-        // may be transferred to), nothing is transferred.
+        // may be transferred to), nothing is transferred.  Nor is a card that is to go "from your support area"
+        // ("fromSupport") once it lies anywhere else: the effect then transfers nothing, whoever could bear it.
         final EffectAppender cardToTransfer = selectResolver;
         final FilterableSource bearers = !whereIsFilter ? null : environment.getFilterFactory().generateFilter(
                 where.substring(where.indexOf("(") + 1, where.lastIndexOf(")")), environment);
@@ -113,6 +114,8 @@ public class Transfer implements EffectAppenderProducer {
                 return EffectForecast.UNKNOWN;
             final LotroGame game = actionContext.getGame();
             for (PhysicalCard card : found.getReach()) {
+                if (fromSupport && card.getZone() != Zone.SUPPORT)
+                    continue;
                 final Filter couldBear = (g, bearer) -> bearer != card.getAttachedTo()
                         && (!checkTarget || RuleUtils.getFullValidTargetFilter(card.getOwner(), g, card).accepts(g, bearer))
                         && g.getModifiersQuerying().canHaveTransferredOn(g, card, bearer);

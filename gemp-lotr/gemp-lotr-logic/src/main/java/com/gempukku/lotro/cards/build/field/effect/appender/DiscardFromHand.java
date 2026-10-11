@@ -65,7 +65,9 @@ public class DiscardFromHand implements EffectAppenderProducer {
                     }
                 });
 
-        return result;
+        // Taught for Q-0224 (IdleOffers): with no card in that hand for the choice to be made from, nothing is
+        // discarded ("you may discard up to 2 cards from hand", the hand empty).
+        return TaughtForecast.actsOnWhatItFindsInHand(result, handSource, cardResolver);
     }
 
 }

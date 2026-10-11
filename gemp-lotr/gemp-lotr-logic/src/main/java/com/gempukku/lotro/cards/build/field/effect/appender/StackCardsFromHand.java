@@ -31,10 +31,10 @@ public class StackCardsFromHand implements EffectAppenderProducer {
 
         MultiEffectAppender result = new MultiEffectAppender();
 
-        result.addEffectAppender(
-                CardResolver.resolveCard(where, "_temp1", "you", "Choose card to stack on", environment));
-        result.addEffectAppender(
-                CardResolver.resolveCardsInHand(select, valueSource, memorize, "you", "you", "Choose cards to stack", environment));
+        final EffectAppender whereResolver = CardResolver.resolveCard(where, "_temp1", "you", "Choose card to stack on", environment);
+        final EffectAppender selectResolver = CardResolver.resolveCardsInHand(select, valueSource, memorize, "you", "you", "Choose cards to stack", environment);
+        result.addEffectAppender(whereResolver);
+        result.addEffectAppender(selectResolver);
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
@@ -54,7 +54,8 @@ public class StackCardsFromHand implements EffectAppenderProducer {
                     }
                 });
 
-        return result;
+        // Taught for Q-0224 (IdleOffers): with no such card in hand, or nothing to stack it on, nothing is stacked.
+        return TaughtForecast.actsOnWhatItFinds(result, whereResolver, selectResolver);
     }
 
 }

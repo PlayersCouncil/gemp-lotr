@@ -38,6 +38,10 @@
 					type: startOfSkirmishInvolving
 					filter: self
 				}
+				requires: {
+					type: canSpot
+					filter: other,ringBound,hobbit
+				}
 				effect: {
 					type: removeBurdens
 					amount: {

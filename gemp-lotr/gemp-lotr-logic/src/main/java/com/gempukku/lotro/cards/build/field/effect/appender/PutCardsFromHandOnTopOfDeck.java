@@ -39,8 +39,8 @@ public class PutCardsFromHandOnTopOfDeck implements EffectAppenderProducer {
 
         MultiEffectAppender result = new MultiEffectAppender();
 
-        result.addEffectAppender(
-                CardResolver.resolveCardsInHand(select, count, "_temp", player, hand, text, true, environment));
+        final EffectAppender cardResolver = CardResolver.resolveCardsInHand(select, count, "_temp", player, hand, text, true, environment);
+        result.addEffectAppender(cardResolver);
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
@@ -77,7 +77,8 @@ public class PutCardsFromHandOnTopOfDeck implements EffectAppenderProducer {
                     }
                 });
 
-        return result;
+        // Taught for Q-0224 (IdleOffers): with no card in that hand to choose, nothing is placed on the deck.
+        return TaughtForecast.actsOnWhatItFindsInHand(result, PlayerResolver.resolvePlayer(hand), cardResolver);
     }
 
 }
