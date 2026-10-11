@@ -456,6 +456,13 @@ ensured that site text worked during starting fellowships, but this text is in t
 "Site text is not active when the starting fellowships are played." So we'll need to dig out that change and axe
 it. I expect that I will be back with a more broken-down version of the game rules for us to do a pass on for
 things like this." *[2026-10-10]*
+Looked for by engine pass 26 (item `sitetext`, 2026-10-11; F-0470, not a bug): there is no such change to axe. The
+game has never let a site's text act while the starting fellowships are played (guards of 2011 and 2019 in
+`GameState.isCardInPlayActive`; no commit of the campaign near them; no test asserting the opposite; eleven probe
+boards, in `orchestrator/engine-pass-26/sitetext.md`). At East Road 1_320 a companion in the draw deck reads its
+printed cost while the fellowship is chosen, and 2 more in the first fellowship phase. The item she remembered
+is most likely G-0036 (a site map that gives the game no site 1 to lay), which is about the test table and not
+about site text.
 
 ## Sources, sheets, revisions and errata
 

@@ -88,7 +88,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - The Q-0034 offers are withheld by the engine, with the effects taught to say they will do nothing (Q-0224: A2) [Q-0231]
 - Setting a board up early is no board out of play (Q-0228: A; Q-0230: A)
 - Tests of the definition language go in a place of their own (Q-0233: C)
-- Site text is not active while the starting fellowships are played
+- Site text is not active while the starting fellowships are played [F-0470, G-0036]
 
 ## Sources, sheets, revisions and errata
 
