@@ -460,6 +460,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A RemoveTwilight cost beside a PlayCardFromDiscard needs removedTwilight (F-0046, F-0141) [F-0450, F-0453, F-0481, Q-0019]
 - "Play any number of / up to N ... from your discard pile" is withheld when nothing can be played (Q-0086)
 - "If you have initiative, you may play this <card> from your discard pile" is a clause of its own, typed `Activated [+ -]` (Hobbitses Are Dead 7_61; F-0055)
+- "If you have initiative, <pay> to <do>" on a Free Peoples event wants four cards beside the event (F-0464, built by engine pass 28)
 - "Hinder/remove X ... to play X cards from your discard pile": X is capped (Q-0094)
 - An action's costs are judged in order, with its own exertions counted (F-0184) [F-0486, Q-0221]
 - Response events are not played by "play an event from ..." (F-0186)

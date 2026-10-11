@@ -206,6 +206,18 @@ public interface ModifiersQuerying {
 
     Side hasInitiative(LotroGame game);
 
+    /**
+     * Which side has initiative as a requirement of the given card reads it.  As hasInitiative, except that a
+     * card the Free Peoples player is playing from his hand is not counted in that hand: while it lies there,
+     * and while it lies in the void from hand with its costs being paid (CR 4.2 "playing a card": "You cannot
+     * count The Card for initiative. ... If you are the Free Peoples player and initiative is a requirement for
+     * playing The Card, you must have four cards in your hand not counting The Card"; F-0464).  For any other
+     * card, a card in play or in another player's hand, the answer is hasInitiative's.  The HaveInitiative
+     * requirement is its one caller; whether a side has lost initiative is still read by hasInitiative, which
+     * counts the card until its play is announced.
+     */
+    Side hasInitiativeNotCounting(LotroGame game, PhysicalCard cardAsking);
+
     int getNumberOfSpottableFPCultures(LotroGame game, String playerId);
 
     int getNumberOfSpottableShadowCultures(LotroGame game, String playerId);

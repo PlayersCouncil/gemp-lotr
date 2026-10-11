@@ -1252,6 +1252,20 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
 
     @Override
     public Side hasInitiative(LotroGame game) {
+        return hasInitiative(game, 0);
+    }
+
+    @Override
+    public Side hasInitiativeNotCounting(LotroGame game, PhysicalCard cardAsking) {
+        // The card is one of those counted below only while it is the Free Peoples player's own and lies in his
+        // hand or in the void from it.
+        final boolean counted = cardAsking != null
+                && (cardAsking.getZone() == Zone.HAND || cardAsking.getZone() == Zone.VOID_FROM_HAND)
+                && cardAsking.getOwner().equals(game.getGameState().getCurrentPlayerId());
+        return hasInitiative(game, counted ? 1 : 0);
+    }
+
+    private Side hasInitiative(LotroGame game, int cardsNotCounted) {
         for (Modifier modifier : getModifiers(game, ModifierEffect.INITIATIVE_MODIFIER)) {
             if (!modifier.shadowCanHaveInitiative(game))
                 return Side.FREE_PEOPLE;
@@ -1267,7 +1281,8 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
         // is announced: the loss of initiative is answered together with the play (CR 4.2 "playing a card").
         int freePeopleInitiativeHandSize = game.getGameState().getHand(game.getGameState().getCurrentPlayerId()).size()
                 + game.getGameState().getVoidFromHand(game.getGameState().getCurrentPlayerId()).size()
-                + game.getActionsEnvironment().countCardsEnteringPlayFromHand(game.getGameState().getCurrentPlayerId());
+                + game.getActionsEnvironment().countCardsEnteringPlayFromHand(game.getGameState().getCurrentPlayerId())
+                - cardsNotCounted;
 
         int initiativeHandSize = 4;
         for (Modifier modifier : getModifiers(game, ModifierEffect.INITIATIVE_MODIFIER))

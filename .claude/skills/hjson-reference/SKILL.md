@@ -396,7 +396,7 @@ Boolean checks. Used in `requires: []` arrays.
 |------------|-----------|---------|
 | `Phase` | phase | Current phase matches |
 | `Location` | filter | Current site matches filter |
-| `HaveInitiative` | side | Side has initiative |
+| `HaveInitiative` | side | Side has initiative. Asked of a card the Free Peoples player is playing from his hand (an event's `requires`, a condition inside its `cost`), that card is not counted: four cards beside it (F-0464) |
 | `CanMove` | — | FP can still move |
 | `CanAddBurdens` | player? | A burden could be added by this card now: false while the Ring-bearer is hindered or a `CantAddBurdens` reaches the card. For a standing text that must know ahead whether a burden it adds later can be added (69_38, F-0308) |
 | `FierceSkirmish` | — | In fierce assignment/skirmish |

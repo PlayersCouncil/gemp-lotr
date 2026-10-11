@@ -6,7 +6,6 @@ import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -31,7 +30,8 @@ import static org.junit.Assert.*;
  * "Playing a card": "Reveal The Card from your hand, and it enters the void ...  You cannot count The Card for
  * initiative. ...  If you are the Free Peoples player and initiative is a requirement for playing The Card, you
  * must have four cards in your hand not counting The Card. ...  If initiative is a requirement for an effect, you
- * cannot count The Card."
+ * cannot count The Card."  A cost that is smaller with initiative is read the same way while it is judged and
+ * while it is paid (Light the Beacons): the card is in the void, and is not counted.
  *
  * The same procedure's "respond to the playing of The Card (and to losing initiative if necessary)" is in
  * DiscardedOnEntryTests (LossOfInitiativeIsAnsweredTogetherWithThePlayThatCausedIt).  "If there is more than one
@@ -63,6 +63,11 @@ public class InitiativeTests
 					// Guma, Plains Farmer: [rohan] ally, vitality 2.  His home is a Towers site and his
 					// ability a fellowship one.
 					put("guma", "4_277");
+					// Light the Beacons: [gandalf] Maneuver event, cost 3.  "Exert Gandalf three times (or twice
+					// if you have initiative) to make all unbound companions of one culture (except [gandalf])
+					// strength +3 until the regroup phase."
+					put("beacons1", "7_43");
+					put("beacons2", "7_43");
 
 					put("soldier", "1_271");    // Orc Soldier: [sauron] Orc, strength 7, vitality 2; a skirmish ability, not used here
 					// Besieging Pike: hand weapon, strength +2, on a [sauron] Orc.  "If you have initiative,
@@ -245,7 +250,6 @@ public class InitiativeTests
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
-	@Ignore("F-0464: an event that needs initiative to be played is counted toward it; CR 4.2 \"playing a card\" wants four cards beside it")
 	@Test
 	public void AnEventThatNeedsInitiativeToBePlayedIsNotCountedTowardIt() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -290,6 +294,63 @@ public class InitiativeTests
 		assertEquals(2, scn.GetFreepsHandCount());
 		assertEquals(twilight + 1, scn.GetTwilight());
 		assertEquals(0, scn.GetWoundsOn(guma));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Test
+	public void ACostThatIsSmallerWithInitiativeIsReadWithoutTheEventThatIsBeingPlayed() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var madril = scn.GetFreepsCard("madril");
+		var beacons1 = scn.GetFreepsCard("beacons1");
+		var beacons2 = scn.GetFreepsCard("beacons2");
+		scn.MoveCompanionsToTable(gandalf, madril);
+		scn.MoveCardsToHand(beacons1, beacons2, scn.GetFreepsCard("troop"), scn.GetFreepsCard("runner"),
+				scn.GetFreepsCard("marksman"));
+
+		var savage = scn.GetShadowCard("savage");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(savage);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertEquals(5, scn.GetFreepsHandCount());
+		assertTrue(scn.FreepsHasInitiative());
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+		assertEquals(6, scn.GetStrength(madril));
+
+		// Played from five cards, four beside it: with initiative, Gandalf exerts twice.  Madril is the one
+		// unbound companion who is not [gandalf].
+		assertTrue(scn.FreepsPlayAvailable(beacons1));
+		scn.FreepsPlayCard(beacons1);
+		assertEquals(2, scn.GetWoundsOn(gandalf));
+		// 6 + 3
+		assertEquals(9, scn.GetStrength(madril));
+		assertInZone(Zone.DISCARD, beacons1);
+
+		// Four cards, the second copy one of them.  He has initiative, and three cards beside the event: it
+		// wants three exertions, and a Gandalf of vitality 4 with two wounds has one to give.
+		scn.ShadowPass();
+		assertEquals(4, scn.GetFreepsHandCount());
+		assertInZone(Zone.HAND, beacons2);
+		assertTrue(scn.FreepsHasInitiative());
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+		assertFalse(scn.FreepsPlayAvailable(beacons2));
+
+		// Unwounded he has three, and three are what he pays: the event is no more counted while its costs
+		// are paid than while they were judged.
+		scn.RemoveWoundsFromChar(gandalf, 2);
+		scn.FreepsRefreshDecision();
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+		assertTrue(scn.FreepsPlayAvailable(beacons2));
+		scn.FreepsPlayCard(beacons2);
+		assertEquals(3, scn.GetWoundsOn(gandalf));
+		// 6 + 3 + 3
+		assertEquals(12, scn.GetStrength(madril));
+		assertInZone(Zone.DISCARD, beacons2);
+		assertEquals(3, scn.GetFreepsHandCount());
+		assertFalse(scn.FreepsHasInitiative());
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 }
