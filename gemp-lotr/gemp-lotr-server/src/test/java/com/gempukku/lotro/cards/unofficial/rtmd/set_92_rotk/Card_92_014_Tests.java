@@ -233,6 +233,7 @@ public class Card_92_014_Tests
 		scn.ShadowPlayCard(assassin);
 		scn.ShadowPlayCard(assailant);
 		assertFalse(scn.ShadowActionAvailable(mod));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 
 		// The fellowship moves again: a second Shadow phase of the same turn
 		scn.SkipToMovementDecision();

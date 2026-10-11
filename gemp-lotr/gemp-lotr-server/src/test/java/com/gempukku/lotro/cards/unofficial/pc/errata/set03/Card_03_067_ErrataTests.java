@@ -349,6 +349,7 @@ public class Card_03_067_ErrataTests
 		scn.ShadowDismissRevealedCards();
 		assertEquals(1, scn.GetWoundsOn(servant));
 		assertFalse(scn.ShadowActionAvailable(palantir));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 
 		// No minion left, so no combat: on to the turn of the other player, and back.
 		scn.MoveCardsToDiscard(servant);

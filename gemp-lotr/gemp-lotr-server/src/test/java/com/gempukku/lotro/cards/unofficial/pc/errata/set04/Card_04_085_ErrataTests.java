@@ -204,6 +204,7 @@ public class Card_04_085_ErrataTests
 
 		// The fellowship phase: he is fresh and a minion is stacked on a condition.
 		assertFalse(scn.FreepsActionAvailable(thandronen));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
 		// Vitality 3 with 2 wounds: exhausted.
 		scn.AddWoundsToChar(thandronen, 2);

@@ -102,6 +102,7 @@ public class Card_19_001_ErrataTests
 
 		// Not an ability of the fellowship phase.
 		assertFalse(scn.FreepsActionAvailable(ring));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
 		scn.MoveMinionsToTable(savage);
 		scn.SkipToPhase(Phase.MANEUVER);

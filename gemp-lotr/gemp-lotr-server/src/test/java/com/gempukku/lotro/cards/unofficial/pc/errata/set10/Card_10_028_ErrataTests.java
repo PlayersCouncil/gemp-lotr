@@ -258,10 +258,12 @@ public class Card_10_028_ErrataTests
 		assertEquals(1, scn.GetCurrentSiteNumber());
 		assertFalse(scn.HasKeyword(scn.GetCurrentSite(), Keyword.SANCTUARY));
 		assertFalse(scn.FreepsActionAvailable(denethor));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
 		scn.SkipToSite(2);
 		assertFalse(scn.HasKeyword(scn.GetCurrentSite(), Keyword.SANCTUARY));
 		assertFalse(scn.FreepsActionAvailable(denethor));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
 		scn.SkipToSite(3);
 		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.SANCTUARY));
@@ -270,9 +272,11 @@ public class Card_10_028_ErrataTests
 		scn.SkipToSite(4);
 		assertFalse(scn.HasKeyword(scn.GetCurrentSite(), Keyword.SANCTUARY));
 		assertFalse(scn.FreepsActionAvailable(denethor));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
 		scn.SkipToSite(5);
 		assertFalse(scn.FreepsActionAvailable(denethor));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
 		scn.SkipToSite(6);
 		assertEquals(6, scn.GetCurrentSiteNumber());

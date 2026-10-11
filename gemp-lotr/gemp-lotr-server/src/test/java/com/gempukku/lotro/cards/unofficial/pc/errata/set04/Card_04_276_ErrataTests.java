@@ -264,6 +264,7 @@ public class Card_04_276_ErrataTests
 
 		scn.StartGame();
 		assertFalse(scn.FreepsActionAvailable(fortress));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
 		// No minions: the game goes from the Shadow phase straight to regroup.
 		scn.SkipToPhase(Phase.REGROUP);

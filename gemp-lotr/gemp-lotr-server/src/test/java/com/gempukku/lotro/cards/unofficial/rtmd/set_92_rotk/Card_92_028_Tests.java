@@ -449,6 +449,7 @@ public class Card_92_028_Tests
 		scn.ShadowChooseCardBPFromSelection(library);
 		assertInZone(Zone.SUPPORT, library);
 		assertFalse(scn.ShadowActionAvailable(mod));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 
 		// The fellowship moves again: a second Shadow phase in the same turn
 		scn.SkipToMovementDecision();

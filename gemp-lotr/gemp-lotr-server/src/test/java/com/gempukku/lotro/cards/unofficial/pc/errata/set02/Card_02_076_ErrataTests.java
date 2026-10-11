@@ -104,6 +104,7 @@ public class Card_02_076_ErrataTests
 		// A burden to remove and Sam able to exert: only Helpless stands in the way.
 		assertEquals(1, scn.GetBurdens());
 		assertFalse(scn.FreepsActionAvailable(sam));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
 		scn.MoveMinionsToTable(troop);
 		scn.SkipToAssignments();

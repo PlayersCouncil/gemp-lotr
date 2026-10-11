@@ -217,6 +217,7 @@ public class Card_10_068_ErrataTests
 		// Skirmish: 10 set + 2 companions + 2 for the site, and Relentless Charge cost nothing.
 		assertEquals(14, scn.GetTwilight());
 		assertFalse(scn.ShadowPlayAvailable(darkness));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 
 		// Enquea, 11 + 2 for his wound, beats Aragorn's 8 without killing him.
 		scn.ShadowPass();
@@ -356,6 +357,7 @@ public class Card_10_068_ErrataTests
 		assertEquals(1, scn.GetWoundsOn(enquea));
 		assertEquals(3, scn.GetTwilight());
 		assertFalse(scn.ShadowActionAvailable(enquea));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 
 		// Lemenya's 9 beats Aragorn's 8; then Enquea's own skirmish, with nothing else changed.
 		scn.ShadowPass();

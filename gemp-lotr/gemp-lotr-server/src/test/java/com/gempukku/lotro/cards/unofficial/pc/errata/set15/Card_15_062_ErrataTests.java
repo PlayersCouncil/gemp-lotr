@@ -184,6 +184,7 @@ public class Card_15_062_ErrataTests
 
 		// Not a fellowship ability.
 		assertFalse(scn.FreepsActionAvailable(blade1));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
 		scn.SkipToPhase(Phase.MANEUVER);
 		assertEquals(2, scn.GetCurrentSiteNumber());

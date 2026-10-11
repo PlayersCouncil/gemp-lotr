@@ -383,6 +383,7 @@ public class Card_07_190_ErrataTests
 		// No threat left to remove.
 		scn.FreepsPass();
 		assertFalse(scn.ShadowActionAvailable(destroyer));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 		assertEquals(12, scn.GetStrength(destroyer));
 		scn.ShadowPass();
 

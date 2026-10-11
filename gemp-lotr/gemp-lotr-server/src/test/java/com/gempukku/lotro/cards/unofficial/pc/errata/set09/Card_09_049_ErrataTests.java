@@ -239,6 +239,7 @@ public class Card_09_049_ErrataTests
 		scn.SetTwilight(3);
 		// Not a fellowship action.
 		assertFalse(scn.FreepsActionAvailable(bilbo));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
 		scn.SkipToPhase(Phase.REGROUP);
 		// 3 in the pool + 2 for the Shadow number of Ettenmoors + 2 companions.

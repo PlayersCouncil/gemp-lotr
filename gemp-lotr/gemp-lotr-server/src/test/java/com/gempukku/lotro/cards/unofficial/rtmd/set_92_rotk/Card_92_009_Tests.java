@@ -106,12 +106,14 @@ public class Card_92_009_Tests
 
 		assertEquals(6, scn.GetCurrentSiteNumber());
 		assertFalse(scn.FreepsPlayAvailable(eomer));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
 		// "Or higher": nor at the sites beyond.
 		scn.SkipToSite(7);
 		assertEquals(7, scn.GetCurrentSiteNumber());
 		assertInZone(Zone.HAND, eomer);
 		assertFalse(scn.FreepsPlayAvailable(eomer));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
 		scn.SkipToSite(8);
 		assertEquals(8, scn.GetCurrentSiteNumber());

@@ -271,6 +271,7 @@ public class Card_91_010_Tests
 		// The Free Peoples player has three cards to discard and companions of his own, but the modifier is not his
 		assertEquals(3, scn.GetFreepsHandCount());
 		assertFalse(scn.FreepsActionAvailable(shadowMod));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 		scn.FreepsPass();
 
 		// The owner is offered it

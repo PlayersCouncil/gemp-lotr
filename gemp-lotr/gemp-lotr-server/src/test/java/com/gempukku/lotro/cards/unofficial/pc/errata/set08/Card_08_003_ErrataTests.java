@@ -105,6 +105,7 @@ public class Card_08_003_ErrataTests
 		assertEquals(1, scn.GetKeywordCount(aragorn, Keyword.DAMAGE));
 		// Not a fellowship event: nothing to play before the fellowship moves.
 		assertFalse(scn.FreepsPlayAvailable(brc));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
 		scn.FreepsPass();
 

@@ -190,6 +190,7 @@ public class Card_92_029_Tests
 		scn.FreepsDismissRevealedCards();
 		scn.ShadowDeclineChoosing();
 		assertFalse(scn.ShadowActionAvailable(mod));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 
 		// The fellowship moves again: a second Shadow phase in the same turn, and no second pack
 		scn.SkipToMovementDecision();
