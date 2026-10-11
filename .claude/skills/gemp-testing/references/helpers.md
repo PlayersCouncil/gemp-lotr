@@ -66,9 +66,16 @@ of Ithilien 18_48; Uruk Decimator 12_150. Tracking Uruk: [uruk-hai] Uruk-hai, no
 vitality 3, site 5; Hunter 1 is its whole text. Butcher: [uruk-hai] Uruk-hai, not unique, cost 4, strength 5,
 vitality 2, site 5; Hunter 6 is its whole text. Faramir: unique [gondor] Man companion, cost 3 (2 in a starting
 fellowship), strength 7, vitality 3; ranger, hunter 2; a Maneuver heal of another companion. Decimator:
-[uruk-hai] Uruk-hai, not unique, cost 4, strength 12 (+2 at a battleground), vitality 3, site 5. In print (the
+[uruk-hai] Uruk-hai, not unique, cost 4, strength 12 (+2 at a battleground), vitality 3, site 5; "While this
+minion is bearing a possession, it is damage +1", and it has no keyword without one. In print (the
 keyword lines of sets 1 to 19) no ally is a hunter and no Free Peoples character is fierce: "a hunter" that is no
 minion is a companion, and "fierce, and no minion" has no candidate (`Card_15_170_Tests`).
+
+**A minion whose own standing text gives it a keyword that is not fierce.** Desert Nomad 7_132. [raider] Man,
+Southron, not unique, cost 4, strength 9, vitality 2, site 4: "While you can spot 2 threats, this minion is damage
++1". The damage-bonus twin of Easterling Axeman 4_224 (fierce at 2 burdens), for a keyword lost or barred "until" a
+time while the minion's own text goes on giving it; a second copy is the control. Lay a second companion for the
+two threats (`AddThreats(2)`), and read the bonus in the wounds of a lost skirmish (`Card_17_100_Tests`).
 
 **A weak minion PRINTED fierce (a companion of strength 5 or 6 beats it or outlasts it in the fierce round).** Uruk
 Pursuer 4_190; Uruk Seeker 4_195; Charging Uruk 15_156; Shelob, Eater of Light 8_25. Pursuer: [isengard] Uruk-hai,
@@ -338,7 +345,8 @@ Holbytla 103_85, Ted Sandyman 18_75; King of the Dead 8_38; Khamûl 103_61, Morg
 4_33, 3_68, Cirith Ungol Guard 10_81, Half-troll of Far Harad 14_12; Ent Avenger 6_27; Corpse Lights 6_99. [shire]
 and no Hobbit: Sméagol 103_116 (companion), Goldberry 9_51, Tom Bombadil 9_52 (allies). A Hobbit who is not
 [shire]: Pippin 103_31 ([gondor]), Merry 103_85 ([rohan]), Ted Sandyman 18_75 (a [men] minion). [rohan] and no Man:
-Merry 103_85 alone, and he is a Man while 3 [rohan] companions or Éowyn can be spotted. [gondor] and no Man: Pippin
+Merry 103_85 alone, and he is a Man while 3 [rohan] companions or Éowyn can be spotted (so a text that spots or
+counts 3 or more [rohan] companions cannot use him: Into the Caves 17_100). [gondor] and no Man: Pippin
 103_31, and the Wraiths of set 8 (King of the Dead 8_38: to play, spot a [gondor] Wraith and add 2 threats, so
 cheat him in). A Nazgûl who is not [ringwraith]: Khamûl 103_61 (an Easterling too; not twilight); [ringwraith] and
 no Nazgûl: Morgul Creeper 8_75 (strength 8), or Morgul Hound 7_192 (an Orc of strength 5 and vitality 2, so it can
@@ -646,6 +654,21 @@ character" (92_35). A Wizard minion who heals, by his own text: Saruman, Agent o
 [uruk-hai] Wizard, strength 8, vitality 4, lurker; "Each time a companion is killed, you may heal Saruman"), laid
 wounded, when Gandalf, Mithrandir 6_30 ("Each time the fellowship moves, wound Gandalf") with 3 wounds dies at the
 move (`Card_13_080_Tests.ASarumanWhoHealsMakesItAMinion`).
+
+**A heal of a companion by each kind of source: a site, one event three times, the Shadow player, a delayed
+trigger.** Balin's Tomb 1_343; Peace of Mind 7_46; Dark Temptation 12_163; Enemy in Your Midst 18_30; End of the
+Game 10_30. For "each time the Free Peoples player heals a companion" (`Card_17_140_Tests`). By a site's text, and
+so by no card of his side: Balin's Tomb, site 4 of `FellowshipSites` ("Maneuver: Discard your tale from play or from
+hand to heal your companion"); its cost is a choice "from play / from hand" whenever a tale is in hand as well, so
+put every other tale of the deck in the discard pile at the start (F-0264): The Saga of Elendil dealt in by a
+turn-skipper failed the test about one run in five. One event that heals one companion three times: Peace of Mind
+([gandalf] Regroup event, cost 4, "Spot Gandalf to heal an unbound Hobbit 3 times"); three heals, each answered in
+its turn. The SHADOW player healing a companion: Dark Temptation ([wraith] support-area condition, "Each time you
+play a Nazgûl, you may heal the Ring-bearer twice to add a burden": the heals are its cost) and Enemy in Your Midst
+([gollum] Shadow event, cost 0, "Heal a Ring-bound companion to reinforce a [gollum] token"; read in its definition,
+laid by no test yet). A heal an event leaves behind: End of the Game ([gondor] Skirmish event, cost 0: an exhausted
+[gondor] companion is strength +2 and, if he wins, heals or is damage +1), whose required trigger is ordered against
+"Resolve skirmish damage" (`FreepsResolveActionOrder("Required trigger from")`).
 
 **A heal of "a companion" with a before and an after.** Master of Healing 3_22, twice, beside Elrond, Lord of
 Rivendell 1_40. [elven] Fellowship or Regroup event, cost 1: "Spot Elrond (or 2 [elven] allies) to heal a companion

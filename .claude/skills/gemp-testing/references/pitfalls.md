@@ -1638,6 +1638,8 @@ each site as validation does (`LotroFormat.validateSite(id, context)`), and is t
 
 - **A search of another player's draw deck** writes `shuffle: false` and a `ShuffleDeck` of the deck named, as the Gronds do (18_82, 68_82; shapes, "A search of another player's draw deck"). `shuffle: true` beside a `deck:` that names the other player shuffles the deck named as well (F-0369), and no printed card writes it.
 
+- **A test that passes alone and fails in its class (or the reverse) points at a definition that keeps state.** A card's definition is built once and shared by every game of the JVM, so a list an effect builds with the definition and then adds to as it is carried out is never emptied. One is known: Into the Caves 17_100, whose `removeKeyword` with `keywordFromMemory` adds each keyword named to the definition's own set, so the minion of every later use, in any test run after, loses them all (F-0487, confirmed, engine). Until that is mended a test that lays 17_100 names only DAMAGE, ENDURING or EASTERLING and reads as kept only a keyword no test names (fierce, Southron), and its two parked tests are shown failing alone, as a probe class of the one test.
+
 **The test booster pack.** The test booster pack (`product/Test-Booster.hjson`) holds eight cards: beside the six it had (among them a
 Shadow response event, Enheartened Foe 1_247, which Race Text 92_29 shows and does not let be chosen), Drums in the
 Deep 1_168 (a Shadow skirmish event: shown and not selectable when the pack is opened in the Shadow phase)

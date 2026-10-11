@@ -390,7 +390,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "<Do> N ... If you do, ..." wants all N (Q-0169, F-0330)
 - "Frodo is corrupted" on a card that names Frodo (F-0356, Held 6_109) [Q-0213, Q-0103]
 - "While a card titled X is removed from the game" names no owner (F-0375, Gollum, Her Sneak 13_50)
-- "Loses <keyword> and cannot gain <keyword>" until a time is one `RemoveKeyword` with that `until` (Q-0011, Harrowdale 11_243)
+- "Loses <keyword> and cannot gain <keyword>" until a time is one `RemoveKeyword` with that `until` (Q-0011, Harrowdale 11_243) [Q-0282, F-0487]
 
 ## What is offered and what is asked
 
@@ -544,6 +544,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Are not unique" wants three copies in play and the fourth played (94_16)
 - A site can be controlled only once every marker has passed it [Q-0230]
 - "Stacked on a site you control": no board tells `controlledSite` from `site` (Above the Battlement 7_262, Gorgoroth Pillager 7_275)
+- "Assign a minion to <a character>": no board tells `minion: choose(minion)` from `choose(character)` (Into the Caves 17_100)
 - A required start-of-turn trigger with a 0-to-N choice
 - "At the start of each of your turns" reads BETWEEN_TURNS; read every counter before as well as after
 - The turn-skippers do not lay sites
