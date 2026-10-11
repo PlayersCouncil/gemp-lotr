@@ -901,6 +901,11 @@ turn, and "remove an [elven] token to ..." is not offered when his is the only o
 an invalid candidate by rule, not by the card's filter. It cuts the other way after `SkipToOtherPlayersTurn()`:
 your own Free Peoples cards are then the inactive ones, and a bonus from your condition reads as the bearer's
 printed number whatever the card does (Brought Down from Inside 69_24): read it on its owner's turn.
+Passed over by every filter is not the same as out of force: the standing text of his Free Peoples condition,
+cheated into his support area, may still be laid on your cards. The Shadow player's Lord of Moria 1_21 put down
+AFTER `StartGame()` gave your Dwarf Guard damage +1; put down before it, it did on one board of five (probes of
+dec-b4_4). Put his card down before `StartGame()`, and beside it read only what is offered and where cards lie,
+never a number his card could change (Card_04_041_Tests).
 
 **An event is in the void while it is being played.** From its play until its last decision is answered an
 event, a response event included, is in `Zone.VOID`; only then is it in the discard pile. `assertInDiscard(event)`

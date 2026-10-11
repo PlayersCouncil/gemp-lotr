@@ -491,7 +491,9 @@ Stop work on the card, record what is in the way, and move to the next. Do not f
   card is parked on the request until the rig can show it.
 - **The text and rules leave a real doubt.** Write the question for Ketura, with the two readings and what each
   would mean for the test, and put its id on the ledger's `Findings:` line. If an existing test already takes one
-  reading, keep that test active: it is the best evidence there is of what was meant. Otherwise, if one reading
+  reading, keep that test active: it is the best evidence there is of what was meant. (One the repository
+  already had switched off with a bare `@Ignore`, and the game fails, cannot be: keep it line for line, parked
+  on the question's number, beside the parked test of the other reading.) Otherwise, if one reading
   is clearly likelier, write the test for it and park it with `@Ignore("Q-0000: ...")`. Where the existing
   test's reading goes against the plain text, do both: the existing reading stays active and a test of the
   text's reading is written and parked, ready to go live on a ruling. The parked test may claim a check an active
@@ -502,7 +504,7 @@ Stop work on the card, record what is in the way, and move to the next. Do not f
   away the one thing that notices a mistake there. A doubt that no reachable board can raise (two cards of one
   title, possible only with sets outside the campaign) is a line in Notes and not a question. So is a doubt the
   glossary settles once two entries are read together, or one whose two readings leave the players the same
-  outcomes. A doubt that hangs on a question already open is a rider to that question, not a new one.
+  outcomes (an offer made or withheld is an outcome: Q-0034). A doubt that hangs on a question already open is a rider to that question, not a new one.
   Where a general ruling in the log reaches the card by its own scope, the game departs from it on this card,
   and the card's old test asserts what the game does, it is still a question: the old test is evidence that the
   departure was meant. Park the ruling's reading, keep the old reading active, and name the other cards built

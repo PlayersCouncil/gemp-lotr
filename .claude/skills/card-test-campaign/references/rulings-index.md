@@ -384,7 +384,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 ## What is offered and what is asked
 
 - The no-effect flag: which cards assert it [Q-0034]
-- An optional trigger or ability that costs nothing and would do nothing is withheld by the engine (Q-0224: A2; Q-0231: B; engine pass 26) [Q-0034, F-0407, F-0408, F-0402, F-0406, Q-0033, F-0411, F-0417, F-0413, Q-0104, F-0410, Q-0102, Q-0243, Q-0029, F-0379, Q-0107]
+- An optional trigger or ability that costs nothing and would do nothing is withheld by the engine (Q-0224: A2; Q-0231: B; engine pass 26) [Q-0034, F-0407, F-0408, F-0402, F-0406, Q-0033, F-0411, F-0417, F-0413, Q-0104, F-0410, F-0423, Q-0102, Q-0243, Q-0245, Q-0029, F-0379, Q-0107]
 - A choice whose every branch has nothing to act on (F-0116) [F-0293, F-0370, F-0366]
 - "<Do X> or <do Y>": each branch is written as the effect itself (F-0310, Here Lies Balin 1_19) [Q-0209, F-0222]
 - A parenthesis with its own price (Q-0089)
@@ -444,6 +444,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - An action's costs are judged in order, with its own exertions counted (F-0184)
 - Response events are not played by "play an event from ..." (F-0186)
 - "Ignoring all costs" passes over the cost in an event's own text (F-0316, built by engine pass 20) [Q-0201]
+- "A card stacked on a [culture] condition" and the other player's own condition (F-0424, open)
 
 ## Triggers, responses and the play of a card
 
@@ -451,7 +452,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "If the <side> player is about to discard ..." asks who discards (F-0296; Q-0171, open)
 - "Each time your condition is hindered or discarded" (Q-0075)
 - "Each time this is hindered/discarded" is answered after the removal (F-0120, F-0121)
-- memorizeLoser holds everyone in the skirmish but the winner (F-0115, F-0136)
+- memorizeLoser holds everyone in the skirmish but the winner (F-0115, F-0136) [F-0422]
 - Built by engine pass 7 (F-0126, F-0131, F-0137, F-0140, Q-0081)
 - A card that leaves play as it comes into play was not played (F-0139, built)
 - "Discard this when at / if <where>" on the move that takes the fellowship there (F-0233, Q-0133)
