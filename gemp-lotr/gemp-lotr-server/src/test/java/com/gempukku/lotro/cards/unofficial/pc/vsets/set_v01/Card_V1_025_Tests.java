@@ -363,6 +363,7 @@ public class Card_V1_025_Tests
 		scn.ShadowChooseCard(frost);
 		assertInZone(Zone.HAND, frost);
 		assertFalse(scn.ShadowActionAvailable(flock));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 
 		// Nobody is assigned to the Flock, so it is still in play when the fellowship moves again.
 		scn.SkipToMovementDecision();

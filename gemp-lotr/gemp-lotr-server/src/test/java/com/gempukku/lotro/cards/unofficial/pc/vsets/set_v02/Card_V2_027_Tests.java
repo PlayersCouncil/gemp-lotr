@@ -287,6 +287,7 @@ public class Card_V2_027_Tests
 		scn.FreepsPass();
 		assertFalse(scn.ShadowActionAvailable(grunt));
 		assertFalse(scn.ShadowActionAvailable(fear));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 		// 3 companions + 3 for White Rocks, and neither event cost anything
 		assertEquals(6, scn.GetTwilight());
 		assertEquals(1, scn.GetWoundsOn(legion));

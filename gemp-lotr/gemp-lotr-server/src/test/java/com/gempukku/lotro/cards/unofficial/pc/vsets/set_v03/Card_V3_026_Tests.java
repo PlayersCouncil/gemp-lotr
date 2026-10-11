@@ -152,6 +152,7 @@ public class Card_V3_026_Tests
 
 		// Its owner has no use of it.
 		assertFalse(scn.FreepsActionAvailable(blind));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 		scn.FreepsPass();
 
 		int freepsDeck = scn.GetFreepsDeckCount();

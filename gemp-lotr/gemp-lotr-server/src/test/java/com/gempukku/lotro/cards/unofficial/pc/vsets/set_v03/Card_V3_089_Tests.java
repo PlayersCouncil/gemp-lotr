@@ -112,6 +112,7 @@ public class Card_V3_089_Tests
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 
 		assertFalse(scn.FreepsPlayAvailable(takeitdown));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 
 		scn.FreepsPass();
 		scn.ShadowPass();

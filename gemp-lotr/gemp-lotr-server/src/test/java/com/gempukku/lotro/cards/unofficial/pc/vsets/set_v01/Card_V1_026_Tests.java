@@ -517,6 +517,7 @@ public class Card_V1_026_Tests
 		scn.ShadowChooseCard(broadsword);
 		assertInZone(Zone.HAND, broadsword);
 		assertFalse(scn.ShadowActionAvailable(crows));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 
 		// Nobody is assigned to the Crows, so they are still in play when the fellowship moves again.
 		scn.SkipToMovementDecision();

@@ -322,6 +322,7 @@ public class Card_V3_121_Tests
 		scn.FreepsDeclineChoosing();
 		assertEquals(1, scn.GetWoundsOn(merry));
 		assertFalse(scn.FreepsActionAvailable(site));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
 		scn.FreepsPass();
 		scn.SkipToOtherPlayersTurn();

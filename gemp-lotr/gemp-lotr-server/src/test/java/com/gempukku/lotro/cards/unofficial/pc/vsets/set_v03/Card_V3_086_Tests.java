@@ -194,6 +194,7 @@ public class Card_V3_086_Tests
 		scn.MoveMinionsToTable(explorer);
 
 		assertFalse(scn.FreepsActionAvailable(calenhad1));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
 		scn.SkipToPhase(Phase.MANEUVER);
 

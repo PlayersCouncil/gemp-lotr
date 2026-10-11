@@ -125,6 +125,7 @@ public class Card_93_001_Tests
 		scn.FreepsAssignAndResolve(aragorn, backstabber);
 		// The owner is the Free Peoples player of this turn and has no minion of his own.
 		assertFalse(scn.FreepsActionAvailable(mod));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 		scn.FreepsPass();
 
 		// Freeps owns mod, so Shadow can't use it, with a Scimitar in hand and an Orc to bear it

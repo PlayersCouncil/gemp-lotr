@@ -149,9 +149,11 @@ public class Card_V1_050_Tests
 		// Bilbo is unwounded throughout, and could exert twice at every site.
 		assertEquals(1, scn.GetCurrentSiteNumber());
 		assertFalse(scn.FreepsActionAvailable(bilbo));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
 		scn.SkipToSite(2);
 		assertFalse(scn.FreepsActionAvailable(bilbo));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
 		// Rivendell Valley, a sanctuary, and Bilbo's home.
 		scn.SkipToSite(3);
@@ -159,9 +161,11 @@ public class Card_V1_050_Tests
 
 		scn.SkipToSite(4);
 		assertFalse(scn.FreepsActionAvailable(bilbo));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
 		scn.SkipToSite(5);
 		assertFalse(scn.FreepsActionAvailable(bilbo));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
 		// Galadriel's Glade, a sanctuary that is not his home.
 		scn.SkipToSite(6);

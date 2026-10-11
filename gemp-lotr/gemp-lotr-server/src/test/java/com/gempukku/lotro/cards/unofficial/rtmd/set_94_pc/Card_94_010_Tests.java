@@ -183,6 +183,7 @@ public class Card_94_010_Tests
 		scn.SkipToAssignments();
 		scn.FreepsAssignAndResolve(aragorn, urukFighter);
 		assertFalse(scn.FreepsActionAvailable(mod));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 		scn.FreepsPass();
 
 		// The Uruk Fighter is player 2's and has a damage bonus to give up, but the modifier is player 1's.

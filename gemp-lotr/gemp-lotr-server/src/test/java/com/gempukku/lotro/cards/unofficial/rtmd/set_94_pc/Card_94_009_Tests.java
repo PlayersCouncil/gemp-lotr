@@ -136,6 +136,7 @@ public class Card_94_009_Tests
 		scn.SkipToPhase(Phase.REGROUP);
 
 		assertFalse(scn.FreepsActionAvailable(mod));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 		scn.FreepsPass();
 
 		// The Troop is player 2's minion and would pay, but the modifier is player 1's.

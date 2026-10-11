@@ -362,6 +362,7 @@ public class Card_V3_054_Tests
 		// The Charger is still a possession in the support area, and the Explorer has no mount.
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
 		assertFalse(scn.ShadowPlayAvailable(horn));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPass();

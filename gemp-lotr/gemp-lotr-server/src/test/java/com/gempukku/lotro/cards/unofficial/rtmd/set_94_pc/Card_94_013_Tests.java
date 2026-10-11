@@ -377,6 +377,7 @@ public class Card_94_013_Tests
 		assertFalse(scn.FreepsActionAvailable(mod));
 		assertFalse(scn.FreepsActionAvailable(legolas));
 		assertFalse(scn.FreepsActionAvailable(bow));
+		assertTrue(scn.AwaitingFreepsArcheryPhaseActions());
 
 		// Nobody is assigned; the fellowship moves again and comes to a second archery phase.
 		scn.SkipToMovementDecision();

@@ -482,6 +482,7 @@ public class Card_V3_085_Tests
 
 		assertTrue(scn.IsHindered(merry));
 		assertFalse(scn.ShadowActionAvailable(scn.GetCurrentSite()));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 		scn.ShadowPass();
 		scn.FreepsPass();
 		// Strength 6 against the Uruk Savage's 5: this time the Man wins.
