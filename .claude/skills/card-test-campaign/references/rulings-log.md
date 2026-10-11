@@ -840,10 +840,10 @@ cards whose tokens "count up" and then self-discard upon accumulation (such as S
 why someone might want the option to reinforce an opponent's card." (reverted; not a bug until the council
 says). F-0430, Old Differences 2_69: "read the text again: "(or -3 if you spot an Elf and a Dwarf)". That is
 purely about seeing both on the table, i.e. both are "working together" and the event is therefore finding more
-ways for minions to exploit racial and cultural tension. Revert this, please." NOT YET REVERTED: the correction
-left that half alone (it is still a spot of both anywhere on the table) and changed only who may be CHOSEN ("an
-Elf or Dwarf skirmishing a [moria] Orc", where any Elf or Dwarf in play could be); she was told and asked
-whether she still wants it out. *[2026-10-11]*
+ways for minions to exploit racial and cultural tension. Revert this, please." The correction had left that half alone (it is still a spot of both anywhere on the table) and
+changed only who may be CHOSEN ("an Elf or Dwarf skirmishing a [moria] Orc", where any Elf or Dwarf in play could
+be); told so, she kept it: "My apologies, I completely misread what F-0430 was about ... Yes, that is a good solid
+bug fix, keep the solution." (F-0430 stands, approved.) *[2026-10-11]*
 
 ## What is offered and what is asked
 
