@@ -22,6 +22,8 @@ public class SelfRemovedFromPlayTriggerEffectProcessor implements EffectProcesso
         final FilterableSource bySource = source != null ? environment.getFilterFactory().generateFilter(source, environment) : null;
 
         DefaultActionSource triggerActionSource = new DefaultActionSource();
+        // Q-0224 (IdleOffers): an optional trigger.
+        triggerActionSource.setWithheldWhenIdle(optional);
         EffectUtils.processRequirementsCostsAndEffects(value, environment, triggerActionSource);
 
         // Whether the definition says what must have done the removing.

@@ -426,15 +426,17 @@ public class Card_19_038_ErrataTests
 		scn.FreepsPass();
 
 		assertTrue(scn.IsHindered(frodo));
-		assertTrue(scn.ShadowActionAvailable(mount));
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
 
-		// Shadowy Mount has the Free Peoples player assign her, and he cannot: nobody is assigned
-		scn.ShadowUseCardAction(mount);
+		// Shadowy Mount would have the Free Peoples player assign her to Pippin, and he cannot.  Its ability costs
+		// nothing and has nobody to assign her to, so it is not offered (Q-0034; withheld by the engine since
+		// Q-0224).  TheFreePeoplesPlayerMadeToAssignHerByAShadowCardAddsTheBurden uses it on this board with
+		// the Ring-bearer unhindered.
+		assertFalse(scn.ShadowActionAvailable(mount));
 
 		assertFalse(scn.IsCharAssigned(nertea));
 		assertFalse(scn.IsCharAssigned(pippin));
 		assertEquals(0, scn.GetBurdens());
-		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
 
 	@Test

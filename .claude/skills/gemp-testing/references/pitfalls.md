@@ -163,6 +163,20 @@ limit (Q-0093). A limit on uses ("limit once per turn") withholds it, cost or no
 gives ("(limit +3)", "add a threat (limit 1)") leaves an ability with a cost on offer (Q-0041): the cost is paid
 and nothing else happens; with no cost it is not offered at that limit either.
 
+**An offer that costs nothing and would do nothing is not made** (Q-0034, Q-0224, Q-0231; engine pass 26). The
+game withholds an optional trigger, a special ability or Response of a card in play, and an ability one card
+gives another, where nothing is paid for it (a spot is no cost) and every one of its effects says it will do
+nothing: nobody to heal, no token to reinforce, nobody a minion could be assigned to, a hand that card may not
+discard from. Such a card has no "Optional responses" to decline and no action to find: a helper's "when you
+play this, you may ..." is simply not asked on a board where it has nothing to do (Brego 4_263 on an unwounded
+bearer, Bill the Pony 13_143 with no [shire] token), so `FreepsDeclineOptionalTrigger()` there fails with nobody
+being asked. Read it with `assertFalse(scn.FreepsHasOptionalTriggerAvailable(card))` and what the game is
+waiting for. An action with a cost, an event, a play, an optional draw from an empty deck and a "you may" asked
+INSIDE another action are offered as before. Which kinds of effect can say they will do nothing, and which
+cannot: card-test-campaign `shapes.md`, "An optional trigger or ability that costs nothing";
+`mechanics/AnOfferThatCostsNothingAndWouldDoNothingIsNotMadeTests`. `GEMP_IDLE_OFFERS=off` in the environment
+of a `cardtest.py run` or `probe` turns the rule off for that run.
+
 **A choice between two things to do offers what can be done in full** (F-0310; CR 4.2 "effect"). Of "<do X> or
 <do Y>" as an effect the game offers the branches that can be performed in full, and carries out a lone one with
 no question. Where none can be but something can be done, every branch is offered and as much of the one chosen
@@ -1349,6 +1363,8 @@ each site as validation does (`LotroFormat.validateSite(id, context)`), and is t
 - `0_8024` Test Roster ("Shadow: If you are the Warden of the Test Table or the Reeve of the Test Table, add (1)."), `0_8025` Test Summons ("... If the Free Peoples player is the Warden of the Test Table ...") and `0_8026` Test Census ("... If any player is ..."): Shadow conditions whose one ability requires `PlayerIs`, for mechanics/PlayerIsRequirementTests. The names are nobody's: an account name has no space in it. A table seats a player under one with the last two arguments of the `VirtualTableScenario` constructor that takes league placements (G-0039; virtualtable/NamedSeatTests); every other table's players are "Free Peoples Player" and "Shadow Player", who meet no card's list. A card whose definition lists real accounts (Race Text 94_5) is not tested by those names (Q-0190: B).
 
 - `0_8027` Test Dredge ("Shadow: Remove (1) to search the Free Peoples player's draw deck and discard a Free Peoples card found there.") and `0_8028` Test Trawl ("... and remove a Free Peoples card found there from the game."): Shadow conditions whose search names the other player's deck and writes `shuffle: true`, the shape the two Gronds had (F-0298), for the two tests of mechanics/DrawDeckShuffledWhenTheLookIsOverTests that show the deck named is the one shuffled and the searcher's own is not (F-0369, built by engine pass 25). A definition may write that, or `shuffle: false` and a `ShuffleDeck` of the deck named, as the Gronds do (shapes, "A search of another player's draw deck").
+
+- `0_8029` Test Muster ("Maneuver: Make an ally participate in skirmishes until the regroup phase."), `0_8030` Test Salve ("Fellowship: Restore a Free Peoples card."), `0_8031` Test Almanac ("Fellowship: Choose a Free Peoples card in your discard pile and take it into hand.") and `0_8032` Test Refrain ("Fellowship: Heal a companion, and again for as long as a companion was healed."): Free Peoples support-area conditions, each an ability with no cost and no requirement whose whole effect is one of the kinds the engine was taught to ask (`enableParticipationInSkirmishes`, `Restore`, `chooseCardsFromDiscard`, `DoWhile`). Every real card with such an offer has a Q-0034 requirement written by hand, which answers first (`mechanics/AnOfferThatCostsNothingAndWouldDoNothingIsNotMadeTests`).
 
 **The test booster pack.** The test booster pack (`product/Test-Booster.hjson`) holds eight cards: beside the six it had, Drums in the
 Deep 1_168 (a Shadow skirmish event: shown and not selectable when the pack is opened in the Shadow phase)

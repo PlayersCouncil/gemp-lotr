@@ -377,6 +377,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 ## What is offered and what is asked
 
 - The no-effect flag: which cards assert it [Q-0034]
+- An optional trigger or ability that costs nothing and would do nothing is withheld by the engine (Q-0224: A2; Q-0231: B; engine pass 26) [Q-0034, Q-0033, Q-0104, Q-0029, F-0379, Q-0107]
 - A choice whose every branch has nothing to act on (F-0116) [F-0293, F-0370, F-0366]
 - "<Do X> or <do Y>": each branch is written as the effect itself (F-0310, Here Lies Balin 1_19) [Q-0209, F-0222]
 - A parenthesis with its own price (Q-0089)
@@ -393,14 +394,14 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Each minion gains this ability: 'Assignment: Assign this minion to bearer of <this card>'" is offered only while both can be assigned (F-0252, F-0353, F-0354) [Q-0034, F-0309, F-0351, F-0352, F-0355, F-0388, Q-0224]
 - A choice made ahead of a preventable exert loses the exert's own check (F-0206) [Q-0114]
 - A `preventable` around an effect that has its own choice asks the prevention first (Wielder of the Flame 2_28) [F-0206]
-- "Spot X to <effect>" on an optional trigger or ability is no cost for Q-0034 (F-0167, F-0209, F-0211, F-0219) [Q-0029, Q-0033, Q-0164]
+- "Spot X to <effect>" on an optional trigger or ability is no cost for Q-0034 (F-0167, F-0209, F-0211, F-0219) [Q-0224, Q-0029, Q-0033, Q-0164]
 - An "or" between two cost-to-effect halves (Q-0034)
 - A choice of cost-to-effect branches with no payable branch is not offered (F-0222, F-0259)
 - "The Free Peoples player must <pay> to assign <this minion> ..." (F-0306, F-0307, F-0308; Q-0174 settled by F-0308) [Q-0199]
 - "You may discard up to N (X, any number of) cards from hand to draw as many" on an optional trigger (F-0300, Robin Smallburrow 68_111 and 18_111) [F-0022, Q-0015, Q-0034, Q-0143]
 - "You may" on a Race to Mount Doom modifier names its player (F-0311)
 - "Response: If a <kind of card> is discarded from play, stack it here" requires the card still in the discard pile (F-0357, Sword Rack 11_158 and Countless Companies 12_58) [Q-0034, Q-0062]
-- "When you play X, you may reinforce a [culture] token" requires a token to reinforce (F-0359, Brego 13_63) [Q-0034, Q-0215]
+- "When you play X, you may reinforce a [culture] token" requires a token to reinforce (F-0359, Brego 13_63) [Q-0034, Q-0224, F-0398, F-0399]
 - "When you play X, you may discard a Shadow possession" requires one to discard (F-0362, Erkenbrand 0_59) [F-0359, Q-0034, Q-0224, F-0367, F-0373, F-0377, F-0368, Q-0231]
 - "Exchange the cards stacked here with your hand" is carried out with either side empty, and not offered with both (F-0371, F-0372, Hall of Our Fathers 11_11) [Q-0034]
 - "Spot a <Wizard> and X other companions": a number taken off a spot count wants a floor, and "other" wants the one spotted to be a companion (F-0374, Discoveries 12_26)

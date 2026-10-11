@@ -234,7 +234,9 @@ Which checks a clause lists follows from its words, and the analyst is expected 
   own (CR 4.2 "skirmish phase(s)"): such an effect from one skirmish is gone in the next
 - "limit", "once per", "no more than", "up to", "at most" → `L`
 - an optional trigger or a special ability with no cost (a spot is no cost) → one `-` is the board on which its
-  whole effect would do nothing: not offered (Q-0034; shapes, "Spot X to <effect>"). With a cost it is offered
+  whole effect would do nothing: not offered (Q-0034; shapes, "Spot X to <effect>"). The game withholds such an
+  offer itself (Q-0224): the test reads it absent, and no requirement is written for it unless the offer is still
+  made there (shapes, "An optional trigger or ability that costs nothing"). With a cost it is offered
   there and used for nothing, which is read under `F` or `+` as for an event, and is no `-`. A play of a card after
   the "to" is itself a cost (Q-0062): "add a burden to play a [shire] tale" with no tale in hand that can be
   played is not offered, and that board is its `C-`
@@ -466,7 +468,10 @@ effect and not on the ability (a `CardPhaseLimit` or `CardAffectedLimitPerPhase`
 the game flags some of those at the cap and not others (hjson-reference, "Limits"), and which is the
 mechanic's to show, not the card's. An ability
 or optional trigger with no cost that is offered though it would do nothing is not a flag matter: by Q-0034 it
-should be withheld, and offering it is a finding. So is a "you may" with no cost of its own inside an
+is withheld, and since Q-0224 the game withholds it wherever its effects can say that they will do nothing
+(shapes, "An optional trigger or ability that costs nothing", has the kinds). The card's test reads the offer
+absent on that board; a requirement is not written for it. Where the offer is still made, the effect is of a
+kind the game cannot ask: that is a finding, which names the kind, and is corrected by a requirement as before. So is a "you may" with no cost of its own inside an
 event's or ability's text that is asked when yes would do nothing: the event is still offered, the question
 inside it is not (shapes, F-0379).
 

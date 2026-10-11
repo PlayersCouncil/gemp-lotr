@@ -149,10 +149,10 @@ public class Card_V2_037_Tests
 		// Neither the [sauron] Orc that won with it nor the Goblin Runner that fought nobody has gone anywhere.
 		assertInZone(Zone.SHADOW_CHARACTERS, soldier, runner2);
 
-		// The other copy's offer is still there, and taking it does nothing: the Runner is no longer in play.
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable(evil1));
+		// The other copy's offer has gone with the Runner: there is no longer a minion in play for it to stack, and
+		// an offer that costs nothing and would do nothing is not made (Q-0034; withheld by the engine since Q-0224).
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(evil1));
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable(evil2));
-		scn.ShadowChooseOptionalTrigger(evil1);
 		assertTrue(scn.GetStackedCards(evil2).contains(runner1));
 		assertEquals(0, scn.GetStackedCards(evil1).size());
 		assertInZone(Zone.SHADOW_CHARACTERS, soldier, runner2);
@@ -168,7 +168,8 @@ public class Card_V2_037_Tests
 		assertTrue(scn.GetStackedCards(evil1).contains(balrog));
 		assertEquals(1, scn.GetStackedCards(evil1).size());
 		assertEquals(1, scn.GetStackedCards(evil2).size());
-		scn.ShadowDeclineOptionalTrigger();
+		// Nor is the second copy's offer for The Balrog made once the first has taken it.
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(evil2));
 
 		assertInZone(Zone.SUPPORT, evil1, evil2);
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());

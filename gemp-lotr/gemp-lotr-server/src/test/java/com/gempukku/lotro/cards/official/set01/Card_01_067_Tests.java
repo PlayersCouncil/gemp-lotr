@@ -425,4 +425,42 @@ public class Card_01_067_Tests
 		assertEquals(1, scn.GetWoundsOn(sam));
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
+
+	@Test
+	public void WithNoHobbitCompanionWoundedNeitherTheValleyNorHerCopyOfItsTextOffersTheHeal() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetValleyScenario();
+
+		var uruviel = scn.GetFreepsCard("uruviel");
+		var arwen = scn.GetFreepsCard("arwen");
+		var sam = scn.GetFreepsCard("sam");
+		var pathfinder = scn.GetFreepsCard("pathfinder");
+		var frodo = scn.GetRingBearer();
+		scn.MoveCompanionsToTable(arwen, sam);
+		scn.MoveAlliesToTable(uruviel);
+
+		var valley = scn.GetFreepsSite(6);
+
+		scn.StartGame();
+		scn.SkipToSite(5);
+		scn.SetFreepsHand(pathfinder);
+		scn.FreepsRefreshDecision();
+		scn.FreepsPlayCard(pathfinder);
+		assertSame(valley, scn.GetSite(6));
+
+		// Arwen alone is wounded, and she is no Hobbit.
+		scn.AddWoundsToChar(arwen, 1);
+		scn.FreepsPass();
+
+		// The move is to her owner's Valley of the Silverlode, and no Hobbit companion has a wound to heal: the
+		// site's offer costs nothing and would do nothing, and so would hers.  Neither is made (Q-0034; the game
+		// withholds both since Q-0224, the copied text as the site's own).
+		assertSame(valley, scn.GetCurrentSite());
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(sam));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(valley));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(uruviel));
+		assertFalse(scn.FreepsAnyDecisionsAvailable());
+		assertEquals(1, scn.GetWoundsOn(arwen));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
 }

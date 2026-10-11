@@ -32,8 +32,8 @@ public class EnableParticipationInSkirmishes implements EffectAppenderProducer {
 
         MultiEffectAppender result = new MultiEffectAppender();
 
-        result.addEffectAppender(
-                CardResolver.resolveCards(select, valueSource, memory, "you", "Choose cards to make participate in skirmishes", environment));
+        final EffectAppender cardResolver = CardResolver.resolveCards(select, valueSource, memory, "you", "Choose cards to make participate in skirmishes", environment);
+        result.addEffectAppender(cardResolver);
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
@@ -44,6 +44,7 @@ public class EnableParticipationInSkirmishes implements EffectAppenderProducer {
                     }
                 });
 
-        return result;
+        // Taught for Q-0224 (IdleOffers): with nobody to give it to nothing is given.
+        return TaughtForecast.actsOnWhatItFinds(result, cardResolver);
     }
 }

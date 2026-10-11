@@ -780,4 +780,99 @@
 		}
 		gametext: <b>Shadow:</b> Remove (1) to search the Free Peoples player's draw deck and remove a Free Peoples card found there from the game.
 	}
+	# AnOfferThatCostsNothingAndWouldDoNothingIsNotMadeTests (Q-0224): four kinds of effect the engine was taught
+	# to ask whether they will do anything, each here as the whole effect of an ability that costs nothing and has
+	# no requirement.  Every real card with such an ability carries a requirement written by hand for Q-0034
+	# (Dunlending Warrior 4_18, Desert Wind Scout 103_48, Greatest Kingdom of My People 51_16, Race Text 94_4),
+	# and that requirement answers before the engine is asked: no real card shows what the effect says of itself.
+	0_8029: {
+		title: Test Muster
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: maneuver
+			effect: {
+				type: enableParticipationInSkirmishes
+				select: choose(ally)
+				until: start(regroup)
+			}
+		}
+		gametext: <b>Maneuver:</b> Make an ally participate in skirmishes until the regroup phase.
+	}
+	0_8030: {
+		title: Test Salve
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: fellowship
+			effect: {
+				type: Restore
+				select: choose(side(free people))
+			}
+		}
+		gametext: <b>Fellowship:</b> Restore a Free Peoples card.
+	}
+	0_8031: {
+		title: Test Almanac
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: fellowship
+			effect: [
+				{
+					type: chooseCardsFromDiscard
+					select: choose(side(free people))
+					memorize: chosenCard
+					text: Choose a Free Peoples card from your discard pile to take into hand
+				}
+				{
+					type: putCardsFromDiscardIntoHand
+					select: memory(chosenCard)
+				}
+			]
+		}
+		gametext: <b>Fellowship:</b> Choose a Free Peoples card in your discard pile and take it into hand.
+	}
+	0_8032: {
+		title: Test Refrain
+		unique: false
+		side: Free Peoples
+		culture: Gondor
+		twilight: 0
+		type: Condition
+		keywords: Support Area
+		effects: {
+			type: activated
+			phase: fellowship
+			effect: {
+				type: DoWhile
+				check: {
+					type: MemoryMatches
+					memory: healed
+					filter: companion
+				}
+				effect: {
+					type: heal
+					select: choose(companion)
+					memorize: healed
+				}
+			}
+		}
+		gametext: <b>Fellowship:</b> Heal a companion, and again for as long as a companion was healed.
+	}
 }

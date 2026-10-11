@@ -68,15 +68,23 @@ WHAT THE EARLIER PHASES GOT WRONG MORE THAN ONCE
   board, or the reading shows nothing.
 - A phase action whose text has no "your" is open to both players on purpose where an older test asserts it; that
   is no finding (`lookup.py F-0312`).
-- An optional trigger or ability with no cost that is offered when it would do nothing is the commonest finding
-  there is (Q-0034; about one card in eleven so far). Look the ruling and its exceptions up before filing it: an
-  optional DRAW is still offered with an empty draw deck (Q-0029), and an action with a cost is offered and flagged.
+- An optional trigger or ability with no cost that is offered when it would do nothing was the commonest finding
+  there was (Q-0034; about one card in eleven). Since engine pass 26 the game withholds most such offers itself
+  (Q-0224; shapes.md, "An optional trigger or ability that costs nothing", lists the kinds of effect it can ask):
+  lay the board, test that the offer is NOT made, file nothing and write no requirement. Only where the offer is
+  still made there is it a finding (name the kind of effect), corrected by a requirement as before. The exceptions
+  stand: an optional DRAW is still offered with an empty draw deck (Q-0029), an action with a cost is offered and
+  flagged, and a "you may" INSIDE an event's or ability's text is not reached by the engine (F-0379: by hand).
 
-KNOWN AND NOT YET CORRECTED (read in the definitions, 2026-10-10; no finding filed: Q-0220 A and the trial of
-Q-0034 in the engine decide whether these are corrected card by card, in a sweep, or by the engine)
+KNOWN, AND WITHHELD BY THE ENGINE SINCE ENGINE PASS 26 (Q-0224: no requirement is wanted; test the offer absent)
 - "When you play <this>, you may reinforce a [culture] token", with no cost and no requirement that a token can be
   reinforced (Brego 13_63 was corrected alone, F-0359): 13_1, 13_10, 13_40, 13_48, 13_126, 13_133, 13_136, 13_143
   (the same sentence), and 13_28, 13_124, 15_9, 15_69, 17_17, 17_36, 17_86, 18_11, 18_62.
+- Galadriel 3_17, Legolas' Sword 5_12, Brego 4_263, Morgul Brute 7_188, Morgul Destroyer 7_190, Gandalf, Returned
+  17_17, Bill the Pony 13_143, Shadowy Mount 12_171 (F-0393 to F-0400, and F-0254's remark): filed and closed by
+  the engine; do not file them again or give them a requirement.
+KNOWN AND NOT YET CORRECTED (read in the definitions, 2026-10-10; the item q34sweep of engine pass 26 goes through
+them)
 - The lists in `orchestrator/trials/patterns.md`, sections 2 and 5 (38 definitions).
 
 TO LOOK AT WHEN THE SET COMES UP (seen in passing by an earlier batch; not looked into, not filed)

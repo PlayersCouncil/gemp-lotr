@@ -42,9 +42,9 @@ public class ReinforceTokens implements EffectAppenderProducer {
 
         MultiEffectAppender result = new MultiEffectAppender();
 
-        result.addEffectAppender(
-                CardResolver.resolveCard(select, (actionContext) -> tokenFilter,
-                        memory, player, "Choose card to reinforce tokens on", environment));
+        final EffectAppender cardResolver = CardResolver.resolveCard(select, (actionContext) -> tokenFilter,
+                        memory, player, "Choose card to reinforce tokens on", environment);
+        result.addEffectAppender(cardResolver);
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
@@ -75,7 +75,8 @@ public class ReinforceTokens implements EffectAppenderProducer {
                     }
                 });
 
-        return result;
+        // Taught for Q-0224 (IdleOffers): with no card that has such a token there is nothing to reinforce.
+        return TaughtForecast.actsOnWhatItFinds(result, cardResolver);
     }
 
     private Token getFirstCultureToken(Map<Token, Integer> tokens) {

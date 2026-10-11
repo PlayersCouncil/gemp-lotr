@@ -52,10 +52,10 @@ public class StackCardsFromDiscard implements EffectAppenderProducer {
 
         MultiEffectAppender result = new MultiEffectAppender();
 
-        result.addEffectAppender(
-                CardResolver.resolveCard(where, "_temp1", "you", "Choose card to stack on", environment));
-        result.addEffectAppender(
-                CardResolver.resolveCardsInDiscard(select, valueSource, "_temp2", "you", "Choose cards to stack", environment));
+        final EffectAppender whereResolver = CardResolver.resolveCard(where, "_temp1", "you", "Choose card to stack on", environment);
+        final EffectAppender selectResolver = CardResolver.resolveCardsInDiscard(select, valueSource, "_temp2", "you", "Choose cards to stack", environment);
+        result.addEffectAppender(whereResolver);
+        result.addEffectAppender(selectResolver);
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
@@ -80,7 +80,8 @@ public class StackCardsFromDiscard implements EffectAppenderProducer {
                     }
                 });
 
-        return result;
+        // Taught for Q-0224 (IdleOffers): with nothing to stack, or nothing to stack it on, nothing is stacked.
+        return TaughtForecast.actsOnWhatItFinds(result, whereResolver, selectResolver);
     }
 
 }

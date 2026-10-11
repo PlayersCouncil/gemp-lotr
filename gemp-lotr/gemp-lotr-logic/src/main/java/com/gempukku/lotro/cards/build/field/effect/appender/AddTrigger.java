@@ -2,6 +2,7 @@ package com.gempukku.lotro.cards.build.field.effect.appender;
 
 import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
+import com.gempukku.lotro.cards.build.field.effect.IdleOffers;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
 import com.gempukku.lotro.cards.build.field.effect.EffectUtils;
@@ -51,11 +52,14 @@ public class AddTrigger implements EffectAppenderProducer {
         final EffectAppender[] costs = environment.getEffectAppenderFactory().getEffectAppenders(true, costArray,
                 EffectUtils.costEnvironmentOfAddedTrigger(environment, costArray));
         final EffectAppender[] effects = environment.getEffectAppenderFactory().getEffectAppenders(false, effectArray, environment);
+        // Q-0224 (IdleOffers): an optional trigger that pays nothing.
+        final boolean withheldWhenIdle = optional && !IdleOffers.paysSomething(costArray, effectArray);
+        final boolean costsRemembering = IdleOffers.remember(costArray);
 
         return new DelayedAppender() {
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
-                ActionProxy actionProxy = createActionProxy(action, actionContext, optional, trigger, requirements, costs, effects, limitPerPhase);
+                ActionProxy actionProxy = createActionProxy(action, actionContext, optional, trigger, requirements, costs, effects, limitPerPhase, withheldWhenIdle, costsRemembering);
 
                 if (until.isPermanent()) {
                     //TODO: alter this if we need an actual end-of-game proxy effect
@@ -71,7 +75,7 @@ public class AddTrigger implements EffectAppenderProducer {
         };
     }
 
-    private ActionProxy createActionProxy(CostToEffectAction action, ActionContext actionContext, boolean optional, TriggerChecker trigger, Requirement[] requirements, EffectAppender[] costs, EffectAppender[] effects, int limitPerPhase) {
+    private ActionProxy createActionProxy(CostToEffectAction action, ActionContext actionContext, boolean optional, TriggerChecker trigger, Requirement[] requirements, EffectAppender[] costs, EffectAppender[] effects, int limitPerPhase, boolean withheldWhenIdle, boolean costsRemembering) {
         return new AbstractActionProxy() {
             // Whether the limit on uses of the added trigger has been reached in the current phase.
             private boolean isLimitReached(ActionContext actionContext) {
@@ -140,6 +144,8 @@ public class AddTrigger implements EffectAppenderProducer {
                 if (trigger.isBefore() && optional && trigger.accepts(delegate)) {
                     if (checkRequirements(delegate))
                         return null;
+                    if (withheldWhenIdle && IdleOffers.areIdle(delegate, java.util.Arrays.asList(effects), costsRemembering))
+                        return null;
 
                     OptionalTriggerAction result = new OptionalTriggerAction(delegate.getSource());
                     customizeTriggerAction(result, delegate);
@@ -173,6 +179,8 @@ public class AddTrigger implements EffectAppenderProducer {
                         lotroGame, actionContext.getSource(), effectResult, null);
                 if (!trigger.isBefore() && optional && trigger.accepts(delegate)) {
                     if (checkRequirements(delegate))
+                        return null;
+                    if (withheldWhenIdle && IdleOffers.areIdle(delegate, java.util.Arrays.asList(effects), costsRemembering))
                         return null;
 
                     OptionalTriggerAction result = new OptionalTriggerAction(delegate.getSource());

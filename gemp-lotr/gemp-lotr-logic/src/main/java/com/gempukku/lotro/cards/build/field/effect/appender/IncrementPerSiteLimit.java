@@ -25,6 +25,11 @@ public class IncrementPerSiteLimit implements EffectAppenderProducer {
 
         return new BookkeepingAppender() {
             @Override
+            protected boolean remembersSomething() {
+                return false;
+            }
+
+            @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                 return new IncrementSiteLimitEffect(actionContext.getSource(), limit);
             }

@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -40,6 +39,10 @@ public class Card_04_301_Tests
 					// Orc Inquisitor: [sauron] Orc, cost 3.  "When you play this minion, you may make the Free Peoples
 					// player discard a card at random from hand."  A discard the Free Peoples player has no choice in.
 					put("inquisitor", "1_268");
+					// Hand of Sauron: [sauron] Maneuver event, cost 0.  "Exert a [sauron] minion to make the Free Peoples
+					// player discard a card at random from his or her hand."  A discard that is paid for, so the
+					// event is played whatever it will do.
+					put("hand", "3_90");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				"4_301",
@@ -95,32 +98,35 @@ public class Card_04_301_Tests
 		// The Free Peoples player's own copy of the Inquisitor is a card in his hand and nothing more.
 		var spare = scn.GetFreepsCard("inquisitor");
 		var inquisitor = scn.GetShadowCard("inquisitor");
+		var hand = scn.GetShadowCard("hand");
 		scn.MoveCompanionsToTable(arwen, legolas, aragorn);
-		scn.MoveCardsToHand(sam, spare, inquisitor);
+		scn.MoveCardsToHand(sam, spare, hand);
 
 		scn.StartGame();
-		scn.SetTwilight(10);
+		scn.MoveMinionsToTable(inquisitor);
+		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPass();
 
-		assertTrue(scn.AwaitingShadowPhaseActions());
 		assertEquals(2, scn.GetFreepsHandCount());
 		assertEquals(0, scn.GetFreepsDiscardCount());
+		assertEquals(0, scn.GetWoundsOn(inquisitor));
 
-		scn.ShadowPlayCard(inquisitor);
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable(inquisitor));
-		scn.ShadowAcceptOptionalTrigger();
+		// Hand of Sauron is an event with a cost: it is played, and paid for, whatever it will do.
+		assertTrue(scn.ShadowPlayAvailable(hand));
+		scn.ShadowPlayCard(hand);
+		assertEquals(1, scn.GetWoundsOn(inquisitor));
 
 		// Arwen, Legolas and Aragorn are three unbound companions: the hand is as it was.
 		assertEquals(2, scn.GetFreepsHandCount());
 		assertInHand(sam, spare);
 		assertEquals(0, scn.GetFreepsDiscardCount());
-		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
 
-	// The same board by Q-0034 to its letter: a "you may" with no cost whose whole effect would do nothing is
-	// not offered.  The test above reads what the game does, and the old test did.
+	// The same bar against a "you may" that costs nothing: its whole effect would do nothing, so it is not offered
+	// (Q-0034, and Ketura on Q-0231: B).  The engine withholds it, from what the random discard says of itself
+	// (Q-0224); WithTwoUnboundCompanionsAndARingBoundOneAShadowCardStillMakesYouDiscardFromHand has the offer.
 	@Test
-	@Ignore("Q-0231: under Frodo's bar Orc Inquisitor's 'you may make the Free Peoples player discard a card at random from hand' is still offered, and does nothing (Q-0034; rider to Q-0224)")
 	public void WithThreeUnboundCompanionsAShadowCardsOptionalDiscardFromHandIsNotOffered() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetDiscardScenario();
 

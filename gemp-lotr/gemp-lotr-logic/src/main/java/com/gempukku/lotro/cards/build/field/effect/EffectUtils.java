@@ -208,6 +208,9 @@ public class EffectUtils {
         // could make what its effects need.
         actionSource.setJudgeable(NoEffectForesight.canForesee(costArray, effectArray));
         actionSource.setRevealAndNothingElse(NoEffectForesight.isARevealAndWhatIsDoneWithTheCards(costArray, effectArray));
+        // For the rule of Q-0224: whether anything is paid for the action (IdleOffers).
+        actionSource.setPayingSomething(IdleOffers.paysSomething(costArray, effectArray));
+        actionSource.setCostsRemembering(IdleOffers.remember(costArray));
 
         final EffectAppenderFactory effectAppenderFactory = environment.getEffectAppenderFactory();
         final CardGenerationEnvironment costEnvironment = costEnvironmentOfTriggeredAction(environment, value.get("trigger"), costArray);

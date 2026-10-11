@@ -34,6 +34,8 @@ public class ResponseEffectProcessor implements EffectProcessor {
                 triggerActionSource.setText(text);
             }
 
+            // Q-0224 (IdleOffers): a Response ability of a card in play.
+            triggerActionSource.setWithheldWhenIdle(!fromDiscard);
             triggerActionSource.addPlayRequirement(triggerChecker);
             EffectUtils.nameWhatSetsOff(trigger, triggerActionSource);
             EffectUtils.processLimits(value, triggerActionSource, phase, true);

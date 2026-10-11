@@ -41,18 +41,18 @@ public class DrawCards implements EffectAppenderProducer {
             public EffectForecast forecast(ActionContext actionContext) {
                 final String drawPlayer = playerSource.getPlayer(actionContext);
                 if (actionContext.getGame().getGameState().getDeck(drawPlayer).isEmpty())
-                    return EffectForecast.NOTHING;
+                    return EffectForecast.NOTHING_FROM_A_DRAW_DECK;
                 // Nor by a player who may not take cards into hand from the draw deck (a draw written on a card
                 // is never a reconcile's).
                 if (RuleUtils.isBarredFromDrawing(actionContext.getGame(), drawPlayer))
-                    return EffectForecast.NOTHING;
+                    return EffectForecast.NOTHING_FROM_A_DRAW_DECK;
                 // Nor is anything drawn past the Rule of 4.  That is said only of a draw that is about to be
                 // made (to a prevention, which then is not put to anybody): the no-effect flag of an action
                 // on offer is left as it was.
                 final LotroGame game = actionContext.getGame();
                 if (actionContext.isAtResolution() && game.getFormat().hasRuleOfFour()
                         && !game.getModifiersQuerying().canDrawCardNoIncrement(game, drawPlayer))
-                    return EffectForecast.NOTHING;
+                    return EffectForecast.NOTHING_FROM_A_DRAW_DECK;
                 // A capped number of cards whose cap is spent is no cards.
                 return EffectForecast.isSpent(count, actionContext, null)
                         ? EffectForecast.AT_LIMIT : EffectForecast.UNKNOWN;

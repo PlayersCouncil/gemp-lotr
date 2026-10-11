@@ -1,6 +1,7 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
 import com.gempukku.lotro.cards.build.ActionContext;
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.FilterableSource;
 import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
@@ -14,6 +15,7 @@ import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.filters.Filter;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
+import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import com.gempukku.lotro.logic.effects.TransferPermanentEffect;
 import com.gempukku.lotro.logic.timing.Effect;
@@ -40,21 +42,22 @@ public class Transfer implements EffectAppenderProducer {
         // be transferred from this companion", Warrior of Rohan 17_104) is never the card taken, whoever it would
         // go to: TransferPermanentEffect would refuse it, after its new bearer had been asked for (F-0340).
         final boolean whereIsFilter = where.startsWith("choose(") || where.startsWith("all(");
+        EffectAppender selectResolver = null;
         if (checkTarget && whereIsFilter) {
             // Only offer cards that have at least one eligible bearer to go to; a card with no bearer definition at
             // all (see RuleUtils.getFullValidTargetFilter) is never a legal choice (#1025).
             final FilterableSource whereSource = environment.getFilterFactory().generateFilter(
                     where.substring(where.indexOf("(") + 1, where.lastIndexOf(")")), environment);
-            result.addEffectAppender(
-                    CardResolver.resolveCard(select,
+            selectResolver = CardResolver.resolveCard(select,
                             actionContext -> Filters.transferableTo(whereSource.getFilterable(actionContext)),
-                            memorizeTransferred, "you", "Choose card to transfer", environment));
+                            memorizeTransferred, "you", "Choose card to transfer", environment);
+            result.addEffectAppender(selectResolver);
         } else {
-            result.addEffectAppender(
-                    CardResolver.resolveCard(select,
+            selectResolver = CardResolver.resolveCard(select,
                             actionContext -> (Filter) (game, candidate) ->
                                     game.getModifiersQuerying().canBeTransferred(game, candidate),
-                            memorizeTransferred, "you", "Choose card to transfer", environment));
+                            memorizeTransferred, "you", "Choose card to transfer", environment);
+            result.addEffectAppender(selectResolver);
         }
         result.addEffectAppender(
                 CardResolver.resolveCards(where,
@@ -94,6 +97,29 @@ public class Transfer implements EffectAppenderProducer {
                     }
                 });
 
-        return result;
+        // Q-0224: with no card to transfer, or with nowhere for any such card to go (the bearers the effect itself
+        // would offer for it: not the one it is on, an eligible one where "checkTarget" asks for that, and one it
+        // may be transferred to), nothing is transferred.
+        final EffectAppender cardToTransfer = selectResolver;
+        final FilterableSource bearers = !whereIsFilter ? null : environment.getFilterFactory().generateFilter(
+                where.substring(where.indexOf("(") + 1, where.lastIndexOf(")")), environment);
+        return TaughtForecast.teach(result, actionContext -> {
+            final EffectForecast found = cardToTransfer.forecast(actionContext);
+            if (found.getReach() == null)
+                return EffectForecast.UNKNOWN;
+            if (found.getReach().isEmpty())
+                return EffectForecast.NOTHING;
+            if (bearers == null)
+                return EffectForecast.UNKNOWN;
+            final LotroGame game = actionContext.getGame();
+            for (PhysicalCard card : found.getReach()) {
+                final Filter couldBear = (g, bearer) -> bearer != card.getAttachedTo()
+                        && (!checkTarget || RuleUtils.getFullValidTargetFilter(card.getOwner(), g, card).accepts(g, bearer))
+                        && g.getModifiersQuerying().canHaveTransferredOn(g, card, bearer);
+                if (Filters.countActive(game, bearers.getFilterable(actionContext), couldBear) > 0)
+                    return EffectForecast.UNKNOWN;
+            }
+            return EffectForecast.NOTHING;
+        });
     }
 }

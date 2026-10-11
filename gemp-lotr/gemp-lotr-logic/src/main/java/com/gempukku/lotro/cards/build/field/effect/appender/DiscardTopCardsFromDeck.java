@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
@@ -27,7 +28,9 @@ public class DiscardTopCardsFromDeck implements EffectAppenderProducer {
 
         final PlayerSource playerSource = PlayerResolver.resolvePlayer(deck);
 
-        return new DelayedAppender() {
+        // Taught for Q-0224 (IdleOffers): nothing is discarded from the top of an empty draw deck (F-0211).  This
+        // is not the optional draw of Q-0029, which stays on offer.
+        return TaughtForecast.teach(new DelayedAppender() {
             @Override
             public boolean isPlayableInFull(ActionContext actionContext) {
                 final String deckId = playerSource.getPlayer(actionContext);
@@ -52,7 +55,8 @@ public class DiscardTopCardsFromDeck implements EffectAppenderProducer {
                     }
                 };
             }
-        };
+        }, actionContext -> actionContext.getGame().getGameState().getDeck(playerSource.getPlayer(actionContext)).isEmpty()
+                ? EffectForecast.NOTHING : EffectForecast.UNKNOWN);
     }
 
 }

@@ -35,24 +35,66 @@ public final class EffectForecast {
     public static final EffectForecast UNKNOWN = new EffectForecast(Verdict.UNKNOWN, false, null, false);
     /** Will do nothing. */
     public static final EffectForecast NOTHING = new EffectForecast(Verdict.NOTHING, true, Collections.emptySet(), false);
+    /**
+     * Will do nothing because a draw deck has no card to give, or its player may draw none: a draw from an empty
+     * draw deck, a reveal of its top cards.  It is flagged as any other effect that does nothing is.  It is told
+     * apart for the rule of Q-0224 (IdleOffers): an optional draw is still offered with an empty
+     * draw deck (Ketura on Q-0029), so an offer is never withheld on this ground.
+     */
+    public static final EffectForecast NOTHING_FROM_A_DRAW_DECK = new EffectForecast(Verdict.NOTHING, true, Collections.emptySet(), false, true);
     /** Will do nothing, a cap being spent. */
     public static final EffectForecast AT_LIMIT = new EffectForecast(Verdict.AT_LIMIT, true, Collections.emptySet(), false);
     /**
      * Does nothing to the game by nature (it remembers something, counts a use, writes a line in the log), so it
      * neither makes an action worth taking nor, when it is all an action has, shows that the action is idle.
      */
-    public static final EffectForecast BOOKKEEPING = new EffectForecast(Verdict.NOTHING, true, Collections.emptySet(), true);
+    public static final EffectForecast BOOKKEEPING = new EffectForecast(Verdict.NOTHING, true, Collections.emptySet(), true, false, true);
+    /**
+     * Bookkeeping that fills no memory: a use counted against a limit, a line in the log.  For the no-effect flag
+     * it is bookkeeping like any other.  It is told apart for the rule of Q-0224 (IdleOffers).
+     */
+    public static final EffectForecast COUNTING = new EffectForecast(Verdict.NOTHING, true, Collections.emptySet(), true, false, false);
 
     private final Verdict verdict;
     private final boolean skirmishBound;
     private final Collection<PhysicalCard> reach;
     private final boolean bookkeeping;
+    private final boolean restingOnADrawDeck;
+    private final boolean remembering;
 
     private EffectForecast(Verdict verdict, boolean skirmishBound, Collection<PhysicalCard> reach, boolean bookkeeping) {
+        this(verdict, skirmishBound, reach, bookkeeping, false);
+    }
+
+    private EffectForecast(Verdict verdict, boolean skirmishBound, Collection<PhysicalCard> reach, boolean bookkeeping,
+            boolean restingOnADrawDeck) {
+        this(verdict, skirmishBound, reach, bookkeeping, restingOnADrawDeck, false);
+    }
+
+    private EffectForecast(Verdict verdict, boolean skirmishBound, Collection<PhysicalCard> reach, boolean bookkeeping,
+            boolean restingOnADrawDeck, boolean remembering) {
         this.verdict = verdict;
         this.skirmishBound = skirmishBound;
         this.reach = reach;
         this.bookkeeping = bookkeeping;
+        this.restingOnADrawDeck = restingOnADrawDeck;
+        this.remembering = remembering;
+    }
+
+    /**
+     * @return True if this effect, or one it holds, fills a memory for a later effect to read (a "memorize").  An
+     * effect that reads such a memory cannot be asked what it will do until the memory is filled.
+     */
+    public boolean isRemembering() {
+        return remembering;
+    }
+
+    /**
+     * @return True if this forecast of nothing, or any part of it, rests on a draw deck having no card to give
+     * (NOTHING_FROM_A_DRAW_DECK).
+     */
+    public boolean isRestingOnADrawDeck() {
+        return restingOnADrawDeck;
     }
 
     public Verdict getVerdict() {
@@ -131,10 +173,16 @@ public final class EffectForecast {
         boolean allBookkeeping = true;
         boolean skirmishBound = true;
         boolean reachKnown = true;
+        boolean onADrawDeck = false;
+        boolean remembering = false;
         Set<PhysicalCard> reach = new LinkedHashSet<>();
         for (EffectForecast part : parts) {
             if (!part.bookkeeping)
                 allBookkeeping = false;
+            if (part.restingOnADrawDeck)
+                onADrawDeck = true;
+            if (part.remembering)
+                remembering = true;
             if (part.verdict == Verdict.UNKNOWN) {
                 nothing = false;
                 if (!part.skirmishBound)
@@ -149,8 +197,12 @@ public final class EffectForecast {
         }
         if (nothing) {
             if (allBookkeeping)
-                return BOOKKEEPING;
-            return atLimit ? AT_LIMIT : NOTHING;
+                return remembering ? BOOKKEEPING : COUNTING;
+            if (atLimit)
+                return AT_LIMIT;
+            if (remembering)
+                return new EffectForecast(Verdict.NOTHING, true, Collections.emptySet(), false, onADrawDeck, true);
+            return onADrawDeck ? NOTHING_FROM_A_DRAW_DECK : NOTHING;
         }
         return new EffectForecast(Verdict.UNKNOWN, skirmishBound, reachKnown ? Collections.unmodifiableSet(reach) : null, false);
     }

@@ -36,11 +36,11 @@ public class RestoreCardsInPlay implements EffectAppenderProducer {
 
         MultiEffectAppender result = new MultiEffectAppender();
 
-        result.addEffectAppender(
-                CardResolver.resolveCards(select,
+        final EffectAppender cardResolver = CardResolver.resolveCards(select,
                         SpotOverride.INCLUDE_HINDERED,
                         (actionContext) -> Filters.canBeRestored(actionContext.getSource()),
-                        count, memory, player, "Choose cards to restore", environment));
+                        count, memory, player, "Choose cards to restore", environment);
+        result.addEffectAppender(cardResolver);
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
@@ -54,7 +54,8 @@ public class RestoreCardsInPlay implements EffectAppenderProducer {
                     }
                 });
 
-        return result;
+        // Taught for Q-0224 (IdleOffers): with no card that can be restored nothing is restored.
+        return TaughtForecast.actsOnWhatItFinds(result, cardResolver);
     }
 
 }

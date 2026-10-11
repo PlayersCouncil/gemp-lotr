@@ -240,15 +240,11 @@ public class StepsOfAMoveTests
 		scn.SkipToMovementDecision();
 		scn.FreepsChooseToMove();
 
-		// The same move one site on, from Steward's Tomb.  The offer is made (a heal that is barred as an effect
-		// is still offered), with the fellowship still at site 5.
-		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
-		assertEquals(5, scn.GetCurrentSiteNumber());
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(sword));
-
-		scn.FreepsAcceptOptionalTrigger();
-
-		// "Wounds cannot be ... healed" still holds: Legolas keeps his wound, and the fellowship moves on.
+		// The same move one site on, from Steward's Tomb.  "Wounds cannot be ... healed" still holds while "the
+		// fellowship moves" is answered: the Sword's heal could heal nobody, it costs nothing (a spot is no cost),
+		// and so its offer is not made (Q-0034; withheld by the engine since Q-0224, which asks the heal itself).
+		// Legolas keeps his wound, and the fellowship moves on.
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(sword));
 		assertEquals(1, scn.GetWoundsOn(legolas));
 		assertEquals(6, scn.GetCurrentSiteNumber());
 		assertTrue(scn.AwaitingShadowPhaseActions());

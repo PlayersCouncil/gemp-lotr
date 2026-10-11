@@ -27,6 +27,11 @@ public class IncrementPerPhaseLimit implements EffectAppenderProducer {
 
         return new BookkeepingAppender() {
             @Override
+            protected boolean remembersSomething() {
+                return false;
+            }
+
+            @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                 final Evaluator evaluator = limitSource.getEvaluator(actionContext);
                 final int limit = evaluator.evaluateExpression(actionContext.getGame(), actionContext.getSource());

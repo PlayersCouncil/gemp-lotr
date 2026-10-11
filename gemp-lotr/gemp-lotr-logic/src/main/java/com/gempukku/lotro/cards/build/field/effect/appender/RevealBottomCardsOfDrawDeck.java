@@ -41,7 +41,7 @@ public class RevealBottomCardsOfDrawDeck implements EffectAppenderProducer {
             public EffectForecast forecast(ActionContext actionContext) {
                 final String deckId = playerSource.getPlayer(actionContext);
                 return actionContext.getGame().getGameState().getDeck(deckId).isEmpty()
-                        ? EffectForecast.NOTHING : EffectForecast.UNKNOWN;
+                        ? EffectForecast.NOTHING_FROM_A_DRAW_DECK : EffectForecast.UNKNOWN;
             }
 
             @Override

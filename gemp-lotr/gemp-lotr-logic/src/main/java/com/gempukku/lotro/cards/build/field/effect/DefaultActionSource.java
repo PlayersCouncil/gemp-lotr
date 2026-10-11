@@ -71,6 +71,13 @@ public class DefaultActionSource implements ActionSource {
     // may be a skirmish action, which is flagged when it reaches nobody in the skirmish being fought.
     private boolean skirmishAbility;
     private boolean event;
+    // Q-0224 (IdleOffers).  An optional trigger, or an ability of a card in play: the
+    // kinds of action that are not offered when they pay nothing and would do nothing.
+    private boolean withheldWhenIdle;
+    // Whether the definition writes a cost that pays something, under "cost" or inside an effect.
+    private boolean payingSomething;
+    // Whether a cost the definition writes, paying nothing, remembers something for the effects.
+    private boolean costsRemembering;
 
     public void setPlayingPlayer(PlayerSource playingPlayer) {
         this.playingPlayer = playingPlayer;
@@ -111,6 +118,23 @@ public class DefaultActionSource implements ActionSource {
 
     public void setEvent(boolean event) {
         this.event = event;
+    }
+
+    /**
+     * Marks the action as one that is not offered when it pays nothing and all its effects would do nothing
+     * (Ketura on Q-0034 and Q-0224; see IdleOffers): an optional trigger, a special ability or Response of a card in
+     * play.  Never set for the play of an event or for a required trigger.
+     */
+    public void setWithheldWhenIdle(boolean withheldWhenIdle) {
+        this.withheldWhenIdle = withheldWhenIdle;
+    }
+
+    public void setPayingSomething(boolean payingSomething) {
+        this.payingSomething = payingSomething;
+    }
+
+    public void setCostsRemembering(boolean costsRemembering) {
+        this.costsRemembering = costsRemembering;
     }
 
     public void addPlayRequirement(Requirement requirement) {
@@ -330,7 +354,21 @@ public class DefaultActionSource implements ActionSource {
                 return false;
             }
         }
+        // Q-0224 (IdleOffers): with nothing to pay and nothing it would do, the action is not offered.  Asked
+        // last, when the trigger that sets the action off has remembered what set it off.
+        if (isIdleOffer(actionContext))
+            return false;
         return true;
+    }
+
+    // Whether this is an optional trigger or an ability of a card in play that pays nothing and all of whose
+    // effects forecast that they will do nothing (see IdleOffers).  An action whose definition names for itself
+    // what it needs to do anything ("noEffectUnless") was written to be offered and flagged, and is left so.
+    private boolean isIdleOffer(ActionContext actionContext) {
+        if (!withheldWhenIdle || payingSomething || !noEffectUnless.isEmpty() || !limitGate.isEmpty())
+            return false;
+        return IdleOffers.areIdle(actionContext, effects,
+                costsRemembering && !IdleOffers.rememberNothing(actionContext, costs));
     }
 
     // The action is being asked whether it can be used, and none of its costs has been paid: what they

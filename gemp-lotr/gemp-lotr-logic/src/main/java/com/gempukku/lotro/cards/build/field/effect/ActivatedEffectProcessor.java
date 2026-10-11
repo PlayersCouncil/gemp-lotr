@@ -26,6 +26,8 @@ public class ActivatedEffectProcessor implements EffectProcessor {
             DefaultActionSource actionSource = new DefaultActionSource();
             actionSource.setText(text);
             actionSource.setSkirmishAbility(phase == Phase.SKIRMISH);
+            // Q-0224 (IdleOffers): an ability of a card in play that pays nothing and would do nothing.
+            actionSource.setWithheldWhenIdle(true);
             EffectUtils.processLimits(value, actionSource, phase, true);
             actionSource.addPlayRequirement(
                     (actionContext) -> PlayConditions.isPhase(actionContext.getGame(), phase));

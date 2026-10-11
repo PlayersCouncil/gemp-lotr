@@ -435,9 +435,10 @@ public class Card_V3_083_Tests
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(legolas));
 		scn.FreepsChooseCard(aragorn);
 		assertAttachedTo(brego, aragorn);
-		// "When you play Brego, you may heal bearer."
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(brego));
-		scn.FreepsDeclineOptionalTrigger();
+		// "When you play Brego, you may heal bearer."  Aragorn has no wound: the offer costs nothing and would do
+		// nothing, and is not made (Q-0034; withheld by the engine since Q-0224).
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(brego));
 
 		assertTrue(scn.FreepsHasCardChoiceAvailable(athelas, mount));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(brego));

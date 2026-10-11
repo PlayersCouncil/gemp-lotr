@@ -11,6 +11,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class Card_03_017_Tests
@@ -119,7 +120,9 @@ public class Card_03_017_Tests
 
 		scn.StartGame();
 
-		scn.FreepsDeclineOptionalTrigger();
+		// No Elf is wounded: her start-of-turn heal has nothing to heal and is not offered (Q-0034; withheld by the
+		// engine since Q-0224).
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 
 		assertTrue(scn.FreepsActionAvailable(galadriel));
 		assertEquals(Zone.ADVENTURE_DECK, shadowSite2.getZone());
@@ -148,7 +151,9 @@ public class Card_03_017_Tests
 
 		scn.StartGame();
 
-		scn.FreepsDeclineOptionalTrigger();
+		// No Elf is wounded: her start-of-turn heal has nothing to heal and is not offered (Q-0034; withheld by the
+		// engine since Q-0224).
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 
 		assertTrue(scn.FreepsActionAvailable(galadriel));
 		assertEquals(Zone.ADVENTURE_DECK, shadowSite2.getZone());
@@ -180,7 +185,9 @@ public class Card_03_017_Tests
 
 		scn.StartGame();
 
-		scn.FreepsDeclineOptionalTrigger();
+		// No Elf is wounded: her start-of-turn heal has nothing to heal and is not offered (Q-0034; withheld by the
+		// engine since Q-0224).
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 
 		assertTrue(scn.FreepsActionAvailable(galadriel));
 		assertEquals(Zone.ADVENTURE_DECK, shadowSite2.getZone());
@@ -210,7 +217,9 @@ public class Card_03_017_Tests
 
 		scn.FreepsChooseCardBPFromSelection(site1);
 		scn.StartGame();
-		scn.FreepsDeclineOptionalTrigger();
+		// No Elf is wounded: her start-of-turn heal has nothing to heal and is not offered (Q-0034; withheld by the
+		// engine since Q-0224).
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 
 		assertTrue(scn.FreepsActionAvailable(galadriel));
 		assertEquals(Zone.ADVENTURE_DECK, shadowSite2.getZone());

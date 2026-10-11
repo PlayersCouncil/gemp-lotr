@@ -12,6 +12,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class Card_17_017_Tests
@@ -114,10 +115,10 @@ public class Card_17_017_Tests
 		scn.FreepsResolveSkirmish(gandalf);
 		scn.PassCurrentPhaseActions();
 
+		// A burden is no Free Peoples token: with no culture token in play there is nothing to reinforce, and the
+		// offer is not made (Q-0034; withheld by the engine since Q-0224).
 		assertEquals(1, scn.GetBurdens());
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
-		scn.FreepsAcceptOptionalTrigger();
-
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 		assertEquals(1, scn.GetBurdens());
 	}
 }

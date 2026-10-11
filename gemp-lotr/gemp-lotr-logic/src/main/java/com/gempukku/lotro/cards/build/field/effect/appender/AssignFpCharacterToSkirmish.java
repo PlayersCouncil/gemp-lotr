@@ -49,14 +49,14 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
         final FilterableSource minionFilter = getSource(minion, environment);
 
         MultiEffectAppender result = new MultiEffectAppender();
-        result.addEffectAppender(
-                CardResolver.resolveCard(fpCharacter,
+        final EffectAppender fpCharacterResolver = CardResolver.resolveCard(fpCharacter,
                         (actionContext) -> {
                             final String assigningPlayer = playerSource.getPlayer(actionContext);
                             Side assigningSide = GameUtils.getSide(actionContext.getGame(), assigningPlayer);
                             final Filterable filter = minionFilter.getFilterable(actionContext);
                             return Filters.assignableToSkirmishAgainst(assigningSide, filter, ignoreExistingAssignments, ignoreDefender, ignoreAllyLocation);
-                        }, fpCharacterMemory, player, "Choose character to assign to skirmish", environment));
+                        }, fpCharacterMemory, player, "Choose character to assign to skirmish", environment);
+        result.addEffectAppender(fpCharacterResolver);
         result.addEffectAppender(
                 CardResolver.resolveCard(minion,
                         (actionContext) -> {
@@ -92,7 +92,9 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
             result.addEffectAppender(assignAppender);
         }
 
-        return result;
+        // Taught for Q-0224 (IdleOffers): with no character one of those minions could be assigned to, nobody is
+        // assigned.
+        return TaughtForecast.actsOnWhatItFinds(result, fpCharacterResolver);
     }
 
     private FilterableSource getSource(String filter, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {

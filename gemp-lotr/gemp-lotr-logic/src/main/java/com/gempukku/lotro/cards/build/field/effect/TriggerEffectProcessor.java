@@ -77,6 +77,8 @@ public class TriggerEffectProcessor implements EffectProcessor {
                         });
             }
 
+            // Q-0224 (IdleOffers): an optional trigger that pays nothing and would do nothing.
+            triggerActionSource.setWithheldWhenIdle(optional);
             EffectUtils.processLimits(value, triggerActionSource, phase, optional);
 
             EffectUtils.processRequirementsCostsAndEffects(value, environment, triggerActionSource);

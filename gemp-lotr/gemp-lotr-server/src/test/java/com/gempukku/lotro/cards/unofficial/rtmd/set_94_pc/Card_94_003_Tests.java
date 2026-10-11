@@ -184,7 +184,9 @@ public class Card_94_003_Tests
 		var frodo = scn.GetRingBearer();
 
 		scn.FreepsChooseCard(pony);
-		scn.FreepsDeclineOptionalTrigger(); // "you may reinforce a [shire] token" — irrelevant to this test
+		// "When you play Bill the Pony, you may reinforce a [shire] token": no card bears one, so the offer is not
+		// made (Q-0034; withheld by the engine since Q-0224).
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(pony));
 
 		assertInPlay(pony);
 		assertAttachedTo(pony, frodo);

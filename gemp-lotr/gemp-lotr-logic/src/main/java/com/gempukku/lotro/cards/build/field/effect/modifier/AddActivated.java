@@ -39,6 +39,8 @@ public class AddActivated implements ModifierSourceProducer {
             DefaultActionSource actionSource = new DefaultActionSource();
             actionSource.setText(text);
             actionSource.setSkirmishAbility(phase == Phase.SKIRMISH);
+            // Q-0224 (IdleOffers): an ability a card in play is given.
+            actionSource.setWithheldWhenIdle(true);
             EffectUtils.processLimits(object, actionSource, phase, true);
             actionSource.addPlayRequirement(
                     (actionContext) -> PlayConditions.isPhase(actionContext.getGame(), phase));
