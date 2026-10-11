@@ -112,8 +112,18 @@ them)
 TO LOOK AT WHEN THE SET COMES UP (seen in passing by an earlier batch; not looked into, not filed)
 - Set 17, Shadowfax 17_24 (from the batch at-mech-hinder-c): "Discard all other possessions on bearer and bearer may not bear a hand weapon" is built as a standing check that discards every other possession or weapon the bearer has at any time, so nothing but artifacts can ever be played on him afterwards and stay; Shadowfax 4_100 and Andúril 7_79 have the same kind of sentence built as a discard when played (and, since F-0360, when restored)
 
-TO ASK KETURA WHEN THE SET COMES UP
-- Set 7: the three `assignmentCost` cards (7_197, Morgul Spawn 7_200, 7_201: "The Free Peoples player must exert
-  a companion to assign this minion") still ask ahead of the assigning and cannot be taken by Éowyn 17_96's
-  action. Whether her reading of F-0308 (the cost is paid as he assigns, by a card too, and not asked ahead)
-  reaches them has not been put to her.
+THE COST OF ASSIGNING (set 7's Morgul Orcs; built by engine pass 26, item assigncost, on Ketura's Q-0221: A)
+- Morgul Regiment 7_197, Morgul Spawn 7_200, Morgul Spearman 7_201 ("the Free Peoples player must exert a
+  companion to assign this minion") and Úlairë Nertëa 69_38 are on one build, `extraCostToAssign`. Nothing is
+  asked ahead: the Free Peoples player pays as he makes the assignment (at his own assigning after his answer,
+  the charged ones in the order of the minions' ids; under a card that has him assign, once the pair is chosen).
+  A cost not paid in full means that one assignment is not made (at his own assigning the minion is a leftover
+  for the Shadow player); while the cost cannot be paid the assignment is not his to make; the Shadow player's
+  assignments are never charged; a lone candidate exerts unasked and the choice of who exerts has no "none".
+  The cards that have him assign (Éowyn 17_96, Alcarin 5_31, Sméagol 7_71 and nine more) can now take a Morgul
+  Orc. `mechanics/CostOfAssigningTests` and `orchestrator/engine-pass-26/assigncost.md` have the whole of it.
+- The three Orcs' old test files pass and read the game as built, but are NOT worked to the Standard (no ledger,
+  the alias `card`, one table built inside a test): work them as any card of this phase.
+- With Ketura, not to be filed again or corrected: F-0425 (Morgul Regiment is his to assign while ONE companion
+  can exert, however many Nazgûl there are: test the game as built) and Q-0247 (the payment's source is the
+  charging card; an assignment already paid for is not asked to pay again).
