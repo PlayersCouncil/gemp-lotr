@@ -55,6 +55,17 @@ WHAT IS ALREADY IN A DECIPHER CARD'S FILE
 - A rule shown in a `mechanics/` class is not shown again card by card unless the Standard asks for it on the card
   (`ls mechanics/`; the class comment says what each is about).
 
+CARDS THAT SHARE A TEXT (Q-0220: H)
+- 153 Decipher cards in 65 groups have the same game text but for names and cultures (Desert Soldier 4_220 and
+  its four kin are the largest group). The queue keeps a group in one batch, and
+  `python3 .claude/skills/card-test-campaign/scripts/orchestrator/twins.py <your ids>` prints the group of each of
+  your cards that has one, with the status of any card of it that is worked already. The SECOND card of a group
+  starts from the FIRST's ledger: its clauses, checks, boards and Notes with the names, cultures and ids changed,
+  and its tests from the first's in the same way. The second's own definition stays shut in stage 1 and is read in
+  stage 2 as any card's: twins by text are not always built alike (Dwarven Bracers 2_3 writes `memorize` where
+  12_5 writes `memorizeActive`), and where two behave differently and their texts do not differ, one of them is
+  a finding.
+
 DEFINITIONS ALREADY CORRECTED, WITH NO CARD TESTS YET
 - 13_75, 13_52, 4_18, 4_15 (engine pass 21, on Ketura's rulings F-0041, F-0058, F-0283): corrected, and shown only
   by three mechanics classes (YouMayOnAStandingTriggerIsAskedTests, EventThatPlaysFromADiscardPileNeedsBothCostsTests,
@@ -103,6 +114,35 @@ WHAT THE EARLIER PHASES GOT WRONG MORE THAN ONCE
   still made there is it a finding (name the kind of effect), corrected by a requirement as before. The exceptions
   stand: an optional DRAW is still offered with an empty draw deck (Q-0029), an action with a cost is offered and
   flagged, and a "you may" INSIDE an event's or ability's text is not reached by the engine (F-0379: by hand).
+
+WHAT WILL BE RAISED OTHERWISE AND IS NO FAULT (Q-0220: J; each line ends with the number that settles it. Test the
+game as built and file nothing.)
+- A RESPONSE EVENT of set 7 or later has no "Response:" in its text: from set 7 the word is printed in the type
+  line (the sheet's `card_subtype: Response`), and `responseEvent` in the definition is right. Sets 1 to 6 print
+  it in the text. (No ruling was wanted: Q-0220: J.)
+- "Draws a card (or takes a card into hand)" (Verily I Come 2_94, Betrayal of Isengard 3_29 and 12_25) is ONE
+  trigger, `playerDrawsCard` with `orTakesIntoHand: true`: no second trigger is owed for the take. "Draws a card"
+  alone has no such field and answers a draw only. (Q-0205, F-0376; mechanics/DrawnOrTakenIntoHandTests.)
+- "Make each ... until" on an EVENT is a snapshot, but not where it changes the COST of cards that are not yet
+  played: Deft in Their Movements 2_99 ("each site's Shadow number -2") and We Must Go Warily 3_48 ("each
+  minion's twilight cost +1") are rightly a standing `modifyCost` over a filter, as Rohirrim Road 7_332 is as an
+  ability. A snapshot would do nothing there. (F-0217; the snapshot itself is Q-0011.)
+- "Wears The One Ring until the regroup phase" (every One Ring, Saruman's Reach 1_137, Resistance Becomes
+  Unbearable 2_79, Narchost 7_362) has no `until:` in the definition: `putOnRing` takes none, and the game takes
+  the Ring off itself as the regroup phase starts, or as it ends where the Ring was put on in it.
+  (mechanics/WearingTheOneRingTests, Q-0220: C.)
+- A `your` that the text has and the definition's filter lacks is no finding where the other player's cards of
+  that side cannot be active: "your Uruk-hai wins a skirmish" (Uruk-hai Rampage 1_159), "each of your companions"
+  (Gildor Inglorion 14_4) and the like, 20 definitions. No board tells the two apart. It IS one where the filter
+  reaches a card that is not in play: "your [isengard] mounts are twilight cost -1" was read off a mount in the
+  other player's hand (Strength of the Pack 102_30, F-0065).
+- F-0444: until engine pass 26's `engine` item is on the branch a killed minion sets off "each time a minion is
+  discarded"; do not file it again, and test a card's "discarded" trigger with a discard. Last Days 12_71 and
+  Throne of Minas Tirith 17_36 ("killed or discarded from play") answer a kill today and are no fault, whatever
+  the pattern search's section 5 says of them.
+- `shuffle: false` on a take, a discard or a putting back of cards that a reveal or a look at the top of a draw
+  deck has just named (`select` on a `memory(...)`) is right: that is no search of the deck, and only a look
+  through the whole of it is followed by a shuffle. (Q-0013, F-0034.)
 
 KNOWN, AND WITHHELD BY THE ENGINE SINCE ENGINE PASS 26 (Q-0224: no requirement is wanted; test the offer absent)
 - "When you play <this>, you may reinforce a [culture] token", with no cost and no requirement that a token can be

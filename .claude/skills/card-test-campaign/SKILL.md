@@ -341,7 +341,9 @@ at every landing. The scripts under `scripts/orchestrator/` take the working fol
 - `scripts/orchestrator/`: `close.py` (a landing, start to finish; it runs `integrate.sh` and `postland.py`),
   `apply-sync.py` (on her machine), `answers.py` (filing a set of her answers), `wf.py` (where each run stands, and
   its reports), `integrate.sh` with `resolve_made.py` (the second working tree), `bootstrap.sh` (a fresh session),
-  `suite-run.sh` (the suite on the committed head, in a second clone), `cost.py` (what a run's steps cost).
+  `suite-run.sh` (the suite on the committed head, in a second clone), `cost.py` (what a run's steps cost),
+  `twins.py` (Decipher cards that share a text, and `--queue <file> --write`, which reorders a queue of cards so
+  that each such group is in one batch: run it when a Decipher queue is written or changed by hand; Q-0220: H).
 - `workflows/card-batch.js`: one batch, start to finish, as a Workflow script.
 - `workflows/engine-pass.js` with `roles/engine.md`: an engine pass between waves. The orchestrator writes the
   queue of items as a file in the state (`orchestrator/engine-pass-<n>.md`, one section an item); one agent takes
