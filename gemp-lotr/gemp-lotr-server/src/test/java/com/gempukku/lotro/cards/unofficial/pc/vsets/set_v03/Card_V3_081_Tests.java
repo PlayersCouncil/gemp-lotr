@@ -163,43 +163,45 @@ public class Card_V3_081_Tests
 	}
 
 	@Test
-	public void WithTwoOtherCopiesInPlayTheOneReturnedIsChosenFromThem() throws DecisionResultInvalidException, CardNotFoundException {
+	public void EitherCopyMayBeTheOneUsedAndItIsTheOneAssignedWhileTheOtherGoesHome() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var winged1 = scn.GetShadowCard("winged1");
 		var winged2 = scn.GetShadowCard("winged2");
-		var winged3 = scn.GetShadowCard("winged3");
 		var lemenya = scn.GetShadowCard("lemenya");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var gimli = scn.GetFreepsCard("gimli");
 		scn.MoveCompanionsToTable(aragorn, gimli);
 
 		scn.StartGame();
-		// Three copies cannot be in play by legal play (two dots); it is the only board on which the choice
-		// of which copy to return is put to the player.
-		scn.MoveMinionsToTable(winged1, winged2, winged3, lemenya);
+		// Two dots: two copies are as many as a game can have in play (CR 5.0 "non-unique"), so the copy used
+		// never has two others to choose between. Here it is the second copy that is used.
+		scn.MoveMinionsToTable(winged1, winged2, lemenya);
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		scn.FreepsPass();
 
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+		assertInZone(Zone.SHADOW_CHARACTERS, winged1);
+		assertFalse(scn.IsCharAssigned(winged2));
+		assertFalse(scn.IsCharAssigned(aragorn));
 		assertTrue(scn.ShadowActionAvailable(winged2));
+
 		scn.ShadowUseCardAction(winged2);
 
-		assertTrue(scn.ShadowHasCardChoiceAvailable(winged1, winged3));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(winged2, lemenya));
-		assertEquals(1, scn.ShadowGetChoiceMin());
-
-		scn.ShadowChooseCard(winged3);
-
-		assertInZone(Zone.HAND, winged3);
-		assertInZone(Zone.SHADOW_CHARACTERS, winged1);
+		// The other copy goes home with nothing asked: never the copy used, never the Nazgul of another title.
+		assertInZone(Zone.HAND, winged1);
 		assertInZone(Zone.SHADOW_CHARACTERS, winged2);
+		assertInZone(Zone.SHADOW_CHARACTERS, lemenya);
+		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, gimli));
+		assertEquals(1, scn.ShadowGetChoiceMin());
 
 		scn.ShadowChooseCard(aragorn);
 
 		// It is the copy whose ability was used that is assigned.
 		assertTrue(scn.IsCharAssignedAgainst(winged2, aragorn));
-		assertFalse(scn.IsCharAssigned(winged1));
 		assertFalse(scn.IsCharAssigned(gimli));
+		assertFalse(scn.IsCharAssigned(lemenya));
+		assertEquals(1, scn.GetShadowHandCount());
 		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
 

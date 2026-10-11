@@ -19,7 +19,6 @@ public class Card_V3_055_Tests
 				{{
 					put("schooner1", "103_55");
 					put("schooner2", "103_55");
-					put("schooner3", "103_55");
 					put("gunners", "8_55");       // Corsair Gunners: Corsair, strength 10; a skirmish ability never used here
 					put("explorer", "4_250");     // Southron Explorer: a [raider] Man who is no Corsair; a regroup ability never used here
 					put("troop", "1_177");        // Goblin Patrol Troop: [moria] Orc, no text at all
@@ -483,42 +482,43 @@ public class Card_V3_055_Tests
 	}
 
 	@Test
-	public void TheSchoonerToHinderIsChosenFromTheOthersAndIsNeverItself() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ManeuverAbilityIsPaidForWithThreeTokensOnAnotherOfYourCardsAndWithOneOtherSchoonerNothingIsAsked() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var schooner1 = scn.GetShadowCard("schooner1");
 		var schooner2 = scn.GetShadowCard("schooner2");
-		var schooner3 = scn.GetShadowCard("schooner3");
 		var galley = scn.GetShadowCard("galley");
 		var gunners = scn.GetShadowCard("gunners");
 		var shards = scn.GetFreepsCard("shards");
 		scn.MoveCardsToSupportArea(shards);
-		// Two dots allow two copies in play, so legal play never gives a choice here. A third copy is cheated
-		// in to read the choice.
-		scn.MoveCardsToSupportArea(schooner1, schooner2, schooner3, galley);
-		scn.AddTokensToCard(schooner1, 3);
+		// Two dots: two Schooners are as many as a game can have in play (CR 5.0 "non-unique"), so the Schooner
+		// used never has two others to choose between. Neither Schooner holds a token: all three are on the
+		// Corsair War Galley.
+		scn.MoveCardsToSupportArea(schooner1, schooner2, galley);
+		scn.AddTokensToCard(galley, 3);
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(gunners);
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPass();
 
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+		assertEquals(0, scn.GetCultureTokensOn(schooner1));
+		assertEquals(0, scn.GetCultureTokensOn(schooner2));
+		assertEquals(3, scn.GetCultureTokensOn(galley));
+		assertFalse(scn.IsHindered(schooner2));
+		assertFalse(scn.IsHindered(shards));
 		assertTrue(scn.ShadowActionAvailable(schooner1));
 
 		scn.ShadowUseCardAction(schooner1);
 
-		assertTrue(scn.ShadowHasCardChoiceAvailable(schooner2, schooner3));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(schooner1, galley));
-		assertEquals(1, scn.ShadowGetChoiceMin());
-
-		scn.ShadowChooseCard(schooner3);
-
-		// The three tokens are all on one card and there is one artifact, so nothing more is asked.
-		assertTrue(scn.IsHindered(schooner3));
-		assertFalse(scn.IsHindered(schooner2));
+		// One other Schooner, the three tokens all on one card and one artifact: each can only be the one it
+		// is, so nothing is asked. The Schooner hindered is the other and never the one used; the Galley, a
+		// [raider] possession beside them, is no Schooner.
+		assertTrue(scn.IsHindered(schooner2));
 		assertFalse(scn.IsHindered(schooner1));
 		assertFalse(scn.IsHindered(galley));
-		assertEquals(0, scn.GetCultureTokensOn(schooner1));
+		assertEquals(0, scn.GetCultureTokensOn(galley));
 		assertTrue(scn.IsHindered(shards));
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}

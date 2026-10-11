@@ -97,13 +97,14 @@ public class Card_V3_096_Tests
 		var sky3 = scn.GetShadowCard("sky3");
 		var fear = scn.GetShadowCard("fear");
 		var despair = scn.GetShadowCard("despair");
-		var dread = scn.GetShadowCard("dread");
 		var wreathed = scn.GetShadowCard("wreathed");
 		var nelya = scn.GetShadowCard("nelya");
 		var soldier = scn.GetShadowCard("soldier");
 		scn.MoveCardsToHand(night);
-		scn.MoveCardsToSupportArea(sky1, sky2, sky3, fear, despair, dread, wreathed);
-		scn.HinderCard(dread);
+		// Three Ominous Skies (three dots) and two Covers of Darkness (two dots, whatever their subtitles): the
+		// five twilight conditions that are as many as a game can have in play beside this one (CR 5.0
+		// "non-unique").
+		scn.MoveCardsToSupportArea(sky1, sky2, sky3, fear, despair, wreathed);
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(nelya, soldier);
@@ -117,10 +118,10 @@ public class Card_V3_096_Tests
 
 		scn.ShadowPlayCard(night);
 
-		// Five twilight conditions of two cultures may be hindered. Not offered: one that is hindered already,
-		// a condition that is not twilight, and a twilight card that is no condition.
+		// Five twilight conditions of two cultures may be hindered. Not offered: a condition that is not
+		// twilight, and a twilight card that is no condition.
 		assertTrue(scn.ShadowHasCardChoiceAvailable(sky1, sky2, sky3, fear, despair));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(dread, wreathed, nelya));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(wreathed, nelya));
 		assertEquals(4, scn.ShadowGetChoiceMin());
 		assertEquals(4, scn.ShadowGetChoiceMax());
 
