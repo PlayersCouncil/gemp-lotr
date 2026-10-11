@@ -4,6 +4,7 @@
     lookup.py Q-0098                      every entry that names Q-0098
     lookup.py "support area" hindered     entries containing every term given (case does not matter)
     lookup.py prevent --in pitfalls       one file only: rulings, shapes, pitfalls, standard, rig, hjson, all
+    lookup.py Q-0027 --skip 1_338,1_342   stage 1 of a batch: what says how one of these cards is BUILT stays shut
     lookup.py --index                     rebuild card-test-campaign/references/rulings-index.md, and the
                                           pitfall index in the gemp-testing skill
 
@@ -17,6 +18,13 @@ so that an entry's first words can be given as rulings-index.md prints them: loo
 A number looked up by itself (no other term, no --in) is also read in the campaign's registers, after the entries:
 a finding's row of findings.tsv (its status, what was found and its outcome, which may leave something open that
 no ruling says), and a question's entry in questions.md: whole while it is open, and Ketura's answer once it has one.
+
+--skip takes the ids of your batch (separated by spaces or commas).  An entry of the shapes, the pitfalls or any
+other file but the rulings log that names one of them, or another version of one (its original, its errata), is
+named by its heading and not printed, and so is such a finding's row of findings.tsv: they say what a definition
+holds and how it was put right, which stage 1 does not read.  The rulings log and a question's entry are printed
+whatever they name: what Ketura ruled a card does is what stage 1 is written from.  Look again in stage 2, without
+--skip.
 
 The exit status is 0 whether or not anything matched: "no entry matches" is an answer, and a chain of lookups in
 one step is not cut short by it.
@@ -137,9 +145,30 @@ def build_index():
 RIG_SKILL = SKILLS / "gemp-testing" / "SKILL.md"
 
 
-def in_registers(number: str) -> str:
+def shut(skipped) -> set:
+    """The ids given to --skip with every other version of each (packet.py's rule), or the ids alone where there
+    are no definitions to read the versions from."""
+    try:
+        import packet
+        return packet.shut(skipped)
+    except BaseException:  # run from a copy of the skill with no repository round it
+        return set(skipped)
+
+
+def names_one_of(text: str, ids) -> str:
+    """The first of the ids that the text names, or ""."""
+    for card_id in sorted(ids):
+        if re.search(r"(?<![\w])%s(?![\d_])" % re.escape(card_id), text):
+            return card_id
+    return ""
+
+
+WITHHELD = "withheld in stage 1 (it names %s, an id after --skip or another version of one): read it in stage 2, without --skip"
+
+
+def in_registers(number: str, skipped=()) -> str:
     """What the campaign's registers say under a finding's or a question's number, or "" where they say nothing
-    (or there is no state folder to read)."""
+    (or there is no state folder to read).  A finding's row that names a card of `skipped` is named and not shown."""
     try:
         import gempcards
         state = gempcards.state_dir()
@@ -153,6 +182,9 @@ def in_registers(number: str) -> str:
             cells = row.split("\t")
             if cells[0] == number and len(cells) == len(head):
                 f = dict(zip(head, cells))
+                named = names_one_of(row, skipped)
+                if named:
+                    return "== findings.tsv > %s: %s\n" % (number, WITHHELD % named)
                 out = ["== findings.tsv > %s: %s %s, %s, %s (%s)" % (number, f.get("card", ""), f.get("name", ""), f.get("kind", ""),
                                                                    f.get("status", ""), f.get("date", "")), f.get("summary", "")]
                 out += ["%s: %s" % (label, f[key]) for label, key in (("Found", "found"), ("Outcome", "outcome")) if f.get(key)]
@@ -212,10 +244,18 @@ def main(argv):
         build_index()
         build_pitfall_index()
         return 0
-    where, terms, limit, narrowed = DEFAULT, [], 8, False
+    where, terms, limit, narrowed, skipped = DEFAULT, [], 8, False, []
     i = 0
     while i < len(argv):
-        if argv[i] == "--in":
+        if argv[i] == "--skip":
+            i += 1
+            while i < len(argv) and re.fullmatch(r"\d+_\d+(?:,\d+_\d+)*,?", argv[i]):
+                skipped += [x for x in argv[i].split(",") if x]
+                i += 1
+            if not skipped:
+                print("--skip: give the ids of your batch after it (1_338,1_342)")
+                return 1
+        elif argv[i] == "--in":
             where = list(FILES) if argv[i + 1] == "all" else argv[i + 1].split(",")
             narrowed = True
             i += 2
@@ -234,9 +274,16 @@ def main(argv):
         hits = [e for e in found if all(p.search(e[2], words(e[2])) for p in pats)]
         if hits:
             print("(no entry matches as a regular expression; matched as plain words)\n")
+    # Stage 1 of a batch: what says how one of its cards is built is named and not shown.
+    skipped = shut(skipped) if skipped else set()
+    withheld = [(e, names_one_of(e[2], skipped)) for e in hits if e[0] != "rulings" and names_one_of(e[2], skipped)] if skipped else []
+    hits = [e for e in hits if e not in [w[0] for w in withheld]]
     # A number asked for by itself is read in the registers too.
-    registers = [r for r in (in_registers(t) for t in terms if narrowed is False and len(terms) == 1 and pats[0].number) if r]
-    if not hits:
+    registers = [r for r in (in_registers(t, skipped) for t in terms if narrowed is False and len(terms) == 1 and pats[0].number) if r]
+    if not hits and not withheld and registers:
+        # The number is the registers' alone: that is an answer, and the line above it does not read as a miss.
+        print("no entry of %s names %s; the campaign's register has it:" % (", ".join(where), terms[0]))
+    elif not hits and not withheld:
         print("no entry matches", " and ".join(repr(t) for t in terms), "in", ", ".join(where))
     for key, heading, text in hits[:limit]:
         print(f"== {key} > {heading}\n{text}\n")
@@ -244,8 +291,10 @@ def main(argv):
         print(f"... and {len(hits) - limit} more (narrow the search, or --max N):")
         for key, heading, text in hits[limit:]:
             print(f"   {key} > {heading}: {lead(text, 100)}")
+    for (key, heading, text), named in withheld:
+        print(f"== {key} > {heading}: {WITHHELD % named}\n")
     for register in registers:
-        print(("\n" if not hits else "") + register)
+        print(("\n" if not hits and not withheld else "") + register)
     return 0
 
 

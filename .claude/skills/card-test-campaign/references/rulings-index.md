@@ -504,6 +504,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A required start-of-turn trigger with a 0-to-N choice
 - "At the start of each of your turns" reads BETWEEN_TURNS; read every counter before as well as after
 - The turn-skippers do not lay sites
+- What a `packet.py --find` pattern is tried against
 - cardtest.py run ends with a blank line
 - Grep before calling a property unique to a block (Aldor 4_262) [Q-0158]
 - A definition's `revision:` can be behind the sheet (F-0294, Shadowfax 67_24) [Q-0180]

@@ -13,8 +13,10 @@
         ended with ": open" here: the title says what is wanted and nothing of its state.
 
     landing.py users <id...>
-        Lists the other cards whose tests put one of these cards on the table as a helper.  A correction to a
-        definition can break them: run their tests after applying one (finish does, with --changed).  A card the
+        Lists the other cards whose tests put one of these cards on the table as a helper, and on a second line
+        the test classes that are no card's own and do the same (a class under mechanics/, one of the rig's own
+        tests), by path.  A correction to a definition can break them: run their tests after applying one (finish
+        does, with --changed: the cards' and the classes').  A card the
         rig keeps under a constant (TestConstants: the Rings, the Ring-bearers, the Maps, the site paths) is found
         by the constant's name as well as by its id, and where it is what a table has when the test names none
         (Frodo 10_121, The Ruling Ring, the King-block sites), in every file that builds such a table.
@@ -25,7 +27,8 @@
         rulings index first if the rulings, the shapes or the pitfalls changed.  Prints what landed and the head.
         --changed names every card whose DEFINITION was corrected (batch cards and others alike): their files
         go into the commit, and before anything is committed the tests of every other card that uses one of
-        them as a helper are run; if any fails nothing is committed.  --with is for any other file.
+        them as a helper are run, with every other test class that lays one of them (mechanics/, the rig's own
+        tests); if any fails nothing is committed.  --with is for any other file.
 
     landing.py commit "<subject>" <path...> [--body-file <file>]
         For work that is not a batch of cards (an engine or rig change with its tests and documents): commits
@@ -162,11 +165,11 @@ def table_arguments(text: str) -> list:
     return out
 
 
-def users(ids, how=None) -> list:
-    """The cards, other than these, whose test files put one of these blueprints on a table: named by its id in a
-    scenario's card map, by the rig's constant for it (VirtualTableScenario.GreatRing is 19_1), or, where it is
-    what a table has when the test names none, by building such a table.  `how`, if given, is filled with the
-    constants and defaults that were looked for."""
+def lays(ids, how=None):
+    """A test of a file's text: whether it puts one of these blueprints on a table, named by its id in a scenario's
+    card map, by the rig's constant for it (VirtualTableScenario.GreatRing is 19_1), or, where it is what a table
+    has when the test names none, by building such a table.  `how`, if given, is filled with the constants and
+    defaults that were looked for."""
     held, defaults = rig_constants()
     names = sorted({name for i in ids for name in held.get(i, [])})
     left_out = sorted(at for at, name in defaults.items() if name in names)
@@ -174,15 +177,40 @@ def users(ids, how=None) -> list:
         how += ["%s is the rig's %s" % (i, " and ".join(held[i])) for i in ids if i in held]
         how += ["a table that names no %s has %s" % ({1: "sites", 2: "Ring-bearer", 3: "Ring"}[at], defaults[at]) for at in left_out]
     wanted = re.compile(r'"(?:%s)"' % "|".join(re.escape(i) for i in ids) + ("|\\b(?:%s)\\b" % "|".join(names) if names else ""))
+    return lambda text: bool(wanted.search(text) or (left_out and any(len(args) <= at or args[at] == "null"
+                                                                      for args in table_arguments(text) for at in left_out)))
+
+
+def users(ids, how=None) -> list:
+    """The cards, other than these, whose test files put one of these blueprints on a table (see `lays`)."""
+    laid = lays(ids, how)
     out = []
     for card_id, path in g.test_index().items():
         if card_id in ids:
             continue
-        text = path.read_text(encoding="utf-8", errors="replace")
-        if wanted.search(text) or (left_out and any(len(args) <= at or args[at] == "null"
-                                                    for args in table_arguments(text) for at in left_out)):
+        if laid(path.read_text(encoding="utf-8", errors="replace")):
             out.append(card_id)
     return sorted(out, key=g.id_sort_key)
+
+
+def other_classes(ids) -> list:
+    """The test classes of the server module that are no card's own and put one of these blueprints on a table: a
+    class under mechanics/, one of the rig's own tests under virtualtable/.  As paths from the repository's root,
+    which `cardtest.py run` takes.  A mechanics class may rest a test on a helper's definition as it is written
+    (RevealingNoCardsFromAHandTests on Storm of Argument 3_6), and a correction to that card breaks it as it
+    would a card's test."""
+    laid = lays(ids)
+    cards_own = {p.resolve() for p in g.test_index().values()}
+    out = []
+    for path in sorted(g.TEST_ROOT.rglob("*.java")):
+        # What `cardtest.py suite` takes for a test class, the framework's own sources left out.
+        if path.resolve() in cards_own or g.FRAMEWORK_DIR in path.parents \
+                or not re.search(r"(Tests?|AtTest)$", path.stem) or path.stem.startswith("Abstract"):
+            continue
+        text = path.read_text(encoding="utf-8", errors="replace")
+        if re.search(r"^\s*@Test\b", text, re.M) and laid(text):
+            out.append(g.rel(path))
+    return out
 
 
 def finish(argv):
@@ -213,18 +241,20 @@ def finish(argv):
             extra.append(path)
     if changed_cards:
         others = [c for c in users(changed_cards) if c not in ids]
-        if others:
-            run = script("cardtest.py", "run", *others, "--out", folder + "-users")
+        classes = other_classes(changed_cards)
+        if others or classes:
+            run = script("cardtest.py", "run", *others, *classes, "--out", folder + "-users")
             ok = re.search(r"^OK \((\d+) tests?\)", run.stdout, re.M)
             if not ok:
                 failed = re.findall(r"^\d+\) (\w+)\(([\w.]+)\)", run.stdout, re.M)
-                print("NOT LANDED: the correction to %s breaks tests of other cards that use it as a helper:" % ", ".join(changed_cards))
+                print("NOT LANDED: the correction to %s breaks tests of other cards or classes that use it as a helper:" % ", ".join(changed_cards))
                 for test, cls in failed[:20]:
                     print("  %s in %s" % (test, cls.rsplit(".", 1)[-1]))
                 if not failed:
                     print("\n".join(run.stdout.strip().split("\n")[-15:]))
                 return 2
-            print("helper users of %s: %d card(s), %s tests pass" % (", ".join(changed_cards), len(others), ok.group(1)))
+            print("helper users of %s: %d card(s)%s, %s tests pass" % (", ".join(changed_cards), len(others),
+                  " and %d other test class(es)" % len(classes) if classes else "", ok.group(1)))
     args = list(ids) + ["--batch", folder]
     for path in extra:
         args += ["--with", path]
@@ -300,6 +330,9 @@ def main(argv):
         elif argv[1] == "users":
             how = []
             print(" ".join(users(argv[2:], how)) or "(none)")
+            classes = other_classes(argv[2:])
+            if classes:
+                print("other test classes: " + " ".join(classes))
             if how:
                 print("(%s)" % "; ".join(how))
         else:

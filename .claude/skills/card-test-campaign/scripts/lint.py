@@ -99,6 +99,11 @@ ITSELF = re.compile(r"\bthis (?:companion|minion|ally|follower|condition|possess
 SELF_DISCARD = re.compile(r"(?:^|(?P<lead>[:,.])\s+|\bmay\s+)discard this(?:\s+[a-z]+)?(?:\s+from play)?\s+to\b", re.I)
 
 
+# How the R clause for a site left behind speaks: by the rule it stands on, or by where the fellowship then is.
+SITE_LEFT = re.compile(r"unless the fellowship is at that site|behind the fellowship|left behind|CR 4\.2 \"active\"|"
+                       r"Legacy Ruling 3\b|\bLR 3\b", re.I)
+
+
 # The cheats that take a card out of its owner's draw deck (the ones that only reorder a deck have Deck in their names).
 LEAVES_DECK = re.compile(r"\b(?:Move(?!\w*Deck)\w+|AttachCardsTo|StackCardsOn|Set(?:Freeps|Shadow)?Hand)\s*\(")
 
@@ -786,6 +791,19 @@ def lint_file(path: Path):
                 "aliases of %s: a second copy is in play wherever it could change a reading (which copy a card went to "
                 "or came from, a modifier tied to those words not stacking), or Notes say why none could"
                 % (says.group(0).lower(), card_id))
+
+    # A site's continuous text built as a plain `modifier` holds only while the fellowship is at the site (CR 4.2
+    # "active", as LR 3 has it), and the site's own ledger owes an R clause for the same board with the site left
+    # behind (shapes, "A site's continuous text").  Dimrill Dale 1_350's ledger pointed to a mechanics class instead
+    # and passed; the reviewer added the test (dec-b1_350).  A `PermanentSiteModifier` owes none.
+    if card is not None and clauses and (card.field("type", "") or "").strip().lower() == "site" \
+            and re.search(r"^\s*type\s*:\s*modifier\s*$", card.raw, re.I | re.M) \
+            and not any(cid.startswith("R") and SITE_LEFT.search(c[2]) for cid, c in clauses.items()):
+        add("warning", "site-left", None, "the site's continuous text is built as a plain `modifier`, which holds only while "
+            "the fellowship is at the site (CR 4.2 \"active\", LR 3), and the ledger has no R clause for the site left "
+            "behind: the same board with the fellowship moved on, where the text no longer bites, in this card's own "
+            "file (shapes, \"A site's continuous text\"; a pointer to mechanics/SiteTextHoldsOnlyWhereTheFellowshipIsTests "
+            "does not stand for it)")
 
     # A race and the culture that goes with it (F-0019, F-0291).  No board is asked for any more (Q-0213: B): the
     # slip is read off the definition, and what is reported is the definition, as a finding to file.  Where the

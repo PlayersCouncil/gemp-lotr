@@ -14,22 +14,32 @@
     packet.py --find <regex> [--skip <ids>]
                                     for choosing helper cards: every card whose printed fields and game text
                                     match (id, name, culture, type, race, numbers, keywords, game text; nothing of
-                                    how it is implemented), without the ids after --skip and the cards they are
-                                    versions of.  The regex is tried, whatever its capitals, against the lines as
-                                    printed, joined by " | ": "\\[gollum\\] condition", "^1_.*\\[gandalf\\].* Man\\b".
+                                    how it is implemented), without the ids after --skip and their other versions.
+                                    Each card is up to three lines (the id line, "keywords:", the game text), and
+                                    the regex is tried, whatever its capitals, against those lines as printed,
+                                    without the indentation and with a newline between them.  So "." and ".*"
+                                    stay inside one line ("keywords:.*Ranger" is the keyword, never the word in
+                                    a game text), "\\n" steps to the next ("\\[shire\\].*\\n.*keywords:.*Tale"
+                                    is a [shire] tale), "^" is the start of the id line, and the text has no
+                                    markup in it (no <b>, no </b>): "\\[gollum\\] condition",
+                                    "^1_.*\\[gandalf\\].* Man\\b".
                                     A race or an item class stands after the type and a comma, with no label, in
                                     whatever capitals the definition has: "companion, Dwarf\\b" finds the Dwarf
                                     companions and "possession, pipe\\b" the pipes ("race: Dwarf" finds nothing).
-                                    Each card prints up to three lines (the id line, "keywords:", the game text):
-                                    to leave cards out, write it into the regex ("^(?!.*\\[elven\\]).*companion, Elf")
+                                    An ally's home stands among the numbers as "home 3F" ("home 3T/6T" for two):
+                                    "ally.*home \\S*6" finds the allies whose home is a site 6.
+                                    To leave cards out, write it into the regex ("^(?!.*\\[elven\\]).*companion, Elf")
                                     or filter the id lines only (grep -E '^[0-9]' first), since grep -v on the
                                     whole output keeps the other two lines of a card it drops
     packet.py --defs <ids> [--skip <ids>]
                                     the definitions of helper cards and nothing else, without their cardInfo,
                                     lore and alternate images
 
---skip takes the ids of your batch (separated by spaces or commas): their definitions and their originals' stay
-shut in stage 1, and neither --find nor --defs will print them.
+--skip takes the ids of your batch (separated by spaces or commas): their definitions and those of their other
+versions (the original of an erratum, the errata of an original, an erratum's fellow errata) stay shut in stage 1,
+and neither --find nor --defs will print them.  --defs also keeps shut, in stage 1, a card whose game text is a
+batch card's own with a word or two changed (Uruviel 1_67 beside Silinde 1_60): its definition would show how the
+batch card is built.  Ask for it again in stage 2, without --skip.
 
 A packet is: where the card lives, the picture the client shows for it (PC cards), what the reviewed spreadsheet
 says it is (Decipher cards) or the errata sheet's row, a later row of that sheet where it has one above the
@@ -49,7 +59,9 @@ import reconcile
 import rules as rulebook
 
 FORMAT_HINTS = [
-    (r"cancel", "Cancelling a skirmish: a Ring-bearer's skirmish may be cancelled in Fellowship, Towers and King "
+    # A skirmish cancelled ("cancel a fierce skirmish involving", "cancel Sméagol's skirmish") or barred from being
+    # ("skirmishes involving ... cannot be canceled"): not an event, an action or an assignment cancelled.
+    (r"cancel\w*\s+(?:[\w'\-]+\s+){0,3}skirmish|skirmish\w*\b[^.]*\bbe cancel", "Cancelling a skirmish: a Ring-bearer's skirmish may be cancelled in Fellowship, Towers and King "
                 "block formats and may not in the others.  If this can cancel a skirmish the Ring-bearer is in, "
                 "it needs a FormatRule clause and a test under each."),
     (r"\bsite \d|\bsites? \d|\b(fellowship|towers|king) block", "Names a site number or a block: test it on that block's path."),
@@ -148,9 +160,13 @@ def printed(card_id: str, card) -> list:
                                    ", " + race if race else "", "".join(", " + c for c in classes))
     if has("unique").lower() == "true":
         first += "; unique"
+    # An ally's home: one site ("allyHome: 3F") or a list of them, one to a line (Aldor 4_262: 3T and 6T).
+    m = re.search(r"^\s*allyHome\s*:\s*(\[.*?\]|[^\n\[]*)", card.raw, re.S | re.M | re.I)
+    homes = [w.strip() for w in re.split(r"[\n,\[\]]", m.group(1)) if w.strip()] if m else []
     numbers = [(label, has(name)) for label, name in (("twilight", "twilight"), ("strength", "strength"), ("vitality", "vitality"),
-                                                      ("resistance", "resistance"), ("site", "site"), ("signet", "signet"),
-                                                      ("block", "block"), ("direction", "direction"))]
+                                                      ("resistance", "resistance"), ("site", "site"))]
+    numbers += [("home", "/".join(homes))]
+    numbers += [(label, has(name)) for label, name in (("signet", "signet"), ("block", "block"), ("direction", "direction"))]
     numbers = ["%s %s" % (label, value) for label, value in numbers if value]
     if numbers:
         first += "; " + ", ".join(numbers)
@@ -178,14 +194,47 @@ def take_ids(argv, flag) -> list:
 
 
 def shut(skipped) -> set:
-    """The ids given to --skip with the cards they are versions of: a batch's cards and their originals."""
+    """The ids given to --skip with every other version of each: the original of an erratum, the errata of an
+    original, and an erratum's fellow errata.  An erratum's definition is its original's with the change made, so
+    any of them shows how the others are built."""
     cards = g.card_index()
-    out = set(skipped)
-    for card_id in skipped:
+
+    def original(card_id):
         m = re.search(r"^\s*parent\s*:\s*(\d+_\d+)", cards[card_id].raw, re.M) if card_id in cards else None
-        if m:
-            out.add(m.group(1))
-    return out
+        return m.group(1) if m else card_id
+
+    originals = {original(card_id) for card_id in skipped}
+    return set(skipped) | originals | {card_id for card_id in cards if original(card_id) in originals}
+
+
+def text_words(card) -> list:
+    """A card's game text as its words, its own title and subtitle written "~": what is left to compare when two
+    cards say the same sentence of themselves."""
+    text = g.plain_text(card.field("gametext", "") or "")
+    for name in sorted({g.plain_text(card.field("title", "") or ""), g.plain_text(card.field("subtitle", "") or "")}, key=len, reverse=True):
+        if len(name) > 2:
+            text = re.sub(re.escape(name), "~", text, flags=re.I)
+    return re.findall(r"[^\W_]+|[~+\-]", text.lower())
+
+
+# A text of fewer words is a keyword line or a "To play, spot an Elf" that scores of cards share word for word.
+SISTER_WORDS = 8
+SISTER_RATIO = 0.85
+
+
+def sister_of(card, skipped):
+    """The first of the ids given whose game text is this card's with a word or two changed (Uruviel 1_67 has
+    Silinde 1_60's sentence with "site 6" for "site 3", and the same `copyCard` under it), or None."""
+    import difflib
+    cards = g.card_index()
+    mine = text_words(card)
+    if len(mine) < SISTER_WORDS:
+        return None
+    for other in skipped:
+        theirs = text_words(cards[other]) if other in cards else []
+        if len(theirs) >= SISTER_WORDS and difflib.SequenceMatcher(None, mine, theirs, autojunk=False).ratio() >= SISTER_RATIO:
+            return other
+    return None
 
 
 def find(argv) -> int:
@@ -202,7 +251,7 @@ def find(argv) -> int:
     found, left_out = 0, []
     for card_id, card in sorted(g.card_index().items(), key=lambda kv: g.id_sort_key(kv[0])):
         lines = printed(card_id, card)
-        if not wanted.search(" | ".join(lines)):
+        if not wanted.search("\n".join(lines)):
             continue
         if card_id in skipped:
             left_out.append(card_id)
@@ -212,6 +261,15 @@ def find(argv) -> int:
         for line in lines[1:]:
             print("    " + line)
     print("%d card(s) match /%s/%s" % (found, argv[i + 1], "; left out as shut: " + ", ".join(left_out) if left_out else ""))
+    if not found and not left_out:
+        # What a pattern that finds nothing most often got wrong about the text it is tried against.
+        if re.search(r"</?[A-Za-z]+>", argv[i + 1]):
+            print("(the text searched has no markup: a pattern with a tag in it, like <b> or </b>, matches nothing)")
+        if re.search(r" \\?\| ", argv[i + 1]):
+            print("(a card's lines are joined by a newline, not by \" | \": write \\n to step from one line to the next)")
+        elif re.search(r"\.[*+]", argv[i + 1]) and "\\n" not in argv[i + 1] and "[\\s\\S]" not in argv[i + 1]:
+            print("(\".\" stays inside one of a card's lines: where the pattern names things from two of them, the id "
+                  "line and the keywords say, write \\n between: \"\\[shire\\].*\\n.*keywords:.*Tale\")")
     return 0
 
 
@@ -235,7 +293,8 @@ def without_bookkeeping(card) -> str:
 
 def defs(argv) -> int:
     cards = g.card_index()
-    skipped = shut(take_ids(argv, "--skip"))
+    batch = take_ids(argv, "--skip")
+    skipped = shut(batch)
     ids = take_ids(argv, "--defs")
     if not ids:
         print("--defs: give the ids of the cards whose definitions to print")
@@ -245,7 +304,11 @@ def defs(argv) -> int:
         if card is None:
             print("# %s: no card definition\n" % card_id)
         elif card_id in skipped:
-            print("# %s  %s: shut (one of the ids after --skip, or the card one of them is a version of)\n" % (card_id, g.full_name(card)))
+            print("# %s  %s: shut (one of the ids after --skip, or another version of one of them)\n" % (card_id, g.full_name(card)))
+        elif sister_of(card, batch):
+            print("# %s  %s: shut in stage 1 (its game text is %s's with a word or two changed, so its definition would show "
+                  "how %s is built: choose another helper, or ask again in stage 2, without --skip)\n"
+                  % (card_id, g.full_name(card), sister_of(card, batch), sister_of(card, batch)))
         else:
             print("# %s  %s (%s line %d)" % (card_id, g.full_name(card), card.rel_file, card.line))
             print("```hjson")

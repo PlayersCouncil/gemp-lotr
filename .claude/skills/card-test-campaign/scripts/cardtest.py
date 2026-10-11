@@ -12,6 +12,11 @@
 may be a test of a module the server is built on (gemp-lotr-logic, gemp-lotr-common): its class is named by the
 package in its source.  A test of gemp-lotr-async cannot be run here (the classpath is the server module's).
 
+What runs the tests is JUnit 4.  A class whose tests are JUnit 5's @ParameterizedTest over a @CsvSource
+(library/FormatLibraryTests) is run all the same by `run`, `suite` and `probe`, one test for each row, through
+junit5/RowsRunner.java beside this script; anything else of JUnit 5 is reported there as a failing test that says
+Maven runs it.
+
 `run` compiles into a folder of its own (--out <name>, default "default"), so several people or agents can each
 run their own cards at once without treading on each other; give each a different --out.  It needs Java 21 and a
 finished `setup`.  Card definitions are read from the source tree as each test starts, so an edited .hjson file
@@ -63,11 +68,21 @@ def setup():
     print("Built.  Classpath written to " + g.rel(CP_FILE))
 
 
-def run_junit(classes, cp) -> int:
+ROWS_RUNNER = Path(__file__).resolve().parent / "junit5" / "RowsRunner.java"
+
+
+def has_rows(source: Path) -> bool:
+    """Whether a test file has a JUnit 5 @ParameterizedTest, which JUnit 4's JUnitCore does not see."""
+    return bool(re.search(r"^\s*@ParameterizedTest\b", source.read_text(encoding="utf-8", errors="replace"), re.M))
+
+
+def run_junit(classes, cp, main="org.junit.runner.JUnitCore") -> int:
+    """Runs the classes and prints what JUnit prints.  `main` is JUnitCore, or RowsRunner where one of the classes
+    has JUnit 5 rows (it is JUnitCore for every other class)."""
     if not classes:
         print("Nothing to run.")
         return 0
-    proc = subprocess.Popen(["java", "-cp", cp, "org.junit.runner.JUnitCore"] + classes, cwd=g.SERVER, env=env(),
+    proc = subprocess.Popen(["java", "-cp", cp, main] + classes, cwd=g.SERVER, env=env(),
                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, errors="replace")
     for line in proc.stdout:
         if NOISE.search(line):
@@ -124,8 +139,9 @@ def run(argv) -> int:
         shutil.rmtree(out_dir)
     out_dir.mkdir(parents=True)
     cp = classpath(out_dir)
+    rows = [ROWS_RUNNER] if any(has_rows(f) for f in files) else []
     javac = subprocess.run(["javac", "-nowarn", "-proc:none", "-encoding", "UTF-8", "-d", str(out_dir), "-cp", cp]
-                           + [str(f) for f in files], cwd=g.SERVER, env=env(), capture_output=True, text=True)
+                           + [str(f) for f in files + rows], cwd=g.SERVER, env=env(), capture_output=True, text=True)
     if javac.returncode != 0:
         sys.stdout.write("\n".join(l for l in (javac.stdout + javac.stderr).split("\n") if not NOISE.search(l)))
         print("\nDid not compile.")
@@ -134,7 +150,7 @@ def run(argv) -> int:
             print("The classpath here is the server module's, which does not hold the classes of a module built on the "
                   "server: %s.  Maven runs such a test (`mvn test` in its module)." % ", ".join(beyond))
         return 2
-    return run_junit([g.test_class_name(f.resolve()) for f in files], cp)
+    return run_junit([g.test_class_name(f.resolve()) for f in files], cp, "RowsRunner" if rows else "org.junit.runner.JUnitCore")
 
 
 def named_card_tests(files) -> list:
@@ -152,21 +168,38 @@ def named_card_tests(files) -> list:
     return out
 
 
+PROBE_USAGE = ("usage: cardtest.py probe <file.java>... [--out <name>]\n"
+               "Compiles and runs JUnit classes kept anywhere (/tmp, say), each named by the package in its source; a card "
+               "test class a probe names is compiled with it as it now stands.  --out names the folder it compiles into "
+               "(default \"probe\"), so that two probes can run at once.")
+
+
 def probe(argv) -> int:
     """Compiles and runs any JUnit class, wherever its file is: for trying something out without adding a test."""
     out_name = "probe"
     if "--out" in argv:
         i = argv.index("--out")
+        if i + 1 >= len(argv):
+            print("--out takes a name after it.\n" + PROBE_USAGE)
+            return 1
         out_name = argv[i + 1]
         argv = argv[:i] + argv[i + 2:]
+    if not argv or any(a in ("-h", "--help") for a in argv):
+        print(PROBE_USAGE)
+        return 0 if argv else 1
+    missing = [a for a in argv if not a.endswith(".java") or not Path(a).is_file()]
+    if missing:
+        print("probe: not a .java file that is there: %s\n%s" % (", ".join(missing), PROBE_USAGE))
+        return 1
     files = [Path(a).resolve() for a in argv]
     out_dir = TARGET / "cardtest" / (out_name + "-probe")
     if out_dir.exists():
         shutil.rmtree(out_dir)
     out_dir.mkdir(parents=True)
     cp = classpath(out_dir)
+    rows = [ROWS_RUNNER] if any(has_rows(f) for f in files) else []
     javac = subprocess.run(["javac", "-nowarn", "-proc:none", "-encoding", "UTF-8", "-d", str(out_dir), "-cp", cp]
-                           + [str(f) for f in files + named_card_tests(files)], cwd=g.SERVER, env=env(),
+                           + [str(f) for f in files + named_card_tests(files) + rows], cwd=g.SERVER, env=env(),
                            capture_output=True, text=True)
     if javac.returncode != 0:
         sys.stdout.write("\n".join(l for l in (javac.stdout + javac.stderr).split("\n") if not NOISE.search(l)))
@@ -176,7 +209,7 @@ def probe(argv) -> int:
     for f in files:
         package = re.search(r"^\s*package\s+([\w.]+)\s*;", f.read_text(encoding="utf-8"), re.M)
         classes.append((package.group(1) + "." if package else "") + f.stem)
-    return run_junit(classes, cp)
+    return run_junit(classes, cp, "RowsRunner" if rows else "org.junit.runner.JUnitCore")
 
 
 def suite(argv) -> int:
@@ -189,7 +222,7 @@ def suite(argv) -> int:
         base = root / "com" / "gempukku" / "lotro" / "cards"
     else:
         base = root / Path(*which.split("."))
-    classes, empty = [], []
+    classes, empty, rows = [], [], False
     for p in sorted(base.rglob("*.class")):
         if "$" in p.name:
             continue
@@ -198,17 +231,31 @@ def suite(argv) -> int:
         if p.stem.startswith("Abstract"):
             continue
         source = (g.SERVER / "src" / "test" / "java" / p.relative_to(root)).with_suffix(".java")
-        # What runs here is JUnit 4's JUnitCore. A class with no @Test of its own has nothing for it to run, and
-        # neither has one whose only tests are JUnit 5's @ParameterizedTest (FormatLibraryTests): Maven's JUnit
-        # Platform provider runs those, this runner cannot.
-        if source.is_file() and not re.search(r"^\s*@Test\b", source.read_text(encoding="utf-8", errors="replace"), re.M):
+        # What runs here is JUnit 4's JUnitCore, and a class with no @Test of its own has nothing for it to run.  One
+        # whose tests are JUnit 5's @ParameterizedTest (FormatLibraryTests) is run through RowsRunner, a row a test.
+        if source.is_file() and has_rows(source):
+            rows = True
+        elif source.is_file() and not re.search(r"^\s*@Test\b", source.read_text(encoding="utf-8", errors="replace"), re.M):
             empty.append(source.name)
             continue
         classes.append(".".join(p.relative_to(root).with_suffix("").parts))
     print("%d test classes under %s" % (len(classes), which))
     if empty:
         print("%d classes have no active test and were left out: %s" % (len(empty), ", ".join(empty)))
-    return run_junit(classes, classpath())
+    if not rows:
+        return run_junit(classes, classpath())
+    out_dir = TARGET / "cardtest" / "suite-rows"
+    if out_dir.exists():
+        shutil.rmtree(out_dir)
+    out_dir.mkdir(parents=True)
+    cp = classpath(out_dir)
+    javac = subprocess.run(["javac", "-nowarn", "-proc:none", "-encoding", "UTF-8", "-d", str(out_dir), "-cp", cp, str(ROWS_RUNNER)],
+                           cwd=g.SERVER, env=env(), capture_output=True, text=True)
+    if javac.returncode != 0:
+        sys.stdout.write("\n".join(l for l in (javac.stdout + javac.stderr).split("\n") if not NOISE.search(l)))
+        print("\n%s did not compile, so the classes with JUnit 5 rows cannot be run." % ROWS_RUNNER.name)
+        return 2
+    return run_junit(classes, cp, "RowsRunner")
 
 
 def main(argv):
