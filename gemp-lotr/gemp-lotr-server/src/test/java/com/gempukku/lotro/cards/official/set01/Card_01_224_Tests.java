@@ -104,6 +104,22 @@ public class Card_01_224_Tests
 		);
 	}
 
+	// Such a Weight to Carry 7_2: strength +2 (printed).  "Maneuver: Add a burden to wear The One Ring until the
+	// regroup phase.  While wearing The One Ring, each time the Ring-bearer is about to take a wound, add a burden
+	// instead."
+	protected VirtualTableScenario GetSuchAWeightToCarryScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("rtim", "1_224");
+					put("lemenya", "1_232");   // Ulaire Lemenya, Lieutenant of Morgul: Nazgul, strength 9, not fierce
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				"7_2"
+		);
+	}
+
 	@Test
 	public void ReturntoItsMasterStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
@@ -516,6 +532,49 @@ public class Card_01_224_Tests
 
 		assertEquals(1, scn.GetWoundsOn(frodo));
 		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void SuchAWeightToCarryWornSinceTheManeuverPhaseAddsNoBurdenInThatSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetSuchAWeightToCarryScenario();
+
+		var frodo = scn.GetRingBearer();
+		var ring = scn.GetRing();
+
+		var rtim = scn.GetShadowCard("rtim");
+		var lemenya = scn.GetShadowCard("lemenya");
+		scn.MoveCardsToHand(rtim);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(lemenya);
+
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsUseCardAction(ring);
+		assertTrue(scn.RBWearingOneRing());
+		assertEquals(1, scn.GetBurdens());
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(frodo, lemenya);
+		scn.FreepsResolveSkirmish(frodo);
+		// 3 + 2 printed on the Ring, against 9: the wound for losing is a burden.
+		assertEquals(5, scn.GetStrength(frodo));
+		scn.PassSkirmishActions();
+		assertEquals(2, scn.GetBurdens());
+		assertEquals(0, scn.GetWoundsOn(frodo));
+
+		assertTrue(scn.ShadowPlayAvailable(rtim));
+		scn.ShadowPlayCard(rtim);
+		assertTrue(scn.IsCharAssignedAgainst(frodo, lemenya));
+
+		scn.FreepsResolveSkirmish(frodo);
+		// The Ring's printed +2 is no game text: he is still 5.
+		assertEquals(5, scn.GetStrength(frodo));
+		scn.PassSkirmishActions();
+
+		// A wound, and no burden.
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(2, scn.GetBurdens());
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
