@@ -296,6 +296,10 @@
 				trigger: {
 					type: startOfTurn
 				}
+				requires: {
+					type: CanSpot
+					filter: ally,allyHome(fellowship,3),wounded
+				}
 				effect: [
 					{
 						type: ChooseActiveCards
