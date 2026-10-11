@@ -99,6 +99,7 @@ public class Card_94_031_Tests
 		assertEquals(9, scn.GetCurrentSiteNumber());
 		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
 		assertFalse(scn.GameIsFinished());
+		assertFalse(scn.FreepsHasWon());
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
@@ -135,6 +136,9 @@ public class Card_94_031_Tests
 
 		assertEquals(9, scn.GetCurrentSiteNumber());
 		assertTrue(scn.GameIsFinished());
+		// The Free Peoples player has taken his fellowship through site 9: the game is his
+		assertTrue(scn.FreepsHasWon());
+		assertFalse(scn.ShadowHasWon());
 	}
 
 	@Test
@@ -168,6 +172,7 @@ public class Card_94_031_Tests
 		// The normal move twilight -- the site's cost of 9 plus 1 per companion (Frodo and Aragorn) -- plus the (4).
 		assertEquals(twilightBeforeMove + 9 + 2 + 4, scn.GetTwilight());
 		assertFalse(scn.GameIsFinished());
+		assertFalse(scn.FreepsHasWon());
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
@@ -188,11 +193,15 @@ public class Card_94_031_Tests
 		// At site 10 with its skirmish phases still to come, the game goes on
 		assertEquals(10, scn.GetCurrentSiteNumber());
 		assertFalse(scn.GameIsFinished());
+		assertFalse(scn.FreepsHasWon());
 
 		scn.SkipToPhase(Phase.REGROUP);
 
 		assertEquals(10, scn.GetCurrentSiteNumber());
 		assertTrue(scn.GameIsFinished());
+		// It is the owner of the modifier who has won, by surviving site 10
+		assertTrue(scn.FreepsHasWon());
+		assertFalse(scn.ShadowHasWon());
 	}
 
 	@Test
@@ -239,6 +248,9 @@ public class Card_94_031_Tests
 
 		assertEquals(9, scn.GetCurrentSiteNumber());
 		assertTrue(scn.GameIsFinished());
+		// Player 1, who holds no modifier, has won at site 9
+		assertTrue(scn.FreepsHasWon());
+		assertFalse(scn.ShadowHasWon());
 	}
 
 	@Test
@@ -268,6 +280,7 @@ public class Card_94_031_Tests
 		assertEquals(9, scn.GetCurrentSiteNumber());
 		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
 		assertFalse(scn.GameIsFinished());
+		assertFalse(scn.ShadowHasWon());
 
 		scn.PassCurrentPhaseActions();
 		int twilightBeforeMove = scn.GetTwilight();
@@ -285,10 +298,14 @@ public class Card_94_031_Tests
 		// The site's cost of 9 plus 1 for player 2's only companion (Frodo), plus the (4)
 		assertEquals(twilightBeforeMove + 9 + 1 + 4, scn.GetTwilight());
 		assertFalse(scn.GameIsFinished());
+		assertFalse(scn.ShadowHasWon());
 
 		scn.SkipToPhaseInverted(Phase.REGROUP);
 
 		assertEquals(10, scn.GetCurrentSiteNumber());
 		assertTrue(scn.GameIsFinished());
+		// Player 2, the owner, has won by surviving site 10
+		assertTrue(scn.ShadowHasWon());
+		assertFalse(scn.FreepsHasWon());
 	}
 }

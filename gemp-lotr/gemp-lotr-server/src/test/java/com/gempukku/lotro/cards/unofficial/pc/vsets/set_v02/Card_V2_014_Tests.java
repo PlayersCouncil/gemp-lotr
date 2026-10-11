@@ -47,6 +47,12 @@ public class Card_V2_014_Tests
 					// comes to be valiant: none is in print.  His other text answers his being played.
 					put("erkenbrand", "102_47");
 					put("grimir", "1_17");       // Grimir, Dwarven Elder: an ally, strength 3, not valiant
+					// Guma, Plains Farmer: a [rohan] Man ally, strength 4, home 4T; a fellowship ability only.
+					put("guma", "4_277");
+					// Northern Signal-fire, Flame of Calenhad: "Maneuver: Hinder this beacon and exert an unbound
+					// Man. Until the regroup phase, each of your other Men gain each of the unloaded keywords
+					// (except race) on that Man."  The one way a Man ally comes to be valiant: none is in print.
+					put("flame", "103_86");
 					// Radagast, The Brown: a [gandalf] Wizard who is not Gandalf.  The move limit is +1.
 					put("radagast", "9_26");
 
@@ -171,6 +177,56 @@ public class Card_V2_014_Tests
 		assertEquals(7, scn.GetStrength(gandalf));
 		assertEquals(4, scn.GetStrength(frodo));
 		assertEquals(13, scn.GetStrength(troop));
+
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Test
+	public void AnAllyWhoIsValiantIsNotMadeStronger() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var remember = scn.GetFreepsCard("remember");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var guard = scn.GetFreepsCard("guard1");
+		var guma = scn.GetFreepsCard("guma");
+		var flame = scn.GetFreepsCard("flame");
+		scn.MoveCompanionsToTable(gandalf, guard);
+		scn.MoveAlliesToTable(guma);
+		scn.MoveCardsToSupportArea(flame);
+		scn.MoveCardsToHand(remember);
+
+		var troop = scn.GetShadowCard("troop");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		// No ally is valiant in print.  The Flame of Calenhad makes one: the Household Guard, the only unbound
+		// Man, exerts with nobody asked, and until the regroup phase the player's other Men have his keyword.
+		// Guma is the only other Man here.
+		assertTrue(scn.HasKeyword(guard, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(guma, Keyword.VALIANT));
+		scn.FreepsUseCardAction(flame);
+		assertEquals(1, scn.GetWoundsOn(guard));
+		assertTrue(scn.HasKeyword(guma, Keyword.VALIANT));
+		assertFalse(scn.HasKeyword(gandalf, Keyword.VALIANT));
+		scn.ShadowPass();
+
+		assertEquals(6, scn.GetStrength(guard));
+		assertEquals(4, scn.GetStrength(guma));
+		assertEquals(7, scn.GetStrength(gandalf));
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+		assertTrue(scn.FreepsPlayAvailable(remember));
+
+		scn.FreepsPlayCard(remember);
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+		assertInZone(Zone.DISCARD, remember);
+		// The valiant companion is +1 (Gandalf is unbound and not valiant, so it is not +2).
+		assertEquals(7, scn.GetStrength(guard));
+		// "Each valiant companion": the ally is valiant still, and no stronger.
+		assertTrue(scn.HasKeyword(guma, Keyword.VALIANT));
+		assertEquals(4, scn.GetStrength(guma));
+		assertEquals(7, scn.GetStrength(gandalf));
 
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}

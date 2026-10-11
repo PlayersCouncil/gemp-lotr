@@ -125,7 +125,8 @@ public class Card_03_108_ErrataTests
 		scn.MoveMinionsToTable(troop, troop2, taskmaster, troll);
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		// A skirmish action: not in the maneuver phase.
+		// A skirmish action: not in the maneuver phase, where the Free Peoples player is asked for actions.
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 		assertFalse(scn.FreepsActionAvailable(pan));
 
 		scn.SkipToAssignments();

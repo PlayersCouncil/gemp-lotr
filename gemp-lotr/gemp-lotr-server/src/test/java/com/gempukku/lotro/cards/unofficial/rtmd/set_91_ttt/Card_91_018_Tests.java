@@ -95,6 +95,9 @@ public class Card_91_018_Tests
 					// Freeps wins, chooses seat
 					scn.FreepsChoose("Go first");
 
+					// Each bid is that player's burdens
+					assertEquals(6, scn.FreepsGetBurdens());
+					assertEquals(0, scn.ShadowGetBurdens());
 					assertTrue(scn.FreepsDecisionAvailable("mulligan"));
 				}
 		);
@@ -117,6 +120,9 @@ public class Card_91_018_Tests
 					// Shadow wins, chooses seat
 					scn.ShadowChoose("Go first");
 
+					// Each bid is that player's burdens
+					assertEquals(0, scn.FreepsGetBurdens());
+					assertEquals(6, scn.ShadowGetBurdens());
 					assertTrue(scn.ShadowDecisionAvailable("mulligan"));
 				}
 		);
@@ -139,6 +145,8 @@ public class Card_91_018_Tests
 
 					scn.FreepsChoose("Go first");
 
+					assertEquals(1, scn.FreepsGetBurdens());
+					assertEquals(0, scn.ShadowGetBurdens());
 					assertTrue(scn.FreepsDecisionAvailable("mulligan"));
 				}
 		);
@@ -148,24 +156,21 @@ public class Card_91_018_Tests
 	public void TheOwnerMayBidMoreThan6() throws DecisionResultInvalidException, CardNotFoundException {
 		// "At least": 6 is a floor under the bid and not the bid itself.
 
-		var scn = GetFreepsScenario(
-				s -> {
-					assertEquals(6, s.FreepsGetChoiceMin());
-					s.FreepsChoose("7");
+		GetFreepsScenario(
+				scn -> {
+					assertEquals(6, scn.FreepsGetChoiceMin());
+					scn.FreepsChoose("7");
 
-					s.ShadowChoose("0");
+					scn.ShadowChoose("0");
 
 					// The higher bidder is the one asked where he sits
-					s.FreepsChoose("Go first");
+					scn.FreepsChoose("Go first");
 
-					assertTrue(s.FreepsDecisionAvailable("mulligan"));
+					// The 7 burdens bid are the owner's; a bid cut down to 6 would read 6
+					assertEquals(7, scn.FreepsGetBurdens());
+					assertEquals(0, scn.ShadowGetBurdens());
+					assertTrue(scn.FreepsDecisionAvailable("mulligan"));
 				}
 		);
-
-		scn.StartGame();
-
-		// The 7 burdens bid, less the 1 that StartGame() takes off every table; a bid cut down to 6 would read 5
-		assertEquals(6, scn.GetBurdens());
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

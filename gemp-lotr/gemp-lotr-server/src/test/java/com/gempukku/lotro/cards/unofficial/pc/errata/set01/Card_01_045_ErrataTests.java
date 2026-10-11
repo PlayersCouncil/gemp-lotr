@@ -24,7 +24,7 @@ public class Card_01_045_ErrataTests
 					put("orophin2", "1_56");    // a second copy of the unique Orophin
 					put("rumil", "1_57");       // Rumil, Elven Protector: [elven] Elf ally, home site 6, cost 2, vitality 3
 					put("silinde", "1_60");     // Silinde, Elf of Mirkwood: [elven] Elf ally, home site 3, vitality 2
-					put("volunteers", "32_17"); // Esgaroth Volunteers: Man ally, home site 6 of the Hobbit block, vitality 4
+					put("aldor", "4_262");      // Aldor, Soldier of Edoras: [rohan] Man ally, homes 3 and 6 of the Tower block, vitality 2; an archery ability only
 					put("elrond", "1_40");      // Elrond, Lord of Rivendell: [elven] Elf ally, cost 4; to play, spot Gandalf or an Elf
 					put("arwen", "1_30");       // Arwen, Daughter of Elrond: [elven] Elf companion, cost 2
 					put("lorienelf", "1_53");   // Lorien Elf: [elven] Elf companion, cost 1; to play, spot an Elf
@@ -102,9 +102,9 @@ public class Card_01_045_ErrataTests
 		var orophin = scn.GetFreepsCard("orophin");
 		var rumil = scn.GetFreepsCard("rumil");
 		var silinde = scn.GetFreepsCard("silinde");
-		var volunteers = scn.GetFreepsCard("volunteers");
+		var aldor = scn.GetFreepsCard("aldor");
 		var arwen = scn.GetFreepsCard("arwen");
-		scn.MoveAlliesToTable(galadriel, celeborn, orophin, rumil, silinde, volunteers);
+		scn.MoveAlliesToTable(galadriel, celeborn, orophin, rumil, silinde, aldor);
 		scn.MoveCompanionsToTable(arwen);
 
 		// Four wounded allies whose home is site 6, Galadriel herself among them.
@@ -112,9 +112,9 @@ public class Card_01_045_ErrataTests
 		scn.AddWoundsToChar(celeborn, 1);
 		scn.AddWoundsToChar(orophin, 2);
 		scn.AddWoundsToChar(rumil, 1);
-		// An ally whose home is site 3, an ally whose home is site 6 of the Hobbit block, and a companion.
+		// An ally whose home is site 3, an ally whose home is site 6 of the Tower block, and a companion.
 		scn.AddWoundsToChar(silinde, 1);
-		scn.AddWoundsToChar(volunteers, 1);
+		scn.AddWoundsToChar(aldor, 1);
 		scn.AddWoundsToChar(arwen, 1);
 
 		// The first turn starts here.
@@ -123,7 +123,7 @@ public class Card_01_045_ErrataTests
 		// Start-of-turn actions come before the fellowship phase: the choice is asked before that phase begins.
 		assertEquals(Phase.BETWEEN_TURNS, scn.GetCurrentPhase());
 		assertTrue(scn.FreepsHasCardChoiceAvailable(galadriel, celeborn, orophin, rumil));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(silinde, volunteers, arwen));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(silinde, aldor, arwen));
 		assertEquals(0, scn.FreepsGetChoiceMin());
 		assertEquals(3, scn.FreepsGetChoiceMax());
 		assertEquals(2, scn.GetWoundsOn(galadriel));
@@ -139,7 +139,7 @@ public class Card_01_045_ErrataTests
 		// The fourth, not chosen
 		assertEquals(1, scn.GetWoundsOn(celeborn));
 		assertEquals(1, scn.GetWoundsOn(silinde));
-		assertEquals(1, scn.GetWoundsOn(volunteers));
+		assertEquals(1, scn.GetWoundsOn(aldor));
 		assertEquals(1, scn.GetWoundsOn(arwen));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

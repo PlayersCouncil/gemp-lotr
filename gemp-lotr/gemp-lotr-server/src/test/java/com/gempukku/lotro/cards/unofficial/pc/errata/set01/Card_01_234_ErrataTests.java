@@ -155,7 +155,9 @@ public class Card_01_234_ErrataTests
 		assertEquals(1, scn.GetTwilight()); // 6 + 2 roaming
 		assertInDiscard(gorbag, twk, rit, khamul, runner, stronghold, freepsEnquea);
 		assertInHand(otsea);
-		// Five companions are one over four: no second play, though Gorbag could still be played.
+		// Five companions are one over four: one play. The pool is 1 here and Gorbag would cost 5 + 2 roaming, so
+		// this board cannot tell one play from two: AcceptingTheTriggerGoesStraightToTheChoiceOfMinion, with (30)
+		// in the pool and a second minion left in the discard pile, is the test that shows the cap.
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 

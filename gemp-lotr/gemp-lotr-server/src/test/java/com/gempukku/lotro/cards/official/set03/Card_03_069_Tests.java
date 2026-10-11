@@ -19,6 +19,10 @@ public class Card_03_069_Tests
 				new HashMap<>()
 				{{
 					put("saruman", "3_69");
+					// Saruman's Staff, Wizard's Device: an [isengard] artifact that plays on Saruman (strength +2, fierce,
+					// damage +1).  "Maneuver: Make the first sentence of Saruman's game text not apply until the regroup
+					// phase."
+					put("staff", "4_174");
 					put("savage", "1_151");     // Uruk Savage: [isengard] Uruk-hai, strength 5, vitality 3; Damage +1 is its whole text
 					// Uruk Shaman: [isengard] Uruk-hai, strength 8, vitality 2, damage +1.  "Maneuver: Remove (2)
 					// to heal an Uruk-hai."
@@ -450,5 +454,56 @@ public class Card_03_069_Tests
 		assertFalse(scn.FreepsDecisionAvailable("Would you like to exert"));
 		assertTrue(scn.IsCharAssignedAgainst(merry, raiders));
 		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
+
+	@Test
+	public void WithHisFirstSentenceMadeNotToApplyBySarumansStaffHeTakesAnArcheryWoundAndIsAssignedToASkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var legolas = scn.GetFreepsCard("legolas");
+		var saruman = scn.GetShadowCard("saruman");
+		var troop = scn.GetShadowCard("troop");
+		var staff = scn.GetShadowCard("staff");
+		scn.MoveCompanionsToTable(aragorn, legolas);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(saruman, troop);
+		scn.AttachCardsTo(saruman, staff);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		// Until the Staff's ability is used the sentence is in force.
+		assertFalse(scn.FreepsCanAssign(saruman));
+		assertFalse(scn.ShadowCanAssign(saruman));
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(staff);
+		assertTrue(scn.FreepsCanAssign(saruman));
+		assertTrue(scn.ShadowCanAssign(saruman));
+
+		// "May not take wounds during the archery phase": Legolas is the fellowship's one archer, and the Shadow
+		// player may now place that wound on Saruman.
+		scn.SkipToArcheryWounds();
+		assertTrue(scn.ShadowHasCardChoiceAvailable(saruman, troop));
+		assertEquals(0, scn.GetWoundsOn(saruman));
+		scn.ShadowChooseCard(saruman);
+		assertEquals(1, scn.GetWoundsOn(saruman));
+		assertEquals(0, scn.GetWoundsOn(troop));
+
+		// The rest of his text still applies: his own assignment ability is on offer.
+		scn.FreepsPass();
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+		assertTrue(scn.ShadowActionAvailable(saruman));
+		scn.ShadowPass();
+
+		// "And may not be assigned to a skirmish": the Free Peoples player is offered him beside the Troop, and
+		// takes the Troop; the Shadow player then assigns Saruman.
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(saruman));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(troop));
+		scn.FreepsAssignToMinions(aragorn, troop);
+		assertTrue(scn.ShadowHasAssignmentTargetAvailable(saruman));
+		scn.ShadowAssignToMinions(aragorn, saruman);
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, troop));
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, saruman));
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 	}
 }

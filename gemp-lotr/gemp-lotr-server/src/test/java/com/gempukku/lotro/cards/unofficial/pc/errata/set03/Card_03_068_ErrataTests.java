@@ -20,6 +20,10 @@ public class Card_03_068_ErrataTests
 				{{
 					put("saruman", "53_68");
 
+					// Saruman's Staff, Wizard's Device: an [isengard] artifact that plays on Saruman (strength +2, fierce,
+					// damage +1).  "Maneuver: Make the first sentence of Saruman's game text not apply until the regroup
+					// phase."
+					put("staff", "4_174");
 					put("raiders", "4_207");    // Uruk-hai Raiding Party: [isengard] Uruk-hai, strength 9, vitality 3, damage +1
 					put("sentry", "10_84");     // Cirith Ungol Sentry: [sauron] Uruk-hai, strength 8, vitality 2, damage +1
 					put("forger", "3_56");      // Isengard Forger: [isengard] Orc, strength 6, vitality 2; a Shadow ability only
@@ -370,5 +374,57 @@ public class Card_03_068_ErrataTests
 		assertEquals(1, scn.GetWoundsOn(forger));
 		// 1 exertion + 1 wound from Pursuit Just Behind: outside the archery phase he can be wounded.
 		assertEquals(2, scn.GetWoundsOn(saruman));
+	}
+
+	@Test
+	public void WithHisFirstSentenceMadeNotToApplyBySarumansStaffHeTakesAnArcheryWoundAndIsAssignedToASkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var legolas = scn.GetFreepsCard("legolas");
+		var saruman = scn.GetShadowCard("saruman");
+		// Isengard Forger: an Orc, so that nothing here is an Uruk-hai whose wound Saruman could answer.
+		var forger = scn.GetShadowCard("forger");
+		var staff = scn.GetShadowCard("staff");
+		scn.MoveCompanionsToTable(aragorn, legolas);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(saruman, forger);
+		scn.AttachCardsTo(saruman, staff);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		// Until the Staff's ability is used the sentence is in force.
+		assertFalse(scn.FreepsCanAssign(saruman));
+		assertFalse(scn.ShadowCanAssign(saruman));
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(staff);
+		assertTrue(scn.FreepsCanAssign(saruman));
+		assertTrue(scn.ShadowCanAssign(saruman));
+
+		// The rest of his text still applies: his own maneuver ability is on offer.
+		scn.FreepsPass();
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+		assertTrue(scn.ShadowActionAvailable(saruman));
+
+		// "May not take wounds during the archery phase": Legolas is the fellowship's one archer, and the Shadow
+		// player may now place that wound on Saruman.
+		scn.SkipToArcheryWounds();
+		assertTrue(scn.ShadowHasCardChoiceAvailable(saruman, forger));
+		assertEquals(0, scn.GetWoundsOn(saruman));
+		scn.ShadowChooseCard(saruman);
+		assertEquals(1, scn.GetWoundsOn(saruman));
+		assertEquals(0, scn.GetWoundsOn(forger));
+
+		// "And may not be assigned to a skirmish": the Free Peoples player is offered him beside the Forger, and
+		// takes the Forger; the Shadow player then assigns Saruman.
+		scn.PassAssignmentActions();
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(saruman));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(forger));
+		scn.FreepsAssignToMinions(aragorn, forger);
+		assertTrue(scn.ShadowHasAssignmentTargetAvailable(saruman));
+		scn.ShadowAssignToMinions(aragorn, saruman);
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, forger));
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, saruman));
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 	}
 }

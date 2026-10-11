@@ -22,6 +22,10 @@ public class Card_V2_029_Tests
 				{{
 					put("saruman", "102_29");
 
+					// Saruman's Staff, Wizard's Device: an [isengard] artifact that plays on Saruman (strength +2, fierce,
+					// damage +1).  "Maneuver: Make the first sentence of Saruman's game text not apply until the regroup
+					// phase."
+					put("staff", "4_174");
 					// Isengard Worker, Servant and Retainer: [isengard] Orcs of strength 5, 7 and 8, vitality 3.
 					// Each has the same regroup ability, which is only ever used on purpose.
 					put("worker", "3_62");
@@ -474,5 +478,41 @@ public class Card_V2_029_Tests
 		assertEquals(1, scn.GetWoundsOn(saruman));
 		assertEquals(0, scn.GetWoundsOn(worker));
 		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
+
+	@Test
+	public void WithHisFirstSentenceMadeNotToApplyBySarumansStaffHeIsAssignedToASkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var saruman = scn.GetShadowCard("saruman");
+		var troop = scn.GetShadowCard("troop");
+		var staff = scn.GetShadowCard("staff");
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(saruman, troop);
+		scn.AttachCardsTo(saruman, staff);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		// Until the Staff's ability is used the sentence is in force.
+		assertFalse(scn.FreepsCanAssign(saruman));
+		assertFalse(scn.ShadowCanAssign(saruman));
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(staff);
+		assertTrue(scn.FreepsCanAssign(saruman));
+		assertTrue(scn.ShadowCanAssign(saruman));
+
+		// The Free Peoples player is offered him beside the Troop, and takes the Troop; the Shadow player then
+		// assigns Saruman.
+		scn.SkipToAssignments();
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(saruman));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(troop));
+		scn.FreepsAssignToMinions(aragorn, troop);
+		assertTrue(scn.ShadowHasAssignmentTargetAvailable(saruman));
+		scn.ShadowAssignToMinions(aragorn, saruman);
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, troop));
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, saruman));
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 	}
 }

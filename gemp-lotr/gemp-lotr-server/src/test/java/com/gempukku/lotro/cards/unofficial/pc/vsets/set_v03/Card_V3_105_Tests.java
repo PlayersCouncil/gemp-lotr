@@ -38,6 +38,8 @@ public class Card_V3_105_Tests
 					put("sword3", "1_299");
 					put("ranger", "1_112");       // Ranger's Sword: hand weapon for Aragorn, strength +2, damage +1
 					put("battlebow", "11_89");    // Long Battle Bow: a ranged weapon for a [men] minion, strength +1; bearer is an archer
+					// Henchman's Dagger: a hand weapon for a [men] minion, cost 0, strength +1; it may be borne beside 1 other hand weapon
+					put("dagger", "18_69");
 
 					// Ted Sandyman, Chief's Men's Ally: a [men] minion who is a Hobbit, strength 3, vitality 4, site 2; a maneuver
 					// ability that needs a site he controls and a regroup ability used only on purpose
@@ -379,6 +381,50 @@ public class Card_V3_105_Tests
 
 		// X: Pippin 4 + the Troop 3. The text says "Hobbit": it names the race and no culture.
 		assertEquals(5 + 7, scn.GetStrength(trollslayer));
+		assertInZone(Zone.DISCARD, driven);
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
+	@Test
+	public void TheOpponentsHobbitBearingAHandWeaponIsAHobbitTheEventMayStrengthen() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var driven = scn.GetFreepsCard("driven");
+		var sam = scn.GetFreepsCard("sam");
+		var sword = scn.GetFreepsCard("sword");
+		// Ted Sandyman is a Hobbit and a [men] minion, and the Dagger is the [men] minions' hand weapon.
+		var ted = scn.GetShadowCard("ted");
+		var dagger = scn.GetShadowCard("dagger");
+		scn.MoveCompanionsToTable(sam);
+		scn.AttachCardsTo(sam, sword);
+		scn.MoveCardsToHand(driven);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(ted);
+		scn.AttachCardsTo(ted, dagger);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(sam, ted);
+		scn.FreepsResolveSkirmish(sam);
+
+		assertTrue(scn.IsRace(ted, Race.HOBBIT));
+		assertAttachedTo(dagger, ted);
+		// 3 + 2 for the Hobbit Sword
+		assertEquals(5, scn.GetStrength(sam));
+		// 3 + 1 for the Dagger
+		assertEquals(4, scn.GetStrength(ted));
+		assertTrue(scn.FreepsPlayAvailable(driven));
+
+		// "A skirmishing Hobbit bearing a hand weapon": the text names a race and no side, and two such Hobbits are
+		// in this skirmish. One of them must be chosen.
+		scn.FreepsPlayCard(driven);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(sam, ted));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		assertEquals(1, scn.FreepsGetChoiceMax());
+		scn.FreepsChooseCard(ted);
+
+		// X: Sam 4 + Ted Sandyman 4. The Hobbit chosen is stronger, and the other is not.
+		assertEquals(4 + 8, scn.GetStrength(ted));
+		assertEquals(5, scn.GetStrength(sam));
 		assertInZone(Zone.DISCARD, driven);
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}

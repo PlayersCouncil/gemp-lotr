@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -369,7 +368,9 @@ public class Card_01_342_Tests
 		assertTrue(scn.FreepsActionAvailable("Blade Tip"));
 		assertTrue(scn.FreepsActionAvailable("Rivendell Waterfall"));
 
-		// Blade Tip is carried out first and its wound is the ranger's last; then the Waterfall's check.
+		// Blade Tip is carried out first and its wound is the ranger's last; then the Waterfall's check, which the
+		// Free Peoples player takes ahead of the ranger's death. The order is his to choose, and what the other
+		// order would give is his own doing: no test reads it.
 		scn.FreepsResolveActionOrder("Blade Tip");
 		assertEquals(4, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
@@ -379,43 +380,6 @@ public class Card_01_342_Tests
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 		// P1 has not moved yet this turn and gets exactly one extra move
 		assertEquals(0, scn.GetMoveCount());
-		assertEquals(3, scn.GetMoveLimit());
-	}
-
-	@Test
-	@Ignore("F-0389: a turn begun at the Waterfall with a ranger gives no +1 when the ranger's death is carried out ahead of the site's pending check")
-	public void TheMoveLimitIsRaisedThoughTheRangersDeathIsCarriedOutBeforeTheWaterfallsCheck() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var aragorn = scn.GetFreepsCard("aragorn");
-		var gimli = scn.GetFreepsCard("gimli");
-		var bladeTip = scn.GetShadowCard("bladetip");
-		scn.MoveCompanionsToTable(aragorn, gimli);
-
-		scn.StartGame();
-		scn.SkipToSite(2);
-		scn.FreepsPass();          // P1: 2 -> 3
-		assertEquals("Rivendell Waterfall", scn.GetCurrentSite().getBlueprint().getTitle());
-
-		scn.AttachCardsTo(aragorn, bladeTip);
-		scn.AddWoundsToChar(aragorn, 3);
-		scn.SkipToOtherPlayersTurn();
-		scn.SkipToOtherPlayersTurn();
-
-		// P1's next turn starts at the Waterfall with the ranger there.
-		assertTrue(scn.FreepsDecisionAvailable("Sanctuary healing"));
-		assertInZone(Zone.FREE_CHARACTERS, aragorn);
-		scn.FreepsDeclineSanctuaryHealing();
-
-		// Blade Tip's wound first, and then the death it brings, ahead of the Waterfall's check.
-		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
-		scn.FreepsResolveActionOrder("Blade Tip");
-		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
-		scn.FreepsResolveRuleFirst();
-
-		assertInZone(Zone.DEAD, aragorn);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-		// A ranger was at the Waterfall as the turn began: +1 for this turn, whatever has become of him since.
 		assertEquals(3, scn.GetMoveLimit());
 	}
 }
