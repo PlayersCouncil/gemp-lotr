@@ -834,6 +834,9 @@ second use, and a choice that cannot be carried out in full then disappears (CR 
 deck's size where a discard or a draw must be possible. Both players' decks hold every alias, so an alias added
 to a shared `Get...Scenario()` moves every hand and deck count the file's other tests read by one (60_52: 15 and
 7 became 16 and 8); where the file reads such counts, give a filler alias the new card's id instead.
+A test that EMPTIES a deck by moving the aliases left in it to the discard pile one by one is caught the same
+way: the new alias stays in the "empty" deck (Card_09_038_Tests gained two cards for one test and two other
+tests' lists had to name them). Read `GetFreepsDeckCount()` as 0 before anything rests on the empty deck.
 The Shadow player's deck runs short too: the turns `SkipToSite` plays draw a small one into his hand (the
 entry on `SkipToSite`, above), so a board taken from an erratum's file whose text never read that deck can find nothing in it
 (Card_01_023_Tests puts four cards back before "discard 3 cards from the top of his or her draw deck").
@@ -1339,7 +1342,10 @@ asked and it goes on; Card_04_001_Tests reads maneuver and archery wounds with t
 Resistance Becomes Unbearable 2_79 (Maneuver: a twilight Nazgûl exerts to exert the Ring-bearer, and it goes on if
 he is then exhausted) and Narchost 7_362 (Shadow, 8 burdens spotted). `RBWearingOneRing()` reads it; every one
 comes off at the regroup phase (1_1 put on IN a regroup phase: at the end of that phase).
-The Ring of Rings 11_1 (given as the string) answers a wound in any phase too, for 1 burden. A companion who
+The Ring of Rings 11_1 (given as the string) answers a wound in any phase too, for 1 burden. Two Rings, each
+given as the string, are put on by a Maneuver action with a cost: Such a Weight to Carry 7_2 for a burden, and
+The Binding Ring 9_1 for an exertion of its bearer (9_1 prints strength +1 and vitality +1, so Frodo, Son of
+Drogo reads 4 and 5 and a minion of 8 overwhelms him: Card_01_224_Tests gives him Hobbit Sword 1_299). A companion who
 becomes the Ring-bearer is not wearing the Ring though the one who died was: to read that, keep another skirmish
 waiting, since the regroup phase that follows would have taken any Ring off (mechanics/WearingTheOneRingTests,
 which holds what the rules say of a Ring worn; what a Ring does while worn is its own file's).
