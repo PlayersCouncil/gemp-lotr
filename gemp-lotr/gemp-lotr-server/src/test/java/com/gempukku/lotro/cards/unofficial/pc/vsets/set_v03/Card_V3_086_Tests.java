@@ -429,7 +429,7 @@ public class Card_V3_086_Tests
 		// The Red Arrow: exert a [gondor] Man to play a [rohan] Man, here the second Rider of Rohan from hand.
 		scn.FreepsUseCardAction(redarrow);
 		scn.FreepsChooseCard(boromir);
-		scn.FreepsChooseNo();
+		// No possession is in hand, so "You may exert that [rohan] Man to play a possession" is not asked (F-0472).
 
 		assertInZone(Zone.FREE_CHARACTERS, rider2);
 		assertTrue(scn.IsRace(rider2, Race.MAN));

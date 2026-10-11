@@ -256,8 +256,7 @@ public class Card_V2_051_Tests
 		// A [rohan] artifact: The Red Arrow has Aragorn exert to play a [rohan] Man, and is then discarded.
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		scn.FreepsUseCardAction(arrow);
-		// "You may exert that [rohan] Man to play a possession on him or her": no.
-		scn.FreepsChooseNo();
+		// "You may exert that [rohan] Man to play a possession on him or her": no possession is in hand, so nothing is asked (F-0472).
 		assertInZone(Zone.FREE_CHARACTERS, rguard);
 		assertInZone(Zone.DISCARD, arrow);
 		assertEquals(2, scn.GetCultureTokensOn(wrath));
