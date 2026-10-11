@@ -438,7 +438,9 @@ beside "Resolve skirmish damage" is the same decision, and so is a Free Peoples 
 time X wins a skirmish", Boromir 59_31: left unanswered, the only sign is that the beaten minion is still in play
 after `PassSkirmishActions()`; a companion's own required "each time X loses a skirmish" raises it too, Isildur
 18_54: until `FreepsResolveRuleFirst()` his wound for losing reads 0 after `PassCurrentPhaseActions()`; it is not
-only for deaths). The rule's entry may have no action
+only for deaths). Two copies of a card with such a required trigger make it one decision of three entries, the
+rule and each copy's trigger; after `FreepsResolveRuleFirst()` both triggers are carried out and no second
+ordering is asked (Sudden Fury 12_132, two copies and a [shire] companion who loses). The rule's entry may have no action
 text at all, and it is not always listed first (King of the Dead 103_27 killed: `["Required trigger from King of
 the Dead…", null]`; Ferocious Haradrim 11_80 answering a death: `[null, "Required trigger from Ferocious
 Haradrim"]`). `FreepsResolveRuleFirst()` resolves the rule, the entry that belongs to no card, wherever it is

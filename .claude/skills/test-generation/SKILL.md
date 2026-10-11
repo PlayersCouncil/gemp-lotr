@@ -361,6 +361,8 @@ Which checks a clause lists follows from its words, and the analyst is expected 
   your [isengard] Man"), the only one of that kind exhausted with others able to exert beside him. A board with
   nobody of the kind shows the filter (`F`) and cannot tell an exertion from a wound (92_2). An "add (or remove, or reinforce) a [culture] token" cost: Redhorn Pass 13_194 ("Culture tokens cannot be
   added, removed, or reinforced") is its `C-` board (Scouring of the Shire 68_112; gemp-testing's `helpers.md`).
+  A cost of REMOVING a token "from here" has a nearer one, which is laid in its place: no token on the card while
+  a second copy holds one, which shows "from here" as well (Sudden Fury 12_132).
   An "add a burden" cost: no printed card stops a burden being added, but a hindered Ring-bearer does
   (CR 5.0 "hinder"), so its `C-` board is `scn.HinderCard(<the Ring-bearer>)` (103_115). Where the card must
   itself be the Ring-bearer to pay (Sméagol 59_30's regroup ability), hindering him shuts its text off and no

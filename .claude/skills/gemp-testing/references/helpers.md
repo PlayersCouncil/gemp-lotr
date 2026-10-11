@@ -750,7 +750,7 @@ no card.
 ## Assigning, playing, drawing, revealing and stacking by a printed card
 
 **A minion assigned by a card and not by a player's assigning.** Éowyn, Northwoman 17_96; Slow-kindled Courage
-7_328; Shadowy Mount 12_171. Éowyn ([rohan] Man, strength 6, vitality 3): "Assignment: Exert Éowyn and assign a
+7_328; Shadowy Mount 12_171; The End Comes 1_169. Éowyn ([rohan] Man, strength 6, vitality 3): "Assignment: Exert Éowyn and assign a
 minion to the Ring-bearer", the Free Peoples player's own action; the minion loses its keywords until the regroup
 phase. Slow-kindled Courage ([shire] condition on Merry or Pippin: cheat it on) gives each minion "Assignment:
 Assign this minion to bearer", which the SHADOW player uses after `FreepsPass()` (`ShadowUseCardAction(minion)`).
@@ -758,7 +758,12 @@ Shadowy Mount ([wraith] mount on a Nazgûl): the Shadow player makes the FREE PE
 unbound companion bearing a [wraith] condition; Blade Tip 1_209 cheated onto the companion is that condition and
 does nothing before its bearer's own next fellowship phase (on the other player's turn neither card is active),
 where a required trigger wounds him: after the sanctuary-healing decision at a site 3 or 6, and in one "Required
-responses" ordering with any other required action of that moment (Card_01_342_Tests).
+responses" ordering with any other required action of that moment (Card_01_342_Tests). Shadowy Mount goes on a
+Nazgûl only: for a minion of any other race the Shadow card that has the FREE PEOPLES player assign is The End
+Comes ([moria] Assignment event, cost 0: "Spot 5 [moria] minions to make the Free Peoples player assign the
+Ring-bearer to a skirmish"), played after `FreepsPass()`; he picks ANY minion for the Ring-bearer
+(`FreepsChooseCard`), and Goblin Patrol Troop 1_177 with four Goblin Runners 1_178 are the five
+(Card_12_098_Tests).
 
 **A minion's own assignment action, with no cost.** Reckless Pride 7_13; Ancient Blade 7_15; Unexpected Visitor
 7_126. Free Peoples conditions on a [dwarven], an [elven], a [gondor] companion: 'Each minion gains this ability:
