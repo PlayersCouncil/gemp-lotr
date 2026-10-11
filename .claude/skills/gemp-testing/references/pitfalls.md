@@ -1412,10 +1412,16 @@ of the fellowship phase is no choice and is made whoever is hindered
 **A Shadows-block site path.** Pass `VirtualTableScenario.Shadows` as the format and a site map of your own;
 `StartGame(scn.GetFreepsSite("site1"))`; after the fellowship phase is passed the Shadow player lays the next
 site with `ShadowChooseCardBPFromSelection(scn.GetShadowSite("site2"))`. `Card_13_164_Tests` is a worked example.
-The turn-skippers cannot walk such a path, but it can be walked by hand to any site: each move is `FreepsPass()`
+The turn-skippers (`SkipToSite`, `SkipCurrentSite`) cannot walk such a path, but it can be walked by hand to any site: each move is `FreepsPass()`
 (a second move in the turn: `SkipToMovementDecision()`, `FreepsChooseToMove()`) and then
 `ShadowChooseCardBPFromSelection(...)`, with `SkipToOtherPlayersTurn()` twice between the first player's turns;
-site 6 takes three of his turns (`Card_V0_001_ErrataTests`). `MoveCardToAdventurePath` works on this path too: the
+site 6 takes three of his turns (`Card_V0_001_ErrataTests`). `SkipToOtherPlayersTurn()` goes through wherever
+the turn's own move was made by hand first or the next site already lies (the second player follows along the
+sites the first player's moves laid), so the start of the first player's SECOND fellowship phase on a given site
+is `StartGame(another site)`, `FreepsPass()`, the Shadow player lays the site, the board is laid there, and
+`SkipToOtherPlayersTurn()` twice: the way to a site's "at the start of your fellowship phase" text that reads what
+no first turn has, a dead pile (`Card_11_255_Tests`, whose last test reads five turn starts, both seats).
+`MoveCardToAdventurePath` works on this path too: the
 card becomes the site ahead, the next move goes to it and the Shadow player is not asked to lay one (the same
 file puts the first player's own copy of a site at site 6 so). For a high site number or a later region (sites 4-6 are region 2,
 7-9 region 3), where the card's text names no block's sites, it is shorter to put the Shadows-block site on a Fellowship-block

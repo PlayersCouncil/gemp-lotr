@@ -380,6 +380,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "<Do> N ... If you do, ..." wants all N (Q-0169, F-0330)
 - "Frodo is corrupted" on a card that names Frodo (F-0356, Held 6_109) [Q-0213, Q-0103]
 - "While a card titled X is removed from the game" names no owner (F-0375, Gollum, Her Sneak 13_50)
+- "Loses <keyword> and cannot gain <keyword>" until a time is one `RemoveKeyword` with that `until` (Q-0011, Harrowdale 11_243)
 
 ## What is offered and what is asked
 
