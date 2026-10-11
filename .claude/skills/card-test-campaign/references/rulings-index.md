@@ -382,7 +382,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A parenthesis with its own price (Q-0089)
 - One thing left to do is done without a second question (Q-0090) [Q-0121, F-0387]
 - A yes/no before a choice whose minimum is 0 (Q-0143, F-0277) [F-0278, F-0285, Q-0102, F-0385]
-- A number that can only be one number is not asked for (F-0147)
+- A number that can only be one number is not asked for (F-0147) [F-0392]
 - "You may make <the other player> do X" (Q-0106)
 - Known shapes from the Dwarven errata (F-0181, F-0194, F-0182) [Q-0034, F-0295, F-0304, F-0323, F-0324, F-0303, F-0314, F-0349, F-0347, F-0348]
 - A "you may" inside an event's or ability's text is not asked when yes would do nothing (F-0379, Halls of My Home 1_18) [Q-0034, F-0057, F-0117]
@@ -428,7 +428,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - What bounds an X: the action's costs, never what its effect can use (Q-0069, Q-0087, Q-0094, F-0067, F-0111). The rulings on X look two ways and are ... [Q-0062, Q-0015, Q-0034, Q-0191]
 - "Discard a <kind> from hand to take a <kind> into hand from the discard pile" does not take back the card just discarded (Q-0192: A) [Q-0034]
 - The twilight cost of a card in play (F-0109, built)
-- LeastDiscountToPlay bounds X in "remove X ... to play ... from your discard pile" (F-0067)
+- LeastDiscountToPlay bounds X in "remove X ... to play ... from your discard pile" (F-0067) [F-0392]
 - Costs, and effects, in the order printed (Q-0080) [F-0123]
 - A RemoveTwilight cost beside a PlayCardFromDiscard needs removedTwilight (F-0046, F-0141)
 - "Play any number of / up to N ... from your discard pile" is withheld when nothing can be played (Q-0086)
