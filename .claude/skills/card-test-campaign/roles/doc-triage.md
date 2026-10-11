@@ -13,7 +13,7 @@ are yours, with these differences.
   shown. A single report is applied only if you verify it (`cardtest.py probe <file.java> --out doc-triage`, ten
   probes at most in all; nothing else is running tests) or a ruling settles it (`lookup.py`).
 - Check each against the documents as they are now before writing (`lookup.py <words> --in pitfalls`, `--in
-  standard`, `--in rig`, `--in hjson`): much has been applied piecemeal, and the engine pass before you has just
+  helpers`, `--in standard`, `--in rig`, `--in hjson`): much has been applied piecemeal, and the engine pass before you has just
   changed some of it (read `/mnt/user-data/outputs/card-tests/orchestrator/engine-pass-16/` first: a suggestion
   about a rig method that pass built, or a behaviour it changed, is out of date).
 - The files agents read through may grow by forty lines in all for this whole clearing, not ten: prefer

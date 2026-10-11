@@ -13,17 +13,16 @@ the card's own tests) stands between what you leave and what is committed.
 You have not seen how the tests were written and should not go looking for the author's notes. Read these first,
 in one step:
 
-(One `Read` returns at most about 25,000 tokens, and `gemp-testing/SKILL.md` (and soon `test-generation/SKILL.md`) is longer than that: when a Read stops short of the file's last line, read on from that line with `offset`, in the same step if you can, until you have the end. The second half of the rig's file is the table of helper cards.)
-
 - `.claude/skills/test-generation/SKILL.md`: the Card Test Standard, including the reviewer's checklist at its end
-- `.claude/skills/gemp-testing/SKILL.md`: the test rig, and an index of the behaviours that catch people out
+- `.claude/skills/gemp-testing/SKILL.md`: the test rig, with an index of the behaviours that catch people out
+  and one of the helper cards the campaign has found for a need
 - `.claude/skills/card-test-campaign/references/rulings-index.md`: every ruling of Ketura's and every settled
   shape of card text, each by its first words
 
 Before you judge a test, a finding or a question against a ruling or a shape the index lists, read the entry
 itself: `python3 .claude/skills/card-test-campaign/scripts/lookup.py <number or words>` prints it (add
-`--in pitfalls` for the rig's behaviours; an entry must contain every term given, so search separate subjects
-separately). The index is for finding; the entry's words are what bind.
+`--in pitfalls` for the rig's behaviours and `--in helpers` for a helper card; an entry must contain every term
+given, so search separate subjects separately). The index is for finding; the entry's words are what bind.
 
 Every step you take re-reads everything you have read so far, so steps are what cost. Read several files in one
 step where you can, and do not look at the same thing twice.
@@ -55,7 +54,12 @@ step where you can, and do not look at the same thing twice.
    (at most two runs a card that try a mistake to settle a doubt: each is a step, and steps are what cost.
    Several mistakes may go in one run where a script of yours makes that possible; each is still reported
    singly). A mistake that survives is a gap;
-   one that is noticed is not. Settle what the game really does with a throwaway
+   one that is noticed is not, unless only a test of something else noticed it: ask which test reads the board
+   the mistake is about (on 1_350 `modifier` for `PermanentSiteModifier` was caught only by a test that happened
+   to read two copies of the text at once), and close the gap if none does. Where the author's Notes say that no
+   board tells two readings apart, or that a reading "gives no different outcome", try the other reading against
+   the tests before accepting it (11_255: "your" read as the site's owner would have left the first player with
+   no offer on his second turn, which the card's own tests read). Settle what the game really does with a throwaway
    test: `cardtest.py probe /tmp/<your folder name>/Probe.java --out <your folder name>` (without `--out` a probe
    is built in a folder every agent shares).
 
@@ -70,8 +74,11 @@ step where you can, and do not look at the same thing twice.
    look for the parked test's own name in the "As a correction" line `mutate.py` prints (it names the parked
    tests that pass and fail under the correction, with the first lines of each failure under it; "SURVIVED"
    above it only means no test failed, which is what a correction wants). Report every active test that fails against the correction, not only the one written
-   for the question: those are what the correction breaks. Where the correction is an engine change and no
-   definition change can show it, say so, and say what the parked test would read once the engine does it.
+   for the question: those are what the correction breaks. Where the author says no correction of the
+   definition exists, try one yourself before agreeing (for a standing check, a second trigger collected in the
+   same window as the other required triggers: 1_342), and say what was tried. Where the correction is an engine
+   change and no definition change can show it, say so, and say what the parked test would read once the engine
+   does it.
    Where the wrong text is in another card's definition, use a probe. For a question about how a sentence is
    to be parsed, look at how other cards with the same shape of sentence are worded and built (`grep` the game
    texts). For a question parked with `Q-...`, check that the rules, the rulings and the settled shapes really do
@@ -83,7 +90,11 @@ step where you can, and do not look at the same thing twice.
 
 6. **A flag with a name of its own.** Where the definition sets a flag or a modifier with a name of its own
    (`sarumanFirstSentenceInactive`), `grep` the card definitions for everything that reads it. Any reader the
-   card's text does not name is an invalid candidate, and probably a finding. The same goes for a field set against its
+   card's text does not name is an invalid candidate, and probably a finding. A finding already KNOWN on such a
+   reader, where the reader is outside the campaign's order (F-0037: the Hobbit Gandalfs read Saruman's flag), is
+   the reader's to show when its set is worked (Q-0236: each card that answers a switch shows it in its own
+   tests): the test parked for it where it was found stays, a card that throws the flag afterwards parks no
+   second one, and its Notes name the number. The same goes for a field set against its
    usual value (an `until:` of its own): `grep` the engine for what reads the field. `forced` on a discard from
    hand or deck is no such field: every such discard must write it, and what it says is ruled (F-0205). `false`
    is right where the discard is one of the Free Peoples player's options, `true` where a Shadow card makes him
@@ -97,16 +108,25 @@ an author may touch, what to do when a test fails and how findings and questions
 to you.
 
 - **Change what is at fault and nothing else.** Do not restyle, rename or reorder what you did not fault.
-- **No board outside play** (Ketura, 2026-10-08). A gap that only a board the game never reaches could close is
-  no gap: say in Notes that the two definitions cannot differ in play. Never give a card a race, culture, type or
-  side no printed card of its side can have (a Shadow minion made an Elf or [rohan]; a Free Peoples Man made
-  [dunland]; a companion made a Wraith; an Elf made a [gondor] Man to bear a [gondor] bow), and never put two
-  cards of one unique title in play. A culture or a race is never given by hand either (Q-0213, 2026-10-10): where a text names
-  one and the definition might go by the other, a PRINTED card that has it against type shows it (the helper table
-  names them), and for Elf, Dwarf, Wizard and Wraith, where no such card exists, nothing is shown and lint reports
-  the definition; an ad hoc keyword, strength or vitality that printed cards can grant is fine.
+- **No board outside play** (Ketura, 2026-10-08). A gap that only a board the game never reaches could close is no
+  gap: say in Notes that the two definitions cannot differ in play. Never give a card a race, culture, type or side
+  no printed card of its side can have (a Shadow minion made an Elf or [rohan]; a Free Peoples Man made [dunland];
+  a companion made a Wraith; an Elf made a [gondor] Man to bear a [gondor] bow), and never put two cards of one
+  unique title in play. A culture or a race is never given by hand either (Q-0213, 2026-10-10): where a text names
+  one and the definition might go by the other, a PRINTED card that has it against type shows it (gemp-testing's
+  `helpers.md` names them: `lookup.py "culture without its race" --in helpers`), and for Elf, Dwarf, Wizard and
+  Wraith, where no such card exists, nothing is shown and lint reports the definition; an ad hoc keyword, strength
+  or vitality that printed cards can grant is fine. No more copies of a title in play than its dots allow, counted
+  by title whatever the subtitle (Q-0239). And no card is invented, nor definition text stapled onto one, to make a
+  board no printed card makes (Ketura, 2026-10-11: `lookup.py Q-0241`): a test shows what a card that exists does,
+  the gap is then no gap, and Notes say what could not be shown. Before calling a candidate unreachable, look for
+  the card that lifts what keeps it off the board ("may not be assigned to a skirmish" on a Saruman is lifted by
+  Saruman's Staff 4_174: `lookup.py 4_33 --in helpers`).
 - **A gap** gets the candidate, reading or test that closes it. The one mistake that proved the gap must be
-  noticed afterwards: run it again. A run that confirms a gap just closed does not count towards the two.
+  noticed afterwards: run it again. A run that confirms a gap just closed, or one already closed by reading, does
+  not count towards the two. A gap that only a random board can show (a card revealed or discarded at random) is
+  run several times over, and the report says how often the mistake was noticed (3 of 3 on 3_33, where the test
+  fails a wrong card five runs in six).
 - **A fix that changes what a test claims changes the ledger too.** Keep the claim lines, `Findings:`,
   `Dropped:` and Notes true.
 - **A finding the author missed** (the game is wrong): the test asserts what the text says and is parked with
@@ -130,7 +150,7 @@ files. (The campaign scripts keep their own working files under `gemp-lotr-serve
 ignores.) The dormant `.old` siblings of a test file are not yours to review.
 
 Other batches run beside yours. One `mutate.py` run at a time for each `--out` name: a second run with the same
-name deletes the first one's working folder.
+name deletes the first one's working folder. Two runs may go side by side under different `--out` names.
 
 ## Reporting back
 

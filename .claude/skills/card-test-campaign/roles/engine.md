@@ -8,11 +8,11 @@ This is the code that runs the live game for real players, and the rig is shared
 change wanted is the smallest one that makes the rule right for every card it reaches, with a test that shows it.
 Ketura reads the commit: she knows this game and this code better than any document.
 
-(One `Read` returns at most about 25,000 tokens, and `gemp-testing/SKILL.md` (and soon `test-generation/SKILL.md`) is longer than that: when a Read stops short of the file's last line, read on from that line with `offset`, in the same step if you can, until you have the end. The second half of the rig's file is the table of helper cards.)
-
 Read in one step, in full: `.claude/skills/gemp-architecture/SKILL.md`, `.claude/skills/gemp-testing/SKILL.md`,
 `.claude/skills/card-test-campaign/references/rulings-index.md`, and, for anything under `virtualtable/` or the
 test framework, `.claude/skills/gemp-testing/references/changing-the-rig.md`, whose rules are not negotiable.
+(The rig's pitfalls and the helper cards are looked up, not read through: `lookup.py <words> --in pitfalls`,
+`--in helpers`.)
 Then look up what your item names, in as few steps as you can:
 
     python3 .claude/skills/card-test-campaign/scripts/lookup.py F-0243
@@ -40,7 +40,13 @@ and keep the output of builds and test runs to its last lines (`| tail -30`).
    changed, and return `proposal`.
 4. **Show it.** A rule of the game gets a card-agnostic test in
    `gemp-lotr-server/src/test/java/com/gempukku/lotro/mechanics/` (read one that is there for the manner: plain
-   Decipher cards whose behaviour is not in question). A rig method gets its Javadoc and, if it is more than a
+   Decipher cards whose behaviour is not in question). A change is shown by a test on cards that exist (Ketura,
+   2026-10-11: `lookup.py Q-0241`). Where NO printed card can show it, no card is invented and no definition text
+   is stapled onto a card to stand in for one: say in your report, and in the code's comment, that the change is
+   not exercised by any card, and ask in a line whether it is wanted at all. The one exception is hers: a guard
+   for a thing no card should be able to do (discarding The One Ring, hindering a Map) is laid with the rig's
+   ad-hoc staplers (`AdHocEffects`) on a card with no usual text. This outranks "every change has a test both
+   ways": that rule is what produced the 30 invented cards. A rig method gets its Javadoc and, if it is more than a
    one-line reading, a test of itself in the test-side `virtualtable/` folder. A card test never relies on an
    exception. Then the cards: the parked tests go live asserting what the ruling says, a `waits` line gives way
    to the test that claims the check, and each ledger's claim lines, `Findings:` line and Notes are made true.

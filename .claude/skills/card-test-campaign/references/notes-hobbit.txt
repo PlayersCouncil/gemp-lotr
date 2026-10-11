@@ -7,3 +7,9 @@ adds to this file; a batch's `notes` argument will point its agents here.)
 - No sheet has these cards and some have no game text in their definition: `packet.py <id> --blind` prints little;
   `packet.py --defs <id>` prints the definition.
 - What the rig lacks for them (from the batch at-cards-hobbit, the lander's words): a `HobbitSites` path (30_49 to 30_57), a Bilbo Ring-bearer constant (30_43 to 30_46 have `canStartWithRing`) and a way to seat The One Ring 30_48 (a [shire] artifact on Bilbo, not a card for the Ring slot); and settle then whether Hobbit-set tests stand on that table Why: the Hobbit Draft Game format holds sets 30 to 33 only, and the four kickstarts of this batch stand on `FOTRFrodo` and `RulingRing` with `FellowshipSites` (30_51 on a Hobbit path written out in its file), as their directives named plain Decipher helpers. Nothing is wrong with them as kickstarts (format is deck validation); the question is for the sets' own planning.
+- Saruman's Staff 4_174 plays on a bare `title(Saruman)`, so on the other player's Saruman, The White 32_24 too
+  (seen on a throwaway board by the batch dec-b4_78; it agrees with Q-0058, and nothing of the Staff's text reaches
+  him). The four Gandalfs 30_25 to 30_28 read Saruman's flag (F-0037, confirmed; Ketura: "Those hobbit cards
+  should have made their own flag"): two parked tests wait for that, in Card_V1_018_Tests and
+  Card_04_174_Tests, and both go live when the Gandalfs get a flag of their own. Dark Sorcery 33_61 throws the
+  same flag.

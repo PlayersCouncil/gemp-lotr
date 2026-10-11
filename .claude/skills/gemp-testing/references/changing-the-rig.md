@@ -54,7 +54,9 @@ scenario code, so more of those are no concern to it.
 2. Settle the signature, with Javadoc. A Freeps method gets its Shadow twin and a player-neutral method that
    both call.
 3. No agreement is needed beforehand, only a real use: add nothing that no test at hand calls for (Ketura,
-   2026-10-06 evening, in the rulings log). Record the addition afterwards in the campaign's `rig-requests.md`,
+   2026-10-06 evening, in the rulings log). No method is added that staples definition text onto a card
+   (Ketura, 2026-10-11: no card is invented for a test; a guard for a thing no card should be able to do is
+   laid with the ad-hoc staplers `AdHocEffects` already has, on a card with no usual text). Record the addition afterwards in the campaign's `rig-requests.md`,
    as information for her. A card's author does not make the change: the need is reported and the orchestrator
    has it built.
 4. Add it with its Javadoc, add a test of the method itself if it is more than a one-line reading, run

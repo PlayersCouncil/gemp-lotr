@@ -24,7 +24,8 @@
     landing.py finish <folder> <id...> [--with <path>]... [--changed <id,id>] [--note "<a line for the commit>"]
         Runs the gate on the cards and commits the ones that clear it as one commit (land.py --batch), then commits
         whatever the lander changed under .claude/skills as "Skills: what <folder> turned up", rebuilding the
-        rulings index first if the rulings, the shapes or the pitfalls changed.  Prints what landed and the head.
+        rulings index and the rig skill's two lists first if the rulings, the shapes, the pitfalls or the helper
+        cards changed.  Prints what landed and the head.
         --changed names every card whose DEFINITION was corrected (batch cards and others alike): their files
         go into the commit, and before anything is committed the tests of every other card that uses one of
         them as a helper are run, with every other test class that lays one of them (mechanics/, the rig's own
@@ -263,9 +264,9 @@ def finish(argv):
     landed = script("land.py", *args)
     print((landed.stdout + landed.stderr).strip())
 
-    # What the lander wrote into the skills (pitfalls, shapes, helper rows, the standard) goes in a commit of its own.
+    # What the lander wrote into the skills (pitfalls, shapes, helper entries, the standard) goes in a commit of its own.
     changed = [line[3:].strip() for line in git("status", "--porcelain", "--", ".claude/skills").stdout.split("\n") if line.strip()]
-    if any(re.search(r"rulings-log\.md|shapes\.md|pitfalls\.md|gemp-testing/SKILL\.md|test-generation/SKILL\.md", c) for c in changed):
+    if any(re.search(r"rulings-log\.md|shapes\.md|pitfalls\.md|helpers\.md|gemp-testing/SKILL\.md|test-generation/SKILL\.md", c) for c in changed):
         index = script("lookup.py", "--index")
         if index.returncode != 0:
             print("lookup.py --index: " + (index.stderr or index.stdout).strip()[-300:])

@@ -13,7 +13,8 @@ held more than a stat check before the campaign (509 tests between them, most fi
   (the rig's own methods, a reading of what the game is waiting for, real cards on a board a game could reach),
   keeping what it shows.
 - Many of these cards have a PC ERRATUM that is landed already (51_x for 1_x, 54_x for 4_x and so on). Stage 1 is
-  blind as always. In stage 2 read the erratum's landed test file and its ledger
+  blind as always: the erratum's test file and ledger stay shut until stage 2, as your own card's files do. In
+  stage 2 read the erratum's landed test file and its ledger
   (`/mnt/user-data/outputs/card-tests/ledgers/<set>/<id>.txt`: `ledgers/51/51_11.txt` for the erratum of 1_11,
   `ledgers/1/1_11.txt` for the original): where the original has the same sentence, the rulings, the
   boards and the helper cards are settled there, and a finding the erratum's batch fixed "in the original too" is
@@ -21,6 +22,8 @@ held more than a stat check before the campaign (509 tests between them, most fi
   Where the two differ, the difference is the erratum's and not a finding on your card.
   An erratum's board is settled only for the zones the ERRATUM's text reads: where the original's text reads
   another zone (a draw deck, a discard pile), lay that zone yourself; the erratum's scenario may leave it empty.
+  Where the erratum's ledger says on its Sources line that it is a new text sharing no sentence with the
+  original (59_46 for 9_46), nothing carries over and its test file need not be read.
 - Hindering: NO hindered candidate is owed on a Decipher card, whether its text says "spot", "you can spot" or
   counts. No Decipher text speaks of hinder; that a hindered card cannot be spotted is shown once, in
   `mechanics/HinderedCardCannotBeSpottedTests`, and laying it again on every card that spots is the kind of
@@ -35,14 +38,20 @@ held more than a stat check before the campaign (509 tests between them, most fi
   with ONE card that answers the switch, and each card that answers a switch shows in its OWN tests that it does
   (Q-0236, 2026-10-11: "we only need to ensure that the *outgoing* mechanism has been enabled, and it's up to
   each of those individual cards to check their side responds to the *incoming* mechanism"). So a Saruman whose
-  first sentence can be switched off (3_68, 3_69, 4_173, 5_56, 4_33, 17_37) owes a test of it, under The White
+  first sentence can be switched off (3_68, 4_173, 5_56, 4_33, 17_37) owes a test of it, under The White
   Council 101_18 or Saruman's Staff 4_174, in his own file; and a test of the switching card lays one of them.
-- No more copies of a title in play than its dots allow, counted by title whatever the subtitle (Q-0239,
-  2026-10-11: "no cheating in more copies of a card than their uniqueness level allows"): one of a unique title,
+  The model is `Card_03_069_Tests.WithHisFirstSentenceMadeNotToApplyBySarumansStaffHeTakesAnArcheryWoundAndIsAssignedToASkirmish`
+  (under the Staff, the smaller board; 3_69, 53_68, 101_30 and 102_29 have it since engine pass 26): shapes.md,
+  "A ruling that a switching card has NO effect", says how it is laid and what its ledger clause is.
+- No more copies of a title in play than its dots allow, counted by title whatever the subtitle, hindered
+  copies included (Q-0239, 2026-10-11: "no cheating in more copies of a card than their uniqueness level
+  allows"): one of a unique title,
   two of a two-dot title. A board that needs more is not a board; say so in the ledger's Notes.
 - No invented card. Nothing is added to `testCards.hjson` or to any definition file for a test (Q-0241,
-  2026-10-11). A card test uses printed cards; if no printed card can make the board, the test is not written and
-  the Notes say what could not be shown.
+  2026-10-11), and no definition text is stapled onto a card to stand in for one. A card test uses printed cards;
+  if no printed card can make the board, the test is not written and the Notes say what could not be shown. A
+  test shows what a card that exists does ("we're trying to make the cards robust, not *necessarily* the design
+  language they're built in"): a definition word your card does not use is not your card's to test.
 
 WHAT IS ALREADY IN A DECIPHER CARD'S FILE
 - The conversion of the old `at` tests put LONE TESTS into many Decipher cards' files (a test of an interaction,
@@ -97,8 +106,15 @@ DEFINITIONS ALREADY CORRECTED, WITH NO CARD TESTS YET
   discard pile), Shelob, Menace 18_34 (F-0417, F-0419). Keep the lone tests and do not file these again.
 - What follows from the ORDER in which a player takes his own required triggers is his own doing and no finding
   (F-0389, dropped 2026-10-11: Rivendell Waterfall 1_342 and a ranger who dies ahead of the site's check).
-- Candidates since answered (now faults, queued for engine pass 26): F-0345 (Boromir 18_40, "a possession" fetched only if [gondor]) and
-  F-0346 (Wish For Our Kinfolk 8_8, a Dwarf ally pays "Exert a Dwarf companion").
+- Corrected by engine pass 26 (item cards) on her answers, each held by a LONE TEST in the card's own file and
+  otherwise unworked: Boromir 18_40 (F-0345: "a possession" of any culture that he may bear is fetched) and Wish
+  For Our Kinfolk 8_8 (F-0346: only a Dwarf COMPANION pays "Exert a Dwarf companion"). Keep the lone tests and do
+  not file these again.
+- A LANDED PC card that owes a test, for whoever next reworks landed cards (not a Decipher batch's): An End
+  Worthy of Remembrance 102_46 (F-0477, the batch dec-b11_1). Its RemoveCultureTokens moved from a CostToEffect
+  in the effect into the event's cost, shown on a probe only (cancelled by The Mouth of Sauron 103_70 it removed
+  no token; now 2 from each condition chosen, before the response); its own file owes the test, as
+  Card_11_060_Tests.TheCompanionsExertBeforeTheShadowPlayerMayCancelTheEventAndStayExerted.
 
 WHAT THE EARLIER PHASES GOT WRONG MORE THAN ONCE
 - Read every helper card's definition before resting a board on it (`packet.py --defs <ids>`); comments in older
@@ -107,6 +123,13 @@ WHAT THE EARLIER PHASES GOT WRONG MORE THAN ONCE
   board, or the reading shows nothing.
 - A phase action whose text has no "your" is open to both players on purpose where an older test asserts it; that
   is no finding (`lookup.py F-0312`).
+- A candidate left out because its own text keeps it off the board, when another card lifts that. Set 4, the
+  [dunland] cards ("a [dunland] Man wins / loses / is in a skirmish"): the printed [dunland] minion who is no Man
+  IS on the board: Saruman, Rabble-rouser 4_33, whose "may not be assigned to a skirmish" Saruman's
+  Staff 4_174 lifts (`lookup.py 4_33 --in helpers`). 4_32 and 4_34 have him
+  (IsNotOfferedWhenADunlandMinionWhoIsNoManWins, IsNotOfferedWhenTheCompanionLosesToADunlandMinionWhoIsNoMan), and
+  each of those tests is the ONLY one that notices `man` taken out of its definition. A Dunland card with those
+  words owes the same board.
 - An optional trigger or ability with no cost that is offered when it would do nothing was the commonest finding
   there was (Q-0034; about one card in eleven). Since engine pass 26 the game withholds most such offers itself
   (Q-0224; shapes.md, "An optional trigger or ability that costs nothing", lists the kinds of effect it can ask):
@@ -140,6 +163,10 @@ game as built and file nothing.)
   "each time a minion is discarded" (CR 4.2 "killed"); Last Days 12_71 and Throne of Minas Tirith 17_36, whose
   texts say "killed or discarded", answer both by two triggers. Test a "discarded" trigger with a discard and
   with a kill that does not set it off; a test parked on F-0444 in a card's file goes live.
+- ASKED AND OPEN, not to be filed again: "a card stacked on a [dwarven] condition" (Axe of Erebor 4_41, More to
+  My Liking 5_9), F-0424. Do not correct 5_9 or write `your` into either definition before the answer; lay the other
+  player's condition as shapes.md says ("A card stacked on a [culture] condition") and park that reading on
+  F-0424. Three tests of Card_04_041_Tests go live or are deleted by the answer.
 - `shuffle: false` on a take, a discard or a putting back of cards that a reveal or a look at the top of a draw
   deck has just named (`select` on a `memory(...)`) is right: that is no search of the deck, and only a look
   through the whole of it is followed by a shuffle. (Q-0013, F-0034.)
@@ -151,11 +178,54 @@ KNOWN, AND WITHHELD BY THE ENGINE SINCE ENGINE PASS 26 (Q-0224: no requirement i
 - Galadriel 3_17, Legolas' Sword 5_12, Brego 4_263, Morgul Brute 7_188, Morgul Destroyer 7_190, Gandalf, Returned
   17_17, Bill the Pony 13_143, Shadowy Mount 12_171 (F-0393 to F-0400, and F-0254's remark): filed and closed by
   the engine; do not file them again or give them a requirement.
-KNOWN AND NOT YET CORRECTED (read in the definitions, 2026-10-10; the item q34sweep of engine pass 26 goes through
-them)
-- The lists in `orchestrator/trials/patterns.md`, sections 2 and 5 (38 definitions).
+KNOWN FROM THE PATTERN SEARCH (read in the definitions, 2026-10-10: `orchestrator/trials/patterns.md`, sections 2
+and 5, 38 definitions)
+- Engine pass 26 has been through those lists (its items census, cards, definitions, q34sweep, choicebranch and
+  engine). What it corrected has a number and a LONE TEST in the card's own file (F-0402 to F-0417, F-0430 to
+  F-0443 among them); what it read and left is in its reports. So the pattern report is no longer a list of
+  faults: before filing one your card's definition seems to have, look the card up in stage 2
+  (`lookup.py <id>`, without `--skip`) and grep its id in
+  `/mnt/user-data/outputs/card-tests/orchestrator/engine-pass-26/*.md`. A definition a pass left "for its own
+  author" is named only there and in shapes.md, never in the pattern report. Arwen's Fate 1_93 (the ruled shape
+  of F-0222: it can be played with neither half possible) is the one known to be still as it was.
 
 TO LOOK AT WHEN THE SET COMES UP (seen in passing by an earlier batch; not looked into, not filed)
+- Set 1, Saruman's Frost 1_135 (from the batch dec-b10_30, read in the definition only: not run, not filed): its
+  text is "Each Hobbit at this site is strength -2" and it is built as `modifyStrength`, `filter: hobbit,companion`,
+  under `location: hasAttached(self)`, so a Hobbit ally whose home is that site (Bounder 1_286 at 2F) and a Hobbit
+  minion (Ted Sandyman 18_75) are not reached.
+- Set 6, Peril 6_105 and Spied From Above 6_84, "it comes into play exhausted" (from the batch dec-b1_350, seen in
+  passing, not looked into, not filed): built as a separate `exhaust` after the play, so the played minion's own
+  "when you play" trigger is answered while it still has no wound (seen on Úlairë Nertëa 1_234 in a probe; a
+  minion whose play-trigger exerts it would tell).
+- Set 6, It Burns Us 6_110, "choose an opponent who must reveal his or her hand" (from the batch dec-b2_28): built
+  as the Free Peoples player's `revealHand` of the Shadow hand (the effect Curse Their Foul Feet! 1_36 uses), so No
+  Business of Ours 2_44 or 52_44 stops it and Eye of Barad-dûr 5_96 answers it. Whether the Shadow player is the
+  one who reveals is Q-0251, open: test the game as built, name that number and file nothing (shapes.md, "If a
+  Free Peoples player reveals this card from your hand").
+- Sets 1, 3 and 10, the other cards that reveal a card at random from a hand and then act on "that card" (by their
+  definitions, not read against their texts: Alive and Unspoiled 1_120, The Palantír of Orthanc 3_67, The Dark
+  Lord Advances 3_87, Drawing His Eye 10_29): lay a hand of several DIFFERENT cards and read "shown means gone,
+  not shown means still there" (pitfalls, "A random or whole-hand effect takes whatever is there"). On His First
+  Serious Check 3_33 a discard at random in place of the card revealed passed every test until six different
+  cards were laid.
+- Sets 7, 11 and 15, "While at a <terrain> site, bearer is ..." on a card a character bears (from F-0380, Asfaloth
+  1_31; none is tested yet): a bare `location` under a bearer reads the FELLOWSHIP's site, so borne by an ally it
+  goes by where the fellowship is and not by his home (CR 4.2 "ally"). On 11_3, 11_55, 11_58, 11_59 and 15_68
+  `bearer,companion` (Asfaloth's correction) would do: the same finding, corrected so. On Swift Steed 7_253,
+  Rohirrim Mount 11_156 and Blade of Lindon 11_16 an ally bearer's home CAN be of the terrain, and no definition
+  says it rightly: the definition language has no word for "the site this character is at". Ask for it (a finding
+  of kind `engine`) when the first of the three is worked; shapes.md, F-0380.
+- Set 9, Sapling of the White Tree 9_35: the CR 4.2 "response" example lives in the Ring's file. Its ledger owes
+  a line in Notes naming
+  Card_04_001_Tests.WornByIsildurTheWoundForALostSkirmishIsABurdenAndTheSaplingCannotAnswerIt, and lays no second
+  test of it. Set 15, The Ring of Doom 15_1 prints 4_1's two sentences ("gains hunter 3" for "is strength +2"):
+  4_1's boards carry over (shapes.md, "The CR 4.2 "response" example").
+- Set 17, Easterling Dispatcher 17_42 ("When you play this minion, you may spot 2 other [men] Men to add (1) for
+  each possession you spot"; from the batch dec-b4_201, read in the definition only, not shown): a no-cost
+  optional trigger built on `chooseHowManyToSpot` with nothing that requires a possession, so it is offered with
+  none in play (the kind of F-0428, Aragorn, Wingfoot 4_364). Whether "for each X you spot" asks a number at all
+  is Q-0248, open.
 - Set 17, Shadowfax 17_24 (from the batch at-mech-hinder-c): "Discard all other possessions on bearer and bearer may not bear a hand weapon" is built as a standing check that discards every other possession or weapon the bearer has at any time, so nothing but artifacts can ever be played on him afterwards and stay; Shadowfax 4_100 and Andúril 7_79 have the same kind of sentence built as a discard when played (and, since F-0360, when restored)
 
 THE COST OF ASSIGNING (set 7's Morgul Orcs; built by engine pass 26, item assigncost, on Ketura's Q-0221: A)

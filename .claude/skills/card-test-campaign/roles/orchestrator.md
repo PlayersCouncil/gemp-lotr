@@ -178,7 +178,8 @@ context is compacted, and the summary that replaces it is somebody's recollectio
 ## What has bitten
 
 - A correction to a definition breaks another card's test that uses it as a helper: `landing.py finish --changed`
-  runs those tests first; `landing.py users <id>` lists them.
+  runs those tests first; `landing.py users <id>` lists them, and on a second line the test classes that are no
+  card's own and lay the card (a `mechanics/` class, one of the rig's own tests), which `finish --changed` runs too.
 - The outputs folder writes through to its store some seconds after a file is closed, and its modification times
   cannot be trusted: postland.py waits and goes by content; `apply-sync.py` says when it was handed an old file.
 - postland.py takes over two minutes on a cold machine: give it five (`close.py`: ten).

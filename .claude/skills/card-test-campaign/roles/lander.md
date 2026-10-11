@@ -33,14 +33,17 @@ return; the others still land.
 
 Nobody has checked the reviewer's changes but you. Look at `git diff -- <the cards' test files>` for:
 
-- **A board outside play** (Ketura, 2026-10-08). A card given a race, culture, type or side that no printed card
-  of its side can have (a Shadow minion made an Elf or [rohan]; a Free Peoples Man made [dunland]; a companion made
-  a Wraith; an Elf made a [gondor] Man to bear a [gondor] bow), or two cards of one unique title in play. Take the
-  candidate or the test out, bring the ledger's claim lines and Notes into line ("the two definitions cannot
-  differ in play"), and run the card again. A culture or a race is never given by hand either (Q-0213, 2026-10-10): where a text names
-  one and the definition might go by the other, a PRINTED card that has it against type shows it (the helper table
-  names them), and for Elf, Dwarf, Wizard and Wraith, where no such card exists, nothing is shown and lint reports
-  the definition; an ad hoc keyword, strength or vitality that printed cards can grant is fine.
+- **A board outside play** (Ketura, 2026-10-08). A card given a race, culture, type or side that no printed card of
+  its side can have (a Shadow minion made an Elf or [rohan]; a Free Peoples Man made [dunland]; a companion made a
+  Wraith; an Elf made a [gondor] Man to bear a [gondor] bow), or two cards of one unique title in play (more copies
+  of any title than its dots allow, counted by title whatever the subtitle: Q-0239), or an invented card or
+  definition text stapled onto a card to stand in for one (Q-0241). Take the candidate or the test out, bring the
+  ledger's claim lines and Notes into line ("the two definitions cannot differ in play"), and run the card again. A
+  culture or a race is never given by hand either (Q-0213, 2026-10-10): where a text names one and the definition
+  might go by the other, a PRINTED card that has it against type shows it (gemp-testing's `helpers.md` names them:
+  `lookup.py "culture without its race" --in helpers`), and for Elf, Dwarf, Wizard and Wraith, where no such card
+  exists, nothing is shown and lint reports the definition; an ad hoc keyword, strength or vitality that printed
+  cards can grant is fine.
 - **A test that relies on an exception** (`assertThrows`, a `try`): lint refuses it. It is a rig request (step 5).
 
 ## 3. Findings: every `F-0000`
@@ -80,8 +83,9 @@ Then put the real number wherever `F-0000` stood (the `@Ignore` text of a test s
 
     python3 .claude/skills/card-test-campaign/scripts/landing.py users <corrected card ids>
 
-lists the other cards whose tests use a corrected card as a helper; `finish` runs their tests and refuses to commit
-if one fails. A test of another card that fails ONLY because of your correction (it answered a question the game no
+lists the other cards whose tests use a corrected card as a helper and, on a second line, the test classes that
+are no card's own and lay it (a class under `mechanics/`, one of the rig's own tests: `users 3_6` names 2_44 and
+mechanics/RevealingNoCardsFromAHandTests.java); `finish --changed` runs both and commits nothing if one fails. A test of another card that fails ONLY because of your correction (it answered a question the game no
 longer asks, it read the old wrong number) has that one line put right, and is named in what you return and passed
 to `finish` with `--with`. Anything less plain than that: take your correction back out, record the finding as
 `confirmed`, and say why.
@@ -126,8 +130,9 @@ and add none. Where it goes:
 
 - a behaviour that catches authors out: `.claude/skills/gemp-testing/references/pitfalls.md`, under the group it
   belongs to, as one paragraph that starts with the behaviour in bold;
-- a helper card: a row of the table in `.claude/skills/gemp-testing/SKILL.md` ("Choosing helper cards"), after
-  reading the card's definition;
+- a helper card: an entry of `.claude/skills/gemp-testing/references/helpers.md`, under the group it belongs to,
+  as one paragraph that starts with the need in bold, after reading the card's definition (`finish` lists it in
+  the skill's index);
 - what a ruling or a landed fix means for a definition and a test: `references/shapes.md`, naming the number;
 - a fact about the definition language: `.claude/skills/hjson-reference/SKILL.md`;
 - a sentence of the Card Test Standard that authors read two ways: one clarifying sentence in
@@ -135,7 +140,7 @@ and add none. Where it goes:
 
 Keep each to one to three lines, in the plain manner of what is round it. The files agents read through (the two
 skills' `SKILL.md`, the role briefs) may grow by ten lines a batch at the very most: a longer thing belongs in
-`pitfalls.md` or `shapes.md`, which are looked up and not read through. `vts-api.md` is generated: never edit it.
+`pitfalls.md`, `helpers.md` or `shapes.md`, which are looked up and not read through. `vts-api.md` is generated: never edit it.
 
 **Not applied**, with the reason in a few words: already there; a single report you could not verify; out of
 date (the stock run of `mutate.py`, a rig method since built); a process note (where a progress file or a script
@@ -176,7 +181,9 @@ and the three lists of step 6. Keep it to what happened.
 
 You may edit: the test files and ledger files of the batch's cards; the definitions of the batch's cards and of
 any card a finding of this batch is also true of, inside that card's block only; the one line of another card's
-test that step 3 allows; the documents named in step 6; files under `/tmp/<folder>-l/` (or the scratchpad
+test that step 3 allows; a test the author drafted for ANOTHER landed card's file where shapes.md says one is
+owed there (a Ring's scenario in Card_01_224_Tests: you put it in, bring that card's ledger into line, run
+`lint.py` and the card yourself, since `finish --with` does neither, and pass the file with `--with`); the documents named in step 6; files under `/tmp/<folder>-l/` (or the scratchpad
 directory your session names, wherever this brief says `/tmp/<folder>-l/`). The registers
 (`findings.tsv`, `questions.md`, `rig-requests.md`, `status.tsv`) are written only through the scripts above.
 Nothing else: not the engine, not the rig, not a script, not a role brief, not git but through `finish`.

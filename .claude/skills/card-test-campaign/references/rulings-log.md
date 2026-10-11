@@ -1157,7 +1157,9 @@ this way and played." A response event is never among the cards offered by "play
 revealed, ignoring all costs":** "Given the specifics of that card, we'll say we restrict it to shadow-phase
 events only." Of the events revealed, only Shadow-phase events may be chosen; a response event, or an event
 of another phase, is not offered (today any event is, and a response event played this way crashes the
-game). Other card types as now. *[2026-10-07, late]*
+game). Other card types as now: those four words are the campaign's, not hers, and say only that her answer
+changed nothing for a card that is no event; what "ignoring all costs" waives is F-0316's entry ("How the
+campaign is run") and its shape. *[2026-10-07, late]*
 
 **2026-10-05. The snapshot (Q-0011).** "Make all X ... until Y" on a special ability affects only what was on
 the table when it was used, "as per the Snapshot Rule", as on an event.
@@ -1582,8 +1584,10 @@ all Free Peoples cards they bear if you can spot 4 Free Peoples cultures)."" *[2
 was intended, given that the player can increase X to get more. It prevented a 6-companion setup exerting Merry
 twice to get 6 exertions. 2. Yeah I can't imagine why one would want some exertions but not the max. If it's an
 enduring minion, they're just not going to use the ability on them." So a "(limit X)" where X is the use's own
-paid amount caps that use only (unlike Q-0134's printed "(limit (N))"), and a "for each X you spot" count spots
-all without asking. *[2026-10-08, evening]*
+paid amount caps that use only (unlike Q-0134's printed "(limit (N))"), and on Merry's Sword the count takes every
+[rohan] companion without asking. Her second answer is about that card: whether every "for each X you spot"
+spots all unasked is Q-0248, open (CR 4.2 "spot" and the game as built ask how many), and nothing rests on
+either reading until it is answered. *[2026-10-08, evening]*
 
 **Shadow Host 58_43:** "The original Shadow Host requires them to be exhausted, not just Wraiths (the errata removes
 that requirement as excessive)." *[2026-10-08, evening]*

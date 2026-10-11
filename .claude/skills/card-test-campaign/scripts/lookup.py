@@ -3,14 +3,15 @@
 
     lookup.py Q-0098                      every entry that names Q-0098
     lookup.py "support area" hindered     entries containing every term given (case does not matter)
-    lookup.py prevent --in pitfalls       one file only: rulings, shapes, pitfalls, standard, rig, hjson, all
+    lookup.py prevent --in pitfalls       one file only: rulings, shapes, pitfalls, helpers, standard, rig, hjson, all
+    lookup.py valiant --in helpers        the helper cards found for a need: a word of it, a card's name or an id
     lookup.py Q-0027 --skip 1_338,1_342   stage 1 of a batch: what says how one of these cards is BUILT stays shut
     lookup.py --index                     rebuild card-test-campaign/references/rulings-index.md, and the
-                                          pitfall index in the gemp-testing skill
+                                          pitfall index and the helper index in the gemp-testing skill
 
 An entry is a paragraph (or a list that stands as one block) under a heading, and is printed only when it
 contains EVERY term given: look up separate subjects with separate commands. By default the rulings log, the
-settled shapes and the rig's pitfalls are searched. A term that looks like a finding, question or rig-request
+settled shapes, the rig's pitfalls and the helper cards are searched. A term that looks like a finding, question or rig-request
 number (F-0123, Q-0045, G-0012) matches that number only; any other term is a regular expression. Where no entry
 matches that way, the terms are tried again as plain words, whatever the punctuation and markup on either side,
 so that an entry's first words can be given as rulings-index.md prints them: lookup.py "The Hobbit sets (30 to 33)".
@@ -39,11 +40,12 @@ FILES = {
     "rulings": REFS / "rulings-log.md",
     "shapes": REFS / "shapes.md",
     "pitfalls": SKILLS / "gemp-testing" / "references" / "pitfalls.md",
+    "helpers": SKILLS / "gemp-testing" / "references" / "helpers.md",
     "standard": SKILLS / "test-generation" / "SKILL.md",
     "rig": SKILLS / "gemp-testing" / "SKILL.md",
     "hjson": SKILLS / "hjson-reference" / "SKILL.md",
 }
-DEFAULT = ["rulings", "shapes", "pitfalls"]
+DEFAULT = ["rulings", "shapes", "pitfalls", "helpers"]
 INDEX = REFS / "rulings-index.md"
 
 
@@ -207,18 +209,28 @@ def in_registers(number: str, skipped=()) -> str:
     return ""
 
 
-def build_pitfall_index():
-    """The rig skill lists every pitfall by its first words, group by group: rebuild that list."""
+# The two lists the rig skill keeps of its reference files, each between a sentence that stands before it and a
+# heading that stands after it: (the file, the words before, the words after).  orchestrator/resolve_made.py knows
+# the same two places (its REGIONS): change them together.
+MADE_LISTS = (
+    ("pitfalls", "surprises in this campaign were one of these.\n\n", "\n## Choosing helper cards"),
+    ("helpers", "the definition of the card it names is read all the same.\n\n", "\n## Race to Mount Doom"),
+)
+
+
+def build_skill_index(key, before, after):
+    """The rig skill lists every pitfall, and every helper card's entry, by its first words, group by group:
+    rebuild one of those lists."""
     groups, order = {}, []
-    first = FILES["pitfalls"].read_text(encoding="utf-8").split("\n", 1)[0].lstrip("# ").strip()
-    for heading, text in entries(FILES["pitfalls"]):
+    first = FILES[key].read_text(encoding="utf-8").split("\n", 1)[0].lstrip("# ").strip()
+    for heading, text in entries(FILES[key]):
         if heading == first:
             continue
         for item in (text.split("\n- ") if text.startswith("- ") else [text]):
             item = item.lstrip("- ")
-            m = re.match(r"\*\*(.+?)\*\*", item)
+            m = re.match(r"\*\*(.+?)\*\*", item, re.S)  # a helper's need may run over the end of a line
             if m:
-                name = m.group(1).strip().rstrip(".,")
+                name = re.sub(r"\s+", " ", m.group(1)).strip().rstrip(".,")
             else:
                 m = re.match(r"`(0_\d+)` (Test [A-Z][\w-]+)", item)
                 if not m:
@@ -230,10 +242,10 @@ def build_pitfall_index():
             groups[heading].append(name)
     lines = ["- **%s:** %s." % (h, " · ".join(groups[h])) for h in order]
     skill = RIG_SKILL.read_text(encoding="utf-8")
-    start = skill.index("surprises in this campaign were one of these.\n\n") + len("surprises in this campaign were one of these.\n\n")
-    end = skill.index("\n## Choosing helper cards")
+    start = skill.index(before) + len(before)
+    end = skill.index(after, start)
     RIG_SKILL.write_text(skill[:start] + "\n".join(lines) + "\n" + skill[end:], encoding="utf-8")
-    print(f"rebuilt the pitfall index in {RIG_SKILL} ({sum(len(v) for v in groups.values())} entries)")
+    print(f"rebuilt the {key} index in {RIG_SKILL} ({sum(len(v) for v in groups.values())} entries)")
 
 
 def main(argv):
@@ -242,7 +254,8 @@ def main(argv):
         return 0
     if argv[0] == "--index":
         build_index()
-        build_pitfall_index()
+        for made in MADE_LISTS:
+            build_skill_index(*made)
         return 0
     where, terms, limit, narrowed, skipped = DEFAULT, [], 8, False, []
     i = 0

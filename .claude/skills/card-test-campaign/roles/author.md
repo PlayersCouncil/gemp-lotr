@@ -5,11 +5,12 @@ campaign to test every card the same way. The cards and a name for your working 
 this brief.
 
 Before anything else, read these three files in full, in one step (three `Read` calls side by side: a single
-`cat` of all three is cut off by the output limit). One `Read` returns at most about 25,000 tokens, and `gemp-testing/SKILL.md` (and soon `test-generation/SKILL.md`) is longer than that: when a Read stops short of the file's last line, read on from that line with `offset`, in the same step if you can, until you have the end. The second half of the rig's file is the table of helper cards. Everything below assumes them:
+`cat` of all three is cut off by the output limit). Everything below assumes them:
 
 - `.claude/skills/test-generation/SKILL.md`: the Card Test Standard. What a card's tests must cover and how the
   file is laid out.
-- `.claude/skills/gemp-testing/SKILL.md`: the test rig, and an index of the behaviours that catch people out.
+- `.claude/skills/gemp-testing/SKILL.md`: the test rig, with an index of the behaviours that catch people out
+  and one of the helper cards the campaign has found for a need (both files are looked up, not read through).
   `.claude/skills/gemp-testing/references/vts-api.md` lists every rig method by interface. It is long: search it
   for what you need (`grep -n -i wound vts-api.md`) and do not read it through.
 - `.claude/skills/card-test-campaign/references/rulings-index.md`: every ruling of Ketura's (she knows this game's
@@ -22,9 +23,14 @@ bears on their text, and every pitfall group their tests will touch, in as few s
     python3 .claude/skills/card-test-campaign/scripts/lookup.py Q-0098
     python3 .claude/skills/card-test-campaign/scripts/lookup.py "support area" hindered
     python3 .claude/skills/card-test-campaign/scripts/lookup.py prevent --in pitfalls
+    python3 .claude/skills/card-test-campaign/scripts/lookup.py "who is not \[shire\]" --in helpers
 
 An entry is printed only when it contains every term given, so look up separate subjects with separate
-commands (chained with `;` in one step), not with one command of many terms.
+commands (chained with `;` in one step), not with one command of many terms. While a card is in stage 1, every
+lookup takes your batch's ids as well, `lookup.py <terms> --skip <your batch's ids>`: an entry of the shapes, the
+pitfalls or the helpers that names one of your cards, or another version of one, says how it is built, and is
+then named by its heading and not printed (a ruling is printed whatever it names). Look again in stage 2,
+without `--skip`.
 
 An expectation rests on an entry's own words, never on its line in an index. A shape the index lists is settled:
 do not raise it as a question again, and where the game departs from it, that is a finding. When a test does
@@ -65,16 +71,25 @@ A `grep` of a `.hjson` file prints whatever lines match, and a line range of one
 offset) whatever cards lie there, those of your other cards and their originals among them. One card's block is
 read with its packet (`--only-withheld`, in stage 2), never out of the file; and to look for a helper or a
 printed text in stage 1, use `packet.py --find <regex> --skip <your batch's ids>`
-(printed fields and game text with ids, nothing of the implementation, your batch and its originals left out) and
-`packet.py --defs <ids> --skip <your batch's ids>` for a chosen helper's definition. You may read another card's finished test file of the same shape, so long as
-that card is neither one of your batch nor the Decipher original of one. Only those are shut: another card that
-shares a title with one of yours (a second Denethor) may be read as a helper like any other.
+(printed fields and game text with ids, nothing of the implementation, your batch and its other versions left out) and
+`packet.py --defs <ids> --skip <your batch's ids>` for a chosen helper's definition (it also keeps shut a helper
+whose game text is a batch card's own with a word or two changed: choose another, or read it in stage 2; asked
+for more than about twenty ids it overruns the output limit, so send it to a file under your folder and `Read`
+that). You may read another card's finished test file of the same shape, so long as that card is neither one of
+your batch nor another version of one: the Decipher original of an erratum, and the landed ERRATUM of an
+original, whose test file and ledger stay shut until stage 2 as your own files do (52_75 for 2_75). Only those
+are shut: another card that shares a title with one of yours (a second Denethor) may be read as a helper like
+any other, and a landed card with the SAME text as yours is the quickest source of boards and helpers
+(`packet.py --find` on the first sentence of the game text: Uruk Veteran 4_201 is Uruk Trooper 4_199 word for
+word).
 
 **Stage 2, with everything.** Run `packet.py <id> --only-withheld`, which prints what the blind packet held back
 (the definition in full, sheet against definition, an erratum's original, the test file) and so ends stage 1 for
 that card: its plan is saved first. (`--with-test` prints the blind packet and the glossary over again in front
 of it.) A long test file overruns the output limit and the middle of it is cut out of the print: where the print
-says so, read the test file itself for the rest.
+says so, read the test file itself for the rest. An entry the packet heads "A ruling on another card names this
+card" is that card's ruling: where its ledger already holds it as an `R` clause (5_60's `R1`, for 8_3), cite it
+under `Sources:` and do not test it again.
 
 Before writing any test, have the Play clause's test written for you (Ketura on Q-0220: the tests of that clause
 have never had a finding beside them, and are generated):
@@ -118,7 +133,10 @@ A parked test is run only through `mutate.py`, and always with a `--replace`: `m
 failing) and then against the correction. `cardtest.py run` leaves parked tests out, and `--with-parked` with no
 `--replace` would run the stock mistakes, which are cut. A line in ANOTHER card's definition (one already corrected that
 your card's file owes a test for, or one a finding proposes to change) is tried against your tests with
-`mutate.py <that card's id> --replace <old> <new> --test <your card's test file>`.
+`mutate.py <that card's id> --replace <old> <new> --test <your card's test file>`, with `--with-parked` where
+your test is parked on it. A finding whose correction is in the ENGINE has no `--replace` to give: run a copy of
+the class with that `@Ignore` line taken out through `cardtest.py probe`, to see the test fail at the reading it
+is parked for. A test the game passes is not parked (6_63's kill test, written for F-0444, passed).
 
 Every step you take re-reads everything you have read so far, so steps are what cost. Read several files in one
 step where you can (the packets of all your cards, the helper cards you mean to use), and do not look at the same
@@ -144,10 +162,13 @@ Decide which of three things is wrong, in this order, and say which in your repo
    If the rules settle it, fix the plan and the test. If they do not, it is a question.
 3. **The game.** The text and rules are clear and the game does something else. Leave the test asserting what the
    text says, park it with `@Ignore("F-0000: <one line>")` (the orchestrator assigns the real number; a finding
-   that has its number already goes in under that number), and report
+   that has its number already goes in under that number, but where an ERRATUM's finding says the original
+   "still has it", the original's copy is a finding of its own, `F-0000`, that names the erratum's number), and report
    it as a finding with: what the text says, what you expected, what happened, and your best guess at the kind
    (typo in the definition, oversight in the implementation, wrong displayed text, engine bug, rig bug).
-   A finding with two causes gets a parked test for each, or half a correction passes the one.
+   A finding with two causes gets a parked test for each, or half a correction passes the one. So does one
+   cause with two symptoms read at different decisions (the offer; the choice between alternatives), where a
+   correction of one would pass the other.
    Where the correction changes how every positive test is driven (a "you may" built as a required trigger,
    correction `optional: true`), every test that takes or declines the offer asserts the offer and is parked;
    lint's `parked-only` warnings on `+`, `O` and `R` are then expected until landing.
@@ -161,7 +182,9 @@ Decide which of three things is wrong, in this order, and say which in your repo
    give the engine lines at fault and what they would have to do (Shrouded Elf 63_23, F-0287).
 
 Be slow to conclude the game is wrong. Most of the time it is, when you think so; but a correct implementation of
-an obscure ruling looks exactly like a bug, and a wrongly reported bug costs more than a question.
+an obscure ruling looks exactly like a bug, and a wrongly reported bug costs more than a question. What follows
+from the ORDER in which a player takes his own required triggers is his own doing and no finding (Ketura on
+F-0389): the test takes the order that gives the text's result, and none is parked for the other.
 
 ## What you may and may not touch
 
@@ -169,6 +192,13 @@ You edit the test files and ledger files of your own cards, and files under `/tm
 does in some situation without adding a test, put a throwaway JUnit class there and run it with
 `cardtest.py probe <file.java>`; use this to understand a failure, never to decide what a test should expect. Nothing else: not card
 definitions, not the engine, not the rig, not other cards' tests, not git, not the campaign's state files.
+A test that is owed in ANOTHER landed card's file (shapes.md says where: a Ring's scenario in
+Card_01_224_Tests) is drafted under your folder and named in your report; the lander adds it.
+
+A test shows what a card that exists does (Ketura, 2026-10-11: `lookup.py Q-0241`). No card is invented, and no
+definition text is stapled onto a card to stand in for one. Where NO printed card can make the board a check
+wants, the check is not shown: its `no <check>:` line, or Notes, says what could not be shown and names the
+search that found no card.
 
 If a check cannot be written with the rig's existing methods, do not write a helper method, do not reach into
 the engine, and do not show it by an exception: a card test never asserts that the rig or the game throws
@@ -206,4 +236,7 @@ files are found at their usual paths and need no mention. For each card give:
 every other agent unless given `--out <your folder name>`. Before calling a filter word harmless because "every
 card of that name or race is of that culture", look for one that is not (Aragorn, Defender of Rohan is a [rohan]
 Aragorn; Ulaire Attea, Khamul of the East 103_61 is a [raider] Nazgûl; Radagast 31_17 and Saruman 32_24 are
-Wizard allies; Bilbo 12_119 is a Ring-bound Hobbit companion).
+Wizard allies; Bilbo 12_119 is a Ring-bound Hobbit companion). And before leaving a candidate out because its
+own text keeps it off the board, look for the card that lifts that: "may not be assigned to a skirmish" on a
+Saruman is lifted by Saruman's Staff 4_174, which any Saruman bears, so Saruman, Rabble-rouser 4_33 IS the
+[dunland] minion who is no Man for "a [dunland] Man wins / loses / is in a skirmish" (`lookup.py 4_33 --in helpers`).

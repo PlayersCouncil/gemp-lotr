@@ -214,15 +214,144 @@ then claimed by a test.
 | `-` | In the *nearest* situation where the text says it should not happen, it does not: the requirement one card short, the event that almost matches, the phase next door. It has to be a situation in which the card is active, so that a mistake in the definition could make the test fail: a Free Peoples card doing nothing on the opponent's turn shows the rule "active", not the card. |
 | `C` | Each cost is paid, read before and after. |
 | `C-` | With a cost that cannot be paid, the action is not offered. |
-| `F` | Who or what can be chosen or affected is exactly who the wording says. Valid candidates: at least one more than is needed, differing from each other in everything the wording does *not* mention (for "a Dwarf", or a keyword with no type word, "your archers", a companion and an ally: with no ally `all(your,archer,or(companion,minion))` passes, 94_13; for "a character" or "borne by a character", a companion, an ally and a minion, the three kinds of character: with no ally on the table `or(companion,minion)` passes, 61_100; for "each minion" or "another minion", minions of two cultures and two races: beside Orcs alone, `minion` narrowed to `orc` passes, 60_91, and for "each minion skirmishing <X>" two minions in ONE skirmish as well, the second put on X by the Shadow player after the Free Peoples player's assignment (pitfalls, "One minion to a companion"): with one minion to a skirmish a definition that takes "a minion" passes, 11_243; for a bare side word, "2 Free Peoples cards" from a deck, a card of each type the place can hold, a companion, a possession and an event: beside companions alone, `side(freeps)` narrowed to `companion` passes, 68_82, and "each type" is a spread like that one, a character, an item and a card that is neither, not every type in print; a bare owner word, "each of your cards", owes that spread and a card of each side, 94_27; for a keyword or item class alone, "a pipeweed", "a pipe", cards of two cultures wherever printed cards have them: beside [shire] ones alone, `pipeweed` narrowed to `culture(shire)` passes, 92_4, and a card of the other culture whose own text stays out of the way is looked for before the culture is left out), all offered or affected. Invalid candidates: one for each thing the wording excludes, each failing *only* the thing it is there for, none offered or affected. For a phrase of two words ("a [sauron] minion") that is a card for each word: a [sauron] card that is no minion, and a minion of another culture; for an item class ("bearing a hand weapon") one of them is a weapon of another class on a bearer of the right kind (a ranged weapon), where a card in play can bear one, since the game has a `weapon` filter one word wider and a possession that is no weapon cannot tell the two apart (65_148); for a number with two bounds, a card on each side. For "an X skirmishing a Y" that is an X assigned to another Y whose skirmish has not begun, not an X fighting something else. For "the Ring-bearer" it is a Ring-bound companion who is not the Ring-bearer (Sam), not just any companion; a Ring-bearer who is not Frodo is no longer asked for on a card that says "the Ring-bearer" (Q-0213: A: no definition has ever written Frodo for him; the tests that have one stay, and no Frodo stands beside him, Q-0159: B). Where it is the text that names Frodo ("Bearer must be Frodo", "If Frodo dies") and a test wants a Frodo who is not the Ring-bearer, he is Frodo, Frenzied Fighter 13_149, the only Frodo who can be in play beside another Ring-bearer (51_313, 51_311; Q-0212). Where the text names its target more than once ("make that Dwarf A, or make that Dwarf B"), the candidate not chosen is read under each. Where the same phrase stands in several clauses, or in a condition or a trigger and not a choice ("a site bearing a weather"), each clause has its own invalid candidate. Where a trigger and the choice it leads to each carry the phrase ("If a [sauron] Orc wins a skirmish, make that Orc ...", whose definition filters the winner and then the choice), the invalid candidates take part in the very event the valid ones do (a [moria] Orc and a [sauron] Uruk-hai winning that same skirmish) and are read as not offered: on a board where the trigger never fires, the choice's own filter goes unchallenged (1_247). A spot requirement owes its valid candidates as a choice does, on one board or across the tests: for "spot an Elf companion", Elf companions of two titles, or `name(Legolas)` passes (91_12). Where a response picks what it saves from several cards affected at once, an invalid candidate is among them (for "your [sauron] condition is about to be discarded", a [sauron] possession in the same discard). Where a trigger names who did the thing ("exerted by a Free Peoples card", "uses a special ability"), one valid doer is neither the card itself nor its bearer, and one is no character where the wording allows (a possession's ability). Where a condition or a trigger turns on a card of a kind being PLAYED ("unless a Shadow event is played"), each word owes a card that fails it alone and is played in that same window (a Shadow card that is no event, a Free Peoples event); a special ability used there stands in for neither (10_116). Where the wording names the PLAYER who does it ("the Free Peoples player is about to discard", "discarded by an opponent"), one valid doer is that player acting by no card of his side (a site's text: Heights of Isengard 11_244), which for a card-worded text is an invalid one; and the other player made to do it by that player's card (Introspection 12_29 for a discard; It Burns Us 6_110 for a reveal) is on the table too, read as shapes.md has it (F-0296; Q-0171; Q-0251). A race against a culture, and a culture against a race, is shown with a PRINTED card that has the one without the other (Pippin, Trollslayer 103_31 is a [gondor] Hobbit; Sméagol, Once Like Us 103_116 a [shire] companion who is no Hobbit; Merry, Master Holbytla 103_85 a [rohan] Hobbit; Khamûl 103_61 a [raider] Nazgûl: gemp-testing's helper table has them by pair), never with an ad hoc modifier: no test gives a card a culture or a race (Q-0213: B). Where no printed card has the one without the other, no candidate is asked for at all: that is always so for Elf and [elven], for Dwarf and [dwarven], for a Free Peoples Wizard and for a Free Peoples Wraith. The slip itself (F-0019, and the reverse, F-0291) is read off the definition: lint warns `race-culture` where a definition goes by the race and its text names the culture, or the reverse, and that is a finding to file, not a board to lay. Nor is a keyword given to a card no printed card with that keyword resembles (an Orc made a Southron, an ally made valiant; Q-0213: C): where every printed card with the keyword is of one culture, race or type, that word cannot be told from the keyword, which is a line in Notes. So is a type word beside something only that type has (a signet, a timeword). Where no board can isolate an excluded thing ("your" tale, when the opponent's is inactive anyway), put the nearest candidate down and say so in Notes. Where the text picks cards out by title and a type word ("these characters: Celeborn, Elrond, Galadriel, Saruman"), an invalid candidate is a card of that title and another type (a follower named Saruman). Where the text names a title with no type word ("spot Saruman"), the valid candidates are cards of that title of each type and each culture there is (Saruman the minion and Saruman the follower, 17_38; Sméagol is [gollum] and [shire]: grep the definitions). That holds for a title that pays a cost or is acted on as it does for one spotted or played ("exert Gollum": each of the two Gollums, [gollum] and [wraith], pays in a test of his own, 60_20); lint warns `title-kinds` where every card of such a title that the file names is of one kind. Where a word is in one filter of the card and not in another ("a unique [elven] companion", then "all Free Peoples archers"), the valid candidates of the second vary in it. Where the effect picks its cards by something read from the card chosen for the cost ("exert a companion to heal another companion with the same signet"), the cost is paid in the tests by cards that differ in it, or a filter fixed to one value (`signet(aragorn)`) passes (92_32). Where the text names two places a card is taken from ("from play or from hand"), the candidates are laid out in each. Where the card is PLAYED from the place, the invalid candidate can be paid for there, so that only the wording keeps it out (10_19: Shelob in the discard pile with a pool too small for her let "Gollum" widened to any minion pass). An "or" inside the noun phrase ("a [gandalf] or [elven] event") is F's business, one valid candidate for each side of it, and needs no `B`. Where the card is not unique and its text says "here", "this condition", "this minion" or the like, a second copy is in play wherever it could change a reading: the test shows which copy a card went to or came from (`ShadowChooseOptionalTrigger(card)` where each copy makes its own offer), that a standing modifier tied to those words does not stack (a numeric modifier with no such words does stack, and two copies are no gap there), that a trigger fires once for its own copy. Where an effect acts on the card itself, or on "that <card>" a trigger has just named, another card of its kind stands beside it and is read as untouched (for "each time a companion is played, that companion ...", a companion already in play, or `all(companion)` passes, 91_9; where the effect then takes "that <card>" out of a PILE, "each time ... discards an [isengard] Orc, you may stack that Orc", the other card of its kind lies in that pile when the offer is taken, or a choice from the pile passes, 6_63); where a second copy cannot change a reading, the untouched control is a different card. What the wording does not mention includes whose a card is and where it stands: for a bare race word ("a Man", Q-0058) one valid candidate is the opponent's, where a card of his of that race can be in play at that moment (no minion is in a fellowship phase: then Notes says none can be, and no board is made for it) (but a player's own Shadow cards are inactive on his turn, so for a "Shadow condition" chosen by a Free Peoples ability they are no candidates at all); for "a minion" or "an Uruk-hai" on a Skirmish event, one valid candidate is not assigned to a skirmish. Where the excluded thing is part of a condition inside a modifier ("in a skirmish involving an [isengard] minion"), the candidates are in skirmishes, not merely on the table. For "bearer" or "self" with a requirement ("if bearer is an archer"), the nearest invalid candidate is another card that meets the requirement. That holds where the requirement is the condition of a trigger and not of an ability: for "While Boromir is the Ring-bearer, at the start of each skirmish involving him" it is the real Ring-bearer in a skirmish of his own while Boromir is a plain companion (59_31). A title that has one card type only ("spot Gandalf") needs one card of the title, and its invalid candidate is a card of that culture with another title. Never put two cards of one unique title in play at once, whatever their types (Ketura, 2026-10-08: the cheats "short-circuit more-or-less legitimate setups"; Elrond the ally and Elrond the companion each get their own board). Before calling a candidate impossible to put on a table, look for a way: an ally's home may be on another block's sites (Gondorian Merchant 7_97, the only [gondor] ally, is at 3T). |
+| `F` | Who or what can be chosen or affected is exactly who the wording says. Valid candidates: at least one more than is needed, differing from each other in everything the wording does *not* mention, all offered or affected. Invalid candidates: one for each thing the wording excludes, each failing *only* the thing it is there for, none offered or affected. What that asks for each shape of wording the campaign has met is set out under "The candidates of `F`, case by case", below this table: find the case of the wording at hand there (`lookup.py "<words>" --in standard`). |
 | `D` | The effect is still in force just before the boundary the text names and gone just after. "Just before" is in the phase that precedes the boundary in a full turn, with the thing the effect touches going on: for "until the regroup phase", during a skirmish that follows one already resolved, and then at the first regroup decision. An effect that holds a shorter-lived part inside it (a trigger lasting until regroup that limits something phase by phase) is read across two phases, or "one in all" and "one in each phase" cannot be told apart. |
 | `L` | A limit holds: it works up to the limit and does nothing beyond it. Which reading shows it goes by the kind of limit (Ketura on Q-0093). A limit on uses ("limit once per turn", "limit once per phase", "limit N times") withholds the ability at its limit, cost or no cost: the test reads it not offered, with its cost still payable and something on the board the effect could still have acted on. A limit on what the effect gives ("(limit +3)", or a bare number of things added: "to add a threat (limit 1)") leaves an ability or optional trigger that has a cost on offer at its limit (Q-0041): the test takes it once more and reads the cost paid and everything else as it was, with something on the board the effect could still have acted on. With no cost, and for a required trigger, it is not offered or does not happen under either kind. Where a limit caps what an X buys ("discard X cards to make … strength +X (limit +3)"), X itself is not capped: a test shows it, with one use beyond the cap or by reading the choice's maximum. A cap inside an effect ("takes no more than 1 wound") is a limit too; one that renews (each phase, each turn) is shown renewing. |
-| `O` | "May" asks, and declining leaves everything as it was. Listed when the text says "may". |
+| `O` | "May" asks, and declining leaves everything as it was. Listed when the text says "may". An optional trigger whose EFFECT is then a choice of "up to N" or "each may" asks twice, the offer and then a choice from 0 to N, and that is as Ketura wants it (F-0385: "click on the card to trigger it ... and then have the option to select 0-N, if one were to change one's mind"): the test reads the offer and the choice's minimum of 0, and nothing is filed. That does not reach a choice that is a COST, or a text that says "a" and not "up to" (rulings log, "What is offered and what is asked"). |
 | `S` | A value that depends on a count is right at two different counts, and at its cap if it has one. Where the count is an X the player chooses, zero is one of the counts where the action still does something at zero (One Dwarf in Moria heals whatever X is). Not where X is a number of exertions, and not where X of zero would do nothing at all: such a use is deliberately not offered (rulings log, Q-0015 and Q-0034: on an ability or optional trigger with nothing else to pay; an event is offered whatever its X can do, and no test turns on its X of zero), and the `-` is that it is not. Where X is a number of cards moved or tokens spent, and a board can arise on which what was paid and what the board lost are different numbers (a bearer who dies takes his other items with him), one test uses that board. |
 | `R` | "Each time" happens a second time, on the same subject where the wording allows: two wounds on one minion tell "for each wound" from "for each minion wounded", which two minions wounded once cannot. |
 | `B` | Each alternative of an "or" or "choose one" is taken in some test. Where a board that could arise makes one alternative impossible to carry out in full, a test shows the other is then what happens: a player may only choose what can be fully performed. |
 | `Z` | Cards that move end up where the text says: attached to the chosen bearer, stacked, in the dead pile, on top of the deck. For a destination the text names. Where a card arrives somewhere and is taken out again in one effect, it is read there in between. A plain discard is read where it is paid or done, under `C` or `+`, and does not call for `Z`. |
 | `K` | The keyword, with its number if it has one, is on the card. Claimed by the stats test (`K -> ElrondStatsAndKeywordsAreCorrect`). |
+
+#### The candidates of `F`, case by case
+
+What the `F` row asks, for each shape of wording the campaign has met. A clause owes the cases its own words fall under and no others.
+
+**Valid candidates differ in everything the wording does not mention.** For "a Dwarf", or a keyword with no type
+word, "your archers", a companion and an ally: with no ally `all(your,archer,or(companion,minion))` passes, 94_13;
+for "a character" or "borne by a character", a companion, an ally and a minion, the three kinds of character: with
+no ally on the table `or(companion,minion)` passes, 61_100; for "each minion" or "another minion", minions of two
+cultures and two races: beside Orcs alone, `minion` narrowed to `orc` passes, 60_91, and for "each minion
+skirmishing <X>" two minions in ONE skirmish as well, the second put on X by the Shadow player after the Free
+Peoples player's assignment (pitfalls, "One minion to a companion"): with one minion to a skirmish a definition
+that takes "a minion" passes, 11_243; for a bare side word, "2 Free Peoples cards" from a deck, a card of each type
+the place can hold, a companion, a possession and an event: beside companions alone, `side(freeps)` narrowed to
+`companion` passes, 68_82, and "each type" is a spread like that one, a character, an item and a card that is
+neither, not every type in print; a bare owner word, "each of your cards", owes that spread and a card of each
+side, 94_27; for a keyword or item class alone, "a pipeweed", "a pipe", cards of two cultures wherever printed
+cards have them: beside [shire] ones alone, `pipeweed` narrowed to `culture(shire)` passes, 92_4, and a card of the
+other culture whose own text stays out of the way is looked for before the culture is left out.
+
+**Invalid candidates, word by word.** For a phrase of two words ("a [sauron] minion") that is a card for each word:
+a [sauron] card that is no minion, and a minion of another culture; for an item class ("bearing a hand weapon") one
+of them is a weapon of another class on a bearer of the right kind (a ranged weapon), where a card in play can bear
+one, since the game has a `weapon` filter one word wider and a possession that is no weapon cannot tell the two
+apart (65_148); for a number with two bounds, a card on each side. For "an X skirmishing a Y" that is an X assigned
+to another Y whose skirmish has not begun, not an X fighting something else.
+
+**"The Ring-bearer", and a Frodo who is not the Ring-bearer.** For "the Ring-bearer" it is a Ring-bound companion
+who is not the Ring-bearer (Sam), not just any companion; a Ring-bearer who is not Frodo is no longer asked for on
+a card that says "the Ring-bearer" (Q-0213: A: no definition has ever written Frodo for him; the tests that have
+one stay, and no Frodo stands beside him, Q-0159: B). Where it is the text that names Frodo ("Bearer must be
+Frodo", "If Frodo dies") and a test wants a Frodo who is not the Ring-bearer, he is Frodo, Frenzied Fighter 13_149,
+the only Frodo who can be in play beside another Ring-bearer (51_313, 51_311; Q-0212).
+
+**A phrase the text carries more than once.** Where the text names its target more than once ("make that Dwarf A,
+or make that Dwarf B"), the candidate not chosen is read under each. Where the same phrase stands in several
+clauses, or in a condition or a trigger and not a choice ("a site bearing a weather"), each clause has its own
+invalid candidate. Where a trigger and the choice it leads to each carry the phrase ("If a [sauron] Orc wins a
+skirmish, make that Orc ...", whose definition filters the winner and then the choice), the invalid candidates take
+part in the very event the valid ones do (a [moria] Orc and a [sauron] Uruk-hai winning that same skirmish) and are
+read as not offered: on a board where the trigger never fires, the choice's own filter goes unchallenged (1_247).
+
+**A spot requirement.** A spot requirement owes its valid candidates as a choice does, on one board or across the
+tests: for "spot an Elf companion", Elf companions of two titles, or `name(Legolas)` passes (91_12).
+
+**What a response saves; who did the thing; a card being played; the player who does it.** Where a response picks
+what it saves from several cards affected at once, an invalid candidate is among them (for "your [sauron] condition
+is about to be discarded", a [sauron] possession in the same discard). Where a trigger names who did the thing
+("exerted by a Free Peoples card", "uses a special ability"), one valid doer is neither the card itself nor its
+bearer, and one is no character where the wording allows (a possession's ability). Where a condition or a trigger
+turns on a card of a kind being PLAYED ("unless a Shadow event is played"), each word owes a card that fails it
+alone and is played in that same window (a Shadow card that is no event, a Free Peoples event); a special ability
+used there stands in for neither (10_116). Where the wording names the PLAYER who does it ("the Free Peoples player
+is about to discard", "discarded by an opponent"), one valid doer is that player acting by no card of his side (a
+site's text: Heights of Isengard 11_244), which for a card-worded text is an invalid one; and the other player made
+to do it by that player's card (Introspection 12_29 for a discard; It Burns Us 6_110 for a reveal) is on the table
+too, read as shapes.md has it (F-0296; Q-0171; Q-0251).
+
+**A race against a culture.** A race against a culture, and a culture against a race, is shown with a PRINTED card
+that has the one without the other (Pippin, Trollslayer 103_31 is a [gondor] Hobbit; Sméagol, Once Like Us 103_116
+a [shire] companion who is no Hobbit; Merry, Master Holbytla 103_85 a [rohan] Hobbit; Khamûl 103_61 a [raider]
+Nazgûl: gemp-testing's `helpers.md` has them by pair), never with an ad hoc modifier: no test gives a card a
+culture or a race (Q-0213: B). Where no printed card has the one without the other, no candidate is asked for at
+all: that is always so for Elf and [elven], for Dwarf and [dwarven], for a Free Peoples Wizard and for a Free
+Peoples Wraith. The slip itself (F-0019, and the reverse, F-0291) is read off the definition: lint warns
+`race-culture` where a definition goes by the race and its text names the culture, or the reverse, and that is a
+finding to file, not a board to lay.
+
+**A keyword or a type word that no card can tell apart; what no board can isolate.** Nor is a keyword given to a
+card no printed card with that keyword resembles (an Orc made a Southron, an ally made valiant; Q-0213: C): where
+every printed card with the keyword is of one culture, race or type, that word cannot be told from the keyword,
+which is a line in Notes. So is a type word beside something only that type has (a signet, a timeword). Where no
+board can isolate an excluded thing ("your" tale, when the opponent's is inactive anyway), put the nearest
+candidate down and say so in Notes.
+
+**Cards picked out by title.** Where the text picks cards out by title and a type word ("these characters:
+Celeborn, Elrond, Galadriel, Saruman"), an invalid candidate is a card of that title and another type (a follower
+named Saruman). Where the text names a title with no type word ("spot Saruman"), the valid candidates are cards of
+that title of each type and each culture there is (Saruman the minion and Saruman the follower, 17_38; Sméagol is
+[gollum] and [shire]: grep the definitions). That holds for a title that pays a cost or is acted on as it does for
+one spotted or played ("exert Gollum": each of the two Gollums, [gollum] and [wraith], pays in a test of his own,
+60_20); lint warns `title-kinds` where every card of such a title that the file names is of one kind.
+
+**A word in one filter and not in another; cards picked by what the cost's card is.** Where a word is in one filter
+of the card and not in another ("a unique [elven] companion", then "all Free Peoples archers"), the valid
+candidates of the second vary in it. Where the effect picks its cards by something read from the card chosen for
+the cost ("exert a companion to heal another companion with the same signet"), the cost is paid in the tests by
+cards that differ in it, or a filter fixed to one value (`signet(aragorn)`) passes (92_32).
+
+**Two places; a card played from the place; an "or" inside the phrase.** Where the text names two places a card is
+taken from ("from play or from hand"), the candidates are laid out in each. Where the card is PLAYED from the
+place, the invalid candidate can be paid for there, so that only the wording keeps it out (10_19: Shelob in the
+discard pile with a pool too small for her let "Gollum" widened to any minion pass). An "or" inside the noun phrase
+("a [gandalf] or [elven] event") is F's business, one valid candidate for each side of it, and needs no `B`.
+
+**A card that is not unique, and "that card": the second copy and the untouched control.** Where the card is not
+unique and its text says "here", "this condition", "this minion" or the like, a second copy is in play wherever it
+could change a reading: the test shows which copy a card went to or came from (`ShadowChooseOptionalTrigger(card)`
+where each copy makes its own offer), that a standing modifier tied to those words does not stack (a numeric
+modifier with no such words does stack, and two copies are no gap there), that a trigger fires once for its own
+copy. Where an effect acts on the card itself, or on "that <card>" a trigger has just named, another card of its
+kind stands beside it and is read as untouched (for "each time a companion is played, that companion ...", a
+companion already in play, or `all(companion)` passes, 91_9; where the effect then takes "that <card>" out of a
+PILE, "each time ... discards an [isengard] Orc, you may stack that Orc", the other card of its kind lies in that
+pile when the offer is taken, or a choice from the pile passes, 6_63); where a second copy cannot change a reading,
+the untouched control is a different card.
+
+**Whose a card is and where it stands.** What the wording does not mention includes whose a card is and where it
+stands: for a bare race word ("a Man", Q-0058) one valid candidate is the opponent's, where a card of his of that
+race can be in play at that moment (no minion is in a fellowship phase: then Notes says none can be, and no board
+is made for it) (but a player's own Shadow cards are inactive on his turn, so for a "Shadow condition" chosen by a
+Free Peoples ability they are no candidates at all); for "a minion" or "an Uruk-hai" on a Skirmish event, one valid
+candidate is not assigned to a skirmish.
+
+**A condition inside a modifier; "bearer" or "self" with a requirement.** Where the excluded thing is part of a
+condition inside a modifier ("in a skirmish involving an [isengard] minion"), the candidates are in skirmishes, not
+merely on the table. For "bearer" or "self" with a requirement ("if bearer is an archer"), the nearest invalid
+candidate is another card that meets the requirement. That holds where the requirement is the condition of a
+trigger and not of an ability: for "While Boromir is the Ring-bearer, at the start of each skirmish involving him"
+it is the real Ring-bearer in a skirmish of his own while Boromir is a plain companion (59_31).
+
+**A title of one card type; never two of one unique title; a candidate that looks impossible.** A title that has
+one card type only ("spot Gandalf") needs one card of the title, and its invalid candidate is a card of that
+culture with another title. Never put two cards of one unique title in play at once, whatever their types (Ketura,
+2026-10-08: the cheats "short-circuit more-or-less legitimate setups"; Elrond the ally and Elrond the companion
+each get their own board). Before calling a candidate impossible to put on a table, look for a way: an ally's home
+may be on another block's sites (Gondorian Merchant 7_97, the only [gondor] ally, is at 3T).
+
+#### Which checks a clause lists
 
 Which checks a clause lists follows from its words, and the analyst is expected to justify leaving one out:
 
@@ -231,7 +360,7 @@ Which checks a clause lists follows from its words, and the analyst is expected 
   line. An exert cost's `C-` board is the one who must exert, exhausted; where the cost names a kind ("exert
   your [isengard] Man"), the only one of that kind exhausted with others able to exert beside him. A board with
   nobody of the kind shows the filter (`F`) and cannot tell an exertion from a wound (92_2). An "add (or remove, or reinforce) a [culture] token" cost: Redhorn Pass 13_194 ("Culture tokens cannot be
-  added, removed, or reinforced") is its `C-` board (Scouring of the Shire 68_112; gemp-testing's helper table).
+  added, removed, or reinforced") is its `C-` board (Scouring of the Shire 68_112; gemp-testing's `helpers.md`).
   An "add a burden" cost: no printed card stops a burden being added, but a hindered Ring-bearer does
   (CR 5.0 "hinder"), so its `C-` board is `scn.HinderCard(<the Ring-bearer>)` (103_115). Where the card must
   itself be the Ring-bearer to pay (Sméagol 59_30's regroup ability), hindering him shuts its text off and no
@@ -243,8 +372,8 @@ Which checks a clause lists follows from its words, and the analyst is expected 
   either: where the action also spots or counts him, the board keeps that met without him (Get On and Get Away
   54_304: Sméagol beside a hindered Galadriel). An "assign <this character> to a minion" cost: its `C-` board
   is the character already assigned (CR 4.2 "assignment phase": both must be unassigned), by a minion's own
-  assignment action after the Free Peoples player's pass (the helper table's Unexpected Visitor 7_126 and its
-  kin; Alcarin 5_31). A minion he must pay to assign and cannot is Q-0221's check, under an `R` clause
+  assignment action after the Free Peoples player's pass (Unexpected Visitor 7_126 and its
+  kin, in gemp-testing's `helpers.md`; Alcarin 5_31). A minion he must pay to assign and cannot is Q-0221's check, under an `R` clause
 - a noun phrase that picks things out ("a Dwarf", "each [moria] Orc", "another companion", "bearer") → `F`. Not
   "the Ring-bearer" in a bare count of burdens ("for each burden on the Ring-bearer"): burdens lie on nobody
   else, so there is no other candidate to lay (Q-0186). A NAMED bearer, "on Frodo", is a phrase like any other (Q-0103)
@@ -361,7 +490,8 @@ expected values are the sheet's; `reconcile.py <id>` (Decipher cards) and the pa
 definition" section (every card) show any field where the sheet and the definition disagree (see "When the sheet
 and the definition disagree" above). A strength, vitality or other bonus printed on a card that is borne (a
 possession's +2) is a printed field: asserted here, and read on the bearer in the test of the Play clause, with
-no clause of its own. Timewords are not a printed field: they are how a
+no clause of its own. Its line of the header is written as the sheet prints it ("Vitality: +2") or as the bare
+number ("Vitality: 2"): the landed files have both, lint takes both, and no assertion hangs on it. Timewords are not a printed field: they are how a
 definition says when an event may be played, and a definition may carry more of them than the card prints.
 A Race to Mount Doom modifier's intensity is one: its header has an `Intensity:` line and the test reads
 `getBlueprint().getIntensity()`, at the definition's value (no sheet has these cards); lint asks for both.
@@ -423,18 +553,40 @@ its comment says what each wrong behaviour would read, and another board shows t
 **One behaviour, shown once.** A positive and a negative case that the same board shows belong in one test.
 Stages that build on each other belong in one test. Two tests that would pass or fail together are one test.
 
+**A switch is shown once on each side.** A card that switches something on other cards (The White Council 101_18
+and Saruman's Staff 4_174, on the first sentence of Saruman's text) is tested with ONE card that answers the
+switch, and each card that answers a switch shows in its own tests that it does (Ketura on Q-0236: "we only need to
+ensure that the *outgoing* mechanism has been enabled, and it's up to each of those individual cards to check their
+side responds to the *incoming* mechanism"). shapes.md, "A ruling that a switching card has NO effect", has the
+boards and the ledger's clause.
+
 **Names say what happens.** `HealsOnlyAlliesWhoseHomeIsSite3`, not `TestTrigger` or `Site3Test2`.
 
 **Known cards only.** Every card in a scenario is there for a reason, has a comment naming it, and has had its
 definition read. Prefer cards with no text.
 
+**Cards that exist.** A test shows what a card that exists does (Ketura, 2026-10-11: "We've got 3,000 cards that
+exist, that's a big enough burden without adding cards that *don't* exist. Remember, we're trying to make the
+cards robust, not *necessarily* the design language they're built in"). No card is invented: none with an id of
+its own is added to any definition file for a test, and no definition text is stapled onto a card to stand in for
+a card there is not. Where no printed card can make a board, the check is not shown, and Notes say what could not
+be. A definition word no card uses is not tested; a word one card uses is tested as far as that card goes and no
+further. The one exception is hers, and is a mechanic's and not a card's: a guard for a thing no card should be
+able to do ("not being able to discard the One Ring, not being able to hinder Maps") is laid with the rig's ad-hoc
+staplers (`AdHocEffects`) on a card with no usual text (Frodo, or a minion, by side), in the test itself, which
+"establishes the artificial test nature of the card while also including its creation right there"
+(`lookup.py Q-0241`).
+
 **A board a game could reach.** The cheats shorten a set-up; they do not make a board no game arrives at (Ketura
 on Q-0213, 2026-10-10: `lookup.py Q-0213`). No card is given a culture or a race, and none a keyword that no
-printed card of its kind has: the printed card that is the thing stands there (gemp-testing's helper table), and
+printed card of its kind has: the printed card that is the thing stands there (gemp-testing's `helpers.md`), and
 where there is none the candidate is not asked for. A keyword or a number that only arranges the board (fierce
 for a second skirmish, an archer, a strength that keeps someone alive) may be given by hand; a new test takes the
-printed card that gives it where the helper table has one. A terrain is a real site of that terrain in the path,
-never a keyword given to a site. Never two cards of one unique title in play. Items are cheated only onto bearers
+printed card that gives it where `helpers.md` has one. A terrain is a real site of that terrain in the path,
+never a keyword given to a site. No more copies of a title in play than its dots allow, counted by title whatever
+the subtitle, hindered copies included (Ketura on Q-0239: "no cheating in more copies of a card than their
+uniqueness level allows"): never two cards of one unique title, never a third of a two-dot title, and a board that
+needs more is no board. Items are cheated only onto bearers
 their text allows, one of each class to a bearer: for "bears 3 cards" or "each weapon", items of different classes.
 No culture token is put on a card that nothing gives tokens to. A site of another block may stand in a path where
 its own text is what the test reads. The tests that landed with such a board before the ruling are relaid by a
@@ -571,7 +723,9 @@ named `...DefinitionTests` (Q-0233: C; `UnknownPhaseInADefinitionTests`, `Player
 It hands `LotroCardBlueprintLibrary.loadCardsFromFile` a few definitions written in the test itself (set-0 ids,
 `0_9101` on) and reads what was kept; its helper methods may stay. What the same word then DOES in a game is a
 mechanic test, in `mechanics/`, and each names the other in its class comment. `mechanics/` holds tests of the
-game only.
+game only. Such a class is for a word that a card which exists uses, as far as that card goes: a word no card
+uses is not tested at all (Ketura, 2026-10-11; rulings log, "The campaign tests cards, not the definition
+language").
 
 A test of a server class that no player sees and no rule describes (the league-placement arithmetic, a decision
 checking its own answer) is neither kind: it is plain JUnit beside the class it tests, in that class's module

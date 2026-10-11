@@ -466,9 +466,12 @@ player gets "Required responses" with the check listed under its card's name
 of it: after a wound that kills, the next ordering lists the death and the card twice. What the check gives is not
 there until it is carried out (the move limit reads 2 at the turn's sanctuary-healing decision and while an
 ordering waits, the ranger standing at the site), and its requirements are run again at that moment, so a check
-whose condition has ended by then does nothing: right for a standing discard, wrong for a "+1 for this turn"
-(F-0389, open, the engine's: the death taken ahead of the Waterfall's check leaves the limit at 2). Read what it
-gives after the ordering is answered; `Card_01_342_Tests`.
+whose condition has ended by then does nothing: right for a standing discard, and for a "+1 for this turn" the
+player's own doing (the death taken ahead of the Waterfall's check leaves the limit at 2; the check taken first
+gives 3). That is no finding (F-0389, dropped by Ketura: what follows from the order in which a player takes his
+own required triggers is his, "so that it's their fault and not the rules"): a test takes the order that gives
+the text's result, and none is parked for the other. Read what the check gives after the ordering is answered;
+`Card_01_342_Tests`.
 
 **A response window can come before the target.** Where the Free Peoples player holds a response event that
 can answer an event being played, the game may put an "Optional responses" decision to him before the played
@@ -736,7 +739,7 @@ block's path needs that block's sites in the scenario (Gondorian Merchant 7_97, 
 `SkipToAssignments` from there moves the fellowship on to n + 1 first.
 No ally's home is a Shadows-block or King-block site (every `allyHome` is F, T or a Hobbit-set H): there an ally
 skirmishes only by another card's text. One Whom Men Would Follow 1_109, played in the maneuver phase as
-set-up, does it by legal play (`Card_11_232_ErrataTests`; the helper table has its row).
+set-up, does it by legal play (`Card_11_232_ErrataTests`; helpers.md has its entry).
 An ally a card says may not participate (a [rohan] ally at Streets of Edoras 4_340) takes no part whatever
 other card has him participate or assigns a minion to him: he adds nothing to the archery total, is offered no
 archery wound, is on neither player's assignment list, and an effect that would assign a minion to him assigns
@@ -1114,7 +1117,7 @@ it lies, with `GetAidTwilightCost(follower)` (G-0051, engine pass 26; for the st
 adds it and a Shadow one (Saruman 17_38) removes it. It fails, saying so, for an Aid that is not a plain amount
 of twilight (a burden, a threat, an exertion, a card from hand): for those the header carries the cost. Every Free Peoples Aid transfers "to a companion", so no ally
 bears a follower by legal play. `AttachCardsTo(companion, follower)` cheats one on. Most followers give the
-bearer a printed strength or resistance; see the helper table for two that leave a reading alone (Little Golden
+bearer a printed strength or resistance; see helpers.md ("A follower that changes no number") for two that leave a reading alone (Little Golden
 Flower 65_148's tests). The rule itself is in `mechanics/AidTests`: in a second maneuver phase of the turn the
 offer is made again for a follower already borne, and declined it costs nothing and leaves him borne (CR 4.2
 "aid": borne "for the rest of the turn"). He goes back to the support area as the turn ends: when the turn ends at
@@ -1166,14 +1169,19 @@ the minion's site number is above the current site's, and it follows a site-numb
 **Making a card something it is not.** `ApplyAdHocModifier` with `IsAdditionalCultureModifier` or
 `IsAdditionalRaceModifier` gives a card a second culture or race, `AddKeywordModifier` a keyword, and filters see
 them. The rig can; a card test no longer does (Ketura on Q-0213, 2026-10-10). No card is given a culture or a
-race: a race is told from its culture by a printed card that has the one without the other (SKILL.md's helper
-table, "A culture without its race"), and where none exists (Elf, Dwarf, a Free Peoples Wizard, a Free Peoples
+race: a race is told from its culture by a printed card that has the one without the other (helpers.md,
+"A culture without its race"), and where none exists (Elf, Dwarf, a Free Peoples Wizard, a Free Peoples
 Wraith) it is not told at all: `lint.py` reports a definition that goes by the one where its text names the other
 (`race-culture`), and that is a finding to file. No keyword is given to a card no printed card with it resembles
-(an Orc made a Southron, an ally made valiant, an [isengard] minion made a tentacle). No site is given a terrain:
-lay a real site of it ("A battleground or a forest site needs no cheat"; the helper table's marshes). What stays
+(an Orc made a Southron, an ally made valiant, an [isengard] minion made a tentacle). That is what is given by
+hand: a game does reach a valiant ally, by two printed cards (a Man ally under Flame of Calenhad 103_86, a Hobbit
+ally under Royal Guard 102_54), and a valiant Ring-bound companion beside Erkenbrand 102_47, so a test that wants
+one lays those (helpers.md, "A valiant ally"); a Southron who is no Man is a Bladetusk made a minion (helpers.md).
+No site is given a terrain:
+lay a real site of it ("A battleground or a forest site needs no cheat"; helpers.md, "A tentacle that stays put",
+has the marshes). What stays
 is the keyword or number that only arranges a board (fierce, archer, damage +1, a strength), and a new test takes
-the printed card that gives it where the helper table has one.
+the printed card that gives it where helpers.md has one.
 
 **An ad hoc modifier aimed at one card goes on after that card is in play.** A card is given a new id each time
 it enters play, and a modifier whose filter is a physical card holds the id it had when the modifier was built.

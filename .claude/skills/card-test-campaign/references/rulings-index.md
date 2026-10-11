@@ -240,7 +240,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A card discarded by its own "when you play this ..., or discard it" was not played for other cards either [F-0139]
 - F-0181, Greatest Kingdom of My People 51_16, "the first time your opponent plays an Orc each turn"
 - F-0186, response events when a card plays "an event" from somewhere
-- F-0193, Race Text 92_29 (RTMD), "Open and reveal a sealed booster pack ... You may play one shadow card revealed, ignoring all costs": "Given the ...
+- F-0193, Race Text 92_29 (RTMD), "Open and reveal a sealed booster pack ... You may play one shadow card revealed, ignoring all costs": "Given the ... [F-0316]
 - 2026-10-05. The snapshot (Q-0011)
 - Keywords copied "until ..." are a snapshot taken when the ability is used [Q-0096]
 - War Howdah 103_62 keeps the stacked Man's game text and keywords [Q-0096]
@@ -338,7 +338,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - F-0235, Ever My Heart Rises 54_46: keep
 - Q-0140, Cavern Entrance 54_355: A
 - F-0239, Gríma, Chief Counselor 55_51: new text
-- Q-0141, Merry's Sword 57_242: "(limit X)" is per use; every [rohan] companion is counted [Q-0134]
+- Q-0141, Merry's Sword 57_242: "(limit X)" is per use; every [rohan] companion is counted [Q-0134, Q-0248]
 - Shadow Host 58_43: "The original Shadow Host requires them to be exhausted, not just Wraiths (the errata removes that requirement as excessive)." ...
 - Q-0142, "wound each / every X": a fixed order, no prompt (B)
 - Q-0143, The Palantír of Orthanc 53_67: B [F-0277, F-0278]
@@ -493,7 +493,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Ruled on the night of 2026-10-07, and built by engine pass 12 (Q-0103 to Q-0108, F-0175 to F-0179) [Q-0105, Q-0023, Q-0104, Q-0107, F-0176, F-0178, F-0196]
 - Whose support area: support(you), support(opponent) and the rest (F-0177, Q-0101)
 - "If a Shadow player has replaced the fellowship's current site this turn" is asked of the site the fellowship is at NOW (Q-0234: A; built by engine pass 26; Many Miles 13_21) [Q-0259]
-- A site's continuous text: `modifier` holds only while the fellowship is there, `PermanentSiteModifier` wherever the site lies (CR 4.2 "active", LR 3; Q-0173, open)
+- A site's continuous text: `modifier` holds only while the fellowship is there, `PermanentSiteModifier` wherever the site lies (CR 4.2 "active", LR 3; Q-0173: B)
 - A site whose text names the site by its title goes by `name(<title>)`, never by `self` or by nothing (Q-0027; F-0043, F-0381, F-0382, F-0383) [F-0390]
 - "While at a <terrain> site" on a card an ally may bear: an ally is at his home site (F-0380, Asfaloth 1_31)
 - "<Do X>; <Y> during this skirmish" on an event that makes the skirmish: Y is laid only if the skirmish was made (F-0386, Return to Its Master 1_224)
