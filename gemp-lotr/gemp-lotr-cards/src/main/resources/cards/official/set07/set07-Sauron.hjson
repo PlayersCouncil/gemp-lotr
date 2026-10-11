@@ -15,6 +15,29 @@
 		timewords: Shadow
 		effects: {
 			type: event
+			requires: {
+				type: Or
+				requires: [
+					{
+						type: Playable
+						fromZone: STACKED
+						filter: besieger,stackedOn(controlledSite)
+					}
+					{
+						type: And
+						requires: [
+							{
+								type: CanSpotBurdens
+							}
+							{
+								type: Playable
+								fromZone: DISCARD
+								filter: culture(sauron),orc
+							}
+						]
+					}
+				]
+			}
 			effect: {
 				type: choice
 				texts: [
