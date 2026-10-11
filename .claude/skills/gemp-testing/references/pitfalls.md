@@ -831,7 +831,11 @@ card"), a hand of one card, or of copies of one, cannot tell it from another car
 different cards, read which was shown (`FreepsHasCardChoiceAvailable(card, false)` for each, before the
 dismissal), and assert of each that it went if it was shown and stayed if it was not. True of a right card on
 every run; with six cards a random discard in its place fails five runs in six
-(Card_03_033_Tests.DiscardsTheCardRevealedAndNotAnotherCardOfTheHand).
+(Card_03_033_Tests.DiscardsTheCardRevealedAndNotAnotherCardOfTheHand). Where what hangs on the card shown is an
+OFFER and not where a card went, no answer stands under an `if` (lint's `conditional`): the test ends on two
+value assertions and answers nothing, `assertEquals(shown, scn.ShadowPlayAvailable(card));
+assertEquals(!shown, scn.AwaitingFellowshipPhaseActions());`
+(Card_05_096_Tests.WhenOneCardOfTheHandIsRevealedAtRandomTheEyeIsOfferedOnlyIfItWasTheCardShown).
 
 **The fierce round reads as the first does.** After a skirmish that leaves a fierce minion in play,
 `GetCurrentPhase()` is `Phase.ASSIGNMENT` again and `AwaitingFreepsAssignmentPhaseActions()` is true, exactly as
@@ -975,7 +979,13 @@ offers to stack a Man of Bree killed by a wound there, against CR 4.2 "killed". 
 discarded" tells the two apart (Q-0081). Last Days 12_71 and Throne of Minas Tirith 17_36 ("killed or discarded
 from play") are built on that trigger alone and answer a kill because of it, as their text asks (each has a test
 that holds it). A test of a text that says only "discarded" asserts that a kill is not answered and is parked
-on F-0444.
+on F-0444, IF the game fails it. It does not fail where the trigger carries a `source:` filter, `source: any`
+included: `source` filters the card that did the discarding, and a discard the engine emits with no source card is
+refused by it (a kill; the discard of the minions as the turn ends; the cards that go with a card that is
+stacked, returned to hand, shuffled in or put on a deck from play). Gnawing, Biting, Hacking, Burning 6_63 is
+built so, and Iron Fist of the Orc 6_64 and Scaffolding 6_73 the same way (read, not run): its kill test and its
+end-of-turn test pass and are ACTIVE (Card_06_063_Tests), and it is `source: any`, not its `phase: regroup`, that
+keeps the end-of-turn discard off it (the phase still reads regroup then).
 
 **The removed-from-game pile.** `scn.MoveCardToZone(card, Zone.REMOVED)` lays a card there (a cheat) and
 `assertInZone(Zone.REMOVED, cards...)` reads it. Two printed cards put cards there by play: Defiled 13_105
