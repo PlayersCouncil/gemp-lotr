@@ -386,4 +386,45 @@ public class Card_V2_070_Tests
 		assertFalse(scn.ShadowActionAvailable(besieger));
 		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 	}
+
+	@Test
+	public void OnceTheFellowshipHasLeftTheWallNoCardCountsASiteThatNobodyControls() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var haldir = scn.GetFreepsCard("haldir");
+		scn.MoveCompanionsToTable(haldir);
+
+		var band = scn.GetShadowCard("band");
+		var chief = scn.GetShadowCard("chief");
+
+		scn.StartGame();
+		scn.SkipToSite(4);
+
+		scn.MoveMinionsToTable(band, chief);
+		scn.FreepsPass();
+
+		// At the Wall nobody controls a site and each card that asks finds one.
+		var wall = scn.GetCurrentSite();
+		assertEquals("Breached Wall", wall.getBlueprint().getTitle());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertEquals(0, scn.GetShadowControlledSiteCount());
+		assertEquals(5, scn.GetStrength(haldir));       // an opponent "controls a site"
+		assertEquals(12, scn.GetStrength(band));        // 10 + 2 for one site
+		assertTrue(scn.ShadowActionAvailable(chief));   // a site he controls to spot
+
+		// Nobody is assigned.  The fellowship moves again, to site 6, and the Wall lies behind it.
+		scn.SkipToMovementDecision();
+		scn.FreepsChooseToMove();
+
+		assertEquals(6, scn.GetCurrentSiteNumber());
+		assertSame(wall, scn.GetSite(5));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		// The same cards on the same table.  The text of a site binds only while the fellowship is at it: the
+		// count is none again.
+		assertEquals(0, scn.GetShadowControlledSiteCount());
+		assertInZone(Zone.SHADOW_CHARACTERS, band, chief);
+		assertEquals(7, scn.GetStrength(haldir));       // 5 + 2: no opponent controls a site
+		assertEquals(10, scn.GetStrength(band));
+		assertFalse(scn.ShadowActionAvailable(chief));
+	}
 }

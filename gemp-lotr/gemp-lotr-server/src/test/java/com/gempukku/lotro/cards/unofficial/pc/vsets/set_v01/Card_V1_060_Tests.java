@@ -255,4 +255,68 @@ public class Card_V1_060_Tests
 
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
+
+	@Test
+	public void OnceTheFellowshipHasLeftTheCrossroadsASkirmishInvolvingAMoriaMinionIsCanceledThoughTheUniqueOneLives() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var merry = scn.GetFreepsCard("merry");
+		var pippin = scn.GetFreepsCard("pippin");
+		var stealth1 = scn.GetFreepsCard("stealth1");
+		var stealth2 = scn.GetFreepsCard("stealth2");
+		scn.MoveCompanionsToTable(merry, pippin);
+
+		var commander = scn.GetShadowCard("commander");
+		var runner = scn.GetShadowCard("runner");
+		var runner2 = scn.GetShadowCard("runner2");
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+
+		scn.MoveCardsToHand(stealth1, stealth2);
+		scn.MoveMinionsToTable(commander, runner, runner2);
+
+		scn.FreepsPass();
+		var crossroads = scn.GetCurrentSite();
+		assertEquals("Moria Crossroads", crossroads.getBlueprint().getTitle());
+
+		// At the Crossroads, with the Guard Commander in play and assigned to nobody, Merry's skirmish with a
+		// Goblin Runner is not canceled.  3 against 5.
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(merry, runner);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(merry);
+		scn.FreepsPlayCard(stealth1);
+		assertInDiscard(stealth1);
+		assertTrue(scn.IsCharSkirmishingAgainst(merry, runner));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		scn.ShadowPass();
+		scn.FreepsPass();
+		assertEquals(1, scn.GetWoundsOn(merry));
+
+		// The fellowship moves again, to site 5, and the Crossroads lie behind it.  The same three minions are
+		// still on the table.
+		scn.SkipToMovementDecision();
+		scn.FreepsChooseToMove();
+		assertEquals(5, scn.GetCurrentSiteNumber());
+		assertSame(crossroads, scn.GetSite(4));
+		assertInZone(Zone.SHADOW_CHARACTERS, commander, runner, runner2);
+
+		// The text of a site binds only while the fellowship is at it: Pippin's skirmish with the other Goblin
+		// Runner is canceled, the unique [moria] minion still in play.
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(pippin, runner2);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(pippin);
+		assertTrue(scn.IsCharSkirmishingAgainst(pippin, runner2));
+		scn.FreepsPlayCard(stealth2);
+		assertInDiscard(stealth2);
+		assertFalse(scn.IsCharSkirmishing(pippin));
+		assertFalse(scn.IsCharAssigned(pippin));
+		assertEquals(0, scn.GetWoundsOn(pippin));
+		assertEquals(0, scn.GetWoundsOn(runner2));
+		assertInZone(Zone.SHADOW_CHARACTERS, commander);
+
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
 }

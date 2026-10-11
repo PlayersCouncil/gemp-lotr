@@ -286,4 +286,52 @@ public class Card_11_227_ErrataTests
 		assertEquals(3, scn.GetShadowArcheryTotal());
 		assertTrue(scn.AwaitingFreepsArcheryPhaseActions());
 	}
+
+	@Test
+	public void OnceTheFellowshipHasLeftAnduinBanksSevenCompanionsAddNothingToTheMinionArcheryTotal() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		var gimli = scn.GetFreepsCard("gimli");
+		var sam = scn.GetFreepsCard("sam");
+		var merry = scn.GetFreepsCard("merry");
+		var pippin = scn.GetFreepsCard("pippin");
+		var savage = scn.GetShadowCard("savage");
+		// Frodo and six more are seven companions.
+		scn.MoveCompanionsToTable(aragorn, boromir, gimli, sam, merry, pippin);
+
+		// Anduin Banks is laid as site 1: region 1.
+		scn.StartGame(scn.GetFreepsSite("anduin"));
+
+		var banks = scn.GetCurrentSite();
+		assertEquals("Anduin Banks", banks.getBlueprint().getTitle());
+		// 2 companions over 5, in region 1
+		assertEquals(2, scn.GetShadowArcheryTotal());
+
+		// The fellowship moves on to Abandoned Mine Shaft, site 2 and still region 1; Anduin Banks lies behind it.
+		scn.FreepsPass();
+		scn.ShadowChooseCardBPFromSelection(scn.GetShadowSite("site2"));
+		scn.MoveMinionsToTable(savage);
+		scn.SkipToPhase(Phase.ARCHERY);
+
+		assertEquals("Abandoned Mine Shaft", scn.GetCurrentSite().getBlueprint().getTitle());
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertSame(banks, scn.GetSite(1));
+		// The same seven companions and a minion who is no archer.  The text of a site binds only while the
+		// fellowship is at it: nothing is added.
+		assertEquals(0, scn.GetShadowArcheryTotal());
+
+		// No wound is asked of anyone: the archery phase goes by and the assignment follows.
+		scn.PassCurrentPhaseActions();
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(boromir));
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertEquals(0, scn.GetWoundsOn(sam));
+		assertEquals(0, scn.GetWoundsOn(merry));
+		assertEquals(0, scn.GetWoundsOn(pippin));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
 }

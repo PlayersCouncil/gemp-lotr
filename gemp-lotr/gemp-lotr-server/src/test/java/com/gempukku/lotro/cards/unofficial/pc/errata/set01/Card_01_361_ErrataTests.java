@@ -24,6 +24,8 @@ public class Card_01_361_ErrataTests
 					put("guard", "1_7");          // Dwarf Guard: [dwarven] companion; needs a Dwarf to be played, so cheated in
 					put("gimli", "1_13");         // Gimli, Son of Gloin: [dwarven] companion; damage +1 and a skirmish ability
 					put("elrond", "1_40");        // Elrond, Lord of Rivendell: [elven] ally; heals site 3 allies at the start of the turn
+					// Pathfinder: "Fellowship or Regroup: Spot a ranger to play the fellowship's next site."  Aragorn is a ranger.
+					put("pathfinder", "1_110");
 
 					put("party1", "1_158");       // Uruk-hai Raiding Party: [isengard] minion, cost 4, site 5; damage +1 only
 					put("party2", "1_158");
@@ -150,6 +152,52 @@ public class Card_01_361_ErrataTests
 		twilight = scn.GetTwilight();
 		scn.ShadowPlayCard(party2);
 		assertEquals(twilight - 4, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void WithTheSlopesLaidAheadOfTheFellowshipAnIsengardMinionCostsItsPrintedNumber() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var guard = scn.GetFreepsCard("guard");
+		var gimli = scn.GetFreepsCard("gimli");
+		var pathfinder = scn.GetFreepsCard("pathfinder");
+		var party = scn.GetShadowCard("party1");
+		var savage = scn.GetShadowCard("savage1");
+		scn.MoveCompanionsToTable(aragorn, guard, gimli);
+
+		scn.StartGame();
+		scn.SkipToSite(7);
+		scn.MoveCardsToHand(pathfinder);
+
+		// To site 8, and with no minion about straight to the regroup phase.  No fellowship ever leaves site 9, so
+		// the Slopes are on the path without the fellowship only when a card has laid them ahead of it: Aragorn is
+		// a ranger, and Pathfinder plays the fellowship's next site.
+		scn.FreepsPass();
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.FreepsPlayCard(pathfinder);
+		assertEquals(8, scn.GetCurrentSiteNumber());
+		assertEquals("51_361", scn.GetSite(9).getBlueprintId());
+
+		// 4 companions and one minion, of [isengard].  The text of a site binds only while the fellowship is at
+		// it: a Raiding Party costs its printed 4.
+		scn.MoveMinionsToTable(savage);
+		scn.MoveCardsToHand(party);
+		assertEquals(4, scn.GetTwilightCost(party));
+
+		// The fellowship moves on to the Slopes, the Savage still on the table: 4 - 1.
+		scn.SkipToMovementDecision();
+		scn.FreepsChooseToMove();
+		assertEquals("51_361", scn.GetCurrentSite().getBlueprintId());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertInZone(Zone.SHADOW_CHARACTERS, savage);
+		assertEquals(3, scn.GetTwilightCost(party));
+
+		int twilight = scn.GetTwilight();
+		scn.ShadowPlayCard(party);
+		assertInZone(Zone.SHADOW_CHARACTERS, party);
+		assertEquals(twilight - 3, scn.GetTwilight());
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

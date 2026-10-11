@@ -181,4 +181,52 @@ public class Card_V2_071_Tests
 
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
+
+	@Test
+	public void OnceTheFellowshipHasLeftTheTowerSixCompanionsGiveNoCharacterADamageBonus() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var sam = scn.GetFreepsCard("sam");
+		var legolas = scn.GetFreepsCard("legolas");
+		var merry = scn.GetFreepsCard("merry");
+		var gaffer = scn.GetFreepsCard("gaffer");
+		var troop = scn.GetShadowCard("troop");
+		var savage = scn.GetShadowCard("savage");
+
+		scn.StartGame();
+		scn.SkipToSite(7);
+
+		// Six companions with Frodo, an ally and two minions, at the Tower.
+		scn.MoveCompanionsToTable(aragorn, gimli, sam, legolas, merry);
+		scn.MoveAlliesToTable(gaffer);
+		scn.MoveMinionsToTable(troop, savage);
+
+		var tower = scn.GetCurrentSite();
+		assertEquals("Helm's Tower", tower.getBlueprint().getTitle());
+		assertEquals(1, scn.GetKeywordCount(frodo, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(merry, Keyword.DAMAGE));
+		assertEquals(2, scn.GetKeywordCount(gimli, Keyword.DAMAGE));        // 1 printed + 1
+		assertEquals(1, scn.GetKeywordCount(gaffer, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(troop, Keyword.DAMAGE));
+		assertEquals(2, scn.GetKeywordCount(savage, Keyword.DAMAGE));       // 1 printed + 1
+
+		// The fellowship moves on to site 8 and the Tower lies behind it.
+		scn.FreepsPass();
+
+		assertEquals(8, scn.GetCurrentSiteNumber());
+		assertSame(tower, scn.GetSite(7));
+		// The same six companions.  The text of a site binds only while the fellowship is at it: each character
+		// has the damage bonus it prints and no more.
+		assertEquals(0, scn.GetKeywordCount(frodo, Keyword.DAMAGE));
+		assertEquals(0, scn.GetKeywordCount(merry, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
+		assertEquals(0, scn.GetKeywordCount(gaffer, Keyword.DAMAGE));
+		assertEquals(0, scn.GetKeywordCount(troop, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(savage, Keyword.DAMAGE));
+
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
 }

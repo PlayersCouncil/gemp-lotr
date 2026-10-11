@@ -96,6 +96,41 @@ public class Card_V3_126_Tests
 		);
 	}
 
+	// The same Ring-bearer with The One Ring, Isildur's Bane 1_1 (strength +1 and vitality +1 printed), whose
+	// response is for a wound in any phase: "Response: If bearer is about to take a wound, he wears The One
+	// Ring until the regroup phase."
+	protected VirtualTableScenario GetIsildursBaneScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("aragorn", "1_89");        // Aragorn, Ranger of the North: a ranger
+					put("anduril", "7_79");        // Anduril, Flame of the West: artifact; "He is damage +1 and cannot bear other weapons"
+					// Pathfinder: "Fellowship or Regroup: Spot a ranger to play the fellowship's next site."  It puts
+					// the Cracks on the path while the fellowship is still at site 8.
+					put("pathfinder", "1_110");
+
+					put("runner", "1_178");        // Goblin Runner: [moria] Orc, strength 5, vitality 1
+					// Gollum, Dark as Darkness: strength 5, vitality 4; "Regroup: Exert Gollum twice to wound the
+					// Ring-bearer."  His other abilities remove a burden, and there is none.
+					put("gollum", "9_28");
+				}},
+				new HashMap<>()
+				{{
+					put("site1", "7_330");
+					put("site2", "7_335");
+					put("site3", "8_117");
+					put("site4", "7_342");
+					put("site5", "7_345");
+					put("site6", "7_350");
+					put("site7", "8_120");
+					put("site8", "7_356");         // Cross Roads: a Shadow ability that needs 2 [raider] Men
+					put("site9", "103_126");       // Cracks of Doom
+				}},
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.IsildursBaneRing
+		);
+	}
+
 	@Test
 	public void CracksofDoomStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
@@ -484,5 +519,58 @@ public class Card_V3_126_Tests
 		assertEquals(2, scn.GetWoundsOn(frodo));
 		assertEquals(2, scn.GetBurdens());
 		assertTrue(scn.GameIsFinished());
+	}
+
+	@Test
+	public void WithTheCracksLaidAheadOfTheFellowshipItemsAndTheRingKeepTheirTextAndAMinionItsStrength() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetIsildursBaneScenario();
+
+		var frodo = scn.GetRingBearer();
+		var ring = scn.GetRing();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var anduril = scn.GetFreepsCard("anduril");
+		var pathfinder = scn.GetFreepsCard("pathfinder");
+		var runner = scn.GetShadowCard("runner");
+		var gollum = scn.GetShadowCard("gollum");
+
+		scn.StartGame();
+		scn.SkipToSite(7);
+		scn.MoveCompanionsToTable(aragorn);
+		scn.AttachCardsTo(aragorn, anduril);
+		scn.MoveCardsToHand(pathfinder);
+
+		// To site 8, and with no minion about straight to the regroup phase.  No fellowship ever leaves site 9, so
+		// the Cracks are on the path without the fellowship only when a card has laid them ahead of it: Aragorn is
+		// a ranger, and Pathfinder plays the fellowship's next site.
+		scn.FreepsPass();
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.MoveMinionsToTable(runner, gollum);
+		scn.FreepsPlayCard(pathfinder);
+		assertEquals(8, scn.GetCurrentSiteNumber());
+		assertEquals("Cracks of Doom", scn.GetSite(9).getBlueprint().getTitle());
+
+		// The text of a site binds only while the fellowship is at it.  A Free Peoples item's text applies, and a
+		// minion has the strength printed.
+		assertTrue(scn.HasKeyword(aragorn, Keyword.DAMAGE));        // Anduril
+		assertEquals(5, scn.GetStrength(runner));
+
+		// So does the text of The One Ring: Gollum wounds the Ring-bearer, who is offered the Ring.  Declined, he
+		// takes the wound.
+		scn.ShadowUseCardAction(gollum);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(ring));
+		scn.FreepsDeclineOptionalTrigger();
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetBurdens());
+		assertFalse(scn.RBWearingOneRing());
+
+		// The fellowship moves on to the Cracks, the same cards on the table.
+		scn.SkipToMovementDecision();
+		scn.FreepsChooseToMove();
+		assertEquals("Cracks of Doom", scn.GetCurrentSite().getBlueprint().getTitle());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertAttachedTo(anduril, aragorn);
+		assertFalse(scn.HasKeyword(aragorn, Keyword.DAMAGE));
+		// 5 + 1 for the site
+		assertEquals(6, scn.GetStrength(runner));
 	}
 }
