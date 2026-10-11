@@ -291,9 +291,9 @@ same (F-0363, engine pass 26): see "A follower's Aid" below.
 stacked here / from hand" neither offers a response event nor counts one towards being usable; an event that
 is a response and a phase event (Eye of Barad-dur 5_96) is offered in its phase only, which no test reads:
 no printed card plays a [sauron] event in a skirmish phase (engine pass 27). For "a [culture] event" a response
-event of that culture is the invalid candidate beside the phase events (`Card_01_017_ErrataTests`, Grimir 51_17
-beside Nobody Tosses a Dwarf 1_23), and a phase word in the definition's filter beside it cannot be told from
-its absence: say so in Notes. Race Text 92_29's booster pack is in `mechanics/ResponseEventsAreNotPlayedByEffectsTests`.
+event of that culture is the invalid candidate beside the phase events (`Card_V2_052_Tests`: Now for Ruin
+102_52, whose filter names no phase, beside Unyielding 10_74, so the refusal read is the game's own), and a
+phase word in the definition's filter beside it cannot be told from its absence: say so in Notes. Race Text 92_29's booster pack is in `mechanics/ResponseEventsAreNotPlayedByEffectsTests`.
 Nor is an event of another phase played that way (CR 4.2 "event"): "play a [shire] tale" from hand in the
 regroup phase does not offer a Skirmish event that is a [shire] tale (Nine-fingered Frodo 10_112), and with that
 alone in hand the ability is not offered (Bilbo 59_49).

@@ -48,6 +48,9 @@ public class Card_V2_052_Tests
 					put("work", "4_297");        // Work for the Sword: another skirmish event, kept in hand
 					put("knights", "7_238");     // Knights of His House: Maneuver, cost 0, nothing to spot
 					put("precise", "18_101");    // Precise Attack: Archery; "Discard a [rohan] possession from play to choose one: ..."
+					// Unyielding: Response, cost 1, nothing to spot.  "If your [rohan] Man wins a skirmish, discard
+					// a [rohan] possession to wound a minion or to liberate a site."
+					put("unyielding", "10_74");
 					// [rohan] cards that are neither conditions nor events.
 					put("chain", "4_278");       // Heavy Chain: a possession, bearer must be a Man
 					put("bow", "5_88");          // Rohirrim Bow: "Archery: Exert bearer and discard this possession to wound a minion."
@@ -299,6 +302,7 @@ public class Card_V2_052_Tests
 		var villagers = scn.GetFreepsCard("villagers");
 		var work = scn.GetFreepsCard("work");
 		var knights = scn.GetFreepsCard("knights");
+		var unyielding = scn.GetFreepsCard("unyielding");
 		var chain = scn.GetFreepsCard("chain");
 		var rider = scn.GetFreepsCard("rider");
 		var arms = scn.GetFreepsCard("arms");
@@ -314,10 +318,12 @@ public class Card_V2_052_Tests
 		scn.MoveCompanionsToTable(guard, haldir);
 		// In the discard pile.  [rohan] and a condition or an event that can be played now: Doom Drove
 		// Them and Fight for the Villagers.  Not so: Arrow-slits (unique, and its other copy is in
-		// play), Knights of His House (a maneuver event, and this is a skirmish), Heavy Chain (a
-		// possession), a Rider of Rohan (a companion), Strength of Arms (an [elven] condition) and
-		// Defiance (an [elven] skirmish event).  A second [rohan] skirmish event is in hand.
-		scn.MoveCardsToDiscard(slits2, doom, villagers, knights, chain, rider, arms, defiance);
+		// play), Knights of His House (a maneuver event, and this is a skirmish), Unyielding (a response
+		// event: played in answer to its own trigger and by no card's effect, though a [rohan] Man is
+		// winning a skirmish as the choice is made; F-0186), Heavy Chain (a possession), a Rider of Rohan
+		// (a companion), Strength of Arms (an [elven] condition) and Defiance (an [elven] skirmish
+		// event).  A second [rohan] skirmish event is in hand.
+		scn.MoveCardsToDiscard(slits2, doom, villagers, knights, unyielding, chain, rider, arms, defiance);
 		scn.MoveCardsToHand(work);
 		// The Shadow player's discard pile: two minions, a possession and a condition.  A third minion
 		// is in his hand.
@@ -341,7 +347,7 @@ public class Card_V2_052_Tests
 
 		assertTrue(scn.FreepsDecisionAvailable("Choose card from discard"));
 		assertTrue(scn.FreepsHasCardChoiceAvailable(doom, villagers));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(slits2, knights, chain, rider, arms, defiance, work));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(slits2, knights, unyielding, chain, rider, arms, defiance, work));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		scn.FreepsChooseCardBPFromSelection(villagers);
 

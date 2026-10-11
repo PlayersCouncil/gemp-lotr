@@ -27,11 +27,13 @@ import static org.junit.Assert.*;
  * card these tests are on.
  *
  * A printed card's "play a [culture] event from your discard pile" is read in that card's own file, with a
- * response event of the culture in the pile: Grimir, Dwarven Elder 51_17 (Card_01_017_ErrataTests) beside
- * Nobody Tosses a Dwarf 1_23.  This class used to read the same of two invented cards, "play an event from your
- * discard pile" and "play an event stacked here" with no culture and no phase in their filters, and of them alone
- * that an event which is a response and a phase event at once (Eye of Barad-dur 5_96, Skirmish and Response) is
- * played by such an effect in its own phase.  No printed card has either shape, and none can reach that event
+ * response event of the culture in the pile: Now for Ruin 102_52 (Card_V2_052_Tests) beside Unyielding 10_74.
+ * Its filter names no phase and excepts nothing, so the refusal read there is the game's own.  (Grimir, Dwarven
+ * Elder 51_17's file lays one too, where the card's own words "skirmish event" would refuse it as well.)  This
+ * class used to read the same of two invented cards, "play an event from your discard pile" and "play an event
+ * stacked here" with no culture and no phase in their filters, and of them alone that an event which is a
+ * response and a phase event at once (Eye of Barad-dur 5_96, Skirmish and Response) is played by such an effect
+ * in its own phase.  No printed card has either shape, and none can reach that event
  * (it is a [sauron] event, and no card plays a [sauron] event or "a Shadow event" from a pile, a stack or a hand
  * in a skirmish phase), so those tests went with the cards (Ketura, 2026-10-11, Q-0241: the campaign tests
  * cards).  That reading of Filters.playable stands in the engine with no test.
