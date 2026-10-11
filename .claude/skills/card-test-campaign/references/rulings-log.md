@@ -614,6 +614,28 @@ flag: abilities that play a card from a pile stay withheld when nothing can be p
 flagged for missing the skirmish only when it is a pump or a cancel that reaches nobody fighting ("If it actually
 results in something hitting the table, it's fine to leave noeffect off of it"); auto-pass is left alone for now. *[2026-10-06, evening]*
 
+**What gets tested (2026-10-11, first notes).** Q-0241, the four cards `adopt` invented for the kinds of effect no
+printed card shows without a hand-written requirement: "This needs reworked. I'm not opposed to inventing new
+cards when testing mechanics or engine code, but I do object to adding them as cards with IDs. The original
+Hinder at tests established the way to do this: staple the ability you want to see onto a card with no usual
+text (frodo or a minion depending on side) and invoke it that way. This establishes the artificial test nature of
+the card while also including its creation right there, plus does not expose us to potential issues surrounding
+test cards infecting the ecosystem. If there are any other tests which have invented their own cards, please set
+up a task to convert them to test frankensteins." So: no invented card with an id of its own (none in
+`testCards.hjson` or any definition file); where a mechanics or engine test needs an ability no printed card
+shows, the ability is stapled, in the test, onto a card with no usual text. Q-0239, no third copy of a two-dot
+title in play in a card test: "A. Yeah, the standing idea is "no cheating in more copies of a card than their
+uniqueness level allows" for that." (A: the three relaid tests are kept as built.) Q-0237, no hindered candidate
+and no second block's path owed on a Decipher card whose text names neither: "Keep both for sure. That is already
+covered by the generic hinder tests, and such classes of mechanical interaction can stand to keep to mechanical
+tests instead of incessantly checking them on all cards." Q-0236, The White Council 101_18's two tests laying
+nine tables, one Saruman to a table: "Are we testing White Council or are we testing nine Sarumen? In the case of
+a modifier, we only need to ensure that the *outgoing* mechanism has been enabled, and it's up to each of those
+individual cards to check their side responds to the *incoming* mechanism. For White Council, that means we check
+*one* of them, which then ensures that White Council has done its due diligence. So a C with just one Saruman."
+So a card that switches something on other cards is tested with ONE card that answers the switch; each card that
+answers it shows, in its own tests, that it does. *[2026-10-11]*
+
 ## How card text is read
 
 **2026-10-05. Cards are code (Q-0012).** "In general I hold to the philosophy that cards are code: the text should
@@ -856,6 +878,25 @@ is has been asked back; not built yet. *[2026-10-07, night]*
 should." This withdraws the 0-to-1 choice she first asked for: the Free Peoples player gets a yes/no, and
 the Shadow player then picks the card. The yes/no is asked only when the Shadow player has a hindered card
 (no pester prompt, as with Q-0107). Built as F-0180. *[2026-10-07, late]*
+
+**What is offered and what is asked (2026-10-11, first notes).** F-0385, Valley of the Silverlode 2_120 ("each
+Hobbit companion may heal"), an optional trigger whose choice may then be answered with nobody: NOT A BUG, A:
+"There are rules surrounding optional/required actions as you point out, so I think we are required to keep this
+an optional trigger. In this case there is no downside to healing, but if we're following a general rule I would
+rather we click on the card to trigger it (such actions don't use popups) and then have the option to select 0-N,
+if one were to change one's mind (for example, the Longbottom Leaf we may click the card for the trigger, and
+only after thinking about it decide that none of the cards are good discard candidates and choose 0). So this one
+is A." So an optional trigger whose EFFECT is a choice of "up to N" or "each may" keeps both: the offer, and a
+choice from 0 (Longbottom Leaf 1_300 and Uruk-hai Healer 14_14 stay as built). The orchestrator's reading, told
+to her: this does not reach a choice that is a COST (Robin Smallburrow 68_111, F-0300: 1 to 3, by Q-0015 as
+amended by Q-0034), nor a text that says "a" and not "up to" (Stewards' Legacy 13_75, F-0041: exactly one).
+Q-0243, Hatred Stirred 11_210 ("you may shuffle a [wraith] card from your discard pile into your draw deck") with
+no [wraith] card there: "Go for B." (the trigger requires the card, as Q-0112 did for Mûmakil Commander; Q-0102
+stays for "up to N"). F-0419, Shelob, Menace 18_34 ("you may add threats up to the number of burdens you can
+spot") adding one for each burden unasked: "as written, it should offer a choice, 0-N, ideally with a prompt
+defaulting to N." F-0420, Mallorn-trees 1_54 offered with no [elven] card in hand: "Yeah that looks like a
+reasonable fix". Q-0240, Resistance Becomes Unbearable 2_79 with a Ring-bearer already exhausted: "A" (as built:
+"is then exhausted" reads his state once the event has done what it can; he puts on the Ring). *[2026-10-11]*
 
 ## Limits
 
@@ -1109,6 +1150,14 @@ the discard pile. *[2026-10-05, afternoon]*
 a `Repeat` round a `ReinforceTokens` with no `times`; `times` on ReinforceTokens is only for "reinforce a
 token twice" (the same card). *[late on 2026-10-06]*
 
+**Triggers (2026-10-11, first notes).** F-0389, Rivendell Waterfall 1_342 giving no +1 to the move limit where
+the Free Peoples player takes the ranger's death ahead of the site's check: DROPPED, not a bug: "this is a
+situation that is both so niche as to be a very diminishing-returns edge case, and also something that is 100% in
+the hands of the Free Peoples player who foolishly decided to choose the wrong order to resolve required triggers
+in. I'm not worried about the timing on this; that's part of the reason *why* freeps has the last tiebreaking say
+in cases like this, so that it's their fault and not the rules. Go ahead and drop this one." So what follows from
+the order in which a player takes his own required triggers is his, and no finding. *[2026-10-11]*
+
 ## Hinder, the support area, sites, Maps and the Ring
 
 **2026-10-05. Sam as Ring-bearer (Q-0008).** Resistance was fleshed out in sets 9 and 11, codifying what had been
@@ -1220,6 +1269,11 @@ ongoing in-game effect." *[2026-10-06, evening]*
 **Controlled sites are not discardable (Q-0056).** A card that discards "a card" from a support area does not
 reach a controlled site. *[2026-10-06, evening]*
 
+**Sites (2026-10-11, first notes).** Q-0238, Speak "Friend" and Enter 2_26 and the nine cards worded "play the
+fellowship's next site (replacing opponent's site if necessary)", on a Shadows-block path with the player's own
+site lying next: "A" (as built: the parenthesis is a reminder and the rule decides; the player's own site is
+replaced too). Q-0226, of which this was a rider, stays parked. *[2026-10-11]*
+
 ## Reveals, draw decks and shuffles
 
 **2026-10-05. Reveal means shown (F-0021).** A card "revealed" from the draw deck that only the player choosing it
@@ -1253,6 +1307,13 @@ clearly be playable with no effect, but I can see the issue with Mumakil Command
 level, the shuffle can target 0 cards, but on a card level we'll set up Mumakil Commander to require there be a
 mount in play first." The engine shuffles the deck with none shuffled in, as from a discard pile (Q-0102);
 Mumakil Commander 18_71's ability is withheld until a mount of his can be spotted. *[2026-10-08]*
+
+**Reveals (2026-10-11, first notes).** F-0391, Storm of Argument 3_6 revealing a Shadow card past No Business of
+Ours 2_44: "Seems pretty clear that it should be rewritten to use revealRandomCardsFromHand. If the other test
+can't then be tested, then it seems that edge case isn't something we really need to worry about, if there are no
+other candidates in the entire card base." So the definition is written as its three siblings are, and the two
+tests of `mechanics/RevealingNoCardsFromAHandTests` that 3_6 alone could lay go, unless another card in the card
+base can lay them. *[2026-10-11]*
 
 ## The test rig
 
@@ -1627,3 +1688,8 @@ and transfers, with gameplay resuming as normal. So I guess this is B+, haha." Q
 "current site" is meant to literally be the site the fellowship is currently at (which seems beyond reasonable),
 then I think A is it." Q-0235, the three old tests kept in 2022 as Legacy classes in 1_31's and 1_9's files:
 "those transferred tests were good to delete with A; they are now covered better elsewhere." *[2026-10-10]*
+
+**Card by card (2026-10-11, first notes).** Q-0242, Frodo, Courteous Halfling 4_301's bar on Shadow discards from
+hand shown stopping Hand of Sauron 3_90: "keep". F-0418, Morgai Foothills 8_110 discarding no card from hand
+(`select: self` in its discardFromHand): "yeah clearly a bug". "Approve all F- items lower than F-0420."
+*[2026-10-11]*

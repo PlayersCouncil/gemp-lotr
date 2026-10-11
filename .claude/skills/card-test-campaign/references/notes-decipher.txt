@@ -26,9 +26,23 @@ held more than a stat check before the campaign (509 tests between them, most fi
   `mechanics/HinderedCardCannotBeSpottedTests`, and laying it again on every card that spots is the kind of
   test Ketura ruled out under Q-0213 ("a waste of time to continue searching for *theoretical* malformed targets
   in places and arrangements where they have been historically sparse"). The Notes of the ledger say so in a
-  line. (Put to her as Q-0237; this is how it stands unless she strikes it.)
+  line. (Q-0237, kept by her, 2026-10-11: "That is already covered by the generic hinder tests, and such classes
+  of mechanical interaction can stand to keep to mechanical tests instead of incessantly checking them on all
+  cards.")
 - A site's BLOCK is the same: a text that says "a site" or "each site" with no block named owes no second
   scenario on another block's path (also Q-0237).
+- A card that SWITCHES something on other cards (The White Council 101_18 on Saruman's first sentence) is tested
+  with ONE card that answers the switch, and each card that answers a switch shows in its OWN tests that it does
+  (Q-0236, 2026-10-11: "we only need to ensure that the *outgoing* mechanism has been enabled, and it's up to
+  each of those individual cards to check their side responds to the *incoming* mechanism"). So a Saruman whose
+  first sentence can be switched off (3_68, 3_69, 4_173, 5_56, 4_33, 17_37) owes a test of it, under The White
+  Council 101_18 or Saruman's Staff 4_174, in his own file; and a test of the switching card lays one of them.
+- No more copies of a title in play than its dots allow, counted by title whatever the subtitle (Q-0239,
+  2026-10-11: "no cheating in more copies of a card than their uniqueness level allows"): one of a unique title,
+  two of a two-dot title. A board that needs more is not a board; say so in the ledger's Notes.
+- No invented card. Nothing is added to `testCards.hjson` or to any definition file for a test (Q-0241,
+  2026-10-11). A card test uses printed cards; if no printed card can make the board, the test is not written and
+  the Notes say what could not be shown.
 
 WHAT IS ALREADY IN A DECIPHER CARD'S FILE
 - The conversion of the old `at` tests put LONE TESTS into many Decipher cards' files (a test of an interaction,
@@ -56,8 +70,16 @@ DEFINITIONS ALREADY CORRECTED, WITH NO CARD TESTS YET
   Card_01_081_Tests.TheCardsTakenIntoHandAreNotNamedInTheGameLog. The same leak on another "look at ... take into
   hand" card is the same finding.
   Any other site 3 of sets 1 to 3 built the same way is the same finding: say F-0383 and correct it.
-- A candidate filed and not yet answered: F-0385 (Valley of the Silverlode 2_120, Bilbo 1_300 and 14_14: an optional
-  trigger whose effect is then a choice of 0 to N, so the player can say no twice). Do not correct it on another card.
+- NOT A FAULT (F-0385, answered 2026-10-11): an optional trigger whose EFFECT is then a choice of "up to N" or
+  "each may", with a minimum of 0, so that the player can decline the offer or take it and choose nobody (Valley
+  of the Silverlode 2_120, Longbottom Leaf 1_300, Uruk-hai Healer 14_14). She wants both: "click on the card to
+  trigger it ... and then have the option to select 0-N, if one were to change one's mind". Test it as built
+  (the offer, and the choice's minimum of 0) and file nothing. It does not reach a choice that is a COST (a cost
+  of none is not offered: Q-0015, Q-0034) or a text that says "a" and not "up to".
+- Where a text says "up to N" of something counted and the definition does all N unasked (Shelob, Menace 18_34,
+  F-0419): a fault. She wants the choice, 0 to N, "ideally with a prompt defaulting to N".
+- What follows from the ORDER in which a player takes his own required triggers is his own doing and no finding
+  (F-0389, dropped 2026-10-11: Rivendell Waterfall 1_342 and a ranger who dies ahead of the site's check).
 - Candidates since answered (now faults, queued for engine pass 26): F-0345 (Boromir 18_40, "a possession" fetched only if [gondor]) and
   F-0346 (Wish For Our Kinfolk 8_8, a Dwarf ally pays "Exert a Dwarf companion").
 

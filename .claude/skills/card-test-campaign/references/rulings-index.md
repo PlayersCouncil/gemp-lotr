@@ -125,6 +125,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - 2026-10-04. The old `at` tests
 - The no-effect flag (new engine feature) [Q-0034]
 - The no-effect flag, what it covers (Q-0073 follow-up)
+- What gets tested (2026-10-11, first notes) [Q-0241, Q-0239, Q-0237, Q-0236]
 
 ## How card text is read
 
@@ -185,6 +186,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Exert X twice" should offer only those able to (F-0131): "It would be nice if [a vitality filter on each card] wasn't necessary all the time." Fixed ...
 - Worth Fighting For 103_120's "you may make the Shadow player shuffle" is to be asked [Q-0106]
 - Q-0106, Worth Fighting For 103_120, "you may make the Shadow player shuffle one of their hindered cards" [Q-0107, F-0180]
+- What is offered and what is asked (2026-10-11, first notes) [F-0385, F-0300, Q-0015, Q-0034, F-0041, Q-0243, Q-0112, Q-0102, F-0419, F-0420, Q-0240]
 
 ## Limits
 
@@ -243,6 +245,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - War Howdah 103_62 keeps the stacked Man's game text and keywords [Q-0096]
 - A tentacle killed by the wound may still be stacked (Q-0014)
 - Reinforcing more than one token is one at a time (F-0113)
+- Triggers (2026-10-11, first notes) [F-0389]
 
 ## Hinder, the support area, sites, Maps and the Ring
 
@@ -264,6 +267,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Control(s) a site" goes by the count of controlled sites (Q-0054)
 - Maps are information only (Q-0055)
 - Controlled sites are not discardable (Q-0056)
+- Sites (2026-10-11, first notes) [Q-0238, Q-0226]
 
 ## Reveals, draw decks and shuffles
 
@@ -274,6 +278,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - 2026-10-05. Copies in hidden zones (G-0003)
 - "Shuffle up to N ... into your draw deck" shuffles the deck even when nothing is shuffled in [Q-0102, F-0161]
 - Q-0112 (F-0196), shuffling "any number" of cards from play with none chosen [Q-0102]
+- Reveals (2026-10-11, first notes) [F-0391]
 
 ## The test rig
 
@@ -347,6 +352,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Card by card (2026-10-10, second notes) [Q-0211, Q-0214, F-0341, Q-0034, F-0340, F-0350, F-0355, G-0041]
 - Card by card (2026-10-10, third notes) [Q-0216, Q-0217, Q-0218, Q-0219, Q-0221, F-0345, F-0346, F-0364, F-0363, F-0376, G-0051, G-0053, G-0054]
 - Card by card (2026-10-10, fourth notes) [Q-0225, Q-0226, Q-0227, Q-0232, Q-0234, Q-0235]
+- Card by card (2026-10-11, first notes) [Q-0242, F-0418, F-0420]
 
 # Settled shapes (shapes.md)
 
