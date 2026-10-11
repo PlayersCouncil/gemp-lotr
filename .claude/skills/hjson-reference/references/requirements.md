@@ -330,7 +330,7 @@ Meta-level operations that modify the output of other requirements or value eval
 * SarumanFirstSentenceActive
   True if Saruman's first sentence of text is to be treated as active, i.e. it is has not been disabled by the likes of Saruman's Staff, Wizard's Device).
 * ShadowPlayerReplacedCurrentSite
-  True if the Shadow player has replaced the Fellowship's current site this turn.  See Many Miles).
+  True while the fellowship is at a site that a Shadow player replaced this turn while the fellowship was at it; false again once the fellowship has moved on from that site (Q-0234).  See Many Miles).
 * SiteAvailableToControl
   True if there are any sites available to be controlled, i.e. all players have passed such a site and it is uncontrolled on the adventure path.
 * ThreatLimit

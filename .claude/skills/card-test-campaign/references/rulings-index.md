@@ -486,6 +486,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - The One Ring is not discarded with a Ring-bearer who is killed: it lies where he was (Q-0232: "B+"; Q-0109; built by engine pass 26)
 - Ruled on the night of 2026-10-07, and built by engine pass 12 (Q-0103 to Q-0108, F-0175 to F-0179) [Q-0105, Q-0023, Q-0104, Q-0107, F-0176, F-0178, F-0196]
 - Whose support area: support(you), support(opponent) and the rest (F-0177, Q-0101)
+- "If a Shadow player has replaced the fellowship's current site this turn" is asked of the site the fellowship is at NOW (Q-0234: A; built by engine pass 26; Many Miles 13_21) [Q-0259]
 - A site's continuous text: `modifier` holds only while the fellowship is there, `PermanentSiteModifier` wherever the site lies (CR 4.2 "active", LR 3; Q-0173, open)
 - A site whose text names the site by its title goes by `name(<title>)`, never by `self` or by nothing (Q-0027; F-0043, F-0381, F-0382, F-0383) [F-0390]
 - "While at a <terrain> site" on a card an ally may bear: an ally is at his home site (F-0380, Asfaloth 1_31)

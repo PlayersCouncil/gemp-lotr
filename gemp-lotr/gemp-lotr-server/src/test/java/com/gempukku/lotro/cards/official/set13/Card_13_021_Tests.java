@@ -8,7 +8,6 @@ import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.common.Timeword;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -166,7 +165,6 @@ public class Card_13_021_Tests
 	}
 
 	@Test
-	@Ignore("Q-0234: once the fellowship has moved on from the site a Shadow player replaced this turn, the game still adds 2")
 	public void AddsOneWhenTheSiteAShadowPlayerReplacedThisTurnIsNoLongerTheCurrentSite() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetReplacedSiteScenario();
 
