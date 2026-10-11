@@ -512,7 +512,9 @@ Stop work on the card, record what is in the way, and move to the next. Do not f
   Where a general ruling in the log reaches the card by its own scope, the game departs from it on this card,
   and the card's old test asserts what the game does, it is still a question: the old test is evidence that the
   departure was meant. Park the ruling's reading, keep the old reading active, and name the other cards built
-  the same way so that one answer covers them.
+  the same way so that one answer covers them. Not so where shapes.md names the card ITSELF as built against the
+  shape (Above the Battlement 7_262 under F-0222): that is a finding with its correction shown, the old reading is
+  dropped, and the report says whose test read otherwise and when, for the landing to put to her (F-0465, Q-0254).
 - **Only a card outside the campaign's order shows it.** A disagreement between game and text that takes a
   Hobbit-set card to show (those sets have no text sheet, and come last) is still a finding, filed against the
   card whose definition is at fault, with its test parked in the file of the card whose text it is. A mere doubt
