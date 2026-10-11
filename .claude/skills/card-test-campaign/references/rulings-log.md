@@ -664,6 +664,25 @@ that exists does. A guard for a thing no card should be able to do is laid with 
 tested as far as that card goes and no further. No new rig method for stapling definition text. Engine pass 27
 (`guards`, `nocards`) carries it out. *[2026-10-11]*
 
+**What a card's tests may take as proven (2026-10-11, fifth notes).** Q-0261, the generated Play test: "Keep. I
+might even want to go one further; I do not think it is necessary to, for example, test that every single minion
+removes twilight from the pool based on its twilight cost when played. I would prefer we have mechanical
+"TwilightPool" tests that go over the nuances of the mechanic, which exhaustively confirms that if a Shadow card
+of any type has a twilight cost of X, X is going to be removed (roaming handled here too), and establishes that
+essentially proven function. That way, it is acceptable on all cards to just check that their twilight cost is
+set to the appropriate amount (as the StatsAndKeywords check already does), and further testing does not need to
+re-litigate proven functionality (that the number translates to twilight tokens). I would also say that this
+should be done for things like stats and such. We aren't, for example, testing that every character is "able to
+be assigned to a skirmish", because that is proven basic functionality and we don't need to get obsessive that a
+character with no assignment-affecting text has interfered with this. Perhaps this warrants another pass,
+something that takes a good look at the StatsAndKeywords tests and extrapolates what mechanical tests need to
+exist for us to *trust* that StatsAndKeywords are all we need to check for the associated elements. We can then
+strip out tests that do nothing except re-litigate what StatsAndKeywords already checked for us." The pass is
+queued as a reading task first (what mechanics classes are owed, which tests would go, how many), put to her
+before anything is stripped. Q-0260, a mechanics test removed because no printed card reaches its branch: "Keep,
+well done. Yeah sometimes we're just not going to have some branches tested, and that's okay (for now; we have so
+many extent branches that are higher priority right now)". *[2026-10-11]*
+
 ## How card text is read
 
 **2026-10-05. Cards are code (Q-0012).** "In general I hold to the philosophy that cards are code: the text should
@@ -808,6 +827,24 @@ landing. *[2026-10-07, afternoon]*
 **"Choose X ... (or you may play it ...)" plays the card chosen** (F-0152, Ominous Sky 103_97): "That's a bug,
 yeah, fix it." *[2026-10-07, later afternoon]*
 
+**Texts (2026-10-11, fifth notes).** F-0424, Axe of Erebor 4_41 and More to My Liking 5_9, "a card stacked on a
+[dwarven] condition": "Bleh. Decipher really needed to tighten up their definitions of when stacked cards could
+be interacted with and they never did. Let's do B for now." (only a card stacked on a [dwarven] condition of your
+own, which is active). F-0468, a reinforcement on another player's card: "The full `reinforce` entry has a
+contradiction in it: "This verb, used in game text, means to add a culture token to a card that already has a
+token of the same culture. You may choose any of your cards with the appropriate culture token if you have more
+than one." The first sentence reads as if there is no restriction on what side you choose, the second sentence
+implies you are restricted to only your own. I'm going to put a rules council issue in for this, but for now
+let's revert this and permit Morannon Plains to let either player choose either player's cards; there are some
+cards whose tokens "count up" and then self-discard upon accumulation (such as Scouring of the Shire), which is
+why someone might want the option to reinforce an opponent's card." (reverted; not a bug until the council
+says). F-0430, Old Differences 2_69: "read the text again: "(or -3 if you spot an Elf and a Dwarf)". That is
+purely about seeing both on the table, i.e. both are "working together" and the event is therefore finding more
+ways for minions to exploit racial and cultural tension. Revert this, please." NOT YET REVERTED: the correction
+left that half alone (it is still a spot of both anywhere on the table) and changed only who may be CHOSEN ("an
+Elf or Dwarf skirmishing a [moria] Orc", where any Elf or Dwarf in play could be); she was told and asked
+whether she still wants it out. *[2026-10-11]*
+
 ## What is offered and what is asked
 
 **X of zero that would do nothing is not offered (Q-0015).** A deliberate departure for quality of life: "we
@@ -925,6 +962,30 @@ spot") adding one for each burden unasked: "as written, it should offer a choice
 defaulting to N." F-0420, Mallorn-trees 1_54 offered with no [elven] card in hand: "Yeah that looks like a
 reasonable fix". Q-0240, Resistance Becomes Unbearable 2_79 with a Ring-bearer already exhausted: "A" (as built:
 "is then exhausted" reads his state once the event has done what it can; he puts on the Ring). *[2026-10-11]*
+
+**What is offered and what is asked (2026-10-11, fifth notes).** Q-0245, Band of Wild Men 4_4's "make it fierce"
+offered again at a second win: "The fact that the fierce skirmish is already over is a bit beyond what we should
+consider for whether or not it's offered; various effects care about whether a minion is fierce or not, and thus
+the effect still has potential to alter that calculus, even if the primary loaded behavior won't. A." (offered at
+every win; a keyword given to a card that has it is not "nothing" for Q-0034). Q-0248, Aragorn, Wingfoot 4_364
+("you may wound a minion for each unbound Hobbit you spot"): "Ask, but instead of as a popup, as a 0-N choice of
+cards to wound. Wingfoot still has to be clicked to indicate the optional trigger is being used, but then it
+skips straight to the wounding." So the player still decides how many, and the number is not asked for by a
+number prompt where the effect's own choice of cards can carry it; Q-0141's "spots all without asking" is for the
+erratum Merry's Sword 57_242 alone. Q-0249, Barrows of Edoras 4_337 offered to a player with no hand: "Keep. I
+agree that there should be a requirement that checks to see if anyone is able to draw; this is relevant for Rule
+of 4 shenanigans but there's also other restrictions." Q-0255, Pelennor Flat 7_345 with no card in hand: "I'd say
+this is a difference between zero and null; is discarding an empty hand an action of "discarding 0 cards" or a
+NPE when trying to locate a hand that doesn't exist? I think the player always has a hand, even if empty. I'm
+reminded of the ruling on What Are We Waiting For, which permits Shadow to re-pick skipping the phase even when
+earlier copies had them picking that already. I think discarding 0 cards is kosher. B." (as built: a hand of no
+cards may be discarded, for nothing). Q-0257, Crashed Gate 8_119 with no site to take: "The question is over
+whether the Freeps choice is "choose an opponent" or "choose an opponent and make them control a site". The "may"
+part is what tips this over for me in the direction of the first; if the opponent chooses not to take it is the
+card retroactively made an invalid choice? So I think A is the right answer." (as built). Q-0244, a follower's
+Aid flagged no-effect whenever nobody can be given the follower: "keep". Q-0246, Saruman's Staff 4_174 not
+offered on the two Sarumans of Legacy Ruling 6: "Keep. This is as good as any mechanism for communicating the
+results of that ruling." *[2026-10-11]*
 
 ## Limits
 
@@ -1064,6 +1125,28 @@ cost "is permitted, but it will cause the cost to no longer be considered paid".
 tokens", built with removeTokensCumulative: "58_57 is supposed to be able to take from multiple targets, yeah."
 *[2026-10-08, evening]*
 
+**Costs (2026-10-11, fifth notes).** F-0425, Morgul Regiment 7_197 assignable while only one of its repeated
+exertions can be paid: "Interruptions by the opponent are one thing, but if you're unable to pay the cost by
+default, you're not supposed to be able to perform the action at all. "If a card or special ability has a cost,
+you must pay that cost or you cannot use that card or special ability." Also, `playing a card`, step 2: "Checking
+to see that all costs can be paid is a requirement of playing a card. If you cannot meet all requirements, The
+Card returns to your hand. If The Card returns to hand, then you do not lose initiative and skip the remaining
+steps." (Obviously Gemp doesn't have such mechanisms because we look *forward* at whether actions can be
+performed, not *backward* and undoing unplayable actions, but the principle is the same.) Thus, Regiment should
+be altered such that it does not permit the costs to even begin if they are not fully capable of paying them at
+the start. B." So a cost is judged payable in FULL before it begins; a response of the opponent's that spoils it
+midway is another matter. Q-0256, Blood Runs Chill 8_3 and Great Day, Great Hour 10_1 ("a Dwarf who is damage
++X"): "A is more consistent with the wording, yeah. (The errata was actually because a response to that exert
+from Cirith Ungol Watcher could cause the dwarf to become hindered, and therefore damage +0, so this memorized
+that before the exert. But I think that's a more faithful reading regardless, it just didn't matter much
+before.)" (X is what the Dwarf was when he was spotted). F-0464, an event that needs initiative counting itself
+toward it: "I agree, A is the right choice. Not sure why this was altered way back when, but I suspect it was
+someone reporting a bug that seemed reasonable rather than a rules-based intervention." (four cards beside the
+event). Q-0247, the three things built beyond the design of the cost of assigning: "Keep. Well done on
+maneuvering that one." Q-0254, Above the Battlement 7_262: "This just needs an official rules council reading;
+the damn text is ambiguous as to what the hell it *means* ... Keep it as it is now, but I'll ask the Council."
+*[2026-10-11]*
+
 ## Triggers, responses and the play of a card
 
 **2026-10-05. Who orders simultaneous actions (G-0005).** "After all other procedures have been followed, the
@@ -1188,6 +1271,18 @@ in. I'm not worried about the timing on this; that's part of the reason *why* fr
 in cases like this, so that it's their fault and not the rules. Go ahead and drop this one." So what follows from
 the order in which a player takes his own required triggers is his, and no finding. *[2026-10-11]*
 
+**Responses (2026-10-11, fifth notes).** Q-0250, Siege Engine 5_60 ("If one or more machines are about to be
+discarded by an opponent, discard this condition to prevent that") against a discard of machines and other
+cards at once: "Given that the FNF ruling steers clear of specifying "machines" being discarded, I think we are
+meant to infer that they are non-machines except for Siege Engine itself. This makes me think that the text is
+thus meant to be read as: "If one or more machines are about to be discarded by an opponent['s card's action],
+discard this condition to prevent that [action]." Given that it emphasizes that this is a single simultaneous
+action, I think it's trying to say that the action is all or nothing. This would indeed rescue the free people's
+own conditions, by preventing the blanket simultaneous action rather than negating it for some and not others,
+which requires splitting up the action into several linked but not simultaneous effects. Let's go with B for this
+one." (the whole discard is prevented once one machine is in it). Q-0253, Very Nice Friends 7_76: "I think it's
+as soon as Freeps chooses not to stay, so before reconcile as it is. A." *[2026-10-11]*
+
 ## Hinder, the support area, sites, Maps and the Ring
 
 **2026-10-05. Sam as Ring-bearer (Q-0008).** Resistance was fleshed out in sets 9 and 11, codifying what had been
@@ -1304,6 +1399,18 @@ fellowship's next site (replacing opponent's site if necessary)", on a Shadows-b
 site lying next: "A" (as built: the parenthesis is a reminder and the rule decides; the player's own site is
 replaced too). Q-0226, of which this was a rider, stays parked. *[2026-10-11]*
 
+**Bearers, the Ring and sites (2026-10-11, fifth notes).** Q-0252, what the engine's "borne by a <kind>" does
+with a hindered bearer: "1 is fine to keep. 2...let's change the filter to `attachedTo(not(ally))`. The intent is
+to wiggle around auto-discarding from an Ally (who is explicitly *not* at the same site as the fellowship unless
+they are at their home site), rather than anything that needs the ability to spot bearer in a way that hinder
+should legitimately interfere with." (a hindered Ring-bearer is still found as "the Ring-bearer"; Asfaloth 1_31
+is discarded underground from a hindered companion too). Q-0258, The One Ring when its bearer is killed while
+assigned to a skirmish not yet fought: "A. In the client today, if Frodo dies in an unresolved assignment it
+deletes the assignment box and rearranges the board before Sam's response can kick in, so there's no need for us
+to change anything for that brief instant". Q-0259, Many Miles 13_21 at a site a Shadow player replaced this
+turn before the fellowship came to it: "B I think, yeah. Your reading seems sound. For the Traveled Leader case,
+yeah, I concur that the replacement still happened, whatever happened in between." (+2). *[2026-10-11]*
+
 ## Reveals, draw decks and shuffles
 
 **2026-10-05. Reveal means shown (F-0021).** A card "revealed" from the draw deck that only the player choosing it
@@ -1344,6 +1451,12 @@ can't then be tested, then it seems that edge case isn't something we really nee
 other candidates in the entire card base." So the definition is written as its three siblings are, and the two
 tests of `mechanics/RevealingNoCardsFromAHandTests` that 3_6 alone could lay go, unless another card in the card
 base can lay them. *[2026-10-11]*
+
+**Reveals (2026-10-11, fifth notes).** Q-0251, Eye of Barad-dûr 5_96 when It Burns Us 6_110 has the Shadow player
+"reveal his or her hand": "Since there's no optionality and no choice, I'd say this is Free Peoples doing the
+revealing. "Make an opponent X" sometimes seems like redundant, unnecessary verbiage when X doesn't have any
+wiggle room. B." (as built: the Eye is offered). With Q-0171 that makes the rule: where a card makes an opponent
+do a thing and he has a choice in it, he is the one doing it; where he has none, the card's player is. *[2026-10-11]*
 
 ## The test rig
 
@@ -1392,6 +1505,11 @@ failed one run in eight because the card under test could be in the hand a rando
 52_44): "the way I usually handle this is to put the card I care about somewhere else, like explicitly into the
 discard pile at the start of the scenario, then it is guaranteed to not interfere with the rest of it."
 *[2026-10-08, night]*
+
+**G-0055 (2026-10-11, fifth notes).** A card of player 2's cheated into play before his turn has its standing
+text started twice (`GameState.addCardToZone` starts a card's text without asking whether the card is active):
+"Good catch. A for sure; the gamestate doesn't want to run that for inactive cards even in real play." (mended in
+the engine; then the landed tests are searched for a doubled number). *[2026-10-11]*
 
 ## Card by card
 
@@ -1724,4 +1842,14 @@ then I think A is it." Q-0235, the three old tests kept in 2022 as Legacy classe
 **Card by card (2026-10-11, first notes).** Q-0242, Frodo, Courteous Halfling 4_301's bar on Shadow discards from
 hand shown stopping Hand of Sauron 3_90: "keep". F-0418, Morgai Foothills 8_110 discarding no card from hand
 (`select: self` in its discardFromHand): "yeah clearly a bug". "Approve all F- items lower than F-0420."
+*[2026-10-11]*
+
+**Card by card (2026-10-11, fifth notes).** F-0469, the replay summary's starting fellowship
+(`ReplayMetadata.ParseReplay`): "Aha! I knew there was something fucking up our stats which made attached cards
+appear to not be in play, and this is why! Excellent catch, please tweak the statement." F-0478, Rush of Steeds
+11_157 answering an exertion that is an effect: "Lavastone Giant reads: "Archery: Exert this minion to reveal a
+random card from your opponent's hand. If it is a Shadow card, the minion archery total is +2. Otherwise, exert
+this minion." In principle I'm fine with adding the cost flag to exert, but if the HDG is the only place this
+happens, we will defer until then to address it." (it had been built by engine pass 27 half an hour before these
+words arrived; she was told). "I approve of all F- items below F-0478 that are crurently fixed without word."
 *[2026-10-11]*

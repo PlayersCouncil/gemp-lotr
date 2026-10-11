@@ -127,6 +127,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - The no-effect flag, what it covers (Q-0073 follow-up)
 - What gets tested (2026-10-11, first notes) [Q-0241, Q-0239, Q-0237, Q-0236]
 - The campaign tests cards, not the definition language (2026-10-11, second and third notes; Q-0241 carried further). "I think the main thing we want ...
+- What a card's tests may take as proven (2026-10-11, fifth notes) [Q-0261, Q-0260]
 
 ## How card text is read
 
@@ -165,6 +166,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - X counts what was actually returned (F-0016)
 - "Wound X twice" is two wounds (F-0148, Take it Down! 103_89): "that's a bug in the implementation, go ahead and fix." An exertion in the definition ...
 - "Choose X ... (or you may play it ...)" plays the card chosen [F-0152]
+- Texts (2026-10-11, fifth notes) [F-0424, F-0468, F-0430]
 
 ## What is offered and what is asked
 
@@ -188,6 +190,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Worth Fighting For 103_120's "you may make the Shadow player shuffle" is to be asked [Q-0106]
 - Q-0106, Worth Fighting For 103_120, "you may make the Shadow player shuffle one of their hindered cards" [Q-0107, F-0180]
 - What is offered and what is asked (2026-10-11, first notes) [F-0385, F-0300, Q-0015, Q-0034, F-0041, Q-0243, Q-0112, Q-0102, F-0419, F-0420, Q-0240]
+- What is offered and what is asked (2026-10-11, fifth notes) [Q-0245, Q-0034, Q-0248, Q-0141, Q-0249, Q-0255, Q-0257, Q-0244, Q-0246]
 
 ## Limits
 
@@ -221,6 +224,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A card discarded with its dying bearer IS "discarded" for a card that then plays it from the discard pile [Q-0105, Q-0023]
 - Preventing a discard that was a cost (Q-0038)
 - "Remove N [culture] tokens" may take them from more than one card
+- Costs (2026-10-11, fifth notes) [F-0425, Q-0256, F-0464, Q-0247, Q-0254]
 
 ## Triggers, responses and the play of a card
 
@@ -247,6 +251,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A tentacle killed by the wound may still be stacked (Q-0014)
 - Reinforcing more than one token is one at a time (F-0113)
 - Triggers (2026-10-11, first notes) [F-0389]
+- Responses (2026-10-11, fifth notes) [Q-0250, Q-0253]
 
 ## Hinder, the support area, sites, Maps and the Ring
 
@@ -269,6 +274,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Maps are information only (Q-0055)
 - Controlled sites are not discardable (Q-0056)
 - Sites (2026-10-11, first notes) [Q-0238, Q-0226]
+- Bearers, the Ring and sites (2026-10-11, fifth notes) [Q-0252, Q-0258, Q-0259]
 
 ## Reveals, draw decks and shuffles
 
@@ -280,6 +286,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Shuffle up to N ... into your draw deck" shuffles the deck even when nothing is shuffled in [Q-0102, F-0161]
 - Q-0112 (F-0196), shuffling "any number" of cards from play with none chosen [Q-0102]
 - Reveals (2026-10-11, first notes) [F-0391]
+- Reveals (2026-10-11, fifth notes) [Q-0251, Q-0171]
 
 ## The test rig
 
@@ -292,6 +299,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A card test never relies on an exception; a check the rig cannot show parks the card [G-0000, G-0029, G-0028]
 - Rig methods ahead of their use (Ketura, 2026-10-08, night)
 - A card that must not be caught up in the rest of a board is put somewhere fixed at the start [F-0264]
+- G-0055 (2026-10-11, fifth notes)
 
 ## Card by card
 
@@ -354,6 +362,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Card by card (2026-10-10, third notes) [Q-0216, Q-0217, Q-0218, Q-0219, Q-0221, F-0345, F-0346, F-0364, F-0363, F-0376, G-0051, G-0053, G-0054]
 - Card by card (2026-10-10, fourth notes) [Q-0225, Q-0226, Q-0227, Q-0232, Q-0234, Q-0235]
 - Card by card (2026-10-11, first notes) [Q-0242, F-0418, F-0420]
+- Card by card (2026-10-11, fifth notes) [F-0469, F-0478]
 
 # Settled shapes (shapes.md)
 
