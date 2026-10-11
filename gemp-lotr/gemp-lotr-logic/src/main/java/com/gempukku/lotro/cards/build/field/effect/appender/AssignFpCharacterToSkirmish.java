@@ -13,6 +13,7 @@ import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import com.gempukku.lotro.logic.effects.AssignmentEffect;
+import com.gempukku.lotro.logic.effects.StackActionEffect;
 import com.gempukku.lotro.logic.timing.Effect;
 import org.json.simple.JSONObject;
 
@@ -73,7 +74,21 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
                 final Collection<? extends PhysicalCard> fpChar = actionContext.getCardsFromMemory(fpCharacterMemory);
                 final Collection<? extends PhysicalCard> minion = actionContext.getCardsFromMemory(minionMemory);
                 if (fpChar.size() == 1 && minion.size() == 1) {
-					return new AssignmentEffect(assigningPlayer, fpChar.iterator().next(), minion.iterator().next(), ignoreExistingAssignments, ignoreDefender, ignoreAllyLocation);
+                    final PhysicalCard assignedCharacter = fpChar.iterator().next();
+                    final PhysicalCard assignedMinion = minion.iterator().next();
+                    final AssignmentEffect assignment = new AssignmentEffect(assigningPlayer, assignedCharacter, assignedMinion, ignoreExistingAssignments, ignoreDefender, ignoreAllyLocation);
+
+                    // A cost of assigning this pair ("the Free Peoples player must exert a companion to assign
+                    // this minion", ExtraCostToAssign) is paid here, the pair being known, and the assignment is
+                    // the effect of the payment: unpaid (a burden prevented, nobody left to exert) it is not
+                    // made.  Where the assignment is itself a cost of the card's action, that cost then fails
+                    // (Q-0221).
+                    final CostToEffectAction payment = actionContext.getGame().getModifiersQuerying()
+                            .getAssignmentCosts(actionContext.getGame(), assigningPlayer, assignedCharacter, assignedMinion);
+                    if (payment == null)
+                        return assignment;
+                    payment.appendEffect(assignment.withCostPaid());
+                    return new StackActionEffect(payment);
                 } else {
                     return null;
                 }

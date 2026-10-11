@@ -6,6 +6,7 @@ import com.gempukku.lotro.game.ExtraPlayCost;
 import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
+import com.gempukku.lotro.logic.actions.AssignmentCostAction;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import com.gempukku.lotro.logic.timing.Action;
@@ -1377,13 +1378,20 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     }
 
     @Override
-    public boolean assignmentCostWasPaid(LotroGame game, PhysicalCard card) {
-        // Only modifiers that affect this specific card count: paying the cost for one minion must not
-        // mark every other minion with an assignment cost as paid.
-        for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.PAID_ASSIGNMENT_COST_MODIFIER, card))
-            if (modifier.isAssignmentCostPaid(game, card))
-                return true;
-        return false;
+    public CostToEffectAction getAssignmentCosts(LotroGame game, String assigningPlayer, PhysicalCard fpCharacter, PhysicalCard minion) {
+        // Only the Free Peoples player is ever charged to assign
+        if (assigningPlayer == null || !assigningPlayer.equals(game.getGameState().getCurrentPlayerId()))
+            return null;
+
+        // One payment for the pair, every charge in it.  Its source is the card that charges (the first, should
+        // two ever charge for one assignment).
+        AssignmentCostAction payment = null;
+        for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.ASSIGNMENT_MODIFIER, minion)) {
+            final AssignmentCostAction payingInto = (payment != null) ? payment : new AssignmentCostAction(modifier.getSource(), assigningPlayer);
+            if (modifier.appendExtraAssignmentCosts(game, payingInto, fpCharacter, minion))
+                payment = payingInto;
+        }
+        return payment;
     }
 
     @Override

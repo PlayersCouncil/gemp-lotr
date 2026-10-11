@@ -82,6 +82,8 @@ public class GameState {
 
     private final List<Assignment> _assignments = new LinkedList<>();
     private int _threatsToCome;
+    // The minion whose cost of assigning has been paid, while the assignment so paid for is checked and made
+    private PhysicalCard _assignmentPaidFor;
     private Map<PhysicalCard, Integer> _woundsToCome = Collections.emptyMap();
     // The events printed with several phases that are being played, each with the phase it is being played in
     private final Map<PhysicalCard, Timeword> _phaseOfEventBeingPlayed = new HashMap<>();
@@ -1468,6 +1470,29 @@ public class GameState {
             return question.get();
         } finally {
             _threatsToCome = before;
+        }
+    }
+
+    /**
+     * Whether the cost of assigning this minion (ExtraAssignmentCostModifier) has been paid and the assignment
+     * paid for is now being checked or made.  False except inside withAssignmentPaidFor.
+     */
+    public boolean isAssignmentPaidFor(PhysicalCard minion) {
+        return _assignmentPaidFor != null && _assignmentPaidFor == minion;
+    }
+
+    /**
+     * Answers a question about the assignment of a minion whose cost of assigning has just been paid: the cost is
+     * not asked for again, since what paid it (the last exertion a companion had) may not be there to pay twice.
+     * Nothing else is changed.
+     */
+    public <T> T withAssignmentPaidFor(PhysicalCard minion, java.util.function.Supplier<T> question) {
+        final PhysicalCard before = _assignmentPaidFor;
+        _assignmentPaidFor = minion;
+        try {
+            return question.get();
+        } finally {
+            _assignmentPaidFor = before;
         }
     }
 

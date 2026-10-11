@@ -8,7 +8,6 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static com.gempukku.lotro.framework.VirtualTableScenario.P1;
 import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
@@ -28,7 +27,7 @@ public class Card_07_200_Tests
 		);
 	}
 
-	protected VirtualTableScenario GetDeclineScenario() throws CardNotFoundException, DecisionResultInvalidException {
+	protected VirtualTableScenario GetTwoCompanionScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
@@ -101,23 +100,26 @@ public class Card_07_200_Tests
 
 		scn.SkipToAssignments();
 
-		assertTrue(scn.FreepsDecisionAvailable(
-				"Would you like to exert a companion to be able to assign Morgul Spawn to skirmish?"));
+		// The price is paid as the Spawn is assigned, and nothing is asked ahead of it (Q-0221)
+		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertTrue(scn.FreepsCanAssign(card));
 
 		// Act
-		scn.PlayerDecided(P1, "0");
+		scn.FreepsAssignToMinions(frodo, card);
 
-		// Assert
+		// Assert: the one companion there is exerts, and the Spawn is assigned
 		assertEquals(1, scn.GetWoundsOn(frodo));
-		assertTrue(scn.FreepsCanAssign(card));
+		assertTrue(scn.IsCharAssignedAgainst(frodo, card));
+		// The Nazgûl is left over for the Shadow player
+		assertTrue(scn.ShadowDecisionAvailable("Assign minions"));
 	}
 
-	// Morgul Spawn's price is built as a question put to the Free Peoples player as he starts his own assigning, ahead
-	// of any assignment (the engine's assignmentCost).  Whether it is to be rebuilt as a cost paid at the assignment
-	// is Q-0221, which is open: this test reads the game as it plays today.
+	// Morgul Spawn's price is a cost of assigning (Q-0221: A): the Free Peoples player pays it as he assigns the
+	// Spawn and only then.  There is no question to decline: he declines by leaving the Spawn unassigned.
 	@Test
-	public void DecliningToExertLeavesMorgulSpawnOutOfTheFreePeoplesPlayersAssigning() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetDeclineScenario();
+	public void LeavingMorgulSpawnUnassignedCostsNothingAndTheShadowPlayerAssignsItForNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetTwoCompanionScenario();
 
 		var spawn = scn.GetShadowCard("spawn");
 		var lemenya = scn.GetShadowCard("lemenya");
@@ -129,21 +131,19 @@ public class Card_07_200_Tests
 		scn.MoveMinionsToTable(spawn, lemenya);
 		scn.SkipToAssignments();
 
-		assertEquals(0, scn.GetWoundsOn(aragorn));
-		assertEquals(0, scn.GetWoundsOn(frodo));
-		assertTrue(scn.FreepsDecisionAvailable(
-				"Would you like to exert a companion to be able to assign Morgul Spawn to skirmish?"));
-		scn.FreepsChooseNo();
-
-		// Nobody exerts, and his assignment lists both companions and the Nazgûl, but not the Spawn.
+		// Nothing is asked ahead; his assignment lists both companions, the Nazgûl and the Spawn.
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
 		assertTrue(scn.FreepsHasAssignmentTargetAvailable(aragorn));
 		assertTrue(scn.FreepsHasAssignmentTargetAvailable(frodo));
 		assertTrue(scn.FreepsHasAssignmentTargetAvailable(lemenya));
-		assertFalse(scn.FreepsHasAssignmentTargetAvailable(spawn));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(spawn));
 		scn.FreepsDeclineAssignments();
+
+		// He assigned nothing, so nobody exerts.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(frodo));
 
 		// The price is the Free Peoples player's alone: the Shadow player's assignment lists the Spawn, and he
 		// assigns it with nobody exerting.
@@ -159,11 +159,10 @@ public class Card_07_200_Tests
 	}
 
 	// The same table, and the price paid: with a second companion beside the Ring-bearer, which of them exerts is
-	// the Free Peoples player's to choose, and the Spawn is then his to assign.  Like the test above, this reads
-	// the price as the game asks it today, ahead of the assigning (Q-0221).
+	// the Free Peoples player's to choose, asked once he has assigned the Spawn and before it is assigned (Q-0221).
 	@Test
 	public void ExertingACompanionOfHisChoiceLetsTheFreePeoplesPlayerAssignMorgulSpawn() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetDeclineScenario();
+		var scn = GetTwoCompanionScenario();
 
 		var spawn = scn.GetShadowCard("spawn");
 		var lemenya = scn.GetShadowCard("lemenya");
@@ -175,29 +174,47 @@ public class Card_07_200_Tests
 		scn.MoveMinionsToTable(spawn, lemenya);
 		scn.SkipToAssignments();
 
+		// His assignment lists the Spawn beside the Nazgûl, and nobody has exerted.
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(frodo));
-		assertTrue(scn.FreepsDecisionAvailable(
-				"Would you like to exert a companion to be able to assign Morgul Spawn to skirmish?"));
-		scn.FreepsChooseYes();
-
-		// "Exert a companion": either of the two, and one of them must.
-		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, frodo));
-		assertEquals(1, scn.FreepsGetChoiceMin());
-		scn.FreepsChooseCard(aragorn);
-		assertEquals(1, scn.GetWoundsOn(aragorn));
-		assertEquals(0, scn.GetWoundsOn(frodo));
-
-		// His assignment now lists the Spawn beside the Nazgûl, and he gives it to the companion who paid.
 		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
 		assertTrue(scn.FreepsHasAssignmentTargetAvailable(spawn));
 		assertTrue(scn.FreepsHasAssignmentTargetAvailable(lemenya));
 		scn.FreepsAssignToMinions(aragorn, spawn);
+
+		// "Exert a companion": either of the two, and one of them must, before the Spawn is assigned.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, frodo));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		assertFalse(scn.IsCharAssigned(spawn));
+		scn.FreepsChooseCard(aragorn);
 
 		// One exertion was the whole price.  The Nazgûl is left over for the Shadow player to assign.
 		assertTrue(scn.IsCharAssignedAgainst(aragorn, spawn));
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertTrue(scn.ShadowDecisionAvailable("Assign minions"));
+	}
+
+	// "While you can spot a Nazgûl": with none, the Spawn is assigned like any other minion.
+	@Test
+	public void WithNoNazgulToSpotMorgulSpawnIsAssignedForNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetTwoCompanionScenario();
+
+		var spawn = scn.GetShadowCard("spawn");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var frodo = scn.GetRingBearer();
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(spawn);
+		scn.SkipToAssignments();
+
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(spawn));
+		scn.FreepsAssignToMinions(aragorn, spawn);
+
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, spawn));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 	}
 }

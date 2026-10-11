@@ -49,8 +49,12 @@ public class Card_19_038_ErrataTests
 					// fellowship phase
 					put("tip", "1_209");
 					// Spider Poison: "Each time bearer is assigned to a skirmish, bearer must exert", a required
-					// trigger of another card that comes at the same moment as her burden
+					// trigger of another card on the same assignment
 					put("poison", "8_28");
+					// Melilot Brandybuck, Merry Dancer: a Hobbit ally, vitality 2, home 1F (so not assigned at
+					// site 2). "Response: If a burden is about to be added by a Shadow card, exert Melilot
+					// Brandybuck to prevent that burden."
+					put("melilot", "3_110");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -161,6 +165,7 @@ public class Card_19_038_ErrataTests
 		// Nothing is asked ahead of the assigning, and nothing is barred
 		assertEquals(0, scn.GetBurdens());
 		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(nertea));
 		assertTrue(scn.FreepsCanAssignAgainst(pippin, nertea));
 		assertTrue(scn.FreepsCanAssignAgainst(sam, nertea));
 		assertTrue(scn.FreepsCanAssignAgainst(frodo, nertea));
@@ -458,25 +463,22 @@ public class Card_19_038_ErrataTests
 		// What the card shows of itself to either player, for as long as she is in play
 		assertEquals("Named race is Hobbit", scn.GetDisplayableInformation(nertea));
 
-		// Spider Poison's "bearer must exert" answers the same assignment, so the Free Peoples player is asked
-		// which of the two comes first, and hers is named with the race
+		// Spider Poison's "bearer must exert" answers the same assignment.  Her burden is a cost paid before the
+		// assignment is made and no trigger, so the two are never put in order: the burden is added, the game
+		// log names the race, she is assigned, and then the bearer exerts
 		scn.AttachCardsTo(pippin, poison);
 		scn.SkipToAssignments();
 
 		assertEquals("Named race is Hobbit", scn.GetDisplayableInformation(nertea));
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(0, scn.GetWoundsOn(pippin));
 
 		scn.MarkGameLog();
 		scn.FreepsAssignToMinions(pippin, nertea);
 
-		assertTrue(scn.FreepsDecisionAvailable("Required responses"));
-		assertTrue(scn.FreepsActionAvailable("named race (Hobbit)"));
-		assertEquals(0, scn.GetBurdens());
-		assertEquals(0, scn.GetWoundsOn(pippin));
-
-		scn.FreepsResolveActionOrder("named race (Hobbit)");
-
 		assertEquals(1, scn.GetBurdens());
 		assertEquals(1, scn.GetWoundsOn(pippin));
+		assertTrue(scn.IsCharAssignedAgainst(pippin, nertea));
 		assertTrue(scn.GameLogSinceMarkSays("named race (Hobbit)"));
 		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 	}
@@ -512,6 +514,8 @@ public class Card_19_038_ErrataTests
 		assertEquals(1, scn.GetWoundsOn(eowyn));
 		assertTrue(scn.IsCharAssignedAgainst(frodo, nertea));
 		assertEquals(1, scn.GetBurdens());
+		// What Éowyn's action then does to the minion it assigned
+		assertFalse(scn.HasKeyword(nertea, Keyword.FIERCE));
 		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
 	}
 
@@ -545,6 +549,135 @@ public class Card_19_038_ErrataTests
 
 		assertTrue(scn.IsCharAssignedAgainst(pippin, nertea));
 		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
+
+	@Test
+	public void ABurdenPreventedAtHisOwnAssigningLeavesHerUnassignedAndTheShadowPlayersToAssign() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var nertea = scn.GetShadowCard("nertea");
+		var sam = scn.GetFreepsCard("sam");
+		var melilot = scn.GetFreepsCard("melilot");
+		scn.MoveCompanionsToTable(sam);
+		scn.MoveAlliesToTable(melilot);
+		scn.MoveCardsToHand(nertea);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.SkipToPhase(Phase.SHADOW);
+		scn.ShadowPlayCard(nertea);
+		scn.ShadowChoose("Hobbit");
+		scn.SkipToAssignments();
+
+		assertEquals(0, scn.GetBurdens());
+		scn.MarkGameLog();
+		scn.FreepsAssignToMinions(sam, nertea);
+
+		// The burden is about to be added, by a Shadow card, and she is not assigned yet
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(melilot));
+		assertFalse(scn.IsCharAssigned(nertea));
+		assertEquals(0, scn.GetBurdens());
+
+		scn.FreepsAcceptOptionalTrigger();
+
+		// The cost was not paid, so the assignment is not made
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(1, scn.GetWoundsOn(melilot));
+		assertFalse(scn.IsCharAssigned(nertea));
+		assertFalse(scn.IsCharAssigned(sam));
+		assertTrue(scn.GameLogSinceMarkSays("did not pay to assign"));
+
+		// He is not asked to assign again.  Never assigned, she is a leftover minion, and the Shadow player
+		// assigns her to the Hobbit for nothing
+		assertTrue(scn.ShadowDecisionAvailable("Assign minions"));
+		assertTrue(scn.ShadowHasAssignmentTargetAvailable(nertea));
+
+		scn.ShadowAssignToMinions(sam, nertea);
+
+		assertTrue(scn.IsCharAssignedAgainst(sam, nertea));
+		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
+	}
+
+	@Test
+	public void ABurdenPreventedInHisOwnAssignmentActionAssignsNobodyAndTheActionDoesNothingMore() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var nertea = scn.GetShadowCard("nertea");
+		var frodo = scn.GetRingBearer();
+		var eowyn = scn.GetFreepsCard("eowyn");
+		var melilot = scn.GetFreepsCard("melilot");
+		scn.MoveCompanionsToTable(eowyn);
+		scn.MoveAlliesToTable(melilot);
+		scn.MoveCardsToHand(nertea);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.SkipToPhase(Phase.SHADOW);
+		scn.ShadowPlayCard(nertea);
+		scn.ShadowChoose("Hobbit");
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		assertTrue(scn.FreepsActionAvailable(eowyn));
+
+		// She is the one minion, so Éowyn's action takes her without a choice, to the Ring-bearer, a Hobbit
+		scn.FreepsUseCardAction(eowyn);
+
+		assertEquals(1, scn.GetWoundsOn(eowyn));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(melilot));
+		assertFalse(scn.IsCharAssigned(nertea));
+
+		scn.FreepsAcceptOptionalTrigger();
+
+		// Éowyn stays exerted; the assignment, part of what her action costs, was not made, so its effect is
+		// not carried out: the minion keeps its keywords
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(1, scn.GetWoundsOn(melilot));
+		assertEquals(1, scn.GetWoundsOn(eowyn));
+		assertFalse(scn.IsCharAssigned(nertea));
+		assertFalse(scn.IsCharAssigned(frodo));
+		assertTrue(scn.HasKeyword(nertea, Keyword.FIERCE));
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+	}
+
+	@Test
+	public void ABurdenPreventedWhenAShadowCardHasHimAssignHerAssignsNobody() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var nertea = scn.GetShadowCard("nertea");
+		var mount = scn.GetShadowCard("mount");
+		var tip = scn.GetShadowCard("tip");
+		var pippin = scn.GetFreepsCard("pippin");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var melilot = scn.GetFreepsCard("melilot");
+		scn.MoveCompanionsToTable(pippin, aragorn);
+		scn.MoveAlliesToTable(melilot);
+		scn.MoveCardsToHand(nertea);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.SkipToPhase(Phase.SHADOW);
+		scn.ShadowPlayCard(nertea);
+		scn.ShadowChoose("Hobbit");
+		// Pippin is the one unbound companion bearing a [wraith] condition
+		scn.AttachCardsTo(nertea, mount);
+		scn.AttachCardsTo(pippin, tip);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPass();
+
+		assertTrue(scn.ShadowActionAvailable(mount));
+		scn.ShadowUseCardAction(mount);
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(melilot));
+		assertFalse(scn.IsCharAssigned(nertea));
+
+		scn.FreepsAcceptOptionalTrigger();
+
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(1, scn.GetWoundsOn(melilot));
+		assertFalse(scn.IsCharAssigned(nertea));
+		assertFalse(scn.IsCharAssigned(pippin));
 		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
 }

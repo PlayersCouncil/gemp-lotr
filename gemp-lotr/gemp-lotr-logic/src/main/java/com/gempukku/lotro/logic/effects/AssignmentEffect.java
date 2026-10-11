@@ -1,6 +1,7 @@
 package com.gempukku.lotro.logic.effects;
 
 import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.filters.Filter;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
@@ -19,6 +20,7 @@ public class AssignmentEffect extends AbstractEffect {
     private final boolean _skipAllyLocationCheck;
     private final PhysicalCard _fpChar;
     private final PhysicalCard _minion;
+    private boolean _costPaid;
 
     public AssignmentEffect(String playerId, PhysicalCard fpChar, PhysicalCard minion) {
         this(playerId, fpChar, minion, false, false, false);
@@ -44,10 +46,23 @@ public class AssignmentEffect extends AbstractEffect {
         return "Assign " + GameUtils.getCardLink(_minion) + " to skirmish " + GameUtils.getCardLink(_fpChar);
     }
 
+    /**
+     * Says that the cost of making this assignment (ExtraAssignmentCostModifier) has been paid: the effect is
+     * the effect of that payment.  The assignment is still checked as it is made, but not for a cost it could
+     * no longer pay.
+     */
+    public AssignmentEffect withCostPaid() {
+        _costPaid = true;
+        return this;
+    }
+
     @Override
     public boolean isPlayableInFull(LotroGame game) {
         Side side = _playerId.equals(game.getGameState().getCurrentPlayerId()) ? Side.FREE_PEOPLE : Side.SHADOW;
-        return Filters.assignableToSkirmishAgainst(side, _fpChar, _ignoreExistingAssignments, _ignoreDefender, _skipAllyLocationCheck).accepts(game, _minion);
+        final Filter assignable = Filters.assignableToSkirmishAgainst(side, _fpChar, _ignoreExistingAssignments, _ignoreDefender, _skipAllyLocationCheck);
+        if (_costPaid)
+            return game.getGameState().withAssignmentPaidFor(_minion, () -> assignable.accepts(game, _minion));
+        return assignable.accepts(game, _minion);
     }
 
     @Override

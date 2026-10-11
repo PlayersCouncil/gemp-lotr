@@ -1239,22 +1239,25 @@
 		site: 4
 		effects: [
 			{
-				type: assignmentCost
-				text: Would you like to exert a companion for each Nazgûl you can spot to be able to assign Morgul Regiment to skirmish?
-				requires: {
-					type: canSpot
-					filter: nazgul
-				}
-				cost: {
-					type: repeat
-					times: {
-						type: forEachYouCanSpot
+				type: modifier
+				modifier: {
+					type: extraCostToAssign
+					requires: {
+						type: canSpot
 						filter: nazgul
 					}
-					effect: {
-						type: exert
-						player: fp
-						select: choose(companion)
+					minion: self
+					cost: {
+						type: repeat
+						times: {
+							type: forEachYouCanSpot
+							filter: nazgul
+						}
+						effect: {
+							type: exert
+							player: fp
+							select: choose(companion)
+						}
 					}
 				}
 			}
@@ -1387,16 +1390,19 @@
 		site: 4
 		effects: [
 			{
-				type: assignmentCost
-				text: Would you like to exert a companion to be able to assign Morgul Spawn to skirmish?
-				requires: {
-					type: canSpot
-					filter: nazgul
-				}
-				cost: {
-					type: exert
-					player: fp
-					select: choose(companion)
+				type: modifier
+				modifier: {
+					type: extraCostToAssign
+					requires: {
+						type: canSpot
+						filter: nazgul
+					}
+					minion: self
+					cost: {
+						type: exert
+						player: fp
+						select: choose(companion)
+					}
 				}
 			}
 		]
@@ -1429,16 +1435,19 @@
 		site: 4
 		effects: [
 			{
-				type: assignmentCost
-				text: Would you like to exert a companion to be able to assign Morgul Spearman to skirmish?
-				requires: {
-					type: canSpot
-					filter: nazgul
-				}
-				cost: {
-					type: exert
-					player: fp
-					select: choose(companion)
+				type: modifier
+				modifier: {
+					type: extraCostToAssign
+					requires: {
+						type: canSpot
+						filter: nazgul
+					}
+					minion: self
+					cost: {
+						type: exert
+						player: fp
+						select: choose(companion)
+					}
 				}
 			}
 		]

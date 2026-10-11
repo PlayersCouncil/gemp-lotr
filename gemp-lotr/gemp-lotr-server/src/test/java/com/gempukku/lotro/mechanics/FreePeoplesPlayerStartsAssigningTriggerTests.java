@@ -19,7 +19,9 @@ import static org.junit.Assert.*;
  * moment.  Since F-0308 her burden is added at the assignment itself and no card uses the trigger, so the old
  * test of it (at/TriggersAtTest.fpStartedAssigning, which read her question) is this one, with a card of the
  * tests' own: Test Drum 0_8022, "Each time the Free Peoples player starts to assign minions, add (1)."  The
- * engine's assignmentCost (Morgul Spawn 7_200) answers the same moment.
+ * engine's assignmentCost (Morgul Spawn 7_200) answered the same moment until Q-0221 retired it: a cost of
+ * assigning is now paid as the assignment is made (mechanics/CostOfAssigningTests), and nothing but this trigger
+ * word answers the moment.
  */
 public class FreePeoplesPlayerStartsAssigningTriggerTests
 {

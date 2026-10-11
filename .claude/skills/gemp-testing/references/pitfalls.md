@@ -81,6 +81,21 @@ Defender shows in the Free Peoples player's own decision without any refusal: a 
 minion from an assignment action is on his list only if he has defender (`FreepsHasAssignmentTargetAvailable`;
 `mechanics/DefenderTests`, with Unexpected Visitor 7_126 and Reckless Pride 7_13 as the assignment actions).
 
+**A minion the Free Peoples player must pay to assign is paid for as he assigns it.** "The Free Peoples player
+must exert a companion to assign this minion to a skirmish" (`extraCostToAssign`: Morgul Regiment 7_197, Morgul
+Spawn 7_200, Morgul Spearman 7_201, Ulaire Nertea 69_38; Q-0221, engine pass 26) asks nothing ahead of his
+assigning. The minion is on his list while the cost can be paid; while it cannot, a minion charged for against
+every character is off it (`FreepsHasAssignmentTargetAvailable`, `FreepsCanAssign` false), and one charged for
+against some characters (69_38) stays on it with `FreepsCanAssignAgainst(character, minion)` false. After
+`FreepsAssignToMinions` the costs are paid before anything is assigned, one charged minion after another in the
+order of their card ids: a choice of who exerts is asked then (`FreepsChooseCard`; a lone candidate exerts
+unasked) and `IsCharAssigned` is false until the last is settled. A cost not paid in full (a burden prevented,
+nobody left to exert) leaves that one minion unassigned and a leftover for the Shadow player, who assigns it for
+nothing; the log says "did not pay to assign" and he is not asked again. A card that has him assign (Éowyn
+17_96, The End Comes 1_169, Shadowy Mount 12_171) charges him once the minion is chosen, and cannot take a
+minion he could not pay for. The Shadow player's own assignments are never charged
+(`mechanics/CostOfAssigningTests`).
+
 **`IsCharAssigned` reads only the skirmishes still waiting.** The game takes an assignment off its list as that
 skirmish begins, so `IsCharAssigned(card)` is false for the characters of the skirmish being fought
 (`IsCharSkirmishing` is true of them), while the definition word `assignedToSkirmish` counts them until the

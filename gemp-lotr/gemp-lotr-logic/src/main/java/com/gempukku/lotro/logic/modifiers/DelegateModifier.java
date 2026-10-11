@@ -385,8 +385,8 @@ public class DelegateModifier implements Modifier {
     }
 
     @Override
-    public boolean isAssignmentCostPaid(LotroGame game, PhysicalCard card) {
-        return delegate.isAssignmentCostPaid(game, card);
+    public boolean appendExtraAssignmentCosts(LotroGame game, CostToEffectAction action, PhysicalCard fpCharacter, PhysicalCard minion) {
+        return delegate.appendExtraAssignmentCosts(game, action, fpCharacter, minion);
     }
 
     @Override

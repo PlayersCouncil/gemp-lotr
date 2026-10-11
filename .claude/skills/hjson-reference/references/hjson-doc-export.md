@@ -185,17 +185,6 @@ Defines the different kinds of effects which can be created
     * cost [ ]
       required
       1 or more costs which must be paid at the start of the Maneuver phase for the associated Follower to be attached to a character.
-* AssignmentCost
-  An optional cost which prevents the Free Peoples player from assigning the associated character from being assigned to a skirmish unless paid.  Under the hood this is a wrapper for the FreePeoplePlayerMayNotAssignCharacter modifier.
-  See Morgul Spawn).
-    * requires [ ]
-      0 or more requirements that must be fulfilled for this cost to be necessary.
-    * cost [ ]
-      required
-  1 or more costs which must be paid by the Free Peoples player for them to be able to assign this minion. 
-    * text
-      required
-      The prompt given to the Free Peoples player when assignments begin.  Should take the form of a yes/no question, i.e. "Would you like to exert a companion to be able to assign X?" 
 * CopyCard
  Any card which copies the game text wholesale of another card.  See Silinde, Elf of Mirkwood).
     * filter
@@ -2128,6 +2117,16 @@ In general, although the names of modifiers are case-insensitive, the names of t
       required
     * from
       required; only "self" or "memory()"
+    * requires [ ]
+      optional
+* ExtraCostToAssign
+ Adds a `cost` the Free Peoples player must pay to assign a `minion` to a skirmish, so long as the `requires` requirements are met ("the Free Peoples player must exert a companion to assign this minion to a skirmish").  The cost is paid as the assignment is made, by the Free Peoples player's own assigning and by any card that has him assign; while it cannot be paid he may not make the assignment, and if it is not paid in full the assignment is not made.  Assignments the Shadow player makes are never charged.  See Morgul Spawn).
+    * minion
+      required; the minions charged for (usually "self")
+    * fpCharacter
+      optional; charges only for assignments against characters matching this filter (default: any character)
+    * cost [ ]
+      required; 1 or more costs, written with `player: fp`
     * requires [ ]
       optional
 * ExtraCostToPlay

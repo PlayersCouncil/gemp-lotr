@@ -178,7 +178,7 @@ public abstract class AbstractModifier implements Modifier {
     }
 
     @Override
-    public boolean isAssignmentCostPaid(LotroGame game, PhysicalCard card) {
+    public boolean appendExtraAssignmentCosts(LotroGame game, CostToEffectAction action, PhysicalCard fpCharacter, PhysicalCard minion) {
         return false;
     }
 

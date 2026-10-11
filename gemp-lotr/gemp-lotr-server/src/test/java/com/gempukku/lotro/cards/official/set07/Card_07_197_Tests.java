@@ -11,7 +11,6 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static com.gempukku.lotro.framework.VirtualTableScenario.P1;
 import static org.junit.Assert.*;
 
 public class Card_07_197_Tests
@@ -89,14 +88,18 @@ public class Card_07_197_Tests
 
 		scn.SkipToAssignments();
 
-		assertTrue(scn.FreepsDecisionAvailable(
-				"Would you like to exert a companion for each Nazgûl you can spot to be able to assign Morgul Regiment to skirmish?"));
+		// The price is paid as the Regiment is assigned, and nothing is asked ahead of it (Q-0221)
+		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertTrue(scn.FreepsCanAssign(card));
 
 		// Act
-		scn.PlayerDecided(P1, "0");
+		scn.FreepsAssignToMinions(frodo, card);
 
-		// Assert
+		// Assert: one Nazgûl, so one exertion, by the one companion there is
 		assertEquals(1, scn.GetWoundsOn(frodo));
-		assertTrue(scn.FreepsCanAssign(card));
+		assertTrue(scn.IsCharAssignedAgainst(frodo, card));
+		// The Nazgûl is left over for the Shadow player
+		assertTrue(scn.ShadowDecisionAvailable("Assign minions"));
 	}
 }

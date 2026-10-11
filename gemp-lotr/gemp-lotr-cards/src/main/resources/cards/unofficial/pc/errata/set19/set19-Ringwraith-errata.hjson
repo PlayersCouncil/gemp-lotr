@@ -95,40 +95,21 @@
 			{
 				type: modifier
 				modifier: {
-					type: cantBeAssignedToSkirmishAgainst
-					requires: {
-						type: not
-						requires: {
-							type: canAddBurdens
+					type: extraCostToAssign
+					minion: self
+					fpCharacter: companion,race(stored)
+					cost: [
+						{
+							type: sendMessage
+							text: "{freeps} must add a burden to assign {self} to skirmish a companion of the named race ({stored})."
+						}
+						{
+							type: addBurdens
+							amount: 1
 							player: fp
 						}
-					}
-					side: free people
-					fpCharacter: companion,race(stored)
-					minion: self
+					]
 				}
-			}
-			{
-				type: Trigger
-				optional: false
-				text: Add a burden for assigning {self} to skirmish a companion of the named race ({stored})
-				trigger: {
-					type: assignedAgainst
-					side: free people
-					filter: self
-					against: companion,race(stored)
-				}
-				effect: [
-					{
-						type: sendMessage
-						text: "{freeps} assigned {self} to skirmish a companion of the named race ({stored}) and must add a burden."
-					}
-					{
-						type: addBurdens
-						amount: 1
-						player: fp
-					}
-				]
 			}
 		]
 		gametext: <b>Fierce.</b><br> When you play Úlairë Nertëa, name a race. The Free Peoples player must add a burden to assign Úlairë Nertëa to skirmish a companion of the named race.
