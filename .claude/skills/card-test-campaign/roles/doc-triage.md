@@ -28,7 +28,8 @@ are yours, with these differences.
   `orchestrator/proposals.md`.
 - Commit with
   `python3 .claude/skills/card-test-campaign/scripts/landing.py commit "Skills: the suggestions of err-b51_172 to err-b58_103 worked in" <paths...>`.
-  If you changed definitions (the backslashes), run `cardtest.py suite all 2>&1 | grep -E "^OK|^Tests run" | tail -3`
+  If you changed definitions (the backslashes), run `cardtest.py suite 2>&1 | grep -E "^OK|^Tests run" | tail -3`
+  (the cards, the mechanics, the definitions and the rig's own tests: what a definition can reach)
   first; it must end `OK`.
 
 Return a few lines: how many applied, not applied and passed up; the commit; anything the orchestrator must act on.

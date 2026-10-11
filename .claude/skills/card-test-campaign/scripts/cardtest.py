@@ -3,7 +3,13 @@
 
     cardtest.py setup                    builds every module once and records the classpath (a minute or so)
     cardtest.py run <what...>            compiles just those test files and runs them (a few seconds)
-    cardtest.py suite [cards|all|<pkg>]  recompiles all the tests and runs a whole tree of them
+    cardtest.py suite [all|cards|<pkg>]  recompiles all the tests and runs a whole tree of them.  With no word:
+                                         what the campaign works on, which is the cards, the mechanics, the
+                                         definition language and the rig's own tests (cards/, mechanics/,
+                                         definitions/, virtualtable/).  `all`: every test of the server module,
+                                         the leagues, tournaments, hall and the rest with them, which is what an
+                                         engine or rig change ends on.  `cards`: the card tests alone.  <pkg>: one
+                                         package (com.gempukku.lotro.mechanics)
     cardtest.py probe <file.java>        compiles and runs a throwaway JUnit class kept anywhere (/tmp, say), for
                                          finding out what the game does without adding a test to the repository;
                                          a card test class the probe names is compiled with it as it now stands
@@ -212,18 +218,28 @@ def probe(argv) -> int:
     return run_junit(classes, cp, "RowsRunner" if rows else "org.junit.runner.JUnitCore")
 
 
+# What `suite` runs with no word after it: the packages the campaign works on (Q-0233).  The tests of the game
+# (a card's, a rule's), of the definition language, and of the rig those are written on.  The rest of the server
+# module's tests (leagues, tournaments, the hall, packs, formats, scenarios, bots ...) are run by `suite all`.
+CAMPAIGN_PACKAGES = ("cards", "mechanics", "definitions", "virtualtable")
+
+
 def suite(argv) -> int:
-    which = argv[0] if argv else "cards"
+    which = argv[0] if argv else "campaign"
     subprocess.check_call(["mvn", "-q", "-B", "-o", "test-compile"], cwd=g.SERVER, env=env())
     root = TARGET / "test-classes"
+    lotro = root / "com" / "gempukku" / "lotro"
     if which == "all":
-        base = root
+        bases = [root]
+    elif which == "campaign":
+        bases = [lotro / package for package in CAMPAIGN_PACKAGES]
+        which = ", ".join(CAMPAIGN_PACKAGES)
     elif which == "cards":
-        base = root / "com" / "gempukku" / "lotro" / "cards"
+        bases = [lotro / "cards"]
     else:
-        base = root / Path(*which.split("."))
+        bases = [root / Path(*which.split("."))]
     classes, empty, rows = [], [], False
-    for p in sorted(base.rglob("*.class")):
+    for p in sorted(c for base in bases for c in base.rglob("*.class")):
         if "$" in p.name:
             continue
         if not re.search(r"(Tests?|AtTest)$", p.stem):

@@ -96,6 +96,22 @@ final class DecisionGuard {
 		}
 	}
 
+	/**
+	 * Fails unless the given player is being asked for a number, saying what each player is in fact being asked.
+	 * @param attempted What was being done, as a clause that names the player: "The number filled in for P1 was
+	 *                  to be read".
+	 */
+	static void requiredNumberQuestion(TableBase table, String player, String attempted) {
+		AwaitingDecision decision = table.userFeedback().getAwaitingDecision(player);
+		if(decision == null) {
+			table.Verify(false, attempted + ", but that player is not being asked anything." + othersAsked(table, player));
+		}
+		else if(decision.getDecisionType() != AwaitingDecisionType.INTEGER) {
+			table.Verify(false, attempted + ", but that player is not being asked for a number.  "
+					+ askedOf(table, player) + othersAsked(table, player));
+		}
+	}
+
 	/** The full names of the given cards, for a failure message; "no card" if none is given. */
 	static String names(PhysicalCardImpl... cards) {
 		if(cards.length == 0)

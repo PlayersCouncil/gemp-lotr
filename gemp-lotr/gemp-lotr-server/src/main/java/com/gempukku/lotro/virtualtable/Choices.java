@@ -330,6 +330,33 @@ public interface Choices extends Decisions {
 	}
 
 	/**
+	 * The number that the question the Free Peoples player is being asked is filled in with before he answers
+	 * (what a client shows in the box: "add threats up to the number of burdens you can spot" comes filled in
+	 * with the most), or null where the question fills none in, which a client shows as 0.  Fails, saying what is
+	 * being asked, where that player is not being asked for a number.
+	 */
+	default Integer FreepsGetChoiceDefault() { return GetChoiceDefault(P1()); }
+	/**
+	 * The number that the question the Shadow player is being asked is filled in with before he answers (what a
+	 * client shows in the box), or null where the question fills none in, which a client shows as 0.  Fails,
+	 * saying what is being asked, where that player is not being asked for a number.
+	 */
+	default Integer ShadowGetChoiceDefault() { return GetChoiceDefault(P2()); }
+	/**
+	 * The number that the question the given player is being asked is filled in with before he answers (what a
+	 * client shows in the box).  It is the game's suggestion and no more: any number between the least and the
+	 * most the question takes may be answered.
+	 * @param player The player being asked for a number.
+	 * @return The number filled in, or null where the question fills none in, which a client shows as 0.  Fails,
+	 * saying what is being asked, where that player is not being asked for a number.
+	 */
+	default Integer GetChoiceDefault(String player) {
+		DecisionGuard.requiredNumberQuestion(this, player, "The number filled in for " + player + " was to be read");
+		String[] filledIn = GetAwaitingDecisionParam(player, "defaultValue");
+		return filledIn == null ? null : Integer.valueOf(filledIn[0]);
+	}
+
+	/**
 	 * @return Gets how many of the currently displayed cards are selectable for a Free Peoples decision.
 	 */
 	default int FreepsGetSelectableCount() {

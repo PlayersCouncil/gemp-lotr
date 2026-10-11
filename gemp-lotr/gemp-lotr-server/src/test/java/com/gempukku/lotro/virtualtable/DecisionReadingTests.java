@@ -21,7 +21,8 @@ import static org.junit.Assert.*;
  * trigger, an assignment, one of several actions of a card, one of two optional actions that a card offers at the
  * same moment), the count of how often a deck has been shuffled, and
  * the answers that are refused when what they answer is not what is being asked (the order of required responses,
- * a showing of cards, an optional trigger of a card that is not offering one).
+ * a showing of cards, an optional trigger of a card that is not offering one), and the number a question for a
+ * number comes filled in with.
  */
 public class DecisionReadingTests
 {
@@ -600,6 +601,85 @@ public class DecisionReadingTests
 		// The response is still his to take for the same win, and the trigger is not offered a second time.
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(banner, "wound 2 minions"));
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable(banner, "Exert a Wraith"));
+	}
+
+	protected VirtualTableScenario GetNumberScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("aragorn", "1_89");         // Aragorn, Ranger of the North
+					// Aragorn's Pipe: "Fellowship: Discard a pipeweed possession and spot X pipes to heal X
+					// companions."  The game asks how many pipes to spot, filled in with all of them.
+					put("pipe", "1_91");
+					put("bilbopipe", "1_285");      // Bilbo's Pipe: a second pipe, borne by Frodo
+					put("toby", "1_305");           // Old Toby: a pipeweed possession, in the support area
+					put("gollum", "5_24");          // Gollum, Nasty Treacherous Creature: his regroup ability is not used
+					// Plotting: "To play, spot Gollum and add up to 9 threats."  The game asks how many threats
+					// to add, and fills no number in.
+					put("plotting", "7_67");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	@Test
+	public void TheNumberAQuestionIsFilledInWithIsReadAndIsNullWhereItFillsNoneIn() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetNumberScenario();
+
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var pipe = scn.GetFreepsCard("pipe");
+		var bilbopipe = scn.GetFreepsCard("bilbopipe");
+		var toby = scn.GetFreepsCard("toby");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.AttachCardsTo(aragorn, pipe);
+		scn.AttachCardsTo(frodo, bilbopipe);
+		scn.MoveCardsToSupportArea(toby);
+
+		var gollum = scn.GetShadowCard("gollum");
+		var plotting = scn.GetShadowCard("plotting");
+		scn.MoveCardsToHand(plotting);
+
+		scn.StartGame();
+
+		// A choice of actions is no question for a number, and a player who is asked nothing has none to read.
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertTrue(Refused(scn::FreepsGetChoiceDefault));
+		assertTrue(Refused(scn::ShadowGetChoiceDefault));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// Two pipes to spot: the question takes 0 to 2 and comes filled in with 2.
+		scn.FreepsUseCardAction(pipe);
+		assertTrue(scn.FreepsDecisionAvailable("Choose how many to spot"));
+		assertEquals(0, scn.FreepsGetChoiceMin());
+		assertEquals(2, scn.FreepsGetChoiceMax());
+		assertEquals(Integer.valueOf(2), scn.FreepsGetChoiceDefault());
+		// It is the Free Peoples player's question and nobody else's.
+		assertTrue(Refused(scn::ShadowGetChoiceDefault));
+		// Reading it answers nothing, and what is filled in is a suggestion: another number may be given.
+		assertTrue(scn.FreepsDecisionAvailable("Choose how many to spot"));
+		scn.FreepsChoose("0");
+		assertInZone(Zone.DISCARD, toby);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// "Add up to 9 threats", with two companions to hold them: 0 to 2, and no number filled in.
+		scn.FreepsPass();
+		scn.MoveMinionsToTable(gollum);
+		scn.SetTwilight(5);
+		scn.ShadowRefreshDecision();
+		scn.ShadowPlayCard(plotting);
+		assertTrue(scn.ShadowDecisionAvailable("Choose how many threats to add"));
+		assertEquals(0, scn.ShadowGetChoiceMin());
+		assertEquals(2, scn.ShadowGetChoiceMax());
+		assertNull(scn.ShadowGetChoiceDefault());
+		assertTrue(Refused(scn::FreepsGetChoiceDefault));
+		scn.ShadowChoose("1");
+
+		assertEquals(1, scn.GetThreats());
+		assertInZone(Zone.SUPPORT, plotting);
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test

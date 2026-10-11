@@ -370,7 +370,7 @@ For `until` field on ongoing effects:
 - `EndOfTurn` — end of turn
 - `EndOfGame` / `Permanent` — never expires
 
-These are the only forms. A `start(...)` or `end(...)` whose word is not a phase is refused and the card is not loaded: the turn is not a phase, so the end of the turn is `EndOfTurn`, never `end(turn)` (which used to be read, silently, as `end(current)`). The `oldPhase` and `newPhase` of a `DuplicateActionFromPhase` modifier are refused the same way (`cards/build/UnknownPhaseInADefinitionTests`, among the logic module's tests).
+These are the only forms. A `start(...)` or `end(...)` whose word is not a phase is refused and the card is not loaded: the turn is not a phase, so the end of the turn is `EndOfTurn`, never `end(turn)` (which used to be read, silently, as `end(current)`). The `oldPhase` and `newPhase` of a `DuplicateActionFromPhase` modifier are refused the same way (`definitions/UnknownPhaseInADefinitionTests`, among the server module's tests).
 
 ---
 
@@ -614,7 +614,8 @@ A Race to Mount Doom meta-site's `Trigger` and `Activated` are collected for eve
 `Wound(select, count?, times?, player?, memorize?)`, `Exert(select, count?, times?, player?, memorize?)`, `Exhaust(select, count?, player?, memorize?)`, `Heal(select, count?, times?, player?, memorize?)`, `Kill(select, count?, player?, memorize?)`
 
 **Tokens:**
-`AddBurdens(amount?, player?)`, `RemoveBurdens(amount?, player?)`, `AddThreats(amount?, player?)`, `RemoveThreats(amount?)`, `AddTwilight(amount?, memorize?)`, `RemoveTwilight(amount?, memorize?)`, `AddCultureTokens(select, culture, count?, memorize?)`, `RemoveCultureTokens(select, culture?, count?, memorize?)`, `ReinforceTokens(select?, culture?, player?, times?, memorize?)`
+`AddBurdens(amount?, player?)`, `RemoveBurdens(amount?, player?)`, `AddThreats(amount?, player?, default?)`, `RemoveThreats(amount?)`, `AddTwilight(amount?, memorize?)`, `RemoveTwilight(amount?, memorize?)`, `AddCultureTokens(select, culture, count?, memorize?)`, `RemoveCultureTokens(select, culture?, count?, memorize?)`, `ReinforceTokens(select?, culture?, player?, times?, memorize?)`
+An `AddThreats` whose `amount` is a range asks its player "Choose how many threats to add", from the range's least to its most and never more than can still be added; `default` (a number or a counted amount) is what that question comes filled in with, held to what may be answered, and with none given it fills none in. "You may add threats up to the number of burdens you can spot" is `amount: {type: range, from: 0, to: {type: forEachBurden}}` with `default: {type: forEachBurden}` (Shelob, Menace 18_34; F-0419).
 `AddCultureTokens` and `ReinforceTokens` do nothing to a hindered card (Q-0070). `ReinforceTokens` chooses only among cards its `player` owns (CR 4.2 "reinforce": "any of your cards"; F-0468), so a definition never writes `your` for it.
 
 **Card Movement:**

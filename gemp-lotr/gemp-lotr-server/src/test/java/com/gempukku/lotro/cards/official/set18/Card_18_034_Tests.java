@@ -40,6 +40,22 @@ public class Card_18_034_Tests
 		);
 	}
 
+	protected VirtualTableScenario GetUpToScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("shelob", "18_34");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, vitality 4: he loses a tie twice and lives
+					// Two more companions, so that with Frodo there are four and room for four threats
+					put("gimli", "1_13");       // Gimli, Son of Gloin
+					put("guard", "1_7");        // Dwarf Guard
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
 	@Test
 	public void ShelobStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
@@ -110,7 +126,62 @@ public class Card_18_034_Tests
 		assertEquals(2, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(shelob));
 		scn.ShadowAcceptOptionalTrigger();
+		// "Up to" the one burden: none or one (F-0419).
+		scn.ShadowChoose("1");
 		assertEquals(1, scn.GetThreats());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	// F-0419 (Ketura, 2026-10-11): "as written, it should offer a choice, 0-N, ideally with a prompt defaulting
+	// to N."  "You may add threats up to the number of burdens you can spot" added one for each burden unasked.
+	@Test
+	public void TheShadowPlayerNamesHowManyThreatsToAddFromNoneToTheBurdensSpottedAndNoMoreThanCanBeAdded() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetUpToScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn, scn.GetFreepsCard("gimli"), scn.GetFreepsCard("guard"));
+		var shelob = scn.GetShadowCard("shelob");
+
+		scn.StartGame();
+		scn.AddBurdens(3);
+		scn.MoveMinionsToTable(shelob);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, shelob);
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.PassSkirmishActions();
+
+		// Shelob (8) has beaten Aragorn (8).  Three burdens, no threat, four companions.
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(3, scn.GetBurdens());
+		assertEquals(0, scn.GetThreats());
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(shelob));
+		scn.ShadowAcceptOptionalTrigger();
+
+		// None to three, filled in with three.
+		assertTrue(scn.ShadowDecisionAvailable("Choose how many threats to add"));
+		assertEquals(0, scn.ShadowGetChoiceMin());
+		assertEquals(3, scn.ShadowGetChoiceMax());
+		assertEquals(Integer.valueOf(3), scn.ShadowGetChoiceDefault());
+		scn.ShadowChoose("2");
+		assertEquals(2, scn.GetThreats());
+
+		// She wins the fierce skirmish too.  Still three burdens, and room for only two threats more (four
+		// companions, two threats): none to two, filled in with two.
+		scn.PassFierceAssignmentActions();
+		scn.FreepsAssignToMinions(aragorn, shelob);
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.PassFierceSkirmishActions();
+
+		assertEquals(2, scn.GetWoundsOn(aragorn));
+		assertEquals(3, scn.GetBurdens());
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(shelob));
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(0, scn.ShadowGetChoiceMin());
+		assertEquals(2, scn.ShadowGetChoiceMax());
+		assertEquals(Integer.valueOf(2), scn.ShadowGetChoiceDefault());
+		scn.ShadowChoose("0");
+
+		assertEquals(2, scn.GetThreats());
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 

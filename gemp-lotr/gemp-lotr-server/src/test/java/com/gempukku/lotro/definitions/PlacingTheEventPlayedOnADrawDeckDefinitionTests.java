@@ -1,5 +1,6 @@
-package com.gempukku.lotro.cards.build;
+package com.gempukku.lotro.definitions;
 
+import com.gempukku.lotro.cards.build.LotroCardBlueprintBuilder;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import org.junit.Test;
 
@@ -13,10 +14,10 @@ import static org.junit.Assert.*;
  * default) is the card they are written on, and "played" is the card whose play is being answered (F-0287).  Any
  * other word is refused when the card is loaded.
  *
- * What the two effects do in a game is in the server module, mechanics/PlacingTheEventPlayedOnADrawDeckTests.
- * Nothing is played here: the library is handed a few definitions and is read for which of them it kept.  The
- * texts are JSON, which the library reads as it reads HJSON.  No game and no table: plain JUnit, beside the builder
- * that reads a definition.
+ * What the two effects do in a game is in mechanics/PlacingTheEventPlayedOnADrawDeckTests.  Nothing is played
+ * here: the library is handed a few definitions and is read for which of them it kept.  The texts are JSON, which
+ * the library reads as it reads HJSON.  No game and no table: plain JUnit, in the package for tests of the
+ * definition language (Q-0233).
  */
 public class PlacingTheEventPlayedOnADrawDeckDefinitionTests
 {

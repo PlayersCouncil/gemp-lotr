@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_08_110_Tests
@@ -19,6 +20,22 @@ public class Card_08_110_Tests
 				{{
 					put("card", "8_110");
 					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetRegroupScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("foothills", "8_110");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a companion who is not Ring-bound
+					put("guard", "1_7");        // Dwarf Guard, Dwarven Armor, Gimli: three cards for the hand
+					put("armor", "1_8");
+					put("gimli", "1_13");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -53,6 +70,42 @@ public class Card_08_110_Tests
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
+	}
+
+	// F-0418 (Ketura, 2026-10-11: "yeah clearly a bug"): "Regroup: Discard a card from hand for each Ring-bound
+	// companion you spot.  Discard this condition."  The ability discarded the condition and no card from hand.
+	@Test
+	public void TheRegroupAbilityDiscardsACardFromHandForTheOneRingBoundCompanionAndThenTheCondition() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetRegroupScenario();
+
+		var foothills = scn.GetFreepsCard("foothills");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var guard = scn.GetFreepsCard("guard");
+		var armor = scn.GetFreepsCard("armor");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCardsToSupportArea(foothills);
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToHand(guard, armor, gimli);
+
+		scn.StartGame();
+		scn.SkipToPhase(Phase.REGROUP);
+
+		// Frodo is the one Ring-bound companion; Aragorn is not counted.  Three cards in hand.
+		assertEquals(3, scn.GetFreepsHandCount());
+		assertInZone(Zone.SUPPORT, foothills);
+		assertTrue(scn.FreepsActionAvailable(foothills));
+		scn.FreepsUseCardAction(foothills);
+
+		// One card for the one Ring-bound companion, of the player's choosing among the three.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(guard, armor, gimli));
+		assertEquals(1, scn.FreepsGetChoiceMax());
+		scn.FreepsChooseCard(armor);
+
+		assertInDiscard(armor);
+		assertInHand(guard, gimli);
+		assertEquals(2, scn.GetFreepsHandCount());
+		assertInDiscard(foothills);
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

@@ -77,7 +77,13 @@ DEFINITIONS ALREADY CORRECTED, WITH NO CARD TESTS YET
   (the offer, and the choice's minimum of 0) and file nothing. It does not reach a choice that is a COST (a cost
   of none is not offered: Q-0015, Q-0034) or a text that says "a" and not "up to".
 - Where a text says "up to N" of something counted and the definition does all N unasked (Shelob, Menace 18_34,
-  F-0419): a fault. She wants the choice, 0 to N, "ideally with a prompt defaulting to N".
+  F-0419): a fault. She wants the choice, 0 to N, "ideally with a prompt defaulting to N". Built for Shelob by
+  engine pass 26 (shapes.md, "You may add threats up to the number of"); a search of every definition found no
+  other card with the fault, so one met from now on is a new finding.
+- Corrected by engine pass 26 (item definitions), each shown by a LONE TEST in the card's own file and otherwise
+  unworked: Morgai Foothills 8_110 (F-0418: its regroup ability discards from hand), Mallorn-trees 1_54 (F-0420:
+  requires an [elven] card in hand), Hatred Stirred 11_210 (Q-0243, F-0473: requires a [wraith] card in the
+  discard pile), Shelob, Menace 18_34 (F-0417, F-0419). Keep the lone tests and do not file these again.
 - What follows from the ORDER in which a player takes his own required triggers is his own doing and no finding
   (F-0389, dropped 2026-10-11: Rivendell Waterfall 1_342 and a ranger who dies ahead of the site's check).
 - Candidates since answered (now faults, queued for engine pass 26): F-0345 (Boromir 18_40, "a possession" fetched only if [gondor]) and

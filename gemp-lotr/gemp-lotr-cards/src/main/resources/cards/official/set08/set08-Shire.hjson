@@ -93,7 +93,6 @@
 					{
 						type: discardFromHand
 						forced: false
-						select: self
 						count: {
 							type: range
 							from: 0

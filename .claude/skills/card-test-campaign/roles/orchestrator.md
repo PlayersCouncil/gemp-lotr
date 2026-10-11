@@ -106,7 +106,8 @@ agent in turn (`roles/engine.md`), which commits it and writes `engine-pass-<n>/
 - Anything an agent changes beyond its item comes back as a "Keep or strike" question, already made.
 - When the pass ends: `close.py engine-pass-<n>`. Its last item ran the whole suite (the line is in that item's
   report); run it yourself (`cardtest.py suite all`, nothing else running in that tree) only if commits have
-  arrived since. Then read each item's `needs_orchestrator`, and launch the next pass.
+  arrived since (card batches alone: `cardtest.py suite`, which leaves out the server's tests that no card or
+  rule reaches). Then read each item's `needs_orchestrator`, and launch the next pass.
 - If a pass is cut off, the item in hand may have left uncommitted work in the tree. Leave it, put a note about it
   at the top of the queue file, and launch again from that item.
 

@@ -304,6 +304,8 @@ Decisions will always come with at least one choice, even if that single choice 
 - `void FreepsResolveActionOrder(String option)` — As FreepsResolveRuleFirst, but takes the required action whose description contains the given text: a card's trigger, by the card's name.
 - `int FreepsGetChoiceMin()  ·  ShadowGetChoiceMin`
 - `int FreepsGetChoiceMax()  ·  ShadowGetChoiceMax` — The max parameter on the current choice for that player, or Integer.MAX_VALUE where that player is choosing a number and the game sets no upper bound on it (no cap).
+- `Integer FreepsGetChoiceDefault()  ·  ShadowGetChoiceDefault` — The number that the question that player is being asked is filled in with before he answers (what a client shows in the box: "add threats up to the number of burdens you can spot" comes filled in with the most), or null where the question fills none in, which a client shows as 0.
+- `Integer GetChoiceDefault(String player)` — The number that the question the given player is being asked is filled in with before he answers (what a client shows in the box).
 - `int FreepsGetSelectableCount()  ·  ShadowGetSelectableCount`
 - `int FreepsGetTotalRevealedCardCount()  ·  ShadowGetTotalRevealedCardCount`
 - `int GetTotalRevealedCardCount(String playerID)`
@@ -556,4 +558,4 @@ This interface holds the handful of accessors that every other virtual table int
 - `void Verify(boolean condition, String message)` — A sanity check on the table's own bookkeeping, used where a procedure has to end up in a known state for whatever follows it to make sense.
 
 ---
-448 entries, 220 of them with no description in the source.
+450 entries, 220 of them with no description in the source.

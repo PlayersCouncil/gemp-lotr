@@ -30,7 +30,7 @@ import static org.junit.Assert.*;
  * arguments of its constructor (G-0039); null is the usual name, "Free Peoples Player" or "Shadow Player".
  *
  * That a definition which lists no name is not loaded is the builder's to show, with no game played:
- * PlayerIsRequirementDefinitionTests, beside the builder in the logic module.
+ * definitions/PlayerIsRequirementDefinitionTests.
  */
 public class PlayerIsRequirementTests
 {

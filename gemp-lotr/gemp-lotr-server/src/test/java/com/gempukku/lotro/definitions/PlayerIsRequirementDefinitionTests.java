@@ -1,5 +1,6 @@
-package com.gempukku.lotro.cards.build;
+package com.gempukku.lotro.definitions;
 
+import com.gempukku.lotro.cards.build.LotroCardBlueprintBuilder;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import org.junit.Test;
 
@@ -12,9 +13,9 @@ import static org.junit.Assert.*;
  * The requirement playerIs (whether a player's account name is one of the names a definition lists) must list at
  * least one name: a definition that lists none, or has no list, is not loaded.
  *
- * What the requirement does in a game is in the server module, mechanics/PlayerIsRequirementTests.  Nothing is
- * played here: the library is handed three definitions and is read for which it kept.  The text is JSON, which the
- * library reads as it reads HJSON.  No game and no table: plain JUnit, beside the builder that reads a definition.
+ * What the requirement does in a game is in mechanics/PlayerIsRequirementTests.  Nothing is played here: the
+ * library is handed three definitions and is read for which it kept.  The text is JSON, which the library reads as
+ * it reads HJSON.  No game and no table: plain JUnit, in the package for tests of the definition language (Q-0233).
  */
 public class PlayerIsRequirementDefinitionTests
 {

@@ -24,9 +24,12 @@ import static org.junit.Assert.*;
  * card, where the showing is as it always was (the other player is shown the card, the owner of the hand is
  * shown nothing: Q-0024, Q-0036):
  * `revealHand` (the whole hand), `revealRandomCardsFromHand` (cards at random) and `revealCardsFromHand` (cards
- * chosen, or taken at random by its `select`).  The last can also come to nothing in a hand that holds cards,
- * when none of them is of the kind asked for: nobody is shown anything then either, and the log says that no
- * cards were revealed without saying that the hand was empty.
+ * chosen, or taken at random by its `select`).
+ *
+ * A chosen reveal that finds no card of the kind asked for, in a hand that holds cards or in its owner's empty
+ * hand, is no longer shown here.  The one printed card that could come to it was Mallorn-trees 1_54, whose
+ * ability is not offered with no [elven] card in hand (F-0420; Ketura on Q-0034), and no card that exists reaches
+ * it now (Ketura, 2026-10-11: a test shows what a card that exists does; Q-0260).  Card_01_054_Tests has the offer.
  */
 public class RevealingNoCardsFromAHandTests
 {
@@ -51,7 +54,7 @@ public class RevealingNoCardsFromAHandTests
 					// deck."
 					put("mallorn", "1_54");
 					put("arwen", "1_30");       // Arwen, Daughter of Elrond: an [elven] card
-					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a card that is not [elven]
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a card for the Free Peoples player's hand
 					put("runner", "1_178");     // Goblin Runner: a card for the Shadow player's hand
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -232,28 +235,7 @@ public class RevealingNoCardsFromAHandTests
 	}
 
 	@Test
-	public void WithNoCardOfTheKindInAHandThatHoldsCardsNobodyIsShownAnythingAndTheLogDoesNotCallTheHandEmpty() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var mallorn = scn.GetFreepsCard("mallorn");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCardsToSupportArea(mallorn);
-		scn.MoveCardsToHand(aragorn);
-
-		scn.StartGame();
-
-		scn.MarkGameLog();
-		scn.FreepsUseCardAction(mallorn);
-		assertFalse(scn.ShadowAnyDecisionsAvailable());
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-		assertInZone(Zone.HAND, aragorn);
-		assertTrue(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkSays("revealed no cards from " + scn.P1() + "'s hand"));
-		assertFalse(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkSays("There were no cards in"));
-		assertFalse(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkMentions(aragorn));
-	}
-
-	@Test
-	public void AChosenCardFromAPlayersOwnHandIsShownToTheOtherPlayerAsBeforeAndFromAnEmptyHandNothingIs() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AChosenCardFromAPlayersOwnHandIsShownToTheOtherPlayerAsBefore() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var mallorn = scn.GetFreepsCard("mallorn");
@@ -274,12 +256,5 @@ public class RevealingNoCardsFromAHandTests
 		assertInZone(Zone.DECK, arwen);
 		assertEquals(0, scn.GetFreepsHandCount());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
-
-		// The hand is now empty.
-		scn.MarkGameLog();
-		scn.FreepsUseCardAction(mallorn);
-		assertFalse(scn.ShadowAnyDecisionsAvailable());
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-		assertTrue(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkSays("no cards in " + scn.P1() + "'s hand"));
 	}
 }

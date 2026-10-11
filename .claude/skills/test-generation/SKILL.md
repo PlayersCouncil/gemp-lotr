@@ -429,7 +429,8 @@ more-or-less legitimate setups"). It is still no candidate for anything chosen o
 
 **Only the rig.** No `scn.game()`, `scn.gameState()`, `getModifiersQuerying`, raw `FreepsDecided("0")`, decision
 parameters, reflection, sleeping or randomness. (The rig's own getters for a decision's bounds,
-`FreepsGetChoiceMin()` and `FreepsGetChoiceMax()`, are the rig and are fine.) An empty answer, `FreepsChoose("")`, is a raw
+`FreepsGetChoiceMin()` and `FreepsGetChoiceMax()`, and for the number a question comes filled in with,
+`FreepsGetChoiceDefault()`, are the rig and are fine.) An empty answer, `FreepsChoose("")`, is a raw
 string too: `FreepsDeclineChoosing()` chooses nothing. `ApplyAdHocModifier` is allowed for arranging a board (a strength
 the test needs, a keyword that printed cards of the kind have: "A board a game could reach"). Any other ad hoc effect (`carryOutEffectInPhaseActionByPlayer` among them) needs its
 reason on the same line as a `// lint-ok: ...` comment, which the reviewer reads.
@@ -545,13 +546,29 @@ with nothing of ledger, stats test or card), and with `--only <Test,Test>` a lon
 that has no ledger. The old tests under `at/` were rewritten into one place or the other; the folder and its
 base class are gone (2026-10-10).
 
+A test of the DEFINITION LANGUAGE (whether a definition is loaded or refused, what a blueprint keeps of a field:
+a word the builder must refuse, a time that names no phase, a follower's Aid cost) plays no game and is no
+mechanic test. It is plain JUnit in the server module, in
+`gemp-lotr-server/src/test/java/com/gempukku/lotro/definitions/`, one class for each thing the language says,
+named `...DefinitionTests` (Q-0233: C; `UnknownPhaseInADefinitionTests`, `PlayerIsRequirementDefinitionTests`).
+It hands `LotroCardBlueprintLibrary.loadCardsFromFile` a few definitions written in the test itself (set-0 ids,
+`0_9101` on) and reads what was kept; its helper methods may stay. What the same word then DOES in a game is a
+mechanic test, in `mechanics/`, and each names the other in its class comment. `mechanics/` holds tests of the
+game only.
+
 A test of a server class that no player sees and no rule describes (the league-placement arithmetic, a decision
 checking its own answer) is neither kind: it is plain JUnit beside the class it tests, in that class's module
 (`RTMDGameInfoTest`, `MultipleChoiceAwaitingDecisionTest`), or, where it must have a game, in the server module
 under the class's package and on the rig (`logic/GameUtilsAllPlayersTests`). One that needs the real card, format
 or product library and no game (a league, a tournament, a merchant, a pack, a format definition) extends
 `framework/LoadedLibraries`, which loads the three once. The rules above and `--form` are for
-tests of the game: only in a unit test whose subject IS a class's exception does `assertThrows` belong.
+tests of the game (a class under `definitions/` and the rig's own tests under `virtualtable/` are not held to
+them): only in a unit test whose subject IS a class's exception does `assertThrows` belong.
+
+Where each kind is, and what runs it: a card's tests under `cards/`, a rule's under `mechanics/`, the definition
+language's under `definitions/` and the rig's own under `virtualtable/` are what `cardtest.py suite` runs with no
+word after it; everything else in the server module (leagues, tournaments, the hall, packs, formats, scenarios)
+is run with them by `cardtest.py suite all` (gemp-testing, "Running tests").
 
 What every card of a kind obeys is a mechanic and is not retested card by card: that exerting is not taking a
 wound and a wound is not an exertion, that an exhausted character cannot exert, how a keyword works.

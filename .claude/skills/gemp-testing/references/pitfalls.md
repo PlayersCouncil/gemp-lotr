@@ -139,6 +139,14 @@ a decision of his by its words, another offer to him read as made, or his answer
 number and the game sets no maximum (a `chooseANumber` with no `to`: Gathering Wind 10_16, Beneath the Mountains
 52_1). That is the reading for "no cap" (G-0027).
 
+**A question for a number may come filled in.** `FreepsGetChoiceDefault()` / `ShadowGetChoiceDefault()` read the
+number the game fills in before the player answers (what the client shows in the box), or null where it fills
+none in (G-0057). "How many to spot" comes filled in with all that can be spotted, a `chooseANumber` with its
+`default` (0 where none is written), "Choose how many threats to add" with the `default` of its `addThreats` and
+otherwise with nothing. It is a suggestion and binds nobody: read it only where the text or a ruling says what it
+should be ("threats up to the number of burdens you can spot" comes filled in with the most, held to what can
+still be added: Shelob, Menace 18_34, F-0419), and answer another number in the same test.
+
 **Answers that are refused when they do not fit what is asked.** `FreepsResolveRuleFirst()` and
 `FreepsResolveActionOrder(text)` fail the test unless the Free Peoples player is being asked to order required
 responses (`FreepsAwaitingRequiredResponseOrder()` reads that, for both of the game's wordings: "Required
@@ -1250,7 +1258,8 @@ random) gives the pop-up to the other players only: the hand's owner is shown no
 (Ketura on Q-0024 and Q-0036; the game log names the cards). A reveal from a hand that has no card to show (an
 empty hand, or no card of the kind asked for) gives nobody a pop-up: there is nothing to dismiss, and the game log
 says "There were no cards in <player>'s hand for <card> to reveal", or "<card> revealed no cards from <player>'s
-hand" when the hand holds cards (Q-0144). In the decision
+hand" when the hand holds cards (Q-0144; since F-0420 no printed card comes to the second line: Mallorn-trees
+1_54 is not offered with no [elven] card in hand). In the decision
 `FreepsHasCardChoiceAvailable(card)` answers false:
 `FreepsHasCardChoiceAvailable(card, false)` is the reading for a card that is shown. A definition that only sets
 `reveal: true` on moving a card writes a line in the game log and shows nobody anything.
@@ -1530,7 +1539,7 @@ each site as validation does (`LotroFormat.validateSite(id, context)`), and is t
 
 ## Test cards and the test booster pack
 
-- **Definitions of the tests' own.** `gemp-lotr-server/src/test/resources/testCards.hjson` holds card definitions known to every table by set-0 ids (`0_8001` on), read by `framework/TestCardLibrary`. They are for mechanic tests that need a shape no real card has. A card's own tests use real cards. The file is a test resource: after editing it, `target/test-classes` needs it (a `mvn test-compile`, or copy it there). A test that only reads whether a definition is LOADED (a word the builder must refuse) plays no game and is no mechanic test: it is plain JUnit beside the builder, in `gemp-lotr-logic/src/test/java/com/gempukku/lotro/cards/build/` (`UnknownPhaseInADefinitionTests`, `PlacingTheEventPlayedOnADrawDeckDefinitionTests`, `PlayerIsRequirementDefinitionTests`), where its helper methods may stay. `mvn test` runs those; `cardtest.py suite` runs the server module's tests only.
+- **Definitions of the tests' own.** `gemp-lotr-server/src/test/resources/testCards.hjson` holds card definitions known to every table by set-0 ids (`0_8001` on), read by `framework/TestCardLibrary`. They are for mechanic tests that need a shape no real card has. A card's own tests use real cards. The file is a test resource: after editing it, `target/test-classes` needs it (a `mvn test-compile`, or copy it there). A test that only reads whether a definition is LOADED (a word the builder must refuse), or what a blueprint keeps of one, plays no game and is no mechanic test: it is plain JUnit in the server module, in `gemp-lotr-server/src/test/java/com/gempukku/lotro/definitions/` (`UnknownPhaseInADefinitionTests`, `PlacingTheEventPlayedOnADrawDeckDefinitionTests`, `PlayerIsRequirementDefinitionTests`, `AidTwilightCostDefinitionTests`; Q-0233: C), where its helper methods may stay. `cardtest.py suite` runs them with the cards, the mechanics and the rig's own tests.
 
 - **Test cards.** `0_8002` Test War-horn copies every keyword of an exerted minion to your other minions until the regroup phase, as a snapshot (mechanics/KeywordSnapshotTests); `0_8003` Test Waystone is the per-site limit's test card (see the comment above it in testCards.hjson).
 

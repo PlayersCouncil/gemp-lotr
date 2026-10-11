@@ -24,8 +24,8 @@ import static org.junit.Assert.*;
  *
  * Both now take a field "filter": "self" (the default) is the card they are written on, and "played" is the card
  * whose play is being answered, as PutPlayedEventIntoHand and RemovePlayedEventFromTheGame already had.  Any
- * other word is refused when the card is loaded (PlacingTheEventPlayedOnADrawDeckDefinitionTests, beside the
- * builder in the logic module: no game is played there).
+ * other word is refused when the card is loaded (definitions/PlacingTheEventPlayedOnADrawDeckDefinitionTests: no
+ * game is played there).
  *
  * The two test cards (testCards.hjson) are Free Peoples conditions: "Response: If you play an event, add (1) to
  * place that event on top of (beneath) your draw deck."  With a cost, such a response is offered again for the

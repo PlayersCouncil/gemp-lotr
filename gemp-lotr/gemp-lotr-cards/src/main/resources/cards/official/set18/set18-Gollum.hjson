@@ -303,6 +303,13 @@
 				effect: {
 					type: addThreats
 					amount: {
+						type: range
+						from: 0
+						to: {
+							type: forEachBurden
+						}
+					}
+					default: {
 						type: forEachBurden
 					}
 				}

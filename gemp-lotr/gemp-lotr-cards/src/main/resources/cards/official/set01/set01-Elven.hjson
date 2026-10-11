@@ -1146,6 +1146,10 @@
 		effects: {
 			type: activated
 			phase: fellowship
+			requires: {
+				type: hasCardInHand
+				filter: culture(elven)
+			}
 			effect: [
 				{
 					type: revealCardsFromHand

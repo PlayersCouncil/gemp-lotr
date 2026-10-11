@@ -384,7 +384,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 ## What is offered and what is asked
 
 - The no-effect flag: which cards assert it [Q-0034]
-- An optional trigger or ability that costs nothing and would do nothing is withheld by the engine (Q-0224: A2; Q-0231: B; engine pass 26) [Q-0034, F-0407, F-0408, F-0402, F-0406, Q-0033, F-0411, F-0417, F-0428, F-0413, Q-0104, F-0410, F-0426, F-0423, Q-0102, Q-0243, Q-0245, Q-0029, F-0429, F-0379, Q-0107]
+- An optional trigger or ability that costs nothing and would do nothing is withheld by the engine (Q-0224: A2; Q-0231: B; engine pass 26) [Q-0034, F-0407, F-0408, F-0402, F-0406, Q-0033, F-0411, F-0417, F-0428, F-0420, F-0413, Q-0104, F-0410, F-0426, F-0423, Q-0243, Q-0112, F-0473, Q-0102, Q-0245, Q-0029, F-0429, F-0379, Q-0107]
 - A choice whose every branch has nothing to act on (F-0116) [F-0293, Q-0220, Q-0224, Q-0255, F-0471, F-0370, F-0366]
 - "<Do X> or <do Y>": each branch is written as the effect itself (F-0310, Here Lies Balin 1_19) [Q-0209, F-0222]
 - "Discard his or her hand or <do Y>": with no card in hand the choice is still asked (as built; Pelennor Flat 7_345; Q-0255, open) [Q-0224]
@@ -417,6 +417,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "You may take control of a site" with no cost requires a site that can be taken (F-0341, Hillman Band 4_21) [F-0336, Q-0034, Q-0062]
 - "Place your hand beneath your draw deck and draw N cards" wants no card in hand (F-0429, Barrows of Edoras 4_337; Q-0249, open)
 - "May draw a card for each X over N" requires N+1 of X (Q-0033, F-0320)
+- "You may add threats up to the number of <things> you can spot": the player names the number, from 0 (F-0419, Shelob, Menace 18_34) [F-0417, Q-0034]
 - A phase action on a Race to Mount Doom modifier is its owner's where the text says "your" (F-0312) [Q-0194, F-0335, Q-0183, Q-0188]
 - A Race to Mount Doom modifier's own discard from hand writes `forced: true`, and no card can tell (F-0205)
 - Mistakes on a Race to Mount Doom modifier that no board tells apart (92_8, 92_10) [F-0312]
@@ -500,7 +501,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A stacked card shuffled in goes to its own owner's deck (F-0172)
 - A take from a draw deck with no "reveal" and no kind of card named writes `reveal: false` (Q-0176, F-0332) [Q-0025, F-0378, F-0384]
 - A card taken into hand in place of a draw is a card drawn; a card taken from anywhere else is not (Q-0205: B; F-0376)
-- revealHand of an empty hand (Q-0144)
+- revealHand of an empty hand (Q-0144) [F-0420]
 - FreepsGetCardChoiceCount() while cards are only shown
 - A search of another player's draw deck shuffles the deck searched (F-0298, F-0369; Grond 68_82 and 18_82) [Q-0172]
 

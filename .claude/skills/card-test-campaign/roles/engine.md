@@ -46,8 +46,10 @@ and keep the output of builds and test runs to its last lines (`| tail -30`).
    to the test that claims the check, and each ledger's claim lines, `Findings:` line and Notes are made true.
 5. **Build and run everything.** `python3 .claude/skills/card-test-campaign/scripts/cardtest.py setup | tail -3`
    rebuilds the modules; then the item's cards and `lint.py <ids>`; then the whole suite:
-   `cardtest.py suite all 2>&1 | grep -E "^OK|^Tests run|^[0-9]+\) " | tail -30`. It must end `OK`. Nothing else is
-   running tests while you work, so you may rebuild freely. A test elsewhere that now fails is read against the
+   `cardtest.py suite all 2>&1 | grep -E "^OK|^Tests run|^[0-9]+\) " | tail -30`. It must end `OK`. (`suite` with
+   no word runs the cards, the mechanics, the definitions and the rig's own tests and is enough while you work;
+   an engine or rig item ends on `suite all`, which runs the scenario, league and format tests as well.) Nothing
+   else is running tests while you work, so you may rebuild freely. A test elsewhere that now fails is read against the
    rules and rulings: if it asserted the old, wrong behaviour, it is put right (that line and no more) and named
    in your report; if you cannot tell which is right, that is a reason to stop, not to choose.
 6. **Say what changed for authors**, briefly and where they will look: a behaviour of the engine in

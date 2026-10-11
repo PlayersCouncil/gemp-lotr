@@ -1,5 +1,6 @@
-package com.gempukku.lotro.cards.build;
+package com.gempukku.lotro.definitions;
 
+import com.gempukku.lotro.cards.build.LotroCardBlueprintBuilder;
 import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import org.junit.Test;
@@ -22,12 +23,12 @@ import static org.junit.Assert.*;
  * play.  A card with no Aid answers null too.
  *
  * The number is a reading and nothing more.  What is paid is the definition's cost, as before: the virtual table's
- * own test of GetAidTwilightCost (virtualtable/AidCostReadingTests, in the server's tests) sets the number read
- * beside the twilight an Aid moves.
+ * own test of GetAidTwilightCost (virtualtable/AidCostReadingTests) sets the number read beside the twilight an
+ * Aid moves.
  *
  * Nothing is played here: each test hands the library a few definitions and reads what each blueprint kept.  The
- * texts are JSON, which the library reads as it reads HJSON.  No game and no table: plain JUnit, beside the
- * builder that reads a definition.
+ * texts are JSON, which the library reads as it reads HJSON.  No game and no table: plain JUnit, in the package
+ * for tests of the definition language (Q-0233).
  */
 public class AidTwilightCostDefinitionTests
 {
