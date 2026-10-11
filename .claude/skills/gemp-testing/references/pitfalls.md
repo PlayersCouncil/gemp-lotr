@@ -1227,13 +1227,16 @@ who looks: read each card with `FreepsHasCardChoiceAvailable(card, false)` and t
 nothing, and his hand keeps its count (`Card_01_067_Tests`).
 
 **A bar on looking at or revealing a hand is asked by each definition word for itself, and one word does not ask
-it** (F-0391, open). `cantLookOrRevealHand` (No Business of Ours 2_44 and 52_44) is asked by `revealHand`,
-`lookAtHand`, `lookAtRandomCardsFromHand` and `revealRandomCardsFromHand`. `revealCardsFromHand` given another
-player's `hand:` (Storm of Argument 3_6, the one definition that has it) shows the card all the same. Two cards
-with one sentence may be written with two words (3_6 against Friends of Old 3_16, "Reveal a card at random from
-an opponent's hand"): before two cards that do a barred act are called the same check, read which word each is
-written with (`Card_02_044_Tests`). Under the bar the action is still offered and its cost paid; nothing is
-shown and the hand keeps its count.
+it** (F-0391, fixed in the definition by engine pass 26). `cantLookOrRevealHand` (No Business of Ours 2_44 and
+52_44) is asked by `revealHand`, `lookAtHand`, `lookAtRandomCardsFromHand` and `revealRandomCardsFromHand`.
+`revealCardsFromHand` asks nothing of it: it is the word for cards a player reveals from his OWN hand, and no
+definition gives it another player's `hand:` any more. Storm of Argument 3_6 did, and showed a Shadow card past
+No Business; it is now written `revealRandomCardsFromHand` (`forced: true`, `hand: shadow`, `count: 1`), as
+Friends of Old 3_16, His First Serious Check 3_33 and Might of Númenor 3_43 write the same sentence. A
+definition met that gives `revealCardsFromHand` a hand that is not the acting player's is a finding. Before two
+cards that do a barred act are called the same check, read which word each is written with
+(`Card_02_044_Tests`). Under the bar the action is still offered and its cost paid; nothing is shown, the hand
+keeps its count, and an X read off the card revealed is 0.
 
 **A look at the top cards of an EMPTY draw deck still shows, with nothing in it.** `LookAtTopCardsOfDrawDeck`
 (Questions That Need Answering 1_81) gives its player "Cards on top of deck" with no card: the count of cards

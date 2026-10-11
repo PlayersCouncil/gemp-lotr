@@ -1362,6 +1362,7 @@ The primary difference is that discrete effects can be undone by an opposite dis
       optional
 * RevealCardsFromHand
   Prompts the owner of the given `hand` to `select` and reveal `count` cards from their hand, optionally storing the chosen cards in the given `memorize` location.
+  For the hand of the player who reveals.  It does not ask `cantLookOrRevealHand`: a card revealed from ANOTHER player's hand is `RevealRandomCardsFromHand` (with `forced: true`) or `RevealHand`, never this word with `select: random(...)` (F-0391, Storm of Argument).
   See Mallorn-trees).
     * hand
       default: you

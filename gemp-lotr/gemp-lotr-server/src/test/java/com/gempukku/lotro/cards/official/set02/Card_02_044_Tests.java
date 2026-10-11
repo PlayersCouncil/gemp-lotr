@@ -4,7 +4,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -223,7 +222,6 @@ public class Card_02_044_Tests
 	}
 
 	@Test
-	@Ignore("F-0391: Storm of Argument 3_6 (revealCardsFromHand with hand: shadow) still shows a card of the Shadow hand with No Business of Ours in play; revealRandomCardsFromHand, as 3_16, 3_33 and 3_43 use it, is barred")
 	public void FreepsCannotRevealACardAtRandomFromTheShadowHandEither() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
