@@ -1,13 +1,23 @@
 package com.gempukku.lotro.mechanics;
 
 import com.gempukku.lotro.common.Phase;
+import com.gempukku.lotro.common.SpotOverride;
 import com.gempukku.lotro.common.Zone;
+import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.framework.VirtualTableScenario;
+import com.gempukku.lotro.game.AbstractActionProxy;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.state.LotroGame;
+import com.gempukku.lotro.logic.actions.ActivateCardAction;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.effects.DiscardCardsFromPlayEffect;
+import com.gempukku.lotro.logic.effects.ReturnCardsToHandEffect;
+import com.gempukku.lotro.logic.timing.Action;
 import org.junit.Test;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import static com.gempukku.lotro.framework.Assertions.assertInZone;
 import static org.junit.Assert.*;
@@ -25,6 +35,13 @@ import static org.junit.Assert.*;
  * hindered card: so a hindered Ring-bearer was discarded, and the game lost, by any discard that reaches hindered
  * cards (F-0174; met at Doom Causeway 103_127).
  *
+ * That much is a guard: no card should be able to discard the Ring-bearer or return him to hand, so none is there
+ * to try.  The first three tests make the attempt themselves (Ketura, 2026-10-11, Q-0241): a maneuver ability
+ * stapled onto a minion with no text of its own, Goblin Patrol Troop 1_177, whose effect is the engine's own
+ * discard from play or return to hand (DiscardCardsFromPlayEffect, ReturnCardsToHandEffect: what every card's
+ * "discard" and "return to hand" are carried out by) aimed at him by the test, reaching hindered cards, with the
+ * Troop as the card that does it.  The tests after them are on printed cards.
+ *
  * The rule on hindering has two sentences of its own about him.  On his burdens, as the exception to "Tokens on
  * hindered cards cannot be spotted, counted, reinforced, removed, or added to": "If the Ring-bearer is hindered,
  * burdens may be spotted and counted, but they still cannot be added or removed."  And on his resistance, which
@@ -37,14 +54,11 @@ public class HinderedRingBearerTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					// Test cards (testCards.hjson), Shadow conditions in the support area:
-					// "Maneuver: Remove (1) to discard a Free Peoples card."
-					put("undertow", "0_8006");
-					// "Maneuver: Remove (1) to return a Free Peoples card to its owner's hand."
-					put("ebbtide", "0_8007");
 					put("sam", "1_311");        // Sam, Son of Hamfast: a fellowship ability that is never used here
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a maneuver ability that is never used here
-					put("runner", "1_178");     // Goblin Runner: a minion, so that there is a maneuver phase
+					// Goblin Patrol Troop: a minion with no text, so that there is a maneuver phase and a card
+					// for a test's discard or return to hand to be stapled onto
+					put("troop", "1_177");
 
 					put("merry", "1_302");      // Merry, Friend to Sam: an unbound Hobbit; a skirmish ability only
 					put("pippin", "1_306");     // Pippin, Friend to Frodo: an unbound Hobbit; his text is about tales
@@ -96,45 +110,37 @@ public class HinderedRingBearerTests
 		var frodo = scn.GetRingBearer();
 		var sam = scn.GetFreepsCard("sam");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		var undertow = scn.GetShadowCard("undertow");
-		var runner = scn.GetShadowCard("runner");
+		var troop = scn.GetShadowCard("troop");
 
 		scn.MoveCompanionsToTable(sam, aragorn);
-		scn.MoveCardsToSupportArea(undertow);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(runner);
-		scn.SetTwilight(10);
+		scn.MoveMinionsToTable(troop);
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.HinderCard(frodo, sam);
+
+		// Stapled onto the Troop: "Maneuver: Discard the Ring-bearer, Sam and Aragorn", hindered or not.
+		scn.ApplyAdHocAction(new AbstractActionProxy() { // lint-ok: a guard: no card should be able to discard the Ring-bearer, so the attempt is stapled on (Q-0241)
+			@Override
+			public List<? extends Action> getPhaseActions(String playerId, LotroGame game) {
+				if (!VirtualTableScenario.P2.equals(playerId) || game.getGameState().getCurrentPhase() != Phase.MANEUVER)
+					return null;
+				var action = new ActivateCardAction(troop, playerId);
+				action.appendEffect(new DiscardCardsFromPlayEffect(playerId, troop, SpotOverride.INCLUDE_HINDERED, Filters.or(frodo, sam, aragorn)));
+				return Collections.singletonList(action);
+			}
+		});
 		scn.FreepsPass();
 
 		assertTrue(scn.IsHindered(frodo));
 		assertTrue(scn.IsHindered(sam));
-		int twilight = scn.GetTwilight();
-		assertTrue(scn.ShadowActionAvailable(undertow));
+		assertFalse(scn.IsHindered(aragorn));
+		assertInZone(Zone.FREE_CHARACTERS, frodo, sam, aragorn);
+		assertTrue(scn.ShadowActionAvailable(troop));
 
-		scn.ShadowUseCardAction(undertow);
-		assertEquals(twilight - 1, scn.GetTwilight());
-		// "A Free Peoples card": Sam, hindered, is offered beside Aragorn.  The hindered Ring-bearer is not.
-		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, sam));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(frodo));
-		scn.ShadowChooseCard(sam);
-		assertInZone(Zone.DISCARD, sam);
-		assertInZone(Zone.FREE_CHARACTERS, frodo, aragorn);
-
-		// Aragorn is now the only card that can be discarded, and is taken without a question
-		scn.FreepsPass();
-		scn.ShadowUseCardAction(undertow);
-		assertEquals(twilight - 2, scn.GetTwilight());
-		assertInZone(Zone.DISCARD, aragorn);
-		assertInZone(Zone.FREE_CHARACTERS, frodo);
-
-		// The hindered Ring-bearer is the only Free Peoples card left: the cost is paid and nothing is discarded
-		scn.FreepsPass();
-		assertTrue(scn.ShadowActionAvailable(undertow));
-		scn.ShadowUseCardAction(undertow);
-		assertEquals(twilight - 3, scn.GetTwilight());
+		scn.ShadowUseCardAction(troop);
+		// Sam, hindered, is discarded beside Aragorn.  The hindered Ring-bearer is not.
+		assertInZone(Zone.DISCARD, sam, aragorn);
 		assertInZone(Zone.FREE_CHARACTERS, frodo);
 		assertTrue(scn.IsHindered(frodo));
 		assertEquals(frodo, scn.GetRingBearer());
@@ -149,46 +155,41 @@ public class HinderedRingBearerTests
 		var frodo = scn.GetRingBearer();
 		var sam = scn.GetFreepsCard("sam");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		var ebbtide = scn.GetShadowCard("ebbtide");
-		var runner = scn.GetShadowCard("runner");
+		var troop = scn.GetShadowCard("troop");
 
 		scn.MoveCompanionsToTable(sam, aragorn);
-		scn.MoveCardsToSupportArea(ebbtide);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(runner);
-		scn.SetTwilight(10);
+		scn.MoveMinionsToTable(troop);
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.HinderCard(frodo, sam);
+
+		// Stapled onto the Troop: "Maneuver: Return the Ring-bearer, Sam and Aragorn to their owner's hand",
+		// hindered or not.
+		scn.ApplyAdHocAction(new AbstractActionProxy() { // lint-ok: a guard: no card should be able to return the Ring-bearer to hand, so the attempt is stapled on (Q-0241)
+			@Override
+			public List<? extends Action> getPhaseActions(String playerId, LotroGame game) {
+				if (!VirtualTableScenario.P2.equals(playerId) || game.getGameState().getCurrentPhase() != Phase.MANEUVER)
+					return null;
+				var action = new ActivateCardAction(troop, playerId);
+				action.appendEffect(new ReturnCardsToHandEffect(troop, SpotOverride.INCLUDE_HINDERED, Filters.or(frodo, sam, aragorn)));
+				return Collections.singletonList(action);
+			}
+		});
 		scn.FreepsPass();
 
 		assertTrue(scn.IsHindered(frodo));
 		assertTrue(scn.IsHindered(sam));
-		int twilight = scn.GetTwilight();
+		assertFalse(scn.IsHindered(aragorn));
+		assertInZone(Zone.FREE_CHARACTERS, frodo, sam, aragorn);
 		int hand = scn.GetFreepsHandCount();
-		assertTrue(scn.ShadowActionAvailable(ebbtide));
+		assertTrue(scn.ShadowActionAvailable(troop));
 
-		scn.ShadowUseCardAction(ebbtide);
-		assertEquals(twilight - 1, scn.GetTwilight());
-		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, sam));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(frodo));
-		scn.ShadowChooseCard(sam);
-		assertInZone(Zone.HAND, sam);
+		scn.ShadowUseCardAction(troop);
+		// Sam, hindered, goes to his owner's hand beside Aragorn, and is hindered no longer.  The hindered
+		// Ring-bearer stays.
+		assertInZone(Zone.HAND, sam, aragorn);
 		assertFalse(scn.IsHindered(sam));
-		assertEquals(hand + 1, scn.GetFreepsHandCount());
-		assertInZone(Zone.FREE_CHARACTERS, frodo, aragorn);
-
-		scn.FreepsPass();
-		scn.ShadowUseCardAction(ebbtide);
-		assertEquals(twilight - 2, scn.GetTwilight());
-		assertInZone(Zone.HAND, aragorn);
-		assertInZone(Zone.FREE_CHARACTERS, frodo);
-
-		// The hindered Ring-bearer is the only Free Peoples card left in play: the cost is paid and he stays
-		scn.FreepsPass();
-		assertTrue(scn.ShadowActionAvailable(ebbtide));
-		scn.ShadowUseCardAction(ebbtide);
-		assertEquals(twilight - 3, scn.GetTwilight());
 		assertEquals(hand + 2, scn.GetFreepsHandCount());
 		assertInZone(Zone.FREE_CHARACTERS, frodo);
 		assertTrue(scn.IsHindered(frodo));
@@ -204,31 +205,41 @@ public class HinderedRingBearerTests
 		var frodo = scn.GetRingBearer();
 		var merry = scn.GetFreepsCard("merry");
 		var pippin = scn.GetFreepsCard("pippin");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		var undertow = scn.GetShadowCard("undertow");
 		var follower = scn.GetShadowCard("follower");
+		var troop = scn.GetShadowCard("troop");
 
-		scn.MoveCompanionsToTable(merry, pippin, aragorn);
-		scn.MoveCardsToSupportArea(undertow);
+		scn.MoveCompanionsToTable(merry, pippin);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(follower);
-		scn.SetTwilight(10);
+		scn.MoveMinionsToTable(follower, troop);
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.HinderCard(merry);
+
+		// Stapled onto the Troop: "Maneuver: Discard the Ring-bearer, Merry and Pippin", hindered or not.
+		scn.ApplyAdHocAction(new AbstractActionProxy() { // lint-ok: a guard: no card should be able to discard the Ring-bearer, so the attempt is stapled on (Q-0241)
+			@Override
+			public List<? extends Action> getPhaseActions(String playerId, LotroGame game) {
+				if (!VirtualTableScenario.P2.equals(playerId) || game.getGameState().getCurrentPhase() != Phase.MANEUVER)
+					return null;
+				var action = new ActivateCardAction(troop, playerId);
+				action.appendEffect(new DiscardCardsFromPlayEffect(playerId, troop, SpotOverride.INCLUDE_HINDERED, Filters.or(frodo, merry, pippin)));
+				return Collections.singletonList(action);
+			}
+		});
 		scn.FreepsPass();
 
 		assertTrue(scn.IsHindered(merry));
 		assertFalse(scn.IsHindered(pippin));
+		assertFalse(scn.IsHindered(frodo));
+		assertTrue(scn.ShadowActionAvailable(troop));
 
-		scn.ShadowUseCardAction(undertow);
+		scn.ShadowUseCardAction(troop);
 		// Uruk Follower keeps Pippin, an unbound Hobbit, from the discard.  Merry, hindered, is no Hobbit to any
 		// card (CR 5.0) and has nothing from it; no rule protects him as the rules protect the Ring-bearer.
-		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, merry));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(pippin, frodo));
-		scn.ShadowChooseCard(merry);
 		assertInZone(Zone.DISCARD, merry);
-		assertInZone(Zone.FREE_CHARACTERS, frodo, pippin, aragorn);
+		assertInZone(Zone.FREE_CHARACTERS, frodo, pippin);
+		assertEquals(frodo, scn.GetRingBearer());
+		assertFalse(scn.GameIsFinished());
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
 

@@ -388,7 +388,9 @@ at the bottom of its chain of bearers, or the controller if that card is a contr
 `RingBearerRule` holds the rules' protections of the Ring-bearer (no discard, no return to hand) and of The
 One Ring (no discard) as modifiers with no source card, which `ModifiersLogic.getModifiersProtectingCard`
 keeps in force for a hindered card. `GameState.canBeHindered` is where a site, a Map and a meta-site are
-refused to every hinder.
+refused to every hinder. Each of the three effects asks its bar for itself, beside the choice a definition
+word makes: `HinderCardsInPlayEffect`, `ReturnCardsToHandEffect` (engine pass 27) and `DiscardCardsFromPlayEffect`,
+the last only when it has a source card (given none, it asks nothing).
 
 ## Format System
 

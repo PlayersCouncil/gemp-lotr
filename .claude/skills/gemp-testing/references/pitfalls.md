@@ -289,10 +289,11 @@ same (F-0363, engine pass 26): see "A follower's Aid" below.
 
 **A response event is not played by another card's effect.** "Play a(n) ... event from your discard pile /
 stacked here / from hand" neither offers a response event nor counts one towards being usable; an event that
-is a response and a phase event (Eye of Barad-dur 5_96) is offered in its phase only
-(`mechanics/ResponseEventsAreNotPlayedByEffectsTests`). For "a [culture] event" a response event of that
-culture is the invalid candidate beside the phase events, and a phase word in the definition's filter beside
-it cannot be told from its absence: say so in Notes.
+is a response and a phase event (Eye of Barad-dur 5_96) is offered in its phase only, which no test reads:
+no printed card plays a [sauron] event in a skirmish phase (engine pass 27). For "a [culture] event" a response
+event of that culture is the invalid candidate beside the phase events (`Card_01_017_ErrataTests`, Grimir 51_17
+beside Nobody Tosses a Dwarf 1_23), and a phase word in the definition's filter beside it cannot be told from
+its absence: say so in Notes. Race Text 92_29's booster pack is in `mechanics/ResponseEventsAreNotPlayedByEffectsTests`.
 Nor is an event of another phase played that way (CR 4.2 "event"): "play a [shire] tale" from hand in the
 regroup phase does not offer a Skirmish event that is a [shire] tale (Nine-fingered Frodo 10_112), and with that
 alone in hand the ability is not offered (Bilbo 59_49).
@@ -1337,7 +1338,9 @@ nobody is asked for a card, and the deck is shuffled once more with its count un
 
 ## Hinder, The One Ring and Maps
 
-**The Ring-bearer is the rules' to protect, hindered or not.** A discard or a return to hand that reaches hindered cards (`override: hindered`: "a card", "a Free Peoples card") neither offers nor takes a hindered Ring-bearer (CR 4.2 "Ring-bearer"; F-0174; `mechanics/HinderedRingBearerTests`), so a definition needs no `not(ring bearer)` there, and with him the only candidate the effect does nothing. What another CARD forbids about cards gives a hindered card nothing: beside Uruk Follower 4_186 a hindered unbound Hobbit is offered and discarded.
+**The Ring-bearer is the rules' to protect, hindered or not.** A discard or a return to hand that reaches hindered cards (`override: hindered`: "a card", "a Free Peoples card") neither offers nor takes a hindered Ring-bearer (CR 4.2 "Ring-bearer"; F-0174), so a definition needs no `not(ring bearer)` there, and with him the only candidate the effect does nothing. The engine's effects refuse him for themselves as well as the definition words' choices do: `DiscardCardsFromPlayEffect` (when it has a source card), and `ReturnCardsToHandEffect` since engine pass 27 (`mechanics/HinderedRingBearerTests`, which aims each at him). What another CARD forbids about cards gives a hindered card nothing: beside Uruk Follower 4_186 a hindered unbound Hobbit is discarded.
+
+**A guard for a thing no card should be able to do is stapled on, never an invented card** (Ketura, 2026-10-11, Q-0241; mechanics classes only). The manner is in `mechanics/TheOneRingIsNeverDiscardedTests`: once the board is laid, `scn.ApplyAdHocAction(new AbstractActionProxy() {...})` whose `getPhaseActions` gives the one player, in the one phase, an `ActivateCardAction(troop, playerId)` on a card with no text (Goblin Patrol Troop 1_177; Frodo for the Free Peoples side) with the engine's own effect appended, aimed at the cards by the test; then `ShadowUseCardAction(troop)` and the board is read. The filters handed to `DiscardCardsFromPlayEffect` are joined with AND (several cards: `Filters.or(a, b)`), it asks no bar when its source is null, and it and `ReturnCardsToHandEffect` reach hindered cards only with `SpotOverride.INCLUDE_HINDERED`. The line needs its reason (`// lint-ok: ...`).
 
 **A hindered card that is shuffled into a draw deck is hindered no longer.** `IsHindered(card)` is false once the card is in the deck, as it is for a card discarded or returned to hand (CR 5.0 "hinder"; `mechanics/HinderedCardLeavingPlayTests`).
 
@@ -1371,7 +1374,7 @@ her back). That is not Q-0222's bonus, which was laid before the hindering (`mec
 
 **The One Ring is never discarded.** A discard that could name it (Doom Causeway 103_127, "each time a card is
 hindered, discard it") neither offers nor takes it, hindered or not; hindered there, it stays on its bearer,
-hindered (`mechanics/TheOneRingIsNeverDiscardedTests`).
+hindered. The engine's discard aimed straight at it leaves it too (`mechanics/TheOneRingIsNeverDiscardedTests`).
 Nor does it go to the discard pile with a Ring-bearer who is killed (Q-0232): it stays in play, in his zone
 (`assertInZone(Zone.FREE_CHARACTERS, ring)`), borne by nobody, while his other cards are discarded; so the discard
 pile counts one fewer than "everything he bore", and `GetAttachedCards` of the dead Ring-bearer is empty. Killed as
@@ -1403,8 +1406,9 @@ waiting, since the regroup phase that follows would have taken any Ring off (mec
 which holds what the rules say of a Ring worn; what a Ring does while worn is its own file's).
 
 **Maps and meta-sites cannot be hindered,** as sites cannot: a hinder of "a card" on a PC-Movie or Race to
-Mount Doom table does not offer them (`mechanics/MapsAndMetaSitesCannotBeHinderedTests`). The cheat
-`HinderCard` hinders whatever it is given and asks no rule.
+Mount Doom table does not offer them, and the engine's hinder aimed straight at them leaves them
+(`mechanics/MapsAndMetaSitesCannotBeHinderedTests`). The cheat `HinderCard` hinders whatever it is given and asks
+no rule.
 
 **A fellowship with no unhindered companion is not asked to move again (F-0315).** CR 5.0 "hinder": "During
 the Regroup phase, if the fellowship has no unhindered companions, the Free Peoples player cannot choose to
@@ -1596,14 +1600,6 @@ each site as validation does (`LotroFormat.validateSite(id, context)`), and is t
 
 - `0_8005` Test Mirror gives one minion's game text and keywords to another until the assignment phase, as a snapshot (mechanics/GameTextSnapshotTests): the test card for `DuplicateGameText`'s `snapshot: true`.
 
-- `0_8006` Test Undertow ("Maneuver: Remove (1) to discard a Free Peoples card.") and `0_8007` Test Ebb-tide ("Maneuver: Remove (1) to return a Free Peoples card to its owner's hand."): Shadow conditions whose effects carry `override: hindered`, for reading what a discard or a return to hand by side alone may take (mechanics/HinderedRingBearerTests).
-
-- `0_8008` Test Riptide ("Maneuver: Remove (1) to discard a card.", reaching hindered cards) and `0_8009` Test Maelstrom ("Maneuver: Remove (1) to discard The One Ring."): mechanics/TheOneRingIsNeverDiscardedTests.
-
-- `0_8010` Test Fog ("Maneuver: Remove (1) to hinder a card."): mechanics/MapsAndMetaSitesCannotBeHinderedTests.
-
-- `0_8011` Test Archive ("Shadow or Skirmish: Play an event from your discard pile.") and `0_8012` Test Lectern ("Shadow or Skirmish: Play an event stacked here."): Shadow conditions for mechanics/ResponseEventsAreNotPlayedByEffectsTests. The test booster pack (`product/Test-Booster.hjson`) holds a Shadow response event, Enheartened Foe 1_247, which Race Text 92_29 shows and does not let be chosen. A choice from a stack is answered with `ShadowChooseCard`, not `ShadowChooseCardBPFromSelection`.
-
 - `0_8013` Test Whetstone ("Skirmish: Exert a Dwarf to play a [dwarven] event from your discard pile."): mechanics/CostsAreJudgedInTheOrderPrintedTests.
 
 - `0_8016` Test Shelf ("Response: If you play an event, add (1) to place that event on top of your draw deck.") and `0_8017` Test Cellar (the same, beneath): Free Peoples conditions built on `filter: played`, for mechanics/PlacingTheEventPlayedOnADrawDeckTests. Each is offered again for the same play after it is used (a cost that can be paid): decline it.
@@ -1622,7 +1618,8 @@ each site as validation does (`LotroFormat.validateSite(id, context)`), and is t
 
 - `0_8029` Test Muster ("Maneuver: Make an ally participate in skirmishes until the regroup phase."), `0_8030` Test Salve ("Fellowship: Restore a Free Peoples card."), `0_8031` Test Almanac ("Fellowship: Choose a Free Peoples card in your discard pile and take it into hand.") and `0_8032` Test Refrain ("Fellowship: Heal a companion, and again for as long as a companion was healed."): Free Peoples support-area conditions, each an ability with no cost and no requirement whose whole effect is one of the kinds the engine was taught to ask (`enableParticipationInSkirmishes`, `Restore`, `chooseCardsFromDiscard`, `DoWhile`). Every real card with such an offer has a Q-0034 requirement written by hand, which answers first (`mechanics/AnOfferThatCostsNothingAndWouldDoNothingIsNotMadeTests`).
 
-**The test booster pack.** The test booster pack (`product/Test-Booster.hjson`) holds eight cards: beside the six it had, Drums in the
+**The test booster pack.** The test booster pack (`product/Test-Booster.hjson`) holds eight cards: beside the six it had (among them a
+Shadow response event, Enheartened Foe 1_247, which Race Text 92_29 shows and does not let be chosen), Drums in the
 Deep 1_168 (a Shadow skirmish event: shown and not selectable when the pack is opened in the Shadow phase)
 and Foul Things 2_59 (a Shadow-phase event costing 2: selectable, and played for nothing; it then plays a
 [moria] minion from the discard pile at that minion's own cost). A card played from the pack is read with
