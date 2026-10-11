@@ -451,12 +451,14 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Hinder/remove X ... to play X cards from your discard pile": X is capped (Q-0094)
 - An action's costs are judged in order, with its own exertions counted (F-0184)
 - Response events are not played by "play an event from ..." (F-0186)
+- "Play a <kind of> Free Peoples card from your draw deck" never offers a Shadow card, whatever the filter says (Dammed Gate-stream 11_235, Green Dragon Inn 11_242)
 - "Ignoring all costs" passes over the cost in an event's own text (F-0316, built by engine pass 20) [Q-0201]
 - "A card stacked on a [culture] condition" and the other player's own condition (F-0424, open)
 
 ## Triggers, responses and the play of a card
 
 - Built on 2026-10-06: assert as ruled, park nothing [F-0083, F-0084, F-0099, Q-0070, Q-0043, F-0100, F-0101, F-0107, Q-0053, Q-0044, Q-0059, F-0097]
+- "If a minion exerts as a cost of its special ability" is also answered where the minion exerts as the EFFECT of its own ability (Rush of Steeds 11_157; F-0478, confirmed, engine)
 - "If the <side> player is about to discard ..." asks who discards (F-0296; Q-0171: A)
 - "If a Free Peoples player reveals this card from your hand" asks whose CARD revealed (Eye of Barad-dûr 5_96; Q-0251, open) [Q-0171]
 - "Each time your condition is hindered or discarded" (Q-0075)

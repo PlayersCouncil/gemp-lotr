@@ -622,7 +622,9 @@ first regroup decision already passed and the Shadow player asked "Play Regroup 
 is `AwaitingShadowRegroupPhaseActions()` (Race Text 94_11).
 `SkipToOtherPlayersTurn()` does not decline what it ends on: an OPTIONAL start-of-turn trigger of the incoming
 player is left pending when it returns (the phase reads BETWEEN_TURNS), for the test to take or decline
-(Prized Lagan 68_110, the R check of "at the start of each turn, you may").
+(Prized Lagan 68_110, the R check of "at the start of each turn, you may"). An optional "at the start of your
+fellowship phase" trigger of player 2's is left pending the same way, with the phase reading FELLOWSHIP and
+`ShadowHasOptionalTriggerAvailable()` true (a site's: Card_11_235_Tests, Card_11_242_Tests).
 
 **Two required start-of-turn triggers stop `StartGame()` short.** With two cards cheated in before `StartGame()`
 that each have a required trigger at the start of the turn (Elrond 1_40 and Galadriel 1_45), the game is left
@@ -651,9 +653,14 @@ until some legal action has been taken. Player 2's own fellowship-phase play is 
 companions, support area and hand were laid BEFORE `StartGame()`: after `SkipToOtherPlayersTurn()` read
 `ShadowPlayAvailable(card)`, play with `ShadowPlayCard(card)`, and end on
 `ShadowDecisionAvailable("Play Fellowship action or Pass")` (Card_94_020_Tests, Card_94_021_Tests).
+`MoveCompanionsToTable(scn.GetShadowCard(x))` before `StartGame()` puts x in player 2's OWN fellowship, where he
+can exert for a cost on that turn (Card_11_242_Tests, the last test).
 The Free Peoples player reconciles at the end of his turn as well: after
 `SkipToOtherPlayersTurn()` a deck of eight or fewer is all in player 1's hand (8 in hand, 0 in the deck), so a
-draw of his on player 2's turn has cards put back on his deck first (Card_91_005_Tests).
+draw of his on player 2's turn has cards put back on his deck first (Card_91_005_Tests). From a deck of nine,
+which card is left is chance once the deck has been shuffled: a card of his that was NOT played is read on a
+later turn as not in play (`assertNotInZone(Zone.FREE_CHARACTERS, card)`), never as still in the draw deck, and
+one wanted in a deck then is put there with `MoveCardsToTopOfDeck` (Card_11_235_Tests, the three-turn test).
 `SkipToSite(n)` rests in the fellowship phase at site n, and `SkipToMovementDecision()` after it has made that
 turn's move: the fellowship is at n + 1, and the regroup move then leaves site n + 1 and not n. Read
 `GetCurrentSiteNumber()` on each side of the move (two old 94_25 tests named the site one too low in their

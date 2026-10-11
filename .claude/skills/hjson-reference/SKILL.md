@@ -251,7 +251,7 @@ The filters in a list are asked in order. Put exclusions ahead of `Playable`: as
 | `Exhausted` | 1 vitality remaining |
 | `InSkirmish` | In active skirmish |
 | `NotAssignedToSkirmish` | Not assigned/skirmishing |
-| `Unbound` / `RingBound` | Companion keyword state |
+| `Unbound` / `RingBound` | Companion keyword state. `Unbound` is "a companion who is not Ring-bound" (`Filters.unboundCompanion`): `companion` beside it adds nothing, and an ally is never `unbound` |
 | `Weapon` | Hand Weapon or Ranged Weapon |
 | `Mounted` | Has mount or mounted status |
 | `Hindered` / `Hinderable` | Hinder state |
