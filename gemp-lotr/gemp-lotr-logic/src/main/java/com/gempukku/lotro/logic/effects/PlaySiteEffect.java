@@ -112,8 +112,11 @@ public class PlaySiteEffect extends AbstractEffect {
 
                             if (oldSite != null) {
                                 controlled = oldSite.getCardController();
-                                if (controlled != null)
+                                if (controlled != null) {
                                     zone = oldSite.getZone();
+                                    //The old site goes back to its owner's adventure deck as nobody's (CR 4.2 "control")
+                                    gameState.loseControlOfCard(oldSite, Zone.ADVENTURE_PATH);
+                                }
                                 stacked = new LinkedList<>(gameState.getStackedCards(oldSite));
 
                                 gameState.removeCardsFromZone(_playerId, Collections.singleton(oldSite));
@@ -134,6 +137,8 @@ public class PlaySiteEffect extends AbstractEffect {
 
                             if (controlled != null) {
                                 gameState.takeControlOfCard(controlled, game, newSite, zone);
+                                //Taken off the old site first: a card stacked again while still stacked is listed twice
+                                gameState.removeCardsFromZone(_playerId, stacked);
                                 for (PhysicalCard physicalCard : stacked)
                                     gameState.stackCard(game, physicalCard, newSite);
                             }

@@ -586,7 +586,10 @@ is Free Peoples cards: where a card lets other card types in
 triggers, but it does not assign archery wounds. An archer on the table stops it, or kills the minion the test
 was about. Leave archers out of a scenario unless they are the point, or put them down after skipping. A
 possession that makes its bearer an archer (a bow) is the same: `AttachCardsTo` it after `SkipToAssignments()`
-(Long Battle Bow 11_89 in Little Golden Flower 65_148's tests).
+(Long Battle Bow 11_89 in Little Golden Flower 65_148's tests). An archer MINION wanted in the skirmishes goes
+down between the two phases: `SkipToPhase(Phase.ASSIGNMENT)` with another minion on the table, `MoveMinionsToTable(archer)`,
+`PassAssignmentActions()`; after `SkipToAssignments()` the assignment already asked does not list it
+(Goblin Archer 1_172 in mechanics/DamageBonusTests).
 
 **`SkipToPhase` declines optional triggers it meets on the way.** A trigger that is offered while the phase is
 still the old one (an "each time the fellowship moves" trigger, offered before the fellowship phase is left) is
@@ -740,6 +743,9 @@ makes a sanctuary of every site numbered 3 or 6 whatever its block, a Shadows-bl
 there included. A turn that begins there asks one 0-to-1 choice for each heal ("Sanctuary healing - Choose
 companion to heal - remaining heals: N"); with no companion wounded nothing is asked and the turn opens on
 fellowship actions. Put the wounds on in the turn before (`Card_V0_001_ErrataTests`).
+A fellowship that only ARRIVES at a sanctuary is not healed in that turn, an ally is never among the choices, and
+each player is asked at the start of his own turn for his own companions. The rule is shown in
+mechanics/SanctuaryTests (CR 4.2 "sanctuary", sentence by sentence): a card owes no test of it.
 Under Race Text 94_7 the modifier's owner is asked with nobody wounded as well, when a burden is on: his
 Ring-bearer may be chosen for the burden alone. For player 2's sanctuary, `AddBurdens` adds to the player whose
 turn it is: put them on in his own turn before, and `SkipToOtherPlayersTurn()` stops on his healing decision
@@ -942,6 +948,28 @@ exertion's included, and loses it as a wound is healed: a helper that is wounded
 **The Rule of 9 counts the dead pile, copy by copy.** With nine companions in play and in the dead pile together,
 no companion is offered from hand whatever else he needs, and other cards are played as ever
 (mechanics/RuleOfNineTests). `MoveCompanionsToTable` and `MoveCardsToDeadPile` do not ask.
+
+**Damage bonuses add up, and "loses all damage bonuses" shuts later ones out** (CR 4.2 "damage bonus").
+`GetKeywordCount(card, Keyword.DAMAGE)` is a character's bonus: his own, what a card in play gives him and what an
+event gave him for the skirmish, added together. The winners place one wound and one more for each damage +1
+among them, so two minions of damage +1 place three; a loser's bonus places nothing. After "loses all damage
+bonuses" the count reads 0, and a bonus given later does not land though its event is played and paid for
+(Seek and Hide 3_112, then Lurtz's Battle Cry 1_128). The rule is shown in mechanics/DamageBonusTests: a card that
+gives or takes a bonus shows the count and one skirmish's wounds, not the arithmetic again.
+
+**A site is controlled lowest first and only behind every marker; it is liberated highest first** (CR 4.2
+"control", "liberate"). An effect that takes control of a site takes the lowest-numbered site that nobody
+controls and that EVERY player's marker has moved beyond, and asks nothing; on the first turn of a game there is
+none (the other marker is on site 1). An ability that takes control as its EFFECT and has a cost (Southron
+Explorer 4_250: exert and remove (5)) is offered all the same and its cost is paid for nothing. The site is then
+in the controller's support area (`assertInZone(Zone.SUPPORT, site)`, `ShadowControls(site)`), `GetSite(n)` still
+answers with it, and it keeps its keywords (Uruk Camp 4_335 controlled is "a battleground you control") and not
+its other text. A liberation takes the highest-numbered site that an OPPONENT of the liberator controls, passing
+over a site of his own, and asks nothing; the site goes back on the path, and what was stacked on it and what was
+played on it goes to the discard pile. With no such site it liberates nothing, its cost paid. A card that replaces
+a controlled site (Úlairë Nelya 1_233 by "an opponent's site": a controlled site is still its owner's) leaves the
+new site controlled, with the stacked cards on it once each (F-0466); a card PLAYED on a site that is replaced is
+left on the old one, controlled or not (F-0467, open). mechanics/ControlOfSitesTests.
 
 **The other player's Free Peoples cards are not active on your turn.** A copy of a possession taken from the
 Shadow player's deck (`GetShadowCard`) and cheated onto your companion is inactive (CR 4.2 "active"), so no
@@ -1280,6 +1308,10 @@ asked and it goes on; Card_04_001_Tests reads maneuver and archery wounds with t
 Resistance Becomes Unbearable 2_79 (Maneuver: a twilight Nazgûl exerts to exert the Ring-bearer, and it goes on if
 he is then exhausted) and Narchost 7_362 (Shadow, 8 burdens spotted). `RBWearingOneRing()` reads it; every one
 comes off at the regroup phase (1_1 put on IN a regroup phase: at the end of that phase).
+The Ring of Rings 11_1 (given as the string) answers a wound in any phase too, for 1 burden. A companion who
+becomes the Ring-bearer is not wearing the Ring though the one who died was: to read that, keep another skirmish
+waiting, since the regroup phase that follows would have taken any Ring off (mechanics/WearingTheOneRingTests,
+which holds what the rules say of a Ring worn; what a Ring does while worn is its own file's).
 
 **Maps and meta-sites cannot be hindered,** as sites cannot: a hinder of "a card" on a PC-Movie or Race to
 Mount Doom table does not offer them (`mechanics/MapsAndMetaSitesCannotBeHinderedTests`). The cheat
