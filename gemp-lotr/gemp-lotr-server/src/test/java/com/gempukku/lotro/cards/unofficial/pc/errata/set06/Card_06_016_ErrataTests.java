@@ -36,6 +36,9 @@ public class Card_06_016_ErrataTests
 					put("savage", "1_151");    // Uruk Savage: [isengard] Uruk-hai, strength 5, vitality 3, damage +1
 					put("footman", "11_82");   // Footman of Dunland: [men] Man, strength 7, vitality 3, cost 3; the site gains plains
 					put("troop", "1_177");     // Goblin Patrol Troop: strength 13, vitality 3, no text
+					// Goblin Scrabbler: [moria] Orc, strength 4, vitality 1.  Its texts are about the playing of
+					// minions (its own, and the roaming penalty of [moria] Orcs); it is cheated in and none is played.
+					put("scrabbler", "2_64");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -257,6 +260,46 @@ public class Card_06_016_ErrataTests
 		// The Knight is no Elf: no minion was made weaker, so there is no "that minion" at 4 or less.
 		assertEquals(5, scn.GetStrength(savage));
 		assertEquals(guard, scn.GetFreepsTopOfDeck());
+		assertEquals(deck, scn.GetFreepsDeckCount());
+		assertInDiscard(forearmed);
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
+	@Test
+	public void AnotherMinionOfTheSkirmishAtFourDoesNotDiscardTheRevealedCardWhileThatMinionIsAtFive() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var forearmed = scn.GetFreepsCard("forearmed");
+		var elf1 = scn.GetFreepsCard("elf1");
+		var knight = scn.GetFreepsCard("knight");
+		scn.MoveCompanionsToTable(elf1);
+		scn.MoveCardsToHand(forearmed);
+
+		var footman = scn.GetShadowCard("footman");
+		var scrabbler = scn.GetShadowCard("scrabbler");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(footman, scrabbler);
+		scn.MoveCardsToTopOfDeck(knight);
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(elf1, footman);
+		scn.ShadowAssignToMinions(elf1, scrabbler);
+		scn.FreepsResolveSkirmish(elf1);
+
+		int deck = scn.GetFreepsDeckCount();
+		assertEquals(7, scn.GetStrength(footman));
+		assertEquals(4, scn.GetStrength(scrabbler));
+		scn.FreepsPlayCard(forearmed);
+		scn.DismissRevealedCards();
+		assertTrue(scn.FreepsHasCardChoiceAvailable(footman, scrabbler));
+		scn.FreepsChooseCard(footman);
+
+		// Gondorian Knight costs 2: the Footman is 7 - 2 = 5, above 4.  The Scrabbler beside him in the same
+		// skirmish is at 4 and is not "that minion": the revealed card stays where it was.
+		assertEquals(5, scn.GetStrength(footman));
+		assertEquals(4, scn.GetStrength(scrabbler));
+		assertEquals(knight, scn.GetFreepsTopOfDeck());
 		assertEquals(deck, scn.GetFreepsDeckCount());
 		assertInDiscard(forearmed);
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());

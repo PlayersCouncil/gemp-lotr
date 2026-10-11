@@ -261,4 +261,30 @@ public class Card_02_038_ErrataTests
 		assertFalse(scn.FreepsActionAvailable(shield));
 		assertAttachedTo(shield, aragorn);
 	}
+
+	@Test
+	public void TheShieldAnotherCompanionBearsCannotBeDiscardedInBoromirsOwnSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var shield = scn.GetFreepsCard("shield");
+		var boromir = scn.GetFreepsCard("boromir");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var brigand = scn.GetShadowCard("brigand");
+		scn.MoveCompanionsToTable(boromir, aragorn);
+		scn.AttachCardsTo(aragorn, shield);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(brigand);
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.PassCurrentPhaseActions();
+		scn.FreepsAssignToMinions(boromir, brigand);
+		scn.FreepsResolveSkirmish(boromir);
+
+		// Boromir is the one fighting, and is not the bearer: "if bearer is Boromir" is not met by him.
+		assertTrue(scn.IsCharSkirmishingAgainst(boromir, brigand));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(shield));
+		assertAttachedTo(shield, aragorn);
+	}
 }

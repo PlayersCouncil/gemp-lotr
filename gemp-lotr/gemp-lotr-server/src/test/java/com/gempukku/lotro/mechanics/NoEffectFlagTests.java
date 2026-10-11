@@ -136,7 +136,6 @@ public class NoEffectFlagTests
 					// Henneth Annun: a [gondor] condition.  "Skirmish: Spot a [gondor] Man and discard this
 					// condition to wound a roaming minion."  Its other text is about site 6 of another block.
 					put("henneth", "4_125");
-					put("henneth2", "4_125");
 					// Warmed Up a Bit: a [shire] event, cost 0.  "Skirmish: Discard an unbound Hobbit."
 					put("warmed", "4_322");
 					put("warmed2", "4_322");
@@ -958,9 +957,8 @@ public class NoEffectFlagTests
 
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var henneth = scn.GetFreepsCard("henneth");
-		var henneth2 = scn.GetFreepsCard("henneth2");
 		scn.MoveCompanionsToTable(aragorn);
-		scn.MoveCardsToSupportArea(henneth, henneth2);
+		scn.MoveCardsToSupportArea(henneth);
 
 		var goblinman = scn.GetShadowCard("goblinman");
 		var runner = scn.GetShadowCard("runner");
@@ -983,14 +981,33 @@ public class NoEffectFlagTests
 		assertInZone(Zone.DISCARD, runner);
 		assertEquals(0, scn.GetWoundsOn(goblinman));
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
 
-		// With no roaming minion left there is nobody at all for the wound, and the other copy is marked.
-		scn.ShadowPass();
-		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
-		assertEquals("effect", scn.FreepsActionNoEffect(henneth2));
+	// The same skirmish on a table of its own with no roaming minion: Henneth Annun is unique, so the card
+	// that wounded the roaming minion above has no second copy to be read beside it.
+	@Test
+	public void AWoundWithNoRoamingMinionForItIsFlaggedThoughAMinionIsFighting() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetSkirmishScenario();
 
-		scn.FreepsUseCardAction(henneth2);
-		assertInZone(Zone.DISCARD, henneth2);
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var henneth = scn.GetFreepsCard("henneth");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToSupportArea(henneth);
+
+		var goblinman = scn.GetShadowCard("goblinman");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(goblinman);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(aragorn, goblinman);
+
+		// At site 2 the one minion in play (site 2) is not roaming: there is nobody at all for the wound.
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertTrue(scn.IsCharSkirmishingAgainst(aragorn, goblinman));
+		assertEquals("effect", scn.FreepsActionNoEffect(henneth));
+
+		scn.FreepsUseCardAction(henneth);
+		assertInZone(Zone.DISCARD, henneth);
 		assertEquals(0, scn.GetWoundsOn(goblinman));
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}

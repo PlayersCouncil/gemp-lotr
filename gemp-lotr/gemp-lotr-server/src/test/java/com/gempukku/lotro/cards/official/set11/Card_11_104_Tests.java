@@ -210,6 +210,47 @@ public class Card_11_104_Tests
 	}
 
 	@Test
+	public void SecondWoundIsNotOfferedWhileOnlyTheShadowPlayersOwnFellowshipIsAtTheBattleground() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetBattlegroundScenario();
+
+		var frodo = scn.GetRingBearer();
+
+		var death = scn.GetShadowCard("death");
+		var mouth = scn.GetShadowCard("mouth");
+
+		scn.StartGame();
+		// Each player has moved once, to Uruk Camp, and it is the first player's turn again.
+		scn.SkipToSite(2);
+		scn.MoveCardsToHand(death);
+		scn.MoveMinionsToTable(mouth);
+		// The first player's fellowship moves on to site 3, a sanctuary and no battleground.
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(frodo, mouth);
+		scn.FreepsResolveSkirmish(frodo);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		// "The fellowship" is the one that moved this turn.  The Shadow player's own is still at the battleground.
+		assertEquals(3, scn.FreepsGetSiteNumber());
+		assertEquals(2, scn.ShadowGetSiteNumber());
+		assertFalse(scn.HasKeyword(scn.GetCurrentSite(), Keyword.BATTLEGROUND));
+		assertTrue(scn.HasKeyword(scn.GetSite(2), Keyword.BATTLEGROUND));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(10, scn.GetTwilight());
+		assertTrue(scn.ShadowPlayAvailable(death));
+
+		scn.ShadowPlayCard(death);
+		scn.FreepsDeclineOptionalTrigger(); // The Ruling Ring
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(7, scn.GetTwilight());
+
+		// 7 in the pool, and nothing is asked: the event is over.
+		assertFalse(scn.ShadowDecisionAvailable("Would you like to remove (3) to wound"));
+		assertInDiscard(death);
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
+
+	@Test
 	public void DecliningToRemoveThreeLeavesOneWoundAndTheEventCannotBePlayedInTheRegroupPhase() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetBattlegroundScenario();
 

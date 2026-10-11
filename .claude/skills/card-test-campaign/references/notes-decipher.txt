@@ -110,11 +110,6 @@ DEFINITIONS ALREADY CORRECTED, WITH NO CARD TESTS YET
   otherwise unworked: Boromir 18_40 (F-0345: "a possession" of any culture that he may bear is fetched) and Wish
   For Our Kinfolk 8_8 (F-0346: only a Dwarf COMPANION pays "Exert a Dwarf companion"). Keep the lone tests and do
   not file these again.
-- A LANDED PC card that owes a test, for whoever next reworks landed cards (not a Decipher batch's): An End
-  Worthy of Remembrance 102_46 (F-0477, the batch dec-b11_1). Its RemoveCultureTokens moved from a CostToEffect
-  in the effect into the event's cost, shown on a probe only (cancelled by The Mouth of Sauron 103_70 it removed
-  no token; now 2 from each condition chosen, before the response); its own file owes the test, as
-  Card_11_060_Tests.TheCompanionsExertBeforeTheShadowPlayerMayCancelTheEventAndStayExerted.
 
 WHAT THE EARLIER PHASES GOT WRONG MORE THAN ONCE
 - Read every helper card's definition before resting a board on it (`packet.py --defs <ids>`); comments in older

@@ -46,10 +46,12 @@ public class SupportAreaTests
 					put("orophin", "1_56");     // Orophin, Lorien Bowman: Elf ally; an archery ability
 					put("bow1", "1_41");        // Elven Bow: possession, bearer must be an Elf
 					put("bow2", "1_41");
-					// The Tale of Gil-galad: Free Peoples condition, bearer must be an Elf; a skirmish ability
-					put("tale1", "1_66");
-					put("tale2", "1_66");
-					put("tale3", "1_66");
+					// The Tale of Gil-galad: Free Peoples condition, unique, bearer must be an Elf; a skirmish ability
+					put("tale", "1_66");
+					// The White Arrows of Lorien: Free Peoples condition, not unique, bearer must be an Elf
+					// companion; an archery ability for a bearer who is an archer, which nobody bearing it here is
+					put("arrows1", "1_68");
+					put("arrows2", "1_68");
 
 					put("armory1", "1_157");    // Uruk-hai Armory: Shadow condition, support area; idle without an Uruk-hai
 					put("armory2", "1_157");
@@ -89,9 +91,9 @@ public class SupportAreaTests
 		var orophin = scn.GetFreepsCard("orophin");
 		var bow1 = scn.GetFreepsCard("bow1");
 		var bow2 = scn.GetFreepsCard("bow2");
-		var tale1 = scn.GetFreepsCard("tale1");
-		var tale2 = scn.GetFreepsCard("tale2");
-		var tale3 = scn.GetFreepsCard("tale3");
+		var tale = scn.GetFreepsCard("tale");
+		var arrows1 = scn.GetFreepsCard("arrows1");
+		var arrows2 = scn.GetFreepsCard("arrows2");
 		var armory1 = scn.GetShadowCard("armory1");
 		var armory2 = scn.GetShadowCard("armory2");
 		var pinned = scn.GetShadowCard("pinned");
@@ -111,12 +113,13 @@ public class SupportAreaTests
 		scn.MoveAlliesToTable(elrond, orophin);
 		// Borne by a card in the support area: a possession on one ally, a condition on the other.
 		scn.AttachCardsTo(orophin, bow1);
-		scn.AttachCardsTo(elrond, tale1);
+		scn.AttachCardsTo(elrond, tale);
 		// Borne by a card that a card in the support area bears. No card there is can be played on a possession;
 		// the cheat stands for one, the support area being the same however deep the card lies.
-		scn.AttachCardsTo(bow1, tale3);
-		// Borne by a companion: the same possession and the same condition.
-		scn.AttachCardsTo(arwen, bow2, tale2);
+		scn.AttachCardsTo(bow1, arrows1);
+		// Borne by a companion: the same possession, and the condition the bow bears. (The Tale of Gil-galad is
+		// unique: one to a table.)
+		scn.AttachCardsTo(arwen, bow2, arrows2);
 
 		// Lying in the Shadow player's support area: three conditions and an artifact.
 		scn.MoveCardsToSupportArea(armory1, armory2, pinned, palantir);
@@ -133,8 +136,8 @@ public class SupportAreaTests
 
 		assertTrue(scn.ShadowPlayAvailable(reach));
 		assertFalse(scn.IsHindered(bow1));
-		assertFalse(scn.IsHindered(tale1));
-		assertFalse(scn.IsHindered(tale3));
+		assertFalse(scn.IsHindered(tale));
+		assertFalse(scn.IsHindered(arrows1));
 
 		scn.ShadowPlayCard(reach);
 
@@ -142,11 +145,11 @@ public class SupportAreaTests
 		assertTrue(scn.IsHindered(elrond));
 		assertTrue(scn.IsHindered(orophin));
 		assertTrue(scn.IsHindered(bow1));
-		assertTrue(scn.IsHindered(tale1));
-		assertTrue(scn.IsHindered(tale3));
+		assertTrue(scn.IsHindered(tale));
+		assertTrue(scn.IsHindered(arrows1));
 		// Not what a companion bears, nor the companions.
 		assertFalse(scn.IsHindered(bow2));
-		assertFalse(scn.IsHindered(tale2));
+		assertFalse(scn.IsHindered(arrows2));
 		assertFalse(scn.IsHindered(arwen));
 		assertFalse(scn.IsHindered(frodo));
 

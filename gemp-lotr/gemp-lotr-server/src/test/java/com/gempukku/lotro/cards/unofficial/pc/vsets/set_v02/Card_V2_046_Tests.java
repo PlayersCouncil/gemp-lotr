@@ -53,6 +53,10 @@ public class Card_V2_046_Tests
 					// Goblin Runner: strength 5, vitality 1.
 					put("runner1", "1_178");
 					put("runner2", "1_178");
+					// The Mouth of Sauron, Bearer of Dread News: a lurker, strength 9, vitality 3.  "Response: If
+					// a Free Peoples event is played, exert this minion to cancel that event."  Other minions take
+					// no more than 1 wound a phase beside him; none here takes more.
+					put("mouth", "103_70");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -392,6 +396,56 @@ public class Card_V2_046_Tests
 		assertEquals(6 + 1, scn.GetStrength(guard1));
 		assertEquals(6 + 1, scn.GetStrength(guard2));
 		assertEquals(5 + 1, scn.GetStrength(defender));
+		assertInZone(Zone.DISCARD, end);
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
+	@Test
+	public void TheTokensAreRemovedBeforeTheShadowPlayerMayCancelTheEventAndStayRemoved() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var end = scn.GetFreepsCard("end");
+		var doom1 = scn.GetFreepsCard("doom1");
+		var cast = scn.GetFreepsCard("cast");
+		var guard1 = scn.GetFreepsCard("guard1");
+		var guard2 = scn.GetFreepsCard("guard2");
+		var defender = scn.GetFreepsCard("defender");
+		var runner = scn.GetShadowCard("runner1");
+		var mouth = scn.GetShadowCard("mouth");
+		scn.MoveCardsToHand(end);
+		scn.MoveCardsToSupportArea(doom1, cast);
+		scn.MoveCompanionsToTable(guard1, guard2, defender);
+		scn.AddTokensToCard(doom1, 2);
+		scn.AddTokensToCard(cast, 3);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner, mouth);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(guard1, runner);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(guard1);
+
+		var pool = scn.GetTwilight();
+		assertEquals(0, scn.GetWoundsOn(mouth));
+		assertTrue(scn.FreepsPlayAvailable(end));
+		scn.FreepsPlayCard(end);
+		scn.FreepsChooseCards(doom1, cast);
+
+		// The tokens stand before the "to": they are gone by the time the Shadow player may answer the event.
+		assertEquals(2 - 2, scn.GetCultureTokensOn(doom1));
+		assertEquals(3 - 2, scn.GetCultureTokensOn(cast));
+		assertEquals(pool + 2, scn.GetTwilight());
+		assertTrue(scn.ShadowActionAvailable(mouth));
+		scn.ShadowUseCardAction(mouth);
+		assertEquals(1, scn.GetWoundsOn(mouth));
+
+		// Cancelled: nobody is made stronger, and what was paid stays paid.
+		assertEquals(6, scn.GetStrength(guard1));
+		assertEquals(6, scn.GetStrength(guard2));
+		assertEquals(5, scn.GetStrength(defender));
+		assertEquals(0, scn.GetCultureTokensOn(doom1));
+		assertEquals(1, scn.GetCultureTokensOn(cast));
+		assertEquals(pool + 2, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, end);
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
