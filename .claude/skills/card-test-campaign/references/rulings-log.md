@@ -636,6 +636,25 @@ individual cards to check their side responds to the *incoming* mechanism. For W
 So a card that switches something on other cards is tested with ONE card that answers the switch; each card that
 answers it shows, in its own tests, that it does. *[2026-10-11]*
 
+**The campaign tests cards, not the definition language (2026-10-11, second and third notes; Q-0241 carried
+further).** "I think the main thing we want to worry about with this campaign is the testing of *cards*. The
+HJSON definition spec, while clearly related to cards, isn't really what we're trying to exhaustively test, and
+it's in flux to serve the cards and the rules." Shown what the 30 invented cards of `testCards.hjson` were for:
+"the only ones that make sense to me are the ones which are testing guards for things that shouldn't happen--not
+being able to discard the One Ring, not being able to hinder Maps, etc. Obviously no card *should* exist that
+does those things, so we have to invent one, but that is the exact situation the ad-hoc actions can handle just
+fine, and what they're built for. Definitions that have no cards have a real hard time justifying themselves;
+they might be obsolete due to refactors, they might be preemptive, or they might be intentionally abandoned. In
+any of those situations, we don't want to *keep testing* that they work. Definitions that have limited use case
+are a little more understandable, we don't want to leave the implementation half-baked, but like....why is
+Shrouded Elf also testing beneath the deck? Does any card do that? Then...why are we testing it? We've got 3,000
+cards that exist, that's a big enough burden without adding cards that *don't* exist. Remember, we're trying to
+make the cards robust, not *necessarily* the design language they're built in." So: a test shows what a card
+that exists does. A guard for a thing no card should be able to do is laid with the rig's ad-hoc staplers
+(`AdHocEffects`) on a text-less card. A definition word no card uses is not tested; a word one card uses is
+tested as far as that card goes and no further. No new rig method for stapling definition text. Engine pass 27
+(`guards`, `nocards`) carries it out. *[2026-10-11]*
+
 ## How card text is read
 
 **2026-10-05. Cards are code (Q-0012).** "In general I hold to the philosophy that cards are code: the text should

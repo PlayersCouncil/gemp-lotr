@@ -126,6 +126,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - The no-effect flag (new engine feature) [Q-0034]
 - The no-effect flag, what it covers (Q-0073 follow-up)
 - What gets tested (2026-10-11, first notes) [Q-0241, Q-0239, Q-0237, Q-0236]
+- The campaign tests cards, not the definition language (2026-10-11, second and third notes; Q-0241 carried further). "I think the main thing we want ...
 
 ## How card text is read
 
