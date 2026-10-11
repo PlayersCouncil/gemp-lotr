@@ -50,10 +50,10 @@ public class Card_V3_127_Tests
 
 					put("initiate", "103_47");     // Desert Wind Initiate: cost 1; "When you play this minion, remove (3) or hinder this minion."
 					put("savage", "1_151");        // Uruk Savage: [isengard] Uruk-hai, strength 5, vitality 3
-					put("runner1", "1_178");       // Goblin Runner: strength 5, vitality 1
+					put("runner1", "1_178");       // Goblin Runner: [moria] Orc, strength 5, vitality 1
 					put("runner2", "1_178");
 					put("witchking", "1_237");     // The Witch-king, Lord of Angmar: unique [ringwraith] minion, strength 14, vitality 4
-					put("scimitar", "1_180");      // Goblin Scimitar: Shadow possession, strength +2, put on a minion by the rig
+					put("scimitar", "1_180");      // Goblin Scimitar: Shadow possession, strength +2; "Bearer must be a [moria] Orc."
 					put("hides", "4_19");          // Hides: Shadow possession in the support area
 					put("reach", "1_137");         // Saruman's Reach: maneuver event; exert an Uruk-hai to make the opponent exert 2 companions or put on The One Ring
 					put("knows", "103_40");        // A Wizard Knows Better: maneuver event; "... you may exert X [isengard] minions ... to hinder an unbound companion costing up to X."
@@ -229,7 +229,7 @@ public class Card_V3_127_Tests
 
 		var gandalf = scn.GetFreepsCard("gandalf");
 		var enter = scn.GetFreepsCard("enter");
-		var savage = scn.GetShadowCard("savage");
+		var runner = scn.GetShadowCard("runner1");
 		var scimitar = scn.GetShadowCard("scimitar");
 		var hides = scn.GetShadowCard("hides");
 
@@ -237,8 +237,9 @@ public class Card_V3_127_Tests
 		scn.SkipToSite(8);
 		scn.MoveCompanionsToTable(gandalf);
 		scn.MoveCardsToHand(enter);
-		scn.MoveMinionsToTable(savage);
-		scn.AttachCardsTo(savage, scimitar);
+		// The Scimitar's bearer must be a [moria] Orc, which the Runner is.
+		scn.MoveMinionsToTable(runner);
+		scn.AttachCardsTo(runner, scimitar);
 		scn.MoveCardsToSupportArea(hides);
 
 		scn.FreepsPass();
@@ -247,20 +248,20 @@ public class Card_V3_127_Tests
 
 		assertEquals(0, scn.GetWoundsOn(gandalf));
 		// 5 + 2 for the Scimitar
-		assertEquals(7, scn.GetStrength(savage));
+		assertEquals(7, scn.GetStrength(runner));
 		assertTrue(scn.FreepsPlayAvailable(enter));
 		scn.FreepsPlayCard(enter);
 		// Gandalf, the only Wizard, exerts; any Shadow card may be hindered.
-		assertTrue(scn.FreepsHasCardChoiceAvailable(savage, scimitar, hides));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(runner, scimitar, hides));
 		scn.FreepsChooseCard(scimitar);
 
 		// The possession the minion bore was hindered and is discarded.
 		assertInDiscard(scimitar);
-		assertEquals(5, scn.GetStrength(savage));
+		assertEquals(5, scn.GetStrength(runner));
 		// Its bearer and the possession in the support area were not hindered.
-		assertInZone(Zone.SHADOW_CHARACTERS, savage);
-		assertFalse(scn.IsHindered(savage));
-		assertEquals(0, scn.GetWoundsOn(savage));
+		assertInZone(Zone.SHADOW_CHARACTERS, runner);
+		assertFalse(scn.IsHindered(runner));
+		assertEquals(0, scn.GetWoundsOn(runner));
 		assertInZone(Zone.SUPPORT, hides);
 		assertFalse(scn.IsHindered(hides));
 		// Gandalf's exertion and the site's wound.

@@ -29,11 +29,13 @@ public class Card_V3_126_Tests
 					put("gimli", "1_13");          // Gimli, Son of Gloin: a Dwarf, strength 6, damage +1 in his own text
 					put("bilbo", "1_284");         // Bilbo, Retired Adventurer: [shire] ally, strength 2
 					put("orophin", "1_56");        // Orophin, Lorien Bowman: Elf ally, an archer in his own text
+					put("lorienElf", "1_53");      // Lorien Elf: Elf companion, strength 4; "To play, spot an Elf" is its whole text
+					put("celeborn", "1_34");       // Celeborn, Lord of Lorien: Elf ally, strength 6; a fellowship ability only
 
 					// Free Peoples items
-					put("anduril", "7_79");        // Anduril, Flame of the West: artifact, strength +2 and vitality +1 printed; "He is damage +1"
-					put("bow", "1_90");            // Aragorn's Bow: possession; "He is an archer."
-					put("elvenBow", "1_41");       // Elven Bow: possession; "Bearer is an archer."
+					put("anduril", "7_79");        // Anduril, Flame of the West: artifact, strength +2 and vitality +1 printed; "He is damage +1 and cannot bear other weapons"
+					put("elvenBow1", "1_41");      // Elven Bow: possession; "Bearer must be an Elf. Bearer is an archer."
+					put("elvenBow2", "1_41");
 					put("scroll", "9_36");         // Scroll of Isildur: artifact in the support area, a tale; the Ring-bearer is resistance +1 for each [gondor] artifact
 					put("horn", "5_8");            // Horn of Helm: possession in the support area; "Maneuver: Exert a Dwarf companion to ..."
 					put("axe", "1_9");             // Dwarven Axe: possession, strength +2 printed; a minion that loses to its bearer costs its owner the top card of his deck
@@ -176,11 +178,12 @@ public class Card_V3_126_Tests
 		var frodo = scn.GetRingBearer();
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var gimli = scn.GetFreepsCard("gimli");
-		var bilbo = scn.GetFreepsCard("bilbo");
+		var lorienElf = scn.GetFreepsCard("lorienElf");
+		var celeborn = scn.GetFreepsCard("celeborn");
 		var orophin = scn.GetFreepsCard("orophin");
 		var anduril = scn.GetFreepsCard("anduril");
-		var bow = scn.GetFreepsCard("bow");
-		var elvenBow = scn.GetFreepsCard("elvenBow");
+		var elvenBow1 = scn.GetFreepsCard("elvenBow1");
+		var elvenBow2 = scn.GetFreepsCard("elvenBow2");
 		var scroll = scn.GetFreepsCard("scroll");
 		var alliance = scn.GetFreepsCard("alliance");
 
@@ -189,13 +192,14 @@ public class Card_V3_126_Tests
 
 		scn.StartGame();
 		scn.SkipToSite(8);
-		scn.MoveCompanionsToTable(aragorn, gimli);
-		scn.MoveAlliesToTable(bilbo, orophin);
-		// An artifact and a possession on a companion (the rig puts the Bow beside Anduril, whose text
-		// would not let him bear it), a possession on an ally (the rig puts the Elven Bow on a Hobbit) and
-		// an artifact in the support area. With them a condition on the same companion.
-		scn.AttachCardsTo(aragorn, anduril, bow, alliance);
-		scn.AttachCardsTo(bilbo, elvenBow);
+		scn.MoveCompanionsToTable(aragorn, gimli, lorienElf);
+		scn.MoveAlliesToTable(celeborn, orophin);
+		// An artifact on a companion, a possession on a companion, a possession on an ally and an artifact
+		// in the support area, each where its text allows: Anduril is Aragorn's only weapon, and each Elven
+		// Bow is on an Elf who is no archer without it. With them a condition on Aragorn.
+		scn.AttachCardsTo(aragorn, anduril, alliance);
+		scn.AttachCardsTo(lorienElf, elvenBow1);
+		scn.AttachCardsTo(celeborn, elvenBow2);
 		scn.MoveCardsToSupportArea(scroll);
 		scn.MoveMinionsToTable(witchking);
 		scn.AttachCardsTo(witchking, paleBlade);
@@ -203,13 +207,13 @@ public class Card_V3_126_Tests
 		// Site 8: every text applies.
 		assertEquals(8, scn.GetCurrentSiteNumber());
 		assertTrue(scn.HasKeyword(aragorn, Keyword.DAMAGE));        // Anduril
-		assertTrue(scn.HasKeyword(aragorn, Keyword.ARCHER));        // Aragorn's Bow
-		assertTrue(scn.HasKeyword(bilbo, Keyword.ARCHER));          // Elven Bow
+		assertTrue(scn.HasKeyword(lorienElf, Keyword.ARCHER));      // an Elven Bow on a companion
+		assertTrue(scn.HasKeyword(celeborn, Keyword.ARCHER));       // an Elven Bow on an ally
 		assertTrue(scn.HasKeyword(scroll, Keyword.TALE));           // the Scroll's own keyword
 		// 10 + 2 for the Scroll: Anduril and the Scroll itself are [gondor] artifacts
 		assertEquals(12, scn.GetResistance(frodo));
-		// 8 + 2 printed on Anduril + 1 for The Last Alliance (Orophin is the one Elf)
-		assertEquals(11, scn.GetStrength(aragorn));
+		// 8 + 2 printed on Anduril + 3 for The Last Alliance (the Lorien Elf, Celeborn and Orophin)
+		assertEquals(13, scn.GetStrength(aragorn));
 		// 4 + 1 printed on Anduril
 		assertEquals(5, scn.GetVitality(aragorn));
 		assertTrue(scn.HasKeyword(alliance, Keyword.TALE));
@@ -226,17 +230,17 @@ public class Card_V3_126_Tests
 		// The text of the Free Peoples items gives nothing: borne by a companion, borne by an ally, in the
 		// support area; artifact and possession.
 		assertFalse(scn.HasKeyword(aragorn, Keyword.DAMAGE));
-		assertFalse(scn.HasKeyword(aragorn, Keyword.ARCHER));
-		assertFalse(scn.HasKeyword(bilbo, Keyword.ARCHER));
+		assertFalse(scn.HasKeyword(lorienElf, Keyword.ARCHER));
+		assertFalse(scn.HasKeyword(celeborn, Keyword.ARCHER));
 		assertFalse(scn.HasKeyword(scroll, Keyword.TALE));
 		assertEquals(10, scn.GetResistance(frodo));
 
-		// What is printed on an item beside its text is still given, and so is the condition's +1:
-		// 8 + 2 + 1, and 4 + 1.
-		assertEquals(11, scn.GetStrength(aragorn));
+		// What is printed on an item beside its text is still given, and so is the condition's +3:
+		// 8 + 2 + 3, and 4 + 1.
+		assertEquals(13, scn.GetStrength(aragorn));
 		assertEquals(5, scn.GetVitality(aragorn));
 		assertTrue(scn.HasKeyword(alliance, Keyword.TALE));
-		// Characters keep their own text.
+		// Characters keep their own text: the Elf who is an archer without a Bow is one still.
 		assertTrue(scn.HasKeyword(gimli, Keyword.DAMAGE));
 		assertTrue(scn.HasKeyword(orophin, Keyword.ARCHER));
 		// A Shadow item keeps its text: 14 + 3 for the Blade + 1 for the site.
@@ -245,8 +249,8 @@ public class Card_V3_126_Tests
 
 		// Nothing left play on the way.
 		assertAttachedTo(anduril, aragorn);
-		assertAttachedTo(bow, aragorn);
-		assertAttachedTo(elvenBow, bilbo);
+		assertAttachedTo(elvenBow1, lorienElf);
+		assertAttachedTo(elvenBow2, celeborn);
 		assertInZone(Zone.SUPPORT, scroll);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
