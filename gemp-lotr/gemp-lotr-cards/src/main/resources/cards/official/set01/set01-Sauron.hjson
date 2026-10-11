@@ -1100,8 +1100,8 @@
 						count: 2
 					}
 					{
-						type: cantspot
-						filter: AssignedToSkirmish(self)
+						type: canSpot
+						filter: hobbit,assignableToSkirmishAgainst(self)
 					}
 				]
 				effect: {
