@@ -533,7 +533,8 @@ reads REGROUP, `GameIsFinished()`, nobody asked): a test there that plays no min
 decision or on `GameIsFinished()`, never on `AwaitingFreepsRegroupPhaseActions()` (Card_01_363_Tests). In the PC
 formats (`winAtEndOfRegroup: true` in lotrFormats.hjson; `"pc_fotr_block"` as the scenario's format) the
 regroup phase at site 9 IS played, so a regroup text at site 9 is a board in play there (Speak "Friend" and
-Enter 2_26 is offered, and lays no site 10). A skipper that plays on through the winning
+Enter 2_26 is offered, and lays no site 10), and the game is won when both have passed, as the Shadow player
+is about to reconcile, his hand untouched (`mechanics/ReconcilingTests`, `mechanics/PlayingSitesTests`). A skipper that plays on through the winning
 turn finds nobody being asked anything and fails, saying that the game is over and who won it:
 `SkipToOtherPlayersTurn()` from player 1's fellowship phase at site 8 (it was a bare `NoSuchElementException`
 until engine pass 24). Under a modifier that
@@ -663,7 +664,11 @@ lays beside it at the next action of the game: lay the X only where the test is 
 than 8 cards in hand it is one card choice of 0 to 1 (`ShadowChooseCard(card)` or `ShadowDeclineReconciliation()`)
 and then the draw up to 8; with an empty hand nothing is asked; with more than 8 it is one choice of exactly
 hand minus 8 cards, minimum and maximum equal, with no optional discard first and no declining (`ShadowChooseCards`).
-Under Foot 60_52's tests read all three.
+Under Foot 60_52's tests read all three. With exactly 8 the one discard is still offered, and a card is drawn
+for it if it is taken; a draw deck with too few cards gives what it has. `mechanics/ReconcilingTests` has each
+hand size for both players, the Shadow player's reconcile in each regroup phase and the Free Peoples player's
+only when he stays, and Careful Study 7_19 ("Regroup: ... discard 3 cards from hand to reconcile your hand") as
+the plain card that brings a reconcile about: a card owes no test of the steps.
 
 **"Each time you reconcile" is answered after the hand is made up.** The offer comes once the reconciling
 player has discarded (or declined) and drawn to 8, so with the offer pending a hand laid at 6 reads 8 and the
@@ -990,7 +995,10 @@ Passed over by every filter is not the same as out of force: the standing text o
 cheated into his support area, may still be laid on your cards. The Shadow player's Lord of Moria 1_21 put down
 AFTER `StartGame()` gave your Dwarf Guard damage +1; put down before it, it did on one board of five (probes of
 dec-b4_4). Put his card down before `StartGame()`, and beside it read only what is offered and where cards lie,
-never a number his card could change (Card_04_041_Tests).
+never a number his card could change (Card_04_041_Tests). On his OWN turn a card of his that was cheated in
+earlier is started a second time: his Ranger of the South 18_56 read +4 for a [gondor] token, not +2 (a probe of
+engine pass 26). Where a test reads a number on player 2's turn, lay his cards after `SkipToOtherPlayersTurn()`
+(`mechanics/CultureTokensTests`, the test of tokens on a card that is not active).
 
 **An event is in the void while it is being played.** From its play until its last decision is answered an
 event, a response event included, is in `Zone.VOID`; only then is it in the discard pile. `assertInDiscard(event)`
@@ -1016,6 +1024,16 @@ companion, not the Ring-bearer alone: with 3 burdens Frodo 1_290 (resistance 10)
 for "an [elven] token" is a card of another culture carrying its own tokens. Put tokens only on a card that
 some card gives tokens to (Q-0213: I): a possession with tokens no card puts there is a board no game reaches
 (F-0073 was found on one, and is moot in play).
+A reinforcement is chosen among the reinforcing player's OWN cards that already have a token of the culture (CR
+4.2 "reinforce"; F-0468: until engine pass 26 Morannon Plains 18_137 offered the other player's too), several
+tokens are chosen for one at a time, and a card that leaves play keeps none of its tokens. The rule is shown in
+`mechanics/CultureTokensTests`: a card's own file reads its own candidates and count and no more.
+
+**A stacked card is not in play** (CR 4.2 "stack"). It cannot be spotted, does not count for uniqueness (a copy
+of a stacked unique card is played, and a third copy stacked beside it), is no companion for a move's twilight
+and no minion to be discarded as the turn ends, and its text is out of force unless it says "while stacked".
+Stacked by legal play: The Shards of Narsil 3_44 (any [gondor] card from hand, fellowship phase, no cost; (1) to
+take one back) and Teeth of Mordor 5_110 (a [sauron] Orc from play, regroup phase, (3)). `mechanics/StackingTests`.
 
 **The Ring is attached to the Ring-bearer.** `GetAttachedCards(ringBearer)` includes The One Ring, so "nothing
 else attached" is a size of 1. `assertNotAttachedTo` is the safer reading.
@@ -1357,6 +1375,11 @@ out ahead of every `siteN`, `homestead` or `path` say, made the whole path unord
 resting on "Choose site to play". The landed scenarios chose their keys round that and are unchanged.) The other
 way about, one numbered site among Shadows-block sites makes the path a numbered one, and with no site 1 in it
 the table is refused when it is built, saying so (`virtualtable/FirstSiteTests`).
+On an unordered path the constructor rests on the first player's "Choose site to play" with all nine offered
+(`FreepsGetBPChoiceCount()`), the Shadow player's choice at each move is among the sites left in his deck, his
+copy of a site already laid included, and the move adds 3 more twilight for a site in region 2 and 6 in region
+3; a numbered path adds none in any of the three Movie block formats (`mechanics/PlayingSitesTests`, which also
+has the next site played by a card, a site replaced on each kind of path, and no site 10).
 `StartGame(site)` with a site named gets past the first question, but the path is still unordered: every move
 asks the Shadow player to lay a site, and `SkipToSite` halts in the fellowship phase.
 On a numbered path nobody is asked "Choose site to play" at all: each player's deck has one site of each number

@@ -615,7 +615,7 @@ A Race to Mount Doom meta-site's `Trigger` and `Activated` are collected for eve
 
 **Tokens:**
 `AddBurdens(amount?, player?)`, `RemoveBurdens(amount?, player?)`, `AddThreats(amount?, player?)`, `RemoveThreats(amount?)`, `AddTwilight(amount?, memorize?)`, `RemoveTwilight(amount?, memorize?)`, `AddCultureTokens(select, culture, count?, memorize?)`, `RemoveCultureTokens(select, culture?, count?, memorize?)`, `ReinforceTokens(select?, culture?, player?, times?, memorize?)`
-`AddCultureTokens` and `ReinforceTokens` do nothing to a hindered card (Q-0070).
+`AddCultureTokens` and `ReinforceTokens` do nothing to a hindered card (Q-0070). `ReinforceTokens` chooses only among cards its `player` owns (CR 4.2 "reinforce": "any of your cards"; F-0468), so a definition never writes `your` for it.
 
 **Card Movement:**
 `Discard(select, count?, player?, memorize?)`, `ReturnToHand(select, count?, player?)`, `Transfer(select, where, checkTarget?, fromSupport?, memorizeTransferred?, memorizeTarget?)`, `StackCardsFromPlay/Hand/Deck/Discard(select, where, count?)`, `RemoveFromTheGame(select, count?, player?, memorize?)`
