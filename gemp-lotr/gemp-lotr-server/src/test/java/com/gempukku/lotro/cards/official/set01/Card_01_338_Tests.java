@@ -3,6 +3,7 @@ package com.gempukku.lotro.cards.official.set01;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -14,14 +15,24 @@ import static org.junit.Assert.*;
 public class Card_01_338_Tests
 {
 
+    // The Ford is site 3, after Bree Gate at site 2 (Shadow number 2; its text needs a ranger).
     protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
         return new VirtualTableScenario(
                 new HashMap<>()
                 {{
+                    // The Witch-king, Lord of Angmar: [wraith] Nazgûl, cost 8, site number 3; fierce, and strength for other Nazgûl
                     put("twk", "1_237");
+                    // Úlairë Lemenya, Lieutenant of Morgul: [wraith] Nazgûl, cost 4, site number 3; her text needs a [wraith] condition
                     put("lemenya", "1_232");
+                    // Úlairë Nertëa, Messenger of Dol Guldur: [wraith] Nazgûl, cost 4, site number 3; when played, for each
+                    // companion over 4 her owner may play a minion from his discard pile
                     put("nertea", "1_234");
+                    // Ulaire Attea, Khamul of the East: a [raider] Nazgûl, cost 6, site number 3; his text needs 3 burdens
+                    put("khamul", "103_61");
+                    // Morgul Creeper: a [wraith] Orc, cost 3, site number 4; its text needs 3 burdens
+                    put("creeper", "8_75");
 
+                    // Dwarf Guard: a companion with no text in play; four of them and Frodo are five companions
                     put("guard1", "1_7");
                     put("guard2", "1_7");
                     put("guard3", "1_7");
@@ -74,12 +85,11 @@ public class Card_01_338_Tests
          * Set: 1
          * Name: Ford of Bruinen
          * Unique: False
-         * Side:
-         * Culture:
-         * Shadow Number: 0
-         * Type: Sanctuary
-         * Subtype:
+         * Type: Site
+         * Block: Fellowship
          * Site Number: 3
+         * Shadow Number: 0
+         * Direction: Right
          * Game Text: <b>River</b>. <b>Sanctuary</b>. The twilight cost of the first Nazgûl played to Ford of Bruinen each turn is -5.
          */
 
@@ -91,86 +101,188 @@ public class Card_01_338_Tests
         assertNull(card.getBlueprint().getSubtitle());
         assertFalse(card.getBlueprint().isUnique());
         assertEquals(CardType.SITE, card.getBlueprint().getCardType());
+        assertEquals(SitesBlock.FELLOWSHIP, card.getBlueprint().getSiteBlock());
+        assertEquals(3, card.getBlueprint().getSiteNumber());
+        assertEquals(0, card.getBlueprint().getTwilightCost());
+        assertEquals(LotroCardBlueprint.Direction.RIGHT, card.getBlueprint().getSiteDirection());
         assertTrue(scn.HasKeyword(card, Keyword.RIVER));
         assertTrue(scn.HasKeyword(card, Keyword.SANCTUARY));
-        assertEquals(0, card.getBlueprint().getTwilightCost());
-        assertEquals(3, card.getBlueprint().getSiteNumber());
     }
 
     @Test
     public void FordofBruinenOnlyDiscountsTheFirstNazgul() throws DecisionResultInvalidException, CardNotFoundException {
-        //Pre-game setup
         var scn = GetScenario();
 
         var ford = scn.GetShadowSite(3);
 
         var twk = scn.GetShadowCard("twk");
         var lemenya = scn.GetShadowCard("lemenya");
-        scn.MoveCardsToHand(twk, lemenya);
 
         scn.StartGame();
-        //Start our test on 2 so that moving to 3 is the first thing we do
+        // The turn begins at site 2, so that the move to the Ford is its first.
         scn.SkipToSite(2);
+        scn.SetShadowHand(twk, lemenya);
 
         scn.SetTwilight(9);
         scn.FreepsPass();
 
-        assertEquals(ford, scn.GetCurrentSite());
-
-        //9 manual + 1 from the fellowship moving
+        assertSame(ford, scn.GetCurrentSite());
+        // 9 set + 1 companion + 0 for the Ford
         assertEquals(10, scn.GetTwilight());
+        assertTrue(scn.AwaitingShadowPhaseActions());
+        // 8 - 5
+        assertEquals(3, scn.GetTwilightCost(twk));
+        // 4 - 5, which reads 0
+        assertEquals(0, scn.GetTwilightCost(lemenya));
 
         scn.ShadowPlayCard(twk);
-        //TWK costs 8 (no roaming), discounted by 5 to 3 total
-        //10 - 3
+        // 3 to play, and no roaming: his site number is 3
         assertEquals(7, scn.GetTwilight());
+        assertInZone(Zone.SHADOW_CHARACTERS, twk);
 
+        // The second Nazgûl of the turn costs her printed 4.
+        assertEquals(4, scn.GetTwilightCost(lemenya));
         scn.ShadowPlayCard(lemenya);
-        //Lemenya costs 4, should have no discount
-        //7 - 4
         assertEquals(3, scn.GetTwilight());
+        assertInZone(Zone.SHADOW_CHARACTERS, lemenya);
+        assertTrue(scn.AwaitingShadowPhaseActions());
+    }
+
+    @Test
+    public void ANazgulOfAnotherCultureIsDiscountedAndAWraithMinionThatIsNoNazgulIsNeitherDiscountedNorCounted() throws DecisionResultInvalidException, CardNotFoundException {
+        var scn = GetScenario();
+
+        var twk = scn.GetShadowCard("twk");
+        var khamul = scn.GetShadowCard("khamul");
+        var creeper = scn.GetShadowCard("creeper");
+
+        scn.StartGame();
+        scn.SkipToSite(2);
+        scn.SetShadowHand(twk, khamul, creeper);
+
+        scn.SetTwilight(9);
+        scn.FreepsPass();
+
+        assertEquals("Ford of Bruinen", scn.GetCurrentSite().getBlueprint().getTitle());
+        // 9 set + 1 companion + 0 for the Ford
+        assertEquals(10, scn.GetTwilight());
+        assertTrue(scn.AwaitingShadowPhaseActions());
+        // 8 - 5 and 6 - 5; the Orc its printed 3
+        assertEquals(3, scn.GetTwilightCost(twk));
+        assertEquals(1, scn.GetTwilightCost(khamul));
+        assertEquals(3, scn.GetTwilightCost(creeper));
+
+        scn.ShadowPlayCard(creeper);
+        // 3 to play + 2 roaming (site number 4, played at site 3)
+        assertEquals(5, scn.GetTwilight());
+        assertInZone(Zone.SHADOW_CHARACTERS, creeper);
+        // No Nazgûl has been played yet.
+        assertEquals(3, scn.GetTwilightCost(twk));
+        assertEquals(1, scn.GetTwilightCost(khamul));
+
+        scn.ShadowPlayCard(khamul);
+        // 1 to play, and no roaming: his site number is 3
+        assertEquals(4, scn.GetTwilight());
+        assertInZone(Zone.SHADOW_CHARACTERS, khamul);
+        // He was the first Nazgûl played to the Ford this turn.
+        assertEquals(8, scn.GetTwilightCost(twk));
+        assertTrue(scn.AwaitingShadowPhaseActions());
     }
 
     @Test
     public void FordDiscountsNerteaButNotNerteasTrigger() throws DecisionResultInvalidException, CardNotFoundException {
-        //Pre-game setup
         var scn = GetScenario();
 
         var ford = scn.GetShadowSite(3);
 
         var twk = scn.GetShadowCard("twk");
         var nertea = scn.GetShadowCard("nertea");
-        scn.MoveCardsToHand(nertea);
-        scn.MoveCardsToDiscard(twk);
 
         scn.MoveCompanionsToTable("guard1", "guard2", "guard3", "guard4");
 
         scn.StartGame();
-        //Start our test on 2 so that moving to 3 is the first thing we do
+        // The turn begins at site 2, so that the move to the Ford is its first.
         scn.SkipToSite(2);
+        scn.SetShadowHand(nertea);
+        scn.MoveCardsToDiscard(twk);
 
         scn.SetTwilight(5);
         scn.FreepsPass();
 
-        assertEquals(ford, scn.GetCurrentSite());
-
-        //5 manual + 5 from the fellowship moving
+        assertSame(ford, scn.GetCurrentSite());
+        // 5 set + 5 companions + 0 for the Ford
         assertEquals(10, scn.GetTwilight());
+        assertTrue(scn.AwaitingShadowPhaseActions());
+        // 4 - 5, which reads 0
+        assertEquals(0, scn.GetTwilightCost(nertea));
+        assertInZone(Zone.DISCARD, twk);
 
         scn.ShadowPlayCard(nertea);
-        //Nertea costs 4 (no roaming), discounted by 5 to 0 total
-        //10 - 0
         assertEquals(10, scn.GetTwilight());
+        assertInZone(Zone.SHADOW_CHARACTERS, nertea);
 
-        //Nertea pulls a minion from discard, which should not get discounted
-        // as Nertea should have consumed the only discount
-        assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+        // Five companions: Nertëa's own text offers one minion from the discard pile.  Taking the offer is the
+        // play, and the Witch-king is the one minion there.  Nertëa was the first Nazgûl of the turn, so he costs
+        // his printed 8.
+        assertTrue(scn.ShadowHasOptionalTriggerAvailable(nertea));
         scn.ShadowAcceptOptionalTrigger();
-        // Taking the offer is the play (F-0387): the Witch-king, the one minion there, is played without a second question.
 
-        //TWK costs 8, should not be discounted
-        //10 - 8
+        assertInZone(Zone.SHADOW_CHARACTERS, twk);
         assertEquals(2, scn.GetTwilight());
+        assertTrue(scn.AwaitingShadowPhaseActions());
+    }
+
+    @Test
+    public void TheFirstNazgulPlayedToTheFordOnTheNextTurnIsFiveCheaperAgain() throws DecisionResultInvalidException, CardNotFoundException {
+        var scn = GetScenario();
+
+        // Each player's own Nazgûl, for the turn on which that player is the Shadow player
+        var firstPlayersKing = scn.GetFreepsCard("twk");
+        var firstPlayersLemenya = scn.GetFreepsCard("lemenya");
+        var secondPlayersKing = scn.GetShadowCard("twk");
+        var secondPlayersLemenya = scn.GetShadowCard("lemenya");
+
+        // The first player's fellowship moves twice in its first turn and comes to rest on the Ford.
+        scn.StartGame();
+        scn.FreepsPass();
+        scn.SkipToMovementDecision();
+        scn.FreepsChooseToMove();
+        assertTrue(scn.AwaitingShadowPhaseActions());
+        assertEquals("Ford of Bruinen", scn.GetCurrentSite().getBlueprint().getTitle());
+
+        scn.SetShadowHand(secondPlayersLemenya, secondPlayersKing);
+        scn.ShadowRefreshDecision();
+        assertEquals(3, scn.GetTwilightCost(secondPlayersKing));
+        int pool = scn.GetTwilight();
+
+        // Lemenya is this turn's first: 4 - 5, played for nothing.
+        scn.ShadowPlayCard(secondPlayersLemenya);
+        assertEquals(pool, scn.GetTwilight());
+        assertInZone(Zone.SHADOW_CHARACTERS, secondPlayersLemenya);
+        assertEquals(8, scn.GetTwilightCost(secondPlayersKing));
+
+        // The second player's turn.  His fellowship moves from site 1 to site 2 and on to the same Ford.
+        scn.SkipToOtherPlayersTurn();
+        assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
+        scn.ShadowPass();
+        scn.SkipToMovementDecision();
+        scn.SetFreepsHand(firstPlayersKing, firstPlayersLemenya);
+        scn.SetTwilight(5);
+        scn.ShadowChooseToMove();
+
+        assertEquals(3, scn.GetCurrentSiteNumber());
+        assertEquals("Ford of Bruinen", scn.GetCurrentSite().getBlueprint().getTitle());
+        assertTrue(scn.FreepsDecisionAvailable("Play Shadow action or Pass"));
+        // 5 set + 1 companion + 0 for the Ford
+        assertEquals(6, scn.GetTwilight());
+        // A new turn: 8 - 5 once more.
+        assertEquals(3, scn.GetTwilightCost(firstPlayersKing));
+
+        scn.FreepsPlayCard(firstPlayersKing);
+        assertEquals(3, scn.GetTwilight());
+        assertInZone(Zone.SHADOW_CHARACTERS, firstPlayersKing);
+        assertEquals(4, scn.GetTwilightCost(firstPlayersLemenya));
+        assertTrue(scn.FreepsDecisionAvailable("Play Shadow action or Pass"));
     }
 
     @Test
