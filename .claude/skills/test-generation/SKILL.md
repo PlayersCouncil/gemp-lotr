@@ -377,7 +377,9 @@ Which checks a clause lists follows from its words, and the analyst is expected 
   54_304: Sméagol beside a hindered Galadriel). An "assign <this character> to a minion" cost: its `C-` board
   is the character already assigned (CR 4.2 "assignment phase": both must be unassigned), by a minion's own
   assignment action after the Free Peoples player's pass (Unexpected Visitor 7_126 and its
-  kin, in gemp-testing's `helpers.md`; Alcarin 5_31). A minion he must pay to assign and cannot is Q-0221's check, under an `R` clause
+  kin, in gemp-testing's `helpers.md`; Alcarin 5_31). A minion he must pay to assign and cannot is Q-0221's
+  check, under an `R` clause typed `Rule [+ -]` that names Q-0221 (Alcarin 5_31, Éowyn 17_96): `+` the price
+  paid once the minion is chosen, `-` the minion not his to name.
 - a noun phrase that picks things out ("a Dwarf", "each [moria] Orc", "another companion", "bearer") → `F`. Not
   "the Ring-bearer" in a bare count of burdens ("for each burden on the Ring-bearer"): burdens lie on nobody
   else, so there is no other candidate to lay (Q-0186). A NAMED bearer, "on Frodo", is a phrase like any other (Q-0103)
@@ -769,6 +771,8 @@ bookends, and that none of the ledger has leaked into the test file. Its warning
    candidate, a `D` that only looks at one side of the boundary, all pass the conformance check. So does a
    card that is not unique and says "this condition" or "here" with no second copy in play in the test where
    it matters: the check warns (`second-copy`) only where no scenario has two aliases of the card at all.
+   A comment that says a thing is "untouched" or "still there" with no assertion under it shows nothing either
+   (lint does not read comments): take the words out, or add the reading where a rule or ruling settles it.
 3. Would the test fail if the card were wrong? Imagine the filter one word wider and one word narrower, the
    number one off, the trigger on the neighbouring event. If the test would still pass, it is not testing that.
    Reading settles most of these (is there a candidate on the table that tells the two apart?);

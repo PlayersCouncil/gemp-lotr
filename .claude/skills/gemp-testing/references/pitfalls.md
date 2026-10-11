@@ -156,7 +156,10 @@ optional is noticed. `FreepsResolveRuleFirst()` also fails when no rule is among
 (two triggers of cards: name one with `FreepsResolveActionOrder`). `FreepsDismissRevealedCards()` and
 `ShadowDismissRevealedCards()` fail unless that player is being shown cards; `DismissRevealedCards()` dismisses
 for whoever is being shown some and fails if nobody is. `FreepsGetTotalRevealedCardCount()` and its Shadow twin
-count the cards a player is being shown, 0 if none. `FreepsChooseOptionalTrigger(card)` fails unless that very
+count the cards a player is being shown, 0 if none. They count the cards of ANY decision that lists cards out
+of play, a real choice from a discard pile or a draw deck too (2 at Gandalf 17_17's choice from his discard
+pile), so a 0 read there is no "nothing was shown": read it before the choice, or at the next thing asked.
+`FreepsChooseOptionalTrigger(card)` fails unless that very
 card is offering, and with `(card, text)` unless it is offering an action so worded. The plain pass methods are
 not like this: a pass with nothing pending does nothing and says nothing (Ketura, on G-0015: passes stay
 harmless), and `FreepsPass()` and `ShadowPass()` answer whatever is pending with nothing, an optional trigger

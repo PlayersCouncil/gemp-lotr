@@ -461,7 +461,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Play any number of / up to N ... from your discard pile" is withheld when nothing can be played (Q-0086)
 - "If you have initiative, you may play this <card> from your discard pile" is a clause of its own, typed `Activated [+ -]` (Hobbitses Are Dead 7_61; F-0055)
 - "Hinder/remove X ... to play X cards from your discard pile": X is capped (Q-0094)
-- An action's costs are judged in order, with its own exertions counted (F-0184)
+- An action's costs are judged in order, with its own exertions counted (F-0184) [F-0486, Q-0221]
 - Response events are not played by "play an event from ..." (F-0186)
 - "Play a <kind of> Free Peoples card from your draw deck" never offers a Shadow card, whatever the filter says (Dammed Gate-stream 11_235, Green Dragon Inn 11_242)
 - "Ignoring all costs" passes over the cost in an event's own text (F-0316, built by engine pass 20) [Q-0201]
