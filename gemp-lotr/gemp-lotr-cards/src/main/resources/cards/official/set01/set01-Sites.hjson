@@ -1304,10 +1304,16 @@
 				type: modifier
 				modifier: {
 					type: modifyCost
-					requires: {
-						type: perPhaseLimit
-						limit: 1
-					}
+					requires: [
+						{
+							type: phase
+							phase: shadow
+						}
+						{
+							type: perPhaseLimit
+							limit: 1
+						}
+					]
 					filter: culture(moria),orc
 					amount: -2
 				}
