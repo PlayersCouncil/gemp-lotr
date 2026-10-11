@@ -627,14 +627,31 @@
 			{
 				type: activated
 				phase: fellowship
+				# The text has no requirement: a player with no card in hand still draws 4.  What is kept
+				# off the menu is the use that would do nothing, no hand to place and no card that may
+				# be drawn.  No requirement reads the Rule of 4, so "used already this phase" stands in
+				# for it (one use draws as far as the rule lets him): a card in hand, or the first use.
 				requires: {
-					type: IsGreaterThan
-					firstNumber: {
-						type: ForEachInHand
-					}
-					secondNumber: 0
+					type: or
+					requires: [
+						{
+							type: IsGreaterThan
+							firstNumber: {
+								type: ForEachInHand
+							}
+							secondNumber: 0
+						}
+						{
+							type: perPhaseLimit
+							limit: 1
+						}
+					]
 				}
 				effect: [
+					{
+						type: incrementPerPhaseLimit
+						limit: 1
+					}
 					{
 						type: putCardsFromHandOnBottomOfDeck
 						select: all(any)

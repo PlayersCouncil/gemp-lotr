@@ -1294,6 +1294,16 @@
 				trigger: {
 					type: moves
 				}
+				requires: [
+					{
+						type: canSpot
+						filter: unbound,hobbit
+					}
+					{
+						type: canSpot
+						filter: minion
+					}
+				]
 				effect: [
 					{
 						type: chooseHowManyToSpot

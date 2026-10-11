@@ -3,52 +3,39 @@ package com.gempukku.lotro.cards.official.set04;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_04_337_Tests
 {
 
+	// The Towers sites: Barrows of Edoras is site 3 of them.  Both players hold every card below, and whatever
+	// a test does not place lies in its owner's draw deck.
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("fodder01", "5_1");
-					put("fodder02", "5_2");
-					put("fodder03", "5_3");
-					put("fodder04", "5_4");
-					put("fodder05", "5_5");
-					put("fodder06", "5_6");
-					put("fodder07", "5_7");
-					put("fodder08", "5_8");
-					put("fodder09", "5_9");
-					put("fodder10", "5_10");
-					put("fodder11", "5_11");
-					put("fodder12", "5_12");
-					put("fodder13", "5_13");
-					put("fodder14", "5_14");
-					put("fodder15", "5_15");
-					put("fodder16", "5_16");
-					put("fodder17", "5_17");
-					put("fodder18", "5_18");
-					put("fodder19", "5_19");
-					put("fodder20", "5_20");
+					// Cards to hold in hand: a companion, a possession and a Shadow minion.
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North
+					put("armor", "1_8");        // Dwarven Armor
+					put("troop", "1_177");      // Goblin Patrol Troop
+
+					// Cards to draw.
+					put("gimli", "1_13");       // Gimli, Son of Gloin
+					put("guard", "1_7");        // Dwarf Guard
+					put("runner", "1_178");     // Goblin Runner
+					put("savage", "1_151");     // Uruk Savage
+					put("marksman", "1_176");   // Goblin Marksman
+					put("brigand", "4_10");     // Dunlending Brigand
+					put("soldier", "1_271");    // Orc Soldier
 				}},
-				new HashMap<>() {{
-					put("site1", "1_319");
-					put("site2", "1_327");
-					put("site3", "4_337");
-					put("site4", "1_343");
-					put("site5", "1_349");
-					put("site6", "101_61");
-					put("site7", "3_118");
-					put("site8", "1_356");
-					put("site9", "1_360");
-				}},
+				VirtualTableScenario.TowersSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -61,118 +48,189 @@ public class Card_04_337_Tests
 		 * Set: 4
 		 * Name: Barrows of Edoras
 		 * Unique: False
-		 * Side: 
-		 * Culture: 
+		 * Type: Site
+		 * Block: Towers
+		 * Site Number: 3
 		 * Shadow Number: 0
-		 * Type: Sanctuary
-		 * Subtype: 
-		 * Site Number: 3T
+		 * Direction: Right
 		 * Game Text: <b>Sanctuary</b>. <b>Fellowship:</b> Place your hand beneath your draw deck and draw 4 cards.
 		*/
 
 		var scn = GetScenario();
 
-		//Use this once you have set the deck up properly
 		var card = scn.GetFreepsSite(3);
-		//var card = scn.GetFreepsCard("barrows");
 
 		assertEquals("Barrows of Edoras", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.SANCTUARY));
-		assertEquals(0, card.getBlueprint().getTwilightCost());
+		assertEquals(SitesBlock.TWO_TOWERS, card.getBlueprint().getSiteBlock());
 		assertEquals(3, card.getBlueprint().getSiteNumber());
+		assertEquals(0, card.getBlueprint().getTwilightCost());
+		assertEquals(LotroCardBlueprint.Direction.RIGHT, card.getBlueprint().getSiteDirection());
+		assertTrue(scn.HasKeyword(card, Keyword.SANCTUARY));
 	}
 
 	@Test
-	public void BarrowsofEdorasAbilityPutsCardsOnBottomOfDeckAndDraws4TheFirstTimeItIsActivated() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void FellowshipActionPlacesTheWholeHandBeneathTheDrawDeckAndDrawsFourCards() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var barrows = scn.GetShadowSite(3);
-
-		var fodder01 = scn.GetFreepsCard("fodder01");
-		var fodder02 = scn.GetFreepsCard("fodder02");
-		var fodder03 = scn.GetFreepsCard("fodder03");
-		var fodder04 = scn.GetFreepsCard("fodder04");
-		var fodder05 = scn.GetFreepsCard("fodder05");
-		var fodder06 = scn.GetFreepsCard("fodder06");
-		var fodder07 = scn.GetFreepsCard("fodder07");
-		var fodder08 = scn.GetFreepsCard("fodder08");
-		var fodder09 = scn.GetFreepsCard("fodder09");
-		var fodder10 = scn.GetFreepsCard("fodder10");
-		var fodder11 = scn.GetFreepsCard("fodder11");
-		var fodder12 = scn.GetFreepsCard("fodder12");
-		var fodder13 = scn.GetFreepsCard("fodder13");
-		var fodder14 = scn.GetFreepsCard("fodder14");
-		var fodder15 = scn.GetFreepsCard("fodder15");
-		var fodder16 = scn.GetFreepsCard("fodder16");
-		var fodder17 = scn.GetFreepsCard("fodder17");
-		var fodder18 = scn.GetFreepsCard("fodder18");
-		var fodder19 = scn.GetFreepsCard("fodder19");
-		var fodder20 = scn.GetFreepsCard("fodder20");
-
-		scn.MoveCardsToHand(fodder01, fodder02, fodder03, fodder04, fodder05, fodder06, fodder07, fodder08);
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var armor = scn.GetFreepsCard("armor");
+		var troop = scn.GetFreepsCard("troop");
+		var gimli = scn.GetFreepsCard("gimli");
+		var guard = scn.GetFreepsCard("guard");
+		var runner = scn.GetFreepsCard("runner");
+		var savage = scn.GetFreepsCard("savage");
+		var marksman = scn.GetFreepsCard("marksman");
 
 		scn.StartGame();
-		scn.MoveCardsToTopOfDeck(fodder20, fodder19, fodder18, fodder17, fodder16, fodder15, fodder14, fodder13, fodder12, fodder11, fodder10, fodder09);
-
-		assertEquals(8, scn.GetFreepsHandCount());
-
 		scn.SkipToSite(3);
 
+		// The site under the fellowship is the copy the other player laid.
+		var barrows = scn.GetShadowSite(3);
+		assertSame(barrows, scn.GetCurrentSite());
 		assertEquals(Phase.FELLOWSHIP, scn.GetCurrentPhase());
-		assertEquals(barrows, scn.GetCurrentSite());
-		assertEquals(3, (long)scn.GetCurrentSite().getSiteNumber());
 
+		// Three cards in hand, of three kinds; Marksman, Savage, Runner, Guard and Gimli on top of the deck,
+		// Gimli highest.  The other player holds two cards.
+		scn.SetFreepsHand(aragorn, armor, troop);
+		scn.MoveCardsToTopOfDeck(marksman, savage, runner, guard, gimli);
+		scn.SetShadowHand(scn.GetShadowCard("aragorn"), scn.GetShadowCard("armor"));
+		scn.FreepsRefreshDecision();
+		assertEquals(3, scn.GetFreepsHandCount());
+		assertEquals(7, scn.GetFreepsDeckCount());
+		assertEquals(2, scn.GetShadowHandCount());
+		int shadowDeck = scn.GetShadowDeckCount();
+
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 		assertTrue(scn.FreepsActionAvailable(barrows));
-
 		scn.FreepsUseCardAction(barrows);
 
-		scn.FreepsChooseCardBPFromSelection(fodder08);
-		scn.FreepsChooseCardBPFromSelection(fodder07);
-		scn.FreepsChooseCardBPFromSelection(fodder06);
-		scn.FreepsChooseCardBPFromSelection(fodder05);
-		scn.FreepsChooseCardBPFromSelection(fodder04);
-		scn.FreepsChooseCardBPFromSelection(fodder03);
-		scn.FreepsChooseCardBPFromSelection(fodder02);
-		//No player choice for the last card as Gemp performs a choice of 1 automatically
+		// He places the cards one at a time; the last goes unasked.
+		scn.FreepsChooseCardBPFromSelection(aragorn);
+		scn.FreepsChooseCardBPFromSelection(armor);
 
-		assertEquals(scn.GetFromBottomOfFreepsDeck(1), fodder01);
-		assertEquals(scn.GetFromBottomOfFreepsDeck(2), fodder02);
-		assertEquals(scn.GetFromBottomOfFreepsDeck(3), fodder03);
-		assertEquals(scn.GetFromBottomOfFreepsDeck(4), fodder04);
-		assertEquals(scn.GetFromBottomOfFreepsDeck(5), fodder05);
-		assertEquals(scn.GetFromBottomOfFreepsDeck(6), fodder06);
-		assertEquals(scn.GetFromBottomOfFreepsDeck(7), fodder07);
-		assertEquals(scn.GetFromBottomOfFreepsDeck(8), fodder08);
-
+		// His whole hand lies beneath his draw deck, the first card placed highest.
+		assertSame(troop, scn.GetFromBottomOfFreepsDeck(1));
+		assertSame(armor, scn.GetFromBottomOfFreepsDeck(2));
+		assertSame(aragorn, scn.GetFromBottomOfFreepsDeck(3));
+		// And his hand is the four cards that were on top, with the fifth still in the deck.
 		assertEquals(4, scn.GetFreepsHandCount());
-		assertEquals(Zone.HAND, fodder09.getZone());
-		assertEquals(Zone.HAND, fodder10.getZone());
-		assertEquals(Zone.HAND, fodder11.getZone());
-		assertEquals(Zone.HAND, fodder12.getZone());
+		assertInHand(gimli, guard, runner, savage);
+		assertInZone(Zone.DECK, marksman);
+		// 7 + 3 placed - 4 drawn
+		assertEquals(6, scn.GetFreepsDeckCount());
 
-		//Do it again, Sam
+		// "Your" hand and "your" draw deck: the other player's are as they were.
+		assertEquals(2, scn.GetShadowHandCount());
+		assertEquals(shadowDeck, scn.GetShadowDeckCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
 
-		assertTrue(scn.FreepsActionAvailable(barrows));
+	@Test
+	public void ASecondUseInOneFellowshipPhasePlacesTheHandBeneathAndDrawsNothingAndThenTheActionIsGone() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var armor = scn.GetFreepsCard("armor");
+		var gimli = scn.GetFreepsCard("gimli");
+		var guard = scn.GetFreepsCard("guard");
+		var runner = scn.GetFreepsCard("runner");
+		var savage = scn.GetFreepsCard("savage");
+		var marksman = scn.GetFreepsCard("marksman");
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+		var barrows = scn.GetCurrentSite();
+
+		scn.SetFreepsHand(aragorn, armor);
+		scn.MoveCardsToTopOfDeck(marksman, savage, runner, guard, gimli);
+		scn.FreepsRefreshDecision();
+		assertEquals(8, scn.GetFreepsDeckCount());
 
 		scn.FreepsUseCardAction(barrows);
+		scn.FreepsChooseCardBPFromSelection(aragorn);
+		assertEquals(4, scn.GetFreepsHandCount());
+		assertInHand(gimli, guard, runner, savage);
+		// 8 + 2 placed - 4 drawn
+		assertEquals(6, scn.GetFreepsDeckCount());
 
-		scn.FreepsChooseCardBPFromSelection(fodder12);
-		scn.FreepsChooseCardBPFromSelection(fodder11);
-		scn.FreepsChooseCardBPFromSelection(fodder10);
-		//No player choice for the last card as Gemp performs a choice of 1 automatically
+		// Again in the same fellowship phase: the four cards go beneath the deck, and the Rule of 4 lets no
+		// fifth card be drawn.
+		assertTrue(scn.FreepsActionAvailable(barrows));
+		scn.FreepsUseCardAction(barrows);
+		scn.FreepsChooseCardBPFromSelection(gimli);
+		scn.FreepsChooseCardBPFromSelection(guard);
+		scn.FreepsChooseCardBPFromSelection(runner);
 
-		assertEquals(scn.GetFromBottomOfFreepsDeck(1), fodder09);
-		assertEquals(scn.GetFromBottomOfFreepsDeck(2), fodder10);
-		assertEquals(scn.GetFromBottomOfFreepsDeck(3), fodder11);
-		assertEquals(scn.GetFromBottomOfFreepsDeck(4), fodder12);
-
-		//Psyche!  Rule of 4 means you can only really do this once
+		assertSame(savage, scn.GetFromBottomOfFreepsDeck(1));
+		assertSame(runner, scn.GetFromBottomOfFreepsDeck(2));
+		assertSame(guard, scn.GetFromBottomOfFreepsDeck(3));
+		assertSame(gimli, scn.GetFromBottomOfFreepsDeck(4));
 		assertEquals(0, scn.GetFreepsHandCount());
+		assertEquals(10, scn.GetFreepsDeckCount());
+		assertInZone(Zone.DECK, marksman);
 
+		// With no card in hand and no card left to draw this phase the action would do nothing: not offered.
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(barrows));
+	}
+
+	@Test
+	public void WithNoCardInHandTheActionStillDrawsFourCards() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gimli = scn.GetFreepsCard("gimli");
+		var guard = scn.GetFreepsCard("guard");
+		var runner = scn.GetFreepsCard("runner");
+		var savage = scn.GetFreepsCard("savage");
+		var marksman = scn.GetFreepsCard("marksman");
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+		var barrows = scn.GetCurrentSite();
+
+		// An empty hand, and the whole of his deck to draw from.
+		scn.SetFreepsHand();
+		scn.MoveCardsToTopOfDeck(marksman, savage, runner, guard, gimli);
+		scn.FreepsRefreshDecision();
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertEquals(10, scn.GetFreepsDeckCount());
+
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertTrue(scn.FreepsActionAvailable(barrows));
+
+		// Nothing to place beneath the deck: he does what he can, and draws 4.
+		scn.FreepsUseCardAction(barrows);
+		assertEquals(4, scn.GetFreepsHandCount());
+		assertInHand(gimli, guard, runner, savage);
+		assertInZone(Zone.DECK, marksman);
+		assertEquals(6, scn.GetFreepsDeckCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void TheActionIsNotOfferedInTheManeuverPhaseAtTheBarrows() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var armor = scn.GetFreepsCard("armor");
+		var troop = scn.GetShadowCard("troop");
+
+		scn.StartGame();
+		scn.SkipToSite(2);
+		scn.SetFreepsHand(aragorn, armor);
+
+		// The move to the Barrows; a minion, so that there is a maneuver phase.
+		scn.FreepsPass();
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		var barrows = scn.GetCurrentSite();
+		assertEquals("Barrows of Edoras", barrows.getBlueprint().getTitle());
+		assertEquals(2, scn.GetFreepsHandCount());
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 		assertFalse(scn.FreepsActionAvailable(barrows));
 	}
 }
