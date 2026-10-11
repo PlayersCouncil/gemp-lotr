@@ -103,7 +103,10 @@ nothing; the log says "did not pay to assign" and he is not asked again. A card 
 17_96, The End Comes 1_169, Shadowy Mount 12_171) charges him once the minion is chosen, and cannot take a
 minion he could not pay for. Where the charged minion is the card's only candidate it is taken unasked, and the
 first thing asked is who exerts: the choice then reads the companions, not the minions (Alcarin 5_31). The Shadow player's own assignments are never charged
-(`mechanics/CostOfAssigningTests`).
+(`mechanics/CostOfAssigningTests`). A cost that is repeated (Morgul Regiment 7_197, an exertion "for each Nazgûl you
+can spot") can be paid only if every repetition can (F-0425, engine pass 28): with fewer exertions left among the
+companions than Nazgûl the Regiment is off his list and nobody exerts, and where an earlier payment of the same
+answer has used the exertions it needed, none of it is paid and it is a leftover ("did not pay to assign").
 
 **`IsCharAssigned` reads only the skirmishes still waiting.** The game takes an assignment off its list as that
 skirmish begins, so `IsCharAssigned(card)` is false for the characters of the skirmish being fought
@@ -267,7 +270,10 @@ pile" is not offered when X's exertions would leave the only candidate unplayabl
 offered when one character with one exertion left is the only A and the only B
 (Grimir 51_17's own tests; `mechanics/CostsAreJudgedInTheOrderPrintedTests`). That is so where the cost names
 its card or only one character can pay; where the player chooses among several, the action is offered on the
-board as it stands (no printed card of that shape plays an event, so that has no test).
+board as it stands (no printed card of that shape plays an event, so that has no test). An assignment that is
+part of the price is judged the same way (F-0486, engine pass 28): "Exert Éowyn and assign a minion to the
+Ring-bearer to ..." (17_96) is not offered where her own exertion is the last any companion has and the one
+minion left for the Ring-bearer is one he must exert a companion to assign.
 
 **A prevention is asked only when its effect will happen** (Q-0114;
 `mechanics/PreventionIsAskedOnlyWhenItsEffectWillHappenTests`). "X may pay to prevent this" is not put to X

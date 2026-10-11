@@ -49,7 +49,6 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
 
         final FilterableSource minionFilter = getSource(minion, environment);
 
-        MultiEffectAppender result = new MultiEffectAppender();
         final EffectAppender fpCharacterResolver = CardResolver.resolveCard(fpCharacter,
                         (actionContext) -> {
                             final String assigningPlayer = playerSource.getPlayer(actionContext);
@@ -57,6 +56,31 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
                             final Filterable filter = minionFilter.getFilterable(actionContext);
                             return Filters.assignableToSkirmishAgainst(assigningSide, filter, ignoreExistingAssignments, ignoreDefender, ignoreAllyLocation);
                         }, fpCharacterMemory, player, "Choose character to assign to skirmish", environment);
+
+        // An assignment that is a cost ("Exert Éowyn and assign a minion to the Ring-bearer to ...", 17_96; in
+        // a definition, the cost of a costToEffect among the action's effects) can be paid while there is a
+        // character one of those minions can be assigned to, and that is asked of the character alone: the
+        // minion is chosen once the character is, and the character is offered only where a minion can be
+        // assigned to it and any cost of assigning that minion paid (ExtraAssignmentCostModifier).  The action
+        // is withheld without it, and it is asked on the board as the action's own costs will leave it
+        // (CostToEffect, DefaultActionSource.addEffectCheck), so that an exertion the action itself takes
+        // first is not counted on again to pay for the minion (F-0486; F-0184).  An assignment that is an
+        // effect is asked as before, and so is one whose character or minion is read from the action's memory,
+        // which nothing can be asked of before the action is taken.
+        final boolean askedAheadAsCost = cost && !CardResolver.readsMemory(fpCharacter) && !CardResolver.readsMemory(minion);
+        MultiEffectAppender result = new MultiEffectAppender() {
+            @Override
+            public boolean isPlayableInFull(ActionContext actionContext) {
+                if (askedAheadAsCost)
+                    return fpCharacterResolver.isPlayableInFull(actionContext);
+                return super.isPlayableInFull(actionContext);
+            }
+
+            @Override
+            public boolean isPlayabilityCheckedAsCostOfEffect() {
+                return askedAheadAsCost;
+            }
+        };
         result.addEffectAppender(fpCharacterResolver);
         result.addEffectAppender(
                 CardResolver.resolveCard(minion,

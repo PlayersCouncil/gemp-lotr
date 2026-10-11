@@ -25,7 +25,11 @@ import static org.junit.Assert.*;
  *
  * Shown with Morgul Spawn 7_200: "While you can spot a Nazgûl, the Free Peoples player must exert a companion to
  * assign this minion to a skirmish."  A cost that is PREVENTED (a burden, by Melilot Brandybuck 3_110) is shown
- * in the tests of Ulaire Nertea 69_38, the one card whose cost can be.
+ * in the tests of Ulaire Nertea 69_38, the one card whose cost can be.  A cost that is REPEATED ("for each Nazgûl
+ * you can spot ... must exert a companion") can be paid only if every repetition can, and is not begun otherwise
+ * (F-0425): the tests of Morgul Regiment 7_197, the one card with one.  An exertion a card's action takes as its own
+ * cost is counted before the cost of the assignment that action then makes as part of its price (F-0486): the
+ * tests of Éowyn 17_96.
  */
 public class CostOfAssigningTests
 {

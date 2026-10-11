@@ -91,6 +91,11 @@ public final class TaughtForecast implements EffectAppender {
     }
 
     @Override
+    public boolean isPlayabilityCheckedAsCostOfEffect() {
+        return effect.isPlayabilityCheckedAsCostOfEffect();
+    }
+
+    @Override
     public int getThreatsAddedAsCost(ActionContext actionContext) {
         return effect.getThreatsAddedAsCost(actionContext);
     }
@@ -98,6 +103,11 @@ public final class TaughtForecast implements EffectAppender {
     @Override
     public void tallyWoundsPlacedAsCost(ActionContext actionContext, Map<PhysicalCard, Integer> tally) {
         effect.tallyWoundsPlacedAsCost(actionContext, tally);
+    }
+
+    @Override
+    public void tallyWoundsOfPayingOnce(ActionContext actionContext, Map<PhysicalCard, Integer> tally) {
+        effect.tallyWoundsOfPayingOnce(actionContext, tally);
     }
 
     @Override

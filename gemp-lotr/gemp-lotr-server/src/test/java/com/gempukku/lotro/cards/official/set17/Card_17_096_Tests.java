@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -511,7 +510,6 @@ public class Card_17_096_Tests
 	}
 
 	@Test
-	@Ignore("F-0486: offered when the one minion left for the Ring-bearer is a Morgul Orc nobody could exert for once Éowyn has exerted; she exerts and nobody is assigned")
 	public void IsNotOfferedWhenTheOnlyMinionLeftForTheRingBearerIsAMorgulSpearmanNobodyCouldExertFor() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

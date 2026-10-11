@@ -17,6 +17,18 @@ public interface EffectAppender extends PreEvaluateAble {
     }
 
     /**
+     * Whether this appender, written as the cost of a costToEffect that stands among an action's effects, has
+     * the action withheld while it cannot be paid.  Such a cost is not asked ahead as a rule, since most of
+     * them read what the action remembers as it is carried out (CostToEffect.isPlayabilityCheckedForEffect).
+     * An assignment says yes (AssignFpCharacterToSkirmish): "Exert Éowyn and assign a minion to the Ring-bearer
+     * to ..." (17_96) is not offered where, once she has exerted, no minion could be assigned and paid for
+     * (F-0486).
+     */
+    default boolean isPlayabilityCheckedAsCostOfEffect() {
+        return false;
+    }
+
+    /**
      * The threats this appender will add when it is carried out as a cost, as far as can be told beforehand;
      * zero for everything that adds none, and for anything that only adds them under a condition or by choice.
      */
@@ -33,6 +45,19 @@ public interface EffectAppender extends PreEvaluateAble {
      * play, are judged with these wounds in place (DefaultActionSource.isValid).
      */
     default void tallyWoundsPlacedAsCost(ActionContext actionContext, Map<PhysicalCard, Integer> tally) {
+    }
+
+    /**
+     * The wounds one paying of this appender as a cost would place, added to the tally: what
+     * tallyWoundsPlacedAsCost says for certain and, where whoever pays has a real choice of whom to exert, the
+     * choice that leaves the most still able to pay (those with the most vitality left).  A repeat among costs
+     * asks it (Repeat): a repeated cost can be paid only if every repetition can (Ketura on F-0425; CR 4.2
+     * "cost"), so each repetition is asked with the wounds of those before it in place.  Exert is taught the
+     * choice, being the one cost a printed card repeats (Morgul Regiment 7_197); every other appender says what
+     * is certain, and a repeated cost of another kind is judged on that.
+     */
+    default void tallyWoundsOfPayingOnce(ActionContext actionContext, Map<PhysicalCard, Integer> tally) {
+        tallyWoundsPlacedAsCost(actionContext, tally);
     }
 
     default boolean canPreEvaluate() {

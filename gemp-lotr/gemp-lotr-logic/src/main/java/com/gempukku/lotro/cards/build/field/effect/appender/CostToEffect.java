@@ -115,6 +115,14 @@ public class CostToEffect implements EffectAppenderProducer {
                 // is frequently used as a wrapper in contexts where the Cost cannot actually be checked
                 // ahead of time, such as when memory values are crucial to the execution (which of course
                 // are not popuulated before the action itself is executed at time of checking).
+                //
+                // The one exception is a cost that says of itself that it can be asked ahead and that the
+                // action is to be withheld without it: an assignment (AssignFpCharacterToSkirmish; F-0486),
+                // whose check reads no memory.  Every cost written beside it is then asked with it.
+                for (EffectAppender costAppender : costAppenders) {
+                    if (costAppender.isPlayabilityCheckedAsCostOfEffect())
+                        return true;
+                }
                 return false;
             }
         };

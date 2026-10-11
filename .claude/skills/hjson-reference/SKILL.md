@@ -508,12 +508,12 @@ Used in `cost: []` and `effect: []` arrays.
 | Subaction | Key Params | Purpose |
 |-----------|-----------|---------|
 | `Choice` | player?, texts[], effects[], requires?[], memorize? | Choose one of N options. `memorize` holds the text of the option taken, asked or not (read it with `MemoryLike`). `requires` is parallel to `texts`, one requirement object per option (`{type: AlwaysAvailable}` for one always offered), each object on its own lines: a one-line `{ type: X }` inside an array does not parse. The one option that can be carried out in full is taken unasked. As an effect with no such option, every option is put to the player, unless each is certain to do nothing (nobody to exert, no site to liberate): then nothing is asked (F-0116). An option that holds other effects says so from what it holds (engine pass 26): an `If` by its check, a `CostToEffect` by whether its cost can be paid, a play by whether a card can be played, a list by each effect in turn; one with an `Optional`, a `Repeat` or a `Preventable` in it, or that begins by remembering something, keeps the question. Write each option as the effect itself (`wound` with `times: 2`), not as a chooser for an effect after the `Choice`: it is by the option's own effect that the game knows whether it can be done in full (F-0310) |
-| `CostToEffect` | cost[], effect[], requires? | Sequential cost-then-effect |
+| `CostToEffect` | cost[], effect[], requires? | Sequential cost-then-effect. Among an action's effects its cost is not asked before the action is offered, except an `AssignFPCharacterToSkirmish`: the action is withheld while, once its own costs are paid, no character could be assigned one of the minions and the assignment paid for (F-0486; Éowyn 17_96) |
 | `If` | check[], true[], false[] | Conditional execution |
 | `Optional` | player?, text, cost?[], effect[], requires? | "You may" prompt. With a `requires` that is not met: not asked, and the effects after it are carried out (F-0379). With a `cost`: not asked when the cost cannot be paid, and the effect is not carried out when the cost is not paid (F-0306) |
 | `Preventable` | player, text, cost[], effect[], instead?[] | "X may Y to prevent Z" |
 | `Multiple` | effects[] | Group subactions |
-| `Repeat` | times, effect[] | Do N times |
+| `Repeat` | times, effect[] | Do N times. Among costs it can be paid only if every repetition can, each asked with the exertions of those before it counted (F-0425; Morgul Regiment 7_197 is the one such), and it is not begun otherwise |
 | `DoWhile` | check, effect[] | Do the effect, then again while the check holds. The check must go false by what the effect did (`MemoryMatches` on what it memorized), or the game hangs (shapes.md, F-0322) |
 | `ForEachPlayer` | effect[] | Once per player |
 | `SendMessage` | text | Log text (also "do nothing") |
