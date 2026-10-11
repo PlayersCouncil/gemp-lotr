@@ -474,30 +474,42 @@ public class Card_V3_113_Tests
 		var merryspipe = scn.GetFreepsCard("merryspipe");
 		var merry = scn.GetFreepsCard("merry");
 		var aragorn = scn.GetFreepsCard("aragorn");
+		var gandalf = scn.GetFreepsCard("gandalf");
 		var stash = scn.GetFreepsCard("stash");
 		var hornblower = scn.GetFreepsCard("hornblower1");
+		var marksman = scn.GetShadowCard("marksman");
 
-		scn.MoveCompanionsToTable(merry, aragorn);
+		scn.MoveCompanionsToTable(merry, aragorn, gandalf);
 		scn.AttachCardsTo(merry, merryspipe);
-		// Wizard's Stash may only be played on a Wizard. Put on Aragorn with no Wizard in play, it stands in for a
-		// Stash whose Wizard has left play: once discarded it cannot be played.
-		scn.AttachCardsTo(aragorn, stash);
+		// Wizard's Stash may only be played on a Wizard, and Gandalf is the one Wizard here. He bears it and is
+		// one wound from death (vitality 4): when he dies it is discarded with him and cannot be played.
+		scn.AttachCardsTo(gandalf, stash);
 		scn.MoveCardsToSupportArea(hornblower);
+		scn.AddWoundsToChar(gandalf, 3);
 
 		scn.StartGame();
-		scn.SkipToPhase(Phase.REGROUP);
+		scn.MoveMinionsToTable(marksman);
+		scn.SkipToArcheryWounds();
 
-		scn.FreepsUseCardAction(hornblower, "Remove a threat");
-		assertTrue(scn.FreepsHasCardChoiceAvailable(stash, hornblower));
-		scn.FreepsChooseCard(stash);
+		assertAttachedTo(stash, gandalf);
+		assertFalse(scn.IsExhausted(merry));
 
+		// The Marksman's one archery wound
+		scn.FreepsChooseCard(gandalf);
+
+		// A pipeweed was discarded and Merry could exert, but with no Wizard left there is nobody to play it on.
+		assertInZone(Zone.DEAD, gandalf);
 		assertInZone(Zone.DISCARD, stash);
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 		assertEquals(0, scn.GetWoundsOn(merry));
-		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 
-		// On the same board the Hornblower Leaf, which can be played, is offered.
-		scn.ShadowPass();
+		// On the same board the Hornblower Leaf, which can be played, is offered. Aragorn (8) beats the
+		// Marksman (7, vitality 1) on the way to the regroup phase.
+		scn.PassAssignmentActions();
+		scn.FreepsAssignAndResolve(aragorn, marksman);
+		scn.PassSkirmishActions();
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 		scn.FreepsUseCardAction(hornblower, "Remove a threat");
 
 		assertInZone(Zone.DISCARD, hornblower);
@@ -523,23 +535,26 @@ public class Card_V3_113_Tests
 
 		scn.MoveCompanionsToTable(merry, aragorn, gandalf);
 		scn.AttachCardsTo(merry, merryspipe);
-		// As in the test before, but with a Wizard in play.
-		scn.AttachCardsTo(aragorn, stash);
+		// Wizard's Stash on the Wizard, who lives: discarded from him, it can be played on him again.
+		scn.AttachCardsTo(gandalf, stash);
 		scn.MoveCardsToSupportArea(hornblower);
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.REGROUP);
 
 		int twilight = scn.GetTwilight();
+		assertAttachedTo(stash, gandalf);
 
+		// The Hornblower Leaf may discard itself or the Stash that Gandalf bears.
 		scn.FreepsUseCardAction(hornblower, "Remove a threat");
+		assertTrue(scn.FreepsHasCardChoiceAvailable(stash, hornblower));
 		scn.FreepsChooseCard(stash);
 
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(merryspipe));
 		assertInZone(Zone.DISCARD, stash);
 		scn.FreepsAcceptOptionalTrigger();
 
-		// Gandalf is the one Wizard. Wizard's Stash costs 2.
+		// Gandalf is the one Wizard: it is played on him again with nothing asked. Wizard's Stash costs 2.
 		assertAttachedTo(stash, gandalf);
 		assertEquals(twilight + 2, scn.GetTwilight());
 		assertTrue(scn.IsHindered(stash));

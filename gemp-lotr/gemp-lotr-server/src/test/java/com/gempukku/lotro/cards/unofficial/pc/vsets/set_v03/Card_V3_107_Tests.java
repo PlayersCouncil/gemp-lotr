@@ -5,8 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -27,7 +25,15 @@ public class Card_V3_107_Tests
 					put("merry", "1_302");          // Merry, Friend to Sam: unique [shire] companion
 					put("pippin", "1_306");         // Pippin, Friend to Frodo: unique [shire] companion
 					put("gimli", "1_13");           // Gimli, Son of Gloin: unique [dwarven] companion
-					put("arwen", "1_30");           // Arwen, Daughter of Elrond: unique [elven] companion, strength 6
+					// Smeagol, Once Like Us: unique [shire] companion with no race; Ring-bound, strength 3, vitality 4. His
+					// assignment ability needs a fellowship of [shire] companions only.
+					put("smeagol", "103_116");
+					// Merry, Master Holbytla: unique [rohan] companion, a Hobbit, and a Man as well while Eowyn can be
+					// spotted. His trigger answers another [rohan] Man exerting, and nobody of [rohan] exerts here.
+					put("holbytla", "103_85");
+					// Pippin, Trollslayer: unique [gondor] companion, a Hobbit, strength 3; a skirmish ability never used
+					// here. Never in play beside the other Pippin.
+					put("trollslayer", "103_31");
 					put("eowyn", "7_229");          // Eowyn, Restless Maiden: unique [rohan] companion who is a Man, as Aragorn is
 					put("knight", "5_35");          // Gondorian Knight: [gondor] companion who is not unique; Knight is its whole text
 					put("businessman", "13_157");   // Westfarthing Businessman: [shire] companion who is not unique
@@ -99,25 +105,30 @@ public class Card_V3_107_Tests
 		var frodo = scn.GetRingBearer();
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var sam = scn.GetFreepsCard("sam");
-		var arwen = scn.GetFreepsCard("arwen");
-		var gimli = scn.GetFreepsCard("gimli");
+		var smeagol = scn.GetFreepsCard("smeagol");
+		var holbytla = scn.GetFreepsCard("holbytla");
+		var trollslayer = scn.GetFreepsCard("trollslayer");
 		var eowyn = scn.GetFreepsCard("eowyn");
 		var knight = scn.GetFreepsCard("knight");
 		var businessman = scn.GetFreepsCard("businessman");
 		var gaffer = scn.GetFreepsCard("gaffer");
 		var merchant = scn.GetFreepsCard("merchant");
 		var savage = scn.GetShadowCard("savage");
-		scn.MoveCompanionsToTable(aragorn, sam, arwen, gimli, eowyn, knight, businessman);
+		scn.MoveCompanionsToTable(aragorn, sam, smeagol, trollslayer, holbytla, eowyn, knight, businessman);
 		scn.MoveAlliesToTable(gaffer, merchant);
 		scn.MoveCardsToHand(forfrodo);
 
 		scn.StartGame();
 		scn.AddBurdens(2);
-		// The text goes by culture, not by race: Arwen is made a [shire] card who is no Hobbit, and Gimli a
-		// Hobbit who is not a [shire] card. Eowyn is a Man who is not a [gondor] card as she stands.
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, arwen, null, Culture.SHIRE));
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, gimli, null, Race.HOBBIT));
 		scn.MoveMinionsToTable(savage);
+
+		// The text goes by culture, not by race. Smeagol is a [shire] companion who is no Hobbit, and Pippin,
+		// Trollslayer a [gondor] companion who is no Man. Merry, Master Holbytla is a Hobbit of neither
+		// culture, and Eowyn a Man who is not a [gondor] card; beside her Merry is a Man as well.
+		assertFalse(scn.IsRace(smeagol, Race.HOBBIT));
+		assertFalse(scn.IsRace(trollslayer, Race.MAN));
+		assertTrue(scn.IsRace(holbytla, Race.HOBBIT));
+		assertTrue(scn.IsRace(holbytla, Race.MAN));
 
 		// A Skirmish event: not playable in the assignment phase, with everything it needs on the table.
 		scn.SkipToPhase(Phase.ASSIGNMENT);
@@ -136,12 +147,13 @@ public class Card_V3_107_Tests
 		assertEquals(0, scn.GetWoundsOn(sam));
 		assertEquals(3, scn.GetStrength(sam));
 		assertEquals(8, scn.GetStrength(aragorn));
-		assertEquals(6, scn.GetStrength(arwen));
+		assertEquals(3, scn.GetStrength(smeagol));
+		assertEquals(3, scn.GetStrength(trollslayer));
 
 		scn.FreepsPlayCard(forfrodo);
-		// In the skirmish or out of it: Aragorn is fighting, Sam and Arwen are not.
-		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, sam, arwen));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(frodo, gimli, eowyn, knight, businessman, gaffer, merchant));
+		// In the skirmish or out of it: Aragorn is fighting, Sam, Smeagol and Pippin are not.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, sam, smeagol, trollslayer));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(frodo, holbytla, eowyn, knight, businessman, gaffer, merchant));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 
 		scn.FreepsChooseCard(sam);
@@ -150,8 +162,10 @@ public class Card_V3_107_Tests
 		assertEquals(5, scn.GetStrength(sam));
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(8, scn.GetStrength(aragorn));
-		assertEquals(0, scn.GetWoundsOn(arwen));
-		assertEquals(6, scn.GetStrength(arwen));
+		assertEquals(0, scn.GetWoundsOn(smeagol));
+		assertEquals(3, scn.GetStrength(smeagol));
+		assertEquals(0, scn.GetWoundsOn(trollslayer));
+		assertEquals(3, scn.GetStrength(trollslayer));
 		assertEquals(twilight + 2, scn.GetTwilight());
 		assertEquals(0, scn.GetFreepsHandCount());
 		assertInZone(Zone.REMOVED, forfrodo);

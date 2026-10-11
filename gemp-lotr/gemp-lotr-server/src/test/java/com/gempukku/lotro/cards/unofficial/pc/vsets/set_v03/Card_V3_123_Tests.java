@@ -22,7 +22,7 @@ public class Card_V3_123_Tests
 				{{
 					put("aragorn", "1_89");        // Aragorn, Ranger of the North: [gondor] Man, strength 8
 					put("gimli", "1_13");          // Gimli, Son of Gloin: a Dwarf, to wear the armor
-					put("bilbo", "1_284");         // Bilbo, Retired Adventurer: [shire] ally
+					put("bilbo", "1_284");         // Bilbo, Retired Adventurer: [shire] ally, a Hobbit
 					put("army", "18_47");          // Elendil's Army: a follower, which is not a character
 
 					// Free Peoples weapons
@@ -30,17 +30,22 @@ public class Card_V3_123_Tests
 					put("sword", "1_112");         // Ranger's Sword: possession, hand weapon, strength +2
 					put("anduril", "7_80");        // Anduril, King's Blade: artifact, hand weapon, strength +2
 					put("aragornsBow", "1_90");    // Aragorn's Bow: possession, ranged weapon
-					put("elvenBow", "1_41");       // Elven Bow: possession, ranged weapon
+					put("hobbitSword", "1_299");   // Hobbit Sword: possession, hand weapon; bearer must be a Hobbit
 					// Free Peoples items that are not weapons
 					put("athelas", "1_94");        // Athelas: possession of no class
 					put("armor", "1_8");           // Dwarven Armor: possession, armor
 
-					// Shadow weapons; their bearers are named, so each is put on the Goblin Runner by the rig
-					put("paleBlade", "1_221");     // The Pale Blade: possession, hand weapon
-					put("raiderBow", "7_155");     // Raider Bow: possession, ranged weapon
-					put("whip", "2_74");           // Whip of Many Thongs: artifact, hand weapon
+					// Shadow weapons, and the minion each one's text names
+					put("paleBlade", "1_221");     // The Pale Blade: possession, hand weapon; bearer must be The Witch-king
+					put("raiderBow", "7_155");     // Raider Bow: possession, ranged weapon; bearer must be a [raider] Man
+					put("whip", "2_74");           // Whip of Many Thongs: artifact, hand weapon; bearer must be The Balrog
+					put("witchking", "1_237");     // The Witch-king, Lord of Angmar: [wraith] Nazgul; fierce
+					put("soldier", "4_254");       // Southron Soldier: [raider] Man; Southron and ambush (2), no other text
+					// The Balrog, The Terror of Khazad-dum: [moria] Balrog; damage +1, and its other text is for
+					// underground sites, which sites 7 and 8 of this path are not
+					put("balrog", "12_79");
 					// Shadow items that are not weapons
-					put("steed", "1_208");         // Black Steed: possession, mount
+					put("steed", "1_208");         // Black Steed: possession, mount; bearer must be a Nazgul
 					put("hides", "4_19");          // Hides: possession in the support area
 
 					put("runner", "1_178");        // Goblin Runner: [moria] Orc
@@ -104,11 +109,13 @@ public class Card_V3_123_Tests
 		var sting = scn.GetFreepsCard("sting");
 		var anduril = scn.GetFreepsCard("anduril");
 		var aragornsBow = scn.GetFreepsCard("aragornsBow");
-		var elvenBow = scn.GetFreepsCard("elvenBow");
+		var hobbitSword = scn.GetFreepsCard("hobbitSword");
 		var athelas = scn.GetFreepsCard("athelas");
 		var armor = scn.GetFreepsCard("armor");
 
-		var runner = scn.GetShadowCard("runner");
+		var witchking = scn.GetShadowCard("witchking");
+		var soldier = scn.GetShadowCard("soldier");
+		var balrog = scn.GetShadowCard("balrog");
 		var paleBlade = scn.GetShadowCard("paleBlade");
 		var raiderBow = scn.GetShadowCard("raiderBow");
 		var whip = scn.GetShadowCard("whip");
@@ -119,16 +126,19 @@ public class Card_V3_123_Tests
 		scn.SkipToSite(7);
 		scn.MoveCompanionsToTable(aragorn, gimli);
 		scn.MoveAlliesToTable(bilbo);
-		// Weapons: a possession and an artifact, hand and ranged, on two companions and (the Elven Bow, put
-		// there by the rig) on an ally. Beside them a possession of no class, an armor and The One Ring.
+		// Weapons: a possession and an artifact, hand and ranged, on two companions and (a Hobbit Sword) on
+		// an ally who is a Hobbit. Beside them a possession of no class, an armor and The One Ring.
 		scn.AttachCardsTo(frodo, sting);
 		scn.AttachCardsTo(aragorn, anduril, aragornsBow, athelas);
 		scn.AttachCardsTo(gimli, armor);
-		scn.AttachCardsTo(bilbo, elvenBow);
-		// The Shadow player's weapons on a minion, with a mount beside them and a possession in his
-		// support area.
-		scn.MoveMinionsToTable(runner);
-		scn.AttachCardsTo(runner, paleBlade, raiderBow, whip, steed);
+		scn.AttachCardsTo(bilbo, hobbitSword);
+		// The Shadow player's weapons, each on the minion its text names: The Pale Blade on The Witch-king,
+		// a Raider Bow on a [raider] Man, the Whip on The Balrog. The Witch-king rides a Black Steed, a
+		// mount and no weapon, and a possession lies in the Shadow support area.
+		scn.MoveMinionsToTable(witchking, soldier, balrog);
+		scn.AttachCardsTo(witchking, paleBlade, steed);
+		scn.AttachCardsTo(soldier, raiderBow);
+		scn.AttachCardsTo(balrog, whip);
 		scn.MoveCardsToSupportArea(hides);
 
 		scn.FreepsPass();
@@ -139,7 +149,7 @@ public class Card_V3_123_Tests
 		assertFalse(scn.IsHindered(sting));
 		assertFalse(scn.IsHindered(anduril));
 		assertFalse(scn.IsHindered(aragornsBow));
-		assertFalse(scn.IsHindered(elvenBow));
+		assertFalse(scn.IsHindered(hobbitSword));
 		assertFalse(scn.IsHindered(paleBlade));
 		assertFalse(scn.IsHindered(raiderBow));
 		assertFalse(scn.IsHindered(whip));
@@ -151,7 +161,7 @@ public class Card_V3_123_Tests
 		assertTrue(scn.IsHindered(sting));          // Free Peoples possession, hand weapon, on the Ring-bearer
 		assertTrue(scn.IsHindered(anduril));        // Free Peoples artifact, hand weapon
 		assertTrue(scn.IsHindered(aragornsBow));    // Free Peoples possession, ranged weapon
-		assertTrue(scn.IsHindered(elvenBow));       // ranged weapon on an ally
+		assertTrue(scn.IsHindered(hobbitSword));    // hand weapon on an ally
 		assertTrue(scn.IsHindered(paleBlade));      // Shadow possession, hand weapon
 		assertTrue(scn.IsHindered(raiderBow));      // Shadow possession, ranged weapon
 		assertTrue(scn.IsHindered(whip));           // Shadow artifact, hand weapon
@@ -167,7 +177,9 @@ public class Card_V3_123_Tests
 		assertFalse(scn.IsHindered(aragorn));
 		assertFalse(scn.IsHindered(gimli));
 		assertFalse(scn.IsHindered(bilbo));
-		assertFalse(scn.IsHindered(runner));
+		assertFalse(scn.IsHindered(witchking));
+		assertFalse(scn.IsHindered(soldier));
+		assertFalse(scn.IsHindered(balrog));
 
 		// Nobody was asked anything on the way.
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());

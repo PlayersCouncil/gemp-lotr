@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -33,6 +32,9 @@ public class Card_V3_119_Tests
 					put("sam", "1_311");           // Sam, Son of Hamfast: Ring-bound Hobbit companion, strength 3
 					put("merry", "1_302");         // Merry, Friend to Sam: unbound Hobbit companion, strength 3; a skirmish ability never used here
 					put("pippin", "1_306");        // Pippin, Friend to Frodo: unbound Hobbit companion; his text is about tales
+					// Pippin, Trollslayer: an unbound Hobbit companion who is a [gondor] card, cost 2; to play, spot a
+					// [gondor] companion. A skirmish ability never used here. Never in play beside the other Pippin.
+					put("trollslayer", "103_31");
 					put("aragorn", "1_89");        // Aragorn, Ranger of the North: unbound Man, [gondor], strength 8; a maneuver ability never used here
 					put("bounder", "1_286");       // Bounder: a [shire] Hobbit ally; a skirmish ability never used here
 
@@ -84,28 +86,33 @@ public class Card_V3_119_Tests
 		var hinderedPipe = scn.GetFreepsCard("treasure2");
 		var toby = scn.GetFreepsCard("toby");
 		var sam = scn.GetFreepsCard("sam");
-		var merry = scn.GetFreepsCard("merry");
+		var trollslayer = scn.GetFreepsCard("trollslayer");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var bounder = scn.GetFreepsCard("bounder");
 
 		// Nothing here is a pipe that can be spotted or an unbound Hobbit: Frodo and Sam are Ring-bound Hobbits,
-		// the Bounder is a Hobbit and an ally, Aragorn is unbound and (made a [shire] card for this test) still no
-		// Hobbit, Old Toby is a pipeweed and no pipe, and the pipe Sam bears is hindered.
+		// the Bounder is a Hobbit and an ally, Aragorn is unbound and no Hobbit, Old Toby is a pipeweed and no
+		// pipe, and the pipe Sam bears is hindered.
 		scn.MoveCompanionsToTable(sam, aragorn);
 		scn.MoveAlliesToTable(bounder);
 		scn.MoveCardsToSupportArea(toby);
 		scn.AttachCardsTo(sam, hinderedPipe);
 		scn.HinderCard(hinderedPipe);
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.SHIRE));
-		scn.MoveCardsToHand(treasure, merry);
+		scn.MoveCardsToHand(treasure, trollslayer);
 
 		scn.StartGame();
 
 		assertTrue(scn.IsHindered(hinderedPipe));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 		assertFalse(scn.FreepsPlayAvailable(treasure));
 
-		scn.FreepsPlayCard(merry);
+		// The unbound Hobbit played is Pippin, Trollslayer, a [gondor] card: the text asks for the race and not
+		// for the [shire] culture. Aragorn is the [gondor] companion Pippin needs to be played.
+		assertEquals(Culture.GONDOR, trollslayer.getBlueprint().getCulture());
+		scn.FreepsPlayCard(trollslayer);
 
+		assertInZone(Zone.FREE_CHARACTERS, trollslayer);
+		assertTrue(scn.IsRace(trollslayer, Race.HOBBIT));
 		assertTrue(scn.FreepsPlayAvailable(treasure));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

@@ -24,7 +24,7 @@ public class Card_V3_124_Tests
 				{{
 					put("aragorn", "1_89");        // Aragorn, Ranger of the North: [gondor] Man
 					put("gimli", "1_13");          // Gimli, Son of Gloin: a Dwarf, to wear the armor
-					put("bilbo", "1_284");         // Bilbo, Retired Adventurer: an ally
+					put("bilbo", "1_284");         // Bilbo, Retired Adventurer: an ally, and a Hobbit
 
 					// Free Peoples cards that companions bear
 					put("sting", "1_313");         // Sting: possession; bearer must be Frodo
@@ -36,7 +36,7 @@ public class Card_V3_124_Tests
 					put("flame", "7_79");          // Anduril, Flame of the West: artifact; Aragorn is vitality +1
 
 					// Free Peoples cards that no companion bears
-					put("elvenBow", "1_41");       // Elven Bow: possession, put on the ally by the rig
+					put("hobbitSword", "1_299");   // Hobbit Sword: possession; bearer must be a Hobbit, and the ally is one
 					put("oldToby", "1_305");       // Old Toby: possession in the support area
 					put("sapling", "9_35");        // Sapling of the White Tree: artifact in the support area
 					put("promise", "2_112");       // A Promise: condition in the support area
@@ -105,7 +105,7 @@ public class Card_V3_124_Tests
 		var athelas = scn.GetFreepsCard("athelas");
 		var alliance = scn.GetFreepsCard("alliance");
 		var army = scn.GetFreepsCard("army");
-		var elvenBow = scn.GetFreepsCard("elvenBow");
+		var hobbitSword = scn.GetFreepsCard("hobbitSword");
 		var oldToby = scn.GetFreepsCard("oldToby");
 		var sapling = scn.GetFreepsCard("sapling");
 		var promise = scn.GetFreepsCard("promise");
@@ -124,7 +124,7 @@ public class Card_V3_124_Tests
 		// ally, and a Free Peoples possession, artifact and condition in the support area. The One Ring is
 		// on the Ring-bearer as always.
 		scn.AttachCardsTo(frodo, poison);
-		scn.AttachCardsTo(bilbo, elvenBow);
+		scn.AttachCardsTo(bilbo, hobbitSword);
 		scn.MoveCardsToSupportArea(oldToby, sapling, promise);
 		assertEquals(0, scn.GetTwilight());
 
@@ -132,7 +132,7 @@ public class Card_V3_124_Tests
 		assertEquals("Gorgoroth Wastes", scn.GetCurrentSite().getBlueprint().getTitle());
 
 		assertTrue(scn.FreepsHasCardChoiceAvailable(sting, anduril, athelas, alliance, army));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(ring, poison, elvenBow, oldToby, sapling, promise));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(ring, poison, hobbitSword, oldToby, sapling, promise));
 		assertEquals(5, scn.FreepsGetCardChoiceCount());
 		// Any of them may be discarded, from none to all.
 		assertEquals(0, scn.FreepsGetChoiceMin());
@@ -150,7 +150,7 @@ public class Card_V3_124_Tests
 
 		assertAttachedTo(ring, frodo);
 		assertAttachedTo(poison, frodo);
-		assertAttachedTo(elvenBow, bilbo);
+		assertAttachedTo(hobbitSword, bilbo);
 		assertInZone(Zone.SUPPORT, oldToby, sapling, promise);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
@@ -270,7 +270,7 @@ public class Card_V3_124_Tests
 		var frodo = scn.GetRingBearer();
 		var ring = scn.GetRing();
 		var bilbo = scn.GetFreepsCard("bilbo");
-		var elvenBow = scn.GetFreepsCard("elvenBow");
+		var hobbitSword = scn.GetFreepsCard("hobbitSword");
 		var oldToby = scn.GetFreepsCard("oldToby");
 		var poison = scn.GetShadowCard("poison");
 
@@ -280,7 +280,7 @@ public class Card_V3_124_Tests
 		// Free Peoples possession is on an ally and another in the support area.
 		scn.MoveAlliesToTable(bilbo);
 		scn.AttachCardsTo(frodo, poison);
-		scn.AttachCardsTo(bilbo, elvenBow);
+		scn.AttachCardsTo(bilbo, hobbitSword);
 		scn.MoveCardsToSupportArea(oldToby);
 
 		scn.FreepsPass();
@@ -291,7 +291,7 @@ public class Card_V3_124_Tests
 		assertEquals(6, scn.GetTwilight());
 		assertAttachedTo(ring, frodo);
 		assertAttachedTo(poison, frodo);
-		assertAttachedTo(elvenBow, bilbo);
+		assertAttachedTo(hobbitSword, bilbo);
 		assertInZone(Zone.SUPPORT, oldToby);
 	}
 

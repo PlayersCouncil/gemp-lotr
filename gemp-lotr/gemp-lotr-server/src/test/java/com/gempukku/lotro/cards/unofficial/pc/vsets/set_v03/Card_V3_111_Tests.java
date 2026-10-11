@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -27,6 +26,12 @@ public class Card_V3_111_Tests
 					// never used here.
 					put("aragorn", "1_89");
 					put("guard", "1_7");        // Dwarf Guard: [dwarven] companion with no text in play
+					// Smeagol, Once Like Us: a Ring-bound [shire] companion with no race, vitality 4.  His
+					// assignment ability is never used here.
+					put("smeagol", "103_116");
+					// Pippin, Trollslayer: a [gondor] companion who is a Hobbit, vitality 4.  Enduring, and a
+					// skirmish ability never used here.
+					put("trollslayer", "103_31");
 					put("sword", "1_299");      // Hobbit Sword: [shire] possession, bearer is strength +2
 					// Farmer Maggot: [shire] Hobbit ally, vitality 3, with a fellowship ability only
 					put("maggot", "1_288");
@@ -174,33 +179,35 @@ public class Card_V3_111_Tests
 
 		var getup = scn.GetFreepsCard("getup");
 		var frodo = scn.GetRingBearer();
-		var sam = scn.GetFreepsCard("sam");
+		var smeagol = scn.GetFreepsCard("smeagol");
 		var merry = scn.GetFreepsCard("merry");
-		var aragorn = scn.GetFreepsCard("aragorn");
+		var trollslayer = scn.GetFreepsCard("trollslayer");
 		var guard = scn.GetFreepsCard("guard");
 		var maggot = scn.GetFreepsCard("maggot");
 		var held1 = scn.GetFreepsCard("held1");
 		var held2 = scn.GetFreepsCard("held2");
 		var troop = scn.GetShadowCard("troop");
-		scn.MoveCompanionsToTable(sam, merry, aragorn, guard);
+		scn.MoveCompanionsToTable(smeagol, merry, trollslayer, guard);
 		scn.MoveAlliesToTable(maggot);
 		scn.MoveCardsToHand(getup, held1, held2);
 		scn.AddWoundsToChar(frodo, 1);
 		// Two wounds on each of the two who will be healed: a heal takes one wound off, not both.
-		scn.AddWoundsToChar(sam, 2);
+		scn.AddWoundsToChar(smeagol, 2);
 		scn.AddWoundsToChar(merry, 2);
-		scn.AddWoundsToChar(aragorn, 1);
+		scn.AddWoundsToChar(trollslayer, 1);
 		scn.AddWoundsToChar(maggot, 1);
-		// Aragorn is made a Hobbit, so that he fails only the culture.
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, aragorn, null, Race.HOBBIT));
 
 		scn.StartGame();
 
 		scn.MoveMinionsToTable(troop);
 		scn.SkipToPhase(Phase.MANEUVER);
-		// Exactly four companions can be spotted: Frodo, Sam, Merry and Aragorn.  Beside them are an ally
+		// Exactly four companions can be spotted: Frodo, Smeagol, Merry and Pippin.  Beside them are an ally
 		// and a fifth companion who is hindered.
 		scn.HinderCard(guard);
+		// The text goes by culture, not by race: Smeagol is a [shire] companion who is no Hobbit, and
+		// Pippin, Trollslayer a Hobbit who is a [gondor] card.
+		assertFalse(scn.IsRace(smeagol, Race.HOBBIT));
+		assertTrue(scn.IsRace(trollslayer, Race.HOBBIT));
 
 		int twilight = scn.GetTwilight();
 		int deck = scn.GetFreepsDeckCount();
@@ -231,20 +238,21 @@ public class Card_V3_111_Tests
 		assertEquals(8, scn.GetFreepsHandCount());
 		assertEquals(deck - 7, scn.GetFreepsDeckCount());
 
-		// Three wounded [shire] companions: the Ring-bearer, a Ring-bound one and an unbound one.  Aragorn
-		// is a wounded Hobbit companion of another culture, Farmer Maggot a wounded [shire] ally.
-		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, sam, merry));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn, maggot, guard));
+		// Three wounded [shire] companions: the Ring-bearer, a Ring-bound one who is no Hobbit and an unbound
+		// Hobbit.  Pippin is a wounded Hobbit companion of another culture, Farmer Maggot a wounded [shire]
+		// ally.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, smeagol, merry));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(trollslayer, maggot, guard));
 		assertEquals(0, scn.FreepsGetChoiceMin());
 		assertEquals(2, scn.FreepsGetChoiceMax());
-		assertEquals(2, scn.GetWoundsOn(sam));
+		assertEquals(2, scn.GetWoundsOn(smeagol));
 		assertEquals(2, scn.GetWoundsOn(merry));
-		scn.FreepsChooseCards(sam, merry);
+		scn.FreepsChooseCards(smeagol, merry);
 
-		assertEquals(1, scn.GetWoundsOn(sam));
+		assertEquals(1, scn.GetWoundsOn(smeagol));
 		assertEquals(1, scn.GetWoundsOn(merry));
 		assertEquals(1, scn.GetWoundsOn(frodo));
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(trollslayer));
 		assertEquals(1, scn.GetWoundsOn(maggot));
 		assertInDiscard(getup);
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());

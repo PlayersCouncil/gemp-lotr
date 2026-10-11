@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -469,20 +468,18 @@ public class Card_V3_117_Tests
 		var sam = scn.GetFreepsCard("sam");
 		var bilbo = scn.GetFreepsCard("bilbo");
 		var merry = scn.GetFreepsCard("merry");
+		// With Frodo dead, Sam the Ring-bearer and Bilbo bearing Sting, no Ring-bound Hobbit is left for it to go
+		// to but Sam. Merry is the other Hobbit on the table, and unbound: Sting's own text keeps it off him.
 		scn.MoveCompanionsToTable(sam, bilbo, merry);
 		scn.AttachCardsTo(bilbo, sting);
 
 		scn.StartGame();
 
-		// With Frodo dead, Sam the Ring-bearer and Bilbo bearing Sting, no card is a Ring-bound Hobbit besides, so
-		// Merry is made one: a Hobbit Sting could go to, and not the one its response names.
-		scn.ApplyAdHocModifier(new AddKeywordModifier(null, merry, null, Keyword.RING_BOUND));
 		var marksman = scn.GetShadowCard("marksman");
 		scn.MoveMinionsToTable(marksman);
 		scn.AddWoundsToChar(frodo, 3);
 		scn.SkipToArcheryWounds();
 
-		assertTrue(scn.HasKeyword(merry, Keyword.RING_BOUND));
 		// 4 companions + 2 for the shadow number of site 2
 		assertEquals(6, scn.GetTwilight());
 
@@ -505,7 +502,7 @@ public class Card_V3_117_Tests
 
 		scn.FreepsChooseOptionalTrigger(sting);
 
-		// On Sam without a choice: Merry was not a candidate.
+		// On Sam with nothing asked: Merry was no candidate.
 		assertAttachedTo(sting, sam);
 		assertNotAttachedTo(sting, bilbo);
 		assertNotAttachedTo(sting, merry);

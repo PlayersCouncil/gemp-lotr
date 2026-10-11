@@ -9,8 +9,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalCultureModifier;
-import com.gempukku.lotro.logic.modifiers.IsAdditionalRaceModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -29,7 +27,9 @@ public class Card_V3_121_Tests
 					put("pippin", "1_306");       // Pippin, Friend to Frodo: unbound Hobbit companion, vitality 4, cost 1
 					put("sam", "1_311");          // Sam, Son of Hamfast: Ring-bound Hobbit companion
 					put("aragorn", "1_89");       // Aragorn, Ranger of the North: unbound Man, [gondor]
-					put("guard", "1_7");          // Dwarf Guard: unbound [dwarven] companion with no text in play
+					// Pippin, Trollslayer: an unbound Hobbit companion who is a [gondor] card, vitality 4; a skirmish
+					// ability only. Never in play beside the other Pippin.
+					put("trollslayer", "103_31");
 					put("bounder", "1_286");      // Bounder: a Hobbit ally; a skirmish ability only
 
 					put("bilbospipe", "1_285");   // Bilbo's Pipe: [shire] pipe, cost 1, bearer must be a Hobbit
@@ -96,10 +96,9 @@ public class Card_V3_121_Tests
 
 		var frodo = scn.GetRingBearer();
 		var merry = scn.GetFreepsCard("merry");
-		var pippin = scn.GetFreepsCard("pippin");
+		var trollslayer = scn.GetFreepsCard("trollslayer");
 		var sam = scn.GetFreepsCard("sam");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		var guard = scn.GetFreepsCard("guard");
 		var bounder = scn.GetFreepsCard("bounder");
 		var bilbospipe = scn.GetFreepsCard("bilbospipe");
 		var aragornspipe = scn.GetFreepsCard("aragornspipe");
@@ -113,11 +112,8 @@ public class Card_V3_121_Tests
 		var pipeweedInDiscard = scn.GetFreepsCard("hornblower");
 		var sword = scn.GetFreepsCard("sword");
 
-		scn.MoveCompanionsToTable(merry, pippin, sam, aragorn, guard);
+		scn.MoveCompanionsToTable(merry, trollslayer, sam, aragorn);
 		scn.MoveAlliesToTable(bounder);
-		// A Hobbit of another culture, and a [shire] companion who is no Hobbit
-		scn.ApplyAdHocModifier(new IsAdditionalRaceModifier(null, guard, null, Race.HOBBIT));
-		scn.ApplyAdHocModifier(new IsAdditionalCultureModifier(null, aragorn, null, Culture.SHIRE));
 		scn.MoveCardsToHand(pipeInHand, pipeweedInHand);
 		scn.MoveCardsToDiscard(pipeInDiscard, pipeweedInDiscard);
 
@@ -133,17 +129,18 @@ public class Card_V3_121_Tests
 		assertTrue(scn.FreepsActionAvailable(site));
 		scn.FreepsUseCardAction(site);
 
-		// Unbound Hobbits: two [shire] companions and one of another culture
-		assertTrue(scn.FreepsHasCardChoiceAvailable(merry, pippin, guard));
-		// The Ring-bearer, a Ring-bound Hobbit, an unbound [shire] companion who is no Hobbit, a Hobbit ally
+		// Unbound Hobbits: a [shire] companion and Pippin, Trollslayer, who is a [gondor] card
+		assertEquals(Culture.GONDOR, trollslayer.getBlueprint().getCulture());
+		assertTrue(scn.IsRace(trollslayer, Race.HOBBIT));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(merry, trollslayer));
+		// The Ring-bearer, a Ring-bound Hobbit, an unbound companion who is no Hobbit, a Hobbit ally
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(frodo, sam, aragorn, bounder));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		assertEquals(1, scn.FreepsGetChoiceMax());
 		scn.FreepsChooseCard(merry);
 
 		assertEquals(1, scn.GetWoundsOn(merry));
-		assertEquals(0, scn.GetWoundsOn(pippin));
-		assertEquals(0, scn.GetWoundsOn(guard));
+		assertEquals(0, scn.GetWoundsOn(trollslayer));
 
 		// The pipe. Pipes of two cultures in the draw deck are offered.
 		scn.FreepsDismissRevealedCards();
@@ -187,8 +184,9 @@ public class Card_V3_121_Tests
 		assertInZone(Zone.HAND, pipeInHand, pipeweedInHand);
 		assertInDiscard(pipeInDiscard, pipeweedInDiscard);
 
-		// Once per phase: two unbound Hobbits could exert and a pipe and two pipeweeds are still in the deck
-		assertEquals(0, scn.GetWoundsOn(pippin));
+		// Once per phase: both unbound Hobbits could exert and a pipe and two pipeweeds are still in the deck
+		assertEquals(1, scn.GetWoundsOn(merry));
+		assertEquals(0, scn.GetWoundsOn(trollslayer));
 		assertInZone(Zone.DECK, aragornspipe, halfling, flotsam);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 		assertFalse(scn.FreepsActionAvailable(site));
