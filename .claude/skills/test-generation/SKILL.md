@@ -716,9 +716,9 @@ skirmish when a side is removed. A card may be how it was noticed, but the test 
 `gemp-lotr-server/src/test/java/com/gempukku/lotro/mechanics/`, beside `cards/`, one class per mechanic, named for
 it (`FierceTests`, `RuleOfFourTests`). They follow every rule above except the ledger; the class comment cites
 the rules section instead. `lint.py --form <file.java>` holds such a class to those rules (how a test is written,
-with nothing of ledger, stats test or card), and with `--only <Test,Test>` a lone test added to a card's file
-that has no ledger. The old tests under `at/` were rewritten into one place or the other; the folder and its
-base class are gone (2026-10-10).
+the `copies` warning included, with nothing of ledger, stats test or card), and with `--only <Test,Test>` a lone
+test added to a card's file that has no ledger. The old tests under `at/` were rewritten into one place or the
+other; the folder and its base class are gone (2026-10-10).
 
 A test of the DEFINITION LANGUAGE (whether a definition is loaded or refused, what a blueprint keeps of a field:
 a word the builder must refuse, a time that names no phase, a follower's Aid cost) plays no game and is no

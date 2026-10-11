@@ -7,9 +7,9 @@
     lint.py --form <file.java> [--only <Test,Test>]
                                     only the rules about how a test is written (bookend, reach, exception, adhoc,
                                     assert, ignore, style, helper, field, scenario, in-file, alias, same-blueprint,
-                                    conditional, not-asked, not-in-hand), for a mechanics class or a card's file
-                                    that has no ledger yet; with --only, only what lies inside the tests named (a
-                                    lone test added to an old file)
+                                    conditional, not-asked, not-in-hand, copies), for a mechanics class or a card's
+                                    file that has no ledger yet; with --only, only what lies inside the tests named
+                                    (a lone test added to an old file)
 
 Exit status is 0 when every file given is free of errors.  Warnings do not fail a file.
 
@@ -219,30 +219,63 @@ def call_arguments(text: str, opens: int) -> list:
 
 
 def scenario_tables(lines, methods) -> dict:
-    """For each Get...Scenario() method of a test file: ({alias: blueprint id} of its deck, the blueprint id of its
-    Ring-bearer or None where that cannot be read)."""
+    """For each Get...Scenario() method of a test file, by its name: ({alias: blueprint id} of its deck, the
+    blueprint id of its Ring-bearer or None where that cannot be read).  A method that hands on another's table
+    (`GetBattlegroundScenario()` returning `GetScenario(sites)`; a `GetScenario()` returning `GetScenario(format,
+    ringBearer)`) is read through to the one that builds it: that one's deck with this one's own cards over it, and
+    the Ring-bearer the builder names or, where the builder takes him as a parameter, the one passed down to it.
+    Of several methods of one name, the one a test calls is taken to be the one with no parameters."""
     import gen_play
     consts = gen_play.test_constants()
-    out = {}
+    found = {}  # name -> [(parameter names, own cards, the builder's Ring-bearer argument or None with no builder, [(scenario method called, arguments)])]
     for name, start, end, above, ret in methods:
         if not re.match(r"^Get\w*Scenario\w*$", name):
             continue
         body = " ".join(text for _, text in java_statements(lines[start:end + 1]))
-        bearer = None
-        built = re.search(r"\bnew\s+VirtualTableScenario\s*\(", body)
+        while True:  # type arguments have commas of their own: new HashMap<String, String>() {{ ... }}
+            bare = re.sub(r"<[\w\s,.?\[\]]*>", "", body)
+            if bare == body:
+                break
+            body = bare
+        signed = re.search(r"\b%s\s*\(([^)]*)\)" % re.escape(name), body)
+        params = [x.split()[-1] for x in signed.group(1).split(",") if x.split()] if signed else []
+        inside = body[signed.end():] if signed else body
+        bearer_arg = None
+        built = re.search(r"\bnew\s+VirtualTableScenario\s*\(", inside)
         if built:
-            args = call_arguments(body, built.end() - 1)
-            arg = args[2] if len(args) > 2 else "null"
-            literal = re.match(r'^"(\d+_\d+)"$', arg)
-            named = re.match(r"^(?:VirtualTableScenario\.)?(\w+)$", arg)
-            if arg == "null":
-                bearer = consts.get("MDFrodo")
-            elif literal:
-                bearer = literal.group(1)
-            elif named and isinstance(consts.get(named.group(1)), str):
-                bearer = consts[named.group(1)]
-        out[name] = (dict(re.findall(r'put\(\s*"([^"]+)"\s*,\s*"(\d+_\d+)"\s*\)', body)), bearer)
-    return out
+            args = call_arguments(inside, built.end() - 1)
+            bearer_arg = args[2] if len(args) > 2 else "null"
+        calls = [(call.group(1), call_arguments(inside, call.end() - 1)) for call in re.finditer(r"\b(Get\w*Scenario\w*)\s*\(", inside)]
+        found.setdefault(name, []).append((params, dict(re.findall(r'put\(\s*"([^"]+)"\s*,\s*"(\d+_\d+)"\s*\)', inside)), bearer_arg, calls))
+
+    def value(arg, passed):
+        """The blueprint id an argument stands for: a literal, one of the rig's constants, or what was passed down."""
+        literal = re.match(r'^"(\d+_\d+)"$', arg)
+        named = re.match(r"^(?:VirtualTableScenario\.)?(\w+)$", arg)
+        if arg == "null":
+            return consts.get("MDFrodo")
+        if literal:
+            return literal.group(1)
+        if named and named.group(1) in passed:
+            return passed[named.group(1)]
+        if named and isinstance(consts.get(named.group(1)), str):
+            return consts[named.group(1)]
+        return None
+
+    def table(method, passed, depth=0):
+        params, cards, bearer_arg, calls = method
+        if bearer_arg is not None:
+            return dict(cards), value(bearer_arg, passed)
+        deck, bearer = {}, None
+        for callee, args in calls if depth < 6 else []:
+            takers = [m for m in found.get(callee, []) if m is not method and len(m[0]) == len(args)]
+            if takers:
+                below, bearer = table(takers[0], {param: value(arg, passed) for param, arg in zip(takers[0][0], args)}, depth + 1)
+                deck.update(below)
+        deck.update(cards)
+        return deck, bearer
+
+    return {name: table(min(same, key=lambda m: len(m[0])), {}) for name, same in found.items()}
 
 
 def copies_over_the_dots(test_lines, tables) -> list:
@@ -1117,9 +1150,11 @@ def lint_file(path: Path):
     return out, lets_off
 
 
-# The rules that are about how a test is written, whatever file it is in (--form).
+# The rules that are about how a test is written, whatever file it is in (--form).  `copies` is among them (engine
+# pass 27): a board no game reaches is no better laid in a mechanics class or a lone test than in a card's own file
+# (Q-0239), and the rule needs only the file's Get...Scenario() methods, not a card or a ledger.
 FORM_RULES = {"bookend", "reach", "exception", "adhoc", "assert", "ignore", "style", "helper", "field", "scenario", "in-file",
-              "alias", "same-blueprint", "conditional", "not-asked", "not-in-hand"}
+              "alias", "same-blueprint", "conditional", "not-asked", "not-in-hand", "copies"}
 
 
 def main(argv):
