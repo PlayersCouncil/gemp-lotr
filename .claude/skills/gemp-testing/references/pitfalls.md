@@ -1309,6 +1309,14 @@ Peoples player has at least 1 site in his or her adventure deck". The other site
 of actions is already pending, and let no move follow that needs a site from a deck left without one (the game
 throws).
 
+**The sites of `TowersSites` have texts that reach a test.** Site 1, Eastemnet Gullies 4_325: "Fellowship: Exert 2
+unbound companions to play Legolas from your draw deck" (a Legolas in the deck of a player with two unbound
+companions who can exert is in its reach). Site 2, Eastfold 4_331: plains; a Shadow action that needs 3 [isengard]
+trackers. Site 3, Barrows of Edoras 4_337: a sanctuary; "Fellowship: Place your hand beneath your draw deck and draw
+4 cards", on offer to the mover with a card in hand and, since F-0429, with none until he has used it once that
+phase: `FreepsActionAvailable(<site 3>)` is true there, and a test that counts the fellowship actions on offer at
+site 3 counts it. Site 4, White Rocks 4_346: a battleground; its Shadow number is +1 for each mounted companion.
+
 **A battleground or a forest site needs no cheat.** The Towers path has both at site 2: Uruk Camp 4_335
 (Battleground, Plains; each Uruk-hai played must exert) and Derndingle 4_330 (Forest; move limit +1 while an
 unbound Hobbit is there). `TowersSites` has neither word at site 1 (4_325) or site 3 (4_337, a sanctuary), so

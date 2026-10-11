@@ -429,6 +429,8 @@ Whether and how many sites a player controls is asked with these two and the `Fo
 | `PerPhaseLimit` | limit?, phase?, perPlayer? | Action invoked fewer than N times. Withholds at the limit, as the `limitPerPhase` field does; prefer the field (see Activated, "Limits") |
 | `PerTurnLimit` | limit? | Per-turn limit check; likewise, `limitPerTurn` |
 
+No requirement and no value reads the Rule of 4 (whether a player may still draw this fellowship phase). Barrows of Edoras 4_337 stands "not yet used this phase" in for it: an `Or` of its other requirement and `PerPhaseLimit` 1, with an `IncrementPerPhaseLimit` as the first effect (F-0429; Q-0249, open).
+
 ### Comparison
 `IsEqual`, `IsNotEqual`, `IsGreaterThan`, `IsGreaterThanOrEqual`, `IsLessThan`, `IsLessThanOrEqual` — all take `firstNumber`, `secondNumber`
 

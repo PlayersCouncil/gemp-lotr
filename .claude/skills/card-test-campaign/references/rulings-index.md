@@ -384,7 +384,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 ## What is offered and what is asked
 
 - The no-effect flag: which cards assert it [Q-0034]
-- An optional trigger or ability that costs nothing and would do nothing is withheld by the engine (Q-0224: A2; Q-0231: B; engine pass 26) [Q-0034, F-0407, F-0408, F-0402, F-0406, Q-0033, F-0411, F-0417, F-0413, Q-0104, F-0410, F-0426, F-0423, Q-0102, Q-0243, Q-0245, Q-0029, F-0379, Q-0107]
+- An optional trigger or ability that costs nothing and would do nothing is withheld by the engine (Q-0224: A2; Q-0231: B; engine pass 26) [Q-0034, F-0407, F-0408, F-0402, F-0406, Q-0033, F-0411, F-0417, F-0428, F-0413, Q-0104, F-0410, F-0426, F-0423, Q-0102, Q-0243, Q-0245, Q-0029, F-0429, F-0379, Q-0107]
 - A choice whose every branch has nothing to act on (F-0116) [F-0293, F-0370, F-0366]
 - "<Do X> or <do Y>": each branch is written as the effect itself (F-0310, Here Lies Balin 1_19) [Q-0209, F-0222]
 - A parenthesis with its own price (Q-0089)
@@ -413,6 +413,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Exchange the cards stacked here with your hand" is carried out with either side empty, and not offered with both (F-0371, F-0372, Hall of Our Fathers 11_11) [Q-0034]
 - "Spot a <Wizard> and X other companions": a number taken off a spot count wants a floor, and "other" wants the one spotted to be a companion (F-0374, Discoveries 12_26)
 - "You may take control of a site" with no cost requires a site that can be taken (F-0341, Hillman Band 4_21) [F-0336, Q-0034, Q-0062]
+- "Place your hand beneath your draw deck and draw N cards" wants no card in hand (F-0429, Barrows of Edoras 4_337; Q-0249, open)
 - "May draw a card for each X over N" requires N+1 of X (Q-0033, F-0320)
 - A phase action on a Race to Mount Doom modifier is its owner's where the text says "your" (F-0312) [Q-0194, F-0335, Q-0183, Q-0188]
 - A Race to Mount Doom modifier's own discard from hand writes `forced: true`, and no card can tell (F-0205)
@@ -429,7 +430,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 
 ## Costs, and playing cards from piles and hands
 
-- "<do> a companion for each <thing>" may be spread (F-0224) [Q-0141]
+- "<do> a companion for each <thing>" may be spread (F-0224) [Q-0141, Q-0248]
 - A reveal before "to" is a cost, and an empty draw deck cannot pay it (F-0022, F-0249) [Q-0104, Q-0029]
 - A reveal that what follows reads must be able to happen (Q-0148, F-0284) [F-0022, Q-0104, Q-0029]
 - A reveal that a cost buys is offered with that draw deck empty, and flagged (Q-0163: B; built by engine pass 21). "<cost> to reveal the top N cards ... [Q-0148]
@@ -484,6 +485,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "While at a <terrain> site" on a card an ally may bear: an ally is at his home site (F-0380, Asfaloth 1_31)
 - "<Do X>; <Y> during this skirmish" on an event that makes the skirmish: Y is laid only if the skirmish was made (F-0386, Return to Its Master 1_224)
 - A Ring's `ringIsActive` requirement is shown in Return to Its Master 1_224's file, not the Ring's own
+- Helpless 2_76, "Sam's game text does not apply": a Sam who is not the Ring-bearer is no longer Ring-bound
 - The CR 4.2 "response" example (Isildur wearing Answer To All Riddles 4_1, Sapling of the White Tree 9_35) is shown in the Ring's file
 
 ## Reveals, draw decks and shuffles
@@ -507,6 +509,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Check D on a delayed "at the start of the regroup phase" that an ability sets up: fight a skirmish between (Under Foot 60_52, Flaming Brand 52_32) [Q-0164]
 - A filter that feeds a count. Where a filter feeds a COUNT ("for each X stacked here", "for each X you can spot"), lay the board so the count under ...
 - "Each site" on a modifier: the sites laid, and a path of a second block (No Stranger to the Shadows 1_108)
+- A draw of 4 in a fellowship phase cannot be told from a draw of 5 or more
 - A count "this phase" against the same count this turn
 - A threshold that is a percentage wants a board large enough to tell the neighbouring numbers apart (94_5) [F-0325]
 - A correction of several lines for mutate.py [F-0379]
