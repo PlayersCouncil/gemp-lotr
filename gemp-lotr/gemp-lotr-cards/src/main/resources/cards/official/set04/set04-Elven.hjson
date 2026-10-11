@@ -55,7 +55,8 @@
 			cost: {
 				type: exert
 				select: choose(elf,companion)
-				count: any
+				// At least one: "exert X Elf companions" is an exertion cost and X is not zero (Q-0076).
+				count: anyNonZero
 				memorize: exertedElves
 			},
 			effect: [
@@ -540,7 +541,7 @@
 		effects: [
 			{
 				type: Trigger
-				optional: false
+				optional: true
 				trigger: {
 					type: winsSkirmish
 					filter: name(Legolas)

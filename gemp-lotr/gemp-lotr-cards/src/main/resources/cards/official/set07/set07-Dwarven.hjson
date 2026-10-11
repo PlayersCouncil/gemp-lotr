@@ -546,12 +546,17 @@
 				phase: skirmish
 				effect: [
 					{
-						type: wound
-						select: choose(minion,inSkirmishAgainst(dwarf))
+						// A choice for each card: the wounds may go to several minions or to one more than
+						// once (CR 4.2 "for each"; F-0224).
+						type: repeat
 						times: {
 							type: forEachStacked
 							on: self
 							filter: culture(dwarven)
+						}
+						effect: {
+							type: wound
+							select: choose(minion,inSkirmishAgainst(dwarf))
 						}
 					}
 					{

@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_04_069_Tests
@@ -19,6 +20,22 @@ public class Card_04_069_Tests
 				{{
 					put("card", "4_69");
 					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// A Legolas who is no archer, and an Uruk Savage he beats without killing it.
+	protected VirtualTableScenario GetLegolasScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("count", "4_69");
+					// Legolas, Companion of the Ring: strength 6; stronger only at a battleground or forest site
+					put("legolas", "11_21");
+					put("savage", "1_151");     // Uruk Savage: strength 5, vitality 3
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -53,6 +70,50 @@ public class Card_04_069_Tests
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
+	}
+
+	// "Each time Legolas wins a skirmish, you may place an [elven] token on this card": a "you may" on a trigger
+	// is asked and may be declined (Q-0021; Q-0220: G).  The definition placed the token unasked.  (My Axe Is
+	// Notched 4_52 has no "may" and places its token unasked.)
+	// F-0460.
+	@Test
+	public void PlacingTheTokenIsOfferedAndMayBeDeclined() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetLegolasScenario();
+
+		var count = scn.GetFreepsCard("count");
+		var legolas = scn.GetFreepsCard("legolas");
+		scn.MoveCompanionsToTable(legolas);
+		scn.MoveCardsToSupportArea(count);
+
+		var savage = scn.GetShadowCard("savage");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(savage);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(legolas, savage);
+		scn.FreepsResolveSkirmish(legolas);
+		scn.PassSkirmishActions();
+
+		// Legolas has won: the offer is made, and declined.
+		assertEquals(1, scn.GetWoundsOn(savage));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(count));
+		assertEquals(0, scn.GetCultureTokensOn(count));
+		scn.FreepsDeclineOptionalTrigger();
+		assertEquals(0, scn.GetCultureTokensOn(count));
+
+		// A second move, and Legolas beats the same minion again: the offer is made again, and taken.
+		scn.SkipToMovementDecision();
+		scn.FreepsChooseToMove();
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(legolas, savage);
+		scn.FreepsResolveSkirmish(legolas);
+		scn.PassSkirmishActions();
+
+		assertEquals(2, scn.GetWoundsOn(savage));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(count));
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(1, scn.GetCultureTokensOn(count));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

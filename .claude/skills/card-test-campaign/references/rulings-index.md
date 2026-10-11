@@ -395,7 +395,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Known shapes from the Dwarven errata (F-0181, F-0194, F-0182) [Q-0034, F-0295, F-0304, F-0323, F-0324, F-0303, F-0314, F-0349, F-0347, F-0348]
 - A "you may" inside an event's or ability's text is not asked when yes would do nothing (F-0379, Halls of My Home 1_18) [Q-0034, F-0057, F-0117]
 - "You may <do X to a card>" on a required trigger wants its choice 0 to 1 (Q-0010, F-0191) [F-0280, F-0289, Q-0021, F-0041, Q-0034]
-- "When you play this ..., you may add (N)" built as a required trigger (F-0009, Q-0165) [Q-0017, Q-0167, F-0328]
+- "When you play this ..., you may add (N)" built as a required trigger (F-0009, Q-0165) [Q-0017, Q-0167, F-0328, Q-0220, F-0460, F-0463]
 - A prevention is asked only when the effect will happen (F-0194, Q-0114)
 - "<A player> may assign a minion to skirmish the Ring-bearer" on an optional trigger wants a minion that can be assigned to him (F-0337, Race Text 94_26) [Q-0034, Q-0114]
 - "Each minion gains this ability: 'Assignment: Assign this minion to bearer of <this card>'" is offered only while both can be assigned (F-0252, F-0353, F-0354) [Q-0034, F-0309, F-0351, F-0352, F-0355, F-0388, Q-0224]
@@ -405,7 +405,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - An "or" between two cost-to-effect halves (Q-0034)
 - A choice of cost-to-effect branches with no payable branch is not offered (F-0222, F-0259)
 - "The Free Peoples player must <pay> to assign <this minion> ..." (Q-0221: A, built by engine pass 26; F-0306, F-0307, F-0308, Q-0174 and Q-0199 before it) [Q-0038, F-0425]
-- "You may discard up to N (X, any number of) cards from hand to draw as many" on an optional trigger (F-0300, Robin Smallburrow 68_111 and 18_111) [F-0022, Q-0015, Q-0034, Q-0143]
+- "You may discard up to N (X, any number of) cards from hand to draw as many" on an optional trigger (F-0300, Robin Smallburrow 68_111 and 18_111) [F-0022, Q-0015, Q-0034, Q-0143, F-0448, F-0449]
 - "You may" on a Race to Mount Doom modifier names its player (F-0311)
 - "Response: If a <kind of card> is discarded from play, stack it here" requires the card still in the discard pile (F-0357, Sword Rack 11_158 and Countless Companies 12_58) [Q-0034, Q-0062]
 - "When you play X, you may reinforce a [culture] token" requires a token to reinforce (F-0359, Brego 13_63) [Q-0034, Q-0224, F-0398, F-0399]
@@ -422,15 +422,15 @@ finding an entry, not for applying one: read the entry itself before an expectat
 ## Limits
 
 - Limits on uses and limits on what the effect gives, as built [Q-0041, Q-0082, Q-0093]
-- "Limit once per site" (Q-0084, F-0146, F-0145)
-- "(limit +N)" is the card's for the whole phase (F-0135, F-0125) [F-0213]
+- "Limit once per site" (Q-0084, F-0146, F-0145) [F-0454, F-0455]
+- "(limit +N)" is the card's for the whole phase (F-0135, F-0125) [F-0213, F-0456]
 - A printed "(limit (N))" or "(limit -N)" is the card's for the whole phase, but not on a play's discount; "(limit X)" is per use (Q-0134, Q-0141, ... [Q-0152, F-0135, F-0245]
 - A bar that a trigger lays "while at <a place>" has the place in it twice (92_35) [F-0319]
 - "Limit 1 per bearer" is a Restriction that lists `L`
 
 ## Costs, and playing cards from piles and hands
 
-- "<do> a companion for each <thing>" may be spread (F-0224) [Q-0141, Q-0248]
+- "<do> a companion for each <thing>" may be spread (F-0224) [F-0458, F-0459, Q-0141, Q-0248]
 - A reveal before "to" is a cost, and an empty draw deck cannot pay it (F-0022, F-0249) [Q-0104, Q-0029]
 - A reveal that what follows reads must be able to happen (Q-0148, F-0284) [F-0022, Q-0104, Q-0029]
 - A reveal that a cost buys is offered with that draw deck empty, and flagged (Q-0163: B; built by engine pass 21). "<cost> to reveal the top N cards ... [Q-0148]
@@ -439,7 +439,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - The twilight cost of a card in play (F-0109, built)
 - LeastDiscountToPlay bounds X in "remove X ... to play ... from your discard pile" (F-0067) [F-0392]
 - Costs, and effects, in the order printed (Q-0080) [F-0123]
-- A RemoveTwilight cost beside a PlayCardFromDiscard needs removedTwilight (F-0046, F-0141)
+- A RemoveTwilight cost beside a PlayCardFromDiscard needs removedTwilight (F-0046, F-0141) [F-0450, F-0453, Q-0019]
 - "Play any number of / up to N ... from your discard pile" is withheld when nothing can be played (Q-0086)
 - "Hinder/remove X ... to play X cards from your discard pile": X is capped (Q-0094)
 - An action's costs are judged in order, with its own exertions counted (F-0184)

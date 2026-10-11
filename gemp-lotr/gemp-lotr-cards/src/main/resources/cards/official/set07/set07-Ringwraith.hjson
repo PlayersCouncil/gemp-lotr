@@ -1689,23 +1689,12 @@
 					type: winsSkirmish
 					filter: your,culture(wraith),minion
 				}
-				requires: {
-					type: perPhaseLimit
-					phase: regroup
-					limit: 1
+				effect: {
+					type: AddCultureTokens
+					culture: wraith
+					select: self
 				}
-				effect: [
-					{
-						type: incrementPerPhaseLimit
-						phase: regroup
-						limit: 1
-					}
-					{
-						type: AddCultureTokens
-						culture: wraith
-						select: self
-					}
-				]
+				limitPerSite: 1
 			}
 			{
 				type: activated

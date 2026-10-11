@@ -557,10 +557,9 @@
 						select: memory(chosenDwarf)
 						keyword: damage
 						amount: {
-							type: cardAffectedLimitPerPhase
-							prefix: dmg-
-							source: 1
+							type: cardPhaseLimit
 							limit: 3
+							amount: 1
 						}
 					}
 				}

@@ -45,6 +45,23 @@ public class Card_12_058_Tests
 		);
 	}
 
+	// A [men] possession that costs something stacked on Countless Companies, and a [men] minion to bear it.
+	protected VirtualTableScenario GetStackedBowScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("companies", "12_58");
+					put("corps", "11_73");      // Corps of Harad: [men] Man; fierce only at a battleground
+					// Long Battle Bow: [men] possession, cost 2, on a [men] minion; when played, may make the Free
+					// Peoples player exert his or her Man, and there is none
+					put("bow", "11_89");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
 	@Test
 	public void CountlessCompaniesStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
@@ -117,5 +134,41 @@ public class Card_12_058_Tests
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable(companies));
 		assertInZone(Zone.DISCARD, corps);
 		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+	}
+
+	// "Remove (1) to play a possession stacked here as if from hand": a play as an effect is treated as a cost,
+	// so the pool must pay for the removal and the possession together (F-0046, F-0141).  The definition did not
+	// count the (1) it removes: with exactly the possession's cost in the pool the ability was offered, took the
+	// token and played nothing.
+	// F-0452.
+	@Test
+	public void ThePoolMustPayForTheRemovalAndTheStackedPossessionTogether() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetStackedBowScenario();
+
+		var companies = scn.GetShadowCard("companies");
+		var corps = scn.GetShadowCard("corps");
+		var bow = scn.GetShadowCard("bow");
+		scn.MoveCardsToSupportArea(companies);
+		scn.StackCardsOn(companies, bow);
+
+		scn.StartGame();
+		scn.FreepsPass();
+		scn.MoveMinionsToTable(corps);
+
+		// (2) in the pool: enough for the Bow or for the removal, not for both.
+		scn.SetTwilight(2);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(companies));
+
+		scn.SetTwilight(3);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.ShadowActionAvailable(companies));
+		scn.ShadowUseCardAction(companies);
+
+		assertEquals(0, scn.GetTwilight());
+		assertAttachedTo(bow, corps);
+		assertEquals(0, scn.GetStackedCards(companies).size());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

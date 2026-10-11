@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_11_129_Tests
@@ -20,6 +21,20 @@ public class Card_11_129_Tests
 				{{
 					put("card", "11_129");
 					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// Mountain Orc, and a companion of resistance 5.
+	protected VirtualTableScenario GetAssignmentScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("orc", "11_129");
+					put("sam", "1_311");        // Sam, Son of Hamfast: resistance 5, vitality 4; a fellowship ability and a response to Frodo's death
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -60,6 +75,31 @@ public class Card_11_129_Tests
 		assertEquals(9, card.getBlueprint().getStrength());
 		assertEquals(2, card.getBlueprint().getVitality());
 		assertEquals(4, card.getBlueprint().getSiteNumber());
+	}
+
+	// "Each time this minion is assigned to skirmish a companion who has resistance 5 or less, exert that
+	// companion": no "may", so nobody is asked (Q-0017; Q-0220: G).  The definition offered the exertion to the
+	// Shadow player, who could decline it.
+	// F-0463.
+	@Test
+	public void TheCompanionIsExertedWithNothingAsked() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetAssignmentScenario();
+
+		var sam = scn.GetFreepsCard("sam");
+		scn.MoveCompanionsToTable(sam);
+
+		var orc = scn.GetShadowCard("orc");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(orc);
+		scn.SkipToAssignments();
+		assertEquals(5, scn.GetResistance(sam));
+		assertEquals(0, scn.GetWoundsOn(sam));
+		scn.FreepsAssignToMinions(sam, orc);
+
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertEquals(1, scn.GetWoundsOn(sam));
+		assertTrue(scn.FreepsAwaitingSkirmishChoice());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

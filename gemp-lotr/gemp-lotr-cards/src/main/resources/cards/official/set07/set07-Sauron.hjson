@@ -2635,8 +2635,7 @@
 					culture: sauron
 					select: self
 				}
-				limitPerPhase: 1
-				phase: regroup
+				limitPerSite: 1
 			}
 			{
 				type: activated

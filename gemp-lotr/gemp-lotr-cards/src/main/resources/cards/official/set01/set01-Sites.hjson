@@ -1086,6 +1086,7 @@
 			effect: {
 				type: playCardFromDiscard
 				select: choose(side(shadow),weapon)
+				removedTwilight: 1
 			}
 		}
 		gametext: <b>Underground</b>. <b>Shadow:</b> Remove (1) to play a Shadow weapon from your discard pile.

@@ -162,6 +162,7 @@
 					{
 						type: playCardFromDiscard
 						select: choose(culture(orc),minion)
+						removedTwilight: 2
 						memorize: playedMinion
 					}
 					{

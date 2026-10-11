@@ -32,12 +32,17 @@
 				phase: skirmish
 				effect: [
 					{
-						type: wound
-						select: choose(minion,inSkirmishAgainst(name(Gandalf)))
+						// A choice for each token: the wounds may go to several minions or to one more than
+						// once (CR 4.2 "for each"; F-0224).
+						type: repeat
 						times: {
 							type: ForEachCultureToken
 							filter: self
 							culture: gandalf
+						}
+						effect: {
+							type: wound
+							select: choose(minion,inSkirmishAgainst(name(Gandalf)))
 						}
 					}
 					{

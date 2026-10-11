@@ -804,7 +804,8 @@
 			cost: {
 				type: discardFromHand
 				forced: false
-				count: 0-2
+				// At least one: declining the offer is the way to discard none (F-0300).
+				count: 1-2
 				memorize: discardedCards
 			}
 			effect: {

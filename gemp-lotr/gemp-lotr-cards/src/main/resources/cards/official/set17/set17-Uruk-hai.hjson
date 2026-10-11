@@ -1177,7 +1177,7 @@
 		effects: [
 			{
 				type: Trigger
-				optional: false
+				optional: true
 				trigger: {
 					type: assignedAgainst
 					filter: self

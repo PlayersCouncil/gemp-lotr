@@ -199,6 +199,7 @@
 					type: playCardFromStacked
 					select: choose(possession)
 					on: self
+					removedTwilight: 1
 				}
 			}
 		]

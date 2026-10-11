@@ -40,7 +40,7 @@
 				effect: {
 					type: putCardsFromDiscardIntoHand
 					select: choose(other,culture(dwarven),possession)
-					count: 2
+					count: 0-2
 				}
 			}
 		]

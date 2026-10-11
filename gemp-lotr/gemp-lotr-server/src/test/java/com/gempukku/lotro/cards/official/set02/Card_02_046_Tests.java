@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_02_046_Tests
@@ -19,6 +20,20 @@ public class Card_02_046_Tests
 				{{
 					put("card", "2_46");
 					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// Uruk Captain, and an Uruk Savage in the discard pile.
+	protected VirtualTableScenario GetCaptainScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("captain", "2_46");
+					put("savage", "1_151");     // Uruk Savage: Uruk-hai, cost 2, site number 5
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -61,6 +76,41 @@ public class Card_02_046_Tests
 		assertEquals(9, card.getBlueprint().getStrength());
 		assertEquals(2, card.getBlueprint().getVitality());
 		assertEquals(5, card.getBlueprint().getSiteNumber());
+	}
+
+	// "Remove (1) and exert Uruk Captain to play an Uruk-hai from your discard pile": a play from a pile as an
+	// effect is treated as a cost, so the pool must pay for the removal and the Uruk-hai together (F-0046,
+	// F-0141).  The definition did not count the (1) it removes: with exactly the Uruk-hai's cost in the pool the
+	// ability was offered, took the token, exerted the Captain and played nothing.
+	// F-0451.
+	@Test
+	public void ThePoolMustPayForTheRemovalAndTheUrukHaiTogether() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetCaptainScenario();
+
+		var captain = scn.GetShadowCard("captain");
+		var savage = scn.GetShadowCard("savage");
+		scn.MoveCardsToDiscard(savage);
+
+		scn.StartGame();
+		scn.FreepsPass();
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		scn.MoveMinionsToTable(captain);
+
+		// At site 2 the Savage is roaming: 2 and 2 more.  (4) in the pool pays for him or for the removal.
+		scn.SetTwilight(4);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(captain));
+
+		scn.SetTwilight(5);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.ShadowActionAvailable(captain));
+		scn.ShadowUseCardAction(captain);
+
+		assertEquals(0, scn.GetTwilight());
+		assertEquals(1, scn.GetWoundsOn(captain));
+		assertInZone(Zone.SHADOW_CHARACTERS, savage);
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used
