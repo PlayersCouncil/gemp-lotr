@@ -585,7 +585,9 @@ start-of-turn or start-of-fellowship trigger, put into play before `StartGame()`
 `StartGame()` returns. Answer it, or put the card down afterwards. A card with no trigger at the start of the turn,
 a minion included, may go down before `StartGame()` and is still on the table in the turn's later phases
 (Card_91_013_Tests; probed): "minions go down after StartGame" is the habit of new tests, and an old file's order
-is left as it is.
+is left as it is. A card put down afterwards is not in the decision already pending: before its own fellowship
+ability is read or used, call `FreepsRefreshDecision()` ("A board changed under a pending decision"; Galadriel
+3_17, Card_03_017_Tests).
 
 **`SkipToSite` plays whole turns, reconciling included.** A small draw deck is drawn into the players' hands on
 the way. `SkipToMovementDecision` and `SkipToOtherPlayersTurn` reconcile too: the Shadow player draws up to 8
@@ -793,7 +795,12 @@ discard pile say (`MoveCardsToDiscard(card)`), and bring it in from there when i
 "then it is guaranteed to not interfere with the rest of it"). A test that passes seven runs in eight is this:
 the card under test in the hand The Mirror of Galadriel discarded from (F-0264, 52_44); a fifth card of the
 culture left in a deck the reconciles drew from (F-0265, 58_20). Run a test that has such an effect twenty times
-before it is called finished.
+before it is called finished. Where the text then acts on THAT card ("reveal a card at random ... discard that
+card"), a hand of one card, or of copies of one, cannot tell it from another card taken at random: lay several
+different cards, read which was shown (`FreepsHasCardChoiceAvailable(card, false)` for each, before the
+dismissal), and assert of each that it went if it was shown and stayed if it was not. True of a right card on
+every run; with six cards a random discard in its place fails five runs in six
+(Card_03_033_Tests.DiscardsTheCardRevealedAndNotAnotherCardOfTheHand).
 
 **The fierce round reads as the first does.** After a skirmish that leaves a fierce minion in play,
 `GetCurrentPhase()` is `Phase.ASSIGNMENT` again and `AwaitingFreepsAssignmentPhaseActions()` is true, exactly as
