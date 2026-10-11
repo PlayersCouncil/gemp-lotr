@@ -15,7 +15,10 @@ needs, the engine makes it without asking, and a `FreepsChooseCard` written for 
 the game has gone on to (G-0032). When it has none, that part of the effect is skipped; so is a choice among
 cards an earlier effect set aside (`ChooseArbitraryCards`) when it set none aside (F-0338). So a test that
 means to inspect a choice has to supply one more valid candidate than the choice needs, and at least one invalid
-one beside them. The same thing hides self-targeting: Celeborn's "exert Celeborn to heal an [elven] ally" heals
+one beside them. A parked test of a NUMBER the game reads otherwise ("X Shadow cards", 1 by the text and 3 as
+built) wants one more candidate than the LARGER of the two readings, or the game takes them all unasked and the
+test fails on a choice that is not there, not at the number it is parked for (Blood Runs Chill 8_3, Q-0256).
+The same thing hides self-targeting: Celeborn's "exert Celeborn to heal an [elven] ally" heals
 Celeborn himself when no other Elven ally is wounded. An "up to N" choice is the exception: its
 minimum is 0, so it asks even with one candidate left (Song of Durin's "discard up to 2 [moria] conditions").
 A choice between piles goes the same way: "from your draw deck or discard pile" is not asked when only one pile

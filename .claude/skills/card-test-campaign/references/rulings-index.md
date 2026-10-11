@@ -387,6 +387,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - An optional trigger or ability that costs nothing and would do nothing is withheld by the engine (Q-0224: A2; Q-0231: B; engine pass 26) [Q-0034, F-0407, F-0408, F-0402, F-0406, Q-0033, F-0411, F-0417, F-0428, F-0413, Q-0104, F-0410, F-0426, F-0423, Q-0102, Q-0243, Q-0245, Q-0029, F-0429, F-0379, Q-0107]
 - A choice whose every branch has nothing to act on (F-0116) [F-0293, Q-0220, F-0370, F-0366]
 - "<Do X> or <do Y>": each branch is written as the effect itself (F-0310, Here Lies Balin 1_19) [Q-0209, F-0222]
+- "Discard his or her hand or <do Y>": with no card in hand the choice is still asked (as built; Pelennor Flat 7_345; Q-0255, open) [Q-0224]
 - A parenthesis with its own price (Q-0089)
 - One thing left to do is done without a second question (Q-0090) [Q-0121, F-0387]
 - A yes/no before a choice whose minimum is 0 (Q-0143, F-0277) [F-0278, F-0285, Q-0102, F-0385]
@@ -435,6 +436,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A reveal that what follows reads must be able to happen (Q-0148, F-0284) [F-0022, Q-0104, Q-0029]
 - A reveal that a cost buys is offered with that draw deck empty, and flagged (Q-0163: B; built by engine pass 21). "<cost> to reveal the top N cards ... [Q-0148]
 - What bounds an X: the action's costs, never what its effect can use (Q-0069, Q-0087, Q-0094, F-0067, F-0111). The rulings on X look two ways and are ... [Q-0062, Q-0015, Q-0034, Q-0191]
+- "Spot a Dwarf who is damage +X and exert that Dwarf ... to <do> X": when X is read (Q-0256, open), and a Dwarf with no bonus. The erratum Blood Runs ... [Q-0015]
 - "Discard a <kind> from hand to take a <kind> into hand from the discard pile" does not take back the card just discarded (Q-0192: A) [Q-0034]
 - The twilight cost of a card in play (F-0109, built)
 - LeastDiscountToPlay bounds X in "remove X ... to play ... from your discard pile" (F-0067) [F-0392]
