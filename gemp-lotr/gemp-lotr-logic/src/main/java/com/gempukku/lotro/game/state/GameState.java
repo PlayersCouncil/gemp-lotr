@@ -408,7 +408,7 @@ public class GameState {
             }
 
             if (_skirmish != null)
-                listener.startSkirmish(_skirmish.getFellowshipCharacter(), _skirmish.getShadowCharacters());
+                sendSkirmish(listener);
 
             for (Map.Entry<PhysicalCard, Map<Token, Integer>> physicalCardMapEntry : _cardTokens.entrySet()) {
                 PhysicalCard card = physicalCardMapEntry.getKey();
@@ -530,6 +530,36 @@ public class GameState {
 
         for (GameStateListener listener : getAllGameStateListeners()) {
             listener.cardMoved(card);
+        }
+    }
+
+    /**
+     * Lays a card that a character bore where that character was, when the character has left play and the card
+     * has not gone with him: The One Ring, which is never discarded, when its bearer is killed (Q-0109, Q-0232).
+     * The card does not leave play at any point.  It keeps its card id and its text stays in force, though with no
+     * bearer for it to speak of; it lies in the zone the bearer was in, borne by nobody, and the clients are told
+     * it has moved there.  If the bearer was the fellowship character of the skirmish being fought, the card is
+     * also shown in his place in that skirmish (Skirmish.getCardLeftInFellowshipPlace), which gives the skirmish no
+     * fellowship character: nothing skirmishes the card and no rule reads it as skirmishing.
+     *
+     * Called once the bearer is out of play (removeCardsFromZone), with what was read of him before he went.  The
+     * card lies there until it is taken up: MakeRingBearerEffect removes it from its zone and attaches it to the
+     * new Ring-bearer.  An assignment the bearer had to a skirmish not yet begun is gone with him, and the card is
+     * given no part in it.
+     * @param card The card left behind, still attached to the bearer who has gone.
+     * @param bearersZone The zone the bearer was in while in play.
+     * @param bearerWasInSkirmish Whether the bearer was the fellowship character of the skirmish being fought.
+     */
+    public void layCardWhereItsBearerWas(PhysicalCard card, Zone bearersZone, boolean bearerWasInSkirmish) {
+        ((PhysicalCardImpl) card).attachTo(null);
+        ((PhysicalCardImpl) card).setZone(bearersZone);
+        for (GameStateListener listener : getAllGameStateListeners())
+            listener.cardMoved(card);
+
+        if (bearerWasInSkirmish && _skirmish != null && _skirmish.getFellowshipCharacter() == null) {
+            _skirmish.setCardLeftInFellowshipPlace(card);
+            for (GameStateListener listener : getAllGameStateListeners())
+                listener.addToSkirmish(card);
         }
     }
 
@@ -915,7 +945,7 @@ public class GameState {
         _skirmish.setFellowshipCharacter(card);
         for (GameStateListener gameStateListener : getAllGameStateListeners()) {
             gameStateListener.finishSkirmish();
-            gameStateListener.startSkirmish(_skirmish.getFellowshipCharacter(), _skirmish.getShadowCharacters());
+            sendSkirmish(gameStateListener);
         }
     }
 
@@ -964,7 +994,7 @@ public class GameState {
         _skirmish.getShadowCharacters().add(card);
         for (GameStateListener listener : getAllGameStateListeners()) {
             listener.finishSkirmish();
-            listener.startSkirmish(_skirmish.getFellowshipCharacter(), _skirmish.getShadowCharacters());
+            sendSkirmish(listener);
         }
     }
 
@@ -986,6 +1016,16 @@ public class GameState {
         }
         if (_skirmish.getShadowCharacters().remove(card)) {
             _skirmish.addRemovedFromSkirmish(card);
+            if (notify) {
+                for (GameStateListener listener : getAllGameStateListeners()) {
+                    listener.removeFromSkirmish(card);
+                }
+            }
+        }
+        // A card that lay where the fellowship character was is taken up from there.  It was never in the skirmish
+        // for any rule, so it is not among those removed from it.
+        if (_skirmish.getCardLeftInFellowshipPlace() == card) {
+            _skirmish.setCardLeftInFellowshipPlace(null);
             if (notify) {
                 for (GameStateListener listener : getAllGameStateListeners()) {
                     listener.removeFromSkirmish(card);
@@ -1137,13 +1177,23 @@ public class GameState {
     private void startSkirmish(Skirmish skirmish) {
         _skirmish = skirmish;
         for (GameStateListener listener : getAllGameStateListeners())
-            listener.startSkirmish(_skirmish.getFellowshipCharacter(), _skirmish.getShadowCharacters());
+            sendSkirmish(listener);
     }
 
     public void restartSkirmish(Skirmish skirmish) {
         _skirmish = skirmish;
         for (GameStateListener listener : getAllGameStateListeners())
-            listener.startSkirmish(_skirmish.getFellowshipCharacter(), _skirmish.getShadowCharacters());
+            sendSkirmish(listener);
+    }
+
+    /**
+     * Tells a client of the skirmish as it stands: who fights in it, and the card, if any, that lies where its
+     * fellowship character was (Skirmish.getCardLeftInFellowshipPlace).
+     */
+    private void sendSkirmish(GameStateListener listener) {
+        listener.startSkirmish(_skirmish.getFellowshipCharacter(), _skirmish.getShadowCharacters());
+        if (_skirmish.getCardLeftInFellowshipPlace() != null)
+            listener.addToSkirmish(_skirmish.getCardLeftInFellowshipPlace());
     }
 
     public Skirmish getSkirmish() {

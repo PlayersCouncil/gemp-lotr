@@ -84,6 +84,35 @@ public interface Skirmishes extends TableBase, Decisions, GameProcedures {
 		return false;
 	}
 
+	/**
+	 * Whether the Free Peoples player's client has the given card before it as a card in the skirmish being
+	 * fought.  See PlayerSeesCardInSkirmish.
+	 */
+	default boolean FreepsSeesCardInSkirmish(PhysicalCardImpl card) { return PlayerSeesCardInSkirmish(P1(), card); }
+	/**
+	 * Whether the Shadow player's client has the given card before it as a card in the skirmish being fought.
+	 * See PlayerSeesCardInSkirmish.
+	 */
+	default boolean ShadowSeesCardInSkirmish(PhysicalCardImpl card) { return PlayerSeesCardInSkirmish(P2(), card); }
+	/**
+	 * Whether the given player's client has the given card before it as a card in the skirmish being fought:
+	 * true when that seat has been told so (as the skirmish started, or as the card was added to it) and has not
+	 * since been told the card left the skirmish or left play, or that the skirmish ended.  This is what a client
+	 * draws the skirmish by, and it is wider than IsCharSkirmishing, which asks the game who is fighting: a card
+	 * lying where the fellowship character of the skirmish was (The One Ring, when its bearer is killed in one)
+	 * is shown in the skirmish and fights nobody.
+	 *
+	 * Read as PlayerSeesCardInHand is: from the channel the table keeps for the seat and from a client joined to
+	 * the seat as the reading is made, failing if the two were told different things, and on a table that keeps
+	 * no such channels.
+	 * @param player The player whose seat is asked about.
+	 * @param card The card asked about.
+	 * @return True if that seat has the card before it as a card in the skirmish.
+	 */
+	default boolean PlayerSeesCardInSkirmish(String player, PhysicalCardImpl card) {
+		return SeatChannel.seesCardInSkirmish(this, player, card);
+	}
+
 	default Boolean CanBeAssignedViaAction(PhysicalCardImpl card)
 	{
 		return CanBeAssignedViaAction(card, Side.SHADOW) || CanBeAssignedViaAction(card, Side.FREE_PEOPLE);

@@ -19,6 +19,11 @@ public class Skirmish {
 
     private final Set<PhysicalCard> _removedFromSkirmish = new LinkedHashSet<>();
 
+    // A card that lies where the fellowship character of this skirmish was (The One Ring, when its bearer was
+    // killed here: Q-0232).  It is in the skirmish for the table to show and for nothing else: it is no
+    // character, and the skirmish has no fellowship character while it lies there.
+    private PhysicalCard _leftInFellowshipPlace;
+
     public Skirmish(PhysicalCard fellowshipCharacter, Set<PhysicalCard> shadowCharacters) {
         _fellowshipCharacter = fellowshipCharacter;
         _shadowCharacters = shadowCharacters;
@@ -51,6 +56,21 @@ public class Skirmish {
 
     public void setFellowshipCharacter(PhysicalCard fellowshipCharacter) {
         _fellowshipCharacter = fellowshipCharacter;
+        // Nothing lies in the place of a character who stands there
+        if (fellowshipCharacter != null)
+            _leftInFellowshipPlace = null;
+    }
+
+    /**
+     * @return The card lying where the fellowship character of this skirmish was, or null.  Not a character and
+     * not in the skirmish for any rule or card: only what the table shows in his place.
+     */
+    public PhysicalCard getCardLeftInFellowshipPlace() {
+        return _leftInFellowshipPlace;
+    }
+
+    public void setCardLeftInFellowshipPlace(PhysicalCard card) {
+        _leftInFellowshipPlace = card;
     }
 
     public void addRemovedFromSkirmish(PhysicalCard loser) {
@@ -85,6 +105,7 @@ public class Skirmish {
         var skirmish = new Skirmish(_fellowshipCharacter, new HashSet<>(_shadowCharacters));
         skirmish._cancelled = _cancelled;
         skirmish._removedFromSkirmish.addAll(_removedFromSkirmish);
+        skirmish._leftInFellowshipPlace = _leftInFellowshipPlace;
         skirmish._fpStrengthOverrideEvaluator = _fpStrengthOverrideEvaluator;
         skirmish._shadowStrengthOverrideEvaluator = _shadowStrengthOverrideEvaluator;
 

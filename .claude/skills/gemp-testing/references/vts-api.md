@@ -350,6 +350,8 @@ Decisions will always come with at least one choice, even if that single choice 
 - `boolean IsCharAssignedAgainst(PhysicalCardImpl skirmisher, PhysicalCardImpl opponent)`
 - `boolean IsCharSkirmishing(PhysicalCardImpl card)`
 - `boolean IsCharSkirmishingAgainst(PhysicalCardImpl skirmisher, PhysicalCardImpl opponent)`
+- `boolean FreepsSeesCardInSkirmish(PhysicalCardImpl card)  ·  ShadowSeesCardInSkirmish` — Whether that player's client has the given card before it as a card in the skirmish being fought.
+- `boolean PlayerSeesCardInSkirmish(String player, PhysicalCardImpl card)` — Whether the given player's client has the given card before it as a card in the skirmish being fought: true when that seat has been told so (as the skirmish started, or as the card was added to it) and has not since been told the card left the skirmish or left play, or that the skirmish ended.
 - `Boolean CanBeAssignedViaAction(PhysicalCardImpl card)`
 - `Boolean FreepsCanAssign(PhysicalCardImpl card)  ·  ShadowCanAssign` — Asks the game's own rule for who may be assigned, not the decision in front of the player.
 - `Boolean CanBeAssignedViaAction(PhysicalCardImpl card, Side side)`
@@ -443,6 +445,10 @@ Functions for checking aspects of a card, such as numeric states and other state
 - `void RemoveTokensFromCard(PhysicalCardImpl card, int count)` — Takes culture tokens of the card's own printed culture off the card, the only kind of token this can remove, and no more of them than are there.
 - `List<PhysicalCardImpl> GetAttachedCards(PhysicalCardImpl card)`
 - `List<PhysicalCardImpl> GetStackedCards(PhysicalCardImpl card)`
+- `boolean FreepsSeesCardInZone(PhysicalCardImpl card, Zone zone)  ·  ShadowSeesCardInZone` — Whether that player's client has the given card before it as a card in the given zone.
+- `boolean PlayerSeesCardInZone(String player, PhysicalCardImpl card, Zone zone)` — Whether the given player's client has the given card before it as a card in the given zone: true when the zone that seat was last sent for the card, as it was put into play or moved (the server's own channel for the seat decides what it is sent), is that zone, and it has not since been sent the card's removal.
+- `boolean FreepsSeesCardBorneBy(PhysicalCardImpl card, PhysicalCardImpl bearer)  ·  ShadowSeesCardBorneBy` — Whether that player's client has the given card before it as borne by the given bearer, or by no card.
+- `boolean PlayerSeesCardBorneBy(String player, PhysicalCardImpl card, PhysicalCardImpl bearer)` — Whether the given player's client has the given card before it as borne by the given bearer: true when that seat was last sent the card, as it was put into play or moved, as attached to that bearer, and has not since been sent the card's removal.
 - `Boolean IsSiteControlled(PhysicalCardImpl card)`
 - `Boolean FreepsControls(PhysicalCardImpl card)  ·  ShadowControls`
 - `int GetTwilightCost(PhysicalCardImpl card)`
@@ -550,4 +556,4 @@ This interface holds the handful of accessors that every other virtual table int
 - `void Verify(boolean condition, String message)` — A sanity check on the table's own bookkeeping, used where a procedure has to end up in a known state for whatever follows it to make sense.
 
 ---
-442 entries, 220 of them with no description in the source.
+448 entries, 220 of them with no description in the source.

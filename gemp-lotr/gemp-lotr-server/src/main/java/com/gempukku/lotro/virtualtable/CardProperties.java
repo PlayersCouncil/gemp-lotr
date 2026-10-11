@@ -78,6 +78,67 @@ public interface CardProperties extends TableBase {
         return (List<PhysicalCardImpl>)(List<?>)gameState().getStackedCards(card);
     }
 
+	/**
+	 * Whether the Free Peoples player's client has the given card before it as a card in the given zone.  See
+	 * PlayerSeesCardInZone.
+	 */
+	default boolean FreepsSeesCardInZone(PhysicalCardImpl card, Zone zone) { return PlayerSeesCardInZone(P1(), card, zone); }
+	/**
+	 * Whether the Shadow player's client has the given card before it as a card in the given zone.  See
+	 * PlayerSeesCardInZone.
+	 */
+	default boolean ShadowSeesCardInZone(PhysicalCardImpl card, Zone zone) { return PlayerSeesCardInZone(P2(), card, zone); }
+	/**
+	 * Whether the given player's client has the given card before it as a card in the given zone: true when the
+	 * zone that seat was last sent for the card, as it was put into play or moved (the server's own channel for
+	 * the seat decides what it is sent), is that zone, and it has not since been sent the card's removal.  This
+	 * is what a client draws the card by, and not the table's own idea of where the card is: for that, assertInZone.
+	 * A card the seat is not shown (one in a draw deck, one in another player's hand) is in no zone to it.
+	 * A site on the adventure path cannot be asked about: the table keeps nothing of how sites are sent as they
+	 * are laid, and the reading is refused for one.
+	 *
+	 * Read as PlayerSeesCardInHand is: from the channel the table keeps for the seat and from a client joined to
+	 * the seat as the reading is made, failing if the two were sent different zones, and on a table that keeps no
+	 * such channels.
+	 * @param player The player whose seat is asked about.
+	 * @param card The card, wherever it lies and whoever owns it.
+	 * @param zone The zone asked about.
+	 * @return True if that seat was last sent the card as a card in that zone.
+	 */
+	default boolean PlayerSeesCardInZone(String player, PhysicalCardImpl card, Zone zone) {
+		Verify(zone != null, "No zone was given to ask whether " + player + " sees a card in it.");
+		return zone != null && SeatChannel.zoneSeen(this, player, card) == zone;
+	}
+
+	/**
+	 * Whether the Free Peoples player's client has the given card before it as borne by the given bearer, or by
+	 * no card.  See PlayerSeesCardBorneBy.
+	 */
+	default boolean FreepsSeesCardBorneBy(PhysicalCardImpl card, PhysicalCardImpl bearer) { return PlayerSeesCardBorneBy(P1(), card, bearer); }
+	/**
+	 * Whether the Shadow player's client has the given card before it as borne by the given bearer, or by no
+	 * card.  See PlayerSeesCardBorneBy.
+	 */
+	default boolean ShadowSeesCardBorneBy(PhysicalCardImpl card, PhysicalCardImpl bearer) { return PlayerSeesCardBorneBy(P2(), card, bearer); }
+	/**
+	 * Whether the given player's client has the given card before it as borne by the given bearer: true when that
+	 * seat was last sent the card, as it was put into play or moved, as attached to that bearer, and has not since
+	 * been sent the card's removal.  With null for the bearer: true when the seat has the card before it and was
+	 * last sent it as attached to no card, which is how a client must be told of a card that lies on its own.
+	 * A card the seat is not shown at all is borne by nothing and by nobody to it: false either way.
+	 *
+	 * Read as PlayerSeesCardInHand is: from the channel the table keeps for the seat and from a client joined to
+	 * the seat as the reading is made, failing if the two were sent different bearers, and on a table that keeps
+	 * no such channels.
+	 * @param player The player whose seat is asked about.
+	 * @param card The card asked about.
+	 * @param bearer The card that is to bear it, or null to ask whether it is shown as borne by no card.
+	 * @return True if that seat has the card before it as borne by that bearer (or, for null, by no card).
+	 */
+	default boolean PlayerSeesCardBorneBy(String player, PhysicalCardImpl card, PhysicalCardImpl bearer) {
+		return SeatChannel.zoneSeen(this, player, card) != null && SeatChannel.bearerSeen(this, player, card) == bearer;
+	}
+
 	default Boolean IsSiteControlled(PhysicalCardImpl card) {
 		return card.getCardController() != null;
 	}

@@ -1317,6 +1317,13 @@ her back). That is not Q-0222's bonus, which was laid before the hindering (`mec
 **The One Ring is never discarded.** A discard that could name it (Doom Causeway 103_127, "each time a card is
 hindered, discard it") neither offers nor takes it, hindered or not; hindered there, it stays on its bearer,
 hindered (`mechanics/TheOneRingIsNeverDiscardedTests`).
+Nor does it go to the discard pile with a Ring-bearer who is killed (Q-0232): it stays in play, in his zone
+(`assertInZone(Zone.FREE_CHARACTERS, ring)`), borne by nobody, while his other cards are discarded; so the discard
+pile counts one fewer than "everything he bore", and `GetAttachedCards` of the dead Ring-bearer is empty. Killed as
+the fellowship character of a skirmish, he leaves it drawn in his place there (`FreepsSeesCardInSkirmish(ring)`),
+fighting nobody (`IsCharSkirmishing(ring)` is false). It lies there while Sam 1_311's response is on offer and is
+taken up from there; with no new Ring-bearer the game ends with it there
+(`mechanics/TheOneRingWhenItsBearerIsKilledTests`). A card's test asserts none of this for itself.
 
 **No cheat puts The One Ring on: the Ring's own text does, and which Ring decides how.** `GreatRing` (19_1) is
 put on by its own Maneuver action at no cost (`FreepsUseCardAction(scn.GetRing())`, Card_V2_065_Tests) and
