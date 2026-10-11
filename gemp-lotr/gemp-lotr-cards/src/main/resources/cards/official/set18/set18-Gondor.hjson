@@ -129,7 +129,7 @@
 				}
 				effect: {
 					type: playCardFromDrawDeck
-					select: choose(culture(gondor),possession,maxTwilight(1))
+					select: choose(possession,maxTwilight(1))
 					on: self
 					showAll: true
 					shuffle: true

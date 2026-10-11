@@ -355,7 +355,7 @@
 				cost: [
 					{
 						type: exert
-						select: choose(dwarf)
+						select: choose(dwarf,companion)
 					}
 					{
 						type: exert
