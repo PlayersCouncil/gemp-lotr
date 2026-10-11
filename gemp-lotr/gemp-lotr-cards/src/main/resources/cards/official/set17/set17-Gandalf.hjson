@@ -39,20 +39,24 @@
 						}
 						secondNumber: 0
 					}
-					true: [
-						{
-							type: revealHand
-							hand: shadowPlayer
-							memorize: revealedCards
-						}
-						{
-							type: discardFromHand
-							hand: shadowPlayer
-							forced: true
-							player: you
-							select: choose(memory(revealedCards),minion)
-						}
-					]
+					true: {
+						type: optional
+						text: Would you like to reveal the Shadow player's hand and discard a minion found there?
+						effect: [
+							{
+								type: revealHand
+								hand: shadowPlayer
+								memorize: revealedCards
+							}
+							{
+								type: discardFromHand
+								hand: shadowPlayer
+								forced: true
+								player: you
+								select: choose(memory(revealedCards),minion)
+							}
+						]
+					}
 				}
 			]
 		}

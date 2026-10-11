@@ -259,6 +259,8 @@ public class BarOnTakingCardsIntoHandTests
 		assertInDiscard(troop);
 		assertEquals(2, scn.GetShadowHandCount());
 
+		// "You may reveal that Shadow player's hand"
+		scn.FreepsChooseYes();
 		scn.FreepsDismissRevealedCards();
 		scn.FreepsChooseCardBPFromSelection(runner);
 
@@ -294,6 +296,8 @@ public class BarOnTakingCardsIntoHandTests
 		assertInDiscard(troop);
 		assertEquals(2, scn.GetShadowHandCount());
 
+		// "You may reveal that Shadow player's hand"
+		scn.FreepsChooseYes();
 		scn.FreepsDismissRevealedCards();
 		scn.FreepsChooseCardBPFromSelection(runner);
 
