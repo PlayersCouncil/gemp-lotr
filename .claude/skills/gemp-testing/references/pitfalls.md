@@ -46,6 +46,11 @@ in that order in the game log. `mechanics/TakenTogetherInCardIdOrderTests` shows
 player is asked to choose it. `FreepsAssignAndResolve` answers that for the skirmish it sets up;
 after other skirmishes, call `FreepsResolveSkirmish(companion)`.
 
+**A skirmish against a lurker is not on offer while another waits** (CR 4.2 "lurker"). At "Choose next skirmish
+to resolve" a companion with a lurker among his minions is no choice until every skirmish without one is resolved,
+in the fierce round too: `FreepsResolveSkirmish(companion)` for him fails there. Resolve the others first, or lay
+no lurker beside a skirmish whose order the test cares about (mechanics/LurkerTests).
+
 **Who is offered for assignment.** `FreepsHasAssignmentTargetAvailable(card)` and its Shadow twin read the
 assignment decision in front of the player. `FreepsCanAssign(card)` and `ShadowCanAssign(card)` read the game's
 rule, whatever is being asked. A restriction on a pair ("may not assign a character to skirmish this minion",
@@ -924,7 +929,19 @@ about to" responses' where a card answers it (Mordor Assassin 7_284: `ShadowHasO
 Then `GetThreats()` reads 0 at once, and the Free Peoples player is asked "Choose characters to wound" once for
 each threat there was, a choice of one companion each time (minimum 1). A threat removed in that window as a cost
 is therefore read in the wounds asked for (2 threats, one removed: one question and one wound; declined: two),
-never as "2 to 1" (`Card_07_284_Tests`).
+never as "2 to 1" (`Card_07_284_Tests`). A companion a card's text places in the dead pile is killed and sets them
+off (Saved From the Fire 8_20: the wounds are asked for before the deck is shown); a killed minion and a companion
+discarded from play do not (mechanics/ThreatsTests).
+
+**Hunter and enduring change a strength a board may lean on.** A hunter has its printed strength everywhere but
+in its own skirmish, and +X there only against a character who is no hunter (`GetKeywordCount(card,
+Keyword.HUNTER)` is the X); hunters are on both sides. An enduring character is +2 for each wound on it, an
+exertion's included, and loses it as a wound is healed: a helper that is wounded or exerts is stronger for it
+(mechanics/HunterTests, EnduringTests).
+
+**The Rule of 9 counts the dead pile, copy by copy.** With nine companions in play and in the dead pile together,
+no companion is offered from hand whatever else he needs, and other cards are played as ever
+(mechanics/RuleOfNineTests). `MoveCompanionsToTable` and `MoveCardsToDeadPile` do not ask.
 
 **The other player's Free Peoples cards are not active on your turn.** A copy of a possession taken from the
 Shadow player's deck (`GetShadowCard`) and cheated onto your companion is inactive (CR 4.2 "active"), so no
@@ -1094,6 +1111,8 @@ number"; the rule is under "modifier".
 **A play as a cost can come to nothing.** An ability whose cost is to play a card is offered, takes its other costs and the card's twilight, and does nothing if the card has left play by the time its play is complete, whatever removed it. Read the costs as paid, the effect as not done, and the phase's decision.
 
 **The loss of initiative comes with the play.** When a Free Peoples card played from hand takes the hand below four, `FreepsHasInitiative()` is still true while the card's entering step is being answered and false once its play is announced; a required "lose initiative" trigger and a required "each time you play" trigger for that play come up in one "Required responses" decision. Initiative is read again each time the game goes round its loop: cards cheated into a hand while a decision is pending give it back at the next answer (`FreepsHasInitiative()` is true after the other player's pass), which sets up a second loss in one turn for the `R` of "each time you lose initiative" (Memories of Darkness 60_2). Assert `FreepsHasInitiative()` true between the cheat and the second loss. In a skirmish, where the only other answers are passes that end it, Sméagol 6_45 ("Skirmish: Discard a card from hand to make Sméagol strength +1"; cheat him in, his play adds a burden) discarding from five cards to four is an answer that keeps initiative, and his discard from four to three, or Ranger of Osgiliath 7_116's "Regroup: Discard 2 cards from hand", is a loss of initiative that is no play (Glimpse of Fate 60_12).
+
+**An event that needs initiative is counted in its own hand (F-0464, open).** A Free Peoples event that says "If you have initiative, ..." is offered from a hand of exactly four cards with itself among them, where CR 4.2 "playing a card" wants four beside it; "If the Shadow has initiative" (So Fair, So Desperate 8_111) is out by one the other way. Until that is mended, show such an event's `+` from five cards and its `-` from three, and leave the hand of exactly four to mechanics/InitiativeTests, where the test is parked. An initiative the EFFECT asks for is read without the event already (All Save One 7_31 played from four cards gives the lesser bonus), and an ability's is checked before its cost is paid (Madril 7_110 discards from four to two and still wounds).
 
 **A card that discards itself as it is played was not played either.** A card discarded by its own "when you play this ..., or discard it" (the three Dunlendings of set 5, Stampeding Chief) is the same: the Free Peoples player's or the Shadow player's choice in that text is the first thing asked, before any trigger or response to the play, and if the card goes nothing answers its play. Beside the Watcher such a card is discarded first and the choice is not asked at all.
 
