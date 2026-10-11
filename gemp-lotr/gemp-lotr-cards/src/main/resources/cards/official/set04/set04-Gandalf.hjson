@@ -294,8 +294,11 @@
 				type: Trigger
 				optional: false
 				trigger: {
-					type: played
-					filter: self
+					type: ConstantlyCheck
+				}
+				requires: {
+					type: canSpot
+					filter: side(shadow),condition,attachedTo(bearer)
 				}
 				effect: {
 					type: discard
@@ -554,20 +557,11 @@
 				type: Trigger
 				optional: false
 				trigger: {
-					type: played
-					filter: self
+					type: ConstantlyCheck
 				}
-				effect: {
-					type: discard
-					select: all(hand weapon,attachedTo(bearer))
-				}
-			}
-			{
-				type: Trigger
-				optional: false
-				trigger: {
-					type: restored
-					filter: self
+				requires: {
+					type: canSpot
+					filter: hand weapon,attachedTo(bearer)
 				}
 				effect: {
 					type: discard

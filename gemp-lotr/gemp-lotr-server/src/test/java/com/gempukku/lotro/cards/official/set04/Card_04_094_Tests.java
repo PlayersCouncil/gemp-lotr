@@ -40,6 +40,13 @@ public class Card_04_094_Tests
 					// Plays on a Free Peoples Man."; its trigger answers a lost skirmish
 					put("banished", "4_139");
 					put("grima", "4_154");      // Gríma, Wormtongue: [isengard] Man, vitality 3, for Banished to exert; a maneuver ability only
+					// Blade Tip: [wraith] condition in the Shadow support area, cost 0.  "Response: If your
+					// Nazgûl wins a skirmish, transfer this condition from your support area to the losing
+					// character."  It wounds its bearer only at the start of a fellowship phase.
+					put("bladetip", "1_209");
+					// Úlairë Lemenya: Nazgûl, strength 9, vitality 2, not fierce; her text is about a
+					// character who bears a [wraith] condition
+					put("lemenya", "1_232");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -124,5 +131,91 @@ public class Card_04_094_Tests
 		assertEquals(0, scn.GetWoundsOn(grima));
 		assertFalse(scn.ShadowPlayAvailable(banished));
 		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	// "Discard all Shadow conditions on Théoden" is a standing discard, apart from the bar that follows it (Ketura
+	// on Q-0229: "the discard will be continuous and the poor-mans-cannot-bear poorly keeps them off"; Q-0223).
+	// The bar is on PLAYING a Shadow condition on him, and a transfer is not a play (Q-0053): Blade Tip reaches
+	// Théoden, and is discarded as it lands.
+	@Test
+	public void AShadowConditionTransferredToTheodenIsDiscardedAsItLands() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetShadowConditionScenario();
+
+		var hearken = scn.GetFreepsCard("hearken");
+		var theoden = scn.GetFreepsCard("theoden");
+		var bladetip = scn.GetShadowCard("bladetip");
+		var lemenya = scn.GetShadowCard("lemenya");
+		scn.MoveCompanionsToTable(theoden);
+		scn.AttachCardsTo(theoden, hearken);
+		scn.MoveCardsToSupportArea(bladetip);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(lemenya);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(theoden, lemenya);
+		scn.FreepsResolveSkirmish(theoden);
+		// 6 + 2 for Hearken to Me, against 9
+		assertEquals(8, scn.GetStrength(theoden));
+		assertEquals(9, scn.GetStrength(lemenya));
+		scn.PassSkirmishActions();
+
+		// The Nazgûl wins and Blade Tip's response is offered
+		assertEquals(1, scn.GetWoundsOn(theoden));
+		assertInZone(Zone.SUPPORT, bladetip);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(bladetip));
+		scn.ShadowAcceptOptionalTrigger();
+
+		// Théoden is the loser, so it went to him: it is in the discard pile, and Hearken to Me is still his
+		assertInZone(Zone.DISCARD, bladetip);
+		assertAttachedTo(hearken, theoden);
+		assertEquals(1, scn.GetWoundsOn(theoden));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	// Comprehensive Rules 5.0, "hinder": while Hearken to Me is hindered its text does not apply, so a Shadow
+	// condition may be played on Théoden.  When it is restored the standing discard is in force again and the
+	// condition is discarded (Ketura on Q-0223: a text with a "discard" sentence "immediately kicks in and
+	// banishes other cards ... that were played on him while [it] was hindered").  The restore here is the Free
+	// Peoples player's own reconcile.
+	@Test
+	public void AShadowConditionPlayedOnTheodenWhileItWasHinderedIsDiscardedWhenItIsRestored() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetShadowConditionScenario();
+
+		var hearken = scn.GetFreepsCard("hearken");
+		var theoden = scn.GetFreepsCard("theoden");
+		var gimli = scn.GetFreepsCard("gimli");
+		var frodo = scn.GetRingBearer();
+		var weary = scn.GetShadowCard("weary");
+		scn.MoveCompanionsToTable(theoden);
+		scn.AttachCardsTo(theoden, hearken);
+		// Gimli stays in hand, so that the reconcile has a discard to ask about
+		scn.MoveCardsToHand(gimli, weary);
+
+		scn.StartGame();
+		scn.HinderCard(hearken);
+		scn.FreepsPass();
+
+		// Its bar is off: Théoden is offered beside Frodo
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertTrue(scn.ShadowPlayAvailable(weary));
+		scn.ShadowPlayCard(weary);
+		assertTrue(scn.ShadowHasCardChoiceAvailable(theoden, frodo));
+		scn.ShadowChooseCard(theoden);
+		assertAttachedTo(weary, theoden);
+		assertTrue(scn.IsHindered(hearken));
+
+		// No minion: the Shadow phase is followed by the regroup phase
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.PassRegroupActions();
+		assertTrue(scn.FreepsDecisionAvailable("another move"));
+		assertTrue(scn.IsHindered(hearken));
+		assertAttachedTo(weary, theoden);
+
+		scn.FreepsChooseToStay();
+		assertTrue(scn.FreepsDecisionAvailable("Reconcile"));
+		assertFalse(scn.IsHindered(hearken));
+		assertAttachedTo(hearken, theoden);
+		assertInZone(Zone.DISCARD, weary);
+		assertInZone(Zone.HAND, gimli);
 	}
 }

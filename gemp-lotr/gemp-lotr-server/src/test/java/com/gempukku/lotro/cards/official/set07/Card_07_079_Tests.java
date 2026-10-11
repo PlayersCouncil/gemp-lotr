@@ -75,11 +75,39 @@ public class Card_07_079_Tests
 		assertEquals(1, card.getBlueprint().getVitality());
 	}
 
+	// "Discard other weapons he bears" is a standing discard, apart from "cannot bear other weapons" (Ketura on
+	// Q-0223 and Q-0229: "two separate, unrelated effects that just so happen to share a target"; the discard is
+	// continuous).  While Anduril's text is in force the bar keeps every other weapon from reaching Aragorn, by a
+	// play or by a transfer, so the discard is seen at two moments only: as Anduril is played on an Aragorn who
+	// bears a weapon, here, and as it is restored, in the test after.
+	@Test
+	public void WhenPlayedDiscardsTheWeaponAragornBears() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var anduril = scn.GetFreepsCard("card");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var bow = scn.GetFreepsCard("bow");
+		scn.MoveCompanionsToTable(aragorn);
+		// A ranged weapon: no hand weapon, so the item class rule lets Anduril be played beside it
+		scn.AttachCardsTo(aragorn, bow);
+		scn.MoveCardsToHand(anduril);
+
+		scn.StartGame();
+
+		assertAttachedTo(bow, aragorn);
+		assertTrue(scn.FreepsPlayAvailable(anduril));
+		scn.FreepsPlayCard(anduril);
+
+		assertAttachedTo(anduril, aragorn);
+		assertInZone(Zone.DISCARD, bow);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
 	// Comprehensive Rules 5.0, "hinder": "If Anduril is hindered, a Ranger's Sword cannot be played on Aragorn due
 	// to passive item class restrictions.  But because Anduril's game text does not apply, Aragorn's Bow can now
 	// be played.  Upon being restored, Anduril's game text resumes being applied, upon which Aragorn's Bow would
-	// be discarded."  (F-0360.)  Here a card restores it; mechanics/HinderedBorneCardTests has the same board with
-	// a reconcile doing the restoring (F-0361).
+	// be discarded."  Here a card restores it; mechanics/HinderedBorneCardTests has the same board with a
+	// reconcile doing the restoring.
 	@Test
 	public void WhenRestoredDiscardsAWeaponAragornTookUpWhileItWasHindered() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();

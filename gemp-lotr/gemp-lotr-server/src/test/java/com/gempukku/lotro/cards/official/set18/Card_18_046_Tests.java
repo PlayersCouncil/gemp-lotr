@@ -118,4 +118,59 @@ public class Card_18_046_Tests
 		assertAttachedTo(elsewhere, troop2);
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
+
+	// Comprehensive Rules 5.0, "hinder": while Disarmed is hindered its text does not apply, so the minion may
+	// take up a Shadow card.  Its discard is tied to its own transfer ("When this condition is transferred to
+	// bearer"), so when it is restored nothing is discarded: "Disarmed however also lacks an ongoing discard (it
+	// explicitly makes it an on-transfer trigger), so it would also permit the shadow cards to stay" (Ketura on
+	// Q-0223: B).  The restore here is the Free Peoples player's own reconcile, which comes before the minions
+	// are discarded.
+	@Test
+	public void AShadowCardTheMinionTookUpWhileThisWasHinderedStaysWhenThisIsRestored() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var card = scn.GetFreepsCard("card");
+		var boromir = scn.GetFreepsCard("boromir");
+		// Boromir stays in hand, so that the reconcile has a discard to ask about
+		scn.MoveCardsToHand(boromir);
+
+		var troop = scn.GetShadowCard("troop1");
+		var scimitar = scn.GetShadowCard("scimitar1");
+		scn.MoveCardsToHand(scimitar);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+		scn.AttachCardsTo(troop, card);
+		scn.FreepsPass();
+
+		// "Bearer cannot bear any Shadow cards": the Troop is the only [moria] Orc
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertEquals(13 - 1, scn.GetStrength(troop));
+		assertFalse(scn.ShadowPlayAvailable(scimitar));
+
+		scn.HinderCard(card);
+		scn.ShadowRefreshDecision();
+		assertEquals(13, scn.GetStrength(troop));
+		assertTrue(scn.ShadowPlayAvailable(scimitar));
+		scn.ShadowPlayCard(scimitar);
+		// "When you play this possession, you may draw a card"
+		scn.ShadowDeclineOptionalTrigger();
+		assertAttachedTo(scimitar, troop);
+		assertTrue(scn.IsHindered(card));
+
+		// Nobody is assigned, so there is no skirmish
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.PassRegroupActions();
+		assertTrue(scn.FreepsDecisionAvailable("another move"));
+		assertTrue(scn.IsHindered(card));
+
+		scn.FreepsChooseToStay();
+		assertTrue(scn.FreepsDecisionAvailable("Reconcile"));
+		// Restored, with its -1 back, and the Scimitar (+2) still on the minion
+		assertFalse(scn.IsHindered(card));
+		assertAttachedTo(card, troop);
+		assertAttachedTo(scimitar, troop);
+		assertEquals(13 - 1 + 2, scn.GetStrength(troop));
+		assertInZone(Zone.HAND, boromir);
+	}
 }

@@ -22,20 +22,11 @@
 				type: Trigger
 				optional: false
 				trigger: {
-					type: played
-					filter: self
+					type: ConstantlyCheck
 				}
-				effect: {
-					type: discard
-					select: all(another,weapon,attachedTo(bearer))
-				}
-			}
-			{
-				type: Trigger
-				optional: false
-				trigger: {
-					type: restored
-					filter: self
+				requires: {
+					type: canSpot
+					filter: another,weapon,attachedTo(bearer)
 				}
 				effect: {
 					type: discard

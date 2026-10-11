@@ -212,8 +212,10 @@ public class HinderedBorneCardTests
 	}
 
 	// The last sentence of the rules' example.  The restoring is the Free Peoples player's own reconcile, which has
-	// no card behind it (F-0361).  Where a card restores Anduril the Bow is discarded as well (F-0360;
-	// Card_07_079_Tests reads it).
+	// no card behind it.  Where a card restores Anduril the Bow is discarded as well (Card_07_079_Tests reads it).
+	// What discards is Anduril's own "Discard other weapons he bears", a standing discard that acts whenever a
+	// weapon is on its bearer while its text is in force (Ketura on Q-0223 and Q-0229); a text with a bar and no
+	// "discard" sentence leaves what was taken up where it is (Card_18_008_Tests, Card_18_046_Tests).
 	@Test
 	public void AWeaponTakenUpWhileAnItemThatBarsItWasHinderedIsDiscardedWhenThatItemIsRestored() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();

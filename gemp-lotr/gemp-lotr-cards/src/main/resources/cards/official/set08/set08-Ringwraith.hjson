@@ -129,19 +129,27 @@
 						filter: your,or(enduring,mounted),nazgul
 					}
 				]
-				effect: [
-					{
-						type: transfer
-						select: self
-						fromSupport: true
-						where: choose(unbound,companion)
-						memorizeTarget: chosenCompanion
-					}
-					{
-						type: discard
-						select: choose(mount,attachedTo(memory(chosenCompanion)))
-					}
-				]
+				effect: {
+					type: transfer
+					select: self
+					fromSupport: true
+					where: choose(unbound,companion)
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: ConstantlyCheck
+				}
+				requires: {
+					type: canSpot
+					filter: mount,attachedTo(bearer)
+				}
+				effect: {
+					type: discard
+					select: all(mount,attachedTo(bearer))
+				}
 			}
 			{
 				type: modifier

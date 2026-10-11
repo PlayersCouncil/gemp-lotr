@@ -30,7 +30,7 @@ public class Card_03_090_ErrataTests
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: vitality 4
 					put("bow", "1_90");         // Aragorn's Bow: possession
 					put("pipe", "1_91");        // Aragorn's Pipe: possession
-					put("anduril", "7_79");     // Anduril, Flame of the West: an artifact, cheated on so its play trigger never fires
+					put("narsil", "9_34");      // Narsil, Blade of the Faithful: an artifact for a [gondor] Man (a hand weapon; the Bow is a ranged weapon); its response needs 2 [gondor] Men
 					put("poison", "8_28");      // Spider Poison: a Shadow possession; nothing unless its bearer is assigned
 					put("sam", "1_311");        // Sam, Son of Hamfast: Ring-bound, not the Ring-bearer
 					put("gimli", "1_13");       // Gimli, Son of Gloin: vitality 3
@@ -87,10 +87,10 @@ public class Card_03_090_ErrataTests
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var bow = scn.GetFreepsCard("bow");
 		var pipe = scn.GetFreepsCard("pipe");
-		var anduril = scn.GetFreepsCard("anduril");
+		var narsil = scn.GetFreepsCard("narsil");
 
 		scn.MoveCompanionsToTable(aragorn);
-		scn.AttachCardsTo(aragorn, anduril, bow, pipe);
+		scn.AttachCardsTo(aragorn, narsil, bow, pipe);
 		scn.MoveCardsToHand(hand);
 		scn.MoveCardsToHand(scn.GetFreepsCard("chieftain"), scn.GetFreepsCard("lurtz"));
 
@@ -113,10 +113,10 @@ public class Card_03_090_ErrataTests
 		assertEquals(1, scn.GetWoundsOn(warden));
 		assertEquals(0, scn.GetWoundsOn(chieftain));
 
-		// Two possessions; Anduril is an artifact.
+		// Two possessions; Narsil is an artifact.
 		assertEquals(2, scn.ShadowGetCardChoiceCount());
 		assertTrue(scn.ShadowHasCardChoiceAvailable(bow, pipe));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(anduril));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(narsil));
 		scn.ShadowChooseCard(bow);
 
 		assertTrue(scn.FreepsDecisionAvailable("prevent"));
@@ -125,7 +125,7 @@ public class Card_03_090_ErrataTests
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertInDiscard(bow);
 		assertAttachedTo(pipe, aragorn);
-		assertAttachedTo(anduril, aragorn);
+		assertAttachedTo(narsil, aragorn);
 		assertEquals(2, scn.GetFreepsHandCount());
 		assertEquals(1, scn.GetFreepsDiscardCount());
 		assertInDiscard(hand);
@@ -193,7 +193,7 @@ public class Card_03_090_ErrataTests
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var bow = scn.GetFreepsCard("bow");
 		var pipe = scn.GetFreepsCard("pipe");
-		var anduril = scn.GetFreepsCard("anduril");
+		var narsil = scn.GetFreepsCard("narsil");
 		var sam = scn.GetFreepsCard("sam");
 		var gimli = scn.GetFreepsCard("gimli");
 		var armor = scn.GetFreepsCard("armor");
@@ -203,7 +203,7 @@ public class Card_03_090_ErrataTests
 
 		scn.MoveCompanionsToTable(aragorn, sam, gimli);
 		scn.MoveAlliesToTable(bilbo);
-		scn.AttachCardsTo(aragorn, anduril, bow, pipe, poison);
+		scn.AttachCardsTo(aragorn, narsil, bow, pipe, poison);
 		scn.AttachCardsTo(frodo, sword);
 		scn.AttachCardsTo(bilbo, sword2);
 		scn.AttachCardsTo(gimli, armor);
@@ -235,7 +235,7 @@ public class Card_03_090_ErrataTests
 		// Any possession on Aragorn, the Shadow player's own included; not his artifact, not a possession
 		// on anyone else.
 		assertTrue(scn.ShadowHasCardChoiceAvailable(bow, pipe, poison));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(anduril, armor, sword, sword2));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(narsil, armor, sword, sword2));
 		assertEquals(1, scn.ShadowGetChoiceMin());
 		scn.ShadowChooseCard(poison);
 
@@ -244,7 +244,7 @@ public class Card_03_090_ErrataTests
 		assertInDiscard(poison);
 		assertAttachedTo(bow, aragorn);
 		assertAttachedTo(pipe, aragorn);
-		assertAttachedTo(anduril, aragorn);
+		assertAttachedTo(narsil, aragorn);
 		assertAttachedTo(sword, frodo);
 		assertAttachedTo(sword2, bilbo);
 		assertAttachedTo(armor, gimli);

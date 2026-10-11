@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_18_008_Tests
@@ -20,6 +21,25 @@ public class Card_18_008_Tests
 				{{
 					put("card", "18_8");
 					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetRestoreScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("armaments", "18_8");
+					// Legolas, Greenleaf: [elven] companion, strength 6, vitality 3; an archer, with an archery
+					// ability.  No test here has an archery phase with a minion in it.
+					put("legolas", "1_50");
+					// Elven Bow: possession, ranged weapon, cost 1.  "Bearer must be an Elf.  Bearer is an archer."
+					put("bow", "1_41");
+					// Elven Cloak: possession, cloak, cost 1.  "To play, spot an Elf.  Bearer must be a companion."
+					put("cloak", "1_42");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -74,5 +94,53 @@ public class Card_18_008_Tests
 		scn.FreepsPlayCard(card);
 
 		assertEquals(2, scn.GetTwilight());
+	}
+
+	// Comprehensive Rules 5.0, "hinder": while Elven Armaments is hindered its text does not apply, so its bearer
+	// may take up another possession.  Its text has a bar and no "discard" sentence, so when it is restored
+	// nothing is discarded: "because it only has the cannot-bear clause and lacks a discard clause, it will have
+	// to begrudgingly co-exist with other possessions played while it was hindered" (Ketura on Q-0223: B).  The
+	// restore here is the Free Peoples player's own reconcile.
+	@Test
+	public void APossessionItsBearerTookUpWhileItWasHinderedStaysWhenItIsRestored() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetRestoreScenario();
+
+		var armaments = scn.GetFreepsCard("armaments");
+		var legolas = scn.GetFreepsCard("legolas");
+		var bow = scn.GetFreepsCard("bow");
+		var cloak = scn.GetFreepsCard("cloak");
+		scn.MoveCompanionsToTable(legolas);
+		scn.AttachCardsTo(legolas, armaments);
+		// The Cloak stays in hand, so that the reconcile has a discard to ask about
+		scn.MoveCardsToHand(bow, cloak);
+
+		scn.StartGame();
+
+		// "Bearer cannot bear any other possessions": Legolas is the only Elf
+		assertEquals(6 + 2, scn.GetStrength(legolas));
+		assertFalse(scn.FreepsPlayAvailable(bow));
+
+		scn.HinderCard(armaments);
+		scn.FreepsRefreshDecision();
+		assertEquals(6, scn.GetStrength(legolas));
+		assertTrue(scn.FreepsPlayAvailable(bow));
+		scn.FreepsPlayCard(bow);
+		assertAttachedTo(bow, legolas);
+		assertTrue(scn.IsHindered(armaments));
+
+		// No minion: the Shadow phase is followed by the regroup phase
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.PassRegroupActions();
+		assertTrue(scn.FreepsDecisionAvailable("another move"));
+		assertTrue(scn.IsHindered(armaments));
+
+		scn.FreepsChooseToStay();
+		assertTrue(scn.FreepsDecisionAvailable("Reconcile"));
+		// Restored, with its bonus back, and both possessions still on him
+		assertFalse(scn.IsHindered(armaments));
+		assertEquals(6 + 2, scn.GetStrength(legolas));
+		assertAttachedTo(armaments, legolas);
+		assertAttachedTo(bow, legolas);
+		assertInZone(Zone.HAND, cloak);
 	}
 }

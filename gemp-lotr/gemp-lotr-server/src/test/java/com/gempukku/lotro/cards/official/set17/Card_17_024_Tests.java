@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_17_024_Tests
@@ -23,6 +24,9 @@ public class Card_17_024_Tests
 					put("pipe", "1_74");
 					put("staff", "2_29");
 					put("gandalf", "1_364");
+					put("radagast", "9_26");     // Radagast, The Brown: the [gandalf] Wizard who is not Gandalf
+					put("bag", "18_26");         // Radagast's Herb Bag: possession with no class, cost 1; bearer must be a [gandalf] Wizard
+					put("hobbitglamdring", "30_29"); // Glamdring (The Hobbit): [gandalf] artifact, hand weapon, bearer must be Gandalf; its trigger needs a skirmish won
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -154,5 +158,100 @@ public class Card_17_024_Tests
 		assertEquals(0, scn.GetBurdens());
 		assertEquals(1, scn.GetThreats());
 		assertEquals(0, scn.GetWoundsOn(gandalf));
+	}
+
+	// Legacy Ruling 1: "Possessions may still be played on or transferred to bearer, but they will immediately be
+	// discarded once attached."  The play is in the test above; this is the transfer.
+	@Test
+	public void APossessionTransferredToTheBearerIsDiscardedAsItArrives() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var shadowfax = scn.GetFreepsCard("shadowfax");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var radagast = scn.GetFreepsCard("radagast");
+		var bag = scn.GetFreepsCard("bag");
+		scn.MoveCompanionsToTable(gandalf, radagast);
+		scn.AttachCardsTo(gandalf, shadowfax);
+		scn.AttachCardsTo(radagast, bag);
+
+		scn.StartGame();
+
+		assertAttachedTo(bag, radagast);
+		// Gandalf is the only other Wizard who could bear the Herb Bag
+		assertTrue(scn.FreepsTransferAvailable(bag));
+		scn.FreepsTransferCard(bag);
+
+		// 1 for the transfer
+		assertEquals(1, scn.GetTwilight());
+		assertInZone(Zone.DISCARD, bag);
+		assertAttachedTo(shadowfax, gandalf);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	// Comprehensive Rules 5.0, "hinder": while Shadowfax is hindered its text does not apply, and a possession
+	// played on its bearer stays.  When it is restored the standing discard is in force again and the possession
+	// is discarded (Ketura on Q-0223).  The restore here is the Free Peoples player's own reconcile.
+	@Test
+	public void APossessionTheBearerTookUpWhileItWasHinderedIsDiscardedWhenItIsRestored() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var shadowfax = scn.GetFreepsCard("shadowfax");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var pipe = scn.GetFreepsCard("pipe");
+		var staff = scn.GetFreepsCard("staff");
+		scn.MoveCompanionsToTable(gandalf);
+		scn.AttachCardsTo(gandalf, shadowfax);
+		// The Wizard Staff stays in hand, so that the reconcile has a discard to ask about
+		scn.MoveCardsToHand(pipe, staff);
+
+		scn.StartGame();
+		scn.HinderCard(shadowfax);
+		scn.FreepsRefreshDecision();
+		scn.FreepsPlayCard(pipe);
+		assertAttachedTo(pipe, gandalf);
+		assertTrue(scn.IsHindered(shadowfax));
+
+		// No minion: the Shadow phase is followed by the regroup phase
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.PassRegroupActions();
+		assertTrue(scn.FreepsDecisionAvailable("another move"));
+		assertTrue(scn.IsHindered(shadowfax));
+		assertAttachedTo(pipe, gandalf);
+
+		scn.FreepsChooseToStay();
+		assertTrue(scn.FreepsDecisionAvailable("Reconcile"));
+		assertFalse(scn.IsHindered(shadowfax));
+		assertAttachedTo(shadowfax, gandalf);
+		assertInZone(Zone.DISCARD, pipe);
+		assertInZone(Zone.HAND, staff);
+	}
+
+	// Ketura on Q-0223: the discard and the bar are two effects that name different things.  "An artifact hand
+	// weapon that was on bearer before GOTM was played would therefore not be discarded: the discard effect only
+	// hits possessions, and 'cannot bear' only prevents new bearings."  The only artifact hand weapon a [gandalf]
+	// Wizard can bear is Glamdring of The Hobbit sets (F-0427).
+	@Test
+	public void AnArtifactHandWeaponBorneBeforeItIsPlayedIsNotDiscarded() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var shadowfax = scn.GetFreepsCard("shadowfax");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var glamdring = scn.GetFreepsCard("hobbitglamdring");
+		var pipe = scn.GetFreepsCard("pipe");
+		scn.MoveCompanionsToTable(gandalf);
+		// An artifact that is a hand weapon, and a possession
+		scn.AttachCardsTo(gandalf, glamdring, pipe);
+		scn.MoveCardsToHand(shadowfax);
+
+		scn.StartGame();
+
+		scn.FreepsPlayCard(shadowfax);
+
+		assertAttachedTo(shadowfax, gandalf);
+		assertInZone(Zone.DISCARD, pipe);
+		assertAttachedTo(glamdring, gandalf);
+		// 7, + 1 for Shadowfax, + 2 for Glamdring
+		assertEquals(10, scn.GetStrength(gandalf));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

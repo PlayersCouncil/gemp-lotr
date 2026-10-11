@@ -236,6 +236,45 @@ public class Card_17_024_ErrataTests
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
+	// Comprehensive Rules 5.0, "hinder": while Shadowfax is hindered its text does not apply, and a possession
+	// played on its bearer stays.  When it is restored the standing discard is in force again and the possession
+	// is discarded (Ketura on Q-0223).  The restore here is the Free Peoples player's own reconcile.
+	@Test
+	public void APossessionTheBearerTookUpWhileItWasHinderedIsDiscardedWhenItIsRestored() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var shadowfax = scn.GetFreepsCard("shadowfax");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var pipe = scn.GetFreepsCard("pipe");
+		var wizardstaff = scn.GetFreepsCard("wizardstaff");
+		scn.MoveCompanionsToTable(gandalf);
+		scn.AttachCardsTo(gandalf, shadowfax);
+		// The Wizard Staff stays in hand, so that the reconcile has a discard to ask about
+		scn.MoveCardsToHand(pipe, wizardstaff);
+
+		scn.StartGame();
+		scn.HinderCard(shadowfax);
+		scn.FreepsRefreshDecision();
+		scn.FreepsPlayCard(pipe);
+		assertAttachedTo(pipe, gandalf);
+		assertTrue(scn.IsHindered(shadowfax));
+
+		// The fellowship moves: a hindered Shadowfax offers nothing.  No minion, so the Shadow phase is followed
+		// by the regroup phase.
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.PassRegroupActions();
+		assertTrue(scn.FreepsDecisionAvailable("another move"));
+		assertTrue(scn.IsHindered(shadowfax));
+		assertAttachedTo(pipe, gandalf);
+
+		scn.FreepsChooseToStay();
+		assertTrue(scn.FreepsDecisionAvailable("Reconcile"));
+		assertFalse(scn.IsHindered(shadowfax));
+		assertAttachedTo(shadowfax, gandalf);
+		assertInDiscard(pipe);
+		assertInZone(Zone.HAND, wizardstaff);
+	}
+
 	@Test
 	public void TransferredToAnotherWizardItDiscardsThePossessionHeBears() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
