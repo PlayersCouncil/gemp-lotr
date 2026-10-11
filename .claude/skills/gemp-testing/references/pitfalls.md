@@ -479,7 +479,13 @@ down after `SkipToSite`, not before.
 
 **Site 9 ends the game.** A fellowship that survives the skirmishes at site 9 has won, so `SkipToSite(9)` returns
 with the game over. To test something at site 9, `SkipToSite(8)` and then pass the fellowship phase: the
-fellowship moves, and the test is in the Shadow phase at site 9. A skipper that plays on through the winning
+fellowship moves, and the test is in the Shadow phase at site 9. If that Shadow phase ends with no minion in
+play the game is over at once and no regroup decision arrives (a probe: the Shadow player passes, the phase
+reads REGROUP, `GameIsFinished()`, nobody asked): a test there that plays no minion rests on the Shadow player's
+decision or on `GameIsFinished()`, never on `AwaitingFreepsRegroupPhaseActions()` (Card_01_363_Tests). In the PC
+formats (`winAtEndOfRegroup: true` in lotrFormats.hjson; `"pc_fotr_block"` as the scenario's format) the
+regroup phase at site 9 IS played, so a regroup text at site 9 is a board in play there (Speak "Friend" and
+Enter 2_26 is offered, and lays no site 10). A skipper that plays on through the winning
 turn finds nobody being asked anything and fails, saying that the game is over and who won it:
 `SkipToOtherPlayersTurn()` from player 1's fellowship phase at site 8 (it was a bare `NoSuchElementException`
 until engine pass 24). Under a modifier that
@@ -1233,7 +1239,11 @@ site where the other player's lies replaces it with its twin, a card of the same
 what it is (`assertSame(freepsSite2, scn.GetSite(2))`, each player's site fetched with `GetFreepsSite(2)` and
 `GetShadowSite(2)` before it is laid; `Card_01_110_Tests`). Whether a twin may replace a twin at all is Q-0226
 (CR 4.2 "site": "You can't replace a site card with the same site card"; the game allows it): a new test that
-replaces a site reads the game as built, stays active, and names that question.
+replaces a site reads the game as built, stays active, and names that question. The board for "(replacing
+opponent's site if necessary)" that a game reaches: the first player at site 3 on his third turn, the second
+player's site 4 laid with `MoveCardToAdventurePath` (as where that player played his next site himself); the
+nearest miss is a second copy played when the player's own site already lies next, which on a numbered path
+plays nothing (Card_02_026_Tests; whether it may replace his own site on a Shadows-block path is Q-0238).
 
 **A table in a format that uses Maps.** `VirtualTableScenario.PCMovie` works with every constructor: each deck is
 given the Map of the path its sites are on (`FellowshipMap` 102_74, `TowersMap` 102_75, `KingMap` 102_76). The

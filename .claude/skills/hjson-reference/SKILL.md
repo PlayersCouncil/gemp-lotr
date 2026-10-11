@@ -639,6 +639,8 @@ A top-level `AddThreats` cost is known to the action's requirements, to the adva
 **Other:**
 `PutOnRing`, `TakeOffRing`, `CorruptRingBearer`, `ReconcileHand(player?)`, `EndPhase`, `MakeSelfRingBearer`, `PlaySite(number, player?, block?, filter?)`, `TakeControlOfSite(player?)`, `LiberateSite(controller?, memorize?)`, `Hinder(select, count?, player?, memorize?)`, `Restore(select, count?, player?, memorize?)`
 
+`EndPhase` ("end your Shadow phase", Tol Brandir 1_363) does not move the game on: it bars phase events and phase special abilities and plays from hand until the end of the phase, so the player is still asked "Play Shadow action or Pass" with only the pass on offer. A test reads the offers gone, then passes.
+
 ---
 
 ## Enums Quick Reference
