@@ -768,6 +768,10 @@ decision, still in the regroup phase with `GetMoveCount()` 1 of `GetMoveLimit()`
 skipper runs on into the other player's fellowship phase, where an `assertFalse` of "another move" shows
 nothing. Keep an undrawn card in the mover's deck and read the count, the limit and the reconcile
 (Card_94_005_Tests).
+The trigger `FPDecidedToStay` (Very Nice Friends 7_76, "If you do not move again this turn", its only user) fires
+both ways: at a "no" to another move, and when the turn ends at the move limit with no question asked. Either
+way it comes before the mover's own reconcile, so a hand it discards is drawn afresh (Card_07_076_Tests; whether
+that order is meant is Q-0253).
 
 **The move limit never reads below 1.** The engine floors it (`ModifiersLogic.getMoveLimit`), so from the base
 of 2 a penalty of 1 and a penalty of 2 both read 1, and a "move limit is -1" card whose every board starts from 2

@@ -441,6 +441,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Costs, and effects, in the order printed (Q-0080) [F-0123]
 - A RemoveTwilight cost beside a PlayCardFromDiscard needs removedTwilight (F-0046, F-0141) [F-0450, F-0453, Q-0019]
 - "Play any number of / up to N ... from your discard pile" is withheld when nothing can be played (Q-0086)
+- "If you have initiative, you may play this <card> from your discard pile" is a clause of its own, typed `Activated [+ -]` (Hobbitses Are Dead 7_61; F-0055)
 - "Hinder/remove X ... to play X cards from your discard pile": X is capped (Q-0094)
 - An action's costs are judged in order, with its own exertions counted (F-0184)
 - Response events are not played by "play an event from ..." (F-0186)
