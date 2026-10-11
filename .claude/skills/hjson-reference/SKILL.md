@@ -272,7 +272,8 @@ The filters in a list are asked in order. Put exclusions ahead of `Playable`: as
 | Filter | Params | Meaning |
 |--------|--------|---------|
 | `Culture(X)` | culture | Matches culture X |
-| `Name(X)` / `Title(X)` | title | Matches card title |
+| `Name(X)` / `Title(X)` | title | Matches card title, with accents, spaces and capitals passed over (`Names.SanitizeName`): `name(Théoden)` finds Theoden, Last of His House 102_55, whose title has no accent |
+| `Subtitle(X)` | subtitle | Matches the card's subtitle, passed over the same way: `bearer,or(subtitle(Of Many Colours),subtitle(Agent of the Dark Lord))` (Saruman's Staff 4_174, F-0426) |
 | `Race(memory(X))` | memory | Race of memorized card |
 | `Side(X)` | side | FP or Shadow side |
 | `Signet(X)` | signet | Has signet X |

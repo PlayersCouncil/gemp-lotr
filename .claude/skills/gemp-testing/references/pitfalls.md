@@ -294,6 +294,9 @@ A Response to "is about to be overwhelmed" that only adds strength (Footman's Ar
 its bearer is still doubled (CR 4.2, the ruling on the card) and not once he is not, though the cost could be
 paid: the skirmish then resolves at once and the bonus ends with it, so the bonus itself is read only between two
 offers, on a board where one use is not enough (`Card_07_093_Tests`).
+A response EVENT with another copy in hand goes the same way: once one copy is played, "Optional responses" comes
+back with the other copy for the same death, and `ShadowDeclineOptionalTrigger()` answers it before the next
+skirmish can be chosen (Beyond Dark Mountains 4_141; probed at the landing of dec-b4_78).
 
 **Two at once, one use.** A required trigger with a limit on uses fires once when one event raises it twice (two companions exerting together): no ordering question is asked for the second.
 
@@ -364,6 +367,11 @@ card in hand that can be played, an event included, is read with `FreepsPlayAvai
 A card's own "you may play this ... from your discard pile" is a use too (Gollum, Plotting Deceiver 7_58: "Use
 Gollum, Plotting Deceiver"): `ShadowPlayAvailable(card)` is false for the card lying in the pile, and
 `ShadowActionAvailable(card)` and `ShadowUseCardAction(card)` read and take it (`Card_07_058_Tests`).
+A response EVENT whose definition gives its play a `text:` (Beyond Dark Mountains 4_141, "Play in response to
+death of <the character>"; the only one) is read by neither at its "Optional responses" decision:
+`ShadowPlayAvailable(card)` and `ShadowActionAvailable(card)` are both false there, though `ShadowPlayCard(card)`
+plays it. Read the offer with `ShadowHasOptionalTriggerAvailable(card)` (probed at the landing of dec-b4_78). A
+response event with no such text is read with `ShadowPlayAvailable` (Ravage the Defeated 4_32).
 
 **Using a card's action.** `FreepsUseCardAction(card)` and `ShadowUseCardAction(card)` take the action `FreepsActionAvailable(card)` sees, even where the game lists another of the card's actions first (a possession that another companion could bear lists "Transfer" before "Use"). A card that offers no such action has the first action listed for it taken, as before: an optional trigger or a response is accepted this way. `FreepsUseCardAction(card, "Use")` is no longer needed to get past a transfer.
 

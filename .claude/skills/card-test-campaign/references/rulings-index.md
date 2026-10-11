@@ -384,7 +384,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 ## What is offered and what is asked
 
 - The no-effect flag: which cards assert it [Q-0034]
-- An optional trigger or ability that costs nothing and would do nothing is withheld by the engine (Q-0224: A2; Q-0231: B; engine pass 26) [Q-0034, F-0407, F-0408, F-0402, F-0406, Q-0033, F-0411, F-0417, F-0413, Q-0104, F-0410, F-0423, Q-0102, Q-0243, Q-0245, Q-0029, F-0379, Q-0107]
+- An optional trigger or ability that costs nothing and would do nothing is withheld by the engine (Q-0224: A2; Q-0231: B; engine pass 26) [Q-0034, F-0407, F-0408, F-0402, F-0406, Q-0033, F-0411, F-0417, F-0413, Q-0104, F-0410, F-0426, F-0423, Q-0102, Q-0243, Q-0245, Q-0029, F-0379, Q-0107]
 - A choice whose every branch has nothing to act on (F-0116) [F-0293, F-0370, F-0366]
 - "<Do X> or <do Y>": each branch is written as the effect itself (F-0310, Here Lies Balin 1_19) [Q-0209, F-0222]
 - A parenthesis with its own price (Q-0089)
@@ -500,6 +500,8 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - An old test that is kept and put in form, and stands on a board outside play [Q-0178]
 - FreepsGetCardChoiceCount() at a choice of phase actions
 - Check D on a change that lasts the turn: read it in a later phase than the one it was made in (Radagast 59_26)
+- "Themselves again once it is over" wants the source of the modifier still in play (Lórien Swordsman 4_78)
+- A ruling that a switching card has NO effect on certain named cards (Legacy Ruling 6, Saruman's Staff 4_174; F-0426; Q-0246, open) [Q-0236, Q-0034, Q-0224]
 - Check D on "until the end of the turn" for a card the end of the turn removes
 - Check D on "until the regroup phase" for an effect that can begin in a regroup phase (Q-0160, open)
 - Check D on a delayed "at the start of the regroup phase" that an ability sets up: fight a skirmish between (Under Foot 60_52, Flaming Brand 52_32) [Q-0164]
