@@ -18,7 +18,19 @@ public class Card_01_147_Tests
 				new HashMap<>()
 				{{
 					put("card", "1_147");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetAssignmentScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("guard", "1_147");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a maneuver ability never used
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -63,18 +75,40 @@ public class Card_01_147_Tests
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void UrukGuardTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	// "Prevent the opponent from assigning that companion to this minion": the opponent of the Guard's owner is
+	// the Free Peoples player alone.  The Shadow player may still assign his own Guard to the companion spotted, among
+	// the minions left over once the Free Peoples player has assigned (F-0490; Ketura, 2026-10-12).
+	@Test
+	public void TheShadowPlayerMayAssignTheGuardToTheCompanionSpottedThoughTheFreePeoplesPlayerMayNot() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetAssignmentScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		var guard = scn.GetShadowCard("guard");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(guard);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPass();
 
-		assertEquals(4, scn.GetTwilight());
+		// Aragorn is spotted.
+		scn.ShadowUseCardAction(guard);
+		scn.ShadowChooseCard(aragorn);
+		assertEquals(1, scn.GetWoundsOn(guard));
+		scn.FreepsPass();
+		scn.ShadowPass();
+
+		// The Free Peoples player may not assign Aragorn to the Guard; Frodo he may.
+		assertFalse(scn.FreepsCanAssignAgainst(aragorn, guard));
+		assertTrue(scn.FreepsCanAssignAgainst(frodo, guard));
+		scn.FreepsDeclineAssignments();
+
+		// The Guard is left over, and the Shadow player assigns it to Aragorn.
+		assertTrue(scn.ShadowCanAssignAgainst(aragorn, guard));
+		scn.ShadowAssignToMinions(aragorn, guard);
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, guard));
+		assertTrue(scn.FreepsAwaitingSkirmishChoice());
 	}
 }
