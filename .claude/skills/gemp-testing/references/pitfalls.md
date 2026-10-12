@@ -928,8 +928,9 @@ The relentless round (CR 5.0 "relentless"; a third round after the fierce one, o
 fierce) reads as the first does too: `Phase.ASSIGNMENT`, the assignment actions
 pending, `InFierceRound()` FALSE. `InRelentlessRound()` names it (G-0043): true from the game's "Relentless
 skirmishes" until the last relentless skirmish is over, and false in the first round and in the fierce one. It is
-passed with `PassAssignmentActions()` and `PassSkirmishActions()`, not the
-`Fierce` ones (`mechanics/keywords/RelentlessTests`).
+passed with `PassAssignmentActions()` and `PassSkirmishActions()` (`mechanics/keywords/RelentlessTests`); the
+`Fierce` ones do the same thing (each is `PassCurrentPhaseActions()`), so either works and the name is for the
+reader (Card_02_101_Tests passes the relentless assignment with `PassFierceAssignmentActions()`).
 The additional phase of The Witch-king's Beast 12_184 (`setupExtraAssignmentAndSkirmishes`) is his alone and is
 neither round: both readings are false in it, and no keyword makes it (Q-0267). With a relentless minion in play
 the two are one round, `InRelentlessRound()` true, with the relentless minions and The Witch-king in it.
@@ -964,6 +965,8 @@ bookend in the regroup phase there is `AwaitingShadowRegroupPhaseActions()`, pla
 but can still be wounded. Nor is he offered to an "exert a ..." choice, whatever its filter: an invalid candidate
 there has 2 vitality left or more, or he shows nothing (beside a Goblin Runner, vitality 1, "exert a companion"
 built as `choose(character,not(ally))` passed; beside Goblin Patrol Troop 1_177, vitality 3, it fails: 92_13).
+For "exert ... twice" he needs 3 left: Filibert Bolger 2_101 (vitality 2) read as not offered to his own "exert a
+Hobbit companion twice" showed nothing of `companion`; Bilbo 1_284, a Hobbit ally of vitality 3, does (dec-b1_49).
 
 **Allies live in the support area.** `MoveAlliesToTable` puts allies there, where an ally played legally goes.
 `MoveCompanionsToTable` takes companions only and fails the test if handed anything else, as `MoveAlliesToTable`
