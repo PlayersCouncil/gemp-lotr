@@ -343,11 +343,9 @@ public class Card_V3_053_Tests
 		assertEquals(5, scn.GetTwilight());
 		assertEquals(1, scn.GetWoundsOn(explorer));
 		assertTrue(scn.IsHindered(easterling));
-		// The Free Peoples player's "may ... to prevent this" has a cost he can pay, so he is asked,
-		// though there is no assignment for it to prevent.
-		assertTrue(scn.FreepsDecisionAvailable("Would you like to make"));
-
-		scn.FreepsChooseNo();
+		// There is no assignment for the Free Peoples player's "may ... to prevent this" to prevent, so he is
+		// not asked (Q-0114; engine pass 32: the assignment says it will assign nobody).
+		assertFalse(scn.FreepsDecisionAvailable("Would you like to make"));
 
 		assertInDiscard(honor);
 		assertFalse(scn.IsCharAssigned(explorer));

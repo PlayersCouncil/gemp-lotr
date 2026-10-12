@@ -78,7 +78,10 @@ public class PutCardsFromHandOnTopOfDeck implements EffectAppenderProducer {
                 });
 
         // Taught for Q-0224 (IdleOffers): with no card in that hand to choose, nothing is placed on the deck.
-        return TaughtForecast.actsOnWhatItFindsInHand(result, PlayerResolver.resolvePlayer(hand), cardResolver);
+        // A choice it is a branch of hears this too, except of the whole hand, as for the whole-hand discard
+        // (Ketura on Q-0255: a player always has a hand).
+        final EffectAppender taught = TaughtForecast.actsOnWhatItFindsInHand(result, PlayerResolver.resolvePlayer(hand), cardResolver);
+        return select.toLowerCase().startsWith("all(") ? TaughtForecast.forOffersOnly(taught) : taught;
     }
 
 }

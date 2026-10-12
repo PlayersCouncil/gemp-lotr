@@ -4,6 +4,7 @@ import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.CardResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.common.Filterable;
@@ -82,6 +83,20 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
             public boolean isPlayabilityCheckedAsCostOfEffect() {
                 return askedAheadAsCost;
             }
+
+            // With no character one of those minions could be assigned to, nobody is assigned (engine pass 32).
+            // This is the effect's own forecast, so it is heard by the no-effect flag (an ability with a cost is
+            // offered and flagged: "Exert Lurtz twice to assign it to an unbound companion", Lurtz 18_118, with
+            // none), by a choice it is a branch of and by a prevention, as well as by the rule of Q-0224
+            // (IdleOffers), which had it alone until then.  Where the character is read from memory, or is not
+            // found by a choice, the resolver cannot say whom it finds and nothing is said.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                final EffectForecast found = fpCharacterResolver.forecast(actionContext);
+                if (found.getReach() != null && found.getReach().isEmpty())
+                    return EffectForecast.NOTHING;
+                return super.forecast(actionContext);
+            }
         };
         result.addEffectAppender(fpCharacterResolver);
         result.addEffectAppender(
@@ -140,9 +155,7 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
             result.addEffectAppender(assignAppender);
         }
 
-        // Taught for Q-0224 (IdleOffers): with no character one of those minions could be assigned to, nobody is
-        // assigned.
-        return TaughtForecast.actsOnWhatItFinds(result, fpCharacterResolver);
+        return result;
     }
 
     private FilterableSource getSource(String filter, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {

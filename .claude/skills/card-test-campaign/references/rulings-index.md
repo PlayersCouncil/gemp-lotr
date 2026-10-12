@@ -412,8 +412,8 @@ finding an entry, not for applying one: read the entry itself before an expectat
 ## What is offered and what is asked
 
 - The no-effect flag: which cards assert it [Q-0034]
-- An optional trigger or ability that costs nothing and would do nothing is withheld by the engine (Q-0224: A2; Q-0231: B; engine pass 26) [Q-0034, F-0407, F-0408, F-0402, F-0406, Q-0262, F-0423, F-0476, Q-0033, F-0411, F-0417, F-0428, F-0420, F-0413, Q-0104, F-0410, F-0426, Q-0243, Q-0112, F-0473, Q-0102, Q-0245, Q-0029, F-0379, Q-0107]
-- A choice whose every branch has nothing to act on (F-0116) [F-0293, Q-0220, Q-0224, Q-0255, F-0471, F-0370, F-0366]
+- An optional trigger or ability that costs nothing and would do nothing is withheld by the engine (Q-0224: A2; Q-0231: B; engine pass 26) [Q-0034, F-0407, F-0408, F-0402, F-0406, Q-0262, F-0426, Q-0246, F-0423, F-0476, Q-0033, F-0411, F-0417, Q-0248, F-0428, F-0420, F-0413, Q-0104, F-0410, Q-0243, Q-0112, F-0473, Q-0102, Q-0245, Q-0029, F-0379, Q-0107]
+- A choice whose every branch has nothing to act on (F-0116) [F-0293, Q-0220, Q-0224, F-0471, Q-0255, F-0370, F-0366]
 - "<Do X> or <do Y>": each branch is written as the effect itself (F-0310, Here Lies Balin 1_19) [Q-0209, F-0222]
 - "Discard his or her hand or <do Y>": with no card in hand the choice is still asked, and the discard may be taken for nothing (Pelennor Flat 7_345; Q-0255: B) [Q-0224]
 - "<Do X> or choose an opponent who may <do Y>": with nothing for the opponent to do the choice is still asked, and the opponent may be chosen for nothing (Crashed Gate 8_119; Q-0257: A) [F-0341, Q-0255]
@@ -549,7 +549,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Check D on a change that lasts the turn: read it in a later phase than the one it was made in (Radagast 59_26)
 - "Themselves again once it is over" wants the source of the modifier still in play (Lórien Swordsman 4_78)
 - A card that bars an act ("may not look at or reveal", "cannot take wounds", "may not be assigned", "cannot use special abilities") is tested on ONE act it stops, and its control (Q-0264: B2; built by engine pass 30) [Q-0265]
-- A ruling that a switching card has NO effect on certain named cards (Legacy Ruling 6, Saruman's Staff 4_174; F-0426; Q-0246, open) [Q-0236, Q-0034, Q-0224]
+- A ruling that a switching card has NO effect on certain named cards (Legacy Ruling 6, Saruman's Staff 4_174; F-0426; Q-0246: keep) [Q-0236, Q-0034, Q-0224]
 - Check D on "until the end of the turn" for a card the end of the turn removes
 - Check D on "until the regroup phase" for an effect that can begin in a regroup phase (Q-0160, open)
 - Check D on a delayed "at the start of the regroup phase" that an ability sets up: fight a skirmish between (Under Foot 60_52, Flaming Brand 52_32) [Q-0164]

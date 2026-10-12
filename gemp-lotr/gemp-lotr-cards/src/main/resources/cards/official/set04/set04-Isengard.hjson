@@ -1869,15 +1869,12 @@
 			{
 				type: activated
 				phase: maneuver
-				requires: [
-					{
-						type: sarumanFirstSentenceActive
-					}
-					{
-						type: cantSpot
-						filter: bearer,or(subtitle(Of Many Colours),subtitle(Agent of the Dark Lord))
-					}
-				]
+				requires: {
+					type: sarumanFirstSentenceActive
+				}
+				// Borne by Saruman, Of Many Colours 12_54 or Agent of the Dark Lord 12_144, whose texts do not read
+				// the switch, it "does not have any effect" (Legacy Ruling 6), and the game does not offer it: no
+				// card in play but the Staff reads the switch (F-0426, Q-0246; engine pass 32).
 				effect: {
 					type: addModifier
 					modifier: {

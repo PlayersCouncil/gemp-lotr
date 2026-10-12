@@ -343,4 +343,57 @@ public class ChoiceWithNothingOnAnyBranchTests
 		// The card is being shown to both players
 		assertTrue(scn.FreepsDecisionAvailable("revealed card(s) from top of deck"));
 	}
+
+	protected VirtualTableScenario GetTaughtBranchScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// Duality: a [gollum] Fellowship event, cost 0.  "Spot Sméagol to choose a Shadow player who must
+					// discard a Shadow card from hand or remove (2)."  The Shadow player chooses.
+					put("duality", "13_47");
+					put("duality2", "13_47");
+					put("smeagol", "5_28");     // Sméagol, Old Noser: a regroup ability, not used here
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// A branch that says it will do nothing only because it was taught to say so for the rule of Q-0224 (twilight
+	// removed from an empty pool, a card discarded from a hand with none to take) is heard by the choice as well
+	// (engine pass 32).  Until then it kept the question, and a definition wanted an If round the choice (Seeing
+	// Stone of Orthanc 9_38, F-0471).  The whole-hand discard is not heard (Q-0255): Pelennor Flat 7_345's file.
+	@Test
+	public void AChoiceWhoseBranchesWereTaughtToSayTheyDoNothingIsNotAsked() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetTaughtBranchScenario();
+
+		var duality = scn.GetFreepsCard("duality");
+		var duality2 = scn.GetFreepsCard("duality2");
+		var smeagol = scn.GetFreepsCard("smeagol");
+		scn.MoveCompanionsToTable(smeagol);
+		scn.MoveCardsToHand(duality, duality2);
+
+		scn.StartGame();
+
+		// No card in the Shadow player's hand and nothing in the pool: the event is played and nobody is asked.
+		assertEquals(0, scn.GetShadowHandCount());
+		assertEquals(0, scn.GetTwilight());
+		scn.FreepsPlayCard(duality);
+
+		assertInDiscard(duality);
+		assertFalse(scn.ShadowDecisionAvailable("Choose action to perform"));
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// With (1) in the pool, removing (2) cannot be done in full and would still remove something: the
+		// question is put, as it always was, and the Shadow player may take either.
+		scn.SetTwilight(1);
+		scn.FreepsPlayCard(duality2);
+
+		assertTrue(scn.ShadowDecisionAvailable("Choose action to perform"));
+		scn.ShadowChoose("Remove");
+		assertEquals(0, scn.GetTwilight());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
 }

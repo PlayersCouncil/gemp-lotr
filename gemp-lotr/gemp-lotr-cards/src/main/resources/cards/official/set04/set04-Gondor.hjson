@@ -1294,16 +1294,13 @@
 				trigger: {
 					type: moves
 				}
-				requires: [
-					{
-						type: canSpot
-						filter: unbound,hobbit
-					}
-					{
-						type: canSpot
-						filter: minion
-					}
-				]
+				// The first wound below stands outside the count, so this is what keeps a yes from wounding a minion
+				// with no unbound Hobbit to spot.  With no minion the game does not offer the trigger (Q-0224): the
+				// wounds have nobody to choose (F-0428; engine pass 32 took out the canSpot minion that said so).
+				requires: {
+					type: canSpot
+					filter: unbound,hobbit
+				}
 				// "A minion for each unbound Hobbit you spot": the player says how many he spots by the minions
 				// he chooses.  The wounds are offered one at a time, each a choice of a minion or of none, since
 				// one minion may take more than one of them (CR 4.2 "for each"); the first none ends them, and

@@ -1656,4 +1656,83 @@ public class NoEffectFlagTests
 		assertEquals(2, scn.GetWoundsOn(frodo));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
+
+	protected VirtualTableScenario GetAssignmentScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// Lurtz, Halfling Hunter: an archer. "Assignment: Exert Lurtz twice to assign it to an unbound companion.
+					// The Free Peoples player may exert that companion or add a burden to prevent this."
+					put("lurtz", "18_118");
+					put("savage", "1_151");     // Uruk Savage: an Uruk-hai, strength 5, vitality 3; Damage +1 is its whole text
+					put("sam", "1_311");        // Sam, Son of Hamfast: a Hobbit companion, Ring-bound
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: an unbound companion
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// An assignment a card makes, with nobody it could make (engine pass 32).  The ability has a cost, so it is
+	// offered; with no unbound companion its effect will assign nobody, and the flag says so.
+	@Test
+	public void AnAssignmentWithNobodyToAssignIsFlagged() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetAssignmentScenario();
+
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		scn.MoveCompanionsToTable(sam);
+
+		var lurtz = scn.GetShadowCard("lurtz");
+		var savage = scn.GetShadowCard("savage");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(savage);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		// Lurtz is an archer: he goes down once the archery phase is over.
+		scn.MoveMinionsToTable(lurtz);
+		scn.FreepsPass();
+
+		// Frodo is the Ring-bearer and Sam is Ring-bound: no companion is unbound.
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+		assertTrue(scn.ShadowActionAvailable(lurtz));
+		assertEquals("effect", scn.ShadowActionNoEffect(lurtz));
+
+		// Taken all the same: Lurtz exerts twice and nobody is assigned.
+		scn.ShadowUseCardAction(lurtz);
+		assertEquals(2, scn.GetWoundsOn(lurtz));
+		assertFalse(scn.IsCharAssigned(lurtz));
+		assertFalse(scn.IsCharAssigned(frodo));
+		assertFalse(scn.IsCharAssigned(sam));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
+
+	@Test
+	public void AnAssignmentWithSomebodyToAssignIsNotFlagged() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetAssignmentScenario();
+
+		var sam = scn.GetFreepsCard("sam");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(sam, aragorn);
+
+		var lurtz = scn.GetShadowCard("lurtz");
+		var savage = scn.GetShadowCard("savage");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(savage);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.MoveMinionsToTable(lurtz);
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+		assertEquals("false", scn.ShadowActionNoEffect(lurtz));
+
+		scn.ShadowUseCardAction(lurtz);
+		// Aragorn is the one unbound companion, and is chosen without a question.
+		assertTrue(scn.FreepsDecisionAvailable("prevent"));
+		scn.FreepsChooseNo();
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, lurtz));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
 }

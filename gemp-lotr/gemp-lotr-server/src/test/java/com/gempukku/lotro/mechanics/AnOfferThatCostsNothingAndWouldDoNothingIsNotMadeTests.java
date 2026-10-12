@@ -34,7 +34,8 @@ import static org.junit.Assert.*;
  * <li>placing a culture token: a card says that culture tokens cannot be added (the same site; F-0423);</li>
  * <li>a transfer: no card to transfer, nobody for it to go to, or a card that is to go "from your support
  * area" and has left it;</li>
- * <li>an assignment to a skirmish: nobody the minion could be assigned to;</li>
+ * <li>an assignment to a skirmish: nobody the minion could be assigned to (since engine pass 32 the effect's own
+ * forecast, which the no-effect flag and a choice hear as well: NoEffectFlagTests);</li>
  * <li>making an ally take part in skirmishes: no ally;</li>
  * <li>stacking a card from play, and from a discard pile: nothing to stack, or nothing to stack it on;</li>
  * <li>a restore: no card that can be restored;</li>
@@ -49,7 +50,10 @@ import static org.junit.Assert.*;
  * that hand to take (of another player's hand, only that it is empty);</li>
  * <li>a card placed from a discard pile beneath a draw deck: no such card in the pile;</li>
  * <li>a draw: its player may draw no more, the Rule of 4 being spent in his own fellowship phase or a card barring
- * him from drawing (Race Text 94_30; Ketura on Q-0262: B).</li>
+ * him from drawing (Race Text 94_30; Ketura on Q-0262: B);</li>
+ * <li>the switch "the first sentence of Saruman's game text does not apply", thrown for a time: no card in play but
+ * the one throwing it has a definition that reads it (engine pass 32; Legacy Ruling 6, Saruman's Staff 4_174 on
+ * the two Sarumans whose texts open with keywords; F-0426, Q-0246).</li>
  * </ul>
  *
  * Four of the kinds have no test: making an ally take part in skirmishes, a restore, a card chosen from a
@@ -1295,5 +1299,71 @@ public class AnOfferThatCostsNothingAndWouldDoNothingIsNotMadeTests
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 		assertInZone(Zone.DECK, axe);
+	}
+
+	protected VirtualTableScenario GetSwitchScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// Saruman's Staff: "Plays on Saruman.  He is fierce and damage +1.  Maneuver: Make the first
+					// sentence of Saruman's game text not apply until the regroup phase."
+					put("staff", "4_174");
+					// Saruman, Servant of the Eye: his first sentence, "Saruman may not take wounds during the
+					// archery phase and may not be assigned to a skirmish", is one his definition says the switch
+					// turns off.
+					put("saruman", "3_69");
+					// Saruman, Of Many Colours: his text opens "Damage +1. Fierce. Lurker.", which the switch does not
+					// reach (Legacy Ruling 6); nothing in his definition reads it.
+					put("colours", "12_54");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a companion, so that minions stay
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	@Test
+	public void ThrowingTheSwitchIsOfferedWhileACardInPlayReadsIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetSwitchScenario();
+
+		scn.MoveCompanionsToTable(scn.GetFreepsCard("aragorn"));
+
+		var saruman = scn.GetShadowCard("saruman");
+		var staff = scn.GetShadowCard("staff");
+
+		scn.StartGame();
+		scn.FreepsPass();
+		scn.MoveMinionsToTable(saruman);
+		scn.AttachCardsTo(saruman, staff);
+
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+		assertTrue(scn.ShadowActionAvailable(staff));
+	}
+
+	@Test
+	public void ThrowingTheSwitchIsNotOfferedWhileNoCardInPlayReadsIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetSwitchScenario();
+
+		scn.MoveCompanionsToTable(scn.GetFreepsCard("aragorn"));
+
+		var colours = scn.GetShadowCard("colours");
+		var staff = scn.GetShadowCard("staff");
+
+		scn.StartGame();
+		scn.FreepsPass();
+		scn.MoveMinionsToTable(colours);
+		scn.AttachCardsTo(colours, staff);
+
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+
+		// The Staff's definition reads the switch too (it is not offered while the switch is thrown already),
+		// and is not counted.
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(staff));
 	}
 }

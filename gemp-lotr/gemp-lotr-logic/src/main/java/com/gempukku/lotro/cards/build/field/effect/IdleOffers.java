@@ -69,12 +69,14 @@ public final class IdleOffers {
         RESOLUTION,
         /**
          * As RESOLUTION, with the effects that were taught something for this rule answering what they were
-         * taught (TaughtForecast): a reinforcement with no token to reinforce, a transfer or an assignment
-         * with nobody to go to, a stacking with nothing to stack, a Ring already worn, a choice with nothing to
-         * choose from, a random discard from a hand that is empty or that the card may not discard from, a draw
-         * by a player who may draw no more (the Rule of 4 spent, or a bar on drawing: Q-0262).  Each
-         * answers so only to this rule; the no-effect flag is judged as it was.  This is the default, and the
-         * mode the game is played in.
+         * taught (TaughtForecast): a reinforcement with no token to reinforce, a transfer with nobody to go
+         * to, a stacking with nothing to stack, a Ring already worn, a choice with nothing to choose from, a
+         * random discard from a hand that is empty or that the card may not discard from, a draw by a player who
+         * may draw no more (the Rule of 4 spent, or a bar on drawing: Q-0262), the switch on the first sentence
+         * of Saruman's text with no other card in play that reads it (engine pass 32).  Each answers so to this
+         * rule and to a choice it is a branch of; the no-effect flag is judged as it was.  (An assignment with
+         * nobody to assign was taught here until engine pass 32, and now says it in its own forecast.)  This is
+         * the default, and the mode the game is played in.
          */
         TAUGHT
     }
