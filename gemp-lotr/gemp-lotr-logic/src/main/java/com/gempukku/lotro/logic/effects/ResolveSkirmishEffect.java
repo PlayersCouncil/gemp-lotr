@@ -11,6 +11,8 @@ import com.gempukku.lotro.logic.timing.results.*;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 
 public class ResolveSkirmishEffect extends AbstractEffect {
@@ -143,6 +145,11 @@ public class ResolveSkirmishEffect extends AbstractEffect {
 					? SkirmishType.NORMAL : skirmishType;
 			game.getActionsEnvironment().emitEffectResult(new CharacterLostSkirmishResult(loserType, loser, involving));
 		}
+		// The losing characters with their strength as the skirmish resolves, handed to the winners (F-0480): a
+		// winner's text that measures the losing character reads it as it was now, wherever it has gone by then.
+		Map<PhysicalCard, Integer> loserStrengths = new LinkedHashMap<>();
+		for (PhysicalCard loser : losers)
+			loserStrengths.put(loser, game.getModifiersQuerying().getStrength(game, loser));
 		// Legacy Ruling #2: The final removed character from a skirmish counts as a loser
 		// https://wiki.lotrtcgpc.net/wiki/Legacy_Ruling_2
 		if(losers.isEmpty()) {
@@ -152,10 +159,14 @@ public class ResolveSkirmishEffect extends AbstractEffect {
 			}
 			if(finalRemoved != null) {
 				game.getActionsEnvironment().emitEffectResult(new CharacterLostSkirmishResult(skirmishType, finalRemoved, involving));
+				// Measured as it left the skirmish: it may be out of play by now
+				Integer strengthWhenRemoved = skirmish.getStrengthWhenRemoved(finalRemoved);
+				loserStrengths.put(finalRemoved, strengthWhenRemoved != null ? strengthWhenRemoved
+						: game.getModifiersQuerying().getStrength(game, finalRemoved));
 			}
 		}
 		for (PhysicalCard winner : winners) {
-			game.getActionsEnvironment().emitEffectResult(new CharacterWonSkirmishResult(skirmishType, winner, involving));
+			game.getActionsEnvironment().emitEffectResult(new CharacterWonSkirmishResult(skirmishType, winner, involving, loserStrengths));
 		}
 
 

@@ -711,7 +711,7 @@
 				trigger: {
 					type: winsSkirmish
 					filter: self
-					memorizeLoser: losers
+					memorizeLoserStrength: losersStrength
 				}
 				effect: {
 					type: exert
@@ -725,9 +725,11 @@
 								type: forEachStrength
 								filter: self
 							}
+							// The strength the losing character had as the skirmish resolved, though it has left
+							// play since (F-0480: A)
 							secondNumber: {
-								type: forEachStrength
-								filter: memory(losers)
+								type: fromMemory
+								memory: losersStrength
 							}
 						}
 					}

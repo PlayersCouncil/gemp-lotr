@@ -737,6 +737,12 @@ public class GameState {
                 _log.error("Card was not found in the expected zone");
         }
 
+        // A character leaving the skirmish with these cards is measured before any of them stops affecting the game
+        if (!skipSkirmishReset) {
+            for (PhysicalCard card : cards)
+                noteStrengthIfSkirmishing(card);
+        }
+
         for (PhysicalCard card : cards) {
             Zone zone = card.getZone();
 
@@ -1013,6 +1019,8 @@ public class GameState {
     private void removeFromSkirmish(PhysicalCard card, boolean notify) {
         if (_skirmish == null)
             return;
+
+        noteStrengthIfSkirmishing(card);
 
         if (_skirmish.getFellowshipCharacter() == card) {
             _skirmish.setFellowshipCharacter(null);
@@ -1563,11 +1571,25 @@ public class GameState {
         addTokens(card, Token.WOUND, 1);
     }
 
+    /**
+     * Notes the strength of a character of the current skirmish as it is about to leave it (F-0480), for Legacy
+     * Ruling 2's final removed character, whom the skirmish's winner measures as "the losing character" though he may
+     * be out of play by then (ResolveSkirmishEffect).  Called while the card is still in play with its text in force.
+     */
+    private void noteStrengthIfSkirmishing(PhysicalCard card) {
+        if (_skirmish == null || _lotroGame == null)
+            return;
+        if (_skirmish.getFellowshipCharacter() == card || _skirmish.getShadowCharacters().contains(card))
+            _skirmish.noteStrengthWhenRemoved(card, _lotroGame.getModifiersQuerying().getStrength(_lotroGame, card));
+    }
+
     public void removeWound(PhysicalCard card) {
         removeTokens(card, Token.WOUND, 1);
     }
 
     public void hinder(Collection<PhysicalCard> cards) {
+        for(var card : cards)
+            noteStrengthIfSkirmishing(card);
         for(var card : cards) {
             card.setFlipped(true);
             stopAffecting(card);

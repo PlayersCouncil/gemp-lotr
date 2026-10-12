@@ -9,7 +9,6 @@ import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -188,7 +187,7 @@ public class Card_15_038_Tests
 	}
 
 	@Test
-	public void TheDifferenceIsNotNegativeWhenAnEnduringMinionIsWoundedForLosingFirst() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheLosersStrengthIsWhatItWasAsTheSkirmishResolvedThoughHisWoundForLosingRaisesIt() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var treebeard = scn.GetFreepsCard("treebeard");
@@ -196,35 +195,43 @@ public class Card_15_038_Tests
 
 		var thrall = scn.GetShadowCard("thrall");
 		var warband = scn.GetShadowCard("warband");
+		var assassin = scn.GetShadowCard("assassin");
+		var chieftain = scn.GetShadowCard("chieftain");
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(thrall, warband);
+		scn.MoveMinionsToTable(thrall, warband, assassin, chieftain);
 
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(treebeard, thrall);
 		scn.ShadowDeclineAssignments();
 
 		scn.FreepsResolveSkirmish(treebeard);
+		// Ettenmoors: Treebeard exerts and is 12 + 2.
+		scn.FreepsUseCardAction(scn.GetCurrentSite());
+		scn.FreepsChooseCard(treebeard);
 		scn.PassSkirmishActions();
+		assertEquals(14, scn.GetStrength(treebeard));
 		assertEquals(11, scn.GetStrength(thrall));
 		assertEquals(0, scn.GetWoundsOn(thrall));
 
-		// The wound for losing is taken first: enduring, the Nazgul is now 13 to Treebeard's 12.
+		// The wound for losing is taken first: enduring, the Nazgul is now 13.
 		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
 		scn.FreepsResolveRuleFirst();
 		assertEquals(13, scn.GetStrength(thrall));
 		assertEquals(1, scn.GetWoundsOn(thrall));
 
-		// The difference between 12 and 13 is 1, whichever of them is the larger.
+		// 14 - 11, the strength the Nazgul had as the skirmish resolved (F-0480: A), not 14 - 13: three minions.
 		assertTrue(scn.ShadowDecisionAvailable("Choose cards to exert"));
-		assertEquals(1, scn.ShadowGetChoiceMin());
-		assertEquals(1, scn.ShadowGetChoiceMax());
-		assertTrue(scn.ShadowHasCardChoiceAvailable(thrall, warband));
+		assertEquals(3, scn.ShadowGetChoiceMin());
+		assertEquals(3, scn.ShadowGetChoiceMax());
+		assertTrue(scn.ShadowHasCardChoiceAvailable(thrall, warband, assassin, chieftain));
 
 		// Treebeard is no Shadow card: the Nazgul may be exerted in a skirmish phase.
-		scn.ShadowChooseCard(thrall);
+		scn.ShadowChooseCards(thrall, warband, assassin);
 		assertEquals(2, scn.GetWoundsOn(thrall));
-		assertEquals(0, scn.GetWoundsOn(warband));
+		assertEquals(1, scn.GetWoundsOn(warband));
+		assertEquals(1, scn.GetWoundsOn(assassin));
+		assertEquals(0, scn.GetWoundsOn(chieftain));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
@@ -358,7 +365,8 @@ public class Card_15_038_Tests
 		scn.FreepsResolveSkirmish(treebeard);
 		scn.PassSkirmishActions();
 
-		// 12 against 5: the Savage is overwhelmed.  Treebeard's text is taken while it is still there to be measured.
+		// 12 against 5: the Savage is overwhelmed.  Treebeard's text is taken first here; taken after the
+		// overwhelming it measures the Savage as it was all the same (WhenTheLoserIsKilledByTheWoundForLosing...).
 		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
 		scn.FreepsResolveActionOrder("Treebeard");
 
@@ -454,7 +462,50 @@ public class Card_15_038_Tests
 	}
 
 	@Test
-	@Ignore("F-0480: a minion removed from Treebeard's skirmish before strengths are totalled is a losing character (LR 2), but the trigger's memory of the losers does not hold it, so X is worked out from nothing: 12, and every minion exerts")
+	public void WhenTheLoserIsKilledByTheWoundForLosingTakenFirstTheDifferenceIsFromTheStrengthItHad() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var treebeard = scn.GetFreepsCard("treebeard");
+		scn.MoveCompanionsToTable(treebeard);
+
+		var warband = scn.GetShadowCard("warband");
+		var assassin = scn.GetShadowCard("assassin");
+		var chieftain = scn.GetShadowCard("chieftain");
+		var hunters = scn.GetShadowCard("hunters");
+		var savage = scn.GetShadowCard("savage");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(warband, assassin, chieftain, hunters, savage);
+		// One wound from death.
+		scn.AddWoundsToChar(warband, 1);
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(treebeard, warband);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(treebeard);
+		assertEquals(10, scn.GetStrength(warband));
+		scn.PassSkirmishActions();
+
+		// The wound for losing is taken first, and kills the War Band.
+		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
+		scn.FreepsResolveRuleFirst();
+		assertInDiscard(warband);
+
+		// 12 - 10, the strength it had as the skirmish resolved (F-0480: A): two minions of the four.
+		assertTrue(scn.ShadowDecisionAvailable("Choose cards to exert"));
+		assertEquals(2, scn.ShadowGetChoiceMin());
+		assertEquals(2, scn.ShadowGetChoiceMax());
+		assertTrue(scn.ShadowHasCardChoiceAvailable(assassin, chieftain, hunters, savage));
+
+		scn.ShadowChooseCards(assassin, savage);
+		assertEquals(1, scn.GetWoundsOn(assassin));
+		assertEquals(1, scn.GetWoundsOn(savage));
+		assertEquals(0, scn.GetWoundsOn(chieftain));
+		assertEquals(0, scn.GetWoundsOn(hunters));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
 	public void WhenTheOnlyMinionIsKilledInTheSkirmishTheDifferenceIsFromTheStrengthItHad() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

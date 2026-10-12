@@ -19,13 +19,16 @@ import java.util.Set;
 public class WinsSkirmish implements TriggerCheckerProducer {
     @Override
     public TriggerChecker getTriggerChecker(JSONObject value, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(value, "filter", "against", "memorize", "memorizeInvolving", "memorizeLoser");
+        FieldUtils.validateAllowedFields(value, "filter", "against", "memorize", "memorizeInvolving", "memorizeLoser", "memorizeLoserStrength");
 
         String winner = FieldUtils.getString(value.get("filter"), "filter", "any");
         String against = FieldUtils.getString(value.get("against"), "against", "any");
         final String memorize = FieldUtils.getString(value.get("memorize"), "memorize");
         final String memorizeInvolving = FieldUtils.getString(value.get("memorizeInvolving"), "memorizeInvolving");
         final String memorizeLoser = FieldUtils.getString(value.get("memorizeLoser"), "memorizeLoser");
+        // A number: the losing characters' strength as the skirmish resolved, Legacy Ruling 2's final removed
+        // character included, wherever they are when the text is carried out (F-0480, Treebeard 15_38)
+        final String memorizeLoserStrength = FieldUtils.getString(value.get("memorizeLoserStrength"), "memorizeLoserStrength");
 
         final FilterableSource winnerFilter = environment.getFilterFactory().generateFilter(winner, environment);
         final FilterableSource againstFilter = environment.getFilterFactory().generateFilter(against, environment);
@@ -51,6 +54,10 @@ public class WinsSkirmish implements TriggerCheckerProducer {
                         losers.remove(winner);
                     }
                     actionContext.setCardMemory(memorizeLoser, losers);
+                }
+                if (result && memorizeLoserStrength != null) {
+                    CharacterWonSkirmishResult wonResult = (CharacterWonSkirmishResult) actionContext.getEffectResult();
+                    actionContext.setValueToMemory(memorizeLoserStrength, String.valueOf(wonResult.getLosersStrengthAsResolved()));
                 }
                 return result;
             }

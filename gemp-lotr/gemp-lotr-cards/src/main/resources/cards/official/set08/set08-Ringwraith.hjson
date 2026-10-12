@@ -290,6 +290,7 @@
 				effect: {
 					type: playCardFromStacked
 					select: choose(culture(wraith),minion)
+					on: self
 				}
 			}
 		]

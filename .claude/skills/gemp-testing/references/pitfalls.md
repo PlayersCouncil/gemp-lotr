@@ -469,9 +469,9 @@ simultaneous actions, whoever's they are.
 A companion whose own text answers his leaving play (Radagast 59_26) raises this decision whenever he is killed,
 by a wound or by a card that places him in the dead pile (not when he is discarded or returned to hand), and his
 text is carried out only once it is answered: as a helper to be killed in another card's test he leaves it pending.
-Which is taken first can change what the trigger does: a win trigger that measures the loser (`forEachStrength`
-over the remembered losers) counts only cards still in play, so with the rule's kill taken first the loser reads 0
-(Treebeard 15_38, F-0480, asked: take the trigger's entry first where the skirmish kills the loser). And an exert of "X minions" with X
+Which is taken first can change what the trigger does, except where it measures the loser: Treebeard 15_38's
+"the losing character's strength" is the strength it had as the skirmish resolved, whichever is first and though
+the rule's wound has killed or strengthened it (`memorizeLoserStrength`; F-0480, engine pass 30). And an exert of "X minions" with X
 above the number able to exert asks nobody and exerts every one that can.
 
 **A card's standing check is a required action, ordered with the others of its moment and looked at again as it

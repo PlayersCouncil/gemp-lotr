@@ -444,4 +444,6 @@ After triggers occur after the action they are keyed to, which means they cannot
       optional
     * memorizeLoser
       optional
+    * memorizeLoserStrength
+      optional: a value memory holding the losing characters' strength as the skirmish resolved (Legacy Ruling 2's final removed character included), read with `fromMemory` (F-0480)
 
