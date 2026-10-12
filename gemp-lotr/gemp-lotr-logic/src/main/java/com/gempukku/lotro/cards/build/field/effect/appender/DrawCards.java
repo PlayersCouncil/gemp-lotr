@@ -25,7 +25,7 @@ public class DrawCards implements EffectAppenderProducer {
         final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
         final ValueSource count = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
 
-        return new DelayedAppender() {
+        final EffectAppender draw = new DelayedAppender() {
             @Override
             public boolean isPlayableInFull(ActionContext actionContext) {
                 final String drawPlayer = playerSource.getPlayer(actionContext);
@@ -66,6 +66,14 @@ public class DrawCards implements EffectAppenderProducer {
                 return new DrawCardsEffect(action, drawPlayer, cardsDrawn);
             }
         };
+
+        // Taught for Q-0224 (IdleOffers): a player who may draw no more (the Rule of 4 spent, or a card that bars
+        // him from drawing) draws nothing, so an optional trigger or a no-cost ability whose whole effect is a draw
+        // is not offered to him (Ketura on Q-0262: B).  An empty draw deck is not that: the offer is still made
+        // (Q-0029), as the effect's own forecast says.
+        return TaughtForecast.teach(draw, actionContext ->
+                RuleUtils.mayDrawACard(actionContext.getGame(), playerSource.getPlayer(actionContext))
+                        ? draw.forecast(actionContext) : EffectForecast.NOTHING);
     }
 
 }

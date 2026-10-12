@@ -1319,6 +1319,8 @@ the exception, not this.
 
 **The Rule of 4.** No more than 4 cards are drawn or taken into hand in a player's fellowship phase. A test of a
 fellowship-phase draw that repeats has to stay within four, or its fifth reading is the rule and not the card.
+Once the four are spent an optional trigger or a no-cost ability whose whole effect is a draw is not offered at
+all (Q-0262: B; the fifth Old Toby 1_305 asks nothing), where an empty draw deck alone still asks (Q-0029).
 
 **A player barred from taking cards into hand draws only when reconciling.** At a table where a player holds
 Race Text 94_30 (`CantTakeCardsIntoHandFromDeckOrDiscardPile`), a card drawn is a card taken into hand from the
@@ -1327,7 +1329,8 @@ on the no-effect flag. His reconciles draw as ever (the regroup one and a card's
 opening hand is dealt. The bar is read for the player the text has draw or take, whoever's card it is on, and
 only for a card of that player's own (Q-0207): his opponent's A New Light 17_15 returns his minion to his hand;
 his opponent's Change of Plans 1_99 has him shuffle his hand in and draw none (Q-0216, kept unless struck).
-Nobody is asked to prevent a draw that is barred. `mechanics/BarOnTakingCardsIntoHandTests`.
+Nobody is asked to prevent a draw that is barred, and an optional trigger or a no-cost ability whose whole effect
+is his draw is not offered to him (Q-0262: B). `mechanics/BarOnTakingCardsIntoHandTests`.
 
 **A card being shown is listed as not selectable.** A real reveal from a deck or from play gives every player,
 the owner included, a "Revealed card(s)" decision to dismiss. A reveal from a HAND (the whole hand, or cards at
@@ -1535,8 +1538,8 @@ throws).
 unbound companions to play Legolas from your draw deck" (a Legolas in the deck of a player with two unbound
 companions who can exert is in its reach). Site 2, Eastfold 4_331: plains; a Shadow action that needs 3 [isengard]
 trackers. Site 3, Barrows of Edoras 4_337: a sanctuary; "Fellowship: Place your hand beneath your draw deck and draw
-4 cards", on offer to the mover with a card in hand and, since F-0429, with none until he has used it once that
-phase: `FreepsActionAvailable(<site 3>)` is true there, and a test that counts the fellowship actions on offer at
+4 cards", on offer to the mover with a card in hand and, since F-0429, with none while he may still draw a card
+(Q-0249: `CanDraw`): `FreepsActionAvailable(<site 3>)` is true there, and a test that counts the fellowship actions on offer at
 site 3 counts it. Site 4, White Rocks 4_346: a battleground; its Shadow number is +1 for each mounted companion.
 
 **A battleground or a forest site needs no cheat.** The Towers path has both at site 2: Uruk Camp 4_335

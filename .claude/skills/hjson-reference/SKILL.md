@@ -399,6 +399,7 @@ Boolean checks. Used in `requires: []` arrays.
 | `HaveInitiative` | side | Side has initiative. Asked of a card the Free Peoples player is playing from his hand (an event's `requires`, a condition inside its `cost`), that card is not counted: four cards beside it (F-0464) |
 | `CanMove` | — | FP can still move |
 | `CanAddBurdens` | player? | A burden could be added by this card now: false while the Ring-bearer is hindered or a `CantAddBurdens` reaches the card. For a standing text that must know ahead whether a burden it adds later can be added (69_38, F-0308) |
+| `CanDraw` | player? | The player (default you) may draw a card now: false once the Rule of 4 is spent in his own fellowship phase and while a card bars him from drawing (Race Text 94_30); his draw deck is not asked. Barrows of Edoras 4_337 (Q-0249) |
 | `FierceSkirmish` | — | In fierce assignment/skirmish |
 | `RingIsOn` | — | Ring-bearer wearing ring |
 | `ControlsSite` | player?, count? | Player controls N sites |
@@ -429,7 +430,7 @@ Whether and how many sites a player controls is asked with these two and the `Fo
 | `PerPhaseLimit` | limit?, phase?, perPlayer? | Action invoked fewer than N times. Withholds at the limit, as the `limitPerPhase` field does; prefer the field (see Activated, "Limits") |
 | `PerTurnLimit` | limit? | Per-turn limit check; likewise, `limitPerTurn` |
 
-No requirement and no value reads the Rule of 4 (whether a player may still draw this fellowship phase). Barrows of Edoras 4_337 stands "not yet used this phase" in for it: an `Or` of its other requirement and `PerPhaseLimit` 1, with an `IncrementPerPhaseLimit` as the first effect (F-0429; Q-0249, open).
+`CanDraw` reads the Rule of 4 and a bar on drawing (engine pass 28; Q-0249). The same reading tells the rule of Q-0224 that a `DrawCards` will do nothing, so an optional trigger or a no-cost ability whose whole effect is a draw needs no requirement for it (Q-0262: B).
 
 ### Comparison
 `IsEqual`, `IsNotEqual`, `IsGreaterThan`, `IsGreaterThanOrEqual`, `IsLessThan`, `IsLessThanOrEqual` — all take `firstNumber`, `secondNumber`

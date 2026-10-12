@@ -127,6 +127,21 @@ public class RuleUtils {
     }
 
     /**
+     * Whether a player may draw a card now, by a card's text (Q-0249, Q-0262).  False while the Rule of 4 is spent
+     * (CR 4.2: "You cannot draw (or take into hand) more than 4 cards during your fellowship phase", in a format
+     * that has the rule) and while he is barred from drawing (isBarredFromDrawing: Race Text 94_30, the one card
+     * that bars it).  Whether his draw deck holds a card is not asked: an optional draw from an empty draw deck is
+     * still offered (Q-0029).  The requirement CanDraw reads it, and so does what the DrawCards effect tells the
+     * rule of Q-0224 (IdleOffers).
+     */
+    public static boolean mayDrawACard(LotroGame game, String drawingPlayer) {
+        if (isBarredFromDrawing(game, drawingPlayer))
+            return false;
+        return !game.getFormat().hasRuleOfFour()
+                || game.getModifiersQuerying().canDrawCardNoIncrement(game, drawingPlayer);
+    }
+
+    /**
      * How many characters of the other side a character is assigned to skirmish, by the assignments still waiting
      * for their skirmish: the minions a companion or ally has, and 1 for a minion that is assigned.
      */

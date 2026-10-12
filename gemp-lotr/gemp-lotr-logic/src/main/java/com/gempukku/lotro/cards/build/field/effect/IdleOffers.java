@@ -30,7 +30,8 @@ import java.util.Set;
  * or a stack; anything with a cost; a "you may" inside another action (the effect "Optional": Q-0224, A2); an
  * action flagged for another reason (a limit that is spent, a skirmish action that reaches nobody in the skirmish);
  * an action whose definition names its own "noEffectUnless"; and an effect that does nothing only because a draw
- * deck is empty (an optional draw is still offered then: Q-0029).
+ * deck is empty (an optional draw is still offered then: Q-0029).  A draw by a player who may draw no more is not
+ * that: the Rule of 4 spent or a bar on drawing withholds the offer (Ketura on Q-0262: B).
  *
  * Four of the kinds taught are exercised by no test (engine pass 27; Ketura, 2026-10-11: no card is invented for
  * a test).  Every printed card that has one of them in an offer that pays nothing carries a requirement written by
@@ -70,7 +71,8 @@ public final class IdleOffers {
          * As RESOLUTION, with the effects that were taught something for this rule answering what they were
          * taught (TaughtForecast): a reinforcement with no token to reinforce, a transfer or an assignment
          * with nobody to go to, a stacking with nothing to stack, a Ring already worn, a choice with nothing to
-         * choose from, a random discard from a hand that is empty or that the card may not discard from.  Each
+         * choose from, a random discard from a hand that is empty or that the card may not discard from, a draw
+         * by a player who may draw no more (the Rule of 4 spent, or a bar on drawing: Q-0262).  Each
          * answers so only to this rule; the no-effect flag is judged as it was.  This is the default, and the
          * mode the game is played in.
          */

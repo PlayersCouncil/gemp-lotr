@@ -41,6 +41,44 @@ public class Card_04_337_Tests
 		);
 	}
 
+	// The Towers sites again, with five Old Tobys to spend the Rule of 4 and Bilbo to put a card back into the draw
+	// deck.  Old Toby 1_305: "Pipeweed.  Plays to your support area.  When you play this possession, you may draw a
+	// card."  Bilbo, Retired Adventurer 1_284: "Fellowship: Exert Bilbo to shuffle a [shire] card from your
+	// discard pile into your draw deck."
+	protected VirtualTableScenario GetDrawnScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("toby1", "1_305");
+					put("toby2", "1_305");
+					put("toby3", "1_305");
+					put("toby4", "1_305");
+					put("toby5", "1_305");
+					put("bilbo", "1_284");
+				}},
+				VirtualTableScenario.TowersSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// The Towers sites, where the player who uses the Barrows has Race Text 94_30: "You may not play or take into
+	// hand cards from your discard pile or draw deck (except when reconciling or starting fellowship)."  A card
+	// drawn is a card taken into hand from the draw deck (Q-0206).
+	protected VirtualTableScenario GetBarredScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("gimli", "1_13");       // Gimli, Son of Gloin: a card in the draw deck
+					put("guard", "1_7");        // Dwarf Guard: a card in the draw deck
+				}},
+				VirtualTableScenario.TowersSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
+				"94_30", null
+		);
+	}
+
 	@Test
 	public void BarrowsofEdorasStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
@@ -208,6 +246,116 @@ public class Card_04_337_Tests
 		assertInZone(Zone.DECK, marksman);
 		assertEquals(6, scn.GetFreepsDeckCount());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void WithNoCardInHandAndFourCardsDrawnByOtherCardsThisPhaseTheActionIsNotOffered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetDrawnScenario();
+
+		var toby1 = scn.GetFreepsCard("toby1");
+		var toby2 = scn.GetFreepsCard("toby2");
+		var toby3 = scn.GetFreepsCard("toby3");
+		var toby4 = scn.GetFreepsCard("toby4");
+		var toby5 = scn.GetFreepsCard("toby5");
+		var bilbo = scn.GetFreepsCard("bilbo");
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+		var barrows = scn.GetCurrentSite();
+
+		// One Old Toby in hand, the next four on top of the deck: each draws the one after it.
+		scn.SetFreepsHand(toby1);
+		scn.MoveCardsToTopOfDeck(toby5, toby4, toby3, toby2);
+		scn.FreepsRefreshDecision();
+
+		scn.FreepsPlayCard(toby1);
+		scn.FreepsAcceptOptionalTrigger();
+		scn.FreepsPlayCard(toby2);
+		scn.FreepsAcceptOptionalTrigger();
+		scn.FreepsPlayCard(toby3);
+		scn.FreepsAcceptOptionalTrigger();
+		scn.FreepsPlayCard(toby4);
+		scn.FreepsAcceptOptionalTrigger();
+		// Four cards drawn this phase.  The fifth Old Toby leaves his hand empty.
+		scn.FreepsPlayCard(toby5);
+		assertInZone(Zone.SUPPORT, toby1, toby2, toby3, toby4, toby5);
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertInZone(Zone.DECK, bilbo);
+
+		// No hand to place, and no card he may draw though his deck has one: not offered.
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(barrows));
+	}
+
+	@Test
+	public void AfterAUseEmptiesAShortDeckAndTheHandIsPlayedOutTheActionIsOfferedAgainWhileACardMayBeDrawn() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetDrawnScenario();
+
+		var toby1 = scn.GetFreepsCard("toby1");
+		var toby2 = scn.GetFreepsCard("toby2");
+		var toby3 = scn.GetFreepsCard("toby3");
+		var toby4 = scn.GetFreepsCard("toby4");
+		var toby5 = scn.GetFreepsCard("toby5");
+		var bilbo = scn.GetFreepsCard("bilbo");
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+		var barrows = scn.GetCurrentSite();
+
+		// One Old Toby in hand and two in a draw deck of two; a fourth in the discard pile; Bilbo at the table.
+		scn.MoveAlliesToTable(bilbo);
+		scn.SetFreepsHand(toby1);
+		scn.MoveCardsToDiscard(toby4, toby5);
+		scn.MoveCardsToTopOfDeck(toby3, toby2);
+		scn.FreepsRefreshDecision();
+		assertEquals(2, scn.GetFreepsDeckCount());
+
+		// The first use: his one card goes beneath, and all three in the deck are drawn, three of the four.
+		scn.FreepsUseCardAction(barrows);
+		assertEquals(0, scn.GetFreepsDeckCount());
+		assertInHand(toby1, toby2, toby3);
+
+		// He plays them out, drawing nothing by them.
+		scn.FreepsPlayCard(toby1);
+		scn.FreepsDeclineOptionalTrigger();
+		scn.FreepsPlayCard(toby2);
+		scn.FreepsDeclineOptionalTrigger();
+		scn.FreepsPlayCard(toby3);
+		scn.FreepsDeclineOptionalTrigger();
+		assertEquals(0, scn.GetFreepsHandCount());
+
+		// Bilbo puts an Old Toby back into the deck.  Toby5 is the other [shire] card in the pile.
+		scn.FreepsUseCardAction(bilbo);
+		scn.FreepsChooseCard(toby4);
+		assertEquals(1, scn.GetFreepsDeckCount());
+
+		// No hand, and a fourth card he may still draw: offered again, though it was used this phase.
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertTrue(scn.FreepsActionAvailable(barrows));
+		scn.FreepsUseCardAction(barrows);
+		assertInHand(toby4);
+		assertEquals(1, scn.GetFreepsHandCount());
+		assertEquals(0, scn.GetFreepsDeckCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void WithNoCardInHandAndABarOnDrawingTheActionIsNotOffered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetBarredScenario();
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+		var barrows = scn.GetCurrentSite();
+		assertEquals("Barrows of Edoras", barrows.getBlueprint().getTitle());
+
+		// An empty hand, a draw deck with cards in it, nothing drawn yet this phase: the bar alone stops a draw.
+		scn.SetFreepsHand();
+		scn.FreepsRefreshDecision();
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertTrue(scn.GetFreepsDeckCount() > 0);
+
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(barrows));
 	}
 
 	@Test

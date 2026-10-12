@@ -47,7 +47,9 @@ import static org.junit.Assert.*;
  * <li>twilight removed as an effect: the pool is empty;</li>
  * <li>a card stacked from hand, a chosen discard from hand, a card placed from a hand on a draw deck: no card in
  * that hand to take (of another player's hand, only that it is empty);</li>
- * <li>a card placed from a discard pile beneath a draw deck: no such card in the pile.</li>
+ * <li>a card placed from a discard pile beneath a draw deck: no such card in the pile;</li>
+ * <li>a draw: its player may draw no more, the Rule of 4 being spent in his own fellowship phase or a card barring
+ * him from drawing (Race Text 94_30; Ketura on Q-0262: B).</li>
  * </ul>
  *
  * Four of the kinds have no test: making an ally take part in skirmishes, a restore, a card chosen from a
@@ -60,8 +62,8 @@ import static org.junit.Assert.*;
  * and are worked last.)
  *
  * What the rule leaves alone is here too: an ability with a cost is offered though its effect will do nothing
- * (it is flagged), and an optional draw is offered with the draw deck empty (Ketura on Q-0029: "let it ask with
- * 0 cards in deck").  The rule does not reach a "you may" inside another action (Q-0224: A2).
+ * (it is flagged), and an optional draw is offered with the draw deck empty while its player may still draw
+ * (Ketura on Q-0029: "let it ask with 0 cards in deck").  The rule does not reach a "you may" inside another action (Q-0224: A2).
  */
 public class AnOfferThatCostsNothingAndWouldDoNothingIsNotMadeTests
 {
@@ -365,6 +367,41 @@ public class AnOfferThatCostsNothingAndWouldDoNothingIsNotMadeTests
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// Five Old Tobys, and a card beneath them in the draw deck that is never played.
+	protected VirtualTableScenario GetRuleOfFourDrawScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("toby1", "1_305");
+					put("toby2", "1_305");
+					put("toby3", "1_305");
+					put("toby4", "1_305");
+					put("toby5", "1_305");
+					put("axe", "1_3");          // Axe Strike: a card in the draw deck and nothing more
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// Old Toby, at a table where the Free Peoples player has Race Text 94_30: "You may not play or take into hand
+	// cards from your discard pile or draw deck (except when reconciling or starting fellowship)."  A card drawn is
+	// a card taken into hand from the draw deck (Q-0206).
+	protected VirtualTableScenario GetBarredDrawScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("toby", "1_305");
+					put("axe", "1_3");          // Axe Strike: a card in the draw deck and nothing more
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
+				"94_30", null
 		);
 	}
 
@@ -1187,5 +1224,76 @@ public class AnOfferThatCostsNothingAndWouldDoNothingIsNotMadeTests
 		scn.FreepsAcceptOptionalTrigger();
 		assertEquals(0, scn.GetFreepsHandCount());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	// The Rule of 4 (CR 4.2): "You cannot draw (or take into hand) more than 4 cards during your fellowship phase."
+	// Ketura on Q-0262: once the four are drawn an optional draw is not offered ("lots of people get confused over
+	// Rule of 4 stuff ... Let's do B for this one"); the empty deck of Q-0029 is still asked.
+	@Test
+	public void AnOptionalDrawIsOfferedForTheFourthCardOfAFellowshipPhaseAndNotForTheFifth() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetRuleOfFourDrawScenario();
+
+		var toby1 = scn.GetFreepsCard("toby1");
+		var toby2 = scn.GetFreepsCard("toby2");
+		var toby3 = scn.GetFreepsCard("toby3");
+		var toby4 = scn.GetFreepsCard("toby4");
+		var toby5 = scn.GetFreepsCard("toby5");
+		var axe = scn.GetFreepsCard("axe");
+
+		scn.StartGame();
+
+		// One Old Toby in hand; the other four on top of the deck, each drawn by the one before it.
+		scn.SetFreepsHand(toby1);
+		scn.MoveCardsToTopOfDeck(axe, toby5, toby4, toby3, toby2);
+		scn.FreepsRefreshDecision();
+		assertEquals(5, scn.GetFreepsDeckCount());
+
+		scn.FreepsPlayCard(toby1);
+		scn.FreepsAcceptOptionalTrigger();
+		scn.FreepsPlayCard(toby2);
+		scn.FreepsAcceptOptionalTrigger();
+		scn.FreepsPlayCard(toby3);
+		scn.FreepsAcceptOptionalTrigger();
+		assertInHand(toby4);
+		assertEquals(2, scn.GetFreepsDeckCount());
+
+		// Three cards drawn this phase: the fourth may be drawn, and is offered.
+		scn.FreepsPlayCard(toby4);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(toby4));
+		scn.FreepsAcceptOptionalTrigger();
+		assertInHand(toby5);
+		assertEquals(1, scn.GetFreepsDeckCount());
+
+		// Four drawn: a fifth may not be, and the draw is not offered, though the deck holds a card.
+		scn.FreepsPlayCard(toby5);
+		assertInZone(Zone.SUPPORT, toby5);
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertInZone(Zone.DECK, axe);
+		assertEquals(0, scn.GetFreepsHandCount());
+	}
+
+	// Q-0262 names a card that bars its player from drawing beside the Rule of 4: such a player's optional draw is
+	// not offered either, in any phase, whatever his draw deck holds.
+	@Test
+	public void AnOptionalDrawIsNotOfferedToAPlayerBarredFromDrawing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetBarredDrawScenario();
+
+		var toby = scn.GetFreepsCard("toby");
+		var axe = scn.GetFreepsCard("axe");
+
+		scn.StartGame();
+
+		scn.SetFreepsHand(toby);
+		scn.FreepsRefreshDecision();
+		assertInZone(Zone.DECK, axe);
+		assertEquals(1, scn.GetFreepsDeckCount());
+
+		// Played from hand, which the bar allows; nothing drawn yet this phase.
+		scn.FreepsPlayCard(toby);
+		assertInZone(Zone.SUPPORT, toby);
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertInZone(Zone.DECK, axe);
 	}
 }
