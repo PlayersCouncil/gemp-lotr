@@ -141,13 +141,15 @@ journals, which it finds by itself in a new session.
 has them in its header, `roles/orchestrator.md` the reasons):
 
 1. `close.py <folder>`: brings a batch made in the second tree onto the branch, then `postland.py` (the batch's
-   usage row, the tracker's data, a bundle of the new commits and one zip of the state files that changed), and
+   usage row, the tracker's data, a bundle of the new commits, and the state committed in its own git repository
+   with a bundle of its new commits), and
    prints what to carry, what to run on her machine and what to launch next.
 2. In one step: carries the files it names to `Claude outputs/card-tests/transport/` on her machine, publishes the
    tracker (the page and `tracker-data.js` from the working folder's `publish/`, to the same artifact), and
    launches the next batch from the queue.
-3. On her machine: `python3 ".../transport/apply-sync.py" <head>`, which unpacks the state and fetches the bundle
-   into her branch, and answers with the head.
+3. On her machine: `python3 ".../transport/apply-sync.py" <head> <state head>`, which brings `Claude
+   outputs/state-cache` (the state, a working copy only Claude writes) to the state bundle and fetches the code
+   bundle into her branch, and answers with both heads.
 4. `close.py --launched <new folder> <run> <ids> --synced <head>`: tracks the new run, records that the sync
    arrived, and rewrites the "Running now" block of `HANDOFF.md`.
 
@@ -312,10 +314,10 @@ touching her working tree:
 2. Write that file into `Claude outputs/card-tests/transport/` in her folder.
 3. On her machine: `git fetch "Claude outputs/card-tests/transport/cto.bundle" feature/card-test-overhaul:feature/card-test-overhaul`
 
-`scripts/orchestrator/postland.py` makes the bundle and, with it, one zip of the state files whose content has
-changed (by hash; the outputs folder's modification times cannot be trusted, and a file written there takes a
-few seconds to reach the store the carrying tool reads). `apply-sync.py`, kept in her `transport/` folder, does
-steps 2 and 3 for both files and prints the head: check it. (`sync.sh` and `statefiles.py` are the older way,
+`scripts/orchestrator/postland.py` makes the bundle and, with it, commits the state folder (a git repository,
+branch `state`, since 2026-10-12: "A separate git repo for state is a good deal better than publishing file changes
+all the time") and bundles its new commits (`state.bundle`; `--zip` still makes the old zip of changed files).
+`apply-sync.py`, kept in her `transport/` folder, applies both and prints both heads: check them. (`sync.sh` and `statefiles.py` are the older way,
 file by file.)
 
 That moves her local branch ref forward and nothing else. Never check anything out, pull, or push on her machine,

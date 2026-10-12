@@ -45,12 +45,14 @@ yours. Everything below follows from that, and from a machine of 8 GB and two pr
 
 The turn a pipeline's notification starts. `scripts/orchestrator/close.py` has the routine in its header:
 
-1. `timeout 600 python3 .../close.py <folder>`: brings a second-tree batch onto the branch, makes the bundle, the state zip and the tracker, renews the second tree if it is free, and prints what to
+1. `timeout 600 python3 .../close.py <folder>`: brings a second-tree batch onto the branch, makes the bundle, commits the state in its own repository with a bundle of it (`state.bundle`) and the tracker, renews the second tree if it is free, and prints what to
    carry, what to run on her machine and what to launch next, with its arguments.
 2. In one step: carry the files (device_commit_files, `force`), publish the tracker to the same artifact, and
    launch the next pipeline.
-3. On her machine: the `apply-sync.py` line. It answers with the head; `NOT UNPACKED` or `EXPECTED` means the
-   store had not caught up: carry again.
+3. On her machine: the `apply-sync.py` line (two heads: the branch's and the state's). It answers with both;
+   `EXPECTED` means a file had not caught up: carry again. Her copy of the state is `Claude outputs/state-cache`,
+   a git working copy only Claude writes (Ketura, 2026-10-12); `Claude outputs/card-tests` there is the old copy,
+   no longer updated. While the outputs store is down, carry by SendUserFile and then by fileUuid, never by path.
 4. `close.py --launched <new folder> <run id> <a,b,c> [--tree repo|cards] --synced <head>`.
 
 Then tell Ketura what landed in a few lines: the numbers filed (Q-, F-, G-), by kind, and one clause on any that
