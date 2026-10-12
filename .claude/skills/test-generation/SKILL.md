@@ -769,7 +769,8 @@ is run with them by `cardtest.py suite all` (gemp-testing, "Running tests").
 What every card of a kind obeys is a mechanic and is not retested card by card: that exerting is not taking a
 wound and a wound is not an exertion, that an exhausted character cannot exert, how a keyword works. So an
 exertion is not owed as the nearest miss of a "takes a wound" or "is about to take a wound" trigger: it is shown
-once, in `mechanics/wounds/AWoundThatIsNotTakenTests` (Q-0265: A).
+once, in `mechanics/wounds/AWoundThatIsNotTakenTests` (Q-0265: A). A keyword a card GRANTS ("Bearer is damage +1") is read on the
+bearer and on a card outside the scope; what the keyword then does in a skirmish is the mechanic's (Ranger's Sword 1_112).
 
 ## Earlier iterations of PC cards
 

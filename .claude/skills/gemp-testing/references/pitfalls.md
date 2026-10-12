@@ -744,6 +744,9 @@ first, so a reading of his hand on each side of the move allows for the draw (Ca
 
 **Who places archery wounds.** The fellowship's archery wounds are placed by the Shadow player on his minions
 (`ShadowChooseCard` after `SkipToArcheryWounds()`), the minions' by the Free Peoples player on companions.
+With a fellowship archery total above 0 and more than one minion to take it, `SkipToAssignments()` (and
+`SkipToPhase(Phase.ASSIGNMENT)`) halts in the archery phase with a `DecisionResultInvalidException`: call
+`SkipToArcheryWounds()` and `ShadowChooseCard(minion)` first (Aragorn's Bow 1_90).
 
 **Allies who take archery wounds instead of companions.** While Come Down's archery ability is in force (4_146,
 54_146: the `AlliesTakeArcheryFireWoundsInsteadOfCompanions` flag), each of the minions' archery wounds is offered
@@ -1337,7 +1340,9 @@ nothing is a use.** `PlayCardFromDrawDeck` without `mustExist` (Race Text 92_28,
 artifact from your draw deck (limit once per turn)") is offered with no artifact in the deck and with the deck
 empty (Q-0019: no penalty for failing to play from the draw deck; Q-0104). Used with nothing to play, the deck
 is shown and shuffled and the turn's `limitPerTurn` is spent. The eight `mustExist: true` cards of Q-0019 are
-the exception, not this.
+the exception, not this. A choice between a draw deck and another pile is the same where the deck's branch has no
+`mustExist`: The Bridge of Khazad-dûm 1_349 ("Play The Balrog from your draw deck or hand") is offered with no
+Balrog anywhere, and used so it looks through the deck and shuffles it.
 
 **The Rule of 4.** No more than 4 cards are drawn or taken into hand in a player's fellowship phase. A test of a
 fellowship-phase draw that repeats has to stay within four, or its fifth reading is the rule and not the card.
