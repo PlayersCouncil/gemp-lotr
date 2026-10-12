@@ -27,6 +27,10 @@ import static org.junit.Assert.*;
  * an ability has already chosen, the Ring-bearer, or any bearer at all ("each attached follower").  Hindering him
  * changes none of those, and what he bears is still found by them.
  *
+ * A text that only rules a kind of bearer out is asked of a hindered bearer too, as he is printed: Asfaloth 1_31
+ * is discarded at an underground site unless an ally bears it, who is at his home site and not the fellowship's,
+ * and hindering its bearer moves neither of them (Ketura on Q-0252).
+ *
  * The game used to ask a borne card's bearer what kind of card it was without asking whether it was hindered, so
  * each definition had to say "and not hindered" for itself, and those of the Decipher sets did not.
  *
@@ -98,6 +102,11 @@ public class BorneByAHinderedBearerTests
 					put("guard", "1_7");        // Dwarf Guard: an unbound [dwarven] companion with no text
 					put("armor", "1_8");        // Dwarven Armor: possession, "Bearer must be a Dwarf."
 					put("elrond", "1_40");      // Elrond, Lord of Rivendell: an ally, for a fourth culture
+
+					// Asfaloth: possession, "Bearer must be an Elf. ... Discard Asfaloth when at an underground
+					// site."  Its discard asks that it be borne by a card that is not an ally.
+					put("asfaloth", "1_31");
+					put("orophin", "1_56");     // Orophin, Lorien Bowman: an Elf ally, home site 6; an archery ability only
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -356,5 +365,39 @@ public class BorneByAHinderedBearerTests
 		assertFalse(scn.IsHindered(weary));
 		assertFalse(scn.IsHindered(aragorn));
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+	}
+
+	// "Not an ally" finds the bearer by no kind of card: it only rules one out, and a hindered bearer is asked it
+	// as he is printed.
+	@Test
+	public void ACardOnAHinderedBearerIsStillBorneByAnAllyOrByOneWhoIsNone() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var arwen = scn.GetFreepsCard("arwen");
+		var orophin = scn.GetFreepsCard("orophin");
+		var asfaloth = scn.GetFreepsCard("asfaloth");
+		scn.MoveCompanionsToTable(arwen);
+		scn.MoveAlliesToTable(orophin);
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+		scn.AttachCardsTo(orophin, asfaloth);
+		scn.HinderCard(arwen, orophin);
+
+		// Balin's Tomb is underground.  A hindered ally is an ally still for a text that leaves allies out: he
+		// is at his home site, and Asfaloth with him.
+		scn.FreepsPass();
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		assertTrue(scn.IsHindered(orophin));
+		assertAttachedTo(asfaloth, orophin);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		// On the hindered companion it is with the fellowship, underground, and goes as the game next looks.
+		scn.AttachCardsTo(arwen, asfaloth);
+		assertTrue(scn.IsHindered(arwen));
+		assertAttachedTo(asfaloth, arwen);
+		scn.ShadowPass();
+		assertTrue(scn.IsHindered(arwen));
+		assertInZone(Zone.DISCARD, asfaloth);
 	}
 }

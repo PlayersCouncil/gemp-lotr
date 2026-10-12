@@ -125,10 +125,11 @@ public class PlaySiteEffect extends AbstractEffect {
                                 oldSite.setSiteNumber(null);
                                 gameState.addCardToZone(game, oldSite, Zone.ADVENTURE_DECK);
                                 //"A Shadow player has replaced the fellowship's current site this turn": the mark is
-                                //that site's.  It is in force only while the fellowship is still there, and a site
-                                //the fellowship has moved on from marks nothing (Q-0234)
-                                if (gameState.getCurrentSiteNumber() == siteNumber
-                                        && !_playerId.equals(gameState.getCurrentPlayerId()))
+                                //that site's, laid wherever the fellowship stood when the site was replaced (a site
+                                //ahead of it that it comes to later in the turn was replaced this turn all the same:
+                                //Q-0259).  It is in force only while the fellowship is at that site, and a site the
+                                //fellowship has moved on from marks nothing (Q-0234)
+                                if (!_playerId.equals(gameState.getCurrentPlayerId()))
                                     game.getModifiersEnvironment().addUntilEndOfTurnModifier(
                                             new SpecialFlagModifier(null,
                                                     gameNow -> gameNow.getGameState().getCurrentSiteNumber() == siteNumber,

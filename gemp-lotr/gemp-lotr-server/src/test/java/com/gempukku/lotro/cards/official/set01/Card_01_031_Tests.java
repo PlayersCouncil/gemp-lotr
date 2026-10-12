@@ -362,6 +362,36 @@ public class Card_01_031_Tests
 	}
 
 	@Test
+	public void BorneByAHinderedCompanionItIsDiscardedAtAnUndergroundSiteAllTheSame() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var asfaloth = scn.GetFreepsCard("asfaloth");
+		var arwen = scn.GetFreepsCard("arwen");
+		var bow = scn.GetFreepsCard("bow");
+		scn.MoveCompanionsToTable(arwen);
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+		scn.AttachCardsTo(arwen, asfaloth, bow);
+		// A hindered Arwen is no companion to be found, and is with the fellowship all the same: what keeps
+		// Asfaloth out of Moria is being borne by an ally, who is at his home site, and nothing else (Ketura
+		// on Q-0252).
+		scn.HinderCard(arwen);
+		assertTrue(scn.IsHindered(arwen));
+		assertFalse(scn.IsHindered(asfaloth));
+		assertAttachedTo(asfaloth, arwen);
+
+		// To Balin's Tomb, which is underground.
+		scn.FreepsPass();
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.UNDERGROUND));
+		assertTrue(scn.IsHindered(arwen));
+		assertInDiscard(asfaloth);
+		assertAttachedTo(bow, arwen);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
 	public void BorneByAnAllyItIsAtHisHomeSiteAndGivesNoMoreWhenTheFellowshipIsAtAPlainsSite() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

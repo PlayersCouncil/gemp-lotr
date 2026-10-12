@@ -9,7 +9,6 @@ import com.gempukku.lotro.common.Timeword;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -296,7 +295,6 @@ public class Card_08_003_Tests
 	}
 
 	@Test
-	@Ignore("Q-0256: X is read after the Dwarf has exerted, so Gimli, Counter of Foes makes it 3; the text names X where the Dwarf is spotted, and the erratum 58_3 locks it in there")
 	public void XIsTheDamageBonusTheDwarfHadWhenHeWasSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -333,7 +331,7 @@ public class Card_08_003_Tests
 	}
 
 	@Test
-	public void HinderedShadowCardsMayBeAmongThoseDiscarded() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AHinderedShadowCardMayBeTheOneDiscarded() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var chill = scn.GetFreepsCard("chill");
@@ -354,14 +352,16 @@ public class Card_08_003_Tests
 
 		scn.FreepsPlayCard(chill);
 
-		// Gimli, damage +1, is damage +1 more for each of the two wounds: X is 3, of the four Shadow cards.
+		// Gimli was damage +1 when he was spotted, whatever his two wounds make him since (Q-0256): X is 1, of
+		// the four Shadow cards, hindered or not.
 		assertEquals(2, scn.GetWoundsOn(counter));
 		assertTrue(scn.ShadowHasCardChoiceAvailable(hindered1, hindered2, greed3, greed4));
-		assertEquals(3, scn.ShadowGetChoiceMin());
-		scn.ShadowChooseCards(hindered1, hindered2, greed3);
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		assertEquals(1, scn.ShadowGetChoiceMax());
+		scn.ShadowChooseCard(hindered1);
 
-		assertInDiscard(hindered1, hindered2, greed3);
-		assertInZone(Zone.SUPPORT, greed4);
+		assertInDiscard(hindered1);
+		assertInZone(Zone.SUPPORT, hindered2, greed3, greed4);
 		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 	}
 }

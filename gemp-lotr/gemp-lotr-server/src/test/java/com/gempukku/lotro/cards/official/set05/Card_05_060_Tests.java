@@ -48,6 +48,13 @@ public class Card_05_060_Tests
 					// Arrow-slits: Free Peoples condition. "Maneuver: Spot 2 [rohan] Men to discard a possession or
 					// a machine. Discard this condition."
 					put("arrowslits", "5_80");
+					// Fortress Never Fallen: Free Peoples condition. "Regroup: Discard a Shadow condition for each
+					// [rohan] token here. Discard this condition." Its tokens are placed when a [rohan] Man wins a
+					// skirmish.
+					put("fortress", "4_276");
+					// Strength Born of Fear: a [sauron] condition in the support area that is no machine. Its
+					// skirmish ability is about a [sauron] Orc.
+					put("fear", "1_278");
 					put("gimli", "1_13");         // Gimli, Son of Glóin: damage +1, vitality 3
 					// Blood Runs Chill: Regroup event. "Spot a Dwarf who is damage +X and exert that Dwarf twice to
 					// make an opponent discard X Shadow cards."
@@ -366,12 +373,14 @@ public class Card_05_060_Tests
 	}
 
 	@Test
-	public void OneResponseSavesEveryMachineAFreePeoplesEventDiscardsAtOnceAndNoOtherCondition() throws DecisionResultInvalidException, CardNotFoundException {
+	public void OneResponseSavesEveryConditionAFreePeoplesEventDiscardsAtOnceTheFreePeoplesPlayersOwnIncluded() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var gandalf = scn.GetFreepsCard("gandalf");
 		var sleep = scn.GetFreepsCard("sleep");
+		var arrowslits = scn.GetFreepsCard("arrowslits");
 		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCardsToSupportArea(arrowslits);
 		scn.MoveCardsToHand(sleep);
 
 		var siege = scn.GetShadowCard("siege");
@@ -383,27 +392,71 @@ public class Card_05_060_Tests
 
 		scn.StartGame();
 
-		assertInZone(Zone.SUPPORT, siege, devilry, ram, ladder, machinery);
+		assertInZone(Zone.SUPPORT, siege, devilry, ram, ladder, machinery, arrowslits);
 		assertTrue(scn.HasKeyword(devilry, Keyword.MACHINE));
 		assertTrue(scn.HasKeyword(ram, Keyword.MACHINE));
 		assertTrue(scn.HasKeyword(ladder, Keyword.MACHINE));
 		assertFalse(scn.HasKeyword(machinery, Keyword.MACHINE));
+		assertFalse(scn.HasKeyword(arrowslits, Keyword.MACHINE));
 
 		scn.FreepsPlayCard(sleep);
 		assertEquals(1, scn.GetWoundsOn(gandalf));
 
-		// Every condition is about to be discarded together, Siege Engine among them.
+		// Every condition is about to be discarded together, Siege Engine and three other machines among them.
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(siege));
 		scn.ShadowAcceptOptionalTrigger();
 
-		// The three other machines stay; Siege Engine goes to pay for it; the condition that is no machine is
-		// discarded as the event says.
+		// The discard is one action and is prevented whole (Ketura on Q-0250): the machines stay, the Shadow
+		// condition that is no machine stays, and so does the Free Peoples player's own condition. Siege Engine
+		// goes to pay for it.
 		assertInZone(Zone.SUPPORT, devilry, ram, ladder);
+		assertInZone(Zone.SUPPORT, machinery);
+		assertInZone(Zone.SUPPORT, arrowslits);
 		assertInZone(Zone.DISCARD, siege);
-		assertInZone(Zone.DISCARD, machinery);
 		assertInZone(Zone.DISCARD, sleep);
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void DiscardedWithTwoConditionsThatAreNoMachinesByFortressNeverFallenItSavesAllThree() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var fortress = scn.GetFreepsCard("fortress");
+		scn.MoveCardsToSupportArea(fortress);
+		// A [rohan] token for each skirmish a [rohan] Man has won.
+		scn.AddTokensToCard(fortress, 3);
+
+		var siege = scn.GetShadowCard("siege");
+		var ram = scn.GetShadowCard("ram");
+		var machinery = scn.GetShadowCard("machinery");
+		var fear = scn.GetShadowCard("fear");
+		scn.MoveCardsToSupportArea(siege, ram, machinery, fear);
+
+		scn.StartGame();
+		scn.SkipToPhase(Phase.REGROUP);
+
+		assertFalse(scn.HasKeyword(machinery, Keyword.MACHINE));
+		assertFalse(scn.HasKeyword(fear, Keyword.MACHINE));
+
+		// Three tokens: three of the four Shadow conditions, Siege Engine the only machine among them.
+		scn.FreepsUseCardAction(fortress);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(siege, ram, machinery, fear));
+		assertEquals(3, scn.FreepsGetChoiceMin());
+		scn.FreepsChooseCards(siege, machinery, fear);
+
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(siege));
+		scn.ShadowAcceptOptionalTrigger();
+
+		// CR 4.2, the ruling on Fortress Never Fallen: the response "technically saves all three conditions, but
+		// then I discard Siege Engine to pay its own cost".
+		assertInZone(Zone.SUPPORT, machinery, fear);
+		assertInZone(Zone.DISCARD, siege);
+		// The condition that was not chosen is where it was, and Fortress Never Fallen goes by its own last sentence.
+		assertInZone(Zone.SUPPORT, ram);
+		assertInZone(Zone.DISCARD, fortress);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 	}
 
 	@Test

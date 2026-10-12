@@ -65,6 +65,27 @@ public class Card_13_021_Tests
 		);
 	}
 
+	// A numbered path, where a site may lie ahead of the fellowship and a Shadow card may replace it there.
+	protected VirtualTableScenario GetSiteAheadScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("miles", "13_21");
+					// Legolas, Prince of Mirkwood: an Elf companion and an archer; his text needs a skirmish
+					put("legolas", "1_51");
+					// Rúmil, Elven Protector: an Elf ally and an archer, home 6F, so he is spotted at site 3 and
+					// adds nothing to the archery total; his archery ability wounds an Orc, and there is none
+					put("rumil", "1_57");
+					// Úlairë Nelya, Lieutenant of Morgul: "Shadow: Exert Úlairë Nelya and spot an opponent's site
+					// to replace it with your site of the same number."  Fierce, vitality 3.
+					put("nelya", "1_233");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
 	@Test
 	public void ManyMilesStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
@@ -206,6 +227,55 @@ public class Card_13_021_Tests
 		assertTrue(scn.FreepsPlayAvailable(miles));
 		scn.FreepsPlayCard(miles);
 		assertEquals(2, scn.GetFreepsArcheryTotal());
+		assertInDiscard(miles);
+		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
+	}
+
+	@Test
+	public void AddsTwoAtASiteAShadowPlayerReplacedThisTurnBeforeTheFellowshipCameToIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetSiteAheadScenario();
+
+		var legolas = scn.GetFreepsCard("legolas");
+		var rumil = scn.GetFreepsCard("rumil");
+		var miles = scn.GetFreepsCard("miles");
+		scn.MoveCompanionsToTable(legolas);
+		scn.MoveAlliesToTable(rumil);
+		scn.MoveCardsToHand(miles);
+
+		var nelya = scn.GetShadowCard("nelya");
+
+		scn.StartGame();
+		scn.FreepsPass();
+		assertEquals(2, scn.GetCurrentSiteNumber());
+
+		// Site 3 lies ahead of the fellowship and is the Free Peoples player's own, as it is once the other
+		// player's fellowship has gone that way and he laid it for it.
+		scn.MoveCardToAdventurePath(scn.GetFreepsSite(3));
+		assertEquals(scn.GetFreepsSite(3), scn.GetSite(3));
+		scn.MoveMinionsToTable(nelya);
+		scn.ShadowRefreshDecision();
+
+		// The Shadow player's Nazgûl replaces it, with the fellowship still at site 2.
+		scn.ShadowUseCardAction(nelya);
+		scn.ShadowChooseCard(scn.GetSite(3));
+		assertEquals(1, scn.GetWoundsOn(nelya));
+		assertEquals(scn.GetShadowSite(3), scn.GetSite(3));
+		assertEquals(2, scn.GetCurrentSiteNumber());
+
+		// The fellowship moves on to it in the regroup phase.
+		scn.SkipToMovementDecision();
+		scn.FreepsChooseToMove();
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertEquals(scn.GetShadowSite(3), scn.GetCurrentSite());
+
+		scn.SkipToPhase(Phase.ARCHERY);
+		assertEquals(1, scn.GetFreepsArcheryTotal());
+
+		// A Shadow player has replaced this site this turn, wherever the fellowship stood when he did (Ketura
+		// on Q-0259).
+		assertTrue(scn.FreepsPlayAvailable(miles));
+		scn.FreepsPlayCard(miles);
+		assertEquals(3, scn.GetFreepsArcheryTotal());
 		assertInDiscard(miles);
 		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
 	}

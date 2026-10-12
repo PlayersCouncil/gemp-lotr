@@ -1304,21 +1304,47 @@
 						filter: minion
 					}
 				]
+				// "A minion for each unbound Hobbit you spot": the player says how many he spots by the minions
+				// he chooses.  The wounds are offered one at a time, each a choice of a minion or of none, since
+				// one minion may take more than one of them (CR 4.2 "for each"); the first none ends them, and
+				// no number is asked for (Q-0248).
 				effect: [
 					{
-						type: chooseHowManyToSpot
-						filter: unbound,hobbit
-						memorize: hobbitCount
+						type: memorizeNumber
+						amount: {
+							type: forEachYouCanSpot
+							filter: unbound,hobbit
+						}
+						memory: hobbitCount
+					}
+					{
+						type: wound
+						select: choose(minion)
+						count: 0-1
+						memorize: woundedMinion
 					}
 					{
 						type: Repeat
 						times: {
-							type: fromMemory
-							memory: hobbitCount
+							type: subtract
+							firstNumber: {
+								type: fromMemory
+								memory: hobbitCount
+							}
+							secondNumber: 1
 						}
 						effect: {
-							type: wound
-							select: choose(minion)
+							type: If
+							check: {
+								type: HasCardInMemory
+								memory: woundedMinion
+							}
+							true: {
+								type: wound
+								select: choose(minion)
+								count: 0-1
+								memorize: woundedMinion
+							}
 						}
 					}
 				]

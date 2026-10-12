@@ -4,7 +4,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -174,26 +173,27 @@ public class Card_04_364_Tests
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(aragorn));
 		scn.FreepsAcceptOptionalTrigger();
 
-		// Only Merry and Pippin are unbound Hobbits: he may spot both, one or neither.
-		assertEquals(0, scn.FreepsGetChoiceMin());
-		assertEquals(2, scn.FreepsGetChoiceMax());
-		scn.FreepsChoose("2");
-
-		// "A minion", of whatever culture or race, and no companion.
+		// No number is asked for: the first wound is the first thing asked, a minion or none.  "A minion", of
+		// whatever culture or race, and no companion.
 		assertEquals(2, scn.FreepsGetCardChoiceCount());
 		assertTrue(scn.FreepsHasCardChoiceAvailable(troop1, ted));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn, merry));
-		assertEquals(1, scn.FreepsGetChoiceMin());
+		assertEquals(0, scn.FreepsGetChoiceMin());
+		assertEquals(1, scn.FreepsGetChoiceMax());
 		scn.FreepsChooseCard(troop1);
 		assertEquals(1, scn.GetWoundsOn(troop1));
 		assertEquals(0, scn.GetWoundsOn(ted));
 
 		// The second wound is a choice of its own: here it goes to the other minion.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(troop1, ted));
+		assertEquals(0, scn.FreepsGetChoiceMin());
+		assertEquals(1, scn.FreepsGetChoiceMax());
 		scn.FreepsChooseCard(ted);
 		assertEquals(1, scn.GetWoundsOn(troop1));
 		assertEquals(1, scn.GetWoundsOn(ted));
 
+		// Only Merry and Pippin are unbound Hobbits: two wounds, and no third is offered.
+		assertFalse(scn.FreepsAnyDecisionsAvailable());
 		assertEquals(3, scn.GetCurrentSiteNumber());
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
@@ -218,8 +218,6 @@ public class Card_04_364_Tests
 		scn.FreepsChooseToMove();
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(aragorn));
 		scn.FreepsAcceptOptionalTrigger();
-		assertEquals(2, scn.FreepsGetChoiceMax());
-		scn.FreepsChoose("2");
 
 		scn.FreepsChooseCard(troop1);
 		assertEquals(1, scn.GetWoundsOn(troop1));
@@ -234,8 +232,7 @@ public class Card_04_364_Tests
 	}
 
 	@Test
-	@Ignore("Q-0248: is every unbound Hobbit spotted without asking (the log's reading of Q-0141)?  The game asks how many, as CR 4.2 \"spot\" has it")
-	public void EveryUnboundHobbitIsSpottedWithoutBeingAskedHowMany() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ChoosingNoMinionEndsTheWoundsThoughAnotherUnboundHobbitCouldBeSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var aragorn = scn.GetFreepsCard("aragorn");
@@ -255,15 +252,14 @@ public class Card_04_364_Tests
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(aragorn));
 		scn.FreepsAcceptOptionalTrigger();
 
-		// Merry and Pippin are spotted, both, and nobody is asked for a number: the first wound is the first choice.
+		// Two unbound Hobbits, and he spots neither: no minion at the first wound, and the second is not offered.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(troop1, ted));
-		scn.FreepsChooseCard(troop1);
-		assertEquals(1, scn.GetWoundsOn(troop1));
-		assertTrue(scn.FreepsHasCardChoiceAvailable(troop1, ted));
-		scn.FreepsChooseCard(ted);
-		assertEquals(1, scn.GetWoundsOn(troop1));
-		assertEquals(1, scn.GetWoundsOn(ted));
+		assertEquals(0, scn.FreepsGetChoiceMin());
+		scn.FreepsDeclineChoosing();
 
+		assertEquals(0, scn.GetWoundsOn(troop1));
+		assertEquals(0, scn.GetWoundsOn(ted));
+		assertFalse(scn.FreepsAnyDecisionsAvailable());
 		assertEquals(3, scn.GetCurrentSiteNumber());
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
@@ -293,7 +289,7 @@ public class Card_04_364_Tests
 	}
 
 	@Test
-	public void EachMoveOfATurnOffersTheWoundsAgainAndTheNumberSpottedIsTheNumberOfWounds() throws DecisionResultInvalidException, CardNotFoundException {
+	public void EachMoveOfATurnOffersTheWoundsAgainAndTheMinionsChosenAreTheNumberOfWounds() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetThreeMoveScenario();
 
 		var aragorn = scn.GetFreepsCard("aragorn");
@@ -309,14 +305,16 @@ public class Card_04_364_Tests
 		scn.MoveMinionsToTable(troop1, ted);
 		scn.SkipToMovementDecision();
 
-		// The move from site 2 to Rivendell Waterfall.  One of the two unbound Hobbits is spotted: one wound,
-		// and no second minion is asked for.
+		// The move from site 2 to Rivendell Waterfall.  One of the two unbound Hobbits is spotted: a minion
+		// for the first wound, and none for the second.
 		scn.FreepsChooseToMove();
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(aragorn));
 		scn.FreepsAcceptOptionalTrigger();
-		assertEquals(2, scn.FreepsGetChoiceMax());
-		scn.FreepsChoose("1");
 		scn.FreepsChooseCard(ted);
+		assertEquals(1, scn.GetWoundsOn(ted));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(troop1, ted));
+		assertEquals(0, scn.FreepsGetChoiceMin());
+		scn.FreepsDeclineChoosing();
 		assertEquals(1, scn.GetWoundsOn(ted));
 		assertEquals(0, scn.GetWoundsOn(troop1));
 		assertEquals(3, scn.GetCurrentSiteNumber());
@@ -328,8 +326,6 @@ public class Card_04_364_Tests
 		scn.FreepsChooseToMove();
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(aragorn));
 		scn.FreepsAcceptOptionalTrigger();
-		assertEquals(2, scn.FreepsGetChoiceMax());
-		scn.FreepsChoose("2");
 		scn.FreepsChooseCard(ted);
 		scn.FreepsChooseCard(troop1);
 		assertEquals(2, scn.GetWoundsOn(ted));
@@ -443,16 +439,17 @@ public class Card_04_364_Tests
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(aragorn));
 		scn.FreepsAcceptOptionalTrigger();
 
-		// Sam, Merry and Pippin are all unbound Hobbits now
-		assertEquals(3, scn.FreepsGetChoiceMax());
-		scn.FreepsChoose("3");
+		// Sam, Merry and Pippin are all unbound Hobbits now: three wounds are offered, one after another
 		scn.FreepsChooseCard(troop1);
 		scn.FreepsChooseCard(troop2);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(troop1, troop2, troop3));
+		assertEquals(0, scn.FreepsGetChoiceMin());
 		scn.FreepsChooseCard(troop3);
 
 		assertEquals(1, scn.GetWoundsOn(troop1));
 		assertEquals(1, scn.GetWoundsOn(troop2));
 		assertEquals(1, scn.GetWoundsOn(troop3));
+		assertFalse(scn.FreepsAnyDecisionsAvailable());
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
@@ -483,13 +480,14 @@ public class Card_04_364_Tests
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(aragorn));
 		scn.FreepsAcceptOptionalTrigger();
 
-		// Only Merry counts
+		// Only Merry counts: one wound is offered, and with it placed no second is
+		assertTrue(scn.FreepsHasCardChoiceAvailable(troop1, troop2));
 		assertEquals(0, scn.FreepsGetChoiceMin());
 		assertEquals(1, scn.FreepsGetChoiceMax());
-		scn.FreepsChoose("1");
 		scn.FreepsChooseCard(troop1);
 		assertEquals(1, scn.GetWoundsOn(troop1));
 		assertEquals(0, scn.GetWoundsOn(troop2));
+		assertFalse(scn.FreepsAnyDecisionsAvailable());
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

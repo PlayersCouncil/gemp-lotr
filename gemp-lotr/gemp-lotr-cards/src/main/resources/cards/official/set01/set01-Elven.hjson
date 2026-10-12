@@ -136,7 +136,7 @@
 						}
 						{
 							type: canSpot
-							filter: self,attachedTo(companion)
+							filter: self,attachedTo(not(ally))
 						}
 					]
 				}

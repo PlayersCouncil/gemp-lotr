@@ -4,7 +4,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -310,7 +309,7 @@ public class Card_10_001_Tests
 	}
 
 	@Test
-	public void GimliCounterOfFoesExertsTheMinionOnceMoreForTheWoundHisOwnExertionGivesHim() throws DecisionResultInvalidException, CardNotFoundException {
+	public void GimliCounterOfFoesExertsTheMinionOnceThoughHisOwnExertionMakesHimDamagePlusTwo() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var great = scn.GetFreepsCard("great");
@@ -333,15 +332,15 @@ public class Card_10_001_Tests
 		assertTrue(scn.FreepsPlayAvailable(great));
 		scn.FreepsPlayCard(great);
 
-		// Damage +1 unwounded, and +1 more for the wound of the exertion that paid: the Troll, of vitality 4, exerts twice.
+		// Damage +1 unwounded, and +1 more for the wound of the exertion that paid; X was read before it
+		// (Q-0256): the Troll, of vitality 4, exerts once.
 		assertEquals(2, scn.GetKeywordCount(counter, Keyword.DAMAGE));
 		assertEquals(1, scn.GetWoundsOn(counter));
-		assertEquals(2, scn.GetWoundsOn(troll));
+		assertEquals(1, scn.GetWoundsOn(troll));
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
-	@Ignore("Q-0256: X is read after the Dwarf has exerted, so Gimli, Counter of Foes makes it 2; the text names X where the Dwarf is chosen to exert, and the erratum of Blood Runs Chill locks it in there")
 	public void XIsTheDamageBonusTheDwarfHadBeforeHeExerted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

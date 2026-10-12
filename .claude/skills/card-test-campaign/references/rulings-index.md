@@ -453,7 +453,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A reveal that what follows reads must be able to happen (Q-0148, F-0284) [F-0022, Q-0104, Q-0029]
 - A reveal that a cost buys is offered with that draw deck empty, and flagged (Q-0163: B; built by engine pass 21). "<cost> to reveal the top N cards ... [Q-0148]
 - What bounds an X: the action's costs, never what its effect can use (Q-0069, Q-0087, Q-0094, F-0067, F-0111). The rulings on X look two ways and are ... [Q-0062, Q-0015, Q-0034, Q-0191]
-- "Spot a Dwarf who is damage +X and exert that Dwarf ... to <do> X": when X is read (Q-0256, open), and a Dwarf with no bonus. The erratum Blood Runs ... [Q-0015]
+- "Spot a Dwarf who is damage +X and exert that Dwarf ... to <do> X": X is the bonus he had when he was spotted (Q-0256: A; built by engine pass 28), ... [Q-0015]
 - "Exert your Wizard to choose a number. Make each minion with that twilight cost ..." (Gathering Wind 10_16): the number is part of the cost (F-0474). ...
 - "Discard a <kind> from hand to take a <kind> into hand from the discard pile" does not take back the card just discarded (Q-0192: A) [Q-0034]
 - The twilight cost of a card in play (F-0109, built)
@@ -477,6 +477,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Built on 2026-10-06: assert as ruled, park nothing [F-0083, F-0084, F-0099, Q-0070, Q-0043, F-0100, F-0101, F-0107, Q-0053, Q-0044, Q-0059, F-0097]
 - "If a minion exerts as a cost of its special ability" is answered at an exertion paid as a cost, and not where the minion exerts as the EFFECT of its own ability (Rush of Steeds 11_157; F-0478, built by engine pass 27)
 - "If the <side> player is about to discard ..." asks who discards (F-0296; Q-0171: A)
+- "If one or more <kind> are about to be discarded by an opponent, <pay> to prevent that": the whole discard is prevented (Q-0250: B; Siege Engine 5_60, engine pass 28)
 - "Each time the Free Peoples player plays the fellowship's next site" asks who plays it (F-0479, Fearless Approach 13_164 and Caravan From the South 13_83) [F-0302]
 - "If a Free Peoples player reveals this card from your hand" asks whose CARD revealed (Eye of Barad-dûr 5_96; Q-0251, open) [Q-0171]
 - "Each time your condition is hindered or discarded" (Q-0075)
@@ -502,7 +503,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A card hindered as its own cost still carries its ability out (F-0151)
 - Q-0098 as built: the words in a definition [F-0160]
 - A number in a filter and a hindered card (CR 5.0 "hinder", Grond 8_103) [Q-0098]
-- "Borne by a <race or type>" and a hindered bearer (Q-0108, F-0212; in the engine since engine pass 26, Q-0220: E) [Q-0237]
+- "Borne by a <race or type>" and a hindered bearer (Q-0108, F-0212; in the engine since engine pass 26, Q-0220: E) [Q-0237, Q-0252]
 - "Support" and support(<whose>) (Q-0099, Q-0101)
 - A character hindered while assigned or skirmishing leaves it, and a minion so freed is not a leftover minion (CR 5.0 "hinder"; CR 4.2 "assignment phase")
 - A hindered Ring-bearer cannot be discarded or returned to hand (F-0174)
@@ -513,7 +514,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "If a Shadow player has replaced the fellowship's current site this turn" is asked of the site the fellowship is at NOW (Q-0234: A; built by engine pass 26; Many Miles 13_21) [Q-0259]
 - A site's continuous text: `modifier` holds only while the fellowship is there, `PermanentSiteModifier` wherever the site lies (CR 4.2 "active", LR 3; Q-0173: B)
 - A site whose text names the site by its title goes by `name(<title>)`, never by `self` or by nothing (Q-0027; F-0043, F-0381, F-0382, F-0383) [F-0390]
-- "While at a <terrain> site" on a card an ally may bear: an ally is at his home site (F-0380, Asfaloth 1_31)
+- "While at a <terrain> site" on a card an ally may bear: an ally is at his home site (F-0380, Asfaloth 1_31) [Q-0252]
 - "<Do X>; <Y> during this skirmish" on an event that makes the skirmish: Y is laid only if the skirmish was made (F-0386, Return to Its Master 1_224)
 - A Ring's `ringIsActive` requirement is shown in Return to Its Master 1_224's file, not the Ring's own
 - Helpless 2_76, "Sam's game text does not apply": a Sam who is not the Ring-bearer is no longer Ring-bound

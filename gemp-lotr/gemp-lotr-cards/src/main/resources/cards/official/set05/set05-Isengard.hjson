@@ -949,7 +949,9 @@
 				}
 				effect: {
 					type: preventDiscard
-					select: all(machine)
+					// "Prevent that" is the whole of the discard a machine is in: one simultaneous action,
+					// prevented for every card in it or for none (Q-0250; CR 4.2, the ruling on Fortress Never Fallen).
+					select: all(any)
 				}
 			}
 		]

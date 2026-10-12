@@ -715,7 +715,7 @@ public class Filters {
     }
 
     public static Filter not(final Filterable... filters) {
-        return (game, physicalCard) -> !Filters.and(filters).accepts(game, physicalCard);
+        return (RulesAKindOut) (game, physicalCard) -> !Filters.and(filters).accepts(game, physicalCard);
     }
 
     public static Filter sameCard(final PhysicalCard card) {
@@ -808,12 +808,18 @@ public class Filters {
     /**
      * Borne by a card that every one of the filters accepts.  A hindered bearer has no title, culture, card type,
      * race or number to be found by (CR 5.0 "hinder"), so a card it bears is not "borne by a companion" or "borne
-     * by a Hobbit" (Ketura on Q-0108): a hindered bearer is found only where no filter given names a kind of card
-     * (namesNoKind).  The card borne is still in play and still borne, and "the cards this card bears", "a card on
-     * bearer" and "each attached follower" go on finding it.
+     * by a Hobbit" (Ketura on Q-0108): a hindered bearer is found only where no filter given finds him by a kind
+     * of card (findsABearerByNoKind).  The card borne is still in play and still borne, and "the cards this card
+     * bears", "a card on bearer" and "each attached follower" go on finding it.
+     * <p>
+     * A not(...) is the other thing a hindered bearer is asked: it finds the bearer by nothing and only rules a
+     * kind of bearer out, and it is asked of him as he is printed.  Asfaloth 1_31's attachedTo(not(ally)) is
+     * there to leave out an ally, who is at his home site and not at the fellowship's: borne by a hindered
+     * companion it is with the fellowship all the same, and borne by a hindered ally it is still at his home
+     * (Ketura on Q-0252).  A not(...) joined to another word arrives here inside an and, and is not seen.
      */
     public static Filter attachedTo(final Filterable... filters) {
-        final boolean findsAHinderedBearer = namesNoKind(filters);
+        final boolean findsAHinderedBearer = findsABearerByNoKind(filters);
         return (game, physicalCard) -> {
             final PhysicalCard bearer = physicalCard.getAttachedTo();
             if (bearer == null)
@@ -828,25 +834,33 @@ public class Filters {
      * A filter that says which card is meant and nothing of what kind of card it is: the cards given (in), the
      * card that bears a given card (bearerOf), the Ring-bearer, who is that by the rules and not by anything
      * printed on him, and any card at all.  A hindered card is still found by these.  A filter is given this type
-     * where it is made.  Every other filter is taken to go by something a hindered card has not got: its title,
-     * culture, card type, race, item class, keywords and numbers "do not apply" (CR 5.0 "hinder").  That takes in
-     * any filter built with and, or or not, which cannot be seen into, and so every attachedTo of a definition
-     * that gives more than one word for the bearer: FilterFactory joins them before they come here.  Two things a
-     * hindered card does keep are not marked, because no definition writes either inside attachedTo: its side,
-     * and being hindered.
+     * where it is made.  Every other filter but a not(...) by itself (RulesAKindOut) is taken to go by something
+     * a hindered card has not got: its title, culture, card type, race, item class, keywords and numbers "do not
+     * apply" (CR 5.0 "hinder").  That takes in any filter built with and or or, which cannot be seen into, and so
+     * every attachedTo of a definition that gives more than one word for the bearer: FilterFactory joins them
+     * before they come here.  Two things a hindered card does keep are not marked, because no definition writes
+     * either inside attachedTo: its side, and being hindered.
      */
     private interface NamesNoKind extends Filter {
     }
 
     /**
-     * Whether none of these filters names a kind of card: each is a card itself or a filter made as NamesNoKind.
-     * A card given as itself is a card's own "self": its text is not in force while it is hindered, so this is
-     * reached only by a text being carried out "until fulfilled" after its card was hindered in the middle of it
-     * (CR 5.0 "hinder"), and no card in print shows it.
+     * A filter made by not(...): it says what a card is not.  Given to attachedTo by itself it finds the bearer
+     * by no kind of card, so a hindered bearer is asked it too, as he is printed.
      */
-    private static boolean namesNoKind(final Filterable... filters) {
+    private interface RulesAKindOut extends Filter {
+    }
+
+    /**
+     * Whether attachedTo asks these filters of a hindered bearer: none of them finds the bearer by a kind of card.
+     * Each is a card itself, a filter made as NamesNoKind, or a not(...) (RulesAKindOut).  A card given as itself
+     * is a card's own "self": its text is not in force while it is hindered, so this is reached only by a text
+     * being carried out "until fulfilled" after its card was hindered in the middle of it (CR 5.0 "hinder"), and
+     * no card in print shows it.
+     */
+    private static boolean findsABearerByNoKind(final Filterable... filters) {
         for (Filterable filter : filters) {
-            if (!(filter instanceof PhysicalCard || filter instanceof NamesNoKind))
+            if (!(filter instanceof PhysicalCard || filter instanceof NamesNoKind || filter instanceof RulesAKindOut))
                 return false;
         }
         return true;
