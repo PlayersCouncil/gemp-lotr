@@ -568,4 +568,5 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - lint's `race-culture` warning (Q-0213: B) [F-0019, F-0291]
 - lint's `cardinfo` warning (Q-0145) [Q-0158]
 - lint's `census` warning (Q-0220: B) [F-0430, F-0443]
+- lint's `plain-play` warning (Q-0279: C; engine pass 29)
 - The Play clause's test is generated: `gen_play.py` (Q-0220: I; Q-0261, open)

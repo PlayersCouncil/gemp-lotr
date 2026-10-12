@@ -141,6 +141,47 @@ def taken_out_of_deck(lines, variable: str, alias: str) -> bool:
 
 
 # ----------------------------------------------------------------------------------------------------------------
+# The play of a card (Q-0279: C): what a test on a bare table was the only thing to notice
+# ----------------------------------------------------------------------------------------------------------------
+
+def bears_on_play(card_id) -> list:
+    """What, by gen_play.py's own reading, a card's definition and text have that bears on its play from hand (a
+    requirement, a cost, a discount, a trigger on its own play, a bearer, a place its type does not give it), one
+    short phrase each, or [] for a plain play.  Only a card of a type that is played from hand and stays in play is
+    read.  The generator's reasons that are about its own table (a Ring-bearer of the card's title, the site under
+    the play) or about a sheet to settle are not counted: they say nothing of the card."""
+    import gen_play
+    try:
+        card = gen_play.Card(card_id)
+    except gen_play.Left:
+        return []
+    return [reason.split(":")[0].strip() for reason in card.bears_on_play]
+
+
+def plays_from_hand(lines, card_id, without=()) -> list:
+    """The tests of a card's file, live and not among `without`, that play a card of that blueprint from hand by
+    legal play (`FreepsPlayCard` or `ShadowPlayCard` of it, by its variable or inline by its alias)."""
+    raw = "\n".join(lines)
+    aliases = [a for a, b in re.findall(r'put\(\s*"([^"]+)"\s*,\s*"(\d+_\d+)"\s*\)', raw) if b == card_id]
+    if not aliases:
+        return []
+    named = "|".join(re.escape(a) for a in aliases)
+    methods, code = split_methods(lines)
+    out = []
+    for name, start, end, above, ret in methods:
+        marks = [t for _, t in above]
+        if name in without or not any(t.startswith("@Test") for t in marks) or any(re.search(r"@Ignore\b", t) for t in marks):
+            continue
+        body = " ".join(text for _, text in java_statements(lines[start:end + 1]))
+        variables = re.findall(r'\b(\w+)\s*=\s*\w+\s*\.\s*Get(?:Freeps|Shadow)Card\(\s*"(?:%s)"\s*\)' % named, body)
+        played = r'\b(?:Freeps|Shadow)PlayCard\(\s*(?:%s\w+\s*\.\s*Get(?:Freeps|Shadow)Card\(\s*"(?:%s)"\s*\))\s*\)' \
+                 % ("".join(re.escape(v) + "|" for v in dict.fromkeys(variables)), named)
+        if re.search(played, body):
+            out.append(name)
+    return out
+
+
+# ----------------------------------------------------------------------------------------------------------------
 # Copies of one title in play (Q-0239): as far as a test's cheats can be followed without running it
 # ----------------------------------------------------------------------------------------------------------------
 
@@ -1078,6 +1119,18 @@ def lint_file(path: Path):
                 "aliases of %s: a second copy is in play wherever it could change a reading (which copy a card went to "
                 "or came from, a modifier tied to those words not stacking), or Notes say why none could"
                 % (says.group(0).lower(), card_id))
+
+    # The play of a card (Q-0279: C).  The stats test reads the printed numbers, and mechanics/TwilightPoolTests and
+    # WhereACardIsPlayedTests show once what they do in a plain play; neither sees a definition that carries
+    # something about being played.  So a card that no live test plays from hand must be one whose play the
+    # generator's reading calls plain.  Read on every card, whether its ledger has a Play clause or not.
+    if card is not None and (card.field("type", "") or "").strip().lower() in PLAYED:
+        bears = bears_on_play(card_id)
+        if bears and not plays_from_hand(lines, card_id):
+            add("warning", "plain-play", None, "no live test plays the card from hand, and by gen_play.py's reading its "
+                "definition or text has something that bears on its play (%s): a test plays it by legal play, the test of "
+                "the clause that says so (the stats test and the mechanics classes of a plain play see none of it; Q-0279: C)"
+                % "; ".join(dict.fromkeys(bears)))
 
     # A site's continuous text built as a plain `modifier` holds only while the fellowship is at the site (CR 4.2
     # "active", as LR 3 has it), and the site's own ledger owes an R clause for the same board with the site left

@@ -273,11 +273,15 @@ class Card:
                 self.text = self.text + " " + sheet_text
         if not side:
             self.reasons.append("its definition does not say which side it is of")
+        # The reasons from here on are what the card's definition and text say of its play (the ones above are a
+        # sheet or a definition to settle first): lint's `plain-play` reads them as `bears_on_play` (Q-0279: C).
+        first_of_play = len(self.reasons)
         if self.cost is None:
             self.reasons.append("its twilight cost is no plain number")
         if self.type == "minion" and self.site is None:
             self.reasons.append("it has no plain site number")
         self._read_definition()
+        self.bears_on_play = self.reasons[first_of_play:]
 
     def _read_definition(self):
         try:
