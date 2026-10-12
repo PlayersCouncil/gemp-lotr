@@ -1205,6 +1205,12 @@ the minion's site number is above the current site's, and it follows a site-numb
 (site number 2) reads false at site 2, and true once a card has raised her site number
 (`Card_15_062_ErrataTests`, `Card_15_064_ErrataTests`).
 
+**A keyword a card gives itself while it can spot that keyword is kept once gained** (Sentry Uruk 15_170, Q-0276;
+`spotsItself`). The other card may go and the Sentry stays fierce; alone from the start it has nothing. What it
+holds is worked out at each step of the game and whenever it is asked about, so a cheat that takes the keyword
+away and gives it back with no step between (`ApplyAdHocModifier` and a read) finds it still held, where any
+step in between (a pass) loses it. Every other "while you can spot" leaves out the card's own grant, as before.
+
 **Making a card something it is not.** `ApplyAdHocModifier` with `IsAdditionalCultureModifier` or
 `IsAdditionalRaceModifier` gives a card a second culture or race, `AddKeywordModifier` a keyword, and filters see
 them. The rig can; a card test no longer does (Ketura on Q-0213, 2026-10-10). No card is given a culture or a

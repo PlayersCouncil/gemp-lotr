@@ -231,11 +231,63 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
                                 liveModifiers.add(modifier);
                         }
                     _skipSet.remove(modifier);
+                } else if (isHeldWhileBeingWorkedOut(game, modifier, modifierEffect)
+                        && (card == null || modifier.affectsCard(game, card))) {
+                    // Asked about while its own condition is being worked out: in force if it held (Q-0276).
+                    liveModifiers.add(modifier);
                 }
             }
         }
 
         return liveModifiers;
+    }
+
+    /**
+     * A modifier whose condition counts its own grant once it has held (SelfSpottingCondition: Sentry Uruk 15_170,
+     * Q-0276), asked about while that condition is being worked out: in force if the condition held when it was
+     * last worked out and the text of its card has not been taken away.  Every other modifier is left out while
+     * it is being worked out, as before.
+     */
+    private boolean isHeldWhileBeingWorkedOut(LotroGame game, Modifier modifier, ModifierEffect modifierEffect) {
+        if (!(modifier.getCondition() instanceof SelfSpottingCondition selfSpotting) || !selfSpotting.hasHeld())
+            return false;
+        return modifierEffect == ModifierEffect.TEXT_MODIFIER || modifier.getSource() == null
+                || modifier.isNonCardTextModifier() || !hasTextRemoved(game, modifier.getSource());
+    }
+
+    /**
+     * Works out, at each step of the game, the condition of every modifier that counts its own grant once it has
+     * held (SelfSpottingCondition), so that what each remembers follows the board whether or not anything asked
+     * about its card in between: a fierce minion that comes into play and is killed before anything asks whether
+     * Sentry Uruk 15_170 is fierce has still made it fierce (Q-0276).  Called from TurnProcedure beside the other
+     * state-based checks.
+     */
+    @Override
+    public void checkSelfSpottingConditions(LotroGame game) {
+        List<Modifier> modifiers = _modifiers.get(ModifierEffect.GIVE_KEYWORD_MODIFIER);
+        if (modifiers == null)
+            return;
+        // Gathered first: working a condition out reads the modifiers, and in nearly every game there is none.
+        List<Modifier> selfSpotting = null;
+        for (Modifier modifier : modifiers) {
+            if (modifier.getCondition() instanceof SelfSpottingCondition) {
+                if (selfSpotting == null)
+                    selfSpotting = new ArrayList<>();
+                selfSpotting.add(modifier);
+            }
+        }
+        if (selfSpotting == null)
+            return;
+        for (Modifier modifier : selfSpotting) {
+            if (!_skipSet.contains(modifier)) {
+                _skipSet.add(modifier);
+                try {
+                    modifier.getCondition().isFullfilled(game);
+                } finally {
+                    _skipSet.remove(modifier);
+                }
+            }
+        }
     }
 
     public void signalEndOfPhase(Phase phase) {
@@ -400,6 +452,11 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
                             } finally {
                                 _skipSet.remove(modifier);
                             }
+                        } else if (modifier.getCondition() instanceof SelfSpottingCondition) {
+                            // Only a modifier that counts its own grant reaches here while it is being worked
+                            // out (isHeldWhileBeingWorkedOut): it gives what it held (Q-0276).
+                            if (modifier.hasKeyword(game, physicalCard, keyword))
+                                return true;
                         } else {
                             return false;
                         }

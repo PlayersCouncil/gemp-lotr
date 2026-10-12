@@ -31,6 +31,7 @@ public class Card_15_170_Tests
 					put("savage", "1_151");         // Uruk Savage: an [isengard] Uruk-hai; damage +1 is its whole text
 					put("rider", "12_161");         // Black Rider: [wraith] Nazgul, site 3; fierce, and stronger for each companion
 					put("berserker", "10_40");      // Easterling Berserker: [raider] Man; damage +2 while he is unwounded
+					put("hillman", "12_60");        // Crazed Hillman: [men] Man, fierce, strength 7, vitality 1; stronger only in a fierce skirmish
 
 					put("aragorn", "1_89");         // Aragorn, Ranger of the North: none of the three keywords
 					put("faramir", "18_48");        // Faramir, Captain of Ithilien: cost 3; ranger, hunter 2
@@ -310,7 +311,7 @@ public class Card_15_170_Tests
 	}
 
 	@Test
-	public void ItDoesNotSpotItselfAndLosesEachKeywordWhenTheOtherCardThatHasItLeavesPlay() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ItSpotsItselfAndKeepsEachKeywordWhenTheOtherCardThatHasItLeavesPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var sentry = scn.GetShadowCard("sentry");
@@ -326,18 +327,62 @@ public class Card_15_170_Tests
 		assertEquals(1, scn.GetKeywordCount(sentry, Keyword.HUNTER));
 		assertEquals(1, scn.GetKeywordCount(sentry, Keyword.DAMAGE));
 
-		// The fierce minion goes: the Sentry, fierce a moment ago, is not the fierce minion its own text spots.
+		// The fierce minion goes. Fierce by its own text, the Sentry is itself a fierce minion it can spot, and
+		// stays fierce (Q-0276: "once it has bootstrapped itself it must continue spotting itself").
 		scn.MoveCardsToDiscard(rider);
-		assertFalse(scn.HasKeyword(sentry, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(sentry, Keyword.FIERCE));
 		assertEquals(1, scn.GetKeywordCount(sentry, Keyword.HUNTER));
 		assertEquals(1, scn.GetKeywordCount(sentry, Keyword.DAMAGE));
 
+		// So for the hunter, and for the character that is damage +1: alone, it keeps all three.
 		scn.MoveCardsToDiscard(tracking);
-		assertFalse(scn.HasKeyword(sentry, Keyword.HUNTER));
+		assertTrue(scn.HasKeyword(sentry, Keyword.FIERCE));
+		assertEquals(1, scn.GetKeywordCount(sentry, Keyword.HUNTER));
 		assertEquals(1, scn.GetKeywordCount(sentry, Keyword.DAMAGE));
 
 		scn.MoveCardsToDiscard(savage);
-		assertFalse(scn.HasKeyword(sentry, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(sentry, Keyword.FIERCE));
+		assertEquals(1, scn.GetKeywordCount(sentry, Keyword.HUNTER));
+		assertEquals(1, scn.GetKeywordCount(sentry, Keyword.DAMAGE));
 		assertInZone(Zone.SHADOW_CHARACTERS, sentry);
+	}
+
+	@Test
+	public void AFierceMinionKilledInTheFirstRoundLeavesItFierceAndItFightsTheFierceRound() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var sentry = scn.GetShadowCard("sentry");
+		var hillman = scn.GetShadowCard("hillman");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(sentry, hillman);
+		// Nothing asks whether the Sentry is fierce before the Hillman dies: the game keeps track of it itself.
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, hillman);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.PassSkirmishActions();
+
+		// Aragorn's 8 against the Hillman's 7: one wound, and his 1 vitality is gone.
+		assertInZone(Zone.DISCARD, hillman);
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		// No other minion is fierce, and there is a fierce round: the Sentry's.
+		assertTrue(scn.HasKeyword(sentry, Keyword.FIERCE));
+		assertTrue(scn.InFierceRound());
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+
+		scn.PassFierceAssignmentActions();
+		scn.FreepsAssignToMinions(aragorn, sentry);
+		assertTrue(scn.IsCharAssignedAgainst(sentry, aragorn));
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.PassFierceSkirmishActions();
+
+		// The Sentry's 10 against Aragorn's 8.
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertInZone(Zone.SHADOW_CHARACTERS, sentry);
+		assertFalse(scn.InFierceRound());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }

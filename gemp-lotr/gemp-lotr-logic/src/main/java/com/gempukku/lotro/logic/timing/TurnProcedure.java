@@ -56,6 +56,7 @@ public class TurnProcedure {
     public void carryOutPendingActionsUntilDecisionNeeded() {
         while (!_userFeedback.hasPendingDecisions() && _game.getWinnerPlayerId() == null) {
             // First check for any "state-based" effects
+            _game.getModifiersEnvironment().checkSelfSpottingConditions(_game);
             _initiativeChangeRule.checkInitiativeChange(_game);
             _characterDeathRule.checkCharactersZeroVitality(_game);
 

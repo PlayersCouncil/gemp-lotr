@@ -753,6 +753,7 @@
 						filter: fierce,minion
 					}
 					filter: self
+					spotsItself: true
 					keyword: fierce
 				}
 			}
@@ -765,6 +766,7 @@
 						filter: hunter
 					}
 					filter: self
+					spotsItself: true
 					keyword: hunter
 					amount: 1
 				}
@@ -778,6 +780,7 @@
 						filter: character,damage
 					}
 					filter: self
+					spotsItself: true
 					keyword: damage
 					amount: 1
 				}

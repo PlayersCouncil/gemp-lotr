@@ -479,7 +479,9 @@ Used in `Modifier` effect types or via `AddModifier` subaction.
 `ModifyCost`, `ModifyPlayOnCost` and a card's own `ModifyOwnCost` price a card being played. A transfer by rule is not a play: it costs the printed twilight cost and none of these reach it (Q-0053, Q-0074).
 
 ### Keyword Modifiers
-`AddKeyword(filter, keyword, amount?, requires?)`, `RemoveKeyword(filter, keyword, requires?)`, `RemoveAllKeywords(filter, requires?)`, `AddKeywordFromCards(filter, from, requires?)`
+`AddKeyword(filter, keyword, amount?, requires?, spotsItself?)`, `RemoveKeyword(filter, keyword, requires?)`, `RemoveAllKeywords(filter, requires?)`, `AddKeywordFromCards(filter, from, requires?)`
+
+`AddKeyword` takes `spotsItself: true` where a card gives ITSELF the keyword its `requires` spots and the text says no "another" ("While you can spot a fierce minion, this minion is fierce", Sentry Uruk 15_170): once given, its own grant counts toward `requires`, so it keeps the keyword after the other card goes, and alone from the start it has none (Q-0276). Without it the card's own grant is never counted. It needs a `requires`.
 
 ### Type/Identity Modifiers
 `AddCulture(filter, culture, requires?)`, `AddRace(filter, race, requires?)`, `AddSignet(filter, signet, requires?)`, `AddActivated(filter, phase, cost?, effect?, requires?)`, `DuplicateGameText(filter, from, requires?)`
