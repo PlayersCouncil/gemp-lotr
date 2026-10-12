@@ -236,7 +236,7 @@ def main(argv):
             # 2026-10-12: commits that change the engine's or the rig's sources leave the main tree's build stale
             # (the suite then fails by the dozen); rebuild it unless a pipeline is at work there.
             moved = subprocess.run(["git", "-C", str(WORK / "repo"), "diff", "--name-only", before, "HEAD", "--",
-                                    "gemp-lotr/*/src/main"], capture_output=True, text=True).stdout.strip()
+                                    ":(glob)gemp-lotr/*/src/main/**"], capture_output=True, text=True).stdout.strip()
             if moved and not at_work("repo"):
                 b = run(sys.executable, HERE.parent / "cardtest.py", "setup")
                 print("main tree rebuilt: " + (b.stdout.strip().split("\n") or [""])[-1][-120:])
