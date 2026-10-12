@@ -42,6 +42,8 @@ const cut = (value) => {
   return value
 }
 
+// Slim-down A1 (Q-0296): agents run as `card-worker` (file and shell tools only); args.agentType: "" turns it off.
+const AGENT_TYPE = args.agentType === undefined ? 'card-worker' : args.agentType
 phase('Items')
 const results = []
 for (const item of items) {
@@ -50,7 +52,7 @@ for (const item of items) {
     `Work in the repository at ${repo}. Read ${brief} and do what it says.\n\n` +
     `Your item is the section "## ${item.key}" of the file ${queue}: read the whole of that section, and the lines above the first section.\n` +
     `This is engine pass ${pass}. Your working folder name: ep${pass}-${item.key}\n`,
-    { label: `${item.key} (pass ${pass})`, phase: 'Items', schema: RESULT })
+    Object.assign({ label: `${item.key} (pass ${pass})`, phase: 'Items', schema: RESULT }, AGENT_TYPE ? { agentType: AGENT_TYPE } : {}))
   if (!r) {
     // The agent died (a usage limit, most likely) and may have left the tree changed: nobody follows it.
     results.push({ item: item.key, status: 'died' })

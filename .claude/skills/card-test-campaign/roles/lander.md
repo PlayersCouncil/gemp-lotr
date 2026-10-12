@@ -23,11 +23,9 @@ take re-reads everything you have read so far, so steps are what cost: do severa
 
 ## 1. Where the cards stand
 
-    python3 .claude/skills/card-test-campaign/scripts/land.py <ids> --check
-
-A card the gate would refuse is put right if the cause is small and plain (a placeholder is expected at this
-point: you number it below). If a card cannot be made to pass, leave it out of the landing and say so in what you
-return; the others still land.
+No gate run here (slim-down A4, Ketura on Q-0296): `finish` runs the gate on every card, and what it refuses is put
+right then. A card the gate refuses is put right if the cause is small and plain. If a card cannot be made to pass,
+leave it out of the landing and say so in what you return; the others still land.
 
 ## 2. What the reviewer left
 

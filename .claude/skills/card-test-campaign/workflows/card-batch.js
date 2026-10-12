@@ -23,7 +23,10 @@ const authorModel = pick(args.authorModel || args.model)
 const reviewModel = pick(args.reviewModel || args.model || 'sonnet')
 // The lander edits definitions and writes what Ketura reads: the session's model unless args.landModel says otherwise.
 const landModel = pick(args.landModel || 'inherit')
-const withModel = (opts, m, e) => Object.assign({}, opts, m ? { model: m } : {}, e ? { effort: e } : {})
+// Slim-down A1 (Ketura on Q-0296): the agents run as the custom type `card-worker` (.claude/agents/card-worker.md),
+// which carries only the file and shell tools instead of every tool of the session.  args.agentType: "" turns it off.
+const AGENT_TYPE = args.agentType === undefined ? 'card-worker' : args.agentType
+const withModel = (opts, m, e) => Object.assign({}, opts, m ? { model: m } : {}, e ? { effort: e } : {}, AGENT_TYPE ? { agentType: AGENT_TYPE } : {})
 
 const TEXT = { type: 'string' }
 const LIST = { type: 'array', items: TEXT }
