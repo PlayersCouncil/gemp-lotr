@@ -213,14 +213,14 @@ then claimed by a test.
 | `+` | With everything the text asks for in place, the thing happens. State is read before and after. |
 | `-` | In the *nearest* situation where the text says it should not happen, it does not: the requirement one card short, the event that almost matches, the phase next door. It has to be a situation in which the card is active, so that a mistake in the definition could make the test fail: a Free Peoples card doing nothing on the opponent's turn shows the rule "active", not the card. |
 | `C` | Each cost is paid, read before and after. |
-| `C-` | With a cost that cannot be paid, the action is not offered. |
+| `C-` | With a cost that cannot be paid, the action is not offered. A cost is judged payable IN FULL before it begins, a repeated cost for every repetition (F-0425, Ketura: "if you're unable to pay the cost by default, you're not supposed to be able to perform the action at all"): a cost that can be paid once and not in full is a `C-` board too. |
 | `F` | Who or what can be chosen or affected is exactly who the wording says. Valid candidates: at least one more than is needed, differing from each other in everything the wording does *not* mention, all offered or affected. Invalid candidates: one for each thing the wording excludes, each failing *only* the thing it is there for, none offered or affected. What that asks for each shape of wording the campaign has met is set out under "The candidates of `F`, case by case", below this table: find the case of the wording at hand there (`lookup.py "<words>" --in standard`). |
 | `D` | The effect is still in force just before the boundary the text names and gone just after. "Just before" is in the phase that precedes the boundary in a full turn, with the thing the effect touches going on: for "until the regroup phase", during a skirmish that follows one already resolved, and then at the first regroup decision. An effect that holds a shorter-lived part inside it (a trigger lasting until regroup that limits something phase by phase) is read across two phases, or "one in all" and "one in each phase" cannot be told apart. |
 | `L` | A limit holds: it works up to the limit and does nothing beyond it. Which reading shows it goes by the kind of limit (Ketura on Q-0093). A limit on uses ("limit once per turn", "limit once per phase", "limit N times") withholds the ability at its limit, cost or no cost: the test reads it not offered, with its cost still payable and something on the board the effect could still have acted on. A limit on what the effect gives ("(limit +3)", or a bare number of things added: "to add a threat (limit 1)") leaves an ability or optional trigger that has a cost on offer at its limit (Q-0041): the test takes it once more and reads the cost paid and everything else as it was, with something on the board the effect could still have acted on. With no cost, and for a required trigger, it is not offered or does not happen under either kind. Where a limit caps what an X buys ("discard X cards to make … strength +X (limit +3)"), X itself is not capped: a test shows it, with one use beyond the cap or by reading the choice's maximum. A cap inside an effect ("takes no more than 1 wound") is a limit too; one that renews (each phase, each turn) is shown renewing. |
 | `O` | "May" asks, and declining leaves everything as it was. Listed when the text says "may". An optional trigger whose EFFECT is then a choice of "up to N" or "each may" asks twice, the offer and then a choice from 0 to N, and that is as Ketura wants it (F-0385: "click on the card to trigger it ... and then have the option to select 0-N, if one were to change one's mind"): the test reads the offer and the choice's minimum of 0, and nothing is filed. That does not reach a choice that is a COST, or a text that says "a" and not "up to" (rulings log, "What is offered and what is asked"). |
 | `S` | A value that depends on a count is right at two different counts, and at its cap if it has one. Where the count is an X the player chooses, zero is one of the counts where the action still does something at zero (One Dwarf in Moria heals whatever X is). Not where X is a number of exertions, and not where X of zero would do nothing at all: such a use is deliberately not offered (rulings log, Q-0015 and Q-0034: on an ability or optional trigger with nothing else to pay; an event is offered whatever its X can do, and no test turns on its X of zero), and the `-` is that it is not. Where X is a number of cards moved or tokens spent, and a board can arise on which what was paid and what the board lost are different numbers (a bearer who dies takes his other items with him), one test uses that board. |
 | `R` | "Each time" happens a second time, on the same subject where the wording allows: two wounds on one minion tell "for each wound" from "for each minion wounded", which two minions wounded once cannot. |
-| `B` | Each alternative of an "or" or "choose one" is taken in some test. Where a board that could arise makes one alternative impossible to carry out in full, a test shows the other is then what happens: a player may only choose what can be fully performed. |
+| `B` | Each alternative of an "or" or "choose one" is taken in some test. Where a board that could arise makes one alternative impossible to carry out in full, a test shows the other is then what happens: a player may only choose what can be fully performed. A discard of a whole hand with no card in it is a discard of none and may be chosen (Q-0255: B, "discarding 0 cards is kosher"), and so may "choose an opponent who may ..." whatever he could then do (Q-0257: A): neither is a board where the other alternative is forced. |
 | `Z` | Cards that move end up where the text says: attached to the chosen bearer, stacked, in the dead pile, on top of the deck. For a destination the text names. Where a card arrives somewhere and is taken out again in one effect, it is read there in between. A plain discard is read where it is paid or done, under `C` or `+`, and does not call for `Z`. |
 | `K` | The keyword, with its number if it has one, is on the card. Claimed by the stats test (`K -> ElrondStatsAndKeywordsAreCorrect`). |
 
@@ -270,7 +270,10 @@ tests: for "spot an Elf companion", Elf companions of two titles, or `name(Legol
 
 **What a response saves; who did the thing; a card being played; the player who does it.** Where a response picks
 what it saves from several cards affected at once, an invalid candidate is among them (for "your [sauron] condition
-is about to be discarded", a [sauron] possession in the same discard). Where a trigger names who did the thing
+is about to be discarded", a [sauron] possession in the same discard). One that saves with no choice ("discard this
+condition to prevent that") prevents the whole of that one simultaneous discard, cards not of the kind it names and
+the opponent's own among them, and they are read saved (Q-0250: B, "the action is all or nothing"; Siege Engine
+5_60). Where a trigger names who did the thing
 ("exerted by a Free Peoples card", "uses a special ability"), one valid doer is neither the card itself nor its
 bearer, and one is no character where the wording allows (a possession's ability). Where a condition or a trigger
 turns on a card of a kind being PLAYED ("unless a Shadow event is played"), each word owes a card that fails it
@@ -279,7 +282,9 @@ used there stands in for neither (10_116). Where the wording names the PLAYER wh
 is about to discard", "discarded by an opponent"), one valid doer is that player acting by no card of his side (a
 site's text: Heights of Isengard 11_244), which for a card-worded text is an invalid one; and the other player made
 to do it by that player's card (Introspection 12_29 for a discard; It Burns Us 6_110 for a reveal) is on the table
-too, read as shapes.md has it (F-0296; Q-0171; Q-0251).
+too. Where he has a choice in it he is the one doing it (Q-0171: "if the player has a choice, they're not
+forced"); where he has none, the card's player is (Q-0251: "Since there's no optionality and no choice, I'd say this
+is Free Peoples doing the revealing"). shapes.md has the boards (F-0296).
 
 **A race against a culture.** A race against a culture, and a culture against a race, is shown with a PRINTED card
 that has the one without the other (Pippin, Trollslayer 103_31 is a [gondor] Hobbit; Sméagol, Once Like Us 103_116
@@ -366,7 +371,8 @@ Which checks a clause lists follows from its words, and the analyst is expected 
   A cost of REMOVING a token "from here" has a nearer one, which is laid in its place: no token on the card while
   a second copy holds one, which shows "from here" as well (Sudden Fury 12_132).
   An "add a burden" cost: no printed card stops a burden being added, but a hindered Ring-bearer does
-  (CR 5.0 "hinder"), so its `C-` board is `scn.HinderCard(<the Ring-bearer>)` (103_115). Where the card must
+  (CR 5.0 "hinder"), so its `C-` board is `scn.HinderCard(<the Ring-bearer>)` (103_115). That board is a V-set
+  card's: a Decipher card owes no hindered board, this one included (Q-0237). Where the card must
   itself be the Ring-bearer to pay (Sméagol 59_30's regroup ability), hindering him shuts its text off and no
   board in play is left: a `no C-:` line. The One Ring's own "add a burden to wear" is NOT such a card: its
   text stays on while its bearer is hindered, and the board holds (4_1: not offered in another companion's
@@ -396,13 +402,19 @@ Which checks a clause lists follows from its words, and the analyst is expected 
 - an optional trigger or a special ability with no cost (a spot is no cost) → one `-` is the board on which its
   whole effect would do nothing: not offered (Q-0034; shapes, "Spot X to <effect>"). The game withholds such an
   offer itself (Q-0224): the test reads it absent, and no requirement is written for it unless the offer is still
-  made there (shapes, "An optional trigger or ability that costs nothing"). With a cost it is offered
+  made there (shapes, "An optional trigger or ability that costs nothing"). A keyword given to a card that has it
+  already is not "nothing" and is offered (Q-0245: A, Band of Wild Men 4_4: "the effect still has potential to alter
+  that calculus"). With a cost it is offered
   there and used for nothing, which is read under `F` or `+` as for an event, and is no `-`. A play of a card after
   the "to" is itself a cost (Q-0062): "add a burden to play a [shire] tale" with no tale in hand that can be
   played is not offered, and that board is its `C-`
 - "may" → `O`. A response or any other special ability is the player's to use or not without the text saying
   so; list `O` for one only where declining has a consequence worth showing
-- "for each", "X" → `S` (and for an X, the zero case)
+- "for each", "X" → `S` (and for an X, the zero case). "For each X you spot" is the player's count: he decides how
+  many, and where the effect is a choice of cards it is asked as a choice of 0 to N of them with no number prompt
+  (Q-0248, Aragorn, Wingfoot 4_364: "as a 0-N choice of cards to wound"; shapes.md, "<do> a companion for each
+  <thing>"). An X read off the card a cost acts on ("a Dwarf who is damage +X ... exert that Dwarf") is what it was
+  when spotted, before the cost (Q-0256: A)
 - "each time" → `R`
 - "or", "choose one" → `B`
 - "make each…", "make all… until…" on an event or a special ability → a `Rule` clause citing CR 4.2 "event"
@@ -444,12 +456,12 @@ The type says what kind of statement the clause is, and sets the checks it must 
 | `ExtraCost` | "To play, exert…" / "add a burden" | `+ - C` | `-` is the cost being unpayable, and that board is the cost's `C-` as well: `C-` is not listed again beside it (a ledger that does list it claims it on the same test and is not wrong). A cost another player must pay to do something with this card while it is in play ("The Free Peoples player must add a burden to assign this minion to …") is a `Modifier` that lists `C` and `C-` as well (69_38). |
 | `PlayOn` | "Bearer must be…", "Plays on…" | `F` | Two valid bearers offered, an invalid one not. |
 | `Activated` | "Phase: cost to effect." on a card in play | `+ -` | For `-`, prefer in this order: a requirement in the text unmet; the cost unpayable; a phase the text does not name. Where the text has no requirement, the test of the unpayable cost claims `-` and `C-` both. The phase is the next one in which that player is asked for actions, not any phase: for a Maneuver event, the archery phase; for a Fellowship action, the maneuver phase with a minion laid so that there is one (the Free Peoples player is asked nothing in the Shadow phase). A condition that stands after the "to" ("Exert Galadriel to play the fellowship's next site if it is a forest") is part of the effect and no requirement (F-0022): where it fails the ability is still offered and its cost paid for nothing (Q-0034, an ability with a cost), and that board is read under `F`, not as the `-` (3_17). |
-| `Event` | the text of an event card | `+ -` | `+` includes the event leaving the hand. `-` as for `Activated`; "the cost" there is a cost the TEXT prints, so a pool short of the card's printed twilight cost is no `-`, and an event whose text has no requirement and no cost takes the phase (Whistling Death 11_104). An event's target is not a requirement: a board with nothing to target is read under `F` or `+` (the event is played for nothing, CR 4.2 "effect"), not as the `-`. |
+| `Event` | the text of an event card | `+ -` | `+` includes the event leaving the hand. `-` as for `Activated`; "the cost" there is a cost the TEXT prints, so a pool short of the card's printed twilight cost is no `-`, and an event whose text has no requirement and no cost takes the phase (Whistling Death 11_104). An event that needs initiative does not count itself toward it (F-0464: A): its `-` is a hand of exactly four with the event among them, its `+` a fifth card (shapes.md, "If you have initiative"). An event's target is not a requirement: a board with nothing to target is read under `F` or `+` (the event is played for nothing, CR 4.2 "effect"), not as the `-`. |
 | `Effect` | a further sentence of an event or special ability, with no phase, requirement or cost of its own ("Then…", "If you do, …", a second sentence) | `+` | Its `-` is the first sentence's. It lists whatever else its own wording calls for. A rider "The Free Peoples player may X to prevent this." is of this type and lists `+ O C C-`: `+` is the thing prevented with the first sentence's cost still paid (CR 4.2 "cost"), `O` the other player declining, `C` and `C-` that player's cost. It lists `-` as well where the card can reach a board on which the thing prevented cannot happen (the prevention is then not asked: Q-0114); where it can reach none, Notes say why. |
 | `Trigger` | "Each time…", "When…", "At the start of…" | `+ -` | `-` is the nearest event that should not set it off. Where the trigger names a phase ("if the fellowship moves during the regroup phase"), that is the same event in another phase of the same turn; this holds for a response event as well. A requirement or threshold not met ("for each companion over 4" with four) is another `-` and does not stand in for the neighbouring event (another card of the kind played while this one is in play), which an active test reads even where the tests that would also notice it are parked (1_234). |
 | `Response` | "Response: If…" | `+ -` | `+` shows the response offered and its effect; for a prevention, that the prevented thing did not happen. |
 | `Modifier` | a standing effect: "Bearer is strength +2.", "While…, …" | `+ -` | `-` is the condition not holding, or a card just outside its scope. Read the value with and without. A modifier on the card itself or its bearer still owes F's other card of its kind, one that meets the condition and is read as untouched. Where two sentences between them take in every card of a kind ("each of your minions is +1 ... each of your opponent's minions is -1", 94_23), no card is outside both: each sentence's `-` is the other's card, read at the other's number, and the printed number is the control. |
-| `Restriction` | "may not", "cannot" | `+ -` | `+` is the forbidden thing refused; `-` is the same thing allowed on the same board without this card. Without that control the refusal proves nothing. Others being offered in the very choice that leaves this one out is a control too, provided nothing else about them explains the difference. A Restriction that names its doers or its objects by a filter ("cannot be removed by Free Peoples cards") lists `F` and owes F's spread of valid candidates as a choice does: for a bare side word, a character, an item and a card that is neither (10_47: beside an ally and a possession alone, `side(free people)` narrowed to those two kinds passed). |
+| `Restriction` | "may not", "cannot" | `+ -` | `+` is the forbidden thing refused; `-` is the same thing allowed on the same board without this card. Without that control the refusal proves nothing. Others being offered in the very choice that leaves this one out is a control too, provided nothing else about them explains the difference. A Restriction that names its doers or its objects by a filter ("cannot be removed by Free Peoples cards") lists `F` and owes F's spread of valid candidates as a choice does: for a bare side word, a character, an item and a card that is neither (10_47: beside an ally and a possession alone, `side(free people)` narrowed to those two kinds passed). A card that bars an ACT ("may not look at or reveal", "cannot take wounds") is tested on ONE act it stops and its control, not on every way the act is done: that each definition word doing the act asks the bar is shown in a mechanics class (Q-0264: B2; Ketura: "mechanic tests should exist that do such a thing ... which will then ensure that future cards using the bar only need to act as A"; shapes.md, "A card that bars an act", names the classes). |
 | `Choice` | a sentence that is only a choice between alternatives | `B` | Usually a choice is part of another clause, which then lists `B`. |
 | `Ruling` | an entry in Section Three of the rules that names this card | `+` | Reproduce the ruling's situation. |
 | `Rule` | a glossary entry that bears on this card in a way its text does not show | `+` | For example, the entry "Sam": a Sam who can become the Ring-bearer when Frodo dies can only do so if Frodo was the Ring-bearer. Cite the entry. Not for rules that every card of the kind obeys, which are mechanics. |
@@ -529,7 +541,11 @@ carries more than the effect should change: one wound healed from two reads 1, w
 
 **Give choices something to choose from.** One more valid candidate than the choice needs, and an invalid one
 beside them (see "One candidate is chosen for you" in gemp-testing). Assert the offer with
-`FreepsHasCardChoiceAvailable(...)` and `FreepsHasCardChoiceNotAvailable(...)` before choosing. Where the text
+`FreepsHasCardChoiceAvailable(...)` and `FreepsHasCardChoiceNotAvailable(...)` before choosing. A choice the game
+carries out unasked, because one valid card is there, shows nothing of the invalid card beside it: a second valid
+candidate is laid and the invalid one read "not offered" (Q-0266: B; Ketura: "Yeah I think B is the way to go.").
+Where the invalid candidate is the Ring-bearer and the effect a discard, the reading shows nothing either way, since
+he is never discarded (Q-0109): the bearer in such a test is another (Sam bearing Sting 8_113). Where the text
 says neither "may" nor "up to", read the minimum of one such choice (`FreepsGetChoiceMin()`): a choice that has
 wrongly become optional looks the same otherwise. A "may" that the game asks as a yes/no ("a minion may exert
 to prevent this") is answered by the yes: the choice of who does it has its minimum read too (5_89). A text with two choices (one for its cost, another for its
@@ -582,7 +598,10 @@ further. The one exception is hers, and is a mechanic's and not a card's: a guar
 able to do ("not being able to discard the One Ring, not being able to hinder Maps") is laid with the rig's ad-hoc
 staplers (`AdHocEffects`) on a card with no usual text (Frodo, or a minion, by side), in the test itself, which
 "establishes the artificial test nature of the card while also including its creation right there"
-(`lookup.py Q-0241`).
+(`lookup.py Q-0241`). The one place definition TEXT is made up for a test is the account-name check (`PlayerIs`,
+Race Text 94_5's): it is shown once, card-agnostic, in `mechanics/PlayerIsRequirementTests`, the requirement built
+from text written in the test and asked at a table seated under made-up names (Q-0271: C, "Yeah do C", on the
+strength of Q-0190).
 
 **A board a game could reach.** The cheats shorten a set-up; they do not make a board no game arrives at (Ketura
 on Q-0213, 2026-10-10: `lookup.py Q-0213`). No card is given a culture or a race, and none a keyword that no
@@ -749,7 +768,9 @@ word after it; everything else in the server module (leagues, tournaments, the h
 is run with them by `cardtest.py suite all` (gemp-testing, "Running tests").
 
 What every card of a kind obeys is a mechanic and is not retested card by card: that exerting is not taking a
-wound and a wound is not an exertion, that an exhausted character cannot exert, how a keyword works.
+wound and a wound is not an exertion, that an exhausted character cannot exert, how a keyword works. So an
+exertion is not owed as the nearest miss of a "takes a wound" or "is about to take a wound" trigger: it is shown
+once, in `mechanics/AWoundThatIsNotTakenTests` (Q-0265: A).
 
 ## Earlier iterations of PC cards
 

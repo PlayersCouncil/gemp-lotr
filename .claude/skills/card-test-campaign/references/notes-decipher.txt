@@ -31,7 +31,8 @@ held more than a stat check before the campaign (509 tests between them, most fi
   in places and arrangements where they have been historically sparse"). The Notes of the ledger say so in a
   line. (Q-0237, kept by her, 2026-10-11: "That is already covered by the generic hinder tests, and such classes
   of mechanical interaction can stand to keep to mechanical tests instead of incessantly checking them on all
-  cards.")
+  cards.") That includes the hindered Ring-bearer as the `C-` of an "add a burden" cost: the Standard's line on
+  that board (103_115) is for the V-sets' cards.
 - A site's BLOCK is the same: a text that says "a site" or "each site" with no block named owes no second
   scenario on another block's path (also Q-0237).
 - A card that SWITCHES something on other cards (The White Council 101_18 on Saruman's first sentence) is tested
@@ -66,7 +67,9 @@ WHAT IS ALREADY IN A DECIPHER CARD'S FILE
 
 CARDS THAT SHARE A TEXT (Q-0220: H)
 - 153 Decipher cards in 65 groups have the same game text but for names and cultures (Desert Soldier 4_220 and
-  its four kin are the largest group). The queue keeps a group in one batch, and
+  its four kin are the largest group). The queue keeps a group in one batch where every card of it is in the
+  queue; a card of a group that is in no queue (Morgul Tormentor 12_90, the twin of Orc Tormentor 12_98, line for
+  line the same definition) is worked from the first's ledger and tests when its set comes up. And
   `python3 .claude/skills/card-test-campaign/scripts/orchestrator/twins.py <your ids>` prints the group of each of
   your cards that has one, with the status of any card of it that is worked already. The SECOND card of a group
   starts from the FIRST's ledger: its clauses, checks, boards and Notes with the names, cultures and ids changed,
@@ -110,6 +113,10 @@ DEFINITIONS ALREADY CORRECTED, WITH NO CARD TESTS YET
   otherwise unworked: Boromir 18_40 (F-0345: "a possession" of any culture that he may bear is fetched) and Wish
   For Our Kinfolk 8_8 (F-0346: only a Dwarf COMPANION pays "Exert a Dwarf companion"). Keep the lone tests and do
   not file these again.
+- Caravan From the South 13_83 (F-0479, corrected at the landing of dec-b13_164 with Fearless Approach 13_164):
+  "Each time the Free Peoples player plays the fellowship's next site" goes by who plays it (`player: free
+  people`). Do not file it again; its batch starts from 13_164's ledger and tests (shapes.md, "Each time the Free
+  Peoples player plays the fellowship's next site"). Its two old tests pass.
 
 WHAT THE EARLIER PHASES GOT WRONG MORE THAN ONCE
 - Read every helper card's definition before resting a board on it (`packet.py --defs <ids>`); comments in older
@@ -130,8 +137,9 @@ WHAT THE EARLIER PHASES GOT WRONG MORE THAN ONCE
   (Q-0224; shapes.md, "An optional trigger or ability that costs nothing", lists the kinds of effect it can ask):
   lay the board, test that the offer is NOT made, file nothing and write no requirement. Only where the offer is
   still made there is it a finding (name the kind of effect), corrected by a requirement as before. The exceptions
-  stand: an optional DRAW is still offered with an empty draw deck (Q-0029), an action with a cost is offered and
-  flagged, and a "you may" INSIDE an event's or ability's text is not reached by the engine (F-0379: by hand).
+  stand: an optional DRAW is still offered with an empty draw deck (Q-0029), an action with a cost is offered, and
+  flagged where the engine can tell its effect will do nothing, and a "you may" INSIDE an event's or ability's
+  text is not reached by the engine (F-0379: by hand).
 
 WHAT WILL BE RAISED OTHERWISE AND IS NO FAULT (Q-0220: J; each line ends with the number that settles it. Test the
 game as built and file nothing.)
@@ -220,19 +228,28 @@ TO LOOK AT WHEN THE SET COMES UP (seen in passing by an earlier batch; not looke
 - Set 17, Easterling Dispatcher 17_42 ("When you play this minion, you may spot 2 other [men] Men to add (1) for
   each possession you spot"; from the batch dec-b4_201, read in the definition only, not shown): a no-cost
   optional trigger built on `chooseHowManyToSpot` with nothing that requires a possession, so it is offered with
-  none in play (the kind of F-0428, Aragorn, Wingfoot 4_364). Whether "for each X you spot" asks a number at all
-  is Q-0248, open.
-- Set 17, Shadowfax 17_24 (from the batch at-mech-hinder-c): "Discard all other possessions on bearer and bearer may not bear a hand weapon" is built as a standing check that discards every other possession or weapon the bearer has at any time, so nothing but artifacts can ever be played on him afterwards and stay; Shadowfax 4_100 and Andúril 7_79 have the same kind of sentence built as a discard when played (and, since F-0360, when restored)
+  none in play (the kind of F-0428, Aragorn, Wingfoot 4_364). Q-0248 is answered: the player decides how many, by
+  a choice of cards where the effect chooses cards; an effect that only counts, as 17_42's (1) for each, keeps its
+  number, and the definitions that ask one are unchanged.
+- Set 6, Blood Has Been Spilled 6_91 (worked in dec-b5_96 before this was seen; from the batch dec-b11_1, read in
+  the definition only): "Discard a mount borne by a [rohan] Man to prevent ..." chooses the mount in `cost` and
+  discards it inside the effect, not as the cost (the pattern of F-0477, corrected on 11_60 and 102_46). Nothing
+  cancels a condition's skirmish ability, so only the moment differs: the mount is still on the table while a
+  trigger on the ability's use (Pass of the Spider 103_12, The Balrog 102_38) is answered.
+- Set 7, Morgul Lackey 7_193 and Morgul Predator 7_196 print Morgul Regiment 7_197's second sentence word for
+  word ("Skirmish: Exert this minion to make a Nazgûl or [wraith] Orc strength +1"); twins.py does not group them
+  with 7_197, whose first sentence is its own. The board carries over from Card_07_197_Tests (shapes.md, under
+  that sentence).
 
 ANSWERED BY KETURA ON 2026-10-11 (her fifth notes; `lookup.py <number>` has her words). Test to these, file none again.
 - A cost is judged payable IN FULL before it begins (F-0425: Morgul Regiment 7_197; a repeated cost wants every
-  repetition payable). Engine pass 28 builds it: until it is on the branch, write the test of the rule and park
-  it on F-0425.
+  repetition payable). Built by engine pass 28 (`Repeat.isPlayableInFull`): test the game as built; nothing is
+  parked on F-0425. 7_197, 7_200 and 7_201 are landed (the batch dec-b19_1).
 - An event that needs initiative does not count itself (F-0464, A: four cards beside it; "If the Shadow has
-  initiative" wants three or fewer beside it). Engine pass 28 builds it: until then park the test of the rule on
-  F-0464.
+  initiative" wants three or fewer beside it). Built by engine pass 28: test the game as built (shapes.md, "If
+  you have initiative"); nothing is parked on F-0464.
 - "A <kind> who is damage +X ... exert ... X": X is what he was when he was SPOTTED, before the exertion (Q-0256,
-  A; Blood Runs Chill 8_3, Great Day, Great Hour 10_1).
+  A; Blood Runs Chill 8_3, Great Day, Great Hour 10_1; built by engine pass 28).
 - Where a card makes an opponent do a thing and he has NO choice in it, the card's player is the one doing it
   (Q-0251: It Burns Us 6_110's reveal is the Free Peoples player's); where he has a choice, he is (Q-0171).
 - "Discard your hand" with no card in hand is a discard of no cards and may be chosen (Q-0255); "choose an
@@ -243,22 +260,23 @@ ANSWERED BY KETURA ON 2026-10-11 (her fifth notes; `lookup.py <number>` has her 
   is asking the rules council).
 - "For each X you spot" in an optional trigger: the player still decides how many, and where the effect is a
   choice of cards the number is not asked by a number prompt: he chooses 0 to N cards (Q-0248: Aragorn, Wingfoot
-  4_364). Engine pass 28 builds it on that card; the other definitions that ask a number stay as they are.
+  4_364). Built by engine pass 28 on that card; the other definitions that ask a number stay as they are.
 - A keyword offered to a card that already has it is still an offer (Q-0245: Band of Wild Men 4_4).
 - The generated Play test stays (Q-0261). She wants to go further (no card re-proving what its stats line already
   says); that is being worked out and is NOT yet a rule for authors: write what the Standard asks today.
 
 THE COST OF ASSIGNING (set 7's Morgul Orcs; built by engine pass 26, item assigncost, on Ketura's Q-0221: A)
 - Morgul Regiment 7_197, Morgul Spawn 7_200, Morgul Spearman 7_201 ("the Free Peoples player must exert a
-  companion to assign this minion") and Úlairë Nertëa 69_38 are on one build, `extraCostToAssign`. Nothing is
-  asked ahead: the Free Peoples player pays as he makes the assignment (at his own assigning after his answer,
-  the charged ones in the order of the minions' ids; under a card that has him assign, once the pair is chosen).
-  A cost not paid in full means that one assignment is not made (at his own assigning the minion is a leftover
-  for the Shadow player); while the cost cannot be paid the assignment is not his to make; the Shadow player's
-  assignments are never charged; a lone candidate exerts unasked and the choice of who exerts has no "none".
-  The cards that have him assign (Éowyn 17_96, Alcarin 5_31, Sméagol 7_71 and nine more) can now take a Morgul
-  Orc. `mechanics/CostOfAssigningTests` and `orchestrator/engine-pass-26/assigncost.md` have the whole of it.
-- The three Orcs' old test files pass and read the game as built, but are NOT worked to the Standard (no ledger,
-  the alias `card`, one table built inside a test): work them as any card of this phase.
+  companion to assign this minion") and Úlairë Nertëa 69_38 are on one build, `extraCostToAssign`. At his own
+  assigning he pays AHEAD (Q-0283, engine pass 30): as he starts assigning, each charging minion whose cost can be
+  paid in full is offered to him as an optional trigger on the minion, until he passes; a minion paid for is his
+  to assign, one not paid for is not, and nothing is paid after his answer. Under a card that has him assign he
+  pays once the pair is chosen. A cost not paid in full means that one assignment is not made; while the cost
+  cannot be paid the assignment is not his to make; the Shadow player's assignments are never charged; a lone
+  candidate exerts unasked and the choice of who exerts has no "none". The cards that have him assign (Éowyn
+  17_96, Alcarin 5_31, Sméagol 7_71 and nine more) can take a Morgul Orc. `mechanics/CostOfAssigningTests`,
+  shapes.md ("The Free Peoples player must <pay> to assign") and `orchestrator/engine-pass-30/regiment.md` have
+  the whole of it.
+- The three Orcs are worked and landed (the batch dec-b19_1).
 - F-0425 is answered (the section above); Q-0247 is kept (the payment's source is the charging card; an
   assignment already paid for is not asked to pay again).

@@ -46,12 +46,18 @@ step where you can, and do not look at the same thing twice.
    no clause ids, by design; if you find any, that is a fix. Does it really show that check? The usual failures:
    a `-` that is not the nearest miss; an `F` with only one valid candidate, or no invalid one; a `D` that looks
    at only one side of the boundary; an assertion after an action with no reading before it; an expected value
-   that could only have come from running the game; a helper card whose own text is doing part of the work.
+   that could only have come from running the game; a helper card whose own text is doing part of the work; a
+   choice the game carries out unasked, one valid card on the table, with no "not offered" read on an invalid
+   one (Q-0266: B). Not gaps since Ketura's answers of 2026-10-12: a card that bars an act tested on one act it
+   stops and its control, with no card of each definition word (Q-0264: B2, the mechanics hold those); no
+   exertion beside a "takes a wound" or "is about to take a wound" trigger (Q-0265: A).
 
    Where you suspect a gap, name the wrong definition that would pass. If reading the test settles it (no
    candidate on the table tells the two apart), fix it without more ado. Only where you cannot tell by reading,
    prove it with that one mistake: `mutate.py <id> --replace "<old>" "<new>" --all --out <your folder name>-m`
    (at most two runs a card that try a mistake to settle a doubt: each is a step, and steps are what cost.
+   Runs side by side under separate `--out` names that try one definition's several guards of one kind each alone
+   (three `until: regroup` lines, by `--nth`) count as one.
    Several mistakes may go in one run where a script of yours makes that possible; each is still reported
    singly). A mistake that survives is a gap;
    one that is noticed is not, unless only a test of something else noticed it: ask which test reads the board
@@ -68,7 +74,9 @@ step where you can, and do not look at the same thing twice.
    `rules.py card <id>`, `rules.py term <word>`, `rules.py grep <phrase>`. If you find one, the finding is a
    misreading. If you cannot, say that you tried and what you looked at. Then check the parked test is sound:
    `mutate.py <id> --replace "<the wrong text>" "<the correction>" --with-parked` runs the parked tests too. The
-   parked test should fail against the card as it is and pass against the correction. Where the author kept an
+   parked test should fail against the card as it is and pass against the correction. Where it reads a question
+   the correction ADDS (`FreepsDecisionAvailable("Would you like to reveal")`), the finding must give the
+   correction's exact `text:`: the test binds to its first words. Where the author kept an
    old reading active beside the parked one (a question), that active test is the one failure to expect against
    the correction; on a card with two questions each parked test also fails under the other's correction, so
    look for the parked test's own name in the "As a correction" line `mutate.py` prints (it names the parked
@@ -99,7 +107,10 @@ step where you can, and do not look at the same thing twice.
    hand or deck is no such field: every such discard must write it, and what it says is ruled (F-0205). `false`
    is right where the discard is one of the Free Peoples player's options, `true` where a Shadow card makes him
    discard with no choice (Frodo, Courteous Halfling 4_301's "Shadow cards may not discard ... from the top of
-   your draw deck" reads it); only a value that departs from that is a finding.
+   your draw deck" reads it); only a value that departs from that is a finding. A Shadow card whose text gives
+   the Free Peoples player a choice that includes a discard owes no board beside Frodo, Courteous Halfling 4_301
+   to show it (F-0205 is the rule, and a test tests the card, not the language: Q-0241), unless its own text
+   names that discard as a cost.
 
 ## Putting it right
 

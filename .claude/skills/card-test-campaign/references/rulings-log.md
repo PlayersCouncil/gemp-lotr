@@ -1857,8 +1857,8 @@ twice to get 6 exertions. 2. Yeah I can't imagine why one would want some exerti
 enduring minion, they're just not going to use the ability on them." So a "(limit X)" where X is the use's own
 paid amount caps that use only (unlike Q-0134's printed "(limit (N))"), and on Merry's Sword the count takes every
 [rohan] companion without asking. Her second answer is about that card: whether every "for each X you spot"
-spots all unasked is Q-0248, open (CR 4.2 "spot" and the game as built ask how many), and nothing rests on
-either reading until it is answered. *[2026-10-08, evening]*
+spots all unasked was Q-0248, then open (CR 4.2 "spot" and the game as built ask how many); answered 2026-10-11
+("What is offered and what is asked": the player still decides how many). *[2026-10-08, evening]*
 
 **Shadow Host 58_43:** "The original Shadow Host requires them to be exhausted, not just Wraiths (the errata removes
 that requirement as excessive)." *[2026-10-08, evening]*

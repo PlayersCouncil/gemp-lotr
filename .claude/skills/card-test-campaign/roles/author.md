@@ -5,7 +5,9 @@ campaign to test every card the same way. The cards and a name for your working 
 this brief.
 
 Before anything else, read these three files in full, in one step (three `Read` calls side by side: a single
-`cat` of all three is cut off by the output limit). Everything below assumes them:
+`cat` of all three is cut off by the output limit). The Standard is longer than one `Read` returns: read it in two
+calls, the second from the line where the first stops (`offset`), or its end ("When something is in the way", the
+mechanics, the reviewer's list) is missed. Everything below assumes them:
 
 - `.claude/skills/test-generation/SKILL.md`: the Card Test Standard. What a card's tests must cover and how the
   file is laid out.
@@ -77,9 +79,11 @@ whose game text is a batch card's own with a word or two changed: choose another
 for more than about twenty ids it overruns the output limit, so send it to a file under your folder and `Read`
 that). You may read another card's finished test file of the same shape, so long as that card is neither one of
 your batch nor another version of one: the Decipher original of an erratum, and the landed ERRATUM of an
-original, whose test file and ledger stay shut until stage 2 as your own files do (52_75 for 2_75). Only those
-are shut: another card that shares a title with one of yours (a second Denethor) may be read as a helper like
-any other, and a landed card with the SAME text as yours is the quickest source of boards and helpers
+original, whose test file and ledger stay shut until stage 2 as your own files do (52_75 for 2_75). So does a
+`mechanics/` class built on one of your batch's cards (`CostOfAssigningTests` on Morgul Spawn 7_200), as the shapes
+and pitfalls that name a batch card do. Only those are shut: another card that shares a title with one of yours (a
+second Denethor) may be read as a helper like any other, and a landed card with the SAME text as yours is the
+quickest source of boards and helpers
 (`packet.py --find` on the first sentence of the game text: Uruk Veteran 4_201 is Uruk Trooper 4_199 word for
 word).
 
@@ -136,7 +140,9 @@ your card's file owes a test for, or one a finding proposes to change) is tried 
 `mutate.py <that card's id> --replace <old> <new> --test <your card's test file>`, with `--with-parked` where
 your test is parked on it. A finding whose correction is in the ENGINE has no `--replace` to give: run a copy of
 the class with that `@Ignore` line taken out through `cardtest.py probe`, to see the test fail at the reading it
-is parked for. A test the game passes is not parked (6_63's kill test, written for F-0444, passed).
+is parked for; where the fault makes the tests of one class disturb one another (each reads what an earlier one
+left, Into the Caves 17_100 under F-0487), the copy holds that one test alone. A test the game passes is not
+parked (6_63's kill test, written for F-0444, passed).
 
 Every step you take re-reads everything you have read so far, so steps are what cost. Read several files in one
 step where you can (the packets of all your cards, the helper cards you mean to use), and do not look at the same
@@ -174,7 +180,9 @@ Decide which of three things is wrong, in this order, and say which in your repo
    lint's `parked-only` warnings on `+`, `O` and `R` are then expected until landing.
    A definition that does not do what its text says is fixed at landing by the orchestrator without waiting for
    Ketura (her rule since 2026-10-07), so for every finding show the correction (the `mutate.py` line that makes
-   your parked test pass with every active test) and say in one sentence whether the departure looks like an
+   your parked test pass with every active test; where the parked test reads a question the correction ADDS,
+   `FreepsDecisionAvailable("Would you like to reveal")`, the finding gives the correction's exact `text:`, since
+   the test binds to its first words) and say in one sentence whether the departure looks like an
    error or typo (the usual case) or looks DELIBERATE (a comment in the definition, a workaround for play, a
    ruling that might explain it). Only the deliberate-looking and the ones you are unsure of go to her first.
    Where the right correction is a change to the ENGINE: show a definition-only correction that makes the parked
@@ -199,6 +207,13 @@ A test shows what a card that exists does (Ketura, 2026-10-11: `lookup.py Q-0241
 definition text is stapled onto a card to stand in for one. Where NO printed card can make the board a check
 wants, the check is not shown: its `no <check>:` line, or Notes, says what could not be shown and names the
 search that found no card.
+
+Nor is a card owed what a mechanics class holds (Ketura, 2026-10-12): a card that bars an act is tested on ONE
+act it stops and its control, and a card of each definition word that does the act is the mechanics' (Q-0264:
+B2); an exertion is not owed as the nearest miss of a wound trigger (Q-0265: A); the account-name check is
+shown once, card-agnostic (Q-0271: C). A choice the game carries out unasked is no such thing: it shows
+nothing of the invalid card, so a second valid candidate is laid and the invalid one read "not offered"
+(Q-0266: B). The Standard has each where it applies.
 
 If a check cannot be written with the rig's existing methods, do not write a helper method, do not reach into
 the engine, and do not show it by an exception: a card test never asserts that the rig or the game throws
