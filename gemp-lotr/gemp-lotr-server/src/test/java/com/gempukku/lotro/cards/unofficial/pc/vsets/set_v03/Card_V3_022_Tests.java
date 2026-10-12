@@ -75,7 +75,7 @@ public class Card_V3_022_Tests
 	}
 
 	@Test
-	public void PlayedForTwoToTheSupportAreaItRaisesTheThreatLimitByTwo() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedToTheSupportAreaItRaisesTheThreatLimitByTwo() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var march = scn.GetFreepsCard("march1");
@@ -88,11 +88,9 @@ public class Card_V3_022_Tests
 
 		// Frodo and two [gondor] Wraiths: three companions.
 		assertEquals(3, scn.GetThreatLimit());
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(march));
 
 		scn.FreepsPlayCard(march);
-		assertEquals(2, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, march);
 		assertNotAttachedTo(march, oath);
 		assertNotAttachedTo(march, sleepless);

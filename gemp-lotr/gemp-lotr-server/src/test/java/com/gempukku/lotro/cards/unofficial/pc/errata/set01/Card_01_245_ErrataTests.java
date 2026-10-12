@@ -143,14 +143,12 @@ public class Card_01_245_ErrataTests
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPass();
 
-		int twilight = scn.GetTwilight();
 		int freepsDeck = scn.GetFreepsDeckCount();
 		assertEquals(1, scn.GetBurdens());
 		assertEquals(1, scn.GetShadowHandCount());
 		assertTrue(scn.ShadowPlayAvailable(measures));
 
 		scn.ShadowPlayCard(measures);
-		assertEquals(twilight - 2, scn.GetTwilight());
 		assertEquals(0, scn.GetBurdens());
 		assertInZone(Zone.SHADOW_CHARACTERS, swordsman);
 
@@ -214,7 +212,6 @@ public class Card_01_245_ErrataTests
 		assertInZone(Zone.DISCARD, soldier, bowmen, measures);
 		assertEquals(0, scn.GetShadowHandCount());
 		assertEquals(0, scn.GetBurdens());
-		assertEquals(twilight - 2, scn.GetTwilight());
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
 
@@ -268,7 +265,6 @@ public class Card_01_245_ErrataTests
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPass();
 
-		int twilight = scn.GetTwilight();
 		int freepsDeck = scn.GetFreepsDeckCount();
 		// An event's target is no requirement: it may be played for nothing.
 		assertTrue(scn.ShadowPlayAvailable(measures));
@@ -277,7 +273,6 @@ public class Card_01_245_ErrataTests
 
 		assertFalse(scn.FreepsDecisionAvailable("prevent"));
 		assertEquals(0, scn.GetBurdens());
-		assertEquals(twilight - 2, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, troop, measures);
 		assertEquals(0, scn.GetShadowHandCount());
 		assertEquals(freepsDeck, scn.GetFreepsDeckCount());

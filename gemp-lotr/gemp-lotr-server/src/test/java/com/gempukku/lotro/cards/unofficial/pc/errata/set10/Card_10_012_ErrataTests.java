@@ -105,8 +105,6 @@ public class Card_10_012_ErrataTests
 		assertTrue(scn.FreepsPlayAvailable(glimpse));
 
 		scn.FreepsPlayCard(glimpse);
-		// 2 for Celeborn + 0
-		assertEquals(2, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, glimpse);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

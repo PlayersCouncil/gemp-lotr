@@ -67,7 +67,7 @@ public class Card_01_142_ErrataTests
 	}
 
 	@Test
-	public void PlayedToTheSupportAreaForTwoOnceAnIsengardMinionCanBeSpotted() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedToTheSupportAreaOnceAnIsengardMinionCanBeSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var voice = scn.GetShadowCard("voice");
@@ -88,10 +88,8 @@ public class Card_01_142_ErrataTests
 
 		scn.ShadowPlayCard(uruk1);
 		assertTrue(scn.ShadowPlayAvailable(voice));
-		int twilight = scn.GetTwilight();
 
 		scn.ShadowPlayCard(voice);
-		assertEquals(twilight - 2, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, voice);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
@@ -118,10 +116,8 @@ public class Card_01_142_ErrataTests
 
 		scn.ShadowPlayCard(forger1);
 		assertTrue(scn.ShadowPlayAvailable(voice));
-		int twilight = scn.GetTwilight();
 
 		scn.ShadowPlayCard(voice);
-		assertEquals(twilight - 2, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, voice);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}

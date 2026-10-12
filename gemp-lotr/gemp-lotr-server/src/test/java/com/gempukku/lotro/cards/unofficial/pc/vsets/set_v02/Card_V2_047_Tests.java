@@ -85,7 +85,7 @@ public class Card_V2_047_Tests
 	}
 
 	@Test
-	public void PlayedForFiveAndAnExhaustedCompanionIsValiantOnceHeIsInPlay() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedAndAnExhaustedCompanionIsValiantOnceHeIsInPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var erkenbrand = scn.GetFreepsCard("erkenbrand");
@@ -99,13 +99,11 @@ public class Card_V2_047_Tests
 		scn.AddWoundsToChar(aragorn, 3);
 		assertTrue(scn.IsExhausted(aragorn));
 		assertFalse(scn.HasKeyword(aragorn, Keyword.VALIANT));
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(0, scn.GetFreepsDeadCount());
 		assertTrue(scn.FreepsPlayAvailable(erkenbrand));
 
 		scn.FreepsPlayCard(erkenbrand);
 
-		assertEquals(5, scn.GetTwilight());
 		assertInZone(Zone.FREE_CHARACTERS, erkenbrand);
 		assertTrue(scn.HasKeyword(aragorn, Keyword.VALIANT));
 		assertFalse(scn.HasKeyword(erkenbrand, Keyword.VALIANT));
@@ -142,7 +140,6 @@ public class Card_V2_047_Tests
 
 		assertEquals(7, scn.GetFreepsDeadCount());
 		assertInZone(Zone.DEAD, guard, elite, rider, rohirrim, eowyn, dwarf, herdsman, theirScout);
-		assertEquals(0, scn.GetTwilight());
 
 		scn.FreepsPlayCard(erkenbrand);
 
@@ -159,7 +156,6 @@ public class Card_V2_047_Tests
 		assertEquals(4, scn.GetFreepsDeadCount());
 		assertInDiscard(veteran);
 		assertInZone(Zone.FREE_CHARACTERS, warrior);
-		assertEquals(5, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

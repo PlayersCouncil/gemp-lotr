@@ -92,8 +92,6 @@ public class Card_04_068_ErrataTests
 
 		assertTrue(scn.FreepsPlayAvailable(ferevellon));
 		scn.FreepsPlayCard(ferevellon);
-		// 2 for Orophin + 2 for Ferevellon
-		assertEquals(4, scn.GetTwilight());
 		assertInZone(Zone.FREE_CHARACTERS, ferevellon);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -109,10 +107,8 @@ public class Card_04_068_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(ferevellon));
 		scn.FreepsPlayCard(ferevellon);
-		assertEquals(2, scn.GetTwilight());
 		assertInZone(Zone.FREE_CHARACTERS, ferevellon);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

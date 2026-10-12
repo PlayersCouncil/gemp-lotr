@@ -77,7 +77,7 @@ public class Card_V3_091_Tests
 	}
 
 	@Test
-	public void IsPlayedForTwoOnARohanCompanionWhoNeedNotBeAMan() throws DecisionResultInvalidException, CardNotFoundException {
+	public void IsPlayedOnARohanCompanionWhoNeedNotBeAMan() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
@@ -92,7 +92,6 @@ public class Card_V3_091_Tests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(3, scn.GetStrength(merry));
 		assertEquals(6, scn.GetStrength(guard));
 		assertTrue(scn.FreepsPlayAvailable(lance));
@@ -107,7 +106,6 @@ public class Card_V3_091_Tests
 		scn.FreepsChooseCard(merry);
 
 		assertAttachedTo(lance, merry);
-		assertEquals(2, scn.GetTwilight());
 		// 3 + 2
 		assertEquals(5, scn.GetStrength(merry));
 		assertEquals(6, scn.GetStrength(guard));

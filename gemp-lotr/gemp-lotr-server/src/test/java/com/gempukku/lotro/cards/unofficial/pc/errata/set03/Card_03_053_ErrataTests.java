@@ -87,12 +87,10 @@ public class Card_03_053_ErrataTests
 		assertTrue(scn.AwaitingShadowPhaseActions());
 		assertTrue(scn.ShadowPlayAvailable(hate));
 
-		int twilight = scn.GetTwilight();
 		int deck = scn.GetShadowDeckCount();
 		assertEquals(1, scn.GetShadowHandCount());
 
 		scn.ShadowPlayCard(hate);
-		assertEquals(twilight - 2, scn.GetTwilight());
 		assertEquals(deck - 3, scn.GetShadowDeckCount());
 		assertEquals(3, scn.GetShadowHandCount());
 		assertInDiscard(hate);

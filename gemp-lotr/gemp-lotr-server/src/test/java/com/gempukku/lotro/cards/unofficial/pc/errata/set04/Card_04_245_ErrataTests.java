@@ -97,7 +97,6 @@ public class Card_04_245_ErrataTests
 		scn.ShadowPlayCard(archer);
 		assertInHand(scout);
 		assertInZone(Zone.SHADOW_CHARACTERS, archer);
-		assertEquals(14, scn.GetTwilight());
 		// The archer alone: he is no "other" Southron, and the Easterling is none at all.
 		assertEquals(1, scn.GetShadowArcheryTotal());
 

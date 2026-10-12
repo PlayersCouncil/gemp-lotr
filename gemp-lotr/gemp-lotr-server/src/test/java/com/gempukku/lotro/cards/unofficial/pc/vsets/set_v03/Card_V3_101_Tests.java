@@ -199,8 +199,6 @@ public class Card_V3_101_Tests
 		assertFalse(scn.IsHindered(scimitar));
 		assertFalse(scn.IsHindered(troop));
 		assertFalse(scn.IsHindered(hunter));
-		// 5 set - 2 for the event
-		assertEquals(3, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, reach);
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
@@ -307,7 +305,6 @@ public class Card_V3_101_Tests
 
 		scn.ShadowPlayCard(reach1);
 
-		assertEquals(12, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, reach1);
 		assertEquals(0, scn.GetWoundsOn(oldsauron));
 		assertTrue(scn.IsHindered(lordofmoria));

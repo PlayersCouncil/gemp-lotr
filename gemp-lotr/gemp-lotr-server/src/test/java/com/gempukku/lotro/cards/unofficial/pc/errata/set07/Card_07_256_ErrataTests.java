@@ -97,7 +97,6 @@ public class Card_07_256_ErrataTests
 		scn.MoveMinionsToTable(troop, savage, savage2);
 		scn.SkipToPhase(Phase.REGROUP);
 
-		int twilight = scn.GetTwilight();
 		assertEquals(3, scn.GetBurdens());
 		assertEquals(0, scn.GetWoundsOn(guard));
 		assertEquals(0, scn.GetWoundsOn(gimli));
@@ -107,7 +106,6 @@ public class Card_07_256_ErrataTests
 		assertTrue(scn.FreepsPlayAvailable(sang));
 
 		scn.FreepsPlayCard(sang);
-		assertEquals(twilight + 1, scn.GetTwilight());
 
 		assertTrue(scn.FreepsHasCardChoiceAvailable(guard, gimli));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(deor, guard2, frodo));

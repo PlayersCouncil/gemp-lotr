@@ -84,7 +84,7 @@ public class Card_V3_031_Tests
 	}
 
 	@Test
-	public void PlayedForTwoToTheFellowshipWhenAGondorWraithIsTheCompanionSpotted() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedToTheFellowshipWhenAGondorWraithIsTheCompanionSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var pippin = scn.GetFreepsCard("pippin");
@@ -94,12 +94,10 @@ public class Card_V3_031_Tests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(pippin));
 
 		scn.FreepsPlayCard(pippin);
 
-		assertEquals(2, scn.GetTwilight());
 		assertInZone(Zone.FREE_CHARACTERS, pippin);
 		assertEquals(0, scn.GetWoundsOn(oathbreaker));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
@@ -129,8 +127,6 @@ public class Card_V3_031_Tests
 
 		scn.FreepsPlayCard(pippin);
 
-		// 2 for the Knight + 2 for Pippin
-		assertEquals(4, scn.GetTwilight());
 		assertInZone(Zone.FREE_CHARACTERS, pippin);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

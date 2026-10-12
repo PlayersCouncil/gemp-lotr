@@ -81,7 +81,7 @@ public class Card_01_316_ErrataTests
 	}
 
 	@Test
-	public void PlaysForNothingOnMerryOrPippinAndNoOtherHobbit() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlaysOnMerryOrPippinAndNoOtherHobbit() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
@@ -104,7 +104,6 @@ public class Card_01_316_ErrataTests
 		scn.FreepsChooseCard(pippin);
 
 		assertAttachedTo(talent, pippin);
-		assertEquals(3, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

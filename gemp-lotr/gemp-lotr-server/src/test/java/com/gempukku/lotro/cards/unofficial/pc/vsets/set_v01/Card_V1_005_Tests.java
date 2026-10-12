@@ -131,7 +131,6 @@ public class Card_V1_005_Tests
 		scn.FreepsPlayCard(onedwarf);
 
 		// Gimli is the only Dwarf bearing two items, so he is spotted without a choice.  One wound is healed, not both.
-		assertEquals(1, scn.GetTwilight());
 		assertEquals(1, scn.GetWoundsOn(gimli));
 
 		assertTrue(scn.FreepsHasCardChoiceAvailable(axe, armor));

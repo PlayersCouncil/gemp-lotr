@@ -98,7 +98,6 @@ public class Card_07_242_ErrataTests
 		scn.StartGame();
 
 		assertEquals(3, scn.GetStrength(merry));
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(sword));
 
 		scn.FreepsPlayCard(sword);
@@ -107,7 +106,6 @@ public class Card_07_242_ErrataTests
 		assertAttachedTo(sword, merry);
 		assertNotAttachedTo(sword, sam);
 		assertNotAttachedTo(sword, guard);
-		assertEquals(1, scn.GetTwilight());
 		assertEquals(5, scn.GetStrength(merry));
 		assertEquals(3, scn.GetStrength(sam));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());

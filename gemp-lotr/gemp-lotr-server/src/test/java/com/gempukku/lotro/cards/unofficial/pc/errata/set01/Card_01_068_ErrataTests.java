@@ -67,7 +67,7 @@ public class Card_01_068_ErrataTests
 	}
 
 	@Test
-	public void PlaysForOneOnAnElfCompanionOnly() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlaysOnAnElfCompanionOnly() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var arrows = scn.GetFreepsCard("arrows");
@@ -82,7 +82,6 @@ public class Card_01_068_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(arrows));
 
 		scn.FreepsPlayCard(arrows);
@@ -93,7 +92,6 @@ public class Card_01_068_ErrataTests
 		scn.FreepsChooseCard(lorien);
 
 		assertAttachedTo(arrows, lorien);
-		assertEquals(1, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

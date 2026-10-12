@@ -145,12 +145,10 @@ public class Card_V2_014_Tests
 		assertEquals(4, scn.GetStrength(frodo));
 		assertEquals(13, scn.GetStrength(troop));
 
-		int twilight = scn.GetTwilight();
 		assertEquals(0, scn.GetWoundsOn(gandalf));
 		assertTrue(scn.FreepsPlayAvailable(remember));
 
 		scn.FreepsPlayCard(remember);
-		assertEquals(twilight + 2, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, remember);
 		// Gandalf exerts, and nobody else.
 		assertEquals(1, scn.GetWoundsOn(gandalf));

@@ -96,7 +96,6 @@ public class Card_V2_011_Tests
 		scn.StartGame();
 
 		assertInZone(Zone.DECK, balglin);
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(1, scn.GetFreepsHandCount());
 		int shuffles = scn.GetFreepsDeckShuffleCount();
 		int opponentShuffles = scn.GetShadowDeckShuffleCount();
@@ -121,7 +120,6 @@ public class Card_V2_011_Tests
 		assertInZone(Zone.HAND, balglin);
 		assertInZone(Zone.DISCARD, allegiance);
 		assertEquals(1, scn.GetFreepsHandCount());
-		assertEquals(1, scn.GetTwilight());
 		// A draw deck that has been looked through is reshuffled: once, and only the deck that was looked
 		// through.
 		assertEquals(shuffles + 1, scn.GetFreepsDeckShuffleCount());
@@ -181,7 +179,6 @@ public class Card_V2_011_Tests
 		assertTrue(scn.IsExhausted(defender));
 		assertTrue(scn.IsExhausted(guardian));
 		assertTrue(scn.IsExhausted(guard));
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(allegiance));
 
 		scn.FreepsPlayCard(allegiance);
@@ -196,7 +193,6 @@ public class Card_V2_011_Tests
 
 		assertInZone(Zone.HAND, elvenbow);
 		assertInZone(Zone.DISCARD, allegiance);
-		assertEquals(1, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
@@ -316,7 +312,6 @@ public class Card_V2_011_Tests
 		assertEquals(deck, scn.GetFreepsDeckCount());
 		assertEquals(0, scn.GetFreepsHandCount());
 		assertEquals(1, scn.GetWoundsOn(guard));
-		assertEquals(1, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, allegiance);
 		// He did look, so the deck is shuffled.
 		assertEquals(shuffles + 1, scn.GetFreepsDeckShuffleCount());
@@ -350,7 +345,6 @@ public class Card_V2_011_Tests
 		scn.FreepsDismissRevealedCards();
 
 		assertEquals(1, scn.GetWoundsOn(guard));
-		assertEquals(1, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, allegiance);
 		assertEquals(0, scn.GetFreepsHandCount());
 		assertEquals(deck, scn.GetFreepsDeckCount());

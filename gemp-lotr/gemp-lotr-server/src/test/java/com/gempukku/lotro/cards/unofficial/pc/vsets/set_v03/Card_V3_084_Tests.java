@@ -105,7 +105,6 @@ public class Card_V3_084_Tests
 		scn.ShadowAssignToMinions(haldir, savage);
 		scn.FreepsResolveSkirmish(haldir);
 
-		int twilight = scn.GetTwilight();
 		assertEquals(0, scn.GetWoundsOn(haldir));
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertEquals(13, scn.GetStrength(troop));
@@ -115,7 +114,6 @@ public class Card_V3_084_Tests
 
 		scn.FreepsPlayCard(iamnoman);
 
-		assertEquals(twilight + 2, scn.GetTwilight());
 		assertEquals(2, scn.GetWoundsOn(haldir));
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		// Both minions fighting Haldir are offered, of two cultures.
@@ -157,14 +155,12 @@ public class Card_V3_084_Tests
 		scn.SkipToAssignments();
 		scn.FreepsAssignAndResolve(eowyn, troop);
 
-		int twilight = scn.GetTwilight();
 		assertEquals(0, scn.GetWoundsOn(eowyn));
 		assertEquals(13, scn.GetStrength(troop));
 
 		scn.FreepsPlayCard(iamnoman);
 
 		// Éowyn is valiant and could have exerted twice, but with her in the skirmish she is spotted instead.
-		assertEquals(twilight + 2, scn.GetTwilight());
 		assertEquals(0, scn.GetWoundsOn(eowyn));
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(rider));

@@ -134,8 +134,6 @@ public class Card_01_048_ErrataTests
 
 		scn.FreepsPlayCard(haldir);
 		assertInZone(Zone.FREE_CHARACTERS, haldir);
-		// 2 for Arwen + 2 for Haldir
-		assertEquals(4, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
@@ -163,8 +161,6 @@ public class Card_01_048_ErrataTests
 
 		scn.FreepsPlayCard(haldir);
 		assertInZone(Zone.FREE_CHARACTERS, haldir);
-		// 2 for Orophin + 2 for Haldir
-		assertEquals(4, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

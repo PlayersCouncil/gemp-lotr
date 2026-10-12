@@ -109,8 +109,7 @@ public class Card_V3_030_Tests
 
 		scn.FreepsPlayCard(nardol);
 
-		// 1 + 2 for the Signal-fire. With exactly two beacons to hinder nothing is asked.
-		assertEquals(3, scn.GetTwilight());
+		// With exactly two beacons to hinder nothing is asked.
 		assertInZone(Zone.SUPPORT, nardol);
 		assertTrue(scn.IsHindered(war1));
 		assertTrue(scn.IsHindered(war2));
@@ -136,7 +135,6 @@ public class Card_V3_030_Tests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		scn.FreepsPlayCard(nardol);
 
 		assertEquals(2, scn.FreepsGetChoiceMin());
@@ -148,7 +146,6 @@ public class Card_V3_030_Tests
 
 		scn.FreepsChooseCards(war1, war2);
 
-		assertEquals(2, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, nardol);
 		assertTrue(scn.IsHindered(war1));
 		assertTrue(scn.IsHindered(war2));

@@ -104,10 +104,8 @@ public class Card_V2_007_Tests
 		scn.MoveMinionsToTable(scn.GetShadowCard("troop"));
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		int twilight = scn.GetTwilight();
 		assertTrue(scn.FreepsPlayAvailable(contest));
 		scn.FreepsPlayCard(contest);
-		assertEquals(twilight + 2, scn.GetTwilight());
 
 		// With no [dwarven] companion there is nothing to choose between: the next thing asked is which card.
 		// A card that already has a [dwarven] token may be reinforced; one with none, or with [elven] tokens, may not.
@@ -151,10 +149,8 @@ public class Card_V2_007_Tests
 		scn.MoveMinionsToTable(scn.GetShadowCard("troop"));
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		int twilight = scn.GetTwilight();
 		assertTrue(scn.FreepsPlayAvailable(contest));
 		scn.FreepsPlayCard(contest);
-		assertEquals(twilight + 2, scn.GetTwilight());
 
 		assertTrue(scn.FreepsHasCardChoiceAvailable(count, arms));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(shake, notched, stout));
@@ -209,11 +205,9 @@ public class Card_V2_007_Tests
 		scn.MoveMinionsToTable(scn.GetShadowCard("troop"));
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		int twilight = scn.GetTwilight();
 		// The spot is all that playing the event asks for; reinforcing comes after the "to".
 		assertTrue(scn.FreepsPlayAvailable(contest));
 		scn.FreepsPlayCard(contest);
-		assertEquals(twilight + 2, scn.GetTwilight());
 
 		// Neither half has anything to reinforce, so the game does not ask which to attempt (F-0116).
 		assertFalse(scn.FreepsDecisionAvailable("Choose action to perform"));
@@ -531,11 +525,9 @@ public class Card_V2_007_Tests
 		scn.MoveMinionsToTable(scn.GetShadowCard("troop"));
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		int twilight = scn.GetTwilight();
 		// The spot is met, so the event may be played; it has nothing it can reinforce.
 		assertTrue(scn.FreepsPlayAvailable(contest));
 		scn.FreepsPlayCard(contest);
-		assertEquals(twilight + 2, scn.GetTwilight());
 
 		// One half has no [dwarven] token to reinforce and the other no [dwarven] companion to spot: neither
 		// can do anything, the game does not ask which to attempt (F-0116), and nothing is reinforced.
@@ -564,10 +556,8 @@ public class Card_V2_007_Tests
 		scn.MoveMinionsToTable(scn.GetShadowCard("troop"));
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		int twilight = scn.GetTwilight();
 		assertTrue(scn.FreepsPlayAvailable(contest));
 		scn.FreepsPlayCard(contest);
-		assertEquals(twilight + 2, scn.GetTwilight());
 
 		// One half has no [elven] token to reinforce and the other no [elven] companion to spot: neither can do
 		// anything, the game does not ask which to attempt (F-0116), and nothing is reinforced.

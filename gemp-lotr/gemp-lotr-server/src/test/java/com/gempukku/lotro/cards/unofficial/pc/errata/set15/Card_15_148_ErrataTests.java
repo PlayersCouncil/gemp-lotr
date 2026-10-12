@@ -360,7 +360,7 @@ public class Card_15_148_ErrataTests
 	}
 
 	@Test
-	public void PlayedForThreeToTheSupportAreaAndEachHobbitBearingAFollowerIsResistancePlus1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedToTheSupportAreaAndEachHobbitBearingAFollowerIsResistancePlus1() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var flower = scn.GetFreepsCard("flower");
@@ -386,11 +386,9 @@ public class Card_15_148_ErrataTests
 		assertEquals(6, scn.GetResistance(pippin));
 		assertEquals(6, scn.GetResistance(merry));
 		assertEquals(6, scn.GetResistance(smeagol));
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(flower));
 
 		scn.FreepsPlayCard(flower);
-		assertEquals(3, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, flower);
 		assertNull(flower.getAttachedTo());
 

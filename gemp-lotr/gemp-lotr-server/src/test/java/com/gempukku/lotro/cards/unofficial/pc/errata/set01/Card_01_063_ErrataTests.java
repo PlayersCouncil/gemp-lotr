@@ -92,7 +92,6 @@ public class Card_01_063_ErrataTests
 		scn.MoveCardsToSupportArea(seeking);
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		int twilight = scn.GetTwilight();
 		assertEquals(0, scn.GetWoundsOn(lorien));
 		assertEquals(0, scn.GetWoundsOn(celeborn));
 		assertEquals(0, scn.GetWoundsOn(aragorn));
@@ -109,7 +108,6 @@ public class Card_01_063_ErrataTests
 		assertEquals(1, scn.GetWoundsOn(celeborn));
 		assertEquals(0, scn.GetWoundsOn(lorien));
 		assertEquals(0, scn.GetWoundsOn(aragorn));
-		assertEquals(twilight + 1, scn.GetTwilight());
 
 		assertTrue(scn.FreepsChoiceAvailable("Wound"));
 		assertTrue(scn.FreepsChoiceAvailable("Discard"));

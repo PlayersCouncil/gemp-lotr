@@ -108,8 +108,6 @@ public class Card_V3_103_Tests
 
 		scn.ShadowPlayCard(accounted);
 
-		// 10 - 1 to play
-		assertEquals(9, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, accounted);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}

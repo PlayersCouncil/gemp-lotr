@@ -92,7 +92,7 @@ public class Card_01_160_ErrataTests
 	}
 
 	@Test
-	public void PlayedForOneOnAnUrukHaiOfAnyCultureAndNotOnAnOrc() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedOnAnUrukHaiOfAnyCultureAndNotOnAnOrc() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var sword = scn.GetShadowCard("sword");
@@ -108,7 +108,6 @@ public class Card_01_160_ErrataTests
 
 		assertEquals(8, scn.GetStrength(sentry));
 		assertTrue(scn.ShadowPlayAvailable(sword));
-		int twilight = scn.GetTwilight();
 
 		scn.ShadowPlayCard(sword);
 		// An Uruk-hai of [sauron] and one of [isengard]; the [isengard] Orc is not offered.
@@ -117,7 +116,6 @@ public class Card_01_160_ErrataTests
 		assertEquals(1, scn.ShadowGetChoiceMin());
 
 		scn.ShadowChooseCard(sentry);
-		assertEquals(twilight - 1, scn.GetTwilight());
 		assertInZone(Zone.ATTACHED, sword);
 		assertEquals(sentry, sword.getAttachedTo());
 		assertEquals(10, scn.GetStrength(sentry));

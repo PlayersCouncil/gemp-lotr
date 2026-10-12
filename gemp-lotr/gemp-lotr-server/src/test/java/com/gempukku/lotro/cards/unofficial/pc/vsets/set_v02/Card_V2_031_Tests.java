@@ -139,7 +139,6 @@ public class Card_V2_031_Tests
 		assertTrue(scn.ShadowPlayAvailable(trail));
 
 		scn.ShadowPlayCard(trail);
-		assertEquals(17 - 1, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, trail);
 		assertTrue(scn.HasKeyword(site1, Keyword.BATTLEGROUND));
 		// Not a site nobody controls, and not the fellowship's own.

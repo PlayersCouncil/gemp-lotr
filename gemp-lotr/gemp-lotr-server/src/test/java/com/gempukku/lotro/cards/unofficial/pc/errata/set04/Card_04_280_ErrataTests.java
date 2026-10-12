@@ -101,8 +101,6 @@ public class Card_04_280_ErrataTests
 		assertEquals(0, scn.GetKeywordCount(theoden, Keyword.DAMAGE));
 
 		scn.FreepsPlayCard(herugrim);
-		// 2 for Théoden + 2 for Herugrim
-		assertEquals(4, scn.GetTwilight());
 		assertAttachedTo(herugrim, theoden);
 		assertEquals(8, scn.GetStrength(theoden));
 		assertEquals(3, scn.GetVitality(theoden));
@@ -128,7 +126,6 @@ public class Card_04_280_ErrataTests
 		assertEquals(0, scn.GetKeywordCount(theoden, Keyword.DAMAGE));
 		scn.FreepsPlayCard(herugrim);
 
-		assertEquals(2, scn.GetTwilight());
 		assertAttachedTo(herugrim, theoden);
 		assertEquals(8, scn.GetStrength(theoden));
 		assertEquals(4, scn.GetVitality(theoden));

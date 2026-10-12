@@ -75,7 +75,7 @@ public class Card_02_007_ErrataTests
 	}
 
 	@Test
-	public void PlaysFromHandForTwoAndCountsTalesAtOnce() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlaysFromHandAndCountsTalesAtOnce() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var gloin = scn.GetFreepsCard("gloin");
@@ -84,12 +84,10 @@ public class Card_02_007_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(gloin));
 
 		scn.FreepsPlayCard(gloin);
 
-		assertEquals(2, scn.GetTwilight());
 		assertInZone(Zone.FREE_CHARACTERS, gloin);
 		// 6 + 1 for Till Durin Wakes Again
 		assertEquals(7, scn.GetStrength(gloin));

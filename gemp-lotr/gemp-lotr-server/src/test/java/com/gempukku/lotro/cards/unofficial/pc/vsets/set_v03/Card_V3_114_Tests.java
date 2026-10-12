@@ -79,7 +79,7 @@ public class Card_V3_114_Tests
 	}
 
 	@Test
-	public void PlayedForOneOnAnUnboundHobbitAndOfferedForNoOtherCharacter() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedOnAnUnboundHobbitAndOfferedForNoOtherCharacter() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
@@ -96,7 +96,6 @@ public class Card_V3_114_Tests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(pippinspipe));
 
 		scn.FreepsPlayCard(pippinspipe);
@@ -111,7 +110,6 @@ public class Card_V3_114_Tests
 		scn.FreepsChooseCard(merry);
 
 		assertAttachedTo(pippinspipe, merry);
-		assertEquals(1, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

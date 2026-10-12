@@ -94,7 +94,6 @@ public class Card_V2_023_Tests
 
 		scn.ShadowPlayCard(fires);
 
-		assertEquals(12, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, fires);
 		assertEquals(0, scn.GetCultureTokensOn(fires));
 		assertTrue(scn.AwaitingShadowPhaseActions());

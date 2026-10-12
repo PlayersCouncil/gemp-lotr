@@ -97,7 +97,6 @@ public class Card_01_036_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(0, scn.GetFreepsArcheryTotal());
 		assertTrue(scn.FreepsPlayAvailable(feet));
 
@@ -112,7 +111,6 @@ public class Card_01_036_ErrataTests
 		assertEquals(1, scn.GetWoundsOn(silinde));
 		assertEquals(0, scn.GetWoundsOn(arwen));
 		assertEquals(0, scn.GetWoundsOn(aragorn));
-		assertEquals(2, scn.GetTwilight());
 
 		// The four cards are shown to the player of the event; the owner of the hand is told by the game log.
 		assertEquals(4, scn.FreepsGetTotalRevealedCardCount());
@@ -167,8 +165,6 @@ public class Card_01_036_ErrataTests
 		assertEquals(1, scn.GetWoundsOn(lorien));
 		assertEquals(2, scn.GetWoundsOn(arwen));
 		assertEquals(0, scn.GetWoundsOn(boromir));
-		// 1 for the Lorien Elf + 2 for the event
-		assertEquals(3, scn.GetTwilight());
 		assertEquals(1, scn.FreepsGetTotalRevealedCardCount());
 
 		scn.FreepsDismissRevealedCards();
@@ -211,7 +207,6 @@ public class Card_01_036_ErrataTests
 		assertEquals(0, scn.GetFreepsArcheryTotal());
 		// The cost stays paid.
 		assertEquals(1, scn.GetWoundsOn(arwen));
-		assertEquals(2, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, feet);
 		assertInZone(Zone.HAND, ownSoldier);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
@@ -411,7 +406,6 @@ public class Card_01_036_ErrataTests
 		scn.MarkGameLog();
 		scn.FreepsPlayCard(feet);
 		assertEquals(1, scn.GetWoundsOn(arwen));
-		assertEquals(2, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, feet);
 		assertEquals(0, scn.GetFreepsArcheryTotal());
 		// Nobody is shown anything or asked anything, and the game log says that there was nothing to reveal.

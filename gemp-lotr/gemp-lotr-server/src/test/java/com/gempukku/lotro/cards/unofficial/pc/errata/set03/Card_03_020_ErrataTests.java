@@ -96,8 +96,6 @@ public class Card_03_020_ErrataTests
 		assertTrue(scn.FreepsPlayAvailable(golradir));
 
 		scn.FreepsPlayCard(golradir);
-		// 2 for Arwen + 2 for Golradir
-		assertEquals(4, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, golradir);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

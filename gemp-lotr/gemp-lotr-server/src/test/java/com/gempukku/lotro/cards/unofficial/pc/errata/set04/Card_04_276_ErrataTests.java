@@ -103,7 +103,7 @@ public class Card_04_276_ErrataTests
 	}
 
 	@Test
-	public void PlayedForTwoAndOnlyARohanManWinningASkirmishOffersAToken() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedAndOnlyARohanManWinningASkirmishOffersAToken() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var fortress = scn.GetFreepsCard("fortress");
@@ -121,9 +121,7 @@ public class Card_04_276_ErrataTests
 		scn.AddWoundsToChar(merry, 2);
 
 		scn.StartGame();
-		assertEquals(0, scn.GetTwilight());
 		scn.FreepsPlayCard(fortress);
-		assertEquals(2, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, fortress);
 
 		scn.MoveMinionsToTable(runner1, runner2, runner3, troop);

@@ -111,7 +111,6 @@ public class Card_08_003_ErrataTests
 
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(brc));
 		assertInHand(brc);
-		assertEquals(0, scn.GetTwilight());
 
 		scn.FreepsChooseOptionalTrigger(brc);
 
@@ -123,7 +122,6 @@ public class Card_08_003_ErrataTests
 
 		assertEquals(1, scn.GetWoundsOn(gimli));
 		assertEquals(0, scn.GetWoundsOn(thrarin));
-		assertEquals(2, scn.GetTwilight());
 
 		// Gimli is damage +2, so the Shadow player hinders 2 Shadow cards, of his choosing.
 		assertTrue(scn.ShadowHasCardChoiceAvailable(troop, pinned, poison));

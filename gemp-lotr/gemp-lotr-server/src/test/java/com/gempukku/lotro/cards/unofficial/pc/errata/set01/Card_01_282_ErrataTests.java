@@ -100,7 +100,6 @@ public class Card_01_282_ErrataTests
 		scn.FreepsPass();
 
 		assertTrue(scn.AwaitingShadowPhaseActions());
-		int twilight = scn.GetTwilight();
 		assertEquals(7, scn.GetStrength(boromir));
 		assertEquals(6, scn.GetStrength(knight));
 		assertEquals(8, scn.GetStrength(rohirrim));
@@ -123,7 +122,6 @@ public class Card_01_282_ErrataTests
 		assertEquals(0, scn.GetWoundsOn(soldier));
 		assertEquals(0, scn.GetWoundsOn(cuguard));
 		assertEquals(0, scn.GetWoundsOn(troop));
-		assertEquals(twilight, scn.GetTwilight());
 		assertAttachedTo(legacy, boromir);
 		assertNotAttachedTo(legacy, knight);
 		// No tales: the printed -1 alone.

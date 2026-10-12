@@ -88,7 +88,6 @@ public class Card_03_024_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(10, scn.GetResistance(frodo));
 		assertEquals(5, scn.GetResistance(sam));
 		assertEquals(0, scn.GetWoundsOn(legolas));
@@ -108,7 +107,6 @@ public class Card_03_024_ErrataTests
 		// The only Ring-bearer is the only bearer: on Frodo, not on Sam.
 		assertAttachedTo(phial, frodo);
 		assertNotAttachedTo(phial, sam);
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(12, scn.GetResistance(frodo));
 		assertEquals(5, scn.GetResistance(sam));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());

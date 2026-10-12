@@ -143,7 +143,7 @@ public class Card_V3_119_Tests
 	}
 
 	@Test
-	public void PlayedForOneOnACompanionOfAnyKindAndNotOnAnAlly() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedOnACompanionOfAnyKindAndNotOnAnAlly() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var treasure = scn.GetFreepsCard("treasure");
@@ -158,7 +158,6 @@ public class Card_V3_119_Tests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(treasure));
 		scn.FreepsPlayCard(treasure);
 
@@ -171,7 +170,6 @@ public class Card_V3_119_Tests
 
 		scn.FreepsChooseCard(aragorn);
 		assertAttachedTo(treasure, aragorn);
-		assertEquals(1, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

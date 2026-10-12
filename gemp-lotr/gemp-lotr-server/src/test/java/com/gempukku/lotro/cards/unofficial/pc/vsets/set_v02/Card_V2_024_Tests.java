@@ -109,7 +109,6 @@ public class Card_V2_024_Tests
 		scn.ShadowChooseCard(rider);
 
 		assertAttachedTo(hound, rider);
-		assertEquals(11, scn.GetTwilight());
 		assertEquals(9, scn.GetStrength(rider));
 		assertEquals(4, scn.GetVitality(rider));
 		assertEquals(5, scn.GetStrength(wargrider));

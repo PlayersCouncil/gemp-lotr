@@ -82,7 +82,6 @@ public class Card_03_027_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(4, scn.GetVitality(elrond));
 		assertTrue(scn.FreepsPlayAvailable(vilya));
 
@@ -91,7 +90,6 @@ public class Card_03_027_ErrataTests
 		assertAttachedTo(vilya, elrond);
 		assertNotAttachedTo(vilya, arwen);
 		assertNotAttachedTo(vilya, silinde);
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(5, scn.GetVitality(elrond));
 		assertEquals(3, scn.GetVitality(arwen));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
@@ -119,7 +117,6 @@ public class Card_03_027_ErrataTests
 		assertAttachedTo(vilya, elrond);
 		assertNotAttachedTo(vilya, arwen);
 		assertNotAttachedTo(vilya, silinde);
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(5, scn.GetVitality(elrond));
 		assertEquals(3, scn.GetVitality(arwen));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());

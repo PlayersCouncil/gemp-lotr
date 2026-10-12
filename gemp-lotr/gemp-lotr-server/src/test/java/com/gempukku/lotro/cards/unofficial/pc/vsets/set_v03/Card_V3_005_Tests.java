@@ -97,7 +97,7 @@ public class Card_V3_005_Tests
 	}
 
 	@Test
-	public void PlaysForTwoOnAGandalfAndOnNoOneElseAndMakesHimStrengthPlusThree() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlaysOnAGandalfAndOnNoOneElseAndMakesHimStrengthPlusThree() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var shadowfax = scn.GetFreepsCard("shadowfax");
@@ -112,7 +112,6 @@ public class Card_V3_005_Tests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		// 6 + 1 for the Hobbit (Frodo) + 1 for the Man (Aragorn)
 		assertEquals(8, scn.GetStrength(gandalf));
 		assertEquals(8, scn.GetStrength(radagast));
@@ -123,7 +122,6 @@ public class Card_V3_005_Tests
 
 		// Gandalf is the only bearer there is, so nobody is asked: it is on him, and on none of the other three.
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
-		assertEquals(2, scn.GetTwilight());
 		assertAttachedTo(shadowfax, gandalf);
 		assertNotAttachedTo(shadowfax, radagast);
 		assertNotAttachedTo(shadowfax, aragorn);

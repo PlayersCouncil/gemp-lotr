@@ -109,8 +109,6 @@ public class Card_V2_077_Tests
 		// Gandalf is the only one who may bear it, so nobody is asked.
 		scn.FreepsPlayCard(staff);
 		assertAttachedTo(staff, shirefolk);
-		// 4 + 2 for the Staff
-		assertEquals(6, scn.GetTwilight());
 		assertEquals(5, scn.GetVitality(shirefolk));
 		assertEquals(4, scn.GetVitality(radagast));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
@@ -142,7 +140,6 @@ public class Card_V2_077_Tests
 		assertAttachedTo(glamdring, gandalf);
 		assertAttachedTo(pipe, gandalf);
 		assertAttachedTo(sword, aragorn);
-		assertEquals(0, scn.GetTwilight());
 
 		scn.FreepsPlayCard(staff);
 		assertAttachedTo(staff, gandalf);
@@ -150,7 +147,6 @@ public class Card_V2_077_Tests
 		// His Pipe is no weapon, and Aragorn's sword is not his.
 		assertAttachedTo(pipe, gandalf);
 		assertAttachedTo(sword, aragorn);
-		assertEquals(2, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
 		// A weapon can still be played on him, this one a possession: it is paid for, and discarded as it

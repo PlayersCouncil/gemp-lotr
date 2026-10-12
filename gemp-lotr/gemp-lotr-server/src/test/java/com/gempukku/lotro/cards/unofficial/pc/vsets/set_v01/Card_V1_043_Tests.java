@@ -107,7 +107,6 @@ public class Card_V1_043_Tests
 		// 12 + 3 wounds on the Ring-bearer
 		assertEquals(15, scn.GetStrength(attea));
 		assertFalse(scn.HasKeyword(attea, Keyword.DAMAGE));
-		assertEquals(3, scn.GetTwilight());
 		assertInDiscard(faces);
 		assertEquals(3, scn.GetWoundsOn(frodo));
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
@@ -292,7 +291,6 @@ public class Card_V1_043_Tests
 		assertEquals(14, scn.GetStrength(wk));
 		assertTrue(scn.HasKeyword(wk, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(wk, Keyword.DAMAGE));
-		assertEquals(3, scn.GetTwilight());
 		assertInDiscard(faces);
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}

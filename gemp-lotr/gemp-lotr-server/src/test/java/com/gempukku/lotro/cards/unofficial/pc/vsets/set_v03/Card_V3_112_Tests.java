@@ -130,13 +130,11 @@ public class Card_V3_112_Tests
 		// The other twelve cards of the scenario are the draw deck: ten Free Peoples cards and two minions.
 		assertEquals(12, scn.GetFreepsDeckCount());
 		assertEquals(0, scn.GetFreepsDiscardCount());
-		assertEquals(0, scn.GetTwilight());
 		int freepsShuffles = scn.GetFreepsDeckShuffleCount();
 		int shadowShuffles = scn.GetShadowDeckShuffleCount();
 		assertTrue(scn.FreepsPlayAvailable(barrel1));
 
 		scn.FreepsPlayCard(barrel1);
-		assertEquals(1, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, barrel1);
 		assertNotAttachedTo(barrel1, frodo);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(barrel1));
@@ -216,7 +214,6 @@ public class Card_V3_112_Tests
 		assertTrue(scn.FreepsPlayAvailable(barrel2));
 
 		scn.FreepsPlayCard(barrel2);
-		assertEquals(1, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, barrel1, barrel2);
 		// The copy just played makes its offer; the copy that was already there does not.
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(barrel2));

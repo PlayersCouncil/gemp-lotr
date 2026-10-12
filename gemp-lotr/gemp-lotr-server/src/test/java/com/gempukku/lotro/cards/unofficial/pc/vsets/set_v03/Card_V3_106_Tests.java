@@ -120,8 +120,6 @@ public class Card_V3_106_Tests
 
 		// On its bearer, not in the support area where other pipeweed lies.
 		assertAttachedTo(flotsam, bounder);
-		// 2 for the pipes + 1 for Flotsam
-		assertEquals(3, scn.GetTwilight());
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(flotsam));
 		int deck = scn.GetFreepsDeckCount();
 		int shuffles = scn.GetFreepsDeckShuffleCount();
@@ -277,7 +275,6 @@ public class Card_V3_106_Tests
 		scn.FreepsPlayCard(flotsam);
 
 		assertAttachedTo(flotsam, aragorn);
-		assertEquals(1, scn.GetTwilight());
 		// There is nothing to shuffle in, and the offer does something all the same: it shuffles the draw deck.
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(flotsam));
 

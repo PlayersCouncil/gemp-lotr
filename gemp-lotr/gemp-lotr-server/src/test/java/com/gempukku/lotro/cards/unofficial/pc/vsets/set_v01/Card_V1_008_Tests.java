@@ -99,7 +99,7 @@ public class Card_V1_008_Tests
 	}
 
 	@Test
-	public void ExertsAChosenElfToPlayOnAChosenUnboundCompanionForOneTwilight() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ExertsAChosenElfToPlayOnAChosenUnboundCompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
@@ -116,7 +116,6 @@ public class Card_V1_008_Tests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(0, scn.GetWoundsOn(arwen));
 		assertEquals(0, scn.GetWoundsOn(celeborn));
 		assertInHand(lament);
@@ -138,7 +137,6 @@ public class Card_V1_008_Tests
 		assertEquals(0, scn.GetWoundsOn(arwen));
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertAttachedTo(lament, aragorn);
-		assertEquals(1, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

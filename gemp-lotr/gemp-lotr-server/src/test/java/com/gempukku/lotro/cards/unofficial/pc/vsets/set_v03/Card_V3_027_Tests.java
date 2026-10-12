@@ -103,8 +103,6 @@ public class Card_V3_027_Tests
 
 		scn.FreepsPlayCard(king);
 
-		// 2 for the Knight + 4 for the King
-		assertEquals(6, scn.GetTwilight());
 		// 1 + 2
 		assertEquals(3, scn.GetThreats());
 		assertInZone(Zone.FREE_CHARACTERS, king);

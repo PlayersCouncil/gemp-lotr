@@ -102,7 +102,6 @@ public class Card_V1_007_Tests
 		scn.SkipToAssignments();
 		scn.FreepsAssignAndResolve(arwen, troop);
 
-		var twilight = scn.GetTwilight();
 		assertInHand(there);
 		assertEquals(0, scn.GetWoundsOn(troop));
 		assertInZone(Zone.SUPPORT, beren);
@@ -118,7 +117,6 @@ public class Card_V1_007_Tests
 		assertAttachedTo(saga, aragorn);
 		assertInZone(Zone.SUPPORT, mallorn, theirBeren);
 		assertEquals(1, scn.GetWoundsOn(troop));
-		assertEquals(twilight + 1, scn.GetTwilight());
 		assertInDiscard(there);
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}

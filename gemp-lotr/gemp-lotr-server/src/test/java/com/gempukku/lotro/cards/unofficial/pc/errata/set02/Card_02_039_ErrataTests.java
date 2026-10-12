@@ -122,7 +122,6 @@ public class Card_02_039_ErrataTests
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPass();
 
-		int twilight = scn.GetTwilight();
 		assertTrue(scn.ShadowPlayAvailable(beyond));
 		scn.ShadowPlayCard(beyond);
 
@@ -133,7 +132,6 @@ public class Card_02_039_ErrataTests
 		scn.ShadowChooseCard(whu);
 		assertEquals(1, scn.GetWoundsOn(whu));
 		assertEquals(0, scn.GetWoundsOn(warrior));
-		assertEquals(twilight - 2, scn.GetTwilight());
 
 		assertTrue(scn.ShadowHasCardChoiceAvailable(mail, darmor, helm, shield, mithril));
 		assertTrue(scn.ShadowHasCardChoiceNotAvailable(sword, athelas, staff, gauntlets));

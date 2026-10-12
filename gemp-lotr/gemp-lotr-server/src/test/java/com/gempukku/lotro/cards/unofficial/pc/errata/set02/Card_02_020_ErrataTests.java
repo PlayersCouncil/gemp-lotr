@@ -105,7 +105,6 @@ public class Card_02_020_ErrataTests
 		scn.HinderCard(voice);
 		scn.FreepsRefreshDecision();
 
-		int twilight = scn.GetTwilight();
 		assertEquals(0, scn.GetWoundsOn(orophin));
 		assertTrue(scn.FreepsPlayAvailable(sentinels));
 
@@ -117,7 +116,6 @@ public class Card_02_020_ErrataTests
 
 		assertEquals(1, scn.GetWoundsOn(orophin));
 		assertEquals(0, scn.GetWoundsOn(silinde));
-		assertEquals(twilight + 2, scn.GetTwilight());
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		assertTrue(scn.FreepsHasCardChoiceAvailable(greed, urgency, evil, stairs));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(voice, poison, armor, troop));

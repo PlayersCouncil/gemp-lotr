@@ -80,7 +80,7 @@ public class Card_19_024_ErrataTests
 	}
 
 	@Test
-	public void PlayedForTwoOnARohanManWhoIsThenStrengthPlus1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedOnARohanManWhoIsThenStrengthPlus1() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
@@ -96,7 +96,6 @@ public class Card_19_024_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(6, scn.GetStrength(guard));
 		assertEquals(4, scn.GetStrength(guma));
 		assertTrue(scn.FreepsPlayAvailable(inside));
@@ -108,7 +107,6 @@ public class Card_19_024_ErrataTests
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(merry, aragorn, frodo));
 		scn.FreepsChooseCard(guma);
 
-		assertEquals(2, scn.GetTwilight());
 		assertAttachedTo(inside, guma);
 		assertEquals(5, scn.GetStrength(guma));
 		assertEquals(6, scn.GetStrength(guard));

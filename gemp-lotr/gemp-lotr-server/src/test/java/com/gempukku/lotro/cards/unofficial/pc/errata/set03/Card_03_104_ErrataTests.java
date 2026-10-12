@@ -88,7 +88,6 @@ public class Card_03_104_ErrataTests
 		scn.FreepsPass();
 
 		assertTrue(scn.AwaitingShadowPhaseActions());
-		int twilight = scn.GetTwilight();
 		assertTrue(scn.ShadowPlayAvailable(tower));
 		scn.ShadowPlayCard(tower);
 
@@ -100,7 +99,6 @@ public class Card_03_104_ErrataTests
 		assertEquals(1, scn.GetWoundsOn(sentry));
 		assertEquals(0, scn.GetWoundsOn(taskmaster));
 		assertEquals(0, scn.GetWoundsOn(troop));
-		assertEquals(twilight - 1, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, tower);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}

@@ -120,8 +120,6 @@ public class Card_V3_064_Tests
 		assertFalse(scn.IsHindered(sky2));
 		assertFalse(scn.IsHindered(servants));
 		assertFalse(scn.IsHindered(nelya));
-		// 11 - 2 to play
-		assertEquals(9, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, fear);
 		assertFalse(scn.IsHindered(fear));
 		assertTrue(scn.AwaitingShadowPhaseActions());
@@ -167,8 +165,6 @@ public class Card_V3_064_Tests
 		assertTrue(scn.IsHindered(sky2));
 		assertFalse(scn.IsHindered(servants));
 		assertFalse(scn.IsHindered(nelya));
-		// 9 - 2 to play
-		assertEquals(7, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, fear);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}

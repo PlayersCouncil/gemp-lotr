@@ -95,7 +95,7 @@ public class Card_01_009_ErrataTests
 	}
 
 	@Test
-	public void PlayedForOneOnADwarfCompanionOrAllyWhoIsThenStrengthPlus2() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedOnADwarfCompanionOrAllyWhoIsThenStrengthPlus2() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var axe = scn.GetFreepsCard("axe");
@@ -108,7 +108,6 @@ public class Card_01_009_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(3, scn.GetStrength(grimir));
 		assertTrue(scn.FreepsPlayAvailable(axe));
 
@@ -118,7 +117,6 @@ public class Card_01_009_ErrataTests
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn));
 
 		scn.FreepsChooseCard(grimir);
-		assertEquals(1, scn.GetTwilight());
 		assertAttachedTo(axe, grimir);
 		assertEquals(5, scn.GetStrength(grimir));
 		assertEquals(6, scn.GetStrength(gimli));

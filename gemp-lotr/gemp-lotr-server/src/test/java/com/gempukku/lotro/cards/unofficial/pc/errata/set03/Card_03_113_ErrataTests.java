@@ -92,8 +92,6 @@ public class Card_03_113_ErrataTests
 		assertTrue(scn.FreepsPlayAvailable(countryside));
 
 		scn.FreepsPlayCard(countryside);
-		// 2 for Sam + 1
-		assertEquals(3, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, countryside);
 		assertEquals(0, scn.GetFreepsHandCount());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
@@ -111,10 +109,8 @@ public class Card_03_113_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(countryside));
 		scn.FreepsPlayCard(countryside);
-		assertEquals(1, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, countryside);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

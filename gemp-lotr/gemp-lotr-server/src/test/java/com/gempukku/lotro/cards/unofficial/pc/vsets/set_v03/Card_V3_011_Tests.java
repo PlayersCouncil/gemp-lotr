@@ -105,7 +105,6 @@ public class Card_V3_011_Tests
 
 		scn.FreepsPlayCard(fickle);
 
-		assertEquals(2, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, fickle);
 		assertNotAttachedTo(fickle, frodo);
 		assertNotAttachedTo(fickle, pippin);

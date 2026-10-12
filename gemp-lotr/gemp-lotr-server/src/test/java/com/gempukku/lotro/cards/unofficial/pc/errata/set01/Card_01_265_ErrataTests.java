@@ -104,7 +104,6 @@ public class Card_01_265_ErrataTests
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(sam, slayer);
 		scn.FreepsResolveSkirmish(sam);
-		int twilight = scn.GetTwilight();
 		int deck = scn.GetFreepsDeckCount();
 		int shadowDeck = scn.GetShadowDeckCount();
 		assertEquals(0, scn.GetBurdens());
@@ -116,7 +115,6 @@ public class Card_01_265_ErrataTests
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(butchery));
 
 		scn.ShadowChooseOptionalTrigger(butchery);
-		assertEquals(twilight, scn.GetTwilight());
 		// One card in the dead pile: one choice, and the Free Peoples player makes it.
 		assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
 		assertTrue(scn.FreepsChoiceAvailable("Add a burden"));

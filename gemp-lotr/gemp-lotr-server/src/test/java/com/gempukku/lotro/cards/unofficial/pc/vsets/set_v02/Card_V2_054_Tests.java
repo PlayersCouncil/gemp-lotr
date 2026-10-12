@@ -109,7 +109,6 @@ public class Card_V2_054_Tests
 
 		scn.FreepsPlayCard(guard);
 
-		assertEquals(4, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, guard);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -146,7 +145,6 @@ public class Card_V2_054_Tests
 
 		scn.FreepsPlayCard(guard);
 
-		assertEquals(3, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, guard);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

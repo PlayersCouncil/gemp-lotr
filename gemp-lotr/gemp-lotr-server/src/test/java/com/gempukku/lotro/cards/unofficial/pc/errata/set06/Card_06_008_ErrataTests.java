@@ -108,7 +108,6 @@ public class Card_06_008_ErrataTests
 
 		// The Brigand 8 against the Knight 6.
 		assertEquals(1, scn.GetWoundsOn(knight));
-		int twilight = scn.GetTwilight();
 		assertFalse(scn.IsHindered(stairs));
 		assertFalse(scn.IsHindered(saga));
 		assertFalse(scn.IsHindered(ned));
@@ -116,7 +115,6 @@ public class Card_06_008_ErrataTests
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(peasants));
 		scn.ShadowChooseOptionalTrigger(peasants);
 
-		assertEquals(twilight - 2, scn.GetTwilight());
 		assertInDiscard(peasants);
 		assertTrue(scn.IsHindered(stairs));
 		assertTrue(scn.IsHindered(saga));

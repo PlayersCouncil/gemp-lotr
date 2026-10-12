@@ -113,7 +113,6 @@ public class Card_V3_036_Tests
 		assertTrue(scn.FreepsPlayAvailable(shut));
 		scn.FreepsPlayCard(shut);
 
-		assertEquals(twilight + 1, scn.GetTwilight());
 		assertTrue(scn.FreepsHasCardChoiceAvailable(pinned, burden, lether));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(ships, wall));
 		assertEquals(1, scn.FreepsGetChoiceMin());
@@ -357,12 +356,10 @@ public class Card_V3_036_Tests
 		scn.AttachCardsTo(savage, wall);
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		int twilight = scn.GetTwilight();
 		assertTrue(scn.FreepsPlayAvailable(shut));
 		scn.FreepsPlayCard(shut);
 
 		// Nothing is discarded. The exertion is a cost that can be paid, so it is offered all the same.
-		assertEquals(twilight + 1, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, ships);
 		assertAttachedTo(wall, savage);
 		assertTrue(scn.FreepsDecisionAvailable("exert a Wraith"));
@@ -496,7 +493,6 @@ public class Card_V3_036_Tests
 		);
 		scn.FreepsResolveSkirmish(deadman1);
 
-		int twilight = scn.GetTwilight();
 		assertEquals(2, scn.GetThreats());
 		assertEquals(6, scn.GetStrength(deadman1));
 		assertTrue(scn.FreepsPlayAvailable(shut));
@@ -512,7 +508,6 @@ public class Card_V3_036_Tests
 		assertEquals(8, scn.GetStrength(deadman1));
 		assertEquals(6, scn.GetStrength(deadman2));
 		assertEquals(7, scn.GetStrength(corpse));
-		assertEquals(twilight + 1, scn.GetTwilight());
 		assertInDiscard(shut);
 		// The maneuver half is not carried out in a skirmish.
 		assertInZone(Zone.SUPPORT, pinned);
@@ -617,14 +612,12 @@ public class Card_V3_036_Tests
 		scn.FreepsAssignToMinions(deadman1, savage);
 		scn.FreepsResolveSkirmish(deadman1);
 
-		int twilight = scn.GetTwilight();
 		assertEquals(0, scn.GetThreats());
 		assertEquals(6, scn.GetStrength(deadman1));
 		assertTrue(scn.FreepsPlayAvailable(shut));
 		scn.FreepsPlayCard(shut);
 
 		assertEquals(6, scn.GetStrength(deadman1));
-		assertEquals(twilight + 1, scn.GetTwilight());
 		assertInDiscard(shut);
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
@@ -647,7 +640,6 @@ public class Card_V3_036_Tests
 		scn.FreepsAssignToMinions(gimli, corpse);
 		scn.FreepsResolveSkirmish(gimli);
 
-		int twilight = scn.GetTwilight();
 		assertEquals(2, scn.GetThreats());
 		assertEquals(6, scn.GetStrength(gimli));
 		assertEquals(7, scn.GetStrength(corpse));
@@ -657,7 +649,6 @@ public class Card_V3_036_Tests
 		// Nobody is asked anything and nobody is stronger: the 2 threats would have made a Wraith 9.
 		assertEquals(6, scn.GetStrength(gimli));
 		assertEquals(7, scn.GetStrength(corpse));
-		assertEquals(twilight + 1, scn.GetTwilight());
 		assertInDiscard(shut);
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}

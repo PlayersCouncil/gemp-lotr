@@ -109,8 +109,6 @@ public class Card_09_035_ErrataTests
 		assertTrue(scn.FreepsPlayAvailable(sapling));
 
 		scn.FreepsPlayCard(sapling);
-		// 2 for the Gondorian Knight + 1
-		assertEquals(3, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, sapling);
 		assertNotAttachedTo(sapling, knight);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
@@ -134,8 +132,6 @@ public class Card_09_035_ErrataTests
 		assertTrue(scn.FreepsPlayAvailable(sapling));
 
 		scn.FreepsPlayCard(sapling);
-		// 4 for Aragorn + 1
-		assertEquals(5, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, sapling);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

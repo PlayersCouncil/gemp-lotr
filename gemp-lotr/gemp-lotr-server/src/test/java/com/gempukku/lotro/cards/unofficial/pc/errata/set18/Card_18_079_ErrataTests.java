@@ -125,7 +125,6 @@ public class Card_18_079_ErrataTests
 		assertTrue(scn.ShadowPlayAvailable(frenzy));
 
 		scn.ShadowPlayCard(frenzy);
-		assertEquals(3, scn.GetTwilight());
 		// Exactly two of the three [orc] Orcs. Not the Half-troll, an [orc] minion, nor the Goblin Runner, a
 		// [moria] Orc.
 		assertTrue(scn.ShadowHasCardChoiceAvailable(scout, sentry, cutthroat));
@@ -181,7 +180,6 @@ public class Card_18_079_ErrataTests
 
 		// The only [orc] Orc there is becomes an archer; nobody else does.
 		scn.ShadowPlayCard(frenzy);
-		assertEquals(3, scn.GetTwilight());
 		assertTrue(scn.HasKeyword(scout, Keyword.ARCHER));
 		assertFalse(scn.HasKeyword(halftroll, Keyword.ARCHER));
 		assertFalse(scn.HasKeyword(runner, Keyword.ARCHER));

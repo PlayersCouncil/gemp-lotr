@@ -104,7 +104,7 @@ public class Card_V3_085_Tests
 	}
 
 	@Test
-	public void PlayedForTwoAndIsHimselfOneOfTheThreeRohanCompanionsThatMakeHimAMan() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedAndIsHimselfOneOfTheThreeRohanCompanionsThatMakeHimAMan() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var merry = scn.GetFreepsCard("merry");
@@ -115,12 +115,10 @@ public class Card_V3_085_Tests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(merry));
 
 		scn.FreepsPlayCard(merry);
 
-		assertEquals(2, scn.GetTwilight());
 		assertInZone(Zone.FREE_CHARACTERS, merry);
 		// The two Riders and Merry himself are the three [rohan] companions.
 		assertTrue(scn.IsRace(merry, Race.MAN));

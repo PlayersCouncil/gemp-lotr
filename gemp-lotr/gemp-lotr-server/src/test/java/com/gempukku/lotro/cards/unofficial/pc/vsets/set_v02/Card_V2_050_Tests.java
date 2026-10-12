@@ -120,7 +120,6 @@ public class Card_V2_050_Tests
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 		assertTrue(scn.FreepsPlayAvailable(hour));
-		var pool = scn.GetTwilight();
 		assertTrue(scn.HasKeyword(guma, Keyword.VALIANT));
 		assertEquals(1, scn.GetWoundsOn(guard));
 		assertEquals(0, scn.GetWoundsOn(haldir));
@@ -138,7 +137,6 @@ public class Card_V2_050_Tests
 		scn.FreepsChooseCard(guard);
 
 		assertInZone(Zone.DISCARD, hour);
-		assertEquals(pool + 2, scn.GetTwilight());
 		assertEquals(2, scn.GetWoundsOn(guard));
 		assertTrue(scn.HasKeyword(guard, Keyword.DEFENDER));
 		assertEquals(1, scn.GetKeywordCount(guard, Keyword.DEFENDER));

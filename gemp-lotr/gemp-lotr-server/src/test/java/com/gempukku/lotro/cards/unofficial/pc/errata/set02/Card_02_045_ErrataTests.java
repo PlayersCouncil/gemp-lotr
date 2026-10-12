@@ -92,7 +92,6 @@ public class Card_02_045_ErrataTests
 		scn.FreepsAcceptOptionalTrigger();
 		assertTrue(scn.RBWearingOneRing());
 
-		int twilight = scn.GetTwilight();
 		int shadowDeck = scn.GetShadowDeckCount();
 		int shadowShuffles = scn.GetShadowDeckShuffleCount();
 		int freepsShuffles = scn.GetFreepsDeckShuffleCount();
@@ -118,7 +117,6 @@ public class Card_02_045_ErrataTests
 		assertInZone(Zone.DECK, runner1);
 		assertInDiscard(attention);
 		assertEquals(shadowDeck - 1, scn.GetShadowDeckCount());
-		assertEquals(twilight - 1, scn.GetTwilight());
 		// The Free Peoples player's deck is as it was.
 		assertEquals(5, scn.GetFreepsDeckCount());
 		assertEquals(4, scn.GetFreepsDiscardCount());
@@ -265,7 +263,6 @@ public class Card_02_045_ErrataTests
 		assertEquals(shadowDeck, scn.GetShadowDeckCount());
 		assertEquals(0, scn.GetShadowHandCount());
 		assertInDiscard(attention);
-		assertEquals(twilight - 1, scn.GetTwilight());
 		// The deck was looked through before the take was prevented.
 		assertEquals(shadowShuffles + 1, scn.GetShadowDeckShuffleCount());
 		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());

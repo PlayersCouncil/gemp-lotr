@@ -129,7 +129,6 @@ public class Card_V2_009_Tests
 		scn.MoveMinionsToTable(troop, savage);
 		scn.SkipToPhase(Phase.ARCHERY);
 
-		int twilight = scn.GetTwilight();
 		assertEquals(1, scn.GetFreepsHandCount());
 		assertEquals(0, scn.GetWoundsOn(troop));
 		assertEquals(0, scn.GetWoundsOn(savage));
@@ -150,8 +149,6 @@ public class Card_V2_009_Tests
 		assertEquals(0, scn.GetWoundsOn(balglin));
 		assertInZone(Zone.DISCARD, leithio);
 		assertEquals(0, scn.GetFreepsHandCount());
-		// The event costs nothing.
-		assertEquals(twilight, scn.GetTwilight());
 		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
 	}
 

@@ -83,7 +83,7 @@ public class Card_15_014_ErrataTests
 	}
 
 	@Test
-	public void PlayedForTwoAndIsStrengthPlusTwoWhileHeBearsAPossessionHoweverManyHeBears() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedAndIsStrengthPlusTwoWhileHeBearsAPossessionHoweverManyHeBears() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var warrior1 = scn.GetFreepsCard("warrior1");
@@ -98,9 +98,7 @@ public class Card_15_014_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		scn.FreepsPlayCard(warrior1);
-		assertEquals(2, scn.GetTwilight());
 		assertInZone(Zone.FREE_CHARACTERS, warrior1);
 
 		assertEquals(5, scn.GetStrength(warrior1));

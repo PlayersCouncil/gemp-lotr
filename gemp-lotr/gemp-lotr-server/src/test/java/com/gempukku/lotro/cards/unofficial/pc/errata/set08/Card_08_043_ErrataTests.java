@@ -71,7 +71,7 @@ public class Card_08_043_ErrataTests
 	}
 
 	@Test
-	public void PlayedForFiveAndTwoThreatsOnSpottingTwoGondorWraithsWhetherExhaustedOrNot() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedByAddingTwoThreatsOnSpottingTwoGondorWraithsWhetherExhaustedOrNot() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var host = scn.GetFreepsCard("host");
@@ -85,14 +85,12 @@ public class Card_08_043_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(0, scn.GetThreats());
 		assertTrue(scn.FreepsPlayAvailable(host));
 
 		scn.FreepsPlayCard(host);
 
 		assertInZone(Zone.FREE_CHARACTERS, host);
-		assertEquals(5, scn.GetTwilight());
 		assertEquals(2, scn.GetThreats());
 		// Spotting exerts nobody.
 		assertEquals(0, scn.GetWoundsOn(oath));

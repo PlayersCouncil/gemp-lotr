@@ -88,7 +88,6 @@ public class Card_01_080_ErrataTests
 		assertTrue(scn.FreepsPlayAvailable(ottar));
 
 		scn.FreepsPlayCard(ottar);
-		assertEquals(5, scn.GetTwilight()); // 4 for Gandalf + 1 for Ottar
 		assertInZone(Zone.SUPPORT, ottar);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

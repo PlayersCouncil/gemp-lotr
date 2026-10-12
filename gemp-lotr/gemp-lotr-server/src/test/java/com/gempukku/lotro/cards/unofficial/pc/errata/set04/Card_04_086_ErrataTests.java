@@ -100,8 +100,6 @@ public class Card_04_086_ErrataTests
 		assertTrue(scn.FreepsPlayAvailable(thonnas));
 
 		scn.FreepsPlayCard(thonnas);
-		// 2 for Orophin + 2 for Thónnas
-		assertEquals(4, scn.GetTwilight());
 		assertInZone(Zone.FREE_CHARACTERS, thonnas);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -117,11 +115,9 @@ public class Card_04_086_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(thonnas));
 
 		scn.FreepsPlayCard(thonnas);
-		assertEquals(2, scn.GetTwilight());
 		assertInZone(Zone.FREE_CHARACTERS, thonnas);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

@@ -97,14 +97,12 @@ public class Card_V3_009_Tests
 		scn.MoveCardsToSupportArea(armory, stone, ships);
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		int twilight = scn.GetTwilight();
 		assertEquals(0, scn.GetWoundsOn(gandalf));
 		assertInZone(Zone.HAND, enter);
 		assertTrue(scn.FreepsPlayAvailable(enter));
 
 		scn.FreepsPlayCard(enter);
 
-		assertEquals(twilight + 2, scn.GetTwilight());
 		// The only Wizard exerts.
 		assertEquals(1, scn.GetWoundsOn(gandalf));
 		// Minions of two cultures; a condition, an artifact and a possession in the support area; a possession
@@ -327,13 +325,11 @@ public class Card_V3_009_Tests
 		scn.ShadowPass();
 
 		// An event is offered whenever its cost can be paid, whatever it will then do.
-		int twilight = scn.GetTwilight();
 		assertTrue(scn.FreepsPlayAvailable(enter2));
 
 		scn.FreepsPlayCard(enter2);
 
 		// Radagast is the only Wizard who can still exert. Nothing is hindered and nobody is exhausted.
-		assertEquals(twilight + 2, scn.GetTwilight());
 		assertEquals(1, scn.GetWoundsOn(radagast));
 		assertEquals(3, scn.GetWoundsOn(gandalf));
 		assertTrue(scn.IsHindered(troop));

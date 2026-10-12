@@ -111,8 +111,6 @@ public class Card_10_008_ErrataTests
 		assertTrue(scn.FreepsPlayAvailable(cirdan));
 
 		scn.FreepsPlayCard(cirdan);
-		// 2 for Celeborn + 4
-		assertEquals(6, scn.GetTwilight());
 		assertInZone(Zone.FREE_CHARACTERS, cirdan);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

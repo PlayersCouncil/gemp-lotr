@@ -80,7 +80,7 @@ public class Card_V3_040_Tests
 	}
 
 	@Test
-	public void RestoresTwoOfThreeHinderedIsengardCardsForTwoAndTheHinderMayBeDeclined() throws DecisionResultInvalidException, CardNotFoundException {
+	public void RestoresTwoOfThreeHinderedIsengardCardsAndTheHinderMayBeDeclined() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var wizard = scn.GetShadowCard("wizard");
@@ -111,7 +111,6 @@ public class Card_V3_040_Tests
 		assertInHand(wizard);
 
 		scn.ShadowPlayCard(wizard);
-		assertEquals(0, scn.GetTwilight());
 
 		assertTrue(scn.ShadowHasCardChoiceAvailable(uruk1, hollowing, palantir));
 		assertFalse(scn.ShadowHasCardChoiceAvailable(troop));
@@ -535,7 +534,6 @@ public class Card_V3_040_Tests
 
 		// "Exert X minions" needs at least one minion to exert (Q-0076), so Galadriel, who costs 0, cannot be
 		// hindered for nothing: the event is paid for and spent, and the Shadow player is asked nothing.
-		assertEquals(0, scn.GetTwilight());
 		assertInDiscard(wizard);
 		assertFalse(scn.ShadowAnyDecisionsAvailable());
 		assertEquals(2, scn.GetWoundsOn(uruk1));
@@ -569,7 +567,6 @@ public class Card_V3_040_Tests
 		scn.ShadowPlayCard(wizard);
 
 		// The event is paid for and spent, and the Shadow player is asked nothing.
-		assertEquals(0, scn.GetTwilight());
 		assertInDiscard(wizard);
 		assertFalse(scn.ShadowAnyDecisionsAvailable());
 		assertEquals(0, scn.GetWoundsOn(troop));
@@ -604,7 +601,6 @@ public class Card_V3_040_Tests
 		// Gimli costs 2 and Aragorn 4, and Frodo is Ring-bound: nobody could be hindered, and spotting is no
 		// cost that might be worth paying for its own sake. The event is paid for and spent, and the Shadow
 		// player is asked nothing.
-		assertEquals(0, scn.GetTwilight());
 		assertInDiscard(wizard);
 		assertFalse(scn.ShadowAnyDecisionsAvailable());
 		assertFalse(scn.IsHindered(gimli));

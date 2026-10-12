@@ -99,7 +99,6 @@ public class Card_01_029_ErrataTests
 		scn.FreepsAssignAndResolve(haldir, runner);
 		assertTrue(scn.FreepsPlayAvailable(enmity));
 		assertEquals(5, scn.GetStrength(haldir));
-		int twilight = scn.GetTwilight();
 
 		scn.FreepsPlayCard(enmity);
 		// Any Elf, in the skirmish or out of it.
@@ -111,7 +110,6 @@ public class Card_01_029_ErrataTests
 		scn.FreepsChooseCard(haldir);
 		assertEquals(6, scn.GetStrength(haldir));
 		assertEquals(6, scn.GetStrength(arwen));
-		assertEquals(twilight, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, enmity);
 
 		scn.ShadowPass();

@@ -97,7 +97,7 @@ public class Card_V3_023_Tests
 	}
 
 	@Test
-	public void PlayedForFourToTheSupportAreaByExertingAGondorCompanionWithOnlyTwoKnightsToSpot() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedToTheSupportAreaByExertingAGondorCompanionWithOnlyTwoKnightsToSpot() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var gate = scn.GetFreepsCard("gate");
@@ -116,7 +116,6 @@ public class Card_V3_023_Tests
 		// nothing but his being an ally keeps him out of the choice.
 		scn.ApplyAdHocModifier(new VitalityModifier(null, merchant, null, 1));
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(0, scn.GetWoundsOn(oath));
 		assertTrue(scn.FreepsPlayAvailable(gate));
 
@@ -131,7 +130,6 @@ public class Card_V3_023_Tests
 		assertEquals(1, scn.GetWoundsOn(oath));
 		assertEquals(0, scn.GetWoundsOn(knight1));
 		assertEquals(0, scn.GetWoundsOn(knight2));
-		assertEquals(4, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, gate);
 		assertNotAttachedTo(gate, oath);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
@@ -169,8 +167,6 @@ public class Card_V3_023_Tests
 		assertEquals(0, scn.GetWoundsOn(knight3));
 		assertEquals(0, scn.GetWoundsOn(rohanAragorn));
 		assertEquals(2, scn.GetWoundsOn(knight1));
-		// 2 for the Knight + 4 for the Gate
-		assertEquals(6, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, gate);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

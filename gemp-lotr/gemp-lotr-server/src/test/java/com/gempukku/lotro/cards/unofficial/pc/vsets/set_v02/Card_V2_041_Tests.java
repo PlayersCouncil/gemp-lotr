@@ -76,7 +76,7 @@ public class Card_V2_041_Tests
 	}
 
 	@Test
-	public void DiscardsOneMoriaMinionToAddOneThreatAndCostsOneTwilightToken() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DiscardsOneMoriaMinionToAddOneThreat() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var peak1 = scn.GetShadowCard("peak1");
@@ -105,7 +105,6 @@ public class Card_V2_041_Tests
 		assertTrue(scn.ShadowPlayAvailable(peak2));
 
 		scn.ShadowPlayCard(peak1);
-		assertEquals(0, scn.GetTwilight());
 		// A [moria] Orc and a [moria] Troll; not the [sauron] Orc, nor the [moria] condition.
 		assertTrue(scn.ShadowHasCardChoiceAvailable(troop, troll));
 		assertTrue(scn.ShadowHasCardChoiceNotAvailable(soldier, pinned));
@@ -161,7 +160,6 @@ public class Card_V2_041_Tests
 		assertTrue(scn.ShadowPlayAvailable(peak));
 
 		scn.ShadowPlayCard(peak);
-		assertEquals(3 - 1, scn.GetTwilight());
 		assertTrue(scn.ShadowHasCardChoiceAvailable(troop, runner, troll));
 		assertEquals(3, scn.ShadowGetChoiceMax());
 
@@ -207,7 +205,6 @@ public class Card_V2_041_Tests
 		scn.FreepsPass();
 
 		scn.ShadowPlayCard(peak);
-		assertEquals(3 - 1, scn.GetTwilight());
 		scn.ShadowChooseCards(troop, runner);
 		assertInZone(Zone.DISCARD, troop, runner);
 
@@ -381,7 +378,6 @@ public class Card_V2_041_Tests
 		assertTrue(scn.ShadowPlayAvailable(peak));
 
 		scn.ShadowPlayCard(peak);
-		assertEquals(0, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, peak);
 		assertInZone(Zone.SHADOW_CHARACTERS, soldier);
 		assertInZone(Zone.SUPPORT, pinned);

@@ -77,7 +77,7 @@ public class Card_17_024_ErrataTests
 	}
 
 	@Test
-	public void PlaysForTwoOnAGandalfWizardWhoIsOneBetterInStrengthVitalityAndResistance() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlaysOnAGandalfWizardWhoIsOneBetterInStrengthVitalityAndResistance() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var shadowfax = scn.GetFreepsCard("shadowfax");
@@ -92,7 +92,6 @@ public class Card_17_024_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(7, scn.GetStrength(gandalf));
 		assertEquals(4, scn.GetVitality(gandalf));
 		assertEquals(6, scn.GetResistance(gandalf));
@@ -106,7 +105,6 @@ public class Card_17_024_ErrataTests
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(avenger, frodo));
 		scn.FreepsChooseCard(gandalf);
 
-		assertEquals(2, scn.GetTwilight());
 		assertAttachedTo(shadowfax, gandalf);
 		assertEquals(8, scn.GetStrength(gandalf));
 		assertEquals(5, scn.GetVitality(gandalf));

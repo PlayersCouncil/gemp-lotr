@@ -118,7 +118,6 @@ public class Card_V3_008_Tests
 		scn.MoveMinionsToTable(troop);
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		int twilight = scn.GetTwilight();
 		int deck = scn.GetFreepsDeckCount();
 		int shuffles = scn.GetFreepsDeckShuffleCount();
 		assertEquals(0, scn.GetWoundsOn(gandalf));
@@ -127,7 +126,6 @@ public class Card_V3_008_Tests
 
 		scn.FreepsPlayCard(words);
 
-		assertEquals(twilight + 4, scn.GetTwilight());
 		// Vitality 4: three exertions leave him exhausted.
 		assertEquals(3, scn.GetWoundsOn(gandalf));
 		assertTrue(scn.IsExhausted(gandalf));

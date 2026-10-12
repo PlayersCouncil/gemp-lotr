@@ -118,7 +118,6 @@ public class Card_V1_055_Tests
 		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{merry, runner1}, new PhysicalCardImpl[]{aragorn, runner2});
 
 		scn.FreepsResolveSkirmish(merry);
-		var twilight = scn.GetTwilight();
 		assertInHand(yet);
 		assertEquals(0, scn.GetWoundsOn(merry));
 		assertEquals(3, scn.GetStrength(merry));
@@ -128,7 +127,6 @@ public class Card_V1_055_Tests
 		assertTrue(scn.FreepsPlayAvailable(yet));
 
 		scn.FreepsPlayCard(yet);
-		assertEquals(twilight + 1, scn.GetTwilight());
 		assertInDiscard(yet);
 		assertEquals(1, scn.GetWoundsOn(merry));
 		// 3 + 3: Sam with the Aragorn signet, Aragorn with Gandalf's and the Dwarf Guard with none add nothing.

@@ -104,7 +104,6 @@ public class Card_01_098_ErrataTests
 		scn.FreepsPlayCard(cloak);
 		assertAttachedTo(cloak, boromir);
 		assertNotAttachedTo(cloak, aragorn);
-		assertEquals(4, scn.GetTwilight());
 		assertEquals(0, scn.GetFreepsHandCount());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

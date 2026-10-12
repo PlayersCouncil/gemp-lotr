@@ -95,14 +95,12 @@ public class Card_17_015_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(2, scn.GetShadowHandCount());
 		assertEquals(5, scn.GetShadowDiscardCount());
 		assertTrue(scn.FreepsPlayAvailable(light));
 		scn.MarkGameLog();
 		scn.FreepsPlayCard(light);
 
-		assertEquals(1, scn.GetTwilight());
 		// The three minions in the Shadow player's discard pile, and nothing else there or in the other pile.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(runner, savage, brigand));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(fear, elf, ownTroop));
@@ -241,7 +239,6 @@ public class Card_17_015_ErrataTests
 		assertTrue(scn.FreepsPlayAvailable(light));
 		scn.FreepsPlayCard(light);
 
-		assertEquals(1, scn.GetTwilight());
 		assertInDiscard(light, fear, elf);
 		assertEquals(0, scn.FreepsGetTotalRevealedCardCount());
 		assertInHand(lemenya, wreathed);

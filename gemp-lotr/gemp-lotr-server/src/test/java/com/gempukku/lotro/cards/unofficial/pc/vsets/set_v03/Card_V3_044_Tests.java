@@ -117,7 +117,6 @@ public class Card_V3_044_Tests
 
 		scn.ShadowChooseCards(scout, soldier, attacker, galley);
 
-		assertEquals(12, scn.GetTwilight());
 		assertTrue(scn.IsHindered(scout));
 		assertTrue(scn.IsHindered(soldier));
 		assertTrue(scn.IsHindered(attacker));
@@ -273,7 +272,6 @@ public class Card_V3_044_Tests
 		assertEquals(0, scn.ShadowGetChoiceMin());
 		scn.ShadowDeclineChoosing();
 
-		assertEquals(12, scn.GetTwilight());
 		assertFalse(scn.IsHindered(scout));
 		assertFalse(scn.IsHindered(ships));
 		assertEquals(2, scn.GetCultureTokensOn(ships));

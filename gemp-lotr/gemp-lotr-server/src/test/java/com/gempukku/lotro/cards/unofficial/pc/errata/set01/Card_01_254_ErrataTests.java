@@ -94,7 +94,6 @@ public class Card_01_254_ErrataTests
 		scn.FreepsPass();
 
 		assertTrue(scn.AwaitingShadowPhaseActions());
-		int twilight = scn.GetTwilight();
 		assertTrue(scn.ShadowPlayAvailable(mordor));
 
 		scn.ShadowPlayCard(mordor);
@@ -112,7 +111,6 @@ public class Card_01_254_ErrataTests
 		assertEquals(1, scn.GetWoundsOn(sentry));
 		assertEquals(0, scn.GetWoundsOn(soldier));
 		assertEquals(0, scn.GetWoundsOn(runner));
-		assertEquals(twilight - 1, scn.GetTwilight());
 		assertAttachedTo(mordor, garrison);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}

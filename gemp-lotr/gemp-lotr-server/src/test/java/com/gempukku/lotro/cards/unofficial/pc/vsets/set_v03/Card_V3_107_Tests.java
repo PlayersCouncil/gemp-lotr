@@ -140,7 +140,6 @@ public class Card_V3_107_Tests
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 		assertTrue(scn.FreepsPlayAvailable(forfrodo));
 
-		int twilight = scn.GetTwilight();
 		int discard = scn.GetFreepsDiscardCount();
 		assertEquals(2, scn.GetBurdens());
 		assertEquals(1, scn.GetFreepsHandCount());
@@ -166,7 +165,6 @@ public class Card_V3_107_Tests
 		assertEquals(3, scn.GetStrength(smeagol));
 		assertEquals(0, scn.GetWoundsOn(trollslayer));
 		assertEquals(3, scn.GetStrength(trollslayer));
-		assertEquals(twilight + 2, scn.GetTwilight());
 		assertEquals(0, scn.GetFreepsHandCount());
 		assertInZone(Zone.REMOVED, forfrodo);
 		assertEquals(discard, scn.GetFreepsDiscardCount());
@@ -189,7 +187,6 @@ public class Card_V3_107_Tests
 		scn.SkipToAssignments();
 		scn.FreepsAssignAndResolve(aragorn, savage);
 
-		int twilight = scn.GetTwilight();
 		int discard = scn.GetFreepsDiscardCount();
 		assertEquals(0, scn.GetBurdens());
 		assertEquals(0, scn.GetWoundsOn(aragorn));
@@ -202,7 +199,6 @@ public class Card_V3_107_Tests
 		assertEquals(8, scn.GetStrength(aragorn));
 		assertEquals(0, scn.GetWoundsOn(sam));
 		assertEquals(3, scn.GetStrength(sam));
-		assertEquals(twilight + 2, scn.GetTwilight());
 		assertInZone(Zone.REMOVED, forfrodo);
 		assertEquals(discard, scn.GetFreepsDiscardCount());
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());

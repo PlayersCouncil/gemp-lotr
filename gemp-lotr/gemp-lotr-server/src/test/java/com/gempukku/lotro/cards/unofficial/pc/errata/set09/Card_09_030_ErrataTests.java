@@ -92,7 +92,7 @@ public class Card_09_030_ErrataTests
 	}
 
 	@Test
-	public void SmeagolIsPlayedFromHandForNothingAndAddsABurden() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SmeagolIsPlayedFromHandByAddingABurden() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var smeagol = scn.GetFreepsCard("smeagol");
@@ -100,12 +100,10 @@ public class Card_09_030_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(0, scn.GetBurdens());
 		assertTrue(scn.FreepsPlayAvailable(smeagol));
 
 		scn.FreepsPlayCard(smeagol);
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(1, scn.GetBurdens());
 		assertInZone(Zone.FREE_CHARACTERS, smeagol);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());

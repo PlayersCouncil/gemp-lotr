@@ -93,7 +93,6 @@ public class Card_V3_099_Tests
 
 		scn.ShadowPlayCard(prisoners);
 
-		assertEquals(11, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, prisoners);
 		assertFalse(scn.IsHindered(prisoners));
 

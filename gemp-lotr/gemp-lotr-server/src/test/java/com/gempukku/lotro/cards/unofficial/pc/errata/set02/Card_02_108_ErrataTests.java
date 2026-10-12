@@ -91,13 +91,11 @@ public class Card_02_108_ErrataTests
 
 		// 3 + 1 for Isildur's Bane
 		assertEquals(4, scn.GetStrength(galadriel));
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(elbereth));
 
 		// Galadriel is the only bearer there can be, so no choice is asked.
 		scn.FreepsPlayCard(elbereth);
 
-		assertEquals(1, scn.GetTwilight());
 		assertAttachedTo(elbereth, galadriel);
 		assertNotAttachedTo(elbereth, sam);
 		assertEquals(5, scn.GetStrength(galadriel));

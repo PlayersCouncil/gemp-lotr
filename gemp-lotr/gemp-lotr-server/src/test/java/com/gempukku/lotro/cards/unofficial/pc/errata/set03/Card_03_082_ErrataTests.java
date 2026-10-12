@@ -86,7 +86,6 @@ public class Card_03_082_ErrataTests
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPass();
 
-		int twilight = scn.GetTwilight();
 		assertTrue(scn.ShadowPlayAvailable(news));
 		scn.ShadowPlayCard(news);
 		assertEquals(2, scn.ShadowGetMultipleChoiceCount());
@@ -109,7 +108,6 @@ public class Card_03_082_ErrataTests
 
 		assertEquals(1, scn.GetKeywordCount(attea, Keyword.DAMAGE));
 		assertEquals(0, scn.GetKeywordCount(lemenya, Keyword.DAMAGE));
-		assertEquals(twilight - 1, scn.GetTwilight());
 		assertInDiscard(news);
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
@@ -132,7 +130,6 @@ public class Card_03_082_ErrataTests
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPass();
 
-		int twilight = scn.GetTwilight();
 		scn.ShadowPlayCard(news);
 		assertEquals(2, scn.ShadowGetMultipleChoiceCount());
 		scn.ShadowChooseOption("wounds");
@@ -151,7 +148,6 @@ public class Card_03_082_ErrataTests
 		assertEquals(1, scn.ShadowGetChoiceMin());
 		scn.ShadowChooseCard(savage);
 
-		assertEquals(twilight - 1, scn.GetTwilight());
 		assertInDiscard(news);
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}

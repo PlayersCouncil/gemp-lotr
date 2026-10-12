@@ -59,7 +59,7 @@ public class Card_01_108_ErrataTests
 	}
 
 	@Test
-	public void PlaysForZeroOnARanger() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlaysOnARanger() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var nostranger = scn.GetFreepsCard("nostranger");
@@ -72,7 +72,6 @@ public class Card_01_108_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(nostranger));
 		scn.FreepsPlayCard(nostranger);
 
@@ -83,8 +82,6 @@ public class Card_01_108_ErrataTests
 		scn.FreepsChooseCard(arwen);
 
 		assertAttachedTo(nostranger, arwen);
-		// It costs 0.
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

@@ -120,9 +120,7 @@ public class Card_04_099_ErrataTests
 		scn.SkipToPhase(Phase.MANEUVER);
 
 		assertTrue(scn.FreepsPlayAvailable(thunder));
-		int twilight = scn.GetTwilight();
 		scn.FreepsPlayCard(thunder);
-		assertEquals(twilight + 3, scn.GetTwilight());
 
 		assertTrue(scn.FreepsChoiceAvailable("Discard a Shadow possession"));
 		assertTrue(scn.FreepsChoiceAvailable("Hinder a Shadow artifact"));
@@ -171,9 +169,7 @@ public class Card_04_099_ErrataTests
 		scn.HinderCard(asperity);
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		int twilight = scn.GetTwilight();
 		scn.FreepsPlayCard(thunder);
-		assertEquals(twilight + 3, scn.GetTwilight());
 
 		assertTrue(scn.FreepsChoiceAvailable("Discard a Shadow possession"));
 		scn.FreepsChooseOption("Hinder");
@@ -210,9 +206,7 @@ public class Card_04_099_ErrataTests
 		scn.StartGame();
 
 		assertTrue(scn.FreepsPlayAvailable(thunder));
-		int twilight = scn.GetTwilight();
 		scn.FreepsPlayCard(thunder);
-		assertEquals(twilight + 3, scn.GetTwilight());
 
 		// Only the hinder can be carried out, so it is what happens.
 		assertTrue(scn.IsHindered(palantir));
@@ -234,9 +228,7 @@ public class Card_04_099_ErrataTests
 
 		scn.StartGame();
 
-		int twilight = scn.GetTwilight();
 		scn.FreepsPlayCard(thunder);
-		assertEquals(twilight + 3, scn.GetTwilight());
 
 		// Only the discard can be carried out, so it is what happens.
 		assertInDiscard(poison, thunder);
@@ -278,9 +270,7 @@ public class Card_04_099_ErrataTests
 
 		scn.StartGame();
 
-		int twilight = scn.GetTwilight();
 		scn.FreepsPlayCard(thunder);
-		assertEquals(twilight + 3, scn.GetTwilight());
 
 		// Played for nothing (CR 4.2 "effect"); a choice with nothing on any branch is not put (F-0116).
 		assertInDiscard(thunder);

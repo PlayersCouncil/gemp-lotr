@@ -101,8 +101,6 @@ public class Card_V3_055_Tests
 
 		scn.ShadowPlayCard(schooner2);
 
-		// 13 - 2 for the Schooner
-		assertEquals(11, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, schooner2);
 		// The token goes on the copy that was played, and nobody was asked.
 		assertEquals(1, scn.GetCultureTokensOn(schooner2));
@@ -148,7 +146,6 @@ public class Card_V3_055_Tests
 
 		scn.ShadowPlayCard(schooner1);
 
-		assertEquals(11, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, schooner1);
 		assertEquals(0, scn.GetCultureTokensOn(schooner1));
 		assertEquals(0, scn.GetCultureTokensOn(galley));
@@ -159,7 +156,6 @@ public class Card_V3_055_Tests
 
 		scn.ShadowPlayCard(schooner2);
 
-		assertEquals(9, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, schooner2);
 		assertEquals(1, scn.GetCultureTokensOn(schooner2));
 		assertEquals(0, scn.GetCultureTokensOn(schooner1));

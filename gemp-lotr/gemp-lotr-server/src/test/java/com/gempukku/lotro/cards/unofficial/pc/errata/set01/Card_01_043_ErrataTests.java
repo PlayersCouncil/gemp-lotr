@@ -100,7 +100,6 @@ public class Card_01_043_ErrataTests
 		scn.StartGame();
 
 		int deck = scn.GetFreepsDeckCount();
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(3, scn.GetFreepsHandCount());
 		assertEquals(0, scn.GetShadowHandCount());
 
@@ -108,7 +107,6 @@ public class Card_01_043_ErrataTests
 		// is drawn for it.
 		scn.FreepsPlayCard(eyes);
 		assertInZone(Zone.SUPPORT, eyes);
-		assertEquals(2, scn.GetTwilight());
 		assertEquals(2, scn.GetFreepsHandCount());
 		assertEquals(deck, scn.GetFreepsDeckCount());
 

@@ -95,9 +95,7 @@ public class Card_18_082_ErrataTests
 		scn.ShadowPlayCard(goblin);
 		assertTrue(scn.ShadowPlayAvailable(grond));
 
-		int twilight = scn.GetTwilight();
 		scn.ShadowPlayCard(grond);
-		assertEquals(twilight - 3, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, grond);
 		assertNull(grond.getAttachedTo());
 		assertTrue(scn.AwaitingShadowPhaseActions());

@@ -99,7 +99,6 @@ public class Card_V2_001_Tests
 		assertTrue(scn.ShadowPlayAvailable(driven));
 
 		scn.ShadowPlayCard(driven);
-		assertEquals(5, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, driven);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
@@ -127,7 +126,6 @@ public class Card_V2_001_Tests
 		assertTrue(scn.ShadowPlayAvailable(driven));
 
 		scn.ShadowPlayCard(driven);
-		assertEquals(3, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, driven);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}

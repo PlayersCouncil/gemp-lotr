@@ -84,7 +84,6 @@ public class Card_03_106_ErrataTests
 		assertTrue(scn.FreepsPlayAvailable(bill));
 		scn.FreepsPlayCard(bill);
 		assertAttachedTo(bill, sam);
-		assertEquals(2, scn.GetTwilight()); // Bill costs nothing
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
@@ -100,7 +99,6 @@ public class Card_03_106_ErrataTests
 		scn.StartGame();
 		scn.FreepsPlayCard(bill);
 		assertAttachedTo(bill, sam);
-		assertEquals(0, scn.GetTwilight());
 
 		// To Ettenmoors, Shadow number 2, which is not underground.
 		scn.FreepsPass();

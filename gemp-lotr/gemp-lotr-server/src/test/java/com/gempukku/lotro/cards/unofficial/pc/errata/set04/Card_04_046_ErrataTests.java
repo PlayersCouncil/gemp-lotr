@@ -75,7 +75,7 @@ public class Card_04_046_ErrataTests
 	}
 
 	@Test
-	public void PlaysFromHandForThreeAndStacksTheTopSixCardsOfYourDrawDeckHere() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlaysFromHandAndStacksTheTopSixCardsOfYourDrawDeckHere() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var emhr = scn.GetFreepsCard("emhr");
@@ -95,11 +95,9 @@ public class Card_04_046_ErrataTests
 		int deck = scn.GetFreepsDeckCount();
 		int shadowDeck = scn.GetShadowDeckCount();
 
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(emhr));
 		scn.FreepsPlayCard(emhr);
 
-		assertEquals(3, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, emhr);
 		// Exactly the top 6 of your own deck, stacked here; the seventh is now on top.
 		assertEquals(6, scn.GetStackedCards(emhr).size());

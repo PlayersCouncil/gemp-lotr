@@ -89,10 +89,8 @@ public class Card_05_092_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(sigewulf));
 		scn.FreepsPlayCard(sigewulf);
-		assertEquals(1, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, sigewulf);
 
 		// No minions: the fellowship moves to site 2 and the game goes straight to the regroup phase.

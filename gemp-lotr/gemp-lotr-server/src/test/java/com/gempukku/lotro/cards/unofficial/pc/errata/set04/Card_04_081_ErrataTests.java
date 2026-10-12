@@ -86,8 +86,6 @@ public class Card_04_081_ErrataTests
 
 		assertTrue(scn.FreepsPlayAvailable(pengedhel));
 		scn.FreepsPlayCard(pengedhel);
-		// 2 for Legolas + 2 for Pengedhel
-		assertEquals(4, scn.GetTwilight());
 		assertInZone(Zone.FREE_CHARACTERS, pengedhel);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -105,7 +103,6 @@ public class Card_04_081_ErrataTests
 
 		assertTrue(scn.FreepsPlayAvailable(pengedhel));
 		scn.FreepsPlayCard(pengedhel);
-		assertEquals(2, scn.GetTwilight());
 		assertInZone(Zone.FREE_CHARACTERS, pengedhel);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

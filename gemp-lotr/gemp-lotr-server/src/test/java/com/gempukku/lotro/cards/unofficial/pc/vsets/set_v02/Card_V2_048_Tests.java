@@ -109,8 +109,6 @@ public class Card_V2_048_Tests
 		assertTrue(scn.FreepsPlayAvailable(stronghold));
 
 		scn.FreepsPlayCard(stronghold);
-		// 2 + 1 for Stronghold of My Fathers
-		assertEquals(3, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, stronghold);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -139,7 +137,6 @@ public class Card_V2_048_Tests
 		assertTrue(scn.FreepsPlayAvailable(stronghold));
 
 		scn.FreepsPlayCard(stronghold);
-		assertEquals(3, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, stronghold);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

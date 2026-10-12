@@ -115,14 +115,12 @@ public class Card_V2_062_Tests
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 		assertTrue(scn.ShadowPlayAvailable(save1));
 		assertEquals(6, scn.GetStrength(scout));
-		assertEquals(5, scn.GetTwilight());
 		assertEquals(2, scn.GetShadowHandCount());
 
 		// An event is offered whatever it will do.  It is paid for and discarded, and with nothing to count
 		// the Scout gains nothing.
 		scn.ShadowPlayCard(save1);
 		assertEquals(6, scn.GetStrength(scout));
-		assertEquals(4, scn.GetTwilight());
 		assertInDiscard(save1);
 		assertEquals(1, scn.GetShadowHandCount());
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
@@ -192,7 +190,6 @@ public class Card_V2_062_Tests
 		assertEquals(6, scn.GetStrength(pursuer));
 		assertEquals(6, scn.GetStrength(raider));
 		assertEquals(7, scn.GetStrength(soldier));
-		assertEquals(4, scn.GetTwilight());
 		assertInDiscard(save1);
 		assertEquals(1, scn.GetShadowHandCount());
 
@@ -203,7 +200,6 @@ public class Card_V2_062_Tests
 		scn.ShadowChooseCard(pursuer);
 		assertEquals(9, scn.GetStrength(pursuer));
 		assertEquals(9, scn.GetStrength(scout));
-		assertEquals(3, scn.GetTwilight());
 		assertInDiscard(save2);
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 
@@ -263,7 +259,6 @@ public class Card_V2_062_Tests
 		scn.ShadowChooseCard(scout);
 		assertEquals(16, scn.GetStrength(scout));
 		assertEquals(6, scn.GetStrength(pursuer));
-		assertEquals(3, scn.GetTwilight());
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 }

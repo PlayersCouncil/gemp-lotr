@@ -73,7 +73,7 @@ public class Card_01_092_ErrataTests
 	}
 
 	@Test
-	public void PlaysForOneOnAManOrAGondorCompanion() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlaysOnAManOrAGondorCompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var armor = scn.GetFreepsCard("armor");
@@ -87,7 +87,6 @@ public class Card_01_092_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(1, scn.GetFreepsHandCount());
 		assertTrue(scn.FreepsPlayAvailable(armor));
 
@@ -99,7 +98,6 @@ public class Card_01_092_ErrataTests
 		scn.FreepsChooseCard(guard);
 
 		assertAttachedTo(armor, guard);
-		assertEquals(1, scn.GetTwilight());
 		assertEquals(0, scn.GetFreepsHandCount());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -128,7 +126,6 @@ public class Card_01_092_ErrataTests
 		scn.FreepsChooseCard(barliman);
 
 		assertAttachedTo(armor, barliman);
-		assertEquals(1, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

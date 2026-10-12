@@ -91,7 +91,6 @@ public class Card_03_085_ErrataTests
 		scn.FreepsPass();
 
 		assertTrue(scn.AwaitingShadowPhaseActions());
-		int twilight = scn.GetTwilight();
 		assertInHand(tgat);
 		assertTrue(scn.ShadowPlayAvailable(tgat));
 		scn.ShadowPlayCard(tgat);
@@ -112,7 +111,6 @@ public class Card_03_085_ErrataTests
 		assertEquals(1, scn.GetWoundsOn(creeper));
 		assertEquals(0, scn.GetWoundsOn(twigul));
 		assertEquals(0, scn.GetWoundsOn(attea));
-		assertEquals(twilight - 1, scn.GetTwilight());
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 

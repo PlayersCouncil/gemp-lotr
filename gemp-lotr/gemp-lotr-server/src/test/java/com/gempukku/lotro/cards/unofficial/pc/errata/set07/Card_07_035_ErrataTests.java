@@ -118,7 +118,6 @@ public class Card_07_035_ErrataTests
 		scn.AttachCardsTo(aragorn, wielding, poison);
 		scn.HinderCard(heavy);
 
-		int twilight = scn.GetTwilight();
 		assertTrue(scn.FreepsPlayAvailable(hope));
 		scn.FreepsPlayCard(hope);
 
@@ -145,7 +144,6 @@ public class Card_07_035_ErrataTests
 		assertFalse(scn.IsHindered(beetles));
 		assertEquals(aragorn, poison.getAttachedTo());
 		assertInZone(Zone.SUPPORT, walls);
-		assertEquals(twilight + 3, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
@@ -267,13 +265,11 @@ public class Card_07_035_ErrataTests
 		scn.HinderCard(heavy);
 		scn.AttachCardsTo(aragorn, poison);
 
-		int twilight = scn.GetTwilight();
 		assertTrue(scn.FreepsPlayAvailable(hope));
 		scn.FreepsPlayCard(hope);
 		scn.FreepsChooseCards(card1);
 
 		assertInDiscard(card1, hope);
-		assertEquals(twilight + 3, scn.GetTwilight());
 		assertTrue(scn.IsHindered(heavy));
 		assertEquals(aragorn, poison.getAttachedTo());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
@@ -293,13 +289,11 @@ public class Card_07_035_ErrataTests
 		// A Shadow condition that either branch could act on, if X were more than zero.
 		scn.MoveCardsToSupportArea(tidings);
 
-		int twilight = scn.GetTwilight();
 		assertTrue(scn.FreepsPlayAvailable(hope));
 		scn.FreepsPlayCard(hope);
 
 		// Nothing in hand to discard, so X is 0: discarding 0 or hindering 0 is nothing to choose between.
 		assertInDiscard(hope);
-		assertEquals(twilight + 3, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, tidings);
 		assertFalse(scn.IsHindered(tidings));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());

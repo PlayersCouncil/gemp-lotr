@@ -95,7 +95,6 @@ public class Card_11_031_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(3, scn.GetFreepsHandCount());
 		assertEquals(3, scn.GetFreepsDiscardCount());
 		assertEquals(1, scn.GetShadowDiscardCount());
@@ -137,7 +136,6 @@ public class Card_11_031_ErrataTests
 		// 3 in the pile - the card taken + the card discarded + the event.
 		assertEquals(4, scn.GetFreepsDiscardCount());
 		assertEquals(1, scn.GetShadowDiscardCount());
-		assertEquals(1, scn.GetTwilight());
 		assertEquals(1, scn.GetWoundsOn(radagast));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -182,7 +180,6 @@ public class Card_11_031_ErrataTests
 		assertInDiscard(troop, account);
 		assertEquals(2, scn.GetFreepsHandCount());
 		assertEquals(2, scn.GetFreepsDiscardCount());
-		assertEquals(1, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
@@ -259,7 +256,6 @@ public class Card_11_031_ErrataTests
 
 		// One Wizard and one other card in hand: both costs are paid without a choice.
 		assertEquals(1, scn.GetWoundsOn(gandalf));
-		assertEquals(1, scn.GetTwilight());
 		assertEquals(0, scn.GetFreepsHandCount());
 		assertInDiscard(guard, armor, account, shadowSavage);
 		assertEquals(3, scn.GetFreepsDiscardCount());

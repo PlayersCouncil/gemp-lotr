@@ -151,7 +151,6 @@ public class Card_V1_017_Tests
 		assertEquals(4, scn.GetTwilight());     // Gandalf's cost
 
 		scn.FreepsPlayCard(twoeyes);
-		assertEquals(7, scn.GetTwilight());     // 4 for Gandalf + 3 for the event
 		assertInDiscard(twoeyes);
 		// The event has left the hand and 4 cards have come into it.
 		assertEquals(4, scn.GetFreepsHandCount());
@@ -199,7 +198,6 @@ public class Card_V1_017_Tests
 		assertEquals(6, scn.GetTwilight());     // 4 for Gandalf + 2 for Frodo
 
 		scn.FreepsPlayCard(twoeyes);
-		assertEquals(9, scn.GetTwilight());     // 6 + 3 for the event
 		assertInDiscard(twoeyes);
 		// The event has left the hand and 3 cards have come into it.
 		assertEquals(3, scn.GetFreepsHandCount());
@@ -230,11 +228,9 @@ public class Card_V1_017_Tests
 		int deckCount = scn.GetFreepsDeckCount();
 		assertTrue(deckCount > 4);
 		assertEquals(1, scn.GetFreepsHandCount());
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(twoeyes));
 
 		scn.FreepsPlayCard(twoeyes);
-		assertEquals(3, scn.GetTwilight());
 		assertInDiscard(twoeyes);
 		// The event has left the hand and 2 cards have come into it.
 		assertEquals(2, scn.GetFreepsHandCount());

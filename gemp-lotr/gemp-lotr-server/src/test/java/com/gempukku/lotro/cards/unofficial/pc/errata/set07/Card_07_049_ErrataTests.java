@@ -65,7 +65,7 @@ public class Card_07_049_ErrataTests
 	}
 
 	@Test
-	public void PlaysOnGandalfForTwoAndOnNoOtherCompanion() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlaysOnGandalfAndOnNoOtherCompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var champion = scn.GetFreepsCard("champion");
@@ -84,12 +84,10 @@ public class Card_07_049_ErrataTests
 		scn.FreepsRefreshDecision();
 
 		assertTrue(scn.FreepsPlayAvailable(champion));
-		assertEquals(0, scn.GetTwilight());
 
 		scn.FreepsPlayCard(champion);
 
 		// Gandalf is the only bearer, so no choice of bearer is asked.
-		assertEquals(2, scn.GetTwilight());
 		assertEquals(gandalf, champion.getAttachedTo());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

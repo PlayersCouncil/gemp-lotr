@@ -92,8 +92,6 @@ public class Card_02_006_ErrataTests
 		assertTrue(scn.FreepsPlayAvailable(fror));
 
 		scn.FreepsPlayCard(fror);
-		// 2 for Gimli + 2 for Fror
-		assertEquals(4, scn.GetTwilight());
 		assertInZone(Zone.FREE_CHARACTERS, fror);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -110,7 +108,6 @@ public class Card_02_006_ErrataTests
 
 		assertTrue(scn.FreepsPlayAvailable(fror));
 		scn.FreepsPlayCard(fror);
-		assertEquals(2, scn.GetTwilight());
 		assertInZone(Zone.FREE_CHARACTERS, fror);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

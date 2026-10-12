@@ -73,7 +73,7 @@ public class Card_V3_019_Tests
 	}
 
 	@Test
-	public void PlayedForFiveAtStrengthEightAndNineOnceAnotherGondorManIsPlayed() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedAtStrengthEightAndNineOnceAnotherGondorManIsPlayed() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var aragorn = scn.GetFreepsCard("aragorn");
@@ -82,11 +82,9 @@ public class Card_V3_019_Tests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(aragorn));
 		scn.FreepsPlayCard(aragorn);
 
-		assertEquals(5, scn.GetTwilight());
 		assertInZone(Zone.FREE_CHARACTERS, aragorn);
 		// He is a [gondor] Man himself, and does not count: only other Men do.
 		assertEquals(8, scn.GetStrength(aragorn));

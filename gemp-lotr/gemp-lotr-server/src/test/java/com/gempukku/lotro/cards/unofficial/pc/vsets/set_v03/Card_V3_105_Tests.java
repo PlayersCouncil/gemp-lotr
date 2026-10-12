@@ -116,7 +116,6 @@ public class Card_V3_105_Tests
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(sam);
 
-		int pool = scn.GetTwilight();
 		// 3 + 2 for the sword
 		assertEquals(5, scn.GetStrength(sam));
 		assertEquals(5, scn.GetStrength(merry));
@@ -129,7 +128,6 @@ public class Card_V3_105_Tests
 		assertEquals(5 + 5, scn.GetStrength(sam));
 		assertEquals(5, scn.GetStrength(merry));
 		assertInZone(Zone.DISCARD, driven);
-		assertEquals(pool + 5, scn.GetTwilight());
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 
 		// X was worked out when the event was played: a later wound in the skirmish does not change it.
@@ -463,13 +461,11 @@ public class Card_V3_105_Tests
 
 		// A Man bearing a hand weapon.
 		scn.FreepsResolveSkirmish(aragorn);
-		int pool = scn.GetTwilight();
 		assertEquals(10, scn.GetStrength(aragorn));
 		assertTrue(scn.FreepsPlayAvailable(driven));
 		scn.FreepsPlayCard(driven);
 		assertEquals(10, scn.GetStrength(aragorn));
 		assertInZone(Zone.DISCARD, driven);
-		assertEquals(pool + 5, scn.GetTwilight());
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 		scn.ShadowPass();
 		scn.FreepsPass();

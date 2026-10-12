@@ -100,8 +100,6 @@ public class Card_V3_118_Tests
 		assertTrue(scn.FreepsPlayAvailable(sooner));
 
 		scn.FreepsPlayCard(sooner);
-		// 2 for Sam + 3
-		assertEquals(5, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, sooner);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

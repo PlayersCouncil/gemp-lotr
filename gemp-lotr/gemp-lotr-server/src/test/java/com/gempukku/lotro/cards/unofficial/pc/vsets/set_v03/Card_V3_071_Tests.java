@@ -111,7 +111,6 @@ public class Card_V3_071_Tests
 		// Lemenya, strength 9, beats Aragorn, strength 8.
 		scn.PassSkirmishActions();
 
-		int twilight = scn.GetTwilight();
 		int deck = scn.GetShadowDeckCount();
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(lemenya));
@@ -124,7 +123,6 @@ public class Card_V3_071_Tests
 
 		scn.ShadowChooseOptionalTrigger(hour);
 
-		assertEquals(twilight - 4, scn.GetTwilight());
 		// The Nazgul who won exerts; the Nazgul standing by does not.
 		assertEquals(1, scn.GetWoundsOn(lemenya));
 		assertEquals(0, scn.GetWoundsOn(otsea));

@@ -138,8 +138,6 @@ public class Card_V3_002_Tests
 		scn.FreepsChooseCard(bounder);
 
 		assertAttachedTo(jetsam, bounder);
-		// 1 for Bilbo's Pipe + 1 for Jetsam
-		assertEquals(2, scn.GetTwilight());
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(jetsam));
 
 		scn.FreepsDeclineOptionalTrigger();

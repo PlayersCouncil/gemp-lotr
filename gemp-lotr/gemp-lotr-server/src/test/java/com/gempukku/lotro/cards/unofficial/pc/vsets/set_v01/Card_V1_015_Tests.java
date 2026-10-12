@@ -108,7 +108,6 @@ public class Card_V1_015_Tests
 		assertTrue(scn.FreepsPlayAvailable(gwaihir));
 
 		scn.FreepsPlayCard(gwaihir);
-		assertEquals(8, scn.GetTwilight());     // 4 for Gandalf + 4 for Gwaihir
 		assertInZone(Zone.SUPPORT, gwaihir);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

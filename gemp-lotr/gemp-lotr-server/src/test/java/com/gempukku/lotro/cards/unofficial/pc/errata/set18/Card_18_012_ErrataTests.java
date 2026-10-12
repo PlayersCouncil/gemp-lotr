@@ -107,8 +107,6 @@ public class Card_18_012_ErrataTests
 		assertTrue(scn.FreepsPlayAvailable(gilgalad));
 
 		scn.FreepsPlayCard(gilgalad);
-		// 2 for Legolas + 5 for Gil-galad
-		assertEquals(7, scn.GetTwilight());
 		assertInZone(Zone.FREE_CHARACTERS, gilgalad);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

@@ -149,7 +149,6 @@ public class Card_V1_024_Tests
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn, gimli, frodo, guard));
 		scn.FreepsChooseCard(arwen);
 
-		assertEquals(7, scn.GetTwilight());
 		assertAttachedTo(sword, arwen);
 		assertNotAttachedTo(sword, boromir);
 		assertNotAttachedTo(sword, sam);

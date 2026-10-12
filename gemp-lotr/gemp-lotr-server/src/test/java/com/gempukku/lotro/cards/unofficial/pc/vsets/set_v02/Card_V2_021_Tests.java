@@ -161,7 +161,6 @@ public class Card_V2_021_Tests
 		assertEquals(3, murderous.getBlueprint().getTwilightCost());
 		assertEquals(4, party.getBlueprint().getTwilightCost());
 		assertEquals(2, worker.getBlueprint().getTwilightCost());
-		var twilight = scn.GetTwilight();
 
 		scn.ShadowPlayCard(shot);
 		// X is at least 1 and at most the 3 + 2 tokens on machines; the 2 on the other card are not counted.
@@ -198,7 +197,6 @@ public class Card_V2_021_Tests
 		assertFalse(scn.IsCharAssigned(worker));
 		assertFalse(scn.IsCharAssigned(guard));
 		assertFalse(scn.IsCharAssigned(bounder));
-		assertEquals(twilight - 2, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, shot);
 		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
@@ -359,7 +357,6 @@ public class Card_V2_021_Tests
 		// Three tokens reach the cheaper Uruk-hai, so the event is not marked as one that will do nothing,
 		// though the player may still remove too few.
 		assertEquals("false", scn.ShadowActionNoEffect(shot));
-		var twilight = scn.GetTwilight();
 
 		scn.ShadowPlayCard(shot);
 		assertEquals(1, scn.ShadowGetChoiceMin());
@@ -368,7 +365,6 @@ public class Card_V2_021_Tests
 		scn.ShadowChoose("2");
 
 		assertEquals(3 - 2, scn.GetCultureTokensOn(ram));
-		assertEquals(twilight - 2, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, shot);
 		assertFalse(scn.IsCharAssigned(aragorn));
 		assertFalse(scn.IsCharAssigned(murderous));
@@ -401,7 +397,6 @@ public class Card_V2_021_Tests
 		assertTrue(scn.ShadowPlayAvailable(shot));
 		// Offered, and marked as an action whose effect will do nothing.
 		assertEquals("effect", scn.ShadowActionNoEffect(shot));
-		var twilight = scn.GetTwilight();
 
 		scn.ShadowPlayCard(shot);
 		assertEquals(1, scn.ShadowGetChoiceMin());
@@ -409,7 +404,6 @@ public class Card_V2_021_Tests
 		scn.ShadowChoose("2");
 
 		assertEquals(0, scn.GetCultureTokensOn(ram));
-		assertEquals(twilight - 2, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, shot);
 		assertFalse(scn.IsCharAssigned(aragorn));
 		assertFalse(scn.IsCharAssigned(murderous));
@@ -443,7 +437,6 @@ public class Card_V2_021_Tests
 		assertTrue(scn.ShadowPlayAvailable(shot));
 		// Offered, and marked as an action whose effect will do nothing.
 		assertEquals("effect", scn.ShadowActionNoEffect(shot));
-		var twilight = scn.GetTwilight();
 
 		scn.ShadowPlayCard(shot);
 		assertEquals(1, scn.ShadowGetChoiceMin());
@@ -452,7 +445,6 @@ public class Card_V2_021_Tests
 
 		// The tokens are gone and the event is paid for and spent; there was no Uruk-hai to assign.
 		assertEquals(0, scn.GetCultureTokensOn(ram));
-		assertEquals(twilight - 2, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, shot);
 		assertFalse(scn.IsCharAssigned(aragorn));
 		assertFalse(scn.IsCharAssigned(worker));

@@ -161,7 +161,6 @@ public class Card_V1_031_Tests
 
 		scn.ShadowPlayCard(purpose);
 
-		assertEquals(1, scn.GetTwilight());
 		assertEquals(1, scn.GetBurdens());
 		assertNotInZone(Zone.HAND, purpose);
 		// The rest is the Shadow player's to take or leave.

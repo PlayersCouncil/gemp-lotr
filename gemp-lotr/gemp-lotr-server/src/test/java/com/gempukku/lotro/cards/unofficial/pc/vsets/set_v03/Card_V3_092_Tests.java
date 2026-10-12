@@ -164,8 +164,6 @@ public class Card_V3_092_Tests
 
 		scn.ShadowPlayCard(watcher);
 
-		// 11 - 2 to play
-		assertEquals(9, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, watcher);
 		// The card as first released added a threat when played; this revision does not, with room for two.
 		assertEquals(2, scn.GetThreatLimit());

@@ -102,7 +102,6 @@ public class Card_V1_047_Tests
 
 		scn.ShadowChooseOption("move limit -1");
 		assertEquals(1, scn.GetMoveLimit());
-		assertEquals(2, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, betrayed);
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 

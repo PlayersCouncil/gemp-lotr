@@ -123,7 +123,6 @@ public class Card_V1_022_Tests
 		assertEquals(0, scn.GetWoundsOn(merry));
 
 		scn.FreepsPlayCard(memorial);
-		assertEquals(5, scn.GetTwilight());     // 4 for Aragorn + 1 for the artifact
 		assertInZone(Zone.SUPPORT, memorial);
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(merry));

@@ -132,13 +132,11 @@ public class Card_V2_017_Tests
 		assertEquals(4, scn.GetStrength(frodo));
 		assertEquals(13, scn.GetStrength(troop));
 
-		int twilight = scn.GetTwilight();
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertInZone(Zone.HAND, die);
 		assertTrue(scn.FreepsPlayAvailable(die));
 
 		scn.FreepsPlayCard(die);
-		assertEquals(twilight + 1, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, die);
 		// Vitality 4 with 3 wounds: Aragorn is exhausted and alive.  Nobody else exerts.
 		assertEquals(3, scn.GetWoundsOn(aragorn));

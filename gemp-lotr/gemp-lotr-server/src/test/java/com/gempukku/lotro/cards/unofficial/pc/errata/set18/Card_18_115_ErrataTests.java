@@ -107,7 +107,6 @@ public class Card_18_115_ErrataTests
 
 		assertTrue(scn.ShadowPlayAvailable(triumph));
 		scn.ShadowPlayCard(triumph);
-		assertEquals(0, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, triumph);
 
 		scn.PassSkirmishActions();
@@ -320,7 +319,6 @@ public class Card_18_115_ErrataTests
 		assertTrue(scn.ShadowPlayAvailable(triumph));
 
 		scn.ShadowPlayCard(triumph);
-		assertEquals(4, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, triumph);
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}

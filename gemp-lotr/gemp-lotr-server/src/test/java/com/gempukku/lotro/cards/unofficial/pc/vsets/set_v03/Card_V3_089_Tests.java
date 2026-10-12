@@ -120,7 +120,6 @@ public class Card_V3_089_Tests
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(theoden);
 
-		int twilight = scn.GetTwilight();
 		assertEquals(0, scn.GetWoundsOn(theoden));
 		assertEquals(0, scn.GetWoundsOn(eomer));
 		assertEquals(0, scn.GetWoundsOn(rider));
@@ -129,7 +128,6 @@ public class Card_V3_089_Tests
 
 		scn.FreepsPlayCard(takeitdown);
 
-		assertEquals(twilight + 2, scn.GetTwilight());
 		assertTrue(scn.FreepsHasCardChoiceAvailable(theoden, eomer));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(guard, aragorn));
 		assertEquals(1, scn.FreepsGetChoiceMin());

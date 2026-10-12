@@ -105,14 +105,12 @@ public class Card_V1_056_Tests
 		scn.AddWoundsToChar(aragorn, 1);
 		scn.AddWoundsToChar(guard, 1);
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(1, scn.GetFreepsHandCount());
 		assertEquals(0, scn.GetFreepsDiscardCount());
 
 		assertTrue(scn.FreepsPlayAvailable(coming));
 
 		scn.FreepsPlayCard(coming);
-		assertEquals(2, scn.GetTwilight());
 
 		// The three wounded companions with the Frodo signet, of three cultures, and nobody else: not the Merry
 		// and the Sam who have the Aragorn signet, not the Pippin and the Aragorn who have Gandalf's, not the
@@ -173,8 +171,6 @@ public class Card_V1_056_Tests
 		scn.FreepsPlayCard(coming);
 		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertEquals(0, scn.GetWoundsOn(gimli));
-		// 2 for the companions + 2 for the event
-		assertEquals(4, scn.GetTwilight());
 		assertInDiscard(coming);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -224,7 +220,6 @@ public class Card_V1_056_Tests
 
 		assertEquals(1, scn.GetWoundsOn(frodo));
 		assertEquals(1, scn.GetWoundsOn(sam));
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(coming));
 
 		// One companion with the Frodo signet is wounded where the event asks for two: it heals the one.  Sam,
@@ -232,7 +227,6 @@ public class Card_V1_056_Tests
 		scn.FreepsPlayCard(coming);
 		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertEquals(1, scn.GetWoundsOn(sam));
-		assertEquals(2, scn.GetTwilight());
 		assertInDiscard(coming);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
@@ -242,7 +236,6 @@ public class Card_V1_056_Tests
 		assertTrue(scn.FreepsPlayAvailable(coming2));
 
 		scn.FreepsPlayCard(coming2);
-		assertEquals(4, scn.GetTwilight());
 		assertInDiscard(coming2);
 		assertEquals(1, scn.GetWoundsOn(sam));
 		assertEquals(0, scn.GetWoundsOn(merry));

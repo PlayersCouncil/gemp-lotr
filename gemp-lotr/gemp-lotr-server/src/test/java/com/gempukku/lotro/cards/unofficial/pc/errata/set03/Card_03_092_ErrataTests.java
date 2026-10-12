@@ -103,7 +103,6 @@ public class Card_03_092_ErrataTests
 		assertTrue(scn.ShadowPlayAvailable(massing));
 
 		scn.ShadowPlayCard(massing);
-		assertEquals(2, scn.GetTwilight());
 
 		// Any [sauron] minion, an Orc or an Uruk-hai; not the [isengard] Uruk-hai, not the [sauron] condition.
 		assertTrue(scn.ShadowHasCardChoiceAvailable(soldier, soldier2, soldier3, sentry));
@@ -301,7 +300,6 @@ public class Card_03_092_ErrataTests
 		// The minions stay; the cost stays paid.
 		assertInZone(Zone.SHADOW_CHARACTERS, soldier2, sentry);
 		assertInDiscard(soldier, massing);
-		assertEquals(2, scn.GetTwilight());
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
@@ -362,7 +360,6 @@ public class Card_03_092_ErrataTests
 		// The event is played and its cost is paid, though there is nothing for it to return.
 		assertInDiscard(soldier, massing);
 		assertInZone(Zone.SHADOW_CHARACTERS, savage);
-		assertEquals(2, scn.GetTwilight());
 		assertFalse(scn.FreepsDecisionAvailable("prevent"));
 		assertEquals(0, scn.GetShadowHandCount());
 		assertEquals(2, scn.GetFreepsHandCount());

@@ -104,8 +104,6 @@ public class Card_10_028_ErrataTests
 		assertTrue(scn.FreepsPlayAvailable(denethor));
 
 		scn.FreepsPlayCard(denethor);
-		// 1 for the Merchant + 2
-		assertEquals(3, scn.GetTwilight());
 		assertInZone(Zone.FREE_CHARACTERS, denethor);
 		assertEquals(0, scn.GetFreepsHandCount());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());

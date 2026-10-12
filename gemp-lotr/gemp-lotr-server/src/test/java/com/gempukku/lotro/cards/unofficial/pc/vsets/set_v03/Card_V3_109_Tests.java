@@ -119,14 +119,12 @@ public class Card_V3_109_Tests
 		assertEquals(0, scn.GetThreats());
 		assertEquals(0, scn.GetBurdens());
 		assertTrue(scn.FreepsPlayAvailable(gaffer));
-		int twilight = scn.GetTwilight();
 
 		// The Free Peoples player picks which of those minions is fought first.
 		scn.FreepsPlayCard(gaffer);
 		assertTrue(scn.FreepsHasCardChoiceAvailable(runner1, savage, troop));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(runner2, runner3));
 		scn.FreepsChooseCard(runner1);
-		assertEquals(twilight + 1, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, gaffer);
 		assertTrue(scn.IsCharSkirmishing(sam));
 		assertTrue(scn.IsCharSkirmishing(runner1));

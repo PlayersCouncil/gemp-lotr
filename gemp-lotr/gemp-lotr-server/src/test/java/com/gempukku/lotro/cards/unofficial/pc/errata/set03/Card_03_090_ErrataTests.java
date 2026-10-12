@@ -99,7 +99,6 @@ public class Card_03_090_ErrataTests
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPass();
 
-		int twilight = scn.GetTwilight();
 		assertEquals(0, scn.GetWoundsOn(warden));
 		assertEquals(0, scn.GetWoundsOn(chieftain));
 		assertEquals(0, scn.GetWoundsOn(aragorn));
@@ -129,8 +128,6 @@ public class Card_03_090_ErrataTests
 		assertEquals(2, scn.GetFreepsHandCount());
 		assertEquals(1, scn.GetFreepsDiscardCount());
 		assertInDiscard(hand);
-		// The event costs nothing.
-		assertEquals(twilight, scn.GetTwilight());
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
 

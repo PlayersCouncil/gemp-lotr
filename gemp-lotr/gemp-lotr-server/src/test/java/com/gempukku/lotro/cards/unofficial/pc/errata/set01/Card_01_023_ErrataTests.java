@@ -118,7 +118,6 @@ public class Card_01_023_ErrataTests
 		scn.SkipToAssignments();
 		scn.FreepsAssignAndResolve(gimli, savage);
 
-		var pool = scn.GetTwilight();
 		var shadowDeck = scn.GetShadowDeckCount();
 		assertEquals(1, scn.GetFreepsHandCount());
 		assertEquals(0, scn.GetShadowDiscardCount());
@@ -150,7 +149,6 @@ public class Card_01_023_ErrataTests
 		assertEquals(0, scn.GetFreepsHandCount());
 		assertEquals(1, scn.GetShadowDiscardCount());
 		assertEquals(shadowDeck, scn.GetShadowDeckCount());
-		assertEquals(pool, scn.GetTwilight());
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 

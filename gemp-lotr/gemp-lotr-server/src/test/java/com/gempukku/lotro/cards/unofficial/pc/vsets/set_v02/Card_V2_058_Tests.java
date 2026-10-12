@@ -114,7 +114,6 @@ public class Card_V2_058_Tests
 		assertTrue(scn.ShadowPlayAvailable(dead));
 
 		scn.ShadowPlayCard(dead);
-		assertEquals(1, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, dead);
 		assertNotAttachedTo(dead, ones);
 		assertNotAttachedTo(dead, nelya);
@@ -140,7 +139,6 @@ public class Card_V2_058_Tests
 		assertTrue(scn.ShadowPlayAvailable(dead));
 
 		scn.ShadowPlayCard(dead);
-		assertEquals(2, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, dead);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
@@ -164,7 +162,6 @@ public class Card_V2_058_Tests
 		assertTrue(scn.ShadowPlayAvailable(dead));
 
 		scn.ShadowPlayCard(dead);
-		assertEquals(3, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, dead);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}

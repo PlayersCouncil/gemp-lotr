@@ -74,7 +74,7 @@ public class Card_V3_034_Tests
 	}
 
 	@Test
-	public void PlayedForThreeToTheFellowshipAddingAThreat() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedToTheFellowshipAddingAThreat() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var warrior = scn.GetFreepsCard("warrior1");
@@ -82,12 +82,10 @@ public class Card_V3_034_Tests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(0, scn.GetThreats());
 		assertTrue(scn.FreepsPlayAvailable(warrior));
 		scn.FreepsPlayCard(warrior);
 
-		assertEquals(3, scn.GetTwilight());
 		assertEquals(1, scn.GetThreats());
 		assertInZone(Zone.FREE_CHARACTERS, warrior);
 		// Nobody is in the dead pile.

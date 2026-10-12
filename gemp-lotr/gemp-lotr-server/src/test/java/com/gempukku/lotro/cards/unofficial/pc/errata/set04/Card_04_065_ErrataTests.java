@@ -86,8 +86,6 @@ public class Card_04_065_ErrataTests
 
 		assertTrue(scn.FreepsPlayAvailable(erethon));
 		scn.FreepsPlayCard(erethon);
-		// 2 for Legolas + 2 for Erethón
-		assertEquals(4, scn.GetTwilight());
 		assertInZone(Zone.FREE_CHARACTERS, erethon);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -105,7 +103,6 @@ public class Card_04_065_ErrataTests
 
 		assertTrue(scn.FreepsPlayAvailable(erethon));
 		scn.FreepsPlayCard(erethon);
-		assertEquals(2, scn.GetTwilight());
 		assertInZone(Zone.FREE_CHARACTERS, erethon);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

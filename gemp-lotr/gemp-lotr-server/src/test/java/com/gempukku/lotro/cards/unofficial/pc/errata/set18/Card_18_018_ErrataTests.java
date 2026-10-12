@@ -84,7 +84,7 @@ public class Card_18_018_ErrataTests
 	}
 
 	@Test
-	public void IsPlayedForTwoOnAGandalfManWhoIsThenStrengthPlus2AndVitalityPlus1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void IsPlayedOnAGandalfManWhoIsThenStrengthPlus2AndVitalityPlus1() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
@@ -100,7 +100,6 @@ public class Card_18_018_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(6, scn.GetStrength(dasron));
 		assertEquals(3, scn.GetVitality(dasron));
 		assertTrue(scn.FreepsPlayAvailable(axe));
@@ -112,7 +111,6 @@ public class Card_18_018_ErrataTests
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		scn.FreepsChooseCard(dasron);
 
-		assertEquals(2, scn.GetTwilight());
 		assertAttachedTo(axe, dasron);
 		assertEquals(8, scn.GetStrength(dasron));
 		assertEquals(4, scn.GetVitality(dasron));

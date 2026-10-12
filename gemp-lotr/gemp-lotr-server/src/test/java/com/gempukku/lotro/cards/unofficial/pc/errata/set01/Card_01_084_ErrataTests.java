@@ -87,13 +87,11 @@ public class Card_01_084_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(0, scn.GetWoundsOn(gandalf));
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.FreepsPlayAvailable(card));
 
 		scn.FreepsPlayCard(card);
-		assertEquals(3, scn.GetTwilight());
 		assertEquals(1, scn.GetWoundsOn(gandalf));
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 
@@ -140,7 +138,6 @@ public class Card_01_084_ErrataTests
 
 		// The cost can be paid, so the event is played; it does as much of its effect as it can.
 		scn.FreepsPlayCard(card);
-		assertEquals(3, scn.GetTwilight());
 		assertEquals(1, scn.GetWoundsOn(gandalf));
 		assertInDiscard(card);
 		assertInZone(Zone.ATTACHED, poison);

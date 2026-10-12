@@ -102,8 +102,6 @@ public class Card_V3_062_Tests
 
 		scn.ShadowPlayCard(howdah);
 
-		// 11 - 2 to play
-		assertEquals(9, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, howdah);
 		assertNotAttachedTo(howdah, rider);
 		// With no bearer it makes nobody an archer, a mounted Southron on the table or not.

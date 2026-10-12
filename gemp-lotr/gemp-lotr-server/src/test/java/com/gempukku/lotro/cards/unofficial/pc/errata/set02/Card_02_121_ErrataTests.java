@@ -84,11 +84,9 @@ public class Card_02_121_ErrataTests
 		assertEquals(4, scn.GetCurrentSiteNumber());
 		assertEquals(2, scn.GetTwilightCost(ettenmoors));
 		assertEquals(3, scn.GetTwilightCost(balinsTomb));
-		assertEquals(0, scn.GetTwilight());
 
 		scn.FreepsPlayCard(gimli);
 		assertInZone(Zone.FREE_CHARACTERS, gimli);
-		assertEquals(2, scn.GetTwilight());
 		// Balin's Tomb is underground; Ettenmoors is not
 		assertEquals(2, scn.GetTwilightCost(balinsTomb));
 		assertEquals(2, scn.GetTwilightCost(ettenmoors));

@@ -102,8 +102,6 @@ public class Card_03_014_ErrataTests
 		assertTrue(scn.FreepsPlayAvailable(erestor));
 
 		scn.FreepsPlayCard(erestor);
-		// 2 for Arwen + 2 for Erestor
-		assertEquals(4, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, erestor);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

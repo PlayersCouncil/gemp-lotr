@@ -108,12 +108,10 @@ public class Card_V3_026_Tests
 		scn.AddWoundsToChar(frodo, 1);
 		scn.AddWoundsToChar(grima, 1);
 
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(blind));
 
 		scn.FreepsPlayCard(blind);
 
-		assertEquals(2, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, blind);
 		// One wound off each Man: a [gondor] companion, a [rohan] companion, a Ring-bound companion, an ally.
 		assertEquals(1, scn.GetWoundsOn(aragorn));

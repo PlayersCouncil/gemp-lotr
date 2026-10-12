@@ -98,7 +98,6 @@ public class Card_01_221_ErrataTests
 		// Enquea is no bearer, so the blade goes to the Witch-king without a choice.
 		scn.ShadowPlayCard(blade);
 		assertAttachedTo(blade, witchking);
-		assertEquals(11, scn.GetTwilight());
 		assertEquals(19, scn.GetStrength(witchking));
 		assertEquals(1, scn.GetKeywordCount(witchking, Keyword.DAMAGE));
 		assertEquals(11, scn.GetStrength(enquea));

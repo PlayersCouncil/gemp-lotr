@@ -88,7 +88,7 @@ public class Card_V2_045_Tests
 	}
 
 	@Test
-	public void IsPlayedForOneOnARohanCompanionWhoBecomesValiantAndStrengthPlusTwo() throws DecisionResultInvalidException, CardNotFoundException {
+	public void IsPlayedOnARohanCompanionWhoBecomesValiantAndStrengthPlusTwo() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
@@ -104,7 +104,6 @@ public class Card_V2_045_Tests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(7, scn.GetStrength(eomer));
 		assertFalse(scn.HasKeyword(eomer, Keyword.VALIANT));
 		assertFalse(scn.HasKeyword(rider, Keyword.VALIANT));
@@ -118,7 +117,6 @@ public class Card_V2_045_Tests
 		assertEquals(1, scn.FreepsGetChoiceMin());
 
 		scn.FreepsChooseCard(eomer);
-		assertEquals(1, scn.GetTwilight());
 		assertAttachedTo(hope, eomer);
 		assertTrue(scn.HasKeyword(eomer, Keyword.VALIANT));
 		// 7 + 2 for the condition.

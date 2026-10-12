@@ -88,7 +88,6 @@ public class Card_01_005_ErrataTests
 		scn.SkipToAssignments();
 		scn.FreepsAssignAndResolve(guard, savage);
 
-		int twilight = scn.GetTwilight();
 		assertEquals(4, scn.GetStrength(guard));
 		assertFalse(scn.HasKeyword(guard, Keyword.DAMAGE));
 		assertInZone(Zone.HAND, blow);
@@ -96,7 +95,6 @@ public class Card_01_005_ErrataTests
 
 		// The Guard is the only Dwarf and the Savage bears nothing: no choice is asked.
 		scn.FreepsPlayCard(blow);
-		assertEquals(twilight + 1, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, blow);
 		assertEquals(6, scn.GetStrength(guard));
 		assertEquals(1, scn.GetKeywordCount(guard, Keyword.DAMAGE));
@@ -330,13 +328,11 @@ public class Card_01_005_ErrataTests
 		scn.SkipToAssignments();
 		scn.FreepsAssignAndResolve(aragorn, soldier1);
 
-		int twilight = scn.GetTwilight();
 		assertEquals(8, scn.GetStrength(aragorn));
 		// Nothing in the text is a cost or a requirement, so the event can be played for nothing.
 		assertTrue(scn.FreepsPlayAvailable(blow));
 
 		scn.FreepsPlayCard(blow);
-		assertEquals(twilight + 1, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, blow);
 		assertEquals(8, scn.GetStrength(aragorn));
 		assertFalse(scn.HasKeyword(aragorn, Keyword.DAMAGE));

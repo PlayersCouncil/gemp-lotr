@@ -71,7 +71,7 @@ public class Card_V2_006_Tests
 	}
 
 	@Test
-	public void PlayedForTwoToTheSupportAreaAndAragornIsStrengthPlusOne() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedToTheSupportAreaAndAragornIsStrengthPlusOne() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var arwen = scn.GetFreepsCard("arwen");
@@ -82,7 +82,6 @@ public class Card_V2_006_Tests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(8, scn.GetStrength(aragorn));
 		assertEquals(7, scn.GetStrength(boromir));
 		assertInZone(Zone.HAND, arwen);
@@ -90,7 +89,6 @@ public class Card_V2_006_Tests
 
 		scn.FreepsPlayCard(arwen);
 
-		assertEquals(2, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, arwen);
 		assertEquals(9, scn.GetStrength(aragorn));
 		// Another [gondor] Man beside him

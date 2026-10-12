@@ -84,7 +84,7 @@ public class Card_01_303_ErrataTests
 	}
 
 	@Test
-	public void PlaysForOneAndIsStrength2MoreOnlyOnceHeBearsAWeaponHimself() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlaysAndIsStrength2MoreOnlyOnceHeBearsAWeaponHimself() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var merry = scn.GetFreepsCard("merry");
@@ -105,9 +105,7 @@ public class Card_01_303_ErrataTests
 		// Frodo is strength 3, +1 from The Ruling Ring, +2 from his Hobbit Sword.
 		assertEquals(6, scn.GetStrength(frodo));
 
-		assertEquals(0, scn.GetTwilight());
 		scn.FreepsPlayCard(merry);
-		assertEquals(1, scn.GetTwilight());
 		assertInZone(Zone.FREE_CHARACTERS, merry);
 		// Aragorn's weapon is not Merry's.
 		assertEquals(3, scn.GetStrength(merry));

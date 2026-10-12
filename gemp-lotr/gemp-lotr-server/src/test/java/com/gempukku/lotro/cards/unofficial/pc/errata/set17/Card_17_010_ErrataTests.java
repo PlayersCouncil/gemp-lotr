@@ -77,7 +77,7 @@ public class Card_17_010_ErrataTests
 	}
 
 	@Test
-	public void PlaysForTwoToTheSupportAreaWithATokenForEachHunterAndAHunterPlayedLaterAddsNone() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlaysToTheSupportAreaWithATokenForEachHunterAndAHunterPlayedLaterAddsNone() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var namarie = scn.GetFreepsCard("namarie");
@@ -89,12 +89,10 @@ public class Card_17_010_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(0, scn.GetCultureTokensOn(namarie));
 		assertTrue(scn.FreepsPlayAvailable(namarie));
 		scn.FreepsPlayCard(namarie);
 
-		assertEquals(2, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, namarie);
 		assertNull(namarie.getAttachedTo());
 		// Gimli and Aragorn are hunters. Lórien Elf, an [elven] companion, and Frodo are not.

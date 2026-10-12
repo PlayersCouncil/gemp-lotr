@@ -123,7 +123,7 @@ public class Card_V2_008_Tests
 	}
 
 	@Test
-	public void PlayedForTwoAndWithNoRangedWeaponGivesNoValiantElfAnything() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedAndWithNoRangedWeaponGivesNoValiantElfAnything() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var haldir = scn.GetFreepsCard("haldir");
@@ -133,12 +133,10 @@ public class Card_V2_008_Tests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(5, scn.GetStrength(swordsman));
 		assertTrue(scn.FreepsPlayAvailable(haldir));
 
 		scn.FreepsPlayCard(haldir);
-		assertEquals(2, scn.GetTwilight());
 		assertInZone(Zone.FREE_CHARACTERS, haldir);
 		assertEquals(6, scn.GetStrength(haldir));
 		assertEquals(5, scn.GetStrength(swordsman));

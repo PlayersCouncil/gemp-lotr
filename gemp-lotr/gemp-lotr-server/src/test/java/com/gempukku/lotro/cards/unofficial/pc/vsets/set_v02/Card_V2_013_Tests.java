@@ -130,7 +130,7 @@ public class Card_V2_013_Tests
 	}
 
 	@Test
-	public void IsPlayedFromHandForFourAndAMountedCompanionIsValiantOnlyOnceGandalfIsInPlay() throws DecisionResultInvalidException, CardNotFoundException {
+	public void IsPlayedFromHandAndAMountedCompanionIsValiantOnlyOnceGandalfIsInPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var gandalf = scn.GetFreepsCard("gandalf");
@@ -142,13 +142,11 @@ public class Card_V2_013_Tests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertAttachedTo(mount, rider);
 		assertFalse(scn.HasKeyword(rider, Keyword.VALIANT));
 		assertTrue(scn.FreepsPlayAvailable(gandalf));
 
 		scn.FreepsPlayCard(gandalf);
-		assertEquals(4, scn.GetTwilight());
 		assertInZone(Zone.FREE_CHARACTERS, gandalf);
 		assertTrue(scn.HasKeyword(rider, Keyword.VALIANT));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());

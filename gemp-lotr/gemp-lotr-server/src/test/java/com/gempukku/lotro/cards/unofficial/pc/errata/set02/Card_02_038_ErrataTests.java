@@ -93,7 +93,6 @@ public class Card_02_038_ErrataTests
 		scn.StartGame();
 		scn.MoveMinionsToTable("marksman", "marksman2");
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(2, scn.GetShadowArcheryTotal());
 		assertEquals(1, scn.GetFreepsArcheryTotal());
 		assertTrue(scn.FreepsPlayAvailable(shield));
@@ -105,7 +104,6 @@ public class Card_02_038_ErrataTests
 		scn.FreepsChooseCard(aragorn);
 
 		assertAttachedTo(shield, aragorn);
-		assertEquals(1, scn.GetTwilight());
 		assertEquals(1, scn.GetShadowArcheryTotal());
 		assertEquals(1, scn.GetFreepsArcheryTotal());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());

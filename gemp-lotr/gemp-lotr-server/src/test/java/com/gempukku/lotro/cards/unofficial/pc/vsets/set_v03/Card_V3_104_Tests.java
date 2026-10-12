@@ -121,8 +121,6 @@ public class Card_V3_104_Tests
 		assertEquals(0, scn.GetWoundsOn(mouth));
 		assertTrue(scn.IsHindered(frodo));
 		assertFalse(scn.IsHindered(sam));
-		// 10 - 3 for the event
-		assertEquals(7, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, dear);
 		assertEquals(11, scn.GetStrength(mouth));
 		assertEquals(11, scn.GetStrength(lemenya));

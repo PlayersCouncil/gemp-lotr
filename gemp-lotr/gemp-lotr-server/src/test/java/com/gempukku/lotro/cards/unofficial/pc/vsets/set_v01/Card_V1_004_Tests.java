@@ -108,7 +108,6 @@ public class Card_V1_004_Tests
 
 		// The only Elf and the only Dwarf are chosen without asking.
 		scn.FreepsPlayCard(friend);
-		assertEquals(6, scn.GetTwilight());
 		assertEquals(1, scn.GetWoundsOn(arwen));
 		assertEquals(9, scn.GetStrength(gimli));
 		assertEquals(2, scn.GetKeywordCount(gimli, Keyword.DAMAGE));

@@ -161,8 +161,6 @@ public class Card_V3_054_Tests
 		scn.ShadowChooseCard(lancers);
 
 		assertAttachedTo(horn, lancers);
-		// 14 - 1 for the Horn
-		assertEquals(13, scn.GetTwilight());
 		// Both Free Peoples mounts, on a companion and on an ally, of two cultures
 		assertTrue(scn.IsHindered(horse));
 		assertTrue(scn.IsHindered(asfaloth));

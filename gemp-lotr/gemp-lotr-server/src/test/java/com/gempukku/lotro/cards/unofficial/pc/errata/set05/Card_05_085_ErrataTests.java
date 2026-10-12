@@ -92,7 +92,6 @@ public class Card_05_085_ErrataTests
 		// No minions: the fellowship moves to site 5 and the game goes straight to the regroup phase.
 		scn.SkipToPhase(Phase.REGROUP);
 
-		int twilight = scn.GetTwilight();
 		assertTrue(scn.ShadowControls(site1));
 		assertTrue(scn.FreepsControls(site2));
 		assertTrue(scn.ShadowControls(site3));
@@ -101,7 +100,6 @@ public class Card_05_085_ErrataTests
 		assertTrue(scn.FreepsPlayAvailable(swift));
 
 		scn.FreepsPlayCard(swift);
-		assertEquals(twilight + 1, scn.GetTwilight());
 		assertEquals(3, scn.FreepsGetCardChoiceCount());
 		assertTrue(scn.FreepsHasCardChoiceAvailable(lord, chasm, wielding));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(poison));

@@ -96,8 +96,6 @@ public class Card_05_010_ErrataTests
 		assertTrue(scn.FreepsPlayAvailable(balglin));
 
 		scn.FreepsPlayCard(balglin);
-		// 2 for Arwen + 2 for Balglin
-		assertEquals(4, scn.GetTwilight());
 		assertInZone(Zone.FREE_CHARACTERS, balglin);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

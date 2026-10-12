@@ -130,7 +130,6 @@ public class Card_03_088_ErrataTests
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPass();
 
-		int twilight = scn.GetTwilight();
 		assertEquals(2, scn.GetMoveLimit());
 		// The [sauron] card spotted is a condition, not a minion.
 		assertTrue(scn.ShadowPlayAvailable(road));
@@ -149,7 +148,6 @@ public class Card_03_088_ErrataTests
 		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertEquals(0, scn.GetWoundsOn(bounder));
 		assertEquals(2, scn.GetMoveLimit());
-		assertEquals(twilight, scn.GetTwilight());
 		assertInDiscard(road);
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}

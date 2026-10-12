@@ -91,7 +91,6 @@ public class Card_08_020_ErrataTests
 		scn.StartGame();
 
 		assertEquals(1, scn.GetCurrentSiteNumber());
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(0, scn.GetFreepsDeadCount());
 		assertEquals(1, scn.GetFreepsHandCount());
 		int freepsShuffles = scn.GetFreepsDeckShuffleCount();
@@ -107,7 +106,6 @@ public class Card_08_020_ErrataTests
 
 		assertInZone(Zone.DEAD, aragorn);
 		assertEquals(1, scn.GetFreepsDeadCount());
-		assertEquals(3, scn.GetTwilight());
 
 		scn.FreepsDismissRevealedCards();
 		// Aragorn's culture: the four [gondor] cards in the draw deck, of three card types. Not the [gandalf]

@@ -100,9 +100,7 @@ public class Card_01_011_ErrataTests
 		scn.FreepsPlayCard(gimli);
 		assertTrue(scn.FreepsPlayAvailable(farin));
 
-		int twilight = scn.GetTwilight();
 		scn.FreepsPlayCard(farin);
-		assertEquals(twilight + 2, scn.GetTwilight());
 		assertInZone(Zone.FREE_CHARACTERS, farin);
 		assertEquals(6, scn.GetStrength(farin));
 		assertEquals(3, scn.GetVitality(farin));

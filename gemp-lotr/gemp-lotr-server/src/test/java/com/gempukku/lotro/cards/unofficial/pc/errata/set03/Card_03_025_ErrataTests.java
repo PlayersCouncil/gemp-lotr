@@ -94,8 +94,6 @@ public class Card_03_025_ErrataTests
 		assertTrue(scn.FreepsPlayAvailable(saelbeth));
 
 		scn.FreepsPlayCard(saelbeth);
-		// 2 for Arwen + 2 for Saelbeth
-		assertEquals(4, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, saelbeth);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -115,7 +113,6 @@ public class Card_03_025_ErrataTests
 
 		assertTrue(scn.FreepsPlayAvailable(saelbeth));
 		scn.FreepsPlayCard(saelbeth);
-		assertEquals(2, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, saelbeth);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

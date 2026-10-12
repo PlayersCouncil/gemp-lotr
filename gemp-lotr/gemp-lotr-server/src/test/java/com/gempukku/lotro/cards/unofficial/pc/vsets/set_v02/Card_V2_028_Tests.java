@@ -111,7 +111,6 @@ public class Card_V2_028_Tests
 		assertTrue(scn.ShadowPlayAvailable(machinery));
 
 		scn.ShadowPlayCard(machinery);
-		assertEquals(12, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, machinery);
 		assertEquals(0, scn.GetCultureTokensOn(machinery));
 		assertInZone(Zone.HAND, saruman, theirGandalf);

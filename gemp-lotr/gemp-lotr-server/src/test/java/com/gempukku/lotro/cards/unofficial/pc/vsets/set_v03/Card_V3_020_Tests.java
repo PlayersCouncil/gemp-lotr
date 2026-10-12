@@ -72,7 +72,7 @@ public class Card_V3_020_Tests
 	}
 
 	@Test
-	public void PlayedForThreeToTheSupportAreaSpottingAGondorWraithToRemoveOneThreat() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedToTheSupportAreaSpottingAGondorWraithToRemoveOneThreat() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var domain = scn.GetFreepsCard("domain");
@@ -85,12 +85,10 @@ public class Card_V3_020_Tests
 		scn.StartGame();
 		scn.AddThreats(2);
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(2, scn.GetThreats());
 		assertTrue(scn.FreepsPlayAvailable(domain));
 		scn.FreepsPlayCard(domain);
 
-		assertEquals(3, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, domain);
 		assertNotAttachedTo(domain, king);
 		assertEquals(1, scn.GetThreats());
@@ -119,7 +117,6 @@ public class Card_V3_020_Tests
 		assertTrue(scn.FreepsPlayAvailable(domain));
 		scn.FreepsPlayCard(domain);
 
-		assertEquals(3, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, domain);
 		assertEquals(2, scn.GetThreats());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());

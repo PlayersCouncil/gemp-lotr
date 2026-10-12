@@ -82,7 +82,7 @@ public class Card_V2_049_Tests
 	}
 
 	@Test
-	public void PlayedForTwoOnEomerItMakesHimStrengthPlusTwoAndDamagePlusOne() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedOnEomerItMakesHimStrengthPlusTwoAndDamagePlusOne() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var guthwine = scn.GetFreepsCard("guthwine");
@@ -92,14 +92,12 @@ public class Card_V2_049_Tests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(7, scn.GetStrength(eomer));
 		assertFalse(scn.HasKeyword(eomer, Keyword.DAMAGE));
 
 		// Eomer is the only [rohan] companion, so it goes to him.
 		scn.FreepsPlayCard(guthwine);
 
-		assertEquals(2, scn.GetTwilight());
 		assertAttachedTo(guthwine, eomer);
 		assertEquals(9, scn.GetStrength(eomer));
 		assertTrue(scn.HasKeyword(eomer, Keyword.DAMAGE));

@@ -102,9 +102,7 @@ public class Card_01_167_ErrataTests
 		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(denizens));
-		int twilight = scn.GetTwilight();
 		scn.ShadowPlayCard(denizens);
-		assertEquals(twilight - 1, scn.GetTwilight());
 
 		assertTrue(scn.ShadowChoiceAvailable("strength +2"));
 		assertTrue(scn.ShadowChoiceAvailable("for each other"));

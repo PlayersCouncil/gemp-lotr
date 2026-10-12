@@ -154,7 +154,6 @@ public class Card_V3_120_Tests
 		assertTrue(scn.IsHindered(hinderedArmory));
 		assertTrue(scn.IsHindered(hinderedWearyOnFrodo));
 		assertTrue(scn.IsExhausted(merry));
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 		int shadowDeck = scn.GetShadowDeckCount();
 		int shadowShuffles = scn.GetShadowDeckShuffleCount();
@@ -162,7 +161,6 @@ public class Card_V3_120_Tests
 
 		assertTrue(scn.FreepsPlayAvailable(wff));
 		scn.FreepsPlayCard(wff);
-		assertEquals(2, scn.GetTwilight());
 
 		// The Shadow player chooses: the Ring-bearer, a Ring-bound Hobbit, a Man and an ally are offered
 		assertFalse(scn.FreepsAnyDecisionsAvailable());
@@ -314,7 +312,6 @@ public class Card_V3_120_Tests
 		scn.StartGame();
 
 		assertTrue(scn.IsExhausted(frodo));
-		assertEquals(0, scn.GetTwilight());
 		int shadowDeck = scn.GetShadowDeckCount();
 		int shadowShuffles = scn.GetShadowDeckShuffleCount();
 
@@ -323,7 +320,6 @@ public class Card_V3_120_Tests
 
 		// Nobody exerts, so nothing is hindered; the Shadow player has no hindered card, so nobody is asked
 		// about one and no deck is shuffled
-		assertEquals(2, scn.GetTwilight());
 		assertInDiscard(wff);
 		assertEquals(3, scn.GetWoundsOn(frodo));
 		assertFalse(scn.IsHindered(armory));

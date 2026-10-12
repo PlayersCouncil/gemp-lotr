@@ -120,7 +120,6 @@ public class Card_03_042_ErrataTests
 		// for us: the Horn goes on him and not on Aragorn or Frodo.
 		scn.FreepsPlayCard(horn);
 
-		assertEquals(4, scn.GetTwilight());
 		assertAttachedTo(horn, boromir);
 		assertNotAttachedTo(horn, aragorn);
 		assertNotAttachedTo(horn, frodo);

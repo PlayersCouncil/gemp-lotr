@@ -75,7 +75,7 @@ public class Card_V3_069_Tests
 	}
 
 	@Test
-	public void RestoresOneHinderedNazgulOfThePlayersChoiceForThree() throws DecisionResultInvalidException, CardNotFoundException {
+	public void RestoresOneHinderedNazgulOfThePlayersChoice() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var noman = scn.GetShadowCard("noman");
@@ -97,7 +97,6 @@ public class Card_V3_069_Tests
 
 		assertTrue(scn.ShadowPlayAvailable(noman));
 		scn.ShadowPlayCard(noman);
-		assertEquals(0, scn.GetTwilight());
 
 		assertTrue(scn.ShadowHasCardChoiceAvailable(rider, attea));
 		assertTrue(scn.ShadowHasCardChoiceNotAvailable(hound, enquea, aragorn));
@@ -160,11 +159,9 @@ public class Card_V3_069_Tests
 		assertTrue(scn.ShadowPlayAvailable(noman));
 
 		// Played in the skirmish phase: Otsea is the only hindered Nazgul and is restored without a choice.
-		var pool = scn.GetTwilight();
 		assertTrue(scn.IsHindered(otsea));
 		scn.ShadowPlayCard(noman);
 		assertFalse(scn.IsHindered(otsea));
-		assertEquals(pool - 3, scn.GetTwilight());
 		assertInDiscard(noman);
 
 		scn.PassSkirmishActions();

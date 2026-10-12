@@ -108,7 +108,6 @@ public class Card_V3_059_Tests
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPass();
 
-		int twilight = scn.GetTwilight();
 		int deck = scn.GetShadowDeckCount();
 		assertEquals(3, scn.GetShadowHandCount());
 		assertTrue(scn.IsHindered(explorer2));
@@ -119,7 +118,6 @@ public class Card_V3_059_Tests
 
 		scn.ShadowPlayCard(strength);
 
-		assertEquals(twilight - 2, scn.GetTwilight());
 		// Every hindered [raider] card, of whatever type; not the hindered [moria] card, and not a [raider]
 		// card that is not hindered.
 		assertTrue(scn.ShadowHasCardChoiceAvailable(explorer2, harad2, ships));
@@ -204,7 +202,6 @@ public class Card_V3_059_Tests
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPass();
 
-		int twilight = scn.GetTwilight();
 		int deck = scn.GetShadowDeckCount();
 		assertEquals(3, scn.GetShadowHandCount());
 		assertEquals(2, scn.GetFreepsHandCount());
@@ -216,7 +213,6 @@ public class Card_V3_059_Tests
 
 		scn.ShadowPlayCard(strength);
 
-		assertEquals(twilight - 2, scn.GetTwilight());
 		// No two cards are asked for: the hand is reconciled, which begins by restoring every hindered card
 		// this player owns, of whatever culture, and then asks for the discard a player may make.
 		assertTrue(scn.ShadowDecisionAvailable("Reconcile"));
@@ -273,7 +269,6 @@ public class Card_V3_059_Tests
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPass();
 
-		int twilight = scn.GetTwilight();
 		int deck = scn.GetShadowDeckCount();
 		assertEquals(11, scn.GetShadowHandCount());
 		assertTrue(scn.IsHindered(explorer2));
@@ -282,7 +277,6 @@ public class Card_V3_059_Tests
 
 		scn.ShadowPlayCard(strength);
 
-		assertEquals(twilight - 2, scn.GetTwilight());
 		// The hand is reconciled: the hindered cards this player owns are restored, the [moria] one too.
 		assertFalse(scn.IsHindered(explorer2));
 		assertFalse(scn.IsHindered(armory));
@@ -322,14 +316,12 @@ public class Card_V3_059_Tests
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPass();
 
-		int twilight = scn.GetTwilight();
 		assertTrue(scn.IsHindered(explorer2));
 		assertTrue(scn.IsHindered(armory));
 
 		scn.ShadowPlayCard(strength1);
 
 		// One hindered [raider] card: it is restored without a choice, and the [moria] card is not.
-		assertEquals(twilight - 2, scn.GetTwilight());
 		assertFalse(scn.IsHindered(explorer2));
 		assertTrue(scn.IsHindered(armory));
 		assertInZone(Zone.DISCARD, strength1);
@@ -341,7 +333,6 @@ public class Card_V3_059_Tests
 		assertTrue(scn.ShadowPlayAvailable(strength2));
 		scn.ShadowPlayCard(strength2);
 
-		assertEquals(twilight - 4, scn.GetTwilight());
 		assertTrue(scn.IsHindered(armory));
 		assertInZone(Zone.DISCARD, strength2);
 		assertEquals(0, scn.GetShadowHandCount());

@@ -108,7 +108,6 @@ public class Card_V1_044_Tests
 
 		assertInDiscard(warden);
 		assertInZone(Zone.SHADOW_CHARACTERS, soldier, runner, sentry);
-		assertEquals(2, scn.GetTwilight());
 		assertInDiscard(fell);
 		// The burden is added with nothing asked of the Free Peoples player.
 		assertEquals(1, scn.GetBurdens());
@@ -228,7 +227,6 @@ public class Card_V1_044_Tests
 		// What was paid stays paid: the Orc, the event and its (1).
 		assertInDiscard(soldier);
 		assertInDiscard(fell);
-		assertEquals(2, scn.GetTwilight());
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 

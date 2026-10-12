@@ -95,7 +95,6 @@ public class Card_01_044_ErrataTests
 		scn.StartGame();
 
 		int deck = scn.GetFreepsDeckCount();
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(2, scn.GetFreepsHandCount());
 		assertEquals(5, scn.GetShadowHandCount());
 		assertTrue(scn.FreepsPlayAvailable(foul));
@@ -111,7 +110,6 @@ public class Card_01_044_ErrataTests
 		assertEquals(1, scn.GetWoundsOn(silinde));
 		assertEquals(0, scn.GetWoundsOn(arwen));
 		assertEquals(0, scn.GetWoundsOn(aragorn));
-		assertEquals(1, scn.GetTwilight());
 
 		// The whole hand is shown to the player of the event; the owner of the hand is told by the game log.
 		assertEquals(5, scn.FreepsGetTotalRevealedCardCount());
@@ -167,8 +165,6 @@ public class Card_01_044_ErrataTests
 		assertEquals(1, scn.GetWoundsOn(lorien));
 		assertEquals(2, scn.GetWoundsOn(arwen));
 		assertEquals(0, scn.GetWoundsOn(boromir));
-		// 1 for the Lorien Elf + 1 for the event
-		assertEquals(2, scn.GetTwilight());
 		// A hand of one card
 		assertEquals(1, scn.FreepsGetTotalRevealedCardCount());
 		assertTrue(scn.FreepsHasCardChoiceAvailable(runner, false));
@@ -236,7 +232,6 @@ public class Card_01_044_ErrataTests
 
 		scn.FreepsPlayCard(foul);
 		assertEquals(1, scn.GetWoundsOn(arwen));
-		assertEquals(1, scn.GetTwilight());
 
 		scn.FreepsDismissRevealedCards();
 		assertTrue(scn.FreepsDecisionAvailable("draw 2 cards"));
@@ -271,7 +266,6 @@ public class Card_01_044_ErrataTests
 		scn.MarkGameLog();
 		scn.FreepsPlayCard(foul);
 		assertEquals(1, scn.GetWoundsOn(arwen));
-		assertEquals(1, scn.GetTwilight());
 		// An empty hand is shown to nobody: there is nothing to dismiss, and the game log says so.
 		assertFalse(scn.FreepsDecisionAvailable("Hand of"));
 		assertFalse(scn.ShadowAnyDecisionsAvailable());

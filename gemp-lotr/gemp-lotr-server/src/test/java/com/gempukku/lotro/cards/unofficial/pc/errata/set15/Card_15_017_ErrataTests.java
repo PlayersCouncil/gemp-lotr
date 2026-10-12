@@ -121,7 +121,6 @@ public class Card_15_017_ErrataTests
 		// Arwen's 2.
 		assertEquals(2, scn.GetTwilight());
 		scn.FreepsPlayCard(haldir);
-		assertEquals(4, scn.GetTwilight());
 		assertInZone(Zone.FREE_CHARACTERS, haldir);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

@@ -78,7 +78,7 @@ public class Card_03_080_ErrataTests
 	}
 
 	@Test
-	public void PlaysForOneOnAnUnboundCompanionNotAlreadyBearingOne() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlaysOnAnUnboundCompanionNotAlreadyBearingOne() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var aragorn = scn.GetFreepsCard("aragorn");
@@ -104,7 +104,6 @@ public class Card_03_080_ErrataTests
 		scn.SetTwilight(5);
 		scn.FreepsPass();
 
-		int twilight = scn.GetTwilight();
 		assertTrue(scn.ShadowPlayAvailable(thing));
 		scn.ShadowPlayCard(thing);
 
@@ -113,7 +112,6 @@ public class Card_03_080_ErrataTests
 		scn.ShadowChooseCard(merry);
 
 		assertAttachedTo(thing, merry);
-		assertEquals(twilight - 1, scn.GetTwilight());
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 

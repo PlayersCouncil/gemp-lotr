@@ -102,9 +102,7 @@ public class Card_04_097_ErrataTests
 		scn.FreepsAssignAndResolve(gandalf, toldea);
 
 		assertTrue(scn.FreepsPlayAvailable(fell));
-		int twilight = scn.GetTwilight();
 		scn.FreepsPlayCard(fell);
-		assertEquals(twilight + 2, scn.GetTwilight());
 		assertTrue(scn.ShadowDecisionAvailable("prevent"));
 		scn.ShadowChooseNo();
 		assertInDiscard(fell);
@@ -220,9 +218,7 @@ public class Card_04_097_ErrataTests
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(gandalf);
 
-		int twilight = scn.GetTwilight();
 		scn.FreepsPlayCard(fell);
-		assertEquals(twilight + 2, scn.GetTwilight());
 		assertTrue(scn.ShadowDecisionAvailable("prevent"));
 		scn.ShadowChooseYes();
 

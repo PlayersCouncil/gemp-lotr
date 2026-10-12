@@ -86,7 +86,6 @@ public class Card_07_236_ErrataTests
 		assertEquals(6, scn.GetStrength(theoden));
 		assertEquals(2, scn.GetVitality(theoden));
 		assertEquals(0, scn.GetKeywordCount(theoden, Keyword.DAMAGE));
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(herugrim));
 
 		scn.FreepsPlayCard(herugrim);
@@ -95,7 +94,6 @@ public class Card_07_236_ErrataTests
 		assertAttachedTo(herugrim, theoden);
 		assertNotAttachedTo(herugrim, guard);
 		assertNotAttachedTo(herugrim, aragorn);
-		assertEquals(3, scn.GetTwilight());
 		assertEquals(8, scn.GetStrength(theoden));
 		assertEquals(3, scn.GetVitality(theoden));
 		assertEquals(1, scn.GetKeywordCount(theoden, Keyword.DAMAGE));

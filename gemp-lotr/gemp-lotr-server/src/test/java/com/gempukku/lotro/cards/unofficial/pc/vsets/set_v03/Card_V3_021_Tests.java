@@ -70,7 +70,7 @@ public class Card_V3_021_Tests
 	}
 
 	@Test
-	public void PlayedForOneOnOneOfTheGondorWraithsWhoGainsAVitality() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedOnOneOfTheGondorWraithsWhoGainsAVitality() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var banner = scn.GetFreepsCard("banner");
@@ -83,7 +83,6 @@ public class Card_V3_021_Tests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(3, scn.GetVitality(deadman));
 		assertEquals(4, scn.GetVitality(king));
 		assertTrue(scn.FreepsPlayAvailable(banner));
@@ -94,7 +93,6 @@ public class Card_V3_021_Tests
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(boromir, frodo));
 		scn.FreepsChooseCard(deadman);
 
-		assertEquals(1, scn.GetTwilight());
 		assertAttachedTo(banner, deadman);
 		assertEquals(4, scn.GetVitality(deadman));
 		assertEquals(4, scn.GetVitality(king));

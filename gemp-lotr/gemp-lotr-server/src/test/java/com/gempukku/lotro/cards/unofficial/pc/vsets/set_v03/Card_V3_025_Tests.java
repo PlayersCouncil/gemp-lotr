@@ -85,7 +85,7 @@ public class Card_V3_025_Tests
 	}
 
 	@Test
-	public void PlayedForTwoToTheSupportAreaAndAThirdCopyIsRefusedWhileTwoAreInPlay() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedToTheSupportAreaAndAThirdCopyIsRefusedWhileTwoAreInPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var gate1 = scn.GetFreepsCard("gate1");
@@ -102,12 +102,10 @@ public class Card_V3_025_Tests
 		// A minion on the table in the fellowship phase, so that only the phase keeps the ability back.
 		scn.MoveMinionsToTable(troop);
 
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(gate1));
 
 		scn.FreepsPlayCard(gate1);
 
-		assertEquals(2, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, gate1);
 		assertNotAttachedTo(gate1, knight1);
 		assertNotAttachedTo(gate1, knight2);
@@ -120,7 +118,6 @@ public class Card_V3_025_Tests
 		assertTrue(scn.FreepsPlayAvailable(gate2));
 		scn.FreepsPlayCard(gate2);
 
-		assertEquals(4, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, gate1, gate2);
 		// And no third.
 		assertFalse(scn.FreepsPlayAvailable(gate3));

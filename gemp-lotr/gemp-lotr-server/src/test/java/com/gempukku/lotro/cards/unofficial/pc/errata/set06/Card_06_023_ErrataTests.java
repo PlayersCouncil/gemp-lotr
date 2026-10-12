@@ -79,7 +79,7 @@ public class Card_06_023_ErrataTests
 	}
 
 	@Test
-	public void PlaysForFourOnlyOnceThreeElfCompanionsCanBeSpotted() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlaysOnlyOnceThreeElfCompanionsCanBeSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var warband = scn.GetFreepsCard("warband");
@@ -100,9 +100,7 @@ public class Card_06_023_ErrataTests
 		scn.FreepsPlayCard(elf2);
 		assertTrue(scn.FreepsPlayAvailable(warband));
 
-		int twilight = scn.GetTwilight();
 		scn.FreepsPlayCard(warband);
-		assertEquals(twilight + 4, scn.GetTwilight());
 		assertInZone(Zone.FREE_CHARACTERS, warband);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

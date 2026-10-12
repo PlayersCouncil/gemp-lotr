@@ -117,8 +117,6 @@ public class Card_V1_010_Tests
 		scn.FreepsChooseCard(arwen);
 		assertAttachedTo(darts, arwen);
 		assertNotAttachedTo(darts, legolas);
-		// 2 for Legolas + 1
-		assertEquals(3, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

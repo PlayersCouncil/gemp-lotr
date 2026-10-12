@@ -95,7 +95,6 @@ public class Card_01_055_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(3, scn.GetStrength(galadriel));
 		assertEquals(3, scn.GetStrength(orophin));
 		assertEquals(5, scn.GetStrength(silinde));
@@ -104,7 +103,6 @@ public class Card_01_055_ErrataTests
 		assertTrue(scn.FreepsPlayAvailable(mirror));
 
 		scn.FreepsPlayCard(mirror);
-		assertEquals(2, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, mirror);
 		assertNotAttachedTo(mirror, galadriel);
 

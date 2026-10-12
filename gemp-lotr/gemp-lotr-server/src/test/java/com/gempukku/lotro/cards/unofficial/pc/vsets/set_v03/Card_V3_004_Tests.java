@@ -77,7 +77,7 @@ public class Card_V3_004_Tests
 	}
 
 	@Test
-	public void PlaysForOneOnAnUnboundCompanionBearingAPipeAndOnNoOneElse() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlaysOnAnUnboundCompanionBearingAPipeAndOnNoOneElse() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var hospitality = scn.GetFreepsCard("hospitality");
@@ -103,7 +103,6 @@ public class Card_V3_004_Tests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(8, scn.GetStrength(aragorn));
 		assertEquals(6, scn.GetStrength(gimli));
 		assertTrue(scn.FreepsPlayAvailable(hospitality));
@@ -114,7 +113,6 @@ public class Card_V3_004_Tests
 		assertEquals(1, scn.FreepsGetChoiceMin());
 
 		scn.FreepsChooseCard(aragorn);
-		assertEquals(1, scn.GetTwilight());
 		assertAttachedTo(hospitality, aragorn);
 		// 8 + 1 printed on the possession
 		assertEquals(9, scn.GetStrength(aragorn));

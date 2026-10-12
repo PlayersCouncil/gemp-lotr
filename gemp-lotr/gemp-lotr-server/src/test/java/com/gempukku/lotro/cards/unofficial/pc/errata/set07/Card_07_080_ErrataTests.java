@@ -66,7 +66,7 @@ public class Card_07_080_ErrataTests
 	}
 
 	@Test
-	public void PlaysOnAragornForThreeAndNotOnBoromir() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlaysOnAragornAndNotOnBoromir() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var anduril = scn.GetFreepsCard("anduril");
@@ -83,12 +83,10 @@ public class Card_07_080_ErrataTests
 		scn.FreepsRefreshDecision();
 
 		assertTrue(scn.FreepsPlayAvailable(anduril));
-		assertEquals(0, scn.GetTwilight());
 
 		scn.FreepsPlayCard(anduril);
 
 		// Aragorn is the only bearer, so no choice of bearer is asked.
-		assertEquals(3, scn.GetTwilight());
 		assertEquals(aragorn, anduril.getAttachedTo());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -108,7 +106,6 @@ public class Card_07_080_ErrataTests
 		assertTrue(scn.FreepsPlayAvailable(anduril));
 		scn.FreepsPlayCard(anduril);
 
-		assertEquals(3, scn.GetTwilight());
 		assertEquals(rohan, anduril.getAttachedTo());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

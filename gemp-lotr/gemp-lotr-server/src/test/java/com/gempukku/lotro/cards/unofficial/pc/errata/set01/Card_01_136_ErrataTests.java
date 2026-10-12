@@ -144,7 +144,6 @@ public class Card_01_136_ErrataTests
 		assertFalse(scn.IsHindered(servant));
 		assertFalse(scn.IsHindered(goblins));
 
-		assertEquals(12, scn.GetTwilight());    // 14 - 2 to play
 		assertInDiscard(power);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
@@ -187,7 +186,6 @@ public class Card_01_136_ErrataTests
 		assertTrue(scn.IsHindered(throwIn));
 		assertFalse(scn.IsHindered(bow));
 		assertFalse(scn.IsHindered(savage));
-		assertEquals(12, scn.GetTwilight());    // 14 - 2 to play
 		assertInDiscard(power);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}

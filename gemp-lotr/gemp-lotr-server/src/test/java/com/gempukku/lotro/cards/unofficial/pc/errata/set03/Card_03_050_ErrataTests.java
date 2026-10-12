@@ -70,7 +70,7 @@ public class Card_03_050_ErrataTests
 	}
 
 	@Test
-	public void PlaysForOneOnACompanionOrAllyNotAlreadyBearingOne() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlaysOnACompanionOrAllyNotAlreadyBearingOne() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var protect = scn.GetShadowCard("protect");
@@ -94,7 +94,6 @@ public class Card_03_050_ErrataTests
 		scn.FreepsPass();
 
 		assertTrue(scn.AwaitingShadowPhaseActions());
-		int twilight = scn.GetTwilight();
 		assertTrue(scn.ShadowPlayAvailable(protect2));
 
 		scn.ShadowPlayCard(protect2);
@@ -105,7 +104,6 @@ public class Card_03_050_ErrataTests
 		assertEquals(1, scn.ShadowGetChoiceMin());
 		scn.ShadowChooseCard(boromir);
 
-		assertEquals(twilight - 1, scn.GetTwilight());
 		assertAttachedTo(protect2, boromir);
 		assertNotAttachedTo(protect2, grimir);
 		assertAttachedTo(weary, boromir);

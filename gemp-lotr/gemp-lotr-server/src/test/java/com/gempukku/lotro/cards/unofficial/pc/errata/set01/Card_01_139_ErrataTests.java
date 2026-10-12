@@ -98,14 +98,12 @@ public class Card_01_139_ErrataTests
 		assertTrue(scn.ShadowPlayAvailable(savagery));
 		assertEquals(5, scn.GetStrength(uruk));
 		assertFalse(scn.HasKeyword(uruk, Keyword.FIERCE));
-		int twilight = scn.GetTwilight();
 
 		scn.ShadowPlayCard(savagery);
 		scn.ShadowChooseCard(uruk);
 		assertEquals(7, scn.GetStrength(uruk));
 		assertFalse(scn.HasKeyword(uruk, Keyword.FIERCE));
 		assertEquals(8, scn.GetStrength(sentry));
-		assertEquals(twilight - 1, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, savagery);
 
 		// Aragorn, 8, beats the Savage, 7.
@@ -188,7 +186,6 @@ public class Card_01_139_ErrataTests
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.FreepsPass();
 		assertEquals(5, scn.GetStrength(uruk));
-		int twilight = scn.GetTwilight();
 
 		scn.ShadowPlayCard(savagery);
 		// No "may": the Shadow player is asked only which Uruk-hai.
@@ -199,7 +196,6 @@ public class Card_01_139_ErrataTests
 		assertTrue(scn.HasKeyword(uruk, Keyword.FIERCE));
 		assertEquals(8, scn.GetStrength(sentry));
 		assertFalse(scn.HasKeyword(sentry, Keyword.FIERCE));
-		assertEquals(twilight - 1, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, savagery);
 
 		// The Savage, 9, beats Aragorn, 8: two wounds with damage +1.

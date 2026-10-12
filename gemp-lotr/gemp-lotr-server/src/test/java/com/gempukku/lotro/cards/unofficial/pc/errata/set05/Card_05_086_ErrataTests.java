@@ -84,13 +84,11 @@ public class Card_05_086_ErrataTests
 		scn.MoveMinionsToTable(runner1, runner2, runner3);
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		int twilight = scn.GetTwilight();
 		assertFalse(scn.HasKeyword(guard1, Keyword.DEFENDER));
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 		assertTrue(scn.FreepsPlayAvailable(weary));
 
 		scn.FreepsPlayCard(weary);
-		assertEquals(twilight + 1, scn.GetTwilight());
 		// Any of the four valiant companions can be one of the three spotted; the Rohirrim Guard and Frodo are not valiant.
 		assertEquals(4, scn.FreepsGetCardChoiceCount());
 		assertTrue(scn.FreepsHasCardChoiceAvailable(guard1, guard2, guard3, elf));

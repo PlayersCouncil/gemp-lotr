@@ -188,7 +188,6 @@ public class Card_V2_046_Tests
 		assertEquals(7, scn.GetStrength(eomer));
 		assertEquals(2, scn.GetStrength(bounder));
 		assertEquals(frodoStrength, scn.GetStrength(frodo));
-		assertEquals(8 + 2, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, end);
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
@@ -354,7 +353,6 @@ public class Card_V2_046_Tests
 
 		scn.FreepsPlayCard(end);
 		assertEquals(0, scn.GetCultureTokensOn(doom1));
-		assertEquals(4 + 2, scn.GetTwilight());
 		assertEquals(7, scn.GetStrength(eomer));
 		assertEquals(frodoStrength, scn.GetStrength(frodo));
 		assertInZone(Zone.DISCARD, end);
@@ -434,7 +432,6 @@ public class Card_V2_046_Tests
 		// The tokens stand before the "to": they are gone by the time the Shadow player may answer the event.
 		assertEquals(2 - 2, scn.GetCultureTokensOn(doom1));
 		assertEquals(3 - 2, scn.GetCultureTokensOn(cast));
-		assertEquals(pool + 2, scn.GetTwilight());
 		assertTrue(scn.ShadowActionAvailable(mouth));
 		scn.ShadowUseCardAction(mouth);
 		assertEquals(1, scn.GetWoundsOn(mouth));

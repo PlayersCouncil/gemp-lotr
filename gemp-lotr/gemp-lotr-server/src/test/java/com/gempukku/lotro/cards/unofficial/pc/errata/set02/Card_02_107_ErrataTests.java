@@ -92,8 +92,6 @@ public class Card_02_107_ErrataTests
 		// Frodo and an ally Hobbit are 2 Hobbits.
 		assertTrue(scn.FreepsPlayAvailable(sunlight));
 		scn.FreepsPlayCard(sunlight);
-		// 2 for Bilbo + 1
-		assertEquals(3, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, sunlight);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

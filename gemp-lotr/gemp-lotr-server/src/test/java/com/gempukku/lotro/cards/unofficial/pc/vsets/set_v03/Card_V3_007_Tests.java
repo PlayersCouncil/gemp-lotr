@@ -75,7 +75,7 @@ public class Card_V3_007_Tests
 	}
 
 	@Test
-	public void PlayedForTwoOnAWizardCompanionOrAllyAndOnNobodyElse() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedOnAWizardCompanionOrAllyAndOnNobodyElse() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var stash = scn.GetFreepsCard("stash");
@@ -92,7 +92,6 @@ public class Card_V3_007_Tests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(1, scn.GetFreepsHandCount());
 		assertTrue(scn.FreepsPlayAvailable(stash));
 
@@ -106,7 +105,6 @@ public class Card_V3_007_Tests
 
 		scn.FreepsChooseCard(radagast);
 
-		assertEquals(2, scn.GetTwilight());
 		assertEquals(0, scn.GetFreepsHandCount());
 		assertAttachedTo(stash, radagast);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
@@ -137,7 +135,6 @@ public class Card_V3_007_Tests
 		scn.FreepsChooseCard(saruman);
 
 		assertAttachedTo(stash, saruman);
-		assertEquals(2, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

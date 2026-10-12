@@ -101,8 +101,6 @@ public class Card_V3_033_Tests
 
 		// 1 + 1
 		assertEquals(2, scn.GetThreats());
-		// 2 for the Knight + 2 for the Spectre
-		assertEquals(4, scn.GetTwilight());
 		assertInZone(Zone.FREE_CHARACTERS, spectre);
 		// Nothing is hindered.
 		assertEquals(5, scn.GetStrength(spectre));

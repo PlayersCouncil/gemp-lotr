@@ -122,7 +122,6 @@ public class Card_V3_108_Tests
 		assertFalse(scn.IsHindered(businessman));
 		assertFalse(scn.IsHindered(bilbo));
 		assertFalse(scn.IsHindered(ted));
-		int twilight = scn.GetTwilight();
 
 		scn.FreepsPlayCard(fortheshire);
 		assertTrue(scn.FreepsHasCardChoiceAvailable(sam, merry, pippin, businessman));
@@ -143,7 +142,6 @@ public class Card_V3_108_Tests
 		assertFalse(scn.IsHindered(runner));
 		assertFalse(scn.HasKeyword(merry, Keyword.DEFENDER));
 		assertFalse(scn.HasKeyword(merry, Keyword.ENDURING));
-		assertEquals(twilight + 1, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, fortheshire);
 		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
 	}

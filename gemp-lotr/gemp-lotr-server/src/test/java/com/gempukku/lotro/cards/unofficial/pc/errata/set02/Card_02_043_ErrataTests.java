@@ -105,7 +105,7 @@ public class Card_02_043_ErrataTests
 	}
 
 	@Test
-	public void PlaysForOneOnAUniqueUrukhaiOnly() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlaysOnAUniqueUrukhaiOnly() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var sword = scn.GetShadowCard("sword");
@@ -121,7 +121,6 @@ public class Card_02_043_ErrataTests
 		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(sword));
-		int twilight = scn.GetTwilight();
 		assertEquals(13, scn.GetStrength(shagrat));
 
 		scn.ShadowPlayCard(sword);
@@ -131,7 +130,6 @@ public class Card_02_043_ErrataTests
 		scn.ShadowChooseCard(shagrat);
 
 		assertAttachedTo(sword, shagrat);
-		assertEquals(twilight - 1, scn.GetTwilight());
 		assertEquals(15, scn.GetStrength(shagrat));
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}

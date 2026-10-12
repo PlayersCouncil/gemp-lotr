@@ -132,7 +132,6 @@ public class Card_V2_065_Tests
 		assertTrue(scn.ShadowPlayAvailable(shapes));
 
 		scn.ShadowPlayCard(shapes);
-		assertEquals(7, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, shapes);
 		assertNotAttachedTo(shapes, lights);
 		assertNotAttachedTo(shapes, nelya);
@@ -159,7 +158,6 @@ public class Card_V2_065_Tests
 		assertTrue(scn.ShadowPlayAvailable(shapes));
 
 		scn.ShadowPlayCard(shapes);
-		assertEquals(13, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, shapes);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}

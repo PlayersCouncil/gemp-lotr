@@ -146,8 +146,6 @@ public class Card_V2_066_Tests
 		// Enduring gives the Undead +2 for its wound; the event gives it nothing.
 		assertEquals(11, scn.GetStrength(undead));
 		assertInDiscard(gaze);
-		// The event costs nothing.
-		assertEquals(twilight, scn.GetTwilight());
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 

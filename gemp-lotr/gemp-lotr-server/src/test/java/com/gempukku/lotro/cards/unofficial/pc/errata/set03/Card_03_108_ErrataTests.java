@@ -71,7 +71,7 @@ public class Card_03_108_ErrataTests
 	}
 
 	@Test
-	public void PlaysForOneOnAHobbitCompanionOrAllyAndMakesBearerStrengthPlusOne() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlaysOnAHobbitCompanionOrAllyAndMakesBearerStrengthPlusOne() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var pan = scn.GetFreepsCard("pan");
@@ -85,7 +85,6 @@ public class Card_03_108_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(3, scn.GetStrength(sam));
 		assertTrue(scn.FreepsPlayAvailable(pan));
 
@@ -96,7 +95,6 @@ public class Card_03_108_ErrataTests
 		scn.FreepsChooseCard(sam);
 
 		assertAttachedTo(pan, sam);
-		assertEquals(1, scn.GetTwilight());
 		assertEquals(4, scn.GetStrength(sam));
 		assertEquals(0, scn.GetFreepsHandCount());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());

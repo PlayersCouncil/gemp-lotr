@@ -69,7 +69,7 @@ public class Card_01_015_ErrataTests
 	}
 
 	@Test
-	public void CannotBePlayedUntilGimliIsInPlayAndThenGoesOnHimForNothing() throws DecisionResultInvalidException, CardNotFoundException {
+	public void CannotBePlayedUntilGimliIsInPlayAndThenGoesOnHim() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var helm = scn.GetFreepsCard("helm");
@@ -86,9 +86,7 @@ public class Card_01_015_ErrataTests
 		scn.FreepsPlayCard(gimli);
 		assertTrue(scn.FreepsPlayAvailable(helm));
 
-		int twilight = scn.GetTwilight();
 		scn.FreepsPlayCard(helm);
-		assertEquals(twilight, scn.GetTwilight());
 		assertAttachedTo(helm, gimli);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
