@@ -8,7 +8,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -243,30 +242,6 @@ public class Card_08_119_Tests
 		assertFalse(scn.ShadowDecisionAvailable("Would you like to take control of a site?"));
 		assertEquals(1, scn.GetThreats());
 		assertFalse(scn.IsSiteControlled(scn.GetSite(4)));
-		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
-	}
-
-	@Test
-	@Ignore("Q-0257: with no site that can be taken, may the Free Peoples player still choose the opponent and add no threats (as built), or must the 3 threats be added?")
-	public void WithNoSiteToTakeTheThreeThreatsAreAddedWithNoQuestion() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		scn.MoveCompanionsToTable("guard1", "guard2");
-
-		scn.StartGame();
-		scn.SkipToSite(4);
-		scn.FreepsPass();
-
-		scn.ShadowTakeControlOfSite();
-		scn.ShadowTakeControlOfSite();
-		scn.ShadowTakeControlOfSite();
-		scn.SkipToPhase(Phase.REGROUP);
-
-		// An opponent who has no site to take cannot be chosen, so the threats are all that is left.
-		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
-		assertFalse(scn.FreepsDecisionAvailable("Choose action to perform"));
-		assertEquals(3, scn.GetThreats());
-		assertFalse(scn.ShadowDecisionAvailable("Would you like to take control of a site?"));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }

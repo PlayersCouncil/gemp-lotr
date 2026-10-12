@@ -900,7 +900,7 @@ Glade 1_351 (site 6 of `FellowshipSites`: `SkipToSite(6)` and an Elf companion).
 random.** It Burns Us 6_110; Meant to Be Alone 3_109. It Burns Us: [shire] Regroup event, cost 1; spot Sam and
 Sméagol or Gollum (Sméagol, Once Like Us 103_116 cheated in) "to choose an opponent who must reveal his or her
 hand", then wounds a minion once for each culture revealed (no minion, nothing wounded). The game treats it as the
-Free Peoples player's reveal (shapes.md, Q-0251, open). Meant to Be Alone: [shire] Fellowship event, cost 1; spot a
+Free Peoples player's reveal (shapes.md, Q-0251: B). Meant to Be Alone: [shire] Fellowship event, cost 1; spot a
 Hobbit companion who is not the Ring-bearer; shows one card at random and removes (X), its twilight cost: the
 reveal with the least side effect. Lay six different cards and read which was shown (pitfalls, "A random or
 whole-hand effect"). `Card_05_096_Tests`.

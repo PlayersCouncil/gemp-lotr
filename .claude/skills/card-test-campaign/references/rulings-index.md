@@ -402,8 +402,8 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - An optional trigger or ability that costs nothing and would do nothing is withheld by the engine (Q-0224: A2; Q-0231: B; engine pass 26) [Q-0034, F-0407, F-0408, F-0402, F-0406, F-0423, F-0476, Q-0033, F-0411, F-0417, F-0428, F-0420, F-0413, Q-0104, F-0410, F-0426, Q-0243, Q-0112, F-0473, Q-0102, Q-0245, Q-0029, F-0429, F-0379, Q-0107]
 - A choice whose every branch has nothing to act on (F-0116) [F-0293, Q-0220, Q-0224, Q-0255, F-0471, F-0370, F-0366]
 - "<Do X> or <do Y>": each branch is written as the effect itself (F-0310, Here Lies Balin 1_19) [Q-0209, F-0222]
-- "Discard his or her hand or <do Y>": with no card in hand the choice is still asked (as built; Pelennor Flat 7_345; Q-0255, open) [Q-0224]
-- "<Do X> or choose an opponent who may <do Y>": with nothing for the opponent to do the choice is still asked (as built; Crashed Gate 8_119; Q-0257, open) [F-0341, F-0310, Q-0255]
+- "Discard his or her hand or <do Y>": with no card in hand the choice is still asked, and the discard may be taken for nothing (Pelennor Flat 7_345; Q-0255: B) [Q-0224]
+- "<Do X> or choose an opponent who may <do Y>": with nothing for the opponent to do the choice is still asked, and the opponent may be chosen for nothing (Crashed Gate 8_119; Q-0257: A) [F-0341, Q-0255]
 - A parenthesis with its own price (Q-0089) [Q-0035]
 - One thing left to do is done without a second question (Q-0090) [Q-0121, F-0387]
 - A yes/no before a choice whose minimum is 0 (Q-0143, F-0277) [F-0278, F-0285, Q-0102, F-0385]
@@ -479,7 +479,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "If the <side> player is about to discard ..." asks who discards (F-0296; Q-0171: A)
 - "If one or more <kind> are about to be discarded by an opponent, <pay> to prevent that": the whole discard is prevented (Q-0250: B; Siege Engine 5_60, engine pass 28)
 - "Each time the Free Peoples player plays the fellowship's next site" asks who plays it (F-0479, Fearless Approach 13_164 and Caravan From the South 13_83) [F-0302]
-- "If a Free Peoples player reveals this card from your hand" asks whose CARD revealed (Eye of Barad-dûr 5_96; Q-0251, open) [Q-0171]
+- "If a Free Peoples player reveals this card from your hand" asks whose CARD revealed (Eye of Barad-dûr 5_96; Q-0251: B) [Q-0171]
 - "Each time your condition is hindered or discarded" (Q-0075)
 - "Each time this is hindered/discarded" is answered after the removal (F-0120, F-0121)
 - memorizeLoser holds everyone in the skirmish but the winner (F-0115, F-0136) [F-0422, F-0480]

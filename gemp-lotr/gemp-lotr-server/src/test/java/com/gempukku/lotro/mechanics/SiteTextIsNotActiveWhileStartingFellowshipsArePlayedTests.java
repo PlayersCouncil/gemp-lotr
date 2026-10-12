@@ -160,6 +160,7 @@ public class SiteTextIsNotActiveWhileStartingFellowshipsArePlayedTests
 		scn.FreepsPlayCard(pippin);
 		assertInZone(Zone.FREE_CHARACTERS, pippin);
 		assertEquals(3, scn.GetTwilight());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
@@ -262,6 +263,7 @@ public class SiteTextIsNotActiveWhileStartingFellowshipsArePlayedTests
 		scn.FreepsPlayCard(sam);
 		assertInZone(Zone.FREE_CHARACTERS, sam);
 		assertEquals(1, scn.GetTwilight());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	// No player has a hand while the starting fellowships are played: the hands are dealt afterwards.  The three

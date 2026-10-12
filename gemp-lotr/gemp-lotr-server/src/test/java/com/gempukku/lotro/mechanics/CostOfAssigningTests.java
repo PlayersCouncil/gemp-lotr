@@ -167,6 +167,7 @@ public class CostOfAssigningTests
 
 		assertTrue(scn.IsCharAssignedAgainst(frodo, spawn));
 		assertEquals(3, scn.GetWoundsOn(frodo));
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 	}
 
 	@Test
@@ -216,6 +217,7 @@ public class CostOfAssigningTests
 
 		assertTrue(scn.IsCharAssignedAgainst(frodo, second));
 		assertEquals(3, scn.GetWoundsOn(frodo));
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 	}
 
 	@Test

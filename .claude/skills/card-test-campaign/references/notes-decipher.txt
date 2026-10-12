@@ -196,9 +196,9 @@ TO LOOK AT WHEN THE SET COMES UP (seen in passing by an earlier batch; not looke
   minion whose play-trigger exerts it would tell).
 - Set 6, It Burns Us 6_110, "choose an opponent who must reveal his or her hand" (from the batch dec-b2_28): built
   as the Free Peoples player's `revealHand` of the Shadow hand (the effect Curse Their Foul Feet! 1_36 uses), so No
-  Business of Ours 2_44 or 52_44 stops it and Eye of Barad-dûr 5_96 answers it. Whether the Shadow player is the
-  one who reveals is Q-0251, open: test the game as built, name that number and file nothing (shapes.md, "If a
-  Free Peoples player reveals this card from your hand").
+  Business of Ours 2_44 or 52_44 stops it and Eye of Barad-dûr 5_96 answers it. That is right (Q-0251, B: the
+  Shadow player has no choice in it, so the Free Peoples player is the one who reveals): test the game as built
+  and file nothing (shapes.md, "If a Free Peoples player reveals this card from your hand").
 - Sets 1, 3 and 10, the other cards that reveal a card at random from a hand and then act on "that card" (by their
   definitions, not read against their texts: Alive and Unspoiled 1_120, The Palantír of Orthanc 3_67, The Dark
   Lord Advances 3_87, Drawing His Eye 10_29): lay a hand of several DIFFERENT cards and read "shown means gone,

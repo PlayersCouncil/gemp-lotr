@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -171,9 +170,9 @@ public class Card_07_345_Tests
 		assertTrue(scn.AwaitingFreepsArcheryPhaseActions());
 	}
 
+	// A player always has a hand, even an empty one, and discarding it is discarding 0 cards (Ketura, Q-0255).
 	@Test
-	@Ignore("Q-0255: with no card in hand the Free Peoples player is still asked, and may take 'Discard your hand' for nothing and add no burden")
-	public void WithNoCardInHandTheFreePeoplesPlayerIsNotAskedAndTwoBurdensAreAdded() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WithNoCardInHandTheFreePeoplesPlayerIsStillAskedAndMayDiscardHisEmptyHandForNoBurden() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var shadowRunner = scn.GetShadowCard("runner");
@@ -190,13 +189,23 @@ public class Card_07_345_Tests
 		scn.MoveMinionsToTable(savage);
 		assertEquals(0, scn.GetFreepsHandCount());
 		assertEquals(0, scn.GetBurdens());
+		var discardPile = scn.GetFreepsDiscardCount();
 
 		scn.ShadowPass();
 
-		// A hand of no cards cannot be discarded, so there is nothing to choose between: the burdens are added.
-		// The Shadow player's hand is not the one the site speaks of.
-		assertFalse(scn.FreepsDecisionAvailable("Choose action to perform"));
-		assertEquals(2, scn.GetBurdens());
+		// Both things are still his to choose between.
+		assertEquals(Phase.MANEUVER, scn.GetCurrentPhase());
+		assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
+		assertEquals(2, scn.FreepsGetMultipleChoiceCount());
+		assertTrue(scn.FreepsChoiceAvailable("Discard"));
+		assertTrue(scn.FreepsChoiceAvailable("burden"));
+
+		scn.FreepsChooseOption("Discard");
+
+		// No card is discarded and no burden is added.  The Shadow player's hand is not the one the site speaks of.
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertEquals(discardPile, scn.GetFreepsDiscardCount());
+		assertEquals(0, scn.GetBurdens());
 		assertEquals(0, scn.ShadowGetBurdens());
 		assertInHand(shadowRunner, shadowFear);
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());

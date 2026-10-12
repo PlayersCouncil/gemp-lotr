@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -441,11 +440,10 @@ public class Card_05_096_Tests
 		assertInHand(eye, savage);
 	}
 
-	// It Burns Us has the Shadow player "reveal his or her hand": the one revealing is the Shadow player, whose own
-	// the hand is, though a Free Peoples card made him.
-	@Ignore("Q-0251: a Free Peoples card that has the Shadow player reveal his own hand (It Burns Us 6_110) is not a Free Peoples player revealing the Eye (as Q-0171 reads a discard the Shadow player makes); the game offers the Eye")
+	// It Burns Us has the Shadow player "reveal his or her hand".  He has no choice in it, so the one revealing is
+	// the Free Peoples player whose card it is (Ketura, Q-0251), and the Eye answers.
 	@Test
-	public void WhenAFreePeoplesEventMakesTheShadowPlayerRevealHisHandNothingIsOffered() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WhenAFreePeoplesEventHasTheShadowPlayerRevealHisHandTheEyeIsOfferedAndAddsTwoBurdens() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetItBurnsUsScenario();
 
 		var sam = scn.GetFreepsCard("sam");
@@ -466,11 +464,18 @@ public class Card_05_096_Tests
 
 		// The Shadow hand is shown to the Free Peoples player, the Eye in it.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(eye, false));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(savage, false));
 		scn.FreepsDismissRevealedCards();
 
-		assertFalse(scn.ShadowPlayAvailable(eye));
+		assertTrue(scn.ShadowPlayAvailable(eye));
 		assertEquals(0, scn.GetBurdens());
-		assertInHand(eye, savage);
+		scn.ShadowPlayCard(eye);
+
+		assertEquals(2, scn.GetBurdens());
+		assertInDiscard(eye);
+		assertInHand(savage);
+		assertEquals(1, scn.GetShadowHandCount());
+		// There is no minion for It Burns Us to wound, and the regroup phase goes on.
 		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 	}
 
