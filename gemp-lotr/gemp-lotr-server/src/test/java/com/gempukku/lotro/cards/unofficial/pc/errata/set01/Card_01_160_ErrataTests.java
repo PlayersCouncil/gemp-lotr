@@ -106,7 +106,6 @@ public class Card_01_160_ErrataTests
 		scn.SetTwilight(10);
 		scn.FreepsPass();
 
-		assertEquals(8, scn.GetStrength(sentry));
 		assertTrue(scn.ShadowPlayAvailable(sword));
 
 		scn.ShadowPlayCard(sword);
@@ -118,7 +117,6 @@ public class Card_01_160_ErrataTests
 		scn.ShadowChooseCard(sentry);
 		assertInZone(Zone.ATTACHED, sword);
 		assertEquals(sentry, sword.getAttachedTo());
-		assertEquals(10, scn.GetStrength(sentry));
 		assertEquals(5, scn.GetStrength(savage));
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}

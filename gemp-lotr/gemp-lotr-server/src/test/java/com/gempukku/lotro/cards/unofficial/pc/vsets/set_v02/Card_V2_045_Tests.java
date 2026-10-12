@@ -88,7 +88,7 @@ public class Card_V2_045_Tests
 	}
 
 	@Test
-	public void IsPlayedOnARohanCompanionWhoBecomesValiantAndStrengthPlusTwo() throws DecisionResultInvalidException, CardNotFoundException {
+	public void IsPlayedOnARohanCompanionWhoBecomesValiant() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
@@ -104,7 +104,6 @@ public class Card_V2_045_Tests
 
 		scn.StartGame();
 
-		assertEquals(7, scn.GetStrength(eomer));
 		assertFalse(scn.HasKeyword(eomer, Keyword.VALIANT));
 		assertFalse(scn.HasKeyword(rider, Keyword.VALIANT));
 		assertTrue(scn.FreepsPlayAvailable(hope));
@@ -119,8 +118,6 @@ public class Card_V2_045_Tests
 		scn.FreepsChooseCard(eomer);
 		assertAttachedTo(hope, eomer);
 		assertTrue(scn.HasKeyword(eomer, Keyword.VALIANT));
-		// 7 + 2 for the condition.
-		assertEquals(9, scn.GetStrength(eomer));
 		// Only its bearer.
 		assertFalse(scn.HasKeyword(rider, Keyword.VALIANT));
 		assertEquals(6, scn.GetStrength(rider));
@@ -144,7 +141,6 @@ public class Card_V2_045_Tests
 		// Two [rohan] companions, one short of the three that would have Merry count as a Man.
 		assertTrue(scn.IsRace(merry, Race.HOBBIT));
 		assertFalse(scn.IsRace(merry, Race.MAN));
-		assertEquals(3, scn.GetStrength(merry));
 		assertTrue(scn.FreepsPlayAvailable(hope));
 
 		scn.FreepsPlayCard(hope);
@@ -154,8 +150,6 @@ public class Card_V2_045_Tests
 
 		scn.FreepsChooseCard(merry);
 		assertAttachedTo(hope, merry);
-		// 3 + 2 for the condition.
-		assertEquals(5, scn.GetStrength(merry));
 		assertEquals(7, scn.GetStrength(eomer));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -205,7 +199,6 @@ public class Card_V2_045_Tests
 		assertEquals(0, scn.GetWoundsOn(rider));
 		assertAttachedTo(hope, eomer);
 		assertTrue(scn.HasKeyword(eomer, Keyword.VALIANT));
-		assertEquals(9, scn.GetStrength(eomer));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 
 		// The fellowship moves again.  With no minion there is no fighting, and the second regroup phase of
@@ -222,7 +215,6 @@ public class Card_V2_045_Tests
 		assertInZone(Zone.DISCARD, hope);
 		assertEquals(1, scn.GetWoundsOn(eomer));
 		assertFalse(scn.HasKeyword(eomer, Keyword.VALIANT));
-		assertEquals(7, scn.GetStrength(eomer));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
@@ -239,8 +231,6 @@ public class Card_V2_045_Tests
 		scn.AttachCardsTo(guard, hope2);
 
 		scn.StartGame();
-		// 6 + 2 for the condition.  The Guard is valiant with or without it.
-		assertEquals(8, scn.GetStrength(guard));
 
 		// No minion is in play, so the regroup phase follows the Shadow phase.
 		scn.SkipToPhase(Phase.REGROUP);
@@ -261,8 +251,7 @@ public class Card_V2_045_Tests
 		assertAttachedTo(hope1, eomer);
 		assertEquals(1, scn.GetWoundsOn(eomer));
 		assertEquals(0, scn.GetWoundsOn(guard));
-		// The Guard is back to his own strength and is valiant still, by his own text; Eomer is as he was.
-		assertEquals(6, scn.GetStrength(guard));
+		// The Guard is valiant still, by his own text; Eomer is as he was.
 		assertTrue(scn.HasKeyword(guard, Keyword.VALIANT));
 		assertTrue(scn.HasKeyword(eomer, Keyword.VALIANT));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());

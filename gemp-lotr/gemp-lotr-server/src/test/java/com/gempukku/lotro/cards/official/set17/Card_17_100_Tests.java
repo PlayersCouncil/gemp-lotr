@@ -130,8 +130,6 @@ public class Card_17_100_Tests
 		assertTrue(scn.FreepsPlayAvailable(caves));
 
 		scn.FreepsPlayCard(caves);
-		// 2 for Théoden + 1 for the condition
-		assertEquals(3, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, caves);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

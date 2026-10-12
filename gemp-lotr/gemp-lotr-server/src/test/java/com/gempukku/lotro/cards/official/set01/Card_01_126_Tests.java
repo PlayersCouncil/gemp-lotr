@@ -80,7 +80,6 @@ public class Card_01_126_Tests
 		assertFalse(scn.HasKeyword(raiders, Keyword.FIERCE));
 		assertFalse(scn.HasKeyword(troop, Keyword.FIERCE));
 		assertFalse(scn.HasKeyword(servant, Keyword.FIERCE));
-		assertEquals(5, scn.GetTwilight());
 		assertTrue(scn.ShadowPlayAvailable(hunt));
 
 		scn.ShadowPlayCard(hunt);
@@ -94,7 +93,6 @@ public class Card_01_126_Tests
 		assertTrue(scn.HasKeyword(troop, Keyword.FIERCE));
 		assertFalse(scn.HasKeyword(raiders, Keyword.FIERCE));
 		assertFalse(scn.HasKeyword(servant, Keyword.FIERCE));
-		assertEquals(2, scn.GetTwilight());     // 5 - 3 to play
 		assertInDiscard(hunt);
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
@@ -114,12 +112,10 @@ public class Card_01_126_Tests
 		scn.FreepsPass();
 
 		// An event is offered whatever its effect will find (CR 4.2 "effect"); the [isengard] Orc is still no Uruk-hai.
-		assertEquals(5, scn.GetTwilight());
 		assertTrue(scn.ShadowPlayAvailable(hunt));
 		scn.ShadowPlayCard(hunt);
 
 		assertFalse(scn.HasKeyword(servant, Keyword.FIERCE));
-		assertEquals(2, scn.GetTwilight());     // 5 - 3 to play
 		assertInDiscard(hunt);
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}

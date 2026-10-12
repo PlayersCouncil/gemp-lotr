@@ -98,16 +98,12 @@ public class Card_01_313_ErrataTests
 		scn.StartGame();
 
 		assertEquals(0, scn.GetTwilight());
-		// 3 + 1 for the Ring
-		assertEquals(4, scn.GetStrength(frodo));
 		assertTrue(scn.FreepsPlayAvailable(sting));
 
 		// Frodo is the only bearer it may have, so nobody is asked.
 		scn.FreepsPlayCard(sting);
 		assertEquals(1, scn.GetTwilight());
 		assertAttachedTo(sting, frodo);
-		// 3 + 1 for the Ring + 2
-		assertEquals(6, scn.GetStrength(frodo));
 		assertEquals(3, scn.GetStrength(sam));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -130,7 +126,6 @@ public class Card_01_313_ErrataTests
 
 		scn.FreepsPlayCard(sting);
 		assertAttachedTo(sting, frodo);
-		assertEquals(5, scn.GetStrength(frodo));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

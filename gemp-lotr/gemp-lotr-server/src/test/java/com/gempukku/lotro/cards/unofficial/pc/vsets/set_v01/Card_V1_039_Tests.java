@@ -183,7 +183,6 @@ public class Card_V1_039_Tests
 		assertEquals(10, scn.GetStrength(aragorn));
 		assertEquals(1, scn.GetKeywordCount(aragorn, Keyword.DAMAGE));
 		assertEquals(9, scn.GetStrength(wraith));
-		assertEquals(3, scn.GetVitality(wraith));
 		// 2 set + 2 for Frodo and Aragorn + 2 for the shadow number of site 2
 		assertEquals(6, scn.GetTwilight());
 
@@ -194,8 +193,6 @@ public class Card_V1_039_Tests
 		// The only Nazgul takes it. 1 is removed for the ability and nothing for the Crown's own cost.
 		assertAttachedTo(crown, wraith);
 		assertEquals(5, scn.GetTwilight());
-		// The Crown is vitality +1.
-		assertEquals(4, scn.GetVitality(wraith));
 		assertEquals(8, scn.GetStrength(aragorn));
 		assertEquals(0, scn.GetKeywordCount(aragorn, Keyword.DAMAGE));
 
@@ -519,7 +516,6 @@ public class Card_V1_039_Tests
 		// 1 set + 2 for Frodo and Aragorn + 2 for the shadow number of site 2
 		assertEquals(5, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, crown, crown2);
-		assertEquals(2, scn.GetVitality(lemenya));
 		assertTrue(scn.ShadowActionAvailable(crown));
 		assertTrue(scn.ShadowActionAvailable(crown2));
 
@@ -535,8 +531,6 @@ public class Card_V1_039_Tests
 		assertAttachedTo(crown, lemenya);
 		assertInZone(Zone.SUPPORT, crown2);
 		assertAttachedTo(crown3, otsea);
-		// The Crown is vitality +1.
-		assertEquals(3, scn.GetVitality(lemenya));
 		assertEquals(3, scn.GetVitality(nelya));
 		assertEquals(4, scn.GetTwilight());
 

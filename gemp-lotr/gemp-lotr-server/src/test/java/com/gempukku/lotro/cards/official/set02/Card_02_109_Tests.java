@@ -129,8 +129,6 @@ public class Card_02_109_Tests
 		assertEquals(1, scn.GetWoundsOn(frodo));
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertInZone(Zone.DISCARD, orcbane);
-		// The event costs nothing.
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 

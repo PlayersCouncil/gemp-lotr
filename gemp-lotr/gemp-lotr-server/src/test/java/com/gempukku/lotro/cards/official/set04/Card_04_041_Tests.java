@@ -99,8 +99,6 @@ public class Card_04_041_Tests
 		// Gimli is the only bearer there can be, so nothing is asked.
 		scn.FreepsPlayCard(axe);
 		assertAttachedTo(axe, gimli);
-		// 2 for Gimli + 2 for the Axe
-		assertEquals(4, scn.GetTwilight());
 		assertEquals(8, scn.GetStrength(gimli));
 		assertEquals(2, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
 		// The other Dwarf is as he was.

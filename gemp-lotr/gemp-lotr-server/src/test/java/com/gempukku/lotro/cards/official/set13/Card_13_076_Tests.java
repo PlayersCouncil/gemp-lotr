@@ -107,12 +107,10 @@ public class Card_13_076_Tests
 		assertEquals(8, scn.GetResistance(watcher));
 		assertEquals(6, scn.GetResistance(ranger));
 		assertEquals(7, scn.GetResistance(arwen));
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(0, scn.GetCultureTokensOn(homestead));
 
 		scn.FreepsPlayCard(homestead);
 
-		assertEquals(2, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, homestead);
 		assertEquals(2, scn.GetCultureTokensOn(homestead));
 

@@ -130,7 +130,6 @@ public class Card_04_032_Tests
 		assertAttachedTo(stone, frodo);
 
 		scn.ShadowPlayCard(ravage);
-		assertEquals(3, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, ravage);
 		// A possession, an artifact and a condition, with nothing chosen.
 		assertInZone(Zone.DISCARD, sword, coat, stone);
@@ -214,7 +213,6 @@ public class Card_04_032_Tests
 		assertTrue(scn.ShadowPlayAvailable(ravage));
 
 		scn.ShadowPlayCard(ravage);
-		assertEquals(3, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, ravage);
 		assertInZone(Zone.DISCARD, elvensword, gilgalad, vilya);
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());

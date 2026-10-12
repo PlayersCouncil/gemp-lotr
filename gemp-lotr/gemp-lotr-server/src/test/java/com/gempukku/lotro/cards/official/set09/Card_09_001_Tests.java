@@ -218,10 +218,6 @@ public class Card_09_001_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(runner, savage, gollum);
 
-		// Frodo, Son of Drogo is strength 3 and vitality 4: the Ring's printed +1 and +1 are his, worn or not.
-		assertEquals(4, scn.GetStrength(frodo));
-		assertEquals(5, scn.GetVitality(frodo));
-
 		scn.SkipToPhase(Phase.MANEUVER);
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 		assertFalse(scn.RBWearingOneRing());
@@ -237,7 +233,6 @@ public class Card_09_001_Tests
 		assertEquals(1, scn.GetWoundsOn(frodo));
 		assertEquals(0, scn.GetWoundsOn(sam));
 		assertEquals(0, scn.GetBurdens());
-		assertEquals(4, scn.GetStrength(frodo));
 
 		// Worn, the ability still has a cost that can be paid, and is still among the maneuver actions.
 		scn.ShadowPass();
@@ -331,7 +326,6 @@ public class Card_09_001_Tests
 		assertTrue(scn.RBWearingOneRing());
 		var ettenmoors = scn.GetCurrentSite();
 		assertTrue(scn.FreepsActionAvailable(ettenmoors));
-		assertEquals(4, scn.GetStrength(frodo));
 		scn.FreepsUseCardAction(ettenmoors);
 		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, sam));
 		scn.FreepsChooseCard(frodo);

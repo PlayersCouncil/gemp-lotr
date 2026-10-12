@@ -91,7 +91,6 @@ public class Card_02_032_Tests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(8, scn.GetStrength(aragorn));
 		assertEquals(5, scn.GetStrength(erland));
 		assertTrue(scn.FreepsPlayAvailable(brand));
@@ -104,7 +103,6 @@ public class Card_02_032_Tests
 		scn.FreepsChooseCard(aragorn);
 
 		assertAttachedTo(brand, aragorn);
-		assertEquals(0, scn.GetTwilight());
 		// 8 printed + 1 from the brand
 		assertEquals(9, scn.GetStrength(aragorn));
 

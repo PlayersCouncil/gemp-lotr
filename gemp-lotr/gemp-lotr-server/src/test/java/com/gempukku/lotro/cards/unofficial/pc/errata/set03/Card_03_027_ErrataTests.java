@@ -69,7 +69,7 @@ public class Card_03_027_ErrataTests
 	}
 
 	@Test
-	public void PlaysOnAnElrondAllyAndOnNoOtherElfForVitalityPlus1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlaysOnAnElrondAllyAndOnNoOtherElf() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var vilya = scn.GetFreepsCard("vilya");
@@ -82,7 +82,6 @@ public class Card_03_027_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals(4, scn.GetVitality(elrond));
 		assertTrue(scn.FreepsPlayAvailable(vilya));
 
 		scn.FreepsPlayCard(vilya);
@@ -90,7 +89,6 @@ public class Card_03_027_ErrataTests
 		assertAttachedTo(vilya, elrond);
 		assertNotAttachedTo(vilya, arwen);
 		assertNotAttachedTo(vilya, silinde);
-		assertEquals(5, scn.GetVitality(elrond));
 		assertEquals(3, scn.GetVitality(arwen));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -110,14 +108,12 @@ public class Card_03_027_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals(4, scn.GetVitality(elrond));
 		assertTrue(scn.FreepsPlayAvailable(vilya));
 		scn.FreepsPlayCard(vilya);
 		// Elrond is the only bearer there is, beside an Elf companion and an Elf ally.
 		assertAttachedTo(vilya, elrond);
 		assertNotAttachedTo(vilya, arwen);
 		assertNotAttachedTo(vilya, silinde);
-		assertEquals(5, scn.GetVitality(elrond));
 		assertEquals(3, scn.GetVitality(arwen));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

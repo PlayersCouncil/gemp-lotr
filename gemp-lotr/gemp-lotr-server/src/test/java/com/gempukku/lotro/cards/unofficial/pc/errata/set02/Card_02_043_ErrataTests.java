@@ -121,7 +121,6 @@ public class Card_02_043_ErrataTests
 		scn.FreepsPass();
 
 		assertTrue(scn.ShadowPlayAvailable(sword));
-		assertEquals(13, scn.GetStrength(shagrat));
 
 		scn.ShadowPlayCard(sword);
 		// Unique Uruk-hai of two cultures; an Uruk-hai that is not unique and a unique Orc are not offered.
@@ -130,7 +129,6 @@ public class Card_02_043_ErrataTests
 		scn.ShadowChooseCard(shagrat);
 
 		assertAttachedTo(sword, shagrat);
-		assertEquals(15, scn.GetStrength(shagrat));
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 

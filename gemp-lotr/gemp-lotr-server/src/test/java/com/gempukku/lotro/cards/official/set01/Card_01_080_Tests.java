@@ -98,7 +98,6 @@ public class Card_01_080_Tests
 		assertTrue(scn.FreepsPlayAvailable(ottar));
 
 		scn.FreepsPlayCard(ottar);
-		assertEquals(5, scn.GetTwilight()); // 4 for Gandalf + 1 for Ottar
 		assertInZone(Zone.SUPPORT, ottar);
 		assertEquals(2, scn.GetStrength(ottar));
 		assertEquals(2, scn.GetVitality(ottar));

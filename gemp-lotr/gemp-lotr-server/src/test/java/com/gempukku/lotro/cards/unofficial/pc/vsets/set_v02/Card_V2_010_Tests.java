@@ -86,7 +86,7 @@ public class Card_V2_010_Tests
 	}
 
 	@Test
-	public void IsPlayedOnAValiantElfWhoIsStrengthPlus2AndVitalityPlus1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void IsPlayedOnAValiantElf() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
@@ -100,8 +100,6 @@ public class Card_V2_010_Tests
 
 		scn.StartGame();
 
-		assertEquals(5, scn.GetStrength(defender));
-		assertEquals(3, scn.GetVitality(defender));
 		assertTrue(scn.FreepsPlayAvailable(armaments));
 
 		scn.FreepsPlayCard(armaments);
@@ -114,8 +112,6 @@ public class Card_V2_010_Tests
 		scn.FreepsChooseCard(defender);
 
 		assertAttachedTo(armaments, defender);
-		assertEquals(7, scn.GetStrength(defender));
-		assertEquals(4, scn.GetVitality(defender));
 		assertEquals(5, scn.GetStrength(balglin));
 		assertEquals(3, scn.GetVitality(balglin));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());

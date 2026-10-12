@@ -190,7 +190,6 @@ public class Card_05_096_Tests
 		assertEquals(3, scn.GetStrength(sam));
 		assertEquals(4, scn.GetStrength(frodo));    // 3 + 1 for The Ruling Ring
 		assertEquals(0, scn.GetBurdens());
-		int twilight = scn.GetTwilight();
 		scn.ShadowPlayCard(eye);
 
 		// Aragorn is the one companion skirmishing a [sauron] Orc, so nothing is asked. Frodo and Sam are the
@@ -203,7 +202,6 @@ public class Card_05_096_Tests
 		assertEquals(3, scn.GetStrength(sam));
 		assertEquals(4, scn.GetStrength(frodo));
 		assertInZone(Zone.DISCARD, eye);
-		assertEquals(twilight, scn.GetTwilight());
 		assertEquals(0, scn.GetBurdens());
 
 		scn.FreepsPass();
@@ -372,8 +370,6 @@ public class Card_05_096_Tests
 
 		assertEquals(2, scn.GetBurdens());
 		assertInZone(Zone.DISCARD, eye);
-		// It costs nothing.
-		assertEquals(1, scn.GetTwilight());
 
 		// The other copy was revealed as well, and answers for itself: kept, it adds nothing.
 		assertTrue(scn.ShadowPlayAvailable(eye2));

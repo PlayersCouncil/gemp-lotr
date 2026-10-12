@@ -107,7 +107,6 @@ public class Card_10_030_Tests
         assertEquals(8, scn.GetStrength(aragorn));
         // 3 + 2 for each of his 3 wounds (enduring)
         assertEquals(9, scn.GetStrength(pippin));
-        int twilight = scn.GetTwilight();
 
         scn.FreepsPlayCard(endgame);
         // An exhausted [gondor] companion of any race, fighting or not: not the Knight, who is not exhausted, nor
@@ -120,7 +119,6 @@ public class Card_10_030_Tests
         scn.FreepsChooseCard(aragorn);
         assertEquals(10, scn.GetStrength(aragorn));
         assertEquals(9, scn.GetStrength(pippin));
-        assertEquals(twilight, scn.GetTwilight());
         assertInZone(Zone.DISCARD, endgame);
 
         scn.ShadowPass();

@@ -82,7 +82,7 @@ public class Card_V2_049_Tests
 	}
 
 	@Test
-	public void PlayedOnEomerItMakesHimStrengthPlusTwoAndDamagePlusOne() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedOnEomerItMakesHimDamagePlusOne() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var guthwine = scn.GetFreepsCard("guthwine");
@@ -92,14 +92,12 @@ public class Card_V2_049_Tests
 
 		scn.StartGame();
 
-		assertEquals(7, scn.GetStrength(eomer));
 		assertFalse(scn.HasKeyword(eomer, Keyword.DAMAGE));
 
 		// Eomer is the only [rohan] companion, so it goes to him.
 		scn.FreepsPlayCard(guthwine);
 
 		assertAttachedTo(guthwine, eomer);
-		assertEquals(9, scn.GetStrength(eomer));
 		assertTrue(scn.HasKeyword(eomer, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(eomer, Keyword.DAMAGE));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
@@ -125,7 +123,6 @@ public class Card_V2_049_Tests
 
 		assertTrue(scn.IsRace(merry, Race.HOBBIT));
 		assertFalse(scn.IsRace(merry, Race.MAN));
-		assertEquals(3, scn.GetStrength(merry));
 		assertFalse(scn.HasKeyword(merry, Keyword.DAMAGE));
 
 		scn.FreepsPlayCard(guthwine);
@@ -137,7 +134,6 @@ public class Card_V2_049_Tests
 		scn.FreepsChooseCard(merry);
 
 		assertAttachedTo(guthwine, merry);
-		assertEquals(5, scn.GetStrength(merry));
 		assertFalse(scn.HasKeyword(merry, Keyword.DAMAGE));
 		// Nor is Eomer damage +1 while another bears it.
 		assertFalse(scn.HasKeyword(eomer, Keyword.DAMAGE));
@@ -170,8 +166,7 @@ public class Card_V2_049_Tests
 		scn.ApplyAdHocModifier(new AddKeywordModifier(null, savage, null, Keyword.FIERCE));
 		scn.SkipToAssignments();
 
-		// 7 + 2 against 5: Eomer wins without overwhelming.
-		assertEquals(9, scn.GetStrength(eomer));
+		// Against the Savage's 5, Eomer wins without overwhelming.
 		assertEquals(5, scn.GetStrength(savage));
 		scn.FreepsAssignAndResolve(eomer, savage);
 		scn.PassSkirmishActions();

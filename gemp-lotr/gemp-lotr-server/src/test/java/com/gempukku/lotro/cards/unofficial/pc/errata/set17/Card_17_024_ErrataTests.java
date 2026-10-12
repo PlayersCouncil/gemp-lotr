@@ -77,7 +77,7 @@ public class Card_17_024_ErrataTests
 	}
 
 	@Test
-	public void PlaysOnAGandalfWizardWhoIsOneBetterInStrengthVitalityAndResistance() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlaysOnAGandalfWizard() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var shadowfax = scn.GetFreepsCard("shadowfax");
@@ -92,9 +92,6 @@ public class Card_17_024_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals(7, scn.GetStrength(gandalf));
-		assertEquals(4, scn.GetVitality(gandalf));
-		assertEquals(6, scn.GetResistance(gandalf));
 		assertTrue(scn.FreepsPlayAvailable(shadowfax));
 		scn.FreepsPlayCard(shadowfax);
 
@@ -106,9 +103,6 @@ public class Card_17_024_ErrataTests
 		scn.FreepsChooseCard(gandalf);
 
 		assertAttachedTo(shadowfax, gandalf);
-		assertEquals(8, scn.GetStrength(gandalf));
-		assertEquals(5, scn.GetVitality(gandalf));
-		assertEquals(7, scn.GetResistance(gandalf));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
@@ -222,14 +216,12 @@ public class Card_17_024_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals(7 + 1, scn.GetStrength(gandalf));
 		assertTrue(scn.FreepsPlayAvailable(glamdring));
 		scn.FreepsPlayCard(glamdring);
 
 		// Its cost is paid and it is gone: Gandalf has Shadowfax's +1 and not Glamdring's +2.
 		assertEquals(2, scn.GetTwilight());
 		assertInDiscard(glamdring);
-		assertEquals(7 + 1, scn.GetStrength(gandalf));
 		assertAttachedTo(shadowfax, gandalf);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

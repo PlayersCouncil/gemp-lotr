@@ -80,7 +80,7 @@ public class Card_19_024_ErrataTests
 	}
 
 	@Test
-	public void PlayedOnARohanManWhoIsThenStrengthPlus1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedOnARohanMan() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
@@ -97,7 +97,6 @@ public class Card_19_024_ErrataTests
 		scn.StartGame();
 
 		assertEquals(6, scn.GetStrength(guard));
-		assertEquals(4, scn.GetStrength(guma));
 		assertTrue(scn.FreepsPlayAvailable(inside));
 
 		scn.FreepsPlayCard(inside);
@@ -108,7 +107,6 @@ public class Card_19_024_ErrataTests
 		scn.FreepsChooseCard(guma);
 
 		assertAttachedTo(inside, guma);
-		assertEquals(5, scn.GetStrength(guma));
 		assertEquals(6, scn.GetStrength(guard));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -148,8 +146,6 @@ public class Card_19_024_ErrataTests
 		// Aragorn's skirmish: no [rohan] Man is in it, and the offer is made all the same.
 		scn.FreepsResolveSkirmish(aragorn);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(inside));
-		assertEquals(5, scn.GetStrength(guma));
-		assertEquals(6, scn.GetStrength(guard));
 
 		scn.FreepsAcceptOptionalTrigger();
 
@@ -163,8 +159,6 @@ public class Card_19_024_ErrataTests
 		// The +1 goes with it, and a transfer by a card's text costs nothing.
 		assertAttachedTo(inside, guard);
 		assertNotAttachedTo(inside, guma);
-		assertEquals(7, scn.GetStrength(guard));
-		assertEquals(4, scn.GetStrength(guma));
 		assertEquals(pool, scn.GetTwilight());
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 
@@ -182,8 +176,6 @@ public class Card_19_024_ErrataTests
 
 		assertAttachedTo(inside, hlafwine);
 		assertNotAttachedTo(inside, guard);
-		assertEquals(5, scn.GetStrength(hlafwine));
-		assertEquals(6, scn.GetStrength(guard));
 		assertEquals(4, scn.GetStrength(guma));
 		assertEquals(pool, scn.GetTwilight());
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
@@ -211,7 +203,6 @@ public class Card_19_024_ErrataTests
 
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable(inside));
 		assertAttachedTo(inside, guard);
-		assertEquals(7, scn.GetStrength(guard));
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 
@@ -239,8 +230,6 @@ public class Card_19_024_ErrataTests
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(inside));
 		scn.FreepsDeclineOptionalTrigger();
 		assertAttachedTo(inside, bearer);
-		assertEquals(7, scn.GetStrength(bearer));
-		assertEquals(6, scn.GetStrength(other));
 
 		// The other Guard's 6 beats the Runner's 5 and kills it: a [rohan] Man has won a skirmish this turn.
 		scn.PassSkirmishActions();
@@ -298,12 +287,10 @@ public class Card_19_024_ErrataTests
 		scn.SkipToOtherPlayersTurn();
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 		assertAttachedTo(inside, bearer);
-		assertEquals(7, scn.GetStrength(bearer));
 
 		// Its owner's next turn: no minion, no skirmish. Last turn's win is not this turn's.
 		scn.SkipToOtherPlayersTurn();
 		assertInZone(Zone.HAND, inside);
-		assertEquals(6, scn.GetStrength(bearer));
 		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
 	}
 

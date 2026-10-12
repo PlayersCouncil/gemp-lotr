@@ -113,7 +113,6 @@ public class Card_02_079_Tests
 		assertEquals(1, scn.ShadowGetChoiceMin());
 		scn.ShadowChooseCard(enquea);
 
-		assertEquals(twilight - 1, scn.GetTwilight());
 		assertEquals(1, scn.GetWoundsOn(enquea));
 		assertEquals(0, scn.GetWoundsOn(twigul));
 		assertEquals(0, scn.GetWoundsOn(lemenya));

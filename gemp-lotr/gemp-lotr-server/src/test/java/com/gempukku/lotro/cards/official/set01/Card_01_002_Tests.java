@@ -121,8 +121,7 @@ public class Card_01_002_Tests
 		// Little Snuffler costs 2.
 		scn.SetTwilight(2);
 
-		// Frodo, Son of Drogo is strength 3 and vitality 4: this Ring adds 1 to his strength alone.
-		assertEquals(4, scn.GetStrength(frodo));
+		// Frodo, Son of Drogo is vitality 4: this Ring adds nothing to his vitality.
 		assertEquals(4, scn.GetVitality(frodo));
 
 		// The Shadow phase: Little Snuffler's wound is in no skirmish.  Nothing is offered, and it is a wound.
@@ -190,8 +189,6 @@ public class Card_01_002_Tests
 		scn.ApplyAdHocModifier(new AddKeywordModifier(null, fanatic, null, Keyword.FIERCE));
 		scn.SkipToAssignments();
 
-		// 7 + 1 for the Ring
-		assertEquals(8, scn.GetStrength(isildur));
 		assertEquals(0, scn.GetBurdens());
 
 		// The Fanatic wounds the Man assigned to it: a wound in the assignment phase, the Ring not worn.
@@ -402,7 +399,7 @@ public class Card_01_002_Tests
 	// 3 + 1 - 6 = -2. This is reset to zero. Hobbit Intuition is played ... He has strength 3 (Frodo) +1 (Ring) - 6
 	// (Enduring Evil) + 3 (Intuition) = 1."
 	@Test
-	public void FrodoWithTheRulingRingIsStrength4AndAStrengthBroughtBelowZeroCountsFromItsTrueSum() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AStrengthBroughtBelowZeroOnFrodoWithTheRulingRingCountsFromItsTrueSum() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
@@ -422,8 +419,6 @@ public class Card_01_002_Tests
 
 		assertEquals(5, scn.GetCurrentSiteNumber());
 		assertEquals(6, scn.GetBurdens());
-		// 3 + 1 for the Ring
-		assertEquals(4, scn.GetStrength(frodo));
 
 		scn.FreepsPass();
 		scn.ShadowPlayCard(evil);

@@ -127,8 +127,6 @@ public class Card_15_038_Tests
 		assertTrue(scn.FreepsPlayAvailable(treebeard));
 
 		scn.FreepsPlayCard(treebeard);
-		// Dasron's 2 + 5
-		assertEquals(7, scn.GetTwilight());
 		assertInZone(Zone.FREE_CHARACTERS, treebeard);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

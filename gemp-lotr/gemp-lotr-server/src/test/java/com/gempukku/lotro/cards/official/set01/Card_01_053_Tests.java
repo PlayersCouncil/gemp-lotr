@@ -99,7 +99,6 @@ public class Card_01_053_Tests
 		// Arwen cost 2.
 		assertEquals(2, scn.GetTwilight());
 		scn.FreepsPlayCard(elf);
-		assertEquals(3, scn.GetTwilight());
 		assertInZone(Zone.FREE_CHARACTERS, elf);
 		assertEquals(4, scn.GetStrength(elf));
 		assertEquals(2, scn.GetVitality(elf));

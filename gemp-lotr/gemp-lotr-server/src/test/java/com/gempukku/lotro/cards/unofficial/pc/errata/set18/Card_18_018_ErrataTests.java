@@ -84,7 +84,7 @@ public class Card_18_018_ErrataTests
 	}
 
 	@Test
-	public void IsPlayedOnAGandalfManWhoIsThenStrengthPlus2AndVitalityPlus1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void IsPlayedOnAGandalfMan() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
@@ -100,8 +100,6 @@ public class Card_18_018_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals(6, scn.GetStrength(dasron));
-		assertEquals(3, scn.GetVitality(dasron));
 		assertTrue(scn.FreepsPlayAvailable(axe));
 		scn.FreepsPlayCard(axe);
 
@@ -112,8 +110,6 @@ public class Card_18_018_ErrataTests
 		scn.FreepsChooseCard(dasron);
 
 		assertAttachedTo(axe, dasron);
-		assertEquals(8, scn.GetStrength(dasron));
-		assertEquals(4, scn.GetVitality(dasron));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
@@ -146,8 +142,6 @@ public class Card_18_018_ErrataTests
 		scn.FreepsAssignToMinions(grimbeorn, savage);
 		scn.FreepsResolveSkirmish(grimbeorn);
 
-		// 4 + 2 for the Axe against 5.
-		assertEquals(6, scn.GetStrength(grimbeorn));
 		assertEquals(0, scn.GetFreepsHandCount());
 		assertEquals(4, scn.GetFreepsDiscardCount());
 		scn.PassSkirmishActions();

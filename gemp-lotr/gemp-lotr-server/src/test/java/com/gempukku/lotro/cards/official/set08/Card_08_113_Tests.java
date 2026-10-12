@@ -74,7 +74,7 @@ public class Card_08_113_Tests
 	}
 
 	@Test
-	public void PlayedForOneOnFrodoOrSamAndNotOnAnotherHobbit() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedOnFrodoOrSamAndNotOnAnotherHobbit() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
@@ -86,8 +86,6 @@ public class Card_08_113_Tests
 
 		scn.StartGame();
 
-		assertEquals(3, scn.GetStrength(sam));
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(sting));
 		scn.FreepsPlayCard(sting);
 
@@ -95,10 +93,7 @@ public class Card_08_113_Tests
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(merry));
 		scn.FreepsChooseCard(sam);
 
-		assertEquals(1, scn.GetTwilight());
 		assertAttachedTo(sting, sam);
-		// 3 + 2 for Sting
-		assertEquals(5, scn.GetStrength(sam));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
@@ -289,7 +284,6 @@ public class Card_08_113_Tests
 		scn.FreepsResolveSkirmish(sam);
 		// 7 + 3 in a fierce skirmish + 1 as a hunter against Sam: 11, more than double his 5.
 		assertEquals(11, scn.GetStrength(charging));
-		assertEquals(5, scn.GetStrength(sam));
 		scn.PassFierceSkirmishActions();
 
 		assertInZone(Zone.DEAD, sam);

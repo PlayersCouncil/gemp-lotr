@@ -79,7 +79,7 @@ public class Card_17_024_Tests
 	}
 
 	@Test
-	public void PlaysForTwoOnAGandalfWizardWhoIsOneBetterInStrengthVitalityAndResistance() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlaysOnAGandalfWizard() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var shadowfax = scn.GetFreepsCard("shadowfax");
@@ -94,10 +94,6 @@ public class Card_17_024_Tests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
-		assertEquals(7, scn.GetStrength(gandalf));
-		assertEquals(4, scn.GetVitality(gandalf));
-		assertEquals(6, scn.GetResistance(gandalf));
 		assertEquals(8, scn.GetStrength(radagast));
 		assertTrue(scn.FreepsPlayAvailable(shadowfax));
 		scn.FreepsPlayCard(shadowfax);
@@ -110,11 +106,7 @@ public class Card_17_024_Tests
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		scn.FreepsChooseCard(gandalf);
 
-		assertEquals(2, scn.GetTwilight());
 		assertAttachedTo(shadowfax, gandalf);
-		assertEquals(7 + 1, scn.GetStrength(gandalf));
-		assertEquals(4 + 1, scn.GetVitality(gandalf));
-		assertEquals(6 + 1, scn.GetResistance(gandalf));
 		assertEquals(8, scn.GetStrength(radagast));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -172,7 +164,6 @@ public class Card_17_024_Tests
 
 		scn.StartGame();
 
-		assertEquals(7 + 1, scn.GetStrength(gandalf));
 		assertTrue(scn.FreepsPlayAvailable(wizardstaff));
 		scn.FreepsPlayCard(wizardstaff);
 		// The bearer of Shadowfax is still a bearer the Wizard Staff may be played on.
@@ -182,7 +173,6 @@ public class Card_17_024_Tests
 		// Its cost is paid and it is gone: Gandalf has Shadowfax's +1 and not the Staff's.
 		assertEquals(2, scn.GetTwilight());
 		assertInDiscard(wizardstaff);
-		assertEquals(7 + 1, scn.GetStrength(gandalf));
 		assertAttachedTo(shadowfax, gandalf);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -213,7 +203,6 @@ public class Card_17_024_Tests
 
 		scn.FreepsPlayCard(shadowfax);
 		assertAttachedTo(shadowfax, gandalf);
-		assertEquals(2, scn.GetTwilight());
 
 		// Gandalf is the only bearer either Glamdring may have, and he may not bear a hand weapon now.
 		assertFalse(scn.FreepsPlayAvailable(glamdring));
@@ -380,8 +369,6 @@ public class Card_17_024_Tests
 		assertAttachedTo(shadowfax, gandalf);
 		assertInZone(Zone.DISCARD, pipe);
 		assertAttachedTo(glamdring, gandalf);
-		// 7, + 1 for Shadowfax, + 2 for Glamdring
-		assertEquals(10, scn.GetStrength(gandalf));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

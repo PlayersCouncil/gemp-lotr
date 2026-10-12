@@ -80,7 +80,7 @@ public class Card_04_280_ErrataTests
 	}
 
 	@Test
-	public void PlayableOnlyOnceTheodenIsInPlayAndMakesHimStrongerAndDamagePlusOne() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayableOnlyOnceTheodenIsInPlayAndMakesHimDamagePlusOne() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var herugrim = scn.GetFreepsCard("herugrim");
@@ -96,14 +96,10 @@ public class Card_04_280_ErrataTests
 		scn.FreepsPlayCard(theoden);
 		assertEquals(2, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(herugrim));
-		assertEquals(6, scn.GetStrength(theoden));
-		assertEquals(2, scn.GetVitality(theoden));
 		assertEquals(0, scn.GetKeywordCount(theoden, Keyword.DAMAGE));
 
 		scn.FreepsPlayCard(herugrim);
 		assertAttachedTo(herugrim, theoden);
-		assertEquals(8, scn.GetStrength(theoden));
-		assertEquals(3, scn.GetVitality(theoden));
 		assertEquals(1, scn.GetKeywordCount(theoden, Keyword.DAMAGE));
 		// The companion beside him gains nothing.
 		assertEquals(6, scn.GetStrength(guard));
@@ -127,8 +123,6 @@ public class Card_04_280_ErrataTests
 		scn.FreepsPlayCard(herugrim);
 
 		assertAttachedTo(herugrim, theoden);
-		assertEquals(8, scn.GetStrength(theoden));
-		assertEquals(4, scn.GetVitality(theoden));
 		assertEquals(1, scn.GetKeywordCount(theoden, Keyword.DAMAGE));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

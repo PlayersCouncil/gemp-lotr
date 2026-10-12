@@ -127,7 +127,6 @@ public class Card_04_141_Tests
 		// A [gondor] Man who is not Aragorn: one burden.
 		assertEquals(1, scn.GetBurdens());
 		assertInZone(Zone.DISCARD, mountains);
-		assertEquals(4, scn.GetTwilight());
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 

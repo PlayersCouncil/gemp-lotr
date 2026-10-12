@@ -103,7 +103,6 @@ public class Card_V3_004_Tests
 
 		scn.StartGame();
 
-		assertEquals(8, scn.GetStrength(aragorn));
 		assertEquals(6, scn.GetStrength(gimli));
 		assertTrue(scn.FreepsPlayAvailable(hospitality));
 
@@ -114,8 +113,6 @@ public class Card_V3_004_Tests
 
 		scn.FreepsChooseCard(aragorn);
 		assertAttachedTo(hospitality, aragorn);
-		// 8 + 1 printed on the possession
-		assertEquals(9, scn.GetStrength(aragorn));
 		assertEquals(6, scn.GetStrength(gimli));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

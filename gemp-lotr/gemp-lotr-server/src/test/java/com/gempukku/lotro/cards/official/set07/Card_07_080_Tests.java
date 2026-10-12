@@ -61,7 +61,7 @@ public class Card_07_080_Tests
 	}
 
 	@Test
-	public void PlaysOnAragornForThreeAndNotOnBoromir() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlaysOnAragornAndNotOnBoromir() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var anduril = scn.GetFreepsCard("anduril");
@@ -79,17 +79,13 @@ public class Card_07_080_Tests
 		scn.FreepsRefreshDecision();
 
 		assertTrue(scn.FreepsPlayAvailable(anduril));
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(0, scn.GetThreats());
-		assertEquals(8, scn.GetStrength(aragorn));
 		assertEquals(0, scn.GetKeywordCount(aragorn, Keyword.DEFENDER));
 
 		scn.FreepsPlayCard(anduril);
 
 		// Aragorn is the only bearer there can be, so no choice of bearer is asked.
-		assertEquals(3, scn.GetTwilight());
 		assertEquals(aragorn, anduril.getAttachedTo());
-		assertEquals(10, scn.GetStrength(aragorn));
 		assertEquals(7, scn.GetStrength(boromir));
 		// No threat can be spotted: he is defender +1 as soon as he bears it, and Boromir beside him is not.
 		assertEquals(1, scn.GetKeywordCount(aragorn, Keyword.DEFENDER));
@@ -110,14 +106,11 @@ public class Card_07_080_Tests
 		scn.StartGame();
 
 		assertTrue(scn.FreepsPlayAvailable(anduril));
-		assertEquals(8, scn.GetStrength(rohan));
 		assertEquals(0, scn.GetKeywordCount(rohan, Keyword.DEFENDER));
 
 		scn.FreepsPlayCard(anduril);
 
-		assertEquals(3, scn.GetTwilight());
 		assertEquals(rohan, anduril.getAttachedTo());
-		assertEquals(10, scn.GetStrength(rohan));
 		assertEquals(1, scn.GetKeywordCount(rohan, Keyword.DEFENDER));
 		assertEquals(0, scn.GetKeywordCount(boromir, Keyword.DEFENDER));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());

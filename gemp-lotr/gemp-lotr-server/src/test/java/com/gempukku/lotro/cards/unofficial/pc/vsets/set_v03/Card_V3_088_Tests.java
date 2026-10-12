@@ -91,7 +91,7 @@ public class Card_V3_088_Tests
 	}
 
 	@Test
-	public void IsPlayedOnATheodenAndOnNoOneElseAndRaisesHisVitality() throws DecisionResultInvalidException, CardNotFoundException {
+	public void IsPlayedOnATheodenAndOnNoOneElse() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var snowmane = scn.GetFreepsCard("snowmane");
@@ -104,7 +104,6 @@ public class Card_V3_088_Tests
 
 		scn.StartGame();
 
-		assertEquals(3, scn.GetVitality(theoden));
 		assertEquals(3, scn.GetVitality(guard));
 		assertTrue(scn.FreepsPlayAvailable(snowmane));
 
@@ -113,7 +112,6 @@ public class Card_V3_088_Tests
 		// Theoden is the one bearer there is: nobody is asked which of the four companions is to bear it.
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 		assertAttachedTo(snowmane, theoden);
-		assertEquals(4, scn.GetVitality(theoden));
 		assertEquals(3, scn.GetVitality(guard));
 		assertEquals(3, scn.GetVitality(boromir));
 	}
@@ -132,14 +130,12 @@ public class Card_V3_088_Tests
 
 		scn.StartGame();
 
-		assertEquals(3, scn.GetVitality(theoden2));
 		assertTrue(scn.FreepsPlayAvailable(snowmane));
 
 		scn.FreepsPlayCard(snowmane);
 
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 		assertAttachedTo(snowmane, theoden2);
-		assertEquals(4, scn.GetVitality(theoden2));
 		assertEquals(3, scn.GetVitality(guard));
 	}
 

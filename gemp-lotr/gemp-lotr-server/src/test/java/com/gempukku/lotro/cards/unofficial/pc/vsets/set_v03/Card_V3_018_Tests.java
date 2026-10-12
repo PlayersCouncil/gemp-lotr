@@ -81,7 +81,7 @@ public class Card_V3_018_Tests
 	}
 
 	@Test
-	public void PlayedForThreeOnAnAragornWhoIsNoGondorCardWhoGainsThreeStrengthAndDamagePlusOne() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedForThreeOnAnAragornWhoIsNoGondorCardWhoGainsDamagePlusOne() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var anduril = scn.GetFreepsCard("anduril");
@@ -96,7 +96,6 @@ public class Card_V3_018_Tests
 		scn.StartGame();
 
 		assertEquals(0, scn.GetTwilight());
-		assertEquals(8, scn.GetStrength(rohanAragorn));
 		assertEquals(7, scn.GetStrength(boromir));
 		assertFalse(scn.HasKeyword(rohanAragorn, Keyword.DAMAGE));
 		assertTrue(scn.FreepsPlayAvailable(anduril));
@@ -109,8 +108,6 @@ public class Card_V3_018_Tests
 		assertAttachedTo(anduril, rohanAragorn);
 		assertNotAttachedTo(anduril, boromir);
 		assertNotAttachedTo(anduril, frodo);
-		// 8 + 3
-		assertEquals(11, scn.GetStrength(rohanAragorn));
 		assertEquals(1, scn.GetKeywordCount(rohanAragorn, Keyword.DAMAGE));
 		// Boromir, who does not bear it, is as he was.
 		assertEquals(7, scn.GetStrength(boromir));

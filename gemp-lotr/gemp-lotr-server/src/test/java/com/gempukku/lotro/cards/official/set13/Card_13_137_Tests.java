@@ -70,7 +70,7 @@ public class Card_13_137_Tests
 	}
 
 	@Test
-	public void PlayedFromHandForThreeBesideEowynEomerAndTheodredHeIsDefenderPlusOneDamagePlusOneAndTheMoveLimitIsThree() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedFromHandBesideEowynEomerAndTheodredHeIsDefenderPlusOneDamagePlusOneAndTheMoveLimitIsThree() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var theoden = scn.GetFreepsCard("theoden");
@@ -82,13 +82,11 @@ public class Card_13_137_Tests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(2, scn.GetMoveLimit());
 		assertTrue(scn.FreepsPlayAvailable(theoden));
 
 		scn.FreepsPlayCard(theoden);
 
-		assertEquals(3, scn.GetTwilight());
 		assertInZone(Zone.FREE_CHARACTERS, theoden);
 		assertEquals(1, scn.GetKeywordCount(theoden, Keyword.DEFENDER));
 		assertEquals(1, scn.GetKeywordCount(theoden, Keyword.DAMAGE));

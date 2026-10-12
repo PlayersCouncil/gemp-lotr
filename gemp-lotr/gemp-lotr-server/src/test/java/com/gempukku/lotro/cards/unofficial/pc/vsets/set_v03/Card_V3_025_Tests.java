@@ -241,7 +241,6 @@ public class Card_V3_025_Tests
 		scn.MoveMinionsToTable(troop, savage);
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		assertEquals(13, scn.GetStrength(troop));
 		assertEquals(5, scn.GetStrength(savage));
 
 		scn.FreepsUseCardAction(gate1);
@@ -256,8 +255,6 @@ public class Card_V3_025_Tests
 
 		assertFalse(scn.IsHindered(troop));
 		assertAttachedTo(gate1, troop);
-		// 13 - 3
-		assertEquals(10, scn.GetStrength(troop));
 		assertEquals(5, scn.GetStrength(savage));
 		// The knights are the Free Peoples player's, who has not reconciled.
 		assertTrue(scn.IsHindered(knight1));

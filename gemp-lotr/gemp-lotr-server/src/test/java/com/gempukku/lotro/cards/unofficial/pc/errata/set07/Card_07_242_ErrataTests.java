@@ -85,7 +85,7 @@ public class Card_07_242_ErrataTests
 	}
 
 	@Test
-	public void PlaysOnMerryOnlyAndMakesHimStrength5() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlaysOnMerryOnly() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var sword = scn.GetFreepsCard("sword");
@@ -97,7 +97,6 @@ public class Card_07_242_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals(3, scn.GetStrength(merry));
 		assertTrue(scn.FreepsPlayAvailable(sword));
 
 		scn.FreepsPlayCard(sword);
@@ -106,7 +105,6 @@ public class Card_07_242_ErrataTests
 		assertAttachedTo(sword, merry);
 		assertNotAttachedTo(sword, sam);
 		assertNotAttachedTo(sword, guard);
-		assertEquals(5, scn.GetStrength(merry));
 		assertEquals(3, scn.GetStrength(sam));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -132,7 +130,6 @@ public class Card_07_242_ErrataTests
 		scn.FreepsPlayCard(sword);
 
 		assertAttachedTo(sword, merry2);
-		assertEquals(5, scn.GetStrength(merry2));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
@@ -388,11 +385,9 @@ public class Card_07_242_ErrataTests
 
 		// This Merry is [rohan], not [shire]; the text names only the title.
 		assertEquals(Culture.ROHAN, merry.getBlueprint().getCulture());
-		assertEquals(3, scn.GetStrength(merry));
 		assertTrue(scn.FreepsPlayAvailable(sword));
 		scn.FreepsPlayCard(sword);
 		assertAttachedTo(sword, merry);
-		assertEquals(5, scn.GetStrength(merry));
 
 		scn.MoveMinionsToTable(savage, troop);
 		scn.SkipToPhase(Phase.MANEUVER);

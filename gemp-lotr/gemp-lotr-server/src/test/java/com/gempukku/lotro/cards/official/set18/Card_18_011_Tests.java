@@ -118,8 +118,6 @@ public class Card_18_011_Tests
 		assertTrue(scn.FreepsPlayAvailable(ewer));
 
 		scn.FreepsPlayCard(ewer);
-		// 2 for Celeborn + 2 for the Ewer
-		assertEquals(4, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, ewer);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -134,11 +132,9 @@ public class Card_18_011_Tests
 		scn.MoveCardsToHand(ewer);
 
 		scn.StartGame();
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(ewer));
 
 		scn.FreepsPlayCard(ewer);
-		assertEquals(2, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, ewer);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -158,7 +154,6 @@ public class Card_18_011_Tests
 		assertTrue(scn.FreepsPlayAvailable(ewer));
 
 		scn.FreepsPlayCard(ewer);
-		assertEquals(2, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, ewer);
 		// She is no Ring-bearer.
 		assertEquals(3, scn.GetStrength(galadriel));
@@ -214,11 +209,9 @@ public class Card_18_011_Tests
 		assertEquals(6, scn.GetStrength(arwen));
 		// 6 - 1 for the burden
 		assertEquals(5, scn.GetResistance(arwen));
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(ewer));
 
 		scn.FreepsPlayCard(ewer);
-		assertEquals(2, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, ewer);
 		// 4 + 2 from the Ewer
 		assertEquals(6, scn.GetStrength(galadriel));

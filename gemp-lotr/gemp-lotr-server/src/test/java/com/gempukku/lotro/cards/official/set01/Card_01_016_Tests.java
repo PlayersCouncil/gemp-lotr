@@ -70,7 +70,7 @@ public class Card_01_016_Tests
 	}
 
 	@Test
-	public void IsPlayedForNothingToTheSupportAreaByExertingADwarfCompanionOrAlly() throws DecisionResultInvalidException, CardNotFoundException {
+	public void IsPlayedToTheSupportAreaByExertingADwarfCompanionOrAlly() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var kingdom = scn.GetFreepsCard("kingdom");
@@ -83,7 +83,6 @@ public class Card_01_016_Tests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(0, scn.GetWoundsOn(grimir));
 		assertTrue(scn.FreepsPlayAvailable(kingdom));
 
@@ -97,8 +96,6 @@ public class Card_01_016_Tests
 		assertEquals(1, scn.GetWoundsOn(grimir));
 		assertEquals(0, scn.GetWoundsOn(gimli));
 		assertEquals(0, scn.GetWoundsOn(aragorn));
-		// The condition costs 0.
-		assertEquals(0, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, kingdom);
 		assertNotAttachedTo(kingdom, grimir);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());

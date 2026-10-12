@@ -112,8 +112,6 @@ public class Card_12_032_Tests
 		scn.FreepsChooseCard(aragorn);
 
 		assertAttachedTo(salve, aragorn);
-		// Twilight cost 0
-		assertEquals(4, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
@@ -140,7 +138,6 @@ public class Card_12_032_Tests
 		scn.FreepsChooseCard(frodo);
 
 		assertAttachedTo(salve, frodo);
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

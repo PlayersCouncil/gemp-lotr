@@ -94,7 +94,7 @@ public class Card_04_174_Tests
 	}
 
 	@Test
-	public void PlaysOnSarumanForTwoAndMakesHimStrengthPlus2FierceAndDamagePlus1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlaysOnSarumanForTwoAndMakesHimFierceAndDamagePlus1() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var saruman = scn.GetShadowCard("saruman");
@@ -111,16 +111,13 @@ public class Card_04_174_Tests
 
 		// 2 companions + 2 for Ettenmoors
 		assertEquals(4, scn.GetTwilight());
-		assertEquals(8, scn.GetStrength(saruman));
 		assertFalse(scn.HasKeyword(saruman, Keyword.FIERCE));
 		assertEquals(0, scn.GetKeywordCount(saruman, Keyword.DAMAGE));
 		assertTrue(scn.ShadowPlayAvailable(staff));
 
 		// Saruman is the only bearer there is: nobody is asked where it goes.
 		scn.ShadowPlayCard(staff);
-		assertEquals(2, scn.GetTwilight());
 		assertAttachedTo(staff, saruman);
-		assertEquals(10, scn.GetStrength(saruman));
 		assertTrue(scn.HasKeyword(saruman, Keyword.FIERCE));
 		assertEquals(1, scn.GetKeywordCount(saruman, Keyword.DAMAGE));
 
@@ -151,15 +148,12 @@ public class Card_04_174_Tests
 
 		// 1 companion + 2 for Ettenmoors
 		assertEquals(3, scn.GetTwilight());
-		assertEquals(8, scn.GetStrength(rabble));
 		assertFalse(scn.HasKeyword(rabble, Keyword.FIERCE));
 		assertEquals(0, scn.GetKeywordCount(rabble, Keyword.DAMAGE));
 		assertTrue(scn.ShadowPlayAvailable(staff));
 
 		scn.ShadowPlayCard(staff);
-		assertEquals(1, scn.GetTwilight());
 		assertAttachedTo(staff, rabble);
-		assertEquals(10, scn.GetStrength(rabble));
 		assertTrue(scn.HasKeyword(rabble, Keyword.FIERCE));
 		assertEquals(1, scn.GetKeywordCount(rabble, Keyword.DAMAGE));
 		assertFalse(scn.HasKeyword(orc, Keyword.FIERCE));

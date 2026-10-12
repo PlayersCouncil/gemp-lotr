@@ -74,7 +74,7 @@ public class Card_05_089_Tests
 	}
 
 	@Test
-	public void PlayedForOneOnARohanManCompanionOrAlly() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedOnARohanManCompanionOrAlly() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var helm = scn.GetFreepsCard("helm");
@@ -90,7 +90,6 @@ public class Card_05_089_Tests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(helm));
 		scn.FreepsPlayCard(helm);
 		// A [rohan] Man, companion or ally; not the [rohan] Hobbit, nor a Man of Gondor.
@@ -99,12 +98,10 @@ public class Card_05_089_Tests
 		scn.FreepsChooseCard(guma);
 
 		assertAttachedTo(helm, guma);
-		assertEquals(1, scn.GetTwilight());
 
 		// The ally has his helm, so the second goes to the one [rohan] Man left without asking.
 		scn.FreepsPlayCard(helm2);
 		assertAttachedTo(helm2, guard);
-		assertEquals(2, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

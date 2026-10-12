@@ -169,6 +169,13 @@ Notes: Elrond is himself an ally whose home is site 3, so C2 heals him too.
   claims a `P1 Play [+]` clause: the seven cards of `orchestrator/engine-pass-28/tools-files/plainplay-keep.tsv`
   (Silinde 1_60, Uruviel 1_67, The Witch-king 52_85, Scouring of the Shire 68_112, Mantle of the White Wizard
   103_3, Hailing from the Far South 103_52, Ominous Sky 103_97) and no others.
+- **No reading of a printed cost or bonus doing its ordinary work** (Q-0279: E2, engine pass 31). A test does
+  not read the pool across a card's play to show its printed cost paid, nor a bearer's strength, vitality or
+  resistance to show a borne card's printed bonus (or the bearer just before it comes or after it goes), where
+  nothing changes the one or the other: that is `mechanics/TwilightPoolTests`' and `BorneItemsTests`'. It reads
+  them where the card's own text, or another card on the table, changes the cost, the pool, the bonus or where
+  the card goes, the nearest miss of that text included, and where something else moves the same number in the
+  same stretch (a move, another play, a wound). The landed tests were stripped to this by engine pass 31.
 - **`R` clauses are everything that is not printed on the card**: a ruling that names it, an interaction from a
   rules example, a rule that differs by format. Their text says where they come from.
 - A clause line is `ID Type [checks] text`. Long text continues on following lines, indented.

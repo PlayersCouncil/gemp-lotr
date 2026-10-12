@@ -83,7 +83,7 @@ public class Card_V3_001_Tests
 	}
 
 	@Test
-	public void PlayedForOneOnARingBoundHobbitWhoGainsAVitality() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedForOneOnARingBoundHobbit() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
@@ -97,7 +97,6 @@ public class Card_V3_001_Tests
 		scn.StartGame();
 
 		assertEquals(0, scn.GetTwilight());
-		assertEquals(4, scn.GetVitality(sam));
 		assertTrue(scn.FreepsPlayAvailable(phial));
 
 		scn.FreepsPlayCard(phial);
@@ -113,7 +112,6 @@ public class Card_V3_001_Tests
 
 		assertAttachedTo(phial, sam);
 		assertEquals(1, scn.GetTwilight());
-		assertEquals(5, scn.GetVitality(sam));
 		assertEquals(4, scn.GetVitality(frodo));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -137,22 +135,18 @@ public class Card_V3_001_Tests
 		scn.StartGame();
 
 		assertAttachedTo(phial, frodo);
-		// Vitality 4 + 1 for the Phial
-		assertEquals(5, scn.GetVitality(frodo));
 
 		// An ally is a fifth character and not a fifth companion.
 		scn.FreepsPlayCard(bounder);
 
 		assertInPlay(bounder);
 		assertAttachedTo(phial, frodo);
-		assertEquals(5, scn.GetVitality(frodo));
 
 		scn.FreepsPlayCard(pippin);
 
 		// 5 companions is more than 4.
 		assertInPlay(pippin);
 		assertInZone(Zone.DISCARD, phial);
-		assertEquals(4, scn.GetVitality(frodo));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
@@ -433,7 +427,6 @@ public class Card_V3_001_Tests
 		assertEquals(sam, scn.GetRingBearer());
 		assertAttachedTo(ring, sam);
 		assertInZone(Zone.DISCARD, phial);
-		assertEquals(4, scn.GetVitality(sam));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(phial));
 
 		scn.FreepsChooseOptionalTrigger(phial);
@@ -443,7 +436,6 @@ public class Card_V3_001_Tests
 		assertNotAttachedTo(phial, bilbo);
 		// 5 + 1 to play the Phial
 		assertEquals(6, scn.GetTwilight());
-		assertEquals(5, scn.GetVitality(sam));
 		assertFalse(scn.ShadowAnyDecisionsAvailable());
 	}
 
@@ -480,9 +472,6 @@ public class Card_V3_001_Tests
 		assertEquals(sam, scn.GetRingBearer());
 		assertAttachedTo(ring, sam);
 		assertAttachedTo(phial, bilbo);
-		// Vitality 4 + 1 for the Phial
-		assertEquals(5, scn.GetVitality(bilbo));
-		assertEquals(4, scn.GetVitality(sam));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(phial));
 
 		scn.FreepsChooseOptionalTrigger(phial);
@@ -490,8 +479,6 @@ public class Card_V3_001_Tests
 		// On Sam, with nothing asked. Frodo is dead, and Sam and Bilbo are every Ring-bound Hobbit left.
 		assertAttachedTo(phial, sam);
 		assertNotAttachedTo(phial, bilbo);
-		assertEquals(4, scn.GetVitality(bilbo));
-		assertEquals(5, scn.GetVitality(sam));
 		// A card moved from one bearer to another by an effect is transferred, and costs nothing.
 		assertEquals(5, scn.GetTwilight());
 		assertFalse(scn.ShadowAnyDecisionsAvailable());

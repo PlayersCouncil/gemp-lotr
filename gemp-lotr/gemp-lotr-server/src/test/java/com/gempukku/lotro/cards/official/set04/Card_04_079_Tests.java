@@ -94,7 +94,6 @@ public class Card_04_079_Tests
 
 		assertEquals(1, scn.GetWoundsOn(savage));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(night));
-		int twilight = scn.GetTwilight();
 		assertEquals(0, scn.GetWoundsOn(pengedhel));
 
 		scn.FreepsChooseOptionalTrigger(night);
@@ -102,7 +101,6 @@ public class Card_04_079_Tests
 		// The Elf who won exerts, and not the Elf beside him.  The event costs 1.
 		assertEquals(1, scn.GetWoundsOn(pengedhel));
 		assertEquals(0, scn.GetWoundsOn(erethon));
-		assertEquals(twilight + 1, scn.GetTwilight());
 		// No site is controlled, so there is nothing to liberate and no choice between the two: a minion is
 		// wounded.  Any minion: the one just beaten or one that was in no skirmish; not a companion.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(savage, party));

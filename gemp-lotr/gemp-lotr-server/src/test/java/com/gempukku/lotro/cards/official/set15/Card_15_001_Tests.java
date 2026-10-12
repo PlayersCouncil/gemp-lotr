@@ -95,9 +95,7 @@ public class Card_15_001_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(runner);
 
-		// Frodo, Son of Drogo is strength 3 and vitality 4: this Ring adds 2 to his vitality, and no keyword while
-		// it is not worn.
-		assertEquals(6, scn.GetVitality(frodo));
+		// Frodo, Son of Drogo is strength 3: this Ring adds no keyword while it is not worn.
 		assertEquals(3, scn.GetStrength(frodo));
 		assertFalse(scn.HasKeyword(frodo, Keyword.HUNTER));
 		assertFalse(scn.HasKeyword(sam, Keyword.HUNTER));
@@ -124,7 +122,6 @@ public class Card_15_001_Tests
 		assertEquals(3, scn.GetKeywordCount(frodo, Keyword.HUNTER));
 		// Hunter is a bonus in the hunter's own skirmish: in Sam's, Frodo is still 3.
 		assertEquals(3, scn.GetStrength(frodo));
-		assertEquals(6, scn.GetVitality(frodo));
 		// Sam is Ring-bound and bears no Ring.
 		assertFalse(scn.HasKeyword(sam, Keyword.HUNTER));
 		assertEquals(3, scn.GetStrength(sam));

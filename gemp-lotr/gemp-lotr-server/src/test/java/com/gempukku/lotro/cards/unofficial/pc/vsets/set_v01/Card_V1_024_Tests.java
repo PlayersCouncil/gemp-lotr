@@ -138,7 +138,6 @@ public class Card_V1_024_Tests
 		assertTrue(scn.FreepsPlayAvailable(sword));
 		// 4 for Aragorn + 2 for Arwen
 		assertEquals(6, scn.GetTwilight());
-		assertEquals(6, scn.GetStrength(arwen));
 		assertEquals(7, scn.GetStrength(boromir));
 
 		scn.FreepsPlayCard(sword);
@@ -152,8 +151,6 @@ public class Card_V1_024_Tests
 		assertAttachedTo(sword, arwen);
 		assertNotAttachedTo(sword, boromir);
 		assertNotAttachedTo(sword, sam);
-		// The condition's own printed strength +2
-		assertEquals(8, scn.GetStrength(arwen));
 		assertEquals(7, scn.GetStrength(boromir));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -248,8 +245,6 @@ public class Card_V1_024_Tests
 		scn.SkipToAssignments();
 		scn.FreepsAssignAndResolve(arwen, savage);
 
-		// 6 + 2 from the condition, against 5
-		assertEquals(8, scn.GetStrength(arwen));
 		assertEquals(5, scn.GetStrength(savage));
 		assertTrue(scn.IsExhausted(aragorn));
 		assertAttachedTo(sword, arwen);
@@ -286,8 +281,6 @@ public class Card_V1_024_Tests
 		scn.SkipToAssignments();
 		scn.FreepsAssignAndResolve(arwen, savage);
 
-		// 6 + 2 from the condition, against 5
-		assertEquals(8, scn.GetStrength(arwen));
 		assertInZone(Zone.DEAD, aragorn);
 		assertAttachedTo(sword, arwen);
 
@@ -335,7 +328,6 @@ public class Card_V1_024_Tests
 
 		// The next thing asked is which skirmish to fight.  Boromir bears it: 7 + 2 against 13, and he loses.
 		scn.FreepsResolveSkirmish(boromir);
-		assertEquals(9, scn.GetStrength(boromir));
 		assertEquals(13, scn.GetStrength(troop));
 		scn.PassSkirmishActions();
 

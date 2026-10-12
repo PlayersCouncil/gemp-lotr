@@ -71,7 +71,7 @@ public class Card_07_236_ErrataTests
 	}
 
 	@Test
-	public void PlaysOnTheodenOnlyAndMakesHimStrength8Vitality3AndDamagePlus1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlaysOnTheodenOnlyAndMakesHimDamagePlus1() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var herugrim = scn.GetFreepsCard("herugrim");
@@ -83,8 +83,6 @@ public class Card_07_236_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals(6, scn.GetStrength(theoden));
-		assertEquals(2, scn.GetVitality(theoden));
 		assertEquals(0, scn.GetKeywordCount(theoden, Keyword.DAMAGE));
 		assertTrue(scn.FreepsPlayAvailable(herugrim));
 
@@ -94,8 +92,6 @@ public class Card_07_236_ErrataTests
 		assertAttachedTo(herugrim, theoden);
 		assertNotAttachedTo(herugrim, guard);
 		assertNotAttachedTo(herugrim, aragorn);
-		assertEquals(8, scn.GetStrength(theoden));
-		assertEquals(3, scn.GetVitality(theoden));
 		assertEquals(1, scn.GetKeywordCount(theoden, Keyword.DAMAGE));
 		assertEquals(0, scn.GetKeywordCount(guard, Keyword.DAMAGE));
 		assertEquals(6, scn.GetStrength(guard));

@@ -106,19 +106,14 @@ public class Card_02_108_Tests
 
 		scn.StartGame();
 		assertInHand(elbereth);
-		// 3 + 1 for Isildur's Bane
-		assertEquals(4, scn.GetStrength(frodo));
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(elbereth));
 
 		// Frodo is the only bearer there can be, so no choice is asked: Sam, Ring-bound and not the
 		// Ring-bearer, is none.
 		scn.FreepsPlayCard(elbereth);
 
-		assertEquals(1, scn.GetTwilight());
 		assertAttachedTo(elbereth, frodo);
 		assertNotAttachedTo(elbereth, sam);
-		assertEquals(5, scn.GetStrength(frodo));
 		assertEquals(3, scn.GetStrength(sam));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

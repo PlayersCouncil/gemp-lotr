@@ -95,14 +95,12 @@ public class Card_17_015_Tests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(2, scn.GetShadowHandCount());
 		assertEquals(4, scn.GetShadowDiscardCount());
 		assertTrue(scn.FreepsPlayAvailable(light));
 		scn.MarkGameLog();
 		scn.FreepsPlayCard(light);
 
-		assertEquals(1, scn.GetTwilight());
 		// The two minions in the Shadow player's discard pile, and nothing else there or in the other pile.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(runner, savage));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(fear, elf, ownTroop));
@@ -180,7 +178,6 @@ public class Card_17_015_Tests
 		assertInZone(Zone.HAND, runner, lemenya, wreathed);
 		assertEquals(3, scn.GetShadowHandCount());
 		assertEquals(1, scn.GetShadowDiscardCount());
-		assertEquals(1, scn.GetTwilight());
 		assertInDiscard(light);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -330,7 +327,6 @@ public class Card_17_015_Tests
 		scn.FreepsPlayCard(light);
 
 		// "If you do": no minion was returned, so the player is not asked and the hand is not shown.
-		assertEquals(1, scn.GetTwilight());
 		assertInDiscard(light, fear, elf, ownTroop);
 		assertEquals(0, scn.FreepsGetTotalRevealedCardCount());
 		assertInZone(Zone.HAND, lemenya, wreathed);

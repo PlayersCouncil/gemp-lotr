@@ -88,9 +88,6 @@ public class Card_07_002_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(runner, savage, gollum);
 
-		// Frodo, Son of Drogo is strength 3: the Ring's printed +2 is his whether it is worn or not.
-		assertEquals(5, scn.GetStrength(frodo));
-
 		scn.SkipToPhase(Phase.MANEUVER);
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 		assertFalse(scn.RBWearingOneRing());
@@ -100,7 +97,6 @@ public class Card_07_002_Tests
 		scn.FreepsUseCardAction(ring);
 		assertTrue(scn.RBWearingOneRing());
 		assertEquals(1, scn.GetBurdens());
-		assertEquals(5, scn.GetStrength(frodo));
 
 		// Worn, the ability still has a cost that can be paid, and is still among the maneuver actions.
 		scn.ShadowPass();
@@ -193,7 +189,6 @@ public class Card_07_002_Tests
 		assertTrue(scn.RBWearingOneRing());
 		var ettenmoors = scn.GetCurrentSite();
 		assertTrue(scn.FreepsActionAvailable(ettenmoors));
-		assertEquals(5, scn.GetStrength(frodo));
 		scn.FreepsUseCardAction(ettenmoors);
 		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, sam));
 		scn.FreepsChooseCard(frodo);

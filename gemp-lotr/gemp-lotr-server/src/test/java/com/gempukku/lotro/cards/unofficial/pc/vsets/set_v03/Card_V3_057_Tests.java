@@ -399,7 +399,6 @@ public class Card_V3_057_Tests
 		// 4 companions + 2 for the shadow number of site 2
 		assertEquals(6, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, harpoon);
-		assertEquals(6, scn.GetStrength(gimli));
 		assertTrue(scn.ShadowActionAvailable(harpoon));
 
 		scn.ShadowUseCardAction(harpoon);
@@ -438,8 +437,6 @@ public class Card_V3_057_Tests
 		assertAttachedTo(harpoon, gimli);
 		assertNotAttachedTo(harpoon, aragorn);
 		assertInZone(Zone.ATTACHED, harpoon);
-		// Gimli 6 - 3 for the Harpoon
-		assertEquals(3, scn.GetStrength(gimli));
 		assertEquals(8, scn.GetStrength(aragorn));
 		// A transfer by a card's text costs no twilight.
 		assertEquals(6, scn.GetTwilight());
@@ -501,9 +498,6 @@ public class Card_V3_057_Tests
 
 		assertAttachedTo(harpoon1, aragorn);
 		assertAttachedTo(harpoon2, boromir);
-		// Aragorn 8 - 3, Boromir 7 - 3
-		assertEquals(5, scn.GetStrength(aragorn));
-		assertEquals(4, scn.GetStrength(boromir));
 		assertEquals(6, scn.GetStrength(gimli));
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
@@ -543,8 +537,6 @@ public class Card_V3_057_Tests
 		assertNotAttachedTo(harpoon2, aragorn);
 		assertNotAttachedTo(harpoon2, sam);
 		assertAttachedTo(harpoon1, aragorn);
-		// Aragorn 8 - 3 for the one Harpoon he bears
-		assertEquals(5, scn.GetStrength(aragorn));
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
 

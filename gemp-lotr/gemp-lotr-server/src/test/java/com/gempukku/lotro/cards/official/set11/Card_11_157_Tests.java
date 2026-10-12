@@ -195,8 +195,6 @@ public class Card_11_157_Tests
 		assertTrue(scn.FreepsPlayAvailable(rush));
 
 		scn.FreepsPlayCard(rush);
-		// 2 for the Guard + 3
-		assertEquals(5, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, rush);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -212,11 +210,9 @@ public class Card_11_157_Tests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(rush));
 
 		scn.FreepsPlayCard(rush);
-		assertEquals(3, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, rush);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

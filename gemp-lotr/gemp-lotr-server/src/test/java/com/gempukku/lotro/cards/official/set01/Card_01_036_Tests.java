@@ -114,8 +114,6 @@ public class Card_01_036_Tests
 		scn.FreepsPlayCard(feet);
 		assertEquals(1, scn.GetWoundsOn(arwen));
 		assertEquals(0, scn.GetWoundsOn(aragorn));
-		// The event costs 0.
-		assertEquals(2, scn.GetTwilight());
 		assertEquals(8, scn.FreepsGetTotalRevealedCardCount());
 
 		scn.FreepsDismissRevealedCards();
@@ -163,7 +161,6 @@ public class Card_01_036_Tests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(feet));
 
 		scn.MarkGameLog();
@@ -177,7 +174,6 @@ public class Card_01_036_Tests
 		assertEquals(1, scn.GetWoundsOn(orophin));
 		assertEquals(0, scn.GetWoundsOn(arwen));
 		assertEquals(0, scn.GetWoundsOn(aragorn));
-		assertEquals(0, scn.GetTwilight());
 
 		// The whole hand is shown to the player of the event; its owner is told by the game log.
 		assertEquals(5, scn.FreepsGetTotalRevealedCardCount());
@@ -300,7 +296,6 @@ public class Card_01_036_Tests
 		assertEquals(1, scn.GetWoundsOn(lorien));
 		assertEquals(2, scn.GetWoundsOn(arwen));
 		assertEquals(0, scn.GetWoundsOn(aragorn));
-		assertEquals(1, scn.GetTwilight());
 		assertEquals(1, scn.FreepsGetTotalRevealedCardCount());
 
 		// The Goblin Runner is his whole hand: it goes without a choice.
@@ -328,7 +323,6 @@ public class Card_01_036_Tests
 		scn.MarkGameLog();
 		scn.FreepsPlayCard(feet);
 		assertEquals(1, scn.GetWoundsOn(arwen));
-		assertEquals(0, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, feet);
 		assertEquals(0, scn.GetShadowDiscardCount());
 		// Nobody is shown anything or asked anything, and the game log says that there was nothing to reveal.

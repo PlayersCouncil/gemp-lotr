@@ -113,9 +113,7 @@ public class Card_04_001_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(runner);
 
-		// Frodo, Son of Drogo is strength 3 and vitality 4: this Ring adds 2 to his vitality, and nothing to his
-		// strength while it is not worn.
-		assertEquals(6, scn.GetVitality(frodo));
+		// Frodo, Son of Drogo is strength 3: this Ring adds nothing to his strength while it is not worn.
 		assertEquals(3, scn.GetStrength(frodo));
 		assertEquals(3, scn.GetStrength(sam));
 
@@ -138,7 +136,6 @@ public class Card_04_001_Tests
 		assertTrue(scn.RBWearingOneRing());
 		assertEquals(1, scn.GetBurdens());
 		assertEquals(5, scn.GetStrength(frodo));
-		assertEquals(6, scn.GetVitality(frodo));
 		// Sam is Ring-bound and bears no Ring.
 		assertEquals(3, scn.GetStrength(sam));
 

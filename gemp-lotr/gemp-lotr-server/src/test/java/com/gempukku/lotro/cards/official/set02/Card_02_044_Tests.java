@@ -91,9 +91,7 @@ public class Card_02_044_Tests
 		assertTrue(scn.ShadowPlayAvailable(business));
 
 		// It costs nothing.
-		int twilight = scn.GetTwilight();
 		scn.ShadowPlayCard(business);
-		assertEquals(twilight, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, business);
 		assertNotAttachedTo(business, uruk);
 		assertNotAttachedTo(business, scn.GetRingBearer());

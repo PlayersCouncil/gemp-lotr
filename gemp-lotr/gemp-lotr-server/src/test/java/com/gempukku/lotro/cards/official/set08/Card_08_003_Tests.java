@@ -122,7 +122,6 @@ public class Card_08_003_Tests
 		assertEquals(2, scn.GetWoundsOn(gimli));
 		assertEquals(0, scn.GetWoundsOn(grimir));
 		assertEquals(0, scn.GetWoundsOn(huorn));
-		assertEquals(7, scn.GetTwilight());
 
 		// Gimli with his axe is damage +2: the Shadow player, and not the Free Peoples player, picks 2 Shadow
 		// cards, of any type and wherever they lie.

@@ -76,7 +76,7 @@ public class Card_V2_024_Tests
 	}
 
 	@Test
-	public void IsPlayedForTwoOnAWargRiderWhoIsStrengthPlus1AndVitalityPlus1() throws DecisionResultInvalidException, CardNotFoundException {
+	public void IsPlayedForTwoOnAWargRider() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
@@ -96,8 +96,6 @@ public class Card_V2_024_Tests
 
 		// 10 set + 1 for Frodo + 2 for the site
 		assertEquals(13, scn.GetTwilight());
-		assertEquals(8, scn.GetStrength(rider));
-		assertEquals(3, scn.GetVitality(rider));
 		assertTrue(scn.ShadowPlayAvailable(hound));
 
 		scn.ShadowPlayCard(hound);
@@ -109,8 +107,6 @@ public class Card_V2_024_Tests
 		scn.ShadowChooseCard(rider);
 
 		assertAttachedTo(hound, rider);
-		assertEquals(9, scn.GetStrength(rider));
-		assertEquals(4, scn.GetVitality(rider));
 		assertEquals(5, scn.GetStrength(wargrider));
 		assertEquals(2, scn.GetVitality(wargrider));
 

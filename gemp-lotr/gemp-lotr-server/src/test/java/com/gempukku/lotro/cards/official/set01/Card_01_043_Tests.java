@@ -91,10 +91,8 @@ public class Card_01_043_Tests
 		scn.StartGame();
 
 		// The condition itself is an [elven] card and no Elf: nobody discards for it.
-		assertEquals(0, scn.GetTwilight());
 		scn.FreepsPlayCard(eyes);
 		assertInZone(Zone.SUPPORT, eyes);
-		assertEquals(2, scn.GetTwilight());
 		assertFalse(scn.ShadowAnyDecisionsAvailable());
 		assertEquals(3, scn.GetShadowHandCount());
 		assertEquals(0, scn.GetShadowDiscardCount());

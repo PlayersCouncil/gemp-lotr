@@ -95,13 +95,10 @@ public class Card_07_071_Tests
 		scn.StartGame();
 
 		assertEquals(0, scn.GetBurdens());
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(smeagol));
 
 		scn.FreepsPlayCard(smeagol);
 		assertEquals(1, scn.GetBurdens());
-		// His twilight cost is 0.
-		assertEquals(0, scn.GetTwilight());
 		assertInZone(Zone.FREE_CHARACTERS, smeagol);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

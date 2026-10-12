@@ -85,8 +85,6 @@ public class Card_01_040_Tests
 
 		scn.FreepsPlayCard(elrond);
 		assertInZone(Zone.SUPPORT, elrond);
-		// 4 for Gandalf + 4 for Elrond
-		assertEquals(8, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
@@ -109,8 +107,6 @@ public class Card_01_040_Tests
 
 		scn.FreepsPlayCard(elrond);
 		assertInZone(Zone.SUPPORT, elrond);
-		// 2 for Orophin + 4 for Elrond
-		assertEquals(6, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

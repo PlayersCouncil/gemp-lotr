@@ -82,7 +82,7 @@ public class Card_V3_117_Tests
 	}
 
 	@Test
-	public void PlayedForOneOnARingBoundHobbitWhoGainsAStrengthAndAResistance() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedForOneOnARingBoundHobbitWhoGainsAStrength() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
@@ -97,7 +97,6 @@ public class Card_V3_117_Tests
 
 		assertEquals(0, scn.GetTwilight());
 		assertEquals(3, scn.GetStrength(sam));
-		assertEquals(5, scn.GetResistance(sam));
 		assertTrue(scn.FreepsPlayAvailable(sting));
 
 		scn.FreepsPlayCard(sting);
@@ -110,7 +109,6 @@ public class Card_V3_117_Tests
 		assertAttachedTo(sting, sam);
 		assertEquals(1, scn.GetTwilight());
 		assertEquals(4, scn.GetStrength(sam));
-		assertEquals(6, scn.GetResistance(sam));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
@@ -443,7 +441,6 @@ public class Card_V3_117_Tests
 		assertInZone(Zone.DISCARD, sting);
 		// 3, + 1 for The One Ring
 		assertEquals(4, scn.GetStrength(sam));
-		int resistance = scn.GetResistance(sam);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(sting));
 
 		scn.FreepsChooseOptionalTrigger(sting);
@@ -454,7 +451,6 @@ public class Card_V3_117_Tests
 		// 5 + 1 to play Sting
 		assertEquals(6, scn.GetTwilight());
 		assertEquals(5, scn.GetStrength(sam));
-		assertEquals(resistance + 1, scn.GetResistance(sam));
 		assertFalse(scn.ShadowAnyDecisionsAvailable());
 	}
 

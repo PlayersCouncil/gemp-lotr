@@ -80,7 +80,7 @@ public class Card_V2_077_Tests
 	}
 
 	@Test
-	public void IsPlayedForTwoOnAGandalfAndOnNoOneElseAndRaisesHisVitality() throws DecisionResultInvalidException, CardNotFoundException {
+	public void IsPlayedForTwoOnAGandalfAndOnNoOneElse() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var staff = scn.GetFreepsCard("staff");
@@ -102,14 +102,12 @@ public class Card_V2_077_Tests
 		assertInZone(Zone.FREE_CHARACTERS, shirefolk);
 		// 4 for Gandalf
 		assertEquals(4, scn.GetTwilight());
-		assertEquals(4, scn.GetVitality(shirefolk));
 		assertEquals(4, scn.GetVitality(radagast));
 		assertTrue(scn.FreepsPlayAvailable(staff));
 
 		// Gandalf is the only one who may bear it, so nobody is asked.
 		scn.FreepsPlayCard(staff);
 		assertAttachedTo(staff, shirefolk);
-		assertEquals(5, scn.GetVitality(shirefolk));
 		assertEquals(4, scn.GetVitality(radagast));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}

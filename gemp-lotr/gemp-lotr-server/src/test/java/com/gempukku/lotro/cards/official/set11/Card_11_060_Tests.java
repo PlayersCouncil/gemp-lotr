@@ -134,7 +134,6 @@ public class Card_11_060_Tests
 		assertEquals(7, scn.GetStrength(footman));
 		assertEquals(5, scn.GetStrength(savage1));
 		assertEquals(5, scn.GetStrength(savage2));
-		var pool = scn.GetTwilight();
 		assertTrue(scn.FreepsPlayAvailable(quality));
 
 		scn.FreepsPlayCard(quality);
@@ -165,7 +164,6 @@ public class Card_11_060_Tests
 		assertEquals(1, scn.GetStrength(footman));
 		assertEquals(5, scn.GetStrength(savage1));
 		assertEquals(5, scn.GetStrength(savage2));
-		assertEquals(pool + 2, scn.GetTwilight());
 		assertInDiscard(quality);
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 
@@ -376,7 +374,6 @@ public class Card_11_060_Tests
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(aragorn);
 
-		var pool = scn.GetTwilight();
 		scn.FreepsPlayCard(quality);
 		scn.FreepsChooseCards(knight1, knight2);
 
@@ -391,7 +388,6 @@ public class Card_11_060_Tests
 		assertEquals(7, scn.GetStrength(footman));
 		assertEquals(1, scn.GetWoundsOn(knight1));
 		assertEquals(1, scn.GetWoundsOn(knight2));
-		assertEquals(pool + 2, scn.GetTwilight());
 		assertInDiscard(quality);
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}

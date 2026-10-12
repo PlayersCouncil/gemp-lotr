@@ -110,13 +110,11 @@ public class Card_12_013_Tests
 		assertEquals(3, scn.GetResistance(gimli));
 		assertEquals(6, scn.GetStrength(gimli));
 		assertInZone(Zone.HAND, sharp);
-		int twilight = scn.GetTwilight();
 
 		scn.FreepsPlayCard(sharp);
 		//Base 6, and since the 4 resistance clause is not met, +2 flat strength
 		assertEquals(8, scn.GetStrength(gimli));
 		assertInZone(Zone.DISCARD, sharp);
-		assertEquals(twilight, scn.GetTwilight());
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
 

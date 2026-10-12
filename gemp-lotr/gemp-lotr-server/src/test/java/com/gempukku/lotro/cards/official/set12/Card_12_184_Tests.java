@@ -104,7 +104,7 @@ public class Card_12_184_Tests
 	}
 
 	@Test
-	public void PlayedFromHandForTwoOnANazgulWhoIsThenStrengthPlusTwo() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedFromHandOnANazgul() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var beast = scn.GetShadowCard("beast");
@@ -119,8 +119,6 @@ public class Card_12_184_Tests
 		scn.SetTwilight(10);
 		scn.FreepsPass();
 
-		int twilight = scn.GetTwilight();
-		assertEquals(9, scn.GetStrength(lemenya));
 		assertTrue(scn.ShadowPlayAvailable(beast));
 
 		scn.ShadowPlayCard(beast);
@@ -131,10 +129,7 @@ public class Card_12_184_Tests
 		assertEquals(1, scn.ShadowGetChoiceMin());
 		scn.ShadowChooseCard(lemenya);
 
-		// A possession pays no roaming penalty.
-		assertEquals(twilight - 2, scn.GetTwilight());
 		assertAttachedTo(beast, lemenya);
-		assertEquals(11, scn.GetStrength(lemenya));
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 

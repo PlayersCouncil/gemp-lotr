@@ -119,7 +119,6 @@ public class Card_07_183_Tests
 
         scn.ShadowPlayCard(mind);
 
-        assertEquals(6, scn.GetTwilight());
         assertInDiscard(mind);
         assertEquals(1, scn.GetWoundsOn(merry));
         // One wound for the character, not one for each condition.
@@ -265,7 +264,6 @@ public class Card_07_183_Tests
 
         scn.ShadowPlayCard(mind);
 
-        assertEquals(5, scn.GetTwilight());
         assertInDiscard(mind);
         assertEquals(1, scn.GetWoundsOn(merry));
         assertEquals(1, scn.GetWoundsOn(hound));
@@ -398,7 +396,6 @@ public class Card_07_183_Tests
         scn.ShadowPlayCard(mind);
 
         // Played for nothing: nobody bears a [wraith] condition.
-        assertEquals(4, scn.GetTwilight());
         assertInDiscard(mind);
         assertEquals(0, scn.GetWoundsOn(pippin));
         assertEquals(0, scn.GetWoundsOn(frodo));

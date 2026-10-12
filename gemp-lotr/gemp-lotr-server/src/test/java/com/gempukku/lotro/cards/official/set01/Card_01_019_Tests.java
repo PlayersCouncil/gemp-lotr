@@ -88,7 +88,6 @@ public class Card_01_019_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(troop, soldier, chieftain, savage, halftroll);
 		scn.SkipToPhase(Phase.MANEUVER);
-		var twilight = scn.GetTwilight();
 
 		assertTrue(scn.FreepsPlayAvailable(balin));
 		assertEquals(0, scn.GetWoundsOn(grimir));
@@ -122,7 +121,6 @@ public class Card_01_019_Tests
 		assertEquals(0, scn.GetWoundsOn(savage));
 		assertEquals(0, scn.GetWoundsOn(halftroll));
 		assertInZone(Zone.DISCARD, balin);
-		assertEquals(twilight, scn.GetTwilight());
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 

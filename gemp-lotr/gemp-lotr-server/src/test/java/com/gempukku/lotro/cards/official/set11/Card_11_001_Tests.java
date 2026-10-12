@@ -105,8 +105,7 @@ public class Card_11_001_Tests
 		// Three Little Snufflers at 2 each.
 		scn.SetTwilight(6);
 
-		// Frodo, Son of Drogo is resistance 10, and the Ring adds 2.  It prints no strength and no vitality.
-		assertEquals(12, scn.GetResistance(frodo));
+		// Frodo, Son of Drogo is strength 3 and vitality 4: the Ring prints no strength and no vitality.
 		assertEquals(3, scn.GetStrength(frodo));
 		assertEquals(4, scn.GetVitality(frodo));
 

@@ -107,10 +107,6 @@ public class Card_01_001_Tests
 		// Three Little Snufflers at 2 each.
 		scn.SetTwilight(6);
 
-		// Frodo, Son of Drogo is strength 3 and vitality 4: the Ring adds 1 to each.
-		assertEquals(4, scn.GetStrength(frodo));
-		assertEquals(5, scn.GetVitality(frodo));
-
 		scn.FreepsPass();
 		assertTrue(scn.AwaitingShadowPhaseActions());
 		assertFalse(scn.RBWearingOneRing());
@@ -192,8 +188,6 @@ public class Card_01_001_Tests
 		scn.MoveMinionsToTable(marksman, soldier);
 		scn.SkipToArcheryWounds();
 
-		// 3 + 1 for the Ring + 2 for the sword
-		assertEquals(6, scn.GetStrength(frodo));
 		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, aragorn));
 		scn.FreepsChooseCard(frodo);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());

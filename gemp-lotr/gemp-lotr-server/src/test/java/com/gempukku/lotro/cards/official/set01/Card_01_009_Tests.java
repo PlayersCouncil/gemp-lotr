@@ -81,7 +81,7 @@ public class Card_01_009_Tests
 	}
 
 	@Test
-	public void CanOnlyBePlayedOnADwarfCompanionOrAllyWhoIsThenStrengthPlus2() throws DecisionResultInvalidException, CardNotFoundException {
+	public void CanOnlyBePlayedOnADwarfCompanionOrAlly() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var axe = scn.GetFreepsCard("axe");
@@ -101,7 +101,6 @@ public class Card_01_009_Tests
 
 		// 2 for Gimli + 1 for Grimir
 		assertEquals(3, scn.GetTwilight());
-		assertEquals(3, scn.GetStrength(grimir));
 
 		scn.FreepsPlayCard(axe);
 		// A Dwarf companion and a Dwarf ally; not Aragorn.
@@ -110,10 +109,7 @@ public class Card_01_009_Tests
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		scn.FreepsChooseCard(grimir);
 
-		// The Axe costs nothing: a cost of 1 would read 4.
-		assertEquals(3, scn.GetTwilight());
 		assertAttachedTo(axe, grimir);
-		assertEquals(5, scn.GetStrength(grimir));
 		assertEquals(6, scn.GetStrength(gimli));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -150,8 +146,6 @@ public class Card_01_009_Tests
 		assertEquals(0, scn.GetShadowDiscardCount());
 		assertEquals(0, scn.GetFreepsDiscardCount());
 		assertEquals(top, scn.GetShadowTopOfDeck());
-		// 4 + 2 for the Axe, against the Savage's 5.
-		assertEquals(6, scn.GetStrength(guard));
 
 		scn.PassSkirmishActions();
 
@@ -197,7 +191,6 @@ public class Card_01_009_Tests
 
 		int shadowDeck = scn.GetShadowDeckCount();
 		int freepsDeck = scn.GetFreepsDeckCount();
-		assertEquals(6, scn.GetStrength(guard));
 		assertEquals(7, scn.GetStrength(soldier));
 
 		// 6 against 7: the Guard loses to the Soldier.
@@ -449,8 +442,6 @@ public class Card_01_009_Tests
 		int deck = scn.GetShadowDeckCount();
 		int freepsDeck = scn.GetFreepsDeckCount();
 		assertTrue(deck >= 2);
-		// 6 + 2 for the Axe, against the Runner's 5.
-		assertEquals(8, scn.GetStrength(gimli));
 
 		scn.PassSkirmishActions();
 

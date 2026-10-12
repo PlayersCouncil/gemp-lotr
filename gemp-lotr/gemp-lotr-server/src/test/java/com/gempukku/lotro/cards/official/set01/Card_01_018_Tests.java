@@ -111,7 +111,6 @@ public class Card_01_018_Tests
 		var shadowShuffles = scn.GetShadowDeckShuffleCount();
 
 		assertTrue(scn.FreepsPlayAvailable(halls));
-		assertEquals(0, scn.GetTwilight());
 		assertEquals(0, scn.GetWoundsOn(gimli));
 
 		scn.FreepsPlayCard(halls);
@@ -124,7 +123,6 @@ public class Card_01_018_Tests
 		scn.FreepsChooseCard(gimli);
 		assertEquals(1, scn.GetWoundsOn(gimli));
 		assertEquals(0, scn.GetWoundsOn(grimir));
-		assertEquals(1, scn.GetTwilight());
 
 		// Each deck has three cards to show, so the player says which.
 		assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));

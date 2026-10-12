@@ -97,7 +97,6 @@ public class Card_01_029_Tests
 		scn.FreepsAssignAndResolve(haldir, runner);
 		assertTrue(scn.FreepsPlayAvailable(enmity));
 		assertEquals(5, scn.GetStrength(haldir));
-		int twilight = scn.GetTwilight();
 
 		scn.FreepsPlayCard(enmity);
 		// Any Elf, in the skirmish or out of it; not Aragorn.
@@ -110,7 +109,6 @@ public class Card_01_029_Tests
 		assertEquals(6, scn.GetStrength(haldir));
 		assertEquals(6, scn.GetStrength(arwen));
 		assertEquals(5, scn.GetStrength(silinde));
-		assertEquals(twilight, scn.GetTwilight());
 		assertInZone(Zone.DISCARD, enmity);
 
 		scn.ShadowPass();

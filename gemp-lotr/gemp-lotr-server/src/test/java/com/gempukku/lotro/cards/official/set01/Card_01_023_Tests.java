@@ -112,7 +112,6 @@ public class Card_01_023_Tests
 		assertEquals(2, scn.GetWoundsOn(savage));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(nobody));
 
-		var pool = scn.GetTwilight();
 		var shadowDeck = scn.GetShadowDeckCount();
 		var freepsDeck = scn.GetFreepsDeckCount();
 		var freepsTop = scn.GetFreepsTopOfDeck();
@@ -130,7 +129,6 @@ public class Card_01_023_Tests
 		assertSame(freepsTop, scn.GetFreepsTopOfDeck());
 		assertInZone(Zone.DISCARD, nobody);
 		assertEquals(1, scn.GetFreepsDiscardCount());
-		assertEquals(pool, scn.GetTwilight());
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 

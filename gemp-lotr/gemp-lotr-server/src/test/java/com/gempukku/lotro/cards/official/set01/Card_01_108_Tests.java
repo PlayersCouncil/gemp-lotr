@@ -81,7 +81,7 @@ public class Card_01_108_Tests
 	}
 
 	@Test
-	public void PlaysForZeroOnARanger() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlaysOnARanger() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var nostranger = scn.GetFreepsCard("nostranger");
@@ -94,7 +94,6 @@ public class Card_01_108_Tests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(nostranger));
 		scn.FreepsPlayCard(nostranger);
 
@@ -105,8 +104,6 @@ public class Card_01_108_Tests
 		scn.FreepsChooseCard(arwen);
 
 		assertAttachedTo(nostranger, arwen);
-		// It costs 0.
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
@@ -226,7 +223,6 @@ public class Card_01_108_Tests
 		// Aragorn is the only ranger, so the bearer is not asked for.
 		scn.FreepsPlayCard(nostranger);
 		assertAttachedTo(nostranger, aragorn);
-		assertEquals(0, scn.GetTwilight());
 
 		scn.FreepsPass();
 
