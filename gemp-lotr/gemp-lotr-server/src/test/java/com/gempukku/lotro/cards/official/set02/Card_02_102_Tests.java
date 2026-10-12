@@ -19,7 +19,7 @@ public class Card_02_102_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "2_102");
+					put("frodo", "2_102");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -37,6 +37,20 @@ public class Card_02_102_Tests
 					put("sword2", "1_299");
 					// Sam, Son of Hamfast: the other Hobbit; his texts are used only on purpose.
 					put("sam", "1_311");
+					// Mithril-coat: a [shire] artifact of cost 2.  "Bearer must be Frodo."
+					put("mithril", "2_105");
+					// Elven Cloak: an [elven] possession of cost 1.  "To play, spot an Elf. Bearer must be a companion."
+					put("cloak", "1_42");
+					// Stone Trolls: a [shire] tale, a condition of cost 2.  "To play, spot Bilbo. Plays on any character."
+					put("trolls", "1_314");
+					// Held: a [shire] condition of cost 1 that is no tale.  "Bearer must be Frodo."
+					put("held", "6_109");
+					// Phial of Galadriel, Bane of Darkness: an [elven] artifact of cost 1.  "Bearer must be a Ring-bound Hobbit."
+					put("phial", "103_1");
+					// Legolas, Greenleaf: the Elf the Cloak spots; an archery ability only.
+					put("legolas", "1_50");
+					// Bilbo, Retired Adventurer: the Bilbo Stone Trolls spots, an ally; a fellowship ability used only on purpose.
+					put("bilbo", "1_284");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				"2_102",
@@ -65,7 +79,7 @@ public class Card_02_102_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("frodo");
 
 		assertEquals("Frodo", card.getBlueprint().getTitle());
 		assertEquals("Reluctant Adventurer", card.getBlueprint().getSubtitle());
@@ -78,7 +92,8 @@ public class Card_02_102_Tests
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
 		assertEquals(10, card.getBlueprint().getResistance());
-		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
+		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet());
+		assertTrue(card.getBlueprint().canStartWithRing());
 	}
 
 	@Test
@@ -111,6 +126,59 @@ public class Card_02_102_Tests
 		scn.FreepsPlayCard(sword2);
 		assertAttachedTo(sword2, sam);
 		assertEquals(1, scn.GetTwilight());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void AnArtifactAPossessionOfAnotherCultureAndAShireTaleCostOneLessOnFrodoAndAConditionThatIsNoTaleDoesNot() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetRingBearerScenario();
+
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		var legolas = scn.GetFreepsCard("legolas");
+		var bilbo = scn.GetFreepsCard("bilbo");
+		var mithril = scn.GetFreepsCard("mithril");
+		var cloak = scn.GetFreepsCard("cloak");
+		var trolls = scn.GetFreepsCard("trolls");
+		var held = scn.GetFreepsCard("held");
+		var phial = scn.GetFreepsCard("phial");
+		scn.MoveCompanionsToTable(sam, legolas);
+		scn.MoveAlliesToTable(bilbo);
+		scn.MoveCardsToHand(mithril, cloak, trolls, held, phial);
+
+		scn.StartGame();
+
+		assertEquals(0, scn.GetTwilight());
+		scn.FreepsPlayCard(mithril);
+		assertAttachedTo(mithril, frodo);
+		// 2 for the artifact - 1 on Frodo
+		assertEquals(1, scn.GetTwilight());
+
+		scn.FreepsPlayCard(phial);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, sam));
+		scn.FreepsChooseCard(frodo);
+		assertAttachedTo(phial, frodo);
+		// 1 for an [elven] artifact - 1 on Frodo; a discount for [shire] artifacts alone would leave 2
+		assertEquals(1, scn.GetTwilight());
+
+		scn.FreepsPlayCard(cloak);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, sam, legolas));
+		scn.FreepsChooseCard(frodo);
+		assertAttachedTo(cloak, frodo);
+		// 1 for an [elven] possession - 1 on Frodo
+		assertEquals(1, scn.GetTwilight());
+
+		scn.FreepsPlayCard(trolls);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, sam, bilbo));
+		scn.FreepsChooseCard(frodo);
+		assertAttachedTo(trolls, frodo);
+		// 2 for the [shire] tale - 1 on Frodo
+		assertEquals(2, scn.GetTwilight());
+
+		scn.FreepsPlayCard(held);
+		assertAttachedTo(held, frodo);
+		// A [shire] condition that is no tale: its full 1
+		assertEquals(3, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }
