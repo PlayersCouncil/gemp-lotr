@@ -30,6 +30,11 @@ import static org.junit.Assert.*;
  *
  * What answers a wound taken in these tests is Rank and File, the one Decipher card whose text is set off by a
  * minion taking a wound in any phase; so the wounded are roaming [sauron] minions.
+ *
+ * An exertion places a wound token too, and it is no wound taken: CR 4.2, "exert": "To exert a character, place a
+ * wound token on that character"; "wound" is a separate act.  Nothing that answers a wound taken, or one about to
+ * be taken, answers an exertion.  That is shown once, here (Ketura on Q-0265, 2026-10-12: "A"), and not card by
+ * card; The One Ring 1_1 and 7_2 read it in their own files as well.
  */
 public class AWoundThatIsNotTakenTests
 {
@@ -68,6 +73,13 @@ public class AWoundThatIsNotTakenTests
 					// Gate Trooper: a [sauron] Orc of site 6, strength 5, vitality 2; its text is about being
 					// played.
 					put("trooper", "5_98");
+
+					// Seeking Its Master: a [sauron] condition of the support area.  "Shadow: Exert a [sauron] Orc and
+					// remove (2) to draw a card."
+					put("seeking", "1_276");
+					// Gorgoroth Troop: a [sauron] Orc of site 5, vitality 4; besieger.  Its one ability, a skirmish
+					// ability that stacks a besieger on a controlled site, is never used.
+					put("troop", "7_279");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -240,5 +252,60 @@ public class AWoundThatIsNotTakenTests
 		assertEquals(1, scn.GetCultureTokensOn(rank));
 		assertFalse(scn.ShadowAnyDecisionsAvailable());
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void AnExertionIsNoWoundTakenAndNothingThatAnswersAWoundAnswersIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var defendit = scn.GetFreepsCard("defendit");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToHand(defendit);
+
+		var rank = scn.GetShadowCard("rank");
+		var seeking = scn.GetShadowCard("seeking");
+		var troop = scn.GetShadowCard("troop");
+		var soldier1 = scn.GetShadowCard("soldier1");
+		scn.MoveCardsToSupportArea(rank, seeking);
+		// Two cards: enough to pay for the Soldier's prevention.
+		scn.MoveCardsToHand(scn.GetShadowCard("hand1"), scn.GetShadowCard("hand2"));
+
+		scn.StartGame();
+		// The Troop, a roaming [sauron] besieger with 4 vitality, is the one exerted and then wounded.  The
+		// Soldier's response answers any besieger about to take a wound, Rank and File any roaming [sauron] minion
+		// that takes one.
+		scn.MoveMinionsToTable(troop, soldier1);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertTrue(scn.HasKeyword(troop, Keyword.ROAMING));
+		assertEquals(0, scn.GetWoundsOn(troop));
+
+		// The Troop exerts for Seeking Its Master: a wound token is placed on him.
+		scn.ShadowUseCardAction(seeking);
+		scn.ShadowChooseCard(troop);
+		assertEquals(1, scn.GetWoundsOn(troop));
+		assertEquals(0, scn.GetWoundsOn(soldier1));
+
+		// No wound was about to be taken and none was taken: the Soldier's response is not offered, nor is Rank
+		// and File, and the Shadow player is back at his phase actions.
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(soldier1));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(rank));
+		assertEquals(0, scn.GetCultureTokensOn(rank));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		// The control: a wound to the same Troop is answered by both.
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPlayCard(defendit);
+		scn.FreepsChooseCard(troop);
+		assertEquals(1, scn.GetWoundsOn(troop));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(soldier1));
+		scn.ShadowDeclineOptionalTrigger();
+		assertEquals(2, scn.GetWoundsOn(troop));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(rank));
+		scn.ShadowChooseOptionalTrigger(rank);
+		assertEquals(1, scn.GetCultureTokensOn(rank));
 	}
 }

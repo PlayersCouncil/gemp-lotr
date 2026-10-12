@@ -1294,9 +1294,10 @@ definition gives it another player's `hand:` any more. Storm of Argument 3_6 did
 No Business; it is now written `revealRandomCardsFromHand` (`forced: true`, `hand: shadow`, `count: 1`), as
 Friends of Old 3_16, His First Serious Check 3_33 and Might of Númenor 3_43 write the same sentence. A
 definition met that gives `revealCardsFromHand` a hand that is not the acting player's is a finding. Before two
-cards that do a barred act are called the same check, read which word each is written with
-(`Card_02_044_Tests`). Under the bar the action is still offered and its cost paid; nothing is shown, the hand
-keeps its count, and an X read off the card revealed is 0.
+cards that do a barred act are called the same check, read which word each is written with: one printed card of
+each word is stopped under the bar in `mechanics/ABarOnLookingAtOrRevealingAHandTests` (Q-0264: B2). Under the
+bar the action is still offered and its cost paid; nothing is shown, the hand keeps its count, and an X read off
+the card revealed is 0.
 
 **A look at the top cards of an EMPTY draw deck still shows, with nothing in it.** `LookAtTopCardsOfDrawDeck`
 (Questions That Need Answering 1_81) gives its player "Cards on top of deck" with no card: the count of cards
