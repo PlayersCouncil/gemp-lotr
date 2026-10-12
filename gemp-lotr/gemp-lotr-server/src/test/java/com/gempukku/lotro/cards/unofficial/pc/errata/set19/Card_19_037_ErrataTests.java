@@ -90,31 +90,6 @@ public class Card_19_037_ErrataTests
 	}
 
 	@Test
-	public void PlayedFromHandForFourPlusRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var lemenya = scn.GetShadowCard("lemenya");
-		scn.MoveCardsToHand(lemenya);
-
-		scn.StartGame();
-		scn.SetTwilight(7);
-		scn.SkipToPhase(Phase.SHADOW);
-
-		// 7 set + 1 companion + 2 for site 2
-		assertEquals(10, scn.GetTwilight());
-		assertInZone(Zone.HAND, lemenya);
-		assertTrue(scn.ShadowPlayAvailable(lemenya));
-
-		scn.ShadowPlayCard(lemenya);
-
-		// 4 to play + 2 roaming: his site number is 3 and the fellowship is at site 2
-		assertEquals(4, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, lemenya);
-		assertEquals(9, scn.GetStrength(lemenya));
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void StrengthPlusOneForEachWraithPossessionInHisOwnersDiscardPileAndForNothingElse() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

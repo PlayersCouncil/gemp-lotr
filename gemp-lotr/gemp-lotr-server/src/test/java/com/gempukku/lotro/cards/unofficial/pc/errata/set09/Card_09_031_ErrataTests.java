@@ -89,23 +89,6 @@ public class Card_09_031_ErrataTests
 	}
 
 	@Test
-	public void BoromirIsPlayedFromHandForThree() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var boromir = scn.GetFreepsCard("boromir");
-		scn.MoveCardsToHand(boromir);
-
-		scn.StartGame();
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(boromir));
-
-		scn.FreepsPlayCard(boromir);
-		assertEquals(3, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, boromir);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void AsTheRingBearerBoromirAddsTwoBurdensAtTheStartOfHisOwnSkirmishAndDiscardsTheMinionHeBeats() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetRingBearerScenario();
 

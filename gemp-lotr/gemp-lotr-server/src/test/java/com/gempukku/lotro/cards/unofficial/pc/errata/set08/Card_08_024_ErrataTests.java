@@ -68,29 +68,6 @@ public class Card_08_024_ErrataTests
 	}
 
 	@Test
-	public void ShadowPlaysPromiseKeepingToHisSupportAreaForFour() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var keeping = scn.GetShadowCard("keeping");
-		scn.MoveCardsToHand(keeping);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		assertTrue(scn.AwaitingShadowPhaseActions());
-		int twilight = scn.GetTwilight();
-		assertTrue(scn.ShadowPlayAvailable(keeping));
-
-		scn.ShadowPlayCard(keeping);
-
-		assertEquals(twilight - 4, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, keeping);
-		assertNull(keeping.getAttachedTo());
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void CompanionsWoundedSkirmishingGollumOrShelobEachMakeTheShadowPlayerExertACompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

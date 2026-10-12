@@ -73,29 +73,6 @@ public class Card_V1_006_Tests
 	}
 
 	@Test
-	public void PlaysFromHandToTheSupportAreaForFree() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var bold = scn.GetFreepsCard("bold");
-		scn.MoveCardsToHand(bold);
-
-		scn.StartGame();
-
-		assertInHand(bold);
-		assertEquals(1, scn.GetFreepsHandCount());
-		assertEquals(0, scn.GetTwilight());
-		// Nothing has to be spotted: only Frodo is in play.
-		assertTrue(scn.FreepsPlayAvailable(bold));
-
-		scn.FreepsPlayCard(bold);
-		// Twilight cost 0: the pool is as it was.
-		assertEquals(0, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, bold);
-		assertEquals(0, scn.GetFreepsHandCount());
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void MovingOffersToExertAnyElfWhoCanExertToMakeAnyDwarfDefenderPlus1() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

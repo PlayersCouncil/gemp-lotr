@@ -87,27 +87,6 @@ public class Card_V3_068_Tests
 	}
 
 	@Test
-	public void PlayedFromHandForOneToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var legions = scn.GetShadowCard("legions");
-		scn.MoveCardsToHand(legions);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		// 10 set + 1 companion + 2 for site 2
-		assertEquals(13, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(legions));
-
-		scn.ShadowPlayCard(legions);
-		assertEquals(12, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, legions);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void TheSecondRingwraithOrcPlayedInAShadowPhaseMayHinderAFreePeoplesPossessionAndTheFirstAndThirdMayNot() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

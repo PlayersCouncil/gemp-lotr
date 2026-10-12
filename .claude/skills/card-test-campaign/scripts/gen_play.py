@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
-"""Writes the test of a card's Play clause (P1): the card played from hand by legal play, what it cost and where
-it ended up (the Card Test Standard, "Clause types", `Play`).  Ketura on Q-0220, I: "generate".
+"""Reads whether a card's play from hand is a plain one: nothing in its text or definition bears on it.
 
-    gen_play.py <ids...>            prints, for each card, the test method and its ledger lines, or why the card
-                                    is left to its author
-    gen_play.py <ids...> --write    puts the test into the card's test file, after the stats test, and the P1
-                                    clause and its claim into the card's ledger.  No other test is touched; the
-                                    skeleton's commented-out placeholder, which is this test unwritten, gives way
-                                    to it, and a card the file still calls "card" is given a name
+Since Q-0279: B (engine pass 31) a card's tests have no Play clause and no test that only plays the card: a plain
+play is shown once by mechanics/TwilightPoolTests and WhereACardIsPlayedTests, and a card's play is tested only
+where its own text bears on it, by the test of that clause.  This script no longer writes tests (--write is
+refused).  What it is for now is its reading (`Card.bears_on_play`), which lint's `plain-play` uses to ask for a
+test that plays the card where something bears on its play.  It once wrote P1's test (Ketura on Q-0220, I), and
+what follows describes that test, which it still prints for comparison.
+
+    gen_play.py <ids...>            prints, for each card, the test it would once have written, or why the card's
+                                    play is not plain
     gen_play.py <id> --alias <name> that name, in place of one made from the card's title
     gen_play.py --census [<what...>]
                                     counts, over the cards given (default: every Decipher card), how many it
                                     writes and how many it leaves, by the reason
 
-<ids> are blueprint ids or selectors (1_40, set:1, file:set01-Elven).  Exit status: 0 when every card given was
-written, 3 when any was left to its author, 1 on a mistake in the command.  Read-only without --write.
+<ids> are blueprint ids or selectors (1_40, set:1, file:set01-Elven).  Exit status: 0 when every card given is a
+plain play, 3 when any is not, 1 on a mistake in the command (--write among them).  Read-only.
 
 What the test expects comes from the card's sheet row: its cost, its type and, for a minion, its site number.  A
 card no sheet has (the Hobbit sets) is read from its definition's printed fields, and the output says so.  The
@@ -845,7 +847,11 @@ def main(argv) -> int:
     if not args or "-h" in args or "--help" in args:
         print(__doc__)
         return 0 if args else 1
-    write = "--write" in args
+    if "--write" in args:
+        print("gen_play.py writes no tests since Q-0279: B (engine pass 31): a card's play is tested only where its own "
+              "text bears on it, by the test of that clause, and lint's plain-play asks for it", file=sys.stderr)
+        return 1
+    write = False
     alias = None
     if "--alias" in args:
         at = args.index("--alias")
@@ -898,8 +904,8 @@ def main(argv) -> int:
             print()
             print("\n".join(ledger_lines(card, ledger_state(card)[0])))
         if card.support_sentence and not any(re.match(r"^C\d+\s+Play\s+\[", line) for line in (ledger_state(card)[0] or [])):
-            print(("  - " if write else "// ") + 'the game text has "Plays to your support area.": that sentence is a C clause of '
-                  "type Play, and this test claims its + as well (`     +  ->  %s` under it)" % test_name(card))
+            print(("  - " if write else "// ") + 'the game text has "Plays to your support area.": since Q-0279 that sentence is a '
+                  "C clause of type Keyword, claimed by the stats test (`     K  ->  <the stats test>` under it)")
         if len(ids) > 1:
             print()
     return status

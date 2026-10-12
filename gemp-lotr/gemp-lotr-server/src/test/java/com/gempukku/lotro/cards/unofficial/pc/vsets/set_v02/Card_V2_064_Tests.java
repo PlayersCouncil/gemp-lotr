@@ -104,28 +104,6 @@ public class Card_V2_064_Tests
 	}
 
 	@Test
-	public void IsPlayedFromHandFor2AndTheRoamingPenalty() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var searcher = scn.GetShadowCard("searcher1");
-		scn.MoveCardsToHand(searcher);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		// 10 set + 1 companion + 2 for site 2
-		assertEquals(13, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(searcher));
-
-		scn.ShadowPlayCard(searcher);
-		// 2 to play + 2 roaming: site number 6 at site 2
-		assertEquals(9, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, searcher);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void SiteNumberOfEachSauronOrcIsOneLowerForEachSearcherInPlayAndHisOwnOnlyOnceHeIsInPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

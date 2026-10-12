@@ -74,29 +74,6 @@ public class Card_03_067_ErrataTests
 	}
 
 	@Test
-	public void PlaysToTheSupportAreaForNothingWithNoMinionInPlay() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var palantir = scn.GetShadowCard("palantir");
-		scn.MoveCardsToHand(palantir);
-
-		scn.StartGame();
-		scn.SetTwilight(5);
-		scn.FreepsPass();
-
-		// 5 set + 1 companion + 2 for Ettenmoors
-		assertEquals(8, scn.GetTwilight());
-		assertTrue(scn.AwaitingShadowPhaseActions());
-		assertTrue(scn.ShadowPlayAvailable(palantir));
-
-		scn.ShadowPlayCard(palantir);
-		assertEquals(8, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, palantir);
-		assertNotAttachedTo(palantir, scn.GetRingBearer());
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void ExertsAnIsengardMinionAndMakesItStrongerForEachFreePeoplesCardLeftInTheRevealedHand() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

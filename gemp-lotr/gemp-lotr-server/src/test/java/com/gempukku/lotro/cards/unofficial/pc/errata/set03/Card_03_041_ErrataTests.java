@@ -62,25 +62,6 @@ public class Card_03_041_ErrataTests
 	}
 
 	@Test
-	public void PlayingGondorBowmenAddsOneTwilightAndPutsItInTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var bowmen = scn.GetFreepsCard("bowmen");
-		scn.MoveCardsToHand(bowmen);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(bowmen));
-
-		scn.FreepsPlayCard(bowmen);
-
-		assertInZone(Zone.SUPPORT, bowmen);
-		assertEquals(1, scn.GetTwilight());
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void ArcheryActionExertsAGondorCompanionAndDiscardsThisConditionToMakeTheFellowshipArcheryTotalPlus2() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

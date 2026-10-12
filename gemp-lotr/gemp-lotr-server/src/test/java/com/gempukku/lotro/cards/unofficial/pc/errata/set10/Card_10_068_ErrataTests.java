@@ -77,30 +77,6 @@ public class Card_10_068_ErrataTests
 	}
 
 	@Test
-	public void PlayedFromHandForSixAndTwoMoreForRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var enquea = scn.GetShadowCard("enquea");
-		scn.MoveCardsToHand(enquea);
-
-		scn.StartGame();
-		scn.SetTwilight(7);
-		scn.FreepsPass();
-
-		assertEquals(2, scn.GetCurrentSiteNumber());
-		assertTrue(scn.AwaitingShadowPhaseActions());
-		// 7 set + 1 companion + 2 for the site
-		assertEquals(10, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(enquea));
-
-		scn.ShadowPlayCard(enquea);
-		// 6 to play + 2 roaming: his site number is 3 and this is site 2.
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, enquea);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void ShadowEventExertsAnotherNazgulAndNotEnqueaWhileAnotherMinionSkirmishes() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

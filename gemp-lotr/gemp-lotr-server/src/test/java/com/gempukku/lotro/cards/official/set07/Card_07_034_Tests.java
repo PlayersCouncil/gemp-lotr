@@ -75,25 +75,6 @@ public class Card_07_034_Tests
 	}
 
 	@Test
-	public void IsPlayedForOneToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var echoes = scn.GetFreepsCard("echoes1");
-		scn.MoveCardsToHand(echoes);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(echoes));
-
-		scn.FreepsPlayCard(echoes);
-
-		assertEquals(1, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, echoes);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void WhenGandalfWinsASkirmishHeMayExertToDrawTwoCards() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

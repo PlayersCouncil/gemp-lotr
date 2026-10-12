@@ -76,30 +76,6 @@ public class Card_18_087_Tests
 	}
 
 	@Test
-	public void PlayedFromHandForFourAndTwoMoreWhileRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var breeder = scn.GetShadowCard("breeder");
-		scn.MoveCardsToHand(breeder);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		int twilight = scn.GetTwilight();
-		assertEquals(2, scn.GetCurrentSiteNumber());
-		assertInZone(Zone.HAND, breeder);
-		assertTrue(scn.ShadowPlayAvailable(breeder));
-
-		scn.ShadowPlayCard(breeder);
-
-		// 4 to play + 2 roaming: its site number is 4 and the fellowship is at site 2
-		assertEquals(twilight - 6, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, breeder);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void ShadowAbilityExertsThisMinionToPlayAnUrukHaiHunterFromHandForTwoLess() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

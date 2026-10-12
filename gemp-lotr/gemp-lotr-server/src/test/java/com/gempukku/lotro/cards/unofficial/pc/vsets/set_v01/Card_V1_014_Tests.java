@@ -101,25 +101,6 @@ public class Card_V1_014_Tests
 	}
 
 	@Test
-	public void PlaysFromHandAsACompanionForFourTwilight() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var gandalf = scn.GetFreepsCard("gandalf");
-		scn.MoveCardsToHand(gandalf);
-
-		scn.StartGame();
-
-		assertInHand(gandalf);
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(gandalf));
-
-		scn.FreepsPlayCard(gandalf);
-		assertEquals(4, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, gandalf);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void AtTheStartOfTheFellowshipPhaseExertsGandalfToTakeAGandalfOrElvenEventFromDiscardIntoHand() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

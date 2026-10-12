@@ -75,24 +75,6 @@ public class Card_09_016_ErrataTests
 	}
 
 	@Test
-	public void IsPlayedFromHandForFour() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var glorfindel = scn.GetFreepsCard("glorfindel");
-		scn.MoveCardsToHand(glorfindel);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(glorfindel));
-		scn.FreepsPlayCard(glorfindel);
-
-		assertEquals(4, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, glorfindel);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void RevealsTheTopCardAndExertsToMakeANazgulHeIsSkirmishingWeakerByItsCostUntilHeIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

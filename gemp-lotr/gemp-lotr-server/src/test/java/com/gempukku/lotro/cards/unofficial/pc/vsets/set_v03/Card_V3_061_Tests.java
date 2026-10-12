@@ -73,34 +73,6 @@ public class Card_V3_061_Tests
 	}
 
 	@Test
-	public void PlayedFromHandForSixAndTwoMoreWhileRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var attea = scn.GetShadowCard("attea");
-		scn.MoveCardsToHand(attea);
-
-		scn.StartGame();
-		scn.SetTwilight(5);
-		scn.FreepsPass();
-
-		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
-		// 5 set + 1 for Frodo + 2 for the shadow number of site 2
-		assertEquals(8, scn.GetTwilight());
-		assertInZone(Zone.HAND, attea);
-		assertTrue(scn.ShadowPlayAvailable(attea));
-
-		scn.ShadowPlayCard(attea);
-
-		// 8 - 6 to play - 2 roaming (a site 3 minion played at site 2)
-		assertEquals(0, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, attea);
-		// No burdens: he is as printed.
-		assertEquals(12, scn.GetStrength(attea));
-		assertEquals(0, scn.GetKeywordCount(attea, Keyword.DAMAGE));
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void TheThirdBurdenMakesEachEasterlingStrengthPlusThreeAndNoOtherMinion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

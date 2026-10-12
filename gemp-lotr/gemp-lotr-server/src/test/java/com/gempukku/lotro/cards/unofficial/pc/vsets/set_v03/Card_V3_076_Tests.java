@@ -70,33 +70,6 @@ public class Card_V3_076_Tests
 	}
 
 	@Test
-	public void PlayedFromHandForSixAtSiteTwoWhereSheIsNotRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var nelya = scn.GetShadowCard("nelya");
-		scn.MoveCardsToHand(nelya);
-
-		scn.StartGame();
-		scn.SetTwilight(4);
-		scn.FreepsPass();
-
-		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
-		assertEquals(2, scn.GetCurrentSiteNumber());
-		// 4 set + 1 for Frodo + 2 for the shadow number of site 2
-		assertEquals(7, scn.GetTwilight());
-		assertInZone(Zone.HAND, nelya);
-		assertTrue(scn.ShadowPlayAvailable(nelya));
-
-		scn.ShadowPlayCard(nelya);
-
-		// 7 - 6 to play; a site 2 minion is not roaming at site 2
-		assertEquals(1, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, nelya);
-		assertEquals(11, scn.GetStrength(nelya));
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void SkirmishActionExertsHerToMakeAnyOneNazgulStrengthPlusOneForEachOfHerOwnersSitesOnThePath() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

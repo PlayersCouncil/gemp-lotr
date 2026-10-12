@@ -80,33 +80,6 @@ public class Card_V2_037_Tests
 	}
 
 	@Test
-	public void PlaysFromHandToTheSupportAreaForOneTwilight() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var evil = scn.GetShadowCard("evil1");
-		var runner = scn.GetShadowCard("runner1");
-		scn.MoveCardsToHand(evil);
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(runner);
-		scn.SetTwilight(5);
-		scn.FreepsPass();
-
-		assertTrue(scn.AwaitingShadowPhaseActions());
-		// 5 set + 1 companion + 2 for the site.
-		assertEquals(8, scn.GetTwilight());
-		assertInZone(Zone.HAND, evil);
-		assertTrue(scn.ShadowPlayAvailable(evil));
-
-		scn.ShadowPlayCard(evil);
-		assertEquals(7, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, evil);
-		assertNotAttachedTo(evil, runner);
-		assertEquals(0, scn.GetStackedCards(evil).size());
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void AMoriaMinionThatWinsASkirmishMayBeStackedOnTheCopyWhoseOfferIsTaken() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

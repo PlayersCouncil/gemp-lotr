@@ -66,28 +66,6 @@ public class Card_02_076_ErrataTests
 	}
 
 	@Test
-	public void PlaysFromHandForOneToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var helpless = scn.GetShadowCard("helpless");
-		scn.MoveCardsToHand(helpless);
-
-		scn.StartGame();
-		scn.SetTwilight(5);
-		scn.FreepsPass();
-
-		// 5 set + 1 companion + 2 for Ettenmoors
-		assertEquals(8, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(helpless));
-		scn.ShadowPlayCard(helpless);
-
-		assertEquals(7, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, helpless);
-		assertNull(helpless.getAttachedTo());
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void BearerCannotUseHisFellowshipAbilityOrHisResponse() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

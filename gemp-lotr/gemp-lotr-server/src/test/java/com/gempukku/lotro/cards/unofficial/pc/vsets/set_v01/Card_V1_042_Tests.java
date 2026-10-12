@@ -91,31 +91,6 @@ public class Card_V1_042_Tests
 	}
 
 	@Test
-	public void PlaysFromHandToTheSupportAreaForTwoTwilight() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var walks = scn.GetShadowCard("walks");
-		scn.MoveCardsToHand(walks);
-
-		scn.StartGame();
-		scn.SetTwilight(5);
-		scn.FreepsPass();
-
-		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
-		// 5 set + 1 for Frodo + 2 for the shadow number of site 2
-		assertEquals(8, scn.GetTwilight());
-		assertInZone(Zone.HAND, walks);
-		// Nothing has to be spotted to play it: there is no minion on the table.
-		assertTrue(scn.ShadowPlayAvailable(walks));
-
-		scn.ShadowPlayCard(walks);
-
-		assertInZone(Zone.SUPPORT, walks);
-		assertEquals(6, scn.GetTwilight());
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void ATwilightNazgulWinningLetsAnyTwilightNazgulExertToShuffleARingwraithCardFromDiscardIntoTheDeck() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

@@ -82,29 +82,6 @@ public class Card_V3_098_Tests
 	}
 
 	@Test
-	public void IsPlayedForFiveAndTwoMoreWhileRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var assassin = scn.GetShadowCard("assassin");
-		scn.MoveCardsToHand(assassin);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		// 10 set + 1 companion + 2 for the site
-		assertEquals(13, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(assassin));
-
-		scn.ShadowPlayCard(assassin);
-
-		// 5 + 2 roaming (site 4, at site 2)
-		assertEquals(6, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, assassin);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void IsStrengthPlusOneForEachHinderedCardOfEitherSideAndNoOtherMinionIs() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

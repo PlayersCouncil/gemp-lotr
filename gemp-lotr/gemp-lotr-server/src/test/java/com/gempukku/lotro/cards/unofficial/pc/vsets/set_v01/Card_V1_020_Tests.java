@@ -91,25 +91,6 @@ public class Card_V1_020_Tests
 	}
 
 	@Test
-	public void PlaysFromHandAsACompanionForThreeTwilight() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var boromir = scn.GetFreepsCard("boromir");
-		scn.MoveCardsToHand(boromir);
-
-		scn.StartGame();
-
-		assertInHand(boromir);
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(boromir));
-
-		scn.FreepsPlayCard(boromir);
-		assertEquals(3, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, boromir);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void IsStrengthPlusTwoWhileSkirmishingOneMinionAndNotForAMinionAssignedToAnotherCompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

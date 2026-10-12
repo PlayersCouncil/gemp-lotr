@@ -80,30 +80,6 @@ public class Card_18_118_Tests
 	}
 
 	@Test
-	public void PlayedFromHandForSevenAndTwoMoreWhileRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var lurtz = scn.GetShadowCard("lurtz");
-		scn.MoveCardsToHand(lurtz);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		int twilight = scn.GetTwilight();
-		assertEquals(2, scn.GetCurrentSiteNumber());
-		assertInZone(Zone.HAND, lurtz);
-		assertTrue(scn.ShadowPlayAvailable(lurtz));
-
-		scn.ShadowPlayCard(lurtz);
-
-		// 7 to play + 2 roaming: its site number is 5 and the fellowship is at site 2
-		assertEquals(twilight - 9, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, lurtz);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void ManeuverAbilityMakesLurtzFierceUntilTheRegroupPhaseWhileSixCompanionsCanBeSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

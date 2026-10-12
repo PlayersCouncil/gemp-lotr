@@ -74,30 +74,6 @@ public class Card_13_080_Tests
 	}
 
 	@Test
-	public void PlayedFromHandForThreeToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var radagast = scn.GetShadowCard("radagast");
-		scn.MoveCardsToHand(radagast);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		int twilight = scn.GetTwilight();
-		assertEquals(2, scn.GetCurrentSiteNumber());
-		assertInZone(Zone.HAND, radagast);
-		assertTrue(scn.ShadowPlayAvailable(radagast));
-
-		scn.ShadowPlayCard(radagast);
-
-		assertEquals(twilight - 3, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, radagast);
-		assertNotAttachedTo(radagast, scn.GetRingBearer());
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void AHealedGandalfMakesItAFierceWizardMinionAndAHealedEntDoesNot() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

@@ -76,24 +76,6 @@ public class Card_01_017_ErrataTests
 	}
 
 	@Test
-	public void IsPlayedForOneToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var grimir = scn.GetFreepsCard("grimir");
-		scn.MoveCardsToHand(grimir);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(grimir));
-
-		scn.FreepsPlayCard(grimir);
-		assertEquals(1, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, grimir);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void ExertsGrimirTwiceToPlayADwarvenSkirmishEventFromTheDiscardPileWhichIsThenRemovedFromTheGame() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

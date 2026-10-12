@@ -113,25 +113,6 @@ public class Card_V2_051_Tests
 	}
 
 	@Test
-	public void IsPlayedForOneToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var wrath = scn.GetFreepsCard("wrath");
-		scn.MoveCardsToHand(wrath);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(wrath));
-
-		scn.FreepsPlayCard(wrath);
-		assertEquals(1, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, wrath);
-		assertEquals(0, scn.GetCultureTokensOn(wrath));
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void ARohanAllyKilledAddsATokenAndSoDoesTheRohanItemHeBore() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

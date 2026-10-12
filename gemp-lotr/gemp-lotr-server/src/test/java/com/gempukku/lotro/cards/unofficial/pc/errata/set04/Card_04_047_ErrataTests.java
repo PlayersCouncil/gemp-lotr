@@ -66,24 +66,6 @@ public class Card_04_047_ErrataTests
 	}
 
 	@Test
-	public void PlaysFromHandForNothingToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var armory = scn.GetFreepsCard("armory");
-		scn.MoveCardsToHand(armory);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(armory));
-		scn.FreepsPlayCard(armory);
-
-		assertEquals(0, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, armory);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void ExertingADwarfAndStackingAFreePeoplesCardMakesThatDwarfUnableToTakeWoundsUntilTheEndOfTheSkirmishPhase() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

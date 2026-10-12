@@ -102,30 +102,6 @@ public class Card_11_101_Tests
 	}
 
 	@Test
-	public void PlayedFromHandForThreeAndTwoMoreWhileRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var breelander = scn.GetShadowCard("breelander");
-		scn.MoveCardsToHand(breelander);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		int twilight = scn.GetTwilight();
-		assertEquals(2, scn.GetCurrentSiteNumber());
-		assertInZone(Zone.HAND, breelander);
-		assertTrue(scn.ShadowPlayAvailable(breelander));
-
-		scn.ShadowPlayCard(breelander);
-
-		// 3 to play + 2 roaming: its site number is 4 and the fellowship is at site 2
-		assertEquals(twilight - 5, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, breelander);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void AtTheStartOfTheManeuverPhaseRemovesTwoToTransferAConditionACharacterBearsToAnotherEligibleBearer() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

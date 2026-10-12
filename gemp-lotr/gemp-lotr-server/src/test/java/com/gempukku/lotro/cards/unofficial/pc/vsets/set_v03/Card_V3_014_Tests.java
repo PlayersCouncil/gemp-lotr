@@ -76,35 +76,6 @@ public class Card_V3_014_Tests
 	}
 
 	@Test
-	public void PlayedFromHandForTwoToTheSupportAreaAndOnNobody() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var strands = scn.GetShadowCard("strands");
-		var gollum = scn.GetShadowCard("gollum");
-		var aragorn = scn.GetFreepsCard("aragorn");
-
-		scn.MoveCompanionsToTable(aragorn);
-		scn.MoveCardsToHand(strands);
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(gollum);
-		scn.SetTwilight(3);
-		scn.FreepsPass();
-
-		// 3 set + 2 companions + 2 for site 2
-		assertEquals(7, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(strands));
-
-		scn.ShadowPlayCard(strands);
-		assertEquals(5, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, strands);
-		assertNotAttachedTo(strands, aragorn);
-		assertNotAttachedTo(strands, gollum);
-		assertEquals(8, scn.GetStrength(aragorn));
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void HinderingAGollumCardTransfersItToTheCompanionFightingGollumWhoIsWeakerAtOnceAndWeakerAgainWhenTheSkirmishEnds() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

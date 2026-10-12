@@ -132,26 +132,6 @@ public class Card_01_295_Tests
 	}
 
 	@Test
-	public void IsPlayedFromHandForOneToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var farmer = scn.GetFreepsCard("farmer");
-		scn.MoveCardsToHand(farmer);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(farmer));
-
-		scn.FreepsPlayCard(farmer);
-		assertEquals(1, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, farmer);
-		assertEquals(2, scn.GetStrength(farmer));
-		assertEquals(2, scn.GetVitality(farmer));
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void AtHisOwnersSite1EachFarmerOffersTheSitesActionAsHisOwnAndItDoesWhatTheSitesDoes() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

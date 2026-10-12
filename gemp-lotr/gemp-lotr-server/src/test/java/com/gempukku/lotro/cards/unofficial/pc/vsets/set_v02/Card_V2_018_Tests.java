@@ -77,31 +77,6 @@ public class Card_V2_018_Tests
 	}
 
 	@Test
-	public void IsPlayedFromHandForNothingToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var menu = scn.GetShadowCard("menu");
-		scn.MoveCardsToHand(menu);
-
-		scn.StartGame();
-		scn.SetTwilight(4);
-		scn.FreepsPass();
-
-		assertTrue(scn.AwaitingShadowPhaseActions());
-		// 4 set + 1 companion + 2 for the site.
-		assertEquals(7, scn.GetTwilight());
-		assertInZone(Zone.HAND, menu);
-		assertTrue(scn.ShadowPlayAvailable(menu));
-
-		scn.ShadowPlayCard(menu);
-		// A cost of 0, and a condition has no roaming penalty.
-		assertEquals(7, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, menu);
-		assertNull(menu.getAttachedTo());
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void SkirmishActionDiscardsASauronTrackerToMakeAnIsengardTrackerStrengthPlus2ForThatSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

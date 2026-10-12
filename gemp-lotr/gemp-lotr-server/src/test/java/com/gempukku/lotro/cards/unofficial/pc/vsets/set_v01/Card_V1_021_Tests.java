@@ -98,25 +98,6 @@ public class Card_V1_021_Tests
 	}
 
 	@Test
-	public void PlaysFromHandToTheSupportAreaForTwoTwilight() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var sons = scn.GetFreepsCard("sons");
-		scn.MoveCardsToHand(sons);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertInHand(sons);
-		assertTrue(scn.FreepsPlayAvailable(sons));
-
-		scn.FreepsPlayCard(sons);
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, sons);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void AragornIsStrengthPlus3WhileBoromirIsAssignedToTwoMinionsAndBoromirIsNotRaisedByAragornsOne() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

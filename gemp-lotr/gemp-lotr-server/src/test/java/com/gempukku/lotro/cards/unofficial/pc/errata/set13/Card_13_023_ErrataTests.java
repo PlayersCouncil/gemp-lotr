@@ -78,24 +78,6 @@ public class Card_13_023_ErrataTests
 	}
 
 	@Test
-	public void PlayedFromHandForTwoAsACompanion() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var elf = scn.GetFreepsCard("elf");
-		scn.MoveCardsToHand(elf);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(elf));
-		scn.FreepsPlayCard(elf);
-
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, elf);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void AnEventPlayedInTheElfsSkirmishGoesToTheDiscardPileUnlessTheElfExertsToPlaceItOnTopOfTheDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

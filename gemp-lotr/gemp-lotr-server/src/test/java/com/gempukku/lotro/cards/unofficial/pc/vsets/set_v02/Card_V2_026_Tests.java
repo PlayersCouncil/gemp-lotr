@@ -77,27 +77,6 @@ public class Card_V2_026_Tests
 	}
 
 	@Test
-	public void IsPlayedFromHandForTwoAndTwoMoreForRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var grunt = scn.GetShadowCard("grunt1");
-		scn.MoveCardsToHand(grunt);
-
-		scn.StartGame();
-		scn.SetTwilight(1);
-		scn.FreepsPass();
-
-		// 1 set + 1 for Frodo + 2 for the site: exactly the 2 to play and the 2 for roaming at site 2
-		assertEquals(4, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(grunt));
-
-		scn.ShadowPlayCard(grunt);
-		assertEquals(0, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, grunt);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void ExertsThisGruntSoThatAnIsengardOrcOneShortOfTripledIsWoundedAndNotOverwhelmed() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

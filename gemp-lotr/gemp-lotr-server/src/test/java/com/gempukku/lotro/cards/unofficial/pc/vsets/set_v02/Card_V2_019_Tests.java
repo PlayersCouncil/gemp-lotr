@@ -94,30 +94,6 @@ public class Card_V2_019_Tests
 	}
 
 	@Test
-	public void IsPlayedFromHandForFivePlusTheRoamingPenalty() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var deathseeker = scn.GetShadowCard("deathseeker");
-		scn.MoveCardsToHand(deathseeker);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		assertTrue(scn.AwaitingShadowPhaseActions());
-		// 10 set + 1 companion + 2 for the site.
-		assertEquals(13, scn.GetTwilight());
-		assertInZone(Zone.HAND, deathseeker);
-		assertTrue(scn.ShadowPlayAvailable(deathseeker));
-
-		scn.ShadowPlayCard(deathseeker);
-		// 5 to play + 2 roaming: its site number is 5 and the fellowship is at site 2.
-		assertEquals(13 - 7, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, deathseeker);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void GrowsStrongerAsTheCompanionItIsFightingExerts() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

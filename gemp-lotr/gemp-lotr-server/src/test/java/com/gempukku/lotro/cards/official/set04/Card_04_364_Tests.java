@@ -121,24 +121,6 @@ public class Card_04_364_Tests
 	}
 
 	@Test
-	public void PlaysFromHandForFour() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCardsToHand(aragorn);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(aragorn));
-
-		scn.FreepsPlayCard(aragorn);
-		assertEquals(4, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, aragorn);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void MovingWoundsOneMinionPerUnboundHobbitSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

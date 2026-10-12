@@ -72,30 +72,6 @@ public class Card_V3_081_Tests
 	}
 
 	@Test
-	public void PlayedFromHandForFourPlusRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var winged1 = scn.GetShadowCard("winged1");
-		scn.MoveCardsToHand(winged1);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		// 10 set + 1 for Frodo + 2 for the shadow number of site 2
-		assertEquals(13, scn.GetTwilight());
-		assertInZone(Zone.HAND, winged1);
-		assertTrue(scn.ShadowPlayAvailable(winged1));
-
-		scn.ShadowPlayCard(winged1);
-
-		assertInZone(Zone.SHADOW_CHARACTERS, winged1);
-		// 13 - 4 to play - 2 roaming (a site 4 minion played at site 2)
-		assertEquals(7, scn.GetTwilight());
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void ReturnsTheOtherWingedNazgulToHandAndAssignsThisOneToTheChosenUnboundCompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

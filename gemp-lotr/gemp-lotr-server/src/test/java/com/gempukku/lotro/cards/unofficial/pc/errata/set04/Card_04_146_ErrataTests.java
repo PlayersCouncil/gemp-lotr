@@ -102,24 +102,6 @@ public class Card_04_146_ErrataTests
 	}
 
 	@Test
-	public void PlaysToTheSupportAreaForNothing() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var comedown = scn.GetShadowCard("comedown");
-		scn.MoveCardsToHand(comedown);
-
-		scn.StartGame();
-		scn.FreepsPass();
-
-		assertTrue(scn.ShadowPlayAvailable(comedown));
-		int twilight = scn.GetTwilight();
-		scn.ShadowPlayCard(comedown);
-		assertEquals(twilight, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, comedown);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void ManeuverSpotsAFortificationAndTheFreePeoplesPlayerPlacesTwoWoundsAmongIsengardMinionsForACostOfOne() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

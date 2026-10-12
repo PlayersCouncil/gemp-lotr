@@ -85,24 +85,6 @@ public class Card_07_091_ErrataTests
 	}
 
 	@Test
-	public void FaramirIsPlayedFromHandForThree() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var faramir = scn.GetFreepsCard("faramir");
-		scn.MoveCardsToHand(faramir);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(faramir));
-
-		scn.FreepsPlayCard(faramir);
-		assertEquals(3, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, faramir);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void FellowshipPlaysARohanManFromHandToHealFaramir() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

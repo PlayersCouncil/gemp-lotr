@@ -74,25 +74,6 @@ public class Card_02_001_ErrataTests
 	}
 
 	@Test
-	public void PlaysFromHandForOneToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("mountains");
-		scn.MoveCardsToHand(card);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(card));
-
-		scn.FreepsPlayCard(card);
-
-		assertEquals(1, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, card);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void DiscardingTheTopThreeCardsPlaysADwarvenWeaponFromDiscardPileOnADwarf() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

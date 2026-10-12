@@ -106,28 +106,6 @@ public class Card_04_154_ErrataTests
 	}
 
 	@Test
-	public void PlayedForTwoPlusRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var grima = scn.GetShadowCard("grima");
-		scn.MoveCardsToHand(grima);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		// 10 set + 1 companion + 2 for Ettenmoors
-		assertEquals(13, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(grima));
-
-		scn.ShadowPlayCard(grima);
-		// 2 to play + 2 roaming (site 3 minion at site 2)
-		assertEquals(9, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, grima);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void ManeuverAbilityExertsGrimaToHinderAWeaponBorneByAnUnboundCompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

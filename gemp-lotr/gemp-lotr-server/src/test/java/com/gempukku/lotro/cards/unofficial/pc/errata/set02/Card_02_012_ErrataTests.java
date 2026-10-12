@@ -106,26 +106,6 @@ public class Card_02_012_ErrataTests
 	}
 
 	@Test
-	public void PlaysFromHandForOneToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var realm = scn.GetFreepsCard("realm");
-		scn.MoveCardsToHand(realm);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(realm));
-
-		scn.FreepsPlayCard(realm);
-
-		assertEquals(1, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, realm);
-		assertNull(realm.getAttachedTo());
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void DiscardingTheTopThreeCardsMakesADwarfStrengthPlusOneAndNotDamagePlusOneAwayFromUnderground() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

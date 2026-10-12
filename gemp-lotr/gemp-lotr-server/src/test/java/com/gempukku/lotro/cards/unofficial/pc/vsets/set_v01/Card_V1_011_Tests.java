@@ -99,26 +99,6 @@ public class Card_V1_011_Tests
 	}
 
 	@Test
-	public void PlaysFromHandToTheSupportAreaForThreeTwilight() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var library = scn.GetFreepsCard("library");
-		scn.MoveCardsToHand(library);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertInZone(Zone.HAND, library);
-		assertTrue(scn.FreepsPlayAvailable(library));
-
-		scn.FreepsPlayCard(library);
-
-		assertEquals(3, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, library);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void FellowshipActionStacksATaleOrAnArtifactFromPlayOrFromHandAndDrawsACardEachTime() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

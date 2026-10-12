@@ -95,27 +95,6 @@ public class Card_V2_027_Tests
 	}
 
 	@Test
-	public void IsPlayedFromHandForEightAndTwoMoreForRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var legion = scn.GetShadowCard("legion");
-		scn.MoveCardsToHand(legion);
-
-		scn.StartGame();
-		scn.SetTwilight(7);
-		scn.FreepsPass();
-
-		// 7 set + 1 for Frodo + 2 for the site: exactly the 8 to play and the 2 for roaming at site 2
-		assertEquals(10, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(legion));
-
-		scn.ShadowPlayCard(legion);
-		assertEquals(0, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, legion);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void IsDamagePlus2OnlyOnceASiteItsOwnerControlsIsABattleground() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

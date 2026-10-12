@@ -100,30 +100,6 @@ public class Card_V2_020_Tests
 	}
 
 	@Test
-	public void IsPlayedFromHandForThreePlusTheRoamingPenalty() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var fanatic = scn.GetShadowCard("fanatic1");
-		scn.MoveCardsToHand(fanatic);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		assertTrue(scn.AwaitingShadowPhaseActions());
-		// 10 set + 1 companion + 2 for the site.
-		assertEquals(13, scn.GetTwilight());
-		assertInZone(Zone.HAND, fanatic);
-		assertTrue(scn.ShadowPlayAvailable(fanatic));
-
-		scn.ShadowPlayCard(fanatic);
-		// 3 to play + 2 roaming: its site number is 5 and the fellowship is at site 2.
-		assertEquals(13 - 5, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, fanatic);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void GrowsStrongerAsTheCompanionItIsFightingExerts() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

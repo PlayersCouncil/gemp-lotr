@@ -68,25 +68,6 @@ public class Card_01_070_ErrataTests
 	}
 
 	@Test
-	public void PlaysForOneToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var barliman = scn.GetFreepsCard("barliman");
-		scn.MoveCardsToHand(barliman);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(barliman));
-
-		scn.FreepsPlayCard(barliman);
-
-		assertEquals(1, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, barliman);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void FellowshipActionExertsBarlimanToTakeASpellFromYourDiscardPileIntoHand() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

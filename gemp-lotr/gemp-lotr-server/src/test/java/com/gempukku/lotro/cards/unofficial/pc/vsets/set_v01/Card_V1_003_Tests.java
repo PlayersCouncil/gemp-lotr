@@ -87,25 +87,6 @@ public class Card_V1_003_Tests
 	}
 
 	@Test
-	public void PlaysFromHandAsACompanionForTwoTwilight() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var gimli = scn.GetFreepsCard("gimli");
-		scn.MoveCardsToHand(gimli);
-
-		scn.StartGame();
-
-		assertInHand(gimli);
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(gimli));
-
-		scn.FreepsPlayCard(gimli);
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, gimli);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void SecondItemMakesGimliDamagePlusOneAndThirdItemStrengthPlusTwo() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

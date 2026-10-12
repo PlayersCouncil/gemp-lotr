@@ -71,24 +71,6 @@ public class Card_03_013_ErrataTests
 	}
 
 	@Test
-	public void IsPlayedFromHandForFourToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var elrond = scn.GetFreepsCard("elrond");
-		scn.MoveCardsToHand(elrond);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(elrond));
-
-		scn.FreepsPlayCard(elrond);
-		assertEquals(4, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, elrond);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void AtTheStartOfTurnHealsAChosenAllyOfSite3TwiceAndAddsTwo() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

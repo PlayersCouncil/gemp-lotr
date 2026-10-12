@@ -77,24 +77,6 @@ public class Card_08_048_ErrataTests
 	}
 
 	@Test
-	public void PlaysFromHandForNothingToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var swept = scn.GetFreepsCard("swept");
-		scn.MoveCardsToHand(swept);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(swept));
-		scn.FreepsPlayCard(swept);
-
-		assertEquals(0, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, swept);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void EachMoveOfTheFellowshipAddsAThreatWhenThatIsChosenAndAsksAgainOnTheRegroupMove() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

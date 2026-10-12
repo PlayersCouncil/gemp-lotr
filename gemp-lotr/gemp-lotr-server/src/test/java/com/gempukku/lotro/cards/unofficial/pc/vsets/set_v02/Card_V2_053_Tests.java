@@ -82,25 +82,6 @@ public class Card_V2_053_Tests
 	}
 
 	@Test
-	public void PlayedForTwoToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var dawn = scn.GetFreepsCard("dawn");
-		scn.MoveCardsToHand(dawn);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(dawn));
-
-		scn.FreepsPlayCard(dawn);
-
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, dawn);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void IsNotOfferedUntilAThirdValiantCompanionCanBeSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

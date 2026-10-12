@@ -78,28 +78,6 @@ public class Card_V3_012_Tests
 	}
 
 	@Test
-	public void PlayedForTwoToTheSupportAreaWithNoShelobInPlay() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var pass = scn.GetShadowCard("pass");
-		scn.MoveCardsToHand(pass);
-
-		scn.StartGame();
-		scn.SetTwilight(5);
-		scn.FreepsPass();
-
-		// 5 set + 1 companion + 2 for the site
-		assertEquals(8, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(pass));
-
-		scn.ShadowPlayCard(pass);
-
-		assertEquals(6, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, pass);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void DiscardsAMinionStackedHereToHinderTheConditionWhoseAbilityWasUsedAndHealShelob() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

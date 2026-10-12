@@ -110,33 +110,6 @@ public class Card_V1_036_Tests
 	}
 
 	@Test
-	public void PlaysFromHandForTwoTwilightAndTwoMoreForRoamingAndStaysInPlayAwayFromAMarsh() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var vile = scn.GetShadowCard("vile");
-		scn.MoveCardsToHand(vile);
-
-		scn.StartGame();
-		scn.SetTwilight(2);
-		scn.FreepsPass();
-
-		assertFalse(scn.HasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
-		// 2 set + 1 companion + 2 for Ettenmoors
-		assertEquals(5, scn.GetTwilight());
-		assertInZone(Zone.HAND, vile);
-		assertTrue(scn.ShadowPlayAvailable(vile));
-
-		scn.ShadowPlayCard(vile);
-
-		// 2 to play + 2 roaming: its site number is 4 and this is site 2
-		assertEquals(1, scn.GetTwilight());
-		// Unlike the other tentacles, it is not discarded for being away from a marsh.
-		assertInZone(Zone.SHADOW_CHARACTERS, vile);
-		assertEquals(0, scn.GetShadowDiscardCount());
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void IsStrengthSevenAtAMarshAndFourLessAtTheSitesBeforeAndAfterIt() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetMarshScenario();
 
@@ -173,6 +146,8 @@ public class Card_V1_036_Tests
 		assertEquals(3, scn.GetCurrentSiteNumber());
 		assertFalse(scn.HasKeyword(scn.GetCurrentSite(), Keyword.MARSH));
 		assertInZone(Zone.SHADOW_CHARACTERS, vile, vile2, troop);
+		// Unlike the other tentacles, it is not discarded for being away from a marsh.
+		assertEquals(0, scn.GetShadowDiscardCount());
 		assertEquals(3, scn.GetStrength(vile));
 		assertEquals(3, scn.GetStrength(vile2));
 		assertEquals(13, scn.GetStrength(troop));

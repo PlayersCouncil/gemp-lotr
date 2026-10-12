@@ -73,27 +73,6 @@ public class Card_V2_040_Tests
 	}
 
 	@Test
-	public void IsPlayedForNothingToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var fire = scn.GetShadowCard("fire");
-		scn.MoveCardsToHand(fire);
-
-		scn.StartGame();
-		scn.FreepsPass();
-
-		// 1 for Frodo + 2 for the site
-		assertEquals(3, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(fire));
-
-		scn.ShadowPlayCard(fire);
-
-		assertEquals(3, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, fire);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void AUniqueMoriaMinionWinningLetsTheShadowPlayerRemoveAThreatToExertACompanionOfHisChoice() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

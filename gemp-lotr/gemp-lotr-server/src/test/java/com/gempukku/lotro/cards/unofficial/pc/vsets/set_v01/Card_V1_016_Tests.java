@@ -84,28 +84,6 @@ public class Card_V1_016_Tests
 	}
 
 	@Test
-	public void PlaysFromHandToTheSupportAreaForOneTwilight() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var myheart = scn.GetFreepsCard("myheart");
-		scn.MoveCardsToHand(myheart);
-
-		scn.StartGame();
-
-		assertInHand(myheart);
-		assertEquals(1, scn.GetFreepsHandCount());
-		assertEquals(0, scn.GetTwilight());
-		// Gandalf is not in play: he is spotted when the card is used, not when it is played.
-		assertTrue(scn.FreepsPlayAvailable(myheart));
-
-		scn.FreepsPlayCard(myheart);
-		assertEquals(1, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, myheart);
-		assertEquals(0, scn.GetFreepsHandCount());
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void PreventsTheWoundOfAMinionThatLosesASkirmishAndHealsAChosenCompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

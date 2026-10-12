@@ -73,28 +73,6 @@ public class Card_08_051_ErrataTests
 	}
 
 	@Test
-	public void PlaysFromHandForItsCostPlusRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var castamir = scn.GetShadowCard("castamir");
-		scn.MoveCardsToHand(castamir);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		// 10 + 2 for site 2 + 1 for the one companion.
-		assertEquals(13, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(castamir));
-		scn.ShadowPlayCard(castamir);
-
-		// 7 to play + 2 roaming (site 4 minion at site 2).
-		assertEquals(4, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, castamir);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void IsFierceInRegionsTwoAndThreeAndNotInRegionOne() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

@@ -88,23 +88,6 @@ public class Card_09_004_ErrataTests
 	}
 
 	@Test
-	public void GimliIsPlayedFromHandForTwo() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var gimli = scn.GetFreepsCard("gimli");
-		scn.MoveCardsToHand(gimli);
-
-		scn.StartGame();
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(gimli));
-
-		scn.FreepsPlayCard(gimli);
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, gimli);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void AsRingBearerAtTheStartOfHisSkirmishGimliMayAdd2Burdens() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetRingBearerScenario();
 

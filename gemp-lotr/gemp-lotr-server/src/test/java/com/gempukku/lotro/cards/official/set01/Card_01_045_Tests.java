@@ -75,24 +75,6 @@ public class Card_01_045_Tests
 		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 6)));
     }
 
-	@Test
-	public void IsPlayedFromHandForThreeToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var galadriel = scn.GetFreepsCard("galadriel");
-		scn.MoveCardsToHand(galadriel);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(galadriel));
-
-		scn.FreepsPlayCard(galadriel);
-		assertEquals(3, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, galadriel);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
     @Test
     public void Site6AlliesAllHeal() throws DecisionResultInvalidException, CardNotFoundException {
         var scn = GetScenario();

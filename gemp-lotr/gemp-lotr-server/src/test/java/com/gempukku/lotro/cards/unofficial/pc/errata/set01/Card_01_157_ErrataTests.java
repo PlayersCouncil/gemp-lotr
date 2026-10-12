@@ -79,27 +79,6 @@ public class Card_01_157_ErrataTests
 	}
 
 	@Test
-	public void PlayedFromHandForOneToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var armory = scn.GetShadowCard("armory1");
-		scn.MoveCardsToHand(armory);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		assertTrue(scn.ShadowPlayAvailable(armory));
-		int twilight = scn.GetTwilight();
-
-		scn.ShadowPlayCard(armory);
-		assertEquals(twilight - 1, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, armory);
-		assertNull(armory.getAttachedTo());
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void FellowshipArcheryTotalIsMinusOneOnceAnUrukHaiIsPlayedAndNotForAnIsengardOrc() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

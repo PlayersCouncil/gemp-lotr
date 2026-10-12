@@ -73,28 +73,6 @@ public class Card_04_192_ErrataTests
 	}
 
 	@Test
-	public void PlayedForThreePlusRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var regular = scn.GetShadowCard("regular");
-		scn.MoveCardsToHand(regular);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		// 10 set + 1 companion + 2 for Ettenmoors
-		assertEquals(13, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(regular));
-
-		scn.ShadowPlayCard(regular);
-		// 3 to play + 2 roaming (site 5 minion at site 2)
-		assertEquals(8, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, regular);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void ShadowAbilityExertsThisMinionToPlayAnUrukHaiFromHand() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

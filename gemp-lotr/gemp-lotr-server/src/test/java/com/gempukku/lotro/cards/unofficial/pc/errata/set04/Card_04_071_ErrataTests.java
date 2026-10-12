@@ -67,23 +67,6 @@ public class Card_04_071_ErrataTests
 	}
 
 	@Test
-	public void PlaysForTwo() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var haldir = scn.GetFreepsCard("haldir");
-		scn.MoveCardsToHand(haldir);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(haldir));
-		scn.FreepsPlayCard(haldir);
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, haldir);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void StrengthPlusTwoWhileNoOpponentControlsASite() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

@@ -66,32 +66,6 @@ public class Card_01_059_ErrataTests
 	}
 
 	@Test
-	public void IsPlayedFromHandForOneToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var sts = scn.GetFreepsCard("sts");
-		var gimli = scn.GetFreepsCard("gimli");
-		var legolas = scn.GetFreepsCard("legolas");
-		scn.MoveCompanionsToTable(gimli, legolas);
-		scn.MoveCardsToHand(sts);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertInZone(Zone.HAND, sts);
-		assertTrue(scn.FreepsPlayAvailable(sts));
-		assertFalse(scn.FreepsActionAvailable(sts));
-
-		scn.FreepsPlayCard(sts);
-		assertEquals(1, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, sts);
-		assertNotAttachedTo(sts, gimli);
-		assertNotAttachedTo(sts, legolas);
-		assertTrue(scn.FreepsActionAvailable(sts));
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void ExertingADwarfAddsOneAndHealsAnElfOfThePlayersChoice() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

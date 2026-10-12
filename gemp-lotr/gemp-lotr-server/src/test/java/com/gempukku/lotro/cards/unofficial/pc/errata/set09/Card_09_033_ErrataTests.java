@@ -103,23 +103,6 @@ public class Card_09_033_ErrataTests
 	}
 
 	@Test
-	public void IsildurIsPlayedFromHandForThree() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var isildur = scn.GetFreepsCard("isildur");
-		scn.MoveCardsToHand(isildur);
-
-		scn.StartGame();
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(isildur));
-
-		scn.FreepsPlayCard(isildur);
-		assertEquals(3, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, isildur);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void AsTheRingBearerIsildurAddsTwoBurdensAtTheStartOfHisOwnSkirmishAndOfNoOther() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetRingBearerScenario();
 

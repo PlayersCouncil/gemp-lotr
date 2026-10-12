@@ -99,28 +99,6 @@ public class Card_V2_063_Tests
 	}
 
 	@Test
-	public void IsPlayedFromHandFor3AndTheRoamingPenalty() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var lugburz = scn.GetShadowCard("lugburz");
-		scn.MoveCardsToHand(lugburz);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		// 10 set + 1 companion + 2 for site 2
-		assertEquals(13, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(lugburz));
-
-		scn.ShadowPlayCard(lugburz);
-		// 3 to play + 2 roaming: site number 6 at site 2
-		assertEquals(8, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, lugburz);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void SauronOrcsAtSiteNumber1OrLessCannotBeChosenForAWoundInTheManeuverPhaseWhileOrcOfLugburzIsInPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

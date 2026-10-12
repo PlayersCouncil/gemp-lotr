@@ -63,8 +63,9 @@ So the order matters and is not a formality.
 side by side: printed in one step the packets overrun the output limit and the middle of them is cut out) and
 from that alone write the card's ledger file: the clauses, their types, the checks each one's wording calls
 for (the claim lines come later, when the tests exist). Then, for each check, write one line: the situation, and
-what the text and rules say happens (none for `P1`: stage 2 begins by having its test generated, and where the
-generator leaves the card, `P1` rides on the test of the clause that got in its way). Save this as `/tmp/<your folder name>/<id>.plan.md` before going on. Do not open the card's `.hjson` file or its existing test
+what the text and rules say happens. A card's play has no clause of its own (Q-0279: B): it is tested only where
+the card's text bears on it (a bearer, a requirement or an extra cost to play, a cost its text changes, a card that
+answers its own play), by the test of that clause, which plays the card from hand. Save this as `/tmp/<your folder name>/<id>.plan.md` before going on. Do not open the card's `.hjson` file or its existing test
 file during this stage. If the text leaves a real doubt about what should happen, write the doubt down as a
 question with both readings; do not settle it by guessing, and do not settle it in stage 2 by seeing what the game
 does.
@@ -95,20 +96,12 @@ says so, read the test file itself for the rest. An entry the packet heads "A ru
 card" is that card's ruling: where its ledger already holds it as an `R` clause (5_60's `R1`, for 8_3), cite it
 under `Sources:` and do not test it again.
 
-Before writing any test, have the Play clause's test written for you (Ketura on Q-0220: the tests of that clause
-have never had a finding beside them, and are generated):
-
-    python3 .claude/skills/card-test-campaign/scripts/gen_play.py <ids> --write
-
-For each card whose play is a plain one it puts `PlayedFromHandFor...` into the test file after the stats test
-and the claim under the ledger's `P1` (and under a "Plays to your support area." clause typed `Play`); in a file
-that is still the skeleton it also gives the card a name in place of "card" (`--alias <name>` chooses it, one card
-at a time) and takes out the commented-out placeholder, which was this test unwritten. Leave that test as it is
-written, and plan no board for `P1`. For every other card it prints why it left the card to you (a bearer, a
-requirement or an extra cost to play, a cost its text changes, a card that answers its own play, a Frodo beside
-Frodo): there you write `P1`'s test by hand as before, which is nearly always the test of the clause it names,
-claiming `P1` too. If a generated test fails, do not mend it: report it as a finding, or as a card the generator
-should have left. It refuses a card whose ledger already gives `P1` to a test, and never writes over a test.
+No test only plays the card, and the ledger has no `P1` (Q-0279: B, engine pass 31): a plain play is shown once by
+`mechanics/TwilightPoolTests` and `WhereACardIsPlayedTests`, and `gen_play.py` writes no tests. Where the card's
+definition or text bears on its play, lint's `plain-play` names it and asks for a test that plays the card from hand:
+that is the test of the clause it names. A "Plays to your support area." sentence is a `Keyword [K]` clause claimed
+by the stats test. A skeleton's commented-out placeholder that only plays the card is taken out (`Dropped:` says it
+was a plain play).
 
 If the card already has behavioural tests, go
 through them one by one against your plan: each either claims one of your checks (keep it, adapted to the

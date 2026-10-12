@@ -84,36 +84,6 @@ public class Card_V3_057_Tests
 	}
 
 	@Test
-	public void IsPlayedForTwoToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionsToTable(aragorn);
-
-		var harpoon = scn.GetShadowCard("harpoon1");
-		scn.MoveCardsToHand(harpoon);
-
-		scn.StartGame();
-		scn.SetTwilight(1);
-		scn.FreepsPass();
-
-		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
-		// 1 set + 2 companions + 2 for the shadow number of site 2
-		assertEquals(5, scn.GetTwilight());
-		assertInZone(Zone.HAND, harpoon);
-		assertTrue(scn.ShadowPlayAvailable(harpoon));
-
-		scn.ShadowPlayCard(harpoon);
-
-		assertEquals(3, scn.GetTwilight());
-		// It goes to the support area with no bearer chosen, and weakens nobody there.
-		assertInZone(Zone.SUPPORT, harpoon);
-		assertNotAttachedTo(harpoon, aragorn);
-		assertEquals(8, scn.GetStrength(aragorn));
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void WhenTheFellowshipMovesTheFreePeoplesPlayerMustHinderTheBearerOrAFreePeoplesItemOnHim() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

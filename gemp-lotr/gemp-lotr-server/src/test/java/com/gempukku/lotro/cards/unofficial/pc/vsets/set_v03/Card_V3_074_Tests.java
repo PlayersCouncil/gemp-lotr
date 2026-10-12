@@ -71,32 +71,6 @@ public class Card_V3_074_Tests
 	}
 
 	@Test
-	public void PlayedFromHandForSevenAndTwoMoreWhileRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var enquea = scn.GetShadowCard("enquea");
-		scn.MoveCardsToHand(enquea);
-
-		scn.StartGame();
-		scn.SetTwilight(7);
-		scn.FreepsPass();
-
-		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
-		// 7 set + 1 for Frodo + 2 for the shadow number of site 2
-		assertEquals(10, scn.GetTwilight());
-		assertInZone(Zone.HAND, enquea);
-		assertTrue(scn.ShadowPlayAvailable(enquea));
-
-		scn.ShadowPlayCard(enquea);
-
-		// 10 - 7 to play - 2 roaming (a site 3 minion played at site 2)
-		assertEquals(1, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, enquea);
-		assertEquals(0, scn.GetWoundsOn(enquea));
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void AtTheStartOfHisSkirmishWithAWoundedCompanionHeMayExertToHealThatCompanionAndExertACompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

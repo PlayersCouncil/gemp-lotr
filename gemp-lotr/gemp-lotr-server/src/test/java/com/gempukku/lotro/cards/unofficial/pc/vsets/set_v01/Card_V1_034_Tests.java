@@ -128,28 +128,6 @@ public class Card_V1_034_Tests
 	}
 
 	@Test
-	public void PlaysFromHandToTheSupportAreaForOneTwilight() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var waters = scn.GetShadowCard("waters");
-		scn.MoveCardsToHand(waters);
-
-		scn.StartGame();
-		scn.FreepsPass();
-
-		// 1 companion + 2 for site 2
-		assertEquals(3, scn.GetTwilight());
-		assertInZone(Zone.HAND, waters);
-		assertTrue(scn.ShadowPlayAvailable(waters));
-
-		scn.ShadowPlayCard(waters);
-
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, waters);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void WoundedTentacleMayBeStackedHereAndAWoundedOrcIsNotOffered() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetMarshScenario();
 

@@ -79,30 +79,6 @@ public class Card_V1_040_Tests
 	}
 
 	@Test
-	public void CostsFourAndTwoMoreForRoamingToPlay() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var rit = scn.GetShadowCard("rit1");
-		scn.MoveCardsToHand(rit);
-
-		scn.StartGame();
-		scn.SetTwilight(7);
-		scn.FreepsPass();
-
-		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
-		// 7 set + 1 for Frodo + 2 for the shadow number of site 2
-		assertEquals(10, scn.GetTwilight());
-		assertInZone(Zone.HAND, rit);
-
-		scn.ShadowPlayCard(rit);
-
-		assertInZone(Zone.SHADOW_CHARACTERS, rit);
-		// 10 - 4 to play - 2 roaming (a site 3 minion played at site 2)
-		assertEquals(4, scn.GetTwilight());
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void IsStrengthPlusOneForEachWoundOnTheRingBearerAndForNothingElse() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

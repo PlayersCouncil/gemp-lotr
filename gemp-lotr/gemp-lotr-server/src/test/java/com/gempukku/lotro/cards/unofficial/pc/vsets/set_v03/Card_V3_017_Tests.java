@@ -80,28 +80,6 @@ public class Card_V3_017_Tests
 	}
 
 	@Test
-	public void PlayedFromHandForTwoToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var get = scn.GetShadowCard("get");
-		scn.MoveCardsToHand(get);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.SkipToPhase(Phase.SHADOW);
-
-		// 10 set + 1 companion + 2 for the site
-		assertEquals(13, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(get));
-
-		scn.ShadowPlayCard(get);
-
-		assertEquals(11, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, get);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void WhenShelobLosesASkirmishAGollumItemMayBePlayedFromTheDiscardPile() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

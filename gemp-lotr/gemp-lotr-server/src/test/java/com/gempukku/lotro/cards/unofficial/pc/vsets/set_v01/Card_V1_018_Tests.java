@@ -118,25 +118,6 @@ public class Card_V1_018_Tests
 	}
 
 	@Test
-	public void PlaysFromHandToTheSupportAreaForOneTwilight() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var council = scn.GetFreepsCard("council");
-		scn.MoveCardsToHand(council);
-
-		scn.StartGame();
-
-		assertInHand(council);
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(council));
-
-		scn.FreepsPlayCard(council);
-		assertEquals(1, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, council);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void SarumansFirstSentenceStopsApplyingWhenASecondElvenAllyIsPlayedBesideGandalf() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

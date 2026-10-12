@@ -98,24 +98,6 @@ public class Card_10_116_Tests
 	}
 
 	@Test
-	public void IsPlayedForNothingToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var tale = scn.GetFreepsCard("tale");
-		scn.MoveCardsToHand(tale);
-
-		scn.StartGame();
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(tale));
-
-		scn.FreepsPlayCard(tale);
-		assertEquals(0, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, tale);
-		assertNull(tale.getAttachedTo());
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void PreventsAHobbitFromBeingOverwhelmedForThatSkirmishOnlyAndIsDiscarded() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

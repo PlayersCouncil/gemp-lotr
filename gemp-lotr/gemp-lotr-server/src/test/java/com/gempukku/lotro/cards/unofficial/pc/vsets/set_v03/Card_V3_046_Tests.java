@@ -86,31 +86,6 @@ public class Card_V3_046_Tests
 	}
 
 	@Test
-	public void PlayedFromHandForThreeAndTwoMoreWhileRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var helmsman = scn.GetShadowCard("helmsman1");
-		scn.MoveCardsToHand(helmsman);
-
-		scn.StartGame();
-		scn.SetTwilight(7);
-		scn.FreepsPass();
-
-		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
-		// 7 set + 1 for Frodo + 2 for the shadow number of site 2
-		assertEquals(10, scn.GetTwilight());
-		assertInZone(Zone.HAND, helmsman);
-		assertTrue(scn.ShadowPlayAvailable(helmsman));
-
-		scn.ShadowPlayCard(helmsman);
-
-		// 10 - 3 to play - 2 roaming (a site 4 minion played at site 2)
-		assertEquals(5, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, helmsman);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void TheHelmsmanChosenExertsToSaveAPossessionFromDiscardAndAConditionFromHinderAndDecliningLetsTheNextGo() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

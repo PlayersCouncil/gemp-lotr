@@ -82,25 +82,6 @@ public class Card_V1_009_Tests
 	}
 
 	@Test
-	public void PlaysFromHandAsACompanionForTwoTwilight() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var legolas = scn.GetFreepsCard("legolas");
-		scn.MoveCardsToHand(legolas);
-
-		scn.StartGame();
-
-		assertInHand(legolas);
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(legolas));
-
-		scn.FreepsPlayCard(legolas);
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, legolas);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void EachWoundAMinionTakesInTheArcheryPhaseMakesLegolasStrengthPlusOne() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

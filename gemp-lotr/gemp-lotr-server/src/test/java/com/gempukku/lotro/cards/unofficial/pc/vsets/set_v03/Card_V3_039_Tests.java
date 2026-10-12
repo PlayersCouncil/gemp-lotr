@@ -78,37 +78,6 @@ public class Card_V3_039_Tests
 	}
 
 	@Test
-	public void PlaysForOneToTheSupportAreaAndATwoDotCardMayHaveTwoCopiesInPlayButNotThree() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var fury1 = scn.GetShadowCard("fury1");
-		var fury2 = scn.GetShadowCard("fury2");
-		var fury3 = scn.GetShadowCard("fury3");
-		scn.MoveCardsToHand(fury1, fury2, fury3);
-
-		scn.StartGame();
-		scn.SetTwilight(5);
-		scn.FreepsPass();
-
-		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
-		// 5 set + 1 for Frodo + 2 for the shadow number of site 2
-		assertEquals(8, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(fury1));
-
-		scn.ShadowPlayCard(fury1);
-		assertEquals(7, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, fury1);
-		assertTrue(scn.ShadowPlayAvailable(fury2));
-
-		scn.ShadowPlayCard(fury2);
-		assertEquals(6, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, fury1, fury2);
-		assertFalse(scn.ShadowPlayAvailable(fury3));
-		assertInZone(Zone.HAND, fury3);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void WinningIsengardMinionMayDiscardTheOtherCopyToHinderEachFreePeoplesCardOnTheLoser() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

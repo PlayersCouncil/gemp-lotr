@@ -77,29 +77,6 @@ public class Card_08_103_ErrataTests
 	}
 
 	@Test
-	public void GrondIsPlayedFromHandForThreeToTheShadowSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var grond = scn.GetShadowCard("grond");
-		scn.MoveCardsToHand(grond);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-		// 10 + 1 companion + 2 for Ettenmoors
-		assertEquals(13, scn.GetTwilight());
-		assertInZone(Zone.HAND, grond);
-
-		assertTrue(scn.ShadowPlayAvailable(grond));
-		scn.ShadowPlayCard(grond);
-		assertEquals(10, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, grond);
-		assertNull(grond.getAttachedTo());
-		assertEquals(0, scn.GetCultureTokensOn(grond));
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void ShadowAbilityPlaysASauronMinionFromHandToAddATokenToGrond() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

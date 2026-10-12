@@ -77,24 +77,6 @@ public class Card_07_096_ErrataTests
 	}
 
 	@Test
-	public void GondorianCaptainIsPlayedFromHandForTwo() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var captain = scn.GetFreepsCard("captain");
-		scn.MoveCardsToHand(captain);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(captain));
-
-		scn.FreepsPlayCard(captain);
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, captain);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void ManeuverDiscardsAFortificationToRemoveAThreat() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

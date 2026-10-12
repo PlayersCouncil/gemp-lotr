@@ -74,27 +74,6 @@ public class Card_02_046_ErrataTests
 	}
 
 	@Test
-	public void PlayedFromHandForThreePlusRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var captain = scn.GetShadowCard("captain");
-		scn.MoveCardsToHand(captain);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		int twilight = scn.GetTwilight();
-		assertTrue(scn.ShadowPlayAvailable(captain));
-		scn.ShadowPlayCard(captain);
-
-		assertInZone(Zone.SHADOW_CHARACTERS, captain);
-		// 3 to play + 2 roaming (site 5 minion at site 2)
-		assertEquals(twilight - 5, scn.GetTwilight());
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void RemovesOneAndExertsAUniqueUrukHaiToPlayAnUrukHaiFromTheDiscardPile() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

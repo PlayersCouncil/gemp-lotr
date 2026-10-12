@@ -74,28 +74,6 @@ public class Card_01_240_ErrataTests
 	}
 
 	@Test
-	public void PlayedFromHandForFourPlusTwoRoamingAtSite2() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var band = scn.GetShadowCard("band");
-		scn.MoveCardsToHand(band);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		// 10 set + 1 companion (Frodo) + 2 for Ettenmoors
-		assertEquals(13, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(band));
-
-		scn.ShadowPlayCard(band);
-		// 4 to play + 2 roaming: site 6 is ahead of site 2
-		assertEquals(7, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, band);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void WinningASkirmishOffersToRemoveTwoToAddTwoBurdensAndTheFreePeoplesPlayerMayDecline() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

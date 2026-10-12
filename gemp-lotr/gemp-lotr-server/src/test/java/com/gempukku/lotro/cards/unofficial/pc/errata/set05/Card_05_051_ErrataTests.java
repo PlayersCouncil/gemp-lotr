@@ -80,27 +80,6 @@ public class Card_05_051_ErrataTests
 	}
 
 	@Test
-	public void PlaysForTwoPlusRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var grima = scn.GetShadowCard("grima");
-		scn.MoveCardsToHand(grima);
-
-		scn.StartGame();
-		scn.SetTwilight(1);
-		scn.FreepsPass();
-
-		// 1 set + 1 for Frodo + 2 for Ettenmoors
-		assertEquals(4, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(grima));
-		scn.ShadowPlayCard(grima);
-		// 2 to play + 2 roaming (site 3, played at site 2)
-		assertEquals(0, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, grima);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void WithThreeCulturesExertsToHinderAConditionBorneByAnUnboundCompanionAndOnlyInTheManeuverPhase() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

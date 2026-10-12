@@ -68,24 +68,6 @@ public class Card_09_046_ErrataTests
 	}
 
 	@Test
-	public void TheRedArrowIsPlayedFromHandForTwoToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var arrow = scn.GetFreepsCard("arrow");
-		scn.MoveCardsToHand(arrow);
-
-		scn.StartGame();
-		// Nobody but Frodo is in play: the card asks for nothing to be spotted.
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(arrow));
-
-		scn.FreepsPlayCard(arrow);
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, arrow);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void FellowshipActionDiscardsTheArrowAndExertsAManToTakeAManOfAnotherCultureIntoHand() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

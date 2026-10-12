@@ -82,25 +82,6 @@ public class Card_V2_016_Tests
 	}
 
 	@Test
-	public void IsPlayedFromHandForFour() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCardsToHand(aragorn);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertInZone(Zone.HAND, aragorn);
-		assertTrue(scn.FreepsPlayAvailable(aragorn));
-
-		scn.FreepsPlayCard(aragorn);
-		assertEquals(4, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, aragorn);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void AtTheStartOfTheTurnMaySpotAnotherValiantCompanionToDrawACard() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

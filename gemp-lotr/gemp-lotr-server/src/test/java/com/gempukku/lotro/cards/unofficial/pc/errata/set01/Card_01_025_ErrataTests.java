@@ -72,24 +72,6 @@ public class Card_01_025_ErrataTests
 	}
 
 	@Test
-	public void IsPlayedForTwoToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var breath = scn.GetFreepsCard("breath");
-		scn.MoveCardsToHand(breath);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(breath));
-
-		scn.FreepsPlayCard(breath);
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, breath);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void AWoundedDwarfWhoWinsASkirmishMayDiscardACardFromHandToHealHimself() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

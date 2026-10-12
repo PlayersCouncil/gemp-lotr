@@ -100,28 +100,6 @@ public class Card_04_034_Tests
 	}
 
 	@Test
-	public void PlayedFromHandForTwoToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var folk = scn.GetShadowCard("folk");
-		scn.MoveCardsToHand(folk);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		// 10 set + 1 companion + 2 for the site
-		assertEquals(13, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(folk));
-
-		scn.ShadowPlayCard(folk);
-		assertEquals(11, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, folk);
-		assertEquals(0, scn.GetCultureTokensOn(folk));
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void EachCompanionWhoLosesToADunlandManOffersATokenAndDecliningPlacesNone() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

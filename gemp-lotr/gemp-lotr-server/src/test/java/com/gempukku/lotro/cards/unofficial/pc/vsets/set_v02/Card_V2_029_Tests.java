@@ -94,30 +94,6 @@ public class Card_V2_029_Tests
 	}
 
 	@Test
-	public void IsPlayedFromHandForFourPlusTheRoamingPenalty() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var saruman = scn.GetShadowCard("saruman");
-		scn.MoveCardsToHand(saruman);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		assertTrue(scn.AwaitingShadowPhaseActions());
-		// 10 set + 1 companion + 2 for the site.
-		assertEquals(13, scn.GetTwilight());
-		assertInZone(Zone.HAND, saruman);
-		assertTrue(scn.ShadowPlayAvailable(saruman));
-
-		scn.ShadowPlayCard(saruman);
-		// 4 to play + 2 roaming: his site number is 4 and the fellowship is at site 2.
-		assertEquals(13 - 6, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, saruman);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void IsOfferedToNeitherPlayerForAssignmentNorToAnAssignmentAction() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

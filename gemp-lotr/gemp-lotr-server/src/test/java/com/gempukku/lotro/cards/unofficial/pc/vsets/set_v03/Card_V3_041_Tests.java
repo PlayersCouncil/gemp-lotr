@@ -85,31 +85,6 @@ public class Card_V3_041_Tests
 	}
 
 	@Test
-	public void IsPlayedForThreeToTheSupportAreaAndIsNoMinionThere() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var charger = scn.GetShadowCard("charger");
-		scn.MoveCardsToHand(charger);
-
-		scn.StartGame();
-		scn.SetTwilight(3);
-		scn.FreepsPass();
-
-		// 3 set + 1 companion + 2 for the site
-		assertEquals(6, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(charger));
-
-		scn.ShadowPlayCard(charger);
-		// A possession pays no roaming penalty.
-		assertEquals(3, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, charger);
-		assertFalse(scn.IsType(charger, CardType.MINION));
-		assertEquals(0, scn.GetStrength(charger));
-		assertEquals(0, scn.GetVitality(charger));
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void ManeuverActionStacksSouthronMenFromPlayHereAndMakesItAFierceMountedSouthronMinion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -144,7 +119,10 @@ public class Card_V3_041_Tests
 		assertEquals(1, scn.GetKeywordCount(charger2, Keyword.AMBUSH));
 
 		scn.FreepsPass();
+		// In the support area it is no minion, with no strength or vitality.
 		assertFalse(scn.IsType(charger, CardType.MINION));
+		assertEquals(0, scn.GetStrength(charger));
+		assertEquals(0, scn.GetVitality(charger));
 		assertFalse(scn.HasKeyword(charger, Keyword.FIERCE));
 		assertFalse(scn.HasKeyword(charger, Keyword.MOUNTED));
 		assertFalse(scn.HasKeyword(charger, Keyword.SOUTHRON));

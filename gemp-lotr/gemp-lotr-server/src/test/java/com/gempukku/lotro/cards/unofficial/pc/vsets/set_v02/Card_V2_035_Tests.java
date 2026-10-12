@@ -84,33 +84,6 @@ public class Card_V2_035_Tests
 	}
 
 	@Test
-	public void PlaysFromHandToTheSupportAreaForOneTwilight() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var wall = scn.GetShadowCard("wall1");
-		var savage = scn.GetShadowCard("savage");
-		scn.MoveCardsToHand(wall);
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(savage);
-		scn.SetTwilight(5);
-		scn.FreepsPass();
-
-		assertTrue(scn.AwaitingShadowPhaseActions());
-		// 5 set + 1 companion + 2 for the site.
-		assertEquals(8, scn.GetTwilight());
-		assertInZone(Zone.HAND, wall);
-		assertTrue(scn.ShadowPlayAvailable(wall));
-
-		scn.ShadowPlayCard(wall);
-		assertEquals(7, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, wall);
-		assertNotAttachedTo(wall, savage);
-		assertEquals(0, scn.GetCultureTokensOn(wall));
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void ArcheryWoundsOnAnUrukHaiCostingXArePreventedAndExertHimUntilHeIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

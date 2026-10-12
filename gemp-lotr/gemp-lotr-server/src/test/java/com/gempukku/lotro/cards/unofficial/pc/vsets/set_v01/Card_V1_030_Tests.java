@@ -83,30 +83,6 @@ public class Card_V1_030_Tests
 	}
 
 	@Test
-	public void CostsFourAndTwoMoreForRoamingToPlay() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var saruman = scn.GetShadowCard("saruman");
-		scn.MoveCardsToHand(saruman);
-
-		scn.StartGame();
-		scn.SetTwilight(7);
-		scn.FreepsPass();
-
-		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
-		// 7 set + 1 for Frodo + 2 for the shadow number of site 2
-		assertEquals(10, scn.GetTwilight());
-		assertInZone(Zone.HAND, saruman);
-
-		scn.ShadowPlayCard(saruman);
-
-		assertInZone(Zone.SHADOW_CHARACTERS, saruman);
-		// 10 - 4 to play - 2 roaming (a site 4 minion played at site 2)
-		assertEquals(4, scn.GetTwilight());
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void WithNoWeatherSarumanTakesNoWoundInTheArcheryPhase() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

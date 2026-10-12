@@ -90,26 +90,6 @@ public class Card_17_096_Tests
 	}
 
 	@Test
-	public void PlayedFromHandForTwoAsACompanion() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var eowyn = scn.GetFreepsCard("eowyn");
-		scn.MoveCardsToHand(eowyn);
-
-		scn.StartGame();
-
-		assertInZone(Zone.HAND, eowyn);
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(eowyn));
-
-		scn.FreepsPlayCard(eowyn);
-
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, eowyn);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void WhileTheRingBearerIsAssignedSheTakesNoWoundForASkirmishSheLosesAndAnotherCompanionDoes() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

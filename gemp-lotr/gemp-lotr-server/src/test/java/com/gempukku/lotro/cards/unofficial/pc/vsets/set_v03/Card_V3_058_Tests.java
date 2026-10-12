@@ -87,30 +87,6 @@ public class Card_V3_058_Tests
 	}
 
 	@Test
-	public void IsPlayedForTwoToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var battlelines = scn.GetShadowCard("battlelines");
-		scn.MoveCardsToHand(battlelines);
-
-		scn.StartGame();
-		scn.SetTwilight(1);
-		scn.FreepsPass();
-
-		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
-		// 1 set + 1 for Frodo + 2 for the shadow number of site 2
-		assertEquals(4, scn.GetTwilight());
-		assertInZone(Zone.HAND, battlelines);
-		assertTrue(scn.ShadowPlayAvailable(battlelines));
-
-		scn.ShadowPlayCard(battlelines);
-
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, battlelines);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void AtTheStartOfASkirmishInvolvingAMinionWithAmbushMayRemoveTwoToHinderAFreePeoplesCondition() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

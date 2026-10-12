@@ -80,27 +80,6 @@ public class Card_V1_052_Tests
 	}
 
 	@Test
-	public void PlaysFromHandAsACompanionForOneTwilight() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var merry = scn.GetFreepsCard("merry");
-		scn.MoveCardsToHand(merry);
-
-		scn.StartGame();
-
-		assertInHand(merry);
-		assertEquals(1, scn.GetFreepsHandCount());
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(merry));
-
-		scn.FreepsPlayCard(merry);
-		assertEquals(1, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, merry);
-		assertEquals(0, scn.GetFreepsHandCount());
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void AssignmentAbilityExertsMerryTwiceAndNeitherPlayerCanAssignTheChosenMinion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

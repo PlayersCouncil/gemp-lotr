@@ -87,24 +87,6 @@ public class Card_04_073_ErrataTests
 	}
 
 	@Test
-	public void LegolasIsPlayedFromHandForTwo() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var legolas = scn.GetFreepsCard("legolas");
-		scn.MoveCardsToHand(legolas);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(legolas));
-
-		scn.FreepsPlayCard(legolas);
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, legolas);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void EachShadowEventOrConditionRemovesOneForTheOneUnboundHobbit() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

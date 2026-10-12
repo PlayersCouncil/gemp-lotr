@@ -86,28 +86,6 @@ public class Card_V2_033_Tests
 	}
 
 	@Test
-	public void IsPlayedForTwoAndTwoMoreForRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var grumbler = scn.GetShadowCard("grumbler");
-		scn.MoveCardsToHand(grumbler);
-
-		scn.StartGame();
-		scn.SetTwilight(1);
-		scn.FreepsPass();
-
-		// 1 set + 1 for Frodo + 2 for the site: exactly the 2 to play and the 2 for roaming at site 2
-		assertEquals(4, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(grumbler));
-
-		scn.ShadowPlayCard(grumbler);
-
-		assertEquals(0, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, grumbler);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void AssignedToACompanionByTheFreePeoplesPlayerItMayBeDiscardedToWoundThatCompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

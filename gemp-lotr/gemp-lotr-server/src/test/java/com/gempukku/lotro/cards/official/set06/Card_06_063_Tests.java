@@ -83,26 +83,6 @@ public class Card_06_063_Tests
 	}
 
 	@Test
-	public void PlaysToTheSupportAreaForTwo() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var gnawing = scn.GetShadowCard("gnawing");
-		scn.MoveCardsToHand(gnawing);
-
-		scn.StartGame();
-		scn.FreepsPass();
-		scn.SetTwilight(5);
-		scn.ShadowRefreshDecision();
-
-		assertTrue(scn.ShadowPlayAvailable(gnawing));
-		scn.ShadowPlayCard(gnawing);
-
-		assertEquals(3, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, gnawing);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void AnIsengardOrcDiscardedByAFreePeoplesRegroupEventMayBeStackedHere() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

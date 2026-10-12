@@ -96,25 +96,6 @@ public class Card_18_050_ErrataTests
 	}
 
 	@Test
-	public void PlaysFromHandToTheSupportAreaForThree() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var stone = scn.GetFreepsCard("stone");
-		scn.MoveCardsToHand(stone);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(stone));
-
-		scn.FreepsPlayCard(stone);
-		assertEquals(3, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, stone);
-		assertEquals(0, scn.GetCultureTokensOn(stone));
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void EachMinionPlayedThatIsNotOfTheWraithCulturePutsATokenHereWhileAManCanBeSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

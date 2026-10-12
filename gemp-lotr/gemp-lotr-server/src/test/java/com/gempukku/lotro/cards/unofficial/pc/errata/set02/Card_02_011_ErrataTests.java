@@ -80,26 +80,6 @@ public class Card_02_011_ErrataTests
 	}
 
 	@Test
-	public void PlaysFromHandForOneToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var burdens = scn.GetFreepsCard("burdens");
-		scn.MoveCardsToHand(burdens);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(burdens));
-
-		scn.FreepsPlayCard(burdens);
-
-		assertEquals(1, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, burdens);
-		assertNull(burdens.getAttachedTo());
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void ExertingADwarfAndHinderingHisItemHindersAShadowConditionInTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

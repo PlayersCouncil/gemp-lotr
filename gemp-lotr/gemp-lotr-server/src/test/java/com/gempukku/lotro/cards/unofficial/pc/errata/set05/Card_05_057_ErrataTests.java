@@ -68,26 +68,6 @@ public class Card_05_057_ErrataTests
 	}
 
 	@Test
-	public void PlaysToTheSupportAreaForNothing() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var ladder = scn.GetShadowCard("ladder");
-		scn.MoveCardsToHand(ladder);
-
-		scn.StartGame();
-		scn.FreepsPass();
-
-		// 1 for Frodo + 2 for Ettenmoors
-		assertEquals(3, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(ladder));
-		scn.ShadowPlayCard(ladder);
-		assertEquals(3, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, ladder);
-		assertNull(ladder.getAttachedTo());
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void ExertsAnUrukHaiToPlaceATokenTwiceAPhaseAndAtTheLimitExertsForNothing() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

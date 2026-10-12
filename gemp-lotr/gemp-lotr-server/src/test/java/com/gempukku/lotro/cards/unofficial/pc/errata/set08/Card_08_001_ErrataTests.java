@@ -66,25 +66,6 @@ public class Card_08_001_ErrataTests
 	}
 
 	@Test
-	public void AggressionPlaysToTheSupportAreaForOne() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var aggression = scn.GetFreepsCard("aggression");
-		scn.MoveCardsToHand(aggression);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertInHand(aggression);
-
-		scn.FreepsPlayCard(aggression);
-
-		assertEquals(1, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, aggression);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void WhileTheFreePeoplesPlayerHasInitiativeEachDwarfIsDamagePlusOne() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

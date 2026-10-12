@@ -80,28 +80,6 @@ public class Card_V1_002_Tests
 	}
 
 	@Test
-	public void PlaysFromHandToTheSupportAreaForOneTwilight() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var delvings = scn.GetFreepsCard("delvings");
-		scn.MoveCardsToHand(delvings);
-
-		scn.StartGame();
-
-		assertInHand(delvings);
-		assertEquals(1, scn.GetFreepsHandCount());
-		assertEquals(0, scn.GetTwilight());
-		// Nothing has to be spotted: only Frodo is in play.
-		assertTrue(scn.FreepsPlayAvailable(delvings));
-
-		scn.FreepsPlayCard(delvings);
-		assertEquals(1, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, delvings);
-		assertEquals(0, scn.GetFreepsHandCount());
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void DwarvenCardDiscardedFromTopOfDeckMayBeStackedHereForOneTwilight() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

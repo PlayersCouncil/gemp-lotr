@@ -70,31 +70,6 @@ public class Card_V3_043_Tests
 	}
 
 	@Test
-	public void PlayedFromHandForFourToTheSupportAreaAsAnArtifactAndNoMinion() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var rearguard = scn.GetShadowCard("rearguard");
-		scn.MoveCardsToHand(rearguard);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		// 10 set + 1 companion + 2 for the site
-		assertEquals(13, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(rearguard));
-
-		scn.ShadowPlayCard(rearguard);
-
-		// 4 to play, and no roaming: it is not a minion.
-		assertEquals(9, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, rearguard);
-		assertTrue(scn.IsType(rearguard, CardType.ARTIFACT));
-		assertFalse(scn.IsType(rearguard, CardType.MINION));
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void RegroupActionStacksASouthronManFromPlayOnTheCopyUsedUntilNoneIsLeft() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -214,6 +189,7 @@ public class Card_V3_043_Tests
 
 		assertEquals(10, scn.GetTwilight());
 		assertInZone(Zone.SUPPORT, rearguard, rearguard2);
+		assertTrue(scn.IsType(rearguard, CardType.ARTIFACT));
 		assertFalse(scn.IsType(rearguard, CardType.MINION));
 		assertFalse(scn.HasKeyword(rearguard, Keyword.FIERCE));
 		assertFalse(scn.HasKeyword(rearguard, Keyword.MOUNTED));

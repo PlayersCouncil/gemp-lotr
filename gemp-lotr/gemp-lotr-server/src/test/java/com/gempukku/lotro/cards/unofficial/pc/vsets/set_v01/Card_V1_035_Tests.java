@@ -81,28 +81,6 @@ public class Card_V1_035_Tests
 	}
 
 	@Test
-	public void PlaysFromHandToTheSupportAreaForOneTwilight() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var darkness = scn.GetShadowCard("darkness");
-		scn.MoveCardsToHand(darkness);
-
-		scn.StartGame();
-		scn.FreepsPass();
-
-		// 1 companion + 2 for site 2
-		assertEquals(3, scn.GetTwilight());
-		assertInZone(Zone.HAND, darkness);
-		assertTrue(scn.ShadowPlayAvailable(darkness));
-
-		scn.ShadowPlayCard(darkness);
-
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, darkness);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void StacksAChosenMoriaItemFromHandOnTheCopyThatWasUsed() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

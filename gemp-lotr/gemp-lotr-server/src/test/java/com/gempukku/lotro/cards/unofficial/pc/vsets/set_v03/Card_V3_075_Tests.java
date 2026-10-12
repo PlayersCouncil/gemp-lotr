@@ -85,32 +85,6 @@ public class Card_V3_075_Tests
 	}
 
 	@Test
-	public void PlayedFromHandForFiveAndTwoMoreWhileRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var lemenya = scn.GetShadowCard("lemenya");
-		scn.MoveCardsToHand(lemenya);
-
-		scn.StartGame();
-		scn.SetTwilight(5);
-		scn.FreepsPass();
-
-		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
-		// 5 set + 1 for Frodo + 2 for the shadow number of site 2
-		assertEquals(8, scn.GetTwilight());
-		assertInZone(Zone.HAND, lemenya);
-		assertTrue(scn.ShadowPlayAvailable(lemenya));
-
-		scn.ShadowPlayCard(lemenya);
-
-		// 8 - 5 to play - 2 roaming (a site 3 minion played at site 2)
-		assertEquals(1, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, lemenya);
-		assertEquals(10, scn.GetStrength(lemenya));
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void ACompanionSkirmishingHerIsStrengthMinusOneForEachOtherNazgulAndFollowsTheirNumber() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

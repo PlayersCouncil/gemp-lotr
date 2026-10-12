@@ -76,24 +76,6 @@ public class Card_03_008_ErrataTests
 	}
 
 	@Test
-	public void IsPlayedFromHandForTwo() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var arwen = scn.GetFreepsCard("arwen");
-		scn.MoveCardsToHand(arwen);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(arwen));
-
-		scn.FreepsPlayCard(arwen);
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, arwen);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void EachMinionSkirmishingArwenIsStrengthMinus1ForEachElvenAllyOfSite3AndNoOtherMinionIs() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

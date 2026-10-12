@@ -84,30 +84,6 @@ public class Card_07_197_Tests
 	}
 
 	@Test
-	public void PlayedFromHandForSevenAndTwoMoreWhileRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var regiment = scn.GetShadowCard("regiment");
-		scn.MoveCardsToHand(regiment);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		int twilight = scn.GetTwilight();
-		assertEquals(2, scn.GetCurrentSiteNumber());
-		assertInZone(Zone.HAND, regiment);
-		assertTrue(scn.ShadowPlayAvailable(regiment));
-
-		scn.ShadowPlayCard(regiment);
-
-		// 7 to play + 2 roaming: its site number is 4 and the fellowship is at site 2
-		assertEquals(twilight - 9, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, regiment);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void MustExertToAssignMorgulRegiment() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

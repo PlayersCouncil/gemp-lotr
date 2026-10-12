@@ -73,27 +73,6 @@ public class Card_V3_010_Tests
 	}
 
 	@Test
-	public void PlayedForThreeToTheSupportAreaWithNoGandalfInPlay() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var broken = scn.GetFreepsCard("broken");
-		var frodo = scn.GetRingBearer();
-		scn.MoveCardsToHand(broken);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(broken));
-
-		scn.FreepsPlayCard(broken);
-
-		assertEquals(3, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, broken);
-		assertNotAttachedTo(broken, frodo);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void ExertsGandalfToDiscardAHinderedShadowCardOfAnyKindAndNothingElse() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

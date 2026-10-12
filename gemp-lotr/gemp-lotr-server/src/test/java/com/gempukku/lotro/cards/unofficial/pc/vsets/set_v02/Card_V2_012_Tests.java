@@ -80,25 +80,6 @@ public class Card_V2_012_Tests
 	}
 
 	@Test
-	public void IsPlayedFromHandForTwoToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var friends = scn.GetFreepsCard("friends");
-		scn.MoveCardsToHand(friends);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(friends));
-
-		scn.FreepsPlayCard(friends);
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, friends);
-		assertNull(friends.getAttachedTo());
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void WhenAnElfWinsASkirmishAManOrADwarfOfMineCompanionOrAllyIsMadeStrengthPlus1() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

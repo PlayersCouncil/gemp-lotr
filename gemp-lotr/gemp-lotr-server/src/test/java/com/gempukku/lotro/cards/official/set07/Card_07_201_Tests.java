@@ -79,30 +79,6 @@ public class Card_07_201_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	@Test
-	public void PlayedFromHandForTwoAndTwoMoreWhileRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var spearman = scn.GetShadowCard("spearman");
-		scn.MoveCardsToHand(spearman);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		int twilight = scn.GetTwilight();
-		assertEquals(2, scn.GetCurrentSiteNumber());
-		assertInZone(Zone.HAND, spearman);
-		assertTrue(scn.ShadowPlayAvailable(spearman));
-
-		scn.ShadowPlayCard(spearman);
-
-		// 2 to play + 2 roaming: its site number is 4 and the fellowship is at site 2
-		assertEquals(twilight - 4, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, spearman);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
 
 	@Test
 	public void MustExertToAssignMorgulSpearman() throws DecisionResultInvalidException, CardNotFoundException {

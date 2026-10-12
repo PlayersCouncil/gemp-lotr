@@ -69,24 +69,6 @@ public class Card_02_104_ErrataTests
 	}
 
 	@Test
-	public void MerryIsPlayedFromHandAsACompanionForOne() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var merry = scn.GetFreepsCard("merry");
-		scn.MoveCardsToHand(merry);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(merry));
-
-		scn.FreepsPlayCard(merry);
-		assertEquals(1, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, merry);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void ExertsMerryToTakeAHobbitAllyFromTheDrawDeckIntoHand() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

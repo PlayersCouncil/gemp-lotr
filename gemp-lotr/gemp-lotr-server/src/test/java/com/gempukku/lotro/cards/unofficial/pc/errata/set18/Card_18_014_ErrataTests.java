@@ -75,24 +75,6 @@ public class Card_18_014_ErrataTests
 	}
 
 	@Test
-	public void HaldirIsPlayedFromHandForTwo() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var haldir = scn.GetFreepsCard("haldir");
-		scn.MoveCardsToHand(haldir);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(haldir));
-		scn.FreepsPlayCard(haldir);
-
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, haldir);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void ExertingHaldirMakesAMinionSkirmishingHimStrengthMinus2() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

@@ -70,33 +70,6 @@ public class Card_V3_051_Tests
 	}
 
 	@Test
-	public void PlaysForTwoToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var duty = scn.GetShadowCard("duty1");
-		scn.MoveCardsToHand(duty);
-
-		scn.StartGame();
-		scn.SetTwilight(3);
-		scn.FreepsPass();
-
-		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
-		// 3 set + 1 for Frodo + 2 for the shadow number of site 2
-		assertEquals(6, scn.GetTwilight());
-		assertInZone(Zone.HAND, duty);
-		assertEquals(1, scn.GetShadowHandCount());
-		assertTrue(scn.ShadowPlayAvailable(duty));
-
-		scn.ShadowPlayCard(duty);
-
-		// 6 - 2 to play; a condition does not roam
-		assertEquals(4, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, duty);
-		assertEquals(0, scn.GetShadowHandCount());
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void WhenARaiderMinionDiesARaiderMinionMayExertToExertAnUnboundCompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

@@ -88,29 +88,6 @@ public class Card_V1_045_Tests
 	}
 
 	@Test
-	public void PlaysFromHandToTheSupportAreaForOneTwilight() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var gaze = scn.GetShadowCard("gaze");
-		scn.MoveCardsToHand(gaze);
-
-		scn.StartGame();
-		scn.FreepsPass();
-
-		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
-		// 1 companion + 2 for the shadow number of site 2
-		assertEquals(3, scn.GetTwilight());
-		assertInZone(Zone.HAND, gaze);
-		assertTrue(scn.ShadowPlayAvailable(gaze));
-
-		scn.ShadowPlayCard(gaze);
-
-		assertInZone(Zone.SUPPORT, gaze);
-		assertEquals(2, scn.GetTwilight());
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void RemovesABurdenToKeepItselfInPlayWhenItIsAboutToBeDiscarded() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

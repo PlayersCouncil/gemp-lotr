@@ -77,24 +77,6 @@ public class Card_18_110_ErrataTests
 	}
 
 	@Test
-	public void PlayedFromHandForNothingToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var lagan = scn.GetFreepsCard("lagan");
-		scn.MoveCardsToHand(lagan);
-
-		scn.StartGame();
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(lagan));
-
-		scn.FreepsPlayCard(lagan);
-		assertEquals(0, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, lagan);
-		assertNull(lagan.getAttachedTo());
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void AtTheStartOfTheTurnItsOwnerMayAddTwoToHealAShireCompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

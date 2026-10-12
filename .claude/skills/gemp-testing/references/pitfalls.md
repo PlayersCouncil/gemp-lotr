@@ -1179,6 +1179,9 @@ and a card of the right owner borne by a card in the other player's area.
 for a card in play, the number printed on it (F-0109, Q-0073); for a card in a hand or pile, what it would cost
 to play now, roaming apart; for a site, its Shadow number as it stands. To read a cost modifier, read a card in
 hand, or play the card and read the pool. A transfer costs the printed number and nothing else (Q-0053, Q-0074).
+A plain play (the printed cost added or removed, roaming, where each type goes) is shown once by
+`mechanics/TwilightPoolTests` and `WhereACardIsPlayedTests`, and no card test only plays its card (Q-0279: B,
+engine pass 31): a card is played from hand in the test of the clause of its text that bears on its play.
 
 **A twilight cost never reads below 0, so a discount as large as the card's cost hides a larger one.** Madril
 65_64 costs 2 and is "twilight cost -2": with `amount: -3` he reads 0 and is played for 0 all the same, and no

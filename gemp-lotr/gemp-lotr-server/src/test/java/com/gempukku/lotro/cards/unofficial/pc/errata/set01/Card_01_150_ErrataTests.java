@@ -93,27 +93,6 @@ public class Card_01_150_ErrataTests
 	}
 
 	@Test
-	public void PlayedFromHandForFourPlusRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var rager = scn.GetShadowCard("rager1");
-		scn.MoveCardsToHand(rager);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		assertTrue(scn.ShadowPlayAvailable(rager));
-		int twilight = scn.GetTwilight();
-
-		scn.ShadowPlayCard(rager);
-		// 4 to play + 2 roaming (site 5 minion at site 2)
-		assertEquals(twilight - 6, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, rager);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void WinningASkirmishTheFreePeoplesPlayerMayChooseToExertACompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

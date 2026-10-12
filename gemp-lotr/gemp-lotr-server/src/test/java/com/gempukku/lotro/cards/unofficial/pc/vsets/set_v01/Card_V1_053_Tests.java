@@ -128,27 +128,6 @@ public class Card_V1_053_Tests
 	}
 
 	@Test
-	public void PlaysFromHandAsACompanionForOneTwilight() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var pippin = scn.GetFreepsCard("pippin");
-		scn.MoveCardsToHand(pippin);
-
-		scn.StartGame();
-
-		assertInHand(pippin);
-		assertEquals(1, scn.GetFreepsHandCount());
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(pippin));
-
-		scn.FreepsPlayCard(pippin);
-		assertEquals(1, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, pippin);
-		assertEquals(0, scn.GetFreepsHandCount());
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void ExertsPippinSoThatAShireCompanionFacingDoubleHisStrengthIsWoundedAndNotOverwhelmed() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetFrodoWithTheAragornSignetScenario();
 

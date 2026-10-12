@@ -73,24 +73,6 @@ public class Card_15_015_ErrataTests
 	}
 
 	@Test
-	public void PlayedForOneToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var focus = scn.GetFreepsCard("focus");
-		scn.MoveCardsToHand(focus);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		scn.FreepsPlayCard(focus);
-
-		assertEquals(1, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, focus);
-		assertNull(focus.getAttachedTo());
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void EachTimeLegolasWinsASkirmishHisOwnerMayHealAHunterDwarvenDwarfOrAHunterGondorMan() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

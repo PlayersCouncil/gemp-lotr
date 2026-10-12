@@ -134,8 +134,6 @@ tests: no ledger comment, and no clause tags above the tests.
 LEDGER  1_40  Elrond, Lord of Rivendell
 Sources: sheet; neither rules document names this card for anything that bears on its tests
 
-P1 Play       [+]          Played from hand for (4), to the support area.
-     +  ->  CannotBePlayedUntilGandalfIsSpotted
 C1 ToPlay     [+ - B]      To play, spot Gandalf or an Elf.
      + - B  ->  CannotBePlayedUntilGandalfIsSpotted
      + B    ->  CannotBePlayedUntilAnElfIsSpotted
@@ -159,26 +157,18 @@ Notes: Elrond is himself an ally whose home is site 3, so C2 heals him too.
   results ("is strength +3 and fierce", read together in every test) stays whole. Every word of the
   game text is in exactly one `C` clause, keyword lines included; reminder text in brackets is left out. The
   conformance check joins the `C` clauses and compares them with the definition's game text.
-- **`P1` is the card being played.** Every companion, ally, minion, possession, artifact, condition and follower
-  has one: the card is played from hand by legal play, and the test reads what it cost and where it ended up. An
-  event is played by its own `Event` clause and needs no `P1`. Nor does The One Ring, which is never played (69_1).
-  **Where the play is a plain one, its test is generated and not written** (Q-0220: I, "generate"):
-  `card-test-campaign/scripts/gen_play.py <id> --write` puts a test named `PlayedFromHandFor...` after the stats
-  test and the `P1` clause and its claim into the ledger, expecting what the card's sheet row says (cost, type, a
-  minion's site number). The author runs it before writing any test, and writes `P1`'s test by hand only for a
-  card it leaves, for the reason it prints: a card played on a bearer, a requirement or an extra cost to play, a
-  cost the card's own text changes or speaks of (and toil), a text about when the card may be played, a card
-  that answers its own play or its being in play, a card of the Ring-bearer's own title. For those nothing has
-  changed: the test of the clause that got in the way plays the card and claims `P1` as well. The generated test
-  stands on the file's `GetScenario()` with nothing in play but the Ring-bearer (a Free Peoples card in the
-  fellowship phase of turn 1, a Shadow card in the Shadow phase at site 2) and reads the card in hand and
-  offered, the pool before and after, the zone the card ends in, and what the game then waits for. It is left as
-  written. Anything more that the card's play would show (a possible bearer on the table left bare, a strength
-  in play, an offer that is or is not made as it arrives) is read in the test of the clause it belongs to; a
-  second test may claim `P1` beside the generated one. A generated test that fails is a finding, or a card the
-  generator should have left, and is reported either way: it is never adjusted until it passes. `GetScenario()`
-  may gain cards freely; a change of its site path or Ring-bearer is run against the generated test.
-  `gen_play.py <id>` with no `--write` prints the test, for a reviewer to lay beside the one in the file.
+- **A card's play has no clause of its own** (Q-0279: B, engine pass 31). The printed cost, type and site number
+  are the stats test's, and what they do in a plain play is shown once, in `mechanics/TwilightPoolTests` and
+  `WhereACardIsPlayedTests`: no test only plays a card. A card's play is tested where its own text bears on it,
+  by the test of that clause, which plays the card from hand by legal play and reads what it cost and where it
+  went: a bearer (`PlayOn`), a requirement or an extra cost to play (`ToPlay`, `ExtraCost`), a cost its text
+  changes or speaks of, toil, a text about when it may be played, a card that answers its own play or its being
+  in play. lint's `plain-play` reads the definition and the text for these (`gen_play.py`'s reading, which is
+  cautious) and asks for a test that plays the card where it finds one and none does; where what it names is not
+  a clause of the card's own play (a text about ANOTHER card's play), the card keeps a test that plays it, which
+  claims a `P1 Play [+]` clause: the seven cards of `orchestrator/engine-pass-28/tools-files/plainplay-keep.tsv`
+  (Silinde 1_60, Uruviel 1_67, The Witch-king 52_85, Scouring of the Shire 68_112, Mantle of the White Wizard
+  103_3, Hailing from the Far South 103_52, Ominous Sky 103_97) and no others.
 - **`R` clauses are everything that is not printed on the card**: a ruling that names it, an interaction from a
   rules example, a rule that differs by format. Their text says where they come from.
 - A clause line is `ID Type [checks] text`. Long text continues on following lines, indented.
@@ -450,8 +440,7 @@ The type says what kind of statement the clause is, and sets the checks it must 
 
 | Type | The clause is | At least | Notes |
 |---|---|---|---|
-| `Play` | the card being played from hand (`P1`) | `+` | Twilight moves by the cost (plus roaming for a minion, and say so in the comment); the card ends in play, in the support area, or on its bearer. May share a test with a `ToPlay` or `PlayOn` clause. The sentence "Plays to your support area." is a `C` clause of this type, claimed by `P1`'s test, which reads the card in the support area and on no character. Written by `gen_play.py` where the play is a plain one ("`P1` is the card being played", above), which puts its claim under such a `C` clause as well; what is said here is what a test written by hand reads. |
-| `Keyword` | a keyword line: "Ranger.", "Damage +1.", "Fierce." | `K` | How the keyword works is the rules' business and is tested once, as a mechanic. A keyword the text grants under a condition is a `Modifier`. A keyword the card has by rule and not in print (every Sam is Ring-bound) is an `R` clause of this type. A follower's "Aid - (N)." is of this type, its reminder in brackets left out; the Aid's cost is an `aidCost` effect and no keyword: where it is twilight the stats test reads the N with `scn.GetAidTwilightCost(card)` (G-0051), and where it is anything else (a burden, a threat, an exertion) nothing reads it and the header carries it. Either way `K` is claimed by the stats test and by a test that takes the Aid and reads what was paid, the pool N higher (Robin Smallburrow 68_111). |
+| `Keyword` | a keyword line: "Ranger.", "Damage +1.", "Fierce." | `K` | How the keyword works is the rules' business and is tested once, as a mechanic. The sentence "Plays to your support area." is a clause of this type, claimed by the stats test's Support Area reading (Q-0279: B). A keyword the text grants under a condition is a `Modifier`. A keyword the card has by rule and not in print (every Sam is Ring-bound) is an `R` clause of this type. A follower's "Aid - (N)." is of this type, its reminder in brackets left out; the Aid's cost is an `aidCost` effect and no keyword: where it is twilight the stats test reads the N with `scn.GetAidTwilightCost(card)` (G-0051), and where it is anything else (a burden, a threat, an exertion) nothing reads it and the header carries it. Either way `K` is claimed by the stats test and by a test that takes the Aid and reads what was paid, the pool N higher (Robin Smallburrow 68_111). |
 | `ToPlay` | "To play, spot…" | `+ -` | Show the change: not playable, then one legal play later, playable. |
 | `ExtraCost` | "To play, exert…" / "add a burden" | `+ - C` | `-` is the cost being unpayable, and that board is the cost's `C-` as well: `C-` is not listed again beside it (a ledger that does list it claims it on the same test and is not wrong). A cost another player must pay to do something with this card while it is in play ("The Free Peoples player must add a burden to assign this minion to …") is a `Modifier` that lists `C` and `C-` as well (69_38). |
 | `PlayOn` | "Bearer must be…", "Plays on…" | `F` | Two valid bearers offered, an invalid one not. |
@@ -508,8 +497,8 @@ print (`getSiteNumber()` is 0 there). Its header comment reproduces the card. Th
 expected values are the sheet's; `reconcile.py <id>` (Decipher cards) and the packet's "Sheet against
 definition" section (every card) show any field where the sheet and the definition disagree (see "When the sheet
 and the definition disagree" above). A strength, vitality or other bonus printed on a card that is borne (a
-possession's +2) is a printed field: asserted here, and read on the bearer in the test of the Play clause, with
-no clause of its own. Its line of the header is written as the sheet prints it ("Vitality: +2") or as the bare
+possession's +2) is a printed field: asserted here, with no clause of its own; that it reaches the bearer is
+`mechanics/BorneItemsTests`'. Its line of the header is written as the sheet prints it ("Vitality: +2") or as the bare
 number ("Vitality: 2"): the landed files have both, lint takes both, and no assertion hangs on it. Timewords are not a printed field: they are how a
 definition says when an event may be played, and a definition may carry more of them than the card prints.
 A Race to Mount Doom modifier's intensity is one: its header has an `Intensity:` line and the test reads

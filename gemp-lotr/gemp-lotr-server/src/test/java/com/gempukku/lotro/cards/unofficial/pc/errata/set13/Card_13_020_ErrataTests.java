@@ -80,24 +80,6 @@ public class Card_13_020_ErrataTests
 	}
 
 	@Test
-	public void PlayedFromHandForTwoAsACompanion() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var protector = scn.GetFreepsCard("protector");
-		scn.MoveCardsToHand(protector);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(protector));
-		scn.FreepsPlayCard(protector);
-
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, protector);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void WhileAnotherCompanionIsAssignedTheDamageWoundAfterTheFirstWoundIsPrevented() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

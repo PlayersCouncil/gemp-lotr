@@ -108,28 +108,6 @@ public class Card_03_069_Tests
 	}
 
 	@Test
-	public void SarumanIsPlayedFromHandForFourPlusRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var saruman = scn.GetShadowCard("saruman");
-		scn.MoveCardsToHand(saruman);
-
-		scn.StartGame();
-		scn.SetTwilight(3);
-		scn.FreepsPass();
-
-		// 3 set + 1 companion + 2 for Ettenmoors
-		assertEquals(6, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(saruman));
-
-		scn.ShadowPlayCard(saruman);
-		// 4 to play + 2 roaming (a site 4 minion at site 2)
-		assertEquals(0, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, saruman);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void SarumanCanBeWoundedInTheManeuverPhaseButNoArcheryWoundCanBePlacedOnHim() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

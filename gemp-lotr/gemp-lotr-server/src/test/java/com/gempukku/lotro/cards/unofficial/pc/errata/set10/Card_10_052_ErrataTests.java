@@ -77,27 +77,6 @@ public class Card_10_052_ErrataTests
 	}
 
 	@Test
-	public void PlayedForOneToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var foot = scn.GetShadowCard("underfoot");
-
-		scn.StartGame();
-		scn.MoveCardsToHand(foot);
-		scn.FreepsPass();
-
-		// 1 companion + 2 for the site
-		assertEquals(3, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(foot));
-
-		scn.ShadowPlayCard(foot);
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, foot);
-		assertEquals(0, scn.GetShadowHandCount());
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void ShadowAbilityReconcilesTheShadowPlayersHandOnceInAShadowPhase() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

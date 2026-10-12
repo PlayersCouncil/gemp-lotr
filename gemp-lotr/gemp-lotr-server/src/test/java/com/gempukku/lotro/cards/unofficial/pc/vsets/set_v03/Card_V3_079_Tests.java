@@ -74,29 +74,6 @@ public class Card_V3_079_Tests
 	}
 
 	@Test
-	public void IsPlayedForSevenAndTwoMoreWhileRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var toldea = scn.GetShadowCard("toldea");
-		scn.MoveCardsToHand(toldea);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		// 10 set + 1 for Frodo + 2 for the shadow number of site 2
-		assertEquals(13, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(toldea));
-
-		scn.ShadowPlayCard(toldea);
-
-		// 13 - 7 to play - 2 roaming: his site number is 3 and the fellowship is at site 2
-		assertEquals(4, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, toldea);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void EachAssignmentToAStrongerCompanionMayExhaustToldeaToHinderThatCompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

@@ -45,6 +45,9 @@ Nobody has checked the reviewer's changes but you. Look at `git diff -- <the car
   exists, nothing is shown and lint reports the definition; an ad hoc keyword, strength or vitality that printed
   cards can grant is fine.
 - **A test that relies on an exception** (`assertThrows`, a `try`): lint refuses it. It is a rig request (step 5).
+- **A test that only plays the card, or a `P1` clause** (Q-0279: B, engine pass 31): neither is written any more.
+  Take such a test out with its claim lines; a card's play is tested only by the test of the clause that bears on
+  it, and lint's `plain-play` warning names a card that then has none (the test of that clause is owed).
 
 ## 3. Findings: every `F-0000`
 

@@ -72,29 +72,6 @@ public class Card_V1_048_Tests
 	}
 
 	@Test
-	public void PlaysFromHandForThreeTwilightPlusTwoForRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var troop = scn.GetShadowCard("troop");
-		scn.MoveCardsToHand(troop);
-
-		scn.StartGame();
-		scn.SetTwilight(7);
-		scn.FreepsPass();
-
-		assertEquals(2, scn.GetCurrentSiteNumber());
-		// 7 set + 1 companion + 2 for the site
-		assertEquals(10, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(troop));
-
-		scn.ShadowPlayCard(troop);
-		// 3 to play + 2 roaming: site number 6, played at site 2
-		assertEquals(5, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, troop);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void IsAnArcherWhileAnExhaustedCompanionCanBeSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

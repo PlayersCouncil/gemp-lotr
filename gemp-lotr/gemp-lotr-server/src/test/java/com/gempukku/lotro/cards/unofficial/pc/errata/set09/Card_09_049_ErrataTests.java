@@ -86,23 +86,6 @@ public class Card_09_049_ErrataTests
 	}
 
 	@Test
-	public void BilboIsPlayedFromHandForTwo() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var bilbo = scn.GetFreepsCard("bilbo");
-		scn.MoveCardsToHand(bilbo);
-
-		scn.StartGame();
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(bilbo));
-
-		scn.FreepsPlayCard(bilbo);
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, bilbo);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void MovingWithTwoTwilightTokensInThePoolAsksForTwoBurdensOrThreeTwilight() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

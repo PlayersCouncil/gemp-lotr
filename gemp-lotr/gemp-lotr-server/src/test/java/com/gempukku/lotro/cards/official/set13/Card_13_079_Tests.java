@@ -70,30 +70,6 @@ public class Card_13_079_Tests
 	}
 
 	@Test
-	public void PlayedFromHandForThreeToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var pallando = scn.GetShadowCard("pallando");
-		scn.MoveCardsToHand(pallando);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		int twilight = scn.GetTwilight();
-		assertEquals(2, scn.GetCurrentSiteNumber());
-		assertInZone(Zone.HAND, pallando);
-		assertTrue(scn.ShadowPlayAvailable(pallando));
-
-		scn.ShadowPlayCard(pallando);
-
-		assertEquals(twilight - 3, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, pallando);
-		assertNotAttachedTo(pallando, scn.GetRingBearer());
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void AtTheStartOfTheManeuverPhaseTheShadowPlayerMayExertAWizardToMakeItAFierceWizardMinion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

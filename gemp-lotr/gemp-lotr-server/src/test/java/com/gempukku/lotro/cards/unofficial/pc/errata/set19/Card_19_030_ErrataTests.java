@@ -90,28 +90,6 @@ public class Card_19_030_ErrataTests
 	}
 
 	@Test
-	public void PlayedFromHandForOne() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var pippin = scn.GetFreepsCard("pippin");
-
-		scn.MoveCardsToHand(pippin);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(pippin));
-
-		scn.FreepsPlayCard(pippin);
-
-		assertEquals(1, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, pippin);
-		// No tale in play: his printed 3.
-		assertEquals(3, scn.GetStrength(pippin));
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void StrengthPlus1ForEachTaleInPlayOfWhateverCultureOrType() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

@@ -75,28 +75,6 @@ public class Card_03_074_ErrataTests
 	}
 
 	@Test
-	public void UrukRaiderIsPlayedFromHandForItsCostPlusRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var raider = scn.GetShadowCard("raider");
-		scn.MoveCardsToHand(raider);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		// 10 set + 1 companion + 2 for Ettenmoors
-		assertEquals(13, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(raider));
-
-		scn.ShadowPlayCard(raider);
-		// 2 to play + 2 roaming (site 5 minion at site 2)
-		assertEquals(9, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, raider);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void UrukRaiderIsStrengthPlus3AndDamagePlus1OnlyWhileAnAllyIsInTheDeadPile() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

@@ -95,24 +95,6 @@ public class Card_03_004_ErrataTests
 	}
 
 	@Test
-	public void PlayedFor2ToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var welcome = scn.GetFreepsCard("welcome");
-		scn.MoveCardsToHand(welcome);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(welcome));
-
-		scn.FreepsPlayCard(welcome);
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, welcome);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void FellowshipActionExertsADwarvenCompanionToHealADwarvenAlly() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

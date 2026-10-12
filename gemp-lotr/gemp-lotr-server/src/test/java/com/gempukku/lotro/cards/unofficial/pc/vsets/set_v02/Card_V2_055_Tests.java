@@ -82,26 +82,6 @@ public class Card_V2_055_Tests
 	}
 
 	@Test
-	public void PlayedForThreeToTheFellowship() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var theoden = scn.GetFreepsCard("theoden");
-		scn.MoveCardsToHand(theoden);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(theoden));
-
-		scn.FreepsPlayCard(theoden);
-
-		assertEquals(3, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, theoden);
-		assertEquals(6, scn.GetStrength(theoden));
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void IsStrengthPlusOneForEachOtherValiantCompanionForAsLongAsThatCompanionIsAssignedToASkirmish() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

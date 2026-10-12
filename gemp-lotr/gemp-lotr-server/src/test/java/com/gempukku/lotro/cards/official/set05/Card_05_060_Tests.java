@@ -127,26 +127,6 @@ public class Card_05_060_Tests
 	}
 
 	@Test
-	public void PlaysToTheSupportAreaForNothing() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var siege = scn.GetShadowCard("siege");
-		scn.MoveCardsToHand(siege);
-
-		scn.StartGame();
-		scn.FreepsPass();
-
-		// 1 for Frodo + 2 for Ettenmoors
-		assertEquals(3, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(siege));
-		scn.ShadowPlayCard(siege);
-		assertEquals(3, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, siege);
-		assertNull(siege.getAttachedTo());
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void PlaysAnUrukHaiFromHandToPlaceATokenOnAMachine() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

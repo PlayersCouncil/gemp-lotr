@@ -75,27 +75,6 @@ public class Card_13_060_Tests
 	}
 
 	@Test
-	public void PlayedFromHandForOneToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var wind = scn.GetFreepsCard("wind");
-		scn.MoveCardsToHand(wind);
-
-		scn.StartGame();
-
-		assertInZone(Zone.HAND, wind);
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(wind));
-
-		scn.FreepsPlayCard(wind);
-
-		assertEquals(1, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, wind);
-		assertNotAttachedTo(wind, scn.GetRingBearer());
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void ResponsePreventsWoundOnFaramirByKillingBoromirOrDenethor() throws DecisionResultInvalidException, CardNotFoundException {
 		// Regression for #1078: the kill filter was written as name(Boromir) AND name(Denethor), so the cost could
 		// never be paid and the response was never offered.

@@ -123,25 +123,6 @@ public class Card_01_306_Tests
 	}
 
 	@Test
-	public void IsPlayedFromHandForOneToTheFellowship() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var pippin = scn.GetFreepsCard("pippin");
-		scn.MoveCardsToHand(pippin);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(pippin));
-
-		scn.FreepsPlayCard(pippin);
-		assertEquals(1, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, pippin);
-		assertEquals(3, scn.GetStrength(pippin));
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void TheShadowPlayersStrickenDumbMayChooseNoShireTaleOfHisOwnersButATaleOfAnotherCultureOrAShireCardThatIsNoTale() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

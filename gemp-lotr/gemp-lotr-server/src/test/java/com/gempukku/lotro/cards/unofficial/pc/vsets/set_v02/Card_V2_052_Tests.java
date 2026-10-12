@@ -108,25 +108,6 @@ public class Card_V2_052_Tests
 	}
 
 	@Test
-	public void IsPlayedForOneToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var ruin = scn.GetFreepsCard("ruin");
-		scn.MoveCardsToHand(ruin);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(ruin));
-
-		scn.FreepsPlayCard(ruin);
-		assertEquals(1, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, ruin);
-		assertEquals(0, scn.GetCultureTokensOn(ruin));
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void EachMinionKilledAddsATokenWhileTwoValiantCompanionsCanBeSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

@@ -84,24 +84,6 @@ public class Card_06_091_Tests
 	}
 
 	@Test
-	public void PlaysToTheSupportAreaForOne() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var blood = scn.GetFreepsCard("blood");
-		scn.MoveCardsToHand(blood);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(blood));
-		scn.FreepsPlayCard(blood);
-
-		assertEquals(1, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, blood);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void DiscardsAMountBorneByARohanManSoThatUnderTripleHeIsNotOverwhelmed() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

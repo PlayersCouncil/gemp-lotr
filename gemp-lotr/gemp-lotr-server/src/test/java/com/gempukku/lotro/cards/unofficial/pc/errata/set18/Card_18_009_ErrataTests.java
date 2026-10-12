@@ -75,25 +75,6 @@ public class Card_18_009_ErrataTests
 	}
 
 	@Test
-	public void IsPlayedFromHandForTwo() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var defender = scn.GetFreepsCard("defender");
-		scn.MoveCardsToHand(defender);
-
-		scn.StartGame();
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(defender));
-
-		scn.FreepsPlayCard(defender);
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, defender);
-		// No [elven] token anywhere: his printed strength.
-		assertEquals(5, scn.GetStrength(defender));
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void IsStrengthPlus2WhileAnElvenTokenCanBeSpottedAndNoMoreForASecondToken() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

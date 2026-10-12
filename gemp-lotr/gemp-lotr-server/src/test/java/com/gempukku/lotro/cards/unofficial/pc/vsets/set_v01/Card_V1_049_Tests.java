@@ -69,32 +69,6 @@ public class Card_V1_049_Tests
 	}
 
 	@Test
-	public void PlaysFromHandToTheSupportAreaForOneTwilight() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var shadow = scn.GetShadowCard("shadow");
-		scn.MoveCardsToHand(shadow);
-
-		scn.StartGame();
-		scn.SetTwilight(4);
-		scn.FreepsPass();
-
-		assertTrue(scn.AwaitingShadowPhaseActions());
-		// 4 set + 1 companion + 2 for the shadow number of site 2
-		assertEquals(7, scn.GetTwilight());
-		assertInZone(Zone.HAND, shadow);
-		assertTrue(scn.ShadowPlayAvailable(shadow));
-
-		scn.ShadowPlayCard(shadow);
-
-		// A condition pays no roaming penalty.
-		assertEquals(6, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, shadow);
-		assertFalse(scn.IsHindered(shadow));
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void EachSauronOrcIsDamagePlusOneWhileFourBurdensCanBeSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

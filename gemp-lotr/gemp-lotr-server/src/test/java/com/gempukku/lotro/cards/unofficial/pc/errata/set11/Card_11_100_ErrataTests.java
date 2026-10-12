@@ -82,30 +82,6 @@ public class Card_11_100_ErrataTests
 	}
 
 	@Test
-	public void IsPlayedFromHandForFourPlusRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var men1 = scn.GetShadowCard("men1");
-		scn.MoveCardsToHand(men1);
-
-		scn.StartGame();
-		scn.SetTwilight(7);
-		scn.SkipToPhase(Phase.SHADOW);
-
-		// 7 set + 1 companion + 2 for the site.
-		assertEquals(10, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(men1));
-
-		scn.ShadowPlayCard(men1);
-
-		// 4 to play + 2 roaming: its site number is 4 and the fellowship is at site 2.
-		assertEquals(4, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, men1);
-		assertNull(men1.getAttachedTo());
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void AtTheStartOfTheManeuverPhaseEachCopyMayExertToTransferAPossessionOrConditionBorneByACharacter() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

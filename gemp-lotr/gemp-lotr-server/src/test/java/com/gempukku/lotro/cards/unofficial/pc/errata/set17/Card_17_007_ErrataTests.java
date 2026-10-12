@@ -83,23 +83,6 @@ public class Card_17_007_ErrataTests
 	}
 
 	@Test
-	public void PlayedFromHandForTwoAsACompanion() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var guardian = scn.GetFreepsCard("guardian1");
-		scn.MoveCardsToHand(guardian);
-
-		scn.StartGame();
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(guardian));
-
-		scn.FreepsPlayCard(guardian);
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, guardian);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void HeIsStrengthPlus2OnlyWhileTheMinionHeIsSkirmishingIsWounded() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

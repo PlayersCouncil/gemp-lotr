@@ -65,28 +65,6 @@ public class Card_V1_032_Tests
 	}
 
 	@Test
-	public void PlaysFromHandToTheSupportAreaForNoTwilight() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var terror = scn.GetShadowCard("terror");
-		scn.MoveCardsToHand(terror);
-
-		scn.StartGame();
-		scn.FreepsPass();
-
-		// 1 companion + 2 for site 2
-		assertEquals(3, scn.GetTwilight());
-		assertInZone(Zone.HAND, terror);
-		assertTrue(scn.ShadowPlayAvailable(terror));
-
-		scn.ShadowPlayCard(terror);
-
-		assertEquals(3, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, terror);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void RevealingTheBalrogFromHandWhenTheFellowshipMovesAddsTwo() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

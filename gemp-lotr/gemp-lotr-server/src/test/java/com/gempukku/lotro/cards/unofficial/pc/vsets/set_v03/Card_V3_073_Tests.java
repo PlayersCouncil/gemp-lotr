@@ -86,28 +86,6 @@ public class Card_V3_073_Tests
 	}
 
 	@Test
-	public void PlaysForSixAndTwoForRoamingToTheMinionsInPlay() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var cantea = scn.GetShadowCard("cantea");
-		scn.MoveCardsToHand(cantea);
-
-		scn.StartGame();
-		scn.SetTwilight(20);
-		scn.FreepsPass();
-
-		int twilight = scn.GetTwilight();
-		assertTrue(scn.ShadowPlayAvailable(cantea));
-
-		scn.ShadowPlayCard(cantea);
-
-		// 6 to play + 2 roaming: her site number is 3 and the fellowship is at site 2.
-		assertEquals(twilight - 8, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, cantea);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void HindersEveryPossessionAndConditionOnTheCharacterSheIsSkirmishingAndNothingElseWithNoOtherNazgulToSpot() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

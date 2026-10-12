@@ -66,25 +66,6 @@ public class Card_03_038_ErrataTests
 	}
 
 	@Test
-	public void PlayingAragornAddsFourTwilight() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCardsToHand(aragorn);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(aragorn));
-
-		scn.FreepsPlayCard(aragorn);
-
-		assertInZone(Zone.FREE_CHARACTERS, aragorn);
-		assertEquals(4, scn.GetTwilight());
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void EachFellowshipPhaseMoveRemovesOneTwilightBeforeTheMoveAddsItsOwn() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

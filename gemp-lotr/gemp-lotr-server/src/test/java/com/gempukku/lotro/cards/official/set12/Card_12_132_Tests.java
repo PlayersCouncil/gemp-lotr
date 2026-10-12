@@ -72,27 +72,6 @@ public class Card_12_132_Tests
 	}
 
 	@Test
-	public void PlayedFromHandForTwoToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var fury = scn.GetFreepsCard("fury");
-		scn.MoveCardsToHand(fury);
-
-		scn.StartGame();
-
-		assertInZone(Zone.HAND, fury);
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(fury));
-
-		scn.FreepsPlayCard(fury);
-
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, fury);
-		assertNotAttachedTo(fury, scn.GetRingBearer());
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void EachTimeAShireCompanionLosesASkirmishEachCopyAddsATokenToItself() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

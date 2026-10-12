@@ -96,28 +96,6 @@ public class Card_V1_012_Tests
 	}
 
 	@Test
-	public void PlaysFromHandToTheSupportAreaForOneTwilight() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var three = scn.GetFreepsCard("three");
-		scn.MoveCardsToHand(three);
-
-		scn.StartGame();
-
-		assertInHand(three);
-		assertEquals(1, scn.GetFreepsHandCount());
-		assertEquals(0, scn.GetTwilight());
-		// Nothing has to be spotted to play it: there is no ring but The One Ring.
-		assertTrue(scn.FreepsPlayAvailable(three));
-
-		scn.FreepsPlayCard(three);
-		assertEquals(1, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, three);
-		assertEquals(0, scn.GetFreepsHandCount());
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void MovingWithAnElvenRingPlacesAChosenCardFromHandBeneathTheDrawDeckAndDrawsACard() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

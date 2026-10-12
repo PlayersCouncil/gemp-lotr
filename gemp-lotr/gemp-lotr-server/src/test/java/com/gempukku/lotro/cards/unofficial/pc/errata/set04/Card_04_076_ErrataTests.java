@@ -67,24 +67,6 @@ public class Card_04_076_ErrataTests
 	}
 
 	@Test
-	public void LorienGuardianIsPlayedFromHandForTwo() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var guardian = scn.GetFreepsCard("guardian");
-		scn.MoveCardsToHand(guardian);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(guardian));
-
-		scn.FreepsPlayCard(guardian);
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, guardian);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void RegroupAbilityExertsThisCompanionToMakeTheShadowPlayerWoundAMinionOfHisChoice() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

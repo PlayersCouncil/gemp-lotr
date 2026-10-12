@@ -82,29 +82,6 @@ public class Card_V3_078_Tests
 	}
 
 	@Test
-	public void IsPlayedForFiveAndTwoMoreWhileRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var otsea = scn.GetShadowCard("otsea");
-		scn.MoveCardsToHand(otsea);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		// 10 set + 1 for Frodo + 2 for the shadow number of site 2
-		assertEquals(13, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(otsea));
-
-		scn.ShadowPlayCard(otsea);
-
-		// 13 - 5 to play - 2 roaming: his site number is 3 and the fellowship is at site 2
-		assertEquals(6, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, otsea);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void EachWinByOtseaMayExertHimAndRemoveOneToPlayAShadowConditionFromTheDiscardPile() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

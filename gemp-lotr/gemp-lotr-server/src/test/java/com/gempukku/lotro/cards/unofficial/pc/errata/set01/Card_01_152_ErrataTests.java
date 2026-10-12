@@ -68,27 +68,6 @@ public class Card_01_152_ErrataTests
 	}
 
 	@Test
-	public void PlayedFromHandForThreePlusRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var shaman = scn.GetShadowCard("shaman");
-		scn.MoveCardsToHand(shaman);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		assertTrue(scn.ShadowPlayAvailable(shaman));
-		int twilight = scn.GetTwilight();
-
-		scn.ShadowPlayCard(shaman);
-		// 3 to play + 2 roaming (site 5 minion at site 2)
-		assertEquals(twilight - 5, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, shaman);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void ManeuverRemovesTwoTwilightToHealAnIsengardMinionOfAnyRace() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

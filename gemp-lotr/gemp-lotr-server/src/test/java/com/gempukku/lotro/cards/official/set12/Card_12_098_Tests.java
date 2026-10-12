@@ -98,30 +98,6 @@ public class Card_12_098_Tests
 	}
 
 	@Test
-	public void PlayedFromHandForTwoAndTwoMoreWhileRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var tormentor = scn.GetShadowCard("tormentor");
-		scn.MoveCardsToHand(tormentor);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		int twilight = scn.GetTwilight();
-		assertEquals(2, scn.GetCurrentSiteNumber());
-		assertInZone(Zone.HAND, tormentor);
-		assertTrue(scn.ShadowPlayAvailable(tormentor));
-
-		scn.ShadowPlayCard(tormentor);
-
-		// 2 to play + 2 roaming: its site number is 4 and the fellowship is at site 2
-		assertEquals(twilight - 4, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, tormentor);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void AssignedByTheFreePeoplesPlayerToAnUnwoundedCompanionItHasHimChooseAndABurdenIsAdded() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

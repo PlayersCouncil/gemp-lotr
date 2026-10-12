@@ -76,29 +76,6 @@ public class Card_03_091_ErrataTests
 	}
 
 	@Test
-	public void PlaysToTheSupportAreaForOne() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var cruelty = scn.GetShadowCard("cruelty");
-		scn.MoveCardsToHand(cruelty);
-
-		scn.StartGame();
-		scn.SetTwilight(3);
-		scn.FreepsPass();
-
-		int twilight = scn.GetTwilight();
-		assertTrue(scn.AwaitingShadowPhaseActions());
-		assertTrue(scn.ShadowPlayAvailable(cruelty));
-
-		scn.ShadowPlayCard(cruelty);
-
-		assertEquals(twilight - 1, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, cruelty);
-		assertNull(cruelty.getAttachedTo());
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void DiscardsASauronMinionToRevealTheTopTwoCardsOfTheOpponentsDeck() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

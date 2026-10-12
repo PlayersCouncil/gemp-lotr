@@ -79,30 +79,6 @@ public class Card_07_200_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	@Test
-	public void PlayedFromHandForFourAndTwoMoreWhileRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var spawn = scn.GetShadowCard("spawn");
-		scn.MoveCardsToHand(spawn);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		int twilight = scn.GetTwilight();
-		assertEquals(2, scn.GetCurrentSiteNumber());
-		assertInZone(Zone.HAND, spawn);
-		assertTrue(scn.ShadowPlayAvailable(spawn));
-
-		scn.ShadowPlayCard(spawn);
-
-		// 4 to play + 2 roaming: its site number is 4 and the fellowship is at site 2
-		assertEquals(twilight - 6, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, spawn);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
 
 	@Test
 	public void MustExertToAssignMorgulSpawn() throws DecisionResultInvalidException, CardNotFoundException {

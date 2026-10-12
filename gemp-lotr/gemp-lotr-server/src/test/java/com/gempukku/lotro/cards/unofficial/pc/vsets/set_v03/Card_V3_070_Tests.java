@@ -86,28 +86,6 @@ public class Card_V3_070_Tests
 	}
 
 	@Test
-	public void PlayedFromHandForThreeAndTwoMoreWhileRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var mouth = scn.GetShadowCard("mouth");
-		scn.MoveCardsToHand(mouth);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		// 10 set + 1 companion + 2 for site 2
-		assertEquals(13, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(mouth));
-
-		scn.ShadowPlayCard(mouth);
-		// 3 to play + 2 roaming: his site number is 3 and the fellowship is at site 2
-		assertEquals(8, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, mouth);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void AnotherMinionLosingToDamagePlusOneTakesOneWoundWhileTheMouthAndACompanionTakeTwo() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

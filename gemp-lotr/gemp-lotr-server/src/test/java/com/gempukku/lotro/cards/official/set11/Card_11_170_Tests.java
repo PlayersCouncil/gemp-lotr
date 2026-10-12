@@ -90,26 +90,6 @@ public class Card_11_170_Tests
 	}
 
 	@Test
-	public void PlayedFromHandForOneAsACompanion() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var pippin = scn.GetFreepsCard("pippin");
-		scn.MoveCardsToHand(pippin);
-
-		scn.StartGame();
-
-		assertInZone(Zone.HAND, pippin);
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(pippin));
-
-		scn.FreepsPlayCard(pippin);
-
-		assertEquals(1, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, pippin);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void ReplacesAnUnboundCompanionOfLessResistanceInTheSkirmishBeingFoughtAndFightsItOut() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

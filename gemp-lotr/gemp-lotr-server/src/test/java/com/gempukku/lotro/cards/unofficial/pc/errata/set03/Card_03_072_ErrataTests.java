@@ -87,28 +87,6 @@ public class Card_03_072_ErrataTests
 	}
 
 	@Test
-	public void TrappedAndAloneIsPlayedToTheSupportAreaForOne() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var trapped = scn.GetShadowCard("trapped");
-		scn.MoveCardsToHand(trapped);
-
-		scn.StartGame();
-		scn.SetTwilight(5);
-		scn.FreepsPass();
-
-		assertTrue(scn.AwaitingShadowPhaseActions());
-		assertTrue(scn.ShadowPlayAvailable(trapped));
-		int twilight = scn.GetTwilight();
-
-		scn.ShadowPlayCard(trapped);
-		assertEquals(twilight - 1, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, trapped);
-		assertNull(trapped.getAttachedTo());
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void CharactersSkirmishingAnIsengardOrcLoseOnlyTheirWeaponsDamageBonuses() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

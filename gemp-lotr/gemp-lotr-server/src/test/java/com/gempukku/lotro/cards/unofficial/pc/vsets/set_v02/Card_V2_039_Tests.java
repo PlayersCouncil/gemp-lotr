@@ -68,27 +68,6 @@ public class Card_V2_039_Tests
 	}
 
 	@Test
-	public void IsPlayedForNothingToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var dungeon = scn.GetShadowCard("dungeon");
-		scn.MoveCardsToHand(dungeon);
-
-		scn.StartGame();
-		scn.FreepsPass();
-
-		// 1 for Frodo + 2 for the site
-		assertEquals(3, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(dungeon));
-
-		scn.ShadowPlayCard(dungeon);
-
-		assertEquals(3, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, dungeon);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void RevealingOneOfTwoBalrogsInHandWhenTheFellowshipMovesAddsAThreat() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

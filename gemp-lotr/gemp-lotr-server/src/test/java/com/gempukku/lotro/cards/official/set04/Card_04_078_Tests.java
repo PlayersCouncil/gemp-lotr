@@ -73,24 +73,6 @@ public class Card_04_078_Tests
 	}
 
 	@Test
-	public void LorienSwordsmanIsPlayedFromHandForTwo() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var swordsman = scn.GetFreepsCard("swordsman");
-		scn.MoveCardsToHand(swordsman);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(swordsman));
-
-		scn.FreepsPlayCard(swordsman);
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, swordsman);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void EachMinionSkirmishingThisCompanionIsStrengthMinus2ForEachWoundOnIt() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

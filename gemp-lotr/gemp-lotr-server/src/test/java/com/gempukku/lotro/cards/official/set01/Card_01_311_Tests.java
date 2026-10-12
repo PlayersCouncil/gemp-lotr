@@ -86,24 +86,6 @@ public class Card_01_311_Tests
 	}
 
 	@Test
-	public void PlaysFromHandAsACompanionForTwoTwilight() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var sam = scn.GetFreepsCard("sam");
-		scn.MoveCardsToHand(sam);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(sam));
-
-		scn.FreepsPlayCard(sam);
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, sam);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void FellowshipAbilityExertsSamToRemoveOneBurdenUntilHeIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

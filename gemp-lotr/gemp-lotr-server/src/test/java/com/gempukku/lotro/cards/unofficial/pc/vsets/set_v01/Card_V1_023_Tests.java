@@ -103,25 +103,6 @@ public class Card_V1_023_Tests
 	}
 
 	@Test
-	public void PlaysFromHandToTheSupportAreaForTwoTwilight() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var gone = scn.GetFreepsCard("gone");
-		scn.MoveCardsToHand(gone);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertInHand(gone);
-		assertTrue(scn.FreepsPlayAvailable(gone));
-
-		scn.FreepsPlayCard(gone);
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, gone);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void EachSkirmishEventPlayedInASignetCompanionsSkirmishMayBeStackedHereAndStillTakesEffect() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

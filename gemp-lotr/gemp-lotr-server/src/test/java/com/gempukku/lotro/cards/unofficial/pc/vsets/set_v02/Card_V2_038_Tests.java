@@ -79,28 +79,6 @@ public class Card_V2_038_Tests
 	}
 
 	@Test
-	public void IsPlayedForFourteenAndTwoMoreForRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var balrog = scn.GetShadowCard("balrog");
-		scn.MoveCardsToHand(balrog);
-
-		scn.StartGame();
-		scn.SetTwilight(13);
-		scn.FreepsPass();
-
-		// 13 set + 1 for Frodo + 2 for the site: exactly the 14 to play and the 2 for roaming at site 2
-		assertEquals(16, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(balrog));
-
-		scn.ShadowPlayCard(balrog);
-
-		assertEquals(0, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, balrog);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void EachMinionTakingAWoundLetsTheShadowPlayerRemoveOneTwilightToAddAThreat() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

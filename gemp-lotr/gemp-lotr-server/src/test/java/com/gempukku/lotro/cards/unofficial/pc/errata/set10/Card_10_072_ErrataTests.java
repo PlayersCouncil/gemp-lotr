@@ -74,24 +74,6 @@ public class Card_10_072_ErrataTests
 	}
 
 	@Test
-	public void PlayedFromHandForTwo() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var eowyn = scn.GetFreepsCard("eowyn");
-		scn.MoveCardsToHand(eowyn);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(eowyn));
-
-		scn.FreepsPlayCard(eowyn);
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, eowyn);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void ExertsEowynToMakeTheShadowPlayerWoundAMinionOnceForOneWoundUntilSheIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

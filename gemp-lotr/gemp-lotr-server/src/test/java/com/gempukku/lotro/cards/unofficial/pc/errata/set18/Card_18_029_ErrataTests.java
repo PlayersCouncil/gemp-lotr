@@ -109,27 +109,6 @@ public class Card_18_029_ErrataTests
 	}
 
 	@Test
-	public void DeceitIsPlayedFromHandForOneToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var deceit = scn.GetShadowCard("deceit");
-		scn.MoveCardsToHand(deceit);
-
-		scn.StartGame();
-		scn.SetTwilight(3);
-		scn.SkipToPhase(Phase.SHADOW);
-
-		// 3 set + 1 for the one companion + 2 for the Shadow number of Ettenmoors.
-		assertEquals(6, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(deceit));
-		scn.ShadowPlayCard(deceit);
-
-		assertEquals(5, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, deceit);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void WhenAFreePeoplesEventDiscardsEveryConditionEachOtherGollumConditionOfItsOwnersMayBeSavedForTwo() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

@@ -70,30 +70,6 @@ public class Card_15_086_Tests
 	}
 
 	@Test
-	public void PlayedFromHandForSixAndTwoMoreWhileRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var gats = scn.GetShadowCard("gats");
-		scn.MoveCardsToHand(gats);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		int twilight = scn.GetTwilight();
-		assertEquals(2, scn.GetCurrentSiteNumber());
-		assertInZone(Zone.HAND, gats);
-		assertTrue(scn.ShadowPlayAvailable(gats));
-
-		scn.ShadowPlayCard(gats);
-
-		// 6 to play + 2 roaming: its site number is 4 and the fellowship is at site 2
-		assertEquals(twilight - 8, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, gats);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void ManeuverActionExertsTheCommanderTwiceToExertAChosenCompanionTwice() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

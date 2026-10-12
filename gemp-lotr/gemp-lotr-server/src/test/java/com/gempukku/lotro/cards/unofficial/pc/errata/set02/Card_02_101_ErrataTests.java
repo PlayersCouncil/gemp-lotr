@@ -73,24 +73,6 @@ public class Card_02_101_ErrataTests
 	}
 
 	@Test
-	public void FilibertIsPlayedFromHandToTheSupportAreaForOne() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var filibert = scn.GetFreepsCard("filibert");
-		scn.MoveCardsToHand(filibert);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(filibert));
-
-		scn.FreepsPlayCard(filibert);
-		assertEquals(1, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, filibert);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void ExertsAHobbitTwiceToCancelHisFierceSkirmishButNotHisRegularOne() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

@@ -69,25 +69,6 @@ public class Card_09_027_ErrataTests
 	}
 
 	@Test
-	public void IsPlayedFromHandForTwoToTheSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var sentback = scn.GetFreepsCard("sentback1");
-		scn.MoveCardsToHand(sentback);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(sentback));
-		scn.FreepsPlayCard(sentback);
-
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.SUPPORT, sentback);
-		assertNotAttachedTo(sentback, scn.GetRingBearer());
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void SkirmishAbilityDiscardsItselfAndEachMinionSkirmishingYourWizardAndPlacesHimInTheDeadPile() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

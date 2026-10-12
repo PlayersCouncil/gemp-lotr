@@ -97,27 +97,6 @@ public class Card_V1_054_Tests
 	}
 
 	@Test
-	public void PlaysFromHandAsACompanionForTwoTwilight() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var sam = scn.GetFreepsCard("sam");
-		scn.MoveCardsToHand(sam);
-
-		scn.StartGame();
-
-		assertInHand(sam);
-		assertEquals(1, scn.GetFreepsHandCount());
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(sam));
-
-		scn.FreepsPlayCard(sam);
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, sam);
-		assertEquals(0, scn.GetFreepsHandCount());
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void FrodoSignetCompanionWhoWinsASkirmishMayBeHealedEachTime() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

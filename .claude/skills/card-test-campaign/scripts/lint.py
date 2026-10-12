@@ -25,7 +25,7 @@ import gempcards as g
 # The checks a clause of each type has to list at the very least.  The standard says which further checks a
 # clause's wording calls for; those are the analyst's to list and the reviewer's to confirm.
 CORE = {
-    "Play": {"+"},
+    "Play": {"+"},  # P1, kept only on the cards of plainplay-keep.tsv (Q-0279: B)
     "Keyword": {"K"},
     "ToPlay": {"+", "-"},
     "ExtraCost": {"+", "-", "C"},
@@ -908,8 +908,8 @@ def lint_file(path: Path):
                     "(the Standard, \"A condition inside a modifier; 'bearer' or 'self' with a requirement\"; 2_79, an "
                     "exhausted companion beside a Ring-bearer who is not), in a test that claims F, or a `no F:` line "
                     "under the clause says why none can stand" % (cid, named[0], named[1]))
-        if card is not None and (card.field("type", "") or "").lower() in PLAYED and not any(c[0] == "Play" for c in clauses.values()):
-            add("error", "ledger", None, "no Play clause (P1 Play [+] ...): a card that is played from hand has a test that plays it")
+        # No Play clause is asked for since Q-0279: B (engine pass 31): a card's play is tested by the test of the
+        # clause that bears on it, and the `plain-play` warning below asks for that test.
         if card is not None:
             want = squash(card.field("gametext", ""))
             text_clauses = [c for cid, c in clauses.items() if cid.startswith("C")]

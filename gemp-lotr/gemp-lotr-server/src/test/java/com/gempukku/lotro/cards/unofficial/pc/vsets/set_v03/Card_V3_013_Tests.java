@@ -77,29 +77,6 @@ public class Card_V3_013_Tests
 	}
 
 	@Test
-	public void PlayedFromHandForSixAndTwoMoreWhileRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var shelob = scn.GetShadowCard("shelob");
-		scn.MoveCardsToHand(shelob);
-
-		scn.StartGame();
-		scn.SetTwilight(9);
-		scn.FreepsPass();
-
-		// 9 set + 1 for Frodo + 2 for site 2
-		assertEquals(12, scn.GetTwilight());
-		assertInZone(Zone.HAND, shelob);
-		assertTrue(scn.ShadowPlayAvailable(shelob));
-
-		scn.ShadowPlayCard(shelob);
-		// 6 to play + 2 roaming: her site number is 8 and the fellowship is at site 2
-		assertEquals(4, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, shelob);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void EachSkirmishShelobFightsMayHinderTheCharacterSheFoughtAndNobodyElse() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

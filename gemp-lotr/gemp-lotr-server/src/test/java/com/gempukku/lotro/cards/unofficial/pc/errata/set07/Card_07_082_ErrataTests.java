@@ -91,24 +91,6 @@ public class Card_07_082_ErrataTests
 	}
 
 	@Test
-	public void CirionIsPlayedFromHandForTwo() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var cirion = scn.GetFreepsCard("cirion");
-		scn.MoveCardsToHand(cirion);
-
-		scn.StartGame();
-
-		assertEquals(0, scn.GetTwilight());
-		assertTrue(scn.FreepsPlayAvailable(cirion));
-
-		scn.FreepsPlayCard(cirion);
-		assertEquals(2, scn.GetTwilight());
-		assertInZone(Zone.FREE_CHARACTERS, cirion);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
 	public void StrengthIsPlusTwoOnlyWhileYourHandHoldsFourOrFiveCards() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

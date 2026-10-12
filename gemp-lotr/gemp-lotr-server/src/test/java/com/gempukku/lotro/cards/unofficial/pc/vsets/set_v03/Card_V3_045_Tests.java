@@ -81,29 +81,6 @@ public class Card_V3_045_Tests
 	}
 
 	@Test
-	public void PlayedFromHandAtSite2ForSixAndTwoForRoaming() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var quartermaster = scn.GetShadowCard("quartermaster");
-		scn.MoveCardsToHand(quartermaster);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		// 10 set + 1 companion + 2 for the site
-		assertEquals(13, scn.GetTwilight());
-		assertTrue(scn.ShadowPlayAvailable(quartermaster));
-
-		scn.ShadowPlayCard(quartermaster);
-
-		// 6 to play + 2 roaming: its site number is 4 and this is site 2
-		assertEquals(5, scn.GetTwilight());
-		assertInZone(Zone.SHADOW_CHARACTERS, quartermaster);
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
 	public void AtTheStartOfItsSkirmishTheFreePeoplesPlayerMayHinderItemsOnTheCompanionItFightsAndEachOneLeftIsDamagePlusOne() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
