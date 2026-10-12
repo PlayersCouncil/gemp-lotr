@@ -65,6 +65,10 @@ def tree_of(folder, t):
 
 
 def at_work(tree, but=None):
+    return _at_work(tree, but)
+
+
+def _at_work(tree, but=None):
     return [f for f, t in tracked().items() if not t.get("landed") and f != but and tree_of(f, t) == tree]
 
 
@@ -157,7 +161,19 @@ def notes_file(queue_name):
 
 
 def next_launch():
-    """What to launch next, with its arguments, for the work that comes off a queue of cards."""
+    """What to launch next, with its arguments, for the work that comes off a queue of cards.  A run whose workflow
+    has ended counts as free though it is not closed yet (no gap between batches, Ketura 2026-10-12: the next is
+    launched before the last is closed)."""
+    try:
+        live = {x["name"] for x in json.loads(run(sys.executable, HERE / "wf.py", "running").stdout or "[]")
+                if str(x.get("state", "")).startswith("running")}
+    except Exception:
+        live = None
+
+    def at_work(tree, but=None):
+        busy = _at_work(tree, but)
+        return busy if live is None else [f for f in busy if f in live]
+
     # Whatever holds the main slot (an engine pass, or a trial that runs a whole suite): batches then go to the second tree.
     held = [f for f in at_work("repo") if f.startswith(("engine-pass", "noeffect", "trial"))]
     out = []
