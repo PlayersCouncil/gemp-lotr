@@ -222,6 +222,12 @@ function start() {
       el("td", { text: c.lint ? "meets" : "not yet" }), el("td", { class: "id", text: c.findings || "" }), el("td", { class: "note", text: c.note || "" })));
     return el("div", { class: "cards" }, t); }
   function draw() { ledger.replaceChildren();
+    // Ketura, 2026-10-12: the 600 most-used cards first, by set; the same cards as in their own section below.
+    const hu = new Set(DATA.highuse || []);
+    const hc = DATA.cards.filter(c => hu.has(c.id));
+    if (hc.length) { ledger.append(row(0, "p:highuse", "High Use Cards", hc));
+      if (open["p:highuse"]) for (const [setName, sc] of groupBy(hc, "set")) { const sk = "s:highuse/" + setName;
+        ledger.append(row(1, sk, setName, sc)); if (open[sk]) ledger.append(cardTable(sc)); } }
     for (const p of DATA.phases) { const pc = DATA.cards.filter(c => c.phase === p.key); if (!pc.length) continue;
       ledger.append(row(0, "p:" + p.key, p.title, pc)); if (!open["p:" + p.key]) continue;
       for (const [setName, sc] of groupBy(pc, "set")) { const sk = "s:" + p.key + "/" + setName; ledger.append(row(1, sk, setName, sc)); if (!open[sk]) continue;

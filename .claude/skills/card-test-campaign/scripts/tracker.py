@@ -310,8 +310,20 @@ def build(state: Path) -> dict:
             running = json.loads((state / "running.json").read_text(encoding="utf-8"))
         except ValueError:
             running = []
+    # Ketura, 2026-10-12: the 600 most-used cards of her query (Fellowship Block, Movie Block, Expanded, Towers
+    # Standard over six months) get a section of their own above the Decipher sets; the same card objects, so a
+    # status shows in both.
+    highuse = []
+    usage = state / "orchestrator" / "top600-usage.tsv"
+    if usage.is_file():
+        import csv as _csv
+        with open(usage, encoding="utf-8", newline="") as f:
+            for row in list(_csv.reader(f, delimiter="\t"))[1:]:
+                if len(row) > 2 and row[2] not in highuse:
+                    highuse.append(row[2])
     data = {
         "generated": stamp,
+        "highuse": highuse,
         "running": running,
         "phases": [{"key": k, "title": t} for k, t in PHASES],
         "focus": focus,
