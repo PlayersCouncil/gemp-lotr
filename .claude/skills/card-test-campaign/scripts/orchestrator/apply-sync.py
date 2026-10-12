@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Runs on Ketura's machine, from Claude outputs/card-tests/transport/: fetches cto.bundle into
 feature/card-test-overhaul (moves the branch ref and nothing else: no checkout, no pull, no push, no status), and
-brings `Claude outputs/state-cache` (the campaign's state, a git working copy only Claude writes; branch `state`) up
-to state.bundle.  An older state-delta.zip, if one came, is unpacked over the card-tests folder as before.  Prints
+fetches state.bundle into `Claude outputs/state-cache.git` (the campaign's state with its history; a bare repository
+only Claude writes, branch `state`), writing the state's files over the card-tests folder.  An older state-delta.zip, if one came, is unpacked over the card-tests folder as before.  Prints
 one line.
 
     apply-sync.py [<expected head> [<expected state head>]]
@@ -16,7 +16,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 STATE = HERE.parent
 REPO = STATE.parent.parent
-CACHE = STATE.parent / "state-cache"
+CACHE = STATE.parent / "state-cache.git"
 BRANCH = "feature/card-test-overhaul"
 want = (sys.argv[1] if len(sys.argv) > 1 else "")[:9]
 want_state = (sys.argv[2] if len(sys.argv) > 2 else "")[:7]
@@ -66,22 +66,41 @@ def fetch():
 
 
 def state():
+    """The state: its history in the bare repository `Claude outputs/state-cache.git` (fetched; git there only ever
+    writes new files and renames them into place), and its files written over the card-tests folder in place.  No
+    checkout and no reset: a connected folder refuses deletes, so a working copy's index lock can never be removed
+    (2026-10-12).  A file the state no longer has is left where it is."""
+    import io, tarfile
     bundle = HERE / "state.bundle"
     while True:
-        have = git("rev-parse", "--short=7", "HEAD", cwd=CACHE).stdout.strip() if (CACHE / ".git").is_dir() else ""
-        if want_state and have.startswith(want_state):
+        have = git("rev-parse", "--short=7", "state", cwd=CACHE).stdout.strip() if (CACHE / "HEAD").is_file() else ""
+        if want_state and have.startswith(want_state) and (STATE / ".state-head").is_file() \
+                and (STATE / ".state-head").read_text().startswith(want_state):
             return "state at " + have
         said = ""
         if bundle.is_file():
-            if not (CACHE / ".git").is_dir():
-                made = git("clone", "-q", "--branch", "state", str(bundle), str(CACHE), cwd=STATE.parent)
-                said = made.stderr.strip()[-160:]
-            elif git("bundle", "verify", str(bundle), cwd=CACHE).returncode == 0:
-                git("fetch", "-q", str(bundle), "+state:refs/remotes/origin/state", cwd=CACHE)
-                git("reset", "-q", "--hard", "origin/state", cwd=CACHE)
-            have = git("rev-parse", "--short=7", "HEAD", cwd=CACHE).stdout.strip() if (CACHE / ".git").is_dir() else ""
-            if not want_state or have.startswith(want_state):
-                return "state at " + (have or "?")
+            if not (CACHE / "HEAD").is_file():
+                said = git("init", "-q", "--bare", str(CACHE), cwd=STATE.parent).stderr.strip()[-160:]
+            if git("bundle", "verify", str(bundle), cwd=CACHE).returncode == 0:
+                said = git("fetch", "-q", str(bundle), "+state:state", cwd=CACHE).stderr.strip()[-160:]
+            have = git("rev-parse", "--short=7", "state", cwd=CACHE).stdout.strip()
+            if have and (not want_state or have.startswith(want_state)):
+                tar = subprocess.run(["git", "archive", "--format=tar", "state"], cwd=CACHE, capture_output=True)
+                written = 0
+                with tarfile.open(fileobj=io.BytesIO(tar.stdout)) as tf:
+                    for m in tf.getmembers():
+                        if not m.isfile():
+                            continue
+                        target = STATE / m.name
+                        data = tf.extractfile(m).read()
+                        if target.is_file() and target.read_bytes() == data:
+                            continue
+                        target.parent.mkdir(parents=True, exist_ok=True)
+                        with open(target, "wb") as f:   # truncated in place: never unlinked
+                            f.write(data)
+                        written += 1
+                (STATE / ".state-head").write_text(have + "\n")
+                return "state at %s (%d file(s) written)" % (have, written)
         if time.time() > deadline:
             return "state at %s, EXPECTED %s %s" % (have or "nothing", want_state or "?", said)
         time.sleep(5)
