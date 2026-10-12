@@ -376,6 +376,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Card by card (2026-10-11, fifth notes) [F-0469, F-0478]
 - Card by card (2026-10-12, fifth notes) [Q-0287, F-0469]
 - Card by card (2026-10-12, sixth notes) [Q-0289, Q-0292, Q-0293, F-0488, F-0489]
+- Card by card (2026-10-12, ninth notes) [Q-0295, Q-0297, F-0490]
 - Card by card (2026-10-12). F-0482 (Mountain-troll 15_112's discount counted ahead): "Go for it". F-0483 (the same card asking whether to discard ... [F-0486]
 
 # Settled shapes (shapes.md)

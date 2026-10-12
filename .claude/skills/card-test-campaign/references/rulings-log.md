@@ -2015,6 +2015,13 @@ list is 9 cards): "keep". Q-0293, Treebeard 15_38 measures a removed loser as it
 `memorizeLoserStrength`, `memorizeLoser` unchanged: "keep both". F-0488 (Flung Into the Fray 8_71, "stacked here")
 and F-0489: "good". *[2026-10-12]*
 
+**Card by card (2026-10-12, ninth notes).** Q-0295, the minions with a cost of assigning (Morgul Regiment 7_197,
+Morgul Spawn 7_200, Morgul Spearman 7_201, Úlairë Nertëa 69_38) offered ahead of his assigning only where he could
+then assign them, and a payment that fails not offered again in the same assigning: "keep both". Q-0297, Into the
+Caves 17_100's bar keeps the minion to what it had when the bar was laid (no more of a keyword it has; one lost by
+its own text may come back up to that): "A". F-0490, Uruk Guard 1_147's bar on assigning names no side, so it stops
+the Shadow player too: "yeah looks like a bug to fix" (`side: free people`, as Uruk-hai Guard 12_156). *[2026-10-12]*
+
 **Card by card (2026-10-12).** F-0482 (Mountain-troll 15_112's discount counted ahead): "Go for it". F-0483 (the
 same card asking whether to discard where the pool cannot pay without it): "Also good". F-0486, Éowyn,
 Northwoman 17_96's last exertion with a Morgul Orc the only minion: "I'm inclined to agree with the agent's
