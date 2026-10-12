@@ -23,6 +23,8 @@ public class RuleSet {
 
         new MusterRule(_actionsEnvironment).applyRule();
 
+        new AssignmentCostRule(_actionsEnvironment).applyRule();
+
         new AmbushRule(_actionsEnvironment).applyRule();
 
         new ResolveSkirmishRule(_game, _actionsEnvironment).applyRule();

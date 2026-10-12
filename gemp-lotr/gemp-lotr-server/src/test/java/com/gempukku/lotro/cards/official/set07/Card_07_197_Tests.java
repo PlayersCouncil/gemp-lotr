@@ -128,14 +128,18 @@ public class Card_07_197_Tests
 
 		scn.SkipToAssignments();
 
-		// The price is paid as the Regiment is assigned, and nothing is asked ahead of it.
-		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+		// The price is offered as he starts assigning, ahead of it (Q-0283).
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(regiment));
 		assertEquals(0, scn.GetWoundsOn(frodo));
+		scn.FreepsChooseOptionalTrigger(regiment);
+
+		// One Nazgûl, so one exertion, by the one companion there is, with nothing to choose.
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
 		assertTrue(scn.FreepsHasAssignmentTargetAvailable(regiment));
 
 		scn.FreepsAssignToMinions(frodo, regiment);
 
-		// One Nazgûl, so one exertion, by the one companion there is, with nothing to choose.
 		assertEquals(1, scn.GetWoundsOn(frodo));
 		assertTrue(scn.IsCharAssignedAgainst(frodo, regiment));
 		// The Nazgûl is left over for the Shadow player.
@@ -161,6 +165,8 @@ public class Card_07_197_Tests
 		scn.SkipToAssignments();
 
 		assertEquals(2, scn.GetVitality(frodo));
+		// Not offered: the first thing asked is his assigning
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(regiment));
 		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
 		assertTrue(scn.FreepsHasAssignmentTargetAvailable(lemenya));
 		assertFalse(scn.FreepsHasAssignmentTargetAvailable(regiment));
@@ -197,25 +203,28 @@ public class Card_07_197_Tests
 		scn.AddWoundsToChar(aragorn, 2);
 		scn.SkipToAssignments();
 
-		assertTrue(scn.FreepsHasAssignmentTargetAvailable(regiment));
-		assertTrue(scn.FreepsCanAssign(regiment));
-
-		scn.FreepsAssignToMinions(aragorn, regiment);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(regiment));
+		scn.FreepsChooseOptionalTrigger(regiment);
 
 		// The first exertion is his to place on either; the second is then the other's, the one companion left
 		// able to exert, and is not asked
 		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, aragorn));
-		assertFalse(scn.IsCharAssigned(regiment));
 		scn.FreepsChooseCard(frodo);
 
 		assertEquals(3, scn.GetWoundsOn(frodo));
 		assertEquals(3, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(regiment));
+		assertTrue(scn.FreepsCanAssign(regiment));
+		scn.FreepsAssignToMinions(aragorn, regiment);
+
 		assertTrue(scn.IsCharAssignedAgainst(aragorn, regiment));
 		assertTrue(scn.ShadowDecisionAvailable("Assign minions"));
 	}
 
+	// Q-0283: each Regiment is offered by itself and judged afresh after each payment, so one that can no longer be
+	// paid for in full is not offered, and nothing is paid once he has answered.
 	@Test
-	public void ARegimentWhoseTwoExertionsCanNoLongerBothBePaidWhenItsTurnComesIsNotBegunAndIsLeftOver() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AfterOneRegimentIsPaidForTheOtherWhoseTwoExertionsCanNoLongerBothBePaidIsOfferedNoMoreAndIsNotHis() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var regiment1 = scn.GetShadowCard("regiment");
@@ -232,27 +241,28 @@ public class Card_07_197_Tests
 		scn.AddWoundsToChar(frodo, 3);
 		scn.SkipToAssignments();
 
-		// Each Regiment can be paid for by itself, so both are his to assign
-		assertTrue(scn.FreepsCanAssign(regiment1));
-		assertTrue(scn.FreepsCanAssign(regiment2));
+		// Each Regiment can be paid for by itself, so both are offered
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(regiment1));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(regiment2));
 
-		// The payments are made in the order of the minions' card ids
-		var first = regiment1.getCardId() < regiment2.getCardId() ? regiment1 : regiment2;
-		var second = first == regiment1 ? regiment2 : regiment1;
+		scn.FreepsChooseOptionalTrigger(regiment2);
 
-		scn.MarkGameLog();
-		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{frodo, second}, new PhysicalCardImpl[]{aragorn, first});
-
-		// Aragorn, the one companion able to, exerts twice for the first.  One exertion is left for the second,
-		// which asks two: none of it is paid, and it is left over for the Shadow player.
+		// Aragorn, the one companion able to, exerts twice, unasked.  One exertion is left for the other Regiment,
+		// which asks two: it is offered no more, nobody exerts for it, and it is not his to assign.
 		assertEquals(2, scn.GetWoundsOn(aragorn));
 		assertEquals(3, scn.GetWoundsOn(frodo));
-		assertTrue(scn.IsCharAssignedAgainst(aragorn, first));
-		assertFalse(scn.IsCharAssigned(second));
-		assertTrue(scn.GameLogSinceMarkSays("did not pay to assign"));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(regiment1));
+		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(regiment2));
+		assertFalse(scn.FreepsHasAssignmentTargetAvailable(regiment1));
+
+		scn.FreepsAssignToMinions(aragorn, regiment2);
+
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, regiment2));
+		assertEquals(2, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowDecisionAvailable("Assign minions"));
-		assertTrue(scn.ShadowHasAssignmentTargetAvailable(second));
-		assertFalse(scn.ShadowHasAssignmentTargetAvailable(first));
+		assertTrue(scn.ShadowHasAssignmentTargetAvailable(regiment1));
+		assertFalse(scn.ShadowHasAssignmentTargetAvailable(regiment2));
 	}
 
 	// "For each Nazgûl": two of them, of two cultures, ask two exertions.  Each is a choice of its own, so one
@@ -278,14 +288,13 @@ public class Card_07_197_Tests
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertEquals(0, scn.GetWoundsOn(bilbo));
-		assertTrue(scn.FreepsHasAssignmentTargetAvailable(regiment));
-		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, regiment}, new PhysicalCardImpl[]{frodo, troop});
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(regiment));
+		scn.FreepsChooseOptionalTrigger(regiment);
 
 		// The first exertion: either companion, and one of them must; Bilbo, an ally who could exert, is not asked.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, frodo));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(bilbo));
 		assertEquals(1, scn.FreepsGetChoiceMin());
-		assertFalse(scn.IsCharAssigned(regiment));
 		scn.FreepsChooseCard(aragorn);
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 
@@ -293,8 +302,10 @@ public class Card_07_197_Tests
 		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, frodo));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(bilbo));
 		assertEquals(1, scn.FreepsGetChoiceMin());
-		assertFalse(scn.IsCharAssigned(regiment));
 		scn.FreepsChooseCard(aragorn);
+
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(regiment));
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, regiment}, new PhysicalCardImpl[]{frodo, troop});
 
 		// Two exertions were the whole price: the Troop, assigned in the same answer, cost nothing.
 		assertEquals(2, scn.GetWoundsOn(aragorn));
@@ -321,6 +332,8 @@ public class Card_07_197_Tests
 		scn.MoveMinionsToTable(regiment, creeper);
 		scn.SkipToAssignments();
 
+		// Nothing to pay, so nothing is offered, and it is his to assign
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(regiment));
 		assertTrue(scn.FreepsHasAssignmentTargetAvailable(regiment));
 		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, regiment}, new PhysicalCardImpl[]{frodo, creeper});
 
@@ -348,16 +361,25 @@ public class Card_07_197_Tests
 		scn.MoveMinionsToTable(regiment1, regiment2, khamul);
 		scn.SkipToAssignments();
 
-		assertTrue(scn.FreepsHasAssignmentTargetAvailable(regiment1));
-		assertTrue(scn.FreepsHasAssignmentTargetAvailable(regiment2));
-		scn.FreepsAssignToMinions(aragorn, regiment2);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(regiment1));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(regiment2));
+		scn.FreepsChooseOptionalTrigger(regiment2);
 
-		// One Nazgûl, Khamûl, a [raider] minion: one exertion for the one Regiment he assigned, and no second
-		// question.
+		// One Nazgûl, Khamûl, a [raider] minion: one exertion for the one Regiment he takes.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, frodo));
 		scn.FreepsChooseCard(frodo);
 		assertEquals(1, scn.GetWoundsOn(frodo));
 		assertEquals(0, scn.GetWoundsOn(aragorn));
+
+		// The other is offered again, and he passes: it is not his to assign.
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(regiment1));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(regiment2));
+		scn.FreepsDeclineOptionalTrigger();
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(regiment2));
+		assertFalse(scn.FreepsHasAssignmentTargetAvailable(regiment1));
+		scn.FreepsAssignToMinions(aragorn, regiment2);
+
+		assertEquals(1, scn.GetWoundsOn(frodo));
 		assertTrue(scn.IsCharAssignedAgainst(aragorn, regiment2));
 		assertFalse(scn.IsCharAssigned(regiment1));
 
@@ -397,7 +419,9 @@ public class Card_07_197_Tests
 		assertFalse(scn.ShadowActionAvailable(regiment));
 		scn.ShadowPass();
 
-		// The Creeper and the Nazgûl cost nothing to assign; the Regiment is left out of the skirmishes.
+		// The Creeper and the Nazgûl cost nothing to assign; the Regiment is not paid for, and is left out of the
+		// skirmishes.
+		scn.FreepsDeclineOptionalTrigger();
 		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{gimli, creeper}, new PhysicalCardImpl[]{aragorn, lemenya});
 		scn.ShadowDeclineAssignments();
 		assertEquals(0, scn.GetWoundsOn(gimli));

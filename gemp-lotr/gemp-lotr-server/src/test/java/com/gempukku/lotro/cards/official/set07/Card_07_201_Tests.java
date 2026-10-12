@@ -125,14 +125,17 @@ public class Card_07_201_Tests
 
 		scn.SkipToAssignments();
 
-		// The price is paid as the Spearman is assigned, and nothing is asked ahead of it.
-		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+		// The price is offered as he starts assigning, ahead of it (Q-0283).
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(spearman));
 		assertEquals(0, scn.GetWoundsOn(frodo));
-		assertTrue(scn.FreepsHasAssignmentTargetAvailable(spearman));
+		scn.FreepsChooseOptionalTrigger(spearman);
 
+		// The one companion there is exerts, with nothing to choose, and the Spearman is then his to assign.
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(spearman));
 		scn.FreepsAssignToMinions(frodo, spearman);
 
-		// The one companion there is exerts, with nothing to choose, and the Spearman is assigned.
 		assertEquals(1, scn.GetWoundsOn(frodo));
 		assertTrue(scn.IsCharAssignedAgainst(frodo, spearman));
 		// The Nazgûl is left over for the Shadow player.
@@ -155,17 +158,20 @@ public class Card_07_201_Tests
 		scn.MoveMinionsToTable(spearman, lemenya);
 		scn.SkipToAssignments();
 
-		// Nothing is asked ahead; his assignment lists both companions, the Nazgûl and the Spearman.
+		// He is offered to pay for the Spearman, and passes: his assignment lists both companions and the Nazgûl, and
+		// not the Spearman.
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(spearman));
+		scn.FreepsDeclineOptionalTrigger();
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
 		assertTrue(scn.FreepsHasAssignmentTargetAvailable(aragorn));
 		assertTrue(scn.FreepsHasAssignmentTargetAvailable(frodo));
 		assertTrue(scn.FreepsHasAssignmentTargetAvailable(lemenya));
-		assertTrue(scn.FreepsHasAssignmentTargetAvailable(spearman));
+		assertFalse(scn.FreepsHasAssignmentTargetAvailable(spearman));
 		scn.FreepsDeclineAssignments();
 
-		// He assigned nothing, so nobody exerts.
+		// He paid for nothing, so nobody exerts.
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(frodo));
 
@@ -200,24 +206,28 @@ public class Card_07_201_Tests
 		scn.MoveMinionsToTable(spearman, lemenya, troop);
 		scn.SkipToAssignments();
 
-		// His assignment lists the Spearman beside the Nazgûl and the Troop, and nobody has exerted.
+		// The Spearman is offered to be paid for, the Nazgûl and the Troop are not, and nobody has exerted.
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertEquals(0, scn.GetWoundsOn(bilbo));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(spearman));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(lemenya));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(troop));
+		scn.FreepsChooseOptionalTrigger(spearman);
+
+		// "Exert a companion": either of the two, and one of them must; Bilbo, an ally who could exert, is not
+		// asked.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, frodo));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(bilbo));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		scn.FreepsChooseCard(aragorn);
+
+		// His assignment then lists the Spearman beside the Nazgûl and the Troop.
 		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
 		assertTrue(scn.FreepsHasAssignmentTargetAvailable(spearman));
 		assertTrue(scn.FreepsHasAssignmentTargetAvailable(lemenya));
 		assertTrue(scn.FreepsHasAssignmentTargetAvailable(troop));
 		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, spearman}, new PhysicalCardImpl[]{frodo, troop});
-
-		// "Exert a companion": either of the two, and one of them must; Bilbo, an ally who could exert, is not
-		// asked.  Nothing is assigned until it is paid.
-		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, frodo));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(bilbo));
-		assertEquals(1, scn.FreepsGetChoiceMin());
-		assertFalse(scn.IsCharAssigned(spearman));
-		assertFalse(scn.IsCharAssigned(troop));
-		scn.FreepsChooseCard(aragorn);
 
 		// One exertion was the whole price: the Troop, assigned in the same answer, cost nothing.
 		assertTrue(scn.IsCharAssignedAgainst(aragorn, spearman));
@@ -246,12 +256,13 @@ public class Card_07_201_Tests
 
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(frodo));
-		assertTrue(scn.FreepsHasAssignmentTargetAvailable(spearman));
-		scn.FreepsAssignToMinions(aragorn, spearman);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(spearman));
+		scn.FreepsChooseOptionalTrigger(spearman);
 
 		// The companion who exerts need not be the one the Spearman is assigned to.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, frodo));
 		scn.FreepsChooseCard(frodo);
+		scn.FreepsAssignToMinions(aragorn, spearman);
 
 		assertTrue(scn.IsCharAssignedAgainst(aragorn, spearman));
 		assertEquals(1, scn.GetWoundsOn(frodo));
@@ -277,13 +288,16 @@ public class Card_07_201_Tests
 
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(frodo));
-		assertTrue(scn.FreepsHasAssignmentTargetAvailable(spearman));
-		scn.FreepsAssignToMinions(aragorn, spearman);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(spearman));
+		scn.FreepsChooseOptionalTrigger(spearman);
 
-		// The one exertion, by either companion; a second would be asked before anything is assigned.
+		// The one exertion, by either companion; a second would be asked before his assigning.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, frodo));
-		assertFalse(scn.IsCharAssigned(spearman));
 		scn.FreepsChooseCard(frodo);
+		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		scn.FreepsAssignToMinions(aragorn, spearman);
 
 		assertTrue(scn.IsCharAssignedAgainst(aragorn, spearman));
 		assertEquals(1, scn.GetWoundsOn(frodo));
@@ -337,17 +351,29 @@ public class Card_07_201_Tests
 		scn.MoveMinionsToTable(spearman1, spearman2, regiment, lemenya);
 		scn.SkipToAssignments();
 
-		// Nothing is asked ahead, and all of them are his to assign beside the Nazgûl.
-		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
-		assertTrue(scn.FreepsHasAssignmentTargetAvailable(spearman1));
-		assertTrue(scn.FreepsHasAssignmentTargetAvailable(spearman2));
-		assertTrue(scn.FreepsHasAssignmentTargetAvailable(regiment));
-		assertTrue(scn.FreepsHasAssignmentTargetAvailable(lemenya));
+		// Each of the three that charge is offered to be paid for; the Nazgûl is not.
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(spearman1));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(spearman2));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(regiment));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(lemenya));
 
-		// He assigns one Spearman: one exertion, of his choice, and no more.
-		scn.FreepsAssignToMinions(aragorn, spearman2);
+		// He pays for one Spearman: one exertion, of his choice, and no more.  The other two are offered again, and he
+		// passes.
+		scn.FreepsChooseOptionalTrigger(spearman2);
 		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, aragorn, gimli));
 		scn.FreepsChooseCard(aragorn);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(spearman1));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(regiment));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(spearman2));
+		scn.FreepsDeclineOptionalTrigger();
+
+		// The Spearman paid for and the Nazgûl are his to assign; the two not paid for are not.
+		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(spearman2));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(lemenya));
+		assertFalse(scn.FreepsHasAssignmentTargetAvailable(spearman1));
+		assertFalse(scn.FreepsHasAssignmentTargetAvailable(regiment));
+		scn.FreepsAssignToMinions(aragorn, spearman2);
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(gimli));
 		assertEquals(0, scn.GetWoundsOn(frodo));
@@ -386,19 +412,18 @@ public class Card_07_201_Tests
 		scn.MoveMinionsToTable(spearman1, spearman2, lemenya);
 		scn.SkipToAssignments();
 
-		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, spearman1}, new PhysicalCardImpl[]{gimli, spearman2});
-
-		// One exertion for each, asked for one after the other; neither is assigned until both are settled.
+		// One exertion for each, paid for one after the other, and the same companion may make both.
+		scn.FreepsChooseOptionalTrigger(spearman1);
 		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, aragorn, gimli));
-		assertFalse(scn.IsCharAssigned(spearman1));
-		assertFalse(scn.IsCharAssigned(spearman2));
 		scn.FreepsChooseCard(aragorn);
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(spearman2));
+		scn.FreepsChooseOptionalTrigger(spearman2);
 		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, aragorn, gimli));
-		assertFalse(scn.IsCharAssigned(spearman1));
-		assertFalse(scn.IsCharAssigned(spearman2));
 		scn.FreepsChooseCard(aragorn);
+
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, spearman1}, new PhysicalCardImpl[]{gimli, spearman2});
 
 		assertEquals(2, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(gimli));

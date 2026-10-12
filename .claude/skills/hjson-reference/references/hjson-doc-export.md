@@ -2120,7 +2120,7 @@ In general, although the names of modifiers are case-insensitive, the names of t
     * requires [ ]
       optional
 * ExtraCostToAssign
- Adds a `cost` the Free Peoples player must pay to assign a `minion` to a skirmish, so long as the `requires` requirements are met ("the Free Peoples player must exert a companion to assign this minion to a skirmish").  The cost is paid as the assignment is made, by the Free Peoples player's own assigning and by any card that has him assign; while it cannot be paid he may not make the assignment, and if it is not paid in full the assignment is not made.  Assignments the Shadow player makes are never charged.  See Morgul Spawn).
+ Adds a `cost` the Free Peoples player must pay to assign a `minion` to a skirmish, so long as the `requires` requirements are met ("the Free Peoples player must exert a companion to assign this minion to a skirmish").  At the Free Peoples player's own assigning the cost is paid ahead, offered on the minion as he starts assigning, and a minion not paid for is not his to assign; where a card has him assign, it is paid as the assignment is made; while it cannot be paid he may not make the assignment, and if it is not paid in full the assignment is not made.  Assignments the Shadow player makes are never charged.  See Morgul Spawn).
     * minion
       required; the minions charged for (usually "self")
     * fpCharacter

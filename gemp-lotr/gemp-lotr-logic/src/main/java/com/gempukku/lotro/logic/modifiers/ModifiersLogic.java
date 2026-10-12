@@ -1467,6 +1467,16 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     }
 
     @Override
+    public boolean appendAssignmentCosts(LotroGame game, CostToEffectAction action, PhysicalCard fpCharacter, PhysicalCard minion) {
+        boolean charged = false;
+        for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.ASSIGNMENT_MODIFIER, minion)) {
+            if (modifier.appendExtraAssignmentCosts(game, action, fpCharacter, minion))
+                charged = true;
+        }
+        return charged;
+    }
+
+    @Override
     public int getSanctuaryHealModifier(LotroGame game) {
         int result = 0;
         for (Modifier modifier : getModifiers(game, ModifierEffect.SANCTUARY_HEAL_MODIFIER))

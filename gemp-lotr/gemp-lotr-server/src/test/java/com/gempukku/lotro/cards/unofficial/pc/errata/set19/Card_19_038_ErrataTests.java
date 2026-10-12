@@ -141,7 +141,7 @@ public class Card_19_038_ErrataTests
 	}
 
 	@Test
-	public void AssigningHerToACompanionOfTheNamedRaceAddsABurdenWithoutAsking() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AsHeStartsAssigningHePaysTheBurdenAheadAndMayThenAssignHerToACompanionOfTheNamedRace() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var nertea = scn.GetShadowCard("nertea");
@@ -162,8 +162,15 @@ public class Card_19_038_ErrataTests
 		scn.MoveMinionsToTable(nelya);
 		scn.SkipToAssignments();
 
-		// Nothing is asked ahead of the assigning, and nothing is barred
+		// She is offered to be paid for as he starts assigning (Q-0283); the other Nazgul costs nothing
 		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(nertea));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(nelya));
+
+		scn.FreepsChooseOptionalTrigger(nertea);
+
+		// The burden is the whole price, and nothing more is asked
+		assertEquals(1, scn.GetBurdens());
 		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
 		assertTrue(scn.FreepsHasAssignmentTargetAvailable(nertea));
 		assertTrue(scn.FreepsCanAssignAgainst(pippin, nertea));
@@ -177,6 +184,45 @@ public class Card_19_038_ErrataTests
 		assertTrue(scn.IsCharAssignedAgainst(sam, nertea));
 		assertTrue(scn.IsCharAssignedAgainst(pippin, nelya));
 		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
+	}
+
+	@Test
+	public void NotPaidForSheIsHisToAssignToAnyoneButACompanionOfTheNamedRace() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var nertea = scn.GetShadowCard("nertea");
+		var nelya = scn.GetShadowCard("nelya");
+		var frodo = scn.GetRingBearer();
+		var pippin = scn.GetFreepsCard("pippin");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(pippin, aragorn);
+		scn.MoveCardsToHand(nertea);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.SkipToPhase(Phase.SHADOW);
+		scn.ShadowPlayCard(nertea);
+		scn.ShadowChoose("Hobbit");
+		scn.MoveMinionsToTable(nelya);
+		scn.SkipToAssignments();
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(nertea));
+		scn.FreepsDeclineOptionalTrigger();
+
+		// She stays among the minions he may assign, but not to a Hobbit companion
+		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(nertea));
+		assertFalse(scn.FreepsCanAssignAgainst(pippin, nertea));
+		assertFalse(scn.FreepsCanAssignAgainst(frodo, nertea));
+		assertTrue(scn.FreepsCanAssignAgainst(aragorn, nertea));
+
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, nertea}, new PhysicalCardImpl[]{pippin, nelya});
+
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, nertea));
+		assertTrue(scn.IsCharAssignedAgainst(pippin, nelya));
+		assertEquals(0, scn.GetBurdens());
 		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 	}
 
@@ -198,8 +244,11 @@ public class Card_19_038_ErrataTests
 		scn.ShadowChoose("Hobbit");
 		scn.SkipToAssignments();
 
-		// Bounder is a Hobbit and an ally, at home at site 2
+		// She is offered for the Ring-bearer's sake, a Hobbit companion, and he passes.  Bounder is a Hobbit and
+		// an ally, at home at site 2
 		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(nertea));
+		scn.FreepsDeclineOptionalTrigger();
 		scn.FreepsAssignToMinions(bounder, nertea);
 
 		assertTrue(scn.IsCharAssignedAgainst(bounder, nertea));
@@ -213,6 +262,8 @@ public class Card_19_038_ErrataTests
 		scn.PassFierceAssignmentActions();
 
 		// Smeagol is a [shire] companion and no Hobbit
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(nertea));
+		scn.FreepsDeclineOptionalTrigger();
 		scn.FreepsAssignToMinions(smeagol, nertea);
 
 		assertTrue(scn.IsCharAssignedAgainst(smeagol, nertea));
@@ -237,8 +288,12 @@ public class Card_19_038_ErrataTests
 		scn.ShadowChoose("Man");
 		scn.SkipToAssignments();
 
+		// He passes on paying for her, so she is not his to assign to the Man
 		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(nertea));
+		scn.FreepsDeclineOptionalTrigger();
 		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+		assertFalse(scn.FreepsCanAssignAgainst(aragorn, nertea));
 
 		// Gimli, strength 6, loses to her 9 and lives; she is fierce
 		scn.FreepsAssignToMinions(gimli, nertea);
@@ -252,7 +307,11 @@ public class Card_19_038_ErrataTests
 		assertTrue(scn.InFierceRound());
 		scn.PassFierceAssignmentActions();
 
+		// The fierce assignment offers her again; paid for, she may go to the Man
 		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(nertea));
+		scn.FreepsChooseOptionalTrigger(nertea);
+		assertEquals(1, scn.GetBurdens());
 		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
 
 		scn.FreepsAssignToMinions(aragorn, nertea);
@@ -280,6 +339,8 @@ public class Card_19_038_ErrataTests
 		scn.SkipToAssignments();
 
 		assertEquals(0, scn.GetBurdens());
+		scn.FreepsChooseOptionalTrigger(nertea);
+		assertEquals(1, scn.GetBurdens());
 		scn.FreepsAssignToMinions(aragorn, nertea);
 		assertEquals(1, scn.GetBurdens());
 
@@ -290,8 +351,11 @@ public class Card_19_038_ErrataTests
 		assertTrue(scn.InFierceRound());
 		scn.PassFierceAssignmentActions();
 
-		// The burden of the first assignment does not pay for this one
+		// The burden of the first assignment does not pay for this one: she is offered again
 		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(nertea));
+		scn.FreepsChooseOptionalTrigger(nertea);
+		assertEquals(2, scn.GetBurdens());
 		assertTrue(scn.FreepsCanAssignAgainst(aragorn, nertea));
 		assertTrue(scn.FreepsCanAssignAgainst(gimli, nertea));
 
@@ -321,7 +385,8 @@ public class Card_19_038_ErrataTests
 		scn.MoveMinionsToTable(nelya);
 		scn.SkipToAssignments();
 
-		// The Free Peoples player leaves her unassigned
+		// The Free Peoples player does not pay for her and leaves her unassigned
+		scn.FreepsDeclineOptionalTrigger();
 		scn.FreepsAssignToMinions(aragorn, nelya);
 
 		assertEquals(0, scn.GetBurdens());
@@ -390,6 +455,8 @@ public class Card_19_038_ErrataTests
 		scn.SkipToAssignments();
 
 		assertTrue(scn.IsHindered(frodo));
+		// Nothing is offered: the first thing asked is his assigning
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(nertea));
 		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
 		assertFalse(scn.FreepsCanAssignAgainst(pippin, nertea));
 		assertTrue(scn.FreepsCanAssignAgainst(aragorn, nertea));
@@ -463,9 +530,9 @@ public class Card_19_038_ErrataTests
 		// What the card shows of itself to either player, for as long as she is in play
 		assertEquals("Named race is Hobbit", scn.GetDisplayableInformation(nertea));
 
-		// Spider Poison's "bearer must exert" answers the same assignment.  Her burden is a cost paid before the
-		// assignment is made and no trigger, so the two are never put in order: the burden is added, the game
-		// log names the race, she is assigned, and then the bearer exerts
+		// Spider Poison's "bearer must exert" answers her assignment.  Her burden is paid ahead, as he starts
+		// assigning, so the two are never put in order: the burden is added and the game log names the race; she
+		// is assigned, and then the bearer exerts
 		scn.AttachCardsTo(pippin, poison);
 		scn.SkipToAssignments();
 
@@ -474,12 +541,17 @@ public class Card_19_038_ErrataTests
 		assertEquals(0, scn.GetWoundsOn(pippin));
 
 		scn.MarkGameLog();
+		scn.FreepsChooseOptionalTrigger(nertea);
+
+		assertEquals(1, scn.GetBurdens());
+		assertEquals(0, scn.GetWoundsOn(pippin));
+		assertTrue(scn.GameLogSinceMarkSays("named race (Hobbit)"));
+
 		scn.FreepsAssignToMinions(pippin, nertea);
 
 		assertEquals(1, scn.GetBurdens());
 		assertEquals(1, scn.GetWoundsOn(pippin));
 		assertTrue(scn.IsCharAssignedAgainst(pippin, nertea));
-		assertTrue(scn.GameLogSinceMarkSays("named race (Hobbit)"));
 		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 	}
 
@@ -553,7 +625,7 @@ public class Card_19_038_ErrataTests
 	}
 
 	@Test
-	public void ABurdenPreventedAtHisOwnAssigningLeavesHerUnassignedAndTheShadowPlayersToAssign() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ABurdenPreventedAsHePaysAheadLeavesHerNotHisToAssignToTheNamedRaceAndTheShadowPlayersToAssign() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var nertea = scn.GetShadowCard("nertea");
@@ -571,25 +643,24 @@ public class Card_19_038_ErrataTests
 		scn.SkipToAssignments();
 
 		assertEquals(0, scn.GetBurdens());
-		scn.MarkGameLog();
-		scn.FreepsAssignToMinions(sam, nertea);
+		scn.FreepsChooseOptionalTrigger(nertea);
 
-		// The burden is about to be added, by a Shadow card, and she is not assigned yet
+		// The burden is about to be added, by a Shadow card
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(melilot));
-		assertFalse(scn.IsCharAssigned(nertea));
 		assertEquals(0, scn.GetBurdens());
 
 		scn.FreepsAcceptOptionalTrigger();
 
-		// The cost was not paid, so the assignment is not made
+		// The cost was not paid, so she is not paid for, and is not offered again: she is not his to assign to
+		// a Hobbit companion
 		assertEquals(0, scn.GetBurdens());
 		assertEquals(1, scn.GetWoundsOn(melilot));
-		assertFalse(scn.IsCharAssigned(nertea));
-		assertFalse(scn.IsCharAssigned(sam));
-		assertTrue(scn.GameLogSinceMarkSays("did not pay to assign"));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(nertea));
+		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+		assertFalse(scn.FreepsCanAssignAgainst(sam, nertea));
+		scn.FreepsDeclineAssignments();
 
-		// He is not asked to assign again.  Never assigned, she is a leftover minion, and the Shadow player
-		// assigns her to the Hobbit for nothing
+		// Never assigned, she is a leftover minion, and the Shadow player assigns her to the Hobbit for nothing
 		assertTrue(scn.ShadowDecisionAvailable("Assign minions"));
 		assertTrue(scn.ShadowHasAssignmentTargetAvailable(nertea));
 

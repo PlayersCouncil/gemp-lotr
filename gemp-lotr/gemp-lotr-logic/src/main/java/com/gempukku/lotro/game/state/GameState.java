@@ -82,8 +82,10 @@ public class GameState {
 
     private final List<Assignment> _assignments = new LinkedList<>();
     private int _threatsToCome;
-    // The minion whose cost of assigning has been paid, while the assignment so paid for is checked and made
-    private PhysicalCard _assignmentPaidFor;
+    // The minions whose cost of assigning has been paid for the assignment being made (Q-0283)
+    private final Set<PhysicalCard> _assignmentsPaidFor = new HashSet<>();
+    // True while the Free Peoples player's own assigning is asked and made (Q-0283)
+    private boolean _freePeoplesPlayerAssigning;
     private Map<PhysicalCard, Integer> _woundsToCome = Collections.emptyMap();
     // The events printed with several phases that are being played, each with the phase it is being played in
     private final Map<PhysicalCard, Timeword> _phaseOfEventBeingPlayed = new HashMap<>();
@@ -1541,26 +1543,44 @@ public class GameState {
     }
 
     /**
-     * Whether the cost of assigning this minion (ExtraAssignmentCostModifier) has been paid and the assignment
-     * paid for is now being checked or made.  False except inside withAssignmentPaidFor.
+     * Whether the cost of assigning this minion (ExtraAssignmentCostModifier) has been paid for the assignment
+     * being made: the mark "its cost of assigning is paid" (Q-0283).  Two things set it, and both ask it first, so
+     * that neither charges twice: the payment the Free Peoples player makes ahead of his own assigning
+     * (AssignmentCostRule), and the payment of an assignment a card has him make (AssignFpCharacterToSkirmish),
+     * which the assignment then uses at once.  While it is set the cost is not asked for again, since what paid
+     * it (the last exertion a companion had) may not be there to pay twice.
      */
     public boolean isAssignmentPaidFor(PhysicalCard minion) {
-        return _assignmentPaidFor != null && _assignmentPaidFor == minion;
+        return _assignmentsPaidFor.contains(minion);
+    }
+
+    /** Marks the cost of assigning this minion paid (Q-0283; isAssignmentPaidFor). */
+    public void markAssignmentPaidFor(PhysicalCard minion) {
+        _assignmentsPaidFor.add(minion);
+    }
+
+    /** The mark of isAssignmentPaidFor is used: by the assignment it paid for, or as that assignment is not made. */
+    public void useAssignmentPaidFor(PhysicalCard minion) {
+        _assignmentsPaidFor.remove(minion);
     }
 
     /**
-     * Answers a question about the assignment of a minion whose cost of assigning has just been paid: the cost is
-     * not asked for again, since what paid it (the last exertion a companion had) may not be there to pay twice.
-     * Nothing else is changed.
+     * Whether the Free Peoples player's own assigning (FreePeoplePlayerAssignsMinionsGameProcess) is being asked
+     * and made.  At it a minion with a cost of assigning that has not been paid for ahead is not his to assign
+     * (Q-0283; ExtraAssignmentCostModifier).
      */
-    public <T> T withAssignmentPaidFor(PhysicalCard minion, java.util.function.Supplier<T> question) {
-        final PhysicalCard before = _assignmentPaidFor;
-        _assignmentPaidFor = minion;
-        try {
-            return question.get();
-        } finally {
-            _assignmentPaidFor = before;
-        }
+    public boolean isFreePeoplesPlayerAssigning() {
+        return _freePeoplesPlayerAssigning;
+    }
+
+    /**
+     * Begins or ends the Free Peoples player's own assigning (isFreePeoplesPlayerAssigning).  As it ends, every
+     * mark of a cost of assigning paid is gone: used by the assignment made, or lost with the one not made.
+     */
+    public void setFreePeoplesPlayerAssigning(boolean assigning) {
+        _freePeoplesPlayerAssigning = assigning;
+        if (!assigning)
+            _assignmentsPaidFor.clear();
     }
 
     public void removeBurdens(int burdens) {
@@ -1969,6 +1989,8 @@ public class GameState {
 
     public void setCurrentPhase(Phase phase) {
         _currentPhase = phase;
+        // A cost of assigning paid in one assignment phase pays for nothing in the next (Q-0283)
+        _assignmentsPaidFor.clear();
         for (GameStateListener listener : getAllGameStateListeners())
             listener.setCurrentPhase(getPhaseString());
     }

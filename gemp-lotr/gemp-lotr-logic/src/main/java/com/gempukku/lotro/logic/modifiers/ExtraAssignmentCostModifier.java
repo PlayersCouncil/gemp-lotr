@@ -17,11 +17,14 @@ import java.util.Set;
  * Nertëa to skirmish a companion of the named race" (69_38).  The twin, for an assignment, of
  * AbstractExtraPlayCostModifier (Q-0221).
  *
- * It affects the minions it charges for, and may name the characters against whom it charges.  The game asks it
- * two things.  Can the cost be paid: while it cannot, the Free Peoples player may not make that assignment, by
- * his own assigning or by a card's (isValidAssignments is the one check every assignment passes).  And the cost
- * itself, appended to the action that pays it as the assignment is made
- * (ModifiersQuerying.getAssignmentCosts).  The Shadow player's assignments are never charged.
+ * It affects the minions it charges for, and may name the characters against whom it charges.  The cost is paid
+ * ahead of the assignment, and the minion is then marked paid for (GameState.isAssignmentPaidFor; Q-0283): at
+ * the start of the Free Peoples player's own assigning, where he is offered to pay for each such minion in turn
+ * (AssignmentCostRule), and where a card has him assign, once the pair is chosen (AssignFpCharacterToSkirmish).
+ * The game asks it two things.  Is the minion his to assign (isValidAssignments is the one check every
+ * assignment passes): at his own assigning only if it was paid for ahead, and by a card's assignment only while
+ * the cost can be paid.  And the cost itself, appended to the action that pays it
+ * (ModifiersQuerying.appendAssignmentCosts).  The Shadow player's assignments are never charged.
  */
 public abstract class ExtraAssignmentCostModifier extends AbstractModifier {
     // Null: against any character
@@ -42,10 +45,16 @@ public abstract class ExtraAssignmentCostModifier extends AbstractModifier {
         return _fpCharacterFilter == null || _fpCharacterFilter.accepts(game, fpCharacter);
     }
 
-    // Unpaid, and not payable: the cost of the assignment now being made has been paid already
-    // (GameState.withAssignmentPaidFor), and what paid it may not be there to pay again.
+    // Not paid for, and not his to pay for now.  A minion marked paid for is assignable whatever the cost would
+    // now be, since what paid it may not be there to pay again.  At his own assigning nothing is paid any more
+    // (Q-0283): a minion not paid for ahead is not his.  Elsewhere (a card has him assign) the cost is paid as the
+    // assignment is made, so the minion is his while the cost can be paid.
     private boolean cannotBePaidFor(LotroGame game, PhysicalCard minion) {
-        return !game.getGameState().isAssignmentPaidFor(minion) && !canPay(game);
+        if (game.getGameState().isAssignmentPaidFor(minion))
+            return false;
+        if (game.getGameState().isFreePeoplesPlayerAssigning())
+            return true;
+        return !canPay(game);
     }
 
     @Override
@@ -71,8 +80,8 @@ public abstract class ExtraAssignmentCostModifier extends AbstractModifier {
         return true;
     }
 
-    // A minion charged for against every character is not the Free Peoples player's to assign at all while the
-    // cost cannot be paid, so it is not listed among the minions he may assign.
+    // A minion charged for against every character is not the Free Peoples player's to assign at all while it
+    // is not paid for and cannot be, so it is not listed among the minions he may assign.
     @Override
     public boolean isPreventedFromBeingAssignedToSkirmish(LotroGame game, Side sidePlayer, PhysicalCard card) {
         return sidePlayer == Side.FREE_PEOPLE && _fpCharacterFilter == null && cannotBePaidFor(game, card);

@@ -3,7 +3,6 @@ package com.gempukku.lotro.mechanics;
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -13,23 +12,24 @@ import static org.junit.Assert.*;
 
 /**
  * A cost of assigning: "the Free Peoples player must <pay> to assign <this minion> to a skirmish" (the definition
- * language's extraCostToAssign; Q-0221).
+ * language's extraCostToAssign; Q-0221, and Q-0283 for when it is paid).
  *
- * The cost is paid as the assignment is made and is not asked for ahead of it.  At the Free Peoples player's own
- * assigning every charged assignment of his answer is paid for, one after another in the order of the minions'
- * card ids, and then all the assignments that were paid for or cost nothing are made at once.  Where a card has
- * him assign (his own or a Shadow card), he pays once the pair is chosen.  A cost that is not paid means that one
- * assignment is not made: at his own assigning the minion is then a leftover minion, the Shadow player's to
- * assign.  While the cost cannot be paid the minion is not the Free Peoples player's to assign at all.  The Shadow
- * player's assignments cost nothing.
+ * At his own assigning the cost is paid AHEAD (Q-0283).  As he starts assigning, each minion with such a cost that
+ * can be paid in full, and that he could then assign, is offered to him as an optional trigger of that minion; he
+ * takes them in any order, paying for each as he takes it, and is offered the rest again, judged afresh, until he
+ * passes.  A minion paid for is his to assign; one he did not pay for is not, and is left for the Shadow player.
+ * Nothing is paid once he has answered, and a payment he does not use is lost.  Where a card has him assign (his
+ * own or a Shadow card), which comes before his own assigning, he pays once the pair is chosen, and the minion is
+ * his to take while the cost can be paid.  The Shadow player's assignments cost nothing.
  *
  * Shown with Morgul Spawn 7_200: "While you can spot a Nazgûl, the Free Peoples player must exert a companion to
- * assign this minion to a skirmish."  A cost that is PREVENTED (a burden, by Melilot Brandybuck 3_110) is shown
- * in the tests of Ulaire Nertea 69_38, the one card whose cost can be.  A cost that is REPEATED ("for each Nazgûl
- * you can spot ... must exert a companion") can be paid only if every repetition can, and is not begun otherwise
- * (F-0425): the tests of Morgul Regiment 7_197, the one card with one.  An exertion a card's action takes as its own
- * cost is counted before the cost of the assignment that action then makes as part of its price (F-0486): the
- * tests of Éowyn 17_96.
+ * assign this minion to a skirmish."  A cost that is PREVENTED (a burden, by Melilot Brandybuck 3_110), and one
+ * that charges against some characters only, are shown in the tests of Ulaire Nertea 69_38, the one card whose
+ * cost can be prevented and the one that names whom.  A cost that is REPEATED ("for each Nazgûl you can spot ...
+ * must exert a companion") can be paid only if every repetition can, and is not offered otherwise (F-0425): the
+ * tests of Morgul Regiment 7_197, the one card with one.  An exertion a card's action takes as its own cost is
+ * counted before the cost of the assignment that action then makes as part of its price (F-0486): the tests of
+ * Éowyn 17_96.
  */
 public class CostOfAssigningTests
 {
@@ -67,7 +67,7 @@ public class CostOfAssigningTests
 	}
 
 	@Test
-	public void AtHisOwnAssigningTheCostIsPaidAsTheAssignmentIsMadeAndNotAskedAhead() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AsHeStartsAssigningHeIsOfferedToPayForTheMinionAndPaidForItIsHisToAssign() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var spawn = scn.GetShadowCard("spawn1");
@@ -80,25 +80,31 @@ public class CostOfAssigningTests
 		scn.MoveMinionsToTable(spawn, lemenya);
 		scn.SkipToAssignments();
 
-		// Nothing is asked and nobody has exerted; the Spawn is his to assign
-		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
-		assertTrue(scn.FreepsHasAssignmentTargetAvailable(spawn));
-		assertTrue(scn.FreepsCanAssign(spawn));
+		// Before he assigns anything, the Spawn is offered to him, and the Nazgûl, which costs nothing, is not
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(spawn));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(lemenya));
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(frodo));
 
-		scn.FreepsAssignToMinions(aragorn, spawn);
+		scn.FreepsChooseOptionalTrigger(spawn);
 
-		// "Exert a companion": either of the two, one of them must, and the Spawn is not assigned until one has
+		// "Exert a companion": either of the two, and one of them must
 		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, frodo));
 		assertEquals(1, scn.FreepsGetChoiceMin());
-		assertFalse(scn.IsCharAssigned(spawn));
-
 		scn.FreepsChooseCard(frodo);
 
 		assertEquals(1, scn.GetWoundsOn(frodo));
 		assertEquals(0, scn.GetWoundsOn(aragorn));
+
+		// Paid for, it is not offered again, and it is his to assign, for nothing more
+		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(spawn));
+		assertTrue(scn.FreepsCanAssign(spawn));
+		scn.FreepsAssignToMinions(aragorn, spawn);
+
 		assertTrue(scn.IsCharAssignedAgainst(aragorn, spawn));
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 
 		// The Nazgûl is left over for the Shadow player; the Spawn is not
 		assertTrue(scn.ShadowDecisionAvailable("Assign minions"));
@@ -107,7 +113,7 @@ public class CostOfAssigningTests
 	}
 
 	@Test
-	public void AMinionHeLeavesUnassignedCostsNothingAndTheShadowPlayerAssignsItForNothing() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AMinionHeDoesNotPayForIsNotHisToAssignAndTheShadowPlayerAssignsItForNothing() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var spawn = scn.GetShadowCard("spawn1");
@@ -120,7 +126,17 @@ public class CostOfAssigningTests
 		scn.MoveMinionsToTable(spawn, lemenya);
 		scn.SkipToAssignments();
 
-		// The Nazgûl costs nothing to assign, and nobody is asked to exert
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(spawn));
+		scn.FreepsDeclineOptionalTrigger();
+
+		// Unpaid, the Spawn is not among the minions he may assign, though the cost could have been paid
+		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(lemenya));
+		assertFalse(scn.FreepsHasAssignmentTargetAvailable(spawn));
+		assertFalse(scn.FreepsCanAssign(spawn));
+		assertFalse(scn.FreepsCanAssignAgainst(aragorn, spawn));
+
+		// The Nazgûl costs nothing to assign
 		scn.FreepsAssignToMinions(aragorn, lemenya);
 
 		assertTrue(scn.IsCharAssignedAgainst(aragorn, lemenya));
@@ -139,7 +155,41 @@ public class CostOfAssigningTests
 	}
 
 	@Test
-	public void WithNobodyAbleToPayTheMinionIsNotHisToAssign() throws DecisionResultInvalidException, CardNotFoundException {
+	public void APaymentHeDoesNotUseIsLost() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var spawn = scn.GetShadowCard("spawn1");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var frodo = scn.GetRingBearer();
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(spawn, lemenya);
+		scn.SkipToAssignments();
+
+		scn.FreepsChooseOptionalTrigger(spawn);
+		scn.FreepsChooseCard(frodo);
+		assertEquals(1, scn.GetWoundsOn(frodo));
+
+		// He pays for the Spawn and then assigns only the Nazgûl
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(spawn));
+		scn.FreepsAssignToMinions(aragorn, lemenya);
+
+		// The exertion stays paid, and the Spawn is the Shadow player's to assign like any leftover minion
+		assertFalse(scn.IsCharAssigned(spawn));
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertTrue(scn.ShadowDecisionAvailable("Assign minions"));
+		assertTrue(scn.ShadowHasAssignmentTargetAvailable(spawn));
+		scn.ShadowAssignToMinions(frodo, spawn);
+
+		assertTrue(scn.IsCharAssignedAgainst(frodo, spawn));
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+	}
+
+	@Test
+	public void WithNobodyAbleToPayTheMinionIsNotOfferedAndIsNotHisToAssign() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var spawn = scn.GetShadowCard("spawn1");
@@ -152,7 +202,9 @@ public class CostOfAssigningTests
 		scn.AddWoundsToChar(frodo, 3);
 		scn.SkipToAssignments();
 
+		// Nothing is offered: the first thing asked is his assigning
 		assertEquals(1, scn.GetVitality(frodo));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(spawn));
 		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
 		assertTrue(scn.FreepsHasAssignmentTargetAvailable(lemenya));
 		assertFalse(scn.FreepsHasAssignmentTargetAvailable(spawn));
@@ -171,7 +223,7 @@ public class CostOfAssigningTests
 	}
 
 	@Test
-	public void TwoChargedAssignmentsArePaidForInTurnAndTheOneLeftUnpaidIsNotMade() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TwoChargedMinionsAreOfferedTogetherTakenInEitherOrderAndJudgedAfreshAfterEachPayment() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var spawn1 = scn.GetShadowCard("spawn1");
@@ -188,36 +240,32 @@ public class CostOfAssigningTests
 		scn.AddWoundsToChar(guard, 1);
 		scn.SkipToAssignments();
 
-		// Each Spawn can be paid for by itself, so both are his to assign
-		assertTrue(scn.FreepsHasAssignmentTargetAvailable(spawn1));
-		assertTrue(scn.FreepsHasAssignmentTargetAvailable(spawn2));
+		// Each Spawn can be paid for by itself, so both are offered
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(spawn1));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(spawn2));
 
-		// The payments are made in the order of the minions' card ids
-		var first = spawn1.getCardId() < spawn2.getCardId() ? spawn1 : spawn2;
-		var second = first == spawn1 ? spawn2 : spawn1;
+		// He takes the one with the higher card id first: the order is his
+		var later = spawn1.getCardId() > spawn2.getCardId() ? spawn1 : spawn2;
+		var earlier = later == spawn1 ? spawn2 : spawn1;
+		scn.FreepsChooseOptionalTrigger(later);
 
-		scn.MarkGameLog();
-		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{frodo, second}, new PhysicalCardImpl[]{guard, first});
-
-		// The Ring-bearer, the one companion able to, exerts for the first; nobody is left to exert for the second
+		// The Ring-bearer, the one companion able to, exerts without a question; nobody is left to pay for the
+		// other, so it is offered no more, and his assigning is asked
 		assertEquals(3, scn.GetWoundsOn(frodo));
 		assertEquals(1, scn.GetWoundsOn(guard));
-		assertTrue(scn.IsCharAssignedAgainst(guard, first));
-		assertFalse(scn.IsCharAssigned(second));
-		assertFalse(scn.IsCharAssigned(frodo));
-		assertTrue(scn.GameLogSinceMarkSays("did not pay to assign"));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(earlier));
+		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(later));
+		assertFalse(scn.FreepsHasAssignmentTargetAvailable(earlier));
 
-		// He is not asked to assign again: the unpaid Spawn is a leftover minion like the Nazgûl
-		assertTrue(scn.ShadowDecisionAvailable("Assign minions"));
-		assertTrue(scn.ShadowHasAssignmentTargetAvailable(second));
-		assertTrue(scn.ShadowHasAssignmentTargetAvailable(lemenya));
-		assertFalse(scn.ShadowHasAssignmentTargetAvailable(first));
+		scn.FreepsAssignToMinions(guard, later);
 
-		scn.ShadowAssignToMinions(frodo, second);
-
-		assertTrue(scn.IsCharAssignedAgainst(frodo, second));
+		assertTrue(scn.IsCharAssignedAgainst(guard, later));
 		assertEquals(3, scn.GetWoundsOn(frodo));
-		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
+		assertTrue(scn.ShadowDecisionAvailable("Assign minions"));
+		assertTrue(scn.ShadowHasAssignmentTargetAvailable(earlier));
+		assertTrue(scn.ShadowHasAssignmentTargetAvailable(lemenya));
+		assertFalse(scn.ShadowHasAssignmentTargetAvailable(later));
 	}
 
 	@Test

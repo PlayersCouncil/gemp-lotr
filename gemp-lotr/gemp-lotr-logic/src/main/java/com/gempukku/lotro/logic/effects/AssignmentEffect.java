@@ -1,7 +1,6 @@
 package com.gempukku.lotro.logic.effects;
 
 import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.filters.Filter;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
@@ -20,7 +19,6 @@ public class AssignmentEffect extends AbstractEffect {
     private final boolean _skipAllyLocationCheck;
     private final PhysicalCard _fpChar;
     private final PhysicalCard _minion;
-    private boolean _costPaid;
 
     public AssignmentEffect(String playerId, PhysicalCard fpChar, PhysicalCard minion) {
         this(playerId, fpChar, minion, false, false, false);
@@ -46,27 +44,25 @@ public class AssignmentEffect extends AbstractEffect {
         return "Assign " + GameUtils.getCardLink(_minion) + " to skirmish " + GameUtils.getCardLink(_fpChar);
     }
 
-    /**
-     * Says that the cost of making this assignment (ExtraAssignmentCostModifier) has been paid: the effect is
-     * the effect of that payment.  The assignment is still checked as it is made, but not for a cost it could
-     * no longer pay.
-     */
-    public AssignmentEffect withCostPaid() {
-        _costPaid = true;
-        return this;
-    }
-
     @Override
     public boolean isPlayableInFull(LotroGame game) {
         Side side = _playerId.equals(game.getGameState().getCurrentPlayerId()) ? Side.FREE_PEOPLE : Side.SHADOW;
-        final Filter assignable = Filters.assignableToSkirmishAgainst(side, _fpChar, _ignoreExistingAssignments, _ignoreDefender, _skipAllyLocationCheck);
-        if (_costPaid)
-            return game.getGameState().withAssignmentPaidFor(_minion, () -> assignable.accepts(game, _minion));
-        return assignable.accepts(game, _minion);
+        return Filters.assignableToSkirmishAgainst(side, _fpChar, _ignoreExistingAssignments, _ignoreDefender, _skipAllyLocationCheck)
+                .accepts(game, _minion);
     }
 
+    /**
+     * Makes the assignment if it can still be made.  A cost of assigning the minion paid for this assignment
+     * (GameState.isAssignmentPaidFor; Q-0283) is used by it, made or not.
+     */
     @Override
     protected FullEffectResult playEffectReturningResult(LotroGame game) {
+        final boolean made = assign(game);
+        game.getGameState().useAssignmentPaidFor(_minion);
+        return new FullEffectResult(made);
+    }
+
+    private boolean assign(LotroGame game) {
         if (isPlayableInFull(game)) {
             if (Filters.notAssignedToSkirmish.accepts(game, _fpChar))
                 game.getActionsEnvironment().emitEffectResult(new AssignedToSkirmishResult(_fpChar, _playerId));
@@ -79,8 +75,8 @@ public class AssignmentEffect extends AbstractEffect {
             game.getActionsEnvironment().emitEffectResult(new AssignAgainstResult(_playerId, _fpChar, _minion));
             game.getActionsEnvironment().emitEffectResult(new AssignAgainstResult(_playerId, _minion, _fpChar));
 
-            return new FullEffectResult(true);
+            return true;
         }
-        return new FullEffectResult(false);
+        return false;
     }
 }

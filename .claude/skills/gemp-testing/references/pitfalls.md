@@ -89,24 +89,26 @@ Defender shows in the Free Peoples player's own decision without any refusal: a 
 minion from an assignment action is on his list only if he has defender (`FreepsHasAssignmentTargetAvailable`;
 `mechanics/DefenderTests`, with Unexpected Visitor 7_126 and Reckless Pride 7_13 as the assignment actions).
 
-**A minion the Free Peoples player must pay to assign is paid for as he assigns it.** "The Free Peoples player
-must exert a companion to assign this minion to a skirmish" (`extraCostToAssign`: Morgul Regiment 7_197, Morgul
-Spawn 7_200, Morgul Spearman 7_201, Ulaire Nertea 69_38; Q-0221, engine pass 26) asks nothing ahead of his
-assigning. The minion is on his list while the cost can be paid; while it cannot, a minion charged for against
-every character is off it (`FreepsHasAssignmentTargetAvailable`, `FreepsCanAssign` false), and one charged for
-against some characters (69_38) stays on it with `FreepsCanAssignAgainst(character, minion)` false. After
-`FreepsAssignToMinions` the costs are paid before anything is assigned, one charged minion after another in the
-order of their card ids: a choice of who exerts is asked then (`FreepsChooseCard`; a lone candidate exerts
-unasked) and `IsCharAssigned` is false until the last is settled. A cost not paid in full (a burden prevented,
-nobody left to exert) leaves that one minion unassigned and a leftover for the Shadow player, who assigns it for
-nothing; the log says "did not pay to assign" and he is not asked again. A card that has him assign (Éowyn
-17_96, The End Comes 1_169, Shadowy Mount 12_171) charges him once the minion is chosen, and cannot take a
-minion he could not pay for. Where the charged minion is the card's only candidate it is taken unasked, and the
-first thing asked is who exerts: the choice then reads the companions, not the minions (Alcarin 5_31). The Shadow player's own assignments are never charged
-(`mechanics/CostOfAssigningTests`). A cost that is repeated (Morgul Regiment 7_197, an exertion "for each Nazgûl you
-can spot") can be paid only if every repetition can (F-0425, engine pass 28): with fewer exertions left among the
-companions than Nazgûl the Regiment is off his list and nobody exerts, and where an earlier payment of the same
-answer has used the exertions it needed, none of it is paid and it is a leftover ("did not pay to assign").
+**A minion the Free Peoples player must pay to assign is paid for ahead of his assigning.** "The Free Peoples
+player must exert a companion to assign this minion to a skirmish" (`extraCostToAssign`: Morgul Regiment 7_197,
+Morgul Spawn 7_200, Morgul Spearman 7_201, Ulaire Nertea 69_38; Q-0221, and Q-0283, engine pass 30). As he starts
+his own assigning, after `SkipToAssignments()`, each such minion whose cost can be paid in full, and that he
+could then assign, is offered to him as an optional trigger on the minion ("Optional responses":
+`FreepsHasOptionalTriggerAvailable(minion)`, `FreepsChooseOptionalTrigger(minion)`, `FreepsDeclineOptionalTrigger()`):
+the choice of who exerts is asked as he takes it (a lone candidate exerts unasked), and the others are offered
+again, judged afresh, until he passes. Only then is "Assign minions" asked. A minion paid for is his to assign;
+one not paid for is not: charged against every character it is off his list (`FreepsHasAssignmentTargetAvailable`,
+`FreepsCanAssign` false), and charged against some (69_38) it stays on it with `FreepsCanAssignAgainst(character,
+minion)` false for those. Nothing is paid after his answer, and a payment he does not use is lost. A cost not
+paid in full (a burden prevented) leaves the minion unpaid and not offered again. A card that has him assign
+(Éowyn 17_96, The End Comes 1_169, Shadowy Mount 12_171), which comes before his own assigning, charges him once
+the minion is chosen and cannot take a minion he could not pay for. Where the charged minion is the card's only
+candidate it is taken unasked, and the first thing asked is who exerts: the choice then reads the companions, not
+the minions (Alcarin 5_31). Before his assigning (in the assignment phase's actions) `FreepsCanAssign` reads a
+card's rule: true while the cost can be paid. The Shadow player's own assignments are never charged
+(`mechanics/CostOfAssigningTests`). A cost that is repeated (Morgul Regiment 7_197, an exertion "for each Nazgûl
+you can spot") can be paid only if every repetition can (F-0425, engine pass 28): with fewer exertions left among
+the companions than Nazgûl the Regiment is not offered and nobody exerts.
 
 **`IsCharAssigned` reads only the skirmishes still waiting.** The game takes an assignment off its list as that
 skirmish begins, so `IsCharAssigned(card)` is false for the characters of the skirmish being fought

@@ -244,11 +244,19 @@ public interface ModifiersQuerying {
      * What the player must pay to assign the minion to skirmish the character, as an action whose costs are that
      * payment (ExtraAssignmentCostModifier: "the Free Peoples player must exert a companion to assign this minion
      * to a skirmish"), or null where the assignment costs nothing: nobody charges for this pair, or the player is
-     * not the Free Peoples player.  Asked once the pair is known and before the assignment is made, by the Free
-     * Peoples player's own assigning and by a card's assignment alike.  The caller stacks the action; a payment
-     * that was not carried out in full (wasCarriedOut) means that one assignment is not made (Q-0221).
+     * not the Free Peoples player.  Asked by a card's assignment once the pair is known and before the
+     * assignment is made: the caller stacks the action, and a payment that was not carried out in full
+     * (wasCarriedOut) means that one assignment is not made (Q-0221).  The Free Peoples player's own assigning
+     * pays ahead instead (appendAssignmentCosts; Q-0283).
      */
     CostToEffectAction getAssignmentCosts(LotroGame game, String assigningPlayer, PhysicalCard fpCharacter, PhysicalCard minion);
+
+    /**
+     * Appends to the action, as costs, every cost of assigning the minion to skirmish the character, as
+     * getAssignmentCosts has them, and says whether there was any.  For the payment the Free Peoples player is
+     * offered ahead of his own assigning (AssignmentCostRule; Q-0283), which is the minion's optional trigger.
+     */
+    boolean appendAssignmentCosts(LotroGame game, CostToEffectAction action, PhysicalCard fpCharacter, PhysicalCard minion);
 
     int getSanctuaryHealModifier(LotroGame game);
 

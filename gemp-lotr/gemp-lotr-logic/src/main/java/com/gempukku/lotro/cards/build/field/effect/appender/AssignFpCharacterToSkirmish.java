@@ -14,7 +14,9 @@ import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import com.gempukku.lotro.logic.effects.AssignmentEffect;
 import com.gempukku.lotro.logic.effects.StackActionEffect;
+import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.timing.Effect;
+import com.gempukku.lotro.logic.timing.UnrespondableEffect;
 import org.json.simple.JSONObject;
 
 import java.util.Collection;
@@ -106,12 +108,19 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
                     // this minion", ExtraCostToAssign) is paid here, the pair being known, and the assignment is
                     // the effect of the payment: unpaid (a burden prevented, nobody left to exert) it is not
                     // made.  Where the assignment is itself a cost of the card's action, that cost then fails
-                    // (Q-0221).
+                    // (Q-0221).  Paid, the minion is marked paid for, and the assignment uses the mark at once
+                    // (GameState.isAssignmentPaidFor; Q-0283).
                     final CostToEffectAction payment = actionContext.getGame().getModifiersQuerying()
                             .getAssignmentCosts(actionContext.getGame(), assigningPlayer, assignedCharacter, assignedMinion);
                     if (payment == null)
                         return assignment;
-                    payment.appendEffect(assignment.withCostPaid());
+                    payment.appendEffect(new UnrespondableEffect() {
+                        @Override
+                        protected void doPlayEffect(LotroGame game) {
+                            game.getGameState().markAssignmentPaidFor(assignedMinion);
+                        }
+                    });
+                    payment.appendEffect(assignment);
                     return new StackActionEffect(payment);
                 } else {
                     return null;
