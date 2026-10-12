@@ -35,6 +35,8 @@ Her answers on the first full draft (Q-0294, 2026-10-12):
 
 ## When
 
+A change a player will see that no finding records (built on a question's answer: Q-0232's Ring left where the
+Ring-bearer fell, Q-0262's withheld draw) gets a row of its own, `N-<short name>`, from whoever builds it.
 Whoever sets a finding `fixed` or `fixed-approved` (the lander at landing, an engine agent closing its numbers, a
 fixer) writes its row in the same step. A finding later reopened or reverted gets its row rewritten (`add` again, or
 `--visible n` if nothing a player sees is left).
