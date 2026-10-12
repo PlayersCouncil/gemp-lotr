@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_18_087_Tests
@@ -18,8 +19,17 @@ public class Card_18_087_Tests
 				new HashMap<>()
 				{{
 					put("breeder", "18_87");
+					put("breeder2", "18_87");
+					put("breeder3", "18_87");
+					// Tracking Uruk: [uruk-hai] Uruk-hai, not unique, cost 5, site 5; Hunter 1 is its whole text
+					put("tracker", "15_171");
+					put("tracker2", "15_171");
+					// Ugluk, Ugly Fellow: unique [uruk-hai] Uruk-hai, cost 4, site 5; fierce, hunter 3; his text
+					// answers the start of a skirmish he is in
 					put("ugluk", "15_172");
-					put("sentry", "15_170");
+					// Uruk Decimator: [uruk-hai] Uruk-hai, cost 4, site 5, with no keyword; stronger at a
+					// battleground and damage +1 only while it bears a possession
+					put("decimator", "12_150");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -66,72 +76,164 @@ public class Card_18_087_Tests
 	}
 
 	@Test
-	public void OrkishBreederAbilityPlaysUrukHunterWithDiscount() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedFromHandForFourAndTwoMoreWhileRoaming() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var breeder = scn.GetShadowCard("breeder");
-		var ugluk = scn.GetShadowCard("ugluk");
-
-		scn.MoveMinionsToTable(breeder);
-		scn.MoveCardsToHand(ugluk);
+		scn.MoveCardsToHand(breeder);
 
 		scn.StartGame();
-		scn.SetTwilight(6);
-		scn.SkipToPhase(Phase.SHADOW);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
 
-		int twilightBefore = scn.GetTwilight();
+		int twilight = scn.GetTwilight();
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertInZone(Zone.HAND, breeder);
+		assertTrue(scn.ShadowPlayAvailable(breeder));
 
-		// Use Orkish Breeder's ability
-		assertTrue(scn.ShadowActionAvailable(breeder));
-		scn.ShadowUseCardAction(breeder);
+		scn.ShadowPlayCard(breeder);
 
-		// Ugluk costs 4 base + 2 roaming (home site 5, current site 1) - 2 discount = 4
-		assertEquals(twilightBefore - 4, scn.GetTwilight());
+		// 4 to play + 2 roaming: its site number is 4 and the fellowship is at site 2
+		assertEquals(twilight - 6, scn.GetTwilight());
+		assertInZone(Zone.SHADOW_CHARACTERS, breeder);
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
-	public void OrkishBreederAbilityAvailableWithExactDiscountedTwilight() throws DecisionResultInvalidException, CardNotFoundException {
-		// Bug: ability not available when pool has exactly enough for discounted cost
-		// Ugluk costs 4, discount -2 = 2 needed. With exactly 2 twilight, should work.
+	public void ShadowAbilityExertsThisMinionToPlayAnUrukHaiHunterFromHandForTwoLess() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var breeder = scn.GetShadowCard("breeder");
+		var breeder2 = scn.GetShadowCard("breeder2");
+		var breeder3 = scn.GetShadowCard("breeder3");
+		var tracker = scn.GetShadowCard("tracker");
 		var ugluk = scn.GetShadowCard("ugluk");
+		var decimator = scn.GetShadowCard("decimator");
+		var discarded = scn.GetShadowCard("tracker2");
 
-		scn.MoveMinionsToTable(breeder);
-		scn.MoveCardsToHand(ugluk);
+		// Two [uruk-hai] hunters in hand, an [uruk-hai] minion who is no hunter and an [orc] hunter; another
+		// [uruk-hai] hunter in the discard pile.
+		scn.MoveCardsToHand(tracker, ugluk, decimator, breeder3);
+		scn.MoveCardsToDiscard(discarded);
 
 		scn.StartGame();
-		// Ugluk costs 4 base + 2 roaming (home site 5, current site 1) - 2 discount = 4
-		scn.SetTwilight(1);
-		scn.SkipToPhase(Phase.SHADOW);
+		scn.MoveMinionsToTable(breeder, breeder2);
+		scn.FreepsPass();
 
-		assertEquals(4, scn.GetTwilight());
-
-		// Ability SHOULD be available — discounted cost of Ugluk is 4
-		assertTrue(scn.ShadowActionAvailable(breeder));
-		scn.ShadowUseCardAction(breeder);
-
-		assertEquals(0, scn.GetTwilight());
-	}
-
-	@Test
-	public void OrkishBreederAbilityNotAvailableWithInsufficientTwilight() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var breeder = scn.GetShadowCard("breeder");
-		var ugluk = scn.GetShadowCard("ugluk");
-
-		scn.MoveMinionsToTable(breeder);
-		scn.MoveCardsToHand(ugluk);
-
-		scn.StartGame();
-		// Ugluk costs 4 base + 2 roaming (home site 5, current site 1) - 2 discount = 4
-		scn.SkipToPhase(Phase.SHADOW);
-
-		assertEquals(3, scn.GetTwilight());
-
-		// Discounted cost is 4, but only 3 twilight available
+		// At two less the Tracking Uruk is 5 - 2 + 2 roaming (site 5 minion at site 2) = 5 and Ugluk
+		// 4 - 2 + 2 = 4: with 3 in the pool the ability could play neither.
+		scn.SetTwilight(3);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.AwaitingShadowPhaseActions());
 		assertFalse(scn.ShadowActionAvailable(breeder));
+
+		scn.SetTwilight(5);
+		scn.ShadowRefreshDecision();
+		assertEquals(0, scn.GetWoundsOn(breeder));
+		assertEquals(0, scn.GetWoundsOn(breeder2));
+		assertTrue(scn.ShadowActionAvailable(breeder));
+		// Nothing is off a card played from hand in the usual way: each of them wants 6 or 7 with its roaming.
+		assertFalse(scn.ShadowPlayAvailable(tracker));
+		assertFalse(scn.ShadowPlayAvailable(ugluk));
+		assertFalse(scn.ShadowPlayAvailable(decimator));
+		assertFalse(scn.ShadowPlayAvailable(breeder3));
+
+		scn.ShadowUseCardAction(breeder);
+		assertEquals(1, scn.GetWoundsOn(breeder));
+		assertEquals(0, scn.GetWoundsOn(breeder2));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(tracker, ugluk));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(decimator, breeder3, discarded));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		scn.ShadowChooseCard(tracker);
+
+		// 5 to play - 2 + 2 roaming (site 5 minion at site 2)
+		assertEquals(0, scn.GetTwilight());
+		assertInZone(Zone.SHADOW_CHARACTERS, tracker);
+		assertInHand(ugluk, decimator, breeder3);
+		assertInDiscard(discarded);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void ShadowAbilityIsNotOfferedOneTokenShortOfTheReducedCost() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var breeder = scn.GetShadowCard("breeder");
+		var ugluk = scn.GetShadowCard("ugluk");
+		scn.MoveCardsToHand(ugluk);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(breeder);
+		scn.FreepsPass();
+
+		// Ugluk is 4 to play - 2 + 2 roaming (site 5 minion at site 2): 4.
+		scn.SetTwilight(3);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(breeder));
+
+		scn.SetTwilight(4);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.ShadowActionAvailable(breeder));
+
+		// The only [uruk-hai] hunter in hand is played without a choice.
+		scn.ShadowUseCardAction(breeder);
+		assertEquals(1, scn.GetWoundsOn(breeder));
+		assertEquals(0, scn.GetTwilight());
+		assertInZone(Zone.SHADOW_CHARACTERS, ugluk);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void ShadowAbilityIsNotOfferedWithNoUrukHaiHunterInHand() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var breeder = scn.GetShadowCard("breeder");
+		var breeder3 = scn.GetShadowCard("breeder3");
+		var decimator = scn.GetShadowCard("decimator");
+
+		// An [uruk-hai] minion who is no hunter and an [orc] hunter in hand; an [uruk-hai] hunter in the
+		// discard pile, and others in the draw deck.
+		scn.MoveCardsToHand(decimator, breeder3);
+		scn.MoveCardsToDiscard(scn.GetShadowCard("tracker"));
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(breeder);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertEquals(0, scn.GetWoundsOn(breeder));
+		assertTrue(scn.ShadowPlayAvailable(decimator));
+		assertTrue(scn.ShadowPlayAvailable(breeder3));
+		assertFalse(scn.ShadowActionAvailable(breeder));
+	}
+
+	@Test
+	public void ShadowAbilityIsNotOfferedOnACopyThatIsExhaustedAndIsOnTheCopyBesideIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var breeder = scn.GetShadowCard("breeder");
+		var breeder2 = scn.GetShadowCard("breeder2");
+		var tracker = scn.GetShadowCard("tracker");
+		scn.MoveCardsToHand(tracker);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(breeder, breeder2);
+		// Vitality 3: two wounds leave the first copy exhausted.
+		scn.AddWoundsToChar(breeder, 2);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertTrue(scn.ShadowPlayAvailable(tracker));
+		assertFalse(scn.ShadowActionAvailable(breeder));
+		assertTrue(scn.ShadowActionAvailable(breeder2));
+
+		scn.ShadowUseCardAction(breeder2);
+		assertEquals(2, scn.GetWoundsOn(breeder));
+		assertEquals(1, scn.GetWoundsOn(breeder2));
+		assertInZone(Zone.SHADOW_CHARACTERS, tracker);
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }
