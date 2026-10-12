@@ -1058,8 +1058,13 @@ then be presented again with the pending second for pass or selection (if vitali
 Regiments aren't selected, they are barred from normal assignments. This solves the UX of not knowing which one
 is asking and also manages the timing a little better rather than waiting for a cost-inspection pileup when all
 assignments are submitted. Keep Him Blind To All Else That Moves does something similar but with special
-abilities assigned to the other player." (a change to the build of Q-0221 for his OWN assigning; which cards it
-reaches, and what a card that has him assign does, were put back to her before it is built.) *[2026-10-12]*
+abilities assigned to the other player." (a change to the build of Q-0221 for his OWN assigning.) Asked which cards and what a card that has
+him assign does: "1- Yeah they call all get it, I think it's better UX. 2- ... I guess maybe extraCostToAssign and
+this trigger would need to be able to affect the same self-flag, indicating that it has been paid for? So that
+assignment actions trip the extra cost, set the flag, and then the at-assignment trigger also asks and
+potentially sets the flag, without the two tripping on each other. A pair of results hitting the same inner
+fields." (all four charging minions; one mark of "paid for" on the minion, set by either way and asked by both;
+engine pass 30, `regiment`, has the shape.) *[2026-10-12]*
 
 ## Limits
 
