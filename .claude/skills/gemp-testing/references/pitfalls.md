@@ -879,7 +879,10 @@ to a shared `Get...Scenario()` moves every hand and deck count the file's other 
 7 became 16 and 8); where the file reads such counts, give a filler alias the new card's id instead.
 A test that EMPTIES a deck by moving the aliases left in it to the discard pile one by one is caught the same
 way: the new alias stays in the "empty" deck (Card_09_038_Tests gained two cards for one test and two other
-tests' lists had to name them). Read `GetFreepsDeckCount()` as 0 before anything rests on the empty deck.
+tests' lists had to name them). `SetFreepsDrawDeck()` / `SetShadowDrawDeck()` with no card empties a deck, and with
+cards makes it exactly those, top first; the rest are set aside in no pile (engine pass 32; Card_08_032_Tests).
+Call it after `StartGame()`, whose deal shuffles the deck. Read `GetFreepsDeckCount()` as 0 before anything rests
+on the empty deck.
 The Shadow player's deck runs short too: the turns `SkipToSite` plays draw a small one into his hand (the
 entry on `SkipToSite`, above), so a board taken from an erratum's file whose text never read that deck can find nothing in it
 (Card_01_023_Tests puts four cards back before "discard 3 cards from the top of his or her draw deck").
@@ -1057,9 +1060,9 @@ printed number whatever the card does (Brought Down from Inside 69_24): read it 
 A card that is not active has no text in force either, whenever a test lays it (G-0055, engine pass 28): the game
 starts a card's text as the card comes into play only if the card is active, and once as each turn begins in
 which it is. His Free Peoples card, cheated in before `StartGame()` or during your turn, changes no number on
-your turn and counts once on his: his Ranger of the South 18_56 reads +2 there for a [gondor] token (before the
-mend it read +2 on YOUR turn and +4 on his, and his Lord of Moria 1_21 gave your Dwarf Guard damage +1). So his
-cards may go down with the rest of the board, at any time, and a number of his is read on his own turn
+your turn and counts once on his: his Ranger of the South 18_56 reads +2 there for a [gondor] token, and his
+Lord of Moria 1_21 gives your Dwarf Guard no damage bonus on your turn. So his cards may go down with the rest of
+the board, at any time, and a number of his is read on his own turn
 (`virtualtable/CardLaidOutOfTurnTests`). The one way left to start a card's text out of turn is `RestoreCard`,
 which starts it whatever the card: restore his hindered card on his own turn (a reconcile never restores a card
 that is not active).
@@ -1279,9 +1282,9 @@ Where nothing in the zone can be chosen, the showing is the only decision ("... 
 selectable; Saved From the Fire 8_20 with no card of the culture in the deck): answer it once. `FreepsDeclineChoosing()`
 answers a showing as readily as a choice, so one too few leaves "Choose cards from deck" pending. One too many
 fails the test, saying what is being asked instead (G-0034; it used to pass the phase in silence): delete the line.
-`FreepsAcceptOptionalTrigger()` sends its answer whatever is asked, and a showing takes it: in an old test an accept
-that follows a search may be the dismissal (Card_08_092_Tests' old threat test passed so). Write it as
-`FreepsDismissRevealedCards()`.
+`FreepsAcceptOptionalTrigger()` answers only a choice of actions (an optional trigger, the order of required
+responses, a phase's actions) and fails, saying what is asked, at a showing or any other decision (engine pass 32;
+it used to send "0" to whatever was asked): a showing is answered by `FreepsDismissRevealedCards()`.
 The showing lists every card of the zone and none of them can be chosen; the choice that follows lists only the
 cards that may be taken. So "shown, and cannot be chosen" is read at the showing
 (`ShadowHasCardChoiceAvailable(card, false)`, `ShadowGetTotalRevealedCardCount()`), and at the choice an invalid

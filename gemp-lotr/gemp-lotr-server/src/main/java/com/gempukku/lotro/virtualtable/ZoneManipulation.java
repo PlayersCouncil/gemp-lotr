@@ -397,6 +397,55 @@ public interface ZoneManipulation extends TableBase {
 		MoveCardsToHand(cards);
 	}
 
+	/**
+	 * Makes the Free Peoples player's (player 1's) draw deck exactly the given cards.
+	 * See {@link #SetDrawDeck(String, PhysicalCardImpl...)}.
+	 * @param cards The cards the draw deck is to hold, the top card first; none, for an empty draw deck.
+	 */
+	default void SetFreepsDrawDeck(PhysicalCardImpl...cards) { SetDrawDeck(P1(), cards); }
+	/**
+	 * Makes the Shadow player's (player 2's) draw deck exactly the given cards.
+	 * See {@link #SetDrawDeck(String, PhysicalCardImpl...)}.
+	 * @param cards The cards the draw deck is to hold, the top card first; none, for an empty draw deck.
+	 */
+	default void SetShadowDrawDeck(PhysicalCardImpl...cards) { SetDrawDeck(P2(), cards); }
+	/**
+	 * Makes the given player's draw deck exactly the given cards, in the order given, the first named on top:
+	 * for a deck of a known size, or an empty one, without naming every card the table put in it.  Every other
+	 * card of that draw deck is set aside, in no zone at all, where no card and no rule finds it: it is not in a
+	 * pile, not in play and not removed from the game, so nothing that counts a discard pile or the removed-from-
+	 * game pile sees it.  A card set aside is still found by the name it was given when the table was set up, and
+	 * any cheat (this one, MoveCardsToHand, MoveCardsToTopOfDeck ...) puts it somewhere again.  The cards given are
+	 * taken from wherever they were, without being played, drawn or discarded.  A cheat like the rest: nothing is
+	 * drawn or shuffled and nothing answers it, the other player's deck is not touched, and a decision already
+	 * pending does not change what it offers.  Called before {@link VirtualTable#StartGame()}, the deck keeps
+	 * those cards and no others, but the game shuffles it to deal the opening hands, so their order is not kept:
+	 * call it after StartGame() where the order matters.
+	 * Fails if a card given is not that player's own (it would go to its owner's deck), or is a site.
+	 * @param player The player whose draw deck is set.
+	 * @param cards The cards the draw deck is to hold, the top card first; none, for an empty draw deck.
+	 */
+	default void SetDrawDeck(String player, PhysicalCardImpl...cards) {
+		Verify(P1().equals(player) || P2().equals(player),
+				"SetDrawDeck was asked to set the draw deck of '" + player + "', who is not a player at this table.");
+		for(PhysicalCardImpl card : cards) {
+			Verify(card != null && player.equals(card.getOwner()) && card.getBlueprint().getCardType() != CardType.SITE,
+					(card == null ? "Nothing" : GameUtils.getFullName(card) + ", a card of " + card.getOwner() + "'s,")
+							+ " cannot be put in the draw deck of " + player + ": a draw deck holds only its owner's cards, and no site.");
+		}
+
+		var wanted = Arrays.asList(cards);
+		for(var card : gameState().getDeck(player).stream().toList()) {
+			if(!wanted.contains(card)) {
+				RemoveCardZone((PhysicalCardImpl) card);
+			}
+		}
+		// Each goes on top in turn, so the first named is laid last.
+		for(PhysicalCardImpl card : wanted.reversed()) {
+			MoveCardsToTopOfDeck(card);
+		}
+	}
+
 
 	/**
 	 * Directly attaches one or more cards to a target card, regardless of legality or costs.  This is often used once

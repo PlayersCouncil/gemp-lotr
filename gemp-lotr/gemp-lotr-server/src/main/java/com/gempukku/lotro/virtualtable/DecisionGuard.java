@@ -97,6 +97,32 @@ final class DecisionGuard {
 	}
 
 	/**
+	 * Fails unless the given player is being asked to choose among actions (an optional trigger or response, the
+	 * order of required responses, the actions of a phase) and at least one action is on offer, saying what each
+	 * player is in fact being asked.  The answer "0" takes the first action there; at a yes/no it is "Yes", at a
+	 * choice of cards or a number it is something else again.
+	 * @param attempted What was being done, as a clause that names the player: "P1 was to accept an optional
+	 *                  trigger".
+	 */
+	static void requiredActionChoice(TableBase table, String player, String attempted) {
+		AwaitingDecision decision = table.userFeedback().getAwaitingDecision(player);
+		if(decision == null) {
+			table.Verify(false, attempted + ", but that player is not being asked anything." + othersAsked(table, player));
+			return;
+		}
+		AwaitingDecisionType type = decision.getDecisionType();
+		if(type != AwaitingDecisionType.CARD_ACTION_CHOICE && type != AwaitingDecisionType.ACTION_CHOICE) {
+			table.Verify(false, attempted + ", but the decision in front of that player is not a choice of actions.  "
+					+ askedOf(table, player) + othersAsked(table, player));
+			return;
+		}
+		String[] actions = decision.getDecisionParameters().get("actionId");
+		if(actions == null || actions.length == 0) {
+			table.Verify(false, attempted + ", but no action is on offer.  " + askedOf(table, player) + othersAsked(table, player));
+		}
+	}
+
+	/**
 	 * Fails unless the given player is being asked for a number, saying what each player is in fact being asked.
 	 * @param attempted What was being done, as a clause that names the player: "The number filled in for P1 was
 	 *                  to be read".

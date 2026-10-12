@@ -139,6 +139,9 @@ While the ability to programmatically execute games is a boon to testing efforts
 - `void SetFreepsHand(PhysicalCardImpl...cards)` — Makes the Free Peoples player's (player 1's) hand exactly the given cards.
 - `void SetShadowHand(PhysicalCardImpl...cards)` — Makes the Shadow player's (player 2's) hand exactly the given cards.
 - `void SetHand(String player, PhysicalCardImpl...cards)` — Makes the given player's hand exactly the given cards, in the order given, whatever the hand held before: for a hand of a known size late in a game, after reconciles have filled it with whatever was on the deck.
+- `void SetFreepsDrawDeck(PhysicalCardImpl...cards)` — Makes the Free Peoples player's (player 1's) draw deck exactly the given cards.
+- `void SetShadowDrawDeck(PhysicalCardImpl...cards)` — Makes the Shadow player's (player 2's) draw deck exactly the given cards.
+- `void SetDrawDeck(String player, PhysicalCardImpl...cards)` — Makes the given player's draw deck exactly the given cards, in the order given, the first named on top: for a deck of a known size, or an empty one, without naming every card the table put in it.
 - `void AttachCardsTo(PhysicalCardImpl bearer, PhysicalCardImpl...cards)` — Directly attaches one or more cards to a target card, regardless of legality or costs.
 - `void StackCardsOn(PhysicalCardImpl on, PhysicalCardImpl...cards)` — Directly stacks one or more cards on a target card, regardless of legality or costs.
 - `void FreepsDrawCard()  ·  ShadowDrawCard`
@@ -265,7 +268,7 @@ A set of functions within the test rig that pertain to decisions.  Decisions in 
 - `String FindOptionalTrigger(String player, PhysicalCardImpl card, String text)` — Finds the optional trigger or response of one particular card whose description contains the given words, among the optional actions the given player is being offered.
 - `boolean FreepsAwaitingRequiredResponseOrder()`
 - `boolean FreepsHasOptionalTriggerAvailable(String text)  ·  ShadowHasOptionalTriggerAvailable`
-- `void FreepsAcceptOptionalTrigger()  ·  ShadowAcceptOptionalTrigger`
+- `void FreepsAcceptOptionalTrigger()  ·  ShadowAcceptOptionalTrigger` — Causes that player to take the first action on offer at a choice of actions: an optional trigger or response ("Optional responses"), the order of required responses, or the actions of a phase.
 - `void FreepsDeclineOptionalTrigger()  ·  ShadowDeclineOptionalTrigger`
 - `String[] GetADParam(String playerID, String paramName)` — Gets all of the options for a particular parameter of the current awaiting decision as an array of strings.
 - `List<String> FreepsGetADParamAsList(String paramName)  ·  ShadowGetADParamAsList`
@@ -558,4 +561,4 @@ This interface holds the handful of accessors that every other virtual table int
 - `void Verify(boolean condition, String message)` — A sanity check on the table's own bookkeeping, used where a procedure has to end up in a known state for whatever follows it to make sense.
 
 ---
-450 entries, 218 of them with no description in the source.
+453 entries, 217 of them with no description in the source.

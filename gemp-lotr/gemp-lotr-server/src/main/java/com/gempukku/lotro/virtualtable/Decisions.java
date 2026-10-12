@@ -428,13 +428,31 @@ public interface Decisions extends TableBase {
 		return false;
 	}
 
-	default void FreepsAcceptOptionalTrigger() { PlayerDecided(P1(), "0"); }
+	/**
+	 * Causes the Free Peoples player to take the first action on offer at a choice of actions: an optional trigger
+	 * or response ("Optional responses"), the order of required responses, or the actions of a phase.  Fails,
+	 * saying what is being asked, at any other decision (a yes/no, a choice of cards, a number, an assignment) or
+	 * with no action on offer, and then nothing is answered: the answer it gives, "0", means something else at
+	 * each of those.  To take one card's trigger among several, FreepsChooseOptionalTrigger(card).
+	 */
+	default void FreepsAcceptOptionalTrigger() { AcceptOptionalTrigger(P1()); }
 	default void FreepsDeclineOptionalTrigger() { PlayerDecided(P1(), ""); }
 
-
-
-	default void ShadowAcceptOptionalTrigger() { PlayerDecided(P2(), "0"); }
+	/**
+	 * Causes the Shadow player to take the first action on offer at a choice of actions: an optional trigger or
+	 * response ("Optional responses"), the order of required responses, or the actions of a phase.  Fails, saying
+	 * what is being asked, at any other decision (a yes/no, a choice of cards, a number, an assignment) or with no
+	 * action on offer, and then nothing is answered: the answer it gives, "0", means something else at each of
+	 * those.  To take one card's trigger among several, ShadowChooseOptionalTrigger(card).
+	 */
+	default void ShadowAcceptOptionalTrigger() { AcceptOptionalTrigger(P2()); }
 	default void ShadowDeclineOptionalTrigger() { PlayerDecided(P2(), ""); }
+
+	// "0" is the first action only where actions are on offer.
+	private void AcceptOptionalTrigger(String player) {
+		DecisionGuard.requiredActionChoice(this, player, player + " was to accept an optional trigger");
+		PlayerDecided(player, "0");
+	}
 
 
 	/**

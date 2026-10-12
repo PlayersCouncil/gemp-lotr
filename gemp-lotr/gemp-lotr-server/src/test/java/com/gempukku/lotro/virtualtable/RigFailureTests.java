@@ -20,7 +20,8 @@ import static org.junit.Assert.*;
  * attempted and what each player is in fact being asked, and leave whatever is pending as it was.  So does a choice
  * of cards given where the game is not asking for cards, or is asking for them the other way, and so does
  * declining to choose where the game is not asking for cards or will not take none, and so does the catch-all
- * FreepsChoose(text) at a choice of actions, where it used to take whichever action had the words.  Also the one
+ * FreepsChoose(text) at a choice of actions, where it used to take whichever action had the words, and so does
+ * accepting an optional trigger where no choice of actions is pending, where it used to answer "0".  Also the one
  * reading that is no failure: the maximum of a number the game sets no upper bound on.
  */
 public class RigFailureTests
@@ -428,6 +429,67 @@ public class RigFailureTests
 		scn.FreepsAssignToMinions(aragorn, runner);
 		assertTrue(scn.IsCharAssignedAgainst(aragorn, runner));
 		assertTrue(scn.ShadowDecisionAvailable("Assign minions"));
+	}
+
+	@Test
+	public void AcceptingAnOptionalTriggerWhereNoActionIsOnOfferIsRefusedSayingWhatIsAskedAndNothingIsAnswered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var wind = scn.GetFreepsCard("wind");
+		var ottar = scn.GetFreepsCard("ottar");
+		var gimli = scn.GetFreepsCard("gimli");
+		var runner = scn.GetShadowCard("runner");
+		var troop = scn.GetShadowCard("troop");
+		var scimitar = scn.GetShadowCard("scimitar");
+		scn.MoveCompanionsToTable(aragorn, gandalf);
+		scn.MoveAlliesToTable(ottar);
+		scn.MoveCardsToHand(wind, gimli);
+		scn.MoveCardsToHand(scimitar);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner);
+
+		String notActions = " was to accept an optional trigger, but the decision in front of that player is not a choice of actions.";
+
+		// A player who is not being asked anything has nothing to accept.
+		assertRefused(scn::ShadowAcceptOptionalTrigger,
+				"Shadow Player was to accept an optional trigger, but that player is not being asked anything.",
+				"Free Peoples Player is being asked \"Play Fellowship action or Pass\"");
+
+		// Cards where they lie, of which none need be chosen: "0" is no card id the game offers, and would have
+		// been taken for whatever it meant there.  Nothing is chosen and the choice stays.
+		scn.FreepsUseCardAction(ottar);
+		assertTrue(scn.FreepsDecisionAvailable("Choose cards from hand to discard"));
+		assertRefused(scn::FreepsAcceptOptionalTrigger, "Free Peoples Player" + notActions,
+				"Free Peoples Player is being asked \"Choose cards from hand to discard\".",
+				"Shadow Player is not being asked anything.");
+		assertTrue(scn.FreepsDecisionAvailable("Choose cards from hand to discard"));
+		assertInZone(Zone.HAND, wind, gimli);
+		scn.FreepsDeclineChoosing();
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// The scimitar's "you may draw a card", an optional trigger: accepted, it draws.  The Goblin Runner is the
+		// only [moria] Orc, so no bearer is asked for.
+		scn.FreepsPass();
+		scn.ShadowPlayCard(scimitar);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		int hand = scn.GetShadowHandCount();
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(hand + 1, scn.GetShadowHandCount());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		// A number, where "0" is a number: refused, and the question stays.
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPlayCard(wind);
+		assertTrue(scn.FreepsDecisionAvailable("Choose a minion cost"));
+		assertRefused(scn::FreepsAcceptOptionalTrigger, "Free Peoples Player" + notActions,
+				"Free Peoples Player is being asked \"Choose a minion cost\".");
+		assertTrue(scn.FreepsDecisionAvailable("Choose a minion cost"));
+		scn.FreepsChoose("6");
+		assertEquals(11, scn.GetStrength(troop));
 	}
 
 	@Test

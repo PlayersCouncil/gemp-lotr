@@ -35,22 +35,6 @@ public class Card_08_032_Tests
 					put("runner", "1_178");     // Goblin Runner: [moria] minion, cost 1; its text is about being played
 					put("fighter", "1_146");    // Uruk Fighter: [isengard] minion, cost 3; a maneuver ability that needs 5 companions
 					put("marksman", "1_176");   // Goblin Marksman: cost 3; only ever a card in a draw deck here
-				}},
-				VirtualTableScenario.FellowshipSites,
-				VirtualTableScenario.FOTRFrodo,
-				VirtualTableScenario.RulingRing
-		);
-	}
-
-	// A table small enough that every card of the Shadow player's draw deck can be put somewhere else.
-	protected VirtualTableScenario GetEmptyShadowDeckScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(
-				new HashMap<>()
-				{{
-					put("catapult", "8_32");
-					put("guard1", "1_7");       // Dwarf Guards: cards to discard from hand
-					put("guard2", "1_7");
-					put("runner", "1_178");     // Goblin Runner: a minion, twilight cost 1
 					put("raiders", "4_242");    // Raiders From the East: a [raider] condition in the support area, twilight cost 0; its abilities need (3) or a token
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -287,7 +271,7 @@ public class Card_08_032_Tests
 
 	@Test
 	public void WithTheOpponentsDrawDeckEmptyTheCardsAreDiscardedFromHandAndNoShadowCardIsDiscarded() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetEmptyShadowDeckScenario();
+		var scn = GetScenario();
 
 		var catapult = scn.GetFreepsCard("catapult");
 		var guard1 = scn.GetFreepsCard("guard1");
@@ -298,9 +282,9 @@ public class Card_08_032_Tests
 		var runner = scn.GetShadowCard("runner");
 		var raiders = scn.GetShadowCard("raiders");
 		scn.MoveCardsToSupportArea(raiders);
-		scn.MoveCardsToDiscard(scn.GetShadowCard("catapult"), scn.GetShadowCard("guard1"), scn.GetShadowCard("guard2"));
 
 		scn.StartGame();
+		scn.SetShadowDrawDeck();
 		scn.MoveMinionsToTable(runner);
 		scn.SkipToPhase(Phase.MANEUVER);
 
