@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set01;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -19,9 +18,39 @@ public class Card_01_178_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "1_178");
+					put("runner", "1_178");
+					put("runner2", "1_178");
+					// Goblin Backstabber: a [moria] Orc of cost 1 and site number 4, like the Runner; damage +2
+					// only in a skirmish beside another [moria] Orc
+					put("backstabber", "1_174");
 				}},
 				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// Site 2 is Midgewater Marshes, a marsh, where Watcher in the Water stays in play.  Moving there, Frodo exerts.
+	protected VirtualTableScenario GetMarshScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("runner", "1_178");
+					// Watcher in the Water, Keeper of Westgate: "While you can spot Watcher in the Water, discard
+					// all other minions (except tentacles)"; discarded if not at a marsh
+					put("watcher", "2_73");
+				}},
+				new HashMap<>() {{
+					put("site1", "1_319");
+					put("site2", "1_332");
+					put("site3", "1_341");
+					put("site4", "1_343");
+					put("site5", "1_349");
+					put("site6", "1_351");
+					put("site7", "1_353");
+					put("site8", "1_356");
+					put("site9", "1_360");
+				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -47,7 +76,7 @@ public class Card_01_178_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("runner");
 
 		assertEquals("Goblin Runner", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -69,7 +98,7 @@ public class Card_01_178_Tests
 	public void PlayedWhileRoamingItPaysItsCostAndThePenaltyAndAddsItsTwoWithoutBeingAsked() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var runner = scn.GetShadowCard("card");
+		var runner = scn.GetShadowCard("runner");
 		scn.MoveCardsToHand(runner);
 
 		scn.StartGame();
@@ -85,6 +114,70 @@ public class Card_01_178_Tests
 		// 3 - 1 to play - 2 roaming + the 2 it adds
 		assertEquals(2, scn.GetTwilight());
 		assertInZone(Zone.SHADOW_CHARACTERS, runner);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void AnotherOrcPlayedAddsNothingAndASecondRunnerAddsItsOwnTwoOnce() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var runner = scn.GetShadowCard("runner");
+		var runner2 = scn.GetShadowCard("runner2");
+		var backstabber = scn.GetShadowCard("backstabber");
+		scn.MoveCardsToHand(runner, runner2, backstabber);
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+		scn.FreepsPass();
+
+		// Site 4: no minion here roams.
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		int pool = scn.GetTwilight();
+
+		scn.ShadowPlayCard(runner);
+		// - 1 to play + 2
+		assertEquals(pool + 1, scn.GetTwilight());
+
+		// Another [moria] Orc played beside the Runner: - 1 to play, and nothing added.
+		scn.ShadowPlayCard(backstabber);
+		assertEquals(pool, scn.GetTwilight());
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+
+		// A second Runner: - 1 to play + 2 for its own play, and the first Runner adds nothing.
+		scn.ShadowPlayCard(runner2);
+		assertEquals(pool + 1, scn.GetTwilight());
+		assertInZone(Zone.SHADOW_CHARACTERS, runner, runner2, backstabber);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	// CR 4.2 "discard": "If Watcher in the Water, Keeper of Westgate is in play ... and you play Goblin Runner
+	// ..., (2) is not added."
+	@Test
+	public void PlayedBesideWatcherInTheWaterItIsDiscardedAndAddsNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetMarshScenario();
+
+		var runner = scn.GetShadowCard("runner");
+		var watcher = scn.GetShadowCard("watcher");
+		scn.MoveCardsToHand(runner);
+
+		scn.StartGame();
+		// The move to Midgewater Marshes adds only 2: enough to pay for the Runner's roaming.
+		scn.SetTwilight(3);
+		scn.FreepsPass();
+		scn.MoveMinionsToTable(watcher);
+		scn.ShadowRefreshDecision();
+
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		int pool = scn.GetTwilight();
+
+		scn.ShadowPlayCard(runner);
+
+		// - 1 to play - 2 roaming (site number 4 at site 2), and the (2) not added
+		assertEquals(pool - 3, scn.GetTwilight());
+		assertInZone(Zone.DISCARD, runner);
+		assertInZone(Zone.SHADOW_CHARACTERS, watcher);
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}

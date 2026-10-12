@@ -238,23 +238,17 @@
 						filter: orc
 					}
 					true: {
-						type: chooseYesOrNo
-						text: Would you like to spot an Orc?
-						memorize: discardCount
-						yes: "2"
-						no: "1"
+						type: memorizeNumber
+						memory: discardCount
+						amount: 2
 					}
 				}
 				{
 					type: discard
 					select: choose(condition)
 					count: {
-						type: range
-						from: 1
-						to: {
-							type: fromMemory
-							memory: discardCount
-						}
+						type: fromMemory
+						memory: discardCount
 					}
 				}
 			]
