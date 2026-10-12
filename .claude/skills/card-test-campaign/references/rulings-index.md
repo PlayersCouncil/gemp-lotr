@@ -92,6 +92,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Patch notes are for players (2026-10-12, on the first draft, which was not)
 - Patch notes, the sample (Q-0288, 2026-10-12, fifth notes)
 - Patch notes, the first full draft (Q-0294, 2026-10-12, sixth notes)
+- Only questions reach her; no double approval (2026-10-12)
 
 ## Sources, sheets, revisions and errata
 

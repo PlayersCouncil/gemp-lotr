@@ -503,6 +503,16 @@ make are very specific to the entry at hand, and so will just need a pass from m
 posted. But I will say: capitalization entries can all get put into one bucket, those don't need their own
 individual card lines." (`references/patch-notes.md` has these as rules.) *[2026-10-12]*
 
+**Only questions reach her; no double approval (2026-10-12).** "a good number of recent entries has just been my
+rubber-stamp ... update how the "Waiting on ketura" tab shows items, perhaps only showing questions (leaving
+Findings still in the two-stage fixed/fixed with approval, so that I can spot-check those). And questions that are
+just asking for double-approval after I already approved the item are probably overkill, yeah." So: the Waiting tab
+shows open questions, findings asked as questions and rig requests; fixes made without her word are spot-checked on
+the Findings tab. A "Keep or strike" is filed only for a change beyond an item's words that changes play (roles/
+engine.md step 9). Also: deployment is "days or possibly months" off ("I just want the workflow all ready to go");
+after the engine pieces the campaign moves to a new instance; the usage window "hasn't come into play for a very
+long time", and three pipelines may come "but not with this instance". *[2026-10-12]*
+
 ## Sources, sheets, revisions and errata
 
 **2026-10-04. Comprehensive Rules 4.2** should contain all the official rulings.
