@@ -59,6 +59,7 @@ import csv
 import fcntl
 import re
 import sys
+import unicodedata
 from collections import OrderedDict, defaultdict
 from pathlib import Path
 
@@ -104,6 +105,9 @@ def findings():
 
 
 def norm(s):
+    """lower case, accents dropped ("Úlairë" sorts and matches as "ulaire"), nothing but letters and digits"""
+    s = unicodedata.normalize("NFKD", s)
+    s = "".join(ch for ch in s if not unicodedata.combining(ch))
     return re.sub(r"[^a-z0-9]+", "", s.lower())
 
 
@@ -331,7 +335,10 @@ def cmd_bucket(argv):
 def card_key(r):
     """The card a card line is about: its first link."""
     m = LINK.search(r["line"])
-    return m.group(0) if m else r["id"]
+    if not m:
+        return r["id"]
+    tail = " (PC Errata)" if r["line"][m.end():].startswith(" (PC Errata)") else ""
+    return m.group(0) + tail
 
 
 def arrange(rows, buckets, handful):
