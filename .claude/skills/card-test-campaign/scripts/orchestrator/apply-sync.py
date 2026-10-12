@@ -68,7 +68,7 @@ def fetch():
 def state():
     bundle = HERE / "state.bundle"
     while True:
-        have = git("rev-parse", "--short=7", "state", cwd=CACHE).stdout.strip() if (CACHE / ".git").is_dir() else ""
+        have = git("rev-parse", "--short=7", "HEAD", cwd=CACHE).stdout.strip() if (CACHE / ".git").is_dir() else ""
         if want_state and have.startswith(want_state):
             return "state at " + have
         said = ""
@@ -79,7 +79,7 @@ def state():
             elif git("bundle", "verify", str(bundle), cwd=CACHE).returncode == 0:
                 git("fetch", "-q", str(bundle), "+state:refs/remotes/origin/state", cwd=CACHE)
                 git("reset", "-q", "--hard", "origin/state", cwd=CACHE)
-            have = git("rev-parse", "--short=7", "state", cwd=CACHE).stdout.strip() if (CACHE / ".git").is_dir() else ""
+            have = git("rev-parse", "--short=7", "HEAD", cwd=CACHE).stdout.strip() if (CACHE / ".git").is_dir() else ""
             if not want_state or have.startswith(want_state):
                 return "state at " + (have or "?")
         if time.time() > deadline:
