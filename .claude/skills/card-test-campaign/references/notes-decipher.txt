@@ -20,6 +20,11 @@ held more than a stat check before the campaign (509 tests between them, most fi
   boards and the helper cards are settled there, and a finding the erratum's batch fixed "in the original too" is
   already in your card's definition (`packet.py` prints the text a definition had before a campaign commit).
   Where the two differ, the difference is the erratum's and not a finding on your card.
+  In stage 2, START the test file from the erratum's (Ketura, 2026-10-12: "refer to the tests for those errata,
+  since in most cases the functionality is very close, and so can be a quick copy-paste with a few adjustments"):
+  copy its tests, change the ids, aliases and helpers to your card's, and change what the original's text makes
+  different; then check each against YOUR stage-1 ledger, which was written blind and stays the judge of what is
+  owed. A test copied over that your text does not support is dropped, not kept.
   An erratum's board is settled only for the zones the ERRATUM's text reads: where the original's text reads
   another zone (a draw deck, a discard pile), lay that zone yourself; the erratum's scenario may leave it empty.
   Where the erratum's ledger says on its Sources line that it is a new text sharing no sentence with the
