@@ -96,6 +96,10 @@ says so, read the test file itself for the rest. An entry the packet heads "A ru
 card" is that card's ruling: where its ledger already holds it as an `R` clause (5_60's `R1`, for 8_3), cite it
 under `Sources:` and do not test it again.
 
+No test reads a printed cost or bonus doing its ordinary work (Q-0279: E2; the Standard's "No reading of a printed
+cost or bonus"): not the pool across a plain play, not a bearer's strength, vitality or resistance for a borne card's
+printed bonus, unless the card's text or another card on the table changes it.
+
 No test only plays the card, and the ledger has no `P1` (Q-0279: B, engine pass 31): a plain play is shown once by
 `mechanics/TwilightPoolTests` and `WhereACardIsPlayedTests`, and `gen_play.py` writes no tests. Where the card's
 definition or text bears on its play, lint's `plain-play` names it and asks for a test that plays the card from hand:
