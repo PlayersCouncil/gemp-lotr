@@ -94,6 +94,7 @@ body { overflow-wrap: anywhere }
 .item h3 { margin: 0 0 6px; font: 600 14px/1.35 var(--sans) } .item h3 .code { font: 500 12.5px var(--mono); color: var(--accent); margin-right: 8px }
 .item .body { white-space: pre-wrap; overflow-wrap: anywhere } .item .meta { color: var(--muted); font-size: 12.5px; margin-top: 6px; white-space: pre-wrap }
 .item code, details.report code { font: 12.5px var(--mono) }
+.item pre.fence, details.report pre.fence { font: 12px/1.45 var(--mono); white-space: pre-wrap; overflow-wrap: anywhere; background: var(--line); padding: 8px 10px; border-radius: 6px; margin: 6px 0 }
 details.report { border-bottom: 1px solid var(--line) } details.report:last-child { border-bottom: 0 }
 details.report summary { padding: 10px 14px; cursor: pointer; font: 500 13px var(--mono) }
 details.report .body { padding: 0 14px 14px; white-space: pre-wrap; overflow-wrap: anywhere }
@@ -140,12 +141,13 @@ details.report .body { padding: 0 14px 14px; white-space: pre-wrap; overflow-wra
   </section>
 
   <section id="ask" role="tabpanel" hidden style="display:flex;flex-direction:column;gap:16px">
-    <p class="lead">Everything that wants a word from her, in full: the open questions (a "Keep or strike" one is a
-      change already made that she may undo; left unanswered it stays), the findings mended or filed without her
-      word, and the open rig requests. An answer in the chat needs only the code.</p>
+    <p class="lead">Only what asks her something, in full: the open questions (a "Keep or strike" one is a change
+      already made that she may undo; left unanswered it stays), the findings filed as a question under their own
+      number, and the open rig requests. Fixes made without her word are on the Findings tab (Fixed, not yet
+      Approved) for spot checks. An answer in the chat needs only the code.</p>
     <h2 id="qhead">Questions</h2>
     <div class="plain" id="qlist"></div>
-    <h2 id="fhead">Findings waiting for her word</h2>
+    <h2 id="fhead">Findings asked as questions</h2>
     <div class="plain" id="wlist"></div>
     <h2 id="ghead">Rig requests</h2>
     <div class="plain" id="glist"></div>
@@ -280,7 +282,11 @@ function start() {
   drawFindingFilters(); drawFindings();
 
   // What waits on Ketura: the open questions and rig requests, word for word.
-  function rich(node, text) { for (const part of (text || "").split(/(\*\*[^*]+\*\*|`[^`]+`)/)) {
+  function rich(node, text) {
+    // a fenced block (```) is shown as it is, in a box of its own; the rest gets bold and code spans
+    const blocks = (text || "").split(/^```[^\n]*\n([\s\S]*?)^```[ \t]*$/m);
+    if (blocks.length > 1) { blocks.forEach((b, i) => { if (i % 2) node.append(el("pre", { class: "fence", text: b.replace(/\n$/, "") })); else rich(node, b); }); return node; }
+    for (const part of (text || "").split(/(\*\*[^*]+\*\*|`[^`]+`)/)) {
       if (/^\*\*/.test(part)) node.append(el("b", { text: part.slice(2, -2) }));
       else if (/^`/.test(part)) node.append(el("code", { text: part.slice(1, -1) }));
       else node.append(part); } return node; }
@@ -291,7 +297,9 @@ function start() {
     if (!items.length) box.append(el("div", { class: "item" }, el("div", { class: "meta", text: none }))); }
   const Q = DATA.questions || [], G = DATA.rig || [];
   // Findings that have not had her word: mended without it, or filed and waiting.
-  const WAITS = { "candidate": "believed wrong, not fixed: waiting on her", "fixed": "fixed without her word", "confirmed": "a fault by her word or the text; the fix is pending", "question": "hangs on an open question" };
+  // Ketura, 2026-10-12: this tab shows questions only; a fix made without her word is spot-checked on the Findings
+  // tab (Fixed against Approved), and a fix pending is no question.
+  const WAITS = { "candidate": "believed wrong, not fixed: waiting on her", "question": "hangs on an open question" };
   // A finding she has spoken on ("Ketura (2026-10-09): ..." in its outcome) and whose fix is only pending is not waiting on her.
   const spoken = f => f.status === "confirmed" && /Ketura \(\d{4}-\d\d-\d\d/.test(f.outcome || "");
   // Ketura, 2026-10-09: "if there is a Q for an F of the same issue, I only need to see the Q". A finding that an
@@ -306,7 +314,7 @@ function start() {
     (KINDS[f.kind] || f.kind) + " · " + WAITS[f.status] + (f.found ? "\nFound: " + f.found : "") + (f.outcome ? "\nOutcome: " + f.outcome : "")));
   if (!W.length) wlist.append(el("div", { class: "item" }, el("div", { class: "meta", text: "None." })));
   document.getElementById("qhead").textContent = "Questions (" + Q.length + ")";
-  document.getElementById("fhead").textContent = "Findings waiting for her word (" + W.length + ")";
+  document.getElementById("fhead").textContent = "Findings asked as questions (" + W.length + ")";
   document.getElementById("ghead").textContent = "Rig requests (" + G.length + ")";
   document.getElementById("tab-ask").textContent = "Waiting on Ketura (" + (Q.length + W.length + G.length) + ")";
   const rlist = document.getElementById("rlist");

@@ -103,7 +103,14 @@ agent in turn (`roles/engine.md`), which commits it and writes `engine-pass-<n>/
   changed"). Where a finding proposes the change, say "check that proposal against the code before you take it".
   A design that wants her eye first is an item that builds nothing: "return a proposal and one question".
 - Order: the rig, then the engine, then card corrections, then `tools` last.
-- Anything an agent changes beyond its item comes back as a "Keep or strike" question, already made.
+- Anything an agent changes beyond its item that changes PLAY comes back as a "Keep or strike" question, already
+  made. How it built what she approved, extra tests, tools and tidy-ups do not: they are in the item's report
+  ("Built beyond the item's words"), which you read at close and mention in one line if worth it (Ketura,
+  2026-10-12: double-approval questions "are probably overkill"). An agent's question that is only that: answer
+  it yourself (keep) and say so in the chat.
+- A new KIND of output for her (a format she has not seen: patch notes, a report, a page) gets a small sample on
+  the tracker before any agent makes the whole of it (2026-10-12: the patch-notes draft written without one was
+  the wrong thing; "I wish I had been consulted first").
 - When the pass ends: `close.py engine-pass-<n>`. Its last item ran the whole suite (the line is in that item's
   report); run it yourself (`cardtest.py suite all`, nothing else running in that tree) only if commits have
   arrived since (card batches alone: `cardtest.py suite`, which leaves out the server's tests that no card or

@@ -78,10 +78,18 @@ and keep the output of builds and test runs to its last lines (`| tail -30`).
    Then `python3 .claude/skills/card-test-campaign/scripts/land.py <the cards whose tests went live>` runs the
    gate on each and sets its status (their files are already committed, so it commits nothing). You run no other
    git command that writes, and you never push.
-9. **Anything that wants Ketura's word gets a number.** She reads the tracker on her phone, not your report, and
-   answers by number. So whatever you did beyond your item's words, and whatever you want her eye on, is filed
-   as a question of its own, whole enough to answer without opening anything else: what changed and why, which
-   cards behave differently, and exactly what striking it would undo.
+9. **Anything that wants Ketura's word gets a number, and nothing else does.** She reads the tracker on her phone,
+   not your report, and answers by number. A question is filed for:
+   - a change beyond your item's words that makes a card or the game PLAY differently (a different board, a
+     different offer, a different result), or that strikes out something she ruled;
+   - a real doubt about what she meant, or a reading her words did not settle that changes play either way.
+   NOT for (Ketura, 2026-10-12: "questions that are just asking for double-approval after I already approved the
+   item are probably overkill"): how you built what she approved (which class, which new word, which helper),
+   tests added beside the ones the item named, a tool or lint change, a tidy-up that changes no play, a count or
+   list she was promised. Those go in your report's "Built beyond the item's words" section, which the
+   orchestrator reads; she does not answer it.
+   A question is whole enough to answer without opening anything else: what changed and why, which cards behave
+   differently, and exactly what striking it would undo.
 
        python3 .claude/skills/card-test-campaign/scripts/landing.py question add "Keep or strike: <what>" /tmp/<your folder>/k1.md
 
@@ -90,7 +98,8 @@ and keep the output of builds and test runs to its last lines (`| tail -30`).
    what you return.
 10. **Write the report** for Ketura and the orchestrator, `/mnt/user-data/outputs/card-tests/orchestrator/engine-pass-<n>/<your item>.md`:
    what was wrong; the change, class by class; every other card or definition that now behaves differently; the
-   tests that show it; anything you looked at and left alone, and why.
+   tests that show it; anything you looked at and left alone, and why; and, under the heading "Built beyond the
+   item's words", what step 9 keeps off her page.
 
 ## If you cannot finish
 
