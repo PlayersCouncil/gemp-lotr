@@ -90,6 +90,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Tests of the definition language go in a place of their own (Q-0233: C)
 - Site text is not active while the starting fellowships are played [F-0470, G-0036]
 - Patch notes are for players (2026-10-12, on the first draft, which was not)
+- Patch notes, the sample (Q-0288, 2026-10-12, fifth notes)
 
 ## Sources, sheets, revisions and errata
 
@@ -195,6 +196,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - What is offered and what is asked (2026-10-11, first notes) [F-0385, F-0300, Q-0015, Q-0034, F-0041, Q-0243, Q-0112, Q-0102, F-0419, F-0420, Q-0240]
 - What is offered and what is asked (2026-10-11, fifth notes) [Q-0245, Q-0034, Q-0248, Q-0141, Q-0249, Q-0255, Q-0257, Q-0244, Q-0246]
 - What is offered and what is asked (2026-10-12) [Q-0262, Q-0029, Q-0278, Q-0284, Q-0281, Q-0283, Q-0221]
+- What is offered and what is asked (2026-10-12, fifth notes) [Q-0286]
 
 ## Limits
 
@@ -279,6 +281,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Controlled sites are not discardable (Q-0056)
 - Sites (2026-10-11, first notes) [Q-0238, Q-0226]
 - Bearers, the Ring and sites (2026-10-11, fifth notes) [Q-0252, Q-0258, Q-0259]
+- Bearers, the Ring and sites (2026-10-12, fifth notes) [Q-0285]
 
 ## Reveals, draw decks and shuffles
 
@@ -367,6 +370,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Card by card (2026-10-10, fourth notes) [Q-0225, Q-0226, Q-0227, Q-0232, Q-0234, Q-0235]
 - Card by card (2026-10-11, first notes) [Q-0242, F-0418, F-0420]
 - Card by card (2026-10-11, fifth notes) [F-0469, F-0478]
+- Card by card (2026-10-12, fifth notes) [Q-0287, F-0469]
 - Card by card (2026-10-12). F-0482 (Mountain-troll 15_112's discount counted ahead): "Go for it". F-0483 (the same card asking whether to discard ... [F-0486]
 
 # Settled shapes (shapes.md)

@@ -483,6 +483,14 @@ not being discernable), and that's okay." And: "I recommend writing some scripts
 and such can be made procedural. And given that we have 3,000 more cards to go, this is likely to come up over
 and over." Her model, for the gist only: the Dota 2 patch notes (dota2.com/patches/7.41). *[2026-10-12]*
 
+**Patch notes, the sample (Q-0288, 2026-10-12, fifth notes).** "Fantastic, this is a thousand percent better."
+The shape stands ("It's just about perfect"); a handful is 5 ("5 is good"). A PC errata is written "[[id|Name]]
+(PC Errata)". Fixes to a card's displayed text alone: "Put all of those into a separate section; I'll be
+introducing those changes as "non-errata errata" that emphasize they're just visual in nature without changing
+much." When notes go out is open ("there's a chance none of this will go out until December, so I just want the
+pipeline/workflow streamlined"). The lander writes each finding's patch-note row as it files it: "Brilliant idea,
+that way the agent review happens as we go and makes it more scriptable." *[2026-10-12]*
+
 ## Sources, sheets, revisions and errata
 
 **2026-10-04. Comprehensive Rules 4.2** should contain all the official rulings.
@@ -1084,6 +1092,10 @@ potentially sets the flag, without the two tripping on each other. A pair of res
 fields." (all four charging minions; one mark of "paid for" on the minion, set by either way and asked by both;
 engine pass 30, `regiment`, has the shape.) *[2026-10-12]*
 
+**What is offered and what is asked (2026-10-12, fifth notes).** Q-0286, the bar on drawing (Race Text 94_30)
+shown by two tests of its own beside the Rule of 4 boards (`CanDraw`; Barrows of Edoras 4_337, Old Toby 1_305):
+"Keep". *[2026-10-12]*
+
 ## Limits
 
 **"Limit once" is not "limit +N"** (Q-0082, They Are Not All Accounted For 103_103): "this should be a limit
@@ -1507,6 +1519,11 @@ deletes the assignment box and rearranges the board before Sam's response can ki
 to change anything for that brief instant". Q-0259, Many Miles 13_21 at a site a Shadow player replaced this
 turn before the fellowship came to it: "B I think, yeah. Your reading seems sound. For the Traveled Leader case,
 yeah, I concur that the replacement still happened, whatever happened in between." (+2). *[2026-10-11]*
+
+**Bearers, the Ring and sites (2026-10-12, fifth notes).** Q-0285, a bare `not(...)` given to `attachedTo` is
+asked of a hindered bearer too (read against him as printed: "not an ally" rules an ally out and finds no kind),
+so Asfaloth 1_31 under `attachedTo(not(ally))` is discarded from a hindered companion underground and stays on a
+hindered ally: "Keep, good work." *[2026-10-12]*
 
 ## Reveals, draw decks and shuffles
 
@@ -1950,6 +1967,9 @@ this minion." In principle I'm fine with adding the cost flag to exert, but if t
 happens, we will defer until then to address it." (it had been built by engine pass 27 half an hour before these
 words arrived; she was told). "I approve of all F- items below F-0478 that are crurently fixed without word."
 *[2026-10-11]*
+
+**Card by card (2026-10-12, fifth notes).** Q-0287, marking replay summaries made after the F-0469 fix:
+"Hmm, yeah, go ahead and bump it." (`ReplayMetadata.MetadataVersion` is 4, 78fdfae69.) *[2026-10-12]*
 
 **Card by card (2026-10-12).** F-0482 (Mountain-troll 15_112's discount counted ahead): "Go for it". F-0483 (the
 same card asking whether to discard where the pool cannot pay without it): "Also good". F-0486, Éowyn,
