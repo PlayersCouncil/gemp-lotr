@@ -50,9 +50,9 @@ The turn a pipeline's notification starts. `scripts/orchestrator/close.py` has t
 2. In one step: carry the files (device_commit_files, `force`), publish the tracker to the same artifact, and
    launch the next pipeline.
 3. On her machine: the `apply-sync.py` line (two heads: the branch's and the state's). It answers with both;
-   `EXPECTED` means a file had not caught up: carry again. Her copy of the state is `Claude outputs/state-cache`,
-   a git working copy only Claude writes (Ketura, 2026-10-12); `Claude outputs/card-tests` there is the old copy,
-   no longer updated. While the outputs store is down, carry by SendUserFile and then by fileUuid, never by path.
+   `EXPECTED` means a file had not caught up: carry again. On her machine the state's history is the bare
+   repository `Claude outputs/state-cache.git` (only Claude writes it) and its files are written in place over
+   `Claude outputs/card-tests` (a connected folder refuses deletes, so no working copy and no checkout there). While the outputs store is down, carry by SendUserFile and then by fileUuid, never by path.
 4. `close.py --launched <new folder> <run id> <a,b,c> [--tree repo|cards] --synced <head>`.
 
 Then tell Ketura what landed in a few lines: the numbers filed (Q-, F-, G-), by kind, and one clause on any that

@@ -147,9 +147,9 @@ has them in its header, `roles/orchestrator.md` the reasons):
 2. In one step: carries the files it names to `Claude outputs/card-tests/transport/` on her machine, publishes the
    tracker (the page and `tracker-data.js` from the working folder's `publish/`, to the same artifact), and
    launches the next batch from the queue.
-3. On her machine: `python3 ".../transport/apply-sync.py" <head> <state head>`, which brings `Claude
-   outputs/state-cache` (the state, a working copy only Claude writes) to the state bundle and fetches the code
-   bundle into her branch, and answers with both heads.
+3. On her machine: `python3 ".../transport/apply-sync.py" <head> <state head>`, which fetches the state
+   bundle into `Claude outputs/state-cache.git` (bare; only Claude writes it), writes the state's files over
+   `Claude outputs/card-tests`, fetches the code bundle into her branch, and answers with both heads.
 4. `close.py --launched <new folder> <run> <ids> --synced <head>`: tracks the new run, records that the sync
    arrived, and rewrites the "Running now" block of `HANDOFF.md`.
 
