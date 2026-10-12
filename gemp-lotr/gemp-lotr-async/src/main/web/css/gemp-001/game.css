@@ -160,6 +160,29 @@ body {
     border-color: #009f9f;
 }
 
+/* An action the server expects to do nothing (the "noEffect" flag): still offered, but pale yellow and doubled, so
+   that it reads differently from an ordinary action without relying on colour. */
+.actionableCard.noEffectCard > .borderOverlay {
+    border-color: #e6d36f;
+    border-style: double;
+}
+
+.contextMenu LI.noEffectAction A {
+    color: #6f6650;
+    height: auto;
+    min-height: 20px;
+    border-left: 6px double #c9b24a;
+    padding-left: 3px;
+}
+
+.contextMenu LI.noEffectAction .noEffectReason {
+    font-style: italic;
+}
+
+.contextMenu LI.noEffectAction.hover A {
+    color: #FFF;
+}
+
 .stats {
     text-align: center;
     padding: 2px;
@@ -658,6 +681,11 @@ body {
 
 .card.inactive.actionableCard > .borderOverlay {
     border-color: #7f7fff;
+}
+
+.card.inactive.actionableCard.noEffectCard > .borderOverlay {
+    border-color: #e6d36f;
+    border-style: double;
 }
 
 .card.inactive.selectedCard > .borderOverlay {
