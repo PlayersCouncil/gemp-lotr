@@ -5,10 +5,24 @@ Ketura's rule (rulings-log.md, "Patch notes are for players", 2026-10-12): every
 or a feature changed in play, as a player sees it on the client; nothing a player cannot see is a patch note; no
 F-/Q-/G- numbers, no engine words.  Materially similar fixes go into a bucket, and a bucket of more than a handful of
 cards becomes one tally line with one example.  Changes to the game as a whole come first, in a few plain sentences.
+A PC errata is linked by id and named so: "[[52_91|Southern Spies]] (PC Errata)".  Corrections to a card's displayed
+text alone go in a section of their own (Q-0288: "non-errata errata", "just visual in nature").
+
+Each finding's row is written when it is filed (Q-0288 (6)): the lander that files or fixes a finding adds its row with
+`add` in the same step, so labelling is never a pass of its own.
 
 The judgement (is it seen? which bucket? the player's words) is an agent's, once per finding, kept in
 <state>/patchnotes/labels.tsv.  Everything after that is this script.
 
+    patchnotes.py add <F-id> --visible y|n [--scope card|game|text] [--bucket SLUG] [--cards ID;ID]
+                      [--line "..."] [--short "..."]
+        Writes (or rewrites) one finding's row and checks it at once; refused with the reasons if it fails.  A row
+        with --visible n needs nothing else.  Run `buckets` first and reuse a slug where the fix is materially the
+        same as the bucket's; `bucket` makes a new one.
+    patchnotes.py buckets
+        The buckets, each with its tally, its example and how many cards are in it so far.
+    patchnotes.py bucket <slug> "<tally with {n}>" "<example>"
+        Makes a bucket (or rewrites one's words).
     patchnotes.py todo [--limit N]
         The fixed findings that have no label yet, with their summary and outcome: what a labelling agent reads.
     patchnotes.py check
@@ -24,11 +38,12 @@ The judgement (is it seen? which bucket? the player's words) is an agent's, once
 labels.tsv (tab-separated, header row):
     id       a finding (F-0001), or N-<anything> for a change no finding records
     visible  y / n: can a player see the change on the client?  n rows are kept so the finding is not asked again.
-    scope    card / game.  game rows are the top section.
+    scope    card / game / text.  game rows are the top section; text rows (a correction to the card's displayed
+             text only, nothing plays differently) are a section of their own after the card fixes.
     bucket   a slug from buckets.tsv, or empty
     cards    the blueprint ids the change reaches, ';'-separated (counted for the bucket; may be empty for game rows)
     line     the statement, card linked: "Fixed [[Old Differences]] being able to target any Dwarf or Elf, not just
-             one in the skirmish."  Link an errata as [[52_91|Southern Spies]] and say it is the errata.
+             one in the skirmish."  A PC errata: "Fixed [[52_91|Southern Spies]] (PC Errata) asking ...".
     short    the statement without the card, for a sub-item ("Fixed the on-play effect adding (1) and not (2)")
     released the notes file it went out in, empty until then
 buckets.tsv (tab-separated, header row):
@@ -41,6 +56,7 @@ buckets.tsv (tab-separated, header row):
              ';'-separated, counted with the labels' cards
 """
 import csv
+import fcntl
 import re
 import sys
 from collections import OrderedDict, defaultdict
@@ -136,6 +152,57 @@ def cmd_todo(argv):
                                                                f["summary"], f["outcome"]))
 
 
+ERRATA_SET = re.compile(r"^(\d{1,3})_\d{1,4}$")
+
+
+def is_errata(cid):
+    m = ERRATA_SET.match(cid.strip())
+    return bool(m) and (50 <= int(m.group(1)) <= 89 or 150 <= int(m.group(1)) <= 199)
+
+
+def text_problems(text, where):
+    out = []
+    m = FORBIDDEN.search(text)
+    if m:
+        out.append("%s: '%s' is not a player's word" % (where, m.group(0)))
+    if re.search(r"\bthe PC errata of\b", text, re.I):
+        out.append("%s: write a PC errata as [[id|Name]] (PC Errata)" % where)
+    for lm in LINK.finditer(text):
+        ref = lm.group(1)
+        _, why = resolve(ref)
+        if why:
+            out.append("%s: %s" % (where, why))
+        if is_errata(ref) and not text[lm.end():].startswith(" (PC Errata)"):
+            out.append("%s: %s is a PC errata: follow its link with \" (PC Errata)\"" % (where, lm.group(0)))
+    return out
+
+
+def row_problems(r, buckets, known):
+    i = r["id"]
+    where = "labels %s" % i
+    out = []
+    if not (i in known or i.startswith("N-")):
+        out.append("%s: no such finding (a change no finding records is N-something)" % where)
+    if r["visible"] not in ("y", "n"):
+        out.append("%s: visible is y or n" % where)
+    if r["visible"] != "y":
+        return out
+    if r["scope"] not in ("card", "game", "text"):
+        out.append("%s: scope is card, game or text" % where)
+    if r["bucket"] and r["bucket"] not in buckets:
+        out.append("%s: no bucket '%s' (patchnotes.py buckets lists them)" % (where, r["bucket"]))
+    if not r["line"]:
+        out.append("%s: no line" % where)
+    for text in (r["line"], r["short"]):
+        out += text_problems(text, where)
+    if r["scope"] in ("card", "text") and not LINK.search(r["line"]):
+        out.append("%s: a card's line links its card" % where)
+    for c in filter(None, r["cards"].split(";")):
+        if c not in gempcards.card_index():
+            out.append("%s: cards names no card %s" % (where, c))
+    return out
+
+
 def cmd_check(argv):
     labels = read_tsv(LABELS, LABEL_COLS)
     buckets = {b["slug"]: b for b in read_tsv(BUCKETS, BUCKET_COLS)}
@@ -143,47 +210,15 @@ def cmd_check(argv):
     problems = []
     seen = set()
     for r in labels:
-        i = r["id"]
-        where = "labels %s" % i
-        if i in seen:
-            problems.append("%s: labelled twice" % where)
-        seen.add(i)
-        if not (i in known or i.startswith("N-")):
-            problems.append("%s: no such finding (a change no finding records is N-something)" % where)
-        if r["visible"] not in ("y", "n"):
-            problems.append("%s: visible is y or n" % where)
-        if r["visible"] != "y":
-            continue
-        if r["scope"] not in ("card", "game"):
-            problems.append("%s: scope is card or game" % where)
-        if r["bucket"] and r["bucket"] not in buckets:
-            problems.append("%s: no bucket '%s' in buckets.tsv" % (where, r["bucket"]))
-        if not r["line"]:
-            problems.append("%s: no line" % where)
-        for text in (r["line"], r["short"]):
-            m = FORBIDDEN.search(text)
-            if m:
-                problems.append("%s: '%s' is not a player's word" % (where, m.group(0)))
-            for ref, _ in LINK.findall(text):
-                _, why = resolve(ref)
-                if why:
-                    problems.append("%s: %s" % (where, why))
-        if r["scope"] == "card" and not LINK.search(r["line"]):
-            problems.append("%s: a card line links its card" % where)
-        for c in filter(None, r["cards"].split(";")):
-            if c not in gempcards.card_index():
-                problems.append("%s: cards names no card %s" % (where, c))
+        if r["id"] in seen:
+            problems.append("labels %s: labelled twice" % r["id"])
+        seen.add(r["id"])
+        problems += row_problems(r, buckets, known)
     for slug, b in buckets.items():
         if "{n}" not in b["tally"]:
             problems.append("bucket %s: the tally has no {n}" % slug)
         for text in (b["tally"], b["example"]):
-            m = FORBIDDEN.search(text)
-            if m:
-                problems.append("bucket %s: '%s' is not a player's word" % (slug, m.group(0)))
-            for ref, _ in LINK.findall(text):
-                _, why = resolve(ref)
-                if why:
-                    problems.append("bucket %s: %s" % (slug, why))
+            problems += text_problems(text, "bucket %s" % slug)
     # sub-items need a short form: a card left with two or more lines outside the big buckets
     _, singles = arrange([r for r in labels if r["visible"] == "y" and not r["released"]], buckets, 5)
     for key, rows in singles.items():
@@ -196,6 +231,101 @@ def cmd_check(argv):
         print(p)
     print("%d label(s), %d bucket(s), %d problem(s)" % (len(labels), len(buckets), len(problems)))
     return 1 if problems else 0
+
+
+class Locked:
+    """labels.tsv and buckets.tsv are written by landers in two trees at once."""
+
+    def __enter__(self):
+        DIR.mkdir(parents=True, exist_ok=True)
+        self.f = open(DIR / ".lock", "w")
+        fcntl.flock(self.f, fcntl.LOCK_EX)
+        return self
+
+    def __exit__(self, *a):
+        fcntl.flock(self.f, fcntl.LOCK_UN)
+        self.f.close()
+
+
+def opts(argv, names):
+    out, rest, k = {}, [], 0
+    while k < len(argv):
+        if argv[k] in names and k + 1 < len(argv):
+            out[argv[k][2:]] = argv[k + 1]
+            k += 2
+        else:
+            rest.append(argv[k])
+            k += 1
+    return out, rest
+
+
+def cmd_add(argv):
+    o, rest = opts(argv, {"--visible", "--scope", "--bucket", "--cards", "--line", "--short"})
+    if len(rest) != 1 or "visible" not in o:
+        raise SystemExit("add <F-id> --visible y|n [--scope card|game|text] [--bucket SLUG] [--cards ID;ID] "
+                         "[--line ...] [--short ...]")
+    row = {c: "" for c in LABEL_COLS}
+    row.update(id=rest[0], scope="card")
+    row.update({k: v.strip() for k, v in o.items()})
+    with Locked():
+        labels = read_tsv(LABELS, LABEL_COLS)
+        buckets = {b["slug"]: b for b in read_tsv(BUCKETS, BUCKET_COLS)}
+        problems = row_problems(row, buckets, {f["id"] for f in findings()})
+        if problems:
+            print("\n".join(problems))
+            print("not written")
+            return 1
+        old = [r for r in labels if r["id"] == row["id"]]
+        if old and old[0]["released"]:
+            print("%s went out in %s already: written as a new line for the next notes" % (row["id"], old[0]["released"]))
+            labels = [r for r in labels if not (r["id"] == row["id"] and not r["released"])]
+        else:
+            labels = [r for r in labels if r["id"] != row["id"]]
+        labels.append(row)
+        write_tsv(LABELS, LABEL_COLS, labels)
+    print("%s %s" % ("rewritten" if old else "written", row["id"]))
+    return 0
+
+
+def bucket_counts(labels, buckets):
+    n = defaultdict(set)
+    for r in labels:
+        if r["visible"] == "y" and r["bucket"]:
+            n[r["bucket"]].update([c for c in r["cards"].split(";") if c] or [r["id"]])
+    for slug, b in buckets.items():
+        n[slug].update(filter(None, b["extra"].split(";")))
+    return n
+
+
+def cmd_buckets(argv):
+    labels = read_tsv(LABELS, LABEL_COLS)
+    buckets = {b["slug"]: b for b in read_tsv(BUCKETS, BUCKET_COLS)}
+    n = bucket_counts(labels, buckets)
+    for slug, b in sorted(buckets.items(), key=lambda kv: -len(n[kv[0]])):
+        print("%-24s %4d  %s\n%30s Example: %s" % (slug, len(n[slug]), b["tally"], "", b["example"]))
+
+
+def cmd_bucket(argv):
+    if len(argv) != 3 or not re.fullmatch(r"[a-z0-9-]+", argv[0]):
+        raise SystemExit('bucket <slug: lowercase and dashes> "<tally with {n}>" "<example>"')
+    slug, tally, example = argv
+    problems = [] if "{n}" in tally else ["the tally has no {n}"]
+    for text in (tally, example):
+        problems += text_problems(text, "bucket %s" % slug)
+    if problems:
+        print("\n".join(problems))
+        print("not written")
+        return 1
+    with Locked():
+        buckets = read_tsv(BUCKETS, BUCKET_COLS)
+        old = [b for b in buckets if b["slug"] == slug]
+        if old:
+            old[0].update(tally=tally, example=example)
+        else:
+            buckets.append({"slug": slug, "tally": tally, "example": example, "extra": ""})
+        write_tsv(BUCKETS, BUCKET_COLS, buckets)
+    print("%s bucket %s" % ("rewrote" if old else "made", slug))
+    return 0
 
 
 def card_key(r):
@@ -241,6 +371,7 @@ def cmd_render(argv):
     buckets = {b["slug"]: b for b in read_tsv(BUCKETS, BUCKET_COLS)}
     rows = [r for r in labels if r["visible"] == "y" and ("--all" in argv or not r["released"])]
     game = [r for r in rows if r["scope"] == "game"]
+    text_rows = sorted((r for r in rows if r["scope"] == "text"), key=lambda r: sort_name(card_key(r)))
     big, singles = arrange(rows, buckets, handful)
 
     out = ["---"]
@@ -271,11 +402,15 @@ def cmd_render(argv):
                 out.append("- %s:" % key)
                 out += ["    - " + (r["short"] or r["line"]) for r in rs]
         out.append("")
+    if text_rows:
+        out += ["### Card text corrections", ""]
+        out += ["- " + r["line"] for r in text_rows]
+        out.append("")
     text = "\n".join(out)
     if opt("--out"):
         Path(opt("--out")).write_text(text, encoding="utf-8")
-        print("wrote %s: %d game change(s), %d bucket(s), %d card(s)" % (opt("--out"), len(game), len(big),
-                                                                       len(singles)))
+        print("wrote %s: %d game change(s), %d bucket(s), %d card(s), %d text correction(s)"
+              % (opt("--out"), len(game), len(big), len(singles), len(text_rows)))
     else:
         sys.stdout.write(text)
 
@@ -297,7 +432,8 @@ def main():
     if len(sys.argv) < 2 or sys.argv[1] in ("-h", "--help"):
         print(__doc__)
         return 0
-    cmd = {"todo": cmd_todo, "check": cmd_check, "render": cmd_render, "release": cmd_release}.get(sys.argv[1])
+    cmd = {"todo": cmd_todo, "check": cmd_check, "render": cmd_render, "release": cmd_release, "add": cmd_add,
+           "buckets": cmd_buckets, "bucket": cmd_bucket}.get(sys.argv[1])
     if not cmd:
         raise SystemExit("unknown command %s" % sys.argv[1])
     return cmd(sys.argv[2:]) or 0
