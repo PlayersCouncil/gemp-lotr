@@ -389,6 +389,11 @@ public abstract class AbstractModifier implements Modifier {
     }
 
     @Override
+    public int getKeywordGainLimit(LotroGame game, PhysicalCard card, Keyword keyword) {
+        return Integer.MAX_VALUE;
+    }
+
+    @Override
     public Evaluator getFpSkirmishStrengthOverrideEvaluator(LotroGame game, PhysicalCard fpCharacter) {
         return null;
     }

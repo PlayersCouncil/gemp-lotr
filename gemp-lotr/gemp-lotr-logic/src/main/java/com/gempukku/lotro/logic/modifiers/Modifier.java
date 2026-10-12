@@ -165,6 +165,12 @@ public interface Modifier {
 
     boolean lostAllKeywords(LotroGame game, PhysicalCard card);
 
+    /**
+     * The most of a keyword this modifier lets the card have, whatever gives it: Integer.MAX_VALUE for every
+     * modifier but a bar on gaining keywords (CantGainKeywordsModifier, Q-0282).
+     */
+    int getKeywordGainLimit(LotroGame game, PhysicalCard card, Keyword keyword);
+
     Evaluator getFpSkirmishStrengthOverrideEvaluator(LotroGame game, PhysicalCard fpCharacter);
     Evaluator getShadowSkirmishStrengthOverrideEvaluator(LotroGame game, PhysicalCard fpCharacter);
 

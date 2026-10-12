@@ -47,6 +47,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("cancelskirmish", new CancelSkirmish());
         effectAppenderProducers.put("cancelspecialability", new CancelSpecialAbility());
         effectAppenderProducers.put("canplaynextaction", new CanPlayNextAction());
+        effectAppenderProducers.put("cantgainkeywords", new CantGainKeywords());
         effectAppenderProducers.put("chooseactivecards", new ChooseActiveCards());
         effectAppenderProducers.put("chooseaculture", new ChooseACulture());
         effectAppenderProducers.put("chooseakeyword", new ChooseAKeyword());

@@ -426,6 +426,25 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
 
     @Override
     public boolean hasKeyword(LotroGame game, PhysicalCard physicalCard, Keyword keyword) {
+        return hasKeywordAsGiven(game, physicalCard, keyword)
+                && getKeywordGainLimit(game, physicalCard, keyword) > 0;
+    }
+
+    /**
+     * The most of a keyword a card may have while it is barred from gaining keywords (CantGainKeywordsModifier,
+     * Into the Caves 17_100; Q-0282): what it had as the bar was laid. Integer.MAX_VALUE with no bar, and for what
+     * is no game text keyword (the keywords a lose-all removes: isCandidateForKeywordRemovalWithTextRemoval).
+     */
+    private int getKeywordGainLimit(LotroGame game, PhysicalCard physicalCard, Keyword keyword) {
+        if (!isCandidateForKeywordRemovalWithTextRemoval(game, physicalCard, keyword))
+            return Integer.MAX_VALUE;
+        int limit = Integer.MAX_VALUE;
+        for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.CANT_GAIN_KEYWORDS_MODIFIER, physicalCard))
+            limit = Math.min(limit, modifier.getKeywordGainLimit(game, physicalCard, keyword));
+        return limit;
+    }
+
+    private boolean hasKeywordAsGiven(LotroGame game, PhysicalCard physicalCard, Keyword keyword) {
         LoggingThreadLocal.logMethodStart(physicalCard, "hasKeyword " + keyword.getHumanReadable());
         try {
             if (isCandidateForKeywordRemovalWithTextRemoval(game, physicalCard, keyword) &&
@@ -488,7 +507,7 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
                 if (appliesKeywordModifier(game, physicalCard, modifier.getSource(), keyword))
                     result += modifier.getKeywordCountModifier(game, physicalCard, keyword);
             }
-            return Math.max(0, result);
+            return Math.min(Math.max(0, result), getKeywordGainLimit(game, physicalCard, keyword));
         } finally {
             LoggingThreadLocal.logMethodEnd();
         }

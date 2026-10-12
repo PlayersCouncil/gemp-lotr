@@ -1208,10 +1208,14 @@ the minion's site number is above the current site's, and it follows a site-numb
 (`Card_15_062_ErrataTests`, `Card_15_064_ErrataTests`).
 
 **A keyword a card gives itself while it can spot that keyword is kept once gained** (Sentry Uruk 15_170, Q-0276;
-`spotsItself`). The other card may go and the Sentry stays fierce; alone from the start it has nothing. What it
+Ravaging Wild Man 15_91, Q-0290; `spotsItself`). The other card may go and the Sentry stays fierce; alone from the start it has nothing. What it
 holds is worked out at each step of the game and whenever it is asked about, so a cheat that takes the keyword
 away and gives it back with no step between (`ApplyAdHocModifier` and a read) finds it still held, where any
 step in between (a pass) loses it. Every other "while you can spot" leaves out the card's own grant, as before.
+
+**"Unable to gain game text keywords" keeps what the card had when it was laid** (`cantGainKeywords`, Into the Caves
+17_100; Q-0282). Nothing is gained from any card, its own text included, and no more of a keyword it has (damage +1
+stays +1); a keyword it had and lost by its own text may come back up to what it had. Roaming is no game text keyword.
 
 **Making a card something it is not.** `ApplyAdHocModifier` with `IsAdditionalCultureModifier` or
 `IsAdditionalRaceModifier` gives a card a second culture or race, `AddKeywordModifier` a keyword, and filters see

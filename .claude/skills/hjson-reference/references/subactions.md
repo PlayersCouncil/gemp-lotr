@@ -291,6 +291,16 @@ Remember that Gemp will attempt to avoid giving the player useless selections; i
       This is mutually exclusive with the `until` field; if this is set that field should be unset.  
     * memorize
       optional
+* CantGainKeywords
+  The `select`ed cards keep the game text keywords they have as this is carried out, and gain no other and no more of one (from any card, their own text included) `until` the given duration expires (Into the Caves 17_100, Q-0282). A keyword had then and lost since may come back up to what was had.
+    * count
+      default: 1
+    * select
+      required
+    * until
+      default: end(current)
+    * memorize
+      optional
 * RemoveKeyword
   Causes the current player to `select count `cards to lose the given `keyword` (optionally sourced `FromMemory`) `until` the given duration expires.  The effect is continuous and the target will be unable to gain that keyword again for the duration of the effect.  Optionally `memoriz`es the selected card.
   See You Cannot Pass!)
@@ -421,8 +431,12 @@ The primary difference is that discrete effects can be undone by an opposite dis
     * memorize
       required
     * keywords [ ] 
-      required
+      required unless `fromCard` is given
       Array of keyword strings, one entry per keyword. 
+    * fromCard
+      optional; a card filter (`memory(chosenMinion)`). The choice is of the game text keywords that card has now; with none, nothing is asked and "" is memorized (Into the Caves 17_100, Q-0282).
+    * noneOption
+      optional; the text of an extra answer that names no keyword, memorized as "" (`RemoveKeyword`'s `keywordFromMemory` then removes nothing).
     * text
       default: Choose a keyword
 * ChooseANumber

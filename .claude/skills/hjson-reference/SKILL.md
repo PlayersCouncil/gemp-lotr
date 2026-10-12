@@ -606,6 +606,7 @@ A Race to Mount Doom meta-site's `Trigger` and `Activated` are collected for eve
 | `ModifySiteNumber` | select, amount, count?, until?, memorize? | Temp site number change |
 | `AddKeyword` | select, keyword, amount?, count?, until?, memorize? | Add keyword temporarily |
 | `RemoveKeyword` | select, keyword, count?, until?, memorize? | Remove keyword temporarily |
+| `CantGainKeywords` | select, count?, until?, memorize? | "Unable to gain game text keywords": keeps the game text keywords the card has as it is carried out, and no more of one (Q-0282) |
 | `RemoveText` | select, count?, until?, memorize? | Disable game text |
 | `ModifyArcheryTotal` | side, amount, until? | Alter archery total |
 | `AddTrigger` | trigger, until?, optional?, requires?, cost?, effect? | Spawn temporary trigger. With `optional: true` it is offered only to the player who performed the action that added it |
@@ -643,7 +644,7 @@ A top-level `AddThreats` cost is known to the action's requirements, to the adva
 `Memorize(filter, memory)`, `MemorizeNumber(amount, memory)`, `MemorizeInfo(info, memory)`, `MemorizeTitle(from, memory)`, `MemorizeDiscard(filter?, memory)`, `MemorizeStacked(filter?, on, memory)`, `MemorizeTopOfDeck(memory, count?)`, `FilterCardsInMemory(filter, memory, memorizeMatching?, memorizeNotMatching?)`
 
 **Choices:**
-`ChooseActiveCards(select?, count?, memorize, text, player?, hindered?)`, `ChooseArbitraryCards(fromMemory, count?, filter?, memorize, text, player?)`, `ChooseANumber(text, from?, to?, memorize, player?)`, `ChooseACulture(memorize)`, `ChooseARace(memorize)`, `ChooseAKeyword(memorize, keywords[], text?)`, `ChooseYesOrNo(text, memorize, player?)`, `ChooseHowManyToSpot(filter, memorize, text?)` (asks from 0 to all that match, so a number taken off its answer wants a `max` of 0: F-0374), `ChooseCardsFromDiscard(select?, count?, memorize, text?)`, `ChooseCardsFromDrawDeck(select?, count?, memorize, player?, deck?, showAll, text?)`
+`ChooseActiveCards(select?, count?, memorize, text, player?, hindered?)`, `ChooseArbitraryCards(fromMemory, count?, filter?, memorize, text, player?)`, `ChooseANumber(text, from?, to?, memorize, player?)`, `ChooseACulture(memorize)`, `ChooseARace(memorize)`, `ChooseAKeyword(memorize, keywords[] or fromCard, noneOption?, text?)` (`fromCard`: the game text keywords that card has now, nothing asked if none; `noneOption`: an answer naming none, memorized as "", which `RemoveKeyword`'s `keywordFromMemory` takes as nothing), `ChooseYesOrNo(text, memorize, player?)`, `ChooseHowManyToSpot(filter, memorize, text?)` (asks from 0 to all that match, so a number taken off its answer wants a `max` of 0: F-0374), `ChooseCardsFromDiscard(select?, count?, memorize, text?)`, `ChooseCardsFromDrawDeck(select?, count?, memorize, player?, deck?, showAll, text?)`
 
 **Skirmish:**
 `CancelSkirmish(filter?, involving?, fierceOnly?)`, `CancelEvent`, `CancelSpecialAbility`, `CancelAllAssignments`, `AssignFPCharacterToSkirmish(fpCharacter, minion, player?)`, `ReplaceInSkirmish(filter, with)`, `RemoveCharacterFromSkirmish(select?, player?, memorize?)`, `StartSkirmish(fpCharacter, against)`, `SetupExtraAssignmentAndSkirmishes(filter)`

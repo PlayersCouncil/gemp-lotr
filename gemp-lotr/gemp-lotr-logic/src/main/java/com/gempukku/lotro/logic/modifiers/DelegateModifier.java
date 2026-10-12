@@ -435,6 +435,11 @@ public class DelegateModifier implements Modifier {
     }
 
     @Override
+    public int getKeywordGainLimit(LotroGame game, PhysicalCard card, Keyword keyword) {
+        return delegate.getKeywordGainLimit(game, card, keyword);
+    }
+
+    @Override
     public boolean shadowCanHaveInitiative(LotroGame game) {
         return delegate.shadowCanHaveInitiative(game);
     }

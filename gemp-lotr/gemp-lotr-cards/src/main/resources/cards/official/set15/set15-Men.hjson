@@ -1081,6 +1081,7 @@
 						filter: hunter
 					}
 					filter: self
+					spotsItself: true
 					keyword: hunter
 					amount: 1
 				}

@@ -61,8 +61,13 @@ public class RemoveKeyword implements EffectAppenderProducer {
                         final Set<Keyword> keywordsOfThisUse = EnumSet.noneOf(Keyword.class);
                         keywordsOfThisUse.addAll(keywords);
                         if (keywordFromMemory != null) {
-                            keywordsOfThisUse.add(Keyword.parse(actionContext.getValueFromMemory(keywordFromMemory)));
+                            // "" is no keyword named (chooseAKeyword's noneOption; Q-0282).
+                            final String named = actionContext.getValueFromMemory(keywordFromMemory);
+                            if (!named.isEmpty())
+                                keywordsOfThisUse.add(Keyword.parse(named));
                         }
+                        if (keywordsOfThisUse.isEmpty())
+                            return null;
                         return new AddUntilModifierEffect(
                                 new RemoveKeywordModifier(actionContext.getSource(), Filters.in(cardsFromMemory), null, keywordsOfThisUse), until);
                     }

@@ -4,7 +4,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -38,6 +37,9 @@ public class Card_17_100_Tests
 					put("captain", "4_225");     // Easterling Captain: [raider] Man, Easterling and fierce; strength 11, site 4
 					put("blackrider", "12_161"); // Black Rider: [wraith] Nazgûl, fierce; strength 8 +1 for each companion
 					put("savage", "1_151");      // Uruk Savage: [isengard] Uruk-hai, damage +1 and no other text
+					put("savage2", "1_151");
+					put("cry1", "1_128");        // Lurtz's Battle Cry: Skirmish event, cost 1; "Make an Uruk-hai strength -1 and damage +1"
+					put("cry2", "1_128");
 					put("scout", "1_270");       // Orc Scouting Band: [sauron] Orc, tracker; a skirmish ability used only on purpose
 					put("axeman1", "4_224");     // Easterling Axeman: Easterling; strength +3 and fierce while 2 burdens can be spotted
 					put("axeman2", "4_224");
@@ -164,12 +166,13 @@ public class Card_17_100_Tests
 		assertEquals(0, scn.GetKeywordCount(sauron, Keyword.DAMAGE));
 		assertTrue(scn.HasKeyword(sauron, Keyword.ENDURING));
 		assertTrue(scn.HasKeyword(sauron, Keyword.FIERCE));
-		scn.FreepsChooseYes();
+		// Asked again, of the keywords he still has.
+		assertFalse(scn.FreepsChoiceAvailable("DAMAGE"));
 		scn.FreepsChooseOption("ENDURING");
 		assertFalse(scn.HasKeyword(sauron, Keyword.DAMAGE));
 		assertFalse(scn.HasKeyword(sauron, Keyword.ENDURING));
 		assertTrue(scn.HasKeyword(sauron, Keyword.FIERCE));
-		scn.FreepsChooseNo();
+		scn.FreepsChooseOption("None");
 
 		// "Of your choice": the keyword that was not named stays.
 		assertFalse(scn.HasKeyword(sauron, Keyword.DAMAGE));
@@ -229,12 +232,16 @@ public class Card_17_100_Tests
 		assertTrue(scn.IsCharAssignedAgainst(frodo, captain));
 		assertFalse(scn.IsCharAssigned(sam));
 
-		// Both keywords of its game text can be named.  Easterling is, and fierce is not.
+		// Both keywords of its game text can be named, and no other; or none.  Easterling is, and fierce is not.
 		assertTrue(scn.FreepsDecisionAvailable("keyword"));
 		assertTrue(scn.FreepsChoiceAvailable("EASTERLING"));
 		assertTrue(scn.FreepsChoiceAvailable("FIERCE"));
+		assertTrue(scn.FreepsChoiceAvailable("None"));
+		assertFalse(scn.FreepsChoiceAvailable("DAMAGE"));
+		assertFalse(scn.FreepsChoiceAvailable("ENDURING"));
+		assertFalse(scn.FreepsChoiceAvailable("TRACKER"));
 		scn.FreepsChooseOption("EASTERLING");
-		scn.FreepsChooseNo();
+		scn.FreepsChooseOption("None");
 
 		assertFalse(scn.HasKeyword(captain, Keyword.EASTERLING));
 		assertTrue(scn.HasKeyword(captain, Keyword.FIERCE));
@@ -285,7 +292,7 @@ public class Card_17_100_Tests
 		assertFalse(scn.IsCharAssigned(gimli));
 
 		scn.FreepsChooseOption("EASTERLING");
-		scn.FreepsChooseNo();
+		scn.FreepsChooseOption("None");
 
 		assertFalse(scn.HasKeyword(captain, Keyword.EASTERLING));
 		assertTrue(scn.HasKeyword(captain, Keyword.FIERCE));
@@ -344,7 +351,7 @@ public class Card_17_100_Tests
 		scn.FreepsUseCardAction(caves);
 		scn.FreepsChooseCard(nomad1);
 		scn.FreepsChooseOption("DAMAGE");
-		scn.FreepsChooseNo();
+		scn.FreepsChooseOption("None");
 
 		// The damage bonus is gone, though its own text goes on giving it; the keyword that was not named
 		// stays.  The other Nomad is as it was.
@@ -376,7 +383,6 @@ public class Card_17_100_Tests
 	}
 
 	@Test
-	@Ignore("Q-0282: 'unable to gain game text keywords' is built for the keywords the player named alone; a keyword he did not name is gained")
 	public void AMinionCannotGainAKeywordThatWasNotNamed() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -398,7 +404,8 @@ public class Card_17_100_Tests
 		scn.FreepsUseCardAction(caves);
 		scn.FreepsChooseCard(axeman1);
 		scn.FreepsChooseOption("EASTERLING");
-		scn.FreepsChooseNo();
+		// Its one keyword named, it has none left to name, and nothing more is asked.
+		assertFalse(scn.FreepsDecisionAvailable("keyword"));
 		assertTrue(scn.IsCharAssignedAgainst(frodo, axeman1));
 		assertFalse(scn.HasKeyword(axeman1, Keyword.EASTERLING));
 
@@ -410,6 +417,111 @@ public class Card_17_100_Tests
 		assertEquals(6 + 3, scn.GetStrength(axeman1));
 		assertFalse(scn.HasKeyword(axeman1, Keyword.FIERCE));
 		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+	}
+
+	@Test
+	public void NamingNoKeywordLeavesTheMinionItsOwnAndItGainsNoneUntilTheRegroupPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var caves = scn.GetFreepsCard("caves");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var sword = scn.GetFreepsCard("sword");
+		var axeman1 = scn.GetShadowCard("axeman1");
+		var axeman2 = scn.GetShadowCard("axeman2");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToSupportArea(caves);
+		// Frodo is strength 5, so that an Axeman at 9 beats him without overwhelming him
+		scn.AttachCardsTo(frodo, sword);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(axeman1, axeman2);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		scn.FreepsUseCardAction(caves);
+		scn.FreepsChooseCard(axeman1);
+
+		// The minion's own keyword is offered, and none; fierce, which it does not have, is not.
+		assertTrue(scn.FreepsDecisionAvailable("keyword"));
+		assertTrue(scn.FreepsChoiceAvailable("EASTERLING"));
+		assertTrue(scn.FreepsChoiceAvailable("None"));
+		assertFalse(scn.FreepsChoiceAvailable("FIERCE"));
+		scn.FreepsChooseOption("None");
+
+		// It keeps what it has, and gains nothing: two burdens give it the strength, which is no keyword, and
+		// not fierce.  The other Axeman is the control.
+		assertTrue(scn.IsCharAssignedAgainst(frodo, axeman1));
+		assertTrue(scn.HasKeyword(axeman1, Keyword.EASTERLING));
+		scn.AddBurdens(2);
+		assertEquals(6 + 3, scn.GetStrength(axeman1));
+		assertFalse(scn.HasKeyword(axeman1, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(axeman2, Keyword.FIERCE));
+
+		scn.PassAssignmentActions();
+		scn.FreepsAssignToMinions(aragorn, axeman2);
+		scn.FreepsResolveSkirmish(frodo);
+		scn.PassCurrentPhaseActions();
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.PassCurrentPhaseActions();
+
+		// Still not fierce in the fierce round, and not to be assigned in it.
+		assertTrue(scn.InFierceRound());
+		scn.PassFierceAssignmentActions();
+		assertFalse(scn.HasKeyword(axeman1, Keyword.FIERCE));
+		assertFalse(scn.FreepsHasAssignmentTargetAvailable(axeman1));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(axeman2));
+		scn.FreepsDeclineAssignments();
+		scn.ShadowDeclineAssignments();
+
+		// The regroup phase: the burdens are still 2, and it is fierce.
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		assertEquals(2, scn.GetBurdens());
+		assertTrue(scn.HasKeyword(axeman1, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(axeman1, Keyword.EASTERLING));
+	}
+
+	@Test
+	public void AMinionWithADamageBonusGainsNoMoreOfIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var caves = scn.GetFreepsCard("caves");
+		var savage = scn.GetShadowCard("savage");
+		var savage2 = scn.GetShadowCard("savage2");
+		var cry1 = scn.GetShadowCard("cry1");
+		var cry2 = scn.GetShadowCard("cry2");
+		scn.MoveCardsToSupportArea(caves);
+		scn.MoveCardsToHand(cry1, cry2);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(savage, savage2);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		scn.FreepsUseCardAction(caves);
+		scn.FreepsChooseCard(savage);
+		scn.FreepsChooseOption("None");
+		assertTrue(scn.IsCharAssignedAgainst(frodo, savage));
+		assertEquals(1, scn.GetKeywordCount(savage, Keyword.DAMAGE));
+
+		scn.PassAssignmentActions();
+		scn.FreepsDeclineAssignments();
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(frodo);
+		scn.SetTwilight(2);
+
+		// Each Uruk Savage is made strength -1 and damage +1.  The one under the bar has the strength and keeps
+		// the damage +1 it had; the other is damage +2.
+		scn.FreepsPass();
+		scn.ShadowPlayCard(cry1);
+		scn.ShadowChooseCard(savage);
+		scn.FreepsPass();
+		scn.ShadowPlayCard(cry2);
+		scn.ShadowChooseCard(savage2);
+		assertEquals(5 - 1, scn.GetStrength(savage));
+		assertEquals(1, scn.GetKeywordCount(savage, Keyword.DAMAGE));
+		assertEquals(5 - 1, scn.GetStrength(savage2));
+		assertEquals(2, scn.GetKeywordCount(savage2, Keyword.DAMAGE));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 
 	@Test
@@ -433,7 +545,6 @@ public class Card_17_100_Tests
 		scn.FreepsUseCardAction(caves);
 		scn.FreepsChooseCard(axeman1);
 		scn.FreepsChooseOption("EASTERLING");
-		scn.FreepsChooseNo();
 		assertFalse(scn.HasKeyword(axeman1, Keyword.EASTERLING));
 		assertTrue(scn.HasKeyword(captain, Keyword.EASTERLING));
 		assertTrue(scn.HasKeyword(captain, Keyword.FIERCE));
@@ -454,7 +565,7 @@ public class Card_17_100_Tests
 		scn.FreepsUseCardAction(caves);
 		assertTrue(scn.IsCharAssignedAgainst(frodo, captain));
 		scn.FreepsChooseOption("FIERCE");
-		scn.FreepsChooseNo();
+		scn.FreepsChooseOption("None");
 
 		assertFalse(scn.HasKeyword(captain, Keyword.FIERCE));
 		assertTrue(scn.HasKeyword(captain, Keyword.EASTERLING));
@@ -494,10 +605,8 @@ public class Card_17_100_Tests
 		assertTrue(scn.IsCharAssignedAgainst(frodo, spearman));
 		assertFalse(scn.IsCharAssigned(lemenya));
 
-		// The assignment paid for, the card goes on to its keywords.
-		assertTrue(scn.FreepsDecisionAvailable("keyword"));
-		scn.FreepsChooseOption("DAMAGE");
-		scn.FreepsChooseNo();
+		// The assignment paid for, the card goes on to its keywords: the Spearman has none, and nothing is asked.
+		assertFalse(scn.FreepsDecisionAvailable("keyword"));
 		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
 	}
 
@@ -526,9 +635,8 @@ public class Card_17_100_Tests
 		assertTrue(scn.IsCharAssignedAgainst(frodo, lemenya));
 		assertFalse(scn.IsCharAssigned(spearman));
 
-		assertTrue(scn.FreepsDecisionAvailable("keyword"));
-		scn.FreepsChooseOption("DAMAGE");
-		scn.FreepsChooseNo();
+		// The Nazgûl has no keyword to name, and nothing is asked.
+		assertFalse(scn.FreepsDecisionAvailable("keyword"));
 		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
 	}
 }
