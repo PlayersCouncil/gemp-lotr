@@ -31,6 +31,15 @@ from pathlib import Path
 
 WORK = Path(os.environ.get("GEMP_WORK", "/home/claude/work"))
 REPO, CARDS = WORK / "repo", WORK / "cards"
+
+
+def pipelines():
+    """How many pipelines may run at once: the number in <work>/pipelines, 2 if there is none (Ketura's standing
+    rule was two; on the new instance she may allow three: Q-0296 C)."""
+    try:
+        return max(1, int((WORK / "pipelines").read_text().strip()))
+    except Exception:
+        return 2
 STATE = Path(os.environ.get("GEMP_CAMPAIGN_STATE", "/mnt/user-data/outputs/card-tests"))
 HERE = Path(__file__).resolve().parent
 BRANCH = "feature/card-test-overhaul"
@@ -158,11 +167,13 @@ def next_launch():
         prefix = {"decipher": "dec"}.get(name.replace("queue-", "").split("-")[0], name.replace("queue-", "")[:4])
         notes = notes_file(name)
         if held:
-            trees = [] if at_work("cards") else [(CARDS, "cards")]
+            # the main tree is held by one pipeline: the others may run batches in the second tree, side by side
+            room = pipelines() - len(at_work("repo")) - len(at_work("cards"))
+            trees = [(CARDS, "cards")] * max(room, 0)
             if not trees:
-                out.append("%s: %d card(s) left; the second tree is in use (%s)" % (name, len(ids), ", ".join(at_work("cards"))))
+                out.append("%s: %d card(s) left; every pipeline is in use (%s)" % (name, len(ids), ", ".join(at_work("repo") + at_work("cards"))))
         else:
-            free = 2 - len([f for f in at_work("repo")]) - len(at_work("cards"))
+            free = pipelines() - len([f for f in at_work("repo")]) - len(at_work("cards"))
             trees = [(REPO, "repo")] * max(free, 0)
         for n, (tree, label) in enumerate(trees):
             batch = ids[n * 4:n * 4 + 4]
@@ -174,7 +185,7 @@ def next_launch():
             out.append("%s (%d left): workflows/card-batch.js with args\n  %s\n  then: close.py --launched %s <run id> %s --tree %s --synced <head>" % (
                 name, len(ids), json.dumps(args), folder, ",".join(batch), label))
     if not held:
-        out.append("nothing holds the main tree: batches may run there, two at a time")
+        out.append("nothing holds the main tree: batches may run there, %d at a time" % pipelines())
     return out
 
 

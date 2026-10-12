@@ -88,7 +88,7 @@ has started). `close.py` runs it, and `integrate.sh --renew` when the second tre
   `close.py --launched ...` without `--synced`, and at the NEXT landing run `close.py` for the waiting folder
   first and then for the new one. The first brings every waiting commit across. Ketura gets them one batch
   late, which costs nothing; a retry every quarter of an hour costs a turn each time.
-- When no engine pass is running, batches run in the main tree, two at a time (`--tree repo`).
+- When no engine pass is running, batches run in the main tree, as many at a time as there are pipelines (`--tree repo`): the number is in `/home/claude/work/pipelines` (2 when there is no file; Ketura may allow 3 on the new instance, Q-0296 C). While an engine pass holds the main tree, the other pipelines run batches side by side in the second tree.
 - Do not run the suite or a build in a tree where a pipeline is at work.
 
 ## Engine passes
