@@ -576,10 +576,12 @@ why is in the game log ("The game ends when it ends", below).
 
 **Player 2 on site 9 with the game still going.** Player 1 wins at site 9 a turn before player 2 can stand
 there, so a text that bites only at site 9 ("your fellowship cannot win until ...", 94_31) is shown for player 2
-by putting him a site ahead: `SkipToSite(6); SkipToOtherPlayersTurn(); ShadowPass();
-SkipToPhaseInverted(Phase.REGROUP); PassCurrentPhaseActions(); ShadowChooseToMove(); SkipToOtherPlayersTurn();
-SkipToOtherPlayersTurn();` has him move twice on his sixth turn and leaves him at site 8 in the fellowship phase
-of his seventh; his move then reaches site 9 before player 1 has (Card_94_031_Tests, the last test).
+by putting him a site ahead: `SkipToSite(6); SkipToOtherPlayersTurn(); ShadowPass(); SkipToMovementDecision();
+ShadowChooseToMove(); SkipToOtherPlayersTurn(); SkipToOtherPlayersTurn();` has him move twice on his sixth turn
+and leaves him at site 8 in the fellowship phase of his seventh; his move then reaches site 9 before player 1 has
+(Card_01_362_Tests, the last test). On a plain table `SkipToPhaseInverted(Phase.REGROUP); PassCurrentPhaseActions();`
+in place of `SkipToMovementDecision()` leaves player 1's reconcile unanswered and `ShadowChooseToMove()` fails
+("Free Peoples Player is being asked Reconcile"); that form passes only on Card_94_031_Tests' own table.
 
 **The game ends when it ends.** When the Ring-bearer dies or is corrupted the game stops at once and no later
 phase arrives. Make the assertions that matter before the event that ends the game. Who lost is read with
