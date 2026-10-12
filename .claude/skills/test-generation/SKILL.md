@@ -244,7 +244,8 @@ other culture whose own text stays out of the way is looked for before the cultu
 a [sauron] card that is no minion, and a minion of another culture; for an item class ("bearing a hand weapon") one
 of them is a weapon of another class on a bearer of the right kind (a ranged weapon), where a card in play can bear
 one, since the game has a `weapon` filter one word wider and a possession that is no weapon cannot tell the two
-apart (65_148); for a number with two bounds, a card on each side. For "an X skirmishing a Y" that is an X assigned
+apart (65_148); for a number with two bounds, a card on each side (a bound no board can reach, as site 1 of
+"sites 1 to 5" for a skirmish, is stood for by the nearest reachable value inside it, site 2, and Notes says so). For "an X skirmishing a Y" that is an X assigned
 to another Y whose skirmish has not begun, not an X fighting something else.
 
 **"The Ring-bearer", and a Frodo who is not the Ring-bearer.** For "the Ring-bearer" it is a Ring-bound companion

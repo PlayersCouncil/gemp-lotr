@@ -337,6 +337,12 @@ to wound a minion". Albert (Man, home 1F; to play, spot Gandalf): "Maneuver: Exe
 second Elf archer for "spot 2 Elf archers" (every Elf companion printed an archer is a Legolas; an ally away from
 home is spotted and adds nothing to the archery total: Card_13_021_Tests).
 
+**An artifact of a culture other than [shire] that a Hobbit can bear, with a cost above 0.** Phial of Galadriel,
+Bane of Darkness 103_1: unique [elven] artifact (phial), cost 1, vitality +1, "Bearer must be a Ring-bound Hobbit"
+(Frodo or Sam 1_311). It discards itself while 5 companions can be spotted, so lay 4 or fewer; its Maneuver ability
+(2 burdens) and its Ring-bearer responses are used only on purpose. The other Phials, 10_13 and 53_24, cost 0 and
+show no discount (Card_02_102_Tests, "each artifact").
+
 ## A culture without its race, a race without its culture, a card against its type
 
 **A culture without its race, or a race without its culture: a printed card, never a modifier (Q-0213: B).** By
