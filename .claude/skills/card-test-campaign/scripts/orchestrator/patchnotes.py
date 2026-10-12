@@ -168,9 +168,20 @@ def is_errata(cid):
     return bool(m) and (50 <= int(m.group(1)) <= 89 or 150 <= int(m.group(1)) <= 199)
 
 
+def card_names_unlinked(text):
+    """The text with every link whose shown words are a card's own name or title taken out, so that a card is
+    called by its name ("[[5_60|Siege Engine]]") and FORBIDDEN still reads every other word, a link's included."""
+    full, title = name_index()
+
+    def cut(lm):
+        shown = norm(lm.group(2) or lm.group(1))
+        return "" if shown in full or shown in title else lm.group(0)
+    return LINK.sub(cut, text)
+
+
 def text_problems(text, where):
     out = []
-    m = FORBIDDEN.search(text)
+    m = FORBIDDEN.search(card_names_unlinked(text))
     if m:
         out.append("%s: '%s' is not a player's word" % (where, m.group(0)))
     if re.search(r"\bthe PC errata of\b", text, re.I):

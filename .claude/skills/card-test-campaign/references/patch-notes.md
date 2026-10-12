@@ -65,6 +65,7 @@ stand.
   engine fix, the cards the outcome names. The bucket's count is these.
 - **line.** One sentence, past tense, "Fixed [[Card]] <doing what it should not>" or "<Card> no longer ..."; what
   the player saw, not why. The card's name as printed; an errata by id with "(PC Errata)" after the link; a name two
-  different cards share, by id. No F-/Q-/G- numbers, no "definition", "filter", "engine", "test".
+  different cards share, by id. No F-/Q-/G- numbers, no "definition", "filter", "engine", "test". A card's own
+  name inside a link is not read for them: "[[5_60|Siege Engine]]" passes, "Siege Engine" unlinked does not.
 - **short.** The line without the card ("Fixed the on-play effect adding (1) and not (2)"), for when the card ends
   up with two or more lines outside buckets. `check` says when one is wanted.
