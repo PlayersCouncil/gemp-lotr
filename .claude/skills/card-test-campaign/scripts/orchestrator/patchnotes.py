@@ -21,7 +21,7 @@ The judgement (is it seen? which bucket? the player's words) is an agent's, once
         same as the bucket's; `bucket` makes a new one.
     patchnotes.py buckets
         The buckets, each with its tally, its example and how many cards are in it so far.
-    patchnotes.py bucket <slug> "<tally with {n}>" "<example>"
+    patchnotes.py bucket <slug> "<tally with {n}>" "<example>" [--min N]
         Makes a bucket (or rewrites one's words).
     patchnotes.py todo [--limit N]
         The fixed findings that have no label yet, with their summary and outcome: what a labelling agent reads.
@@ -54,6 +54,10 @@ buckets.tsv (tab-separated, header row):
              Aragorn signet."
     extra    further ids the change reaches that no label names (an engine fix reaching cards not yet worked),
              ';'-separated, counted with the labels' cards
+    min      the fewest cards that make it a tally line; empty is "more than a handful" (6).  1 makes it a tally
+             line always (Q-0294: "capitalization entries can all get put into one bucket, those don't need their
+             own individual card lines").
+A bucket holds rows of one scope: card rows print in the card fixes, text rows in the text corrections.
 """
 import csv
 import fcntl
@@ -71,7 +75,7 @@ DIR = STATE / "patchnotes"
 LABELS = DIR / "labels.tsv"
 BUCKETS = DIR / "buckets.tsv"
 LABEL_COLS = ["id", "visible", "scope", "bucket", "cards", "line", "short", "released"]
-BUCKET_COLS = ["slug", "tally", "example", "extra"]
+BUCKET_COLS = ["slug", "tally", "example", "extra", "min"]
 FIXED = {"fixed", "fixed-approved"}
 LINK = re.compile(r"\[\[([^\[\]|\n]+)(?:\|([^\[\]\n]+))?]]")
 # What a player never sees: our numbers, our tools, the engine's names.
@@ -224,8 +228,9 @@ def cmd_check(argv):
         for text in (b["tally"], b["example"]):
             problems += text_problems(text, "bucket %s" % slug)
     # sub-items need a short form: a card left with two or more lines outside the big buckets
-    _, singles = arrange([r for r in labels if r["visible"] == "y" and not r["released"]], buckets, 5)
-    for key, rows in singles.items():
+    live = [r for r in labels if r["visible"] == "y" and not r["released"]]
+    singles = list(arrange(live, buckets, 5)[1].items()) + list(arrange(live, buckets, 5, "text")[1].items())
+    for key, rows in singles:
         if len(rows) > 1:
             for r in rows:
                 if not r["short"]:
@@ -310,6 +315,11 @@ def cmd_buckets(argv):
 
 
 def cmd_bucket(argv):
+    least = None
+    if "--min" in argv:
+        k = argv.index("--min")
+        least = argv[k + 1]
+        argv = argv[:k] + argv[k + 2:]
     if len(argv) != 3 or not re.fullmatch(r"[a-z0-9-]+", argv[0]):
         raise SystemExit('bucket <slug: lowercase and dashes> "<tally with {n}>" "<example>"')
     slug, tally, example = argv
@@ -325,8 +335,10 @@ def cmd_bucket(argv):
         old = [b for b in buckets if b["slug"] == slug]
         if old:
             old[0].update(tally=tally, example=example)
+            if least is not None:
+                old[0]["min"] = least
         else:
-            buckets.append({"slug": slug, "tally": tally, "example": example, "extra": ""})
+            buckets.append({"slug": slug, "tally": tally, "example": example, "extra": "", "min": least or ""})
         write_tsv(BUCKETS, BUCKET_COLS, buckets)
     print("%s bucket %s" % ("rewrote" if old else "made", slug))
     return 0
@@ -341,11 +353,11 @@ def card_key(r):
     return m.group(0) + tail
 
 
-def arrange(rows, buckets, handful):
-    """(big buckets {slug: (count, rows)}, card lines {card link: [rows]})"""
+def arrange(rows, buckets, handful, scope="card"):
+    """(big buckets {slug: (count, rows)}, lines {card link: [rows]}) for the rows of one scope"""
     by_bucket = defaultdict(list)
     for r in rows:
-        if r["scope"] == "card" and r["bucket"]:
+        if r["scope"] == scope and r["bucket"]:
             by_bucket[r["bucket"]].append(r)
     big = OrderedDict()
     for slug, rs in by_bucket.items():
@@ -353,11 +365,12 @@ def arrange(rows, buckets, handful):
         for r in rs:
             cards.update([c for c in r["cards"].split(";") if c] or [r["id"]])
         cards.update(filter(None, buckets.get(slug, {}).get("extra", "").split(";")))
-        if len(cards) > handful:
+        least = buckets.get(slug, {}).get("min") or str(handful + 1)
+        if len(cards) >= int(least):
             big[slug] = (len(cards), rs)
     singles = defaultdict(list)
     for r in rows:
-        if r["scope"] == "card" and r["bucket"] not in big:
+        if r["scope"] == scope and r["bucket"] not in big:
             singles[card_key(r)].append(r)
     return big, singles
 
@@ -377,9 +390,11 @@ def cmd_render(argv):
     labels = read_tsv(LABELS, LABEL_COLS)
     buckets = {b["slug"]: b for b in read_tsv(BUCKETS, BUCKET_COLS)}
     rows = [r for r in labels if r["visible"] == "y" and ("--all" in argv or not r["released"])]
-    game = [r for r in rows if r["scope"] == "game"]
-    text_rows = sorted((r for r in rows if r["scope"] == "text"), key=lambda r: sort_name(card_key(r)))
+    # a New Feature is introduced before the changes that refer to it
+    game = sorted((r for r in rows if r["scope"] == "game"), key=lambda r: not r["line"].startswith("New Feature"))
     big, singles = arrange(rows, buckets, handful)
+    tbig, tsingles = arrange(rows, buckets, handful, "text")
+    text_rows = [r for r in rows if r["scope"] == "text"]
 
     out = ["---"]
     if opt("--date"):
@@ -393,8 +408,10 @@ def cmd_render(argv):
         out += ["### Game changes", ""]
         out += ["- " + r["line"] for r in game]
         out.append("")
-    if big or singles:
-        out += ["### Card fixes", ""]
+    def section(heading, big, singles):
+        if not (big or singles):
+            return
+        out.extend([heading, ""])
         for slug, (n, rs) in sorted(big.items(), key=lambda kv: -kv[1][0]):
             b = buckets[slug]
             line = b["tally"].replace("{n}", str(n))
@@ -407,12 +424,11 @@ def cmd_render(argv):
                 out.append("- " + rs[0]["line"])
             else:
                 out.append("- %s:" % key)
-                out += ["    - " + (r["short"] or r["line"]) for r in rs]
+                out.extend("    - " + (r["short"] or r["line"]) for r in rs)
         out.append("")
-    if text_rows:
-        out += ["### Card text corrections", ""]
-        out += ["- " + r["line"] for r in text_rows]
-        out.append("")
+
+    section("### Card fixes", big, singles)
+    section("### Card text corrections", tbig, tsingles)
     text = "\n".join(out)
     if opt("--out"):
         Path(opt("--out")).write_text(text, encoding="utf-8")

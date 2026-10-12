@@ -91,6 +91,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Site text is not active while the starting fellowships are played [F-0470, G-0036]
 - Patch notes are for players (2026-10-12, on the first draft, which was not)
 - Patch notes, the sample (Q-0288, 2026-10-12, fifth notes)
+- Patch notes, the first full draft (Q-0294, 2026-10-12, sixth notes)
 
 ## Sources, sheets, revisions and errata
 
@@ -282,6 +283,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Sites (2026-10-11, first notes) [Q-0238, Q-0226]
 - Bearers, the Ring and sites (2026-10-11, fifth notes) [Q-0252, Q-0258, Q-0259]
 - Bearers, the Ring and sites (2026-10-12, fifth notes) [Q-0285]
+- Keywords a card gives itself while it can spot them (2026-10-12, sixth notes) [Q-0291, Q-0290]
 
 ## Reveals, draw decks and shuffles
 
@@ -371,6 +373,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Card by card (2026-10-11, first notes) [Q-0242, F-0418, F-0420]
 - Card by card (2026-10-11, fifth notes) [F-0469, F-0478]
 - Card by card (2026-10-12, fifth notes) [Q-0287, F-0469]
+- Card by card (2026-10-12, sixth notes) [Q-0289, Q-0292, Q-0293, F-0488, F-0489]
 - Card by card (2026-10-12). F-0482 (Mountain-troll 15_112's discount counted ahead): "Go for it". F-0483 (the same card asking whether to discard ... [F-0486]
 
 # Settled shapes (shapes.md)

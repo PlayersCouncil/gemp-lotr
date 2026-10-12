@@ -491,6 +491,18 @@ much." When notes go out is open ("there's a chance none of this will go out unt
 pipeline/workflow streamlined"). The lander writes each finding's patch-note row as it files it: "Brilliant idea,
 that way the agent review happens as we go and makes it more scriptable." *[2026-10-12]*
 
+**Patch notes, the first full draft (Q-0294, 2026-10-12, sixth notes).** "Conciseness was the more important part,
+that each sentence did not drone on and on, and I think these do that just fine." Collector's numbers: "The collinfo
+isn't visible anywhere except the image, no; you can nix that." Item class: "Technically it's visible in the
+right-click card readout. I would say "Added missing 'Pony' item class."" An erratum's link to its original: "This
+is bookkeeping the user won't see, you can drop this." Errata rebuilt to her newer text: "Yeah they'll be listed as
+proper errata, but they'll still be here too." "The no-effect feature will need a bit of explanation in its own
+feature bullet, and then after that all such affected cards can reference it by saying "now marked with no-effect
+border"". A response offered twice for two winners is a game change: "Agreed." And: "most of the changes I would
+make are very specific to the entry at hand, and so will just need a pass from me at the end, whenever these get
+posted. But I will say: capitalization entries can all get put into one bucket, those don't need their own
+individual card lines." (`references/patch-notes.md` has these as rules.) *[2026-10-12]*
+
 ## Sources, sheets, revisions and errata
 
 **2026-10-04. Comprehensive Rules 4.2** should contain all the official rulings.
@@ -1525,6 +1537,13 @@ asked of a hindered bearer too (read against him as printed: "not an ally" rules
 so Asfaloth 1_31 under `attachedTo(not(ally))` is discarded from a hindered companion underground and stays on a
 hindered ally: "Keep, good work." *[2026-10-12]*
 
+**Keywords a card gives itself while it can spot them (2026-10-12, sixth notes).** Q-0291, Sentry Uruk 15_170 keeps
+a self-given keyword only while it has it; once taken away, barred or its text stops, it is not regained alone:
+"Yup, that makes sense. If he bootstraps himself, and then loses other supporting minions, and then his bootstraps
+are cut, he can't get back up again by himself. Keep." Q-0290, Ravaging Wild Man 15_91 ("While you can spot a
+hunter, this minion gains hunter 1"), the Sentry's words: "A, yeah, same deal" (`spotsItself: true`).
+*[2026-10-12]*
+
 ## Reveals, draw decks and shuffles
 
 **2026-10-05. Reveal means shown (F-0021).** A card "revealed" from the draw deck that only the player choosing it
@@ -1970,6 +1989,13 @@ words arrived; she was told). "I approve of all F- items below F-0478 that are c
 
 **Card by card (2026-10-12, fifth notes).** Q-0287, marking replay summaries made after the F-0469 fix:
 "Hmm, yeah, go ahead and bump it." (`ReplayMetadata.MetadataVersion` is 4, 78fdfae69.) *[2026-10-12]*
+
+**Card by card (2026-10-12, sixth notes).** Q-0289, The Witch-king's Beast 12_184's additional phase and a
+relentless round made one round, with The Witch-king and the relentless minions in it: "Well done, I approve. A."
+Q-0292, `gen_play.py` no longer counts a twilight cost the text gives another card as the card's own (pass 31's keep
+list is 9 cards): "keep". Q-0293, Treebeard 15_38 measures a removed loser as it left the skirmish, by
+`memorizeLoserStrength`, `memorizeLoser` unchanged: "keep both". F-0488 (Flung Into the Fray 8_71, "stacked here")
+and F-0489: "good". *[2026-10-12]*
 
 **Card by card (2026-10-12).** F-0482 (Mountain-troll 15_112's discount counted ahead): "Go for it". F-0483 (the
 same card asking whether to discard where the pool cannot pay without it): "Also good". F-0486, Éowyn,
