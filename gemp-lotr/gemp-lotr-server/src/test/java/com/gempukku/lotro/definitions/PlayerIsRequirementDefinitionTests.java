@@ -15,8 +15,8 @@ import static org.junit.Assert.*;
  *
  * Kept as a guard of the loader (engine pass 27; Q-0273): no printed card can show a definition being refused, so
  * the three definitions are written here, in the test, and reach no library and no table.  The one printed card
- * with the requirement is Race Text 94_5; what the requirement does in a game has no test of its own since
- * engine pass 27 (Q-0271).  Nothing is played here: the library is handed three definitions and is read for
+ * with the requirement is Race Text 94_5; what the requirement does in a game is tested, card-agnostic, in
+ * mechanics/PlayerIsRequirementTests (Q-0271: C).  Nothing is played here: the library is handed three definitions and is read for
  * which it kept.  The text is JSON, which the library reads as it reads HJSON.  Plain JUnit, in the package for
  * tests of the definition language (Q-0233).
  */

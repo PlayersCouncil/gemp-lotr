@@ -219,8 +219,9 @@ The last answer is the higher bidder's seat ("Go first" / "Go second"); assertio
 A player left out of the standings has no place. The two players' account names are "Free Peoples Player" and
 "Shadow Player" (the constants `P1`, `P2`) unless the constructor's last two arguments seat them under others
 (G-0039: `..., bidHandler, placements, freepsPlayerName, shadowPlayerName`, null for the usual name). That was built
-for the mechanic test of a condition on a player's name (`PlayerIs`), which laid invented cards and went with them
-in engine pass 27; the rig's own test of it stays (virtualtable/NamedSeatTests). A card's own tests do not read the
+for the mechanic test of a condition on a player's name (`PlayerIs`): mechanics/PlayerIsRequirementTests, which
+builds the requirement from definition text in the test and asks it directly, no card laid (Q-0271: C, the one
+exception to "no definition text made up for a test"); the rig's own test of it is virtualtable/NamedSeatTests. A card's own tests do not read the
 account names in its definition (Q-0190: B, 94_5). At such a table the
 players are `scn.P1()` and `scn.P2()`, never the constants, and placements are keyed by the names given.
 A modifier of deck building (92_1, 92_19, 94_22: `DeckBuildingOverride`) drives no game: it is tested with
