@@ -465,6 +465,24 @@ printed cost while the fellowship is chosen, and 2 more in the first fellowship 
 is most likely G-0036 (a site map that gives the game no site 1 to lay), which is about the test table and not
 about site text.
 
+**Patch notes are for players (2026-10-12, on the first draft, which was not).** "I wish I had been consulted
+first lmao. These are *not* patch notes, they are a summary that is only just readable enough for me myself to
+parse it, and nobody else. Patch notes are for the end user, who is not technical and has zero insight to the
+Q-/F-/G- system, nor Gemp itself. What they want to know is what changed from *their* side." Her format: "Every
+item should be a single statement about how a card or feature has changed in interaction. If it is not seeable on
+the client, it is not a patch note. Example: "Fixed [[Aragorn, King in Exile]] prompting the user when no
+companion could be healed."" Materially similar cards go into buckets: "If more than a handful of cards fit into
+the bucket, the entry should change: "Fixed 123 cards prompting the user with an optional trigger that would do
+nothing. Example: [[Aragorn, King in Exile]] no longer asks you to heal if there are no wounded companions with
+the Aragorn signet."" "Straightforward implementation fixes should not belabor the fix." A card with several fixes
+that are in no bucket gets them as subitems under its name. Changes to the game as a whole, not about one card,
+are "described in a handful of concise sentences, and all of them should be bundled together at the top before
+card-specific fixes" ("New Feature: After the Ring-bearer is killed, the One Ring now stays on the board marking
+where they once were. ..."). "This may result in a large number of F- items not showing in the patch notes (or
+not being discernable), and that's okay." And: "I recommend writing some scripts for this procedure ... bucketing
+and such can be made procedural. And given that we have 3,000 more cards to go, this is likely to come up over
+and over." Her model, for the gist only: the Dota 2 patch notes (dota2.com/patches/7.41). *[2026-10-12]*
+
 ## Sources, sheets, revisions and errata
 
 **2026-10-04. Comprehensive Rules 4.2** should contain all the official rulings.

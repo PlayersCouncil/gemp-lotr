@@ -89,6 +89,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Setting a board up early is no board out of play (Q-0228: A; Q-0230: A)
 - Tests of the definition language go in a place of their own (Q-0233: C)
 - Site text is not active while the starting fellowships are played [F-0470, G-0036]
+- Patch notes are for players (2026-10-12, on the first draft, which was not)
 
 ## Sources, sheets, revisions and errata
 
