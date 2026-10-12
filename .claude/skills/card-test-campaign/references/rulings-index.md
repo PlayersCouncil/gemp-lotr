@@ -466,7 +466,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Response events are not played by "play an event from ..." (F-0186)
 - "Play a <kind of> Free Peoples card from your draw deck" never offers a Shadow card, whatever the filter says (Dammed Gate-stream 11_235, Green Dragon Inn 11_242)
 - "Ignoring all costs" passes over the cost in an event's own text (F-0316, built by engine pass 20) [Q-0201]
-- "A card stacked on a [culture] condition" and the other player's own condition (F-0424, open)
+- "A card stacked on a [culture] condition" is one stacked on an ACTIVE such card: the player's own (F-0424: B, "for now"; built by engine pass 28)
 
 ## Triggers, responses and the play of a card
 

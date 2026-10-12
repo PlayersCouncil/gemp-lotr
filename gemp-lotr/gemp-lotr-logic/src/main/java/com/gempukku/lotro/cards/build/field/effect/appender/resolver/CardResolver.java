@@ -74,15 +74,16 @@ public class CardResolver {
 
     public static EffectAppender resolveStackedCards(String type, FilterableSource choiceFilter, FilterableSource playabilityFilter, ValueSource countSource, FilterableSource stackedOn,
                                                      String memory, String choicePlayer, String choiceText, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+        // "A card stacked on <such a card>" is a card stacked on such a card that is ACTIVE: not the other player's
+        // own Free Peoples card on this turn, not a player's own Shadow card on his own turn, not a hindered card
+        // (CR 4.2 "active": "Inactive cards are not affected by the game and do not affect the game"; F-0424,
+        // Ketura: "Let's do B for now").  ChooseStackedCardsEffect looks under active cards only when the card is
+        // chosen, and ActivatePhaseActionsFromStackedRule offers a stacked card's own ability only on an active
+        // one; what is judged payable, and what is found for "self" or from memory, goes by the same reading.
         Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource = actionContext -> {
-            if(stackedOn != null) {
-                final Filterable stackedOnFilter = stackedOn.getFilterable(actionContext);
-                return Filters.filter(actionContext.getGame(), actionContext.getGame().getGameState().getAllCards(), Filters.stackedOn(stackedOnFilter));
-            }
-            else {
-                return Filters.filter(actionContext.getGame(), actionContext.getGame().getGameState().getAllCards(), Filters.stackedOn(Filters.any));
-            }
-
+            final Filterable stackedOnFilter = stackedOn != null ? stackedOn.getFilterable(actionContext) : Filters.any;
+            return Filters.filter(actionContext.getGame(), actionContext.getGame().getGameState().getAllCards(),
+                    Filters.stackedOn(Filters.active, stackedOnFilter));
         };
 
         if (type.startsWith("memory(") && type.endsWith(")")) {

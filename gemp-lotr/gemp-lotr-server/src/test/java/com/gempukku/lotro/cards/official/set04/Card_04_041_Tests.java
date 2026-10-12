@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -270,53 +269,6 @@ public class Card_04_041_Tests
 		assertEquals(8, scn.GetStrength(gimli));
 	}
 
-	@Ignore("F-0424: is a card stacked on the other player's [dwarven] condition, which is not active on this turn, one the Axe may discard?")
-	@Test
-	public void SkirmishAbilityCanDiscardACardStackedOnEitherPlayersDwarvenCondition() throws DecisionResultInvalidException, CardNotFoundException {
-		// Written for a report (#1001) that cards stacked on the opponent's [dwarven] condition were never offered:
-		// stacked cards are inactive whatever they are stacked on, so the reading here is that whether the
-		// condition is active is not what decides.
-		var scn = GetScenario();
-
-		var axe = scn.GetFreepsCard("axe");
-		var gimli = scn.GetFreepsCard("gimli");
-		var myCondition = scn.GetFreepsCard("lordOfMoria");
-		var myStacked = scn.GetFreepsCard("toby");
-		scn.MoveCompanionsToTable(gimli);
-		scn.AttachCardsTo(gimli, axe);
-		scn.MoveCardsToSupportArea(myCondition);
-		scn.StackCardsOn(myCondition, myStacked);
-
-		var theirCondition = scn.GetShadowCard("lordOfMoria");
-		var theirStacked = scn.GetShadowCard("toby");
-		var troop = scn.GetShadowCard("troop");
-		scn.MoveCardsToSupportArea(theirCondition);
-		scn.StackCardsOn(theirCondition, theirStacked);
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(troop);
-		scn.SkipToAssignments();
-		scn.FreepsAssignToMinions(gimli, troop);
-		scn.FreepsResolveSkirmish(gimli);
-
-		assertInZone(Zone.STACKED, myStacked, theirStacked);
-		assertEquals(8, scn.GetStrength(gimli));   // 6 printed + 2 from the axe
-		assertTrue(scn.FreepsActionAvailable(axe));
-
-		scn.FreepsUseCardAction(axe);
-		assertEquals(2, scn.FreepsGetMultipleChoiceCount());
-		scn.FreepsChooseOption("stacked");
-
-		assertTrue(scn.FreepsHasCardChoiceAvailable(myStacked, theirStacked));
-		scn.FreepsChooseCard(theirStacked);
-
-		assertInZone(Zone.DISCARD, theirStacked);
-		assertInZone(Zone.STACKED, myStacked);
-		assertEquals(9, scn.GetStrength(gimli));
-		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
-	}
-
-	@Ignore("F-0424: offered when the only card stacked on a [dwarven] condition is on the other player's, and using it then discards nothing and gives nothing")
 	@Test
 	public void IsNotOfferedWhenTheOnlyStackedCardIsOnTheOtherPlayersDwarvenCondition() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -346,7 +298,6 @@ public class Card_04_041_Tests
 		assertEquals(8, scn.GetStrength(gimli));
 	}
 
-	@Ignore("F-0424: with a [dwarven] condition of his own in play he is asked to choose between the alternatives, though the only stacked card is on the other player's condition and cannot be discarded")
 	@Test
 	public void WithADwarvenConditionOfHisOwnTheStackedAlternativeIsNotAskedWhenTheOnlyStackedCardIsOnTheOtherPlayersCondition() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();

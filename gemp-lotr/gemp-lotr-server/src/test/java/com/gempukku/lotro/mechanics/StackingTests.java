@@ -26,6 +26,11 @@ import static org.junit.Assert.*;
  * regroup phase.  What a card says may be done with the cards stacked on it (played as if from hand, counted,
  * discarded to pay for something) is that card's own text and is not gone over here.
  *
+ * One reading is the rules' and not a card's: a text that names "a card stacked on <a kind of card>" finds one
+ * only under an ACTIVE card of that kind (CR 4.2 "active": "Inactive cards are not affected by the game and do
+ * not affect the game"; Ketura on F-0424, 2026-10-11: "Let's do B for now").  More to My Liking shows it: it
+ * stacks cards on itself and pays "a card stacked on a [dwarven] condition".
+ *
  * What becomes of stacked cards when the card under them leaves play is LeavingPlayTests (CR 4.2 "leaving play");
  * when a controlled site is liberated or replaced, ControlOfSitesTests ("liberate", "control"); when the card
  * under them is hindered, the classes of the hinder rules.  "May be looked at by any player" has no test: the rig
@@ -244,5 +249,78 @@ public class StackingTests
 		assertEquals(1, scn.GetStackedCards(teeth).size());
 		assertInZone(Zone.SUPPORT, teeth);
 		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
+	}
+
+	protected VirtualTableScenario GetStackedOnAKindOfCardScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// More to My Liking: unique [dwarven] condition in the support area.  "Maneuver: Stack the
+					// top card from your draw deck here (limit once per phase).  Maneuver: Spot a Dwarf and
+					// discard a card stacked on a [dwarven] condition to take a Free Peoples card stacked here
+					// into hand."  Each player has a copy.
+					put("liking", "5_9");
+					// Gimli, Son of Gloin: the Dwarf to spot; a skirmish ability, not used
+					put("gimli", "1_13");
+					// Old Toby: Free Peoples filler to stack (each player has two)
+					put("toby1", "1_305");
+					put("toby2", "1_305");
+					// Goblin Runner: a minion, so that there is a maneuver phase; its text acts only as it is played
+					put("runner", "1_178");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	@Test
+	public void ACardStackedOnTheOtherPlayersInactiveCardIsNotOfferedAndPaysNoCost() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetStackedOnAKindOfCardScenario();
+
+		var liking = scn.GetFreepsCard("liking");
+		var gimli = scn.GetFreepsCard("gimli");
+		var toby1 = scn.GetFreepsCard("toby1");
+		var toby2 = scn.GetFreepsCard("toby2");
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveCardsToSupportArea(liking);
+		scn.StackCardsOn(liking, toby1, toby2);
+
+		// The other player's own Free Peoples cards lie in his support area and are not active on this turn.
+		var theirLiking = scn.GetShadowCard("liking");
+		var theirToby = scn.GetShadowCard("toby1");
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveCardsToSupportArea(theirLiking);
+		scn.StackCardsOn(theirLiking, theirToby);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertInZone(Zone.STACKED, toby1, toby2, theirToby);
+		assertTrue(scn.FreepsActionAvailable(liking, "Take a Free Peoples card"));
+
+		// "Discard a card stacked on a [dwarven] condition": the two on his own condition, and not the one on
+		// the other player's.
+		scn.FreepsUseCardAction(liking, "Take a Free Peoples card");
+		assertTrue(scn.FreepsHasCardChoiceAvailable(toby1, toby2));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(theirToby));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		assertEquals(1, scn.FreepsGetChoiceMax());
+
+		// The one card left stacked here is taken into hand with nothing asked.
+		scn.FreepsChooseCard(toby1);
+		assertInZone(Zone.DISCARD, toby1);
+		assertInZone(Zone.HAND, toby2);
+		assertEquals(0, scn.GetStackedCards(liking).size());
+		assertInZone(Zone.STACKED, theirToby);
+		assertEquals(1, scn.GetStackedCards(theirLiking).size());
+
+		// The only card now stacked on a [dwarven] condition is on the other player's: it pays nothing, so the
+		// ability is not on offer, while the condition's other ability is.
+		scn.ShadowPass();
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+		assertTrue(scn.FreepsActionAvailable(liking, "Stack top card"));
+		assertFalse(scn.FreepsActionAvailable(liking, "Take a Free Peoples card"));
 	}
 }

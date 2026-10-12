@@ -158,10 +158,11 @@ game as built and file nothing.)
   "each time a minion is discarded" (CR 4.2 "killed"); Last Days 12_71 and Throne of Minas Tirith 17_36, whose
   texts say "killed or discarded", answer both by two triggers. Test a "discarded" trigger with a discard and
   with a kill that does not set it off; a test parked on F-0444 in a card's file goes live.
-- ASKED AND OPEN, not to be filed again: "a card stacked on a [dwarven] condition" (Axe of Erebor 4_41, More to
-  My Liking 5_9), F-0424. Do not correct 5_9 or write `your` into either definition before the answer; lay the other
-  player's condition as shapes.md says ("A card stacked on a [culture] condition") and park that reading on
-  F-0424. Three tests of Card_04_041_Tests go live or are deleted by the answer.
+- F-0424, CORRECTED (engine pass 28, item stacked, 2026-10-11; Ketura: "Let's do B for now"): "a card stacked on
+  a [dwarven] condition" (Axe of Erebor 4_41, More to My Liking 5_9) is one stacked on the player's own, active
+  condition; a card stacked on the other player's condition neither pays the cost nor is offered. No `your` goes
+  into a definition for it. Lay the other player's condition with a card stacked on it, as shapes.md says ("A
+  card stacked on a [culture] condition"), and assert the ability not offered: nothing is parked on F-0424 now.
 - `shuffle: false` on a take, a discard or a putting back of cards that a reveal or a look at the top of a draw
   deck has just named (`select` on a `memory(...)`) is right: that is no search of the deck, and only a look
   through the whole of it is followed by a shuffle. (Q-0013, F-0034.)

@@ -1099,6 +1099,9 @@ of a stacked unique card is played, and a third copy stacked beside it), is no c
 and no minion to be discarded as the turn ends, and its text is out of force unless it says "while stacked".
 Stacked by legal play: The Shards of Narsil 3_44 (any [gondor] card from hand, fellowship phase, no cost; (1) to
 take one back) and Teeth of Mordor 5_110 (a [sauron] Orc from play, regroup phase, (3)). `mechanics/StackingTests`.
+"A card stacked on <a kind of card>" is found only under an ACTIVE card of that kind (F-0424: B, engine pass 28):
+a card stacked on the other player's own Free Peoples card on this turn, or on a hindered card, pays no cost, is
+not offered to be chosen and is not counted. Lay his stack before `StartGame()` and read the ability as not offered.
 
 **The Ring is attached to the Ring-bearer.** `GetAttachedCards(ringBearer)` includes The One Ring, so "nothing
 else attached" is a size of 1. `assertNotAttachedTo` is the safer reading.
