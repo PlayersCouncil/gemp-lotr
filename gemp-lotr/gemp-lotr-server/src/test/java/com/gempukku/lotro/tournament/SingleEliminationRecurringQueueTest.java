@@ -4,13 +4,9 @@ import com.gempukku.lotro.framework.LoadedLibraries;
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.db.vo.CollectionType;
-import com.gempukku.lotro.game.DefaultAdventureLibrary;
-import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.LotroFormat;
 import com.gempukku.lotro.game.Player;
-import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.hall.HallException;
-import com.gempukku.lotro.packs.ProductLibrary;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -21,13 +17,7 @@ import static org.junit.Assert.*;
 
 public class SingleEliminationRecurringQueueTest extends LoadedLibraries {
 
-    private static LotroFormat _testFormat;
-    static {
-        _cardLibrary = new LotroCardBlueprintLibrary();
-        _formatLibrary = new LotroFormatLibrary(new DefaultAdventureLibrary(), _cardLibrary);
-        _productLibrary = new ProductLibrary(_cardLibrary);
-        _testFormat = _formatLibrary.getFormat("fotr_block");
-    }
+    private static final LotroFormat _testFormat = _formatLibrary.getFormat("fotr_block");
 
     @Test
     public void joiningQueue() throws Exception {

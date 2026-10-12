@@ -5,11 +5,7 @@ import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.db.vo.CollectionType;
-import com.gempukku.lotro.game.DefaultAdventureLibrary;
-import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
-import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.logic.vo.LotroDeck;
-import com.gempukku.lotro.packs.ProductLibrary;
 import com.gempukku.lotro.tournament.action.TournamentProcessAction;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -25,12 +21,6 @@ import static org.junit.Assert.assertEquals;
 
 public class ConstructedTournamentTest extends LoadedLibraries {
     private final int _waitForPairingsTime = 100;
-
-    static {
-        _cardLibrary = new LotroCardBlueprintLibrary();
-        _formatLibrary = new LotroFormatLibrary(new DefaultAdventureLibrary(), _cardLibrary);
-        _productLibrary = new ProductLibrary(_cardLibrary);
-    }
 
     @Test
     public void testTournament() throws InterruptedException {

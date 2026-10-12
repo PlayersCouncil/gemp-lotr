@@ -114,8 +114,10 @@ public class SupportAreaTests
 		// Borne by a card in the support area: a possession on one ally, a condition on the other.
 		scn.AttachCardsTo(orophin, bow1);
 		scn.AttachCardsTo(elrond, tale);
-		// Borne by a card that a card in the support area bears. No card there is can be played on a possession;
-		// the cheat stands for one, the support area being the same however deep the card lies.
+		// Borne by a card that a card in the support area bears. This board is a cheat that no game reaches: no
+		// card there is can be played on a possession (no definition's target names one). It is kept to show the
+		// engine's own reading, that a support card is borne at any depth (Filters.isInSupportArea walks every
+		// bearer up to the bottom of the chain), and not as a thing any card does.
 		scn.AttachCardsTo(bow1, arrows1);
 		// Borne by a companion: the same possession, and the condition the bow bears. (The Tale of Gil-galad is
 		// unique: one to a table.)

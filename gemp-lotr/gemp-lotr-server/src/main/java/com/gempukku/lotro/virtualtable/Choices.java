@@ -371,15 +371,24 @@ public interface Choices extends Decisions {
 	}
 
 	/**
-	 * @return How many cards the Free Peoples player is currently being shown, whether or not any may be chosen.
+	 * @return How many cards the Free Peoples player is currently being shown, whether or not any may be chosen
+	 * (see GetTotalRevealedCardCount: a choice from a discard pile or a draw deck is counted too).
 	 */
 	default int FreepsGetTotalRevealedCardCount() { return GetTotalRevealedCardCount(P1()); }
 
 	/**
-	 * @return How many cards the Shadow player is currently being shown, whether or not any may be chosen.
+	 * @return How many cards the Shadow player is currently being shown, whether or not any may be chosen
+	 * (see GetTotalRevealedCardCount: a choice from a discard pile or a draw deck is counted too).
 	 */
 	default int ShadowGetTotalRevealedCardCount() { return GetTotalRevealedCardCount(P2()); }
 
+	/**
+	 * How many cards the player is currently being shown: the cards of any ARBITRARY_CARDS decision he is asked,
+	 * whether or not any may be chosen, a real choice from a discard pile or a draw deck included as well as a showing.
+	 * That kind is every decision that lists cards out of play, so a 0 read at such a choice shows nothing.
+	 * @param playerID The player being asked.
+	 * @return The number of cards in that decision, or 0 if he is asked nothing or something of another kind.
+	 */
 	default int GetTotalRevealedCardCount(String playerID) {
 		AwaitingDecision decision = GetAwaitingDecision(playerID);
 		if(decision == null || decision.getDecisionType() != AwaitingDecisionType.ARBITRARY_CARDS)

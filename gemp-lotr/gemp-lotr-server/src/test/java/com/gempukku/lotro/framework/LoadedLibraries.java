@@ -14,13 +14,7 @@ import com.gempukku.lotro.packs.ProductLibrary;
  * the printed cards and nothing else.
  */
 public abstract class LoadedLibraries {
-    public static LotroCardBlueprintLibrary _cardLibrary;
-    public static LotroFormatLibrary _formatLibrary;
-    public static ProductLibrary _productLibrary;
-
-    static {
-        _cardLibrary = new LotroCardBlueprintLibrary();
-        _formatLibrary = new LotroFormatLibrary(new DefaultAdventureLibrary(), _cardLibrary);
-        _productLibrary = new ProductLibrary(_cardLibrary);
-    }
+    public static final LotroCardBlueprintLibrary _cardLibrary = new LotroCardBlueprintLibrary();
+    public static final LotroFormatLibrary _formatLibrary = new LotroFormatLibrary(new DefaultAdventureLibrary(), _cardLibrary);
+    public static final ProductLibrary _productLibrary = new ProductLibrary(_cardLibrary);
 }

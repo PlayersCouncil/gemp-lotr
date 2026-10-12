@@ -399,5 +399,6 @@ public class BorneByAHinderedBearerTests
 		scn.ShadowPass();
 		assertTrue(scn.IsHindered(arwen));
 		assertInZone(Zone.DISCARD, asfaloth);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }
