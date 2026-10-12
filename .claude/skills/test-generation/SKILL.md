@@ -246,7 +246,10 @@ of them is a weapon of another class on a bearer of the right kind (a ranged wea
 one, since the game has a `weapon` filter one word wider and a possession that is no weapon cannot tell the two
 apart (65_148); for a number with two bounds, a card on each side (a bound no board can reach, as site 1 of
 "sites 1 to 5" for a skirmish, is stood for by the nearest reachable value inside it, site 2, and Notes says so). For "an X skirmishing a Y" that is an X assigned
-to another Y whose skirmish has not begun, not an X fighting something else.
+to another Y whose skirmish has not begun, not an X fighting something else. That is the candidate for the word
+"skirmishing"; the word "a Y" wants its own, an X fighting a character who is no Y, read DURING that skirmish (fight
+it first), or `inSkirmish` alone passes. Where Y is one character (bearer, Frodo), the first is an X assigned to him
+and read before his skirmish begins (Mithril-coat 2_105).
 
 **"The Ring-bearer", and a Frodo who is not the Ring-bearer.** For "the Ring-bearer" it is a Ring-bound companion
 who is not the Ring-bearer (Sam), not just any companion; a Ring-bearer who is not Frodo is no longer asked for on

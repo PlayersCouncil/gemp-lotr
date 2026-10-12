@@ -506,6 +506,11 @@ entry carries its card's name: "Elrond", "Dwarven Heart", "The One Ring", "Gimli
 false there. Two required answers to one "is about to take a wound" are put to the player again for every wound of
 the same skirmish (`mechanics/actions/RequiredActionsAnsweringOneTriggerTests`).
 
+**A candidate a helper's own text refuses shows nothing of the card under test.** A Hobbit already assigned is
+not offered to a second Orc Assassin 1_262's "assign a Hobbit to skirmish this minion" at any site, so reading him
+refused at Caras Galadhon 3_115 showed nothing of the site's bar (dec-b1_286, reviewer). Read the same candidate on
+the control board: if it is refused there too, the reading belongs to the helper; drop it.
+
 ## Getting to the moment: set-up, the skippers and turns
 
 **Set the twilight pool before the Shadow phase starts.** Because the engine asks once, a pool set while the
@@ -833,7 +838,9 @@ A mover who is barred from choosing to move (Race Text 94_5, `CantMove`) is not 
 `SkipToMovementDecision()` does not stop where its name says: with a hand he is left at his own "Reconcile"
 decision, still in the regroup phase with `GetMoveCount()` 1 of `GetMoveLimit()` 2; with an empty hand the
 skipper runs on into the other player's fellowship phase, where an `assertFalse` of "another move" shows
-nothing. Keep an undrawn card in the mover's deck and read the count, the limit and the reconcile
+nothing. With player 1 as the mover, a card put in his hand (`MoveCardsToHand`) is enough to stop the skipper
+at his "Reconcile" (Shores of Nen Hithoel 1_359's tests).
+Keep an undrawn card in the mover's deck and read the count, the limit and the reconcile
 (Card_94_005_Tests).
 The trigger `FPDecidedToStay` (Very Nice Friends 7_76, "If you do not move again this turn", its only user) fires
 both ways: at a "no" to another move, and when the turn ends at the move limit with no question asked. Either
