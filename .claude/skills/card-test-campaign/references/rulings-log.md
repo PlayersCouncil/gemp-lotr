@@ -683,6 +683,40 @@ before anything is stripped. Q-0260, a mechanics test removed because no printed
 well done. Yeah sometimes we're just not going to have some branches tested, and that's okay (for now; we have so
 many extent branches that are higher priority right now)". *[2026-10-11]*
 
+**The stats line is trusted, and the tests are trimmed to it (2026-10-12; Q-0279, engine pass 28's report
+`orchestrator/trials/trust.md`).** "Excellent work. Yes on A-D (tho on A: there is a Shadow follower, only one; a
+Saruman. On D: also site bonus reaching the bearer) I think I want E2. Were this a new initiative or a new app I
+would think differently, but the sorts of things that these tests are hitting are among the most frequently
+tested areas of the game, so I'm not worried that it removes a safety net we need. The thing I do want to improve
+in this case is how tightly packed our tests are; 600 tests which are doing more than they should (or even
+existing when they shouldn't) is some bloat I would like to trim; we're already likely to hit 20,000 tests by
+the end with perfectly legitimate use cases, and I don't want to inflate that number with pointless tests." So:
+A, `mechanics/TwilightPoolTests` and `WhereACardIsPlayedTests` are written; B, the Play clause is stripped (a
+card's play is tested only where its own text bears on it) and the generator stops; C, lint's `plain-play` asks
+for a test where a definition carries something about its own play; D, the classes for strength, borne items
+(and a site's bonus reaching the bearer), resistance and an ally's home; E2, the readings of a printed cost or
+bonus on the way to something else come OUT of the tests that stay. Q-0264, a card that bars an act (No Business
+of Ours 2_44): "I don't think that a card should necessarily take upon itself the burden of checking that every
+possible engine route follows its own bar, but I *do* think that mechanic tests should exist that do such a
+thing. I would say B2: one of each is a great idea, but they should be in mechanics tests, which will then ensure
+that future cards using the bar only need to act as A." (the barring card is tested with ONE card that is
+stopped; a mechanics class holds one card of each definition word that performs the act). Q-0265, an exertion as
+the nearest miss of "is about to take a wound": "A" (shown once in a mechanics class, not card by card). Q-0266,
+a choice carried out with no question because one card is valid: "Yeah I think B is the way to go." (a choice
+always gets a second valid candidate and a read "not offered" on the invalid one). Q-0271, the account-name
+check with no game test: "Yeah do C" (ONE card-agnostic test, the requirement built in the test from its
+definition text and asked directly at a table seated under made-up names: an exception to "no definition text
+made up for a test", for this check, on the strength of Q-0190). Q-0272 (Test Banner's readings moved onto
+Úlairë Nelya 103_76): "Keep". Q-0273 (two classes that read shapes no card has deleted, three loader guards
+kept): "Keep". Q-0274, the definition words no printed card uses: "A, we'll keep all these. Many of them are
+counterparts to existing mechanics, and since they swim in the same waters, future cards playing in the same
+design space are likely to run into them. And some of them are for scenarios, as you say." (kept in the engine,
+untested). Q-0263 (a mechanics test on Slippery as Fishes 9_29 for an empty hand revealed): "this is keep."
+Q-0268 (the return-to-hand effect refusing the Ring-bearer for itself): "Keep". Q-0277 (an exhaustion paid as a
+cost says so, as an exertion does): "Exhaust is defined as "exert that character as many times as you can", so
+the two are linked. Keep." F-0484, the rig's cheat for a site crashing on Mount Doom 15_193: "Good fix to
+perform; the cheat functions should really be as legitimate as possible, timing aside." *[2026-10-12]*
+
 ## How card text is read
 
 **2026-10-05. Cards are code (Q-0012).** "In general I hold to the philosophy that cards are code: the text should
@@ -845,6 +879,27 @@ changed only who may be CHOSEN ("an Elf or Dwarf skirmishing a [moria] Orc", whe
 be); told so, she kept it: "My apologies, I completely misread what F-0430 was about ... Yes, that is a good solid
 bug fix, keep the solution." (F-0430 stands, approved.) *[2026-10-11]*
 
+**Texts (2026-10-12).** Q-0276, Sentry Uruk 15_170 ("While you can spot a fierce minion, this minion is fierce"):
+"This one actually came up on mlotro a while ago and I thought through it then: it has to be A, because without
+'another' in the spot filter text, once it has bootstrapped itself it must continue spotting itself. Undoing
+that would mean altering the text from what was written (which i just said to do on Mountain-troll lmao, but in
+this case it's not quite as clear what was meant in any case). A." (it spots itself and keeps each keyword once
+gained). Q-0275, Mountain-troll 15_112's "to make it twilight cost -10 and fierce" naming no time: "of course it
+doesn't say. The intent is obvious in this case, as Fierce does very little in the Shadow phase; Decipher had a
+habit of accidentally leaving it off. We'll be gracious this once and let it be until the end of the turn like
+the errata is; A." Q-0282, Into the Caves 17_100 ("lose all game text keywords of your choice and unable to gain
+game text keywords"): "Sets 17 and 18 were built in a CAVE with a box of SCRAPS by a single lone employee as
+Decipher imploded around his ears. The templating is inconsistent at the best of times. Let's do A." ("of your
+choice" belongs to the keywords lost; the minion can gain NO game text keyword until the regroup phase).
+Q-0267, The Witch-king's Beast 12_184 under a bar on gaining keywords: "Ah shit, I didn't think about keyword
+effects when consolidating the beast's effect. Go ahead and revert it to the old effect; A." (the additional
+assignment and skirmish phase is his whatever bars keywords). F-0480, Treebeard, Enraged Shepherd 15_38 when the
+losing character has left play: "Oof. let's do A I suppose." (X is taken from the strength the loser had when
+the skirmish resolved). Q-0269, the same card beating two minions: "A" (their strength together). Q-0270,
+Madril 15_64: "A" (the threats are counted once, at the start of the maneuver phase). Q-0280, the F-0468 revert
+reaching the four cards that reinforce a [gollum] token: "A, yeah. Gollum is just weird like that, and it's a
+weirdness that many of its cards lean into, so I'm fine with it having such unorthodox interactions." *[2026-10-12]*
+
 ## What is offered and what is asked
 
 **X of zero that would do nothing is not offered (Q-0015).** A deliberate departure for quality of life: "we
@@ -986,6 +1041,25 @@ card retroactively made an invalid choice? So I think A is the right answer." (a
 Aid flagged no-effect whenever nobody can be given the follower: "keep". Q-0246, Saruman's Staff 4_174 not
 offered on the two Sarumans of Legacy Ruling 6: "Keep. This is as good as any mechanism for communicating the
 results of that ruling." *[2026-10-11]*
+
+**What is offered and what is asked (2026-10-12).** Q-0262, "you may draw a card" once the Rule of 4 is spent
+(Old Toby 1_305): "A is more likely to cause questions; lots of people get confused over Rule of 4 stuff (even
+with the addition of UI explaining it). Let's do B for this one." (not offered; Q-0029's "let it ask" is for the
+empty deck). Q-0278, A New Light 17_15 ("you may reveal that Shadow player's hand and discard a minion found
+there"): "A, but it should be a 0-1 choice so they could decide to not discard (I think the two "mays" are
+separate, plus there are cases where not discarding is preferred strategically)." (asked whether to reveal;
+then a choice of no minion or one). Q-0284, The Faithful Stone 18_50: "B" (the minion is spotted first and the
+Shadow player answers knowing which, as the erratum 68_50 has it). Q-0281, Light the Beacons 7_43 not counting
+itself while its cost is judged or paid: "A is correct". Q-0283, Morgul Regiment 7_197 and how its cost is
+asked for: "Can we make this be an optional trigger that happens when Freeps starts assignments? Ideally
+something that makes Regiment highlight itself for Freeps to click on or pass (so that 2 Regiments in play are
+both highlighted and both clickable in any order, where I might click on the first, then select my exerters,
+then be presented again with the pending second for pass or selection (if vitality permits)). Then if any
+Regiments aren't selected, they are barred from normal assignments. This solves the UX of not knowing which one
+is asking and also manages the timing a little better rather than waiting for a cost-inspection pileup when all
+assignments are submitted. Keep Him Blind To All Else That Moves does something similar but with special
+abilities assigned to the other player." (a change to the build of Q-0221 for his OWN assigning; which cards it
+reaches, and what a card that has him assign does, were put back to her before it is built.) *[2026-10-12]*
 
 ## Limits
 
@@ -1853,3 +1927,10 @@ this minion." In principle I'm fine with adding the cost flag to exert, but if t
 happens, we will defer until then to address it." (it had been built by engine pass 27 half an hour before these
 words arrived; she was told). "I approve of all F- items below F-0478 that are crurently fixed without word."
 *[2026-10-11]*
+
+**Card by card (2026-10-12).** F-0482 (Mountain-troll 15_112's discount counted ahead): "Go for it". F-0483 (the
+same card asking whether to discard where the pool cannot pay without it): "Also good". F-0486, Éowyn,
+Northwoman 17_96's last exertion with a Morgul Orc the only minion: "I'm inclined to agree with the agent's
+corner-of-a-corner decision. Let's leave this test parked for potential work in the future, but Northwoman and
+these minions have gotten enough attention spent on them for now. :)" (engine pass 28 had already built it when
+these words arrived; she was told). "Good, maybe we can run two engine agents for a bit". *[2026-10-12]*

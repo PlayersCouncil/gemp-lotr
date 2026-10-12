@@ -128,6 +128,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - What gets tested (2026-10-11, first notes) [Q-0241, Q-0239, Q-0237, Q-0236]
 - The campaign tests cards, not the definition language (2026-10-11, second and third notes; Q-0241 carried further). "I think the main thing we want ...
 - What a card's tests may take as proven (2026-10-11, fifth notes) [Q-0261, Q-0260]
+- The stats line is trusted, and the tests are trimmed to it (2026-10-12; Q-0279, engine pass 28's report orchestrator/trials/trust.md). "Excellent ... [Q-0264, Q-0265, Q-0266, Q-0271, Q-0190, Q-0272, Q-0273, Q-0274, Q-0263, Q-0268, Q-0277, F-0484]
 
 ## How card text is read
 
@@ -167,6 +168,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Wound X twice" is two wounds (F-0148, Take it Down! 103_89): "that's a bug in the implementation, go ahead and fix." An exertion in the definition ...
 - "Choose X ... (or you may play it ...)" plays the card chosen [F-0152]
 - Texts (2026-10-11, fifth notes) [F-0424, F-0468, F-0430]
+- Texts (2026-10-12). Q-0276, Sentry Uruk 15_170 ("While you can spot a fierce minion, this minion is fierce"): "This one actually came up on mlotro a ... [Q-0275, Q-0282, Q-0267, F-0480, Q-0269, Q-0270, Q-0280, F-0468]
 
 ## What is offered and what is asked
 
@@ -191,6 +193,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Q-0106, Worth Fighting For 103_120, "you may make the Shadow player shuffle one of their hindered cards" [Q-0107, F-0180]
 - What is offered and what is asked (2026-10-11, first notes) [F-0385, F-0300, Q-0015, Q-0034, F-0041, Q-0243, Q-0112, Q-0102, F-0419, F-0420, Q-0240]
 - What is offered and what is asked (2026-10-11, fifth notes) [Q-0245, Q-0034, Q-0248, Q-0141, Q-0249, Q-0255, Q-0257, Q-0244, Q-0246]
+- What is offered and what is asked (2026-10-12) [Q-0262, Q-0029, Q-0278, Q-0284, Q-0281, Q-0283, Q-0221]
 
 ## Limits
 
@@ -363,6 +366,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Card by card (2026-10-10, fourth notes) [Q-0225, Q-0226, Q-0227, Q-0232, Q-0234, Q-0235]
 - Card by card (2026-10-11, first notes) [Q-0242, F-0418, F-0420]
 - Card by card (2026-10-11, fifth notes) [F-0469, F-0478]
+- Card by card (2026-10-12). F-0482 (Mountain-troll 15_112's discount counted ahead): "Go for it". F-0483 (the same card asking whether to discard ... [F-0486]
 
 # Settled shapes (shapes.md)
 
