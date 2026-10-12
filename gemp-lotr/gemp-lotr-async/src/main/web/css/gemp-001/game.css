@@ -167,10 +167,15 @@ body {
     border-style: double;
 }
 
-.contextMenu LI.noEffectAction A {
-    color: #6f6650;
+/* An action's menu entry is as tall as its text: jquery.contextMenu.css fixes every entry at one line and hides the
+   rest, which cut longer action texts off mid-sentence. */
+.contextMenu LI A {
     height: auto;
     min-height: 20px;
+}
+
+.contextMenu LI.noEffectAction A {
+    color: #6f6650;
     border-left: 6px double #c9b24a;
     padding-left: 3px;
 }
