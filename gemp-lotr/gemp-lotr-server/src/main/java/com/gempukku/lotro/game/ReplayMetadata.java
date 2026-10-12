@@ -137,7 +137,8 @@ public class ReplayMetadata {
                 var targetCardID = event.getTargetCardId();
 
                 if (bpID != null && cardID != null && participantID != null && participantID.equals(player)) {
-                    if (!GameStarted && (zone.equals(Zone.FREE_CHARACTERS)) || zone.equals(Zone.ATTACHED)) {
+                    // Only what went down before the game started, attached cards as much as characters (F-0469)
+                    if (!GameStarted && (zone.equals(Zone.FREE_CHARACTERS) || zone.equals(Zone.ATTACHED))) {
                         Decks.get(player).StartingFellowship.add(bpID);
                     }
 
