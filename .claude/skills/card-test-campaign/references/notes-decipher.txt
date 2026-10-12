@@ -240,6 +240,17 @@ TO LOOK AT WHEN THE SET COMES UP (seen in passing by an earlier batch; not looke
   word ("Skirmish: Exert this minion to make a Nazgûl or [wraith] Orc strength +1"); twins.py does not group them
   with 7_197, whose first sentence is its own. The board carries over from Card_07_197_Tests (shapes.md, under
   that sentence).
+- Set 2, the other two cards that lay the hand bar of No Business of Ours 2_44 (from engine pass 30, `mechbars`;
+  not changed there): under Q-0264 B2 each owes ONE act stopped and its control, as 2_44 now has, and the words
+  are `mechanics/ABarOnLookingAtOrRevealingAHandTests`'s (shapes.md, "A card that bars an act"). Erland 2_21's
+  file is a stub (the stats test and a commented-out draft): write it so from the start, the Shadow player's look
+  under Erland and without him, `F` for his own hand and the Free Peoples player's acts. The erratum 52_44
+  (`Card_02_044_ErrataTests`, approved in the errata phase) stops two words, each `+ - B` (Curse Their Foul Feet!
+  1_36's `revealHand`, The Mirror of Galadriel 1_55's `lookAtRandomCardsFromHand`): keep one with its control and
+  its `F` test, drop the other into the ledger's Dropped line, and keep the Mirror's discard-pile set-up (F-0264)
+  if the Mirror is the one kept. Southern Spies 2_91 under Erland (seen in passing, not probed, not filed): its
+  discard of the Free Peoples hand is `discardFromHand`, `player: you`, and fails its forecast under Erland's bar
+  though nothing is looked at; an event is not asked the forecast, so the discard is expected to happen. Read it.
 
 ANSWERED BY KETURA ON 2026-10-11 (her fifth notes; `lookup.py <number>` has her words). Test to these, file none again.
 - A cost is judged payable IN FULL before it begins (F-0425: Morgul Regiment 7_197; a repeated cost wants every
