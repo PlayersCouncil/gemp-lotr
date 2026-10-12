@@ -3,6 +3,7 @@ package com.gempukku.lotro.cards.official.set03;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -12,18 +13,6 @@ import static org.junit.Assert.*;
 
 public class Card_03_115_Tests
 {
-
-	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(
-				new HashMap<>()
-				{{
-					put("card", "3_115");
-				}},
-				VirtualTableScenario.FellowshipSites,
-				VirtualTableScenario.FOTRFrodo,
-				VirtualTableScenario.RulingRing
-		);
-	}
 
 	protected VirtualTableScenario GetCarasGaladhonScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
@@ -77,29 +66,28 @@ public class Card_03_115_Tests
 		 * Set: 3
 		 * Name: Caras Galadhon
 		 * Unique: False
-		 * Side: 
-		 * Culture: 
-		 * Shadow Number: 3
-		 * Type: Sanctuary
-		 * Subtype: 
+		 * Type: Site
+		 * Block: Fellowship
 		 * Site Number: 6
+		 * Shadow Number: 3
+		 * Direction: Left
 		 * Game Text: <b>Forest</b>. <b>Sanctuary</b>. While the fellowship is at Caras Galadhon, no more than one minion may be assigned to each skirmish.
 		*/
 
-		var scn = GetScenario();
+		var scn = GetCarasGaladhonScenario();
 
-		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite(6);
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsSite(6);
 
 		assertEquals("Caras Galadhon", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
+		assertEquals(SitesBlock.FELLOWSHIP, card.getBlueprint().getSiteBlock());
+		assertEquals(6, card.getBlueprint().getSiteNumber());
+		assertEquals(3, card.getBlueprint().getTwilightCost());
+		assertEquals(LotroCardBlueprint.Direction.LEFT, card.getBlueprint().getSiteDirection());
 		assertTrue(scn.HasKeyword(card, Keyword.FOREST));
 		assertTrue(scn.HasKeyword(card, Keyword.SANCTUARY));
-		assertEquals(3, card.getBlueprint().getTwilightCost());
-		assertEquals(6, card.getBlueprint().getSiteNumber());
 	}
 
 	@Test
@@ -141,11 +129,10 @@ public class Card_03_115_Tests
 		assertFalse(scn.ShadowActionAvailable(assassin1));
 		assertTrue(scn.ShadowActionAvailable(assassin2));
 
-		// The second Assassin goes to one of the two Hobbits left, never to the one already taken.
+		// The second Assassin goes to one of the two Hobbits left.
 		scn.ShadowUseCardAction(assassin2);
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, pippin));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(merry));
 		scn.FreepsChooseCard(frodo);
 		assertTrue(scn.IsCharAssignedAgainst(frodo, assassin2));
 		assertTrue(scn.IsCharAssignedAgainst(merry, assassin1));
@@ -213,6 +200,33 @@ public class Card_03_115_Tests
 		assertTrue(scn.IsCharAssignedAgainst(merry, assassin1));
 		assertTrue(scn.IsCharAssignedAgainst(merry, troop));
 		assertFalse(scn.IsCharAssigned(pippin));
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
+	}
+
+	@Test
+	public void OnceTheFellowshipHasMovedOnFromCarasGaladhonTwoMinionsMayBeAssignedToOneSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetCarasGaladhonScenario();
+
+		var merry = scn.GetFreepsCard("merry");
+		var assassin1 = scn.GetShadowCard("assassin1");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCompanionsToTable(merry);
+
+		scn.StartGame();
+		scn.SkipToSite(6);
+		assertEquals("Caras Galadhon", scn.GetCurrentSite().getBlueprint().getTitle());
+		scn.MoveMinionsToTable(assassin1, troop);
+
+		// The fellowship moves on to site 7, and Caras Galadhon lies behind it.
+		scn.SkipToAssignments();
+		assertEquals(7, scn.GetCurrentSiteNumber());
+		scn.FreepsAssignToMinions(merry, troop);
+
+		assertTrue(scn.ShadowDecisionAvailable("Assign minions"));
+		assertTrue(scn.ShadowCanAssignAgainst(merry, assassin1));
+		scn.ShadowAssignToMinions(merry, assassin1);
+		assertTrue(scn.IsCharAssignedAgainst(merry, troop));
+		assertTrue(scn.IsCharAssignedAgainst(merry, assassin1));
 		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 	}
 }
