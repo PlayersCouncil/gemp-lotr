@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set01;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -19,7 +18,13 @@ public class Card_01_094_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "1_94");
+					put("athelas", "1_94");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a [gondor] Man companion; a maneuver ability never used
+					put("merchant", "7_97");    // Gondorian Merchant: a [gondor] Man ally; his maneuver ability is never used
+					// Pippin, Trollslayer: a [gondor] companion who is no Man (a Hobbit); cheated in past his "to play";
+					// a skirmish ability never used
+					put("pippin", "103_31");
+					put("rider", "4_265");      // Elite Rider: a [rohan] Man companion; his text reads only a starting fellowship and a skirmish
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -40,6 +45,12 @@ public class Card_01_094_Tests
 					put("breath", "1_207");     // Black Breath: Shadow condition; wounds may not be removed from its bearer
 					put("defense", "1_244");    // Desperate Defense of the Ring: Shadow condition on a companion; acts only when he is assigned
 					put("tip", "1_209");        // Blade Tip: Shadow condition in the support area, on no companion
+					put("weary", "4_212");      // Weary: Shadow condition on a companion or ally; acts only when its bearer is assigned
+					put("poison", "8_28");      // Spider Poison: a Shadow POSSESSION a companion may bear; acts only when he is assigned
+
+					put("athelas2", "1_94");    // a second copy, for "this possession"
+					put("boromir", "1_97");     // Boromir, Son of Denethor: a second [gondor] Man, to bear it; his skirmish ability is never used
+					put("runner", "1_178");     // Goblin Runner: a minion, so that there is a maneuver phase; its play trigger is not set off by a cheat
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -58,13 +69,13 @@ public class Card_01_094_Tests
 		 * Culture: Gondor
 		 * Twilight Cost: 1
 		 * Type: Possession
-		 * Subtype: 
-		 * Game Text: Bearer must be a [gondor] Man.<br><b>Fellowship:</b> Discard this possession to heal a companion or to remove a Shadow condition from a companion.
-		*/
+		 * Game Text: Bearer must be a [gondor] Man.
+		 * Fellowship: Discard this possession to heal a companion or to remove a Shadow condition from a companion.
+		 */
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("athelas");
 
 		assertEquals("Athelas", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -73,6 +84,55 @@ public class Card_01_094_Tests
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
 		assertEquals(1, card.getBlueprint().getTwilightCost());
+	}
+
+	@Test
+	public void PlaysOnlyOnAGondorManCompanionOrAlly() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var athelas = scn.GetFreepsCard("athelas");
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var merchant = scn.GetFreepsCard("merchant");
+		var pippin = scn.GetFreepsCard("pippin");
+		var rider = scn.GetFreepsCard("rider");
+		scn.MoveCompanionsToTable(aragorn, pippin, rider);
+		scn.MoveAlliesToTable(merchant);
+		scn.MoveCardsToHand(athelas);
+
+		scn.StartGame();
+
+		assertTrue(scn.FreepsPlayAvailable(athelas));
+		scn.FreepsPlayCard(athelas);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, merchant));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(pippin, rider, frodo));
+
+		scn.FreepsChooseCard(merchant);
+		assertAttachedTo(athelas, merchant);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void ItsFellowshipActionIsNotOfferedInTheManeuverPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetHealOrRemoveScenario();
+
+		var athelas = scn.GetFreepsCard("athelas");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var weary = scn.GetShadowCard("weary");
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveCompanionsToTable(aragorn, gimli);
+		scn.AttachCardsTo(aragorn, athelas);
+
+		scn.StartGame();
+		// Something for each half to act on.
+		scn.AddWoundsToChar(gimli, 1);
+		scn.AttachCardsTo(gimli, weary);
+		scn.MoveMinionsToTable(runner);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(athelas));
 	}
 
 	@Test
@@ -151,26 +211,34 @@ public class Card_01_094_Tests
 		var breath = scn.GetShadowCard("breath");
 		var defense = scn.GetShadowCard("defense");
 		var tip = scn.GetShadowCard("tip");
-		scn.MoveCompanionsToTable(aragorn, gimli);
+		var weary = scn.GetShadowCard("weary");
+		var poison = scn.GetShadowCard("poison");
+		var athelas2 = scn.GetFreepsCard("athelas2");
+		var boromir = scn.GetFreepsCard("boromir");
+		scn.MoveCompanionsToTable(aragorn, gimli, boromir);
 		scn.MoveAlliesToTable(bounder);
 		scn.AttachCardsTo(aragorn, athelas, saga);
+		scn.AttachCardsTo(boromir, athelas2);
 
 		scn.StartGame();
 		// No companion is wounded; the ally is.
 		scn.AddWoundsToChar(bounder, 1);
-		scn.AttachCardsTo(gimli, breath);
+		scn.AttachCardsTo(gimli, breath, poison);
 		scn.AttachCardsTo(aragorn, defense);
+		scn.AttachCardsTo(bounder, weary);
 		scn.MoveCardsToSupportArea(tip);
 
 		assertEquals(0, scn.GetShadowDiscardCount());
 
 		scn.FreepsUseCardAction(athelas);
 		assertInZone(Zone.DISCARD, athelas);
+		// The copy used is the one discarded.
+		assertAttachedTo(athelas2, boromir);
 		assertFalse(scn.FreepsDecisionAvailable("Choose action to perform"));
 		// A Shadow condition on a companion: either of the two, not the Shadow condition in the support area,
-		// not the Free Peoples condition Aragorn bears.
+		// not the one on an ally, not the Shadow possession on a companion, not the Free Peoples condition Aragorn bears.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(breath, defense));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(tip, saga));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(tip, weary, poison, saga));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 
 		scn.FreepsChooseCard(breath);
@@ -178,6 +246,8 @@ public class Card_01_094_Tests
 		assertEquals(1, scn.GetShadowDiscardCount());
 		assertAttachedTo(defense, aragorn);
 		assertAttachedTo(saga, aragorn);
+		assertAttachedTo(poison, gimli);
+		assertAttachedTo(weary, bounder);
 		assertInZone(Zone.SUPPORT, tip);
 		assertEquals(1, scn.GetWoundsOn(bounder));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
