@@ -94,6 +94,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Patch notes, the first full draft (Q-0294, 2026-10-12, sixth notes)
 - Only questions reach her; no double approval (2026-10-12)
 - Making the 3K faster (Q-0296, 2026-10-12)
+- Every landed card approved; mechanics sorted by subject (2026-10-12, tenth notes)
 
 ## Sources, sheets, revisions and errata
 

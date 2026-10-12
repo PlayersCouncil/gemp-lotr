@@ -521,6 +521,11 @@ convinced about B; on a previous instance we did an extensive rerun trial with S
 straight miss several errors, tho Opus also didn't re-find all the same errors either, which made downgrading a bit
 of a tradeoff." *[2026-10-12]*
 
+**Every landed card approved; mechanics sorted by subject (2026-10-12, tenth notes).** "Go ahead and mark all current
+card tests as approved." (633 cards from ready to approved; the 2 parked stay parked.) "Let's sort the mechanics test
+folder into subfolders. Something like: keywords, hinder, choices, actions, skirmishes, as well as as many others as
+you deem fit." (Engine pass 33: twelve folders.) *[2026-10-12]*
+
 ## Sources, sheets, revisions and errata
 
 **2026-10-04. Comprehensive Rules 4.2** should contain all the official rulings.
