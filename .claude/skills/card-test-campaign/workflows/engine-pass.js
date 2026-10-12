@@ -42,17 +42,32 @@ const cut = (value) => {
   return value
 }
 
-// Slim-down A1 (Q-0296): agents run as `card-worker` (file and shell tools only); args.agentType: "" turns it off.
-const AGENT_TYPE = args.agentType === undefined ? 'card-worker' : args.agentType
+// Slim-down A1 (Ketura on Q-0296): the agents run as the custom type `card-worker` (.claude/agents/card-worker.md),
+// which carries only the file and shell tools.  A session that started before that file existed does not know the
+// type (agent() throws "not found", 2026-10-12): then every agent runs as the default, once logged.
+// args.agentType: "" turns it off.
+let AGENT_TYPE = args.agentType === undefined ? 'card-worker' : args.agentType
+const run = async (prompt, opts) => {
+  if (AGENT_TYPE) {
+    try {
+      return await agent(prompt, Object.assign({}, opts, { agentType: AGENT_TYPE }))
+    } catch (e) {
+      if (!/not found/.test(String(e))) throw e
+      log(`agent type ${AGENT_TYPE} is not known in this session: the default agent is used`)
+      AGENT_TYPE = ''
+    }
+  }
+  return await agent(prompt, opts)
+}
 phase('Items')
 const results = []
 for (const item of items) {
   const brief = roles + (item.brief || 'engine.md')
-  const r = await agent(
+  const r = await run(
     `Work in the repository at ${repo}. Read ${brief} and do what it says.\n\n` +
     `Your item is the section "## ${item.key}" of the file ${queue}: read the whole of that section, and the lines above the first section.\n` +
     `This is engine pass ${pass}. Your working folder name: ep${pass}-${item.key}\n`,
-    Object.assign({ label: `${item.key} (pass ${pass})`, phase: 'Items', schema: RESULT }, AGENT_TYPE ? { agentType: AGENT_TYPE } : {}))
+    { label: `${item.key} (pass ${pass})`, phase: 'Items', schema: RESULT })
   if (!r) {
     // The agent died (a usage limit, most likely) and may have left the tree changed: nobody follows it.
     results.push({ item: item.key, status: 'died' })

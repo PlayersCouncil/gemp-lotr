@@ -24,9 +24,23 @@ const reviewModel = pick(args.reviewModel || args.model || 'sonnet')
 // The lander edits definitions and writes what Ketura reads: the session's model unless args.landModel says otherwise.
 const landModel = pick(args.landModel || 'inherit')
 // Slim-down A1 (Ketura on Q-0296): the agents run as the custom type `card-worker` (.claude/agents/card-worker.md),
-// which carries only the file and shell tools instead of every tool of the session.  args.agentType: "" turns it off.
-const AGENT_TYPE = args.agentType === undefined ? 'card-worker' : args.agentType
-const withModel = (opts, m, e) => Object.assign({}, opts, m ? { model: m } : {}, e ? { effort: e } : {}, AGENT_TYPE ? { agentType: AGENT_TYPE } : {})
+// which carries only the file and shell tools.  A session that started before that file existed does not know the
+// type (agent() throws "not found", 2026-10-12): then every agent runs as the default, once logged.
+// args.agentType: "" turns it off.
+let AGENT_TYPE = args.agentType === undefined ? 'card-worker' : args.agentType
+const run = async (prompt, opts) => {
+  if (AGENT_TYPE) {
+    try {
+      return await agent(prompt, Object.assign({}, opts, { agentType: AGENT_TYPE }))
+    } catch (e) {
+      if (!/not found/.test(String(e))) throw e
+      log(`agent type ${AGENT_TYPE} is not known in this session: the default agent is used`)
+      AGENT_TYPE = ''
+    }
+  }
+  return await agent(prompt, opts)
+}
+const withModel = (opts, m, e) => Object.assign({}, opts, m ? { model: m } : {}, e ? { effort: e } : {})
 
 const TEXT = { type: 'string' }
 const LIST = { type: 'array', items: TEXT }
@@ -183,7 +197,7 @@ const where = `Work in the repository at ${repo}. `
 // the reports themselves are in the run's journal (scripts/orchestrator/wf.py show <folder>).
 const land = async (reports) => {
   phase('Land')
-  const landed = await agent(
+  const landed = await run(
     where + `Read ${roles}lander.md and do what it says.\n\n` +
     `The cards: ${cards.join(', ')}\nThe batch's folder name: ${folder}\nYour working folder name: ${folder}-l\n` +
     (notes ? `\nFrom the orchestrator:\n${notes}\n` : '') +
@@ -197,7 +211,7 @@ const numbered = (items) => (items || []).map((t, i) => `${i + 1}. ${t}`).join('
 // A list from the orchestrator (a ruling to apply, a definition that changed) worked through by a fixer.
 if (args.fixes) {
   phase('Fix')
-  const fix = await agent(
+  const fix = await run(
     where + `Read ${roles}fixer.md and do what it says.\n\n` +
     `The cards and the list for each:\n\n${args.fixes}\n\nYour working folder name: ${folder}-f\n`,
     withModel({ label: `fix ${folder}`, phase: 'Fix', schema: FIXED }, reviewModel, args.reviewEffort))
@@ -210,7 +224,7 @@ if (args.fixes) {
 // resumeFromRunId and the same args is the simpler way: finished stages come back from the journal at once.)
 if (args.reported) {
   phase('Review')
-  const review = await agent(
+  const review = await run(
     where + `Read ${roles}review-and-fix.md and do what it says.\n\n` +
     `The cards: ${cards.join(', ')}\nYour working folder name: ${folder}-r2\n\n` +
     `What the author reported as findings, questions and rig requests (the rest of the author's report is kept from you on purpose):\n${args.reported}\n`,
@@ -220,7 +234,7 @@ if (args.reported) {
 }
 
 phase('Author')
-const author = await agent(
+const author = await run(
   where + `Read ${roles}author.md and do what it says.\n\n` +
   `Your cards: ${cards.join(', ')}\nYour working folder name: ${folder}-a\n` +
   (notes ? `\nFrom the orchestrator:\n${notes}\n` : ''),
@@ -235,7 +249,7 @@ const reported = (author.cards || []).map(c =>
 ).join('\n')
 
 phase('Review')
-const review = await agent(
+const review = await run(
   where + `Read ${roles}review-and-fix.md and do what it says.\n\n` +
   `The cards: ${cards.join(', ')}\nYour working folder name: ${folder}-r\n\n` +
   `What the author reported as findings, questions and rig requests (the rest of the author's report is kept from you on purpose):\n${reported}\n`,
