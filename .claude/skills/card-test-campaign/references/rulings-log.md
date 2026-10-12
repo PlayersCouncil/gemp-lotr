@@ -1933,4 +1933,5 @@ same card asking whether to discard where the pool cannot pay without it): "Also
 Northwoman 17_96's last exertion with a Morgul Orc the only minion: "I'm inclined to agree with the agent's
 corner-of-a-corner decision. Let's leave this test parked for potential work in the future, but Northwoman and
 these minions have gotten enough attention spent on them for now. :)" (engine pass 28 had already built it when
-these words arrived; she was told). "Good, maybe we can run two engine agents for a bit". *[2026-10-12]*
+these words arrived; told so: "I think F-0486 got its status changed since I wrote that entry, so "parked" may
+not make sense anymore now that it's addressed." It stands as built.) "Good, maybe we can run two engine agents for a bit". *[2026-10-12]*
