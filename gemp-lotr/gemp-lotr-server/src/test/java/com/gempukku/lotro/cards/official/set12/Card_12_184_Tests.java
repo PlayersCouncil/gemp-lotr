@@ -41,6 +41,10 @@ public class Card_12_184_Tests
 					// Éowyn, Northwoman: "Assignment: Exert Éowyn and assign a minion to the Ring-bearer to make that
 					// minion lose all game text keywords and unable to gain game text keywords until the regroup phase."
 					put("eowyn", "17_96");
+					// Úlairë Enquëa, Magnified through Suffering: fierce and relentless; strength 12, vitality 4.  At the
+					// start of his skirmish with a wounded companion he may exert to heal and exert: no companion is
+					// wounded where he is here.
+					put("enquea", "103_74");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -411,7 +415,6 @@ public class Card_12_184_Tests
 	}
 
 	@Test
-	@Ignore("Q-0267: built on the keyword relentless, the additional phase is lost (and the two exertions paid for nothing) once another card has barred The Witch-king from gaining keywords; this asserts the text's reading")
 	public void TheAdditionalPhaseIsHisThoughEowynHasBarredHimFromGainingKeywords() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -454,6 +457,46 @@ public class Card_12_184_Tests
 	}
 
 	@Test
+	public void WithARelentlessMinionInPlayHisAdditionalPhaseIsTheRelentlessRoundAndBothTakePart() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var boromir = scn.GetFreepsCard("boromir");
+		scn.MoveCompanionsToTable(boromir);
+
+		var twk = scn.GetShadowCard("twk");
+		var beast = scn.GetShadowCard("beast");
+		var enquea = scn.GetShadowCard("enquea");
+		var rider = scn.GetShadowCard("rider");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(twk, enquea, rider);
+		scn.AttachCardsTo(twk, beast);
+
+		// Nobody is assigned in the first round or in the fierce one.
+		scn.SkipToAssignments();
+		scn.FreepsDeclineAssignments();
+		scn.ShadowDeclineAssignments();
+		scn.PassFierceAssignmentActions();
+		scn.FreepsDeclineAssignments();
+		scn.ShadowDeclineAssignments();
+
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(beast));
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(2, scn.GetWoundsOn(twk));
+
+		// His additional phase and Enquëa's relentless round are one round (Q-0267): both are there to be
+		// defended against, and the Black Rider, fierce and neither relentless nor The Witch-king, is not.
+		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
+		assertTrue(scn.InRelentlessRound());
+		scn.PassAssignmentActions();
+		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+		assertEquals(2, scn.FreepsGetShadowAssignmentTargetCount());
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(twk));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(enquea));
+		assertFalse(scn.FreepsHasAssignmentTargetAvailable(rider));
+	}
+
+	@Test
 	public void TheExtraAssignmentPhaseIsOfferedThoughNobodyWasAssignedInEitherRound() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetNobodyAssignedScenario();
 
@@ -490,11 +533,11 @@ public class Card_12_184_Tests
 		assertEquals(2, scn.GetWoundsOn(witchking));
 		assertEquals(0, scn.GetWoundsOn(rider));
 
-		// One more assignment phase, for him: the other fierce Nazgûl has no part in it.  It is no fierce round;
-		// the game runs it as the round that follows the fierce one (CR 5.0 "relentless").
+		// One more assignment phase, for him: the other fierce Nazgûl has no part in it.  It is neither the fierce
+		// round nor a relentless one (Q-0267): no keyword of his makes it.
 		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
 		assertFalse(scn.InFierceRound());
-		assertTrue(scn.InRelentlessRound());
+		assertFalse(scn.InRelentlessRound());
 		scn.PassAssignmentActions();
 		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
 		assertTrue(scn.FreepsCanAssign(witchking));

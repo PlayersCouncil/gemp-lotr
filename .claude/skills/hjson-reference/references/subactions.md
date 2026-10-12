@@ -1411,7 +1411,8 @@ The primary difference is that discrete effects can be undone by an opposite dis
       default: 1
 * SetupExtraAssignmentAndSkirmishes
   Kicks off another set of Assignment/Skirmish phases involving all minions matching `filter.
-  `See The Witch-king's Beast, Fell Creature).
+  `See The Witch-king's Beast, Fell Creature).  No keyword is given: a bar on gaining keywords does not reach it
+  (Q-0267).  A relentless minion in play takes part as well, the two rounds being one.
     * filter
       required
 * ShadowCantHaveInitiative

@@ -920,6 +920,9 @@ pending, `InFierceRound()` FALSE. `InRelentlessRound()` names it (G-0043): true 
 skirmishes" until the last relentless skirmish is over, and false in the first round and in the fierce one. It is
 passed with `PassAssignmentActions()` and `PassSkirmishActions()`, not the
 `Fierce` ones (`mechanics/RelentlessTests`).
+The additional phase of The Witch-king's Beast 12_184 (`setupExtraAssignmentAndSkirmishes`) is his alone and is
+neither round: both readings are false in it, and no keyword makes it (Q-0267). With a relentless minion in play
+the two are one round, `InRelentlessRound()` true, with the relentless minions and The Witch-king in it.
 
 **Before `StartGame()` the burdens read 1.** The constructor has bid 1 burden for player 1 and placed the
 Ring-bearers; `StartGame()` then takes 1 burden off (`RemoveBurdens(1)`). A burden a card added at set-up would
@@ -1638,7 +1641,7 @@ each site as validation does (`LotroFormat.validateSite(id, context)`), and is t
 
 - **No card is invented for a test** (Ketura, 2026-10-11; Q-0241). A card test uses printed cards. A guard for a thing no card should be able to do is laid with the ad hoc staplers on a text-less card (above, "A guard for a thing no card should be able to do is stapled on"). Nothing else is invented: a definition word no printed card uses has no test, and a word one card uses is tested as far as that card goes, in that card's own file. The table's card library is the printed cards and nothing else: the tests' own definitions (30 cards with set-0 ids from `0_8001`, in a test resource) and the tests that laid them were deleted by engine pass 27; the words left with no card and no test are listed in Q-0274.
 
-- **A test of whether a definition is LOADED** (a word the builder must refuse) plays no game and is no mechanic test: it is plain JUnit in the server module, in `gemp-lotr-server/src/test/java/com/gempukku/lotro/definitions/` (`UnknownPhaseInADefinitionTests`, `PlacingTheEventPlayedOnADrawDeckDefinitionTests`, `PlayerIsRequirementDefinitionTests`; Q-0233: C), where its helper methods may stay. These three are kept as guards of the loader (Q-0273, open): no printed card can show a definition refused, so each writes its definitions in the test itself, and they reach no library and no table. `cardtest.py suite` runs them with the cards, the mechanics and the rig's own tests. None is added for a shape no card has.
+- **A test of whether a definition is LOADED** (a word the builder must refuse) plays no game and is no mechanic test: it is plain JUnit in the server module, in `gemp-lotr-server/src/test/java/com/gempukku/lotro/definitions/` (`UnknownPhaseInADefinitionTests`, `PlacingTheEventPlayedOnADrawDeckDefinitionTests`, `PlayerIsRequirementDefinitionTests`; Q-0233: C), where its helper methods may stay. These three are kept as guards of the loader (Q-0273: keep): no printed card can show a definition refused, so each writes its definitions in the test itself, and they reach no library and no table. `cardtest.py suite` runs them with the cards, the mechanics and the rig's own tests. None is added for a shape no card has.
 
 - **A burden that cannot be added.** No printed card stops a burden being added. A card's own test of one hinders the Ring-bearer (`HinderCard`): while he is hindered the rules put the modifier on (`HinderedRule`; test-generation, "anything before "to"").
 

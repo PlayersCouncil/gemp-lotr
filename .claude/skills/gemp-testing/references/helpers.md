@@ -869,9 +869,9 @@ cancel.
 [gandalf] Fellowship event, Spell, cost 1, needs a [gandalf] Wizard spotted: the Free Peoples player chooses a
 minion in the Shadow player's discard pile (`FreepsChooseCardBPFromSelection`) and it returns to its owner's hand;
 he is then asked whether to reveal the Shadow hand ("you may": F-0485, Q-0278). Answer `FreepsChooseYes()`, dismiss
-the hand shown (`FreepsDismissRevealedCards()`) and choose the minion to discard from it, the one just returned if
-it is the only minion there, so put a second minion in that hand; `FreepsChooseNo()` ends the event with the minion
-returned. With no minion in that discard pile nothing is asked. The erratum 67_15 takes 2 and reveals unasked (its
+the hand shown (`FreepsDismissRevealedCards()`) and choose the minion to discard from it (a choice of no minion or
+one, asked even with one minion there: Q-0278; `FreepsDeclineChoosing()` discards none); `FreepsChooseNo()` ends
+the event with the minion returned. With no minion in that discard pile nothing is asked. The erratum 67_15 takes 2 and reveals unasked (its
 text has no "may"). No printed card PLAYS a card from another player's pile (searched for 94_30).
 
 **A card that answers a card DRAWN, and one that answers a card drawn or taken into hand; a draw at will; a card

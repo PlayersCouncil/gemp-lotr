@@ -54,6 +54,7 @@
 								forced: true
 								player: you
 								select: choose(memory(revealedCards),minion)
+								count: 0-1
 							}
 						]
 					}

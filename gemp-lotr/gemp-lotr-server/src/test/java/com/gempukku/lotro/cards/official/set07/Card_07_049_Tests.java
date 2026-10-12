@@ -98,12 +98,12 @@ public class Card_07_049_Tests
 
 		// Each minion has the ability, in the words of this card.
 		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
-		assertTrue(scn.ShadowActionAvailable(troop1, "Steadfast Champion"));
-		assertTrue(scn.ShadowActionAvailable(troop2, "Steadfast Champion"));
+		assertTrue(scn.ShadowActionAvailable(troop1, "Assign this minion to Gandalf"));
+		assertTrue(scn.ShadowActionAvailable(troop2, "Assign this minion to Gandalf"));
 		assertFalse(scn.IsCharAssigned(gandalf));
 		assertFalse(scn.IsCharAssigned(troop1));
 
-		scn.ShadowUseCardAction(troop1, "Steadfast Champion");
+		scn.ShadowUseCardAction(troop1, "Assign this minion to Gandalf");
 
 		assertTrue(scn.IsCharAssignedAgainst(gandalf, troop1));
 		assertFalse(scn.IsCharAssigned(gimli));
@@ -113,8 +113,8 @@ public class Card_07_049_Tests
 
 		// The assigned minion has the ability no longer, and neither has the other minion now that Gandalf is
 		// assigned.  Reckless Pride's, whose bearer is not, is still the unassigned minion's to use.
-		assertFalse(scn.ShadowActionAvailable(troop1, "Steadfast Champion"));
-		assertFalse(scn.ShadowActionAvailable(troop2, "Steadfast Champion"));
+		assertFalse(scn.ShadowActionAvailable(troop1, "Assign this minion to Gandalf"));
+		assertFalse(scn.ShadowActionAvailable(troop2, "Assign this minion to Gandalf"));
 		assertFalse(scn.ShadowActionAvailable(troop1, "Reckless Pride"));
 		assertTrue(scn.ShadowActionAvailable(troop2, "Reckless Pride"));
 		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());

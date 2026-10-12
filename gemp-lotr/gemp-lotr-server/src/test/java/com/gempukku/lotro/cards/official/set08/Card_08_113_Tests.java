@@ -112,11 +112,13 @@ public class Card_08_113_Tests
 		scn.AttachCardsTo(sam, sting);
 
 		var shelob = scn.GetShadowCard("shelob");
+		var seeker = scn.GetShadowCard("seeker");
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(shelob);
+		scn.MoveMinionsToTable(shelob, seeker);
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(sam, shelob);
+		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(sam);
 		scn.PassSkirmishActions();
 
@@ -129,22 +131,31 @@ public class Card_08_113_Tests
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 
+		// Sam is made strong enough that Shelob and the Uruk Seeker together (8 + 6) do not overwhelm him.
+		scn.ApplyAdHocModifier(new StrengthModifier(null, sam, null, 3));
 		scn.PassFierceAssignmentActions();
 		scn.FreepsAssignToMinions(sam, shelob);
+		scn.ShadowAssignToMinions(sam, seeker);
 		scn.FreepsResolveSkirmish(sam);
 		scn.PassFierceSkirmishActions();
 
 		assertEquals(2, scn.GetWoundsOn(sam));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(sting));
 		assertEquals(0, scn.GetThreats());
-		assertInZone(Zone.SHADOW_CHARACTERS, shelob);
+		assertInZone(Zone.SHADOW_CHARACTERS, shelob, seeker);
 
 		scn.FreepsAcceptOptionalTrigger();
 
+		// Either minion of the skirmish; not Sam, who is involved in it too (Q-0266).
 		assertEquals(1, scn.GetThreats());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(shelob, seeker));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(sam));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		scn.FreepsChooseCard(shelob);
 		assertInZone(Zone.DISCARD, shelob);
+		assertInZone(Zone.SHADOW_CHARACTERS, seeker);
 
-		// Frodo and Sam leave room for a second threat, so the response is offered again, for nothing.
+		// Frodo and Sam leave room for a second threat, so the response is offered again.
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(sting));
 		scn.FreepsDeclineOptionalTrigger();
 

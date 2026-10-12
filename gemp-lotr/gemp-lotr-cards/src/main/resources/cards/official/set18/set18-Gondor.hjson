@@ -637,22 +637,28 @@
 					culture: gondor
 					select: self
 				}
-				effect: {
-					type: preventable
-					player: shadow
-					text: Would you like to remove 2 twilight to prevent effect of The Faithful Stone?
-					cost: {
-						type: removeTwilight
-						amount: 2
+				effect: [
+					{
+						type: ChooseActiveCards
+						select: choose(minion)
+						memorize: chosenMinion
+						text: Choose a minion that cannot be assigned to a skirmish until the regroup phase
 					}
-					effect: [
-						{
+					{
+						type: preventable
+						player: shadow
+						text: Would you like to remove 2 twilight to prevent the effect of The Faithful Stone on {chosenMinion}?
+						cost: {
+							type: removeTwilight
+							amount: 2
+						}
+						effect: {
 							type: disableSkirmishAssignment
-							select: choose(minion)
+							select: memory(chosenMinion)
 							until: regroup
 						}
-					]
-				}
+					}
+				]
 			}
 		]
 		gametext: <b>Tale</b>. Each time a non-[wraith] minion is played, you may spot a Man to add a [gondor] token here.<br><b>Maneuver:</b> Remove 3 [gondor] tokens from here to spot a minion. That minion cannot be assigned to a skirmish until the regroup phase. Any Shadow player may remove (2) to prevent this.

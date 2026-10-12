@@ -134,10 +134,10 @@ public class Card_17_015_Tests
 		assertFalse(scn.GameLogSinceMarkMentions(shadowTroop));
 		scn.FreepsDismissRevealedCards();
 
-		// A minion of that hand, whether it was returned or was there already. Not the condition.
+		// A minion of that hand, whether it was returned or was there already, or none (Q-0278). Not the condition.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(savage, lemenya));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(wreathed));
-		assertEquals(1, scn.FreepsGetChoiceMin());
+		assertEquals(0, scn.FreepsGetChoiceMin());
 		assertEquals(1, scn.FreepsGetChoiceMax());
 		scn.FreepsChooseCardBPFromSelection(lemenya);
 
@@ -186,6 +186,41 @@ public class Card_17_015_Tests
 	}
 
 	@Test
+	public void AfterTheRevealTheFreePeoplesPlayerMayDiscardNoMinion() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var light = scn.GetFreepsCard("light");
+		var runner = scn.GetShadowCard("runner");
+		var savage = scn.GetShadowCard("savage");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var wreathed = scn.GetShadowCard("wreathed");
+		scn.MoveCompanionsToTable("gandalf");
+		scn.MoveCardsToHand(light);
+		scn.MoveCardsToDiscard(runner, savage);
+		scn.MoveCardsToHand(lemenya, wreathed);
+
+		scn.StartGame();
+
+		scn.FreepsPlayCard(light);
+		scn.FreepsChooseCardBPFromSelection(runner);
+		scn.FreepsChooseYes();
+		assertEquals(3, scn.FreepsGetTotalRevealedCardCount());
+		scn.FreepsDismissRevealedCards();
+
+		// "You may reveal ... and discard a minion found there": the hand is shown, and the discard is a choice
+		// of no minion or one (Q-0278).  None is chosen.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(runner, lemenya));
+		assertEquals(0, scn.FreepsGetChoiceMin());
+		scn.FreepsDeclineChoosing();
+
+		assertInZone(Zone.HAND, runner, lemenya, wreathed);
+		assertEquals(3, scn.GetShadowHandCount());
+		assertEquals(1, scn.GetShadowDiscardCount());
+		assertInDiscard(light);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
 	public void RadagastIsAGandalfWizardAndTheMinionJustReturnedMayBeTheOneDiscarded() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -214,7 +249,12 @@ public class Card_17_015_Tests
 		assertEquals(2, scn.FreepsGetTotalRevealedCardCount());
 		scn.FreepsDismissRevealedCards();
 
-		// The Runner is the only minion found in that hand, and goes back to the discard pile.
+		// The Runner is the only minion found in that hand: the choice is still asked, none being an answer
+		// (Q-0278), and the Runner goes back to the discard pile.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(runner));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(wreathed));
+		assertEquals(0, scn.FreepsGetChoiceMin());
+		scn.FreepsChooseCardBPFromSelection(runner);
 		assertInDiscard(runner, fear);
 		assertInZone(Zone.HAND, wreathed);
 		assertEquals(1, scn.GetShadowHandCount());

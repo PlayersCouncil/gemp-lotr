@@ -4,7 +4,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -367,17 +366,16 @@ public class Card_18_050_Tests
 		scn.FreepsUseCardAction(stone);
 		assertEquals(1, scn.GetCultureTokensOn(stone));
 
-		// The Shadow player is asked before the minion is named, and declines.
-		assertTrue(scn.ShadowDecisionAvailable("prevent"));
-		scn.ShadowChooseNo();
-		assertEquals(5, scn.GetTwilight());
-
 		// An Uruk-hai, a Man and an Orc, of three cultures.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(savage, brigand, runner));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(knight, smeagol, frodo));
 		assertEquals(1, scn.FreepsGetChoiceMin());
-
 		scn.FreepsChooseCard(savage);
+
+		// The Shadow player is asked once the minion is named (Q-0284), and declines.
+		assertTrue(scn.ShadowDecisionAvailable("prevent"));
+		scn.ShadowChooseNo();
+		assertEquals(5, scn.GetTwilight());
 		assertEquals(1, scn.GetCultureTokensOn(stone));
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 
@@ -437,8 +435,8 @@ public class Card_18_050_Tests
 		scn.SkipToPhase(Phase.MANEUVER);
 
 		scn.FreepsUseCardAction(stone);
-		scn.ShadowChooseNo();
 		scn.FreepsChooseCard(chosen);
+		scn.ShadowChooseNo();
 
 		scn.SkipToAssignments();
 		assertFalse(scn.InFierceRound());
@@ -501,11 +499,12 @@ public class Card_18_050_Tests
 		scn.FreepsUseCardAction(stone);
 		assertEquals(1, scn.GetCultureTokensOn(stone));
 		assertEquals(5, scn.GetTwilight());
+		scn.FreepsChooseCard(savage);
 		assertTrue(scn.ShadowDecisionAvailable("prevent"));
 
 		scn.ShadowChooseYes();
 		assertEquals(3, scn.GetTwilight());
-		// The three tokens are a cost, and stay paid. No minion is named.
+		// The three tokens are a cost, and stay paid.
 		assertEquals(1, scn.GetCultureTokensOn(stone));
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 
@@ -518,7 +517,6 @@ public class Card_18_050_Tests
 	}
 
 	@Test
-	@Ignore("Q-0284: the Shadow player is asked whether to prevent before the minion is spotted; the text spots the minion first, and the erratum 68_50 asks in that order")
 	public void TheMinionIsSpottedBeforeTheShadowPlayerIsAskedToPrevent() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -590,9 +588,9 @@ public class Card_18_050_Tests
 		assertEquals(3, scn.GetCultureTokensOn(stone2));
 
 		// With (1) in the pool the Shadow player cannot remove (2) and is not asked to.
-		assertFalse(scn.ShadowDecisionAvailable("prevent"));
 		assertTrue(scn.FreepsHasCardChoiceAvailable(savage, brigand));
 		scn.FreepsChooseCard(savage);
+		assertFalse(scn.ShadowDecisionAvailable("prevent"));
 		assertEquals(1, scn.GetTwilight());
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 
