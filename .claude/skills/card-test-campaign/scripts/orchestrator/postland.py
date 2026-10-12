@@ -2,12 +2,15 @@
 """What the orchestrator runs when a batch's lander has finished: everything that is left, in one step.
 
     postland.py [<folder>...]   for each folder: its usage row and the mark that it has landed; then the tracker's
-                                data, the bundle of new commits and one zip of every state file that has changed.
-                                Prints the two files to carry to Ketura's machine and where they go.
-    postland.py --mark          once apply-sync.py on her machine has answered with the new head: remembers that
-                                the bundle and the zip arrived, so the next ones hold only what is newer.
+                                data, the bundle of new commits, and the state committed in the state folder's own
+                                git repository (branch `state`) with a bundle of its new commits.  Prints the files
+                                to carry to Ketura's machine and where they go.
+    postland.py --mark          once apply-sync.py on her machine has answered with the new heads: remembers that
+                                both bundles arrived, so the next ones hold only what is newer.
 
-Content hashes decide what has changed, not times: the outputs folder's modification times cannot be trusted.
+The state is a git repository since 2026-10-12 (Ketura: "A separate git repo for state is a good deal better than
+publishing file changes all the time"); on her machine it is `Claude outputs/state-cache`, a working copy only
+Claude writes.  (Before, a zip of every changed file went across; `--zip` still makes one.)
 """
 import hashlib, json, os, subprocess, sys, zipfile
 from pathlib import Path
@@ -37,6 +40,8 @@ def mark():
     seen_file.write_text(json.dumps(seen))
     if (WORK / "pending_sync").exists():
         os.replace(WORK / "pending_sync", WORK / "last_synced")
+    if (WORK / "pending_state").exists():
+        os.replace(WORK / "pending_state", WORK / "last_synced_state")
     print("marked %d state file(s); last synced %s" % (len(listed), (WORK / "last_synced").read_text().strip()[:9]))
 
 
@@ -83,24 +88,45 @@ def main(argv):
     else:
         print("bundle: nothing new (head %s)" % head[:9])
 
-    seen_file = WORK / "state_hashes.json"
-    seen = json.loads(seen_file.read_text()) if seen_file.exists() else {}
+    # The state: committed in its own repository, and the commits her copy has not had go across as one bundle.
+    run("git", "add", "-A", cwd=STATE)
+    if run("git", "diff", "--cached", "--quiet", cwd=STATE).returncode != 0:
+        run("git", "commit", "-q", "-m", "The campaign's state at the branch head %s" % head[:9], cwd=STATE)
+    shead = run("git", "rev-parse", "state", cwd=STATE).stdout.strip()
+    slast = (WORK / "last_synced_state").read_text().strip() if (WORK / "last_synced_state").exists() else ""
+    if slast != shead:
+        rng = ["%s..state" % slast] if slast else ["state"]
+        made = run("git", "bundle", "create", "-q", str(transport / "state.bundle"), *rng, cwd=STATE)
+        if made.returncode != 0:
+            print("state bundle: " + made.stderr.strip())
+            return 1
+        (WORK / "pending_state").write_text(shead + "\n")
+        print("state: commit %s in state.bundle" % shead[:9])
+        carry.append("state.bundle")
+    else:
+        print("state: nothing new (state %s)" % shead[:9])
     listed = {}
-    with zipfile.ZipFile(transport / "state-delta.zip", "w", zipfile.ZIP_DEFLATED) as z:
-        z.writestr(".sync-head", head)   # apply-sync.py waits for the zip that belongs to this head
-        for p in sorted(STATE.rglob("*")):
-            if not p.is_file() or "transport" in p.parts or p.name in SKIP:
-                continue
-            rel = "/".join(p.relative_to(STATE).parts)
-            d = digest(p)
-            if seen.get(rel) != d:
-                listed[rel] = d
-                z.write(p, rel)
-    print("state: %d changed file(s) in state-delta.zip" % len(listed))
-    carry.append("state-delta.zip")
+    seen = {}
+    if "--zip" in argv:
+        seen_file = WORK / "state_hashes.json"
+        seen = json.loads(seen_file.read_text()) if seen_file.exists() else {}
+        with zipfile.ZipFile(transport / "state-delta.zip", "w", zipfile.ZIP_DEFLATED) as z:
+            z.writestr(".sync-head", head)
+            for p in sorted(STATE.rglob("*")):
+                if not p.is_file() or "transport" in p.parts or ".git" in p.parts or p.name in SKIP:
+                    continue
+                rel = "/".join(p.relative_to(STATE).parts)
+                d = digest(p)
+                if seen.get(rel) != d:
+                    listed[rel] = d
+                    z.write(p, rel)
+        print("state: %d changed file(s) in state-delta.zip" % len(listed))
+        carry.append("state-delta.zip")
     # The script that applies all this on her machine travels with it whenever it has changed.
     applier = SCRIPTS / "orchestrator/apply-sync.py"
-    if seen.get("transport/apply-sync.py") != digest(applier):
+    carried = WORK / "applier_digest"
+    if (carried.read_text().strip() if carried.exists() else "") != digest(applier):
+        carried.write_text(digest(applier))
         (transport / "apply-sync.py").write_bytes(applier.read_bytes())
         listed["transport/apply-sync.py"] = digest(applier)
         carry.append("apply-sync.py")
@@ -112,7 +138,7 @@ def main(argv):
     time.sleep(12)
     print("carry (device_commit_files, force): " + json.dumps(
         [{"stagedPath": str(transport / name), "devicePath": DEVICE + name} for name in carry]))
-    print("then on her machine: python3 \"$HOME/mnt/gemp-lotr/Claude outputs/card-tests/transport/apply-sync.py\" %s" % head[:9])
+    print("then on her machine: python3 \"$HOME/mnt/gemp-lotr/Claude outputs/card-tests/transport/apply-sync.py\" %s %s" % (head[:9], shead[:9]))
 
 
 if __name__ == "__main__":
