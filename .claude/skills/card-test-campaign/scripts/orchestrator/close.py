@@ -227,11 +227,21 @@ def main(argv):
             return 1
         second = tree_of(folder, t) == "cards"
         if second:
+            before = subprocess.run(["git", "-C", str(WORK / "repo"), "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip()
             r = run("bash", HERE / "integrate.sh")
             print((r.stdout.strip() or r.stderr.strip()[-400:]))
             if r.returncode != 0:
                 print("NOT BROUGHT ONTO THE BRANCH (integrate.sh, exit %d): nothing else was done. Run close.py %s again when the cause is gone." % (r.returncode, folder))
                 return r.returncode
+            # 2026-10-12: commits that change the engine's or the rig's sources leave the main tree's build stale
+            # (the suite then fails by the dozen); rebuild it unless a pipeline is at work there.
+            moved = subprocess.run(["git", "-C", str(WORK / "repo"), "diff", "--name-only", before, "HEAD", "--",
+                                    "gemp-lotr/*/src/main"], capture_output=True, text=True).stdout.strip()
+            if moved and not at_work("repo"):
+                b = run(sys.executable, HERE.parent / "cardtest.py", "setup")
+                print("main tree rebuilt: " + (b.stdout.strip().split("\n") or [""])[-1][-120:])
+            elif moved:
+                print("main tree NOT rebuilt (a pipeline is at work there): run cardtest.py setup there when it ends")
         r = run(sys.executable, HERE / "postland.py", folder)
         keep = [x for x in r.stdout.split("\n") if x.startswith(("bundle", "state:", "carry", "then on her machine")) or "NOT" in x or "rror" in x]
         print("\n".join(keep) or (r.stdout + r.stderr)[-600:])
