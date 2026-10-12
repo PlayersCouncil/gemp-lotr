@@ -85,10 +85,17 @@ def take(argv, flag):
     return value
 
 
+def no_headings(body: str) -> str:
+    """A body line that starts with '#' would read as the next entry (or section) to everything that parses
+    questions.md and rig-requests.md (2026-10-12: a sample of patch notes in Q-0288 cut the entry in two, and the
+    tracker showed half).  Such lines are indented four spaces, which leaves them readable."""
+    return re.sub(r"(?m)^(#{1,6}\s)", r"    \1", body)
+
+
 def question_add(argv):
     given = take(argv, "--id")
     title, body_file = argv[0], Path(argv[1])
-    body = body_file.read_text(encoding="utf-8").strip()
+    body = no_headings(body_file.read_text(encoding="utf-8").strip())
     path = g.state_dir() / "questions.md"
     text = read(path)
     if "## Open" not in text:
@@ -108,7 +115,7 @@ def question_add(argv):
 
 def rig_add(argv):
     title, body_file = argv[0], Path(argv[1])
-    body = body_file.read_text(encoding="utf-8").strip()
+    body = no_headings(body_file.read_text(encoding="utf-8").strip())
     path = g.state_dir() / "rig-requests.md"
     text = read(path)
     opened = re.search(r"^## Open\s*$", text, re.M)
