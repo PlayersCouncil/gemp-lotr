@@ -9,6 +9,7 @@ import com.gempukku.lotro.logic.effects.OptionalEffect;
 import com.gempukku.lotro.logic.effects.choose.ChooseAndDiscardCardsFromPlayEffect;
 import com.gempukku.lotro.logic.timing.AbstractSubActionEffect;
 import com.gempukku.lotro.logic.timing.Action;
+import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.PlayConditions;
 
 import java.util.Collection;
@@ -66,18 +67,24 @@ public class OptionalDiscardDiscountEffect extends AbstractSubActionEffect imple
     public void playEffect(LotroGame game) {
         if (isPlayableInFull(game)) {
             SubAction subAction = new SubAction(_action);
-            if (PlayConditions.canDiscardFromPlay(_action.getActionSource(), game, _discardCount, _discardFilters))
-                subAction.appendEffect(
-                        new OptionalEffect(subAction, _playerId,
-                                new ChooseAndDiscardCardsFromPlayEffect(subAction, _playerId, _discardCount, _discardCount, _discardFilters) {
-                                    @Override
-                                    protected void cardsToBeDiscardedCallback(Collection<PhysicalCard> cards) {
-                                        if (cards.size() == _discardCount) {
-                                            _paid = true;
-                                            discountPaidCallback(_discardCount);
-                                        }
-                                    }
-                                }));
+            if (PlayConditions.canDiscardFromPlay(_action.getActionSource(), game, _discardCount, _discardFilters)) {
+                Effect discard = new ChooseAndDiscardCardsFromPlayEffect(subAction, _playerId, _discardCount, _discardCount, _discardFilters) {
+                    @Override
+                    protected void cardsToBeDiscardedCallback(Collection<PhysicalCard> cards) {
+                        if (cards.size() == _discardCount) {
+                            _paid = true;
+                            discountPaidCallback(_discardCount);
+                        }
+                    }
+                };
+                // Where the pool cannot pay without the discount, the discard is the only way to pay: it is made
+                // with no question (F-0483), as a number that can only be one number is not asked for (F-0147).
+                // Otherwise the player is asked whether to take it.
+                if (_minimalDiscount > 0)
+                    subAction.appendEffect(discard);
+                else
+                    subAction.appendEffect(new OptionalEffect(subAction, _playerId, discard));
+            }
             processSubAction(game, subAction);
         }
     }

@@ -116,10 +116,14 @@ public class PotentialDiscount implements EffectProcessor {
                     new DiscountSource() {
                         @Override
                         public int getPotentialDiscount(ActionContext actionContext) {
+                            // All or nothing: the whole discount once the number to discard can be discarded, and
+                            // none below that (F-0482), as ifRemoveFromDiscard counts it.
                             Filterable filterable = filterableSource.getFilterable(actionContext);
                             int possibleDiscard = Filters.countActive(actionContext.getGame(), filterable, Filters.canBeDiscarded(actionContext.getPerformingPlayer(), actionContext.getSource()));
-                            int max = maxSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), actionContext.getSource());
-                            return Math.min(possibleDiscard, max);
+                            int discardCount = discardCountSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), actionContext.getSource());
+                            if (possibleDiscard < discardCount)
+                                return 0;
+                            return maxSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), actionContext.getSource());
                         }
 
                         @Override

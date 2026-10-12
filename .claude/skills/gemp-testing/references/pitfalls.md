@@ -1483,10 +1483,9 @@ path instead: a site map of `FellowshipSites` with the card in place of site n, 
 site after the current one whatever key the map gave it, so one scenario with the card in place of a site no
 test reaches (`putAll(FellowshipSites); remove("site9"); put("parapet", "63_188")`) serves every site number
 (`Card_13_188_ErrataTests`: sites 4 to 7).
-Mount Doom 15_193 is the one site the cheat cannot lay: it puts the card on the path before it gives it a site
-number, and Mount Doom's bar reads its own number as it comes into force (a NullPointerException; F-0484, the
-rig's). Lay it by legal play: the Shadow player on a move, or as the next site in the regroup phase with
-Pathfinder 1_110 or One Good Turn Deserves Another 11_49 (`Card_15_193_Tests`).
+The cheat gives the site its number before it reaches the path, as a site played is given it, so a site whose
+text reads its own number as it comes into force is laid like any other: Mount Doom 15_193 threw a
+NullPointerException until engine pass 28 (F-0484; `virtualtable/AdventurePathLayingTests`).
 The key no longer matters (engine pass 24): the path is ordered only while the FIRST card of the adventure deck
 has a site number (`GameState.usesUnorderedSites`), and the rig now puts the sites that have a printed number
 into each adventure deck ahead of those that have none, so a Shadows-block site on a numbered path may stand
@@ -1650,7 +1649,7 @@ each site as validation does (`LotroFormat.validateSite(id, context)`), and is t
 
 - **A search of another player's draw deck** writes `shuffle: false` and a `ShuffleDeck` of the deck named, as the Gronds do (18_82, 68_82; shapes, "A search of another player's draw deck"). `shuffle: true` beside a `deck:` that names the other player shuffles the deck named as well (F-0369), and no printed card writes it.
 
-- **A test that passes alone and fails in its class (or the reverse) points at a definition that keeps state.** A card's definition is built once and shared by every game of the JVM, so a list an effect builds with the definition and then adds to as it is carried out is never emptied. One is known: Into the Caves 17_100, whose `removeKeyword` with `keywordFromMemory` adds each keyword named to the definition's own set, so the minion of every later use, in any test run after, loses them all (F-0487, confirmed, engine). Until that is mended a test that lays 17_100 names only DAMAGE, ENDURING or EASTERLING and reads as kept only a keyword no test names (fierce, Southron), and its two parked tests are shown failing alone, as a probe class of the one test.
+- **A test that passes alone and fails in its class (or the reverse) points at a definition that keeps state.** A card's definition is built once and shared by every game of the JVM, so a list an effect builds with the definition and then adds to as it is carried out is never emptied. One was found and mended: Into the Caves 17_100, whose `removeKeyword` with `keywordFromMemory` added each keyword named to the definition's own set, so the minion of every later use, in any test run after, lost them all (F-0487; engine pass 28 builds the keywords of each use afresh, and a search of every appender found no other write from a use to what the definition holds). Such a test is a finding against the engine, not a test to rearrange.
 
 **The test booster pack.** The test booster pack (`product/Test-Booster.hjson`) holds eight cards: beside the six it had (among them a
 Shadow response event, Enheartened Foe 1_247, which Race Text 92_29 shows and does not let be chosen), Drums in the

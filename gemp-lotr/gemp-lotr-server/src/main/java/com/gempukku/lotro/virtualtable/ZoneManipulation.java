@@ -184,13 +184,16 @@ public interface ZoneManipulation extends TableBase {
 	 * printed on it and whatever block it is of: its site number becomes the current site's plus one.  The
 	 * fellowship's next move goes to it, and on a Shadows-block path the Shadow player is then not asked to lay a
 	 * site for that move.  A cheat like the rest: nothing that answers a site being played is set off, and a
-	 * site already lying at that number is not taken away.
+	 * site already lying at that number is not taken away.  The site number is given before the card reaches the
+	 * path, as a site played is given it (PlaySiteEffect), so a site whose text reads its own number as it comes
+	 * into force (Mount Doom 15_193, "sites in this region") is laid like any other (F-0484).
 	 * @param card The site to lay, from an adventure deck.
 	 */
 	default void MoveCardToAdventurePath(PhysicalCardImpl card) {
 		int num = gameState().getCurrentSiteNumber() + 1;
-		MoveCardToZone(card, Zone.ADVENTURE_PATH);
+		RemoveCardZone(card);
 		card.setSiteNumber(num);
+		gameState().addCardToZone(game(), card, Zone.ADVENTURE_PATH);
 	}
 
 	default void MoveCardsToAdventureDeck(PhysicalCardImpl...cards) {

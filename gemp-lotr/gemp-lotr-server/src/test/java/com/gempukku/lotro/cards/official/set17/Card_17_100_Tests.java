@@ -413,7 +413,6 @@ public class Card_17_100_Tests
 	}
 
 	@Test
-	@Ignore("F-0487: a keyword named in one use of the card is lost again by the minion of every later use, though it is not named there")
 	public void AKeywordNamedInAnEarlierUseIsNotLostByTheMinionOfALaterUse() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

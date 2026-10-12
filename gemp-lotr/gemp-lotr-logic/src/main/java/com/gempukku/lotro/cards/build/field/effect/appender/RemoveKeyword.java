@@ -21,6 +21,8 @@ import com.gempukku.lotro.logic.timing.Effect;
 import org.json.simple.JSONObject;
 
 import java.util.Collection;
+import java.util.EnumSet;
+import java.util.Set;
 
 public class RemoveKeyword implements EffectAppenderProducer {
     @Override
@@ -54,11 +56,15 @@ public class RemoveKeyword implements EffectAppenderProducer {
                     @Override
                     protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                         final Collection<? extends PhysicalCard> cardsFromMemory = actionContext.getCardsFromMemory(memory);
+                        // The keywords of THIS use: the definition's own and the one named into memory. The
+                        // definition's set is shared by every use in every game and is never written to (F-0487).
+                        final Set<Keyword> keywordsOfThisUse = EnumSet.noneOf(Keyword.class);
+                        keywordsOfThisUse.addAll(keywords);
                         if (keywordFromMemory != null) {
-                            keywords.add(Keyword.parse(actionContext.getValueFromMemory(keywordFromMemory)));
+                            keywordsOfThisUse.add(Keyword.parse(actionContext.getValueFromMemory(keywordFromMemory)));
                         }
                         return new AddUntilModifierEffect(
-                                new RemoveKeywordModifier(actionContext.getSource(), Filters.in(cardsFromMemory), null, keywords), until);
+                                new RemoveKeywordModifier(actionContext.getSource(), Filters.in(cardsFromMemory), null, keywordsOfThisUse), until);
                     }
                 });
 

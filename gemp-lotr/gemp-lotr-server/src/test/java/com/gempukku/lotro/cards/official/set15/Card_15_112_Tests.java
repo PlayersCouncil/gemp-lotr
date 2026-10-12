@@ -4,7 +4,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -193,36 +192,6 @@ public class Card_15_112_Tests
 	}
 
 	@Test
-	@Ignore("Q-0275: the text names no time for fierce. As built the troll is fierce for as long as it is in play; by the default for an effect with no stated duration (Q-0018) it would be fierce to the end of the Shadow phase it was played in.")
-	public void FierceEndsWithTheShadowPhaseTheTrollWasPlayedIn() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var troll = scn.GetShadowCard("troll1");
-		var pit1 = scn.GetShadowCard("pit1");
-		var pit2 = scn.GetShadowCard("pit2");
-		var khazad1 = scn.GetShadowCard("khazad1");
-		var khazad2 = scn.GetShadowCard("khazad2");
-		var sentry = scn.GetShadowCard("sentry");
-		scn.MoveCardsToHand(troll);
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(pit1, pit2, khazad1, khazad2, sentry);
-		scn.SetTwilight(17);
-		scn.FreepsPass();
-
-		scn.ShadowPlayCard(troll);
-		scn.ShadowChooseYes();
-		assertInZone(Zone.SHADOW_CHARACTERS, troll);
-		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
-		assertTrue(scn.HasKeyword(troll, Keyword.FIERCE));
-
-		scn.SkipToPhase(Phase.MANEUVER);
-		assertInZone(Zone.SHADOW_CHARACTERS, troll);
-		assertFalse(scn.HasKeyword(troll, Keyword.FIERCE));
-		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
-	}
-
-	@Test
 	public void AnotherOrcMinionPlayedIsOfferedNoDiscountAndTheTrollsOwnMayBeDeclinedForTheFullCost() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -303,7 +272,6 @@ public class Card_15_112_Tests
 	}
 
 	@Test
-	@Ignore("F-0482: with five [orc] minions to discard the troll is offered only when the pool holds 7 (each of the five counted as 1 off its cost of 10, and 2 roaming); its cost at the discount is 0, so 2 should do")
 	public void IsOfferedWithOnlyItsRoamingPenaltyInThePoolWhenFiveOrcMinionsCanBeDiscarded() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -329,7 +297,6 @@ public class Card_15_112_Tests
 	}
 
 	@Test
-	@Ignore("F-0483: with a pool that cannot pay 10 and roaming, the player is still asked whether to discard, and a no empties the pool and puts the troll in the discard pile; the discount is the only way to pay and should be taken without a question")
 	public void WithAPoolThatCannotPayInFullTheFiveAreDiscardedWithoutAQuestion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
