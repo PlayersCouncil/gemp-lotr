@@ -1049,14 +1049,15 @@ turn, and "remove an [elven] token to ..." is not offered when his is the only o
 an invalid candidate by rule, not by the card's filter. It cuts the other way after `SkipToOtherPlayersTurn()`:
 your own Free Peoples cards are then the inactive ones, and a bonus from your condition reads as the bearer's
 printed number whatever the card does (Brought Down from Inside 69_24): read it on its owner's turn.
-Passed over by every filter is not the same as out of force: the standing text of his Free Peoples condition,
-cheated into his support area, may still be laid on your cards. The Shadow player's Lord of Moria 1_21 put down
-AFTER `StartGame()` gave your Dwarf Guard damage +1; put down before it, it did on one board of five (probes of
-dec-b4_4). Put his card down before `StartGame()`, and beside it read only what is offered and where cards lie,
-never a number his card could change (Card_04_041_Tests). On his OWN turn a card of his that was cheated in
-earlier is started a second time: his Ranger of the South 18_56 read +4 for a [gondor] token, not +2 (a probe of
-engine pass 26). Where a test reads a number on player 2's turn, lay his cards after `SkipToOtherPlayersTurn()`
-(`mechanics/CultureTokensTests`, the test of tokens on a card that is not active).
+A card that is not active has no text in force either, whenever a test lays it (G-0055, engine pass 28): the game
+starts a card's text as the card comes into play only if the card is active, and once as each turn begins in
+which it is. His Free Peoples card, cheated in before `StartGame()` or during your turn, changes no number on
+your turn and counts once on his: his Ranger of the South 18_56 reads +2 there for a [gondor] token (before the
+mend it read +2 on YOUR turn and +4 on his, and his Lord of Moria 1_21 gave your Dwarf Guard damage +1). So his
+cards may go down with the rest of the board, at any time, and a number of his is read on his own turn
+(`virtualtable/CardLaidOutOfTurnTests`). The one way left to start a card's text out of turn is `RestoreCard`,
+which starts it whatever the card: restore his hindered card on his own turn (a reconcile never restores a card
+that is not active).
 
 **An event is in the void while it is being played.** From its play until its last decision is answered an
 event, a response event included, is in `Zone.VOID`; only then is it in the discard pile. `assertInDiscard(event)`

@@ -40,6 +40,9 @@ public interface ZoneManipulation extends TableBase {
 	/**
 	 * Manually moves a given card to a given zone.  This ignores any game costs, requirements, or rules and
 	 * effectively teleports the card to whatever zone you like.  Do be careful where you stick weird things.
+	 * A card put into play that is not active as it lands (a Free Peoples card of the player whose turn it is
+	 * not, a Shadow card of the player whose turn it is) has no text in force until a turn begins in which it is
+	 * active, as the game has it for every card on the table (GameState.addCardToZone).
 	 * @param card The card to teleport
 	 * @param zone The zone to teleport into
 	 */

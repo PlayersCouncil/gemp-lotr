@@ -840,7 +840,16 @@ public class GameState {
 
         if (_currentPhase.isCardsAffectGame()) {
             if (zone.isInPlay()) {
-                if (card.getBlueprint().getCardType() != CardType.SITE || (getCurrentPhase() != Phase.PLAY_STARTING_FELLOWSHIP && getCurrentSite() == card)) {
+                if (card.getBlueprint().getCardType() == CardType.SITE) {
+                    if (getCurrentPhase() != Phase.PLAY_STARTING_FELLOWSHIP && getCurrentSite() == card)
+                        startAffecting(game, card);
+                }
+                // A card that is not active as it comes into play has no text in force (CR 4.2 "active"), so its
+                // text is not started here: startAffectingCardsForCurrentPlayer starts it, once, when a turn
+                // begins in which it is active.  Asked as that method asks it.  No play puts such a card on the
+                // table; a card laid directly for the player whose turn it is not is one (G-0055), and started
+                // here as well it was in force out of turn and counted twice in its owner's.
+                else if (isCardInPlayActive(card)) {
                     startAffecting(game, card);
                 }
             }
