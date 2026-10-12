@@ -9,12 +9,13 @@
                                          definitions/, virtualtable/).  `all`: every test of the server module,
                                          the leagues, tournaments, hall and the rest with them, which is what an
                                          engine or rig change ends on.  `cards`: the card tests alone.  <pkg>: one
-                                         package (com.gempukku.lotro.mechanics)
+                                         package and those under it (com.gempukku.lotro.mechanics)
     cardtest.py probe <file.java>        compiles and runs a throwaway JUnit class kept anywhere (/tmp, say), for
                                          finding out what the game does without adding a test to the repository;
                                          a card test class the probe names is compiled with it as it now stands
 
-<what> is a blueprint id (1_40), a test file's path, or a selector (set:1, file:set01-Elven, seg:vset).  The file
+<what> is a blueprint id (1_40), a test file's path, a mechanics class's name (HinderedByNoCardTests, found in
+whichever folder of mechanics/ holds it), or a selector (set:1, file:set01-Elven, seg:vset).  The file
 may be a test of a module the server is built on (gemp-lotr-logic, gemp-lotr-common): its class is named by the
 package in its source.  A test of gemp-lotr-async cannot be run here (the classpath is the server module's).
 
@@ -100,6 +101,20 @@ def run_junit(classes, cp, main="org.junit.runner.JUnitCore") -> int:
     return proc.wait()
 
 
+MECHANICS = g.TEST_ROOT / "mechanics"
+
+
+def mechanics_class(w):
+    """The mechanics class a word names by its class name: `HinderedByNoCardTests`, `mechanics/HinderedByNoCardTests`,
+    or a path to it from before mechanics/ was sorted into folders by subject (engine pass 33).  None for anything
+    else (a blueprint id, a selector)."""
+    stem = Path(w[:-len(".java")] if w.endswith(".java") else w).name
+    if not re.fullmatch(r"[A-Z]\w*Tests?", stem):
+        return None
+    found = sorted(MECHANICS.rglob(stem + ".java"))
+    return found[0] if len(found) == 1 else None
+
+
 def resolve_files(what) -> list:
     tests = g.test_index()
     files = []
@@ -107,6 +122,10 @@ def resolve_files(what) -> list:
         p = Path(w)
         if w.endswith(".java") and (p.is_file() or (g.REPO / w).is_file()):
             files.append(p.resolve() if p.is_file() else g.REPO / w)
+            continue
+        named = mechanics_class(w)
+        if named is not None:
+            files.append(named)
             continue
         for card_id in g.resolve_ids([w]):
             if card_id in tests:

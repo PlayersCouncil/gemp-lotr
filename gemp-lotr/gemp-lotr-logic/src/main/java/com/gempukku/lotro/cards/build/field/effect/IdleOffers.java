@@ -41,7 +41,7 @@ import java.util.Set;
  * (ChooseCardsFromDiscard: Greatest Kingdom of My People 51_16) and a repeated effect (DoWhile: Race Text 94_4).
  * One card has the first of them with no such requirement, Crown of Erebor 32_1 of the Hobbit sets, which have no
  * recorded game text to test against and are worked last.  The teaching of the four stays; the other kinds have
- * their tests on printed cards (mechanics/AnOfferThatCostsNothingAndWouldDoNothingIsNotMadeTests).
+ * their tests on printed cards (mechanics/actions/AnOfferThatCostsNothingAndWouldDoNothingIsNotMadeTests).
  *
  * The switch (the system property gemp.idleOffers, or the environment variable GEMP_IDLE_OFFERS) is kept for
  * tests and for measuring; the game runs in the mode TAUGHT.

@@ -121,7 +121,11 @@ works on (`cards/`, `mechanics/`, `definitions/`, `virtualtable/`) and leaves ou
 (leagues, tournaments, the hall, packs, formats, scenarios, bots), which no card or rule reaches; `suite all`
 after any change to the engine, the rig or the framework (an engine item ends on it, and so does a chunk), since
 the scenario tests and the league and format tests run the same classes. `suite <package>` runs one package
-(`suite com.gempukku.lotro.mechanics`).
+and every package under it (`suite com.gempukku.lotro.mechanics`, or `suite com.gempukku.lotro.mechanics.hinder`).
+
+`mechanics/` is sorted by subject (engine pass 33): `keywords/`, `hinder/`, `choices/`, `actions/`, `skirmishes/`,
+`costs/`, `wounds/`, `ring/`, `sites/`, `deck/`, `inplay/`, `game/`. A new class goes in the folder of its subject; a
+new folder only when none fits. `cardtest.py run` takes a mechanics class by its name (`run HinderedByNoCardTests`).
 
 `cardtest.py probe /tmp/x/Probe.java` compiles and runs a throwaway JUnit class kept outside the repository, for
 finding out what the game does in some situation without adding a test. To print what a player is being asked
@@ -219,7 +223,7 @@ The last answer is the higher bidder's seat ("Go first" / "Go second"); assertio
 A player left out of the standings has no place. The two players' account names are "Free Peoples Player" and
 "Shadow Player" (the constants `P1`, `P2`) unless the constructor's last two arguments seat them under others
 (G-0039: `..., bidHandler, placements, freepsPlayerName, shadowPlayerName`, null for the usual name). That was built
-for the mechanic test of a condition on a player's name (`PlayerIs`): mechanics/PlayerIsRequirementTests, which
+for the mechanic test of a condition on a player's name (`PlayerIs`): mechanics/actions/PlayerIsRequirementTests, which
 builds the requirement from definition text in the test and asks it directly, no card laid (Q-0271: C, the one
 exception to "no definition text made up for a test"); the rig's own test of it is virtualtable/NamedSeatTests. A card's own tests do not read the
 account names in its definition (Q-0190: B, 94_5). At such a table the

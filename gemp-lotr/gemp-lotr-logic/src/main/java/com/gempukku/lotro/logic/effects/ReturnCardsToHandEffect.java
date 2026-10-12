@@ -41,7 +41,7 @@ public class ReturnCardsToHandEffect extends AbstractEffect {
      * from that (ModifiersQuerying.canBeReturnedToHand: the Ring-bearer by the rules, CR 4.2 "Ring-bearer", hindered
      * or not), as the discard and the hinder effects ask what bars theirs.  The definition word ReturnToHand asks
      * the same of the cards it chooses from, so no card's text is carried out differently for it; only an effect
-     * handed its cards directly is, which no card does (mechanics/HinderedRingBearerTests staples one).
+     * handed its cards directly is, which no card does (mechanics/hinder/HinderedRingBearerTests staples one).
      */
     private Collection<PhysicalCard> getCardsThatMayBeReturned(LotroGame game) {
         return Filters.filterActive(game, _spotOverrides, _filter,

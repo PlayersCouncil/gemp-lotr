@@ -2,7 +2,7 @@
 """Reads whether a card's play from hand is a plain one: nothing in its text or definition bears on it.
 
 Since Q-0279: B (engine pass 31) a card's tests have no Play clause and no test that only plays the card: a plain
-play is shown once by mechanics/TwilightPoolTests and WhereACardIsPlayedTests, and a card's play is tested only
+play is shown once by mechanics/costs/TwilightPoolTests and WhereACardIsPlayedTests, and a card's play is tested only
 where its own text bears on it, by the test of that clause.  This script no longer writes tests (--write is
 refused).  What it is for now is its reading (`Card.bears_on_play`), which lint's `plain-play` uses to ask for a
 test that plays the card where something bears on its play.  It once wrote P1's test (Ketura on Q-0220, I), and

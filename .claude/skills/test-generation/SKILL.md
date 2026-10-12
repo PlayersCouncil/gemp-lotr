@@ -158,7 +158,7 @@ Notes: Elrond is himself an ally whose home is site 3, so C2 heals him too.
   game text is in exactly one `C` clause, keyword lines included; reminder text in brackets is left out. The
   conformance check joins the `C` clauses and compares them with the definition's game text.
 - **A card's play has no clause of its own** (Q-0279: B, engine pass 31). The printed cost, type and site number
-  are the stats test's, and what they do in a plain play is shown once, in `mechanics/TwilightPoolTests` and
+  are the stats test's, and what they do in a plain play is shown once, in `mechanics/costs/TwilightPoolTests` and
   `WhereACardIsPlayedTests`: no test only plays a card. A card's play is tested where its own text bears on it,
   by the test of that clause, which plays the card from hand by legal play and reads what it cost and where it
   went: a bearer (`PlayOn`), a requirement or an extra cost to play (`ToPlay`, `ExtraCost`), a cost its text
@@ -172,7 +172,7 @@ Notes: Elrond is himself an ally whose home is site 3, so C2 heals him too.
 - **No reading of a printed cost or bonus doing its ordinary work** (Q-0279: E2, engine pass 31). A test does
   not read the pool across a card's play to show its printed cost paid, nor a bearer's strength, vitality or
   resistance to show a borne card's printed bonus (or the bearer just before it comes or after it goes), where
-  nothing changes the one or the other: that is `mechanics/TwilightPoolTests`' and `BorneItemsTests`'. It reads
+  nothing changes the one or the other: that is `mechanics/costs/TwilightPoolTests`' and `BorneItemsTests`'. It reads
   them where the card's own text, or another card on the table, changes the cost, the pool, the bonus or where
   the card goes, the nearest miss of that text included, and where something else moves the same number in the
   same stretch (a move, another play, a wound). The landed tests were stripped to this by engine pass 31.
@@ -505,7 +505,7 @@ expected values are the sheet's; `reconcile.py <id>` (Decipher cards) and the pa
 definition" section (every card) show any field where the sheet and the definition disagree (see "When the sheet
 and the definition disagree" above). A strength, vitality or other bonus printed on a card that is borne (a
 possession's +2) is a printed field: asserted here, with no clause of its own; that it reaches the bearer is
-`mechanics/BorneItemsTests`'. Its line of the header is written as the sheet prints it ("Vitality: +2") or as the bare
+`mechanics/inplay/BorneItemsTests`'. Its line of the header is written as the sheet prints it ("Vitality: +2") or as the bare
 number ("Vitality: 2"): the landed files have both, lint takes both, and no assertion hangs on it. Timewords are not a printed field: they are how a
 definition says when an event may be played, and a definition may carry more of them than the card prints.
 A Race to Mount Doom modifier's intensity is one: its header has an `Intensity:` line and the test reads
@@ -595,7 +595,7 @@ able to do ("not being able to discard the One Ring, not being able to hinder Ma
 staplers (`AdHocEffects`) on a card with no usual text (Frodo, or a minion, by side), in the test itself, which
 "establishes the artificial test nature of the card while also including its creation right there"
 (`lookup.py Q-0241`). The one place definition TEXT is made up for a test is the account-name check (`PlayerIs`,
-Race Text 94_5's): it is shown once, card-agnostic, in `mechanics/PlayerIsRequirementTests`, the requirement built
+Race Text 94_5's): it is shown once, card-agnostic, in `mechanics/actions/PlayerIsRequirementTests`, the requirement built
 from text written in the test and asked at a table seated under made-up names (Q-0271: C, "Yeah do C", on the
 strength of Q-0190).
 
@@ -652,7 +652,7 @@ already has one (Final Strike 60_20, the only errata file that does), it stays t
 `FormatRule`, `+ -`, citing the format definitions, with one `Get...Scenario()` method per format that returns a
 `DeckValidationScenario`.
 
-The no-effect flag is not asserted for every card. It is tested as a mechanic (`mechanics/NoEffectFlagTests`, the
+The no-effect flag is not asserted for every card. It is tested as a mechanic (`mechanics/actions/NoEffectFlagTests`, the
 common cases) and asserted in a card's own tests only in three cases: the definition declares `noEffectUnless` (a
 convenience guard that was converted: Breaching Shot 102_21); the rulings log names the card for it (Trail of
 Savagery 102_31); or the card has an ability or optional trigger with a cost and a limit on what its effect gives, which
@@ -731,7 +731,10 @@ lint refuses it on `@Test`'s line). A parked test whose failure is that the game
 Some behaviour belongs to the rules and not to any card: how fierce works, the Rule of 4, what happens to a
 skirmish when a side is removed. A card may be how it was noticed, but the test is not that card's. These go in
 `gemp-lotr-server/src/test/java/com/gempukku/lotro/mechanics/`, beside `cards/`, one class per mechanic, named for
-it (`FierceTests`, `RuleOfFourTests`). They follow every rule above except the ledger; the class comment cites
+it (`FierceTests`, `RuleOfFourTests`). The folder is sorted by subject into `keywords/`, `hinder/`, `choices/`,
+`actions/`, `skirmishes/`, `costs/`, `wounds/`, `ring/`, `sites/`, `deck/`, `inplay/` and `game/` (engine pass 33,
+package `com.gempukku.lotro.mechanics.<folder>`): a new class goes in the folder of its subject, and a new folder
+is made only when none fits. They follow every rule above except the ledger; the class comment cites
 the rules section instead. `lint.py --form <file.java>` holds such a class to those rules (how a test is written,
 the `copies` warning included, with nothing of ledger, stats test or card), and with `--only <Test,Test>` a lone
 test added to a card's file that has no ledger. The old tests under `at/` were rewritten into one place or the
@@ -766,7 +769,7 @@ is run with them by `cardtest.py suite all` (gemp-testing, "Running tests").
 What every card of a kind obeys is a mechanic and is not retested card by card: that exerting is not taking a
 wound and a wound is not an exertion, that an exhausted character cannot exert, how a keyword works. So an
 exertion is not owed as the nearest miss of a "takes a wound" or "is about to take a wound" trigger: it is shown
-once, in `mechanics/AWoundThatIsNotTakenTests` (Q-0265: A).
+once, in `mechanics/wounds/AWoundThatIsNotTakenTests` (Q-0265: A).
 
 ## Earlier iterations of PC cards
 

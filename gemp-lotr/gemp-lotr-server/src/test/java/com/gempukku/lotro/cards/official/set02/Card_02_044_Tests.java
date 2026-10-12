@@ -121,7 +121,7 @@ public class Card_02_044_Tests
 	@Test
 	public void FreepsCannotLookAtTheShadowHandByASitesText() throws DecisionResultInvalidException, CardNotFoundException {
 		// The one act stopped here.  Each definition word that looks at or reveals another player's hand is shown
-		// stopped under the bar in mechanics/ABarOnLookingAtOrRevealingAHandTests (Ketura on Q-0264: B2).
+		// stopped under the bar in mechanics/deck/ABarOnLookingAtOrRevealingAHandTests (Ketura on Q-0264: B2).
 		var scn = GetScenario();
 
 		var business = scn.GetShadowCard("business");

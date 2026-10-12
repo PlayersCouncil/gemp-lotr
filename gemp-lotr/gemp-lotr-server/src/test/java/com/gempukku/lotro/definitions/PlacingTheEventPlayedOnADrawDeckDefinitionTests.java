@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
  * Kept as a guard of the loader (engine pass 27; Q-0273): no printed card can show a definition being refused,
  * so the definitions are written here, in the test, and reach no library and no table.  What the effects do in
  * a game is in the tests of the cards that have them: an event that places itself in
- * mechanics/PlacingTheEventPlayedOnADrawDeckTests (Toss Me 6_11), another card's Response in Shrouded Elf's own
+ * mechanics/deck/PlacingTheEventPlayedOnADrawDeckTests (Toss Me 6_11), another card's Response in Shrouded Elf's own
  * (Card_13_023_ErrataTests).  Nothing is played here: the library is handed a few definitions and is read for
  * which of them it kept.  The texts are JSON, which the library reads as it reads HJSON.  Plain JUnit, in the
  * package for tests of the definition language (Q-0233).

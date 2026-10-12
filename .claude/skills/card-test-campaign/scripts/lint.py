@@ -1120,7 +1120,7 @@ def lint_file(path: Path):
                 "or came from, a modifier tied to those words not stacking), or Notes say why none could"
                 % (says.group(0).lower(), card_id))
 
-    # The play of a card (Q-0279: C).  The stats test reads the printed numbers, and mechanics/TwilightPoolTests and
+    # The play of a card (Q-0279: C).  The stats test reads the printed numbers, and mechanics/costs/TwilightPoolTests and
     # WhereACardIsPlayedTests show once what they do in a plain play; neither sees a definition that carries
     # something about being played.  So a card that no live test plays from hand must be one whose play the
     # generator's reading calls plain.  Read on every card, whether its ledger has a Play clause or not.
@@ -1142,7 +1142,7 @@ def lint_file(path: Path):
         add("warning", "site-left", None, "the site's continuous text is built as a plain `modifier`, which holds only while "
             "the fellowship is at the site (CR 4.2 \"active\", LR 3), and the ledger has no R clause for the site left "
             "behind: the same board with the fellowship moved on, where the text no longer bites, in this card's own "
-            "file (shapes, \"A site's continuous text\"; a pointer to mechanics/SiteTextHoldsOnlyWhereTheFellowshipIsTests "
+            "file (shapes, \"A site's continuous text\"; a pointer to mechanics/sites/SiteTextHoldsOnlyWhereTheFellowshipIsTests "
             "does not stand for it)")
 
     # A race and the culture that goes with it (F-0019, F-0291).  No board is asked for any more (Q-0213: B): the

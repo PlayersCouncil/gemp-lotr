@@ -101,7 +101,7 @@ cost or bonus"): not the pool across a plain play, not a bearer's strength, vita
 printed bonus, unless the card's text or another card on the table changes it.
 
 No test only plays the card, and the ledger has no `P1` (Q-0279: B, engine pass 31): a plain play is shown once by
-`mechanics/TwilightPoolTests` and `WhereACardIsPlayedTests`, and `gen_play.py` writes no tests. Where the card's
+`mechanics/costs/TwilightPoolTests` and `WhereACardIsPlayedTests`, and `gen_play.py` writes no tests. Where the card's
 definition or text bears on its play, lint's `plain-play` names it and asks for a test that plays the card from hand:
 that is the test of the clause it names. A "Plays to your support area." sentence is a `Keyword [K]` clause claimed
 by the stats test. A skeleton's commented-out placeholder that only plays the card is taken out (`Dropped:` says it

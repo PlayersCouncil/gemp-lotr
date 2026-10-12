@@ -93,7 +93,7 @@ Then put the real number wherever `F-0000` stood (the `@Ignore` text of a test s
 
 lists the other cards whose tests use a corrected card as a helper and, on a second line, the test classes that
 are no card's own and lay it (a class under `mechanics/`, one of the rig's own tests: `users 3_6` names 2_44 and
-mechanics/RevealingNoCardsFromAHandTests.java); `finish --changed` runs both and commits nothing if one fails. A test of another card that fails ONLY because of your correction (it answered a question the game no
+mechanics/deck/RevealingNoCardsFromAHandTests.java); `finish --changed` runs both and commits nothing if one fails. A test of another card that fails ONLY because of your correction (it answered a question the game no
 longer asks, it read the old wrong number) has that one line put right, and is named in what you return and passed
 to `finish` with `--with`. Anything less plain than that: take your correction back out, record the finding as
 `confirmed`, and say why.

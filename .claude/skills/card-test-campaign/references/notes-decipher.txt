@@ -31,7 +31,7 @@ held more than a stat check before the campaign (509 tests between them, most fi
   original (59_46 for 9_46), nothing carries over and its test file need not be read.
 - Hindering: NO hindered candidate is owed on a Decipher card, whether its text says "spot", "you can spot" or
   counts. No Decipher text speaks of hinder; that a hindered card cannot be spotted is shown once, in
-  `mechanics/HinderedCardCannotBeSpottedTests`, and laying it again on every card that spots is the kind of
+  `mechanics/hinder/HinderedCardCannotBeSpottedTests`, and laying it again on every card that spots is the kind of
   test Ketura ruled out under Q-0213 ("a waste of time to continue searching for *theoretical* malformed targets
   in places and arrangements where they have been historically sparse"). The Notes of the ledger say so in a
   line. (Q-0237, kept by her, 2026-10-11: "That is already covered by the generic hinder tests, and such classes
@@ -153,7 +153,7 @@ game as built and file nothing.)
   it in the text. (No ruling was wanted: Q-0220: J.)
 - "Draws a card (or takes a card into hand)" (Verily I Come 2_94, Betrayal of Isengard 3_29 and 12_25) is ONE
   trigger, `playerDrawsCard` with `orTakesIntoHand: true`: no second trigger is owed for the take. "Draws a card"
-  alone has no such field and answers a draw only. (Q-0205, F-0376; mechanics/DrawnOrTakenIntoHandTests.)
+  alone has no such field and answers a draw only. (Q-0205, F-0376; mechanics/deck/DrawnOrTakenIntoHandTests.)
 - "Make each ... until" on an EVENT is a snapshot, but not where it changes the COST of cards that are not yet
   played: Deft in Their Movements 2_99 ("each site's Shadow number -2") and We Must Go Warily 3_48 ("each
   minion's twilight cost +1") are rightly a standing `modifyCost` over a filter, as Rohirrim Road 7_332 is as an
@@ -161,7 +161,7 @@ game as built and file nothing.)
 - "Wears The One Ring until the regroup phase" (every One Ring, Saruman's Reach 1_137, Resistance Becomes
   Unbearable 2_79, Narchost 7_362) has no `until:` in the definition: `putOnRing` takes none, and the game takes
   the Ring off itself as the regroup phase starts, or as it ends where the Ring was put on in it.
-  (mechanics/WearingTheOneRingTests, Q-0220: C.)
+  (mechanics/ring/WearingTheOneRingTests, Q-0220: C.)
 - A `your` that the text has and the definition's filter lacks is no finding where the other player's cards of
   that side cannot be active: "your Uruk-hai wins a skirmish" (Uruk-hai Rampage 1_159), "each of your companions"
   (Gildor Inglorion 14_4) and the like, 20 definitions. No board tells the two apart. It IS one where the filter
@@ -247,7 +247,7 @@ TO LOOK AT WHEN THE SET COMES UP (seen in passing by an earlier batch; not looke
   that sentence).
 - Set 2, the other two cards that lay the hand bar of No Business of Ours 2_44 (from engine pass 30, `mechbars`;
   not changed there): under Q-0264 B2 each owes ONE act stopped and its control, as 2_44 now has, and the words
-  are `mechanics/ABarOnLookingAtOrRevealingAHandTests`'s (shapes.md, "A card that bars an act"). Erland 2_21's
+  are `mechanics/deck/ABarOnLookingAtOrRevealingAHandTests`'s (shapes.md, "A card that bars an act"). Erland 2_21's
   file is a stub (the stats test and a commented-out draft): write it so from the start, the Shadow player's look
   under Erland and without him, `F` for his own hand and the Free Peoples player's acts. The erratum 52_44
   (`Card_02_044_ErrataTests`, approved in the errata phase) stops two words, each `+ - B` (Curse Their Foul Feet!
@@ -290,7 +290,7 @@ THE COST OF ASSIGNING (set 7's Morgul Orcs; built by engine pass 26, item assign
   pays once the pair is chosen. A cost not paid in full means that one assignment is not made; while the cost
   cannot be paid the assignment is not his to make; the Shadow player's assignments are never charged; a lone
   candidate exerts unasked and the choice of who exerts has no "none". The cards that have him assign (Éowyn
-  17_96, Alcarin 5_31, Sméagol 7_71 and nine more) can take a Morgul Orc. `mechanics/CostOfAssigningTests`,
+  17_96, Alcarin 5_31, Sméagol 7_71 and nine more) can take a Morgul Orc. `mechanics/skirmishes/CostOfAssigningTests`,
   shapes.md ("The Free Peoples player must <pay> to assign") and `orchestrator/engine-pass-30/regiment.md` have
   the whole of it.
 - The three Orcs are worked and landed (the batch dec-b19_1).

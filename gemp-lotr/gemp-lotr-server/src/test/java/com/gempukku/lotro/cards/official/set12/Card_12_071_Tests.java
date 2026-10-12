@@ -74,7 +74,7 @@ public class Card_12_071_Tests
 
 	// "Each time a [men] minion is killed or discarded from play".  A killed minion is not discarded (CR 4.2
 	// "killed"; F-0444), so the definition has a `killed` trigger beside its `discarded` one: this holds the kill.
-	// The discard, and one offer for each, are in mechanics/KilledIsNotDiscardedTests.
+	// The discard, and one offer for each, are in mechanics/wounds/KilledIsNotDiscardedTests.
 	@Test
 	public void AMenMinionKilledInASkirmishLetsAMenMinionBePlayed() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetKilledMinionScenario();

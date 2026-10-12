@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
  * constructor of VirtualTableScenario that ends with the two names; G-0039).  The names are the players' names to
  * the game, and everything the table keys by player goes by them: each player's cards, his meta-site, his seat's
  * channel, and the Freeps and Shadow methods.  It is for tests of something that reads a player's name
- * (mechanics/PlayerIsRequirementTests).
+ * (mechanics/actions/PlayerIsRequirementTests).
  */
 public class NamedSeatTests
 {

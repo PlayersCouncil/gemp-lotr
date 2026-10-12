@@ -752,7 +752,7 @@ tested areas of the game, so I'm not worried that it removes a safety net we nee
 in this case is how tightly packed our tests are; 600 tests which are doing more than they should (or even
 existing when they shouldn't) is some bloat I would like to trim; we're already likely to hit 20,000 tests by
 the end with perfectly legitimate use cases, and I don't want to inflate that number with pointless tests." So:
-A, `mechanics/TwilightPoolTests` and `WhereACardIsPlayedTests` are written; B, the Play clause is stripped (a
+A, `mechanics/costs/TwilightPoolTests` and `WhereACardIsPlayedTests` are written; B, the Play clause is stripped (a
 card's play is tested only where its own text bears on it) and the generator stops; C, lint's `plain-play` asks
 for a test where a definition carries something about its own play; D, the classes for strength, borne items
 (and a site's bonus reaching the bearer), resistance and an ally's home; E2, the readings of a printed cost or
@@ -1254,7 +1254,7 @@ The ruling had not been implemented; it is to be treated as an engine bug and im
 (What was found when implementing it: the rule has been in the exhaust effect since 74b4a685d, 2025-06-28, where
 a character who cannot exert is not a candidate for exhausting. The card that prompted the finding, Ulaire Toldea
 103_79, got round it by nesting its cost inside an `If` in its effect, where a cost does not decide whether a
-trigger is offered. The definition was fixed; the engine needed nothing. `mechanics/ExhaustTests` holds the rule.)
+trigger is offered. The definition was fixed; the engine needed nothing. `mechanics/wounds/ExhaustTests` holds the rule.)
 
 **A card discarded with its dying bearer IS "discarded" for a card that then plays it from the discard pile**
 (Q-0105, Merry's Pipe 103_113), "but it has to be playable". The older rule against answering a discard on
@@ -1440,7 +1440,7 @@ his name." Bears on: every Sam with "make Sam the Ring-bearer (resistance 5)".
 
 **2026-10-05. Hinder.** `at/HinderTests.java` has an exhaustive set of tests for the hinder mechanic; read it
 where the 5.0 excerpts leave a detail of hinder open.
-(Since 2026-10-10 that set is converted: the rule-by-rule tests are the `mechanics/Hindered*Tests` classes, with
+(Since 2026-10-10 that set is converted: the rule-by-rule tests are the `mechanics/hinder/Hindered*Tests` classes, with
 CardsBorneByAHinderedCardTests, TokensOnAHinderedCardTests, ReconcilingRestoresHinderedCardsTests and
 UniquenessTests. Read those; `at/HinderTests.java` is gone, with the whole of `at/`.)
 
@@ -1605,7 +1605,7 @@ Mumakil Commander 18_71's ability is withheld until a mount of his can be spotte
 Ours 2_44: "Seems pretty clear that it should be rewritten to use revealRandomCardsFromHand. If the other test
 can't then be tested, then it seems that edge case isn't something we really need to worry about, if there are no
 other candidates in the entire card base." So the definition is written as its three siblings are, and the two
-tests of `mechanics/RevealingNoCardsFromAHandTests` that 3_6 alone could lay go, unless another card in the card
+tests of `mechanics/deck/RevealingNoCardsFromAHandTests` that 3_6 alone could lay go, unless another card in the card
 base can lay them. *[2026-10-11]*
 
 **Reveals (2026-10-11, fifth notes).** Q-0251, Eye of Barad-dûr 5_96 when It Burns Us 6_110 has the Shadow player

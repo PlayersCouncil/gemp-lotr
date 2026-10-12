@@ -79,7 +79,7 @@ public class Card_13_063_Tests
 	// (HinderTests.CannotReinforceCultureTokenOnHinderedCard) took the offer on this board and read the token
 	// count unchanged; the definition was corrected for this test (F-0359).  The offer made, with tokens that
 	// can be reinforced beside the hindered one, is read in
-	// mechanics/TokensOnAHinderedCardTests.NoCultureTokenIsReinforcedOnAHinderedCard.
+	// mechanics/hinder/TokensOnAHinderedCardTests.NoCultureTokenIsReinforcedOnAHinderedCard.
 	@Test
 	public void ReinforcingIsNotOfferedWhenTheOnlyGondorTokenIsOnAHinderedCard() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetReinforceScenario();

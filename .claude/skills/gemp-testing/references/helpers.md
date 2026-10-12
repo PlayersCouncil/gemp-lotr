@@ -97,7 +97,7 @@ the regroup phase". Neither is unique: a second copy is the control (68_110).
 **A minion with ambush and nothing else; a second instance of ambush.** Southron Soldier 4_254; Raider Bow 7_155.
 Soldier: [raider] Man, not unique, cost 2, strength 4, vitality 1, site 4; "Southron. Ambush (2)" is its whole
 text. Bow: [raider] possession on a [raider] Man, "Bearer is an archer and ambush (5)": attach it after the archery
-phase unless the archer is wanted (`mechanics/AmbushTests`; one offer for the sum, F-0010). Ambush printed outside
+phase unless the archer is wanted (`mechanics/keywords/AmbushTests`; one offer for the sum, F-0010). Ambush printed outside
 [raider]: Fearsome Dunlending 11_79 ([men] Man, cost 3, strength 9, vitality 2; ambush (1); a when-played offer at
 a plains site only) and Warrior of Dunland 11_103 ([men] Man, cost 2, strength 8, vitality 1; ambush (1), and a
 second ambush (1) at a plains site: site 2 of `FellowshipSites` is plains); Horror of Harad 14_13 ([orc]
@@ -194,7 +194,7 @@ Creature 5_24. Lord of Moria (support-area condition): "Each Dwarf is damage +1"
 Aragorn): "He is damage +1" and nothing else. Battle Cry ([isengard] Skirmish event, cost 1): an Uruk-hai is
 strength -1 and damage +1. Seek and Hide ([shire] Skirmish event, cost 1, spot 2 [shire] companions): a minion
 loses all damage bonuses. Gollum (strength 5, vitality 4; a regroup ability used only on purpose) loses to Gimli
-1_13 and shows 1, 2 or 3 wounds (mechanics/DamageBonusTests).
+1_13 and shows 1, 2 or 3 wounds (mechanics/keywords/DamageBonusTests).
 
 **A companion who loses to a minion with damage +1 and takes one wound.** Mithril-coat, Dwarf-mail 13_153. [shire]
 artifact (armor), unique, cost 2; bearer must be a Ring-bound Hobbit (Sam 1_311). Each minion skirmishing bearer
@@ -233,7 +233,7 @@ pitfalls.
 
 **A follower with a plain bonus.** Pallando, Far-travelling One 13_37. Unique [gandalf] follower, cost 2, strength
 +1, Aid (2). Transferred to a companion who is not [gandalf] he exerts the bearer twice, so Gandalf 1_72 bears him
-(`mechanics/AidTests`); his other trigger needs the bearer to win a skirmish. Also the [gandalf] Free Peoples card
+(`mechanics/keywords/AidTests`); his other trigger needs the bearer to win a skirmish. Also the [gandalf] Free Peoples card
 that is no character: the candidate left out by "a [gandalf] character" (Card_01_087_Tests, in the draw deck).
 
 **A valiant companion and nothing else.** Household Guard 5_83. [rohan] Man, strength 6, vitality 3; Valiant is its
@@ -577,7 +577,7 @@ Aragorn, Ranger of the North 1_89 and Man of Bree 11_90). Defend It and Hope: [g
 "Exert a [gondor] Man to wound a minion once (or twice if that minion is an Uruk-hai)": kills a minion of 1
 vitality. What Are They?: [gondor] Maneuver event, cost 1, "Spot a ranger to discard a roaming minion". Man of
 Bree: [men] Man, cost 2, vitality 1, site 4 (roaming at site 2), strength 4 and +1 for each card in the Free
-Peoples hand. With one minion on the table neither event asks anything (mechanics/KilledIsNotDiscardedTests,
+Peoples hand. With one minion on the table neither event asks anything (mechanics/wounds/KilledIsNotDiscardedTests,
 Card_17_066_Tests). A COMPANION killed and one discarded in the regroup phase: Morgul Slayer 3_93 and Fierce in
 Despair 7_148, in the same class.
 
@@ -757,7 +757,7 @@ Draught 8_65. Ranger: [gondor] Man, strength 5, +2 while a [gondor] token can be
 (to play, spot a [men] minion: cheat it in); the minion archery total is +2 at 5 culture tokens of any culture. The
 three unique [gondor] support-area conditions get tokens only as they are played (cheated in they have none:
 `AddTokensToCard`) and act only in a skirmish. Ships: [raider] support-area possession, not unique, a Shadow and a
-Regroup ability used only on purpose (mechanics/TokensOnAHinderedCardTests).
+Regroup ability used only on purpose (mechanics/hinder/TokensOnAHinderedCardTests).
 
 **A culture token placed and removed by legal play; a reinforcement of one token, and of several; a cost of 2
 tokens.** A Path Appointed 8_42; Arod, Rohirrim Steed 13_1 with Suspended Palaces 6_10 and Stout and Strong 4_57;
@@ -767,7 +767,7 @@ here to discard a minion". Arod (on a Dwarf): "When you play Arod, you may reinf
 own example; its Response removes 2 [dwarven] tokens, from two cards if need be. Palaces takes 2 tokens as it is
 played beside a Dwarf and discards itself as a cost in the fellowship phase; Stout and Strong takes one for each
 skirmish a Dwarf wins. Guarded City: [gondor] event, cost 1, a [gondor] token reinforced for each possession the
-spotted companion bears, each chosen for in turn (mechanics/CultureTokensTests).
+spotted companion bears, each chosen for in turn (mechanics/inplay/CultureTokensTests).
 
 **Any Ring put on in the maneuver phase by a printed card (a Ring's phase word read with the Ring ON).** Saruman's
 Reach 1_137, with Uruk Savage 1_151. [isengard] Maneuver event, cost 0: "Exert an Uruk-hai to make the opponent
@@ -794,7 +794,7 @@ STRONGER companion, exhausting himself to hinder that companion; it answers an a
 used while he is assigned to nobody. Shelob (fierce): "Skirmish: If Gollum is skirmishing, exert Gollum and Shelob
 to hinder a character he is skirmishing." The three minions are fierce, so once the skirmish is gone the game rests
 on the fierce round's assignment actions, not on the regroup phase
-(`mechanics/HinderedCharacterCannotSkirmishTests`).
+(`mechanics/hinder/HinderedCharacterCannotSkirmishTests`).
 
 **A card that restores a Free Peoples card by legal play (where the restoring is the act).** Mantle of the White
 Wizard 103_3, with Gandalf 1_72, Gandalf's Staff 2_22 and A New Light 17_15. The Mantle in the support area: "Each
@@ -885,7 +885,7 @@ your discard pile"; the Wizard is a [gandalf] skirmish event for the pile. A car
 not drawn: Master Proudfoot 1_301 (ally; "Fellowship: If the twilight pool has fewer than 3 twilight tokens, add
 (2) to reveal the top 3 cards of your draw deck. Take all [shire] cards revealed into hand and discard the rest";
 `DismissRevealedCards()` after it). The card that answers either is Verily I Come 2_94, on the Ring-bearer, a
-burden for each in the fellowship phase (F-0376; mechanics/DrawnOrTakenIntoHandTests, Card_07_195_Tests).
+burden for each in the fellowship phase (F-0376; mechanics/deck/DrawnOrTakenIntoHandTests, Card_07_195_Tests).
 
 **A hand revealed by its own owner, on each side (the invalid doer and the invalid hand for a bar on looking at or
 revealing a hand).** Troll's Keyward, Keeper of the Beast 12_105; Mallorn-trees 1_54. Keyward: unique [orc] Orc,
@@ -910,7 +910,7 @@ Teeth of Mordor 5_110; Stand Against Darkness 1_63. Teeth: [sauron] support-area
 [sauron] Orc and remove (3) to stack that minion here". Stand Against Darkness: [elven] Maneuver event, cost 1,
 "Exert an Elf to discard a [sauron] minion, a [sauron] condition, or a [sauron] possession". With one Mordor Guard
 7_287 ("When this minion is discarded, remove 3 threats") stacked and another in play, two copies of the event show
-that a stacked card was not discarded from play (mechanics/LeavingPlayTests).
+that a stacked card was not discarded from play (mechanics/wounds/LeavingPlayTests).
 
 **A [dwarven] condition that play stacks Free Peoples cards on.** Here Is Good Rock 4_50. Unique tale in the
 support area, cost 1: "Skirmish: Stack a Free Peoples card from hand here to make a Dwarf damage +1".
@@ -924,11 +924,11 @@ from hand here. Fellowship: Add (1) to take a card stacked here into hand" (two 
 `FreepsUseCardAction(shards, "Stack")`). Teeth: [sauron] support-area condition, "Regroup: Spot a [sauron] Orc and
 remove (3) to stack that minion here"; its Shadow ability plays one back. A minion whose standing text reads off
 another card, to show it out of force on the stack: Grishnákh 5_100 beside Orc Chieftain 1_266
-(`GetMinionSiteNumber` 3, then 6) (mechanics/StackingTests).
+(`GetMinionSiteNumber` 3, then 6) (mechanics/inplay/StackingTests).
 
 **A reconcile in the middle of a phase.** Careful Study 7_19. [elven] Regroup event, cost 1: "Spot an Elf and
 discard 3 cards from hand to reconcile your hand." With five other cards in hand: `FreepsChooseCards` of three,
-then the reconcile's own 0-to-1 discard and the draw to 8 (mechanics/ReconcilingTests).
+then the reconcile's own 0-to-1 discard and the draw to 8 (mechanics/game/ReconcilingTests).
 
 **A companion's twilight cost raised (to show the size of a discount on a cheap companion).** The Misadventure of
 Mr. Underhill 1_129. [isengard] support-area condition, cost 2 ("To play, exert an Uruk-hai": cheat it into the
@@ -942,7 +942,7 @@ of 3 would read 1 (`Card_15_064_Tests`; pitfalls, "A twilight cost never reads b
 Lord of Angmar 1_237. At 2, "Each Nazgûl's twilight cost is -1"; at 3 (a sanctuary), "The twilight cost of the
 first Nazgûl played to Ford of Bruinen each turn is -5". `GetTwilightCost` of the Witch-king (cost 8; his own text
 is about strength) in the Shadow player's hand reads 8 with neither text in force, 7, 3, or 2 with both
-(mechanics/SiteTextHoldsOnlyWhereTheFellowshipIsTests). Weatherhills is also the one site-2 text a FELLOWSHIP phase
+(mechanics/sites/SiteTextHoldsOnlyWhereTheFellowshipIsTests). Weatherhills is also the one site-2 text a FELLOWSHIP phase
 can read (no Fellowship-block site 2 has a fellowship action): for "your site N" with the owner's site of another
 number as the invalid candidate (Hobbit Farmer 1_295), a Nazgûl in the mover's hand keeps her printed cost while
 the fellowship is at site 1 and Weatherhills lies ahead (Card_01_295_Tests).
@@ -969,7 +969,7 @@ opponent controls site 4 of a Towers path). The Band is strength 10 and +2 for e
 12, 14 reads the count for one player. Uruk Camp is a battleground and plains printed as site 2 of the Towers block
 (`putAll(TowersSites); put("site2", "4_335")`): Advance Uruk Patrol 4_136 is strength +4 while its owner controls
 it. For a board that only needs a site in someone's hands, the cheat (`ShadowTakeControlOfSite(site)`). Pitfalls,
-"A site is controlled lowest first"; mechanics/ControlOfSitesTests.
+"A site is controlled lowest first"; mechanics/sites/ControlOfSitesTests.
 
 **The next site played, and a site replaced, by legal play.** Pathfinder 1_110; Úlairë Nelya, Lieutenant of Morgul
 1_233; Úlairë Nelya, Third of the Nine Riders 11_222. Pathfinder: [gondor] Fellowship or Regroup event, cost 0,
@@ -978,7 +978,7 @@ lays the player's own site of the next number, or nothing where that site alread
 chooses, and a site lying next is replaced. Nelya 1_233 ("Shadow: Exert ... and spot an opponent's site to replace
 it with your site of the same number") replaces site 1 on the first turn; Nelya 11_222 ("Shadow: Exert ... to
 replace the fellowship's current site with a site from your adventure deck") any site, on a Shadows-block path.
-Duilin 14_7 reads the terrain under the fellowship before and after (mechanics/PlayingSitesTests).
+Duilin 14_7 reads the terrain under the fellowship before and after (mechanics/sites/PlayingSitesTests).
 By a SITE's own text, a doer that is no card of the player's side: Mere of Dead Faces 11_246 ("Regroup: Exert
 your Gollum or your Sméagol to play the fellowship's next site"), with Sméagol, Slinker 5_29 in play and the
 fellowship there: `FreepsUseCardAction(site)`, `FreepsChooseCardBPFromSelection(next)`. A Free Peoples site played

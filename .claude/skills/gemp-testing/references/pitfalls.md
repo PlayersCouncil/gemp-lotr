@@ -32,7 +32,7 @@ So does a transfer: with one legal bearer it is made without asking.
 
 **A number that can only be one number is not asked for** (F-0147). Where an effect or a cost asks for a number and only one can be named (X from 1 to 1, "how many to spot" with none to spot, "remove X tokens" with none there), the game takes it. A test of such a board does not answer the question, and an answer written "to be safe" goes to the NEXT decision (the symptom is a wrong number later, not an error). To read the bounds of an X, arrange a board where two numbers can be named.
 
-**A choice with nothing on any branch is not asked** (F-0116, F-0293). Where a `choice` comes up as an effect and no branch can be carried out in full, the player is asked to pick among all of them (a branch may still be done in part: Dwarrowdelf Chamber 1_344 with one companion to exert), unless every branch is a single effect that is certain to do nothing: nobody to exert, heal, wound or discard, no burden or threat to remove, no site to liberate. Then nothing is asked and nothing happens, and a test of that board answers no "Choose action to perform" (assert `assertFalse(scn.FreepsDecisionAvailable("Choose action to perform"))`; mechanics/ChoiceWithNothingOnAnyBranchTests). Since engine pass 26 (Q-0220: D) a branch that holds others says so too (mechanics/ChoiceWithABranchThatHoldsOthersTests): an `if` by the side its check picks (a failed check with no `false` is nothing); a `costToEffect` by its cost alone, so one that cannot be paid for (or whose own `requires` fails) is nothing and one that can never is, whatever it buys (Arwen's Fate 1_93: Aragorn exerts for an Arwen who is not there); a play by whether a card can be played (a play from a draw deck only with `mustExist`); several effects by each in turn. The question is still kept by a branch with an `optional`, a `repeat` or a `preventable` in it, by one that first remembers something for its next effect (`memorize`, `memorizeActive`), and by one whose effect cannot tell. Since engine pass 32 a branch also answers with what it was taught for the rule of the next section (an empty pool to remove twilight from, no card in a hand to discard or place, no card to choose), and an assignment with nobody to assign answers (Duality 13_47 with no Shadow card in hand and an empty pool asks nothing); a discard or placing of a WHOLE hand still keeps the question (Q-0255).
+**A choice with nothing on any branch is not asked** (F-0116, F-0293). Where a `choice` comes up as an effect and no branch can be carried out in full, the player is asked to pick among all of them (a branch may still be done in part: Dwarrowdelf Chamber 1_344 with one companion to exert), unless every branch is a single effect that is certain to do nothing: nobody to exert, heal, wound or discard, no burden or threat to remove, no site to liberate. Then nothing is asked and nothing happens, and a test of that board answers no "Choose action to perform" (assert `assertFalse(scn.FreepsDecisionAvailable("Choose action to perform"))`; mechanics/choices/ChoiceWithNothingOnAnyBranchTests). Since engine pass 26 (Q-0220: D) a branch that holds others says so too (mechanics/choices/ChoiceWithABranchThatHoldsOthersTests): an `if` by the side its check picks (a failed check with no `false` is nothing); a `costToEffect` by its cost alone, so one that cannot be paid for (or whose own `requires` fails) is nothing and one that can never is, whatever it buys (Arwen's Fate 1_93: Aragorn exerts for an Arwen who is not there); a play by whether a card can be played (a play from a draw deck only with `mustExist`); several effects by each in turn. The question is still kept by a branch with an `optional`, a `repeat` or a `preventable` in it, by one that first remembers something for its next effect (`memorize`, `memorizeActive`), and by one whose effect cannot tell. Since engine pass 32 a branch also answers with what it was taught for the rule of the next section (an empty pool to remove twilight from, no card in a hand to discard or place, no card to choose), and an assignment with nobody to assign answers (Duality 13_47 with no Shadow card in hand and an empty pool asks nothing); a discard or placing of a WHOLE hand still keeps the question (Q-0255).
 
 **"Wound each" and "wound every" wound one card at a time.** Each of the wounds has its own "is about to"
 window (`<Wound X> - Optional "is about to" responses`), so a response that picks which card it saves ("prevent
@@ -43,7 +43,7 @@ same in every run (Q-0142, F-0268). A card gets a new id as it comes into play, 
 order they came into play: lay them down one at a time (`MoveMinionsToTable(a); MoveMinionsToTable(b);`) and a
 test may say whose window comes first. It holds for cards a player chose together too ("wound 2 Orcs"), whichever
 was named first, and one effect that takes several at once (exert every, heal, hinder, discard each) names them
-in that order in the game log. `mechanics/TakenTogetherInCardIdOrderTests` shows each.
+in that order in the game log. `mechanics/actions/TakenTogetherInCardIdOrderTests` shows each.
 
 **Choosing which skirmish to resolve is always asked.** Even when only one skirmish is left, the Free Peoples
 player is asked to choose it. `FreepsAssignAndResolve` answers that for the skirmish it sets up;
@@ -52,7 +52,7 @@ after other skirmishes, call `FreepsResolveSkirmish(companion)`.
 **A skirmish against a lurker is not on offer while another waits** (CR 4.2 "lurker"). At "Choose next skirmish
 to resolve" a companion with a lurker among his minions is no choice until every skirmish without one is resolved,
 in the fierce round too: `FreepsResolveSkirmish(companion)` for him fails there. Resolve the others first, or lay
-no lurker beside a skirmish whose order the test cares about (mechanics/LurkerTests).
+no lurker beside a skirmish whose order the test cares about (mechanics/keywords/LurkerTests).
 
 **Who is offered for assignment.** `FreepsHasAssignmentTargetAvailable(card)` and its Shadow twin read the
 assignment decision in front of the player. `FreepsCanAssign(card)` and `ShadowCanAssign(card)` read the game's
@@ -65,7 +65,7 @@ the rig throwing. A restriction on one card for one player
 off that player's list, and when it is the only minion the Free Peoples player is not asked to assign at all.
 Defender is counted against the minions a character already has (F-0355, engine pass 24): for a defender +1
 companion `FreepsCanAssignAgainst(aragorn, m1, m2)` is true and `(aragorn, m1, m2, m3)` false, and once he has two
-`FreepsCanAssign(aragorn)` is false, while `ShadowCanAssignAgainst` has no such count (`mechanics/DefenderTests`).
+`FreepsCanAssign(aragorn)` is false, while `ShadowCanAssignAgainst` has no such count (`mechanics/keywords/DefenderTests`).
 Defender is the Free Peoples player's own when he assigns: an assignment a card makes, either player's, needs
 both characters unassigned, and an action written with `assignableToSkirmishAgainst` is not offered for a
 companion who has a minion, whatever his defender bonus.
@@ -87,7 +87,7 @@ comes to face two: `ShadowAssignToMinions(companion, secondMinion)` after the Fr
 `ShadowDeclineAssignments()` passes that decision; with no minion left over he is not asked.
 Defender shows in the Free Peoples player's own decision without any refusal: a companion who already has a
 minion from an assignment action is on his list only if he has defender (`FreepsHasAssignmentTargetAvailable`;
-`mechanics/DefenderTests`, with Unexpected Visitor 7_126 and Reckless Pride 7_13 as the assignment actions).
+`mechanics/keywords/DefenderTests`, with Unexpected Visitor 7_126 and Reckless Pride 7_13 as the assignment actions).
 
 **A minion the Free Peoples player must pay to assign is paid for ahead of his assigning.** "The Free Peoples
 player must exert a companion to assign this minion to a skirmish" (`extraCostToAssign`: Morgul Regiment 7_197,
@@ -106,7 +106,7 @@ the minion is chosen and cannot take a minion he could not pay for. Where the ch
 candidate it is taken unasked, and the first thing asked is who exerts: the choice then reads the companions, not
 the minions (Alcarin 5_31). Before his assigning (in the assignment phase's actions) `FreepsCanAssign` reads a
 card's rule: true while the cost can be paid. The Shadow player's own assignments are never charged
-(`mechanics/CostOfAssigningTests`). A cost that is repeated (Morgul Regiment 7_197, an exertion "for each Nazgûl
+(`mechanics/skirmishes/CostOfAssigningTests`). A cost that is repeated (Morgul Regiment 7_197, an exertion "for each Nazgûl
 you can spot") can be paid only if every repetition can (F-0425, engine pass 28): with fewer exertions left among
 the companions than Nazgûl the Regiment is not offered and nobody exerts.
 
@@ -216,7 +216,7 @@ being asked. Read it with `assertFalse(scn.FreepsHasOptionalTriggerAvailable(car
 waiting for. An action with a cost, an event, a play, an optional draw from an empty deck and a "you may" asked
 INSIDE another action are offered as before. Which kinds of effect can say they will do nothing, and which
 cannot: card-test-campaign `shapes.md`, "An optional trigger or ability that costs nothing";
-`mechanics/AnOfferThatCostsNothingAndWouldDoNothingIsNotMadeTests`. `GEMP_IDLE_OFFERS=off` in the environment
+`mechanics/actions/AnOfferThatCostsNothingAndWouldDoNothingIsNotMadeTests`. `GEMP_IDLE_OFFERS=off` in the environment
 of a `cardtest.py run` or `probe` turns the rule off for that run.
 
 **A choice between two things to do offers what can be done in full** (F-0310; CR 4.2 "effect"). Of "<do X> or
@@ -224,7 +224,7 @@ of a `cardtest.py run` or `probe` turns the rule off for that run.
 no question. Where none can be but something can be done, every branch is offered and as much of the one chosen
 as can be done is done; where nothing can be done on any, nothing is asked (F-0116). Here Lies Balin 1_19: no
 Orc, nothing asked; one Orc of 1 vitality, both offered; two such Orcs, "wound 2 Orcs" unasked; one Orc of 3
-vitality, "wound 1 Orc twice" unasked (mechanics/ChoiceOfWhatCanBeDoneInFullTests). A choice's `memorize` holds
+vitality, "wound 1 Orc twice" unasked (mechanics/choices/ChoiceOfWhatCanBeDoneInFullTests). A choice's `memorize` holds
 the text of the branch taken, asked or not.
 
 **A "wound X twice" branch of a choice is not offered to a character with 1 vitality left.** In "add 2 burdens or
@@ -237,7 +237,7 @@ extension of the choice (Q-0209: B; Stand Against Darkness 51_63, a [sauron] min
 2 and 3), and a lone X able to take both takes them with no question. Where no branch can be done in full and
 both are offered all the same, any X may be picked and takes the wound it can. A "wound X twice" that is no
 branch of a choice offers every X able to take a wound, as it always did (Fury of the White Rider 5_18;
-mechanics/ChoiceOfWhatCanBeDoneInFullTests has all three).
+mechanics/choices/ChoiceOfWhatCanBeDoneInFullTests has all three).
 
 **A play inside an `If` does not gate its action.** The engine refuses an action it can see will play nothing
 only when the play is the action's top-level effect. Wrapped in an `If`, the action is always offered and does
@@ -245,7 +245,7 @@ nothing when used (F-0036, Out of Dark Waters). A definition written that way is
 round. Its correction is a requirement of the definition's own for the play: on an event, `Playable` with
 `fromZone: DISCARD`, which counts the event's own cost as gone from the pool (Little Snuffler 13_52, F-0058: not
 offered in region 3 with the pool one short of event and minion together, or with no [gollum] minion in the
-discard pile; `mechanics/EventThatPlaysFromADiscardPileNeedsBothCostsTests`).
+discard pile; `mechanics/costs/EventThatPlaysFromADiscardPileNeedsBothCostsTests`).
 
 **The no-effect flag.** Every action a player is offered carries a word saying whether the game expects it to do
 nothing. `FreepsActionNoEffect(card)` and `ShadowActionNoEffect(card)`, and the same with words of the action's
@@ -260,17 +260,17 @@ definition) reads `"limit"` once it has given as much as the limit allows. A cap
 reads `"limit"` once spent only where it is on a strength bonus, a keyword's amount or a number of cards drawn
 and the action does nothing else; a cap on anything else reads `"false"` (Sting 1_313, 51_313). One with a limit on uses is not offered at its limit, so there is no flag to read. An assignment a card makes with nobody it could assign reads `"effect"` (Lurtz 18_118 with no unbound companion; engine pass 32). An event, or an action with a cost, whose effects are a
 reveal from a draw deck and what is done with the cards revealed reads `"effect"` while that deck is empty
-(Q-0163; `mechanics/RevealFromAnEmptyDrawDeckTests`; shapes, "A reveal that a cost buys"). The flag is worked out when the decision is sent, so after cheating the board get a new decision
+(Q-0163; `mechanics/deck/RevealFromAnEmptyDrawDeckTests`; shapes, "A reveal that a cost buys"). The flag is worked out when the decision is sent, so after cheating the board get a new decision
 before reading it (`FreepsRefreshDecision()`). At site 2 of `FellowshipSites` (Ettenmoors) each player
 is also offered the site's own skirmish action in every skirmish. "Take off The One Ring" says that it will
 do nothing while the Ring is not on: an ability with nothing else it can do then reads `"effect"`, and `"false"`
-once the Ring is on (O Elbereth! Gilthoniel! 2_108; F-0370, engine pass 25; two tests of `mechanics/NoEffectFlagTests`). Which cards assert the flag: test-generation,
+once the Ring is on (O Elbereth! Gilthoniel! 2_108; F-0370, engine pass 25; two tests of `mechanics/actions/NoEffectFlagTests`). Which cards assert the flag: test-generation,
 "Rulings, interactions and formats".
 
 **An action's own exertions count against what it then needs.** "Exert X twice to play ... from your discard
 pile" is not offered when X's exertions would leave the only candidate unplayable, and "exert A and B" is not
 offered when one character with one exertion left is the only A and the only B
-(Grimir 51_17's own tests; `mechanics/CostsAreJudgedInTheOrderPrintedTests`). That is so where the cost names
+(Grimir 51_17's own tests; `mechanics/costs/CostsAreJudgedInTheOrderPrintedTests`). That is so where the cost names
 its card or only one character can pay; where the player chooses among several, the action is offered on the
 board as it stands (no printed card of that shape plays an event, so that has no test). An assignment that is
 part of the price is judged the same way (F-0486, engine pass 28): "Exert Éowyn and assign a minion to the
@@ -278,7 +278,7 @@ Ring-bearer to ..." (17_96) is not offered where her own exertion is the last an
 minion left for the Ring-bearer is one he must exert a companion to assign.
 
 **A prevention is asked only when its effect will happen** (Q-0114;
-`mechanics/PreventionIsAskedOnlyWhenItsEffectWillHappenTests`). "X may pay to prevent this" is not put to X
+`mechanics/actions/PreventionIsAskedOnlyWhenItsEffectWillHappenTests`). "X may pay to prevent this" is not put to X
 when the effect cannot happen: a draw or a reveal from an empty deck, the fifth draw of a fellowship phase, nobody chosen
 for the effect or the one chosen out of reach (a companion who cannot exert), threats at their limit, no site
 to take, a skirmish that will not be cancelled. An answer written for the question on such a board
@@ -296,7 +296,7 @@ Rohan 17_104 (`CantBeTransferred`) is never among the cards a card's `Transfer` 
 `checkTarget` or without (F-0340, engine pass 24); a possession may still be transferred TO him. With nothing
 else to take, an ability with a cost is offered all the same (Q-0034): the cost is paid, nobody is asked for a
 card or a bearer, and the flag reads `"false"`. Strange-looking Men 11_100 are Men: they are offered as bearers
-of an Armor themselves (Q-0058). `mechanics/CardThatCannotBeTransferredTests`. A follower's Aid asks the
+of an Armor themselves (Q-0058). `mechanics/inplay/CardThatCannotBeTransferredTests`. A follower's Aid asks the
 same (F-0363, engine pass 26): see "A follower's Aid" below.
 
 **A response event is not played by another card's effect.** "Play a(n) ... event from your discard pile /
@@ -305,7 +305,7 @@ is a response and a phase event (Eye of Barad-dur 5_96) is offered in its phase 
 no printed card plays a [sauron] event in a skirmish phase (engine pass 27). For "a [culture] event" a response
 event of that culture is the invalid candidate beside the phase events (`Card_V2_052_Tests`: Now for Ruin
 102_52, whose filter names no phase, beside Unyielding 10_74, so the refusal read is the game's own), and a
-phase word in the definition's filter beside it cannot be told from its absence: say so in Notes. Race Text 92_29's booster pack is in `mechanics/ResponseEventsAreNotPlayedByEffectsTests`.
+phase word in the definition's filter beside it cannot be told from its absence: say so in Notes. Race Text 92_29's booster pack is in `mechanics/actions/ResponseEventsAreNotPlayedByEffectsTests`.
 Nor is an event of another phase played that way (CR 4.2 "event"): "play a [shire] tale" from hand in the
 regroup phase does not offer a Skirmish event that is a [shire] tale (Nine-fingered Frodo 10_112), and with that
 alone in hand the ability is not offered (Bilbo 59_49).
@@ -335,7 +335,7 @@ as a phase ability and reports itself as used once its costs are paid; its word 
 is used in. So a card that answers "a special ability is used" with no phase named (Storied Homestead 13_76,
 Terrible as the Dawn 53_103, and Boromir's Cloak 51_98 by Q-0203) is offered against one, and a card that names
 a phase's abilities ("a skirmish special ability": 5_59, 5_64; "a regroup special ability": 5_114) is not, though the
-Response was used in that phase (`mechanics/ResponseAbilityIsASpecialAbilityTests`). F-0201 said no card could
+Response was used in that phase (`mechanics/actions/ResponseAbilityIsASpecialAbilityTests`). F-0201 said no card could
 answer one; that was a misreading of the source and no fault. A cancelled "is about to" Response leaves the
 situation standing, and its owner is offered it again for as long as he can pay (CR 4.2 "response"): leave him
 nothing to pay with, or decline for him, before reading that the wound landed.
@@ -364,7 +364,7 @@ and its response, on an overwhelm), add words from the action's description:
 `FreepsHasOptionalTriggerAvailable(card, text)` and `FreepsChooseOptionalTrigger(card, text)`, as
 `FreepsUseCardAction(card, text)` does for phase actions.
 
-**Toil is a choice of cards, asked only when there is something to choose** (CR 4.2 "toil"; mechanics/ToilTests).
+**Toil is a choice of cards, asked only when there is something to choose** (CR 4.2 "toil"; mechanics/keywords/ToilTests).
 A toil card is offered when the pool covers its cost less the toil number for each character of its culture its
 player could exert (an exhausted one is not counted), and any roaming penalty on top: exertions never pay the
 penalty. Played, it asks for the characters to exert (`ShadowGetChoiceMin()` is the number of exertions the pool is
@@ -377,7 +377,7 @@ the card lands: at the offer the card is on its way (`VOID_FROM_HAND`) and its c
 where it lies and the pool after the offer is answered.
 
 **Muster is one optional trigger for all of a player's muster characters** (CR 4.2 "muster";
-mechanics/MusterTests). At the start of the regroup phase a player with a muster character and a card in hand has
+mechanics/keywords/MusterTests). At the start of the regroup phase a player with a muster character and a card in hand has
 one offer, "Use Muster" (`ShadowHasOptionalTriggerAvailable(card, "Use Muster")`), the Free Peoples player's first.
 Taken, it is one choice of 0 to N cards from hand, N the number of his muster characters, and as many are drawn
 after. With an empty hand there is no offer. `SkipToPhase(Phase.REGROUP)` rests on the offer: a test that only
@@ -504,7 +504,7 @@ is true, read what is to be ordered with `FreepsGetActionCount()` and `FreepsAct
 entry carries its card's name: "Elrond", "Dwarven Heart", "The One Ring", "Gimli's Helm"), and name the first with
 `FreepsResolveActionOrder("<card title>")`. `FreepsChoiceAvailable(text)` reads only a multiple choice's answers and is
 false there. Two required answers to one "is about to take a wound" are put to the player again for every wound of
-the same skirmish (`mechanics/RequiredActionsAnsweringOneTriggerTests`).
+the same skirmish (`mechanics/actions/RequiredActionsAnsweringOneTriggerTests`).
 
 ## Getting to the moment: set-up, the skippers and turns
 
@@ -515,11 +515,11 @@ exact pool adds those in: `// 10 set + 1 companion + 2 for the site`. A pool tha
 `<card> is not offering Shadow Player a play.`: count the roaming penalty as well as the cost.
 To read both sides of a cost in one Shadow phase, set the pool there and refresh: `SetTwilight(3)`,
 `ShadowRefreshDecision()`, not offered; `SetTwilight(4)`, `ShadowRefreshDecision()`, offered. No sum for the move is
-then needed (mechanics/RoamingTests, ToilTests).
+then needed (mechanics/keywords/RoamingTests, ToilTests).
 
 **No end of turn is sent before turn 1 (F-0327).** After the mulligans `MulliganProcess` ends what the starting
 fellowships left "until the end of the turn" and hands on to `BetweenTurnsProcess`: no `EndOfTurnResult` is sent,
-and the log has no "End of turn" line, before the first turn (mechanics/NoEndOfTurnBeforeTheFirstTurnTests). Until
+and the log has no "End of turn" line, before the first turn (mechanics/game/NoEndOfTurnBeforeTheFirstTurnTests). Until
 engine pass 21 the whole end-of-turn step ran there, with the player who goes second counting as the Free Peoples
 player: an `EndOfTurn` trigger on a card of his in play (Race Text 94_3 lets conditions into a starting
 fellowship) or on a meta-site went off, and `StartGame()` could return with a question pending in BETWEEN_TURNS.
@@ -564,7 +564,7 @@ decision or on `GameIsFinished()`, never on `AwaitingFreepsRegroupPhaseActions()
 formats (`winAtEndOfRegroup: true` in lotrFormats.hjson; `"pc_fotr_block"` as the scenario's format) the
 regroup phase at site 9 IS played, so a regroup text at site 9 is a board in play there (Speak "Friend" and
 Enter 2_26 is offered, and lays no site 10), and the game is won when both have passed, as the Shadow player
-is about to reconcile, his hand untouched (`mechanics/ReconcilingTests`, `mechanics/PlayingSitesTests`). A skipper that plays on through the winning
+is about to reconcile, his hand untouched (`mechanics/game/ReconcilingTests`, `mechanics/sites/PlayingSitesTests`). A skipper that plays on through the winning
 turn finds nobody being asked anything and fails, saying that the game is over and who won it:
 `SkipToOtherPlayersTurn()` from player 1's fellowship phase at site 8 (it was a bare `NoSuchElementException`
 until engine pass 24). Under a modifier that
@@ -584,10 +584,10 @@ of his seventh; his move then reaches site 9 before player 1 has (Card_94_031_Te
 **The game ends when it ends.** When the Ring-bearer dies or is corrupted the game stops at once and no later
 phase arrives. Make the assertions that matter before the event that ends the game. Who lost is read with
 `FreepsHasLost()` / `ShadowHasLost()` (and `FreepsHasWon()` / `ShadowHasWon()`; all four false while the game
-goes on; `mechanics/CorruptionBeforeTheGameStartsTests`). One of the four asserted TRUE is a closing reading for
+goes on; `mechanics/ring/CorruptionBeforeTheGameStartsTests`). One of the four asserted TRUE is a closing reading for
 `lint.py`, as `GameIsFinished()` is; read as false it is not, since a game still going on answers the same. WHY is read from
 the game log, in the game's own words: `MarkGameLog()` before the act that ends it, then
-`GameLogSinceMarkSays(scn.P1() + " lost due to: The Ring-Bearer is corrupted")` (`mechanics/HinderedRingBearerTests`,
+`GameLogSinceMarkSays(scn.P1() + " lost due to: The Ring-Bearer is corrupted")` (`mechanics/hinder/HinderedRingBearerTests`,
 Card_01_252_Tests): neither `GameIsFinished()` nor who lost tells a corruption from any other end.
 
 **A starting fellowship.** `StartGame()` skips it. To test "(except in your starting fellowship)": the scenario
@@ -602,14 +602,14 @@ companion, a card offered only while the total with its cost is 4 or less), and 
 begins (Card_94_003_Tests). The total begins again at 0 as the next player's choice begins and the LAST player's
 total is still in the pool at the mulligan question: a pool read as 0 there, after `ShadowDeclineChoosing()`,
 shows nothing. Read "no tokens for a starting fellowship" in the first fellowship phase, with player 2 having
-played somebody too (mechanics/StartingFellowshipTests). Every rig table gives both players the same deck, so a
+played somebody too (mechanics/game/StartingFellowshipTests). Every rig table gives both players the same deck, so a
 directive's "the game goes on to the mulligan question" is: player 1 asked nothing
 (`FreepsAnyDecisionsAvailable()` false), player 2's "Starting fellowship" pending, and the mulligan question
 only after his answer. While a player chooses, only HIS cards on the table are in force, and `GetBurdens()` is
 his: Éomer 4_267 reads 2 with his own player's Elite Rider 4_265 down and 3 again once the other player is
 choosing. Read a cost, a spot or a resistance while its player is the one being asked. Site 1's text is not in
 force while either player chooses, and its keyword is not counted (CR 4.2 "starting fellowship"; F-0470;
-mechanics/SiteTextIsNotActiveWhileStartingFellowshipsArePlayedTests): at East Road 1_320 a companion in the draw
+mechanics/sites/SiteTextIsNotActiveWhileStartingFellowshipsArePlayedTests): at East Road 1_320 a companion in the draw
 deck reads its printed cost, and 2 more in the first fellowship phase. The cost of the
 companion whose play ends the first player's choice cannot be read from the pool, which reads 0 again as the
 next choice begins: read `GetTwilightCost(card)` of a card still in the draw deck while its owner chooses, which
@@ -617,7 +617,7 @@ answers with a starting-fellowship discount in force (Gondorian Knight 5_35 read
 Card_05_031_Tests). A starting fellowship
 is Free Peoples cards: where a card lets other card types in
 (Race Text 94_3), a Shadow card of those types in the draw deck is never offered, whatever the running total
-(Q-0189, F-0343; mechanics/StartingFellowshipIsFreePeoplesCardsTests).
+(Q-0189, F-0343; mechanics/game/StartingFellowshipIsFreePeoplesCardsTests).
 
 **Archers get in the way.** `SkipToPhase` passes for both players and takes the first choice on required
 triggers, but it does not assign archery wounds. An archer on the table stops it, or kills the minion the test
@@ -626,7 +626,7 @@ possession that makes its bearer an archer (a bow) is the same: `AttachCardsTo` 
 (Long Battle Bow 11_89 in Little Golden Flower 65_148's tests). An archer MINION wanted in the skirmishes goes
 down between the two phases: `SkipToPhase(Phase.ASSIGNMENT)` with another minion on the table, `MoveMinionsToTable(archer)`,
 `PassAssignmentActions()`; after `SkipToAssignments()` the assignment already asked does not list it
-(Goblin Archer 1_172 in mechanics/DamageBonusTests).
+(Goblin Archer 1_172 in mechanics/keywords/DamageBonusTests).
 
 **`SkipToPhase` declines optional triggers it meets on the way.** A trigger that is offered while the phase is
 still the old one (an "each time the fellowship moves" trigger, offered before the fellowship phase is left) is
@@ -696,7 +696,7 @@ comments, and one of them was the move from site 6 into region 3 without saying 
 **A reconcile restores first.** By the time a reconcile's discard decision is pending, the reconciling player's
 hindered cards have been restored (CR 5.0 "reconcile"; Q-0059). That is so for both players' regroup reconciles
 and for "reconcile your hand" effects. A restored card's standing discard has been carried out by then as well:
-Andúril 7_79 has discarded the Bow taken up while it was hindered (Q-0223; `mechanics/HinderedBorneCardTests`).
+Andúril 7_79 has discarded the Bow taken up while it was hindered (Q-0223; `mechanics/hinder/HinderedBorneCardTests`).
 A card with a standing "Discard <X> he bears" (4_94, 4_100, 7_79, 8_69, 17_24, 67_24, 102_77) discards an X the rig
 lays beside it at the next action of the game: lay the X only where the test is about its going.
 
@@ -705,7 +705,7 @@ than 8 cards in hand it is one card choice of 0 to 1 (`ShadowChooseCard(card)` o
 and then the draw up to 8; with an empty hand nothing is asked; with more than 8 it is one choice of exactly
 hand minus 8 cards, minimum and maximum equal, with no optional discard first and no declining (`ShadowChooseCards`).
 Under Foot 60_52's tests read all three. With exactly 8 the one discard is still offered, and a card is drawn
-for it if it is taken; a draw deck with too few cards gives what it has. `mechanics/ReconcilingTests` has each
+for it if it is taken; a draw deck with too few cards gives what it has. `mechanics/game/ReconcilingTests` has each
 hand size for both players, the Shadow player's reconcile in each regroup phase and the Free Peoples player's
 only when he stays, and Careful Study 7_19 ("Regroup: ... discard 3 cards from hand to reconcile your hand") as
 the plain card that brings a reconcile about: a card owes no test of the steps.
@@ -796,7 +796,7 @@ companion to heal - remaining heals: N"); with no companion wounded nothing is a
 fellowship actions. Put the wounds on in the turn before (`Card_V0_001_ErrataTests`).
 A fellowship that only ARRIVES at a sanctuary is not healed in that turn, an ally is never among the choices, and
 each player is asked at the start of his own turn for his own companions. The rule is shown in
-mechanics/SanctuaryTests (CR 4.2 "sanctuary", sentence by sentence): a card owes no test of it.
+mechanics/sites/SanctuaryTests (CR 4.2 "sanctuary", sentence by sentence): a card owes no test of it.
 Under Race Text 94_7 the modifier's owner is asked with nobody wounded as well, when a burden is on: his
 Ring-bearer may be chosen for the burden alone. For player 2's sanctuary, `AddBurdens` adds to the player whose
 turn it is: put them on in his own turn before, and `SkipToOtherPlayersTurn()` stops on his healing decision
@@ -858,7 +858,7 @@ underground site", "if underground", "if not at a marsh" (a `ConstantlyCheck` wi
 not looked at between the moving of the marker and the adding of the move's twilight. At a decision raised by a
 "when the fellowship moves to" text the card is still in play; its text counts in the twilight the move adds
 (Bill the Pony's -1 at the underground site that discards him); and it is in the discard pile before anyone is
-asked anything further. Outside a move the check acts at once (`mechanics/AtASiteWhenTheMoveIsFinishedTests`,
+asked anything further. Outside a move the check acts at once (`mechanics/sites/AtASiteWhenTheMoveIsFinishedTests`,
 F-0233).
 
 **Inside an "each time the fellowship moves" trigger the marker is still on the site left.** The engine raises
@@ -866,7 +866,7 @@ F-0233).
 (`MovementGameProcess`), as CR 4.2 "moving your fellowship" lists the steps (Q-0184; engine pass 21, before which
 the marker moved first). At a decision raised by a `Moves` trigger `GetCurrentSiteNumber()` is the site being
 left, `GetMoveCount()` does not yet count the move, the text of the site left is the one in force, and a
-`Location` requirement in that trigger's block reads that site (`mechanics/StepsOfAMoveTests`; Race Text 92_18).
+`Location` requirement in that trigger's block reads that site (`mechanics/sites/StepsOfAMoveTests`; Race Text 92_18).
 The pool is the one from before the move too: "each time the fellowship moves, remove (2)" (Aragorn 3_38) on
 turn 1 removes nothing from an empty pool, and the move's twilight is then added in full. `SetTwilight(3)`
 first, and spell the sum: 3 - 2 + 2 for the site + 2 companions.
@@ -924,7 +924,7 @@ fierce) reads as the first does too: `Phase.ASSIGNMENT`, the assignment actions
 pending, `InFierceRound()` FALSE. `InRelentlessRound()` names it (G-0043): true from the game's "Relentless
 skirmishes" until the last relentless skirmish is over, and false in the first round and in the fierce one. It is
 passed with `PassAssignmentActions()` and `PassSkirmishActions()`, not the
-`Fierce` ones (`mechanics/RelentlessTests`).
+`Fierce` ones (`mechanics/keywords/RelentlessTests`).
 The additional phase of The Witch-king's Beast 12_184 (`setupExtraAssignmentAndSkirmishes`) is his alone and is
 neither round: both readings are false in it, and no keyword makes it (Q-0267). With a relentless minion in play
 the two are one round, `InRelentlessRound()` true, with the relentless minions and The Witch-king in it.
@@ -997,24 +997,24 @@ each threat there was, a choice of one companion each time (minimum 1). A threat
 is therefore read in the wounds asked for (2 threats, one removed: one question and one wound; declined: two),
 never as "2 to 1" (`Card_07_284_Tests`). A companion a card's text places in the dead pile is killed and sets them
 off (Saved From the Fire 8_20: the wounds are asked for before the deck is shown); a killed minion and a companion
-discarded from play do not (mechanics/ThreatsTests).
+discarded from play do not (mechanics/wounds/ThreatsTests).
 
 **Hunter and enduring change a strength a board may lean on.** A hunter has its printed strength everywhere but
 in its own skirmish, and +X there only against a character who is no hunter (`GetKeywordCount(card,
 Keyword.HUNTER)` is the X); hunters are on both sides. An enduring character is +2 for each wound on it, an
 exertion's included, and loses it as a wound is healed: a helper that is wounded or exerts is stronger for it
-(mechanics/HunterTests, EnduringTests).
+(mechanics/keywords/HunterTests, EnduringTests).
 
 **The Rule of 9 counts the dead pile, copy by copy.** With nine companions in play and in the dead pile together,
 no companion is offered from hand whatever else he needs, and other cards are played as ever
-(mechanics/RuleOfNineTests). `MoveCompanionsToTable` and `MoveCardsToDeadPile` do not ask.
+(mechanics/game/RuleOfNineTests). `MoveCompanionsToTable` and `MoveCardsToDeadPile` do not ask.
 
 **Damage bonuses add up, and "loses all damage bonuses" shuts later ones out** (CR 4.2 "damage bonus").
 `GetKeywordCount(card, Keyword.DAMAGE)` is a character's bonus: his own, what a card in play gives him and what an
 event gave him for the skirmish, added together. The winners place one wound and one more for each damage +1
 among them, so two minions of damage +1 place three; a loser's bonus places nothing. After "loses all damage
 bonuses" the count reads 0, and a bonus given later does not land though its event is played and paid for
-(Seek and Hide 3_112, then Lurtz's Battle Cry 1_128). The rule is shown in mechanics/DamageBonusTests: a card that
+(Seek and Hide 3_112, then Lurtz's Battle Cry 1_128). The rule is shown in mechanics/keywords/DamageBonusTests: a card that
 gives or takes a bonus shows the count and one skirmish's wounds, not the arithmetic again.
 
 **The wounds of a lost skirmish are placed in rounds, one on every loser; a loser killed early leaves his own later wounds over.**
@@ -1043,7 +1043,7 @@ controlled or not, lies on the new site afterwards (CR 4.2 "site": "all cards pl
 are moved to the new site"; F-0467, mended by engine pass 26): it is the same card and never leaves play
 (`assertAttachedTo(card, newSite)`, `PlayerSeesCardBorneBy`), and its "this site" is the new one from then on
 (Saruman's Frost 1_135 on a current site that Úlairë Nelya 11_222 replaces still takes 2 from each Hobbit).
-mechanics/ControlOfSitesTests, mechanics/PlayingSitesTests.
+mechanics/sites/ControlOfSitesTests, mechanics/sites/PlayingSitesTests.
 
 **The other player's Free Peoples cards are not active on your turn.** A copy of a possession taken from the
 Shadow player's deck (`GetShadowCard`) and cheated onto your companion is inactive (CR 4.2 "active"), so no
@@ -1079,14 +1079,14 @@ or Regroup" event is an event of the current phase alone: `timeword(skirmish)` i
 or a `modifyCost` is false of Sword-wall 4_84 played in the regroup phase. In a hand or a pile it is what is
 printed on it ("take a skirmish event into hand" finds it in any phase), and an event printed with one phase,
 with or without "Response" (Eye of Barad-dûr 5_96), is never narrowed
-(`mechanics/EventPrintedWithSeveralPhasesTests`).
+(`mechanics/actions/EventPrintedWithSeveralPhasesTests`).
 
 **`GetVitality` is the vitality left.** Printed vitality and what cards add, less wounds: a character of
 vitality 4 with 3 wounds reads 1. The printed number is the blueprint's, as the stats test reads it.
 
 **`GetResistance` is the resistance left.** Printed resistance and what cards add, less the burdens, and for every
 companion, not the Ring-bearer alone: with 3 burdens Frodo 1_290 (resistance 10) reads 7 and Sam 1_311 (5) reads 2
-(`mechanics/RingBearerSuccessionTests`).
+(`mechanics/ring/RingBearerSuccessionTests`).
 
 **Culture tokens are of the card's own culture.** `AddTokensToCard`, `RemoveTokensFromCard` and
 `GetCultureTokensOn` deal only in the token of the culture of the card they are given, so the invalid candidate
@@ -1100,14 +1100,14 @@ engine pass 26 and reverted by pass 28). Another player's card is among them onl
 card active: at Morannon Plains 18_137, which names no culture, and in the [gollum] culture, the one culture with
 cards on both sides (Larder 8_23 against Gladden Homestead 13_49 and Nice Fish 15_46). Several tokens are chosen
 for one at a time, and a card that leaves play keeps none of its tokens. The rule is shown in
-`mechanics/CultureTokensTests`: a card's own file reads its own candidates and count and no more, and never
+`mechanics/inplay/CultureTokensTests`: a card's own file reads its own candidates and count and no more, and never
 asserts that another player's card with such a token is NOT offered.
 
 **A stacked card is not in play** (CR 4.2 "stack"). It cannot be spotted, does not count for uniqueness (a copy
 of a stacked unique card is played, and a third copy stacked beside it), is no companion for a move's twilight
 and no minion to be discarded as the turn ends, and its text is out of force unless it says "while stacked".
 Stacked by legal play: The Shards of Narsil 3_44 (any [gondor] card from hand, fellowship phase, no cost; (1) to
-take one back) and Teeth of Mordor 5_110 (a [sauron] Orc from play, regroup phase, (3)). `mechanics/StackingTests`.
+take one back) and Teeth of Mordor 5_110 (a [sauron] Orc from play, regroup phase, (3)). `mechanics/inplay/StackingTests`.
 "A card stacked on <a kind of card>" is found only under an ACTIVE card of that kind (F-0424: B, engine pass 28):
 a card stacked on the other player's own Free Peoples card on this turn, or on a hindered card, pays no cost, is
 not offered to be chosen and is not counted. Lay his stack before `StartGame()` and read the ability as not offered.
@@ -1135,7 +1135,7 @@ still refuses every discard the engine emits with no source card: the discard of
 and the cards that go with a card that is stacked, returned to hand, shuffled in or put on a deck from play.
 Gnawing, Biting, Hacking, Burning 6_63 is built so, and Iron Fist of the Orc 6_64 and Scaffolding 6_73 the same
 way (read, not run): it is `source: any`, not its `phase: regroup`, that keeps the end-of-turn discard off it
-(the phase still reads regroup then). mechanics/KilledIsNotDiscardedTests.
+(the phase still reads regroup then). mechanics/wounds/KilledIsNotDiscardedTests.
 
 **The removed-from-game pile.** `scn.MoveCardToZone(card, Zone.REMOVED)` lays a card there (a cheat) and
 `assertInZone(Zone.REMOVED, cards...)` reads it. Two printed cards put cards there by play: Defiled 13_105
@@ -1144,7 +1144,7 @@ Déagol in his owner's discard pile, to play himself from it). Déagol 13_46 is 
 Shadow player's deck he is `GetShadowCard`, and the Free Peoples player's own copy is the other player's
 (Card_13_050_Tests, Card_13_105_Tests).
 
-**What an ally bears is in the support area.** A "support card" is a card in a support area or borne by a card that is (`mechanics/SupportAreaTests`): a Shadow condition on an ally (Weary 4_212 plays on a companion or ally) or on a site the Shadow player controls (Pillage of Rohan 4_167, Wolves of Isengard 5_69, No Retreat 4_30; `ShadowTakeControlOfSite(scn.GetSite(n))` after `SkipToSite(n + 1)`, then `AttachCardsTo(site, card)`) is a valid candidate for "a Shadow support card", and the same card on a companion is the invalid one beside it.
+**What an ally bears is in the support area.** A "support card" is a card in a support area or borne by a card that is (`mechanics/inplay/SupportAreaTests`): a Shadow condition on an ally (Weary 4_212 plays on a companion or ally) or on a site the Shadow player controls (Pillage of Rohan 4_167, Wolves of Isengard 5_69, No Retreat 4_30; `ShadowTakeControlOfSite(scn.GetSite(n))` after `SkipToSite(n + 1)`, then `AttachCardsTo(site, card)`) is a valid candidate for "a Shadow support card", and the same card on a companion is the invalid one beside it.
 
 **A follower's Aid is an optional trigger at the start of the maneuver phase.** A follower lies in the support
 area until its Aid is paid, and the offer is made for one a companion already bears as well (cheated on with
@@ -1158,7 +1158,7 @@ adds it and a Shadow one (Saruman 17_38) removes it. It fails, saying so, for an
 of twilight (a burden, a threat, an exertion, a card from hand): for those the header carries the cost. Every Free Peoples Aid transfers "to a companion", so no ally
 bears a follower by legal play. `AttachCardsTo(companion, follower)` cheats one on. Most followers give the
 bearer a printed strength or resistance; see helpers.md ("A follower that changes no number") for two that leave a reading alone (Little Golden
-Flower 65_148's tests). The rule itself is in `mechanics/AidTests`: in a second maneuver phase of the turn the
+Flower 65_148's tests). The rule itself is in `mechanics/keywords/AidTests`: in a second maneuver phase of the turn the
 offer is made again for a follower already borne, and declined it costs nothing and leaves him borne (CR 4.2
 "aid": borne "for the rest of the turn"). He goes back to the support area as the turn ends: when the turn ends at
 the move limit that is after `PassCurrentPhaseActions()`, `PassReconcile(scn.P2())`, `PassReconcile(scn.P1())`,
@@ -1169,10 +1169,10 @@ While the follower has nobody to go to the Aid is offered all the same and reads
 (F-0363; Ketura: "they can still attempt to pay it and get nothing out of it"). That is at Streets of Bree 18_140
 ("followers cannot be transferred to a character"; laid with `MoveCardToAdventurePath`), under any other
 `CantBeTransferred` that reaches the follower, and in a second maneuver phase when the follower's bearer is its
-owner's only character (Q-0244). Anywhere else it reads `"false"`. `mechanics/AidTests`.
+owner's only character (Q-0244). Anywhere else it reads `"false"`. `mechanics/keywords/AidTests`.
 
 **Whose support area.** A card borne by a card in a support area is in THAT support area, whoever owns it
-(`mechanics/WhoseSupportAreaTests`): the Shadow player's Weary on your ally is in your support area ("a
+(`mechanics/inplay/WhoseSupportAreaTests`): the Shadow player's Weary on your ally is in your support area ("a
 condition from the Free Peoples support area" reaches it; "a Shadow condition from an opponent's support
 area", used by you, does not). For "your / an opponent's support area" the valid candidates are a card lying
 there and one borne by an ally or a controlled site there; the invalid ones are the same card on a companion
@@ -1183,7 +1183,7 @@ for a card in play, the number printed on it (F-0109, Q-0073); for a card in a h
 to play now, roaming apart; for a site, its Shadow number as it stands. To read a cost modifier, read a card in
 hand, or play the card and read the pool. A transfer costs the printed number and nothing else (Q-0053, Q-0074).
 A plain play (the printed cost added or removed, roaming, where each type goes) is shown once by
-`mechanics/TwilightPoolTests` and `WhereACardIsPlayedTests`, and no card test only plays its card (Q-0279: B,
+`mechanics/costs/TwilightPoolTests` and `WhereACardIsPlayedTests`, and no card test only plays its card (Q-0279: B,
 engine pass 31): a card is played from hand in the test of the clause of its text that bears on its play.
 
 **A twilight cost never reads below 0, so a discount as large as the card's cost hides a larger one.** Madril
@@ -1261,13 +1261,13 @@ number"; the rule is under "modifier".
 
 ## A card that leaves play as it is played
 
-**A card that leaves play as it comes into play was not played.** A minion played beside Watcher in the Water, a tentacle played away from a marsh, a possession or weapon played on a bearer of Shadowfax, Greatest of the Mearas (17_24 and its erratum 67_24, a standing discard by LR 1; no other Shadowfax): the card goes to the discard pile, what it cost stays paid, and nothing that answers a play happens or is offered: not its own "when you play", not another card's "each time you play", not a response (CR 4.2 "discard"; `mechanics/DiscardedOnEntryTests`). The standing discard is done before the play is announced, so no "Required responses" question is asked between it and a play's own triggers, for a card that stays either. The game log has a line "<card> left play as it came into play".
+**A card that leaves play as it comes into play was not played.** A minion played beside Watcher in the Water, a tentacle played away from a marsh, a possession or weapon played on a bearer of Shadowfax, Greatest of the Mearas (17_24 and its erratum 67_24, a standing discard by LR 1; no other Shadowfax): the card goes to the discard pile, what it cost stays paid, and nothing that answers a play happens or is offered: not its own "when you play", not another card's "each time you play", not a response (CR 4.2 "discard"; `mechanics/inplay/DiscardedOnEntryTests`). The standing discard is done before the play is announced, so no "Required responses" question is asked between it and a play's own triggers, for a card that stays either. The game log has a line "<card> left play as it came into play".
 
 **A play as a cost can come to nothing.** An ability whose cost is to play a card is offered, takes its other costs and the card's twilight, and does nothing if the card has left play by the time its play is complete, whatever removed it. Read the costs as paid, the effect as not done, and the phase's decision.
 
 **The loss of initiative comes with the play.** When a Free Peoples card played from hand takes the hand below four, `FreepsHasInitiative()` is still true while the card's entering step is being answered and false once its play is announced; a required "lose initiative" trigger and a required "each time you play" trigger for that play come up in one "Required responses" decision. Initiative is read again each time the game goes round its loop: cards cheated into a hand while a decision is pending give it back at the next answer (`FreepsHasInitiative()` is true after the other player's pass), which sets up a second loss in one turn for the `R` of "each time you lose initiative" (Memories of Darkness 60_2). Assert `FreepsHasInitiative()` true between the cheat and the second loss. In a skirmish, where the only other answers are passes that end it, Sméagol 6_45 ("Skirmish: Discard a card from hand to make Sméagol strength +1"; cheat him in, his play adds a burden) discarding from five cards to four is an answer that keeps initiative, and his discard from four to three, or Ranger of Osgiliath 7_116's "Regroup: Discard 2 cards from hand", is a loss of initiative that is no play (Glimpse of Fate 60_12).
 
-**An event that needs initiative is not counted toward it (F-0464, built by engine pass 28).** A Free Peoples event that says "If you have initiative, ..." wants four cards in hand BESIDE itself (CR 4.2 "playing a card": "not counting The Card"): from a hand of exactly four with itself among them it is not offered, though `FreepsHasInitiative()` reads true there, and from five it is; "If the Shadow has initiative" (So Fair, So Desperate 8_111) is offered from four with itself among them and not from five. Its `-` is the hand of exactly four and its `+` the hand of five (8_111 the other way round); each of the five such events has that lone test in its file. A cost that is smaller with initiative is read the same way, judged and paid: Light the Beacons 7_43 played from exactly four cards exerts Gandalf three times. An initiative the EFFECT asks for is read without the event as before (All Save One 7_31 played from four cards gives the lesser bonus), an ability's is checked before its cost is paid (Madril 7_110 discards from four to two and still wounds), and a card in play counts the whole hand. `mechanics/InitiativeTests`.
+**An event that needs initiative is not counted toward it (F-0464, built by engine pass 28).** A Free Peoples event that says "If you have initiative, ..." wants four cards in hand BESIDE itself (CR 4.2 "playing a card": "not counting The Card"): from a hand of exactly four with itself among them it is not offered, though `FreepsHasInitiative()` reads true there, and from five it is; "If the Shadow has initiative" (So Fair, So Desperate 8_111) is offered from four with itself among them and not from five. Its `-` is the hand of exactly four and its `+` the hand of five (8_111 the other way round); each of the five such events has that lone test in its file. A cost that is smaller with initiative is read the same way, judged and paid: Light the Beacons 7_43 played from exactly four cards exerts Gandalf three times. An initiative the EFFECT asks for is read without the event as before (All Save One 7_31 played from four cards gives the lesser bonus), an ability's is checked before its cost is paid (Madril 7_110 discards from four to two and still wounds), and a card in play counts the whole hand. `mechanics/game/InitiativeTests`.
 
 **A card that discards itself as it is played was not played either.** A card discarded by its own "when you play this ..., or discard it" (the three Dunlendings of set 5, Stampeding Chief) is the same: the Free Peoples player's or the Shadow player's choice in that text is the first thing asked, before any trigger or response to the play, and if the card goes nothing answers its play. Beside the Watcher such a card is discarded first and the choice is not asked at all.
 
@@ -1307,7 +1307,7 @@ No Business; it is now written `revealRandomCardsFromHand` (`forced: true`, `han
 Friends of Old 3_16, His First Serious Check 3_33 and Might of Númenor 3_43 write the same sentence. A
 definition met that gives `revealCardsFromHand` a hand that is not the acting player's is a finding. Before two
 cards that do a barred act are called the same check, read which word each is written with: one printed card of
-each word is stopped under the bar in `mechanics/ABarOnLookingAtOrRevealingAHandTests` (Q-0264: B2). Under the
+each word is stopped under the bar in `mechanics/deck/ABarOnLookingAtOrRevealingAHandTests` (Q-0264: B2). Under the
 bar the action is still offered and its cost paid; nothing is shown, the hand keeps its count, and an X read off
 the card revealed is 0.
 
@@ -1330,7 +1330,7 @@ A look that plays nothing reads one, the definition's own, and is the test that 
 true`. A card played onto a bearer and an event shuffle as they leave even where nobody looked (`showAll: false`);
 a card played to the table or the support area does not (a minion revealed by From Deep in Shadow 12_38, a
 starting fellowship). Read the count as more than before unless the number is the point
-(mechanics/DrawDeckShuffledWhenTheLookIsOverTests).
+(mechanics/deck/DrawDeckShuffledWhenTheLookIsOverTests).
 
 **A "play ... from your draw deck" action with no cost is offered whatever the deck holds, and a look that plays
 nothing is a use.** `PlayCardFromDrawDeck` without `mustExist` (Race Text 92_28, "Fellowship or Shadow: Play an
@@ -1352,7 +1352,7 @@ opening hand is dealt. The bar is read for the player the text has draw or take,
 only for a card of that player's own (Q-0207): his opponent's A New Light 17_15 returns his minion to his hand;
 his opponent's Change of Plans 1_99 has him shuffle his hand in and draw none (Q-0216, kept unless struck).
 Nobody is asked to prevent a draw that is barred, and an optional trigger or a no-cost ability whose whole effect
-is his draw is not offered to him (Q-0262: B). `mechanics/BarOnTakingCardsIntoHandTests`.
+is his draw is not offered to him (Q-0262: B). `mechanics/deck/BarOnTakingCardsIntoHandTests`.
 
 **A card being shown is listed as not selectable.** A real reveal from a deck or from play gives every player,
 the owner included, a "Revealed card(s)" decision to dismiss. A reveal from a HAND (the whole hand, or cards at
@@ -1396,11 +1396,11 @@ nobody is asked for a card, and the deck is shuffled once more with its count un
 
 ## Hinder, The One Ring and Maps
 
-**The Ring-bearer is the rules' to protect, hindered or not.** A discard or a return to hand that reaches hindered cards (`override: hindered`: "a card", "a Free Peoples card") neither offers nor takes a hindered Ring-bearer (CR 4.2 "Ring-bearer"; F-0174), so a definition needs no `not(ring bearer)` there, and with him the only candidate the effect does nothing. The engine's effects refuse him for themselves as well as the definition words' choices do: `DiscardCardsFromPlayEffect` (when it has a source card), and `ReturnCardsToHandEffect` since engine pass 27 (`mechanics/HinderedRingBearerTests`, which aims each at him). What another CARD forbids about cards gives a hindered card nothing: beside Uruk Follower 4_186 a hindered unbound Hobbit is discarded.
+**The Ring-bearer is the rules' to protect, hindered or not.** A discard or a return to hand that reaches hindered cards (`override: hindered`: "a card", "a Free Peoples card") neither offers nor takes a hindered Ring-bearer (CR 4.2 "Ring-bearer"; F-0174), so a definition needs no `not(ring bearer)` there, and with him the only candidate the effect does nothing. The engine's effects refuse him for themselves as well as the definition words' choices do: `DiscardCardsFromPlayEffect` (when it has a source card), and `ReturnCardsToHandEffect` since engine pass 27 (`mechanics/hinder/HinderedRingBearerTests`, which aims each at him). What another CARD forbids about cards gives a hindered card nothing: beside Uruk Follower 4_186 a hindered unbound Hobbit is discarded.
 
-**A guard for a thing no card should be able to do is stapled on, never an invented card** (Ketura, 2026-10-11, Q-0241; mechanics classes only). The manner is in `mechanics/TheOneRingIsNeverDiscardedTests`: once the board is laid, `scn.ApplyAdHocAction(new AbstractActionProxy() {...})` whose `getPhaseActions` gives the one player, in the one phase, an `ActivateCardAction(troop, playerId)` on a card with no text (Goblin Patrol Troop 1_177; Frodo for the Free Peoples side) with the engine's own effect appended, aimed at the cards by the test; then `ShadowUseCardAction(troop)` and the board is read. The filters handed to `DiscardCardsFromPlayEffect` are joined with AND (several cards: `Filters.or(a, b)`), it asks no bar when its source is null, and it and `ReturnCardsToHandEffect` reach hindered cards only with `SpotOverride.INCLUDE_HINDERED`. The line needs its reason (`// lint-ok: ...`).
+**A guard for a thing no card should be able to do is stapled on, never an invented card** (Ketura, 2026-10-11, Q-0241; mechanics classes only). The manner is in `mechanics/ring/TheOneRingIsNeverDiscardedTests`: once the board is laid, `scn.ApplyAdHocAction(new AbstractActionProxy() {...})` whose `getPhaseActions` gives the one player, in the one phase, an `ActivateCardAction(troop, playerId)` on a card with no text (Goblin Patrol Troop 1_177; Frodo for the Free Peoples side) with the engine's own effect appended, aimed at the cards by the test; then `ShadowUseCardAction(troop)` and the board is read. The filters handed to `DiscardCardsFromPlayEffect` are joined with AND (several cards: `Filters.or(a, b)`), it asks no bar when its source is null, and it and `ReturnCardsToHandEffect` reach hindered cards only with `SpotOverride.INCLUDE_HINDERED`. The line needs its reason (`// lint-ok: ...`).
 
-**A hindered card that is shuffled into a draw deck is hindered no longer.** `IsHindered(card)` is false once the card is in the deck, as it is for a card discarded or returned to hand (CR 5.0 "hinder"; `mechanics/HinderedCardLeavingPlayTests`).
+**A hindered card that is shuffled into a draw deck is hindered no longer.** `IsHindered(card)` is false once the card is in the deck, as it is for a card discarded or returned to hand (CR 5.0 "hinder"; `mechanics/hinder/HinderedCardLeavingPlayTests`).
 
 **A hindered card is still borne.** "Bearing 3 or more cards" and "for each card he or she bears" count a
 hindered card; "for each possession" does not. Hinder one of the counted cards with `HinderCard` and read
@@ -1411,7 +1411,7 @@ a hindered bearer is found by no kind and no title (CR 5.0 "hinder"; Q-0108), so
 Hobbit" does not offer the condition on a hindered Hobbit, and it is offered again once he is restored. The
 engine does this for every `attachedTo(<a kind>)`; no definition needs `not(hindered)` for it. What names the
 bearer as a card still finds what he bears: "bearer", a companion the ability has chosen, the Ring-bearer, "each
-attached follower" (`mechanics/BorneByAHinderedBearerTests`). So does a text that only rules a kind of bearer out
+attached follower" (`mechanics/hinder/BorneByAHinderedBearerTests`). So does a text that only rules a kind of bearer out
 (`attachedTo(not(ally))`, Q-0252): Asfaloth 1_31 is discarded underground from a hindered companion as from any
 other, and stays on a hindered ally.
 
@@ -1420,28 +1420,28 @@ other, and stays on a hindered ally.
 the print is not hidden. So a hindered card's own number shows nothing about hinder. Read what the rule changes:
 the choice, spot or count that leaves him out (before, hindered, and again once `RestoreCard` has brought him
 back), or, for a bonus he should have missed, his number after he is restored
-(`mechanics/HinderedCardCannotBeSpottedTests`).
+(`mechanics/hinder/HinderedCardCannotBeSpottedTests`).
 Keywords go the same way for what is printed and not for what was given: `HasKeyword` of a hindered Aragorn
 reads RANGER true (the engine answers from the print before it looks at hinder; a restore may pick a hindered
 card by a printed trait, CR 5.0 "restore") and a defender +1 he gave himself false. Read a hindered card's
 printed keyword by what it does: the archery total for an archer (Legolas 1_50: 1, hindered 0), another card's
-spot (`mechanics/HinderedCardHasNoGameTextTests`). A bonus given "until ..." is back when the card is restored
+spot (`mechanics/hinder/HinderedCardHasNoGameTextTests`). A bonus given "until ..." is back when the card is restored
 before then (as built; Q-0222 asks).
 What a borne card gives is not its hindered bearer's either: Aragorn's Bow 1_90 on a hindered Aragorn reads the
 fellowship archery total 0 (1 again on restoring), and a bonus that a borne card's ability aims at its hindered
 bearer is never laid (Gwemegil 1_47 used by discarding two cards: Arwen reads 6 + 2 once `RestoreCard` has brought
-her back). That is not Q-0222's bonus, which was laid before the hindering (`mechanics/CardsBorneByAHinderedCardTests`).
+her back). That is not Q-0222's bonus, which was laid before the hindering (`mechanics/hinder/CardsBorneByAHinderedCardTests`).
 
 **The One Ring is never discarded.** A discard that could name it (Doom Causeway 103_127, "each time a card is
 hindered, discard it") neither offers nor takes it, hindered or not; hindered there, it stays on its bearer,
-hindered. The engine's discard aimed straight at it leaves it too (`mechanics/TheOneRingIsNeverDiscardedTests`).
+hindered. The engine's discard aimed straight at it leaves it too (`mechanics/ring/TheOneRingIsNeverDiscardedTests`).
 Nor does it go to the discard pile with a Ring-bearer who is killed (Q-0232): it stays in play, in his zone
 (`assertInZone(Zone.FREE_CHARACTERS, ring)`), borne by nobody, while his other cards are discarded; so the discard
 pile counts one fewer than "everything he bore", and `GetAttachedCards` of the dead Ring-bearer is empty. Killed as
 the fellowship character of a skirmish, he leaves it drawn in his place there (`FreepsSeesCardInSkirmish(ring)`),
 fighting nobody (`IsCharSkirmishing(ring)` is false). It lies there while Sam 1_311's response is on offer and is
 taken up from there; with no new Ring-bearer the game ends with it there
-(`mechanics/TheOneRingWhenItsBearerIsKilledTests`). A card's test asserts none of this for itself.
+(`mechanics/ring/TheOneRingWhenItsBearerIsKilledTests`). A card's test asserts none of this for itself.
 
 **No cheat puts The One Ring on: the Ring's own text does, and which Ring decides how.** `GreatRing` (19_1) is
 put on by its own Maneuver action at no cost (`FreepsUseCardAction(scn.GetRing())`, Card_V2_065_Tests) and
@@ -1462,12 +1462,12 @@ given as the string, are put on by a Maneuver action with a cost: Such a Weight 
 The Binding Ring 9_1 for an exertion of its bearer (9_1 prints strength +1 and vitality +1, so Frodo, Son of
 Drogo reads 4 and 5 and a minion of 8 overwhelms him: Card_01_224_Tests gives him Hobbit Sword 1_299). A companion who
 becomes the Ring-bearer is not wearing the Ring though the one who died was: to read that, keep another skirmish
-waiting, since the regroup phase that follows would have taken any Ring off (mechanics/WearingTheOneRingTests,
+waiting, since the regroup phase that follows would have taken any Ring off (mechanics/ring/WearingTheOneRingTests,
 which holds what the rules say of a Ring worn; what a Ring does while worn is its own file's).
 
 **Maps and meta-sites cannot be hindered,** as sites cannot: a hinder of "a card" on a PC-Movie or Race to
 Mount Doom table does not offer them, and the engine's hinder aimed straight at them leaves them
-(`mechanics/MapsAndMetaSitesCannotBeHinderedTests`). The cheat `HinderCard` hinders whatever it is given and asks
+(`mechanics/hinder/MapsAndMetaSitesCannotBeHinderedTests`). The cheat `HinderCard` hinders whatever it is given and asks
 no rule.
 
 **A fellowship with no unhindered companion is not asked to move again (F-0315).** CR 5.0 "hinder": "During
@@ -1479,7 +1479,7 @@ again.", and its player reconciles (which restores them). A card that makes the 
 alone fails; for a second move with a hindered Ring-bearer, cheat in a plain companion who stays unhindered
 (Dwarf Guard 1_7) and count 1 for him in the move's twilight and nothing for the hindered one (92_25). The move
 of the fellowship phase is no choice and is made whoever is hindered
-(`mechanics/NoUnhinderedCompanionNoRegroupMoveTests`).
+(`mechanics/hinder/NoUnhinderedCompanionNoRegroupMoveTests`).
 
 ## Tables and formats
 
@@ -1522,7 +1522,7 @@ the table is refused when it is built, saying so (`virtualtable/FirstSiteTests`)
 On an unordered path the constructor rests on the first player's "Choose site to play" with all nine offered
 (`FreepsGetBPChoiceCount()`), the Shadow player's choice at each move is among the sites left in his deck, his
 copy of a site already laid included, and the move adds 3 more twilight for a site in region 2 and 6 in region
-3; a numbered path adds none in any of the three Movie block formats (`mechanics/PlayingSitesTests`, which also
+3; a numbered path adds none in any of the three Movie block formats (`mechanics/sites/PlayingSitesTests`, which also
 has the next site played by a card, a site replaced on each kind of path, and no site 10).
 `StartGame(site)` with a site named gets past the first question, but the path is still unordered: every move
 asks the Shadow player to lay a site, and `SkipToSite` halts in the fellowship phase.
@@ -1618,7 +1618,7 @@ first printed, which the PC formats refuse for its errata. `hasMapError(errors)`
 named and the valid ones are not.
 `getErrorLines(errors)` returns every line of every objection, one to an entry and in alphabetical order (the
 sites' objections come as one entry of several lines, in whatever order the deck holds its sites): set it beside
-`List.of(...)` of the objections expected (`mechanics/SitesFromAnyBlockTests`).
+`List.of(...)` of the objections expected (`mechanics/sites/SitesFromAnyBlockTests`).
 A Race to Mount Doom modifier of deck building is tied to validation by its own overrides:
 `dvs.validate(deck, VirtualTableScenario.FindCard("92_1").getDeckBuildingOverrides())`, which is what
 `LeagueService.buildDeckValidationContext` merges for the player who has it. A context built by hand with the
@@ -1626,7 +1626,7 @@ number from the text (`new DeckValidationContext().setMaximumSameNameOverride(6)
 card: a wrong number in the definition passes it (the old tests of 92_1, 92_19 and 94_22, all since rewritten).
 `getDeckBuildingOverrides()` hands back the blueprint's own object, the same one to every test of the run: a test
 of the league's merge calls `merge` on a `new DeckValidationContext()` with the card's overrides as the argument,
-never on the card's overrides (`mechanics/DeckBuildingOverridesMergeTests`, 94_22's two merge tests until engine
+never on the card's overrides (`mechanics/game/DeckBuildingOverridesMergeTests`, 94_22's two merge tests until engine
 pass 24). Whose deck the overrides bind ("Your draw deck ...") is the league's choice
 of player and nothing in the definition: no card test can show it, the `-` for the other player is the same deck
 validated with no context, and the ledger's Notes say so.
@@ -1642,7 +1642,7 @@ number is the most ("Deck contains 6 sites with twilight number of 0.", in Expan
 11_231 and 11_250 at sites 6 to 8. Slopes of Amon Hen 1_361, like Ettenmoors 1_331, is refused as first printed
 in PC Movie (its errata has seven sites: 1_331, 1_333, 1_361, 3_120, 4_355, 7_332, 7_359). Under 92_19's override
 (`skipSiteBlockValidation`) a site is let off the format's block, its sets and the Map, and is still held to the
-format's X-list and errata (Q-0185: A; `mechanics/SitesFromAnyBlockTests`): a mixed deck read as wholly legal
+format's X-list and errata (Q-0185: A; `mechanics/sites/SitesFromAnyBlockTests`): a mixed deck read as wholly legal
 with the override wants Bree Gate 1_327 or Ettenmoors 51_331 at 2, and in Multipath no Emyn Muil 1_360 at 9.
 The override opens the Fellowship, Towers, King and Shadows blocks and no other (Q-0219: B): a Hobbit site (sets 30
 to 33) under it draws "Site does not use supported block: <site>" in every format that does not play the Hobbit
@@ -1664,13 +1664,13 @@ each site as validation does (`LotroFormat.validateSite(id, context)`), and is t
 
 - **A burden that cannot be added.** No printed card stops a burden being added. A card's own test of one hinders the Ring-bearer (`HinderCard`): while he is hindered the rules put the modifier on (`HinderedRule`; test-generation, "anything before "to"").
 
-- **Who heals.** A heal is asked about with the player who makes it: a `CantHeal` with `player` stops that player's heals alone (Race Text 92_35, the one card that names one), one without stops everybody's (Steward's Tomb 10_119; mechanics/HealBarThatNamesAPlayerTests), and a heal that is barred as an effect is still offered and heals nothing (Scaling Ladder 5_57 is used and discarded), while one barred as a cost is not offered (Hrethel 6_95).
+- **Who heals.** A heal is asked about with the player who makes it: a `CantHeal` with `player` stops that player's heals alone (Race Text 92_35, the one card that names one), one without stops everybody's (Steward's Tomb 10_119; mechanics/wounds/HealBarThatNamesAPlayerTests), and a heal that is barred as an effect is still offered and heals nothing (Scaling Ladder 5_57 is used and discarded), while one barred as a cost is not offered (Hrethel 6_95).
 
 - **A card that names something as it is played has stored nothing when it is cheated into play**: its filter on the stored value matches nobody, a `{stored}` in its texts reads "nothing" and `GetDisplayableInformation` returns the definition's line with `{stored}` still in it, so a test of such a card plays it (Ulaire Nertea 69_38).
 
 - **`transferableTo(<filter>)`** asks what a `Transfer` with `checkTarget: true` would then find, and moves nothing: a possession on Warrior of Rohan 17_104 is never accepted; a bearer who has an item of its class, whom another card keeps from bearing it, or who is hindered is no place for it (Race Text 94_4's own tests, F-0324; Gamling 18_99 is the other card with the word).
 
-- **A player's account name.** A table seats a player under a chosen name with the last two arguments of the `VirtualTableScenario` constructor that takes league placements (G-0039; virtualtable/NamedSeatTests); every other table's players are "Free Peoples Player" and "Shadow Player", who meet no card's list. A card whose definition lists real accounts (Race Text 94_5, the one card with `PlayerIs`) is not tested by those names (Q-0190: B), the name check itself is tested once, card-agnostic, in mechanics/PlayerIsRequirementTests: the requirement built from definition text written in the test and asked directly at a named table, the one exception to "no definition text made up for a test" (Q-0271: C).
+- **A player's account name.** A table seats a player under a chosen name with the last two arguments of the `VirtualTableScenario` constructor that takes league placements (G-0039; virtualtable/NamedSeatTests); every other table's players are "Free Peoples Player" and "Shadow Player", who meet no card's list. A card whose definition lists real accounts (Race Text 94_5, the one card with `PlayerIs`) is not tested by those names (Q-0190: B), the name check itself is tested once, card-agnostic, in mechanics/actions/PlayerIsRequirementTests: the requirement built from definition text written in the test and asked directly at a named table, the one exception to "no definition text made up for a test" (Q-0271: C).
 
 - **A search of another player's draw deck** writes `shuffle: false` and a `ShuffleDeck` of the deck named, as the Gronds do (18_82, 68_82; shapes, "A search of another player's draw deck"). `shuffle: true` beside a `deck:` that names the other player shuffles the deck named as well (F-0369), and no printed card writes it.
 
@@ -1695,4 +1695,4 @@ For a card the fixed pack does not hold, `scn.UseBoosterOf("1_197", "1_177")` in
 of the Unknown 1_197 ("Exert your [moria] Orc to draw 2 cards") draws 2 with no Orc exerted and with none on the
 table. A cost the text reads back is still carried out: The Eye of Sauron 2_87 exerts no Orc and still asks "how
 many burdens to spot", and All Life Flees 18_132 still removes its (X) (Q-0201, open). A card the event then
-plays (Foul Things, We Must Have It) is paid for as ever. mechanics/IgnoringAllCostsTests.
+plays (Foul Things, We Must Have It) is paid for as ever. mechanics/costs/IgnoringAllCostsTests.
