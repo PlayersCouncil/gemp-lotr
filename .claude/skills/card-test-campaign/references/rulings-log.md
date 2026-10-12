@@ -521,6 +521,11 @@ convinced about B; on a previous instance we did an extensive rerun trial with S
 straight miss several errors, tho Opus also didn't re-find all the same errors either, which made downgrading a bit
 of a tradeoff." *[2026-10-12]*
 
+**The trial batch, and the gap taken out (2026-10-12, thirteenth notes).** After dec-b1_349 (card-worker agents:
+3.6M cache-read and 5.8 minutes a card, against 6.05M and 12.5): "if it's that big a tokens savings, let's remove the
+gap and go ahead and go with a 2 pipeline setup." (The next batch is launched before the last is closed;
+`<work>/pipelines` is 2.) *[2026-10-12]*
+
 **Every landed card approved; mechanics sorted by subject (2026-10-12, tenth notes).** "Go ahead and mark all current
 card tests as approved." (633 cards from ready to approved; the 2 parked stay parked.) "Let's sort the mechanics test
 folder into subfolders. Something like: keywords, hinder, choices, actions, skirmishes, as well as as many others as

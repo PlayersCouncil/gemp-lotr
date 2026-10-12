@@ -43,7 +43,14 @@ yours. Everything below follows from that, and from a machine of 8 GB and two pr
 
 ## A landing
 
-The turn a pipeline's notification starts. `scripts/orchestrator/close.py` has the routine in its header:
+The turn a pipeline's notification starts. `scripts/orchestrator/close.py` has the routine in its header.
+
+No gap between batches (Ketura, 2026-10-12, after the trial batch: "if it's that big a tokens savings, let's remove
+the gap and go ahead and go with a 2 pipeline setup"): when a MAIN-TREE batch ends, launch the next one FIRST, in the
+same step as nothing else, with the arguments `close.py --now`'s Next block prints, then do the landing below for the
+batch that ended (its lander has already committed; close.py only makes the bundle, the state and the tracker). A
+batch that ended in the SECOND tree is closed first (it has to be brought onto the branch). Never launch from a turn
+that carries a message of hers, as ever.
 
 1. `timeout 600 python3 .../close.py <folder>`: brings a second-tree batch onto the branch, makes the bundle, commits the state in its own repository with a bundle of it (`state.bundle`) and the tracker, renews the second tree if it is free, and prints what to
    carry, what to run on her machine and what to launch next, with its arguments.
