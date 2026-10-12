@@ -65,6 +65,11 @@ Decipher original (or another card) and the finding holds there too, correct tha
 prints its number. Kinds: `hjson-typo`, `hjson-logic`, `gametext`, `engine`, `rig`, `test`, `sheet`, `ruling`,
 `data`. The summary is one or two sentences: the card's words, what the game did, what it does now.
 
+In the same step, write the finding's patch-note row (Ketura on Q-0288, 2026-10-12: "that way the agent review
+happens as we go"): `patchnotes.py add <F-number> --visible y|n ...`, as `references/patch-notes.md` says. Do the
+same for a finding you set `fixed` later in the landing. A row the script refuses is not written: mend it and add
+it again.
+
 **A fault no definition can mend** (the engine or the rig is wrong). Leave the test parked, record the finding as
 `confirmed`, and say in its summary what the engine would have to do. The card lands parked.
 

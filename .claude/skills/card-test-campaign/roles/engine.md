@@ -67,6 +67,8 @@ and keep the output of builds and test runs to its last lines (`| tail -30`).
    changed, in a sentence, and which cards' tests went live>"` (Ketura has already said these are faults). For
    each rig request: in `rig-requests.md`, move its entry from `## Open` to the top of `## Done`, with the heading
    ending in what was built and the date in place of `open`, and one line on which test now uses it.
+   For each finding you set `fixed` or `fixed-approved`, write its patch-note row (`patchnotes.py add`, as
+   `references/patch-notes.md` says); for one you reopen or revert, rewrite it.
 8. **Commit, then mark the cards.** One commit for the item, naming every path you changed (engine, definitions,
    tests, documents):
 
