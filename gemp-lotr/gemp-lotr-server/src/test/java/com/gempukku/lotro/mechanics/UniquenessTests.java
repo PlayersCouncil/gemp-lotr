@@ -26,7 +26,8 @@ import static org.junit.Assert.*;
  *
  * Comprehensive Rules 5.0, "non-unique": "All cards that do not have a single dot before their card title are
  * non-unique.  This means that all players may have multiple copies of those cards in play at one time.  If a card
- * has 2 dots it is restricted to 2 copies in play".
+ * has 2 dots it is restricted to 2 copies in play".  Three dots are three copies (War-beacon 103_35, Ominous Sky
+ * 103_97).
  *
  * Comprehensive Rules 5.0, "hinder": "If a hindered card is unique, you cannot play another copy of that card with
  * the same title.  ...  If you have a hindered Aragorn, and play a second Aragorn, this would be an inconsistent
@@ -73,6 +74,20 @@ public class UniquenessTests
 					put("fury1", "103_39");     // Savage Fury: two dots; a Shadow condition for the support area, cost 1
 					put("fury2", "103_39");
 					put("fury3", "103_39");
+
+					// War-beacon: three dots; a Free Peoples possession for the support area, cost 1.  "To play, spot an
+					// unbound Man."  Its two fellowship abilities are never used.
+					put("beacon1", "103_35");
+					put("beacon2", "103_35");
+					put("beacon3", "103_35");
+					put("beacon4", "103_35");
+					// Ominous Sky: three dots; a Shadow condition for the support area, cost 2.  It answers an Orc or a
+					// Troll played (there is none), and its Shadow ability is never used.  These are the only two
+					// cards printed with three dots.
+					put("sky1", "103_97");
+					put("sky2", "103_97");
+					put("sky3", "103_97");
+					put("sky4", "103_97");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -373,6 +388,64 @@ public class UniquenessTests
 		// title, read without its accents, that withholds the other.
 		assertFalse(scn.ShadowPlayAvailable(thrall));
 		assertTrue(scn.ShadowPlayAvailable(attea));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void ACardWithThreeDotsMayHaveThreeCopiesInPlayAndNoFourth() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn1");
+		var beacon1 = scn.GetFreepsCard("beacon1");
+		var beacon2 = scn.GetFreepsCard("beacon2");
+		var beacon3 = scn.GetFreepsCard("beacon3");
+		var beacon4 = scn.GetFreepsCard("beacon4");
+		var sky1 = scn.GetShadowCard("sky1");
+		var sky2 = scn.GetShadowCard("sky2");
+		var sky3 = scn.GetShadowCard("sky3");
+		var sky4 = scn.GetShadowCard("sky4");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToHand(beacon1, beacon2, beacon3, beacon4);
+		scn.MoveCardsToHand(sky1, sky2, sky3, sky4);
+
+		scn.StartGame();
+
+		// A Free Peoples card.  Aragorn is the unbound Man its text needs.
+		scn.FreepsPlayCard(beacon1);
+		scn.FreepsPlayCard(beacon2);
+		assertTrue(scn.FreepsPlayAvailable(beacon3));
+		assertTrue(scn.FreepsPlayAvailable(beacon4));
+		scn.FreepsPlayCard(beacon3);
+
+		assertInZone(Zone.SUPPORT, beacon1, beacon2, beacon3);
+		assertEquals(3, scn.GetTwilight());
+		assertFalse(scn.FreepsPlayAvailable(beacon4));
+		assertInZone(Zone.HAND, beacon4);
+
+		scn.MoveCardsToDiscard(beacon1);
+		scn.FreepsRefreshDecision();
+		assertTrue(scn.FreepsPlayAvailable(beacon4));
+
+		// A Shadow card.  3, 2 for the Shadow number of site 2 and 1 for each of the two companions, and 4 more,
+		// so that the pool would pay for the fourth.
+		scn.SetTwilight(7);
+		scn.FreepsPass();
+		assertEquals(11, scn.GetTwilight());
+
+		scn.ShadowPlayCard(sky1);
+		scn.ShadowPlayCard(sky2);
+		assertTrue(scn.ShadowPlayAvailable(sky3));
+		assertTrue(scn.ShadowPlayAvailable(sky4));
+		scn.ShadowPlayCard(sky3);
+
+		assertInZone(Zone.SUPPORT, sky1, sky2, sky3);
+		assertEquals(5, scn.GetTwilight());
+		assertFalse(scn.ShadowPlayAvailable(sky4));
+		assertInZone(Zone.HAND, sky4);
+
+		scn.MoveCardsToDiscard(sky1);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.ShadowPlayAvailable(sky4));
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

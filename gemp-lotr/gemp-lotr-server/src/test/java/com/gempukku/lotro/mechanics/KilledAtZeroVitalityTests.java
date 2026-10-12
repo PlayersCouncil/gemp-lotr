@@ -4,6 +4,7 @@ import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -22,6 +23,9 @@ import static org.junit.Assert.*;
  *
  * The vitality that the wounds deplete is the character's with every bonus counted, not the number printed on him.
  * Boromir, Lord of Gondor 1_96 has vitality 3; The Saga of Elendil 1_114 gives its bearer vitality +1.
+ *
+ * "Killed": "Place killed Free Peoples characters (companions and allies) in your dead pile.  ...  Place killed
+ * minions in your discard pile."  A killed character that a card's text answers is in KilledIsNotDiscardedTests.
  */
 public class KilledAtZeroVitalityTests
 {
@@ -37,6 +41,17 @@ public class KilledAtZeroVitalityTests
 					put("saga", "1_114");
 					put("assassin", "1_131");   // Orthanc Assassin: "Archer. Damage +1." is its whole text
 					put("troop", "1_177");      // Goblin Patrol Troop: strength 13, no text at all
+
+					// For where the killed go.  Gondorian Knight 5_35: companion, strength 6, vitality 3, "Knight."
+					// Erland, Advisor to Brand 2_21: ally, home site 3 of the Fellowship path, strength 5, vitality
+					// 2; "Shadow players may not look at or reveal cards in your hand."  Household Guard 5_83:
+					// companion, strength 6, vitality 3, "Valiant."
+					put("knight", "5_35");
+					put("erland", "2_21");
+					put("guard", "5_83");
+					put("brigand", "4_10");     // Dunlending Brigand: strength 8, vitality 1, no text at all
+					put("soldier", "7_199");    // Morgul Soldier: strength 6, vitality 2; "Nazgul are strength +1."
+					put("grima", "4_154");      // Gríma, Wormtongue: strength 4, vitality 3; a maneuver ability, never used
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -149,6 +164,57 @@ public class KilledAtZeroVitalityTests
 		// He is killed at once, before the skirmish is resolved: the Troop has nobody left to fight, and the game
 		// has gone on to the regroup phase.
 		assertEquals(0, scn.GetWoundsOn(troop));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void AKilledCompanionOrAllyGoesToTheDeadPileAndAKilledMinionToTheDiscardPile() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var knight = scn.GetFreepsCard("knight");
+		var erland = scn.GetFreepsCard("erland");
+		var guard = scn.GetFreepsCard("guard");
+		scn.MoveCompanionsToTable(knight, guard);
+		scn.MoveAlliesToTable(erland);
+
+		var brigand = scn.GetShadowCard("brigand");
+		var soldier = scn.GetShadowCard("soldier");
+		var grima = scn.GetShadowCard("grima");
+
+		scn.StartGame();
+		scn.SkipToSite(2);
+		scn.MoveMinionsToTable(brigand, soldier, grima);
+		scn.AddWoundsToChar(knight, 2);
+		scn.AddWoundsToChar(erland, 1);
+		scn.AddWoundsToChar(grima, 2);
+
+		// The move takes the fellowship to site 3, Erland's home, where he skirmishes.
+		scn.SkipToAssignments();
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertEquals(0, scn.GetFreepsDeadCount());
+		assertEquals(0, scn.GetShadowDiscardCount());
+
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{knight, brigand}, new PhysicalCardImpl[]{erland, soldier},
+				new PhysicalCardImpl[]{guard, grima});
+
+		// The Brigand, 8, beats the Knight, 6, with one vitality left: a companion.
+		scn.FreepsResolveSkirmish(knight);
+		scn.PassSkirmishActions();
+		assertInZone(Zone.DEAD, knight);
+
+		// The Soldier, 6, beats Erland, 5, with one vitality left: an ally.
+		scn.FreepsResolveSkirmish(erland);
+		scn.PassSkirmishActions();
+		assertInZone(Zone.DEAD, erland);
+
+		// The Guard, 6, beats Gríma, 4, with one vitality left: a minion.
+		scn.FreepsResolveSkirmish(guard);
+		scn.PassSkirmishActions();
+		assertInZone(Zone.DISCARD, grima);
+
+		assertEquals(2, scn.GetFreepsDeadCount());
+		assertEquals(1, scn.GetShadowDiscardCount());
+		assertEquals(0, scn.GetFreepsDiscardCount());
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }
