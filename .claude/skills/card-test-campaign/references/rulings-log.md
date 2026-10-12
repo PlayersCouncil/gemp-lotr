@@ -513,6 +513,14 @@ engine.md step 9). Also: deployment is "days or possibly months" off ("I just wa
 after the engine pieces the campaign moves to a new instance; the usage window "hasn't come into play for a very
 long time", and three pipelines may come "but not with this instance". *[2026-10-12]*
 
+**Making the 3K faster (Q-0296, 2026-10-12).** Of the slim-down's four changes (`orchestrator/trials/slimdown.md`):
+card agents carry only the tools they use, a cap on what agents read in full at the start, and the lander's first
+gate run dropped are adopted; the gap between batches stays: "I wouldn't eliminate the gap; that one I think is
+likely more responsible for the solid stability than any other." The author stays at high effort: "I'm also not
+convinced about B; on a previous instance we did an extensive rerun trial with Sonnet vs Opus and Sonnet did in fact
+straight miss several errors, tho Opus also didn't re-find all the same errors either, which made downgrading a bit
+of a tradeoff." *[2026-10-12]*
+
 ## Sources, sheets, revisions and errata
 
 **2026-10-04. Comprehensive Rules 4.2** should contain all the official rulings.
