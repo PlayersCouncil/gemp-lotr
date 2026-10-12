@@ -696,7 +696,9 @@ one wanted in a deck then is put there with `MoveCardsToTopOfDeck` (Card_11_235_
 `SkipToSite(n)` rests in the fellowship phase at site n, and `SkipToMovementDecision()` after it has made that
 turn's move: the fellowship is at n + 1, and the regroup move then leaves site n + 1 and not n. Read
 `GetCurrentSiteNumber()` on each side of the move (two old 94_25 tests named the site one too low in their
-comments, and one of them was the move from site 6 into region 3 without saying so).
+comments, and one of them was the move from site 6 into region 3 without saying so). So does `SkipToPhase` to any
+phase after the fellowship phase: a site's text in its own turn's maneuver, archery or skirmish phase wants
+`SkipToSite(n - 1)` and then the skip (Card_01_354_Tests).
 
 **A reconcile on the way discards from the front of the hand.** A player over the hand size at a reconcile on the way discards down to it from the front of his hand, however many cards that is (`PassReconcile(player)`, which every turn-skipper uses), so a test may put any number of cards in a hand before skipping. A test that reaches "Choose cards to discard down to 8" by its own passes answers it in one go: `scn.PassReconcile(scn.P1())`, or `FreepsChooseCards(...)` with exactly `FreepsGetChoiceMin()` cards.
 
@@ -818,7 +820,9 @@ is his site, not the one player 1's fellowship reached. One player's marker, who
 text compares the two markers ("ahead on the adventure path", CR 4.2 "ahead"), read both at each step
 (Card_13_003_Tests). The card on the path is the copy of whoever laid it: from site 2 on, on
 player 1's first turn, the Shadow player's. `GetCurrentSite()` and `GetSite(n)` return that card and
-`GetFreepsSite(n)` a different one, so compare with `GetSite(n)` or by blueprint.
+`GetFreepsSite(n)` a different one, so compare with `GetSite(n)` or by blueprint. It also gives a site's
+trigger on "the fellowship" a board that tells the mover from the site's owner: read both players' burdens
+(Card_03_116_Tests).
 `GetSite(n)` is null for a site not yet laid (site 6 on turn 1), and `HasKeyword(null, ...)` then throws: read a
 site's terrain off the path only once the fellowship has been there.
 
