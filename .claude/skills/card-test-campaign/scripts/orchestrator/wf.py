@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """wf.py status            where each tracked batch workflow has got to
    wf.py show <folder>     everything its agents reported
-   wf.py track <folder> <run id> [<a,b,c> [repo|cards]]   (close.py --launched does this)"""
+   wf.py track <folder> <run id> [<a,b,c> [repo|cards]]   (close.py --launched does this)
+   wf.py at-work [cards|repo]  the tracked runs that may still be at work in that tree (integrate.sh asks it)"""
 import json, sys
 from pathlib import Path
 def _workflows_dir():
@@ -13,7 +14,7 @@ def _workflows_dir():
     found = sorted(glob.glob("/root/.claude/projects/*/*/subagents/workflows"), key=os.path.getmtime)
     return Path(found[-1]) if found else Path("/root/.claude/projects/none")
 BASE = _workflows_dir()
-TRACK = Path("/home/claude/work/workflows.json")
+TRACK = Path(__import__("os").environ.get("GEMP_WORK", "/home/claude/work")) / "workflows.json"   # as close.py finds it
 tracked = json.loads(TRACK.read_text()) if TRACK.exists() else {}
 
 def load(run):
@@ -86,6 +87,18 @@ elif cmd == "status":
     for folder, t in tracked.items():
         if t.get("landed"): continue
         print(folder, t["run"], progress(folder, t)[0])
+elif cmd == "at-work":
+    # For integrate.sh: the runs tracked in that tree ("repo" or "cards") that may still have an agent at work in
+    # it, one a line.  A clean tree is no sign of an idle one (an author still reading has changed nothing), so only
+    # a run whose journal says it has landed, finished or died is left out; one not marked landed whose journal
+    # cannot be read is counted as at work.
+    want = sys.argv[2] if len(sys.argv) > 2 else "cards"
+    for folder, t in tracked.items():
+        if t.get("landed") or (t.get("tree") or ("repo" if folder.startswith("engine-pass") else "cards")) != want:
+            continue
+        st = progress(folder, t)[0]
+        if not st.startswith(("LANDED", "finished", "FAILED", "stopped")):
+            print(folder)
 elif cmd == "running":
     # For the tracker: every run not yet landed, as JSON.
     out = []

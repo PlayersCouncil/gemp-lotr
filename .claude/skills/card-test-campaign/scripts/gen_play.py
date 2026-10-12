@@ -34,7 +34,8 @@ It leaves to the author, saying which:
   - a requirement or an extra cost to play ("To play, spot ...", "To play, exert ..."): the ToPlay or ExtraCost
     clause's test plays it;
   - a cost that is no plain number, or that the card's own text changes or speaks of ("twilight cost", a
-    discount, "roaming"), and toil;
+    discount, "roaming"), and toil.  A twilight cost the text plainly gives ANOTHER card ("play an [uruk-hai]
+    hunter at twilight cost -2", "that minion's twilight cost", "with a twilight cost of X") is not its own;
   - a text that says when or whether the card may be played, or that acts from the hand;
   - a card that answers its own play or its being in play (a "played", "enters play" or continuously checked
     trigger or response, "about to add twilight"): the test of that clause has an offer or a result to read.
@@ -100,6 +101,71 @@ TEXT_GUARDS = [
 ]
 SUPPORT_SENTENCE = re.compile(r"\bplays to your support area\b", re.I)
 
+# What a sentence does to a card that a later "its", "his" or "it is" may stand for: the last of these before the
+# pronoun, in its sentence or the one before, names the card the pronoun means.
+_PRONOUN_ANTECEDENT = re.compile(r"\b(?:play|plays|played|spot|reveal|reveals|revealed|choose|discard|stack)\s+(?!to\b|from\b)(\S+)", re.I)
+
+
+def _own_or_not(text: str, title: str) -> list:
+    """Each place a game text speaks of a twilight cost, and whether that cost can be the card's OWN as it is played
+    from hand: [(the words, "own" or "other")].  "Other" only where the words plainly give the cost to another card
+    ("play an [uruk-hai] hunter at twilight cost -2", "that minion's twilight cost", "Elladan is twilight cost -2"
+    on Elrohir, "a card with a twilight cost of X", "its twilight cost" after "play a [dunland] Man"); anything else
+    is taken to be the card's own (the cautious reading: the card is left to its author).  A standing text such as
+    "each [moria] Orc's twilight cost is +2" is another card's even on a [moria] Orc: it is in force only while the
+    card is in play.  The card's own cost is the definition's `modifyOwnCost` or `discount`, which are read first."""
+    folded, own_title = _fold(text), _fold(title)
+    out = []
+
+    def names_self(phrase: str) -> bool:
+        phrase = phrase.strip(" ,:(")
+        return bool(re.search(r"\bthis\b", phrase)) or (bool(own_title) and phrase.endswith(own_title))
+
+    def pronoun(before_all: str) -> str:
+        """For "its"/"his"/"it is": "other" where the last thing played, spotted, revealed, chosen, discarded or
+        stacked before it, in its sentence or the one before, is not the card itself, and its own sentence does not
+        name the card ("When this is in your starting fellowship and you can spot an unbound [gondor] companion
+        ..., his twilight cost is -2" is Ranger of the White Tree 17_33's own)."""
+        recent = re.split(r"[.;!?]", before_all)
+        if names_self(recent[-1]) or re.search(r"\bthis\b", recent[-1]) or (own_title and own_title in recent[-1]):
+            return "own"
+        recent = " ".join(recent[-2:])
+        found = list(_PRONOUN_ANTECEDENT.finditer(recent))
+        if not found:
+            return "own"
+        rest = recent[found[-1].start(1):]
+        return "own" if re.match(r"this\b", rest) or (own_title and rest.startswith(own_title)) else "other"
+
+    for m in re.finditer(r"\btwilight cost\b", folded):
+        start = max(folded.rfind(c, 0, m.start()) for c in ".;!?") + 1
+        before = folded[start:m.start()]
+        clause = re.split(r"[,:(]", before)[-1]          # the words of its own clause, after the last comma or colon
+        after = folded[m.end():m.end() + 60]
+        words = (before + "twilight cost" + after).strip()
+        if re.search(r"\b(?:with|without|has|have|having)\s+(?:a|an|the|no)?\s*(?:[\w\[\]-]+\s+){0,3}$", before) or re.search(r"\bat\s+$", before):
+            out.append((words, "other"))                 # a filter on another card, or "play X at twilight cost -2"
+        elif re.match(r"\s+of\s+", after):
+            target = re.sub(r"^\s+of\s+", "", after)
+            out.append((words, "own" if target.startswith("this") or (own_title and target.startswith(own_title)) else "other"))
+        elif re.search(r"\b(?:its|his|her|his or her)\s+$", before):
+            out.append((words, pronoun(folded[:m.start()])))
+        elif re.search(r"'s\s+$", clause):
+            out.append((words, "own" if names_self(re.sub(r"'s\s+$", "", clause)) else "other"))
+        elif re.search(r"\b(?:is|are)\s+$", clause):
+            subject = re.sub(r"\b(?:is|are)\s+$", "", clause).strip()
+            if subject in ("it", "he", "she", "he or she"):
+                out.append((words, pronoun(folded[:m.start()])))
+            else:
+                out.append((words, "own" if names_self(subject) else "other"))
+        else:
+            out.append((words, "own"))
+    return out
+
+
+def speaks_of_own_cost(text: str, title: str) -> bool:
+    """The `cost` text guard: whether the text speaks of a twilight cost that may be the card's own."""
+    return any(kind == "own" for _, kind in _own_or_not(text, title))
+
 WORDS = ["Nothing", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve",
          "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen", "Twenty"]
 STOP = {"the", "of", "a", "an", "and", "in", "to", "for", "is", "at", "on", "by", "with", "from", "his", "her", "my",
@@ -111,7 +177,8 @@ JAVA_WORDS = {"abstract", "assert", "boolean", "break", "byte", "case", "catch",
               "protected", "public", "return", "short", "static", "super", "switch", "this", "throw", "throws",
               "transient", "try", "var", "void", "volatile", "while", "true", "false", "null", "scn", "twilight"}
 
-SCENARIO_HEAD = re.compile(r"^\t(?:public|protected)\s+VirtualTableScenario\s+GetScenario\s*\(\s*\)")
+# A class's members are indented by one tab, or in some older files by four spaces.
+SCENARIO_HEAD = re.compile(r"^(\t| {4})(?:public|protected)\s+VirtualTableScenario\s+GetScenario\s*\(\s*\)")
 SKELETON_NOTE = "Uncomment any @Test markers"
 
 
@@ -317,6 +384,8 @@ class Card:
                         "plays it, reads what is then asked or done, and claims P1" % (kind, ", ".join(loud)))
         for kind, pattern, reason in TEXT_GUARDS:
             if kind not in kinds and re.search(pattern, self.text, re.I):
+                if kind == "cost" and not speaks_of_own_cost(self.text, self.title):
+                    continue                           # every twilight cost it speaks of is another card's
                 say(reason, kind)
         if self.type in ("condition", "possession", "artifact") and "target" not in parsed:
             if not any(k.replace("_", " ").startswith("support area") for k in _keywords(parsed)):
@@ -394,8 +463,13 @@ class TestFile:
         self.lines, self.eol = _read(self.path)
         start = next((i for i, line in enumerate(self.lines) if SCENARIO_HEAD.match(line)), None)
         if start is None:
-            raise Left(["its test file has no GetScenario() method to take a table from"])
-        end = next(i for i in range(start, len(self.lines)) if self.lines[i].rstrip() == "\t}")
+            raise Left(["its test file has no GetScenario() in a form it can read (`public` or `protected "
+                        "VirtualTableScenario GetScenario()`, with no parameters, indented by a tab or four spaces)"])
+        self.indent = SCENARIO_HEAD.match(self.lines[start]).group(1)
+        end = next((i for i in range(start, len(self.lines)) if self.lines[i].rstrip() == self.indent + "}"), None)
+        if end is None:
+            raise Left(["its test file has no GetScenario() in a form it can read (no closing brace at the method's "
+                        "own indentation)"])
         body = _without_comments("\n".join(self.lines[start:end + 1]))
         self.aliases = set(re.findall(r'put\(\s*"([^"]+)"', body))
         self.alias = next((a for a, b in re.findall(r'put\(\s*"([^"]+)"\s*,\s*"(\d+_\d+)"\s*\)', body) if b == card.id), None)
@@ -558,8 +632,22 @@ def test_method(card: Card, alias: str) -> str:
     return "\n".join(out)
 
 
-def ledger_lines(card: Card) -> list:
-    return ["P1 Play       [+]          " + clause_text(card), "     +  ->  " + test_name(card)]
+CLAUSE_LINE = re.compile(r"^([A-Z]\d+\s+[A-Za-z]+\s+)(\[[^\]]*\]\s+)\S")
+
+
+def ledger_lines(card: Card, ledger=None) -> list:
+    """P1's line and its claim, laid out as the ledger's other clause lines are (where the checks' bracket and the
+    clause's text begin, the columns most of them use), or as before where it has none."""
+    import collections
+    columns = collections.Counter()
+    for line in ledger or []:
+        m = CLAUSE_LINE.match(line)
+        if m and not line.startswith("P1 "):
+            columns[(len(m.group(1)), len(m.group(1)) + len(m.group(2)))] += 1
+    bracket, text = columns.most_common(1)[0][0] if columns else (14, 27)
+    head = "P1 Play".ljust(bracket - 1) + " "
+    head = head + "[+]".ljust(max(text - len(head), 4))
+    return [head + clause_text(card), "     +  ->  " + test_name(card)]
 
 
 def generate(card_id: str, alias=None):
@@ -585,15 +673,16 @@ def generate(card_id: str, alias=None):
 # Writing: the test into the file, the clause and its claim into the ledger
 # ----------------------------------------------------------------------------------------------------------------
 
-def _method_span(lines, name):
+def _method_span(lines, name, indent="\t"):
     """(first line, last line) of the method of that name with the annotations and comments that stand on it, or None."""
-    at = next((i for i, line in enumerate(lines) if re.match(r"^\t(?://\s*)?public void %s\s*\(" % re.escape(name), line)), None)
+    i_ = re.escape(indent)
+    at = next((i for i, line in enumerate(lines) if re.match(r"^%s(?://\s*)?public void %s\s*\(" % (i_, re.escape(name)), line)), None)
     if at is None:
         return None
     start = at
-    while start > 0 and re.match(r"^\t(@|//)", lines[start - 1]):
+    while start > 0 and re.match(r"^%s(@|//)" % i_, lines[start - 1]):
         start -= 1
-    end = next(i for i in range(at, len(lines)) if lines[i].rstrip() == "\t}")
+    end = next(i for i in range(at, len(lines)) if lines[i].rstrip() == indent + "}")
     return start, end
 
 
@@ -615,17 +704,21 @@ def write_test(file: TestFile, card: Card, alias: str, method: str) -> list:
             del lines[note:end + 1]
             did.append("the skeleton's commented-out placeholder test is taken out")
     name = test_name(card)
-    span = _method_span(lines, name)
+    indent = file.indent
+    if indent != "\t":
+        # An older file indented by spaces: the test is written as the file is.
+        method = "\n".join(re.sub(r"^\t+", lambda m: indent * len(m.group(0)), line) for line in method.split("\n"))
+    span = _method_span(lines, name, indent)
     if span is not None:
         if "\n".join(lines[span[0]:span[1] + 1]) != method:
             raise Left(["its file already has a test named %s that is not this one word for word: nothing is written over "
                         "a test (print without --write to compare; take the old one out to have this one)" % name])
         did.append("%s is already in the file, word for word" % name)
     else:
-        stats = next((i for i, line in enumerate(lines) if re.match(r"^\tpublic void \w+Stats(?:AndKeywords)?AreCorrect\s*\(", line)), None)
+        stats = next((i for i, line in enumerate(lines) if re.match(r"^%spublic void \w+Stats(?:AndKeywords)?AreCorrect\s*\(" % re.escape(indent), line)), None)
         if stats is None:
             raise Left(["its test file has no stats test to put the Play test after"])
-        end = next(i for i in range(stats, len(lines)) if lines[i].rstrip() == "\t}")
+        end = next(i for i in range(stats, len(lines)) if lines[i].rstrip() == indent + "}")
         lines[end + 1:end + 1] = [""] + method.split("\n")
         did.append("%s is put after the stats test" % name)
     text = "\n".join(lines)
@@ -633,10 +726,23 @@ def write_test(file: TestFile, card: Card, alias: str, method: str) -> list:
               ("import com.gempukku.lotro.common.*;", r"import com\.gempukku\.lotro\.common\.(?:\*|Zone);")]
     for line, there in wanted:
         if not re.search(there, text):
-            last = max(i for i, x in enumerate(lines) if x.startswith("import "))
             static = line.startswith("import static")
-            anchor = next((i for i, x in enumerate(lines) if x.startswith("import static ")), None) if static else None
-            lines.insert(anchor if anchor is not None else (last + 1), line)
+            if static:
+                # Before the first static import, or after the last import of all.
+                anchor = next((i for i, x in enumerate(lines) if x.startswith("import static ")), None)
+                at = anchor if anchor is not None else max(i for i, x in enumerate(lines) if x.startswith("import ")) + 1
+            else:
+                # Among the ordinary imports, and in place of the classes of that package imported one by one.
+                one_by_one = [i for i, x in enumerate(lines) if re.match(r"^import com\.gempukku\.lotro\.common\.[A-Z]\w*;\s*$", x)]
+                if one_by_one:
+                    did.append("took out the imports the wildcard covers (%s)" % ", ".join(
+                        re.sub(r"^import com\.gempukku\.lotro\.common\.|;\s*$", "", lines[i]) for i in one_by_one))
+                    at = one_by_one[0]
+                    lines = [x for i, x in enumerate(lines) if i not in one_by_one]
+                else:
+                    plain = [i for i, x in enumerate(lines) if x.startswith("import ") and not x.startswith("import static ")]
+                    at = (plain[-1] + 1) if plain else next(i for i, x in enumerate(lines) if x.startswith("import "))
+            lines.insert(at, line)
             text = "\n".join(lines)
             did.append("added `%s`" % line)
     _write(file.path, lines, file.eol)
@@ -665,7 +771,7 @@ def write_ledger(card: Card) -> list:
     path = g.ledger_path(card.id)
     lines, at, claimants = ledger_state(card)
     name, did = test_name(card), []
-    clause, claim = ledger_lines(card)
+    clause, claim = ledger_lines(card, lines)
     if lines is None:
         path.parent.mkdir(parents=True, exist_ok=True)
         lines = ["LEDGER  %s  %s" % (card.id, card.name), "Sources:", "", clause, claim, ""]
@@ -790,7 +896,7 @@ def main(argv) -> int:
                 print('// the file still calls the card "%s": --write renames it "%s"' % (file.alias, name))
             print(method)
             print()
-            print("\n".join(ledger_lines(card)))
+            print("\n".join(ledger_lines(card, ledger_state(card)[0])))
         if card.support_sentence and not any(re.match(r"^C\d+\s+Play\s+\[", line) for line in (ledger_state(card)[0] or [])):
             print(("  - " if write else "// ") + 'the game text has "Plays to your support area.": that sentence is a C clause of '
                   "type Play, and this test claims its + as well (`     +  ->  %s` under it)" % test_name(card))

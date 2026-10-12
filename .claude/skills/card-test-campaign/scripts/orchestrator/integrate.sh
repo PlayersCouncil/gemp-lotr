@@ -12,14 +12,22 @@
 #      kept; then `git add`, `GIT_EDITOR=true git rebase --continue`, and run this again.
 #   3. The fast-forward is refused (exit 3): it changes files in the main tree, and git refuses if one of them has
 #      uncommitted changes there (an engine agent in the middle of an item).  Wait for that agent's commit and run
-#      this again.  If by then the NEXT batch is at work in the second tree (its tree is not clean, so nothing can
-#      be rebased there), the landed commits are cherry-picked onto the branch in the main tree instead; the later
-#      rebase drops them from cards-wip as already applied.
+#      this again.  If by then the NEXT batch is at work in the second tree, the landed commits are cherry-picked
+#      onto the branch in the main tree instead; the later rebase drops them from cards-wip as already applied.
+# "At work in the second tree": its working tree is not clean, OR workflows.json tracks a run in the tree `cards`
+# that has not landed, finished or died (`wf.py at-work cards`).  A clean tree alone is no sign: an author still
+# reading has changed nothing, and a rebase under him moves the files he is reading (2026-10-11, dec-b15_86).
+# For the same reason --renew refuses (exit 4) while such a run is tracked.
 set -e
 WORK=${GEMP_WORK:-/home/claude/work}
 BRANCH=feature/card-test-overhaul
 HERE=.claude/skills/card-test-campaign/scripts
+# The runs that may be at work in the second tree, by workflows.json and their journals (see the header).
+# If it cannot be asked, the tree is taken to be in use: a cherry-pick in place of a rebase costs nothing.
+BUSY=$(python3 "$WORK/repo/$HERE/orchestrator/wf.py" at-work cards 2>/dev/null) || BUSY="? (wf.py at-work failed)"
+BUSY=$(echo $BUSY)
 if [ "$1" = "--renew" ]; then
+  [ -z "$BUSY" ] || { echo "not renewed: the second tree is in use ($BUSY, by workflows.json)"; exit 4; }
   cd "$WORK/cards" && git checkout -q cards-wip
   # Never throw away a landed batch: if cards-wip holds commits the branch has not taken yet (the fast-forward was
   # refused while an engine agent had one of their files open), bring the branch's new commits in under them instead.
@@ -33,8 +41,8 @@ if [ "$1" = "--renew" ]; then
 fi
 cd "$WORK/cards"
 [ "$(git rev-list --count "$BRANCH"..cards-wip)" != "0" ] || { echo "nothing to integrate"; exit 0; }
-if [ -n "$(git status --porcelain)" ]; then
-  # Case 3, second half: a batch is at work here.
+if [ -n "$(git status --porcelain)" ] || [ -n "$BUSY" ]; then
+  # Case 3, second half: a batch is at work here (its tree is not clean, or a run is tracked in it).
   PICK=$(git cherry "$BRANCH" cards-wip | awk '$1=="+"{print $2}')
   [ -n "$PICK" ] || { echo "nothing to integrate (the branch already has every commit of cards-wip)"; exit 0; }
   # Ask before picking anything: a pick that stops on its second commit leaves the first to be undone under an
@@ -46,7 +54,7 @@ if [ -n "$(git status --porcelain)" ]; then
     echo "the branch could not be moved up (case 3 above: a file in the main tree is being changed):"; echo "$OPEN" | sed 's/^/\t/' | head -5; exit 3
   fi
   if git cherry-pick $PICK >/tmp/integrate.err 2>&1; then
-    echo "integrated $(echo $PICK | wc -w) commit(s) by cherry-pick (a batch is at work in the second tree); branch at $(git rev-parse --short=9 $BRANCH)"
+    echo "integrated $(echo $PICK | wc -w) commit(s) by cherry-pick (at work in the second tree: ${BUSY:-uncommitted changes}); branch at $(git rev-parse --short=9 $BRANCH)"
     exit 0
   fi
   git cherry-pick --abort 2>/dev/null || true

@@ -16,6 +16,8 @@
                                             "mistake", a sound parked test is one that passes here and fails
                                             against the card as it is.  Only failing tests are listed: a correction
                                             under which nothing fails prints one line, with the number of tests run.
+                                            The report is the "As a correction" line alone, with no count of
+                                            mistakes noticed and survived over it.
                                             It also goes on where a test fails against the card as it is (without it
                                             the tool stops there), which is how a probe that fails today is tried
                                             under a correction
@@ -661,12 +663,21 @@ def main(argv):
             results[n] = (verdict, failed)
             whys[n] = why
 
-    print("%s  %s: %d mistakes made in the definition%s" % (card_id, g.full_name(card), len(todo),
-                                                           ", and the tests of %s run against each" % test.name if other_test else ""))
+    # A change of the caller's own with the parked tests on is a correction: what the tests do under it is reported
+    # below, and a "SURVIVED" over a correction every test passes would read as a failure of it.
+    as_correction = with_parked and "--replace" in argv
+    if as_correction:
+        print("%s  %s: a correction tried in the definition%s" % (card_id, g.full_name(card),
+                                                                  ", and the tests of %s run against it" % test.name if other_test else ""))
+    else:
+        print("%s  %s: %d mistakes made in the definition%s" % (card_id, g.full_name(card), len(todo),
+                                                               ", and the tests of %s run against each" % test.name if other_test else ""))
     counts = {"noticed": 0, "survived": 0, "invalid": 0, "hung": 0}
     for n, (i, what, _) in enumerate(todo):
         verdict, failed = results[n]
         counts[verdict] += 1
+        if as_correction:
+            continue
         if verdict == "survived":
             print("  SURVIVED  line %d: %s" % (card.line + i, what))
         elif "--all" in argv or with_parked or printed or "--replace" in argv:
@@ -674,8 +685,9 @@ def main(argv):
             print("  %-9s line %d: %s%s" % (verdict, card.line + i, what, "  (" + failed + ")" if failed else ""))
         if not with_parked:
             say_printed(whys[n])
-    print("%d noticed, %d survived, %d made the card unloadable%s" % (counts["noticed"], counts["survived"], counts["invalid"],
-                                                                       ", %d never returned" % counts["hung"] if counts["hung"] else ""))
+    if not as_correction:
+        print("%d noticed, %d survived, %d made the card unloadable%s" % (counts["noticed"], counts["survived"], counts["invalid"],
+                                                                           ", %d never returned" % counts["hung"] if counts["hung"] else ""))
     if with_parked:
         # Read as a correction: what the parked tests do under it is the point.
         for n, (i, what, _) in enumerate(todo):
