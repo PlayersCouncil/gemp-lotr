@@ -3,6 +3,8 @@ package com.gempukku.lotro.cards.official.set01;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Keyword;
+import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.common.Timeword;
 import com.gempukku.lotro.game.CardNotFoundException;
@@ -11,6 +13,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_01_038_Tests
@@ -20,8 +23,14 @@ public class Card_01_038_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "1_38");
-					// put other cards in here as needed for the test case
+					put("shot", "1_38");
+					put("legolas", "1_50");     // Legolas, Greenleaf: [elven] Elf companion, printed archer; his archery ability is used only on purpose
+					put("arwen", "1_30");       // Arwen, Daughter of Elrond: [elven] Elf companion, no archer; strength +3 against a Nazgul only
+					put("elvenbow", "1_41");    // Elven Bow: bearer must be an Elf; bearer is an archer
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion; a maneuver ability used only on purpose
+					put("aragornsbow", "1_90"); // Aragorn's Bow: on Aragorn, "He is an archer"; its archery ability is used only on purpose
+					put("orophin", "1_56");     // Orophin, Lorien Bowman: [elven] Elf ally, printed archer, home 6; his archery ability used only on purpose
+					put("troop", "1_177");      // Goblin Patrol Troop: a minion with no text, so that there is an archery phase
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +55,7 @@ public class Card_01_038_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("shot");
 
 		assertEquals("Double Shot", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -54,22 +63,87 @@ public class Card_01_038_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertTrue(scn.HasTimeword(card, Timeword.ARCHERY));
+		assertTrue(scn.HasTimeword(card, Timeword.ARCHERY));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void DoubleShotTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void SpottingLegolasMakesTheFellowshipArcheryTotalPlusOne() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var shot = scn.GetFreepsCard("shot");
+		var legolas = scn.GetFreepsCard("legolas");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCompanionsToTable(legolas);
+		scn.MoveCardsToHand(shot);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToPhase(Phase.ARCHERY);
 
-		assertEquals(0, scn.GetTwilight());
+		assertTrue(scn.AwaitingFreepsArcheryPhaseActions());
+		// Legolas, the one archer, adds 1.
+		assertEquals(1, scn.GetFreepsArcheryTotal());
+		assertTrue(scn.FreepsPlayAvailable(shot));
+
+		scn.FreepsPlayCard(shot);
+		assertEquals(2, scn.GetFreepsArcheryTotal());
+		assertInDiscard(shot);
+		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
+	}
+
+	@Test
+	public void ArwenBearingAnElvenBowIsAnElfArcherCompanionToSpot() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var shot = scn.GetFreepsCard("shot");
+		var arwen = scn.GetFreepsCard("arwen");
+		var elvenbow = scn.GetFreepsCard("elvenbow");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCompanionsToTable(arwen);
+		scn.AttachCardsTo(arwen, elvenbow);
+		scn.MoveCardsToHand(shot);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToPhase(Phase.ARCHERY);
+
+		assertTrue(scn.AwaitingFreepsArcheryPhaseActions());
+		// Arwen is an archer by her bow, and adds 1.
+		assertEquals(1, scn.GetFreepsArcheryTotal());
+		assertTrue(scn.FreepsPlayAvailable(shot));
+
+		scn.FreepsPlayCard(shot);
+		assertEquals(2, scn.GetFreepsArcheryTotal());
+		assertInDiscard(shot);
+		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
+	}
+
+	@Test
+	public void CannotBePlayedWithAnElfWhoIsNoArcherAnArcherWhoIsNoElfOrAnElfArcherWhoIsNoCompanion() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var shot = scn.GetFreepsCard("shot");
+		var arwen = scn.GetFreepsCard("arwen");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var aragornsbow = scn.GetFreepsCard("aragornsbow");
+		var orophin = scn.GetFreepsCard("orophin");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCompanionsToTable(arwen, aragorn);
+		scn.AttachCardsTo(aragorn, aragornsbow);
+		scn.MoveAlliesToTable(orophin);
+		scn.MoveCardsToHand(shot);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToPhase(Phase.ARCHERY);
+
+		// Arwen is an Elf companion and no archer; Aragorn is an archer companion by his bow and no Elf;
+		// Orophin is an Elf archer and an ally.
+		assertTrue(scn.AwaitingFreepsArcheryPhaseActions());
+		assertTrue(scn.HasKeyword(aragorn, Keyword.ARCHER));
+		assertTrue(scn.HasKeyword(orophin, Keyword.ARCHER));
+		assertFalse(scn.FreepsPlayAvailable(shot));
+		assertInHand(shot);
 	}
 }
