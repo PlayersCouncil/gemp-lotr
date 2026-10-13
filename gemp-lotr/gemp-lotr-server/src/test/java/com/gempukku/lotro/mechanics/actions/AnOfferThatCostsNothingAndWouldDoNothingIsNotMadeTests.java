@@ -53,7 +53,10 @@ import static org.junit.Assert.*;
  * him from drawing (Race Text 94_30; Ketura on Q-0262: B);</li>
  * <li>the switch "the first sentence of Saruman's game text does not apply", thrown for a time: no card in play but
  * the one throwing it has a definition that reads it (engine pass 32; Legacy Ruling 6, Saruman's Staff 4_174 on
- * the two Sarumans whose texts open with keywords; F-0426, Q-0246).</li>
+ * the two Sarumans whose texts open with keywords; F-0426, Q-0246);</li>
+ * <li>the fellowship's next site played: no site can be played, as on a numbered path where the player's own site
+ * of the next number lies there already (engine pass 36; F-0496, Andúril 7_79).  On a Shadows-block path his own
+ * site lying next is replaced (Ketura on Q-0238: A), and the offer is made.</li>
  * </ul>
  *
  * Four of the kinds have no test: making an ally take part in skirmishes, a restore, a card chosen from a
@@ -1365,5 +1368,90 @@ public class AnOfferThatCostsNothingAndWouldDoNothingIsNotMadeTests
 		// and is not counted.
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 		assertFalse(scn.ShadowActionAvailable(staff));
+	}
+
+	// Ranger of Westernesse: [gondor] Man companion, cost 2, Ranger.  "When you play this companion, you may play
+	// the fellowship's next site."
+	protected VirtualTableScenario GetNextSiteScenario(HashMap<String, String> sites, String format) throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("ranger", "11_65");
+				}},
+				sites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
+				format
+		);
+	}
+
+	@Test
+	public void ThePlayOfTheNextSiteIsOfferedOnANumberedPathWhereTheOtherPlayersSiteLiesNext() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetNextSiteScenario(VirtualTableScenario.FellowshipSites, VirtualTableScenario.Fellowship);
+
+		var ranger = scn.GetFreepsCard("ranger");
+		var firstPlayersSite2 = scn.GetFreepsSite(2);
+		var secondPlayersSite2 = scn.GetShadowSite(2);
+		scn.MoveCardsToHand(ranger);
+
+		scn.StartGame();
+		scn.MoveCardToAdventurePath(secondPlayersSite2);
+		scn.FreepsRefreshDecision();
+		assertSame(secondPlayersSite2, scn.GetSite(2));
+
+		scn.FreepsPlayCard(ranger);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(ranger));
+
+		scn.FreepsAcceptOptionalTrigger();
+		assertSame(firstPlayersSite2, scn.GetSite(2));
+		assertInZone(Zone.ADVENTURE_DECK, secondPlayersSite2);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void ThePlayOfTheNextSiteIsNotOfferedOnANumberedPathWhereThePlayersOwnSiteLiesNext() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetNextSiteScenario(VirtualTableScenario.FellowshipSites, VirtualTableScenario.Fellowship);
+
+		var ranger = scn.GetFreepsCard("ranger");
+		var firstPlayersSite2 = scn.GetFreepsSite(2);
+		scn.MoveCardsToHand(ranger);
+
+		scn.StartGame();
+		// As where he has played his next site already: he has no other site 2.
+		scn.MoveCardToAdventurePath(firstPlayersSite2);
+		scn.FreepsRefreshDecision();
+		assertSame(firstPlayersSite2, scn.GetSite(2));
+
+		scn.FreepsPlayCard(ranger);
+		assertInZone(Zone.FREE_CHARACTERS, ranger);
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(ranger));
+		assertSame(firstPlayersSite2, scn.GetSite(2));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void ThePlayOfTheNextSiteIsOfferedOnAShadowsPathWhereThePlayersOwnSiteLiesNext() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetNextSiteScenario(VirtualTableScenario.ShadowsSites, VirtualTableScenario.Shadows);
+
+		var ranger = scn.GetFreepsCard("ranger");
+		var firstPlayersMineShaft = scn.GetFreepsSite("site2");
+		var firstPlayersRuins = scn.GetFreepsSite("site5");
+		scn.MoveCardsToHand(ranger);
+
+		scn.StartGame(scn.GetFreepsSite("site1"));
+		scn.MoveCardToAdventurePath(firstPlayersMineShaft);
+		scn.FreepsRefreshDecision();
+		assertSame(firstPlayersMineShaft, scn.GetSite(2));
+
+		// His own site lying next is replaced by another of his (Q-0238: A).
+		scn.FreepsPlayCard(ranger);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(ranger));
+
+		scn.FreepsAcceptOptionalTrigger();
+		assertTrue(scn.FreepsDecisionAvailable("Choose site to play"));
+		scn.FreepsChooseCardBPFromSelection(firstPlayersRuins);
+		assertSame(firstPlayersRuins, scn.GetSite(2));
+		assertInZone(Zone.ADVENTURE_DECK, firstPlayersMineShaft);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

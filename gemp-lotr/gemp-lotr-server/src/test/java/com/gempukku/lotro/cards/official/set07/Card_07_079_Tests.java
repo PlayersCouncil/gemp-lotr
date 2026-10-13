@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -294,7 +293,6 @@ public class Card_07_079_Tests
 	}
 
 	@Test
-	@Ignore("F-0496: the action is offered at site 2 with his own site 3 already lying next, where it can play nothing (Q-0034)")
 	public void IsNotOfferedWhileHisOwnNextSiteAlreadyLies() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

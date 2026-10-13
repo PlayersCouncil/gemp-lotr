@@ -209,7 +209,8 @@ gives another, where nothing is paid for it (a spot is no cost) and every one of
 nothing: nobody to heal, no token to reinforce, nobody a minion could be assigned to, a hand that card may not
 discard from, an empty twilight pool to "remove (1)" from, no card in hand to stack, discard or place on a deck,
 no such card in a discard pile to place beneath a deck, a condition "transferred from your support area" that
-has left it. Such a card has no "Optional responses" to decline and no action to find: a helper's "when you
+has left it, the fellowship's next site where none can be played (on a numbered path, the player's own site of
+that number lies there already; engine pass 36, F-0496). Such a card has no "Optional responses" to decline and no action to find: a helper's "when you
 play this, you may ..." is simply not asked on a board where it has nothing to do (Brego 4_263 on an unwounded
 bearer, Bill the Pony 13_143 with no [shire] token), so `FreepsDeclineOptionalTrigger()` there fails with nobody
 being asked. Read it with `assertFalse(scn.FreepsHasOptionalTriggerAvailable(card))` and what the game is

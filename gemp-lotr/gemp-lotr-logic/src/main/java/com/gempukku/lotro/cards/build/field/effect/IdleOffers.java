@@ -73,7 +73,8 @@ public final class IdleOffers {
          * to, a stacking with nothing to stack, a Ring already worn, a choice with nothing to choose from, a
          * random discard from a hand that is empty or that the card may not discard from, a draw by a player who
          * may draw no more (the Rule of 4 spent, or a bar on drawing: Q-0262), the switch on the first sentence
-         * of Saruman's text with no other card in play that reads it (engine pass 32).  Each answers so to this
+         * of Saruman's text with no other card in play that reads it (engine pass 32), the fellowship's next site
+         * played where no site can be played (F-0496, engine pass 36).  Each answers so to this
          * rule and to a choice it is a branch of; the no-effect flag is judged as it was.  (An assignment with
          * nobody to assign was taught here until engine pass 32, and now says it in its own forecast.)  This is
          * the default, and the mode the game is played in.
