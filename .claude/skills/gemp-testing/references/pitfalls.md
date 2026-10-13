@@ -1638,7 +1638,10 @@ Multipath, where every `buildDeck` deck draws "Card is X-listed" for Emyn Muil a
 after Boromir 1_96, which made five of one title at the 37th card) and a card the format X-lists or allows fewer
 than four of (Forces of Mordor 1_248 in Multipath and Expanded). 94_22's deck-size tests of 99 and 100 cards were
 written before that and read `hasMinimumDeckSizeError` alone. The filler knows nothing of the cards a test
-names: name a card of its ranges (1_88 to 1_119, 1_239 to 1_283) and its copies are added to. The Ring-bearer,
+names: name a card of its ranges (1_88 to 1_119, 1_239 to 1_283), or one of the same TITLE as a card there
+(Aragorn, King in Exile 1_365 beside the filler's 1_89), and its copies are added to. To read the copy objection
+alone, give both filler counts 0: `buildDeck(cards, null, 0, 0)` is the named cards and nothing more, and reads
+`hasMaxSameNameError` only (Card_01_365_Tests). The Ring-bearer,
 Ring, Map and sites are the ones the test names, as named: the rig's `FellowshipSites` have Ettenmoors 1_331 as
 first printed, which the PC formats refuse for its errata. `hasMapError(errors)` says whether a Map objected;
 `getMapErrorSites(errors)` returns the names of the sites its objection lists, for reading that a stray site is
