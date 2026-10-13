@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.official.set01;
 
+import com.gempukku.lotro.framework.DeckValidationScenario;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
@@ -7,6 +8,7 @@ import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -17,7 +19,7 @@ public class Card_01_365_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "1_365");
+					put("aragorn", "1_365");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -41,6 +43,10 @@ public class Card_01_365_Tests
 		);
 	}
 
+	protected DeckValidationScenario GetDeckScenario() {
+		return new DeckValidationScenario();
+	}
+
 	@Test
 	public void AragornStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
@@ -62,7 +68,7 @@ public class Card_01_365_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("aragorn");
 
 		assertEquals("Aragorn", card.getBlueprint().getTitle());
 		assertEquals("King in Exile", card.getBlueprint().getSubtitle());
@@ -96,6 +102,7 @@ public class Card_01_365_Tests
 
 		// The turn begins, and the game stops at the offer.
 		scn.StartGame();
+		assertEquals(Phase.BETWEEN_TURNS, scn.GetCurrentPhase());
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(aragorn));
 		assertEquals(2, scn.GetWoundsOn(arwen));
 
@@ -136,5 +143,57 @@ public class Card_01_365_Tests
 		assertEquals(1, scn.GetWoundsOn(gandalf));
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void DeclinedItHealsNobodyAndIsOfferedAgainAtHisOwnersNextTurnAndNotAtTheOpponents() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetHealScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var arwen = scn.GetFreepsCard("arwen");
+		scn.MoveCompanionsToTable(aragorn, arwen);
+		scn.AddWoundsToChar(arwen, 2);
+
+		scn.StartGame();
+
+		assertEquals(Phase.BETWEEN_TURNS, scn.GetCurrentPhase());
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(aragorn));
+		scn.FreepsDeclineOptionalTrigger();
+
+		assertEquals(2, scn.GetWoundsOn(arwen));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// The other player's turn begins with his fellowship phase: nothing is offered and nobody is healed.
+		scn.SkipToOtherPlayersTurn();
+		assertEquals(scn.P2(), scn.GetCurrentPlayer());
+		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(aragorn));
+		assertEquals(2, scn.GetWoundsOn(arwen));
+
+		// The owner's second turn: offered again, and taken.
+		scn.SkipToOtherPlayersTurn();
+		assertEquals(scn.P1(), scn.GetCurrentPlayer());
+		assertEquals(Phase.BETWEEN_TURNS, scn.GetCurrentPhase());
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(aragorn));
+		assertEquals(2, scn.GetWoundsOn(arwen));
+		scn.FreepsAcceptOptionalTrigger();
+
+		// Arwen, the one wounded candidate, is healed of one wound without a choice being put.
+		assertEquals(1, scn.GetWoundsOn(arwen));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	// CR 4.2 "building your deck": a draw deck may hold four copies of Aragorn, King in Exile, or two of it and two
+	// of Aragorn, Ranger of the North, but not four of each, since they have the same title.  Only the objection to
+	// copies is read: these decks are no more than the named cards, and draw others for their size.
+	@Test
+	public void ADrawDeckHoldsFourCopiesOfTheTitleAragornWhateverTheSubtitle() throws DecisionResultInvalidException, CardNotFoundException {
+		var dvs = GetDeckScenario();
+
+		assertFalse(dvs.hasMaxSameNameError(dvs.validate(dvs.buildDeck(Map.of("1_365", 4), null, 0, 0))));
+		assertFalse(dvs.hasMaxSameNameError(dvs.validate(dvs.buildDeck(Map.of("1_365", 2, "1_89", 2), null, 0, 0))));
+		// One more of the other subtitle is a fifth Aragorn.
+		assertTrue(dvs.hasMaxSameNameError(dvs.validate(dvs.buildDeck(Map.of("1_365", 2, "1_89", 3), null, 0, 0))));
+		assertTrue(dvs.hasMaxSameNameError(dvs.validate(dvs.buildDeck(Map.of("1_365", 4, "1_89", 4), null, 0, 0))));
 	}
 }

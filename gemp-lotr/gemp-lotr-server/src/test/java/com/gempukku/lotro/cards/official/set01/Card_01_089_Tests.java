@@ -3,6 +3,7 @@ package com.gempukku.lotro.cards.official.set01;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -17,8 +18,10 @@ public class Card_01_089_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "1_89");
-					// put other cards in here as needed for the test case
+					put("aragorn", "1_89");
+					put("boromir", "1_96");     // Boromir, Lord of Gondor: [gondor] Man companion, strength 7, vitality 3; an overwhelm bar only
+					put("runner1", "1_178");    // Goblin Runner: strength 5, vitality 1; its when-played text is not used (cheated in)
+					put("runner2", "1_178");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +50,7 @@ public class Card_01_089_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("aragorn");
 
 		assertEquals("Aragorn", card.getBlueprint().getTitle());
 		assertEquals("Ranger of the North", card.getBlueprint().getSubtitle());
@@ -61,21 +64,90 @@ public class Card_01_089_Tests
 		assertEquals(8, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
 		assertEquals(6, card.getBlueprint().getResistance());
-		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
+		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void AragornTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void ManeuverActionExertsAragornToMakeHimAloneDefenderPlusOneEachTimeItIsUsed() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		scn.MoveCompanionsToTable(aragorn, boromir);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(scn.GetShadowCard("runner1"));
+		scn.SkipToPhase(Phase.MANEUVER);
 
-		assertEquals(4, scn.GetTwilight());
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetKeywordCount(aragorn, Keyword.DEFENDER));
+		assertTrue(scn.FreepsActionAvailable(aragorn));
+		scn.FreepsUseCardAction(aragorn);
+
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetKeywordCount(aragorn, Keyword.DEFENDER));
+		// Another companion is not made a defender.
+		assertEquals(0, scn.GetKeywordCount(boromir, Keyword.DEFENDER));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+
+		// The text has no limit, and a second defender +1 is added to the first (CR 4.2 "defender").
+		scn.ShadowPass();
+		scn.FreepsUseCardAction(aragorn);
+		assertEquals(2, scn.GetWoundsOn(aragorn));
+		assertEquals(2, scn.GetKeywordCount(aragorn, Keyword.DEFENDER));
+		assertEquals(0, scn.GetKeywordCount(boromir, Keyword.DEFENDER));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Test
+	public void ManeuverActionIsNotOfferedWhileAragornIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+		// Vitality 4 with 3 wounds: exhausted.
+		scn.AddWoundsToChar(aragorn, 3);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(scn.GetShadowCard("runner1"));
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(aragorn));
+		assertEquals(0, scn.GetKeywordCount(aragorn, Keyword.DEFENDER));
+	}
+
+	@Test
+	public void DefenderLastsThroughTheSkirmishesAndIsGoneAtTheRegroupPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		scn.MoveCompanionsToTable(aragorn, boromir);
+
+		var runner1 = scn.GetShadowCard("runner1");
+		var runner2 = scn.GetShadowCard("runner2");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner1, runner2);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		scn.FreepsUseCardAction(aragorn);
+		assertEquals(1, scn.GetKeywordCount(aragorn, Keyword.DEFENDER));
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{boromir, runner1}, new PhysicalCardImpl[]{aragorn, runner2});
+
+		// Boromir's skirmish first; Aragorn's follows it.
+		scn.FreepsResolveSkirmish(boromir);
+		scn.PassSkirmishActions();
+		scn.FreepsResolveSkirmish(aragorn);
+		assertTrue(scn.IsCharSkirmishingAgainst(aragorn, runner2));
+		assertEquals(1, scn.GetKeywordCount(aragorn, Keyword.DEFENDER));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+
+		scn.PassSkirmishActions();
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		assertEquals(0, scn.GetKeywordCount(aragorn, Keyword.DEFENDER));
 	}
 }
