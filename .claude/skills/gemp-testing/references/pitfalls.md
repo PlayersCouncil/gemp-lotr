@@ -1019,7 +1019,10 @@ player whose turn it is (`gameState().addBurdens`). One player's burdens are REA
 `FreepsGetBurdens()` and `ShadowGetBurdens()` (player 1's and player 2's; G-0044, engine pass 24); they are LAID
 only for the player whose turn it is, so the other player's are laid on his own turn or come of his bid. "The
 other player's burdens are not counted" landed without a board on that account, and no check was owed for it
-(92_25); a later card that needs one lays the other player's burdens a turn earlier and reads both.
+(92_25); a later card that needs one lays the other player's burdens a turn earlier and reads both. Player 2's
+Ring-bearer and burdens stay in play on player 1's turn: `StartGame(); SkipToOtherPlayersTurn(); AddBurdens(3);
+SkipToOtherPlayersTurn();` is back in player 1's fellowship phase with `ShadowGetBurdens()` 3 and
+`FreepsGetBurdens()` 0 (Sauron 9_48, "for each burden you spot", counts only the first: Card_09_048_Tests).
 A burden added as a turn ENDS (Thin and Stretched 1_279, "at the end of each turn") is not read by `GetBurdens()`
 at the next decision, which is the other player's: read 0 at the mover's last decision ("another move"), end the
 turn, and read `FreepsGetBurdens()` at the other player's first decision (Card_01_279_Tests).
