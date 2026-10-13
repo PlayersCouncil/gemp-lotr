@@ -539,8 +539,9 @@ is asked next: following a Free Peoples skirmish action `FreepsPass()` does noth
 it is `ShadowPass()` and then `FreepsPass()` that end the skirmish, so the last reading inside a skirmish is
 taken before that pair. `PassSkirmishActions()` and its kin pass for whoever holds the decision first. The same
 holds in the other shared phases: a test that ends on a Free Peoples maneuver ability rests on
-`AwaitingShadowManeuverPhaseActions()`, and a second use by the Free Peoples player needs `ShadowPass()` first
-(Elven Guardian 67_7's tests).
+`AwaitingShadowManeuverPhaseActions()`, and one on a Free Peoples regroup ability on
+`AwaitingShadowRegroupPhaseActions()` (Glamdring 1_75); a second use by the Free Peoples player needs `ShadowPass()`
+first (Elven Guardian 67_7's tests).
 `PassSkirmishActions()` is the wrong call once the Free Peoples player has already passed in that skirmish (a
 `FreepsPass()` made only to read what the Shadow player is offered): it passes for the Shadow player, the
 skirmish resolves, and its second pass goes to whatever the Free Peoples player is asked next, the choice of

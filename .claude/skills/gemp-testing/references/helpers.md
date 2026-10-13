@@ -126,7 +126,8 @@ cost 12, site number 4 (12 + 2 roaming at site 2), strength 17, vitality 5, dama
 and nothing discards it; its text acts only at an underground site (fierce, takes no wounds, cannot be exerted).
 The others get in a board's way: 2_51 discards every other minion, and itself when not underground; 2_52 (cost 14)
 needs a [moria] Orc spotted and discards itself when not underground; 6_76 (cost 14) costs 3 less beside a [moria]
-minion. Every minion titled The Balrog is [moria]. It is also the bearer for Whip of Many Thongs 2_74 or The
+minion. Every minion titled The Balrog is [moria] (the sheet's culture `moria_balrog`, the Balrog icon, is
+`Culture.MORIA`: 2_51, 2_52, 6_76, 12_79, 19_18). It is also the bearer for Whip of Many Thongs 2_74 or The
 Balrog's Sword 2_50 (each "Bearer must be The Balrog") away from Moria.
 
 **A besieger; a besieger who is no Orc; a card with the word in its title only; a legal way onto a controlled
