@@ -258,8 +258,9 @@ a bearer by race ("Bearer must be a Hobbit"), the Ring-bearer and a Hobbit of an
 103_31): beside [shire] Hobbits who are not the Ring-bearer, `hobbit,culture(shire)` passes, 3_108; for "bearer" in a
 Modifier or Restriction on a card that a companion and an ally can both come to bear (a transfer to "a character"),
 one bearer of each: with companions alone bearing it, `and(companion,hasAttached(self))` passes, 1_207.
-A kind no printed card can make a candidate drops out of the spread, and Notes say why: for "Exert a [gondor] Man"
-there is no ally, as the one [gondor] Man ally, Gondorian Merchant 7_97, has vitality 1 and can never exert (5_32).
+A kind no printed card can make a candidate drops out of the spread, and Notes say why: for "Bearer must be a Dwarf"
+there is no opponent's Dwarf, as no Shadow card is a Dwarf (9_8). (For "Exert a [gondor] Man" the ally IS owed:
+Gondorian Merchant 7_97 bearing Narsil 9_34 can exert, 5_39; helpers.md.)
 
 **Invalid candidates, word by word.** For a phrase of two words ("a [sauron] minion") that is a card for each word:
 a [sauron] card that is no minion, and a minion of another culture; for an item class ("bearing a hand weapon") one

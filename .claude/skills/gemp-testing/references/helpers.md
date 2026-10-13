@@ -199,7 +199,7 @@ read, Household Guard 5_83 is the plain one.
 **A damage bonus in print for "a Dwarf who is damage +X": a Dwarf ally with one and without; a companion with one
 who is no Dwarf; a bonus that moves as he exerts.** Grimir, Dwarven Elder 1_17 bearing Ring of Guile 9_8; Huorn
 9_25; Gimli, Counter of Foes 8_5. Grimir: unique Dwarf ally, strength 3, vitality 3, home 3F, no bonus of his own;
-a fellowship ability only. Ring of Guile (Ring of Accretion 9_6 is its twin): unique [dwarven] artifact, cost 0,
+a fellowship ability only. Ring of Guile (Ring of Accretion 9_6 shares its first two sentences, not its Maneuver ability: no twin): unique [dwarven] artifact, cost 0,
 "Bearer must be a Dwarf. Bearer is damage +1"; its Maneuver ability discards it and is used only on purpose. Huorn:
 [gandalf] Tree, not unique, strength 6, vitality 4, Damage +1; its Response needs an Ent. (Gandalf, Mithrandir 6_30
 is a Wizard with Damage +1 who is wounded at every move.) Gimli 8_5: Damage +1 and +1 more for each wound on him,
