@@ -587,7 +587,8 @@ carries out unasked, because one valid card is there, shows nothing of the inval
 candidate is laid and the invalid one read "not offered" (Q-0266: B; Ketura: "Yeah I think B is the way to go.").
 That is owed by the test that claims the choice's `F`; a `-`/`C-` test whose choice goes unasked because only one
 candidate can be paid for owes nothing more there (8_30).
-Q-0266 is about choices of cards: "<do X> or <do Y>" carried out unasked because one branch cannot be done in full
+Q-0266 is about choices of cards, an effect's own ("exert Faramir to wound that minion", 4_118) as well as a bearer's or
+a target's: "<do X> or <do Y>" carried out unasked because one branch cannot be done in full
 is the board F-0310 owes (shapes.md, "<Do X> or <do Y>"), and the reading there.
 Where the text allows only one valid candidate ("the losing character": one skirmish has one, Blade Tip 1_209),
 the invalid ones are laid all the same, the game going on unasked is the reading, and Notes say why.
