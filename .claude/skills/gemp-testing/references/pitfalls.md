@@ -203,6 +203,12 @@ limit (Q-0093). A limit on uses ("limit once per turn") withholds it, cost or no
 gives ("(limit +3)", "add a threat (limit 1)") leaves an ability with a cost on offer (Q-0041): the cost is paid
 and nothing else happens; with no cost it is not offered at that limit either.
 
+**An event's random discard from hand counted the event itself as payment** (F-0498, We Must Have It 5_30).
+`discardCardAtRandomFromHand` judges its cost against the whole hand, the card being played included (a chosen
+`discardFromHand` leaves it out). 5_30 is mended with `requires: {type: hasCardInHand, filter: not(self)}` on its
+`costToEffect`. Not `cardsInHandMoreThan` with count 1: that `requires` is asked again once the event has left the
+hand, and refuses the play with one other card in hand. A hand rule of this kind goes by a filter that leaves out `self`.
+
 **An offer that costs nothing and would do nothing is not made** (Q-0034, Q-0224, Q-0231; engine pass 26). The
 game withholds an optional trigger, a special ability or Response of a card in play, and an ability one card
 gives another, where nothing is paid for it (a spot is no cost) and every one of its effects says it will do
