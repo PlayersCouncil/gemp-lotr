@@ -399,10 +399,14 @@ A card's own "you may play this ... from your discard pile" is a use too (Gollum
 Gollum, Plotting Deceiver"): `ShadowPlayAvailable(card)` is false for the card lying in the pile, and
 `ShadowActionAvailable(card)` and `ShadowUseCardAction(card)` read and take it (`Card_07_058_Tests`).
 A response EVENT whose definition gives its play a `text:` (Beyond Dark Mountains 4_141, "Play in response to
-death of <the character>"; the only one) is read by neither at its "Optional responses" decision:
+death of <the character>"; and four more: 4_37, Unheeded 8_115 ("Wound {exertedMinion}"), 10_3, 13_122) is
+read by neither at its "Optional responses" decision:
 `ShadowPlayAvailable(card)` and `ShadowActionAvailable(card)` are both false there, though `ShadowPlayCard(card)`
-plays it. Read the offer with `ShadowHasOptionalTriggerAvailable(card)` (probed at the landing of dec-b4_78). A
-response event with no such text is read with `ShadowPlayAvailable` (Ravage the Defeated 4_32).
+plays it. Read the offer with `ShadowHasOptionalTriggerAvailable(card)` (probed at the landing of dec-b4_78), and
+take it with `FreepsChooseOptionalTrigger(card)` where it is the Free Peoples player's (Unheeded answering
+Grishnákh 5_100's exertion, `Card_05_100_Tests`, dec-b5_100). A
+response event with no such text is read with `ShadowPlayAvailable` (Ravage the Defeated 4_32; Gondor Will See It
+Done 2_34, `FreepsPlayAvailable`, Card_10_119_Tests).
 
 **Using a card's action.** `FreepsUseCardAction(card)` and `ShadowUseCardAction(card)` take the action `FreepsActionAvailable(card)` sees, even where the game lists another of the card's actions first (a possession that another companion could bear lists "Transfer" before "Use"). A card that offers no such action has the first action listed for it taken, as before: an optional trigger or a response is accepted this way. `FreepsUseCardAction(card, "Use")` is no longer needed to get past a transfer.
 
@@ -1650,6 +1654,10 @@ opponent's site if necessary)" that a game reaches: the first player at site 3 o
 player's site 4 laid with `MoveCardToAdventurePath` (as where that player played his next site himself); the
 nearest miss is a second copy played when the player's own site already lies next, which on a numbered path
 plays nothing (Card_02_026_Tests; whether it may replace his own site on a Shadows-block path is Q-0238).
+A numbered path's site laid by a move, by `FreepsPass()` or by `SkipToSite(n)`, is the SHADOW player's copy, on
+every move of either player and on the Fellowship and King paths alike (probed at the landing of dec-b5_100):
+`assertSame(scn.GetShadowSite("site5"), scn.GetCurrentSite())`, never `GetFreepsSite`, which then answers with the
+copy still in the Free Peoples adventure deck.
 
 **A table in a format that uses Maps.** `VirtualTableScenario.PCMovie` works with every constructor: each deck is
 given the Map of the path its sites are on (`FellowshipMap` 102_74, `TowersMap` 102_75, `KingMap` 102_76). The

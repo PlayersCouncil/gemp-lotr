@@ -325,7 +325,8 @@ candidate down and say so in Notes.
 
 **Cards picked out by title.** Where the text picks cards out by title and a type word ("these characters:
 Celeborn, Elrond, Galadriel, Saruman"), an invalid candidate is a card of that title and another type (a follower
-named Saruman). Where the text names a title with no type word ("spot Saruman"), the valid candidates are cards of
+named Saruman). Where no printed card of those titles is of another type, none is laid and Notes say so; a card
+whose title only begins with the name may stand as the nearest miss (Boromir, My Brother 4_111 for 7_112). Where the text names a title with no type word ("spot Saruman"), the valid candidates are cards of
 that title of each type and each culture there is (Saruman the minion and Saruman the follower, 17_38; Sméagol is
 [gollum] and [shire]: grep the definitions). That holds for a title that pays a cost or is acted on as it does for
 one spotted or played ("exert Gollum": each of the two Gollums, [gollum] and [wraith], pays in a test of his own,
@@ -360,7 +361,8 @@ stands: for a bare race word ("a Man", Q-0058) one valid candidate is the oppone
 race can be in play at that moment (no minion is in a fellowship phase: then Notes says none can be, and no board
 is made for it) (but a player's own Shadow cards are inactive on his turn, so for a "Shadow condition" chosen by a
 Free Peoples ability they are no candidates at all); for "a minion" or "an Uruk-hai" on a Skirmish event, one valid
-candidate is not assigned to a skirmish. A Skirmish action's choice that is not limited to the skirmish ("your
+candidate is not assigned to a skirmish, and so on a Skirmish special ability whose text names no assignment
+(Noble Leaders 7_112: `assignedToSkirmish(minion)` added to its choice survived without one). A Skirmish action's choice that is not limited to the skirmish ("your
 [sauron] minion", Morgul Vale 7_357) also wants one valid candidate IN the skirmish being resolved, or a choice
 narrowed to `not(inSkirmish)` passes.
 
@@ -457,7 +459,9 @@ Which checks a clause lists follows from its words, and the analyst is expected 
   CR 4.2 "draw deck", whether or not the card says "shuffle": `+` is one more shuffle of that deck (or two: see
   gemp-testing) and none of the other player's, read with the shuffle count; `-` is no shuffle on any alternative
   that does not look through the deck ("or discard pile"), and none when the player declines before looking. Like
-  the snapshot, this is a rule tested card by card because the game writes it into each definition
+  the snapshot, this is a rule tested card by card because the game writes it into each definition. Where the
+  card prints "Shuffle your draw deck." as a sentence, that sentence's clause owes these claims and stands for
+  the Rule clause (Saved From the Fire 8_20)
 - "reveal" → the card is shown to the other player, who has a decision to dismiss. One test reads the showing
   for each player (the shown card listed and not selectable, a card not revealed absent); the others only
   dismiss (the dismiss methods fail the test when that player is being shown nothing). A reveal from a hand is
