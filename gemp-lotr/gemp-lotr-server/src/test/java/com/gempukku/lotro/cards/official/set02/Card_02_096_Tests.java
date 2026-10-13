@@ -19,7 +19,7 @@ public class Card_02_096_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "2_96");
+					put("bilbo", "2_96");
 					put("redbook", "2_113");    // Red Book of Westmarch: a tale in the support area; answers a tale being played
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a maneuver ability that is never used here
 					put("pinned", "1_192");     // Pinned Down: Shadow condition, support area; idle without a [moria] archer
@@ -28,6 +28,12 @@ public class Card_02_096_Tests
 					// [isengard] tracker and nothing else
 					put("weary1", "4_212");
 					put("weary2", "4_212");
+					put("harp", "18_3");        // Thorin's Harp: [dwarven] tale, a condition in the support area; a maneuver ability never used
+					put("saga", "1_114");       // The Saga of Elendil: [gondor] tale, a condition on a [gondor] companion; a skirmish ability
+					put("lord", "1_21");        // Lord of Moria: [dwarven] condition in the support area that is no tale; no Dwarf in play
+					put("trolls", "1_314");     // Stone Trolls: [shire] tale, here only in hand
+					put("breath", "1_207");     // Black Breath: [wraith] Shadow condition, support area; a skirmish ability
+					put("scaffolding", "6_73"); // Scaffolding: [isengard] Shadow POSSESSION in the support area; idle here
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -55,7 +61,7 @@ public class Card_02_096_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("bilbo");
 
 		assertEquals("Bilbo", card.getBlueprint().getTitle());
 		assertEquals("Well-spoken Gentlehobbit", card.getBlueprint().getSubtitle());
@@ -70,26 +76,11 @@ public class Card_02_096_Tests
 		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 1)));
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void BilboTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-
-		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(2, scn.GetTwilight());
-	}
-
 	@Test
 	public void FellowshipAbilityReachesAShadowConditionOnASiteTheOpponentControlsAndNotOneOnAnAllyOrACompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var bilbo = scn.GetFreepsCard("card");
+		var bilbo = scn.GetFreepsCard("bilbo");
 		var redbook = scn.GetFreepsCard("redbook");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var pinned = scn.GetShadowCard("pinned");
@@ -127,5 +118,86 @@ public class Card_02_096_Tests
 		assertAttachedTo(weary1, bilbo);
 		assertAttachedTo(weary2, aragorn);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void ExertsBilboAndDiscardsTheChosenTaleToDiscardTheChosenShadowConditionFromTheOpponentsSupportArea() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var bilbo = scn.GetFreepsCard("bilbo");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var harp = scn.GetFreepsCard("harp");
+		var saga = scn.GetFreepsCard("saga");
+		var lord = scn.GetFreepsCard("lord");
+		var pinned = scn.GetShadowCard("pinned");
+		var breath = scn.GetShadowCard("breath");
+		var scaffolding = scn.GetShadowCard("scaffolding");
+		scn.MoveAlliesToTable(bilbo);
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToSupportArea(harp, lord, pinned, breath, scaffolding);
+		scn.AttachCardsTo(aragorn, saga);
+
+		scn.StartGame();
+
+		assertEquals(0, scn.GetWoundsOn(bilbo));
+		assertTrue(scn.FreepsActionAvailable(bilbo));
+		scn.FreepsUseCardAction(bilbo);
+		assertEquals(1, scn.GetWoundsOn(bilbo));
+
+		// A tale of either culture and either place; not a condition that is no tale.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(harp, saga));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(lord));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		scn.FreepsChooseCard(saga);
+		assertInDiscard(saga);
+		assertInZone(Zone.SUPPORT, harp, lord);
+
+		// A Shadow condition of either culture there; not a Shadow possession beside them.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(pinned, breath));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(scaffolding));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		scn.FreepsChooseCard(breath);
+		assertInDiscard(breath);
+		assertInZone(Zone.SUPPORT, pinned, scaffolding);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void IsNotOfferedWhileBilboIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var bilbo = scn.GetFreepsCard("bilbo");
+		var harp = scn.GetFreepsCard("harp");
+		var pinned = scn.GetShadowCard("pinned");
+		scn.MoveAlliesToTable(bilbo);
+		scn.MoveCardsToSupportArea(harp, pinned);
+		// Vitality 3 with 2 wounds: he cannot exert.
+		scn.AddWoundsToChar(bilbo, 2);
+
+		scn.StartGame();
+
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(bilbo));
+		assertInZone(Zone.SUPPORT, harp, pinned);
+	}
+
+	@Test
+	public void IsNotOfferedWithNoTaleInPlayThoughOneIsInHand() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var bilbo = scn.GetFreepsCard("bilbo");
+		var lord = scn.GetFreepsCard("lord");
+		var trolls = scn.GetFreepsCard("trolls");
+		var pinned = scn.GetShadowCard("pinned");
+		scn.MoveAlliesToTable(bilbo);
+		scn.MoveCardsToSupportArea(lord, pinned);
+		scn.MoveCardsToHand(trolls);
+
+		scn.StartGame();
+
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(bilbo));
+		assertEquals(0, scn.GetWoundsOn(bilbo));
+		assertInHand(trolls);
 	}
 }
