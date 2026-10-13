@@ -316,7 +316,7 @@
 				phase: skirmish
 				effect: {
 					type: transfer
-					select: choose(culture(rohan),possession)
+					select: choose(culture(rohan),possession,transferableTo(self))
 					where: self
 					checkTarget: true
 				}
@@ -434,6 +434,7 @@
 						{
 							type: discard
 							select: choose(side(shadow),attachedTo(ringBearer))
+							override: hindered
 						}
 					]
 				}

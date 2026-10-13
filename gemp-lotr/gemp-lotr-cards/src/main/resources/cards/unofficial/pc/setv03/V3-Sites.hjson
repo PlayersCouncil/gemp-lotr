@@ -360,7 +360,8 @@
 				effect: [
 					{
 						type: Memorize
-						filter: side(Free Peoples), AttachedTo(companion)
+						filter: side(Free Peoples), AttachedTo(companion,not(hindered))
+						hindered: true
 						memory: originallyAttached
 					}
 					{
@@ -370,7 +371,8 @@
 					{
 						type: Discard
 						player: Free Peoples
-						select: choose(side(Free Peoples), AttachedTo(companion))
+						select: choose(side(Free Peoples), AttachedTo(companion,not(hindered)))
+						override: hindered
 						count: any
 						memorize: discardedCards
 					}
@@ -742,7 +744,7 @@
 				effect: {
 					type: Hinder
 					player: Shadow
-					select: choose(not(or(companion, The One Ring, Map, MetaSite)))
+					select: choose(not(or(companion, The One Ring)))
 				}
 			}
 		]

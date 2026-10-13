@@ -88,7 +88,8 @@
 				optional: true
 				trigger: {
 					type: played
-					filter: not(your),site,nextSiteNumber
+					player: free people
+					filter: site,nextSiteNumber
 				}
 				effect: {
 					type: discard
@@ -846,7 +847,7 @@
 				type: toPlay
 				requires: {
 					type: canSpot
-					filter: culture(men),zone(support)
+					filter: culture(men),support(you)
 				}
 			}
 			{

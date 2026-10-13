@@ -2,10 +2,10 @@
 
 	52_101: {
 		cardInfo: {
-			//id: 2_101.1
+			//id: 52_101.1
 			parent: 2_101
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/52_101.jpg
 			collInfo: 2C101
@@ -14,27 +14,35 @@
 		title: Filibert Bolger
 		subtitle: Wily Rascal
 		unique: true
-		culture: shire
+		side: Free Peoples
+		culture: Shire
 		twilight: 1
-		type: ally
+		type: Ally
 		allyHome: 1F
-		race: hobbit
+		race: Hobbit
 		strength: 1
 		vitality: 2
 		effects: {
 			type: activated
 			phase: skirmish
+			// Q-0127 (Ketura, 2026-10-08): any Hobbit companion but the Ring-bearer may pay, in any skirmish, and
+			// the action is flagged when no such Hobbit able to exert twice is in the fierce skirmish being fought.
+			noEffectUnless: {
+				type: canSpot
+				filter: hobbit,companion,not(ring bearer),inFierceSkirmish,minVitality(3)
+			}
 			cost: [
 				{
 					type: exert
-					select: choose(hobbit,companion,not(ring bearer),infierceskirmish)
+					select: choose(hobbit,companion,not(ring bearer))
 					times: 2
 					memorize: exertedHobbit
 				}
 			]
 			effect: {
 				type: cancelSkirmish
-				filter: memory(exertedHobbit),infierceskirmish
+				fierceOnly: true
+				filter: memory(exertedHobbit)
 			}
 		}
 		gametext: <b>Skirmish:</b> Exert a Hobbit companion twice (except the Ring-bearer) to cancel a fierce skirmish involving that Hobbit.
@@ -151,10 +159,10 @@
 	
 	52_107: {
 		cardInfo: {
-			//id: 2_107.1
+			//id: 52_107.1
 			parent: 2_107
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN02E107.1.jpg
 			collInfo: 2U107
@@ -162,10 +170,11 @@
 		}
 		title: Not Feared in Sunlight
 		unique: false
-		culture: shire
+		side: Free Peoples
+		culture: Shire
 		twilight: 1
-		type: condition
-		keyword: support area
+		type: Condition
+		keywords: Support Area
 		effects: [
 			{
 				type: toPlay
@@ -193,7 +202,7 @@
 				}
 			}
 		]
-		gametext: To play, spot 2 Hobbits.\Fellowship: Discard this condition to make each Nazgûl strength -4 until the regroup phase.
+		gametext: To play, spot 2 Hobbits. Fellowship: Discard this condition to make each Nazgûl strength -4 until the regroup phase.
 		lore: "'...our shapes cast shadows in their minds, which only the noon sun destroys....'"
 		promotext: ""
 		alts: {
@@ -206,10 +215,10 @@
 
 	52_108: {
 		cardInfo: {
-			//id: 2_108.1
+			//id: 52_108.1
 			parent: 2_108
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/52_108.jpg
 			collInfo: 2R108
@@ -217,11 +226,12 @@
 		}
 		title: O Elbereth! Gilthoniel!
 		unique: true
-		culture: shire
+		side: Free Peoples
+		culture: Shire
 		twilight: 1
-		type: condition
+		type: Condition
 		strength: 1
-		keyword: tale
+		keywords: Tale
 		target: ring bearer
 		effects: {
 			type: activated
@@ -238,31 +248,46 @@
 				}
 			]
 			effect: {
-				type: choice
-				texts: [
-					Make the Ring-bearer strength +4 if skirmishing a Nazgul
-					Take off The One Ring
-				]
-				effects: [
-					{ 
-						type: If
-						check: {
+				type: If
+				check: {
+					type: Or
+					requires: [
+						{
 							type: CanSpot
 							filter: memory(oldBearer),InSkirmishAgainst(Nazgul)
 						}
-						true: {
-							type: addmodifier
-							modifier: {
-								type: modifyStrength
-								filter: memory(oldBearer),inSkirmishAgainst(nazgul)
-								amount: 4
+						{
+							type: RingIsOn
+						}
+					]
+				}
+				true: {
+					type: choice
+					texts: [
+						Make the Ring-bearer strength +4 if skirmishing a Nazgul
+						Take off The One Ring
+					]
+					effects: [
+						{ 
+							type: If
+							check: {
+								type: CanSpot
+								filter: memory(oldBearer),InSkirmishAgainst(Nazgul)
+							}
+							true: {
+								type: addmodifier
+								modifier: {
+									type: modifyStrength
+									filter: memory(oldBearer),inSkirmishAgainst(nazgul)
+									amount: 4
+								}
 							}
 						}
-					}
-					{
-						type: takeOffRing
-					}
-				]
+						{
+							type: takeOffRing
+						}
+					]
+				}
 			}
 		}
 		gametext: <b>Tale.</b>  Bearer must be the Ring-bearer.<br><b>Skirmish:</b> Discard this condition to make the Ring-bearer strength +4 if skirmishing a Nazgul or to take off The One Ring.
@@ -278,7 +303,7 @@
 	
 	52_110: {
 		cardInfo: {
-			//id: 2_110.1
+			//id: 52_110.1
 			parent: 2_110
 			variant: ERRATA
 			variantPath: errata/pc

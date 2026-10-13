@@ -1,0 +1,353 @@
+<title>Card Test Campaign</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600&display=swap">
+<style>
+[hidden] { display: none !important }
+/* Layout: a ledger. One row per part of the campaign, each with a bar split by status; a row opens into its sets,
+   a set into its cultures, a culture into its cards.  Approved cards leave the lists. */
+:root {
+  --bg: #f5f7f5; --surface: #ffffff; --ink: #1b2420; --muted: #5c6a64; --line: #dce2de; --accent: #2b6b5a;
+  --todo: #cdd5d0; --prog: #3b78c2; --ready: #c4861a; --parked: #b24a40; --ok: #2e8d5a; --hover: #eef2ef;
+  --sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --cond: "IBM Plex Sans Condensed", "Arial Narrow", "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121715; --surface: #1a211e; --ink: #e5ebe7; --muted: #98a69f; --line: #2a3430; --accent: #6dbfa4;
+  --todo: #3a4640; --prog: #6aa2e8; --ready: #e0ab48; --parked: #e27c72; --ok: #5cc58a; --hover: #212a26;
+  color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #121715; --surface: #1a211e; --ink: #e5ebe7; --muted: #98a69f; --line: #2a3430; --accent: #6dbfa4;
+  --todo: #3a4640; --prog: #6aa2e8; --ready: #e0ab48; --parked: #e27c72; --ok: #5cc58a; --hover: #212a26;
+  color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--ink); font: 14px/1.45 var(--sans); padding-inline: 16px; padding-block: 20px 48px }
+.wrap { max-width: 1120px; margin-inline: auto; display: flex; flex-direction: column; gap: 20px }
+header { display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: baseline; justify-content: space-between }
+h1 { font: 600 26px/1.15 var(--cond); margin: 0; letter-spacing: .01em; text-wrap: balance }
+.stamp { color: var(--muted); font-size: 12.5px }
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line) }
+.tabs button { font: 500 14px var(--cond); letter-spacing: .03em; text-transform: uppercase; color: var(--muted); background: none;
+  border: 0; border-bottom: 2px solid transparent; padding: 8px 12px; cursor: pointer }
+.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent) }
+.tabs button:focus-visible, .row:focus-visible, .chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+.totals { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1px; background: var(--line);
+  border: 1px solid var(--line) }
+.totals div { background: var(--surface); padding: 10px 12px; min-width: 0 }
+.totals b { display: block; font: 500 22px/1.1 var(--mono); font-variant-numeric: tabular-nums }
+.totals span { color: var(--muted); font: 500 11.5px var(--cond); letter-spacing: .06em; text-transform: uppercase }
+.swatch { display: inline-block; width: 9px; height: 9px; margin-right: 6px; vertical-align: baseline }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center }
+.chip { font: 500 12.5px var(--sans); color: var(--ink); background: var(--surface); border: 1px solid var(--line);
+  padding: 4px 10px; cursor: pointer }
+.chip[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent) }
+.ledger { border: 1px solid var(--line); background: var(--surface) }
+.row { display: grid; grid-template-columns: minmax(0, 1fr) 86px minmax(110px, 30%); gap: 12px; align-items: center;
+  width: 100%; padding: 9px 12px; border: 0; border-top: 1px solid var(--line); background: none; color: inherit;
+  font: inherit; text-align: left; cursor: pointer }
+.ledger > .row:first-child { border-top: 0 }
+.row:hover { background: var(--hover) }
+.row .name { min-width: 0; display: flex; gap: 8px; align-items: baseline }
+.row .name i { font-style: normal; color: var(--muted); width: 10px; flex: none; font-family: var(--mono) }
+.row .count { font: 400 12.5px var(--mono); color: var(--muted); text-align: right; font-variant-numeric: tabular-nums }
+.row.l0 .name b { font: 600 15px var(--cond); letter-spacing: .01em }
+.row.l1 { padding-left: 30px }
+.row.l1 .name b { font-weight: 500 }
+.row.l2 { padding-left: 50px; font-size: 13px }
+.row.l2 .name b { font-weight: 400 }
+.row.done .name b { color: var(--muted) }
+.bar { display: flex; height: 10px; background: var(--todo); overflow: hidden }
+.bar span { display: block; height: 100% }
+.cards { border-top: 1px solid var(--line); overflow-x: auto; padding-left: 50px }
+table { border-collapse: collapse; width: 100%; font-size: 13px }
+th { font: 500 11px var(--cond); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); text-align: left;
+  padding: 7px 10px; border-bottom: 1px solid var(--line); white-space: nowrap }
+td { padding: 6px 10px; border-bottom: 1px solid var(--line); vertical-align: top }
+tr:last-child td { border-bottom: 0 }
+.cards table { table-layout: fixed; min-width: 700px }
+.cards th:nth-child(1) { width: 84px } .cards th:nth-child(2) { width: 30% } .cards th:nth-child(3) { width: 150px }
+.cards th:nth-child(4) { width: 80px } .cards th:nth-child(5) { width: 86px } .cards th:nth-child(6) { width: 96px }
+td.id { font: 400 12.5px var(--mono); white-space: nowrap; color: var(--muted) }
+td.num { font: 400 12.5px var(--mono); white-space: nowrap; font-variant-numeric: tabular-nums }
+td.note { color: var(--muted); min-width: 180px }
+.pill { display: inline-block; font: 500 11.5px var(--cond); letter-spacing: .05em; text-transform: uppercase; padding: 1px 7px;
+  border: 1px solid currentColor; white-space: nowrap }
+.pill.todo { color: var(--muted) } .pill.in-progress { color: var(--prog) } .pill.ready { color: var(--ready) }
+.pill.parked { color: var(--parked) } .pill.approved { color: var(--ok) }
+.pill.candidate { color: var(--parked) } .pill.question, .pill.confirmed { color: var(--prog) } .pill.fixed { color: var(--ready) }
+.pill.fixed-approved { color: var(--ok) } .pill.not-a-bug { color: var(--muted) }
+.fbar { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center }
+.fbar input { font: 400 13px var(--sans); color: var(--ink); background: var(--surface); border: 1px solid var(--line); padding: 5px 10px;
+  min-width: 0; flex: 1 1 220px; max-width: 340px }
+.fbar input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+.chip .n { color: var(--muted); font: 400 12px var(--mono); margin-left: 6px }
+#flist { min-width: 980px } #flist td:nth-child(3) { min-width: 150px } #flist td:nth-child(6) { min-width: 220px } #flist td.when { font: 400 12.5px var(--mono); white-space: nowrap; color: var(--muted) }
+.empty { color: var(--muted); padding: 10px 12px 10px 50px; border-top: 1px solid var(--line); font-size: 13px }
+h2 { font: 600 16px var(--cond); letter-spacing: .02em; margin: 8px 0 0 }
+.plain { border: 1px solid var(--line); background: var(--surface); overflow-x: auto }
+.plain table td, .plain table th { padding-inline: 12px }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 16px; color: var(--muted); font-size: 12.5px }
+p.lead { margin: 0; color: var(--muted); max-width: 70ch }
+.tabs { flex-wrap: wrap } .tabs button { white-space: nowrap }
+body { overflow-wrap: anywhere }
+/* What waits on Ketura, and the reports: read on a phone, so each is a block of its own, not a table row. */
+.item { padding: 12px 14px; border-bottom: 1px solid var(--line) } .item:last-child { border-bottom: 0 }
+.item h3 { margin: 0 0 6px; font: 600 14px/1.35 var(--sans) } .item h3 .code { font: 500 12.5px var(--mono); color: var(--accent); margin-right: 8px }
+.item .body { white-space: pre-wrap; overflow-wrap: anywhere } .item .meta { color: var(--muted); font-size: 12.5px; margin-top: 6px; white-space: pre-wrap }
+.item code, details.report code { font: 12.5px var(--mono) }
+.item pre.fence, details.report pre.fence { font: 12px/1.45 var(--mono); white-space: pre-wrap; overflow-wrap: anywhere; background: var(--line); padding: 8px 10px; border-radius: 6px; margin: 6px 0 }
+details.report { border-bottom: 1px solid var(--line) } details.report:last-child { border-bottom: 0 }
+details.report summary { padding: 10px 14px; cursor: pointer; font: 500 13px var(--mono) }
+details.report .body { padding: 0 14px 14px; white-space: pre-wrap; overflow-wrap: anywhere }
+@media (max-width: 620px) {
+  .row { grid-template-columns: minmax(0, 1fr) 64px; row-gap: 6px }
+  .row .bar { grid-column: 1 / -1 }
+  .row.l1 { padding-left: 20px } .row.l2 { padding-left: 30px } .cards { padding-left: 0 } .empty { padding-left: 30px }
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Card Test Campaign</h1>
+    <span class="stamp" id="stamp"></span>
+  </header>
+  <p class="lead" id="running"></p>
+  <div class="tabs" role="tablist">
+    <button role="tab" id="tab-progress" aria-selected="true" aria-controls="progress">Progress</button>
+    <button role="tab" id="tab-findings" aria-selected="false" aria-controls="findings">Findings</button>
+    <button role="tab" id="tab-ask" aria-selected="false" aria-controls="ask">Waiting on Ketura</button>
+    <button role="tab" id="tab-reports" aria-selected="false" aria-controls="reports">Reports</button>
+  </div>
+
+  <section id="progress" role="tabpanel" style="display:flex;flex-direction:column;gap:16px">
+    <div class="totals" id="totals"></div>
+    <div class="chips" id="filters"></div>
+    <div class="ledger" id="ledger"></div>
+    <div class="legend" id="legend"></div>
+    <h2>Other work</h2>
+    <div class="plain"><table id="other"></table></div>
+  </section>
+
+  <section id="findings" role="tabpanel" hidden style="display:flex;flex-direction:column;gap:16px">
+    <p class="lead">Everything the campaign has turned up. "Fixed" was mended without waiting for a ruling and has not been
+      looked at by Ketura; "fixed with approval" has her word on it, given before the fix or after.</p>
+    <div class="fbar">
+      <div class="chips" id="ffilters"></div>
+      <div class="chips" id="fkinds"></div>
+      <input type="search" id="fsearch" placeholder="Card id, name or word" aria-label="Search the findings">
+    </div>
+    <div class="plain"><table id="flist"></table></div>
+    <div class="stamp" id="fcount"></div>
+    <h2>By kind</h2>
+    <div class="plain"><table id="tally"></table></div>
+  </section>
+
+  <section id="ask" role="tabpanel" hidden style="display:flex;flex-direction:column;gap:16px">
+    <p class="lead">Only what asks her something, in full: the open questions (a "Keep or strike" one is a change
+      already made that she may undo; left unanswered it stays), the findings filed as a question under their own
+      number, and the open rig requests. Fixes made without her word are on the Findings tab (Fixed, not yet
+      Approved) for spot checks. An answer in the chat needs only the code.</p>
+    <h2 id="qhead">Questions</h2>
+    <div class="plain" id="qlist"></div>
+    <h2 id="fhead">Findings asked as questions</h2>
+    <div class="plain" id="wlist"></div>
+    <h2 id="ghead">Rig requests</h2>
+    <div class="plain" id="glist"></div>
+  </section>
+
+  <section id="reports" role="tabpanel" hidden style="display:flex;flex-direction:column;gap:16px">
+    <p class="lead">What each engine item and each batch's lander wrote, whole, newest first. Tap one to open it.</p>
+    <div class="plain" id="rlist"></div>
+  </section>
+</div>
+
+<script src="tracker-data.js"></script>
+<script>
+const DATA = window.TRACKER_DATA || /*__DATA__*/null;
+const STATUSES = ["approved", "ready", "parked", "in-progress", "todo"];
+const LABEL = { "approved": "Approved", "ready": "Ready for review", "parked": "Parked", "in-progress": "In progress", "todo": "To do" };
+const COLOR = { "approved": "var(--ok)", "ready": "var(--ready)", "parked": "var(--parked)", "in-progress": "var(--prog)", "todo": "var(--todo)" };
+const KINDS = { "hjson-typo": "Typo in the definition", "hjson-logic": "Implementation oversight", "gametext": "Displayed text wrong",
+  "engine": "Engine bug", "rig": "Test rig bug", "test": "Existing test wrong or empty", "sheet": "Spreadsheet wrong",
+  "ruling": "Needs a ruling", "data": "Data oddity" };
+const el = (tag, attrs, ...kids) => { const e = document.createElement(tag);
+  for (const k in (attrs || {})) { if (k === "class") e.className = attrs[k]; else if (k === "text") e.textContent = attrs[k]; else e.setAttribute(k, attrs[k]); }
+  for (const kid of kids) if (kid != null) e.append(kid); return e; };
+const store = { get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
+
+function counts(cards) { const c = { total: cards.length }; for (const s of STATUSES) c[s] = 0; for (const x of cards) c[x.status]++; return c; }
+function bar(c) { const b = el("div", { class: "bar", role: "img", "aria-label": STATUSES.map(s => c[s] + " " + LABEL[s].toLowerCase()).join(", ") });
+  for (const s of STATUSES) { if (s === "todo" || !c[s]) continue; const seg = el("span"); seg.style.width = (100 * c[s] / Math.max(1, c.total)) + "%"; seg.style.background = COLOR[s]; b.append(seg); }
+  return b; }
+
+function start() {
+  if (!DATA) { document.getElementById("ledger").append(el("div", { class: "empty", text: "No data in this page." })); return; }
+  document.getElementById("stamp").textContent = "As of " + DATA.generated;
+  // What the agents are doing, as of the moment this data was written (it does not move by itself).
+  const runs = DATA.running || [];
+  const runText = runs.length ? runs.map(r => r.name + ": " + r.state + (r.done && r.done.length ? " (done: " + r.done.join(", ") + (r.of && r.of.length ? "; " + r.done.length + " of " + r.of.length : "") + ")" : "")).join("  ·  ") : "nothing";
+  document.getElementById("running").textContent = "Running now: " + runText + "  ·  checked " + DATA.generated;
+  const all = counts(DATA.cards);
+  const totals = document.getElementById("totals");
+  totals.append(el("div", null, el("b", { text: all.total.toLocaleString() }), el("span", { text: "Cards" })));
+  for (const s of STATUSES) { const d = el("div", null, el("b", { text: all[s].toLocaleString() }));
+    const sp = el("span"); const sw = el("i", { class: "swatch" }); sw.style.background = COLOR[s]; sp.append(sw, LABEL[s]); d.append(sp); totals.append(d); }
+
+  // Which rows are open.  The page opens at whatever the campaign is working on, unless the viewer has opened or shut rows themselves.
+  const focusKey = (DATA.focus || []).join("/");
+  let open = store.get("open", null);
+  if (!open || store.get("focus", "") !== focusKey) { open = {}; if (DATA.focus && DATA.focus[0]) { open["p:" + DATA.focus[0]] = true; if (DATA.focus[1]) open["s:" + DATA.focus[0] + "/" + DATA.focus[1]] = true; } store.set("focus", focusKey); store.set("open", open); }
+  let filter = store.get("filter", "all");
+  let showApproved = false;
+
+  const filters = document.getElementById("filters");
+  function drawFilters() { filters.replaceChildren();
+    for (const f of ["all", "ready", "parked", "in-progress", "todo"]) { const b = el("button", { class: "chip", "aria-pressed": String(filter === f), id: "filter-" + f, text: f === "all" ? "Everything open" : LABEL[f] });
+      b.onclick = () => { filter = f; store.set("filter", f); drawFilters(); draw(); }; filters.append(b); }
+    const a = el("button", { class: "chip", "aria-pressed": String(showApproved), id: "filter-approved", text: (showApproved ? "Hide" : "Show") + " approved cards" });
+    a.onclick = () => { showApproved = !showApproved; drawFilters(); draw(); }; filters.append(a); }
+
+  const ledger = document.getElementById("ledger");
+  function groupBy(cards, key) { const m = new Map(); for (const c of cards) { if (!m.has(c[key])) m.set(c[key], []); m.get(c[key]).push(c); } return m; }
+  function row(level, key, title, cards) { const c = counts(cards); const isOpen = !!open[key];
+    const r = el("button", { class: "row l" + level + (c.approved === c.total ? " done" : ""), "aria-expanded": String(isOpen) },
+      el("span", { class: "name" }, el("i", { text: isOpen ? "–" : "+" }), el("b", { text: title })),
+      el("span", { class: "count", text: (c.total - c.todo) + " / " + c.total }), bar(c));
+    r.onclick = () => { open[key] = !open[key]; store.set("open", open); draw(); }; return r; }
+  function cardTable(cards) {
+    const shown = cards.filter(c => (showApproved || c.status !== "approved") && (filter === "all" || c.status === filter));
+    if (!shown.length) return el("div", { class: "empty", text: cards.every(c => c.status === "approved") ? "Every card here is approved." : "Nothing here matches the filter." });
+    const t = el("table"); t.append(el("tr", null, ...["Card", "Name", "Status", "Tests", "Standard", "Findings", "Note"].map(h => el("th", { text: h }))));
+    for (const c of shown) t.append(el("tr", null, el("td", { class: "id", text: c.id }), el("td", { text: c.name }),
+      el("td", null, el("span", { class: "pill " + c.status, text: LABEL[c.status] })), el("td", { class: "num", text: c.was + " → " + c.now }),
+      el("td", { text: c.lint ? "meets" : "not yet" }), el("td", { class: "id", text: c.findings || "" }), el("td", { class: "note", text: c.note || "" })));
+    return el("div", { class: "cards" }, t); }
+  function draw() { ledger.replaceChildren();
+    // Ketura, 2026-10-12: the 600 most-used cards first, by set; the same cards as in their own section below.
+    // Ketura, 2026-10-13: the section sits right above the Decipher cards.
+    const hu = new Set(DATA.highuse || []);
+    const hc = DATA.cards.filter(c => hu.has(c.id));
+    function highUse() { if (!hc.length) return; ledger.append(row(0, "p:highuse", "High Use Cards", hc));
+      if (open["p:highuse"]) for (const [setName, sc] of groupBy(hc, "set")) { const sk = "s:highuse/" + setName;
+        ledger.append(row(1, sk, setName, sc)); if (open[sk]) ledger.append(cardTable(sc)); } }
+    let huDone = false;
+    for (const p of DATA.phases) { if (p.key === "decipher") { highUse(); huDone = true; }
+      const pc = DATA.cards.filter(c => c.phase === p.key); if (!pc.length) continue;
+      ledger.append(row(0, "p:" + p.key, p.title, pc)); if (!open["p:" + p.key]) continue;
+      for (const [setName, sc] of groupBy(pc, "set")) { const sk = "s:" + p.key + "/" + setName; ledger.append(row(1, sk, setName, sc)); if (!open[sk]) continue;
+        const groups = groupBy(sc, "group");
+        if (groups.size === 1) { ledger.append(cardTable(sc)); continue; }
+        for (const [gName, gc] of groups) { const gk = "g:" + p.key + "/" + setName + "/" + gName; const small = sc.length <= 150;
+          if (open[gk] === undefined && small) open[gk] = true;
+          ledger.append(row(2, gk, gName, gc)); if (open[gk]) ledger.append(cardTable(gc)); } } }
+    if (!huDone) highUse(); }
+  drawFilters(); draw();
+
+  const legend = document.getElementById("legend");
+  legend.append(el("span", { text: "Counts are worked (every status but To do) / total. \"Tests\" is how many active tests the card had before the campaign and has now. \"Standard\" is whether its test file passes the conformance check." }));
+
+  const other = document.getElementById("other");
+  other.append(el("tr", null, el("th", { text: "What" }), el("th", { text: "Size" })));
+  const legacyTotal = (DATA.legacy || []).reduce((a, l) => a + l.tests, 0);
+  other.append(el("tr", null, el("td", { text: "Tests written before the rig (the at folder), to be rewritten as card tests or as card-agnostic mechanic tests" }), el("td", { class: "num", text: legacyTotal + " tests in " + (DATA.legacy || []).length + " files" })));
+  other.append(el("tr", null, el("td", { text: "Test files kept for earlier iterations of PC cards, kept in step but not switched on" }), el("td", { class: "num", text: DATA.dormant + " files" })));
+
+  // Findings.
+  const F = DATA.findings || [];
+  const FS = ["candidate", "question", "confirmed", "fixed", "fixed-approved", "not-a-bug"];
+  const FLABEL = { "candidate": "Waiting on Ketura", "question": "Question open", "confirmed": "Fix pending", "fixed": "Fixed",
+    "fixed-approved": "Fixed with approval", "not-a-bug": "Not a bug" };
+  const tally = document.getElementById("tally");
+  tally.append(el("tr", null, el("th", { text: "Kind" }), ...FS.map(s => el("th", { text: FLABEL[s] })), el("th", { text: "All" })));
+  const kinds = [...new Set(F.map(f => f.kind))];
+  for (const k of kinds) { const of = F.filter(f => f.kind === k);
+    tally.append(el("tr", null, el("td", { text: KINDS[k] || k }), ...FS.map(s => el("td", { class: "num", text: String(of.filter(f => f.status === s).length || "") })), el("td", { class: "num", text: String(of.length) }))); }
+  if (!F.length) tally.append(el("tr", null, el("td", { text: "Nothing yet.", colspan: "8" })));
+
+  // The filter: one status group at a time, newest first unless turned round, and a search over every column.
+  const FGROUPS = [["all", "All", null], ["waiting", "Waiting on Ketura", ["candidate", "question"]], ["pending", "Fix pending", ["confirmed"]],
+    ["fixed", "Fixed, not yet approved", ["fixed"]], ["approved", "Fixed with approval", ["fixed-approved"]], ["not", "Not a bug", ["not-a-bug"]]];
+  let fgroup = store.get("fgroup", "all"); if (!FGROUPS.some(g => g[0] === fgroup)) fgroup = "all";
+  let newestFirst = store.get("fnewest", true); let ftext = "";
+  const ffilters = document.getElementById("ffilters"), flist = document.getElementById("flist"), fcount = document.getElementById("fcount");
+  // Ketura, 2026-10-13: a second filter, by kind, beside the status filter; All by default.
+  const fkinds = document.getElementById("fkinds");
+  const KORDER = Object.keys(KINDS).filter(k => F.some(f => f.kind === k)).concat([...new Set(F.map(f => f.kind))].filter(k => !(k in KINDS)));
+  let fkind = store.get("fkind", "all"); if (fkind !== "all" && !KORDER.includes(fkind)) fkind = "all";
+  function drawKindFilters() { fkinds.replaceChildren();
+    for (const k of ["all"].concat(KORDER)) { const n = k === "all" ? F.length : F.filter(f => f.kind === k).length;
+      const b = el("button", { class: "chip", "aria-pressed": String(fkind === k), id: "fkind-" + k }, k === "all" ? "All kinds" : (KINDS[k] || k), el("span", { class: "n", text: String(n) }));
+      b.onclick = () => { fkind = k; store.set("fkind", k); drawKindFilters(); drawFindings(); }; fkinds.append(b); } }
+  function drawFindingFilters() { ffilters.replaceChildren();
+    for (const [key, label, sts] of FGROUPS) { const n = sts ? F.filter(f => sts.includes(f.status)).length : F.length;
+      const b = el("button", { class: "chip", "aria-pressed": String(fgroup === key), id: "ffilter-" + key }, label, el("span", { class: "n", text: String(n) }));
+      b.onclick = () => { fgroup = key; store.set("fgroup", key); drawFindingFilters(); drawFindings(); }; ffilters.append(b); }
+    const o = el("button", { class: "chip", "aria-pressed": String(newestFirst), id: "ffilter-newest", text: "Newest first" });
+    o.onclick = () => { newestFirst = !newestFirst; store.set("fnewest", newestFirst); drawFindingFilters(); drawFindings(); }; ffilters.append(o); }
+  function drawFindings() { flist.replaceChildren();
+    flist.append(el("tr", null, ...["Id", "Found", "Card", "Kind", "Status", "What", "How it was found", "Outcome"].map(h => el("th", { text: h }))));
+    const sts = FGROUPS.find(g => g[0] === fgroup)[2]; const words = ftext.toLowerCase().split(/\s+/).filter(Boolean);
+    let shown = F.filter(f => (!sts || sts.includes(f.status)) && (fkind === "all" || f.kind === fkind));
+    if (words.length) shown = shown.filter(f => { const hay = [f.id, f.card, f.name, KINDS[f.kind] || f.kind, FLABEL[f.status] || f.status, f.summary, f.found, f.outcome].join(" ").toLowerCase();
+      return words.every(w => hay.includes(w)); });
+    if (newestFirst) shown = shown.slice().reverse();
+    for (const f of shown) flist.append(el("tr", null, el("td", { class: "id", text: f.id }), el("td", { class: "when", text: f.date || "" }),
+      el("td", null, el("span", { class: "id", text: f.card + " " }), f.name || ""),
+      el("td", { text: KINDS[f.kind] || f.kind }), el("td", null, el("span", { class: "pill " + f.status, text: FLABEL[f.status] || f.status })),
+      el("td", { text: f.summary || "" }), el("td", { class: "note", text: f.found || "" }), el("td", { class: "note", text: f.outcome || "" })));
+    if (!shown.length) flist.append(el("tr", null, el("td", { class: "note", text: "Nothing here matches the filter.", colspan: "8" })));
+    fcount.textContent = shown.length + " of " + F.length + " findings shown"; }
+  document.getElementById("fsearch").oninput = e => { ftext = e.target.value; drawFindings(); };
+  drawFindingFilters(); drawKindFilters(); drawFindings();
+
+  // What waits on Ketura: the open questions and rig requests, word for word.
+  function rich(node, text) {
+    // a fenced block (```) is shown as it is, in a box of its own; the rest gets bold and code spans
+    const blocks = (text || "").split(/^```[^\n]*\n([\s\S]*?)^```[ \t]*$/m);
+    if (blocks.length > 1) { blocks.forEach((b, i) => { if (i % 2) node.append(el("pre", { class: "fence", text: b.replace(/\n$/, "") })); else rich(node, b); }); return node; }
+    for (const part of (text || "").split(/(\*\*[^*]+\*\*|`[^`]+`)/)) {
+      if (/^\*\*/.test(part)) node.append(el("b", { text: part.slice(2, -2) }));
+      else if (/^`/.test(part)) node.append(el("code", { text: part.slice(1, -1) }));
+      else node.append(part); } return node; }
+  function item(code, title, body, meta) { const d = el("div", { class: "item" }, el("h3", null, el("span", { class: "code", text: code }), title || ""));
+    d.append(rich(el("div", { class: "body" }), body)); if (meta) d.append(rich(el("div", { class: "meta" }), meta)); return d; }
+  function drawOpen(box, items, none) { box.replaceChildren();
+    for (const q of items) box.append(item(q.id, q.title, q.body));
+    if (!items.length) box.append(el("div", { class: "item" }, el("div", { class: "meta", text: none }))); }
+  const Q = DATA.questions || [], G = DATA.rig || [];
+  // Findings that have not had her word: mended without it, or filed and waiting.
+  // Ketura, 2026-10-12: this tab shows questions only; a fix made without her word is spot-checked on the Findings
+  // tab (Fixed against Approved), and a fix pending is no question.
+  const WAITS = { "candidate": "believed wrong, not fixed: waiting on her", "question": "hangs on an open question" };
+  // A finding she has spoken on ("Ketura (2026-10-09): ..." in its outcome) and whose fix is only pending is not waiting on her.
+  const spoken = f => f.status === "confirmed" && /Ketura \(\d{4}-\d\d-\d\d/.test(f.outcome || "");
+  // Ketura, 2026-10-09: "if there is a Q for an F of the same issue, I only need to see the Q". A finding that an
+  // open question is filed under, or names, or that names an open question, is left to that question.
+  const qtext = Q.map(q => q.id + " " + (q.title || "") + " " + (q.body || "")).join("\n");
+  const asked = f => qtext.includes(f.id) || Q.some(q => ((f.summary || "") + " " + (f.found || "") + " " + (f.outcome || "")).includes(q.id));
+  const W = (DATA.findings || []).filter(f => WAITS[f.status] && !spoken(f) && !asked(f)).slice().reverse();
+  drawOpen(document.getElementById("qlist"), Q, "No question is open.");
+  drawOpen(document.getElementById("glist"), G, "No rig request is open.");
+  const wlist = document.getElementById("wlist"); wlist.replaceChildren();
+  for (const f of W) wlist.append(item(f.id, (f.card ? f.card + " " : "") + (f.name || ""), f.summary || "",
+    (KINDS[f.kind] || f.kind) + " · " + WAITS[f.status] + (f.found ? "\nFound: " + f.found : "") + (f.outcome ? "\nOutcome: " + f.outcome : "")));
+  if (!W.length) wlist.append(el("div", { class: "item" }, el("div", { class: "meta", text: "None." })));
+  document.getElementById("qhead").textContent = "Questions (" + Q.length + ")";
+  document.getElementById("fhead").textContent = "Findings asked as questions (" + W.length + ")";
+  document.getElementById("ghead").textContent = "Rig requests (" + G.length + ")";
+  document.getElementById("tab-ask").textContent = "Waiting on Ketura (" + (Q.length + W.length + G.length) + ")";
+  const rlist = document.getElementById("rlist");
+  for (const r of (DATA.reports || [])) { const d = el("details", { class: "report" }, el("summary", { text: r.name }));
+    d.append(rich(el("div", { class: "body" }), r.text)); rlist.append(d); }
+  if (!(DATA.reports || []).length) rlist.append(el("div", { class: "item" }, el("div", { class: "meta", text: "No report yet." })));
+
+  // Tabs.
+  const tabs = { progress: document.getElementById("tab-progress"), findings: document.getElementById("tab-findings"), ask: document.getElementById("tab-ask"), reports: document.getElementById("tab-reports") };
+  function show(name) { for (const k in tabs) { tabs[k].setAttribute("aria-selected", String(k === name)); document.getElementById(k).hidden = k !== name; } }
+  tabs.progress.onclick = () => show("progress"); tabs.findings.onclick = () => show("findings"); tabs.ask.onclick = () => show("ask"); tabs.reports.onclick = () => show("reports");
+  if (location.hash === "#findings") show("findings");
+  if (location.hash === "#ask") show("ask");
+  if (location.hash === "#reports") show("reports");
+}
+start();
+</script>

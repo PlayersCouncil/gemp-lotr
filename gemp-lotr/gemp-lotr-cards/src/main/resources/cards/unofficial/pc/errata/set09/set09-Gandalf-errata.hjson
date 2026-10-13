@@ -2,10 +2,10 @@
 
 	59_26: {
 		cardInfo: {
-			//id: 9_26.1
+			//id: 59_26.1
 			parent: 9_26
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/59_26.jpg
 			collInfo: 9R+26
@@ -59,7 +59,7 @@
 						optional: false
 						trigger: {
 							type: RemovedFromPlay
-							filter: title(Radagast)
+							filter: self
 						}
 						effect: {
 							type: addModifier
@@ -138,10 +138,10 @@
 	
 	59_27: {
 		cardInfo: {
-			//id: 9_27.1
+			//id: 59_27.1
 			parent: 9_27
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN09E027.1_card.jpg
 			collInfo: 9R27
@@ -153,7 +153,7 @@
 		culture: Gandalf
 		twilight: 2
 		type: Condition
-		keyword: support area
+		keywords: Support Area
 		effects: [
 			{
 				type: activated

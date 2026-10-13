@@ -2,7 +2,10 @@
 
 	61_114: {
 		cardInfo: {
-			//id: 1_114.1
+			//id: 61_114.1
+			parent: 11_114
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/61_114.jpg
 			collInfo: 11U114
@@ -10,10 +13,11 @@
 		}
 		title: Demoralized
 		unique: true
-		culture: orc
+		side: Shadow
+		culture: Orc
 		twilight: 1
-		type: condition
-		keyword: support area
+		type: Condition
+		keywords: Support Area
 		effects: [
 			{
 				type: toPlay
@@ -24,7 +28,7 @@
 			}
 			{
 				type: Trigger
-				optional: false
+				optional: true
 				trigger: {
 					type: exerted
 					filter: companion
@@ -57,17 +61,22 @@
 
 	61_132: {
 		cardInfo: {
-			//id: 1_132.1
+			//id: 61_132.1
+			parent: 11_132
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/61_132.jpg
 			collInfo: 11C132
 			rarity: C
 		}
 		title: Orkish Smith
-		culture: orc
+		unique: false
+		side: Shadow
+		culture: Orc
 		twilight: 2
-		type: minion
-		race: orc
+		type: Minion
+		race: Orc
 		strength: 6
 		vitality: 1
 		site: 4

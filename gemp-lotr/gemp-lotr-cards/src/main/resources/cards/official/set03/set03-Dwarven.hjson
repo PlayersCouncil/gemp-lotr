@@ -230,9 +230,10 @@
 			type: event
 			effect: [
 				{
-					type: revealCardsFromHand
+					type: revealRandomCardsFromHand
+					forced: true
 					hand: shadow
-					select: random(1)
+					count: 1
 					memorize: revealedCard
 				}
 				{

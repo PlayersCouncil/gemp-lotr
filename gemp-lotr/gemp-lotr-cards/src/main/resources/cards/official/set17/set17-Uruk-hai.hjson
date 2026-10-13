@@ -753,10 +753,17 @@
 					type: winsSkirmish
 					filter: self
 				}
-				requires: {
-					type: cantSpot
-					filter: siteYouControl
-				}
+				requires: [
+					{
+						type: not
+						requires: {
+							type: controlsSite
+						}
+					}
+					{
+						type: SiteAvailableToControl
+					}
+				]
 				effect: {
 					type: takeControlOfSite
 				}
@@ -1085,7 +1092,7 @@
 					keyword: damage
 					amount: {
 						type: forEachYouCanSpot
-						filter: hunter,assignedToSkirmish(any)
+						filter: culture(uruk-hai),hunter,assignedToSkirmish(any)
 					}
 				}
 			}
@@ -1170,7 +1177,7 @@
 		effects: [
 			{
 				type: Trigger
-				optional: false
+				optional: true
 				trigger: {
 					type: assignedAgainst
 					filter: self
@@ -1250,11 +1257,17 @@
 				trigger: {
 					type: SiteControlled
 				}
-				requires: {
-					type: canSpot
-					filter: culture(uruk-hai),minion
-					count: 3
-				}
+				requires: [
+					{
+						type: canSpot
+						filter: culture(uruk-hai),minion
+						count: 3
+					}
+					{
+						type: canSpot
+						filter: unbound,companion,canExert
+					}
+				]
 				effect: {
 					type: exert
 					select: choose(unbound,companion)

@@ -87,6 +87,13 @@ public interface LotroCardBlueprint {
 
     PlayEventAction getPlayEventCardAction(String playerId, LotroGame game, PhysicalCard self);
 
+    /**
+     * The action that plays this event "ignoring all costs": no twilight cost, and none of the costs in its own
+     * text that can be passed over (PlayEventAction.isCostsIgnored).  Whether the event may be played at all is
+     * asked elsewhere (PlayUtils.checkPlayRequirementsIgnoringCosts).
+     */
+    PlayEventAction getPlayEventCardActionIgnoringCosts(String playerId, LotroGame game, PhysicalCard self);
+
     List<? extends Modifier> getInPlayModifiers(LotroGame game, PhysicalCard self);
 
     List<? extends Modifier> getStackedOnModifiers(LotroGame game, PhysicalCard self);
@@ -167,6 +174,15 @@ public interface LotroCardBlueprint {
     boolean canPayAidCost(LotroGame game, PhysicalCard self);
 
     void appendAidCosts(LotroGame game, CostToEffectAction action, PhysicalCard self);
+
+    /**
+     * The N of a follower's printed "Aid - (N)": the twilight its Aid costs, which a Free Peoples follower adds
+     * and a Shadow follower removes.  A reading of the card and nothing more: the Aid is paid through
+     * appendAidCosts.
+     * @return That number; null for a card with no Aid, and for a follower whose Aid is not a plain amount of
+     * twilight and nothing else ("Aid - Add a burden.", "Aid - Exert a [gondor] companion.").
+     */
+    default Integer getAidTwilightCost() { return null; }
 
     boolean skipUniquenessCheck();
 

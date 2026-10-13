@@ -1,6 +1,6 @@
 package com.gempukku.lotro.game.formats;
 
-import com.gempukku.lotro.at.AbstractAtTest;
+import com.gempukku.lotro.framework.LoadedLibraries;
 import com.gempukku.lotro.common.AppConfig;
 import com.gempukku.lotro.game.LotroFormat;
 import com.gempukku.util.JsonUtils;
@@ -17,7 +17,7 @@ import java.util.*;
 import static org.junit.Assert.*;
 
 /** The rows behind Help › PC Errata (GET /hall/errata/json: entries, formats, counts). */
-public class ErrataCatalogTest extends AbstractAtTest {
+public class ErrataCatalogTest extends LoadedLibraries {
 
     @SuppressWarnings("unchecked")
     private static List<Map<String, Object>> entries(Map<String, Object> catalog) {
@@ -97,8 +97,8 @@ public class ErrataCatalogTest extends AbstractAtTest {
         assertFalse(formats.contains("movie"));
         @SuppressWarnings("unchecked") var before = (Map<String, Object>) e.get("before");
         @SuppressWarnings("unchecked") var after = (Map<String, Object>) e.get("after");
-        assertTrue(((String) after.get("gametext")).contains("discard a Shadow item"));
-        assertFalse(((String) before.get("gametext")).contains("discard a Shadow item"));
+        assertTrue(((String) after.get("gametext")).contains("Discard a Shadow item"));
+        assertFalse(((String) before.get("gametext")).contains("Shadow item"));
         @SuppressWarnings("unchecked") var stats = (Map<String, Object>) after.get("stats");
         assertEquals(1, stats.get("Twilight"));
         assertEquals(Boolean.FALSE, stats.get("Unique"));

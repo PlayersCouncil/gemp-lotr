@@ -27,7 +27,10 @@ public class AddTokenEffect extends AbstractEffect {
 
     @Override
     public boolean isPlayableInFull(LotroGame game) {
-        return _target.getZone().isInPlay() && !game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.CANT_TOUCH_CULTURE_TOKENS);
+        // CR 5.0 "hinder": tokens on hindered cards cannot be added to. This holds even for a card hindered in the
+        // middle of its own ability, whose text is otherwise carried out: "cannot" beats "continue to be executed".
+        return _target.getZone().isInPlay() && !game.getGameState().isHindered(_target)
+                && !game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.CANT_TOUCH_CULTURE_TOKENS);
     }
 
     @Override

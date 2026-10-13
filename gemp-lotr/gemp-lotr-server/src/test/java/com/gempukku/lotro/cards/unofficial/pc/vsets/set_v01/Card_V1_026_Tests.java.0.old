@@ -118,7 +118,7 @@ public class Card_V1_026_Tests
 
 		scn.SetTwilight(16);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(20, scn.GetTwilight()); //base after moving
 		scn.ShadowPlayCard(crows);
@@ -174,10 +174,10 @@ public class Card_V1_026_Tests
 		scn.StartGame();
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		// 1 freepsitem, no saruman
 		assertFalse(scn.ShadowActionAvailable(crows));
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.PassCurrentPhaseActions();
@@ -187,10 +187,10 @@ public class Card_V1_026_Tests
 		scn.AttachCardsTo(gimli, axe1);
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		// 2 freeps items, no saruman
 		assertTrue(scn.ShadowActionAvailable(crows));
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.PassCurrentPhaseActions();
@@ -201,7 +201,7 @@ public class Card_V1_026_Tests
 		scn.MoveMinionToTable(saruman);
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		// 0 wounded companions, yes saruman
 		assertTrue(scn.ShadowActionAvailable(crows));
 
@@ -232,7 +232,7 @@ public class Card_V1_026_Tests
 		scn.StartGame();
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(crows));
 		assertEquals(Zone.DECK, poss1.getZone());
 		assertEquals(poss1, scn.GetShadowBottomOfDeck());
@@ -256,7 +256,7 @@ public class Card_V1_026_Tests
 		scn.FreepsChooseToMove();
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(crows2));
 		assertEquals(Zone.DECK, poss1.getZone());
 		assertEquals(poss1, scn.GetShadowBottomOfDeck());
@@ -280,7 +280,7 @@ public class Card_V1_026_Tests
 		scn.FreepsChooseToMove();
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(crows3));
 		assertEquals(Zone.DECK, poss1.getZone());
 		assertEquals(poss1, scn.GetShadowBottomOfDeck());

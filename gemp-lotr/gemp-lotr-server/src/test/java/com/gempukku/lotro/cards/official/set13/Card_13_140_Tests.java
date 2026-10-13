@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_13_140_Tests
@@ -18,7 +19,20 @@ public class Card_13_140_Tests
 				new HashMap<>()
 				{{
 					put("card", "13_140");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetDiscountScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("sauron", "13_140");
+					put("troop1", "1_177");     // Goblin Patrol Troop: a minion of vitality 3 with no text at all
+					put("troop2", "1_177");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -64,18 +78,72 @@ public class Card_13_140_Tests
 		assertEquals(6, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SauronTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void ExertingAMinionAsHeIsPlayedTakesTheRegionNumberOffHisCostAndAPoolOneShortThenPlaysHim() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetDiscountScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var sauron = scn.GetShadowCard("sauron");
+		var troop1 = scn.GetShadowCard("troop1");
+		var troop2 = scn.GetShadowCard("troop2");
+		scn.MoveCardsToHand(sauron);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(troop1, troop2);
+		// 14, and for the move 1 companion and the 2 of Ettenmoors
+		scn.SetTwilight(14);
+		scn.FreepsPass();
 
-		assertEquals(16, scn.GetTwilight());
+		// Site 2 is in region 1.  16 to play + 2 roaming (his site number is 6) = 18: the pool is one short,
+		// and one minion exerted takes 1 off.
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertEquals(17, scn.GetTwilight());
+		assertEquals(0, scn.GetWoundsOn(troop1));
+		assertEquals(0, scn.GetWoundsOn(troop2));
+		assertTrue(scn.ShadowPlayAvailable(sauron));
+
+		scn.ShadowPlayCard(sauron);
+		// "Any number of minions", but no fewer than the pool needs: he cannot be played for less than he
+		// costs by exerting nobody.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(troop1, troop2));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		assertEquals(2, scn.ShadowGetChoiceMax());
+		scn.ShadowChooseCards(troop2);
+
+		assertEquals(0, scn.GetWoundsOn(troop1));
+		assertEquals(1, scn.GetWoundsOn(troop2));
+		assertEquals(0, scn.GetTwilight());
+		assertInZone(Zone.SHADOW_CHARACTERS, sauron);
+		assertEquals(0, scn.GetWoundsOn(sauron));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void WithThePoolOneShortAndNoMinionAbleToExertHeIsNotOffered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetDiscountScenario();
+
+		var sauron = scn.GetShadowCard("sauron");
+		var troop1 = scn.GetShadowCard("troop1");
+		scn.MoveCardsToHand(sauron);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop1);
+		// Vitality 3 with 2 wounds: the one minion in play is exhausted, and can be spotted but not exerted.
+		scn.AddWoundsToChar(troop1, 2);
+		// 14, and for the move 1 companion and the 2 of Ettenmoors
+		scn.SetTwilight(14);
+		scn.FreepsPass();
+
+		// 16 to play + 2 roaming = 18, with no exertion to take anything off it.
+		assertEquals(17, scn.GetTwilight());
+		assertInZone(Zone.HAND, sauron);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertFalse(scn.ShadowPlayAvailable(sauron));
+
+		// One more in the pool, and he is offered at his whole cost.
+		scn.SetTwilight(18);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.ShadowPlayAvailable(sauron));
+		assertEquals(2, scn.GetWoundsOn(troop1));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

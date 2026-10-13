@@ -119,17 +119,19 @@
 		timewords: Maneuver
 		effects: {
 			type: event
-			cost: {
-				type: exert
-				select: choose(your,wizard)
-			},
-			effect: [
+			cost: [
+				{
+					type: exert
+					select: choose(your,wizard)
+				}
 				{
 					type: chooseANumber
 					text: Choose a minion cost
 					from: 0
 					memorize: chosenNumber
 				}
+			],
+			effect: [
 				{
 					type: modifyStrength
 					select: all(minion,matchesTwilight(memory(chosenNumber)))

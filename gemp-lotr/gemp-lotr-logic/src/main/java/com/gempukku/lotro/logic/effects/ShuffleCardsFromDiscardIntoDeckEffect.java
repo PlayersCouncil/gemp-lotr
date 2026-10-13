@@ -56,6 +56,13 @@ public class ShuffleCardsFromDiscardIntoDeckEffect extends AbstractEffect {
             game.getGameState().shuffleCardsIntoDeck(toShuffleIn, _playerDeck);
 
             game.getGameState().sendMessage(getAppendedNames(toShuffleIn) + " " + GameUtils.be(toShuffleIn) + " shuffled into " + _playerDeck + " deck");
+        } else {
+            // The deck is shuffled though nothing is shuffled into it: "it's more consistent for the shuffle to
+            // always happen even if you're shuffling 'in' nothing" (Ketura on Q-0102; F-0178).  So "you may
+            // shuffle up to 2 ... from your discard pile into your draw deck" always does something.
+            game.getGameState().shuffleDeck(_playerDeck);
+
+            game.getGameState().sendMessage(_playerDeck + " deck is shuffled with no card shuffled into it");
         }
 
         return new FullEffectResult(toShuffleIn.size() == _cards.size());

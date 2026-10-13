@@ -16,6 +16,16 @@ Choice
     The `effects` provided can include a nested array, which will automatically be wrapped in a Multiple.
     See Pippin, Hobbit of Some Intelligence).
 
+    Only the options that can be carried out in full are offered, and a lone one is taken without asking.  With none,
+    a Choice that is a cost comes to nothing, and a Choice that is an effect offers every option (one of them may still
+    be done in part), unless each option is certain to do nothing (nobody to exert or heal, no burden to remove, no
+    site to liberate): then the player is not asked and nothing happens (F-0116).
+    An option that holds others is judged from what it holds (engine pass 26): an If by the side its check picks; a
+    CostToEffect by whether its cost can be paid and its `requires` holds (one that cannot be paid for is nothing;
+    one that can never is, whatever it buys); a play by whether a card can be played; a nested array, a Multiple or
+    a Choice by each effect in turn.  An option with an Optional, a Repeat or a Preventable in it, or one that
+    begins by remembering something for its next effect, is not judged and keeps the question.
+
     * player
       default: you
     * texts [ ]
@@ -281,6 +291,16 @@ Remember that Gemp will attempt to avoid giving the player useless selections; i
       This is mutually exclusive with the `until` field; if this is set that field should be unset.  
     * memorize
       optional
+* CantGainKeywords
+  The `select`ed cards keep the game text keywords they have as this is carried out, and gain no other and no more of one (from any card, their own text included) `until` the given duration expires (Into the Caves 17_100, Q-0282). A keyword had then and lost since may come back up to what was had.
+    * count
+      default: 1
+    * select
+      required
+    * until
+      default: end(current)
+    * memorize
+      optional
 * RemoveKeyword
   Causes the current player to `select count `cards to lose the given `keyword` (optionally sourced `FromMemory`) `until` the given duration expires.  The effect is continuous and the target will be unable to gain that keyword again for the duration of the effect.  Optionally `memoriz`es the selected card.
   See You Cannot Pass!)
@@ -411,8 +431,12 @@ The primary difference is that discrete effects can be undone by an opposite dis
     * memorize
       required
     * keywords [ ] 
-      required
+      required unless `fromCard` is given
       Array of keyword strings, one entry per keyword. 
+    * fromCard
+      optional; a card filter (`memory(chosenMinion)`). The choice is of the game text keywords that card has now; with none, nothing is asked and "" is memorized (Into the Caves 17_100, Q-0282).
+    * noneOption
+      optional; the text of an extra answer that names no keyword, memorized as "" (`RemoveKeyword`'s `keywordFromMemory` then removes nothing).
     * text
       default: Choose a keyword
 * ChooseANumber
@@ -458,7 +482,7 @@ The primary difference is that discrete effects can be undone by an opposite dis
     * memorize
       required
     * text
-      default: Choose cards from discard.
+      optional; the words the player is asked in.  Without it the choice is asked as every choice from a discard pile is, "Choose card from discard".  (Until engine pass 18 a `text` given here was never shown: F-0285.)
 * ChooseCardsFromDrawDeck
   The `player` is prompted with `text` to choose `count`* cards matching `filter` from the given `deck`.  If `showAll` is true, all cards in that deck are revealed to that player, which is what's supposed to happen RAW when searching the draw deck.  The chosen cards are stored to the given `memorize` location.
   See Counsel of the Wise).
@@ -1008,6 +1032,8 @@ The primary difference is that discrete effects can be undone by an opposite dis
       required; boolean
     * showAll
       required; boolean
+    * inPlaceOfDraw
+      default: false.  `true` where the card is taken in place of a card its owner was about to draw ("about to draw a card ... look at the top three cards of your draw deck instead. Take [one] into your hand": The Mirror of Galadriel 15_22, beside its `preventEffect` of the draw): that card is the card drawn, and `PlayerDrawsCard` answers it (Q-0205: B).
 * PutCardsFromDeckOnTopOfDeck
   Causes the current player to `select count` cards from their draw deck and place them on top of their draw deck, optionally `reveal`ing the card to their opponent.  (The reveal is required RAW when it is a specific card, but is not required when the operation is indistinct, such as "look at a card and place it on top of your draw deck".)
   See Back to the Light).
@@ -1029,7 +1055,7 @@ The primary difference is that discrete effects can be undone by an opposite dis
     * reveal
       required; boolean
 * PutCardsFromDiscardIntoHand
-  Causes `player` to `select count` cards from the given `discard` pile and place them in their owner's hand (this cannot be used to steal cards), optionally storing the chosen cards in the given `memorize`* location.
+  Causes `player` to `select count` cards from the given `discard` pile and place them in their owner's hand (this cannot be used to steal cards), optionally storing the chosen cards in the given `memorize`* location.  `text` is what `player` is asked when choosing; where `count` may be 0 ("may take up to N"), say there that none need be chosen instead of wrapping the effect in an `Optional` (Q-0143; Gwaihir 101_15).
   See A New Light).
     * count
       default: 1
@@ -1038,9 +1064,11 @@ The primary difference is that discrete effects can be undone by an opposite dis
     * player
       default: you
     * discard
-      required; player
+      default: the same as `player`
     * memorize
       optional
+    * text
+      optional; default: the game's "Choose card from discard"
 * PutCardsFromDiscardOnBottomOfDeck
   Causes the current player to `select count` cards from their discard pile and place them on the bottom of their draw deck.
   See Goblin Sneak)`*.
@@ -1067,7 +1095,7 @@ The primary difference is that discrete effects can be undone by an opposite dis
     * reveal
       default: false
 * PutCardsFromHandOnTopOfDeck
-  Causes `player` to `select count` cards from the given `hand` and place them on the top of their owner's draw deck, optionally `reveal`ing the card to their opponent.  (The reveal is required RAW when it is a specific card, but is not required when the operation is indistinct, such as "look at a card and place it on top of your draw deck".  It's also not necessary if being done to an opponent's cards)
+  Causes `player` to `select count` cards from the given `hand` and place them on the top of their owner's draw deck, optionally `reveal`ing the card to their opponent.  (The reveal is required RAW when it is a specific card, but is not required when the operation is indistinct, such as "look at a card and place it on top of your draw deck".  It's also not necessary if being done to an opponent's cards)  With more than one card, `player` is then asked their order on the deck.  `text` is what `player` is asked when choosing; where `count` may be 0, say there that none need be chosen instead of wrapping the effect in an `Optional` (Q-0143).
   See The Palantir of Orthanc).
     * player
       default: you
@@ -1079,6 +1107,8 @@ The primary difference is that discrete effects can be undone by an opposite dis
       default: choose(any)
     * reveal
       default: false
+    * text
+      default: Choose cards from hand
 * PutCardsFromPlayOnBottomOfDeck
   Causes `player` to `select count` cards from play and place them on the bottom of their owner's draw deck.
   See Uruk Reserve).
@@ -1108,13 +1138,17 @@ The primary difference is that discrete effects can be undone by an opposite dis
     * filter
       default: self
 * PutPlayedEventOnBottomOfDrawDeck
-  Causes the currently-resolving event to go to the bottom of its owner's draw deck after resolving instead of the discard pile.
-  If not part of the event itself, this must be part of a `Played` trigger reacting to that event.
+  Causes a currently-resolving event matching `filter` to go to the bottom of its owner's draw deck after resolving instead of the discard pile.
+  `filter` may only be either "self" (the card this is written on: an event that places itself) or "played" (the card whose play is being answered).  If not part of the event itself, this must be part of a `Played` trigger reacting to that event and must say `filter: played`: left at the default there it acts on the card with the trigger, which is not being played, and does nothing.
  See Hobbitses Are Dead).
+    * filter
+      default: self
 * PutPlayedEventOnTopOfDrawDeck
-  Causes the currently-resolving event to go to the top of its owner's draw deck after resolving instead of the discard pile.
-  If not part of the event itself, this must be part of a `Played` trigger reacting to that event.
- See Still Needed).
+  Causes a currently-resolving event matching `filter` to go to the top of its owner's draw deck after resolving instead of the discard pile.
+  `filter` may only be either "self" (the card this is written on: an event that places itself) or "played" (the card whose play is being answered).  If not part of the event itself, this must be part of a `Played` trigger reacting to that event and must say `filter: played`: left at the default there it acts on the card with the trigger, which is not being played, and does nothing.
+ See Still Needed) for "self", and Shrouded Elf for "played".
+    * filter
+      default: self
 * PutRandomCardFromHandBeneathDrawDeck
   Causes `player` to put `count` random cards from their hand beneath their draw deck.`
   `See Knights of His House).
@@ -1294,7 +1328,7 @@ The primary difference is that discrete effects can be undone by an opposite dis
       required
 * Restore
   Causes `player` to `select count` cards to be flipped back right-side-up and restored, optionally storing the restored cards at the given `memorize` address.
-  Hindering a card temporarily disables it, and thus Restoring it causes it to resume activity on the board.  This action happens automatically during reconciliation, but can be invoked early using this entry. This mechanic was first added by the PC for set V3.
+  Hindering a card temporarily disables it, and thus Restoring it causes it to resume activity on the board.  This action happens automatically during reconciliation, but can be invoked early using this entry. This mechanic was first added by the PC for set V3.  The choice is worded "Choose cards to restore".
     * count
       default: 1
     * select
@@ -1342,6 +1376,7 @@ The primary difference is that discrete effects can be undone by an opposite dis
       optional
 * RevealCardsFromHand
   Prompts the owner of the given `hand` to `select` and reveal `count` cards from their hand, optionally storing the chosen cards in the given `memorize` location.
+  For the hand of the player who reveals.  It does not ask `cantLookOrRevealHand`: a card revealed from ANOTHER player's hand is `RevealRandomCardsFromHand` (with `forced: true`) or `RevealHand`, never this word with `select: random(...)` (F-0391, Storm of Argument).
   See Mallorn-trees).
     * hand
       default: you
@@ -1390,7 +1425,8 @@ The primary difference is that discrete effects can be undone by an opposite dis
       default: 1
 * SetupExtraAssignmentAndSkirmishes
   Kicks off another set of Assignment/Skirmish phases involving all minions matching `filter.
-  `See The Witch-king's Beast, Fell Creature).
+  `See The Witch-king's Beast, Fell Creature).  No keyword is given: a bar on gaining keywords does not reach it
+  (Q-0267).  A relentless minion in play takes part as well, the two rounds being one.
     * filter
       required
 * ShadowCantHaveInitiative

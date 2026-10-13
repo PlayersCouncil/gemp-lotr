@@ -1183,7 +1183,7 @@
 				type: modifier
 				modifier: {
 					type: modifyStrength
-					filter: bearer,inSkirmishAgainst(race(stored))
+					filter: bearer,inSkirmishAgainst(companion,race(stored))
 					amount: 3
 				}
 			}
@@ -1191,7 +1191,7 @@
 				type: modifier
 				modifier: {
 					type: addKeyword
-					filter: bearer,inSkirmishAgainst(race(stored))
+					filter: bearer,inSkirmishAgainst(companion,race(stored))
 					keyword: damage
 					amount: 1
 				}

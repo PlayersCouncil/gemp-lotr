@@ -1,10 +1,10 @@
 {
 	54_355: {
 		cardInfo: {
-			//id: 4_355.1
+			//id: 54_355.1
 			parent: 4_355
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN04E355.1_card.jpg
 			collInfo: 4U355

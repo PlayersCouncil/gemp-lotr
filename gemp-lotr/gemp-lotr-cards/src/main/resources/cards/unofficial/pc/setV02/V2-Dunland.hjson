@@ -166,6 +166,7 @@
 							type: playCardFromDiscard
 							select: choose(culture(dunland), possession)
 							on: Memory(playedDunlending)
+							optional: true
 						}
 					}
 				}
@@ -397,6 +398,7 @@
 			{
 				type: ActivatedInDrawDeck
 				phase: Shadow
+				specialAbility: false
 				requires: [
 					{
 						type: Playable

@@ -98,7 +98,6 @@
 			{
 				type: Trigger
 				optional: false
-				optional: false
 				trigger: {
 					type: startOfPhase
 					phase: regroup
@@ -116,7 +115,6 @@
 			}
 			{
 				type: Trigger
-				optional: false
 				optional: false
 				trigger: {
 					type: startOfPhase
@@ -205,10 +203,10 @@
 
 	101_9: {
 		cardInfo: {
-			//id: 101_10
+			//id: 101_9
 			image: sets/vset1/LOTR-ENV1S009.1_card.jpg
 			revision: 1
-			collInfo: V1R10
+			collInfo: V1R9
 			rarity: R
 		}
 		title: Legolas
@@ -226,7 +224,6 @@
 		keywords: Archer
 		effects: {
 			type: Trigger
-			optional: false
 			optional: false
 			requires: {
 				type: Phase
@@ -267,7 +264,7 @@
 		culture: Elven
 		twilight: 1
 		type: Condition
-		target: unique,elf,companion
+		target: unique,culture(elven),companion
 		keywords: Tale
 		effects: {
 			type: activated
@@ -381,9 +378,8 @@
 						type: memorizenumber
 						memory: stackedCultures
 						amount:{
-							type: forEachCulture
-							over: 0
-							filter: cultureFromMemory(stackedCards)
+							type: forEachCultureInMemory
+							memory: stackedCards
 						}
 					}
 					{
@@ -472,8 +468,6 @@
 			{
 				type: Trigger
 				optional: false
-				optional: false
-				text: Would you like to spot 3 [elven] or [gandalf] rings to heal a companion?
 				trigger: {
 					type: moves
 				}
@@ -485,6 +479,7 @@
 				effect: {
 					type: heal
 					select: choose(companion)
+					count: 0-1
 					times: 1
 				}
 			}

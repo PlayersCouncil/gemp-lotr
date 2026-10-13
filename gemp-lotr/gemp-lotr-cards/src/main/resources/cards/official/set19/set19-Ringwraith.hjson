@@ -217,10 +217,14 @@
 						memorize: chosenRace
 					}
 					{
-						type: storeWhileInZone
+						type: storeRace
 						memory: chosenRace
 					}
 				]
+			}
+			{
+				type: displayableInformation
+				text: Named race is {stored}
 			}
 			{
 				type: modifier

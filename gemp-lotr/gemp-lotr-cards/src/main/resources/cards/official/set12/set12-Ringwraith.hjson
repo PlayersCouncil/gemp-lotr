@@ -632,6 +632,10 @@
 						type: canSpot
 						filter: another,culture(wraith)
 					}
+					{
+						type: canSpot
+						filter: companion,inSkirmishAgainst(self)
+					}
 				]
 				effect: {
 					type: kill
@@ -1158,10 +1162,8 @@
 					times: 2
 				}
 				effect: {
-					type: AddKeyword
-					select: bearer
-					keyword: Relentless
-					until: start(regroup)
+					type: setupExtraAssignmentAndSkirmishes
+					filter: bearer
 				}
 			}
 		]

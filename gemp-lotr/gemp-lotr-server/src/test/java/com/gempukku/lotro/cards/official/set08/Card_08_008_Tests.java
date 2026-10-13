@@ -26,6 +26,23 @@ public class Card_08_008_Tests
 		);
 	}
 
+	protected VirtualTableScenario GetDwarvesScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("wish", "8_8");
+					// Thrarin, Dwarven Smith: Dwarf ally, vitality 2; his one ability is a maneuver ability
+					put("thrarin", "1_27");
+					put("gimli", "1_13");       // Gimli, Son of Gloin: Dwarf companion, vitality 3; a skirmish ability that is never used
+					put("guard", "1_7");        // Dwarf Guard: Dwarf companion, vitality 2; no text once in play
+					put("legolas", "1_50");     // Legolas, Greenleaf: [elven] companion, vitality 3; an archery ability that is never used
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
 	@Test
 	public void WishForOurKinfolkStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
@@ -55,18 +72,46 @@ public class Card_08_008_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void WishForOurKinfolkTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void FellowshipActionIsPaidByADwarfCompanionAndNeverByADwarfAlly() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetDwarvesScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var wish = scn.GetFreepsCard("wish");
+		var thrarin = scn.GetFreepsCard("thrarin");
+		var gimli = scn.GetFreepsCard("gimli");
+		var guard = scn.GetFreepsCard("guard");
+		var legolas = scn.GetFreepsCard("legolas");
+		scn.MoveCardsToSupportArea(wish);
+		scn.MoveAlliesToTable(thrarin);
+		scn.MoveCompanionsToTable(legolas);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		// Thrarin is a Dwarf who can exert and Legolas an [elven] companion who can: the one thing missing from
+		// "exert a Dwarf companion" is that the Dwarf be a companion.
+		assertEquals(0, scn.GetWoundsOn(thrarin));
+		assertEquals(0, scn.GetWoundsOn(legolas));
+		assertFalse(scn.FreepsActionAvailable(wish));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		scn.MoveCompanionsToTable(gimli, guard);
+		scn.FreepsRefreshDecision();
+
+		assertEquals(0, scn.GetCultureTokensOn(wish));
+		assertTrue(scn.FreepsActionAvailable(wish));
+		scn.FreepsUseCardAction(wish);
+
+		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli, guard));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(thrarin));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		scn.FreepsChooseCard(guard);
+
+		// Legolas is the only [elven] companion and there is no [gondor] Man, so he exerts with nothing asked.
+		assertEquals(1, scn.GetWoundsOn(guard));
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertEquals(0, scn.GetWoundsOn(thrarin));
+		assertEquals(1, scn.GetWoundsOn(legolas));
+		assertEquals(1, scn.GetCultureTokensOn(wish));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

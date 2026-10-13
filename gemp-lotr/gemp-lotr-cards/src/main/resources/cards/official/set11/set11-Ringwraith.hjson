@@ -143,9 +143,15 @@
 					filter: companion
 					against: culture(wraith),minion
 				}
-				requires: {
-					type: fierceSkirmish
-				}
+				requires: [
+					{
+						type: fierceSkirmish
+					}
+					{
+						type: hasCardInDiscard
+						filter: culture(wraith)
+					}
+				]
 				effect: {
 					type: shuffleCardsFromDiscardIntoDrawDeck
 					select: choose(culture(wraith))

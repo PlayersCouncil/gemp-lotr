@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_09_002_Tests
@@ -19,7 +20,19 @@ public class Card_09_002_Tests
 				new HashMap<>()
 				{{
 					put("card", "9_2");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetSiteControlScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("freca", "9_2");
+					put("brigand", "4_10");     // Dunlending Brigand: the other [dunland] Man, with no text
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -62,18 +75,61 @@ public class Card_09_002_Tests
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void FrecaTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void WithASiteThatCanBeControlledPlayingFrecaOffersItAndAYesTakesIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetSiteControlScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var freca = scn.GetShadowCard("freca");
+		var brigand = scn.GetShadowCard("brigand");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// Player 1's second turn: both markers are on site 2, so site 1 is behind every marker.
+		scn.SkipToSite(2);
+		var site1 = scn.GetSite(1);
+		scn.MoveMinionsToTable(brigand);
+		scn.MoveCardsToHand(freca);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
 
-		assertEquals(4, scn.GetTwilight());
+		assertFalse(scn.IsSiteControlled(site1));
+		assertEquals(0, scn.GetShadowControlledSiteCount());
+
+		scn.ShadowPlayCard(freca);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(freca));
+		scn.ShadowAcceptOptionalTrigger();
+
+		assertTrue(scn.ShadowControls(site1));
+		assertEquals(1, scn.GetShadowControlledSiteCount());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void WithNoSiteThatCanBeControlledPlayingFrecaOffersNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetSiteControlScenario();
+
+		var freca = scn.GetShadowCard("freca");
+		var brigand = scn.GetShadowCard("brigand");
+
+		scn.StartGame();
+		scn.SkipToSite(2);
+		// Site 1 is the only site every marker has passed, and player 1 took it on player 2's turn: there is
+		// nothing a yes could take (Q-0034).
+		scn.FreepsTakeControlOfSite();
+		var site1 = scn.GetSite(1);
+		scn.MoveMinionsToTable(brigand);
+		scn.MoveCardsToHand(freca);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		assertTrue(scn.FreepsControls(site1));
+
+		scn.ShadowPlayCard(freca);
+		// Freca is in play beside the other [dunland] Man.
+		assertInZone(Zone.SHADOW_CHARACTERS, freca);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(freca));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		assertEquals(0, scn.GetShadowControlledSiteCount());
+		assertEquals(1, scn.GetFreepsControlledSiteCount());
 	}
 }

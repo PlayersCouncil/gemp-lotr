@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_01_268_Tests
@@ -19,7 +20,19 @@ public class Card_01_268_Tests
 				new HashMap<>()
 				{{
 					put("card", "1_268");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetTwoInquisitorsScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("inquisitor1", "1_268");
+					put("inquisitor2", "1_268");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -62,18 +75,36 @@ public class Card_01_268_Tests
 		assertEquals(6, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void OrcInquisitorTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void WithNoCardInTheFreePeoplesHandTheDiscardIsNotOffered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetTwoInquisitorsScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var inquisitor1 = scn.GetShadowCard("inquisitor1");
+		var inquisitor2 = scn.GetShadowCard("inquisitor2");
+		// The Free Peoples player's own copy of the minion is the one card in his hand.
+		var spare = scn.GetFreepsCard("inquisitor1");
+		scn.MoveCardsToHand(inquisitor1, inquisitor2, spare);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// Each Inquisitor costs 3 + 2 for roaming.
+		scn.SetTwilight(10);
+		scn.FreepsPass();
 
-		assertEquals(3, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertEquals(1, scn.GetFreepsHandCount());
+
+		// With a card in that hand the offer is made, and a yes discards the card.
+		scn.ShadowPlayCard(inquisitor1);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(inquisitor1));
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertInDiscard(spare);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		// The hand is empty now.  A yes would do nothing, so nothing is asked.
+		scn.ShadowPlayCard(inquisitor2);
+		assertInZone(Zone.SHADOW_CHARACTERS, inquisitor2);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(inquisitor2));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

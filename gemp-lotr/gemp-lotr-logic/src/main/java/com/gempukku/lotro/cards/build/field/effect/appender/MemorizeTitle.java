@@ -26,7 +26,7 @@ public class MemorizeTitle implements EffectAppenderProducer {
         if (memory == null)
             throw new InvalidCardDefinitionException("Memory is required for a MemorizeTitle effect");
 
-        return new DelayedAppender() {
+        return new BookkeepingAppender() {
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                 return new UnrespondableEffect() {

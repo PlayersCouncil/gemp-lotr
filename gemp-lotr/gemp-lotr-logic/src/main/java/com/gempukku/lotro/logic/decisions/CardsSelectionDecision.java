@@ -48,7 +48,8 @@ public abstract class CardsSelectionDecision extends AbstractAwaitingDecision {
         if (cardIds.length < _minimum || cardIds.length > _maximum)
             throw new DecisionResultInvalidException();
 
-        Set<PhysicalCard> result = new HashSet<>();
+        // In the order of the answer, so that the same answer gives the same cards in the same order every time.
+        Set<PhysicalCard> result = new LinkedHashSet<>();
         try {
             for (String cardId : cardIds) {
                 PhysicalCard card = getSelectedCardById(Integer.parseInt(cardId));

@@ -10,17 +10,18 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class Card_92_017_Tests
 {
-	private final HashMap<String, String> cards = new HashMap<>() {{
-		put("guard", "1_7");
-		// Goblin Runner (1_178): Moria Orc minion, twilight 0
-		put("runner", "1_178");
-	}};
-
 	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// Dwarf Guard: [dwarven] Dwarf companion, no text but its requirement to be played (cheated in).
+					// A second companion: threats stop at the number of companions.
+					put("guard", "1_7");
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -29,7 +30,13 @@ public class Card_92_017_Tests
 	}
 
 	protected VirtualTableScenario GetShadowScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// Dwarf Guard: [dwarven] Dwarf companion, no text but its requirement to be played (cheated in).
+					// A second companion: threats stop at the number of companions.
+					put("guard", "1_7");
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -43,6 +50,7 @@ public class Card_92_017_Tests
 		 * Set: RTMD 92
 		 * Name: Race Text 92_17
 		 * Type: MetaSite
+		 * Intensity: 2
 		 * Game Text: Each time your fellowship moves, add a threat.
 		 */
 
@@ -52,6 +60,7 @@ public class Card_92_017_Tests
 
 		assertEquals("Race Text 92_17", card.getBlueprint().getTitle());
 		assertEquals(CardType.METASITE, card.getBlueprint().getCardType());
+		assertEquals(2, card.getBlueprint().getIntensity());
 	}
 
 	@Test
@@ -69,6 +78,7 @@ public class Card_92_017_Tests
 		scn.SkipToMovementDecision();
 		scn.FreepsChooseToMove();
 		assertEquals(2, scn.GetThreats());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
@@ -83,5 +93,6 @@ public class Card_92_017_Tests
 
 		// No threats added — shadow owns the modifier
 		assertEquals(0, scn.GetThreats());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

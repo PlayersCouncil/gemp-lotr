@@ -129,10 +129,6 @@ If updating this enum, be sure to update `Token` as well.
     * WISE
     * BURGLAR
 * PC keywords:
-    * CONCEALED
-      Unused
-    * EXPOSED
-      Unused
     * RELENTLESS
 
 ## Kill Cause

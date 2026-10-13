@@ -79,10 +79,15 @@
 					type: killed
 					filter: companion
 				}
-				requires: {
-					type: phase
-					phase: archery
-				}
+				requires: [
+					{
+						type: phase
+						phase: archery
+					}
+					{
+						type: SiteAvailableToControl
+					}
+				]
 				effect: {
 					type: takeControlOfSite
 				}
@@ -139,10 +144,15 @@
 					type: killed
 					filter: companion
 				}
-				requires: {
-					type: phase
-					phase: skirmish
-				}
+				requires: [
+					{
+						type: phase
+						phase: skirmish
+					}
+					{
+						type: SiteAvailableToControl
+					}
+				]
 				effect: {
 					type: takeControlOfSite
 				}
@@ -588,6 +598,13 @@
 			{
 				type: activated
 				phase: regroup
+				// Not offered without a mount of his to shuffle in: the engine would shuffle the deck with none
+				// (Ketura on Q-0112, F-0196: "on a card level we'll set up Mumakil Commander to require there be
+				// a mount in play first").
+				requires: {
+					type: canSpot
+					filter: your,culture(men),mount
+				}
 				effect: {
 					type: shuffleCardsFromPlayIntoDrawDeck
 					select: choose(your,culture(men),mount)

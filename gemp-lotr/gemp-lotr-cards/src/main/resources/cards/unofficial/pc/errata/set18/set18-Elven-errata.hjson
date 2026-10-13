@@ -2,6 +2,9 @@
 	68_9: {
 		cardInfo: {
 			//id: 68_9.1
+			parent: 18_9
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN18E009.1_card.jpg
 			collInfo: 18C9
@@ -45,7 +48,10 @@
 	
 	68_11: {
 		cardInfo: {
-			//id: 8_11.1
+			//id: 68_11.1
+			parent: 18_11
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN18E011.1.jpg
 			collInfo: 18R11
@@ -53,10 +59,11 @@
 		}
 		title: Galadriel's Silver Ewer
 		unique: true
-		culture: elven
+		side: Free Peoples
+		culture: Elven
 		twilight: 2
-		type: artifact
-		keyword: support area
+		type: Artifact
+		keywords: Support Area
 		effects: [
 			{
 				type: toPlay
@@ -107,7 +114,7 @@
 				}
 			}
 		]
-		gametext: To play, spot Galadriel or Celeborn.\While Galadriel is the Ring-bearer, she is strength +1 and resistance +2.<br>Each time you play an [elven] skirmish event, you may exert Galadriel to reinforce an [elven] token.
+		gametext: To play, spot Galadriel or Celeborn. While Galadriel is the Ring-bearer, she is strength +1 and resistance +2.<br>Each time you play an [elven] skirmish event, you may exert Galadriel to reinforce an [elven] token.
 		lore: "'Will you look into the mirror?'"
 		promotext: ""
 		alts: {
@@ -121,7 +128,10 @@
 	
 	68_12: {
 		cardInfo: {
-			//id: 8_12.1
+			//id: 68_12.1
+			parent: 18_12
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/68_12.jpg
 			collInfo: 18R12
@@ -130,9 +140,9 @@
 		title: Gil-galad
 		subtitle: High King of the Noldor
 		unique: true
-		side: free_people
+		side: Free Peoples
 		culture: Elven
-		type: companion
+		type: Companion
 		race: Elf
 		twilight: 5
 		strength: 9
@@ -143,7 +153,7 @@
 				type: toPlay
 				requires: {
 					type: canSpot
-					filter: elf,companion
+					filter: culture(elven),companion
 					count:2
 				}
 			}
@@ -190,6 +200,9 @@
 	68_14: {
 		cardInfo: {
 			//id: 68_14.1
+			parent: 18_14
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN18E014.1_card.jpg
 			collInfo: 18R14

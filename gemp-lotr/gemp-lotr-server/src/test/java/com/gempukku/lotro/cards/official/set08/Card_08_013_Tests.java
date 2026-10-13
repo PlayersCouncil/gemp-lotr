@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.official.set08;
 
+import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
@@ -18,6 +19,7 @@ public class Card_08_013_Tests
 				new HashMap<>()
 				{{
 					put("card", "8_13");
+					put("runner", "1_178");     // Goblin Runner: a minion, so that there is an archery phase
 					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -68,5 +70,37 @@ public class Card_08_013_Tests
 		scn.FreepsPlayCard(card);
 
 		assertEquals(1, scn.GetTwilight());
+	}
+
+	@Test
+	public void ArcheryAbilityAtItsLimitStillRemovesATokenAndAddsNothingToTheArcheryTotal() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var card = scn.GetFreepsCard("card");
+		scn.MoveCardsToSupportArea(card);
+		scn.AddTokensToCard(card, 3);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(scn.GetShadowCard("runner"));
+		scn.SkipToPhase(Phase.ARCHERY);
+
+		assertEquals(0, scn.GetFreepsArcheryTotal());
+		assertEquals("false", scn.FreepsActionNoEffect(card));
+		scn.FreepsUseCardAction(card);
+		scn.ShadowPass();
+		scn.FreepsUseCardAction(card);
+		scn.ShadowPass();
+		assertEquals(2, scn.GetFreepsArcheryTotal());
+		assertEquals(1, scn.GetCultureTokensOn(card));
+
+		// Limit +2: a token can still be removed, so the ability is still offered, flagged as doing nothing
+		// (Ketura on Q-0041).
+		assertTrue(scn.FreepsActionAvailable(card));
+		assertEquals("limit", scn.FreepsActionNoEffect(card));
+
+		scn.FreepsUseCardAction(card);
+		assertEquals(0, scn.GetCultureTokensOn(card));
+		assertEquals(2, scn.GetFreepsArcheryTotal());
 	}
 }

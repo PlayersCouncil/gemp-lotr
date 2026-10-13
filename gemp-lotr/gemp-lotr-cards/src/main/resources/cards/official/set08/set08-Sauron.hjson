@@ -90,10 +90,17 @@
 					type: played
 					filter: self
 				}
-				requires: {
-					type: canSpot
-					filter: another,besieger
-				}
+				requires: [
+					{
+						type: canSpot
+						filter: another,besieger
+					}
+					{
+						type: canSpot
+						filter: companion
+						count: 5
+					}
+				]
 				effect: {
 					type: addThreats
 					amount: {

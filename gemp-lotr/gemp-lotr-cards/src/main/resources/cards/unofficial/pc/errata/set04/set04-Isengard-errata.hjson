@@ -2,21 +2,23 @@
 	
 	54_146: {
 		cardInfo: {
-			//id: 4_146.1
+			//id: 54_146.1
 			parent: 4_146
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN04E146.1.jpg
 			collInfo: 4R146
 			rarity: R
 		}
 		title: Come Down
-		culture: isengard
+		unique: false
+		side: Shadow
+		culture: Isengard
 		twilight: 0
-		type: condition
-		keyword: [
-			support area
+		type: Condition
+		keywords: [
+			Support Area
 		]
 		effects: [
 			{
@@ -26,6 +28,10 @@
 					{
 						type: CanSpot
 						filter: fortification
+					}
+					{
+						type: CanSpot
+						filter: culture(isengard),minion
 					}
 				]
 				effect: [
@@ -62,30 +68,28 @@
 			{
 				type: activated
 				phase: archery
-				requires: {
-					type: CanSpot
-					filter: culture(Isengard),archer
-					count: 2
-				}
+				requires: [
+					{
+						type: CanSpot
+						filter: culture(Isengard),archer
+						count: 2
+					}
+					{
+						type: CanSpot
+						filter: Ally,not(barredFromArcheryFire)
+					}
+				]
 				effect: [
 					{
 						type: AddModifier
 						modifier: {
-							type: AllyCanParticipateInArcheryFire
-							filter: Ally
-						}
-					}
-					{
-						type: AddModifier
-						modifier: {
-							type: CantTakeArcheryWounds
-							filter: Companion
+							type: AlliesTakeArcheryFireWoundsInsteadOfCompanions
 						}
 					}
 				]
 			}
 		]
-		gametext: Maneuver: If you can spot an [isengard] minion, spot a fortification.  Make the Free Peoples player distribute X + 1 wounds among your [isengard] minions to discard that fortification, where X is its twilight cost.\<b>Archery:</b> Spot 2 [isengard] archers to make allies take wounds from archery fire instead of companions.
+		gametext: Maneuver: If you can spot an [isengard] minion, spot a fortification.  Make the Free Peoples player distribute X + 1 wounds among your [isengard] minions, where X is its twilight cost. Discard that fortification. <b>Archery:</b> Spot 2 [isengard] archers to make allies take wounds from archery fire instead of companions.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -170,32 +174,32 @@
 					type: exert
 					select: self
 				}
-				effect: {
-					type: If
-					check: {
-						type: canSpot
-						filter: unbound,companion,hasAttachedCount(3,any)
+				effect: [
+					{
+						type: chooseActiveCards
+						text: Choose an unbound companion to spot
+						select: choose(unbound,companion,not(hindered),or(hasAttached(weapon),and(hasAttachedCount(3,any,override(hindered)),hasAttached(side(free)))))
+						memorize: chosenCompanion
 					}
-					true: [
-						{
-							type: chooseActiveCards
-							text: Choose unbound companion to hinder cards on
-							select: choose(unbound,companion,hasAttachedCount(3,any))
-							memorize: chosenCompanion
+					{
+						type: If
+						check: {
+							type: canSpot
+							filter: memory(chosenCompanion),hasAttachedCount(3,any,override(hindered))
 						}
-						{
+						true: {
 							type: Hinder
 							select: all(attachedTo(memory(chosenCompanion)),side(free))
 						}
-					]
-					false: {
-						type: Hinder
-						select: choose(attachedTo(unbound,companion),weapon)
+						false: {
+							type: Hinder
+							select: choose(weapon,attachedTo(memory(chosenCompanion),not(hindered)))
+						}
 					}
-				}
+				]
 			}
 		]
-		gametext: Maneuver: Exert Grima to hinder a weapon borne by an unbound companion (or all Free Peoples cards borne by that companion if they are bearing 3 or more cards).
+		gametext: Maneuver: Exert Grima to spot an unbound companion. Hinder a weapon borne by that companion (or all Free Peoples cards borne by them if they bear 3 or more cards).
 		lore: "'I care for you and yours as best I may. But do not weary yourself, or tax too heavily your strength.'"
 		promotext: ""
 		alts: {
@@ -208,10 +212,10 @@
 
 	54_192: {
 		cardInfo: {
-			//id: 4_192.1
+			//id: 54_192.1
 			parent: 4_192
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/54_192.jpg
 			collInfo: 4C192
@@ -219,15 +223,15 @@
 		}
 		title: Uruk Regular
 		unique: false
-		side: shadow
+		side: Shadow
 		culture: Isengard
-		type: minion
-		race: Uruk-Hai
+		type: Minion
+		race: Uruk-hai
 		twilight: 3
 		strength: 8
 		vitality: 2
 		site: 5
-		keyword: Damage+1
+		keywords: Damage+1
 		effects: {
 			type: activated
 			phase: shadow

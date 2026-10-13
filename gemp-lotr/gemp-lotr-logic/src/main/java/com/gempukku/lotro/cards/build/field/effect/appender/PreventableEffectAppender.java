@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.DelegateActionContext;
 import com.gempukku.lotro.cards.build.PlayerSource;
@@ -41,7 +42,11 @@ public class PreventableEffectAppender extends DelayedAppender {
 
         DelegateActionContext preventCostActionContext = new DelegateActionContext(actionContext, preventingPlayerId, actionContext.getGame(), actionContext.getSource(), actionContext.getEffectResult(), actionContext.getEffect());
 
-        if (preventingPredicate.test(actionContext) && areCostsPlayable(preventCostActionContext)) {
+        // A prevention is put to a player only when what it would prevent is going to happen (Ketura on
+        // Q-0114): with nothing to draw, a draw past the Rule of 4, nobody left to wound or discard, nobody is
+        // asked and nothing is paid.  The effects are still appended, and do the nothing they would have done.
+        if (preventingPredicate.test(actionContext) && areCostsPlayable(preventCostActionContext)
+                && !EffectForecast.isCertainToDoNothing(actionContext, effectAppenders)) {
             SubAction subAction = new SubAction(action);
             subAction.appendEffect(new PlayoutDecisionEffect(preventingPlayerId, new YesNoDecision(textToUse) {
                 @Override
@@ -86,6 +91,22 @@ public class PreventableEffectAppender extends DelayedAppender {
                 effectAppender.appendEffect(false, subAction, actionContext);
             return new StackActionEffect(subAction);
         }
+    }
+
+    // As a branch of a choice it keeps the choice asked: what is paid to prevent it, and what is done in its
+    // place, are another player's to choose.
+    @Override
+    public boolean isCertainToDoNothingIfChosen(ActionContext actionContext) {
+        return false;
+    }
+
+    // What would happen if it were not prevented.  Where preventing it puts something else in its place,
+    // nothing is said: that is the other player's to bring about.
+    @Override
+    public EffectForecast forecast(ActionContext actionContext) {
+        if (insteadAppenders != null && insteadAppenders.length > 0)
+            return EffectForecast.UNKNOWN;
+        return EffectForecast.together(actionContext, effectAppenders);
     }
 
     private boolean areCostsPlayable(ActionContext actionContext) {

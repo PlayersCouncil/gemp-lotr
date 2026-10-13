@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_09_027_Tests
@@ -18,7 +19,10 @@ public class Card_09_027_Tests
 				new HashMap<>()
 				{{
 					put("card", "9_27");
-					// put other cards in here as needed for the test case
+					// Radagast, The Brown: a unique Wizard companion of cost 4; the move limit is +1, and his other
+					// text answers a move in the regroup phase.  Two copies: one dead, one in hand.
+					put("radagast1", "9_26");
+					put("radagast2", "9_26");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -55,18 +59,32 @@ public class Card_09_027_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SentBackTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void FellowshipAbilityPlaysAWizardWhoseOtherCopyIsInTheDeadPile() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var sentback = scn.GetFreepsCard("card");
+		var dead = scn.GetFreepsCard("radagast1");
+		var held = scn.GetFreepsCard("radagast2");
+		scn.MoveCardsToSupportArea(sentback);
+		scn.MoveCardsToDeadPile(dead);
+		scn.MoveCardsToHand(held);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(2, scn.GetTwilight());
+		// A Radagast in the dead pile bars the copy in hand from being played in the ordinary way.
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertInZone(Zone.HAND, held);
+		assertFalse(scn.FreepsPlayAvailable(held));
+		assertTrue(scn.FreepsActionAvailable(sentback));
+		assertEquals(0, scn.GetTwilight());
+		scn.FreepsUseCardAction(sentback);
+
+		// He is played, for his own cost of 4, and the condition stays where it was.
+		assertInZone(Zone.FREE_CHARACTERS, held);
+		assertInZone(Zone.DEAD, dead);
+		assertEquals(4, scn.GetTwilight());
+		assertInZone(Zone.SUPPORT, sentback);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

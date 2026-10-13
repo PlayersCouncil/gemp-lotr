@@ -1,6 +1,6 @@
 package com.gempukku.lotro.collection;
 
-import com.gempukku.lotro.at.AbstractAtTest;
+import com.gempukku.lotro.framework.LoadedLibraries;
 import com.gempukku.lotro.db.CollectionDAO;
 import com.gempukku.lotro.db.PlayerDAO;
 import com.gempukku.lotro.db.vo.CollectionType;
@@ -28,7 +28,7 @@ import static org.junit.Assert.*;
  * Verifies that awarding an {@code openOnDelivery} product through {@link CollectionsManager} deposits
  * the rolled contents rather than the product, both in the DB write and in the delivery notification.
  */
-public class CollectionsManagerDeliveryTest extends AbstractAtTest {
+public class CollectionsManagerDeliveryTest extends LoadedLibraries {
 
     private static final String PRODUCTS = """
             [

@@ -68,7 +68,7 @@ public class RestoreCardsInPlayEffect extends AbstractPreventableCardEffect {
             return;
 
         if(_source == null) {
-            game.getGameState().sendMessage(_performingPlayer + " restores all of their hindered cards after reconcile: " + getAppendedNames(cards));
+            game.getGameState().sendMessage(_performingPlayer + " restores all of their hindered cards on reconciling: " + getAppendedNames(cards));
         }
         else {
             game.getGameState().sendMessage(_sourceText + " restores " + getAppendedNames(cards));

@@ -3,24 +3,32 @@ package com.gempukku.lotro.cards.unofficial.pc.errata.set08;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_08_001_ErrataTests
 {
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
-				new HashMap<String, String>()
+				new HashMap<>()
 				{{
-					put("card", "58_1");
-					// put other cards in here as needed for the test case
+					put("aggression", "58_1");
+					put("aggression2", "58_1"); // a second copy, to show which one is discarded
+
+					put("guard", "1_7");       // Dwarf Guard: Dwarf companion, no damage bonus; to play, spot a Dwarf
+					put("guard2", "1_7");
+					put("gimli", "1_13");      // Gimli, Son of Gloin: Dwarf companion, printed damage +1; a skirmish ability only
+					put("thrarin", "1_27");    // Thrarin, Dwarven Smith: Dwarf ally; a maneuver ability only
+					put("aragorn", "1_89");    // Aragorn, Ranger of the North: [gondor] Man companion, no Dwarf; a maneuver ability used only on purpose
+
+					put("filler1", "1_177");   // Goblin Patrol Troop: no text; only ever held in hand
+					put("filler2", "1_177");
+					put("filler3", "1_177");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -28,54 +36,131 @@ public class Card_08_001_ErrataTests
 		);
 	}
 
-	// Uncomment both @Test markers below once this is ready to be used
-
-	//@Test
+	@Test
 	public void AggressionStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
-
 		/**
-		* Set: 8
-		* Title: Aggression
-		* Side: Free Peoples
-		* Culture: Dwarven
-		* Twilight Cost: 1
-		* Type: condition
-		* Subtype: Support Area
-		* Game Text: While you have initiative, each Dwarf is damage +1.
-		* 	Fellowship: Spot a Dwarf and discard this condition to draw a card.
-		*/
+		 * Set: 8
+		 * Name: Aggression
+		 * Unique: False
+		 * Side: Free Peoples
+		 * Culture: Dwarven
+		 * Twilight Cost: 1
+		 * Type: Condition
+		 * Subtype: Support Area
+		 * Game Text: While you have initiative, each Dwarf is damage +1.
+		 * Fellowship: Spot a Dwarf and discard this condition to draw a card.
+		 */
 
-		//Pre-game setup
-		VirtualTableScenario scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("aggression");
 
+		assertEquals("Aggression", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.DWARVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		//assertEquals(Race.CREATURE, card.getBlueprint().getRace());
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
-		//assertEquals(, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		//assertEquals(, card.getBlueprint().getSiteNumber()); // Change this to getAllyHomeSiteNumbers for allies
-
 	}
 
-	//@Test
-	public void AggressionTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		VirtualTableScenario scn = GetScenario();
+	@Test
+	public void WhileTheFreePeoplesPlayerHasInitiativeEachDwarfIsDamagePlusOne() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
 
-		PhysicalCardImpl card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var aggression = scn.GetFreepsCard("aggression");
+		var guard = scn.GetFreepsCard("guard");
+		var guard2 = scn.GetFreepsCard("guard2");
+		var gimli = scn.GetFreepsCard("gimli");
+		var thrarin = scn.GetFreepsCard("thrarin");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCardsToSupportArea(aggression);
+		scn.MoveCompanionsToTable(guard, gimli, aragorn);
+		scn.MoveAlliesToTable(thrarin);
+		scn.MoveCardsToHand(guard2, scn.GetFreepsCard("filler1"), scn.GetFreepsCard("filler2"), scn.GetFreepsCard("filler3"));
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		// 4 cards in hand: the Free Peoples player has initiative.
+		assertEquals(4, scn.GetFreepsHandCount());
+		assertTrue(scn.FreepsHasInitiative());
+		assertEquals(1, scn.GetKeywordCount(guard, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(thrarin, Keyword.DAMAGE));
+		// Printed damage +1, and +1 more.
+		assertEquals(2, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
+		// Aragorn is a companion who is no Dwarf.
+		assertEquals(0, scn.GetKeywordCount(aragorn, Keyword.DAMAGE));
+
+		// Playing the second Dwarf Guard takes the hand to 3 and the initiative away.
+		scn.FreepsPlayCard(guard2);
+
+		assertEquals(3, scn.GetFreepsHandCount());
+		assertFalse(scn.FreepsHasInitiative());
+		assertEquals(0, scn.GetKeywordCount(guard, Keyword.DAMAGE));
+		assertEquals(0, scn.GetKeywordCount(guard2, Keyword.DAMAGE));
+		assertEquals(0, scn.GetKeywordCount(thrarin, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
+		assertEquals(0, scn.GetKeywordCount(aragorn, Keyword.DAMAGE));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void FellowshipSpotsADwarfAndDiscardsAggressionToDrawACard() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aggression = scn.GetFreepsCard("aggression");
+		var aggression2 = scn.GetFreepsCard("aggression2");
+		var guard = scn.GetFreepsCard("guard");
+		scn.MoveCardsToSupportArea(aggression, aggression2);
+		scn.MoveCompanionsToTable(guard);
+
+		scn.StartGame();
+
+		int deck = scn.GetFreepsDeckCount();
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertInZone(Zone.SUPPORT, aggression);
+		assertInZone(Zone.SUPPORT, aggression2);
+		assertTrue(scn.FreepsActionAvailable(aggression));
+
+		scn.FreepsUseCardAction(aggression);
+
+		// Only the copy whose action was used is discarded.
+		assertInDiscard(aggression);
+		assertInZone(Zone.SUPPORT, aggression2);
+		assertEquals(1, scn.GetFreepsHandCount());
+		assertEquals(deck - 1, scn.GetFreepsDeckCount());
+		assertEquals(0, scn.GetWoundsOn(guard));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void FellowshipIsNotOfferedUntilADwarfCanBeSpottedAndADwarvenAllyIsEnough() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aggression = scn.GetFreepsCard("aggression");
+		var thrarin = scn.GetFreepsCard("thrarin");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCardsToSupportArea(aggression);
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToHand(thrarin);
+
+		scn.StartGame();
+
+		// A companion who is no Dwarf, and Aggression itself, a [dwarven] card that is no Dwarf: no Dwarf to spot.
+		assertFalse(scn.FreepsActionAvailable(aggression));
+
+		scn.FreepsPlayCard(thrarin);
+
+		int deck = scn.GetFreepsDeckCount();
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertTrue(scn.FreepsActionAvailable(aggression));
+
+		scn.FreepsUseCardAction(aggression);
+
+		assertInDiscard(aggression);
+		assertEquals(1, scn.GetFreepsHandCount());
+		assertEquals(deck - 1, scn.GetFreepsDeckCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

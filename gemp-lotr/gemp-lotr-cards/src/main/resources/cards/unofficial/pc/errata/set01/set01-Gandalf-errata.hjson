@@ -1,12 +1,13 @@
 {
 	
+	# History: 51_70 has one released revision, revision 1 (errata sheet date 2024.04.21, batch "07: 2023 Yuletide"), which is the live block below. It was trial D of four (A to D) put to a vote; the live block was labelled revision 4 after its trial number until 2026-10-05. Trials A to C were never released and are not kept here; they can be read in git at cfa8f0717 (2023-12-16), gemp-lotr/gemp-lotr-cards/src/main/resources/cards/unofficial/pc/errata/yuletide/set01-Gandalf-errata-playtest.hjson (71_70, 71_402 and the first 71_403; the second 71_403 is trial D).
 		51_70: {
 		cardInfo: {
-			//id: 1_70.4
+			//id: 51_70.1
 			parent: 1_70
 			variant: ERRATA
-			variantPath: promos/pc
-			revision: 4
+			variantPath: errata/pc
+			revision: 1
 			image: errata/LOTR-EN01E070.1_card.jpg
 			collInfo: 1U70
 			rarity: U
@@ -45,13 +46,82 @@
 		}
 	}
 
+	# History: revision 1 (errata sheet date 2021.03.28, batch "01: 2021 X-List"). Recovered from git, fac49bfff^ (e834d6a8e): gemp-lotr/gemp-lotr-async/src/main/web/cards/unofficial/pc/errata/set01/set01-Gandalf-errata.hjson. fac49bfff (2022-08-19) put revision 2 over this block without keeping it.
+	# 51_80: {
+	# 	cardInfo: {
+	# 		//Either a full URL, or a subpath for the PC image server
+	# 		imagePath: errata/51_80.jpg
+	# 		//If this is true, then all gameplay-related info outside this cardInfo definition
+	# 		// will be ignored and the java class loaded instead.
+	# 		javaClass: false
+	# 		//This instructs the blueprint generator to insert this card as an alt of the listed
+	# 		// parent blueprint. Can of course be ommitted if not an errata or promo.
+	# 		parent: 1_80
+	# 		//This is the tree path to use within the alts structure on the parent.
+	# 		// Can of course be ommitted if parent is null. 
+	# 		parentPath: errata/pc
+	# 		//Versioning differentiates releases within a particular alt path, such as PC errata
+	# 		// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+	# 		//Top-level cards should always be version 0.
+	# 		version: 1?
+	# 		collInfo: 1R80
+	# 		rarity: R
+	# 		setNum: "1"
+	# 		cardNum: 80
+	# 		// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+	# 		style: Standard
+	# 	}
+	# 	title: Ottar
+	# 	subtitle: Man of Laketown
+	# 	unique: true
+	# 	culture: Gandalf
+	# 	twilight: 1
+	# 	type: ally
+	# 	allyHome: fellowship,3
+	# 	race: man
+	# 	strength: 2
+	# 	vitality: 2
+	# 	requires: {
+	# 		type: canSpot
+	# 		filter: name(Gandalf)
+	# 	}
+	# 	effects: {
+	# 		type: activated
+	# 		phase: fellowship
+	# 		cost: [
+	# 			{
+	# 				type: exert
+	# 				filter: self
+	# 			}
+	# 			{
+	# 				type: discardFromHand
+	# 				forced: false
+	# 			}
+	# 		]
+	# 		effect: {
+	# 			type: drawCards
+	# 		}
+	# 	}
+	# 	gametext: To play, spot Gandalf.<br><b>Fellowship:</b> Exert Ottar and discard a card from hand to draw a card.
+	# 	lore: The Men of Laketown come from the North, where they trade with the Dwarves of the Lonely Mountain.
+	# 	promotext: ""
+	# 	alts: {
+	# 		//These are just CardInfo objects
+	# 		promos: {
+	# 		}
+	# 		//These are full card definitions, with redundant info that is the same as the original card ommitted
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
+	
 	51_80: {
 		cardInfo: {
-			//id: 1_80.1
+			//id: 51_80.2
 			parent: 1_80
 			variant: ERRATA
-			variantPath: promos/pc
-			revision: 1
+			variantPath: errata/pc
+			revision: 2
 			image: errata/51_80.jpg
 			collInfo: 1R80
 			rarity: R
@@ -141,7 +211,7 @@
 				}
 			]
 		}
-		gametext: <b>Spell</b>.<br>Exert Gandalf to discard a Shadow condition and then hinder all condition.
+		gametext: <b>Spell</b>.<br>Exert Gandalf to discard a Shadow condition and then hinder all other conditions.
 		lore: "'Losto Caradhras, sedho, hodo, nuitho i ruith.'"
 		promotext: ""
 		alts: {
@@ -154,10 +224,10 @@
 	
 	51_87: {
 		cardInfo: {
-			//id: 1_87.1
+			//id: 51_87.1
 			parent: 1_87
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E087.1_card.jpg
 			collInfo: 1R87
@@ -169,7 +239,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		timeword: fellowship
+		timewords: Fellowship
 		effects: {
 			type: event
 			effect: {

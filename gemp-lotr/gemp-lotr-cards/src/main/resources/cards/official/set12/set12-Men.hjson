@@ -172,10 +172,10 @@
 					filter: culture(men),possession
 					memorize: discardedPossession
 				}
-				# If this is true, then the possession must have been caught by a copy of Countless Companies
-				# so we shouldn't continue pestering the user
+				# If the possession is no longer in the discard pile, then it must have been caught by a copy of
+				# Countless Companies so we shouldn't continue pestering the user
 				requires: {
-					type: CantSpot
+					type: HasCardInDiscard
 					filter: memory(discardedPossession)
 				}
 				effect: {
@@ -199,6 +199,7 @@
 					type: playCardFromStacked
 					select: choose(possession)
 					on: self
+					removedTwilight: 1
 				}
 			}
 		]
@@ -765,10 +766,11 @@
 				type: Trigger
 				optional: true
 				trigger: [
-					# {
-					# 	type: killed
-					# 	filter: culture(men),minion
-					# }
+					# "killed or discarded from play": a killed minion is not discarded (CR 4.2 "killed"; F-0444)
+					{
+						type: killed
+						filter: culture(men),minion
+					}
 					{
 						type: discarded
 						filter: culture(men),minion

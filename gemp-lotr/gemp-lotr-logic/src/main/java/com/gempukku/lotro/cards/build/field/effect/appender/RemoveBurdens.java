@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
@@ -29,7 +30,17 @@ public class RemoveBurdens implements EffectAppenderProducer {
 
         String memorize = "_temp";
 
-        MultiEffectAppender result = new MultiEffectAppender();
+        MultiEffectAppender result = new MultiEffectAppender() {
+            // With no burden to remove, or none that may be removed, it does nothing.  How many it would
+            // remove is not worked out.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                final LotroGame game = actionContext.getGame();
+                if (game.getGameState().getBurdens() == 0 || !game.getModifiersQuerying().canRemoveBurden(game, actionContext.getSource()))
+                    return EffectForecast.NOTHING;
+                return EffectForecast.UNKNOWN;
+            }
+        };
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

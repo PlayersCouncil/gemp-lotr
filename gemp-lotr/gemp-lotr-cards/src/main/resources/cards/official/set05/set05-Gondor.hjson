@@ -213,6 +213,8 @@
 				{
 					type: discard
 					select: all(side(shadow),attachedTo(memory(chosenMinion)))
+					// "Shadow cards" names a side and nothing more: a hindered one is discarded too (Q-0098).
+					override: hindered
 				}
 			]
 		}
@@ -470,6 +472,12 @@
 		timewords: Fellowship
 		effects: {
 			type: event
+			// A play from the discard pile is treated as a cost: with nothing there that can be played the
+			// event is not offered (Q-0086).
+			requires: {
+				type: HasCardInDiscard
+				filter: possession,PlayableOn(companion,signet(Aragorn))
+			}
 			cost: {
 				type: exert
 				select: choose(name(Aragorn))

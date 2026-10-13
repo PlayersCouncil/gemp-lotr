@@ -277,7 +277,6 @@
 			}
 			{
 				type: Trigger
-				optional: false
 				trigger: {
 					type: takesWound
 					filter: bearer
@@ -988,7 +987,7 @@
 			type: event
 			effect: {
 				type: modifyStrength
-				select: choose(or(Elf,Dwarf))
+				select: choose(or(Elf,Dwarf),inSkirmishAgainst(culture(moria),orc))
 				amount: {
 					type: Conditional
 					requires: [
@@ -1034,7 +1033,32 @@
 			type: event
 			cost: {
 				type: revealCardsFromHand
-				count: any
+				// At least as many Orcs as bring The Balrog within the pool, at 2 an Orc: playing it is a
+				// cost, and a reveal that plays nothing is not one to make (Q-0062, F-0067).
+				count: {
+					type: range
+					from: {
+						type: sum
+						source: [
+							{
+								type: leastDiscountToPlay
+								fromZone: HAND
+								filter: name(The Balrog)
+								max: {
+									type: ForEachInHand
+									filter: culture(moria),orc
+									multiplier: 2
+								}
+							}
+							1
+						]
+						divider: 2
+					}
+					to: {
+						type: ForEachInHand
+						filter: culture(moria),orc
+					}
+				}
 				select: choose(culture(moria),orc)
 				memorize: revealedCards
 			}

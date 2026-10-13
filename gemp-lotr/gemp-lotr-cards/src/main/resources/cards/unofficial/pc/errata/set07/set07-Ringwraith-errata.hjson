@@ -2,10 +2,10 @@
 
 	57_190: {
 		cardInfo: {
-			//id: 7_190.1
+			//id: 57_190.1
 			parent: 7_190
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN07E190.1_card.jpg
 			collInfo: 7U190
@@ -26,10 +26,16 @@
 				type: Trigger
 				optional: true
 				text: Would you like to spot a Nazgul to add 1 threat?
-				requires: {
-					type: CanSpot
-					filter: nazgul
-				}
+				requires: [
+					{
+						type: CanSpot
+						filter: nazgul
+					}
+					{
+						type: ThreatsRemaining
+						amount: 1
+					}
+				]
 				trigger: {
 					type: played
 					filter: self
@@ -65,7 +71,7 @@
 				}
 			}
 		]
-		gametext: When you play this minion, you may spot a Nazgûl to add a threat. The<br>Free Peoples player may make you wound a companion to prevent this. <br><b>Skirmish:</b> Remove a threat to make this minion strength +4.
+		gametext: When you play this minion, you may spot a Nazgûl to add a threat. The<br>Free Peoples player may make you wound a companion to prevent this. <br><b>Skirmish:</b> Remove a threat to make this minion strength +3.
 		lore: ""
 		promotext: ""
 		alts: {

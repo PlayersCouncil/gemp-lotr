@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_19_003_Tests
@@ -19,7 +20,23 @@ public class Card_19_003_Tests
 				new HashMap<>()
 				{{
 					put("card", "19_3");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetTwoBearersScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("twitching1", "19_3");
+					put("twitching2", "19_3");
+					// Gimli, Son of Gloin: a [dwarven] companion, strength 6, damage +1; a skirmish ability never used
+					put("gimli", "1_13");
+					put("guard", "1_7");        // Dwarf Guard: a [dwarven] companion with no text once in play
+					put("runner", "1_178");     // Goblin Runner: strength 5, vitality 1
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -55,18 +72,45 @@ public class Card_19_003_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void StillTwitchingTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void IsDiscardedAtTheEndOfATurnInWhichItsBearerWonNoSkirmishAndStaysWhenHeWonOne() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetTwoBearersScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		// One copy on each of two [dwarven] companions: Gimli fights and wins, the Dwarf Guard fights nobody.
+		var onGimli = scn.GetFreepsCard("twitching1");
+		var onGuard = scn.GetFreepsCard("twitching2");
+		var gimli = scn.GetFreepsCard("gimli");
+		var guard = scn.GetFreepsCard("guard");
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveCompanionsToTable(gimli, guard);
+		scn.AttachCardsTo(gimli, onGimli);
+		scn.AttachCardsTo(guard, onGuard);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(runner);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(gimli, runner);
+		scn.PassSkirmishActions();
 
-		assertEquals(1, scn.GetTwilight());
+		// Gimli's 6, and the 2 of hunter 2, beats the Goblin Runner's 5. The transfer his copy then offers
+		// is declined; the Guard's copy, whose bearer won nothing, offers none.
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(onGimli));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(onGuard));
+		scn.FreepsDeclineOptionalTrigger();
+		assertInDiscard(runner);
+
+		// Both are still borne when the fellowship decides not to move again.
+		scn.SkipToMovementDecision();
+		assertAttachedTo(onGimli, gimli);
+		assertAttachedTo(onGuard, guard);
+
+		scn.FreepsChooseToStay();
+		scn.PassReconcile(scn.P1());
+
+		// The turn is over. Gimli won a skirmish in it and keeps his copy. The Guard did not, though another
+		// [dwarven] companion did: his copy is in the discard pile.
+		assertAttachedTo(onGimli, gimli);
+		assertInDiscard(onGuard);
+		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
 	}
 }

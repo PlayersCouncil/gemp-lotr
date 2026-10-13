@@ -5,12 +5,15 @@ import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
+import java.util.List;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_06_011_Tests
@@ -21,7 +24,23 @@ public class Card_06_011_Tests
 				new HashMap<>()
 				{{
 					put("card", "6_11");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetStackScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("toss", "6_11");
+					put("gimli", "1_13");       // Gimli, Son of Glóin: strength 6
+					put("guard", "1_7");        // Dwarf Guard: another Dwarf, strength 4, whom the text does not name
+					// Here Is Good Rock: [dwarven] condition in the support area.  "Skirmish: Stack a Free Peoples
+					// card from hand here to make a Dwarf damage +1" is how a card comes to be stacked on it.
+					put("rock", "4_50");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -58,18 +77,33 @@ public class Card_06_011_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void TossMeTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void WhileStackedOnADwarvenConditionGimliIsStrengthPlusOne() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetStackScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var toss = scn.GetFreepsCard("toss");
+		var gimli = scn.GetFreepsCard("gimli");
+		var guard = scn.GetFreepsCard("guard");
+		var rock = scn.GetFreepsCard("rock");
+		scn.MoveCompanionsToTable(gimli, guard);
+		scn.MoveCardsToSupportArea(rock);
+		scn.MoveCardsToHand(toss);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		// In hand the card does nothing.
+		assertInHand(toss);
+		assertEquals(6, scn.GetStrength(gimli));
+		assertEquals(4, scn.GetStrength(guard));
+
+		// The stacking is arrangement: what is shown is the text of a card that lies on a stack and is not in play.
+		scn.StackCardsOn(rock, toss);
+
+		assertInZone(Zone.STACKED, toss);
+		assertEquals(List.of(toss), scn.GetStackedCards(rock));
+		// 6 + 1, and for Gimli alone.
+		assertEquals(7, scn.GetStrength(gimli));
+		assertEquals(4, scn.GetStrength(guard));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

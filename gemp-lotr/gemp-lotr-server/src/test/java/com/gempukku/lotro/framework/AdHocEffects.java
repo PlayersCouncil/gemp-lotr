@@ -13,7 +13,6 @@ import com.gempukku.lotro.logic.actions.RequiredTriggerAction;
 import com.gempukku.lotro.logic.actions.SystemQueueAction;
 import com.gempukku.lotro.logic.decisions.CardActionSelectionDecision;
 import com.gempukku.lotro.logic.effects.DiscardCardsFromPlayEffect;
-import com.gempukku.lotro.logic.effects.TakeControlOfASiteEffect;
 import com.gempukku.lotro.logic.modifiers.Modifier;
 import com.gempukku.lotro.logic.timing.Action;
 import com.gempukku.lotro.logic.timing.Effect;
@@ -70,36 +69,32 @@ public interface AdHocEffects extends TableBase, TestConstants, Decisions {
         game().getActionsEnvironment().addAlwaysOnActionProxy(action);
     }
 
-	default void ShadowTakeControlOfSite() {
-		ShadowExecuteAdHocEffect(new TakeControlOfASiteEffect(null, P2));
-	}
-
 	/**
-	 * Causes the Free Peoples player to execute an arbitrary effect.  Note that there are nuances to how and whether this
-	 * ever works; in particular it seems to only work if there are 0 legal actions to take on the current decision.
-	 * When it works, it can be useful for altering the game state in situations where you want e.g. the proper trigger
-	 * or other side-effects to be respected.  It is finicky tho.
+	 * Causes the Free Peoples player to execute an arbitrary effect.  The player must be at a choice of
+	 * phase actions ("Play ... action or Pass"): the effect is run in place of that player's answer to it, whatever
+	 * else the choice offers, and the game then moves on to whoever acts next.  It is useful for altering the game
+	 * state in situations where you want e.g. the proper trigger or other side-effects to be respected.
 	 * To ensure test integrity, this also asserts that the effect does in fact get carried out.
 	 * @param effect The effect to execute.  Details are determined by the effect itself.
 	 * executed as part of the current player decision.
 	 */
-	default void FreepsExecuteAdHocEffect(Effect effect) { ExecuteAdHocEffect(P1, effect); }
+	default void FreepsExecuteAdHocEffect(Effect effect) { ExecuteAdHocEffect(P1(), effect); }
 	/**
-	 * Causes the Shadow player to execute an arbitrary effect.  Note that there are nuances to how and whether this
-	 * ever works; in particular it seems to only work if there are 0 legal actions to take on the current decision.
-	 * When it works, it can be useful for altering the game state in situations where you want e.g. the proper trigger
-	 * or other side-effects to be respected.  It is finicky tho.
+	 * Causes the Shadow player to execute an arbitrary effect.  The player must be at a choice of
+	 * phase actions ("Play ... action or Pass"): the effect is run in place of that player's answer to it, whatever
+	 * else the choice offers, and the game then moves on to whoever acts next.  It is useful for altering the game
+	 * state in situations where you want e.g. the proper trigger or other side-effects to be respected.
 	 * To ensure test integrity, this also asserts that the effect does in fact get carried out.
 	 * @param effect The effect to execute.  Details are determined by the effect itself.
 	 * executed as part of the current player decision.
 	 */
-	default void ShadowExecuteAdHocEffect(Effect effect) { ExecuteAdHocEffect(P2, effect); }
+	default void ShadowExecuteAdHocEffect(Effect effect) { ExecuteAdHocEffect(P2(), effect); }
 
 	/**
-	 * Causes the given player to execute an arbitrary effect.  Note that there are nuances to how and whether this
-	 * ever works; in particular it seems to only work if there are 0 legal actions to take on the current decision.
-	 * When it works, it can be useful for altering the game state in situations where you want e.g. the proper trigger
-	 * or other side-effects to be respected.  It is finicky tho.
+	 * Causes the given player to execute an arbitrary effect.  The player must be at a choice of
+	 * phase actions ("Play ... action or Pass"): the effect is run in place of that player's answer to it, whatever
+	 * else the choice offers, and the game then moves on to whoever acts next.  It is useful for altering the game
+	 * state in situations where you want e.g. the proper trigger or other side-effects to be respected.
 	 * To ensure test integrity, this also asserts that the effect does in fact get carried out.
 	 * @param playerId The player who will execute the effect.
 	 * @param effect The effect to execute.  Details are determined by the effect itself.
@@ -107,8 +102,38 @@ public interface AdHocEffects extends TableBase, TestConstants, Decisions {
 	 */
 	default void ExecuteAdHocEffect(String playerId, Effect effect) {
         carryOutEffectInPhaseActionByPlayer(playerId, effect);
-        assertTrue(effect.wasCarriedOut());
+        assertTrue("The ad hoc effect was not carried out: something stopped it, or it had nothing to act on."
+                + "  Where that is what the test is about, run it with ExecuteAdHocEffectUnchecked.", effect.wasCarriedOut());
     }
+
+	/**
+	 * Causes the Free Peoples player to execute an arbitrary effect whose outcome the test is about, without
+	 * asserting that it was carried out: a wound aimed at a character who may turn out to be protected from it.
+	 * The test reads what became of it from the board.  See {@link #ExecuteAdHocEffectUnchecked}.
+	 * @param effect The effect to execute.  Details are determined by the effect itself.
+	 */
+	default void FreepsExecuteAdHocEffectUnchecked(Effect effect) { ExecuteAdHocEffectUnchecked(P1(), effect); }
+	/**
+	 * Causes the Shadow player to execute an arbitrary effect whose outcome the test is about, without asserting
+	 * that it was carried out: a wound aimed at a character who may turn out to be protected from it.  The test
+	 * reads what became of it from the board.  See {@link #ExecuteAdHocEffectUnchecked}.
+	 * @param effect The effect to execute.  Details are determined by the effect itself.
+	 */
+	default void ShadowExecuteAdHocEffectUnchecked(Effect effect) { ExecuteAdHocEffectUnchecked(P2(), effect); }
+	/**
+	 * Causes the given player to execute an arbitrary effect, as ExecuteAdHocEffect does, but without asserting
+	 * that the effect was carried out.  It is for an effect that something on the board may stop (a wound that a
+	 * prevention or a "cannot take wounds" may turn aside), where what happened is the thing under test and is
+	 * read from the board afterwards.  Where the effect is only a means of arranging the board, use
+	 * ExecuteAdHocEffect, which fails the test if the effect did not happen.
+	 * The effect is run in place of the player's answer to a choice of phase actions, so that choice is used up:
+	 * the game moves on to whoever acts next.
+	 * @param playerId The player who will execute the effect, who must be at a choice of phase actions.
+	 * @param effect The effect to execute.  Details are determined by the effect itself.
+	 */
+	default void ExecuteAdHocEffectUnchecked(String playerId, Effect effect) {
+		carryOutEffectInPhaseActionByPlayer(playerId, effect);
+	}
 
 	/**
 	 * Takes a filter string and produces the proper Java code that the filter represents.  This is used to produce
@@ -172,7 +197,7 @@ public interface AdHocEffects extends TableBase, TestConstants, Decisions {
 					LotroGame game, EffectResult effectResult)  {
 				RequiredTriggerAction action = new RequiredTriggerAction(null);
 				action.appendEffect(
-						new DiscardCardsFromPlayEffect(P2, null, filterables));
+						new DiscardCardsFromPlayEffect(P2(), null, filterables));
 				return Collections.singletonList(action);
 			}
 		});
@@ -184,11 +209,21 @@ public interface AdHocEffects extends TableBase, TestConstants, Decisions {
 		carryOutEffectInPhaseActionByPlayer(playerId, action);
 	}
 
+	/**
+	 * Has the given player take the given action in answer to the choice of actions that player is facing, as if
+	 * it had been among the actions on offer.  Fails unless the player is at a choice of actions.
+	 */
 	default void carryOutEffectInPhaseActionByPlayer(String playerId, Action action) {
-		var awaitingDecision = (CardActionSelectionDecision) userFeedback().getAwaitingDecision(playerId);
+		var pending = userFeedback().getAwaitingDecision(playerId);
+		assertTrue(playerId + " is not at a choice of actions, so an ad hoc effect cannot be run for that player"
+				+ (pending == null ? " (nothing is being asked)." : " (the decision pending is '" + pending.getText() + "')."),
+				pending instanceof CardActionSelectionDecision);
+		var awaitingDecision = (CardActionSelectionDecision) pending;
+		// The action is added after those the decision already offers, and is taken by its place among them.
+		int place = awaitingDecision.getDecisionParameters().get("actionId").length;
 		awaitingDecision.addAction(action);
 
-		PlayerDecided(playerId, "0");
+		PlayerDecided(playerId, String.valueOf(place));
 	}
 
 

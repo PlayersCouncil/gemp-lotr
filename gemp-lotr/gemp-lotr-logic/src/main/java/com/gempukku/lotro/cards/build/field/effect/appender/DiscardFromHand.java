@@ -65,7 +65,12 @@ public class DiscardFromHand implements EffectAppenderProducer {
                     }
                 });
 
-        return result;
+        // Taught for Q-0224 (IdleOffers): with no card in that hand for the choice to be made from, nothing is
+        // discarded ("you may discard up to 2 cards from hand", the hand empty).  A choice it is a branch of
+        // hears that too, except of the whole hand: "discard your hand" with none in it is a real choice
+        // (Ketura on Q-0255, Pelennor Flat 7_345).
+        final EffectAppender taught = TaughtForecast.actsOnWhatItFindsInHand(result, handSource, cardResolver);
+        return select.toLowerCase().startsWith("all(") ? TaughtForecast.forOffersOnly(taught) : taught;
     }
 
 }

@@ -17,11 +17,20 @@ public class ExhaustCharacterEffect extends AbstractSubActionEffect {
     private final PhysicalCard _source;
     private final Action _action;
     private final Filterable[] _filters;
+    private boolean _paidAsCost;
 
     public ExhaustCharacterEffect(PhysicalCard source, Action action, Filterable... filters) {
         _source = source;
         _action = action;
         _filters = filters;
+    }
+
+    /**
+     * Says that this exhaustion is carried out as a cost; each of its exertions then says so in its ExertResult
+     * (ExertResult.isPaidAsCost; F-0478).
+     */
+    public void setPaidAsCost(boolean paidAsCost) {
+        _paidAsCost = paidAsCost;
     }
 
     @Override
@@ -55,6 +64,7 @@ public class ExhaustCharacterEffect extends AbstractSubActionEffect {
         private InfiniteExertionEffect(PhysicalCard source, CostToEffectAction subAction, Filterable[] filters) {
             super(_action, source, filters);
             _subAction = subAction;
+            setPaidAsCost(ExhaustCharacterEffect.this._paidAsCost);
         }
 
         @Override

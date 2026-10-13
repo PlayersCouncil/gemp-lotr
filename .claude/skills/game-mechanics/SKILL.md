@@ -15,6 +15,12 @@ Cross-referenced against Comprehensive Rules 4.2.
 
 For the full unabridged rules text, read `${CLAUDE_SKILL_DIR}/references/comprehensive-rules-4.2.wiki.txt`.
 
+What the Players' Council has added or changed since (hinder, restore, relentless, "item", two- and three-dot
+uniqueness, public discard piles, when the game ends at site 9) is in
+`${CLAUDE_SKILL_DIR}/references/comprehensive-rules-5.0-excerpts.wiki.txt`. Where the two differ, 5.0 is in
+force. To look something up in either without reading the whole of it, use
+`card-test-campaign/scripts/rules.py` (`term`, `card`, `grep`).
+
 ---
 
 ## Turn Structure
@@ -68,6 +74,7 @@ Fellowship → Shadow → Maneuver → Archery → Assignment → Skirmish(s) �
   - Higher strength wins; each loser takes 1 wound (+ damage bonus wounds)
   - **Tie: Shadow side wins**
   - **Overwhelm**: strength ≥ 2× opponent's → loser is killed outright. Str > 0 overwhelms str 0. If both sides are 0, Shadow wins but does not overwhelm.
+  - Overwhelm is decided character by character (Q-0044). The Shadow side is overwhelmed only when it loses to at least double its total strength; then each minion with no protection is killed, and a minion that "cannot be overwhelmed unless its strength is tripled" is killed only if the winning strength is also at least three times that minion's own strength. A minion spared this way has lost the skirmish: it takes the wounds for losing (1 + the winner's damage bonus) and is not "overwhelmed" for other texts (Q-0074).
 - If all characters on one side removed mid-skirmish before resolution, other side wins
 - If all characters on one side removed before skirmish begins, that skirmish doesn't occur
 - A character removed mid-skirmish is neither winning nor losing (unless it was the last on its side)
@@ -77,6 +84,7 @@ Fellowship → Shadow → Maneuver → Archery → Assignment → Skirmish(s) �
 **Regroup Phase** (alternating):
 - Both players may use Regroup actions (action procedure)
 - Reconcile: FP player may discard 1 card from hand, then draws to 8 or discards down to 8
+- Any reconcile, a "reconcile your hand" effect included, first restores the reconciling player's hindered cards, before the discard (CR 5.0 "reconcile"; Q-0059)
 - Shadow player discards all minions from play
 - Movement decision: FP player may move again (up to move limit, default 2) — if so, return to Shadow phase. If not, Shadow reconciles and minions are discarded.
 
@@ -115,7 +123,9 @@ Fellowship → Shadow → Maneuver → Archery → Assignment → Skirmish(s) �
 6. Resolve **effects** ("when you play" triggers, etc.)
 7. Events go to discard pile after resolution
 
-Transferring a possession/artifact is NOT playing it — pay twilight cost again during Fellowship phase, but "when you play" does not trigger.
+The twilight cost of a card in play is the number printed on it, whatever another card or its own text says (CR 4.2 "twilight cost"; F-0109, Q-0073). A site's Shadow number is not a twilight cost and is read as modified.
+
+Transferring a possession/artifact is NOT playing it — pay twilight cost again during Fellowship phase, but "when you play" does not trigger. Nor is the card "coming into play": a transfer costs the printed twilight cost, changed neither by another card nor by the card's own cost text (Q-0053, Q-0074).
 
 ---
 
@@ -198,6 +208,10 @@ Transferring a possession/artifact is NOT playing it — pay twilight cost again
 - RTMD modifier cards in support area permanently
 - Not a real LotR TCG card type
 
+### Maps (PC)
+- Each deck brings one in a format that uses Maps (`pc_movie`); it lies in its owner's support area from before the game begins
+- Information only: a Map announces which site path its deck uses and has no effect in play (Q-0055). At deck validation it holds the adventure deck to that path
+
 ---
 
 ## Uniqueness
@@ -221,7 +235,7 @@ Transferring a possession/artifact is NOT playing it — pay twilight cost again
 - **Damage +X** — winner deals X additional wounds in skirmish
 - **Defender +X** — can take X additional assignments
 - **Fierce** — minion gets a second round of assignments/skirmishes after normal skirmishes
-- **Enduring** — not killed by overwhelm; instead takes wounds equal to vitality minus 1
+- **Enduring** — strength +2 for each wound on the character (CR 4.2 "enduring")
 - **Hunter X** — gains strength bonus based on wounds/threats (varies by version)
 - **Ambush (X)** — Shadow pays X twilight to assign during assignment; some trigger wound effects
 - **Lurker** — cannot be assigned to skirmish normally
@@ -336,3 +350,4 @@ Transferring a possession/artifact is NOT playing it — pay twilight cost again
 - "About to" actions fire when something is about to happen
 - Typically only one response can fire per situation — if one replaces the event ("instead"), others can no longer respond to the original situation
 - Prevention: stops the event entirely. Replacement ("instead"): substitutes a different outcome.
+- A response is no longer offered once the ability or event it answers has been cancelled; an optional trigger ("each time ..., you may") still is (Q-0043)

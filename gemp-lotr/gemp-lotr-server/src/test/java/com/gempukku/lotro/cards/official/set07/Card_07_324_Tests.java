@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_07_324_Tests
@@ -18,8 +19,16 @@ public class Card_07_324_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "7_324");
-					// put other cards in here as needed for the test case
+					put("pippin", "7_324");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, vitality 4; a maneuver ability never used
+
+					// Goblin Patrol Troop: a [moria] Orc, strength 13, vitality 3, site 4; no text.  Roaming at site 2.
+					put("troop", "1_177");
+					// Uruk Savage: an [isengard] Uruk-hai, vitality 3, site 5; damage +1 and nothing else.  Roaming at site 2.
+					put("savage", "1_151");
+					// Rough Man of the South: a [men] Man, vitality 3, site 2: not roaming at site 2.  Stronger in
+					// regions 1 and 2, and nothing else.
+					put("rough", "18_73");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -43,12 +52,13 @@ public class Card_07_324_Tests
 		 * Vitality: 4
 		 * Resistance: 6
 		 * Signet: Aragorn
-		 * Game Text: <b>Skirmish:</b> If Pippin is not assigned to a skirmish, return him to your hand to wound a roaming minion twice.
-		*/
+		 * Game Text: <b>Skirmish:</b> If Pippin is not assigned to a skirmish, return him to your hand to wound a
+		 * 	roaming minion twice.
+		 */
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("pippin");
 
 		assertEquals("Pippin", card.getBlueprint().getTitle());
 		assertEquals("Wearer of Black and Silver", card.getBlueprint().getSubtitle());
@@ -61,21 +71,91 @@ public class Card_07_324_Tests
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
 		assertEquals(6, card.getBlueprint().getResistance());
-		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
+		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void PippinTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void UnassignedPippinReturnsToHandToWoundARoamingMinionTwice() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var pippin = scn.GetFreepsCard("pippin");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(pippin, aragorn);
+
+		var troop = scn.GetShadowCard("troop");
+		var savage = scn.GetShadowCard("savage");
+		var rough = scn.GetShadowCard("rough");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(troop, savage, rough);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, troop);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
 
-		assertEquals(1, scn.GetTwilight());
+		// At site 2: the Troop (site 4) and the Savage (site 5) are roaming, the Rough Man (site 2) is not.
+		// The Troop is in the skirmish being resolved; the Savage and the Rough Man are assigned to nothing.
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertTrue(scn.HasKeyword(troop, Keyword.ROAMING));
+		assertTrue(scn.HasKeyword(savage, Keyword.ROAMING));
+		assertFalse(scn.HasKeyword(rough, Keyword.ROAMING));
+		assertTrue(scn.IsCharSkirmishing(troop));
+		assertFalse(scn.IsCharAssigned(savage));
+		assertFalse(scn.IsCharAssigned(pippin));
+		assertInZone(Zone.FREE_CHARACTERS, pippin);
+		assertEquals(0, scn.GetWoundsOn(troop));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertTrue(scn.FreepsActionAvailable(pippin));
+
+		scn.FreepsUseCardAction(pippin);
+		assertInZone(Zone.HAND, pippin);
+
+		assertTrue(scn.FreepsHasCardChoiceAvailable(troop, savage));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(rough));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		scn.FreepsChooseCard(troop);
+
+		// Two wounds on the one minion chosen.
+		assertEquals(2, scn.GetWoundsOn(troop));
+		assertEquals(0, scn.GetWoundsOn(savage));
+		assertEquals(0, scn.GetWoundsOn(rough));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
+	@Test
+	public void NotOfferedWhilePippinIsAssignedToASkirmishNorInHisOwnSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var pippin = scn.GetFreepsCard("pippin");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(pippin, aragorn);
+
+		var troop = scn.GetShadowCard("troop");
+		var savage = scn.GetShadowCard("savage");
+		var rough = scn.GetShadowCard("rough");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop, savage, rough);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(
+				new PhysicalCardImpl[]{aragorn, troop},
+				new PhysicalCardImpl[]{pippin, savage});
+		scn.ShadowDeclineAssignments();
+
+		// Aragorn's skirmish: Pippin is assigned to a skirmish that is still to come.
+		scn.FreepsResolveSkirmish(aragorn);
+		assertTrue(scn.IsCharAssigned(pippin));
+		assertTrue(scn.HasKeyword(troop, Keyword.ROAMING));
+		assertTrue(scn.HasKeyword(savage, Keyword.ROAMING));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(pippin));
+		scn.PassSkirmishActions();
+
+		// Nor in his own skirmish.
+		scn.FreepsResolveSkirmish(pippin);
+		assertTrue(scn.IsCharSkirmishing(pippin));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(pippin));
+		assertInZone(Zone.FREE_CHARACTERS, pippin);
 	}
 }

@@ -19,6 +19,8 @@ public class Card_01_269_Tests
 				new HashMap<>()
 				{{
 					put("card", "1_269");
+					put("orc", "1_271");        // Orc Soldier: a [sauron] Orc, strength 7
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, vitality 4
 					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -71,5 +73,43 @@ public class Card_01_269_Tests
 		scn.FreepsPlayCard(card);
 
 		assertEquals(1, scn.GetTwilight());
+	}
+
+	@Test
+	public void SkirmishAbilityAtItsLimitIsStillOfferedAndPaidForAndAddsNoStrength() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var card = scn.GetShadowCard("card");
+		var orc = scn.GetShadowCard("orc");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(orc);
+		scn.AttachCardsTo(orc, card);
+		scn.SetTwilight(10);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(aragorn, orc);
+		scn.FreepsPass();
+
+		// 7, +2 for the scimitar itself
+		assertEquals(9, scn.GetStrength(orc));
+		for (int used = 0; used < 3; used++) {
+			assertEquals("false", scn.ShadowActionNoEffect(card));
+			scn.ShadowUseCardAction(card);
+			assertEquals(9 + used + 1, scn.GetStrength(orc));
+			scn.FreepsPass();
+		}
+
+		// Limit +3: (1) can still be removed, so the ability is still offered, flagged as doing nothing
+		// (Ketura on Q-0041).
+		var twilight = scn.GetTwilight();
+		assertTrue(scn.ShadowActionAvailable(card));
+		assertEquals("limit", scn.ShadowActionNoEffect(card));
+
+		scn.ShadowUseCardAction(card);
+		assertEquals(twilight - 1, scn.GetTwilight());
+		assertEquals(12, scn.GetStrength(orc));
 	}
 }

@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_12_026_Tests
@@ -18,7 +19,45 @@ public class Card_12_026_Tests
 				new HashMap<>()
 				{{
 					put("card", "12_26");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetExamineScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("discoveries", "12_26");
+					// Gandalf, Friend of the Shirefolk: the [gandalf] Wizard, and the one who could exert for toil
+					put("gandalf", "1_72");
+					// Gimli, Skilled Defender: with the Ring-bearer, the two other companions; his text answers
+					// a skirmish he wins
+					put("gimli", "5_7");
+					put("strike", "1_3");       // Axe Strike, Battle Fury and Cleaving Blow: the top three cards of the draw deck
+					put("fury", "1_4");
+					put("blow", "1_5");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetAllyWizardScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("discoveries", "12_26");
+					// Saruman, The White (a Hobbit-set card): the one [gandalf] Wizard who is an ally and no
+					// companion.  His texts are about Gandalf, a Wise ally to discard, and a skirmish.
+					put("saruman", "32_24");
+					put("gimli", "5_7");        // Gimli, Skilled Defender: with the Ring-bearer, the two companions
+					put("strike", "1_3");       // Axe Strike, Battle Fury and Cleaving Blow: the top three cards of the draw deck
+					put("fury", "1_4");
+					put("blow", "1_5");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -58,18 +97,133 @@ public class Card_12_026_Tests
 		assertEquals(7, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void DiscoveriesTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void ExaminesAsManyTopCardsAsOtherCompanionsSpottedAndPutsThemBackInTheOrderChosen() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetExamineScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var discoveries = scn.GetFreepsCard("discoveries");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var gimli = scn.GetFreepsCard("gimli");
+		var strike = scn.GetFreepsCard("strike");
+		var fury = scn.GetFreepsCard("fury");
+		var blow = scn.GetFreepsCard("blow");
+		scn.MoveCompanionsToTable(gandalf, gimli);
+		scn.MoveCardsToHand(discoveries);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// From the top: Axe Strike, Battle Fury, Cleaving Blow.
+		scn.MoveCardsToTopOfDeck(blow, fury, strike);
 
+		assertEquals(strike, scn.GetFromTopOfFreepsDeck(1));
+		assertEquals(fury, scn.GetFromTopOfFreepsDeck(2));
+		assertEquals(blow, scn.GetFromTopOfFreepsDeck(3));
+		assertEquals(0, scn.GetTwilight());
+
+		// Toil 3: Gandalf could exert for it, and does not.
+		scn.FreepsPlayCard(discoveries);
+		assertEquals(0, scn.FreepsGetChoiceMin());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(gandalf));
+		scn.FreepsDeclineChoosing();
 		assertEquals(7, scn.GetTwilight());
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+
+		// The game asks how many companions are spotted, the Wizard among them: Gandalf, Gimli and the
+		// Ring-bearer are three, and X is the two others.
+		assertEquals(3, scn.FreepsGetChoiceMax());
+		scn.FreepsChoose("3");
+
+		// The top two cards are shown to their owner alone, and the third is not.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(strike, fury));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(blow));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+
+		// The card chosen first goes back first, and the other on top of it.
+		scn.FreepsChooseCardBPFromSelection(strike);
+		assertEquals(fury, scn.GetFromTopOfFreepsDeck(1));
+		assertEquals(strike, scn.GetFromTopOfFreepsDeck(2));
+		assertEquals(blow, scn.GetFromTopOfFreepsDeck(3));
+		assertInZone(Zone.DISCARD, discoveries);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	// "Spot a [gandalf] Wizard and X other companions": X may be none (CR 4.2 "spot": "you may choose to spot 2
+	// Elves, 1 Elf, or none"), and then no card is examined.  The game's question counts the Wizard too and
+	// starts at 0; answered 0, it used to make the number of cards to examine one less than nothing and throw
+	// (F-0374).
+	@Test
+	public void SpottingNobodyExaminesNoCardAndTheGameGoesOn() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetExamineScenario();
+
+		var discoveries = scn.GetFreepsCard("discoveries");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var gimli = scn.GetFreepsCard("gimli");
+		var strike = scn.GetFreepsCard("strike");
+		var fury = scn.GetFreepsCard("fury");
+		var blow = scn.GetFreepsCard("blow");
+		scn.MoveCompanionsToTable(gandalf, gimli);
+		scn.MoveCardsToHand(discoveries);
+
+		scn.StartGame();
+		scn.MoveCardsToTopOfDeck(blow, fury, strike);
+
+		scn.FreepsPlayCard(discoveries);
+		scn.FreepsDeclineChoosing();
+		assertEquals(0, scn.FreepsGetChoiceMin());
+		scn.FreepsChoose("0");
+
+		// Nothing is shown and nothing moves; the event is played and done with.
+		assertEquals(strike, scn.GetFromTopOfFreepsDeck(1));
+		assertEquals(fury, scn.GetFromTopOfFreepsDeck(2));
+		assertEquals(blow, scn.GetFromTopOfFreepsDeck(3));
+		assertInZone(Zone.DISCARD, discoveries);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	// "A [gandalf] Wizard and X other companions": where the Wizard spotted is no companion, every companion is
+	// another one.  Only a Hobbit-set card shows it (every Decipher [gandalf] Wizard is a companion), on a table
+	// of the Anything Goes format.  The game used to examine one card fewer than the companions spotted here
+	// too (F-0374).
+	@Test
+	public void WithTheWizardAnAllyEveryCompanionSpottedIsAnotherCompanion() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetAllyWizardScenario();
+
+		var discoveries = scn.GetFreepsCard("discoveries");
+		var saruman = scn.GetFreepsCard("saruman");
+		var gimli = scn.GetFreepsCard("gimli");
+		var strike = scn.GetFreepsCard("strike");
+		var fury = scn.GetFreepsCard("fury");
+		var blow = scn.GetFreepsCard("blow");
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveAlliesToTable(saruman);
+		scn.MoveCardsToHand(discoveries);
+
+		scn.StartGame();
+		// From the top: Axe Strike, Battle Fury, Cleaving Blow.
+		scn.MoveCardsToTopOfDeck(blow, fury, strike);
+
+		assertEquals(0, scn.GetTwilight());
+		assertTrue(scn.FreepsPlayAvailable(discoveries));
+
+		// Toil 3: Saruman could exert for it, and does not.
+		scn.FreepsPlayCard(discoveries);
+		assertEquals(0, scn.FreepsGetChoiceMin());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(saruman));
+		scn.FreepsDeclineChoosing();
+		assertEquals(7, scn.GetTwilight());
+
+		// Gimli and the Ring-bearer are the two companions, both of them other than the Wizard: X is 2.
+		assertEquals(2, scn.FreepsGetChoiceMax());
+		scn.FreepsChoose("2");
+
+		assertTrue(scn.FreepsHasCardChoiceAvailable(strike, fury));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(blow));
+
+		scn.FreepsChooseCardBPFromSelection(strike);
+		assertEquals(fury, scn.GetFromTopOfFreepsDeck(1));
+		assertEquals(strike, scn.GetFromTopOfFreepsDeck(2));
+		assertEquals(blow, scn.GetFromTopOfFreepsDeck(3));
+		assertInZone(Zone.DISCARD, discoveries);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_11_173_Tests
@@ -19,7 +20,24 @@ public class Card_11_173_Tests
 				new HashMap<>()
 				{{
 					put("card", "11_173");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetResistanceScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("sting", "11_173");
+					// Aragorn, Ranger of the North: strength 8, resistance 6; his own maneuver ability is not used
+					put("aragorn", "1_89");
+					// Gimli, Skilled Defender: resistance 6; his text answers a skirmish he wins, and he is in none
+					put("gimli", "5_7");
+					put("bounder", "1_286");    // Bounder: a [shire] Hobbit ally, the character who is no companion
+					put("runner", "1_178");     // Goblin Runner: strength 5, vitality 1; its text is about being played
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -58,18 +76,53 @@ public class Card_11_173_Tests
 		assertEquals(2, card.getBlueprint().getStrength());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void StingTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void BorneByFrodoItExertsHimToMakeAnotherCompanionResistancePlus2UntilTheRegroupPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetResistanceScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var frodo = scn.GetRingBearer();
+		var sting = scn.GetFreepsCard("sting");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var bounder = scn.GetFreepsCard("bounder");
+		scn.MoveCompanionsToTable(aragorn, gimli);
+		scn.MoveAlliesToTable(bounder);
+		scn.AttachCardsTo(frodo, sting);
+
+		var runner = scn.GetShadowCard("runner");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(runner);
+		scn.SkipToPhase(Phase.MANEUVER);
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(10, scn.GetResistance(frodo));
+		assertEquals(6, scn.GetResistance(aragorn));
+		assertEquals(6, scn.GetResistance(gimli));
+		assertTrue(scn.FreepsActionAvailable(sting));
+
+		scn.FreepsUseCardAction(sting);
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		// "Another companion": not Frodo himself, and not the ally.
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, gimli));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(frodo, bounder));
+
+		scn.FreepsChooseCard(aragorn);
+		assertEquals(8, scn.GetResistance(aragorn));
+		assertEquals(6, scn.GetResistance(gimli));
+		assertEquals(10, scn.GetResistance(frodo));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+
+		// Still there in the skirmish that follows ...
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, runner);
+		scn.FreepsResolveSkirmish(aragorn);
+		assertEquals(8, scn.GetResistance(aragorn));
+
+		// ... and gone at the first decision of the regroup phase.  (Aragorn, 8, beats the Runner, 5.)
+		scn.PassSkirmishActions();
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		assertEquals(6, scn.GetResistance(aragorn));
 	}
 }

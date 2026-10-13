@@ -20,6 +20,8 @@ public class Card_15_091_Tests
 				{{
 					put("card", "15_91");
 					// put other cards in here as needed for the test case
+					// Tracking Uruk: [uruk-hai] Uruk-hai; hunter 1 is its whole text
+					put("tracking", "15_171");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -60,6 +62,29 @@ public class Card_15_091_Tests
 		assertEquals(10, card.getBlueprint().getStrength());
 		assertEquals(2, card.getBlueprint().getVitality());
 		assertEquals(4, card.getBlueprint().getSiteNumber());
+	}
+
+	@Test
+	public void ItSpotsItselfAndKeepsHunter1WhenTheOtherHunterLeavesPlay() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var wildman = scn.GetShadowCard("card");
+		var tracking = scn.GetShadowCard("tracking");
+
+		scn.StartGame();
+		// Alone, it has no hunter to spot.
+		scn.MoveMinionsToTable(wildman);
+		assertEquals(0, scn.GetKeywordCount(wildman, Keyword.HUNTER));
+
+		scn.MoveMinionsToTable(tracking);
+		assertEquals(1, scn.GetKeywordCount(wildman, Keyword.HUNTER));
+
+		// The other hunter goes.  Hunter by its own text, the Wild Man is itself a hunter it can spot, and keeps
+		// hunter 1 (Q-0290: "A, yeah, same deal" as Sentry Uruk 15_170, Q-0276).
+		scn.MoveCardsToDiscard(tracking);
+		assertEquals(1, scn.GetKeywordCount(wildman, Keyword.HUNTER));
+		assertTrue(scn.HasKeyword(wildman, Keyword.HUNTER));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

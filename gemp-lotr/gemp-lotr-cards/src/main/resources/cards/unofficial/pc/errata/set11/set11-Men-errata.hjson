@@ -2,17 +2,22 @@
 
 	61_100: {
 		cardInfo: {
-			//id: 1_100.1
+			//id: 61_100.1
+			parent: 11_100
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/61_100.jpg
 			collInfo: 11R100
 			rarity: R
 		}
 		title: Strange-looking Men
-		culture: men
+		unique: false
+		side: Shadow
+		culture: Men
 		twilight: 4
-		type: minion
-		race: man
+		type: Minion
+		race: Man
 		strength: 10
 		vitality: 2
 		site: 4

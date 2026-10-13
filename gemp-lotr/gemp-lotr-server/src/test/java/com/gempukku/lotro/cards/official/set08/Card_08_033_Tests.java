@@ -1,16 +1,14 @@
 package com.gempukku.lotro.cards.official.set08;
 
 import com.gempukku.lotro.framework.VirtualTableScenario;
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_08_033_Tests
@@ -22,6 +20,22 @@ public class Card_08_033_Tests
 				{{
 					put("card", "8_33");
 					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// Two [gondor] Wraiths, neither exhausted, and a minion that overwhelms one of them.
+	protected VirtualTableScenario GetTwoWraithsScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("edict", "8_33");
+					put("oathbreaker", "8_41");
+					put("sleepless", "8_45");
+					put("troop", "1_177");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -56,6 +70,40 @@ public class Card_08_033_Tests
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
         assertTrue(scn.HasTimeword(card, Timeword.RESPONSE));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
+	}
+
+	// "either exhaust another [gondor] Wraith or spot another exhausted [gondor] Wraith": the definition let any
+	// [gondor] Wraith be spotted, so the other Wraith need never be exhausted.
+	@Test
+	public void AnotherWraithWhoIsNotExhaustedMustBeExhaustedAndCannotBeSpotted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetTwoWraithsScenario();
+
+		var edict = scn.GetFreepsCard("edict");
+		var oathbreaker = scn.GetFreepsCard("oathbreaker");
+		var sleepless = scn.GetFreepsCard("sleepless");
+		scn.MoveCompanionsToTable(oathbreaker, sleepless);
+		scn.MoveCardsToHand(edict);
+
+		var troop = scn.GetShadowCard("troop");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(oathbreaker, troop);
+		scn.FreepsResolveSkirmish(oathbreaker);
+
+		// 6 against 13: Oathbreaker is overwhelmed and about to be killed.
+		scn.PassSkirmishActions();
+		assertTrue(scn.FreepsPlayAvailable(edict));
+		scn.FreepsPlayCard(edict);
+
+		// He is discarded and not killed.  Sleepless Dead is not exhausted, so there is no "exhausted [gondor]
+		// Wraith" to spot: he is exhausted, and with one thing to do nothing is asked.
+		assertInZone(Zone.DISCARD, oathbreaker);
+		assertEquals(2, scn.GetWoundsOn(sleepless));
+		assertTrue(scn.IsExhausted(sleepless));
+		assertInZone(Zone.DISCARD, edict);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

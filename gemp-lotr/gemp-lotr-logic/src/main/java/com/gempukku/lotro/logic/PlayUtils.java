@@ -89,6 +89,18 @@ public class PlayUtils {
         }
     }
 
+    /**
+     * As below, for a card that would be played after the given number of threats had been added: they take up
+     * room under the threat limit, so a card that must itself add a threat to be played may have none left.
+     */
+    public static boolean checkPlayRequirements(LotroGame game, PhysicalCard card, Filterable additionalAttachmentFilter, int withTwilightRemoved, int withThreatsAdded, int twilightModifier, boolean ignoreRoamingPenalty, boolean ignoreCheckingDeadPile, boolean ignoreResponseEvents) {
+        if (withThreatsAdded <= 0)
+            return checkPlayRequirements(game, card, additionalAttachmentFilter, withTwilightRemoved, twilightModifier, ignoreRoamingPenalty, ignoreCheckingDeadPile, ignoreResponseEvents);
+
+        return game.getGameState().withThreatsToCome(withThreatsAdded,
+                () -> checkPlayRequirements(game, card, additionalAttachmentFilter, withTwilightRemoved, twilightModifier, ignoreRoamingPenalty, ignoreCheckingDeadPile, ignoreResponseEvents));
+    }
+
     public static boolean checkPlayRequirements(LotroGame game, PhysicalCard card, Filterable additionalAttachmentFilter, int withTwilightRemoved, int twilightModifier, boolean ignoreRoamingPenalty, boolean ignoreCheckingDeadPile, boolean ignoreResponseEvents) {
         final LotroCardBlueprint blueprint = card.getBlueprint();
 
@@ -96,12 +108,14 @@ public class PlayUtils {
         if (!blueprint.checkPlayRequirements(game, card))
             return false;
 
-        twilightModifier -= game.getModifiersQuerying().getPotentialDiscount(game, card);
-
         // Check if there exists a legal target (if needed)
         final Filterable validTargetFilter = blueprint.getValidTargetFilter(card.getOwner(), game, card);
         Filterable finalTargetFilter = null;
         if (validTargetFilter != null) {
+            // The filter is handed the modifier whole, as getPlayCardAction hands it: it takes what the card's
+            // discounts (toil, a definition's discount) could cover off the cost on each bearer itself, and a
+            // modifier already less by that would count them twice (F-0350).  For a card played on a bearer this
+            // filter is the check of the pool.
             finalTargetFilter = Filters.and(getFullAttachValidTargetFilter(game, card, twilightModifier, withTwilightRemoved), additionalAttachmentFilter);
             if (Filters.countActive(game, finalTargetFilter) == 0)
                 return false;
@@ -134,12 +148,16 @@ public class PlayUtils {
                 return false;
         }
 
-        return (blueprint.getSide() != Side.SHADOW || canPayForShadowCard(game, card, finalTargetFilter, withTwilightRemoved, twilightModifier, ignoreRoamingPenalty));
+        // What the card's discounts could cover at the most comes off its cost; never off the roaming penalty.
+        final int leastTwilightModifier = twilightModifier - game.getModifiersQuerying().getPotentialDiscount(game, card);
+
+        return (blueprint.getSide() != Side.SHADOW || canPayForShadowCard(game, card, finalTargetFilter, withTwilightRemoved, leastTwilightModifier, ignoreRoamingPenalty));
     }
 
     /**
      * Checks if a card can be played ignoring all costs (twilight, ToPlay requirements, ExtraCosts,
-     * roaming penalty) but still respecting uniqueness, Rule of Nine, and CantPlayCards modifiers.
+     * roaming penalty, and what an event's own text asks before its "to") but still respecting uniqueness,
+     * Rule of Nine, and CantPlayCards modifiers.
      */
     public static boolean checkPlayRequirementsIgnoringCosts(LotroGame game, PhysicalCard card) {
         final LotroCardBlueprint blueprint = card.getBlueprint();
@@ -157,13 +175,25 @@ public class PlayUtils {
                 && !(checkRuleOfNine(game, card) && checkPlayRingBearer(game, card)))
             return false;
 
-        // Skip: ToPlay requirements, ExtraCosts, twilight cost, roaming penalty, event timeword check
+        // An event is played in its own phase, whatever costs are ignored: the phase is no cost.  So an event
+        // of another phase is not playable (Ketura on F-0193, Race Text 92_29: "restrict it to shadow-phase
+        // events only"), and neither is a response event, which is played in answer to its own trigger and
+        // never by another card's effect and has no play action to be given (F-0186).  A response event that
+        // is also an event of the current phase is played as that.
+        if (blueprint.getCardType() == CardType.EVENT) {
+            final Timeword timeword = PhaseKeywordMap.get(game.getGameState().getCurrentPhase());
+            if (timeword == null || !blueprint.hasTimeword(timeword))
+                return false;
+        }
+
+        // Skip: ToPlay requirements, ExtraCosts, twilight cost, roaming penalty
         return true;
     }
 
     /**
      * Creates a play action for a card ignoring all costs — no twilight payment, no extra costs,
-     * no roaming penalty. Used for "play ignoring all costs" effects.
+     * no roaming penalty, and for an event none of the costs in its own text that can be passed over
+     * (DefaultActionSource.createAction). Used for "play ignoring all costs" effects.
      */
     public static CostToEffectAction getPlayCardActionIgnoringCosts(LotroGame game, PhysicalCard card) {
         final LotroCardBlueprint blueprint = card.getBlueprint();
@@ -183,9 +213,9 @@ public class PlayUtils {
                 return action;
             }
         } else {
-            final PlayEventAction action = blueprint.getPlayEventCardAction(card.getOwner(), game, card);
-            // Skip extra costs and discounts
-            return action;
+            // Skip extra costs and discounts, the event's twilight cost, and the costs in its own text
+            // ("Exert your [moria] Orc to draw 2 cards" draws 2 with no Orc exerted: Ketura on F-0316)
+            return blueprint.getPlayEventCardActionIgnoringCosts(card.getOwner(), game, card);
         }
     }
 

@@ -3,6 +3,7 @@ package com.gempukku.lotro.logic.decisions;
 import com.alibaba.fastjson2.JSONObject;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.timing.Action;
+import com.gempukku.lotro.logic.timing.NoEffect;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -21,6 +22,8 @@ public abstract class CardActionSelectionDecision extends AbstractAwaitingDecisi
         setParam("cardId", getCardIds(actions));
         setParam("blueprintId", getBlueprintIdsForVirtualActions(actions));
         setParam("actionText", getActionTexts(actions));
+        // Each action is judged here, once, as it is put in front of the player.
+        setParam("noEffect", getNoEffects(actions));
     }
 
     public CardActionSelectionDecision(int id, String text, List<String> cardIds, List<String> blueprintIds, List<String> actionTexts) {
@@ -38,6 +41,25 @@ public abstract class CardActionSelectionDecision extends AbstractAwaitingDecisi
             actionIds[i] = String.valueOf(i);
         }
         setParam("actionId", actionIds);
+    }
+
+    /**
+     * Replaces the actions on offer with a list worked out afresh, leaving the decision itself, and what happens
+     * when it is answered, as they were.  For the virtual table, after it has rearranged the board under a
+     * decision that was already pending: the choices in a decision are otherwise fixed when it is sent.
+     * @param actions The actions now on offer.
+     */
+    public void refreshActions(List<? extends Action> actions) {
+        if (_actions == null)
+            throw new UnsupportedOperationException("This decision was not made from a game's actions");
+        _actions.clear();
+        _actions.addAll(actions);
+
+        setParam("actionId", getActionIds(actions));
+        setParam("cardId", getCardIds(actions));
+        setParam("blueprintId", getBlueprintIdsForVirtualActions(actions));
+        setParam("actionText", getActionTexts(actions));
+        setParam("noEffect", getNoEffects(actions));
     }
 
     /**
@@ -76,9 +98,15 @@ public abstract class CardActionSelectionDecision extends AbstractAwaitingDecisi
     }
 
     private String[] getActionTexts(List<? extends Action> actions) {
+        // Each as it words itself, and two offers of one action told apart by what each is for.
+        return OfferedActionTexts.of(_game, actions);
+    }
+
+    // One word for each action, in the order of "actionId": "false", or why the action will do nothing.
+    private String[] getNoEffects(List<? extends Action> actions) {
         String[] result = new String[actions.size()];
         for (int i = 0; i < result.length; i++)
-            result[i] = actions.get(i).getText(_game);
+            result[i] = NoEffect.wordOf(actions.get(i).getNoEffect());
         return result;
     }
 

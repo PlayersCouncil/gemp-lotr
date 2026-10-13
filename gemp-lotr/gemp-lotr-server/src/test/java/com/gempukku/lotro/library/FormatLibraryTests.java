@@ -1,6 +1,6 @@
 package com.gempukku.lotro.library;
 
-import com.gempukku.lotro.at.AbstractAtTest;
+import com.gempukku.lotro.framework.LoadedLibraries;
 import com.gempukku.lotro.game.CardCollection;
 import com.gempukku.lotro.game.DefaultAdventureLibrary;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 
-public class FormatLibraryTests extends AbstractAtTest {
+public class FormatLibraryTests extends LoadedLibraries {
 
     protected static LotroFormatLibrary _formatLibrary = new LotroFormatLibrary(new DefaultAdventureLibrary(), _cardLibrary);
     protected static SealedLeagueProduct _sealedLeagueProduct = new SealedLeagueProduct();

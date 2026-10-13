@@ -2,7 +2,10 @@
 
 	60_68: {
 		cardInfo: {
-			//id: 0_68.1
+			//id: 60_68.1
+			parent: 10_68
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN10S068.1_card.jpg
 			collInfo: 10R68
@@ -16,7 +19,7 @@
 		twilight: 6
 		type: Minion
 		race: Nazgul
-		keyword: enduring
+		keywords: Enduring
 		strength: 11
 		vitality: 4
 		site: 3

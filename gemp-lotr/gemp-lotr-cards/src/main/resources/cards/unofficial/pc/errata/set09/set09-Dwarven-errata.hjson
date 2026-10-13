@@ -1,10 +1,10 @@
 {
 	59_4: {
 		cardInfo: {
-			//id: 9_4.1
+			//id: 59_4.1
 			parent: 9_4
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN09E004.1_card.jpg
 			collInfo: 9R+4
@@ -13,16 +13,17 @@
 		title: Gimli
 		subtitle: Bearer of Grudges
 		unique: true
-		culture: dwarven
+		side: Free Peoples
+		culture: Dwarven
 		twilight: 2
-		type: companion
-		race: dwarf
+		type: Companion
+		race: Dwarf
 		strength: 6
 		vitality: 3
 		resistance: 5
 		canStartWithRing: true
-		keyword: [
-			damage+1
+		keywords: [
+			Damage+1
 		]
 		effects: [
 			{

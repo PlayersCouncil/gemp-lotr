@@ -187,7 +187,6 @@
 				cost: {
 					type: exert
 					select: memory(winner)
-					ignoreCostCheckFailure: true
 				}
 				effect: {
 					type: drawCards
@@ -935,7 +934,11 @@
 					type: addActivated
 					filter: minion
 					phase: assignment
-					text: Assign this minion to bearer of Steadfast Champion.
+					text: Assign this minion to Gandalf.
+					requires: {
+						type: canSpot
+						filter: hasAttached(name(Steadfast Champion)),assignableToSkirmishAgainst(self)
+					}
 					effect: {
 						type: assignFpCharacterToSkirmish
 						fpCharacter: choose(hasAttached(name(Steadfast Champion)))

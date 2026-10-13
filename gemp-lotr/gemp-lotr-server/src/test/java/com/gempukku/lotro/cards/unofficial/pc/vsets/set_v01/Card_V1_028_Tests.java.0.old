@@ -112,7 +112,7 @@ public class Card_V1_028_Tests
 		scn.StartGame();
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowPlayAvailable(wisp));
 		assertEquals(Zone.DECK, saruman1.getZone());
 		assertEquals(saruman1, scn.GetShadowBottomOfDeck());
@@ -136,7 +136,7 @@ public class Card_V1_028_Tests
 		scn.FreepsChooseToMove();
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowPlayAvailable(wisp2));
 		assertEquals(Zone.DECK, saruman1.getZone());
 		assertEquals(saruman1, scn.GetShadowBottomOfDeck());
@@ -160,7 +160,7 @@ public class Card_V1_028_Tests
 		scn.FreepsChooseToMove();
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowPlayAvailable(wisp3));
 		assertEquals(Zone.DECK, saruman1.getZone());
 		assertEquals(saruman1, scn.GetShadowBottomOfDeck());
@@ -198,7 +198,7 @@ public class Card_V1_028_Tests
 		scn.StartGame();
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowPlayAvailable(wisp));
 
 		scn.ShadowPlayCard(wisp);

@@ -1,13 +1,16 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_V2_049_Tests
@@ -18,11 +21,27 @@ public class Card_V2_049_Tests
 				new HashMap<>()
 				{{
 					put("guthwine", "102_49");
-					put("eowyn", "5_122");
-					put("eomer", "4_267");
-					put("condition", "6_97");
 
-					put("runner", "1_178");
+					put("eomer", "12_112");     // Eomer, Eored Leader: strength 7, vitality 3; a maneuver ability used only on purpose
+					put("northman", "17_95");   // Eomer, Northman: strength 7, damage +1 in print
+					put("guard", "5_83");       // Household Guard: [rohan] Man, strength 6; Valiant is its whole text
+					// Merry, Master Holbytla: a [rohan] Hobbit companion, strength 3, valiant.  He is a Man as well
+					// only while 3 [rohan] companions (or Eowyn) can be spotted; his trigger answers another [rohan]
+					// Man exerting, and his skirmish ability is never used.
+					put("merry", "103_85");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a [gondor] Man
+					put("herdsman", "7_247");   // Rohirrim Herdsman: a [rohan] ally
+
+					// Cards that bear culture tokens; none of them does anything unless used on purpose.
+					put("doom", "8_86");        // Doom Drove Them: [rohan] condition
+					put("freely", "13_127");    // Freely Across Our Land: [rohan] condition
+					put("nonealive", "6_97");   // We Left None Alive: [rohan] condition, given no token here
+					put("path", "8_42");        // A Path Appointed: [gondor] condition bearing [gondor] tokens
+
+					put("runner", "1_178");     // Goblin Runner: strength 5, vitality 1
+					put("runner2", "1_178");
+					put("savage", "1_151");     // Uruk Savage: strength 5, vitality 3; damage +1 and nothing else
+					put("troop", "1_177");      // Goblin Patrol Troop: strength 13, no text
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -35,7 +54,7 @@ public class Card_V2_049_Tests
 
 		/**
 		 * Set: V2
-		 * Name: Guthwine, Eomer's Blade
+		 * Name: Gúthwinë, Eomer's Blade
 		 * Unique: True
 		 * Side: Free Peoples
 		 * Culture: Rohan
@@ -44,8 +63,8 @@ public class Card_V2_049_Tests
 		 * Subtype: Hand weapon
 		 * Strength: 2
 		 * Game Text: Bearer must be a [rohan] companion.
-		* 	If bearer is Eomer, he is damage +1 and each time he wins a skirmish, you may reinforce a [rohan] token.
-		*/
+		 * 	If bearer is Eomer, he is damage +1 and each time he wins a skirmish, you may reinforce a [rohan] token.
+		 */
 
 		var scn = GetScenario();
 
@@ -63,124 +82,272 @@ public class Card_V2_049_Tests
 	}
 
 	@Test
-	public void GuthwineCanBeBorneByAnyRohanCompanion() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void PlayedOnEomerItMakesHimDamagePlusOne() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var guthwine = scn.GetFreepsCard("guthwine");
 		var eomer = scn.GetFreepsCard("eomer");
-		var eowyn = scn.GetFreepsCard("eowyn");
-		scn.MoveCardsToHand(guthwine);
-		scn.MoveCompanionsToTable(eomer, eowyn);
-
-		scn.StartGame();
-		scn.FreepsPlayCard(guthwine);
-
-		assertTrue(scn.FreepsHasCardChoiceAvailable(eomer));
-		assertTrue(scn.FreepsHasCardChoiceAvailable(eowyn));
-
-		scn.FreepsChooseCard(eowyn);
-		assertEquals(Zone.ATTACHED, guthwine.getZone());
-		assertEquals(eowyn, guthwine.getAttachedTo());
-	}
-
-	@Test
-	public void GuthwineMakesEomerBearerDamagePlus1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var guthwine = scn.GetFreepsCard("guthwine");
-		var eomer = scn.GetFreepsCard("eomer");
-		scn.MoveCardsToHand(guthwine);
 		scn.MoveCompanionsToTable(eomer);
+		scn.MoveCardsToHand(guthwine);
 
 		scn.StartGame();
 
 		assertFalse(scn.HasKeyword(eomer, Keyword.DAMAGE));
 
+		// Eomer is the only [rohan] companion, so it goes to him.
 		scn.FreepsPlayCard(guthwine);
 
-		assertEquals(Zone.ATTACHED, guthwine.getZone());
-		assertEquals(eomer, guthwine.getAttachedTo());
+		assertAttachedTo(guthwine, eomer);
 		assertTrue(scn.HasKeyword(eomer, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(eomer, Keyword.DAMAGE));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	public void GuthwineDoesNotMakeNonEomerBearerDamagePlus1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void BearerMustBeARohanCompanionAndOnOneWhoIsNotEomerItGivesNoDamageBonus() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
+		var frodo = scn.GetRingBearer();
 		var guthwine = scn.GetFreepsCard("guthwine");
-		var eowyn = scn.GetFreepsCard("eowyn");
+		var eomer = scn.GetFreepsCard("eomer");
+		var merry = scn.GetFreepsCard("merry");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var herdsman = scn.GetFreepsCard("herdsman");
+		// Merry, Master Holbytla is the one [rohan] companion in print who is no Man: with only two [rohan]
+		// companions on the table he is a Hobbit and nothing else.
+		scn.MoveCompanionsToTable(eomer, merry, aragorn);
+		scn.MoveAlliesToTable(herdsman);
 		scn.MoveCardsToHand(guthwine);
-		scn.MoveCompanionsToTable(eowyn);
 
 		scn.StartGame();
 
-		assertFalse(scn.HasKeyword(eowyn, Keyword.DAMAGE));
+		assertTrue(scn.IsRace(merry, Race.HOBBIT));
+		assertFalse(scn.IsRace(merry, Race.MAN));
+		assertFalse(scn.HasKeyword(merry, Keyword.DAMAGE));
 
 		scn.FreepsPlayCard(guthwine);
 
-		assertEquals(Zone.ATTACHED, guthwine.getZone());
-		assertEquals(eowyn, guthwine.getAttachedTo());
-		assertFalse(scn.HasKeyword(eowyn, Keyword.DAMAGE));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(eomer, merry));
+		// A Man of another culture, a [rohan] ally, and the Ring-bearer.
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn, herdsman, frodo));
+
+		scn.FreepsChooseCard(merry);
+
+		assertAttachedTo(guthwine, merry);
+		assertFalse(scn.HasKeyword(merry, Keyword.DAMAGE));
+		// Nor is Eomer damage +1 while another bears it.
+		assertFalse(scn.HasKeyword(eomer, Keyword.DAMAGE));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	public void GuthwineReinforcesRohanTokenWhenEomerWinsSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void EachTimeEomerWinsASkirmishARohanTokenMayBeReinforced() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var guthwine = scn.GetFreepsCard("guthwine");
 		var eomer = scn.GetFreepsCard("eomer");
-		var condition = scn.GetFreepsCard("condition");
+		var doom = scn.GetFreepsCard("doom");
+		var freely = scn.GetFreepsCard("freely");
+		var nonealive = scn.GetFreepsCard("nonealive");
+		var path = scn.GetFreepsCard("path");
 		scn.MoveCompanionsToTable(eomer);
 		scn.AttachCardsTo(eomer, guthwine);
-		scn.MoveCardsToSupportArea(condition);
-		scn.AddTokensToCard(condition, 1);
+		scn.MoveCardsToSupportArea(doom, freely, nonealive, path);
+		// Two [rohan] cards with a [rohan] token each, a [rohan] card with none, and a [gondor] token.
+		scn.AddTokensToCard(doom, 1);
+		scn.AddTokensToCard(freely, 1);
+		scn.AddTokensToCard(path, 1);
 
-		var runner = scn.GetShadowCard("runner");
-		scn.MoveMinionsToTable(runner);
+		var savage = scn.GetShadowCard("savage");
 
 		scn.StartGame();
-
+		scn.MoveMinionsToTable(savage);
+		// Fierce, so that Eomer fights it twice in one turn.
+		scn.ApplyAdHocModifier(new AddKeywordModifier(null, savage, null, Keyword.FIERCE));
 		scn.SkipToAssignments();
-		scn.FreepsAssignAndResolve(eomer, runner);
+
+		// Against the Savage's 5, Eomer wins without overwhelming.
+		assertEquals(5, scn.GetStrength(savage));
+		scn.FreepsAssignAndResolve(eomer, savage);
 		scn.PassSkirmishActions();
 
-		assertEquals(1, scn.GetCultureTokensOn(condition));
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
+		// 1 wound for losing + 1 for Eomer's damage +1; the Savage has vitality 3.
+		assertEquals(2, scn.GetWoundsOn(savage));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(guthwine));
 		scn.FreepsAcceptOptionalTrigger();
 
-		assertEquals(2, scn.GetCultureTokensOn(condition));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(doom, freely));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(nonealive, path));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		assertEquals(1, scn.FreepsGetChoiceMax());
+		scn.FreepsChooseCard(doom);
+
+		assertEquals(2, scn.GetCultureTokensOn(doom));
+		assertEquals(1, scn.GetCultureTokensOn(freely));
+		assertEquals(0, scn.GetCultureTokensOn(nonealive));
+		assertEquals(1, scn.GetCultureTokensOn(path));
+
+		// The fierce skirmish: he wins again, and may reinforce again.
+		scn.PassFierceAssignmentActions();
+		scn.FreepsAssignAndResolve(eomer, savage);
+		scn.PassFierceSkirmishActions();
+
+		assertInDiscard(savage);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(guthwine));
+		scn.FreepsAcceptOptionalTrigger();
+		assertTrue(scn.FreepsHasCardChoiceAvailable(doom, freely));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(nonealive, path));
+		scn.FreepsChooseCard(freely);
+
+		assertEquals(2, scn.GetCultureTokensOn(doom));
+		assertEquals(2, scn.GetCultureTokensOn(freely));
+		assertEquals(0, scn.GetCultureTokensOn(nonealive));
+		assertEquals(1, scn.GetCultureTokensOn(path));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
 	@Test
-	public void GuthwineDoesNotReinforceRohanTokenWhenNonEomerWinsSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void OnAnEomerWhoIsDamagePlusOneInPrintTheBonusesAddAndTheReinforcementMayBeDeclined() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var guthwine = scn.GetFreepsCard("guthwine");
-		var eowyn = scn.GetFreepsCard("eowyn");
-		var condition = scn.GetFreepsCard("condition");
-		scn.MoveCompanionsToTable(eowyn);
-		scn.AttachCardsTo(eowyn, guthwine);
-		scn.MoveCardsToSupportArea(condition);
-		scn.AddTokensToCard(condition, 1);
+		var northman = scn.GetFreepsCard("northman");
+		var doom = scn.GetFreepsCard("doom");
+		var freely = scn.GetFreepsCard("freely");
+		scn.MoveCompanionsToTable(northman);
+		scn.MoveCardsToHand(guthwine);
+		scn.MoveCardsToSupportArea(doom, freely);
+		scn.AddTokensToCard(doom, 1);
+		scn.AddTokensToCard(freely, 1);
 
 		var runner = scn.GetShadowCard("runner");
-		scn.MoveMinionsToTable(runner);
 
 		scn.StartGame();
 
+		assertEquals(1, scn.GetKeywordCount(northman, Keyword.DAMAGE));
+		scn.FreepsPlayCard(guthwine);
+		assertAttachedTo(guthwine, northman);
+		assertEquals(2, scn.GetKeywordCount(northman, Keyword.DAMAGE));
+
+		scn.MoveMinionsToTable(runner);
 		scn.SkipToAssignments();
-		scn.FreepsAssignAndResolve(eowyn, runner);
+		// 7 + 2 against 5
+		scn.FreepsAssignAndResolve(northman, runner);
 		scn.PassSkirmishActions();
 
-		assertEquals(1, scn.GetCultureTokensOn(condition));
-		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertInDiscard(runner);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(guthwine));
+		scn.FreepsDeclineOptionalTrigger();
 
-		assertEquals(1, scn.GetCultureTokensOn(condition));
+		assertEquals(1, scn.GetCultureTokensOn(doom));
+		assertEquals(1, scn.GetCultureTokensOn(freely));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void IsNotOfferedWhenAnotherRohanCompanionBearingItWinsNorWhenEomerWinsWithoutIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var guthwine = scn.GetFreepsCard("guthwine");
+		var eomer = scn.GetFreepsCard("eomer");
+		var guard = scn.GetFreepsCard("guard");
+		var doom = scn.GetFreepsCard("doom");
+		scn.MoveCompanionsToTable(eomer, guard);
+		scn.AttachCardsTo(guard, guthwine);
+		scn.MoveCardsToSupportArea(doom);
+		scn.AddTokensToCard(doom, 1);
+
+		var runner = scn.GetShadowCard("runner");
+		var runner2 = scn.GetShadowCard("runner2");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner, runner2);
+		scn.SkipToAssignments();
+
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{guard, runner}, new PhysicalCardImpl[]{eomer, runner2});
+
+		// The Household Guard, bearing it: 6 + 2 against 5.
+		scn.FreepsResolveSkirmish(guard);
+		scn.PassSkirmishActions();
+		assertInDiscard(runner);
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertEquals(1, scn.GetCultureTokensOn(doom));
+
+		// Eomer, without it: 7 against 5.
+		scn.FreepsResolveSkirmish(eomer);
+		scn.PassSkirmishActions();
+		assertInDiscard(runner2);
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertEquals(1, scn.GetCultureTokensOn(doom));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void IsNotOfferedWhenEomerLosesNorWhenAnotherCompanionWinsBesideHim() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var guthwine = scn.GetFreepsCard("guthwine");
+		var eomer = scn.GetFreepsCard("eomer");
+		var guard = scn.GetFreepsCard("guard");
+		var doom = scn.GetFreepsCard("doom");
+		scn.MoveCompanionsToTable(eomer, guard);
+		scn.AttachCardsTo(eomer, guthwine);
+		scn.MoveCardsToSupportArea(doom);
+		scn.AddTokensToCard(doom, 1);
+
+		var runner = scn.GetShadowCard("runner");
+		var troop = scn.GetShadowCard("troop");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner, troop);
+		scn.SkipToAssignments();
+
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{guard, runner}, new PhysicalCardImpl[]{eomer, troop});
+
+		// The Household Guard wins: 6 against 5.
+		scn.FreepsResolveSkirmish(guard);
+		scn.PassSkirmishActions();
+		assertInDiscard(runner);
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertEquals(1, scn.GetCultureTokensOn(doom));
+
+		// Eomer loses: 7 + 2 against 13.
+		assertEquals(0, scn.GetWoundsOn(eomer));
+		scn.FreepsResolveSkirmish(eomer);
+		scn.PassSkirmishActions();
+		assertEquals(1, scn.GetWoundsOn(eomer));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertEquals(1, scn.GetCultureTokensOn(doom));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void IsNotOfferedWhenThereIsNoRohanTokenToReinforce() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var guthwine = scn.GetFreepsCard("guthwine");
+		var eomer = scn.GetFreepsCard("eomer");
+		var nonealive = scn.GetFreepsCard("nonealive");
+		var path = scn.GetFreepsCard("path");
+		scn.MoveCompanionsToTable(eomer);
+		scn.AttachCardsTo(eomer, guthwine);
+		// A [rohan] card that could bear tokens and has none, and a token of another culture.
+		scn.MoveCardsToSupportArea(nonealive, path);
+		scn.AddTokensToCard(path, 1);
+
+		var runner = scn.GetShadowCard("runner");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner);
+		scn.SkipToAssignments();
+
+		scn.FreepsAssignAndResolve(eomer, runner);
+		scn.PassSkirmishActions();
+
+		assertInDiscard(runner);
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(guthwine));
+		assertEquals(0, scn.GetCultureTokensOn(nonealive));
+		assertEquals(1, scn.GetCultureTokensOn(path));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }

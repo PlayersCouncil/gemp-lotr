@@ -1,6 +1,6 @@
 //package com.gempukku.lotro.library;
 //
-//import com.gempukku.lotro.at.AbstractAtTest;
+//import com.gempukku.lotro.framework.LoadedLibraries;
 //import com.gempukku.lotro.builder.PacksStorageBuilder;
 //import com.gempukku.lotro.packs.PacksStorage;
 //import com.gempukku.lotro.packs.ProductLibrary;
@@ -19,7 +19,7 @@
 
 
 //
-//public class ProductLibraryTests extends AbstractAtTest {
+//public class ProductLibraryTests extends LoadedLibraries {
 //
 //    protected static ProductLibrary _productLib = new ProductLibrary(_cardLibrary);
 //    protected static PacksStorage _packStorage = PacksStorageBuilder.createPacksStorage(_cardLibrary);

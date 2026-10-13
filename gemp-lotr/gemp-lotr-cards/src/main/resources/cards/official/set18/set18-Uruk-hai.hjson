@@ -123,6 +123,22 @@
 					type: winsSkirmish
 					filter: bearer
 				}
+				requires: {
+					type: or
+					requires: [
+						{
+							type: canSpot
+							filter: follower
+						}
+						{
+							type: canSpot
+							filter: culture(uruk-hai),minion,wounded
+						}
+						{
+							type: SiteAvailableToControl
+						}
+					]
+				}
 				effect: {
 					type: choice
 					texts: [
@@ -690,6 +706,9 @@
 				trigger: {
 					type: winsSkirmish
 					filter: self
+				}
+				requires: {
+					type: SiteAvailableToControl
 				}
 				effect: {
 					type: takeControlOfSite

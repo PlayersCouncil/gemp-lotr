@@ -28,13 +28,25 @@ public class PlayEventAction extends AbstractCostToEffectAction {
 
     private final Zone _playedFrom;
 
+    private final boolean _costsIgnored;
+
     public PlayEventAction(PhysicalCard card) {
         this(card, false);
     }
 
     public PlayEventAction(PhysicalCard card, boolean requiresRanger) {
+        this(card, requiresRanger, false);
+    }
+
+    /**
+     * @param costsIgnored True for an event that another card plays "ignoring all costs".  Its twilight cost is
+     *                     neither taken from the pool nor added to it, no discount on it is asked about, and
+     *                     the costs in its own text are not asked of it (see isCostsIgnored).
+     */
+    public PlayEventAction(PhysicalCard card, boolean requiresRanger, boolean costsIgnored) {
         _eventPlayed = card;
         _requiresRanger = requiresRanger;
+        _costsIgnored = costsIgnored;
 
         _playedFrom = card.getZone();
 
@@ -43,6 +55,15 @@ public class PlayEventAction extends AbstractCostToEffectAction {
 
     public PhysicalCard getEventPlayed() {
         return _eventPlayed;
+    }
+
+    /**
+     * Whether this event is played "ignoring all costs" (Race Text 92_29).  The cost in an event's own text is
+     * one of them (Ketura on F-0316), so what builds this action's costs from the card's definition leaves out
+     * each cost that can be passed over: DefaultActionSource.createAction.
+     */
+    public boolean isCostsIgnored() {
+        return _costsIgnored;
     }
 
     @Override
@@ -70,6 +91,9 @@ public class PlayEventAction extends AbstractCostToEffectAction {
             _cardRemoved = true;
             final Zone playedFromZone = _eventPlayed.getZone();
             _eventPlayed.setPlayedFromZone(playedFromZone);
+            // An event printed with several phases is, from here until this action is over, an event of the
+            // phase it is being played in (CR 4.2 "phase action")
+            game.getGameState().eventPlayStarted(_eventPlayed);
 
             game.getGameState().sendMessage(_eventPlayed.getOwner() + " plays " + GameUtils.getCardLink(_eventPlayed) + " from " + playedFromZone.getHumanReadable());
             game.getGameState().removeCardsFromZone(_eventPlayed.getOwner(), Collections.singleton(_eventPlayed));
@@ -85,6 +109,11 @@ public class PlayEventAction extends AbstractCostToEffectAction {
             }
 
             game.getGameState().eventPlayed(_eventPlayed);
+        }
+
+        if (_costsIgnored) {
+            _discountResolved = true;
+            _discountApplied = true;
         }
 
         if (!_discountResolved) {
@@ -131,6 +160,7 @@ public class PlayEventAction extends AbstractCostToEffectAction {
             game.getGameState().addCardToZone(game, _eventPlayed, Zone.DISCARD);
         }
 
+        game.getGameState().eventPlayFinished(_eventPlayed);
         return null;
     }
 }

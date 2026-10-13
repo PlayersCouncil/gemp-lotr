@@ -180,7 +180,7 @@
 					amount: 1
 					until: regroup
 				}
-				limitPerPhase: 1
+				effectLimitPerPhase: 1
 			}
 		]
 		gametext: <b>Fellowship:</b> Spot a [gondor] Man and add (2) to make each unbound companion strength +1 until the regroup phase (limit +1).

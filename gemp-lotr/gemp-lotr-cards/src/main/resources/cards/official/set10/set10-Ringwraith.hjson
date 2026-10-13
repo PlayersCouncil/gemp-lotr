@@ -415,7 +415,7 @@
 						requires: {
 							type: memoryMatches
 							memory: chosenMinion
-							filter: inSkirmishAgainst(cultureInDeadPile)
+							filter: inSkirmishAgainst(companion,cultureInDeadPile)
 						}
 						true: 4
 						false: 2

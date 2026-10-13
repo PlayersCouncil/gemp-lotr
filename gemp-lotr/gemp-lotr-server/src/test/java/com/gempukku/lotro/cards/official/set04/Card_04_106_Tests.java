@@ -5,12 +5,14 @@ import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_04_106_Tests
@@ -21,7 +23,24 @@ public class Card_04_106_Tests
 				new HashMap<>()
 				{{
 					put("card", "4_106");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetDeadPileScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("wellmet", "4_106");
+					// Elrond, Lord of Rivendell: the Elf, an ally; his start-of-turn heal reaches allies of
+					// site 3 only, and his fellowship ability is not used
+					put("elrond", "1_40");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: the [gondor] Man
+					put("gimli", "5_7");        // Gimli, Skilled Defender: the Dwarf; a trigger on winning a skirmish only
+					put("gandalf", "1_72");     // Gandalf, Friend of the Shirefolk: cost 4
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -58,18 +77,33 @@ public class Card_04_106_Tests
 		assertEquals(5, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void WellMetIndeedTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void SpotsAnElfAGondorManAndADwarfToPlayGandalfFromTheDeadPile() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetDeadPileScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var wellmet = scn.GetFreepsCard("wellmet");
+		var elrond = scn.GetFreepsCard("elrond");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.MoveAlliesToTable(elrond);
+		scn.MoveCompanionsToTable(aragorn, gimli);
+		scn.MoveCardsToDeadPile(gandalf);
+		scn.MoveCardsToHand(wellmet);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(5, scn.GetTwilight());
+		assertEquals(0, scn.GetTwilight());
+		assertInZone(Zone.DEAD, gandalf);
+		assertEquals(1, scn.GetFreepsDeadCount());
+		assertTrue(scn.FreepsPlayAvailable(wellmet));
+
+		scn.FreepsPlayCard(wellmet);
+		assertInZone(Zone.FREE_CHARACTERS, gandalf);
+		assertEquals(0, scn.GetFreepsDeadCount());
+		// 5 for the event + 4 for Gandalf.
+		assertEquals(9, scn.GetTwilight());
+		assertInZone(Zone.DISCARD, wellmet);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

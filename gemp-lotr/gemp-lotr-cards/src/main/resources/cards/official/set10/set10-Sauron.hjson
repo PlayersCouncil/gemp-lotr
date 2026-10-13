@@ -515,6 +515,10 @@
 			{
 				type: activated
 				phase: regroup
+				requires: {
+					type: canSpot
+					filter: controlledSite
+				}
 				effect: {
 					type: StackCardsFromPlay
 					select: self

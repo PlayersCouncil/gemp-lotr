@@ -18,7 +18,10 @@ public class Card_05_095_Tests
 				new HashMap<>()
 				{{
 					put("card", "5_95");
-					// put other cards in here as needed for the test case
+					put("soldier1", "1_271");     // Orc Soldier: [sauron] Orc
+					put("soldier2", "1_271");
+					put("shadow", "1_252");       // The Irresistible Shadow: [sauron] condition, cost 0; to play, exert a [sauron] Orc
+					put("armory", "1_173");       // Goblin Armory: [moria] condition, cost 0
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -68,5 +71,34 @@ public class Card_05_095_Tests
 		scn.FreepsPlayCard(card);
 
 		assertEquals(0, scn.GetTwilight());
+	}
+
+	@Test
+	public void ManeuverActionIsNotOfferedUnlessASauronConditionInTheDiscardPileCanBePlayed() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetScenario();
+
+		var card = scn.GetShadowCard("card");
+		var soldier1 = scn.GetShadowCard("soldier1");
+		var soldier2 = scn.GetShadowCard("soldier2");
+		var shadow = scn.GetShadowCard("shadow");
+		var armory = scn.GetShadowCard("armory");
+		scn.MoveCardsToSupportArea(card);
+		//A condition that could be played, but is not a [sauron] one
+		scn.MoveCardsToDiscard(armory);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(soldier1, soldier2);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+
+		//Playing from the discard pile is treated as a cost: with nothing to play, the ability is withheld
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(card));
+
+		scn.MoveCardsToDiscard(shadow);
+		scn.ShadowRefreshDecision();
+
+		assertTrue(scn.ShadowActionAvailable(card));
 	}
 }

@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_15_036_Tests
@@ -19,7 +20,22 @@ public class Card_15_036_Tests
 				new HashMap<>()
 				{{
 					put("card", "15_36");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetRevealScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("shepherd", "15_36");
+					put("axe", "1_3");          // Axe Strike: the top card of the draw deck
+					// Cleaving Blow: the bottom card, a [dwarven] event and so no [gandalf] character to play
+					put("blow", "1_5");
+					put("runner", "1_178");     // Goblin Runner: a minion, so that there is a maneuver phase
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -62,18 +78,41 @@ public class Card_15_036_Tests
 		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void ShepherdoftheTreesTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void ManeuverAbilityExertsThisCompanionToRevealTheBottomCardOfItsOwnersDrawDeckToBothPlayers() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetRevealScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var shepherd = scn.GetFreepsCard("shepherd");
+		var axe = scn.GetFreepsCard("axe");
+		var blow = scn.GetFreepsCard("blow");
+		scn.MoveCompanionsToTable(shepherd);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveCardsToTopOfDeck(axe);
+		scn.MoveCardsToBottomOfDeck(blow);
+		scn.MoveMinionsToTable(scn.GetShadowCard("runner"));
+		scn.SkipToPhase(Phase.MANEUVER);
 
-		assertEquals(5, scn.GetTwilight());
+		assertSame(axe, scn.GetFreepsTopOfDeck());
+		assertSame(blow, scn.GetFreepsBottomOfDeck());
+		assertEquals(0, scn.GetWoundsOn(shepherd));
+		assertTrue(scn.FreepsActionAvailable(shepherd));
+
+		scn.FreepsUseCardAction(shepherd);
+		assertEquals(1, scn.GetWoundsOn(shepherd));
+		// Each player is shown the bottom card, and not the top one.
+		assertEquals(1, scn.FreepsGetTotalRevealedCardCount());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(blow, false));
+		assertFalse(scn.FreepsHasCardChoiceAvailable(axe, false));
+		assertEquals(1, scn.ShadowGetTotalRevealedCardCount());
+		assertTrue(scn.ShadowHasCardChoiceAvailable(blow, false));
+		assertFalse(scn.ShadowHasCardChoiceAvailable(axe, false));
+
+		scn.FreepsDismissRevealedCards();
+		scn.ShadowDismissRevealedCards();
+		// It is no [gandalf] character: nothing is played, and it lies where it lay.
+		assertSame(blow, scn.GetFreepsBottomOfDeck());
+		assertInZone(Zone.DECK, blow);
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 }

@@ -5,12 +5,14 @@ import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_11_049_Tests
@@ -21,7 +23,21 @@ public class Card_11_049_Tests
 				new HashMap<>()
 				{{
 					put("card", "11_49");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetSmeagolScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("turn", "11_49");
+					// Sméagol, Slinker: "To play, add a burden", so he is put on the table; his skirmish ability
+					// is not used
+					put("smeagol", "5_29");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -59,18 +75,58 @@ public class Card_11_049_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void OneGoodTurnbrDeservesAnotherTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void AddingABurdenTakesTheEventBackIntoHand() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetSmeagolScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var turn = scn.GetFreepsCard("turn");
+		var smeagol = scn.GetFreepsCard("smeagol");
+		scn.MoveCompanionsToTable(smeagol);
+		scn.MoveCardsToHand(turn);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(0, scn.GetTwilight());
+		// Only site 1 is on the adventure path.
+		var freepsSite2 = scn.GetFreepsSite(2);
+		assertNull(scn.GetSite(2));
+		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.FreepsPlayAvailable(turn));
+
+		scn.FreepsPlayCard(turn);
+		// The fellowship's next site is played, from its player's own adventure deck, and then the question
+		// is put.
+		assertSame(freepsSite2, scn.GetSite(2));
+		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.FreepsDecisionAvailable("add a burden"));
+
+		scn.FreepsChooseYes();
+		assertEquals(1, scn.GetBurdens());
+		assertInZone(Zone.HAND, turn);
+		assertEquals(0, scn.GetFreepsDiscardCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void DecliningTheBurdenLeavesTheEventInTheDiscardPile() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetSmeagolScenario();
+
+		var turn = scn.GetFreepsCard("turn");
+		var smeagol = scn.GetFreepsCard("smeagol");
+		scn.MoveCompanionsToTable(smeagol);
+		scn.MoveCardsToHand(turn);
+
+		scn.StartGame();
+
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(0, scn.GetFreepsDiscardCount());
+
+		scn.FreepsPlayCard(turn);
+		assertTrue(scn.FreepsDecisionAvailable("add a burden"));
+
+		scn.FreepsChooseNo();
+		assertEquals(0, scn.GetBurdens());
+		assertInZone(Zone.DISCARD, turn);
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

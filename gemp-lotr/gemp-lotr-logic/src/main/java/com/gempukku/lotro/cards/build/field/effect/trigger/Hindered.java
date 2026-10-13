@@ -17,7 +17,10 @@ public class Hindered implements TriggerCheckerProducer {
         FieldUtils.validateAllowedFields(value, "filter", "source", "player", "zone", "memorize");
 
         final String filter = FieldUtils.getString(value.get("filter"), "filter", "any");
-        final String source = FieldUtils.getString(value.get("source"), "source", "any");
+        // With no "source:", every hinder sets the trigger off, one that no card made included (the game makes
+        // none today).  A "source:" is a condition on the card that did the hindering, and a hinder by no card
+        // does not meet it.  The Restored trigger reads its "source:" the same way (F-0361).
+        final String source = FieldUtils.getString(value.get("source"), "source");
         final String hinderingPlayer = FieldUtils.getString(value.get("player"), "player");
         Zone zone = FieldUtils.getEnum(Zone.class, value.get("zone"), "zone");
         final String memorize = FieldUtils.getString(value.get("memorize"), "memorize");

@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_03_110_Tests
@@ -19,7 +20,23 @@ public class Card_03_110_Tests
 				new HashMap<>()
 				{{
 					put("card", "3_110");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetBurdenScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("melilot", "3_110");
+					// Desperate Defense of the Ring: a [sauron] condition borne by a companion.  "Each time bearer
+					// is assigned to a skirmish, the Free Peoples player chooses to either discard 3 cards from
+					// hand or add a burden."
+					put("defense", "1_244");
+					put("runner", "1_178");     // Goblin Runner: the minion its bearer is assigned to
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -62,18 +79,35 @@ public class Card_03_110_Tests
 		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 1)));
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void MelilotBrandybuckTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void ResponseExertsMelilotToPreventABurdenAShadowCardIsAboutToAdd() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetBurdenScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var melilot = scn.GetFreepsCard("melilot");
+		var frodo = scn.GetRingBearer();
+		var defense = scn.GetShadowCard("defense");
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveAlliesToTable(melilot);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.AttachCardsTo(frodo, defense);
+		scn.MoveMinionsToTable(runner);
+		scn.SkipToAssignments();
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(0, scn.GetWoundsOn(melilot));
+
+		// With no card in hand the burden is all the Free Peoples player can choose, and nothing is asked.
+		scn.FreepsAssignToMinions(frodo, runner);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(melilot));
+		assertEquals(0, scn.GetBurdens());
+
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(1, scn.GetWoundsOn(melilot));
+		assertEquals(0, scn.GetBurdens());
+		assertAttachedTo(defense, frodo);
+		assertTrue(scn.IsCharAssignedAgainst(frodo, runner));
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 	}
 }

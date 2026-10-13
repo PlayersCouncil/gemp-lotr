@@ -301,6 +301,7 @@
 					amount: {
 						type: forEachHasAttached
 						filter: any
+						hindered: true
 					}
 				}
 			}

@@ -15,6 +15,29 @@
 		timewords: Shadow
 		effects: {
 			type: event
+			requires: {
+				type: Or
+				requires: [
+					{
+						type: Playable
+						fromZone: STACKED
+						filter: besieger,stackedOn(controlledSite)
+					}
+					{
+						type: And
+						requires: [
+							{
+								type: CanSpotBurdens
+							}
+							{
+								type: Playable
+								fromZone: DISCARD
+								filter: culture(sauron),orc
+							}
+						]
+					}
+				]
+			}
 			effect: {
 				type: choice
 				texts: [
@@ -414,7 +437,7 @@
 						type: canSpotThreats
 						amount: 3
 					}
-					filter: culture(sauron),orc
+					filter: culture(sauron),orc,not(roaming)
 					amount: 1
 				}
 			}
@@ -972,7 +995,7 @@
 				}
 				effect: {
 					type: discard
-					select: choose(condition,side(free people),zone(support))
+					select: choose(condition,support(free people))
 				}
 			}
 		]
@@ -2635,8 +2658,7 @@
 					culture: sauron
 					select: self
 				}
-				limitPerPhase: 1
-				phase: regroup
+				limitPerSite: 1
 			}
 			{
 				type: activated

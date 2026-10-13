@@ -25,10 +25,15 @@
 					type: played
 					filter: self
 				}
-				requires: {
-					type: canSpot
-					filter: another,culture(dunland),man
-				}
+				requires: [
+					{
+						type: canSpot
+						filter: another,culture(dunland),man
+					}
+					{
+						type: SiteAvailableToControl
+					}
+				]
 				effect: {
 					type: takeControlOfSite
 				}

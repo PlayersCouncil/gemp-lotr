@@ -115,6 +115,10 @@
 				type: winsSkirmish
 				filter: self
 			}
+			requires: {
+				type: canSpot
+				filter: minion,assignedToSkirmish(unbound,companion)
+			}
 			effect: {
 				type: wound
 				select: choose(minion,assignedToSkirmish(unbound,companion))

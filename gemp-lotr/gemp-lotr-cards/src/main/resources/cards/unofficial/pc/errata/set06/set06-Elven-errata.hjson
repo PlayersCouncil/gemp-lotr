@@ -1,10 +1,10 @@
 {
 	56_16: {
 		cardInfo: {
-			//id: 6_16.1
+			//id: 56_16.1
 			parent: 6_16
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN06E016.1_card.jpg
 			collInfo: 6U16
@@ -16,16 +16,16 @@
 		culture: Elven
 		twilight: 1
 		type: Event
-		timeword: skirmish
+		timewords: Skirmish
 		effects: {
 			type: event
+			cost: {
+				type: RevealTopCardsOfDrawDeck
+				deck: you
+				count: 1
+				memorize: revealedCard
+			}
 			effect: [
-				{
-					type: RevealTopCardsOfDrawDeck
-					deck: you
-					count: 1
-					memorize: revealedCard
-				}
 				{
 					type: ModifyStrength
 					select: choose(minion,InSkirmishAgainst(Elf))
@@ -39,12 +39,9 @@
 				{
 					type: If
 					check: {
-						type: IsLessThanOrEqual
-						firstNumber: {
-							type: ForEachStrength
-							filter: memory(weakenedMinion)
-						}
-						secondNumber: 4
+						type: MemoryMatches
+						memory: weakenedMinion
+						filter: maxStrength(4)
 					}
 					true: {
 						type: DiscardCardsFromDrawDeck
@@ -69,7 +66,7 @@
 	
 	56_22: {
 		cardInfo: {
-			//id: 6_22.1
+			//id: 56_22.1
 			parent: 6_22
 			variant: ERRATA
 			variantPath: errata/pc
@@ -140,7 +137,7 @@
 
 	56_23: {
 		cardInfo: {
-			//id: 6_23.1
+			//id: 56_23.1
 			parent: 6_23
 			variant: ERRATA
 			variantPath: errata/pc

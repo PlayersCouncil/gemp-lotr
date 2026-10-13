@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_04_011_Tests
@@ -19,7 +20,18 @@ public class Card_04_011_Tests
 				new HashMap<>()
 				{{
 					put("card", "4_11");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetStackedScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("looter", "4_11");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -62,18 +74,47 @@ public class Card_04_011_Tests
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void DunlendingLooterTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void StackedOnASiteYouControlHeIsPlayedInTheShadowPhaseForTwoLessAndStillPaysRoaming() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetStackedScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		// Player 2's first turn, so that a fellowship stands at site 2 with both markers off site 1.
+		// Player 1 is the Shadow player there, and the Looter is his.
+		// The sum is the old at test's (playFromControlledSite).  No game has him stacked this early: he is
+		// stacked by winning a skirmish, and his owner's next Shadow phase is at site 3 or later, where he
+		// does not roam (Q-0230: keep or strike the roaming half).
+		var looter = scn.GetFreepsCard("looter");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToOtherPlayersTurn();
+		scn.ShadowPass();
 
-		assertEquals(3, scn.GetTwilight());
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertTrue(scn.FreepsDecisionAvailable("Play Shadow action or Pass"));
+
+		var site1 = scn.GetSite(1);
+		scn.FreepsTakeControlOfSite(site1);
+		scn.StackCardsOn(site1, looter);
+		assertTrue(scn.IsSiteControlled(site1));
+		assertEquals(1, scn.GetStackedCards(site1).size());
+		assertInZone(Zone.STACKED, looter);
+
+		// 3 for the Looter + 2 roaming (his site number is 3, the fellowship is at site 2) - 2 by his own
+		// text: 3.  One short of that he is not offered.
+		scn.SetTwilight(2);
+		scn.FreepsRefreshDecision();
+		assertTrue(scn.FreepsDecisionAvailable("Play Shadow action or Pass"));
+		assertFalse(scn.FreepsActionAvailable(looter));
+
+		scn.SetTwilight(3);
+		scn.FreepsRefreshDecision();
+		assertTrue(scn.FreepsActionAvailable(looter));
+
+		scn.FreepsUseCardAction(looter);
+		assertInZone(Zone.SHADOW_CHARACTERS, looter);
+		assertEquals(0, scn.GetStackedCards(site1).size());
+		assertEquals(0, scn.GetTwilight());
+		assertTrue(scn.IsSiteControlled(site1));
+		assertTrue(scn.FreepsDecisionAvailable("Play Shadow action or Pass"));
 	}
 }

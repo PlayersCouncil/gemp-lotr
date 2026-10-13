@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_07_058_Tests
@@ -19,7 +20,22 @@ public class Card_07_058_Tests
 				new HashMap<>()
 				{{
 					put("card", "7_58");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetDiscardPileScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("gollum", "7_58");
+					// Three cards for the Free Peoples hand: with fewer than 4 there, the Shadow player has initiative.
+					put("strike", "1_3");       // Axe Strike
+					put("lorien", "1_53");      // Lórien Elf
+					put("guard", "1_7");        // Dwarf Guard
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -61,18 +77,29 @@ public class Card_07_058_Tests
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GollumTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void WithInitiativeInTheShadowPhaseGollumIsPlayedFromTheDiscardPile() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetDiscardPileScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var gollum = scn.GetShadowCard("gollum");
+		scn.MoveCardsToDiscard(gollum);
+		scn.MoveCardsToHand(scn.GetFreepsCard("strike"), scn.GetFreepsCard("lorien"), scn.GetFreepsCard("guard"));
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// 1 set + 1 companion + 2 for the site: 4 in the Shadow phase.
+		scn.SetTwilight(1);
+		scn.FreepsPass();
 
-		assertEquals(2, scn.GetTwilight());
+		assertEquals(3, scn.GetFreepsHandCount());
+		assertTrue(scn.ShadowHasInitiative());
+		assertInZone(Zone.DISCARD, gollum);
+		assertEquals(4, scn.GetTwilight());
+		assertTrue(scn.ShadowActionAvailable(gollum));
+
+		scn.ShadowUseCardAction(gollum);
+		assertInZone(Zone.SHADOW_CHARACTERS, gollum);
+		// 2 to play + 2 roaming: his site number is 3 and the fellowship is at site 2.
+		assertEquals(0, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

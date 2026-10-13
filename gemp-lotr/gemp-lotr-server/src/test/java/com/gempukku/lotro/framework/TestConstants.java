@@ -91,7 +91,30 @@ public interface TestConstants {
 	}};
 
 	/*
+	 * The Maps of the three Movie-block site paths (PC, set V2).  A Map announces which site path its deck uses and
+	 * does nothing else: it lies in its owner's support area from before the game begins.  A format that uses Maps
+	 * (PCMovie) wants one in every deck; a table in such a format gives each deck the Map of its sites' path unless
+	 * the constructor names one.
+	 */
+
+	/**
+	 * Path of the Fellowship: "Your adventure deck must only contain cards from the Fellowship site path."
+	 */
+	String FellowshipMap = "102_74";
+	/**
+	 * Road to the Towers: "Your adventure deck must only contain cards from the Towers site path."
+	 */
+	String TowersMap = "102_75";
+	/**
+	 * Journey of the King: "Your adventure deck must only contain cards from the King site path."
+	 */
+	String KingMap = "102_76";
+
+	/*
 	 * Some useful Ring-bearer and One Ring references.  This list can be expanded as needed.
+	 *
+	 * Each is the Decipher card.  The errata of a Ring-bearer (59_4, 59_14, 59_30) have no constants: a table
+	 * whose Ring-bearer is to be an erratum is given its blueprint id as the constructor's ringBearerID.
 	 */
 
 	/**
@@ -105,7 +128,8 @@ public interface TestConstants {
 	String FOTRFrodo = "1_290";
 	String MDFrodo = "10_121";
 	/**
-	 * Gimli, Bearer of Grudges
+	 * Gimli, Bearer of Grudges, the Decipher original 9_4: his erratum has no constant, and a table whose
+	 * Ring-bearer is to be the erratum is given "59_4" as the constructor's ringBearerID.
 	 * 6 strength
 	 * 3 vitality
 	 * 4 resistance
@@ -115,19 +139,21 @@ public interface TestConstants {
 	 */
 	String GimliRB = "9_4";
 	/**
-	 * Galadriel, Bearer of Wisdom
+	 * Galadriel, Bearer of Wisdom, the Decipher original 9_14: her erratum has no constant, and a table whose
+	 * Ring-bearer is to be the erratum is given "59_14" as the constructor's ringBearerID.
 	 * 3 strength
 	 * 3 vitality
-	 * 4 resistance
+	 * 3 resistance (it reads 4 while she bears the Ring: she is an [Elven] companion herself)
 	 * While Galadriel bears an artifact or The One Ring, she is resistance +1 for each [Elven] companion you can spot.
 	 */
 	String GaladrielRB = "9_14";
 
 	/**
-	 * Smeagol, Bearer of Great Secrets
+	 * Smeagol, Bearer of Great Secrets, the Decipher original 9_30: his erratum has no constant, and a table whose
+	 * Ring-bearer is to be the erratum is given "59_30" as the constructor's ringBearerID.
 	 * 3 strength
 	 * 4 vitality
-	 * 8 resistance
+	 * 7 resistance
 	 * Ring-bound. To play, add a burden.
 	 * Each time the fellowship moves, place an unbound companion in the dead pile.
 	 * Regroup: If Sméagol is the Ring-bearer, add 2 burdens to discard each minion.

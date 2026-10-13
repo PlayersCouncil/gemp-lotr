@@ -26,6 +26,20 @@ public class Card_12_128_Tests
 		);
 	}
 
+	// Frodo the Ring-bearer and Sam.
+	protected VirtualTableScenario GetFrodoAndSamScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("promise", "12_128");
+					put("sam", "1_311");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
 	@Test
 	public void APromiseStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
@@ -53,6 +67,35 @@ public class Card_12_128_Tests
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
+	}
+
+	// "While you can spot Frodo and Sam and neither is exhausted": the definition never asked whether either was.
+	@Test
+	public void NeitherIsStrongerWhileOneOfThemIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFrodoAndSamScenario();
+
+		var frodo = scn.GetRingBearer();
+		var promise = scn.GetFreepsCard("promise");
+		var sam = scn.GetFreepsCard("sam");
+		scn.MoveCompanionsToTable(sam);
+		scn.MoveCardsToSupportArea(promise);
+
+		scn.StartGame();
+		// Frodo is 3 + 1 for the Ring, Sam 3; each +1.
+		assertEquals(5, scn.GetStrength(frodo));
+		assertEquals(4, scn.GetStrength(sam));
+
+		// Sam has 4 vitality: with 2 wounds he is not exhausted yet, with 3 he is.
+		scn.AddWoundsToChar(sam, 2);
+		assertFalse(scn.IsExhausted(sam));
+		assertEquals(5, scn.GetStrength(frodo));
+		assertEquals(4, scn.GetStrength(sam));
+
+		scn.AddWoundsToChar(sam, 1);
+		assertTrue(scn.IsExhausted(sam));
+		assertEquals(4, scn.GetStrength(frodo));
+		assertEquals(3, scn.GetStrength(sam));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

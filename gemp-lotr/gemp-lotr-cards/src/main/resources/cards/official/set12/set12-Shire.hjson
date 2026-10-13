@@ -448,11 +448,11 @@
 					requires: [
 						{
 							type: canSpot
-							filter: name(Frodo)
+							filter: name(Frodo),not(exhausted)
 						}
 						{
 							type: canSpot
-							filter: name(Sam)
+							filter: name(Sam),not(exhausted)
 						}
 					]
 					filter: or(name(Frodo),name(Sam))

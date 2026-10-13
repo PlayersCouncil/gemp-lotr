@@ -479,11 +479,17 @@
 			{
 				type: activated
 				phase: archery
-				requires: {
-					type: canSpot
-					filter: culture(isengard),archer
-					count: 2
-				}
+				requires: [
+					{
+						type: canSpot
+						filter: culture(isengard),archer
+						count: 2
+					}
+					{
+						type: canSpot
+						filter: ally,not(barredFromArcheryFire)
+					}
+				]
 				effect: [
 					{
 						type: addModifier
@@ -845,18 +851,19 @@
 				}
 				requires: {
 					type: canSpot
-					filter: unbound,companion,hasAttachedCount(3,any)
+					filter: unbound,companion,hasAttachedCount(3,any,override(hindered))
 				}
 				effect: [
 					{
 						type: chooseActiveCards
 						text: Choose unbound companion to return attached Free Peoples cards to hand
-						select: choose(unbound,companion,hasAttachedCount(3,any))
+						select: choose(unbound,companion,hasAttachedCount(3,any,override(hindered)))
 						memorize: chosenCompanion
 					}
 					{
 						type: returnToHand
 						select: all(attachedTo(memory(chosenCompanion)),side(free))
+						override: hindered
 					}
 				]
 			}
@@ -1865,6 +1872,9 @@
 				requires: {
 					type: sarumanFirstSentenceActive
 				}
+				// Borne by Saruman, Of Many Colours 12_54 or Agent of the Dark Lord 12_144, whose texts do not read
+				// the switch, it "does not have any effect" (Legacy Ruling 6), and the game does not offer it: no
+				// card in play but the Staff reads the switch (F-0426, Q-0246; engine pass 32).
 				effect: {
 					type: addModifier
 					modifier: {
@@ -2185,7 +2195,8 @@
 				type: activated
 				phase: regroup
 				requires: {
-					type: controlsSite
+					type: canSpot
+					filter: controlledSite
 				}
 				effect: {
 					type: StackCardsFromPlay
@@ -3114,6 +3125,9 @@
 					killer: urukHai
 					inSkirmish: true
 				}
+				requires: {
+					type: SiteAvailableToControl
+				}
 				effect: {
 					type: takeControlOfSite
 				}
@@ -3550,6 +3564,7 @@
 					amount: {
 						type: forEachYouCanSpot
 						filter: attachedTo(character,inSkirmishAgainst(memory(chosenTracker)))
+						hindered: true
 						multiplier: 2
 					}
 				}

@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_06_109_Tests
@@ -19,10 +20,35 @@ public class Card_06_109_Tests
 				new HashMap<>()
 				{{
 					put("card", "6_109");
-					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetFrodoRingBearerScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("held", "6_109");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// Gimli, Bearer of Grudges as the Ring-bearer, beside the one Frodo who can stand there (Q-0212)
+	protected VirtualTableScenario GetOtherRingBearerScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("held", "6_109");
+					put("fighter", "13_149");   // Frodo, Frenzied Fighter: "This version of Frodo cannot become the Ring-bearer"
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.GimliRB,
 				VirtualTableScenario.RulingRing
 		);
 	}
@@ -55,18 +81,53 @@ public class Card_06_109_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void HeldTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void BorneByAFrodoWhoIsTheRingBearerTheMoveToSite9CorruptsHim() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFrodoRingBearerScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var frodo = scn.GetRingBearer();
+		var held = scn.GetFreepsCard("held");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToSite(8);
+		scn.AttachCardsTo(frodo, held);
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(8, scn.GetCurrentSiteNumber());
+		assertFalse(scn.GameIsFinished());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		scn.MarkGameLog();
+		scn.FreepsPass();
+
+		assertTrue(scn.GameIsFinished());
+		assertTrue(scn.GameLogSinceMarkSays(scn.P1() + " lost due to: The Ring-Bearer is corrupted"));
+		assertFalse(scn.GameLogSinceMarkSays(scn.P2() + " lost"));
+	}
+
+	@Test
+	public void BorneByAFrodoWhoIsNotTheRingBearerTheMoveToSite9CorruptsNobody() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetOtherRingBearerScenario();
+
+		var held = scn.GetFreepsCard("held");
+		var fighter = scn.GetFreepsCard("fighter");
+
+		scn.StartGame();
+		scn.SkipToSite(8);
+		scn.MoveCompanionsToTable(fighter);
+		scn.AttachCardsTo(fighter, held);
+
+		assertEquals(8, scn.GetCurrentSiteNumber());
+		assertFalse(scn.GameIsFinished());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		scn.MarkGameLog();
+		scn.FreepsPass();
+
+		// "Frodo is corrupted": the Frodo who bears this is no Ring-bearer, and the Ring-bearer is no Frodo.
+		assertEquals(9, scn.GetCurrentSiteNumber());
+		assertFalse(scn.GameIsFinished());
+		assertFalse(scn.GameLogSinceMarkSays("lost due to"));
+		assertAttachedTo(held, fighter);
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

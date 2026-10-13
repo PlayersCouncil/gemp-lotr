@@ -1,6 +1,5 @@
 package com.gempukku.lotro.tournament;
 
-import com.gempukku.lotro.at.AbstractAtTest;
 import com.gempukku.lotro.competitive.BestOfOneStandingsProducer;
 import com.gempukku.lotro.competitive.PlayerStanding;
 import org.apache.commons.lang3.StringUtils;
@@ -11,7 +10,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static org.junit.Assert.*;
 
-public class SwissPairingMechanismTest extends AbstractAtTest {
+public class SwissPairingMechanismTest {
 //    @Test
 //    public void testPairingLargeTournament() {
 //        int repeatCount = 1;

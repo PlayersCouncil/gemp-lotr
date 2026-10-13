@@ -4,6 +4,7 @@ import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.cards.build.Requirement;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.HashMap;
@@ -25,6 +26,8 @@ public class RequirementFactory {
 
         requirementProducers.put("alwaysavailable", new AlwaysAvailableRequirement());
 
+        requirementProducers.put("canaddburdens", new CanAddBurdens());
+        requirementProducers.put("candraw", new CanDraw());
         requirementProducers.put("canmove", new CanMove());
         requirementProducers.put("canspot", new CanSpot());
         requirementProducers.put("cantspot", new CantSpot());
@@ -71,11 +74,13 @@ public class RequirementFactory {
         requirementProducers.put("ownerisshadow", new OwnerIsShadow());
         requirementProducers.put("perphaselimit", new PerPhaseLimit());
         requirementProducers.put("perturnlimit", new PerTurnLimit());
+        requirementProducers.put("persitelimit", new PerSiteLimit());
         requirementProducers.put("playable", new Playable());
         requirementProducers.put("playeris", new PlayerIs());
         requirementProducers.put("playerleagueplacement", new PlayerLeaguePlacement());
         requirementProducers.put("phase", new PhaseRequirement());
         requirementProducers.put("playedcardthisphase", new PlayedCardThisPhase());
+        requirementProducers.put("playedcardthisturn", new PlayedCardThisTurn());
         requirementProducers.put("ringisactive", new RingIsActive());
         requirementProducers.put("ringison", new RingIsOn());
         requirementProducers.put("sarumanfirstsentenceactive", new SarumanFirstSentenceActive());
@@ -94,6 +99,27 @@ public class RequirementFactory {
         if (requirementProducer == null)
             throw new InvalidCardDefinitionException("Unable to resolve requirement of type: " + type);
         return requirementProducer.getPlayRequirement(object, environment);
+    }
+
+    /**
+     * Whether a "requires" as a definition writes it (one requirement or a list of them, with whatever a "not",
+     * an "or" or an "and" holds inside) asks where the fellowship is: the "location" requirement.
+     */
+    public static boolean asksWhereTheFellowshipIs(Object requires) {
+        if (requires instanceof JSONObject object) {
+            if ("location".equalsIgnoreCase(String.valueOf(object.get("type"))))
+                return true;
+            for (Object value : object.values()) {
+                if (asksWhereTheFellowshipIs(value))
+                    return true;
+            }
+        } else if (requires instanceof JSONArray array) {
+            for (Object value : array) {
+                if (asksWhereTheFellowshipIs(value))
+                    return true;
+            }
+        }
+        return false;
     }
 
     public Requirement[] getRequirements(JSONObject[] object, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {

@@ -91,6 +91,7 @@
 		effects: {
 			type: Trigger
 			optional: true
+			player: owner
 			trigger: {
 				type: Moves
 			}
@@ -107,7 +108,7 @@
 					type: ModifyMoveLimit
 					amount: 1
 				}
-				until: end(regroup)
+				until: endOfTurn
 			}
 		}
 		gametext: Each time your fellowship moves, you may kill a companion (except the Ring-bearer) to make the move limit +1.
@@ -256,9 +257,16 @@
 			trigger: {
 				type: Moves
 			}
-			requires: {
-				type: OwnerIsFreeps
-			}
+			requires: [
+				{
+					type: OwnerIsFreeps
+				}
+				{
+					type: CanSpot
+					filter: companion
+					count: 5
+				}
+			]
 			effect: {
 				type: DrawCards
 				count: {
@@ -298,7 +306,7 @@
 			type: Modifier
 			modifier: {
 				type: ModifyStrength
-				filter: wraith
+				filter: wraith,InSkirmish
 				amount: {
 					type: ForEachWound
 					filter: InSkirmish

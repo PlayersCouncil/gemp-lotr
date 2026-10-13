@@ -18,6 +18,7 @@ public class ExertCharactersEffect extends AbstractPreventableCardEffect {
     private final PhysicalCard _source;
     private final Set<PhysicalCard> _placeNoWound = new HashSet<>();
     private boolean _forToil;
+    private boolean _paidAsCost;
 
     public ExertCharactersEffect(Action action, PhysicalCard source, Filterable... filter) {
         super(filter);
@@ -33,6 +34,14 @@ public class ExertCharactersEffect extends AbstractPreventableCardEffect {
 
     public void setForToil(boolean forToil) {
         _forToil = forToil;
+    }
+
+    /**
+     * Says that this exertion is carried out as a cost, which its ExertResult then repeats
+     * (ExertResult.isPaidAsCost; F-0478).
+     */
+    public void setPaidAsCost(boolean paidAsCost) {
+        _paidAsCost = paidAsCost;
     }
 
     @Override
@@ -65,7 +74,7 @@ public class ExertCharactersEffect extends AbstractPreventableCardEffect {
         for (PhysicalCard woundedCard : cards) {
             if (!_placeNoWound.contains(woundedCard))
                 game.getGameState().addWound(woundedCard);
-            game.getActionsEnvironment().emitEffectResult(new ExertResult(_action, woundedCard, _forToil));
+            game.getActionsEnvironment().emitEffectResult(new ExertResult(_action, woundedCard, _forToil, _paidAsCost));
             forEachExertedByEffect(woundedCard);
         }
     }

@@ -411,13 +411,32 @@
 					type: startOfPhase
 					phase: maneuver
 				}
-				requires: {
-					type: canSpot
-					filter: dwarf
-				}
+				requires: [
+					{
+						type: canSpot
+						filter: dwarf
+					}
+					# With nothing stacked here and no card in hand there is nothing to exchange
+					{
+						type: or
+						requires: [
+							{
+								type: hasCardStacked
+								filter: any
+								on: self
+							}
+							{
+								type: cardsInHandMoreThan
+								count: 0
+							}
+						]
+					}
+				]
 				effect: {
 					type: exchangeCardsInHandWithCardsStacked
 					selectInHand: all(any)
+					# An empty hand is exchanged too: the stacked cards are taken and nothing goes back
+					countInHand: 0
 					selectInStacked: self
 				}
 			}

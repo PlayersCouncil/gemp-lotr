@@ -143,7 +143,7 @@
 						}
 						{
 							type: spot
-							filter: culture(gondor),wraith
+							filter: culture(gondor),wraith,exhausted
 						}
 					]
 				}
@@ -733,6 +733,8 @@
 					type: playCardFromDiscard
 					select: choose(culture(gondor),fortification)
 				}
+				// "(limit 1)" most likely counts the fortifications played, but is built as a limit on uses so that the
+				// ability is not offered at its limit (Ketura, 2026-10-07: "code Sixth Level as once just for UX sake").
 				limitPerPhase: 1
 			}
 		]

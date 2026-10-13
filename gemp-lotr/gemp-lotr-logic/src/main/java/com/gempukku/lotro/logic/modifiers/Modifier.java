@@ -74,7 +74,12 @@ public interface Modifier {
 
     boolean isUnhastyCompanionAllowedToParticipateInSkirmishes(LotroGame game, PhysicalCard card);
 
-    boolean isAssignmentCostPaid(LotroGame game, PhysicalCard card);
+    /**
+     * Appends, as costs of the given action, what this modifier has the Free Peoples player pay to assign the
+     * minion to skirmish the character, and says whether it charges for that assignment at all
+     * (ExtraAssignmentCostModifier).
+     */
+    boolean appendExtraAssignmentCosts(LotroGame game, CostToEffectAction action, PhysicalCard fpCharacter, PhysicalCard minion);
 
     boolean isAllyPreventedFromParticipatingInArcheryFire(LotroGame game, PhysicalCard card);
 
@@ -121,7 +126,12 @@ public interface Modifier {
 
     boolean canBeReturnedToHand(LotroGame game, PhysicalCard card, PhysicalCard source);
 
-    boolean canBeHealed(LotroGame game, PhysicalCard card);
+    /**
+     * Whether this modifier lets performingPlayer heal a wound from the card.  A bar on healing that names a
+     * player ("you may not heal ...") answers false for that player's heals alone; one that names nobody answers
+     * false whoever heals.
+     */
+    boolean canBeHealed(LotroGame game, String performingPlayer, PhysicalCard card);
 
     boolean canAddBurden(LotroGame game, String performingPlayer, PhysicalCard source);
 
@@ -154,6 +164,12 @@ public interface Modifier {
     int getHandSizeModifier(LotroGame game, String playerId);
 
     boolean lostAllKeywords(LotroGame game, PhysicalCard card);
+
+    /**
+     * The most of a keyword this modifier lets the card have, whatever gives it: Integer.MAX_VALUE for every
+     * modifier but a bar on gaining keywords (CantGainKeywordsModifier, Q-0282).
+     */
+    int getKeywordGainLimit(LotroGame game, PhysicalCard card, Keyword keyword);
 
     Evaluator getFpSkirmishStrengthOverrideEvaluator(LotroGame game, PhysicalCard fpCharacter);
     Evaluator getShadowSkirmishStrengthOverrideEvaluator(LotroGame game, PhysicalCard fpCharacter);

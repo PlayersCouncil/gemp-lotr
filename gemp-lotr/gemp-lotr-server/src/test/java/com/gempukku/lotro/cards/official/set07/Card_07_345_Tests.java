@@ -3,42 +3,34 @@ package com.gempukku.lotro.cards.official.set07;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_07_345_Tests
 {
 
+	// The King path: Pelennor Flat is its site 5.  Nothing on the way there asks anything of a fellowship of
+	// Frodo alone (Edoras Hall, King's Tent, The Dimholt, Osgiliath Fallen).
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("fodder01", "5_1");
-					put("fodder02", "5_2");
-					put("fodder03", "5_3");
-					put("fodder04", "5_4");
-					put("fodder05", "5_5");
-					put("fodder06", "5_6");
-					put("fodder07", "5_7");
-					put("fodder08", "5_8");
+					// A hand of both sides and several card types: a player's hand holds his Shadow cards too.
+					put("guard", "1_7");        // Dwarf Guard: a Free Peoples companion
+					put("armor", "1_8");        // Dwarven Armor: a Free Peoples possession
+					put("sleep", "1_84");       // Sleep, Caradhras: a Free Peoples event
+					put("runner", "1_178");     // Goblin Runner: a Shadow minion
+					put("fear", "1_278");       // Strength Born of Fear: a Shadow condition
 
-					put("runner", "1_178");
+					put("savage", "1_151");     // Uruk Savage: a minion on the table, so that there is a maneuver phase; "Damage +1." is its whole text
 				}},
-				new HashMap<>() {{
-					put("site1", "1_319");
-					put("site2", "1_327");
-					put("site3", "4_337");
-					put("site4", "1_343");
-					put("site5", "7_345");
-					put("site6", "101_61");
-					put("site7", "3_118");
-					put("site8", "1_356");
-					put("site9", "1_360");
-				}},
+				VirtualTableScenario.KingSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -51,12 +43,11 @@ public class Card_07_345_Tests
 		 * Set: 7
 		 * Name: Pelennor Flat
 		 * Unique: False
-		 * Side: 
-		 * Culture: 
-		 * Shadow Number: 6
 		 * Type: Site
-		 * Subtype: 
-		 * Site Number: 5K
+		 * Block: King
+		 * Site Number: 5
+		 * Shadow Number: 6
+		 * Direction: Left
 		 * Game Text: <b>Plains</b>. At the start of the maneuver phase, the Free Peoples player must discard his or her hand or add 2 burdens.
 		*/
 
@@ -68,130 +59,155 @@ public class Card_07_345_Tests
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.PLAINS));
-		assertEquals(6, card.getBlueprint().getTwilightCost());
+		assertEquals(SitesBlock.KING, card.getBlueprint().getSiteBlock());
 		assertEquals(5, card.getBlueprint().getSiteNumber());
+		assertEquals(6, card.getBlueprint().getTwilightCost());
+		assertEquals(LotroCardBlueprint.Direction.LEFT, card.getBlueprint().getSiteDirection());
+		assertTrue(scn.HasKeyword(card, Keyword.PLAINS));
 	}
 
 	@Test
-	public void PelennorFlatFreepsCanChooseToDiscardHand() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void AtTheStartOfTheManeuverPhaseTheFreePeoplesPlayerMayDiscardHisWholeHand() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
+		var guard = scn.GetFreepsCard("guard");
+		var armor = scn.GetFreepsCard("armor");
+		var sleep = scn.GetFreepsCard("sleep");
+		var runner = scn.GetFreepsCard("runner");
+		var fear = scn.GetFreepsCard("fear");
+		var shadowRunner = scn.GetShadowCard("runner");
+		var shadowFear = scn.GetShadowCard("fear");
+		var savage = scn.GetShadowCard("savage");
 		var flat = scn.GetShadowSite(5);
 
-		var fodder01 = scn.GetFreepsCard("fodder01");
-		var fodder02 = scn.GetFreepsCard("fodder02");
-		var fodder03 = scn.GetFreepsCard("fodder03");
-		var fodder04 = scn.GetFreepsCard("fodder04");
-		var fodder05 = scn.GetFreepsCard("fodder05");
-		var fodder06 = scn.GetFreepsCard("fodder06");
-		var fodder07 = scn.GetFreepsCard("fodder07");
-		var fodder08 = scn.GetFreepsCard("fodder08");
-
-		scn.MoveCardsToHand(fodder01, fodder02, fodder03, fodder04, fodder05, fodder06, fodder07, fodder08);
-
 		scn.StartGame();
-		scn.AddBurdens(1);
-		assertEquals(8, scn.GetFreepsHandCount());
-
 		scn.SkipToSite(4);
+		scn.SetFreepsHand(guard, armor, sleep, runner, fear);
+		scn.SetShadowHand(shadowRunner, shadowFear);
+		scn.FreepsPass();
 
-		scn.MoveMinionsToTable("runner");
+		// The Shadow player laid the site, and it is his copy that lies there.
+		assertSame(flat, scn.GetCurrentSite());
+		scn.MoveMinionsToTable(savage);
 
-		scn.FreepsPassCurrentPhaseAction();
+		// Nothing happens in the Shadow phase.
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(0, scn.ShadowGetBurdens());
+		assertInHand(guard, armor, sleep, runner, fear);
+		assertInHand(shadowRunner, shadowFear);
 
-		assertEquals(flat, scn.GetCurrentSite());
-		assertEquals(5, (long)scn.GetCurrentSite().getSiteNumber());
+		scn.ShadowPass();
 
-		scn.ShadowPassCurrentPhaseAction();
-
+		// It is the Free Peoples player who is asked, whoever's site this is.
+		assertEquals(Phase.MANEUVER, scn.GetCurrentPhase());
 		assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
-		var choices = scn.FreepsGetMultipleChoices();
-		assertTrue(choices.getFirst().contains("Discard"));
-		assertTrue(choices.getLast().contains("burden"));
-
-		assertEquals(1, scn.GetBurdens());
-		assertEquals(Zone.HAND, fodder01.getZone());
-		assertEquals(Zone.HAND, fodder02.getZone());
-		assertEquals(Zone.HAND, fodder03.getZone());
-		assertEquals(Zone.HAND, fodder04.getZone());
-		assertEquals(Zone.HAND, fodder05.getZone());
-		assertEquals(Zone.HAND, fodder06.getZone());
-		assertEquals(Zone.HAND, fodder07.getZone());
-		assertEquals(Zone.HAND, fodder08.getZone());
+		assertEquals(2, scn.FreepsGetMultipleChoiceCount());
+		assertFalse(scn.ShadowDecisionAvailable("Choose action to perform"));
+		assertInHand(guard, armor, sleep, runner, fear);
 
 		scn.FreepsChooseOption("Discard");
 
-		assertEquals(1, scn.GetBurdens());
-		assertEquals(Zone.DISCARD, fodder01.getZone());
-		assertEquals(Zone.DISCARD, fodder02.getZone());
-		assertEquals(Zone.DISCARD, fodder03.getZone());
-		assertEquals(Zone.DISCARD, fodder04.getZone());
-		assertEquals(Zone.DISCARD, fodder05.getZone());
-		assertEquals(Zone.DISCARD, fodder06.getZone());
-		assertEquals(Zone.DISCARD, fodder07.getZone());
-		assertEquals(Zone.DISCARD, fodder08.getZone());
+		// His whole hand, the Shadow cards in it as well, and no burden.
+		assertInDiscard(guard, armor, sleep, runner, fear);
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(0, scn.ShadowGetBurdens());
+		assertInHand(shadowRunner, shadowFear);
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+
+		// The start of the next phase asks nothing more.
+		scn.FreepsPass();
+		scn.ShadowPass();
+		assertEquals(0, scn.GetBurdens());
+		assertInHand(shadowRunner, shadowFear);
+		assertTrue(scn.AwaitingFreepsArcheryPhaseActions());
 	}
 
 	@Test
-	public void PelennorFlatFreepsCanChooseToAdd2Burdens() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void AtTheStartOfTheManeuverPhaseTheFreePeoplesPlayerMayAddTwoBurdensAndKeepHisHand() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var flat = scn.GetShadowSite(5);
-
-		var fodder01 = scn.GetFreepsCard("fodder01");
-		var fodder02 = scn.GetFreepsCard("fodder02");
-		var fodder03 = scn.GetFreepsCard("fodder03");
-		var fodder04 = scn.GetFreepsCard("fodder04");
-		var fodder05 = scn.GetFreepsCard("fodder05");
-		var fodder06 = scn.GetFreepsCard("fodder06");
-		var fodder07 = scn.GetFreepsCard("fodder07");
-		var fodder08 = scn.GetFreepsCard("fodder08");
-
-		scn.MoveCardsToHand(fodder01, fodder02, fodder03, fodder04, fodder05, fodder06, fodder07, fodder08);
+		var guard = scn.GetFreepsCard("guard");
+		var armor = scn.GetFreepsCard("armor");
+		var sleep = scn.GetFreepsCard("sleep");
+		var runner = scn.GetFreepsCard("runner");
+		var fear = scn.GetFreepsCard("fear");
+		var shadowRunner = scn.GetShadowCard("runner");
+		var shadowFear = scn.GetShadowCard("fear");
+		var savage = scn.GetShadowCard("savage");
 
 		scn.StartGame();
 		scn.AddBurdens(1);
-		assertEquals(8, scn.GetFreepsHandCount());
-
 		scn.SkipToSite(4);
+		scn.SetFreepsHand(guard, armor, sleep, runner, fear);
+		scn.SetShadowHand(shadowRunner, shadowFear);
+		scn.FreepsPass();
 
-		scn.MoveMinionsToTable("runner");
+		assertEquals("Pelennor Flat", scn.GetCurrentSite().getBlueprint().getTitle());
+		scn.MoveMinionsToTable(savage);
+		assertEquals(1, scn.GetBurdens());
+		assertEquals(0, scn.ShadowGetBurdens());
 
-		scn.FreepsPassCurrentPhaseAction();
-
-		assertEquals(flat, scn.GetCurrentSite());
-		assertEquals(5, (long)scn.GetCurrentSite().getSiteNumber());
-
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
-		var choices = scn.FreepsGetMultipleChoices();
-		assertTrue(choices.getFirst().contains("Discard"));
-		assertTrue(choices.getLast().contains("burden"));
-
 		assertEquals(1, scn.GetBurdens());
-		assertEquals(Zone.HAND, fodder01.getZone());
-		assertEquals(Zone.HAND, fodder02.getZone());
-		assertEquals(Zone.HAND, fodder03.getZone());
-		assertEquals(Zone.HAND, fodder04.getZone());
-		assertEquals(Zone.HAND, fodder05.getZone());
-		assertEquals(Zone.HAND, fodder06.getZone());
-		assertEquals(Zone.HAND, fodder07.getZone());
-		assertEquals(Zone.HAND, fodder08.getZone());
-
 		scn.FreepsChooseOption("burden");
 
+		// Two burdens, on his own Ring-bearer, and every card still in hand.
 		assertEquals(3, scn.GetBurdens());
-		assertEquals(Zone.HAND, fodder01.getZone());
-		assertEquals(Zone.HAND, fodder02.getZone());
-		assertEquals(Zone.HAND, fodder03.getZone());
-		assertEquals(Zone.HAND, fodder04.getZone());
-		assertEquals(Zone.HAND, fodder05.getZone());
-		assertEquals(Zone.HAND, fodder06.getZone());
-		assertEquals(Zone.HAND, fodder07.getZone());
-		assertEquals(Zone.HAND, fodder08.getZone());
+		assertEquals(0, scn.ShadowGetBurdens());
+		assertInHand(guard, armor, sleep, runner, fear);
+		assertInHand(shadowRunner, shadowFear);
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+
+		// The start of the next phase adds nothing more.
+		scn.FreepsPass();
+		scn.ShadowPass();
+		assertEquals(3, scn.GetBurdens());
+		assertInHand(guard, armor, sleep, runner, fear);
+		assertTrue(scn.AwaitingFreepsArcheryPhaseActions());
+	}
+
+	// A player always has a hand, even an empty one, and discarding it is discarding 0 cards (Ketura, Q-0255).
+	@Test
+	public void WithNoCardInHandTheFreePeoplesPlayerIsStillAskedAndMayDiscardHisEmptyHandForNoBurden() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var shadowRunner = scn.GetShadowCard("runner");
+		var shadowFear = scn.GetShadowCard("fear");
+		var savage = scn.GetShadowCard("savage");
+
+		scn.StartGame();
+		scn.SkipToSite(4);
+		scn.SetFreepsHand();
+		scn.SetShadowHand(shadowRunner, shadowFear);
+		scn.FreepsPass();
+
+		assertEquals("Pelennor Flat", scn.GetCurrentSite().getBlueprint().getTitle());
+		scn.MoveMinionsToTable(savage);
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertEquals(0, scn.GetBurdens());
+		var discardPile = scn.GetFreepsDiscardCount();
+
+		scn.ShadowPass();
+
+		// Both things are still his to choose between.
+		assertEquals(Phase.MANEUVER, scn.GetCurrentPhase());
+		assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
+		assertEquals(2, scn.FreepsGetMultipleChoiceCount());
+		assertTrue(scn.FreepsChoiceAvailable("Discard"));
+		assertTrue(scn.FreepsChoiceAvailable("burden"));
+
+		scn.FreepsChooseOption("Discard");
+
+		// No card is discarded and no burden is added.  The Shadow player's hand is not the one the site speaks of.
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertEquals(discardPile, scn.GetFreepsDiscardCount());
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(0, scn.ShadowGetBurdens());
+		assertInHand(shadowRunner, shadowFear);
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
 }

@@ -8,6 +8,7 @@ import com.gempukku.lotro.game.state.actions.DefaultActionsEnvironment;
 import com.gempukku.lotro.logic.InvalidSoloAdventureException;
 import com.gempukku.lotro.logic.PlayOrder;
 import com.gempukku.lotro.logic.actions.OptionalTriggerAction;
+import com.gempukku.lotro.logic.actions.RequiredTriggerAction;
 import com.gempukku.lotro.logic.actions.SystemQueueAction;
 import com.gempukku.lotro.logic.decisions.ActionSelectionDecision;
 import com.gempukku.lotro.logic.decisions.CardActionSelectionDecision;
@@ -55,6 +56,7 @@ public class TurnProcedure {
     public void carryOutPendingActionsUntilDecisionNeeded() {
         while (!_userFeedback.hasPendingDecisions() && _game.getWinnerPlayerId() == null) {
             // First check for any "state-based" effects
+            _game.getModifiersEnvironment().checkSelfSpottingConditions(_game);
             _initiativeChangeRule.checkInitiativeChange(_game);
             _characterDeathRule.checkCharactersZeroVitality(_game);
 
@@ -355,6 +357,12 @@ public class TurnProcedure {
 
         @Override
         public void doPlayEffect(LotroGame game) {
+            // A trigger whose card's limit on uses was taken by one carried out before it is dropped: it is
+            // neither carried out nor put to the player to be ordered (F-0145).
+            _actions.removeIf(action -> action instanceof RequiredTriggerAction requiredTrigger && requiredTrigger.isSpent());
+            if (_actions.isEmpty())
+                return;
+
             if (_actions.size() == 1) {
                 _game.getActionsEnvironment().addActionToStack(_actions.get(0));
             } else if (areAllActionsTheSame(game)) {

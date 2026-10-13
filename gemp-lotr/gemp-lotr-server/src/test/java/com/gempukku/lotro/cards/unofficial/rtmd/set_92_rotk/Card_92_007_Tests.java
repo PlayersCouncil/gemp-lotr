@@ -2,39 +2,27 @@ package com.gempukku.lotro.cards.unofficial.rtmd.set_92_rotk;
 
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Zone;
-import com.gempukku.lotro.framework.TestConstants;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.state.EventSerializer;
-import com.gempukku.lotro.game.state.GameCommunicationChannel;
-import com.gempukku.lotro.game.state.GameEvent;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.timing.GameStats;
 import org.junit.Test;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
-public class Card_92_007_Tests implements TestConstants
+public class Card_92_007_Tests
 {
-	private final HashMap<String, String> cards = new HashMap<>() {{
-		put("gimli", "1_13");
-		put("legolas", "1_50");
-		put("runner", "1_178");
-		put("enquea", "1_231");
-	}};
-
 	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("gimli", "1_13");       // Gimli, Son of Gloin
+					put("legolas", "1_50");     // Legolas, Greenleaf
+					put("runner", "1_178");     // Goblin Runner
+					put("enquea", "1_231");     // Ulaire Enquea, Lieutenant of Morgul
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -43,11 +31,34 @@ public class Card_92_007_Tests implements TestConstants
 	}
 
 	protected VirtualTableScenario GetShadowScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("gimli", "1_13");       // Gimli, Son of Gloin
+					put("legolas", "1_50");     // Legolas, Greenleaf
+					put("runner", "1_178");     // Goblin Runner
+					put("enquea", "1_231");     // Ulaire Enquea, Lieutenant of Morgul
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
 				null, "92_7"
+		);
+	}
+
+	// The same table with no modifier: the control.
+	protected VirtualTableScenario GetNoModScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("gimli", "1_13");       // Gimli, Son of Gloin
+					put("legolas", "1_50");     // Legolas, Greenleaf
+					put("runner", "1_178");     // Goblin Runner
+					put("enquea", "1_231");     // Ulaire Enquea, Lieutenant of Morgul
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -57,6 +68,7 @@ public class Card_92_007_Tests implements TestConstants
 		 * Set: RTMD 92
 		 * Name: Race Text 92_7
 		 * Type: MetaSite
+		 * Intensity: 4
 		 * Game Text: You must play with your hand revealed.
 		 */
 
@@ -66,169 +78,200 @@ public class Card_92_007_Tests implements TestConstants
 
 		assertEquals("Race Text 92_7", card.getBlueprint().getTitle());
 		assertEquals(CardType.METASITE, card.getBlueprint().getCardType());
+		assertEquals(4, card.getBlueprint().getIntensity());
 	}
-
-	@Test
-	public void ModifierIsActiveForFreepsOwner() throws DecisionResultInvalidException, CardNotFoundException {
-		// 92_7: The card owner's hand should be revealed.
-		// This tests the modifier is registered; actual visibility is a client/channel concern
-		// that can't be verified in the test rig.
-
-		var scn = GetFreepsScenario();
-
-		scn.StartGame();
-
-		// The modifier should report the freeps player's hand as revealed
-		var game = scn.game();
-		assertTrue(game.getModifiersQuerying().isHandRevealed(game, P1));
-		assertFalse(game.getModifiersQuerying().isHandRevealed(game, P2));
-	}
-
-	@Test
-	public void ModifierIsActiveForShadowOwner() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetShadowScenario();
-
-		scn.StartGame();
-
-		var game = scn.game();
-		assertTrue(game.getModifiersQuerying().isHandRevealed(game, P2));
-		assertFalse(game.getModifiersQuerying().isHandRevealed(game, P1));
-	}
-
-	// ---- #1095: who is told that the hand is revealed, and who receives its cards ----
-	// The owner is whoever holds 92_7, which is not tied to a side: both orientations are tested.
 
 	@Test
 	public void GameStatsReportTheFreepsOwnersHandAsRevealed() throws DecisionResultInvalidException, CardNotFoundException {
+		// The owner is whoever holds 92_7, which is not tied to a side: both orientations are tested.
 		var scn = GetFreepsScenario();
+
 		scn.StartGame();
 
-		var stats = new GameStats();
-		stats.updateGameStats(scn.game());
-		assertEquals(Set.of(P1), stats.getRevealedHands());
+		// Every client is told whose hand is revealed: the owner's, and not the other player's.
+		assertTrue(scn.FreepsHandIsRevealed());
+		assertFalse(scn.ShadowHandIsRevealed());
 	}
 
 	@Test
 	public void GameStatsReportTheShadowOwnersHandAsRevealed() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetShadowScenario();
+
 		scn.StartGame();
 
-		var stats = new GameStats();
-		stats.updateGameStats(scn.game());
-		assertEquals(Set.of(P2), stats.getRevealedHands());
+		assertTrue(scn.ShadowHandIsRevealed());
+		assertFalse(scn.FreepsHandIsRevealed());
 	}
 
 	@Test
 	public void RevealedHandStillReportedAfterRolesSwap() throws DecisionResultInvalidException, CardNotFoundException {
-		// 92_7 belongs to P1, who is the Free Peoples player on turn 1 and the Shadow player on turn 2.
+		// 92_7 belongs to player 1, who is the Free Peoples player on turn 1 and the Shadow player on turn 2.
 		var scn = GetFreepsScenario();
-		scn.StartGame();
-		scn.SkipToSite(2);
 
-		var stats = new GameStats();
-		stats.updateGameStats(scn.game());
-		assertEquals(Set.of(P1), stats.getRevealedHands());
-	}
-
-	@Test
-	public void RevealedHandFlagIsSerializedOnlyOnTheOwnersPlayerZones() throws Exception {
-		var scn = GetShadowScenario();
-		scn.StartGame();
-
-		var stats = new GameStats();
-		stats.updateGameStats(scn.game());
-
-		Element ge = serialize(new GameEvent(GameEvent.Type.GAME_STATS).gameStats(stats));
-		NodeList zones = ge.getElementsByTagName("playerZones");
-		assertEquals(2, zones.getLength());
-		for (int i = 0; i < zones.getLength(); i++) {
-			var zone = (Element) zones.item(i);
-			if (zone.getAttribute("name").equals(P2))
-				assertEquals("true", zone.getAttribute("handRevealed"));
-			else
-				assertFalse(zone.hasAttribute("handRevealed"));
-		}
-	}
-
-	@Test
-	public void NoHandIsReportedRevealedWithout92_7() throws Exception {
-		var scn = new VirtualTableScenario(cards, VirtualTableScenario.FellowshipSites,
-				VirtualTableScenario.FOTRFrodo, VirtualTableScenario.RulingRing);
-		scn.StartGame();
-
-		var stats = new GameStats();
-		stats.updateGameStats(scn.game());
-		assertTrue(stats.getRevealedHands().isEmpty());
-
-		Element ge = serialize(new GameEvent(GameEvent.Type.GAME_STATS).gameStats(stats));
-		NodeList zones = ge.getElementsByTagName("playerZones");
-		for (int i = 0; i < zones.getLength(); i++)
-			assertFalse(((Element) zones.item(i)).hasAttribute("handRevealed"));
-	}
-
-	@Test
-	public void SpectatorJoiningIsSentTheFreepsOwnersHandButNotTheOpponents() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetFreepsScenario();
-		scn.MoveCardsToFreepsHand("gimli", "legolas");
-		scn.MoveCardsToShadowHand("runner", "enquea");
-		scn.StartGame();
-
-		assertSpectatorSeesOnlyOwnersHand(scn, P1, Set.of("gimli", "legolas"), P2);
-	}
-
-	@Test
-	public void SpectatorJoiningIsSentTheShadowOwnersHandButNotTheOpponents() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetShadowScenario();
-		scn.MoveCardsToFreepsHand("gimli", "legolas");
-		scn.MoveCardsToShadowHand("runner", "enquea");
-		scn.StartGame();
-
-		assertSpectatorSeesOnlyOwnersHand(scn, P2, Set.of("runner", "enquea"), P1);
-	}
-
-	@Test
-	public void SpectatorIsSentCardsDrawnIntoTheRevealedHand() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetFreepsScenario();
 		var gimli = scn.GetFreepsCard("gimli");
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveCardsToHand(gimli, runner);
+
+		scn.StartGame();
+		assertEquals(scn.P1(), scn.GetCurrentPlayer());
+		assertTrue(scn.FreepsHandIsRevealed());
+		assertTrue(scn.ShadowSeesCardInHand(gimli));
+
+		scn.SkipToOtherPlayersTurn();
+
+		// Player 2 is the one moving a fellowship now, and it is still player 1's hand that lies open.
+		assertEquals(scn.P2(), scn.GetCurrentPlayer());
+		assertTrue(scn.FreepsHandIsRevealed());
+		assertFalse(scn.ShadowHandIsRevealed());
+		assertInZone(Zone.HAND, gimli, runner);
+		assertTrue(scn.ShadowSeesCardInHand(gimli));
+		assertFalse(scn.FreepsSeesCardInHand(runner));
+
+		// And on the turn after, when he is the Free Peoples player again.
+		scn.SkipToOtherPlayersTurn();
+
+		assertEquals(scn.P1(), scn.GetCurrentPlayer());
+		assertTrue(scn.FreepsHandIsRevealed());
+		assertFalse(scn.ShadowHandIsRevealed());
+	}
+
+	@Test
+	public void NoHandIsReportedRevealedWithout92_7() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetNoModScenario();
+
+		var gimli = scn.GetFreepsCard("gimli");
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveCardsToHand(gimli, runner);
+
+		scn.StartGame();
+
+		assertFalse(scn.FreepsHandIsRevealed());
+		assertFalse(scn.ShadowHandIsRevealed());
+
+		// Each player is sent his own hand and neither is sent the other's.
+		assertTrue(scn.FreepsSeesCardInHand(gimli));
+		assertFalse(scn.ShadowSeesCardInHand(gimli));
+		assertTrue(scn.ShadowSeesCardInHand(runner));
+		assertFalse(scn.FreepsSeesCardInHand(runner));
+	}
+
+	@Test
+	public void TheOtherPlayerIsSentTheFreepsOwnersHandAndTheOwnerIsNotSentHis() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
+
+		var gimli = scn.GetFreepsCard("gimli");
+		var legolas = scn.GetFreepsCard("legolas");
+		var runner = scn.GetShadowCard("runner");
+		var enquea = scn.GetShadowCard("enquea");
+		scn.MoveCardsToHand(gimli, legolas, runner, enquea);
+
+		scn.StartGame();
+
+		// Player 2 has both of player 1's cards in hand before him, beside his own two.
+		assertTrue(scn.ShadowSeesCardInHand(gimli));
+		assertTrue(scn.ShadowSeesCardInHand(legolas));
+		assertTrue(scn.ShadowSeesCardInHand(runner));
+		assertTrue(scn.ShadowSeesCardInHand(enquea));
+
+		// Player 1 has his own two and neither of player 2's: the modifier opens its owner's hand only.
+		assertTrue(scn.FreepsSeesCardInHand(gimli));
+		assertTrue(scn.FreepsSeesCardInHand(legolas));
+		assertFalse(scn.FreepsSeesCardInHand(runner));
+		assertFalse(scn.FreepsSeesCardInHand(enquea));
+	}
+
+	@Test
+	public void TheOtherPlayerIsSentTheShadowOwnersHandAndTheOwnerIsNotSentHis() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetShadowScenario();
+
+		var gimli = scn.GetFreepsCard("gimli");
+		var legolas = scn.GetFreepsCard("legolas");
+		var runner = scn.GetShadowCard("runner");
+		var enquea = scn.GetShadowCard("enquea");
+		scn.MoveCardsToHand(gimli, legolas, runner, enquea);
+
+		scn.StartGame();
+
+		assertTrue(scn.FreepsSeesCardInHand(runner));
+		assertTrue(scn.FreepsSeesCardInHand(enquea));
+		assertTrue(scn.FreepsSeesCardInHand(gimli));
+		assertTrue(scn.FreepsSeesCardInHand(legolas));
+
+		assertTrue(scn.ShadowSeesCardInHand(runner));
+		assertTrue(scn.ShadowSeesCardInHand(enquea));
+		assertFalse(scn.ShadowSeesCardInHand(gimli));
+		assertFalse(scn.ShadowSeesCardInHand(legolas));
+	}
+
+	@Test
+	public void TheOtherPlayerIsSentCardsDrawnIntoTheRevealedHand() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
+
+		var gimli = scn.GetFreepsCard("gimli");
+
 		scn.StartGame();
 		scn.MoveCardsToTopOfDeck(gimli);
 
-		var spectator = new GameCommunicationChannel("spectator", 1, true, scn.game().getFormat());
-		scn.game().addGameStateListener("spectator", spectator);
-		spectator.consumeGameEvents();
+		// On the draw deck the card is in nobody's sight.
+		assertFalse(scn.ShadowSeesCardInHand(gimli));
+		assertFalse(scn.FreepsSeesCardInHand(gimli));
 
 		scn.FreepsDrawCards(1);
+
 		assertInZone(Zone.HAND, gimli);
-
-		var drawn = spectator.consumeGameEvents().stream()
-				.filter(e -> e.getType() == GameEvent.Type.PUT_CARD_INTO_PLAY && e.getZone() == Zone.HAND)
-				.map(GameEvent::getCardId).collect(Collectors.toSet());
-		assertEquals(Set.of(gimli.getCardId()), drawn);
+		assertTrue(scn.ShadowSeesCardInHand(gimli));
+		assertTrue(scn.FreepsSeesCardInHand(gimli));
 	}
 
-	private void assertSpectatorSeesOnlyOwnersHand(VirtualTableScenario scn, String owner, Set<String> ownerAliases,
-			String opponent) throws CardNotFoundException {
-		var spectator = new GameCommunicationChannel("spectator", 1, true, scn.game().getFormat());
-		scn.game().addGameStateListener("spectator", spectator);
-		List<GameEvent> events = spectator.consumeGameEvents();
+	@Test
+	public void ACardThatLeavesTheFreepsOwnersHandGoesFromTheOtherPlayersSight() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
 
-		var handCardIds = events.stream()
-				.filter(e -> e.getType() == GameEvent.Type.PUT_CARD_INTO_PLAY && e.getZone() == Zone.HAND)
-				.map(GameEvent::getCardId).collect(Collectors.toSet());
-		var expected = ownerAliases.stream()
-				.map(alias -> owner.equals(P1) ? scn.GetFreepsCard(alias) : scn.GetShadowCard(alias))
-				.map(card -> card.getCardId()).collect(Collectors.toSet());
-		assertEquals(expected, handCardIds);
+		var gimli = scn.GetFreepsCard("gimli");
+		var legolas = scn.GetFreepsCard("legolas");
+		scn.MoveCardsToHand(gimli, legolas);
 
-		// and the stats it is sent say whose hand that is, so the client can show the link for every viewer
-		var stats = events.stream().filter(e -> e.getType() == GameEvent.Type.GAME_STATS)
-				.map(GameEvent::getGameStats).reduce((a, b) -> b).orElseThrow();
-		assertEquals(Set.of(owner), stats.getRevealedHands());
-		assertFalse(stats.getRevealedHands().contains(opponent));
+		scn.StartGame();
+
+		assertTrue(scn.ShadowSeesCardInHand(gimli));
+		assertTrue(scn.ShadowSeesCardInHand(legolas));
+
+		scn.FreepsPlayCard(gimli);
+
+		// Played, Gimli is on the table and no longer a card of the open hand; Legolas is there still.
+		assertInZone(Zone.FREE_CHARACTERS, gimli);
+		assertFalse(scn.ShadowSeesCardInHand(gimli));
+		assertTrue(scn.ShadowSeesCardInHand(legolas));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		scn.MoveCardsToDiscard(legolas);
+
+		assertInZone(Zone.DISCARD, legolas);
+		assertFalse(scn.ShadowSeesCardInHand(legolas));
+		assertTrue(scn.FreepsHandIsRevealed());
 	}
 
-	private static Element serialize(GameEvent event) throws Exception {
-		Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-		return (Element) new EventSerializer().serializeEvent(doc, event);
+	@Test
+	public void ACardThatLeavesTheShadowOwnersHandGoesFromTheOtherPlayersSight() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetShadowScenario();
+
+		var runner = scn.GetShadowCard("runner");
+		var enquea = scn.GetShadowCard("enquea");
+		scn.MoveCardsToHand(runner, enquea);
+
+		scn.StartGame();
+		scn.SetTwilight(5);
+		scn.FreepsPass();
+
+		assertTrue(scn.FreepsSeesCardInHand(runner));
+		assertTrue(scn.FreepsSeesCardInHand(enquea));
+
+		scn.ShadowPlayCard(runner);
+
+		assertInZone(Zone.SHADOW_CHARACTERS, runner);
+		assertFalse(scn.FreepsSeesCardInHand(runner));
+		assertTrue(scn.FreepsSeesCardInHand(enquea));
+		assertTrue(scn.ShadowHandIsRevealed());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

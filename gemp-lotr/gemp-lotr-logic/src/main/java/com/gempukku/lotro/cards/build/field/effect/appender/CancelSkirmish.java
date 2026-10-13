@@ -1,5 +1,7 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.cards.build.field.effect.appender.resolver.CardResolver;
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.FilterableSource;
@@ -26,16 +28,40 @@ public class CancelSkirmish implements EffectAppenderProducer {
 
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
         final FilterableSource involvingSource = environment.getFilterFactory().generateFilter(involving, environment);
+        final boolean filtersReadMemory = CardResolver.readsMemory(filter) || CardResolver.readsMemory(involving);
+        final boolean namesSecondKind = effectObject.get("involving") != null;
 
         return new DelayedAppender() {
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
-                final Filterable involving = filterableSource.getFilterable(actionContext);
+                final Filterable first = filterableSource.getFilterable(actionContext);
                 if (!fierceOnly || actionContext.getGame().getGameState().isFierceSkirmishes()) {
-                    return new CancelSkirmishEffect(involving);
+                    if (!namesSecondKind)
+                        return new CancelSkirmishEffect(first);
+
+                    // "A skirmish involving X and Y": the skirmish has to hold a card of each kind when the
+                    // effect is carried out, as it has to when the effect is checked as a cost.
+                    final Filterable second = involvingSource.getFilterable(actionContext);
+                    return new CancelSkirmishEffect(first) {
+                        @Override
+                        public boolean isPlayableInFull(LotroGame game) {
+                            return super.isPlayableInFull(game)
+                                    && Filters.countActive(game, Filters.and(second, Filters.inSkirmish)) > 0;
+                        }
+                    };
                 } else {
                     return null;
                 }
+            }
+
+            // Nothing to cancel, or no leave to cancel it: nobody of the kind named is in the skirmish being
+            // fought, the format keeps the Ring-bearer's skirmish from being cancelled, or a card forbids it.
+            // A cancelled skirmish is never a matter of that skirmish only, so there is no more to say.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                if (filtersReadMemory && !actionContext.isAtResolution())
+                    return EffectForecast.UNKNOWN;
+                return isPlayableInFull(actionContext) ? EffectForecast.UNKNOWN : EffectForecast.NOTHING;
             }
 
             @Override

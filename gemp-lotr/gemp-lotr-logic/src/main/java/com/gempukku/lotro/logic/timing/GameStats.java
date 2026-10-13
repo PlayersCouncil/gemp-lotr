@@ -145,16 +145,9 @@ public class GameStats {
             _fpOverwhelmed = newFpOverwhelmed;
         }
 
-        //The other way round: as the skirmish stands, the minions lose it and are overwhelmed (the same sums as
-        // ResolveSkirmishEffect, where a tie or a Free Peoples overwhelm comes first)
-        boolean newShadowOverwhelmed = false;
-        if (skirmish != null && skirmish.getFellowshipCharacter() != null && !skirmish.getShadowCharacters().isEmpty()
-                && !newFpOverwhelmed && newFellowshipStrength > newShadowStrength) {
-            int shadowMultiplier = 2;
-            for (PhysicalCard minion : skirmish.getShadowCharacters())
-                shadowMultiplier = Math.max(shadowMultiplier, game.getModifiersQuerying().getOverwhelmMultiplier(game, minion));
-            newShadowOverwhelmed = newFellowshipStrength >= (long) shadowMultiplier * newShadowStrength;
-        }
+        //The other way round: as the skirmish stands, the minions lose it and at least one of them is overwhelmed
+        // (the same sums as ResolveSkirmishEffect, where a tie or a Free Peoples overwhelm comes first)
+        boolean newShadowOverwhelmed = !newFpOverwhelmed && !RuleUtils.getMinionsFacingOverwhelm(game).isEmpty();
         if (newShadowOverwhelmed != _shadowOverwhelmed) {
             changed = true;
             _shadowOverwhelmed = newShadowOverwhelmed;

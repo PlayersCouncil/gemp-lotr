@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_04_208_Tests
@@ -21,7 +22,11 @@ public class Card_04_208_Tests
 				new HashMap<>()
 				{{
 					put("card", "4_208");
-					// put other cards in here as needed for the test case
+					put("tracker", "4_193");    // Uruk Runner: [isengard] tracker, strength 8, vitality 2; stronger in a fierce skirmish
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8
+					// Dwarven Armor: a possession that changes no number, put on Aragorn by the rig
+					put("armor1", "1_8");
+					put("armor2", "1_8");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -71,5 +76,35 @@ public class Card_04_208_Tests
 		scn.FreepsPlayCard(card);
 
 		assertEquals(0, scn.GetTwilight());
+	}
+
+	@Test
+	public void AHinderedCardBorneByTheCharacterTheTrackerIsSkirmishingIsCountedWithTheOthers() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var vengeance = scn.GetShadowCard("card");
+		var tracker = scn.GetShadowCard("tracker");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var armor1 = scn.GetFreepsCard("armor1");
+		var armor2 = scn.GetFreepsCard("armor2");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.AttachCardsTo(aragorn, armor1, armor2);
+		scn.MoveCardsToHand(vengeance);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(tracker);
+		// A hindered card is a card still, and still borne
+		scn.HinderCard(armor2);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(aragorn, tracker);
+		scn.FreepsPass();
+
+		assertTrue(scn.IsHindered(armor2));
+		assertEquals(8, scn.GetStrength(tracker));
+
+		scn.ShadowPlayCard(vengeance);
+		// 8 + 2 for each of the two cards Aragorn bears
+		assertEquals(12, scn.GetStrength(tracker));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 }

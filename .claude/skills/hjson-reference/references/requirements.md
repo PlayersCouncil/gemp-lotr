@@ -63,7 +63,7 @@ Meta-level operations that modify the output of other requirements or value eval
 ## Function Requirements
 
 * CanMove
-  True if the current Free Peoples player's move count is less than the move limit, i.e. they can voluntarily choose to move again if they so desire.
+  True if the current Free Peoples player's move count is less than the move limit, no `CantMove` is in force and the fellowship has an unhindered companion (CR 5.0 "hinder"), i.e. they can voluntarily choose to move again if they so desire.  The same reading the regroup phase makes before asking (`RuleUtils.canChooseToMoveAgain`).
 * CanSelfBePlayed
   True if this card can be played.  This is normally handled automatically when playing from hand, but if self-playing from other contexts (from discard, from a stack, etc), then this may need used to verify all the fiddly sub-requirements like uniqueness and so on.
 * CanSpot
@@ -330,7 +330,7 @@ Meta-level operations that modify the output of other requirements or value eval
 * SarumanFirstSentenceActive
   True if Saruman's first sentence of text is to be treated as active, i.e. it is has not been disabled by the likes of Saruman's Staff, Wizard's Device).
 * ShadowPlayerReplacedCurrentSite
-  True if the Shadow player has replaced the Fellowship's current site this turn.  See Many Miles).
+  True while the fellowship is at a site that a Shadow player replaced this turn while the fellowship was at it; false again once the fellowship has moved on from that site (Q-0234).  See Many Miles).
 * SiteAvailableToControl
   True if there are any sites available to be controlled, i.e. all players have passed such a site and it is uncontrolled on the adventure path.
 * ThreatLimit

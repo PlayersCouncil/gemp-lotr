@@ -8,6 +8,7 @@ import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
 import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.state.LotroGame;
@@ -35,9 +36,13 @@ public class SetupExtraAssignmentAndSkirmishes implements EffectAppenderProducer
             @Override
             protected List<? extends Effect> createEffects(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                 List<Effect> effects = new ArrayList<>();
+                // The additional phase is the named minions' alone (Q-0267), but a relentless minion has the round
+                // after the fierce one by rule: with one in play the two are one round (EndSkirmishesGameProcess),
+                // and it is not barred from it.
                 effects.add(
                         new AddUntilEndOfPhaseModifierEffect(
-                                new CantBeAssignedToSkirmishModifier(action.getActionSource(), null, Filters.and(CardType.MINION, Filters.not(filterableSource.getFilterable(actionContext)))), Phase.ASSIGNMENT));
+                                new CantBeAssignedToSkirmishModifier(action.getActionSource(), null,
+                                        Filters.and(CardType.MINION, Filters.not(Keyword.RELENTLESS), Filters.not(filterableSource.getFilterable(actionContext)))), Phase.ASSIGNMENT));
                 action.appendEffect(
                         new UnrespondableEffect() {
                             @Override

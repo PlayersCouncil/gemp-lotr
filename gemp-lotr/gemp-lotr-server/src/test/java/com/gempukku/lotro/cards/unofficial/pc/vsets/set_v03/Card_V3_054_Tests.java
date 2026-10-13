@@ -1,37 +1,40 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
 import static com.gempukku.lotro.framework.Assertions.*;
+import static org.junit.Assert.*;
 
 public class Card_V3_054_Tests
 {
-
-// ----------------------------------------
-// HORN OF FAR HARAD TESTS
-// ----------------------------------------
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("horn", "103_54");        // Horn of Far Harad
-					put("explorer", "4_250");     // Southron Explorer
-					put("mumak", "5_73");         // Mumak - [Raider] mount possession
-					put("charger", "103_41");     // Bladetusk Charger - transforms into mounted Southron
-					put("southron1", "4_222");    // Desert Warrior - for stacking
-					put("orc", "1_271");          // Orc Soldier - bait
+					put("horn", "103_54");
+					put("explorer", "4_250");     // Southron Explorer: Southron, strength 5, vitality 3; a regroup ability never used here
+					put("explorer2", "4_250");
+					put("lancers", "4_217");      // Desert Lancers: Southron, strength 11; a regroup ability never used here
+					put("infantry", "4_227");     // Easterling Infantry: [raider] Man, Easterling and no Southron, strength 8; no text below 3 burdens
+					put("khamul", "103_61");      // Ulaire Attea, Khamul of the East: unique [raider] Nazgul, an Easterling and no Southron, fierce; the rest of his text needs 3 burdens
+					put("mumakil", "8_64");       // Mumakil: [raider] mount for a Southron, strength +3, fierce; damage +1 with initiative
+					put("warmumak", "5_78");      // War Mumak: [raider] mount for a Southron, cost 3, strength +4, fierce; an optional trigger on an overwhelm only
+					put("mumak", "5_73");         // Mumak: [raider] mount for a Southron, cost 2, strength +3, fierce; an optional trigger on a win only
+					put("fellbeast", "6_83");     // Fell Beast: [wraith] mount, bearer must be a Nazgul; bearer is strength +2 and fierce
+					put("charger", "103_41");     // Bladetusk Charger: a possession its Maneuver ability makes a fierce mounted Southron minion until the end of the turn
+					put("rearguard", "103_43");   // Bladetusk Rearguard: an artifact; Maneuver: remove (5) to make it a fierce mounted Southron minion of strength 5 and vitality 5 until the end of the turn
 
-					put("aragorn", "1_89");
-					put("eowyn", "5_122");
-					put("horse", "4_283");           // Horse of Rohan
+					put("aragorn", "1_89");       // Aragorn, Ranger of the North: strength 8, vitality 4
+					put("horse", "4_283");        // Horse of Rohan: [rohan] mount; exerts minions at the start of its bearer's skirmishes
+					put("sword", "1_112");        // Ranger's Sword: a [gondor] possession that is no mount
+					put("orophin", "1_56");       // Orophin, Lorien Bowman: Elf ally (an archer, so only in a test that ends in the Shadow phase)
+					put("asfaloth", "1_31");      // Asfaloth: [elven] mount, bearer must be an Elf
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -52,9 +55,9 @@ public class Card_V3_054_Tests
 		 * Type: Possession
 		 * Subtype: Horn
 		 * Game Text: Bearer must be a mounted Southron.
-		* 	When you play this, hinder all Free Peoples mounts.
-		* 	Skirmish: Remove a threat to make a Southron strength +2.
-		*/
+		 * 	When you play this, hinder all Free Peoples mounts.
+		 * 	Skirmish: Remove a threat to make a Southron strength +2.
+		 */
 
 		var scn = GetScenario();
 
@@ -67,145 +70,328 @@ public class Card_V3_054_Tests
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
 		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.HORN));
+		assertEquals(1, card.getBlueprint().getPossessionClasses().size());
 		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(0, card.getBlueprint().getStrength());
+		assertEquals(0, card.getBlueprint().getVitality());
 	}
 
-
-
 	@Test
-	public void HornAttachesToMountedSouthronAndHindersFPMounts() throws DecisionResultInvalidException, CardNotFoundException {
+	public void CannotBePlayedUntilASouthronIsMounted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var horn = scn.GetShadowCard("horn");
 		var explorer = scn.GetShadowCard("explorer");
 		var mumak = scn.GetShadowCard("mumak");
-		var eowyn = scn.GetFreepsCard("eowyn");
-		var horse = scn.GetFreepsCard("horse");
-		scn.MoveCardsToHand(horn);
-		scn.MoveMinionsToTable(explorer);
-		scn.AttachCardsTo(explorer, mumak); // Explorer is now mounted
-		scn.MoveCompanionsToTable(eowyn);
-		scn.AttachCardsTo(eowyn, horse); // FP horse
+		scn.MoveCardsToHand(horn, mumak);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(explorer);
 		scn.SetTwilight(10);
 		scn.FreepsPass();
 
-		assertFalse(scn.IsHindered(horse));
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		// A Southron with no mount is the only minion in play.
+		assertFalse(scn.ShadowPlayAvailable(horn));
+		assertTrue(scn.ShadowPlayAvailable(mumak));
+
+		// The Explorer is the only Southron, so the Mumak goes on him without a choice.
+		scn.ShadowPlayCard(mumak);
+
 		assertAttachedTo(mumak, explorer);
+		assertTrue(scn.ShadowPlayAvailable(horn));
 
 		scn.ShadowPlayCard(horn);
-		// Explorer auto-selected as only mounted Southron
 
-		// Horn attached
-		assertInZone(Zone.ATTACHED, horn);
-
-		// FP mount hindered on play
-		assertTrue(scn.IsHindered(horse));
+		assertAttachedTo(horn, explorer);
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
-	public void HornCannotAttachToUnmountedSouthron() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var horn = scn.GetShadowCard("horn");
-		var explorer = scn.GetShadowCard("explorer"); // No mount
-		scn.MoveCardsToHand(horn);
-		scn.MoveMinionsToTable(explorer);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-
-		assertFalse(scn.HasKeyword(explorer, Keyword.MOUNTED));
-
-		scn.FreepsPassCurrentPhaseAction();
-
-		// Horn should not be playable - no mounted Southron
-		assertFalse(scn.ShadowPlayAvailable(horn));
-	}
-
-	@Test
-	public void HornSkirmishAbilityPumpsSouthron() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlayedForOneOnAMountedSouthronOfTheShadowPlayersChoiceAndHindersEveryFreePeoplesMount() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var horn = scn.GetShadowCard("horn");
 		var explorer = scn.GetShadowCard("explorer");
-		var mumak = scn.GetShadowCard("mumak");
+		var explorer2 = scn.GetShadowCard("explorer2");
+		var lancers = scn.GetShadowCard("lancers");
+		var khamul = scn.GetShadowCard("khamul");
+		var mumakil = scn.GetShadowCard("mumakil");
+		var warmumak = scn.GetShadowCard("warmumak");
+		var fellbeast = scn.GetShadowCard("fellbeast");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveMinionsToTable(explorer);
-		scn.AttachCardsTo(explorer, mumak, horn);
+		var horse = scn.GetFreepsCard("horse");
+		var sword = scn.GetFreepsCard("sword");
+		var orophin = scn.GetFreepsCard("orophin");
+		var asfaloth = scn.GetFreepsCard("asfaloth");
 		scn.MoveCompanionsToTable(aragorn);
-		scn.AddThreats(2);
+		scn.AttachCardsTo(aragorn, horse, sword);
+		scn.MoveAlliesToTable(orophin);
+		scn.AttachCardsTo(orophin, asfaloth);
+		scn.MoveCardsToHand(horn);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(explorer, explorer2, lancers, khamul);
+		scn.AttachCardsTo(explorer, mumakil);
+		scn.AttachCardsTo(lancers, warmumak);
+		// Every [raider] mount says "bearer must be a Southron". The one [raider] minion who is no Southron and
+		// may be mounted is Khamul, a Nazgul and an Easterling, on a Nazgul's mount.
+		scn.AttachCardsTo(khamul, fellbeast);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		// 10 set + 2 for Frodo and Aragorn + 2 for the shadow number of site 2
+		assertEquals(14, scn.GetTwilight());
+		assertFalse(scn.IsHindered(horse));
+		assertFalse(scn.IsHindered(asfaloth));
+		assertFalse(scn.IsHindered(sword));
+		assertTrue(scn.ShadowPlayAvailable(horn));
+
+		scn.ShadowPlayCard(horn);
+
+		// Two mounted Southrons to choose from; the Southron with no mount and the mounted Easterling are not.
+		assertAttachedTo(fellbeast, khamul);
+		assertTrue(scn.HasKeyword(khamul, Keyword.EASTERLING));
+		assertFalse(scn.HasKeyword(khamul, Keyword.SOUTHRON));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(explorer, lancers));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(explorer2, khamul));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+
+		scn.ShadowChooseCard(lancers);
+
+		assertAttachedTo(horn, lancers);
+		// Both Free Peoples mounts, on a companion and on an ally, of two cultures
+		assertTrue(scn.IsHindered(horse));
+		assertTrue(scn.IsHindered(asfaloth));
+		// Not the possession that is no mount, not the Shadow player's own mounts, not the riders
+		assertFalse(scn.IsHindered(sword));
+		assertFalse(scn.IsHindered(mumakil));
+		assertFalse(scn.IsHindered(warmumak));
+		assertFalse(scn.IsHindered(fellbeast));
+		assertFalse(scn.IsHindered(aragorn));
+		assertFalse(scn.IsHindered(orophin));
+		assertFalse(scn.IsHindered(horn));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void PlayingAnotherPossessionWhileAHornIsInPlayHindersNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var horn = scn.GetShadowCard("horn");
+		var explorer = scn.GetShadowCard("explorer");
+		var lancers = scn.GetShadowCard("lancers");
+		var mumakil = scn.GetShadowCard("mumakil");
+		var warmumak = scn.GetShadowCard("warmumak");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var horse = scn.GetFreepsCard("horse");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.AttachCardsTo(aragorn, horse);
+		scn.MoveCardsToHand(warmumak);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(explorer, lancers);
+		scn.AttachCardsTo(explorer, mumakil, horn);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		assertFalse(scn.IsHindered(horse));
+		assertTrue(scn.ShadowPlayAvailable(warmumak));
+
+		// The Explorer already has a mount, so the War Mumak goes on the Lancers without a choice.
+		scn.ShadowPlayCard(warmumak);
+
+		assertAttachedTo(warmumak, lancers);
+		assertFalse(scn.IsHindered(horse));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void SkirmishAbilityRemovesAThreatEachTimeItIsUsedAndTheStrengthLastsUntilThatSkirmishEnds() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var horn = scn.GetShadowCard("horn");
+		var explorer = scn.GetShadowCard("explorer");
+		var explorer2 = scn.GetShadowCard("explorer2");
+		var mumakil = scn.GetShadowCard("mumakil");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(explorer, explorer2);
+		scn.AttachCardsTo(explorer, mumakil, horn);
+		scn.AddThreats(2);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+
+		// With threats to remove and Southrons in play, but in the maneuver phase
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+		assertEquals(2, scn.GetThreats());
+		assertFalse(scn.ShadowActionAvailable(horn));
+
+		scn.ShadowPass();
 		scn.SkipToAssignments();
-		scn.FreepsAssignToMinions(aragorn, explorer);
+		scn.FreepsAssignToMinions(aragorn, explorer2);
+		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.FreepsPass();
 
-		int explorerStrengthBefore = scn.GetStrength(explorer);
-		int threatsBefore = scn.GetThreats();
-
+		assertEquals(5, scn.GetStrength(explorer2));
+		// Strength 5 + 3 for the Mumakil
+		assertEquals(8, scn.GetStrength(explorer));
 		assertTrue(scn.ShadowActionAvailable(horn));
-		scn.ShadowUseCardAction(horn);
-		// Explorer auto-selected as only Southron
 
-		assertEquals(threatsBefore - 1, scn.GetThreats());
-		assertEquals(explorerStrengthBefore + 2, scn.GetStrength(explorer));
+		scn.ShadowUseCardAction(horn);
+		scn.ShadowChooseCard(explorer2);
+
+		assertEquals(1, scn.GetThreats());
+		assertEquals(7, scn.GetStrength(explorer2));
+		assertEquals(8, scn.GetStrength(explorer));
+
+		scn.FreepsPass();
+		assertTrue(scn.ShadowActionAvailable(horn));
+
+		// The text sets no limit: a second threat buys a second +2.
+		scn.ShadowUseCardAction(horn);
+		scn.ShadowChooseCard(explorer2);
+
+		assertEquals(0, scn.GetThreats());
+		assertEquals(9, scn.GetStrength(explorer2));
+
+		scn.FreepsPass();
+
+		// No threat left to remove
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(horn));
+
+		scn.ShadowPass();
+
+		// Strength 9 beat Aragorn's 8; with the skirmish over, the Explorer is back to his own strength.
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(explorer2));
+		assertEquals(5, scn.GetStrength(explorer2));
+		// The Mumakil's bearer is fierce and was not assigned, so a fierce assignment phase follows.
+		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
 
 	@Test
-	public void HornCanAttachToTransformedBladetusk() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SkirmishAbilityOffersEverySouthronInOrOutOfTheSkirmishAndNoOtherMinion() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var horn = scn.GetShadowCard("horn");
+		var explorer = scn.GetShadowCard("explorer");
+		var explorer2 = scn.GetShadowCard("explorer2");
+		var infantry = scn.GetShadowCard("infantry");
+		var rearguard = scn.GetShadowCard("rearguard");
+		var mumakil = scn.GetShadowCard("mumakil");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToSupportArea(rearguard);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(explorer, explorer2, infantry);
+		scn.AttachCardsTo(explorer, mumakil, horn);
+		scn.AddThreats(1);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.SetTwilight(5);
+		scn.FreepsPass();
+
+		// Every Southron card there is is a [raider] Man. A Bladetusk Rearguard that has made itself a minion
+		// is a Southron by its own text and no Man: the Horn's text goes by the keyword.
+		scn.ShadowUseCardAction(rearguard);
+
+		assertInZone(Zone.SHADOW_CHARACTERS, rearguard);
+		assertTrue(scn.HasKeyword(rearguard, Keyword.SOUTHRON));
+		assertFalse(scn.IsRace(rearguard, Race.MAN));
+		assertEquals(0, scn.GetTwilight());
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, explorer2);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.FreepsPass();
+
+		assertEquals(1, scn.GetThreats());
+		// Strength 5 + 3 for the Mumakil
+		assertEquals(8, scn.GetStrength(explorer));
+		assertEquals(5, scn.GetStrength(explorer2));
+		assertEquals(8, scn.GetStrength(infantry));
+		assertEquals(5, scn.GetStrength(rearguard));
+		assertTrue(scn.ShadowActionAvailable(horn));
+
+		scn.ShadowUseCardAction(horn);
+
+		// The bearer, mounted and out of the skirmish; the Southron fighting Aragorn, who has no mount; and the
+		// Bladetusk that is a Southron and no Man. The Easterling is a [raider] Man and no Southron.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(explorer, explorer2, rearguard));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(infantry));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+
+		scn.ShadowChooseCard(explorer);
+
+		assertEquals(0, scn.GetThreats());
+		assertEquals(10, scn.GetStrength(explorer));
+		assertEquals(5, scn.GetStrength(explorer2));
+		assertEquals(8, scn.GetStrength(infantry));
+		assertEquals(5, scn.GetStrength(rearguard));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
+
+	@Test
+	public void CanBePlayedOnABladetuskThatHasBeenMadeAMountedSouthronMinion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var horn = scn.GetShadowCard("horn");
 		var charger = scn.GetShadowCard("charger");
-		var southron = scn.GetShadowCard("southron1");
+		var explorer = scn.GetShadowCard("explorer");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		scn.MoveCardsToHand(horn);
 		scn.MoveCardsToSupportArea(charger);
-		scn.MoveMinionsToTable(southron); // Bait
 		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(explorer);
 		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		// The Charger is still a possession in the support area, and the Explorer has no mount.
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		assertFalse(scn.ShadowPlayAvailable(horn));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsPass();
 
-		// Transform Charger
+		// The Explorer is the only Southron Man, so he is stacked without a choice.
 		scn.ShadowUseCardAction(charger);
 
-		assertTrue(scn.HasKeyword(charger, Keyword.MOUNTED));
-		assertTrue(scn.HasKeyword(charger, Keyword.SOUTHRON));
 		assertInZone(Zone.SHADOW_CHARACTERS, charger);
+		assertInZone(Zone.STACKED, explorer);
 
-		// Skip to Regroup without assigning Charger
+		// Nobody is assigned, in the ordinary round or the fierce one.
 		scn.SkipToAssignments();
 		scn.FreepsDeclineAssignments();
 		scn.ShadowDeclineAssignments();
-
-		//Fierce
 		scn.PassFierceAssignmentActions();
 		scn.FreepsDeclineAssignments();
 		scn.ShadowDeclineAssignments();
 
-		// Regroup
 		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
 		scn.PassCurrentPhaseActions();
 		scn.ShadowDeclineReconciliation();
 		scn.FreepsChooseToMove();
 
-		// Now back to Shadow phase at site 2
+		// A second Shadow phase in the turn that made the Charger a minion
 		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
-
-		// Charger should still be transformed (until end of turn)
-		assertTrue(scn.HasKeyword(charger, Keyword.MOUNTED));
-		assertTrue(scn.HasKeyword(charger, Keyword.SOUTHRON));
-
-		// Horn should be playable on transformed Charger
+		assertInZone(Zone.SHADOW_CHARACTERS, charger);
 		assertTrue(scn.ShadowPlayAvailable(horn));
+
 		scn.ShadowPlayCard(horn);
 
 		assertAttachedTo(horn, charger);
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

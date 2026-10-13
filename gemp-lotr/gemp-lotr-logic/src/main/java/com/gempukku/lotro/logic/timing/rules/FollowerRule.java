@@ -13,6 +13,7 @@ import com.gempukku.lotro.logic.actions.OptionalTriggerAction;
 import com.gempukku.lotro.logic.effects.ChooseActiveCardEffect;
 import com.gempukku.lotro.logic.effects.TransferPermanentEffect;
 import com.gempukku.lotro.logic.timing.EffectResult;
+import com.gempukku.lotro.logic.timing.NoEffect;
 import com.gempukku.lotro.logic.timing.PlayConditions;
 import com.gempukku.lotro.logic.timing.TriggerConditions;
 
@@ -41,8 +42,21 @@ public class FollowerRule {
                                     final OptionalTriggerAction action = new OptionalTriggerAction(follower);
                                     action.setText("Use " + GameUtils.getCardLink(follower) + " Aid");
                                     follower.getBlueprint().appendAidCosts(game, action, follower);
+                                    // The characters the follower could be transferred to: its owner's, other
+                                    // than the one that bears it, and none of them while something says that
+                                    // the follower cannot be transferred ("followers cannot be transferred to a
+                                    // character", Streets of Bree 18_140).  TransferPermanentEffect asks that
+                                    // too, and used to refuse the transfer after the character had been asked
+                                    // for (F-0363).
+                                    final Filter couldTakeFollower = Filters.and(followerTarget, Filters.not(Filters.hasAttached(follower)),
+                                            (Filter) (g, character) -> g.getModifiersQuerying().canBeTransferred(g, follower));
+                                    // With nobody to take it the Aid is offered all the same, as any action
+                                    // with a cost is: the cost is paid, nobody is asked for a character and
+                                    // nothing moves.  The offer says so beforehand (the no-effect flag).
+                                    action.setNoEffectJudge(
+                                            () -> Filters.countActive(game, couldTakeFollower) > 0 ? null : NoEffect.EFFECT);
                                     action.appendCost(
-                                            new ChooseActiveCardEffect(follower, playerId, "Choose character to transfer follower to", followerTarget, Filters.not(Filters.hasAttached(follower))) {
+                                            new ChooseActiveCardEffect(follower, playerId, "Choose character to transfer follower to", couldTakeFollower) {
                                                 @Override
                                                 protected void cardSelected(LotroGame game, PhysicalCard card) {
                                                     action.appendEffect(

@@ -231,6 +231,11 @@
 			{
 				type: activated
 				phase: skirmish
+				// The X of the second sentence is read from the card revealed: with no card to reveal
+				// the ability is not offered (Q-0148).
+				requires: {
+					type: HasCardInDrawDeck
+				}
 				effect: [
 					{
 						type: revealTopCardsOfDrawDeck
@@ -239,7 +244,7 @@
 					}
 					{
 						type: optional
-						text: Would you like to exert Glorfindel to make a Nazgul he is skirmishing strength -X, where X is the twilight cost the the card revealed?
+						text: Would you like to exert Glorfindel to make a Nazgul he is skirmishing strength -X, where X is the twilight cost of the card revealed?
 						cost: {
 							type: exert
 							select: self

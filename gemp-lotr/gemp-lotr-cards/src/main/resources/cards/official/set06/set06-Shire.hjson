@@ -38,6 +38,10 @@
 					type: movesTo
 					filter: siteNumber(9)
 				}
+				requires: {
+					type: canSpot
+					filter: ring-bearer,title(Frodo)
+				}
 				effect: {
 					type: corruptRingBearer
 				}

@@ -132,6 +132,7 @@
 			{
 				type: activatedInDiscard
 				phase: skirmish
+				specialAbility: false
 				cost: {
 					type: removeCardsInDiscardFromGame
 					select: choose(other,culture(gondor))
@@ -249,6 +250,11 @@
 				trigger: {
 					type: played
 					filter: self
+				}
+				# Not offered with no [gondor] token to reinforce: it has no cost (Q-0034).
+				requires: {
+					type: CanSpot
+					filter: HasCultureToken(gondor)
 				}
 				effect: {
 					type: reinforceTokens
@@ -494,7 +500,7 @@
 				phase: skirmish
 				cost: {
 					type: discard
-					select: choose(culture(gondor),condition,zone(support))
+					select: choose(culture(gondor),condition,support(you))
 				}
 				effect: {
 					type: modifyStrength
@@ -935,20 +941,24 @@
 			}
 			{
 				type: Trigger
-				optional: false
+				optional: true
 				trigger: {
 					type: exerted
 					filter: name(Boromir)
 				}
+				# No cost, so not offered when no minion could be exerted (Q-0034).
+				requires: {
+					type: canSpot
+					filter: minion,canExert
+				}
 				effect: {
 					type: exert
 					select: choose(minion)
-					count: 0-1
 				}
 			}
 			{
 				type: Trigger
-				optional: false
+				optional: true
 				trigger: {
 					type: exerted
 					filter: name(Faramir)
@@ -956,7 +966,6 @@
 				cost: {
 					type: spot
 					select: choose(minion)
-					count: 0-1
 					memorize: spottedMinion
 				}
 				effect: {
@@ -1012,8 +1021,7 @@
 				}
 			}
 			{
-				type: Trigger
-				optional: true
+				type: Response
 				trigger: {
 					type: usesSpecialAbility
 					filter: minion

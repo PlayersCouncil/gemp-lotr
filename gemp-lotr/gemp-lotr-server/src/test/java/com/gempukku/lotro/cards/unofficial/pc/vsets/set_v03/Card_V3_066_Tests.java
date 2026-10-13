@@ -1,9 +1,6 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Phase;
-import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -11,22 +8,30 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_V3_066_Tests
 {
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("gollum", "103_66");
-					put("witchking", "1_237");
+					put("lemenya", "1_232");    // Ulaire Lemenya: [wraith] Nazgul, cost 4, site 3; weakens bearers of [wraith] conditions
+					put("nelya", "2_84");       // Ulaire Nelya, Ringwraith in Twilight: twilight [wraith] Nazgul, cost 5, site 2
+					put("khamul", "103_61");    // Ulaire Attea, Khamul of the East: the [raider] Nazgul, cost 6, site 3; fierce
+					put("witchking", "1_237");  // The Witch-king, Lord of Angmar: [wraith] Nazgul, cost 8, site 3; fierce
+					put("lackey", "7_193");     // Morgul Lackey: [wraith] Orc, cost 2, site 4; a skirmish ability
 
-					put("sam", "1_311");      // Cost 2
-					put("aragorn", "1_89");   // Cost 4
-
-					put("runner", "1_178");
+					put("galadriel", "13_15");  // Galadriel, Sorceress of the Hidden Land: costs 0; text only on a regroup move
+					put("smeagol", "5_29");     // Smeagol, Slinker: costs 0, Ring-bound; a cost to play, so he is cheated in
+					put("merry", "1_302");      // Merry, Friend to Sam: costs 1
+					put("sam", "1_311");        // Sam, Son of Hamfast: costs 2, Ring-bound and not the Ring-bearer
+					put("gimli", "1_13");       // Gimli, Son of Gloin: costs 2
+					put("boromir", "1_97");     // Boromir, Son of Denethor: costs 3
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: costs 4
+					put("silinde", "1_60");     // Silinde, Elf of Mirkwood: ally costing 2, home site 3
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -42,16 +47,16 @@ public class Card_V3_066_Tests
 		 * Name: Gollum, Half a Wraith Himself
 		 * Unique: true
 		 * Side: Shadow
-		 * Culture: Wraith
+		 * Culture: Ringwraith
 		 * Twilight Cost: 2
 		 * Type: Minion
-		 * Subtype: 
+		 * Subtype:
 		 * Strength: 5
 		 * Vitality: 4
 		 * Site Number: 3
 		 * Game Text: Each time you play a Nazgul, you may exert Gollum to add a threat.
-		* 	Assignment: Remove X threats to assign Gollum to a companion costing X or less (except the Ring-bearer).
-		*/
+		 * 	Assignment: Remove X threats to assign Gollum to a companion costing X or less (except the Ring-bearer).
+		 */
 
 		var scn = GetScenario();
 
@@ -63,268 +68,453 @@ public class Card_V3_066_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
+		assertNull(card.getBlueprint().getRace());
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		assertEquals(5, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-
-
-// ======== NAZGUL TRIGGER TESTS ========
-
 	@Test
-	public void GollumCanExertToAddThreatWhenPlayingNazgul() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void PlayedFromHandForTwoAndTwoMoreWhileRoaming() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var gollum = scn.GetShadowCard("gollum");
-		var witchking = scn.GetShadowCard("witchking");
-
-		scn.MoveMinionsToTable(gollum);
-		scn.MoveCardsToHand(witchking);
+		scn.MoveCardsToHand(gollum);
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
+
+		// 10 set + 1 companion + 2 for the site
+		assertEquals(13, scn.GetTwilight());
+		scn.ShadowPlayCard(gollum);
+
+		// 2 to play + 2 roaming (his site number is 3, the fellowship is at site 2)
+		assertEquals(9, scn.GetTwilight());
+		assertInZone(Zone.SHADOW_CHARACTERS, gollum);
+		// He is no Nazgul: his own play is not answered.
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertEquals(0, scn.GetWoundsOn(gollum));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void EachNazgulPlayedLetsGollumExertToAddAThreatUntilHeIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gollum = scn.GetShadowCard("gollum");
+		var lackey = scn.GetShadowCard("lackey");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var nelya = scn.GetShadowCard("nelya");
+		var khamul = scn.GetShadowCard("khamul");
+		var witchking = scn.GetShadowCard("witchking");
+		scn.MoveCardsToHand(lackey, lemenya, nelya, khamul, witchking);
+		// Four companions with Frodo, so three threats are within the limit.
+		scn.MoveCompanionsToTable(scn.GetFreepsCard("aragorn"), scn.GetFreepsCard("sam"), scn.GetFreepsCard("gimli"));
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(gollum);
+		scn.SetTwilight(40);
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetWoundsOn(gollum));
 		assertEquals(0, scn.GetThreats());
 
-		scn.ShadowPlayCard(witchking);
+		// A [wraith] minion that is not a Nazgul.
+		scn.ShadowPlayCard(lackey);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertEquals(0, scn.GetWoundsOn(gollum));
+		assertEquals(0, scn.GetThreats());
 
-		// Optional trigger should be available
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowPlayCard(lemenya);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(gollum));
 		scn.ShadowAcceptOptionalTrigger();
-
-		// Gollum exerted, threat added
 		assertEquals(1, scn.GetWoundsOn(gollum));
 		assertEquals(1, scn.GetThreats());
-	}
 
-	@Test
-	public void GollumTriggerCanBeDeclined() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var gollum = scn.GetShadowCard("gollum");
-		var witchking = scn.GetShadowCard("witchking");
-
-		scn.MoveMinionsToTable(gollum);
-		scn.MoveCardsToHand(witchking);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
-
-		scn.ShadowPlayCard(witchking);
-
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
-		scn.ShadowDeclineOptionalTrigger();
-
-		// Neither exertion nor threat
-		assertEquals(0, scn.GetWoundsOn(gollum));
-		assertEquals(0, scn.GetThreats());
-	}
-
-	@Test
-	public void GollumTriggerDoesNotFireForNonNazgul() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var gollum = scn.GetShadowCard("gollum");
-		var runner = scn.GetShadowCard("runner");
-
-		scn.MoveMinionsToTable(gollum);
-		scn.MoveCardsToHand(runner);
-
-		scn.StartGame();
-		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
-
-		scn.ShadowPlayCard(runner);
-
-		// No trigger for non-Nazgul
-		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
-	}
-
-// ======== ASSIGNMENT ABILITY TESTS ========
-
-	@Test
-	public void GollumAssignmentAbilityNotAvailableWithNoThreats() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var gollum = scn.GetShadowCard("gollum");
-		var sam = scn.GetFreepsCard("sam");
-
-		scn.MoveMinionsToTable(gollum);
-		scn.MoveCompanionsToTable(sam);
-
-		scn.StartGame();
-		scn.SkipToPhase(Phase.ASSIGNMENT);
-
-		assertEquals(0, scn.GetThreats());
-	}
-
-	@Test
-	public void GollumCanAssignToCompanionCostingUpToXThreats() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var gollum = scn.GetShadowCard("gollum");
-		var sam = scn.GetFreepsCard("sam");  // Cost 2
-
-		scn.MoveMinionsToTable(gollum);
-		scn.MoveCompanionsToTable(sam);
-		scn.AddThreats(3);
-
-		scn.StartGame();
-		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.FreepsPass();
-
-		assertEquals(3, scn.GetThreats());
-		assertFalse(scn.IsCharAssigned(gollum));
-
-		assertTrue(scn.ShadowActionAvailable(gollum));
-		scn.ShadowUseCardAction(gollum);
-
-		// Choose to remove 2 threats (Sam costs 2)
-		scn.ShadowChoose("2");
-
-		// Sam should be only valid target (costs 2, within budget)
-		// Auto-selected since only one valid target
-
-		assertEquals(1, scn.GetThreats());  // 3 - 2 = 1
-		assertTrue(scn.IsCharAssignedAgainst(sam, gollum));
-	}
-
-	@Test
-	public void GollumAssignmentLimitedByHighestCompanionCost() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var gollum = scn.GetShadowCard("gollum");
-		var sam = scn.GetFreepsCard("sam");  // Cost 2 - highest companion
-
-		scn.MoveMinionsToTable(gollum);
-		scn.MoveCompanionsToTable(sam);
-		scn.AddThreats(5);  // More threats than highest companion cost
-
-		scn.StartGame();
-		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.FreepsPass();
-
-		assertEquals(5, scn.GetThreats());
-
-		scn.ShadowUseCardAction(gollum);
-
-		// Max should be 2 (Sam's cost), not 5 (threat count)
-		// So max choice should be 2
-		assertEquals(2, scn.ShadowGetChoiceMax());
-	}
-
-	@Test
-	public void GollumAssignmentLimitedByCurrentThreats() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var gollum = scn.GetShadowCard("gollum");
-		var aragorn = scn.GetFreepsCard("aragorn");  // Cost 4 - highest companion
-
-		scn.MoveMinionsToTable(gollum);
-		scn.MoveCompanionsToTable(aragorn);
-		scn.AddThreats(2);  // Fewer threats than highest companion cost
-
-		scn.StartGame();
-		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.FreepsPass();
-
+		// A twilight Nazgul.
+		scn.ShadowPlayCard(nelya);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(gollum));
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(2, scn.GetWoundsOn(gollum));
 		assertEquals(2, scn.GetThreats());
 
-		scn.ShadowUseCardAction(gollum);
+		// The [raider] Nazgul.
+		scn.ShadowPlayCard(khamul);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(gollum));
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(3, scn.GetWoundsOn(gollum));
+		assertEquals(3, scn.GetThreats());
 
-		// Max should be 2 (threat count), not 4 (Aragorn's cost)
-		assertEquals(2, scn.ShadowGetChoiceMax());
+		// Vitality 4 with 3 wounds: exhausted, so he can no longer exert.
+		scn.ShadowPlayCard(witchking);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertEquals(3, scn.GetWoundsOn(gollum));
+		assertEquals(3, scn.GetThreats());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
-	public void GollumCannotAssignToRingBearer() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void NazgulTriggerCanBeDeclined() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gollum = scn.GetShadowCard("gollum");
+		var lemenya = scn.GetShadowCard("lemenya");
+		scn.MoveCardsToHand(lemenya);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(gollum);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		scn.ShadowPlayCard(lemenya);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(gollum));
+		scn.ShadowDeclineOptionalTrigger();
+
+		assertEquals(0, scn.GetWoundsOn(gollum));
+		assertEquals(0, scn.GetThreats());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void AtTheThreatLimitGollumMayStillExertAndNoThreatIsAdded() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gollum = scn.GetShadowCard("gollum");
+		var lemenya = scn.GetShadowCard("lemenya");
+		scn.MoveCardsToHand(lemenya);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(gollum);
+		// Frodo alone: one companion, so one threat is all there can be.
+		scn.AddThreats(1);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		assertEquals(1, scn.GetThreatLimit());
+		assertEquals(1, scn.GetThreats());
+
+		// The exertion is a cost, so the offer is made whether or not a threat can be added.
+		scn.ShadowPlayCard(lemenya);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(gollum));
+		scn.ShadowAcceptOptionalTrigger();
+
+		assertEquals(1, scn.GetWoundsOn(gollum));
+		assertEquals(1, scn.GetThreats());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void AssignmentAbilityRemovesXThreatsToAssignGollumToACompanionCostingXOrLess() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var gollum = scn.GetShadowCard("gollum");
 		var frodo = scn.GetRingBearer();
-		// Only Frodo (RB) as companion target
-
-		scn.MoveMinionsToTable(gollum);
-		scn.AddThreats(3);
+		var merry = scn.GetFreepsCard("merry");
+		var sam = scn.GetFreepsCard("sam");
+		var gimli = scn.GetFreepsCard("gimli");
+		var boromir = scn.GetFreepsCard("boromir");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var silinde = scn.GetFreepsCard("silinde");
+		scn.MoveCompanionsToTable(merry, sam, gimli, boromir, aragorn);
+		scn.MoveAlliesToTable(silinde);
 
 		scn.StartGame();
-		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.SkipToSite(2);
+		scn.AddThreats(5);
+		scn.MoveMinionsToTable(gollum);
 
-		// Even with threats, Frodo is excluded as target
-		// If no valid targets, ability shouldn't work
+		// Not a maneuver ability.
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(gollum));
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		// Site 3 is Silinde's home, where an ally may be assigned to a skirmish.
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		scn.FreepsPass();
+
+		assertEquals(5, scn.GetThreats());
+		assertFalse(scn.IsCharAssigned(gollum));
+		assertTrue(scn.ShadowActionAvailable(gollum));
+		scn.ShadowUseCardAction(gollum);
+		scn.ShadowChoose("2");
+
+		assertEquals(3, scn.GetThreats());
+		// Costing 2 (Sam, who is Ring-bound, and Gimli) or less (Merry). Not Boromir at 3 or Aragorn at
+		// 4, not the Ring-bearer for all that he costs 0, and not an ally costing 2.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(sam, gimli, merry));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(boromir, aragorn, frodo, silinde));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		scn.ShadowChooseCard(sam);
+
+		assertTrue(scn.IsCharAssignedAgainst(sam, gollum));
+		assertFalse(scn.IsCharAssigned(gimli));
+		assertFalse(scn.IsCharAssigned(merry));
+		assertEquals(3, scn.GetThreats());
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+
+		// Nor a skirmish ability: in the skirmish that follows, with threats still there to remove.
+		scn.FreepsPass();
+		scn.ShadowPass();
+		scn.FreepsResolveSkirmish(sam);
+		scn.FreepsPass();
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 		assertFalse(scn.ShadowActionAvailable(gollum));
 	}
 
 	@Test
-	public void GollumAssignmentOffersValidTargetsBasedOnChosenX() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void RemovingFourThreatsReachesACompanionCostingFour() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var gollum = scn.GetShadowCard("gollum");
-		var sam = scn.GetFreepsCard("sam");        // Cost 2
-		var aragorn = scn.GetFreepsCard("aragorn"); // Cost 4
-
-		scn.MoveMinionsToTable(gollum);
-		scn.MoveCompanionsToTable(sam, aragorn);
-		scn.AddThreats(4);
+		var frodo = scn.GetRingBearer();
+		var merry = scn.GetFreepsCard("merry");
+		var sam = scn.GetFreepsCard("sam");
+		var boromir = scn.GetFreepsCard("boromir");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(merry, sam, boromir, aragorn);
 
 		scn.StartGame();
+		scn.AddThreats(4);
+		scn.MoveMinionsToTable(gollum);
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		scn.FreepsPass();
 
+		assertEquals(4, scn.GetThreats());
 		scn.ShadowUseCardAction(gollum);
+		scn.ShadowChoose("4");
 
-		// Choose X = 2
-		scn.ShadowChoose("2");
+		assertEquals(0, scn.GetThreats());
+		assertTrue(scn.ShadowHasCardChoiceAvailable(merry, sam, boromir, aragorn));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(frodo));
+		scn.ShadowChooseCard(aragorn);
 
-		// Sam (cost 2) should be valid, Aragorn (cost 4) should not
-		// So sam is auto-selected
-
-		assertEquals(2, scn.GetThreats());  // 4 - 2 = 2
-		assertTrue(scn.IsCharAssignedAgainst(sam, gollum));
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, gollum));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
 
 	@Test
-	public void GollumAssignmentWithHigherXAllowsMoreTargets() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void WithNoThreatsXIsZeroAndReachesACompanionCostingNothingButNotTheRingBearer() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var gollum = scn.GetShadowCard("gollum");
-		var sam = scn.GetFreepsCard("sam");        // Cost 2
-		var aragorn = scn.GetFreepsCard("aragorn"); // Cost 4
-
-		scn.MoveMinionsToTable(gollum);
-		scn.MoveCompanionsToTable(sam, aragorn);
-		scn.AddThreats(4);
+		var frodo = scn.GetRingBearer();
+		var galadriel = scn.GetFreepsCard("galadriel");
+		var smeagol = scn.GetFreepsCard("smeagol");
+		var sam = scn.GetFreepsCard("sam");
+		scn.MoveCompanionsToTable(galadriel, smeagol, sam);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(gollum);
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 		scn.FreepsPass();
 
+		assertEquals(0, scn.GetThreats());
+		assertTrue(scn.ShadowActionAvailable(gollum));
+		// With no threats X can only be 0, and the game takes it without asking.
 		scn.ShadowUseCardAction(gollum);
 
-		// Choose X = 4
-		scn.ShadowChoose("4");
+		// Frodo costs 0 as well, and Smeagol is Ring-bound: only the Ring-bearer is excepted.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(galadriel, smeagol));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(sam, frodo));
+		scn.ShadowChooseCard(smeagol);
 
-		// Both Sam (cost 2) and Aragorn (cost 4) should be valid
-		assertTrue(scn.ShadowHasCardChoiceAvailable(sam, aragorn));
+		assertEquals(0, scn.GetThreats());
+		assertTrue(scn.IsCharAssignedAgainst(smeagol, gollum));
+		assertFalse(scn.IsCharAssigned(galadriel));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
 
-		scn.ShadowChooseCard(aragorn);
+	@Test
+	public void XCannotBeMoreThanTheThreatsThereAre() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
 
-		assertEquals(0, scn.GetThreats());  // 4 - 4 = 0
-		assertTrue(scn.IsCharAssignedAgainst(aragorn, gollum));
+		var gollum = scn.GetShadowCard("gollum");
+		var merry = scn.GetFreepsCard("merry");
+		var sam = scn.GetFreepsCard("sam");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(merry, sam, aragorn);
+
+		scn.StartGame();
+		scn.AddThreats(2);
+		scn.MoveMinionsToTable(gollum);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPass();
+
+		assertEquals(2, scn.GetThreats());
+		scn.ShadowUseCardAction(gollum);
+
+		// Two threats, so 2 at most: Aragorn at 4 is out of reach.
+		assertEquals(2, scn.ShadowGetChoiceMax());
+		scn.ShadowChoose("2");
+		assertTrue(scn.ShadowHasCardChoiceAvailable(merry, sam));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(aragorn));
+		scn.ShadowChooseCard(merry);
+
+		assertEquals(0, scn.GetThreats());
+		assertTrue(scn.IsCharAssignedAgainst(merry, gollum));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
+
+	@Test
+	public void XMayBeMoreThanTheDearestCompanionCosts() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gollum = scn.GetShadowCard("gollum");
+		var sam = scn.GetFreepsCard("sam");
+		scn.MoveCompanionsToTable(sam);
+
+		scn.StartGame();
+		scn.AddThreats(5);
+		scn.MoveMinionsToTable(gollum);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPass();
+
+		assertEquals(5, scn.GetThreats());
+		scn.ShadowUseCardAction(gollum);
+
+		// Five threats, and nobody costs more than Sam's 2: X may still be anything up to 5.
+		assertEquals(5, scn.ShadowGetChoiceMax());
+		scn.ShadowChoose("3");
+
+		// Three threats go, one more than Sam costs. He is the only companion within reach and is chosen
+		// without asking.
+		assertEquals(2, scn.GetThreats());
+		assertTrue(scn.IsCharAssignedAgainst(sam, gollum));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
+
+	@Test
+	public void XMayBeAnyNumberOfTheThreatsThereAre() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gollum = scn.GetShadowCard("gollum");
+		var sam = scn.GetFreepsCard("sam");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCompanionsToTable(sam, gimli);
+
+		scn.StartGame();
+		scn.AddThreats(5);
+		scn.MoveMinionsToTable(gollum);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPass();
+
+		assertEquals(5, scn.GetThreats());
+		scn.ShadowUseCardAction(gollum);
+
+		// Sam and Gimli both cost 2. "Remove X threats ... costing X or less": X is the player's, up to
+		// the threats there are.
+		assertEquals(5, scn.ShadowGetChoiceMax());
+		scn.ShadowChoose("5");
+		assertTrue(scn.ShadowHasCardChoiceAvailable(sam, gimli));
+		scn.ShadowChooseCard(gimli);
+
+		assertEquals(0, scn.GetThreats());
+		assertTrue(scn.IsCharAssignedAgainst(gimli, gollum));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
+
+	@Test
+	public void NotOfferedWithNoThreatsAndNoCompanionCostingNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gollum = scn.GetShadowCard("gollum");
+		var merry = scn.GetFreepsCard("merry");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(merry, aragorn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(gollum);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPass();
+
+		// X could only be 0, and nobody but the Ring-bearer costs 0: nothing to pay and nothing to do.
+		assertEquals(0, scn.GetThreats());
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(gollum));
+	}
+
+	@Test
+	public void NotOfferedAgainForNothingOnceGollumIsAssigned() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gollum = scn.GetShadowCard("gollum");
+		var galadriel = scn.GetFreepsCard("galadriel");
+		var smeagol = scn.GetFreepsCard("smeagol");
+		scn.MoveCompanionsToTable(galadriel, smeagol);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(gollum);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPass();
+
+		assertTrue(scn.ShadowActionAvailable(gollum));
+		scn.ShadowUseCardAction(gollum);
+		scn.ShadowChooseCard(smeagol);
+		assertTrue(scn.IsCharAssignedAgainst(smeagol, gollum));
+
+		// Galadriel costs 0 and is unassigned, but Gollum is assigned already (an assignment action
+		// needs both unassigned): X could only be 0 and would do nothing.
+		scn.FreepsPass();
+		assertEquals(0, scn.GetThreats());
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(gollum));
+	}
+
+	@Test
+	public void XStartsAtOneWhenNoCompanionButTheRingBearerCostsNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gollum = scn.GetShadowCard("gollum");
+		var merry = scn.GetFreepsCard("merry");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(merry, aragorn);
+
+		scn.StartGame();
+		scn.AddThreats(3);
+		scn.MoveMinionsToTable(gollum);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPass();
+
+		assertEquals(3, scn.GetThreats());
+		assertTrue(scn.ShadowActionAvailable(gollum));
+		scn.ShadowUseCardAction(gollum);
+
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		scn.ShadowChoose("1");
+
+		// Merry is the only companion costing 1 or less who is not the Ring-bearer.
+		assertEquals(2, scn.GetThreats());
+		assertTrue(scn.IsCharAssignedAgainst(merry, gollum));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
+
+	@Test
+	public void WithThreatsAndNobodyWithinReachTheThreatsAreRemovedForNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gollum = scn.GetShadowCard("gollum");
+		var frodo = scn.GetRingBearer();
+
+		scn.StartGame();
+		scn.AddThreats(1);
+		scn.MoveMinionsToTable(gollum);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPass();
+
+		// Frodo is the only companion: there is a threat to pay with and nobody Gollum may be assigned to.
+		assertEquals(1, scn.GetThreats());
+		assertTrue(scn.ShadowActionAvailable(gollum));
+		scn.ShadowUseCardAction(gollum);
+
+		// X is at least 1, since nobody but the Ring-bearer costs 0, and at most the one threat: the only
+		// number there is, so the game takes it without asking.  The threat is paid, and there is nobody to assign.
+		assertEquals(0, scn.GetThreats());
+		assertFalse(scn.IsCharAssigned(gollum));
+		assertFalse(scn.IsCharAssigned(frodo));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
 }

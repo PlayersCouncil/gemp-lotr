@@ -275,7 +275,7 @@
 				cost: {
 					type: discardFromHand
 					forced: false
-					count: any
+					count: anyNonZero
 					memorize: discardedCards
 				}
 				effect: {

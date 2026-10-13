@@ -149,7 +149,7 @@
 	
 	53_50: {
 		cardInfo: {
-			//id: 3_50.3
+			//id: 53_50.3
 			parent: 3_50
 			variant: ERRATA
 			variantPath: errata/pc
@@ -168,7 +168,6 @@
 		effects: [
 			{
 				type: Trigger
-				optional: false
 				optional: false
 				trigger: {
 					type: WinsSkirmish
@@ -273,10 +272,10 @@
 	
 	53_54: {
 		cardInfo: {
-			//id: 3_54.1
+			//id: 53_54.1
 			parent: 3_54
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN03E054.1.jpg
 			collInfo: 3R54
@@ -284,10 +283,11 @@
 		}
 		title: Hollowing of Isengard
 		unique: false
-		culture: isengard
+		side: Shadow
+		culture: Isengard
 		twilight: 2
-		type: condition
-		keyword: support area
+		type: Condition
+		keywords: Support Area
 		effects: [
 			{
 				type: toPlay
@@ -298,7 +298,6 @@
 			}
 			{
 				type: Trigger
-				optional: false
 				trigger: {
 					type: startofphase
 					phase: Shadow
@@ -326,7 +325,7 @@
 				}
 			}
 		]
-		gametext: To play, spot an [isengard] minion.\At the start of your Shadow phase, you may discard an [isengard] card from hand to add (3) (or (5) if that card was an Orc).
+		gametext: To play, spot an [isengard] minion. At the start of your Shadow phase, you may discard an [isengard] card from hand to add (3) (or (5) if that card was an Orc).
 		lore: "'Rip them all down!'"
 		promotext: ""
 		alts: {
@@ -556,10 +555,10 @@
 	
 	53_68: {
 		cardInfo: {
-			//id: 3_68.2
+			//id: 53_68.2
 			parent: 3_68
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 2
 			image: errata/LOTR-EN03E068.1.jpg
 			collInfo: 3R68
@@ -568,9 +567,9 @@
 		title: Saruman
 		subtitle: Keeper of Isengard
 		unique: true
-		side: shadow
+		side: Shadow
 		culture: Isengard
-		type: minion
+		type: Minion
 		race: Wizard
 		twilight: 4
 		strength: 8
@@ -774,16 +773,12 @@
 				}
 				effect: [
 					{
-						type: Optional
-						text: Would you like to put any cards in hand on top of your draw deck?
+						type: PutCardsFromHandOnTopOfDeck
 						player: Free Peoples
-						effect: {
-							type: PutCardsFromHandOnTopOfDeck
-							player: Free Peoples
-							hand: Free Peoples
-							count: any
-							reveal: false
-						}
+						hand: Free Peoples
+						count: any
+						reveal: false
+						text: Choose any number of cards from your hand to place on top of your draw deck (you may choose none). Your hand will then be revealed.
 					}
 					{
 						type: RevealHand
@@ -892,6 +887,11 @@
 			{
 				type: activated
 				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: culture(isengard),orc
+					count: 2
+				}
 				cost: {
 					type: Spot
 					select: choose(inSkirmish,Isengard,orc)

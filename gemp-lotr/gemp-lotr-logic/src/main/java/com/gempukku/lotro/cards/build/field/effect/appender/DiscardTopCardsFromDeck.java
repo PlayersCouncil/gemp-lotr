@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
@@ -27,7 +28,11 @@ public class DiscardTopCardsFromDeck implements EffectAppenderProducer {
 
         final PlayerSource playerSource = PlayerResolver.resolvePlayer(deck);
 
-        return new DelayedAppender() {
+        // Taught for Q-0224 (IdleOffers): nothing is discarded from the top of an empty draw deck (F-0211), nor
+        // (by Q-0231) from a deck this card may not discard from ("Shadow cards may not discard cards ... from the
+        // top of your draw deck", Frodo, Courteous Halfling 4_301): what DiscardTopCardFromDeckEffect itself asks
+        // before it discards.  This is not the optional draw of Q-0029, which stays on offer.
+        return TaughtForecast.teach(new DelayedAppender() {
             @Override
             public boolean isPlayableInFull(ActionContext actionContext) {
                 final String deckId = playerSource.getPlayer(actionContext);
@@ -52,7 +57,15 @@ public class DiscardTopCardsFromDeck implements EffectAppenderProducer {
                     }
                 };
             }
-        };
+        }, actionContext -> {
+            final LotroGame game = actionContext.getGame();
+            final String deckId = playerSource.getPlayer(actionContext);
+            if (game.getGameState().getDeck(deckId).isEmpty())
+                return EffectForecast.NOTHING;
+            if (forced && !game.getModifiersQuerying().canDiscardCardsFromTopOfDeck(game, deckId, actionContext.getSource()))
+                return EffectForecast.NOTHING;
+            return EffectForecast.UNKNOWN;
+        });
     }
 
 }

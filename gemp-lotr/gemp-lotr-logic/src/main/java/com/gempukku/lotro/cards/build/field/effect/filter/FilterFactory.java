@@ -2,9 +2,11 @@ package com.gempukku.lotro.cards.build.field.effect.filter;
 
 import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
+import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filter;
+import com.gempukku.lotro.logic.PlayUtils;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
@@ -28,7 +30,9 @@ public class FilterFactory {
         for (Keyword value : Keyword.values())
             appendFilter(value);
 
-        appendFilter("support", "support", Filters.zone(Zone.SUPPORT));
+        // A "support card": in a support area, which a card borne by a card in one is too (Q-0099).  The zone alone
+        // is zone(support).
+        appendFilter("support", "support", Filters.inSupportArea);
 
         for (PossessionClass value : PossessionClass.values())
             appendFilter(value);
@@ -60,7 +64,8 @@ public class FilterFactory {
                     final PhysicalCard attachedTo = actionContext.getSource().getAttachedTo();
                     return Filters.region(GameUtils.getRegion(attachedTo.getSiteNumber()));
                 });
-        simpleFilters.put("bearer", (actionContext -> Filters.hasAttached(actionContext.getSource())));
+        simpleFilters.put("barredfromarcheryfire", (actionContext) -> Filters.barredFromArcheryFire);
+        simpleFilters.put("bearer", (actionContext -> Filters.bearerOf(actionContext.getSource())));
         simpleFilters.put("canbediscarded", (actionContext -> Filters.canBeDiscarded(actionContext.getPerformingPlayer(), actionContext.getSource())));
         simpleFilters.put("canbereturnedtohand", (actionContext -> Filters.canBeReturnedToHand(actionContext.getSource())));
         simpleFilters.put("canexert", (actionContext -> Filters.canExert(actionContext.getSource())));
@@ -165,7 +170,7 @@ public class FilterFactory {
         simpleFilters.put("oddtwilight", (actionContext) -> Filters.oddPrintedTwilightCost());
         simpleFilters.put("eventwilight", (actionContext) -> Filters.evenPrintedTwilightCost());
         simpleFilters.put("playable", (actionContext) -> Filters.playable(0));
-        simpleFilters.put("playablefromdeadpile", (actionContext) -> Filters.playable(0, 0, false, true, false));
+        simpleFilters.put("playablefromdeadpile", (actionContext) -> Filters.playable(0, 0, actionContext.getUnpaidThreatCost(), false, true, false));
         simpleFilters.put("ringbearer", (actionContext) -> Filters.ringBearer);
         simpleFilters.put("ring-bearer", (actionContext) -> Filters.ringBearer);
         simpleFilters.put("ringbound",
@@ -267,12 +272,32 @@ public class FilterFactory {
                     return (actionContext) -> Filters.isAllyInRegion(number, sitesBlock);
                 });
 
+        // Whether a card's own text could assign the two to each other: what AssignFpCharacterToSkirmish goes on
+        // to ask, with the flags that effect has when its definition names none.  An assignment already made is
+        // not ignored and defender is, whichever player asks: an assignment action assigns only if "both of
+        // them are unassigned" (CR 4.2 "assignment phase"), and defender +X is for the Free Peoples player's own
+        // assigning, which no definition asks about (F-0355).
         parameterFilters.put("assignabletoskirmishagainst",
                 (parameter, environment) -> {
                     final FilterableSource againstFilterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
                     return actionContext -> {
                         final Side side = GameUtils.getSide(actionContext.getGame(), actionContext.getPerformingPlayer());
-                        return Filters.assignableToSkirmishAgainst(side, againstFilterableSource.getFilterable(actionContext));
+                        return Filters.assignableToSkirmishAgainst(side, againstFilterableSource.getFilterable(actionContext), false, true, false);
+                    };
+                });
+        // As "assignableToSkirmishAgainst", asked of an ally as if a card had already made him participate in
+        // skirmishes: where his home is does not count, and everything else that stops an assignment does (a
+        // card that bars him from skirmishes, an assignment he or the other character already has, a card that
+        // says either cannot be assigned).  It is what AssignFpCharacterToSkirmish goes on to ask once an
+        // EnableParticipationInSkirmishes before it has been carried out, so a requirement and a choice written
+        // with it withhold "make that ally participate in skirmishes and assign this minion to skirmish that
+        // ally" when it could assign the minion to nobody, and offer only the allies it could (F-0283).
+        parameterFilters.put("assignabletoskirmishagainstignoringallylocation",
+                (parameter, environment) -> {
+                    final FilterableSource againstFilterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
+                    return actionContext -> {
+                        final Side side = GameUtils.getSide(actionContext.getGame(), actionContext.getPerformingPlayer());
+                        return Filters.assignableToSkirmishAgainst(side, againstFilterableSource.getFilterable(actionContext), false, true, true);
                     };
                 });
         parameterFilters.put("assignedtoskirmish",
@@ -330,17 +355,59 @@ public class FilterFactory {
                 return gameText != null && gameText.toLowerCase().contains(searchText);
             };
         }));
+        // A card that attaches (a possession, an artifact, a condition borne by a character) and could be played
+        // now on some card the inner filter accepts: its own requirements and twilight cost as for "Playable",
+        // and a legal bearer among those cards.  For a card in a hand or a pile, in a requirement that goes
+        // with "PlayCardFromDiscard ... on: <filter>" and the like (F-0140).  What the action will take from the
+        // pool or add in threats before the play is counted as already gone, as PlayCardFromDiscard counts it.
+        parameterFilters.put("playableon",
+                (parameter, environment) -> {
+                    final FilterableSource onSource = environment.getFilterFactory().generateFilter(parameter, environment);
+                    return (actionContext) -> {
+                        final Filterable on = onSource.getFilterable(actionContext);
+                        final int twilightGoneFirst = actionContext.getUnpaidTwilightCost();
+                        final int threatsAddedFirst = actionContext.getUnpaidThreatCost();
+                        final Filter playable = Filters.playable(0, twilightGoneFirst, threatsAddedFirst, false, false, true);
+                        return (Filter) (game, physicalCard) ->
+                                physicalCard.getBlueprint().getValidTargetFilter(physicalCard.getOwner(), game, physicalCard) != null
+                                        && playable.accepts(game, physicalCard)
+                                        && PlayUtils.checkPlayRequirements(game, physicalCard, on, twilightGoneFirst, threatsAddedFirst, 0, false, false, true);
+                    };
+                });
+        // A card in play that a card's effect could transfer now to some card the inner filter accepts: it may
+        // be transferred at all, and one of those cards is an eligible bearer for it other than its own
+        // (Filters.transferableTo).  For the requirement that goes with "Transfer ... where: choose(<filter>),
+        // checkTarget: true", so that the offer is withheld when nothing could move (F-0324).
+        parameterFilters.put("transferableto",
+                (parameter, environment) -> {
+                    final FilterableSource toSource = environment.getFilterFactory().generateFilter(parameter, environment);
+                    return (actionContext) -> Filters.transferableTo(toSource.getFilterable(actionContext));
+                });
         parameterFilters.put("hasattached",
                 (parameter, environment) -> {
                     final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
                     return (actionContext) -> Filters.hasAttached(filterableSource.getFilterable(actionContext));
                 });
+        // hasAttachedCount(3,possession): bearing 3 or more possessions.  A last word override(hindered) has the
+        // count take in hindered cards, as "override: hindered" does on an effect: hasAttachedCount(3,any,
+        // override(hindered)) is "bearing 3 or more cards".  For a count that names nothing but "cards" or a side
+        // (Ketura on Q-0098 and on Lying Counsel 15_85); anything more specific does not see a hindered card.
         parameterFilters.put("hasattachedcount",
                 (parameter, environment) -> {
                     String[] parameterSplit = parameter.split(",", 2);
-                    int count = Integer.parseInt(parameterSplit[0]);
-                    final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameterSplit[1], environment);
-                    return (actionContext) -> Filters.hasAttached(count, filterableSource.getFilterable(actionContext));
+                    int count = Integer.parseInt(parameterSplit[0].trim());
+                    Map<InactiveReason, Boolean> override = SpotOverride.NONE;
+                    List<String> counted = new LinkedList<>();
+                    for (String part : splitIntoFilters(parameterSplit[1])) {
+                        if (part.startsWith("override(") && part.endsWith(")"))
+                            override = FieldUtils.getSpotOverride(part.substring("override(".length(), part.length() - 1).trim(), "override");
+                        else
+                            counted.add(part);
+                    }
+                    final Map<InactiveReason, Boolean> countOverride = override;
+                    final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(
+                            counted.isEmpty() ? "any" : String.join(",", counted), environment);
+                    return (actionContext) -> Filters.hasAttached(count, countOverride, filterableSource.getFilterable(actionContext));
                 });
         parameterFilters.put("hasanyculturetokens", (parameter, environment) -> {
             int count = Integer.parseInt(parameter != null ? parameter : "1");
@@ -733,6 +800,26 @@ public class FilterFactory {
                     throw new InvalidCardDefinitionException("Unknown race definition in filter: " + parameter
                             + ".  Do not use race() for races; instead just list the race by itself.");
                 });
+        // A card that ReplaceCardInPlayWithCardInDiscard can replace: the performing player's discard pile holds a
+        // card that matches the given filter and has this card's title and another subtitle.
+        parameterFilters.put("replaceablefromdiscard",
+                (parameter, environment) -> {
+                    final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
+                    return actionContext -> {
+                        final Filterable replacementFilter = filterableSource.getFilterable(actionContext);
+                        final String playerId = actionContext.getPerformingPlayer();
+                        return (Filter) (game, physicalCard) -> {
+                            var blueprint = physicalCard.getBlueprint();
+                            for (PhysicalCard inDiscard : Filters.filter(game, game.getGameState().getDiscard(playerId), replacementFilter)) {
+                                var other = inDiscard.getBlueprint();
+                                if (Objects.equals(other.getSanitizedTitle(), blueprint.getSanitizedTitle())
+                                        && !Objects.equals(other.getSanitizedSubtitle(), blueprint.getSanitizedSubtitle()))
+                                    return true;
+                            }
+                            return false;
+                        };
+                    };
+                });
         parameterFilters.put("regionnumber",
                 (parameter, environment) -> {
                     int min, max;
@@ -832,6 +919,17 @@ public class FilterFactory {
 
             return (actionContext) -> timeword;
         });
+        // "In <a player's> support area", of a card other than the one whose text it is: lying in that player's
+        // support area or borne, at any depth, by a card that is (Ketura on Q-0101).  support(you),
+        // support(opponent), support(free people), support(shadow), support(owner).  The plain word `support` is
+        // "in a support area", anybody's; zone(support) is the card itself lying in the support zone.
+        parameterFilters.put("support",
+                (parameter, environment) -> {
+                    if (parameter.equals("opponent"))
+                        return actionContext -> Filters.inSupportAreaOfAnOpponentOf(actionContext.getPerformingPlayer());
+                    final PlayerSource whose = PlayerResolver.resolvePlayer(parameter.equals("your") ? "you" : parameter);
+                    return actionContext -> Filters.inSupportAreaOf(whose.getPlayer(actionContext));
+                });
         parameterFilters.put("zone",
                 (parameter, environment) -> {
                     final Zone zone = FieldUtils.getEnum(Zone.class, parameter, "parameter");

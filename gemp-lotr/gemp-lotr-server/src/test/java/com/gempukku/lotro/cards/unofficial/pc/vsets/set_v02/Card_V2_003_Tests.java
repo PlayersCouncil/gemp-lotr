@@ -1,13 +1,16 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
-import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.InitiativeHandSizeModifier;
+import com.gempukku.lotro.logic.modifiers.evaluator.ConstantEvaluator;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_V2_003_Tests
@@ -18,11 +21,15 @@ public class Card_V2_003_Tests
 				new HashMap<>()
 				{{
 					put("reaver", "102_3");
+					put("reaver2", "102_3");
+					// Dunlending Brigand: another [dunland] Man minion, strength 8, no text. The spare copies
+					// fill out hands.
+					put("brigand", "4_10");
+					put("brigand2", "4_10");
+					put("brigand3", "4_10");
+					put("brigand4", "4_10");
 
-					put("card1", "102_4");
-					put("card2", "102_5");
-					put("card3", "102_6");
-					put("card4", "102_7");
+					put("pippin", "1_306");     // Pippin, Friend to Frodo: cost 1, nothing to spot, protects [shire] tales
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +53,7 @@ public class Card_V2_003_Tests
 		 * Vitality: 1
 		 * Site Number: 3
 		 * Game Text: While you have initiative, this minion is strength +3 and damage +1.
-		*/
+		 */
 
 		var scn = GetScenario();
 
@@ -66,44 +73,108 @@ public class Card_V2_003_Tests
 	}
 
 	@Test
-	public void DunlendingReaverNoBonusIfFreepsHasInitiative() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void PlayedWhileTheFreePeoplesPlayerHasFourCardsInHandItHasNoBonus() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var reaver = scn.GetShadowCard("reaver");
 		scn.MoveCardsToHand(reaver);
-
-		scn.FreepsDrawCards(4);
+		// The Shadow player's own hand is the larger, and is not what decides who has initiative.
+		scn.MoveCardsToShadowHand("brigand", "brigand2", "brigand3", "brigand4");
+		scn.MoveCardsToFreepsHand("brigand", "brigand2", "brigand3", "brigand4");
 
 		scn.StartGame();
-		scn.SetTwilight(10);
+		scn.SetTwilight(4);
+		scn.FreepsPass();
 
-		scn.FreepsPassCurrentPhaseAction();
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		// 4 set + 1 companion + 2 for the site
+		assertEquals(7, scn.GetTwilight());
 		assertTrue(scn.ShadowPlayAvailable(reaver));
 
 		scn.ShadowPlayCard(reaver);
+		// 2 to play + 2 roaming: site number 3, played at site 2
+		assertEquals(3, scn.GetTwilight());
+		assertInZone(Zone.SHADOW_CHARACTERS, reaver);
 
+		assertEquals(4, scn.GetFreepsHandCount());
+		assertEquals(4, scn.GetShadowHandCount());
+		assertTrue(scn.FreepsHasInitiative());
 		assertEquals(8, scn.GetStrength(reaver));
 		assertFalse(scn.HasKeyword(reaver, Keyword.DAMAGE));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
-	public void DunlendingReaverIsStrengthPlus3AndDamagePlus1IfShadowHasInitiative() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void IsStrengthPlusThreeAndDamagePlusOneWhileTheFreePeoplesPlayerHasThreeCardsInHand() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var reaver = scn.GetShadowCard("reaver");
-		scn.MoveCardsToHand(reaver);
+		var reaver2 = scn.GetShadowCard("reaver2");
+		var brigand = scn.GetShadowCard("brigand");
+		var pippin = scn.GetFreepsCard("pippin");
+		scn.MoveCardsToFreepsHand("pippin", "brigand", "brigand2", "brigand3");
 
 		scn.StartGame();
-		scn.SetTwilight(10);
+		// The Shadow player's own hand is empty throughout.
+		scn.MoveMinionsToTable(reaver, reaver2, brigand);
 
-		scn.FreepsPassCurrentPhaseAction();
-		assertTrue(scn.ShadowPlayAvailable(reaver));
+		assertEquals(4, scn.GetFreepsHandCount());
+		assertEquals(0, scn.GetShadowHandCount());
+		assertTrue(scn.FreepsHasInitiative());
+		assertEquals(8, scn.GetStrength(reaver));
+		assertEquals(8, scn.GetStrength(reaver2));
+		assertEquals(8, scn.GetStrength(brigand));
+		assertFalse(scn.HasKeyword(reaver, Keyword.DAMAGE));
+		assertFalse(scn.HasKeyword(reaver2, Keyword.DAMAGE));
+		assertFalse(scn.HasKeyword(brigand, Keyword.DAMAGE));
 
-		scn.ShadowPlayCard(reaver);
-
+		// The Free Peoples player plays one of his 4 cards, and the Shadow has initiative.
+		scn.FreepsPlayCard(pippin);
+		assertEquals(3, scn.GetFreepsHandCount());
+		assertTrue(scn.ShadowHasInitiative());
+		// Each copy for itself: 8 + 3 and damage +1, not 8 + 3 + 3 and damage +2.
 		assertEquals(11, scn.GetStrength(reaver));
-		assertTrue(scn.HasKeyword(reaver, Keyword.DAMAGE));
+		assertEquals(11, scn.GetStrength(reaver2));
+		assertEquals(1, scn.GetKeywordCount(reaver, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(reaver2, Keyword.DAMAGE));
+		// The Brigand beside them is another [dunland] Man of strength 8.
+		assertEquals(8, scn.GetStrength(brigand));
+		assertFalse(scn.HasKeyword(brigand, Keyword.DAMAGE));
+
+		// A fourth card in hand gives the Free Peoples player initiative again.
+		scn.MoveCardsToFreepsHand("brigand4");
+		assertEquals(4, scn.GetFreepsHandCount());
+		assertTrue(scn.FreepsHasInitiative());
+		assertEquals(8, scn.GetStrength(reaver));
+		assertEquals(8, scn.GetStrength(reaver2));
+		assertFalse(scn.HasKeyword(reaver, Keyword.DAMAGE));
+		assertFalse(scn.HasKeyword(reaver2, Keyword.DAMAGE));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void HasItsBonusAgainstFourCardsInHandWhenInitiativeTakesFive() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var reaver = scn.GetShadowCard("reaver");
+		scn.MoveCardsToFreepsHand("brigand", "brigand2", "brigand3", "brigand4");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(reaver);
+
+		assertEquals(4, scn.GetFreepsHandCount());
+		assertTrue(scn.FreepsHasInitiative());
+		assertEquals(8, scn.GetStrength(reaver));
+		assertFalse(scn.HasKeyword(reaver, Keyword.DAMAGE));
+
+		// Initiative is made to take one card more, as Streaming to the Field (8_78) and Driven into the Hills
+		// (V2_1) make it. The hand is the same 4 cards and the Shadow now has initiative: the bonus goes by
+		// initiative, not by a count of the cards in hand.
+		scn.ApplyAdHocModifier(new InitiativeHandSizeModifier(null, null, new ConstantEvaluator(1)));
+		assertEquals(4, scn.GetFreepsHandCount());
+		assertTrue(scn.ShadowHasInitiative());
+		assertEquals(11, scn.GetStrength(reaver));
+		assertEquals(1, scn.GetKeywordCount(reaver, Keyword.DAMAGE));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

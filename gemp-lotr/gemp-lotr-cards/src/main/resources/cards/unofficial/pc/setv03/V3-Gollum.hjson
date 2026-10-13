@@ -260,18 +260,28 @@
 					type: CanSpot
 					filter: companion, InSkirmishAgainst(culture(Gollum))
 				}
-				cost: {
-					type: Hinder
-					select: choose(your, culture(Gollum))
-				}
+				cost: [
+					// The companion is spotted before anything is hindered, and is "that companion"
+					// afterwards, though hindering the minion he is fighting ends the skirmish.
+					{
+						type: ChooseActiveCards
+						select: choose(companion, InSkirmishAgainst(culture(Gollum), minion))
+						memorize: spottedCompanion
+						text: Choose a companion skirmishing a {gollum} minion
+					}
+					{
+						type: Hinder
+						select: choose(your, culture(Gollum))
+					}
+				]
 				effect: {
 					type: transfer
 					select: self
-					where: choose(companion, or(InSkirmishAgainst(title(Shelob)), and(InSkirmishAgainst(culture(gollum), minion),Limit1PerBearer)) )
+					where: choose(memory(spottedCompanion), or(InSkirmishAgainst(title(Shelob)), Limit1PerBearer))
 				}
 			}
 		]
-		gametext: At the end of each skirmish involving bearer, make bearer strength -1 until the end of the turn.\Skirmish: Hinder your [gollum] card to transfer this to a companion skirmishing a [Gollum] minion. Limit 1 per bearer unless they are skirmishing Shelob.
+		gametext: At the end of each skirmish involving bearer, make bearer strength -1 until the end of the turn. Skirmish: Spot a companion skirmishing a [Gollum] minion and hinder your [gollum] card to transfer this to that companion. Limit 1 per bearer unless they are skirmishing Shelob.
 		lore: "Never yet had any fly escaped from Shelob's webs, and the greater now was her rage and hunger."
 		promotext: ""
 		alts: {
@@ -313,18 +323,14 @@
 						select: choose(culture(Gollum))
 					}
 					{
-						type: Memorize
-						filter: culture(Gollum), minion
-						memory: gollumMinionsInPlay
-					}
-					{
 						type: Optional
 						text: Would you like to remove a threat to replace your {Gollum} minion with another from your discard pile?
 						requires: [
+							// Replacing from the discard pile is treated as playing from it: a minion that
+							// nothing there could replace is not one that can be spotted for this.
 							{
-								type: HasCardInDiscard
-								ignoreCostCheckFailure: true
-								filter: TitleFromMemory(gollumMinionsInPlay), not(SubtitleFromMemory(gollumMinionsInPlay))
+								type: CanSpot
+								filter: culture(Gollum), minion, ReplaceableFromDiscard(minion)
 							}
 						]
 						cost: [
@@ -334,7 +340,7 @@
 							}
 							{
 								type: ChooseActiveCards
-								select: choose(culture(Gollum), minion)
+								select: choose(culture(Gollum), minion, ReplaceableFromDiscard(minion))
 								memorize: chosenMinion
 								text: Choose a {Gollum} minion to replace
 							}
@@ -343,7 +349,7 @@
 							{
 								type: ReplaceCardInPlayWithCardInDiscard
 								selectInPlay: memory(chosenMinion)
-								selectInDiscard: choose(TitleFromMemory(chosenMinion), not(SubtitleFromMemory(chosenMinion)))
+								selectInDiscard: choose(minion, TitleFromMemory(chosenMinion), not(SubtitleFromMemory(chosenMinion)))
 							}
 						]
 					}

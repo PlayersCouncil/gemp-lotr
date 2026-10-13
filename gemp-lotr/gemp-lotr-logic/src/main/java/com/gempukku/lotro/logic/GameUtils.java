@@ -223,6 +223,21 @@ public class GameUtils {
         return String.join(", ", cardStrings);
     }
 
+    /**
+     * The line the game log carries when a reveal from a hand has no card to show.  Nobody is shown a list of no
+     * cards to dismiss (Ketura on Q-0144): this line is how the players learn that the reveal came to nothing.
+     * @param source The card whose text reveals.
+     * @param handPlayerId The player whose hand it is.
+     * @return "There were no cards in <player>'s hand for <card> to reveal" when the hand is empty; when the hand
+     * holds cards and none of them was revealed (none fitted, none was chosen, the number to reveal was 0),
+     * "<card> revealed no cards from <player>'s hand".
+     */
+    public static String getNoCardsRevealedFromHandMessage(LotroGame game, PhysicalCard source, String handPlayerId) {
+        if (game.getGameState().getHand(handPlayerId).isEmpty())
+            return "There were no cards in " + handPlayerId + "'s hand for " + getCardLink(source) + " to reveal";
+        return getCardLink(source) + " revealed no cards from " + handPlayerId + "'s hand";
+    }
+
     public static String substituteText(String text, ActionContext context)
     {
         String result = text;
@@ -272,6 +287,15 @@ public class GameUtils {
                 }
                 else if (memory.equals("bearer")) {
                     found = GameUtils.getAppendedNames(Collections.singleton(context.getSource().getAttachedTo()));
+                }
+                else if (memory.equals("stored")) {
+                    // What the source card has stored on itself for as long as it stays where it is (a race, a
+                    // culture or a keyword named as it was played), in the words its displayableInformation
+                    // shows.  It is read from the card, so any of the card's texts can name it: an action's
+                    // memory is gone when the action that stored the value ends (F-0307).
+                    var source = context.getSource();
+                    var stored = source != null ? source.getWhileInZoneData() : null;
+                    found = stored != null ? stored.getHumanReadable() : "nothing";
                 }
                 else {
                     found = GameUtils.getAppendedNames(context.getCardsFromMemory(memory));

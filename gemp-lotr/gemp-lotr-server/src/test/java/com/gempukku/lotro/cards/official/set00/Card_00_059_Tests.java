@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_00_059_Tests
@@ -19,7 +20,36 @@ public class Card_00_059_Tests
 				new HashMap<>()
 				{{
 					put("card", "0_59");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetSkirmishScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("erkenbrand", "0_59");
+					put("aldor", "4_262");      // Aldor, Soldier of Edoras: [rohan] Man ally; his archery ability needs a villager
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: the companion in the skirmish, a Man who is not [rohan]
+					put("runner", "1_178");     // Goblin Runner: strength 5, the minion he fights
+					put("scimitar", "1_180");   // Goblin Scimitar: Shadow possession on a [moria] Orc, strength +2
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetNoShadowPossessionScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("erkenbrand", "0_59");
+					put("sword", "1_299");      // Hobbit Sword: a Free Peoples possession, no text but "Bearer must be a Hobbit"
+					put("ambition", "1_133");   // Saruman's Ambition: a Shadow card in play that is a condition
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -62,18 +92,84 @@ public class Card_00_059_Tests
 		assertEquals(5, card.getBlueprint().getResistance());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void ErkenbrandTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void WithARohanManHeIsPlayedDuringASkirmishAsASkirmishEventCouldBe() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetSkirmishScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var erkenbrand = scn.GetFreepsCard("erkenbrand");
+		var aldor = scn.GetFreepsCard("aldor");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var runner = scn.GetShadowCard("runner");
+		var scimitar = scn.GetShadowCard("scimitar");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveAlliesToTable(aldor);
+		scn.MoveCardsToHand(erkenbrand);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(runner);
+		scn.AttachCardsTo(runner, scimitar);
 
+		// In the fellowship phase he may be played as any companion may.  He is left in hand.
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertTrue(scn.FreepsPlayAvailable(erkenbrand));
+
+		// No skirmish event could be played in the maneuver phase, so neither can he.
+		scn.SkipToPhase(Phase.MANEUVER);
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+		assertFalse(scn.FreepsPlayAvailable(erkenbrand));
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, runner);
+		scn.FreepsResolveSkirmish(aragorn);
+
+		// In Aragorn's skirmish, where a skirmish event could be played, Aldor is the [rohan] Man spotted.
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertTrue(scn.FreepsPlayAvailable(erkenbrand));
+		assertInZone(Zone.HAND, erkenbrand);
+		// 2 companions + 2 for Ettenmoors
+		assertEquals(4, scn.GetTwilight());
+
+		scn.FreepsPlayCard(erkenbrand);
+		// He joins the fellowship, not the skirmish, for his cost of 3.
+		assertInZone(Zone.FREE_CHARACTERS, erkenbrand);
+		assertFalse(scn.IsCharSkirmishing(erkenbrand));
+		assertTrue(scn.IsCharSkirmishingAgainst(aragorn, runner));
+		assertEquals(7, scn.GetTwilight());
+
+		// "When you play Erkenbrand" answers this play as it would one in the fellowship phase.  Declined, the
+		// Scimitar stays where it is and the skirmish goes on with the Shadow player's action.
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(erkenbrand));
+		scn.FreepsDeclineOptionalTrigger();
+		assertAttachedTo(scimitar, runner);
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
+	// Ketura on Q-0034: an optional trigger with no cost whose whole effect would do nothing is not offered.
+	// The offer made, with a Shadow possession in play, is read in the test above.
+	@Test
+	public void WithNoShadowPossessionInPlayHisDiscardIsNotOffered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetNoShadowPossessionScenario();
+
+		var erkenbrand = scn.GetFreepsCard("erkenbrand");
+		var frodo = scn.GetRingBearer();
+		var sword = scn.GetFreepsCard("sword");
+		var ambition = scn.GetShadowCard("ambition");
+		scn.MoveCardsToHand(erkenbrand);
+		// A possession that is not a Shadow card, and a Shadow card that is no possession.
+		scn.AttachCardsTo(frodo, sword);
+		scn.MoveCardsToSupportArea(ambition);
+
+		scn.StartGame();
+
+		assertEquals(0, scn.GetTwilight());
+		assertTrue(scn.FreepsPlayAvailable(erkenbrand));
+
+		scn.FreepsPlayCard(erkenbrand);
+		assertInZone(Zone.FREE_CHARACTERS, erkenbrand);
 		assertEquals(3, scn.GetTwilight());
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertAttachedTo(sword, frodo);
+		assertInZone(Zone.SUPPORT, ambition);
 	}
 }

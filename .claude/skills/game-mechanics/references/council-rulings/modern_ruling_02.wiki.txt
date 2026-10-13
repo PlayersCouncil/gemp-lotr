@@ -1,0 +1,109 @@
+{{CardSplashImage|Merry, Of Buckland}}
+'''Status: Discussion (2025-04-13)'''
+= Exhaust as a Cost =
+
+__TOC__
+
+Throughout the Decipher cardbase, "exhaust" is used as a verb meaning to exert a character as many times as possible, leaving them with 1 vitality (a.k.a. "exhausted").  However, "exhaust" is never used as a cost, only an effect.  As an effect, it is covered by the standard "do as much as you can and ignore the rest" concept, meaning that if you attempt to exhaust an already-exhausted minion, you shrug and do nothing.
+
+{{Card|Merry, Of Buckland}} first introduced definitive exhausting as a cost in PC cards in set V1, and it will continue to be a useful set of verbiage if the details can be hammered out. Merry reads:
+
+{{CardText|Merry, Of Buckland}}
+
+In Merry's case, the target minion can only prevent Merry's text if they successfully exhaust, which begs the question of whether they are capable of doing so if they are already exhausted.
+
+There are further use cases for cards in the future.  For example, consider a card that says:
+
+  Exhaust Gandalf to draw 3 cards.
+
+Depending on the board state, this could be taken to be a variable cost that applies anywhere from 0-6 exertions in one go.  Does exerting Gandalf once qualify as an "exhaustion"?  Does he fulfill the cost if he is already exhausted?
+
+The main questions to be hammered out relating to using "exhaust" as a cost are:
+
+* Can you successfully "exhaust" an already exhausted character?
+* If you can, does it count as fulfilling an explicit "exhaust" cost?
+* Can (or should) a single exertion on a character fulfill an "exhaust" cost?
+
+== Rules References ==
+
+Exhaust is defined like so:
+
+{{Quote|title=exhausted|text=
+To exhaust a character means to exert that character as many times as you can.<br><br>
+''If a card tells you to exhaust a character with a vitality of 3, then you must exert that character 2 times by placing 2 wound tokens.''
+
+}}
+
+There is also:
+
+{{Quote|title=exhausted|text=
+No player may exert a character who is exhausted. If the effect of an action says a character "must exert" and that character is exhausted, then nothing happens. 
+
+}}
+
+"Nothing happens" here could be read to mean that the exhaustion fails to be fulfilled as a cost, or it could refer to how no wound tokens are applied.
+
+The "exert" section includes:
+
+{{Quote|title=exhausted|text=
+If the cost of an action requires a character to exert X times, then that character must have X+1 or more vitality or that action cannot be performed. A character cannot exert 0 times to pay the cost of a card that requires a character to exert X times.<br><br> 
+''You cannot pay for the cost of {{Card|They Sang as They Slew}} by exerting a character zero times.''
+
+}}
+
+The above is useful but not conclusive; as "exhaust" is defined as exerting "as many times as you can", it's hard to say if this "requires a character to exert X times"; it could after all just require that the applicable minion exert 0 times.  
+
+
+== Other Cards ==
+
+{{Card|Terrible and Evil}} was ruled that:
+
+{{Quote|text=If Gandalf is exhausted, he cannot exert to pay the cost of this card, even if X is equal to zero. }}
+
+Which is in truth just confirming that the "X cannot be 0" rule applies in this case.  (That rule was included all the way back in the Comprehensive Rules 2.0, predating T&E).
+
+{{Card|Elessar's Edict}} originally read:
+
+{{CardText|Elessar's Edict}}
+
+This was altered to:
+
+  If a {{CI|Gondor}} Wraith is about to be killed, discard him and either exhaust another {{CI|Gondor}} Wraith or spot another exhausted {{CI|Gondor}} Wraith to prevent that. 
+
+So in this case, Decipher sidestepped the decision (and once again sidestepped "instead", which we will get to eventually), preferring to expand the wording to have 2 explicit success states.
+
+
+== Gemp ==
+Gemp currently treats exhausting as always succeeding so long as the target is an active card (it doesn't even check to confirm the target is a ''character'', you can "successfully exhaust" a ''site'' if you want).
+
+Thus, the V1 Merry using his ability on an already-exhausted character will always automatically fail.
+
+
+
+== The Question ==
+
+* A: An already-exhausted character cannot be exhausted again to pay an exhaust cost.
+** V1 Merry is thus unblockable if the target is exhausted
+* B: An already-exhausted character automatically fulfills the cost of any exhaust cost.
+** V1 Merry's behavior stays the same as it is now
+* C: A character may ''only'' exhaust as a cost if they are already at full health.
+** A Balrog with 1 wound would be unable to prevent V1 Merry's ability.
+
+
+== 11-27-25 Decision ==
+
+The modern rules team has unanimously decided that option A will be what is used going forward, and that an exhausted character cannot be exhausted again to pay a cost. The following entries will be added to the Comprehensive Rulebook 5.0 under rules 2.28 (costs) and 2.44 respectively. 
+
+{{Quote|title=costs|text=
+If you would exhaust a character in order to pay a cost, you may not attempt to exhaust an already exhausted character in order to pay that cost. <br/>
+ {{Card|Merry, Of Buckland}} says "'''Assignment''': Exert Merry twice to prevent a minion from being assigned to a skirmish until the regroup phase. The Shadow player may exhaust that minion to prevent this." His ability is used on an already exhausted {{Card|Orc Slaughterer}}. That minion is already exhausted and thus cannot exhaust to prevent Merry's ability.
+}}
+
+{{Quote|title=exhausted|text=
+A character who is already exhausted cannot exhaust in order to pay a cost. 
+}}
+
+----
+
+
+{{Rules_Table}}

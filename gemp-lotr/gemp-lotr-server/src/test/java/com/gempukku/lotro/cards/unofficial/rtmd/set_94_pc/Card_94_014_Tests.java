@@ -11,13 +11,11 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class Card_94_014_Tests {
-
-	private final HashMap<String, String> cards = new HashMap<>() {{
-	}};
-
+public class Card_94_014_Tests
+{
 	protected VirtualTableScenario GetShadowScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>(),
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -26,7 +24,8 @@ public class Card_94_014_Tests {
 	}
 
 	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>(),
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -40,6 +39,7 @@ public class Card_94_014_Tests {
 		 * Set: RTMD 94
 		 * Name: Race Text 94_14
 		 * Type: MetaSite
+		 * Intensity: 1
 		 * Game Text: Shadow: Remove 3 threats to add a burden.
 		 */
 
@@ -60,6 +60,7 @@ public class Card_94_014_Tests {
 		scn.SkipToPhase(Phase.SHADOW);
 
 		int b = scn.GetBurdens();
+		assertEquals(0, b);
 		assertEquals(3, scn.GetThreats());
 		assertTrue(scn.ShadowActionAvailable(mod));
 
@@ -79,7 +80,9 @@ public class Card_94_014_Tests {
 		scn.AddThreats(2);
 		scn.SkipToPhase(Phase.SHADOW);
 
+		assertEquals(2, scn.GetThreats());
 		assertFalse(scn.ShadowActionAvailable(mod));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
@@ -98,14 +101,15 @@ public class Card_94_014_Tests {
 		scn.AddThreats(3);
 		scn.SkipToPhase(Phase.SHADOW);
 
-		// The owner (Freeps-active this turn) is not asked anything during the Shadow phase...
-		assertFalse(scn.FreepsActionAvailable(mod));
-		// ...but the non-owner, currently playing the Shadow role, is.
+		// The non-owner, currently playing the Shadow role, is offered it.
 		assertTrue(scn.ShadowActionAvailable(mod));
 
 		int b = scn.GetBurdens();
+		assertEquals(0, b);
+		assertEquals(3, scn.GetThreats());
 		scn.ShadowUseCardAction(mod);
 		assertEquals(0, scn.GetThreats());
 		assertEquals(b + 1, scn.GetBurdens());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

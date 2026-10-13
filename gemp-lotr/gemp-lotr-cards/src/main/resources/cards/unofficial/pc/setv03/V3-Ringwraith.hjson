@@ -126,22 +126,14 @@
 					type: Exerted
 					filter: companion
 				}
-				requires: {
-					type: perPhaseLimit
-					phase: regroup
-					limit: 1
+				// "Limit once per site" is once for each site in a turn (Q-0084): the engine's count, cleared when
+				// the fellowship moves and at the end of the turn (F-0146). Two companions exerting at once draw
+				// one card: the second trigger is dropped once the first has used the limit (F-0145).
+				limitPerSite: 1
+				effect: {
+					type: DrawCards
+					count: 1
 				}
-				effect: [
-					{
-						type: incrementPerPhaseLimit
-						phase: regroup
-						limit: 1
-					}
-					{
-						type: DrawCards
-						count: 1
-					}
-				]
 			}
 			{
 				type: Response
@@ -225,6 +217,14 @@
 						amount: 1
 					}
 					{
+						type: Hinder
+						select: self
+					}
+				]
+				// What follows "to" is effect, the two spots included: with no unbound companion to spot the ability is
+				// still offered, and hinders every character but the minion (Q-0085).
+				effect: [
+					{
 						type: Spot
 						select: choose(culture(Ringwraith), minion)
 						memorize: chosenMinion
@@ -236,13 +236,9 @@
 					}
 					{
 						type: Hinder
-						select: self
+						select: all(character,not(or(memory(chosenMinion),memory(chosenComp) )))
 					}
 				]
-				effect: {
-					type: Hinder
-					select: all(not(or(memory(chosenMinion),memory(chosenComp) )))
-				}
 			}
 		]
 		gametext: Twilight.<br>To play, hinder 2 twilight conditions.<br>Assignment: Spot 3 [ringwraith] minions, remove a burden, and hinder this condition to spot a [ringwraith] minion and an unbound companion.  Hinder all other characters.
@@ -524,19 +520,35 @@
 			{
 				type: Activated
 				phase: Assignment
+				// X is the player's, up to the threats there are (Q-0087). X of zero is on offer only where it does
+				// something: where a companion costing 0 who is not the Ring-bearer can be assigned to Gollum (F-0132).
+				requires: {
+					type: Or
+					requires: [
+						{
+							type: CanSpotThreats
+							amount: 1
+						}
+						{
+							type: CanSpot
+							filter: companion, MaxTwilight(0), not(ring-bearer), AssignableToSkirmishAgainst(self)
+						}
+					]
+				}
 				cost: {
 					type: ChooseANumber
 					text: Choose how many threats to remove
-					from: 0
+					from: {
+						type: Conditional
+						requires: {
+							type: CanSpot
+							filter: companion, MaxTwilight(0), not(ring-bearer), AssignableToSkirmishAgainst(self)
+						}
+						true: 0
+						false: 1
+					}
 					to: {
-						type: Min
-						firstNumber: {
-							type: ForEachThreat
-						}
-						secondNumber: {
-							type: ForEachTwilightCost
-							filter: HighestTwilight(companion)
-						}
+						type: ForEachThreat
 					}
 					memorize: removedThreats
 				}
@@ -661,12 +673,24 @@
 					filter: Nazgul
 					player: you
 				}
-				requires: {
-					type: playedCardThisPhase
-					filter: Nazgul
-					min: 2
-					max: 2
-				}
+				requires: [
+					// "Each Shadow phase": a second Nazgul played in another phase is not answered (F-0130).
+					{
+						type: Phase
+						phase: Shadow
+					}
+					{
+						type: playedCardThisPhase
+						filter: Nazgul
+						min: 2
+						max: 2
+					}
+					// No cost, so not offered with nobody to hinder (Q-0034, F-0134).
+					{
+						type: CanSpot
+						filter: wounded,companion
+					}
+				]
 				effect: [
 					{
 						type: ChooseActiveCards
@@ -684,9 +708,10 @@
 							type: preventable
 							text: Would you like to wound another companion to prevent hindering {chosenComp}?
 							player: freeps
+							// "Make you wound": the Free Peoples player decides whether, and you choose whom (Q-0088).
 							cost: {
 								type: Wound
-								player: freeps
+								player: owner
 								select: choose(not(memory(chosenComp)),companion)
 							}
 							effect: {
@@ -698,9 +723,10 @@
 							type: preventable
 							text: Would you like to exert another companion to prevent hindering {chosenComp}?
 							player: freeps
+							// "Make you exert": the Free Peoples player decides whether, and you choose whom (Q-0088).
 							cost: {
 								type: Exert
-								player: freeps
+								player: owner
 								select: choose(not(memory(chosenComp)),companion)
 							}
 							effect: {
@@ -824,12 +850,24 @@
 					player: you
 					filter: ringwraith,orc
 				}
-				requires: {
-					type: playedCardThisPhase
-					filter: ringwraith,orc
-					min: 2
-					max: 2
-				}
+				requires: [
+					// "each Shadow phase": a second Orc played in another phase is not answered (F-0130).
+					{
+						type: Phase
+						phase: Shadow
+					}
+					{
+						type: playedCardThisPhase
+						filter: ringwraith,orc
+						min: 2
+						max: 2
+					}
+					// No cost, so not offered with nothing to hinder (Q-0034, F-0129).
+					{
+						type: CanSpot
+						filter: side(freeps),possession
+					}
+				]
 				effect: {
 					type: Hinder
 					select: choose(side(freeps),possession)
@@ -838,6 +876,12 @@
 			{
 				type: Activated
 				phase: Shadow
+				// A play from the discard pile is treated as a cost: with nothing there that can be played on a
+				// [ringwraith] Orc the ability is not offered (Q-0086).
+				requires: {
+					type: HasCardInDiscard
+					filter: possession,PlayableOn(ringwraith,orc)
+				}
 				cost: {
 					type: Spot
 					filter: Nazgul
@@ -1084,7 +1128,6 @@
 				}
 				cost: {
 					type: Exert
-					ignoreCostCheckFailure: true
 					select: memory(winner)
 				}
 				effect: [
@@ -1105,7 +1148,7 @@
 						}
 						effect: {
 							type: Wound
-							select: memory(loser)
+							select: choose(memory(loser),companion)
 						}
 					}
 				]
@@ -1161,7 +1204,7 @@
 				}
 				effect: {
 					type: PlayCardFromDiscard
-					select: choose(minion, PrintedTwilightCostFromMemory(playedMinion))
+					select: choose(minion, PrintedTwilightCostFromMemory(playedMinion), not(memory(playedMinion)))
 				}
 			}
 			{
@@ -1319,7 +1362,7 @@
 				]
 			}
 		]
-		gametext: Fierce. Relentless. <i>(This minion participates in 1 extra round of skirmishes after fierce.)</i><br>At the start of each skirmish involving Ulaire Enquea and a wounded character, you may exert him to heal that character and exert a companion.
+		gametext: Fierce. Relentless. <i>(This minion participates in 1 extra round of skirmishes after fierce.)</i><br>At the start of each skirmish involving Ulaire Enquea and a wounded companion or ally, you may exert him to heal that character and exert a companion.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -1567,21 +1610,21 @@
 				effect: {
 					type: ModifyStrength
 					select: choose(Nazgul)
+					// The limit is the card's for the whole skirmish phase, over all its uses and whichever Nazgul is chosen (F-0135).
 					amount: {
-						type: Conditional
-						requires: {
-							type: CanSpot
-							filter: another,Nazgul
+						type: CardPhaseLimit
+						limit: {
+							type: Conditional
+							requires: {
+								type: CanSpot
+								filter: another,Nazgul
+							}
+							true: 5
+							false: 2
 						}
-						true: {
+						amount: {
 							type: ForEachYouCanSpot
 							filter: your,site,Zone(ADVENTURE PATH)
-							limit: 5
-						}
-						false: {
-							type: ForEachYouCanSpot
-							filter: your,site,Zone(ADVENTURE PATH)
-							limit: 2
 						}
 					}
 				}
@@ -1631,13 +1674,43 @@
 					player: you
 					memorize: playedMinion
 				}
+				// A play from the discard pile is a cost (Q-0062), and the plays below sit inside an If where the
+				// engine does not gate the action: so the offer is made only when something there can be played
+				// on the minion that was played (F-0140).  An artifact counts only if this minion can exert
+				// once the minion played has: twice over when the minion played is this one.
 				requires: {
-					type: HasCardInDiscard
-					filter: side(shadow),item,Playable	
+					type: Or
+					requires: [
+						{
+							type: HasCardInDiscard
+							filter: side(shadow),possession,PlayableOn(memory(playedMinion))
+						}
+						{
+							type: And
+							requires: [
+								{
+									type: HasCardInDiscard
+									filter: side(shadow),artifact,PlayableOn(memory(playedMinion))
+								}
+								{
+									type: Or
+									requires: [
+										{
+											type: CanSpot
+											filter: self,not(memory(playedMinion)),CanExert
+										}
+										{
+											type: CanSpot
+											filter: self,memory(playedMinion),CanExert,MinVitality(3)
+										}
+									]
+								}
+							]
+						}
+					]
 				}
 				cost: {
 					type: Exert
-					ignoreCostCheckFailure: true
 					select: memory(playedMinion)
 				}
 				effect: [
@@ -1645,17 +1718,23 @@
 						type: If
 						check: {
 							type: HasCardInDiscard
-							filter: side(shadow),possession,Playable
+							filter: side(shadow),possession,PlayableOn(memory(playedMinion))
 						}
 						true: {
-							// Has possession - check if also has artifact
+							// A possession can be played: can an artifact as well?
 							type: If
-							check: {
-								type: HasCardInDiscard
-								filter: side(shadow),artifact,Playable
-							}
+							check: [
+								{
+									type: HasCardInDiscard
+									filter: side(shadow),artifact,PlayableOn(memory(playedMinion))
+								}
+								{
+									type: CanSpot
+									filter: self,CanExert
+								}
+							]
 							true: {
-								// Both available - real choice
+								// Both can: the player chooses (Ketura on Q-0089)
 								type: Choice
 								texts: [
 									Play a possession from discard on {playedMinion}
@@ -1682,16 +1761,15 @@
 								]
 							}
 							false: {
-								// Only possession - just play it
+								// Only a possession
 								type: PlayCardFromDiscard
 								select: choose(side(shadow),possession)
 								on: memory(playedMinion)
 							}
 						}
 						false: {
-							// No possession, only artifact (requires already verified an item exists)
-							type: Optional
-							text: Would you like to exert {self} to play an artifact from discard?
+							// Only an artifact: taking the offer was taking this, so nothing more is asked (Q-0090)
+							type: CostToEffect
 							cost: {
 								type: Exert
 								select: self
@@ -1706,7 +1784,7 @@
 				]
 			}
 		]
-		gametext: Fierce.<br>Each time you play a minion, you may exert it to play a possession on it from your discard pile (or an artifact if you exert this minion as well).
+		gametext: Fierce.<br>Each time you play a minion, you may exert it to play a possession on it from your discard pile (or an artifact if you also exert this minion).
 		lore: "'And they skin the body off you as soon as look at you, and leave you all cold in the dark on the other side.'"
 		promotext: ""
 		alts: {
@@ -1826,6 +1904,8 @@
 				effect: {
 					type: PlayCardFromDiscard
 					select: choose(side(shadow),condition)
+					// The (1) this trigger's cost removes is not there to pay for the condition (F-0046, F-0141).
+					removedTwilight: 1
 					memorize: chosenCondition
 					extraEffects: {
 						type: If
@@ -1998,7 +2078,7 @@
 					memorizeAssigned: comp
 				}
 				requires: {
-					type: IsNotEqual
+					type: IsLessThan
 					firstNumber: {
 						type: ForEachStrength
 						filter: self
@@ -2008,71 +2088,73 @@
 						filter: memory(comp)
 					}
 				}
-				effect: [
-					{
-						type: If
-						check: {
-							type: IsLessThan
-							firstNumber: {
-								type: ForEachStrength
-								filter: self
+				cost: {
+					type: Exhaust
+					select: self
+				}
+				effect: {
+					type: Hinder
+					select: memory(comp)
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: AssignedAgainst
+					filter: companion
+					against: self
+					memorizeAssigned: comp
+				}
+				requires: {
+					type: IsGreaterThan
+					firstNumber: {
+						type: ForEachStrength
+						filter: self
+					}
+					secondNumber: {
+						type: ForEachStrength
+						filter: memory(comp)
+					}
+				}
+				cost: {
+					type: Exert
+					select: self
+				}
+				effect: {
+					// The question is not put when neither branch can do anything (F-0116, F-0142).
+					type: If
+					check: {
+						type: Or
+						requires: [
+							{
+								type: CanSpot
+								filter: memory(comp),not(exhausted)
 							}
-							secondNumber: {
-								type: ForEachStrength
-								filter: memory(comp)
+							{
+								type: ThreatsRemaining
+								amount: 1
 							}
-						}
-						true: {
-							type: CostToEffect
-							cost: {
-								type: Exhaust
-								select: self
-							}
-							effect: {
-								type: Hinder
+						]
+					}
+					true: {
+						type: Choice
+						texts: [
+							Exert that companion
+							Add a threat
+						]
+						effects: [
+							{
+								type: Exert
 								select: memory(comp)
 							}
-						}
+							{
+								type: AddThreats
+								amount: 1
+							}
+						]
 					}
-					{
-						type: If
-						check: {
-							type: IsGreaterThan
-							firstNumber: {
-								type: ForEachStrength
-								filter: self
-							}
-							secondNumber: {
-								type: ForEachStrength
-								filter: memory(comp)
-							}
-						}
-						true: {
-							type: CostToEffect
-							cost: {
-								type: Exert
-								select: self
-							}
-							effect: {
-								type: Choice
-								texts: [
-									Exert that companion
-									Add a threat
-								]
-								effects: [
-									{
-										type: Exert
-										select: memory(comp)
-									}
-									{
-										type: AddThreats
-										amount: 1
-									}
-								]
-							}
-						}
-					}
-				]
+				}
 			}
 		]
 		gametext: Fierce.<br>Each time this minion is assigned to a stronger companion, you may exhaust this minion to hinder that companion.<br>Each time this minion is assigned to a weaker companion, you may exert this minion to exert that companion or add a threat.

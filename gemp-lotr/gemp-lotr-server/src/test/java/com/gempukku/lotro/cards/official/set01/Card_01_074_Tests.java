@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_01_074_Tests
@@ -19,7 +20,24 @@ public class Card_01_074_Tests
 				new HashMap<>()
 				{{
 					put("card", "1_74");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetPipeScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("pipe", "1_74");
+					put("gandalf", "1_72");         // Gandalf, Friend of the Shirefolk
+					put("aragorn", "1_89");         // Aragorn, Ranger of the North: bears the second pipe
+					put("aragornspipe", "1_91");    // Aragorn's Pipe: a pipe of another culture, on a [gondor] companion
+					put("toby", "1_305");           // Old Toby: [shire] pipeweed possession, support area
+					put("leaf", "1_300");           // Longbottom Leaf: [shire] pipeweed possession, support area
+					put("book", "2_113");           // Red Book of Westmarch: a [shire] possession in the support area that is no pipeweed
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -56,18 +74,45 @@ public class Card_01_074_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GandalfsPipeTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void DiscardsAPipeweedAndSpotsXPipesToRemoveXBurdens() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetPipeScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var pipe = scn.GetFreepsCard("pipe");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var aragornspipe = scn.GetFreepsCard("aragornspipe");
+		var toby = scn.GetFreepsCard("toby");
+		var leaf = scn.GetFreepsCard("leaf");
+		var book = scn.GetFreepsCard("book");
+		scn.MoveCompanionsToTable(gandalf, aragorn);
+		scn.AttachCardsTo(gandalf, pipe);
+		scn.AttachCardsTo(aragorn, aragornspipe);
+		scn.MoveCardsToSupportArea(toby, leaf, book);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// Three burdens and two pipes: "X burdens" is neither every burden nor one.
+		scn.AddBurdens(3);
 
-		assertEquals(0, scn.GetTwilight());
+		assertEquals(3, scn.GetBurdens());
+		assertTrue(scn.FreepsActionAvailable(pipe));
+
+		scn.FreepsUseCardAction(pipe);
+		// The pipeweed to discard: either pipeweed, and no other possession.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(toby, leaf));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(book, pipe, aragornspipe));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+
+		scn.FreepsChooseCard(leaf);
+		assertInZone(Zone.DISCARD, leaf);
+		assertInZone(Zone.SUPPORT, toby, book);
+
+		// X may be as many as the two pipes in play.
+		assertEquals(2, scn.FreepsGetChoiceMax());
+		scn.FreepsChoose("2");
+		assertEquals(1, scn.GetBurdens());
+		assertAttachedTo(pipe, gandalf);
+		assertAttachedTo(aragornspipe, aragorn);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

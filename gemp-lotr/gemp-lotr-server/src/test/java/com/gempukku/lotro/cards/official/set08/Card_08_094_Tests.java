@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_08_094_Tests
@@ -19,6 +20,26 @@ public class Card_08_094_Tests
 				{{
 					put("card", "8_94");
 					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetThreatScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// The first is cheated into play: the [sauron] Orc to spot, and the other besieger
+					put("agitator1", "8_94");
+					put("agitator2", "8_94");
+					put("agitator3", "8_94");
+					// Dwarf Guard: a companion with no text once in play
+					put("guard1", "1_7");
+					put("guard2", "1_7");
+					put("guard3", "1_7");
+					put("guard4", "1_7");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -60,6 +81,44 @@ public class Card_08_094_Tests
 		assertEquals(9, card.getBlueprint().getStrength());
 		assertEquals(2, card.getBlueprint().getVitality());
 		assertEquals(5, card.getBlueprint().getSiteNumber());
+	}
+
+	// Ketura on Q-0034: an optional action with no cost that would do nothing is not offered.  "A threat for each
+	// companion over 4" is no threat with four companions.
+	@Test
+	public void TheThreatsAreOfferedWithFiveCompanionsAndNotWithFour() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetThreatScenario();
+
+		var frodo = scn.GetRingBearer();
+		var guard4 = scn.GetFreepsCard("guard4");
+		scn.MoveCompanionsToTable(scn.GetFreepsCard("guard1"), scn.GetFreepsCard("guard2"), scn.GetFreepsCard("guard3"));
+
+		var agitator1 = scn.GetShadowCard("agitator1");
+		var agitator2 = scn.GetShadowCard("agitator2");
+		var agitator3 = scn.GetShadowCard("agitator3");
+		scn.MoveCardsToHand(agitator2, agitator3);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(agitator1);
+		scn.SetTwilight(20);
+		scn.FreepsPass();
+
+		// Frodo and three Dwarf Guards; another besieger is there to spot.
+		assertInZone(Zone.FREE_CHARACTERS, frodo);
+		scn.ShadowPlayCard(agitator2);
+		assertInZone(Zone.SHADOW_CHARACTERS, agitator2);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(agitator2));
+		assertEquals(0, scn.GetThreats());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		// A fifth companion: one over 4.
+		scn.MoveCompanionsToTable(guard4);
+		scn.ShadowRefreshDecision();
+		scn.ShadowPlayCard(agitator3);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(agitator3));
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(1, scn.GetThreats());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

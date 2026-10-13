@@ -126,22 +126,14 @@
 					type: Exerted
 					filter: companion
 				}
-				requires: {
-					type: perPhaseLimit
-					phase: regroup
-					limit: 1
+				// "Limit once per site" is once for each site in a turn (Q-0084): the engine's count, cleared when
+				// the fellowship moves and at the end of the turn (F-0146). Two companions exerting at once draw
+				// one card: the second trigger is dropped once the first has used the limit (F-0145).
+				limitPerSite: 1
+				effect: {
+					type: DrawCards
+					count: 1
 				}
-				effect: [
-					{
-						type: incrementPerPhaseLimit
-						phase: regroup
-						limit: 1
-					}
-					{
-						type: DrawCards
-						count: 1
-					}
-				]
 			}
 			{
 				type: Response
@@ -228,7 +220,9 @@
 				]
 				effect: {
 					type: Discard
-					select: choose(side(Free Peoples), AttachedTo(InSkirmishAgainst(memory(exertedTroll))))
+					select: choose(side(Free Peoples), AttachedTo(companion,InSkirmishAgainst(memory(exertedTroll))))
+					// "A Free Peoples card" may be a hindered one (Q-0098, CR 5.0 "hinder").
+					override: hindered
 				}
 			}
 		]
@@ -761,9 +755,22 @@
 				cost: {
 					type: Hinder
 					select: choose(your, hinderable, side(Shadow), support)
+					// X is at least as many as bring Sauron within the pool, from hand or from the discard
+					// pile: playing him is a cost, and an X that plays nothing is not one to name (F-0067).
 					count: {
 						type: Range
-						from: 0
+						from: {
+							type: LeastDiscountToPlay
+							fromZone: [
+								HAND
+								DISCARD
+							]
+							filter: name(Sauron)
+							max: {
+								type: ForEachYouCanSpot
+								filter: your, hinderable, side(Shadow), support
+							}
+						}
 						to: {
 							type: ForEachYouCanSpot
 							filter: your, hinderable, side(Shadow), support
@@ -1125,7 +1132,7 @@
 								text: Would you like to play {chosenCondition}?
 								effect: {
 									type: PlayCardFromDiscard
-									select: choose(side(Shadow), condition)
+									select: choose(memory(chosenCondition))
 									memorize: chosenCondition
 								}
 							}
@@ -1203,7 +1210,7 @@
 				}
 				effect: {
 					type: Hinder
-					select: choose(or(weapon, condition), AttachedTo(InSkirmishAgainst(self)))
+					select: choose(or(weapon, condition), AttachedTo(companion, InSkirmishAgainst(self)))
 				}
 			}
 		]
@@ -1463,12 +1470,12 @@
 				effect: [
 					{
 						type: Hinder
-						select: all(side(Free Peoples), or(support,AttachedTo(support)))
+						select: all(side(Free Peoples), support)
 						memorize: hinderedCards
 					}
 					{
 						type: Hinder
-						select: choose(side(Shadow), or(support,AttachedTo(support)))
+						select: choose(side(Shadow), support)
 						count: {
 							type: ForEachInMemory
 							memory: hinderedCards
@@ -1518,6 +1525,20 @@
 				trigger: {
 					type: LosesSkirmish
 					filter: companion
+				}
+				// Nothing is asked when neither can be added (F-0154).
+				requires: {
+					type: Or
+					requires: [
+						{
+							type: ThreatsRemaining
+							amount: 1
+						}
+						{
+							type: CanSpot
+							filter: ring bearer
+						}
+					]
 				}
 				effect: {
 					type: Choice
@@ -1604,25 +1625,18 @@
 						fromZone: DECK
 					}
 				]
-				requires: {
-					type: perPhaseLimit
-					phase: regroup
-					limit: 1
-				}
+				// "Limit once per site" is once for each site in a turn (Q-0084), counted by the engine (F-0146),
+				// and a limit on the number of times this can be used at all (Q-0082): at its limit it is not
+				// offered.
+				limitPerSite: 1
 				cost: {
 					type: Exert
 					select: choose(or(ally, and(unbound,companion)))
 				}
-				effect: [
-					{
-						type: DrawCards
-						count: 1
-					}
-					{
-						type: IncrementPerPhaseLimit 
-						phase: regroup
-					}
-				]
+				effect: {
+					type: DrawCards
+					count: 1
+				}
 			}
 		]
 		gametext: To play, spot 2 [sauron] or [ringwraith] cards.<br>Each time a Free Peoples card reveals or discards a card from any draw deck, you may exert an unbound companion or ally to draw a card (limit once per site).

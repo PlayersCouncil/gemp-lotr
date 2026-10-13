@@ -48,6 +48,15 @@ public interface TableBase {
 	 */
 	String P2();
 
+	/**
+	 * What the table has kept of all that the given player's seat has been sent by the game.  For the table's own
+	 * readings (HandIsRevealed, PlayerSeesCardInHand), not for callers.
+	 * @param player The name of the player in the seat asked about.
+	 * @return That seat's channel, or null on a table that keeps no channels for its seats (see
+	 * VirtualTable.KeepSeatChannels).
+	 */
+	SeatChannel seatChannel(String player);
+
 	PhysicalCardImpl GetFreepsCard(String cardName);
 	PhysicalCardImpl GetShadowCard(String cardName);
 	PhysicalCardImpl GetCard(String player, String cardName);

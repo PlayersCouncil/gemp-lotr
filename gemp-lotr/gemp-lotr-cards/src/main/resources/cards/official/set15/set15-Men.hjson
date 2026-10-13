@@ -395,29 +395,34 @@
 					type: startOfPhase
 					phase: maneuver
 				}
-				requires: {
-					type: or
-					requires: [
-						{
-							type: and
-							requires: [
-								{
-									type: canSpot
-									filter: another,culture(men),man
-								}
-								{
-									type: canSpot
-									filter: character
-									count: 8
-								}
-							]
-						}
-						{
-							type: canSpotFPCultures
-							amount: 3
-						}
-					]
-				}
+				requires: [
+					{
+						type: or
+						requires: [
+							{
+								type: and
+								requires: [
+									{
+										type: canSpot
+										filter: another,culture(men),man
+									}
+									{
+										type: canSpot
+										filter: character
+										count: 8
+									}
+								]
+							}
+							{
+								type: canSpotFPCultures
+								amount: 3
+							}
+						]
+					}
+					{
+						type: SiteAvailableToControl
+					}
+				]
 				effect: {
 					type: takeControlOfSite
 				}
@@ -747,7 +752,7 @@
 				}
 				{
 					type: spot
-					select: choose(unbound,companion,hasAttachedCount(3,any))
+					select: choose(unbound,companion,hasAttachedCount(3,any,override(hindered)))
 					memorize: chosenCompanion
 				}
 			]
@@ -762,10 +767,12 @@
 					effect: {
 						type: returnToHand
 						select: all(side(free people),attachedTo(memory(chosenCompanion)))
+						override: hindered
 					}
 					instead: {
 						type: discard
 						select: all(side(free people),attachedTo(memory(chosenCompanion)))
+						override: hindered
 					}
 				}
 			]
@@ -860,6 +867,9 @@
 				trigger: {
 					type: winsSkirmish
 					filter: self,hasAttached(hand weapon)
+				}
+				requires: {
+					type: SiteAvailableToControl
 				}
 				effect: {
 					type: takeControlOfSite
@@ -1071,6 +1081,7 @@
 						filter: hunter
 					}
 					filter: self
+					spotsItself: true
 					keyword: hunter
 					amount: 1
 				}

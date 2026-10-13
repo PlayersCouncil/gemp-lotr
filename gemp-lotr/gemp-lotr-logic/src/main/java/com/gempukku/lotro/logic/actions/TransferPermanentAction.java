@@ -26,7 +26,7 @@ public class TransferPermanentAction extends ActivateCardAction {
                     @Override
                     protected void doPlayEffect(LotroGame game) {
                         if (!game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.TRANSFERS_FOR_FREE))
-                            insertCost(new PayTwilightCostEffect(card));
+                            insertCost(PayTwilightCostEffect.forTransfer(card));
                     }
                 });
         appendEffect(

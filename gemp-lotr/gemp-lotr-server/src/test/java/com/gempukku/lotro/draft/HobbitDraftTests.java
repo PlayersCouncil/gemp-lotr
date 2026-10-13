@@ -1,6 +1,6 @@
 package com.gempukku.lotro.draft;
 
-import com.gempukku.lotro.at.AbstractAtTest;
+import com.gempukku.lotro.framework.LoadedLibraries;
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.draft2.SoloDraft;
 import com.gempukku.lotro.draft2.SoloDraftDefinitions;
@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
 
-public class HobbitDraftTests extends AbstractAtTest {
+public class HobbitDraftTests extends LoadedLibraries {
     @Test
     public void HobbitDraftTest() {
 //        final String property = System.getProperty("user.dir");

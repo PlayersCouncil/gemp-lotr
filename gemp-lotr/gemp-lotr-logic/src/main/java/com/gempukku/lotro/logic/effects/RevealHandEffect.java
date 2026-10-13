@@ -43,20 +43,25 @@ public class RevealHandEffect extends AbstractEffect {
     protected FullEffectResult playEffectReturningResult(LotroGame game) {
         if (game.getModifiersQuerying().canLookOrRevealCardsInHand(game, _handPlayerId, _actingPlayer)) {
             final List<? extends PhysicalCard> hand = game.getGameState().getHand(_handPlayerId);
-            game.getGameState().sendMessage(GameUtils.getCardLink(_source) + " revealed " + _handPlayerId + " cards in hand - " + getAppendedNames(hand));
+            if (hand.isEmpty()) {
+                // An empty hand is shown to nobody: the game log says there was nothing to reveal (Q-0144).
+                game.getGameState().sendMessage(GameUtils.getNoCardsRevealedFromHandMessage(game, _source, _handPlayerId));
+            } else {
+                game.getGameState().sendMessage(GameUtils.getCardLink(_source) + " revealed " + _handPlayerId + " cards in hand - " + getAppendedNames(hand));
 
-            final PlayOrder playerOrder = game.getGameState().getPlayerOrder().getCounterClockwisePlayOrder(_handPlayerId, false);
-            // Skip hand owner
-            playerOrder.getNextPlayer();
+                final PlayOrder playerOrder = game.getGameState().getPlayerOrder().getCounterClockwisePlayOrder(_handPlayerId, false);
+                // Skip hand owner
+                playerOrder.getNextPlayer();
 
-            String nextPlayer;
-            while ((nextPlayer = playerOrder.getNextPlayer()) != null) {
-                game.getUserFeedback().sendAwaitingDecision(nextPlayer,
-                        new ArbitraryCardsSelectionDecision(1, "Hand of " + _handPlayerId, hand, Collections.emptySet(), 0, 0) {
-                            @Override
-                            public void decisionMade(String result) {
-                            }
-                        });
+                String nextPlayer;
+                while ((nextPlayer = playerOrder.getNextPlayer()) != null) {
+                    game.getUserFeedback().sendAwaitingDecision(nextPlayer,
+                            new ArbitraryCardsSelectionDecision(1, "Hand of " + _handPlayerId, hand, Collections.emptySet(), 0, 0) {
+                                @Override
+                                public void decisionMade(String result) {
+                                }
+                            });
+                }
             }
 
             cardsRevealed(hand);

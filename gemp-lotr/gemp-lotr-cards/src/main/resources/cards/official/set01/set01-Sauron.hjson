@@ -1100,8 +1100,8 @@
 						count: 2
 					}
 					{
-						type: cantspot
-						filter: AssignedToSkirmish(self)
+						type: canSpot
+						filter: hobbit,assignableToSkirmishAgainst(self)
 					}
 				]
 				effect: {
@@ -1354,6 +1354,11 @@
 				type: played
 				filter: self
 			}
+			requires: {
+				type: cardsInHandMoreThan
+				player: fp
+				count: 0
+			}
 			effect: {
 				type: discardCardAtRandomFromHand
 				hand: fp
@@ -1389,24 +1394,15 @@
 		effects: {
 			type: activated
 			phase: skirmish
-			requires: {
-				type: perPhaseLimit
-				limit: 3
-			}
+			effectLimitPerPhase: 3
 			cost: {
 				type: removeTwilight
 			}
-			effect: [
-				{
-					type: incrementPerPhaseLimit
-					limit: 3
-				}
-				{
-					type: modifyStrength
-					select: bearer
-					amount: 1
-				}
-			]
+			effect: {
+				type: modifyStrength
+				select: bearer
+				amount: 1
+			}
 		}
 		gametext: Bearer must be a [sauron] Orc.<br><b>Skirmish:</b> Remove (1) to make bearer strength +1 (limit +3).
 		lore: "An Orc's weapon reflects his passion for war and cruelty."

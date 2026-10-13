@@ -109,7 +109,7 @@ public class Card_V1_029_Tests
 
 		scn.SetTwilight(27);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(30, scn.GetTwilight()); //base after moving
 		scn.ShadowPlayCard(murder);
@@ -153,10 +153,10 @@ public class Card_V1_029_Tests
 		scn.MoveCardsToSupportArea("fcond1");
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		// 1 freeps condition, no saruman
 		assertFalse(scn.ShadowActionAvailable(murder));
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.PassCurrentPhaseActions();
@@ -166,10 +166,10 @@ public class Card_V1_029_Tests
 		scn.MoveCardsToSupportArea("fcond2", "fcond3");
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		// 3 freeps conditions, no saruman
 		assertTrue(scn.ShadowActionAvailable(murder));
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.PassCurrentPhaseActions();
@@ -180,7 +180,7 @@ public class Card_V1_029_Tests
 		scn.MoveMinionToTable(saruman);
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		// 0 freeps conditions, yes saruman
 		assertTrue(scn.ShadowActionAvailable(murder));
 
@@ -212,7 +212,7 @@ public class Card_V1_029_Tests
 		scn.StartGame();
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(murder));
 		assertEquals(Zone.DECK, cond1.getZone());
 		assertEquals(cond1, scn.GetShadowBottomOfDeck());
@@ -236,7 +236,7 @@ public class Card_V1_029_Tests
 		scn.FreepsChooseToMove();
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(murder2));
 		assertEquals(Zone.DECK, cond1.getZone());
 		assertEquals(cond1, scn.GetShadowBottomOfDeck());
@@ -260,7 +260,7 @@ public class Card_V1_029_Tests
 		scn.FreepsChooseToMove();
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable(murder3));
 		assertEquals(Zone.DECK, cond1.getZone());
 		assertEquals(cond1, scn.GetShadowBottomOfDeck());

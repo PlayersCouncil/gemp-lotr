@@ -3,12 +3,12 @@ package com.gempukku.lotro.cards.official.set01;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_01_112_Tests
@@ -18,8 +18,24 @@ public class Card_01_112_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "1_112");
-					// put other cards in here as needed for the test case
+					put("sword", "1_112");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man, cost 4, strength 8; a maneuver ability used only on purpose
+					put("boromir", "1_97");     // Boromir, Son of Denethor: a [gondor] Man companion who is not Aragorn; a skirmish ability never used
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetRohanAragornScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("sword", "1_112");
+					// Aragorn, Defender of Rohan: the only Aragorn who is not [gondor]; his hunter needs the Ring-bearer assigned
+					put("aragorn", "17_93");
+					put("boromir", "1_97");     // Boromir, Son of Denethor: a [gondor] Man companion who is not Aragorn
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -38,14 +54,15 @@ public class Card_01_112_Tests
 		 * Culture: Gondor
 		 * Twilight Cost: 1
 		 * Type: Possession
-		 * Subtype: Hand weapon
-		 * Strength: 2
-		 * Game Text: Bearer must be Aragorn.<br>He is <b>damage +1</b>.
-		*/
+		 * Subtype: Hand Weapon
+		 * Strength: +2
+		 * Game Text: Bearer must be Aragorn.
+		 * He is damage +1.
+		 */
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("sword");
 
 		assertEquals("Ranger's Sword", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -58,18 +75,53 @@ public class Card_01_112_Tests
 		assertEquals(2, card.getBlueprint().getStrength());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void RangersSwordTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void PlaysOnlyOnAragornAndMakesHimDamagePlus1() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var sword = scn.GetFreepsCard("sword");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		scn.MoveCompanionsToTable(boromir);
+		scn.MoveCardsToHand(aragorn, sword);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		// Frodo and Boromir, and no Aragorn: nobody may bear it.
+		assertFalse(scn.FreepsPlayAvailable(sword));
+
+		scn.FreepsPlayCard(aragorn);
+		assertTrue(scn.FreepsPlayAvailable(sword));
+		assertEquals(0, scn.GetKeywordCount(aragorn, Keyword.DAMAGE));
+
+		// Aragorn is the only bearer it may have, so nobody is asked.
+		scn.FreepsPlayCard(sword);
+		assertAttachedTo(sword, aragorn);
+		assertEquals(1, scn.GetKeywordCount(aragorn, Keyword.DAMAGE));
+		assertEquals(0, scn.GetKeywordCount(boromir, Keyword.DAMAGE));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void PlaysOnAragornDefenderOfRohanAndMakesHimDamagePlus1() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetRohanAragornScenario();
+
+		var sword = scn.GetFreepsCard("sword");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		scn.MoveCompanionsToTable(aragorn, boromir);
+		scn.MoveCardsToHand(sword);
+
+		scn.StartGame();
+
+		assertEquals(Culture.ROHAN, aragorn.getBlueprint().getCulture());
+		assertEquals(0, scn.GetKeywordCount(aragorn, Keyword.DAMAGE));
+		assertTrue(scn.FreepsPlayAvailable(sword));
+
+		scn.FreepsPlayCard(sword);
+		assertAttachedTo(sword, aragorn);
+		assertEquals(1, scn.GetKeywordCount(aragorn, Keyword.DAMAGE));
+		assertEquals(0, scn.GetKeywordCount(boromir, Keyword.DAMAGE));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

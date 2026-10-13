@@ -692,7 +692,7 @@
 				]
 				effect: {
 					type: discard
-					select: all(condition,zone(support))
+					select: all(condition,support)
 				}
 			}
 		]
@@ -998,7 +998,8 @@
 				cost: {
 					type: discardFromHand
 					forced: false
-					count: any
+					// At least one: declining the offer is the way to discard none (F-0300).
+					count: anyNonZero
 					memorize: discardedCards
 				}
 				effect: {

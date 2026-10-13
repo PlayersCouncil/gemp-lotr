@@ -399,7 +399,7 @@
 				}
 			}
 		]
-		gametext: <b>Fellowship</b> <i>or</i> <b>Regroup</b>: Discard an [elven] event from hand to hinder a Shadow condition or possession.
+		gametext: When Galadriel is in your starting fellowship, her twilight cost is -3.<br><b>Fellowship</b> <i>or</i> <b>Regroup</b>: Discard an [elven] event from hand to hinder a Shadow condition or possession.
 		lore: "'I pass the test,' she said. 'I will diminish, and go into the West, and remain Galadriel.'"
 		promotext: ""
 		alts: {
@@ -412,7 +412,10 @@
 	
 	60_12: {
 		cardInfo: {
-			//id: 0_12.1
+			//id: 60_12.1
+			parent: 10_12
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN10E012.1.jpg
 			collInfo: 10U12
@@ -420,10 +423,11 @@
 		}
 		title: Glimpse of Fate
 		unique: true
-		culture: elven
+		side: Free Peoples
+		culture: Elven
 		twilight: 0
-		type: condition
-		keyword: support area
+		type: Condition
+		keywords: Support Area
 		effects: [
 			{
 				type: toPlay
@@ -440,10 +444,16 @@
 					type: losesInitiative
 					side: free peoples
 				}
-				requires: {
-					type: perTurnLimit
-					limit: 1
-				}
+				requires: [
+					{
+						type: perTurnLimit
+						limit: 1
+					}
+					{
+						type: canSpot
+						filter: minion
+					}
+				]
 				effect: [
 					{
 						type: incrementPerTurnLimit

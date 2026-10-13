@@ -314,7 +314,7 @@
 			}
 			{
 				type: Trigger
-				optional: true
+				optional: false
 				trigger: {
 					type: startOfPhase
 					phase: assignment
@@ -330,7 +330,7 @@
 						filter: name(Boromir)
 						keyword: defender+1
 					}
-					until: start(regroup)
+					until: end(assignment)
 				}
 			}
 		]
@@ -422,7 +422,6 @@
 			}
 			{
 				type: Trigger
-				optional: false
 				optional: false
 				trigger: {
 					type: killed

@@ -233,7 +233,7 @@
 					type: cantHeal
 					requires: {
 						type: canSpot
-						filter: culture(gollum),or(character,and(your,zone(support)))
+						filter: culture(gollum),or(character,support(you))
 					}
 					filter: bearer
 				}

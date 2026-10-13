@@ -290,23 +290,32 @@
 		effects: [
 			{
 				type: Trigger
-				optional: false
 				text: Add threats up to the number of burdens
 				optional: true
 				trigger: {
 					type: winsSkirmish
 					filter: self
 				}
+				requires: {
+					type: canSpotBurdens
+					amount: 1
+				}
 				effect: {
 					type: addThreats
 					amount: {
+						type: range
+						from: 0
+						to: {
+							type: forEachBurden
+						}
+					}
+					default: {
 						type: forEachBurden
 					}
 				}
 			}
 			{
 				type: Trigger
-				optional: false
 				text: Play Gollum from your discard pile
 				optional: true
 				trigger: {

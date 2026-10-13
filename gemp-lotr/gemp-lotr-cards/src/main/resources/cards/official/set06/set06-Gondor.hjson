@@ -182,7 +182,6 @@
 		effects: [
 			{
 				type: Trigger
-				optional: false
 				text: Heal another {gondor} companion
 				optional: true
 				trigger: {

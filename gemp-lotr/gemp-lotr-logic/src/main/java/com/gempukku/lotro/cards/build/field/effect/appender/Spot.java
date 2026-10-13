@@ -11,7 +11,7 @@ import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.PlayConditions;
-import com.gempukku.lotro.logic.timing.UnrespondableEffect;
+import com.gempukku.lotro.logic.timing.AbstractEffect;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONObject;
 
@@ -51,15 +51,30 @@ public class Spot implements EffectAppenderProducer {
             return new DelayedAppender() {
                 @Override
                 protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
-                    return new UnrespondableEffect() {
+                    // Spotting changes nothing on the table, but it is carried out only if the cards are there to be
+                    // spotted.  An action's own costs are checked before it is offered; a spot that is the cost of a
+                    // sub-action (a CostToEffect, which may be one branch of a Choice whose "no valid choices"
+                    // fallback offers every branch) is checked here and nowhere else, and a spot that fails must fail
+                    // the cost so that the sub-action produces none of its effects.
+                    return new AbstractEffect() {
                         @Override
-                        protected void doPlayEffect(LotroGame game) {
+                        public boolean isPlayableInFull(LotroGame game) {
+                            return canSpot(actionContext);
+                        }
+
+                        @Override
+                        protected FullEffectResult playEffectReturningResult(LotroGame game) {
+                            return new FullEffectResult(canSpot(actionContext));
                         }
                     };
                 }
 
                 @Override
                 public boolean isPlayableInFull(ActionContext actionContext) {
+                    return canSpot(actionContext);
+                }
+
+                private boolean canSpot(ActionContext actionContext) {
                     final int count = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
                     Filterable filterable = filterableSource.getFilterable(actionContext);
                     return PlayConditions.canSpot(actionContext.getGame(), count, filterable);

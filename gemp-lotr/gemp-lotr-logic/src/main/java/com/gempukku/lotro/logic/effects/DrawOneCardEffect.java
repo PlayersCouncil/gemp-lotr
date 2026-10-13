@@ -12,6 +12,7 @@ import com.gempukku.lotro.logic.modifiers.ModifierFlag;
 import com.gempukku.lotro.logic.timing.AbstractEffect;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.Preventable;
+import com.gempukku.lotro.logic.timing.RuleUtils;
 import com.gempukku.lotro.logic.timing.results.DrawCardOrPutIntoHandResult;
 
 import java.util.Collection;
@@ -33,7 +34,9 @@ public class DrawOneCardEffect extends AbstractEffect implements Preventable {
      *                      (drawing back up to hand size). Such draws are never subject to
      *                      OPPONENT_FILTERS_YOUR_DRAWS - see the "(except when reconciling)" clause on cards
      *                      that grant that flag (e.g. 94_28). All other draws, including other card-effect
-     *                      draws played during the regroup phase, remain subject to it.
+     *                      draws played during the regroup phase, remain subject to it.  Nor are they
+     *                      stopped by a bar on taking cards into hand from the draw deck, whose text has the
+     *                      same exception (94_30): every other draw of a barred player draws nothing.
      */
     public DrawOneCardEffect(String playerId, boolean reconcileDraw) {
         _playerId = playerId;
@@ -52,11 +55,18 @@ public class DrawOneCardEffect extends AbstractEffect implements Preventable {
 
     @Override
     public boolean isPlayableInFull(LotroGame game) {
-        return game.getGameState().getDeck(_playerId).size() >= 1;
+        return game.getGameState().getDeck(_playerId).size() >= 1 && !isBarred(game);
     }
 
     public boolean canDrawCard(LotroGame game) {
-        return (!_prevented && game.getGameState().getDeck(_playerId).size() > 0) && game.getModifiersQuerying().canDrawCardNoIncrement(game, _playerId);
+        return (!_prevented && game.getGameState().getDeck(_playerId).size() > 0) && !isBarred(game)
+                && game.getModifiersQuerying().canDrawCardNoIncrement(game, _playerId);
+    }
+
+    // A card drawn is a card taken into hand from the draw deck: a player who may not take one draws nothing,
+    // except when reconciling.
+    private boolean isBarred(LotroGame game) {
+        return !_reconcileDraw && RuleUtils.isBarredFromDrawing(game, _playerId);
     }
 
     @Override
@@ -67,7 +77,7 @@ public class DrawOneCardEffect extends AbstractEffect implements Preventable {
     @Override
     protected FullEffectResult playEffectReturningResult(LotroGame game) {
         int drawn = 0;
-        if (!_prevented && game.getGameState().getDeck(_playerId).size() > 0 &&
+        if (!_prevented && game.getGameState().getDeck(_playerId).size() > 0 && !isBarred(game) &&
                 (!game.getFormat().hasRuleOfFour() || game.getModifiersQuerying().canDrawCardAndIncrementForRuleOfFour(game, _playerId))) {
             if (!_reconcileDraw && game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.OPPONENT_FILTERS_YOUR_DRAWS, _playerId))
                 opponentFiltersDraw(game);

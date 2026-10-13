@@ -15,21 +15,30 @@ import static org.junit.Assert.*;
 
 public class Card_92_014_Tests
 {
-	private final HashMap<String, String> cards = new HashMap<>() {{
-		// Desert Lord (4_246): Raider Man minion, twilight 4
-		put("desert", "4_246");
-		// Southron Troop (7_140): Raider Man minion, twilight 4
-		put("troop", "7_140");
-		// Corsair Lookout (8_55): Raider Man minion, twilight 3
-		put("corsair", "8_55");
-		// Goblin Runner (1_178): Moria Orc minion, twilight 0 — NOT a raider
-		put("runner", "1_178");
-		// Sam, Son of Hamfast (1_311): Shire companion
-		put("sam", "1_311");
-	}};
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// Southron Assassin: [raider] Man minion, twilight 4, site 4; answers only a lost skirmish
+					put("assassin", "4_246");
+					// Easterling Assailant: [raider] Man minion, twilight 4, site 4; a skirmish ability only
+					put("assailant", "7_140");
+					// Corsair Gunners: [raider] Man minion, twilight 5, site 4; a skirmish ability only
+					put("gunners", "8_55");
+					// Ulaire Attea, Khamul of the East: a [raider] minion who is a Nazgul, twilight 6, site 3;
+					// his text does nothing below 3 burdens
+					put("khamul", "103_61");
+					// Goblin Runner: [moria] Orc minion, twilight 1 — NOT a raider
+					put("runner", "1_178");
+					// Dunlending Brigand: a Man minion who is not [raider] ([dunland]), twilight 2, no text
+					put("brigand", "4_10");
+					// Raider Halberd: a [raider] card that is no minion (possession, twilight 0, on a [raider] Man)
+					put("halberd", "7_156");
+					// Sam, Son of Hamfast: [shire] Hobbit companion
+					put("sam", "1_311");
+					// Merry, From O'er the Brandywine: another [shire] Hobbit companion; stronger with a weapon
+					put("merry", "1_303");
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -38,7 +47,29 @@ public class Card_92_014_Tests
 	}
 
 	protected VirtualTableScenario GetSamScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// Southron Assassin: [raider] Man minion, twilight 4, site 4; answers only a lost skirmish
+					put("assassin", "4_246");
+					// Easterling Assailant: [raider] Man minion, twilight 4, site 4; a skirmish ability only
+					put("assailant", "7_140");
+					// Corsair Gunners: [raider] Man minion, twilight 5, site 4; a skirmish ability only
+					put("gunners", "8_55");
+					// Ulaire Attea, Khamul of the East: a [raider] minion who is a Nazgul, twilight 6, site 3;
+					// his text does nothing below 3 burdens
+					put("khamul", "103_61");
+					// Goblin Runner: [moria] Orc minion, twilight 1 — NOT a raider
+					put("runner", "1_178");
+					// Dunlending Brigand: a Man minion who is not [raider] ([dunland]), twilight 2, no text
+					put("brigand", "4_10");
+					// Raider Halberd: a [raider] card that is no minion (possession, twilight 0, on a [raider] Man)
+					put("halberd", "7_156");
+					// Sam, Son of Hamfast: [shire] Hobbit companion
+					put("sam", "1_311");
+					// Merry, From O'er the Brandywine: another [shire] Hobbit companion; stronger with a weapon
+					put("merry", "1_303");
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.SamRB,
 				VirtualTableScenario.RulingRing,
@@ -47,7 +78,29 @@ public class Card_92_014_Tests
 	}
 
 	protected VirtualTableScenario GetOpponentScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// Southron Assassin: [raider] Man minion, twilight 4, site 4; answers only a lost skirmish
+					put("assassin", "4_246");
+					// Easterling Assailant: [raider] Man minion, twilight 4, site 4; a skirmish ability only
+					put("assailant", "7_140");
+					// Corsair Gunners: [raider] Man minion, twilight 5, site 4; a skirmish ability only
+					put("gunners", "8_55");
+					// Ulaire Attea, Khamul of the East: a [raider] minion who is a Nazgul, twilight 6, site 3;
+					// his text does nothing below 3 burdens
+					put("khamul", "103_61");
+					// Goblin Runner: [moria] Orc minion, twilight 1 — NOT a raider
+					put("runner", "1_178");
+					// Dunlending Brigand: a Man minion who is not [raider] ([dunland]), twilight 2, no text
+					put("brigand", "4_10");
+					// Raider Halberd: a [raider] card that is no minion (possession, twilight 0, on a [raider] Man)
+					put("halberd", "7_156");
+					// Sam, Son of Hamfast: [shire] Hobbit companion
+					put("sam", "1_311");
+					// Merry, From O'er the Brandywine: another [shire] Hobbit companion; stronger with a weapon
+					put("merry", "1_303");
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -61,6 +114,7 @@ public class Card_92_014_Tests
 		 * Set: RTMD 92
 		 * Name: Race Text 92_14
 		 * Type: MetaSite
+		 * Intensity: -1
 		 * Game Text: Shadow: If 3 or more [Raider] minions have been played this phase, discard Sam.
 		 */
 
@@ -70,6 +124,7 @@ public class Card_92_014_Tests
 
 		assertEquals("Race Text 92_14", card.getBlueprint().getTitle());
 		assertEquals(CardType.METASITE, card.getBlueprint().getCardType());
+		assertEquals(-1, card.getBlueprint().getIntensity());
 	}
 
 	@Test
@@ -77,13 +132,13 @@ public class Card_92_014_Tests
 		var scn = GetScenario();
 
 		var mod = scn.GetShadowCard("mod");
-		var desert = scn.GetShadowCard("desert");
-		var troop = scn.GetShadowCard("troop");
-		var corsair = scn.GetShadowCard("corsair");
+		var assassin = scn.GetShadowCard("assassin");
+		var assailant = scn.GetShadowCard("assailant");
+		var gunners = scn.GetShadowCard("gunners");
 		var runner = scn.GetShadowCard("runner");
 		var sam = scn.GetFreepsCard("sam");
 
-		scn.MoveCardsToHand(desert, troop, corsair, runner);
+		scn.MoveCardsToHand(assassin, assailant, gunners, runner);
 		scn.MoveCompanionsToTable(sam);
 
 		scn.StartGame();
@@ -94,11 +149,11 @@ public class Card_92_014_Tests
 		assertFalse(scn.ShadowActionAvailable(mod));
 
 		// 1 Raider played
-		scn.ShadowPlayCard(desert);
+		scn.ShadowPlayCard(assassin);
 		assertFalse(scn.ShadowActionAvailable(mod));
 
 		// 2 Raiders played
-		scn.ShadowPlayCard(troop);
+		scn.ShadowPlayCard(assailant);
 		assertFalse(scn.ShadowActionAvailable(mod));
 
 		// 2 Raiders + another minion played
@@ -106,11 +161,55 @@ public class Card_92_014_Tests
 		assertFalse(scn.ShadowActionAvailable(mod));
 
 		// Now 3 raiders played this phase — ability should be available
-		scn.ShadowPlayCard(corsair);
+		scn.ShadowPlayCard(gunners);
 		assertTrue(scn.ShadowActionAvailable(mod));
+		assertInZone(Zone.FREE_CHARACTERS, sam);
 		scn.ShadowUseCardAction(mod);
 
 		assertInZone(Zone.DISCARD, sam);
+		assertInZone(Zone.FREE_CHARACTERS, scn.GetRingBearer());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void ARaiderNazgulCountsAndAManOfAnotherCultureAndARaiderPossessionDoNot() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var mod = scn.GetShadowCard("mod");
+		var khamul = scn.GetShadowCard("khamul");
+		var assassin = scn.GetShadowCard("assassin");
+		var assailant = scn.GetShadowCard("assailant");
+		var brigand = scn.GetShadowCard("brigand");
+		var halberd = scn.GetShadowCard("halberd");
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		var merry = scn.GetFreepsCard("merry");
+
+		scn.MoveCardsToHand(khamul, assassin, assailant, brigand, halberd);
+		scn.MoveCompanionsToTable(sam, merry);
+
+		scn.StartGame();
+		scn.SetTwilight(30);
+		scn.SkipToPhase(Phase.SHADOW);
+
+		// Two [raider] minions, and beside them a Man minion of another culture and a [raider] possession
+		scn.ShadowPlayCard(khamul);
+		scn.ShadowPlayCard(assassin);
+		scn.ShadowPlayCard(brigand);
+		scn.ShadowPlayCard(halberd);
+		assertAttachedTo(halberd, assassin);
+		assertFalse(scn.ShadowActionAvailable(mod));
+
+		// The third [raider] minion: a Nazgul and two Men
+		scn.ShadowPlayCard(assailant);
+		assertTrue(scn.ShadowActionAvailable(mod));
+		assertInZone(Zone.FREE_CHARACTERS, sam);
+		scn.ShadowUseCardAction(mod);
+
+		// Sam, and no other Hobbit of the Shire: nothing is asked
+		assertInZone(Zone.DISCARD, sam);
+		assertInZone(Zone.FREE_CHARACTERS, merry, frodo);
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
@@ -118,33 +217,35 @@ public class Card_92_014_Tests
 		var scn = GetScenario();
 
 		var mod = scn.GetShadowCard("mod");
-		var desert = scn.GetShadowCard("desert");
-		var troop = scn.GetShadowCard("troop");
+		var assassin = scn.GetShadowCard("assassin");
+		var assailant = scn.GetShadowCard("assailant");
+		var gunners = scn.GetShadowCard("gunners");
 		var sam = scn.GetFreepsCard("sam");
 
-		scn.MoveCardsToHand(desert, troop);
+		scn.MoveCardsToHand(assassin, assailant, gunners);
 		scn.MoveCompanionsToTable(sam);
-		scn.MoveCardsToFreepsDiscard("runner");
 
 		scn.StartGame();
 		scn.SetTwilight(20);
 		scn.SkipToPhase(Phase.SHADOW);
 
 		// Play 2 raiders this phase
-		scn.ShadowPlayCard(desert);
-		scn.ShadowPlayCard(troop);
+		scn.ShadowPlayCard(assassin);
+		scn.ShadowPlayCard(assailant);
 		assertFalse(scn.ShadowActionAvailable(mod));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 
-		// Move to next turn's shadow phase
-		scn.ShadowPassCurrentPhaseAction();
-		scn.SkipToPhase(Phase.REGROUP);
-		scn.PassCurrentPhaseActions();
+		// The fellowship moves again: a second Shadow phase of the same turn
+		scn.SkipToMovementDecision();
 		scn.FreepsChooseToMove();
 
-		// New shadow phase — count should have reset, and we have no new raiders to play
-		scn.MoveMinionsToTable(desert, troop);
-		scn.SkipToPhase(Phase.SHADOW);
+		// New shadow phase — count should have reset: the third raider of the turn is the first of this phase
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		scn.ShadowPlayCard(gunners);
+		assertInZone(Zone.SHADOW_CHARACTERS, assassin, assailant, gunners);
+		assertInZone(Zone.FREE_CHARACTERS, sam);
 		assertFalse(scn.ShadowActionAvailable(mod));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
@@ -153,23 +254,25 @@ public class Card_92_014_Tests
 		var scn = GetSamScenario();
 
 		var mod = scn.GetShadowCard("mod");
-		var desert = scn.GetShadowCard("desert");
-		var troop = scn.GetShadowCard("troop");
-		var corsair = scn.GetShadowCard("corsair");
+		var assassin = scn.GetShadowCard("assassin");
+		var assailant = scn.GetShadowCard("assailant");
+		var gunners = scn.GetShadowCard("gunners");
 		var sam = scn.GetRingBearer();
 
-		scn.MoveCardsToHand(desert, troop, corsair);
+		scn.MoveCardsToHand(assassin, assailant, gunners);
 
 		scn.StartGame();
 		scn.SetTwilight(20);
 		scn.SkipToPhase(Phase.SHADOW);
 
-		scn.ShadowPlayCard(desert);
-		scn.ShadowPlayCard(troop);
-		scn.ShadowPlayCard(corsair);
+		scn.ShadowPlayCard(assassin);
+		scn.ShadowPlayCard(assailant);
+		scn.ShadowPlayCard(gunners);
 
 		// Sam is ring-bearer — ability should not be available
 		assertFalse(scn.ShadowActionAvailable(mod));
+		assertInZone(Zone.FREE_CHARACTERS, sam);
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
@@ -177,22 +280,27 @@ public class Card_92_014_Tests
 		var scn = GetOpponentScenario();
 
 		var mod = scn.GetFreepsCard("mod");
-		var desert = scn.GetShadowCard("desert");
-		var troop = scn.GetShadowCard("troop");
-		var corsair = scn.GetShadowCard("corsair");
+		var assassin = scn.GetShadowCard("assassin");
+		var assailant = scn.GetShadowCard("assailant");
+		var gunners = scn.GetShadowCard("gunners");
 		var sam = scn.GetFreepsCard("sam");
 
-		scn.MoveCardsToHand(desert, troop, corsair);
+		scn.MoveCardsToHand(assassin, assailant, gunners);
 		scn.MoveCompanionsToTable(sam);
 
 		scn.StartGame();
 		scn.SetTwilight(20);
 		scn.SkipToPhase(Phase.SHADOW);
 
-		scn.ShadowPlayCard(desert);
-		scn.ShadowPlayCard(troop);
-		scn.ShadowPlayCard(corsair);
+		scn.ShadowPlayCard(assassin);
+		scn.ShadowPlayCard(assailant);
+		scn.ShadowPlayCard(gunners);
 
 		assertTrue(scn.ShadowActionAvailable(mod));
+		assertInZone(Zone.FREE_CHARACTERS, sam);
+		scn.ShadowUseCardAction(mod);
+
+		assertInZone(Zone.DISCARD, sam);
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

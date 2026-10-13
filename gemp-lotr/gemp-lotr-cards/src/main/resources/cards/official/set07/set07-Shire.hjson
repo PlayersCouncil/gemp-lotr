@@ -192,10 +192,19 @@
 			{
 				type: activated
 				phase: skirmish
-				requires: {
-					type: canSpot
-					filter: self,notAssignedToSkirmish
-				}
+				requires: [
+					{
+						type: canSpot
+						filter: self,notAssignedToSkirmish
+					}
+					// A play from the discard pile is treated as a cost: with nothing there that can be played
+					// the ability is not offered (Q-0086).  Merry is back in hand by then, so a possession that
+					// only he could bear does not count.
+					{
+						type: HasCardInDiscard
+						filter: culture(rohan),possession,or(PlayableOn(not(self)),and(Playable,not(PlayableOn(any))))
+					}
+				]
 				cost: {
 					type: returnToHand
 					select: self
@@ -404,10 +413,16 @@
 			{
 				type: activated
 				phase: regroup
-				cost: {
-					type: discard
-					select: self
-				}
+				cost: [
+					{
+						type: discard
+						select: self
+					}
+					{
+						type: exert
+						select: choose(hobbit,companion)
+					}
+				]
 				effect: {
 					type: playNextSite
 				}
@@ -555,7 +570,11 @@
 					type: addActivated
 					filter: minion
 					phase: assignment
-					text: Assign this minion to bearer of Reckless Pride.
+					text: Assign this minion to bearer of Slow-kindled Courage.
+					requires: {
+						type: canSpot
+						filter: hasAttached(name(Slow-kindled Courage)),assignableToSkirmishAgainst(self)
+					}
 					effect: {
 						type: assignFpCharacterToSkirmish
 						fpCharacter: choose(hasAttached(name(Slow-kindled Courage)))

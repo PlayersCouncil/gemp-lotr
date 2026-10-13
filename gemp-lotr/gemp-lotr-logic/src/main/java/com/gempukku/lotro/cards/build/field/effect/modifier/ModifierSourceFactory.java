@@ -30,7 +30,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("cancelkeywordbonus", new CancelKeywordBonus());
         modifierProducers.put("cancelstrengthbonus", new CancelStrengthBonus());
         modifierProducers.put("canplaystackedcards", new CanPlayStackedCards());
-        modifierProducers.put("cantaddburdens", new CantRemoveBurdens());
+        modifierProducers.put("cantaddburdens", new CantAddBurdens());
         modifierProducers.put("cantbear", new CantBear());
         modifierProducers.put("cantbeassignedtoskirmish", new CantBeAssignedToSkirmish());
         modifierProducers.put("cantbeassignedtoskirmishagainst", new CantBeAssignedToSkirmishAgainst());
@@ -67,6 +67,7 @@ public class ModifierSourceFactory {
         modifierProducers.put("doesnotaddtoarcherytotal", new DoesNotAddToArcheryTotal());
         modifierProducers.put("duplicateactionfromphase", new DuplicateActionFromPhase());
         modifierProducers.put("duplicategametext", new DuplicateGameText());
+        modifierProducers.put("extracosttoassign", new ExtraCostToAssign());
         modifierProducers.put("extracosttoplay", new ExtraCostToPlay());
         modifierProducers.put("fpculturecount", new FPCultureCount());
         modifierProducers.put("hastomoveifable", new AddModifierFlag(ModifierFlag.HAS_TO_MOVE_IF_POSSIBLE));

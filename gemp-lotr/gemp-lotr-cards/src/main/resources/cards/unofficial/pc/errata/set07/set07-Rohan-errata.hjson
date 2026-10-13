@@ -117,8 +117,15 @@
 			effect: {
 				type: repeat
 				times: {
-					type: fromMemory
-					memory: exertCount
+					type: min
+					firstNumber: {
+						type: forEachYouCanSpot
+						filter: culture(rohan),companion
+					}
+					secondNumber: {
+						type: fromMemory
+						memory: exertCount
+					}
 				}
 				effect: {
 					type: exert
@@ -139,20 +146,22 @@
 	
 	57_256: {
 		cardInfo: {
-			//id: 7_256.1
+			//id: 57_256.1
 			parent: 7_256
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN07E256.1.jpg
 			collInfo: 7C256
 			rarity: C
 		}
 		title: They Sang as They Slew
-		culture: rohan
+		unique: false
+		side: Free Peoples
+		culture: Rohan
 		twilight: 1
-		type: event
-		timeword: regroup
+		type: Event
+		timewords: Regroup
 		effects: {
 			type: event
 			cost: {
@@ -160,16 +169,10 @@
 				select: choose(mounted,companion)
 				count: {
 					type: range
-					from: 0
+					from: 1
 					to: {
-						type: max
-						firstNumber: {
-							type: ForEachBurden
-						}
-						secondNumber: {
-							type: ForEachYouCanSpot
-							filter: minion
-						}
+						type: ForEachYouCanSpot
+						filter: mounted,companion,CanExert
 					}
 				}
 				memorize: exertedComps 

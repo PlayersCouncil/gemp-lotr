@@ -3,11 +3,13 @@ package com.gempukku.lotro.cards.official.set01;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_01_013_Tests
@@ -17,8 +19,10 @@ public class Card_01_013_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "1_13");
-					// put other cards in here as needed for the test case
+					put("gimli", "1_13");
+					put("boromir", "1_96");     // Boromir, Lord of Gondor: strength 7, not overwhelmed unless his strength is tripled
+					put("runner1", "1_178");    // Goblin Runner: strength 5, vitality 1; its text answers its play, and it is cheated in
+					put("runner2", "1_178");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +51,7 @@ public class Card_01_013_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("gimli");
 
 		assertEquals("Gimli", card.getBlueprint().getTitle());
 		assertEquals("Son of Glóin", card.getBlueprint().getSubtitle());
@@ -65,18 +69,51 @@ public class Card_01_013_Tests
 		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GimliTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void SkirmishAbilityExertsGimliToMakeHimStrengthPlus2ForThatSkirmishUntilHeIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var gimli = scn.GetFreepsCard("gimli");
+		var boromir = scn.GetFreepsCard("boromir");
+		var runner1 = scn.GetShadowCard("runner1");
+		var runner2 = scn.GetShadowCard("runner2");
+		scn.MoveCompanionsToTable(gimli, boromir);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(runner1, runner2);
 
-		assertEquals(2, scn.GetTwilight());
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{gimli, runner1}, new PhysicalCardImpl[]{boromir, runner2});
+		scn.FreepsResolveSkirmish(gimli);
+
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertEquals(6, scn.GetStrength(gimli));
+		assertEquals(7, scn.GetStrength(boromir));
+		assertTrue(scn.FreepsActionAvailable(gimli));
+
+		scn.FreepsUseCardAction(gimli);
+		// Gimli and nobody else: no choice is asked, and Boromir is as he was.
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertEquals(8, scn.GetStrength(gimli));
+		assertEquals(7, scn.GetStrength(boromir));
+
+		scn.ShadowPass();
+		scn.FreepsUseCardAction(gimli);
+		assertEquals(2, scn.GetWoundsOn(gimli));
+		assertEquals(10, scn.GetStrength(gimli));
+
+		// Vitality 3 with 2 wounds: exhausted, so he cannot pay again.
+		scn.ShadowPass();
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(gimli));
+		// Still in force in the last window before the skirmish is resolved.
+		assertEquals(10, scn.GetStrength(gimli));
+		scn.FreepsPass();
+
+		// The next skirmish is a phase of its own: the +4 is gone.
+		scn.FreepsResolveSkirmish(boromir);
+		assertEquals(2, scn.GetWoundsOn(gimli));
+		assertEquals(6, scn.GetStrength(gimli));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 }

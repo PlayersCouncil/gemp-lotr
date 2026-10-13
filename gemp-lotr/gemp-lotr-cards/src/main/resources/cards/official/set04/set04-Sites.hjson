@@ -627,12 +627,23 @@
 			{
 				type: activated
 				phase: fellowship
+				# The text has no requirement: a player with no card in hand still draws 4.  What is kept
+				# off the menu is the use that would do nothing: no hand to place and no card that may be
+				# drawn (the Rule of 4 spent, or a bar on drawing; Q-0249).
 				requires: {
-					type: IsGreaterThan
-					firstNumber: {
-						type: ForEachInHand
-					}
-					secondNumber: 0
+					type: or
+					requires: [
+						{
+							type: IsGreaterThan
+							firstNumber: {
+								type: ForEachInHand
+							}
+							secondNumber: 0
+						}
+						{
+							type: CanDraw
+						}
+					]
 				}
 				effect: [
 					{
@@ -714,26 +725,17 @@
 			{
 				type: activated
 				phase: fellowship
-				requires: {
-					type: perTurnLimit
-					limit: 1
-				}
+				limitPerTurn: 1
 				cost: {
 					type: exert
 					select: choose(culture(rohan),man)
 				}
-				effect: [
-					{
-						type: incrementPerTurnLimit
-						limit: 1
-					}
-					{
-						type: playCardFromDrawDeck
-						select: choose(culture(rohan),mount)
-						showAll: true
-						shuffle: true
-					}
-				]
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(culture(rohan),mount)
+					showAll: true
+					shuffle: true
+				}
 			}
 		]
 		gametext: <b>Sanctuary</b>. <b>Fellowship:</b> Exert a [rohan] Man to play a [rohan] mount from your draw deck (limit once per turn).
@@ -964,7 +966,7 @@
 					type: choice
 					texts: [
 						Exert Théoden
-						Exert 2 companions
+						Exert 2 other companions
 					]
 					effects: [
 						{
@@ -973,7 +975,7 @@
 						}
 						{
 							type: exert
-							select: choose(companion)
+							select: choose(not(name(Théoden)),companion)
 							count: 2
 						}
 					]
@@ -1055,8 +1057,9 @@
 					requires: {
 						type: not
 						requires: {
-							type: playedCardThisPhase
+							type: playedCardThisTurn
 							filter: urukHai
+							atCurrentSite: true
 						}
 					}
 					amount: -3
@@ -1664,6 +1667,12 @@
 				trigger: {
 					type: movesTo
 					filter: self
+				}
+				# Not offered when there is nothing to draw for (Q-0033).
+				requires: {
+					type: canSpot
+					filter: companion
+					count: 5
 				}
 				effect: {
 					type: drawCards

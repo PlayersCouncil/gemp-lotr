@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_04_301_Tests
@@ -19,10 +20,32 @@ public class Card_04_301_Tests
 				new HashMap<>()
 				{{
 					put("card", "4_301");
-					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// Frodo, Courteous Halfling is the Ring-bearer here.
+	protected VirtualTableScenario GetDiscardScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("arwen", "7_16");       // Arwen, Fair Elf Maiden: an unbound companion; her text is about skirmishing a fierce minion
+					put("legolas", "1_50");     // Legolas, Greenleaf: an unbound companion; an archer, and no test here reaches the archery phase
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: an unbound companion
+					put("sam", "1_311");        // Sam, Son of Hamfast: a companion who is Ring-bound, and so not one of the three
+					// Orc Inquisitor: [sauron] Orc, cost 3.  "When you play this minion, you may make the Free Peoples
+					// player discard a card at random from hand."  A discard the Free Peoples player has no choice in.
+					put("inquisitor", "1_268");
+					// Hand of Sauron: [sauron] Maneuver event, cost 0.  "Exert a [sauron] minion to make the Free Peoples
+					// player discard a card at random from his or her hand."  A discard that is paid for, so the
+					// event is played whatever it will do.
+					put("hand", "3_90");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				"4_301",
 				VirtualTableScenario.RulingRing
 		);
 	}
@@ -64,18 +87,104 @@ public class Card_04_301_Tests
 		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void FrodoTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void WithThreeUnboundCompanionsAShadowCardCannotMakeYouDiscardFromHand() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetDiscardScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var arwen = scn.GetFreepsCard("arwen");
+		var legolas = scn.GetFreepsCard("legolas");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var sam = scn.GetFreepsCard("sam");
+		// The Free Peoples player's own copy of the Inquisitor is a card in his hand and nothing more.
+		var spare = scn.GetFreepsCard("inquisitor");
+		var inquisitor = scn.GetShadowCard("inquisitor");
+		var hand = scn.GetShadowCard("hand");
+		scn.MoveCompanionsToTable(arwen, legolas, aragorn);
+		scn.MoveCardsToHand(sam, spare, hand);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(inquisitor);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
 
-		assertEquals(0, scn.GetTwilight());
+		assertEquals(2, scn.GetFreepsHandCount());
+		assertEquals(0, scn.GetFreepsDiscardCount());
+		assertEquals(0, scn.GetWoundsOn(inquisitor));
+
+		// Hand of Sauron is an event with a cost: it is played, and paid for, whatever it will do.
+		assertTrue(scn.ShadowPlayAvailable(hand));
+		scn.ShadowPlayCard(hand);
+		assertEquals(1, scn.GetWoundsOn(inquisitor));
+
+		// Arwen, Legolas and Aragorn are three unbound companions: the hand is as it was.
+		assertEquals(2, scn.GetFreepsHandCount());
+		assertInHand(sam, spare);
+		assertEquals(0, scn.GetFreepsDiscardCount());
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+	}
+
+	// The same bar against a "you may" that costs nothing: its whole effect would do nothing, so it is not offered
+	// (Q-0034, and Ketura on Q-0231: B).  The engine withholds it, from what the random discard says of itself
+	// (Q-0224); WithTwoUnboundCompanionsAndARingBoundOneAShadowCardStillMakesYouDiscardFromHand has the offer.
+	@Test
+	public void WithThreeUnboundCompanionsAShadowCardsOptionalDiscardFromHandIsNotOffered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetDiscardScenario();
+
+		var arwen = scn.GetFreepsCard("arwen");
+		var legolas = scn.GetFreepsCard("legolas");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var sam = scn.GetFreepsCard("sam");
+		var spare = scn.GetFreepsCard("inquisitor");
+		var inquisitor = scn.GetShadowCard("inquisitor");
+		scn.MoveCompanionsToTable(arwen, legolas, aragorn);
+		scn.MoveCardsToHand(sam, spare, inquisitor);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertEquals(2, scn.GetFreepsHandCount());
+
+		scn.ShadowPlayCard(inquisitor);
+
+		assertInZone(Zone.SHADOW_CHARACTERS, inquisitor);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(inquisitor));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertEquals(2, scn.GetFreepsHandCount());
+		assertInHand(sam, spare);
+	}
+
+	@Test
+	public void WithTwoUnboundCompanionsAndARingBoundOneAShadowCardStillMakesYouDiscardFromHand() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetDiscardScenario();
+
+		var arwen = scn.GetFreepsCard("arwen");
+		var legolas = scn.GetFreepsCard("legolas");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var sam = scn.GetFreepsCard("sam");
+		var spare = scn.GetFreepsCard("inquisitor");
+		var inquisitor = scn.GetShadowCard("inquisitor");
+		// Three companions beside Frodo again, but Sam is Ring-bound: two unbound companions, one short.
+		scn.MoveCompanionsToTable(arwen, legolas, sam);
+		scn.MoveCardsToHand(aragorn, spare, inquisitor);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertTrue(scn.HasKeyword(sam, Keyword.RING_BOUND));
+		assertEquals(2, scn.GetFreepsHandCount());
+		assertEquals(0, scn.GetFreepsDiscardCount());
+
+		scn.ShadowPlayCard(inquisitor);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(inquisitor));
+		scn.ShadowAcceptOptionalTrigger();
+
+		// One of the two cards, at random, has gone to the discard pile.
+		assertEquals(1, scn.GetFreepsHandCount());
+		assertEquals(1, scn.GetFreepsDiscardCount());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

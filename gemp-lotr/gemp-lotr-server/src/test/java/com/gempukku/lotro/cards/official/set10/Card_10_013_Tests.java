@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_10_013_Tests
@@ -19,7 +20,13 @@ public class Card_10_013_Tests
 				new HashMap<>()
 				{{
 					put("card", "10_13");
-					// put other cards in here as needed for the test case
+					// Sam, Son of Hamfast: a Hobbit, strength 3, vitality 4; a fellowship ability, and a response if
+					// Frodo dies
+					put("sam", "1_311");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, vitality 4
+
+					put("savage", "1_151");     // Uruk Savage: Uruk-hai, strength 5, vitality 3; damage +1 is its whole text
+					put("party", "1_158");      // Uruk-hai Raiding Party: Uruk-hai, strength 9, vitality 3; damage +1 is its whole text
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -55,18 +62,48 @@ public class Card_10_013_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void PhialofGaladrielTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void RemovesTheGameTextOfAMinionSkirmishingBearerAndIsDiscarded() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var phial = scn.GetFreepsCard("card");
+		var sam = scn.GetFreepsCard("sam");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var savage = scn.GetShadowCard("savage");
+		var party = scn.GetShadowCard("party");
+		scn.MoveCompanionsToTable(sam, aragorn);
+		scn.AttachCardsTo(sam, phial);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(savage, party);
+		scn.SkipToAssignments();
+		// The Savage fights the bearer; the Raiding Party waits for Aragorn, whose skirmish has not begun.
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{sam, savage}, new PhysicalCardImpl[]{aragorn, party});
+		scn.FreepsResolveSkirmish(sam);
 
-		assertEquals(0, scn.GetTwilight());
+		assertTrue(scn.HasKeyword(savage, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(party, Keyword.DAMAGE));
+		assertAttachedTo(phial, sam);
+		assertTrue(scn.FreepsActionAvailable(phial));
+		scn.FreepsUseCardAction(phial);
+
+		// The minion skirmishing the bearer has lost its damage +1 and is an Uruk-hai minion still; the minion
+		// assigned to Aragorn keeps its own.
+		assertFalse(scn.HasKeyword(savage, Keyword.DAMAGE));
+		assertTrue(scn.IsType(savage, CardType.MINION));
+		assertTrue(scn.IsRace(savage, Race.URUK_HAI));
+		assertTrue(scn.HasKeyword(party, Keyword.DAMAGE));
+		assertInDiscard(phial);
+
+		// Sam's 3 loses to the Savage's 5 and is not overwhelmed: one wound, where damage +1 would have made two.
+		assertEquals(0, scn.GetWoundsOn(sam));
+		scn.PassSkirmishActions();
+		assertEquals(1, scn.GetWoundsOn(sam));
+
+		// Aragorn's 8 loses to the Raiding Party's 9, damage +1 and all: two wounds.
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.PassSkirmishActions();
+		assertEquals(2, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }

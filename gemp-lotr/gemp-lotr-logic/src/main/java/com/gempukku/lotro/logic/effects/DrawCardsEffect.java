@@ -7,6 +7,7 @@ import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import com.gempukku.lotro.logic.timing.AbstractSubActionEffect;
 import com.gempukku.lotro.logic.timing.Action;
 import com.gempukku.lotro.logic.timing.Effect;
+import com.gempukku.lotro.logic.timing.RuleUtils;
 import com.gempukku.lotro.logic.timing.UnrespondableEffect;
 
 import java.util.LinkedList;
@@ -42,16 +43,22 @@ public class DrawCardsEffect extends AbstractSubActionEffect {
 
     @Override
     public boolean isPlayableInFull(LotroGame game) {
-        return game.getGameState().getDeck(_playerId).size() >= _count.evaluateExpression(game, null);
+        return game.getGameState().getDeck(_playerId).size() >= _count.evaluateExpression(game, null)
+                && (isReconcileDraw() || !RuleUtils.isBarredFromDrawing(game, _playerId));
+    }
+
+    // Reconcile draws (a player drawing back up to hand size at the end of the regroup phase, or when a card has
+    // the player reconcile) are never subject to a replacement such as OPPONENT_FILTERS_YOUR_DRAWS, nor to a bar
+    // on taking cards into hand from the draw deck - see PlayerReconcilesAction, the only caller that passes an
+    // Action of type RECONCILE here.
+    private boolean isReconcileDraw() {
+        return _action != null && _action.getType() == Action.Type.RECONCILE;
     }
 
     @Override
     public void playEffect(LotroGame game) {
         SubAction subAction = new SubAction(_action);
-        // Reconcile draws (a player drawing back up to hand size at the end of the regroup phase) are never
-        // subject to a replacement such as OPPONENT_FILTERS_YOUR_DRAWS - see PlayerReconcilesAction, the only
-        // caller that passes an Action of type RECONCILE here.
-        final boolean reconcileDraw = _action != null && _action.getType() == Action.Type.RECONCILE;
+        final boolean reconcileDraw = isReconcileDraw();
         final List<DrawOneCardEffect> drawEffects = new LinkedList<>();
         final int drawCount = _count.evaluateExpression(game, null);
         for (int i = 0; i < drawCount; i++) {

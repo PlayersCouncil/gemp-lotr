@@ -88,21 +88,24 @@ Before triggers occur before the action they are keyed to, which means that they
     * filter
       required
 * AboutToHinder
-  Triggers before a card matching `filter` is hindered` by player `using a card matching `source`.  
+  Triggers before a card matching `filter` is hindered by `player` using a card matching `source`.  
     * filter
-      default: any
+      required
     * source
       default: any
+      A hinder that no card makes passes whatever is written here (as built; the game makes no such hinder today).  
     * player
       optional
 * AboutToRestore
   Triggers before a card matching `filter` is restored by `player` using a card matching `source`.  
     * filter
-      default: any
+      required
     * source
       default: any
+      A restore that no card makes (every reconcile's) passes whatever is written here (as built): unlike `Restored`, a `source` does not keep a reconcile's restore out.  No definition uses this trigger yet.  
     * player
       optional
+      For a reconcile's restore, the player reconciling.  
 * AboutToTakeControlOfSite
   Triggers before a card matching `filter` causes any player to take control of a site.
     * filter
@@ -213,7 +216,7 @@ After triggers occur after the action they are keyed to, which means they cannot
     * memorize
       optional
 * ExertsForSpecialAbility
-  Triggers after a card matching `filter` exerts as part of executing a special ability of a card matching `source`, and optionally `memorize`s the exerted character.
+  Triggers after a card matching `filter` exerts as a cost of a special ability of a card matching `source`, and optionally `memorize`s the exerted character.  An exertion that is an effect of the ability is not answered (F-0478).
   If `itsOwn` is true, `source` is ignored and the source is checked to be the same as the exerting card.
  See Rush of Steeds).
     * filter
@@ -247,16 +250,17 @@ After triggers occur after the action they are keyed to, which means they cannot
     * memorize
       optional
 * Hindered
-  Triggers after a card matching `filter` in the given `zone` is hindered` by player `using a card matching `source`, and optionally `memorize`s the hindered card.  
+  Triggers after a card matching `filter` is hindered by `player` using a card matching `source`, and optionally `memorize`s the hindered card.  
     * filter
       default: any
     * source
-      default: any
+      optional
+      With none written, every hinder is answered, one that no card made included.  One written is a condition on the card that did the hindering, and a hinder by no card does not meet it (as `Discarded` reads its `source`).  
     * player
       optional
     * zone
       optional
-      Out-of-play zones will result in an error. 
+      Out-of-play zones will result in an error.  The value is read and checked and nothing more: the trigger answers wherever in play the card is.  
     * memorize
       optional
 * Killed
@@ -309,9 +313,11 @@ After triggers occur after the action they are keyed to, which means they cannot
     * exertsRanger
       default:false
 * PlayerDrawsCard
-  Triggers after `player` draws a card from their draw deck or takes a card into hand.
+  Triggers after `player` draws a card.  A card taken into hand (from a discard pile, or from a draw deck by a look, a reveal or a search) is not a card drawn: where the text says "draws a card (or takes a card into hand)", write `orTakesIntoHand: true` (Verily I Come 2_94, Betrayal of Isengard 3_29; F-0376).  A card taken in place of a draw is a card drawn (see `inPlaceOfDraw` on PutCardsFromDeckIntoHand).
     * player
       required
+    * orTakesIntoHand
+      default: false
 * PutsOnRing
   Triggers after the Ring-bearer "puts on" The One Ring.
 * Reconciles
@@ -345,16 +351,18 @@ After triggers occur after the action they are keyed to, which means they cannot
     * number
       default: 0 (any)
 * Restored
-  Triggers after a card matching `filter` in the given `zone` is restored by `player` using a card matching `source`, and optionally `memorize`s the restored card.  
+  Triggers after a card matching `filter` is restored by `player` using a card matching `source`, and optionally `memorize`s the restored card.  
     * filter
       default: any
     * source
-      default: any
+      optional
+      With none written, every restore is answered, the one no card makes included: a reconcile's (CR 5.0 "reconcile"; F-0361).  One written is a condition on the card that did the restoring, and a reconcile's restore does not meet it.  "When this is restored" writes none.  
     * player
       optional
+      For a reconcile's restore, the player reconciling.  
     * zone
       optional
-      Out-of-play zones will result in an error. 
+      Out-of-play zones will result in an error.  The value is read and checked and nothing more: the trigger answers wherever in play the card is.  
     * memorize
       optional
 * RevealsCardFromDrawDeck
@@ -436,4 +444,6 @@ After triggers occur after the action they are keyed to, which means they cannot
       optional
     * memorizeLoser
       optional
+    * memorizeLoserStrength
+      optional: a value memory holding the losing characters' strength as the skirmish resolved (Legacy Ruling 2's final removed character included), read with `fromMemory` (F-0480)
 

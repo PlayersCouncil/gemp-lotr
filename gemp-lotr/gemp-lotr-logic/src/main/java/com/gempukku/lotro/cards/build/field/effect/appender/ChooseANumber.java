@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
@@ -33,7 +34,8 @@ public class ChooseANumber implements EffectAppenderProducer {
         if (memorize == null)
             throw new InvalidCardDefinitionException("ChooseANumber requires a field to memorize the value");
 
-        return new DelayedAppender() {
+        // Taught for Q-0224 (IdleOffers): naming a number changes nothing in the game.
+        return TaughtForecast.teach(new DelayedAppender() {
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                 int min = fromSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
@@ -52,6 +54,6 @@ public class ChooseANumber implements EffectAppenderProducer {
                             }
                         });
             }
-        };
+        }, actionContext -> EffectForecast.BOOKKEEPING);
     }
 }

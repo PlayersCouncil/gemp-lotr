@@ -2,7 +2,10 @@
 
 	68_79: {
 		cardInfo: {
-			//id: 8_79.1
+			//id: 68_79.1
+			parent: 18_79
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/68_79.jpg
 			collInfo: 18U79
@@ -10,10 +13,11 @@
 		}
 		title: Frenzy of Arrows
 		unique: false
+		side: Shadow
 		culture: Orc
 		twilight: 2
 		type: Event
-		timeword: archery
+		timewords: Archery
 		effects: {
 			type: event
 			effect: [
@@ -47,7 +51,10 @@
 	
 	68_82: {
 		cardInfo: {
-			//id: 8_82.1
+			//id: 68_82.1
+			parent: 18_82
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN18E082.1.jpg
 			collInfo: 18R82
@@ -56,10 +63,11 @@
 		title: Grond
 		subtitle: Forged With Black Steel
 		unique: true
+		side: Shadow
 		culture: Orc
 		twilight: 3
-		type: possession
-		keyword: [
+		type: Possession
+		keywords: [
 			Support Area
 		]
 		effects: [
@@ -72,7 +80,6 @@
 			}
 			{
 				type: Trigger
-				optional: false
 				trigger: {
 					type: moves
 				}
@@ -98,13 +105,17 @@
 						deck: freeps
 						count: 2
 						showAll: true
-						shuffle: true
+						shuffle: false
 						forced: true
+					}
+					{
+						type: ShuffleDeck
+						deck: freeps
 					}
 				]
 			}
 		]
-		gametext: To play, spot an [orc] minion.<br>Each time the fellowship moves during the regroup phase, you may discard this possession to make the Free Peoples player shuffle 2 cards from their hand into their draw deck.  Search that draw deck and discard 2 Free Peoples cards.
+		gametext: To play, spot an [orc] minion.<br>Each time the fellowship moves during the regroup phase, you may discard this possession to make the Free Peoples player shuffle 2 cards from their hand into their draw deck.  Search that deck and discard 2 Free Peoples cards from it.
 		lore: "'Grond! Grond! Grond! Grond! Grond! Grond!'"
 		promotext: ""
 		alts: {

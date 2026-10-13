@@ -19,7 +19,20 @@ public class Card_04_025_Tests
 				new HashMap<>()
 				{{
 					put("card", "4_25");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetSiteControlScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("tribe", "4_25");
+					put("brigand", "4_10");     // Dunlending Brigand: the other [dunland] minion, with no text
+					put("knight", "5_35");      // Gondorian Knight: strength 6, vitality 3, no text
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -62,18 +75,73 @@ public class Card_04_025_Tests
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void HillmanTribeTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void WithASiteThatCanBeControlledWinningASkirmishOffersItAndAYesTakesIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetSiteControlScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var tribe = scn.GetShadowCard("tribe");
+		var brigand = scn.GetShadowCard("brigand");
+		var knight = scn.GetFreepsCard("knight");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// Player 1's second turn: both markers are on site 2, so site 1 is behind every marker.
+		scn.SkipToSite(2);
+		var site1 = scn.GetSite(1);
+		scn.MoveCompanionsToTable(knight);
+		scn.MoveMinionsToTable(tribe, brigand);
 
-		assertEquals(3, scn.GetTwilight());
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(knight, tribe);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(knight);
+
+		assertEquals(0, scn.GetWoundsOn(knight));
+		assertFalse(scn.IsSiteControlled(site1));
+		assertEquals(0, scn.GetShadowControlledSiteCount());
+
+		scn.PassCurrentPhaseActions();
+		// 9 against 6: the Knight loses, and takes a wound.
+		assertEquals(1, scn.GetWoundsOn(knight));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(tribe));
+		scn.ShadowAcceptOptionalTrigger();
+
+		assertTrue(scn.ShadowControls(site1));
+		assertEquals(1, scn.GetShadowControlledSiteCount());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void WithNoSiteThatCanBeControlledWinningASkirmishOffersNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetSiteControlScenario();
+
+		var tribe = scn.GetShadowCard("tribe");
+		var brigand = scn.GetShadowCard("brigand");
+		var knight = scn.GetFreepsCard("knight");
+
+		scn.StartGame();
+		scn.SkipToSite(2);
+		// Site 1 is the only site every marker has passed, and player 1 took it on player 2's turn: there is
+		// nothing a yes could take (Q-0034).
+		scn.FreepsTakeControlOfSite();
+		var site1 = scn.GetSite(1);
+		scn.MoveCompanionsToTable(knight);
+		scn.MoveMinionsToTable(tribe, brigand);
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(knight, tribe);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(knight);
+
+		assertEquals(0, scn.GetWoundsOn(knight));
+		assertTrue(scn.FreepsControls(site1));
+
+		scn.PassCurrentPhaseActions();
+		// The Tribe has won, beside the other [dunland] minion.
+		assertEquals(1, scn.GetWoundsOn(knight));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(tribe));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+
+		assertEquals(0, scn.GetShadowControlledSiteCount());
+		assertEquals(1, scn.GetFreepsControlledSiteCount());
 	}
 }

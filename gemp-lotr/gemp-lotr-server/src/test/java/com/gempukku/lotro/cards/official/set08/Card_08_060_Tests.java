@@ -18,7 +18,24 @@ public class Card_08_060_Tests
 				new HashMap<>()
 				{{
 					put("card", "8_60");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetArcheryScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("marksman", "8_60");
+					put("numenorean", "8_49");  // Black Númenorean: a [raider] Man; fierce, and a skirmish ability that needs initiative
+					put("ships", "8_65");       // Ships of Great Draught: a [raider] possession in the support area, no Man
+					put("brigand", "4_10");     // Dunlending Brigand: a [dunland] Man with no text
+					put("sam", "1_311");        // Sam, Son of Hamfast: Ring-bound and not the Ring-bearer
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: unbound
+					put("gimli", "1_13");       // Gimli, Son of Glóin: unbound, so that a wound unbound companions alone may take is still a choice
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -63,18 +80,66 @@ public class Card_08_060_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void HaradrimMarksmanTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void WithAnotherRaiderManRingBoundCompanionsAreNotOfferedArcheryWounds() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetArcheryScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCompanionsToTable(sam, aragorn, gimli);
+
+		var marksman = scn.GetShadowCard("marksman");
+		var numenorean = scn.GetShadowCard("numenorean");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(marksman, numenorean);
+		scn.SkipToArcheryWounds();
 
-		assertEquals(5, scn.GetTwilight());
+		// The Marksman is the one archer: one wound, which only the unbound companions may take.
+		assertEquals(1, scn.GetShadowArcheryTotal());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, gimli));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(frodo, sam));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		scn.FreepsChooseCard(aragorn);
+
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertEquals(0, scn.GetWoundsOn(sam));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
+
+	@Test
+	public void WithNoOtherRaiderManRingBoundCompanionsAreOfferedArcheryWounds() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetArcheryScenario();
+
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCompanionsToTable(sam, aragorn, gimli);
+
+		var marksman = scn.GetShadowCard("marksman");
+		var ships = scn.GetShadowCard("ships");
+		var brigand = scn.GetShadowCard("brigand");
+
+		scn.StartGame();
+		// Beside the Marksman: a [raider] card that is no Man, and a Man who is not [raider].
+		scn.MoveCardsToSupportArea(ships);
+		scn.MoveMinionsToTable(marksman, brigand);
+		scn.SkipToArcheryWounds();
+
+		assertEquals(1, scn.GetShadowArcheryTotal());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, sam, aragorn, gimli));
+		assertEquals(0, scn.GetWoundsOn(sam));
+		scn.FreepsChooseCard(sam);
+
+		assertEquals(1, scn.GetWoundsOn(sam));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
 }

@@ -22,8 +22,11 @@
 				type: Trigger
 				optional: false
 				trigger: {
-					type: played
-					filter: self
+					type: ConstantlyCheck
+				}
+				requires: {
+					type: canSpot
+					filter: another,weapon,attachedTo(bearer)
 				}
 				effect: {
 					type: discard
@@ -505,6 +508,10 @@
 						type: canSpot
 						filter: another,culture(gondor),man
 					}
+					{
+						type: canSpot
+						filter: minion
+					}
 				]
 				effect: {
 					type: discard
@@ -882,8 +889,7 @@
 					phase: regroup
 				}
 				requires: {
-					type: cantSpot
-					filter: site,controlledByOtherPlayer
+					type: opponentDoesNotControlSite
 				}
 				effect: {
 					type: wound
@@ -1599,7 +1605,7 @@
 				}
 				effect: {
 					type: wound
-					select: choose(minion,inSkirmishAgainst(memory(exertedMan)))
+					select: choose(roaming,minion,inSkirmishAgainst(memory(exertedMan)))
 				}
 			}
 			{
@@ -2476,6 +2482,10 @@
 					filter: minion
 					phase: assignment
 					text: Assign this minion to bearer of Unexpected Visitor.
+					requires: {
+						type: canSpot
+						filter: hasAttached(name(Unexpected Visitor)),assignableToSkirmishAgainst(self)
+					}
 					effect: {
 						type: assignFpCharacterToSkirmish
 						fpCharacter: choose(hasAttached(name(Unexpected Visitor)))
@@ -2535,8 +2545,7 @@
 				modifier: {
 					type: modifyStrength
 					requires: {
-						type: cantSpot
-						filter: site,controlledByOtherPlayer
+						type: opponentDoesNotControlSite
 					}
 					filter: self
 					amount: 2

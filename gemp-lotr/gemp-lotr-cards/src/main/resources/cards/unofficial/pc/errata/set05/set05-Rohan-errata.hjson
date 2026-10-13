@@ -36,7 +36,7 @@
 				}
 			]
 		}
-		gametext: <b>Regroup:</b> Spot 3 valiant companions to discard up to 2 conditions and liberate a site.
+		gametext: Spot 3 valiant companions to discard up to 2 conditions and liberate a site.
 		lore: "'Let us drive through such foes as are already between us and the fastness.'"
 		promotext: ""
 		alts: {
@@ -82,7 +82,7 @@
 				}
 			]
 		}
-		gametext: <b>Maneuver:</b> Spot 3 valiant companions to make one of those companions <b>defender +1</b> until the regroup phase.
+		gametext: Spot 3 valiant companions to make one of those companions <b>defender +1</b> until the regroup phase.
 		lore: "'We must draw all our forces now behind the walls.'"
 		promotext: ""
 		alts: {

@@ -43,9 +43,10 @@
 			{
 				type: activatedInDiscard
 				phase: shadow
+				specialAbility: false
 				requires: {
 					type: canSpotThreats
-					amount: 3
+					amount: 5
 				}
 				effect: {
 					type: playCardFromDiscard
@@ -328,7 +329,7 @@
 			cost: [
 				{
 					type: spot
-					select: choose(culture(men),possession)
+					select: choose(culture(men),possession,support(you))
 					memorize: spottedPossession
 				}
 				{
@@ -441,7 +442,7 @@
 				effect: {
 					type: StackCardsFromPlay
 					select: choose(culture(men),minion)
-					where: choose(culture(men),possession,zone(support))
+					where: choose(culture(men),possession,support(you))
 				}
 			}
 		]
@@ -534,8 +535,7 @@
 				type: Trigger
 				optional: false
 				trigger: {
-					type: played
-					filter: self
+					type: EntersPlay
 					fromZone: hand
 				}
 				effect: {
@@ -609,7 +609,7 @@
 				effect: {
 					type: stackCardsFromDiscard
 					select: memory(chosenMinion)
-					where: choose(culture(men),possession,zone(support))
+					where: choose(culture(men),possession,support(you))
 				}
 			}
 		]
@@ -1230,7 +1230,7 @@
 				effect: {
 					type: stackCardsFromDiscard
 					select: choose(culture(men),minion)
-					where: choose(culture(men),possession,zone(support))
+					where: choose(culture(men),possession,support(you))
 				}
 			}
 		]

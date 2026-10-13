@@ -86,8 +86,8 @@ public class Card_V1_052_Tests
 		scn.FreepsUseCardAction(merry);
 		assertEquals(3, scn.GetWoundsOn(merry));
 		scn.ShadowChooseNo();
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		//immediately skips to the fierce skirmish
 		scn.PassCurrentPhaseActions();
 
@@ -119,8 +119,8 @@ public class Card_V1_052_Tests
 		scn.ShadowChooseYes();
 		assertEquals(7, scn.GetWoundsOn(shelob));
 
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 
 		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
 	}

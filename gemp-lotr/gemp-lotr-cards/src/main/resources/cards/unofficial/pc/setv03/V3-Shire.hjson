@@ -35,16 +35,22 @@
 						type: AddTrigger
 						trigger: {
 							type: SkirmishAboutToEnd
-							involving: memory(pumpedHobbit)
+							involving: any
 						}
-						requires: {
-							type: CantSpot
-							filter: companion
-							count: 5
-						}
+						requires: [
+							{
+								type: CantSpot
+								filter: companion
+								count: 5
+							}
+							{
+								type: HasCardInMemory
+								memory: pumpedHobbit
+							}
+						]
 						effect: {
 							type: Hinder
-							select: choose(minion, InSkirmishAgainst(memory(pumpedHobbit)))
+							select: choose(minion, InSkirmish)
 						}
 					}
 				]
@@ -364,7 +370,7 @@
 				effect: [
 					{
 						type: Memorize
-						filter: Hobbit, InSkirmish
+						filter: Hobbit, InSkirmishAgainst(minion)
 						memory: skirmisher
 					}
 					{
@@ -398,7 +404,7 @@
 				]
 			}
 		]
-		gametext: Spot a Hobbit skirmishing more than 1 minion.  Resolve skirmishes between that Hobbit and those minions individually.  Until the regroup phase, add a burden each time that Hobbit loses a skirmish and a threat each time that Hobbit wins.
+		gametext: Spot a Hobbit skirmishing more than 1 minion to resolve skirmishes between that Hobbit and those minions individually.  Until the regroup phase, add a burden each time that Hobbit loses a skirmish and a threat each time that Hobbit wins.
 		lore: "The orc wheeled round, but before it could make a move Sam slashed its whip-hand from its arm."
 		promotext: ""
 		alts: {
@@ -488,7 +494,7 @@
 					}
 					{
 						type: Optional
-						text: Would you like to add (3) to reconcile your hand and heal 2 {shire} companions?
+						text: Would you like to add (3) to reconcile your hand and heal up to 2 {shire} companions?
 						requires: {
 							type: CantSpot
 							filter: companion
@@ -558,6 +564,7 @@
 					showAll: true
 					shuffle: true
 					forced: false
+					count: 0-1
 				}
 			}
 			{
@@ -565,6 +572,10 @@
 				method: discarded
 				optional: true
 				source: pipe
+				requires: {
+					type: HasCardInDiscard
+					filter: side(Free Peoples), not(event), not(title(Hornblower Barrel))
+				}
 				cost: {
 					type: Spot
 					filter: another, title(Hornblower Barrel)
@@ -614,7 +625,6 @@
 				trigger: {
 					type: Discarded
 					filter: pipeweed
-					source: any
 					memorize: discardedPipeweed
 				}
 				cost: {
@@ -762,91 +772,137 @@
 				}
 				effect: [
 					{
-						type: Choice
-						texts: [
-							Hinder Shadow support conditions
-							Hinder Shadow support possessions
-						]
-						effects: [
+						// Neither question is put when no answer to it could hinder anything (F-0116).
+						type: If
+						check: {
+							type: CanSpot
+							filter: side(Shadow), support, or(condition,possession)
+						}
+						true: [
 							{
-								type: MemorizeInfo
-								memory: chosenType
-								info: condition
+								type: Choice
+								texts: [
+									Hinder Shadow support conditions
+									Hinder Shadow support possessions
+								]
+								effects: [
+									{
+										type: MemorizeInfo
+										memory: chosenType
+										info: condition
+									}
+									{
+										type: MemorizeInfo
+										memory: chosenType
+										info: possession
+									}
+								]
 							}
 							{
-								type: MemorizeInfo
-								memory: chosenType
-								info: possession
+								type: SendMessage
+								text: "{you} chooses {chosenType}"
 							}
-						]
-					}
-					{
-						type: SendMessage
-						text: "{you} chooses {chosenType}"
-					}
-					{
-						type: Choice
-						texts: [
-							Hinder all odd-numbered Shadow support {chosenType}s
-							Hinder all even-numbered Shadow support {chosenType}s
-						]
-						effects: [
 							{
 								type: If
 								check: {
-									type: MemoryIs
-									memory: chosenType
-									value: condition
+									type: Or
+									requires: [
+										{
+											type: And
+											requires: [
+												{
+													type: MemoryIs
+													memory: chosenType
+													value: condition
+												}
+												{
+													type: CanSpot
+													filter: side(Shadow), support, condition
+												}
+											]
+										}
+										{
+											type: And
+											requires: [
+												{
+													type: MemoryIs
+													memory: chosenType
+													value: possession
+												}
+												{
+													type: CanSpot
+													filter: side(Shadow), support, possession
+												}
+											]
+										}
+									]
 								}
-								true: [
-									{
-										type: SendMessage
-										text: "{you} chooses odd-numbered."
+								true: {
+										type: Choice
+										texts: [
+											Hinder all odd-numbered Shadow support {chosenType}s
+											Hinder all even-numbered Shadow support {chosenType}s
+										]
+										effects: [
+											{
+												type: If
+												check: {
+													type: MemoryIs
+													memory: chosenType
+													value: condition
+												}
+												true: [
+													{
+														type: SendMessage
+														text: "{you} chooses odd-numbered."
+													}
+													{
+														type: Hinder
+														select: all(side(Shadow), support, oddTwilight, condition)
+													}
+												]
+												false: [
+													{
+														type: SendMessage
+														text: "{you} chooses odd-numbered."
+													}
+													{
+														type: Hinder
+														select: all(side(Shadow), support, oddTwilight, possession)
+													}
+												]
+											}
+											
+											{
+												type: If
+												check: {
+													type: MemoryIs
+													memory: chosenType
+													value: condition
+												}
+												true: [
+													{
+														type: SendMessage
+														text: "{you} chooses even-numbered."
+													}
+													{
+														type: Hinder
+														select: all(side(Shadow), support, evenTwilight, condition)
+													}
+												]
+												false: [
+													{
+														type: SendMessage
+														text: "{you} chooses even-numbered."
+													}
+													{
+														type: Hinder
+														select: all(side(Shadow), support, evenTwilight, possession)
+													}
+												]
+											}
+										]
 									}
-									{
-										type: Hinder
-										select: all(side(Shadow), support, oddTwilight, condition)
-									}
-								]
-								false: [
-									{
-										type: SendMessage
-										text: "{you} chooses odd-numbered."
-									}
-									{
-										type: Hinder
-										select: all(side(Shadow), support, oddTwilight, possession)
-									}
-								]
-							}
-							
-							{
-								type: If
-								check: {
-									type: MemoryIs
-									memory: chosenType
-									value: condition
-								}
-								true: [
-									{
-										type: SendMessage
-										text: "{you} chooses even-numbered."
-									}
-									{
-										type: Hinder
-										select: all(side(Shadow), support, evenTwilight, condition)
-									}
-								]
-								false: [
-									{
-										type: SendMessage
-										text: "{you} chooses even-numbered."
-									}
-									{
-										type: Hinder
-										select: all(side(Shadow), support, evenTwilight, possession)
-									}
-								]
 							}
 						]
 					}
@@ -1094,8 +1150,11 @@
 					type: ModifyStrength
 					select: bearer
 					amount: {
-						type: ForEachThreat
+						type: CardPhaseLimit
 						limit: 6
+						amount: {
+							type: ForEachThreat
+						}
 					}
 				}
 			}
@@ -1103,6 +1162,10 @@
 				type: Response
 				trigger: {
 					type: NewRingBearer
+				}
+				requires: {
+					type: CanSpot
+					filter: Hobbit,Ring-bearer,not(HasAttached(self)),not(HasAttached(hand weapon))
 				}
 				effect: {
 					type: Transfer
@@ -1219,7 +1282,7 @@
 				]
 			}
 		]
-		gametext: To play, spot 2 Hobbit companions.<br>Skirmish: Exert a companion and hinder each card borne by them to make that companion strength +1 for each card hindered (+3 if that card is a weapon).  Hinder this condition if you can spot more than 4 companions.
+		gametext: To play, spot 2 Hobbit companions.<br>Skirmish: Exert a companion and hinder each card borne by them to make that companion strength +1 for each card hindered (+3 if that card is a weapon).  Hinder this condition (or discard this if you can spot more than 4 companions).
 		lore: ""
 		promotext: ""
 		alts: {
@@ -1442,18 +1505,30 @@
 						}
 						true: [
 							{
-								type: ChooseActiveCards
-								player: Shadow
-								text: Choose a hindered Shadow card to shuffle into your draw deck
-								select: choose(side(Shadow), hindered)
-								hindered: true
-								memorize: chosenHindered
-							}
-							{
-								type: ShuffleCardsFromPlayIntoDrawDeck
-								player: Shadow
-								select: memory(chosenHindered)
-								includeStacked: true
+								type: Optional
+								text: Would you like to make the Shadow player shuffle one of their hindered cards into its owner's draw deck?
+								// Not asked when the Shadow player has no hindered card to shuffle.
+								requires: {
+									type: CanSpot
+									filter: side(Shadow), hindered
+									hindered: true
+								}
+								effect: [
+									{
+										type: ChooseActiveCards
+										player: Shadow
+										text: Choose a hindered Shadow card to shuffle into your draw deck
+										select: choose(side(Shadow), hindered)
+										hindered: true
+										memorize: chosenHindered
+									}
+									{
+										type: ShuffleCardsFromPlayIntoDrawDeck
+										player: Shadow
+										select: memory(chosenHindered)
+										includeStacked: true
+									}
+								]
 							}
 						]
 					}

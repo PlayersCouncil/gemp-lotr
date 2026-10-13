@@ -1,38 +1,38 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.framework.*;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
 import static com.gempukku.lotro.framework.Assertions.*;
+import static org.junit.Assert.*;
 
 public class Card_V3_004_Tests
 {
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("hospitality", "103_4");
-					put("pippin", "1_306"); // Unbound Hobbit
-					put("sam", "1_311"); // Ring-bound Hobbit
-					put("frodospipe", "3_107"); // Shire pipe
-					put("gandalfspipe", "1_74"); // Gandalf pipe
-					put("aragornspipe", "1_91"); // Gondor pipe
-
-					// Companions of different cultures for culture count test
-					put("gandalf", "1_364"); // Gandalf culture
-					put("legolas", "1_50"); // Elven culture
-					put("gimli", "1_13"); // Dwarven culture
-					put("aragorn", "1_89"); // Gondor culture
-
-					put("stalker", "5_72"); // Desert Stalker
-					put("runner", "1_178");
+					put("hospitality2", "103_4");
+					put("aragorn", "1_89");         // Aragorn, Ranger of the North: unbound [gondor] Man, strength 8
+					put("gimli", "1_13");           // Gimli, Son of Gloin: unbound [dwarven] Dwarf, strength 6
+					put("pippin", "1_306");         // Pippin, Friend to Frodo: unbound [shire] Hobbit
+					put("sam", "1_311");            // Sam, Son of Hamfast: Ring-bound, and not the Ring-bearer
+					put("gaffer", "1_291");         // The Gaffer: [shire] Hobbit ally
+					put("aragornspipe", "1_91");    // Aragorn's Pipe: [gondor] pipe, on a [gondor] companion
+					put("gimlispipe", "3_2");       // Gimli's Pipe: [dwarven] pipe, on Gimli
+					put("frodospipe", "3_107");     // Frodo's Pipe: [shire] pipe, on Frodo
+					put("bilbospipe", "1_285");     // Bilbo's Pipe: [shire] pipe, on any Hobbit
+					put("gafferspipe", "1_292");    // The Gaffer's Pipe: [shire] pipe, on any Hobbit
+					put("agents", "6_57");          // Agents of Orthanc: strength 9, +2 and damage +1 for each Free Peoples culture over 2
+					put("agents2", "6_57");
+					put("stalker", "5_72");         // Desert Stalker: its maneuver ability needs 4 Free Peoples cultures spotted
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -51,12 +51,13 @@ public class Card_V3_004_Tests
 		 * Culture: Gandalf
 		 * Twilight Cost: 1
 		 * Type: Possession
-		 * Subtype: 
-		 * Strength: 1
+		 * Subtype:
+		 * Strength: +1
 		 * Game Text: Pipeweed.
-		* 	Bearer must be an unbound companion bearing a pipe. 
-		* 	Each time the fellowship moves, spot 3 pipes of different cultures to make the number of Free Peoples cultures that can be counted -1 until the regroup phase.
-		*/
+		 * 	Bearer must be an unbound companion bearing a pipe.
+		 * 	Each time the fellowship moves, spot 3 pipes of different cultures to make the number of Free Peoples
+		 * 	cultures that can be counted -1 until the regroup phase.
+		 */
 
 		var scn = GetScenario();
 
@@ -64,115 +65,221 @@ public class Card_V3_004_Tests
 
 		assertEquals("Saruman's Hospitality", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(2, card.getBlueprint().getUniqueRestriction());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertNull(card.getBlueprint().getPossessionClasses());
 		assertTrue(scn.HasKeyword(card, Keyword.PIPEWEED));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 		assertEquals(1, card.getBlueprint().getStrength());
 	}
 
-
 	@Test
-	public void HospitalityRequiresUnboundCompanionWithPipeAndGivesStrength() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void PlaysOnAnUnboundCompanionBearingAPipeAndOnNoOneElse() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var hospitality = scn.GetFreepsCard("hospitality");
+		var hospitality2 = scn.GetFreepsCard("hospitality2");
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
 		var pippin = scn.GetFreepsCard("pippin");
 		var sam = scn.GetFreepsCard("sam");
-		var frodospipe = scn.GetFreepsCard("frodospipe");
-
+		var gaffer = scn.GetFreepsCard("gaffer");
+		scn.MoveCompanionsToTable(aragorn, gimli, pippin, sam);
+		scn.MoveAlliesToTable(gaffer);
+		scn.AttachCardsTo(aragorn, scn.GetFreepsCard("aragornspipe"));
+		scn.AttachCardsTo(gimli, scn.GetFreepsCard("gimlispipe"));
+		// Ring-bound companions with a pipe each: the Ring-bearer, and one who is not.
+		scn.AttachCardsTo(frodo, scn.GetFreepsCard("frodospipe"));
+		scn.AttachCardsTo(sam, scn.GetFreepsCard("bilbospipe"));
+		// An ally with a pipe.
+		scn.AttachCardsTo(gaffer, scn.GetFreepsCard("gafferspipe"));
+		// An unbound companion who bears pipeweed and no pipe: the other copy of this card, cheated onto him.
+		scn.AttachCardsTo(pippin, hospitality2);
 		scn.MoveCardsToHand(hospitality);
-		scn.MoveCompanionsToTable(pippin, sam);
-		scn.AttachCardsTo(pippin, frodospipe);
 
 		scn.StartGame();
 
-		// Pippin is unbound with pipe, base strength should be whatever it is
-		int pippinBaseStrength = scn.GetStrength(pippin);
-
-		// Should be able to play on Pippin (unbound with pipe)
+		assertEquals(6, scn.GetStrength(gimli));
 		assertTrue(scn.FreepsPlayAvailable(hospitality));
+
 		scn.FreepsPlayCard(hospitality);
-		assertAttachedTo(hospitality, pippin);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, gimli));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(frodo, sam, gaffer, pippin));
+		assertEquals(1, scn.FreepsGetChoiceMin());
 
-		// Pippin should have +1 strength from hospitality
-		assertEquals(pippinBaseStrength + 1, scn.GetStrength(pippin));
+		scn.FreepsChooseCard(aragorn);
+		assertAttachedTo(hospitality, aragorn);
+		assertEquals(6, scn.GetStrength(gimli));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	public void HospitalityCannotAttachToRingBoundCompanion() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void CannotBePlayedUntilAnUnboundCompanionBearsAPipe() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var hospitality = scn.GetFreepsCard("hospitality");
-		var sam = scn.GetFreepsCard("sam");
-		var frodospipe = scn.GetFreepsCard("frodospipe");
-
-		scn.MoveCardsToHand(hospitality);
-		scn.MoveCompanionsToTable(sam);
-		scn.AttachCardsTo(sam, frodospipe);
-
-		scn.StartGame();
-
-		// Sam is ring-bound, so Hospitality should not be playable
-		// (Frodo is also ring-bound and is always present)
-		assertFalse(scn.FreepsPlayAvailable(hospitality));
-	}
-
-	@Test
-	public void HospitalityReducesCultureCountWith3DifferentPipes() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var frodo = scn.GetRingBearer(); // Shire culture
-		var gandalf = scn.GetFreepsCard("gandalf"); // Gandalf culture
-		var legolas = scn.GetFreepsCard("legolas"); // Elven culture
-		var gimli = scn.GetFreepsCard("gimli"); // Dwarven culture
-		var hospitality = scn.GetFreepsCard("hospitality");
-		var pippin = scn.GetFreepsCard("pippin");
-		var frodospipe = scn.GetFreepsCard("frodospipe");
-		var gandalfspipe = scn.GetFreepsCard("gandalfspipe");
 		var aragornspipe = scn.GetFreepsCard("aragornspipe");
-
-		scn.MoveCompanionsToTable(gandalf, legolas, gimli, pippin);
-		scn.AttachCardsTo(pippin, frodospipe, hospitality);
-		scn.AttachCardsTo(gandalf, gandalfspipe);
-		// Only 2 pipes initially
-
-		var stalker = scn.GetShadowCard("stalker");
-		scn.MoveMinionsToTable(stalker);
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var sam = scn.GetFreepsCard("sam");
+		scn.MoveCompanionsToTable(aragorn, sam);
+		// The only pipes in play are on the Ring-bound companions.
+		scn.AttachCardsTo(scn.GetRingBearer(), scn.GetFreepsCard("frodospipe"));
+		scn.AttachCardsTo(sam, scn.GetFreepsCard("bilbospipe"));
+		scn.MoveCardsToHand(hospitality, aragornspipe);
 
 		scn.StartGame();
 
-		// Move from site 1 to site 2 - only 2 pipes, so modifier doesn't trigger
-		scn.FreepsPassCurrentPhaseAction();
+		assertFalse(scn.FreepsPlayAvailable(hospitality));
 
-		assertEquals(2, scn.GetCurrentSiteNumber());
+		scn.FreepsPlayCard(aragornspipe);
+		assertAttachedTo(aragornspipe, aragorn);
+		assertTrue(scn.FreepsPlayAvailable(hospitality));
 
-		scn.SkipToPhase(Phase.MANEUVER);
+		// Aragorn is now the one unbound companion bearing a pipe, so nobody is asked where it goes.
+		scn.FreepsPlayCard(hospitality);
+		assertAttachedTo(hospitality, aragorn);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void EachMoveWithPipesOfThreeCulturesMakesOneFewerFreePeoplesCultureCountUntilTheRegroupPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var hospitality = scn.GetFreepsCard("hospitality");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var gaffer = scn.GetFreepsCard("gaffer");
+		var gimlispipe = scn.GetFreepsCard("gimlispipe");
+		var agents = scn.GetShadowCard("agents");
+		var agents2 = scn.GetShadowCard("agents2");
+		var stalker = scn.GetShadowCard("stalker");
+		scn.MoveCompanionsToTable(aragorn, gimli);
+		scn.MoveAlliesToTable(gaffer);
+		scn.AttachCardsTo(aragorn, scn.GetFreepsCard("aragornspipe"), hospitality);
+		// A pipe on an ally counts as well as one on a companion.
+		scn.AttachCardsTo(gaffer, scn.GetFreepsCard("gafferspipe"));
+		scn.MoveCardsToHand(gimlispipe);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(agents, agents2, stalker);
+
+		// Four cultures: [shire] (Frodo, The Gaffer), [gondor] (Aragorn), [dwarven] (Gimli), [gandalf] (this card).
+		assertEquals(4, scn.GetFreepsCultureCount());
+		// 9 + 2 for each of the 2 cultures over 2
+		assertEquals(13, scn.GetStrength(agents));
+
+		// The pipe of a third culture arrives by legal play: [gondor], [shire] and now [dwarven].
+		scn.FreepsPlayCard(gimlispipe);
+		assertAttachedTo(gimlispipe, gimli);
+		assertEquals(4, scn.GetFreepsCultureCount());
 
 		scn.FreepsPass();
-		// Desert Stalker should be able to use ability (spots 4 cultures: Shire, Gandalf, Elven, Dwarven)
-		assertTrue(scn.ShadowActionAvailable(stalker));
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertEquals(3, scn.GetFreepsCultureCount());
+		// 9 + 2 for the 1 culture over 2
+		assertEquals(11, scn.GetStrength(agents));
 
-		// Now attach 3rd pipe directly
-		scn.AttachCardsTo(legolas, aragornspipe);
-
-		// Move during Regroup phase
-		scn.SkipToPhase(Phase.REGROUP);
-		scn.BothPass();
-		scn.FreepsChooseToMove();
-
-		assertEquals(3, scn.GetCurrentSiteNumber());
-
-		// Now Hospitality should trigger (3 pipes of different cultures)
-		// FP culture count is reduced by 1, so Stalker sees only 3 cultures instead of 4
 		scn.SkipToPhase(Phase.MANEUVER);
-
-		// Desert Stalker should NOT be able to use ability (needs 4 cultures, only sees 3)
+		scn.FreepsPass();
+		// "Spot 4 Free Peoples cultures" finds only 3.
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 		assertFalse(scn.ShadowActionAvailable(stalker));
+
+		scn.ShadowPass();
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[] { aragorn, agents }, new PhysicalCardImpl[] { gimli, agents2 });
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(gimli);
+		scn.PassCurrentPhaseActions();
+		// 6 against 11: Gimli loses and takes 1 wound + 1 for the damage +1 of the 1 culture over 2
+		assertEquals(2, scn.GetWoundsOn(gimli));
+
+		// Still one fewer in a second skirmish, the last thing before the regroup phase.
+		scn.FreepsResolveSkirmish(aragorn);
+		assertEquals(Phase.SKIRMISH, scn.GetCurrentPhase());
+		assertEquals(3, scn.GetFreepsCultureCount());
+		assertEquals(11, scn.GetStrength(agents));
+
+		scn.PassCurrentPhaseActions();
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		assertEquals(4, scn.GetFreepsCultureCount());
+		assertEquals(13, scn.GetStrength(agents));
+
+		// The fellowship moves a second time.
+		scn.PassRegroupActions();
+		scn.FreepsChooseToMove();
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertEquals(3, scn.GetFreepsCultureCount());
+		assertEquals(11, scn.GetStrength(agents));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void ThreePipesOfTwoCulturesAndAPipeweedOfAThirdLeaveTheCountAlone() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var hospitality = scn.GetFreepsCard("hospitality");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var gaffer = scn.GetFreepsCard("gaffer");
+		var agents = scn.GetShadowCard("agents");
+		var stalker = scn.GetShadowCard("stalker");
+		scn.MoveCompanionsToTable(aragorn, gimli);
+		scn.MoveAlliesToTable(gaffer);
+		// Pipes: one [gondor] and two [shire]. This card is a [gandalf] pipeweed, and no pipe.
+		scn.AttachCardsTo(aragorn, scn.GetFreepsCard("aragornspipe"), hospitality);
+		scn.AttachCardsTo(scn.GetRingBearer(), scn.GetFreepsCard("frodospipe"));
+		scn.AttachCardsTo(gaffer, scn.GetFreepsCard("gafferspipe"));
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(agents, stalker);
+
+		assertEquals(4, scn.GetFreepsCultureCount());
+		assertEquals(13, scn.GetStrength(agents));
+
+		scn.FreepsPass();
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertEquals(4, scn.GetFreepsCultureCount());
+		assertEquals(13, scn.GetStrength(agents));
+
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+		assertTrue(scn.ShadowActionAvailable(stalker));
+	}
+
+	@Test
+	public void TwoCopiesEachMakeOneFewerCultureCount() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var gaffer = scn.GetFreepsCard("gaffer");
+		var agents = scn.GetShadowCard("agents");
+		scn.MoveCompanionsToTable(aragorn, gimli);
+		scn.MoveAlliesToTable(gaffer);
+		scn.AttachCardsTo(aragorn, scn.GetFreepsCard("aragornspipe"), scn.GetFreepsCard("hospitality"));
+		scn.AttachCardsTo(gimli, scn.GetFreepsCard("gimlispipe"), scn.GetFreepsCard("hospitality2"));
+		scn.AttachCardsTo(gaffer, scn.GetFreepsCard("gafferspipe"));
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(agents);
+
+		assertEquals(4, scn.GetFreepsCultureCount());
+		assertEquals(13, scn.GetStrength(agents));
+
+		scn.FreepsPass();
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		// 4 - 1 for each copy
+		assertEquals(2, scn.GetFreepsCultureCount());
+		// No culture over 2 is left to count.
+		assertEquals(9, scn.GetStrength(agents));
 	}
 }

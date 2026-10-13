@@ -3,14 +3,17 @@ package com.gempukku.lotro.cards.official.set08;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_08_009_Tests
@@ -21,7 +24,22 @@ public class Card_08_009_Tests
 				new HashMap<>()
 				{{
 					put("card", "8_9");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetArcheryScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("ship", "8_9");
+					put("legolas", "1_50");     // Legolas, Greenleaf: the Elf companion; an archer with an archery special ability
+					put("garrison", "8_36");    // Garrison of Gondor: a [gondor] Man and an archer; his other text needs a fortification
+					put("sam", "1_311");        // Sam, Son of Hamfast: Ring-bound and not the Ring-bearer
+					put("troop", "1_177");      // Goblin Patrol Troop: vitality 3, no text
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -58,18 +76,62 @@ public class Card_08_009_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void AGreyShipTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void TheXChosenComesOffTheFellowshipArcheryTotalAndThatManyUnboundCompanionsAreHealed() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetArcheryScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var frodo = scn.GetRingBearer();
+		var ship = scn.GetFreepsCard("ship");
+		var legolas = scn.GetFreepsCard("legolas");
+		var garrison = scn.GetFreepsCard("garrison");
+		var sam = scn.GetFreepsCard("sam");
+		scn.MoveCompanionsToTable(legolas, garrison, sam);
+		scn.MoveCardsToHand(ship);
+
+		var troop = scn.GetShadowCard("troop");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// Two unbound companions and two Ring-bound ones are wounded; the Garrison twice, so that one heal shows.
+		scn.AddWoundsToChar(legolas, 1);
+		scn.AddWoundsToChar(garrison, 2);
+		scn.AddWoundsToChar(sam, 1);
+		scn.AddWoundsToChar(frodo, 1);
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToPhase(Phase.ARCHERY);
 
-		assertEquals(2, scn.GetTwilight());
+		// Two archers: the fellowship archery total is 2.
+		assertTrue(scn.AwaitingFreepsArcheryPhaseActions());
+		assertEquals(2, scn.GetFreepsArcheryTotal());
+		assertTrue(scn.FreepsActionAvailable(legolas));
+		assertTrue(scn.FreepsPlayAvailable(ship));
+		int twilight = scn.GetTwilight();
+		scn.FreepsPlayCard(ship);
+
+		// X is anything from 0 to the archery total.
+		assertEquals(0, scn.FreepsGetChoiceMin());
+		assertEquals(2, scn.FreepsGetChoiceMax());
+		scn.FreepsChoose("1");
+
+		// One unbound companion is healed, of the player's choosing; the Ring-bound ones are not on offer.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(legolas, garrison));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(sam, frodo));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		scn.FreepsChooseCard(garrison);
+
+		// 2 - 1 off the total; one of the Garrison's two wounds healed and nobody else's.
+		assertEquals(1, scn.GetFreepsArcheryTotal());
+		assertEquals(1, scn.GetWoundsOn(garrison));
+		assertEquals(1, scn.GetWoundsOn(legolas));
+		assertEquals(1, scn.GetWoundsOn(sam));
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		// The event's cost of 2.
+		assertEquals(twilight + 2, scn.GetTwilight());
+		assertInZone(Zone.DISCARD, ship);
+
+		// "You cannot use archery special abilities": Legolas's is no longer offered when the player is next asked.
+		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
+		scn.ShadowPass();
+		assertTrue(scn.AwaitingFreepsArcheryPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(legolas));
 	}
 }

@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_18_040_Tests
@@ -19,6 +20,27 @@ public class Card_18_040_Tests
 				{{
 					put("card", "18_40");
 					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// What Boromir's own play may find in the draw deck: both players' decks hold every card named here
+	protected VirtualTableScenario GetDrawDeckScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("boromir", "18_40");
+					// Great Shield: [gondor] possession (shield), cost 1.  "Bearer must be a Man."  The minion
+					// archery total is -1, and no test here has an archer.
+					put("shield", "1_107");
+					// Heavy Chain: [rohan] possession (armor), cost 1.  "Bearer must be a Man."  Bearer may not be
+					// overwhelmed unless his strength is tripled, and nobody here skirmishes.
+					put("chain", "4_278");
+					// Rider's Spear: [rohan] possession (hand weapon), cost 1.  "Bearer must be a [rohan] Man."
+					put("spear", "4_288");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -62,18 +84,38 @@ public class Card_18_040_Tests
 		assertEquals(5, card.getBlueprint().getResistance());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void BoromirTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void WhenPlayedAPossessionOfAnotherCultureThatHeMayBearIsPlayedOnHimFromTheDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetDrawDeckScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var boromir = scn.GetFreepsCard("boromir");
+		var shield = scn.GetFreepsCard("shield");
+		var chain = scn.GetFreepsCard("chain");
+		var spear = scn.GetFreepsCard("spear");
+		scn.MoveCardsToHand(boromir);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(3, scn.GetTwilight());
+		assertEquals(0, scn.GetTwilight());
+		assertInZone(Zone.DECK, shield, chain, spear);
+		scn.FreepsPlayCard(boromir);
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(boromir));
+		scn.FreepsAcceptOptionalTrigger();
+
+		// The whole draw deck is shown, and then the choice is put.
+		scn.FreepsDismissRevealedCards();
+		// "A possession with a twilight cost of 1 or less" names no culture: the Shield is a [gondor] one and the
+		// Chain a [rohan] one, each of cost 1 and each for a Man.  The Spear costs 1 as well, and is for a [rohan]
+		// Man, which Boromir is not: it could not be played "on him".
+		assertTrue(scn.FreepsHasCardChoiceAvailable(shield, chain));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(spear));
+		scn.FreepsChooseCardBPFromSelection(chain);
+
+		assertAttachedTo(chain, boromir);
+		assertInZone(Zone.DECK, shield, spear);
+		// 3 for Boromir + 1 for Heavy Chain
+		assertEquals(4, scn.GetTwilight());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

@@ -3,6 +3,7 @@ package com.gempukku.lotro.virtualtable;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
+import com.gempukku.lotro.logic.decisions.CardActionSelectionDecision;
 
 import java.util.Arrays;
 import java.util.List;
@@ -92,6 +93,40 @@ public interface Decisions extends TableBase {
 	default boolean AwaitingFellowshipPhaseActions() { return FreepsDecisionAvailable("Play Fellowship action or Pass"); }
 
 	/**
+	 * Has the Free Peoples player's pending choice of phase actions worked out afresh and sent again, so that it
+	 * offers what the board allows now.  The game works out what a decision offers when it sends it, so a card
+	 * the rig moved or changed while the choice was pending is otherwise not reflected in it.  Fails if the Free
+	 * Peoples player is not at a choice of phase actions ("Play ... action or Pass").
+	 */
+	default void FreepsRefreshDecision() { RefreshDecision(P1()); }
+	/**
+	 * Has the Shadow player's pending choice of phase actions worked out afresh and sent again, so that it offers
+	 * what the board allows now.  The game works out what a decision offers when it sends it, so a card the rig
+	 * moved or changed while the choice was pending is otherwise not reflected in it.  Fails if the Shadow player
+	 * is not at a choice of phase actions ("Play ... action or Pass").
+	 */
+	default void ShadowRefreshDecision() { RefreshDecision(P2()); }
+	/**
+	 * Has the given player's pending choice of phase actions worked out afresh and sent again.  It is the same
+	 * decision, asked again with the actions the board allows now: nothing is answered, nothing moves, and no
+	 * other decision (a trigger, a response, a choice of cards) can be refreshed this way.
+	 * @param player The player facing a choice of phase actions.  Fails if that player is facing anything else,
+	 * or nothing.
+	 */
+	default void RefreshDecision(String player) {
+		AwaitingDecision decision = GetAwaitingDecision(player);
+		String asked = decision == null ? null : decision.getText();
+		boolean phaseActions = decision instanceof CardActionSelectionDecision && asked != null
+				&& asked.toLowerCase().contains("action") && asked.toLowerCase().contains("pass");
+		Verify(phaseActions, player + " is not at a choice of phase actions"
+				+ (decision == null ? " (nothing is being asked)" : " (the decision pending is '" + asked + "')")
+				+ ", so there is nothing to refresh.");
+		((CardActionSelectionDecision) decision).refreshActions(game().getActionsEnvironment().getPhaseActions(player));
+		userFeedback().sendAwaitingDecision(player, decision);
+		userFeedback().atRest();
+	}
+
+	/**
 	 * @return True if the Shadow player is currently deciding on a top-level phase action to use during the Shadow phase, or else false.
 	 */
 	default boolean AwaitingShadowPhaseActions() { return ShadowDecisionAvailable("Play Shadow action or Pass"); }
@@ -135,6 +170,26 @@ public interface Decisions extends TableBase {
 	 * @return True if the Shadow player is currently deciding on a top-level phase action to use during the Skirmish phase, or else false.
 	 */
 	default boolean AwaitingShadowSkirmishPhaseActions() { return ShadowDecisionAvailable("Choose action to play or Pass"); }
+
+	/**
+	 * @return True if the Free Peoples player (player 1) is being asked which skirmish to resolve next.  See
+	 * AwaitingSkirmishChoice.
+	 */
+	default boolean FreepsAwaitingSkirmishChoice() { return AwaitingSkirmishChoice(P1()); }
+	/**
+	 * @return True if the Shadow player (player 2) is being asked which skirmish to resolve next, as he is on his
+	 * own turn, when his is the fellowship that is fighting.  See AwaitingSkirmishChoice.
+	 */
+	default boolean ShadowAwaitingSkirmishChoice() { return AwaitingSkirmishChoice(P2()); }
+	/**
+	 * Whether the given player is being asked "Choose next skirmish to resolve": the moment after the assignment
+	 * phase, when every assignment has been made, and again after each skirmish while another is waiting.  The
+	 * game asks it of the player whose fellowship is fighting, and asks even when one skirmish is all there is.
+	 * It is answered with FreepsResolveSkirmish or ShadowResolveSkirmish.
+	 * @param player The player who may be choosing.
+	 * @return True if that is the decision in front of that player; false at any other, or with nothing asked.
+	 */
+	default boolean AwaitingSkirmishChoice(String player) { return DecisionAvailable(player, "Choose next skirmish to resolve"); }
 
 	/**
 	 * @return True if the Free Peoples player is currently deciding on a top-level phase action to use during the Regroup phase, or else false.
@@ -242,9 +297,108 @@ public interface Decisions extends TableBase {
 	void PlayerDecided(String player, String answer);
 
 	default boolean FreepsHasOptionalTriggerAvailable() { return FreepsDecisionAvailable("Optional"); }
-	default boolean FreepsHasOptionalTriggerAvailable(PhysicalCardImpl card) { return FreepsHasOptionalTriggerAvailable(GameUtils.getFullName(card)); }
+	/**
+	 * @param card The card whose optional trigger or response is being asked about.
+	 * @return True if the Free Peoples player is being asked about optional actions and one of them is that
+	 * particular card's, whatever its wording.
+	 */
+	default boolean FreepsHasOptionalTriggerAvailable(PhysicalCardImpl card) { return HasOptionalTriggerAvailable(P1(), card); }
 	default boolean ShadowHasOptionalTriggerAvailable() { return ShadowDecisionAvailable("Optional"); }
-	default boolean ShadowHasOptionalTriggerAvailable(PhysicalCardImpl card) { return ShadowHasOptionalTriggerAvailable(GameUtils.getFullName(card)); }
+	/**
+	 * @param card The card whose optional trigger or response is being asked about.
+	 * @return True if the Shadow player is being asked about optional actions and one of them is that particular
+	 * card's, whatever its wording.
+	 */
+	default boolean ShadowHasOptionalTriggerAvailable(PhysicalCardImpl card) { return HasOptionalTriggerAvailable(P2(), card); }
+	/**
+	 * Checks by the physical card each offered action belongs to, so a trigger whose definition words its own
+	 * prompt is found, and another copy of the same card does not answer for this one.  A decision that does not
+	 * say which card its actions belong to is matched on the card's name appearing in the prompt, as before.
+	 * @param player The player being asked about optional actions.
+	 * @param card The card whose optional trigger or response is being asked about.
+	 * @return True if one of the optional actions on offer is that card's.
+	 */
+	default boolean HasOptionalTriggerAvailable(String player, PhysicalCardImpl card) {
+		if(!DecisionAvailable(player, "Optional"))
+			return false;
+		String[] cardIds = GetAwaitingDecisionParam(player, "cardId");
+		if(cardIds != null)
+			return Arrays.asList(cardIds).contains(String.valueOf(card.getCardId()));
+		String[] texts = GetAwaitingDecisionParam(player, "actionText");
+		if(texts == null)
+			return false;
+		String name = GameUtils.getFullName(card).toLowerCase();
+		return Arrays.stream(texts).anyMatch(x -> x.toLowerCase().contains(name));
+	}
+
+	/**
+	 * For a card that offers more than one optional action at the same moment (a trigger and a response to the
+	 * same win, say), where the card alone does not say which is meant.
+	 * @param card The card whose optional trigger or response is being asked about.
+	 * @param text Words from the action's description that tell it from the card's other actions.  Case is ignored.
+	 * @return True if the Free Peoples player is being asked about optional actions and one of them is that
+	 * particular card's and is so described.
+	 */
+	default boolean FreepsHasOptionalTriggerAvailable(PhysicalCardImpl card, String text) { return HasOptionalTriggerAvailable(P1(), card, text); }
+	/**
+	 * For a card that offers more than one optional action at the same moment (a trigger and a response to the
+	 * same win, say), where the card alone does not say which is meant.
+	 * @param card The card whose optional trigger or response is being asked about.
+	 * @param text Words from the action's description that tell it from the card's other actions.  Case is ignored.
+	 * @return True if the Shadow player is being asked about optional actions and one of them is that particular
+	 * card's and is so described.
+	 */
+	default boolean ShadowHasOptionalTriggerAvailable(PhysicalCardImpl card, String text) { return HasOptionalTriggerAvailable(P2(), card, text); }
+	/**
+	 * @param player The player being asked about optional actions.
+	 * @param card The card whose optional trigger or response is being asked about.
+	 * @param text Words the action's description must contain.  Case is ignored.
+	 * @return True if one of the optional actions on offer is that card's and is so described.
+	 */
+	default boolean HasOptionalTriggerAvailable(String player, PhysicalCardImpl card, String text) {
+		return FindOptionalTrigger(player, card, text) != null;
+	}
+	/**
+	 * Finds the optional trigger or response of one particular card whose description contains the given words,
+	 * among the optional actions the given player is being offered.  Card and words are matched as
+	 * {@link Actions#FindCardAction} matches them for the actions of a phase.
+	 * @param player The player being asked about optional actions.
+	 * @param card The card the action must belong to.
+	 * @param text Words the action's description must contain.  Case is ignored.
+	 * @return The id of the action, which answers the decision, or null if there is none, or the player is not
+	 * being asked about optional actions.
+	 */
+	default String FindOptionalTrigger(String player, PhysicalCardImpl card, String text) {
+		if(!DecisionAvailable(player, "Optional"))
+			return null;
+		String[] texts = GetAwaitingDecisionParam(player, "actionText");
+		String[] cardIds = GetAwaitingDecisionParam(player, "cardId");
+		String[] actionIds = GetAwaitingDecisionParam(player, "actionId");
+		if(texts == null || cardIds == null || actionIds == null)
+			return null;
+		String id = String.valueOf(card.getCardId());
+		String wanted = text.toLowerCase();
+		for (int i = 0; i < texts.length && i < cardIds.length && i < actionIds.length; i++) {
+			if(cardIds[i].equals(id) && texts[i] != null && texts[i].toLowerCase().contains(wanted))
+				return actionIds[i];
+		}
+		return null;
+	}
+
+	/**
+	 * @return True if the Free Peoples player is being asked in which order required actions that happen at the
+	 * same moment are to be resolved.  By rule it is always the Free Peoples player who is asked, whoever's the
+	 * actions are.  The game words the question in two ways: "Required responses" for actions that answer
+	 * something that has happened, and '&lt;effect&gt; - Required "is about to" responses' for those that answer
+	 * something about to happen.  Either is such a question, and nothing else is.
+	 */
+	default boolean FreepsAwaitingRequiredResponseOrder() {
+		AwaitingDecision ad = GetAwaitingDecision(P1());
+		if(ad == null)
+			return false;
+		String text = ad.getText();
+		return text.equals("Required responses") || text.endsWith(" - Required \"is about to\" responses");
+	}
 
 	default boolean FreepsHasOptionalTriggerAvailable(String text) {
 		if(!FreepsDecisionAvailable("Optional"))
@@ -274,13 +428,31 @@ public interface Decisions extends TableBase {
 		return false;
 	}
 
-	default void FreepsAcceptOptionalTrigger() { PlayerDecided(P1(), "0"); }
+	/**
+	 * Causes the Free Peoples player to take the first action on offer at a choice of actions: an optional trigger
+	 * or response ("Optional responses"), the order of required responses, or the actions of a phase.  Fails,
+	 * saying what is being asked, at any other decision (a yes/no, a choice of cards, a number, an assignment) or
+	 * with no action on offer, and then nothing is answered: the answer it gives, "0", means something else at
+	 * each of those.  To take one card's trigger among several, FreepsChooseOptionalTrigger(card).
+	 */
+	default void FreepsAcceptOptionalTrigger() { AcceptOptionalTrigger(P1()); }
 	default void FreepsDeclineOptionalTrigger() { PlayerDecided(P1(), ""); }
 
-
-
-	default void ShadowAcceptOptionalTrigger() { PlayerDecided(P2(), "0"); }
+	/**
+	 * Causes the Shadow player to take the first action on offer at a choice of actions: an optional trigger or
+	 * response ("Optional responses"), the order of required responses, or the actions of a phase.  Fails, saying
+	 * what is being asked, at any other decision (a yes/no, a choice of cards, a number, an assignment) or with no
+	 * action on offer, and then nothing is answered: the answer it gives, "0", means something else at each of
+	 * those.  To take one card's trigger among several, ShadowChooseOptionalTrigger(card).
+	 */
+	default void ShadowAcceptOptionalTrigger() { AcceptOptionalTrigger(P2()); }
 	default void ShadowDeclineOptionalTrigger() { PlayerDecided(P2(), ""); }
+
+	// "0" is the first action only where actions are on offer.
+	private void AcceptOptionalTrigger(String player) {
+		DecisionGuard.requiredActionChoice(this, player, player + " was to accept an optional trigger");
+		PlayerDecided(player, "0");
+	}
 
 
 	/**
@@ -291,10 +463,7 @@ public interface Decisions extends TableBase {
 	 * options on the current decision, so option 0 is tied to the first choice on the decision, option 1 is the second
 	 * choice on the decision, etc.
 	 */
-	default String[] GetADParam(String playerID, String paramName) {
-		var decision = userFeedback().getAwaitingDecision(playerID);
-		return decision.getDecisionParameters().get(paramName);
-	}
+	default String[] GetADParam(String playerID, String paramName) { return GetAwaitingDecisionParam(playerID, paramName); }
 
 	default List<String> FreepsGetADParamAsList(String paramName) { return GetADParamAsList(P1(), paramName); }
 	default List<String> ShadowGetADParamAsList(String paramName) { return GetADParamAsList(P2(), paramName); }
@@ -306,20 +475,49 @@ public interface Decisions extends TableBase {
 		return Arrays.asList(paramList);
 	}
 
+	/**
+	 * How many of the entries of the given parameter of the given player's decision equal the given value.  Fails,
+	 * saying what each player is being asked, if the player is not being asked anything or the decision has no
+	 * such parameter.
+	 */
 	default int GetADParamEqualsCount(String playerID, String paramName, String value) {
-		return (int) Arrays.stream(GetAwaitingDecisionParam(playerID, paramName)).filter(s -> s.equals(value)).count();
+		return (int) Arrays.stream(DecisionGuard.readParam(this, playerID, paramName)).filter(s -> s.equals(value)).count();
 	}
 	default String[] FreepsGetADParam(String paramName) { return GetAwaitingDecisionParam(P1(), paramName); }
 	default String[] ShadowGetADParam(String paramName) { return GetAwaitingDecisionParam(P2(), paramName); }
-	default String FreepsGetFirstADParam(String paramName) { return GetAwaitingDecisionParam(P1(), paramName)[0]; }
-	default String ShadowGetFirstADParam(String paramName) { return GetAwaitingDecisionParam(P2(), paramName)[0]; }
+	/**
+	 * The first entry of the given parameter of the Free Peoples player's decision.  Fails, saying what each player
+	 * is being asked, if that player is not being asked anything or the decision has no such parameter.
+	 */
+	default String FreepsGetFirstADParam(String paramName) { return DecisionGuard.readParam(this, P1(), paramName)[0]; }
+	/**
+	 * The first entry of the given parameter of the Shadow player's decision.  Fails, saying what each player
+	 * is being asked, if that player is not being asked anything or the decision has no such parameter.
+	 */
+	default String ShadowGetFirstADParam(String paramName) { return DecisionGuard.readParam(this, P2(), paramName)[0]; }
+	/**
+	 * Gets all of the options for a particular parameter of the given player's current decision.
+	 * @param playerID The player making the current decision.
+	 * @param paramName The parameter options to return.
+	 * @return An array of strings indexed like the choices on the decision, or null if the decision has no such
+	 * parameter or the player is not being asked anything at all.
+	 */
 	default String[] GetAwaitingDecisionParam(String playerID, String paramName) {
 		var decision = userFeedback().getAwaitingDecision(playerID);
+		if(decision == null)
+			return null;
 		return decision.getDecisionParameters().get(paramName);
 	}
 
+	/**
+	 * @param playerID The player making the current decision.
+	 * @return Every parameter of the given player's current decision, or null if the player is not being asked
+	 * anything.
+	 */
 	default Map<String, String[]> GetAwaitingDecisionParams(String playerID) {
 		var decision = userFeedback().getAwaitingDecision(playerID);
+		if(decision == null)
+			return null;
 		return decision.getDecisionParameters();
 	}
 

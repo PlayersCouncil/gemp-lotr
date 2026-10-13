@@ -1,7 +1,7 @@
 {
 	51_331: {
 		cardInfo: {
-			//id: 1_331.1
+			//id: 51_331.1
 			parent: 1_331
 			variant: ERRATA
 			variantPath: errata/pc
@@ -46,25 +46,39 @@
 	
 	51_333: {
 		cardInfo: {
-			//id: 1_333.1
+			//id: 51_333.1
 			parent: 1_333
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E333.1.jpg
-			collInfo: 1
+			collInfo: 1U333
 			rarity: U
 		}
 		title: Midgewater Moors
+		unique: false
 		twilight: 1
-		type: site
+		type: Site
 		site: 2
-		block: fellowship
-		keyword: plains
-		direction: left
+		block: Fellowship
+		keywords: Plains
+		direction: Left
 		effects: {
 			type: Trigger
 			optional: false
+			requires: {
+				type: Or
+				requires: [
+					{
+						type: CanSpot
+						filter: companion,CanExert
+					}
+					{
+						type: HasCardInHand
+						player: freeps
+					}
+				]
+			}
 			trigger: {
 				type: played
 				filter: minion

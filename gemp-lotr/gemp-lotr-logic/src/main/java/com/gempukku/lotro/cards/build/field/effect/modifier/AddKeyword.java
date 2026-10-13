@@ -5,16 +5,23 @@ import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
+import com.gempukku.lotro.logic.modifiers.Condition;
 import com.gempukku.lotro.logic.modifiers.Modifier;
+import com.gempukku.lotro.logic.modifiers.SelfSpottingCondition;
 import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import org.json.simple.JSONObject;
 
 public class AddKeyword implements ModifierSourceProducer {
     @Override
     public ModifierSource getModifierSource(JSONObject object, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(object, "filter", "requires", "keyword", "amount");
+        FieldUtils.validateAllowedFields(object, "filter", "requires", "keyword", "amount", "spotsItself");
 
         final JSONObject[] conditionArray = FieldUtils.getObjectArray(object.get("requires"), "requires");
+        // "While you can spot a fierce minion, this minion is fierce" with no "another": once the keyword is
+        // given, the card it is given to counts toward `requires` (Sentry Uruk 15_170; Q-0276).
+        final boolean spotsItself = FieldUtils.getBoolean(object.get("spotsItself"), "spotsItself", false);
+        if (spotsItself && conditionArray.length == 0)
+            throw new InvalidCardDefinitionException("'spotsItself' of 'addKeyword' needs a 'requires'");
         final String filter = FieldUtils.getString(object.get("filter"), "filter");
         final String keywordString = FieldUtils.getString(object.get("keyword"), "keyword");
         if (keywordString == null)
@@ -35,9 +42,11 @@ public class AddKeyword implements ModifierSourceProducer {
                     @Override
                     public Modifier getModifier(ActionContext actionContext) {
                         final Evaluator evaluator = amount.getEvaluator(actionContext);
+                        Condition condition = RequirementCondition.createCondition(requirements, actionContext);
+                        if (spotsItself)
+                            condition = new SelfSpottingCondition(condition);
                         return new AddKeywordModifier(actionContext.getSource(),
-                                filterableSource.getFilterable(actionContext),
-                                RequirementCondition.createCondition(requirements, actionContext), keyword, evaluator);
+                                filterableSource.getFilterable(actionContext), condition, keyword, evaluator);
                     }
         };
     }

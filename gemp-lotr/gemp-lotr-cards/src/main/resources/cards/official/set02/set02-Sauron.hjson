@@ -366,6 +366,7 @@
 				trigger: {
 					type: playerDrawsCard
 					player: fp
+					orTakesIntoHand: true
 				}
 				requires: {
 					type: phase

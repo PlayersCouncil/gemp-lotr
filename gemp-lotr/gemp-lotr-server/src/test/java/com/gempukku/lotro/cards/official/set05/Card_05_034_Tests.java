@@ -5,6 +5,7 @@ import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -21,6 +22,11 @@ public class Card_05_034_Tests
 				new HashMap<>()
 				{{
 					put("card", "5_34");
+					put("wall", "5_33");        // City Wall: a [gondor] fortification, a Free Peoples condition that a minion bears
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8
+					put("troop", "1_177");      // Goblin Patrol Troop: strength 13, no text
+					put("scimitar1", "1_180");  // Goblin Scimitar: a [moria] possession, a Shadow card a minion bears
+					put("scimitar2", "1_180");
 					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -71,5 +77,38 @@ public class Card_05_034_Tests
 		scn.FreepsPlayCard(card);
 
 		assertEquals(0, scn.GetTwilight());
+	}
+	@Test
+	public void AHinderedShadowCardBorneByThatMinionIsDiscardedWithTheOthers() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var card = scn.GetFreepsCard("card");
+		var wall = scn.GetFreepsCard("wall");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToHand(card);
+
+		var troop = scn.GetShadowCard("troop");
+		var hindered = scn.GetShadowCard("scimitar1");
+		var unhindered = scn.GetShadowCard("scimitar2");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+		scn.AttachCardsTo(troop, wall, hindered, unhindered);
+		// A hindered card has no type or culture, and is a Shadow card still (CR 5.0 "hinder"; Ketura on Q-0098).
+		scn.HinderCard(hindered);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(aragorn, troop);
+
+		assertTrue(scn.IsHindered(hindered));
+		assertTrue(scn.FreepsPlayAvailable(card));
+		scn.FreepsPlayCard(card);
+
+		// Both Shadow cards the minion bore are discarded, the hindered one with the other; the Free Peoples
+		// fortification stays on it.
+		assertEquals(Zone.DISCARD, hindered.getZone());
+		assertEquals(Zone.DISCARD, unhindered.getZone());
+		assertEquals(Zone.ATTACHED, wall.getZone());
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
 }

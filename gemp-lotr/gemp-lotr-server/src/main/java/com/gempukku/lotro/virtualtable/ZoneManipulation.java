@@ -1,7 +1,9 @@
 package com.gempukku.lotro.virtualtable;
 
+import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.PhysicalCardImpl;
+import com.gempukku.lotro.logic.GameUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,6 +40,9 @@ public interface ZoneManipulation extends TableBase {
 	/**
 	 * Manually moves a given card to a given zone.  This ignores any game costs, requirements, or rules and
 	 * effectively teleports the card to whatever zone you like.  Do be careful where you stick weird things.
+	 * A card put into play that is not active as it lands (a Free Peoples card of the player whose turn it is
+	 * not, a Shadow card of the player whose turn it is) has no text in force until a turn begins in which it is
+	 * active, as the game has it for every card on the table (GameState.addCardToZone).
 	 * @param card The card to teleport
 	 * @param zone The zone to teleport into
 	 */
@@ -47,11 +52,42 @@ public interface ZoneManipulation extends TableBase {
 	}
 
 
+	/**
+	 * Puts the Free Peoples player's named companions into play, without playing them.
+	 * @param names The names the companions were given when the table was set up.
+	 */
 	default void MoveCompanionsToTable(String...names) {
 		Arrays.stream(names).forEach(name -> MoveCompanionsToTable(GetFreepsCard(name)));
 	}
+	/**
+	 * Puts companions into play, where companions go, without playing them.  Only companions: an ally put here
+	 * would sit where no legally played ally ever does, so allies have {@link #MoveAlliesToTable}.
+	 * @param cards The companions to put into play.
+	 */
 	default void MoveCompanionsToTable(PhysicalCardImpl...cards) {
-		Arrays.stream(cards).forEach(card -> MoveCardToZone(card, Zone.FREE_CHARACTERS));
+		Arrays.stream(cards).forEach(card -> {
+			Verify(card.getBlueprint().getCardType() == CardType.COMPANION,
+					GameUtils.getFullName(card) + " is not a companion.  Allies go to the table with MoveAlliesToTable.");
+			MoveCardToZone(card, Zone.FREE_CHARACTERS);
+		});
+	}
+	/**
+	 * Puts the Free Peoples player's named allies into play, without playing them.
+	 * @param names The names the allies were given when the table was set up.
+	 */
+	default void MoveAlliesToTable(String...names) {
+		Arrays.stream(names).forEach(name -> MoveAlliesToTable(GetFreepsCard(name)));
+	}
+	/**
+	 * Puts allies into play, in the support area where a legally played ally goes, without playing them.
+	 * @param cards The allies to put into play.
+	 */
+	default void MoveAlliesToTable(PhysicalCardImpl...cards) {
+		Arrays.stream(cards).forEach(card -> {
+			Verify(card.getBlueprint().getCardType() == CardType.ALLY,
+					GameUtils.getFullName(card) + " is not an ally.  Companions go to the table with MoveCompanionsToTable.");
+			MoveCardToZone(card, Zone.SUPPORT);
+		});
 	}
 	default void MoveMinionsToTable(String...names) {
 		Arrays.stream(names).forEach(name -> MoveMinionsToTable(GetShadowCard(name)));
@@ -73,12 +109,28 @@ public interface ZoneManipulation extends TableBase {
 	}
 
 
+	/**
+	 * Puts the Free Peoples player's named cards on top of that player's draw deck one at a time, in the order
+	 * given, so the last card named ends as the top card.
+	 * @param names The names the cards were given when the table was set up, the card to be on top last.
+	 */
 	default void MoveCardsToTopOfFreepsDeck(String...names) {
 		Arrays.stream(names).forEach(name -> MoveCardsToTopOfDeck(GetFreepsCard(name)));
 	}
+	/**
+	 * Puts the Shadow player's named cards on top of that player's draw deck one at a time, in the order given,
+	 * so the last card named ends as the top card.
+	 * @param names The names the cards were given when the table was set up, the card to be on top last.
+	 */
 	default void MoveCardsToTopOfShadowDeck(String...names) {
 		Arrays.stream(names).forEach(name -> MoveCardsToTopOfDeck(GetShadowCard(name)));
 	}
+	/**
+	 * Puts the given cards on top of their owners' draw decks one at a time, in the order given, so the last card
+	 * named ends as the top card (the next one drawn) and the first named lies deepest.  Each card is taken from
+	 * wherever it was, without being played, discarded or drawn.
+	 * @param cards The cards to move, the card to be on top last.
+	 */
 	default void MoveCardsToTopOfDeck(PhysicalCardImpl...cards) {
 		Arrays.stream(cards).forEach(card -> {
 			RemoveCardZone(card);
@@ -86,12 +138,28 @@ public interface ZoneManipulation extends TableBase {
 		});
 	}
 
+	/**
+	 * Puts the Free Peoples player's named cards on the bottom of that player's draw deck one at a time, in the
+	 * order given, so the last card named ends as the bottom card.
+	 * @param names The names the cards were given when the table was set up, the card to be at the bottom last.
+	 */
 	default void MoveCardsToBottomOfFreepsDeck(String...names) {
 		Arrays.stream(names).forEach(name -> MoveCardsToBottomOfDeck(GetFreepsCard(name)));
 	}
+	/**
+	 * Puts the Shadow player's named cards on the bottom of that player's draw deck one at a time, in the order
+	 * given, so the last card named ends as the bottom card.
+	 * @param names The names the cards were given when the table was set up, the card to be at the bottom last.
+	 */
 	default void MoveCardsToBottomOfShadowDeck(String...names) {
 		Arrays.stream(names).forEach(name -> MoveCardsToBottomOfDeck(GetShadowCard(name)));
 	}
+	/**
+	 * Puts the given cards on the bottom of their owners' draw decks one at a time, in the order given, so the
+	 * last card named ends as the bottom card.  Each card is taken from wherever it was, without being played,
+	 * discarded or drawn.
+	 * @param cards The cards to move, the card to be at the bottom last.
+	 */
 	default void MoveCardsToBottomOfDeck(PhysicalCardImpl...cards) {
 		Arrays.stream(cards).forEach(card -> {
 			RemoveCardZone(card);
@@ -111,18 +179,166 @@ public interface ZoneManipulation extends TableBase {
 		Arrays.stream(cards).forEach(card -> MoveCardToZone(card, Zone.DISCARD));
 	}
 
+	/**
+	 * Lays the given card on the adventure path as the site after the one the fellowship is at, whatever number is
+	 * printed on it and whatever block it is of: its site number becomes the current site's plus one.  The
+	 * fellowship's next move goes to it, and on a Shadows-block path the Shadow player is then not asked to lay a
+	 * site for that move.  A cheat like the rest: nothing that answers a site being played is set off, and a
+	 * site already lying at that number is not taken away.  The site number is given before the card reaches the
+	 * path, as a site played is given it (PlaySiteEffect), so a site whose text reads its own number as it comes
+	 * into force (Mount Doom 15_193, "sites in this region") is laid like any other (F-0484).
+	 * @param card The site to lay, from an adventure deck.
+	 */
 	default void MoveCardToAdventurePath(PhysicalCardImpl card) {
 		int num = gameState().getCurrentSiteNumber() + 1;
-		MoveCardToZone(card, Zone.ADVENTURE_PATH);
+		RemoveCardZone(card);
 		card.setSiteNumber(num);
+		gameState().addCardToZone(game(), card, Zone.ADVENTURE_PATH);
 	}
 
 	default void MoveCardsToAdventureDeck(PhysicalCardImpl...cards) {
 		Arrays.stream(cards).forEach(card -> MoveCardToZone(card, Zone.ADVENTURE_DECK));
 	}
 
+	/**
+	 * Makes the Free Peoples player's (player 1's) adventure deck exactly the given sites.
+	 * See {@link #SetAdventureDeck(String, PhysicalCardImpl...)}.
+	 * @param sites The sites the adventure deck is to hold; none, for an empty adventure deck.
+	 */
+	default void SetFreepsAdventureDeck(PhysicalCardImpl...sites) { SetAdventureDeck(P1(), sites); }
+	/**
+	 * Makes the Shadow player's (player 2's) adventure deck exactly the given sites.
+	 * See {@link #SetAdventureDeck(String, PhysicalCardImpl...)}.
+	 * @param sites The sites the adventure deck is to hold; none, for an empty adventure deck.
+	 */
+	default void SetShadowAdventureDeck(PhysicalCardImpl...sites) { SetAdventureDeck(P2(), sites); }
+	/**
+	 * Makes the given player's adventure deck exactly the given sites: for the board on which a player has few
+	 * sites left in it, or none, which a game reaches when the sites on the path are his own.  Every other site of
+	 * that adventure deck is set aside, in no zone at all, where no card and no rule finds it: it is not on the
+	 * adventure path, not in a pile, and not removed from the game.  The sites that stay keep the order they lay
+	 * in.  A site set aside by an earlier call may be named again and goes back in, after the sites that stayed;
+	 * it is still found by the name it was given when the table was set up, and not by its number.
+	 * A cheat like the rest: nothing is played and nothing answers it, the adventure path and the other player's
+	 * adventure deck are not touched, and a decision already pending does not change what it offers.  The game
+	 * lays sites from this deck when its player is the Shadow player and the fellowship moves to a site not yet
+	 * on the path: a move that finds no site there to lay breaks the game (it throws), so take sites away only
+	 * where no such move follows.
+	 * Fails if a card given is not a site of that player's own, or is anywhere but in his adventure deck or set
+	 * aside from it (a site on the adventure path is not taken off it by this).
+	 * @param player The player whose adventure deck is set.
+	 * @param sites The sites the adventure deck is to hold; none, for an empty adventure deck.
+	 */
+	default void SetAdventureDeck(String player, PhysicalCardImpl...sites) {
+		Verify(P1().equals(player) || P2().equals(player),
+				"SetAdventureDeck was asked to set the adventure deck of '" + player + "', who is not a player at this table.");
+		for(PhysicalCardImpl site : sites) {
+			Verify(site != null && site.getBlueprint().getCardType() == CardType.SITE && player.equals(site.getOwner()),
+					(site == null ? "Nothing" : GameUtils.getFullName(site) + ", a card of " + site.getOwner() + "'s,")
+							+ " cannot be put in the adventure deck of " + player + ": an adventure deck holds only its owner's sites.");
+			Verify(site.getZone() == Zone.ADVENTURE_DECK || site.getZone() == null,
+					GameUtils.getFullName(site) + " is in play or in another pile (" + site.getZone() + "), and is not taken from "
+							+ "there: SetAdventureDeck keeps or puts back only sites of the adventure deck itself.");
+		}
+
+		var wanted = Arrays.asList(sites);
+		for(var card : gameState().getAdventureDeck(player).stream().toList()) {
+			if(!wanted.contains(card)) {
+				RemoveCardZone((PhysicalCardImpl) card);
+			}
+		}
+		for(PhysicalCardImpl site : sites) {
+			if(site.getZone() == null) {
+				gameState().addCardToZone(game(), site, Zone.ADVENTURE_DECK);
+			}
+		}
+	}
+
 	default void MoveCardsToDeadPile(PhysicalCardImpl...cards) {
 		Arrays.stream(cards).forEach(card -> MoveCardToZone(card, Zone.DEAD));
+	}
+
+
+	/**
+	 * Gives the Free Peoples player (player 1) control of the first site that can be controlled, without any card
+	 * taking it.  Nothing in the rules keeps the first player from controlling a site; on his own turn he is only
+	 * out of step with when he would have taken it.
+	 * See {@link #TakeControlOfSite(String)}.
+	 */
+	default void FreepsTakeControlOfSite() { TakeControlOfSite(P1()); }
+	/**
+	 * Gives the Shadow player (player 2) control of the first site that can be controlled, without any card
+	 * taking it.
+	 * See {@link #TakeControlOfSite(String)}.
+	 */
+	default void ShadowTakeControlOfSite() { TakeControlOfSite(P2()); }
+	/**
+	 * Gives the Free Peoples player (player 1) control of the given site, without any card taking it.
+	 * See {@link #TakeControlOfSite(String, PhysicalCardImpl)}.
+	 * @param site The site to take, which need not be the first that can be controlled.
+	 */
+	default void FreepsTakeControlOfSite(PhysicalCardImpl site) { TakeControlOfSite(P1(), site); }
+	/**
+	 * Gives the Shadow player (player 2) control of the given site, without any card taking it.
+	 * See {@link #TakeControlOfSite(String, PhysicalCardImpl)}.
+	 * @param site The site to take, which need not be the first that can be controlled.
+	 */
+	default void ShadowTakeControlOfSite(PhysicalCardImpl site) { TakeControlOfSite(P2(), site); }
+
+	/**
+	 * Gives the given player control of the first site that can be controlled: the lowest-numbered site on the
+	 * adventure path that nobody controls and that every player's marker has moved beyond, which is the site an
+	 * effect that takes control of a site would take.  This is a cheat like the rest of this interface: it answers
+	 * no decision, so it can be called at any time, whoever is being asked what; no "take control of a site"
+	 * effect is played, so nothing that responds to one is set off; and a decision already pending does not
+	 * change what it offers.
+	 * Fails if no site can be controlled.
+	 * @param player The player who is to control the site.
+	 */
+	default void TakeControlOfSite(String player) {
+		PhysicalCardImpl first = null;
+		for (int i = 1; i < LowestPlayerPosition() && first == null; i++) {
+			var site = (PhysicalCardImpl) gameState().getSite(i);
+			if (site != null && site.getCardController() == null)
+				first = site;
+		}
+		Verify(first != null, "No site can be controlled by " + player + ": there is no site nobody controls "
+				+ "that every player's marker has moved beyond (the lowest marker is at site " + LowestPlayerPosition() + ").");
+		TakeControlOfSite(player, first);
+	}
+
+	/**
+	 * Gives the given player control of the given site, which is put in that player's support area as the rules
+	 * have it.  The site need not be the lowest-numbered one that can be controlled, so that a board can hold a
+	 * site of one player's between sites of the other's.  A cheat: see {@link #TakeControlOfSite(String)}.
+	 * Fails if the card is not a site on the adventure path, if somebody already controls it, or if some player's
+	 * marker is at that site or has yet to reach it.
+	 * @param player The player who is to control the site.
+	 * @param site The site to take.
+	 */
+	default void TakeControlOfSite(String player, PhysicalCardImpl site) {
+		Verify(site != null && site.getBlueprint().getCardType() == CardType.SITE,
+				(site == null ? "Nothing" : GameUtils.getFullName(site)) + " is not a site, so " + player + " cannot take control of it.");
+		Verify(site.getCardController() == null,
+				GameUtils.getFullName(site) + " is already controlled by " + site.getCardController() + ", so " + player + " cannot take control of it.");
+		Verify(site.getZone() == Zone.ADVENTURE_PATH,
+				GameUtils.getFullName(site) + " is not on the adventure path, so " + player + " cannot take control of it.");
+		Verify(site.getSiteNumber() < LowestPlayerPosition(),
+				GameUtils.getFullName(site) + " is site " + site.getSiteNumber() + " and a player's marker is at site "
+						+ LowestPlayerPosition() + ": a site can be controlled only once every marker has moved beyond it.");
+
+		gameState().takeControlOfCard(player, game(), site, Zone.SUPPORT);
+
+		Verify(player.equals(site.getCardController()) && site.getZone() == Zone.SUPPORT,
+				player + " did not take control of " + GameUtils.getFullName(site) + ".");
+	}
+
+	// The site number of the marker furthest back on the adventure path: the sites below it can be controlled.
+	private int LowestPlayerPosition() {
+		int lowest = Integer.MAX_VALUE;
+		for (String player : gameState().getPlayerOrder().getAllPlayers())
+			lowest = Math.min(lowest, gameState().getPlayerPosition(player));
+		return lowest;
 	}
 
 
@@ -139,6 +355,94 @@ public interface ZoneManipulation extends TableBase {
 		for(PhysicalCardImpl card : cards) {
 			RemoveCardZone(card);
 			MoveCardToZone(card, Zone.HAND);
+		}
+	}
+
+	/**
+	 * Makes the Free Peoples player's (player 1's) hand exactly the given cards.
+	 * See {@link #SetHand(String, PhysicalCardImpl...)}.
+	 * @param cards The cards the hand is to hold, the front of the hand first; none, for an empty hand.
+	 */
+	default void SetFreepsHand(PhysicalCardImpl...cards) { SetHand(P1(), cards); }
+	/**
+	 * Makes the Shadow player's (player 2's) hand exactly the given cards.
+	 * See {@link #SetHand(String, PhysicalCardImpl...)}.
+	 * @param cards The cards the hand is to hold, the front of the hand first; none, for an empty hand.
+	 */
+	default void SetShadowHand(PhysicalCardImpl...cards) { SetHand(P2(), cards); }
+	/**
+	 * Makes the given player's hand exactly the given cards, in the order given, whatever the hand held before:
+	 * for a hand of a known size late in a game, after reconciles have filled it with whatever was on the deck.
+	 * Every other card of that hand is put on top of that player's draw deck, the card that was at the front of
+	 * the hand ending as the top card (the way {@link VirtualTable#StartGame()} puts an opening hand back).  The
+	 * cards given are taken from wherever they were, without being played, drawn or discarded, and one already
+	 * in the hand takes its place in the order given.  The other player's hand is not touched.
+	 * Fails if a card given is not that player's own: it would go to its owner's hand.
+	 * @param player The player whose hand is set.
+	 * @param cards The cards the hand is to hold, the front of the hand first; none, for an empty hand.
+	 */
+	default void SetHand(String player, PhysicalCardImpl...cards) {
+		for(PhysicalCardImpl card : cards) {
+			Verify(card != null && player.equals(card.getOwner()),
+					(card == null ? "Nothing" : GameUtils.getFullName(card) + ", a card of " + card.getOwner() + "'s,")
+							+ " cannot be put in the hand of " + player + ": a hand holds only its owner's cards.");
+		}
+
+		var wanted = Arrays.asList(cards);
+		for(var card : gameState().getHand(player).stream().toList().reversed()) {
+			if(!wanted.contains(card)) {
+				MoveCardsToTopOfDeck((PhysicalCardImpl) card);
+			}
+		}
+		MoveCardsToHand(cards);
+	}
+
+	/**
+	 * Makes the Free Peoples player's (player 1's) draw deck exactly the given cards.
+	 * See {@link #SetDrawDeck(String, PhysicalCardImpl...)}.
+	 * @param cards The cards the draw deck is to hold, the top card first; none, for an empty draw deck.
+	 */
+	default void SetFreepsDrawDeck(PhysicalCardImpl...cards) { SetDrawDeck(P1(), cards); }
+	/**
+	 * Makes the Shadow player's (player 2's) draw deck exactly the given cards.
+	 * See {@link #SetDrawDeck(String, PhysicalCardImpl...)}.
+	 * @param cards The cards the draw deck is to hold, the top card first; none, for an empty draw deck.
+	 */
+	default void SetShadowDrawDeck(PhysicalCardImpl...cards) { SetDrawDeck(P2(), cards); }
+	/**
+	 * Makes the given player's draw deck exactly the given cards, in the order given, the first named on top:
+	 * for a deck of a known size, or an empty one, without naming every card the table put in it.  Every other
+	 * card of that draw deck is set aside, in no zone at all, where no card and no rule finds it: it is not in a
+	 * pile, not in play and not removed from the game, so nothing that counts a discard pile or the removed-from-
+	 * game pile sees it.  A card set aside is still found by the name it was given when the table was set up, and
+	 * any cheat (this one, MoveCardsToHand, MoveCardsToTopOfDeck ...) puts it somewhere again.  The cards given are
+	 * taken from wherever they were, without being played, drawn or discarded.  A cheat like the rest: nothing is
+	 * drawn or shuffled and nothing answers it, the other player's deck is not touched, and a decision already
+	 * pending does not change what it offers.  Called before {@link VirtualTable#StartGame()}, the deck keeps
+	 * those cards and no others, but the game shuffles it to deal the opening hands, so their order is not kept:
+	 * call it after StartGame() where the order matters.
+	 * Fails if a card given is not that player's own (it would go to its owner's deck), or is a site.
+	 * @param player The player whose draw deck is set.
+	 * @param cards The cards the draw deck is to hold, the top card first; none, for an empty draw deck.
+	 */
+	default void SetDrawDeck(String player, PhysicalCardImpl...cards) {
+		Verify(P1().equals(player) || P2().equals(player),
+				"SetDrawDeck was asked to set the draw deck of '" + player + "', who is not a player at this table.");
+		for(PhysicalCardImpl card : cards) {
+			Verify(card != null && player.equals(card.getOwner()) && card.getBlueprint().getCardType() != CardType.SITE,
+					(card == null ? "Nothing" : GameUtils.getFullName(card) + ", a card of " + card.getOwner() + "'s,")
+							+ " cannot be put in the draw deck of " + player + ": a draw deck holds only its owner's cards, and no site.");
+		}
+
+		var wanted = Arrays.asList(cards);
+		for(var card : gameState().getDeck(player).stream().toList()) {
+			if(!wanted.contains(card)) {
+				RemoveCardZone((PhysicalCardImpl) card);
+			}
+		}
+		// Each goes on top in turn, so the first named is laid last.
+		for(PhysicalCardImpl card : wanted.reversed()) {
+			MoveCardsToTopOfDeck(card);
 		}
 	}
 

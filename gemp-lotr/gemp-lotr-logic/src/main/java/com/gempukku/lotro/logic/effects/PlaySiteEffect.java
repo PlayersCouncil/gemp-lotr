@@ -109,20 +109,31 @@ public class PlaySiteEffect extends AbstractEffect {
                             Zone zone = null;
                             String controlled = null;
                             List<PhysicalCard> stacked = null;
+                            List<PhysicalCard> playedOn = Collections.emptyList();
 
                             if (oldSite != null) {
                                 controlled = oldSite.getCardController();
-                                if (controlled != null)
+                                if (controlled != null) {
                                     zone = oldSite.getZone();
+                                    //The old site goes back to its owner's adventure deck as nobody's (CR 4.2 "control")
+                                    gameState.loseControlOfCard(oldSite, Zone.ADVENTURE_PATH);
+                                }
                                 stacked = new LinkedList<>(gameState.getStackedCards(oldSite));
+                                playedOn = new LinkedList<>(gameState.getAttachedCards(oldSite));
 
                                 gameState.removeCardsFromZone(_playerId, Collections.singleton(oldSite));
                                 oldSite.setSiteNumber(null);
                                 gameState.addCardToZone(game, oldSite, Zone.ADVENTURE_DECK);
-                                if (gameState.getCurrentSiteNumber() == siteNumber
-                                        && !_playerId.equals(gameState.getCurrentPlayerId()))
+                                //"A Shadow player has replaced the fellowship's current site this turn": the mark is
+                                //that site's, laid wherever the fellowship stood when the site was replaced (a site
+                                //ahead of it that it comes to later in the turn was replaced this turn all the same:
+                                //Q-0259).  It is in force only while the fellowship is at that site, and a site the
+                                //fellowship has moved on from marks nothing (Q-0234)
+                                if (!_playerId.equals(gameState.getCurrentPlayerId()))
                                     game.getModifiersEnvironment().addUntilEndOfTurnModifier(
-                                            new SpecialFlagModifier(null, null, ModifierFlag.SHADOW_PLAYER_REPLACED_CURRENT_SITE));
+                                            new SpecialFlagModifier(null,
+                                                    gameNow -> gameNow.getGameState().getCurrentSiteNumber() == siteNumber,
+                                                    ModifierFlag.SHADOW_PLAYER_REPLACED_CURRENT_SITE));
 
                                 game.getActionsEnvironment().emitEffectResult(new ReplaceSiteResult(_playerId, siteNumber));
                             }
@@ -134,8 +145,22 @@ public class PlaySiteEffect extends AbstractEffect {
 
                             if (controlled != null) {
                                 gameState.takeControlOfCard(controlled, game, newSite, zone);
+                                //Taken off the old site first: a card stacked again while still stacked is listed twice
+                                gameState.removeCardsFromZone(_playerId, stacked);
                                 for (PhysicalCard physicalCard : stacked)
                                     gameState.stackCard(game, physicalCard, newSite);
+                            }
+
+                            //"When a site is replaced, all cards played on or stacked on the old site are moved to
+                            //the new site" (CR 4.2 "site"), on a controlled site and on the adventure path alike.
+                            //A card played on the old site never leaves play: it is handed to the new site as a
+                            //card that changes bearer is, keeping its card id and its tokens, and a text that is
+                            //in force (not that of a card inactive this turn, or hindered) is stopped and started
+                            //once so that it answers for the new site (F-0467)
+                            for (PhysicalCard physicalCard : playedOn) {
+                                gameState.transferCard(physicalCard, newSite);
+                                if (gameState.isCardInPlayActive(physicalCard))
+                                    gameState.reapplyAffectingForCard(game, physicalCard);
                             }
 
                             sitePlayedCallback(newSite);

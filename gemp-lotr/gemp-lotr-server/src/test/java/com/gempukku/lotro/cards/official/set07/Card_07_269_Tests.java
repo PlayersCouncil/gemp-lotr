@@ -26,6 +26,23 @@ public class Card_07_269_Tests
 		);
 	}
 
+	// A [sauron] Orc of site number 6 at site 2, and four companions to hold four threats.
+	protected VirtualTableScenario GetThreatsScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("fires", "7_269");
+					put("chieftain", "1_266");
+					put("aragorn", "1_89");
+					put("gimli", "1_13");
+					put("sam", "1_311");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
 	@Test
 	public void FiresRagedUncheckedStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
@@ -53,6 +70,37 @@ public class Card_07_269_Tests
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
+	}
+
+	// "each [sauron] Orc that is not roaming is strength +1": the definition made every [sauron] Orc stronger.
+	@Test
+	public void ASauronOrcStillRoamingAtThreeThreatsIsNotStronger() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetThreatsScenario();
+
+		scn.MoveCompanionsToTable("aragorn", "gimli", "sam");
+
+		var fires = scn.GetShadowCard("fires");
+		var chieftain = scn.GetShadowCard("chieftain");
+		scn.MoveCardsToSupportArea(fires);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(chieftain);
+		scn.SkipToPhase(Phase.MANEUVER);
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertEquals(7, scn.GetStrength(chieftain));
+
+		// Site number 6 - 3 for the threats is 3, at site 2: the Chieftain is still roaming.
+		scn.AddThreats(3);
+		assertEquals(3, scn.GetThreats());
+		assertTrue(scn.HasKeyword(chieftain, Keyword.ROAMING));
+		assertEquals(7, scn.GetStrength(chieftain));
+
+		// With a fourth threat his site number is 2 and he roams no longer.
+		scn.AddThreats(1);
+		assertEquals(4, scn.GetThreats());
+		assertFalse(scn.HasKeyword(chieftain, Keyword.ROAMING));
+		assertEquals(8, scn.GetStrength(chieftain));
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

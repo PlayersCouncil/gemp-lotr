@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
@@ -32,17 +33,24 @@ public class Heal implements EffectAppenderProducer {
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
         final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
 
-        MultiEffectAppender result = new MultiEffectAppender();
-
-        result.addEffectAppender(
-                CardResolver.resolveCards(select,
+        final EffectAppender cardResolver = CardResolver.resolveCards(select,
                         SpotOverride.NONE,
-                        (actionContext) -> Filters.canHeal,
+                        (actionContext) -> Filters.canHeal(playerSource.getPlayer(actionContext)),
                         (actionContext) -> (Filter) (game, physicalCard) -> {
                             final int healTimes = times.getEvaluator(actionContext).evaluateExpression(game, physicalCard);
-                            return game.getGameState().getWounds(physicalCard) >= healTimes && game.getModifiersQuerying().canBeHealed(game, physicalCard);
+                            return game.getGameState().getWounds(physicalCard) >= healTimes && game.getModifiersQuerying().canBeHealed(game, playerSource.getPlayer(actionContext), physicalCard);
                         },
-                        count, memory, player, "Choose cards to heal", environment));
+                        count, memory, player, "Choose cards to heal", environment);
+
+        MultiEffectAppender result = new MultiEffectAppender() {
+            // With nobody who has a wound that can be healed it does nothing.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                return EffectForecast.givenTo(cardResolver.forecast(actionContext), false);
+            }
+        };
+
+        result.addEffectAppender(cardResolver);
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

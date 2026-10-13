@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_V3_061_Tests
@@ -17,11 +18,13 @@ public class Card_V3_061_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("attea", "103_61");       // Úlairë Attëa, Khamul of the East
-					put("captain", "4_225");      // Easterling Captain - str 11
-					put("southron", "4_222");     // Desert Warrior - Southron, NOT Easterling
-
-					put("aragorn", "1_89");
+					put("attea", "103_61");
+					put("attacker", "7_141");   // Easterling Attacker: [raider] Man, Easterling, strength 6; a skirmish ability never used here
+					put("guard", "4_226");      // Easterling Guard: [raider] Man, Easterling, strength 9, vitality 2; assigned to an unbound companion, may exert to add a burden
+					put("troop", "1_177");      // Goblin Patrol Troop: [moria] Orc, strength 13, no text at all
+					put("soldier", "4_254");    // Southron Soldier: [raider] Man, Southron, strength 4, ambush (2), no other text
+					put("lemenya", "1_232");    // Ulaire Lemenya: [wraith] Nazgul, strength 9; weakens bearers of [wraith] conditions, of which there are none
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: an unbound companion
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -45,9 +48,9 @@ public class Card_V3_061_Tests
 		 * Vitality: 3
 		 * Site Number: 3
 		 * Game Text: <b>Easterling.</b>  Fierce.
-		* 	While you can spot 3 burdens, each Easterling is strength +3.
-		* 	While you can spot 5 burdens, each Easterling is <b>damage +1</b>.
-		*/
+		 * 	While you can spot 3 burdens, each Easterling is strength +3.
+		 * 	While you can spot 5 burdens, each Easterling is <b>damage +1</b>.
+		 */
 
 		var scn = GetScenario();
 
@@ -62,6 +65,7 @@ public class Card_V3_061_Tests
 		assertEquals(Race.NAZGUL, card.getBlueprint().getRace());
 		assertTrue(scn.HasKeyword(card, Keyword.EASTERLING));
 		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(card, Keyword.DAMAGE));
 		assertEquals(6, card.getBlueprint().getTwilightCost());
 		assertEquals(12, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
@@ -69,78 +73,106 @@ public class Card_V3_061_Tests
 	}
 
 	@Test
-	public void AtteaGrantsStrengthToEasterlingsAtThreeBurdens() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheThirdBurdenMakesEachEasterlingStrengthPlusThreeAndNoOtherMinion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var attea = scn.GetShadowCard("attea");
-		var captain = scn.GetShadowCard("captain");
-		var southron = scn.GetShadowCard("southron");
-		scn.MoveMinionsToTable(attea, captain, southron);
+		var attacker = scn.GetShadowCard("attacker");
+		var guard = scn.GetShadowCard("guard");
+		var troop = scn.GetShadowCard("troop");
+		var soldier = scn.GetShadowCard("soldier");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(attea, attacker, guard, troop, soldier, lemenya);
+		scn.AddBurdens(2);
+		scn.SkipToAssignments();
 
-		// Base strengths, no burdens
+		// 2 burdens: one short.
+		assertEquals(2, scn.GetBurdens());
 		assertEquals(12, scn.GetStrength(attea));
-		assertEquals(11, scn.GetStrength(captain));
-		assertEquals(6, scn.GetStrength(southron));
+		assertEquals(6, scn.GetStrength(attacker));
+		assertEquals(9, scn.GetStrength(guard));
+		assertEquals(13, scn.GetStrength(troop));
+		assertEquals(4, scn.GetStrength(soldier));
+		assertEquals(9, scn.GetStrength(lemenya));
 
-		scn.AddBurdens(3);
+		// The Guard, assigned to an unbound companion, exerts to add the third burden.
+		scn.FreepsAssignToMinions(aragorn, guard);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(guard));
+		scn.ShadowChooseOptionalTrigger(guard);
 
-		// With 3 burdens, Easterlings get +3
+		assertEquals(3, scn.GetBurdens());
+		// Attea himself is an Easterling, and the one who is no Man: 12 + 3
 		assertEquals(15, scn.GetStrength(attea));
-		assertEquals(14, scn.GetStrength(captain));
-		// Southron is not Easterling - no bonus
-		assertEquals(6, scn.GetStrength(southron));
+		// 6 + 3
+		assertEquals(9, scn.GetStrength(attacker));
+		// 9 + 3
+		assertEquals(12, scn.GetStrength(guard));
+		// A [raider] Man who is a Southron, a Nazgul who is no Easterling and an Orc gain nothing.
+		assertEquals(4, scn.GetStrength(soldier));
+		assertEquals(9, scn.GetStrength(lemenya));
+		assertEquals(13, scn.GetStrength(troop));
+		// 3 burdens are not 5: nobody is damage +1.
+		assertEquals(0, scn.GetKeywordCount(attea, Keyword.DAMAGE));
+		assertEquals(0, scn.GetKeywordCount(attacker, Keyword.DAMAGE));
+		assertEquals(0, scn.GetKeywordCount(guard, Keyword.DAMAGE));
+		assertEquals(0, scn.GetKeywordCount(troop, Keyword.DAMAGE));
+		assertTrue(scn.ShadowDecisionAvailable("assign"));
 	}
 
 	@Test
-	public void AtteaGrantsDamageToEasterlingsAtFiveBurdens() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheFifthBurdenMakesEachEasterlingDamagePlusOneAndNoOtherMinion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var attea = scn.GetShadowCard("attea");
-		var captain = scn.GetShadowCard("captain");
-		var southron = scn.GetShadowCard("southron");
-		scn.MoveMinionsToTable(attea, captain, southron);
+		var attacker = scn.GetShadowCard("attacker");
+		var guard = scn.GetShadowCard("guard");
+		var troop = scn.GetShadowCard("troop");
+		var soldier = scn.GetShadowCard("soldier");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
-
-		// No damage keyword at 0 burdens
-		assertFalse(scn.HasKeyword(attea, Keyword.DAMAGE));
-		assertFalse(scn.HasKeyword(captain, Keyword.DAMAGE));
-
+		scn.MoveMinionsToTable(attea, attacker, guard, troop, soldier, lemenya);
 		scn.AddBurdens(4);
+		scn.SkipToAssignments();
 
-		// 4 burdens - still no damage (need 5)
-		assertFalse(scn.HasKeyword(attea, Keyword.DAMAGE));
-		assertFalse(scn.HasKeyword(captain, Keyword.DAMAGE));
+		// 4 burdens: one short for the damage bonus, while the strength bonus is in force.
+		assertEquals(4, scn.GetBurdens());
+		assertEquals(0, scn.GetKeywordCount(attea, Keyword.DAMAGE));
+		assertEquals(0, scn.GetKeywordCount(attacker, Keyword.DAMAGE));
+		assertEquals(0, scn.GetKeywordCount(guard, Keyword.DAMAGE));
+		assertEquals(0, scn.GetKeywordCount(troop, Keyword.DAMAGE));
+		assertEquals(0, scn.GetKeywordCount(soldier, Keyword.DAMAGE));
+		assertEquals(0, scn.GetKeywordCount(lemenya, Keyword.DAMAGE));
+		// 12 + 3, 6 + 3
+		assertEquals(15, scn.GetStrength(attea));
+		assertEquals(9, scn.GetStrength(attacker));
 
-		scn.AddBurdens(1); // Now at 5
+		// The Guard, assigned to an unbound companion, exerts to add the fifth burden.
+		scn.FreepsAssignToMinions(aragorn, guard);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(guard));
+		scn.ShadowChooseOptionalTrigger(guard);
 
-		// With 5 burdens, Easterlings get damage +1
-		assertTrue(scn.HasKeyword(attea, Keyword.DAMAGE));
+		assertEquals(5, scn.GetBurdens());
 		assertEquals(1, scn.GetKeywordCount(attea, Keyword.DAMAGE));
-		assertTrue(scn.HasKeyword(captain, Keyword.DAMAGE));
-		assertEquals(1, scn.GetKeywordCount(captain, Keyword.DAMAGE));
-
-		// Southron still not Easterling
-		assertFalse(scn.HasKeyword(southron, Keyword.DAMAGE));
-	}
-
-	@Test
-	public void AtteaBothBonusesActiveAtFiveBurdens() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var attea = scn.GetShadowCard("attea");
-		var captain = scn.GetShadowCard("captain");
-		scn.MoveMinionsToTable(attea, captain);
-
-		scn.StartGame();
-		scn.AddBurdens(5);
-
-		// Both bonuses active
-		assertEquals(15, scn.GetStrength(attea)); // 12 + 3
-		assertEquals(14, scn.GetStrength(captain)); // 11 + 3
-		assertEquals(1, scn.GetKeywordCount(attea, Keyword.DAMAGE));
-		assertEquals(1, scn.GetKeywordCount(captain, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(attacker, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(guard, Keyword.DAMAGE));
+		// A [raider] Man who is a Southron, a Nazgul who is no Easterling and an Orc gain nothing.
+		assertEquals(0, scn.GetKeywordCount(soldier, Keyword.DAMAGE));
+		assertEquals(0, scn.GetKeywordCount(lemenya, Keyword.DAMAGE));
+		assertEquals(0, scn.GetKeywordCount(troop, Keyword.DAMAGE));
+		// The strength bonus is 3 whatever the number of burdens: 12 + 3, 6 + 3, 9 + 3
+		assertEquals(15, scn.GetStrength(attea));
+		assertEquals(9, scn.GetStrength(attacker));
+		assertEquals(12, scn.GetStrength(guard));
+		assertEquals(4, scn.GetStrength(soldier));
+		assertEquals(9, scn.GetStrength(lemenya));
+		assertEquals(13, scn.GetStrength(troop));
+		assertTrue(scn.ShadowDecisionAvailable("assign"));
 	}
 }

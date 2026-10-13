@@ -89,7 +89,7 @@
 					filter: culture(raider),man
 					count: 2
 				}
-				limitPerPhase: 1
+				effectLimitPerPhase: 1
 				cost: {
 					type: removeTwilight
 					amount: 3

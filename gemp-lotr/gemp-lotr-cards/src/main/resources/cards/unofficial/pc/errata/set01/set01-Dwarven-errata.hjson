@@ -37,7 +37,7 @@
 				}
 			]
 		}
-		gametext: Skirmish: Make a Dwarf strength +2 and <b>damage +1</b> and discard a Shadow item borne by a minion that Dwarf is skirmishing.
+		gametext: Skirmish: Make a Dwarf strength +2 and <b>damage +1</b>. Discard a Shadow item borne by a minion that Dwarf is skirmishing.
 		lore: "The shoddy workmanship of Orc-smiths cannot withstand the fury of Durin's folk."
 		promotext: ""
 		alts: {
@@ -50,16 +50,18 @@
 	
 	51_7: {
 		cardInfo: {
-			//id: 1_7.1
+			//id: 51_7.1
 			parent: 1_7
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/51_7.jpg
 			collInfo: 1C7
 			rarity: C
 		}
 		title: Dwarf Guard
+		unique: false
+		side: Free Peoples
 		culture: Dwarven
 		twilight: 1
 		type: Companion
@@ -158,10 +160,10 @@
 	
 	51_9: {
 		cardInfo: {
-			//id: 1_9.2
+			//id: 51_9.2
 			parent: 1_9
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 2
 			image: errata/LOTR-EN01E009.2_card.jpg
 			collInfo: 1C9
@@ -173,7 +175,7 @@
 		culture: Dwarven
 		twilight: 1
 		type: Possession
-		itemclass: Hand Weapon
+		itemclass: Hand weapon
 		strength: 2
 		target: dwarf
 		effects: {
@@ -244,10 +246,10 @@
 
 	51_11: {
 		cardInfo: {
-			//id: 1_11.1
+			//id: 51_11.1
 			parent: 1_11
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/51_11.jpg
 			collInfo: 1C11
@@ -256,10 +258,11 @@
 		title: Farin
 		subtitle: Dwarven Emissary
 		unique: true
-		culture: dwarven
+		side: Free Peoples
+		culture: Dwarven
 		twilight: 2
-		type: companion
-		race: dwarf
+		type: Companion
+		race: Dwarf
 		strength: 6
 		vitality: 3
 		resistance: 6
@@ -293,10 +296,10 @@
 
 	51_12: {
 		cardInfo: {
-			//id: 1_12.1
+			//id: 51_12.1
 			parent: 1_12
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/51_12.jpg
 			collInfo: 1U12
@@ -305,15 +308,16 @@
 		title: Gimli
 		subtitle: Dwarf of Erebor
 		unique: true
-		culture: dwarven
+		side: Free Peoples
+		culture: Dwarven
 		twilight: 2
-		type: companion
-		race: dwarf
+		type: Companion
+		race: Dwarf
 		strength: 6
 		vitality: 3
 		resistance: 6
-		signet: aragorn
-		keyword: damage+1
+		signet: Aragorn
+		keywords: Damage+1
 		effects: {
 			type: activated
 			phase: fellowship
@@ -406,10 +410,10 @@
 	
 	51_16: {
 		cardInfo: {
-			//id: 1_16.1
+			//id: 51_16.1
 			parent: 1_16
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E016.1.jpg
 			collInfo: 1R16
@@ -417,12 +421,13 @@
 		}
 		title: Greatest Kingdom of My People
 		unique: true
-		culture: dwarven
+		side: Free Peoples
+		culture: Dwarven
 		twilight: 1
-		type: condition
-		keyword: [
-			tale
-			support area
+		type: Condition
+		keywords: [
+			Tale
+			Support Area
 		]
 		effects: [
 			{
@@ -440,10 +445,19 @@
 					filter: orc
 					memorize: playedOrc
 				}
-				requires: {
-					type: perTurnLimit
-					limit: 1
-				}
+				// "The first time ... each turn": only the first Orc played in the turn, whether or not the
+				// offer was taken (F-0181); not offered with no [dwarven] card to take (F-0182).
+				requires: [
+					{
+						type: playedCardThisTurn
+						filter: orc
+						max: 1
+					}
+					{
+						type: HasCardInDiscard
+						filter: culture(dwarven)
+					}
+				]
 				effect: [
 					{
 						type: chooseCardsFromDiscard
@@ -453,28 +467,32 @@
 						text: Choose a Dwarven card from your discard pile to take into hand
 					}
 					{
-						type: preventable
-						player: shadow
-						text: Would you like to discard the bottom 2 cards of your draw deck to prevent the Free Peoples player taking {chosenCard} into hand from their discard pile?
-						cost: {
-							type: discardBottomCardsFromDeck
-							count: 2
-							forced: false
-							deck: ownerFromMemory(playedOrc)
+						// With no card named there is nothing to prevent (F-0183).
+						type: If
+						check: {
+							type: HasCardInMemory
+							memory: chosenCard
 						}
-						effect: {
-							type: putCardsFromDiscardIntoHand
-							select: memory(chosenCard)
+						true: {
+							type: preventable
+							player: shadow
+							text: Would you like to discard the bottom 2 cards of your draw deck to prevent the Free Peoples player taking {chosenCard} into hand from their discard pile?
+							cost: {
+								type: discardBottomCardsFromDeck
+								count: 2
+								forced: false
+								deck: ownerFromMemory(playedOrc)
+							}
+							effect: {
+								type: putCardsFromDiscardIntoHand
+								select: memory(chosenCard)
+							}
 						}
-					}
-					{
-						type: IncrementPerTurnLimit
-						limit: 1
 					}
 				]
 			}
 		]
-		gametext: <b>Tale.</b>  To play, exert a Dwarf. \The first time your opponent plays an Orc each turn, you may take a [dwarven] card into hand from your discard pile.  The Shadow player may discard the bottom 2 cards of their draw deck to prevent this.
+		gametext: <b>Tale.</b>  To play, exert a Dwarf. The first time your opponent plays an Orc each turn, you may take a [dwarven] card into hand from your discard pile.  The Shadow player may discard the bottom 2 cards of their draw deck to prevent this.
 		lore: "'With golden roof and silver floor / And runes of power upon the door.'"
 		promotext: ""
 		alts: {
@@ -657,20 +675,22 @@
 	
 	51_23: {
 		cardInfo: {
-			//id: 1_23.1
+			//id: 51_23.1
 			parent: 1_23
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E023.1.jpg
 			collInfo: 1R23
 			rarity: R
 		}
 		title: Nobody Tosses a Dwarf
-		culture: dwarven
+		unique: false
+		side: Free Peoples
+		culture: Dwarven
 		twilight: 0
-		type: event
-		timeword: response
+		type: Event
+		timewords: Response
 		effects: {
 			type: responseEvent
 			trigger: {
@@ -681,22 +701,33 @@
 				{
 					type: chooseActiveCards
 					select: choose(side(shadow))
+					// "A Shadow card" names a side and nothing more: a hindered one may be the card (Q-0098).
+					hindered: true
 					memorize: chosenCard
 					text: Choose a Shadow card to discard
 				}
 				{
-					type: preventable
-					player: shadow
-					text: Would you like to discard the bottom 3 cards of your deck to prevent {chosenCard} from being discarded?
-					cost: {
-						type: discardBottomCardsFromDeck
-						deck: shadow
-						count: 3
-						forced: false
+					// With no Shadow card chosen there is no owner and nothing to prevent (F-0185).
+					type: If
+					check: {
+						type: HasCardInMemory
+						memory: chosenCard
 					}
-					effect: {
-						type: discard
-						select: memory(chosenCard)
+					true: {
+						type: preventable
+						player: shadow
+						text: Would you like to discard the bottom 3 cards of your deck to prevent {chosenCard} from being discarded?
+						cost: {
+							type: discardBottomCardsFromDeck
+							deck: shadow
+							count: 3
+							forced: false
+						}
+						effect: {
+							type: discard
+							select: memory(chosenCard)
+							override: hindered
+						}
 					}
 				}
 			]

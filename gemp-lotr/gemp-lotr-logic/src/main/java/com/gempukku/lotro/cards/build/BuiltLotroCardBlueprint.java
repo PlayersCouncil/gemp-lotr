@@ -668,12 +668,12 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
 
     @Override
     public List<? extends Action> getPhaseActionsFromDiscard(String playerId, LotroGame game, PhysicalCard self) {
-        return getActivatedActions(playerId, game, self, inDiscardPhaseActions);
+        return getActivatedOrPlayPermissionActions(playerId, game, self, inDiscardPhaseActions);
     }
 
     @Override
     public List<? extends Action> getPhaseActionsFromDrawDeck(String playerId, LotroGame game, PhysicalCard self) {
-        return getActivatedActions(playerId, game, self, inDrawDeckPhaseActions);
+        return getActivatedOrPlayPermissionActions(playerId, game, self, inDrawDeckPhaseActions);
     }
 
 
@@ -791,7 +791,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
                     return false;
             }
 
-        if (playEventAction != null && !playEventAction.isValid(dummy))
+        if (playEventAction != null && !playEventAction.isValid(new EventPlayabilityContext(dummy)))
             return false;
 
         return true;
@@ -813,8 +813,17 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
 
     @Override
     public PlayEventAction getPlayEventCardAction(String playerId, LotroGame game, PhysicalCard self) {
+        return getPlayEventCardAction(playerId, game, self, false);
+    }
+
+    @Override
+    public PlayEventAction getPlayEventCardActionIgnoringCosts(String playerId, LotroGame game, PhysicalCard self) {
+        return getPlayEventCardAction(playerId, game, self, true);
+    }
+
+    private PlayEventAction getPlayEventCardAction(String playerId, LotroGame game, PhysicalCard self, boolean costsIgnored) {
         DefaultActionContext actionContext = new DefaultActionContext(playerId, game, self, null, null);
-        PlayEventAction action = new PlayEventAction(self, playEventAction.requiresRanger());
+        PlayEventAction action = new PlayEventAction(self, playEventAction.requiresRanger(), costsIgnored);
         playEventAction.createAction(action, actionContext);
         return action;
     }
@@ -1193,7 +1202,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
                 actionContext = new DefaultActionContext(optionalInHandBeforeAction.getPlayer().getPlayer(actionContext), game, self, null, effect);
             }
 
-            if (optionalInHandBeforeAction.isValid(actionContext)) {
+            if (optionalInHandBeforeAction.isValid(new EventPlayabilityContext(actionContext))) {
                 PlayEventAction action = new PlayEventAction(self);
                 optionalInHandBeforeAction.createAction(action, actionContext);
                 result.add(action);
@@ -1216,7 +1225,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
                 actionContext = new DefaultActionContext(optionalInHandAfterAction.getPlayer().getPlayer(actionContext), game, self, effectResult, null);
             }
 
-            if (optionalInHandAfterAction.isValid(actionContext)) {
+            if (optionalInHandAfterAction.isValid(new EventPlayabilityContext(actionContext))) {
                 PlayEventAction action = new PlayEventAction(self);
                 optionalInHandAfterAction.createAction(action, actionContext);
                 result.add(action);
@@ -1328,12 +1337,20 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         }
     }
 
+    // A card's own "discarded from play" or "hindered" trigger is that card's and its owner's: "you" in its
+    // text is the owner and "this card" and "another" are counted from the card itself, whoever removed it and
+    // with whatever card.  What did the removing stays in the result, where the trigger's "source" condition
+    // reads it (SelfRemovedFromPlayTriggerEffectProcessor).
+    private static DefaultActionContext ownRemovalContext(LotroGame game, PhysicalCard removedCard, EffectResult result) {
+        return new DefaultActionContext(removedCard.getOwner(), game, removedCard, result, null);
+    }
+
     @Override
     public RequiredTriggerAction getDiscardedFromPlayRequiredTrigger(LotroGame game, DiscardCardsFromPlayResult result) {
         if (discardedFromPlayRequiredTriggerAction == null)
             return null;
 
-        DefaultActionContext actionContext = new DefaultActionContext(result.getPerformingPlayer(), game, result.getSource(), result, null);
+        DefaultActionContext actionContext = ownRemovalContext(game, result.getDiscardedCard(), result);
         if (discardedFromPlayRequiredTriggerAction.isValid(actionContext)) {
             RequiredTriggerAction action = new RequiredTriggerAction(result.getDiscardedCard());
             discardedFromPlayRequiredTriggerAction.createAction(action, actionContext);
@@ -1347,7 +1364,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         if (discardedFromPlayOptionalTriggerAction == null)
             return null;
 
-        DefaultActionContext actionContext = new DefaultActionContext(result.getPerformingPlayer(), game, result.getSource(), null, null);
+        DefaultActionContext actionContext = ownRemovalContext(game, result.getDiscardedCard(), result);
         if (discardedFromPlayOptionalTriggerAction.isValid(actionContext)) {
             OptionalTriggerAction action = new OptionalTriggerAction(result.getDiscardedCard());
             discardedFromPlayOptionalTriggerAction.createAction(action, actionContext);
@@ -1362,7 +1379,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         if (hinderedFromPlayRequiredTriggerAction == null)
             return null;
 
-        DefaultActionContext actionContext = new DefaultActionContext(result.getPerformingPlayer(), game, result.getSource(), result, null);
+        DefaultActionContext actionContext = ownRemovalContext(game, result.getHinderedCard(), result);
         if (hinderedFromPlayRequiredTriggerAction.isValid(actionContext)) {
             RequiredTriggerAction action = new RequiredTriggerAction(result.getHinderedCard());
             hinderedFromPlayRequiredTriggerAction.createAction(action, actionContext);
@@ -1376,7 +1393,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         if (hinderedFromPlayOptionalTriggerAction == null)
             return null;
 
-        DefaultActionContext actionContext = new DefaultActionContext(result.getPerformingPlayer(), game, result.getSource(), null, null);
+        DefaultActionContext actionContext = ownRemovalContext(game, result.getHinderedCard(), result);
         if (hinderedFromPlayOptionalTriggerAction.isValid(actionContext)) {
             OptionalTriggerAction action = new OptionalTriggerAction(result.getHinderedCard());
             hinderedFromPlayOptionalTriggerAction.createAction(action, actionContext);
@@ -1446,6 +1463,11 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     }
 
     @Override
+    public Integer getAidTwilightCost() {
+        return aidCostSource == null ? null : aidCostSource.getTwilightCost();
+    }
+
+    @Override
     public boolean skipUniquenessCheck() {
         return false;
     }
@@ -1474,6 +1496,26 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
             if (inPlayPhaseAction.isValid(actionContext)) {
                 ActivateCardAction action = new ActivateCardAction(self, playerId);
                 inPlayPhaseAction.createAction(action, actionContext);
+                result.add(action);
+            }
+        }
+        return result;
+    }
+
+    // The actions a card offers from the discard pile or draw deck.  Each is a special ability unless its definition
+    // says it is only a permission to play the card (see ActionSource.isSpecialAbility).
+    private List<CostToEffectAction> getActivatedOrPlayPermissionActions(String playerId, LotroGame game, PhysicalCard self, List<ActionSource> sources) {
+        if (sources == null)
+            return null;
+
+        List<CostToEffectAction> result = new LinkedList<>();
+        for (ActionSource source : sources) {
+            DefaultActionContext actionContext = new DefaultActionContext(playerId, game, self, null, null);
+            if (source.isValid(actionContext)) {
+                CostToEffectAction action = source.isSpecialAbility()
+                        ? new ActivateCardAction(self, playerId)
+                        : new PlayPermissionAction(self, playerId);
+                source.createAction(action, actionContext);
                 result.add(action);
             }
         }

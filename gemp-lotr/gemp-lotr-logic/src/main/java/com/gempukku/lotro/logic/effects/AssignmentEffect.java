@@ -47,11 +47,22 @@ public class AssignmentEffect extends AbstractEffect {
     @Override
     public boolean isPlayableInFull(LotroGame game) {
         Side side = _playerId.equals(game.getGameState().getCurrentPlayerId()) ? Side.FREE_PEOPLE : Side.SHADOW;
-        return Filters.assignableToSkirmishAgainst(side, _fpChar, _ignoreExistingAssignments, _ignoreDefender, _skipAllyLocationCheck).accepts(game, _minion);
+        return Filters.assignableToSkirmishAgainst(side, _fpChar, _ignoreExistingAssignments, _ignoreDefender, _skipAllyLocationCheck)
+                .accepts(game, _minion);
     }
 
+    /**
+     * Makes the assignment if it can still be made.  A cost of assigning the minion paid for this assignment
+     * (GameState.isAssignmentPaidFor; Q-0283) is used by it, made or not.
+     */
     @Override
     protected FullEffectResult playEffectReturningResult(LotroGame game) {
+        final boolean made = assign(game);
+        game.getGameState().useAssignmentPaidFor(_minion);
+        return new FullEffectResult(made);
+    }
+
+    private boolean assign(LotroGame game) {
         if (isPlayableInFull(game)) {
             if (Filters.notAssignedToSkirmish.accepts(game, _fpChar))
                 game.getActionsEnvironment().emitEffectResult(new AssignedToSkirmishResult(_fpChar, _playerId));
@@ -64,8 +75,8 @@ public class AssignmentEffect extends AbstractEffect {
             game.getActionsEnvironment().emitEffectResult(new AssignAgainstResult(_playerId, _fpChar, _minion));
             game.getActionsEnvironment().emitEffectResult(new AssignAgainstResult(_playerId, _minion, _fpChar));
 
-            return new FullEffectResult(true);
+            return true;
         }
-        return new FullEffectResult(false);
+        return false;
     }
 }

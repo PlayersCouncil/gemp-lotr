@@ -26,6 +26,32 @@ public class Card_04_339_Tests
 		);
 	}
 
+	// The Towers-block path with this site as site 3.
+	protected VirtualTableScenario GetSiteScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("eomer", "4_267");      // Eomer, Third Marshal of Riddermark: a [rohan] Man, vitality 3
+					put("mount", "4_287");      // Rider's Mount: a [rohan] mount, cost 1; bearer must be a [rohan] Man
+					put("mount2", "4_287");
+				}},
+				new HashMap<>()
+				{{
+					put("site1", "4_325");
+					put("site2", "4_331");
+					put("site3", "4_339");
+					put("site4", "4_346");
+					put("site5", "4_348");
+					put("site6", "4_352");
+					put("site7", "102_71");
+					put("site8", "4_358");
+					put("site9", "4_363");
+				}},
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
 	@Test
 	public void StablesStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
@@ -70,5 +96,36 @@ public class Card_04_339_Tests
 		scn.FreepsPlayCard(card);
 
 		assertEquals(0, scn.GetTwilight());
+	}
+
+	@Test
+	public void FellowshipAbilityIsNotOfferedAgainInTheTurnItWasUsed() throws DecisionResultInvalidException, CardNotFoundException {
+		//Pre-game setup
+		var scn = GetSiteScenario();
+
+		var eomer = scn.GetFreepsCard("eomer");
+		var mount = scn.GetFreepsCard("mount");
+		var mount2 = scn.GetFreepsCard("mount2");
+		scn.MoveCompanionsToTable(eomer);
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+		// The turns played on the way drew the deck into hand.
+		scn.MoveCardsToTopOfDeck(mount, mount2);
+
+		var site = scn.GetCurrentSite();
+		assertEquals("Stables", site.getBlueprint().getTitle());
+
+		scn.FreepsUseCardAction(site);
+		scn.DismissRevealedCards();
+		scn.FreepsChooseCardBPFromSelection(mount);
+		assertEquals(1, scn.GetWoundsOn(eomer));
+		assertEquals(1, scn.GetAttachedCards(eomer).size());
+
+		// Limit once per turn: a limit on uses, so the ability is not offered again, though Eomer could still
+		// exert and the draw deck still holds a mount (Ketura on Q-0093).
+		assertFalse(scn.FreepsActionAvailable(site));
+		assertEquals(1, scn.GetWoundsOn(eomer));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

@@ -19,22 +19,29 @@ public class Card_V3_001_Tests
 				new HashMap<>()
 				{{
 					put("phial", "103_1");
-					// Need: Sam with "Response: If Frodo dies, make Sam the Ring-bearer"
-					put("sam", "1_311");
-					put("pippin", "1_306"); // Unbound Hobbit
-					put("gimli", "1_13"); // Non-Hobbit
-					// Generic companions for 5+ companion test
-					put("companion1", "1_89");
-					put("companion2", "1_89");
-					put("companion3", "1_89");
-					put("companion4", "1_89");
+					put("sam", "1_311");        // Sam, Son of Hamfast: Ring-bound Hobbit. "Response: If Frodo dies, make Sam the Ring-bearer"
+					put("pippin", "1_306");     // Pippin, Friend to Frodo: an unbound Hobbit, cost 1
+					// Bilbo, Melancholy Hobbit: a Ring-bound Hobbit who is never the Ring-bearer; an offer at the start of
+					// a skirmish involving him and nothing else
+					put("bilbo", "12_119");
+					// Smeagol, Once Like Us: a [shire] companion, Ring-bound, with no race; an assignment ability and nothing else
+					put("smeagol", "103_116");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: "Maneuver: Exert Aragorn to make him defender +1"
+					put("gimli", "1_13");       // Gimli, Son of Gloin: a skirmish ability
+					put("gandalf", "1_72");     // Gandalf, Friend of the Shirefolk: a strength modifier and nothing else
+					put("bounder", "1_286");    // Bounder: Hobbit ally, cost 1; a skirmish ability
+					put("sword", "1_299");      // Hobbit Sword: bearer must be a Hobbit, cost 1, no text
+					put("toby", "1_305");       // Old Toby: a Free Peoples possession that sits in the support area
+					put("stone", "13_36");      // The Palantir of Orthanc, Recovered Seeing Stone: a Free Peoples artifact borne by Gandalf
 
-					// Shadow support cards for hinder test
-					put("shared1", "1_264"); // Need Shadow support card
-					put("shared2", "1_264"); // Same title as shared1
-					put("different1", "1_281"); // Different title
-					put("runner", "1_178");
-
+					put("armory1", "1_157");    // Uruk-hai Armory: [isengard] condition, support area; does nothing without an Uruk-hai
+					put("armory2", "1_157");
+					put("pinned", "1_192");     // Pinned Down: [moria] condition, support area; does nothing without a [moria] archer
+					put("breath1", "1_207");    // Black Breath: [wraith] condition, support area; moves onto a character in a skirmish
+					put("breath2", "1_207");
+					put("palantir", "3_67");    // The Palantir of Orthanc: [isengard] artifact, support area; a Shadow-phase ability
+					put("troop", "1_177");      // Goblin Patrol Troop: no text
+					put("marksman", "1_176");   // Goblin Marksman: Archer and nothing else
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -53,10 +60,10 @@ public class Card_V3_001_Tests
 		 * Twilight Cost: 1
 		 * Type: Artifact
 		 * Subtype: Phial
-		 * Vitality: 1
+		 * Vitality: +1
 		 * Game Text: Bearer must be a Ring-bound Hobbit. Discard this if you can spot more than 4 companions.
-		 *     Maneuver: Add 2 burdens to hinder all Shadow support cards with a title you spot.
-		 *     Response: If The One Ring is transferred, play this on the new Ring-bearer.  You may use this ability from your discard pile.
+		 * 	Maneuver: Add 2 burdens to hinder all Shadow support cards with a title you spot.
+		 * 	Response: If The One Ring is transferred, play this on the new Ring-bearer.  You may use this ability from your discard pile.
 		 */
 
 		var scn = GetScenario();
@@ -68,174 +75,562 @@ public class Card_V3_001_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
+		assertEquals(1, card.getBlueprint().getPossessionClasses().size());
 		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.PHIAL));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(0, card.getBlueprint().getStrength());
 		assertEquals(1, card.getBlueprint().getVitality());
 	}
+
 	@Test
-	public void PhialAttachesToRingBoundHobbitOnly() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void PlayedForOneOnARingBoundHobbit() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var phial = scn.GetFreepsCard("phial");
 		var frodo = scn.GetRingBearer();
+		var phial = scn.GetFreepsCard("phial");
+		var sam = scn.GetFreepsCard("sam");
 		var pippin = scn.GetFreepsCard("pippin");
-		var gimli = scn.GetFreepsCard("gimli");
-
+		var smeagol = scn.GetFreepsCard("smeagol");
+		scn.MoveCompanionsToTable(sam, pippin, smeagol);
 		scn.MoveCardsToHand(phial);
-		scn.MoveCompanionsToTable(pippin, gimli);
 
 		scn.StartGame();
 
-		// Frodo is the only ring-bound Hobbit, so Phial auto-attaches to him
+		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(phial));
+
 		scn.FreepsPlayCard(phial);
 
-		assertAttachedTo(phial, frodo);
+		// Frodo, the Ring-bearer, and Sam are the Ring-bound Hobbits. Pippin is a Hobbit and unbound. This Smeagol
+		// is Ring-bound and a [shire] companion, and no Hobbit: a card that took "Hobbit" to mean the culture
+		// would let him through.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, sam));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(pippin, smeagol));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+
+		scn.FreepsChooseCard(sam);
+
+		assertAttachedTo(phial, sam);
+		assertEquals(1, scn.GetTwilight());
+		assertEquals(4, scn.GetVitality(frodo));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	public void PhialDiscardsWhen5Companions() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void DiscardedWhenAFifthCompanionIsPlayedButNotWhenAnAllyJoinsFourCompanions() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
 		var phial = scn.GetFreepsCard("phial");
+		var sam = scn.GetFreepsCard("sam");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var bounder = scn.GetFreepsCard("bounder");
+		var pippin = scn.GetFreepsCard("pippin");
+		// Frodo and three more: 4 companions
+		scn.MoveCompanionsToTable(sam, aragorn, gimli);
 		scn.AttachCardsTo(frodo, phial);
-
-		// Start with Frodo + 3 companions = 4 total
-		scn.MoveCompanionsToTable("companion1", "companion2", "companion3");
+		scn.MoveCardsToHand(bounder, pippin);
 
 		scn.StartGame();
 
-		// 4 companions total, Phial should remain attached
 		assertAttachedTo(phial, frodo);
 
-		// Add 4th companion (5 total with Frodo)
-		scn.MoveCompanionsToTable("companion4");
-		scn.FreepsPassCurrentPhaseAction();
+		// An ally is a fifth character and not a fifth companion.
+		scn.FreepsPlayCard(bounder);
 
-		// Now 5 total companions, Phial should auto-discard
-		assertEquals(Zone.DISCARD, phial.getZone());
+		assertInPlay(bounder);
+		assertAttachedTo(phial, frodo);
+
+		scn.FreepsPlayCard(pippin);
+
+		// 5 companions is more than 4.
+		assertInPlay(pippin);
+		assertInZone(Zone.DISCARD, phial);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	public void PhialManeuverAbilityHindersCardsByTitle() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void ManeuverAbilityAddsTwoBurdensAndHindersEveryShadowSupportCardOfTheTitleSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
 		var phial = scn.GetFreepsCard("phial");
-		var shared1 = scn.GetShadowCard("shared1");
-		var shared2 = scn.GetShadowCard("shared2");
-		var different1 = scn.GetShadowCard("different1");
-
+		var toby = scn.GetFreepsCard("toby");
+		var armory1 = scn.GetShadowCard("armory1");
+		var armory2 = scn.GetShadowCard("armory2");
+		var pinned = scn.GetShadowCard("pinned");
+		var breath1 = scn.GetShadowCard("breath1");
+		var palantir = scn.GetShadowCard("palantir");
+		var troop = scn.GetShadowCard("troop");
 		scn.AttachCardsTo(frodo, phial);
-		scn.MoveCardsToSupportArea(shared1, shared2, different1);
-
-		var runner = scn.GetShadowCard("runner");
-		scn.MoveMinionsToTable(runner);
+		scn.MoveCardsToSupportArea(toby);
+		scn.MoveCardsToSupportArea(armory1, armory2, pinned, breath1, palantir);
 
 		scn.StartGame();
-		scn.RemoveBurdens(1); //we start with 1 due to the initial bid
+		scn.MoveMinionsToTable(troop);
 		scn.SkipToPhase(Phase.MANEUVER);
 
 		assertEquals(0, scn.GetBurdens());
-		assertFalse(scn.IsHindered(shared1));
-		assertFalse(scn.IsHindered(shared2));
-		assertFalse(scn.IsHindered(different1));
+		assertTrue(scn.FreepsActionAvailable(phial));
 
+		scn.FreepsUseCardAction(phial);
+
+		assertEquals(2, scn.GetBurdens());
+		// Conditions of three cultures and an artifact, all in the Shadow player's support area. Old Toby is in a
+		// support area and is no Shadow card; the Troop is a Shadow card and is in no support area.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(armory1, armory2, pinned, breath1, palantir));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(toby, troop));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+
+		scn.FreepsChooseCard(armory1);
+
+		// Both copies of the title spotted, and nothing of any other title.
+		assertTrue(scn.IsHindered(armory1));
+		assertTrue(scn.IsHindered(armory2));
+		assertFalse(scn.IsHindered(pinned));
+		assertFalse(scn.IsHindered(breath1));
+		assertFalse(scn.IsHindered(palantir));
+		assertFalse(scn.IsHindered(toby));
+		assertFalse(scn.IsHindered(troop));
+		assertFalse(scn.IsHindered(phial));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+
+		// It may be used again in the same phase, for 2 more burdens.
+		scn.ShadowPass();
 		assertTrue(scn.FreepsActionAvailable(phial));
 		scn.FreepsUseCardAction(phial);
 
-		// Choose shared1's title (shared2 has same title, different1 has different title)
-		scn.FreepsChooseCard(shared1);
+		assertEquals(4, scn.GetBurdens());
+		scn.FreepsChooseCard(palantir);
 
-		assertEquals(2, scn.GetBurdens());
-		assertTrue(scn.IsHindered(shared1));
-		assertTrue(scn.IsHindered(shared2)); // Same title as shared1
-		assertFalse(scn.IsHindered(different1)); // Different title
+		assertTrue(scn.IsHindered(palantir));
+		assertFalse(scn.IsHindered(pinned));
+		assertFalse(scn.IsHindered(breath1));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 
 	@Test
-	public void PhialofGaladrielCanPlayOnSamWhenInDiscard() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void ManeuverAbilityHindersOnlyShadowSupportCardsOfTheTitleSpotted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var phial = scn.GetFreepsCard("phial");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var stone = scn.GetFreepsCard("stone");
+		var breath1 = scn.GetShadowCard("breath1");
+		var breath2 = scn.GetShadowCard("breath2");
+		var palantir = scn.GetShadowCard("palantir");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCompanionsToTable(aragorn, gandalf);
+		scn.AttachCardsTo(frodo, phial);
+		scn.MoveCardsToSupportArea(breath1, palantir);
+		// A Black Breath that has left the support area for a character, as its own ability moves it.
+		scn.AttachCardsTo(aragorn, breath2);
+
+		scn.StartGame();
+		// The Free Peoples player's own artifact of the same title as the Shadow player's Palantir. Put down after
+		// the start of the fellowship phase, when it would have made its offer.
+		scn.AttachCardsTo(gandalf, stone);
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertEquals(0, scn.GetBurdens());
+		scn.FreepsUseCardAction(phial);
+		assertEquals(2, scn.GetBurdens());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(breath1, palantir));
+		scn.FreepsChooseCard(breath1);
+
+		// The Black Breath on Aragorn is a Shadow card of that title and is not a support card.
+		assertTrue(scn.IsHindered(breath1));
+		assertFalse(scn.IsHindered(breath2));
+		assertFalse(scn.IsHindered(palantir));
+		assertFalse(scn.IsHindered(stone));
+
+		scn.ShadowPass();
+		scn.FreepsUseCardAction(phial);
+		assertEquals(4, scn.GetBurdens());
+
+		// One Shadow support card is left unhindered, so its title is the one spotted.
+		// Gandalf's Palantir has that title and is not a Shadow card.
+		assertTrue(scn.IsHindered(palantir));
+		assertFalse(scn.IsHindered(stone));
+		assertFalse(scn.IsHindered(breath2));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Test
+	public void ManeuverAbilityReachesAShadowCardAnAllyBearsAndNotOneACompanionBears() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var phial = scn.GetFreepsCard("phial");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var bounder = scn.GetFreepsCard("bounder");
+		var breath1 = scn.GetShadowCard("breath1");
+		var breath2 = scn.GetShadowCard("breath2");
+		var palantir = scn.GetShadowCard("palantir");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveAlliesToTable(bounder);
+		scn.AttachCardsTo(frodo, phial);
+		scn.MoveCardsToSupportArea(palantir);
+		// Two Black Breaths that have left the Shadow player's support area for a character, as their own ability
+		// moves them: one to an ally, who is in a support area himself, and one to a companion.
+		scn.AttachCardsTo(bounder, breath1);
+		scn.AttachCardsTo(aragorn, breath2);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertEquals(0, scn.GetBurdens());
+		scn.FreepsUseCardAction(phial);
+		assertEquals(2, scn.GetBurdens());
+
+		// What a card in a support area bears is in that support area: the Black Breath on the ally is a Shadow
+		// support card. The one on Aragorn is not, and the ally is no Shadow card.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(palantir, breath1));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(breath2, bounder, troop));
+		scn.FreepsChooseCard(breath1);
+
+		assertTrue(scn.IsHindered(breath1));
+		assertFalse(scn.IsHindered(breath2));
+		assertFalse(scn.IsHindered(palantir));
+		assertFalse(scn.IsHindered(bounder));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Test
+	public void ManeuverAbilityWithNoShadowSupportCardStillAddsItsTwoBurdens() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var phial = scn.GetFreepsCard("phial");
+		var toby = scn.GetFreepsCard("toby");
+		var troop = scn.GetShadowCard("troop");
+		scn.AttachCardsTo(frodo, phial);
+		scn.MoveCardsToSupportArea(toby);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertEquals(0, scn.GetBurdens());
+		// An ability with a cost is offered whenever the cost can be paid.
+		assertTrue(scn.FreepsActionAvailable(phial));
+
+		scn.FreepsUseCardAction(phial);
+
+		assertEquals(2, scn.GetBurdens());
+		assertFalse(scn.IsHindered(toby));
+		assertFalse(scn.IsHindered(troop));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Test
+	public void ManeuverAbilityIsOfferedInTheManeuverPhaseOnly() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var phial = scn.GetFreepsCard("phial");
+		var armory1 = scn.GetShadowCard("armory1");
+		var troop = scn.GetShadowCard("troop");
+		scn.AttachCardsTo(frodo, phial);
+		scn.MoveCardsToSupportArea(armory1);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(phial));
+
+		scn.SkipToPhase(Phase.MANEUVER);
+		assertTrue(scn.FreepsActionAvailable(phial));
+
+		scn.SkipToPhase(Phase.ARCHERY);
+		assertFalse(scn.FreepsActionAvailable(phial));
+		assertEquals(0, scn.GetBurdens());
+		assertFalse(scn.IsHindered(armory1));
+		assertTrue(scn.AwaitingFreepsArcheryPhaseActions());
+	}
+
+	@Test
+	public void ManeuverAbilityIsNotOfferedWhileTheRingBearerIsHinderedAndCanBeGivenNoBurden() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var phial = scn.GetFreepsCard("phial");
+		var sam = scn.GetFreepsCard("sam");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var armory1 = scn.GetShadowCard("armory1");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCompanionsToTable(sam, aragorn);
+		scn.AttachCardsTo(sam, phial);
+		scn.MoveCardsToSupportArea(armory1);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertTrue(scn.FreepsActionAvailable(phial));
+
+		// Burdens cannot be added while the Ring-bearer is hindered, so the cost cannot be paid.
+		scn.HinderCard(frodo);
+		// Aragorn's own maneuver ability, to have the Free Peoples player asked afresh.
+		scn.FreepsUseCardAction(aragorn);
+		scn.ShadowPass();
+
+		assertTrue(scn.IsHindered(frodo));
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(phial));
+		assertEquals(0, scn.GetBurdens());
+		assertFalse(scn.IsHindered(armory1));
+	}
+
+	@Test
+	public void WhenFrodoDiesBearingItTheResponsePlaysItFromTheDiscardPileOnSamTheNewRingBearer() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
 		var ring = scn.GetRing();
-		var sam = scn.GetFreepsCard("sam");
 		var phial = scn.GetFreepsCard("phial");
+		var sam = scn.GetFreepsCard("sam");
+		var bilbo = scn.GetFreepsCard("bilbo");
+		var marksman = scn.GetShadowCard("marksman");
+		// Bilbo is a Ring-bound Hobbit the Phial could be played on, and not the one its response names.
+		scn.MoveCompanionsToTable(sam, bilbo);
+		scn.AttachCardsTo(frodo, phial);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(marksman);
+		// Vitality 4 + 1 for the Phial: four wounds leave Frodo one from death.
+		scn.AddWoundsToChar(frodo, 4);
+		scn.SkipToArcheryWounds();
+
+		assertAttachedTo(phial, frodo);
+		// 3 companions + 2 for the shadow number of site 2
+		assertEquals(5, scn.GetTwilight());
+
+		// The Marksman's one archery wound
+		scn.FreepsChooseCard(frodo);
+
+		assertInZone(Zone.DEAD, frodo);
+		// The Phial went to the discard pile with its bearer.
+		assertInZone(Zone.DISCARD, phial);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(sam));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(phial));
+
+		scn.FreepsChooseOptionalTrigger(sam);
+
+		assertEquals(sam, scn.GetRingBearer());
+		assertAttachedTo(ring, sam);
+		assertInZone(Zone.DISCARD, phial);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(phial));
+
+		scn.FreepsChooseOptionalTrigger(phial);
+
+		// On Sam without a choice: Bilbo was not a candidate.
+		assertAttachedTo(phial, sam);
+		assertNotAttachedTo(phial, bilbo);
+		// 5 + 1 to play the Phial
+		assertEquals(6, scn.GetTwilight());
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+	}
+
+	@Test
+	public void WhenFrodoDiesWithThePhialOnBilboTheResponseMovesItToSamTheNewRingBearer() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var ring = scn.GetRing();
+		var phial = scn.GetFreepsCard("phial");
+		var sam = scn.GetFreepsCard("sam");
+		var bilbo = scn.GetFreepsCard("bilbo");
+		var marksman = scn.GetShadowCard("marksman");
+		scn.MoveCompanionsToTable(sam, bilbo);
+		scn.AttachCardsTo(bilbo, phial);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(marksman);
+		// Vitality 4: three wounds leave Frodo one from death.
+		scn.AddWoundsToChar(frodo, 3);
+		scn.SkipToArcheryWounds();
+
+		// 3 companions + 2 for the shadow number of site 2
+		assertEquals(5, scn.GetTwilight());
+
+		// The Marksman's one archery wound
+		scn.FreepsChooseCard(frodo);
+
+		assertInZone(Zone.DEAD, frodo);
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(phial));
+
+		scn.FreepsChooseOptionalTrigger(sam);
+
+		assertEquals(sam, scn.GetRingBearer());
+		assertAttachedTo(ring, sam);
+		assertAttachedTo(phial, bilbo);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(phial));
+
+		scn.FreepsChooseOptionalTrigger(phial);
+
+		// On Sam, with nothing asked. Frodo is dead, and Sam and Bilbo are every Ring-bound Hobbit left.
+		assertAttachedTo(phial, sam);
+		assertNotAttachedTo(phial, bilbo);
+		// A card moved from one bearer to another by an effect is transferred, and costs nothing.
+		assertEquals(5, scn.GetTwilight());
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+	}
+
+	@Test
+	public void OncePlayedOnTheNewRingBearerTheResponseIsNotOfferedAgain() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var phial = scn.GetFreepsCard("phial");
+		var sam = scn.GetFreepsCard("sam");
+		var marksman = scn.GetShadowCard("marksman");
 		scn.MoveCompanionsToTable(sam);
 		scn.MoveCardsToDiscard(phial);
 
-		var runner = scn.GetShadowCard("runner");
-		scn.MoveMinionsToTable(runner);
-
 		scn.StartGame();
-
+		scn.MoveMinionsToTable(marksman);
 		scn.AddWoundsToChar(frodo, 3);
+		scn.SkipToArcheryWounds();
 
-		scn.SkipToAssignments();
-		scn.FreepsAssignAndResolve(frodo, runner);
-		scn.FreepsPass();
-		scn.ShadowPass();
-
-		//The One Ring offering to convert wound to burden
-		scn.FreepsDeclineOptionalTrigger();
-
+		scn.FreepsChooseCard(frodo);
 		assertInZone(Zone.DEAD, frodo);
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
-		scn.FreepsAcceptOptionalTrigger();
-		assertEquals(sam, ring.getAttachedTo());
+		scn.FreepsChooseOptionalTrigger(sam);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(phial));
+		scn.FreepsChooseOptionalTrigger(phial);
 
-		assertInZone(Zone.DISCARD, phial);
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
-		assertTrue(scn.FreepsActionAvailable(phial));
-
-		scn.FreepsAcceptOptionalTrigger();
-		assertInZone(Zone.ATTACHED, phial);
-		assertEquals(sam, phial.getAttachedTo());
+		// It is on Sam and there is nothing more for it to do.
+		assertAttachedTo(phial, sam);
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(phial));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
 
 	@Test
-	public void PhialofGaladrielCanPlayOnSamWhenOnFrodo() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void TheResponseFromTheDiscardPileMayBeDeclinedAndIsNotOfferedToTheOtherPlayer() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
 		var ring = scn.GetRing();
-		var sam = scn.GetFreepsCard("sam");
 		var phial = scn.GetFreepsCard("phial");
+		var theirPhial = scn.GetShadowCard("phial");
+		var sam = scn.GetFreepsCard("sam");
+		var marksman = scn.GetShadowCard("marksman");
 		scn.MoveCompanionsToTable(sam);
-		scn.AttachCardsTo(frodo, phial);
+		scn.MoveCardsToDiscard(phial, theirPhial);
 
-		var runner = scn.GetShadowCard("runner");
-		scn.MoveMinionsToTable(runner);
+		scn.StartGame();
+		scn.MoveMinionsToTable(marksman);
+		scn.AddWoundsToChar(frodo, 3);
+		scn.SkipToArcheryWounds();
+
+		// 2 companions + 2 for the shadow number of site 2
+		assertEquals(4, scn.GetTwilight());
+
+		scn.FreepsChooseCard(frodo);
+		assertInZone(Zone.DEAD, frodo);
+		scn.FreepsChooseOptionalTrigger(sam);
+
+		assertEquals(sam, scn.GetRingBearer());
+		assertAttachedTo(ring, sam);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(phial));
+
+		scn.FreepsDeclineOptionalTrigger();
+
+		assertInZone(Zone.DISCARD, phial);
+		assertInZone(Zone.DISCARD, theirPhial);
+		assertNotAttachedTo(phial, sam);
+		assertNotAttachedTo(theirPhial, sam);
+		assertEquals(4, scn.GetTwilight());
+		assertEquals(4, scn.GetVitality(sam));
+		// The Shadow player's copy, in his own discard pile, made him no offer on the way.
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
+
+	@Test
+	public void TheResponseIsNotOfferedWhileThePhialIsInHand() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var phial = scn.GetFreepsCard("phial");
+		var sam = scn.GetFreepsCard("sam");
+		var marksman = scn.GetShadowCard("marksman");
+		scn.MoveCompanionsToTable(sam);
+		scn.MoveCardsToHand(phial);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(marksman);
+		scn.AddWoundsToChar(frodo, 3);
+		scn.SkipToArcheryWounds();
+
+		scn.FreepsChooseCard(frodo);
+		assertInZone(Zone.DEAD, frodo);
+		scn.FreepsChooseOptionalTrigger(sam);
+
+		// The Ring has been transferred, and the game has gone on without a word from the Phial.
+		assertEquals(sam, scn.GetRingBearer());
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(phial));
+		assertInZone(Zone.HAND, phial);
+		assertEquals(4, scn.GetTwilight());
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
+
+	@Test
+	public void TheResponseIsNotOfferedWhileThePhialIsAlreadyOnTheNewRingBearer() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var phial = scn.GetFreepsCard("phial");
+		var sam = scn.GetFreepsCard("sam");
+		var marksman = scn.GetShadowCard("marksman");
+		scn.MoveCompanionsToTable(sam);
+		scn.AttachCardsTo(sam, phial);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(marksman);
+		scn.AddWoundsToChar(frodo, 3);
+		scn.SkipToArcheryWounds();
+
+		scn.FreepsChooseCard(frodo);
+		assertInZone(Zone.DEAD, frodo);
+		scn.FreepsChooseOptionalTrigger(sam);
+
+		assertEquals(sam, scn.GetRingBearer());
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(phial));
+		assertAttachedTo(phial, sam);
+		assertEquals(4, scn.GetTwilight());
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
+
+	@Test
+	public void TransferringAnotherItemToSamIsNotTheOneRingBeingTransferred() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var phial = scn.GetFreepsCard("phial");
+		var sam = scn.GetFreepsCard("sam");
+		var sword = scn.GetFreepsCard("sword");
+		scn.MoveCompanionsToTable(sam);
+		scn.AttachCardsTo(frodo, sword);
+		scn.MoveCardsToDiscard(phial);
 
 		scn.StartGame();
 
-		scn.AddWoundsToChar(frodo, 4);
+		assertAttachedTo(sword, frodo);
+		assertTrue(scn.FreepsTransferAvailable(sword));
 
-		scn.SkipToAssignments();
-		scn.FreepsAssignAndResolve(frodo, runner);
-		scn.FreepsPass();
-		scn.ShadowPass();
+		scn.FreepsTransferCard(sword);
 
-		//The One Ring offering to convert wound to burden
-		scn.FreepsDeclineOptionalTrigger();
-
-		assertInZone(Zone.DEAD, frodo);
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
-		scn.FreepsAcceptOptionalTrigger();
-		assertEquals(sam, ring.getAttachedTo());
-
+		assertAttachedTo(sword, sam);
+		assertEquals(frodo, scn.GetRingBearer());
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(phial));
 		assertInZone(Zone.DISCARD, phial);
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
-		assertTrue(scn.FreepsActionAvailable(phial));
-
-		scn.FreepsAcceptOptionalTrigger();
-		assertInZone(Zone.ATTACHED, phial);
-		assertEquals(sam, phial.getAttachedTo());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

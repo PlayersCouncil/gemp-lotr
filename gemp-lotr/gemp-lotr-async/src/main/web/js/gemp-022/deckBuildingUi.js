@@ -386,7 +386,8 @@ var GempLotrDeckBuildingUI = Class.extend({
 		this.showRace = value;
 		this.currentMetaSites = metaSites || null;
 
-		// Check if any meta-site has siteOverride and pass to CardFilter
+		// metaSites are the player's own in the chosen league (GET /league lists only those), so the site
+		// list is opened to every block only while one of them has siteOverride. Pass that to CardFilter.
 		var hasSiteOverride = metaSites && metaSites.some(function(s) { return s.siteOverride; });
 		this.cardFilter.siteOverride = hasSiteOverride || false;
 

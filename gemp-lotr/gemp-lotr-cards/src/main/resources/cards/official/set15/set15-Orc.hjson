@@ -216,6 +216,10 @@
 					type: played
 					filter: self
 				}
+				requires: {
+					type: canSpot
+					filter: side(free people),or(possession,artifact)
+				}
 				effect: {
 					type: addThreats
 					amount: {
@@ -667,6 +671,10 @@
 					type: played
 					filter: self
 				}
+				requires: {
+					type: canSpot
+					filter: culture(orc),or(possession,artifact)
+				}
 				effect: {
 					type: discard
 					select: choose(fortification)
@@ -902,7 +910,7 @@
 				effect: [
 					{
 						type: playCardFromDiscard
-						removedTwilight: 2
+						removedTwilight: 3
 						select: choose(culture(orc), orc)
 						memorize: PlayedOrc
 						discount: -2

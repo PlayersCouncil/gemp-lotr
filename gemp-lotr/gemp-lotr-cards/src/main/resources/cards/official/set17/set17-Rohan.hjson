@@ -464,31 +464,39 @@
 						minion: choose(minion)
 						memorizeMinion: chosenMinion
 					}
-					effect: {
-						type: doWhile
-						check: {
-							type: memoryIs
-							memory: choice
-							value: yes
+					effect: [
+						{
+							type: doWhile
+							check: {
+								type: not
+								requires: {
+									type: memoryIs
+									memory: keyword
+									value: ""
+								}
+							}
+							effect: [
+								{
+									type: chooseAKeyword
+									fromCard: memory(chosenMinion)
+									noneOption: None
+									text: Choose a keyword for the minion to lose, or None
+									memorize: keyword
+								}
+								{
+									type: removeKeyword
+									select: memory(chosenMinion)
+									keywordFromMemory: keyword
+									until: regroup
+								}
+							]
 						}
-						effect: [
-							{
-								type: chooseAKeyword
-								memorize: keyword
-							}
-							{
-								type: removeKeyword
-								select: memory(chosenMinion)
-								keywordFromMemory: keyword
-								until: regroup
-							}
-							{
-								type: chooseYesOrNo
-								text: Would you like to choose more keywords?
-								memorize: choice
-							}
-						]
-					}
+						{
+							type: cantGainKeywords
+							select: memory(chosenMinion)
+							until: regroup
+						}
+					]
 				}
 			}
 		]

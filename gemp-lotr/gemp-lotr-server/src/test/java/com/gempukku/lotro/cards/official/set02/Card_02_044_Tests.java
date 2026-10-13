@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_02_044_Tests
@@ -18,18 +19,17 @@ public class Card_02_044_Tests
 				new HashMap<>()
 				{{
 					put("business", "2_44");
-					put("uruk", "1_151");
+					put("uruk", "1_151");       // Uruk Savage: [isengard] Uruk-hai, cost 2, site 5; damage +1 and nothing else
+					put("goblinman", "2_42");   // Goblin Man: [isengard] Orc; discarded underground; a Shadow ability used only on purpose
+					put("runner", "1_178");     // Goblin Runner: a [moria] minion; cheated in, so its text does nothing
+					put("armory", "1_157");     // Uruk-hai Armory: an [isengard] condition in the support area; its text is about archery
+					put("keyward", "12_105");   // Troll's Keyward: [orc] Orc, vitality 3. "Shadow: Exert Troll's Keyward and reveal your hand to add (1) for each [orc] Troll revealed."
 
-					put("mirror", "1_55");
-					put("curse1", "1_36");
-					put("curse2", "1_36");
-					put("galadriel", "6_18");
-					put("chaff1", "6_19");
-					put("chaff2", "6_20");
-					put("chaff3", "6_21");
-					put("chaff4", "6_22");
-					put("chaff5", "6_23");
+					put("curse", "1_36");       // Curse Their Foul Feet!: an [elven] event, for the Free Peoples hand; it is never played
+					put("arwen", "1_30");       // Arwen, Daughter of Elrond: Elf companion, vitality 3; her text is about skirmishing a Nazgul
+					put("mallorn", "1_54");     // Mallorn-trees: "Fellowship: Reveal an [elven] card from hand and place it beneath your draw deck."
 				}},
+				// Site 6 is Galadriel's Glade: "Sanctuary. Fellowship: Exert an Elf to look at an opponent's hand."
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
@@ -47,9 +47,9 @@ public class Card_02_044_Tests
 		 * Culture: Isengard
 		 * Twilight Cost: 0
 		 * Type: Condition
-		* Subtype: Support Area
-		* Game Text: To play, spot an [isengard] minion. Plays to your support area.
-		* 	The Free Peoples player may not look at or reveal cards in any Shadow player’s hand.
+		 * Subtype: Support Area
+		 * Game Text: To play, spot an [isengard] minion. Plays to your support area.
+		 * 		The Free Peoples player may not look at or reveal cards in any Shadow player's hand.
 		*/
 
 		var scn = GetScenario();
@@ -68,84 +68,161 @@ public class Card_02_044_Tests
 
 	@Test
 	public void NoBusinessSpotsAnIsengardMinionToPlay() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var business = scn.GetShadowCard("business");
 		var uruk = scn.GetShadowCard("uruk");
+		var runner = scn.GetShadowCard("runner");
+		var armory = scn.GetShadowCard("armory");
 		scn.MoveCardsToHand(business, uruk);
 
 		scn.StartGame();
+		// A [moria] minion and an [isengard] condition: neither is an [isengard] minion.
+		scn.MoveMinionsToTable(runner);
+		scn.MoveCardsToSupportArea(armory);
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertInZone(Zone.HAND, business);
 		assertFalse(scn.ShadowPlayAvailable(business));
+
 		scn.ShadowPlayCard(uruk);
 		assertTrue(scn.ShadowPlayAvailable(business));
+
+		// It costs nothing.
+		scn.ShadowPlayCard(business);
+		assertInZone(Zone.SUPPORT, business);
+		assertNotAttachedTo(business, uruk);
+		assertNotAttachedTo(business, scn.GetRingBearer());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
-	public void FreepsCannotRevealCardsInShadowHand() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void AnIsengardOrcMayBeSpottedToPlayIt() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var business = scn.GetShadowCard("business");
+		var goblinman = scn.GetShadowCard("goblinman");
 		scn.MoveCardsToHand(business);
 
-		var galadriel = scn.GetFreepsCard("galadriel");
-		var curse1 = scn.GetFreepsCard("curse1");
-		var curse2 = scn.GetFreepsCard("curse2");
-		scn.MoveCardsToHand(curse1, curse2);
-		scn.MoveCardsToSupportArea(galadriel);
-
 		scn.StartGame();
-		scn.ShadowDrawCards(8);
+		scn.MoveMinionsToTable(goblinman);
+		scn.FreepsPass();
 
-		//First check that curse works with No Business in hand
-		scn.FreepsPlayCard(curse1);
-		assertTrue(scn.FreepsDecisionAvailable("Hand"));
-		scn.MoveCardsToSupportArea(business); //slide in No Business between actions
-		scn.FreepsDismissRevealedCards();
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertTrue(scn.ShadowPlayAvailable(business));
 
-		//Curse's effect should now be blocked
-		assertTrue(scn.FreepsPlayAvailable(curse2));
-		scn.FreepsPlayCard(curse2);
-		assertFalse(scn.FreepsDecisionAvailable("Hand"));
-		assertTrue(scn.FreepsDecisionAvailable("Play Fellowship action"));
+		scn.ShadowPlayCard(business);
+		assertInZone(Zone.SUPPORT, business);
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
-	public void FreepsCannotLookAtCardsInShadowHand() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void FreepsCannotLookAtTheShadowHandByASitesText() throws DecisionResultInvalidException, CardNotFoundException {
+		// The one act stopped here.  Each definition word that looks at or reveals another player's hand is shown
+		// stopped under the bar in mechanics/deck/ABarOnLookingAtOrRevealingAHandTests (Ketura on Q-0264: B2).
 		var scn = GetScenario();
 
 		var business = scn.GetShadowCard("business");
-		scn.MoveCardsToHand(business);
-		scn.MoveMinionsToTable("uruk");
+		var uruk = scn.GetShadowCard("uruk");
+		var armory = scn.GetShadowCard("armory");
+		scn.MoveCardsToDiscard(business);
 
-		var galadriel = scn.GetFreepsCard("galadriel");
-		var mirror = scn.GetFreepsCard("mirror");
-		scn.MoveCardsToSupportArea(mirror, galadriel);
+		var arwen = scn.GetFreepsCard("arwen");
+		scn.MoveCompanionsToTable(arwen);
 
 		scn.StartGame();
-		scn.ShadowDrawCards(8);
-		scn.SkipToPhase(Phase.MANEUVER);
+		scn.SkipToSite(6);
+		scn.SetShadowHand(uruk, armory);
 
-		//First check that the mirror works with No Business in hand
-		scn.FreepsUseCardAction(mirror);
-		assertTrue(scn.FreepsDecisionAvailable("Opponent's hand"));
-		assertFalse(scn.ShadowAnyDecisionsAvailable());
-		assertEquals(2, scn.FreepsGetCardChoiceCount());
+		var glade = scn.GetCurrentSite();
+		assertEquals(6, scn.GetCurrentSiteNumber());
+		assertEquals(0, scn.GetWoundsOn(arwen));
+		assertTrue(scn.FreepsActionAvailable(glade));
+
+		// Without the card, the site shows the whole hand. Arwen is the only Elf, so she pays.
+		scn.FreepsUseCardAction(glade);
+		assertEquals(1, scn.GetWoundsOn(arwen));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(uruk, false));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(armory, false));
+		assertEquals(2, scn.FreepsGetTotalRevealedCardCount());
 		scn.FreepsDismissRevealedCards();
-		scn.FreepsChooseAny();
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
-		scn.MoveCardsToSupportArea(business); //slide in No Business between actions
-		scn.ShadowPassCurrentPhaseAction();
+		scn.MoveCardsToSupportArea(business);
+		assertInZone(Zone.SUPPORT, business);
 
-		//Mirror's effect should now be blocked
-		assertTrue(scn.FreepsActionAvailable(mirror));
-		scn.FreepsUseCardAction(mirror);
-		assertFalse(scn.FreepsAnyDecisionsAvailable());
-		assertTrue(scn.ShadowDecisionAvailable("Play Maneuver action"));
+		// With it, the Elf exerts and nothing is shown.
+		assertTrue(scn.FreepsActionAvailable(glade));
+		scn.FreepsUseCardAction(glade);
+		assertEquals(2, scn.GetWoundsOn(arwen));
+		assertEquals(0, scn.FreepsGetTotalRevealedCardCount());
+		assertEquals(2, scn.GetShadowHandCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void TheShadowPlayerMayStillRevealHisOwnHand() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var business = scn.GetShadowCard("business");
+		var keyward = scn.GetShadowCard("keyward");
+		var uruk = scn.GetShadowCard("uruk");
+		var armory = scn.GetShadowCard("armory");
+		scn.MoveCardsToSupportArea(business);
+		scn.MoveCardsToHand(uruk, armory);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(keyward);
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertInZone(Zone.SUPPORT, business);
+		assertEquals(0, scn.GetWoundsOn(keyward));
+		assertTrue(scn.ShadowActionAvailable(keyward));
+		int twilight = scn.GetTwilight();
+
+		// The restriction is on the Free Peoples player: a hand its own owner reveals is shown to him.
+		scn.ShadowUseCardAction(keyward);
+		assertEquals(1, scn.GetWoundsOn(keyward));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(uruk, false));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(armory, false));
+		assertEquals(2, scn.FreepsGetTotalRevealedCardCount());
+		scn.FreepsDismissRevealedCards();
+
+		// No [orc] Troll among them, so nothing is added.
+		assertEquals(twilight, scn.GetTwilight());
+		assertEquals(2, scn.GetShadowHandCount());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void TheFreePeoplesPlayerMayStillRevealCardsFromHisOwnHand() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var business = scn.GetShadowCard("business");
+		scn.MoveCardsToSupportArea(business);
+
+		var mallorn = scn.GetFreepsCard("mallorn");
+		var curse = scn.GetFreepsCard("curse");
+		scn.MoveCardsToSupportArea(mallorn);
+		scn.MoveCardsToHand(curse);
+
+		scn.StartGame();
+
+		assertInZone(Zone.SUPPORT, business);
+		assertEquals(1, scn.GetFreepsHandCount());
+		assertTrue(scn.FreepsActionAvailable(mallorn));
+
+		// The restriction is on a Shadow player's hand: the one [elven] card in his own is shown to the Shadow player.
+		scn.FreepsUseCardAction(mallorn);
+		assertTrue(scn.ShadowHasCardChoiceAvailable(curse, false));
+		assertEquals(1, scn.ShadowGetTotalRevealedCardCount());
+		scn.ShadowDismissRevealedCards();
+
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertInZone(Zone.DECK, curse);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

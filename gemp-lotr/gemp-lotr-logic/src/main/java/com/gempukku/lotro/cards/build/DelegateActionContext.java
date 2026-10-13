@@ -88,4 +88,24 @@ public class DelegateActionContext implements ActionContext {
     public Effect getEffect() {
         return effect;
     }
+
+    @Override
+    public int getUnpaidTwilightCost() {
+        return delegate.getUnpaidTwilightCost();
+    }
+
+    @Override
+    public int getUnpaidThreatCost() {
+        return delegate.getUnpaidThreatCost();
+    }
+
+    @Override
+    public boolean isAtResolution() {
+        return delegate.isAtResolution();
+    }
+
+    @Override
+    public boolean isBranchChosenAsDoableInFull() {
+        return delegate.isBranchChosenAsDoableInFull();
+    }
 }

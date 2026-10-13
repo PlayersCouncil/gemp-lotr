@@ -29,11 +29,19 @@
 			{
 				type: activated
 				phase: maneuver
-				requires: {
-					type: canSpot
-					filter: culture(sauron),orc
-					count: 2
-				}
+				requires: [
+					{
+						type: canSpot
+						filter: culture(sauron),orc
+						count: 2
+					}
+					// A play from the discard pile is treated as a cost: with nothing there that can be played
+					// the ability is not offered (Q-0086).
+					{
+						type: HasCardInDiscard
+						filter: culture(sauron),condition,Playable
+					}
+				]
 				effect: [
 					{
 						type: repeat
@@ -404,8 +412,9 @@
 						{
 							type: not
 							requires: {
-								type: playedCardThisPhase
+								type: playedCardThisTurn
 								filter: culture(sauron),orc
+								atCurrentSite: true
 							}
 						}
 					]

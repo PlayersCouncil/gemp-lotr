@@ -24,6 +24,10 @@
 					type: winsSkirmish
 					filter: bearer,name(Grimbeorn)
 				}
+				requires: {
+					type: HasCardInDiscard
+					filter: culture(gandalf)
+				}
 				effect: {
 					type: putCardsFromDiscardIntoHand
 					select: choose(culture(gandalf))

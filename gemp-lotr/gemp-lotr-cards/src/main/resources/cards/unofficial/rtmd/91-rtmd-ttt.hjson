@@ -60,12 +60,13 @@
 					type: OwnerIsFreeps
 				}
 				optional: true
+				player: owner
 				effect: {
 					type: PutCardsFromDeckIntoHand
 					select: choose(your)
 					count: 1
 					shuffle: true
-					reveal: true
+					reveal: false
 					showAll: false
 				}
 			}
@@ -100,6 +101,7 @@
 			{
 				type: Trigger
 				optional: true
+				player: owner
 				trigger: {
 					type: Moves
 				}
@@ -312,16 +314,36 @@
 		intensity: 3
 		effects: [
 			{
-				type: Modifier
-				modifier: {
-					type: ModifyMoveLimit
-					amount: -1
-					requires: {
-						type: CanSpot
-						filter: your,companion
-						count: 5
-					}
+				type: Trigger
+				optional: false
+				trigger: {
+					type: ConstantlyCheck
+					requires: [
+						{
+							type: PerTurnLimit
+							limit: 1
+						}
+						{
+							type: CanSpot
+							filter: your,companion
+							count: 5
+						}
+					]
 				}
+				effect: [
+					{
+						type: IncrementPerTurnLimit
+						limit: 1
+					}
+					{
+						type: AddModifier
+						modifier: {
+							type: ModifyMoveLimit
+							amount: -1
+						}
+						until: EndOfTurn
+					}
+				]
 			}
 		]
 		gametext: While you can spot 5 or more companions, your move limit is -1.
@@ -399,6 +421,9 @@
 			{
 				type: Activated
 				phase: skirmish
+				requires: {
+					type: IsOwner
+				}
 				cost: {
 					type: DiscardFromHand
 					count: 3
@@ -483,11 +508,15 @@
 		intensity: -2
 		effects: [
 			{
-				type: Modifier
-				modifier: {
-					type: ModifyMoveLimit
-					amount: 1
+				type: Trigger
+				optional: false
+				trigger: {
+					type: ConstantlyCheck
 					requires: [
+						{
+							type: PerTurnLimit
+							limit: 1
+						}
 						{
 							type: OwnerIsFreeps
 						}
@@ -505,6 +534,20 @@
 						}
 					]
 				}
+				effect: [
+					{
+						type: IncrementPerTurnLimit
+						limit: 1
+					}
+					{
+						type: AddModifier
+						modifier: {
+							type: ModifyMoveLimit
+							amount: 1
+						}
+						until: EndOfTurn
+					}
+				]
 			}
 		]
 		gametext: While you can spot a Dwarf companion, an Elf companion, and Gandalf, your move limit is +1.
@@ -707,7 +750,7 @@
 				}
 			}
 		]
-		gametext: Each time your fellowship moves, add (3) \(or (6) if you can spot 6 companions).
+		gametext: Each time your fellowship moves, add (3) (or (6) if you can spot 6 companions).
 		lore: ""
 		promotext: ""
 		helptext: ""

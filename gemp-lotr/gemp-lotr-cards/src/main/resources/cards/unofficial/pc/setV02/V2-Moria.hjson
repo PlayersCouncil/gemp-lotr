@@ -31,38 +31,20 @@
 			{
 				type: activated
 				phase: shadow
-				requires: [
-					{
-						type: HasCardStacked
-						filter: playable, unique, minion	
-						on: self
-					}
-				]
 				effect: [
 					{
-						type: ChooseCardsFromSingleStack
-						select: choose(playable, unique, minion)
-						count: 1
+						// The play is the action's first effect, so the action is offered and the minion may be
+						// chosen only when the pool covers its cost after the reduction.  "Each other card stacked
+						// here" is every card stacked here but the minion played: one fewer than are stacked.
+						type: PlayCardFromStacked
+						select: choose(unique, minion)
 						on: self
-						memorize: chosenMinion
-						text: Choose a minion to play.
-					}
-					{
-						type: MemorizeNumber
-						amount: {
+						discount: {
 							type: ForEachStacked
-							filter: not(memory(chosenMinion))
 							on: self
+							over: 1
 							multiplier: -1
 						}
-						memory: stackedDiscount
-					}
-					{
-						type: PlayCardFromStacked
-						select: memory(chosenMinion)
-						on: self
-						discount: memory(stackedDiscount)
-						assumePlayable: true
 					}
 					{
 						type: Discard
@@ -129,13 +111,15 @@
 					phase: skirmish
 					player: freeps
 				}
+				# "a companion it is skirmishing": an ally the Balrog fights is not wounded, and with no companion
+				# in the skirmish the offer, which has no cost, is not made (Q-0034).
 				requires: {
 					type: CanSpot
-					filter: InSkirmish,self
+					filter: companion,InSkirmishAgainst(self)
 				}
 				effect: {
 					type: Wound
-					select: choose(InSkirmishAgainst(self))
+					select: choose(companion,InSkirmishAgainst(self))
 					times: 1
 				}
 			}
@@ -200,7 +184,14 @@
 					cost: {
 						type: ChooseANumber
 						text: Choose how many threats to remove
-						from: 0
+						from: {
+							type: LeastDiscountToPlay
+							fromZone: DISCARD
+							filter: name(The Balrog)
+							max: {
+								type: ForEachThreat
+							}
+						}
 						to: {
 							type: ForEachThreat
 						}
@@ -326,7 +317,19 @@
 					firstNumber: memory(discardedMinions)
 					secondNumber: 0
 				}
+				# The prevention is only on offer when X companions can exert; otherwise the threats are added
+				# outright (a cost that cannot be paid in full is not paid in part).
 				true: {
+					type: If
+					check: {
+						type: IsGreaterThanOrEqual
+						firstNumber: {
+							type: ForEachYouCanSpot
+							filter: companion,canexert
+						}
+						secondNumber: memory(discardedMinions)
+					}
+					true: {
 					type: Preventable
 					text: Would you like to exert {discardedMinions} companions to prevent adding {discardedMinions} threats?
 					player: freeps
@@ -337,6 +340,11 @@
 						ignoreCostCheckFailure: true
 					}
 					effect: {
+						type: AddThreats
+						amount: memory(discardedMinions)
+					}
+				}
+					false: {
 						type: AddThreats
 						amount: memory(discardedMinions)
 					}

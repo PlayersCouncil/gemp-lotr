@@ -3,23 +3,28 @@ package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_01_070_ErrataTests
 {
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "51_70");
-					// put other cards in here as needed for the test case
+					put("barliman", "51_70");
+
+					put("celeborn", "1_34");      // Celeborn, Lord of Lorien: an ally to stand beside Barliman
+					put("sleep", "1_84");         // Sleep, Caradhras: [gandalf] Spell event
+					put("wizard", "1_78");        // Mysterious Wizard: [gandalf] Spell event, left in the draw deck
+					put("servant", "1_83");       // Servant of the Secret Fire: [gandalf] Spell event, the other player's in his discard pile
+					put("chill", "1_134");        // Saruman's Chill: [isengard] Spell condition, a Shadow card
+					put("folly", "1_77");         // Let Folly Be Our Cloak: [gandalf] event, no Spell
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -43,11 +48,11 @@ public class Card_01_070_ErrataTests
 		 * Vitality: 2
 		 * Site Number: 1
 		 * Game Text: <b>Fellowship:</b> Exert Barliman Butterbur to take a spell into hand from your discard pile.
-		*/
+		 */
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("barliman");
 
 		assertEquals("Barliman Butterbur", card.getBlueprint().getTitle());
 		assertEquals("Prancing Pony Proprietor", card.getBlueprint().getSubtitle());
@@ -62,18 +67,90 @@ public class Card_01_070_ErrataTests
 		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 1)));
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void BarlimanButterburDTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void FellowshipActionExertsBarlimanToTakeASpellFromYourDiscardPileIntoHand() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var barliman = scn.GetFreepsCard("barliman");
+		var celeborn = scn.GetFreepsCard("celeborn");
+		var sleep = scn.GetFreepsCard("sleep");
+		var wizard = scn.GetFreepsCard("wizard");
+		var chill = scn.GetFreepsCard("chill");
+		var folly = scn.GetFreepsCard("folly");
+		var shadowServant = scn.GetShadowCard("servant");
+		scn.MoveAlliesToTable(barliman, celeborn);
+		// A [gandalf] spell event and an [isengard] spell condition of his own; a [gandalf] event that is no
+		// spell beside them; a spell left in his draw deck; and a spell in the other player's discard pile, each
+		// of a title of its own, since a choice from a pile lists its cards by blueprint.
+		scn.MoveCardsToDiscard(sleep, chill, folly, shadowServant);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(0, scn.GetWoundsOn(barliman));
+		assertEquals(0, scn.GetWoundsOn(celeborn));
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertTrue(scn.FreepsActionAvailable(barliman));
+
+		scn.FreepsUseCardAction(barliman);
+		assertEquals(1, scn.GetWoundsOn(barliman));
+		assertEquals(0, scn.GetWoundsOn(celeborn));
+
+		assertTrue(scn.FreepsHasCardChoiceAvailable(sleep, chill));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(folly, wizard, shadowServant));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		scn.FreepsChooseCard(chill);
+
+		assertInHand(chill);
+		assertEquals(1, scn.GetFreepsHandCount());
+		assertInDiscard(sleep, folly, shadowServant);
+		assertInZone(Zone.DECK, wizard);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void WithNoSpellInTheDiscardPileItIsStillOfferedAndTakesNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var barliman = scn.GetFreepsCard("barliman");
+		var folly = scn.GetFreepsCard("folly");
+		var wizard = scn.GetFreepsCard("wizard");
+		scn.MoveAlliesToTable(barliman);
+		scn.MoveCardsToDiscard(folly);
+
+		scn.StartGame();
+
+		assertEquals(0, scn.GetWoundsOn(barliman));
+		assertEquals(0, scn.GetFreepsHandCount());
+		// The action has a cost, so it is offered whatever the effect can find (Q-0034).
+		assertTrue(scn.FreepsActionAvailable(barliman));
+
+		scn.FreepsUseCardAction(barliman);
+
+		assertEquals(1, scn.GetWoundsOn(barliman));
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertInDiscard(folly);
+		assertInZone(Zone.DECK, wizard);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void NotOfferedWhileBarlimanIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var barliman = scn.GetFreepsCard("barliman");
+		var sleep = scn.GetFreepsCard("sleep");
+		scn.MoveAlliesToTable(barliman);
+		scn.MoveCardsToDiscard(sleep);
+		// Vitality 2 with 1 wound: exhausted.
+		scn.AddWoundsToChar(barliman, 1);
+
+		scn.StartGame();
+
+		assertFalse(scn.FreepsActionAvailable(barliman));
+
+		scn.RemoveWoundsFromChar(barliman, 1);
+		scn.FreepsRefreshDecision();
+		assertTrue(scn.FreepsActionAvailable(barliman));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

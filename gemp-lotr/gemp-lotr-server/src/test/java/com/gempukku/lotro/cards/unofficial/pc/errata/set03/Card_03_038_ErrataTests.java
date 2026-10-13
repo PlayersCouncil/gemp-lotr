@@ -1,116 +1,133 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
 
-import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static com.gempukku.lotro.framework.Assertions.*;
+import static org.junit.Assert.*;
 
 public class Card_03_038_ErrataTests
 {
-    protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new VirtualTableScenario(
-                new HashMap<>() {{
-                    put("aragorn", "53_38");
-                    put("gimli", "1_13");
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("aragorn", "53_38");
+				}},
+				// Site 2 is Ettenmoors (Shadow number 2), site 3 Rivendell Valley (Shadow number 0).
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
 
-                    put("minion", "1_268");
-                    put("tracker", "1_270");
-                }}
-        );
-    }
+	@Test
+	public void AragornStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
-    @Test
-    public void AragornStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+		/**
+		 * Set: 3
+		 * Name: Aragorn, Heir to the White City
+		 * Unique: true
+		 * Side: Free Peoples
+		 * Culture: Gondor
+		 * Twilight Cost: 4
+		 * Type: Companion
+		 * Subtype: Man
+		 * Strength: 8
+		 * Vitality: 4
+		 * Resistance: 6
+		 * Signet: Frodo
+		 * Game Text: Ranger.
+		 * Each time the fellowship moves during the fellowship phase, remove (1).
+		 */
 
-        /**
-         * Set: 1E
-         * Title: *Aragorn
-         * Subtitle: Heir to the White City
-         * Side: Free Peoples
-         * Culture: Gondor
-         * Twilight Cost: 4
-         * Type: Companion
-         * Subtype: Man
-         * Strength: 8
-         * Vitality: 4
-         * Signet: Frodo
-         * Errata Game Text: Ranger.  Each time the fellowship moves during the fellowship phase, remove (1).
-         */
+		var scn = GetScenario();
 
-        //Pre-game setup
-        VirtualTableScenario scn = GetScenario();
+		var card = scn.GetFreepsCard("aragorn");
 
-        var aragorn = scn.GetFreepsCard("aragorn");
+		assertEquals("Aragorn", card.getBlueprint().getTitle());
+		assertEquals("Heir to the White City", card.getBlueprint().getSubtitle());
+		assertTrue(card.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
+		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
+		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
+		assertEquals(Race.MAN, card.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(card, Keyword.RANGER));
+		assertEquals(4, card.getBlueprint().getTwilightCost());
+		assertEquals(8, card.getBlueprint().getStrength());
+		assertEquals(4, card.getBlueprint().getVitality());
+		assertEquals(6, card.getBlueprint().getResistance());
+		assertEquals(Signet.FRODO, card.getBlueprint().getSignet());
+	}
 
-        assertTrue(aragorn.getBlueprint().isUnique());
-        assertEquals(Side.FREE_PEOPLE, aragorn.getBlueprint().getSide());
-        assertEquals(Culture.GONDOR, aragorn.getBlueprint().getCulture());
-        assertEquals(CardType.COMPANION, aragorn.getBlueprint().getCardType());
-        assertEquals(Race.MAN, aragorn.getBlueprint().getRace());
-        assertEquals(4, aragorn.getBlueprint().getTwilightCost());
-        assertEquals(8, aragorn.getBlueprint().getStrength());
-        assertEquals(4, aragorn.getBlueprint().getVitality());
-        assertEquals(6, aragorn.getBlueprint().getResistance());
-        assertEquals(Signet.FRODO, aragorn.getBlueprint().getSignet());
+	@Test
+	public void EachFellowshipPhaseMoveRemovesOneTwilightBeforeTheMoveAddsItsOwn() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
 
-        assertTrue(scn.HasKeyword(aragorn, Keyword.RANGER));
-    }
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
 
+		scn.StartGame();
+		scn.SetTwilight(3);
 
-    @Test
-    public void AragornAbilityOnlyWorksDuringFellowship() throws DecisionResultInvalidException, CardNotFoundException {
-        //Pre-game setup
-        VirtualTableScenario scn = GetScenario();
+		scn.FreepsPass();
 
-        PhysicalCardImpl frodo = scn.GetRingBearer();
-        PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
-        scn.MoveCompanionsToTable(aragorn);
+		// 3 in the pool - 1 for Aragorn + 2 for Ettenmoors + 2 for Frodo and Aragorn
+		assertEquals(6, scn.GetTwilight());
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 
-        scn.StartGame();
-        scn.SetTwilight(2);
+		scn.SkipToOtherPlayersTurn();
+		scn.SkipToOtherPlayersTurn();
+		scn.SetTwilight(2);
 
-        scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
-        // 2 for Frodo/Aragorn, 1 for the site, 2 in the pool, -1 for Aragorn's text
-        assertEquals(4, scn.GetTwilight());
+		// The second time: 2 in the pool - 1 for Aragorn + 0 for Rivendell Valley + 2 for Frodo and Aragorn
+		assertEquals(3, scn.GetTwilight());
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
 
+	@Test
+	public void AMoveInTheRegroupPhaseRemovesNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
 
-        scn.SkipToPhase(Phase.REGROUP);
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
 
-        scn.PassCurrentPhaseActions();
-        scn.ShadowPassCurrentPhaseAction();
-        assertEquals(4, scn.GetTwilight());
-        scn.FreepsChooseToMove();
+		scn.StartGame();
+		scn.SkipToMovementDecision();
+		scn.SetTwilight(3);
 
-        // 2 for Frodo/Aragorn, 1 for the site, 4 in the pool, no removal from Aragorn
-        assertEquals(7, scn.GetTwilight());
-    }
+		scn.FreepsChooseToMove();
 
-    @Test
-    public void AragornAbilityOnlyWorksIfTwilightInPool() throws DecisionResultInvalidException, CardNotFoundException {
-        //Pre-game setup
-        VirtualTableScenario scn = GetScenario();
+		// 3 in the pool + 0 for Rivendell Valley + 2 for Frodo and Aragorn, and nothing removed
+		assertEquals(5, scn.GetTwilight());
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
 
-        PhysicalCardImpl frodo = scn.GetRingBearer();
-        PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
-        scn.MoveCompanionsToTable(aragorn);
+	@Test
+	public void NothingIsRemovedFromAnEmptyPoolSinceTheMoveAddsItsTwilightAfterward() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
 
-        scn.StartGame();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
 
-        scn.FreepsPassCurrentPhaseAction();
+		scn.StartGame();
 
-        // 2 for Frodo/Aragorn, 1 for the site, no removal since there was nothing in the pool before moving
-        assertEquals(3, scn.GetTwilight());
+		assertEquals(0, scn.GetTwilight());
 
-    }
+		scn.FreepsPass();
 
-
-
+		// 2 for Ettenmoors + 2 for Frodo and Aragorn; the (1) was due before any of it was added
+		assertEquals(4, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
 }

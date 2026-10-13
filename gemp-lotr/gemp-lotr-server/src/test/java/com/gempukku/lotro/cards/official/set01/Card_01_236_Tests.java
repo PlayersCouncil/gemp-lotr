@@ -17,8 +17,11 @@ public class Card_01_236_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "1_236");
-					// put other cards in here as needed for the test case
+					put("toldea", "1_236");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a [gondor] Man companion; maneuver ability used only on purpose
+					put("sam", "1_311");        // Sam, Son of Hamfast: a Ring-bound [shire] Hobbit companion who is not the Ring-bearer
+					put("bounder", "1_286");    // Bounder: a [shire] Hobbit ally with home site 2, so at home and assignable in the assignment phase of turn 1; skirmish ability used only on purpose
+					put("troop", "1_177");      // Goblin Patrol Troop: a [moria] Orc with no text, a second minion beside her
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +49,7 @@ public class Card_01_236_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("toldea");
 
 		assertEquals("Úlairë Toldëa", card.getBlueprint().getTitle());
 		assertEquals("Messenger of Morgul", card.getBlueprint().getSubtitle());
@@ -62,18 +65,87 @@ public class Card_01_236_Tests
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void UlaireToldeaTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void AtFourBurdensAssignsAChosenCompanionOtherThanTheRingBearerToSkirmishHer() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var sam = scn.GetFreepsCard("sam");
+		var bounder = scn.GetFreepsCard("bounder");
+		scn.MoveCompanionsToTable(aragorn, sam);
+		scn.MoveAlliesToTable(bounder);
+
+		var toldea = scn.GetShadowCard("toldea");
+		var troop = scn.GetShadowCard("troop");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.AddBurdens(4);
+		scn.MoveMinionsToTable(toldea, troop);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPass();
 
-		assertEquals(6, scn.GetTwilight());
+		assertEquals(4, scn.GetBurdens());
+		assertTrue(scn.ShadowActionAvailable(toldea));
+		scn.ShadowUseCardAction(toldea);
+		// Bounder is at home on site 2 and could be assigned, but he is an ally and no companion.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, sam));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(frodo, bounder));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		scn.ShadowChooseCard(aragorn);
+
+		// She is assigned to him, and the other minion to nobody.
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, toldea));
+		assertFalse(scn.IsCharAssigned(troop));
+		assertFalse(scn.IsCharAssigned(sam));
+		assertFalse(scn.IsCharAssigned(frodo));
+		assertFalse(scn.IsCharAssigned(bounder));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+
+		// Once she is assigned, the ability is not offered again, though Sam is still unassigned.
+		scn.FreepsPass();
+		assertFalse(scn.ShadowActionAvailable(toldea));
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+	}
+
+	@Test
+	public void IsNotOfferedAtThreeBurdens() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var sam = scn.GetFreepsCard("sam");
+		scn.MoveCompanionsToTable(aragorn, sam);
+
+		var toldea = scn.GetShadowCard("toldea");
+
+		scn.StartGame();
+		scn.AddBurdens(3);
+		// A wound on the Ring-bearer beside the burdens: a token on him that is no burden.
+		scn.AddWoundsToChar(frodo, 1);
+		scn.MoveMinionsToTable(toldea);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPass();
+
+		assertEquals(3, scn.GetBurdens());
+		assertFalse(scn.ShadowActionAvailable(toldea));
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+	}
+
+	@Test
+	public void IsNotOfferedWhenTheRingBearerIsTheOnlyCompanion() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var toldea = scn.GetShadowCard("toldea");
+
+		scn.StartGame();
+		scn.AddBurdens(4);
+		scn.MoveMinionsToTable(toldea);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPass();
+
+		assertEquals(4, scn.GetBurdens());
+		assertFalse(scn.ShadowActionAvailable(toldea));
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
 	}
 }

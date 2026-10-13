@@ -20,13 +20,13 @@ public class TimeResolver {
         }
         else if (value.toLowerCase().startsWith("start(") && value.endsWith(")")) {
             final String phaseName = value.substring(value.indexOf("(") + 1, value.lastIndexOf(")"));
-            return new Time(Phase.findPhase(phaseName), true, false, false);
+            return new Time(resolvePhase(phaseName, value), true, false, false);
         }
         else if (value.toLowerCase().startsWith("end(") && value.endsWith(")")) {
             final String phaseName = value.substring(value.indexOf("(") + 1, value.lastIndexOf(")"));
             if (phaseName.equalsIgnoreCase("current"))
                 return new Time(null, false, false, false);
-            return new Time(Phase.findPhase(phaseName), false, false, false);
+            return new Time(resolvePhase(phaseName, value), false, false, false);
         }
         else if (value.equalsIgnoreCase("endofturn"))
             return new Time(null, false, true, false);
@@ -37,6 +37,19 @@ public class TimeResolver {
         }
 
         throw new InvalidCardDefinitionException("Unable to resolve time: " + value);
+    }
+
+    /**
+     * The phase named inside "start(...)" or "end(...)".  A name that is no phase is refused: a time with no
+     * phase means the end of the current phase, so "end(turn)" would otherwise be read, without a word, as
+     * "end(current)".
+     */
+    private static Phase resolvePhase(String phaseName, String value) throws InvalidCardDefinitionException {
+        final Phase phase = Phase.findPhase(phaseName);
+        if (phase == null)
+            throw new InvalidCardDefinitionException("Unable to resolve time: " + value + " ('" + phaseName
+                    + "' is not a phase; the end of the turn is 'endofturn', the end of the current phase 'end(current)')");
+        return phase;
     }
 
     public static class Time {
@@ -65,6 +78,16 @@ public class TimeResolver {
         }
 
         public boolean isPermanent() { return permanent; }
+
+        /**
+         * @return Whether something lasting until this time, begun in a phase of the given kind, is gone when
+         * that phase ends: the time is the end of the current phase, or the end of a phase of that kind.
+         */
+        public boolean endsWithCurrentPhase(Phase current) {
+            if (endOfTurn || permanent || start)
+                return false;
+            return phase == null || phase == current;
+        }
 
         public String getHumanReadable() {
             if (endOfTurn) {

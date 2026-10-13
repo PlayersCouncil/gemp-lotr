@@ -2,6 +2,7 @@ package com.gempukku.lotro.cards.build.field.effect.appender.resolver;
 
 import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.field.effect.appender.DelayedAppender;
 import com.gempukku.lotro.common.Filterable;
 import com.gempukku.lotro.common.InactiveReason;
@@ -36,7 +37,7 @@ public class CardResolver {
                 Filters.filter(actionContext.getGame(), actionContext.getGame().getGameState().getAllCards(), Filters.stackedOn(stackedOn.getFilterable(actionContext)));
 
         if (select.startsWith("memory(") && select.endsWith(")")) {
-            return resolveMemoryCards(select, null, null, countSource, memory, stackSource);
+            return resolveMemoryCards(select, null, null, countSource, memory, stackSource, environment);
         }
         else if (select.startsWith("choose(") && select.endsWith(")")) {
             final PlayerSource playerSource = PlayerResolver.resolvePlayer(choicePlayer);
@@ -73,19 +74,20 @@ public class CardResolver {
 
     public static EffectAppender resolveStackedCards(String type, FilterableSource choiceFilter, FilterableSource playabilityFilter, ValueSource countSource, FilterableSource stackedOn,
                                                      String memory, String choicePlayer, String choiceText, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+        // "A card stacked on <such a card>" is a card stacked on such a card that is ACTIVE: not the other player's
+        // own Free Peoples card on this turn, not a player's own Shadow card on his own turn, not a hindered card
+        // (CR 4.2 "active": "Inactive cards are not affected by the game and do not affect the game"; F-0424,
+        // Ketura: "Let's do B for now").  ChooseStackedCardsEffect looks under active cards only when the card is
+        // chosen, and ActivatePhaseActionsFromStackedRule offers a stacked card's own ability only on an active
+        // one; what is judged payable, and what is found for "self" or from memory, goes by the same reading.
         Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource = actionContext -> {
-            if(stackedOn != null) {
-                final Filterable stackedOnFilter = stackedOn.getFilterable(actionContext);
-                return Filters.filter(actionContext.getGame(), actionContext.getGame().getGameState().getAllCards(), Filters.stackedOn(stackedOnFilter));
-            }
-            else {
-                return Filters.filter(actionContext.getGame(), actionContext.getGame().getGameState().getAllCards(), Filters.stackedOn(Filters.any));
-            }
-
+            final Filterable stackedOnFilter = stackedOn != null ? stackedOn.getFilterable(actionContext) : Filters.any;
+            return Filters.filter(actionContext.getGame(), actionContext.getGame().getGameState().getAllCards(),
+                    Filters.stackedOn(Filters.active, stackedOnFilter));
         };
 
         if (type.startsWith("memory(") && type.endsWith(")")) {
-            return resolveMemoryCards(type, choiceFilter, playabilityFilter, countSource, memory, cardSource);
+            return resolveMemoryCards(type, choiceFilter, playabilityFilter, countSource, memory, cardSource, environment);
         } else if (type.equals("self")) {
             return resolveSelf(choiceFilter, playabilityFilter, countSource, memory, cardSource);
         } else if (type.startsWith("choose(") && type.endsWith(")")) {
@@ -155,7 +157,7 @@ public class CardResolver {
         } else if (type.equals("self")) {
             return resolveSelf(choiceFilter, playabilityFilter, countSource, memory, cardSource);
         } else if (type.startsWith("memory(") && type.endsWith(")")) {
-            return resolveMemoryCards(type, choiceFilter, playabilityFilter, countSource, memory, cardSource);
+            return resolveMemoryCards(type, choiceFilter, playabilityFilter, countSource, memory, cardSource, environment);
         } else if (type.startsWith("all(") && type.endsWith(")")) {
             return resolveAllCards(type, choiceFilter, memory, environment, cardSource);
         } else if (type.startsWith("choose(") && type.endsWith(")")) {
@@ -204,7 +206,9 @@ public class CardResolver {
                 @Override
                 public boolean isPlayableInFull(ActionContext actionContext) {
                     final String playerDeck = playerDeckSource.getPlayer(actionContext);
-                    return actionContext.getGame().getGameState().getHand(playerDeck).size() >= count;
+                    // The adventure deck the sites are picked from, not that player's hand (F-0421).  No card
+                    // writes this pick as a cost, so no board tells the two apart today.
+                    return actionContext.getGame().getGameState().getAdventureDeck(playerDeck).size() >= count;
                 }
 
                 @Override
@@ -223,7 +227,7 @@ public class CardResolver {
         } else if (type.equals("self")) {
             return resolveSelf(additionalFilter, additionalFilter, countSource, memory, cardSource);
         } else if (type.startsWith("memory(") && type.endsWith(")")) {
-            return resolveMemoryCards(type, additionalFilter, additionalFilter, countSource, memory, cardSource);
+            return resolveMemoryCards(type, additionalFilter, additionalFilter, countSource, memory, cardSource, environment);
         } else if (type.startsWith("all(") && type.endsWith(")")) {
             return resolveAllCards(type, additionalFilter, memory, environment, cardSource);
         }
@@ -251,6 +255,15 @@ public class CardResolver {
     }
 
     public static EffectAppender resolveCardsInDiscard(String type, FilterableSource choiceFilter, FilterableSource playabilityFilter, ValueSource countSource, String memory, String choicePlayer, String targetPlayerDiscard, String choiceText, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+        return resolveCardsInDiscard(type, choiceFilter, playabilityFilter, countSource, memory, choicePlayer, targetPlayerDiscard, choiceText, null, environment);
+    }
+
+    /**
+     * @param askedText the words a definition gives for the choice in a "text" field of its own, which the player
+     *                  is then asked in; null where it gives none, and the choice is asked as every choice from a
+     *                  discard pile is ("Choose card from discard"), whatever choiceText says.
+     */
+    public static EffectAppender resolveCardsInDiscard(String type, FilterableSource choiceFilter, FilterableSource playabilityFilter, ValueSource countSource, String memory, String choicePlayer, String targetPlayerDiscard, String choiceText, String askedText, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         final PlayerSource playerSource = PlayerResolver.resolvePlayer(choicePlayer);
         final PlayerSource targetPlayerDiscardSource = PlayerResolver.resolvePlayer(targetPlayerDiscard);
 
@@ -262,7 +275,7 @@ public class CardResolver {
         if (type.equals("self")) {
             return resolveSelf(choiceFilter, playabilityFilter, countSource, memory, cardSource);
         } else if (type.startsWith("memory(") && type.endsWith(")")) {
-            return resolveMemoryCards(type, choiceFilter, playabilityFilter, countSource, memory, cardSource);
+            return resolveMemoryCards(type, choiceFilter, playabilityFilter, countSource, memory, cardSource, environment);
         } else if (type.startsWith("all(") && type.endsWith(")")) {
             return resolveAllCards(type, choiceFilter, memory, environment, cardSource);
         } else if (type.startsWith("choose(") && type.endsWith(")")) {
@@ -273,12 +286,20 @@ public class CardResolver {
                     @Override
                     protected void cardsSelected(LotroGame game, Collection<PhysicalCard> cards) {
                         actionContext.setCardMemory(memory, cards);
-                        game.getGameState().sendMessage(GameUtils.substituteText("{you} chooses {" + memory + "}.", actionContext));
+                        //The player who was asked, who need not be the one performing the action.
+                        game.getGameState().sendMessage(GameUtils.substituteText(choicePlayerId + " chooses {" + memory + "}.", actionContext));
                     }
 
                     @Override
                     public String getText(LotroGame game) {
                         return GameUtils.substituteText(choiceText, actionContext);
+                    }
+
+                    @Override
+                    protected String getChoiceText(LotroGame game) {
+                        if (askedText == null)
+                            return super.getChoiceText(game);
+                        return GameUtils.substituteText(askedText, actionContext);
                     }
                 };
             };
@@ -300,7 +321,7 @@ public class CardResolver {
         if (type.equals("self")) {
             return resolveSelf(choiceFilter, playabilityFilter, countSource, memory, cardSource);
         } else if (type.startsWith("memory(") && type.endsWith(")")) {
-            return resolveMemoryCards(type, choiceFilter, playabilityFilter, countSource, memory, cardSource);
+            return resolveMemoryCards(type, choiceFilter, playabilityFilter, countSource, memory, cardSource, environment);
         } else if (type.startsWith("all(") && type.endsWith(")")) {
             return resolveAllCards(type, choiceFilter, memory, environment, cardSource);
         } else if (type.startsWith("choose(") && type.endsWith(")")) {
@@ -336,7 +357,7 @@ public class CardResolver {
         if (type.equals("self")) {
             return resolveSelf(choiceFilter, playabilityFilter, countSource, memory, cardSource);
         } else if (type.startsWith("memory(") && type.endsWith(")")) {
-            return resolveMemoryCards(type, choiceFilter, playabilityFilter, countSource, memory, cardSource);
+            return resolveMemoryCards(type, choiceFilter, playabilityFilter, countSource, memory, cardSource, environment);
         } else if (type.startsWith("all(") && type.endsWith(")")) {
             return resolveAllCards(type, choiceFilter, memory, environment, cardSource);
         } else if (type.startsWith("choose(") && type.endsWith(")")) {
@@ -374,7 +395,7 @@ public class CardResolver {
         if (type.equals("self")) {
             return resolveSelf(choiceFilter, choiceFilter, countSource, memory, cardSource);
         } else if (type.startsWith("memory(") && type.endsWith(")")) {
-            return resolveMemoryCards(type, choiceFilter, choiceFilter, countSource, memory, cardSource);
+            return resolveMemoryCards(type, choiceFilter, choiceFilter, countSource, memory, cardSource, environment);
         } else if (type.startsWith("all(") && type.endsWith(")")) {
             return resolveAllCards(type, choiceFilter, memory, environment, cardSource);
         } else if (type.startsWith("choose(") && type.endsWith(")")) {
@@ -434,7 +455,7 @@ public class CardResolver {
             moreOverrides.putIfAbsent(InactiveReason.HINDERED, Boolean.TRUE);
 			cardSource = actionContext -> Filters.filterActive(actionContext.getGame(), moreOverrides, Filters.any);
 
-            return resolveSelf(additionalFilter, playabilityFilter, countSource, memory, cardSource);
+            return resolveSelf(additionalFilter, playabilityFilter, countSource, memory, cardSource, true);
         } else if (type.equals("bearer")) {
             Function<ActionContext, Iterable<? extends PhysicalCard>> finalCardSource = cardSource;
             return new DelayedAppender() {
@@ -442,6 +463,12 @@ public class CardResolver {
                 public boolean isPlayableInFull(ActionContext actionContext) {
                     int min = countSource.getEvaluator(actionContext).getMinimum(actionContext.getGame(), null);
                     return filterCards(actionContext, playabilityFilter).size() >= min;
+                }
+
+                // The card this one is on, if the effect could be given to it now.
+                @Override
+                public EffectForecast forecast(ActionContext actionContext) {
+                    return EffectForecast.candidates(filterCards(actionContext, additionalFilter));
                 }
 
                 @Override
@@ -480,9 +507,9 @@ public class CardResolver {
                 }
             };
         } else if (type.startsWith("memory(") && type.endsWith(")")) {
-            return resolveMemoryCards(type, additionalFilter, playabilityFilter, countSource, memory, maxOverrideCardSource);
+            return resolveMemoryCards(type, additionalFilter, playabilityFilter, countSource, memory, maxOverrideCardSource, environment);
         } else if (type.startsWith("all(") && type.endsWith(")")) {
-            return resolveAllCards(type, additionalFilter, memory, environment, cardSource);
+            return resolveAllCards(type, additionalFilter, memory, environment, cardSource, true);
         } else if (type.startsWith("choose(") && type.endsWith(")")) {
             final PlayerSource playerSource = PlayerResolver.resolvePlayer(choicePlayer);
             ChoiceEffectSource effectSource = (possibleCards, action, actionContext, min, max) -> {
@@ -496,7 +523,7 @@ public class CardResolver {
                 };
             };
 
-            return resolveChoiceCards(type, additionalFilter, playabilityFilter, countSource, environment, cardSource, choicePlayer, effectSource);
+            return resolveChoiceCards(type, additionalFilter, playabilityFilter, countSource, environment, cardSource, choicePlayer, effectSource, true);
         }
         throw new InvalidCardDefinitionException("Unable to resolve card resolver of type: " + type);
     }
@@ -504,11 +531,28 @@ public class CardResolver {
     private static DelayedAppender resolveSelf(FilterableSource choiceFilter, FilterableSource playabilityFilter,
                                                ValueSource countSource, String memory,
                                                Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource) {
+        return resolveSelf(choiceFilter, playabilityFilter, countSource, memory, cardSource, false);
+    }
+
+    // Only a resolver of cards in play forecasts whom it would find (inPlay): the filters handed to the resolvers
+    // of the other zones weigh what a card would cost to play, and a forecast never works out an amount.
+    private static DelayedAppender resolveSelf(FilterableSource choiceFilter, FilterableSource playabilityFilter,
+                                               ValueSource countSource, String memory,
+                                               Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource,
+                                               boolean inPlay) {
         return new DelayedAppender() {
             @Override
             public boolean isPlayableInFull(ActionContext actionContext) {
                 int min = countSource.getEvaluator(actionContext).getMinimum(actionContext.getGame(), null);
                 return filterCards(actionContext, playabilityFilter).size() >= min;
+            }
+
+            // The card itself, if the effect could be given to it now.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                if (!inPlay && !actionContext.isAtResolution())
+                    return EffectForecast.UNKNOWN;
+                return EffectForecast.candidates(filterCards(actionContext, choiceFilter));
             }
 
             @Override
@@ -554,8 +598,13 @@ public class CardResolver {
 
     private static DelayedAppender resolveMemoryCards(String type, FilterableSource choiceFilter, FilterableSource playabilityFilter,
                                                       ValueSource countSource, String memory,
-                                                      Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource) throws InvalidCardDefinitionException {
+                                                      Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource,
+                                                      CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         String sourceMemory = extractMemoryLocation(type);
+        // As a cost, a selection from memory can be checked for payability only where that memory is filled
+        // before the costs are looked at: by the trigger that sets the action off, or by the action that added
+        // a trigger. Filled by an earlier cost of the same action, it is still empty when the action is offered.
+        final boolean filledBeforeCosts = environment != null && environment.isMemoryFilledBeforeCosts(sourceMemory);
 
         return new DelayedAppender() {
             @Override
@@ -591,8 +640,19 @@ public class CardResolver {
                 };
             }
 
+            // The cards remembered, as far as the effect could still be given to them.  That can be said only at
+            // resolution: while the action is on offer the memory is still to be filled.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                if (!actionContext.isAtResolution())
+                    return EffectForecast.UNKNOWN;
+                return EffectForecast.candidates(filterCards(actionContext, choiceFilter));
+            }
+
             private Collection<PhysicalCard> filterCards(ActionContext actionContext, FilterableSource filter) {
                 Collection<? extends PhysicalCard> cardsFromMemory = actionContext.getCardsFromMemory(sourceMemory);
+                if (cardsFromMemory == null)
+                    return Collections.emptyList();
                 Filterable additionalFilterable = Filters.any;
                 if (filter != null)
                     additionalFilterable = filter.getFilterable(actionContext);
@@ -601,21 +661,22 @@ public class CardResolver {
 
             @Override
             public boolean canPreEvaluate() {
-                return false;
+                return filledBeforeCosts;
             }
         };
     }
 
     private static DelayedAppender resolveChoiceCards(String type, FilterableSource choiceFilter, FilterableSource playabilityFilter,
             ValueSource countSource, CardGenerationEnvironment environment, Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource, ChoiceEffectSource effectSource) throws InvalidCardDefinitionException {
-        return resolveChoiceCards(type, choiceFilter, playabilityFilter, countSource, environment, cardSource, null, effectSource);
+        return resolveChoiceCards(type, choiceFilter, playabilityFilter, countSource, environment, cardSource, null, effectSource, false);
     }
 
     private static DelayedAppender resolveChoiceCards(String type, FilterableSource choiceFilter, FilterableSource playabilityFilter,
             ValueSource countSource, CardGenerationEnvironment environment, Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource,
-            String choicePlayer, ChoiceEffectSource effectSource) throws InvalidCardDefinitionException {
+            String choicePlayer, ChoiceEffectSource effectSource, boolean inPlay) throws InvalidCardDefinitionException {
         final String filter = type.substring(type.indexOf("(") + 1, type.lastIndexOf(")"));
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
+        final boolean forecastable = inPlay && !readsMemory(filter);
         PlayerSource playerSource = choicePlayer == null ? PlayerResolver.resolvePlayer("you") : PlayerResolver.resolvePlayer(choicePlayer);
 
         return new DelayedAppender() {
@@ -645,6 +706,21 @@ public class CardResolver {
                 return effectSource.createEffect(filterCards(playerContext, choiceFilter), action, playerContext, min, max);
             }
 
+            // The cards the choice would be made from if it were made now.  A filter that reads memory cannot
+            // be asked yet: what it reads is filled as the action is carried out.  At resolution it is filled,
+            // and the cards of any zone are the ones the choice is about to be made from.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                if (!forecastable && !actionContext.isAtResolution())
+                    return EffectForecast.UNKNOWN;
+                var playerContext = actionContext;
+                if(choicePlayer != null) {
+                    String choicePlayerId = playerSource.getPlayer(actionContext);
+                    playerContext = new DelegateActionContext(actionContext, choicePlayerId);
+                }
+                return EffectForecast.candidates(filterCards(playerContext, choiceFilter));
+            }
+
             private Collection<PhysicalCard> filterCards(ActionContext actionContext, FilterableSource filter) {
                 Filterable filterable = filterableSource.getFilterable(actionContext);
                 Filterable additionalFilterable = Filters.any;
@@ -657,8 +733,15 @@ public class CardResolver {
 
     private static DelayedAppender resolveAllCards(String type, FilterableSource additionalFilter, String memory,
             CardGenerationEnvironment environment, Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource) throws InvalidCardDefinitionException {
+        return resolveAllCards(type, additionalFilter, memory, environment, cardSource, false);
+    }
+
+    private static DelayedAppender resolveAllCards(String type, FilterableSource additionalFilter, String memory,
+            CardGenerationEnvironment environment, Function<ActionContext, Iterable<? extends PhysicalCard>> cardSource,
+            boolean inPlay) throws InvalidCardDefinitionException {
         final String filter = type.substring(type.indexOf("(") + 1, type.lastIndexOf(")"));
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
+        final boolean forecastable = inPlay && !readsMemory(filter);
         return new DelayedAppender() {
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
@@ -667,17 +750,34 @@ public class CardResolver {
                     protected void doPlayEffect(LotroGame game) {
                         actionContext.setCardMemory(memory, filterCards(actionContext, additionalFilter));
                     }
-
-                    private Collection<PhysicalCard> filterCards(ActionContext actionContext, FilterableSource filter) {
-                        final Filterable filterable = filterableSource.getFilterable(actionContext);
-                        Filterable additionalFilterable = Filters.any;
-                        if (filter != null)
-                            additionalFilterable = filter.getFilterable(actionContext);
-                        return Filters.filter(actionContext.getGame(), cardSource.apply(actionContext), filterable, additionalFilterable);
-                    }
                 };
             }
+
+            // Every card the effect would take if it were carried out now.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                if (!forecastable && !actionContext.isAtResolution())
+                    return EffectForecast.UNKNOWN;
+                return EffectForecast.candidates(filterCards(actionContext, additionalFilter));
+            }
+
+            private Collection<PhysicalCard> filterCards(ActionContext actionContext, FilterableSource filter) {
+                final Filterable filterable = filterableSource.getFilterable(actionContext);
+                Filterable additionalFilterable = Filters.any;
+                if (filter != null)
+                    additionalFilterable = filter.getFilterable(actionContext);
+                return Filters.filter(actionContext.getGame(), cardSource.apply(actionContext), filterable, additionalFilterable);
+            }
         };
+    }
+
+    /**
+     * @return Whether a filter, as a definition writes it, reads the memory of the action it belongs to ("memory(x)",
+     * "cultureFromMemory(x)", "maxTwilight(memory(x))").  Such a filter cannot be asked before the action is
+     * carried out, so nothing can be forecast of an effect that selects by it.
+     */
+    public static boolean readsMemory(String filter) {
+        return filter != null && filter.toLowerCase().contains("memory");
     }
 
     private interface ChoiceEffectSource {

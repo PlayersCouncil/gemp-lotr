@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_02_042_Tests
@@ -19,7 +20,23 @@ public class Card_02_042_Tests
 				new HashMap<>()
 				{{
 					put("card", "2_42");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetLookScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("goblinman", "2_42");
+					// The Free Peoples player's hand: a companion, a possession and a minion
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North
+					put("armor", "1_8");        // Dwarven Armor
+					put("runner", "1_178");     // Goblin Runner
+					put("gimli", "1_13");       // Gimli, Son of Glóin: left in the Free Peoples draw deck
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -62,18 +79,42 @@ public class Card_02_042_Tests
 		assertEquals(2, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GoblinManTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void ShadowAbilityExertsThisMinionAndShowsTheFreePeoplesPlayersHandToItsOwnerAlone() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetLookScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var goblinMan = scn.GetShadowCard("goblinman");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var armor = scn.GetFreepsCard("armor");
+		var runner = scn.GetFreepsCard("runner");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCardsToHand(aragorn, armor, runner);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(goblinMan);
+		// To Ettenmoors, which is not underground.
+		scn.FreepsPass();
 
-		assertEquals(2, scn.GetTwilight());
+		assertEquals(3, scn.GetFreepsHandCount());
+		assertInZone(Zone.DECK, gimli);
+		assertEquals(0, scn.GetWoundsOn(goblinMan));
+		assertTrue(scn.ShadowActionAvailable(goblinMan));
+
+		scn.ShadowUseCardAction(goblinMan);
+		assertEquals(1, scn.GetWoundsOn(goblinMan));
+		// The Shadow player is shown the whole hand, with nothing in it to choose, and no card from the draw deck.
+		assertEquals(3, scn.ShadowGetTotalRevealedCardCount());
+		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, false));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(armor, false));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(runner, false));
+		assertFalse(scn.ShadowHasCardChoiceAvailable(gimli, false));
+		assertEquals(0, scn.ShadowGetSelectableCount());
+		// A look is the looker's alone: the hand's owner is shown nothing and asked nothing.
+		assertFalse(scn.FreepsAnyDecisionsAvailable());
+
+		scn.ShadowDismissRevealedCards();
+		assertEquals(3, scn.GetFreepsHandCount());
+		assertInZone(Zone.HAND, aragorn, armor, runner);
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

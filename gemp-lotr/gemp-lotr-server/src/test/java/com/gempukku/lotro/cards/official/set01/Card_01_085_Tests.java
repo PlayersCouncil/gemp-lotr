@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_01_085_Tests
@@ -18,7 +19,20 @@ public class Card_01_085_Tests
 				new HashMap<>()
 				{{
 					put("card", "1_85");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetExertionScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("spirit", "1_85");
+					put("gandalf", "1_72");     // Gandalf, Friend of the Shirefolk: the Gandalf spotted
+					put("sam", "1_311");        // Sam, Son of Hamfast: "Fellowship: Exert Sam to remove a burden."
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -56,18 +70,37 @@ public class Card_01_085_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void StrengthofSpiritTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void ResponseSpottingGandalfPlacesNoWoundForACompanionsExertion() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetExertionScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var spirit = scn.GetFreepsCard("spirit");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		// The companion who exerts is not Gandalf: "a companion" and the Gandalf spotted are two cards.
+		var sam = scn.GetFreepsCard("sam");
+		scn.MoveCompanionsToTable(gandalf, sam);
+		scn.MoveCardsToHand(spirit);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.AddBurdens(2);
 
+		assertEquals(0, scn.GetTwilight());
+		assertEquals(0, scn.GetWoundsOn(sam));
+		assertEquals(2, scn.GetBurdens());
+
+		// Sam exerts as the cost of his ability: the response comes before the wound is placed.
+		scn.FreepsUseCardAction(sam);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(spirit));
+		assertEquals(0, scn.GetWoundsOn(sam));
+		assertEquals(2, scn.GetBurdens());
+
+		scn.FreepsChooseOptionalTrigger(spirit);
+		// No wound for the exertion, which still pays for the burden removed.
+		assertEquals(0, scn.GetWoundsOn(sam));
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+		assertEquals(1, scn.GetBurdens());
 		assertEquals(1, scn.GetTwilight());
+		assertInZone(Zone.DISCARD, spirit);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

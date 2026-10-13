@@ -2,22 +2,26 @@
 
 	63_188: {
 		cardInfo: {
-			//id: 3_188.1
+			//id: 63_188.1
+			parent: 13_188
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/63_188.jpg
 			collInfo: 13U188
 			rarity: U
 		}
 		title: Courtyard Parapet
-		type: site
+		unique: false
+		type: Site
 		block: Shadows
 		twilight: 0
-		keyword: Dwelling
-		direction: left
+		keywords: Dwelling
+		direction: Left
 		effects: [
 			{
 				type: Trigger
-				optional: true
+				optional: false
 				trigger: {
 					type: movesTo
 					filter: self

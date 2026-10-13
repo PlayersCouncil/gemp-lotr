@@ -377,7 +377,8 @@
 				optional: true
 				trigger: {
 					type: played
-					filter: not(your),site,nextSiteNumber
+					player: free people
+					filter: site,nextSiteNumber
 				}
 				effect: {
 					type: discard
@@ -932,7 +933,7 @@
 			type: event
 			cost: {
 				type: exert
-				select: choose(your,lurker,minion)
+				select: choose(your,culture(uruk-hai),lurker,minion)
 			}
 			effect: [
 				{

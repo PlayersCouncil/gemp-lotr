@@ -3,6 +3,7 @@ package com.gempukku.lotro.cards.official.set17;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -19,6 +20,22 @@ public class Card_17_134_Tests
 				{{
 					put("card", "17_134");
 					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// An [uruk-hai] hunter minion and a Free Peoples hunter companion, each to be assigned to a skirmish.
+	protected VirtualTableScenario GetHuntersOfBothSidesScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("vanquisher", "17_134");
+					put("tracker", "15_171");
+					put("gimli", "15_5");
+					put("aragorn", "1_89");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -60,6 +77,32 @@ public class Card_17_134_Tests
 		assertEquals(8, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
 		assertEquals(5, card.getBlueprint().getSiteNumber());
+	}
+
+	// "damage +1 for each [uruk-hai] hunter assigned to a skirmish": the definition counted every hunter, the Free
+	// Peoples player's among them.
+	@Test
+	public void OnlyUrukHaiCultureHuntersAssignedToASkirmishAreCounted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetHuntersOfBothSidesScenario();
+
+		var gimli = scn.GetFreepsCard("gimli");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(gimli, aragorn);
+
+		var vanquisher = scn.GetShadowCard("vanquisher");
+		var tracker = scn.GetShadowCard("tracker");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(vanquisher, tracker);
+		scn.SkipToAssignments();
+		assertEquals(0, scn.GetKeywordCount(vanquisher, Keyword.DAMAGE));
+
+		// Gimli, Feared Axeman is a hunter and is assigned, to the Vanquisher herself; Tracking Uruk is the one
+		// [uruk-hai] hunter assigned.
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{gimli, vanquisher}, new PhysicalCardImpl[]{aragorn, tracker});
+		assertTrue(scn.HasKeyword(gimli, Keyword.HUNTER));
+		assertEquals(1, scn.GetKeywordCount(vanquisher, Keyword.DAMAGE));
+		assertTrue(scn.FreepsAwaitingSkirmishChoice());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

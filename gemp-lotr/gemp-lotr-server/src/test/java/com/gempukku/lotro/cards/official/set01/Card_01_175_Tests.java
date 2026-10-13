@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_01_175_Tests
@@ -18,7 +19,20 @@ public class Card_01_175_Tests
 				new HashMap<>()
 				{{
 					put("card", "1_175");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetCompanionPlayedScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("domain", "1_175");
+					put("gimli", "1_13");       // Gimli, Son of Glóin: cost 2, vitality 3
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: cost 4, vitality 4
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -56,18 +70,37 @@ public class Card_01_175_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GoblinDomainTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void ACompanionPlayedAtSite4OrHigherComesIntoPlayExhaustedAndOneAlreadyThereIsUntouched() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetCompanionPlayedScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var domain = scn.GetShadowCard("domain");
+		var gimli = scn.GetFreepsCard("gimli");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCardsToSupportArea(domain);
+		scn.MoveCardsToHand(gimli, aragorn);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToSite(3);
 
-		assertEquals(1, scn.GetTwilight());
+		// At site 3, one short of the site the text names, a companion comes into play as he always does.
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertInZone(Zone.SUPPORT, domain);
+		scn.FreepsPlayCard(gimli);
+		assertInZone(Zone.FREE_CHARACTERS, gimli);
+		assertEquals(0, scn.GetWoundsOn(gimli));
+
+		scn.SkipToSite(4);
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertTrue(scn.FreepsPlayAvailable(aragorn));
+
+		scn.FreepsPlayCard(aragorn);
+		// Vitality 4 with 3 wounds: exhausted.  Gimli, who was in play already, is as he was.
+		assertInZone(Zone.FREE_CHARACTERS, aragorn);
+		assertEquals(3, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.IsExhausted(aragorn));
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

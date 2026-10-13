@@ -465,6 +465,7 @@
 			{
 				type: activatedInDiscard
 				phase: skirmish
+				specialAbility: false
 				cost: {
 					type: removeCardsInDiscardFromGame
 					select: choose(other,culture(elven))
@@ -825,6 +826,7 @@
 				}
 				effect: {
 					type: putPlayedEventOnTopOfDrawDeck
+					filter: played
 				}
 			}
 		]

@@ -360,9 +360,21 @@
 				type: modifier
 				modifier: {
 					type: modifyStrength
+					# "a card titled Déagol is removed from the game" names no owner: Gollum's
+					# own player's removed pile, or the Free Peoples player's (F-0375)
 					requires: {
-						type: hasCardInRemoved
-						filter: name(Déagol)
+						type: or
+						requires: [
+							{
+								type: hasCardInRemoved
+								filter: name(Déagol)
+							}
+							{
+								type: hasCardInRemoved
+								player: free people
+								filter: name(Déagol)
+							}
+						]
 					}
 					filter: self
 					amount: 2
@@ -373,8 +385,18 @@
 				modifier: {
 					type: addKeyword
 					requires: {
-						type: hasCardInRemoved
-						filter: name(Déagol)
+						type: or
+						requires: [
+							{
+								type: hasCardInRemoved
+								filter: name(Déagol)
+							}
+							{
+								type: hasCardInRemoved
+								player: free people
+								filter: name(Déagol)
+							}
+						]
 					}
 					filter: self
 					keyword: fierce
@@ -462,6 +484,27 @@
 		effects: [
 			{
 				type: event
+				# In region 3 the play is the whole of the event, and a play from the discard pile is treated
+				# as a cost: with no [gollum] minion there that the pool can pay for once the event's own
+				# cost has left it, the event is not offered (F-0046, F-0058).  The play itself sits inside
+				# an If inside a choice, where the engine does not ask beforehand.
+				requires: {
+					type: Or
+					requires: [
+						{
+							type: Not
+							requires: {
+								type: location
+								filter: regionNumber(3)
+							}
+						}
+						{
+							type: Playable
+							fromZone: DISCARD
+							filter: culture(gollum),minion
+						}
+					]
+				}
 				cost: [
 					{
 						type: choice
@@ -582,6 +625,7 @@
 			{
 				type: activatedInDiscard
 				phase: skirmish
+				specialAbility: false
 				cost: {
 					type: removeCardsInDiscardFromGame
 					select: choose(other,culture(gollum))
@@ -740,6 +784,8 @@
 				effect: {
 					type: discardCardsFromDrawDeck
 					select: choose(culture(gollum))
+					# A card looked for in the draw deck need not be found.
+					count: 0-1
 					showAll: true
 					shuffle: true
 					forced: false

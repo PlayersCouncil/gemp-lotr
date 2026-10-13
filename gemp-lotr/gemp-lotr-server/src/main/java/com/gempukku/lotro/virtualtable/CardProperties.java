@@ -2,6 +2,7 @@ package com.gempukku.lotro.virtualtable;
 
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.PhysicalCardImpl;
+import com.gempukku.lotro.logic.GameUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,12 +33,30 @@ public interface CardProperties extends TableBase {
 	}
 
 
+	/**
+	 * How many culture tokens of the card's own printed culture are on the card: a token of any other culture on
+	 * it is not counted, and this cannot read one.
+	 * @param card The card to inspect.
+	 * @return The number of tokens of that card's culture on it.
+	 */
 	default int GetCultureTokensOn(PhysicalCardImpl card) { return gameState().getTokenCount(card, Token.findTokenForCulture(card.getBlueprint().getCulture())); }
 
+	/**
+	 * Puts culture tokens of the card's own printed culture on the card, the only kind of token this can place.
+	 * Nothing is reinforced and nothing is added by a card: no trigger answers it.
+	 * @param card The card to put tokens on.
+	 * @param count How many.
+	 */
 	default void AddTokensToCard(PhysicalCardImpl card, int count) {
 		gameState().addTokens(card, Token.findTokenForCulture(card.getBlueprint().getCulture()), count);
 	}
 
+	/**
+	 * Takes culture tokens of the card's own printed culture off the card, the only kind of token this can remove,
+	 * and no more of them than are there.
+	 * @param card The card to take tokens from.
+	 * @param count How many.
+	 */
 	default void RemoveTokensFromCard(PhysicalCardImpl card, int count) {
 		gameState().removeTokens(card, Token.findTokenForCulture(card.getBlueprint().getCulture()), count);
 	}
@@ -59,6 +78,67 @@ public interface CardProperties extends TableBase {
         return (List<PhysicalCardImpl>)(List<?>)gameState().getStackedCards(card);
     }
 
+	/**
+	 * Whether the Free Peoples player's client has the given card before it as a card in the given zone.  See
+	 * PlayerSeesCardInZone.
+	 */
+	default boolean FreepsSeesCardInZone(PhysicalCardImpl card, Zone zone) { return PlayerSeesCardInZone(P1(), card, zone); }
+	/**
+	 * Whether the Shadow player's client has the given card before it as a card in the given zone.  See
+	 * PlayerSeesCardInZone.
+	 */
+	default boolean ShadowSeesCardInZone(PhysicalCardImpl card, Zone zone) { return PlayerSeesCardInZone(P2(), card, zone); }
+	/**
+	 * Whether the given player's client has the given card before it as a card in the given zone: true when the
+	 * zone that seat was last sent for the card, as it was put into play or moved (the server's own channel for
+	 * the seat decides what it is sent), is that zone, and it has not since been sent the card's removal.  This
+	 * is what a client draws the card by, and not the table's own idea of where the card is: for that, assertInZone.
+	 * A card the seat is not shown (one in a draw deck, one in another player's hand) is in no zone to it.
+	 * A site on the adventure path cannot be asked about: the table keeps nothing of how sites are sent as they
+	 * are laid, and the reading is refused for one.
+	 *
+	 * Read as PlayerSeesCardInHand is: from the channel the table keeps for the seat and from a client joined to
+	 * the seat as the reading is made, failing if the two were sent different zones, and on a table that keeps no
+	 * such channels.
+	 * @param player The player whose seat is asked about.
+	 * @param card The card, wherever it lies and whoever owns it.
+	 * @param zone The zone asked about.
+	 * @return True if that seat was last sent the card as a card in that zone.
+	 */
+	default boolean PlayerSeesCardInZone(String player, PhysicalCardImpl card, Zone zone) {
+		Verify(zone != null, "No zone was given to ask whether " + player + " sees a card in it.");
+		return zone != null && SeatChannel.zoneSeen(this, player, card) == zone;
+	}
+
+	/**
+	 * Whether the Free Peoples player's client has the given card before it as borne by the given bearer, or by
+	 * no card.  See PlayerSeesCardBorneBy.
+	 */
+	default boolean FreepsSeesCardBorneBy(PhysicalCardImpl card, PhysicalCardImpl bearer) { return PlayerSeesCardBorneBy(P1(), card, bearer); }
+	/**
+	 * Whether the Shadow player's client has the given card before it as borne by the given bearer, or by no
+	 * card.  See PlayerSeesCardBorneBy.
+	 */
+	default boolean ShadowSeesCardBorneBy(PhysicalCardImpl card, PhysicalCardImpl bearer) { return PlayerSeesCardBorneBy(P2(), card, bearer); }
+	/**
+	 * Whether the given player's client has the given card before it as borne by the given bearer: true when that
+	 * seat was last sent the card, as it was put into play or moved, as attached to that bearer, and has not since
+	 * been sent the card's removal.  With null for the bearer: true when the seat has the card before it and was
+	 * last sent it as attached to no card, which is how a client must be told of a card that lies on its own.
+	 * A card the seat is not shown at all is borne by nothing and by nobody to it: false either way.
+	 *
+	 * Read as PlayerSeesCardInHand is: from the channel the table keeps for the seat and from a client joined to
+	 * the seat as the reading is made, failing if the two were sent different bearers, and on a table that keeps
+	 * no such channels.
+	 * @param player The player whose seat is asked about.
+	 * @param card The card asked about.
+	 * @param bearer The card that is to bear it, or null to ask whether it is shown as borne by no card.
+	 * @return True if that seat has the card before it as borne by that bearer (or, for null, by no card).
+	 */
+	default boolean PlayerSeesCardBorneBy(String player, PhysicalCardImpl card, PhysicalCardImpl bearer) {
+		return SeatChannel.zoneSeen(this, player, card) != null && SeatChannel.bearerSeen(this, player, card) == bearer;
+	}
+
 	default Boolean IsSiteControlled(PhysicalCardImpl card) {
 		return card.getCardController() != null;
 	}
@@ -73,7 +153,10 @@ public interface CardProperties extends TableBase {
 
 	/**
 	 * @param card The card to inspect.
-	 * @return The modified current twilight cost of the card, as altered by all current in-game effects.
+	 * @return The twilight cost of the card where it is.  For a card in play that is the number printed on it,
+	 * whatever another card or its own text says about its cost (CR 4.2 "twilight cost").  For a card in a hand
+	 * or a pile it is what the card would cost to play, as altered by all current in-game effects, the roaming
+	 * penalty apart.  For a site it is the Shadow number as it stands.
 	 */
 	default int GetTwilightCost(PhysicalCardImpl card)
 	{
@@ -89,11 +172,35 @@ public interface CardProperties extends TableBase {
 		return game().getModifiersQuerying().getStrength(game(), card);
 	}
 
+	/**
+	 * The N of a follower's printed "Aid - (N)": the twilight its Aid costs, as the card's definition has it.  A
+	 * Free Peoples follower's Aid adds that much to the twilight pool and a Shadow follower's removes it.  This
+	 * reads the card, wherever it lies, and takes no Aid: the pool read before and after an Aid is taken shows
+	 * what was paid.
+	 * Only for an Aid that is a plain amount of twilight and nothing else.  Fails, saying so, for a follower whose
+	 * Aid is paid in anything else ("Aid - Add a burden.", "Aid - Exert a [gondor] companion.") and for a card
+	 * that is no follower.
+	 * @param follower The follower to inspect.
+	 * @return The twilight cost of its Aid.
+	 */
+	default int GetAidTwilightCost(PhysicalCardImpl follower) {
+		Verify(follower != null && follower.getBlueprint().getCardType() == CardType.FOLLOWER,
+				(follower == null ? "Nothing" : GameUtils.getFullName(follower))
+						+ " is not a follower, so it has no Aid whose twilight cost could be read.");
+		Integer cost = follower.getBlueprint().getAidTwilightCost();
+		Verify(cost != null, "The Aid of " + GameUtils.getFullName(follower)
+				+ " is not a plain amount of twilight, so it has no twilight cost to read.");
+		return cost;
+	}
+
 	default int GetOverwhelmMultiplier(PhysicalCardImpl card) { return game().getModifiersQuerying().getOverwhelmMultiplier(game(), card); }
 
 	/**
+	 * The vitality the card has left: its printed vitality and whatever cards add or take away, less the wounds
+	 * on it, and never less than 0.  A character of printed vitality 4 with 3 wounds reads 1.  The printed
+	 * number is the blueprint's.
 	 * @param card The card to inspect.
-	 * @return The modified current vitality of the card, as altered by all current in-game effects.
+	 * @return The modified current vitality of the card, as altered by all current in-game effects and by its wounds.
 	 */
 	default int GetVitality(PhysicalCardImpl card) { return game().getModifiersQuerying().getVitality(game(), card); }
 
@@ -152,6 +259,15 @@ public interface CardProperties extends TableBase {
 	{
 		return  game().getModifiersQuerying().isRace(game(), card, race);
 	}
+
+	/**
+	 * What a card adds of its own to what the client shows of it, under "Extra information" in its card info: the
+	 * text of its definition's displayableInformation, with the value the card has stored on itself (a race, a
+	 * culture or a keyword named as it was played) in place of {stored}.
+	 * @param card The card to inspect.
+	 * @return That text; null if the card's definition has none.
+	 */
+	default String GetDisplayableInformation(PhysicalCardImpl card) { return card.getBlueprint().getDisplayableInformation(card); }
 
 	default boolean IsHindered(PhysicalCardImpl card) { return HasKeyword(card, Keyword.HINDERED); }
 	default void HinderCard(PhysicalCardImpl...cards) {

@@ -38,6 +38,10 @@
 					type: startOfSkirmishInvolving
 					filter: self
 				}
+				requires: {
+					type: canSpot
+					filter: other,ringBound,hobbit
+				}
 				effect: {
 					type: removeBurdens
 					amount: {
@@ -262,6 +266,7 @@
 			{
 				type: activatedInDiscard
 				phase: skirmish
+				specialAbility: false
 				cost: {
 					type: removeCardsInDiscardFromGame
 					select: choose(other,culture(shire))

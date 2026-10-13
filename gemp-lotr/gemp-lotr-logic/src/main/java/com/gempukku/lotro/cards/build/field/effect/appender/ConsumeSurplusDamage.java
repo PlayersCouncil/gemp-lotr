@@ -6,6 +6,7 @@ import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
+import com.gempukku.lotro.cards.build.field.effect.requirement.KilledWithSurplusDamage;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import com.gempukku.lotro.logic.actions.ResolveSkirmishDamageAction;
@@ -24,10 +25,10 @@ public class ConsumeSurplusDamage implements EffectAppenderProducer {
                     @Override
                     protected void doPlayEffect(LotroGame game) {
                         final ResolveSkirmishDamageAction resolveSkirmishDamageAction = game.getActionsEnvironment().findTopmostActionOfType(ResolveSkirmishDamageAction.class);
-                        if (resolveSkirmishDamageAction != null
-                                && resolveSkirmishDamageAction.getRemainingDamage() > 0) {
-                            resolveSkirmishDamageAction.consumeRemainingDamage();
-                        }
+                        // Only the share of the character whose kill is being answered: the other losers of the
+                        // skirmish still take their own wounds (F-0475)
+                        if (resolveSkirmishDamageAction != null)
+                            resolveSkirmishDamageAction.consumeRemainingDamage(KilledWithSurplusDamage.getKilledCard(actionContext));
                     }
                 };
             }

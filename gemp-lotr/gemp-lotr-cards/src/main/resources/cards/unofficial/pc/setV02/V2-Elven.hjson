@@ -87,7 +87,7 @@
 			requires: [
 				{
 					type: CanSpot
-					filter: or(elf,dwarf), companion
+					filter: or(culture(elven),culture(dwarven)), companion
 				}
 			]
 			effect: [
@@ -109,7 +109,7 @@
 							]
 							cost: {
 								type: Spot
-								filter: elf, companion
+								filter: culture(elven), companion
 							}
 							effect: {
 								type: ReinforceTokens
@@ -127,7 +127,7 @@
 							]
 							cost: {
 								type: Spot
-								filter: dwarf, companion
+								filter: culture(dwarven), companion
 							}
 							effect: {
 								type: ReinforceTokens
@@ -148,19 +148,28 @@
 							type: CanSpot
 							filter: name(Legolas)
 						}
-					]
-					true: [
+						# Not asked when there is no token of either culture to reinforce (Q-0034).
 						{
-							type: ReinforceTokens
-							culture: elven
-							select: choose(HasCultureToken(elven))
-						}
-						{
-							type: ReinforceTokens
-							culture: dwarven
-							select: choose(HasCultureToken(dwarven))
+							type: CanSpot
+							filter: or(HasCultureToken(elven),HasCultureToken(dwarven))
 						}
 					]
+					true: {
+						type: optional
+						text: Would you like to reinforce both an [elven] and a [dwarven] token an additional time?
+						effect: [
+							{
+								type: ReinforceTokens
+								culture: elven
+								select: choose(HasCultureToken(elven))
+							}
+							{
+								type: ReinforceTokens
+								culture: dwarven
+								select: choose(HasCultureToken(dwarven))
+							}
+						]
+					}
 				}
 			]
 		}
@@ -234,7 +243,7 @@
 				}
 			}
 		]
-		gametext: Valiant. <br>While Haldir bears a ranged weapon, each valiant Elf is strength +1 and does not add to the fellowship archery total.<br>Each time an [elven] possession is about to be discarded by a card effect, you may exert Haldir to prevent that.
+		gametext: Valiant. <br>While Haldir bears a ranged weapon, each valiant Elf is strength +1 and each valiant Elf does not add to the fellowship archery total.<br>Each time an [elven] possession is about to be discarded by a card effect, you may exert Haldir to prevent that.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -264,8 +273,7 @@
 			cost: {
 				type: Spot
 				count: 2
-				select: choose(elf, valiant)
-				memorize: spottedElves
+				filter: elf, valiant
 			},
 			effect: [
 				{
@@ -284,7 +292,7 @@
 				}
 			]
 		}
-		gametext: Spot 2 valiant elves to wound a minion (or wound a minion twice if each of those elves bears a ranged weapon).
+		gametext: Spot 2 valiant Elves to wound a minion (or wound a minion twice if each of those Elves bears a ranged weapon).
 		lore: "'I must go and seek some arrows,' said Legolas. 'Would that this night would end, and I could have better light for shooting.'"
 		promotext: ""
 		alts: {
@@ -322,10 +330,6 @@
 				trigger: {
 					type: WinsSkirmish
 					filter: bearer
-				}
-				requires: {
-					type: CanSpot
-					filter: not(bearer), wounded, valiant, elf
 				}
 				cost: {
 					type: Exert
@@ -420,7 +424,6 @@
 		effects: [
 			{
 				type: Trigger
-				optional: false
 				optional: false
 				trigger: {
 					type: WinsSkirmish

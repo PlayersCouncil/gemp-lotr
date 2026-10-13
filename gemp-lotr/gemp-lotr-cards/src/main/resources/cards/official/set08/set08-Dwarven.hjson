@@ -125,26 +125,50 @@
 		timewords: Regroup
 		effects: {
 			type: event
-			cost: {
-				type: exert
-				select: choose(dwarf,damage,CanExert)
-				times: 2
-				memorize: exertedDwarf
-			},
+			cost: [
+				{
+					type: spot
+					select: choose(dwarf,damage,CanExert,MinVitality(3))
+					memorize: exertedDwarf
+					text: Choose a Dwarf to exert
+				}
+				{
+					// X is the damage bonus the Dwarf has when he is spotted: it is remembered before he
+					// exerts, and what the exertions do to him does not change it (Q-0256; as the erratum 58_3).
+					type: memorizeNumber
+					amount: {
+						type: forEachKeywordOnCardInMemory
+						memory: exertedDwarf
+						keyword: damage
+					}
+					memory: damageBonus
+				}
+				{
+					// A remembered Dwarf cannot be judged beforehand as a cost, so his exertions go through
+					// costToEffect (the spot above has already asked for a Dwarf able to exert twice).
+					type: costToEffect
+					effect: {
+						type: exert
+						select: memory(exertedDwarf)
+						times: 2
+					}
+				}
+			],
 			effect: [
 				{
 					type: Discard
 					player: shadow
 					select: choose(side(shadow))
+					// "Shadow cards" names a side and nothing more: a hindered one may be among them (Q-0098).
+					override: hindered
 					count: {
-						type: forEachKeywordOnCardInMemory
-						memory: exertedDwarf
-						keyword: damage
+						type: fromMemory
+						memory: damageBonus
 					}
 				}
 			]
 		}
-		gametext: Spot a Dwarf who is damage +X and exert that Dwarf to make an opponent discard X Shadow cards.
+		gametext: Spot a Dwarf who is damage +X and exert that Dwarf twice to make an opponent discard X Shadow cards.
 		lore: "...the Dark Door gaped before them like the mouth of night."
 		promotext: ""
 		alts: {
@@ -353,7 +377,7 @@
 				cost: [
 					{
 						type: exert
-						select: choose(dwarf)
+						select: choose(dwarf,companion)
 					}
 					{
 						type: exert

@@ -1,8 +1,9 @@
 package com.gempukku.lotro.logic.effects;
 
 import com.gempukku.lotro.common.Filterable;
+import com.gempukku.lotro.common.InactiveReason;
+import com.gempukku.lotro.common.SpotOverride;
 import com.gempukku.lotro.common.Zone;
-import com.gempukku.lotro.filters.Filter;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.GameState;
@@ -15,20 +16,41 @@ import com.gempukku.lotro.logic.timing.results.ReturnCardsToHandResult;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class ReturnCardsToHandEffect extends AbstractEffect {
     private final PhysicalCard _source;
     private final Filterable _filter;
+    // Which inactive cards the effect reaches beside the active ones: hindered cards, where the text names its
+    // cards by nothing but "card" or a side (Ketura on Q-0098).
+    private final Map<InactiveReason, Boolean> _spotOverrides;
 
     public ReturnCardsToHandEffect(PhysicalCard source, Filterable filter) {
+        this(source, SpotOverride.NONE, filter);
+    }
+
+    public ReturnCardsToHandEffect(PhysicalCard source, Map<InactiveReason, Boolean> spotOverrides, Filterable filter) {
         _source = source;
         _filter = filter;
+        _spotOverrides = spotOverrides;
+    }
+
+    /**
+     * The cards this effect is aimed at that may be returned to hand.  The effect asks for itself what bars a card
+     * from that (ModifiersQuerying.canBeReturnedToHand: the Ring-bearer by the rules, CR 4.2 "Ring-bearer", hindered
+     * or not), as the discard and the hinder effects ask what bars theirs.  The definition word ReturnToHand asks
+     * the same of the cards it chooses from, so no card's text is carried out differently for it; only an effect
+     * handed its cards directly is, which no card does (mechanics/hinder/HinderedRingBearerTests staples one).
+     */
+    private Collection<PhysicalCard> getCardsThatMayBeReturned(LotroGame game) {
+        return Filters.filterActive(game, _spotOverrides, _filter,
+                _source == null ? Filters.any : Filters.canBeReturnedToHand(_source));
     }
 
     @Override
     public String getText(LotroGame game) {
-        Collection<PhysicalCard> cards = Filters.filterActive(game, _filter);
+        Collection<PhysicalCard> cards = getCardsThatMayBeReturned(game);
         return "Return " + getAppendedNames(cards) + " to hand";
     }
 
@@ -39,19 +61,13 @@ public class ReturnCardsToHandEffect extends AbstractEffect {
 
     @Override
     public boolean isPlayableInFull(LotroGame game) {
-        return Filters.filterActive(game, _filter,
-                new Filter() {
-                    @Override
-                    public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
-                        return (_source == null || game.getModifiersQuerying().canBeReturnedToHand(game, physicalCard, _source));
-                    }
-                }).size() > 0;
+        return getCardsThatMayBeReturned(game).size() > 0;
     }
 
     @Override
     protected FullEffectResult playEffectReturningResult(LotroGame game) {
         GameState gameState = game.getGameState();
-        Collection<PhysicalCard> cardsToReturnToHand = Filters.filterActive(game, _filter);
+        Collection<PhysicalCard> cardsToReturnToHand = getCardsThatMayBeReturned(game);
 
         // Preparation, figure out, what's going where...
         Set<PhysicalCard> discardedFromPlay = new HashSet<>();

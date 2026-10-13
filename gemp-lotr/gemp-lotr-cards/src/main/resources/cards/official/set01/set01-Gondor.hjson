@@ -1335,6 +1335,10 @@
 			trigger: {
 				type: startOfTurn
 			}
+			requires: {
+				type: canSpot
+				filter: another,companion,signet(Aragorn),wounded
+			}
 			effect: {
 				type: heal
 				select: choose(another,companion,signet(Aragorn))

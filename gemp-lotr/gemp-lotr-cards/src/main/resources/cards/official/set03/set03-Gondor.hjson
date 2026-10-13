@@ -235,6 +235,10 @@
 		effects: {
 			type: activated
 			phase: maneuver
+			requires: {
+				type: canSpot
+				filter: ally
+			}
 			cost: {
 				type: exert
 				select: bearer
@@ -532,7 +536,7 @@
 			}
 			cost: {
 				type: exert
-				count: 2
+				times: 2
 				select: choose(culture(gondor),companion)
 			}
 			effect: {

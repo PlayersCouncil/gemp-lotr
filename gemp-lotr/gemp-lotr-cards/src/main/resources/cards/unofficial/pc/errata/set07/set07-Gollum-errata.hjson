@@ -58,7 +58,7 @@
 				}
 			]
 		}
-		gametext: Spot any number of [gollum] conditions. Make Smeagol strength +3 and damage +1 for each condition spotted. Discard each of yours spotted and hinder each of your opponent's spotted. 
+		gametext: Spot any number of [gollum] conditions. Make Smeagol strength +3 and damage +1 for each condition spotted. Discard each of your spotted conditions and hinder each of your opponent's spotted conditions. 
 		lore: "'Clever hobbits to climb so high, very clever hobbits!'"
 		promotext: ""
 		alts: {

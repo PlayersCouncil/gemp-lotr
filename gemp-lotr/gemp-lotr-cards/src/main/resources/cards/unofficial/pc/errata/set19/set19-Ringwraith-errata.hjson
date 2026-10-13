@@ -2,7 +2,10 @@
 	
 	69_37: {
 		cardInfo: {
-			//id: 9_37.1
+			//id: 69_37.1
+			parent: 19_37
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN19E037.1.jpg
 			collInfo: 19P37
@@ -11,14 +14,15 @@
 		title: Úlairë Lemenya
 		subtitle: Dark Enemy
 		unique: true
-		culture: wraith
+		side: Shadow
+		culture: Wraith
 		twilight: 4
-		type: minion
-		race: nazgul
+		type: Minion
+		race: Nazgul
 		strength: 9
 		vitality: 2
 		site: 3
-		keyword: fierce
+		keywords: Fierce
 		effects: {
 			type: modifier
 			modifier: {
@@ -44,7 +48,10 @@
 
 	69_38: {
 		cardInfo: {
-			//id: 9_38.1
+			//id: 69_38.1
+			parent: 19_38
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/69_38.jpg
 			collInfo: 19P38
@@ -53,14 +60,15 @@
 		title: Ulaire Nertea
 		subtitle: Dark Horseman
 		unique: true
+		side: Shadow
 		culture: Wraith
 		twilight: 4
-		type: minion
-		race: nazgul
+		type: Minion
+		race: Nazgul
 		strength: 9
 		vitality: 2
 		site: 3
-		keyword: fierce
+		keywords: Fierce
 		effects: [
 			{
 				type: Trigger
@@ -75,55 +83,33 @@
 						memorize: chosenRace
 					}
 					{
-						type: storeWhileInZone
+						type: storeRace
 						memory: chosenRace
 					}
 				]
 			}
 			{
-				type: Trigger
-				optional: false
-				trigger: {
-					type: fpstartedassigning
-				}
-				effect: [
-					{
-						type: chooseYesOrNo
-						player: fp
-						text: Would you like to add a burden to be able to assign Ulaire Nertea to a {chosenRace}?
-						memorize: choice
-					}
-					{
-						type: If
-						check: {
-							type: memoryIs
-							memory: choice
-							value: no
+				type: displayableInformation
+				text: Named race is {stored}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: extraCostToAssign
+					minion: self
+					fpCharacter: companion,race(stored)
+					cost: [
+						{
+							type: sendMessage
+							text: "{freeps} must add a burden to assign {self} to skirmish a companion of the named race ({stored})."
 						}
-						true: {
-							type: addmodifier
-							until: start(skirmish)
-							modifier: {
-								type: cantBeAssignedToSkirmishAgainst
-								side: free people
-								fpCharacter: companion,race(stored)
-								minion: self
-							}
-						}
-					}
-					{
-						type: If
-						check: {
-							type: memoryIs
-							memory: choice
-							value: yes
-						}
-						true: {
+						{
 							type: addBurdens
 							amount: 1
+							player: fp
 						}
-					}
-				]
+					]
+				}
 			}
 		]
 		gametext: <b>Fierce.</b><br> When you play Úlairë Nertëa, name a race. The Free Peoples player must add a burden to assign Úlairë Nertëa to skirmish a companion of the named race.

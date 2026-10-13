@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_12_058_Tests
@@ -18,7 +19,42 @@ public class Card_12_058_Tests
 				new HashMap<>()
 				{{
 					put("card", "12_58");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetResponseScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("companies", "12_58");
+					put("corps", "11_73");      // Corps of Harad: [men] Man; fierce only at a battleground
+					// Henchman's Dagger: [men] possession, cost 0, on a [men] minion; a hand weapon that may be
+					// borne beside another
+					put("dagger", "18_69");
+
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a ranger, vitality 4
+					put("vengeance", "1_106");  // Gondor's Vengeance: Regroup event. Exert a ranger companion to discard a minion
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// A [men] possession that costs something stacked on Countless Companies, and a [men] minion to bear it.
+	protected VirtualTableScenario GetStackedBowScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("companies", "12_58");
+					put("corps", "11_73");      // Corps of Harad: [men] Man; fierce only at a battleground
+					// Long Battle Bow: [men] possession, cost 2, on a [men] minion; when played, may make the Free
+					// Peoples player exert his or her Man, and there is none
+					put("bow", "11_89");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -55,18 +91,84 @@ public class Card_12_058_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void CountlessCompaniesTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	// Ketura on Q-0034: an optional action with no cost whose whole effect would do nothing is not offered.  Once
+	// the discarded possession is stacked here it is no longer in the discard pile, and a second use of the
+	// Response for the same discard would stack nothing.  The game used to offer it again each time it was taken,
+	// for as long as the player went on taking it (F-0357).
+	@Test
+	public void OnceTheDiscardedPossessionIsStackedHereTheResponseIsNotOfferedForItAgain() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetResponseScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var vengeance = scn.GetFreepsCard("vengeance");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToHand(vengeance);
+
+		var companies = scn.GetShadowCard("companies");
+		var corps = scn.GetShadowCard("corps");
+		var dagger = scn.GetShadowCard("dagger");
+		scn.MoveCardsToSupportArea(companies);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(corps);
+		scn.AttachCardsTo(corps, dagger);
+		// Nobody is assigned to the Corps, so it is in play when the regroup phase starts.
+		scn.SkipToPhase(Phase.REGROUP);
+
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		assertAttachedTo(dagger, corps);
+		assertEquals(0, scn.GetStackedCards(companies).size());
+
+		// The Corps is discarded, and the dagger it bore is discarded from play with it
+		scn.FreepsPlayCard(vengeance);
+		assertInZone(Zone.DISCARD, corps, dagger);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(companies));
+
+		scn.ShadowAcceptOptionalTrigger();
+		assertInZone(Zone.STACKED, dagger);
+		assertEquals(1, scn.GetStackedCards(companies).size());
+		assertTrue(scn.GetStackedCards(companies).contains(dagger));
+
+		// Nothing is left in the discard pile for the Response to stack, and it is the Shadow player's turn to
+		// act in the regroup phase
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(companies));
+		assertInZone(Zone.DISCARD, corps);
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+	}
+
+	// "Remove (1) to play a possession stacked here as if from hand": a play as an effect is treated as a cost,
+	// so the pool must pay for the removal and the possession together (F-0046, F-0141).  The definition did not
+	// count the (1) it removes: with exactly the possession's cost in the pool the ability was offered, took the
+	// token and played nothing.
+	// F-0452.
+	@Test
+	public void ThePoolMustPayForTheRemovalAndTheStackedPossessionTogether() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetStackedBowScenario();
+
+		var companies = scn.GetShadowCard("companies");
+		var corps = scn.GetShadowCard("corps");
+		var bow = scn.GetShadowCard("bow");
+		scn.MoveCardsToSupportArea(companies);
+		scn.StackCardsOn(companies, bow);
+
+		scn.StartGame();
+		scn.FreepsPass();
+		scn.MoveMinionsToTable(corps);
+
+		// (2) in the pool: enough for the Bow or for the removal, not for both.
+		scn.SetTwilight(2);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(companies));
+
+		scn.SetTwilight(3);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.ShadowActionAvailable(companies));
+		scn.ShadowUseCardAction(companies);
 
 		assertEquals(0, scn.GetTwilight());
+		assertAttachedTo(bow, corps);
+		assertEquals(0, scn.GetStackedCards(companies).size());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

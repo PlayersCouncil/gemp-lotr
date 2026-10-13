@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
@@ -28,7 +29,17 @@ public class RemoveThreats implements EffectAppenderProducer {
 
         String memorize = "_temp";
 
-        MultiEffectAppender result = new MultiEffectAppender();
+        MultiEffectAppender result = new MultiEffectAppender() {
+            // With no threat to remove, or none that may be removed, it does nothing.  How many it would
+            // remove is not worked out.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                final LotroGame game = actionContext.getGame();
+                if (game.getGameState().getThreats() == 0 || !game.getModifiersQuerying().canRemoveThreat(game, actionContext.getSource()))
+                    return EffectForecast.NOTHING;
+                return EffectForecast.UNKNOWN;
+            }
+        };
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

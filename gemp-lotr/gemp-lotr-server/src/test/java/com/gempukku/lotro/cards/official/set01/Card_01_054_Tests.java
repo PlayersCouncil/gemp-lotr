@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_01_054_Tests
@@ -19,6 +20,21 @@ public class Card_01_054_Tests
 				{{
 					put("card", "1_54");
 					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetRevealScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("mallorn", "1_54");
+					put("haldir", "1_48");      // Haldir, Elf of the Golden Wood: an [elven] companion, held in hand
+					put("elf", "1_53");         // Lórien Elf: another [elven] companion, held in hand
+					put("guard", "1_7");        // Dwarf Guard: a [dwarven] companion, the card in hand that is not [elven]
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -53,6 +69,49 @@ public class Card_01_054_Tests
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
+	}
+
+	// F-0420 (Ketura on Q-0034: an optional action with no cost that would do nothing is not offered; on this card,
+	// 2026-10-11: "Yeah that looks like a reasonable fix").  "Fellowship: Reveal an [elven] card from hand and
+	// place it beneath your draw deck": with no [elven] card in hand there is nothing to reveal or to place.
+	@Test
+	public void TheAbilityIsNotOfferedWithNoElvenCardInHandAndWithOnePlacesTheCardRevealedBeneathTheDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetRevealScenario();
+
+		var mallorn = scn.GetFreepsCard("mallorn");
+		var haldir = scn.GetFreepsCard("haldir");
+		var elf = scn.GetFreepsCard("elf");
+		var guard = scn.GetFreepsCard("guard");
+		scn.MoveCardsToSupportArea(mallorn);
+		scn.MoveCardsToHand(guard);
+
+		scn.StartGame();
+
+		// A card in hand, and it is [dwarven].
+		assertEquals(1, scn.GetFreepsHandCount());
+		assertFalse(scn.FreepsActionAvailable(mallorn));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// Two [elven] cards beside it.
+		scn.MoveCardsToHand(haldir, elf);
+		scn.FreepsRefreshDecision();
+		assertTrue(scn.FreepsActionAvailable(mallorn));
+		scn.FreepsUseCardAction(mallorn);
+
+		assertTrue(scn.FreepsHasCardChoiceAvailable(haldir, elf));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(guard));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		scn.FreepsChooseCard(haldir);
+
+		// Revealed: the Shadow player is shown it.  Then it lies beneath the draw deck.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(haldir, false));
+		assertEquals(1, scn.ShadowGetTotalRevealedCardCount());
+		scn.ShadowDismissRevealedCards();
+
+		assertEquals(haldir, scn.GetFreepsBottomOfDeck());
+		assertInHand(guard, elf);
+		assertEquals(2, scn.GetFreepsHandCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

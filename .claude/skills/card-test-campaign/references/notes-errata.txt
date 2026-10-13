@@ -1,0 +1,76 @@
+(THIS PHASE IS FINISHED. One thing below no longer holds: since Q-0213, 2026-10-10, no card is given a culture or a race by hand; see the Card Test Standard, check F. In notes-rtmd, 92_24's test is now three copies in play and the fourth played.)
+
+These are PC ERRATA: sets 51 to 69, each a revision of a Decipher card (51_x of 1_x, 68_x of 18_x and so on). Hindering and beacons will seldom concern you: an errata card's tests need no hindered card unless its text speaks of one, or the erratum's own change is to the words "you can spot" (from "in play", "in the fellowship" and the like): there one hindered candidate that adds nothing is what shows the change (Anduin Banks 61_227). It is owed nowhere else, and no landed card is reopened for it.
+
+WHAT TO READ. Your role file names the skill files to read in full. Everything the earlier V-set and errata batches settled (Ketura's rulings and the shapes of text they fixed, with what the engine now does) is listed in .claude/skills/card-test-campaign/references/rulings-index.md, which you read in full; `lookup.py <number or words>` prints an entry. The answer to any Q- number is under it in /mnt/user-data/outputs/card-tests/questions.md. These notes are only what is particular to the errata phase, and how to work.
+
+WHAT IS PARTICULAR TO THE ERRATA.
+- The text. The packet gives the card's text from the master errata sheet, matched by the definition's revision number, and the definition's own game text. The sheet is about 95% accurate (some rows were proposed and never released): read test-generation's paragraph on PC cards and the rulings log's "Revisions" entry before calling a difference a finding. A worked errata example: The Dark Lord Advances 53_87 (ledger /mnt/user-data/outputs/card-tests/ledgers/53/53_87.txt, Card_53_087 test file).
+- The Decipher original (the same number in sets 1 to 19) is NOT yours: its tests come in a later phase. Read its definition, because an erratum is usually the original with a few words changed and the definition is often a copy with the change made. Test the erratum's WHOLE text, not only what changed. Where a finding on your card is also true of the original (the same lines in its definition), say so in the finding and give the original's id; write nothing in the original's files.
+- Tests that were switched off (F-0006). Twenty-six errata test classes have every @Test commented out: 53_108, 53_113, 54_192, 54_304, 57_49, 57_96, 57_359, 58_1, 58_24, 58_102, 60_2, 60_91, 61_31, 61_100, 61_114, 61_132, 61_227, 61_249, 65_15, 65_62, 68_12, 68_29, 68_79, 68_112, 68_136, 68_139. Treat such a file as having no tests: read what the commented tests reached for (they may be of an earlier revision), write the file from the packet, and say in the ledger's Dropped line what the old comments asserted that the new tests do not. 57_359 and a few others have since gained a live test or two from engine work: keep what such a test asserts.
+- (68_50, once listed here as waiting on F-0041, landed on 2026-10-09 as a required trigger: its released text has no "you may", F-0297.)
+- A Decipher RULING on the original (the packet lists it because the title matches). Where the erratum still has the sentence the ruling is about, the ruling binds and is an R clause as usual. Where the erratum REWROTE that sentence, the ruling does not reach it by default (Ketura on Q-0111, Dwarven Axe 51_9: "our errata is our own set of rulings"): assert what the erratum's own text gives, write no R clause, park nothing. BUT she wants to hear of each one ("do bring it up when it happens, because I sense that there are some where we agree with the ruling"): report it under `questions` in one or two sentences headed "Decipher ruling not carried over (default B of Q-0111)", with the ruling's words, the erratum's sentence and what a test would read if the ruling were kept. A rules EXAMPLE that merely names the card (the Rule of 9 example naming Dwarf Guard) is not a ruling on it: a line in Notes, no clause.
+- When to read the original's definition: in stage 2 only, with the erratum's own (stage 1 is planned from the text with every implementation shut, the original's included). `packet.py <id> --with-test` prints it, under "The original as defined". It is there to compare against, not a step of its own: where the erratum's definition is not what the text led you to expect, or you have a finding, see whether the original has the same lines and say so. With no finding and no doubt on a card there is nothing to do with it and nothing to report (err-b60_68).
+- (F-0198, Trapped and Alone 53_72: fixed at landing on 2026-10-08.)
+- A CR 4.2 "Clarification" on the original that only restates the original's printed text, where the erratum rewrote that sentence: a line in Sources, no clause, no question (Saruman's Snows 51_138). A CR 4.2 "Erratum" entry on the original is the same: it is Decipher's corrected text of the original and no ruling, so where the PC erratum rewrote the sentence it is a line in Sources and nothing is reported under Q-0111 (Gil-galad 68_12).
+- An old test's scenario may name a batch card's original as filler (the old 51_154 test had 1_157): drop it without reading its definition. A grep of the `gametext:` lines across cards in stage 1 shows the originals' printed text; that is allowed (it is the printed card, not its implementation), but say so in the plan.
+- OPEN with Ketura, F-0205: a "the Free Peoples player must X or discard the top N cards of their draw deck" built with `forced: false` on the discard (the originals are forced), so Frodo 4_301 / 19_28 ("Shadow cards may not discard ... from the top of your draw deck") do not stop it. On such a card (51_265, 52_43 and others): assert the game as it is in the active tests, park one test of the forced reading on F-0205 (the 51_150 and 51_160 tests are examples), and do not report it again. A discard the Free Peoples player MAY pay to prevent something is rightly unforced: no test needed. F-0205 concerns Shadow CARDS only: where the source is a site, the Frodos (filter side(shadow)) cannot reach it under either build, so no F-0205 test applies.
+- The stats header's "Set:" line keeps the convention of the existing errata files: the ORIGINAL's set number ("Set: 1" for 51_x).
+- A "you may" that is built as a required trigger whose choice is 0 to 1 is no finding (Q-0010): read O as a choice with a minimum of 0, decline it, and read everything as it was. Such a trigger is ordered against the skirmish's wounds in a "Required responses" decision each time: `FreepsResolveRuleFirst()`.
+- Helper for wounding a minion in the middle of another character's skirmish from the Free Peoples side: Men of Numenor 5_37 (Skirmish event, cost 0: "wound a minion bearing a [gondor] fortification") with City Wall 5_33 cheated onto the minion (it also makes the bearer strength -3).
+- Where an erratum exists ONLY to work round an engine fault that has since been fixed (Northern Ithilien 57_359 is one: Ketura will revert it), test the card as it is written and note it; do not raise it.
+- The Decipher original of ANOTHER card in your batch is shut too until that card's stage 2: do not pick it as a helper for an earlier card, and do not print its definition (neighbouring cards of one culture make each other's originals the obvious helpers). If it happens, say so in your report and in both ledgers' Notes, as the 51_53 author did.
+- For the author of Grima, Wormtongue 54_154 when set 54 comes up: engine pass 13 gave it `hasAttachedCount(3,any,override(hindered))` and one test (F-0188). Left for you to read against the text and raise if it departs: the definition takes the "3 or more cards" branch whenever ANY unbound companion bears 3 cards, with or without a weapon, and then a weapon on a companion bearing fewer cannot be chosen; the text ("hinder a weapon borne by an unbound companion (or all Free Peoples cards borne by that companion if they are bearing 3 or more)") reads as about the companion whose weapon is chosen. Its stats test's header comment says "possession" where the text says "weapon".
+
+HOW TO WORK, since 2026-10-07 (a usage limit cut two authors off mid-batch and their work had to be pieced together): take the cards ONE AT A TIME. The blind packets of all your cards may be read together, as your role file says; from there finish a card completely (plan, stage 2, test file, ledger, lint, run) before the next card's stage 2 is opened, and after each card append one line to /home/claude/work/analysis/progress/<your batch folder>.txt (create it): the card id, its state, its test count, and each finding or question in a sentence. If your notes say a previous run on this batch was cut off, read that progress file, the plans it names and the files in the tree first, check what is there, and go on from it; do not start a finished card again.
+
+Race against culture (F-0019; reviewers found this gap in four of the last six cards). Where the card names a race
+("an Elf", "a Dwarf", "Uruk-hai"), put on the invalid side a character of that race's culture who is not of the
+race: give a Man the [elven] culture with an ad hoc IsAdditionalCultureModifier (precedent: Card_01_063_ErrataTests),
+or use an [elven] non-character card where only a count is read. Without it, culture(elven) for elf passes every test.
+
+No two cards of one unique title in play at once, whatever their types (Ketura, 2026-10-08: "putting 2 unique
+cards on the table is getting too far into the weeds"). Not two Boromirs, and not Elrond the ally beside Elrond
+the companion: each version goes on its own board. Cheats short-circuit legitimate setups only.
+
+"Limit 1 per bearer" lists L (as on 101_27, 103_57, 51_282). Its valid control is a bearer carrying another card of
+the same culture and type, offered.
+
+Settled at landing on 2026-10-08 (shapes to follow): an event or ability whose every branch is "exert/pay X to Y"
+is not offered when no branch's cost can be paid; a choice of cost-to-effect branches without a requires for this
+is a finding (F-0222). "<do> a companion for each <thing>" lets the player spread the actions over several cards
+(CR 4.2 "for each"): built as `times` on one choice it is a finding (F-0224); the right shape is a repeat round a
+single choice (12_99, 17_128).
+
+Ketura, 2026-10-08: a backslash in a title, lore or game text is the nanDECK newline shorthand. Replace it with a
+space in the definition when you meet it; it is no finding and needs no report.
+
+Forced discards (F-0205, ruled): where the Free Peoples player chooses between a discard and another penalty, the
+discard is `forced: false` and right. A Shadow card that makes him discard from hand or the top of his deck with no
+choice must be `forced: true` (so Frodo, Courteous Halfling 4_301 stops it): check the flag on such cards.
+
+Ever My Heart Rises 54_46 asks "how many times" and discards 5 for each: deliberate (Q-0124, answered B on
+2026-10-08, for this card, Beneath the Mountains and Realm of Dwarrowdelf only). Test it as built; no finding.
+
+Boards outside play (Ketura, 2026-10-08): do not give a card a race, type or side that no printed card of that side
+can have, only to put a candidate on the table (a Shadow minion made an Elf to stand for "the opponent's Elf"). For
+a bare race word, the opponent's valid candidate exists only where his card of that race can be active on your turn
+(an opponent's Man minion for "a Man", Q-0058); otherwise say in Notes that none can be. Giving a card another
+culture for race against culture (F-0019) is ruled and stays.  Nor make a bearer a race and culture he is not so that a
+weapon no card of his kind can bear goes on him (an Elf made a [gondor] Man to bear a [gondor] bow): when every
+legal candidate shares a word, say so in Notes; that word cannot differ in play.
+
+Settled, Q-0134 (2026-10-08): "(limit (N))" and "(limit -N)" on a count inside an effect are the card's limit for
+the whole phase, like "(limit +N)" (F-0135). An ability built as a cap on each use is a finding (fixable at landing
+where a cardPhaseLimit wrapper does it; an engine finding where it does not, as Uruk Regular's cost discount,
+F-0245). An event is one card played once, so the two readings agree there. Legolas 54_73 loses his limit (new
+revision coming).
+Reports that need no answer (a Decipher ruling not carried over, under Q-0111's default B, and the like) are
+findings, not questions (Ketura, 2026-10-08): report them as a finding of kind "ruling", saying no answer is needed.
+
+"(limit X)" where X is the amount paid for that use (Merry's Sword 57_242, Q-0141) caps that use only: unlike a
+printed "(limit (N))" (Q-0134), it is not a whole-phase limit. A "for each <thing> you spot" count spots them all,
+without asking how many.
+- Where the erratum's effects and its old test follow a ruling on the original AGAINST the erratum's own displayed text, look first for a later revision of the erratum (the master sheet may have a row of a higher revision than the definition's `revision:`, which the packet prints under "A later row of the sheet"; shapes.md, F-0294, Shadowfax 67_24). If there is none it is a question, with the game's reading active and the text's parked.
+- A question or finding that calls a departure from the original deliberate, or an oversight, says what the file's history shows: `git log --oneline -S"<the line>" -- <the .hjson file>`. (On 61_114 an `optional: false` read as a deliberate change of one word was the old default written out by the mass edit of 2024-11-08.)
+- A listing of helper cards across a set skips your batch's ids and their originals: neighbouring cards of one culture make each other's originals the obvious helpers, and those files are shut. `packet.py --find "<regex>" --skip <your ids>` makes such a listing from what is printed on the cards (id, culture, type, race, numbers, keywords, game text) and leaves those out; `packet.py --defs <helper ids> --skip <your ids>` prints the helpers' definitions without cardInfo and lore.

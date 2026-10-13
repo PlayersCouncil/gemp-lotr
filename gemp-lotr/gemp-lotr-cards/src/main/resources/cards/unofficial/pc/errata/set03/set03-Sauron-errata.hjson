@@ -1,10 +1,10 @@
 {
 	53_87: {
 		cardInfo: {
-			//id: 3_87.1
+			//id: 53_87.1
 			parent: 3_87
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN03E087.1.jpg
 			collInfo: 3C87
@@ -12,10 +12,11 @@
 		}
 		title: The Dark Lord Advances
 		unique: false
-		culture: sauron
+		side: Shadow
+		culture: Sauron
 		twilight: 2
-		type: event
-		timeword: regroup
+		type: Event
+		timewords: Regroup
 		effects: {
 			type: event
 			cost: {
@@ -40,32 +41,44 @@
 				}
 				{
 					type: ChooseCardsFromDrawDeck
-					select: choose(minion,MaxTwilight(memory(revealedCard)))
+					select: choose(minion,MaxTwilight(memory(revealedTwilightCost)))
 					memorize: chosenCard
+					count: 0-1
 					text: Choose a minion to take into hand from your draw deck
 					showAll: true
 				}
 				{
-					type: preventable
-					player: freeps
-					cost: {
-						type: discardfromhand
-						hand: freeps
+					type: If
+					check: {
+						type: HasCardInMemory
+						memory: chosenCard
+					}
+					true: {
+						type: preventable
 						player: freeps
-						forced: false
-						count: {
-							type: fromMemory
-							memory: twilightCostInMemory
+						cost: {
+							type: discardfromhand
+							hand: freeps
+							player: freeps
+							forced: false
+							count: {
+								type: fromMemory
+								memory: revealedTwilightCost
+							}
+						}
+						text: Discard {revealedTwilightCost} cards from hand to prevent your opponent taking {chosenCard} into hand from their draw deck
+						effect: {
+							type: PutCardsFromDeckIntoHand
+							select: memory(chosenCard)
+							reveal: true
+							shuffle: false
+							showAll: false
 						}
 					}
-					text: Discard {twilightCostInMemory} cards from hand to prevent your opponent taking {chosenCard} into hand from their draw deck
-					effect: {
-						type: PutCardsFromDeckIntoHand
-						select: memory(chosenCard)
-						reveal: true
-						shuffle: false
-						showAll: false
-					}
+				}
+				# The draw deck has been looked through, so it is reshuffled, whether or not the card was taken.
+				{
+					type: shuffleDeck
 				}
 			]
 		}
@@ -82,10 +95,10 @@
 	
 	53_88: {
 		cardInfo: {
-			//id: 3_88.1
+			//id: 53_88.1
 			parent: 3_88
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN03E088.1.jpg
 			collInfo: 3U88
@@ -93,15 +106,26 @@
 		}
 		title: Get Off the Road!
 		unique: false
-		culture: sauron
+		side: Shadow
+		culture: Sauron
 		twilight: 0
-		type: event
-		timeword: maneuver
-		keyword: [
-			search
+		type: Event
+		timewords: Maneuver
+		keywords: [
+			Search
 		]
 		effects: {
 			type: event
+			requires: [
+				{
+					type: canSpot
+					filter: culture(sauron)
+				}
+				{
+					type: canSpot
+					filter: nazgul
+				}
+			]
 			effect: {
 				type: If
 				check: [
@@ -112,6 +136,10 @@
 					{
 						type: canSpot
 						filter: nazgul
+					}
+					{
+						type: canSpotBurdens
+						amount: 1
 					}
 				]
 				true:	{
@@ -127,17 +155,20 @@
 					}
 					text: Make the move limit -1 to prevent exerting a companion for each burden
 					effect: {
-						type: exert
-						player: freeps
+						type: repeat
 						times: {
 							type: ForEachBurden
 						}
-						select: choose(companion)
+						effect: {
+							type: exert
+							player: freeps
+							select: choose(companion)
+						}
 					}
 				}
 			}
 		}
-		gametext: <b>Search.</b><b>Spot a [sauron] card and a Nazgul to make the Free Peoples player exert a companion for each burden you can spot.  The Free Peoples player may make the move limit -1 to prevent this.
+		gametext: <b>Search.</b><br>Spot a [sauron] card and a Nazgul to make the Free Peoples player exert a companion for each burden you can spot.  The Free Peoples player may make the move limit -1 to prevent this.
 		lore: "'The Morgul-lord and his Black Riders have come forth. War is preparing!'"
 		promotext: ""
 		alts: {
@@ -213,10 +244,10 @@
 	
 	53_90: {
 		cardInfo: {
-			//id: 3_90.2
+			//id: 53_90.2
 			parent: 3_90
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 2
 			image: errata/LOTR-EN03E090.2_card.jpg
 			collInfo: 3C90
@@ -228,7 +259,7 @@
 		culture: Sauron
 		twilight: 0
 		type: Event
-		timeword: maneuver
+		timewords: Maneuver
 		effects: {
 			type: event
 			requires: {
@@ -242,7 +273,7 @@
 			effect: [
 				{
 					type: ChooseActiveCards
-					select: choose(companion,not(ring-bearer))
+					select: choose(companion,not(ring-bearer),or(not(exhausted),hasAttached(possession)))
 					memorize: chosenComp
 					text: Choose a companion (except the Ring-bearer) to exert and have a borne possession discarded.
 				}
@@ -289,10 +320,10 @@
 	
 	53_91: {
 		cardInfo: {
-			//id: 3_91.1
+			//id: 53_91.1
 			parent: 3_91
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN03E091.1.jpg
 			collInfo: 3R91
@@ -300,10 +331,11 @@
 		}
 		title: His Cruelty and Malice
 		unique: false
-		culture: sauron
+		side: Shadow
+		culture: Sauron
 		twilight: 1
-		type: condition
-		keyword: [
+		type: Condition
+		keywords: [
 			Support Area
 		]
 		effects: {
@@ -356,23 +388,6 @@
 						}
 					]
 				}
-				{
-					type: choice
-					texts: [
-						Exert {chosenMinion}
-						Discard {chosenMinion}
-					]
-					effects: [
-						{
-							type: exert
-							select: memory(chosenMinion)
-						}
-						{
-							type: discard
-							select: choose(culture(sauron),minion)
-						}
-					]
-				}
 				
 				
 			]
@@ -390,10 +405,10 @@
 	
 	53_92: {
 		cardInfo: {
-			//id: 3_92.1
+			//id: 53_92.1
 			parent: 3_92
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN03E092.1.jpg
 			collInfo: 3U92
@@ -401,10 +416,11 @@
 		}
 		title: Massing in the East
 		unique: false
-		culture: sauron
+		side: Shadow
+		culture: Sauron
 		twilight: 1
-		type: event
-		timeword: regroup
+		type: Event
+		timewords: Regroup
 		effects: {
 			type: event
 			cost: {
@@ -426,8 +442,12 @@
 					memorize: chosenMinions
 					text: Choose minions to return to hand
 					count: {
-						type: fromMemory
-						memory: raceCount
+						type: range
+						from: 0
+						to: {
+							type: fromMemory
+							memory: raceCount
+						}
 					}
 				}
 				{
@@ -462,6 +482,7 @@
 		}
 	}
 	
+	# History: revision 1 (errata sheet date 2023.01.11, batch "04: 2022 Yuletide").
 	# 53_103: {
 	# 	cardInfo: {
 	# 		imagePath: errata/LOTR-EN03E103.1.jpg
@@ -564,6 +585,7 @@
 	# 	}
 	# }
 	
+	# History: revision 2 (errata sheet date 2024.04.21, batch "07: 2023 Yuletide").
 	# 53_103: {
 	# 	cardInfo: {
 	# 		imagePath: errata/LOTR-EN03E103.2_card.jpg
@@ -639,6 +661,7 @@
 	# 		}
 	# 	}
 	# }
+	# History: revision 3 (errata sheet date 2024.09.14, batch "08: 2024 Pre-WC").
 	# 53_103: {
 	# 	cardInfo: {
 	# 		imagePath: errata/LOTR-EN03E103.3_card.jpg
@@ -706,11 +729,11 @@
 	
 	53_103: {
 		cardInfo: {
-			//id: 3_103.3
+			//id: 53_103.4
 			parent: 3_103
 			variant: ERRATA
 			variantPath: errata/pc
-			revision: 3
+			revision: 4
 			image: errata/LOTR-EN03E103.4_card.jpg
 			collInfo: 3R103
 			rarity: R
@@ -744,7 +767,7 @@
 				cost: {
 					type: Discard
 					player: freeps
-					select: choose(companion,not(ring-bearer),not(bearer))
+					select: choose(companion,not(ring-bearer),not(memory(target)))
 				}
 			}
 		}
@@ -761,10 +784,10 @@
 	
 	53_104: {
 		cardInfo: {
-			//id: 3_104.1
+			//id: 53_104.1
 			parent: 3_104
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN03E104.1.jpg
 			collInfo: 3R104
@@ -772,10 +795,11 @@
 		}
 		title: Tower of Barad-dur
 		unique: false
-		culture: sauron
+		side: Shadow
+		culture: Sauron
 		twilight: 1
-		type: condition
-		keyword: [
+		type: Condition
+		keywords: [
 			Support Area
 		]
 		
@@ -789,7 +813,7 @@
 			}
 			{
 				type: Trigger
-				optional: true
+				optional: false
 				trigger: {
 					type: moves
 				}

@@ -178,8 +178,8 @@ public class Card_V1_061_Tests
 		scn.SkipToPhase(Phase.REGROUP);
 		assertEquals(5, (long)scn.GetCurrentSite().getSiteNumber());
 		scn.FreepsPlayCard(pathfinder); //ensure that it counts as "ours"
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		scn.ShadowDeclineReconciliation();
 		scn.FreepsChooseToMove();
 		assertEquals("Lorien Throne Room", scn.GetCurrentSite().getBlueprint().getTitle());

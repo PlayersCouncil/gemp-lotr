@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_15_043_Tests
@@ -19,7 +20,21 @@ public class Card_15_043_Tests
 				new HashMap<>()
 				{{
 					put("card", "15_43");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetSkirmishScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("gollum", "15_43");
+					// Gimli, Son of Glóin: strength 6, which is not the Ring-bearer's; his skirmish ability is
+					// not used
+					put("gimli", "1_13");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -59,18 +74,33 @@ public class Card_15_043_Tests
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GollumTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void AtTheStartOfASkirmishInvolvingGollumHeGainsTheRingBearersStrength() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetSkirmishScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var frodo = scn.GetRingBearer();
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCompanionsToTable(gimli);
+
+		var gollum = scn.GetShadowCard("gollum");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(gollum);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gimli, gollum);
 
-		assertEquals(2, scn.GetTwilight());
+		// Assigned, and his skirmish not yet begun: no strength is printed on him.
+		assertTrue(scn.FreepsAwaitingSkirmishChoice());
+		assertEquals(0, scn.GetStrength(gollum));
+		// 3, and 1 for The Ruling Ring
+		assertEquals(4, scn.GetStrength(frodo));
+		assertEquals(6, scn.GetStrength(gimli));
+
+		// The Ring-bearer's strength, not that of the companion he fights.
+		scn.FreepsResolveSkirmish(gimli);
+		assertEquals(4, scn.GetStrength(gollum));
+		assertEquals(4, scn.GetStrength(frodo));
+		assertEquals(6, scn.GetStrength(gimli));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 }

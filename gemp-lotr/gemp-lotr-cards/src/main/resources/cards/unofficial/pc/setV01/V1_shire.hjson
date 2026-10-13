@@ -20,6 +20,14 @@
 		vitality: 3
 		effects: [
 			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: companion,signet(Frodo)
+					count: 2
+				}
+			}
+			{
 				type: activated
 				phase: fellowship
 				requires: {
@@ -107,6 +115,7 @@
 		}
 	}
 	
+	# History: revision 0, the card as first released in V1 (not in the errata sheet, so no date). Its game text, from the V1 sheet: Assignment: Exert Merry 3 times to prevent a minion from being assigned to a skirmish until the regroup phase.  The Shadow player may exhaust that minion to prevent this.
 	# 101_52: {
 	# 	title: Merry
 	# 	subtitle: Of Buckland
@@ -156,8 +165,8 @@
 
 	101_52: {
 		cardInfo: {
-			//id: 101_52.2
-			revision: 2
+			//id: 101_52.1
+			revision: 1
 			image: sets/vset1/LOTR-ENV1E052.1_card.jpg
 			collInfo: V1R52
 			rarity: R
@@ -440,7 +449,7 @@
 				}
 			}
 		]
-		gametext: Each time a companion with the Frodo signet wins a skirmish, you may spot Frodo to heal that companion.\Response: If Frodo is killed, make Sam the Ring-bearer (resistance 5).
+		gametext: Each time a companion with the Frodo signet wins a skirmish, you may spot Frodo to heal that companion. Response: If Frodo is killed, make Sam the Ring-bearer (resistance 5).
 		lore: "'Don't turn me into anything... unnatural.'" 
 		promotext: ""
 		alts: {

@@ -52,13 +52,19 @@
 				type: modifier
 				modifier: {
 					type: modifyCost
-					requires: {
-						type: not
-						requires: {
-							type: playedCardThisPhase
-							filter: hunter,minion
+					requires: [
+						{
+							type: phase
+							phase: shadow
 						}
-					}
+						{
+							type: not
+							requires: {
+								type: playedCardThisPhase
+								filter: hunter,minion
+							}
+						}
+					]
 					filter: hunter,minion
 					amount: -2
 				}
@@ -226,7 +232,8 @@
 		effects: [
 			{
 				type: Trigger
-				optional: false
+				optional: true
+				player: shadow
 				trigger: {
 					type: transferred
 					filter: follower

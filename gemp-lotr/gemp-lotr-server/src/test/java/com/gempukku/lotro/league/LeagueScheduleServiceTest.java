@@ -1,7 +1,7 @@
 package com.gempukku.lotro.league;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.gempukku.lotro.at.AbstractAtTest;
+import com.gempukku.lotro.framework.LoadedLibraries;
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.common.DateUtils;
@@ -22,7 +22,7 @@ import java.util.Random;
 
 import static org.junit.Assert.*;
 
-public class LeagueScheduleServiceTest extends AbstractAtTest {
+public class LeagueScheduleServiceTest extends LoadedLibraries {
     private LeagueDAO _leagueDao;
     private LeagueService _leagueService;
     private LeagueScheduleDAO _scheduleDao;

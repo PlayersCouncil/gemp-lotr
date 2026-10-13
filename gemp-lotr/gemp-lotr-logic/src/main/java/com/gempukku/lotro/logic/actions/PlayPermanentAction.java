@@ -19,8 +19,11 @@ public class PlayPermanentAction extends AbstractCostToEffectAction {
 
     private boolean _cardRemoved;
 
-    private Effect _playCardEffect;
+    private PlayCardEffect _playCardEffect;
     private boolean _cardPlayed;
+
+    private boolean _playCompleted;
+    private boolean _cardStayedInPlay;
 
     private boolean _cardDiscarded;
 
@@ -30,6 +33,8 @@ public class PlayPermanentAction extends AbstractCostToEffectAction {
     private final Zone _fromZone;
     private final Zone _toZone;
     private PhysicalCard _playedFromCard;
+
+    private boolean _deckLookedThrough;
 
     public PlayPermanentAction(PhysicalCard card, Zone zone, int twilightModifier, boolean ignoreRoamingPenalty) {
         _permanentPlayed = card;
@@ -45,6 +50,18 @@ public class PlayPermanentAction extends AbstractCostToEffectAction {
 
         _fromZone = card.getZone();
         _toZone = zone;
+    }
+
+    /**
+     * Says that the player has looked through the draw deck this card is being played from.  The look is over once
+     * the card has been taken out of the deck, and that is when the deck is reshuffled (CR 4.2 "draw deck": "When you
+     * finish looking through it, reshuffle it"): before the card is paid for, and so before the card's own text or
+     * anything else answers its play.  A card played from a deck that nobody has said was looked through leaves the
+     * rest of the deck in order: a card revealed from the top or the bottom of a deck and then played, and the cards
+     * of a starting fellowship, whose deck is shuffled once the last of them is down.
+     */
+    public void setDeckLookedThrough() {
+        _deckLookedThrough = true;
     }
 
     @Override
@@ -75,6 +92,10 @@ public class PlayPermanentAction extends AbstractCostToEffectAction {
                 game.getGameState().addCardToZone(game, _permanentPlayed, Zone.VOID_FROM_HAND);
             else
                 game.getGameState().addCardToZone(game, _permanentPlayed, Zone.VOID);
+            if (playedFromZone == Zone.DECK && _deckLookedThrough) {
+                game.getGameState().sendMessage(_permanentPlayed.getOwner() + " shuffles their deck");
+                game.getGameState().shuffleDeck(_permanentPlayed.getOwner());
+            }
         }
 
         if (!_discountResolved) {
@@ -97,6 +118,15 @@ public class PlayPermanentAction extends AbstractCostToEffectAction {
             insertCost(new PayTwilightCostEffect(_permanentPlayed, _twilightModifier, _ignoreRoamingPenalty));
         }
 
+        // The card has been placed: its own text on entering play is given its turn, and then its play is
+        // announced, each once everything that answered the step before has finished and whatever else has
+        // happened meanwhile.
+        if (_cardPlayed) {
+            Effect step = _playCardEffect.nextStep();
+            if (step != null)
+                return step;
+        }
+
         if (!isCostFailed()) {
             Effect cost = getNextCost();
             if (cost != null)
@@ -111,6 +141,8 @@ public class PlayPermanentAction extends AbstractCostToEffectAction {
             Effect effect = getNextEffect();
             if (effect != null)
                 return effect;
+
+            completePlay(game);
         } else {
             if (!_cardDiscarded) {
                 _cardDiscarded = true;
@@ -122,7 +154,26 @@ public class PlayPermanentAction extends AbstractCostToEffectAction {
         return null;
     }
 
+    /**
+     * The last step of playing a card (CR 4.2 "playing a card": "The card is played. ... other cards are in play").
+     * It is reached once every response to the play has finished, and is where the play is judged: a card that has
+     * left play by now, by whatever means, was not played (and its play was never announced if the card had
+     * already gone when it came to be).
+     */
+    private void completePlay(LotroGame game) {
+        if (!_playCompleted) {
+            _playCompleted = true;
+            _cardStayedInPlay = _playCardEffect.completePlay(game);
+        }
+    }
+
+    /**
+     * Whether this play happened, for whatever depends on it: an ability whose cost was to play the card, an "if
+     * you do".  It did only if the card is still in play when its play is complete, that is after every response
+     * to it has finished.  The twilight and whatever else was paid to play the card stay paid either way.
+     */
+    @Override
     public boolean wasCarriedOut() {
-        return _cardPlayed && _playCardEffect != null && _playCardEffect.wasCarriedOut();
+        return _playCompleted && _cardStayedInPlay;
     }
 }

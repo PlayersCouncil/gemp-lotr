@@ -31,7 +31,7 @@ public class MemorizeTopOfDeck implements EffectAppenderProducer {
         if (memory == null)
             throw new InvalidCardDefinitionException("Memory is required for a Memorize effect.");
 
-        return new DelayedAppender() {
+        return new BookkeepingAppender() {
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                 Evaluator evaluator = countSource.getEvaluator(actionContext);

@@ -8,17 +8,31 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_08_050_Tests
 {
 
+	// The Shadow phase of every test is at site 2 of the Fellowship path, shadow number 2, where a minion of
+	// site number 4 pays 2 more for roaming.  With Frodo alone the pool there is 3 plus whatever was set.
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("blacksails", "8_50");
-					put("corsair", "8_53");
+					put("sails1", "8_50");
+					put("sails2", "8_50");
+					// Corsair Buccaneer: a corsair, cost 3, site number 4.  When played, may remove a threat to add
+					// tokens: with no threat to remove it asks nothing.
+					put("buccaneer", "8_53");
+					// Corsair Gunners: a corsair, cost 5, site number 4.  A skirmish ability and nothing on being played.
+					put("gunners", "8_55");
+					// Corsair Plunderer: a corsair, cost 2.  Only ever in hand here.
+					put("plunderer", "8_58");
+					// Easterling Axeman: a [raider] minion that is no corsair, cost 2.  Its text needs 2 burdens.
+					put("axeman", "4_224");
+					// Corsair War Galley: a [raider] possession with Corsair in its title, and no corsair.  Cost 1.
+					put("galley", "8_59");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -43,7 +57,7 @@ public class Card_08_050_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("blacksails");
+		var card = scn.GetFreepsCard("sails1");
 
 		assertEquals("Black Sails of Umbar", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -56,227 +70,275 @@ public class Card_08_050_Tests
 	}
 
 	@Test
-	public void BlackSailsOnPlayAdds1Token() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void PlayedForTwoToTheSupportAreaAndATokenMayBeAddedHere() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var blacksails = scn.GetShadowCard("blacksails");
-		scn.MoveCardsToHand(blacksails);
+		var inPlay = scn.GetShadowCard("sails1");
+		var played = scn.GetShadowCard("sails2");
+		scn.MoveCardsToSupportArea(inPlay);
+		scn.MoveCardsToHand(played);
 
 		scn.StartGame();
-		scn.SkipToPhase(Phase.SHADOW);
+		scn.FreepsPass();
 
-		assertTrue(scn.ShadowPlayAvailable(blacksails));
-		scn.ShadowPlayCard(blacksails);
+		// 1 companion + 2 for the site
+		assertEquals(3, scn.GetTwilight());
+		assertTrue(scn.ShadowPlayAvailable(played));
 
-		assertEquals(0, scn.GetCultureTokensOn(blacksails));
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowPlayCard(played);
+
+		assertEquals(1, scn.GetTwilight());
+		assertInZone(Zone.SUPPORT, played);
+		// The copy that was played makes the offer; the copy already in play does not.
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(played));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(inPlay));
+		assertEquals(0, scn.GetCultureTokensOn(played));
+
 		scn.ShadowAcceptOptionalTrigger();
-		assertEquals(1, scn.GetCultureTokensOn(blacksails));
+
+		assertEquals(1, scn.GetCultureTokensOn(played));
+		assertEquals(0, scn.GetCultureTokensOn(inPlay));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
-	public void BlackSailsAbilityCannotActivateIfNoCorsairInDiscard() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void TheTokenMayBeDeclined() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var blacksails = scn.GetShadowCard("blacksails");
-		var corsair = scn.GetShadowCard("corsair");
-		scn.MoveCardsToSupportArea(blacksails);
-		scn.MoveCardsToTopOfDeck(corsair);
+		var sails = scn.GetShadowCard("sails1");
+		scn.MoveCardsToHand(sails);
 
 		scn.StartGame();
-		scn.SetTwilight(50);
-		scn.SkipToPhase(Phase.SHADOW);
+		scn.FreepsPass();
+		scn.ShadowPlayCard(sails);
 
-		assertEquals(Zone.DECK, corsair.getZone());
-		assertFalse(scn.ShadowActionAvailable(blacksails));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(sails));
+		scn.ShadowDeclineOptionalTrigger();
+
+		assertEquals(0, scn.GetCultureTokensOn(sails));
+		assertInZone(Zone.SUPPORT, sails);
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
-	public void BlackSailsAbilityCanRemove0TokensToDiscount0() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void RemovingTwoTokensHerePlaysACorsairFromTheDiscardPileForTwoLessAndDiscardsThisPossession() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var blacksails = scn.GetShadowCard("blacksails");
-		var corsair = scn.GetShadowCard("corsair");
-		scn.MoveCardsToSupportArea(blacksails);
-		scn.MoveCardsToDiscard(corsair);
+		var used = scn.GetShadowCard("sails1");
+		var other = scn.GetShadowCard("sails2");
+		var buccaneer = scn.GetShadowCard("buccaneer");
+		scn.MoveCardsToSupportArea(used, other);
+		scn.MoveCardsToDiscard(buccaneer);
 
 		scn.StartGame();
-		scn.SetTwilight(47);
-		scn.AddTokensToCard(blacksails, 5);
-		scn.SkipToPhase(Phase.SHADOW);
+		scn.AddTokensToCard(used, 3);
+		scn.AddTokensToCard(other, 4);
+		scn.SetTwilight(7);
+		scn.FreepsPass();
 
-		assertEquals(50, scn.GetTwilight());
-		assertEquals(Zone.DISCARD, corsair.getZone());
-		assertTrue(scn.ShadowActionAvailable(blacksails));
-		scn.ShadowUseCardAction(blacksails);
-		assertTrue(scn.ShadowDecisionAvailable("remove"));
+		// 7 set + 1 companion + 2 for the site
+		assertEquals(10, scn.GetTwilight());
+		assertTrue(scn.ShadowActionAvailable(used));
+
+		scn.ShadowUseCardAction(used);
+
+		// The pool pays for the Buccaneer in full, so X may be 0; and no more than the 3 tokens here, whatever
+		// the other copy holds.
+		assertEquals(0, scn.ShadowGetChoiceMin());
+		assertEquals(3, scn.ShadowGetChoiceMax());
+		scn.ShadowChoose("2");
+
+		assertInZone(Zone.SHADOW_CHARACTERS, buccaneer);
+		// 3 - 2 for the tokens removed + 2 for roaming
+		assertEquals(7, scn.GetTwilight());
+		assertInDiscard(used);
+		assertInZone(Zone.SUPPORT, other);
+		assertEquals(4, scn.GetCultureTokensOn(other));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void WithXOfZeroTheCorsairIsPlayedAtFullCost() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var sails = scn.GetShadowCard("sails1");
+		var buccaneer = scn.GetShadowCard("buccaneer");
+		scn.MoveCardsToSupportArea(sails);
+		scn.MoveCardsToDiscard(buccaneer);
+
+		scn.StartGame();
+		scn.AddTokensToCard(sails, 3);
+		scn.SetTwilight(7);
+		scn.FreepsPass();
+
+		assertEquals(10, scn.GetTwilight());
+		scn.ShadowUseCardAction(sails);
 		scn.ShadowChoose("0");
 
-		assertEquals(Zone.SHADOW_CHARACTERS, corsair.getZone());
-		//Buccaneer costs 3 + 2 for roaming, with no discount = 5
-		assertEquals(45, scn.GetTwilight());
+		assertInZone(Zone.SHADOW_CHARACTERS, buccaneer);
+		// 3 + 2 for roaming
+		assertEquals(5, scn.GetTwilight());
+		assertInDiscard(sails);
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
-	public void BlackSailsAbilityCanRemove1TokensToDiscount1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void AnXGreaterThanTheCorsairsCostMakesItCostNothingAndRoamingIsStillPaid() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var blacksails = scn.GetShadowCard("blacksails");
-		var corsair = scn.GetShadowCard("corsair");
-		scn.MoveCardsToSupportArea(blacksails);
-		scn.MoveCardsToDiscard(corsair);
+		var sails = scn.GetShadowCard("sails1");
+		var buccaneer = scn.GetShadowCard("buccaneer");
+		scn.MoveCardsToSupportArea(sails);
+		scn.MoveCardsToDiscard(buccaneer);
 
 		scn.StartGame();
-		scn.SetTwilight(47);
-		scn.AddTokensToCard(blacksails, 5);
-		scn.SkipToPhase(Phase.SHADOW);
+		scn.AddTokensToCard(sails, 5);
+		scn.SetTwilight(7);
+		scn.FreepsPass();
 
-		assertEquals(50, scn.GetTwilight());
-		assertEquals(Zone.DISCARD, corsair.getZone());
-		assertTrue(scn.ShadowActionAvailable(blacksails));
-		scn.ShadowUseCardAction(blacksails);
-		assertTrue(scn.ShadowDecisionAvailable("remove"));
-		scn.ShadowChoose("1");
-
-		assertEquals(Zone.SHADOW_CHARACTERS, corsair.getZone());
-		//Buccaneer costs 3 + 2 for roaming, with a -1 discount = 4
-		assertEquals(46, scn.GetTwilight());
-	}
-
-	@Test
-	public void BlackSailsAbilityCanRemove2TokensToDiscount2() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var blacksails = scn.GetShadowCard("blacksails");
-		var corsair = scn.GetShadowCard("corsair");
-		scn.MoveCardsToSupportArea(blacksails);
-		scn.MoveCardsToDiscard(corsair);
-
-		scn.StartGame();
-		scn.SetTwilight(47);
-		scn.AddTokensToCard(blacksails, 5);
-		scn.SkipToPhase(Phase.SHADOW);
-
-		assertEquals(50, scn.GetTwilight());
-		assertEquals(Zone.DISCARD, corsair.getZone());
-		assertTrue(scn.ShadowActionAvailable(blacksails));
-		scn.ShadowUseCardAction(blacksails);
-		assertTrue(scn.ShadowDecisionAvailable("remove"));
-		scn.ShadowChoose("2");
-
-		assertEquals(Zone.SHADOW_CHARACTERS, corsair.getZone());
-		//Buccaneer costs 3 + 2 for roaming, with a -2 discount = 3
-		assertEquals(47, scn.GetTwilight());
-	}
-
-	@Test
-	public void BlackSailsAbilityCanRemove3TokensToDiscount3() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var blacksails = scn.GetShadowCard("blacksails");
-		var corsair = scn.GetShadowCard("corsair");
-		scn.MoveCardsToSupportArea(blacksails);
-		scn.MoveCardsToDiscard(corsair);
-
-		scn.StartGame();
-		scn.SetTwilight(47);
-		scn.AddTokensToCard(blacksails, 5);
-		scn.SkipToPhase(Phase.SHADOW);
-
-		assertEquals(50, scn.GetTwilight());
-		assertEquals(Zone.DISCARD, corsair.getZone());
-		assertTrue(scn.ShadowActionAvailable(blacksails));
-		scn.ShadowUseCardAction(blacksails);
-		assertTrue(scn.ShadowDecisionAvailable("remove"));
-		scn.ShadowChoose("3");
-
-		assertEquals(Zone.SHADOW_CHARACTERS, corsair.getZone());
-		//Buccaneer costs 3 + 2 for roaming, with a -3 discount = 2
-		assertEquals(48, scn.GetTwilight());
-	}
-
-	@Test
-	public void BlackSailsAbilityRemovingTooManyTokensCapsAtZeroCost() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var blacksails = scn.GetShadowCard("blacksails");
-		var corsair = scn.GetShadowCard("corsair");
-		scn.MoveCardsToSupportArea(blacksails);
-		scn.MoveCardsToDiscard(corsair);
-
-		scn.StartGame();
-		scn.SetTwilight(47);
-		scn.AddTokensToCard(blacksails, 5);
-		scn.SkipToPhase(Phase.SHADOW);
-
-		assertEquals(50, scn.GetTwilight());
-		assertEquals(Zone.DISCARD, corsair.getZone());
-		assertTrue(scn.ShadowActionAvailable(blacksails));
-		scn.ShadowUseCardAction(blacksails);
-		assertTrue(scn.ShadowDecisionAvailable("remove"));
+		assertEquals(10, scn.GetTwilight());
+		scn.ShadowUseCardAction(sails);
+		assertEquals(5, scn.ShadowGetChoiceMax());
 		scn.ShadowChoose("5");
 
-		assertEquals(Zone.SHADOW_CHARACTERS, corsair.getZone());
-		//Buccaneer costs 3 + 2 for roaming, with a -3 discount = 2, even tho 5 was removed
-		assertEquals(48, scn.GetTwilight());
+		assertInZone(Zone.SHADOW_CHARACTERS, buccaneer);
+		// 3 - 5 is no less than 0; + 2 for roaming
+		assertEquals(8, scn.GetTwilight());
+		assertInDiscard(sails);
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
-	public void BlackSailsAbilityUsableWhenDiscountRequired() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void EitherCorsairInTheDiscardPileMayBePlayedAndNothingElse() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var blacksails = scn.GetShadowCard("blacksails");
-		var corsair = scn.GetShadowCard("corsair");
-		scn.MoveCardsToSupportArea(blacksails);
-		scn.MoveCardsToDiscard(corsair);
+		var sails = scn.GetShadowCard("sails1");
+		var buccaneer = scn.GetShadowCard("buccaneer");
+		var gunners = scn.GetShadowCard("gunners");
+		var plunderer = scn.GetShadowCard("plunderer");
+		var axeman = scn.GetShadowCard("axeman");
+		var galley = scn.GetShadowCard("galley");
+		scn.MoveCardsToSupportArea(sails);
+		scn.MoveCardsToDiscard(buccaneer, gunners, axeman, galley);
+		scn.MoveCardsToHand(plunderer);
 
 		scn.StartGame();
-		scn.AddTokensToCard(blacksails, 5);
-		scn.SkipToPhase(Phase.SHADOW);
+		scn.AddTokensToCard(sails, 1);
+		scn.SetTwilight(7);
+		scn.FreepsPass();
 
-		assertEquals(3, scn.GetTwilight());
-		assertEquals(Zone.DISCARD, corsair.getZone());
-		assertTrue(scn.ShadowActionAvailable(blacksails));
-		scn.ShadowUseCardAction(blacksails);
-		assertTrue(scn.ShadowDecisionAvailable("remove"));
-		scn.ShadowChoose("2");
+		// The pool pays for anything here: the Plunderer and the War Galley could be played from hand or
+		// discard pile if the text reached them.
+		assertEquals(10, scn.GetTwilight());
+		assertTrue(scn.ShadowPlayAvailable(plunderer));
 
-		assertEquals(Zone.SHADOW_CHARACTERS, corsair.getZone());
-		//Buccaneer costs 3 + 2 for roaming, with a -2 discount = 3
-		assertEquals(0, scn.GetTwilight());
-	}
-
-	@Test
-	public void BlackSailsAbilityUsableWhenPlayerFumblesAmounts() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var blacksails = scn.GetShadowCard("blacksails");
-		var corsair = scn.GetShadowCard("corsair");
-		scn.MoveCardsToSupportArea(blacksails);
-		scn.MoveCardsToDiscard(corsair);
-
-		scn.StartGame();
-		scn.AddTokensToCard(blacksails, 5);
-		scn.SkipToPhase(Phase.SHADOW);
-
-		assertEquals(3, scn.GetTwilight());
-		assertEquals(Zone.DISCARD, corsair.getZone());
-		assertTrue(scn.ShadowActionAvailable(blacksails));
-		scn.ShadowUseCardAction(blacksails);
-		assertTrue(scn.ShadowDecisionAvailable("remove"));
+		scn.ShadowUseCardAction(sails);
 		scn.ShadowChoose("1");
 
-		assertEquals(Zone.DISCARD, corsair.getZone());
-		//Buccaneer costs 3 + 2 for roaming, with a -1 discount = 4....which is not enough to have played the buccaneer.
+		// A corsair, of either cost, in the discard pile.  Not a [raider] minion that is no corsair, not a
+		// possession with Corsair in its title, not a corsair in hand.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(buccaneer, gunners));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(axeman, galley, plunderer));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		scn.ShadowChooseCardBPFromSelection(gunners);
+
+		assertInZone(Zone.SHADOW_CHARACTERS, gunners);
+		// 5 - 1 for the token removed + 2 for roaming
+		assertEquals(4, scn.GetTwilight());
+		assertInDiscard(buccaneer, axeman, galley);
+		assertInZone(Zone.HAND, plunderer);
+		assertInDiscard(sails);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void IsNotOfferedWithACorsairInHandAndOnlyOtherRaiderCardsInTheDiscardPile() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var sails = scn.GetShadowCard("sails1");
+		var plunderer = scn.GetShadowCard("plunderer");
+		var axeman = scn.GetShadowCard("axeman");
+		var galley = scn.GetShadowCard("galley");
+		scn.MoveCardsToSupportArea(sails);
+		scn.MoveCardsToDiscard(axeman, galley);
+		scn.MoveCardsToHand(plunderer);
+
+		scn.StartGame();
+		scn.AddTokensToCard(sails, 3);
+		scn.SetTwilight(7);
+		scn.FreepsPass();
+
+		assertEquals(10, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		// The pool is enough: the Plunderer can be played from hand.
+		assertTrue(scn.ShadowPlayAvailable(plunderer));
+		assertFalse(scn.ShadowActionAvailable(sails));
+	}
+
+	@Test
+	public void TheSmallestXThatMayBeNamedIsOneThatPaysForACorsair() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var sails = scn.GetShadowCard("sails1");
+		var buccaneer = scn.GetShadowCard("buccaneer");
+		var gunners = scn.GetShadowCard("gunners");
+		scn.MoveCardsToSupportArea(sails);
+		scn.MoveCardsToDiscard(buccaneer, gunners);
+
+		scn.StartGame();
+		scn.AddTokensToCard(sails, 5);
+		scn.FreepsPass();
+
+		// 1 companion + 2 for the site.  The Buccaneer costs 3 + 2 for roaming, 2 more than the pool; the
+		// Gunners cost 5 + 2 for roaming, 4 more.  So X has to be at least 2, what brings a corsair within reach.
 		assertEquals(3, scn.GetTwilight());
+		assertTrue(scn.ShadowActionAvailable(sails));
+
+		scn.ShadowUseCardAction(sails);
+
+		assertEquals(2, scn.ShadowGetChoiceMin());
+		assertEquals(5, scn.ShadowGetChoiceMax());
+		scn.ShadowChoose("2");
+
+		// At X = 2 the Buccaneer is the only corsair that can be paid for, and is played without a choice.
+		assertInZone(Zone.SHADOW_CHARACTERS, buccaneer);
+		assertInDiscard(gunners);
+		assertEquals(0, scn.GetTwilight());
+		assertInDiscard(sails);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void IsOfferedOnlyWhereTheTokensHereBringACorsairWithinThePool() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var oneToken = scn.GetShadowCard("sails1");
+		var twoTokens = scn.GetShadowCard("sails2");
+		var buccaneer = scn.GetShadowCard("buccaneer");
+		scn.MoveCardsToSupportArea(oneToken, twoTokens);
+		scn.MoveCardsToDiscard(buccaneer);
+
+		scn.StartGame();
+		scn.AddTokensToCard(oneToken, 1);
+		scn.AddTokensToCard(twoTokens, 2);
+		scn.FreepsPass();
+
+		// 1 companion + 2 for the site.  The Buccaneer costs 3 + 2 for roaming: with every token of the first
+		// copy removed it would still cost 4, and with both tokens of the second, 3.
+		assertEquals(3, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(oneToken));
+		assertTrue(scn.ShadowActionAvailable(twoTokens));
+
+		scn.ShadowUseCardAction(twoTokens);
+
+		// Both tokens are needed, so 2 is the only X there is, and the game takes it without asking.
+
+		assertInZone(Zone.SHADOW_CHARACTERS, buccaneer);
+		assertEquals(0, scn.GetTwilight());
+		assertInDiscard(twoTokens);
+		assertInZone(Zone.SUPPORT, oneToken);
+		assertEquals(1, scn.GetCultureTokensOn(oneToken));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

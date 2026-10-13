@@ -1,0 +1,125 @@
+{{CardSplashImage|Sting, Bane of the Eight Legs}}
+'''Status: Preliminary Decision (2025-05-04)'''
+= Skirmish Procedure Breakdown =
+
+__TOC__
+
+
+
+{{Card|Sting, Bane of the Eight Legs}} reads:
+
+{{CardText|Sting, Bane of the Eight Legs}}
+
+This was coded on Gemp both pre- and post-Grand Card Rework to resolve in a way such that if the wielder of Sting was overwhelmed, they would be killed and thus Sting would be discarded, precluding any use of the "skirmish is about to end" trigger.  After this was reported repeatedly as a bug, Gemp was subsequently altered so that "about to end" triggers for skirmishes occurred before skirmish resolution, which makes Sting able to be invoked even if the wielder is about to die, effectively making it impossible for them to lose a fierce skirmish.  
+
+Subsequently, ''this'' behavior was repeatedly reported as a bug, and so a ruling is requested to clarify the precise steps and stages of skirmish resolution.  No behavior ''necessarily'' need change, but we may need to decide a timeline of where precisely each portion of the process occurs.
+
+== Footman's Armor ==
+
+To make things more complicated, there exists a card which ''does'' in fact alter the outcome of an overwhelm: {{Card|Footman's Armor}}.  This reads:
+
+{{CardText|Footman's Armor}}
+
+This behavior was later clarified by Decipher in a ruling:
+
+{{Quote|text= Each time the response for this card is activated, the conditions for being overwhelmed must be checked again.}}
+
+Which means at the very least that that there must exist a point at which a companion can be "about to be overwhelmed" yet has not passed the point of no return.  How this compares or contrasts with "skirmish about to end" is up for debate.
+
+
+== Rules Entries ==
+
+In the Comprehensive Rules, there are two sections that deal with skirmishes (a complication we should probably consolidate and address in the future, but that is not the subject of this ruling).  The first is within the phase-by-phase breakdown in Section One, and the other is in the "skirmish phase(s)" section in the Glossary of Section Two.  Both sections are recreated below (duplications and all):
+
+{{RulesQuote|title=6. Skirmish Phase(s)|source=6._Skirmish_Phase(s)|text=
+When the assignment phase is complete, each defending character will fight in a separate skirmish phase. In an order decided by the Free Peoples player, skirmishes are resolved one at a time by conducting a skirmish phase for each.
+
+Once a skirmish phase has finished, the Free Peoples player must select another defending companion (one who is still assigned to a minion), and perform another skirmish phase.
+Perform skirmish actions
+
+During each skirmish phase, players may perform skirmish actions (special abilities on cards in play with "Skirmish:" and events with that keyword) using the action procedure. Each skirmish action lasts only for a single skirmish. When all players consecutively pass, proceed to resolve that skirmish.
+
+=== Resolve that skirmish ===
+
+If the total strength of one side is more than the strength of the other side (but less than double), the side with the most strength wins that skirmish. (If there is a tie, the Shadow side wins.) Place one wound on each character on the losing side.
+
+When the winning side has one or more characters with the keyword damage +1, then each losing character takes one additional wound for each damage +1. (Damage +2 adds two wounds, and so on.) This is called a damage bonus, which may be added to or removed by various effects.
+
+If the total strength of one side is at least double the total strength of the other side, all the characters on the losing side are overwhelmed and killed (regardless of how many wounds or how much vitality each has). When a character is overwhelmed, that character does not take any more wounds — he simply dies.
+
+A skirmish phase ends after all actions triggered by winning or losing that skirmish have resolved. A surviving minion or companion may skirmish again this turn if the fellowship makes another move (or if the minion has the keyword fierce).
+
+=== Skirmish Phase Summary ===
+
+* Free Peoples player chooses a skirmish.
+* Players perform skirmish actions.
+* Resolve that skirmish and assign wounds.
+* If any skirmishes are unresolved, repeat this procedure.
+}}
+
+
+
+{{RulesQuote|title=6. Skirmish Phase(s)|source=skirmish_phase|text=
+When the {{SL|assignment phase}} is complete, each defending character will fight in a separate skirmish phase. In an order decided by the Free Peoples player, skirmishes are resolved one at a time by conducting a skirmish phase for each.
+
+During each skirmish phase, players may perform skirmish actions (special abilities on cards in play with "Skirmish:" and events with 
+that keyword) using the {{SL|action procedure}}. Each skirmish action lasts only for a single skirmish. When all players consecutively pass, proceed to resolve that skirmish.
+
+If the total strength of one side is more than the strength of the other side (but less than double), the side with the most strength wins that skirmish. (If there is a tie, the Shadow side wins.) Place one wound on each character on the losing side. (See {{SL|damage bonus}}, {{SL|killed}}, {{SL|overwhelmed}}.)
+
+ ''If Aragorn, with strength of 8, faces two Orcs, each with strength of 3 (total strength of 6), then Aragorn wins that skirmish and each losing Orc takes one wound.''
+
+If all characters of one side are removed during a skirmish before strength has been totaled, the skirmish resolves and the other side wins.
+
+If all characters of one side are removed from a skirmish before that skirmish begins, that skirmish does not occur.
+
+A character is "skirmishing" or in a skirmish "involving" that character only while the skirmish phase that character is assigned to is happening.
+
+ ''{{Card|Smeagol, Slippery Sneak}} ("Skirmish: Add threats equal to the total vitality of minions Sméagol is skirmishing to discard Sméagol.") and Frodo are each assigned to different skirmishes. The Free Peoples player chooses to resolve Frodo's skirmish first. He cannot use Sméagol's ability during Frodo's skirmish.''
+
+{{Clarification|text=
+A losing character is any character on the losing side when a skirmish revolves. '''A character removed from his or her skirmish is a losing character, unless there are still one or more characters on each side of that skirmish, in which case the removed character is neither a losing nor a winning character.''' A character removed from a skirmish is not wounded (or overwhelmed) when that skirmish resolves.
+
+
+''Boromir, bearing a Blade of Gondor (1R95) ("Skirmish: Exert Boromir to wound an Orc or Uruk-hai he is skirmishing."), faces two Uruk-hai who each have only 1 vitality remaining. Boromir exerts once to use the Blade and kill one of the Uruk-hai. That Uruk-hai is neither a losing nor a winning character. '''If Boromir exerts to use the Blade again to wound the second Uruk-hai, Boromir will be the winning character, and that second Uruk-hai will be a losing character.'''''
+|source=[[Legacy Ruling 2]]
+}}
+
+If a skirmish is canceled, it ends immediately with no winner or loser.
+
+When a skirmish resolves (or is canceled) for any reason, no more skirmish actions may be taken.
+
+A skirmish phase ends after all actions triggered by winning or losing that skirmish have resolved. At this point, characters who were involved in that skirmish are no longer assigned.
+
+A surviving minion or companion may skirmish again this turn if the fellowship makes another move (or if the minion has the keyword {{SL|fierce}}).
+
+Once a skirmish phase has finished, the Free Peoples player must select another defending companion (one who is still assigned to a minion), and perform another skirmish phase. 
+
+When all skirmishes (both normal and fierce) have been resolved, proceed to the regroup phase.
+
+See also {{SL|enduring}}, {{SL|lurker}}.
+}}
+
+
+As you can see, the rules around skirmishes are defined as a series of mostly-unrelated statements that are not structured together (and only barely in order).  What we need is something closer to [[Comprehensive_Rules_4.2#moving_your_fellowship|Moving Your Fellowship]] (added in the April 5, 2005 CRD) or [[Comprehensive_Rules_4.2#playing_a_card|Playing a Card]] (added in the June 17, 2005 CRD) that breaks everything down into the smallest pieces possible and leaves no gaps in the definition.
+
+
+== Ramifications ==
+
+Ideally this should not result in any changes to the common understanding of how to execute skirmishes, with the possible exception of how skirmishes resolve with the aforementioned {{Card|Sting, Bane of the Eight Legs}} or {{Card|Footman's Armor}}.  Any ruling generated will be a green section inserted into the beginning of the "skirmish phase" glossary section, as it is replacing no existing portion of the rules, only clarifying the ones we've got.
+
+
+== The Question ==
+
+* How, precisely, do Skirmish Phases play out?
+* When in the above process does {{Card|Sting, Bane of the Eight Legs}} trigger?
+
+
+== 2025-05-03 Preliminary Decision ==
+Legacy Rules will in the future be publishing a full decision that will include a step-by-step breakdown of the Skirmish phase, but as a first point, {{Card|Sting, Bane of the Eight Legs}} should not trigger after being overwhelmed: when a character is overwhelmed, they are killed, and being killed all cards attached to them are discarded, and this clearly happens ''before'' the skirmish has fully ended.  This means that Sting is no longer ever on the table for its effect to be evaluated.
+
+
+----
+
+
+{{Rules_Table}}

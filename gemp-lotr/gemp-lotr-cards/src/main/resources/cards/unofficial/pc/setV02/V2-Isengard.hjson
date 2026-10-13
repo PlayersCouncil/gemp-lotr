@@ -185,7 +185,16 @@
 		timewords: Assignment
 		effects: {
 			type: event
-			requires: [
+			# An event is offered whenever its cost can be paid, whatever its effect will do (Q-0034): it used
+			# to be withheld while no Uruk-hai cost as little as the tokens on machines.
+			requires: {
+				type: CanSpotCultureTokens
+				culture: isengard
+				filter: machine
+			}
+			# It is offered then, and flagged as having no effect: no number of tokens the player could
+			# remove reaches any Uruk-hai in play.
+			noEffectUnless: [
 				{
 					type: CanSpotCultureTokens
 					culture: isengard
@@ -459,7 +468,6 @@
 			{
 				type: Trigger
 				optional: false
-				optional: false
 				trigger: {
 					type: Played
 					filter: self
@@ -550,6 +558,11 @@
 					type: Played
 					filter: self
 				}
+				# Not offered with nothing to take: it has no cost (Q-0034).
+				requires: {
+					type: HasCardInDiscard
+					filter: timeword(skirmish),event,culture(isengard)
+				}
 				effect: {
 					type: PutCardsFromDiscardIntoHand
 					select: choose(timeword(skirmish),event,culture(isengard))
@@ -622,7 +635,7 @@
 				}
 			}
 		]
-		gametext: When you play this minion, you may play an [isengard] orc from your discard pile; it is strength +1 until the regroup phase.<br>Regroup: Discard this minion to add two threats.
+		gametext: When you play this minion, you may play an [isengard] Orc from your discard pile; it is strength +1 until the regroup phase.<br>Regroup: Discard this minion to add two threats.
 		lore: "'He has taken up with foul folk, with the Orcs.'"
 		promotext: ""
 		alts: {
@@ -757,7 +770,6 @@
 			{
 				type: Trigger
 				optional: false
-				optional: false
 				trigger: {
 					type: Played
 					filter: self
@@ -792,10 +804,8 @@
 			{
 				type: Activated
 				phase: Skirmish
-				requires: {
-					type: CanSpot
-					filter: culture(isengard), orc, InSkirmish
-				}
+				# No requirement: an ability with a cost is offered whenever the cost can be paid (Q-0034).  It
+				# used to be withheld unless an [isengard] Orc was in the skirmish.
 				cost: {
 					type: If
 					check: {
@@ -926,7 +936,7 @@
 						filter: mounted,culture(isengard),orc
 						count: 2
 					}
-					filter: culture(isengard),mount
+					filter: your,culture(isengard),mount
 					amount: -1
 				}
 			}
@@ -968,10 +978,8 @@
 			{
 				type: Activated
 				phase: Skirmish
-				requires: {
-					type: CanSpot
-					filter: uruk-hai, inSkirmish
-				}
+				# No requirement: an ability with a cost is offered whenever the cost can be paid (Q-0034).  It
+				# used to be withheld unless an Uruk-hai was in the skirmish.
 				cost: {
 					type: RemoveTokensCumulative
 					culture: isengard
@@ -1294,6 +1302,20 @@
 					type: Played
 					filter: self
 				}
+				// The stacking has no cost, so it is not offered when there is nothing it could stack.
+				requires: {
+					type: Or
+					requires: [
+						{
+							type: HasCardInDiscard
+							filter: culture(isengard),mount
+						}
+						{
+							type: HasCardInDrawDeck
+							filter: culture(isengard),mount
+						}
+					]
+				}
 				effect: [
 					{
 						type: Choice
@@ -1319,12 +1341,28 @@
 						]
 					}
 					{
+						// The second mount: only if the first was stacked, and only if there is another to stack.
 						type: If
-						check: {
-							type: HasCardStacked
-							filter: any
-							on: self
-						}
+						check: [
+							{
+								type: HasCardStacked
+								filter: any
+								on: self
+							}
+							{
+								type: Or
+								requires: [
+									{
+										type: HasCardInDiscard
+										filter: culture(isengard),mount
+									}
+									{
+										type: HasCardInDrawDeck
+										filter: culture(isengard),mount
+									}
+								]
+							}
+						]
 						true: {
 							type: Choice
 							texts: [

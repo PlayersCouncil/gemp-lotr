@@ -5,12 +5,14 @@ import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_04_304_Tests
@@ -21,7 +23,6 @@ public class Card_04_304_Tests
 				new HashMap<>()
 				{{
 					put("card", "4_304");
-					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -58,18 +59,38 @@ public class Card_04_304_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GetOnandGetAwayTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void AddsTwoBurdensToPlayTheFellowshipsNextTwoSites() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var getaway = scn.GetFreepsCard("card");
+		scn.MoveCardsToHand(getaway);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(0, scn.GetTwilight());
+		var site2 = scn.GetFreepsSite(2);
+		var site3 = scn.GetFreepsSite(3);
+		var site4 = scn.GetFreepsSite(4);
+		// Only site 1 is on the adventure path so far.
+		assertEquals(1, scn.GetCurrentSiteNumber());
+		assertNull(scn.GetSite(2));
+		assertNull(scn.GetSite(3));
+		assertInZone(Zone.ADVENTURE_DECK, site2, site3, site4);
+		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.FreepsPlayAvailable(getaway));
+
+		scn.FreepsPlayCard(getaway);
+
+		assertEquals(2, scn.GetBurdens());
+		// The fellowship's next 2 sites are the player's own sites 2 and 3, and no further.
+		assertEquals(site2, scn.GetSite(2));
+		assertEquals(site3, scn.GetSite(3));
+		assertInZone(Zone.ADVENTURE_PATH, site2, site3);
+		assertNull(scn.GetSite(4));
+		assertInZone(Zone.ADVENTURE_DECK, site4);
+		// The sites are played, and the fellowship has not moved.
+		assertEquals(1, scn.GetCurrentSiteNumber());
+		assertInDiscard(getaway);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

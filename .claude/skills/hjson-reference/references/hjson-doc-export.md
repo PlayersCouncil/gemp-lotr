@@ -185,17 +185,6 @@ Defines the different kinds of effects which can be created
     * cost [ ]
       required
       1 or more costs which must be paid at the start of the Maneuver phase for the associated Follower to be attached to a character.
-* AssignmentCost
-  An optional cost which prevents the Free Peoples player from assigning the associated character from being assigned to a skirmish unless paid.  Under the hood this is a wrapper for the FreePeoplePlayerMayNotAssignCharacter modifier.
-  See Morgul Spawn).
-    * requires [ ]
-      0 or more requirements that must be fulfilled for this cost to be necessary.
-    * cost [ ]
-      required
-  1 or more costs which must be paid by the Free Peoples player for them to be able to assign this minion. 
-    * text
-      required
-      The prompt given to the Free Peoples player when assignments begin.  Should take the form of a yes/no question, i.e. "Would you like to exert a companion to be able to assign X?" 
 * CopyCard
  Any card which copies the game text wholesale of another card.  See Silinde, Elf of Mirkwood).
     * filter
@@ -581,10 +570,6 @@ If updating this enum, be sure to update `Token` as well.
     * WISE
     * BURGLAR
 * PC keywords:
-    * CONCEALED
-      Unused
-    * EXPOSED
-      Unused
     * RELENTLESS
 
 ## Kill Cause
@@ -1792,7 +1777,7 @@ In general, although the names of modifiers are case-insensitive, the names of t
     * unloaded
       default: false
 * AddNoTwilightForCompanionMove
- Companions matching `filter` add 0 twilight when moving instead of the default 1.  Used by the obsolete Second Edition and the nascent PC concealed keyword.
+ Companions matching `filter` add 0 twilight when moving instead of the default 1.  Used by the obsolete Second Edition.
     * filter
       required
 * AddCulture
@@ -2132,6 +2117,16 @@ In general, although the names of modifiers are case-insensitive, the names of t
       required
     * from
       required; only "self" or "memory()"
+    * requires [ ]
+      optional
+* ExtraCostToAssign
+ Adds a `cost` the Free Peoples player must pay to assign a `minion` to a skirmish, so long as the `requires` requirements are met ("the Free Peoples player must exert a companion to assign this minion to a skirmish").  At the Free Peoples player's own assigning the cost is paid ahead, offered on the minion as he starts assigning, and a minion not paid for is not his to assign; where a card has him assign, it is paid as the assignment is made; while it cannot be paid he may not make the assignment, and if it is not paid in full the assignment is not made.  Assignments the Shadow player makes are never charged.  See Morgul Spawn).
+    * minion
+      required; the minions charged for (usually "self")
+    * fpCharacter
+      optional; charges only for assignments against characters matching this filter (default: any character)
+    * cost [ ]
+      required; 1 or more costs, written with `player: fp`
     * requires [ ]
       optional
 * ExtraCostToPlay
@@ -2898,7 +2893,7 @@ After triggers occur after the action they are keyed to, which means they cannot
     * memorize
       optional
 * ExertsForSpecialAbility
-  Triggers after a card matching `filter` exerts as part of executing a special ability of a card matching `source`, and optionally `memorize`s the exerted character.
+  Triggers after a card matching `filter` exerts as a cost of a special ability of a card matching `source`, and optionally `memorize`s the exerted character.  An exertion that is an effect of the ability is not answered (F-0478).
   If `itsOwn` is true, `source` is ignored and the source is checked to be the same as the exerting card.
  See Rush of Steeds).
     * filter
@@ -2994,9 +2989,11 @@ After triggers occur after the action they are keyed to, which means they cannot
     * exertsRanger
       default:false
 * PlayerDrawsCard
-  Triggers after `player` draws a card from their draw deck or takes a card into hand.
+  Triggers after `player` draws a card.  A card taken into hand (from a discard pile, or from a draw deck by a look, a reveal or a search) is not a card drawn: where the text says "draws a card (or takes a card into hand)", write `orTakesIntoHand: true` (Verily I Come 2_94, Betrayal of Isengard 3_29; F-0376).  A card taken in place of a draw is a card drawn (see `inPlaceOfDraw` on PutCardsFromDeckIntoHand).
     * player
       required
+    * orTakesIntoHand
+      default: false
 * PutsOnRing
   Triggers after the Ring-bearer "puts on" The One Ring.
 * Reconciles
@@ -4132,6 +4129,8 @@ The primary difference is that discrete effects can be undone by an opposite dis
       required; boolean
     * showAll
       required; boolean
+    * inPlaceOfDraw
+      default: false.  `true` where the card is taken in place of a card its owner was about to draw ("about to draw a card ... look at the top three cards of your draw deck instead. Take [one] into your hand": The Mirror of Galadriel 15_22, beside its `preventEffect` of the draw): that card is the card drawn, and `PlayerDrawsCard` answers it (Q-0205: B).
 * PutCardsFromDeckOnTopOfDeck
   Causes the current player to `select count` cards from their draw deck and place them on top of their draw deck, optionally `reveal`ing the card to their opponent.  (The reveal is required RAW when it is a specific card, but is not required when the operation is indistinct, such as "look at a card and place it on top of your draw deck".)
   See Back to the Light).
@@ -4466,6 +4465,7 @@ The primary difference is that discrete effects can be undone by an opposite dis
       optional
 * RevealCardsFromHand
   Prompts the owner of the given `hand` to `select` and reveal `count` cards from their hand, optionally storing the chosen cards in the given `memorize` location.
+  For the hand of the player who reveals.  It does not ask `cantLookOrRevealHand`: a card revealed from ANOTHER player's hand is `RevealRandomCardsFromHand` (with `forced: true`) or `RevealHand`, never this word with `select: random(...)` (F-0391, Storm of Argument).
   See Mallorn-trees).
     * hand
       default: you

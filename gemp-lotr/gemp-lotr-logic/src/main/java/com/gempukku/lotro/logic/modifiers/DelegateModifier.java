@@ -70,8 +70,8 @@ public class DelegateModifier implements Modifier {
     }
 
     @Override
-    public boolean canBeHealed(LotroGame game, PhysicalCard card) {
-        return delegate.canBeHealed(game, card);
+    public boolean canBeHealed(LotroGame game, String performingPlayer, PhysicalCard card) {
+        return delegate.canBeHealed(game, performingPlayer, card);
     }
 
     @Override
@@ -385,8 +385,8 @@ public class DelegateModifier implements Modifier {
     }
 
     @Override
-    public boolean isAssignmentCostPaid(LotroGame game, PhysicalCard card) {
-        return delegate.isAssignmentCostPaid(game, card);
+    public boolean appendExtraAssignmentCosts(LotroGame game, CostToEffectAction action, PhysicalCard fpCharacter, PhysicalCard minion) {
+        return delegate.appendExtraAssignmentCosts(game, action, fpCharacter, minion);
     }
 
     @Override
@@ -432,6 +432,11 @@ public class DelegateModifier implements Modifier {
     @Override
     public boolean lostAllKeywords(LotroGame game, PhysicalCard card) {
         return delegate.lostAllKeywords(game, card);
+    }
+
+    @Override
+    public int getKeywordGainLimit(LotroGame game, PhysicalCard card, Keyword keyword) {
+        return delegate.getKeywordGainLimit(game, card, keyword);
     }
 
     @Override

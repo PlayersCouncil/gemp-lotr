@@ -397,6 +397,10 @@
 					type: played
 					filter: self
 				}
+				requires: {
+					type: cardsInHandMoreThan
+					count: 0
+				}
 				effect: [
 					{
 						type: stackCardsFromHand
@@ -542,12 +546,17 @@
 				phase: skirmish
 				effect: [
 					{
-						type: wound
-						select: choose(minion,inSkirmishAgainst(dwarf))
+						// A choice for each card: the wounds may go to several minions or to one more than
+						// once (CR 4.2 "for each"; F-0224).
+						type: repeat
 						times: {
 							type: forEachStacked
 							on: self
 							filter: culture(dwarven)
+						}
+						effect: {
+							type: wound
+							select: choose(minion,inSkirmishAgainst(dwarf))
 						}
 					}
 					{
@@ -589,6 +598,10 @@
 					filter: minion
 					phase: assignment
 					text: Assign this minion to bearer of Reckless Pride.
+					requires: {
+						type: canSpot
+						filter: hasAttached(name(Reckless Pride)),assignableToSkirmishAgainst(self)
+					}
 					effect: {
 						type: assignFpCharacterToSkirmish
 						fpCharacter: choose(hasAttached(name(Reckless Pride)))
@@ -666,15 +679,6 @@
 				}
 			}
 		]
-		gametext: Choose one: Spot a Dwarf to draw a card; or, if this card is stacked on a [dwarven] condition, spot a Dwarf companion and discard this event to exert a minion twice.
-		lore: Food and drink would pay off some of my score against you.'
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
 		gametext: Choose one: Spot a Dwarf to draw a card; or, if this card is stacked on a [dwarven] condition, spot a Dwarf companion and discard this event to exert a minion twice.
 		lore: "'Food and drink would pay off some of my score against you.'"
 		promotext: ""

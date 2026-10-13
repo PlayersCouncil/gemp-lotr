@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_19_027_Tests
@@ -21,7 +22,24 @@ public class Card_19_027_Tests
 				new HashMap<>()
 				{{
 					put("card", "19_27");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetTokenScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("might", "19_27");
+					// Chamber of Records: a [dwarven] condition in the support area that holds [dwarven] tokens
+					// (two as it is played beside a Dwarf); its fellowship ability is never used
+					put("chamber", "15_3");
+					// Rank and File: a [sauron] condition in the support area that holds [sauron] tokens (one each
+					// time a roaming [sauron] minion takes a wound); its two abilities are never used
+					put("rank", "10_96");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -58,18 +76,43 @@ public class Card_19_027_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SauronsMightTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void IsNotOfferedWithNoFreePeoplesCultureTokenToRemoveAndIsWithOne() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetTokenScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var might = scn.GetShadowCard("might");
+		var rank = scn.GetShadowCard("rank");
+		var chamber = scn.GetFreepsCard("chamber");
+		scn.MoveCardsToSupportArea(chamber, rank);
+		scn.MoveCardsToHand(might);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.AddTokensToCard(rank, 1);
+		scn.FreepsPass();
 
-		assertEquals(0, scn.GetTwilight());
+		// The Shadow phase, with an empty pool: the event costs nothing, and its second sentence, which
+		// costs (1), cannot be used.
+		scn.SetTwilight(0);
+		scn.ShadowRefreshDecision();
+
+		// The only culture token in play is a [sauron] one on a Shadow card.
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertEquals(0, scn.GetCultureTokensOn(chamber));
+		assertEquals(1, scn.GetCultureTokensOn(rank));
+		assertFalse(scn.ShadowPlayAvailable(might));
+
+		// With one token on a Free Peoples card it is offered.
+		scn.AddTokensToCard(chamber, 1);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.ShadowPlayAvailable(might));
+		assertEquals(1, scn.GetCultureTokensOn(chamber));
+		assertEquals(0, scn.GetThreats());
+
+		scn.ShadowPlayCard(might);
+		assertEquals(0, scn.GetCultureTokensOn(chamber));
+		assertEquals(1, scn.GetCultureTokensOn(rank));
+		assertEquals(1, scn.GetThreats());
+		assertInDiscard(might);
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

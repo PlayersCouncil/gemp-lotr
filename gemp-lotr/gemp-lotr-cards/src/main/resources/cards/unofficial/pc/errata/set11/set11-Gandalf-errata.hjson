@@ -2,17 +2,22 @@
 
 	61_31: {
 		cardInfo: {
-			//id: 1_31.1
+			//id: 61_31.1
+			parent: 11_31
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/61_31.jpg
 			collInfo: 11C31
 			rarity: C
 		}
 		title: Final Account
-		culture: gandalf
+		unique: false
+		side: Free Peoples
+		culture: Gandalf
 		twilight: 1
-		type: event
-		timeword: fellowship
+		type: Event
+		timewords: Fellowship
 		effects: {
 			type: event
 			cost: [

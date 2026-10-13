@@ -27,6 +27,7 @@
 					amount: {
 						type: forEachHasAttached
 						filter: any
+						hindered: true
 						multiplier: -1
 					}
 				}

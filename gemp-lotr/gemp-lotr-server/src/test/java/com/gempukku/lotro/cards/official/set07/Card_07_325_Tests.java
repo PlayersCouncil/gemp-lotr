@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_07_325_Tests
@@ -19,6 +20,21 @@ public class Card_07_325_Tests
 				{{
 					put("card", "7_325");
 					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// Frodo and Sam to exert, and a companion who is no Hobbit.
+	protected VirtualTableScenario GetHobbitCompanionsScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("pressing", "7_325");
+					put("sam", "1_311");
+					put("aragorn", "1_89");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -53,6 +69,36 @@ public class Card_07_325_Tests
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
+	}
+
+	// "Regroup: Discard this condition and exert a Hobbit companion to play the fellowship's next site": the
+	// definition had no exertion.
+	@Test
+	public void TheRegroupAbilityExertsAHobbitCompanionAsWellAsDiscardingTheCondition() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetHobbitCompanionsScenario();
+
+		var frodo = scn.GetRingBearer();
+		var pressing = scn.GetFreepsCard("pressing");
+		var sam = scn.GetFreepsCard("sam");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(sam, aragorn);
+
+		scn.StartGame();
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.MoveCardsToSupportArea(pressing);
+		scn.FreepsRefreshDecision();
+		assertTrue(scn.FreepsActionAvailable(pressing));
+		scn.FreepsUseCardAction(pressing);
+
+		// The condition goes first, and then a Hobbit companion is chosen: Frodo or Sam, and not Aragorn.
+		assertInZone(Zone.DISCARD, pressing);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, sam));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn));
+		scn.FreepsChooseCard(sam);
+		assertEquals(1, scn.GetWoundsOn(sam));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

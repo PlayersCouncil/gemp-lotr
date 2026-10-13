@@ -3,11 +3,13 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_V3_074_Tests
@@ -18,11 +20,10 @@ public class Card_V3_074_Tests
 				new HashMap<>()
 				{{
 					put("enquea", "103_74");
-
-					put("aragorn", "1_89");
-					put("boromir", "1_96");
-					put("sam", "1_311");
-					put("legolas", "1_50");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, vitality 4; a maneuver ability never used here
+					put("sam", "1_311");        // Sam, Son of Hamfast: strength 3, vitality 4; a fellowship ability, and a response if Frodo dies
+					put("bounder", "1_286");    // Bounder: [shire] Hobbit ally, home site 2, strength 2, vitality 2; a skirmish ability never used here
+					put("runner", "1_178");     // Goblin Runner: strength 5; its text is about being played, and it is never played
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -35,7 +36,7 @@ public class Card_V3_074_Tests
 
 		/**
 		 * Set: V3
-		 * Name: Ulaire Enquea, Magnified through Suffering
+		 * Name: Úlairë Enquëa, Magnified through Suffering
 		 * Unique: true
 		 * Side: Shadow
 		 * Culture: Wraith
@@ -46,8 +47,9 @@ public class Card_V3_074_Tests
 		 * Vitality: 4
 		 * Site Number: 3
 		 * Game Text: Fierce. Relentless. <i>(This minion participates in 1 extra round of skirmishes after fierce.)</i>
-		* 	At the start of each skirmish involving Ulaire Enquea and a wounded character, you may exert him to heal that character and exert a companion.
-		*/
+		 * 	At the start of each skirmish involving Ulaire Enquea and a wounded companion or ally, you may exert him
+		 * 	to heal that character and exert a companion.
+		 */
 
 		var scn = GetScenario();
 
@@ -68,210 +70,246 @@ public class Card_V3_074_Tests
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-
-// ======== TRIGGER TESTS ========
-
 	@Test
-	public void EnqueaCanHealSkirmishingCharacterAndExertAnyCompanion() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void AtTheStartOfHisSkirmishWithAWoundedCompanionHeMayExertToHealThatCompanionAndExertACompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var frodo = scn.GetRingBearer();
-		var enquea = scn.GetShadowCard("enquea");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		var boromir = scn.GetFreepsCard("boromir");
-
-		scn.MoveMinionsToTable(enquea);
-		scn.MoveCompanionsToTable(aragorn, boromir);
+		var sam = scn.GetFreepsCard("sam");
+		var bounder = scn.GetFreepsCard("bounder");
+		var enquea = scn.GetShadowCard("enquea");
+		scn.MoveCompanionsToTable(aragorn, sam);
+		scn.MoveAlliesToTable(bounder);
 		scn.AddWoundsToChar(aragorn, 1);
+		// A second wounded companion, who will not be in the skirmish.
+		scn.AddWoundsToChar(sam, 1);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(enquea);
 		scn.SkipToAssignments();
-
 		scn.FreepsAssignToMinions(aragorn, enquea);
-		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(aragorn);
 
-		// At start of skirmish, trigger available
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(Phase.SKIRMISH, scn.GetCurrentPhase());
 		assertEquals(0, scn.GetWoundsOn(enquea));
-		assertEquals(0, scn.GetWoundsOn(boromir));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(sam));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(bounder));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(enquea));
 
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
-		scn.ShadowAcceptOptionalTrigger();
+		scn.ShadowChooseOptionalTrigger(enquea);
 
-		// Enquëa exerts
 		assertEquals(1, scn.GetWoundsOn(enquea));
-
-		// Choose to heal Aragorn (only wounded FP character in skirmish)
-		// Auto-selected
-
+		// The companion he is skirmishing is healed; the other wounded companion is not.
 		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(sam));
+		// Any companion may be the one exerted, the one just healed and the Ring-bearer included; the ally may not.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, sam, frodo));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(bounder, enquea));
+		assertEquals(1, scn.ShadowGetChoiceMin());
 
-		// Choose companion to exert - both Aragorn and Boromir valid
-		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, boromir, frodo));
-		scn.ShadowChooseCard(boromir);
+		scn.ShadowChooseCard(sam);
 
-		assertEquals(1, scn.GetWoundsOn(boromir));
+		assertEquals(2, scn.GetWoundsOn(sam));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(bounder));
+		assertEquals(1, scn.GetWoundsOn(enquea));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 
 	@Test
-	public void EnqueaCanExertSameCompanionThatWasHealed() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void AWoundedAllyInHisSkirmishIsHealedAndIsNotACompanionToExert() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var enquea = scn.GetShadowCard("enquea");
+		var frodo = scn.GetRingBearer();
 		var aragorn = scn.GetFreepsCard("aragorn");
-
-		scn.MoveMinionsToTable(enquea);
+		var bounder = scn.GetFreepsCard("bounder");
+		var enquea = scn.GetShadowCard("enquea");
 		scn.MoveCompanionsToTable(aragorn);
-		scn.AddWoundsToChar(aragorn, 1);
+		scn.MoveAlliesToTable(bounder);
+		scn.AddWoundsToChar(bounder, 1);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(enquea);
+		// The first move is to site 2, the Bounder's home, where he may be assigned.
 		scn.SkipToAssignments();
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		scn.FreepsAssignToMinions(bounder, enquea);
+		scn.FreepsResolveSkirmish(bounder);
 
-		scn.FreepsAssignToMinions(aragorn, enquea);
-		scn.ShadowDeclineAssignments();
-		scn.FreepsResolveSkirmish(aragorn);
+		assertEquals(0, scn.GetWoundsOn(enquea));
+		assertEquals(1, scn.GetWoundsOn(bounder));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(enquea));
 
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		scn.ShadowChooseOptionalTrigger(enquea);
 
-		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(1, scn.GetWoundsOn(enquea));
+		assertEquals(0, scn.GetWoundsOn(bounder));
+		// Healed, the Bounder could exert (vitality 2), but he is no companion.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, frodo));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(bounder));
+		assertEquals(1, scn.ShadowGetChoiceMin());
 
-		// Aragorn healed (auto-selected)
-		assertEquals(0, scn.GetWoundsOn(aragorn));
-
-		// Exert Aragorn (can target the same companion)
 		scn.ShadowChooseCard(aragorn);
 
-		// Net result: Aragorn back to 1 wound (healed then exerted)
 		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(bounder));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 
 	@Test
-	public void EnqueaTriggerNotAvailableIfSkirmishingCharacterNotWounded() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void IsNotOfferedAgainstAnUnwoundedCompanionNorWhenAnotherMinionSkirmishesAWoundedOne() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var enquea = scn.GetShadowCard("enquea");
 		var aragorn = scn.GetFreepsCard("aragorn");
-
-		scn.MoveMinionsToTable(enquea);
-		scn.MoveCompanionsToTable(aragorn);
-		// Aragorn not wounded
+		var sam = scn.GetFreepsCard("sam");
+		var enquea = scn.GetShadowCard("enquea");
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveCompanionsToTable(aragorn, sam);
+		scn.AddWoundsToChar(sam, 1);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(enquea, runner);
+		// Enquea is wounded himself, and can still exert (vitality 4): a wounded minion in his skirmish is no
+		// wounded companion or ally.
+		scn.AddWoundsToChar(enquea, 1);
 		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, enquea}, new PhysicalCardImpl[]{sam, runner});
 
-		scn.FreepsAssignToMinions(aragorn, enquea);
-		scn.ShadowDeclineAssignments();
+		// Sam is wounded, but it is the Goblin Runner he skirmishes: Enquea is not in this skirmish.
+		scn.FreepsResolveSkirmish(sam);
+		assertEquals(Phase.SKIRMISH, scn.GetCurrentPhase());
+		// Nothing is put to the Shadow player: the skirmish goes straight to its actions.
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		scn.PassSkirmishActions();
+		// Goblin Runner 5 beats Sam 3
+		assertEquals(2, scn.GetWoundsOn(sam));
+
+		// Enquea skirmishes Aragorn, who has no wound, while Sam has two and Enquea himself has one.
 		scn.FreepsResolveSkirmish(aragorn);
-
-		// No wounded character in skirmish
-		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertEquals(Phase.SKIRMISH, scn.GetCurrentPhase());
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertEquals(1, scn.GetWoundsOn(enquea));
+		assertEquals(2, scn.GetWoundsOn(sam));
 	}
 
 	@Test
-	public void EnqueaTriggerNotAvailableIfExhausted() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void DecliningLeavesHimUnexertedTheCompanionWoundedAndNobodyExerted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var enquea = scn.GetShadowCard("enquea");
+		var frodo = scn.GetRingBearer();
 		var aragorn = scn.GetFreepsCard("aragorn");
-
-		scn.MoveMinionsToTable(enquea);
-		scn.MoveCompanionsToTable(aragorn);
-		scn.AddWoundsToChar(aragorn, 1);
-		scn.AddWoundsToChar(enquea, 3);  // Vitality 4, exhausted
-
-		scn.StartGame();
-		scn.SkipToAssignments();
-
-		scn.FreepsAssignToMinions(aragorn, enquea);
-		scn.ShadowDeclineAssignments();
-		scn.FreepsResolveSkirmish(aragorn);
-
-		// Enquëa can't exert
-		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
-	}
-
-	@Test
-	public void EnqueaTriggerCanBeDeclined() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
+		var sam = scn.GetFreepsCard("sam");
 		var enquea = scn.GetShadowCard("enquea");
-		var aragorn = scn.GetFreepsCard("aragorn");
-
-		scn.MoveMinionsToTable(enquea);
-		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCompanionsToTable(aragorn, sam);
 		scn.AddWoundsToChar(aragorn, 1);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(enquea);
 		scn.SkipToAssignments();
-
 		scn.FreepsAssignToMinions(aragorn, enquea);
-		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(aragorn);
 
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(enquea));
+
 		scn.ShadowDeclineOptionalTrigger();
 
-		// Nothing changes
-		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(enquea));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(sam));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 
-// ======== RELENTLESS TEST ========
-
 	@Test
-	public void EnqueaParticipatesInThreeRoundsOfSkirmishes() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void IsNotOfferedWhenHeIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var enquea = scn.GetShadowCard("enquea");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		var boromir = scn.GetFreepsCard("boromir");
-		var sam = scn.GetFreepsCard("sam");
-
-		scn.MoveMinionsToTable(enquea);
-		scn.MoveCompanionsToTable(aragorn, boromir, sam);
+		var enquea = scn.GetShadowCard("enquea");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.AddWoundsToChar(aragorn, 1);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(enquea);
+		// Vitality 4 with 3 wounds: he cannot exert.
+		scn.AddWoundsToChar(enquea, 3);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, enquea);
+		scn.FreepsResolveSkirmish(aragorn);
+
+		assertEquals(Phase.SKIRMISH, scn.GetCurrentPhase());
+		// Nothing is put to the Shadow player: the skirmish goes straight to its actions.
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertEquals(3, scn.GetWoundsOn(enquea));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+	}
+
+	@Test
+	public void IsOfferedAgainAtTheStartOfTheFierceSkirmishAndOfTheRelentlessOne() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var sam = scn.GetFreepsCard("sam");
+		var enquea = scn.GetShadowCard("enquea");
+		scn.MoveCompanionsToTable(aragorn, sam);
+		scn.AddWoundsToChar(aragorn, 1);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(enquea);
 		scn.SkipToAssignments();
 
-		// Round 1: Normal assignment
+		// The first skirmish.
 		scn.FreepsAssignToMinions(aragorn, enquea);
-		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(aragorn);
-		scn.PassCurrentPhaseActions();
-
-		// Aragorn loses (8 str vs 12 str), takes wound
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(enquea));
+		scn.ShadowChooseOptionalTrigger(enquea);
+		assertEquals(1, scn.GetWoundsOn(enquea));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		scn.ShadowChooseCard(sam);
+		assertEquals(1, scn.GetWoundsOn(sam));
+		scn.PassSkirmishActions();
+		// Enquea 12 beats Aragorn 8: Aragorn is wounded again.
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 
-		// Round 2: Fierce assignment
-		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
-		scn.BothPass();
-		assertTrue(scn.FreepsDecisionAvailable("Assign"));
-		scn.FreepsAssignToMinions(boromir, enquea);
-		scn.ShadowDeclineAssignments();
-		scn.FreepsResolveSkirmish(boromir);
-		scn.PassCurrentPhaseActions();
+		// The fierce skirmish. This time the companion healed is the one exerted.
+		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
+		scn.PassFierceAssignmentActions();
+		scn.FreepsAssignToMinions(aragorn, enquea);
+		scn.FreepsResolveSkirmish(aragorn);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(enquea));
+		scn.ShadowChooseOptionalTrigger(enquea);
+		assertEquals(2, scn.GetWoundsOn(enquea));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, sam));
+		scn.ShadowChooseCard(aragorn);
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(sam));
+		scn.PassFierceSkirmishActions();
+		assertEquals(2, scn.GetWoundsOn(aragorn));
 
-		// Boromir loses, takes wound
-		assertEquals(1, scn.GetWoundsOn(boromir));
+		// The relentless skirmish.
+		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
+		scn.PassAssignmentActions();
+		scn.FreepsAssignToMinions(aragorn, enquea);
+		scn.FreepsResolveSkirmish(aragorn);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(enquea));
+		scn.ShadowChooseOptionalTrigger(enquea);
+		assertEquals(3, scn.GetWoundsOn(enquea));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		scn.ShadowChooseCard(sam);
+		assertEquals(2, scn.GetWoundsOn(sam));
+		scn.PassSkirmishActions();
+		assertEquals(2, scn.GetWoundsOn(aragorn));
 
-		// Round 3: Relentless assignment
-		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
-		scn.BothPass();
-		assertTrue(scn.FreepsDecisionAvailable("Assign"));
-		scn.FreepsAssignToMinions(sam, enquea);
-		scn.ShadowDeclineAssignments();
-		scn.FreepsResolveSkirmish(sam);
-		scn.PassCurrentPhaseActions();
-
-
-		// No 4th round - should proceed to Regroup
+		// Three rounds and no fourth.
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		assertInZone(Zone.SHADOW_CHARACTERS, enquea);
+		assertEquals(3, scn.GetWoundsOn(enquea));
 	}
 }

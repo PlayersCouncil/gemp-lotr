@@ -296,6 +296,10 @@
 				trigger: {
 					type: startOfTurn
 				}
+				requires: {
+					type: CanSpot
+					filter: ally,allyHome(fellowship,3),wounded
+				}
 				effect: [
 					{
 						type: ChooseActiveCards
@@ -800,7 +804,8 @@
 			cost: {
 				type: discardFromHand
 				forced: false
-				count: 0-2
+				// At least one: declining the offer is the way to discard none (F-0300).
+				count: 1-2
 				memorize: discardedCards
 			}
 			effect: {
@@ -969,6 +974,10 @@
 		effects: {
 			type: activated
 			phase: maneuver
+			requires: {
+				type: canSpot
+				filter: side(shadow),condition
+			}
 			cost: {
 				type: exert
 				select: bearer

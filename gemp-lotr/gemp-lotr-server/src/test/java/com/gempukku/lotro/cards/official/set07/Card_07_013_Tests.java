@@ -55,18 +55,127 @@ public class Card_07_013_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void RecklessPrideTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	protected VirtualTableScenario GetAssignmentScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("pride", "7_13");
+					put("gimli", "1_13");       // Gimli, Son of Gloin: a [dwarven] companion; a skirmish ability, not used here
+					// Ancient Blade: the same ability for its own bearer, an [elven] companion
+					put("blade", "7_15");
+					put("arwen", "1_30");       // Arwen, Daughter of Elrond: her text needs a Nazgul
+					put("troop1", "1_177");     // Goblin Patrol Troop: no text at all
+					put("troop2", "1_177");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+	// The ability costs nothing, so it is not offered where it would assign nobody (Ketura on Q-0034, F-0353;
+	// CR 4.2 "assignment phase": "Many assignment actions assign a minion to a companion.  You cannot do this
+	// unless both of them are unassigned").
+	@Test
+	public void EachMinionMayAssignItselfToTheBearerOfRecklessPrideAndNotOnceEitherIsAssigned() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetAssignmentScenario();
+
+		var pride = scn.GetFreepsCard("pride");
+		var gimli = scn.GetFreepsCard("gimli");
+		var blade = scn.GetFreepsCard("blade");
+		var arwen = scn.GetFreepsCard("arwen");
+		scn.MoveCompanionsToTable(gimli, arwen);
+		scn.AttachCardsTo(gimli, pride);
+		scn.AttachCardsTo(arwen, blade);
+
+		var troop1 = scn.GetShadowCard("troop1");
+		var troop2 = scn.GetShadowCard("troop2");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(troop1, troop2);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPass();
 
-		assertEquals(2, scn.GetTwilight());
+		// Each minion has the ability, in the words of this card.
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+		assertTrue(scn.ShadowActionAvailable(troop1, "Reckless Pride"));
+		assertTrue(scn.ShadowActionAvailable(troop2, "Reckless Pride"));
+		assertFalse(scn.IsCharAssigned(gimli));
+		assertFalse(scn.IsCharAssigned(troop1));
+
+		scn.ShadowUseCardAction(troop1, "Reckless Pride");
+
+		assertTrue(scn.IsCharAssignedAgainst(gimli, troop1));
+		assertFalse(scn.IsCharAssigned(arwen));
+		assertFalse(scn.IsCharAssigned(troop2));
+
+		scn.FreepsPass();
+
+		// The assigned minion has the ability no longer, and neither has the other minion now that the bearer is
+		// assigned.  Ancient Blade's, whose bearer is not, is still the unassigned minion's to use.
+		assertFalse(scn.ShadowActionAvailable(troop1, "Reckless Pride"));
+		assertFalse(scn.ShadowActionAvailable(troop2, "Reckless Pride"));
+		assertFalse(scn.ShadowActionAvailable(troop1, "Ancient Blade"));
+		assertTrue(scn.ShadowActionAvailable(troop2, "Ancient Blade"));
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+	}
+
+	protected VirtualTableScenario GetDefenderScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("pride", "7_13");
+					put("gimli", "1_13");       // Gimli, Son of Gloin: a [dwarven] companion, vitality 3; a skirmish ability, not used here
+					// Disquiet of Our People: "Maneuver: Exert a Dwarf to make that Dwarf defender +1 (or defender +2
+					// if you spot an Orc) until the regroup phase."
+					put("disquiet", "2_2");
+					put("savage1", "1_151");    // Uruk Savage: an Uruk-hai, so no Orc is spotted; damage +1 and nothing else
+					put("savage2", "1_151");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// CR 4.2 "assignment phase": an assignment action assigns a minion to a companion only if "both of them are
+	// unassigned"; "defender +X" is the Free Peoples player's own to use when he assigns ("you may assign that
+	// character to one additional unassigned minion").  So once the bearer has a minion the ability would assign
+	// nobody, whatever his defender bonus, and by Q-0034 it is not offered.
+	@Test
+	public void WithItsBearerAssignedTheAbilityIsNotOfferedThoughHeHasDefender() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetDefenderScenario();
+
+		var pride = scn.GetFreepsCard("pride");
+		var gimli = scn.GetFreepsCard("gimli");
+		var disquiet = scn.GetFreepsCard("disquiet");
+		scn.MoveCompanionsToTable(gimli);
+		scn.AttachCardsTo(gimli, pride);
+		scn.MoveCardsToHand(disquiet);
+
+		var savage1 = scn.GetShadowCard("savage1");
+		var savage2 = scn.GetShadowCard("savage2");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(savage1, savage2);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		// Gimli is the only Dwarf, so he is the one exerted.
+		scn.FreepsPlayCard(disquiet);
+		assertEquals(1, scn.GetKeywordCount(gimli, Keyword.DEFENDER));
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPass();
+
+		assertTrue(scn.ShadowActionAvailable(savage1, "Reckless Pride"));
+		assertTrue(scn.ShadowActionAvailable(savage2, "Reckless Pride"));
+		scn.ShadowUseCardAction(savage1, "Reckless Pride");
+		assertTrue(scn.IsCharAssignedAgainst(gimli, savage1));
+
+		scn.FreepsPass();
+
+		assertFalse(scn.ShadowActionAvailable(savage2, "Reckless Pride"));
+		assertFalse(scn.IsCharAssigned(savage2));
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
 	}
 }

@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_17_136_Tests
@@ -19,6 +20,20 @@ public class Card_17_136_Tests
 				{{
 					put("card", "17_136");
 					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// White Hand Warrior, wounded, and a companion who is no hunter.
+	protected VirtualTableScenario GetWoundedWarriorScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("warrior", "17_136");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, vitality 4, no hunter
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -62,6 +77,44 @@ public class Card_17_136_Tests
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(2, card.getBlueprint().getVitality());
 		assertEquals(5, card.getBlueprint().getSiteNumber());
+	}
+
+	// "Each time this minion is assigned to a non-hunter companion, you may heal a hunter": a "you may" on a
+	// trigger is asked and may be declined (Q-0021; Q-0220: G).  The definition healed a hunter unasked.
+	// F-0462.
+	@Test
+	public void HealingAHunterIsOfferedAndMayBeDeclined() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetWoundedWarriorScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		var warrior = scn.GetShadowCard("warrior");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(warrior);
+		scn.AddWoundsToChar(warrior, 1);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, warrior);
+
+		// The Warrior is himself the wounded hunter: the offer is made, and declined.
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(warrior));
+		scn.ShadowDeclineOptionalTrigger();
+		assertEquals(1, scn.GetWoundsOn(warrior));
+
+		// Hunter 4 against a non-hunter: 10 to Aragorn's 8.  He is fierce, and is assigned to Aragorn again.
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.PassSkirmishActions();
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.InFierceRound());
+		scn.PassFierceAssignmentActions();
+		scn.FreepsAssignToMinions(aragorn, warrior);
+
+		// The offer is made again, and taken: he is the only wounded hunter, and nothing more is asked.
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(warrior));
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(0, scn.GetWoundsOn(warrior));
+		assertTrue(scn.FreepsAwaitingSkirmishChoice());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

@@ -8,17 +8,30 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_V1_025_Tests
 {
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "101_25");
-					// put other cards in here as needed for the test case
+					put("flock", "101_25");
+					put("flock2", "101_25");
+					put("saruman", "3_69");     // Saruman, Servant of the Eye: [isengard] minion, not weather; an assignment ability never used here
+					put("agent", "12_144");     // Saruman, Agent of the Dark Lord: [uruk-hai] minion, cost 4, site 4, lurker; a skirmish ability and a trigger on a companion's death, neither met here
+					put("snows", "1_138");      // Saruman's Snows: [isengard] weather condition
+					put("chill", "1_134");      // Saruman's Chill: [isengard] weather condition
+					put("frost", "1_135");      // Saruman's Frost: [isengard] weather condition
+					put("storm", "2_48");       // Wizard Storm: [isengard] weather condition
+
+					put("guard1", "1_7");       // Dwarf Guard: companion, vitality 2; its only text is a requirement to play it
+					put("guard2", "1_7");
+					put("guard3", "1_7");
+					put("guard4", "1_7");
+					put("guard5", "1_7");
+					put("thrarin", "1_27");     // Thrarin, Dwarven Smith: ally, vitality 2; a maneuver ability never used here
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -42,12 +55,12 @@ public class Card_V1_025_Tests
 		 * Vitality: 3
 		 * Site Number: 4
 		 * Game Text: This minion is twilight cost -1 for each companion you can spot over 3.
-		* 	Shadow: Spot 2 wounded companions (or spot Saruman) to take an [isengard] weather into hand from your draw deck or discard pile (limit once per phase).
-		*/
+		 * 	Shadow: Spot 2 wounded companions (or spot Saruman) to take an [isengard] weather into hand from your draw deck or discard pile (limit once per phase).
+		 */
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("flock");
 
 		assertEquals("Crebain Flock", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +75,364 @@ public class Card_V1_025_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void CrebainFlockTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void CostsItsPrintedTwoWithThreeCompanionsAndAnAlly() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var flock = scn.GetShadowCard("flock");
+		scn.MoveCardsToHand(flock);
+		scn.MoveCompanionsToTable("guard1", "guard2");
+		scn.MoveCardsToSupportArea(scn.GetFreepsCard("thrarin"));
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SetTwilight(5);
+		scn.FreepsPass();
 
-		assertEquals(2, scn.GetTwilight());
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		// 5 set + 3 companions + 2 for the shadow number of site 2
+		assertEquals(10, scn.GetTwilight());
+		assertInZone(Zone.HAND, flock);
+		assertEquals(1, scn.GetShadowHandCount());
+
+		scn.ShadowPlayCard(flock);
+
+		assertInZone(Zone.SHADOW_CHARACTERS, flock);
+		assertEquals(0, scn.GetShadowHandCount());
+		// Frodo and two Dwarf Guards: no companion over 3, and the ally is not a companion.
+		// 10 - 2 to play - 2 roaming (a site 4 minion played at site 2)
+		assertEquals(6, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void CostsOneLessWithFourCompanions() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var flock = scn.GetShadowCard("flock");
+		scn.MoveCardsToHand(flock);
+		scn.MoveCompanionsToTable("guard1", "guard2", "guard3");
+
+		scn.StartGame();
+		scn.SetTwilight(4);
+		scn.FreepsPass();
+
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		// 4 set + 4 companions + 2 for the shadow number of site 2
+		assertEquals(10, scn.GetTwilight());
+
+		scn.ShadowPlayCard(flock);
+
+		assertInPlay(flock);
+		// One companion over 3: 10 - (2 - 1) to play - 2 roaming at site 2
+		assertEquals(7, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void CostsTwoLessWithFiveCompanions() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var flock = scn.GetShadowCard("flock");
+		scn.MoveCardsToHand(flock);
+		scn.MoveCompanionsToTable("guard1", "guard2", "guard3", "guard4");
+
+		scn.StartGame();
+		scn.SetTwilight(3);
+		scn.FreepsPass();
+
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		// 3 set + 5 companions + 2 for the shadow number of site 2
+		assertEquals(10, scn.GetTwilight());
+
+		scn.ShadowPlayCard(flock);
+
+		assertInPlay(flock);
+		// Two companions over 3: 10 - (2 - 2) to play - 2 roaming at site 2
+		assertEquals(8, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void CostDoesNotGoBelowZeroWithSixCompanions() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var flock = scn.GetShadowCard("flock");
+		scn.MoveCardsToHand(flock);
+		scn.MoveCompanionsToTable("guard1", "guard2", "guard3", "guard4", "guard5");
+
+		scn.StartGame();
+		scn.SetTwilight(2);
+		scn.FreepsPass();
+
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		// 2 set + 6 companions + 2 for the shadow number of site 2
+		assertEquals(10, scn.GetTwilight());
+
+		scn.ShadowPlayCard(flock);
+
+		assertInPlay(flock);
+		// Three companions over 3: 2 - 3 is below zero, so the cost is 0. 10 - 0 to play - 2 roaming at site 2
+		assertEquals(8, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void SpottingTwoWoundedCompanionsTakesAnIsengardWeatherFromTheDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var flock = scn.GetShadowCard("flock");
+		var flock2 = scn.GetShadowCard("flock2");
+		var snows = scn.GetShadowCard("snows");
+		var chill = scn.GetShadowCard("chill");
+		var frost = scn.GetShadowCard("frost");
+		var saruman = scn.GetShadowCard("saruman");
+		var guard1 = scn.GetFreepsCard("guard1");
+		var guard2 = scn.GetFreepsCard("guard2");
+		var thrarin = scn.GetFreepsCard("thrarin");
+		scn.MoveCompanionsToTable(guard1, guard2);
+		scn.MoveCardsToSupportArea(thrarin);
+		scn.MoveCardsToHand(flock2);
+		// Snows, Chill and Saruman stay in the draw deck; Frost gives the discard pile a weather too.
+		scn.MoveCardsToDiscard(frost);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(flock);
+		scn.AddWoundsToChar(guard1, 1);
+		scn.AddWoundsToChar(thrarin, 1);
+		scn.SetTwilight(5);
+		scn.FreepsPass();
+
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		// 5 set + 3 companions + 2 for the shadow number of site 2
+		assertEquals(10, scn.GetTwilight());
+		// One wounded companion, a wounded ally, two unwounded companions and no Saruman
+		assertEquals(1, scn.GetWoundsOn(guard1));
+		assertEquals(1, scn.GetWoundsOn(thrarin));
+		assertEquals(0, scn.GetWoundsOn(guard2));
+		assertFalse(scn.ShadowActionAvailable(flock));
+
+		// A second companion is wounded. Playing the other Flock is only there to have the game ask again.
+		scn.AddWoundsToChar(guard2, 1);
+		scn.ShadowPlayCard(flock2);
+		assertTrue(scn.ShadowActionAvailable(flock));
+
+		assertEquals(0, scn.GetShadowHandCount());
+		int deckBefore = scn.GetShadowDeckCount();
+		assertInZone(Zone.DECK, snows, chill);
+
+		scn.ShadowUseCardAction(flock);
+		assertTrue(scn.ShadowChoiceAvailable("draw deck"));
+		assertTrue(scn.ShadowChoiceAvailable("discard pile"));
+		scn.ShadowChoose("draw deck");
+		scn.ShadowDismissRevealedCards();
+
+		assertTrue(scn.ShadowHasCardChoiceAvailable(snows, chill));
+		// An [isengard] minion that is not weather
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(saruman));
+		scn.ShadowChooseCardBPFromSelection(snows);
+
+		assertInZone(Zone.HAND, snows);
+		assertEquals(1, scn.GetShadowHandCount());
+		assertEquals(deckBefore - 1, scn.GetShadowDeckCount());
+		assertInZone(Zone.DECK, chill);
+		assertInZone(Zone.DISCARD, frost);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void SpottingSarumanIsEnoughWithNoWoundedCompanions() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var flock = scn.GetShadowCard("flock");
+		// "Saruman" is a title: this one is not [isengard], unlike the Flock.
+		var saruman = scn.GetShadowCard("agent");
+		var chill = scn.GetShadowCard("chill");
+		var frost = scn.GetShadowCard("frost");
+		scn.MoveCardsToHand(saruman);
+		scn.MoveCardsToDiscard(frost);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(flock);
+		scn.SetTwilight(3);
+		scn.FreepsPass();
+
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		// 3 set + 1 for Frodo + 2 for the shadow number of site 2
+		assertEquals(6, scn.GetTwilight());
+		// No wounded companion and no Saruman
+		assertEquals(0, scn.GetWoundsOn(scn.GetRingBearer()));
+		assertFalse(scn.ShadowActionAvailable(flock));
+
+		scn.ShadowPlayCard(saruman);
+		assertInPlay(saruman);
+		// 6 - 4 to play Saruman - 2 roaming at site 2
+		assertEquals(0, scn.GetTwilight());
+		assertTrue(scn.ShadowActionAvailable(flock));
+
+		assertEquals(0, scn.GetShadowHandCount());
+		scn.ShadowUseCardAction(flock);
+		scn.ShadowChoose("draw deck");
+		scn.ShadowDismissRevealedCards();
+		scn.ShadowChooseCardBPFromSelection(chill);
+
+		assertInZone(Zone.HAND, chill);
+		assertEquals(1, scn.GetShadowHandCount());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void EachCopyTakesFromTheDiscardPileOnceInAPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var flock = scn.GetShadowCard("flock");
+		var flock2 = scn.GetShadowCard("flock2");
+		var frost = scn.GetShadowCard("frost");
+		var storm = scn.GetShadowCard("storm");
+		var saruman = scn.GetShadowCard("saruman");
+		var guard1 = scn.GetFreepsCard("guard1");
+		var guard2 = scn.GetFreepsCard("guard2");
+		scn.MoveCompanionsToTable(guard1, guard2);
+		// Frost and Storm are the weather in the discard pile; Snows and Chill stay in the draw deck.
+		scn.MoveCardsToDiscard(frost, storm, saruman);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(flock, flock2);
+		scn.AddWoundsToChar(guard1, 1);
+		scn.AddWoundsToChar(guard2, 1);
+		scn.FreepsPass();
+
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		// One action for each copy.
+		assertTrue(scn.ShadowActionAvailable(flock));
+		assertTrue(scn.ShadowActionAvailable(flock2));
+		assertEquals(0, scn.GetShadowHandCount());
+		assertEquals(3, scn.GetShadowDiscardCount());
+
+		scn.ShadowUseCardAction(flock);
+		assertTrue(scn.ShadowChoiceAvailable("draw deck"));
+		assertTrue(scn.ShadowChoiceAvailable("discard pile"));
+		scn.ShadowChoose("discard pile");
+
+		assertTrue(scn.ShadowHasCardChoiceAvailable(frost, storm));
+		// An [isengard] minion that is not weather
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(saruman));
+		scn.ShadowChooseCard(frost);
+
+		assertInZone(Zone.HAND, frost);
+		assertEquals(1, scn.GetShadowHandCount());
+		assertEquals(2, scn.GetShadowDiscardCount());
+		// The first copy has had its once; the limit of the second copy is its own (CR 4.2 "limit").
+		assertFalse(scn.ShadowActionAvailable(flock));
+		assertTrue(scn.ShadowActionAvailable(flock2));
+
+		scn.ShadowUseCardAction(flock2);
+		scn.ShadowChoose("discard pile");
+		// Storm is the only [isengard] weather left in the discard pile, so it is taken without asking.
+		assertInZone(Zone.HAND, storm);
+		assertEquals(2, scn.GetShadowHandCount());
+		assertEquals(1, scn.GetShadowDiscardCount());
+		assertInZone(Zone.DISCARD, saruman);
+		assertFalse(scn.ShadowActionAvailable(flock));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void CanBeUsedAgainInASecondShadowPhaseOfTheSameTurn() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var flock = scn.GetShadowCard("flock");
+		var frost = scn.GetShadowCard("frost");
+		var storm = scn.GetShadowCard("storm");
+		var guard1 = scn.GetFreepsCard("guard1");
+		var guard2 = scn.GetFreepsCard("guard2");
+		scn.MoveCompanionsToTable(guard1, guard2);
+		scn.MoveCardsToDiscard(frost, storm);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(flock);
+		scn.AddWoundsToChar(guard1, 1);
+		scn.AddWoundsToChar(guard2, 1);
+		scn.FreepsPass();
+
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertTrue(scn.ShadowActionAvailable(flock));
+
+		scn.ShadowUseCardAction(flock);
+		scn.ShadowChoose("discard pile");
+		scn.ShadowChooseCard(frost);
+		assertInZone(Zone.HAND, frost);
+		assertFalse(scn.ShadowActionAvailable(flock));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		// Nobody is assigned to the Flock, so it is still in play when the fellowship moves again.
+		scn.SkipToMovementDecision();
+		scn.FreepsChooseToMove();
+
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertInPlay(flock);
+		assertEquals(1, scn.GetWoundsOn(guard1));
+		assertEquals(1, scn.GetWoundsOn(guard2));
+		assertTrue(scn.ShadowActionAvailable(flock));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void AWeatherFoundInTheDrawDeckNeedNotBeTakenAndTheDeckIsStillReshuffled() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var flock = scn.GetShadowCard("flock");
+		var snows = scn.GetShadowCard("snows");
+		var chill = scn.GetShadowCard("chill");
+		var frost = scn.GetShadowCard("frost");
+		var storm = scn.GetShadowCard("storm");
+		var saruman = scn.GetShadowCard("saruman");
+		var guard1 = scn.GetFreepsCard("guard1");
+		var guard2 = scn.GetFreepsCard("guard2");
+		scn.MoveCompanionsToTable(guard1, guard2);
+		// Snows is the one [isengard] weather left in the draw deck; the discard pile has three of its own.
+		scn.MoveCardsToDiscard(chill, frost, storm);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(flock);
+		scn.AddWoundsToChar(guard1, 1);
+		scn.AddWoundsToChar(guard2, 1);
+		scn.FreepsPass();
+
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		assertTrue(scn.ShadowActionAvailable(flock));
+		assertInZone(Zone.DECK, snows, saruman);
+		assertInZone(Zone.DISCARD, chill, frost, storm);
+		assertEquals(0, scn.GetShadowHandCount());
+		int deckBefore = scn.GetShadowDeckCount();
+		int shuffles = scn.GetShadowDeckShuffleCount();
+		int opponentShuffles = scn.GetFreepsDeckShuffleCount();
+
+		scn.ShadowUseCardAction(flock);
+		assertTrue(scn.ShadowChoiceAvailable("draw deck"));
+		assertTrue(scn.ShadowChoiceAvailable("discard pile"));
+		scn.ShadowChoose("draw deck");
+		scn.ShadowDismissRevealedCards();
+
+		// Snows is the only card that could be chosen, and it is still not taken unasked: "There is no penalty
+		// if you don't find (or choose not to play) a card you are looking for in your draw deck."
+		assertTrue(scn.ShadowHasCardChoiceAvailable(snows));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(chill, frost, storm, saruman));
+		assertEquals(0, scn.ShadowGetChoiceMin());
+		assertEquals(1, scn.ShadowGetChoiceMax());
+		scn.ShadowDeclineChoosing();
+
+		// Nothing was taken: Snows is still in the deck, and the game has not gone to the discard pile for one instead.
+		assertInZone(Zone.DECK, snows);
+		assertEquals(deckBefore, scn.GetShadowDeckCount());
+		assertInZone(Zone.DISCARD, chill, frost, storm);
+		assertEquals(0, scn.GetShadowHandCount());
+		// The deck was looked through, so it is reshuffled though nothing came out of it: once, and only that deck.
+		assertEquals(shuffles + 1, scn.GetShadowDeckShuffleCount());
+		assertEquals(opponentShuffles, scn.GetFreepsDeckShuffleCount());
+		// The ability has been used all the same, and that was its once for this phase.
+		assertFalse(scn.ShadowActionAvailable(flock));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

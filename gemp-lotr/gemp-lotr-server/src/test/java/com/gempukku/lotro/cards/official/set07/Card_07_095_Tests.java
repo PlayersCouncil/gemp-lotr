@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_07_095_Tests
@@ -18,7 +19,22 @@ public class Card_07_095_Tests
 				new HashMap<>()
 				{{
 					put("card", "7_95");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetFortificationScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("stands", "7_95");
+					put("citadel", "5_32");     // Citadel of the Stars: a [gondor] fortification
+					put("wall", "5_33");        // City Wall: a [gondor] fortification
+					put("spear", "7_108");      // Knight's Spear: a [gondor] possession, and no fortification
+					put("guard", "1_7");        // Dwarf Guard: the one card of the Free Peoples draw deck
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -55,18 +71,39 @@ public class Card_07_095_Tests
 		assertEquals(3, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GondorStillStandsTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void DiscardsItselfToPlaceAGondorFortificationFromYourDiscardPileOnTopOfYourDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFortificationScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var stands = scn.GetFreepsCard("stands");
+		var citadel = scn.GetFreepsCard("citadel");
+		var wall = scn.GetFreepsCard("wall");
+		var spear = scn.GetFreepsCard("spear");
+		var guard = scn.GetFreepsCard("guard");
+		scn.MoveCardsToSupportArea(stands);
+		scn.MoveCardsToDiscard(citadel, wall, spear);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// No minion is in play, so the wound of its own trigger at the start of the regroup phase falls on nobody.
+		scn.SkipToPhase(Phase.REGROUP);
 
-		assertEquals(3, scn.GetTwilight());
+		assertInZone(Zone.SUPPORT, stands);
+		assertEquals(1, scn.GetFreepsDeckCount());
+		assertEquals(guard, scn.GetFreepsTopOfDeck());
+		assertTrue(scn.FreepsActionAvailable(stands));
+
+		scn.FreepsUseCardAction(stands);
+		assertInZone(Zone.DISCARD, stands);
+		// The two fortifications; not the [gondor] possession, nor Gondor Still Stands itself, which lies there now.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(citadel, wall));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(spear, stands));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		scn.FreepsChooseCards(citadel);
+
+		assertEquals(2, scn.GetFreepsDeckCount());
+		assertEquals(citadel, scn.GetFreepsTopOfDeck());
+		assertEquals(guard, scn.GetFreepsBottomOfDeck());
+		assertInZone(Zone.DISCARD, wall, spear, stands);
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 	}
 }

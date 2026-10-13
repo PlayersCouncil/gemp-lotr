@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_13_050_Tests
@@ -19,7 +20,23 @@ public class Card_13_050_Tests
 				new HashMap<>()
 				{{
 					put("card", "13_50");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetDeagolScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("gollum", "13_50");
+					// Déagol, Fateful Finder: the only card of that title, a Free Peoples [gollum] follower
+					put("deagol", "13_46");
+					// Defiled: an [orc] event that removes [orc] cards in its owner's discard pile from the game,
+					// copies of itself among them: a card removed from the game that is not titled Déagol
+					put("defiled", "13_105");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -61,18 +78,85 @@ public class Card_13_050_Tests
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GollumTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void IsStrengthPlus2AndFierceWhileACardTitledDeagolIsRemovedFromTheGame() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetDeagolScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var gollum = scn.GetShadowCard("gollum");
+		var deagol = scn.GetShadowCard("deagol");
+		var defiled = scn.GetShadowCard("defiled");
+		scn.MoveCardsToDiscard(deagol, defiled);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.FreepsPass();
+		scn.MoveMinionsToTable(gollum);
 
-		assertEquals(2, scn.GetTwilight());
+		assertEquals(5, scn.GetStrength(gollum));
+		assertFalse(scn.HasKeyword(gollum, Keyword.FIERCE));
+
+		// A card of his owner's that is removed from the game, and is not titled Déagol.
+		scn.MoveCardToZone(defiled, Zone.REMOVED);
+		assertEquals(5, scn.GetStrength(gollum));
+		assertFalse(scn.HasKeyword(gollum, Keyword.FIERCE));
+
+		scn.MoveCardToZone(deagol, Zone.REMOVED);
+		assertEquals(7, scn.GetStrength(gollum));
+		assertTrue(scn.HasKeyword(gollum, Keyword.FIERCE));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void PlayedFromTheDiscardPileByRemovingDeagolFromTheGameHeIsStrengthPlus2AndFierce() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetDeagolScenario();
+
+		var gollum = scn.GetShadowCard("gollum");
+		var deagol = scn.GetShadowCard("deagol");
+		var defiled = scn.GetShadowCard("defiled");
+		scn.MoveCardsToDiscard(gollum, deagol, defiled);
+
+		scn.StartGame();
+		scn.FreepsPass();
+		scn.SetTwilight(4);
+		scn.ShadowRefreshDecision();
+
+		assertEquals(5, scn.GetStrength(gollum));
+		assertTrue(scn.ShadowActionAvailable(gollum));
+
+		// Déagol is the only card of that title in the discard pile: nothing is asked.
+		scn.ShadowUseCardAction(gollum);
+		assertInZone(Zone.REMOVED, deagol);
+		assertInDiscard(defiled);
+		assertInZone(Zone.SHADOW_CHARACTERS, gollum);
+		// 2 to play + 2 roaming: his site number is 3 and the fellowship is at site 2
+		assertEquals(0, scn.GetTwilight());
+
+		assertEquals(7, scn.GetStrength(gollum));
+		assertTrue(scn.HasKeyword(gollum, Keyword.FIERCE));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void TheOtherPlayersDeagolRemovedFromTheGameMakesGollumStrengthPlus2AndFierceAsWell() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetDeagolScenario();
+
+		// The Free Peoples player's own Déagol, in his own discard pile: on his turns as the Shadow player his
+		// own Gollum removes it from the game.
+		var theirDeagol = scn.GetFreepsCard("deagol");
+		scn.MoveCardsToDiscard(theirDeagol);
+
+		var gollum = scn.GetShadowCard("gollum");
+
+		scn.StartGame();
+		scn.FreepsPass();
+		scn.MoveMinionsToTable(gollum);
+
+		assertEquals(5, scn.GetStrength(gollum));
+		assertFalse(scn.HasKeyword(gollum, Keyword.FIERCE));
+
+		// The text names no owner: "a card titled Déagol is removed from the game" (F-0375).
+		scn.MoveCardToZone(theirDeagol, Zone.REMOVED);
+		assertEquals(7, scn.GetStrength(gollum));
+		assertTrue(scn.HasKeyword(gollum, Keyword.FIERCE));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

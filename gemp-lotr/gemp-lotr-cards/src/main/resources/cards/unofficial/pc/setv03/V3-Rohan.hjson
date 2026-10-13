@@ -66,7 +66,7 @@
 				]
 			}
 		]
-		gametext: The Shadow player may hinder any of their own support cards.<br>Spot an unhindered Shadow support card.  Make a [rohan] companion strength +1 for each of the following: that card's twilight cost, cards stacked on that card, culture tokens on that card, copies of that card in play.
+		gametext: The Shadow player may hinder any of their own support cards.<br>Spot an unhindered Shadow support card.  Make a [rohan] companion strength +1 for each of the following: that card's twilight cost, cards stacked on that card, culture tokens on that card, copies of that card you can spot.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -248,7 +248,17 @@
 				cost: {
 					type: Hinder
 					select: choose(hinderable, beacon)
-					count: 1-5
+					// X is at least 1 and no more than the items in the discard pile that can be played on
+					// one of your Men (Q-0094); the beacons that can be hindered are the other bound.
+					count: {
+						type: range
+						from: 1
+						to: {
+							type: ForEachInDiscard
+							discard: you
+							filter: item,PlayableOn(your,Man)
+						}
+					}
 					memorize: hinderedBeacons
 				}
 				effect: {
@@ -337,7 +347,7 @@
 				]
 			}
 		]
-		gametext: Exert a skirmishing valiant companion twice (or spot Eowyn in a skirmish) to make a minion strength -1 for each hindered or wounded card you can spot.
+		gametext: Exert a skirmishing valiant companion twice (or spot Eowyn in a skirmish) to make a skirmishing minion strength -1 for each hindered or wounded card you can spot.
 		lore: "'You look upon a woman. Éowyn I am, Éomund's daughter. You stand between me and my lord and kin. Begone, if you be not deathless! For living or dark undead, I will smite you, if you touch him.'"
 		promotext: ""
 		alts: {
@@ -527,8 +537,17 @@
 					select: self
 				}
 				effect: {
+					// Only a skirmish involving a [rohan] Man is resolved (F-0143). The ability is still
+					// offered in any other skirmish: hindering Merry is a cost that can be paid.
+					type: If
+					check: {
+						type: CanSpot
+						filter: culture(rohan),Man,InSkirmish
+					}
+					true: {
 						type: EndPhase
 					}
+				}
 			}
 		]
 		gametext: Valiant. Enduring.<br>While you can spot 3 [rohan] companions (or Eowyn), Merry is considered a [Rohan] Man.<br>Each time another [rohan] Man exerts, you may exert Merry to heal that Man.<br>Skirmish: If he is not assigned to a skirmish, hinder Merry to immediately resolve a skirmish involving a [rohan] Man.
@@ -589,19 +608,29 @@
 						memorize: exertedMan
 					}
 				]
-				effect: {
-					type: AddModifier
-					until: start(Regroup)
-					modifier: {
-						type: AddKeywordFromCards
-						filter: your, Man
-						from: memory(exertedMan)
-						unloaded: true
+				effect: [
+					// The Men in play when the ability is used, and no Man who comes later (Q-0011, F-0144).
+					{
+						type: MemorizeActive
+						filter: your, Man, not(memory(exertedMan))
+						memory: otherMen
 					}
-				}
+					{
+						type: AddModifier
+						until: start(Regroup)
+						modifier: {
+							type: AddKeywordFromCards
+							filter: memory(otherMen)
+							from: memory(exertedMan)
+							unloaded: true
+							// The keywords on him when the ability is used, whatever becomes of him (Q-0096).
+							snapshot: true
+						}
+					}
+				]
 			}
 		]
-		gametext: Beacon. To play, hinder 2 beacons.<br><b>Maneuver</b>: Hinder this beacon and exert an unbound Man.  Until the regroup phase, each of your other Men gain each of the unloaded keywords on that Man.
+		gametext: Beacon. To play, hinder 2 beacons.<br><b>Maneuver</b>: Hinder this beacon and exert an unbound Man.  Until the regroup phase, each of your other Men gain each of the unloaded keywords (except race) on that Man.
 		lore: "'It is over-late to send for aid when you are already besieged,' answered Beregond. 'But I do not know the counsel of the Lord and his captains.'"
 		promotext: ""
 		alts: {
@@ -811,10 +840,10 @@
 				}
 				effect: [
 					{
-						type: Exert
+						type: Wound
 						select: choose(mounted, minion)
 						times: 2
-						memorize: exertedMinion
+						memorize: woundedMinion
 					}
 					{
 						type: Exert
@@ -823,11 +852,19 @@
 						memorize: exertedComps
 					}
 					{
-						type: DiscardStackedCards
-						select: choose(side(Shadow))
-						count: {
-							type: ForEachInMemory
+						// Nothing is asked when nobody exerted (F-0149).
+						type: If
+						check: {
+							type: HasCardInMemory
 							memory: exertedComps
+						}
+						true: {
+							type: DiscardStackedCards
+							select: choose(side(Shadow))
+							count: {
+								type: ForEachInMemory
+								memory: exertedComps
+							}
 						}
 					}
 				]

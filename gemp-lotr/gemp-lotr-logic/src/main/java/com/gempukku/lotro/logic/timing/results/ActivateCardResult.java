@@ -11,6 +11,7 @@ public class ActivateCardResult extends EffectResult {
     private final String _player;
     private boolean _effectCancelled;
     private Zone _activatedZone;
+    private boolean _activatedInSupportArea;
 
     public ActivateCardResult(PhysicalCard source, String performingPlayer, Timeword actionTimeword, Zone activatedZone) {
         super(Type.ACTIVATE);
@@ -37,7 +38,24 @@ public class ActivateCardResult extends EffectResult {
         return _effectCancelled;
     }
 
+    @Override
+    public boolean isCancelled() {
+        return _effectCancelled;
+    }
+
     public Zone getActivatedZone() {
         return _activatedZone;
+    }
+
+    /**
+     * Whether the card was in a support area when its ability was used: lying in one, or borne by a card that
+     * was (Filters.isInSupportArea).  The zone alone is getActivatedZone().
+     */
+    public boolean wasActivatedInSupportArea() {
+        return _activatedInSupportArea;
+    }
+
+    public void setActivatedInSupportArea(boolean activatedInSupportArea) {
+        _activatedInSupportArea = activatedInSupportArea;
     }
 }

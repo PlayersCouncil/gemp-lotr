@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_10_026_Tests
@@ -18,7 +19,6 @@ public class Card_10_026_Tests
 				new HashMap<>()
 				{{
 					put("card", "10_26");
-					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -62,18 +62,51 @@ public class Card_10_026_Tests
 		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void CursedofErechTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void IsPlayedByAddingAThreat() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var cursed = scn.GetFreepsCard("card");
+		scn.MoveCardsToHand(cursed);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
+		assertEquals(0, scn.GetThreats());
+		assertEquals(0, scn.GetTwilight());
+		assertTrue(scn.FreepsPlayAvailable(cursed));
+		scn.FreepsPlayCard(cursed);
+
+		assertEquals(1, scn.GetThreats());
 		assertEquals(3, scn.GetTwilight());
+		assertInZone(Zone.FREE_CHARACTERS, cursed);
+		// "When you play Cursed of Erech, exert him twice."
+		assertEquals(2, scn.GetWoundsOn(cursed));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void IsNotOfferedWhenAThreatCannotBeAdded() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var cursed = scn.GetFreepsCard("card");
+		scn.MoveCardsToHand(cursed);
+
+		scn.StartGame();
+
+		// The Ring-bearer is the only companion in play, so one threat is as many as there may be: the board
+		// nearest to one on which the threat can be added.  He is not counted as a companion before he is played.
+		scn.AddThreats(1);
+		scn.FreepsRefreshDecision();
+		assertEquals(1, scn.GetThreats());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertInZone(Zone.HAND, cursed);
+		assertFalse(scn.FreepsPlayAvailable(cursed));
+
+		// With the threat gone he is offered again.
+		scn.RemoveThreats(1);
+		scn.FreepsRefreshDecision();
+		assertEquals(0, scn.GetThreats());
+		assertTrue(scn.FreepsPlayAvailable(cursed));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

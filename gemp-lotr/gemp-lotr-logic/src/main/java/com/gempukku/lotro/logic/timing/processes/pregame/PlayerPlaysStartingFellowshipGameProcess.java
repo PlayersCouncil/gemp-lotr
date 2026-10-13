@@ -2,6 +2,7 @@ package com.gempukku.lotro.logic.timing.processes.pregame;
 
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Filterable;
+import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.filters.Filter;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
@@ -24,7 +25,9 @@ import java.util.Set;
 public class PlayerPlaysStartingFellowshipGameProcess implements GameProcess {
     /**
      * The card types a starting fellowship may contain beyond companions when
-     * {@link ModifierFlag#EXTRA_CARD_TYPES_IN_STARTING_FELLOWSHIP} is active for the player.
+     * {@link ModifierFlag#EXTRA_CARD_TYPES_IN_STARTING_FELLOWSHIP} is active for the player.  Only the Free
+     * Peoples cards of these types: a starting fellowship is Free Peoples cards, and the flag lifts the rule's
+     * "not allies, possessions, artifacts, or conditions" and nothing else (Q-0189, F-0343).
      */
     private static final Set<CardType> EXTRA_STARTING_TYPES = EnumSet.of(
             CardType.POSSESSION, CardType.ARTIFACT, CardType.CONDITION, CardType.ALLY, CardType.FOLLOWER);
@@ -66,8 +69,9 @@ public class PlayerPlaysStartingFellowshipGameProcess implements GameProcess {
         final boolean extraTypes = allowsExtraCardTypes(game, playerId);
         Filterable typeFilter = CardType.COMPANION;
         if (extraTypes)
-            typeFilter = Filters.or(CardType.COMPANION, CardType.POSSESSION, CardType.ARTIFACT,
-                    CardType.CONDITION, CardType.ALLY, CardType.FOLLOWER);
+            typeFilter = Filters.or(CardType.COMPANION,
+                    Filters.and(Side.FREE_PEOPLE, Filters.or(CardType.POSSESSION, CardType.ARTIFACT,
+                            CardType.CONDITION, CardType.ALLY, CardType.FOLLOWER)));
 
         return Filters.filter(game, game.getGameState().getDeck(playerId),
                 typeFilter,

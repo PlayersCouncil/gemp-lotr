@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_04_178_Tests
@@ -19,7 +20,21 @@ public class Card_04_178_Tests
 				new HashMap<>()
 				{{
 					put("card", "4_178");
-					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetAssignmentScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("unferth", "4_178");
+					put("savage", "1_151");     // Uruk Savage: an [isengard] minion who is no Man; Damage +1 its whole text
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: vitality 4; a maneuver ability only
+					put("gimli", "1_13");       // Gimli, Son of Glóin: vitality 3; a skirmish ability only
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -62,18 +77,33 @@ public class Card_04_178_Tests
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void UnferthTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void ACompanionTheFreePeoplesPlayerAssignsToAnIsengardManMustExert() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetAssignmentScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var unferth = scn.GetShadowCard("unferth");
+		var savage = scn.GetShadowCard("savage");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var frodo = scn.GetRingBearer();
+		scn.MoveCompanionsToTable(aragorn, gimli);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(unferth, savage);
+		scn.SkipToAssignments();
 
-		assertEquals(2, scn.GetTwilight());
+		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(gimli));
+
+		// Aragorn to Unferth, an [isengard] Man; Gimli to the Savage, an [isengard] Uruk-hai.
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, unferth}, new PhysicalCardImpl[]{gimli, savage});
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(unferth));
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, unferth));
+		assertTrue(scn.IsCharAssignedAgainst(gimli, savage));
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 	}
 }

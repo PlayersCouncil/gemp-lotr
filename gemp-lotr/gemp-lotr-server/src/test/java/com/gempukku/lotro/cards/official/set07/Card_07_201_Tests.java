@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static com.gempukku.lotro.framework.VirtualTableScenario.P1;
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_07_201_Tests
@@ -19,8 +19,24 @@ public class Card_07_201_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "7_201");
-					put("enquea", "1_231");
+					put("spearman", "7_201");
+					put("spearman2", "7_201");
+					// Úlairë Lemenya, Lieutenant of Morgul: a [wraith] Nazgûl, cost 4, site 3, not fierce; her text
+					// is about companions bearing [wraith] conditions
+					put("lemenya", "1_232");
+					// Ulaire Attea, Khamul of the East: a Nazgûl who is [raider]; his text needs 3 burdens
+					put("khamul", "103_61");
+					// Morgul Creeper: a [wraith] Orc who is no Nazgûl; its text needs 3 burdens
+					put("creeper", "8_75");
+					put("troop", "1_177");      // Goblin Patrol Troop: a [moria] Orc with no text
+					// Morgul Regiment: "For each Nazgûl you can spot, the Free Peoples player must exert a companion
+					// to assign this minion to a skirmish."  Another minion with a price of its own.
+					put("regiment", "7_197");
+
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a [gondor] Man, vitality 4
+					put("gimli", "1_13");       // Gimli, Son of Glóin: a Dwarf, vitality 3
+					// Bilbo, Retired Adventurer: a [shire] ally, vitality 3, home site 3; he can exert, and is no companion
+					put("bilbo", "1_284");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -48,7 +64,7 @@ public class Card_07_201_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("spearman");
 
 		assertEquals("Morgul Spearman", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -63,150 +79,385 @@ public class Card_07_201_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
+
 	@Test
 	public void MustExertToAssignMorgulSpearman() throws DecisionResultInvalidException, CardNotFoundException {
-		// Arrange
-		VirtualTableScenario scn = GetScenario();
+		var scn = GetScenario();
 
-		var card = scn.GetShadowCard("card");
-		var enquea = scn.GetShadowCard("enquea");
-		var frodo = scn.GetRingBearer();
-
-		scn.MoveCardsToHand(card);
-		scn.MoveCardsToHand(enquea);
-
-		scn.StartGame();
-
-		scn.SetTwilight(20);
-
-		scn.FreepsPassCurrentPhaseAction();
-
-		scn.ShadowPlayCard(card);
-		scn.ShadowPlayCard(enquea);
-		scn.ShadowPassCurrentPhaseAction();
-
-		scn.SkipToAssignments();
-
-		assertTrue(scn.FreepsDecisionAvailable(
-				"Would you like to exert a companion to be able to assign Morgul Spearman to skirmish?"));
-
-		// Act
-		scn.PlayerDecided(P1, "0");
-
-		// Assert
-		assertEquals(1, scn.GetWoundsOn(frodo));
-		assertTrue(scn.FreepsCanAssign(card));
-	}
-
-	protected VirtualTableScenario GetTwoSpearmenScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(
-				new HashMap<>()
-				{{
-					put("aragorn", "1_89");
-					put("gimli", "1_13");
-
-					put("spearman1", "7_201");
-					put("spearman2", "7_201");
-					put("enquea", "1_231");
-				}},
-				VirtualTableScenario.FellowshipSites,
-				VirtualTableScenario.FOTRFrodo,
-				VirtualTableScenario.RulingRing
-		);
-	}
-
-	// Issue #1090: the assignment cost is per-minion.  Paying it for one Morgul Spearman must not
-	// make every other Morgul Spearman (or any other assignment-cost minion) assignable as well.
-	@Test
-	public void PayingForOneSpearmanDoesNotLetFreepsAssignAnother() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetTwoSpearmenScenario();
-
-		var frodo = scn.GetRingBearer();
-		var aragorn = scn.GetFreepsCard("aragorn");
-		var gimli = scn.GetFreepsCard("gimli");
-		var spearman1 = scn.GetShadowCard("spearman1");
-		var spearman2 = scn.GetShadowCard("spearman2");
-		var enquea = scn.GetShadowCard("enquea");
-
-		scn.MoveCompanionsToTable(aragorn, gimli);
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(spearman1, spearman2, enquea);
-
-		scn.SkipToAssignments();
-
-		// Both spearmen ask for their own cost; the Shadow player orders the two required triggers.
-		assertFalse(scn.ShadowAnyDecisionsAvailable());
-		assertTrue(scn.FreepsDecisionAvailable("Would you like to exert a companion to be able to assign Morgul Spearman to skirmish?"));
-		scn.FreepsChooseNo();
-
-		assertTrue(scn.FreepsDecisionAvailable("Would you like to exert a companion to be able to assign Morgul Spearman to skirmish?"));
-		scn.FreepsChooseYes();
-		scn.FreepsChooseCard(aragorn);
-		assertEquals(1, scn.GetWoundsOn(aragorn));
-
-		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
-		assertFalse(scn.FreepsCanAssign(spearman1));
-		assertTrue(scn.FreepsCanAssign(spearman2));
-		assertTrue(scn.FreepsCanAssign(enquea));
-		var targets = scn.FreepsGetShadowAssignmentTargets();
-		assertFalse(targets.contains(String.valueOf(spearman1.getCardId())));
-		assertTrue(targets.contains(String.valueOf(spearman2.getCardId())));
-		assertTrue(targets.contains(String.valueOf(enquea.getCardId())));
-
-		// The unpaid spearman is still available for the Shadow player to assign.
-		scn.FreepsAssignToMinions(aragorn, spearman2);
-		assertTrue(scn.ShadowDecisionAvailable("Assign minions"));
-		assertTrue(scn.ShadowGetShadowAssignmentTargets().contains(String.valueOf(spearman1.getCardId())));
-		scn.ShadowAssignToMinions(frodo, spearman1);
-		assertTrue(scn.IsCharAssignedAgainst(frodo, spearman1));
-		assertTrue(scn.IsCharAssignedAgainst(aragorn, spearman2));
-	}
-
-	@Test
-	public void PayingForSpearmanDoesNotLetFreepsAssignAnUnpaidMorgulRegiment() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = new VirtualTableScenario(
-				new HashMap<>()
-				{{
-					put("aragorn", "1_89");
-					put("gimli", "1_13");
-
-					put("spearman", "7_201");
-					put("regiment", "7_197");
-					put("enquea", "1_231");
-				}},
-				VirtualTableScenario.FellowshipSites,
-				VirtualTableScenario.FOTRFrodo,
-				VirtualTableScenario.RulingRing
-		);
-
-		var aragorn = scn.GetFreepsCard("aragorn");
-		var gimli = scn.GetFreepsCard("gimli");
 		var spearman = scn.GetShadowCard("spearman");
-		var regiment = scn.GetShadowCard("regiment");
-		var enquea = scn.GetShadowCard("enquea");
-
-		scn.MoveCompanionsToTable(aragorn, gimli);
+		var lemenya = scn.GetShadowCard("lemenya");
+		var frodo = scn.GetRingBearer();
+		scn.MoveCardsToHand(lemenya);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(spearman, regiment, enquea);
+		scn.MoveMinionsToTable(spearman);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		// The Nazgûl arrives by play, beside a Spearman already there.
+		assertTrue(scn.ShadowPlayAvailable(lemenya));
+		scn.ShadowPlayCard(lemenya);
+		scn.ShadowPass();
 
 		scn.SkipToAssignments();
 
-		// The Free Peoples player orders the two different required triggers; resolve the Regiment's first.
-		assertTrue(scn.FreepsDecisionAvailable("Required responses"));
-		scn.FreepsChooseAction("blueprintId", "7_197");
-		assertTrue(scn.FreepsDecisionAvailable("assign Morgul Regiment"));
-		scn.FreepsChooseNo();
+		// The price is offered as he starts assigning, ahead of it (Q-0283).
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(spearman));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		scn.FreepsChooseOptionalTrigger(spearman);
 
-		assertTrue(scn.FreepsDecisionAvailable("assign Morgul Spearman"));
-		scn.FreepsChooseYes();
+		// The one companion there is exerts, with nothing to choose, and the Spearman is then his to assign.
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(spearman));
+		scn.FreepsAssignToMinions(frodo, spearman);
+
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertTrue(scn.IsCharAssignedAgainst(frodo, spearman));
+		// The Nazgûl is left over for the Shadow player.
+		assertTrue(scn.ShadowDecisionAvailable("Assign minions"));
+	}
+
+	// The price is the Free Peoples player's, and is paid only for an assignment he makes.  There is no question
+	// to decline: he declines by leaving the Spearman unassigned.
+	@Test
+	public void LeavingMorgulSpearmanUnassignedCostsNothingAndTheShadowPlayerAssignsItForNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var spearman = scn.GetShadowCard("spearman");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var frodo = scn.GetRingBearer();
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(spearman, lemenya);
+		scn.SkipToAssignments();
+
+		// He is offered to pay for the Spearman, and passes: his assignment lists both companions and the Nazgûl, and
+		// not the Spearman.
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(spearman));
+		scn.FreepsDeclineOptionalTrigger();
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(aragorn));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(frodo));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(lemenya));
+		assertFalse(scn.FreepsHasAssignmentTargetAvailable(spearman));
+		scn.FreepsDeclineAssignments();
+
+		// He paid for nothing, so nobody exerts.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+
+		// The Shadow player's assignment lists the Spearman, and he assigns it with nobody exerting.
+		assertTrue(scn.ShadowDecisionAvailable("Assign minions"));
+		assertTrue(scn.ShadowHasAssignmentTargetAvailable(spearman));
+		assertTrue(scn.ShadowHasAssignmentTargetAvailable(lemenya));
+		scn.ShadowAssignToMinions(aragorn, spearman);
+
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, spearman));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
+	}
+
+	// With a second companion beside the Ring-bearer, which of them exerts is the Free Peoples player's to choose,
+	// asked once he has assigned the Spearman and before anything is assigned.
+	@Test
+	public void ExertingACompanionOfHisChoiceLetsTheFreePeoplesPlayerAssignMorgulSpearman() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var spearman = scn.GetShadowCard("spearman");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var troop = scn.GetShadowCard("troop");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var bilbo = scn.GetFreepsCard("bilbo");
+		var frodo = scn.GetRingBearer();
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveAlliesToTable(bilbo);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(spearman, lemenya, troop);
+		scn.SkipToAssignments();
+
+		// The Spearman is offered to be paid for, the Nazgûl and the Troop are not, and nobody has exerted.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(bilbo));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(spearman));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(lemenya));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(troop));
+		scn.FreepsChooseOptionalTrigger(spearman);
+
+		// "Exert a companion": either of the two, and one of them must; Bilbo, an ally who could exert, is not
+		// asked.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, frodo));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(bilbo));
+		assertEquals(1, scn.FreepsGetChoiceMin());
 		scn.FreepsChooseCard(aragorn);
 
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// His assignment then lists the Spearman beside the Nazgûl and the Troop.
 		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(spearman));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(lemenya));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(troop));
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, spearman}, new PhysicalCardImpl[]{frodo, troop});
+
+		// One exertion was the whole price: the Troop, assigned in the same answer, cost nothing.
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, spearman));
+		assertTrue(scn.IsCharAssignedAgainst(frodo, troop));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(bilbo));
+		// The Nazgûl is left over for the Shadow player.
+		assertTrue(scn.ShadowDecisionAvailable("Assign minions"));
+	}
+
+	// "A Nazgûl" is a race: Khamûl is a [raider] minion, and the price is owed beside him alone.
+	@Test
+	public void ANazgulOfAnotherCultureIsSpottedAndEitherCompanionMayExert() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var spearman = scn.GetShadowCard("spearman");
+		var khamul = scn.GetShadowCard("khamul");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var frodo = scn.GetRingBearer();
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(spearman, khamul);
+		scn.SkipToAssignments();
+
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(spearman));
+		scn.FreepsChooseOptionalTrigger(spearman);
+
+		// The companion who exerts need not be the one the Spearman is assigned to.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, frodo));
+		scn.FreepsChooseCard(frodo);
+		scn.FreepsAssignToMinions(aragorn, spearman);
+
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, spearman));
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.ShadowDecisionAvailable("Assign minions"));
+	}
+
+	// "While you can spot a Nazgûl" is no "for each Nazgûl": two of them, of two cultures, ask one exertion and no more.
+	@Test
+	public void WithTwoNazgulSpottedMorgulSpearmanStillCostsOneExertionAndNotTwo() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var spearman = scn.GetShadowCard("spearman");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var khamul = scn.GetShadowCard("khamul");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var frodo = scn.GetRingBearer();
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(spearman, lemenya, khamul);
+		scn.SkipToAssignments();
+
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(spearman));
+		scn.FreepsChooseOptionalTrigger(spearman);
+
+		// The one exertion, by either companion; a second would be asked before his assigning.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, frodo));
+		scn.FreepsChooseCard(frodo);
+		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		scn.FreepsAssignToMinions(aragorn, spearman);
+
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, spearman));
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		// The Nazgûl are left over for the Shadow player.
+		assertTrue(scn.ShadowDecisionAvailable("Assign minions"));
+	}
+
+	// "While you can spot a Nazgûl": with none, beside [wraith] Orcs who are none, the Spearman is assigned like any
+	// other minion.
+	@Test
+	public void WithNoNazgulToSpotMorgulSpearmanIsAssignedForNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var spearman = scn.GetShadowCard("spearman");
+		var creeper = scn.GetShadowCard("creeper");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var frodo = scn.GetRingBearer();
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(spearman, creeper);
+		scn.SkipToAssignments();
+
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(spearman));
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, spearman}, new PhysicalCardImpl[]{frodo, creeper});
+
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, spearman));
+		assertTrue(scn.IsCharAssignedAgainst(frodo, creeper));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
+	}
+
+	// The price is each minion's own: a Morgul Spearman the Free Peoples player assigns is paid for by itself, and
+	// neither a second Spearman nor a Morgul Regiment that he leaves alone costs him anything.
+	@Test
+	public void EachSpearmanTheFreePeoplesPlayerAssignsIsPaidForByItself() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var spearman1 = scn.GetShadowCard("spearman");
+		var spearman2 = scn.GetShadowCard("spearman2");
+		var regiment = scn.GetShadowCard("regiment");
+		var lemenya = scn.GetShadowCard("lemenya");
+		scn.MoveCompanionsToTable(aragorn, gimli);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(spearman1, spearman2, regiment, lemenya);
+		scn.SkipToAssignments();
+
+		// Each of the three that charge is offered to be paid for; the Nazgûl is not.
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(spearman1));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(spearman2));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(regiment));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(lemenya));
+
+		// He pays for one Spearman: one exertion, of his choice, and no more.  The other two are offered again, and he
+		// passes.
+		scn.FreepsChooseOptionalTrigger(spearman2);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, aragorn, gimli));
+		scn.FreepsChooseCard(aragorn);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(spearman1));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(regiment));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(spearman2));
+		scn.FreepsDeclineOptionalTrigger();
+
+		// The Spearman paid for and the Nazgûl are his to assign; the two not paid for are not.
+		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(spearman2));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(lemenya));
+		assertFalse(scn.FreepsHasAssignmentTargetAvailable(spearman1));
+		assertFalse(scn.FreepsHasAssignmentTargetAvailable(regiment));
+		scn.FreepsAssignToMinions(aragorn, spearman2);
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, spearman2));
+		assertFalse(scn.IsCharAssigned(spearman1));
+		assertFalse(scn.IsCharAssigned(regiment));
+
+		// The Spearman and the Regiment he left alone are the Shadow player's to assign, for nothing.
+		assertTrue(scn.ShadowDecisionAvailable("Assign minions"));
+		assertTrue(scn.ShadowHasAssignmentTargetAvailable(spearman1));
+		assertTrue(scn.ShadowHasAssignmentTargetAvailable(regiment));
+		assertFalse(scn.ShadowHasAssignmentTargetAvailable(spearman2));
+		scn.ShadowAssignToMinions(new PhysicalCardImpl[]{frodo, spearman1}, new PhysicalCardImpl[]{gimli, regiment});
+		assertTrue(scn.IsCharAssignedAgainst(frodo, spearman1));
+		assertTrue(scn.IsCharAssignedAgainst(gimli, regiment));
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, spearman2));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
+	}
+
+	@Test
+	public void AssigningBothSpearmenCostsAnExertionForEach() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var spearman1 = scn.GetShadowCard("spearman");
+		var spearman2 = scn.GetShadowCard("spearman2");
+		var lemenya = scn.GetShadowCard("lemenya");
+		scn.MoveCompanionsToTable(aragorn, gimli);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(spearman1, spearman2, lemenya);
+		scn.SkipToAssignments();
+
+		// One exertion for each, paid for one after the other, and the same companion may make both.
+		scn.FreepsChooseOptionalTrigger(spearman1);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, aragorn, gimli));
+		scn.FreepsChooseCard(aragorn);
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(spearman2));
+		scn.FreepsChooseOptionalTrigger(spearman2);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, aragorn, gimli));
+		scn.FreepsChooseCard(aragorn);
+
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, spearman1}, new PhysicalCardImpl[]{gimli, spearman2});
+
+		assertEquals(2, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, spearman1));
+		assertTrue(scn.IsCharAssignedAgainst(gimli, spearman2));
+		assertTrue(scn.ShadowDecisionAvailable("Assign minions"));
+	}
+
+	@Test
+	public void WithEveryCompanionExhaustedMorgulSpearmanIsNotTheFreePeoplesPlayersToAssignOnceANazgulIsPlayed() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var spearman = scn.GetShadowCard("spearman");
+		var troop = scn.GetShadowCard("troop");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var bilbo = scn.GetFreepsCard("bilbo");
+		var frodo = scn.GetRingBearer();
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveAlliesToTable(bilbo);
+		scn.MoveCardsToHand(lemenya);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(spearman, troop);
+		// Both companions (vitality 4) are exhausted.  Bilbo, an ally, could exert, and is no companion.
+		scn.AddWoundsToChar(frodo, 3);
+		scn.AddWoundsToChar(aragorn, 3);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		// With no Nazgûl to spot there is no price, and the Spearman is the Free Peoples player's to assign.
+		assertTrue(scn.AwaitingShadowPhaseActions());
 		assertTrue(scn.FreepsCanAssign(spearman));
-		assertFalse(scn.FreepsCanAssign(regiment));
-		assertFalse(scn.FreepsGetShadowAssignmentTargets().contains(String.valueOf(regiment.getCardId())));
+
+		scn.ShadowPlayCard(lemenya);
+		assertFalse(scn.FreepsCanAssign(spearman));
+		scn.ShadowPass();
+
+		scn.SkipToAssignments();
+
+		// His assignment lists the Troop and the Nazgûl, and not the Spearman he cannot pay for.
+		assertTrue(scn.FreepsDecisionAvailable("Assign minions"));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(troop));
+		assertTrue(scn.FreepsHasAssignmentTargetAvailable(lemenya));
+		assertFalse(scn.FreepsHasAssignmentTargetAvailable(spearman));
+		assertFalse(scn.FreepsCanAssignAgainst(aragorn, spearman));
+		scn.FreepsDeclineAssignments();
+
+		// Nobody exerted, and the Spearman is the Shadow player's to assign, for nothing.
+		assertEquals(0, scn.GetWoundsOn(bilbo));
+		assertTrue(scn.ShadowHasAssignmentTargetAvailable(spearman));
+		scn.ShadowAssignToMinions(aragorn, spearman);
+
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, spearman));
+		assertEquals(3, scn.GetWoundsOn(frodo));
+		assertEquals(3, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(bilbo));
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 	}
 }

@@ -1,5 +1,7 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.common.Phase;
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
@@ -26,6 +28,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ModifyStrength implements EffectAppenderProducer {
+    // The name of the source card's counter for a "(limit +N)" on strength.  It is the card's own for the phase
+    // and is kept apart from the counter of the card's uses (limitPerPhase).
+    private static final String LIMIT_COUNTER = "strengthLimit-";
+
     @Override
     public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "amount", "count", "select", "until", "memorize", "limitPerCardThisPhase");
@@ -39,10 +45,35 @@ public class ModifyStrength implements EffectAppenderProducer {
         if (limit > -1 && effectObject.get("until") != null)
             throw new InvalidCardDefinitionException("ModifyStrength: If limitPerCardThisPhase is defined, the until should not be, as it can only be applied until current phase");
 
-        MultiEffectAppender result = new MultiEffectAppender();
+        final EffectAppender cardResolver = CardResolver.resolveCards(select, valueSource, memory, "you", "Choose cards to modify strength of", environment);
+        // Strength given for the current phase by a skirmish action is gone when the skirmish is.
+        final boolean endsWithSkirmish = time.endsWithCurrentPhase(Phase.SKIRMISH);
 
-        result.addEffectAppender(
-                CardResolver.resolveCards(select, valueSource, memory, "you", "Choose cards to modify strength of", environment));
+        MultiEffectAppender result = new MultiEffectAppender() {
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                final EffectForecast given = EffectForecast.givenTo(cardResolver.forecast(actionContext), endsWithSkirmish);
+                if (given.getVerdict() != EffectForecast.Verdict.UNKNOWN)
+                    return given;
+                // A capped amount whose cap is spent comes to nothing, whoever it is given to.  It is asked for
+                // the card it will be worked out for, which is this effect's source.
+                if (EffectForecast.isSpent(amountSource, actionContext, actionContext.getSource()))
+                    return EffectForecast.AT_LIMIT;
+                if (limit == -1)
+                    return given;
+
+                // A limited bonus is the source card's for the phase (CR 4.2 "limit"), whoever it is given to:
+                // once the card has given its limit it gives nothing more.  The counter is read and not
+                // counted on.
+                final LotroGame game = actionContext.getGame();
+                final int used = game.getModifiersQuerying().getUntilEndOfPhaseLimitCounter(actionContext.getSource(), LIMIT_COUNTER, game.getGameState().getCurrentPhase()).getUsedLimit();
+                if (used >= limit)
+                    return EffectForecast.AT_LIMIT;
+                return given;
+            }
+        };
+
+        result.addEffectAppender(cardResolver);
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
@@ -53,13 +84,16 @@ public class ModifyStrength implements EffectAppenderProducer {
                         final int amount = evaluator.evaluateExpression(game, actionContext.getSource());
 
                         if (limit != -1 && amount != 0) {
+                            // "(limit +N)" is the source card's for the whole phase (CR 4.2 "limit"; Ketura on
+                            // F-0125): one counter for the card, counted once for a use however many cards the
+                            // use reaches, and what a use would add beyond the limit is ignored.
                             int absAmount = Math.abs(amount);
                             int multiplier = absAmount / amount;
                             List<Modifier> modifiers = new LinkedList<>();
-                            for (PhysicalCard affectedCard : cardsFromMemory) {
-                                int incrementedBy = game.getModifiersQuerying().getUntilEndOfPhaseLimitCounter(action.getActionSource(), affectedCard.getCardId() + "-", game.getGameState().getCurrentPhase()).incrementToLimit(limit, absAmount);
+                            if (!cardsFromMemory.isEmpty()) {
+                                int incrementedBy = game.getModifiersQuerying().getUntilEndOfPhaseLimitCounter(action.getActionSource(), LIMIT_COUNTER, game.getGameState().getCurrentPhase()).incrementToLimit(limit, absAmount);
                                 if (incrementedBy > 0) {
-                                    modifiers.add(new StrengthModifier(actionContext.getSource(), affectedCard, null, multiplier * incrementedBy));
+                                    modifiers.add(new StrengthModifier(actionContext.getSource(), Filters.in(cardsFromMemory), null, multiplier * incrementedBy));
                                 }
                             }
                             return new AddUntilModifierEffect(modifiers, time);

@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_07_010_Tests
@@ -19,6 +20,20 @@ public class Card_07_010_Tests
 				{{
 					put("card", "7_10");
 					// put other cards in here as needed for the test case
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// Two copies of the condition are the Free Peoples player's whole hand.
+	protected VirtualTableScenario GetStackOfferScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("loyalty1", "7_10");
+					put("loyalty2", "7_10");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -53,6 +68,35 @@ public class Card_07_010_Tests
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
+	}
+
+	// Ketura on Q-0034: an optional action with no cost that would do nothing is not offered.  With no card left
+	// in hand nothing can be stacked, and no card is drawn "for each [dwarven] card you stack".
+	@Test
+	public void TheOfferToStackIsMadeWhileACardIsLeftInHandAndNotOnceTheHandIsEmpty() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetStackOfferScenario();
+
+		var loyalty1 = scn.GetFreepsCard("loyalty1");
+		var loyalty2 = scn.GetFreepsCard("loyalty2");
+		scn.MoveCardsToHand(loyalty1, loyalty2);
+
+		scn.StartGame();
+
+		// The second copy is still in hand: there is a card to stack.
+		scn.FreepsPlayCard(loyalty1);
+		assertInZone(Zone.SUPPORT, loyalty1);
+		assertEquals(1, scn.GetFreepsHandCount());
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(loyalty1));
+		scn.FreepsDeclineOptionalTrigger();
+		assertInHand(loyalty2);
+
+		// It is the last card in hand: once it is played the hand is empty.
+		scn.FreepsPlayCard(loyalty2);
+		assertInZone(Zone.SUPPORT, loyalty2);
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(loyalty2));
+		assertEquals(0, scn.GetStackedCards(loyalty2).size());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	// Uncomment any @Test markers below once this is ready to be used

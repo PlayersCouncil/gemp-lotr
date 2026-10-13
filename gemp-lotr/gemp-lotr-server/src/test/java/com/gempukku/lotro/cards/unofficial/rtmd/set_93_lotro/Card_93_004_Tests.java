@@ -16,17 +16,19 @@ import static org.junit.Assert.*;
 
 public class Card_93_004_Tests
 {
-	private final HashMap<String, String> cards = new HashMap<>() {{
-		put("aragorn", "1_89"); // Aragorn: Gondor companion (potential wound target)
-		put("runner", "1_178"); // Goblin Runner: Moria Orc minion
-		put("event", "1_116"); // Swordarm of the White Tower: skirmish event
-		put("troop", "1_177"); // Goblin Patrol Troop: Moria Orc minion, strength 13, vitality 3
-		put("drums", "1_168"); // Drums in the Deep: Shadow skirmish event
-		put("gimli", "1_13"); // Gimli: second companion, for a second skirmish
-	}};
-
 	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("aragorn", "1_89"); // Aragorn: Gondor companion (potential wound target)
+					put("runner", "1_178"); // Goblin Runner: Moria Orc minion
+					put("event", "1_116"); // Swordarm of the White Tower: skirmish event
+					put("troop", "1_177"); // Goblin Patrol Troop: Moria Orc minion, strength 13, vitality 3
+					put("drums", "1_168"); // Drums in the Deep: Shadow skirmish event
+					put("gimli", "1_13"); // Gimli: second companion, for a second skirmish
+					put("breath", "1_25"); // Still Draws Breath: a Response event (a Dwarf wins a skirmish: heal him)
+					put("bounder", "1_286"); // Bounder: a [shire] Hobbit ally
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -35,7 +37,18 @@ public class Card_93_004_Tests
 	}
 
 	protected VirtualTableScenario GetShadowScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("aragorn", "1_89"); // Aragorn: Gondor companion (potential wound target)
+					put("runner", "1_178"); // Goblin Runner: Moria Orc minion
+					put("event", "1_116"); // Swordarm of the White Tower: skirmish event
+					put("troop", "1_177"); // Goblin Patrol Troop: Moria Orc minion, strength 13, vitality 3
+					put("drums", "1_168"); // Drums in the Deep: Shadow skirmish event
+					put("gimli", "1_13"); // Gimli: second companion, for a second skirmish
+					put("breath", "1_25"); // Still Draws Breath: a Response event (a Dwarf wins a skirmish: heal him)
+					put("bounder", "1_286"); // Bounder: a [shire] Hobbit ally
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -49,6 +62,7 @@ public class Card_93_004_Tests
 		 * Set: RTMD 93
 		 * Name: Race Text 93_4
 		 * Type: MetaSite
+		 * Intensity: 6
 		 * Game Text: Wound one of your characters after each skirmish in which you did not play a
 		 * skirmish event.
 		 */
@@ -56,12 +70,14 @@ public class Card_93_004_Tests
 		var card = scn.GetFreepsCard("mod");
 		assertEquals("Race Text 93_4", card.getBlueprint().getTitle());
 		assertEquals(CardType.METASITE, card.getBlueprint().getCardType());
+		assertEquals(6, card.getBlueprint().getIntensity());
 	}
 
 	@Test
 	public void WoundsWhenNoSkirmishEventPlayed() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetFreepsScenario();
 
+		var frodo = scn.GetRingBearer();
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var runner = scn.GetShadowCard("runner");
 
@@ -72,15 +88,21 @@ public class Card_93_004_Tests
 		scn.SkipToAssignments();
 		scn.FreepsAssignAndResolve(aragorn, runner);
 
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+
 		// Don't play any skirmish events — just pass
-		scn.FreepsPassCurrentPhaseAction();
-		scn.ShadowPassCurrentPhaseAction();
+		scn.FreepsPass();
+		scn.ShadowPass();
 
 		// After skirmish resolves, the trigger fires — wound one of your characters
 		// Aragorn has 0 wounds before, should be asked to choose a wound target
 		assertTrue(scn.FreepsDecisionAvailable("Choose cards to wound"));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, frodo));
+		assertEquals(1, scn.FreepsGetChoiceMin());
 		scn.FreepsChooseCard(aragorn);
 		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
 	@Test
@@ -102,12 +124,13 @@ public class Card_93_004_Tests
 		// Play the skirmish event
 		scn.FreepsPlayCard(event);
 
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 
 		// No wound trigger should fire because we played a skirmish event
 		// Should proceed past the skirmish without a wound choice
 		assertFalse(scn.FreepsDecisionAvailable("Choose cards to wound"));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
@@ -128,20 +151,22 @@ public class Card_93_004_Tests
 		scn.SkipToAssignments();
 		scn.FreepsAssignAndResolve(aragorn, troop);
 
-		scn.FreepsPassCurrentPhaseAction();
-		scn.ShadowPassCurrentPhaseAction();
+		scn.FreepsPass();
+		scn.ShadowPass();
 
 		// The Shadow player (who holds the modifier) wounds one of their own characters: a minion
 		assertFalse(scn.FreepsDecisionAvailable("Choose cards to wound"));
 		assertTrue(scn.ShadowDecisionAvailable("Choose cards to wound"));
 		assertTrue(scn.ShadowHasCardChoiceAvailable(troop, runner));
 		assertFalse(scn.ShadowHasCardChoiceAvailable(aragorn));
+		assertEquals(1, scn.ShadowGetChoiceMin());
 		scn.ShadowChooseCard(troop);
 
 		assertEquals(1, scn.GetWoundsOn(troop));
 		assertEquals(0, scn.GetWoundsOn(runner));
 		// Aragorn only took the skirmish loss wound
 		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
 	@Test
@@ -161,12 +186,11 @@ public class Card_93_004_Tests
 		scn.SkipToAssignments();
 		scn.FreepsAssignAndResolve(aragorn, troop);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowPlayCard(drums);
-		if (scn.ShadowDecisionAvailable("Choose cards"))
-			scn.ShadowChooseCard(troop);
-		scn.FreepsPassCurrentPhaseAction();
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowChooseCard(troop);
+		scn.FreepsPass();
+		scn.ShadowPass();
 
 		assertFalse(scn.ShadowDecisionAvailable("Choose cards to wound"));
 		assertEquals(0, scn.GetWoundsOn(troop));
@@ -192,12 +216,15 @@ public class Card_93_004_Tests
 		scn.FreepsAssignAndResolve(aragorn, troop);
 
 		scn.FreepsPlayCard(event);
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowDecisionAvailable("Choose cards to wound"));
 		scn.ShadowChooseCard(runner);
+		// The Runner has 1 vitality: the wound kills it
 		assertInZone(Zone.DISCARD, runner);
+		assertEquals(0, scn.GetWoundsOn(troop));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
 	@Test
@@ -219,8 +246,8 @@ public class Card_93_004_Tests
 		scn.FreepsAssignAndResolve(aragorn, troop);
 
 		scn.FreepsPlayCard(event);
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 
 		assertFalse(scn.FreepsDecisionAvailable("Choose cards to wound"));
 		assertFalse(scn.ShadowDecisionAvailable("Choose cards to wound"));
@@ -249,36 +276,29 @@ public class Card_93_004_Tests
 		scn.MoveMinionsToTable(p2Troop);
 		scn.SkipToAssignments();
 		scn.FreepsAssignAndResolve(p1Aragorn, p2Troop);
-		scn.FreepsPassCurrentPhaseAction();
-		scn.ShadowPassCurrentPhaseAction();
+		scn.FreepsPass();
+		scn.ShadowPass();
 		assertTrue(scn.FreepsDecisionAvailable("Choose cards to wound"));
 		assertFalse(scn.FreepsHasCardChoiceAvailable(p2Troop));
 		scn.FreepsChooseCard(p1Aragorn);
 		assertEquals(2, scn.GetWoundsOn(p1Aragorn));   // skirmish loss + the modifier
 
 		// Finish turn 1 without moving again
-		scn.SkipToMovementDecision();
-		scn.FreepsChooseToStay();
-		if (scn.FreepsDecisionAvailable("reconcile")) scn.FreepsDeclineReconciliation();
-		while (scn.FreepsDecisionAvailable("discard down")) scn.FreepsChooseCard((PhysicalCardImpl) scn.GetFreepsHand().getFirst());
-		if (scn.ShadowDecisionAvailable("reconcile")) scn.ShadowDeclineReconciliation();
-		while (scn.ShadowDecisionAvailable("discard down")) scn.ShadowChooseCard((PhysicalCardImpl) scn.GetShadowHand().getFirst());
+		scn.SkipToOtherPlayersTurn();
 
 		// Turn 2: P2 is Free Peoples, P1 (the holder) is the Shadow player
 		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action"));
 		scn.MoveMinionsToTable(p1Troop, p1Runner);
 		scn.SkipToPhaseInverted(Phase.ASSIGNMENT);
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		scn.ShadowAssignToMinions(p2Aragorn, p1Troop);
-		if (scn.FreepsDecisionAvailable("Assign minions"))
-			scn.FreepsDeclineAssignments();
-		if (scn.ShadowDecisionAvailable("Choose next skirmish"))
-			scn.ShadowChooseCard(p2Aragorn);
+		scn.FreepsDeclineAssignments();
+		scn.ShadowResolveSkirmish(p2Aragorn);
 
 		// Neither side plays a skirmish event
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 
 		// P1 wounds one of their own minions; nothing of P2's is offered
 		assertTrue(scn.FreepsDecisionAvailable("Choose cards to wound"));
@@ -288,6 +308,7 @@ public class Card_93_004_Tests
 		scn.FreepsChooseCard(p1Troop);
 		assertEquals(1, scn.GetWoundsOn(p1Troop));
 		assertEquals(1, scn.GetWoundsOn(p2Aragorn));   // only the skirmish loss
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 	}
 
 	@Test
@@ -308,24 +329,115 @@ public class Card_93_004_Tests
 		scn.MoveMinionsToTable(troop, runner);
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, runner}, new PhysicalCardImpl[]{gimli, troop});
-		if (scn.ShadowDecisionAvailable("Assign minions"))
-			scn.ShadowDeclineAssignments();
 
 		// Skirmish 1: Aragorn vs the runner, with a skirmish event -> no wound from the modifier
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.FreepsPlayCard(event);
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		assertFalse(scn.FreepsDecisionAvailable("Choose cards to wound"));
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 
 		// Skirmish 2: Gimli vs the troop, no skirmish event -> the modifier wounds one of your characters
-		if (scn.FreepsDecisionAvailable("Choose next skirmish"))
-			scn.FreepsResolveSkirmish(gimli);
-		scn.FreepsPassCurrentPhaseAction();
-		scn.ShadowPassCurrentPhaseAction();
+		// (Gimli, strength 6, is overwhelmed by the Troop's 13 and killed: the wound is Aragorn's to take)
+		scn.FreepsResolveSkirmish(gimli);
+		scn.FreepsPass();
+		scn.ShadowPass();
 		assertTrue(scn.FreepsDecisionAvailable("Choose cards to wound"));
 		scn.FreepsChooseCard(aragorn);
 		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void EachSkirmishWithNoSkirmishEventBringsAWoundOfItsOwn() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var troop = scn.GetShadowCard("troop");
+		var runner = scn.GetShadowCard("runner");
+
+		scn.MoveCompanionsToTable(aragorn, gimli);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop, runner);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{gimli, runner}, new PhysicalCardImpl[]{aragorn, troop});
+
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+
+		// Skirmish 1: Gimli (6) beats the Runner (5). Nothing is played: a wound, here put on Aragorn
+		scn.FreepsResolveSkirmish(gimli);
+		scn.FreepsPass();
+		scn.ShadowPass();
+		assertTrue(scn.FreepsDecisionAvailable("Choose cards to wound"));
+		scn.FreepsChooseCard(aragorn);
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(gimli));
+
+		// Skirmish 2: Aragorn (8) loses to the Troop (13) and takes the loser's wound. Nothing is played
+		// again: a second wound from the modifier, on Aragorn again
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.FreepsPass();
+		scn.ShadowPass();
+		assertEquals(2, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.FreepsDecisionAvailable("Choose cards to wound"));
+		scn.FreepsChooseCard(aragorn);
+
+		// 1 from the first skirmish's end + 1 for losing the second + 1 from the second skirmish's end
+		assertEquals(3, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void ASkirmishAbilityAndAResponseEventAreNoSkirmishEvents() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
+
+		var frodo = scn.GetRingBearer();
+		var gimli = scn.GetFreepsCard("gimli");
+		var bounder = scn.GetFreepsCard("bounder");
+		var breath = scn.GetFreepsCard("breath");
+		var troop = scn.GetShadowCard("troop");
+		var runner = scn.GetShadowCard("runner");
+
+		scn.MoveCompanionsToTable(gimli);
+		// Bounder is at home at site 2, and is left out of the skirmishes
+		scn.MoveAlliesToTable(bounder);
+		scn.MoveCardsToHand(breath);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop, runner);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(gimli, runner);
+
+		// A skirmish special ability: Gimli exerts to be strength +2
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertTrue(scn.FreepsActionAvailable(gimli));
+		scn.FreepsUseCardAction(gimli);
+		assertEquals(1, scn.GetWoundsOn(gimli));
+
+		scn.ShadowPass();
+		scn.FreepsPass();
+
+		// Gimli wins, and an event is played in the skirmish that is no skirmish event: a Response
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(breath));
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertInZone(Zone.DISCARD, breath);
+
+		// Neither spares the wound. It may go on a companion in the skirmish or out of it or on an ally,
+		// and not on the other player's minion
+		assertTrue(scn.FreepsDecisionAvailable("Choose cards to wound"));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli, frodo, bounder));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(troop));
+		scn.FreepsChooseCard(bounder);
+
+		assertEquals(1, scn.GetWoundsOn(bounder));
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(troop));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }

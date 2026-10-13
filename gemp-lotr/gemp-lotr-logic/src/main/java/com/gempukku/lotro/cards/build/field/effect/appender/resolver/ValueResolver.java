@@ -7,6 +7,7 @@ import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.modifiers.evaluator.*;
+import com.gempukku.lotro.logic.timing.PlayConditions;
 import com.gempukku.lotro.logic.timing.RuleUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -331,12 +332,15 @@ public class ValueResolver {
                 FieldUtils.validateAllowedFields(object, "limit", "amount");
                 ValueSource limitSource = resolveEvaluator(object.get("limit"), 0, environment);
                 ValueSource valueSource = resolveEvaluator(object.get("amount"), 0, environment);
+                // A limit given by a value ("limit +3 unless you can spot another Nazgul") can be read when the
+                // no-effect flag is judged, as a plain number can, so long as it does not itself count on a limit.
+                final boolean limitCanBeRead = !countsOnALimit(object.get("limit"));
                 return new ValueSource() {
                     @Override
                     public Evaluator getEvaluator(ActionContext actionContext) {
                         return new CardPhaseLimitEvaluator(actionContext.getSource(),
                                 actionContext.getGame().getGameState().getCurrentPhase(), limitSource.getEvaluator(actionContext),
-                                valueSource.getEvaluator(actionContext));
+                                valueSource.getEvaluator(actionContext), limitCanBeRead);
                     }
 
                     @Override
@@ -449,11 +453,16 @@ public class ValueResolver {
                             };
                         });
             } else if (type.equalsIgnoreCase("forEachHasAttached")) {
-                FieldUtils.validateAllowedFields(object, "filter", "over", "limit", "multiplier", "divider");
+                // "hindered: true", as on forEachYouCanSpot: the count takes in hindered cards.  For "each card
+                // he or she bears" and the like, which name nothing but a card (Ketura on Q-0098 and on Lying
+                // Counsel 15_85).
+                FieldUtils.validateAllowedFields(object, "filter", "hindered", "over", "limit", "multiplier", "divider");
                 final String filter = FieldUtils.getString(object.get("filter"), "filter");
+                final boolean hindered = FieldUtils.getBoolean(object.get("hindered"), "hindered", false);
                 final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
+                final var override = hindered ? SpotOverride.INCLUDE_HINDERED : SpotOverride.NONE;
                 return new SmartValueSource(environment, object,
-                        actionContext -> (game, cardAffected) -> Filters.countActive(game, Filters.attachedTo(cardAffected), filterableSource.getFilterable(actionContext)));
+                        actionContext -> (game, cardAffected) -> Filters.countActive(game, override, Filters.attachedTo(cardAffected), filterableSource.getFilterable(actionContext)));
             } else if (type.equalsIgnoreCase("forEachInDeadPile")) {
                 FieldUtils.validateAllowedFields(object, "filter", "limit", "over", "multiplier", "divider");
                 final String filter = FieldUtils.getString(object.get("filter"), "filter", "any");
@@ -549,6 +558,49 @@ public class ValueResolver {
                             }
                             return count;
                         });
+            } else if (type.equalsIgnoreCase("leastDiscountToPlay")) {
+                // The least X, from 0 up to "max", at which some card matching the filter can be played from the
+                // pile at twilight cost -X: the lower bound of an X that buys a play ("Remove X threats. Play
+                // The Balrog from your discard pile; its twilight cost is -X").  Playing from a pile as an effect
+                // is a cost, and so is playing from hand (Q-0062), so an X that leaves the card out of reach is
+                // not one the player may name.  The question is put to the same check a play is, so roaming, the
+                // card's own cost text and every standing modifier are counted.  "fromZone" is DISCARD, HAND, or
+                // both as a list where the card may be played from either ("play Sauron from hand or from your
+                // discard pile"): the least X that brings a card within reach in any of them.  Where no X up to
+                // "max" will do the answer is "max": the ability's own Playable requirement is what withholds
+                // it then.
+                FieldUtils.validateAllowedFields(object, "filter", "fromZone", "max", "player");
+                final String filter = FieldUtils.getString(object.get("filter"), "filter");
+                if (filter == null)
+                    throw new InvalidCardDefinitionException("LeastDiscountToPlay requires a filter.");
+                final Set<Zone> zones = FieldUtils.getEnumArray(Zone.class, object.get("fromZone"), "fromZone");
+                if (zones.isEmpty())
+                    throw new InvalidCardDefinitionException("LeastDiscountToPlay requires a fromZone.");
+                for (Zone zone : zones) {
+                    if (zone != Zone.DISCARD && zone != Zone.HAND)
+                        throw new InvalidCardDefinitionException("fromZone must be DISCARD, HAND or both for LeastDiscountToPlay.");
+                }
+                final boolean fromDiscard = zones.contains(Zone.DISCARD);
+                final boolean fromHand = zones.contains(Zone.HAND);
+                final ValueSource maxSource = resolveEvaluator(object.get("max"), environment);
+                final PlayerSource playerSource = PlayerResolver.resolvePlayer(FieldUtils.getString(object.get("player"), "player", "you"));
+                final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
+
+                return actionContext -> {
+                    final String player = playerSource.getPlayer(actionContext);
+                    final Filterable filterable = filterableSource.getFilterable(actionContext);
+                    final Evaluator maxEvaluator = maxSource.getEvaluator(actionContext);
+                    return (game, cardAffected) -> {
+                        final int max = Math.max(0, maxEvaluator.evaluateExpression(game, cardAffected));
+                        for (int discount = 0; discount < max; discount++) {
+                            if (fromDiscard && PlayConditions.canPlayFromDiscard(player, game, -discount, filterable))
+                                return discount;
+                            if (fromHand && PlayConditions.canPlayFromHand(player, game, -discount, filterable))
+                                return discount;
+                        }
+                        return max;
+                    };
+                };
             } else if (type.equalsIgnoreCase("forEachThreat")) {
                 FieldUtils.validateAllowedFields(object, "over", "limit", "multiplier", "divider");
                 return new SmartValueSource(environment, object,
@@ -789,5 +841,30 @@ public class ValueResolver {
             return valueSource.canPreEvaluate() && overSource.canPreEvaluate() && limitSource.canPreEvaluate() && multiplierSource.canPreEvaluate()
                     && dividerSource.canPreEvaluate();
         }
+    }
+
+    // Whether a value's definition holds, at any depth, a value that counts on a limit as it is worked out.
+    private static boolean countsOnALimit(Object definition) {
+        if (definition instanceof JSONObject object) {
+            final Object type = object.get("type");
+            if (type instanceof String name
+                    && (name.equalsIgnoreCase("cardPhaseLimit") || name.equalsIgnoreCase("cardAffectedLimitPerPhase")))
+                return true;
+            for (Object value : object.values()) {
+                if (countsOnALimit(value))
+                    return true;
+            }
+        } else if (definition instanceof Iterable<?> iterable) {
+            for (Object element : iterable) {
+                if (countsOnALimit(element))
+                    return true;
+            }
+        } else if (definition instanceof Object[] array) {
+            for (Object element : array) {
+                if (countsOnALimit(element))
+                    return true;
+            }
+        }
+        return false;
     }
 }

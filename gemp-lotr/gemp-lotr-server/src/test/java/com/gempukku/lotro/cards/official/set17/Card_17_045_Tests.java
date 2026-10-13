@@ -5,12 +5,14 @@ import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_17_045_Tests
@@ -20,8 +22,14 @@ public class Card_17_045_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "17_45");
-					// put other cards in here as needed for the test case
+					put("wake", "17_45");
+
+					put("brand", "17_47");      // Primitive Brand: [men] possession, a hand weapon borne by a [men] minion; bearer is strength +2
+					put("armor", "17_41");      // Ceremonial Armor: [men] possession played to the support area; a response to a wound, not met here
+					put("oath", "17_66");       // Wildman's Oath: [men] possession played to the support area; a skirmish ability never used here
+					put("haradrim", "11_74");   // Detachment of Haradrim: [men] Man, strength 12, vitality 3; a maneuver ability never used here
+					put("runner", "1_178");     // Goblin Runner: a minion to lie stacked on a possession
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8; a maneuver ability never used here
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +54,7 @@ public class Card_17_045_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("wake");
 
 		assertEquals("In the Wild Men's Wake", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -58,18 +66,57 @@ public class Card_17_045_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void IntheWildMensWakeTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void SpotsAMenPossessionInTheSupportAreaAndNotOneThatAMinionBears() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var wake = scn.GetShadowCard("wake");
+		var brand = scn.GetShadowCard("brand");
+		var armor = scn.GetShadowCard("armor");
+		var oath = scn.GetShadowCard("oath");
+		var haradrim = scn.GetShadowCard("haradrim");
+		var runner = scn.GetShadowCard("runner");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToHand(wake);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SetTwilight(3);
+		scn.MoveMinionsToTable(haradrim);
+		// The only [men] possession in play is borne by a minion: it is in no support area.
+		scn.AttachCardsTo(haradrim, brand);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(aragorn, haradrim);
+		scn.FreepsPass();
 
-		assertEquals(1, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		assertAttachedTo(brand, haradrim);
+		assertFalse(scn.ShadowPlayAvailable(wake));
+
+		// Two [men] possessions lying in the support area, one with a minion stacked on it and one with none.
+		scn.MoveCardsToSupportArea(armor, oath);
+		scn.StackCardsOn(armor, runner);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.ShadowPlayAvailable(wake));
+
+		var pool = scn.GetTwilight();
+		// 12 + 2 for the Primitive Brand
+		assertEquals(14, scn.GetStrength(haradrim));
+
+		scn.ShadowPlayCard(wake);
+		assertEquals(pool - 1, scn.GetTwilight());
+		assertTrue(scn.ShadowHasCardChoiceAvailable(armor, oath));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(brand));
+		scn.ShadowChooseCard(armor);
+
+		// The Detachment is the only [men] minion: it is strength +1 for the one minion stacked on the Armor.
+		assertEquals(15, scn.GetStrength(haradrim));
+		// The possession need not be discarded.
+		scn.ShadowChooseNo();
+		assertInZone(Zone.SUPPORT, armor, oath);
+		assertAttachedTo(brand, haradrim);
+		assertEquals(15, scn.GetStrength(haradrim));
+		assertInZone(Zone.DISCARD, wake);
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 }
