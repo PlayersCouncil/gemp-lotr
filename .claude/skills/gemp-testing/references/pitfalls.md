@@ -28,7 +28,7 @@ a draw deck can always be tried (Q-0019), so with the one candidate in the disca
 offered and the test answers `FreepsChoose("discard pile")` (A Wizard Is Never Late 30_23, `Card_31_019_Tests`).
 So does a transfer: with one legal bearer it is made without asking.
 
-**A board changed under a pending decision: an action offered though its cost cannot be paid.** The game works out what a decision offers when it sends it. After a cheat that changes the board while a player is at a choice of phase actions, call `FreepsRefreshDecision()` / `ShadowRefreshDecision()` before reading what is on offer; they fail unless that player is at such a choice. Wounds or discards cheated on turn 1 after `StartGame()` are the usual case: an action whose cost can no longer be paid still reads as offered, and looks like a cost-gating fault in the engine (Green Dragon Inn 1_322); used, it does nothing: no cost is paid and the card stays where it was (Thrór's Map 1_318, its Hobbits wounded after `StartGame()` so that none could exert). The same after a skipper: `SetFreepsHand`, `SetFreepsDrawDeck` or `MoveCardsToDiscard` leave the fellowship decision the skip ended on as it was, so a card dealt into hand on the way and then cheated into the discard pile still reads as offered, and `FreepsUseCardAction` plays it from there; a bar on plays from the discard pile then looks broken (The Great River 3_118).
+**A board changed under a pending decision: an action offered though its cost cannot be paid.** The game works out what a decision offers when it sends it. After a cheat that changes the board while a player is at a choice of phase actions, call `FreepsRefreshDecision()` / `ShadowRefreshDecision()` before reading what is on offer; they fail unless that player is at such a choice. Wounds or discards cheated on turn 1 after `StartGame()` are the usual case: an action whose cost can no longer be paid still reads as offered, and looks like a cost-gating fault in the engine (Green Dragon Inn 1_322); used, it does nothing: no cost is paid and the card stays where it was (Thrór's Map 1_318, its Hobbits wounded after `StartGame()` so that none could exert). The same after a skipper: `SetFreepsHand`, `SetFreepsDrawDeck` or `MoveCardsToDiscard` leave the fellowship decision the skip ended on as it was, so a card dealt into hand on the way and then cheated into the discard pile still reads as offered, and `FreepsUseCardAction` plays it from there; a bar on plays from the discard pile then looks broken (The Great River 3_118). It hides an offer as well: a minion cheated in at the Free Peoples player's pending regroup decision is not counted in it, so a site's "your minion" read on HIS side (a site's "you" is each player, Q-0140) needs the minion laid before `SkipToPhase(Phase.REGROUP)` (Osgiliath Channel 8_120).
 
 **A number that can only be one number is not asked for** (F-0147). Where an effect or a cost asks for a number and only one can be named (X from 1 to 1, "how many to spot" with none to spot, "remove X tokens" with none there), the game takes it. A test of such a board does not answer the question, and an answer written "to be safe" goes to the NEXT decision (the symptom is a wrong number later, not an error). To read the bounds of an X, arrange a board where two numbers can be named.
 
@@ -473,7 +473,8 @@ by a wound or by a card that places him in the dead pile (not when he is discard
 text is carried out only once it is answered: as a helper to be killed in another card's test he leaves it pending.
 Which is taken first can change what the trigger does, except where it measures the loser: Treebeard 15_38's
 "the losing character's strength" is the strength it had as the skirmish resolved, whichever is first and though
-the rule's wound has killed or strengthened it (`memorizeLoserStrength`; F-0480, engine pass 30). And an exert of "X minions" with X
+the rule's wound has killed or strengthened it (`memorizeLoserStrength`; F-0480, engine pass 30). A SITE's standing "each time a companion is killed" (Slag Mounds 7_363) raises it on every death,
+as `[null, "Required trigger from Slag Mounds"]`, and its burden is added only after `FreepsResolveRuleFirst()`. And an exert of "X minions" with X
 above the number able to exert asks nobody and exerts every one that can.
 
 **A card's standing check is a required action, ordered with the others of its moment and looked at again as it
@@ -569,7 +570,8 @@ play the game is over at once and no regroup decision arrives (a probe: the Shad
 reads REGROUP, `GameIsFinished()`, nobody asked): a test there that plays no minion rests on the Shadow player's
 decision or on `GameIsFinished()`, never on `AwaitingFreepsRegroupPhaseActions()` (Card_01_363_Tests). In the PC
 formats (`winAtEndOfRegroup: true` in lotrFormats.hjson; `"pc_fotr_block"` as the scenario's format) the
-regroup phase at site 9 IS played, so a regroup text at site 9 is a board in play there (Speak "Friend" and
+regroup phase at site 9 IS played (the five-argument constructor with `VirtualTableScenario.PCMovie` as its last argument does it:
+Card_07_363_Tests.GetRegroupAtSite9Scenario), so a regroup text at site 9 is a board in play there (Speak "Friend" and
 Enter 2_26 is offered, and lays no site 10), and the game is won when both have passed, as the Shadow player
 is about to reconcile, his hand untouched (`mechanics/game/ReconcilingTests`, `mechanics/sites/PlayingSitesTests`). A skipper that plays on through the winning
 turn finds nobody being asked anything and fails, saying that the game is over and who won it:

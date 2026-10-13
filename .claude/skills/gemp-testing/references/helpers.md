@@ -344,6 +344,11 @@ part in archery fire and skirmishes until the regroup phase. Nothing else; the a
 companion. A Wizard who is an ally and WINS a skirmish is Radagast, The Brown 31_17 by this event: 8 + 2 beats Uruk
 Shaman 1_152 (8, vitality 2) without killing it (`Card_13_078_Tests.AWizardWhoIsAnAllyAndWinsASkirmishMakesItAMinion`).
 
+**An ally in a skirmish at any site, with no Aragorn needed.** Thrarin, Dwarven Smith 1_27: unique [dwarven] Dwarf
+ally, strength 4, vitality 2, home 3F. "Maneuver: Exert Thrarin to allow him to participate in archery fire and
+skirmishes until the regroup phase." Used, he is assigned like a companion; Goblin Patrol Troop 1_177 (13)
+overwhelms him, for "an ally killed" (Card_07_363_Tests).
+
 **A special ability of an ally in a phase that has minions.** Rúmil, Elven Protector 1_57; Calaglin, Elf of Lórien
 3_10; Albert Dreary, Entertainer from Bree 1_69. Each unique, vitality 3, and used away from home. Rúmil (Elf,
 archer, home 6F): "Archery: Exert Rúmil to wound an Orc". Calaglin (Elf, archer, home 6F): "Regroup: Exert Calaglin

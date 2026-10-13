@@ -407,6 +407,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Choose X ... (or you may play it ...)" plays the card chosen (F-0152)
 - Ruled 2026-10-08 and built by engine pass 15 (F-0197, F-0196, Q-0115) [Q-0113, Q-0112]
 - "While ..., the move limit is +1 (-1)" with no "for this turn" lasts the turn (Q-0179: B; F-0333, F-0334) [Q-0122, F-0317, F-0389]
+- "Make the Free Peoples player choose to move again" is one forced move, and with no cost wants `canMove` (Q-0018; F-0495; Q-0301 open on "this turn")
 - "<Do> N ... If you do, ..." wants all N (Q-0169, F-0330)
 - "Frodo is corrupted" on a card that names Frodo (F-0356, Held 6_109) [Q-0213, Q-0103]
 - "While a card titled X is removed from the game" names no owner (F-0375, Gollum, Her Sneak 13_50)
