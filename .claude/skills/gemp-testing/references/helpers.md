@@ -173,6 +173,11 @@ is only ever used on purpose.
 **An archer, when archery is the point.** Legolas, Greenleaf 1_50. Strength 6, vitality 3; Archer, with an archery
 ability.
 
+**A Legolas who is no archer, for a text that names Legolas in a skirmish.** Legolas, Companion of the Ring 11_21.
+Strength 6, vitality 3; his only text is +2 strength and resistance at a battleground or forest, which no site of
+`FellowshipSites` is. An archer Legolas stops the skippers ("Archers get in the way"); 11_22 and 15_18 (hunter 1) are
+the other non-archers (Card_01_033_Tests).
+
 **Damage +1, when damage is the point.** Gimli, Son of Glóin 1_13. Strength 6, vitality 3; Damage +1, with a
 skirmish ability. As the handy companion of another culture he gives a minion he beats 2 wounds: where one wound is
 read, Household Guard 5_83 is the plain one.

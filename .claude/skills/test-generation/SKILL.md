@@ -558,6 +558,8 @@ carries out unasked, because one valid card is there, shows nothing of the inval
 candidate is laid and the invalid one read "not offered" (Q-0266: B; Ketura: "Yeah I think B is the way to go.").
 Where the text allows only one valid candidate ("the losing character": one skirmish has one, Blade Tip 1_209),
 the invalid ones are laid all the same, the game going on unasked is the reading, and Notes say why.
+A bearer named by a unique title ("Bearer must be Legolas") is such a text (Q-0239): one board for each card type
+of the title that is laid, and the invalid candidate read as the play refused on a board without him (1_33).
 Where the invalid candidate is the Ring-bearer and the effect a discard, the reading shows nothing either way, since
 he is never discarded (Q-0109): the bearer in such a test is another (Sam bearing Sting 8_113). Where the text
 says neither "may" nor "up to", read the minimum of one such choice (`FreepsGetChoiceMin()`): a choice that has
