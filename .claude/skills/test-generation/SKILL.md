@@ -555,7 +555,7 @@ a one-off effect that counts at its moment ("add (1) for each burden", "for each
 the board once: its counts are cheated, at the two counts `S` asks for (92_25, 92_26).
 
 **Read before and after.** An assertion after an action means little without the same reading before it. If an
-ability exerts, read 0 wounds, act, read 1. Where the amount is not in the wording ("heal a minion", "wound a companion"), the target
+ability exerts, read 0 wounds, act, read 1. A state the test laid by a cheat (wounds added, an item attached) is read too, before the action that changes it. Where the amount is not in the wording ("heal a minion", "wound a companion"), the target
 carries more than the effect should change: one wound healed from two reads 1, which "heal two" would not.
 
 **Give choices something to choose from.** One more valid candidate than the choice needs, and an invalid one
