@@ -35,6 +35,13 @@ import static org.junit.Assert.*;
  * (F-0298): that card's own tests show the deck searched shuffled and the searcher's left alone.  No printed
  * card writes `shuffle: true` beside a `deck:` that names the other player; the engine shuffles the deck named
  * there too (F-0369), and that is not tested (Ketura, 2026-10-11: a test shows what a card that exists does).
+ *
+ * A look that plays nothing is over as the player declines, and the deck is reshuffled then (CR 4.2 "draw deck":
+ * "There is no penalty if you don't find (or choose not to play) a card"; the reshuffle is still owed).  Where
+ * the play is an action's COST (Captured by the Ring 7_53) it fails, and an action carries out no cost after one
+ * that has failed: the definition's shuffle, written after the play, was never reached (F-0494).  PlayCardFromDrawDeck
+ * now shuffles ahead of the failure when the definition writes `shuffle: true`, and leaves its later shuffle out,
+ * so a look that plays nothing shuffles once whether the play is a cost or an effect, and the cost is still unpaid.
  */
 public class DrawDeckShuffledWhenTheLookIsOverTests
 {
@@ -53,6 +60,9 @@ public class DrawDeckShuffledWhenTheLookIsOverTests
 					put("poison1", "8_28");     // Spider Poison: [gollum] possession with the Support Area keyword; its texts need Shelob or a bearer
 					put("poison2", "8_28");
 					put("troop", "1_177");      // Goblin Patrol Troop: [moria] minion, cost 6, site 4, no text
+
+					put("captured", "7_53");    // Captured by the Ring: [gollum] Shadow event, cost 0. "Play Gollum from your draw deck or discard pile to add a threat."
+					put("villain", "6_40");     // Gollum, Old Villain: cost 2, site 3; a skirmish ability only
 
 					put("aragorn", "1_89");
 					put("gimli", "1_13");
@@ -143,6 +153,66 @@ public class DrawDeckShuffledWhenTheLookIsOverTests
 		assertEquals(shuffles + 3, scn.GetShadowDeckShuffleCount());
 		assertEquals(freepsShuffles, scn.GetFreepsDeckShuffleCount());
 		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void ADeckLookedThroughForAPlayThatIsACostIsReshuffledWhenNothingIsPlayedAndTheCostIsStillUnpaid() throws DecisionResultInvalidException, CardNotFoundException {
+		// Captured by the Ring's play of Gollum is its cost: with none played, no threat is added (F-0494)
+		var scn = GetScenario();
+
+		var captured = scn.GetShadowCard("captured");
+		var villain = scn.GetShadowCard("villain");
+		scn.MoveCompanionsToTable("aragorn");
+		scn.MoveCardsToHand(captured);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		assertInZone(Zone.DECK, villain);
+		int shuffles = scn.GetShadowDeckShuffleCount();
+		int freepsShuffles = scn.GetFreepsDeckShuffleCount();
+
+		scn.ShadowPlayCard(captured);
+		scn.ShadowDismissRevealedCards();
+		assertTrue(scn.ShadowHasCardChoiceAvailable(villain));
+		scn.ShadowDeclineChoosing();
+
+		assertInZone(Zone.DECK, villain);
+		assertInZone(Zone.DISCARD, captured);
+		assertEquals(0, scn.GetThreats());
+		assertEquals(shuffles + 1, scn.GetShadowDeckShuffleCount());
+		assertEquals(freepsShuffles, scn.GetFreepsDeckShuffleCount());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void ADeckLookedThroughForAPlayThatIsAnEffectIsReshuffledOnceWhenNothingIsPlayed() throws DecisionResultInvalidException, CardNotFoundException {
+		// Southfarthing Leaf's play of a pipeweed is its effect: the shuffle made as the player declines is the only one
+		var scn = GetScenario();
+
+		var leaf = scn.GetFreepsCard("leaf");
+		var toby = scn.GetFreepsCard("toby");
+		scn.MoveCardsToSupportArea(leaf);
+
+		scn.StartGame();
+		scn.SkipToPhase(Phase.REGROUP);
+
+		int shuffles = scn.GetFreepsDeckShuffleCount();
+		int shadowShuffles = scn.GetShadowDeckShuffleCount();
+		assertInZone(Zone.DECK, toby);
+
+		scn.FreepsUseCardAction(leaf);
+		scn.FreepsDismissRevealedCards();
+		assertTrue(scn.FreepsHasCardChoiceAvailable(toby));
+		scn.FreepsDeclineChoosing();
+
+		assertInZone(Zone.DECK, toby);
+		assertInZone(Zone.DISCARD, leaf);
+		assertEquals(shuffles + 1, scn.GetFreepsDeckShuffleCount());
+		assertEquals(shadowShuffles, scn.GetShadowDeckShuffleCount());
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 	}
 
 	@Test

@@ -25,6 +25,7 @@ import com.gempukku.lotro.logic.timing.FailedEffect;
 import org.json.simple.JSONObject;
 
 import java.util.Collection;
+import java.util.List;
 
 public class PlayCardFromDrawDeck implements EffectAppenderProducer {
     @Override
@@ -83,7 +84,7 @@ public class PlayCardFromDrawDeck implements EffectAppenderProducer {
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
-                    protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
+                    protected List<? extends Effect> createEffects(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                         final Collection<? extends PhysicalCard> cardsToPlay = actionContext.getCardsFromMemory(memorize);
                         if (cardsToPlay.size() == 1) {
                             final int costModifier = costModifierSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), actionContext.getSource());
@@ -96,10 +97,17 @@ public class PlayCardFromDrawDeck implements EffectAppenderProducer {
                             // the table or the support area does so only when told the deck was looked through.
                             if (showAll && playCardAction instanceof PlayPermanentAction playPermanentAction)
                                 playPermanentAction.setDeckLookedThrough();
-                            return new StackActionEffect(playCardAction);
+                            return List.of(new StackActionEffect(playCardAction));
+                        } else if (shuffle) {
+                            // The deck was looked through and nothing was played from it: it is reshuffled all the
+                            // same (CR 4.2 "draw deck"; Q-0013), and here, ahead of the FailedEffect, because an
+                            // action carries out no cost after one that has failed, and the shuffle after this
+                            // appender would never be reached where the play is a cost (Captured by the Ring 7_53;
+                            // F-0494).  That shuffle is then left out, so that an effect shuffles once, as before.
+                            return List.of(new ShuffleDeckEffect(actionContext.getPerformingPlayer()), new FailedEffect());
                         } else {
                             // This will notify any effect that uses playing from deck as a cost, that the cost was not "paid"
-                            return new FailedEffect();
+                            return List.of(new FailedEffect());
                         }
                     }
 
@@ -122,6 +130,9 @@ public class PlayCardFromDrawDeck implements EffectAppenderProducer {
                     new DelayedAppender() {
                         @Override
                         protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
+                            // With no card played the deck has been shuffled already, above.
+                            if (actionContext.getCardsFromMemory(memorize).size() != 1)
+                                return null;
                             return new ShuffleDeckEffect(actionContext.getPerformingPlayer());
                         }
                     });

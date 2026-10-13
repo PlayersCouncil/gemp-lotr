@@ -4,7 +4,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -298,7 +297,6 @@ public class Card_07_053_Tests
 	}
 
 	@Test
-	@Ignore("F-0494: a draw deck looked through by a play that is a COST, and then playing nothing, is not reshuffled")
 	public void ADrawDeckLookedThroughForAGollumNotPlayedIsStillReshuffled() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

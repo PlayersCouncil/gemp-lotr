@@ -1361,9 +1361,8 @@ that was looked through (`showAll: true`) shuffles it as the card leaves, before
 own "when you play" text is asked (Old Toby 1_305: the count is already one more at his offer; F-0313, engine
 pass 20), and the definition's `shuffle: true` shuffles again after the play: two more, whatever kind of card.
 A look that plays nothing reads one, the definition's own, and is the test that notices a missing `shuffle:
-true`, but only where the play is an EFFECT: where it is a COST ("Play Gollum from your draw deck ... to add a
-threat", Captured by the Ring 7_53) the play fails, no later cost is carried out, and the count is unchanged
-(F-0494, open: test the rules' +1 and park it on F-0494). A card played onto a bearer and an event shuffle as they leave even where nobody looked (`showAll: false`);
+true`, whether the play is an EFFECT or a COST ("Play Gollum from your draw deck ... to add a threat", Captured
+by the Ring 7_53: the shuffle is made ahead of the failed play, and the cost is still unpaid; F-0494, engine pass 35). A card played onto a bearer and an event shuffle as they leave even where nobody looked (`showAll: false`);
 a card played to the table or the support area does not (a minion revealed by From Deep in Shadow 12_38, a
 starting fellowship). Read the count as more than before unless the number is the point
 (mechanics/deck/DrawDeckShuffledWhenTheLookIsOverTests).
