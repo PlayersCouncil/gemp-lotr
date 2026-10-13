@@ -154,7 +154,9 @@ Notes: Elrond is himself an ally whose home is site 3, so C2 heals him too.
   "and": left whole, a claim for either half satisfies the conformance check for both. So is one whose "and"
   joins two predicates of ONE type that are shown on different boards ("Saruman may not take wounds during the
   archery phase and may not be assigned to a skirmish": two Restrictions, 53_68, 3_69); one condition with two
-  results ("is strength +3 and fierce", read together in every test) stays whole. Every word of the
+  results ("is strength +3 and fierce", read together in every test) stays whole. A sentence that is a choice
+  between two branches ("Make an Uruk-hai strength +2, or spot 5 companions to make ...", 1_139) may be cut at
+  the comma before "or", the choice's `B` listed on the first. Every word of the
   game text is in exactly one `C` clause, keyword lines included; reminder text in brackets is left out. The
   conformance check joins the `C` clauses and compares them with the definition's game text.
 - **A card's play has no clause of its own** (Q-0279: B, engine pass 31). The printed cost, type and site number
