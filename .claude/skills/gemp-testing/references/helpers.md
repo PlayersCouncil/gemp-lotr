@@ -182,6 +182,11 @@ Strength 6, vitality 3; his only text is +2 strength and resistance at a battleg
 `FellowshipSites` is. An archer Legolas stops the skippers ("Archers get in the way"); 11_22 and 15_18 (hunter 1) are
 the other non-archers (Card_01_033_Tests).
 
+**A Free Peoples skirmish ability on a Ring-bound Man (Faramir 4_117), with no archer keyword.** Ranger's Bow 4_131:
+[gondor] possession, cost 1, bearer must be a Ring-bound Man; "Skirmish: If bearer is skirmishing a Man or a roaming
+minion, exert bearer to wound that minion." Faramir's Bow 4_118 does the same but makes him an archer ("Archers get
+in the way"; Card_04_117_Tests).
+
 **Elf companions who are no archers, for "spot N Elf companions".** Haldir 1_48 (strength 5, vitality 3; +2 at
 sites 6 to 8 of the Fellowship path), Arwen 1_30 (strength 6, vitality 3; ranger, +3 against a Nazgûl), Lórien Elf
 1_53 (strength 4, vitality 2). Haldir and Lórien Elf need an Elf spotted to play: cheat them in. Legolas 1_50's

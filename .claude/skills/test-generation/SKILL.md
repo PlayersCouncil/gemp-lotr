@@ -425,7 +425,8 @@ Which checks a clause lists follows from its words, and the analyst is expected 
   (the moves made, 92_11) owes a line in Notes and no later turn. A phase ability that changes something and names no duration has
   one by rule (CR 4.2 "phase action": it lasts for the phase it is used in) → `D`. So has a trigger's effect:
   by Ketura's ruling (Q-0018) it lasts to the end of the current phase → `D`. Each skirmish is a phase of its
-  own (CR 4.2 "skirmish phase(s)"): such an effect from one skirmish is gone in the next
+  own (CR 4.2 "skirmish phase(s)"): such an effect from one skirmish is gone in the next. Its "just before" is
+  read in the same skirmish at the decision that follows the use, and its "just after" in the next (Elven Sword 4_64)
 - "limit", "once per", "no more than", "up to", "at most" → `L`
 - an optional trigger or a special ability with no cost (a spot is no cost) → one `-` is the board on which its
   whole effect would do nothing: not offered (Q-0034; shapes, "Spot X to <effect>"). The game withholds such an

@@ -357,6 +357,11 @@ definition without its `OwnerIsFreeps` offers nothing either and passes.
 
 ## Reading and answering an offer
 
+**A cost that is a choice ("Exert bearer or discard 2 cards from hand") is a multiple choice whose own text names
+neither option.** `FreepsDecisionAvailable("Exert bearer")` is false while it is pending. Read the options whole
+with `assertEquals(List.of("Exert bearer", "Discard 2 cards from hand"), scn.FreepsGetMultipleChoices())` and answer
+with `FreepsChoose(option)`; with one option payable nothing is asked (Elven Sword 4_64, Card_04_064_Tests).
+
 **"Is an optional trigger pending" is a broad question.** `FreepsHasOptionalTriggerAvailable()` is true for any
 optional decision, the Ruling Ring's included. To assert that a particular card's trigger is on offer, pass the
 card: `FreepsHasOptionalTriggerAvailable(card)` goes by the card each offered action belongs to, whatever its
