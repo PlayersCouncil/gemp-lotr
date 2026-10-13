@@ -713,7 +713,9 @@ Game 10_30. For "each time the Free Peoples player heals a companion" (`Card_17_
 so by no card of his side: Balin's Tomb, site 4 of `FellowshipSites` ("Maneuver: Discard your tale from play or from
 hand to heal your companion"); its cost is a choice "from play / from hand" whenever a tale is in hand as well, so
 put every other tale of the deck in the discard pile at the start (F-0264): The Saga of Elendil dealt in by a
-turn-skipper failed the test about one run in five. One event that heals one companion three times: Peace of Mind
+turn-skipper failed the test about one run in five, and so
+does Gondor Bowmen 3_41, a [gondor] tale too (Card_10_020_Tests). With no tale in hand the tale in play is
+discarded unasked. One event that heals one companion three times: Peace of Mind
 ([gandalf] Regroup event, cost 4, "Spot Gandalf to heal an unbound Hobbit 3 times"); three heals, each answered in
 its turn. The SHADOW player healing a companion: Dark Temptation ([wraith] support-area condition, "Each time you
 play a Nazgûl, you may heal the Ring-bearer twice to add a burden": the heals are its cost) and Enemy in Your Midst
