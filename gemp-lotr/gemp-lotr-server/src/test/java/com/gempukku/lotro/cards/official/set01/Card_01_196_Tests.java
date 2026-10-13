@@ -18,7 +18,7 @@ public class Card_01_196_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "1_196");
+					put("coming", "1_196");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,6 +47,9 @@ public class Card_01_196_Tests
 					put("scavengers", "1_179"); // Goblin Scavengers: a third [moria] Orc
 					put("swarms", "1_183");     // Goblin Swarms: a [moria] condition, a card that is no minion
 					put("domain", "1_175");     // Goblin Domain: another
+					// Orc Taskmaster: a [sauron] Orc, a card of the hand that is not [moria]; its only text is an
+					// ability of a minion in play
+					put("taskmaster", "2_90");
 
 					// Guard Commander: a [moria] Orc in play, so that the Cave Troll could be played if it were
 					// offered.  A skirmish ability only.
@@ -69,13 +72,14 @@ public class Card_01_196_Tests
 		 * Culture: Moria
 		 * Twilight Cost: 3
 		 * Type: Condition
-		 * Subtype: 
-		 * Game Text: Plays to your support area.<br><b>Shadow:</b> Discard 3 cards from hand to play a [moria] Orc from your discard pile.
+		 * Subtype: Support Area
+		 * Game Text: Plays to your support area.
+		 * 	<b>Shadow:</b> Discard 3 cards from hand to play a [moria] Orc from your discard pile.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("coming");
 
 		assertEquals("They Are Coming", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -100,10 +104,11 @@ public class Card_01_196_Tests
 		var sneak = scn.GetShadowCard("sneak");
 		var swarms = scn.GetShadowCard("swarms");
 		var domain = scn.GetShadowCard("domain");
+		var taskmaster = scn.GetShadowCard("taskmaster");
 		var commander = scn.GetShadowCard("commander");
 		scn.MoveCardsToSupportArea(coming);
 		scn.MoveCardsToDiscard(troop, marksman, troll, soldier);
-		scn.MoveCardsToHand(runner, sneak, swarms, domain);
+		scn.MoveCardsToHand(runner, sneak, swarms, domain, taskmaster);
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(commander);
@@ -116,13 +121,14 @@ public class Card_01_196_Tests
 		assertTrue(scn.ShadowActionAvailable(coming));
 
 		scn.ShadowUseCardAction(coming);
-		assertTrue(scn.ShadowHasCardChoiceAvailable(runner, sneak, swarms, domain));
+		// Any card of the hand pays, of whatever culture and type
+		assertTrue(scn.ShadowHasCardChoiceAvailable(runner, sneak, swarms, domain, taskmaster));
 		assertEquals(3, scn.ShadowGetChoiceMin());
 		assertEquals(3, scn.ShadowGetChoiceMax());
 
 		scn.ShadowChooseCards(runner, sneak, swarms);
 		assertInDiscard(runner, sneak, swarms);
-		assertInHand(domain);
+		assertInHand(domain, taskmaster);
 		// The two [moria] Orcs that lay in the discard pile before the cost was paid, and neither of the two
 		// that lie there now because they paid it.  Nor the [moria] Troll, nor the [sauron] Orc.
 		assertTrue(scn.ShadowHasCardChoiceAvailable(troop, marksman));
@@ -131,11 +137,9 @@ public class Card_01_196_Tests
 		assertEquals(1, scn.ShadowGetChoiceMin());
 
 		scn.ShadowChooseCards(marksman);
-		// 13 - 3 for the Marksman - 2 roaming (a site 4 minion at site 2)
-		assertEquals(8, scn.GetTwilight());
 		assertInZone(Zone.SHADOW_CHARACTERS, marksman);
 		assertInDiscard(troop, troll, soldier, runner, sneak, swarms);
-		assertInHand(domain);
+		assertInHand(domain, taskmaster);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
@@ -167,6 +171,61 @@ public class Card_01_196_Tests
 		scn.MoveCardsToDiscard(troop);
 		scn.ShadowRefreshDecision();
 		assertTrue(scn.ShadowActionAvailable(coming));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void IsOfferedOnlyWithThreeCardsInHandAndAMoriaOrcInYourOwnDiscardPileThatThePoolCanPayFor() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetDiscardPileScenario();
+
+		var coming = scn.GetShadowCard("coming");
+		var troop = scn.GetShadowCard("troop");
+		var runner = scn.GetShadowCard("runner");
+		var swarms = scn.GetShadowCard("swarms");
+		var domain = scn.GetShadowCard("domain");
+		// A [moria] Orc in the other player's discard pile.
+		var freepsTroop = scn.GetFreepsCard("troop");
+		scn.MoveCardsToSupportArea(coming);
+		scn.MoveCardsToHand(swarms, domain, runner);
+		scn.MoveCardsToDiscard(freepsTroop);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		// Three cards in hand and (13) in the pool, but the only [moria] Orc in a discard pile is not in yours.
+		assertEquals(13, scn.GetTwilight());
+		assertEquals(3, scn.GetShadowHandCount());
+		assertEquals(0, scn.GetShadowDiscardCount());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(coming));
+
+		// A Goblin Patrol Troop in your own discard pile costs 6, and 2 more for roaming (a site 4 minion at site 2).
+		scn.MoveCardsToDiscard(troop);
+		scn.SetTwilight(7);
+		scn.ShadowRefreshDecision();
+		assertFalse(scn.ShadowActionAvailable(coming));
+
+		scn.SetTwilight(8);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.ShadowActionAvailable(coming));
+
+		// Two cards in hand cannot pay the discard of 3.
+		scn.MoveCardsToTopOfDeck(runner);
+		scn.ShadowRefreshDecision();
+		assertEquals(2, scn.GetShadowHandCount());
+		assertFalse(scn.ShadowActionAvailable(coming));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		scn.MoveCardsToHand(runner);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.ShadowActionAvailable(coming));
+		scn.ShadowUseCardAction(coming);
+
+		// The whole hand pays, and the Troop is the one [moria] Orc there that did not pay: both are done unasked.
+		assertEquals(0, scn.GetShadowHandCount());
+		assertInDiscard(swarms, domain, runner, freepsTroop);
+		assertInZone(Zone.SHADOW_CHARACTERS, troop);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }
