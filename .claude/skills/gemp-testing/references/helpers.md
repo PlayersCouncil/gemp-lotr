@@ -41,6 +41,10 @@ both win (`Card_13_078_Tests.TwoWizardsWhoWinOneSkirmishMakeItAMinionOnce`).
 vitality 3, cost 6, site 4, not unique. Damage +2 only while he is unwounded. "To play, spot an Easterling": cheat
 him in. His Skirmish ability wounds 2 other [raider] Men, so with fewer than two beside him it cannot be paid.
 
+**A [sauron] minion of cost 5, to read a discount of 3 above the floor of 0.** Morgul Hunter 1_256. [sauron] Orc, not
+unique, cost 5, strength 9, vitality 4, site 6; "strength +1 for each companion you can spot" is its whole text.
+At -3 it costs 2, and 2 more roaming on turn 1 (`Card_09_047_Tests`).
+
 **A Shadow archer and nothing else.** Goblin Marksman 1_176. Strength 7, vitality 1, cost 3, site 4; Archer is its
 whole text.
 
@@ -353,6 +357,13 @@ Bane of Darkness 103_1: unique [elven] artifact (phial), cost 1, vitality +1, "B
 (Frodo or Sam 1_311). It discards itself while 5 companions can be spotted, so lay 4 or fewer; its Maneuver ability
 (2 burdens) and its Ring-bearer responses are used only on purpose. The other Phials, 10_13 and 53_24, cost 0 and
 show no discount (Card_02_102_Tests, "each artifact").
+
+**Seven [elven] artifacts in play at once, for a count that stops at +6 ("(limit +6)", Aiglos 9_12).** Each unique,
+of its own title. Aiglos 9_12 and Vilya 9_23 (cost 0, "Bearer must be Elrond or Gil-galad") on Gil-galad 9_15;
+Phial of Galadriel, Star-glass 10_13 (cost 0, on a Hobbit: the Ring-bearer); in the support area Library of
+Rivendell 101_11, Galadriel's Silver Ewer 18_11 (its bonuses are for Galadriel as Ring-bearer), The Mirror of
+Galadriel 15_22 (to play, spot 3 Elves: cheat it in; answers a draw) and Gift of the Evenstar 15_16 (answers a won
+skirmish and the start of a maneuver phase). Their abilities are used only on purpose (`Card_09_012_Tests`).
 
 ## A culture without its race, a race without its culture, a card against its type
 

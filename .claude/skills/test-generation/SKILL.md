@@ -822,6 +822,7 @@ bookends, and that none of the ledger has leaked into the test file. Its warning
    it matters: the check warns (`second-copy`) only where no scenario has two aliases of the card at all.
    A comment that says a thing is "untouched" or "still there" with no assertion under it shows nothing either
    (lint does not read comments): take the words out, or add the reading where a rule or ruling settles it.
+   Nor does lint see a pool read after a helper's play made only to meet a requirement: E2 takes it out (1_165, 9_47).
 3. Would the test fail if the card were wrong? Imagine the filter one word wider and one word narrower, the
    number one off, the trigger on the neighbouring event. If the test would still pass, it is not testing that.
    Reading settles most of these (is there a candidate on the table that tells the two apart?);

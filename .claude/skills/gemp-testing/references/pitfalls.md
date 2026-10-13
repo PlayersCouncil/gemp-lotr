@@ -683,7 +683,9 @@ before the second move is asked about, so a test that turns on his hand at the s
 first. A test that needs cards in the draw deck afterwards puts them back with `MoveCardsToTopOfDeck`. A test
 that needs a hand of a known size afterwards sets it: `SetFreepsHand(cards...)` / `SetShadowHand(cards...)` make
 that player's hand exactly those cards, in that order, and put the rest of it on top of his draw deck (G-0035;
-`Card_10_012_ErrataTests`); never move the scenario's aliases away one by one. And as
+`Card_10_012_ErrataTests`); never move the scenario's aliases away one by one. The cards named are taken from
+wherever they are, play included: a companion cheated onto the table and named there goes back to hand, and the
+companion count and the twilight a move adds drop with him (dec-b9_12, West Road 7_337). And as
 the fellowship decision is already pending when it returns, a card made playable by cheating is not offered
 until some legal action has been taken. Player 2's own fellowship-phase play is offered at once where his
 companions, support area and hand were laid BEFORE `StartGame()`: after `SkipToOtherPlayersTurn()` read
