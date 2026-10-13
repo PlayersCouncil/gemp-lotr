@@ -938,6 +938,9 @@ entry on `SkipToSite`, above), so a board taken from an erratum's file whose tex
 A short scenario runs short as well. `SetFreepsHand(...)` after a skipper puts the rest of the hand back on the
 draw deck, and once a test moves the last of those into hand or play a "draw a card" draws nothing and the hand
 reads one short: keep one named card in the deck and read it in hand after the draw (Card_01_060_Tests, Gimli).
+**A board copied from an erratum's file rests on the erratum's numbers.** Where the original differs in a number the
+board leans on (burdens, resistance, vitality, strength), re-count each copied test under the original's: Boromir
+9_31 adds 3 burdens at resistance 6 where 59_31 adds 2 at 7, so the erratum's fierce-round test corrupts or kills him.
 
 **A random or whole-hand effect takes whatever is there.** Where a test sets off anything that acts on a hand or
 a deck by chance or as a whole (a random look, reveal or discard from a hand; a discard "for each X revealed"; a
