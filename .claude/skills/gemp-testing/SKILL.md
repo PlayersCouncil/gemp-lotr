@@ -43,7 +43,7 @@ var elrond = scn.GetFreepsCard("elrond");      // 2. the cards, by the names the
 var runner = scn.GetShadowCard("runner");
 scn.MoveAlliesToTable(elrond);                 // 3. arrange the board by cheating
 scn.StartGame();                               // 4. fellowship phase of turn 1, at site 1
-scn.MoveMinionsToTable(runner);                //    (minions go down after StartGame or SkipToSite)
+scn.MoveMinionsToTable(runner);                //    (minions go down after StartGame or SkipToSite, before the skip into the phase that reads them)
 scn.SkipToPhase(Phase.MANEUVER);               // 5. get to the moment under test
 scn.FreepsUseCardAction(elrond);               // 6. act, as a player would
 assertEquals(1, scn.GetWoundsOn(elrond));      // 7. assert
