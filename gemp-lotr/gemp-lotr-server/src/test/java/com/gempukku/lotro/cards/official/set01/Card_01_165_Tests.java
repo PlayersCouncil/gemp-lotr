@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_01_165_Tests
@@ -17,8 +18,11 @@ public class Card_01_165_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "1_165");
-					// put other cards in here as needed for the test case
+					put("troll", "1_165");
+					put("troop", "1_177");      // Goblin Patrol Troop: [moria] Orc, cost 6, site 4, no text
+					put("runner", "1_178");     // Goblin Runner: [moria] Orc, cost 1; its only text answers its own play (cheated in here)
+					put("balrog", "12_79");     // The Balrog, The Terror of Khazad-dûm: a [moria] minion who is no Orc; its text acts only underground
+					put("soldier", "1_271");    // Orc Soldier: an Orc of another culture ([sauron]); a skirmish ability only
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +50,7 @@ public class Card_01_165_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("troll");
 
 		assertEquals("Cave Troll of Moria", card.getBlueprint().getTitle());
 		assertEquals("Scourge of the Black Pit", card.getBlueprint().getSubtitle());
@@ -64,18 +68,78 @@ public class Card_01_165_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void CaveTrollofMoriaTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void CannotBePlayedUntilAMoriaOrcIsSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var troll = scn.GetShadowCard("troll");
+		var troop = scn.GetShadowCard("troop");
+		var balrog = scn.GetShadowCard("balrog");
+		var soldier = scn.GetShadowCard("soldier");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveCardsToHand(troll, troop);
+		// A [moria] minion who is no Orc, and an Orc who is not [moria].
+		scn.MoveMinionsToTable(balrog, soldier);
 
-		assertEquals(10, scn.GetTwilight());
+		scn.FreepsPass();
+		// Shadow phase at site 2: the troll would cost 10 + 2 roaming, the Patrol Troop 6 + 2.
+		scn.SetTwilight(20);
+		scn.ShadowRefreshDecision();
+
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertFalse(scn.ShadowPlayAvailable(troll));
+		assertTrue(scn.ShadowPlayAvailable(troop));
+
+		scn.ShadowPlayCard(troop);
+
+		// The Troop's 6 + 2 roaming leaves 12 in the pool, exactly the troll's 10 + 2.
+		assertTrue(scn.ShadowPlayAvailable(troll));
+
+		scn.ShadowPlayCard(troll);
+
+		assertInZone(Zone.SHADOW_CHARACTERS, troll);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void AtAnUndergroundSiteHisTwilightCostIsThreeLessAndNoOtherCardsIs() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var troll = scn.GetShadowCard("troll");
+		var troop = scn.GetShadowCard("troop");
+		var runner = scn.GetShadowCard("runner");
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+		scn.MoveCardsToHand(troll, troop);
+		scn.MoveMinionsToTable(runner);
+
+		// Site 3, Rivendell Valley, is not underground.
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertEquals(10, scn.GetTwilightCost(troll));
+		assertEquals(6, scn.GetTwilightCost(troop));
+
+		scn.FreepsPass();
+
+		// Site 4, Balin's Tomb, is underground (and the troll's own site number: no roaming).
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		assertEquals(7, scn.GetTwilightCost(troll));
+		assertEquals(6, scn.GetTwilightCost(troop));
+
+		scn.SetTwilight(6);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertFalse(scn.ShadowPlayAvailable(troll));
+
+		scn.SetTwilight(7);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.ShadowPlayAvailable(troll));
+
+		scn.ShadowPlayCard(troll);
+
+		assertInZone(Zone.SHADOW_CHARACTERS, troll);
+		assertEquals(0, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }
