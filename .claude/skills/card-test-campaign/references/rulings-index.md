@@ -391,7 +391,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Reinforcing more than one token (F-0113)
 - "Its skirmish" on a minion (F-0114) [F-0321]
 - "By another card" (Q-0079). "By another card" in a card's text is a card other than THAT card (Q-0079, Corsair Helmsman 103_46): a [raider] minion ...
-- A spot that stands after "to" is an effect (Q-0085)
+- A spot that stands after "to" is an effect (Q-0085) [Q-0058, F-0492]
 - "Remove X ... to <do something to> a card costing X or less" (Q-0087, F-0133)
 - "The <other> player may make you <do X> to prevent this" (Q-0088)
 - "A <thing>" is one (F-0136). "A <thing>" is one: a choice of one, not all that match (F-0136).

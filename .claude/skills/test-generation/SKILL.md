@@ -423,8 +423,9 @@ Which checks a clause lists follows from its words, and the analyst is expected 
   offer itself (Q-0224): the test reads it absent, and no requirement is written for it unless the offer is still
   made there (shapes, "An optional trigger or ability that costs nothing"). A keyword given to a card that has it
   already is not "nothing" and is offered (Q-0245: A, Band of Wild Men 4_4: "the effect still has potential to alter
-  that calculus"). With a cost it is offered
-  there and used for nothing, which is read under `F` or `+` as for an event, and is no `-`. A play of a card after
+  that calculus"). Where a board can have the card hold that keyword already (the ability used once, then
+  offered again: Lurtz 1_127), that offer is owed and read. With a cost it is offered there and used for
+  nothing, which is read under `F` or `+` as for an event, and is no `-`. A play of a card after
   the "to" is itself a cost (Q-0062): "add a burden to play a [shire] tale" with no tale in hand that can be
   played is not offered, and that board is its `C-`
 - "may" → `O`. A response or any other special ability is the player's to use or not without the text saying
