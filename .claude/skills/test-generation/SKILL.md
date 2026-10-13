@@ -436,7 +436,7 @@ Which checks a clause lists follows from its words, and the analyst is expected 
   <thing>"). An X read off the card a cost acts on ("a Dwarf who is damage +X ... exert that Dwarf") is what it was
   when spotted, before the cost (Q-0256: A)
 - "each time" → `R`
-- "or", "choose one" → `B`
+- "or", "choose one" → `B`; so is an "or" between two printed phases ("Fellowship or Regroup:"), each phase taken in a test
 - "make each…", "make all… until…" on an event or a special ability → a `Rule` clause citing CR 4.2 "event"
   (some effects affect only what was there when they were used): a test that a card which becomes one of them
   afterwards is not affected. The game writes this into each definition, not into the engine, so it is each
