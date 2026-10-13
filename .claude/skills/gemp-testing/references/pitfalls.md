@@ -1293,7 +1293,8 @@ number"; the rule is under "modifier".
 ## Hidden zones, reveals, shuffles and the game log
 
 **Searching a deck shows the deck first.** An effect that looks through a hidden zone shows the cards before it
-asks for a choice. `FreepsDismissRevealedCards()` answers the showing; then choose with
+asks for a choice, and so does a play from the draw deck (`playCardFromDrawDeck`: Éomer 12_112's "You may inspect
+the contents of your deck" comes before "Choose cards from deck", Card_01_317_Tests). `FreepsDismissRevealedCards()` answers the showing; then choose with
 `FreepsChooseCardBPFromSelection(card)`, which picks by blueprint because cards in hidden zones are not identified
 to the client. To take nothing from a choice whose minimum is 0, `FreepsDeclineChoosing()`: a
 `FreepsChooseCardBPFromSelection()` with no card does not compile (two overloads fit).

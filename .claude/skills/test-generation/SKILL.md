@@ -238,7 +238,9 @@ the place can hold, a companion, a possession and an event: beside companions al
 neither, not every type in print; a bare owner word, "each of your cards", owes that spread and a card of each
 side, 94_27; for a keyword or item class alone, "a pipeweed", "a pipe", cards of two cultures wherever printed
 cards have them: beside [shire] ones alone, `pipeweed` narrowed to `culture(shire)` passes, 92_4, and a card of the
-other culture whose own text stays out of the way is looked for before the culture is left out.
+other culture whose own text stays out of the way is looked for before the culture is left out; for a bare `weapon`,
+a possession and an artifact (Narsil 9_34 on a [gondor] Man, The Balrog's Sword 2_50 on The Balrog 12_79): beside
+possessions alone, `weapon` narrowed to `possession,weapon` passes, 1_230 and 1_173.
 
 **Invalid candidates, word by word.** For a phrase of two words ("a [sauron] minion") that is a card for each word:
 a [sauron] card that is no minion, and a minion of another culture; for an item class ("bearing a hand weapon") one

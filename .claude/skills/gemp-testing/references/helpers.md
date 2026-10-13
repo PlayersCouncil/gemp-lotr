@@ -377,7 +377,8 @@ trigger, so put him down after `StartGame()`), 4_364. Gandalf signet: 1_89, 4_10
 
 **A Hobbit who is not [shire].** Pippin, Trollslayer 103_31; Merry, Master Holbytla 103_85. The only two Free
 Peoples ones. Pippin is [gondor] (to play, spot a [gondor] companion: cheat him in; a skirmish ability used only on
-purpose). Merry is [rohan] (the only [rohan] character who is no Man), and a Man as well while 3 [rohan] companions
+purpose); he is Enduring, strength +2 for each wound on him, so leave him out of a test that reads his strength
+after he is wounded (a "until the regroup phase" bonus read after a lost skirmish, Card_01_317_Tests). Merry is [rohan] (the only [rohan] character who is no Man), and a Man as well while 3 [rohan] companions
 or Éowyn can be spotted (he counts himself among the 3; beside any Éowyn he is the Hobbit of the wrong culture and
 the Man of the wrong culture at once); each time another [rohan] Man exerts he offers an optional trigger (exert
 Merry to heal that Man), so keep him out of a test that exerts one. He can hold an item only a [rohan] Man may bear
