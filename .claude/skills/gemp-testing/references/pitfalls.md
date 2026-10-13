@@ -834,7 +834,9 @@ site's terrain off the path only once the fellowship has been there.
 
 **At the move limit, the regroup phase ends the turn.** When the fellowship has moved as often as the move limit
 allows, both players passing in the regroup phase ends the turn at once and the other player's "Play Fellowship
-action or Pass" decision is pending; no "another move" question is asked. Below the limit the Free Peoples
+action or Pass" decision is next; no "another move" question is asked. As the turn ends (at the limit, or after
+`FreepsChooseToStay()` below it) the Free Peoples player reconciles first: with cards in hand he is asked
+"Reconcile" (`FreepsDeclineReconciliation()`) before the next turn's decision can be read (Card_07_355_Tests). Below the limit the Free Peoples
 player is asked "Do you want to make another move?". Either comes only after the Shadow player's reconciliation:
 with cards in his hand he is first asked "Reconcile - choose card to discard or press DONE"
 (`ShadowDeclineReconciliation()`); with an empty hand nothing is asked (Radagast 59_26's tests). An empty hand
@@ -1357,7 +1359,9 @@ that was looked through (`showAll: true`) shuffles it as the card leaves, before
 own "when you play" text is asked (Old Toby 1_305: the count is already one more at his offer; F-0313, engine
 pass 20), and the definition's `shuffle: true` shuffles again after the play: two more, whatever kind of card.
 A look that plays nothing reads one, the definition's own, and is the test that notices a missing `shuffle:
-true`. A card played onto a bearer and an event shuffle as they leave even where nobody looked (`showAll: false`);
+true`, but only where the play is an EFFECT: where it is a COST ("Play Gollum from your draw deck ... to add a
+threat", Captured by the Ring 7_53) the play fails, no later cost is carried out, and the count is unchanged
+(F-0494, open: test the rules' +1 and park it on F-0494). A card played onto a bearer and an event shuffle as they leave even where nobody looked (`showAll: false`);
 a card played to the table or the support area does not (a minion revealed by From Deep in Shadow 12_38, a
 starting fellowship). Read the count as more than before unless the number is the point
 (mechanics/deck/DrawDeckShuffledWhenTheLookIsOverTests).
