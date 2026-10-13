@@ -178,6 +178,11 @@ Strength 6, vitality 3; his only text is +2 strength and resistance at a battleg
 `FellowshipSites` is. An archer Legolas stops the skippers ("Archers get in the way"); 11_22 and 15_18 (hunter 1) are
 the other non-archers (Card_01_033_Tests).
 
+**Elf companions who are no archers, for "spot N Elf companions".** Haldir 1_48 (strength 5, vitality 3; +2 at
+sites 6 to 8 of the Fellowship path), Arwen 1_30 (strength 6, vitality 3; ranger, +3 against a Nazgûl), Lórien Elf
+1_53 (strength 4, vitality 2). Haldir and Lórien Elf need an Elf spotted to play: cheat them in. Legolas 1_50's
+archery wound can exhaust the minion under test before the skirmish ("Archers get in the way"; Card_01_261_Tests).
+
 **Damage +1, when damage is the point.** Gimli, Son of Glóin 1_13. Strength 6, vitality 3; Damage +1, with a
 skirmish ability. As the handy companion of another culture he gives a minion he beats 2 wounds: where one wound is
 read, Household Guard 5_83 is the plain one.
