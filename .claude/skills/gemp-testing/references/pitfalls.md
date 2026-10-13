@@ -879,7 +879,9 @@ A change that is to last the turn writes `until: endOfTurn`; read it in the Shad
 `SkipToMovementDecision()` again and passes into the "another move" question: a bare
 `DecisionResultInvalidException`. To read the board at the move decision and then end the turn:
 `SkipToMovementDecision()`, the assertions, `FreepsChooseToStay()`, `PassReconcile(P1())`; the other player's
-"Play Fellowship action or Pass" is then pending (Card_19_024_ErrataTests).
+"Play Fellowship action or Pass" is then pending (Card_19_024_ErrataTests). The skipper begins with
+`SkipToMovementDecision()` whatever the state, so call it only from before the turn's move decision: after
+`FreepsChooseToStay()` it ran on into player 2's SHADOW phase (dec-b9_16).
 
 **A card discarded for where the fellowship is goes when the move is finished.** "Discard ... when at an
 underground site", "if underground", "if not at a marsh" (a `ConstantlyCheck` with a `Location` requirement) is

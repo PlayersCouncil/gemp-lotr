@@ -475,6 +475,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Exert your Wizard to choose a number. Make each minion with that twilight cost ..." (Gathering Wind 10_16): the number is part of the cost (F-0474). ...
 - "Discard a <kind> from hand to take a <kind> into hand from the discard pile" does not take back the card just discarded (Q-0192: A) [Q-0034]
 - The twilight cost of a card in play (F-0109, built)
+- The CR 4.2 "twilight cost" example (Rohirrim Road 7_332 with Catapult 8_32) is shown twice, and rightly
 - LeastDiscountToPlay bounds X in "remove X ... to play ... from your discard pile" (F-0067) [F-0392]
 - Costs, and effects, in the order printed (Q-0080) [F-0123]
 - What the text prints before "to" is PAID in `cost`, also where the player first chooses it into a memory (F-0477, The Highest Quality 11_60 and An End Worthy of Remembrance 102_46)
