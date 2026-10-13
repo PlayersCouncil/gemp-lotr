@@ -600,7 +600,9 @@ Card_01_252_Tests): neither `GameIsFinished()` nor who lost tells a corruption f
 
 **A starting fellowship.** `StartGame()` skips it. To test "(except in your starting fellowship)": the scenario
 constructor returns with player 1's "Starting fellowship" choice pending; `FreepsChooseCard(card)` plays a
-companion into it and player 2's choice is then pending. End the test there: going on deals opening hands.
+companion into it, and player 2's choice is pending only once player 1 has no companion left in the deck that
+fits under the total of 4; while one fits, player 1 chooses on (Merry 1_303 at 1 after Pippin 1_307 at 1:
+`FreepsDecisionAvailable("Starting fellowship")` still true, Card_01_307_Tests). End the test there: going on deals opening hands.
 To play on instead, answer player 2's choice too (`ShadowDeclineChoosing()` takes nobody; `FreepsDeclineChoosing()`
 ends player 1's early, never `FreepsChoose("")`) and then call
 `StartGame(true, false)`, which leaves the starting fellowships alone; called while either choice is still
