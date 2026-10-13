@@ -370,7 +370,9 @@ it is the real Ring-bearer in a skirmish of his own while Boromir is a plain com
 
 **A title of one card type; never two of one unique title; a candidate that looks impossible.** A title that has
 one card type only ("spot Gandalf") needs one card of the title, and its invalid candidate is a card of that
-culture with another title. Never put two cards of one unique title in play at once, whatever their types (Ketura,
+culture with another title. That candidate fails the title alone: same culture, same type (a [gandalf] companion
+who is no Gandalf, Ent Avenger 6_27; a [gandalf] ally or a companion of another culture lets
+`culture(gandalf),companion` through, dec-b1_83). Never put two cards of one unique title in play at once, whatever their types (Ketura,
 2026-10-08: the cheats "short-circuit more-or-less legitimate setups"; Elrond the ally and Elrond the companion
 each get their own board). Before calling a candidate impossible to put on a table, look for a way: an ally's home
 may be on another block's sites (Gondorian Merchant 7_97, the only [gondor] ally, is at 3T).
@@ -825,7 +827,9 @@ bookends, and that none of the ledger has leaked into the test file. Its warning
    stock mistakes, `mutate.py <id>` on its own, is no longer part of the campaign); and
    `cardtest.py probe <file.java>` runs a throwaway test from `/tmp` to see what the game really does.
 4. Did an expectation come from the definition or from running the game?
-5. Is any helper card doing something the test does not account for?
+5. Is any helper card doing something the test does not account for? Where a helper's own ability is what a
+   test reads as NOT working (a question's reading included), a control shows it working without the card under
+   test (Gwemegil 1_47's +1 against a minion that is no Troop of Uruk-hai, Card_01_143_Tests).
 6. For a failure: is the test wrong, or is it a finding? Check the rules before deciding, and ask if unsure.
 7. Does the definition say one thing twice? Where it repeats an effect in two branches (the same blocks under
    an `If`'s true and false), tests written from the text tend to hold one copy only. A mistake that survives in

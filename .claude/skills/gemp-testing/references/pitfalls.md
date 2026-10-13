@@ -962,7 +962,9 @@ has got to: before `StartGame()` they are the two bids as bid.
 fellowship moves) `MoveMinionsToTable(<player 1's minion>); SkipToPhaseInverted(Phase.ASSIGNMENT);
 PassCurrentPhaseActions(); ShadowAssignToMinions(companion, minion); ShadowResolveSkirmish(companion);
 ShadowPass();` and player 1, the Shadow player of that turn, then acts with the `Freeps...` methods
-(Card_93_001_Tests). The skirmish decision reads "Choose action to play or Pass" for both seats on every turn,
+(Card_93_001_Tests). The skirmish decision reads "Choose action to play or Pass" for both seats on every turn
+(on player 1's turn too, `ShadowDecisionAvailable("Skirmish")` reads false while the Shadow player is asked for
+his skirmish action; the choice of the next skirmish is `FreepsAwaitingSkirmishChoice()`, dec-b1_83),
 so the bookend there is the seat's own `AwaitingFreepsSkirmishPhaseActions()` or
 `AwaitingShadowSkirmishPhaseActions()`: the "Play <phase> action or Pass" reading that the fellowship and
 Shadow phases need on player 2's turn matches nothing in a skirmish. Any later phase of player 2's turn is reached
