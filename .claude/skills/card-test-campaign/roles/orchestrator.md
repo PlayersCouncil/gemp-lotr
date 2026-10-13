@@ -52,6 +52,15 @@ prints. The no-gap routine of 2026-10-12 (launch first, close after) put two bat
 build on the 8 GB machine at once, and it restarted (2026-10-13, about 02:42Z). Never launch from a turn that
 carries a message of hers, as ever.
 
+**Landings five at a time** (Ketura, 2026-10-13: "let's have you just do landings every 5 rounds. Just add a short
+tally to the scheduled checkins that mentions "X finished cards pending" so I know to include those if I look at the
+dashboard."). A main-tree card batch that ends is NOT closed then: add its folder to `<work>/pending_landings.json`
+and launch the next (its lander has already committed in the main tree and written the state). When the list holds
+five, close them all in order (`close.py <folder>` each), launch, then ONE sync and ONE publish, and empty the list.
+Every report to her says "<n> finished cards pending" (4 a batch in the list). Close at once, as before, anything
+else: an engine pass, a batch in the second tree, a batch that filed a question (she should see it), an engine
+finding that wants a pass, or a run that failed.
+
 1. `timeout 600 python3 .../close.py <folder>`: brings a second-tree batch onto the branch, makes the bundle, commits the state in its own repository with a bundle of it (`state.bundle`) and the tracker, renews the second tree if it is free, and prints what to
    carry, what to run on her machine and what to launch next, with its arguments.
 2. In one step: carry the files (device_commit_files, `force`), publish the tracker to the same artifact, and
