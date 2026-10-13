@@ -599,6 +599,11 @@ Hobbit companion strength +2", used only on purpose. Three Monstrous Trolls: sup
 Response needs a Hobbit ally to exert. Red Book: unique POSSESSION in the support area, cost 2; its trigger needs
 Bilbo. The tales of other cultures are under "Tales of each kind".
 
+**A fortification that is no condition (beside "a fortification": every other is a condition).** Stronghold of My
+Fathers 102_48. [rohan] POSSESSION, unique, Fortification, Support Area, cost 1; to play, spot 2 valiant companions
+(two Household Guards 5_83) or 3 [rohan] companions; a Response to a wound on a [rohan] companion only. Laid in a draw
+deck beside First Level 7_92 or Arrow-slits 5_80, it tells `fortification` from `condition,fortification` (10_117, 103_23).
+
 ## Wounds, exertions, heals, kills and discards that a printed card does
 
 **Wounds in the regroup phase.** Morgul Slayer 3_93. Strength 7, vitality 2; "Regroup: Exert this minion to wound a
