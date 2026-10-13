@@ -28,6 +28,7 @@ import com.gempukku.lotro.prizes.PrizeService;
 import com.gempukku.lotro.scenario.ScenarioAuthoring;
 import com.gempukku.lotro.scenario.ScenarioLibrary;
 import com.gempukku.lotro.scenario.ScenarioRunLog;
+import com.gempukku.lotro.scenario.ScenarioShelf;
 import com.gempukku.lotro.service.AdminService;
 import com.gempukku.lotro.service.LoggedUserHolder;
 import com.gempukku.lotro.bots.BotService;
@@ -170,9 +171,11 @@ public class ServerBuilder {
         objectMap.put(PatchNoteAnnouncer.class, patchNoteAnnouncer);
         patchNoteAnnouncer.start(PatchNoteAnnouncer.DEFAULT_FIRST_CHECK_DELAY_MS, PatchNoteAnnouncer.DEFAULT_CHECK_INTERVAL_MS);
 
-        // Scenarios (tutorials, puzzles, sandboxes): the files that ship in the cards module's scenarios/ folder, and
-        // the ones players have written, which live in a folder of their own outside the repository.  Both are read
-        // on first use and again whenever a file changes, so a scenario can be edited in place on a running server.
+        // Scenarios (tutorials, puzzles, sandboxes): the public ones and the ones players have written, which live in
+        // a data folder of their own outside the repository (scenarios.user.path); the ones that ship in the cards
+        // module's scenarios/ folder are brought into its public/ folder without undoing what was done on the server.
+        // They are read on first use and again whenever a file changes, so a scenario can be edited in place on a
+        // running server.
         String userScenarios = AppConfig.getProperty("scenarios.user.path");
         ScenarioLibrary scenarios = new ScenarioLibrary(AppConfig.getResourceFile("scenarios"),
                 userScenarios == null || userScenarios.isBlank() ? null : new File(userScenarios),
@@ -237,13 +240,19 @@ public class ServerBuilder {
         objectMap.put(ScenarioRunLog.class, scenarioRunLog);
         extract(objectMap, LotroServer.class).setScenarioRunLog(scenarioRunLog);
         // Writing scenarios by playing them: each author's draft, and the game it is being written in
-        objectMap.put(ScenarioAuthoring.class, new ScenarioAuthoring(
+        ScenarioAuthoring authoring = new ScenarioAuthoring(
                 extract(objectMap, ScenarioLibrary.class),
                 extract(objectMap, LotroCardBlueprintLibrary.class),
                 extract(objectMap, LotroFormatLibrary.class)::getFormat,
                 patchNoteCards,
                 extract(objectMap, LotroServer.class)::seatAuthoringGame,
-                new File(AppConfig.getWebPath(), "images/scenarios")));
+                new File(AppConfig.getWebPath(), "images/scenarios"));
+        objectMap.put(ScenarioAuthoring.class, authoring);
+        // My Scenarios and Scenario Admin: copying, submitting for review, approving, the archive
+        ScenarioShelf shelf = new ScenarioShelf(scenarios, extract(objectMap, LotroCardBlueprintLibrary.class));
+        // (a scenario submitted for review is not to be changed: a draft of it open in the authoring tool is closed)
+        shelf.onLocked(authoring::closeOn);
+        objectMap.put(ScenarioShelf.class, shelf);
 
         objectMap.put(HallServer.class,
                 new HallServer(

@@ -853,9 +853,46 @@ public class ScenarioAuthoring {
     private Session session(Player player) throws AuthoringException {
         Session session = _sessions.get(player.getName());
         if (session == null)
-            throw new AuthoringException("You have no scenario open for writing.  Open one from the Game Hall.");
+            throw new AuthoringException("You have no scenario open for writing.  Open one from My Account > My Scenarios in the Game Hall.");
         session.left = false;
         return session;
+    }
+
+    /** Refuses to change a scenario that is in review, unless it is an admin who is changing it. */
+    private void notLocked(Session session, String owner, String path) throws AuthoringException {
+        if (path != null && !session.player.hasType(Player.Type.ADMIN) && _scenarios.locked(owner, path))
+            throw new AuthoringException("It has been submitted for review, and cannot be changed until an admin has approved or "
+                    + "rejected it.  To go on working on it, copy it in My Scenarios.");
+    }
+
+    /**
+     * For submitting the author's scenario for review: its file, which has to be theirs and saved as it stands.
+     * @return The path of the file within the author's folder.
+     */
+    public String submitting(Player player) throws AuthoringException {
+        Session session = session(player);
+        synchronized (session) {
+            if (!session.onDisk)
+                throw new AuthoringException("It has not been saved yet.  Save it first.");
+            if (session.dirty)
+                throw new AuthoringException("It has changes that have not been saved.  Save it first (what is submitted is what is saved).");
+            if (!player.getName().equals(session.owner))
+                throw new AuthoringException("Only a scenario in your own folder can be submitted.");
+            return session.path;
+        }
+    }
+
+    /** Whether a player has a draft of this file open with changes that are not in it. */
+    public boolean unsavedOn(String owner, String path) {
+        Session session = owner == null ? null : _sessions.get(owner);
+        return session != null && owner.equals(session.owner) && path.equals(session.path) && session.dirty;
+    }
+
+    /** Closes a player's draft if it is of this file: it has been locked (submitted for review). */
+    public void closeOn(String owner, String path) {
+        Session session = owner == null ? null : _sessions.get(owner);
+        if (session != null && owner.equals(session.owner) && path.equals(session.path))
+            close(session.player);
     }
 
     /** The author's page says it is being closed (or reloaded: if so, it will be heard from again in a moment). */
@@ -1008,6 +1045,9 @@ public class ScenarioAuthoring {
             throw new AuthoringException("That scenario's file has mistakes that have to be put right in the file itself:\n" + String.join("\n", entry.errors()));
         if (!admin && (entry.owner() == null || !entry.owner().equals(player.getName())))
             throw new AuthoringException("That scenario is not yours to change.");
+        if (!admin && _scenarios.locked(entry.owner(), entry.path()))
+            throw new AuthoringException("It has been submitted for review, and cannot be changed until an admin has approved or "
+                    + "rejected it.  To go on working on it, copy it in My Scenarios.");
         //A user's scenario is known to the library by its owner's name as well; its file is not
         String fileId = entry.owner() == null ? entry.id() : entry.id().substring(entry.owner().length() + 1);
         Session session = new Session(player);
@@ -2037,6 +2077,7 @@ public class ScenarioAuthoring {
             if (!session.onDisk && path != null && !path.isBlank())
                 to = place(player, filed(path, kind), canonical, admin);
             boolean moves = session.onDisk && !to.equals(from);
+            notLocked(session, from.owner(), session.onDisk ? from.path() : null);
             if ((!session.onDisk || moves) && _scenarios.exists(to.owner(), to.path()))
                 throw new AuthoringException("There is already a scenario at " + to.shown()
                         + (moves ? ", which is where a " + kind.name().toLowerCase(Locale.ROOT) + " called this goes.  Rename one of them."
@@ -2093,6 +2134,7 @@ public class ScenarioAuthoring {
             Place to = place(player, filed(path, kindOf(session)), canonical, admin);
             Place from = new Place(session.owner, session.path);
             if (!to.equals(from)) {
+                notLocked(session, from.owner(), session.onDisk ? from.path() : null);
                 if (_scenarios.exists(to.owner(), to.path()))
                     throw new AuthoringException("There is already a scenario at " + to.shown() + ".");
                 if (session.onDisk) {
@@ -2113,11 +2155,13 @@ public class ScenarioAuthoring {
     }
 
     private Map<String, Object> write(Session session, Place to) throws AuthoringException {
+        notLocked(session, to.owner(), to.path());
         Sitting sitting = session.sitting;
         String text = sitting.mediator.scenarioLocked(() -> ScenarioWriter.toHjson(sitting.def, _library));
         ScenarioLibrary.Entry entry;
         try {
-            entry = _scenarios.save(to.owner(), to.path(), text);
+            entry = _scenarios.save(to.owner(), to.path(), text, "written over in the authoring tool", session.player.getName(),
+                    !session.player.hasType(Player.Type.ADMIN));
         } catch (IOException exp) {
             throw new AuthoringException("It could not be saved: " + exp.getMessage());
         }
@@ -2275,6 +2319,8 @@ public class ScenarioAuthoring {
             //(whether the author may put a scenario among the game's own)
             state.put("mayPublish", session.player.hasType(Player.Type.ADMIN));
             state.put("onDisk", session.onDisk);
+            //(whether its file is in the author's own folder: one that is can be submitted for review)
+            state.put("own", session.owner != null && session.owner.equals(session.player.getName()));
             state.put("canonical", session.path != null && session.owner == null);
             state.put("canSaveAnywhere", _scenarios.hasUserFolder());
             state.put("commentsLost", session.commentsLost);

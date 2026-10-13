@@ -4,6 +4,7 @@
  * A hall URL's fragment names what is on screen, so the address bar is always a link to it:
  *
  *   #game-hall, #help, #events, #info, #account, #admin        a top-level tab
+ *   #account/scenarios, #admin/scenarios                       My Scenarios, Scenario Admin
  *   #help/formats, #events/leagues, #info/stats, ...            a sub-tab (slugs in GempLinks.TABS)
  *   #help/manual                                               How Do I Play?, scrolled to the Manual
  *   #format-<code>                                             Help › Format Definitions, that format (GempFormatHelp)
@@ -51,14 +52,16 @@ var GempLinks = {
 		{slug: "account", href: "includes/account.html", login: true, aliases: ["my-account"], panel: "#accountMain", subs: [
 			{slug: "overview", match: ["#account"]},
 			{slug: "history", match: ["gameHistory"]},
-			{slug: "stats", match: ["yourStats"]}
+			{slug: "stats", match: ["yourStats"]},
+			{slug: "scenarios", match: ["myScenarios"]}
 		]},
 		{slug: "admin", href: "includes/admin.html", login: true, panel: "#adminMain", subs: [
 			{slug: "general", match: ["generalAdmin"]},
 			{slug: "league", match: ["leagueAdmin"]},
 			{slug: "tournament", match: ["tournamentAdmin"]},
 			{slug: "prizes", match: ["prizeAdmin"]},
-			{slug: "users", match: ["userAdmin"]}
+			{slug: "users", match: ["userAdmin"]},
+			{slug: "scenarios", match: ["scenarioAdmin"]}
 		]}
 	],
 

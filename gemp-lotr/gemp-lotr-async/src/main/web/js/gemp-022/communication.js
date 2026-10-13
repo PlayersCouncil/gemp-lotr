@@ -501,6 +501,18 @@ var GempLotrCommunication = Class.extend({
             dataType:"json"
         });
     },
+    // My Scenarios and Scenario Admin: see ScenarioRequestHandler (/scenarios/mine, /public, /admin) on the server
+    scenarioShelf:function (method, what, data, callback, failure) {
+        $.ajax({
+            type:method,
+            url:this.url + "/scenarios/" + what,
+            cache:false,
+            data:data || {},
+            success:callback,
+            error:failure,
+            dataType:"json"
+        });
+    },
     // The scenario authoring tool: see ScenarioRequestHandler (/scenarios/author/...) on the server
     scenarioAuthor:function (method, what, data, callback, failure) {
         $.ajax({

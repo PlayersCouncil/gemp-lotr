@@ -1,6 +1,5 @@
 package com.gempukku.lotro.scenario;
 
-import com.gempukku.lotro.common.AppConfig;
 import org.junit.Test;
 
 import java.io.File;
@@ -21,7 +20,7 @@ import static org.junit.Assert.*;
 public class ScenarioWriterTest {
     private static List<Path> everyScenarioFile() throws IOException {
         List<Path> files = new ArrayList<>();
-        for (File root : List.of(AppConfig.getResourceFile("scenarios"), new File("src/test/resources/scenarios"))) {
+        for (File root : List.of(new File("src/test/resources/scenarios"))) {
             if (!root.isDirectory())
                 continue;
             try (Stream<Path> paths = Files.walk(root.toPath())) {

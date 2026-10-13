@@ -1996,11 +1996,15 @@ var GempScenarioOverlay = Class.extend({
         this.goToHall();
     },
 
-    goToHall: function () {
+    /**
+     * Back to the Game Hall: this tab closes itself if there is a hall open in another (which is shown 'hash', a hall
+     * link such as "#account/scenarios", if one is given), and goes to the hall itself if there is not.
+     */
+    goToHall: function (hash) {
         var that = this;
         this.leaving = true;
         var here = function () {
-            location.href = "/gemp-lotr/hall.html";
+            location.href = "/gemp-lotr/hall.html" + (hash || "");
         };
         var channel;
         try {
@@ -2014,6 +2018,8 @@ var GempScenarioOverlay = Class.extend({
             if (answered || event.data == null || event.data.type != "here")
                 return;
             answered = true;
+            if (hash)
+                channel.postMessage({type: "go", hash: hash});
             channel.close();
             window.close();
             //A tab the player opened by hand is not a script's to close.  Still here a moment later means that.

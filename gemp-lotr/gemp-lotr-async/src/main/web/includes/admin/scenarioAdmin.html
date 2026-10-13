@@ -1,0 +1,11 @@
+<script type="text/javascript">
+	$("#scenarioAdmin").ready(
+		function () {
+			if ($("#scenarioAdmin").data("scenarioAdminUI") == null)
+				$("#scenarioAdmin").data("scenarioAdminUI", new ScenarioAdminUI($("#scenarioAdmin")));
+		});
+</script>
+<div class="game-history-article shelf-article">
+	<h1>Scenario Admin</h1>
+	<div id="scenarioAdmin"></div>
+</div>

@@ -14,10 +14,9 @@
  * A scenario game the player is still in the middle of is offered first, to carry on with or to start over.
  * Starting any scenario gives up the one in progress (the server does that), so the buttons say so.
  *
- * Whoever may write scenarios (the list says: mayAuthor) also gets, under the list, a way to start a new one and an
- * "Enable editing" button.  The Edit buttons on the scenarios are only there while that is on, and it is off every
- * time the screen is opened: an author looks at the list as everybody else sees it unless they have asked not to.
- * New or Edit opens a game with the authoring panel beside it (see scenario/scenarioAuthor.js); an author has one
+ * Whoever may write scenarios (the list says: mayAuthor) gets, under the list, a link to My Account > My Scenarios,
+ * where scenarios are written, copied and submitted (scenario/scenarioShelf.js).  A file with mistakes in it that the
+ * authoring tool can open all the same is offered for editing in the list of those (unreadable).  An author has one
  * draft at a time, and its game is the one "in the middle of" above.
  */
 class PlayScenario extends TableFlow {
@@ -36,14 +35,10 @@ class PlayScenario extends TableFlow {
 	mayAuthor = false;
 	authoring = null;
 	authorDiv = null;
-	//Whether this player may put a scenario among the game's own (the public ones): the admins
-	mayPublish = false;
-	//Whether the Edit buttons are shown.  Never remembered: it is asked for each time the screen is opened.
-	editing = false;
 	//The scenarios that are next in their campaigns, {id: true}; null until asked for (see nextIds)
 	next = null;
 	//Scenario files with mistakes in them, which are in no list: [{path, owner, mine, id, title, errors: [...],
-	// openable}].  The server sends an admin all of them and anyone else their own.  'openable' ones can be opened
+	// openable}].  The server sends an admin the public ones and everybody their own.  'openable' ones can be opened
 	// in the authoring tool all the same, with the mistaken parts left out.
 	unreadable = [];
 	unreadableDiv = null;
@@ -76,7 +71,6 @@ class PlayScenario extends TableFlow {
 
 	show() {
 		this.mainDiv.show();
-		this.editing = false;
 		//The game opens in a window like this one, and a tutorial's bubbles need room to point at things (the game
 		// screen makes the same check and says so again)
 		$("#scenario-small-window").prop("hidden",
@@ -93,8 +87,6 @@ class PlayScenario extends TableFlow {
 			that.current = (data && data.current) || null;
 			that.mayAuthor = !!(data && data.mayAuthor);
 			that.authoring = (data && data.authoring) || null;
-			that.ownFolder = !!(data && data.ownFolder);
-			that.mayPublish = !!(data && data.mayPublish);
 			that.unreadable = (data && data.unreadable) || [];
 			that.render();
 			that.sayUnreadable();
@@ -217,10 +209,7 @@ class PlayScenario extends TableFlow {
 			for (const error of errors)
 				list.append($("<li></li>").text(error));
 			text.append(list);
-			if (file.openable && file.id != null && !this.editing) {
-				if (this.mayAuthor)
-					text.append($("<div class='scenario-unreadable-note'></div>").text("The authoring tool can open this one (Enable editing)."));
-			} else if (file.openable && file.id != null) {
+			if (file.openable && file.id != null) {
 				let id = file.id;
 				row.append($("<button class='scenario-edit'></button>")
 					.attr("title", "Open it in the authoring tool, with the mistaken parts left out. The tool shows what they were.")
@@ -364,11 +353,6 @@ class PlayScenario extends TableFlow {
 			text.append($("<div class='scenario-notes'></div>").text(notes.join(" · ")));
 		row.append(text);
 
-		if (this.mayAuthor && this.editing)
-			row.append($("<button class='scenario-edit'></button>").attr("title", "Open it in the authoring tool").text("Edit").button().click(function () {
-				that.author({id: scenario.id});
-			}));
-
 		var inProgress = this.current != null && this.current.id == scenario.id;
 		var label = inProgress ? "Start Over" : (scenario.progress != null ? "Play Again" : "Play");
 		row.append($("<button class='scenario-play'></button>").text(label).button().click(function () {
@@ -377,7 +361,9 @@ class PlayScenario extends TableFlow {
 		return row;
 	}
 
-	// For those who may write scenarios: a new one, by id and title.
+	// For those who may write scenarios: where to do it.  Writing, copying and submitting scenarios is under My
+	// Account > My Scenarios (scenario/scenarioShelf.js); the draft they have open is offered there, and above
+	// (scenario-current) when its game is the one they are in the middle of.
 	renderAuthor() {
 		var that = this;
 		this.authorDiv.empty();
@@ -385,80 +371,15 @@ class PlayScenario extends TableFlow {
 			this.authorDiv.prop("hidden", true);
 			return;
 		}
-		if (this.authoring != null) {
-			//The draft is on the server whatever has become of the game it was being written in
-			var draft = this.authoring;
-			this.authorDiv.append($("<span class='scenario-author-draft'></span>")
-				.append(document.createTextNode("You have a draft open: "))
-				.append($("<b></b>").text(draft.title || draft.id))
-				.append(document.createTextNode((draft.test ? " (being played as a player would)" : "")
-					+ (draft.dirty ? ", with changes that have not been saved." : "."))));
-			this.authorDiv.append($("<button class='scenario-continue'></button>").text("Continue writing").button().click(function () {
-				that.resumeDraft();
-			}));
-			this.authorDiv.append($("<button class='scenario-close-draft'></button>").text("Close it").button().click(function () {
-				if (draft.dirty !== false && !confirm("Close the draft? It has changes that have not been saved, and they are lost."))
-					return;
-				that.comm.scenarioAuthor("POST", "close", {}, function () {
-					that.refresh();
-				}, function () {
-					that.refresh();
-				});
-			}));
-			this.authorDiv.append($("<span class='scenario-author-break'></span>"));
-		}
-		//The id is what the scenario is known by, and what its file is called: it is asked once, here.  Left empty,
-		// it is made from the title.
-		var id = $("<input type='text' maxlength='60'/>").attr("placeholder", "id: basics-02-the-ring").attr("aria-label", "The new scenario's id")
-			.attr("title", "What the scenario is known by, and its file's name: small letters, digits and dashes. Empty: made from the title.");
-		var title = $("<input type='text' maxlength='80'/>").attr("placeholder", "Title").attr("aria-label", "The new scenario's title");
-		var slug = function (text) {
-			return String(text).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").substring(0, 60);
-		};
-		title.bind("input", function () {
-			id.attr("placeholder", slug(title.val()) != "" ? "id: " + slug(title.val()) : "id: basics-02-the-ring");
+		var link = $("<a href='#account/scenarios'></a>").text("My Account > My Scenarios").click(function (event) {
+			event.preventDefault();
+			that.mainHall.tableCreator.closeAfterSuccess();
+			if (window.GempLinks)
+				GempLinks.go("#account/scenarios");
 		});
-		this.authorDiv.append($("<span class='scenario-author-label'></span>").text("New Scenario:")).append(id).append(title);
-		//Where its file goes: the author's own folder, or among the public scenarios.  Only somebody who may publish
-		// is asked, and only on a server that has both; what was chosen last time is what is offered next time.
-		var where = null;
-		if (this.ownFolder && this.mayPublish) {
-			var last = null;
-			try {
-				last = localStorage.getItem("gemp-scenario-new-where");
-			} catch (e) {
-				last = null;
-			}
-			where = $("<select></select>").attr("aria-label", "Where the new scenario's file is kept")
-				.attr("title", "Where its file is kept. A public scenario goes in the game's scenarios folder and is offered to everybody once it plays through; one of your own is offered only to you and the admins.")
-				.append($("<option value='own'></option>").text("My Scenarios"))
-				.append($("<option value='canonical'></option>").text("Public Scenarios"))
-				.val(last == "canonical" ? "canonical" : "own");
-			this.authorDiv.append(where);
-		}
-		this.authorDiv.append($("<button class='scenario-new'></button>").text("Create").button().click(function () {
-			//(with nothing to choose between: the author's own folder where there is one, the public ones where not)
-			var canonical = where != null ? where.val() == "canonical" : !that.ownFolder;
-			if (where != null) {
-				try {
-					localStorage.setItem("gemp-scenario-new-where", canonical ? "canonical" : "own");
-				} catch (e) {
-					// only a convenience
-				}
-			}
-			var name = String(id.val()).trim() != "" ? String(id.val()).trim() : slug(title.val());
-			that.author({"new": true, id: name, title: String(title.val()).trim(), canonical: canonical});
-		}));
-		//The Edit buttons: asked for each time, so that what an author sees until then is what a player sees
-		this.authorDiv.append($("<span class='scenario-author-break'></span>"));
-		this.authorDiv.append($("<span class='scenario-author-note'></span>").text(this.editing
-			? "Editing is on: each scenario has an Edit button."
-			: "The list is shown as players see it."));
-		this.authorDiv.append($("<button class='scenario-editing'></button>").attr("aria-pressed", this.editing ? "true" : "false")
-			.text(this.editing ? "Disable editing" : "Enable editing").button().click(function () {
-				that.editing = !that.editing;
-				that.render();
-			}));
+		this.authorDiv.append($("<span class='scenario-author-note'></span>")
+			.append(document.createTextNode("Create your own Puzzle or Tutorial Scenarios on "))
+			.append(link).append(document.createTextNode(".")));
 		this.authorDiv.prop("hidden", false);
 	}
 

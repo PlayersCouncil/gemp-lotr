@@ -23,18 +23,22 @@ public class ScenarioLibraryTest {
     @Rule
     public TemporaryFolder temp = new TemporaryFolder();
 
+    /** The public scenarios: public/ in the data folder.  (What the repository ships is in 'shipped': see ShippedScenarios.) */
     private File canon;
     private File users;
+    private File shipped;
     private long now = 1_000_000;
 
     @Before
     public void folders() throws Exception {
-        canon = temp.newFolder("canon");
         users = temp.newFolder("scenarios-user");
+        canon = new File(users, "public");
+        assertTrue(canon.mkdirs());
+        shipped = temp.newFolder("shipped");
     }
 
     private ScenarioLibrary library() {
-        return new ScenarioLibrary(canon, users, ScenarioTesting.library(), ScenarioLibraryTest::format, null, 5000, () -> now);
+        return new ScenarioLibrary(shipped, users, ScenarioTesting.library(), ScenarioLibraryTest::format, null, 5000, () -> now);
     }
 
     private static LotroFormat format(String code) {
@@ -111,7 +115,11 @@ public class ScenarioLibraryTest {
         assertEquals(List.of("first"), ids(library.getAvailableTo("anybody", false)));
         //An author gets their own, working or not
         assertEquals(List.of("first", "ketura/mine"), ids(library.getAvailableTo("ketura", false)));
-        assertEquals(List.of("first", "second", "ketura/mine", "someone/theirs"), ids(library.getAvailableTo("admin", true)));
+        //An admin is offered the public ones that do not play through as well, to see why; other players' scenarios
+        // are for them to review when they are submitted, and are not in the list (though an admin can start them)
+        assertEquals(List.of("first", "second"), ids(library.getAvailableTo("admin", true)));
+        assertTrue(library.startableBy(library.get("someone/theirs"), "admin", true));
+        assertFalse(library.startableBy(library.get("someone/theirs"), "ketura", false));
     }
 
     @Test
@@ -210,7 +218,7 @@ public class ScenarioLibraryTest {
         assertNotNull("It is known by its id, so that it can be opened", broken);
         assertFalse(broken.playable());
         assertFalse(broken.verified());
-        assertFalse("Nobody is offered it to play, an admin included", broken.availableTo("anybody", true));
+        assertFalse("Nobody can start it, an admin included", library.startableBy(broken, "anybody", true));
         assertEquals(List.of(), library.getAvailableTo("anybody", true));
         assertTrue(broken.openable());
         assertNull(broken.report());
