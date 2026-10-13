@@ -178,7 +178,8 @@ Notes: Elrond is himself an ally whose home is site 3, so C2 heals him too.
   same stretch (a move, another play, a wound). The landed tests were stripped to this by engine pass 31. A card
   played from a pile by another card's effect is held there too (`TwilightPoolTests`,
   `AMinionPlayedFromTheDiscardPileRemovesItsCostAndTheRoamingPenalty`): the pool after it is not read; one short
-  of it, where the play is a cost, is (1_196).
+  of it, where the play is a cost, is (1_196). A helper card's play, made only to meet a requirement, is held
+  too: the pool after it is not read (1_165, the troll's [moria] Orc).
 - **`R` clauses are everything that is not printed on the card**: a ruling that names it, an interaction from a
   rules example, a rule that differs by format. Their text says where they come from. A rules example that names
   the card is owed even where it hinders (Gwemegil 1_47 in CR 5.0 "hinder"): Q-0237 waives only boards it names none in.
@@ -555,6 +556,8 @@ beside them (see "One candidate is chosen for you" in gemp-testing). Assert the 
 `FreepsHasCardChoiceAvailable(...)` and `FreepsHasCardChoiceNotAvailable(...)` before choosing. A choice the game
 carries out unasked, because one valid card is there, shows nothing of the invalid card beside it: a second valid
 candidate is laid and the invalid one read "not offered" (Q-0266: B; Ketura: "Yeah I think B is the way to go.").
+Where the text allows only one valid candidate ("the losing character": one skirmish has one, Blade Tip 1_209),
+the invalid ones are laid all the same, the game going on unasked is the reading, and Notes say why.
 Where the invalid candidate is the Ring-bearer and the effect a discard, the reading shows nothing either way, since
 he is never discarded (Q-0109): the bearer in such a test is another (Sam bearing Sting 8_113). Where the text
 says neither "may" nor "up to", read the minimum of one such choice (`FreepsGetChoiceMin()`): a choice that has
