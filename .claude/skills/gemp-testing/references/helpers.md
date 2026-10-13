@@ -211,6 +211,12 @@ strength -1 and damage +1. Seek and Hide ([shire] Skirmish event, cost 1, spot 2
 loses all damage bonuses. Gollum (strength 5, vitality 4; a regroup ability used only on purpose) loses to Gimli
 1_13 and shows 1, 2 or 3 wounds (mechanics/keywords/DamageBonusTests).
 
+**A companion's damage bonus taken away, with no event played (the `-` of "while he is damage +X").** Saruman, Mind
+of Metal and Wheels 102_29 with Isengard Worker 3_62. Saruman: unique [isengard] Wizard minion, "Companions
+skirmishing [isengard] Orcs lose all damage bonuses"; he may not be assigned, and his Response (exert him to
+prevent a wound to an [isengard] Orc) is used only on purpose. Worker: [isengard] Orc, strength 5, vitality 3; a
+regroup ability only. Gimli 9_4 assigned to the Worker is damage +1; in the skirmish, 0 (Card_09_004_Tests).
+
 **A companion who loses to a minion with damage +1 and takes one wound.** Mithril-coat, Dwarf-mail 13_153. [shire]
 artifact (armor), unique, cost 2; bearer must be a Ring-bound Hobbit (Sam 1_311). Each minion skirmishing bearer
 loses all damage bonuses. Every plain Uruk-hai has Damage +1, which gives the loser two wounds and can hide "not

@@ -569,6 +569,8 @@ beside them (see "One candidate is chosen for you" in gemp-testing). Assert the 
 `FreepsHasCardChoiceAvailable(...)` and `FreepsHasCardChoiceNotAvailable(...)` before choosing. A choice the game
 carries out unasked, because one valid card is there, shows nothing of the invalid card beside it: a second valid
 candidate is laid and the invalid one read "not offered" (Q-0266: B; Ketura: "Yeah I think B is the way to go.").
+Q-0266 is about choices of cards: "<do X> or <do Y>" carried out unasked because one branch cannot be done in full
+is the board F-0310 owes (shapes.md, "<Do X> or <do Y>"), and the reading there.
 Where the text allows only one valid candidate ("the losing character": one skirmish has one, Blade Tip 1_209),
 the invalid ones are laid all the same, the game going on unasked is the reading, and Notes say why.
 A bearer named by a unique title ("Bearer must be Legolas") is such a text (Q-0239): one board for each card type
