@@ -148,6 +148,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Here" on a site is the site's title (Q-0027) [F-0043]
 - "One" stands for the noun before it (Q-0028)
 - A branch in parentheses is mandatory when it is available (F-0047, Q-0035)
+- A parenthesis that adds targets of either side is "up to" (F-0491, Secret Sentinels 2_20) [Q-0035]
 - "Spot X to Y" does nothing without X, even as one branch of a choice (F-0053)
 - What a special ability is (Q-0039)
 - Reading card text. A race word with no "your" names no side: "Wraith is Wraith" (Q-0068), "Bearer must be a Wizard" lets the opponent's Saruman bear ... [Q-0058, Q-0069, Q-0065, Q-0057, Q-0047, Q-0050, Q-0044]
@@ -381,6 +382,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Card by card (2026-10-12, sixth notes) [Q-0289, Q-0292, Q-0293, F-0488, F-0489]
 - Card by card (2026-10-12, ninth notes) [Q-0295, Q-0297, F-0490]
 - Card by card (2026-10-12). F-0482 (Mountain-troll 15_112's discount counted ahead): "Go for it". F-0483 (the same card asking whether to discard ... [F-0486]
+- Card by card (2026-10-13). Q-0298, Saruman's Staff 4_174 withheld by the engine's rule instead of a requirement naming the two subtitles: "keep". ... [Q-0299, Q-0300, F-0492, F-0491]
 
 # Settled shapes (shapes.md)
 

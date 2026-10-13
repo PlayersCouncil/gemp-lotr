@@ -157,6 +157,12 @@ lies); or it would break a ruling, above all one that invites a board outside pl
 something a test must cover. Append each as one line to `<state>/orchestrator/proposals.md`
 (`<state>` is `/mnt/user-data/outputs/card-tests`): the folder, the file it concerns, the change, why.
 
+**Odd wording.** A card whose printed words read oddly and had to be settled by a ruling or a reading (an early
+word used in another sense than later sets use it, a target with no side where one was surely meant, a word no rule
+defines): one line in `<state>/wording.md` (card, the words, what is odd, how it plays now, the number). Ketura,
+2026-10-13: "we should keep track of weird wording for a potential spring cleaning update in the future". Nothing
+is changed on the card for it.
+
 ## 7. Land
 
     python3 .claude/skills/card-test-campaign/scripts/landing.py finish <folder> <ids> \

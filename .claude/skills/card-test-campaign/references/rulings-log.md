@@ -830,6 +830,14 @@ and never offers the exertion, and is right. "Wound a minion (or wound a minion 
 bears a ranged weapon)": if two valiant Elves bearing ranged weapons can be spotted the minion is wounded twice;
 the player is not asked which Elves and cannot choose the lesser result. *[2026-10-06]*
 
+**A parenthesis that adds targets of either side is "up to" (F-0491, Secret Sentinels 2_20).** "Exert an Elf ally
+to discard a condition (or 2 conditions if you spot an Orc)": "This one needs to be optional because A: it says
+"you spot" not "you can spot", and B: it's keyed to "condition" and not "Shadow condition" meaning you can be
+forced to discard your own condition. In effect, treat this one as 1 mandatory discard and then a 0-1 discard if
+an Orc can be spotted. (We won't waste their time actually choosing one to spot)" So nothing is asked about the
+spot; with an Orc to spot the player discards 1 or 2 conditions, his choice; without, exactly 1. Q-0035 stands
+where the better branch can only help him (a minion wounded twice). *[2026-10-13]*
+
 **"Spot X to Y" does nothing without X, even as one branch of a choice (F-0053).** "When you're given a choice,
 you have to pick one that you're 'fully capable' of performing. But when an effect cannot be fully performed,
 you 'do what you can and ignore the rest'. That can lead to some unexpected edge cases. That said, 'spot X to Y'
@@ -2043,3 +2051,11 @@ corner-of-a-corner decision. Let's leave this test parked for potential work in 
 these minions have gotten enough attention spent on them for now. :)" (engine pass 28 had already built it when
 these words arrived; told so: "I think F-0486 got its status changed since I wrote that entry, so "parked" may
 not make sense anymore now that it's addressed." It stands as built.) "Good, maybe we can run two engine agents for a bit". *[2026-10-12]*
+
+**Card by card (2026-10-13).** Q-0298, Saruman's Staff 4_174 withheld by the engine's rule instead of a
+requirement naming the two subtitles: "keep". Q-0299, Athelas 1_94's "remove a Shadow condition" is a discard: "A,
+this is early installment weirdness. Although actually it occurs to me, we should keep track of weird wording for
+a potential spring cleaning update in the future that fixes these sorts of things." (the list is
+`<state>/wording.md`). Q-0300, Troop of Uruk-hai: a strength bonus a weapon gives by its own ability is lost too:
+"A". F-0492, Horn of Boromir 3_42 not offered with no ally to spot: "Approved." F-0491: under "How card text is
+read". *[2026-10-13]*
