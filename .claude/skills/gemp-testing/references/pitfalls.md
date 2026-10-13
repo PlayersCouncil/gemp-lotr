@@ -516,7 +516,8 @@ the control board: if it is refused there too, the reading belongs to the helper
 **Set the twilight pool before the Shadow phase starts.** Because the engine asks once, a pool set while the
 Shadow player's decision is already pending does not make a minion playable. Set it during the fellowship phase,
 then pass. The move then adds one for each companion plus the new site's shadow number, so a test that needs an
-exact pool adds those in: `// 10 set + 1 companion + 2 for the site`. A pool that is too small shows only as the rig's
+exact pool adds those in: `// 10 set + 1 companion + 2 for the site`. No region twilight (CR 4.2's +3 / +6) is
+added on the ordered `FellowshipSites`, `TowersSites` or `KingSites` paths; only an unordered path adds it. A pool that is too small shows only as the rig's
 `<card> is not offering Shadow Player a play.`: count the roaming penalty as well as the cost.
 To read both sides of a cost in one Shadow phase, set the pool there and refresh: `SetTwilight(3)`,
 `ShadowRefreshDecision()`, not offered; `SetTwilight(4)`, `ShadowRefreshDecision()`, offered. No sum for the move is
@@ -1283,7 +1284,8 @@ call needs its reason on the line (`// lint-ok: ...`), as `carryOutEffectInPhase
 
 **A value modified below zero counts as zero** (CR 4.2 "modifier"): a site's Shadow number lowered past 0 reads
 0 (Rivendell Valley stays 0 under No Stranger to the Shadows 51_108). `rules.py term` has no entry for "Shadow
-number"; the rule is under "modifier".
+number"; the rule is under "modifier". So a discount of N is read at a site whose number is above N, or N and
+N + 1 read alike: A Talent for Not Being Seen 1_316's -2 is told from -3 at Balin's Tomb (3), not Ettenmoors (2).
 
 ## A card that leaves play as it is played
 
@@ -1348,8 +1350,9 @@ taken a blueprint no other card of that deck has (fillers of another kind), or a
 `assertInZone(Zone.HAND, card)` fails.
 
 **Whether a deck was shuffled.** `GetFreepsDeckShuffleCount()` and `GetShadowDeckShuffleCount()`, read before and
-after. A draw deck that has been looked through is reshuffled whether or not the card says so (CR 4.2 "draw
-deck"; Ketura's ruling on Q-0013), so a card that searches a deck has this to show. A card played out of a deck
+after. By the rules a draw deck that has been looked through is reshuffled whether or not the card says so (CR 4.2
+"draw deck"; Ketura's ruling on Q-0013), so a card that searches a deck has this to show; in the engine that
+shuffle is the definition's own `shuffle: true` (`shuffle: false` on Hobbiton Party Field 2_115 was noticed). A card played out of a deck
 that was looked through (`showAll: true`) shuffles it as the card leaves, before it is paid for and before its
 own "when you play" text is asked (Old Toby 1_305: the count is already one more at his offer; F-0313, engine
 pass 20), and the definition's `shuffle: true` shuffles again after the play: two more, whatever kind of card.
