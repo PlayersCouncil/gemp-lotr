@@ -1,30 +1,43 @@
 package com.gempukku.lotro.cards.official.set07;
 
 import com.gempukku.lotro.framework.VirtualTableScenario;
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Zone;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_07_359_Tests
 {
 
+	// The King-block path with Northern Ithilien as site 8.  Each test skips to site 7 and moves here.
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("gollum", "9_28");
-					put("watcher", "2_73");
-					put("fens", "5_22");
+					put("gollum", "9_28");          // Gollum, Dark as Darkness: [gollum] minion, cost 2, site 3; abilities used only on purpose
+					put("vilegollum", "7_59");      // Gollum, Vile Creature: [gollum] minion, cost 2, site 3; a skirmish ability
+					put("nastygollum", "5_24");     // Gollum, Nasty Treacherous Creature: [gollum] minion, cost 2, site 3; a regroup ability
+					// Gollum, Half a Wraith Himself: the one Gollum who is not [gollum]: a [wraith] minion, cost 2, site 3.
+					// His trigger answers a Nazgul being played and his ability is an assignment action.
+					put("wraithgollum", "103_66");
+					// Gollum, Old Villain: [gollum] minion, cost 2; a skirmish ability.  The Free Peoples player's own
+					// Gollum, of a version no other test card is: an offer from a discard pile is read by version.
+					put("oldgollum", "6_40");
+					put("shelob", "8_25");          // Shelob, Eater of Light: [gollum] minion that is not Gollum, cost 6, site 8
+					put("refuge", "4_29");          // No Refuge: [dunland] Shadow condition, cost 0, support area; nothing without a stacked Man
+					put("watcher", "2_73");         // Watcher in the Water: discards all other minions (except tentacles)
+					put("fens", "5_22");            // Evil-smelling Fens: every site is a marsh, which keeps the Watcher in play
 
-					put("companion1", "1_7");
-					put("companion2", "1_11");
-					put("companion3", "1_12");
+					// Three companions beside Frodo: room for four threats.
+					put("companion1", "1_7");       // Dwarf Guard
+					put("companion2", "1_11");      // Farin, Dwarven Emissary
+					put("companion3", "1_12");      // Gimli, Dwarf of Erebor
 				}},
 				new HashMap<>() {{
 					put("site1", "7_330");
@@ -49,14 +62,13 @@ public class Card_07_359_Tests
 		 * Set: 7
 		 * Name: Northern Ithilien
 		 * Unique: False
-		 * Side: 
-		 * Culture: 
-		 * Shadow Number: 8
 		 * Type: Site
-		 * Subtype: 
+		 * Block: King
 		 * Site Number: 8K
+		 * Shadow Number: 8
+		 * Direction: Right
 		 * Game Text: <b>Shadow:</b> Remove 2 threats and play Gollum from your discard pile to add 2 burdens.
-		*/
+		 */
 
 		var scn = GetScenario();
 
@@ -66,8 +78,128 @@ public class Card_07_359_Tests
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertEquals(8, card.getBlueprint().getTwilightCost());
+		assertEquals(SitesBlock.KING, card.getBlueprint().getSiteBlock());
 		assertEquals(8, card.getBlueprint().getSiteNumber());
+		assertEquals(8, card.getBlueprint().getTwilightCost());
+		assertEquals(LotroCardBlueprint.Direction.RIGHT, card.getBlueprint().getSiteDirection());
+	}
+
+	@Test
+	public void RemovesTwoThreatsAndPlaysGollumFromTheDiscardPileToAddTwoBurdens() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gollum = scn.GetShadowCard("gollum");
+		var vileGollum = scn.GetShadowCard("vilegollum");
+		var nastyGollum = scn.GetShadowCard("nastygollum");
+		var wraithGollum = scn.GetShadowCard("wraithgollum");
+		var shelob = scn.GetShadowCard("shelob");
+		var freepsGollum = scn.GetFreepsCard("oldgollum");
+		scn.MoveCompanionsToTable("companion1", "companion2", "companion3");
+
+		scn.StartGame();
+		scn.SkipToSite(7);
+		// Three Gollums in the Shadow player's discard pile, two of them [gollum] and one [wraith]; Shelob, who is
+		// [gollum] and no Gollum, beside them; a Gollum in his hand; and a Gollum in the other player's discard pile.
+		scn.MoveCardsToDiscard(vileGollum, nastyGollum, wraithGollum, shelob, freepsGollum);
+		scn.MoveCardsToHand(gollum);
+		scn.AddThreats(4);
+		scn.SetTwilight(20);
+		scn.FreepsPass();
+
+		var site = scn.GetCurrentSite();
+		assertEquals("Northern Ithilien", site.getBlueprint().getTitle());
+		assertEquals(4, scn.GetThreats());
+		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.ShadowActionAvailable(site));
+
+		scn.ShadowUseCardAction(site);
+		assertEquals(2, scn.GetThreats());
+		// "Gollum" is the title and nothing more: the [wraith] Gollum is one of them.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(vileGollum, nastyGollum, wraithGollum));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(shelob, gollum, freepsGollum));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		scn.ShadowChooseCard(wraithGollum);
+
+		assertInZone(Zone.SHADOW_CHARACTERS, wraithGollum);
+		assertInDiscard(vileGollum, nastyGollum, shelob);
+		assertEquals(2, scn.GetBurdens());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void NotOfferedWithOnlyOneThreatToRemove() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gollum = scn.GetShadowCard("vilegollum");
+		scn.MoveCompanionsToTable("companion1", "companion2", "companion3");
+
+		scn.StartGame();
+		scn.SkipToSite(7);
+		scn.MoveCardsToDiscard(gollum);
+		scn.AddThreats(1);
+		scn.SetTwilight(20);
+		scn.FreepsPass();
+
+		var site = scn.GetCurrentSite();
+		assertEquals("Northern Ithilien", site.getBlueprint().getTitle());
+		assertEquals(1, scn.GetThreats());
+		assertInDiscard(gollum);
+		assertFalse(scn.ShadowActionAvailable(site));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void NotOfferedWhenGollumIsInHandAndNotInTheDiscardPile() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gollum = scn.GetShadowCard("vilegollum");
+		var shelob = scn.GetShadowCard("shelob");
+		var freepsGollum = scn.GetFreepsCard("oldgollum");
+		scn.MoveCompanionsToTable("companion1", "companion2", "companion3");
+
+		scn.StartGame();
+		scn.SkipToSite(7);
+		// His Gollum in hand, Shelob in his discard pile, and a Gollum in the other player's discard pile.
+		scn.MoveCardsToHand(gollum);
+		scn.MoveCardsToDiscard(shelob, freepsGollum);
+		scn.AddThreats(4);
+		scn.SetTwilight(20);
+		scn.FreepsPass();
+
+		var site = scn.GetCurrentSite();
+		assertEquals(4, scn.GetThreats());
+		assertTrue(scn.ShadowPlayAvailable(gollum));
+		assertFalse(scn.ShadowActionAvailable(site));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void NotOfferedWhenThePoolCannotPayForGollum() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gollum = scn.GetShadowCard("vilegollum");
+		var refuge = scn.GetShadowCard("refuge");
+		scn.MoveCompanionsToTable("companion1", "companion2", "companion3");
+
+		scn.StartGame();
+		scn.SkipToSite(7);
+		scn.MoveCardsToDiscard(gollum);
+		scn.MoveCardsToHand(refuge);
+		scn.AddThreats(4);
+		scn.FreepsPass();
+
+		var site = scn.GetCurrentSite();
+		assertTrue(scn.ShadowActionAvailable(site));
+
+		// One short of Gollum's cost of 2 (site 3 is not roaming at site 8); playing No Refuge for nothing asks
+		// the Shadow player afresh.
+		scn.SetTwilight(1);
+		scn.ShadowPlayCard(refuge);
+		assertEquals(1, scn.GetTwilight());
+		assertEquals(4, scn.GetThreats());
+		assertInDiscard(gollum);
+		assertFalse(scn.ShadowActionAvailable(site));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
@@ -92,7 +224,7 @@ public class Card_07_359_Tests
 
 		var site = scn.GetCurrentSite();
 		assertEquals("Northern Ithilien", site.getBlueprint().getTitle());
-		assertEquals(Zone.SHADOW_CHARACTERS, watcher.getZone());
+		assertInZone(Zone.SHADOW_CHARACTERS, watcher);
 		//4 companions + 8 for the site
 		assertEquals(12, scn.GetTwilight());
 		assertEquals(4, scn.GetThreats());
@@ -106,8 +238,8 @@ public class Card_07_359_Tests
 		// he was not played, so the cost is not fulfilled and no burden is added.
 		assertEquals(2, scn.GetThreats());
 		assertEquals(10, scn.GetTwilight());
-		assertEquals(Zone.DISCARD, gollum.getZone());
-		assertEquals(Zone.SHADOW_CHARACTERS, watcher.getZone());
+		assertInDiscard(gollum);
+		assertInZone(Zone.SHADOW_CHARACTERS, watcher);
 		assertEquals(0, scn.GetBurdens());
 
 		//Gollum is back in the discard pile, so it can be done again, with the same result.
@@ -116,7 +248,7 @@ public class Card_07_359_Tests
 
 		assertEquals(0, scn.GetThreats());
 		assertEquals(8, scn.GetTwilight());
-		assertEquals(Zone.DISCARD, gollum.getZone());
+		assertInDiscard(gollum);
 		assertEquals(0, scn.GetBurdens());
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
