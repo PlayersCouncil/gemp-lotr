@@ -526,6 +526,10 @@ of a tradeoff." *[2026-10-12]*
 gap and go ahead and go with a 2 pipeline setup." (The next batch is launched before the last is closed;
 `<work>/pipelines` is 2.) *[2026-10-12]*
 
+**The gap back, after a restart (2026-10-13).** The machine restarted with two batches at work and a landing
+running beside them (no gap). Offered (1) two pipelines with the landing between batches, (2) no gap on one
+pipeline, (3) as before: "Yeah go with 1." *[2026-10-13]*
+
 **Every landed card approved; mechanics sorted by subject (2026-10-12, tenth notes).** "Go ahead and mark all current
 card tests as approved." (633 cards from ready to approved; the 2 parked stay parked.) "Let's sort the mechanics test
 folder into subfolders. Something like: keywords, hinder, choices, actions, skirmishes, as well as as many others as
