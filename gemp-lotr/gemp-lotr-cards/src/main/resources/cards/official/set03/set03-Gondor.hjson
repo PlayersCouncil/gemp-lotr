@@ -235,6 +235,10 @@
 		effects: {
 			type: activated
 			phase: maneuver
+			requires: {
+				type: canSpot
+				filter: ally
+			}
 			cost: {
 				type: exert
 				select: bearer
