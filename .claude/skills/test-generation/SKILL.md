@@ -357,7 +357,9 @@ stands: for a bare race word ("a Man", Q-0058) one valid candidate is the oppone
 race can be in play at that moment (no minion is in a fellowship phase: then Notes says none can be, and no board
 is made for it) (but a player's own Shadow cards are inactive on his turn, so for a "Shadow condition" chosen by a
 Free Peoples ability they are no candidates at all); for "a minion" or "an Uruk-hai" on a Skirmish event, one valid
-candidate is not assigned to a skirmish.
+candidate is not assigned to a skirmish. A Skirmish action's choice that is not limited to the skirmish ("your
+[sauron] minion", Morgul Vale 7_357) also wants one valid candidate IN the skirmish being resolved, or a choice
+narrowed to `not(inSkirmish)` passes.
 
 **A condition inside a modifier; "bearer" or "self" with a requirement.** Where the excluded thing is part of a
 condition inside a modifier ("in a skirmish involving an [isengard] minion"), the candidates are in skirmishes, not
