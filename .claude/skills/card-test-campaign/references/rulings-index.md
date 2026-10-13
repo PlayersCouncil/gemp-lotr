@@ -568,6 +568,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Are not unique" wants three copies in play and the fourth played (94_16)
 - A site can be controlled only once every marker has passed it [Q-0230]
 - A Decipher site 1's Fellowship action whose only price is a burden, with no requirement (The Prancing Pony 1_324), has no `-` and no `C-` board [Q-0237]
+- A site 9's "When the fellowship moves to this site" (Dagorlad 7_360) has no `-` board
 - "Stacked on a site you control": no board tells `controlledSite` from `site` (Above the Battlement 7_262, Gorgoroth Pillager 7_275)
 - "Assign a minion to <a character>": no board tells `minion: choose(minion)` from `choose(character)` (Into the Caves 17_100)
 - "Skirmish: Exert this minion to make a Nazgûl or [wraith] Orc strength +1" (Morgul Regiment 7_197; Morgul Lackey 7_193 and Morgul Predator 7_196 print it word for word and are built with the same filter, `or(nazgul,and(culture(wraith),orc))`)

@@ -1596,6 +1596,15 @@ trackers. Site 3, Barrows of Edoras 4_337: a sanctuary; "Fellowship: Place your 
 (Q-0249: `CanDraw`): `FreepsActionAvailable(<site 3>)` is true there, and a test that counts the fellowship actions on offer at
 site 3 counts it. Site 4, White Rocks 4_346: a battleground; its Shadow number is +1 for each mounted companion.
 
+**The sites of `KingSites` have texts that reach a test.** Site 1, Edoras Hall 7_330: each [rohan] possession is
+twilight cost -1 while the fellowship is there. Site 2, King's Tent 7_335: a Shadow action (initiative and a minion of
+his). Site 3, The Dimholt 8_117: underground, a sanctuary; "Fellowship: Add 3 threats to play an enduring companion
+from your draw deck". Site 5, Pelennor Flat 7_345: at the start of each maneuver phase there the Free Peoples player
+must choose to discard his hand or add 2 burdens (asked with an empty hand too: Q-0255), so a test in site 5's
+maneuver phase answers that first. Site 6, Minas Tirith Seventh Circle 7_350: a regroup move from it heals each
+[elven] companion. Site 9, Dagorlad 7_360: the move to it adds 3 threats (up to the limit), so a test that reads
+threats at site 9 counts them in (Card_07_360_Tests).
+
 **A battleground or a forest site needs no cheat.** The Towers path has both at site 2: Uruk Camp 4_335
 (Battleground, Plains; each Uruk-hai played must exert) and Derndingle 4_330 (Forest; move limit +1 while an
 unbound Hobbit is there). `TowersSites` has neither word at site 1 (4_325) or site 3 (4_337, a sanctuary), so
