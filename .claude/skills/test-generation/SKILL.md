@@ -359,7 +359,8 @@ kind stands beside it and is read as untouched (for "each time a companion is pl
 companion already in play, or `all(companion)` passes, 91_9; where the effect then takes "that <card>" out of a
 PILE, "each time ... discards an [isengard] Orc, you may stack that Orc", the other card of its kind lies in that
 pile when the offer is taken, or a choice from the pile passes, 6_63); where a second copy cannot change a reading,
-the untouched control is a different card.
+the untouched control is a different card. For a Skirmish ability on "this minion", the copy stands in the SAME
+skirmish: one in another skirmish lets `choose(minion,inSkirmish)` pass, a lone candidate being chosen unasked (7_190).
 
 **Whose a card is and where it stands.** What the wording does not mention includes whose a card is and where it
 stands: for a bare race word ("a Man", Q-0058) one valid candidate is the opponent's, where a card of his of that
