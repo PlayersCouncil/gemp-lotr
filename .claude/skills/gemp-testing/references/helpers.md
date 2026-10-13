@@ -874,6 +874,11 @@ Ring-bearer to a skirmish"), played after `FreepsPass()`; he picks ANY minion fo
 (`FreepsChooseCard`), and Goblin Patrol Troop 1_177 with four Goblin Runners 1_178 are the five
 (Card_12_098_Tests).
 
+**A card played only to take the hand from four to three (a loss of initiative).** Stairs of Khazad-dûm 1_24
+([dwarven] condition, cost 0, support area, no requirement) in the fellowship phase; Elendil's Valor 1_103 ([gondor]
+Maneuver event, cost 0) in the maneuver phase, which picks a lone [gondor] companion unasked, so no `FreepsChooseCard`
+follows it (Card_10_012_Tests, Card_10_108_Tests). Skirmish and regroup: pitfalls, "The loss of initiative comes with the play".
+
 **A minion's own assignment action, with no cost.** Reckless Pride 7_13; Ancient Blade 7_15; Unexpected Visitor
 7_126. Free Peoples conditions on a [dwarven], an [elven], a [gondor] companion: 'Each minion gains this ability:
 "Assignment: Assign this minion to bearer of <this card>."' `ShadowUseCardAction(minion, "<the card's name>")`
