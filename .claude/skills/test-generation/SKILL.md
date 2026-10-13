@@ -175,7 +175,10 @@ Notes: Elrond is himself an ally whose home is site 3, so C2 heals him too.
   nothing changes the one or the other: that is `mechanics/costs/TwilightPoolTests`' and `BorneItemsTests`'. It reads
   them where the card's own text, or another card on the table, changes the cost, the pool, the bonus or where
   the card goes, the nearest miss of that text included, and where something else moves the same number in the
-  same stretch (a move, another play, a wound). The landed tests were stripped to this by engine pass 31.
+  same stretch (a move, another play, a wound). The landed tests were stripped to this by engine pass 31. A card
+  played from a pile by another card's effect is held there too (`TwilightPoolTests`,
+  `AMinionPlayedFromTheDiscardPileRemovesItsCostAndTheRoamingPenalty`): the pool after it is not read; one short
+  of it, where the play is a cost, is (1_196).
 - **`R` clauses are everything that is not printed on the card**: a ruling that names it, an interaction from a
   rules example, a rule that differs by format. Their text says where they come from. A rules example that names
   the card is owed even where it hinders (Gwemegil 1_47 in CR 5.0 "hinder"): Q-0237 waives only boards it names none in.
@@ -241,7 +244,10 @@ side, 94_27; for a keyword or item class alone, "a pipeweed", "a pipe", cards of
 cards have them: beside [shire] ones alone, `pipeweed` narrowed to `culture(shire)` passes, 92_4, and a card of the
 other culture whose own text stays out of the way is looked for before the culture is left out; for a bare `weapon`,
 a possession and an artifact (Narsil 9_34 on a [gondor] Man, The Balrog's Sword 2_50 on The Balrog 12_79): beside
-possessions alone, `weapon` narrowed to `possession,weapon` passes, 1_230 and 1_173.
+possessions alone, `weapon` narrowed to `possession,weapon` passes, 1_230 and 1_173; for "discard N cards from
+hand", a card of another culture in the hand: beside [moria] cards alone, `choose(culture(moria))` passes, 1_196; for
+a bearer by race ("Bearer must be a Hobbit"), the Ring-bearer and a Hobbit of another culture (Pippin, Trollslayer
+103_31): beside [shire] Hobbits who are not the Ring-bearer, `hobbit,culture(shire)` passes, 3_108.
 
 **Invalid candidates, word by word.** For a phrase of two words ("a [sauron] minion") that is a card for each word:
 a [sauron] card that is no minion, and a minion of another culture; for an item class ("bearing a hand weapon") one
@@ -270,7 +276,9 @@ part in the very event the valid ones do (a [moria] Orc and a [sauron] Uruk-hai 
 read as not offered: on a board where the trigger never fires, the choice's own filter goes unchallenged (1_247).
 
 **A spot requirement.** A spot requirement owes its valid candidates as a choice does, on one board or across the
-tests: for "spot an Elf companion", Elf companions of two titles, or `name(Legolas)` passes (91_12).
+tests: for "spot an Elf companion", Elf companions of two titles, or `name(Legolas)` passes (91_12). A spot that
+must FAIL ("moves ... without a ranger") is the same: the cards that would stop it are its valid candidates, each
+read stopping it, and one that fails a word (the other player's ranger, not in the fellowship that moves) is read not stopping it (1_355).
 
 **What a response saves; who did the thing; a card being played; the player who does it.** Where a response picks
 what it saves from several cards affected at once, an invalid candidate is among them (for "your [sauron] condition
@@ -463,7 +471,7 @@ The type says what kind of statement the clause is, and sets the checks it must 
 | `Effect` | a further sentence of an event or special ability, with no phase, requirement or cost of its own ("Then…", "If you do, …", a second sentence) | `+` | Its `-` is the first sentence's. It lists whatever else its own wording calls for. A rider "The Free Peoples player may X to prevent this." is of this type and lists `+ O C C-`: `+` is the thing prevented with the first sentence's cost still paid (CR 4.2 "cost"), `O` the other player declining, `C` and `C-` that player's cost. It lists `-` as well where the card can reach a board on which the thing prevented cannot happen (the prevention is then not asked: Q-0114); where it can reach none, Notes say why. |
 | `Trigger` | "Each time…", "When…", "At the start of…" | `+ -` | `-` is the nearest event that should not set it off. Where the trigger names a phase ("if the fellowship moves during the regroup phase"), that is the same event in another phase of the same turn; this holds for a response event as well. A requirement or threshold not met ("for each companion over 4" with four) is another `-` and does not stand in for the neighbouring event (another card of the kind played while this one is in play), which an active test reads even where the tests that would also notice it are parked (1_234). |
 | `Response` | "Response: If…" | `+ -` | `+` shows the response offered and its effect; for a prevention, that the prevented thing did not happen. |
-| `Modifier` | a standing effect: "Bearer is strength +2.", "While…, …" | `+ -` | `-` is the condition not holding, or a card just outside its scope. Read the value with and without. A modifier on the card itself or its bearer still owes F's other card of its kind, one that meets the condition and is read as untouched. Where two sentences between them take in every card of a kind ("each of your minions is +1 ... each of your opponent's minions is -1", 94_23), no card is outside both: each sentence's `-` is the other's card, read at the other's number, and the printed number is the control. A site's continuous text (a plain `modifier`) also owes an `R` clause: the same board with the site left behind (CR 4.2 "active", LR 3; shapes.md, "A site's continuous text"). |
+| `Modifier` | a standing effect: "Bearer is strength +2.", "While…, …" | `+ -` | `-` is the condition not holding, or a card just outside its scope. Read the value with and without. A modifier on the card itself or its bearer still owes F's other card of its kind, one that meets the condition and is read as untouched. Where two sentences between them take in every card of a kind ("each of your minions is +1 ... each of your opponent's minions is -1", 94_23), no card is outside both: each sentence's `-` is the other's card, read at the other's number, and the printed number is the control. A site's continuous text (a plain `modifier`) also owes an `R` clause: the same board with the site left behind (CR 4.2 "active", LR 3; shapes.md, "A site's continuous text"). "Is not overwhelmed unless his strength is tripled" is of this type, `+ - F` (Boromir 1_96; Coat of Mail 51_101's ledger, which types it `Restriction`, owes the same checks). |
 | `Restriction` | "may not", "cannot" | `+ -` | `+` is the forbidden thing refused; `-` is the same thing allowed on the same board without this card. Without that control the refusal proves nothing. Others being offered in the very choice that leaves this one out is a control too, provided nothing else about them explains the difference. A Restriction that names its doers or its objects by a filter ("cannot be removed by Free Peoples cards") lists `F` and owes F's spread of valid candidates as a choice does: for a bare side word, a character, an item and a card that is neither (10_47: beside an ally and a possession alone, `side(free people)` narrowed to those two kinds passed). A card that bars an ACT ("may not look at or reveal", "cannot take wounds") is tested on ONE act it stops and its control, not on every way the act is done: that each definition word doing the act asks the bar is shown in a mechanics class (Q-0264: B2; Ketura: "mechanic tests should exist that do such a thing ... which will then ensure that future cards using the bar only need to act as A"; shapes.md, "A card that bars an act", names the classes). |
 | `Choice` | a sentence that is only a choice between alternatives | `B` | Usually a choice is part of another clause, which then lists `B`. |
 | `Ruling` | an entry in Section Three of the rules that names this card | `+` | Reproduce the ruling's situation. |
