@@ -132,6 +132,7 @@ details.report .body { padding: 0 14px 14px; white-space: pre-wrap; overflow-wra
       looked at by Ketura; "fixed with approval" has her word on it, given before the fix or after.</p>
     <div class="fbar">
       <div class="chips" id="ffilters"></div>
+      <div class="chips" id="fkinds"></div>
       <input type="search" id="fsearch" placeholder="Card id, name or word" aria-label="Search the findings">
     </div>
     <div class="plain"><table id="flist"></table></div>
@@ -211,7 +212,7 @@ function start() {
   function row(level, key, title, cards) { const c = counts(cards); const isOpen = !!open[key];
     const r = el("button", { class: "row l" + level + (c.approved === c.total ? " done" : ""), "aria-expanded": String(isOpen) },
       el("span", { class: "name" }, el("i", { text: isOpen ? "–" : "+" }), el("b", { text: title })),
-      el("span", { class: "count", text: c.approved + " / " + c.total }), bar(c));
+      el("span", { class: "count", text: (c.total - c.todo) + " / " + c.total }), bar(c));
     r.onclick = () => { open[key] = !open[key]; store.set("open", open); draw(); }; return r; }
   function cardTable(cards) {
     const shown = cards.filter(c => (showApproved || c.status !== "approved") && (filter === "all" || c.status === filter));
@@ -223,23 +224,27 @@ function start() {
     return el("div", { class: "cards" }, t); }
   function draw() { ledger.replaceChildren();
     // Ketura, 2026-10-12: the 600 most-used cards first, by set; the same cards as in their own section below.
+    // Ketura, 2026-10-13: the section sits right above the Decipher cards.
     const hu = new Set(DATA.highuse || []);
     const hc = DATA.cards.filter(c => hu.has(c.id));
-    if (hc.length) { ledger.append(row(0, "p:highuse", "High Use Cards", hc));
+    function highUse() { if (!hc.length) return; ledger.append(row(0, "p:highuse", "High Use Cards", hc));
       if (open["p:highuse"]) for (const [setName, sc] of groupBy(hc, "set")) { const sk = "s:highuse/" + setName;
         ledger.append(row(1, sk, setName, sc)); if (open[sk]) ledger.append(cardTable(sc)); } }
-    for (const p of DATA.phases) { const pc = DATA.cards.filter(c => c.phase === p.key); if (!pc.length) continue;
+    let huDone = false;
+    for (const p of DATA.phases) { if (p.key === "decipher") { highUse(); huDone = true; }
+      const pc = DATA.cards.filter(c => c.phase === p.key); if (!pc.length) continue;
       ledger.append(row(0, "p:" + p.key, p.title, pc)); if (!open["p:" + p.key]) continue;
       for (const [setName, sc] of groupBy(pc, "set")) { const sk = "s:" + p.key + "/" + setName; ledger.append(row(1, sk, setName, sc)); if (!open[sk]) continue;
         const groups = groupBy(sc, "group");
         if (groups.size === 1) { ledger.append(cardTable(sc)); continue; }
         for (const [gName, gc] of groups) { const gk = "g:" + p.key + "/" + setName + "/" + gName; const small = sc.length <= 150;
           if (open[gk] === undefined && small) open[gk] = true;
-          ledger.append(row(2, gk, gName, gc)); if (open[gk]) ledger.append(cardTable(gc)); } } } }
+          ledger.append(row(2, gk, gName, gc)); if (open[gk]) ledger.append(cardTable(gc)); } } }
+    if (!huDone) highUse(); }
   drawFilters(); draw();
 
   const legend = document.getElementById("legend");
-  legend.append(el("span", { text: "Counts are approved / total. \"Tests\" is how many active tests the card had before the campaign and has now. \"Standard\" is whether its test file passes the conformance check." }));
+  legend.append(el("span", { text: "Counts are worked (every status but To do) / total. \"Tests\" is how many active tests the card had before the campaign and has now. \"Standard\" is whether its test file passes the conformance check." }));
 
   const other = document.getElementById("other");
   other.append(el("tr", null, el("th", { text: "What" }), el("th", { text: "Size" })));
@@ -265,6 +270,14 @@ function start() {
   let fgroup = store.get("fgroup", "all"); if (!FGROUPS.some(g => g[0] === fgroup)) fgroup = "all";
   let newestFirst = store.get("fnewest", true); let ftext = "";
   const ffilters = document.getElementById("ffilters"), flist = document.getElementById("flist"), fcount = document.getElementById("fcount");
+  // Ketura, 2026-10-13: a second filter, by kind, beside the status filter; All by default.
+  const fkinds = document.getElementById("fkinds");
+  const KORDER = Object.keys(KINDS).filter(k => F.some(f => f.kind === k)).concat([...new Set(F.map(f => f.kind))].filter(k => !(k in KINDS)));
+  let fkind = store.get("fkind", "all"); if (fkind !== "all" && !KORDER.includes(fkind)) fkind = "all";
+  function drawKindFilters() { fkinds.replaceChildren();
+    for (const k of ["all"].concat(KORDER)) { const n = k === "all" ? F.length : F.filter(f => f.kind === k).length;
+      const b = el("button", { class: "chip", "aria-pressed": String(fkind === k), id: "fkind-" + k }, k === "all" ? "All kinds" : (KINDS[k] || k), el("span", { class: "n", text: String(n) }));
+      b.onclick = () => { fkind = k; store.set("fkind", k); drawKindFilters(); drawFindings(); }; fkinds.append(b); } }
   function drawFindingFilters() { ffilters.replaceChildren();
     for (const [key, label, sts] of FGROUPS) { const n = sts ? F.filter(f => sts.includes(f.status)).length : F.length;
       const b = el("button", { class: "chip", "aria-pressed": String(fgroup === key), id: "ffilter-" + key }, label, el("span", { class: "n", text: String(n) }));
@@ -274,7 +287,7 @@ function start() {
   function drawFindings() { flist.replaceChildren();
     flist.append(el("tr", null, ...["Id", "Found", "Card", "Kind", "Status", "What", "How it was found", "Outcome"].map(h => el("th", { text: h }))));
     const sts = FGROUPS.find(g => g[0] === fgroup)[2]; const words = ftext.toLowerCase().split(/\s+/).filter(Boolean);
-    let shown = F.filter(f => !sts || sts.includes(f.status));
+    let shown = F.filter(f => (!sts || sts.includes(f.status)) && (fkind === "all" || f.kind === fkind));
     if (words.length) shown = shown.filter(f => { const hay = [f.id, f.card, f.name, KINDS[f.kind] || f.kind, FLABEL[f.status] || f.status, f.summary, f.found, f.outcome].join(" ").toLowerCase();
       return words.every(w => hay.includes(w)); });
     if (newestFirst) shown = shown.slice().reverse();
@@ -285,7 +298,7 @@ function start() {
     if (!shown.length) flist.append(el("tr", null, el("td", { class: "note", text: "Nothing here matches the filter.", colspan: "8" })));
     fcount.textContent = shown.length + " of " + F.length + " findings shown"; }
   document.getElementById("fsearch").oninput = e => { ftext = e.target.value; drawFindings(); };
-  drawFindingFilters(); drawFindings();
+  drawFindingFilters(); drawKindFilters(); drawFindings();
 
   // What waits on Ketura: the open questions and rig requests, word for word.
   function rich(node, text) {

@@ -2,6 +2,7 @@
 """wf.py status            where each tracked batch workflow has got to
    wf.py show <folder>     everything its agents reported
    wf.py track <folder> <run id> [<a,b,c> [repo|cards]]   (close.py --launched does this)
+   wf.py stopped <folder> "<why>"   a run whose agent died with no journal line (a usage limit, a restart)
    wf.py at-work [cards|repo]  the tracked runs that may still be at work in that tree (integrate.sh asks it)"""
 import json, sys
 from pathlib import Path
@@ -56,6 +57,7 @@ def state(run, lean=False):
 def progress(folder, t):
     """(state, the stages finished, in order) for any tracked run.  An engine pass is a list of items, one agent
     each; a card batch is author, review, land."""
+    if t.get("stopped"): return "stopped: " + t["stopped"], []
     stages, started = load(t["run"])
     order = list(dict.fromkeys(started.values()))
     done = [k for k in order if stages.get(k) is not None]
@@ -80,6 +82,9 @@ if cmd == "track":
     tracked[sys.argv[2]]["at"] = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%MZ")
     TRACK.write_text(json.dumps(tracked, indent=1))
     print("tracking %s (%s) in the tree '%s'" % (sys.argv[2], sys.argv[3], tracked[sys.argv[2]]["tree"]))
+elif cmd == "stopped":
+    tracked[sys.argv[2]]["stopped"] = sys.argv[3]
+    TRACK.write_text(json.dumps(tracked, indent=1))
 elif cmd == "landed":
     tracked[sys.argv[2]]["landed"] = True
     TRACK.write_text(json.dumps(tracked, indent=1))
