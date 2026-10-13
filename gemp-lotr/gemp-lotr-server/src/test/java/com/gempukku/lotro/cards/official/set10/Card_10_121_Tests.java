@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set10;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,11 +17,10 @@ public class Card_10_121_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "10_121");
-					// put other cards in here as needed for the test case
 				}},
 				VirtualTableScenario.FellowshipSites,
-				VirtualTableScenario.FOTRFrodo,
+				// Frodo, Resolute Hobbit is the card under test, laid as the table's Ring-bearer.
+				VirtualTableScenario.MDFrodo,
 				VirtualTableScenario.RulingRing
 		);
 	}
@@ -48,7 +46,7 @@ public class Card_10_121_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetRingBearer();
 
 		assertEquals("Frodo", card.getBlueprint().getTitle());
 		assertEquals("Resolute Hobbit", card.getBlueprint().getSubtitle());
@@ -61,21 +59,9 @@ public class Card_10_121_Tests
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
 		assertEquals(12, card.getBlueprint().getResistance());
-		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
-	}
-
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void FrodoTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-
-		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(0, scn.GetTwilight());
+		assertEquals(Signet.FRODO, card.getBlueprint().getSignet());
+		assertTrue(card.getBlueprint().canStartWithRing());
+		// Every Frodo is Ring-bound by rule (CR 4.2 "Ring-bound"), though the card does not print it.
+		assertTrue(scn.HasKeyword(card, Keyword.RING_BOUND));
 	}
 }
