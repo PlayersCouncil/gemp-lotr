@@ -447,6 +447,9 @@ and with three twice; the first chosen lies highest and the last, unasked, is th
 all of them shown: `FreepsDeclineChoosing()`. `putCardsFromDeckOnTopOfDeck` asks the same way ("Choose card to put
 on top of deck"): Back to the Light 18_6 with two cards set aside asks once; the first chosen is put down first
 and the last, unasked, lies on top (`GetFreepsTopOfDeck()`, `GetFromTopOfFreepsDeck(2)`; `Card_18_006_Tests`).
+`putCardsFromHandOnTopOfDeck` asks it too, after the choice of cards from hand: Nenya 9_20 with two chosen asks
+once (`FreepsChooseCard(first)`), and the order read is the player's own answer (`Card_09_020_Tests`). Leave other
+cards in the deck under them, or a reading of "on top" cannot be told from one of "anywhere in the deck".
 
 **Two offers of one response.** When the same card offers the same trigger or response twice in one decision (two Nazgul winning one skirmish), each offer's text ends with " (for <the cards its trigger memorized>)". A single offer reads as before. Choose between them by that text.
 
@@ -957,6 +960,9 @@ last fierce skirmish is over. A "this phase" effect from the first assignment ph
 The assignment actions are pending again too, and nothing has passed them as `SkipToAssignments()` did the first
 time: call `PassFierceAssignmentActions()` before `FreepsAssignToMinions`, or the assignment is refused with a
 bare `DecisionResultInvalidException` (Card_09_031_ErrataTests).
+In the first round it is the other way about: `SkipToAssignments()` is `SkipToPhase(Phase.ASSIGNMENT)` and then
+the assignment actions passed, so it rests at "Assign minions"; a `PassAssignmentActions()` after it passes the
+assignment itself by, and a later `FreepsAssignToMinions` is refused (dec-b10_23, Shelob 10_23).
 The round comes about with nobody assigned at all: where a fierce minion is in play and both players decline to
 assign, the fierce assignment phase follows, which is the cheapest way to stand just before the regroup phase
 (a D check on "until the regroup phase", Prized Lagan 68_110).
