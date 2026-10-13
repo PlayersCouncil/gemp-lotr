@@ -483,6 +483,10 @@
 				}
 				false: {
 					type: costToEffect
+					requires: {
+						type: hasCardInHand
+						filter: not(self)
+					}
 					cost: {
 						type: discardCardAtRandomFromHand
 						forced: false
