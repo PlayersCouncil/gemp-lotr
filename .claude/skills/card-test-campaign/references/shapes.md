@@ -415,7 +415,7 @@ shown the same way.
 means and the test keeps its name and what it asserts; the ledger's `Dropped:` line says what the old board was
 (92_30: a pool of 1 reached with two No Stranger to the Shadows cheated onto Frodo, now reached at Rivendell
 Valley on a second move). "Kept, not rewritten" (Q-0178) does not keep such a board: Ketura, "remove that
-malformed board state" (rulings, "No two cards of one unique title in play"). More threats than companions is no such board: CR 4.2 "threats" names it ("Sometimes a companion will be discarded, and there will be more threats than companions in play"), so an old `AddThreats(3)` beside the Ring-bearer alone stands (94_14).
+malformed board state" (rulings, "No two cards of one unique title in play"). More threats than companions is no such board: CR 4.2 "threats" names it ("Sometimes a companion will be discarded, and there will be more threats than companions in play"), so an old `AddThreats(3)` beside the Ring-bearer alone stands (94_14). Q-0237 strikes no old test: a hindered board a Decipher card's file already holds is kept and put in form like any other (Gríma 4_154, F-0179's test, the only one that reads its definition's `override(hindered)`).
 
 **FreepsGetCardChoiceCount() at a choice of phase actions.** The rig check `FreepsGetCardChoiceCount()` is NOT 0 at an ordinary phase-action decision (it counts the cards offering actions); to assert no card choice is pending use `AwaitingFreepsSkirmishPhaseActions()` and its kin.
 
