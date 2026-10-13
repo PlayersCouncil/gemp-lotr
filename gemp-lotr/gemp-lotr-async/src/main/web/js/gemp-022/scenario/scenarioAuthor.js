@@ -3221,6 +3221,13 @@ var GempScenarioAuthor = Class.extend({
                 that.renderScenario();
             });
         }));
+        //A scenario of the author's own can be submitted for review from here (see ScenarioSubmit): it is saved
+        // first if it needs to be, and then locked, so the draft is closed and this tab goes back to the hall
+        if (state.own)
+            buttons.append(this.button("Submit for review" + "\u2026", "Submit it for review, to become a public scenario"
+                + (state.dirty || !state.onDisk ? ". It is saved first." : "."), function () {
+                that.submit();
+            }));
         buttons.append(this.button("Close the draft", "Give the draft up. Anything not saved is lost.", function () {
             if (!state.dirty || confirm("The draft has changes that have not been saved. Close it anyway?"))
                 that.call("POST", "close", {}, function () {
@@ -3335,6 +3342,36 @@ var GempScenarioAuthor = Class.extend({
         box.scrollTop(scroll);
     },
 
+    /** Submits the draft's file for review: saved first if it has changes; the draft is then closed, and the tab with it. */
+    submit: function () {
+        var that = this;
+        ScenarioSubmit.ask(this.draft.title || this.draft.id, function () {
+            var send = function () {
+                that.call("POST", "submit", {}, function () {
+                    that.gone = true;
+                    that.overlay.goToHall("#account/scenarios");
+                });
+            };
+            if (!that.state.dirty && that.state.onDisk) {
+                send();
+                return;
+            }
+            if (!that.mayOverwrite())
+                return;
+            that.flush(function () {
+                that.call("POST", "save", {}, function (result) {
+                    var saved = result.saved || {};
+                    if ((saved.errors || []).length > 0 || !saved.verified) {
+                        //(the server would refuse it: what is wrong is said as a save says it)
+                        that.afterSave(result);
+                        return;
+                    }
+                    send();
+                });
+            });
+        });
+    },
+
     save: function () {
         var that = this;
         var data = {};
@@ -3398,9 +3435,10 @@ var GempScenarioAuthor = Class.extend({
             .attr("title", "A name, with folders before it if it goes in any: basics/basics-02-the-ring. Letters, digits, spaces, dots, dashes and underscores. "
                 + "It is kept under " + folder + " because of its kind, and .hjson is put on the end.");
         var shown = this.el("div", "sa-note");
-        //Only somebody who may publish, on a server that keeps authors' own scenarios too, has anything to choose
-        var chooses = !!state.mayPublish && !!state.canSaveAnywhere;
-        var canonical = $("<input type='checkbox'/>").prop("checked", !state.canSaveAnywhere || (chooses && !!state.canonical));
+        //A file stays among the public scenarios if it is one (an admin opened it there), and goes in the author's own
+        // folder otherwise: a scenario becomes public by being submitted and approved (My Scenarios), not from here
+        var chooses = false;
+        var canonical = $("<input type='checkbox'/>").prop("checked", !state.canSaveAnywhere || !!state.canonical);
         var show = function () {
             var tidy = that.tidyPath(path.val());
             shown.text(tidy == "" ? "" : (canonical.prop("checked") ? "" : "your own folder: ") + folder + tidy

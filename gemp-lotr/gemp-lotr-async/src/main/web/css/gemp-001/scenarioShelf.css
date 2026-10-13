@@ -1,0 +1,294 @@
+/* My Account > My Scenarios and Admin > Scenario Admin (js/gemp-022/scenario/scenarioShelf.js), and the "are you
+   sure" for submitting a scenario (scenarioSubmit.js), which the authoring tool's page shows as well. */
+
+.shelf-article {
+	max-width: 70em;
+}
+
+.shelf-intro {
+	max-width: 52em;
+}
+
+.shelf-tools,
+.shelf-draft {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.5em;
+	margin: 0.8em 0;
+}
+
+.shelf-draft {
+	padding: 0.4em 0.7em;
+	border: 1px solid #a8893a;
+	background: rgba(168, 137, 58, 0.12);
+}
+
+.shelf-draft[hidden] {
+	display: none;
+}
+
+.shelf-tools input {
+	flex: 0 1 14em;
+	min-width: 6em;
+}
+
+.shelf-label {
+	font-weight: bold;
+}
+
+.shelf-gap {
+	flex: 1 1 1em;
+}
+
+.shelf-count {
+	color: #999;
+	font-size: 90%;
+}
+
+.shelf-status {
+	min-height: 1.3em;
+	margin: 0.3em 0;
+	white-space: pre-wrap;
+}
+
+.shelf-status[data-kind="error"] {
+	color: #ff8a80;
+}
+
+.shelf-status[data-kind="success"] {
+	color: #9ccc65;
+}
+
+.shelf-status[data-kind="pending"] {
+	color: #bbb;
+	font-style: italic;
+}
+
+.shelf-pane {
+	margin: 1.2em 0 1.8em;
+}
+
+.shelf-pane > h2 {
+	border-bottom: 1px solid #555;
+	padding-bottom: 0.2em;
+}
+
+h2.shelf-kind,
+h3.shelf-kind {
+	margin: 1em 0 0.3em;
+}
+
+h3.shelf-campaign,
+h4.shelf-campaign {
+	margin: 0.6em 0 0.2em 0.6em;
+	color: #ccb27a;
+	font-weight: normal;
+	font-style: italic;
+}
+
+.shelf-row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.6em;
+	padding: 0.45em 0.6em;
+	border-bottom: 1px solid #3a3a3a;
+}
+
+.shelf-row:hover {
+	background: rgba(255, 255, 255, 0.03);
+}
+
+.shelf-row.shelf-disabled .shelf-text {
+	opacity: 0.55;
+}
+
+.shelf-text {
+	flex: 1 1 22em;
+	min-width: 0;
+}
+
+.shelf-title-text {
+	font-weight: bold;
+}
+
+.shelf-dim,
+.shelf-notes {
+	color: #999;
+}
+
+.shelf-notes {
+	font-size: 85%;
+	overflow-wrap: anywhere;
+}
+
+.shelf-links {
+	margin-left: 0.8em;
+	font-weight: normal;
+}
+
+.shelf-tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.3em;
+	margin: 0.15em 0;
+}
+
+.shelf-tags:empty {
+	display: none;
+}
+
+.shelf-tag {
+	display: inline-block;
+	padding: 0 0.5em;
+	border-radius: 0.7em;
+	font-size: 80%;
+	line-height: 1.6;
+	border: 1px solid #666;
+	color: #ddd;
+	cursor: default;
+}
+
+.shelf-tag-review { border-color: #64b5f6; color: #90caf9; }
+.shelf-tag-rejected { border-color: #ffb74d; color: #ffcc80; }
+.shelf-tag-published { border-color: #d4af37; color: #f0d46b; background: rgba(212, 175, 55, 0.15); }
+.shelf-tag-published-changed { border-color: #a8893a; color: #ccb27a; }
+.shelf-tag-broken { border-color: #e57373; color: #ef9a9a; }
+.shelf-tag-unverified { border-color: #888; color: #bbb; }
+.shelf-tag-disabled { border-color: #888; color: #aaa; }
+.shelf-tag-replaces { border-color: #ffb74d; color: #ffcc80; }
+.shelf-tag-new { border-color: #81c784; color: #a5d6a7; }
+
+.shelf-feedback {
+	margin-top: 0.3em;
+	padding: 0.35em 0.6em;
+	border-left: 3px solid #ffb74d;
+	background: rgba(255, 183, 77, 0.08);
+	white-space: pre-wrap;
+}
+
+.shelf-buttons {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.3em;
+	flex: 0 0 auto;
+}
+
+.shelf-buttons .ui-button {
+	padding: 0.25em 0.7em;
+}
+
+.shelf-danger.ui-button:not(.ui-state-disabled) {
+	color: #ef9a9a;
+}
+
+.shelf-toggle {
+	margin-right: 0.4em;
+	white-space: nowrap;
+}
+
+.shelf-reject {
+	padding: 0.4em 0.6em 0.6em 2em;
+	border-bottom: 1px solid #3a3a3a;
+}
+
+.shelf-reject[hidden] {
+	display: none;
+}
+
+.shelf-reject textarea {
+	width: 100%;
+	max-width: 40em;
+	box-sizing: border-box;
+	display: block;
+	margin-bottom: 0.3em;
+}
+
+.shelf-warning {
+	color: #ffcc80;
+}
+
+.shelf-conflicts .shelf-row {
+	border-left: 3px solid #ffb74d;
+}
+
+/* ---- Submitting for review: the "are you sure" ---- */
+
+.scenario-submit-shade {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.6);
+	/* (over the authoring tool's panels and a tutorial's bubbles, which go up to 100021) */
+	z-index: 100030;
+}
+
+.scenario-submit {
+	position: fixed;
+	z-index: 100031;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	width: min(38em, calc(100vw - 2em));
+	max-height: calc(100vh - 2em);
+	overflow-y: auto;
+	box-sizing: border-box;
+	padding: 1em 1.4em;
+	background: #1d1d1d;
+	color: #ddd;
+	border: 1px solid #a8893a;
+	border-radius: 4px;
+	box-shadow: 0 6px 30px rgba(0, 0, 0, 0.7);
+	/* (the hall's and the game's: it is put straight into the body, which has neither) */
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	line-height: 1.4;
+	text-align: left;
+}
+
+.scenario-submit h2 {
+	margin: 0 0 0.6em;
+	font-size: 1.25em;
+	color: #f0d46b;
+}
+
+.scenario-submit h3 {
+	margin: 0.8em 0 0.3em;
+	font-size: 1em;
+}
+
+.scenario-submit ul {
+	margin: 0;
+	padding-left: 1.3em;
+}
+
+.scenario-submit li {
+	margin: 0.25em 0;
+}
+
+.scenario-submit-ask {
+	margin: 1em 0 0.6em;
+	font-weight: bold;
+}
+
+.scenario-submit-buttons {
+	display: flex;
+	gap: 0.6em;
+	justify-content: flex-end;
+}
+
+.scenario-submit-buttons button {
+	padding: 0.4em 1em;
+	font: inherit;
+	cursor: pointer;
+	border: 1px solid #777;
+	background: #333;
+	color: #eee;
+	border-radius: 3px;
+}
+
+.scenario-submit-buttons .scenario-submit-yes {
+	border-color: #a8893a;
+	background: #5a4a1e;
+}

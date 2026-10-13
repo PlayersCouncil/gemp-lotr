@@ -10,6 +10,7 @@ import com.gempukku.lotro.scenario.ScenarioDefinition;
 import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.scenario.ScenarioLibrary;
 import com.gempukku.lotro.scenario.ScenarioRunLog;
+import com.gempukku.lotro.scenario.ScenarioShelf;
 import com.gempukku.util.JsonUtils;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
@@ -47,7 +48,23 @@ import java.util.Map;
  * GET /scenarios/errors - admins only: every scenario file, with what is wrong with it and the report of its
  * headless run: {@code {files:[{path, owner, id, playable, verified, errors, warnings, report}]}}.
  * <p>
- * Under /scenarios/author/ is the authoring tool (see {@link ScenarioAuthoring}), for now open to admins only.  An
+ * My Scenarios (see {@link ScenarioShelf}), for any player who may write scenarios:<br>
+ * GET /scenarios/mine - {@code {scenarios:[...], limit, authoring}}: the player's own, as ScenarioShelf.mine gives
+ * them, how many they may keep, and the draft they have open in the authoring tool (as in GET /scenarios).<br>
+ * GET /scenarios/public - {@code {scenarios:[...]}}: the public scenarios they may take a copy of.<br>
+ * POST /scenarios/mine/copy (path), mine/copyPublic (id), mine/delete (path), mine/submit (path).  Copies answer
+ * {@code {ok, id, path}}: the copy's id (to open it by) and file.
+ * <p>
+ * Scenario Admin, for admins:<br>
+ * GET /scenarios/admin - {@code {public, conflicts, submissions, archive, archived, hasArchive, authoring}}
+ * (ScenarioShelf.adminState, and the admin's own draft as in GET /scenarios).<br>
+ * POST /scenarios/admin/approve (owner, path), reject (owner, path, feedback), disable (id, disabled), delete (path),
+ * edit (id: copies a public scenario into the admin's own folder, answering {@code {ok, id, path}}), restore (key),
+ * settle (path, take=repository|ours).
+ * <p>
+ * Something that cannot be done is a 400 with an {@code {error}} body.
+ * <p>
+ * Under /scenarios/author/ is the authoring tool (see {@link ScenarioAuthoring}), open to every player.  An
  * author has one draft open at a time, and a game it is being written in.  Every POST answers
  * {@code {ok, gameId, events, rebuilt, state}}: {@code rebuilt} means there is a fresh game to go to (gameId),
  * {@code events} that the game in hand has been sent something its client should fetch, and {@code state} is what
@@ -58,7 +75,7 @@ import java.util.Map;
  * GET cards?q=&sites= - {@code {cards:[{id, name, type, culture, side, cost}]}}: cards by name.<br>
  * POST open (id | new=true, id, title); edit (patch, goto); goto (step, sub); answer (term, record | least=true);
  * do (op, setup); alias (from, to); here; retake; settings (recording, askOpponent, way);
- * save (path, canonical, as: copy|rename); left;
+ * save (path, canonical, as: copy|rename); submit (the draft's saved file, for review: the draft is closed); left;
  * check; test (step);
  * resume; close.
  */
@@ -69,10 +86,12 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
     private final ScenarioRunLog _runLog;
     private final LotroServer _lotroServer;
     private final ScenarioAuthoring _authoring;
+    private final ScenarioShelf _shelf;
 
     public ScenarioRequestHandler(Map<Type, Object> context) {
         super(context);
         _authoring = extractObject(context, ScenarioAuthoring.class);
+        _shelf = extractObject(context, ScenarioShelf.class);
         _scenarios = extractObject(context, ScenarioLibrary.class);
         _runLog = extractObject(context, ScenarioRunLog.class);
         _lotroServer = extractObject(context, LotroServer.class);
@@ -88,6 +107,10 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
             errors(request, responseWriter);
         } else if (uri.startsWith("/author/")) {
             author(uri.substring("/author/".length()), request, responseWriter);
+        } else if (uri.equals("/mine") || uri.equals("/public") || uri.startsWith("/mine/")) {
+            mine(uri.substring(1), request, responseWriter);
+        } else if (uri.equals("/admin") || uri.startsWith("/admin/")) {
+            admin(uri.substring(1), request, responseWriter);
         } else {
             throw new HttpProcessingException(404);
         }
@@ -137,14 +160,14 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
 
         //The files that are not in that list because a game of them cannot be started at all (a file that is not
         // HJSON, a card that was never declared, a format that does not exist), each with why.  An admin is told of
-        // every one; anybody else, of their own.  Without this a scenario that has been edited into a mistake just
+        // every public one; anybody, of their own.  Without this a scenario that has been edited into a mistake just
         // disappears from the list, and nothing says why.  'openable' is whether the authoring tool can open it all
         // the same, with what is mistaken left out (see ScenarioSalvage).
         boolean admin = player.hasType(Player.Type.ADMIN);
         List<Map<String, Object>> unreadable = new ArrayList<>();
         for (ScenarioLibrary.Entry entry : _scenarios.getAll()) {
             boolean mine = entry.owner() != null && entry.owner().equals(player.getName());
-            if (entry.playable() || !(admin || mine))
+            if (entry.playable() || !((admin && entry.canonical()) || mine))
                 continue;
             Map<String, Object> json = new LinkedHashMap<>();
             json.put("path", (entry.owner() == null ? "" : "users/" + entry.owner() + "/") + entry.path());
@@ -153,7 +176,7 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
             json.put("id", entry.id());
             json.put("title", entry.def() == null ? null : entry.def().title);
             json.put("errors", entry.errors());
-            json.put("openable", entry.openable() && mayAuthor(player));
+            json.put("openable", entry.openable() && mayAuthor(player) && (mine || admin));
             unreadable.add(json);
         }
 
@@ -187,7 +210,7 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
             String id = getFormParameterSafely(postDecoder, "id");
 
             ScenarioLibrary.Entry entry = _scenarios.get(id);
-            if (entry == null || !entry.availableTo(player.getName(), player.hasType(Player.Type.ADMIN))) {
+            if (entry == null || !_scenarios.startableBy(entry, player.getName(), player.hasType(Player.Type.ADMIN))) {
                 writeError(responseWriter, 404, "There is no scenario called '" + id + "'.");
                 return;
             }
@@ -238,9 +261,130 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
         responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(result));
     }
 
-    /** Who may write scenarios.  For now, the admins. */
+    /** Who may write scenarios: every player (but the bots). */
     private static boolean mayAuthor(Player player) {
-        return player.hasType(Player.Type.ADMIN);
+        return !player.hasType(Player.Type.BOT);
+    }
+
+    private void mine(String what, HttpRequest request, ResponseWriter responseWriter) throws Exception {
+        //Not on behalf of anybody else: a player's scenarios are their own
+        Player player = getResourceOwnerSafely(request, null);
+        if (!mayAuthor(player))
+            throw new HttpProcessingException(403);
+        boolean admin = player.hasType(Player.Type.ADMIN);
+        String name = player.getName();
+        try {
+            Map<String, Object> result = new LinkedHashMap<>();
+            if (request.method() == HttpMethod.GET) {
+                switch (what) {
+                    case "mine" -> {
+                        result.put("scenarios", _shelf.mine(name));
+                        result.put("limit", ScenarioLibrary.MAX_OWN);
+                        result.put("ownFolder", _scenarios.hasUserFolder());
+                        result.put("authoring", _authoring.currentForHall(player));
+                    }
+                    case "public" -> result.put("scenarios", _shelf.publicOnes(name, admin));
+                    default -> throw new HttpProcessingException(404);
+                }
+                responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(result));
+                return;
+            }
+            if (request.method() != HttpMethod.POST)
+                throw new HttpProcessingException(404);
+            HttpPostRequestDecoder form = new HttpPostRequestDecoder(request);
+            try {
+                String path = getFormParameterSafely(form, "path");
+                switch (what) {
+                    case "mine/copy" -> copied(result, _shelf.copy(name, path));
+                    case "mine/copyPublic" -> copied(result, _shelf.copyPublic(name, getFormParameterSafely(form, "id"), admin));
+                    case "mine/delete" -> _shelf.delete(name, path);
+                    case "mine/submit" -> {
+                        //(submitting closes a draft of it that is open in the authoring tool: not one with changes in it)
+                        if (path != null && _authoring.unsavedOn(name, path))
+                            throw new ScenarioShelf.ShelfException("You have it open in the authoring tool, with changes that have not been saved.  "
+                                    + "Save them (what is submitted is what is saved), or close the draft, first.");
+                        _shelf.submit(name, path);
+                    }
+                    default -> throw new HttpProcessingException(404);
+                }
+                result.put("ok", true);
+                responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(result));
+            } finally {
+                form.destroy();
+            }
+        } catch (ScenarioShelf.ShelfException exp) {
+            writeError(responseWriter, 400, exp.getMessage());
+        } catch (HttpProcessingException exp) {
+            throw exp;
+        } catch (RuntimeException exp) {
+            _log.error("My Scenarios could not " + what + " for " + name, exp);
+            writeError(responseWriter, 500, "That went wrong on the server: " + exp);
+        }
+    }
+
+    private static void copied(Map<String, Object> result, ScenarioLibrary.Entry entry) {
+        result.put("id", entry.id());
+        result.put("path", entry.path());
+    }
+
+    private void admin(String what, HttpRequest request, ResponseWriter responseWriter) throws Exception {
+        //Not on behalf of anybody else: the caller has to be an admin themselves
+        Player player = getResourceOwnerSafely(request, null);
+        if (!player.hasType(Player.Type.ADMIN))
+            throw new HttpProcessingException(403);
+        String name = player.getName();
+        try {
+            Map<String, Object> result = new LinkedHashMap<>();
+            if (request.method() == HttpMethod.GET) {
+                if (!what.equals("admin"))
+                    throw new HttpProcessingException(404);
+                QueryStringDecoder query = new QueryStringDecoder(request.uri());
+                Integer limit = null;
+                try {
+                    String asked = getQueryParameterSafely(query, "limit");
+                    limit = asked == null ? null : Integer.parseInt(asked);
+                } catch (NumberFormatException ignored) {
+                }
+                Map<String, Object> state = _shelf.adminState(limit == null ? 100 : Math.max(1, limit));
+                //(the draft the admin has open in the authoring tool, which opening another drops)
+                state.put("authoring", _authoring.currentForHall(player));
+                responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(state));
+                return;
+            }
+            if (request.method() != HttpMethod.POST)
+                throw new HttpProcessingException(404);
+            HttpPostRequestDecoder form = new HttpPostRequestDecoder(request);
+            try {
+                String owner = getFormParameterSafely(form, "owner");
+                String path = getFormParameterSafely(form, "path");
+                String id = getFormParameterSafely(form, "id");
+                switch (what) {
+                    case "admin/approve" -> copied(result, _shelf.approve(owner, path, name));
+                    case "admin/reject" -> _shelf.reject(owner, path, getFormParameterSafely(form, "feedback"), name);
+                    case "admin/disable" -> _shelf.disable(id, !"false".equals(getFormParameterSafely(form, "disabled")));
+                    case "admin/delete" -> _shelf.deletePublic(path, name);
+                    case "admin/edit" -> copied(result, _shelf.copyPublic(name, id, true));
+                    case "admin/restore" -> {
+                        ScenarioLibrary.Entry entry = _shelf.restore(getFormParameterSafely(form, "key"), name);
+                        if (entry != null)
+                            copied(result, entry);
+                    }
+                    case "admin/settle" -> _shelf.settle(path, "repository".equals(getFormParameterSafely(form, "take")), name);
+                    default -> throw new HttpProcessingException(404);
+                }
+                result.put("ok", true);
+                responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(result));
+            } finally {
+                form.destroy();
+            }
+        } catch (ScenarioShelf.ShelfException exp) {
+            writeError(responseWriter, 400, exp.getMessage());
+        } catch (HttpProcessingException exp) {
+            throw exp;
+        } catch (RuntimeException exp) {
+            _log.error("Scenario Admin could not " + what + " for " + name, exp);
+            writeError(responseWriter, 500, "That went wrong on the server: " + exp);
+        }
     }
 
     private void author(String what, HttpRequest request, ResponseWriter responseWriter) throws Exception {
@@ -308,6 +452,18 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
                         result = "copy".equals(as) ? _authoring.saveAs(player, path, canonical, admin)
                                 : "rename".equals(as) ? _authoring.rename(player, path, canonical, admin)
                                 : _authoring.save(player, path, canonical, admin);
+                    }
+                    case "submit" -> {
+                        String path = _authoring.submitting(player);
+                        try {
+                            _shelf.submit(player.getName(), path);
+                        } catch (ScenarioShelf.ShelfException exp) {
+                            throw new ScenarioAuthoring.AuthoringException(exp.getMessage());
+                        }
+                        //(submitting closes the draft: what it answers is that it is gone)
+                        result = new LinkedHashMap<>();
+                        result.put("ok", true);
+                        result.put("submitted", path);
                     }
                     case "left" -> {
                         _authoring.left(player);
