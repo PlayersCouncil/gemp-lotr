@@ -196,6 +196,9 @@ offers the next inside an `If` that `HasCardInMemory` of the last choice, so the
 (read with `FreepsDeclineChoosing()`, and no further decision). One 0-to-N prompt cannot place two wounds on one
 minion. The 45 other definitions that ask the number are unchanged; Morgai Foothills 8_110's regroup ability
 ("discard a card from hand for each ... you spot") is already a 0-to-N choice of cards.
+An effect that only COUNTS what is spotted keeps the number prompt: "Draw a card for each Elf companion you spot"
+(Alliance Reforged 4_58, F-0497) is `chooseHowManyToSpot` and `drawCards` with `count: fromMemory`; a
+`forEachYouCanSpot` count there is the reading of "you CAN spot" and a finding.
 
 **A reveal before "to" is a cost, and an empty draw deck cannot pay it (F-0022, F-0249).** "Reveal the top card
 of your draw deck to <effect>" has the reveal as its cost, since everything before "to" is one (F-0022): it is
