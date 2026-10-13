@@ -248,7 +248,9 @@ side, 94_27; for a keyword or item class alone, "a pipeweed", "a pipe", cards of
 cards have them: beside [shire] ones alone, `pipeweed` narrowed to `culture(shire)` passes, 92_4, and a card of the
 other culture whose own text stays out of the way is looked for before the culture is left out; for a bare `weapon`,
 a possession and an artifact (Narsil 9_34 on a [gondor] Man, The Balrog's Sword 2_50 on The Balrog 12_79): beside
-possessions alone, `weapon` narrowed to `possession,weapon` passes, 1_230 and 1_173; for "discard N cards from
+possessions alone, `weapon` narrowed to `possession,weapon` passes, 1_230 and 1_173; for a count or spot of an item
+type ("each [gondor] artifact you can spot"), one in a support area and one borne (helpers.md, "A [gondor] artifact
+that someone bears"): beside support-area cards alone, `zone(support)` added passes, 9_36; for "discard N cards from
 hand", a card of another culture in the hand: beside [moria] cards alone, `choose(culture(moria))` passes, 1_196; for
 a bearer by race ("Bearer must be a Hobbit"), the Ring-bearer and a Hobbit of another culture (Pippin, Trollslayer
 103_31): beside [shire] Hobbits who are not the Ring-bearer, `hobbit,culture(shire)` passes, 3_108; for "bearer" in a

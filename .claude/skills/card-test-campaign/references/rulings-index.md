@@ -573,6 +573,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A site 9's "When the fellowship moves to this site" (Dagorlad 7_360) has no `-` board
 - "Stacked on a site you control": no board tells `controlledSite` from `site` (Above the Battlement 7_262, Gorgoroth Pillager 7_275)
 - "Assign a minion to <a character>": no board tells `minion: choose(minion)` from `choose(character)` (Into the Caves 17_100)
+- "An enduring minion": no board tells `choose(enduring,minion)` from `choose(enduring)` (City of the Dead 8_118)
 - "Skirmish: Exert this minion to make a Nazgûl or [wraith] Orc strength +1" (Morgul Regiment 7_197; Morgul Lackey 7_193 and Morgul Predator 7_196 print it word for word and are built with the same filter, `or(nazgul,and(culture(wraith),orc))`)
 - A required start-of-turn trigger with a 0-to-N choice
 - "At the start of each of your turns" reads BETWEEN_TURNS; read every counter before as well as after

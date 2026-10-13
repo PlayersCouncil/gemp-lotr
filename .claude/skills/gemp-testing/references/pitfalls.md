@@ -735,7 +735,13 @@ first in the regroup phase, sets off nothing: read the offer as absent at the "a
 
 **A deck's order is set after `StartGame()`.** The game shuffles each deck to deal the opening hands, so a card
 moved to the top or bottom of a draw deck before `StartGame()` does not stay there. `MoveCardsToTopOfDeck(a, b,
-c)` puts each on top in turn, so the last one named is the top card.
+c)` puts each on top in turn, so the last one named is the top card. A skipper that plays whole turns
+(`SkipToSite`, `SkipToOtherPlayersTurn`) then draws from that deck, so a card cheated into it before the skip is
+likely in hand after it: lay a draw deck the test reads after the skip (City of the Dead 8_118's tests).
+
+**Only the table-laying cheats take aliases.** `MoveCompanionsToTable` and `MoveMinionsToTable` take alias strings
+as well as cards; `AttachCardsTo`, `MoveCardsToSupportArea`, `MoveCardsToDiscard` and `MoveCardsToHand` take cards
+only (`scn.GetFreepsCard("x")`), and a string there does not compile.
 
 **The Ruling Ring interrupts skirmishes.** With the default Ring, a Ring-bearer about to take a wound in a
 skirmish gets an optional response. `FreepsDeclineOptionalTrigger()` declines it. Keep the Ring-bearer out of
