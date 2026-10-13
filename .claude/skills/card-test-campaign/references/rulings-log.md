@@ -2058,4 +2058,5 @@ this is early installment weirdness. Although actually it occurs to me, we shoul
 a potential spring cleaning update in the future that fixes these sorts of things." (the list is
 `<state>/wording.md`). Q-0300, Troop of Uruk-hai: a strength bonus a weapon gives by its own ability is lost too:
 "A". F-0492, Horn of Boromir 3_42 not offered with no ally to spot: "Approved." F-0491: under "How card text is
-read". *[2026-10-13]*
+read". Q-0301, "choose to move again this turn" forces one move, not every move left that turn (Osgiliath
+Channel 8_120; the same words on No Retreat 4_30, Forced March 13_108, Hornburg Wall 5_118): "A, I think." *[2026-10-13]*
