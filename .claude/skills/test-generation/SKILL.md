@@ -248,7 +248,9 @@ a possession and an artifact (Narsil 9_34 on a [gondor] Man, The Balrog's Sword 
 possessions alone, `weapon` narrowed to `possession,weapon` passes, 1_230 and 1_173; for "discard N cards from
 hand", a card of another culture in the hand: beside [moria] cards alone, `choose(culture(moria))` passes, 1_196; for
 a bearer by race ("Bearer must be a Hobbit"), the Ring-bearer and a Hobbit of another culture (Pippin, Trollslayer
-103_31): beside [shire] Hobbits who are not the Ring-bearer, `hobbit,culture(shire)` passes, 3_108.
+103_31): beside [shire] Hobbits who are not the Ring-bearer, `hobbit,culture(shire)` passes, 3_108; for "bearer" in a
+Modifier or Restriction on a card that a companion and an ally can both come to bear (a transfer to "a character"),
+one bearer of each: with companions alone bearing it, `and(companion,hasAttached(self))` passes, 1_207.
 
 **Invalid candidates, word by word.** For a phrase of two words ("a [sauron] minion") that is a card for each word:
 a [sauron] card that is no minion, and a minion of another culture; for an item class ("bearing a hand weapon") one
