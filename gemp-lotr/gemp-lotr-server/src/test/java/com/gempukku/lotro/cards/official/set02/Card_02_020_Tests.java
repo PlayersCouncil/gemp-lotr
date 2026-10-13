@@ -132,7 +132,7 @@ public class Card_02_020_Tests
 	}
 
 	@Test
-	public void WithAnOrcToSpotTwoConditionsAreDiscardedAndNothingIsAsked() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WithAnOrcToSpotNothingIsAskedAndTwoConditionsMayBeDiscarded() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var sentinels = scn.GetFreepsCard("sentinels");
@@ -167,16 +167,54 @@ public class Card_02_020_Tests
 		assertEquals(1, scn.GetWoundsOn(silinde));
 		assertEquals(0, scn.GetWoundsOn(orophin));
 
-		// The parenthesis is taken whenever an Orc can be spotted: straight to a choice of exactly 2 conditions.
+		// Nothing is asked about the spot: straight to a choice of 1 or 2 conditions (F-0491: one discard, and with an
+		// Orc to spot 0 to 1 more, since "a condition" can be the player's own).
 		assertFalse(scn.FreepsDecisionAvailable("spot an Orc"));
 		assertTrue(scn.FreepsHasCardChoiceAvailable(stairs, greed, urgency, evil));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(poison, armor, soldier, savage));
-		assertEquals(2, scn.FreepsGetChoiceMin());
+		assertEquals(1, scn.FreepsGetChoiceMin());
 		assertEquals(2, scn.FreepsGetChoiceMax());
 		scn.FreepsChooseCards(greed, evil);
 
 		assertInZone(Zone.DISCARD, greed, evil);
 		assertInZone(Zone.SUPPORT, stairs, urgency);
+		assertInZone(Zone.DISCARD, sentinels);
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Test
+	public void WithAnOrcToSpotThePlayerMayDiscardJustOneConditionAndKeepHisOwn() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var sentinels = scn.GetFreepsCard("sentinels");
+		var orophin = scn.GetFreepsCard("orophin");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var stairs = scn.GetFreepsCard("stairs");
+		var greed = scn.GetShadowCard("greed");
+		var soldier = scn.GetShadowCard("soldier");
+
+		scn.MoveCardsToHand(sentinels);
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveAlliesToTable(orophin);
+		scn.MoveCardsToSupportArea(stairs, greed);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(soldier);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		scn.FreepsPlayCard(sentinels);
+		// The only Elf ally pays with nothing asked.
+		assertEquals(1, scn.GetWoundsOn(orophin));
+
+		// Two conditions in play, one of them his own: he may take the Shadow one alone.
+		assertFalse(scn.FreepsDecisionAvailable("spot an Orc"));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(stairs, greed));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		assertEquals(2, scn.FreepsGetChoiceMax());
+		scn.FreepsChooseCard(greed);
+
+		assertInZone(Zone.DISCARD, greed);
+		assertInZone(Zone.SUPPORT, stairs);
 		assertInZone(Zone.DISCARD, sentinels);
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}

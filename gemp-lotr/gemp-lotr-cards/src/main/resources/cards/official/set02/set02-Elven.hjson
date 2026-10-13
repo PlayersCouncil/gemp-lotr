@@ -247,8 +247,12 @@
 					type: discard
 					select: choose(condition)
 					count: {
-						type: fromMemory
-						memory: discardCount
+						type: range
+						from: 1
+						to: {
+							type: fromMemory
+							memory: discardCount
+						}
 					}
 				}
 			]
