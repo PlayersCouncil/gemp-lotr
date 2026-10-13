@@ -368,7 +368,11 @@ definition without its `OwnerIsFreeps` offers nothing either and passes.
 **A cost that is a choice ("Exert bearer or discard 2 cards from hand") is a multiple choice whose own text names
 neither option.** `FreepsDecisionAvailable("Exert bearer")` is false while it is pending. Read the options whole
 with `assertEquals(List.of("Exert bearer", "Discard 2 cards from hand"), scn.FreepsGetMultipleChoices())` and answer
-with `FreepsChoose(option)`; with one option payable nothing is asked (Elven Sword 4_64, Card_04_064_Tests).
+with `FreepsChoose(option)`; with one option payable nothing is asked (Elven Sword 4_64, Card_04_064_Tests). An
+option that names a culture comes through as HTML (`Discard a <span class='cultureHint' ...> Raider</span> card from
+hand`), so neither reads it: count the options with `ShadowGetMultipleChoiceCount()`, read each with
+`ShadowChoiceAvailable(<words>)` and answer with `ShadowChooseOption(<words>)`, which match on part of the text
+(Ships of Great Draught 8_65).
 
 **"Is an optional trigger pending" is a broad question.** `FreepsHasOptionalTriggerAvailable()` is true for any
 optional decision, the Ruling Ring's included. To assert that a particular card's trigger is on offer, pass the

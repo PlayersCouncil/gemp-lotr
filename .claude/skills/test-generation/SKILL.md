@@ -188,7 +188,8 @@ Notes: Elrond is himself an ally whose home is site 3, so C2 heals him too.
   the card is owed even where it hinders (Gwemegil 1_47 in CR 5.0 "hinder"): Q-0237 waives only boards it names none in.
 - A clause line is `ID Type [checks] text`. Long text continues on following lines, indented.
 - **Under each clause, one line per test that claims any of its checks**: `checks -> TestMethodName`. A test may
-  claim checks of several clauses and a check may be claimed by several tests. Every check a clause lists must be
+  claim checks of several clauses and a check may be claimed by several tests; the checks on a claim line may
+  stand in any order. Every check a clause lists must be
   claimed, and every behaviour test in the file must claim something. A test that claims nothing is either
   missing from the ledger or testing nothing the card says. A test parked with `@Ignore` claims the checks it
   would show if the reading it asserts is right; the conformance check warns where a parked test is a check's
