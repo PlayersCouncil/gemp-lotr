@@ -200,7 +200,7 @@ read, Household Guard 5_83 is the plain one.
 who is no Dwarf; a bonus that moves as he exerts.** Grimir, Dwarven Elder 1_17 bearing Ring of Guile 9_8; Huorn
 9_25; Gimli, Counter of Foes 8_5. Grimir: unique Dwarf ally, strength 3, vitality 3, home 3F, no bonus of his own;
 a fellowship ability only. Ring of Guile (Ring of Accretion 9_6 shares its first two sentences, not its Maneuver ability: no twin): unique [dwarven] artifact, cost 0,
-"Bearer must be a Dwarf. Bearer is damage +1"; its Maneuver ability discards it and is used only on purpose. Huorn:
+"Bearer must be a Dwarf. Bearer is damage +1", and strength +1 in print, as every set 9 Dwarven Ring; its Maneuver ability discards it and is used only on purpose. Huorn:
 [gandalf] Tree, not unique, strength 6, vitality 4, Damage +1; its Response needs an Ent. (Gandalf, Mithrandir 6_30
 is a Wizard with Damage +1 who is wounded at every move.) Gimli 8_5: Damage +1 and +1 more for each wound on him,
 so an exertion he pays changes it; never beside Gimli 1_13. A Dwarf ally who WINS a skirmish with a printed bonus:
@@ -249,7 +249,9 @@ a Dwarf to make that Dwarf defender +1 (or defender +2 if you spot an Orc) until
 Patrol Troops (Orcs) it is +2.
 
 **An item that changes no number.** Dwarven Armor 1_8. Possession, cost 0, bearer must be a Dwarf; bearer may not
-be overwhelmed unless strength is tripled.
+be overwhelmed unless strength is tripled. The ARTIFACT for a Dwarf that changes no strength: Ring of Artifice 17_4
+(unique Ring, cost 0; damage +1, and strength +1 for each [dwarven] artifact in its owner's discard pile, so none
+while that pile holds none; its Regroup ability discards it). Not a set 9 Dwarven Ring: 9_6 to 9_9 each print strength +1.
 
 **A follower that changes no number.** Rohan Worker 15_135. Not unique, no printed strength or resistance (most
 followers give the bearer one); Aid (1); its texts answer a transfer to a companion who is not [rohan] (bearer
