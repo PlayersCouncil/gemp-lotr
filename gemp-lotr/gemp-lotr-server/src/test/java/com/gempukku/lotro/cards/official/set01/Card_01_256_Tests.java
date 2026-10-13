@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set01;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,12 @@ public class Card_01_256_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "1_256");
-					// put other cards in here as needed for the test case
+					put("hunter", "1_256");
+					put("hunter2", "1_256");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion
+					put("gimli", "1_13");       // Gimli, Son of Gloin: [dwarven] Dwarf companion, cost 2, nothing needed to play him
+					put("maggot", "1_288");     // Farmer Maggot, Chaser of Rascals: a [shire] Hobbit ally, no companion
+					put("troop", "1_177");      // Goblin Patrol Troop: [moria] Orc, strength 13, no text
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +50,7 @@ public class Card_01_256_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("hunter");
 
 		assertEquals("Morgul Hunter", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +65,36 @@ public class Card_01_256_Tests
 		assertEquals(6, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void MorgulHunterTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void IsStrengthPlusOneForEachCompanionAndRisesAsOneIsPlayed() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var maggot = scn.GetFreepsCard("maggot");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveAlliesToTable(maggot);
+		scn.MoveCardsToHand(gimli);
+
+		var hunter = scn.GetShadowCard("hunter");
+		var hunter2 = scn.GetShadowCard("hunter2");
+		var troop = scn.GetShadowCard("troop");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// Laid in the fellowship phase to read the count change as a companion is played.
+		scn.MoveMinionsToTable(hunter, hunter2, troop);
 
-		assertEquals(5, scn.GetTwilight());
+		// 9 + 2 for Frodo and Aragorn; the ally and the three minions are no companions. Each Hunter counts for
+		// itself, and the Troop is untouched.
+		assertEquals(11, scn.GetStrength(hunter));
+		assertEquals(11, scn.GetStrength(hunter2));
+		assertEquals(13, scn.GetStrength(troop));
+
+		scn.FreepsPlayCard(gimli);
+		// 9 + 3
+		assertEquals(12, scn.GetStrength(hunter));
+		assertEquals(12, scn.GetStrength(hunter2));
+		assertEquals(13, scn.GetStrength(troop));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }
