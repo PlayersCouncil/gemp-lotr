@@ -759,6 +759,8 @@ first, so a reading of his hand on each side of the move allows for the draw (Ca
 With a fellowship archery total above 0 and more than one minion to take it, `SkipToAssignments()` (and
 `SkipToPhase(Phase.ASSIGNMENT)`) halts in the archery phase with a `DecisionResultInvalidException`: call
 `SkipToArcheryWounds()` and `ShadowChooseCard(minion)` first (Aragorn's Bow 1_90).
+With ONE minion in play the wound is placed on him unasked, and the archery phase ends straight into the
+assignment phase (Hand Axe 2_10).
 
 **Allies who take archery wounds instead of companions.** While Come Down's archery ability is in force (4_146,
 54_146: the `AlliesTakeArcheryFireWoundsInsteadOfCompanions` flag), each of the minions' archery wounds is offered
