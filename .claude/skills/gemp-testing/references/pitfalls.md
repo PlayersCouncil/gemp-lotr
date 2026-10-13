@@ -978,6 +978,9 @@ OFFER and not where a card went, no answer stands under an `if` (lint's `conditi
 value assertions and answers nothing, `assertEquals(shown, scn.ShadowPlayAvailable(card));
 assertEquals(!shown, scn.AwaitingFellowshipPhaseActions());`
 (Card_05_096_Tests.WhenOneCardOfTheHandIsRevealedAtRandomTheEyeIsOfferedOnlyIfItWasTheCardShown).
+Where it is a NUMBER to choose (the bounds of a heal), the test reads the bounds and ends on the pending decision's
+text, `assertTrue(scn.FreepsDecisionAvailable("Choose cards to heal"))`, which lint's bookend rule takes
+(Card_03_043_Tests.TheNumberHealedIsTheCostOfTheCardShownAndNotOfAnotherCardOfTheHand).
 
 **The fierce round reads as the first does.** After a skirmish that leaves a fierce minion in play,
 `GetCurrentPhase()` is `Phase.ASSIGNMENT` again and `AwaitingFreepsAssignmentPhaseActions()` is true, exactly as
@@ -1510,7 +1513,9 @@ back), or, for a bonus he should have missed, his number after he is restored
 (`mechanics/hinder/HinderedCardCannotBeSpottedTests`).
 Keywords go the same way for what is printed and not for what was given: `HasKeyword` of a hindered Aragorn
 reads RANGER true (the engine answers from the print before it looks at hinder; a restore may pick a hindered
-card by a printed trait, CR 5.0 "restore") and a defender +1 he gave himself false. Read a hindered card's
+card by a printed trait, CR 5.0 "restore") and a defender +1 he gave himself false. `GetKeywordCount` goes the
+same way: a hindered Gimli 1_13 bearing Gimli's Battle Axe 7_9 at 3 threats reads DAMAGE 1, his print without the
+axe's +1, and 2 again once restored, so a given bonus can be read there (Card_07_009_Tests). Read a hindered card's
 printed keyword by what it does: the archery total for an archer (Legolas 1_50: 1, hindered 0), another card's
 spot (`mechanics/hinder/HinderedCardHasNoGameTextTests`). A bonus given "until ..." is back when the card is restored
 before then (as built; Q-0222 asks).
