@@ -296,7 +296,8 @@ read stopping it, and one that fails a word (the other player's ranger, not in t
 
 **What a response saves; who did the thing; a card being played; the player who does it.** Where a response picks
 what it saves from several cards affected at once, an invalid candidate is among them (for "your [sauron] condition
-is about to be discarded", a [sauron] possession in the same discard). One that saves with no choice ("discard this
+is about to be discarded", a [sauron] possession in the same discard; for a wound, the losers of one skirmish,
+whose wounds are taken together where a "wound each" is not: pitfalls, "Wound each"). One that saves with no choice ("discard this
 condition to prevent that") prevents the whole of that one simultaneous discard, cards not of the kind it names and
 the opponent's own among them, and they are read saved (Q-0250: B, "the action is all or nothing"; Siege Engine
 5_60). Where a trigger names who did the thing

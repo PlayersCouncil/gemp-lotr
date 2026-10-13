@@ -39,7 +39,11 @@ the choice).
 **"Wound each" and "wound every" wound one card at a time.** Each of the wounds has its own "is about to"
 window (`<Wound X> - Optional "is about to" responses`), so a response that picks which card it saves ("prevent
 a wound to an Elf") is offered one card at a time and never a choice among the cards the effect reaches: the F
-check's invalid candidate "among them" cannot be shown against such an effect, which is a line in Notes. Nobody
+check's invalid candidate "among them" cannot be shown against such an effect, which is a line in Notes. The
+wounds of a LOST SKIRMISH are not such an effect: every loser is wounded together, in one window naming them all
+(`Wound A, B, C - Optional "is about to" responses`), and a prevention that names a kind is then asked "Choose
+characters to prevent effect to" among the matching losers only, so its `F` lays several losers, valid and
+invalid, in one skirmish (Hides 4_19: two [dunland] Men, a Man of another culture and Saruman 4_33). Nobody
 is asked the order: cards in play that an effect takes together are taken in the order of their card ids, the
 same in every run (Q-0142, F-0268). A card gets a new id as it comes into play, so that is the
 order they came into play: lay them down one at a time (`MoveMinionsToTable(a); MoveMinionsToTable(b);`) and a
@@ -86,6 +90,8 @@ companion (more takes defender): `FreepsAssignToMinions` with two minions in one
 with a bare `DecisionResultInvalidException`. A minion he leaves unassigned gives the Shadow player an
 assignment decision of his own, whoever else is assigned, the Ring-bearer included, and that is how a companion
 comes to face two: `ShadowAssignToMinions(companion, secondMinion)` after the Free Peoples player's assignment.
+Several minions to one companion go in ONE call, `ShadowAssignToMinions(companion, m1, m2, m3)` (Card_04_019_Tests):
+the companion repeated in the array form is refused, and a second call finds the Shadow player no longer asked.
 `ShadowDeclineAssignments()` passes that decision; with no minion left over he is not asked.
 Defender shows in the Free Peoples player's own decision without any refusal: a companion who already has a
 minion from an assignment action is on his list only if he has defender (`FreepsHasAssignmentTargetAvailable`;
