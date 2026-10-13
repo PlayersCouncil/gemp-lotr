@@ -560,7 +560,7 @@ he is never discarded (Q-0109): the bearer in such a test is another (Sam bearin
 says neither "may" nor "up to", read the minimum of one such choice (`FreepsGetChoiceMin()`): a choice that has
 wrongly become optional looks the same otherwise. A "may" that the game asks as a yes/no ("a minion may exert
 to prevent this") is answered by the yes: the choice of who does it has its minimum read too (5_89). A text with two choices (one for its cost, another for its
-effect) has the minimum of each read, once.
+effect, or a card and then the bearer it is played on: Goblin Scavengers 1_179) has the minimum of each read, once.
 
 **Say what the game is waiting for.** After a test's last action, assert the decision the game has come to rest
 on: `AwaitingFellowshipPhaseActions()` and its kin, a named decision, a pending optional trigger, or
