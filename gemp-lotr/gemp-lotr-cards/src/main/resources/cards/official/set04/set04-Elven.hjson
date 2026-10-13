@@ -18,10 +18,15 @@
 			type: event
 			effect: [
 				{
+					type: chooseHowManyToSpot
+					filter: elf,companion
+					memorize: spotCount
+				}
+				{
 					type: drawCards
 					count: {
-						type: forEachYouCanSpot
-						filter: elf,companion
+						type: fromMemory
+						memory: spotCount
 					}
 				}
 			]

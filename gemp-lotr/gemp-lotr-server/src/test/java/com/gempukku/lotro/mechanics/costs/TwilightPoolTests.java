@@ -282,6 +282,7 @@ public class TwilightPoolTests
 		scn.SetTwilight(3);
 
 		scn.FreepsPlayCard(alliance);
+		scn.FreepsChoose("1");
 		// One Elf companion: one card drawn.
 		assertEquals(1, scn.GetFreepsHandCount());
 		assertInDiscard(alliance);
