@@ -945,6 +945,14 @@ an effect added earlier in the turn lapses just after the second move and one ad
 A change that is to last the turn writes `until: endOfTurn`; read it in the Shadow phase after a second move
 (F-0317, 93_3: the limit read 3 up to the question of another move and 2 after the move).
 
+**An effect with no `until` ends with the phase it began in, and each skirmish is a phase of its own.** An
+`addKeyword` (or any effect taking `until`) with none lasts to `end(current)` (Q-0018): a keyword gained in a
+skirmish is gone as that skirmish ends, before the next skirmish or the regroup phase. So a "gains X until <a
+later phase>" written with no `until` passes every reading taken in the phase it began in; read it in the later
+phase (Stewards' Legacy 13_75, F-0511). And a `-` taken as a skirmish wound shows nothing of a mistaken trigger
+whose effect has that default: take the neighbouring event in a phase that lasts as well, a wound in the regroup
+phase by Morgul Slayer 3_93 (Card_13_075_Tests.DenethorWoundedInALostSkirmishAndByAWoundInTheRegroupPhaseHasNoMuster).
+
 **`SkipToOtherPlayersTurn()` straight after `SkipToMovementDecision()` throws.** It calls
 `SkipToMovementDecision()` again and passes into the "another move" question: a bare
 `DecisionResultInvalidException`. To read the board at the move decision and then end the turn:

@@ -636,7 +636,8 @@ unbound Man. With one beacon in play the Flame cannot be played, with both it ca
 
 **Wounds in the regroup phase.** Morgul Slayer 3_93. Strength 7, vitality 2; "Regroup: Exert this minion to wound a
 companion (except the Ring-bearer)." Two copies wound one companion twice in one regroup phase, which is how to
-read "until the regroup phase" at its boundary.
+read "until the regroup phase" at its boundary. One wound from it is also the `-` of a trigger on an exertion
+whose effect would last the current phase: a skirmish wound shows nothing there (Card_13_075_Tests).
 
 **A Free Peoples wound on a minion in the maneuver phase.** Defend It and Hope 4_115. [gondor] Maneuver event, cost
 0: exert a [gondor] Man to wound a minion once, or twice if it is an Uruk-hai. Kills a minion of 1 vitality to

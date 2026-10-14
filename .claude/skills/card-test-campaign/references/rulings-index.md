@@ -488,6 +488,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Costs, and effects, in the order printed (Q-0080) [F-0123]
 - What the text prints before "to" is PAID in `cost`, also where the player first chooses it into a memory (F-0477, The Highest Quality 11_60 and An End Worthy of Remembrance 102_46)
 - "When you play this minion, you may discard N <cards> from play to make it twilight cost -M and <keyword>" is a discount inside the play (Mountain-troll 15_112; F-0482 and F-0483, built by engine pass 28; Q-0275: A) [Q-0279]
+- "When you play <this>, you may exert any number of minions. For each minion you exert, <this> is twilight cost -X" is a `perExert` discount, asked as one choice (Sauron 13_140; F-0385, Q-0143)
 - A RemoveTwilight cost beside a PlayCardFromDiscard needs removedTwilight (F-0046, F-0141) [F-0450, F-0453, F-0481, Q-0019]
 - "Play any number of / up to N ... from your discard pile" is withheld when nothing can be played (Q-0086)
 - "If you have initiative, you may play this <card> from your discard pile" is a clause of its own, typed `Activated [+ -]` (Hobbitses Are Dead 7_61; F-0055)

@@ -364,7 +364,7 @@ Common fields on most: `over` (subtract from result), `limit` (cap), `multiplier
 ## Duration Resolution
 
 For `until` field on ongoing effects:
-- `end(current)` — end of current phase (default)
+- `end(current)` — end of current phase (default; each skirmish is a phase of its own, so "until the end of the regroup phase" wants `end(Regroup)` written: F-0511)
 - `end(Skirmish)` — end of skirmish phase
 - `start(Regroup)` — start of regroup (a bare `Regroup` is the same)
 - `EndOfTurn` — end of turn
