@@ -887,6 +887,14 @@ follows it (Card_10_012_Tests, Card_10_108_Tests). Skirmish and regroup: pitfall
 takes it; how a companion comes to have a minion before the Free Peoples player assigns. Offered only while minion
 and bearer can both be assigned (F-0353, F-0354).
 
+**A minion that comes into a skirmish already under way (the board for "each minion skirmishing ..." read as a
+snapshot).** Controlled By The Ring 15_41 on Gollum, Vile Creature 7_59, the only printed card that puts a minion
+into a skirmish in another's place. Condition, cost 1, "Bearer must be Gollum. Skirmish: If Gollum is not assigned
+to a skirmish, discard this condition to have him replace a minion skirmishing a companion"; Gollum is strength 5,
+vitality 4, and his own skirmish ability is used only on purpose. Leave him unassigned (`ShadowDeclineAssignments()`),
+and once the effect is used `ShadowUseCardAction(<the condition>)` puts him where the minion was, the minion out of
+the skirmish (Card_07_017_Tests.AMinionThatComesIntoHerSkirmishAfterTheUseIsNotMadeWeaker).
+
 **A Shadow card that is no event, played in a skirmish (the invalid candidate beside "a Shadow event is played").**
 Army of Haradrim 5_70 with War Mûmak 5_78. Army: unique [raider] Man, Southron, cost 7, strength 14, vitality 4,
 site 4; "Skirmish: Remove (3) to play a [raider] mount from your discard pile". Mûmak: [raider] mount on a
@@ -1027,7 +1035,10 @@ to take control of a site", twice in a phase with (10); two copies take two site
 opponent controls site 4 of a Towers path). The Band is strength 10 and +2 for each site its owner controls: 10,
 12, 14 reads the count for one player. Uruk Camp is a battleground and plains printed as site 2 of the Towers block
 (`putAll(TowersSites); put("site2", "4_335")`): Advance Uruk Patrol 4_136 is strength +4 while its owner controls
-it. For a board that only needs a site in someone's hands, the cheat (`ShadowTakeControlOfSite(site)`). Pitfalls,
+it. For a board that only needs a site in someone's hands, the cheat (`ShadowTakeControlOfSite()`,
+`FreepsTakeControlOfSite()`): never on player 1's first turn, where player 2's marker is still on site 1 and the cheat
+finds no site even with the fellowship at site 2; `StartGame(); SkipToSite(2);` puts player 1's second turn at site 3
+with site 1 behind every marker (Card_08_095_Tests). Pitfalls,
 "A site is controlled lowest first"; mechanics/sites/ControlOfSitesTests.
 
 **The next site played, and a site replaced, by legal play.** Pathfinder 1_110; Úlairë Nelya, Lieutenant of Morgul
