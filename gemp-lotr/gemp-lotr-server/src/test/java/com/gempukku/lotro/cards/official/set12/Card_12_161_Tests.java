@@ -17,8 +17,12 @@ public class Card_12_161_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "12_161");
-					// put other cards in here as needed for the test case
+					put("rider", "12_161");
+					put("rider2", "12_161");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion
+					put("gimli", "1_13");       // Gimli, Son of Gloin: [dwarven] Dwarf companion, cost 2, nothing needed to play him
+					put("maggot", "1_288");     // Farmer Maggot, Chaser of Rascals: a [shire] Hobbit ally, no companion
+					put("troop", "1_177");      // Goblin Patrol Troop: [moria] Orc, strength 13, no text
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +50,7 @@ public class Card_12_161_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("rider");
 
 		assertEquals("Black Rider", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +66,36 @@ public class Card_12_161_Tests
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void BlackRiderTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void IsStrengthPlusOneForEachCompanionAndRisesAsOneIsPlayed() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var maggot = scn.GetFreepsCard("maggot");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveAlliesToTable(maggot);
+		scn.MoveCardsToHand(gimli);
+
+		var rider = scn.GetShadowCard("rider");
+		var rider2 = scn.GetShadowCard("rider2");
+		var troop = scn.GetShadowCard("troop");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// Laid in the fellowship phase to read the count change as a companion is played.
+		scn.MoveMinionsToTable(rider, rider2, troop);
 
-		assertEquals(5, scn.GetTwilight());
+		// 8 + 2 for Frodo and Aragorn; the ally and the three minions are no companions. Each Rider counts for
+		// itself, and the Troop is untouched.
+		assertEquals(10, scn.GetStrength(rider));
+		assertEquals(10, scn.GetStrength(rider2));
+		assertEquals(13, scn.GetStrength(troop));
+
+		scn.FreepsPlayCard(gimli);
+		// 8 + 3
+		assertEquals(11, scn.GetStrength(rider));
+		assertEquals(11, scn.GetStrength(rider2));
+		assertEquals(13, scn.GetStrength(troop));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

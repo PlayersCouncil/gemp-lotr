@@ -278,11 +278,36 @@
 					type: played
 					filter: self
 				}
-				requires: {
-					type: canSpot
-					filter: other,nazgul
-					count: 2
-				}
+				requires: [
+					{
+						type: canSpot
+						filter: other,nazgul
+						count: 2
+					}
+					{
+						type: or
+						requires: [
+							{
+								type: canSpot
+								filter: unbound,companion,canExert
+							}
+							{
+								type: and
+								requires: [
+									{
+										type: canSpot
+										filter: companion
+										count: 6
+									}
+									{
+										type: canSpot
+										filter: companion,canExert
+									}
+								]
+							}
+						]
+					}
+				]
 				effect: {
 					type: if
 					check: {
