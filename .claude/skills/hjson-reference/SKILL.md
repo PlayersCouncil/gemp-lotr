@@ -272,7 +272,7 @@ The filters in a list are asked in order. Put exclusions ahead of `Playable`: as
 | Filter | Params | Meaning |
 |--------|--------|---------|
 | `Culture(X)` | culture | Matches culture X |
-| `Name(X)` / `Title(X)` | title | Matches card title, with accents, spaces and capitals passed over (`Names.SanitizeName`): `name(Théoden)` finds Theoden, Last of His House 102_55, whose title has no accent |
+| `Name(X)` / `Title(X)` | title | Matches card title, with accents, spaces and capitals passed over (`Names.SanitizeName`): `name(Théoden)` finds Theoden, Last of His House 102_55, and `name(Sméagol)` Sméagol, Once Like Us 103_116 (title `Smeagol`), whose titles have no accent |
 | `Subtitle(X)` | subtitle | Matches the card's subtitle, passed over the same way: `subtitle(Of Many Colours)`.  No definition uses it since engine pass 32 took it out of Saruman's Staff 4_174 (F-0426) |
 | `Race(memory(X))` | memory | Race of memorized card |
 | `Side(X)` | side | FP or Shadow side |

@@ -386,6 +386,15 @@ Rivendell 101_11, Galadriel's Silver Ewer 18_11 (its bonuses are for Galadriel a
 Galadriel 15_22 (to play, spot 3 Elves: cheat it in; answers a draw) and Gift of the Evenstar 15_16 (answers a won
 skirmish and the start of a maneuver phase). Their abilities are used only on purpose (`Card_09_012_Tests`).
 
+**Cards for "play a <culture> artifact (condition, possession) from your draw deck", one for each place it goes.**
+[elven] artifacts: The Mirror of Galadriel, Dangerous Guide 15_22 (unique, cost 2, to the support area; to play,
+spot 3 Elves, an Elf ally among them: Orophin 1_56) and Phial of Galadriel, Star-glass 10_13 (unique, cost 0,
+"Bearer must be a Hobbit": the Ring-bearer); Elven Bow 1_41 (an [elven] possession) and Ring of Guile 9_8 (a
+[dwarven] artifact) are the ones not offered (`Card_18_007_Tests`). [men] cards with no requirement: Lying in Wait
+13_95 (condition, cost 0, support area), War Trident 12_77 (possession, cost 1, "Bearer must be a [men] minion") and
+Fleet of Corsair Ships 18_66 (possession, cost 3, support area; its play has a "you may add a [men] token"
+trigger); Man of Bree 11_90 is the [men] minion not offered (`Card_12_073_Tests`).
+
 ## A culture without its race, a race without its culture, a card against its type
 
 **A culture without its race, or a race without its culture: a printed card, never a modifier (Q-0213: B).** By
