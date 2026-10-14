@@ -120,9 +120,9 @@ While the ability to programmatically execute games is a boon to testing efforts
 - `void MoveCardsToBottomOfFreepsDeck(String...names)` — Puts the Free Peoples player's named cards on the bottom of that player's draw deck one at a time, in the order given, so the last card named ends as the bottom card.
 - `void MoveCardsToBottomOfShadowDeck(String...names)` — Puts the Shadow player's named cards on the bottom of that player's draw deck one at a time, in the order given, so the last card named ends as the bottom card.
 - `void MoveCardsToBottomOfDeck(PhysicalCardImpl...cards)` — Puts the given cards on the bottom of their owners' draw decks one at a time, in the order given, so the last card named ends as the bottom card.
-- `void MoveCardsToFreepsDiscard(String...names)`
-- `void MoveCardsToShadowDiscard(String...names)`
-- `void MoveCardsToDiscard(PhysicalCardImpl...cards)`
+- `void MoveCardsToFreepsDiscard(String...names)` — Puts the Free Peoples player's named cards in his discard pile, as `MoveCardsToDiscard` does.
+- `void MoveCardsToShadowDiscard(String...names)` — Puts the Shadow player's named cards in his discard pile, as `MoveCardsToDiscard` does.
+- `void MoveCardsToDiscard(PhysicalCardImpl...cards)` — Puts the given cards in their owners' discard piles, from wherever they were, without discarding them: nothing answers it.
 - `void MoveCardToAdventurePath(PhysicalCardImpl card)` — Lays the given card on the adventure path as the site after the one the fellowship is at, whatever number is printed on it and whatever block it is of: its site number becomes the current site's plus one.
 - `void MoveCardsToAdventureDeck(PhysicalCardImpl...cards)`
 - `void SetFreepsAdventureDeck(PhysicalCardImpl...sites)` — Makes the Free Peoples player's (player 1's) adventure deck exactly the given sites.
@@ -241,6 +241,7 @@ A set of functions within the test rig that pertain to decisions.  Decisions in 
 - `boolean AwaitingFellowshipPhaseActions()`
 - `void FreepsRefreshDecision()  ·  ShadowRefreshDecision` — Has that player's pending choice of phase actions worked out afresh and sent again, so that it offers what the board allows now.
 - `void RefreshDecision(String player)` — Has the given player's pending choice of phase actions worked out afresh and sent again.
+- `void RefreshPendingPhaseActions()` — Has every pending choice of phase actions ("Play ...
 - `boolean AwaitingShadowPhaseActions()`
 - `boolean AwaitingFreepsManeuverPhaseActions()`
 - `boolean AwaitingShadowManeuverPhaseActions()`
@@ -555,10 +556,11 @@ This interface holds the handful of accessors that every other virtual table int
 - `String P1()`
 - `String P2()`
 - `SeatChannel seatChannel(String player)` — What the table has kept of all that the given player's seat has been sent by the game.
+- `void RefreshPendingPhaseActions()` — Has every pending choice of phase actions worked out afresh, and does nothing else.
 - `PhysicalCardImpl GetFreepsCard(String cardName)`
 - `PhysicalCardImpl GetShadowCard(String cardName)`
 - `PhysicalCardImpl GetCard(String player, String cardName)`
 - `void Verify(boolean condition, String message)` — A sanity check on the table's own bookkeeping, used where a procedure has to end up in a known state for whatever follows it to make sense.
 
 ---
-453 entries, 216 of them with no description in the source.
+455 entries, 213 of them with no description in the source.

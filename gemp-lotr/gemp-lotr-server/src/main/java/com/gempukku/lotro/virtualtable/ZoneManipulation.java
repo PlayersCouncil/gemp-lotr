@@ -167,16 +167,33 @@ public interface ZoneManipulation extends TableBase {
 		});
 	}
 
+	/**
+	 * Puts the Free Peoples player's named cards in his discard pile, as {@link #MoveCardsToDiscard} does.
+	 * @param names The names the cards were given when the table was set up.
+	 */
 	default void MoveCardsToFreepsDiscard(String...names) {
 		Arrays.stream(names).forEach(name -> MoveCardsToDiscard(GetFreepsCard(name)));
 	}
 
+	/**
+	 * Puts the Shadow player's named cards in his discard pile, as {@link #MoveCardsToDiscard} does.
+	 * @param names The names the cards were given when the table was set up.
+	 */
 	default void MoveCardsToShadowDiscard(String...names) {
 		Arrays.stream(names).forEach(name -> MoveCardsToDiscard(GetShadowCard(name)));
 	}
 
+	/**
+	 * Puts the given cards in their owners' discard piles, from wherever they were, without discarding them:
+	 * nothing answers it.  As it finishes, a choice of phase actions that is pending is worked out afresh
+	 * ({@link #RefreshPendingPhaseActions()}), so a card moved out of a hand is no longer offered from there, and
+	 * one that can be played from the discard pile is offered from there.  Every other decision pending is left
+	 * as it was.
+	 * @param cards The cards to move.
+	 */
 	default void MoveCardsToDiscard(PhysicalCardImpl...cards) {
 		Arrays.stream(cards).forEach(card -> MoveCardToZone(card, Zone.DISCARD));
+		RefreshPendingPhaseActions();
 	}
 
 	/**
@@ -376,7 +393,9 @@ public interface ZoneManipulation extends TableBase {
 	 * Every other card of that hand is put on top of that player's draw deck, the card that was at the front of
 	 * the hand ending as the top card (the way {@link VirtualTable#StartGame()} puts an opening hand back).  The
 	 * cards given are taken from wherever they were, without being played, drawn or discarded, and one already
-	 * in the hand takes its place in the order given.  The other player's hand is not touched.
+	 * in the hand takes its place in the order given.  The other player's hand is not touched.  As it finishes, a
+	 * choice of phase actions that is pending is worked out afresh ({@link #RefreshPendingPhaseActions()}), so what
+	 * it offers from the hand is what the hand now holds; every other decision pending is left as it was.
 	 * Fails if a card given is not that player's own: it would go to its owner's hand.
 	 * @param player The player whose hand is set.
 	 * @param cards The cards the hand is to hold, the front of the hand first; none, for an empty hand.
@@ -395,6 +414,7 @@ public interface ZoneManipulation extends TableBase {
 			}
 		}
 		MoveCardsToHand(cards);
+		RefreshPendingPhaseActions();
 	}
 
 	/**
@@ -417,8 +437,10 @@ public interface ZoneManipulation extends TableBase {
 	 * game pile sees it.  A card set aside is still found by the name it was given when the table was set up, and
 	 * any cheat (this one, MoveCardsToHand, MoveCardsToTopOfDeck ...) puts it somewhere again.  The cards given are
 	 * taken from wherever they were, without being played, drawn or discarded.  A cheat like the rest: nothing is
-	 * drawn or shuffled and nothing answers it, the other player's deck is not touched, and a decision already
-	 * pending does not change what it offers.  Called before {@link VirtualTable#StartGame()}, the deck keeps
+	 * drawn or shuffled and nothing answers it, and the other player's deck is not touched.  As it finishes, a
+	 * choice of phase actions that is pending is worked out afresh ({@link #RefreshPendingPhaseActions()}), so a
+	 * play from the draw deck is offered on what the deck now holds; every other decision pending is left as it
+	 * was.  Called before {@link VirtualTable#StartGame()}, the deck keeps
 	 * those cards and no others, but the game shuffles it to deal the opening hands, so their order is not kept:
 	 * call it after StartGame() where the order matters.
 	 * Fails if a card given is not that player's own (it would go to its owner's deck), or is a site.
@@ -444,6 +466,7 @@ public interface ZoneManipulation extends TableBase {
 		for(PhysicalCardImpl card : wanted.reversed()) {
 			MoveCardsToTopOfDeck(card);
 		}
+		RefreshPendingPhaseActions();
 	}
 
 

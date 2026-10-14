@@ -116,14 +116,41 @@ public interface Decisions extends TableBase {
 	default void RefreshDecision(String player) {
 		AwaitingDecision decision = GetAwaitingDecision(player);
 		String asked = decision == null ? null : decision.getText();
-		boolean phaseActions = decision instanceof CardActionSelectionDecision && asked != null
-				&& asked.toLowerCase().contains("action") && asked.toLowerCase().contains("pass");
-		Verify(phaseActions, player + " is not at a choice of phase actions"
+		Verify(isChoiceOfPhaseActions(decision), player + " is not at a choice of phase actions"
 				+ (decision == null ? " (nothing is being asked)" : " (the decision pending is '" + asked + "')")
 				+ ", so there is nothing to refresh.");
-		((CardActionSelectionDecision) decision).refreshActions(game().getActionsEnvironment().getPhaseActions(player));
-		userFeedback().sendAwaitingDecision(player, decision);
+		refreshPhaseActions(player, (CardActionSelectionDecision) decision);
 		userFeedback().atRest();
+	}
+	/**
+	 * Has every pending choice of phase actions ("Play ... action or Pass") worked out afresh and sent again, as
+	 * {@link #RefreshDecision(String)} does, and leaves every other decision as it is; with no such choice pending
+	 * it does nothing.  The cheats that change a hand, a draw deck or a discard pile (SetHand, SetDrawDeck,
+	 * MoveCardsToDiscard and their twins) call it as they finish, so that a card they moved is offered, or not,
+	 * from where it now lies.
+	 */
+	@Override
+	default void RefreshPendingPhaseActions() {
+		boolean refreshed = false;
+		for(String player : List.of(P1(), P2())) {
+			AwaitingDecision decision = GetAwaitingDecision(player);
+			if(isChoiceOfPhaseActions(decision)) {
+				refreshPhaseActions(player, (CardActionSelectionDecision) decision);
+				refreshed = true;
+			}
+		}
+		if(refreshed) {
+			userFeedback().atRest();
+		}
+	}
+	private static boolean isChoiceOfPhaseActions(AwaitingDecision decision) {
+		String asked = decision == null ? null : decision.getText();
+		return decision instanceof CardActionSelectionDecision && asked != null
+				&& asked.toLowerCase().contains("action") && asked.toLowerCase().contains("pass");
+	}
+	private void refreshPhaseActions(String player, CardActionSelectionDecision decision) {
+		decision.refreshActions(game().getActionsEnvironment().getPhaseActions(player));
+		userFeedback().sendAwaitingDecision(player, decision);
 	}
 
 	/**
