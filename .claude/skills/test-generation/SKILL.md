@@ -391,7 +391,11 @@ candidate is another card that meets the requirement (lint warns `if-is` where a
 named> is ..." sentence lists no `F`: 2_79's "If the Ring-bearer is then exhausted" wanted an exhausted companion
 beside a Ring-bearer who is not). That holds where the requirement is the condition of a
 trigger and not of an ability: for "While Boromir is the Ring-bearer, at the start of each skirmish involving him"
-it is the real Ring-bearer in a skirmish of his own while Boromir is a plain companion (59_31).
+it is the real Ring-bearer in a skirmish of his own while Boromir is a plain companion (59_31). Where the requirement
+stands on a Skirmish ability ("Skirmish: If bearer is an unbound Hobbit, discard this possession to ..."), a bearer who
+meets it outside the skirmish is a valid candidate (the text names no skirmish), and the requirement owes the culture
+spread of "Bearer must be a Hobbit" (11_171: Pippin, Trollslayer beside Merry); for "unbound" the invalid candidates
+are a Ring-bound companion (Sam) and an ally of the race (Bounder 1_286: only companions are unbound, CR 4.2).
 
 **A title of one card type; never two of one unique title; a candidate that looks impossible.** A title that has
 one card type only ("spot Gandalf") needs one card of the title, and its invalid candidate is a card of that
@@ -612,7 +616,8 @@ he is never discarded (Q-0109): the bearer in such a test is another (Sam bearin
 says neither "may" nor "up to", read the minimum of one such choice (`FreepsGetChoiceMin()`): a choice that has
 wrongly become optional looks the same otherwise. A "may" that the game asks as a yes/no ("a minion may exert
 to prevent this") is answered by the yes: the choice of who does it has its minimum read too (5_89). A text with two choices (one for its cost, another for its
-effect, or a card and then the bearer it is played on: Goblin Scavengers 1_179) has the minimum of each read, once.
+effect, or a card and then the bearer it is played on: Goblin Scavengers 1_179) has the minimum of each read, once;
+a card played on a bearer has its bearer choice's minimum read even where that is its only choice (17_24, 18_26, 11_171).
 
 **Say what the game is waiting for.** After a test's last action, assert the decision the game has come to rest
 on: `AwaitingFellowshipPhaseActions()` and its kin, a named decision, a pending optional trigger, or
