@@ -2090,3 +2090,13 @@ shenanigans. I'd say A except for the case of instant removal." Q-0308, an "X or
 be paid and the player is asked: "B, but I don't think older tests need relitigated." Q-0309, a trigger on the
 card's own win owes its own loss only: "I think A is sufficient here." *[2026-10-14]*
 
+**Card by card (2026-10-14, later).** Q-0304, a Skirmish card's "not offered" check may be read in either
+neighbouring phase (assignment or regroup): "Ah yeah, B is fine". Q-0310, Sting, Weapon of Heritage 11_173, the Sam
+sentence printed after the Maneuver action: "This was a poorly-templated card; we will treat the ability as if it
+were in the proper place above the special ability; they at least had the decency to use proper linebreaks to make
+that readably distinct. A" (a standing trigger; Q-0164 reaches only a sentence that can act after its action, as the
+burn-out clauses). Q-0311, Gwaihir, The Windlord 17_20, an exhausted Wizard minion may be chosen and is wounded: "A is
+fine, the "instead" is superfluous and perhaps should have been worded "exert a minion (or wound it if it is a
+Wizard)". A." She also corrected the question: not every Wizard minion is a Saruman; "there are also the Deceived
+wizards that emerge from conditions (Pallando Deceived, Alatar Deceived, etc)" (13_x [isengard]). *[2026-10-14]*
+

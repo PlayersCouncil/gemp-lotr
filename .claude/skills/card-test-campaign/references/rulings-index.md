@@ -386,6 +386,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Card by card (2026-10-13). Q-0298, Saruman's Staff 4_174 withheld by the engine's rule instead of a requirement naming the two subtitles: "keep". ... [Q-0299, Q-0300, F-0492, F-0491, Q-0301]
 - Card by card (2026-10-14). F-0503, Ranger's Cloak 15_68 borne by an ally (the forest half now a companion bearer's alone): "if the ally is at his ... [F-0502]
 - What a test must lay (2026-10-14, the Standard's questions from engine pass 39) [Q-0303, Q-0305, Q-0306, Q-0307, Q-0308, Q-0309]
+- Card by card (2026-10-14, later) [Q-0304, Q-0310, Q-0164, Q-0311]
 
 # Settled shapes (shapes.md)
 
