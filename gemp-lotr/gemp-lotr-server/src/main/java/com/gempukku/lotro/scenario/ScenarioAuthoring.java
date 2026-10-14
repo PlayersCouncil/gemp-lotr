@@ -286,6 +286,36 @@ public class ScenarioAuthoring {
         }
 
         /**
+         * A pass made without asking (nothing to play, in a phase that is passed through), past the end of the
+         * script, is written down like anything else done there: as a step that is only that pass.  Such a step is
+         * used up by the same pass in every game of the draft with nobody asked (see ScenarioDirector.isSilentPass),
+         * until it is given something to say.
+         */
+        @Override
+        public void passedByItself(String player, Phase phase, Step used, boolean frontier) {
+            if (!frontier || !session.recording)
+                return;
+            ScenarioDirector director = live.Session().Director();
+            if (director.end() != null)
+                return;
+            boolean human = player.equals(live.HumanPlayer());
+            //(the opponent's are the author's to write only while the author is answering for it)
+            if (!human && !session.askOpponent)
+                return;
+            ScenarioTable table = live.Table();
+            JsonObject json = new JsonObject();
+            json.add("when", table.SeatOf(player).key() + ", action, phase(" + phase.name().toLowerCase(Locale.ROOT) + "), turn("
+                    + table.gameState().getTurnNumber() + ")");
+            json.add(human ? "allow" : "answer", "pass");
+            try {
+                director.record(ScenarioParser.parseStep(def, json, 0));
+                session.changed();
+            } catch (ScenarioFormatException exp) {
+                session.notice = "A pass made without asking could not be written into the script: " + exp.getMessage();
+            }
+        }
+
+        /**
          * A step of the player's that repeats has what is done at it written in each time round (see repeated()), so
          * while that is being done it holds the author to nothing: what it allows so far is only what has been done
          * so far.
@@ -2644,6 +2674,25 @@ public class ScenarioAuthoring {
         board.put("twilight", table.GetTwilight());
         board.put("burdens", table.GetBurdens());
         board.put("threats", table.GetThreats());
+        //Each seat's adventure path, by site number, with the names the Board tab shows
+        Map<String, Object> sites = new LinkedHashMap<>();
+        for (Seat seat : Seat.values()) {
+            List<Map<String, Object>> path = new ArrayList<>();
+            int number = 0;
+            for (String id : sitting.def.sites.getOrDefault(seat, List.of())) {
+                Map<String, Object> site = new LinkedHashMap<>();
+                site.put("number", ++number);
+                site.put("id", id);
+                try {
+                    site.put("name", GameUtils.getFullName(_library.getLotroCardBlueprint(id)));
+                } catch (CardNotFoundException exp) {
+                    site.put("name", null);
+                }
+                path.add(site);
+            }
+            sites.put(seat.key(), path);
+        }
+        board.put("sites", sites);
         return board;
     }
 

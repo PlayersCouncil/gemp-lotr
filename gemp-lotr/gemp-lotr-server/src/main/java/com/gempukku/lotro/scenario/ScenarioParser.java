@@ -915,13 +915,11 @@ public final class ScenarioParser {
         if (answers != null)
             for (String line : lines(answers, context))
                 for (String part : Terms.split(line, ',', context)) {
-                    //"play(servant1)?" is allowed if it is on offer, and no mistake if it is not
-                    boolean ifOffered = part.endsWith("?");
-                    String written = ifOffered ? part.substring(0, part.length() - 1).trim() : part;
-                    for (Terms.Term term : Terms.parse(written, context)) {
-                        Answer answer = parseAnswer(def, term, context);
-                        allow.answers.add(ifOffered ? answer.offeredOrNot() : answer);
-                    }
+                    //(every answer is allowed if it is on offer and no mistake if it is not: the ? that used to say so
+                    // for one answer is still read, and means nothing more)
+                    String written = part.endsWith("?") ? part.substring(0, part.length() - 1).trim() : part;
+                    for (Terms.Term term : Terms.parse(written, context))
+                        allow.answers.add(parseAnswer(def, term, context));
                 }
         if (allow.answers.isEmpty() && allow.passWhen == null)
             throw new ScenarioFormatException(context + ": allows nothing at all");

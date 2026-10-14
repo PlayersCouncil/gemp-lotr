@@ -1142,3 +1142,9 @@ body.sa-picking .scenario-pointer {
 .sa-step.sa-substep.sa-turn-even.sa-selected {
     background: #3a3220;
 }
+
+/* A step that is only a pass the game makes by itself: there, but quiet */
+.sa-step.sa-silent .sa-what,
+.sa-step.sa-silent .sa-who {
+    opacity: 0.55;
+}

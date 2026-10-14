@@ -81,6 +81,7 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
     private String _followProblem;
     private java.util.function.Consumer<GameJournal.Entry> _noteFollower;
     private java.util.function.BiPredicate<String, Phase> _askToPass;
+    private java.util.function.BiConsumer<String, Phase> _autoPassed;
 
     /**
      * @param humanPlayer The name of the player in the scenario's "human" seat.
@@ -190,6 +191,14 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
      */
     public void AskToPass(java.util.function.BiPredicate<String, Phase> askToPass) {
         _askToPass = askToPass;
+    }
+
+    /**
+     * Is told each time a player passes in a phase without being asked (nothing to play, and a phase they are
+     * passed through), once the board has been laid out.  Told inside the game's processing, before the pass is made.
+     */
+    public void AutoPassed(java.util.function.BiConsumer<String, Phase> autoPassed) {
+        _autoPassed = autoPassed;
     }
 
     /** How many of the earlier game's answers this one was given. */
@@ -345,6 +354,10 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
         _game.setPlayerAutoPassSettings(OpponentPlayer(), EnumSet.allOf(Phase.class));
         //...except where the script's next step is about a pass: then whoever it is gets asked, to be passed by hand
         _game.setAskToPass((player, phase) -> _arranged && _askToPass != null && _askToPass.test(player, phase));
+        _game.setAutoPassed((player, phase) -> {
+            if (_arranged && _autoPassed != null)
+                _autoPassed.accept(player, phase);
+        });
 
         for (Seat seat : Seat.values()) {
             try {
