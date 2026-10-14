@@ -2071,4 +2071,6 @@ Channel 8_120; the same words on No Retreat 4_30, Forced March 13_108, Hornburg 
 bearer's alone): "if the ally is at his home site and the fellowship is at the *same* site, he should get the bonus
 if the site is a forest. Assuming blocks are correct. However this is overwhelmingly unlikely to occur given that this
 is an Expanded-era card and I don't think any format can permit such an interaction except Anything Goes, so it's not
-worth tuning up; leave it as is." *[2026-10-14]*
+worth tuning up; leave it as is." F-0502, Merry and Pippin, In the Bloom of Health (17_107, 17_109), "Add 1 to the
+number of Ents you can spot": "the "you" in their text is referring to its owner and not to anyone else. That's
+valid, I think; carry on." A spot bonus counts for its card's owner only (engine pass 39). *[2026-10-14]*

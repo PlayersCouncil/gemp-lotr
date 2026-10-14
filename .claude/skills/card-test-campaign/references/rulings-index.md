@@ -384,7 +384,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Card by card (2026-10-12, ninth notes) [Q-0295, Q-0297, F-0490]
 - Card by card (2026-10-12). F-0482 (Mountain-troll 15_112's discount counted ahead): "Go for it". F-0483 (the same card asking whether to discard ... [F-0486]
 - Card by card (2026-10-13). Q-0298, Saruman's Staff 4_174 withheld by the engine's rule instead of a requirement naming the two subtitles: "keep". ... [Q-0299, Q-0300, F-0492, F-0491, Q-0301]
-- Card by card (2026-10-14). F-0503, Ranger's Cloak 15_68 borne by an ally (the forest half now a companion bearer's alone): "if the ally is at his ...
+- Card by card (2026-10-14). F-0503, Ranger's Cloak 15_68 borne by an ally (the forest half now a companion bearer's alone): "if the ally is at his ... [F-0502]
 
 # Settled shapes (shapes.md)
 
