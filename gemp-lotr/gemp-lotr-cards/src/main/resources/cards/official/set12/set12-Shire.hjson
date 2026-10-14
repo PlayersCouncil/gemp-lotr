@@ -155,6 +155,7 @@
 				trigger: {
 					type: played
 					filter: hobbit
+					player: you
 				}
 				effect: [
 					{
