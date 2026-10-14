@@ -528,6 +528,7 @@ public class Card_94_030_Tests
 		scn.StartGame();
 		scn.SkipToPhase(Phase.SHADOW);
 		scn.SetTwilight(5);
+		scn.ShadowRefreshDecision();
 
 		assertFalse(scn.ShadowPlayAvailable(host));
 		assertInDiscard(backstabber);

@@ -181,6 +181,7 @@ public class Card_92_005_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(3);
+		scn.FreepsRefreshDecision();
 
 		assertFalse(scn.FreepsActionAvailable(mod));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());

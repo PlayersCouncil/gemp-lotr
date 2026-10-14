@@ -190,6 +190,7 @@ public class Card_V3_086_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(explorer);
+		scn.FreepsRefreshDecision();
 
 		assertFalse(scn.FreepsActionAvailable(calenhad1));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());

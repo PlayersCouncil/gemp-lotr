@@ -412,6 +412,7 @@ public class Card_18_050_ErrataTests
 		scn.MoveMinionsToTable(savage, brigand);
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.SetTwilight(1);
+		scn.FreepsRefreshDecision();
 
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 		assertEquals(2, scn.GetCultureTokensOn(stone));

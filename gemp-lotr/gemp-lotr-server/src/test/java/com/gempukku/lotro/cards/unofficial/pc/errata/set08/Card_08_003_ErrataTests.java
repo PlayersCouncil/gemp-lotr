@@ -97,6 +97,7 @@ public class Card_08_003_ErrataTests
 		scn.MoveCardsToSupportArea(pinned, pinned2);
 		scn.HinderCard(pinned2);
 		scn.AttachCardsTo(guard, poison);
+		scn.FreepsRefreshDecision();
 
 		// Gimli is damage +1 printed, +1 from his axe.
 		assertEquals(2, scn.GetKeywordCount(gimli, Keyword.DAMAGE));

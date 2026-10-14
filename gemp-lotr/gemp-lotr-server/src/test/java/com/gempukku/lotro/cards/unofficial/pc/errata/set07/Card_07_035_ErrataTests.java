@@ -84,6 +84,7 @@ public class Card_07_035_ErrataTests
 
 		scn.StartGame();
 		scn.MoveCardsToSupportArea(scn.GetShadowCard("tidings"));
+		scn.FreepsRefreshDecision();
 
 		// A [gandalf] companion of another title.
 		assertFalse(scn.FreepsPlayAvailable(hope));

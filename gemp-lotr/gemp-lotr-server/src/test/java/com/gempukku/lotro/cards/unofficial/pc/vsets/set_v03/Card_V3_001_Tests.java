@@ -342,6 +342,7 @@ public class Card_V3_001_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(troop);
+		scn.FreepsRefreshDecision();
 
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 		assertFalse(scn.FreepsActionAvailable(phial));

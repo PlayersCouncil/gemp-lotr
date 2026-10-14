@@ -170,6 +170,7 @@ public class Card_04_304_ErrataTests
 		var site2 = scn.GetFreepsSite(2);
 		var site3 = scn.GetFreepsSite(3);
 		scn.MoveCardToAdventurePath(opponentsSite2);
+		scn.FreepsRefreshDecision();
 		assertEquals(opponentsSite2, scn.GetSite(2));
 		assertNull(scn.GetSite(3));
 
@@ -209,6 +210,7 @@ public class Card_04_304_ErrataTests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(gollum);
+		scn.FreepsRefreshDecision();
 
 		var site2 = scn.GetFreepsSite(2);
 		var site3 = scn.GetFreepsSite(3);

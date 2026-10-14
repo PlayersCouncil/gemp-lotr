@@ -181,6 +181,7 @@ public class Card_15_062_ErrataTests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(savage, troop, nelya);
+		scn.FreepsRefreshDecision();
 
 		// Not a fellowship ability.
 		assertFalse(scn.FreepsActionAvailable(blade1));

@@ -241,6 +241,7 @@ public class Card_01_075_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(2);
+		scn.FreepsRefreshDecision();
 
 		assertFalse(scn.FreepsActionAvailable(glamdring));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
