@@ -340,6 +340,8 @@ that title of each type and each culture there is (Saruman the minion and Saruma
 [gollum] and [shire]: grep the definitions). That holds for a title that pays a cost or is acted on as it does for
 one spotted or played ("exert Gollum": each of the two Gollums, [gollum] and [wraith], pays in a test of his own,
 60_20); lint warns `title-kinds` where every card of such a title that the file names is of one kind.
+A card's own name in its own text is that card (`self`), not a title picking cards out: "Exert Elrond" on Elrond
+owes `C` and `C-` and no F (1_40 above; Úlairë Nelya 11_222).
 
 **A word in one filter and not in another; cards picked by what the cost's card is.** Where a word is in one filter
 of the card and not in another ("a unique [elven] companion", then "all Free Peoples archers"), the valid
@@ -442,7 +444,8 @@ Which checks a clause lists follows from its words, and the analyst is expected 
 - an optional trigger or a special ability with no cost (a spot is no cost) → one `-` is the board on which its
   whole effect would do nothing: not offered (Q-0034; shapes, "Spot X to <effect>"). The game withholds such an
   offer itself (Q-0224): the test reads it absent, and no requirement is written for it unless the offer is still
-  made there (shapes, "An optional trigger or ability that costs nothing"). A keyword given to a card that has it
+  made there (shapes, "An optional trigger or ability that costs nothing"). For a draw that can come in its
+  player's fellowship phase the board is the Rule of 4 spent (Q-0262: B; an empty deck still asks, Q-0029). A keyword given to a card that has it
   already is not "nothing" and is offered (Q-0245: A, Band of Wild Men 4_4: "the effect still has potential to alter
   that calculus"). Where a board can have the card hold that keyword already (the ability used once, then
   offered again: Lurtz 1_127), that offer is owed and read. With a cost it is offered there and used for
@@ -579,7 +582,7 @@ a one-off effect that counts at its moment ("add (1) for each burden", "for each
 the board once: its counts are cheated, at the two counts `S` asks for (92_25, 92_26).
 
 **Read before and after.** An assertion after an action means little without the same reading before it. If an
-ability exerts, read 0 wounds, act, read 1. A state the test laid by a cheat (wounds added, an item attached) is read too, before the action that changes it, and so is one the action must leave alone (a control's cheated wounds): "unchanged" after means nothing without the reading before (dec-b7_354). Where the amount is not in the wording ("heal a minion", "wound a companion"), the target
+ability exerts, read 0 wounds, act, read 1. A state the test laid by a cheat (wounds added, an item attached, a card put in a zone) is read too, before the action that changes it, and so is one the action must leave alone (a control's cheated wounds): "unchanged" after means nothing without the reading before (dec-b7_354). Where the amount is not in the wording ("heal a minion", "wound a companion"), the target
 carries more than the effect should change: one wound healed from two reads 1, which "heal two" would not.
 Where the target's vitality holds only one wound and no printed card raises it (a Hobbit ally healing itself), its vitality is
 raised by hand, `VitalityModifier` after it is in play: a number that only arranges the board (Q-0213: E; 1_297).

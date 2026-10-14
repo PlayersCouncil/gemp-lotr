@@ -869,7 +869,9 @@ text compares the two markers ("ahead on the adventure path", CR 4.2 "ahead"), r
 player 1's first turn, the Shadow player's. `GetCurrentSite()` and `GetSite(n)` return that card and
 `GetFreepsSite(n)` a different one, so compare with `GetSite(n)` or by blueprint. It also gives a site's
 trigger on "the fellowship" a board that tells the mover from the site's owner: read both players' burdens
-(Card_03_116_Tests).
+(Card_03_116_Tests). A site's `player: free people` trigger with `on: your,companion` takes "your" as the Free
+Peoples player of the turn, not the site's owner: the second player at the first player's Trollshaw Forest 11_260
+is the one offered the draw (Card_11_260_Tests).
 `GetSite(n)` is null for a site not yet laid (site 6 on turn 1), and `HasKeyword(null, ...)` then throws: read a
 site's terrain off the path only once the fellowship has been there.
 
@@ -953,6 +955,8 @@ on the empty deck.
 The Shadow player's deck runs short too: the turns `SkipToSite` plays draw a small one into his hand (the
 entry on `SkipToSite`, above), so a board taken from an erratum's file whose text never read that deck can find nothing in it
 (Card_01_023_Tests puts four cards back before "discard 3 cards from the top of his or her draw deck").
+`SkipToOtherPlayersTurn` is the same: a small scenario's second player can start his first turn with nothing in
+his deck, so a draw read there wants `SetShadowDrawDeck(...)` first (Card_11_260_Tests, on a Shadows-block path).
 A short scenario runs short as well. `SetFreepsHand(...)` after a skipper puts the rest of the hand back on the
 draw deck, and once a test moves the last of those into hand or play a "draw a card" draws nothing and the hand
 reads one short: keep one named card in the deck and read it in hand after the draw (Card_01_060_Tests, Gimli).
