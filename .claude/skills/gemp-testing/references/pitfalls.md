@@ -371,6 +371,9 @@ he is not offered whoever owns the modifier, and the reading shows nothing (91_1
 meant for both players is in shapes.md (F-0312). The `-` of "your fellowship" (the modifier across the table,
 nobody offered) wants the same: the mover's side holds what the cost takes (93_3: a companion to kill), or a
 definition without its `OwnerIsFreeps` offers nothing either and passes.
+A site's optional trigger with no `player:` line is offered first to the Free Peoples player of the turn, so a
+`player: free people` taken out is noticed by the decline test alone: every "the Free Peoples player may" on a
+site has one (Osgiliath Reclaimed 11_252, by `mutate.py --replace`, dec-b11_212).
 
 ## Reading and answering an offer
 
@@ -1256,7 +1259,9 @@ area until its Aid is paid, and the offer is made for one a companion already be
 first (`FreepsDeclineOptionalTrigger()`; a bare `FreepsPass()` only answers the offer, and the Shadow player is
 not yet asked; Frenzy of Arrows 68_79's tests). `SkipToPhase(Phase.MANEUVER)` leaves the offer pending:
 `FreepsHasOptionalTriggerAvailable(follower)` reads it, and `FreepsAcceptOptionalTrigger()` pays the Aid cost and
-then asks for the companion (`FreepsChooseCard`). The N of a printed "Aid - (N)" is read off the card, wherever
+then asks for the companion (`FreepsChooseCard`). `FreepsHasOptionalTriggerAvailable(follower)` cannot tell the Aid
+from the follower's own "when you transfer this" trigger: give the offer's words, `(follower, "Aid")` for the Aid
+("Use <card> Aid") and `(follower, "Optional trigger")` for the trigger (Card_18_017_Tests). The N of a printed "Aid - (N)" is read off the card, wherever
 it lies, with `GetAidTwilightCost(follower)` (G-0051, engine pass 26; for the stats test): a Free Peoples Aid
 adds it and a Shadow one (Saruman 17_38) removes it. It fails, saying so, for an Aid that is not a plain amount
 of twilight (a burden, a threat, an exertion, a card from hand): for those the header carries the cost. Every Free Peoples Aid transfers "to a companion", so no ally

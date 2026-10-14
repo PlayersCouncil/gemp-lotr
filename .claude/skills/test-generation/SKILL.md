@@ -886,3 +886,5 @@ bookends, and that none of the ledger has leaked into the test file. Its warning
    clause of its own; `mutate.py --replace old new --nth 2` reaches the second copy. Two triggers in one list
    that differ in a phase word are this too (60_20, "a maneuver or archery special ability"): each has its own
    invalid doer, in its own phase.
+   Two guards of one thing in different places are this too (a `CanSpot self, zone(SUPPORT)` requirement beside
+   `fromSupport: true`, Lost in the Woods 11_212): neither alone shows, so replace both in one mutate.py run.
