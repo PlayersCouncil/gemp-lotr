@@ -613,9 +613,11 @@ until the card is transcribed from its image (`Card_30_051_Tests`).
 thing under test the way a player would. Never cheat the thing under test, and never play out something that is
 only set-up. Where a clause counts something ("strength +2 while he bears 3 items"), changing the counted thing
 is part of the act: do it by legal play in one test, which shows the modifier switching on as the count is
-reached, and cheat it in the others. That is for a standing text, which has to be seen to switch on. A trigger or
-a one-off effect that counts at its moment ("add (1) for each burden", "for each Free Peoples possession") reads
-the board once: its counts are cheated, at the two counts `S` asks for (92_25, 92_26).
+reached, and cheat it in the others. That is for a standing text, which has to be seen to switch on. Where nothing the
+text bars can happen in the phase the count is changed in (a bar on Shadow acts, reached by playing a companion),
+the play comes ahead of the act and the act is read refused; the test without the count is the reading of it off
+(4_301). A trigger or a one-off effect that counts at its moment ("add (1) for each burden", "for each Free
+Peoples possession") reads the board once: its counts are cheated, at the two counts `S` asks for (92_25, 92_26).
 
 **Read before and after.** An assertion after an action means little without the same reading before it. If an
 ability exerts, read 0 wounds, act, read 1. A state the test laid by a cheat (wounds added, an item attached, a card put in a zone) is read too, before the action that changes it, and so is one the action must leave alone (a control's cheated wounds, a copy cheated onto a bearer that a declined offer leaves there): "unchanged" after means nothing without the reading before (dec-b7_354). A card cheated into a zone the action takes it from is put there early enough to be read there first (a Nazgûl cheated into the discard pile he is then played from); the one state not read before is one the action removes at once, an item discarded as soon as it is attached (Q-0307). Where the amount is not in the wording ("heal a minion", "wound a companion"), the target

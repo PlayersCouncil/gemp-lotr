@@ -783,6 +783,15 @@ source is a site, which has no side (path and play in Card_18_029_ErrataTests). 
 event, cost 2, spot a [gandalf] Wizard): away from a battleground its only branch has the SHADOW player choose and
 discard one of his own conditions. Brooding on Tomorrow 10_14 does the same on a loss of initiative.
 
+**A doer that is no Shadow card, and a Shadow item, for "Shadow cards may not discard cards from your hand or from the
+top of your draw deck".** Midgewater Moors 1_333; Uruk-hai Sword 1_160. The Moors (FOTR site 2, plains): "Each time a
+minion is played, the Free Peoples player discards a card from hand", written `forced: true`, so the bar is asked of
+it and only its side lets it through. The bar is asked only of a discard written `forced: true`: Search Far and Wide
+4_56's cost (the top card of the deck) writes `false` and shows nothing as a candidate, whatever its side. The Sword
+([isengard] hand weapon on an Uruk-hai, Uruk-hai Band 4_202): "Each time bearer wins a skirmish, the Free Peoples
+player must discard the top card of his or her draw deck"; the loser's wound and its trigger are ordered by the Free
+Peoples player (Card_04_301_Tests).
+
 **A discard the SHADOW player makes: by a keyword across card types, and by a site's text; a Shadow card that has
 the Free Peoples player discard his own cards; a Shadow card's discard that is not from play.** Stricken Dumb 2_80;
 Buckland Homestead 11_230; Why Shouldn't I Keep It? 3_105; Massing in the East 3_92. Stricken Dumb ([wraith]
