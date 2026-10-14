@@ -3,6 +3,7 @@ package com.gempukku.lotro.cards.official.set04;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -40,14 +41,30 @@ public class Card_04_347_Tests
 		);
 	}
 
-	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+	// The same path, with the candidates of "Uruk-hai" beside a Raiding Party.
+	protected VirtualTableScenario GetCandidatesScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "4_347");
-					// put other cards in here as needed for the test case
+					// Uruk-hai Raiding Party: [isengard] Uruk-hai, cost 4, site 5; damage +1 and nothing else
+					put("party", "1_158");
+					// Cirith Ungol Guard: a [sauron] Uruk-hai, cost 3, site 6; damage +1 and nothing else
+					put("guard", "10_81");
+					// Isengard Retainer: an [isengard] Orc, no Uruk-hai, cost 4, site 4; a regroup ability never used
+					put("retainer", "3_57");
 				}},
-				VirtualTableScenario.FellowshipSites,
+				new HashMap<>()
+				{{
+					put("site1", "4_325");
+					put("site2", "4_331");
+					put("site3", "4_337");
+					put("site4", "4_346");
+					put("site5", "4_347");
+					put("site6", "4_352");
+					put("site7", "102_71");
+					put("site8", "4_358");
+					put("site9", "4_363");
+				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -60,29 +77,28 @@ public class Card_04_347_Tests
 		 * Set: 4
 		 * Name: Deep of Helm
 		 * Unique: False
-		 * Side: 
-		 * Culture: 
-		 * Shadow Number: 6
 		 * Type: Site
-		 * Subtype: 
-		 * Site Number: 5T
+		 * Block: Towers
+		 * Site Number: 5
+		 * Shadow Number: 6
+		 * Direction: Left
 		 * Game Text: <b>Battleground</b>. <b>Plains</b>. The twilight cost of the first Uruk-hai played at Deep of Helm each turn is -3.
 		*/
 
-		var scn = GetScenario();
+		var scn = GetDeepOfHelmScenario();
 
-		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite(5);
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsSite(5);
 
 		assertEquals("Deep of Helm", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
+		assertEquals(SitesBlock.TWO_TOWERS, card.getBlueprint().getSiteBlock());
+		assertEquals(5, card.getBlueprint().getSiteNumber());
+		assertEquals(6, card.getBlueprint().getTwilightCost());
+		assertEquals(LotroCardBlueprint.Direction.LEFT, card.getBlueprint().getSiteDirection());
 		assertTrue(scn.HasKeyword(card, Keyword.BATTLEGROUND));
 		assertTrue(scn.HasKeyword(card, Keyword.PLAINS));
-		assertEquals(6, card.getBlueprint().getTwilightCost());
-		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
 	@Test
@@ -170,18 +186,72 @@ public class Card_04_347_Tests
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void DeepofHelmTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void AnUrukHaiOfAnotherCultureIsThreeCheaperAndAnIsengardOrcIsNeitherDiscountedNorCounted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetCandidatesScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var party = scn.GetShadowCard("party");
+		var guard = scn.GetShadowCard("guard");
+		var retainer = scn.GetShadowCard("retainer");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToSite(4);
+		scn.SetShadowHand(party, guard, retainer);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
 
-		assertEquals(6, scn.GetTwilight());
+		assertEquals("Deep of Helm", scn.GetCurrentSite().getBlueprint().getTitle());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		int twilight = scn.GetTwilight();
+		// 4 - 3, 3 - 3; the Orc its printed 4
+		assertEquals(1, scn.GetTwilightCost(party));
+		assertEquals(0, scn.GetTwilightCost(guard));
+		assertEquals(4, scn.GetTwilightCost(retainer));
+
+		scn.ShadowPlayCard(retainer);
+		// 4 to play, and no roaming: his site number is 4
+		assertEquals(twilight - 4, scn.GetTwilight());
+		assertInZone(Zone.SHADOW_CHARACTERS, retainer);
+		// No Uruk-hai has been played here yet.
+		assertEquals(1, scn.GetTwilightCost(party));
+		assertEquals(0, scn.GetTwilightCost(guard));
+
+		scn.ShadowPlayCard(guard);
+		// 0 to play + 2 roaming (site number 6, played at site 5)
+		assertEquals(twilight - 4 - 2, scn.GetTwilight());
+		assertInZone(Zone.SHADOW_CHARACTERS, guard);
+		// The [sauron] Uruk-hai was the first played here this turn.
+		assertEquals(4, scn.GetTwilightCost(party));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void OnceTheFellowshipHasMovedOnFromDeepOfHelmTheFirstUrukHaiCostsItsPrintedNumber() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetCandidatesScenario();
+
+		var party = scn.GetShadowCard("party");
+
+		scn.StartGame();
+		scn.SkipToSite(5);
+		scn.SetShadowHand(party);
+
+		// The turn begins with the fellowship at Deep of Helm: 4 - 3 while it is there.
+		assertEquals("Deep of Helm", scn.GetCurrentSite().getBlueprint().getTitle());
+		assertEquals(1, scn.GetTwilightCost(party));
+
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		// Site 6, Caves of Aglarond, with Deep of Helm behind the fellowship.
+		assertEquals(6, scn.GetCurrentSiteNumber());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		int twilight = scn.GetTwilight();
+		assertEquals(4, scn.GetTwilightCost(party));
+
+		scn.ShadowPlayCard(party);
+		// 4 to play, and no roaming: its site number is 5
+		assertEquals(twilight - 4, scn.GetTwilight());
+		assertInZone(Zone.SHADOW_CHARACTERS, party);
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }
