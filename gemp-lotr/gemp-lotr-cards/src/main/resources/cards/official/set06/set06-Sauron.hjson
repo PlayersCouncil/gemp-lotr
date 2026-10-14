@@ -370,11 +370,7 @@
 						type: PlayCardFromHand
 						select: choose(or(nazgul,culture(sauron)),minion)
 						discount: -4
-						memorize: playedMinion
-					}
-					{
-						type: exhaust
-						select: memory(playedMinion)
+						exhausted: true
 					}
 				]
 			}

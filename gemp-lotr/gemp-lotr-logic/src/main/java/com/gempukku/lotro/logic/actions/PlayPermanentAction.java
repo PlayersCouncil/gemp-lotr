@@ -35,6 +35,7 @@ public class PlayPermanentAction extends AbstractCostToEffectAction {
     private PhysicalCard _playedFromCard;
 
     private boolean _deckLookedThrough;
+    private boolean _comesIntoPlayExhausted;
 
     public PlayPermanentAction(PhysicalCard card, Zone zone, int twilightModifier, boolean ignoreRoamingPenalty) {
         _permanentPlayed = card;
@@ -62,6 +63,14 @@ public class PlayPermanentAction extends AbstractCostToEffectAction {
      */
     public void setDeckLookedThrough() {
         _deckLookedThrough = true;
+    }
+
+    /**
+     * Says that the card comes into play exhausted ("That minion comes into play exhausted", Gothmog 18_80): it is
+     * placed with the wounds that leave it 1 vitality, before its play is answered (PlayCardEffect; F-0500).
+     */
+    public void setComesIntoPlayExhausted() {
+        _comesIntoPlayExhausted = true;
     }
 
     @Override
@@ -135,6 +144,7 @@ public class PlayPermanentAction extends AbstractCostToEffectAction {
             if (!_cardPlayed) {
                 _cardPlayed = true;
                 _playCardEffect = new PlayCardEffect(_permanentPlayed.getOwner(), _fromZone, _permanentPlayed, _toZone, _playedFromCard, isPaidToil());
+                _playCardEffect.setComesIntoPlayExhausted(_comesIntoPlayExhausted);
                 return _playCardEffect;
             }
 

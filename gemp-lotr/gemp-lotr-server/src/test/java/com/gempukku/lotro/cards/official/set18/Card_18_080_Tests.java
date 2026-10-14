@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -282,7 +281,6 @@ public class Card_18_080_Tests
 	}
 
 	@Test
-	@Ignore("F-0500: the minion is exhausted only after its play has been answered, so it can still exert for Nertëa")
 	public void TheMinionPlayedIsExhaustedAsItComesIntoPlaySoItCannotExertForUlaireNertea() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetNerteaScenario();
 

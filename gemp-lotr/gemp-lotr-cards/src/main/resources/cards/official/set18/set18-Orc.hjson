@@ -163,11 +163,7 @@
 						type: playCardFromDiscard
 						select: choose(culture(orc),minion)
 						removedTwilight: 2
-						memorize: playedMinion
-					}
-					{
-						type: exhaust
-						select: memory(playedMinion)
+						exhausted: true
 					}
 				]
 			}

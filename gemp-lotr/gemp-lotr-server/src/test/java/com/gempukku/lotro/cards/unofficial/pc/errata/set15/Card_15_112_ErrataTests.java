@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-import static com.gempukku.lotro.framework.Assertions.assertInZone;
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_15_112_ErrataTests
@@ -35,6 +35,24 @@ public class Card_15_112_ErrataTests
 					put("beckoning", "12_83");      // The Beckoning Shadow: support-area condition; nothing below 5 burdens
 				}},
 				// Site 2 is Ettenmoors: plains, Shadow number 2.
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetNerteaScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("troll", "65_112");
+					put("pit", "11_117");           // Denizen of the Black Pit: cost 4, vitality 3, site 4
+					put("khazad", "11_115");        // Denizen of Khazad-dum: cost 3, vitality 2, site 4; the control
+					put("spear", "12_96");          // Orc Spear: [orc] possession, cost 1, bearer must be an [orc] minion
+					// Úlairë Nertëa, Sanctified for Cruelty: "Each time you play a minion, you may exert it to play a
+					// possession on it from your discard pile"
+					put("nertea", "103_77");
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
@@ -385,6 +403,46 @@ public class Card_15_112_ErrataTests
 		scn.ShadowRefreshDecision();
 		assertTrue(scn.ShadowActionAvailable(troll1));
 		assertEquals(20, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	// "It comes into play exhausted": exhausted as the Orc is placed, so it is exhausted already when its play is
+	// answered (CR 4.2 "playing a card"; F-0500).  Úlairë Nertëa offers to exert a minion just played: she offers
+	// it for an Orc played fresh from hand, and not for the one this ability plays.
+	@Test
+	public void TheOrcPlayedIsExhaustedAsItComesIntoPlaySoItCannotExertForUlaireNertea() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetNerteaScenario();
+
+		var troll = scn.GetShadowCard("troll");
+		var nertea = scn.GetShadowCard("nertea");
+		var pit = scn.GetShadowCard("pit");
+		var khazad = scn.GetShadowCard("khazad");
+		var spear = scn.GetShadowCard("spear");
+		scn.MoveCardsToDiscard(pit, spear);
+		scn.MoveCardsToHand(khazad);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troll, nertea);
+		scn.SetTwilight(20);
+		scn.FreepsPass();
+
+		// The control: the Denizen of Khazad-dum played from hand comes in fresh, and Nertëa offers to exert it.
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		scn.ShadowPlayCard(khazad);
+		assertInZone(Zone.SHADOW_CHARACTERS, khazad);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(nertea));
+		scn.ShadowDeclineOptionalTrigger();
+		assertInDiscard(spear);
+
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		scn.ShadowUseCardAction(troll);
+
+		// The Black Pit Denizen, the one [orc] Orc in the discard pile, is played and is exhausted by the time its
+		// play is answered: Nertëa has nothing to offer.
+		assertInZone(Zone.SHADOW_CHARACTERS, pit);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(nertea));
+		assertEquals(2, scn.GetWoundsOn(pit));
+		assertInDiscard(spear);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }
