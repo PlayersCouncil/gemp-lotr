@@ -736,6 +736,8 @@ var GempScenarioOverlay = Class.extend({
         $(".scenario-live, .scenario-notnow").removeClass("scenario-live scenario-notnow");
         if (this.step != null && this.step.seat == "human")
             this.clearStep();
+        if (this.author != null)
+            this.author.answeredHere();
     },
 
     /* ---------------------------------------------------------------- info */
@@ -812,6 +814,13 @@ var GempScenarioOverlay = Class.extend({
         replaceIn($("#chatBox"));
         replaceIn($(".ui-dialog-title"));
         replaceIn($("#pregame-info"));
+        //(a window the game opens later, "Hand of ..." say, gets its title as it opens)
+        if (!this.renamesWindows) {
+            this.renamesWindows = true;
+            $(document).bind("dialogopen", function (event) {
+                replaceIn($(event.target).closest(".ui-dialog").find(".ui-dialog-title"));
+            });
+        }
 
         var chatBox = this.game.chatBox;
         if (chatBox != null && !chatBox.scenarioRenamed) {

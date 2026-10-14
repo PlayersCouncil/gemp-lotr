@@ -252,6 +252,18 @@ var GempScenarioAuthor = Class.extend({
         var limit = $(window).width() - (this.game.reservedRight || 0) - 6;
         dialogs.each(function () {
             var rect = this.getBoundingClientRect();
+            //(one wider than the room beside the panel, as the game makes a window of cards, is made to fit it: its
+            // buttons are at its right-hand end)
+            var content = $(this).children(".ui-dialog-content");
+            if (rect.width > limit - 6 && content.length > 0) {
+                try {
+                    content.dialog("option", "width", Math.max(300, limit - 12));
+                    content.trigger("dialogresize");
+                } catch (e) {
+                    // (not one of jQuery UI's)
+                }
+                rect = this.getBoundingClientRect();
+            }
             if (rect.width > 0 && rect.right > limit)
                 $(this).css("left", Math.max(0, $(this).offset().left - (rect.right - limit)));
         });
@@ -362,6 +374,22 @@ var GempScenarioAuthor = Class.extend({
         }, 250);
     },
 
+    /**
+     * The author has answered a decision on the game's screen.  What it led to can be the opponent being asked, or the
+     * script being written, with no game event to say so (an opponent's decision left for the author shows nothing on
+     * the author's screen): the state is looked at once the answer has had time to arrive, and again a little later.
+     */
+    answeredHere: function () {
+        var that = this;
+        clearTimeout(this.answeredTimer);
+        this.answeredTimer = setTimeout(function () {
+            that.gameMoved();
+            that.answeredTimer = setTimeout(function () {
+                that.gameMoved();
+            }, 1200);
+        }, 500);
+    },
+
     edit: function (patch, goTo, done, failed) {
         var data = {patch: JSON.stringify(patch)};
         if (goTo != null)
@@ -428,6 +456,18 @@ var GempScenarioAuthor = Class.extend({
         }
         this.draft = state.draft;
         this.draft.steps = this.draft.steps || [];
+        //The opponent's decision is about to be answered (by the script, or by itself), or about to be left for the
+        // author; either way something happens with no game event to say so: it is looked at again shortly
+        var settling = state.waiting != null && state.waiting.opponent != null && !state.waiting.opponent.held;
+        clearTimeout(this.settlingTimer);
+        this.settlingCount = settling ? (same ? (this.settlingCount || 0) + 1 : 0) : 0;
+        if (settling && this.settlingCount < 10) {
+            var that = this;
+            this.settlingTimer = setTimeout(function () {
+                if (that.requests == 0)
+                    that.refresh();
+            }, 700);
+        }
         if (same)
             return;
         var steps = this.draft.steps;

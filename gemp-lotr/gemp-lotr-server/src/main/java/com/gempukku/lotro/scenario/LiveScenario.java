@@ -93,6 +93,17 @@ public class LiveScenario implements ScenarioSession.Listener {
 
         /** A decision, of either seat's, has been answered.  Called inside the game's lock. */
         void answered(Ruling ruling, String answer);
+
+        /**
+         * Whether a step of the person's is being written as it is played, so that it restricts nothing (see
+         * ScenarioSession.WritingInto).
+         */
+        default boolean writesInto(Step step) {
+            return false;
+        }
+
+        /** The person has taken one of the choices a pause ends in. */
+        default void chose(String choice) { }
     }
 
     private final ScenarioDefinition _def;
@@ -216,6 +227,7 @@ public class LiveScenario implements ScenarioSession.Listener {
      */
     public void SetAuthor(Author author) {
         _author = author;
+        _session.WritingInto(author::writesInto);
     }
 
     /**
@@ -542,7 +554,10 @@ public class LiveScenario implements ScenarioSession.Listener {
             return;
         }
         //(the session tells this about the ruling that follows, and that puts the next step on the screen)
-        if (_session.Read(_human, stepNumber, choice) && _session.Director().end() != null)
+        boolean read = _session.Read(_human, stepNumber, choice);
+        if (read && choice != null && _author != null)
+            _author.chose(choice);
+        if (read && _session.Director().end() != null)
             clearStep();
     }
 

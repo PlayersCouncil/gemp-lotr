@@ -534,6 +534,129 @@ public class ScenarioAuthoringTest {
     }
 
     @Test
+    public void AStepAddedForADecisionAndMadeToRepeatHasEveryTimeRoundWrittenIn() throws Exception {
+        Files.createDirectories(new File(canon, "tutorials").toPath());
+        Files.writeString(new File(canon, "tutorials/both.hjson").toPath(), ScenarioTesting.scenario("""
+                	opponent: {
+                		fallback: pass
+                	}
+                	setup: {
+                		freeps: {
+                			hand: aragorn, boromir
+                		}
+                	}
+                """).replace("id: test", "id: both"), StandardCharsets.UTF_8);
+        authoring.open(player, "both", true);
+        Client client = new Client(game());
+        //Added for the decision, and given its "repeat until" before anything is done at it
+        authoring.stepHere(player);
+        String name = state().getJSONArray("uids").getString(0);
+        authoring.edit(player, "{\"steps\": [{\"op\": \"merge\", \"uid\": \"" + name + "\", \"set\": {\"until\": \"phase(shadow)\"}}]}", null);
+        client = new Client(game());
+        client.answer(playing(client, "Aragorn"));
+        client.answer(playing(client, "Boromir"));
+        client.answer("");
+        JSONObject step = steps(state()).getJSONObject(0);
+        assertEquals("The first time round is written in as well", "play(aragorn), play(boromir), pass", step.getString("answer"));
+        assertEquals("play(aragorn), play(boromir), pass", step.getString("allow"));
+        assertEquals(1, steps(state()).size());
+    }
+
+    @Test
+    public void ARepeatingStepBeingWrittenHoldsItsAuthorToNothing() throws Exception {
+        Files.createDirectories(new File(canon, "tutorials").toPath());
+        Files.writeString(new File(canon, "tutorials/both.hjson").toPath(), ScenarioTesting.scenario("""
+                	opponent: {
+                		fallback: pass
+                	}
+                	setup: {
+                		freeps: {
+                			hand: aragorn, boromir
+                		}
+                	}
+                	steps: [
+                		{
+                			when: freeps, action, phase(fellowship), turn(1)
+                			until: phase(shadow)
+                			allow: play(aragorn)
+                		}
+                	]
+                """).replace("id: test", "id: both"), StandardCharsets.UTF_8);
+        authoring.open(player, "both", true);
+        Client client = new Client(game());
+        client.answer(playing(client, "Aragorn"));
+        //What it allows so far (Aragorn, who has been played) is not all the author may do: it is being written
+        JSONObject state = state();
+        assertTrue(String.valueOf(state.get("problems")), state.getJSONArray("problems") == null || state.getJSONArray("problems").isEmpty());
+        client.answer(playing(client, "Boromir"));
+        client.answer("");
+        state = state();
+        assertTrue(String.valueOf(state.get("problems")), state.getJSONArray("problems") == null || state.getJSONArray("problems").isEmpty());
+        assertEquals("play(aragorn), play(boromir), pass", steps(state).getJSONObject(0).getString("answer"));
+
+        //Not writing down what is done, it holds the author to what it says, as it would a player
+        String name = state.getJSONArray("uids").getString(0);
+        authoring.edit(player, "{\"steps\": [{\"op\": \"merge\", \"uid\": \"" + name + "\", \"set\": {\"allow\": \"play(aragorn)\"}, \"unset\": [\"answer\"]}]}", null);
+        authoring.settings(player, false, null, null);
+        authoring.goTo(player, 1);
+        client = new Client(game());
+        client.answer(playing(client, "Aragorn"));
+        assertNotEquals(0, state().getJSONArray("problems").size());
+    }
+
+    @Test
+    public void TheWayTheAuthorWentAtAForkIsTheWayAFreshGameGoes() throws Exception {
+        Files.createDirectories(new File(canon, "tutorials").toPath());
+        Files.writeString(new File(canon, "tutorials/fork.hjson").toPath(), ScenarioTesting.scenario("""
+                	opponent: {
+                		fallback: pass
+                	}
+                	setup: {
+                		freeps: {
+                			hand: aragorn
+                		}
+                	}
+                	steps: [
+                		{
+                			pause: true
+                			when: freeps, action, phase(fellowship), turn(1)
+                			messages: [
+                				{
+                					text: Which way?
+                					choices: {
+                						left: Left
+                						right: Right
+                					}
+                				}
+                			]
+                		}
+                		{
+                			if: left
+                			when: freeps, action, phase(fellowship), turn(1)
+                			allow: pass
+                		}
+                	]
+                """).replace("id: test", "id: fork"), StandardCharsets.UTF_8);
+        authoring.open(player, "fork", true);
+        Client client = new Client(game());
+        assertTrue(state().getJSONArray("way").isEmpty());
+        game().scenarioAcknowledged(player, 1, "right");
+        for (int i = 0; i < 100 && client.decision == null; i++) {
+            Thread.sleep(50);
+            client.poll();
+        }
+        assertEquals(List.of("right"), state().getJSONArray("way").toJavaList(String.class));
+        //A step written for the decision now, and the fresh game that follows from it, are on the way taken
+        JSONObject state = json(authoring.stepHere(player)).getJSONObject("state");
+        assertEquals(3, steps(state).size());
+        assertEquals(List.of("right"), state.getJSONObject("position").getJSONArray("chosen").toJavaList(String.class));
+        authoring.goTo(player, 3);
+        state = state();
+        assertEquals(List.of("right"), state.getJSONObject("position").getJSONArray("chosen").toJavaList(String.class));
+        assertEquals(3, state.getJSONObject("position").getIntValue("step"));
+    }
+
+    @Test
     public void ARepeatingStepWithPassWhenIsNotGivenPassToAllow() throws Exception {
         Files.createDirectories(new File(canon, "tutorials").toPath());
         Files.writeString(new File(canon, "tutorials/both.hjson").toPath(), ScenarioTesting.scenario("""
