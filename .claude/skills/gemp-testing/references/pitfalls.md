@@ -1734,10 +1734,12 @@ what it is (`assertSame(freepsSite2, scn.GetSite(2))`, each player's site fetche
 (CR 4.2 "site": "You can't replace a site card with the same site card"; the game allows it): a new test that
 replaces a site reads the game as built, stays active, and names that question on the ledger's `Findings:`
 line (also where the twin is only among the sites offered and no test takes it: Traveled Leader 12_34), with Q-0238 where the wording is "(replacing opponent's site if necessary)" (Notes alone are not enough). The board for "(replacing
-opponent's site if necessary)" that a game reaches: the first player at site 3 on his third turn, the second
+opponent's site if necessary)" that a game reaches: the first player at site 3 (for a Fellowship action
+`SkipToSite(3)`, Card_02_026_Tests; for a Regroup one `SkipToSite(2)`, `FreepsPass()` and
+`SkipToPhase(Phase.REGROUP)`, Card_05_023_Tests), the second
 player's site 4 laid with `MoveCardToAdventurePath` (as where that player played his next site himself); the
 nearest miss is a second copy played when the player's own site already lies next, which on a numbered path
-plays nothing (Card_02_026_Tests; whether it may replace his own site on a Shadows-block path is Q-0238).
+plays nothing (Card_02_026_Tests, Card_05_023_Tests; whether it may replace his own site on a Shadows-block path is Q-0238).
 A numbered path's site laid by a move, by `FreepsPass()` or by `SkipToSite(n)`, is the SHADOW player's copy, on
 every move of either player and on the Fellowship and King paths alike (probed at the landing of dec-b5_100):
 `assertSame(scn.GetShadowSite("site5"), scn.GetCurrentSite())`, never `GetFreepsSite`, which then answers with the
