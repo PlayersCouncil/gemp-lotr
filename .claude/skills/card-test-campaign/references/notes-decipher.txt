@@ -28,6 +28,10 @@ a stub has no behavioural test to account for, and the erratum's file is still w
   copy its tests, change the ids, aliases and helpers to your card's, and change what the original's text makes
   different; then check each against YOUR stage-1 ledger, which was written blind and stays the judge of what is
   owed. A test copied over that your text does not support is dropped, not kept.
+  A "cost paid for nothing" test can turn round: where the erratum TAKES a card into hand that the original
+  PLAYS from the discard pile, the original's play is itself a cost (Q-0062) and its ability is not offered with
+  nothing there to play (68_12's WithNoElvenConditionInTheDiscardPileTheTokenIsRemovedForNothing became 18_12's
+  WithNoElvenConditionInTheDiscardPileTheRegroupAbilityIsNotOffered).
   Check each copied board against the original's own numbers as well as its words (burdens, resistance, vitality:
   59_31's fierce-round board corrupts or kills 9_31's Boromir, of 3 burdens and resistance 6), and where the
   erratum's test gives a keyword or a number by hand (fierce, a strength), take the printed helper `helpers.md` names
@@ -98,9 +102,10 @@ CARDS THAT SHARE A TEXT (Q-0220: H)
   a finding.
 
 DEFINITIONS ALREADY CORRECTED, WITH NO CARD TESTS YET
-- 13_75, 13_52, 4_18, 4_15 (engine pass 21, on Ketura's rulings F-0041, F-0058, F-0283): corrected, and shown only
+- 13_75, 13_52, 4_18, 4_15 (engine pass 21, on Ketura's rulings F-0041, F-0058, F-0283): corrected, and shown
   by three mechanics classes (YouMayOnAStandingTriggerIsAskedTests, EventThatPlaysFromADiscardPileNeedsBothCostsTests,
-  MinionThatAssignsItselfToAnAllyTests). Do not report them as findings again; `packet.py` prints the text a
+  MinionThatAssignsItselfToAnAllyTests); 13_75 is landed since (dec-b13_140), and the first class is trimmed to the
+  rule (engine pass 44). Do not report them as findings again; `packet.py` prints the text a
   definition had before a campaign commit changed it.
 - 5_7, 7_88, 1_365 (F-0347 to F-0349, at landing of the batch at-mech-triggers): the Q-0034 requirement is in.
 - Sites whose text Silinde 1_60 takes on ("has the game text of his owner's site 3"): a site's trigger written to
@@ -285,6 +290,14 @@ TO LOOK AT WHEN THE SET COMES UP (seen in passing by an earlier batch; not looke
   is read right after `scn.AddWoundsToChar(card, 1)`, with the choice of fellowship actions still the one sent
   before the wound, so it shows nothing of the limit. Put `scn.FreepsRefreshDecision();` between the two (pitfalls,
   "A board changed under a pending decision") and read the action absent after it.
+
+- Sets 13 and 18, an `optional` reinforce INSIDE an event's effect with no `requires` (from the batch dec-b17_109,
+  read in the definitions only, not run, not filed): Honoring His Kinfolk 13_6, Inside a Song 13_16, Out of All
+  Knowledge 13_54, Hope Renewed 13_70, Defenses Long Held 18_44 ("... and you may reinforce a [<culture>] token"). The engine
+  withholds an action, never a question inside one, so with no token of the culture in play each is expected to
+  ask a yes/no that does nothing: the shape of F-0379 and F-0505 (Morannon Plains 18_137). Lay that board (the
+  event played with no such token) and read the question not asked and the rest of the text carried out
+  (shapes.md, "A "you may" inside an event's or ability's text").
 
 ANSWERED BY KETURA ON 2026-10-11 (her fifth notes; `lookup.py <number>` has her words). Test to these, file none again.
 - A cost is judged payable IN FULL before it begins (F-0425: Morgul Regiment 7_197; a repeated cost wants every

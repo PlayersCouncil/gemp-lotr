@@ -279,6 +279,7 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 	 * @param target The phase the tester actually wants to be in
 	 */
     default void SkipToPhase(Phase target) {
+		VerifyGameBegun("SkipToPhase(" + target + ")");
 		Phase current = gameState().getCurrentPhase();
 		try {
 			for (int attempts = 1; attempts <= 20; attempts++) {
@@ -328,6 +329,7 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 	 * @param target The phase of player 2's turn that the tester wants to be in.
 	 */
 	default void SkipToPhaseInverted(Phase target) {
+		VerifyGameBegun("SkipToPhaseInverted(" + target + ")");
 		for(int attempts = 1; attempts <= 20; attempts++)
 		{
 			Phase current = gameState().getCurrentPhase();
@@ -351,7 +353,18 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 		}
 	}
 
+	/**
+	 * Every skipper plays turns that have begun.  Before the first turn (the bid, the starting fellowships and the
+	 * mulligans still to come, as a table is before {@code StartGame()}) a skip fails here, naming itself, rather
+	 * than further on with "halted in phase BETWEEN_TURNS" or a missing site.
+	 */
+	private void VerifyGameBegun(String skipper) {
+		Verify(gameState().getTurnNumber() > 0, skipper + " was called before the first turn began: call StartGame() "
+				+ "first (or, with the starting fellowships played by hand, answer them and the mulligans), then skip.");
+	}
+
 	default void SkipToSite(int siteNum) {
+		VerifyGameBegun("SkipToSite(" + siteNum + ")");
 		for(int i = GetCurrentSite().getSiteNumber(); i < siteNum; i = GetCurrentSite().getSiteNumber())
 		{
 			SkipCurrentSite();
@@ -359,6 +372,7 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 	}
 
 	default void SkipCurrentSite() {
+		VerifyGameBegun("SkipCurrentSite()");
 		SkipToPhase(Phase.REGROUP);
 		PhysicalCardImpl site = GetCurrentSite();
 		if(site.getSiteNumber() == 9)

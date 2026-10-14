@@ -68,7 +68,7 @@ public class Card_01_038_Tests
 	}
 
 	@Test
-	public void SpottingLegolasMakesTheFellowshipArcheryTotalPlusOne() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SpottingLegolasMakesTheFellowshipArcheryTotalPlusOneForTheArcheryPhase() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var shot = scn.GetFreepsCard("shot");
@@ -90,6 +90,14 @@ public class Card_01_038_Tests
 		assertEquals(2, scn.GetFreepsArcheryTotal());
 		assertInDiscard(shot);
 		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
+
+		// In force as the archery fire is placed (the one minion takes both wounds unasked), and gone with the
+		// phase: the assignment phase reads Legolas's 1 again.
+		assertEquals(0, scn.GetWoundsOn(troop));
+		scn.PassArcheryActions();
+		assertEquals(2, scn.GetWoundsOn(troop));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+		assertEquals(1, scn.GetFreepsArcheryTotal());
 	}
 
 	@Test

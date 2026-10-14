@@ -76,21 +76,28 @@ does.
 A `grep` of a `.hjson` file prints whatever lines match, and a line range of one (`sed -n`, a `Read` with an
 offset) whatever cards lie there, those of your other cards and their originals among them. One card's block is
 read with its packet (`--only-withheld`, in stage 2), never out of the file; and to look for a helper or a
-printed text in stage 1, use `packet.py --find <regex> --skip <your batch's ids>`
+printed text in stage 1 (a follower's Aid, a phrase), use `packet.py --find <regex> --skip <your batch's ids>`, never
+a grep of the `.hjson` files, not even one that prints only `gametext:` lines
 (printed fields and game text with ids, nothing of the implementation, your batch and its other versions left out) and
 `packet.py --defs <ids> --skip <your batch's ids>` for a chosen helper's definition (it also keeps shut a helper
 whose game text is a batch card's own with a word or two changed, or prints a whole sentence of one: choose another, or read it in stage 2; asked
 for more than about twenty ids it overruns the output limit, so send it to a file under your folder and `Read`
-that). You may read another card's finished test file of the same shape, so long as that card is neither one of
-your batch nor another version of one, and neither the file nor its ledger names one (grep it for your ids
-first: Dimrill Dale 1_350's Notes describe Great Chasm 2_118's definition): the Decipher original of an erratum, and the landed ERRATUM of an
-original, whose test file and ledger stay shut until stage 2 as your own files do (52_75 for 2_75). So does a
-`mechanics/` class built on one of your batch's cards (`CostOfAssigningTests` on Morgul Spawn 7_200), as the shapes
-and pitfalls that name a batch card do. Only those are shut: another card that shares a title with one of yours (a
-second Denethor) may be read as a helper like any other, and a landed card with the SAME text as yours is the
-quickest source of boards and helpers
-(`packet.py --find` on the first sentence of the game text: Uruk Veteran 4_201 is Uruk Trooper 4_199 word for
-word).
+that). You may read another card's finished test file of the same shape, and its ledger, so long as that card is
+neither one of your batch nor another version of one (the Decipher original of an erratum, and the landed ERRATUM
+of an original, whose test file and ledger stay shut until stage 2 as your own files do: 52_75 for 2_75) and the
+file does not name one. `packet.py --landed <your batch's ids>` lists the test files, `mechanics/` classes and
+ledgers that name one (by id, by test class, or by a name only it has, Crags of Emyn Muil), each open or shut, and
+prints nothing of what they say: run it before opening any. A test file or class that names a batch card only in a
+line of its scenario map (a helper laid, a site of a path: every Shadows-path file names 11_234) and never fetches
+it is open; one that names it anywhere else is shut (Dimrill Dale 1_350's Notes describe Great Chasm 2_118's
+definition; `CostOfAssigningTests` is built on Morgul Spawn 7_200), as the shapes and pitfalls that name a batch
+card are. A ledger is judged apart from its test file: one that names a batch card is shut, since no script can
+tell a board in its Notes from a description, and the test file beside it may still be open. Another card that
+shares a title with one of yours (a second Denethor) may be read as a helper like any other, and a landed card
+with the SAME text as yours, or a sentence of it, is the quickest source of boards and helpers (`packet.py --find`
+on the first sentence of the game text: Uruk Veteran 4_201 is Uruk Trooper 4_199 word for word): its test file and
+ledger are open whatever they name (Merry 17_107's ledger names Pippin 17_109, whose first sentence it prints; the
+twins rule of notes-decipher.txt), and only its definition is shut (`--defs` says so).
 
 **Stage 2, with everything.** Run `packet.py <id> --only-withheld`, which prints what the blind packet held back
 (the definition in full, sheet against definition, an erratum's original, the test file) and so ends stage 1 for

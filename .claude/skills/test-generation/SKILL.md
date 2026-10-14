@@ -396,7 +396,11 @@ candidate is not assigned to a skirmish, and so on a Skirmish special ability wh
 (Noble Leaders 7_112: `assignedToSkirmish(minion)` added to its choice survived without one). A Skirmish action's choice that is not limited to the skirmish ("your
 [sauron] minion", Morgul Vale 7_357) also wants one valid candidate IN the skirmish being resolved, or a choice
 narrowed to `not(inSkirmish)` passes. Where "your" names a pile, the other player's card in his own pile is an invalid candidate of a title the
-chooser's piles do not hold: a choice from a pile is read by blueprint (pitfalls, "A choice from a pile").
+chooser's piles do not hold: a choice from a pile is read by blueprint (pitfalls, "A choice from a pile"). That is
+owed where the definition word could name the other player's pile (a `player` field: `PlayCardFromDiscard`,
+`PutCardsFromDiscardIntoHand`); a word that reads only its performer's own pile (`PlayCardFromDrawDeck`,
+`PutCardsFromDeckIntoHand`, `ShuffleCardsFromDiscardIntoDrawDeck`: no `player` or deck field) owes no such board,
+since no definition of it can differ there (15_51, dec-b13_53).
 
 **A condition inside a modifier; "bearer" or "self" with a requirement.** Where the excluded thing is part of a
 condition inside a modifier ("in a skirmish involving an [isengard] minion"), the candidates are in skirmishes, not

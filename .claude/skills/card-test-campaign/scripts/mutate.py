@@ -528,7 +528,16 @@ def changed_definition(raw: str, card_id: str, pairs, nth=None, every=False) -> 
                     raise SystemExit("'%s' is not in the definition of %s %d time(s)%s." % (
                         old_text, card_id, nth or 1, " once the changes before it are made" if said else ""))
             after = changed[:at] + new_text + changed[at + len(old_text):]
-            said.append("'%s' becomes '%s'%s" % (old_text, new_text, " (occurrence %d)" % nth if (nth or 1) > 1 else ""))
+            times = changed.count(old_text)
+            if (nth or 1) > 1:
+                where = " (occurrence %d of %d)" % (nth, times)
+            elif times > 1:
+                # Said, so that a mistake meant for every place is not read as made there (11_61's filter phrase,
+                # also inside a select: choose(...)).
+                where = " (the first of %d occurrences; --every for all of them, --nth N for another)" % times
+            else:
+                where = ""
+            said.append("'%s' becomes '%s'%s" % (old_text, new_text, where))
         line = changed[:at].count("\n") if line is None else min(line, changed[:at].count("\n"))
         changed = after
     return changed, line, said

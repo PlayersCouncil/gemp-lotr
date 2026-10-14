@@ -738,8 +738,8 @@ ability is read or used, call `FreepsRefreshDecision()` ("A board changed under 
 3_17, Card_03_017_Tests).
 
 **`SkipToSite` plays whole turns, reconciling included.** A small draw deck is drawn into the players' hands on
-the way. Call `StartGame()` first: without it the skip fails with "Attempting to skip to phase REGROUP, halted in
-phase BETWEEN_TURNS", which does not name the missing call (a probe, dec-b11_259). `SkipToMovementDecision` and `SkipToOtherPlayersTurn` reconcile too: the Shadow player draws up to 8
+the way. Call `StartGame()` first: every skipper called before the first turn fails at once with "<the skipper> was
+called before the first turn began: call StartGame() first" (engine pass 44, RigFailureTests; dec-b11_259). `SkipToMovementDecision` and `SkipToOtherPlayersTurn` reconcile too: the Shadow player draws up to 8
 before the second move is asked about, so a test that turns on his hand at the second move empties his draw deck
 first. A test that needs cards in the draw deck afterwards puts them back with `MoveCardsToTopOfDeck`. A test
 that needs a hand of a known size afterwards sets it: `SetFreepsHand(cards...)` / `SetShadowHand(cards...)` make

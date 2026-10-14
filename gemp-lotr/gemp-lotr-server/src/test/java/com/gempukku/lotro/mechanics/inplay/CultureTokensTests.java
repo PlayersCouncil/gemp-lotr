@@ -41,7 +41,10 @@ import static org.junit.Assert.*;
  * A token is laid by the rig only on a card that a card of the game gives tokens to, and of the number it gives.
  * The tokens on a hindered card are TokensOnAHinderedCardTests; that a reinforcement with no cost is not offered
  * with no token to reinforce is the engine's rule for every such offer
- * (AnOfferThatCostsNothingAndWouldDoNothingIsNotMadeTests) and is read once here on the rules' own card.
+ * (AnOfferThatCostsNothingAndWouldDoNothingIsNotMadeTests) and is read once here on the rules' own card.  The
+ * rule withholds an action, never a question inside one: a "you may reinforce" that is an `optional` inside a
+ * required trigger or an event (Morannon Plains 18_137's) is not asked with no token in play only because its
+ * own definition requires one (F-0505; shapes.md, "A "you may" inside an event's or ability's text").
  */
 public class CultureTokensTests
 {

@@ -58,6 +58,11 @@ step where you can, and do not look at the same thing twice.
    Where you suspect a gap, name the wrong definition that would pass. If reading the test settles it (no
    candidate on the table tells the two apart), fix it without more ado. Only where you cannot tell by reading,
    prove it with that one mistake: `mutate.py <id> --replace "<old>" "<new>" --all --out <your folder name>-m`
+   (`--all` there only lists every test that noticed; the mistake is made where the old text FIRST stands in the
+   card's block: `--every` makes it in every place, as one mistake, and `--nth N` in the Nth; a filter phrase in
+   both a `filter:` and a `select: choose(...)` wants `--every`, 11_61. Where the board that would tell is one the
+   card's tests lack, copy the test file under your folder, add the board there, and run the mistake against the
+   copy with `--test /tmp/<your folder name>/<the file>.java`, 15_164; the card's own file is changed only as a fix)
    (at most two runs a card that try a mistake to settle a doubt: each is a step, and steps are what cost.
    Runs side by side under separate `--out` names that try one definition's several guards of one kind each alone
    (three `until: regroup` lines, by `--nth`) count as one.
