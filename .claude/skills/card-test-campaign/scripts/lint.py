@@ -1349,8 +1349,8 @@ def lint_file(path: Path):
                 % (message, card_id))
 
     # A title that cards of more than one culture or type carry (Gollum is [gollum] and [wraith]; Saruman a minion
-    # and a follower): with one kind of it on every table, a culture or type written beside the name in the
-    # definition passes every test (60_20).  Like second-copy, this reads which cards the file names at all, not
+    # and a follower): with one type or one culture of it on every table, a type or culture written beside the name
+    # in the definition passes every test (60_20).  Like second-copy, this reads which cards the file names at all, not
     # which of them a test puts in play.  A card that names its own title is left alone ("limit 1 per bearer",
     # "another Elf"): the other kind is then its own original or erratum.
     if card is not None:
@@ -1361,15 +1361,26 @@ def lint_file(path: Path):
             if not kinds:
                 continue
             have = sorted(k for k, ids in kinds.items() if in_file & set(ids))
-            if len(have) == 1:
+            if not have:
+                continue
+            # Owed (Q-0306): each TYPE the title has, and a second CULTURE where it has more than one; not every
+            # culture (Saruman is a minion of four).
+            types_missing = sorted({t for c, t in kinds} - {t for c, t in have})
+            one_culture = len({c for c, t in kinds}) > 1 and len({c for c, t in have}) == 1
+            if types_missing or one_culture:
                 def words(kind):
                     return ("[%s] %s" % kind) if kind[0] else kind[1]
-                others = ", ".join("%s (%s)" % (words(k), " ".join(sorted(ids, key=g.id_sort_key)[:3]) + (" ..." if len(ids) > 3 else ""))
-                                   for k, ids in sorted(kinds.items()) if k != have[0])
-                add("warning", "title-kinds", None, "the definition names %s, and every card of that title in this file is "
-                    "%s; there is also %s: where the text names the title with no culture or type word, each kind "
-                    "is a valid candidate in a test of its own (the Standard's F), or a culture or type written beside "
-                    "the name passes every test" % (g.plain_text(g.card_index()[kinds[have[0]][0]].field("title", title)), words(have[0]), others))
+                owed = [k for k in sorted(kinds) if k not in have and (k[1] in types_missing or (one_culture and k[0] != have[0][0]))]
+                others = ", ".join("%s (%s)" % (words(k), " ".join(sorted(kinds[k], key=g.id_sort_key)[:3]) + (" ..." if len(kinds[k]) > 3 else ""))
+                                   for k in owed)
+                lacks = " and ".join(x for x in ("no %s" % "/".join(types_missing) if types_missing else "",
+                                                 "one culture" if one_culture else "") if x)
+                add("warning", "title-kinds", None, "the definition names %s, and the cards of that title in this file are "
+                    "%s: %s; there is also %s: where the text names the title with no culture or type word, each type "
+                    "of the title and a second culture are valid candidates, each in a test of its own (the Standard's F, "
+                    "Q-0306), or a culture or type written beside the name passes every test"
+                    % (g.plain_text(g.card_index()[kinds[have[0]][0]].field("title", title)), ", ".join(words(k) for k in have),
+                       lacks, others))
 
     if card is not None:
         import cardinfo
