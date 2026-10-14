@@ -78,6 +78,8 @@ public class ScenarioSession implements DecisionObserver, DecisionArbiter {
     /** By player: the ruling on the decision that player is being asked for. */
     private final Map<String, Ruling> _rulings = new LinkedHashMap<>();
     private Listener _listener;
+    /** Authoring: the steps of the person's that are being written as they are played, which restrict nothing. */
+    private java.util.function.Predicate<Step> _writing;
 
     /**
      * @param table A table that has not been started yet.
@@ -89,6 +91,18 @@ public class ScenarioSession implements DecisionObserver, DecisionArbiter {
         table.Arbitrate(this);
         table.AskToPass(_director::asksToPass);
         table.OnNote(this::follow);
+    }
+
+    /**
+     * Authoring: a step that is being written as it is played (one that repeats, with what is done each time round
+     * written into it) shows its messages and restricts nothing: what its author does there is what it will allow.
+     */
+    public void WritingInto(java.util.function.Predicate<Step> writing) {
+        _writing = writing;
+    }
+
+    private boolean writing(Step step, String player) {
+        return _writing != null && step != null && player.equals(_table.HumanPlayer()) && _writing.test(step);
     }
 
     /**
@@ -105,7 +119,7 @@ public class ScenarioSession implements DecisionObserver, DecisionArbiter {
             String problem = null;
             String noAnswer = null;
             try {
-                shown = _director.present(step, ruling.player(), ruling.decision());
+                shown = writing(step, ruling.player()) ? _director.presentUnrestricted(step) : _director.present(step, ruling.player(), ruling.decision());
                 try {
                     answer = _director.scriptedAnswer(step, ruling.decision());
                 } catch (ScenarioScriptException exp) {
@@ -304,7 +318,7 @@ public class ScenarioSession implements DecisionObserver, DecisionArbiter {
                 step = _director.match(player, decision);
             if (step != null) {
                 try {
-                    shown = _director.present(step, player, decision);
+                    shown = writing(step, player) ? _director.presentUnrestricted(step) : _director.present(step, player, decision);
                 } catch (ScenarioScriptException exp) {
                     problem = exp.getMessage();
                     shown = _director.presentUnrestricted(step);

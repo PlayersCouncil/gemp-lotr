@@ -153,7 +153,7 @@ public class ScenarioAuthoring {
         /** Whether the opponent's decisions that the script does not answer are left for the author. */
         volatile boolean askOpponent = true;
         /** The choices to take at the script's forks when it plays itself: the names in here, where a fork offers one. */
-        final Set<String> way = new LinkedHashSet<>();
+        final Set<String> way = new java.util.concurrent.CopyOnWriteArraySet<>();
         /** The last thing worth telling the author that nothing on the game screen says. */
         volatile String notice;
         /** The notice that says where the script stopped when it played itself, while that is still the notice. */
@@ -285,6 +285,37 @@ public class ScenarioAuthoring {
             return ScenarioParser.parseStep(def, json, step.number, step.parent, step.sub);
         }
 
+        /**
+         * A step of the player's that repeats has what is done at it written in each time round (see repeated()), so
+         * while that is being done it holds the author to nothing: what it allows so far is only what has been done
+         * so far.
+         */
+        @Override
+        public boolean writesInto(Step step) {
+            return session.recording && step.until != null && step.parent == null && !step.pause && !step.block;
+        }
+
+        /**
+         * The author has taken one of a pause's choices in the game: that is the way the script goes there when it
+         * plays itself, as it does for every fresh game of the draft from here on, until the author says otherwise.
+         */
+        @Override
+        public void chose(String choice) {
+            for (Step step : def.steps) {
+                List<Step> all = new ArrayList<>();
+                all.add(step);
+                all.addAll(step.children);
+                for (Step one : all) {
+                    Set<String> names = ScenarioSession.ChoicesOf(one).keySet();
+                    if (names.contains(choice) && !session.way.contains(choice)) {
+                        session.way.removeAll(names);
+                        session.way.add(choice);
+                        session.revision.incrementAndGet();
+                    }
+                }
+            }
+        }
+
         @Override
         public boolean holds(Ruling ruling) {
             if (!author || !session.askOpponent)
@@ -325,6 +356,10 @@ public class ScenarioAuthoring {
                             json.get("allow").asObject().set("answers", term);
                         else
                             json.set(human ? "allow" : "answer", term);
+                        //(a step of the player's that repeats has what is done each time round as its answer, from
+                        // the first time on: see repeated())
+                        if (human && step.until != null && step.parent == null && !step.pause)
+                            json.set("answer", term);
                         copyInto(step, reparsed(step, json));
                         changed = true;
                     } else if (human && session.recording && step.until != null && step.parent == null && !step.pause
