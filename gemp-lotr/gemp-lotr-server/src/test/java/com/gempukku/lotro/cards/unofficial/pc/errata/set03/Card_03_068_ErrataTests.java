@@ -405,4 +405,47 @@ public class Card_03_068_ErrataTests
 		assertTrue(scn.IsCharAssignedAgainst(aragorn, saruman));
 		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 	}
+
+	@Test
+	public void WithHisFirstSentenceMadeNotToApplyHisResponseAndHisManeuverAbilityStillWork() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var legolas = scn.GetFreepsCard("legolas");
+		var gimli = scn.GetFreepsCard("gimli");
+		var quick = scn.GetFreepsCard("quick");
+		var saruman = scn.GetShadowCard("saruman");
+		var sentry = scn.GetShadowCard("sentry");
+		var staff = scn.GetShadowCard("staff");
+		scn.MoveCompanionsToTable(legolas, gimli);
+		scn.MoveCardsToHand(quick);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(saruman, sentry);
+		scn.AttachCardsTo(saruman, staff);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertFalse(scn.FreepsCanAssign(saruman));
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(staff);
+		assertTrue(scn.FreepsCanAssign(saruman));
+
+		// Only the first sentence is switched off.  The Response is still offered for a wound to the Uruk-hai...
+		scn.FreepsPlayCard(quick);
+		scn.FreepsChooseCard(sentry);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(saruman));
+		assertEquals(0, scn.GetWoundsOn(saruman));
+		scn.ShadowChooseOptionalTrigger(saruman);
+		assertEquals(1, scn.GetWoundsOn(saruman));
+		assertEquals(0, scn.GetWoundsOn(sentry));
+		assertInZone(Zone.SHADOW_CHARACTERS, saruman);
+
+		// ...and the maneuver ability still makes it fierce.
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+		assertFalse(scn.HasKeyword(sentry, Keyword.FIERCE));
+		assertTrue(scn.ShadowActionAvailable(saruman));
+		scn.ShadowUseCardAction(saruman);
+		assertEquals(2, scn.GetWoundsOn(saruman));
+		assertTrue(scn.HasKeyword(sentry, Keyword.FIERCE));
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+	}
 }

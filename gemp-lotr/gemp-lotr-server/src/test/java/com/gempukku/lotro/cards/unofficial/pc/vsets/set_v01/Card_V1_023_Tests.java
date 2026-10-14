@@ -425,9 +425,14 @@ public class Card_V1_023_Tests
 		assertEquals(3, scn.GetStackedCards(gone).size());
 		assertInDiscard(swordarm, swordarm2, defiance, defiance2);
 
-		// Aragorn's 11 overwhelms the Savage's 5.  Merry's skirmish is a new skirmish phase.
+		// The bonus names no duration: it lasts to the end of this skirmish phase.  It is still there at the
+		// phase's last decision, and Aragorn's 11 overwhelms the Savage's 5.
 		scn.ShadowPass();
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertEquals(11, scn.GetStrength(aragorn));
 		scn.FreepsPass();
+		assertInDiscard(savage1);
+		// Merry's skirmish is a new skirmish phase, and Aragorn is back to 8.
 		scn.FreepsResolveSkirmish(merry);
 		assertEquals(3, scn.GetStrength(merry));
 		assertEquals(8, scn.GetStrength(aragorn));

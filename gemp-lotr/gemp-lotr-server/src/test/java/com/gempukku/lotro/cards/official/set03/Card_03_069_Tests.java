@@ -484,4 +484,50 @@ public class Card_03_069_Tests
 		assertTrue(scn.IsCharAssignedAgainst(aragorn, saruman));
 		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 	}
+
+	@Test
+	public void WithHisFirstSentenceMadeNotToApplyHisAssignmentAbilityStillAssignsAnIsengardMinion() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var saruman = scn.GetShadowCard("saruman");
+		var savage = scn.GetShadowCard("savage");
+		var staff = scn.GetShadowCard("staff");
+		scn.MoveCompanionsToTable(sam, aragorn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(saruman, savage);
+		scn.AttachCardsTo(saruman, staff);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertFalse(scn.FreepsCanAssign(saruman));
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(staff);
+		assertTrue(scn.FreepsCanAssign(saruman));
+
+		// Only the first sentence is switched off: his Assignment ability still works, and he may now be assigned
+		// by it like any other [isengard] minion.
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPass();
+		assertTrue(scn.FreepsCanAssign(saruman));
+		assertTrue(scn.ShadowActionAvailable(saruman));
+		assertEquals(0, scn.GetWoundsOn(saruman));
+		scn.ShadowUseCardAction(saruman);
+		assertEquals(1, scn.GetWoundsOn(saruman));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(sam, aragorn));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(frodo));
+		scn.ShadowChooseCard(aragorn);
+		assertTrue(scn.ShadowHasCardChoiceAvailable(savage, saruman));
+		scn.ShadowChooseCard(savage);
+
+		// The companion may still exert to prevent it; declined, the assignment is made.
+		assertTrue(scn.FreepsDecisionAvailable("Would you like to exert"));
+		scn.FreepsChooseNo();
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, savage));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertFalse(scn.IsCharAssigned(saruman));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
 }

@@ -491,4 +491,48 @@ public class Card_V2_029_Tests
 		assertTrue(scn.IsCharAssignedAgainst(aragorn, saruman));
 		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 	}
+
+	@Test
+	public void WithHisFirstSentenceMadeNotToApplyHisResponseAndTheLossOfDamageBonusesStillWork() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gimli = scn.GetFreepsCard("gimli");
+		var legolas = scn.GetFreepsCard("legolas");
+		var saruman = scn.GetShadowCard("saruman");
+		var worker = scn.GetShadowCard("worker");
+		var staff = scn.GetShadowCard("staff");
+		scn.MoveCompanionsToTable(gimli, legolas);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(saruman, worker);
+		scn.AttachCardsTo(saruman, staff);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertFalse(scn.FreepsCanAssign(saruman));
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(staff);
+		assertTrue(scn.FreepsCanAssign(saruman));
+
+		// Only the first sentence is switched off.  Legolas is the fellowship's one archer, and the Shadow player
+		// places the arrow on the [isengard] Orc: the Response is still offered and prevents it.
+		scn.SkipToArcheryWounds();
+		scn.ShadowChooseCard(worker);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(saruman));
+		assertEquals(0, scn.GetWoundsOn(saruman));
+		scn.ShadowChooseOptionalTrigger(saruman);
+		assertEquals(1, scn.GetWoundsOn(saruman));
+		assertEquals(0, scn.GetWoundsOn(worker));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+
+		// And Gimli, skirmishing the [isengard] Orc while the switch still holds, loses his damage bonus.
+		scn.PassAssignmentActions();
+		assertEquals(1, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
+		scn.FreepsAssignToMinions(gimli, worker);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(gimli);
+		assertTrue(scn.IsCharSkirmishingAgainst(gimli, worker));
+		assertTrue(scn.FreepsCanAssign(saruman));
+		assertEquals(0, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
 }

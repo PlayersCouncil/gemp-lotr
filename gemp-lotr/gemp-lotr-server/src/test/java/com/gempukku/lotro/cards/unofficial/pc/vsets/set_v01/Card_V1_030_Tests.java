@@ -24,6 +24,14 @@ public class Card_V1_030_Tests
 					// damage +1).  "Maneuver: Make the first sentence of Saruman's game text not apply until the regroup
 					// phase."
 					put("staff", "4_174");
+					// The White Council: "While you can spot Gandalf and 2 [elven] allies, the first sentence of
+					// Saruman's game text does not apply."  A standing switch, so it still holds in the regroup phase,
+					// where the Staff's has ended.
+					put("council", "101_18");
+					// [elven] allies, vitality 3 each; Golradir's ability is a skirmish action and Celeborn's a
+					// fellowship action, neither used.
+					put("golradir", "3_20");
+					put("celeborn", "1_34");
 					put("snows", "1_138");      // Saruman's Snows: weather condition that plays on a site; stops skirmish events and skirmish abilities at that site
 					put("frost", "1_135");      // Saruman's Frost: weather condition that plays on a site; Hobbits at that site are strength -2
 					put("ambition", "1_133");   // Saruman's Ambition: an [isengard] condition that is not weather; cheapens [isengard] events
@@ -516,5 +524,54 @@ public class Card_V1_030_Tests
 		assertTrue(scn.IsCharAssignedAgainst(aragorn, troop));
 		assertTrue(scn.IsCharAssignedAgainst(aragorn, saruman));
 		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
+	}
+
+	@Test
+	public void WithHisFirstSentenceMadeNotToApplyByTheWhiteCouncilTheWeatherBonusAndHisResponseStillWork() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var council = scn.GetFreepsCard("council");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var golradir = scn.GetFreepsCard("golradir");
+		var celeborn = scn.GetFreepsCard("celeborn");
+		var frodo = scn.GetRingBearer();
+		var saruman = scn.GetShadowCard("saruman");
+		var snows = scn.GetShadowCard("snows");
+		scn.MoveCardsToSupportArea(council);
+		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveAlliesToTable(golradir, celeborn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(saruman);
+		scn.FreepsPass();
+
+		// No weather is in play, and Gandalf and two [elven] allies hold the switch: Saruman may be assigned.
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertTrue(scn.FreepsCanAssign(saruman));
+		assertTrue(scn.ShadowCanAssign(saruman));
+		assertEquals(6, scn.GetStrength(saruman));
+
+		// Only the first sentence is switched off: at a site bearing a weather he is strength +2...
+		scn.AttachCardsTo(scn.GetCurrentSite(), snows);
+		assertEquals(8, scn.GetStrength(saruman));
+
+		// ...and his Response is still offered as the fellowship leaves it.
+		scn.SkipToMovementDecision();
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertInZone(Zone.SHADOW_CHARACTERS, saruman);
+		assertTrue(scn.FreepsCanAssign(saruman));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+		scn.FreepsChooseToMove();
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.ShadowAcceptOptionalTrigger();
+
+		assertInZone(Zone.DISCARD, saruman);
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+		assertEquals(0, scn.GetWoundsOn(golradir));
+		assertEquals(0, scn.GetWoundsOn(celeborn));
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }
