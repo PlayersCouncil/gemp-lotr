@@ -2066,3 +2066,9 @@ a potential spring cleaning update in the future that fixes these sorts of thing
 "A". F-0492, Horn of Boromir 3_42 not offered with no ally to spot: "Approved." F-0491: under "How card text is
 read". Q-0301, "choose to move again this turn" forces one move, not every move left that turn (Osgiliath
 Channel 8_120; the same words on No Retreat 4_30, Forced March 13_108, Hornburg Wall 5_118): "A, I think." *[2026-10-13]*
+
+**Card by card (2026-10-14).** F-0503, Ranger's Cloak 15_68 borne by an ally (the forest half now a companion
+bearer's alone): "if the ally is at his home site and the fellowship is at the *same* site, he should get the bonus
+if the site is a forest. Assuming blocks are correct. However this is overwhelmingly unlikely to occur given that this
+is an Expanded-era card and I don't think any format can permit such an interaction except Anything Goes, so it's not
+worth tuning up; leave it as is." *[2026-10-14]*
