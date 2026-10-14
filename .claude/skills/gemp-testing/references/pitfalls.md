@@ -890,7 +890,8 @@ trigger on "the fellowship" a board that tells the mover from the site's owner: 
 Peoples player of the turn, not the site's owner: the second player at the first player's Trollshaw Forest 11_260
 is the one offered the draw (Card_11_260_Tests).
 `GetSite(n)` is null for a site not yet laid (site 6 on turn 1), and `HasKeyword(null, ...)` then throws: read a
-site's terrain off the path only once the fellowship has been there.
+site's terrain off the path only once the fellowship has been there. Which player a site's optional trigger is
+offered to: "A meta-site's optional trigger is offered to every player", its last paragraph.
 
 **At the move limit, the regroup phase ends the turn.** When the fellowship has moved as often as the move limit
 allows, both players passing in the regroup phase ends the turn at once and the other player's "Play Fellowship

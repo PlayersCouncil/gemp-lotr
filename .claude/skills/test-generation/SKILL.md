@@ -261,7 +261,9 @@ hand", a card of another culture in the hand: beside [moria] cards alone, `choos
 a bearer by race ("Bearer must be a Hobbit"), the Ring-bearer and a Hobbit of another culture (Pippin, Trollslayer
 103_31): beside [shire] Hobbits who are not the Ring-bearer, `hobbit,culture(shire)` passes, 3_108; for "bearer" in a
 Modifier or Restriction on a card that a companion and an ally can both come to bear (a transfer to "a character"),
-one bearer of each: with companions alone bearing it, `and(companion,hasAttached(self))` passes, 1_207.
+one bearer of each: with companions alone bearing it, `and(companion,hasAttached(self))` passes, 1_207; for "a
+companion of each culture", a companion of each culture a printed companion has, the Hobbit sets aside (Q-0303;
+Notes name a culture only they have): with three laid, a line written for the wrong culture passes, 13_189.
 A kind no printed card can make a candidate drops out of the spread, and Notes say why: for "Bearer must be a Dwarf"
 there is no opponent's Dwarf, as no Shadow card is a Dwarf (9_8). (For "Exert a [gondor] Man" the ally IS owed:
 Gondorian Merchant 7_97 bearing Narsil 9_34 can exert, 5_39; helpers.md.)
@@ -277,7 +279,9 @@ type widened to `character` passes (Alatar 13_28). For "an X skirmishing a Y" th
 to another Y whose skirmish has not begun, not an X fighting something else. That is the candidate for the word
 "skirmishing"; the word "a Y" wants its own, an X fighting a character who is no Y, read DURING that skirmish (fight
 it first), or `inSkirmish` alone passes. Where Y is one character (bearer, Frodo), the first is an X assigned to him
-and read before his skirmish begins (Mithril-coat 2_105); where the text acts only once his skirmish is under way (a trigger at its start), it is an X assigned to another character whose skirmish comes later, read at the start of his, since one that already fought elsewhere passes `assignedToSkirmish(character)` (Brego 4_263). Where his text can be used in a skirmish not his own (a skirmish special ability), the second is an X fighting another companion, read during that skirmish, or `inSkirmish` passes for `inSkirmishAgainst(self)` (Glorfindel 9_16).
+and read before his skirmish begins (Mithril-coat 2_105); where the text acts only once his skirmish is under way (a trigger at its start), it is an X assigned to another character whose skirmish comes later, read at the start of his, since one that already fought elsewhere passes `assignedToSkirmish(character)` (Brego 4_263). Where his text can be used in a skirmish not his own (a skirmish special ability), the second is an X fighting another companion, read during that skirmish, or `inSkirmish` passes for `inSkirmishAgainst(self)` (Glorfindel 9_16). An exception
+named by a phase alone ("cannot take wounds except during a skirmish") owes the card in NO skirmish while another is
+fought, or `not(inSkirmish)` passes for `not(phase(skirmish))` (11_94; helpers.md, Long I Fell 4_97).
 
 **"The Ring-bearer", and a Frodo who is not the Ring-bearer.** For "the Ring-bearer" it is a Ring-bound companion
 who is not the Ring-bearer (Sam), not just any companion; a Ring-bearer who is not Frodo is no longer asked for on
@@ -441,7 +445,8 @@ Which checks a clause lists follows from its words, and the analyst is expected 
   "the Ring-bearer" in a bare count of burdens ("for each burden on the Ring-bearer"): burdens lie on nobody
   else, so there is no other candidate to lay (Q-0186). A NAMED bearer, "on Frodo", is a phrase like any other (Q-0103). "Bearer" in a cost ("exert bearer") as well: the
   cost is paid once by a bearer of another kind (an ally beside the Ring-bearer), or `choose(companion,hasAttached(self))`
-  passes for `bearer` (Sting 18_113)
+  passes for `bearer` (Sting 18_113). Where the cost repeats ("exert bearer twice") and no such bearer has the
+  vitality, vitality given him by hand is fine, as printed cards give it (Gondorian Merchant 7_97 +2, 15_62)
 - "until", "this phase", "this turn" → `D`. Not where the words stand inside a condition and bound a COUNT ("if 3
   or more [raider] minions have been played this phase", "has moved more than once this turn"): nothing is in
   force to end, so no `D`. The bound is then the threshold's `-`: beside the short count, what nearly counts was

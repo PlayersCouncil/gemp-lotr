@@ -349,7 +349,8 @@ ally; a unique Man, strength 6, vitality 1; home 3T, so he skirmishes on the Tow
 move). His maneuver ability needs initiative and 2 cards discarded from hand: only ever used on purpose. The ally
 among the candidates for "a character" or "a Man" (he may bear Flaming Brand 2_32). He is not out of reach of an
 exertion or a vitality threshold: Narsil 9_34 (hand weapon) and Ranger's Cloak 15_68 (cloak), each vitality +1 and
-"Bearer must be a [gondor] Man", make him 2 or 3 (Card_09_038_Tests, Card_09_046_Tests), which is what notices a
+"Bearer must be a [gondor] Man", make him 2 or 3 (Card_09_038_Tests, Card_09_046_Tests); for "exert bearer twice"
+on a hand weapon (Ithilien Blade 15_62, so no Narsil) +2 vitality by hand (Card_15_062_Tests), which is what notices a
 `companion` added to "a [gondor] Man".
 
 **An ally in a skirmish away from any home site (a Shadows-block path).** One Whom Men Would Follow 1_109. [gondor]
@@ -445,7 +446,9 @@ in the way").
 **A [shire] character who is no Hobbit.** Goldberry, River-daughter 9_51. Ally, home 2F, strength 4, vitality 6, no
 race; her texts need a river. Tom Bombadil 9_52 is the other ally (to play, remove 2 burdens or 2 threats: cheat
 him in). The one COMPANION is Smeagol, Once Like Us 103_116: strength 3, vitality 4, resistance 6, Ring-bound, no
-race; to play, add a burden (cheat him in); an assignment ability only. He can fight and bear a follower.
+race; to play, add a burden (cheat him in); an assignment ability only. He can fight and bear a follower. His
+title is "Smeagol" with no accent, and `name(Sméagol)` takes him, as `Filters.name` compares sanitized titles
+(Card_12_040_Tests).
 
 **A [gandalf] Wizard who is an ally; a weapon that is no possession.** Saruman, The White 32_24; Glamdring (The
 Hobbit) 30_29. Saruman is an ally (home 3H, cost 4, strength 8, vitality 4, wise); a Gandalf is defender +1 beside
@@ -633,7 +636,9 @@ signet-bearer.** Long I Fell 4_97. [gandalf] Skirmish event (Spell), cost 2: "Sp
 him. Any Shadow player may make you wound a minion to prevent this." Played in any companion's skirmish with
 Gandalf in play: `FreepsPlayCard(fell)`, `ShadowChooseYes()`, `FreepsChooseCard(minion)`. A minion one wound from
 death is killed, the skirmish ends at once with the companion its winner (LR 2: the minion is the losing
-character), and a win trigger of his raises the "Required responses" ordering (`Card_15_038_Tests`).
+character), and a win trigger of his raises the "Required responses" ordering (`Card_15_038_Tests`). It is also
+a wound to a minion in a skirmish it is not in: the Free Peoples player chooses any minion, the bearer of Pavise
+11_94 among them while another skirmish is fought (`Card_11_094_Tests`).
 
 **A minion killed, and a minion discarded and not killed, by the Free Peoples player in the maneuver phase (the two
 sides of "each time a minion is discarded", "is killed").** Defend It and Hope 4_115; What Are They? 1_119 (with
