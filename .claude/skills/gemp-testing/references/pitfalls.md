@@ -413,7 +413,9 @@ passes through takes or declines it.
 player ("the first Shadow player may discard 2 cards from hand to add a burden" inside a site's required trigger,
 Courtyard Parapet 63_188) asks that player a yes/no in the definition's own `text`. `ShadowHasOptionalTriggerAvailable()`
 is false there: read it with `ShadowDecisionAvailable("<words of the text>")` and answer it with `ShadowChooseYes()` /
-`ShadowChooseNo()` (and the Free Peoples twins). It is not asked when its cost cannot be paid.
+`ShadowChooseNo()` (and the Free Peoples twins). It is not asked when its cost cannot be paid. The Decipher
+original 13_188 is NOT built so: its trigger is a plain optional one with `player: shadow`, read with
+`ShadowHasOptionalTriggerAvailable(site)` and answered with `ShadowAcceptOptionalTrigger()` (`Card_13_188_Tests`).
 
 **An ability with wording of its own, and a card with several.** `FreepsActionAvailable(card)` sees an ability
 whose definition gives it its own `text:` (Library of Rivendell's "Stack your tale or artifact from play") as

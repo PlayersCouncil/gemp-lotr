@@ -159,7 +159,8 @@ Notes: Elrond is himself an ally whose home is site 3, so C2 heals him too.
   results ("is strength +3 and fierce", read together in every test) stays whole. A sentence that is a choice
   between two branches ("Make an Uruk-hai strength +2, or spot 5 companions to make ...", 1_139) may be cut at
   the comma before "or", the choice's `B` listed on the first. Every word of the
-  game text is in exactly one `C` clause, keyword lines included; reminder text in brackets is left out. The
+  game text is in exactly one `C` clause, keyword lines included; reminder text in brackets is left out (a
+  `<helper>(...)</helper>` span is such reminder text, and quoted in a clause it fails the conformance check). The
   conformance check joins the `C` clauses and compares them with the definition's game text.
 - **A card's play has no clause of its own** (Q-0279: B, engine pass 31). The printed cost, type and site number
   are the stats test's, and what they do in a plain play is shown once, in `mechanics/costs/TwilightPoolTests` and
