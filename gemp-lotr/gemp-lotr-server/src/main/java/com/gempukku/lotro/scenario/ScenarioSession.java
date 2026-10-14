@@ -152,6 +152,22 @@ public class ScenarioSession implements DecisionObserver, DecisionArbiter {
         return false;
     }
 
+    /**
+     * Authoring: a step has been written for the decision a player has in front of them, in front of the step that
+     * had it.  Their decision is ruled on afresh (the new step, coming first, takes it) and they are told.  The step
+     * that had it has not been answered, so nothing it counted is undone.
+     * @return Whether that player had a decision to rule on again.
+     */
+    public boolean Reroute(String player) {
+        Ruling ruling = _rulings.get(player);
+        if (ruling == null || _table.userFeedback().getAwaitingDecision(player) != ruling.decision())
+            return false;
+        Ruling again = rule(player, ruling.decision());
+        _rulings.put(player, again);
+        tell(again);
+        return true;
+    }
+
     private static final String READ = "read";
 
     /**

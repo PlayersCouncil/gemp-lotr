@@ -94,8 +94,12 @@ var ScenarioAnchors = {
             } else if (name == "assignment") {
                 return ScenarioAnchors.groupRect(game.freePeopleAssignGroups[cards[sub]], game.shadowAssignGroups[cards[sub]]);
             } else if (name == "skirmish") {
+                var side = sub == null ? null : sub.toLowerCase();
+                //(the cards on one side of the skirmish being fought, whichever they are)
+                if (side == "freeps" || side == "shadow")
+                    return ScenarioAnchors.rectOf(ScenarioAnchors.cardsIn(side == "freeps" ? game.skirmishFellowshipGroup : game.skirmishShadowGroup));
                 elem = sub == null ? game.skirmishGroupDiv
-                    : sub.toLowerCase() == "fpstrength" ? game.fpStrengthDiv : game.shadowStrengthDiv;
+                    : side == "fpstrength" ? game.fpStrengthDiv : game.shadowStrengthDiv;
             } else if (name == "stats") {
                 elem = sub == null ? game.statsDiv
                     : sub.toLowerCase() == "archery" ? $(".fpArchery, .shadowArchery") : $(".stats .move");

@@ -1087,3 +1087,58 @@ body.sa-picking .scenario-pointer {
 .sa-repeat-more {
     margin: 0 0 4px 22px;
 }
+
+/* The timeline in groups: a heading where the turn or the phase changes, and each phase's colour down the rows' edge */
+.sa-tl-group {
+    padding: 3px 6px 2px;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: #d9cfb4;
+    background: #1d1a12;
+    border-top: 1px solid #4a4130;
+    border-left: 4px solid #6d6450;
+}
+
+.sa-tl-group.sa-turn-even {
+    background: #17191c;
+}
+
+.sa-step.sa-turn-even {
+    background: #121417;
+}
+
+.sa-step[class*="sa-ph-"] {
+    border-left: 4px solid transparent;
+}
+
+.sa-ph-opening { border-left-color: #9a9a9a !important; }
+.sa-ph-fellowship { border-left-color: #6fae63 !important; }
+.sa-ph-shadow { border-left-color: #9a72c8 !important; }
+.sa-ph-maneuver { border-left-color: #d0913a !important; }
+.sa-ph-archery { border-left-color: #c2604f !important; }
+.sa-ph-assignment { border-left-color: #4f8fc4 !important; }
+.sa-ph-skirmish { border-left-color: #d24b4b !important; }
+.sa-ph-regroup { border-left-color: #3fb3a0 !important; }
+.sa-ph-between_turns { border-left-color: #7d7d7d !important; }
+.sa-ph-block, .sa-ph-after-block { border-left-color: #c9a6ff !important; }
+.sa-ph-none { border-left-color: #4a4130 !important; }
+
+.sa-stephead .sa-tocurrent {
+    letter-spacing: -4px;
+    padding-right: 8px;
+}
+
+.sa-step.sa-substep.sa-turn-even {
+    background: #14161a;
+}
+
+.sa-step.sa-turn-even:hover {
+    background: #26221a;
+}
+
+.sa-step.sa-turn-even.sa-selected,
+.sa-step.sa-substep.sa-turn-even.sa-selected {
+    background: #3a3220;
+}
