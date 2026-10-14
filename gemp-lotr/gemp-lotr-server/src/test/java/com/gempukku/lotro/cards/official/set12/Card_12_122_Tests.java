@@ -31,6 +31,9 @@ public class Card_12_122_Tests
 					put("goldberry", "9_51");
 					// Ted Sandyman, Chief's Men's Ally: a [men] minion who is a Hobbit, site 2; his abilities are never used
 					put("ted", "18_75");
+					// Black Breath: a [wraith] condition.  "Burdens and wounds may not be removed from bearer"; its
+					// skirmish transfer is never used.
+					put("breath", "1_207");
 				}},
 				new HashMap<>()
 				{{
@@ -244,6 +247,36 @@ public class Card_12_122_Tests
 		assertFalse(scn.FreepsDecisionAvailable("Choose how many burdens to remove"));
 		assertEquals(0, scn.GetBurdens());
 		assertEquals(2, scn.GetWoundsOn(frodo));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void UnderABarOnRemovingBurdensNothingIsAskedAndNothingHappens() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var hearth = scn.GetFreepsCard("hearth");
+		var frodo = scn.GetRingBearer();
+		var pippin = scn.GetFreepsCard("pippin");
+		var breath = scn.GetShadowCard("breath");
+		var glade = scn.GetFreepsSite("site1");
+		scn.MoveCardsToSupportArea(hearth);
+		scn.MoveCardsToHand(pippin);
+		scn.AttachCardsTo(frodo, breath);
+
+		scn.StartGame(glade);
+		scn.AddBurdens(2);
+
+		assertSame(glade, scn.GetCurrentSite());
+		assertAttachedTo(breath, frodo);
+		assertEquals(2, scn.GetBurdens());
+
+		scn.FreepsPlayCard(pippin);
+
+		// No burden may be removed, so there is none to choose (F-0512): nothing is asked, and away from a dwelling
+		// nothing is done.
+		assertInZone(Zone.FREE_CHARACTERS, pippin);
+		assertFalse(scn.FreepsDecisionAvailable("Choose how many burdens to remove"));
+		assertEquals(2, scn.GetBurdens());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

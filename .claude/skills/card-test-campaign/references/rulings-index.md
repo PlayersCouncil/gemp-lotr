@@ -511,7 +511,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Each time the Free Peoples player plays the fellowship's next site" asks who plays it (F-0479, Fearless Approach 13_164 and Caravan From the South 13_83) [F-0302]
 - "Each time the Free Peoples player assigns a companion or ally to a skirmish" asks who assigns (F-0513, Wold of Rohan 4_336; Q-0251, Q-0171)
 - "Each time you play a <race>" names its player (F-0510, Home and Hearth 12_122)
-- "You may <do X>. Then, <Y>": the trigger is required, X a choice of 0 to 1, and Y done whatever was chosen (Q-0314; Home and Hearth 12_122, engine pass 44)
+- "You may <do X>. Then, <Y>": the trigger is required, X a choice of 0 to 1, and Y done whatever was chosen (Q-0314; Home and Hearth 12_122, engine pass 44) [F-0512]
 - "If a Free Peoples player reveals this card from your hand" asks whose CARD revealed (Eye of Barad-dûr 5_96; Q-0251: B) [Q-0171]
 - "Each time your condition is hindered or discarded" (Q-0075)
 - "Each time this is hindered/discarded" is answered after the removal (F-0120, F-0121)
