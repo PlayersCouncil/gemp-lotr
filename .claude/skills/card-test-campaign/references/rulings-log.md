@@ -822,6 +822,12 @@ corrected to go by its name (F-0043). *[2026-10-05, evening]*
 **"One" stands for the noun before it (Q-0028).** On Rivendell Gateway (101_59), "the intent is (when game text
 is at such a premium as it is for sites) 'one' is a stand-in for 'an unbound companion'." *[2026-10-05, evening]*
 
+**"Comes into play exhausted" is a state it arrives in, not exertions (Q-0302).** "I'd say that "coming into play
+exhausted" pre-empts the actual play trigger, so it should occur before any exertion responses or whatnot can occur.
+Keep." The wounds are on the character as it is placed in play, before anything answers its play, and they are no
+exertions: no "each time ... exerts" card answers them (engine pass 37, `exhausted: true` on the play effects).
+*[2026-10-14]*
+
 **A branch in parentheses is mandatory when it is available (F-0047, Q-0035).** "When there are parenthesis like
 this, it's actually mandatory to use the parenthesis over the portion outside the parenthesis, so the player
 doesn't have a choice", and "Decipher ruled that a branch in parenthesis is mandatory to choose if it's

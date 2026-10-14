@@ -147,6 +147,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - An effect with no stated duration lasts to the end of the current phase (Q-0018)
 - "Here" on a site is the site's title (Q-0027) [F-0043]
 - "One" stands for the noun before it (Q-0028)
+- "Comes into play exhausted" is a state it arrives in, not exertions (Q-0302)
 - A branch in parentheses is mandatory when it is available (F-0047, Q-0035)
 - A parenthesis that adds targets of either side is "up to" (F-0491, Secret Sentinels 2_20) [Q-0035]
 - "Spot X to Y" does nothing without X, even as one branch of a choice (F-0053)
