@@ -1691,7 +1691,8 @@ threats at site 9 counts them in (Card_07_360_Tests).
 unbound Hobbit is there). `TowersSites` has neither word at site 1 (4_325) or site 3 (4_337, a sanctuary), so
 `putAll(TowersSites); put("site2", "4_335")` and the fellowship's own two moves (`FreepsPass()`, then
 `SkipToMovementDecision()` and `FreepsChooseToMove()`) show "while at a battleground site" off, on and off again
-(`Card_15_017_ErrataTests`). The Fellowship path has forests and no battleground.
+(`Card_15_017_ErrataTests`). The Fellowship path has neither: `FellowshipSites` has no forest (1_351 is a
+sanctuary only) and no battleground.
 
 **A Hobbit-set card (sets 30 to 33) stands on the usual table for now.** The rig has no Hobbit constants: the
 Hobbit Draft Game's Ring-bearer is a Bilbo (30_43 to 30_46, `canStartWithRing`) and its One Ring 30_48 is a

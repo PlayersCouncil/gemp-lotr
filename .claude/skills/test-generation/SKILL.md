@@ -271,7 +271,9 @@ a [sauron] card that is no minion, and a minion of another culture; for an item 
 of them is a weapon of another class on a bearer of the right kind (a ranged weapon), where a card in play can bear
 one, since the game has a `weapon` filter one word wider and a possession that is no weapon cannot tell the two
 apart (65_148); for a number with two bounds, a card on each side (a bound no board can reach, as site 1 of
-"sites 1 to 5" for a skirmish, is stood for by the nearest reachable value inside it, site 2, and Notes says so). For "an X skirmishing a Y" that is an X assigned
+"sites 1 to 5" for a skirmish, is stood for by the nearest reachable value inside it, site 2, and Notes says so). Where the type word has a character neighbour (companion against ally), the card of the first word that is no X
+is a character where print allows (Barliman Butterbur 1_70, a [gandalf] ally, for "a [gandalf] companion"), or the
+type widened to `character` passes (Alatar 13_28). For "an X skirmishing a Y" that is an X assigned
 to another Y whose skirmish has not begun, not an X fighting something else. That is the candidate for the word
 "skirmishing"; the word "a Y" wants its own, an X fighting a character who is no Y, read DURING that skirmish (fight
 it first), or `inSkirmish` alone passes. Where Y is one character (bearer, Frodo), the first is an X assigned to him
@@ -430,7 +432,9 @@ Which checks a clause lists follows from its words, and the analyst is expected 
   paid once the minion is chosen, `-` the minion not his to name.
 - a noun phrase that picks things out ("a Dwarf", "each [moria] Orc", "another companion", "bearer") → `F`. Not
   "the Ring-bearer" in a bare count of burdens ("for each burden on the Ring-bearer"): burdens lie on nobody
-  else, so there is no other candidate to lay (Q-0186). A NAMED bearer, "on Frodo", is a phrase like any other (Q-0103)
+  else, so there is no other candidate to lay (Q-0186). A NAMED bearer, "on Frodo", is a phrase like any other (Q-0103). "Bearer" in a cost ("exert bearer") as well: the
+  cost is paid once by a bearer of another kind (an ally beside the Ring-bearer), or `choose(companion,hasAttached(self))`
+  passes for `bearer` (Sting 18_113)
 - "until", "this phase", "this turn" → `D`. Not where the words stand inside a condition and bound a COUNT ("if 3
   or more [raider] minions have been played this phase", "has moved more than once this turn"): nothing is in
   force to end, so no `D`. The bound is then the threshold's `-`: beside the short count, what nearly counts was
@@ -612,7 +616,8 @@ effect, or a card and then the bearer it is played on: Goblin Scavengers 1_179) 
 
 **Say what the game is waiting for.** After a test's last action, assert the decision the game has come to rest
 on: `AwaitingFellowshipPhaseActions()` and its kin, a named decision, a pending optional trigger, or
-`GameIsFinished()`. This is what catches a trigger left dangling or a response window nobody expected, and it is
+`GameIsFinished()`. In a phase both players act in, a Free Peoples action leaves the game on the Shadow player's
+decision (`AwaitingShadowRegroupPhaseActions()`; pitfalls, "Both players act in most phases"). This is what catches a trigger left dangling or a response window nobody expected, and it is
 the proof in a test that something did *not* happen. The conformance check also takes the phase read on its own
 (`assertEquals(Phase.REGROUP, scn.GetCurrentPhase())`), which says less: it does not show that nothing is pending.
 A test that makes no play and gives no answer after `StartGame()` (a standing modifier read in the fellowship
