@@ -2074,3 +2074,19 @@ is an Expanded-era card and I don't think any format can permit such an interact
 worth tuning up; leave it as is." F-0502, Merry and Pippin, In the Bloom of Health (17_107, 17_109), "Add 1 to the
 number of Ents you can spot": "the "you" in their text is referring to its owner and not to anyone else. That's
 valid, I think; carry on." A spot bonus counts for its card's owner only (engine pass 39). *[2026-10-14]*
+
+**What a test must lay (2026-10-14, the Standard's questions from engine pass 39).** Q-0303, the Hobbit-set cards
+among a bare title's candidates: "We don't need to consider the HDG for this, no. (their own tests can include
+those, but we don't need to make all Legolas tests everywhere more bloated for no reason; HDG isn't played in
+constructed and so doesn't overlap with other sets. So even within its own tests it might not make sense.)" Q-0305,
+"When you play" on a companion played into the starting fellowship: "I think this one is valid to check on everyone
+(where possible), given that the context there is different enough (given the phase it's in) for situations to
+crop up." Q-0306, a bare title's candidates: "Frankly I think "each type and culture" is a lot, especially for the
+Sarumen who are the most diverse card bar none. I'd say just cross type boundaries (companion/ally) and culture
+boundaries (isengard/dunland) and call it a day." Q-0307, reading a cheated state before the action: "I think the
+Nazgul example seems like it should be checked, just put it in the discard pile *sooner*. But I can see where the
+first one is trickier; if it's discarded as soon as it's attached, then it can't be seen on the proper spot without
+shenanigans. I'd say A except for the case of instant removal." Q-0308, an "X or Y" cost owes a board where both can
+be paid and the player is asked: "B, but I don't think older tests need relitigated." Q-0309, a trigger on the
+card's own win owes its own loss only: "I think A is sufficient here." *[2026-10-14]*
+
