@@ -888,3 +888,5 @@ bookends, and that none of the ledger has leaked into the test file. Its warning
    invalid doer, in its own phase.
    Two guards of one thing in different places are this too (a `CanSpot self, zone(SUPPORT)` requirement beside
    `fromSupport: true`, Lost in the Woods 11_212): neither alone shows, so replace both in one mutate.py run.
+   A choice whose filter has a branch of its own is this too: each branch's guard word is a filter word owed a
+   board (Gwaihir 17_20's `and(wizard,canWound)` beside `and(not(wizard),canExert)`: an exhausted Wizard minion).
