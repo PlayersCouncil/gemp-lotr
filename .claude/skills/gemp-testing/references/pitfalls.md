@@ -19,7 +19,9 @@ one beside them. A parked test of a NUMBER the game reads otherwise ("X Shadow c
 built) wants one more candidate than the LARGER of the two readings, or the game takes them all unasked and the
 test fails on a choice that is not there, not at the number it is parked for (Blood Runs Chill 8_3, Q-0256).
 The same thing hides self-targeting: Celeborn's "exert Celeborn to heal an [elven] ally" heals
-Celeborn himself when no other Elven ally is wounded. An "up to N" choice is the exception: its
+Celeborn himself when no other Elven ally is wounded. A heal's choice offers only WOUNDED characters, so an
+unwounded one (the Ring-bearer, say) is no candidate: with one other wounded, the heal is made unasked and a
+`FreepsChooseCard` fails at the next decision (Fates Entwined 13_148). An "up to N" choice is the exception: its
 minimum is 0, so it asks even with one candidate left (Song of Durin's "discard up to 2 [moria] conditions").
 A choice between piles goes the same way: "from your draw deck or discard pile" is not asked when only one pile
 has a candidate, and a `ShadowChoose("draw deck")` then fails inside the next decision. That holds for the
