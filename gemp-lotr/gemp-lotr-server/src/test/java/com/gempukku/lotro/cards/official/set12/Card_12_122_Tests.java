@@ -99,26 +99,29 @@ public class Card_12_122_Tests
 		assertEquals(3, scn.GetWoundsOn(frodo));
 		assertEquals(1, scn.GetWoundsOn(sam));
 
-		// A [shire] Hobbit companion.
+		// A [shire] Hobbit companion.  The trigger is required; the burden is a choice of 0 to 1 (Q-0314).
 		scn.FreepsPlayCard(pippin);
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(hearth));
-		scn.FreepsAcceptOptionalTrigger();
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(hearth));
+		assertTrue(scn.FreepsDecisionAvailable("Choose how many burdens to remove"));
+		assertEquals(0, scn.FreepsGetChoiceMin());
+		assertEquals(1, scn.FreepsGetChoiceMax());
+		scn.FreepsChoose("1");
 		assertEquals(2, scn.GetBurdens());
 		assertEquals(2, scn.GetWoundsOn(frodo));
 		assertEquals(1, scn.GetWoundsOn(sam));
 
 		// A [shire] Hobbit ally: each time, once more.
 		scn.FreepsPlayCard(bounder);
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(hearth));
-		scn.FreepsAcceptOptionalTrigger();
+		assertTrue(scn.FreepsDecisionAvailable("Choose how many burdens to remove"));
+		scn.FreepsChoose("1");
 		assertEquals(1, scn.GetBurdens());
 		assertEquals(1, scn.GetWoundsOn(frodo));
 		assertEquals(1, scn.GetWoundsOn(sam));
 
 		// A [rohan] Hobbit companion.
 		scn.FreepsPlayCard(merry);
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(hearth));
-		scn.FreepsAcceptOptionalTrigger();
+		assertTrue(scn.FreepsDecisionAvailable("Choose how many burdens to remove"));
+		scn.FreepsChoose("1");
 		assertEquals(0, scn.GetBurdens());
 		assertEquals(0, scn.GetWoundsOn(frodo));
 		// Sam is Ring-bound but not the Ring-bearer: never healed.
@@ -127,7 +130,7 @@ public class Card_12_122_Tests
 	}
 
 	@Test
-	public void DecliningRemovesNoBurdenAndHealsNobody() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DecliningTheBurdenAtADwellingStillHealsTheRingBearer() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var hearth = scn.GetFreepsCard("hearth");
@@ -146,12 +149,12 @@ public class Card_12_122_Tests
 		assertEquals(2, scn.GetWoundsOn(frodo));
 
 		scn.FreepsPlayCard(pippin);
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(hearth));
-		scn.FreepsDeclineOptionalTrigger();
+		assertTrue(scn.FreepsDecisionAvailable("Choose how many burdens to remove"));
+		scn.FreepsChoose("0");
 
-		// The heal follows the burden ("Then"): declined, neither happens.
+		// "Then" is a separate, required effect (Q-0314): the burden declined, the Ring-bearer is healed all the same.
 		assertEquals(2, scn.GetBurdens());
-		assertEquals(2, scn.GetWoundsOn(frodo));
+		assertEquals(1, scn.GetWoundsOn(frodo));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
@@ -174,10 +177,9 @@ public class Card_12_122_Tests
 		assertEquals(0, scn.GetBurdens());
 		assertEquals(2, scn.GetWoundsOn(frodo));
 
-		// No burden to remove, but the heal can still be done: CR 4.2 "effect", as much as can be done.
+		// No burden to remove: nothing is asked, and the heal is done.
 		scn.FreepsPlayCard(pippin);
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(hearth));
-		scn.FreepsAcceptOptionalTrigger();
+		assertFalse(scn.FreepsDecisionAvailable("Choose how many burdens to remove"));
 
 		assertEquals(0, scn.GetBurdens());
 		assertEquals(1, scn.GetWoundsOn(frodo));
@@ -209,8 +211,8 @@ public class Card_12_122_Tests
 		assertEquals(2, scn.GetWoundsOn(frodo));
 
 		scn.FreepsPlayCard(pippin);
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(hearth));
-		scn.FreepsAcceptOptionalTrigger();
+		assertTrue(scn.FreepsDecisionAvailable("Choose how many burdens to remove"));
+		scn.FreepsChoose("1");
 
 		assertEquals(1, scn.GetBurdens());
 		assertEquals(2, scn.GetWoundsOn(frodo));
@@ -218,7 +220,7 @@ public class Card_12_122_Tests
 	}
 
 	@Test
-	public void WithNoBurdenAwayFromADwellingNothingIsOffered() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WithNoBurdenAwayFromADwellingNothingIsAskedAndNothingHappens() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var hearth = scn.GetFreepsCard("hearth");
@@ -237,9 +239,10 @@ public class Card_12_122_Tests
 
 		scn.FreepsPlayCard(pippin);
 
-		// No burden to remove and no dwelling: the trigger would do nothing, and is not offered.
+		// No burden to remove and no dwelling: the required trigger asks nothing and does nothing.
 		assertInZone(Zone.FREE_CHARACTERS, pippin);
-		assertFalse(scn.FreepsHasOptionalTriggerAvailable(hearth));
+		assertFalse(scn.FreepsDecisionAvailable("Choose how many burdens to remove"));
+		assertEquals(0, scn.GetBurdens());
 		assertEquals(2, scn.GetWoundsOn(frodo));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -265,14 +268,14 @@ public class Card_12_122_Tests
 		// Its own play is no Hobbit's.
 		scn.FreepsPlayCard(hearth);
 		assertInZone(Zone.SUPPORT, hearth);
-		assertFalse(scn.FreepsHasOptionalTriggerAvailable(hearth));
+		assertFalse(scn.FreepsDecisionAvailable("Choose how many burdens to remove"));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
 		// A [shire] ally who is no Hobbit, at the dwelling, with a burden to remove and a wound to heal.
 		scn.FreepsPlayCard(goldberry);
 
 		assertInZone(Zone.SUPPORT, goldberry);
-		assertFalse(scn.FreepsHasOptionalTriggerAvailable(hearth));
+		assertFalse(scn.FreepsDecisionAvailable("Choose how many burdens to remove"));
 		assertEquals(2, scn.GetBurdens());
 		assertEquals(2, scn.GetWoundsOn(frodo));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
@@ -306,7 +309,7 @@ public class Card_12_122_Tests
 		scn.ShadowPlayCard(ted);
 
 		assertInZone(Zone.SHADOW_CHARACTERS, ted);
-		assertFalse(scn.FreepsHasOptionalTriggerAvailable(hearth));
+		assertFalse(scn.FreepsDecisionAvailable("Choose how many burdens to remove"));
 		assertEquals(2, scn.GetBurdens());
 		assertEquals(2, scn.GetWoundsOn(frodo));
 		assertTrue(scn.AwaitingShadowPhaseActions());

@@ -380,9 +380,10 @@ A site's optional trigger with no `player:` line is offered first to the Free Pe
 `player: free people` taken out is noticed by the decline test alone: every "the Free Peoples player may" on a
 site has one (Osgiliath Reclaimed 11_252, by `mutate.py --replace`, dec-b11_212).
 **An optional trigger with several effects is offered while any one of them can act.** Where the first effect has
-nothing to do and a later one still has (Home and Hearth 12_122: no burden to remove, the Ring-bearer wounded at a
-dwelling), the offer is made and taken does the rest; lay that board beside the Q-0034 one where neither can act,
-or a definition that gates the whole offer on the first effect (it moved into `cost`) survives every test (dec-b1_119).
+nothing to do and a later one still has, the offer is made and taken does the rest; lay that board beside the
+Q-0034 one where neither can act, or a definition that gates the whole offer on the first effect (it moved into
+`cost`) survives every test (found on Home and Hearth 12_122 in dec-b1_119, whose trigger Q-0314 has since made
+required: shapes.md, "You may <do X>. Then, <Y>").
 
 ## Reading and answering an offer
 

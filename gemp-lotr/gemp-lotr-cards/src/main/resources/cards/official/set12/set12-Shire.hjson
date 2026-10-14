@@ -151,7 +151,7 @@
 		effects: [
 			{
 				type: Trigger
-				optional: true
+				optional: false
 				trigger: {
 					type: played
 					filter: hobbit
@@ -160,6 +160,7 @@
 				effect: [
 					{
 						type: removeBurdens
+						amount: 0-1
 					}
 					{
 						type: If
