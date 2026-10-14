@@ -389,6 +389,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Card by card (2026-10-14, later) [Q-0304, Q-0310, Q-0164, Q-0311]
 - Q-0312, a Hobbit-set card that is the only printed card of its kind (2026-10-14) [Q-0303]
 - "If a <kind> ... is about to be discarded ... to prevent that" saves the one card (Q-0313, 2026-10-14) [Q-0250]
+- "You may X. Then, Y": the "Then" sentence is a separate, required effect (Q-0314, 2026-10-14)
 
 # Settled shapes (shapes.md)
 

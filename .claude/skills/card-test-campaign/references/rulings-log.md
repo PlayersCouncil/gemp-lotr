@@ -2112,3 +2112,9 @@ Scouring is OP as it is (Thus the errata nerfing it), and it canceling all nukes
 saves one [shire] card; Q-0250's whole-discard reading is for a text that names "one or more" of a kind (Siege
 Engine 5_60). *[2026-10-14]*
 
+**"You may X. Then, Y": the "Then" sentence is a separate, required effect (Q-0314, 2026-10-14).** Home and Hearth
+12_122, "Each time you play a Hobbit, you may remove a burden. Then, if the fellowship is at dwelling site, heal the
+Ring-bearer": "I would expect the "then" to signify a separate effect, so that it is a required effect that is
+evaluated after the burden's 0-1 choice is resolved." So the trigger is required, the burden removal a 0-1 choice,
+and at a dwelling the Ring-bearer is healed whether or not a burden was removed. *[2026-10-14]*
+
