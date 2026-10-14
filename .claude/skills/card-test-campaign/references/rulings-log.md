@@ -2106,3 +2106,9 @@ small test, it's just not exemplary to involve the HDG that way." The test stays
 out of a bare title's candidates, and a Hobbit-set card is laid only where it is the one card that tells two
 definitions apart. *[2026-10-14]*
 
+**"If a <kind> ... is about to be discarded ... to prevent that" saves the one card (Q-0313, 2026-10-14).** Scouring
+of the Shire 18_112 (and 68_112; Gimli, Feared Axeman 7_7 and Deceit 18_29 built the same): "Yeah, keep it at A.
+Scouring is OP as it is (Thus the errata nerfing it), and it canceling all nukes would be even crazier." One token
+saves one [shire] card; Q-0250's whole-discard reading is for a text that names "one or more" of a kind (Siege
+Engine 5_60). *[2026-10-14]*
+
