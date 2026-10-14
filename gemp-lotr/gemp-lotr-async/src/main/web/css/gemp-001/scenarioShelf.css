@@ -41,9 +41,10 @@
 	flex: 1 1 1em;
 }
 
-.shelf-count {
-	color: #999;
-	font-size: 90%;
+/* (a scenario just copied for editing) */
+.shelf-row.shelf-picked {
+	background: rgba(212, 175, 55, 0.14);
+	box-shadow: inset 3px 0 0 #d4af37;
 }
 
 .shelf-status {
@@ -286,6 +287,15 @@ h4.shelf-campaign {
 	background: #333;
 	color: #eee;
 	border-radius: 3px;
+}
+
+.scenario-submit p {
+	margin: 0.4em 0;
+}
+
+.scenario-submit-buttons .scenario-submit-yes.scenario-submit-danger {
+	border-color: #b71c1c;
+	background: #5c1a1a;
 }
 
 .scenario-submit-buttons .scenario-submit-yes {

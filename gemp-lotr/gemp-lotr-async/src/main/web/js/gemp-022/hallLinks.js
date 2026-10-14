@@ -60,8 +60,8 @@ var GempLinks = {
 			{slug: "league", match: ["leagueAdmin"]},
 			{slug: "tournament", match: ["tournamentAdmin"]},
 			{slug: "prizes", match: ["prizeAdmin"]},
-			{slug: "users", match: ["userAdmin"]},
-			{slug: "scenarios", match: ["scenarioAdmin"]}
+			{slug: "scenarios", match: ["scenarioAdmin"]},
+			{slug: "users", match: ["userAdmin"]}
 		]}
 	],
 

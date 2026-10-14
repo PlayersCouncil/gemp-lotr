@@ -440,7 +440,7 @@ public class ScenarioAuthoring {
             When until = repeating.until;
             String cannot = repeating.describe() + (repeating.block ? " is a block that" : " repeats and") + " is under way, and ";
             if (until.require != null || until.source.startsWith("{"))
-                throw new AuthoringException(cannot + "its 'until' is written out with requirements.  Change it by hand so that it fits this decision; "
+                throw new AuthoringException(cannot + "its 'until' is written out with requirements.  Change it yourself (Until, on the Step tab) so that it fits this decision; "
                         + "then a step can be added for the decision.");
             When kept = new When();
             if (until.seat != null && fits(director, player, decision, part -> part.seat = until.seat))
@@ -469,7 +469,7 @@ public class ScenarioAuthoring {
             if (!apart(kept, own))
                 kept.turn = table.gameState().getTurnNumber();
             if (!apart(kept, own))
-                throw new AuthoringException(cannot + "nothing simple tells this decision from the ones it applies to.  Change its 'until' by hand "
+                throw new AuthoringException(cannot + "nothing simple tells this decision from the ones it applies to.  Change its 'until' yourself (Until, on the Step tab) "
                         + "so that it fits this decision; then a step can be added for the decision.");
             List<String> terms = new ArrayList<>();
             if (kept.seat != null)
@@ -2007,7 +2007,7 @@ public class ScenarioAuthoring {
             String problem = sitting.mediator.scenarioLocked(() -> {
                 Step step = sitting.over() ? null : sitting.inHand();
                 if (step == null)
-                    return "No step is in hand to be answered again.";
+                    return "There is no current step to be answered again.";
                 if (step.pause)
                     return "A pause is read, not answered.";
                 step.allow = null;

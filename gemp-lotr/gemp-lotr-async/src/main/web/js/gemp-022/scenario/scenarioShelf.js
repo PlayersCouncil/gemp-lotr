@@ -130,9 +130,44 @@ var ScenarioShelfCommon = {
      * @param draft The draft they have open ({dirty, title, id}), or null.
      */
     edit: function (what, draft, said, done) {
-        if (draft != null && draft.dirty !== false
-            && !confirm("You have a draft open (" + (draft.title || draft.id) + ") with changes that have not been saved. Opening another drops it, and they are lost."))
+        var that = this;
+        this.droppingDraft(draft, function () {
+            that.openForEdit(what, said, done);
+        });
+    },
+
+    /**
+     * Goes ahead (go()) at once if the player has no draft with unsaved changes open, and once they say so if they
+     * have: opening another drops it.  go() runs from a click either way, so it can open a tab.
+     */
+    droppingDraft: function (draft, go) {
+        if (draft == null || draft.dirty === false) {
+            go();
             return;
+        }
+        ScenarioConfirm.ask({
+            title: "You have a draft open with unsaved changes",
+            text: "\u201c" + (draft.title || draft.id) + "\u201d is open in the authoring tool with changes that have not been saved. "
+                + "Opening another scenario closes it, and those changes are lost.",
+            yes: "Close it and go on", no: "Cancel", danger: true
+        }, go);
+    },
+
+    /** Asks "Are you sure you want to delete ...?", and calls go() if they are. */
+    askDelete: function (name, go) {
+        ScenarioConfirm.ask({
+            title: "Delete \u201c" + name + "\u201d?",
+            text: "Are you sure you want to delete \u201c" + name + "\u201d?",
+            yes: "Delete", no: "Cancel", danger: true
+        }, go);
+    },
+
+    /** The path of a scenario My Scenarios is to pick out when it next shows the list (one just copied for editing). */
+    highlight: null,
+    /** What My Scenarios says about it when it does. */
+    highlightSaying: null,
+
+    openForEdit: function (what, said, done) {
         var win = this.reserveWindow();
         said("Opening the authoring tool...", "pending");
         hall.comm.scenarioAuthor("POST", "open", what, function (result) {
@@ -216,7 +251,6 @@ MyScenariosUI.prototype = {
         tools.append(ScenarioShelfCommon.button("Copy Public...", "Take a copy of one of the public scenarios to change. Submitted and approved, your version replaces it.", function () {
             that.copyPublic();
         }));
-        this.countSpan = $("<span class='shelf-count'></span>").appendTo(tools);
         this.status = $("<div class='shelf-status' role='status' aria-live='polite'></div>").appendTo(c);
         this.list = $("<div class='shelf-list'></div>").appendTo(c);
         //Coming back to it after a while (or from the authoring tool's tab), it is fetched again
@@ -268,20 +302,24 @@ MyScenariosUI.prototype = {
             });
         }));
         this.draftDiv.append(ScenarioShelfCommon.button("Close it", "Give the draft up. Anything not saved is lost.", function () {
-            if (draft.dirty !== false && !confirm("Close the draft? It has changes that have not been saved, and they are lost."))
-                return;
-            hall.comm.scenarioAuthor("POST", "close", {}, function () {
-                that.refresh();
-            }, function () {
-                that.refresh();
-            });
+            var close = function () {
+                hall.comm.scenarioAuthor("POST", "close", {}, function () {
+                    that.refresh();
+                }, function () {
+                    that.refresh();
+                });
+            };
+            if (draft.dirty === false)
+                close();
+            else
+                ScenarioConfirm.ask({title: "Close the draft?", text: "It has changes that have not been saved, and they are lost.",
+                    yes: "Close it", no: "Cancel", danger: true}, close);
         }));
     },
 
     render: function () {
         var that = this;
         this.renderDraft();
-        this.countSpan.text(this.scenarios.length + " of " + this.limit + " scenarios");
         var list = this.list.empty();
         if (!this.ownFolder) {
             list.append($("<p class='account-help'></p>").text("This server has nowhere to keep players' own scenarios (scenarios.user.path is not set)."));
@@ -303,6 +341,20 @@ MyScenariosUI.prototype = {
                 });
             });
         });
+        //A scenario just copied for editing (here, or by Edit public scenario in Scenario Admin) is picked out
+        var picked = ScenarioShelfCommon.highlight == null ? $()
+            : list.find(".shelf-row").filter(function () { return $(this).attr("data-path") == ScenarioShelfCommon.highlight; });
+        if (picked.length > 0) {
+            picked.addClass("shelf-picked");
+            if (ScenarioShelfCommon.highlightSaying)
+                this.say(ScenarioShelfCommon.highlightSaying, "success");
+            ScenarioShelfCommon.highlight = null;
+            ScenarioShelfCommon.highlightSaying = null;
+            setTimeout(function () {
+                if (picked[0].scrollIntoView)
+                    picked[0].scrollIntoView({block: "center"});
+            }, 50);
+        }
     },
 
     row: function (scenario) {
@@ -354,7 +406,10 @@ MyScenariosUI.prototype = {
             ScenarioShelfCommon.play(scenario.fullId, said);
         }).button("option", "disabled", !scenario.playable));
         buttons.append(ScenarioShelfCommon.button("Copy", "Make a copy of it, \u201cCopy of " + (scenario.title || scenario.id) + "\u201d, to change", function () {
-            that.post("mine/copy", {path: scenario.path}, "Copied.");
+            that.post("mine/copy", {path: scenario.path}, function (result) {
+                ScenarioShelfCommon.highlight = result.path;
+                return "Copied.";
+            });
         }).button("option", "disabled", scenario.fullId == null));
         var current = scenario.published == "current";
         buttons.append(ScenarioShelfCommon.button("Submit...", locked ? "It has been submitted"
@@ -365,9 +420,9 @@ MyScenariosUI.prototype = {
             });
         }).button("option", "disabled", locked || current || !scenario.verified));
         buttons.append(ScenarioShelfCommon.button("Delete", locked ? "It is in review, and cannot be deleted" : "Delete it", function () {
-            if (!confirm("Delete \u201c" + (scenario.title || scenario.path) + "\u201d? (If it was a mistake, an admin can put it back.)"))
-                return;
-            that.post("mine/delete", {path: scenario.path}, "Deleted.");
+            ScenarioShelfCommon.askDelete(scenario.title || scenario.path, function () {
+                that.post("mine/delete", {path: scenario.path}, "Deleted.");
+            });
         }, "shelf-danger").button("option", "disabled", locked));
         return row;
     },
@@ -421,6 +476,7 @@ MyScenariosUI.prototype = {
                         $("<div class='shelf-buttons'></div>").appendTo(row).append(ScenarioShelfCommon.button("Copy", "Copy it into your own scenarios", function () {
                             box.dialog("close");
                             that.post("mine/copyPublic", {id: scenario.fullId}, function (result) {
+                                ScenarioShelfCommon.highlight = result.path;
                                 return "Copied as " + result.path + ". Edit it from the list below.";
                             });
                         }));
@@ -533,8 +589,10 @@ ScenarioAdminUI.prototype = {
                 .append($("<div class='shelf-notes'></div>").text(why[conflict.kind] || conflict.kind));
             $("<div class='shelf-buttons'></div>").appendTo(row)
                 .append(ScenarioShelfCommon.button("Take the repository's", "Put the repository's version in its place (what is here now is archived)", function () {
-                    if (confirm("Replace " + conflict.path + " with the repository's version? What is here now goes to the archive."))
+                    ScenarioConfirm.ask({title: "Take the repository's version?", text: "Replace " + conflict.path
+                            + " with the repository's version? What is here now goes to the archive.", yes: "Take the repository's"}, function () {
                         that.post("admin/settle", {path: conflict.path, take: "repository"}, "Took the repository's " + conflict.path + ".");
+                    });
                 }))
                 .append(ScenarioShelfCommon.button("Keep ours", "Keep what is here, until the repository changes it again", function () {
                     that.post("admin/settle", {path: conflict.path, take: "ours"}, "Kept the server's " + conflict.path + ".");
@@ -597,8 +655,9 @@ ScenarioAdminUI.prototype = {
             that.editPublic(scenario);
         }).button("option", "disabled", !scenario.openable));
         buttons.append(ScenarioShelfCommon.button("Delete", "Take it down (it goes to the archive)", function () {
-            if (confirm("Delete the public scenario \u201c" + (scenario.title || scenario.path) + "\u201d? Players are no longer offered it. It goes to the archive, from which it can be restored."))
+            ScenarioShelfCommon.askDelete(scenario.title || scenario.path, function () {
                 that.post("admin/delete", {path: scenario.path}, "Deleted " + (scenario.title || scenario.path) + ".");
+            });
         }, "shelf-danger"));
         return row;
     },
@@ -608,10 +667,17 @@ ScenarioAdminUI.prototype = {
         var that = this;
         if (this.busy)
             return;
-        var draft = this.state.authoring || null;
-        if (draft != null && draft.dirty !== false
-            && !confirm("You have a draft open (" + (draft.title || draft.id) + ") with changes that have not been saved. Opening the copy drops it, and they are lost."))
-            return;
+        ScenarioShelfCommon.droppingDraft(this.state.authoring || null, function () {
+            that.copyAndEdit(scenario);
+        });
+    },
+
+    /**
+     * The copy for Edit public scenario: made, opened in the authoring tool in a new tab, and picked out in My
+     * Scenarios, which this tab goes to, so that coming back to it says what happened.
+     */
+    copyAndEdit: function (scenario) {
+        var that = this;
         //(the tab is opened now, on the click, and pointed at the tool once the copy and the draft are made)
         var win = ScenarioShelfCommon.reserveWindow();
         this.busy = true;
@@ -624,13 +690,22 @@ ScenarioAdminUI.prototype = {
             that.refresh();
         };
         hall.comm.scenarioShelf("POST", "admin/edit", {id: scenario.fullId}, function (copied) {
-            $(document).trigger("gemp:scenarios-changed");
+            ScenarioShelfCommon.highlight = copied.path;
+            ScenarioShelfCommon.highlightSaying = "A copy of the public \u201c" + (scenario.title || scenario.fullId)
+                + "\u201d, for you to edit. It is open in the authoring tool, in another tab. Submit it and approve it to replace the public one.";
             hall.comm.scenarioAuthor("POST", "open", {id: copied.id}, function (result) {
                 that.busy = false;
                 that.say("Copied into your scenarios as " + copied.path + ", and opened in a new tab.", "success");
                 ScenarioShelfCommon.openGame(win, result.gameId);
                 that.refresh();
-            }, failed);
+                if (window.GempLinks)
+                    GempLinks.go("#account/scenarios");
+                $(document).trigger("gemp:scenarios-changed");
+            }, function (xhr) {
+                //(the copy is made, if not opened: it is in My Scenarios all the same)
+                failed(xhr);
+                $(document).trigger("gemp:scenarios-changed");
+            });
         }, failed);
     },
 
@@ -685,14 +760,20 @@ ScenarioAdminUI.prototype = {
         var replacing = scenario.replaces != null;
         buttons.append(ScenarioShelfCommon.button(replacing ? "Replace" : "Approve", replacing
             ? "Make it public in place of \u201c" + (scenario.replaces.title || scenario.replaces.id) + "\u201d" : "Make it a public scenario", function () {
-            var question = replacing
-                ? "Accepting this replaces the public scenario \u201c" + (scenario.replaces.title || scenario.replaces.id) + "\u201d (" + scenario.replaces.path + ") with "
-                    + scenario.owner + "'s submission. The one it replaces goes to the archive.\n\nReplace it?"
-                : "Make \u201c" + (scenario.title || scenario.path) + "\u201d a public scenario, offered to every player?";
-            if (confirm(question))
+            ScenarioConfirm.ask(replacing ? {
+                title: "Replace \u201c" + (scenario.replaces.title || scenario.replaces.id) + "\u201d?",
+                text: ["Accepting this replaces the public scenario \u201c" + (scenario.replaces.title || scenario.replaces.id) + "\u201d ("
+                    + scenario.replaces.path + ") with " + scenario.owner + "'s submission.", "The one it replaces goes to the archive."],
+                yes: "Replace it"
+            } : {
+                title: "Approve \u201c" + (scenario.title || scenario.path) + "\u201d?",
+                text: "It becomes a public scenario, offered to every player.",
+                yes: "Approve it"
+            }, function () {
                 that.post("admin/approve", {owner: scenario.owner, path: scenario.path}, function (result) {
                     return (replacing ? "Replaced: " : "Approved: ") + "it is public as " + result.path + ".";
                 });
+            });
         }).button("option", "disabled", scenario.clash != null || !scenario.playable));
         var feedback = $("<div class='shelf-reject' hidden></div>");
         var area = $("<textarea rows='4' maxlength='4000'></textarea>").attr("placeholder", "What should be changed? " + scenario.owner + " sees this in My Scenarios.")
@@ -733,10 +814,12 @@ ScenarioAdminUI.prototype = {
                 notes.push("restored " + ScenarioShelfCommon.when(record.restoredAt) + " by " + record.restoredBy);
             text.append($("<div class='shelf-notes'></div>").text(notes.join(" \u00b7 ")));
             $("<div class='shelf-buttons'></div>").appendTo(row).append(ScenarioShelfCommon.button("Restore", "Put it back where it was", function () {
-                if (confirm("Put this version of " + (record.owner ? record.owner + "'s " : "the public ") + record.path + " back? Whatever is there now goes to the archive."))
+                ScenarioConfirm.ask({title: "Restore " + record.path + "?", text: "Put this version of " + (record.owner ? record.owner + "'s " : "the public ")
+                        + record.path + " back? Whatever is there now goes to the archive.", yes: "Restore it"}, function () {
                     that.post("admin/restore", {key: record.key}, "Restored " + record.path + ".", function () {
                         $(document).trigger("gemp:scenarios-changed");
                     });
+                });
             }));
         });
         if ((this.state.archived || 0) > records.length)

@@ -1637,8 +1637,9 @@ var GempScenarioOverlay = Class.extend({
             //A side the scenario names is the side it goes on, and level with the middle of the thing, whatever
             // cards that covers: the author has seen what it covers.  Only what it must not cover (what is outlined,
             // what is to be clicked, what the message says to keep clear of) still slides it along that side.  Left
-            // to itself it goes on whichever side costs least.
-            var order = ["right", "left", "below", "above"];
+            // to itself it goes on whichever side costs least, and, where they cost much the same, above first: a
+            // bubble over what it points at reads before the thing, and keeps clear of the hand along the bottom.
+            var order = ["above", "right", "left", "below"];
             var named = side != null && side != "auto" && $.inArray(side, order) > -1;
             if (named)
                 order = [side];
