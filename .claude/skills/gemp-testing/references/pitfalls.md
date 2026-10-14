@@ -43,7 +43,10 @@ check's invalid candidate "among them" cannot be shown against such an effect, w
 wounds of a LOST SKIRMISH are not such an effect: every loser is wounded together, in one window naming them all
 (`Wound A, B, C - Optional "is about to" responses`), and a prevention that names a kind is then asked "Choose
 characters to prevent effect to" among the matching losers only, so its `F` lays several losers, valid and
-invalid, in one skirmish (Hides 4_19: two [dunland] Men, a Man of another culture and Saruman 4_33). Nobody
+invalid, in one skirmish (Hides 4_19: two [dunland] Men, a Man of another culture and Saruman 4_33). That
+board is for minions only: a skirmish has one Free Peoples character (CR 4.2 "assignment phase"), so a response
+to a wound on one kind of FREE PEOPLES character ("an unbound Hobbit", Skinbark 6_35) meets each candidate
+alone in its own window, and its `F` "among them" is a line in Notes (dec-b11_78 found no board). Nobody
 is asked the order: cards in play that an effect takes together are taken in the order of their card ids, the
 same in every run (Q-0142, F-0268). A card gets a new id as it comes into play, so that is the
 order they came into play: lay them down one at a time (`MoveMinionsToTable(a); MoveMinionsToTable(b);`) and a

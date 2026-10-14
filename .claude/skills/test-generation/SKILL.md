@@ -455,7 +455,8 @@ Which checks a clause lists follows from its words, and the analyst is expected 
   done just outside the window, in the phase before of the same turn for "this phase" (shapes.md, "A count "this
   phase""), on the turn before for "this turn". A count the rules themselves keep and start again each turn
   (the moves made, 92_11) owes a line in Notes and no later turn. A phase ability that changes something and names no duration has
-  one by rule (CR 4.2 "phase action": it lasts for the phase it is used in) → `D`. So has a trigger's effect:
+  one by rule (CR 4.2 "phase action": it lasts for the phase it is used in) → `D`; so has an event's, an archery
+  total included, read again once the phase is over (Elevated Fire 11_78). So has a trigger's effect:
   by Ketura's ruling (Q-0018) it lasts to the end of the current phase → `D`. Each skirmish is a phase of its
   own (CR 4.2 "skirmish phase(s)"): such an effect from one skirmish is gone in the next. Its "just before" is
   read in the same skirmish at the decision that follows the use, and its "just after" in the next (Elven Sword 4_64)
