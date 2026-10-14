@@ -600,6 +600,10 @@
 					true: {
 						type: optional
 						text: Would you like to make an opponent place a random card from hand beneath draw deck?
+						requires: {
+							type: HasCardInHand
+							player: shadow
+						}
 						effect: {
 							type: putCardsFromHandOnBottomOfDeck
 							player: shadow

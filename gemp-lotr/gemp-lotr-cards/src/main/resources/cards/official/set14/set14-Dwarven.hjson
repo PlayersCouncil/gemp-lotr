@@ -22,7 +22,7 @@
 				type: modifier
 				modifier: {
 					type: modifyCost
-					filter: another,or(dwarf,and(culture(gandalf),man))
+					filter: your,another,or(dwarf,and(culture(gandalf),man))
 					amount: -1
 				}
 			}
