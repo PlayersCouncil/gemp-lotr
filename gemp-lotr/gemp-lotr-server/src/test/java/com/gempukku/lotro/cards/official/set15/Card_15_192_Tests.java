@@ -3,6 +3,7 @@ package com.gempukku.lotro.cards.official.set15;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -14,14 +15,32 @@ import static org.junit.Assert.*;
 public class Card_15_192_Tests
 {
 
+	// Isengard Ruined stands in each adventure deck in place of site 9, which no test reaches, and is put on the
+	// path as site 2.
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "15_192");
-					// put other cards in here as needed for the test case
+					put("aragorn", "1_89");         // Aragorn, Ranger of the North: [gondor] Man companion, vitality 4; a maneuver ability only
+					put("knight", "5_35");          // Gondorian Knight: [gondor] Man companion, vitality 3; Knight is his whole text
+					put("grimir", "1_17");          // Grimir, Dwarven Elder: an ally of vitality 3; a fellowship ability only
+					// Elendil's Army: [gondor] follower, strength +2; Aid: exert a [gondor] companion
+					put("army", "18_47");
+					// Saruman, Servant of Sauron: [isengard] Shadow follower, Aid (1) removed, to a minion; its other text
+					// needs its bearer to win a skirmish
+					put("saruman", "17_38");
+					// First Level: [gondor] fortification condition; Maneuver: exert a [gondor] Man (or spot a knight) to
+					// transfer it from the support area to a minion
+					put("firstlevel", "7_92");
+
+					put("raiders", "1_158");        // Uruk-hai Raiding Party: vitality 3; Damage +1 is its whole text
 				}},
-				VirtualTableScenario.FellowshipSites,
+				new HashMap<>()
+				{{
+					putAll(VirtualTableScenario.FellowshipSites);
+					remove("site9");
+					put("ruined", "15_192");
+				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -57,28 +76,26 @@ public class Card_15_192_Tests
 		/**
 		 * Set: 15
 		 * Name: Isengard Ruined
-		 * Unique: False
-		 * Side: 
-		 * Culture: 
-		 * Shadow Number: 1
+		 * Unique: false
 		 * Type: Site
-		 * Subtype: 
-		 * Site Number: *
+		 * Block: Shadows
+		 * Shadow Number: 1
+		 * Direction: Right
 		 * Game Text: <b>Battleground</b>. Each time a follower is transferred to a character, the first Shadow player may exert a companion twice.
-		*/
+		 */
 
 		var scn = GetScenario();
 
-		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite();
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsSite("ruined");
 
 		assertEquals("Isengard Ruined", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.BATTLEGROUND));
+		assertEquals(SitesBlock.SHADOWS, card.getBlueprint().getSiteBlock());
 		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(LotroCardBlueprint.Direction.RIGHT, card.getBlueprint().getSiteDirection());
+		assertTrue(scn.HasKeyword(card, Keyword.BATTLEGROUND));
 	}
 
 	// "Each time a follower is transferred to a character, the first Shadow player may exert a companion
@@ -133,18 +150,133 @@ public class Card_15_192_Tests
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void IsengardRuinedTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void TheShadowPlayerMayExertACompanionWhoCanExertTwiceEachTimeAFollowerOfEitherSideIsTransferred() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var knight = scn.GetFreepsCard("knight");
+		var grimir = scn.GetFreepsCard("grimir");
+		var army = scn.GetFreepsCard("army");
+		scn.MoveCompanionsToTable(aragorn, knight);
+		scn.MoveAlliesToTable(grimir);
+		scn.MoveCardsToSupportArea(army);
+		// Vitality 3 with 1 wound: the Knight can exert once more, not twice.
+		scn.AddWoundsToChar(knight, 1);
+
+		var saruman = scn.GetShadowCard("saruman");
+		var raiders = scn.GetShadowCard("raiders");
+		scn.MoveCardsToSupportArea(saruman);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveCardToAdventurePath(scn.GetShadowSite("ruined"));
+		scn.FreepsPass();
+		var ruined = scn.GetCurrentSite();
+		assertEquals("Isengard Ruined", ruined.getBlueprint().getTitle());
+		scn.MoveMinionsToTable(raiders);
+		scn.SkipToPhase(Phase.MANEUVER);
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(knight));
+		assertEquals(0, scn.GetWoundsOn(grimir));
+		assertEquals(0, scn.GetWoundsOn(raiders));
+
+		// The Free Peoples follower: Aragorn exerts for the Aid, and the Army goes to Frodo.
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(army));
+		scn.FreepsAcceptOptionalTrigger();
+		scn.FreepsChooseCard(aragorn);
+		scn.FreepsChooseCard(frodo);
+		assertAttachedTo(army, frodo);
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(ruined));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(ruined));
+		scn.ShadowAcceptOptionalTrigger();
+		// Companions who can exert twice are offered; the Knight, who can exert once, an ally and a minion are not.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(frodo, aragorn));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(knight, grimir, raiders));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		scn.ShadowChooseCard(aragorn);
+		// 1 + 2
+		assertEquals(3, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(1, scn.GetWoundsOn(knight));
+		assertEquals(0, scn.GetWoundsOn(grimir));
+		assertEquals(0, scn.GetWoundsOn(raiders));
+
+		// The Shadow follower, transferred to a minion: asked again, and declined.
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(saruman));
+		scn.ShadowAcceptOptionalTrigger();
+		assertAttachedTo(saruman, raiders);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(ruined));
+		scn.ShadowDeclineOptionalTrigger();
+		assertEquals(3, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(1, scn.GetWoundsOn(knight));
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+	}
+
+	@Test
+	public void AConditionTransferredToACharacterIsNoFollowerAndOffersNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var firstlevel = scn.GetFreepsCard("firstlevel");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToSupportArea(firstlevel);
+
+		var raiders = scn.GetShadowCard("raiders");
+
+		scn.StartGame();
+		scn.MoveCardToAdventurePath(scn.GetShadowSite("ruined"));
+		scn.FreepsPass();
+		var ruined = scn.GetCurrentSite();
+		assertEquals("Isengard Ruined", ruined.getBlueprint().getTitle());
+		scn.MoveMinionsToTable(raiders);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		scn.FreepsUseCardAction(firstlevel);
+		assertAttachedTo(firstlevel, raiders);
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(ruined));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+	}
+
+	@Test
+	public void WithNoCompanionAbleToExertNothingIsOffered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+
+		var saruman = scn.GetShadowCard("saruman");
+		var raiders = scn.GetShadowCard("raiders");
+		scn.MoveCardsToSupportArea(saruman);
+
+		scn.StartGame();
+		scn.MoveCardToAdventurePath(scn.GetShadowSite("ruined"));
+		scn.FreepsPass();
+		var ruined = scn.GetCurrentSite();
+		assertEquals("Isengard Ruined", ruined.getBlueprint().getTitle());
+		scn.MoveMinionsToTable(raiders);
+		// Frodo, the only companion, is exhausted: vitality 4 with 3 wounds.
+		scn.AddWoundsToChar(frodo, 3);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(saruman));
+		scn.ShadowAcceptOptionalTrigger();
+		assertAttachedTo(saruman, raiders);
+
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(ruined));
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+		assertEquals(3, scn.GetWoundsOn(frodo));
 	}
 }
