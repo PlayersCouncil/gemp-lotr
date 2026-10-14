@@ -309,7 +309,7 @@ is about to be discarded", a [sauron] possession in the same discard; for a woun
 whose wounds are taken together where a "wound each" is not: pitfalls, "Wound each"). One that saves with no choice ("discard this
 condition to prevent that") prevents the whole of that one simultaneous discard, cards not of the kind it names and
 the opponent's own among them, and they are read saved (Q-0250: B, "the action is all or nothing"; Siege Engine
-5_60). Where a trigger names who did the thing
+5_60). A singular "If a <kind> is about to be discarded" is open on Q-0313 (shapes.md, Q-0250). Where a trigger names who did the thing
 ("exerted by a Free Peoples card", "uses a special ability"), one valid doer is neither the card itself nor its
 bearer, and one is no character where the wording allows (a possession's ability). Where a condition or a trigger
 turns on a card of a kind being PLAYED ("unless a Shadow event is played"), each word owes a card that fails it

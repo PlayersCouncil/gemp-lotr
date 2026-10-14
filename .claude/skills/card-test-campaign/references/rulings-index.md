@@ -502,7 +502,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Built on 2026-10-06: assert as ruled, park nothing [F-0083, F-0084, F-0099, Q-0070, Q-0043, F-0100, F-0101, F-0107, Q-0053, Q-0044, Q-0059, F-0097]
 - "If a minion exerts as a cost of its special ability" is answered at an exertion paid as a cost, and not where the minion exerts as the EFFECT of its own ability (Rush of Steeds 11_157; F-0478, built by engine pass 27)
 - "If the <side> player is about to discard ..." asks who discards (F-0296; Q-0171: A)
-- "If one or more <kind> are about to be discarded by an opponent, <pay> to prevent that": the whole discard is prevented (Q-0250: B; Siege Engine 5_60, engine pass 28)
+- "If one or more <kind> are about to be discarded by an opponent, <pay> to prevent that": the whole discard is prevented (Q-0250: B; Siege Engine 5_60, engine pass 28) [Q-0313]
 - "Each time the Free Peoples player plays the fellowship's next site" asks who plays it (F-0479, Fearless Approach 13_164 and Caravan From the South 13_83) [F-0302]
 - "If a Free Peoples player reveals this card from your hand" asks whose CARD revealed (Eye of Barad-dûr 5_96; Q-0251: B) [Q-0171]
 - "Each time your condition is hindered or discarded" (Q-0075)
