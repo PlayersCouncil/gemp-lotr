@@ -1298,6 +1298,10 @@ var GempScenarioOverlay = Class.extend({
         this.bubble.css({display: "block", visibility: "hidden"});
 
         this.showZoom(message.zoom);
+        //A card shown large covers the table: the pointer does not reach what is under it (a card under it would
+        // otherwise come up enlarged over it).  Unless the message is waiting on something done on the table, which
+        // has to be reachable through it.
+        this.zoomBox.toggleClass("scenario-zoom-blocks", message.zoom != null && (message.advance == "next" || chooses));
         this.setHighlights(message.highlight || [], message.highlightStyle);
         this.refresh();
         this.bubble.css({visibility: "visible"});

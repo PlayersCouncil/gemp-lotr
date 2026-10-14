@@ -850,6 +850,88 @@ var GempScenarioAuthor = Class.extend({
         });
     },
 
+    /**
+     * "Repeat until": a step that goes on applying to every decision that fits its When, until one arrives that fits
+     * its Until (which goes to the step after it).  Ticking it fills Until in with the phase after the one the step
+     * is in (or the next turn), to be changed if that is not it.  While a step repeats, what its author does at it is
+     * written into its Answer, one answer for each time round, and into what it allows (the server does that).
+     */
+    repeatRow: function (work) {
+        var that = this;
+        var blank = function (value) {
+            return value == null || ("" + value).trim() == "";
+        };
+        var row = this.el("div", "sa-repeat");
+        var line = this.el("div", "sa-row").appendTo(row);
+        var untilInput = this.bound(work, "until", "hjson").attr("rows", 1)
+            .attr("title", "The first decision that fits this ends the repeating, and goes to the step after this one. Written like When: "
+                + "phase(shadow), turn(4), freeps, action, phase(regroup) ... or in full as the file has it, in HJSON.");
+        var shown = this.el("div", "sa-repeat-more");
+        var box = $("<input type='checkbox'/>").prop("checked", !blank(work.until)).change(function () {
+            if (this.checked) {
+                if (blank(work.until))
+                    work.until = that.nextUntil(work.when);
+                untilInput.val(work.until || "").trigger("sa-fit");
+                shown.show();
+                if (blank(work.until))
+                    untilInput.focus();
+                else
+                    that.stepChanged(true);
+            } else {
+                work.until = "";
+                untilInput.val("").trigger("sa-fit");
+                shown.hide();
+                that.stepChanged(true);
+            }
+        });
+        line.append(this.el("label", "sa-check").attr("title", "Go on applying to every decision that fits When, not only the first, until a decision arrives that fits what is given here")
+            .append(box).append(document.createTextNode(" repeat until")));
+        line.append(untilInput.addClass("sa-until"));
+        shown.append(this.el("div", "sa-note", "It applies to every decision that fits When, until one arrives that fits this, which goes to the next step. "
+            + "Play it through as the player should: each thing you do is added to Answer, in order, and to Allow."));
+        //Repeating to do several things and then pass: Pass only once they have been done
+        var plays = [];
+        ("" + (work.allow.answers || "")).replace(/play\(\s*([A-Za-z0-9_]+)\s*\)/g, function (all, alias) {
+            if ($.inArray(alias, plays) < 0)
+                plays.push(alias);
+            return all;
+        });
+        if (blank(work.allow.passWhen)) {
+            var gate = this.button("Pass only once " + (plays.length == 0 ? "they are" : plays.join(" and ") + (plays.length == 1 ? " is" : " are")) + " in play",
+                plays.length == 0 ? "Allow play(card) first: this makes Pass wait until each card played here is on the table"
+                    : "Sets Pass when: Pass is not allowed until each of these is on the table. (Say what to tell a player who passes too early in Otherwise.)", function () {
+                    work.allow.passWhen = "[\n" + $.map(plays, function (alias) {
+                        return "\t{\n\t\ttype: canSpot\n\t\tfilter: alias(" + alias + ")\n\t}";
+                    }).join("\n") + "\n]";
+                    var typed = that.form != null && that.form.typed != null ? that.form.typed.passWhen : null;
+                    if (typed != null)
+                        typed.input.val(work.allow.passWhen).trigger("sa-fit");
+                    if (that.form != null && that.form.more != null)
+                        that.form.more.attr("open", "open");
+                    gate.remove();
+                    that.stepChanged(true);
+                });
+            if (plays.length == 0)
+                gate.prop("disabled", true);
+            shown.append(this.el("div", "sa-bar").append(gate));
+        }
+        row.append(shown.toggle(!blank(work.until)));
+        return row;
+    },
+
+    /** What a step that repeats is likely to repeat until: the phase after the one its When names, or the next turn. */
+    nextUntil: function (when) {
+        var text = "" + (when || "");
+        var phase = /phase\(\s*([a-z]+)\s*\)/i.exec(text);
+        var turn = /turn\(\s*(\d+)\s*\)/i.exec(text);
+        if (phase != null) {
+            var at = $.inArray(phase[1].toLowerCase(), this.PHASES);
+            if (at > -1 && at < this.PHASES.length - 1)
+                return "phase(" + this.PHASES[at + 1] + ")";
+        }
+        return turn != null ? "turn(" + (parseInt(turn[1]) + 1) + ")" : "";
+    },
+
     /** The step in hand takes what it allows, and its answer, from what its author does next. */
     retake: function () {
         var that = this;
@@ -2094,6 +2176,8 @@ var GempScenarioAuthor = Class.extend({
             flagsRow.append(this.el("label", "sa-check").attr("title", "A player who fails later can come back to here")
                 .append(this.bound(work, "checkpoint", "check")).append(document.createTextNode(" checkpoint")));
         flagsRow.append(this.field("name", this.bound(work, "id", "text").addClass("sa-short"), "Only to make reports easier to read"));
+        if (!child && !block && !opening && !work.pause)
+            when.append(this.repeatRow(work));
         if ((this.state.flags || []).length > 0 && !opening) {
             when.append(this.field("If", this.bound(work, "if", "text"), "Only part of the game if these were chosen at a pause's choice: " + this.state.flags.join(", ")));
             when.append(this.field("Unless", this.bound(work, "unless", "text"), "Not part of the game if any of these was chosen"));
@@ -2125,7 +2209,7 @@ var GempScenarioAuthor = Class.extend({
                 "Changes to the board when the step's decision arrives: move(card, seat.zone), draw(n), wound(card, n), heal(card, n), twilight(n), burdens(n), attach(card, bearer), stack(card, host). "
                 + "The decision itself was worked out before them: what they put in a hand can be played from the next decision on."));
             var more = $("<details class='sa-more'></details>").appendTo(does);
-            more.append($("<summary></summary>").text(child ? "Wrong clicks" : "Wrong clicks, repeating, giving up"));
+            more.append($("<summary></summary>").text(child ? "Wrong clicks" : "Wrong clicks, giving up"));
             more.append(this.field("Otherwise", this.bound(work.allow, "otherwise", "area").attr("rows", 2), "What to say when the player clicks something legal that is not allowed. Empty: the stock line."));
             more.append(this.field("Pass when", this.bound(work.allow, "passWhen", "hjson"), "Requirements (as on a card) that have to hold before Pass is allowed, as the file has them, in HJSON: { type: canSpot, filter: alias(aragorn) }"));
             work.allow.hints = work.allow.hints || {};
@@ -2151,13 +2235,12 @@ var GempScenarioAuthor = Class.extend({
                 hintBox.append(add);
             };
             drawHints();
-            if (!child) {
-                //(written like When: a line of terms, or in full as the file has it)
-                more.append(this.field("Until", this.bound(work, "until", "hjson"), "Keeps applying to decisions until one arrives that fits this. Written like When: a line of terms, or in full as the file has it, in HJSON."));
+            //(Until is with "repeat until", under When)
+            if (!child)
                 more.append(this.field("Skip when", this.bound(work, "skipWhen", "hjson"), "Given up on if a decision that fits this arrives first"));
-            }
-            if (work.allow.passWhen != null || work.allow.otherwise || work.until != null || work.skipWhen != null)
+            if (work.allow.passWhen != null || work.allow.otherwise || work.skipWhen != null)
                 more.attr("open", "open");
+            this.form.more = more;
         }
 
         /* ---- what it says ---- */

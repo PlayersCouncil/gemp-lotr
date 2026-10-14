@@ -507,6 +507,11 @@ body.scenario-tutorial .decisionClock {
 
 /* ---- a card shown large ---- */
 
+/* (it takes the pointer, so that nothing under it is hovered or clicked: see showBubble) */
+.scenario-zoom.scenario-zoom-blocks {
+    pointer-events: auto;
+}
+
 .scenario-zoom-shade {
     position: absolute;
     left: 0;
