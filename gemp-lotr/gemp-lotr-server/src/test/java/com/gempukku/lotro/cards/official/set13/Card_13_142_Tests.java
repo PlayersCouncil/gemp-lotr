@@ -3,6 +3,7 @@ package com.gempukku.lotro.cards.official.set13;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +19,15 @@ public class Card_13_142_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "13_142");
-					// put other cards in here as needed for the test case
+					put("bilbo", "13_142");
+					put("sam", "1_311");         // Sam, Son of Hamfast: a Ring-bound Hobbit; a fellowship ability and a response to Frodo's death
+					put("merry", "1_303");       // Merry, From O'er the Brandywine: an unbound Hobbit companion; +2 only with a weapon
+					// Sméagol, Poor Creature: a Ring-bound companion of no race; a skirmish ability used only on purpose
+					put("smeagol", "6_45");
+					put("runner1", "1_178");     // Goblin Runner: strength 5, vitality 1; its text is about being played
+					put("runner2", "1_178");
+					// Uruk Pursuer: fierce, strength 5, vitality 3; his texts are about unbound Hobbits discarded or killed
+					put("pursuer", "4_190");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -63,7 +71,7 @@ public class Card_13_142_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("bilbo");
 
 		assertEquals("Bilbo", card.getBlueprint().getTitle());
 		assertEquals("Aged Ring-bearer", card.getBlueprint().getSubtitle());
@@ -120,23 +128,111 @@ public class Card_13_142_Tests
 		scn.FreepsResolveSkirmish(bilbo);
 
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(bilbo));
+		assertEquals(1, scn.GetBurdens());
 		scn.FreepsAcceptOptionalTrigger();
 		assertEquals(0, scn.GetBurdens());
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void BilboTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void WhileBilboIsNotAssignedEachRingBoundHobbitIsStrengthPlusOneAndAtHisSkirmishABurdenIsRemovedForEachOther() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var bilbo = scn.GetFreepsCard("bilbo");
+		var sam = scn.GetFreepsCard("sam");
+		var merry = scn.GetFreepsCard("merry");
+		var smeagol = scn.GetFreepsCard("smeagol");
+		var frodo = scn.GetRingBearer();
+		scn.MoveCompanionsToTable(bilbo, sam, merry, smeagol);
+
+		var runner1 = scn.GetShadowCard("runner1");
+		var runner2 = scn.GetShadowCard("runner2");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.AddBurdens(4);
 
-		assertEquals(2, scn.GetTwilight());
+		// Bilbo is assigned to nothing: each Ring-bound Hobbit, Bilbo himself among them, is +1; not Merry, a
+		// Hobbit who is not Ring-bound, nor Sméagol, a Ring-bound companion who is no Hobbit.
+		assertEquals(4, scn.GetStrength(bilbo));
+		assertEquals(5, scn.GetStrength(frodo));    // 3 + 1 for The Ruling Ring + 1
+		assertEquals(4, scn.GetStrength(sam));
+		assertEquals(3, scn.GetStrength(merry));
+		assertEquals(3, scn.GetStrength(smeagol));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		scn.MoveMinionsToTable(runner1, runner2);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(
+				new PhysicalCardImpl[]{bilbo, runner1},
+				new PhysicalCardImpl[]{sam, runner2});
+
+		// Bilbo is assigned: nobody is +1.
+		assertTrue(scn.IsCharAssigned(bilbo));
+		assertEquals(3, scn.GetStrength(bilbo));
+		assertEquals(4, scn.GetStrength(frodo));
+		assertEquals(3, scn.GetStrength(sam));
+
+		// Sam's skirmish, fought first, does not involve Bilbo: nothing is offered, and Bilbo, still waiting for
+		// his own, gives no bonus.
+		assertEquals(4, scn.GetBurdens());
+		scn.FreepsResolveSkirmish(sam);
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(bilbo));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertEquals(3, scn.GetStrength(sam));
+		assertEquals(4, scn.GetBurdens());
+		scn.PassSkirmishActions();
+
+		// Bilbo's skirmish: a burden for each other Ring-bound Hobbit he can spot, Frodo and Sam. Not Bilbo himself,
+		// Merry or Sméagol.
+		scn.FreepsResolveSkirmish(bilbo);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(bilbo));
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(2, scn.GetBurdens());
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		scn.PassSkirmishActions();
+
+		// His skirmish is over and he is assigned no longer: the bonus is back.
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		assertEquals(4, scn.GetStrength(bilbo));
+		assertEquals(5, scn.GetStrength(frodo));
+		assertEquals(4, scn.GetStrength(sam));
+		assertEquals(3, scn.GetStrength(merry));
+		assertEquals(3, scn.GetStrength(smeagol));
+	}
+
+	@Test
+	public void WithFrodoTheOnlyOtherRingBoundHobbitOneBurdenGoesAndTheFierceSkirmishOffersItAgain() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var bilbo = scn.GetFreepsCard("bilbo");
+		var merry = scn.GetFreepsCard("merry");
+		scn.MoveCompanionsToTable(bilbo, merry);
+
+		var pursuer = scn.GetShadowCard("pursuer");
+
+		scn.StartGame();
+		scn.AddBurdens(3);
+		scn.MoveMinionsToTable(pursuer);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(bilbo, pursuer);
+		scn.FreepsResolveSkirmish(bilbo);
+
+		// Frodo alone is counted, not Merry: one burden.
+		assertEquals(3, scn.GetBurdens());
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(bilbo));
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(2, scn.GetBurdens());
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		scn.PassSkirmishActions();
+
+		// The Pursuer is fierce: Bilbo's second skirmish offers it again, and declining leaves the burdens.
+		assertTrue(scn.InFierceRound());
+		scn.PassFierceAssignmentActions();
+		scn.FreepsAssignToMinions(bilbo, pursuer);
+		scn.FreepsResolveSkirmish(bilbo);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(bilbo));
+		scn.FreepsDeclineOptionalTrigger();
+		assertEquals(2, scn.GetBurdens());
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 }
