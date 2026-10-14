@@ -117,7 +117,10 @@ SELF_BAR = r"(?:^|[.:]\s+)(?:this (?:minion|companion|ally|character|follower)|%
 CHEAT = re.compile(r"\bscn\s*\.\s*(?:Move\w*To\w*|AttachCardsTo|StackCardsOn|AddWoundsToChar|RemoveWoundsFromChar|"
                    r"AddTokensToCard|RemoveTokensFromCard|AddBurdens|RemoveBurdens|AddThreats|RemoveThreats|SetTwilight|"
                    r"Set\w*Hand|Set\w*DrawDeck|ApplyAdHoc\w*|HinderCard\w*|RestoreCard\w*|\w*TakeControlOfSite)\s*\(")
-REFRESH = re.compile(r"RefreshDecision\s*\(")
+# What works a pending choice of phase actions out afresh: the refresh itself, and (since engine pass 40, G-0060)
+# the cheats that end with one (SetHand, SetDrawDeck and MoveCardsToDiscard, with their twins and by-name variants).
+REFRESH = re.compile(r"Refresh(?:Decision|PendingPhaseActions)\s*\(|\bscn\s*\.\s*(?:Set(?:Freeps|Shadow)?(?:Hand|DrawDeck)|"
+                     r"MoveCards(?:To|ToFreeps|ToShadow)Discard)\s*\(")
 
 # How the R clause for a site left behind speaks: by the rule it stands on, or by where the fellowship then is.
 SITE_LEFT = re.compile(r"unless the fellowship is at that site|behind the fellowship|left behind|CR 4\.2 \"active\"|"

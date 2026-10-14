@@ -20,6 +20,7 @@ public class Card_V1_025_Tests
 					put("flock", "101_25");
 					put("flock2", "101_25");
 					put("saruman", "3_69");     // Saruman, Servant of the Eye: [isengard] minion, not weather; an assignment ability never used here
+					put("servant", "17_38");    // Saruman, Servant of Sauron: [isengard] follower, cost 1; its text is for the minion it aids, and it aids none here
 					put("agent", "12_144");     // Saruman, Agent of the Dark Lord: [uruk-hai] minion, cost 4, site 4, lurker; a skirmish ability and a trigger on a companion's death, neither met here
 					put("snows", "1_138");      // Saruman's Snows: [isengard] weather condition
 					put("chill", "1_134");      // Saruman's Chill: [isengard] weather condition
@@ -267,6 +268,45 @@ public class Card_V1_025_Tests
 		assertInPlay(saruman);
 		// 6 - 4 to play Saruman - 2 roaming at site 2
 		assertEquals(0, scn.GetTwilight());
+		assertTrue(scn.ShadowActionAvailable(flock));
+
+		assertEquals(0, scn.GetShadowHandCount());
+		scn.ShadowUseCardAction(flock);
+		scn.ShadowChoose("draw deck");
+		scn.ShadowDismissRevealedCards();
+		scn.ShadowChooseCardBPFromSelection(chill);
+
+		assertInZone(Zone.HAND, chill);
+		assertEquals(1, scn.GetShadowHandCount());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void SpottingASarumanWhoIsAFollowerIsEnoughToo() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var flock = scn.GetShadowCard("flock");
+		// "Saruman" has no type word: a follower of that title is spotted as a minion is.
+		var servant = scn.GetShadowCard("servant");
+		var chill = scn.GetShadowCard("chill");
+		var frost = scn.GetShadowCard("frost");
+		scn.MoveCardsToHand(servant);
+		scn.MoveCardsToDiscard(frost);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(flock);
+		scn.SetTwilight(3);
+		scn.FreepsPass();
+
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		// 3 set + 1 for Frodo + 2 for the shadow number of site 2
+		assertEquals(6, scn.GetTwilight());
+		// No wounded companion and no Saruman
+		assertEquals(0, scn.GetWoundsOn(scn.GetRingBearer()));
+		assertFalse(scn.ShadowActionAvailable(flock));
+
+		scn.ShadowPlayCard(servant);
+		assertInZone(Zone.SUPPORT, servant);
 		assertTrue(scn.ShadowActionAvailable(flock));
 
 		assertEquals(0, scn.GetShadowHandCount());

@@ -20,6 +20,7 @@ public class Card_V3_038_Tests
 					put("illturn", "103_38");
 					put("saruman", "3_69");     // Saruman, Servant of the Eye: [isengard] Wizard minion
 					put("follower", "17_38");   // Saruman, Servant of Sauron: [isengard] Shadow follower
+					put("rabble", "4_33");      // Saruman, Rabble-rouser: [dunland] Wizard minion, cost 4, site 4; exerts companions on a move for each [dunland] Man
 					put("traitor", "4_173");    // Saruman, Black Traitor: cost 4, site 4. When you play Saruman, you may discard a condition
 					put("savage1", "1_151");    // Uruk Savage: [isengard] Uruk-hai, cost 2, site 5, vitality 3; damage +1 is its whole text
 					put("savage2", "1_151");
@@ -135,6 +136,33 @@ public class Card_V3_038_Tests
 		scn.FreepsPass();
 
 		assertEquals(13, scn.GetTwilight());
+		assertTrue(scn.ShadowPlayAvailable(illturn));
+
+		scn.ShadowPlayCard(illturn);
+		assertInZone(Zone.SUPPORT, illturn);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void ASarumanOfDunlandAloneIsEnoughToPlayIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var illturn = scn.GetShadowCard("illturn");
+		// "Saruman" has no culture word: a [dunland] Saruman is spotted as an [isengard] one is.
+		var rabble = scn.GetShadowCard("rabble");
+		scn.MoveCardsToHand(illturn, rabble);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		assertEquals(Phase.SHADOW, scn.GetCurrentPhase());
+		assertEquals(13, scn.GetTwilight());
+		assertFalse(scn.ShadowPlayAvailable(illturn));
+
+		scn.ShadowPlayCard(rabble);
+		// 13 - 4 to play - 2 roaming (a site 4 minion played at site 2)
+		assertEquals(7, scn.GetTwilight());
 		assertTrue(scn.ShadowPlayAvailable(illturn));
 
 		scn.ShadowPlayCard(illturn);

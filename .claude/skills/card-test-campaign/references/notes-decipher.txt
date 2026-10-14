@@ -280,6 +280,11 @@ TO LOOK AT WHEN THE SET COMES UP (seen in passing by an earlier batch; not looke
   if the Mirror is the one kept. Southern Spies 2_91 under Erland (seen in passing, not probed, not filed): its
   discard of the Free Peoples hand is `discardFromHand`, `player: you`, and fails its forecast under Erland's bar
   though nothing is looked at; an event is not asked the forecast, so the discard is expected to happen. Read it.
+- Set 4, Card_04_365_Tests (from engine pass 41, lint's `stale`; a lone test, not landed, left as it is): in
+  FellowshipAbilityIsNotOfferedAgainInTheTurnItWasUsed (line 111), `assertFalse(scn.FreepsActionAvailable(card))`
+  is read right after `scn.AddWoundsToChar(card, 1)`, with the choice of fellowship actions still the one sent
+  before the wound, so it shows nothing of the limit. Put `scn.FreepsRefreshDecision();` between the two (pitfalls,
+  "A board changed under a pending decision") and read the action absent after it.
 
 ANSWERED BY KETURA ON 2026-10-11 (her fifth notes; `lookup.py <number>` has her words). Test to these, file none again.
 - A cost is judged payable IN FULL before it begins (F-0425: Morgul Regiment 7_197; a repeated cost wants every
