@@ -22,9 +22,9 @@ import static org.junit.Assert.*;
  * alternate currency--not preventing or canceling the effect, just providing a conversion."
  *
  * Two things follow, and each is a test here.  A cost that an "instead" turns into something else is paid, and
- * what it buys happens (a cost that is PREVENTED is not paid: ACostThatIsPreventedIsNotPaidTests).  And where
- * something cannot be prevented, an "instead" still takes its place, because replacing a thing is not preventing
- * it.
+ * what it buys happens (a cost that is PREVENTED is not paid: ACostThatIsPreventedIsNotPaidTests); that holds for
+ * a wound a worn Ring turns into burdens as for a discard turned into a stacking (F-0507).  And where something
+ * cannot be prevented, an "instead" still takes its place, because replacing a thing is not preventing it.
  */
 public class InsteadTests
 {
@@ -47,6 +47,28 @@ public class InsteadTests
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// The One Ring, Isildur's Bane: "Response: If bearer is about to take a wound, he wears The One Ring until the
+	// regroup phase.  While wearing The One Ring, each time the Ring-bearer is about to take a wound, add 2
+	// burdens instead."  It answers a wound in any phase, the Shadow phase included.
+	protected VirtualTableScenario GetWoundPaidAsBurdensScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// Morgul Brute: "When you play this minion, you may spot a Nazgûl to add a burden.  The Free
+					// Peoples player may wound the Ring-bearer to prevent this."  Its skirmish ability is not used.
+					put("brute1", "7_188");
+					put("brute2", "7_188");
+					put("lemenya", "1_232");    // Úlairë Lemenya: a Nazgûl; its text touches only [wraith] conditions
+					// Lost to the Goblins, a Shadow event: "Response: If the Ring-bearer exerts or takes a wound,
+					// ..."  Never played: it is here to be offered when he takes a wound, and only then.
+					put("lost", "1_189");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.IsildursBaneRing
 		);
 	}
 
@@ -140,6 +162,58 @@ public class InsteadTests
 		assertInZone(Zone.SHADOW_CHARACTERS, soldier);
 		assertEquals(0, scn.GetWoundsOn(soldier));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void AWoundPaidAsBurdensIsPaidAndWhatItBuysHappens() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetWoundPaidAsBurdensScenario();
+
+		var frodo = scn.GetRingBearer();
+		var ring = scn.GetRing();
+
+		var brute1 = scn.GetShadowCard("brute1");
+		var brute2 = scn.GetShadowCard("brute2");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var lost = scn.GetShadowCard("lost");
+		scn.MoveCardsToHand(brute1, brute2, lost);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(lemenya);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		// The control: the first Brute's burden is prevented with a wound the Ring-bearer takes.  The Ring's
+		// response is declined; the wound lands, and the Shadow player is offered the event that answers it.
+		scn.ShadowPlayCard(brute1);
+		scn.ShadowAcceptOptionalTrigger();
+		assertTrue(scn.FreepsDecisionAvailable("prevent"));
+		scn.FreepsChooseYes();
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(ring));
+		scn.FreepsDeclineOptionalTrigger();
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetBurdens());
+		assertFalse(scn.RBWearingOneRing());
+		assertTrue(scn.ShadowPlayAvailable(lost));
+		scn.ShadowDeclineOptionalTrigger();
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		// The second Brute, and the same price.  This time Frodo puts the Ring on in answer to the wound, and 2
+		// burdens are added in its place: he takes no wound.
+		scn.ShadowPlayCard(brute2);
+		scn.ShadowAcceptOptionalTrigger();
+		assertTrue(scn.FreepsDecisionAvailable("prevent"));
+		scn.FreepsChooseYes();
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(ring));
+		scn.FreepsChooseOptionalTrigger(ring);
+		assertTrue(scn.RBWearingOneRing());
+		assertEquals(1, scn.GetWoundsOn(frodo));
+
+		// The price was paid in burdens, so the Brute's burden is prevented: 2 burdens, not 3.  No wound was
+		// taken, and nothing answers one.
+		assertEquals(2, scn.GetBurdens());
+		assertFalse(scn.ShadowPlayAvailable(lost));
+		assertInZone(Zone.HAND, lost);
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test

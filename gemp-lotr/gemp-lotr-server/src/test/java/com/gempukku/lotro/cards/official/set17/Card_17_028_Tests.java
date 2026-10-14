@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -314,7 +313,6 @@ public class Card_17_028_Tests
 	}
 
 	@Test
-	@Ignore("F-0507: a cost wound turned into a burden by The One Ring counts as unpaid, and the minion is not made roaming")
 	public void WearingTheRingFaramirPaysTheWoundAsABurdenAndTheMinionIsStillMadeRoaming() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetRingBearerScenario();
 

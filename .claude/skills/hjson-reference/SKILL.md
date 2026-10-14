@@ -652,6 +652,7 @@ A top-level `AddThreats` cost is known to the action's requirements, to the adva
 
 **Prevention:**
 `PreventWound(select, memorize?)`, `PreventAllWounds(select?)`, `PreventDiscard(select, memorize?)`, `PreventExert(select, memorize?)`, `PreventHeal(select, memorize?)`, `PreventEffect`, `PreventBurden`, `PreventTwilight`, `NegateWound(select?)`, `PreventAddingAllBurdens`
+`NegateWound` is for "... instead" of a wound, `PreventWound` for "prevent": a negated wound counts as done (a cost paid that way is paid; F-0507), a prevented one does not, and only a prevention is barred by `CantPreventWounds`.
 
 **Limits:**
 `IncrementPerPhaseLimit(limit?, phase?, perPlayer?)`, `IncrementPerTurnLimit(limit?)`
