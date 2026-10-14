@@ -18,6 +18,10 @@ class AutoZoom {
 	hoverTimer = null;
 	hoverValid = false;
 	cooldownTimer = null;
+	//Whether the pointer is over the preview (and not over the card it is of).  The preview lets clicks and the
+	// pointer through to the table, so that it never gets in the way of what is under it; but what is under it is
+	// hidden, and is not previewed in its place until the pointer has left the preview.
+	covered = false;
 
 	static HoverDelay = 500;
 	static HoverCooldown = 500;
@@ -280,9 +284,48 @@ class AutoZoom {
 		this.hoverValid = true;
 	}
 	
+	/** Whether the pointer is within the preview as it is shown. */
+	insidePreview(event) {
+		if (!this.cardDisplay.populated || event.clientX == null)
+			return false;
+		const rect = this.cardDisplay.baseDiv[0].getBoundingClientRect();
+		return rect.width > 0 && rect.height > 0 && event.clientX >= rect.left && event.clientX <= rect.right
+			&& event.clientY >= rect.top && event.clientY <= rect.bottom;
+	}
+
+	/** Whether the pointer is over the preview, and over something other than the card it is of. */
+	overPreview(event) {
+		if (!this.insidePreview(event))
+			return false;
+		const base = this.baseImageDiv;
+		return !(base != null && (base === event.target || $.contains(base, event.target)));
+	}
+
+	/**
+	 * The pointer has moved.  Once it leaves the preview, what it is over is looked at as if it had just come onto
+	 * it: the preview of another card, or none.
+	 */
+	handleMouseMove(event, isDragging, infoDialogOpen) {
+		if (!this.covered || this.insidePreview(event))
+			return true;
+		this.covered = false;
+		this.handleMouseOver(event, isDragging, infoDialogOpen);
+		//(a move is never stopped here: dragging a card, for one, listens for it too)
+		return true;
+	}
+
 	handleMouseOver(event, isDragging, infoDialogOpen) {
 		const that = this;
 		const target = $(event.target);
+		// Over the preview, a card under it is not previewed in its place: the preview stays as it is
+		if (!isDragging && !infoDialogOpen && this.showPreviewImage && this.overPreview(event)) {
+			this.covered = true;
+			this.abortHoverTimer();
+			this.abortCooldownTimer();
+			event.stopPropagation();
+			return false;
+		}
+		this.covered = false;
 		// In a scenario, the card a step has left as the only thing to click (scenario-live, see
 		// scenarioOverlay.js) is not previewed: the preview would come up over the click being asked for.
 		const tarIsCard = target.hasClass("actionArea") && target.closest(".scenario-live").length == 0;
@@ -376,6 +419,9 @@ class AutoZoom {
 	}
 
 	handleMouseOut(event) {
+		//(going from the card onto its preview, or about under the preview, is not leaving it)
+		if (this.insidePreview(event))
+			return true;
 		if(this.hoverTimer) {
 			this.abortHoverTimer();
 

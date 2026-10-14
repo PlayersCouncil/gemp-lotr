@@ -3,6 +3,46 @@
  * same in the Game Hall (My Account > My Scenarios) and in the authoring tool (its Scenario tab), so it is built here
  * with nothing but jQuery: the two pages have different jQuery UI themes, and neither is needed.
  */
+/**
+ * A question with two answers, in the same box as the one for submitting (not the browser's own confirm(), which
+ * looks like nothing else on the page and stops it dead).
+ *     ScenarioConfirm.ask({title, text, yes, no, danger}, onYes)
+ * 'text' is a line or a list of lines; 'yes' and 'no' are the buttons' words; 'danger' colours the yes button as
+ * something that cannot be taken back.  onYes is called from the click on yes, so it can open a tab.
+ */
+var ScenarioConfirm = {
+    ask: function (what, onYes) {
+        $(".scenario-submit, .scenario-submit-shade").remove();
+        var shade = $("<div class='scenario-submit-shade'></div>").appendTo("body");
+        var box = $("<div class='scenario-submit scenario-confirm' role='dialog' aria-modal='true'></div>").appendTo("body");
+        var put = function () {
+            shade.remove();
+            box.remove();
+            $(document).unbind("keydown.scenarioSubmit");
+        };
+        box.append($("<h2></h2>").text(what.title || "Are you sure?"));
+        var lines = what.text == null ? [] : $.isArray(what.text) ? what.text : [what.text];
+        $.each(lines, function (i, line) {
+            box.append($("<p></p>").text(line));
+        });
+        var buttons = $("<div class='scenario-submit-buttons'></div>").appendTo(box);
+        var yes = $("<button type='button' class='scenario-submit-yes'></button>").text(what.yes || "Yes").click(function () {
+            put();
+            onYes();
+        });
+        if (what.danger)
+            yes.addClass("scenario-submit-danger");
+        var no = $("<button type='button' class='scenario-submit-no'></button>").text(what.no || "Cancel").click(put);
+        buttons.append(yes).append(no);
+        shade.click(put);
+        $(document).bind("keydown.scenarioSubmit", function (event) {
+            if (event.keyCode == 27)
+                put();
+        });
+        no.focus();
+    }
+};
+
 var ScenarioSubmit = {
     GUIDELINES: [
         "Play it through yourself first, as a player would. The server plays it through too: one that does not play through cannot be submitted.",

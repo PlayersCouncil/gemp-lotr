@@ -333,6 +333,12 @@ var GempLotrDeckBuildingUI = Class.extend({
 			function (event) {
 				return that.autoZoom.handleMouseOut(event.originalEvent);
 			});
+		// (the card preview hides what is under it: moving off it is noticed here)
+		$('body').unbind('mousemove.autozoom');
+		$("body").bind("mousemove.autozoom",
+			function (event) {
+				return that.autoZoom.handleMouseMove(event.originalEvent, that.dragCardId != null, that.cardInfoDialog.isOpen());
+			});
 
 		$("body").mousedown(
 				function (event) {
