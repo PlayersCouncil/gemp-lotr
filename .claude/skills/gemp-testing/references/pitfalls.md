@@ -1001,7 +1001,9 @@ card"), a hand of one card, or of copies of one, cannot tell it from another car
 different cards, read which was shown (`FreepsHasCardChoiceAvailable(card, false)` for each, before the
 dismissal), and assert of each that it went if it was shown and stayed if it was not. True of a right card on
 every run; with six cards a random discard in its place fails five runs in six
-(Card_03_033_Tests.DiscardsTheCardRevealedAndNotAnotherCardOfTheHand). Where what hangs on the card shown is an
+(Card_03_033_Tests.DiscardsTheCardRevealedAndNotAnotherCardOfTheHand). That the pick is RANDOM no board shows (a
+pick of the same card every time reads the same): read which card went and that the others stayed, run it the
+twenty times, and say in Notes that the chance itself is not shown (Card_15_050_Tests). Where what hangs on the card shown is an
 OFFER and not where a card went, no answer stands under an `if` (lint's `conditional`): the test ends on two
 value assertions and answers nothing, `assertEquals(shown, scn.ShadowPlayAvailable(card));
 assertEquals(!shown, scn.AwaitingFellowshipPhaseActions());`
@@ -1460,7 +1462,7 @@ own "when you play" text is asked (Old Toby 1_305: the count is already one more
 pass 20), and the definition's `shuffle: true` shuffles again after the play: two more, whatever kind of card.
 A look that plays nothing reads one, the definition's own, and is the test that notices a missing `shuffle:
 true`, whether the play is an EFFECT or a COST ("Play Gollum from your draw deck ... to add a threat", Captured
-by the Ring 7_53: the shuffle is made ahead of the failed play, and the cost is still unpaid; F-0494, engine pass 35). A card played onto a bearer and an event shuffle as they leave even where nobody looked (`showAll: false`);
+by the Ring 7_53: the shuffle is made ahead of the failed play, and the cost is still unpaid; F-0494, engine pass 35). A card played OUT OF a deck onto a bearer, and an event played out of a deck, shuffle it as they leave even where nobody looked (`showAll: false`; an event played from hand that plays a card out of the deck counts as that card does);
 a card played to the table or the support area does not (a minion revealed by From Deep in Shadow 12_38, a
 starting fellowship). On a card's own board read the EXACT count wherever the board fixes it: `> shuffles` after a
 card played out of a looked-through deck passes with the definition's `shuffle: true` gone, and `shuffles + 2`
