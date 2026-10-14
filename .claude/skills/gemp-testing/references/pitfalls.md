@@ -1647,7 +1647,7 @@ path instead: a site map of `FellowshipSites` with the card in place of site n, 
 (`Card_11_227_ErrataTests`, site 7; `Card_04_355_ErrataTests`). `MoveCardToAdventurePath` makes the card the
 site after the current one whatever key the map gave it, so one scenario with the card in place of a site no
 test reaches (`putAll(FellowshipSites); remove("site9"); put("parapet", "63_188")`) serves every site number
-(`Card_13_188_ErrataTests`: sites 4 to 7).
+(`Card_13_185_Tests`, sites 3, 4 and 7, with no other card in its maps; `Card_13_188_ErrataTests`: sites 4 to 7).
 The cheat gives the site its number before it reaches the path, as a site played is given it, so a site whose
 text reads its own number as it comes into force is laid like any other: Mount Doom 15_193 threw a
 NullPointerException until engine pass 28 (F-0484; `virtualtable/AdventurePathLayingTests`).

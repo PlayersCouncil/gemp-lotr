@@ -918,6 +918,9 @@ to a skirmish, discard this condition to have him replace a minion skirmishing a
 vitality 4, and his own skirmish ability is used only on purpose. Leave him unassigned (`ShadowDeclineAssignments()`),
 and once the effect is used `ShadowUseCardAction(<the condition>)` puts him where the minion was, the minion out of
 the skirmish (Card_07_017_Tests.AMinionThatComesIntoHerSkirmishAfterTheUseIsNotMadeWeaker).
+Where the text read is a keyword Gollum lacks ("lose fierce"), give it him by hand as a printed card can
+(`ApplyAdHocModifier(new AddKeywordModifier(null, gollum, null, Keyword.FIERCE))`, as Emyn Muil 1_360 would):
+Card_13_153_Tests.AMinionThatComesIntoTheBearersSkirmishAfterTheUseKeepsFierceAndOneItReplacedStaysWithoutIt.
 
 **A Shadow card that is no event, played in a skirmish (the invalid candidate beside "a Shadow event is played").**
 Army of Haradrim 5_70 with War Mûmak 5_78. Army: unique [raider] Man, Southron, cost 7, strength 14, vitality 4,
