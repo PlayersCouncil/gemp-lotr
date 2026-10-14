@@ -27,6 +27,7 @@ import com.gempukku.lotro.scenario.ScenarioSession.Ruling;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hjson.JsonObject;
+import org.hjson.JsonValue;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -326,6 +327,9 @@ public class ScenarioAuthoring {
                             json.set(human ? "allow" : "answer", term);
                         copyInto(step, reparsed(step, json));
                         changed = true;
+                    } else if (human && session.recording && step.until != null && step.parent == null && !step.pause
+                            && unrecorded != ruling.decision() && repeated(step, ruling, answer)) {
+                        changed = true;
                     }
                     if (changed)
                         session.changed();
@@ -535,6 +539,58 @@ public class ScenarioAuthoring {
         boolean blank(Step step) {
             return !step.pause && step.allow == null && step.answers.isEmpty() && step.messages.isEmpty() && step.doOps.isEmpty()
                     && step.end == null && step.until == null && step.skipWhen == null && step.onlyIf.isEmpty() && step.unless.isEmpty();
+        }
+
+        /**
+         * Recording, at a step that repeats (it has an 'until'): what was just done is written into its 'answer' as
+         * the answer for this time round, which is what the script plays when it plays itself through the step, and
+         * into what it allows if it is not there already.  A Pass is not added to what it allows where the step says
+         * when Pass is allowed (its 'passWhen').  Where the step's answers already say this for this time round,
+         * nothing changes; where they say something else, what was done replaces it and the answers after it go:
+         * they were for a way through that is not this one.
+         * @return Whether the step was changed.
+         */
+        boolean repeated(Step step, Ruling ruling, String answer) throws ScenarioFormatException {
+            ScenarioDirector director = live.Session().Director();
+            int index = director.currentStep() == step ? director.timesApplied() - 1 : -1;
+            if (index < 0)
+                return false;
+            List<String> answers = new ArrayList<>();
+            for (Answer one : step.answers)
+                answers.add(one.source());
+            if (index > answers.size()) {
+                //(the times round before this one were not written down: the list would not line up)
+                session.notice = "Not written into step " + step.label() + "'s answers: it has applied " + index
+                        + " times before this, and its answers say what to do for only " + answers.size() + ".  Go back to the step (Play to here) and do it again.";
+                return false;
+            }
+            String term = term(ruling.decision(), answer);
+            if (index < answers.size() && answers.get(index).equals(term))
+                return false;
+            List<String> now = new ArrayList<>(answers.subList(0, index));
+            now.add(term);
+            JsonObject json = ScenarioWriter.step(step);
+            json.set("answer", String.join(", ", now));
+            boolean pass = "pass".equals(term);
+            boolean allowed = false;
+            if (step.allow != null)
+                for (Answer one : step.allow.answers)
+                    if (one.source().equals(term))
+                        allowed = true;
+            if (!allowed && !(pass && step.allow != null && step.allow.passWhen != null)) {
+                JsonValue allow = json.get("allow");
+                if (allow == null) {
+                    json.set("allow", term);
+                } else if (allow.isString()) {
+                    json.set("allow", allow.asString().isBlank() ? term : allow.asString() + ", " + term);
+                } else if (allow.isObject()) {
+                    JsonValue had = allow.asObject().get("answers");
+                    String was = had == null ? "" : had.isString() ? had.asString() : "";
+                    allow.asObject().set("answers", was.isBlank() ? term : was + ", " + term);
+                }
+            }
+            copyInto(step, reparsed(step, json));
+            return true;
         }
 
         /**

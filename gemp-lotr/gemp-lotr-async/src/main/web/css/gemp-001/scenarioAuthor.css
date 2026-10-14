@@ -1072,3 +1072,18 @@ body.sa-picking .scenario-pointer {
     border-color: #d8b24a;
     color: #fff;
 }
+
+/* "repeat until", under When: the box, the Until it gives, and what is said about it */
+.sa-repeat .sa-row .sa-check {
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+.sa-repeat .sa-until {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.sa-repeat-more {
+    margin: 0 0 4px 22px;
+}

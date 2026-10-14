@@ -444,6 +444,99 @@ public class ScenarioAuthoringTest {
         throw new AssertionError("No card called " + alias);
     }
 
+    /** The action in the decision the client has whose text names a card ("Play Aragorn"). */
+    private static String playing(Client client, String name) {
+        Map<String, String[]> parameters = client.decision.getAwaitingDecision().getDecisionParameters();
+        String[] texts = parameters.get("actionText");
+        for (int i = 0; i < texts.length; i++)
+            if (texts[i].contains(name))
+                return parameters.get("actionId")[i];
+        throw new AssertionError("Nothing offers " + name + ": " + String.join(", ", texts));
+    }
+
+    @Test
+    public void WhatIsDoneAtARepeatingStepIsWrittenIntoItsAnswersInOrder() throws Exception {
+        Files.createDirectories(new File(canon, "tutorials").toPath());
+        Files.writeString(new File(canon, "tutorials/both.hjson").toPath(), ScenarioTesting.scenario("""
+                	opponent: {
+                		fallback: pass
+                	}
+                	setup: {
+                		freeps: {
+                			hand: aragorn, boromir
+                		}
+                	}
+                	steps: [
+                		{
+                			when: freeps, action, phase(fellowship), turn(1)
+                			until: phase(shadow)
+                			allow: play(aragorn)
+                		}
+                	]
+                """).replace("id: test", "id: both"), StandardCharsets.UTF_8);
+        authoring.open(player, "both", true);
+        Client client = new Client(game());
+        client.answer(playing(client, "Aragorn"));
+        client.answer(playing(client, "Boromir"));
+        client.answer("");
+        JSONObject step = steps(state()).getJSONObject(0);
+        assertEquals("play(aragorn), play(boromir), pass", step.getString("answer"));
+        assertEquals("What was done and was not allowed is allowed now", "play(aragorn), play(boromir), pass", step.getString("allow"));
+
+        //Played to again, and done the same way: nothing changes, and nothing is written twice
+        authoring.goTo(player, 1);
+        client = new Client(game());
+        client.answer(playing(client, "Aragorn"));
+        client.answer(playing(client, "Boromir"));
+        client.answer("");
+        step = steps(state()).getJSONObject(0);
+        assertEquals("play(aragorn), play(boromir), pass", step.getString("answer"));
+
+        //Done another way: from where it differs, the answers are what was done this time
+        authoring.goTo(player, 1);
+        client = new Client(game());
+        client.answer(playing(client, "Boromir"));
+        step = steps(state()).getJSONObject(0);
+        assertEquals("play(boromir)", step.getString("answer"));
+    }
+
+    @Test
+    public void ARepeatingStepWithPassWhenIsNotGivenPassToAllow() throws Exception {
+        Files.createDirectories(new File(canon, "tutorials").toPath());
+        Files.writeString(new File(canon, "tutorials/both.hjson").toPath(), ScenarioTesting.scenario("""
+                	opponent: {
+                		fallback: pass
+                	}
+                	setup: {
+                		freeps: {
+                			hand: aragorn, boromir
+                		}
+                	}
+                	steps: [
+                		{
+                			when: freeps, action, phase(fellowship), turn(1)
+                			until: phase(shadow)
+                			allow: {
+                				answers: play(aragorn), play(boromir)
+                				passWhen: [
+                					{
+                						type: canSpot
+                						filter: alias(aragorn)
+                					}
+                				]
+                			}
+                		}
+                	]
+                """).replace("id: test", "id: both"), StandardCharsets.UTF_8);
+        authoring.open(player, "both", true);
+        Client client = new Client(game());
+        client.answer(playing(client, "Aragorn"));
+        client.answer("");
+        JSONObject step = steps(state()).getJSONObject(0);
+        assertEquals("play(aragorn), pass", step.getString("answer"));
+        assertEquals("play(aragorn), play(boromir)", step.getJSONObject("allow").getString("answers"));
+    }
+
     @Test
     public void AScenarioInReviewIsNotChangedByItsAuthor() throws Exception {
         authoring.create(player, "unsaved", "Unsaved");
