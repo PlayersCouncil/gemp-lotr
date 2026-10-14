@@ -378,7 +378,9 @@ with `FreepsChoose(option)`; with one option payable nothing is asked (Elven Swo
 option that names a culture comes through as HTML (`Discard a <span class='cultureHint' ...> Raider</span> card from
 hand`), so neither reads it: count the options with `ShadowGetMultipleChoiceCount()`, read each with
 `ShadowChoiceAvailable(<words>)` and answer with `ShadowChooseOption(<words>)`, which match on part of the text
-(Ships of Great Draught 8_65).
+(Ships of Great Draught 8_65). An EFFECT that is a choice (`type: choice` with its `texts:`) is asked the same way:
+its options are the definition's `texts`, read with `FreepsChoiceAvailable("Liberate a site")` and answered with
+`FreepsChoose(<the whole text>)` (Andúril 17_27, "liberate a site or discard a condition borne by a companion").
 
 **"Is an optional trigger pending" is a broad question.** `FreepsHasOptionalTriggerAvailable()` is true for any
 optional decision, the Ruling Ring's included. To assert that a particular card's trigger is on offer, pass the
@@ -1141,7 +1143,9 @@ filter sees it. To put a card the opponent owns on a companion, use a Shadow car
 Spider Poison (8_28) is one, and does nothing unless its bearer is assigned to a skirmish. A second copy of a
 Free Peoples card is a second name for it in the scenario (`put("mail2", "1_101")`), never the Shadow player's
 copy: a count of what a companion bears passes that one over. The other half is as true: your own Shadow cards
-are not active on your turn, so a Shadow condition you own is no candidate for your Free Peoples ability.
+are not active on your turn, so a Shadow condition you own is no candidate for your Free Peoples ability: a
+Shadow condition laid on your companion is the Shadow player's copy (`GetShadowCard`), never `GetFreepsCard`, or
+a branch that would act on it goes unoffered and the choice is not asked (Andúril 17_27's Weary 4_212).
 Culture tokens go with the card: a token on his card is not spotted, reinforced or removed by your cards on your
 turn, and "remove an [elven] token to ..." is not offered when his is the only one (68_9, 68_11, 68_12). It is
 an invalid candidate by rule, not by the card's filter. It cuts the other way after `SkipToOtherPlayersTurn()`:
