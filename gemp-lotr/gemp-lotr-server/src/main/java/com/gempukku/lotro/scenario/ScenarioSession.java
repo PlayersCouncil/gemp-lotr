@@ -1,5 +1,6 @@
 package com.gempukku.lotro.scenario;
 
+import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.game.DecisionArbiter;
 import com.gempukku.lotro.game.DecisionObserver;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
@@ -71,6 +72,14 @@ public class ScenarioSession implements DecisionObserver, DecisionArbiter {
          * ruled on.  This is the moment to end the game, if it is time to: what is waiting is then never asked.
          */
         void atRest();
+
+        /**
+         * A player has passed in a phase without being asked (nothing to play, and a phase they are passed through).
+         * Called inside the game's processing.
+         * @param used The silent pass step that pass used up; null if none.
+         * @param frontier Whether the pass is past the end of the script.
+         */
+        default void passedByItself(String player, Phase phase, Step used, boolean frontier) { }
     }
 
     private final ScenarioTable _table;
@@ -90,7 +99,16 @@ public class ScenarioSession implements DecisionObserver, DecisionArbiter {
         table.Observe(this);
         table.Arbitrate(this);
         table.AskToPass(_director::asksToPass);
+        table.AutoPassed(this::autoPassed);
         table.OnNote(this::follow);
+    }
+
+    private void autoPassed(String player, Phase phase) {
+        ScenarioDirector.AutoPass result = _director.autoPassed(player, phase);
+        if (_listener == null || result == ScenarioDirector.AutoPass.NOT)
+            return;
+        _listener.passedByItself(player, phase, result == ScenarioDirector.AutoPass.USED ? _director.lastAutoPassed() : null,
+                result == ScenarioDirector.AutoPass.FRONTIER);
     }
 
     /**

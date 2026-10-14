@@ -284,7 +284,7 @@ public final class ScenarioWriter {
 
     private static String answers(List<Answer> answers) {
         StringJoiner terms = new StringJoiner(", ");
-        answers.forEach(answer -> terms.add(answer.source() + (answer.ifOffered() ? "?" : "")));
+        answers.forEach(answer -> terms.add(answer.source()));
         return terms.toString();
     }
 

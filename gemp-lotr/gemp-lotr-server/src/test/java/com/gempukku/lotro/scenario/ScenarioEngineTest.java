@@ -625,9 +625,9 @@ public class ScenarioEngineTest {
     }
 
     @Test
-    public void thePlayerIsAskedToPassWhereTheScriptIsAboutThePass() throws Exception {
-        //Every phase is passed for the player, and the opponent is never asked when it has nothing to play; but
-        // each is asked where the next step is about that very pass
+    public void thePlayerIsAskedToPassWhereTheScriptSpeaksOverThePass() throws Exception {
+        //Every phase is passed for the player, and the opponent is never asked when it has nothing to play.  A step
+        // that is only that pass is used up by it with nobody asked; one with something to say has it asked for.
         ScenarioRunReport report = ScenarioTesting.run("""
                 	options: {
                 		autoPass: true
@@ -643,6 +643,38 @@ public class ScenarioEngineTest {
                 			answer: pass
                 		}
                 		{
+                			when: freeps, action, phase(maneuver)
+                			allow: pass
+                		}
+                		{
+                			when: freeps, action, phase(archery)
+                			messages: [
+                				No arrows this time.
+                			]
+                			allow: pass
+                			end: complete
+                		}
+                	]
+                """);
+        assertTrue(report.toString(), report.passed());
+        List<String> asked = report.decisions.stream().map(ScenarioRunReport.Decision::decision).filter(d -> !d.trim().startsWith("says")).toList();
+        assertEquals(asked.toString(), 1, asked.size());
+        assertTrue(asked.get(0), asked.get(0).startsWith("freeps, action \"Play Archery action or Pass\""));
+        assertTrue(report.toString(), report.toString().contains("matched   1"));
+        assertTrue(report.toString(), report.toString().contains("matched   2"));
+
+        //Without its message the last step would still be asked for: it ends the scenario
+        report = ScenarioTesting.run("""
+                	options: {
+                		autoPass: true
+                	}
+                	setup: {
+                		shadow: {
+                			minions: runner1
+                		}
+                	}
+                	steps: [
+                		{
                 			when: freeps, action, phase(archery)
                 			allow: pass
                 			end: complete
@@ -650,10 +682,7 @@ public class ScenarioEngineTest {
                 	]
                 """);
         assertTrue(report.toString(), report.passed());
-        List<String> asked = report.decisions.stream().map(ScenarioRunReport.Decision::decision).toList();
-        assertEquals(asked.toString(), 2, asked.size());
-        assertTrue(asked.get(0), asked.get(0).startsWith("shadow, action \"Play Shadow action or Pass\" offering nothing but Pass"));
-        assertTrue(asked.get(1), asked.get(1).startsWith("freeps, action \"Play Archery action or Pass\""));
+        assertEquals(1, report.decisions.stream().filter(d -> !d.decision().trim().startsWith("says")).count());
     }
 
     @Test
@@ -717,10 +746,13 @@ public class ScenarioEngineTest {
                 		}
                 	]
                 """;
+        assertTrue(ScenarioTesting.run(either.replace("ALLOW", "play(gandalf), play(aragorn)")).passed());
+        //(the ? that once said so for one answer is still read)
         assertTrue(ScenarioTesting.run(either.replace("ALLOW", "play(gandalf)?, play(aragorn)?")).passed());
-        assertFails(ScenarioTesting.run(either.replace("ALLOW", "play(gandalf), play(aragorn)")), "no such action is on offer");
         //...but something it allows has to be
-        assertFails(ScenarioTesting.run(either.replace("ALLOW", "play(aragorn)?, play(boromir)?")), "allows nothing that this decision offers");
+        assertFails(ScenarioTesting.run(either.replace("ALLOW", "play(aragorn), play(boromir)")), "allows nothing that this decision offers");
+        //With no answer of its own, the script plays the first of them that is on offer
+        assertTrue(ScenarioTesting.run(either.replace("ALLOW", "play(aragorn), play(gandalf)").replace("answer: play(gandalf)\n", "")).passed());
     }
 
     @Test

@@ -80,6 +80,9 @@ public class ScenarioDirector {
     /** In the block the script is at: the steps that are done with (a 'once' that has applied, a pause that has been read). */
     private final Set<Step> _spent = java.util.Collections.newSetFromMap(new java.util.IdentityHashMap<>());
     private ScenarioDefinition.End _end;
+    /** See holdFor. */
+    private Step _holdFor;
+    private Step _lastAutoPassed;
 
     private AwaitingDecision _lastDecision;
     private Step _lastMatch;
@@ -313,7 +316,7 @@ public class ScenarioDirector {
                         continue;
                     //(the phase is said for it if the block says it for all its steps)
                     if (couldFit(child.when, player, phase, !(saysPhase(child.when, phase) || (child.when.phase == null && step.when.phase == phase))))
-                        return isAboutPassing(child);
+                        return asks(child);
                 }
                 return false;
             }
@@ -321,7 +324,7 @@ public class ScenarioDirector {
             // wanted is the pass that ends it: that is for the step after it to say.
             if (index == _index && step.repeats() && _timesApplied > 0)
                 continue;
-            return couldFit(step.when, player, phase, !saysPhase(step.when, phase)) && isAboutPassing(step);
+            return couldFit(step.when, player, phase, !saysPhase(step.when, phase)) && asks(step);
         }
         return false;
     }
@@ -362,6 +365,180 @@ public class ScenarioDirector {
         if (step.allow == null)
             return false;
         return step.allow.passWhen != null || step.allow.answers.stream().anyMatch(answer -> answer.kind() == AnswerKind.PASS);
+    }
+
+    /** Whether a step that is about a pass has the player (or the opponent) asked for it: see isSilentPass. */
+    private boolean asks(Step step) {
+        return isAboutPassing(step) && (!isSilentPass(step) || step == _holdFor);
+    }
+
+    /**
+     * A step that is only a pass, and says nothing: it is used up by the pass the game makes by itself when there is
+     * nothing to play (see autoPassed), with nobody asked.  Given something to say, the step has the pass asked for.
+     * (In a phase the player is not passed through, they are asked whatever the step is.)
+     */
+    public static boolean isSilentPass(Step step) {
+        //(nor one that ends the scenario, or is a checkpoint: somebody has to be there for those)
+        if (step.pause || step.block || !step.messages.isEmpty() || step.end != null || step.checkpoint)
+            return false;
+        boolean answers = !step.answers.isEmpty() && step.answers.stream().allMatch(answer -> answer.kind() == AnswerKind.PASS);
+        boolean allows = step.allow != null && step.allow.passWhen == null && !step.allow.answers.isEmpty()
+                && step.allow.answers.stream().allMatch(answer -> answer.kind() == AnswerKind.PASS);
+        return (answers && (step.allow == null || allows)) || (allows && step.answers.isEmpty());
+    }
+
+    /**
+     * A step to be asked for even if it is a silent pass: the step a game of the draft is being played up to, so
+     * that the game stops there.
+     */
+    public void holdFor(Step step) {
+        _holdFor = step;
+    }
+
+    /** The step the last pass made without asking used up (see autoPassed). */
+    public Step lastAutoPassed() {
+        return _lastAutoPassed;
+    }
+
+    public enum AutoPass {
+        /** A silent pass step of the script's was used up by it. */
+        USED,
+        /** The script has nothing more to say: the pass is past its end. */
+        FRONTIER,
+        /** The script is at a step that is not this pass's. */
+        NOT
+    }
+
+    /**
+     * A player passes in a phase without being asked: they had nothing to play, and the phase is one they are
+     * passed through.  If the decision that pass would have been goes to a silent pass step (see isSilentPass), the
+     * step is used up by it, as it would be by the pass asked for; otherwise nothing changes.
+     */
+    public AutoPass autoPassed(String player, Phase phase) {
+        observeSkirmish();
+        //Where the decision would go, worked out without moving anything: the steps it would pass over on the way,
+        // and the step itself
+        List<Runnable> passedOver = new ArrayList<>();
+        int index = _index;
+        int times = _timesApplied;
+        Step target = null;
+        Step block = null;
+        while (index < _def.steps.size() && target == null) {
+            Step step = _def.steps.get(index);
+            final Step at = step;
+            if (!partOfTheGame(step)) {
+                passedOver.add(() -> {
+                    _statuses.put(at.label(), StepStatus.BYPASSED);
+                    for (Step child : at.children)
+                        _statuses.put(child.label(), StepStatus.BYPASSED);
+                    advance();
+                });
+                index++;
+                times = 0;
+                continue;
+            }
+            if (step.block) {
+                boolean firstTime = times == 0;
+                if (fitsPass(step.until, player, phase) || (firstTime && step.skipWhen != null && fitsPass(step.skipWhen, player, phase))) {
+                    passedOver.add(() -> {
+                        if (_timesApplied == 0)
+                            _statuses.put(at.label(), StepStatus.SKIPPED);
+                        for (Step child : at.children)
+                            if (_statuses.get(child.label()) == StepStatus.UNREACHED)
+                                _statuses.put(child.label(), StepStatus.SKIPPED);
+                        advance();
+                    });
+                    index++;
+                    times = 0;
+                    continue;
+                }
+                if (!fitsPass(step.when, player, phase))
+                    return AutoPass.NOT;
+                for (Step child : step.children) {
+                    if ((index == _index && _spent.contains(child)) || !partOfTheGame(child) || !fitsPass(child.when, player, phase))
+                        continue;
+                    target = child;
+                    block = step;
+                    break;
+                }
+                if (target == null)
+                    return AutoPass.NOT;
+                break;
+            }
+            if (step.repeats() && fitsPass(step.until, player, phase)) {
+                passedOver.add(() -> {
+                    if (_timesApplied == 0)
+                        _statuses.put(at.label(), StepStatus.SKIPPED);
+                    advance();
+                });
+                index++;
+                times = 0;
+                continue;
+            }
+            if (fitsPass(step.when, player, phase)) {
+                target = step;
+                break;
+            }
+            if (times == 0 && step.skipWhen != null && fitsPass(step.skipWhen, player, phase)) {
+                passedOver.add(() -> {
+                    _statuses.put(at.label(), StepStatus.SKIPPED);
+                    advance();
+                });
+                index++;
+                times = 0;
+                continue;
+            }
+            return AutoPass.NOT;
+        }
+        if (target == null)
+            return atFrontier() ? AutoPass.FRONTIER : AutoPass.NOT;
+        if (!isSilentPass(target) || target == _holdFor)
+            return AutoPass.NOT;
+        passedOver.forEach(Runnable::run);
+        if (block != null) {
+            if (_applied.getOrDefault(target, 0) == 0) {
+                _statuses.put(target.label(), StepStatus.MATCHED);
+                for (DoOp op : target.doOps)
+                    _table.Apply(op);
+            }
+            _statuses.put(block.label(), StepStatus.MATCHED);
+        } else if (_timesApplied == 0) {
+            _statuses.put(target.label(), StepStatus.MATCHED);
+            for (DoOp op : target.doOps)
+                _table.Apply(op);
+        }
+        _lastAutoPassed = target;
+        answered(target);
+        return AutoPass.USED;
+    }
+
+    /**
+     * Whether a 'when' fits the decision a pass made without asking would have been: the player's "play something or
+     * pass" in the phase, offering nothing.
+     */
+    private boolean fitsPass(When when, String player, Phase phase) {
+        if (when == null || when.opening)
+            return false;
+        if (when.seat != null && when.seat != _table.SeatOf(player))
+            return false;
+        if (when.decision != null && when.decision != AwaitingDecisionType.CARD_ACTION_CHOICE)
+            return false;
+        if (when.text != null) {
+            String said = phase == Phase.SKIRMISH ? "Choose action to play or Pass" : "Play " + phase.getHumanReadable() + " action or Pass";
+            if (!said.toLowerCase().contains(when.text.toLowerCase()))
+                return false;
+        }
+        if (when.phase != null && when.phase != phase)
+            return false;
+        if (when.turn != null && when.turn != _table.gameState().getTurnNumber())
+            return false;
+        if (when.skirmish != null && (_table.gameState().getSkirmish() == null || when.skirmish != _skirmishOrdinal))
+            return false;
+        if (when.offers != null)
+            return false;
+        if (when.fighting != null && !isFighting(when.fighting))
+            return false;
+        return when.require == null || _table.Holds(when.require, player);
     }
 
     /** Set once a step that ends the scenario has been answered. */
@@ -624,14 +801,27 @@ public class ScenarioDirector {
                         + " answers but has been asked for another.  The decision is: " + AnswerCompiler.describe(_table, decision));
         } else if (step.allow != null && step.allow.answers.size() == 1 && step.allow.passWhen == null) {
             answer = step.allow.answers.getFirst();
+        } else if (step.allow != null) {
+            //Several allowed and none said to be the script's: the first of them that is on offer (and Pass, once
+            // its 'passWhen' holds, if none is)
+            for (Answer one : step.allow.answers)
+                try {
+                    return AnswerCompiler.compile(_table, decision, one);
+                } catch (ScenarioScriptException exp) {
+                    // not on offer: the next
+                }
+            if (step.allow.passWhen != null && _table.Holds(step.allow.passWhen, _table.HumanPlayer()))
+                return AnswerCompiler.compile(_table, decision, new Answer(AnswerKind.PASS, List.of(), null, 0, Map.of(), "pass"));
+            throw new ScenarioScriptException("step " + step.label() + " allows nothing that this decision offers.  The decision is: "
+                    + AnswerCompiler.describe(_table, decision));
         }
         return answer == null ? null : AnswerCompiler.compile(_table, decision, answer);
     }
 
     /**
      * Works out what a step shows the player for this decision.  Doing so also checks the step against the game:
-     * every answer the step allows has to be one the decision really offers.
-     * @throws ScenarioScriptException if the step allows something the decision does not offer.
+     * something the step allows has to be on offer.
+     * @throws ScenarioScriptException if the step allows nothing the decision offers.
      */
     public Presentation present(Step step, String player, AwaitingDecision decision) throws ScenarioScriptException {
         List<RenderedMessage> messages = render(step);
@@ -641,31 +831,26 @@ public class ScenarioDirector {
         Allow allow = step.allow;
         if (allow != null) {
             allowed = new ArrayList<>();
+            //Each answer is allowed if the decision offers it.  One that it does not is no mistake: the other copy of
+            // a card that has been played, an alternative the player did not take, in a step that spans several
+            // decisions what has been done already.  A step that allows nothing the decision offers is one.
+            List<String> notOffered = new ArrayList<>();
             for (Answer answer : allow.answers) {
-                if (answer.kind() == AnswerKind.PASS) {
-                    try {
-                        AnswerCompiler.compile(_table, decision, answer);
-                        passAllowed = true;
-                    } catch (ScenarioScriptException exp) {
-                        if (!answer.ifOffered())
-                            throw exp;
-                    }
-                    continue;
-                }
                 try {
-                    allowed.add(AnswerCompiler.compile(_table, decision, answer));
+                    String compiled = AnswerCompiler.compile(_table, decision, answer);
+                    if (answer.kind() == AnswerKind.PASS)
+                        passAllowed = true;
+                    else
+                        allowed.add(compiled);
                 } catch (ScenarioScriptException exp) {
-                    //In a step that spans several decisions, an allowed answer is expected to stop being on offer
-                    // once it has been used (a card that has been played cannot be played again); and an answer
-                    // written with a ? is one its author knows may not be on offer
-                    if (!step.recurs() && !answer.ifOffered())
-                        throw exp;
+                    notOffered.add(exp.getMessage());
                 }
             }
             if (allow.passWhen != null && _table.Holds(allow.passWhen, player))
                 passAllowed = true;
             if (allowed.isEmpty() && !passAllowed)
-                throw new ScenarioScriptException("step " + step.label() + " allows nothing that this decision offers.  The decision is: "
+                throw new ScenarioScriptException("step " + step.label() + " allows nothing that this decision offers"
+                        + (notOffered.isEmpty() ? "" : " (" + String.join("; ", notOffered) + ")") + ".  The decision is: "
                         + AnswerCompiler.describe(_table, decision));
         }
         return new Presentation(step, messages, allowed, passAllowed);

@@ -649,8 +649,7 @@ public class ScenarioParserTest {
         assertEquals("aragorn", Anchors.cardAlias("card:aragorn:strength"));
         assertEquals("strength", Anchors.printedPart("card:aragorn:strength"));
         assertNull("Wounds lie on a card; they are not printed on it", Anchors.printedPart("card:aragorn:wounds"));
-        assertTrue(def.steps.getFirst().allow.answers.get(0).ifOffered());
-        assertFalse(def.steps.getFirst().allow.answers.get(1).ifOffered());
+        assertEquals("A ? from before every allowed answer was 'if it is on offer' is read, and dropped", "play(servant1)", def.steps.getFirst().allow.answers.get(0).source());
         assertTrue(ScenarioValidator.validate(def, ScenarioTesting.library()).isEmpty());
         assertArrayEquals(CardFaces.region(CardFaces.Frame.CHARACTER, "strength"),
                 CardFaces.region(def, "aragorn", "strength", ScenarioTesting.library()), 0);

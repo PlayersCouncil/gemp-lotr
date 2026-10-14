@@ -37,7 +37,7 @@ var GempScenarioAuthor = Class.extend({
         "zone:minions", "pile:self.deck", "pile:self.discard", "pile:self.deadPile", "pile:self.adventureDeck",
         "pile:self.removed", "pile:self.hand", "pile:opp.deck", "pile:opp.discard", "pile:opp.deadPile",
         "pile:opp.adventureDeck", "pile:opp.removed", "pile:opp.hand", "ui:twilightPool", "ui:phase", "ui:initiative",
-        "ui:ruleof4", "ui:clock", "ui:advPath", "ui:alertBox", "ui:skirmish", "ui:skirmish:fpStrength", "ui:skirmish:freeps", "ui:skirmish:shadow",
+        "ui:ruleof4", "ui:clock", "ui:advPath", "ui:alertBox", "ui:gameLog", "ui:skirmish", "ui:skirmish:fpStrength", "ui:skirmish:freeps", "ui:skirmish:shadow",
         "ui:skirmish:shadowStrength", "ui:stats", "ui:stats:archery", "ui:stats:move", "ui:chat", "ui:settings",
         "ui:dialog", "ui:cardInfo", "ui:button:pass", "ui:button:done", "ui:button:reset"],
     TABS: [["timeline", "Timeline"], ["step", "Step"], ["opponent", "Opponent"], ["board", "Board"], ["scenario", "Scenario"]],
@@ -961,7 +961,7 @@ var GempScenarioAuthor = Class.extend({
             + "Play it through as the player should: each thing you do is added to Answer, in order, and to Allow."));
         //Repeating to do several things and then pass: Pass only once they have been done
         var plays = [];
-        ("" + (work.allow.answers || "")).replace(/play\(\s*([A-Za-z0-9_]+)\s*\)/g, function (all, alias) {
+        ("" + (work.allow.answers || "") + ", " + (work.answer || "")).replace(/play\(\s*([A-Za-z0-9_]+)\s*\)/g, function (all, alias) {
             if ($.inArray(alias, plays) < 0)
                 plays.push(alias);
             return all;
@@ -985,6 +985,22 @@ var GempScenarioAuthor = Class.extend({
                 gate.prop("disabled", true);
             shown.append(this.el("div", "sa-bar").append(gate));
         }
+        //...and to go on until they have been: Until, written out with what has to be on the table
+        var inPlay = function (aliases) {
+            return "{\n\tseat: " + (that.draft.human || "freeps") + "\n\tdecision: action\n\trequire: [\n" + $.map(aliases, function (alias) {
+                return "\t\t{\n\t\t\ttype: canSpot\n\t\t\tfilter: alias(" + alias + ")\n\t\t}";
+            }).join("\n") + "\n\t]\n}";
+        };
+        var until = this.button("Until " + (plays.length == 0 ? "they are" : plays.join(" and ") + (plays.length == 1 ? " is" : " are")) + " in play",
+            plays.length == 0 ? "Allow play(card) first: this makes the step go on until each card played here is on the table"
+                : "Sets Until: the step goes on until each of these is on the table, and the player's next decision after that goes to the next step", function () {
+                work.until = inPlay(plays);
+                untilInput.val(work.until).trigger("sa-fit");
+                that.stepChanged(true);
+            });
+        if (plays.length == 0 || ("" + (work.until || "")) == inPlay(plays))
+            until.prop("disabled", true);
+        shown.append(this.el("div", "sa-bar").append(until));
         row.append(shown.toggle(!blank(work.until)));
         return row;
     },
@@ -1000,6 +1016,45 @@ var GempScenarioAuthor = Class.extend({
                 return "phase(" + this.PHASES[at + 1] + ")";
         }
         return turn != null ? "turn(" + (parseInt(turn[1]) + 1) + ")" : "";
+    },
+
+    SILENT: "A pass the game makes by itself, when there is nothing to play: this step is used up by it with nobody asked. "
+        + "Give it a message and the pass is asked for, and the message said over it.",
+
+    /** A step that is only a pass and says nothing (see the server's ScenarioDirector.isSilentPass). */
+    silentPass: function (step) {
+        if (step == null || step.pause || step.anyOrder != null || (step.messages || []).length > 0 || step.checkpoint
+            || (step.end != null && (typeof step.end == "string" ? step.end != "" : !!step.end.result)))
+            return false;
+        var that = this;
+        var onlyPass = function (text) {
+            var terms = that.splitTerms(text || "");
+            return terms.length > 0 && $.grep(terms, function (term) {
+                return term.replace(/\?$/, "") != "pass";
+            }).length == 0;
+        };
+        var allow = step.allow == null ? null : typeof step.allow == "string" ? {answers: step.allow} : step.allow;
+        var answers = step.answer != null && $.trim(step.answer) != "";
+        var allows = allow != null && allow.passWhen == null && onlyPass(allow.answers);
+        return (answers && onlyPass(step.answer) && (allow == null || allows)) || (allows && !answers);
+    },
+
+    /**
+     * A silent pass in a place where the game passes by itself: the opponent's (with nothing to play it is never
+     * asked), or the player's in a phase they are passed through.  (The player's anywhere else is asked all the same.)
+     */
+    passesByItself: function (step) {
+        if (!this.silentPass(step) || typeof step.when != "string")
+            return false;
+        var terms = this.splitTerms(step.when);
+        var seat = (terms[0] || "").toLowerCase();
+        if ($.inArray(seat, this.SEATS) > -1 && !this.isHumanSeat(seat))
+            return true;
+        var phase = /phase\(\s*([a-z_]+)\s*\)/i.exec(step.when);
+        var passed = (this.draft.options || {}).autoPass;
+        if (phase == null || passed == null)
+            return false;
+        return passed === true || ("" + passed).toLowerCase() == "true" || $.inArray(phase[1].toLowerCase(), this.splitTerms("" + passed)) > -1;
     },
 
     /** The step in hand takes what it allows, and its answer, from what its author does next. */
@@ -1206,6 +1261,10 @@ var GempScenarioAuthor = Class.extend({
                 tags.append(that.el("span", "sa-tag sa-bubbles", "\u25ac" + count).attr("title", count + " message" + (count == 1 ? "" : "s")));
             if (step.once)
                 tags.append(that.el("span", "sa-tag", "once").attr("title", "It applies to one decision. Without this, a step in a block applies to every decision that fits it, for as long as the block lasts."));
+            if (that.passesByItself(step)) {
+                row.addClass("sa-silent");
+                tags.append(that.el("span", "sa-tag", "by itself").attr("title", that.SILENT));
+            }
             if (step.checkpoint)
                 tags.append(that.el("span", "sa-tag sa-flag", "\u2691").attr("title", "A checkpoint"));
             if (step.end)
@@ -2205,6 +2264,9 @@ var GempScenarioAuthor = Class.extend({
                 ? "This step says nothing yet about what is done. Do it in the game now, and what you do is written in as what it allows. Messages put on it here first are shown before it is answered."
                 : "This step says nothing yet about what is done. When the game comes to it, what you do there is written in as what it allows."));
 
+        if (!block && this.passesByItself(this.written(work)))
+            box.append(this.el("div", "sa-note sa-awaiting", this.SILENT));
+
         /* ---- what it waits for ---- */
         var opening = this.isOpening(work);
         var when = this.el("div", "sa-section").appendTo(box);
@@ -2339,10 +2401,59 @@ var GempScenarioAuthor = Class.extend({
         } else if (!work.pause) {
             var does = this.el("div", "sa-section").appendTo(box);
             does.append(this.el("div", "sa-heading", "What is done"));
-            does.append(this.field("Allow", this.bound(work.allow, "answers", "text"),
-                "What the player may do: play(card), use(card), choose(card, card), option(text), number(n), assign(character: minion + minion), pass. Several, separated by commas; a ? after one that may not be on offer. Empty: anything."));
-            does.append(this.field("Answer", this.bound(work, "answer", "text"),
-                "What the script plays: the opponent's answer, or the player's when the script plays itself"));
+            var allowInput = this.bound(work.allow, "answers", "text");
+            var answerInput = this.bound(work, "answer", "text");
+            var seatTerm = (this.splitTerms(typeof work.when == "string" ? work.when : "")[0] || "").toLowerCase();
+            var players = !work.when || typeof work.when != "string" || $.inArray(seatTerm, this.SEATS) < 0 || this.isHumanSeat(seatTerm);
+            if (players) {
+                //A step where the player may do whatever they like: what is written is only what the script plays
+                var free = ("" + (work.allow.answers || "")).trim() == "" && ("" + (work.answer || "")).trim() != "";
+                does.append(this.el("label", "sa-check sa-block").attr("title", "Ticked, the step allows anything, and its Answer is only what the script plays when it plays itself (as Check does)")
+                    .append($("<input type='checkbox'/>").prop("checked", free).change(function () {
+                        if (this.checked) {
+                            if (("" + (work.answer || "")).trim() == "")
+                                work.answer = work.allow.answers;
+                            work.allow.answers = "";
+                        } else {
+                            work.allow.answers = work.answer || "";
+                        }
+                        allowInput.val(work.allow.answers).prop("disabled", this.checked);
+                        answerInput.val(work.answer || "");
+                        that.stepChanged(true);
+                    })).append(document.createTextNode(" the player may do anything here")));
+                allowInput.prop("disabled", free);
+            }
+            does.append(this.field("Allow", allowInput,
+                "What the player may do: play(card), use(card), choose(card, card), option(text), number(n), assign(character: minion + minion), pass. Several, separated by commas: each is allowed when it is on offer (the other copy of a card, a way the player did not go), and something in it has to be. Empty: anything."));
+            //With its decision on the table: what else the decision offers, to be allowed as well with a click
+            var asked = this.state.waiting && this.state.waiting.human;
+            if (players && inHandNow && asked != null && !work.pause) {
+                var offered = $.map(asked.options || [], function (option) {
+                    return option.term || null;
+                });
+                if (asked.pass)
+                    offered.push("pass");
+                var chips = this.el("div", "sa-row sa-wrap sa-offered");
+                var have = function () {
+                    return that.splitTerms(work.allow.answers || "");
+                };
+                $.each(offered, function (i, term) {
+                    if ($.inArray(term, have()) > -1)
+                        return;
+                    chips.append(that.button("+ " + term, "Allow this as well", function () {
+                        var now = have();
+                        now.push(term);
+                        work.allow.answers = now.join(", ");
+                        allowInput.val(work.allow.answers);
+                        $(this).remove();
+                        that.stepChanged(true);
+                    }, "sa-inline"));
+                });
+                if (chips.children().length > 0)
+                    does.append(this.el("div", "sa-note", "Also on offer here:")).append(chips);
+            }
+            does.append(this.field("Answer", answerInput,
+                "What the script plays: the opponent's answer, or the player's when the script plays itself. Empty: the first thing Allow lets the player do that is on offer"));
             does.append(this.field("Do", this.bound(work, "do", "text"),
                 "Changes to the board when the step's decision arrives: move(card, seat.zone), draw(n), wound(card, n), heal(card, n), twilight(n), burdens(n), attach(card, bearer), stack(card, host). "
                 + "The decision itself was worked out before them: what they put in a hand can be played from the next decision on."));
@@ -3139,6 +3250,8 @@ var GempScenarioAuthor = Class.extend({
         counter("Burdens", "burdens", board.burdens);
         counter("Threats", "threats", board.threats);
 
+        this.renderSites(box, board);
+
         //(what another card can be put on: anything on the table, a card that is itself on another included)
         var bearers = $.grep(board.cards, function (card) {
             return card.zone == "characters" || card.zone == "minions" || card.zone == "support" || card.zone == "attached";
@@ -3146,6 +3259,7 @@ var GempScenarioAuthor = Class.extend({
         $.each(["freeps", "shadow"], function (index, seat) {
             var section = that.el("div", "sa-section").appendTo(box);
             section.append(that.el("div", "sa-heading", seat == "freeps" ? "Free Peoples seat" : "Shadow seat"));
+            section.append(that.ringRow(seat, board));
             var zones = $.map(that.ZONES, function (zone) {
                 return [[seat + "." + zone, zone]];
             });
@@ -3305,6 +3419,143 @@ var GempScenarioAuthor = Class.extend({
             }, "sa-primary"));
         };
         box.scrollTop(scroll);
+    },
+
+    /**
+     * Each seat's adventure path, a site to a row: a site is changed (or one added after the last) by finding it by
+     * name, as a card is.  Both seats usually have the same path, and are changed together while they do.
+     */
+    renderSites: function (box, board) {
+        var that = this;
+        var paths = board.sites || {};
+        var ids = function (seat) {
+            return $.map(paths[seat] || [], function (site) {
+                return site.id;
+            });
+        };
+        if (this.ui.sitesApart == null)
+            this.ui.sitesApart = ids("freeps").join(",") != ids("shadow").join(",");
+        var apart = this.ui.sitesApart;
+        var section = this.el("div", "sa-section sa-sites").appendTo(box);
+        section.append(this.el("div", "sa-heading", "The adventure path"));
+        section.append(this.el("label", "sa-check sa-block").attr("title", "Unticked, each seat's path is changed on its own")
+            .append($("<input type='checkbox'/>").prop("checked", !apart).change(function () {
+                that.ui.sitesApart = !this.checked;
+                that.remember();
+                if (this.checked && ids("freeps").join(",") != ids("shadow").join(","))
+                    that.putSites(ids("freeps"), ids("freeps"));
+                else
+                    that.renderBoard();
+            })).append(document.createTextNode(" the same sites for both seats")));
+        $.each(apart ? ["freeps", "shadow"] : ["freeps"], function (index, seat) {
+            if (apart)
+                section.append(that.el("div", "sa-zonehead", seat == "freeps" ? "Free Peoples" : "Shadow"));
+            var list = ids(seat);
+            var change = function (at, id) {
+                var now = list.slice();
+                if (id == null)
+                    now.splice(at, 1);
+                else
+                    now[at] = id;
+                if (!apart)
+                    that.putSites(now, now);
+                else
+                    that.putSites(seat == "freeps" ? now : ids("freeps"), seat == "shadow" ? now : ids("shadow"));
+            };
+            $.each(paths[seat] || [], function (at, site) {
+                var row = that.el("div", "sa-card").appendTo(section);
+                var name = that.el("div", "sa-cardname").appendTo(row);
+                name.append(that.el("span", "sa-alias", "Site " + site.number));
+                name.append(that.el("span", "cardHint", " " + (site.name || "(no such card)")).attr("value", site.id).attr("title", ""));
+                name.append(that.el("span", "sa-note", " " + site.id));
+                var controls = that.el("div", "sa-row").appendTo(row);
+                controls.append(that.siteFinder(site.number, function (id) {
+                    change(at, id);
+                }, "Change"));
+                if (at == list.length - 1 && list.length > 1)
+                    controls.append(that.button("\u00d7", "Take the last site off the path", function () {
+                        change(at, null);
+                    }, "sa-danger"));
+            });
+            section.append(that.el("div", "sa-row").append(that.siteFinder(list.length + 1, function (id) {
+                change(list.length, id);
+            }, "+ Site " + (list.length + 1))));
+        });
+    },
+
+    /** A button that opens a search for a site by name; done(id) with the one chosen. */
+    siteFinder: function (number, done, label) {
+        var that = this;
+        var holder = this.el("span", "sa-sitefinder");
+        holder.append(this.button(label, "Find a site by its name", function () {
+            holder.empty();
+            var query = $("<input type='text'/>").addClass("sa-input sa-short").attr("placeholder", "name of a site");
+            var results = that.el("div", "sa-results");
+            holder.append(query).append(that.button("Cancel", "", function () {
+                that.renderBoard();
+            })).append(results);
+            var search = null;
+            query.bind("input", function () {
+                clearTimeout(search);
+                search = setTimeout(function () {
+                    that.call("GET", "cards", {q: query.val(), sites: true}, function (found) {
+                        results.empty();
+                        //(the sites for this place on the path first)
+                        var cards = (found.cards || []).slice().sort(function (a, b) {
+                            return (a.site == number ? 0 : 1) - (b.site == number ? 0 : 1);
+                        });
+                        $.each(cards, function (i, card) {
+                            results.append(that.el("div", "sa-result", card.name + "  \u00b7  " + card.id + "  \u00b7  site " + card.site).click(function () {
+                                done(card.id);
+                            }));
+                        });
+                        if (cards.length == 0)
+                            results.append(that.el("div", "sa-note", "No site by that name."));
+                    });
+                }, 300);
+            });
+            query.focus();
+        }));
+        return holder;
+    },
+
+    putSites: function (freeps, shadow) {
+        this.edit({top: {sites: {freeps: freeps.join(", "), shadow: shadow.join(", ")}}}, null);
+    },
+
+    /** The seat's Ring-bearer and its Ring, chosen from its cards. */
+    ringRow: function (seat, board) {
+        var that = this;
+        var mine = $.grep(board.cards, function (card) {
+            return card.owner == seat;
+        });
+        var choices = function (type) {
+            return $.map($.grep(mine, function (card) {
+                return card.type == type;
+            }), function (card) {
+                return [[card.alias, card.alias + " (" + card.name + ")"]];
+            });
+        };
+        var put = function (part, value) {
+            var now = that.clone(that.draft[part]) || {};
+            if (value == "")
+                delete now[seat];
+            else
+                now[seat] = value;
+            var top = {};
+            top[part] = $.isEmptyObject(now) ? null : now;
+            that.edit({top: top}, null);
+        };
+        var row = this.el("div", "sa-row sa-wrap sa-ring");
+        row.append(this.el("span", "sa-label", "Ring-bearer"));
+        row.append(this.select(choices("COMPANION"), (this.draft.ringBearer || {})[seat] || "", function (value) {
+            put("ringBearer", value);
+        }).attr("title", "The companion who carries the Ring"));
+        row.append(this.el("span", "sa-label sa-inline", "Ring"));
+        row.append(this.select([["", "none"]].concat(choices("THE_ONE_RING")), (this.draft.ring || {})[seat] || "", function (value) {
+            put("ring", value);
+        }).attr("title", "The One Ring the Ring-bearer bears (Add a card: The One Ring, to have another one to choose)"));
+        return row;
     },
 
     /**
@@ -3565,6 +3816,9 @@ var GempScenarioAuthor = Class.extend({
         });
         play.append(this.field("Bubble gap", bubbleGap, "How far from what it points at a bubble sits, for every message that does not say. A plain number is hundredths of the window's shorter side; 20px is pixels. Empty: " + this.overlay.STOCK_GAP + "."));
 
+        this.renderRules(box);
+        this.renderOutcome(box);
+
         var parts = this.el("div", "sa-section").appendTo(box);
         parts.append(this.el("div", "sa-heading", "The rest of the file"));
         parts.append(this.el("p", "sa-note", "Each part as the file has it, in HJSON: what is copied out of a scenario's file can be pasted here (with or without its name in front), and the other way about. "
@@ -3593,6 +3847,160 @@ var GempScenarioAuthor = Class.extend({
             }));
         });
         box.scrollTop(scroll);
+    },
+
+    /**
+     * The rules a scenario plays by, as far as they are the usual ones: each seat's hand size, phases it skips, The
+     * One Ring's text, the minions' roaming penalty, and whether the player takes every turn.  Anything else the file
+     * has under 'rules' is kept as it is (and is changed under The rest of the file).
+     */
+    renderRules: function (box) {
+        var that = this;
+        var rules = this.clone(this.draft.rules) || {};
+        var section = this.el("div", "sa-section sa-rules").appendTo(box);
+        section.append(this.el("div", "sa-heading", "Rules"));
+        var send = function () {
+            var empty = !rules.oneSided && $.grep(["freeps", "shadow"], function (seat) {
+                return (rules[seat] || []).length > 0;
+            }).length == 0;
+            that.edit({top: {rules: empty ? null : rules}}, null);
+        };
+        section.append(this.el("label", "sa-check sa-block").attr("title", "The Shadow player never takes a turn of their own")
+            .append($("<input type='checkbox'/>").prop("checked", !!rules.oneSided).change(function () {
+                if (this.checked)
+                    rules.oneSided = true;
+                else
+                    delete rules.oneSided;
+                send();
+            })).append(document.createTextNode(" one-sided: the Free Peoples take every turn")));
+
+        //What one of a seat's effects is, if it is one of the usual ones
+        var only = function (object, names) {
+            if (object == null || typeof object != "object")
+                return false;
+            for (var name in object)
+                if (object.hasOwnProperty(name) && $.inArray(name, names) < 0)
+                    return false;
+            return true;
+        };
+        var kindOf = function (effect) {
+            if (!only(effect, ["type", "modifier"]) || effect.type != "modifier")
+                return null;
+            var m = effect.modifier;
+            if (m.type == "modifyHandSize" && only(m, ["type", "amount"]))
+                return "hand";
+            if (m.type == "skipPhase" && only(m, ["type", "phase"]))
+                return "skip";
+            if (m.type == "disableGameText" && only(m, ["type", "filter"]) && m.filter == "name(The One Ring)")
+                return "ring";
+            if (m.type == "modifyRoamingPenalty" && only(m, ["type", "filter", "amount"]) && m.filter == "minion")
+                return "roaming";
+            return null;
+        };
+        $.each(["freeps", "shadow"], function (index, seat) {
+            var effects = rules[seat] || [];
+            var known = {hand: 0, skip: [], ring: false, roaming: 0}, others = [];
+            $.each(effects, function (i, effect) {
+                var kind = kindOf(effect);
+                if (kind == "hand")
+                    known.hand += parseInt(effect.modifier.amount) || 0;
+                else if (kind == "skip")
+                    known.skip.push(("" + effect.modifier.phase).toLowerCase());
+                else if (kind == "ring")
+                    known.ring = true;
+                else if (kind == "roaming")
+                    known.roaming += parseInt(effect.modifier.amount) || 0;
+                else
+                    others.push(effect);
+            });
+            var rebuild = function () {
+                var out = [];
+                if (known.hand != 0)
+                    out.push({type: "modifier", modifier: {type: "modifyHandSize", amount: known.hand}});
+                if (known.ring)
+                    out.push({type: "modifier", modifier: {type: "disableGameText", filter: "name(The One Ring)"}});
+                $.each(that.PHASES, function (i, phase) {
+                    if ($.inArray(phase, known.skip) > -1)
+                        out.push({type: "modifier", modifier: {type: "skipPhase", phase: phase}});
+                });
+                if (known.roaming != 0)
+                    out.push({type: "modifier", modifier: {type: "modifyRoamingPenalty", filter: "minion", amount: known.roaming}});
+                out = out.concat(others);
+                if (out.length == 0)
+                    delete rules[seat];
+                else
+                    rules[seat] = out;
+                send();
+            };
+            var block = that.el("div", "sa-seatrules").appendTo(section);
+            block.append(that.el("div", "sa-zonehead", seat == "freeps" ? "Free Peoples" : "Shadow"));
+            var number = function (label, value, hint, changed) {
+                var input = $("<input type='number'/>").addClass("sa-input sa-short").val(value).change(function () {
+                    changed(parseInt($(this).val()) || 0);
+                    rebuild();
+                });
+                block.append(that.field(label, input, hint));
+            };
+            number("Hand size \u00b1", known.hand, "Added to the usual 8: -3 makes it 5", function (value) {
+                known.hand = value;
+            });
+            var skipRow = that.el("div", "sa-row sa-wrap").appendTo(block);
+            skipRow.append(that.el("span", "sa-label", "Skips").attr("title", "Phases this seat's turns go without"));
+            $.each(that.PHASES, function (i, phase) {
+                skipRow.append(that.el("label", "sa-check").append($("<input type='checkbox'/>").prop("checked", $.inArray(phase, known.skip) > -1).change(function () {
+                    known.skip = $.grep(known.skip, function (name) {
+                        return name != phase;
+                    });
+                    if (this.checked)
+                        known.skip.push(phase);
+                    rebuild();
+                })).append(document.createTextNode(" " + phase)));
+            });
+            block.append(that.el("label", "sa-check sa-block").append($("<input type='checkbox'/>").prop("checked", known.ring).change(function () {
+                known.ring = this.checked;
+                rebuild();
+            })).append(document.createTextNode(" The One Ring's game text is switched off")));
+            number("Roaming \u00b1", known.roaming, "Added to the roaming penalty of this seat's minions (the twilight for playing one whose site number is above the fellowship's), -2 takes 2 off it", function (value) {
+                known.roaming = value;
+            });
+            if (others.length > 0)
+                block.append(that.el("div", "sa-note", others.length + " other effect" + (others.length == 1 ? "" : "s")
+                    + " (under 'rules' in The rest of the file, below), kept as " + (others.length == 1 ? "it is" : "they are") + "."));
+        });
+    },
+
+    /** How the player loses, as far as the usual ways go, and what they are told when they do. */
+    renderOutcome: function (box) {
+        var that = this;
+        var outcome = this.clone(this.draft.outcome) || {};
+        var section = this.el("div", "sa-section sa-outcome").appendTo(box);
+        section.append(this.el("div", "sa-heading", "How it is lost"));
+        var send = function () {
+            that.edit({top: {outcome: $.isEmptyObject(outcome) ? null : outcome}}, null);
+        };
+        var companion = {type: "hasCardInDeadPile", filter: "companion"};
+        var lose = outcome.lose;
+        var which = lose == null ? "" : JSON.stringify(lose) == JSON.stringify(companion) ? "companion" : "other";
+        var options = [["", "only as the game is lost (the Ring-bearer killed or corrupted)"], ["companion", "also when any companion is killed"]];
+        if (which == "other")
+            options.push(["other", "as The rest of the file says (under 'outcome')"]);
+        section.append(this.field("The player loses", this.select(options, which, function (value) {
+            if (value == "")
+                delete outcome.lose;
+            else if (value == "companion")
+                outcome.lose = companion;
+            else
+                return;
+            send();
+        })));
+        var message = this.el("textarea", "sa-input").attr("rows", 3).val(outcome.loseMessage || "").change(function () {
+            if ($.trim($(this).val()) == "")
+                delete outcome.loseMessage;
+            else
+                outcome.loseMessage = $(this).val();
+            send();
+        });
+        section.append(this.field("They are told", message, "What the player reads when they lose, with the way back to the last checkpoint"));
     },
 
     /** Submits the draft's file for review: saved first if it has changes; the draft is then closed, and the tab with it. */

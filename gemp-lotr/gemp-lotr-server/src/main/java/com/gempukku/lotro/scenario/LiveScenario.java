@@ -1,5 +1,6 @@
 package com.gempukku.lotro.scenario;
 
+import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.game.GameJournal;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.LotroFormat;
@@ -104,6 +105,9 @@ public class LiveScenario implements ScenarioSession.Listener {
 
         /** The person has taken one of the choices a pause ends in. */
         default void chose(String choice) { }
+
+        /** See ScenarioSession.Listener.passedByItself.  Called inside the game's processing. */
+        default void passedByItself(String player, Phase phase, Step used, boolean frontier) { }
     }
 
     private final ScenarioDefinition _def;
@@ -254,6 +258,14 @@ public class LiveScenario implements ScenarioSession.Listener {
         _runToSub = Math.max(0, sub);
         _runToTimes = Math.max(0, times);
         _runChoices = choices;
+        //(an author sent to a step that is only a pass the game makes by itself is stopped there all the same, to
+        // give it something to say)
+        if (_author != null && step >= 1 && step <= _def.steps.size()) {
+            Step target = _def.steps.get(step - 1);
+            if (sub > 0 && sub <= target.children.size())
+                target = target.children.get(sub - 1);
+            _session.Director().holdFor(target);
+        }
     }
 
     /** Whether a decision that goes to the step the script was sent to is where it was sent. */
@@ -511,6 +523,17 @@ public class LiveScenario implements ScenarioSession.Listener {
     private void clearStep() {
         _table.gameState().clearScenarioEvent(_human, STEP);
         _stepShownFor = null;
+    }
+
+    @Override
+    public void passedByItself(String player, Phase phase, Step used, boolean frontier) {
+        if (_author == null || _result != null)
+            return;
+        try {
+            _author.passedByItself(player, phase, used, frontier);
+        } catch (RuntimeException exp) {
+            LOG.error("Scenario " + _def.id + ": its author could not be told about a pass", exp);
+        }
     }
 
     @Override

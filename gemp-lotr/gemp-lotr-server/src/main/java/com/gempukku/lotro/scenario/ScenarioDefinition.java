@@ -157,20 +157,12 @@ public final class ScenarioDefinition {
      * @param text USE: a fragment of the action's text, when the card offers more than one.  OPTION: the option's
      *             text, or "#n" for the n-th option counting from 1.  RAW: the literal answer.
      * @param assignments ASSIGN: Free Peoples character -> the minions assigned to it.
-     * @param ifOffered In an 'allow': the answer is allowed whenever the decision offers it, and it is no mistake if
-     *                  the decision does not (the other copy of a card that has already been played, say).
+     * In an 'allow', an answer is allowed whenever the decision offers it, and it is no mistake if the decision does
+     * not (the other copy of a card that has already been played, say): only a step that allows nothing the decision
+     * offers is one.
      */
     public record Answer(AnswerKind kind, List<String> cards, String text, int number,
-                         Map<String, List<String>> assignments, String source, boolean ifOffered) {
-        public Answer(AnswerKind kind, List<String> cards, String text, int number,
-                      Map<String, List<String>> assignments, String source) {
-            this(kind, cards, text, number, assignments, source, false);
-        }
-
-        public Answer offeredOrNot() {
-            return new Answer(kind, cards, text, number, assignments, source, true);
-        }
-    }
+                         Map<String, List<String>> assignments, String source) { }
 
     /**
      * A standing order: what the opponent does whenever it is asked something that no step covers and this fits.

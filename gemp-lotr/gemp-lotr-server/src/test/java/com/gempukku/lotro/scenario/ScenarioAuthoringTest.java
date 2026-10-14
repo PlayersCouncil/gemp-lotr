@@ -242,15 +242,19 @@ public class ScenarioAuthoringTest {
         }
         authoring.answer(player, "play(runner1)", true);
         JSONObject state = state();
-        assertEquals(before + 1, steps(state).size());
+        assertTrue(steps(state).size() >= before + 1);
         JSONObject written = steps(state).getJSONObject(before);
         assertEquals("play(runner1)", written.getString("answer"));
         assertTrue(written.getString("when"), written.getString("when").startsWith("shadow, action, phase(shadow)"));
 
-        //Played again from the top, the script answers for the Shadow by itself
+        //Played again from the top, the script answers for the Shadow by itself (and what it then passes without
+        // being asked, past the end of the script, is written down as passes)
         state = json(authoring.goTo(player, 99)).getJSONObject("state");
         assertNull(state.getString("notice"), state.getString("notice"));
-        assertEquals(before + 1, steps(state).size());
+        assertTrue(steps(state).size() >= before + 1);
+        assertEquals("play(runner1)", steps(state).getJSONObject(before).getString("answer"));
+        for (int i = before + 1; i < steps(state).size(); i++)
+            assertEquals(steps(state).getJSONObject(i).toString(), "pass", steps(state).getJSONObject(i).getString("answer"));
         for (Object card : state.getJSONObject("board").getJSONArray("cards"))
             if (((JSONObject) card).getString("alias").equals("runner1"))
                 assertEquals("minions", ((JSONObject) card).getString("zone"));
@@ -657,6 +661,59 @@ public class ScenarioAuthoringTest {
     }
 
     @Test
+    public void APassMadeWithoutAskingIsWrittenAsAStepThatCanBeSpokenOver() throws Exception {
+        Files.createDirectories(new File(canon, "tutorials").toPath());
+        Files.writeString(new File(canon, "tutorials/passes.hjson").toPath(), ScenarioTesting.scenario("""
+                	opponent: {
+                		fallback: pass
+                	}
+                	options: {
+                		autoPass: maneuver, archery
+                	}
+                	setup: {
+                		shadow: {
+                			minions: runner1
+                		}
+                	}
+                """).replace("id: test", "id: passes"), StandardCharsets.UTF_8);
+        authoring.open(player, "passes", true);
+        Client client = new Client(game());
+        //The Fellowship phase is the player's to pass; the Shadow's, maneuver and archery pass by themselves
+        client.answer("");
+        client.poll();
+        JSONObject state = state();
+        List<String> whens = new ArrayList<>();
+        for (Object step : steps(state))
+            whens.add(((JSONObject) step).getString("when"));
+        assertTrue(whens.toString(), whens.contains("freeps, action, phase(maneuver), turn(1)"));
+        assertTrue(whens.toString(), whens.contains("freeps, action, phase(archery), turn(1)"));
+        assertTrue(whens.toString(), whens.contains("shadow, action, phase(shadow), turn(1)"));
+        int archery = whens.indexOf("freeps, action, phase(archery), turn(1)");
+        assertEquals("pass", steps(state).getJSONObject(archery).getString("allow"));
+        int written = whens.size();
+
+        //Played again, they are used up by the same passes, with nobody asked: nothing more is written
+        state = json(authoring.goTo(player, 99)).getJSONObject("state");
+        assertEquals(written, steps(state).size());
+        assertEquals("matched", state.getJSONArray("statuses").getString(archery));
+
+        //Sent to one, the game stops there
+        state = json(authoring.goTo(player, archery + 1)).getJSONObject("state");
+        assertEquals(archery + 1, state.getJSONObject("position").getIntValue("step"));
+        assertTrue(state.getJSONObject("position").getBooleanValue("inHand"));
+
+        //Given something to say, it is asked for, and says it
+        String name = state.getJSONArray("uids").getString(archery);
+        authoring.edit(player, "{\"steps\": [{\"op\": \"merge\", \"uid\": \"" + name + "\", \"set\": {\"messages\": [\"No arrows yet.\"]}}]}", null);
+        authoring.goTo(player, 99);
+        authoring.goTo(player, archery + 1);
+        client = new Client(game());
+        client.poll();
+        assertEquals(archery + 1, client.lastStep().getIntValue("step"));
+        assertEquals(written, steps(state()).size());
+    }
+
+    @Test
     public void ARepeatingStepWithPassWhenIsNotGivenPassToAllow() throws Exception {
         Files.createDirectories(new File(canon, "tutorials").toPath());
         Files.writeString(new File(canon, "tutorials/both.hjson").toPath(), ScenarioTesting.scenario("""
@@ -774,7 +831,9 @@ public class ScenarioAuthoringTest {
         //Opened again, it is the same draft, and saving writes the same file
         state = json(authoring.open(player, AUTHOR + "/my-first", false)).getJSONObject("state");
         assertEquals("my-first", state.getJSONObject("draft").getString("id"));
-        assertEquals(1, steps(state).size());
+        assertEquals("The player's pass, and the opponent's in the Shadow phase (made without asking, with nothing to play)", 2, steps(state).size());
+        assertEquals("shadow, action, phase(shadow), turn(1)", steps(state).getJSONObject(1).getString("when"));
+        assertEquals("pass", steps(state).getJSONObject(1).getString("answer"));
         authoring.save(player, null, false, false);
         assertEquals(text, Files.readString(file.toPath(), StandardCharsets.UTF_8));
 
@@ -1651,7 +1710,10 @@ public class ScenarioAuthoringTest {
             }
             state = state();
         }
-        assertEquals("The regroup phase is where the block ends: what is done there is a step of the script", 2, steps(state).size());
+        assertTrue("The regroup phase is where the block ends: what is done there is a step of the script", steps(state).size() >= 2);
+        //(and the opponent's passes there, made without asking, are steps that only pass)
+        for (int i = 2; i < steps(state).size(); i++)
+            assertEquals("pass", steps(state).getJSONObject(i).getString("answer"));
         assertTrue(steps(state).getJSONObject(1).getString("when"), steps(state).getJSONObject(1).getString("when").startsWith("freeps, action, phase(regroup), turn(1)"));
         JSONArray written = under(state, 0);
         assertTrue("Several decisions were written into the block: " + written, written.size() > 3);
@@ -1899,7 +1961,7 @@ public class ScenarioAuthoringTest {
         assertEquals("Then [[strider|the ranger]] is in play.", first.getJSONArray("messages").getJSONObject(1).getString("text"));
         assertEquals("picked(strider)", first.getJSONArray("messages").getJSONObject(1).getString("on"));
         JSONObject allow = first.getJSONObject("allow");
-        assertEquals("What is quoted from the game is not the card's name", "play(strider), use(strider, text aragorn says)?", allow.getString("answers"));
+        assertEquals("What is quoted from the game is not the card's name", "play(strider), use(strider, text aragorn says)", allow.getString("answers"));
         assertEquals("alias(strider)", allow.getJSONArray("passWhen").getJSONObject(0).getString("filter"));
         assertEquals("Yes, [[strider|aragorn]].", allow.getJSONObject("hints").getString("strider"));
         assertEquals("play(strider)", first.getString("answer"));

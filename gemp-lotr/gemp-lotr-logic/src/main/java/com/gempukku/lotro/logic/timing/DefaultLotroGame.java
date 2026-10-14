@@ -43,6 +43,7 @@ public class DefaultLotroGame implements LotroGame {
     private final Set<String> _allPlayers;
     private final Map<String, Set<Phase>> _autoPassConfiguration = new HashMap<>();
     private java.util.function.BiPredicate<String, Phase> _askToPass;
+    private java.util.function.BiConsumer<String, Phase> _autoPassed;
 
     private String _winnerPlayerId;
     private final Map<String, String> _losers = new HashMap<>();
@@ -175,9 +176,12 @@ public class DefaultLotroGame implements LotroGame {
         if (_askToPass != null && _askToPass.test(playerId, phase))
             return false;
         final Set<Phase> passablePhases = _autoPassConfiguration.get(playerId);
-        if (passablePhases == null)
+        if (passablePhases == null || !passablePhases.contains(phase))
             return false;
-        return passablePhases.contains(phase);
+        //(asked only when the player has nothing to play: the answer is the pass itself)
+        if (_autoPassed != null)
+            _autoPassed.accept(playerId, phase);
+        return true;
     }
 
     @Override
@@ -409,5 +413,13 @@ public class DefaultLotroGame implements LotroGame {
      */
     public void setAskToPass(java.util.function.BiPredicate<String, Phase> askToPass) {
         _askToPass = askToPass;
+    }
+
+    /**
+     * Is told each time a player passes in a phase without being asked: they had nothing to play, and their settings
+     * pass that phase for them.  It is told just before the pass is made.
+     */
+    public void setAutoPassed(java.util.function.BiConsumer<String, Phase> autoPassed) {
+        _autoPassed = autoPassed;
     }
 }
