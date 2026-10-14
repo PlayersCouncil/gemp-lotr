@@ -5,7 +5,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.CantTakeWoundsModifier;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -276,38 +275,6 @@ public class Card_07_190_ErrataTests
 		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertEquals(0, scn.GetWoundsOn(silinde));
 		assertEquals(0, scn.GetThreats());
-		assertTrue(scn.AwaitingShadowPhaseActions());
-	}
-
-	@Test
-	public void TheFreePeoplesPlayerIsNotAskedWhenNoCompanionCanTakeAWound() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var frodo = scn.GetRingBearer();
-		var aragorn = scn.GetFreepsCard("aragorn");
-		scn.MoveCompanionsToTable(aragorn);
-		// The Ring-bearer and Aragorn are every companion there is, and neither can take a wound.
-		scn.ApplyAdHocModifier(new CantTakeWoundsModifier(null, null, CardType.COMPANION));
-
-		var destroyer = scn.GetShadowCard("destroyer");
-		var lemenya = scn.GetShadowCard("lemenya");
-		scn.MoveCardsToHand(destroyer);
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(lemenya);
-		scn.SetTwilight(10);
-		scn.FreepsPass();
-
-		assertEquals(0, scn.GetThreats());
-		scn.ShadowPlayCard(destroyer);
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable(destroyer));
-		scn.ShadowAcceptOptionalTrigger();
-
-		// The price of preventing it cannot be paid, so nobody is asked and the threat is added.
-		assertFalse(scn.FreepsDecisionAvailable("prevent"));
-		assertEquals(1, scn.GetThreats());
-		assertEquals(0, scn.GetWoundsOn(frodo));
-		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 

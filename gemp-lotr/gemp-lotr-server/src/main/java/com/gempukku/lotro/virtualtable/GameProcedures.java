@@ -24,6 +24,15 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 	}
 
 
+	/**
+	 * Plays on into the assignment phase ({@link #SkipToPhase}) and passes its actions for both players, so that it
+	 * rests at the Free Peoples player's "Assign minions" decision, nothing assigned.  It answers no optional
+	 * trigger of its own: where something is offered as the maneuver phase starts, the passes fall out of step.  A
+	 * Shadow follower's Aid (Saruman 17_38 in the support area or borne by a minion) is such an offer: the call then
+	 * rests at the Shadow player's "Play Assignment action or Pass", and an assignment after it finds no "Assign
+	 * minions" to answer.  There, skip to the maneuver phase, decline the Aid ({@code ShadowDeclineOptionalTrigger()})
+	 * and then call this.
+	 */
 	default void SkipToAssignments() {
 		SkipToPhase(Phase.ASSIGNMENT);
 		PassCurrentPhaseActions();

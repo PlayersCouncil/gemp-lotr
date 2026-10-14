@@ -75,6 +75,7 @@ public class Card_V3_062_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertNull(card.getBlueprint().getPossessionClasses());
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertFalse(scn.HasKeyword(card, Keyword.ARCHER));
 		assertEquals(2, card.getBlueprint().getTwilightCost());

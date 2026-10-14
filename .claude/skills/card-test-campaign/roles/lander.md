@@ -16,6 +16,7 @@ section "When something is in the way". Read nothing else through. Look things u
 
     python3 .claude/skills/card-test-campaign/scripts/lookup.py Q-0098
     python3 .claude/skills/card-test-campaign/scripts/lookup.py overwhelm --in pitfalls
+    python3 .claude/skills/card-test-campaign/scripts/lookup.py underground --max 0    # a broad word: listed by first words
     python3 .claude/skills/card-test-campaign/scripts/packet.py <id>
 
 (An entry is printed only when it contains every term given: search separate subjects separately.) Every step you

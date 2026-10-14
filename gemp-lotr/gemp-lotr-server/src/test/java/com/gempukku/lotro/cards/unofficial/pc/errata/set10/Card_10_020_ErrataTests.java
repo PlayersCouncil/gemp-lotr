@@ -29,11 +29,13 @@ public class Card_10_020_ErrataTests
 					put("gimli", "1_13");           // Gimli, Son of Gloin: strength 6; "Skirmish: Exert Gimli to make him strength +2."
 					put("bowmen1", "3_41");         // Gondor Bowmen: support-area condition; "Archery: Exert a [gondor] companion and discard this condition to make the fellowship archery total +2."
 					put("bowmen2", "3_41");
+					put("saga", "1_114");           // The Saga of Elendil: [gondor] tale on a [gondor] companion; a skirmish ability used only on purpose
 					put("valor", "1_103");          // Elendil's Valor: Maneuver event, cost 0; "Make a [gondor] companion defender +1 until the regroup phase."
 					put("assassin", "2_93");        // Tower Assassin: [sauron] Orc, strength 11, vitality 3; "Maneuver: Exert Tower Assassin to wound an ally."
 					put("wreathed", "1_238");       // Wreathed in Shadow: [wraith] support-area condition; "Archery: Remove (1) to make the fellowship archery total -1." (to play, spot a Nazgul: cheated in)
 				}},
-				// Site 8 is Anduin Banks (a river) and site 9 is Emyn Muil, which has no terrain of its own.
+				// Site 4 is Balin's Tomb ("Maneuver: Discard your tale from play or from hand to heal your companion"),
+				// site 8 is Anduin Banks (a river) and site 9 is Emyn Muil, which has no terrain of its own.
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
@@ -334,6 +336,47 @@ public class Card_10_020_ErrataTests
 		assertEquals(1, scn.GetWoundsOn(gollum));
 		assertEquals(2, scn.GetWoundsOn(aragorn));
 		assertEquals(1, scn.GetKeywordCount(aragorn, Keyword.DEFENDER));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Test
+	public void ResponseCancelsAManeuverAbilityOfASiteTheFreePeoplesPlayerUses() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var saga = scn.GetFreepsCard("saga");
+		var strike = scn.GetShadowCard("strike1");
+		var gollum = scn.GetShadowCard("gollum");
+		// Gondor Bowmen is a tale as well: kept out of the hand, so that the site's cost has only the tale in play
+		// to take and is paid without a question.
+		var bowmen1 = scn.GetFreepsCard("bowmen1");
+		var bowmen2 = scn.GetFreepsCard("bowmen2");
+
+		scn.MoveCompanionsToTable(aragorn);
+		scn.AttachCardsTo(aragorn, saga);
+		scn.AddWoundsToChar(aragorn, 2);
+		scn.MoveCardsToDiscard(bowmen1, bowmen2);
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+		scn.MoveCardsToSupportArea(strike);
+		scn.MoveMinionsToTable(gollum);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		// Balin's Tomb is a site: its ability is the Free Peoples player's, by no card of his side.
+		var tomb = scn.GetCurrentSite();
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		assertEquals(2, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(gollum));
+		assertTrue(scn.FreepsActionAvailable(tomb));
+
+		scn.FreepsUseCardAction(tomb);
+		assertInZone(Zone.DISCARD, saga);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(strike));
+		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(1, scn.GetWoundsOn(gollum));
+		// The tale is gone and Aragorn is not healed.
+		assertEquals(2, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 

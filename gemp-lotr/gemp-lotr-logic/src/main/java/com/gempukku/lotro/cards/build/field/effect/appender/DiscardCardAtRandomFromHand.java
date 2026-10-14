@@ -48,7 +48,12 @@ public class DiscardCardAtRandomFromHand implements EffectAppenderProducer {
                 final LotroGame game = actionContext.getGame();
                 final String playerId = playerSource.getPlayer(actionContext);
                 final int count = countSource.getEvaluator(actionContext).evaluateExpression(game, null);
-                return game.getGameState().getHand(playerId).size() >= count
+                // The card being played is not discarded to pay for itself (CR 4.2 "playing a card": "You cannot
+                // discard The Card to pay a cost"), as DiscardFromHand leaves it out of its choice: while it is
+                // still in the hand it is not counted (We Must Have It 5_30, F-0498).
+                final long others = game.getGameState().getHand(playerId).stream()
+                        .filter(card -> card != actionContext.getSource()).count();
+                return others >= count
                         && (!forced || game.getModifiersQuerying().canDiscardCardsFromHand(game, playerId, actionContext.getSource()));
             }
         }, actionContext -> {

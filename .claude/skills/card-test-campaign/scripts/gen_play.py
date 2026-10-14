@@ -402,6 +402,8 @@ class Card:
                     continue                           # every twilight cost it speaks of is another card's
                 if kind == "when" and not speaks_of_own_play(self.text, self.title):
                     continue                           # every "may not be played" it says is of another card
+                if kind == "roaming" and self.type != "minion":
+                    continue                           # only a minion is roaming as it is played (7_324 wounds "a roaming minion")
                 say(reason, kind)
         if self.type in ("condition", "possession", "artifact") and "target" not in parsed:
             if not any(k.replace("_", " ").startswith("support area") for k in _keywords(parsed)):

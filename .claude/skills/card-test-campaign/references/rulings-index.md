@@ -600,4 +600,5 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - lint's `cardinfo` warning (Q-0145) [Q-0158]
 - lint's `census` warning (Q-0220: B) [F-0430, F-0443]
 - lint's `plain-play` warning (Q-0279: C; engine pass 29)
+- lint's `stale`, `race-side`, `pile-cost`, `rule-of-4`, `self-bar`, `item-class` and `bearer-min` warnings (engine pass 39) [Q-0058, Q-0062, Q-0262]
 - No Play clause, and no test that only plays a card (Q-0279: B; engine pass 31) [Q-0220]

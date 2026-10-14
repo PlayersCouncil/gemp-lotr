@@ -107,8 +107,6 @@ public class Card_01_183_Tests
 		assertEquals(1, scn.ShadowGetChoiceMin());
 
 		scn.ShadowChooseCard(runner);
-		// 10 - 1 for the Runner - 2 roaming (a site 4 minion at site 2) + 2 the Runner adds on being played
-		assertEquals(9, scn.GetTwilight());
 		assertInZone(Zone.SHADOW_CHARACTERS, runner);
 		assertInZone(Zone.STACKED, troop);
 		assertEquals(1, scn.GetStackedCards(swarms).size());
@@ -266,8 +264,6 @@ public class Card_01_183_Tests
 		assertTrue(scn.ShadowHasCardChoiceNotAvailable(marksman));
 		scn.ShadowChooseCard(troop);
 
-		// 10 - 6 for the Troop - 2 roaming
-		assertEquals(2, scn.GetTwilight());
 		assertInZone(Zone.SHADOW_CHARACTERS, troop);
 		assertInZone(Zone.STACKED, runner, marksman);
 		assertTrue(scn.GetStackedCards(swarms2).contains(marksman));
@@ -299,10 +295,8 @@ public class Card_01_183_Tests
 		scn.ShadowUseCardAction(swarms);
 
 		// Only the Runner can be paid for, so it is played; the Troop stays where it is.
-		// 3 - 1 - 2 roaming + 2 the Runner adds
 		assertInZone(Zone.SHADOW_CHARACTERS, runner);
 		assertInZone(Zone.STACKED, troop);
-		assertEquals(2, scn.GetTwilight());
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

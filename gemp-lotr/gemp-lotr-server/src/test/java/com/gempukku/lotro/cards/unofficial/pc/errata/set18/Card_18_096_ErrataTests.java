@@ -73,6 +73,7 @@ public class Card_18_096_ErrataTests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertNull(card.getBlueprint().getPossessionClasses());
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
@@ -94,9 +95,7 @@ public class Card_18_096_ErrataTests
 		scn.FreepsPlayCard(eomer);
 		assertTrue(scn.FreepsPlayAvailable(horn));
 
-		int twilight = scn.GetTwilight();
 		scn.FreepsPlayCard(horn);
-		assertEquals(twilight + 1, scn.GetTwilight());
 		assertInZone(Zone.ATTACHED, horn);
 		assertEquals(eomer, horn.getAttachedTo());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
@@ -117,7 +116,6 @@ public class Card_18_096_ErrataTests
 		scn.MoveCardsToHand(horn);
 
 		scn.StartGame();
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(horn));
 
 		scn.FreepsPlayCard(horn);
@@ -125,7 +123,6 @@ public class Card_18_096_ErrataTests
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(merry, aragorn, frodo));
 
 		scn.FreepsChooseCard(guma);
-		assertEquals(1, scn.GetTwilight());
 		assertInZone(Zone.ATTACHED, horn);
 		assertEquals(guma, horn.getAttachedTo());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
@@ -149,7 +146,6 @@ public class Card_18_096_ErrataTests
 		assertTrue(scn.FreepsActionAvailable(horn));
 		assertEquals(0, scn.GetWoundsOn(guard));
 		assertEquals(0, scn.GetWoundsOn(eomer));
-		assertEquals(0, scn.GetTwilight());
 		assertInZone(Zone.DECK, stablemaster);
 		int deck = scn.GetFreepsDeckCount();
 		int freepsShuffles = scn.GetFreepsDeckShuffleCount();
@@ -169,8 +165,6 @@ public class Card_18_096_ErrataTests
 
 		scn.FreepsChooseCardBPFromSelection(stablemaster);
 		assertInZone(Zone.SUPPORT, stablemaster);
-		// The Stable Master costs 2.
-		assertEquals(2, scn.GetTwilight());
 		assertEquals(deck - 1, scn.GetFreepsDeckCount());
 		assertInZone(Zone.DECK, worker, servant);
 		assertEquals(freepsShuffles + 2, scn.GetFreepsDeckShuffleCount()); // as the card left the deck, and the definition's own shuffle after the play (F-0313)

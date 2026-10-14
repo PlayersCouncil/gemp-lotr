@@ -29,10 +29,11 @@ bears on their text, and every pitfall group their tests will touch, in as few s
 
 An entry is printed only when it contains every term given, so look up separate subjects with separate
 commands (chained with `;` in one step), not with one command of many terms. While a card is in stage 1, every
-lookup takes your batch's ids as well, `lookup.py <terms> --skip <your batch's ids>`: an entry of the shapes, the
-pitfalls or the helpers that names one of your cards, or another version of one, says how it is built, and is
-then named by its heading and not printed (a ruling is printed whatever it names). Look again in stage 2,
-without `--skip`.
+lookup takes your batch's ids as well, `lookup.py <terms> --skip <your batch's ids>`: what names one of your
+cards, another version of one, or a `mechanics/` class built on one says how it is built, and is left out: the
+whole entry where its first sentence does (named by its heading), else those sentences alone (a ruling is printed
+whatever card it names). A broad word matches many long entries: `--max 0` lists them by their first words, to
+choose from. Look again in stage 2, without `--skip`.
 
 An expectation rests on an entry's own words, never on its line in an index. A shape the index lists is settled:
 do not raise it as a question again, and where the game departs from it, that is a finding. When a test does
@@ -78,7 +79,7 @@ read with its packet (`--only-withheld`, in stage 2), never out of the file; and
 printed text in stage 1, use `packet.py --find <regex> --skip <your batch's ids>`
 (printed fields and game text with ids, nothing of the implementation, your batch and its other versions left out) and
 `packet.py --defs <ids> --skip <your batch's ids>` for a chosen helper's definition (it also keeps shut a helper
-whose game text is a batch card's own with a word or two changed: choose another, or read it in stage 2; asked
+whose game text is a batch card's own with a word or two changed, or prints a whole sentence of one: choose another, or read it in stage 2; asked
 for more than about twenty ids it overruns the output limit, so send it to a file under your folder and `Read`
 that). You may read another card's finished test file of the same shape, so long as that card is neither one of
 your batch nor another version of one, and neither the file nor its ledger names one (grep it for your ids

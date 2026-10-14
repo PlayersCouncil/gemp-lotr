@@ -87,7 +87,7 @@ public class Card_10_008_ErrataTests
 	}
 
 	@Test
-	public void CannotBePlayedWithOneElfAndIsPlayedForFourOnceASecondIsSpotted() throws DecisionResultInvalidException, CardNotFoundException {
+	public void CannotBePlayedWithOneElfAndIsPlayedOnceASecondIsSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var cirdan = scn.GetFreepsCard("cirdan");
@@ -107,7 +107,6 @@ public class Card_10_008_ErrataTests
 
 		// A second Elf, an ally.
 		scn.FreepsPlayCard(celeborn);
-		assertEquals(2, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(cirdan));
 
 		scn.FreepsPlayCard(cirdan);

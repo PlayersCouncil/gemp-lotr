@@ -16,19 +16,29 @@ settled shapes, the rig's pitfalls and the helper cards are searched. A term tha
 number (F-0123, Q-0045, G-0012) matches that number only, and one that is a card id (1_38) that id only (not
 101_38, not 1_389); any other term is a regular expression. Where no entry
 matches that way, the terms are tried again as plain words, whatever the punctuation and markup on either side,
-so that an entry's first words can be given as rulings-index.md prints them: lookup.py "The Hobbit sets (30 to 33)".
+so that an entry's first words can be given as rulings-index.md prints them: lookup.py "The Hobbit sets (30 to 33)";
+and where that finds nothing either, each word of the terms (of three letters or more, the small words left out) is
+looked for on its own, in any order: "from your discard pile into hand" then finds "take a <card> into hand from
+your discard pile".
 
 A number looked up by itself (no other term, no --in) is also read in the campaign's registers, after the entries:
 a finding's row of findings.tsv (its status, what was found and its outcome, which may leave something open that
 no ruling says), and a question's entry in questions.md: whole while it is open, and Ketura's answer once it has one.
 
 --skip takes the ids of your batch (separated by spaces or commas).  An entry of the shapes, the pitfalls or any
-other file but the rulings log that names one of them, or another version of one (its original, its errata), by
-its id or by its full name (a title of two words or more that no other card has will do: Rivendell Valley), is
-named by its heading and not printed, and so is such a finding's row of findings.tsv: they say what a definition
-holds and how it was put right, which stage 1 does not read.  The rulings log and a question's entry are printed
-whatever they name: what Ketura ruled a card does is what stage 1 is written from.  Look again in stage 2, without
---skip.
+other file but the rulings log that names one of them, or another version of one (its original, its errata, unless
+that version is a new text sharing no sentence with it), by its id or by its full name (a title of two words or
+more that no other card has will do: Rivendell Valley), or that names a mechanics/ class built on one of them (the
+class's alias map or Ring-bearer has the card, and no more than five classes have it), says how it is built or
+tested, which stage 1 does not read.  Where the entry's first sentence (its bold lead) does so, the entry is named
+by its heading and not printed; elsewhere only the sentences that do so are left out, and the entry's general rule
+is printed with a line saying how many.  Such a finding's row of findings.tsv is named and not printed.  The
+rulings log and a question's entry are printed whatever card they name: what Ketura ruled a card does is what
+stage 1 is written from; only a sentence of the log that points to a mechanics/ class built on a batch card is
+left out.  Look again in stage 2, without --skip.
+
+--max N prints the first N entries whole and lists the rest by their first words; --max 0 lists them all so, for
+choosing what to read (a broad word, "underground", "named", matches many long entries).
 
 An entry printed whole would overrun the output: one longer than about 1,500 characters is printed to a line's end
 there, then the lines further on that hold a term, then how much was left out; --full prints it whole.  A ruling
@@ -159,12 +169,96 @@ RIG_SKILL = SKILLS / "gemp-testing" / "SKILL.md"
 
 def shut(skipped) -> set:
     """The ids given to --skip with every other version of each (packet.py's rule), or the ids alone where there
-    are no definitions to read the versions from."""
+    are no definitions to read the versions from.  A version that is a new text, sharing no sentence with any card
+    given and little of its wording (59_46 for 9_46; 61_232 for 11_232), is left open: what is written of it tells
+    nothing of how the card given is built or tested."""
     try:
         import packet
-        return packet.shut(skipped)
+        every = packet.shut(skipped)
     except BaseException:  # run from a copy of the skill with no repository round it
         return set(skipped)
+    return {v for v in every if v in skipped or not new_text(v, skipped)}
+
+
+NEW_TEXT_RATIO = 0.5
+
+
+def new_text(version: str, skipped) -> bool:
+    """Whether a version's game text shares no sentence with the game text of any of the cards given, and is under
+    half like each of them word by word (a one-sentence card with a word changed is no new text)."""
+    import difflib
+    import gempcards
+    import packet
+    cards = gempcards.card_index()
+
+    def sentences(card) -> set:
+        return {x for x in packet.sentences(card) if len(x.split()) > 2}
+    mine = cards.get(version)
+    if mine is None:
+        return False
+    for other in skipped:
+        theirs = cards.get(other)
+        if theirs is None:
+            return False
+        if sentences(mine) & sentences(theirs):
+            return False
+        if difflib.SequenceMatcher(None, packet.text_words(mine), packet.text_words(theirs), autojunk=False).ratio() >= NEW_TEXT_RATIO:
+            return False
+    return True
+
+
+# A card in the alias maps of more mechanics/ classes than this is a table's furniture (Aragorn 1_89, Goblin Runner
+# 1_178), not what a class is built on.
+FURNITURE = 5
+
+
+def classes_built_on(ids) -> dict:
+    """{class name: id} for each mechanics/ test class built on one of the ids: one whose alias map has the card
+    (`put("pallando", "13_37")`) or whose Ring-bearer is it (a constant of TestConstants: GaladrielRB, 9_14), where
+    the card is in no more than FURNITURE classes.  The brief keeps such a class shut in stage 1 (AidTests, built on
+    Pallando 13_37; CostOfAssigningTests on Morgul Spawn 7_200).  {} where there is no repository to read."""
+    try:
+        import gempcards
+        root = gempcards.TEST_ROOT / "mechanics"
+        constants = dict(re.findall(r'\bString\s+(\w+)\s*=\s*"(\d+_\d+)"\s*;',
+                                    (gempcards.FRAMEWORK_DIR / "TestConstants.java").read_text(encoding="utf-8")))
+        files = sorted(root.rglob("*.java"))
+    except BaseException:
+        return {}
+    holders = {}
+    for f in files:
+        text = f.read_text(encoding="utf-8", errors="replace")
+        held = set(re.findall(r'put\(\s*"[^"]+"\s*,\s*"(\d+_\d+)"\s*\)', text))
+        held |= {constants[n] for n in re.findall(r"\b(?:VirtualTableScenario|TestConstants)\.(\w+)", text) if n in constants}
+        for cid in held:
+            holders.setdefault(cid, []).append(f.stem)
+    out = {}
+    for cid in ids:
+        if 0 < len(holders.get(cid, [])) <= FURNITURE:
+            for name in holders[cid]:
+                out.setdefault(name, cid)
+    return out
+
+
+def names_a_class(text: str, classes: dict) -> str:
+    """The first of `classes` (classes_built_on) that the text names, as "<id> (by mechanics/ class <name>)", or ""."""
+    for name in sorted(classes):
+        if re.search(r"(?<![\w])%s(?![\w])" % re.escape(name), text):
+            return "%s (by mechanics/ class %s, built on it)" % (classes[name], name)
+    return ""
+
+
+def sentences_of(text: str) -> list:
+    """An entry cut into its sentences, each with what stood after it (the space or line break), so that the
+    sentences kept can be put back as they stood.  A sentence ends at ".", "!" or "?" (a bold lead's "**" after
+    it included) followed by white space."""
+    parts = re.split(r"((?<=[.!?])(?:\*\*|\*|`|\)|\")?\s+)", text)
+    out = []
+    for i in range(0, len(parts), 2):
+        piece = parts[i] + (parts[i + 1] if i + 1 < len(parts) and parts[i + 1] else "")
+        if piece.strip():
+            out.append(piece)
+    return out
 
 
 def names_one_of(text: str, ids) -> str:
@@ -209,6 +303,9 @@ def names_one_by_title(text: str, names: dict) -> str:
 
 
 CUT = 1500
+# Words left out when the words of a term are looked for one by one.
+SMALL_WORDS = {"the", "and", "you", "your", "from", "into", "that", "this", "with", "for", "are", "his", "her", "its",
+               "has", "have", "may", "can", "not", "who", "each", "any", "all", "one", "out", "when", "while", "where"}
 
 
 def shown(text: str, pats, full: bool) -> str:
@@ -319,6 +416,7 @@ def main(argv):
             build_skill_index(*made)
         return 0
     where, terms, limit, narrowed, skipped, full = DEFAULT, [], 8, False, [], False
+    limit_given = False
     i = 0
     while i < len(argv):
         if argv[i] == "--skip":
@@ -342,7 +440,7 @@ def main(argv):
             full = True
             i += 1
         elif argv[i] == "--max":
-            limit = int(argv[i + 1])
+            limit, limit_given = int(argv[i + 1]), True
             i += 2
         else:
             terms.append(argv[i])
@@ -356,14 +454,49 @@ def main(argv):
         hits = [e for e in found if all(p.search(e[2], words(e[2])) for p in pats)]
         if hits:
             print("(no entry matches as a regular expression; matched as plain words)\n")
-    # Stage 1 of a batch: what says how one of its cards is built is named and not shown.
+    if not hits:
+        # Nor as plain words: each word on its own, in any order (a phrase written in another word order than the
+        # entry's: "from your discard pile into hand" for "take a <card> into hand from your discard pile").
+        each = [w for t in terms if not re.fullmatch(r"[QFG]-\d{4}|\d+_\d+", t) for w in words(t).split()
+                if len(w) > 2 and w not in SMALL_WORDS]
+        each += [t for t in terms if re.fullmatch(r"[QFG]-\d{4}|\d+_\d+", t)]
+        if each and len(each) > len(terms):
+            loose = [matcher(w) for w in dict.fromkeys(each)]
+            hits = [e for e in found if all(p.search(e[2], words(e[2])) for p in loose)]
+            if hits:
+                print("(no entry holds the terms as written; matched by their words one by one, in any order: %s)\n"
+                      % ", ".join(dict.fromkeys(each)))
+                if len(hits) > 3 and not limit_given:
+                    limit = 0  # a loose match: listed by first words, to be read by name
+    # Stage 1 of a batch: what says how one of its cards is built is named and not shown: the whole entry where its
+    # lead does, else only the sentences that do.
     skipped = shut(skipped) if skipped else set()
     by_name = titles_of(skipped) if skipped else {}
+    classes = classes_built_on(skipped) if skipped else {}
 
-    def names_one(text):
-        return names_one_of(text, skipped) or names_one_by_title(text, by_name)
-    withheld = [(e, names_one(e[2])) for e in hits if e[0] != "rulings" and names_one(e[2])] if skipped else []
-    hits = [e for e in hits if e not in [w[0] for w in withheld]]
+    def names_one(text, key):
+        if key == "rulings":
+            return names_a_class(text, classes)
+        return names_one_of(text, skipped) or names_one_by_title(text, by_name) or names_a_class(text, classes)
+    withheld, kept, notes = [], [], {}
+    for e in hits:
+        if not skipped:
+            kept.append(e)
+            continue
+        parts = sentences_of(e[2])
+        named = [names_one(x, e[0]) for x in parts]
+        if not any(named):
+            kept.append(e)
+        elif e[0] != "rulings" and (named[0] or all(named)):
+            withheld.append((e, named[0] or next(n for n in named if n)))
+        else:
+            left = [x for x, n in zip(parts, named) if not n]
+            out = sorted(dict.fromkeys(n.split(" ")[0] for n in named if n))
+            notes[(e[0], e[1], "".join(left).rstrip())] = ("  [%d sentence(s) of this entry left out in stage 1: they name %s, "
+                                                          "an id after --skip or another version of one, or a mechanics/ "
+                                                          "class built on one]" % (sum(1 for n in named if n), " and ".join(out)))
+            kept.append((e[0], e[1], "".join(left).rstrip()))
+    hits = kept
     # A number asked for by itself is read in the registers too.
     registers = [r for r in (in_registers(t, skipped) for t in terms if narrowed is False and len(terms) == 1 and pats[0].number) if r]
     if not hits and not withheld and registers:
@@ -372,9 +505,11 @@ def main(argv):
     elif not hits and not withheld:
         print("no entry matches", " and ".join(repr(t) for t in terms), "in", ", ".join(where))
     for key, heading, text in hits[:limit]:
-        print(f"== {key} > {heading}\n{shown(text, pats, full or key == 'rulings')}\n")
+        note = notes.get((key, heading, text))
+        print(f"== {key} > {heading}\n{shown(text, pats, full or key == 'rulings')}" + ("\n" + note if note else "") + "\n")
     if len(hits) > limit:
-        print(f"... and {len(hits) - limit} more (narrow the search, or --max N):")
+        print(f"{len(hits)} entries match; by their first words:" if limit == 0 else
+              f"... and {len(hits) - limit} more (narrow the search, or --max N):")
         for key, heading, text in hits[limit:]:
             print(f"   {key} > {heading}: {lead(text, 100)}")
     for (key, heading, text), named in withheld:

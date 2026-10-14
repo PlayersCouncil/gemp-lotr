@@ -20,9 +20,15 @@
                                     without the indentation and with a newline between them.  So "." and ".*"
                                     stay inside one line ("keywords:.*Ranger" is the keyword, never the word in
                                     a game text), "\\n" steps to the next ("\\[shire\\].*\\n.*keywords:.*Tale"
-                                    is a [shire] tale), "^" is the start of the id line, and the text has no
-                                    markup in it (no <b>, no </b>): "\\[gollum\\] condition",
-                                    "^1_.*\\[gandalf\\].* Man\\b".
+                                    is a [shire] tale), "^" is the start of the id line and "$" the end of the
+                                    card's LAST line (its game text, where it has one), not of the id line: to
+                                    anchor at the end of the id line write "(\\n|$)" ('minion.*site 3(\\n|$)'
+                                    finds every minion of site 3, 'minion.*site 3$' only the few with no game
+                                    text).  The id line ends with the last of its numbers: a minion's "site N",
+                                    an ally's "home ...", a companion's "resistance N" or "signet <name>", a
+                                    site's "direction <side>", and "; unique" or the type where nothing is
+                                    printed after it.  The text has no markup in it (no <b>, no </b):
+                                    "\\[gollum\\] condition", "^1_.*\\[gandalf\\].* Man\\b".
                                     The id line opens with the id, two spaces, the name, two spaces, so "^Saruman"
                                     finds nothing: a title is "^\\S+  Saruman(,|  )" (every Saruman, whatever
                                     its subtitle), or --title.
@@ -51,8 +57,9 @@
 --skip takes the ids of your batch (separated by spaces or commas): their definitions and those of their other
 versions (the original of an erratum, the errata of an original, an erratum's fellow errata) stay shut in stage 1,
 and neither --find nor --defs will print them.  --defs also keeps shut, in stage 1, a card whose game text is a
-batch card's own with a word or two changed (Uruviel 1_67 beside Silinde 1_60): its definition would show how the
-batch card is built.  Ask for it again in stage 2, without --skip.
+batch card's own with a word or two changed (Uruviel 1_67 beside Silinde 1_60), or that prints a whole sentence of
+a batch card's word for word, of eight words or more (Rider's Mount 4_287 beside Brego 4_263): its definition would
+show how the batch card is built.  Ask for it again in stage 2, without --skip.
 
 A packet is: where the card lives, the picture the client shows for it (PC cards), what the reviewed spreadsheet
 says it is (Decipher cards) or the errata sheet's row, a later row of that sheet where it has one above the
@@ -279,6 +286,15 @@ def text_words(card) -> list:
     return re.findall(r"[^\W_]+|[~+\-]", text.lower())
 
 
+def sentences(card) -> set:
+    """A card's game text as its sentences, each as text_words gives it (its own title "~"), joined by spaces."""
+    text = g.plain_text(card.field("gametext", "") or "")
+    for name in sorted({g.plain_text(card.field("title", "") or ""), g.plain_text(card.field("subtitle", "") or "")}, key=len, reverse=True):
+        if len(name) > 2:
+            text = re.sub(re.escape(name), "~", text, flags=re.I)
+    return {" ".join(re.findall(r"[^\W_]+|[~+\-]", part.lower())) for part in re.split(r"(?<=[.!?])\s+", text) if part.strip()}
+
+
 # A text of fewer words is a keyword line or a "To play, spot an Elf" that scores of cards share word for word.
 SISTER_WORDS = 8
 SISTER_RATIO = 0.85
@@ -296,6 +312,21 @@ def sister_of(card, skipped):
         theirs = text_words(cards[other]) if other in cards else []
         if len(theirs) >= SISTER_WORDS and difflib.SequenceMatcher(None, mine, theirs, autojunk=False).ratio() >= SISTER_RATIO:
             return other
+    return None
+
+
+def shares_a_sentence(card, skipped):
+    """(the id, the sentence) of the first of the ids given that prints a whole sentence of SISTER_WORDS words or more
+    that this card prints too, word for word (its own title aside), or None.  Rider's Mount 4_287 prints Brego 4_263's
+    "At the start of each skirmish involving bearer, each minion skirmishing bearer must exert", and its definition
+    would show how that sentence of Brego's is built."""
+    cards = g.card_index()
+    mine = {x for x in sentences(card) if len(x.split()) >= SISTER_WORDS}
+    for other in skipped:
+        if other in cards:
+            both = mine & sentences(cards[other])
+            if both:
+                return other, sorted(both, key=len)[-1]
     return None
 
 
@@ -346,6 +377,10 @@ def find(argv) -> int:
         for line in lines[1:]:
             print("    " + line)
     asked = " and ".join(([] if title is None else ["have the title \"%s\"" % title]) + ([] if pattern is None else ["match /%s/" % pattern]))
+    if pattern is not None and re.search(r"(?<!\\)\$", pattern) and "\\n|$" not in pattern:
+        # Found or not: a "$" meant for the end of the id line silently finds only the cards with no game text.
+        print("(\"$\" is the end of a card's LAST line, its game text where it has one, not of the id line: to anchor "
+              "at the end of the id line write (\\n|$), as in 'minion.*site 3(\\n|$)')")
     print("%d card(s) %s%s" % (found, asked, "; left out as shut: " + ", ".join(left_out) if left_out else ""))
     if not found and not left_out:
         # What a search that finds nothing most often got wrong about the text it is tried against.
@@ -408,6 +443,11 @@ def defs(argv) -> int:
             print("# %s  %s: shut in stage 1 (its game text is %s's with a word or two changed, so its definition would show "
                   "how %s is built: choose another helper, or ask again in stage 2, without --skip)\n"
                   % (card_id, g.full_name(card), sister_of(card, batch), sister_of(card, batch)))
+        elif shares_a_sentence(card, batch):
+            other, said = shares_a_sentence(card, batch)
+            print("# %s  %s: shut in stage 1 (it prints a sentence of %s's word for word, \"%s\", so its definition would "
+                  "show how that sentence of %s is built: choose another helper, or ask again in stage 2, without --skip)\n"
+                  % (card_id, g.full_name(card), other, said, other))
         else:
             print("# %s  %s (%s line %d)" % (card_id, g.full_name(card), card.rel_file, card.line))
             print("```hjson")

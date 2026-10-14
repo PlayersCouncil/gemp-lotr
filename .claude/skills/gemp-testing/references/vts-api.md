@@ -161,7 +161,7 @@ While the ability to programmatically execute games is a boon to testing efforts
 These functions are for progressing through the game itself.  For instance, if your test is really about battle attrition and the phases before that point are just in the way, here you will find functions to skip past phases so that your test can remain mostly clean of irrelevant procedure. Do be warned that these functions assume a best-case scenario that can be safely passed through; if a card has a required decision that does not have an obvious "decline" option, then these functions will fail and you will have to do it manually.  If you actually do need such a pestering card on the table, it is advised that you only place it at the last possible second rather than putting it down early and requiring you to do all the manual procedure.
 
 - `void SkipToArcheryWounds()`
-- `void SkipToAssignments()`
+- `void SkipToAssignments()` — Plays on into the assignment phase (`SkipToPhase`) and passes its actions for both players, so that it rests at the Free Peoples player's "Assign minions" decision, nothing assigned.
 - `void FreepsResolveSkirmish(PhysicalCardImpl comp)  ·  ShadowResolveSkirmish`
 - `void SkipToMovementDecision()` — Stops at the regroup "do you want to make another move?" decision of whichever player's turn is under way or, where the mover is not asked that, at his reconcile or in the other player's fellowship phase.
 - `void SkipToOtherPlayersTurn()` — Plays out the rest of the turn that is under way and stops at the start of the other player's fellowship phase; the moving fellowship declines the optional regroup move.
@@ -561,4 +561,4 @@ This interface holds the handful of accessors that every other virtual table int
 - `void Verify(boolean condition, String message)` — A sanity check on the table's own bookkeeping, used where a procedure has to end up in a known state for whatever follows it to make sense.
 
 ---
-453 entries, 217 of them with no description in the source.
+453 entries, 216 of them with no description in the source.

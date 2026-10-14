@@ -28,6 +28,11 @@ a stub has no behavioural test to account for, and the erratum's file is still w
   copy its tests, change the ids, aliases and helpers to your card's, and change what the original's text makes
   different; then check each against YOUR stage-1 ledger, which was written blind and stays the judge of what is
   owed. A test copied over that your text does not support is dropped, not kept.
+  Check each copied board against the original's own numbers as well as its words (burdens, resistance, vitality:
+  59_31's fierce-round board corrupts or kills 9_31's Boromir, of 3 burdens and resistance 6), and where the
+  erratum's test gives a keyword or a number by hand (fierce, a strength), take the printed helper `helpers.md` names
+  instead (Uruk Pursuer 4_190 for a fierce minion; Morgul Whelp 7_202, strength 3 while the Ring-bearer has no wound,
+  for a weak one, as Card_18_018_Tests lays them; the Standard's "A board a game could reach").
   An erratum's board is settled only for the zones the ERRATUM's text reads: where the original's text reads
   another zone (a draw deck, a discard pile), lay that zone yourself; the erratum's scenario may leave it empty.
   Where the erratum's ledger says on its Sources line that it is a new text sharing no sentence with the
@@ -213,10 +218,18 @@ TO LOOK AT WHEN THE SET COMES UP (seen in passing by an earlier batch; not looke
   text is "Each Hobbit at this site is strength -2" and it is built as `modifyStrength`, `filter: hobbit,companion`,
   under `location: hasAttached(self)`, so a Hobbit ally whose home is that site (Bounder 1_286 at 2F) and a Hobbit
   minion (Ted Sandyman 18_75) are not reached.
-- Set 6, Peril 6_105 and Spied From Above 6_84, "it comes into play exhausted" (from the batch dec-b1_350, seen in
-  passing, not looked into, not filed): built as a separate `exhaust` after the play, so the played minion's own
-  "when you play" trigger is answered while it still has no wound (seen on Úlairë Nertëa 1_234 in a probe; a
-  minion whose play-trigger exerts it would tell).
+- Sets 3, 5, 12 and 13, an optional "draw a card for each ..." with no cost (from the lander of dec-b11_251, read in
+  the definitions only, not run): the engine does not withhold a count that comes to zero (Q-0033; shapes.md, the
+  Q-0224 entry's "Known NOT to"), so each wants a requirement that spots one of what is counted, as F-0504 (17_141)
+  had. None looks to have one: Book of Mazarbul 3_1 (Dwarf companions), Orc Captain 5_103 (sites you control),
+  Vicious Uruk 12_158 (wounds on a character it skirmishes), Wells of Deep Memory 13_27 (Arwen, Celeborn or
+  Galadriel). The engine-pass-26 sweep tables classed every optional draw as "kept on offer: Q-0029" and missed them.
+- Set 6, Peril 6_105 and Spied From Above 6_84, "it comes into play exhausted": F-0500, fixed by engine pass 37 with
+  Gothmog 18_80 and Mountain-troll 65_112 (`exhausted: true` on the play: the wounds are on before anything answers
+  it, and are no exertions; Q-0302). The board that tells: Úlairë Nertëa 103_77's offer for the minion played, with
+  a Beastly Olog-hai 11_108 played by Isengard Informant 13_110 as the control (Card_18_080_Tests). Goblin Domain
+  1_175, Blood of Númenor 2_31 and Race Text 91_9 say it of characters other cards play: F-0501, engine pass 38, a
+  `ComesIntoPlayExhausted` modifier. shapes.md, "<A character> comes into play exhausted".
 - Set 6, It Burns Us 6_110, "choose an opponent who must reveal his or her hand" (from the batch dec-b2_28): built
   as the Free Peoples player's `revealHand` of the Shadow hand (the effect Curse Their Foul Feet! 1_36 uses), so No
   Business of Ours 2_44 or 52_44 stops it and Eye of Barad-dûr 5_96 answers it. That is right (Q-0251, B: the
@@ -245,7 +258,8 @@ TO LOOK AT WHEN THE SET COMES UP (seen in passing by an earlier batch; not looke
   optional trigger built on `chooseHowManyToSpot` with nothing that requires a possession, so it is offered with
   none in play (the kind of F-0428, Aragorn, Wingfoot 4_364). Q-0248 is answered: the player decides how many, by
   a choice of cards where the effect chooses cards; an effect that only counts, as 17_42's (1) for each, keeps its
-  number, and the definitions that ask one are unchanged.
+  number PROMPT (the player names 0 to N: Alliance Reforged 4_58 was corrected to `chooseHowManyToSpot`, F-0497),
+  and the definitions that ask one are unchanged.
 - Set 6, Blood Has Been Spilled 6_91 (worked in dec-b5_96 before this was seen; from the batch dec-b11_1, read in
   the definition only): "Discard a mount borne by a [rohan] Man to prevent ..." chooses the mount in `cost` and
   discards it inside the effect, not as the cost (the pattern of F-0477, corrected on 11_60 and 102_46). Nothing
