@@ -846,7 +846,9 @@ being asked when it is called (engine pass 24, `virtualtable/SanctuaryHealingTes
 empty answers whatever was asked, and the fifth passed the fellowship phase once a heal had been taken: the
 landed tests that take some heals and decline the rest do it with `FreepsDeclineChoosing()` once for each that
 remains (`Card_18_139_ErrataTests`, `Card_V0_001_ErrataTests`), which works as before. There is no Shadow twin:
-on player 2's turn decline each with `ShadowDeclineChoosing()`.
+on player 2's turn decline each with `ShadowDeclineChoosing()`. A required start-of-turn trigger of the same player
+(Grimbeorn 14_6's heal) is ordered against the sanctuary heal first: answer "Required responses" with
+`FreepsResolveActionOrder("Required trigger from")`, then call this (Card_14_006_Tests).
 
 **Sanctuary healing is asked at any site laid as site 3 or 6, and only when a companion is wounded.** The rule
 makes a sanctuary of every site numbered 3 or 6 whatever its block, a Shadows-block site the Shadow player laid
@@ -1356,6 +1358,8 @@ N + 1 read alike: A Talent for Not Being Seen 1_316's -2 is told from -3 at Bali
 ## A card that leaves play as it is played
 
 **A card that leaves play as it comes into play was not played.** A minion played beside Watcher in the Water, a tentacle played away from a marsh, a possession or weapon played on a bearer of Shadowfax, Greatest of the Mearas (17_24 and its erratum 67_24, a standing discard by LR 1; no other Shadowfax): the card goes to the discard pile, what it cost stays paid, and nothing that answers a play happens or is offered: not its own "when you play", not another card's "each time you play", not a response (CR 4.2 "discard"; `mechanics/inplay/DiscardedOnEntryTests`). The standing discard is done before the play is announced, so no "Required responses" question is asked between it and a play's own triggers, for a card that stays either. The game log has a line "<card> left play as it came into play".
+
+**A card played "exhausted" is exhausted only after its play has been answered (F-0500, engine, open).** Gothmog 18_80, Spied From Above 6_84, Peril 6_105 and Mountain-troll 15_112 and 65_112 play the card and then `exhaust` it, so a card that answers the play sees it unwounded: Úlairë Nertëa 103_77 offers to exert it. A wound count read after the play passes either way; the reading that tells is Nertëa's offer, beside a control played fresh in the same phase (Isengard Informant 13_110 playing Beastly Olog-hai 11_108). Park that test on F-0500 (Card_18_080_Tests).
 
 **A play as a cost can come to nothing.** An ability whose cost is to play a card is offered, takes its other costs and the card's twilight, and does nothing if the card has left play by the time its play is complete, whatever removed it. Read the costs as paid, the effect as not done, and the phase's decision.
 
