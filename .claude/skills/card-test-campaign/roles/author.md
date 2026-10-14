@@ -61,12 +61,14 @@ So the order matters and is not a formality.
 
 (for several cards, each into a file of its own, `> /tmp/<your folder name>/<id>.packet.txt`, and the files read
 side by side: printed in one step the packets overrun the output limit and the middle of them is cut out) and
-from that alone write the card's ledger file: the clauses, their types, the checks each one's wording calls
-for (the claim lines come later, when the tests exist). Then, for each check, write one line: the situation, and
-what the text and rules say happens. A card's play has no clause of its own (Q-0279: B): it is tested only where
+from that alone write the card's plan, `/tmp/<your folder name>/<id>.plan.md`: the clauses as the ledger will
+hold them (id, type, checks, text), and under each check one line: the situation, and what the text and rules say
+happens. A card's play has no clause of its own (Q-0279: B): it is tested only where
 the card's text bears on it (a bearer, a requirement or an extra cost to play, a cost its text changes, a card that
-answers its own play), by the test of that clause, which plays the card from hand. Save this as `/tmp/<your folder name>/<id>.plan.md` before going on. Do not open the card's `.hjson` file or its existing test
-file during this stage. If the text leaves a real doubt about what should happen, write the doubt down as a
+answers its own play), by the test of that clause, which plays the card from hand. The plan is stage 1's one file,
+saved before going on; the ledger file is written once, in stage 2, from the plan (its Sources, Findings, Dropped
+and Notes lines may go in at once), and its claim lines added with `Edit` as the tests exist. Do not open the
+card's `.hjson` file or its existing test file during this stage. If the text leaves a real doubt about what should happen, write the doubt down as a
 question with both readings; do not settle it by guessing, and do not settle it in stage 2 by seeing what the game
 does.
 
@@ -79,7 +81,8 @@ printed text in stage 1, use `packet.py --find <regex> --skip <your batch's ids>
 whose game text is a batch card's own with a word or two changed: choose another, or read it in stage 2; asked
 for more than about twenty ids it overruns the output limit, so send it to a file under your folder and `Read`
 that). You may read another card's finished test file of the same shape, so long as that card is neither one of
-your batch nor another version of one: the Decipher original of an erratum, and the landed ERRATUM of an
+your batch nor another version of one, and neither the file nor its ledger names one (grep it for your ids
+first: Dimrill Dale 1_350's Notes describe Great Chasm 2_118's definition): the Decipher original of an erratum, and the landed ERRATUM of an
 original, whose test file and ledger stay shut until stage 2 as your own files do (52_75 for 2_75). So does a
 `mechanics/` class built on one of your batch's cards (`CostOfAssigningTests` on Morgul Spawn 7_200), as the shapes
 and pitfalls that name a batch card do. Only those are shut: another card that shares a title with one of yours (a

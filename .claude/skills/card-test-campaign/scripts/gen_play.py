@@ -91,13 +91,14 @@ QUIET_TRIGGERS = {"winsskirmish", "losesskirmish", "startofphase", "endofphase",
 
 # Words of a game text that say something of the card's own play, each with the kind of thing it is: where the
 # definition has an effect of that kind the definition's reason is given and the text's is not said again.
+TEXT_GUARDS_WHEN = r"\b(?:may|can) (?:not |only )?be played\b|\bcannot be played\b|\bcan't be played\b"
 TEXT_GUARDS = [
     ("bearer", r"\bbearer must be\b|\bplays on\b",
      "its text says what bears it and its definition names no bearer: the PlayOn clause's test plays it and claims P1"),
     ("toplay", r"\bto play,", "its text has a \"To play, ...\" that its definition has not: the test of that clause plays it and claims P1"),
     ("cost", r"\btwilight cost\b", "its text speaks of a twilight cost: the test of that clause reads the cost and claims P1"),
     ("roaming", r"\broaming\b", "its text speaks of roaming: the test of that clause reads what the play costs and claims P1"),
-    ("when", r"\b(?:may|can) (?:not |only )?be played\b|\bcannot be played\b|\bcan't be played\b",
+    ("when", TEXT_GUARDS_WHEN,
      "its text says when or whether it may be played: the test of that clause plays it and claims P1"),
     ("toil", r"\btoil\b", "it has toil, which may pay part of its cost: the test that plays it reads what was exerted"),
 ]
@@ -167,6 +168,17 @@ def _own_or_not(text: str, title: str) -> list:
 def speaks_of_own_cost(text: str, title: str) -> bool:
     """The `cost` text guard: whether the text speaks of a twilight cost that may be the card's own."""
     return any(kind == "own" for _, kind in _own_or_not(text, title))
+
+def speaks_of_own_play(text: str, title: str) -> bool:
+    """The `when` text guard: whether a "may not be played" or the like is said of the card itself, and not of
+    another card the sentence names before it ("Return to Its Master may not be played" on The Witch-king 2_85,
+    "Shadow conditions may not be played on Théoden" on Hearken to Me 4_94)."""
+    for m in re.finditer(TEXT_GUARDS_WHEN, text, re.I):
+        subject = re.split(r"[.:,;]\s|\band\b", text[:m.start()])[-1].strip()  # the words the verb is said of
+        if not subject or re.search(r"\b(?:this|it)\b", subject, re.I) or (title and title.lower() in subject.lower()):
+            return True
+    return False
+
 
 WORDS = ["Nothing", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve",
          "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen", "Twenty"]
@@ -388,6 +400,8 @@ class Card:
             if kind not in kinds and re.search(pattern, self.text, re.I):
                 if kind == "cost" and not speaks_of_own_cost(self.text, self.title):
                     continue                           # every twilight cost it speaks of is another card's
+                if kind == "when" and not speaks_of_own_play(self.text, self.title):
+                    continue                           # every "may not be played" it says is of another card
                 say(reason, kind)
         if self.type in ("condition", "possession", "artifact") and "target" not in parsed:
             if not any(k.replace("_", " ").startswith("support area") for k in _keywords(parsed)):

@@ -1,10 +1,13 @@
 NOTES FOR THE DECIPHER SETS (begun 2026-10-10, before the phase: things earlier work left for it. The orchestrator
 adds to this file; a batch's `notes` argument points its agents here.)
 
-THE FIRST DECIPHER CARDS: THE 152 THAT ALREADY HAD BEHAVIOURAL TESTS (queue-decipher-existing.json)
+THE DECIPHER CARDS: WHAT A BATCH'S FILES HOLD (queue-decipher-existing.json, worked out; queue-decipher-3k.json)
 Ketura, 2026-10-10: "After the at suite conversion has been completed, resume upgrading the existing non-stat
-tests, which I believe now only has about 150ish remaining." These are Decipher cards of sets 1 to 19 whose files
-held more than a stat check before the campaign (509 tests between them, most files fewer than five).
+tests, which I believe now only has about 150ish remaining." The first queue held the Decipher cards of sets 1 to
+19 whose files held more than a stat check (509 tests between them), a commented-out play draft counted as more:
+some of them, and every card of queue-decipher-3k.json that batches now come from, have only the generated stats
+test and a commented-out placeholder, or that and a lone test or two (below). What follows holds for all of them:
+a stub has no behavioural test to account for, and the erratum's file is still where stage 2 starts.
 - The text is the card's row of `gen_en_standard.tsv` (reviewed; Decipher's own errata are in it). The packet
   prints it against the definition.
 - Every existing test is accounted for in stage 2, as the brief says: it claims a check, or is redundant, or knows
@@ -28,7 +31,10 @@ held more than a stat check before the campaign (509 tests between them, most fi
   An erratum's board is settled only for the zones the ERRATUM's text reads: where the original's text reads
   another zone (a draw deck, a discard pile), lay that zone yourself; the erratum's scenario may leave it empty.
   Where the erratum's ledger says on its Sources line that it is a new text sharing no sentence with the
-  original (59_46 for 9_46), nothing carries over and its test file need not be read.
+  original (59_46 for 9_46), nothing carries over and its test file need not be read. Where the texts differ and
+  the Sources line does not say so (51_361 counts companions where 1_361 counts minions), compare them yourself:
+  a sentence the two share carries its boards and helpers over; one of the erratum's own carries no clause, though
+  its board may serve as a start.
 - Hindering: NO hindered candidate is owed on a Decipher card, whether its text says "spot", "you can spot" or
   counts. No Decipher text speaks of hinder; that a hindered card cannot be spotted is shown once, in
   `mechanics/hinder/HinderedCardCannotBeSpottedTests`, and laying it again on every card that spots is the kind of
@@ -37,7 +43,8 @@ held more than a stat check before the campaign (509 tests between them, most fi
   line. (Q-0237, kept by her, 2026-10-11: "That is already covered by the generic hinder tests, and such classes
   of mechanical interaction can stand to keep to mechanical tests instead of incessantly checking them on all
   cards.") That includes the hindered Ring-bearer as the `C-` of an "add a burden" cost: the Standard's line on
-  that board (103_115) is for the V-sets' cards.
+  that board (103_115) is for the V-sets' cards. A rules example that names the card ITSELF is still owed as an
+  R clause though it hinders (Gwemegil 1_47 in CR 5.0 "hinder"; the Standard's R-clause line).
 - A site's BLOCK is the same: a text that says "a site" or "each site" with no block named owes no second
   scenario on another block's path (also Q-0237).
 - A card that SWITCHES something on other cards (The White Council 101_18 on Saruman's first sentence) is tested
@@ -66,7 +73,9 @@ WHAT IS ALREADY IN A DECIPHER CARD'S FILE
   (`grep -l "Card_<set>_<number>_Tests"` there finds your card's). A lone test may also be older than that
   conversion and in no list (Card_01_009_Tests has two): it is told by its form and its comment. They are existing
   tests: account for each in stage 2 as the brief says (it claims a check, or it is a clause of its own, usually
-  `Interaction`), keep it active, and do not rewrite one that passes the conformance check.
+  `Interaction`), keep it active, and do not rewrite one that passes the conformance check. Renaming an alias
+  `card` to the name lint asks for is no rewrite; moving the test onto the card's merged scenario is one (the
+  decks under it change): it keeps its own Get...Scenario().
 - A rule shown in a `mechanics/` class is not shown again card by card unless the Standard asks for it on the card
   (`ls mechanics/`; the class comment says what each is about).
 
@@ -79,8 +88,8 @@ CARDS THAT SHARE A TEXT (Q-0220: H)
   your cards that has one, with the status of any card of it that is worked already. The SECOND card of a group
   starts from the FIRST's ledger: its clauses, checks, boards and Notes with the names, cultures and ids changed,
   and its tests from the first's in the same way. The second's own definition stays shut in stage 1 and is read in
-  stage 2 as any card's: twins by text are not always built alike (Dwarven Bracers 2_3 writes `memorize` where
-  12_5 writes `memorizeActive`), and where two behave differently and their texts do not differ, one of them is
+  stage 2 as any card's: twins by text are not always built alike (one may write `memorize` where its twin writes
+  `memorizeActive`), and where two behave differently and their texts do not differ, one of them is
   a finding.
 
 DEFINITIONS ALREADY CORRECTED, WITH NO CARD TESTS YET
@@ -194,7 +203,8 @@ and 5, 38 definitions)
   F-0443 among them); what it read and left is in its reports. So the pattern report is no longer a list of
   faults: before filing one your card's definition seems to have, look the card up in stage 2
   (`lookup.py <id>`, without `--skip`) and grep its id in
-  `/mnt/user-data/outputs/card-tests/orchestrator/engine-pass-26/*.md`. A definition a pass left "for its own
+  `/mnt/user-data/outputs/card-tests/orchestrator/engine-pass-26/*.md` (nothing found means the pass did not
+  touch the card). A definition a pass left "for its own
   author" is named only there and in shapes.md, never in the pattern report. Arwen's Fate 1_93 (the ruled shape
   of F-0222: it can be played with neither half possible) is the one known to be still as it was.
 

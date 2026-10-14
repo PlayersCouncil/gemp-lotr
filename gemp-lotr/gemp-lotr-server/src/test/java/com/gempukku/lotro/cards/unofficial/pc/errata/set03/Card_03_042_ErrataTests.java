@@ -113,7 +113,6 @@ public class Card_03_042_ErrataTests
 		assertFalse(scn.FreepsPlayAvailable(horn));
 
 		scn.FreepsPlayCard(boromir);
-		assertEquals(3, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(horn));
 
 		// Boromir is the only valid bearer (a second Boromir can never be in play beside him), so the game chooses

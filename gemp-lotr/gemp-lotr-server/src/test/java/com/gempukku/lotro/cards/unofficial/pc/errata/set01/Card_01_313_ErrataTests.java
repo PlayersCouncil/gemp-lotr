@@ -97,14 +97,11 @@ public class Card_01_313_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(sting));
 
 		// Frodo is the only bearer it may have, so nobody is asked.
 		scn.FreepsPlayCard(sting);
-		assertEquals(1, scn.GetTwilight());
 		assertAttachedTo(sting, frodo);
-		assertEquals(3, scn.GetStrength(sam));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

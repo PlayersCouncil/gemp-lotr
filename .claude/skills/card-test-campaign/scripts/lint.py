@@ -61,6 +61,11 @@ METHOD_OPENS = re.compile(r"^\s*(public|protected|private)\s+(?:static\s+)?([\w<
 # A field of the class: a declaration at the class's own depth that is no method.
 FIELD = re.compile(r"^\s*(?:(?:public|protected|private|static|final|volatile|transient)\s+)*[\w<>\[\], .?]+?\s+(\w+)\s*(?:=|;)")
 
+# What a clause does that lasts: a strength or keyword made, gained or lost (the `duration` warning).
+LASTING_CHANGE = re.compile(r"\bmakes?\b[^.]*?\b(?:strength|vitality|resistance) [+-]|\bmakes?\b[^.]*?\b(?:fierce|damage \+|"
+                            r"an archer|defender \+)|\b(?:gains?|loses?)\b[^.]*?\b(?:fierce|damage|archer|ambush|hunter|bonus|"
+                            r"bonuses|keywords?|game text)\b|\b(?:is|are) strength [+-]", re.I)
+
 FORBIDDEN = [
     (r"\bscn\s*\.\s*(game|gameState|userFeedback)\s*\(\s*\)", "reaches past the rig into the engine; ask for a rig method instead"),
     (r"\bgetModifiersQuerying\b", "reaches past the rig into the engine; ask for a rig method instead"),
@@ -871,6 +876,7 @@ def lint_file(path: Path):
             add("error", "in-file", i, "a clause tag comment in the test file: which test claims what is recorded in the ledger file")
 
     ledger_file = g.ledger_path(card_id) if card_id else None
+    card_type = (card.field("type", "") or "").strip().lower() if card is not None else ""
     clauses, claims, cited, faults = parse_ledger(ledger_file) if ledger_file else (None, None, [], [])
     test_names = {m[0] for m in tests}
     if clauses is None:
@@ -908,6 +914,16 @@ def lint_file(path: Path):
                     "(the Standard, \"A condition inside a modifier; 'bearer' or 'self' with a requirement\"; 2_79, an "
                     "exhausted companion beside a Ring-bearer who is not), in a test that claims F, or a `no F:` line "
                     "under the clause says why none can stand" % (cid, named[0], named[1]))
+            # A phase ability, a trigger's or an event's effect that changes something and names no duration has
+            # one by rule (CR 4.2 "phase action"; Q-0018): the Standard's `D` (1_298's "make a Hobbit strength +2"
+            # on a Skirmish event, and I Would Have Gone With You to the End 101_23 went without one).
+            if cid.startswith("C") and "D" not in codes and "D" not in waived and "D" not in waived.waits \
+                    and (ctype in ("Activated", "Trigger", "Response", "Event") or (ctype == "Effect" and card_type == "event")) \
+                    and LASTING_CHANGE.search(text) and not re.search(r"\buntil\b", text, re.I):
+                add("warning", "duration", None, "%s: the clause changes something and names no duration, so it lasts to "
+                    "the end of the phase by rule (CR 4.2 \"phase action\"; Q-0018): a `D` reads it in force at the "
+                    "phase's last decision and gone in the next (each skirmish is a phase), or a `no D:` line says why "
+                    "none can be shown" % cid)
         # No Play clause is asked for since Q-0279: B (engine pass 31): a card's play is tested by the test of the
         # clause that bears on it, and the `plain-play` warning below asks for that test.
         if card is not None:
@@ -1158,7 +1174,12 @@ def lint_file(path: Path):
     # something the check cannot see.  Where text and definition agree, nothing is said.
     if card is not None:
         import census
+        # A ledger whose Notes name the census and each word it found has said what carries them (3_115, 1_183).
+        notes = ledger_file.read_text(encoding="utf-8").partition("\nNotes:")[2] if ledger_file is not None and ledger_file.is_file() else ""
         for which, words, message in census.check(card_id):
+            if re.search(r"\bcensus\b", notes, re.I) and all(re.search(r"\b%s" % re.escape(w.strip()), notes, re.I)
+                                                              for w in words.split(",")):
+                continue
             add("warning", "census", None, "%s: read the definition against the text there; where the definition is at "
                 "fault that is a finding to file (`hjson-logic`), and where something else carries the words (a trigger "
                 "only such a card can set off, a rule of the game) the ledger's Notes say what (Q-0220: B; `census.py %s`)"

@@ -457,9 +457,16 @@ def main(argv):
         revision = re.search(r"^\s*revision\s*:\s*(\d+)", card.raw, re.M)
         if revision and revision.group(1) != "0":
             print("- This is revision %s of the card: its text has been changed since it was first released." % revision.group(1))
-        for relation, other in errata_family(card_id):
+        family = errata_family(card_id)
+        for relation, other in family:
             other_card = cards.get(other)
-            print("- Versions: %s %s%s" % (relation, other, "  " + g.full_name(other_card) if other_card else ""))
+            landed = ""
+            if relation == "has a version" and g.segment_of(card_id) == "decipher":
+                # The Decipher notes start stage 2 from a landed erratum's file: say whether there is one to start from.
+                landed = " (its ledger is written: a landed erratum)" if g.ledger_path(other).is_file() else " (no ledger yet: not landed)"
+            print("- Versions: %s %s%s%s" % (relation, other, "  " + g.full_name(other_card) if other_card else "", landed))
+        if not family and g.segment_of(card_id) == "decipher":
+            print("- Versions: none: no PC erratum, so no erratum's file to start from")
         image = g.client_image(card_id)
         if image:
             print("- Picture the client shows: %s (PC_Cards.js line %d)" % image)
@@ -580,6 +587,7 @@ def main(argv):
         hints = [] if only_withheld else [msg for pat, msg in FORMAT_HINTS if re.search(pat, text)]
         if hints:
             print("## Format-sensitive rules to consider")
+            print("(the rules, and the words that bring each into play: .claude/skills/test-generation/references/format-rules.md)")
             for h in hints:
                 print("- " + h)
             print()

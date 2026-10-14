@@ -498,7 +498,8 @@ Which checks a clause lists follows from its words, and the analyst is expected 
   (gemp-testing, "A card made known by the game log alone")
 - a threshold ("if you can spot 3…") → `+` at exactly the threshold and `-` one short of it, with something
   beside the short count that nearly counts (a third ring of another culture)
-- "play…on", "stack", "place…in the dead pile", "put…on top of" and the like → `Z`
+- "play…on", "stack", "place…in the dead pile", "put…on top of" and the like → `Z`; so does "play the
+  fellowship's next site" (the site laid on the path, and a site it replaces back in its owner's adventure deck)
 
 ### Clause types
 

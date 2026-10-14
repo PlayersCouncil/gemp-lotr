@@ -23,6 +23,7 @@ public class Card_03_041_ErrataTests
 					put("knight", "5_35");      // Gondorian Knight: [gondor] companion who is not unique, Knight and no other text
 					put("aragorn", "17_93");    // Aragorn, Defender of Rohan: a [rohan] Man companion; text only while the Ring-bearer is assigned
 					put("merchant", "7_97");    // Gondorian Merchant: [gondor] ally; a maneuver ability only
+					put("narsil", "9_34");      // Narsil: vitality +1 on a [gondor] Man, so that the Merchant could exert
 					put("troop", "1_177");      // Goblin Patrol Troop: a minion with no text, so that there is an archery phase
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -71,10 +72,12 @@ public class Card_03_041_ErrataTests
 		var knight = scn.GetFreepsCard("knight");
 		var aragorn = scn.GetFreepsCard("aragorn");
 		var merchant = scn.GetFreepsCard("merchant");
+		var narsil = scn.GetFreepsCard("narsil");
 		var troop = scn.GetShadowCard("troop");
 		var frodo = scn.GetRingBearer();
 		scn.MoveCompanionsToTable(boromir, knight, aragorn);
 		scn.MoveAlliesToTable(merchant);
+		scn.AttachCardsTo(merchant, narsil);
 		scn.MoveCardsToSupportArea(bowmen, bowmen2);
 
 		scn.StartGame();
@@ -85,6 +88,8 @@ public class Card_03_041_ErrataTests
 		// No archers on either side.
 		assertEquals(0, scn.GetFreepsArcheryTotal());
 		assertEquals(0, scn.GetShadowArcheryTotal());
+		// With Narsil on him the Merchant is not exhausted: he could exert if the choice let him.
+		assertFalse(scn.IsExhausted(merchant));
 		assertEquals(0, scn.GetWoundsOn(knight));
 		assertEquals(0, scn.GetWoundsOn(boromir));
 		assertTrue(scn.FreepsActionAvailable(bowmen));

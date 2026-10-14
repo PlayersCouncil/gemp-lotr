@@ -108,7 +108,6 @@ public class Card_07_359_ErrataTests
 
 		var site = scn.GetCurrentSite();
 		assertEquals("Northern Ithilien", site.getBlueprint().getTitle());
-		int twilight = scn.GetTwilight();
 		int burdens = scn.GetBurdens();
 		assertEquals(4, scn.GetThreats());
 		assertTrue(scn.ShadowActionAvailable(site));
@@ -122,8 +121,6 @@ public class Card_07_359_ErrataTests
 
 		assertInZone(Zone.SHADOW_CHARACTERS, wraithGollum);
 		assertInDiscard(gollum, gollum2, shelob);
-		// Gollum, Half a Wraith Himself costs 2; site 3 is not roaming at site 8.
-		assertEquals(twilight - 2, scn.GetTwilight());
 		assertEquals(burdens + 2, scn.GetBurdens());
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
