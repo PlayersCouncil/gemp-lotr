@@ -2118,3 +2118,8 @@ Ring-bearer": "I would expect the "then" to signify a separate effect, so that i
 evaluated after the burden's 0-1 choice is resolved." So the trigger is required, the burden removal a 0-1 choice,
 and at a dwelling the Ring-bearer is healed whether or not a burden was removed. *[2026-10-14]*
 
+**A wound is not owed against an "each time X exerts" trigger card by card (Q-0315, 2026-10-14).** The reverse of
+Q-0265: "So long as the relevant triggers are tested in the mechanics tests, I'd say this also doesn't need to repeat
+it on all relevant cards. A." It is shown once, in a mechanics test (a wound does not set off an exertion trigger).
+*[2026-10-14]*
+
