@@ -1731,6 +1731,11 @@ trackers. Site 3, Barrows of Edoras 4_337: a sanctuary; "Fellowship: Place your 
 4 cards", on offer to the mover with a card in hand and, since F-0429, with none while he may still draw a card
 (Q-0249: `CanDraw`): `FreepsActionAvailable(<site 3>)` is true there, and a test that counts the fellowship actions on offer at
 site 3 counts it. Site 4, White Rocks 4_346: a battleground; its Shadow number is +1 for each mounted companion.
+Site 5, Deeping Wall 4_348: a battleground; "Shadow: Play Saruman from your draw deck". Site 6, Caves of Aglarond
+4_352: underground, a sanctuary; a Maneuver action that makes your Uruk-hai fierce. Site 7, Helm's Tower 102_71: a
+battleground; each character damage +1 while 6 companions can be spotted. Site 8, Ring of Isengard 4_358: "Shadow:
+Play a [dunland] minion to draw a card". Site 9, Palantír Chamber 4_363: "Shadow: Remove 2 burdens to play a minion
+from your discard pile", on offer at site 9 with 2 burdens and a minion in the discard pile (dec-b12_18).
 
 **The sites of `KingSites` have texts that reach a test.** Site 1, Edoras Hall 7_330: each [rohan] possession is
 twilight cost -1 while the fellowship is there. Site 2, King's Tent 7_335: a Shadow action (initiative and a minion of

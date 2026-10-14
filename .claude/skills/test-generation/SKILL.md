@@ -347,7 +347,8 @@ named Saruman). Where no printed card of those titles is of another type, none i
 whose title only begins with the name may stand as the nearest miss (Boromir, My Brother 4_111 for 7_112). Where the text names a title with no type word ("spot Saruman"), the valid candidates are cards of
 that title of each type there is (companion, ally, minion, follower) and of a second culture where the title has
 more than one, not of every culture (Q-0306: Saruman the [isengard] minion, the follower 17_38 and the [dunland]
-minion 4_33, not each of his four minion cultures; Sméagol is [gollum] and [shire]: grep the definitions). The Hobbit
+minion 4_33, not each of his four minion cultures; Sméagol is [gollum] and [shire]: grep the definitions, the
+V-sets' with the Decipher sets': Arwen's one ally is Lady of Rivendell 102_6). The Hobbit
 sets (30 to 33) are not counted among them, not even in a Hobbit-set card's own tests unless the card needs it
 (Q-0303). That holds for a title that pays a cost or is acted on as it does for
 one spotted or played ("exert Gollum": each of the two Gollums, [gollum] and [wraith], pays in a test of his own,
