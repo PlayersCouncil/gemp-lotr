@@ -937,6 +937,7 @@
 					type: addKeyword
 					select: choose(name(Denethor))
 					keyword: muster
+					until: end(regroup)
 				}
 			}
 			{
