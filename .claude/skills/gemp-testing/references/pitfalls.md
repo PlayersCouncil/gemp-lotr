@@ -1258,6 +1258,11 @@ While the follower has nobody to go to the Aid is offered all the same and reads
 ("followers cannot be transferred to a character"; laid with `MoveCardToAdventurePath`), under any other
 `CantBeTransferred` that reaches the follower, and in a second maneuver phase when the follower's bearer is its
 owner's only character (Q-0244). Anywhere else it reads `"false"`. `mechanics/keywords/AidTests`.
+A SHADOW follower (Saruman 17_38) in the support area or borne by a minion has its Aid offered to the Shadow player
+as the maneuver phase starts, and `SkipToPhase(Phase.ASSIGNMENT)` passes over it out of step: it rests with the
+Shadow player at "Play Assignment action or Pass", and a following `SkipToAssignments()` answers the Free Peoples
+"Assign minions" with nothing. Use `SkipToPhase(Phase.MANEUVER)`, `ShadowDeclineOptionalTrigger()`, then
+`SkipToAssignments()` (Card_17_038_Tests; probed in dec-b19_18).
 
 **Whose support area.** A card borne by a card in a support area is in THAT support area, whoever owns it
 (`mechanics/inplay/WhoseSupportAreaTests`): the Shadow player's Weary on your ally is in your support area ("a
@@ -1421,8 +1426,9 @@ A look that plays nothing reads one, the definition's own, and is the test that 
 true`, whether the play is an EFFECT or a COST ("Play Gollum from your draw deck ... to add a threat", Captured
 by the Ring 7_53: the shuffle is made ahead of the failed play, and the cost is still unpaid; F-0494, engine pass 35). A card played onto a bearer and an event shuffle as they leave even where nobody looked (`showAll: false`);
 a card played to the table or the support area does not (a minion revealed by From Deep in Shadow 12_38, a
-starting fellowship). Read the count as more than before unless the number is the point
-(mechanics/deck/DrawDeckShuffledWhenTheLookIsOverTests).
+starting fellowship). On a card's own board read the EXACT count wherever the board fixes it: `> shuffles` after a
+card played out of a looked-through deck passes with the definition's `shuffle: true` gone, and `shuffles + 2`
+does not (The Prancing Pony 11_256; mechanics/deck/DrawDeckShuffledWhenTheLookIsOverTests).
 
 **A "play ... from your draw deck" action with no cost is offered whatever the deck holds, and a look that plays
 nothing is a use.** `PlayCardFromDrawDeck` without `mustExist` (Race Text 92_28, "Fellowship or Shadow: Play an

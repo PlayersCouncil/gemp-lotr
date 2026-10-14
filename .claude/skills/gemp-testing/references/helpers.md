@@ -320,7 +320,8 @@ says "the Ring-bearer" (Q-0213: A: `name(Frodo)` has never been written for him)
 
 **A Hobbit ally who may be assigned on turn 1.** Bounder 1_286. [shire] Hobbit ally, not unique, cost 1, strength
 2, vitality 2, home 2F (site 2 of `FellowshipSites`); a skirmish ability used only on purpose. The Hobbit who is no
-companion.
+companion. At his home site either player may assign him with no card's help (CR 4.2 "ally"; pitfalls, "An ally in
+a skirmish").
 
 **An ally who bears a weapon, or three cards.** Farmer Maggot, Chaser of Rascals 1_288; Bilbo, Retired Adventurer
 1_284; with Hobbit Sword 1_299, Orc Armor 10_113, Salt from the Shire 11_171. A Hobbit ally lawfully bears whatever
