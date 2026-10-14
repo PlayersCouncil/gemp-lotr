@@ -362,7 +362,8 @@ cards that differ in it, or a filter fixed to one value (`signet(aragorn)`) pass
 **Two places; a card played from the place; an "or" inside the phrase.** Where the text names two places a card is
 taken from ("from play or from hand"), the candidates are laid out in each. Where the card is PLAYED from the
 place, the invalid candidate can be paid for there, so that only the wording keeps it out (10_19: Shelob in the
-discard pile with a pool too small for her let "Gollum" widened to any minion pass). An "or" inside the noun phrase
+discard pile with a pool too small for her let "Gollum" widened to any minion pass; a Free Peoples card adds its
+cost and needs no pool laid). An "or" inside the noun phrase
 ("a [gandalf] or [elven] event") is F's business, one valid candidate for each side of it, and needs no `B`. An "or"
 between two noun phrases, each with its own article or a name ("Gandalf or an Elf", "a [sauron] engine or a site
 you control"), is two alternatives and lists `B`, each taken alone (1_40 above; 8_95).

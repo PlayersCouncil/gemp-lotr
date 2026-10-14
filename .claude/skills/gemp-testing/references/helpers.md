@@ -437,7 +437,8 @@ purpose); he is Enduring, strength +2 for each wound on him, so leave him out of
 after he is wounded (a "until the regroup phase" bonus read after a lost skirmish, Card_01_317_Tests). Merry is [rohan] (the only [rohan] character who is no Man), and a Man as well while 3 [rohan] companions
 or Éowyn can be spotted (he counts himself among the 3; beside any Éowyn he is the Hobbit of the wrong culture and
 the Man of the wrong culture at once); each time another [rohan] Man exerts he offers an optional trigger (exert
-Merry to heal that Man), so keep him out of a test that exerts one. He can hold an item only a [rohan] Man may bear
+Merry to heal that Man), so keep him out of a test that exerts one, or, where he is the invalid candidate beside an
+"exert a [rohan] Man" cost, decline his offer before going on (Card_11_259_Tests). He can hold an item only a [rohan] Man may bear
 while he is NO Man: lay him beside Éowyn with it, and have her killed in an earlier skirmish of the same turn; he
 keeps the item and is a Hobbit only (`Card_06_091_Tests.AMountOnMerryPaysOnlyWhileHeIsARohanMan`). Without one, "a
 Hobbit" narrowed to [shire] passes every test. The opponent's Hobbit, for a bare "Hobbit" (Q-0058), is Ted Sandyman

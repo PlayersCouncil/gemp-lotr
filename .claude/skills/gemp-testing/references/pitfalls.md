@@ -469,6 +469,8 @@ a card read as NOT offered (one still in the hand, say) fails that reading as so
 candidate of its blueprint is put in the pile, so a candidate added later takes a blueprint of its own (68_82).
 The other player's pile can be told apart all the same: the invalid candidate for "your discard pile" is a card
 in HIS pile of a title that is in none of the chooser's piles (91_11: his Orc Bowmen, the chooser's left in the deck).
+For "your draw deck", where both decks hold every alias, move the chooser's own valid cards out of his deck and
+leave the other player's in his: nothing offered then shows that only the chooser's deck is searched (Card_11_259_Tests).
 A choice among cards that lie in no zone at all (94_31's "site from outside the game") is read and answered by
 blueprint id, `ShadowHasBPChoiceAvailable("1_361")` and `ShadowChooseCardBPFromSelection("1_361")`, and
 `ShadowGetChoiceMin()` reads its minimum as for any choice of cards (Card_94_031_Tests).
@@ -729,7 +731,8 @@ ability is read or used, call `FreepsRefreshDecision()` ("A board changed under 
 3_17, Card_03_017_Tests).
 
 **`SkipToSite` plays whole turns, reconciling included.** A small draw deck is drawn into the players' hands on
-the way. `SkipToMovementDecision` and `SkipToOtherPlayersTurn` reconcile too: the Shadow player draws up to 8
+the way. Call `StartGame()` first: without it the skip fails with "Attempting to skip to phase REGROUP, halted in
+phase BETWEEN_TURNS", which does not name the missing call (a probe, dec-b11_259). `SkipToMovementDecision` and `SkipToOtherPlayersTurn` reconcile too: the Shadow player draws up to 8
 before the second move is asked about, so a test that turns on his hand at the second move empties his draw deck
 first. A test that needs cards in the draw deck afterwards puts them back with `MoveCardsToTopOfDeck`. A test
 that needs a hand of a known size afterwards sets it: `SetFreepsHand(cards...)` / `SetShadowHand(cards...)` make
@@ -1307,6 +1310,8 @@ and a card of the right owner borne by a card in the other player's area.
 for a card in play, the number printed on it (F-0109, Q-0073); for a card in a hand or pile, what it would cost
 to play now, roaming apart; for a site, its Shadow number as it stands. To read a cost modifier, read a card in
 hand, or play the card and read the pool. A transfer costs the printed number and nothing else (Q-0053, Q-0074).
+A Free Peoples card's play ADDS its cost to the pool and needs none in it: an invalid Free Peoples candidate "that
+can be paid for" wants no `SetTwilight` (Card_11_259_Tests); only a Shadow card wants a pool laid for it.
 A plain play (the printed cost added or removed, roaming, where each type goes) is shown once by
 `mechanics/costs/TwilightPoolTests` and `WhereACardIsPlayedTests`, and no card test only plays its card (Q-0279: B,
 engine pass 31): a card is played from hand in the test of the clause of its text that bears on its play.
@@ -1481,6 +1486,8 @@ Balrog anywhere, and used so it looks through the deck and shuffles it.
 fellowship-phase draw that repeats has to stay within four, or its fifth reading is the rule and not the card.
 Once the four are spent an optional trigger or a no-cost ability whose whole effect is a draw is not offered at
 all (Q-0262: B; the fifth Old Toby 1_305 asks nothing), where an empty draw deck alone still asks (Q-0029).
+The move at the end of the fellowship phase is part of it: a draw from a "when your fellowship moves from" trigger
+counts, and is withheld once four are drawn (Moria Guardroom 11_247, Card_11_247_Tests).
 
 **A player barred from taking cards into hand draws only when reconciling.** At a table where a player holds
 Race Text 94_30 (`CantTakeCardsIntoHandFromDeckOrDiscardPile`), a card drawn is a card taken into hand from the
