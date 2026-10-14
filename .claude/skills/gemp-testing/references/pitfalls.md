@@ -1701,7 +1701,7 @@ what it is (`assertSame(freepsSite2, scn.GetSite(2))`, each player's site fetche
 `GetShadowSite(2)` before it is laid; `Card_01_110_Tests`). Whether a twin may replace a twin at all is Q-0226
 (CR 4.2 "site": "You can't replace a site card with the same site card"; the game allows it): a new test that
 replaces a site reads the game as built, stays active, and names that question on the ledger's `Findings:`
-line, with Q-0238 where the wording is "(replacing opponent's site if necessary)" (Notes alone are not enough). The board for "(replacing
+line (also where the twin is only among the sites offered and no test takes it: Traveled Leader 12_34), with Q-0238 where the wording is "(replacing opponent's site if necessary)" (Notes alone are not enough). The board for "(replacing
 opponent's site if necessary)" that a game reaches: the first player at site 3 on his third turn, the second
 player's site 4 laid with `MoveCardToAdventurePath` (as where that player played his next site himself); the
 nearest miss is a second copy played when the player's own site already lies next, which on a numbered path

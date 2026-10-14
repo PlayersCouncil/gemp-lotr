@@ -562,6 +562,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Check D on "until the regroup phase" for an effect that can begin in a regroup phase (Q-0160, open)
 - Check D on a delayed "at the start of the regroup phase" that an ability sets up: fight a skirmish between (Under Foot 60_52, Flaming Brand 52_32) [Q-0164]
 - A filter that feeds a count. Where a filter feeds a COUNT ("for each X stacked here", "for each X you can spot"), lay the board so the count under ...
+- A phrase the definition writes twice: in a requirement and in the choice (Beorning Axe 18_18, "a [gandalf] card" as `HasCardInDiscard` and as the `choose` of `putCardsFromDiscardIntoHand`)
 - "Each site" on a modifier: the sites laid, and a path of a second block (No Stranger to the Shadows 1_108)
 - A draw of 4 in a fellowship phase cannot be told from a draw of 5 or more
 - A count "this phase" against the same count this turn
