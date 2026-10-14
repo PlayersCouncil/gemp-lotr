@@ -81,6 +81,12 @@ Defender is the Free Peoples player's own when he assigns: an assignment a card 
 both characters unassigned, and an action written with `assignableToSkirmishAgainst` is not offered for a
 companion who has a minion, whatever his defender bonus.
 
+**An assignment a card makes another player make is his only where he had a choice** (Q-0251 with Q-0171;
+F-0513, engine pass 45). "Make the Free Peoples player assign this minion to an unwounded companion" (Barbaric Uruk
+12_135) with one unwounded companion is chosen for him, and the game log, "each time the Free Peoples player
+assigns" and ambush all read it as the Shadow player's; with two to choose between it is his. What may be assigned
+is still judged for him (`mechanics/skirmishes/AnAssignmentACardMakesAnotherPlayerMakeTests`).
+
 **The moment after the assignments is the choice of the next skirmish.** When every minion is assigned the Free Peoples player is
 asked "Choose next skirmish to resolve", and that is the bookend to assert after `FreepsAssignToMinions` or
 `ShadowAssignToMinions`: `assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"))`.

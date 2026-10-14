@@ -99,14 +99,17 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
             }
         };
         result.addEffectAppender(fpCharacterResolver);
-        result.addEffectAppender(
+        final EffectAppender minionResolver =
                 CardResolver.resolveCard(minion,
                         (actionContext) -> {
                             final String assigningPlayer = playerSource.getPlayer(actionContext);
                             Side assigningSide = GameUtils.getSide(actionContext.getGame(), assigningPlayer);
                             final Collection<? extends PhysicalCard> fpChar = actionContext.getCardsFromMemory(fpCharacterMemory);
                             return Filters.assignableToSkirmishAgainst(assigningSide, Filters.in(fpChar), ignoreExistingAssignments, ignoreDefender, ignoreAllyLocation);
-                        }, minionMemory, player, "Choose minion to assign to character", environment));
+                        }, minionMemory, player, "Choose minion to assign to character", environment);
+        result.addEffectAppender(minionResolver);
+        final boolean characterIsChosen = fpCharacter.startsWith("choose(");
+        final boolean minionIsChosen = minion.startsWith("choose(");
 
         DelayedAppender assignAppender = new DelayedAppender() {
             @Override
@@ -117,7 +120,19 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
                 if (fpChar.size() == 1 && minion.size() == 1) {
                     final PhysicalCard assignedCharacter = fpChar.iterator().next();
                     final PhysicalCard assignedMinion = minion.iterator().next();
-                    final AssignmentEffect assignment = new AssignmentEffect(assigningPlayer, assignedCharacter, assignedMinion, ignoreExistingAssignments, ignoreDefender, ignoreAllyLocation);
+                    // A card that makes another player assign ("Make the Free Peoples player assign this minion to
+                    // an unwounded companion", Barbaric Uruk 12_135) has him do it where he has a choice in it, of
+                    // the character or of the minion, and is itself the one assigning where he has none (Q-0251
+                    // with Q-0171; F-0513): what "each time the Free Peoples player assigns ..." reads is then
+                    // credited to the card's player.  What may be assigned, and what is paid to assign it, are
+                    // still judged for the player made to assign, as he was asked.  The choices change nothing on
+                    // the board, so the candidates found now are the ones he was offered.
+                    String doer = assigningPlayer;
+                    if (!assigningPlayer.equals(actionContext.getPerformingPlayer())
+                            && !wasOfferedAChoice(characterIsChosen, fpCharacterResolver, actionContext)
+                            && !wasOfferedAChoice(minionIsChosen, minionResolver, actionContext))
+                        doer = actionContext.getPerformingPlayer();
+                    final AssignmentEffect assignment = new AssignmentEffect(assigningPlayer, doer, assignedCharacter, assignedMinion, ignoreExistingAssignments, ignoreDefender, ignoreAllyLocation);
 
                     // A cost of assigning this pair ("the Free Peoples player must exert a companion to assign
                     // this minion", ExtraCostToAssign) is paid here, the pair being known, and the assignment is
@@ -156,6 +171,18 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
         }
 
         return result;
+    }
+
+    /**
+     * Whether the player who chose by this resolver had more than one card to choose from.  A card found by the
+     * definition (self, bearer, memory) was no choice of his; a resolver that cannot say what it found is taken
+     * to have offered one.
+     */
+    private static boolean wasOfferedAChoice(boolean chosen, EffectAppender resolver, ActionContext actionContext) {
+        if (!chosen)
+            return false;
+        final Collection<PhysicalCard> candidates = EffectForecast.cardsFoundNow(actionContext, resolver);
+        return candidates == null || candidates.size() > 1;
     }
 
     private FilterableSource getSource(String filter, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {

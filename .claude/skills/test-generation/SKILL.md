@@ -325,7 +325,7 @@ too. Where he has a choice in it he is the one doing it (Q-0171: "if the player 
 forced"); where he has none, the card's player is (Q-0251: "Since there's no optionality and no choice, I'd say this
 is Free Peoples doing the revealing"). This reaches every act a card makes the other player do, an assignment as well as a
 discard or a reveal, and either way round: Barbaric Uruk 12_135 making him assign the one unwounded companion is
-the Shadow player's assignment (F-0513, Wold of Rohan 4_336). shapes.md has the boards (F-0296).
+the Shadow player's assignment (F-0513, Wold of Rohan 4_336; built by engine pass 45). shapes.md has the boards (F-0296).
 
 **A race against a culture.** A race against a culture, and a culture against a race, is shown with a PRINTED card
 that has the one without the other (Pippin, Trollslayer 103_31 is a [gondor] Hobbit; Sméagol, Once Like Us 103_116

@@ -6,7 +6,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -194,7 +193,6 @@ public class Card_04_336_Tests
 	}
 
 	@Test
-	@Ignore("F-0513: made by a Shadow card to assign the one companion he can, the Free Peoples player has no choice and the Shadow player is the one assigning (Q-0251, Q-0171); the game adds (1) all the same")
 	public void TheFreePeoplesPlayerMadeToAssignByAShadowCardWithNoChoiceAddsNothing() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
