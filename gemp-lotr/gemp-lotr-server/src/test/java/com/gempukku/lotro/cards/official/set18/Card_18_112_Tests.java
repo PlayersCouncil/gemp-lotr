@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -686,41 +685,5 @@ public class Card_18_112_Tests
 		assertEquals(1, scn.GetCultureTokensOn(ale));
 		assertAttachedTo(pony, sam);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
-	}
-
-	@Test
-	@Ignore("Q-0313: does \"add a token here to prevent that\" prevent the whole discard (Q-0250), or the one [shire] card?")
-	public void OneResponseToADiscardOfEveryConditionPreventsTheWholeDiscard() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var scouring = scn.GetFreepsCard("scouring");
-		var lord = scn.GetFreepsCard("lord");
-		var savage = scn.GetShadowCard("savage");
-		var power = scn.GetShadowCard("power");
-		var fear = scn.GetShadowCard("fear");
-		// This card is the one [shire] card in the discard; a [dwarven] condition and the Shadow player's own
-		// condition go with it.
-		scn.MoveCardsToSupportArea(scouring, lord);
-		scn.MoveCardsToSupportArea(fear);
-		scn.MoveCardsToHand(power);
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(savage);
-		scn.SetTwilight(2);
-
-		scn.SkipToPhase(Phase.SHADOW);
-
-		assertInZone(Zone.SUPPORT, scouring, lord, fear);
-		scn.ShadowPlayCard(power);
-
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(scouring));
-		assertEquals(0, scn.GetCultureTokensOn(scouring));
-		scn.FreepsAcceptOptionalTrigger();
-		assertEquals(1, scn.GetCultureTokensOn(scouring));
-
-		// Q-0250's reading: that one simultaneous discard is prevented whole, every card in it saved.
-		assertInZone(Zone.SUPPORT, scouring, lord, fear);
-		assertInZone(Zone.DISCARD, power);
-		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }
