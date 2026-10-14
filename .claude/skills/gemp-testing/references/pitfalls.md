@@ -1169,7 +1169,9 @@ its other text. A liberation takes the highest-numbered site that an OPPONENT of
 over a site of his own, and asks nothing; the site goes back on the path, and what was stacked on it and what was
 played on it goes to the discard pile. With no such site it liberates nothing, its cost paid. A card that replaces
 a controlled site (Úlairë Nelya 1_233 by "an opponent's site": a controlled site is still its owner's) leaves the
-new site controlled, with the stacked cards on it once each (F-0466). A card PLAYED on a site that is replaced,
+new site controlled, with the stacked cards on it once each (F-0466). Being still its owner's, a controlled site is
+the invalid candidate of "your sites on the adventure path" (Led Astray 11_45): only `zone(adventure path)` keeps
+it out of a `choose(your,site)`, and only a controlled site tells the two apart. A card PLAYED on a site that is replaced,
 controlled or not, lies on the new site afterwards (CR 4.2 "site": "all cards played on or stacked on the old site
 are moved to the new site"; F-0467, mended by engine pass 26): it is the same card and never leaves play
 (`assertAttachedTo(card, newSite)`, `PlayerSeesCardBorneBy`), and its "this site" is the new one from then on
@@ -1494,7 +1496,9 @@ empty (Q-0019: no penalty for failing to play from the draw deck; Q-0104). Used 
 is shown and shuffled and the turn's `limitPerTurn` is spent. The eight `mustExist: true` cards of Q-0019 are
 the exception, not this. A choice between a draw deck and another pile is the same where the deck's branch has no
 `mustExist`: The Bridge of Khazad-dûm 1_349 ("Play The Balrog from your draw deck or hand") is offered with no
-Balrog anywhere, and used so it looks through the deck and shuffles it.
+Balrog anywhere, and used so it looks through the deck and shuffles it. The choice of the card to play is 0 to 1
+whatever the text says, `mustExist` or not (Q-0019, the engine's comment in `PlayCardFromDrawDeck`): read it as 0
+where it is read, and file nothing; the Standard's minimum for a text with no "may" does not reach it (15_51).
 
 **The Rule of 4.** No more than 4 cards are drawn or taken into hand in a player's fellowship phase. A test of a
 fellowship-phase draw that repeats has to stay within four, or its fifth reading is the rule and not the card.

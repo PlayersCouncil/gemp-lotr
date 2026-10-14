@@ -249,7 +249,9 @@ the place can hold, a companion, a possession and an event: beside companions al
 `companion` passes, 68_82, and "each type" is a spread like that one, a character, an item and a card that is
 neither, not every type in print; a bare owner word, "each of your cards", owes that spread and a card of each
 side, 94_27; for a keyword or item class alone, "a pipeweed", "a pipe", cards of two cultures wherever printed
-cards have them: beside [shire] ones alone, `pipeweed` narrowed to `culture(shire)` passes, 92_4, and a card of the
+cards have them: beside [shire] ones alone, `pipeweed` narrowed to `culture(shire)` passes, 92_4; for a culture word
+on a kind a title is printed in ("a [gollum] minion"), one of another title, also inside an effect's "If that
+minion is ...": beside Gollum alone `name(Gollum)` passes, 15_51 (Shelob 8_26); and a card of the
 other culture whose own text stays out of the way is looked for before the culture is left out, and where printed
 cards of more than one type have the keyword, one of each type ("a fortification": a condition and Stronghold of My
 Fathers 102_48, a possession): beside conditions alone, `condition,fortification` passes, 10_117; for a bare `weapon`,
@@ -500,7 +502,8 @@ Which checks a clause lists follows from its words, and the analyst is expected 
   that does not look through the deck ("or discard pile"), and none when the player declines before looking. Like
   the snapshot, this is a rule tested card by card because the game writes it into each definition. Where the
   card prints "Shuffle your draw deck." as a sentence, that sentence's clause owes these claims and stands for
-  the Rule clause (Saved From the Fire 8_20)
+  the Rule clause (Saved From the Fire 8_20); where the card always looks, with no other pile and nothing to
+  decline first, there is no `-`, and the clause carries a `no -:` line saying so (Sudden Strike 15_51)
 - "reveal" → the card is shown to the other player, who has a decision to dismiss. One test reads the showing
   for each player (the shown card listed and not selectable, a card not revealed absent); the others only
   dismiss (the dismiss methods fail the test when that player is being shown nothing). A reveal from a hand is
@@ -628,7 +631,8 @@ A bearer named by a unique title ("Bearer must be Legolas") is such a text (Q-02
 of the title that is laid, and the invalid candidate read as the play refused on a board without him (1_33).
 Where the invalid candidate is the Ring-bearer and the effect a discard, the reading shows nothing either way, since
 he is never discarded (Q-0109): the bearer in such a test is another (Sam bearing Sting 8_113). Where the text
-says neither "may" nor "up to", read the minimum of one such choice (`FreepsGetChoiceMin()`): a choice that has
+says neither "may" nor "up to", read the minimum of one such choice (`FreepsGetChoiceMin()`; a play from a draw
+deck is 0 to 1 by Q-0019 whatever the text says: pitfalls, "A "play ... from your draw deck" action"): a choice that has
 wrongly become optional looks the same otherwise. A "may" that the game asks as a yes/no ("a minion may exert
 to prevent this") is answered by the yes: the choice of who does it has its minimum read too (5_89). A text with two choices (one for its cost, another for its
 effect, a card and then the bearer it is played on: Goblin Scavengers 1_179, or a bearer and then its own "when you play"

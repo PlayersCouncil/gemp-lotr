@@ -454,6 +454,14 @@ race; to play, add a burden (cheat him in); an assignment ability only. He can f
 title is "Smeagol" with no accent, and `name(Sméagol)` takes him, as `Filters.name` compares sanitized titles
 (Card_12_040_Tests).
 
+**Each Gollum and each Sméagol, by culture; a [gollum] minion of another title** ("spot Gollum or Sméagol", "a
+[gollum] minion"). Gollum, Nasty Treacherous Creature 5_24 ([gollum] minion, cost 2, strength 5, vitality 4; a
+regroup ability only) and Gollum, Half a Wraith Himself 103_66 ([wraith]); Sméagol, Poor Creature 6_45 ([gollum]
+companion, Ring-bound; to play, add a burden; a skirmish ability used only on purpose) and Smeagol, Once Like Us
+103_116 ([shire], above). Shelob, Last Child of Ungoliant 8_26 ([gollum] minion, cost 6, enduring, fierce, damage
++1 in a fierce skirmish) is the [gollum] minion who is no Gollum: beside Gollum alone `name(Gollum)` passes for
+`culture(gollum),minion` (Card_15_051_Tests).
+
 **A [gandalf] Wizard who is an ally; a weapon that is no possession.** Saruman, The White 32_24; Glamdring (The
 Hobbit) 30_29. Saruman is an ally (home 3H, cost 4, strength 8, vitality 4, wise); a Gandalf is defender +1 beside
 him, and his two abilities are used only on purpose. Without him "a [gandalf] Wizard" narrowed to companions passes
