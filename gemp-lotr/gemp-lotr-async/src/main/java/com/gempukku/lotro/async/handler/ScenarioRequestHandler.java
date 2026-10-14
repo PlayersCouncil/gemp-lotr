@@ -74,7 +74,8 @@ import java.util.Map;
  * GET source - {@code {source}}: the draft as the file it would be saved as.<br>
  * GET cards?q=&sites= - {@code {cards:[{id, name, type, culture, side, cost}]}}: cards by name.<br>
  * POST open (id | new=true, id, title); edit (patch, goto); goto (step, sub); answer (term, record | least=true);
- * do (op, setup); alias (from, to); here; retake; settings (recording, askOpponent, way);
+ * do (op, setup); alias (from, to); here; before (a step for the waiting decision, in front of the block's step that has
+ * it); retake; settings (recording, askOpponent, way);
  * save (path, canonical, as: copy|rename); submit (the draft's saved file, for review: the draft is closed); left;
  * check; test (step);
  * resume; close.
@@ -432,6 +433,7 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
                     case "do" -> result = _authoring.apply(player, getFormParameterSafely(form, "op"), "true".equals(getFormParameterSafely(form, "setup")));
                     case "alias" -> result = _authoring.renameCard(player, getFormParameterSafely(form, "from"), getFormParameterSafely(form, "to"));
                     case "here" -> result = _authoring.stepHere(player);
+                    case "before" -> result = _authoring.stepBefore(player);
                     case "retake" -> result = _authoring.retake(player);
                     case "settings" -> {
                         String way = getFormParameterSafely(form, "way");

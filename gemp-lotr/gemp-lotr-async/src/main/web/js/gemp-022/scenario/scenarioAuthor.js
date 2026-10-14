@@ -37,7 +37,7 @@ var GempScenarioAuthor = Class.extend({
         "zone:minions", "pile:self.deck", "pile:self.discard", "pile:self.deadPile", "pile:self.adventureDeck",
         "pile:self.removed", "pile:self.hand", "pile:opp.deck", "pile:opp.discard", "pile:opp.deadPile",
         "pile:opp.adventureDeck", "pile:opp.removed", "pile:opp.hand", "ui:twilightPool", "ui:phase", "ui:initiative",
-        "ui:ruleof4", "ui:clock", "ui:advPath", "ui:alertBox", "ui:skirmish", "ui:skirmish:fpStrength",
+        "ui:ruleof4", "ui:clock", "ui:advPath", "ui:alertBox", "ui:skirmish", "ui:skirmish:fpStrength", "ui:skirmish:freeps", "ui:skirmish:shadow",
         "ui:skirmish:shadowStrength", "ui:stats", "ui:stats:archery", "ui:stats:move", "ui:chat", "ui:settings",
         "ui:dialog", "ui:cardInfo", "ui:button:pass", "ui:button:done", "ui:button:reset"],
     TABS: [["timeline", "Timeline"], ["step", "Step"], ["opponent", "Opponent"], ["board", "Board"], ["scenario", "Scenario"]],
@@ -569,6 +569,27 @@ var GempScenarioAuthor = Class.extend({
         return null;
     },
 
+    /** For "card:alias": "shadow" or "freeps" if that card is in the skirmish being fought, on that side; null otherwise. */
+    skirmishSideOf: function (anchor) {
+        var match = /^card:([A-Za-z0-9_]+)$/.exec(anchor || "");
+        var id = match == null ? null : this.cardMap()[match[1]];
+        if (id == null)
+            return null;
+        var game = this.game;
+        var holds = function (group) {
+            if (group == null || typeof group.getCardElems != "function")
+                return false;
+            var found = false;
+            $.each(group.getCardElems(), function (index, elem) {
+                var card = elem.data("card");
+                if (card != null && String(card.cardId) == String(id))
+                    found = true;
+            });
+            return found;
+        };
+        return holds(game.skirmishShadowGroup) ? "shadow" : holds(game.skirmishFellowshipGroup) ? "freeps" : null;
+    },
+
     cardMap: function () {
         var map = {};
         var cards = (this.state && this.state.board && this.state.board.cards) || [];
@@ -840,6 +861,15 @@ var GempScenarioAuthor = Class.extend({
     },
 
     /** A step for the decision that is waiting, written where the script stands; the Step tab turns to it. */
+    /** Whether a decision is waiting that no step covers, so that a step can be added for it (addStepHere). */
+    unscripted: function () {
+        var state = this.state;
+        if (state == null || !state.session)
+            return false;
+        var position = state.position, waiting = state.waiting || {};
+        return !position.over && !position.inHand && (waiting.human != null || (waiting.opponent != null && waiting.opponent.held));
+    },
+
     addStepHere: function () {
         var that = this;
         this.flush(function () {
@@ -1017,6 +1047,24 @@ var GempScenarioAuthor = Class.extend({
         return {who: who, when: rest.join(" "), act: act};
     },
 
+    PHASE_NAMES: {
+        opening: "Before the first turn", fellowship: "Fellowship", shadow: "Shadow", maneuver: "Maneuver", archery: "Archery",
+        assignment: "Assignment", skirmish: "Skirmish", regroup: "Regroup", between_turns: "Between turns", block: "Several phases, in any order",
+        "after-block": "After the block"
+    },
+
+    /** The turn and phase a step's When names: {turn, phase}, each null where it names none. */
+    placeOf: function (step) {
+        if (this.isOpening(step))
+            return {turn: 0, phase: "opening"};
+        var when = typeof step.when == "string" ? step.when : "";
+        var turn = /turn\(\s*(\d+)\s*\)/i.exec(when), phase = /phase\(\s*([a-z_]+)\s*\)/i.exec(when);
+        return {
+            turn: turn != null ? parseInt(turn[1]) : null,
+            phase: phase != null ? phase[1].toLowerCase() : step.anyOrder != null ? "block" : null
+        };
+    },
+
     /** Whether a step is the one that is read before the first turn, on the board as it is laid out. */
     isOpening: function (step) {
         return step != null && typeof step.when == "string" && $.trim(step.when).toLowerCase() == "opening";
@@ -1141,11 +1189,38 @@ var GempScenarioAuthor = Class.extend({
                 that.render();
             });
         };
+        //The steps are grouped by the turn and phase they are in, with a heading where that changes: a step that
+        // says neither is in the same place as the one before it.  Each phase has a colour down the rows' edge.
+        var group = {turn: null, phase: null};
         $.each(steps, function (index, step) {
+            var where = that.placeOf(step);
+            var turn = where.turn != null ? where.turn : group.turn;
+            var phase = where.phase != null ? where.phase : group.phase;
+            if (turn !== group.turn || phase !== group.phase) {
+                group = {turn: turn, phase: phase};
+                var words = [];
+                if (turn != null)
+                    words.push("Turn " + turn);
+                if (phase != null)
+                    words.push(that.PHASE_NAMES[phase] || phase);
+                if (words.length > 0)
+                    list.append(that.el("div", "sa-tl-group sa-ph-" + (phase || "none") + (turn != null && turn % 2 == 0 ? " sa-turn-even" : ""), words.join(" \u00b7 ")));
+            }
+            var mark = function () {
+                list.children(".sa-step").last().addClass("sa-ph-" + (group.phase || "none")).toggleClass("sa-turn-even", group.turn != null && group.turn % 2 == 0);
+            };
             drawRow(step, index, -1);
+            mark();
             $.each(step.anyOrder || [], function (sub, child) {
                 drawRow(child, index, sub);
+                mark();
             });
+            //(a block may run through several phases: what follows it says where it is, or is in the block's last)
+            if (step.anyOrder != null && typeof step.until == "string") {
+                var ends = /phase\(\s*([a-z_]+)\s*\)/i.exec(step.until);
+                if (ends != null)
+                    group.phase = "after-block";
+            }
         });
 
         var end = this.el("div", "sa-end").appendTo(list);
@@ -1156,8 +1231,7 @@ var GempScenarioAuthor = Class.extend({
             end.append(this.el("div", null, "The script ends here. What you do from here on " + (state.recording ? "is written down." : "is not written down.")));
         }
         var waiting = state.waiting || {};
-        var unscripted = !position.over && !position.inHand && (waiting.human != null || (waiting.opponent != null && waiting.opponent.held));
-        if (unscripted) {
+        if (this.unscripted()) {
             var asked = waiting.human != null ? waiting.human : waiting.opponent;
             end.append(this.el("div", "sa-asked", (waiting.human != null ? "You are" : "The opponent is") + " being asked: " + asked.text + " (" + asked.where + ")"));
             end.append(this.button("Add a step for this decision", "A step to hang messages on before the decision is answered; its answer is filled in when it is given", function () {
@@ -1778,6 +1852,7 @@ var GempScenarioAuthor = Class.extend({
         var number = form.index + 1;
         var where = this.whereOf(form.index, -1);
         this.stepHead.find(".sa-stepname").text("Step " + number + " of " + this.draft.steps.length);
+        this.stepHead.find(".sa-addhere").prop("disabled", !this.unscripted());
         this.stepHead.find(".sa-stepwhere").text(where.words).attr("class", "sa-stepwhere sa-status-" + where.status);
         //(on a block's page, each of the steps in it says what has become of it)
         this.tabs.step.find(".sa-panelwhere").each(function () {
@@ -1807,6 +1882,16 @@ var GempScenarioAuthor = Class.extend({
         head.append(this.button("\u25b6", "The step after", function () {
             that.selectStep(number + 1);
         }).prop("disabled", number >= steps.length));
+        //To the step the game is at; from there (or past it), to the last step
+        head.append(this.button("\u25b6\u25b6", "To the step the game is at; from there or past it, to the last step", function () {
+            var at = that.state.position.step;
+            that.selectStep(number >= at || at > steps.length ? steps.length : at);
+        }, "sa-tocurrent"));
+        //The Timeline's "Add a step for this decision", from here: it goes where that decision comes, whatever step is shown
+        head.append(this.button("+", "Add a step for the decision that is waiting, which no step covers (as on the Timeline). "
+            + "It goes where that decision comes in the script, whatever step is shown here.", function () {
+            that.addStepHere();
+        }, "sa-addhere"));
         head.append(this.el("span", "sa-stepwhere"));
 
         var acts = this.el("div", "sa-bar").appendTo(box);
@@ -1975,7 +2060,20 @@ var GempScenarioAuthor = Class.extend({
             line.append(this.button("\u25b6", "A fresh game, played by the script up to the first decision this step takes", function () {
                 that.goTo(number, sub + 1);
             }));
-            line.append(this.button("Insert", "A new step in the block, before this one. It says nothing yet: what you do at its decision is written in.", function () {
+            var position = this.state.position;
+            var holding = position.step == number && position.inHand && !position.over && position.sub == sub + 1;
+            line.append(this.button("Insert", holding
+                ? "A new step in the block, before this one, for the decision waiting now and no other (in a skirmish, that skirmish's): it takes the decision from this step. Give it a message, then do what the player should, and that is written in as what it allows."
+                : "A new step in the block, before this one. It says nothing yet: what you do at its decision is written in.", function () {
+                if (holding) {
+                    that.flush(function () {
+                        that.ui.jump = true;
+                        that.ui.tab = "step";
+                        that.form = null;
+                        that.call("POST", "before", {});
+                    });
+                    return;
+                }
                 that.insertInBlock(index, sub, {once: true, when: (that.draft.human || "freeps") + ", action"}, true);
             }));
             line.append(this.button("\u2191", "Earlier in the block. (Where a step comes matters only when a decision fits more than one of them: it goes to the first.)", function () {
@@ -2346,13 +2444,32 @@ var GempScenarioAuthor = Class.extend({
             var anchorRow = that.el("div", "sa-row sa-anchor").appendTo(card);
             anchorRow.append(that.el("span", "sa-label", "Points at").attr("title", "What the bubble sits beside and points at. Several things, separated by commas, and it points at each of them. Empty: the middle of the screen."));
             anchorRow.append(anchor);
+            //A card in the skirmish being fought may not be the one fighting there in another game (the player
+            // assigned the other minion, say): it can be pointed at as "whichever is fighting on that side" instead
+            var either = that.el("div", "sa-note sa-either").hide();
             anchorRow.append(that.button("Pick", "Click the thing on the table", function () {
                 focus();
                 that.pick(function (picked) {
+                    var was = $.trim(highlight.val());
                     anchor.val(picked).change();
                     //Usually what is pointed at is what is outlined
-                    if ($.trim(highlight.val()) == "")
+                    if (was == "")
                         highlight.val(picked).change();
+                    var side = that.skirmishSideOf(picked);
+                    either.empty().hide();
+                    if (side != null) {
+                        var name = picked.replace(/^card:/, "");
+                        either.append(document.createTextNode(name + " is " + (side == "shadow" ? "a minion" : "the character") + " in the skirmish being fought. "
+                            + "If another game can have a different card there, point at whichever is: "));
+                        either.append(that.button(side == "shadow" ? "Whichever minion is fighting" : "Whichever character is fighting",
+                            "Points at (and outlines) the cards on that side of the skirmish being fought, whichever they are: ui:skirmish:" + side, function () {
+                                anchor.val("ui:skirmish:" + side).change();
+                                if ($.trim(highlight.val()) == picked)
+                                    highlight.val("ui:skirmish:" + side).change();
+                                either.hide();
+                            }, "sa-inline"));
+                        either.show();
+                    }
                 });
             }));
             anchorRow.append(that.button("+", "Click another thing on the table for it to point at as well", function () {
@@ -2365,6 +2482,7 @@ var GempScenarioAuthor = Class.extend({
                 });
             }));
             anchorRow.append(that.partSelect(anchor));
+            card.append(either);
 
             //Which side of it, and how far off: tried on the screen as they are changed, without waiting to be sent
             var stockGap = (that.draft.options || {}).bubbleGap || that.overlay.STOCK_GAP;
@@ -2762,6 +2880,18 @@ var GempScenarioAuthor = Class.extend({
     thingAt: function (x, y, cards) {
         var that = this;
         var best = null;
+        //Cards lie over one another (what is attached to a character, under it): the one under the pointer is the
+        // one on top there, whatever the others' boxes are
+        var top = null;
+        var stack = document.elementsFromPoint ? document.elementsFromPoint(x, y) : [];
+        for (var s = 0; s < stack.length && top == null; s++) {
+            var under = $(stack[s]);
+            if (under.closest("#scenarioAuthor, #scenarioLayer, .sa-pickbox, .sa-picklabel").length > 0)
+                continue;
+            var cardElem = under.closest(".card");
+            if (cardElem.length > 0)
+                top = cardElem[0];
+        }
         var consider = function (anchor, rect) {
             if (rect == null || x < rect.left || x > rect.left + rect.width || y < rect.top || y > rect.top + rect.height)
                 return;
@@ -2771,7 +2901,7 @@ var GempScenarioAuthor = Class.extend({
         };
         $(".card:visible").each(function () {
             var card = $(this).data("card");
-            if (card == null)
+            if (card == null || (top != null && this !== top))
                 return;
             var rect = ScenarioAnchors.rectOf($(this));
             var alias = that.aliasOfCard(card.cardId);

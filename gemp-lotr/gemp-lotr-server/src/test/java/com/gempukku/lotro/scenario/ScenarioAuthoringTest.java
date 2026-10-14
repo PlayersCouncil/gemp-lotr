@@ -455,6 +455,39 @@ public class ScenarioAuthoringTest {
     }
 
     @Test
+    public void AStepIsPutInFrontOfTheBlockStepThatHasTheDecisionAndTakesIt() throws Exception {
+        Files.createDirectories(new File(canon, "tutorials").toPath());
+        Files.copy(new File("src/test/resources/scenarios/two-skirmishes.hjson").toPath(), new File(canon, "tutorials/two-skirmishes.hjson").toPath());
+        authoring.open(player, "two-skirmishes", true);
+        //The first decision the block's catch-all step takes: in Gandalf's skirmish, which is fought first
+        JSONObject state = json(authoring.goTo(player, 1, 4)).getJSONObject("state");
+        assertEquals(4, state.getJSONObject("position").getIntValue("sub"));
+        state = json(authoring.stepBefore(player)).getJSONObject("state");
+        JSONArray kids = steps(state).getJSONObject(0).getJSONArray("anyOrder");
+        assertEquals(5, kids.size());
+        JSONObject made = kids.getJSONObject(3);
+        assertEquals("freeps, action, phase(skirmish), fighting(gandalf)", made.getString("when"));
+        assertTrue(made.getBooleanValue("once"));
+        assertEquals("It has the decision now", 4, state.getJSONObject("position").getIntValue("sub"));
+        assertEquals("freeps, action, phase(skirmish)", kids.getJSONObject(4).getString("when"));
+
+        //What is done at it is what it allows
+        Client client = new Client(game());
+        client.answer("");
+        kids = steps(state()).getJSONObject(0).getJSONArray("anyOrder");
+        assertEquals("pass", kids.getJSONObject(3).getString("allow"));
+
+        //Not for a step of the script itself: that step can be given the message
+        authoring.goTo(player, 2);
+        try {
+            authoring.stepBefore(player);
+            fail("Step 2 is not in a block");
+        } catch (ScenarioAuthoring.AuthoringException expected) {
+            assertTrue(expected.getMessage(), expected.getMessage().contains("give it the message itself"));
+        }
+    }
+
+    @Test
     public void WhatIsDoneAtARepeatingStepIsWrittenIntoItsAnswersInOrder() throws Exception {
         Files.createDirectories(new File(canon, "tutorials").toPath());
         Files.writeString(new File(canon, "tutorials/both.hjson").toPath(), ScenarioTesting.scenario("""

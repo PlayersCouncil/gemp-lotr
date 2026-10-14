@@ -182,6 +182,18 @@ public class ScenarioDirector {
         }
     }
 
+    /**
+     * Authoring: writes a step into the block the script is at, in front of one of its steps, so that what would
+     * have gone to that one goes to the new step first.
+     */
+    public void insertInBlock(Step step, Step before) {
+        Step block = currentStep();
+        if (block == null || !block.block || before.parent != block)
+            throw new IllegalStateException("The script is not at that step's block");
+        step.parent = block;
+        restructure(() -> block.children.add(block.children.indexOf(before), step), null);
+    }
+
     /** Authoring: takes a step that was written into a block out of it again. */
     public void removeFromBlock(Step step) {
         Step block = step.parent;

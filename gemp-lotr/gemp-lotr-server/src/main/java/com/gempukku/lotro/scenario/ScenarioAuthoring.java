@@ -2052,6 +2052,70 @@ public class ScenarioAuthoring {
     }
 
     /**
+     * A step for the decision that is waiting, in front of the step of a block that has it.  For a stretch the block
+     * covers with one step for many decisions (every pass in a skirmish, say), this is how something is said at one
+     * of them: the new step is made to fit this decision and no other (in a skirmish, that skirmish's: fighting(the
+     * companion in it)), applies once, and takes the decision; what is done at it is written in as what it allows.
+     */
+    public Map<String, Object> stepBefore(Player player) throws AuthoringException {
+        Session session = session(player);
+        synchronized (session) {
+            Sitting sitting = session.sitting;
+            requireAuthor(sitting);
+            String problem = sitting.mediator.scenarioLocked(() -> {
+                if (sitting.over())
+                    return "The game is over: go back to a step first.";
+                Ruling waiting = null;
+                for (String name : List.of(sitting.live.HumanPlayer(), sitting.live.OpponentPlayer())) {
+                    Ruling ruling = sitting.live.Session().Ruling(name);
+                    if (waiting == null && ruling != null && ruling.step() != null
+                            && sitting.live.Table().userFeedback().getAwaitingDecision(name) == ruling.decision())
+                        waiting = ruling;
+                }
+                if (waiting == null)
+                    return "No step has a decision waiting.";
+                Step had = waiting.step();
+                if (had.parent == null)
+                    return "Step " + had.label() + " has this decision, and no other step can come between: give it the message itself.";
+                if (had.pause)
+                    return "Step " + had.label() + " is a pause: it is read, and its decision goes to whichever step comes next.";
+                ScenarioDirector director = sitting.live.Session().Director();
+                Step block = had.parent;
+                StringBuilder when = new StringBuilder(sitting.whenFor(waiting.player(), waiting.decision(), block));
+                //(in a skirmish, that skirmish and not the others the block covers)
+                var skirmish = sitting.live.Table().gameState().getSkirmish();
+                String fighting = skirmish == null || skirmish.getFellowshipCharacter() == null ? null
+                        : sitting.live.Table().AliasOf(skirmish.getFellowshipCharacter());
+                if (fighting != null)
+                    when.append(", fighting(").append(fighting).append(")");
+                try {
+                    JsonObject json = new JsonObject();
+                    json.add("when", when.toString());
+                    json.add("once", true);
+                    Step step = ScenarioParser.parseStep(sitting.def, json, block.number, block, had.sub);
+                    director.insertInBlock(step, had);
+                    sitting.awaiting.add(step);
+                    sitting.live.Session().Reroute(waiting.player());
+                    if (sitting.inHand() != step) {
+                        director.removeFromBlock(step);
+                        sitting.awaiting.remove(step);
+                        sitting.live.Session().Reroute(waiting.player());
+                        return "A step could not be written for this decision.";
+                    }
+                    session.movedOn();
+                    return null;
+                } catch (ScenarioFormatException exp) {
+                    return exp.getMessage();
+                }
+            });
+            if (problem != null)
+                throw new AuthoringException(problem);
+            session.changed();
+            return result(session, true, false);
+        }
+    }
+
+    /**
      * The step in hand forgets what it allows and how it is answered, and takes both from what its author does next:
      * for a step that is right in everything but what was done at it.
      */
