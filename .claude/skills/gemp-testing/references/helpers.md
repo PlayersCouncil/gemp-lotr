@@ -14,7 +14,8 @@ Brigand) is never offered whatever the filter.
 **A cheap minion.** Goblin Runner 1_178. Strength 5, vitality 1; when played, may add (2): harmless if cheated onto
 the table, and added without asking when it is played for real (F-0009). Played beside a card with its own required
 trigger on a minion being played (The Faithful Stone 68_50), the two come at once and the Free Peoples player
-orders them in a "Required responses" decision: play Goblin Patrol Troop there.
+orders them in a "Required responses" decision: play Goblin Patrol Troop there. Its site number is 4: played at
+sites 2 or 3 it is roaming and costs 1 + 2, before its own (2) is added (Card_12_111_Tests reads the pool so).
 
 **A weak minion that survives a hit.** Uruk Savage 1_151. Strength 5, vitality 3; Damage +1 is its whole text. An
 unboosted strength-6 companion beats it without killing it.
@@ -622,6 +623,13 @@ Bilbo. The tales of other cultures are under "Tales of each kind".
 Fathers 102_48. [rohan] POSSESSION, unique, Fortification, Support Area, cost 1; to play, spot 2 valiant companions
 (two Household Guards 5_83) or 3 [rohan] companions; a Response to a wound on a [rohan] companion only. Laid in a draw
 deck beside First Level 7_92 or Arrow-slits 5_80, it tells `fortification` from `condition,fortification` (10_117, 103_23).
+
+**A [rohan] possession with no bearer (support area), and beacons to hinder for it.** Northern Signal-fire, Flame of
+Calenhad 103_86 ([rohan] possession, 2 dots, Beacon, Support Area, cost 2; to play, hinder 2 beacons; a maneuver
+ability only). War-beacon 103_35 and Northern Signal-fire, Flame of Amon Din 103_28 ([gondor] beacons, cheated into
+the support area) are the two to hinder: their abilities are fellowship ones and a response to a wound on an
+unbound Man. With one beacon in play the Flame cannot be played, with both it can (Card_07_321_Tests, beside
+`PlayableOn(any)` in a play-from-discard requirement). Two Signal-fires in play is the title's 2 dots, no more.
 
 ## Wounds, exertions, heals, kills and discards that a printed card does
 
