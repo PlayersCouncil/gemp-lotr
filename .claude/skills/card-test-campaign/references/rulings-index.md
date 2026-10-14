@@ -507,6 +507,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "If your <kind> wins a skirmish, <do something to> that <kind>" built as a `winsSkirmish` trigger whose effect CHOOSES among `inSkirmish` cards of the same filter (Goblin Swarms 1_183, as built; dec-b2_122) [Q-0224]
 - Built by engine pass 7 (F-0126, F-0131, F-0137, F-0140, Q-0081)
 - A card that leaves play as it comes into play was not played (F-0139, built)
+- "<A character> comes into play exhausted" (Q-0302; F-0500, F-0501)
 - "Discard this when at / if <where>" on the move that takes the fellowship there (F-0233, Q-0133)
 - "Each time your fellowship moves, ... (or N if at site X or higher)" reads the site left (Q-0184: A; built by engine pass 21)
 - "When <this card> leaves play, this bonus is lost" as a turn-long added trigger names `self` (F-0270, Radagast 59_26)

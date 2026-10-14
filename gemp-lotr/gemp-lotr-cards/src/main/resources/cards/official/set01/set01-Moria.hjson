@@ -519,20 +519,14 @@
 				}
 			}
 			{
-				type: Trigger
-				optional: false
-				trigger: {
-					type: played
+				type: modifier
+				modifier: {
+					type: comesIntoPlayExhausted
 					filter: companion
-					memorize: playedCompanion
-				}
-				requires: {
-					type: location
-					filter: siteBlock(fellowship),siteNumber(4-9)
-				}
-				effect: {
-					type: exhaust
-					select: memory(playedCompanion)
+					requires: {
+						type: location
+						filter: siteBlock(fellowship),siteNumber(4-9)
+					}
 				}
 			}
 		]

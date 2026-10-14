@@ -1580,6 +1580,11 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     }
 
     @Override
+    public boolean comesIntoPlayExhausted(LotroGame game, PhysicalCard card) {
+        return !getModifiersAffectingCard(game, ModifierEffect.COMES_INTO_PLAY_EXHAUSTED_MODIFIER, card).isEmpty();
+    }
+
+    @Override
     public boolean sanctuaryMayRemoveBurdens(LotroGame game, String playerId) {
         for (Modifier modifier : getModifiers(game, ModifierEffect.SANCTUARY_REMOVE_BURDEN_MODIFIER))
             if (modifier.sanctuaryMayRemoveBurdens(game, playerId))

@@ -274,5 +274,11 @@ public interface ModifiersQuerying {
 
     boolean deadPileGoesToDiscard(LotroGame game, PhysicalCard card);
 
+    /**
+     * Whether another card says that this card comes into play exhausted ("Each [sauron] Orc comes into play
+     * exhausted", Blood of Númenor 2_31): PlayCardEffect asks it of a character as it is placed (Q-0302).
+     */
+    boolean comesIntoPlayExhausted(LotroGame game, PhysicalCard card);
+
     boolean sanctuaryMayRemoveBurdens(LotroGame game, String playerId);
 }

@@ -170,20 +170,14 @@
 		keyword: support area
 		effects: [
 			{
-				type: Trigger
-				optional: false
-				requires: {
-					type: HasCardInDeadPile
+				type: modifier
+				modifier: {
+					type: comesIntoPlayExhausted
 					filter: culture(dwarven),companion
-				}
-				trigger: {
-					type: played
-					filter: culture(dwarven),companion
-					memorize: playedCompanion
-				}
-				effect: {
-					type: exhaust
-					select: memory(playedCompanion)
+					requires: {
+						type: HasCardInDeadPile
+						filter: culture(dwarven),companion
+					}
 				}
 			}
 			{

@@ -374,20 +374,14 @@
 		intensity: 5
 		effects: [
 			{
-				type: Trigger
-				optional: false
-				trigger: {
-					type: Played
+				type: Modifier
+				modifier: {
+					type: ComesIntoPlayExhausted
 					filter: companion
-					memorize: playedCompanion
-				}
-				requires: {
-					type: Location
-					filter: not(siteNumber(1))
-				}
-				effect: {
-					type: Exhaust
-					select: memory(playedCompanion)
+					requires: {
+						type: Location
+						filter: not(siteNumber(1))
+					}
 				}
 			}
 		]
