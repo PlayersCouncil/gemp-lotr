@@ -62,6 +62,8 @@ One class per card, in the folder and under the name it already has. The class h
 fields, and none of the campaign's bookkeeping. What a reader finds is test names that say what happens, the
 card's printed text in the stats test's header, and comments where a number or a choice of helper card needs
 explaining.
+A method that only returns a site or card map for several scenarios to share is a helper method too (lint
+refuses it): write the map into each `Get...Scenario()`.
 
 ```java
 public class Card_01_040_Tests

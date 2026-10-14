@@ -1608,7 +1608,8 @@ has a site number (`GameState.usesUnorderedSites`), and the rig now puts the sit
 into each adventure deck ahead of those that have none, so a Shadows-block site on a numbered path may stand
 under any key, `site9` included. (The deck used to be built in the site map's HashMap order, and a key that came
 out ahead of every `siteN`, `homestead` or `path` say, made the whole path unordered: `StartGame()` was left
-resting on "Choose site to play". The landed scenarios chose their keys round that and are unchanged.) The other
+resting on "Choose site to play". The landed scenarios chose their keys round that and are unchanged, and a
+ledger Note that calls a capitalised key needed, 68_136's "Mithlond", is out of date: 17_147 and 18_136 use lowercase.) The other
 way about, one numbered site among Shadows-block sites makes the path a numbered one, and with no site 1 in it
 the table is refused when it is built, saying so (`virtualtable/FirstSiteTests`).
 On an unordered path the constructor rests on the first player's "Choose site to play" with all nine offered
