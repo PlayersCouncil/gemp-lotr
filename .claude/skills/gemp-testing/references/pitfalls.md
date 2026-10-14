@@ -1730,7 +1730,7 @@ companions who can exert is in its reach). Site 2, Eastfold 4_331: plains; a Sha
 trackers. Site 3, Barrows of Edoras 4_337: a sanctuary; "Fellowship: Place your hand beneath your draw deck and draw
 4 cards", on offer to the mover with a card in hand and, since F-0429, with none while he may still draw a card
 (Q-0249: `CanDraw`): `FreepsActionAvailable(<site 3>)` is true there, and a test that counts the fellowship actions on offer at
-site 3 counts it. Site 4, White Rocks 4_346: a battleground; its Shadow number is +1 for each mounted companion.
+site 3 counts it. Site 4, White Rocks 4_346: a battleground; its Shadow number is +1 for each mounted companion, so a test that mounts companions and moves to site 4 counts them in the pool.
 Site 5, Deeping Wall 4_348: a battleground; "Shadow: Play Saruman from your draw deck". Site 6, Caves of Aglarond
 4_352: underground, a sanctuary; a Maneuver action that makes your Uruk-hai fierce. Site 7, Helm's Tower 102_71: a
 battleground; each character damage +1 while 6 companions can be spotted. Site 8, Ring of Isengard 4_358: "Shadow:

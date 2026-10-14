@@ -274,7 +274,8 @@ Gondorian Merchant 7_97 bearing Narsil 9_34 can exert, 5_39; helpers.md.)
 a [sauron] card that is no minion, and a minion of another culture; for an item class ("bearing a hand weapon") one
 of them is a weapon of another class on a bearer of the right kind (a ranged weapon), where a card in play can bear
 one, since the game has a `weapon` filter one word wider and a possession that is no weapon cannot tell the two
-apart (65_148); for a number with two bounds, a card on each side (a bound no board can reach, as site 1 of
+apart (65_148); "mounted" is an item class too (bearing a possession of the class mount), and owes a companion
+bearing a possession that is no mount (Gimli 1_13 with Dwarven Armor 1_8, 4_346); for a number with two bounds, a card on each side (a bound no board can reach, as site 1 of
 "sites 1 to 5" for a skirmish, is stood for by the nearest reachable value inside it, site 2, and Notes says so). Where the type word has a character neighbour (companion against ally), the card of the first word that is no X
 is a character where print allows (Barliman Butterbur 1_70, a [gandalf] ally, for "a [gandalf] companion"), or the
 type widened to `character` passes (Alatar 13_28). For "an X skirmishing a Y" that is an X assigned
@@ -322,7 +323,9 @@ site's text: Heights of Isengard 11_244), which for a card-worded text is an inv
 to do it by that player's card (Introspection 12_29 for a discard; It Burns Us 6_110 for a reveal) is on the table
 too. Where he has a choice in it he is the one doing it (Q-0171: "if the player has a choice, they're not
 forced"); where he has none, the card's player is (Q-0251: "Since there's no optionality and no choice, I'd say this
-is Free Peoples doing the revealing"). shapes.md has the boards (F-0296).
+is Free Peoples doing the revealing"). This reaches every act a card makes the other player do, an assignment as well as a
+discard or a reveal, and either way round: Barbaric Uruk 12_135 making him assign the one unwounded companion is
+the Shadow player's assignment (F-0513, Wold of Rohan 4_336). shapes.md has the boards (F-0296).
 
 **A race against a culture.** A race against a culture, and a culture against a race, is shown with a PRINTED card
 that has the one without the other (Pippin, Trollslayer 103_31 is a [gondor] Hobbit; Sméagol, Once Like Us 103_116
