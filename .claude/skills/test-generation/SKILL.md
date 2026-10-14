@@ -589,6 +589,8 @@ assertions that are current. Rewrite it from the packet; never keep it on trust.
 no resistance column, so resistance is asserted at the definition's value. No sheet has a site's direction
 either: assert the definition's value, and on an erratum compare it with the original's `direction:`; where the
 two differ it is a finding, and the two card images say which was printed (Doorway to Doom 68_134, F-0302).
+It is a `LotroCardBlueprint.Direction` (`LotroCardBlueprint.Direction.LEFT`, with an import of
+`com.gempukku.lotro.game.LotroCardBlueprint`; a bare `Direction` does not compile: `Card_13_185_Tests`).
 A definition with no `direction:` line (every Hobbit-set site) reads null: assert `assertNull(getSiteDirection())`
 until the card is transcribed from its image (`Card_30_051_Tests`).
 

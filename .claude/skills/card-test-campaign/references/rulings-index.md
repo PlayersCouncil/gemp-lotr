@@ -507,6 +507,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "If one or more <kind> are about to be discarded by an opponent, <pay> to prevent that": the whole discard is prevented (Q-0250: B; Siege Engine 5_60, engine pass 28)
 - "If a <kind> is about to be discarded ..., <pay> to prevent that" saves the one card; "one or more <kind>" saves the whole discard (Q-0313: A, as built; Q-0250)
 - "Each time the Free Peoples player plays the fellowship's next site" asks who plays it (F-0479, Fearless Approach 13_164 and Caravan From the South 13_83) [F-0302]
+- "Each time you play a <race>" names its player (F-0510, Home and Hearth 12_122)
 - "If a Free Peoples player reveals this card from your hand" asks whose CARD revealed (Eye of Barad-dûr 5_96; Q-0251: B) [Q-0171]
 - "Each time your condition is hindered or discarded" (Q-0075)
 - "Each time this is hindered/discarded" is answered after the removal (F-0120, F-0121)
@@ -606,5 +607,5 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - lint's `cardinfo` warning (Q-0145) [Q-0158]
 - lint's `census` warning (Q-0220: B) [F-0430, F-0443]
 - lint's `plain-play` warning (Q-0279: C; engine pass 29)
-- lint's `stale`, `race-side`, `pile-cost`, `rule-of-4`, `self-bar`, `item-class` and `bearer-min` warnings (engine pass 39) [Q-0058, Q-0062, Q-0262]
+- lint's `stale`, `race-side`, `pile-cost`, `rule-of-4`, `self-bar`, `item-class` and `bearer-min` warnings (engine pass 39) [Q-0058, F-0510, Q-0062, Q-0262]
 - No Play clause, and no test that only plays a card (Q-0279: B; engine pass 31) [Q-0220]
