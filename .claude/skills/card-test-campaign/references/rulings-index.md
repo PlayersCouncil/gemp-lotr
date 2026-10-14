@@ -592,7 +592,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Grep before calling a property unique to a block (Aldor 4_262) [Q-0158]
 - A definition's `revision:` can be behind the sheet (F-0294, Shadowfax 67_24) [Q-0180]
 - A definition's game text may have been brought to the sheet's wording on 2026-10-05 (F-0297, The Faithful Stone 68_50) [Q-0017, F-0041]
-- Facts earlier authors got wrong
+- Facts earlier authors got wrong [Q-0311]
 - Rig methods newer than the generated list
 - lint's `second-copy` and `ruled` warnings
 - lint's `not-asked`, `not-in-hand` and `conditional` warnings (engine pass 21)

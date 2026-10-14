@@ -35,7 +35,9 @@ about [men] possessions. Pallando Deceived: unique [isengard] condition, support
 phase its owner may exert a Wizard (Saruman, the only one, with no choice asked) and it is a fierce Wizard minion of
 strength 10 and vitality 1 until the regroup phase, taking no wounds. The Free Peoples player assigns one to a
 companion and the Shadow player the other; Aragorn 1_89 at Ettenmoors (8 + 2) is not overwhelmed by their 18, and
-both win (`Card_13_078_Tests.TwoWizardsWhoWinOneSkirmishMakeItAMinionOnce`).
+both win (`Card_13_078_Tests.TwoWizardsWhoWinOneSkirmishMakeItAMinionOnce`). The same pair is the Wizard minion who
+is no Saruman (Ketura on Q-0311), of a second culture: a choice that wounds or exerts leaves Pallando out, as it
+cannot take wounds and cannot exert at vitality 1 (`Card_17_020_Tests.AnIsengardWizardMinionWhoCannotTakeWoundsIsNotChosenBesideSaruman`).
 
 **A minion with damage +2, to tell an X of 1 from 2.** Easterling Berserker 10_40. [raider] Man, strength 11,
 vitality 3, cost 6, site 4, not unique. Damage +2 only while he is unwounded. "To play, spot an Easterling": cheat

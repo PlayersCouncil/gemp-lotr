@@ -46,6 +46,10 @@ public class Card_17_020_Tests
 					// Messenger's Mount: on The Mouth of Sauron, who is fierce. "Response: If a [men] minion is about
 					// to take a wound, remove (3) to prevent that": offered at a wound and not at an exertion.
 					put("mount", "12_72");
+					// Pallando Deceived: an [isengard] condition in the support area. At the start of the maneuver
+					// phase its owner may exert a Wizard to make it a fierce Wizard minion, strength 10, vitality 1,
+					// that cannot take wounds, until the regroup phase: a Wizard minion who is no Saruman.
+					put("pallando", "13_79");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -352,6 +356,58 @@ public class Card_17_020_Tests
 		assertEquals(1, scn.GetWoundsOn(mouth));
 		assertEquals(5, scn.GetTwilight());
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void AnIsengardWizardMinionWhoCannotTakeWoundsIsNotChosenBesideSaruman() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var gwaihir = scn.GetFreepsCard("gwaihir");
+		scn.MoveCompanionsToTable(gandalf);
+		scn.AttachCardsTo(gandalf, gwaihir);
+
+		var savage = scn.GetShadowCard("savage1");
+		var saruman = scn.GetShadowCard("saruman");
+		var pallando = scn.GetShadowCard("pallando");
+		scn.MoveCardsToSupportArea(pallando);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(savage, saruman);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsDeclineOptionalTrigger();
+		// Pallando Deceived exerts Saruman to become an [isengard] Wizard minion that cannot take wounds.
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(pallando));
+		scn.ShadowAcceptOptionalTrigger();
+		scn.ShadowChooseCard(saruman);
+		assertEquals(1, scn.GetWoundsOn(saruman));
+		assertInZone(Zone.SHADOW_CHARACTERS, pallando);
+		assertTrue(scn.IsType(pallando, CardType.MINION));
+		assertTrue(scn.IsRace(pallando, Race.WIZARD));
+		assertEquals(Culture.ISENGARD, pallando.getBlueprint().getCulture());
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gandalf, savage);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(gandalf);
+		scn.PassSkirmishActions();
+
+		// Gandalf 8 beats the Savage 5. Two Wizard minions, of [men] and [isengard]: Saruman may be wounded and is
+		// offered; Pallando, a Wizard who cannot take wounds, would be wounded instead of exerted, and is not.
+		assertEquals(1, scn.GetWoundsOn(savage));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(gwaihir));
+		scn.FreepsAcceptOptionalTrigger();
+		assertTrue(scn.FreepsHasCardChoiceAvailable(savage, saruman));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(pallando));
+		scn.FreepsChooseCard(saruman);
+
+		assertEquals(2, scn.GetWoundsOn(saruman));
+		assertEquals(1, scn.GetWoundsOn(savage));
+		assertEquals(0, scn.GetWoundsOn(pallando));
+		assertInZone(Zone.SHADOW_CHARACTERS, pallando);
+		// Pallando is fierce: the fierce round's assignment phase follows.
+		assertTrue(scn.InFierceRound());
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
 
 	@Test
