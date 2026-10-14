@@ -2100,3 +2100,9 @@ fine, the "instead" is superfluous and perhaps should have been worded "exert a 
 Wizard)". A." She also corrected the question: not every Wizard minion is a Saruman; "there are also the Deceived
 wizards that emerge from conditions (Pallando Deceived, Alatar Deceived, etc)" (13_x [isengard]). *[2026-10-14]*
 
+**Q-0312, a Hobbit-set card that is the only printed card of its kind (2026-10-14).** Stern Words 19_9 ("spot a
+[gandalf] Wizard"), whose only [gandalf] Wizard ally is Saruman, The White 32_24: "Keep I guess; as you say it's a
+small test, it's just not exemplary to involve the HDG that way." The test stays; Q-0303 still keeps the Hobbit sets
+out of a bare title's candidates, and a Hobbit-set card is laid only where it is the one card that tells two
+definitions apart. *[2026-10-14]*
+

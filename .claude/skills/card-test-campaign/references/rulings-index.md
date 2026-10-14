@@ -387,6 +387,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Card by card (2026-10-14). F-0503, Ranger's Cloak 15_68 borne by an ally (the forest half now a companion bearer's alone): "if the ally is at his ... [F-0502]
 - What a test must lay (2026-10-14, the Standard's questions from engine pass 39) [Q-0303, Q-0305, Q-0306, Q-0307, Q-0308, Q-0309]
 - Card by card (2026-10-14, later) [Q-0304, Q-0310, Q-0164, Q-0311]
+- Q-0312, a Hobbit-set card that is the only printed card of its kind (2026-10-14) [Q-0303]
 
 # Settled shapes (shapes.md)
 
