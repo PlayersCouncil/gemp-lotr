@@ -1080,3 +1080,6 @@ Leader 12_34 ([gandalf] Maneuver or Regroup event, cost 1, "Spot a [gandalf] Wiz
 fellowship's current region with a site from your adventure deck"). The next site laid by a card that is no
 ranger's: One Good Turn Deserves Another 11_49 ([gollum] Fellowship or Regroup event, cost 0, spot Sméagol; then
 "you may add a burden to take this card back into hand", asked each time). Both in `Card_15_193_Tests`.
+Under a bar on replacing sites (Rapid Reload 15_89's, Doorway to Doom 68_134's), Traveled Leader still asks "Choose
+site to replace" among every site of the region and is played, nothing replaced, its site left in the adventure deck;
+Pathfinder and Mere of Dead Faces 11_246 stay playable or usable and do nothing (Mere's exertion paid) (`Card_15_089_Tests`).
