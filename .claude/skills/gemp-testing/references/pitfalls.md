@@ -261,6 +261,9 @@ round. Its correction is a requirement of the definition's own for the play: on 
 `fromZone: DISCARD`, which counts the event's own cost as gone from the pool (Little Snuffler 13_52, F-0058: not
 offered in region 3 with the pool one short of event and minion together, or with no [gollum] minion in the
 discard pile; `mechanics/costs/EventThatPlaysFromADiscardPileNeedsBothCostsTests`).
+A branch of a `choice` is another matter: an `If` there whose check fails makes the branch "not doable in full", so
+it is not offered and the other branch is carried out unasked (Gandalf 13_33, "unless you spot 2 other companions
+and discard 2 [gandalf] cards": Card_13_033_Tests, one other companion; shapes.md, F-0310).
 
 **The no-effect flag.** Every action a player is offered carries a word saying whether the game expects it to do
 nothing. `FreepsActionNoEffect(card)` and `ShadowActionNoEffect(card)`, and the same with words of the action's
@@ -407,7 +410,9 @@ mechanics/keywords/MusterTests). At the start of the regroup phase a player with
 one offer, "Use Muster" (`ShadowHasOptionalTriggerAvailable(card, "Use Muster")`), the Free Peoples player's first.
 Taken, it is one choice of 0 to N cards from hand, N the number of his muster characters, and as many are drawn
 after. With an empty hand there is no offer. `SkipToPhase(Phase.REGROUP)` rests on the offer: a test that only
-passes through takes or declines it.
+passes through takes or declines it. `SkipToSite(n)` stops on it too and fails ("expected to end between turns or
+in the Fellowship phase, but ended in REGROUP"), since its turns draw a hand: put the muster character, or the
+card that gives muster, down after the skip (Phial of Galadriel 13_155, Card_13_155_Tests; a probe, dec-b17_22).
 
 **A yes/no in the middle of a trigger is not an optional trigger.** A definition's `Optional` effect for a named
 player ("the first Shadow player may discard 2 cards from hand to add a burden" inside a site's required trigger,
