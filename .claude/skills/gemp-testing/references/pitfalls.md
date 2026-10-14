@@ -1261,7 +1261,9 @@ not yet asked; Frenzy of Arrows 68_79's tests). `SkipToPhase(Phase.MANEUVER)` le
 `FreepsHasOptionalTriggerAvailable(follower)` reads it, and `FreepsAcceptOptionalTrigger()` pays the Aid cost and
 then asks for the companion (`FreepsChooseCard`). `FreepsHasOptionalTriggerAvailable(follower)` cannot tell the Aid
 from the follower's own "when you transfer this" trigger: give the offer's words, `(follower, "Aid")` for the Aid
-("Use <card> Aid") and `(follower, "Optional trigger")` for the trigger (Card_18_017_Tests). The N of a printed "Aid - (N)" is read off the card, wherever
+("Use <card> Aid") and `(follower, "Optional trigger")` for the trigger (Card_18_017_Tests). Once the Aid is
+resolved, a bare `FreepsHasOptionalTriggerAvailable(follower)` reads the transfer trigger alone (Card_13_028_Tests,
+Card_13_144_Tests). The N of a printed "Aid - (N)" is read off the card, wherever
 it lies, with `GetAidTwilightCost(follower)` (G-0051, engine pass 26; for the stats test): a Free Peoples Aid
 adds it and a Shadow one (Saruman 17_38) removes it. It fails, saying so, for an Aid that is not a plain amount
 of twilight (a burden, a threat, an exertion, a card from hand): for those the header carries the cost. Every Free Peoples Aid transfers "to a companion", so no ally
