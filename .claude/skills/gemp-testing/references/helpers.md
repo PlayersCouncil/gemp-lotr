@@ -357,6 +357,8 @@ Maneuver event, cost 0: exert Aragorn (any Aragorn; he keeps the wound), and a c
 part in archery fire and skirmishes until the regroup phase. Nothing else; the ally is then assigned like a
 companion. A Wizard who is an ally and WINS a skirmish is Radagast, The Brown 31_17 by this event: 8 + 2 beats Uruk
 Shaman 1_152 (8, vitality 2) without killing it (`Card_13_078_Tests.AWizardWhoIsAnAllyAndWinsASkirmishMakesItAMinion`).
+His 10 overwhelms a minion of strength 5 or less (Uruk Savage 1_151 is discarded, not wounded): for a wound to
+read, lay a minion of strength 6 to 9; or read the kill (`Card_11_244_Tests`, dec-b11_244).
 
 **An ally in a skirmish at any site, with no Aragorn needed.** Thrarin, Dwarven Smith 1_27: unique [dwarven] Dwarf
 ally, strength 4, vitality 2, home 3F. "Maneuver: Exert Thrarin to allow him to participate in archery fire and

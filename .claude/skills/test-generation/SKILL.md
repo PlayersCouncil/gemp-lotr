@@ -444,7 +444,8 @@ Which checks a clause lists follows from its words, and the analyst is expected 
 - an optional trigger or a special ability with no cost (a spot is no cost) → one `-` is the board on which its
   whole effect would do nothing: not offered (Q-0034; shapes, "Spot X to <effect>"). The game withholds such an
   offer itself (Q-0224): the test reads it absent, and no requirement is written for it unless the offer is still
-  made there (shapes, "An optional trigger or ability that costs nothing"). For a draw that can come in its
+  made there (shapes, "An optional trigger or ability that costs nothing"). On a `Trigger` this `-` is owed beside
+  the neighbouring-event `-`, and neither stands in for the other (Heights of Isengard 11_244). For a draw that can come in its
   player's fellowship phase the board is the Rule of 4 spent (Q-0262: B; an empty deck still asks, Q-0029). A keyword given to a card that has it
   already is not "nothing" and is offered (Q-0245: A, Band of Wild Men 4_4: "the effect still has potential to alter
   that calculus"). Where a board can have the card hold that keyword already (the ability used once, then

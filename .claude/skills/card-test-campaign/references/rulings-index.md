@@ -414,6 +414,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "While a card titled X is removed from the game" names no owner (F-0375, Gollum, Her Sneak 13_50)
 - "Loses <keyword> and cannot gain <keyword>" until a time is one `RemoveKeyword` with that `until` (Q-0011, Harrowdale 11_243) [Q-0282, F-0487]
 - "While you can spot a <keyword> ..., this <card> is (gains) <that keyword>" with no "another" keeps the keyword once gained (Q-0276: A; built by engine pass 30) [Q-0291, Q-0290]
+- A bare type word in a COST names no side, on a Free Peoples card as on a Shadow card (Q-0058, F-0491, Q-0012)
 
 ## What is offered and what is asked
 
