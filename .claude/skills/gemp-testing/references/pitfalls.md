@@ -558,6 +558,9 @@ added on the ordered `FellowshipSites`, `TowersSites` or `KingSites` paths; only
 To read both sides of a cost in one Shadow phase, set the pool there and refresh: `SetTwilight(3)`,
 `ShadowRefreshDecision()`, not offered; `SetTwilight(4)`, `ShadowRefreshDecision()`, offered. No sum for the move is
 then needed (mechanics/keywords/RoamingTests, ToilTests).
+A Free Peoples card's cost is ADDED to the pool, never paid from it: a pool set "to afford" a Free Peoples play
+does nothing (Radagast's Herb Bag 18_26 is played from a pool of 0). Set it only where a text reads it (Keep Your
+Forked Tongue 4_96 spots 3 twilight tokens), or to read the cost added.
 
 **No end of turn is sent before turn 1 (F-0327).** After the mulligans `MulliganProcess` ends what the starting
 fellowships left "until the end of the turn" and hands on to `BetweenTurnsProcess`: no `EndOfTurnResult` is sent,
