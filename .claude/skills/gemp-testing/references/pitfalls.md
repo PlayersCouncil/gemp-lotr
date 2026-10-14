@@ -731,7 +731,10 @@ before the second move is asked about, so a test that turns on his hand at the s
 first. A test that needs cards in the draw deck afterwards puts them back with `MoveCardsToTopOfDeck`. A test
 that needs a hand of a known size afterwards sets it: `SetFreepsHand(cards...)` / `SetShadowHand(cards...)` make
 that player's hand exactly those cards, in that order, and put the rest of it on top of his draw deck (G-0035;
-`Card_10_012_ErrataTests`); never move the scenario's aliases away one by one. The cards named are taken from
+`Card_10_012_ErrataTests`); never move the scenario's aliases away one by one. The cards drawn on the way are the
+scenario's own aliases, so a test that reads what is offered from a hand after the skip sets that hand first: a
+cheaper card drawn on the way can make an offer the test meant to withhold (Dark Approach 12_162 was offered with
+too little twilight for the Nazgûl named, for Lemenya 1_232 drawn on the way). The cards named are taken from
 wherever they are, play included: a companion cheated onto the table and named there goes back to hand, and the
 companion count and the twilight a move adds drop with him (dec-b9_12, West Road 7_337). And as
 the fellowship decision is already pending when it returns, a card made playable by cheating is not offered
@@ -1525,6 +1528,8 @@ with a `choose(...)`) is offered with no such event in the pile (Q-0034: it has 
 nobody is asked for a card, and the deck is shuffled once more with its count unchanged (`Card_01_017_Tests`).
 
 ## Hinder, The One Ring and Maps
+
+**A wound cost that a worn Ring turns into a burden reads as unpaid (F-0507, open).** By Ketura's ruling ("'Instead' converts a cost") the cost is paid and what it buys happens, but `negateWound` goes through `preventEffect`, so the game adds the burden and skips the effect. This holds for any card that wounds the Ring-bearer as a cost while The Ruling Ring 1_2, Answer To All Riddles 4_1, The Great Ring 19_1 or the like is worn. Write the ruled reading and park it on F-0507 (Card_17_028_Tests).
 
 **The Ring-bearer is the rules' to protect, hindered or not.** A discard or a return to hand that reaches hindered cards (`override: hindered`: "a card", "a Free Peoples card") neither offers nor takes a hindered Ring-bearer (CR 4.2 "Ring-bearer"; F-0174), so a definition needs no `not(ring bearer)` there, and with him the only candidate the effect does nothing. The engine's effects refuse him for themselves as well as the definition words' choices do: `DiscardCardsFromPlayEffect` (when it has a source card), and `ReturnCardsToHandEffect` since engine pass 27 (`mechanics/hinder/HinderedRingBearerTests`, which aims each at him). What another CARD forbids about cards gives a hindered card nothing: beside Uruk Follower 4_186 a hindered unbound Hobbit is discarded.
 

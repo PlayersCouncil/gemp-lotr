@@ -421,7 +421,9 @@ Which checks a clause lists follows from its words, and the analyst is expected 
   discarding itself as its only cost ("discard this condition to …") can always pay: no `C-`, and no `no C-:`
   line. An exert cost's `C-` board is the one who must exert, exhausted; where the cost names a kind ("exert
   your [isengard] Man"), the only one of that kind exhausted with others able to exert beside him. A board with
-  nobody of the kind shows the filter (`F`) and cannot tell an exertion from a wound (92_2). An "add (or remove, or reinforce) a [culture] token" cost: Redhorn Pass 13_194 ("Culture tokens cannot be
+  nobody of the kind shows the filter (`F`) and cannot tell an exertion from a wound (92_2). A wound cost's `C-`
+  is a bar on wounds or a cap reached: Armor 1_92 ("takes no more than 1 wound during each skirmish phase") after
+  one wound that phase (Faramir 17_28). A `no C-` search for a wound cost takes in "no more than". An "add (or remove, or reinforce) a [culture] token" cost: Redhorn Pass 13_194 ("Culture tokens cannot be
   added, removed, or reinforced") is its `C-` board (Scouring of the Shire 68_112; gemp-testing's `helpers.md`).
   A cost of REMOVING a token "from here" has a nearer one, which is laid in its place: no token on the card while
   a second copy holds one, which shows "from here" as well (Sudden Fury 12_132).
