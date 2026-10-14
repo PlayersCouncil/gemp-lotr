@@ -700,7 +700,7 @@ public class ValueResolver {
                 final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
                 final var override = hindered ? SpotOverride.INCLUDE_HINDERED : SpotOverride.NONE;
                 return new SmartValueSource(environment, object,
-                        actionContext -> (game, cardAffected) -> Filters.countSpottable(game, override, filterableSource.getFilterable(actionContext)));
+                        actionContext -> (game, cardAffected) -> Filters.countSpottable(game, actionContext.getPerformingPlayer(), override, filterableSource.getFilterable(actionContext)));
             } else if (type.equalsIgnoreCase("forEachHinderedYouCanSpot")) {
                 FieldUtils.validateAllowedFields(object, "filter", "over", "limit", "multiplier", "divider");
                 final String filter = FieldUtils.getString(object.get("filter"), "filter", "any");

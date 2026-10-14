@@ -300,8 +300,8 @@ public class DelegateModifier implements Modifier {
     }
 
     @Override
-    public int getSpotCountModifier(LotroGame game, Filterable filter) {
-        return delegate.getSpotCountModifier(game, filter);
+    public int getSpotCountModifier(LotroGame game, Filterable filter, String spottingPlayer) {
+        return delegate.getSpotCountModifier(game, filter, spottingPlayer);
     }
 
     @Override

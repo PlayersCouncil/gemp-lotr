@@ -224,7 +224,12 @@ public interface ModifiersQuerying {
 
     int getNumberOfSpottableControlledSites(LotroGame game, String playerId);
 
-    int getSpotBonus(LotroGame game, Filterable filter);
+    /**
+     * What the modifiers in force add to the spotting player's count of cards matching this one filter (Merry, In
+     * the Bloom of Health 17_107: "add 1 to the number of Ents you can spot"). Null for a count that is no player's,
+     * which gets no bonus (F-0502).
+     */
+    int getSpotBonus(LotroGame game, Filterable filter, String spottingPlayer);
 
     boolean hasFlagActive(LotroGame game, ModifierFlag modifierFlag);
 

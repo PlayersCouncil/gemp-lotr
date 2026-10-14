@@ -338,7 +338,7 @@ public abstract class AbstractModifier implements Modifier {
     }
 
     @Override
-    public int getSpotCountModifier(LotroGame game, Filterable filter) {
+    public int getSpotCountModifier(LotroGame game, Filterable filter, String spottingPlayer) {
         return 0;
     }
 

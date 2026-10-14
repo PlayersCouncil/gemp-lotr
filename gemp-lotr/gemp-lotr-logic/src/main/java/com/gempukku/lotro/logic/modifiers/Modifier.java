@@ -145,7 +145,12 @@ public interface Modifier {
 
     boolean canDiscardCardsFromTopOfDeck(LotroGame game, String playerId, PhysicalCard source);
 
-    int getSpotCountModifier(LotroGame game, Filterable filter);
+    /**
+     * What this modifier adds to the number of cards a player can spot with one filter alone ("add 1 to the number
+     * of Ents you can spot"). The spotting player is the one whose count it is, or null for a count that is no
+     * player's, to which no such bonus is added (F-0502).
+     */
+    int getSpotCountModifier(LotroGame game, Filterable filter, String spottingPlayer);
 
     boolean hasFlagActive(LotroGame game, ModifierFlag modifierFlag);
 

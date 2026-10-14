@@ -791,7 +791,7 @@ public class FilterFactory {
                                 return false;
 
                             for(var race : races) {
-                                if(Filters.canSpot(game, race))
+                                if(Filters.canSpot(game, actionContext.getPerformingPlayer(), 1, SpotOverride.NONE, race))
                                     return false;
                             }
                             return true;

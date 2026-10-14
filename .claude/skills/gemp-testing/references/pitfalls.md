@@ -1369,6 +1369,10 @@ call needs its reason on the line (`// lint-ok: ...`), as `carryOutEffectInPhase
 number"; the rule is under "modifier". So a discount of N is read at a site whose number is above N, or N and
 N + 1 read alike: A Talent for Not Being Seen 1_316's -2 is told from -3 at Balin's Tomb (3), not Ettenmoors (2).
 
+**"Add 1 to the number of X you can spot" raises its owner's count alone** (F-0502, engine pass 39). The count is
+the action's performing player's (`Filters.countSpottable` with a spotting player): Merry 17_107's +1 Ent is not in
+the Shadow player's Urgency 19_17 count. The bonus still reaches only a count whose filter is the bare race or class.
+
 ## A card that leaves play as it is played
 
 **A card that leaves play as it comes into play was not played.** A minion played beside Watcher in the Water, a tentacle played away from a marsh, a possession or weapon played on a bearer of Shadowfax, Greatest of the Mearas (17_24 and its erratum 67_24, a standing discard by LR 1; no other Shadowfax): the card goes to the discard pile, what it cost stays paid, and nothing that answers a play happens or is offered: not its own "when you play", not another card's "each time you play", not a response (CR 4.2 "discard"; `mechanics/inplay/DiscardedOnEntryTests`). The standing discard is done before the play is announced, so no "Required responses" question is asked between it and a play's own triggers, for a card that stays either. The game log has a line "<card> left play as it came into play".

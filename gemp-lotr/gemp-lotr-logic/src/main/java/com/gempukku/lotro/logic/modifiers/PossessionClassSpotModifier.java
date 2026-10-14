@@ -14,9 +14,13 @@ public class PossessionClassSpotModifier extends AbstractModifier {
     }
 
 
+    /**
+     * "Add 1 to the number of ... you can spot": "you" is the owner of the card that says it, and no other player's
+     * count is raised (F-0502).
+     */
     @Override
-    public int getSpotCountModifier(LotroGame game, Filterable filter) {
-        if (filter == _possessionClass)
+    public int getSpotCountModifier(LotroGame game, Filterable filter, String spottingPlayer) {
+        if (filter == _possessionClass && getSource().getOwner().equals(spottingPlayer))
             return 1;
         return 0;
     }

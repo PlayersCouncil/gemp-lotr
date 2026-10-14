@@ -84,6 +84,14 @@ public class Filters {
         return countSpottable(game, spotOverrides, filters) >= count;
     }
 
+    /**
+     * Whether the spotting player can spot this many cards, counting the bonuses to his own count
+     * ({@link #countSpottable(LotroGame, String, Map, Filterable...)}).
+     */
+    public static boolean canSpot(LotroGame game, String spottingPlayer, int count, Map<InactiveReason, Boolean> spotOverrides, Filterable... filters) {
+        return countSpottable(game, spottingPlayer, spotOverrides, filters) >= count;
+    }
+
     public static boolean hasActive(LotroGame game, Filterable... filters) {
         return findFirstActive(game, SpotOverride.NONE, filters) != null;
     }
@@ -135,12 +143,21 @@ public class Filters {
 
     public static int countSpottable(LotroGame game, Filterable... filters) { return countSpottable(game, SpotOverride.NONE, filters); }
     public static int countSpottable(LotroGame game, Map<InactiveReason, Boolean> spotOverrides, Filterable... filters) {
+        return countSpottable(game, null, spotOverrides, filters);
+    }
+
+    /**
+     * The number of cards the spotting player can spot. With one filter, the bonuses to that player's own count are
+     * added ("add 1 to the number of Ents you can spot" raises its owner's count and no other: F-0502); a count made
+     * for no player (null) gets none.
+     */
+    public static int countSpottable(LotroGame game, String spottingPlayer, Map<InactiveReason, Boolean> spotOverrides, Filterable... filters) {
         GetCardsMatchingFilterVisitor matchingFilterVisitor = new GetCardsMatchingFilterVisitor(game, Filters.and(filters, Filters.spottable));
         game.getGameState().iterateActiveCards(matchingFilterVisitor, spotOverrides);
         int result = matchingFilterVisitor.getCounter();
         //TODO: make this less dependent on how the definition is arranged
-        if (filters.length == 1)
-            result += game.getModifiersQuerying().getSpotBonus(game, filters[0]);
+        if (filters.length == 1 && spottingPlayer != null)
+            result += game.getModifiersQuerying().getSpotBonus(game, filters[0], spottingPlayer);
         return result;
     }
 

@@ -1425,10 +1425,10 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     }
 
     @Override
-    public int getSpotBonus(LotroGame game, Filterable filter) {
+    public int getSpotBonus(LotroGame game, Filterable filter, String spottingPlayer) {
         int result = 0;
         for (Modifier modifier : getModifiers(game, ModifierEffect.SPOT_MODIFIER))
-            result += modifier.getSpotCountModifier(game, filter);
+            result += modifier.getSpotCountModifier(game, filter, spottingPlayer);
         return Math.max(0, result);
     }
 

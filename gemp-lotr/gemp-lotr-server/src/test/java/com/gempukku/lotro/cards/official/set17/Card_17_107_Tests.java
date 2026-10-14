@@ -4,7 +4,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -128,7 +127,6 @@ public class Card_17_107_Tests
 	}
 
 	@Test
-	@Ignore("F-0502: Merry's +1 to the Ents 'you' can spot is added to the Shadow player's count too (Urgency 19_17 adds 4 for one Ent)")
 	public void TheShadowPlayersCountOfEntsIsNotRaised() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
