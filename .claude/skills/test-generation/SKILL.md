@@ -194,6 +194,8 @@ Notes: Elrond is himself an ally whose home is site 3, so C2 heals him too.
   the card is owed even where it hinders (Gwemegil 1_47 in CR 5.0 "hinder"): Q-0237 waives only boards it names none in.
   It is owed too where a `mechanics/` class already lays it on this very card, and a glossary entry's own example
   naming this card alone is typed `Rule` (`Ruling` is Section Three; 1_47's `Ruling` is not wrong): 3_35 in CR 4.2 "limit".
+  An example that quotes this card's text word for word without its title names it too (Old Toby 1_305 in CR 4.2
+  "when", as Merry 51_303 in "while").
 - A clause line is `ID Type [checks] text`. Long text continues on following lines, indented.
 - **Under each clause, one line per test that claims any of its checks**: `checks -> TestMethodName`. A test may
   claim checks of several clauses and a check may be claimed by several tests; the checks on a claim line may
@@ -956,6 +958,8 @@ bookends, and that none of the ledger has leaked into the test file. Its warning
    A comment that says a thing is "untouched" or "still there" with no assertion under it shows nothing either
    (lint does not read comments): take the words out, or add the reading where a rule or ruling settles it.
    Nor does lint see a pool read after a helper's play made only to meet a requirement: E2 takes it out (1_165, 9_47).
+   Nor does it see the card under test played out where its play is only set-up ("Arrange by cheating, act by
+   playing"): Merry 1_303 played legally ahead of a modifier test, cheated on at review.
 3. Would the test fail if the card were wrong? Imagine the filter one word wider and one word narrower, the
    number one off, the trigger on the neighbouring event, the effect's verb its neighbour (a wound read as an
    exertion: lay a character the wound kills; an exertion read as a wound: lay one with a single vitality left,

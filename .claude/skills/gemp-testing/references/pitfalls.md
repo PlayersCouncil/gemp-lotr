@@ -1583,7 +1583,9 @@ by the Ring 7_53: the shuffle is made ahead of the failed play, and the cost is 
 a card played to the table or the support area does not (a minion revealed by From Deep in Shadow 12_38, a
 starting fellowship). On a card's own board read the EXACT count wherever the board fixes it: `> shuffles` after a
 card played out of a looked-through deck passes with the definition's `shuffle: true` gone, and `shuffles + 2`
-does not (The Prancing Pony 11_256; mechanics/deck/DrawDeckShuffledWhenTheLookIsOverTests).
+does not (The Prancing Pony 11_256; mechanics/deck/DrawDeckShuffledWhenTheLookIsOverTests). A reveal or look at the TOP
+cards is no search and writes `shuffle: false` (Q-0013): where a test reads the deck after one, read the count
+unchanged too, since the top card's order notices a stray shuffle only by chance (Master Proudfoot 1_301).
 
 **A "play ... from your draw deck" action with no cost is offered whatever the deck holds, and a look that plays
 nothing is a use.** `PlayCardFromDrawDeck` without `mustExist` (Race Text 92_28, "Fellowship or Shadow: Play an
