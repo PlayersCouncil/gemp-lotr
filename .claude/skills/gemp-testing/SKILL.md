@@ -185,8 +185,11 @@ The sites of `FellowshipSites`, for tests that turn on terrain or on where the f
 | 8 | Anduin Banks 1_356 | 6 | River. Adds to the minion archery total for each companion over 4 |
 | 9 | Emyn Muil 1_360 | 9 | Maneuver: exert your minion to make it fierce |
 
-`SkipToSite(3)` followed by `SkipToPhase(Phase.MANEUVER)` puts a test in the maneuver phase at site 4, so a
-site's own maneuver, archery or skirmish phase wants `SkipToSite(n - 1)` and then the skip (Card_01_341_Tests). Read a
+`SkipToSite(n)` ends in the fellowship phase at site n, and any skip on from there (`SkipToPhase`,
+`SkipToAssignments`) or a `FreepsPass()` moves the fellowship to site n + 1: `SkipToSite(3)` and then
+`SkipToPhase(Phase.MANEUVER)` is the maneuver phase at site 4. So a test of a site's own text (its move trigger,
+its maneuver, archery, skirmish or regroup phase) wants `SkipToSite(n - 1)`, with the minions laid there, and then
+the skip (Card_01_341_Tests; Nan Curunír 5_119 at site 8 from `SkipToSite(7)`, dec-b5_119). Read a
 site's definition before relying on it, as for any helper card. No site of this path is underground below
 site 4, where a [moria] minion stops roaming: for a roaming minion underground (beside The Balrog 2_52, which is
 discarded anywhere else) take `KingSites`, whose site 3 is The Dimholt 8_117 (underground, a sanctuary):
