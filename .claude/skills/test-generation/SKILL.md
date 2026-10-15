@@ -388,7 +388,9 @@ owes `C` and `C-` and no F (1_40 above; Úlairë Nelya 11_222).
 of the card and not in another ("a unique [elven] companion", then "all Free Peoples archers"), the valid
 candidates of the second vary in it. Where the effect picks its cards by something read from the card chosen for
 the cost ("exert a companion to heal another companion with the same signet"), the cost is paid in the tests by
-cards that differ in it, or a filter fixed to one value (`signet(aragorn)`) passes (92_32).
+cards that differ in it, or a filter fixed to one value (`signet(aragorn)`) passes (92_32). "The rest" after a
+take ("take all [wraith] cards revealed and discard the rest") is such a second filter: the cards it reaches differ in
+what it does not mention, a Free Peoples card among them where the place can hold one, or `side(shadow)` passes (1_215).
 
 **Two places; a card played from the place; an "or" inside the phrase.** Where the text names two places a card is
 taken from ("from play or from hand"), the candidates are laid out in each. Where the card is PLAYED from the
@@ -627,8 +629,8 @@ reads null: `assertNull(getPossessionClasses())` (Bill the Pony 3_106, The Mirro
 its Shadow number (`getTwilightCost()`), its direction, and its site number, which a Shadows-block site does not
 print (`getSiteNumber()` is 0 there). Its header comment reproduces the card. A site's header has Block, Site Number (where
 printed), Shadow Number and Direction lines in place of the generated stub's empty Side, Culture and Subtype
-(Card_04_329_Tests). A support-area card's Subtype line may stay blank as generated or read "Support Area": both are
-landed and no assertion hangs on it. The
+(Card_04_329_Tests). A support-area card's Subtype line may stay blank as generated or read "Support Area", and a
+Response event's blank or "Response" (1_247, 1_214): both are landed and no assertion hangs on it. The
 expected values are the sheet's; `reconcile.py <id>` (Decipher cards) and the packet's "Sheet against
 definition" section (every card) show any field where the sheet and the definition disagree (see "When the sheet
 and the definition disagree" above). A strength, vitality or other bonus printed on a card that is borne (a
