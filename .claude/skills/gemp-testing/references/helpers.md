@@ -349,7 +349,9 @@ Edoras 4_337, a sanctuary; with Westemnet Plains 4_342 as site 3 it is a plains 
 6").** Aldor, Soldier of Edoras 4_262. [rohan] Man ally, unique, cost 1, strength 3, vitality 2, homes 3T and 6T;
 "Archery: Exert Aldor and spot a villager to make the fellowship archery total +1" (it requires a villager to
 spot). The printed card for this, so no Hobbit-set ally (Esgaroth Volunteers 32_17, home 6H) is wanted: only he
-notices `allyHome(T,6)` let in beside `allyHome(fellowship,6)` (Card_01_045_Tests).
+notices `allyHome(T,6)` let in beside `allyHome(fellowship,6)` (Card_01_045_Tests). At a 6T site (Great Hall
+4_353) he is at home whatever the site's text says, so he is no candidate for a text that lets allies take part
+"at" that site: `allyHome(T,6)` in place of its filter would pass with him (Card_04_353_Tests, dec-b4_353).
 
 **A [gondor] character who is not a companion; an ally who is a Man.** Gondorian Merchant 7_97. The only [gondor]
 ally; a unique Man, strength 6, vitality 1; home 3T, so he skirmishes on the Towers sites (`SkipToSite(2)` and a
