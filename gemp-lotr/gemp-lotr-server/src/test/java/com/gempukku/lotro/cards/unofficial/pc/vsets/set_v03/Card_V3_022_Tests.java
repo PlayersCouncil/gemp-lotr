@@ -187,6 +187,7 @@ public class Card_V3_022_Tests
 		scn.StartGame();
 		// Corpse Lights is a Wraith of the [sauron] culture.
 		scn.MoveMinionsToTable(lights);
+		scn.FreepsRefreshDecision();
 		scn.AddThreats(2);
 
 		assertEquals(3, scn.GetThreatLimit());
@@ -218,6 +219,7 @@ public class Card_V3_022_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(lights);
+		scn.FreepsRefreshDecision();
 		// Frodo, Aragorn and the two Wraiths: as many threats as companions.
 		scn.AddThreats(4);
 

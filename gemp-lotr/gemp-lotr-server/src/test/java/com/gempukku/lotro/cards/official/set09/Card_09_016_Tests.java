@@ -212,6 +212,7 @@ public class Card_09_016_Tests
 
 		// A second use, with another card on top. Dwarf Guard costs 1: 9 - 1 = 8.
 		scn.MoveCardsToTopOfDeck(guard);
+		scn.FreepsRefreshDecision();
 		scn.FreepsUseCardAction(glorfindel);
 		assertTrue(scn.FreepsHasCardChoiceAvailable(guard, false));
 		scn.DismissRevealedCards();

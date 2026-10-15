@@ -519,6 +519,7 @@ public class Card_05_096_Tests
 
 		scn.StartGame();
 		scn.MoveCardsToTopOfDeck(eye);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(0, scn.GetBurdens());
 		scn.FreepsPlayCard(hidden);

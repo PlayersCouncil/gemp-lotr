@@ -222,6 +222,7 @@ public class Card_01_193_Tests
 		scn.SkipToAssignments();
 		scn.FreepsAssignAndResolve(aragorn, balrog);
 		scn.AttachCardsTo(balrog, wall);
+		scn.FreepsRefreshDecision();
 		assertAttachedTo(wall, balrog);
 		// Each costs 1, and 0 with the discount.
 		scn.SetTwilight(0);
@@ -268,6 +269,7 @@ public class Card_01_193_Tests
 		scn.FreepsAssignAndResolve(aragorn, troll);
 		// The Chain goes down after the maneuver phase, whose end it answers.
 		scn.AttachCardsTo(troll, chain, wall);
+		scn.FreepsRefreshDecision();
 		assertAttachedTo(chain, troll);
 		assertAttachedTo(wall, troll);
 		// Enough to play either card back at full cost.

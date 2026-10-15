@@ -184,6 +184,7 @@ public class Card_07_188_Tests
 
 		// A Nazgul who is not [ringwraith].
 		scn.MoveMinionsToTable(attea);
+		scn.ShadowRefreshDecision();
 		scn.ShadowPlayCard(brute2);
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(brute2));
 		scn.ShadowAcceptOptionalTrigger();

@@ -282,6 +282,7 @@ public class Card_01_194_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(runner, troop, troll);
+		scn.FreepsRefreshDecision();
 		assertInHand(relentless, imitation);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 

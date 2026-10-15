@@ -132,6 +132,7 @@ public class Card_00_059_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(runner);
 		scn.AttachCardsTo(runner, scimitar);
+		scn.FreepsRefreshDecision();
 		assertInZone(Zone.HAND, erkenbrand);
 		assertAttachedTo(scimitar, runner);
 

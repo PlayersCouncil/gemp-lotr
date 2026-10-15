@@ -123,6 +123,11 @@ CHEAT = re.compile(r"\bscn\s*\.\s*(?:Move\w*To\w*|AttachCardsTo|StackCardsOn|Add
 # the cheats that end with one (SetHand, SetDrawDeck and MoveCardsToDiscard, with their twins and by-name variants).
 REFRESH = re.compile(r"Refresh(?:Decision|PendingPhaseActions)\s*\(|\bscn\s*\.\s*(?:Set(?:Freeps|Shadow)?(?:Hand|DrawDeck)|"
                      r"MoveCards(?:To|ToFreeps|ToShadow)Discard)\s*\(")
+# The cheats that move cards (into a hand, onto a deck, onto the table, onto a bearer or a stack), and a card's action
+# taken from a pending choice of actions or read as offered there (engine pass 50).
+MOVED = re.compile(r"\bscn\s*\.\s*(?:Move\w*To\w*|AttachCardsTo|StackCardsOn)\s*\(")
+TAKEN = re.compile(r"\bscn\s*\.\s*(Freeps|Shadow)(PlayCard|UseCardAction|TransferCard|DiscardToHeal)\s*\(|"
+                   r"\bassertTrue\s*\(\s*scn\s*\.\s*(Freeps|Shadow)(\w*(?:Action|Play|Transfer)\w*Available|AnyActionsAvailable)\s*\(")
 
 # How the R clause for a site left behind speaks: by the rule it stands on, or by where the fellowship then is.
 SITE_LEFT = re.compile(r"unless the fellowship is at that site|behind the fellowship|left behind|CR 4\.2 \"active\"|"
@@ -1309,6 +1314,24 @@ def lint_file(path: Path):
                     "between: a pending decision offers what it did before the cheat, so the reading shows the board as it "
                     "was (pitfalls, \"A board changed under a pending decision\")"
                     % (name, m.group(1) or m.group(3), m.group(2) or m.group(4), start + stale_at + 1, m.group(1) or m.group(3)))
+        # The same for a card's action TAKEN from that decision, or read as offered, after a cheat that moved cards (a
+        # hand, a deck, a zone): what was offered turned on where the cards lay as it was worked out, which after a
+        # skipper's draws is chance (Card_01_175_Tests and Card_04_346_Tests failed about one run in ten; engine pass 50).
+        moved_at = None
+        for n, line in enumerate(body):
+            m = TAKEN.search(line)
+            if m and moved_at is not None and not let_off(start + n):
+                side = m.group(1) or m.group(3)
+                add("warning", "stale", start + n, "%s: %s%s is taken from a decision worked out before the cheat on line %d, with "
+                    "no answer or %sRefreshDecision() between: whether it is offered turns on where the cards lay before "
+                    "the cheat (pitfalls, \"A board changed under a pending decision\")"
+                    % (name, side, m.group(2) or m.group(4), start + moved_at + 1, side))
+                moved_at = None
+            if MOVES_ON.search(line) or REFRESH.search(line):
+                moved_at = None
+                continue
+            if MOVED.search(line) and any(MOVES_ON.search(x) for x in body[:n]):
+                moved_at = n
         # The pool read straight after a helper's plain play (Q-0279: E2, the readings of a printed cost on the way to
         # something else come out; 68_12 and 18_12, dec-b17_89).  Not where the card's own text speaks of a cost, the
         # pool, roaming or a twilight number, which may be what the reading is for.

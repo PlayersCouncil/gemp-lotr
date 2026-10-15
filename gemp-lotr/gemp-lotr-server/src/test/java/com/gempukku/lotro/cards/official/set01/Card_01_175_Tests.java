@@ -242,6 +242,7 @@ public class Card_01_175_Tests
 		scn.StartGame();
 		scn.SkipToSite(5);
 		scn.MoveCardsToHand(boromir, gimli, bounder);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(5, scn.GetCurrentSiteNumber());
 		assertInZone(Zone.SUPPORT, domain);
@@ -283,6 +284,7 @@ public class Card_01_175_Tests
 		scn.SkipToSite(4);
 		scn.MoveCompanionsToTable(boromir);
 		scn.MoveCardsToHand(gimli);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(4, scn.GetCurrentSiteNumber());
 		assertEquals(0, scn.GetWoundsOn(frodo));

@@ -175,6 +175,7 @@ public class Card_04_324_Tests
 		scn.StartGame();
 		scn.SkipToOtherPlayersTurn();
 		scn.MoveCardsToHand(aragorn, sword1, sword2, sword3, p1sword1, p1sword2);
+		scn.ShadowRefreshDecision();
 
 		// The second player's fellowship is at site 1, the first player's Eastemnet Downs.
 		assertEquals(1, scn.ShadowGetSiteNumber());

@@ -107,6 +107,7 @@ public class Card_08_102_ErrataTests
 		assertEquals(9, scn.GetTwilightCost(troll));
 
 		scn.MoveCardsToSupportArea(grond);
+		scn.ShadowRefreshDecision();
 		assertEquals(8, scn.GetTwilightCost(troll));
 
 		scn.ShadowPlayCard(towers);
@@ -118,6 +119,7 @@ public class Card_08_102_ErrataTests
 		assertEquals(4, scn.GetTwilightCost(troll));
 
 		scn.MoveCardsToSupportArea(towers2);
+		scn.ShadowRefreshDecision();
 		// 6 [sauron] engines: limit -5
 		assertEquals(4, scn.GetTwilightCost(troll));
 
@@ -160,6 +162,7 @@ public class Card_08_102_ErrataTests
 		scn.FreepsPass();
 
 		scn.MoveMinionsToTable(troll2);
+		scn.ShadowRefreshDecision();
 		scn.ShadowPlayCard(troll);
 		// Only the copy that was played offers its trigger.
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(troll));

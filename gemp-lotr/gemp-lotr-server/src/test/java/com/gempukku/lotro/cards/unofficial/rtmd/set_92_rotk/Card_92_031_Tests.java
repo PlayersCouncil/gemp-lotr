@@ -127,6 +127,7 @@ public class Card_92_031_Tests
 		scn.StartGame();
 		// Blade Tip wounds its bearer at the start of each fellowship phase, so it goes on once this one has begun
 		scn.AttachCardsTo(aragorn, bladetip);
+		scn.FreepsRefreshDecision();
 
 		scn.FreepsUseCardAction(mod);
 		// Three Elf companions, of whom two exert; the Elf ally and the Man, each able to exert, are not among them

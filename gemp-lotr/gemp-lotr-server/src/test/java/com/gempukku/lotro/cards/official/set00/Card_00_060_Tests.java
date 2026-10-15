@@ -184,6 +184,7 @@ public class Card_00_060_Tests
 		scn.StartGame();
 		scn.AttachCardsTo(aragorn, defense);
 		scn.MoveMinionsToTable(runner);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(0, scn.GetBurdens());
 		assertEquals(0, scn.GetCultureTokensOn(hat));
@@ -250,6 +251,7 @@ public class Card_00_060_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(lemenya, nomad);
+		scn.FreepsRefreshDecision();
 		// Kept Safe holds 2 [shire] tokens of its own: a card that "here" must not reach.
 		scn.FreepsPlayCard(keptsafe);
 		scn.SetTwilight(10);

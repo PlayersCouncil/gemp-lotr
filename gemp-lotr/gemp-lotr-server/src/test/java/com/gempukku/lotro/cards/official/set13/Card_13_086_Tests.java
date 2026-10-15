@@ -112,6 +112,7 @@ public class Card_13_086_Tests
 		scn.AddTokensToCard(theirHeirs, 1);
 		scn.FreepsPass();
 		scn.MoveMinionsToTable(wind);
+		scn.ShadowRefreshDecision();
 
 		// 2 [gondor] tokens on a Free Peoples card and 2 [raider] tokens on a Shadow card: four.  The token on
 		// the card that is not active would make five.  No minion is an archer.

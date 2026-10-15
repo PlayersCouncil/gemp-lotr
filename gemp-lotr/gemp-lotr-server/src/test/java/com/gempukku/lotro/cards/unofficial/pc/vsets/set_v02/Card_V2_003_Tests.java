@@ -117,6 +117,7 @@ public class Card_V2_003_Tests
 		scn.StartGame();
 		// The Shadow player's own hand is empty throughout.
 		scn.MoveMinionsToTable(reaver, reaver2, brigand);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(4, scn.GetFreepsHandCount());
 		assertEquals(0, scn.GetShadowHandCount());

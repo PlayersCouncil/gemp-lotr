@@ -170,6 +170,7 @@ public class Card_19_030_ErrataTests
 
 		// A [shire] companion who is no Hobbit: limit 3.
 		scn.MoveCompanionsToTable(smeagol);
+		scn.FreepsRefreshDecision();
 		assertEquals(6, scn.GetStrength(pippin));
 
 		// Sam is played from hand: limit 4, and there are 4 tales.

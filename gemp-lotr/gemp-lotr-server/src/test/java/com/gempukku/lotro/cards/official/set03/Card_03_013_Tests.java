@@ -243,6 +243,7 @@ public class Card_03_013_Tests
 		// With no minion in play the game goes from the Shadow phase straight to regroup.
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.MoveMinionsToTable(troop);
+		scn.FreepsRefreshDecision();
 		scn.AddWoundsToChar(troop, 1);
 
 		assertEquals(0, scn.GetWoundsOn(elrond));

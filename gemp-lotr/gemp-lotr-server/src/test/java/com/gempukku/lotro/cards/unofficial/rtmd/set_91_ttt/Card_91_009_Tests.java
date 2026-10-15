@@ -181,6 +181,7 @@ public class Card_91_009_Tests
 		scn.StartGame();
 		scn.SkipToSite(2);
 		scn.MoveCardsToHand(savage);
+		scn.FreepsRefreshDecision();
 
 		// A companion, an ally and a minion are played on one board away from site 1
 		scn.FreepsPlayCard(gimli);

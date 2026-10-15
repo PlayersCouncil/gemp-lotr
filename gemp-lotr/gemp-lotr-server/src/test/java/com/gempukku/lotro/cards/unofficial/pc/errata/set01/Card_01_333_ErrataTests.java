@@ -187,6 +187,7 @@ public class Card_01_333_ErrataTests
 
 		// Every companion exhausted and one card in hand: it is discarded, with no choice between the two.
 		scn.MoveCardsToHand(fodder1);
+		scn.ShadowRefreshDecision();
 		scn.ShadowPlayCard(savage);
 		assertInZone(Zone.DISCARD, fodder1);
 		assertEquals(0, scn.GetFreepsHandCount());

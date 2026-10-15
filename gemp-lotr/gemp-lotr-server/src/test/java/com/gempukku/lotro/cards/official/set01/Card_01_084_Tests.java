@@ -97,6 +97,7 @@ public class Card_01_084_Tests
 		scn.StartGame();
 		var site = scn.GetCurrentSite();
 		scn.AttachCardsTo(site, arms);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(0, scn.GetWoundsOn(gandalf));
 		assertEquals(0, scn.GetWoundsOn(avenger));

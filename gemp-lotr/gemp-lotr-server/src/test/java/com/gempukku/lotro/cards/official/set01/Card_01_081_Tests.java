@@ -187,6 +187,7 @@ public class Card_01_081_Tests
 
 		scn.StartGame();
 		scn.MoveCardsToTopOfDeck(bow, aragorn, gimli, legolas);
+		scn.FreepsRefreshDecision();
 
 		scn.MarkGameLog();
 		scn.FreepsPlayCard(questions);

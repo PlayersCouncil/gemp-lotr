@@ -424,6 +424,7 @@ public class Card_V1_013_Tests
 
 		// The turns that were skipped drew the rest of the deck into hand.
 		scn.MoveCardsToTopOfDeck(elrond, orophin);
+		scn.FreepsRefreshDecision();
 
 		assertEquals("Ered Nimrais", scn.GetCurrentSite().getBlueprint().getTitle());
 		assertInZone(Zone.HAND, counsel, barliman);

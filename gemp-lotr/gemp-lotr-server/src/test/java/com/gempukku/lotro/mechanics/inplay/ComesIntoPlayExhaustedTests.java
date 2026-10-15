@@ -131,6 +131,7 @@ public class ComesIntoPlayExhaustedTests
 		scn.StartGame();
 		scn.SkipToSite(4);
 		scn.MoveMinionsToTable(uruk);
+		scn.FreepsRefreshDecision();
 		int shadowHand = scn.GetShadowHandCount();
 
 		scn.FreepsPlayCard(aragorn);

@@ -147,6 +147,7 @@ public class Card_01_320_Tests
 
 		scn.SkipToSite(2);
 		scn.MoveCardsToHand(gimli);
+		scn.FreepsRefreshDecision();
 
 		// Site 2, Ettenmoors, with East Road behind the fellowship.
 		assertEquals(2, scn.GetCurrentSiteNumber());

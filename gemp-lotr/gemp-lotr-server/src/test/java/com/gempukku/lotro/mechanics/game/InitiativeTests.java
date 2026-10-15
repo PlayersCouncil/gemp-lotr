@@ -122,6 +122,7 @@ public class InitiativeTests
 		// The Shadow hand is not what is counted: four cards there change nothing.
 		scn.MoveCardsToHand(scn.GetShadowCard("savage"), scn.GetShadowCard("runner"), scn.GetShadowCard("marksman"),
 				scn.GetShadowCard("brigand"));
+		scn.FreepsRefreshDecision();
 		assertEquals(4, scn.GetShadowHandCount());
 		assertTrue(scn.ShadowHasInitiative());
 		assertEquals(12, scn.GetStrength(soldier));

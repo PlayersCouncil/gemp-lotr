@@ -139,6 +139,7 @@ public class Card_01_301_Tests
 		scn.StartGame();
 		// From the top: Goblin Runner, Hobbit Sword, Sleep Caradhras, then Axe Strike.
 		scn.MoveCardsToTopOfDeck(axe, sleep, sword, runner);
+		scn.FreepsRefreshDecision();
 
 		assertInZone(Zone.DECK, runner, sword, sleep, axe);
 		assertSame(runner, scn.GetFreepsTopOfDeck());

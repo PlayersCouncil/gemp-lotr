@@ -151,6 +151,7 @@ public class Card_02_044_Tests
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
 		scn.MoveCardsToSupportArea(business);
+		scn.FreepsRefreshDecision();
 		assertInZone(Zone.SUPPORT, business);
 
 		// With it, the Elf exerts and nothing is shown.

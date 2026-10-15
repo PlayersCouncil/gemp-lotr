@@ -94,6 +94,7 @@ public class Card_04_019_Tests
 
 		// The Savage lies under the Brigand, which is the next card drawn.
 		scn.MoveCardsToTopOfDeck(savage, brigand);
+		scn.ShadowRefreshDecision();
 		int deck = scn.GetShadowDeckCount();
 		assertEquals(2, scn.GetShadowHandCount());
 		assertTrue(scn.ShadowPlayAvailable(hides));

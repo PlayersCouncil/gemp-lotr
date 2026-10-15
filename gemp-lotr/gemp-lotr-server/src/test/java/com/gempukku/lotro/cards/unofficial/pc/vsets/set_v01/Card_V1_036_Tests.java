@@ -179,6 +179,7 @@ public class Card_V1_036_Tests
 
 		// Two Orcs join it: one put there, one played so that the Shadow player is asked afresh.
 		scn.MoveMinionsToTable(troop);
+		scn.ShadowRefreshDecision();
 		scn.ShadowPlayCard(runner);
 		assertTrue(scn.ShadowPlayAvailable(spear));
 

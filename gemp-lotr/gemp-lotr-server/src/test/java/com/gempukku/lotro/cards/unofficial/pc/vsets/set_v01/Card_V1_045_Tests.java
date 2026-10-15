@@ -258,6 +258,7 @@ public class Card_V1_045_Tests
 		scn.AddBurdens(1);
 		scn.MoveMinionsToTable(soldier);
 		scn.AttachCardsTo(soldier, scimitar);
+		scn.FreepsRefreshDecision();
 
 		// A [moria] condition of the Shadow player's.
 		scn.FreepsPlayCard(introspection);

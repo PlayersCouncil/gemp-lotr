@@ -79,6 +79,7 @@ public class Card_11_067_Tests
 		scn.StartGame();
 		scn.AddBurdens(1);
 		scn.MoveMinionsToTable(archer);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(1, scn.GetBurdens());
 		assertEquals(9, scn.GetResistance(frodo));

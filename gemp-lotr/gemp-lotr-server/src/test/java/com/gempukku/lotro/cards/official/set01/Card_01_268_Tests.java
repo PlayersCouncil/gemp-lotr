@@ -198,6 +198,7 @@ public class Card_01_268_Tests
 		scn.FreepsPass();
 		// Put into play, not played: no offer.
 		scn.MoveMinionsToTable(inquisitor1);
+		scn.ShadowRefreshDecision();
 		assertInZone(Zone.SHADOW_CHARACTERS, inquisitor1);
 		assertEquals(2, scn.GetFreepsHandCount());
 

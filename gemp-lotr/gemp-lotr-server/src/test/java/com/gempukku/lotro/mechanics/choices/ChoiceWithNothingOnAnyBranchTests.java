@@ -333,6 +333,7 @@ public class ChoiceWithNothingOnAnyBranchTests
 		// One card in the Shadow player's deck, fewer than the 3 to be revealed.  Neither branch can be carried
 		// out in full, and one of them will show a card: the question is put, as it always was.
 		scn.MoveCardsToTopOfDeck(sword);
+		scn.FreepsRefreshDecision();
 		scn.FreepsPlayCard(halls2);
 
 		assertEquals(2, scn.GetWoundsOn(gimli));

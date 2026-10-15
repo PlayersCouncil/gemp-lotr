@@ -351,6 +351,7 @@ public class Card_01_036_ErrataTests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(troop);
+		scn.FreepsRefreshDecision();
 		scn.FreepsPlayCard(feet);
 		assertEquals(4, scn.FreepsGetTotalRevealedCardCount());
 

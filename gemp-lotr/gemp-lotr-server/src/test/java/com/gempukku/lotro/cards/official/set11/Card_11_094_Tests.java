@@ -144,6 +144,7 @@ public class Card_11_094_Tests
 		// A second Pavise already in play lowers the cost of none but itself.
 		scn.MoveMinionsToTable(footman);
 		scn.AttachCardsTo(footman, pavise2);
+		scn.FreepsRefreshDecision();
 
 		// A Free Peoples artifact, a Free Peoples condition and two Shadow possessions: none is counted.
 		assertEquals(3, scn.GetTwilightCost(pavise));

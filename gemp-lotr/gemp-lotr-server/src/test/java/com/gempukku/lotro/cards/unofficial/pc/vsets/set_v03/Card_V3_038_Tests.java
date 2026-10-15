@@ -605,6 +605,7 @@ public class Card_V3_038_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(savage1, runner);
+		scn.FreepsRefreshDecision();
 		scn.SetTwilight(20);
 
 		// A condition hindered by a Shadow card: Nor is He Early answers a character played and hinders itself.

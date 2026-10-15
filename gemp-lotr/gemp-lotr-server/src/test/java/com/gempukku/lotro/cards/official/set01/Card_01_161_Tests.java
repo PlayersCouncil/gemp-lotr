@@ -269,6 +269,7 @@ public class Card_01_161_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(savage);
+		scn.FreepsRefreshDecision();
 		assertInHand(wariness, imitation);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 

@@ -466,6 +466,7 @@ public class Card_92_028_Tests
 		// Player 2's own turn: a new turn, and he is now the Free Peoples player
 		scn.SkipToOtherPlayersTurn();
 		scn.MoveCardsToBottomOfDeck(shards);
+		scn.ShadowRefreshDecision();
 		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
 		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.ShadowActionAvailable(mod));

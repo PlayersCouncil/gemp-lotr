@@ -86,6 +86,7 @@ public class Card_02_018_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable("marksman1", "marksman2");
+		scn.FreepsRefreshDecision();
 
 		// An Elf who is an ally and a companion who is no Elf: no Elf companion to spot, and two archers count 2.
 		assertEquals(2, scn.GetShadowArcheryTotal());

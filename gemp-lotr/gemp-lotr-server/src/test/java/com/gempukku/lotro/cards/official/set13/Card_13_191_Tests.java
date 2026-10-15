@@ -106,6 +106,7 @@ public class Card_13_191_Tests
 		// A minion laid early, to read the standing text on him beside the companions (Q-0228).
 		scn.MoveMinionsToTable(troop);
 		scn.AttachCardsTo(troop, scimitar);
+		scn.FreepsRefreshDecision();
 
 		// A Free Peoples condition, a follower and a Shadow possession: 8 + 3
 		assertEquals(11, scn.GetStrength(aragorn));

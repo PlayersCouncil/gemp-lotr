@@ -219,6 +219,7 @@ public class Card_V1_029_Tests
 
 		// A third Free Peoples condition arrives. Playing the Uruk Savage is only there to have the game ask again.
 		scn.MoveCardsToSupportArea(wisdom);
+		scn.ShadowRefreshDecision();
 		scn.ShadowPlayCard(savage);
 		assertTrue(scn.ShadowActionAvailable(murder));
 

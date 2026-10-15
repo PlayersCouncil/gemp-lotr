@@ -193,6 +193,7 @@ public class Card_07_076_Tests
 		// The other player's site 5 lies next, as it does where he has played his next site himself.  Both
 		// players hold the same nine sites here, so the site that replaces it is its twin.
 		scn.MoveCardToAdventurePath(shadowSite5);
+		scn.FreepsRefreshDecision();
 		assertSame(shadowSite5, scn.GetSite(5));
 		assertInZone(Zone.ADVENTURE_DECK, site5);
 		assertEquals(0, scn.GetBurdens());

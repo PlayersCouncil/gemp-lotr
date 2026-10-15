@@ -289,6 +289,7 @@ public class Card_V1_026_Tests
 
 		// A second item, an artifact this time.  Playing the Uruk Savage is only there to have the game ask again.
 		scn.AttachCardsTo(aragorn, anduril);
+		scn.ShadowRefreshDecision();
 		scn.ShadowPlayCard(savage);
 		assertTrue(scn.ShadowActionAvailable(crows));
 

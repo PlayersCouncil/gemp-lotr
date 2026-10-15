@@ -378,6 +378,7 @@ public class Card_V3_070_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(mouth, savage);
+		scn.FreepsRefreshDecision();
 		scn.AddBurdens(1);
 		scn.SetTwilight(10);
 

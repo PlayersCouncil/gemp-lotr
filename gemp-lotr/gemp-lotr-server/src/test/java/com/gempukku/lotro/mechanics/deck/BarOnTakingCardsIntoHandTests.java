@@ -382,6 +382,7 @@ public class BarOnTakingCardsIntoHandTests
 
 		scn.StartGame();
 		scn.MoveCardsToTopOfDeck(deck1);
+		scn.FreepsRefreshDecision();
 
 		// From his discard pile: Barliman's cost is paid and the event stays where it lay.
 		assertTrue(scn.FreepsActionAvailable(barliman));

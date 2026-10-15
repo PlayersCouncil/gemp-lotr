@@ -136,6 +136,7 @@ public class Card_03_113_ErrataTests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(troop);
+		scn.FreepsRefreshDecision();
 		scn.AddBurdens(2);
 		scn.AddWoundsToChar(frodo, 2);
 		scn.AddWoundsToChar(sam, 2);
@@ -278,6 +279,7 @@ public class Card_03_113_ErrataTests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(troop);
+		scn.FreepsRefreshDecision();
 		scn.AddBurdens(1);
 		// Only an ally and a minion are wounded: no companion could be healed.
 		scn.AddWoundsToChar(bilbo, 1);

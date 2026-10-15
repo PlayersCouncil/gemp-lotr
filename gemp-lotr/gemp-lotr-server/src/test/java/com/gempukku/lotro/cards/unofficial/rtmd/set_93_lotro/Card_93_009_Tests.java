@@ -203,6 +203,7 @@ public class Card_93_009_Tests
 
 		// His companions are in his hand: the draw deck holds an ally, a minion and an event
 		scn.MoveCardsToHand(aragorn, boromir, gimli, legolas);
+		scn.FreepsRefreshDecision();
 		assertEquals(3, scn.GetFreepsDeckCount());
 		assertEquals(0, scn.GetTwilight());
 		int shuffles = scn.GetFreepsDeckShuffleCount();
@@ -271,6 +272,7 @@ public class Card_93_009_Tests
 		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
 		// The reconcile drew his whole deck into his hand: two companions are put back on it
 		scn.MoveCardsToTopOfDeck(boromir, gimli);
+		scn.ShadowRefreshDecision();
 		assertEquals(2, scn.GetShadowDeckCount());
 		assertEquals(0, scn.GetTwilight());
 		int shuffles = scn.GetShadowDeckShuffleCount();

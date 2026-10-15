@@ -85,6 +85,7 @@ public class Card_01_107_Tests
 		var marksman1 = scn.GetShadowCard("marksman1");
 		var marksman2 = scn.GetShadowCard("marksman2");
 		scn.MoveMinionsToTable(marksman1, marksman2);
+		scn.FreepsRefreshDecision();
 
 		// Two minion archers; Legolas is the one Free Peoples archer.
 		assertEquals(2, scn.GetShadowArcheryTotal());

@@ -287,6 +287,7 @@ public class Card_V3_035_Tests
 		scn.StartGame();
 		// The last one listed ends up on top: Athelas, Helm! Helm!, a Gondorian Knight, a Household Guard, and fifth the Blade.
 		scn.MoveCardsToTopOfDeck(blade, guard, knight2, helm, athelas);
+		scn.FreepsRefreshDecision();
 
 		int deck = scn.GetFreepsDeckCount();
 		int shuffles = scn.GetFreepsDeckShuffleCount();
@@ -436,6 +437,7 @@ public class Card_V3_035_Tests
 		scn.StartGame();
 		// From the top: Athelas, Helm! Helm!, Curse Their Foul Feet!, a Goblin Runner, and fifth the Blade of Gondor.
 		scn.MoveCardsToTopOfDeck(blade, runner, curse, helm, athelas);
+		scn.FreepsRefreshDecision();
 
 		int deck = scn.GetFreepsDeckCount();
 		int shuffles = scn.GetFreepsDeckShuffleCount();
@@ -490,6 +492,7 @@ public class Card_V3_035_Tests
 		scn.StartGame();
 		// From the top: Athelas, Helm! Helm!, Curse Their Foul Feet!, a Goblin Runner, and fifth the Blade of Gondor.
 		scn.MoveCardsToTopOfDeck(blade, runner, curse, helm, athelas);
+		scn.FreepsRefreshDecision();
 
 		int deck = scn.GetFreepsDeckCount();
 		int shuffles = scn.GetFreepsDeckShuffleCount();

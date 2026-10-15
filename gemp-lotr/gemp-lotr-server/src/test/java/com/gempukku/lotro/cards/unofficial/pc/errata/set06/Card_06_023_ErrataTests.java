@@ -215,6 +215,7 @@ public class Card_06_023_ErrataTests
 		// An archer with no ranged weapon, so that the Naith Longbow, which makes no archer, is what changes.
 		scn.ApplyAdHocModifier(new AddKeywordModifier(null, warband, null, Keyword.ARCHER));
 		scn.MoveMinionsToTable(troll);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(2, scn.GetFreepsArcheryTotal());
 		scn.FreepsPlayCard(longbow);

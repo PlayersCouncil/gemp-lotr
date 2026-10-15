@@ -181,6 +181,7 @@ public class Card_V2_013_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(lemenya);
 		scn.AttachCardsTo(lemenya, steed);
+		scn.FreepsRefreshDecision();
 
 		// Mounted companions: a [gondor] Man and a [rohan] Man.
 		assertTrue(scn.HasKeyword(aragorn, Keyword.VALIANT));

@@ -479,6 +479,7 @@ public class Card_V1_034_Tests
 		scn.StartGame();
 		// A tentacle in play: the Vile Tentacle, the one that is not discarded away from a marsh.
 		scn.MoveMinionsToTable(vile);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(4, scn.GetStackedCards(waters).size());
 		assertEquals(0, scn.GetShadowDiscardCount());

@@ -86,6 +86,7 @@ public class Card_03_103_ErrataTests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable("taskmaster");
+		scn.FreepsRefreshDecision();
 
 		assertEquals(0, scn.GetWoundsOn(gimli));
 		scn.FreepsUseCardAction(gimli);
@@ -115,6 +116,7 @@ public class Card_03_103_ErrataTests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable("taskmaster");
+		scn.FreepsRefreshDecision();
 
 		assertEquals(0, scn.GetWoundsOn(elrond));
 		scn.FreepsUseCardAction(elrond);
@@ -198,6 +200,7 @@ public class Card_03_103_ErrataTests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(taskmaster);
+		scn.FreepsRefreshDecision();
 
 		// The pipe's ability exerts Gimli, a companion, but it is the possession's ability.
 		scn.FreepsUseCardAction(pipe);
@@ -250,6 +253,7 @@ public class Card_03_103_ErrataTests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable("troop");
+		scn.FreepsRefreshDecision();
 
 		// Only a [moria] minion: no [sauron] card to spot, and the event cannot spot itself.
 		scn.FreepsUseCardAction(elrond);
@@ -259,6 +263,7 @@ public class Card_03_103_ErrataTests
 
 		// A [sauron] condition and no [sauron] minion.
 		scn.MoveCardsToSupportArea(cruelty);
+		scn.FreepsRefreshDecision();
 		scn.FreepsUseCardAction(elrond);
 		assertEquals(2, scn.GetWoundsOn(elrond));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(dawn));
@@ -285,6 +290,7 @@ public class Card_03_103_ErrataTests
 		scn.StartGame();
 		scn.MoveAlliesToTable(elrond);
 		scn.MoveMinionsToTable("taskmaster");
+		scn.FreepsRefreshDecision();
 
 		scn.FreepsUseCardAction(gimli);
 		scn.ShadowChooseOptionalTrigger(dawn);
@@ -318,6 +324,7 @@ public class Card_03_103_ErrataTests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable("taskmaster");
+		scn.FreepsRefreshDecision();
 
 		scn.FreepsUseCardAction(gimli);
 		scn.ShadowChooseOptionalTrigger(dawn);

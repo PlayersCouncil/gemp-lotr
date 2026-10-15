@@ -512,6 +512,7 @@ public class Card_V2_051_Tests
 		scn.MoveMinionsToTable(troop);
 		scn.SkipToPhase(Phase.ARCHERY);
 		scn.MoveCardsToTopOfDeck(javelin);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(javelin, scn.GetFreepsTopOfDeck());
 		assertEquals(0, scn.GetCultureTokensOn(wrath));

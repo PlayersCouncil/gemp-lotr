@@ -234,6 +234,7 @@ public class Card_V3_046_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(helmsman);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(0, scn.GetWoundsOn(helmsman));
 		assertFalse(scn.IsHindered(helmsman));

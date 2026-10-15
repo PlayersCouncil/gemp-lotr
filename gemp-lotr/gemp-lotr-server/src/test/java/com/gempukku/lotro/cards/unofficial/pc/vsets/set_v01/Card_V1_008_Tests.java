@@ -194,6 +194,7 @@ public class Card_V1_008_Tests
 
 		// Gimli goes to my dead pile.  The game only looks again after an action, so Aragorn is played.
 		scn.MoveCardsToDeadPile(gimli);
+		scn.FreepsRefreshDecision();
 		scn.FreepsPlayCard(aragorn);
 		assertTrue(scn.FreepsPlayAvailable(lament));
 		assertInHand(lament);

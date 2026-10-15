@@ -365,6 +365,7 @@ public class Card_09_033_Tests
 		// An artifact that another companion bears (put on after the start of the turn, where its own
 		// trigger would have been offered).
 		scn.AttachCardsTo(aragorn, barahir);
+		scn.FreepsRefreshDecision();
 
 		// Frodo bears The One Ring, Aragorn an artifact, Isildur only his Armor: nobody is stronger.
 		assertEquals(6, scn.GetStrength(knight));

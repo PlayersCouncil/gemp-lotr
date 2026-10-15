@@ -283,6 +283,7 @@ public class Card_01_207_Tests
 
 		scn.StartGame();
 		scn.MoveCardsToSupportArea(breath);
+		scn.FreepsRefreshDecision();
 		scn.AddWoundsToChar(aragorn, 2);
 		scn.AddWoundsToChar(boromir, 1);
 		scn.AddWoundsToChar(frodo, 1);

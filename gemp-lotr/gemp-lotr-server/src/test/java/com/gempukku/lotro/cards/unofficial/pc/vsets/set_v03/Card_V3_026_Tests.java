@@ -99,6 +99,7 @@ public class Card_V3_026_Tests
 		// A Man of the Shadow's: on the table beside this condition only when an effect plays it outside the
 		// fellowship phase, so he is put there by the rig.
 		scn.MoveMinionsToTable(grima);
+		scn.FreepsRefreshDecision();
 		scn.AddWoundsToChar(aragorn, 2);
 		scn.AddWoundsToChar(eomer, 1);
 		scn.AddWoundsToChar(ithilien, 1);

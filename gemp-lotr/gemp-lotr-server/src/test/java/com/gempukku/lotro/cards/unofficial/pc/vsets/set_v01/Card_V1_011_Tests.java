@@ -120,6 +120,7 @@ public class Card_V1_011_Tests
 		// anything to stack but the two put there.
 		scn.MoveCardsToTopOfDeck(scn.GetFreepsCard("troop1"), scn.GetFreepsCard("troop2"),
 				scn.GetFreepsCard("savage"), scn.GetFreepsCard("runner"));
+		scn.FreepsRefreshDecision();
 		var deck = scn.GetFreepsDeckCount();
 
 		assertEquals(0, scn.GetStackedCards(library).size());
@@ -254,6 +255,7 @@ public class Card_V1_011_Tests
 		// A tale arrives in hand.  The game only works out what is on offer when it next asks, so a condition is
 		// played to make it ask again.
 		scn.MoveCardsToHand(redbook);
+		scn.FreepsRefreshDecision();
 		scn.FreepsPlayCard(lordOfMoria2);
 
 		assertTrue(scn.FreepsActionAvailable("Stack your tale or artifact from hand"));

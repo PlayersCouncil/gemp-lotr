@@ -230,6 +230,7 @@ public class Card_01_087_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(troop);
+		scn.FreepsRefreshDecision();
 
 		assertInZone(Zone.DECK, barliman);
 		assertTrue(scn.FreepsPlayAvailable(late));

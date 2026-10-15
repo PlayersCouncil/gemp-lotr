@@ -134,6 +134,7 @@ public class Card_15_062_Tests
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		// A minion at its own site number is not roaming.
 		scn.MoveMinionsToTable(nelya);
+		scn.ShadowRefreshDecision();
 		assertFalse(scn.HasKeyword(nelya, Keyword.ROAMING));
 		assertEquals(10, scn.GetStrength(aragorn));     // 8 + 2
 		assertEquals(8, scn.GetStrength(knight1));      // 6 + 2

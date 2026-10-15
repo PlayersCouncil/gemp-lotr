@@ -107,6 +107,7 @@ public class Card_04_335_Tests
 		scn.FreepsPass();
 		assertSame(camp, scn.GetCurrentSite());
 		scn.MoveMinionsToTable(fighter);
+		scn.ShadowRefreshDecision();
 		assertEquals(0, scn.GetWoundsOn(fighter));
 
 		// An [isengard] Orc, of the Fighter's culture: no exertion for it, nor for the Uruk-hai beside it.

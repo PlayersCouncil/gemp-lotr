@@ -131,6 +131,7 @@ public class Card_15_050_Tests
 
 		scn.StartGame();
 		scn.MoveCardsToHand(shadowHerbs, shadowDoom);
+		scn.FreepsRefreshDecision();
 
 		assertInZone(Zone.DECK, nicefish, doom, called, boat, notthistime);
 		assertEquals(2, scn.GetShadowHandCount());
@@ -174,6 +175,7 @@ public class Card_15_050_Tests
 
 		scn.StartGame();
 		scn.MoveCardsToHand(shadowHand);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(5, scn.GetShadowHandCount());
 		int shadowDeck = scn.GetShadowDeckCount();
@@ -221,6 +223,7 @@ public class Card_15_050_Tests
 
 		scn.StartGame();
 		scn.MoveCardsToHand(shadowHerbs, shadowDoom);
+		scn.FreepsRefreshDecision();
 		assertEquals(2, scn.GetShadowHandCount());
 		int shadowDeck = scn.GetShadowDeckCount();
 

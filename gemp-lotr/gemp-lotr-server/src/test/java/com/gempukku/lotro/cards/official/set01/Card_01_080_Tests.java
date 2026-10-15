@@ -126,6 +126,7 @@ public class Card_01_080_Tests
 		scn.StartGame();
 		// The Goblin Marksman is the top card of the deck, then the Uruk Savage, Gimli and Aragorn.
 		scn.MoveCardsToTopOfDeck(aragorn, gimli, savage, marksman);
+		scn.FreepsRefreshDecision();
 
 		int deck = scn.GetFreepsDeckCount();
 		int shadowDeck = scn.GetShadowDeckCount();
@@ -178,6 +179,7 @@ public class Card_01_080_Tests
 
 		scn.StartGame();
 		scn.MoveCardsToTopOfDeck(savage, marksman);
+		scn.FreepsRefreshDecision();
 
 		int deck = scn.GetFreepsDeckCount();
 		assertEquals(0, scn.GetWoundsOn(ottar));
@@ -211,6 +213,7 @@ public class Card_01_080_Tests
 
 		scn.StartGame();
 		scn.MoveCardsToTopOfDeck(marksman);
+		scn.FreepsRefreshDecision();
 
 		int deck = scn.GetFreepsDeckCount();
 		assertEquals(0, scn.GetWoundsOn(ottar));

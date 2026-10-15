@@ -108,6 +108,7 @@ public class Card_12_034_Tests
 		// The next site already lies ahead, as a card that plays the fellowship's next site would lay it: Nurn,
 		// site 4, in region 2.
 		scn.MoveCardToAdventurePath(nurn);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(3, scn.GetCurrentSiteNumber());
 		assertSame(glade, scn.GetSite(1));

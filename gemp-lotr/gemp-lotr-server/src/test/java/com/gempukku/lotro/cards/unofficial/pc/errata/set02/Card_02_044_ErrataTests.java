@@ -160,6 +160,7 @@ public class Card_02_044_ErrataTests
 		// 3 printed + 1 more, no [isengard] minion to spot.
 		assertEquals(4, scn.GetTwilightCost(business));
 		scn.MoveMinionsToTable(servant);
+		scn.ShadowRefreshDecision();
 		// 3 printed + 1 more - 3.
 		assertEquals(1, scn.GetTwilightCost(business));
 		int twilight = scn.GetTwilight();
@@ -195,6 +196,7 @@ public class Card_02_044_ErrataTests
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
 		scn.MoveCardsToSupportArea(business);
+		scn.FreepsRefreshDecision();
 
 		// With it, the curse is still played and its cost paid, and nothing is shown.
 		assertTrue(scn.FreepsPlayAvailable(curse2));
@@ -241,6 +243,7 @@ public class Card_02_044_ErrataTests
 		scn.ShadowPass();
 
 		scn.MoveCardsToSupportArea(business);
+		scn.FreepsRefreshDecision();
 		assertInZone(Zone.SUPPORT, business);
 
 		// With it, the Mirror is still used and its cost paid, and nothing is looked at or discarded.

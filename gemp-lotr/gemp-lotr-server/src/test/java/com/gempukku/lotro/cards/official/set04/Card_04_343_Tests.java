@@ -79,6 +79,7 @@ public class Card_04_343_Tests
 		scn.StartGame();
 		scn.SkipToSite(4);
 		scn.MoveCardsToHand(gimli, bounder, sword);
+		scn.FreepsRefreshDecision();
 
 		assertEquals("Ered Nimrais", scn.GetCurrentSite().getBlueprint().getTitle());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
@@ -143,6 +144,7 @@ public class Card_04_343_Tests
 		// Player 1's fellowship has moved on to site 5; player 2's comes to his turn at site 4.
 		scn.SkipToOtherPlayersTurn();
 		scn.MoveCardsToHand(shadowGimli);
+		scn.ShadowRefreshDecision();
 
 		assertEquals(4, scn.GetCurrentSiteNumber());
 		assertEquals("Ered Nimrais", scn.GetCurrentSite().getBlueprint().getTitle());
@@ -174,6 +176,7 @@ public class Card_04_343_Tests
 
 		scn.SkipToSite(5);
 		scn.MoveCardsToHand(gimli);
+		scn.FreepsRefreshDecision();
 
 		// Site 5, Deeping Wall, with Ered Nimrais behind the fellowship.
 		assertEquals(5, scn.GetCurrentSiteNumber());

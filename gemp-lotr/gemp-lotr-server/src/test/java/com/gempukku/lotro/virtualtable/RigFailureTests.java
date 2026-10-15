@@ -321,6 +321,7 @@ public class RigFailureTests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(runner, troop);
+		scn.FreepsRefreshDecision();
 
 		// Cards the game shows, from the discard pile: answered by their places in the showing, not by card id.
 		scn.FreepsUseCardAction(barliman);
@@ -452,6 +453,7 @@ public class RigFailureTests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(runner);
+		scn.FreepsRefreshDecision();
 
 		String notActions = " was to accept an optional trigger, but the decision in front of that player is not a choice of actions.";
 
@@ -515,6 +517,7 @@ public class RigFailureTests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(runner, troop);
+		scn.FreepsRefreshDecision();
 
 		// Cards where they lie, of which none need be chosen: "discard up to 3 cards from hand".  No card is
 		// discarded and none drawn; Ottar's exertion, the cost, is paid.

@@ -113,6 +113,7 @@ public class Card_12_026_Tests
 		scn.StartGame();
 		// From the top: Axe Strike, Battle Fury, Cleaving Blow.
 		scn.MoveCardsToTopOfDeck(blow, fury, strike);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(strike, scn.GetFromTopOfFreepsDeck(1));
 		assertEquals(fury, scn.GetFromTopOfFreepsDeck(2));
@@ -166,6 +167,7 @@ public class Card_12_026_Tests
 
 		scn.StartGame();
 		scn.MoveCardsToTopOfDeck(blow, fury, strike);
+		scn.FreepsRefreshDecision();
 
 		scn.FreepsPlayCard(discoveries);
 		scn.FreepsDeclineChoosing();
@@ -201,6 +203,7 @@ public class Card_12_026_Tests
 		scn.StartGame();
 		// From the top: Axe Strike, Battle Fury, Cleaving Blow.
 		scn.MoveCardsToTopOfDeck(blow, fury, strike);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(0, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(discoveries));

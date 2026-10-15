@@ -479,6 +479,7 @@ public class Card_V3_002_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(troop);
+		scn.FreepsRefreshDecision();
 
 		// Jetsam is the only pipeweed, so it is the one discarded.
 		scn.FreepsUseCardAction(gpipe);

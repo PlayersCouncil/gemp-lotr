@@ -173,6 +173,7 @@ public class Card_01_134_Tests
 		var site3 = scn.GetSite(3);
 		assertEquals(3, scn.GetCurrentSiteNumber());
 		scn.AttachCardsTo(site2, snows);
+		scn.ShadowRefreshDecision();
 		assertAttachedTo(snows, site2);
 		assertEquals(0, scn.GetWoundsOn(raiders));
 		assertEquals(0, scn.GetWoundsOn(servant));

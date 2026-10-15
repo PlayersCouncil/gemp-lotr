@@ -220,6 +220,7 @@ public class Card_V2_077_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(runner);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(0, scn.GetWoundsOn(gandalf));
 		scn.FreepsPlayCard(sleep1);

@@ -386,6 +386,7 @@ public class Card_V3_119_Tests
 		var runner1 = scn.GetShadowCard("runner1");
 		var runner2 = scn.GetShadowCard("runner2");
 		scn.MoveMinionsToTable(runner1, runner2);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(3, scn.GetStrength(merry));
 		assertEquals(8, scn.GetStrength(aragorn));

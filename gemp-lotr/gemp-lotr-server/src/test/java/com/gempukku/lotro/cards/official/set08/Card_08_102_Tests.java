@@ -129,6 +129,7 @@ public class Card_08_102_Tests
 		assertEquals(9, scn.GetTwilightCost(troll2));
 
 		scn.MoveCardsToSupportArea(grond);
+		scn.ShadowRefreshDecision();
 		// One engine, a possession.  Each copy in hand is 1 less, not 2: "this minion" does not reach the other.
 		assertEquals(8, scn.GetTwilightCost(troll));
 		assertEquals(8, scn.GetTwilightCost(troll2));
@@ -180,6 +181,7 @@ public class Card_08_102_Tests
 
 		assertTrue(scn.AwaitingShadowPhaseActions());
 		scn.MoveMinionsToTable(troll2);
+		scn.ShadowRefreshDecision();
 		// 9 - 1 engine; no roaming at site 5.
 		int before = scn.GetTwilight();
 		scn.ShadowPlayCard(troll);

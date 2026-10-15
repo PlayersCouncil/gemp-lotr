@@ -130,6 +130,7 @@ public class Card_10_028_Tests
 		// The turns on the way drew the small deck into the hands: these go back.
 		scn.MoveCardsToTopOfDeck(armor, shards, bowmen, valor, knight, dwarvenArmor, fear);
 		scn.MoveCardsToTopOfDeck(scn.GetShadowCard("knight"), scn.GetShadowCard("valor"));
+		scn.FreepsRefreshDecision();
 
 		assertEquals(3, scn.GetCurrentSiteNumber());
 		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.SANCTUARY));
@@ -195,6 +196,7 @@ public class Card_10_028_Tests
 		scn.SkipToSite(3);
 		scn.MoveCardsToTopOfDeck(armor, bowmen, valor);
 		scn.MoveCardsToTopOfDeck(scn.GetShadowCard("knight"), scn.GetShadowCard("valor"));
+		scn.FreepsRefreshDecision();
 
 		assertEquals(0, scn.GetFreepsHandCount());
 		assertEquals(3, scn.GetFreepsDeckCount());
@@ -281,6 +283,7 @@ public class Card_10_028_Tests
 		// through and shuffled, and the opponent may still draw.
 		scn.MoveCardsToTopOfDeck(dwarvenArmor, fear);
 		scn.MoveCardsToTopOfDeck(scn.GetShadowCard("knight"), scn.GetShadowCard("valor"));
+		scn.FreepsRefreshDecision();
 		int hand = scn.GetFreepsHandCount();
 		assertEquals(2, scn.GetFreepsDeckCount());
 		int shuffles = scn.GetFreepsDeckShuffleCount();

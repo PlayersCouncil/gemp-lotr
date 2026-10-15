@@ -166,6 +166,7 @@ public class Card_V3_004_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(agents, agents2, stalker);
+		scn.FreepsRefreshDecision();
 
 		// Four cultures: [shire] (Frodo, The Gaffer), [gondor] (Aragorn), [dwarven] (Gimli), [gandalf] (this card).
 		assertEquals(4, scn.GetFreepsCultureCount());

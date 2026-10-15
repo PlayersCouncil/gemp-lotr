@@ -235,6 +235,7 @@ public class Card_01_275_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(orcscout);
+		scn.FreepsRefreshDecision();
 		assertInHand(imitation);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 

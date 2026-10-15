@@ -99,6 +99,7 @@ public class Card_04_092_Tests
 		scn.StartGame();
 		var site = scn.GetCurrentSite();
 		scn.AttachCardsTo(site, arms, spies);
+		scn.FreepsRefreshDecision();
 
 		assertInZone(Zone.SUPPORT, stairs, pinned, shadowStairs, freepsPinned);
 		assertAttachedTo(saga, aragorn);

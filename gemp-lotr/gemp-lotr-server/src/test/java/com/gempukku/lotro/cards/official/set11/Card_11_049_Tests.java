@@ -268,6 +268,7 @@ public class Card_11_049_Tests
 		// The other player's Balin's Tomb lies at site 4, as it does where he has played his next site himself.
 		// Both players hold the same nine sites here, so the site that replaces it is its twin.
 		scn.MoveCardToAdventurePath(shadowSite4);
+		scn.FreepsRefreshDecision();
 
 		assertSame(shadowSite4, scn.GetSite(4));
 		assertInZone(Zone.ADVENTURE_DECK, site4);

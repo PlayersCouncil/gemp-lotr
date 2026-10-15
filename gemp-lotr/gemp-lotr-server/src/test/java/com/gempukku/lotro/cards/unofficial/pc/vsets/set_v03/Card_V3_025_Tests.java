@@ -101,6 +101,7 @@ public class Card_V3_025_Tests
 		scn.StartGame();
 		// A minion on the table in the fellowship phase, so that only the phase keeps the ability back.
 		scn.MoveMinionsToTable(troop);
+		scn.FreepsRefreshDecision();
 
 		assertTrue(scn.FreepsPlayAvailable(gate1));
 
@@ -289,6 +290,7 @@ public class Card_V3_025_Tests
 
 		// A second unbound knight arrives, and another action is taken so that the game asks afresh.
 		scn.MoveCompanionsToTable(knight2);
+		scn.FreepsRefreshDecision();
 		scn.FreepsUseCardAction(aragorn);
 		scn.ShadowPass();
 

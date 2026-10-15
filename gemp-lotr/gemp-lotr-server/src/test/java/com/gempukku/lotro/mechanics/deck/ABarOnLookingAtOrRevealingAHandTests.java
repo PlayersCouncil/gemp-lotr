@@ -127,6 +127,7 @@ public class ABarOnLookingAtOrRevealingAHandTests
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
 		scn.MoveCardsToSupportArea(business);
+		scn.FreepsRefreshDecision();
 		assertInZone(Zone.SUPPORT, business);
 
 		// Under it, the curse is still played and its cost paid, and nothing is shown.
@@ -173,6 +174,7 @@ public class ABarOnLookingAtOrRevealingAHandTests
 		assertTrue(scn.AwaitingShadowPhaseActions());
 
 		scn.MoveAlliesToTable(erland);
+		scn.ShadowRefreshDecision();
 		assertInZone(Zone.SUPPORT, erland);
 
 		// Under it, the other Goblin Man is still offered and exerts, and nothing is shown.
@@ -221,6 +223,7 @@ public class ABarOnLookingAtOrRevealingAHandTests
 
 		scn.ShadowPass();
 		scn.MoveCardsToSupportArea(business);
+		scn.FreepsRefreshDecision();
 		assertInZone(Zone.SUPPORT, business);
 
 		// Under it, the Mirror is still used and its cost paid, and nothing is looked at or discarded.
@@ -264,6 +267,7 @@ public class ABarOnLookingAtOrRevealingAHandTests
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
 		scn.MoveCardsToSupportArea(business);
+		scn.FreepsRefreshDecision();
 		assertInZone(Zone.SUPPORT, business);
 
 		// Under it, the event is still played and paid for, and nothing is shown.

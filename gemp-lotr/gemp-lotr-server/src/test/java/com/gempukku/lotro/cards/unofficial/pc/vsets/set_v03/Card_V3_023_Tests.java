@@ -495,6 +495,7 @@ public class Card_V3_023_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(taskmaster1, taskmaster2);
 		scn.AttachCardsTo(taskmaster2, enraged);
+		scn.FreepsRefreshDecision();
 		scn.SetTwilight(10);
 
 		// A Free Peoples condition in the support area: Confronting the Eye adds (2).

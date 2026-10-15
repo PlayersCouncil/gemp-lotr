@@ -125,6 +125,7 @@ public class Card_04_304_ErrataTests
 		scn.StartGame();
 		scn.SkipToSite(2);
 		scn.MoveCardsToHand(getaway);
+		scn.FreepsRefreshDecision();
 
 		var site2 = scn.GetSite(2);
 		var site3 = scn.GetFreepsSite(3);

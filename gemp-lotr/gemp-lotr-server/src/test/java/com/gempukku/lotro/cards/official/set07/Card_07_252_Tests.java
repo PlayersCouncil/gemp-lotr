@@ -91,6 +91,7 @@ public class Card_07_252_Tests
 		scn.StartGame();
 		scn.SkipToSite(4);
 		scn.MoveCardsToHand(arms);
+		scn.FreepsRefreshDecision();
 
 		var site4 = scn.GetSite(4);
 		assertEquals(4, scn.GetCurrentSiteNumber());
@@ -124,6 +125,7 @@ public class Card_07_252_Tests
 		scn.StartGame();
 		scn.SkipToSite(4);
 		scn.MoveCardsToHand(arms);
+		scn.FreepsRefreshDecision();
 
 		var site3 = scn.GetSite(3);
 		assertEquals(4, scn.GetCurrentSiteNumber());

@@ -183,6 +183,7 @@ public class Card_01_082_Tests
 
 		scn.StartGame();
 		scn.MoveCardsToTopOfDeck(gimli, legolas);
+		scn.FreepsRefreshDecision();
 
 		assertInZone(Zone.DECK, legolas, gimli);
 		scn.MarkGameLog();

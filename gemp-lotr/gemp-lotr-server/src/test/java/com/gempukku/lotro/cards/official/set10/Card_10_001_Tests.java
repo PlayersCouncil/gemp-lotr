@@ -100,6 +100,7 @@ public class Card_10_001_Tests
 		scn.SetTwilight(20);
 		scn.FreepsPass();
 		scn.MoveMinionsToTable(patrol);
+		scn.ShadowRefreshDecision();
 
 		// A Shadow card that is no minion is played: nothing is offered.
 		scn.ShadowPlayCard(fear);
@@ -201,6 +202,7 @@ public class Card_10_001_Tests
 
 		// The same Dwarf with a damage bonus is the Dwarf the event wants.
 		scn.AttachCardsTo(guard, ring);
+		scn.ShadowRefreshDecision();
 		scn.ShadowPlayCard(gollum);
 		assertTrue(scn.FreepsPlayAvailable(great));
 		scn.FreepsPlayCard(great);

@@ -102,6 +102,7 @@ public class Card_15_022_Tests
 		scn.StartGame();
 		// The draw deck from the top: Goblin Runner, Hobbit Sword, Axe Strike, Cleaving Blow, and three more.
 		scn.MoveCardsToTopOfDeck(blow, axe, sword, runner);
+		scn.FreepsRefreshDecision();
 		assertEquals(7, scn.GetFreepsDeckCount());
 		assertEquals(0, scn.GetFreepsHandCount());
 		assertEquals(0, scn.GetWoundsOn(legolas));
@@ -172,6 +173,7 @@ public class Card_15_022_Tests
 		scn.StartGame();
 		// The draw deck from the top: Goblin Runner, Hobbit Sword, Axe Strike, Cleaving Blow.
 		scn.MoveCardsToTopOfDeck(blow, axe, sword, runner);
+		scn.FreepsRefreshDecision();
 		assertEquals(0, scn.GetThreats());
 		assertEquals(0, scn.GetFreepsHandCount());
 
@@ -225,6 +227,7 @@ public class Card_15_022_Tests
 		scn.StartGame();
 		// The draw deck from the top: three Shadow cards, then Cleaving Blow.
 		scn.MoveCardsToTopOfDeck(blow, troop, scimitar, runner);
+		scn.FreepsRefreshDecision();
 		assertEquals(7, scn.GetFreepsDeckCount());
 		assertEquals(0, scn.GetThreats());
 
@@ -288,6 +291,7 @@ public class Card_15_022_Tests
 		scn.StartGame();
 		// The draw deck from the top: Goblin Runner, Hobbit Sword, Axe Strike, Cleaving Blow.
 		scn.MoveCardsToTopOfDeck(blow, axe, sword, runner);
+		scn.FreepsRefreshDecision();
 
 		scn.FreepsUseCardAction(elrond);
 		scn.MarkGameLog();

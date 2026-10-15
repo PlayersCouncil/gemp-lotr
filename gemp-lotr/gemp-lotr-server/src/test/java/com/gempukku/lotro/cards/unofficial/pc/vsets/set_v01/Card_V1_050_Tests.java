@@ -174,6 +174,7 @@ public class Card_V1_050_Tests
 
 		// The turns played on the way have drawn the deck into hand.
 		scn.MoveCardsToTopOfDeck(sword, pipe, coat);
+		scn.FreepsRefreshDecision();
 		int twilight = scn.GetTwilight();
 
 		scn.FreepsUseCardAction(bilbo);

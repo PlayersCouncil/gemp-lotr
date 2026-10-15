@@ -116,6 +116,7 @@ public class Card_02_084_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(nelya);
+		scn.FreepsRefreshDecision();
 		scn.AddWoundsToChar(frodo, 1);
 
 		assertEquals(0, scn.GetBurdens());

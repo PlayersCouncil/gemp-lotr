@@ -134,6 +134,7 @@ public class Card_05_001_Tests
 		scn.StartGame();
 		scn.FreepsPass();
 		scn.MoveMinionsToTable(inPlay);
+		scn.ShadowRefreshDecision();
 		assertEquals(3, scn.GetTwilight());
 		assertEquals(3, scn.GetFreepsHandCount());
 		assertEquals(0, scn.GetFreepsDiscardCount());
@@ -204,6 +205,7 @@ public class Card_05_001_Tests
 		scn.SetTwilight(1);
 		scn.FreepsPass();
 		scn.MoveMinionsToTable(rampager);
+		scn.ShadowRefreshDecision();
 		assertEquals(4, scn.GetTwilight());
 
 		// 2 to play + 2 roaming (site number 3, at site 2)

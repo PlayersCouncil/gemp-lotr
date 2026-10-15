@@ -344,6 +344,7 @@ public class Card_V3_082_Tests
 		scn.FreepsAssignAndResolve(rider, savage);
 		// Put down here, past the Shadow phase its own trigger answers: an artifact of cost 0.
 		scn.MoveCardsToSupportArea(stone);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(5, scn.GetStrength(rider));
 

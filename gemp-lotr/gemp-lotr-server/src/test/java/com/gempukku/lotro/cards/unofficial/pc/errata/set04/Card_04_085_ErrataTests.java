@@ -153,6 +153,7 @@ public class Card_04_085_ErrataTests
 		scn.SkipToPhase(Phase.REGROUP);
 		// A minion in play cannot be chosen either.
 		scn.MoveMinionsToTable(troop3);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(0, scn.GetWoundsOn(thandronen));
 		assertTrue(scn.FreepsActionAvailable(thandronen));

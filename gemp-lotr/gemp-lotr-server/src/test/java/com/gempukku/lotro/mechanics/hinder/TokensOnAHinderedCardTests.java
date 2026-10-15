@@ -512,6 +512,7 @@ public class TokensOnAHinderedCardTests
 		// The top five cards of the Shadow player's draw deck: two Free Peoples cards and three Shadow cards.
 		scn.MoveCardsToTopOfDeck(scn.GetShadowCard("sam"), scn.GetShadowCard("gimli"),
 				scn.GetShadowCard("whelp"), scn.GetShadowCard("uruk"), scn.GetShadowCard("champion"));
+		scn.FreepsRefreshDecision();
 
 		assertEquals(0, scn.GetThreats());
 		scn.FreepsPlayCard(knowledge1);
@@ -537,6 +538,7 @@ public class TokensOnAHinderedCardTests
 		scn.HinderCard(heirs, garrison);
 		scn.MoveCardsToTopOfDeck(scn.GetShadowCard("sam"), scn.GetShadowCard("gimli"),
 				scn.GetShadowCard("elrond"), scn.GetShadowCard("ranger"), scn.GetShadowCard("whelp"));
+		scn.FreepsRefreshDecision();
 		scn.FreepsPlayCard(knowledge2);
 		scn.DismissRevealedCards();
 		assertEquals(4, scn.GetThreats());

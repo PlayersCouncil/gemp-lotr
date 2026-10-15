@@ -106,6 +106,7 @@ public class Card_V2_071_Tests
 		scn.AttachCardsTo(gimli, armor);
 		scn.MoveAlliesToTable(gaffer);
 		scn.MoveMinionsToTable(troop, savage);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(0, scn.GetKeywordCount(frodo, Keyword.DAMAGE));
 		assertEquals(0, scn.GetKeywordCount(aragorn, Keyword.DAMAGE));

@@ -174,6 +174,7 @@ public class Card_01_110_Tests
 		// The other player's site 4 lies next, as where he has played his next site himself.  Both players hold
 		// the same nine sites here, so the site that replaces it is its twin (Q-0226).
 		scn.MoveCardToAdventurePath(shadowSite4);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(3, scn.GetCurrentSiteNumber());
 		assertSame(shadowSite4, scn.GetSite(4));

@@ -87,6 +87,7 @@ public class Card_04_245_ErrataTests
 
 		// The Easterling is a [raider] Man but no Southron.
 		scn.MoveMinionsToTable(axeman);
+		scn.ShadowRefreshDecision();
 		assertEquals(2, scn.GetShadowControlledSiteCount());
 		assertEquals(1, scn.GetFreepsControlledSiteCount());
 		// 10 set + 1 companion + 6 for The Bridge of Khazad-dum

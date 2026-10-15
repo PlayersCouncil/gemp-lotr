@@ -106,6 +106,7 @@ public class Card_01_080_ErrataTests
 
 		scn.StartGame();
 		scn.MoveCardsToTopOfDeck(troop2);
+		scn.FreepsRefreshDecision();
 
 		int deck = scn.GetFreepsDeckCount();
 		assertEquals(0, scn.GetWoundsOn(ottar));
@@ -172,6 +173,7 @@ public class Card_01_080_ErrataTests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(troop);
+		scn.FreepsRefreshDecision();
 
 		assertTrue(scn.FreepsActionAvailable(ottar));
 

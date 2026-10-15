@@ -135,6 +135,7 @@ public class DrawnOrTakenIntoHandTests
 		scn.StartGame();
 		// The draw deck from the top: Hobbit Sword, Axe Strike, Axe Strike, Cleaving Blow
 		scn.MoveCardsToTopOfDeck(blow, axe2, axe1, sword);
+		scn.FreepsRefreshDecision();
 
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 		assertEquals(0, scn.GetFreepsHandCount());
@@ -182,6 +183,7 @@ public class DrawnOrTakenIntoHandTests
 		scn.StartGame();
 		// The draw deck from the top: Hobbit Sword, Axe Strike, Axe Strike, Cleaving Blow
 		scn.MoveCardsToTopOfDeck(blow, axe2, axe1, sword);
+		scn.FreepsRefreshDecision();
 
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 		assertEquals(0, scn.GetFreepsHandCount());
@@ -281,6 +283,7 @@ public class DrawnOrTakenIntoHandTests
 		scn.StartGame();
 		// The draw deck from the top: Hobbit Sword, Cleaving Blow
 		scn.MoveCardsToTopOfDeck(blow, sword);
+		scn.FreepsRefreshDecision();
 
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 		assertEquals(0, scn.GetFreepsHandCount());

@@ -116,6 +116,7 @@ public class Card_01_101_ErrataTests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(brigand);
+		scn.FreepsRefreshDecision();
 
 		scn.FreepsPlayCard(coat);
 		// "A Man" read on its own, as the original's "Bearer must be a Man" was: a Man ally may bear it, and,

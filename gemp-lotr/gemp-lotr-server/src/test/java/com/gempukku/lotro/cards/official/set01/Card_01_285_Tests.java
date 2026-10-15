@@ -136,6 +136,7 @@ public class Card_01_285_Tests
 		scn.StartGame();
 		scn.MoveCardsToDiscard(tbaa, banner, harp);
 		scn.MoveCardsToHand(redbook);
+		scn.FreepsRefreshDecision();
 
 		assertAttachedTo(pipe, frodo);
 		assertAttachedTo(aragornspipe, aragorn);
@@ -270,6 +271,7 @@ public class Card_01_285_Tests
 		// A card in the discard pile that is no tale, and a tale in hand
 		scn.MoveCardsToDiscard(sword);
 		scn.MoveCardsToHand(redbook);
+		scn.FreepsRefreshDecision();
 
 		assertInZone(Zone.SUPPORT, toby);
 		assertInDiscard(sword);

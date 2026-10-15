@@ -86,6 +86,7 @@ public class Card_02_016_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(savage, troll);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(1, scn.GetKeywordCount(savage, Keyword.DAMAGE));
 		assertEquals(5, scn.GetStrength(savage));

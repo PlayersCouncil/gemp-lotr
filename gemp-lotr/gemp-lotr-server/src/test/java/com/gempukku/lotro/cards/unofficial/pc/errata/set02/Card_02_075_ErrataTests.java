@@ -245,6 +245,7 @@ public class Card_02_075_ErrataTests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(ferny, troop);
+		scn.FreepsRefreshDecision();
 
 		// With no Hobbit to spot, Bill is the Free Peoples player's to assign as any minion is.
 		assertTrue(scn.FreepsCanAssign(ferny));

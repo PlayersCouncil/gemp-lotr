@@ -130,6 +130,7 @@ public class Card_12_004_Tests
 		var spare = scn.GetFreepsCard("spare");
 		var spare2 = scn.GetFreepsCard("troop");
 		scn.MoveCardsToTopOfDeck(spare2, spare);
+		scn.FreepsRefreshDecision();
 		assertSame(spare, scn.GetFreepsTopOfDeck());
 		assertInZone(Zone.DECK, spare, spare2);
 		int hand = scn.GetFreepsHandCount();

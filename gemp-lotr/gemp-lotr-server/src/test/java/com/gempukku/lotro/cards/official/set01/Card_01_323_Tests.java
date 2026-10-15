@@ -172,6 +172,7 @@ public class Card_01_323_Tests
 
 		scn.SkipToSite(2);
 		scn.MoveCardsToHand(sam);
+		scn.FreepsRefreshDecision();
 
 		// Site 2, Ettenmoors, with Green Hill Country behind the fellowship.
 		assertEquals(2, scn.GetCurrentSiteNumber());

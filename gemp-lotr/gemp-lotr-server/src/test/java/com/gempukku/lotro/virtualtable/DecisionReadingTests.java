@@ -141,6 +141,7 @@ public class DecisionReadingTests
 		scn.StartGame();
 		// What stacking draws is a card that cannot itself be stacked.
 		scn.MoveCardsToTopOfDeck(scn.GetFreepsCard("deck1"), scn.GetFreepsCard("deck2"));
+		scn.FreepsRefreshDecision();
 
 		assertEquals(Phase.FELLOWSHIP, scn.GetCurrentPhase());
 		assertTrue(scn.FreepsActionAvailable(library));
@@ -181,6 +182,7 @@ public class DecisionReadingTests
 		// Elrond draws the top card; The Gaffer must not be it (the deck's order is random, and he was 1 time in 12).
 		// He is put at the bottom once the game has started: the decks are shuffled as it starts.
 		scn.MoveCardsToBottomOfDeck(gaffer);
+		scn.FreepsRefreshDecision();
 
 		int freeps = scn.GetFreepsDeckShuffleCount();
 		int shadow = scn.GetShadowDeckShuffleCount();

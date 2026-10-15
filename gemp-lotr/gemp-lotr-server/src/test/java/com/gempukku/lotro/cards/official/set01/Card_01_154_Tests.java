@@ -154,6 +154,7 @@ public class Card_01_154_Tests
 		scn.FreepsPass();
 		// Put into play, not played: no offer.
 		scn.MoveMinionsToTable(soldier1);
+		scn.ShadowRefreshDecision();
 		assertInZone(Zone.SHADOW_CHARACTERS, soldier1);
 
 		// Another [isengard] Uruk-hai played while a Soldier is in play.

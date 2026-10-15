@@ -184,6 +184,7 @@ public class Card_03_005_ErrataTests
 		scn.StartGame();
 		scn.MoveMinionsToTable(troop);
 		scn.AttachCardsTo(troop, spear);
+		scn.FreepsRefreshDecision();
 
 		assertTrue(scn.FreepsActionAvailable(song));
 		scn.FreepsUseCardAction(song);
@@ -226,6 +227,7 @@ public class Card_03_005_ErrataTests
 		scn.MoveMinionsToTable(troop);
 		scn.AttachCardsTo(troop, spear);
 		scn.AttachCardsTo(frodo, thrown);
+		scn.FreepsRefreshDecision();
 
 		scn.FreepsUseCardAction(song);
 		// No choice between hindering and discarding: straight to the [moria] conditions

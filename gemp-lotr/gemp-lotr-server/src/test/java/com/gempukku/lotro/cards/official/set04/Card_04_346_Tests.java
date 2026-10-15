@@ -134,6 +134,7 @@ public class Card_04_346_Tests
 		scn.StartGame();
 		scn.SkipToSite(4);
 		scn.MoveCardsToHand(mount);
+		scn.FreepsRefreshDecision();
 
 		assertSame(rocks, scn.GetCurrentSite());
 		assertInZone(Zone.ATTACHED, asfaloth);

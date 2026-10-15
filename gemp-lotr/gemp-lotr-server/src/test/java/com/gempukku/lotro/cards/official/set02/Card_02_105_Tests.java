@@ -139,6 +139,7 @@ public class Card_02_105_Tests
 		scn.StartGame();
 		// Laid early, as they will stand in the archery phase of this turn.
 		scn.MoveMinionsToTable(marksman, marksman2);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(2, scn.GetShadowArcheryTotal());
 		assertEquals(1, scn.GetFreepsArcheryTotal());

@@ -92,6 +92,7 @@ public class Card_04_356_Tests
 		scn.StartGame();
 		scn.SkipToSite(7);
 		scn.MoveCardsToHand(gandalf, boromir);
+		scn.FreepsRefreshDecision();
 
 		assertEquals("Hornburg Causeway", scn.GetCurrentSite().getBlueprint().getTitle());
 		// Five companions, three of them unbound: a count of all companions over 3 would read 4.

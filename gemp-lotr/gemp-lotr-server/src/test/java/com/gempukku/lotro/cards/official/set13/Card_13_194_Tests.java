@@ -225,6 +225,7 @@ public class Card_13_194_Tests
 		// The Shadow player lays his Abandoned Mine Shaft as the next site; Redhorn Pass is left behind.
 		scn.ShadowChooseCardBPFromSelection(scn.GetShadowSite("site2"));
 		scn.MoveCardsToHand(ships3);
+		scn.ShadowRefreshDecision();
 
 		assertSame(scn.GetShadowSite("site2"), scn.GetCurrentSite());
 		assertInZone(Zone.ADVENTURE_PATH, redhorn);

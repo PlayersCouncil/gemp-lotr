@@ -129,6 +129,7 @@ public class Card_04_339_Tests
 		scn.SkipToSite(3);
 		// The turns played on the way drew the deck into hand.
 		scn.MoveCardsToTopOfDeck(ridersmount, horse, sword, knightsmount);
+		scn.FreepsRefreshDecision();
 
 		var stables = scn.GetCurrentSite();
 		assertEquals("Stables", stables.getBlueprint().getTitle());
@@ -231,6 +232,7 @@ public class Card_04_339_Tests
 		scn.StartGame();
 		scn.SkipToSite(3);
 		scn.MoveCardsToTopOfDeck(ridersmount);
+		scn.FreepsRefreshDecision();
 
 		var stables = scn.GetCurrentSite();
 		assertEquals("Stables", stables.getBlueprint().getTitle());
@@ -273,6 +275,7 @@ public class Card_04_339_Tests
 		// No [rohan] mount in the deck: the Sword of Rohan and the Knight's Mount are there.
 		scn.MoveCardsToDiscard(ridersmount, scn.GetFreepsCard("horse"));
 		scn.MoveCardsToTopOfDeck(sword, knightsmount);
+		scn.FreepsRefreshDecision();
 
 		var stables = scn.GetCurrentSite();
 		assertEquals("Stables", stables.getBlueprint().getTitle());
@@ -317,6 +320,7 @@ public class Card_04_339_Tests
 		scn.SkipToSite(3);
 		// The turns played on the way drew the deck into hand.
 		scn.MoveCardsToTopOfDeck(mount, mount2);
+		scn.FreepsRefreshDecision();
 
 		var site = scn.GetCurrentSite();
 		assertEquals("Stables", site.getBlueprint().getTitle());

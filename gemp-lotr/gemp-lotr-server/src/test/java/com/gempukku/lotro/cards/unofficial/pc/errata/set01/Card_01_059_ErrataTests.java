@@ -388,6 +388,7 @@ public class Card_01_059_ErrataTests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable("runner");
+		scn.FreepsRefreshDecision();
 
 		assertTrue(scn.FreepsActionAvailable(sts));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());

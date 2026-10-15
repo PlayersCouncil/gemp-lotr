@@ -95,6 +95,7 @@ public class Card_01_305_Tests
 
 		scn.StartGame();
 		scn.MoveCardsToTopOfDeck(axe);
+		scn.FreepsRefreshDecision();
 
 		assertInHand(toby);
 		assertEquals(1, scn.GetFreepsHandCount());
@@ -124,6 +125,7 @@ public class Card_01_305_Tests
 
 		scn.StartGame();
 		scn.MoveCardsToTopOfDeck(axe);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(1, scn.GetFreepsHandCount());
 		assertSame(axe, scn.GetFreepsTopOfDeck());
@@ -152,6 +154,7 @@ public class Card_01_305_Tests
 
 		scn.StartGame();
 		scn.MoveCardsToTopOfDeck(axe2, axe);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(2, scn.GetFreepsHandCount());
 		assertInZone(Zone.DECK, axe, axe2);

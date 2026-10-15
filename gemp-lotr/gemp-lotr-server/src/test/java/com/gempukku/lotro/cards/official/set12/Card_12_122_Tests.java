@@ -204,6 +204,7 @@ public class Card_12_122_Tests
 		scn.StartGame(glade);
 		// The dwelling lies next on the path, and the fellowship is not at it.
 		scn.MoveCardToAdventurePath(streets);
+		scn.FreepsRefreshDecision();
 		scn.AddBurdens(2);
 		scn.AddWoundsToChar(frodo, 2);
 

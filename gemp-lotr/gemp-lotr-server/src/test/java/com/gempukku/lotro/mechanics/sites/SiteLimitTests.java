@@ -140,6 +140,7 @@ public class SiteLimitTests
 		assertInZone(Zone.SUPPORT, watcher);
 		// The reconciles on the way may have emptied the draw deck.
 		scn.MoveCardsToTopOfDeck(scn.GetShadowCard("troop1"), scn.GetShadowCard("troop2"), scn.GetShadowCard("troop3"));
+		scn.FreepsRefreshDecision();
 		hand = scn.GetShadowHandCount();
 		int deck = scn.GetShadowDeckCount();
 

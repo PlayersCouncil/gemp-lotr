@@ -134,6 +134,7 @@ public class Card_V1_024_Tests
 
 		// Boromir and Sam are put down beside him without being played.  Playing Arwen has the game ask again.
 		scn.MoveCompanionsToTable(boromir, sam);
+		scn.FreepsRefreshDecision();
 		scn.FreepsPlayCard(arwen);
 		assertTrue(scn.FreepsPlayAvailable(sword));
 		// 4 for Aragorn + 2 for Arwen

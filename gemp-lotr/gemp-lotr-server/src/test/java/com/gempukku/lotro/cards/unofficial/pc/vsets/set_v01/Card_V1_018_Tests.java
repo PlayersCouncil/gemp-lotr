@@ -140,6 +140,7 @@ public class Card_V1_018_Tests
 		assertEquals(13, scn.GetStrength(axeman));
 
 		scn.MoveMinionsToTable(coldlyStill);
+		scn.FreepsRefreshDecision();
 		// "Each [men] minion bearing a possession is strength +2": 13 + 2
 		assertEquals(15, scn.GetStrength(axeman));
 
@@ -168,6 +169,7 @@ public class Card_V1_018_Tests
 
 		assertEquals(6, scn.GetResistance(aragorn));
 		scn.MoveMinionsToTable(whiteHand);
+		scn.FreepsRefreshDecision();
 		assertEquals(5, scn.GetResistance(aragorn));
 
 		scn.FreepsPlayCard(gandalf);
@@ -340,6 +342,7 @@ public class Card_V1_018_Tests
 		scn.StartGame();
 
 		scn.MoveMinionsToTable(colours);
+		scn.FreepsRefreshDecision();
 		assertEquals(1, scn.GetKeywordCount(colours, Keyword.DAMAGE));
 		assertTrue(scn.HasKeyword(colours, Keyword.FIERCE));
 		assertTrue(scn.HasKeyword(colours, Keyword.LURKER));
@@ -372,6 +375,7 @@ public class Card_V1_018_Tests
 		scn.StartGame();
 
 		scn.MoveMinionsToTable(agent);
+		scn.FreepsRefreshDecision();
 		assertTrue(scn.HasKeyword(agent, Keyword.LURKER));
 
 		// The play that makes it Gandalf and two [elven] allies.

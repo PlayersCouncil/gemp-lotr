@@ -275,6 +275,7 @@ public class Card_01_135_Tests
 		var site3 = scn.GetSite(3);
 		assertEquals(3, scn.GetCurrentSiteNumber());
 		scn.AttachCardsTo(site2, chill);
+		scn.ShadowRefreshDecision();
 		assertAttachedTo(chill, site2);
 
 		scn.ShadowPlayCard(frost);

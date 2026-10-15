@@ -161,6 +161,7 @@ public class Card_V3_100_Tests
 		scn.MoveCardsToSupportArea(shards);
 		assertEquals(15, scn.GetTwilightCost(sauron));
 		scn.MoveCardsToSupportArea(throne);
+		scn.FreepsRefreshDecision();
 		assertEquals(14, scn.GetTwilightCost(sauron));
 
 		// A second companion, played from hand: 18 - 2 companions - 3 artifacts.
@@ -204,6 +205,7 @@ public class Card_V3_100_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(sauron, troop);
+		scn.FreepsRefreshDecision();
 
 		assertFalse(scn.HasKeyword(sauron, Keyword.FIERCE));
 		assertFalse(scn.HasKeyword(sauron, Keyword.RELENTLESS));

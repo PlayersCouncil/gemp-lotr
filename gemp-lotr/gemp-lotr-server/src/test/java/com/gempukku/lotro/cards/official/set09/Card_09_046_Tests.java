@@ -117,6 +117,7 @@ public class Card_09_046_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(troop);
+		scn.FreepsRefreshDecision();
 
 		// The Arrow costs 0, and nothing is needed to play it.
 		assertEquals(0, scn.GetTwilight());

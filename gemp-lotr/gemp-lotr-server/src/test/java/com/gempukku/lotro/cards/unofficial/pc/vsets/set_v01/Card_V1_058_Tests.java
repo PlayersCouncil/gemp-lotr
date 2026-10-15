@@ -118,6 +118,7 @@ public class Card_V1_058_Tests
 		assertEquals(23, scn.GetTwilight());
 		// A minion of strength 5 that is on the table without having been played.
 		scn.MoveMinionsToTable(savage);
+		scn.ShadowRefreshDecision();
 		assertEquals(5, scn.GetStrength(savage));
 		assertEquals(5, scn.GetStrength(backstabber1));
 		assertEquals(5, scn.GetStrength(backstabber2));
@@ -298,6 +299,7 @@ public class Card_V1_058_Tests
 
 		// The Cart comes back.  The minion that has its +3 keeps it; the next one played gets none.
 		scn.MoveCardsToSupportArea(cart);
+		scn.ShadowRefreshDecision();
 		assertEquals(8, scn.GetStrength(backstabber2));
 		scn.ShadowPlayCard(savage);
 		assertInZone(Zone.SHADOW_CHARACTERS, savage);
@@ -330,6 +332,7 @@ public class Card_V1_058_Tests
 		scn.FreepsPass();
 		// A Wizard who is no [gandalf] card: every Free Peoples Wizard is one, so he is the Shadow player's.
 		scn.MoveMinionsToTable(saruman);
+		scn.ShadowRefreshDecision();
 
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		assertInZone(Zone.DEAD, gandalf);

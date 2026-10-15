@@ -232,6 +232,7 @@ public class Card_V2_047_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(runner);
+		scn.FreepsRefreshDecision();
 
 		// Exhausted: one vitality left.
 		scn.AddWoundsToChar(erkenbrand, 2);   // vitality 3

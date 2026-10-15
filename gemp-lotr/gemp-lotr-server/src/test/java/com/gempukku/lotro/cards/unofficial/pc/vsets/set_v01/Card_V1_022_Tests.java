@@ -360,6 +360,7 @@ public class Card_V1_022_Tests
 		scn.StartGame();
 		scn.AddBurdens(1);
 		scn.MoveMinionsToTable(troop);
+		scn.FreepsRefreshDecision();
 
 		assertTrue(scn.FreepsActionAvailable(memorial));
 

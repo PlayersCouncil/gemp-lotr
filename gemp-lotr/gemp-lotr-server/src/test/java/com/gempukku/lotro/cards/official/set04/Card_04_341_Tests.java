@@ -87,6 +87,7 @@ public class Card_04_341_Tests
 		// The turns played on the way drew the deck into hand, so the cards wanted are laid after them.
 		scn.MoveCardsToTopOfDeck(thengel, lord, eomer);
 		scn.MoveCardsToHand(king);
+		scn.FreepsRefreshDecision();
 		assertInZone(Zone.DECK, thengel, lord, eomer);
 		assertInHand(king);
 
@@ -134,6 +135,7 @@ public class Card_04_341_Tests
 		scn.MoveCardsToDiscard(thengel, lord);
 		scn.MoveCardsToTopOfDeck(eomer);
 		scn.MoveCardsToHand(king);
+		scn.FreepsRefreshDecision();
 		assertInDiscard(thengel, lord);
 		assertInZone(Zone.DECK, eomer);
 		assertInHand(king);
@@ -194,6 +196,7 @@ public class Card_04_341_Tests
 		scn.StartGame();
 		scn.SkipToSite(3);
 		scn.MoveCardsToTopOfDeck(lord);
+		scn.FreepsRefreshDecision();
 		assertInZone(Zone.DECK, lord);
 
 		var throne = scn.GetCurrentSite();

@@ -108,6 +108,7 @@ public class Card_V3_042_Tests
 		assertFalse(scn.IsType(matriarch, CardType.MINION));
 
 		scn.MoveMinionsToTable(warrior2, khamul, savage);
+		scn.ShadowRefreshDecision();
 
 		// A [raider] Man who is no Southron is played: nothing is offered.
 		scn.ShadowPlayCard(infantry);

@@ -264,6 +264,7 @@ public class Card_09_046_ErrataTests
 		scn.SkipToPhase(Phase.REGROUP);
 		// A Man who is the other player's, and could exert (vitality 2).
 		scn.MoveMinionsToTable(axeman);
+		scn.FreepsRefreshDecision();
 		assertTrue(scn.FreepsActionAvailable(arrow));
 
 		scn.FreepsUseCardAction(arrow);

@@ -176,6 +176,7 @@ public class Card_01_012_Tests
 
 		scn.MoveCardsToTopOfDeck(troop);
 		scn.MoveCardsToBottomOfDeck(savage);
+		scn.FreepsRefreshDecision();
 		int deck = scn.GetFreepsDeckCount();
 
 		assertEquals(0, scn.GetTwilight());
@@ -209,6 +210,7 @@ public class Card_01_012_Tests
 
 		scn.MoveCardsToTopOfDeck(troop);
 		scn.MoveCardsToBottomOfDeck(savage);
+		scn.FreepsRefreshDecision();
 		int deck = scn.GetFreepsDeckCount();
 
 		assertEquals(0, scn.GetTwilight());

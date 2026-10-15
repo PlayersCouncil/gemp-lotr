@@ -166,6 +166,7 @@ public class Card_V3_103_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(slayer);
 		scn.MoveCardsToTopOfDeck(elrond, bladetip, runner);
+		scn.FreepsRefreshDecision();
 
 		int hand = scn.GetShadowHandCount();
 		int deck = scn.GetShadowDeckCount();
@@ -219,6 +220,7 @@ public class Card_V3_103_Tests
 
 		scn.StartGame();
 		scn.MoveCardsToTopOfDeck(elrond, bladetip, runner);
+		scn.FreepsRefreshDecision();
 
 		int hand = scn.GetShadowHandCount();
 		int deck = scn.GetShadowDeckCount();
@@ -281,6 +283,7 @@ public class Card_V3_103_Tests
 
 		scn.StartGame();
 		scn.MoveCardsToTopOfDeck(elrond, bladetip, runner);
+		scn.FreepsRefreshDecision();
 
 		int hand = scn.GetShadowHandCount();
 		int deck = scn.GetShadowDeckCount();
@@ -320,6 +323,7 @@ public class Card_V3_103_Tests
 
 		scn.StartGame();
 		scn.MoveCardsToTopOfDeck(elrond, bladetip, runner);
+		scn.FreepsRefreshDecision();
 
 		int hand = scn.GetShadowHandCount();
 		int deck = scn.GetShadowDeckCount();
@@ -373,6 +377,7 @@ public class Card_V3_103_Tests
 
 		scn.StartGame();
 		scn.MoveCardsToTopOfDeck(elrond, bladetip, runner);
+		scn.FreepsRefreshDecision();
 
 		int hand = scn.GetShadowHandCount();
 		int deck = scn.GetShadowDeckCount();
@@ -435,6 +440,7 @@ public class Card_V3_103_Tests
 
 		scn.StartGame();
 		scn.MoveCardsToTopOfDeck(elrond, bladetip, runner);
+		scn.FreepsRefreshDecision();
 		scn.SetTwilight(10);
 
 		assertEquals(1, scn.GetCurrentSiteNumber());
@@ -572,6 +578,7 @@ public class Card_V3_103_Tests
 
 		scn.StartGame();
 		scn.MoveCardsToTopOfDeck(elrond, bladetip, runner);
+		scn.FreepsRefreshDecision();
 
 		int hand = scn.GetShadowHandCount();
 
@@ -797,6 +804,7 @@ public class Card_V3_103_Tests
 		scn.StartGame();
 		// Gandalf is wanted in the draw deck further down: he must not be the card drawn here.
 		scn.MoveCardsToBottomOfDeck(gandalf);
+		scn.FreepsRefreshDecision();
 
 		int freepsDeck = scn.GetFreepsDeckCount();
 
@@ -843,6 +851,7 @@ public class Card_V3_103_Tests
 
 		// A reveal from a draw deck on the same board is answered.
 		scn.MoveCardsToTopOfDeck(elrond, bladetip, runner);
+		scn.FreepsRefreshDecision();
 		scn.FreepsPlayCard(halls);
 		scn.FreepsChoose("your deck");
 		scn.DismissRevealedCards();
@@ -872,6 +881,7 @@ public class Card_V3_103_Tests
 
 		scn.StartGame();
 		scn.MoveCardsToTopOfDeck(elrond, bladetip, runner);
+		scn.FreepsRefreshDecision();
 
 		int hand = scn.GetShadowHandCount();
 

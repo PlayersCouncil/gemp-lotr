@@ -332,6 +332,7 @@ public class Card_13_164_Tests
 		scn.StartGame(scn.GetFreepsSite("site1"));
 		// The second player's cards, as an earlier turn of his would have left them.
 		scn.MoveCardsToSupportArea(fearless, bowmen, ships);
+		scn.FreepsRefreshDecision();
 
 		assertInZone(Zone.ADVENTURE_DECK, crags);
 
@@ -372,6 +373,7 @@ public class Card_13_164_Tests
 
 		scn.StartGame(scn.GetFreepsSite("site1"));
 		scn.MoveCardsToSupportArea(fearless);
+		scn.FreepsRefreshDecision();
 
 		scn.FreepsPlayCard(speak);
 		scn.FreepsChooseCardBPFromSelection(scn.GetFreepsSite("site3"));
@@ -426,6 +428,7 @@ public class Card_13_164_Tests
 		var crags = scn.GetFreepsSite("site3");
 		scn.StartGame(scn.GetFreepsSite("site1"));
 		scn.MoveCardsToSupportArea(fearless, fearless2, bowmen);
+		scn.FreepsRefreshDecision();
 
 		// The fellowship phase: Speak "Friend" and Enter lays Mere of Dead Faces as site 2.  Each copy offers.
 		scn.FreepsPlayCard(speak);

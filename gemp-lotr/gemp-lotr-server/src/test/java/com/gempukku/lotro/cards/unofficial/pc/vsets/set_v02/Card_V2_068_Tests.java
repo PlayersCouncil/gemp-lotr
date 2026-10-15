@@ -121,6 +121,7 @@ public class Card_V2_068_Tests
 		scn.MoveCardsToHand(rider1, guard1, eomer1, swordsman, aldor, spear, rider2);
 		scn.MoveCardsToDiscard(guard2, runner3);
 		scn.MoveCardsToTopOfDeck(guard3, eomer2, runner2, runner1);
+		scn.FreepsRefreshDecision();
 
 		// The Rider is a [rohan] Man for the Spear to go on, so each card that is not valiant could be played.
 		scn.FreepsPlayCard(rider1);
@@ -209,6 +210,7 @@ public class Card_V2_068_Tests
 		scn.MoveCardsToHand(rider1, rider2, aldor, spear, eomer2);
 		scn.MoveCardsToDiscard(guard2, swordsman);
 		scn.MoveCardsToTopOfDeck(runner3, runner2, runner1, guard3, guard1);
+		scn.FreepsRefreshDecision();
 
 		scn.FreepsPlayCard(rider1);
 		assertTrue(scn.FreepsPlayAvailable(rider2));
@@ -219,6 +221,7 @@ public class Card_V2_068_Tests
 
 		// A Household Guard comes into hand, and after the next legal play the Tomb's action is there.
 		scn.MoveCardsToHand(guard1);
+		scn.FreepsRefreshDecision();
 		scn.FreepsPlayCard(aldor);
 		assertTrue(scn.FreepsActionAvailable(tomb));
 		assertEquals(3, scn.GetTwilight());     // 2 for the Rider + 1 for Aldor

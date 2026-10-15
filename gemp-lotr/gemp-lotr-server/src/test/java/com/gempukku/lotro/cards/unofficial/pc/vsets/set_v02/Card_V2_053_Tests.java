@@ -351,6 +351,7 @@ public class Card_V2_053_Tests
 
 		// Other copies of the events come to hand, so that there are events to refuse.
 		scn.MoveCardsToHand(valor2, mark2);
+		scn.ShadowRefreshDecision();
 
 		// "You": the other player still has his Maneuver actions, a minion's ability and an event from hand.
 		assertInHand(terror);

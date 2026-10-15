@@ -305,6 +305,7 @@ public class Card_13_076_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(taskmaster);
 		scn.AttachCardsTo(taskmaster, enraged);
+		scn.FreepsRefreshDecision();
 		scn.AddBurdens(1);
 		scn.SetTwilight(10);
 

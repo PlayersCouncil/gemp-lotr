@@ -184,6 +184,7 @@ public class ActionAvailabilityTests
 
 		// With an artifact in hand the ability is on offer, under its own wording.
 		scn.MoveCardsToHand(staff);
+		scn.FreepsRefreshDecision();
 		scn.FreepsPlayCard(sword);
 		assertTrue(scn.FreepsActionAvailable("Stack your tale or artifact from hand"));
 		assertFalse(scn.FreepsActionAvailable("Use Library of Rivendell"));

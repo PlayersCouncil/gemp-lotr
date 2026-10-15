@@ -299,6 +299,7 @@ public class Card_V2_032_Tests
 
 		// The Orc of Lugburz is put in hand, and the Chieftain played so that the game looks again.
 		scn.MoveCardsToHand(lugburz);
+		scn.ShadowRefreshDecision();
 		scn.ShadowPlayCard(chieftain);
 
 		// 2 to play + 2 roaming
