@@ -22,9 +22,7 @@ import java.util.function.Consumer;
  * The texts are sent as she wrote them: a markdown link, the cards' titles in [[...]] and the number in **...**.
  * How a client draws them is the client's.
  * <p>
- * What is settled is handed to the window that found the loop (LoopTracker.agreed), which carries it out.  The run
- * of the iterations is the next item of engine pass 51 (loop-run); until it is built, the window asks the player
- * who was about to be asked, as it would have, and the loop is counted afresh.
+ * What is settled is handed to the window that found the loop (LoopTracker.agreed), which carries it out (LoopRun).
  */
 public class LoopNegotiation extends SystemQueueAction {
     /** The first line of the Free Peoples player's prompt and of the Shadow player's. */

@@ -345,6 +345,64 @@ public interface Actions extends Decisions, Choices {
 		return found;
 	}
 
+	/**
+	 * @param card The card whose action is meant, which must be offering the Free Peoples player exactly one.
+	 * @return Whether the pending decision flags that action "loopBanned": a use of an ability that a voluntary loop
+	 * used, barred to the end of the phase (CR 4.2 "loops"; Q-0329).  Such an action is offered all the same, and is
+	 * refused if taken.
+	 */
+	default boolean FreepsActionLoopBanned(PhysicalCardImpl card) { return CardActionLoopBanned(P1(), card, null); }
+	/**
+	 * @param card The card whose action is meant, which must be offering the Shadow player exactly one.
+	 * @return Whether the pending decision flags that action "loopBanned" (see FreepsActionLoopBanned).
+	 */
+	default boolean ShadowActionLoopBanned(PhysicalCardImpl card) { return CardActionLoopBanned(P2(), card, null); }
+	/**
+	 * @param card The card the action belongs to.
+	 * @param text Words from the action's description that tell it from the card's other actions.  Case is ignored.
+	 * @return Whether the pending decision flags that action "loopBanned" (see FreepsActionLoopBanned).
+	 */
+	default boolean FreepsActionLoopBanned(PhysicalCardImpl card, String text) { return CardActionLoopBanned(P1(), card, text); }
+	/**
+	 * @param card The card the action belongs to.
+	 * @param text Words from the action's description that tell it from the card's other actions.  Case is ignored.
+	 * @return Whether the pending decision flags that action "loopBanned" (see FreepsActionLoopBanned).
+	 */
+	default boolean ShadowActionLoopBanned(PhysicalCardImpl card, String text) { return CardActionLoopBanned(P2(), card, text); }
+	/**
+	 * Reads the "loopBanned" flag of one action of one particular card in the choice of actions the given player is
+	 * facing: whether it is a use of an ability a voluntary loop used, barred to the end of the phase (CR 4.2 "loops";
+	 * ActionsEnvironment.barUntilEndOfPhase).  The action is offered all the same, and the game refuses it if it is
+	 * taken.  Fails the test if the card is offering that player no such action, or more than one.
+	 * @param player The player facing a choice of actions.
+	 * @param card The card the action belongs to.
+	 * @param text Words the action's description must contain, or null if the card offers only one action.  Case
+	 * is ignored.
+	 * @return True if the action is flagged.
+	 */
+	default boolean CardActionLoopBanned(String player, PhysicalCardImpl card, String text) {
+		String[] texts = GetAwaitingDecisionParam(player, "actionText");
+		String[] cardIds = GetAwaitingDecisionParam(player, "cardId");
+		String[] bans = GetAwaitingDecisionParam(player, "loopBanned");
+		String name = GameUtils.getFullName(card);
+		String described = text == null ? "an action" : "an action described as '" + text + "'";
+		Verify(texts != null && cardIds != null, player + " is not being offered a choice of actions, so " + name + " is not offering " + described + ".");
+		Verify(bans != null && bans.length == texts.length, "The decision " + player + " is facing does not say, action by action, which of them are barred after a loop.");
+		String id = String.valueOf(card.getCardId());
+		String wanted = text == null ? "" : text.toLowerCase();
+		String found = null;
+		int count = 0;
+		for (int i = 0; i < texts.length && i < cardIds.length; i++) {
+			if(cardIds[i].equals(id) && texts[i].toLowerCase().contains(wanted)) {
+				found = bans[i];
+				count++;
+			}
+		}
+		Verify(count > 0, name + " is not offering " + player + " " + described + ".");
+		Verify(count == 1, name + " is offering " + player + " " + count + " actions that fit; say which is meant by words of its description.");
+		return "true".equals(found);
+	}
+
 	default void FreepsTransferCard(PhysicalCardImpl card) { TakeCardAction(P1(), card, GetCardActionId(P1(), card, "Transfer"), "a transfer"); }
 	default void ShadowTransferCard(PhysicalCardImpl card) { TakeCardAction(P2(), card, GetCardActionId(P2(), card, "Transfer "), "a transfer"); }
 

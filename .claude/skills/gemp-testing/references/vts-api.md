@@ -34,6 +34,8 @@ The unit test rig: a virtual table with two made-up players, where every card th
 - `void InitializeGameWithDecks(Map<String, LotroDeck> decks, String formatName, String freepsMetaSiteId, String shadowMetaSiteId, Map<String, RTMDGameInfo.LeaguePlacement> playerPlacements)` — Starts up a game of LOTR-TCG with the given decks and format.  `decks`: A map of decks for each player in the game; key is the player name.  `formatName`: Name of the format this table should be following.  `freepsMetaSiteId`: Blueprint ID of the Race to Mount Doom meta-sites used by player 1, or else null  `shadowMetaSiteId`: Blueprint ID of the Race to Mount Doom meta-sites used by player 2, or else null  `playerPlacements`: Race to Mount Doom league placements per player (keyed by P1() / P2()), or else null
 - `void UseTestBoosters()` — When testing the live mid-game booster pack opening, we obviously want to be able to have deterministic booster pack results, which requires that we override the default pack opener with a custom one.
 - `void UseBoosterOf(String... blueprintIds)` — Has the game's pack opener offer one pack, "Test - Booster", whose contents are exactly the cards given, in the order given, every time it is opened: the pack for a test that needs a card the fixed test pack of UseTestBoosters() does not hold.
+- `void MarkGameEvents()` — Starts reading what the game sends from here: joins, for each seat, a channel to the game as the replay recorder joins one for each player (GameRecorder.recordGame: a GameCommunicationChannel that is no live connection, so it cuts nobody off), and drops any joined by an earlier call.
+- `List<GameEvent> GetGameEventsSinceMark(String player)`
 
 ## The table itself
 
@@ -218,6 +220,9 @@ Actions are top-level decisions that involve legal game operations available to 
 - `String FreepsActionNoEffect(PhysicalCardImpl card)  ·  ShadowActionNoEffect` — Reads the no-effect flag of one action of one particular card in the choice of actions that player is facing.  Here `text` is null.
 - `String FreepsActionNoEffect(PhysicalCardImpl card, String text)  ·  ShadowActionNoEffect` — Reads the no-effect flag of one action of one particular card in the choice of actions that player is facing.
 - `String CardActionNoEffect(String player, PhysicalCardImpl card, String text)` — Reads the no-effect flag of one action of one particular card in the choice of actions the given player is facing.
+- `boolean FreepsActionLoopBanned(PhysicalCardImpl card)  ·  ShadowActionLoopBanned` — Reads the "loopBanned" flag of one action of one particular card in the choice of actions that player is facing: whether it is a use of an ability a voluntary loop used, barred to the end of the phase (CR 4.2 "loops"; ActionsEnvironment.barUntilEndOfPhase).  Here `text` is null.
+- `boolean FreepsActionLoopBanned(PhysicalCardImpl card, String text)  ·  ShadowActionLoopBanned` — Reads the "loopBanned" flag of one action of one particular card in the choice of actions that player is facing: whether it is a use of an ability a voluntary loop used, barred to the end of the phase (CR 4.2 "loops"; ActionsEnvironment.barUntilEndOfPhase).
+- `boolean CardActionLoopBanned(String player, PhysicalCardImpl card, String text)` — Reads the "loopBanned" flag of one action of one particular card in the choice of actions the given player is facing: whether it is a use of an ability a voluntary loop used, barred to the end of the phase (CR 4.2 "loops"; ActionsEnvironment.barUntilEndOfPhase).
 - `void FreepsTransferCard(PhysicalCardImpl card)  ·  ShadowTransferCard`
 - `void FreepsPlayCard(PhysicalCardImpl card)  ·  ShadowPlayCard` — Causes that player to play that card from hand as if they had clicked it in the UI.
 - `boolean FreepsHasDiscardToHealAvailable()` — Causes the Free Peoples player to select a unique character in hand, which will then be discarded to heal a copy of that character in play.
@@ -571,4 +576,4 @@ This interface holds the handful of accessors that every other virtual table int
 - `void Verify(boolean condition, String message)` — A sanity check on the table's own bookkeeping, used where a procedure has to end up in a known state for whatever follows it to make sense.
 
 ---
-463 entries, 213 of them with no description in the source.
+468 entries, 214 of them with no description in the source.

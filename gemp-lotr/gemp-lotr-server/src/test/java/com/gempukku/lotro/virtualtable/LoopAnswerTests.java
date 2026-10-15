@@ -124,8 +124,11 @@ public class LoopAnswerTests
 		scn.FreepsNameLoopIterations(5);
 		scn.ShadowLowerLoop(4);
 
-		assertFalse(scn.ShadowAnyDecisionsAvailable());
-		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		// The loop is run four times and Sméagol's action once more (LoopRun): he is 7 + 10, and the Shadow player
+		// is asked next.
+		assertEquals(17, scn.GetStrength(scn.GetFreepsCard("smeagol")));
+		assertFalse(scn.FreepsAnyDecisionsAvailable());
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
 
 	@Test

@@ -6,6 +6,8 @@ import com.gempukku.lotro.common.SitesBlock;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
+import com.gempukku.lotro.game.state.GameCommunicationChannel;
+import com.gempukku.lotro.game.state.GameEvent;
 import com.gempukku.lotro.game.state.GameExtraInfo;
 import com.gempukku.lotro.game.state.RTMDGameInfo;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -16,6 +18,7 @@ import com.gempukku.lotro.packs.ProductLibraryPackOpener;
 import com.gempukku.lotro.virtualtable.VirtualTable;
 import org.junit.Assert;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -538,6 +541,47 @@ public class VirtualTableScenario extends VirtualTable implements TestConstants,
             Verify(known, "UseBoosterOf was given '" + blueprintId + "', which is not the blueprint id of any card.");
         }
         _game.setPackOpener(new NamedPackOpener(List.of(blueprintIds)));
+    }
+
+
+    // Each seat's channel joined by MarkGameEvents(), and the events it has been sent since
+    private final Map<String, GameCommunicationChannel> _eventMarkChannels = new HashMap<>();
+    private final Map<String, List<GameEvent>> _eventsSinceMark = new HashMap<>();
+
+    /**
+     * Starts reading what the game sends from here: joins, for each seat, a channel to the game as the replay
+     * recorder joins one for each player (GameRecorder.recordGame: a GameCommunicationChannel that is no live
+     * connection, so it cuts nobody off), and drops any joined by an earlier call.  The state each is sent as it
+     * joins is not counted.  What a client and a replay are sent from then on is what these channels are sent:
+     * every one of them is a listener of the game the same way (GameState.addGameStateListener).
+     */
+    public void MarkGameEvents() {
+        for (GameCommunicationChannel channel : _eventMarkChannels.values())
+            _game.removeGameStateListener(channel);
+        _eventMarkChannels.clear();
+        _eventsSinceMark.clear();
+        for (String player : List.of(P1(), P2())) {
+            var channel = new GameCommunicationChannel(player, 0, false, _game.getFormat());
+            _game.addGameStateListener(player, channel);
+            channel.consumeGameEvents();
+            _eventMarkChannels.put(player, channel);
+            _eventsSinceMark.put(player, new ArrayList<>());
+        }
+    }
+
+    /**
+     * @param player The seat asked about (P1() or P2()).
+     * @return Every event the game has sent that seat since MarkGameEvents() was last called, oldest first, as a
+     * client or the replay would be sent them.
+     */
+    public List<GameEvent> GetGameEventsSinceMark(String player) {
+        var channel = _eventMarkChannels.get(player);
+        Verify(channel != null, "What the game sends is not being read for " + player + ": call MarkGameEvents() first.");
+        if (channel == null)
+            return List.of();
+        var events = _eventsSinceMark.get(player);
+        events.addAll(channel.consumeGameEvents());
+        return List.copyOf(events);
     }
 
 }

@@ -8,6 +8,7 @@ import com.gempukku.lotro.logic.decisions.CardActionSelectionDecision;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.timing.Action;
 import com.gempukku.lotro.logic.timing.loops.LoopNegotiation;
+import com.gempukku.lotro.logic.timing.loops.LoopRun;
 import com.gempukku.lotro.logic.timing.loops.LoopTracker;
 import com.gempukku.lotro.logic.timing.processes.GameProcess;
 
@@ -16,7 +17,8 @@ import java.util.List;
 /**
  * The players take actions of the phase in turn (maneuver, archery, assignment and regroup) until each in a row has
  * passed.  Each step is a new instance; what carries over goes through the constructor, the loop step's tracker
- * (CR 4.2 "loops", LoopTracker) included.
+ * (CR 4.2 "loops", LoopTracker) included, and with it the run of a loop the players have settled (LoopRun), which
+ * is carried out before anybody is asked anything.
  */
 public class PlayersPlayPhaseActionsInOrderGameProcess implements GameProcess {
     private final PlayOrder _playOrder;
@@ -49,10 +51,27 @@ public class PlayersPlayPhaseActionsInOrderGameProcess implements GameProcess {
                 && (game.getGameState().getSkirmish().isCancelled()
                 || skirmish.getFellowshipCharacter() == null || skirmish.getShadowCharacters().size() == 0)) {
             // If the skirmish is cancelled or one side of the skirmish is missing, no more phase actions can be played
+            if (_loopTracker.getRun() != null)
+                _loopTracker.getRun().stop(game, "the skirmish is over");
             _nextProcess = _followingGameProcess;
         } else {
+            _loopTracker.offering(game);
+
             String playerId;
-            if (_playerToAsk != null) {
+            final LoopRun run = _loopTracker.getRun();
+            if (run != null) {
+                // CR 4.2 "loops": the loop the players settled is carried out, an action at a time, as if each
+                // were chosen; then the player it leaves to act is asked.
+                final Action step = run.nextAction(game);
+                if (step != null) {
+                    _nextProcess = new PlayersPlayPhaseActionsInOrderGameProcess(_playOrder, 0, _followingGameProcess, _loopTracker, null);
+                    game.getActionsEnvironment().addActionToStack(step);
+                    return;
+                }
+                _loopTracker.runOver();
+                game.getGameState().setConsecutiveAction(false);
+                playerId = takeTurnOf(run.getNextActor());
+            } else if (_playerToAsk != null) {
                 playerId = _playerToAsk;
             } else if (game.getGameState().isConsecutiveAction()) {
                 playerId = _playOrder.getLastPlayer();
@@ -64,15 +83,15 @@ public class PlayersPlayPhaseActionsInOrderGameProcess implements GameProcess {
             final List<Action> playableActions = game.getActionsEnvironment().getPhaseActions(playerId);
 
             // CR 4.2 "loops": the player would be offered the first action of a loop for the third time.  The
-            // players settle how many more times it runs, and then he is asked as he would have been.
-            final LoopTracker.Loop loop = (_playerToAsk == null) ? _loopTracker.findLoop(game, playerId, playableActions) : null;
+            // players settle how many more times it runs, and the run is carried out before anybody is asked.
+            final LoopTracker.Loop loop = (_playerToAsk == null && run == null) ? _loopTracker.findLoop(game, playerId, playableActions) : null;
             if (loop != null) {
                 game.getActionsEnvironment().addActionToStack(new LoopNegotiation(game, loop, _loopTracker::agreed));
                 _nextProcess = new PlayersPlayPhaseActionsInOrderGameProcess(_playOrder, _consecutivePasses, _followingGameProcess, _loopTracker, playerId);
                 return;
             }
 
-            if (playableActions.size() == 0 && game.shouldAutoPass(playerId, game.getGameState().getCurrentPhase())) {
+            if (countUsable(game, playableActions) == 0 && game.shouldAutoPass(playerId, game.getGameState().getCurrentPhase())) {
                 playerPassed();
             } else {
                 game.getUserFeedback().sendAwaitingDecision(playerId,
@@ -91,6 +110,24 @@ public class PlayersPlayPhaseActionsInOrderGameProcess implements GameProcess {
                         });
             }
         }
+    }
+
+    // The player to act after a loop's run, the order brought up to him: the next player of the order is the one
+    // after him.
+    private String takeTurnOf(String playerId) {
+        for (int i = 0; i < _playOrder.getPlayerCount() && !playerId.equals(_playOrder.getLastPlayer()); i++)
+            _playOrder.getNextPlayer();
+        return playerId;
+    }
+
+    // The actions a player can take: those not barred after a loop (they are offered, and refused if taken).
+    private static int countUsable(LotroGame game, List<Action> actions) {
+        int count = 0;
+        for (Action action : actions) {
+            if (!game.getActionsEnvironment().isLoopBanned(action))
+                count++;
+        }
+        return count;
     }
 
     private void playerPassed() {

@@ -12,4 +12,14 @@ public interface UserFeedback {
      * over.  Does nothing by default.
      */
     default void atRest() { }
+
+    /**
+     * Told of an answer a decision has taken, once it has taken it, by whoever put the decision to its player.  The
+     * game's own feedback keeps the answers given while an action of a loop's round is carried out, to give them
+     * again when the loop is run (CR 4.2 "loops"; LoopFeedback).  Does nothing by default.
+     * @param playerId The player who answered.
+     * @param decision The decision.
+     * @param answer The answer it took.
+     */
+    default void decisionAnswered(String playerId, AwaitingDecision decision, String answer) { }
 }

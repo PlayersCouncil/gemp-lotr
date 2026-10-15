@@ -227,8 +227,13 @@ skirmish or in the maneuver, archery, assignment or regroup actions, with no pas
 start of the third round is the board at the start of the second, the player who opened the round is not offered
 his actions: the Free Peoples player is asked how many more times the loop runs (`FreepsNameLoopIterations`), and
 the Shadow player agrees or lowers it (`ShadowAgreeToLoop`, `ShadowLowerLoop`). A round that spends anything (a
-wound, a card, twilight, a token) never matches, and an ability with a limit is never part of a loop. Until the
-run of the iterations is built (the loop-run item of engine pass 51) the player is then asked as before.
+wound, a card, twilight, a token) never matches, and an ability with a limit is never part of a loop. The loop is
+then run inside the answer that settles it, before anybody is asked anything: N rounds if the Shadow player agreed
+(he takes the last action) or M if he lowered (the Free Peoples player takes it), with the opener's action once
+more at the end where the rounds end on the wrong player; a choice inside the round is made as it was in the
+second round played by hand. The next decision is the other player's actions, and each looping ability (that card's,
+not its other abilities nor another copy's) is still offered, flagged, to the end of the phase or skirmish: read it
+with `FreepsActionLoopBanned(card)`; `FreepsActionAvailable` reads it as offered, and taking it is refused.
 `mechanics/actions/VoluntaryLoopTests`, `FiniteRepeatsAreNoLoopTests`.
 
 ## What is offered, and what an offer does

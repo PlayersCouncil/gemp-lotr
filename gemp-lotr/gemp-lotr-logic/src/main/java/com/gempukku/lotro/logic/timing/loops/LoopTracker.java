@@ -6,6 +6,7 @@ import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.timing.Action;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
@@ -40,7 +41,12 @@ import java.util.Objects;
  * not exercised by any test.)
  * <p>
  * The tracker keeps the last four choices and a fingerprint only for a choice that repeats the one two before it,
- * so a game in which nobody repeats an action pays for a short list and nothing else.
+ * so a game in which nobody repeats an action pays for a short list and nothing else.  With each choice it keeps the
+ * answers given to the decisions asked while that action was carried out (LoopFeedback records them), so that a
+ * loop's run can give them again.
+ * <p>
+ * Once the players have settled how many more times the loop goes ({@link #agreed}), the tracker holds the run of
+ * it (LoopRun), which the window carries out before it asks anybody anything else.
  * <p>
  * Not exercised by any card: a search of the definitions (engine pass 51) found no printed pair of a Free Peoples
  * and a Shadow ability that loops outside a skirmish, so the finding in the maneuver, archery, assignment and
@@ -51,6 +57,9 @@ public class LoopTracker {
     private final boolean _enabled;
     private final Deque<Entry> _entries = new ArrayDeque<>();
     private LoopNegotiation.Agreement _lastAgreement;
+    // The round of the loop last found: its second round, as it was played by hand
+    private List<Entry> _foundRound;
+    private LoopRun _run;
 
     /**
      * @param playerCount How many players take actions in turn in the window; the tracker is off unless two.
@@ -80,9 +89,24 @@ public class LoopTracker {
         BoardFingerprint fingerprint = null;
         if (_entries.size() >= 2 && secondLast().key.equals(key))
             fingerprint = BoardFingerprint.of(game);
-        _entries.addLast(new Entry(key, action.getActionAttachedToCard(), action.getAbility(), fingerprint));
+        final Entry entry = new Entry(key, action.getActionAttachedToCard(), action.getAbility(), fingerprint, new ArrayList<>());
+        _entries.addLast(entry);
         while (_entries.size() > 4)
             _entries.removeFirst();
+        final LoopFeedback feedback = LoopFeedback.of(game);
+        if (feedback != null)
+            feedback.recordAnswersInto(entry.answers);
+    }
+
+    /**
+     * The window is about to offer a player his actions (or to carry out the next step of a run): the action chosen
+     * last is over, and nothing answered from now on is part of it.
+     * @param game The game.
+     */
+    public void offering(LotroGame game) {
+        final LoopFeedback feedback = LoopFeedback.of(game);
+        if (feedback != null)
+            feedback.recordAnswersInto(null);
     }
 
     /**
@@ -104,7 +128,7 @@ public class LoopTracker {
 
         if (!first.key.equals(third.key) || !second.key.equals(fourth.key))
             return null;
-        if (!first.key.player.equals(playerId) || second.key.player.equals(playerId))
+        if (!first.key.player().equals(playerId) || second.key.player().equals(playerId))
             return null;
         if (isLimited(first) || isLimited(second))
             return null;
@@ -124,17 +148,41 @@ public class LoopTracker {
         if (!third.fingerprint.equals(BoardFingerprint.of(game)))
             return null;
 
-        return new Loop(first.key.player, first.card, second.key.player, second.card);
+        _foundRound = List.of(third, fourth);
+        return new Loop(first.key.player(), first.card, second.key.player(), second.card);
     }
 
     /**
-     * The players have settled how many more times the loop runs.  What has been chosen so far no longer counts
-     * towards a loop.
+     * The players have settled how many more times the loop runs: the run of it is made, to be carried out by the
+     * window ({@link #getRun}).  What has been chosen so far no longer counts towards a loop.
      * @param agreement What they settled.
      */
     public void agreed(LoopNegotiation.Agreement agreement) {
         _lastAgreement = agreement;
+        final Entry first = _foundRound.get(0);
+        final Entry second = _foundRound.get(1);
+        _run = new LoopRun(
+                new LoopRun.Step(first.key, first.card, first.answers),
+                new LoopRun.Step(second.key, second.card, second.answers),
+                agreement);
+        _foundRound = null;
         _entries.clear();
+    }
+
+    /**
+     * @return The run of the loop the players last settled, while it is still to be carried out or under way; null
+     * when there is none.  The window carries it out step by step (LoopRun.nextAction) and, when that gives no more
+     * actions, asks the player the run says is next and calls {@link #runOver}.
+     */
+    public LoopRun getRun() {
+        return _run;
+    }
+
+    /**
+     * The run is over and the window has gone back to asking the players.
+     */
+    public void runOver() {
+        _run = null;
     }
 
     /**
@@ -164,29 +212,53 @@ public class LoopTracker {
     public record Loop(String opener, PhysicalCard openerCard, String other, PhysicalCard otherCard) {
     }
 
-    // What tells one use of an action from another: who took it, of which card, and which of the card's abilities
-    // (or, for an action no definition built, its type and its words).
-    private record Key(String player, int cardId, Object ability) {
-        private static Key of(LotroGame game, String playerId, Action action) {
+    /**
+     * One ability of one card: the card's id, and the piece of its definition that built the action (the action's
+     * ActionSource), or, for an action no definition built, its type and its words.  It is what a loop's run looks
+     * for among the actions on offer, and what is barred once the loop is over (ActionsEnvironment.barUntilEndOfPhase):
+     * the looping ability of that card, and not its other abilities, nor the same ability of another copy.
+     * @param cardId The card's id, or -1 for an action of no card.
+     * @param ability The ActionSource, or the type and words.
+     */
+    public record Ability(int cardId, Object ability) {
+        /**
+         * @param game The game.
+         * @param action An action.
+         * @return The ability that action is a use of.
+         */
+        public static Ability of(LotroGame game, Action action) {
             final PhysicalCard card = action.getActionAttachedToCard();
             final Object ability = action.getAbility() != null
                     ? action.getAbility()
                     : action.getType() + ":" + action.getText(game);
-            return new Key(playerId, card == null ? -1 : card.getCardId(), ability);
+            return new Ability(card == null ? -1 : card.getCardId(), ability);
         }
 
         @Override
         public boolean equals(Object o) {
-            return o instanceof Key other && player.equals(other.player) && cardId == other.cardId
+            return o instanceof Ability other && cardId == other.cardId
                     && (ability instanceof ActionSource ? ability == other.ability : Objects.equals(ability, other.ability));
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(player, cardId);
+            return Integer.hashCode(cardId);
         }
     }
 
-    private record Entry(Key key, PhysicalCard card, ActionSource ability, BoardFingerprint fingerprint) {
+    /**
+     * What tells one use of an action from another: who took it, and the ability of which card.
+     * @param player The player who took it.
+     * @param ability The ability.
+     */
+    record Key(String player, Ability ability) {
+        static Key of(LotroGame game, String playerId, Action action) {
+            return new Key(playerId, Ability.of(game, action));
+        }
+    }
+
+    // One action chosen: what it was a use of, its card, the ability that built it, the board as it was chosen (only
+    // where it repeats the choice two before it), and the answers to the decisions asked while it was carried out.
+    private record Entry(Key key, PhysicalCard card, ActionSource ability, BoardFingerprint fingerprint, List<LoopRun.Answer> answers) {
     }
 }

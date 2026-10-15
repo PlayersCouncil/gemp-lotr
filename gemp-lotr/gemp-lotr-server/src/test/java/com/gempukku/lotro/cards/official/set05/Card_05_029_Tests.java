@@ -184,10 +184,12 @@ public class Card_05_029_Tests
 	}
 
 	@Test
-	public void AtAnduinBanksTheBurdenLoopIsFoundAtItsThirdRound() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AtAnduinBanksTheBurdenLoopRunsAsManyMoreTimesAsTheShadowPlayerAgrees() throws DecisionResultInvalidException, CardNotFoundException {
 		// CR 4.2 "loops": Sméagol skirmishing a minion at Anduin Banks.  Each use of his ability adds the burden the
 		// next use of the site's ability removes.  After two rounds, the board as it was, the loop is found: the Free
-		// Peoples player names how many more times it runs and the Shadow player agrees or lowers it (Q-0329).
+		// Peoples player names how many more times it runs and the Shadow player agrees, "with the Shadow player
+		// taking the final action" (Q-0329).  The loop is run, and each ability is barred for the rest of the
+		// skirmish.
 		var scn = GetScenario();
 
 		var smeagol = scn.GetFreepsCard("smeagol");
@@ -237,13 +239,68 @@ public class Card_05_029_Tests
 		assertTrue(scn.ShadowDecisionAvailable("the loop between [[Sméagol, Slinker]] and [[Anduin Banks]] will be performed **3** more times."));
 		scn.ShadowAgreeToLoop();
 
-		// The run of the iterations is not built yet: he is offered his ability again, and passes.
-		assertTrue(scn.FreepsActionAvailable(smeagol));
+		// Three rounds, the site's action last: Sméagol 7 + 6, the Pursuer 9 + 6, no burden.  The Free Peoples
+		// player acts next, with Sméagol's ability barred.
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(13, scn.GetStrength(smeagol));
+		assertEquals(15, scn.GetStrength(pursuer));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertTrue(scn.FreepsActionLoopBanned(smeagol));
 		scn.PassSkirmishActions();
 
-		// 7 against 9: the minion wins, and Sméagol takes no wound.
+		// 13 against 15: the minion wins, and Sméagol takes no wound.
 		assertEquals(0, scn.GetWoundsOn(smeagol));
 		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.InFierceRound());
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
+
+	@Test
+	public void AtAnduinBanksALowerNumberGivesSmeagolTheLastActionAndLeavesHisBurden() throws DecisionResultInvalidException, CardNotFoundException {
+		// CR 4.2 "loops": the Shadow player "may name a lower number of iterations ... with the Free Peoples player
+		// taking the final action", so the loop ends on Sméagol's ability, adding one action where the rounds end
+		// on the site's (Q-0329).
+		var scn = GetScenario();
+
+		var smeagol = scn.GetFreepsCard("smeagol");
+		var pursuer = scn.GetShadowCard("pursuer");
+		scn.MoveCompanionsToTable(smeagol);
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+		scn.MoveMinionsToTable(pursuer);
+		scn.FreepsPass();
+
+		var banks = scn.GetCurrentSite();
+		assertEquals("Anduin Banks", banks.getBlueprint().getTitle());
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(smeagol, pursuer);
+		scn.FreepsResolveSkirmish(smeagol);
+
+		scn.FreepsUseCardAction(smeagol);
+		scn.ShadowUseCardAction(banks);
+		scn.FreepsUseCardAction(smeagol);
+		scn.ShadowUseCardAction(banks);
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(7, scn.GetStrength(smeagol));
+		assertEquals(9, scn.GetStrength(pursuer));
+
+		scn.FreepsNameLoopIterations(3);
+		scn.ShadowLowerLoop(2);
+
+		// Two rounds and Sméagol's ability once more: he is 7 + 6, the Pursuer 9 + 4, and his last burden stays.
+		// The Shadow player acts next, with the site's ability barred.
+		assertEquals(1, scn.GetBurdens());
+		assertEquals(13, scn.GetStrength(smeagol));
+		assertEquals(13, scn.GetStrength(pursuer));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		assertTrue(scn.ShadowActionLoopBanned(banks));
+		scn.PassSkirmishActions();
+
+		// 13 against 13: a tie the minion wins, and Sméagol takes no wound.
+		assertEquals(0, scn.GetWoundsOn(smeagol));
+		assertEquals(1, scn.GetBurdens());
 		assertTrue(scn.InFierceRound());
 		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}

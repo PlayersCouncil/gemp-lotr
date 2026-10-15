@@ -12,6 +12,8 @@ import java.util.List;
 public abstract class CardActionSelectionDecision extends AbstractAwaitingDecision {
     private final LotroGame _game;
     private final List<Action> _actions;
+    // For each action, whether it is a use of an ability barred after a voluntary loop (ActionsEnvironment.isLoopBanned)
+    private boolean[] _loopBanned;
 
     public CardActionSelectionDecision(LotroGame game, int decisionId, String text, List<? extends Action> actions) {
         super(decisionId, text, AwaitingDecisionType.CARD_ACTION_CHOICE);
@@ -24,6 +26,7 @@ public abstract class CardActionSelectionDecision extends AbstractAwaitingDecisi
         setParam("actionText", getActionTexts(actions));
         // Each action is judged here, once, as it is put in front of the player.
         setParam("noEffect", getNoEffects(actions));
+        setParam("loopBanned", getLoopBans(actions));
     }
 
     public CardActionSelectionDecision(int id, String text, List<String> cardIds, List<String> blueprintIds, List<String> actionTexts) {
@@ -60,6 +63,7 @@ public abstract class CardActionSelectionDecision extends AbstractAwaitingDecisi
         setParam("blueprintId", getBlueprintIdsForVirtualActions(actions));
         setParam("actionText", getActionTexts(actions));
         setParam("noEffect", getNoEffects(actions));
+        setParam("loopBanned", getLoopBans(actions));
     }
 
     /**
@@ -110,6 +114,19 @@ public abstract class CardActionSelectionDecision extends AbstractAwaitingDecisi
         return result;
     }
 
+    // One word for each action, in the order of "actionId": "true" if it is a use of an ability barred for the rest
+    // of the phase after a voluntary loop (CR 4.2 "loops"; Q-0329), "false" if not.  Such an action is shown and
+    // cannot be taken (getSelectedAction refuses it).
+    private String[] getLoopBans(List<? extends Action> actions) {
+        _loopBanned = new boolean[actions.size()];
+        String[] result = new String[actions.size()];
+        for (int i = 0; i < result.length; i++) {
+            _loopBanned[i] = _game != null && _game.getActionsEnvironment().isLoopBanned(actions.get(i));
+            result[i] = String.valueOf(_loopBanned[i]);
+        }
+        return result;
+    }
+
     protected Action getSelectedAction(String result) throws DecisionResultInvalidException {
         if (result.equals(""))
             return null;
@@ -117,6 +134,8 @@ public abstract class CardActionSelectionDecision extends AbstractAwaitingDecisi
             int actionIndex = Integer.parseInt(result);
             if (actionIndex < 0 || actionIndex >= _actions.size())
                 throw new DecisionResultInvalidException();
+            if (_loopBanned != null && actionIndex < _loopBanned.length && _loopBanned[actionIndex])
+                throw new DecisionResultInvalidException("That ability was used in a loop, and cannot be used again this phase");
 
             return _actions.get(actionIndex);
         } catch (NumberFormatException exp) {

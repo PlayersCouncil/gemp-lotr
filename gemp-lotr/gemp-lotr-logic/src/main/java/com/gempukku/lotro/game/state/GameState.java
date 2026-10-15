@@ -92,6 +92,11 @@ public class GameState {
     private Skirmish _skirmish = null;
 
     private final Set<GameStateListener> _gameStateListeners = new HashSet<>();
+    // While events are held back (holdBackEvents): what would have been sent, in order, and each listener as the
+    // senders see it then; null when nothing is held back
+    private List<Runnable> _heldBackEvents;
+    private List<GameStateListener> _heldBackListeners;
+    private GameStats _heldBackGameStats;
     private final LinkedList<String> _lastMessages = new LinkedList<>();
     // Every message sent since startMessageRecord() was last called; null until somebody asks for a record
     private List<String> _messageRecord;
@@ -317,7 +322,79 @@ public class GameState {
     }
 
     private Collection<GameStateListener> getAllGameStateListeners() {
+        if (_heldBackEvents != null)
+            return _heldBackListeners;
         return Collections.unmodifiableSet(_gameStateListeners);
+    }
+
+    /**
+     * From now on nothing is sent to the players, nor to anything else listening to the game (the replay's
+     * recording, a bot): each event is kept back instead, until {@link #releaseHeldBackEvents} sends what is kept
+     * or {@link #dropHeldBackEvents} drops it.  For the rounds of a voluntary loop carried out unseen (CR 4.2
+     * "loops"; Ketura on Q-0329: "disable transmission/recording of the game events while doing so, only sending
+     * the final 1-2 actions with updated stats"; LoopRun).  The game log's lines are kept back with the rest, from
+     * the record of messages too, and the game stats are not sent at all until the release, which sends them as
+     * they then stand.  Nothing changes in the game itself.
+     */
+    public void holdBackEvents() {
+        if (_heldBackEvents != null)
+            return;
+        _heldBackEvents = new ArrayList<>();
+        _heldBackListeners = new ArrayList<>();
+        for (GameStateListener listener : _gameStateListeners)
+            _heldBackListeners.add(heldBack(listener));
+    }
+
+    /**
+     * Drops what has been held back so far, which is then never sent; events go on being held back.  For when what
+     * the players last saw is again how the game stands.
+     */
+    public void dropHeldBackEvents() {
+        if (_heldBackEvents != null)
+            _heldBackEvents.clear();
+    }
+
+    /**
+     * Stops holding events back, sends what was held, in order, and then the game stats as they stand if any were
+     * held back.  An event held back is worked out as it is sent: a card is described as it is now.
+     */
+    public void releaseHeldBackEvents() {
+        if (_heldBackEvents == null)
+            return;
+        final List<Runnable> held = _heldBackEvents;
+        final GameStats gameStats = _heldBackGameStats;
+        _heldBackEvents = null;
+        _heldBackListeners = null;
+        _heldBackGameStats = null;
+        for (Runnable event : held)
+            event.run();
+        if (gameStats != null)
+            sendGameStats(gameStats);
+    }
+
+    // A listener as the senders see it while events are held back: what it is told is kept back for it, and what
+    // is asked of it (whose it is, whether it is a person's) it answers at once.
+    private GameStateListener heldBack(GameStateListener listener) {
+        return (GameStateListener) java.lang.reflect.Proxy.newProxyInstance(GameStateListener.class.getClassLoader(),
+                new Class<?>[]{GameStateListener.class},
+                (proxy, method, args) -> {
+                    if (method.getReturnType() != void.class)
+                        return invoke(listener, method, args);
+                    _heldBackEvents.add(() -> invoke(listener, method, args));
+                    return null;
+                });
+    }
+
+    private static Object invoke(GameStateListener listener, java.lang.reflect.Method method, Object[] args) {
+        try {
+            return method.invoke(listener, args);
+        } catch (java.lang.reflect.InvocationTargetException exp) {
+            if (exp.getCause() instanceof RuntimeException runtime)
+                throw runtime;
+            throw new IllegalStateException(exp.getCause());
+        } catch (IllegalAccessException exp) {
+            throw new IllegalStateException(exp);
+        }
     }
 
     private String getPhaseString() {
@@ -472,6 +549,10 @@ public class GameState {
     }
 
     public void sendMessage(String message) {
+        if (_heldBackEvents != null) {
+            _heldBackEvents.add(() -> sendMessage(message));
+            return;
+        }
         _lastMessages.add(message);
         if (_lastMessages.size() > LAST_MESSAGE_STORED_COUNT)
             _lastMessages.removeFirst();
@@ -2098,6 +2179,10 @@ public class GameState {
     }
 
     public void sendGameStats(GameStats gameStats) {
+        if (_heldBackEvents != null) {
+            _heldBackGameStats = gameStats;
+            return;
+        }
         for (GameStateListener listener : getAllGameStateListeners())
             listener.sendGameStats(gameStats);
         _mostRecentGameStats = gameStats;
