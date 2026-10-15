@@ -554,6 +554,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "While bearer is at a <terrain> site", "if that <character> is at a <terrain>": the character's place is `atSite(<terrain>)`, and an ally is at his home site (F-0380, F-0503, F-0518; built by engine pass 48) [Q-0252, F-0233]
 - "<Do X>; <Y> during this skirmish" on an event that makes the skirmish: Y is laid only if the skirmish was made (F-0386, Return to Its Master 1_224)
 - A Ring's `ringIsActive` requirement is shown in Return to Its Master 1_224's file, not the Ring's own
+- A Frodo with the Ring-bearer keyword, and CR 4.2 "Ring-bearer" ("If a character other than Frodo is your Ring-bearer, you cannot play any version of Frodo with the Ring-bearer keyword") [Q-0159]
 - Helpless 2_76, "Sam's game text does not apply": a Sam who is not the Ring-bearer is no longer Ring-bound
 - The CR 4.2 "response" example (Isildur wearing Answer To All Riddles 4_1, Sapling of the White Tree 9_35) is shown in the Ring's file
 - The CR 4.2 "modifier" example (Shelob, Her Ladyship 10_23 with Sent Back 9_27) is shown in Shelob's file, and the "effect" and "preventing effects" example (Morgul Destroyer with the Sapling 9_35) in Morgul Destroyer's

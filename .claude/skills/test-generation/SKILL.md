@@ -368,6 +368,9 @@ sets (30 to 33) are not counted among them, not even in a Hobbit-set card's own 
 (Q-0303). That holds for a title that pays a cost or is acted on as it does for
 one spotted or played ("exert Gollum": each of the two Gollums, [gollum] and [wraith], pays in a test of his own,
 60_20); lint warns `title-kinds` where the cards of such a title that the file names leave out a type of it or are all of one culture.
+For any word, a title or not, a Hobbit-set card is laid only where it is the one printed card that tells two
+definitions apart, and Notes say so (Q-0312: Saruman, The White 32_24 for Stern Words 19_9; Iron-forged Weapon
+32_18, the one hand weapon of another culture a Dwarf can bear, for Axe Strike 1_3).
 A card's own name in its own text is that card (`self`), not a title picking cards out: "Exert Elrond" on Elrond
 owes `C` and `C-` and no F (1_40 above; Úlairë Nelya 11_222).
 
