@@ -467,10 +467,11 @@
 					type: DiscardFromHand
 					count: 3
 					forced: false
+					memorize: discardedCards
 				}
 				effect: {
 					type: PlayCardFromDiscard
-					select: choose(your,condition)
+					select: choose(your,condition,not(memory(discardedCards)))
 				}
 			}
 		]
