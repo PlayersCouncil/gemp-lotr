@@ -20,11 +20,7 @@
 				type: modifier
 				modifier: {
 					type: addKeyword
-					requires: {
-						type: location
-						filter: mountain
-					}
-					filter: bearer
+					filter: bearer,atSite(mountain)
 					keyword: damage
 					amount: 1
 				}

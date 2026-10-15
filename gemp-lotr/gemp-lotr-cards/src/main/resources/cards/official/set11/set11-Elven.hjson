@@ -62,11 +62,7 @@
 				type: modifier
 				modifier: {
 					type: modifyStrength
-					requires: {
-						type: location
-						filter: or(forest,river)
-					}
-					filter: minion,inSkirmishAgainst(bearer)
+					filter: minion,inSkirmishAgainst(bearer,atSite(or(forest,river)))
 					amount: -1
 				}
 			}
@@ -228,11 +224,13 @@
 				{
 					type: modifyStrength
 					select: choose(elf)
+					memorize: chosenElf
 					amount: {
 						type: Conditional
 						requires: {
-							type: location
-							filter: river
+							type: memoryMatches
+							memory: chosenElf
+							filter: atSite(river)
 						}
 						true: 3
 						false: 2

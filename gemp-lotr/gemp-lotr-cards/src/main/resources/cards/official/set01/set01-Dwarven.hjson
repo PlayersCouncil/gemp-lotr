@@ -1157,11 +1157,13 @@
 			effect: {
 				type: modifyStrength
 				select: choose(dwarf)
+				memorize: chosenDwarf
 				amount: {
 					type: Conditional
 					requires: {
-						type: location
-						filter: underground
+						type: memoryMatches
+						memory: chosenDwarf
+						filter: atSite(underground)
 					}
 					true: 4
 					false: 2

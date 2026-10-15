@@ -3,6 +3,13 @@ package com.gempukku.lotro.cards.build.field.effect.appender;
 import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.CardResolver;
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import com.gempukku.lotro.cards.build.FilterableSource;
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Filterable;
+import com.gempukku.lotro.filters.Filters;
+import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
@@ -34,6 +41,19 @@ public class IfEffect implements EffectAppenderProducer {
         // "At sites 1 to 5 ...; at any other site ...": where the fellowship is does not change while an action
         // is paid for, so a check of that and nothing else can be made beforehand as well.
         final boolean checksOnlyTheSite = conditionArray.length > 0 && Arrays.stream(conditionArray).allMatch(IfEffect::isSiteCheck);
+        // "If that Man is at a plains" (memoryMatches of atSite(...), F-0518): where a card is does not change while
+        // an action is paid for either, but the card is chosen by the action itself.  Before it is chosen the check
+        // can hold only if some site on the path is of the kind, so with none it is certainly false.
+        final FilterableSource[] placeChecks = new FilterableSource[conditionArray.length];
+        boolean checksOnlyPlaces = conditionArray.length > 0;
+        for (int i = 0; i < conditionArray.length; i++) {
+            final String siteFilter = placeCheckSiteFilter(conditionArray[i]);
+            if (siteFilter != null)
+                placeChecks[i] = environment.getFilterFactory().generateFilter(siteFilter, environment);
+            else if (!isSiteCheck(conditionArray[i]))
+                checksOnlyPlaces = false;
+        }
+        final boolean checksOnlyWhereThingsAre = checksOnlyPlaces;
 
         return new DelayedAppender() {
             @Override
@@ -60,6 +80,12 @@ public class IfEffect implements EffectAppenderProducer {
                     return EffectForecast.AT_LIMIT;
                 if (checksOnlyTheSite)
                     return EffectForecast.together(actionContext, checkRequirements(actionContext) ? trueEffectAppenders : falseEffectAppenders);
+                if (checksOnlyWhereThingsAre) {
+                    if (everyPlaceCheckedIsRemembered(actionContext))
+                        return EffectForecast.together(actionContext, checkRequirements(actionContext) ? trueEffectAppenders : falseEffectAppenders);
+                    if (!mayHoldBeforeTheCardIsChosen(actionContext))
+                        return EffectForecast.together(actionContext, falseEffectAppenders);
+                }
                 return EffectForecast.together(actionContext, trueEffectAppenders, falseEffectAppenders);
             }
 
@@ -70,6 +96,38 @@ public class IfEffect implements EffectAppenderProducer {
             public boolean isCertainToDoNothingIfChosen(ActionContext actionContext) {
                 return EffectForecast.areCertainToDoNothingIfChosen(actionContext,
                         checkRequirements(actionContext) ? trueEffectAppenders : falseEffectAppenders);
+            }
+
+            // Each check of the site as it stands, each check of where a remembered card is as it stands once the
+            // card is remembered, and before that whether any site laid on the path is of the kind (every card is
+            // at the fellowship's site or at an ally's home site laid there: Filters.atSite).
+            private boolean everyPlaceCheckedIsRemembered(ActionContext actionContext) {
+                for (int i = 0; i < conditions.length; i++) {
+                    if (placeChecks[i] != null && actionContext.getCardsFromMemory(placeCheckMemory(conditionArray[i])).isEmpty())
+                        return false;
+                }
+                return true;
+            }
+
+            private boolean mayHoldBeforeTheCardIsChosen(ActionContext actionContext) {
+                for (int i = 0; i < conditions.length; i++) {
+                    if (placeChecks[i] == null || !actionContext.getCardsFromMemory(placeCheckMemory(conditionArray[i])).isEmpty()) {
+                        if (!conditions[i].accepts(actionContext))
+                            return false;
+                    } else {
+                        final Filterable siteFilter = placeChecks[i].getFilterable(actionContext);
+                        boolean anySite = false;
+                        for (PhysicalCard card : actionContext.getGame().getGameState().getInPlay()) {
+                            if (card.getBlueprint().getCardType() == CardType.SITE && Filters.accepts(actionContext.getGame(), card, siteFilter)) {
+                                anySite = true;
+                                break;
+                            }
+                        }
+                        if (!anySite)
+                            return false;
+                    }
+                }
+                return true;
             }
 
             private boolean checkRequirements(ActionContext actionContext) {
@@ -102,6 +160,20 @@ public class IfEffect implements EffectAppenderProducer {
     private static boolean isSiteCheck(JSONObject condition) {
         return String.valueOf(condition.get("type")).equalsIgnoreCase("location")
                 && !CardResolver.readsMemory(String.valueOf(condition.get("filter")));
+    }
+
+    private static final Pattern AT_SITE = Pattern.compile("^\\s*atsite\\((.*)\\)\\s*$", Pattern.CASE_INSENSITIVE);
+
+    // The site filter of a check "memoryMatches <memory> atSite(<site filter>)", or null for any other check.
+    private static String placeCheckSiteFilter(JSONObject condition) {
+        if (!String.valueOf(condition.get("type")).equalsIgnoreCase("memoryMatches") || condition.get("count") != null)
+            return null;
+        final Matcher matcher = AT_SITE.matcher(String.valueOf(condition.get("filter")));
+        return matcher.matches() ? matcher.group(1) : null;
+    }
+
+    private static String placeCheckMemory(JSONObject condition) {
+        return String.valueOf(condition.get("memory"));
     }
 
     private static boolean isLimitCheck(JSONObject condition) {

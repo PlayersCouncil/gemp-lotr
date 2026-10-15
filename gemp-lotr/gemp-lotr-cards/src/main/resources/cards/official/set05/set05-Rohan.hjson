@@ -758,8 +758,9 @@
 					{
 						type: If
 						check: {
-							type: location
-							filter: plains
+							type: memoryMatches
+							memory: chosenMan
+							filter: atSite(plains)
 						}
 						true: {
 							type: heal

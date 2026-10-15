@@ -160,13 +160,15 @@
 				{
 					type: modifyStrength
 					select: choose(dwarf)
+					memorize: chosenDwarf
 					amount: 2
 				}
 				{
 					type: If
 					check: {
-						type: location
-						filter: or(battleground,mountain)
+						type: memoryMatches
+						memory: chosenDwarf
+						filter: atSite(or(battleground,mountain))
 					}
 					true: {
 						type: drawCards
@@ -373,8 +375,9 @@
 							{
 								type: Conditional
 								requires: {
-									type: location
-									filter: or(mountain,underground)
+									type: memoryMatches
+									memory: chosenDwarf
+									filter: atSite(or(mountain,underground))
 								}
 								true: 1
 								false: 0

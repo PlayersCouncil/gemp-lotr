@@ -264,6 +264,14 @@ public class FilterFactory {
                     int number = Integer.parseInt(parameterSplit[1]);
                     return (actionContext) -> Filters.isAllyHome(number, sitesBlock);
                 });
+        // A card at a site the filter given accepts, "while bearer is at a plains site": an ally at his home site,
+        // every other card at the fellowship's (Filters.atSite; CR 4.2 "ally", F-0518).  Where the text names the
+        // character's place; "while the fellowship is at" is the location requirement.
+        parameterFilters.put("atsite",
+                (parameter, environment) -> {
+                    final FilterableSource siteFilterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
+                    return (actionContext) -> Filters.atSite(siteFilterableSource.getFilterable(actionContext));
+                });
         parameterFilters.put("allyinregion",
                 (parameter, environment) -> {
                     final String[] parameterSplit = parameter.split(",");

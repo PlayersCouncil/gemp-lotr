@@ -116,11 +116,7 @@
 				type: modifier
 				modifier: {
 					type: addKeyword
-					filter: bearer,unwounded
-					requires: {
-						type: location
-						filter: battleground
-					}
+					filter: bearer,unwounded,atSite(battleground)
 					keyword: defender
 					amount: 1
 				}
@@ -247,8 +243,8 @@
 					phase: archery
 				}
 				requires: {
-					type: location
-					filter: battleground
+					type: canSpot
+					filter: bearer,atSite(battleground)
 				}
 				cost: {
 					type: exert
@@ -300,8 +296,8 @@
 								filter: bearer,ranger
 							}
 							{
-								type: location
-								filter: river
+								type: canSpot
+								filter: bearer,atSite(river)
 							}
 						]
 					}

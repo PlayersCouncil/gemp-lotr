@@ -46,6 +46,28 @@ public class Card_02_012_Tests
 		);
 	}
 
+	// The Fellowship path: site 4 is Balin's Tomb 1_343, underground (its maneuver ability needs a tale).  Grimir's
+	// home, site 3, is Rivendell Valley 1_341, a sanctuary and no more.  No Dwarf ally has a home that is
+	// underground: each is of site 3 of the Fellowship path.  Aragorn fights the skirmish; the Dwarves are in none.
+	protected VirtualTableScenario GetAllyScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("realm", "2_12");
+					put("guard", "1_7");        // Dwarf Guard: Dwarf companion, strength 4, no text in play
+					put("grimir", "1_17");      // Grimir, Dwarven Elder: Dwarf ally, home 3F; a fellowship ability only
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: companion, strength 8; a maneuver ability used only on purpose
+					put("troop", "1_177");      // Goblin Patrol Troop: minion, strength 13, no text
+					for (int i = 1; i <= 20; i++) {
+						put("filler" + i, "1_177");
+					}
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
 	@Test
 	public void RealmofDwarrowdelfStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
@@ -133,5 +155,44 @@ public class Card_02_012_Tests
 		scn.FreepsPlayCard(card);
 
 		assertEquals(1, scn.GetTwilight());
+	}
+
+	@Test
+	public void AnAllyWhoseHomeIsNotUndergroundGetsNoDamageWithTheFellowshipUnderground() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetAllyScenario();
+
+		var realm = scn.GetFreepsCard("realm");
+		var guard = scn.GetFreepsCard("guard");
+		var grimir = scn.GetFreepsCard("grimir");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCardsToSupportArea(realm);
+		scn.MoveCompanionsToTable(guard, aragorn);
+		scn.MoveAlliesToTable(grimir);
+
+		var troop = scn.GetShadowCard("troop");
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToAssignments();
+		assertEquals("Balin's Tomb", scn.GetCurrentSite().getBlueprint().getTitle());
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.UNDERGROUND));
+		scn.FreepsAssignToMinions(aragorn, troop);
+		scn.FreepsResolveSkirmish(aragorn);
+		int grimirStrength = scn.GetStrength(grimir);
+
+		// The companion is with the fellowship, underground: strength +1 and damage +1.
+		scn.FreepsUseCardAction(realm);
+		scn.FreepsChooseCard(guard);
+		assertEquals(5, scn.GetStrength(guard));
+		assertEquals(1, scn.GetKeywordCount(guard, Keyword.DAMAGE));
+
+		// Grimir is at his home site, Rivendell Valley (CR 4.2 "ally"): strength +1 and no damage.
+		scn.ShadowPass();
+		scn.FreepsUseCardAction(realm);
+		scn.FreepsChooseCard(grimir);
+		assertEquals(grimirStrength + 1, scn.GetStrength(grimir));
+		assertEquals(0, scn.GetKeywordCount(grimir, Keyword.DAMAGE));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
 }

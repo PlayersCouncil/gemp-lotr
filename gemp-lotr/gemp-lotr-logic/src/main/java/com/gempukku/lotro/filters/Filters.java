@@ -610,6 +610,36 @@ public class Filters {
             (Filter) (game, physicalCard) -> RuleUtils.isAllyAtHome(physicalCard, game.getGameState().getCurrentSiteNumber(), game.getGameState().getCurrentSiteBlock()));
 
     /**
+     * A card at a site the given filter accepts: "while bearer is at a plains site", "heal that Man if at a
+     * plains" (the definition word atSite(...)).  CR 4.2 "ally": "Each ally in your support area is considered to
+     * be at his home site.  When your fellowship is at your ally's home site, that ally is considered to be at the
+     * same site as the fellowship."  So an ally is at each of his home sites that lies on the adventure path
+     * (RuleUtils.getAllyHomeSitesOnThePath), wherever the fellowship is, and in a skirmish away from home as well
+     * (Ketura on F-0503); an ally with no home on the path (a home not yet laid, a path of another block, a
+     * Shadows path, where "allies have no home sites") is at no site and is at a site of no terrain.  Every other
+     * card is at the site the fellowship is at.  A card borne is where the card at the bottom of its bearers is,
+     * and an ally is known by what is printed on him, so a hindered ally is still at his home site (Q-0252).
+     * The site is asked the filter as it stands, a terrain a card has given it included.  F-0518, engine pass 48.
+     */
+    public static Filter atSite(final Filterable siteFilter) {
+        return (game, physicalCard) -> {
+            PhysicalCard at = physicalCard;
+            // A card is borne by one card at most, so the walk ends; the count is against a chain that is broken.
+            for (int depth = 0; at.getAttachedTo() != null && depth < 50; depth++)
+                at = at.getAttachedTo();
+            if (at.getBlueprint().getCardType() == CardType.ALLY) {
+                for (PhysicalCard homeSite : RuleUtils.getAllyHomeSitesOnThePath(game, at)) {
+                    if (accepts(game, homeSite, siteFilter))
+                        return true;
+                }
+                return false;
+            }
+            final PhysicalCard currentSite = game.getGameState().getCurrentSite();
+            return currentSite != null && accepts(game, currentSite, siteFilter);
+        };
+    }
+
+    /**
      * A character a card says "may not participate in archery fire" (Streets of Edoras). Participating has
      * parts: counting for the archery total, and taking archery wounds. The bar is on both, so a card that sends
      * archery wounds to allies sends none to this one.

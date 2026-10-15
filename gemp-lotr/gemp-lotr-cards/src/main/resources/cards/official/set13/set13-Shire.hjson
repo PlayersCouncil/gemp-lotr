@@ -218,8 +218,9 @@
 							{
 								type: Conditional
 								requires: {
-									type: location
-									filter: dwelling
+									type: memoryMatches
+									memory: chosenHobbit
+									filter: atSite(dwelling)
 								}
 								true: 1
 								false: 0
@@ -285,13 +286,13 @@
 			{
 				type: event
 				requires: {
-					type: location
-					filter: or(dwelling,forest)
+					type: canSpot
+					filter: your,hobbit,atSite(or(dwelling,forest))
 				}
 				effect: [
 					{
 						type: modifyStrength
-						select: choose(your,hobbit)
+						select: choose(your,hobbit,atSite(or(dwelling,forest)))
 						amount: 3
 					}
 				]

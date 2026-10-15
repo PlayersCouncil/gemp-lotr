@@ -549,8 +549,9 @@
 				{
 					type: If
 					check: {
-						type: location
-						filter: underground
+						type: memoryMatches
+						memory: chosenDwarf
+						filter: atSite(underground)
 					}
 					true: {
 						type: addKeyword

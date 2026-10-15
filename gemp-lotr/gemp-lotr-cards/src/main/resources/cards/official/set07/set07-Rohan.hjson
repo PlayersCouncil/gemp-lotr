@@ -1633,11 +1633,7 @@
 				type: modifier
 				modifier: {
 					type: cantTakeMoreWoundsThan
-					requires: {
-						type: location
-						filter: plains
-					}
-					filter: bearer
+					filter: bearer,atSite(plains)
 					amount: 1
 					phase: skirmish
 				}

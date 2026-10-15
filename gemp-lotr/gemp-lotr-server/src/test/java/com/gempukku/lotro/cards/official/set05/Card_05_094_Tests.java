@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -54,6 +53,28 @@ public class Card_05_094_Tests
 					put("troop", "1_177");      // Goblin Patrol Troop: strength 13, vitality 3, no text
 				}},
 				VirtualTableScenario.KingSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// The Towers path with Westemnet Hills 4_344 as site 4: a plains, and the home site of Guma (4T).  Moving there
+	// heals each mounted companion and mounted ally, so the wound is laid after the move.
+	protected VirtualTableScenario GetHillsScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("host", "5_94");
+					put("guard", "5_83");       // Household Guard: [rohan] Man companion, strength 6, vitality 3; valiant and nothing else
+					put("guma", "4_277");       // Guma: [rohan] Man ally, home 4T, strength 4, vitality 2; a fellowship ability used only on purpose
+					put("mount", "4_287");      // Rider's Mount: [rohan] mount on a [rohan] Man; minions skirmishing bearer exert
+					put("troop", "1_177");      // Goblin Patrol Troop: strength 13, vitality 3, no text
+				}},
+				new HashMap<>()
+				{{
+					putAll(VirtualTableScenario.TowersSites);
+					put("site4", "4_344");
+				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -212,7 +233,6 @@ public class Card_05_094_Tests
 	}
 
 	@Test
-	@Ignore("F-0518: \"heal that Man if at a plains\" goes by the fellowship's site, but an ally is at his home site (CR 4.2 ally): the Herdsman, home Barrows of Edoras, is healed with the fellowship at Eastfold")
 	public void AnAllyChosenWithTheFellowshipAtAPlainsIsAtHisHomeSiteAndIsNotHealed() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
@@ -235,7 +255,8 @@ public class Card_05_094_Tests
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(guard, troop);
 		scn.FreepsResolveSkirmish(guard);
-		// The fellowship is at a plains; the Herdsman, an ally, is at his home site 3, Barrows of Edoras.
+		// The fellowship is at a plains.  The Herdsman, an ally, is at his home site (CR 4.2 "ally"): site 3, Barrows
+		// of Edoras, no plains and not yet laid.
 		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.PLAINS));
 		assertFalse(scn.HasKeyword(scn.GetFreepsSite(3), Keyword.PLAINS));
 		assertEquals(4, scn.GetStrength(herdsman));
@@ -245,6 +266,45 @@ public class Card_05_094_Tests
 		scn.FreepsUseCardAction(host);
 		assertEquals(7, scn.GetStrength(herdsman));
 		assertEquals(1, scn.GetWoundsOn(herdsman));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
+	@Test
+	public void AnAllyChosenAtHisHomeSiteWhichIsAPlainsIsHealed() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetHillsScenario();
+
+		var host = scn.GetFreepsCard("host");
+		var guard = scn.GetFreepsCard("guard");
+		var guma = scn.GetFreepsCard("guma");
+		var mount = scn.GetFreepsCard("mount");
+		scn.MoveCompanionsToTable(guard);
+		scn.MoveAlliesToTable(guma);
+		scn.MoveCardsToSupportArea(host);
+		scn.AttachCardsTo(guma, mount);
+
+		var troop = scn.GetShadowCard("troop");
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+		scn.SkipToPhase(Phase.SHADOW);
+		scn.AddWoundsToChar(guma, 1);
+		scn.MoveMinionsToTable(troop);
+		assertEquals(1, scn.GetWoundsOn(guma));
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(guard, troop);
+		scn.FreepsResolveSkirmish(guard);
+		// The fellowship is at Guma's home site, Westemnet Hills, a plains: so is he.
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		assertEquals("Westemnet Hills", scn.GetCurrentSite().getBlueprint().getTitle());
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.PLAINS));
+		assertEquals(4, scn.GetStrength(guma));
+		assertEquals(1, scn.GetWoundsOn(guma));
+
+		// The only mounted [rohan] Man: chosen unasked.
+		scn.FreepsUseCardAction(host);
+		assertEquals(7, scn.GetStrength(guma));
+		assertEquals(0, scn.GetWoundsOn(guma));
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
 }

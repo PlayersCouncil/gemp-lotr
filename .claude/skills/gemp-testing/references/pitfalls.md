@@ -1109,6 +1109,14 @@ Hobbit companion twice" showed nothing of `companion`; Bilbo 1_284, a Hobbit all
 `MoveCompanionsToTable` takes companions only and fails the test if handed anything else, as `MoveAlliesToTable`
 does if handed anything but an ally.
 
+**An ally is at his home site, not the fellowship's** (F-0518, engine pass 48). A text that names a character's
+place (`atSite(...)`: "while bearer is at a plains site") reads an ally at each of his home sites laid on the path:
+Guma 4_277 is at a plains at Westemnet Hills with the fellowship at White Rocks, and the Rohirrim Herdsman 7_247 is
+at Barrows of Edoras with the fellowship at Westemnet Hills. A home not yet laid (site 4 while the fellowship is at
+site 2), another block's path and a Shadows path leave him at no site. A board for "an ally at the terrain" lays
+his home site as that terrain; one for "not" lays the fellowship at the terrain and the ally's home elsewhere
+(mechanics/sites/WhereACharacterIsTests).
+
 **A play read as not offered for a card that is not in hand shows nothing.** `GetFreepsCard` and `GetShadowCard`
 leave the card in its owner's draw deck, and there `FreepsPlayAvailable(card)` answers false whatever the card
 under test does (probed: Barliman Butterbur 1_70 false from the deck and true from the hand, with nothing on the

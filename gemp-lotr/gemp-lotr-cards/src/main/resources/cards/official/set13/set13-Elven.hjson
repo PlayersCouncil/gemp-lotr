@@ -485,16 +485,9 @@
 				type: event
 				effect: [
 					{
-						type: If
-						check: {
-							type: location
-							filter: or(forest,river)
-						}
-						true: {
-							type: modifyStrength
-							select: choose(minion,inSkirmishAgainst(your,elf))
-							amount: -3
-						}
+						type: modifyStrength
+						select: choose(minion,inSkirmishAgainst(your,elf,atSite(or(forest,river))))
+						amount: -3
 					}
 				]
 			}
