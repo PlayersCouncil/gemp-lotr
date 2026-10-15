@@ -499,6 +499,8 @@ leave the other player's in his: nothing offered then shows that only the choose
 A choice among cards that lie in no zone at all (94_31's "site from outside the game") is read and answered by
 blueprint id, `ShadowHasBPChoiceAvailable("1_361")` and `ShadowChooseCardBPFromSelection("1_361")`, and
 `ShadowGetChoiceMin()` reads its minimum as for any choice of cards (Card_94_031_Tests).
+To read that a reveal of the OTHER player's hand leaves the revealer's own hand unshown, the revealer's card must be
+of a title that hand lacks: his copy of a card that is also in it reads as shown (Card_01_086_Tests).
 
 **Several cards placed beneath a draw deck are asked for one at a time.** `putCardsFromDiscardOnBottomOfDeck`
 with more than one card to place, `all(...)` included, asks its player which goes first (a choice of one, minimum

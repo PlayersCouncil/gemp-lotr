@@ -447,8 +447,8 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A choice made ahead of a preventable exert loses the exert's own check (F-0206) [Q-0114]
 - A `preventable` around an effect that has its own choice asks the prevention first (Wielder of the Flame 2_28) [F-0206, Q-0284]
 - "Spot X to <effect>" on an optional trigger or ability is no cost for Q-0034 (F-0167, F-0209, F-0211, F-0219) [Q-0224, Q-0029, Q-0033, F-0401, Q-0164]
-- An "or" between two cost-to-effect halves (Q-0034)
-- A choice of cost-to-effect branches with no payable branch is not offered (F-0222, F-0259) [Q-0220, Q-0062, F-0465, Q-0254]
+- An "or" between two cost-to-effect halves (Q-0034) [F-0222]
+- A choice of cost-to-effect branches with no payable branch is not offered (F-0222, F-0259) [Q-0220, F-0530, Q-0034, Q-0062, F-0465, Q-0254]
 - "The Free Peoples player must <pay> to assign <this minion> ..." (Q-0221: A, built by engine pass 26; paid ahead of his own assigning by Q-0283, engine pass 30; F-0306, F-0307, F-0308, Q-0174 and Q-0199 before it) [F-0499, Q-0038, F-0425]
 - "You may discard up to N (X, any number of) cards from hand to draw as many" on an optional trigger (F-0300, Robin Smallburrow 68_111 and 18_111) [F-0022, Q-0015, Q-0034, Q-0143, F-0448, F-0449]
 - "You may" on a Race to Mount Doom modifier names its player (F-0311)
