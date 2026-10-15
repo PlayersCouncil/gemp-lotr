@@ -10,7 +10,7 @@ Each of these has been checked against the engine as it stands on this branch.
 onto the table while a decision is pending does not change what that decision offers. To see a card become
 playable, complete the pending decision with a real action and look at the next one.
 
-**One candidate is chosen for you; none is skipped.** When a choice has exactly as many valid candidates as it
+**One candidate is chosen for you; none is skipped.** When a choice (a cost's as well as a target's: 2 cards to discard from a hand of 2) has exactly as many valid candidates as it
 needs, the engine makes it without asking, and a `FreepsChooseCard` written for it fails, naming the decision
 the game has gone on to (G-0032). When it has none, that part of the effect is skipped; so is a choice among
 cards an earlier effect set aside (`ChooseArbitraryCards`) when it set none aside (F-0338). So a test that
@@ -932,7 +932,7 @@ with cards in his hand he is first asked "Reconcile - choose card to discard or 
 (`ShadowDeclineReconciliation()`); with an empty hand nothing is asked (Radagast 59_26's tests). An empty hand
 does not stay empty over a second move: where his draw deck holds cards the Shadow player draws at the reconcile
 inside `SkipToMovementDecision()`, so the last regroup phase asks him to reconcile again before the turn ends
-and the minions are discarded (Mountain-troll 65_112's tests). The old Race to Mount Doom double-move tests reach
+and the minions are discarded (Mountain-troll 65_112's tests). So a test of a regroup-move trigger that reads or spends the Shadow hand empties his draw deck first, `SetShadowDrawDeck()` with no cards, or the reconcile before the move refills the hand (Card_04_213_Tests). The old Race to Mount Doom double-move tests reach
 the second move by `SkipToPhase(Phase.REGROUP); PassCurrentPhaseActions(); FreepsChooseToMove()` over empty hands
 (a one-card deck, its other copy put in the discard pile): one more card in the deck and the last call fails on
 the Shadow player's reconcile. Write `SkipToMovementDecision()` for the first two (92_11, 92_14).
