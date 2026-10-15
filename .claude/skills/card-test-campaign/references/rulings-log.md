@@ -2152,7 +2152,7 @@ same non-pass actions 3 times in a row? Attempt to detect when the cost of one a
 action? If a subagent can investigate and propose how the server-side aspect would work, I'm willing to consider how
 to handle this." She believes involuntary loops are handled (Frodo, Weary From the Journey against Black Land
 Observer). Until a design is approved the alternation stands and 5_29's test reads it; the proposal is an engine-pass
-item that builds nothing. *[2026-10-15]*
+item that builds nothing. *[2026-10-15]* Her second word: "One player using a finite resource 3 times probably isn't a loop (Trust Me as you Once Did), but both players just happening to have 3+-use abilities is a pretty slim chance of happening I think. That said it also occurred to me that loops do not have to involve single pairs of actions--but we'll leave off complicated chains of actions while trying to figure out the simple 2-action case."
 
 **Several burdens or threats moved by one effect are counted one by one (Q-0322, Q-0324, 2026-10-15).** The Shire
 Countryside 3_113 ("each time you remove a burden"): "A"; Tom Bombadil's Hat 0_60 ("each time a Shadow card adds a
