@@ -716,11 +716,7 @@
 				type: modifier
 				modifier: {
 					type: modifyStrength
-					filter: hobbit,companion
-					requires: {
-						type: location
-						filter: hasAttached(self)
-					}
+					filter: hobbit,atSite(hasAttached(self))
 					amount: -2
 				}
 			}
