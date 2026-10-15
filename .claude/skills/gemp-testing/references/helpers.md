@@ -352,6 +352,10 @@ spot). The printed card for this, so no Hobbit-set ally (Esgaroth Volunteers 32_
 notices `allyHome(T,6)` let in beside `allyHome(fellowship,6)` (Card_01_045_Tests). At a 6T site (Great Hall
 4_353) he is at home whatever the site's text says, so he is no candidate for a text that lets allies take part
 "at" that site: `allyHome(T,6)` in place of its filter would pass with him (Card_04_353_Tests, dec-b4_353).
+For an ELF ally of such a site 3, Aldor fails "Elf" as well: the only printed one is Rivendell Scout 33_16 (Hobbit
+set, home 3H; unique Elf archer, strength 6, vitality 3; an optional trigger on a companion healed), laid under
+Q-0312 as the one card that tells `allyHome(fellowship,3)` from a home 3 of any block (Card_01_064_Tests). No Elf
+ally has a home 6 outside the Fellowship block, so an "Elf ally whose home is site 6" has no such board (1_65).
 
 **A [gondor] character who is not a companion; an ally who is a Man.** Gondorian Merchant 7_97. The only [gondor]
 ally; a unique Man, strength 6, vitality 1; home 3T, so he skirmishes on the Towers sites (`SkipToSite(2)` and a
