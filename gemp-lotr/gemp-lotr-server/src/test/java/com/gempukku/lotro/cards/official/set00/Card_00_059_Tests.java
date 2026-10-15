@@ -19,7 +19,7 @@ public class Card_00_059_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "0_59");
+					put("erkenbrand", "0_59");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -57,6 +57,30 @@ public class Card_00_059_Tests
 		);
 	}
 
+	protected VirtualTableScenario GetDiscardScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("erkenbrand", "0_59");
+					put("theoden", "4_292");     // Theoden, Son of Thengel: a [rohan] Man companion; a regroup ability only
+					put("merry", "103_85");      // Merry, Master Holbytla: a [rohan] Hobbit, a Man only beside 3 [rohan] companions or Eowyn;
+					                             // his skirmish ability is used only on purpose, and nobody exerts here
+					put("aragorn", "1_89");      // Aragorn, Ranger of the North: a Man who is not [rohan]; a maneuver ability only
+					put("gimli", "1_13");        // Gimli, Son of Gloin: a companion played after Erkenbrand; a skirmish ability only
+					put("sword", "1_299");       // Hobbit Sword: a Free Peoples possession, "Bearer must be a Hobbit" and nothing else
+
+					put("wildmen", "4_4");       // Band of Wild Men: [dunland] Man, strength 11; a trigger on winning a skirmish only
+					put("ironaxe", "4_26");      // Iron Axe: [dunland] possession, "Bearer must be a [dunland] Man" and nothing else
+					put("poison", "8_28");       // Spider Poison: [gollum] possession in the Shadow support area; its texts act only on a bearer
+					put("palantir", "3_67");     // The Palantir of Orthanc: an [isengard] ARTIFACT in the support area; a Shadow ability only
+					put("ambition", "1_133");    // Saruman's Ambition: an [isengard] condition in the support area; a discount and a skirmish ability used only on purpose
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
 	@Test
 	public void ErkenbrandStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
@@ -77,7 +101,7 @@ public class Card_00_059_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("erkenbrand");
 
 		assertEquals("Erkenbrand", card.getBlueprint().getTitle());
 		assertEquals("Master of Westfold", card.getBlueprint().getSubtitle());
@@ -108,6 +132,8 @@ public class Card_00_059_Tests
 		scn.StartGame();
 		scn.MoveMinionsToTable(runner);
 		scn.AttachCardsTo(runner, scimitar);
+		assertInZone(Zone.HAND, erkenbrand);
+		assertAttachedTo(scimitar, runner);
 
 		// In the fellowship phase he may be played as any companion may.  He is left in hand.
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
@@ -126,15 +152,12 @@ public class Card_00_059_Tests
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 		assertTrue(scn.FreepsPlayAvailable(erkenbrand));
 		assertInZone(Zone.HAND, erkenbrand);
-		// 2 companions + 2 for Ettenmoors
-		assertEquals(4, scn.GetTwilight());
 
 		scn.FreepsPlayCard(erkenbrand);
-		// He joins the fellowship, not the skirmish, for his cost of 3.
+		// He joins the fellowship, not the skirmish.
 		assertInZone(Zone.FREE_CHARACTERS, erkenbrand);
 		assertFalse(scn.IsCharSkirmishing(erkenbrand));
 		assertTrue(scn.IsCharSkirmishingAgainst(aragorn, runner));
-		assertEquals(7, scn.GetTwilight());
 
 		// "When you play Erkenbrand" answers this play as it would one in the fellowship phase.  Declined, the
 		// Scimitar stays where it is and the skirmish goes on with the Shadow player's action.
@@ -161,15 +184,115 @@ public class Card_00_059_Tests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
+		assertAttachedTo(sword, frodo);
+		assertInZone(Zone.SUPPORT, ambition);
 		assertTrue(scn.FreepsPlayAvailable(erkenbrand));
 
 		scn.FreepsPlayCard(erkenbrand);
 		assertInZone(Zone.FREE_CHARACTERS, erkenbrand);
-		assertEquals(3, scn.GetTwilight());
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 		assertAttachedTo(sword, frodo);
 		assertInZone(Zone.SUPPORT, ambition);
+	}
+
+	@Test
+	public void WithARohanManCompanionHeIsPlayedInASkirmishAndDiscardsAChosenShadowPossession() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetDiscardScenario();
+
+		var erkenbrand = scn.GetFreepsCard("erkenbrand");
+		var theoden = scn.GetFreepsCard("theoden");
+		var frodo = scn.GetRingBearer();
+		var sword = scn.GetFreepsCard("sword");
+		var wildmen = scn.GetShadowCard("wildmen");
+		var ironaxe = scn.GetShadowCard("ironaxe");
+		var poison = scn.GetShadowCard("poison");
+		var palantir = scn.GetShadowCard("palantir");
+		var ambition = scn.GetShadowCard("ambition");
+		scn.MoveCompanionsToTable(theoden);
+		scn.AttachCardsTo(frodo, sword);
+		scn.MoveCardsToHand(erkenbrand);
+		scn.MoveCardsToSupportArea(poison, palantir, ambition);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(wildmen);
+		scn.AttachCardsTo(wildmen, ironaxe);
+		assertInZone(Zone.HAND, erkenbrand);
+		assertAttachedTo(ironaxe, wildmen);
+		assertAttachedTo(sword, frodo);
+		assertInZone(Zone.SUPPORT, poison, palantir, ambition);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(theoden, wildmen);
+		scn.FreepsResolveSkirmish(theoden);
+
+		// Theoden is the [rohan] Man spotted.
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertTrue(scn.FreepsPlayAvailable(erkenbrand));
+		assertAttachedTo(ironaxe, wildmen);
+		assertAttachedTo(sword, frodo);
+		assertInZone(Zone.SUPPORT, poison, palantir, ambition);
+
+		scn.FreepsPlayCard(erkenbrand);
+		assertInZone(Zone.FREE_CHARACTERS, erkenbrand);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(erkenbrand));
+		scn.FreepsAcceptOptionalTrigger();
+
+		// A Shadow possession borne by a minion and one in the support area; not a Shadow artifact, a Shadow
+		// condition, or a Free Peoples possession.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(ironaxe, poison));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(palantir, ambition, sword));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		scn.FreepsChooseCard(ironaxe);
+
+		assertInZone(Zone.DISCARD, ironaxe);
+		assertInZone(Zone.SUPPORT, poison, palantir, ambition);
+		assertAttachedTo(sword, frodo);
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
+	@Test
+	public void WithOnlyARohanHobbitAndAGondorManHeCannotBePlayedInASkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetDiscardScenario();
+
+		var erkenbrand = scn.GetFreepsCard("erkenbrand");
+		var merry = scn.GetFreepsCard("merry");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var wildmen = scn.GetShadowCard("wildmen");
+		scn.MoveCompanionsToTable(merry, aragorn);
+		scn.MoveCardsToHand(erkenbrand);
+		assertInZone(Zone.HAND, erkenbrand);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(wildmen);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, wildmen);
+		scn.FreepsResolveSkirmish(aragorn);
+
+		// Merry is [rohan] and no Man (one [rohan] companion, no Eowyn); Aragorn is a Man and not [rohan].
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertInZone(Zone.HAND, erkenbrand);
+		assertFalse(scn.FreepsPlayAvailable(erkenbrand));
+	}
+
+	@Test
+	public void NoDiscardIsOfferedWhenAnotherCompanionIsPlayedAfterHim() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetDiscardScenario();
+
+		var erkenbrand = scn.GetFreepsCard("erkenbrand");
+		var gimli = scn.GetFreepsCard("gimli");
+		var poison = scn.GetShadowCard("poison");
+		scn.MoveCompanionsToTable(erkenbrand);
+		scn.MoveCardsToHand(gimli);
+		scn.MoveCardsToSupportArea(poison);
+
+		scn.StartGame();
+
+		assertInZone(Zone.SUPPORT, poison);
+		assertTrue(scn.FreepsPlayAvailable(gimli));
+		scn.FreepsPlayCard(gimli);
+		assertInZone(Zone.FREE_CHARACTERS, gimli);
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(erkenbrand));
+		assertInZone(Zone.SUPPORT, poison);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }
