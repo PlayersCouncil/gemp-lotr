@@ -309,7 +309,9 @@ clauses, or in a condition or a trigger and not a choice ("a site bearing a weat
 invalid candidate. Where a trigger and the choice it leads to each carry the phrase ("If a [sauron] Orc wins a
 skirmish, make that Orc ...", whose definition filters the winner and then the choice), the invalid candidates take
 part in the very event the valid ones do (a [moria] Orc and a [sauron] Uruk-hai winning that same skirmish) and are
-read as not offered: on a board where the trigger never fires, the choice's own filter goes unchallenged (1_247). Where
+read as not offered: on a board where the trigger never fires, the choice's own filter goes unchallenged (1_247). The other way round as well: the
+valid spread is owed by the trigger's own filter, on a board where a candidate who differs from the others in what
+the text does not mention is the one that fires it, or a narrowed trigger passes behind a wide choice (1_85). Where
 the DEFINITION writes one phrase twice, as a requirement and the choice it gates ("reveal an [elven] card from
 hand"), each owes its spread: a board where the offer rests on a card of each kind alone (shapes.md, "A phrase
 the definition writes twice"; 1_54).
@@ -322,7 +324,8 @@ read stopping it, and one that fails a word (the other player's ranger, not in t
 **What a response saves; who did the thing; a card being played; the player who does it.** Where a response picks
 what it saves from several cards affected at once, an invalid candidate is among them (for "your [sauron] condition
 is about to be discarded", a [sauron] possession in the same discard; for a wound, the losers of one skirmish,
-whose wounds are taken together where a "wound each" is not: pitfalls, "Wound each"). One that saves with no choice ("discard this
+whose wounds are taken together where a "wound each" is not: pitfalls, "Wound each"; for an exertion, an ally
+and a minion exerting with the companions: helpers.md, Devilry of Orthanc 5_49). One that saves with no choice ("discard this
 condition to prevent that") prevents the whole of that one simultaneous discard, cards not of the kind it names and
 the opponent's own among them, and they are read saved (Q-0250: B, "the action is all or nothing"; Siege Engine
 5_60, "one or more machines"). A singular "If a <kind> is about to be discarded" saves the one card, one at each use (Q-0313: A; shapes.md). Where a trigger names who did the thing

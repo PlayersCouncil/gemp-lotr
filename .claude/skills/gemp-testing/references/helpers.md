@@ -745,6 +745,13 @@ pool to 1. The Shadow doer for "the Free Peoples player uses an archery special 
 cost 6, strength 14, vitality 3, site 4; "Maneuver: Exert Mûmak Commander twice to exert a companion twice (except
 the Ring-bearer)." Two exertions of the minion and then two of one companion, by one effect.
 
+**Every character exerting at once, by one effect (an "is about to exert" response that picks the exertion it
+spares).** Devilry of Orthanc 5_49. [isengard] Machine condition, unique, support area; "Maneuver: Spot 8
+[isengard] tokens here to exert every character" (cheat the 8 tokens on and read them; it then discards itself).
+Companions, allies and minions exert together, a Shadow card's effect and no cost: an ally and a minion are the
+invalid candidates of the choice. An exhausted companion does not exert, so exhaust the Ring-bearer to leave one
+companion of another culture and race as the only exertion that fires the trigger (Card_01_085_Tests).
+
 **A Free Peoples card that exerts a companion of the player's choice: an event, an effect and not a cost; and a
 card with no side that does.** Dear Friends 2_98; Isildur, Sword-bearer 18_54; Ettenmoors 1_331. Dear Friends:
 [shire] Fellowship event, cost 0, "Exert a companion to place a Free Peoples card from your discard pile beneath
