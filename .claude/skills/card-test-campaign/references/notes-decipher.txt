@@ -356,9 +356,3 @@ THE COST OF ASSIGNING (set 7's Morgul Orcs; built by engine pass 26, item assign
 - A card that prints no game text and no keyword (Gandalf, Stormcrow 0_64, and about 33 more): its ledger has no
   clause lines (Sources, Findings, Dropped and Notes only), its stats test header writes `Game Text: (none)`, and
   lint accepts that. Do not invent a placeholder clause.
-
-- The Ring's Oppression 1_273 (dec-b1_272): Orc Butchery 1_265's lander (dec-b1_260) read 1_273's definition as having F-0534's gap
-  (no branch for a companion killed outside a skirmish by a [sauron] Orc's own wound, e.g. Morgul Slayer 3_93's regroup
-  ability). Check it on a board; if so it is the same correction as 1_265's (the erratum 51_265's second branch). Q-0328
-  (open: does CR 4.2's definition of "a [Sauron] Orc kills a companion" exclude a kill in the Orc's skirmish by another
-  minion's wound?) reaches 1_273 too: test the as-built reading and park the other on Q-0328, as 1_265 did.
