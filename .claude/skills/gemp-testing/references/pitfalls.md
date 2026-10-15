@@ -647,7 +647,11 @@ formats (`winAtEndOfRegroup: true` in lotrFormats.hjson; `"pc_fotr_block"` as th
 regroup phase at site 9 IS played (the five-argument constructor with `VirtualTableScenario.PCMovie` as its last argument does it:
 Card_07_363_Tests.GetRegroupAtSite9Scenario), so a regroup text at site 9 is a board in play there (Speak "Friend" and
 Enter 2_26 is offered, and lays no site 10), and the game is won when both have passed, as the Shadow player
-is about to reconcile, his hand untouched (`mechanics/game/ReconcilingTests`, `mechanics/sites/PlayingSitesTests`). A skipper that plays on through the winning
+is about to reconcile, his hand untouched (`mechanics/game/ReconcilingTests`, `mechanics/sites/PlayingSitesTests`).
+Where a CARD holds the win back to the reconcile in the default format (Caverns of Isengard 5_120), the Shadow
+player IS asked to reconcile once both have passed (`ShadowDecisionAvailable("Reconcile")`), and the game ends
+only on his answer (`ShadowDeclineReconciliation()`): `GameIsFinished()` read straight after `ShadowPass()` is
+false (Card_05_120_Tests). A skipper that plays on through the winning
 turn finds nobody being asked anything and fails, saying that the game is over and who won it:
 `SkipToOtherPlayersTurn()` from player 1's fellowship phase at site 8 (it was a bare `NoSuchElementException`
 until engine pass 24). Under a modifier that
@@ -852,6 +856,9 @@ With a fellowship archery total above 0 and more than one minion to take it, `Sk
 `SkipToArcheryWounds()` and `ShadowChooseCard(minion)` first (Aragorn's Bow 1_90).
 With ONE minion in play the wound is placed on him unasked, and the archery phase ends straight into the
 assignment phase (Hand Axe 2_10).
+With both totals above 0 the Free Peoples player is asked FIRST (the minions' wounds on his companions), then the
+Shadow player (the fellowship's on his minions): `FreepsChooseCard`, then `ShadowChooseCard` (ArcheryFireGameProcess;
+Card_01_238_Tests). Both totals are taken once, as archery fire begins.
 
 **Allies who take archery wounds instead of companions.** While Come Down's archery ability is in force (4_146,
 54_146: the `AlliesTakeArcheryFireWoundsInsteadOfCompanions` flag), each of the minions' archery wounds is offered
