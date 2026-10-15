@@ -161,7 +161,8 @@ Notes: Elrond is himself an ally whose home is site 3, so C2 heals him too.
   the comma before "or", the choice's `B` listed on the first. Every word of the
   game text is in exactly one `C` clause, keyword lines included; reminder text in brackets is left out (a
   `<helper>(...)</helper>` span is such reminder text, and quoted in a clause it fails the conformance check). The
-  conformance check joins the `C` clauses and compares them with the definition's game text. A semicolon is
+  conformance check joins the `C` clauses and compares them with the definition's game text, markup taken out of
+  both: `<b>Regroup:</b>` and `Regroup:` are alike to it, and either may be written. A semicolon is
   no sentence end: an ability's "...; this minion does not add to the minion archery total" stays in its clause
   (Uruk Crossbowman 4_183; Q-0164).
 - **A card's play has no clause of its own** (Q-0279: B, engine pass 31). The printed cost, type and site number
