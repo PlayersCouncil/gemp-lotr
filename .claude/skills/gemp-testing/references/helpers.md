@@ -65,7 +65,10 @@ vitality 1, no text).
 **A fierce minion with next to no other text (two of them, of other cultures and races, for "a minion" that loses
 or keeps fierce).** Black Rider 12_161; White Hand Destroyer 17_124. Black Rider: [wraith] Nazgûl, not unique, cost
 5, strength 8, vitality 3, site 3; strength +1 for each companion. Destroyer: unique [uruk-hai] Uruk-hai, cost 5,
-strength 10, vitality 3, site 5; hunter 3 only for each site controlled.
+strength 10, vitality 3, site 5; hunter 3 only for each site controlled. For a card that makes a [wraith] minion
+fierce (the Q-0245 board, a candidate fierce already), Black Rider serves, or Úlairë Nelya 1_233: unique [wraith]
+Nazgûl, cost 5, strength 10, vitality 3, site 2; her Shadow ability replaces a site and is used only on purpose
+(Card_01_235_Tests).
 
 **A hunter and nothing else, with a small number and a large one; a hunter who is no minion; a minion that is
 damage +1 only while it bears a possession.** Tracking Uruk 15_171; White Hand Butcher 17_122; Faramir, Captain

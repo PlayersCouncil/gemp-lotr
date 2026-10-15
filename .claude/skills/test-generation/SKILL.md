@@ -521,7 +521,8 @@ Which checks a clause lists follows from its words, and the analyst is expected 
   player's fellowship phase the board is the Rule of 4 spent (Q-0262: B; an empty deck still asks, Q-0029); a Fellowship
   EVENT that draws owes no such board (the rule's, shown with Delving 1_6 in mechanics/deck/RuleOfFourTests). A keyword given to a card that has it
   already is not "nothing" and is offered (Q-0245: A, Band of Wild Men 4_4: "the effect still has potential to alter
-  that calculus"). Where a board can have the card hold that keyword already (the ability used once, then
+  that calculus"). That board is owed by every trigger or ability that gives a keyword, with a cost as without,
+  though it stands in this bullet (Úlairë Otsëa 1_235: a [wraith] minion printed fierce among the choices). Where a board can have the card hold that keyword already (the ability used once, then
   offered again: Lurtz 1_127), that offer is owed and read. With a cost it is offered there and used for
   nothing, which is read under `F` or `+` as for an event, and is no `-`; the board is owed all the same, with the
   cost payable at the second offer (Uruk-hai Rampage 1_159: (3) in the pool again for the fierce win). A play of a card after
