@@ -99,7 +99,10 @@ strength +7 in a fierce skirmish. Card_08_113_Tests has all four.
 4_224. Fighter ([isengard] Uruk-hai, strength 8, vitality 2, damage +1): "Maneuver: Spot 5 companions to make this
 minion fierce until the regroup phase". Axeman ([raider] Man, strength 6, vitality 2): strength +3 and fierce while
 2 burdens can be spotted, which outlasts the start of the regroup phase and so shows D for "cannot gain ... until
-the regroup phase". Neither is unique: a second copy is the control (68_110).
+the regroup phase". Neither is unique: a second copy is the control (68_110). Any Uruk-hai, either culture, made
+fierce by a printed card and not by hand: Hunt Them Down! 1_126, [isengard] Maneuver event, twilight 3, "Make an
+Uruk-hai fierce until the regroup phase" (a choice of `uruk-hai`; one Uruk-hai is taken unasked): Card_01_147_Tests,
+Card_01_150_Tests (dec-b1_146).
 
 **A minion with ambush and nothing else; a second instance of ambush.** Southron Soldier 4_254; Raider Bow 7_155.
 Soldier: [raider] Man, not unique, cost 2, strength 4, vitality 1, site 4; "Southron. Ambush (2)" is its whole
