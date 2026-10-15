@@ -253,7 +253,9 @@ the place can hold, a companion, a possession and an event: beside companions al
 `companion` passes, 68_82, and "each type" is a spread like that one, a character, an item and a card that is
 neither, not every type in print; a bare owner word, "each of your cards", owes that spread and a card of each
 side, 94_27; for a keyword or item class alone, "a pipeweed", "a pipe", cards of two cultures wherever printed
-cards have them: beside [shire] ones alone, `pipeweed` narrowed to `culture(shire)` passes, 92_4; for a culture word
+cards have them: beside [shire] ones alone, `pipeweed` narrowed to `culture(shire)` passes, 92_4; for a terrain word
+on a site ("a river"), two sites of it that differ in another keyword (Buckleberry Ferry 1_330 and Ford of Bruinen
+1_338, a sanctuary): beside the Ferry alone, `river,not(sanctuary)` passes, 1_46; for a culture word
 on a kind a title is printed in ("a [gollum] minion"), one of another title, also inside an effect's "If that
 minion is ...": beside Gollum alone `name(Gollum)` passes, 15_51 (Shelob 8_26); and a card of the
 other culture whose own text stays out of the way is looked for before the culture is left out, and where printed

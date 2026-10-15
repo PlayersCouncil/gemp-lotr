@@ -1099,6 +1099,12 @@ From Blackroot Vale 14_7. Unique [gondor] Man, cost 2, strength 5, vitality 3, R
 a forest or river site, Duilin is strength +3" is his whole text, so 5 or 8 reads the site. A keyword on a site
 that is NOT the fellowship's is read with `HasKeyword(site, Keyword.RIVER)` (`Card_17_120_Tests`).
 
+**A river at a low site number ("moves from a river", "at a river" with moves left after it).** Buckleberry Ferry
+1_330 (site 2, river; no assignment or skirmish phases while only Hobbits are companions) and Ford of Bruinen 1_338
+(site 3, river and sanctuary; the first Nazgûl played there each turn is -5), on a Fellowship path of their own
+with Bag End 1_319 at 1; `FellowshipSites` has rivers only at 7 and 8, where a second move runs into site 9. The two
+differ in the sanctuary, so they are a valid spread for "a river" (`Card_01_046_Tests`).
+
 **A turn with THREE moves, so that the same minions are on the table at two moves ("each time the fellowship moves"
 with minions to act on; no minion is in play at the move that ends a fellowship phase).** Rivendell Waterfall
 1_342, as site 3 of `FellowshipSites`, with a ranger. Forest, sanctuary: "While you can spot a ranger at Rivendell
