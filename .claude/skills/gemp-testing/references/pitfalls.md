@@ -1054,6 +1054,9 @@ draw deck, and once a test moves the last of those into hand or play a "draw a c
 reads one short: keep one named card in the deck and read it in hand after the draw (Card_01_060_Tests, Gimli).
 A single test that lays every alias on the table empties the deck the same way, so that a draw trigger looks like
 it never fired (Card_01_206_Tests keeps two spare aliases in the Shadow deck for its six-card board).
+A deck of exactly the cards to be drawn passes a draw of MORE: lay one card beyond what the effect draws and read
+it still in the deck after (Seeking Its Master 1_276's `count: 2` survived until a second Orc War Band lay beneath
+the first: `MoveCardsToTopOfDeck(spare, drawn)`, dec-b1_276).
 **A board copied from an erratum's file rests on the erratum's numbers.** Where the original differs in a number the
 board leans on (burdens, resistance, vitality, strength), re-count each copied test under the original's: Boromir
 9_31 adds 3 burdens at resistance 6 where 59_31 adds 2 at 7, so the erratum's fierce-round test corrupts or kills him.
