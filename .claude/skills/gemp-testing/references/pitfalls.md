@@ -111,6 +111,8 @@ the companion repeated in the array form is refused, and a second call finds the
 Defender shows in the Free Peoples player's own decision without any refusal: a companion who already has a
 minion from an assignment action is on his list only if he has defender (`FreepsHasAssignmentTargetAvailable`;
 `mechanics/keywords/DefenderTests`, with Unexpected Visitor 7_126 and Reckless Pride 7_13 as the assignment actions).
+A defender assigned to two minions in one answer is two assignments to an `assignedAgainst` trigger, one against
+each minion (Q-0323: B, engine pass 49; Weary 4_212 exerts twice), and one to `assignedToSkirmish` (Wold of Rohan 4_336).
 
 **A minion the Free Peoples player must pay to assign is paid for ahead of his assigning.** "The Free Peoples
 player must exert a companion to assign this minion to a skirmish" (`extraCostToAssign`: Morgul Regiment 7_197,

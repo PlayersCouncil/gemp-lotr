@@ -307,7 +307,7 @@ public class Card_04_212_Tests
 	}
 
 	@Test
-	public void ADefenderBearerAssignedToTwoIsengardTrackersInOneAnswerExertsOnce() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ADefenderBearerAssignedToTwoIsengardTrackersInOneAnswerExertsTwice() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var weary = scn.GetShadowCard("weary");
@@ -327,8 +327,8 @@ public class Card_04_212_Tests
 
 		assertTrue(scn.IsCharAssignedAgainst(heir, pursuer));
 		assertTrue(scn.IsCharAssignedAgainst(heir, footsoldier));
-		// One assignment of bearer, to one skirmish: one exertion (reading A of Q-0323).
-		assertEquals(1, scn.GetWoundsOn(heir));
+		// Bearer is assigned to skirmish each [isengard] tracker: one exertion for each (Q-0323: B).
+		assertEquals(2, scn.GetWoundsOn(heir));
 		assertTrue(scn.FreepsAwaitingSkirmishChoice());
 	}
 }
