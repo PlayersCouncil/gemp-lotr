@@ -17,8 +17,7 @@ public class Card_01_131_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "1_131");
-					// put other cards in here as needed for the test case
+					put("assassin", "1_131");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,36 +45,21 @@ public class Card_01_131_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var assassin = scn.GetFreepsCard("assassin");
 
-		assertEquals("Orthanc Assassin", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.URUK_HAI, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.ARCHER));
-		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
-		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
-		assertEquals(5, card.getBlueprint().getTwilightCost());
-		assertEquals(10, card.getBlueprint().getStrength());
-		assertEquals(3, card.getBlueprint().getVitality());
-		assertEquals(5, card.getBlueprint().getSiteNumber());
-	}
-
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void OrthancAssassinTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-
-		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(5, scn.GetTwilight());
+		assertEquals("Orthanc Assassin", assassin.getBlueprint().getTitle());
+		assertNull(assassin.getBlueprint().getSubtitle());
+		assertTrue(assassin.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, assassin.getBlueprint().getSide());
+		assertEquals(Culture.ISENGARD, assassin.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, assassin.getBlueprint().getCardType());
+		assertEquals(Race.URUK_HAI, assassin.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(assassin, Keyword.ARCHER));
+		assertTrue(scn.HasKeyword(assassin, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(assassin, Keyword.DAMAGE));
+		assertEquals(5, assassin.getBlueprint().getTwilightCost());
+		assertEquals(10, assassin.getBlueprint().getStrength());
+		assertEquals(3, assassin.getBlueprint().getVitality());
+		assertEquals(5, assassin.getBlueprint().getSiteNumber());
 	}
 }
