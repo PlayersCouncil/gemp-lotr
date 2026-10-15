@@ -1539,6 +1539,9 @@ cards that may be taken. So "shown, and cannot be chosen" is read at the showing
 card is simply absent (`ShadowHasCardChoiceNotAvailable(card)`; `(card, false)` fails there). A search of the
 OTHER player's deck (Grond 68_82) is shown to the searching player alone: the deck's owner has no decision.
 A take written with `showAll: false` (Race Text 91_2) has no showing to dismiss: the choice comes at once.
+Where a test says a player's own deck is shown to him alone, it reads the other side too: `assertEquals(0,
+scn.ShadowGetTotalRevealedCardCount())` beside the Free Peoples count (Card_01_319_Tests; a comment with no assertion
+under it shows nothing, dec-b1_319).
 
 **"Look at an opponent's hand" is a showing to the looker alone.** Once the cost is paid, a `lookAtHand`
 (Galadriel's Glade 1_351, "Fellowship: Exert an Elf to look at an opponent's hand") shows the hand to the player
