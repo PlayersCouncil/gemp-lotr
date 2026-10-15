@@ -422,7 +422,9 @@ it is the real Ring-bearer in a skirmish of his own while Boromir is a plain com
 stands on a Skirmish ability ("Skirmish: If bearer is an unbound Hobbit, discard this possession to ..."), a bearer who
 meets it outside the skirmish is a valid candidate (the text names no skirmish), and the requirement owes the culture
 spread of "Bearer must be a Hobbit" (11_171: Pippin, Trollslayer beside Merry); for "unbound" the invalid candidates
-are a Ring-bound companion (Sam) and an ally of the race (Bounder 1_286: only companions are unbound, CR 4.2).
+are a Ring-bound companion (Sam) and an ally of the race (Bounder 1_286: only companions are unbound, CR 4.2). The same
+holds for "unbound" in a spot ("While you can spot an unbound Hobbit", Derndingle 4_330): lay the ally in the support
+area whatever his home site, since a spot does not ask where he stands, or `hobbit,not(ring-bound)` passes.
 
 **A title of one card type; never two of one unique title; a candidate that looks impossible.** A title that has
 one card type only ("spot Gandalf") needs one card of the title, and its invalid candidate is a card of that
@@ -593,7 +595,9 @@ subtitle, uniqueness, side, culture, type, race or item class, twilight cost, st
 signet, site number or home, and each keyword with its number. A possession or artifact that prints no item class
 reads null: `assertNull(getPossessionClasses())` (Bill the Pony 3_106, The Mirror of Galadriel 1_55). A site's fields are its block (`getSiteBlock()`),
 its Shadow number (`getTwilightCost()`), its direction, and its site number, which a Shadows-block site does not
-print (`getSiteNumber()` is 0 there). Its header comment reproduces the card. The
+print (`getSiteNumber()` is 0 there). Its header comment reproduces the card. A site's header has Block, Site Number (where
+printed), Shadow Number and Direction lines in place of the generated stub's empty Side, Culture and Subtype
+(Card_04_329_Tests). The
 expected values are the sheet's; `reconcile.py <id>` (Decipher cards) and the packet's "Sheet against
 definition" section (every card) show any field where the sheet and the definition disagree (see "When the sheet
 and the definition disagree" above). A strength, vitality or other bonus printed on a card that is borne (a
