@@ -3126,12 +3126,17 @@
 				trigger: {
 					type: Killed
 					filter: or(companion,ally)
-					killer: urukHai
-					inSkirmish: true
 				}
-				requires: {
-					type: SiteAvailableToControl
-				}
+				requires: [
+					{
+						// "During a skirmish involving an Uruk-hai": whatever killed him, not "killed by" (F-0546).
+						type: canSpot
+						filter: urukHai,inSkirmish
+					}
+					{
+						type: SiteAvailableToControl
+					}
+				]
 				effect: {
 					type: takeControlOfSite
 				}

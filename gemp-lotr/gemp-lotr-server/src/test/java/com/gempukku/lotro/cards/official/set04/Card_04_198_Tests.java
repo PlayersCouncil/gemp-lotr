@@ -32,6 +32,8 @@ public class Card_04_198_Tests
 				{{
 					put("stormer", "4_198");
 					put("guard", "1_7");        // Dwarf Guard: strength 4, vitality 2; overwhelmed by the Stormer's 8
+					put("scout", "15_116");     // Scouting Orc: [orc] Orc, no Uruk-hai; "Skirmish: Exert this minion to wound a companion it is skirmishing."
+					put("xbow", "4_183");       // Uruk Crossbowman: Uruk-hai archer; "Archery: Exert this minion to make the Free Peoples player wound an unbound companion ..."
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -139,5 +141,72 @@ public class Card_04_198_Tests
 
 		assertEquals(0, scn.GetShadowControlledSiteCount());
 		assertEquals(1, scn.GetFreepsControlledSiteCount());
+	}
+
+	// "Killed during a skirmish involving an Uruk-hai" is any kill in that skirmish, whatever wound dealt it, and
+	// not "killed by an Uruk-hai" (CR 4.2's definition of that is for "<X> kills", Q-0328). The card was built
+	// with `killer: urukHai`: this kill, by another minion's own wound, was not answered. F-0546.
+	@Test
+	public void ACompanionKilledInAnUrukHaisSkirmishByAnotherMinionsWoundOffersIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetSiteControlScenario();
+
+		var stormer = scn.GetShadowCard("stormer");
+		var scout = scn.GetShadowCard("scout");
+		var guard = scn.GetFreepsCard("guard");
+
+		scn.StartGame();
+		scn.SkipToSite(2);
+		var site1 = scn.GetSite(1);
+		scn.MoveCompanionsToTable(guard);
+		scn.AddWoundsToChar(guard, 1);
+		scn.MoveMinionsToTable(stormer, scout);
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(guard, stormer);
+		// The Shadow player puts the [orc] Orc in the same skirmish.
+		scn.ShadowAssignToMinions(guard, scout);
+		scn.FreepsResolveSkirmish(guard);
+
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(scout);
+		// The Orc's wound kills the Guard before the skirmish is resolved.
+		assertInZone(Zone.DEAD, guard);
+		assertFalse(scn.IsSiteControlled(site1));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(stormer));
+		scn.ShadowAcceptOptionalTrigger();
+
+		assertTrue(scn.ShadowControls(site1));
+		assertEquals(1, scn.GetShadowControlledSiteCount());
+		// The Guard was the skirmish's only Free Peoples character: it is over, and so is the phase.
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	// The other side of the same words: an Uruk-hai's own wound outside any skirmish. As built (`killer`, whose
+	// `inSkirmish` was not asked of a wound) the archery-phase kill offered a site. F-0546.
+	@Test
+	public void ACompanionKilledOutsideASkirmishByAnUrukHaisOwnWoundOffersNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetSiteControlScenario();
+
+		var stormer = scn.GetShadowCard("stormer");
+		var xbow = scn.GetShadowCard("xbow");
+		var guard = scn.GetFreepsCard("guard");
+
+		scn.StartGame();
+		scn.SkipToSite(2);
+		var site1 = scn.GetSite(1);
+		scn.MoveCompanionsToTable(guard);
+		scn.AddWoundsToChar(guard, 1);
+		scn.MoveMinionsToTable(stormer, xbow);
+
+		scn.SkipToPhase(Phase.ARCHERY);
+		scn.FreepsPass();
+		// The Guard is the only unbound companion, and takes the wound with nothing asked.
+		scn.ShadowUseCardAction(xbow);
+		assertInZone(Zone.DEAD, guard);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(stormer));
+		assertTrue(scn.FreepsDecisionAvailable("Play Archery action or Pass"));
+
+		assertFalse(scn.IsSiteControlled(site1));
+		assertEquals(0, scn.GetShadowControlledSiteCount());
 	}
 }

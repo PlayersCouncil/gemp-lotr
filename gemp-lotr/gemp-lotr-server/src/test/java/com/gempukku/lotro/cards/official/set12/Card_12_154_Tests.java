@@ -38,6 +38,7 @@ public class Card_12_154_Tests
 					put("suppressing", "12_147");
 					put("guard1", "1_7");       // Dwarf Guard: strength 4, vitality 2
 					put("guard2", "1_7");
+					put("scout", "15_116");     // Scouting Orc: [orc] Orc; "Skirmish: Exert this minion to wound a companion it is skirmishing."
 					for (int i = 1; i <= 5; i++) {
 						put("filler" + i, "1_177");     // Goblin Patrol Troop: no text at all
 					}
@@ -133,6 +134,48 @@ public class Card_12_154_Tests
 		assertInZone(Zone.DISCARD, filler1, filler2);
 		assertEquals(2, scn.GetShadowHandCount());
 		assertEquals(deck - 2, scn.GetShadowDeckCount());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	// "Killed in a skirmish involving an [uruk-hai] minion" is any kill in that skirmish, whatever wound dealt it,
+	// and not "killed by an [uruk-hai] minion" (CR 4.2's definition of that is for "<X> kills", Q-0328). The card
+	// was built with `killer: culture(uruk-hai),minion`: this kill, by another minion's own wound, was not
+	// answered. F-0547.
+	@Test
+	public void ACompanionKilledInTheSkirmishByAnotherMinionsWoundOffersIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetKillScenario();
+
+		var guard1 = scn.GetFreepsCard("guard1");
+		scn.MoveCompanionsToTable(guard1);
+
+		var slaughterer = scn.GetShadowCard("slaughterer");
+		var scout = scn.GetShadowCard("scout");
+		var filler1 = scn.GetShadowCard("filler1");
+		var filler2 = scn.GetShadowCard("filler2");
+
+		scn.StartGame();
+		scn.AddWoundsToChar(guard1, 1);
+		scn.MoveMinionsToTable(slaughterer, scout);
+		scn.SetShadowHand(filler1, filler2);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(guard1, slaughterer);
+		// The Shadow player puts the [orc] Orc in the same skirmish.
+		scn.ShadowAssignToMinions(guard1, scout);
+		scn.FreepsResolveSkirmish(guard1);
+
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(scout);
+		// The Orc's wound kills the Dwarf before the skirmish is resolved.
+		assertInZone(Zone.DEAD, guard1);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(slaughterer));
+		scn.ShadowAcceptOptionalTrigger();
+
+		int deck = scn.GetShadowDeckCount();
+		scn.ShadowChooseCards(filler1, filler2);
+		assertInZone(Zone.DISCARD, filler1, filler2);
+		assertEquals(2, scn.GetShadowHandCount());
+		assertEquals(deck - 2, scn.GetShadowDeckCount());
+		// The Dwarf was the skirmish's only Free Peoples character: it is over, and so is the phase.
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
