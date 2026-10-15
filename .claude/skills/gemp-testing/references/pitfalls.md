@@ -347,7 +347,9 @@ alone in hand the ability is not offered (Bilbo 59_49).
 offered again (Q-0043), so a pass or decline written to answer a second offer answers the next decision instead.
 Optional triggers are still offered. A Response special ability with a cost is the other way about: once used,
 it is offered again for the same play for as long as its cost can still be paid (CR 4.2 "response": "You may
-respond more than once to the same situation"; Q-0034), though a second use gains nothing. That second "Optional
+respond more than once to the same situation"; Q-0034). A second use gains nothing after a cancel, but an effect
+that can be had twice is had twice: Uruk Bloodlust 1_144's re-offer, one for each winner it memorized, heals a
+second wound on the same winner (dec-b1_141). That second "Optional
 responses" decision stands in front of whatever comes next: decline it, or the played event stays in the void
 and a reading written for after the play reads VOID (Shrouded Elf 63_23). Not so after a PREVENTION: a Response
 that prevents what it answers ("... is about to ..., exert X to prevent this") leaves nothing to answer, and the
