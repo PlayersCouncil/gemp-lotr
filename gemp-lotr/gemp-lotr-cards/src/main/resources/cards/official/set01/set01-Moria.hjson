@@ -171,16 +171,29 @@
 		timewords: Skirmish
 		effects: {
 			type: event
-			effect: {
-				type: modifyStrength
-				select: choose(culture(moria),orc)
-				memorize: chosenOrc
-				amount: {
-					type: forEachYouCanSpot
-					filter: not(memory(chosenOrc)),culture(moria),orc
-					limit: 4
+			effect: [
+				{
+					type: chooseActiveCards
+					select: choose(culture(moria),orc)
+					text: Choose a {moria} Orc to make strength +1 for each other {moria} Orc you spot
+					memorize: chosenOrc
 				}
-			}
+				{
+					type: chooseHowManyToSpot
+					filter: not(memory(chosenOrc)),culture(moria),orc
+					text: Choose how many other {moria} Orcs to spot
+					memorize: spotCount
+				}
+				{
+					type: modifyStrength
+					select: memory(chosenOrc)
+					amount: {
+						type: fromMemory
+						memory: spotCount
+						limit: 4
+					}
+				}
+			]
 		}
 		gametext: <b>Skirmish:</b> Make a [moria] Orc strength +1 for each other [moria] Orc you spot (limit +4).
 		lore: "...there came a great noise: a rolling Boom that seemed to come from depths far below, and to tremble in the stone at their feet."
