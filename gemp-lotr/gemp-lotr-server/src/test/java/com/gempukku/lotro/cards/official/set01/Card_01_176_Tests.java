@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_01_176_Tests
@@ -17,8 +18,7 @@ public class Card_01_176_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "1_176");
-					// put other cards in here as needed for the test case
+					put("marksman", "1_176");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +46,7 @@ public class Card_01_176_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("marksman");
 
 		assertEquals("Goblin Marksman", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +62,23 @@ public class Card_01_176_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GoblinMarksmanTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void TheReminderTextAddsNothingSoTheMarksmanAddsOneToTheMinionArcheryTotal() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var marksman = scn.GetShadowCard("marksman");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(marksman);
+		assertInZone(Zone.SHADOW_CHARACTERS, marksman);
 
-		assertEquals(3, scn.GetTwilight());
+		// Site 2 is Ettenmoors, whose text adds nothing to archery, and no other archer is on the table: the
+		// Marksman's archer keyword adds 1, and the words in brackets after it (descriptive only, CR 4.2's ruling on
+		// this card) add nothing more.
+		scn.SkipToPhase(Phase.ARCHERY);
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertEquals(1, scn.GetShadowArcheryTotal());
+		assertEquals(0, scn.GetFreepsArcheryTotal());
+		assertTrue(scn.AwaitingFreepsArcheryPhaseActions());
 	}
 }
