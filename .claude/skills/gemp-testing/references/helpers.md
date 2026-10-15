@@ -1100,6 +1100,12 @@ Shadow player's support area before the game). "The twilight cost of each compan
 a sanctuary is +2": at Bag End a companion of cost 2 reads 4 in hand, and 2 with a discount of 2, where a discount
 of 3 would read 1 (`Card_15_064_Tests`; pitfalls, "A twilight cost never reads below 0").
 
+**A Shadow possession's twilight cost raised (to show the size of a discount on a weapon of cost 0 or 1).** Taurnil
+5_13 bearing Elven Bow 1_41. Taurnil: [elven] Elf companion ("To play, spot an Elf": cheat him in), "While Taurnil
+bears a ranged weapon, the twilight cost of each Shadow possession is +2"; he then adds nothing to the fellowship
+archery total. A Goblin Spear 1_182 (cost 1) reads 3, and 2 at "twilight cost -1", so a pool of exactly 2 is
+offered and left at 0, where -2 would leave 1 and a pool of 1 withholds the play (`Card_01_193_Tests`).
+
 ## Sites and moves
 
 **Two sites whose standing texts read as one number.** Weatherhills 1_335; Ford of Bruinen 1_338; The Witch-king,

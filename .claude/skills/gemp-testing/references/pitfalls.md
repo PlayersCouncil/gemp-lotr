@@ -1414,6 +1414,8 @@ condition, cost 0, "To play, spot no minions. Each time you play a minion, it is
 Shadow support area, reaches a minion played from hand and one played from the discard pile; its "each companion
 is strength -1" needs an [orc] minion in play. Gollum (2) played at "twilight cost -2" beside it costs 1 and his
 roaming penalty, so a pool one short withholds the play and -1 or -3 reads another number (`Card_10_019_Tests`).
+For a SHADOW POSSESSION: Taurnil 5_13 bearing a ranged weapon (+2; helpers, "A Shadow possession's twilight cost
+raised"; `Card_01_193_Tests`).
 
 **"When you play X, you may remove N threats to make its twilight cost -N" asks for N as the card is played.**
 The card is offered when the pool and the threats together cover it (roaming counted), and the number asked for
