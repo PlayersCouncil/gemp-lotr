@@ -382,7 +382,9 @@ For any word, a title or not, a Hobbit-set card is laid only where it is the one
 definitions apart, and Notes say so (Q-0312: Saruman, The White 32_24 for Stern Words 19_9; Iron-forged Weapon
 32_18, the one hand weapon of another culture a Dwarf can bear, for Axe Strike 1_3).
 A card's own name in its own text is that card (`self`), not a title picking cards out: "Exert Elrond" on Elrond
-owes `C` and `C-` and no F (1_40 above; Úlairë Nelya 11_222).
+owes `C` and `C-` and no F (1_40 above; Úlairë Nelya 11_222). Another card's title in a cost is a title that pays, even
+where that card is always the bearer ("Exert Úlairë Lemenya" on the Sword of Minas Morgul 1_225): its `C-` board puts
+another card of that type and culture beside him, able to pay and left unexerted, or `choose(nazgul)` passes.
 
 **A word in one filter and not in another; cards picked by what the cost's card is.** Where a word is in one filter
 of the card and not in another ("a unique [elven] companion", then "all Free Peoples archers"), the valid

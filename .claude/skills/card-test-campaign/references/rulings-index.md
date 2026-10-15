@@ -560,6 +560,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Helpless 2_76, "Sam's game text does not apply": a Sam who is not the Ring-bearer is no longer Ring-bound
 - The CR 4.2 "response" example (Isildur wearing Answer To All Riddles 4_1, Sapling of the White Tree 9_35) is shown in the Ring's file
 - The CR 4.2 "modifier" example (Shelob, Her Ladyship 10_23 with Sent Back 9_27) is shown in Shelob's file, and the "effect" and "preventing effects" example (Morgul Destroyer with the Sapling 9_35) in Morgul Destroyer's
+- "This card can replace sites only in the Fellowship block format" (CR 4.2 Section Three: Paths Seldom Trodden 1_222, Úlairë Nelya 1_233, Dark Places 2_55; Grimbold 7_233 with "King block") is open as Q-0327
 
 ## Reveals, draw decks and shuffles
 

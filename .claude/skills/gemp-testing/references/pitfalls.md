@@ -1864,6 +1864,11 @@ A numbered path's site laid by a move, by `FreepsPass()` or by `SkipToSite(n)`, 
 every move of either player and on the Fellowship and King paths alike (probed at the landing of dec-b5_100):
 `assertSame(scn.GetShadowSite("site5"), scn.GetCurrentSite())`, never `GetFreepsSite`, which then answers with the
 copy still in the Free Peoples adventure deck.
+A site put in the CARD map (`put("trollshaw", "1_334")`, not the site map) goes into BOTH adventure decks as well,
+so each player holds two sites of that number: a plain `FreepsPass()` then stops at the Shadow player's "Choose
+site to play" and not at his Shadow phase, and "your site of the same number" can pick up the extra copy. Give each
+player nine sites, one of each number (`SetFreepsAdventureDeck`, `SetShadowAdventureDeck`), then lay the card-map
+site with `MoveCardToAdventurePath`, which takes it even after the reset has taken it out (Card_01_222_Tests).
 
 **A table in a format that uses Maps.** `VirtualTableScenario.PCMovie` works with every constructor: each deck is
 given the Map of the path its sites are on (`FellowshipMap` 102_74, `TowersMap` 102_75, `KingMap` 102_76). The
