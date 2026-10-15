@@ -20,7 +20,10 @@ import java.util.Set;
  *                                                    window is open, ui:cardInfo the card information window
  *     ui:site:<n>                                    one site on the adventure path
  *     ui:button:<pass|done|reset>                    a decision button
- *     ui:skirmish:<fpStrength|shadowStrength>        a total in the skirmish box
+ *     ui:skirmish:<selfStrength|oppStrength>         a total in the skirmish box: the person's side, the other side
+ *     ui:skirmish:<selfDamage|oppDamage>             the damage bonus beside it (shown while there is one)
+ *                                                    (fpStrength and shadowStrength, as once written, are read as
+ *                                                    selfStrength and oppStrength for a Free Peoples player)
  *     ui:skirmish:<freeps|shadow>                    the cards on that side of the skirmish being fought, whichever they are
  *     ui:assignment:<alias>                          the assignment group of a Free Peoples character
  *     ui:stats:<archery|move>                        a figure in the stats box
@@ -78,7 +81,7 @@ public final class Anchors {
                         ScenarioParser.card(def, parts[2], context);
                     }
                     case "skirmish" -> {
-                        if (parts.length == 3 && !List.of("fpstrength", "shadowstrength", "freeps", "shadow").contains(parts[2].toLowerCase(Locale.ROOT)))
+                        if (parts.length == 3 && !List.of("selfstrength", "oppstrength", "selfdamage", "oppdamage", "fpstrength", "shadowstrength", "freeps", "shadow").contains(parts[2].toLowerCase(Locale.ROOT)))
                             throw bad(anchor, context);
                         if (parts.length > 3)
                             throw bad(anchor, context);

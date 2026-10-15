@@ -174,7 +174,21 @@ public class ScenarioDirector {
         if (block == null || !block.block)
             throw new IllegalStateException("The script is not at a block");
         step.parent = block;
-        restructure(() -> block.children.add(step), null);
+        //A step for after a skirmish goes in front of the steps for choosing a skirmish, which would otherwise take
+        // the decision after it too (the first choice's step, say, if it applies to every choice)
+        Step before = null;
+        if (step.when.after != null)
+            for (Step child : block.children)
+                if (before == null && child.when.after == null && child.when.fighting == null && child.when.text != null
+                        && child.when.text.toLowerCase().contains("next skirmish"))
+                    before = child;
+        Step ahead = before;
+        restructure(() -> {
+            if (ahead == null)
+                block.children.add(step);
+            else
+                block.children.add(block.children.indexOf(ahead), step);
+        }, null);
         if (used) {
             _statuses.put(step.label(), StepStatus.MATCHED);
             _statuses.put(block.label(), StepStatus.MATCHED);
@@ -350,6 +364,7 @@ public class ScenarioDirector {
                 && (when.turn == null || when.turn == _table.gameState().getTurnNumber())
                 && (when.skirmish == null || (_table.gameState().getSkirmish() != null && when.skirmish == _skirmishOrdinal))
                 && (when.fighting == null || isFighting(when.fighting))
+                && (when.after == null || isAfter(when.after))
                 && (when.require == null || _table.Holds(when.require, player));
     }
 
@@ -537,6 +552,8 @@ public class ScenarioDirector {
         if (when.offers != null)
             return false;
         if (when.fighting != null && !isFighting(when.fighting))
+            return false;
+        if (when.after != null && !isAfter(when.after))
             return false;
         return when.require == null || _table.Holds(when.require, player);
     }
@@ -731,6 +748,14 @@ public class ScenarioDirector {
         return skirmish.getFellowshipCharacter() == card || skirmish.getShadowCharacters().contains(card);
     }
 
+    /** Whether no skirmish is being fought, and the last one fought this turn was this character's. */
+    private boolean isAfter(String alias) {
+        if (_table.gameState().getSkirmish() != null)
+            return false;
+        PhysicalCard last = _table.gameState().getLastSkirmishCharacter();
+        return last != null && last == _table.Card(alias);
+    }
+
     private void observeSkirmish() {
         int turn = _table.gameState().getTurnNumber();
         if (turn != _skirmishTurn) {
@@ -764,6 +789,8 @@ public class ScenarioDirector {
         if (when.offers != null && !offers(decision, when.offers))
             return false;
         if (when.fighting != null && !isFighting(when.fighting))
+            return false;
+        if (when.after != null && !isAfter(when.after))
             return false;
         return when.require == null || _table.Holds(when.require, player);
     }

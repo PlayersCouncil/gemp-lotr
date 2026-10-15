@@ -232,6 +232,8 @@ public final class ScenarioWriter {
             }
         }
         if (step.block) {
+            if (step.skirmishes)
+                json.add("skirmishes", true);
             JsonArray children = new JsonArray();
             for (Step child : step.children)
                 children.add(step(child));
@@ -260,6 +262,8 @@ public final class ScenarioWriter {
                 terms.add("offers(" + when.offers + ")");
             if (when.fighting != null)
                 terms.add("fighting(" + when.fighting + ")");
+            if (when.after != null)
+                terms.add("after(" + when.after + ")");
             if (when.text != null)
                 terms.add("text(" + when.text + ")");
             return JsonValue.valueOf(terms.toString());
@@ -278,6 +282,7 @@ public final class ScenarioWriter {
             json.add("skirmish", when.skirmish);
         addIfSet(json, "offers", when.offers);
         addIfSet(json, "fighting", when.fighting);
+        addIfSet(json, "after", when.after);
         json.add("require", requirements(when.require));
         return json;
     }

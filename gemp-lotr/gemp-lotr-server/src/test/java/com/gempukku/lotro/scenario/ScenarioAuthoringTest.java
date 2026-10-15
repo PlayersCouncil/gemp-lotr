@@ -459,6 +459,39 @@ public class ScenarioAuthoringTest {
     }
 
     @Test
+    public void AStepForTheChoiceAfterASkirmishIsForWhatComesAfterThatSkirmish() throws Exception {
+        Files.createDirectories(new File(canon, "tutorials").toPath());
+        Files.copy(new File("src/test/resources/scenarios/two-skirmishes.hjson").toPath(), new File(canon, "tutorials/two-skirmishes.hjson").toPath());
+        authoring.open(player, "two-skirmishes", true);
+        //The first choice of skirmish is the block's step 2's first decision; Gandalf's is fought, and the next
+        // choice is step 2's again
+        authoring.goTo(player, 1, 2);
+        Client client = new Client(game());
+        client.answer(String.valueOf(cardNamed(state(), "gandalf").getString("cardId")));
+        for (int i = 0; i < 10; i++) {
+            JSONObject waiting = state().getJSONObject("waiting").getJSONObject("human");
+            if (waiting != null && waiting.getString("text").contains("next skirmish"))
+                break;
+            client.poll();
+            client.answer("");
+        }
+        JSONObject state = state();
+        assertEquals(2, state.getJSONObject("position").getIntValue("sub"));
+        state = json(authoring.stepBefore(player)).getJSONObject("state");
+        JSONArray kids = steps(state).getJSONObject(0).getJSONArray("anyOrder");
+        JSONObject made = kids.getJSONObject(1);
+        assertEquals("freeps, cards, after(gandalf), text(next skirmish)", made.getString("when"));
+        authoring.edit(player, "{\"steps\": [{\"op\": \"merge\", \"uid\": \"" + state.getJSONArray("kids").getJSONArray(0).getString(1)
+                + "\", \"set\": {\"messages\": [\"Now Aragorn.\"]}}]}", null);
+        client = new Client(game());
+        client.answer(String.valueOf(cardNamed(state(), "aragorn").getString("cardId")));
+
+        //Played through, it is said after Gandalf's skirmish and nowhere else
+        state = json(authoring.goTo(player, 99)).getJSONObject("state");
+        assertEquals("matched", state.getJSONArray("substatuses").getJSONArray(0).getString(1));
+    }
+
+    @Test
     public void AStepIsPutInFrontOfTheBlockStepThatHasTheDecisionAndTakesIt() throws Exception {
         Files.createDirectories(new File(canon, "tutorials").toPath());
         Files.copy(new File("src/test/resources/scenarios/two-skirmishes.hjson").toPath(), new File(canon, "tutorials/two-skirmishes.hjson").toPath());
@@ -470,7 +503,7 @@ public class ScenarioAuthoringTest {
         JSONArray kids = steps(state).getJSONObject(0).getJSONArray("anyOrder");
         assertEquals(5, kids.size());
         JSONObject made = kids.getJSONObject(3);
-        assertEquals("freeps, action, phase(skirmish), fighting(gandalf)", made.getString("when"));
+        assertEquals("freeps, action, fighting(gandalf)", made.getString("when"));
         assertTrue(made.getBooleanValue("once"));
         assertEquals("It has the decision now", 4, state.getJSONObject("position").getIntValue("sub"));
         assertEquals("freeps, action, phase(skirmish)", kids.getJSONObject(4).getString("when"));
