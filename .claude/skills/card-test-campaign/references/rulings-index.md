@@ -408,7 +408,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "A <thing>" is one (F-0136). "A <thing>" is one: a choice of one, not all that match (F-0136).
 - "The second time ... each Shadow phase" (F-0130) [F-0390]
 - "May X, and must Y for each X"; "copies of that card"; "is considered a <race>" (Q-0091, Q-0092)
-- "A minion" on a Skirmish event that reaches only minions in the skirmish (Q-0095)
+- "A minion" on a Skirmish event that reaches only minions in the skirmish (Q-0095) [F-0527]
 - "Wound X twice" written as an exertion (F-0148)
 - "Make allies take wounds from archery fire instead of companions" (Q-0136, Q-0137, Q-0147, F-0243, F-0244, F-0275) [Q-0034]
 - "Participates in archery fire and skirmishes" against "may not participate" (Q-0150, F-0281) [F-0283]

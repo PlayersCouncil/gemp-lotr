@@ -161,7 +161,9 @@ Notes: Elrond is himself an ally whose home is site 3, so C2 heals him too.
   the comma before "or", the choice's `B` listed on the first. Every word of the
   game text is in exactly one `C` clause, keyword lines included; reminder text in brackets is left out (a
   `<helper>(...)</helper>` span is such reminder text, and quoted in a clause it fails the conformance check). The
-  conformance check joins the `C` clauses and compares them with the definition's game text.
+  conformance check joins the `C` clauses and compares them with the definition's game text. A semicolon is
+  no sentence end: an ability's "...; this minion does not add to the minion archery total" stays in its clause
+  (Uruk Crossbowman 4_183; Q-0164).
 - **A card's play has no clause of its own** (Q-0279: B, engine pass 31). The printed cost, type and site number
   are the stats test's, and what they do in a plain play is shown once, in `mechanics/costs/TwilightPoolTests` and
   `WhereACardIsPlayedTests`: no test only plays a card. A card's play is tested where its own text bears on it,
@@ -603,7 +605,8 @@ reads null: `assertNull(getPossessionClasses())` (Bill the Pony 3_106, The Mirro
 its Shadow number (`getTwilightCost()`), its direction, and its site number, which a Shadows-block site does not
 print (`getSiteNumber()` is 0 there). Its header comment reproduces the card. A site's header has Block, Site Number (where
 printed), Shadow Number and Direction lines in place of the generated stub's empty Side, Culture and Subtype
-(Card_04_329_Tests). The
+(Card_04_329_Tests). A support-area card's Subtype line may stay blank as generated or read "Support Area": both are
+landed and no assertion hangs on it. The
 expected values are the sheet's; `reconcile.py <id>` (Decipher cards) and the packet's "Sheet against
 definition" section (every card) show any field where the sheet and the definition disagree (see "When the sheet
 and the definition disagree" above). A strength, vitality or other bonus printed on a card that is borne (a

@@ -28,7 +28,7 @@ What the campaign has learned about particular shapes of card text: what a rulin
 
 **"May X, and must Y for each X"; "copies of that card"; "is considered a <race>" (Q-0091, Q-0092).** "May X, and must Y for each X" is not a price: X is done, then Y as far as it can be (Q-0091). "Copies of that card" counts the card itself and goes by title (Q-0092). "Is considered a [culture] <race>" ADDS the race.
 
-**"A minion" on a Skirmish event that reaches only minions in the skirmish (Q-0095).** "A minion" on a Skirmish event that reaches only minions in the skirmish: the TEXT is changed to "a skirmishing minion" (Q-0095, done on 103_84). On another card of the shape, say so as a finding of kind gametext, naming Q-0095.
+**"A minion" on a Skirmish event that reaches only minions in the skirmish (Q-0095).** "A minion" on a Skirmish event that reaches only minions in the skirmish: the TEXT is changed to "a skirmishing minion" (Q-0095, done on 103_84). On another card of the shape, say so as a finding of kind gametext, naming Q-0095. On a DECIPHER card, whose print cannot change, it is a candidate and a question (F-0527, Vengeance 4_208, open: the text changed, or `InSkirmish` dropped to match the print); the other Decipher skirmish events of "Make a/an <kind> strength +N" choose with no `InSkirmish`, as printed (Kill Them Now 4_156 is no card of the shape).
 
 **"Wound X twice" written as an exertion (F-0148).** RULED 2026-10-07 (F-0148, Take it Down! 103_89): "wound X twice" written as an exertion in a definition is a definition fault (a wound can kill and can fall on an exhausted character, an exertion cannot): fixable at landing.
 
