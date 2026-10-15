@@ -183,6 +183,12 @@ is only ever used on purpose.
 **An archer, when archery is the point.** Legolas, Greenleaf 1_50. Strength 6, vitality 3; Archer, with an archery
 ability.
 
+**A Free Peoples archer in a skirmish, for a Shadow text's "if skirmishing an archer".** Companions: Legolas 1_50 and
+Garrison of Gondor 8_36 ([gondor] Man, unique, strength 8, vitality 3; Knight, Archer; cheat it in past "spot 3
+[gondor] companions"). An ally: Orophin 1_56 ([elven] Elf, unique, strength 3, vitality 3; Archer; Archery: exert him
+to wound an Uruk-hai), made to skirmish by One Whom Men Would Follow 1_109 (strength 5 then); he then fires in
+archery too, so only a minion with vitality to spare may be on the table before the assignment phase (Card_01_201_Tests).
+
 **A Legolas who is no archer, for a text that names Legolas in a skirmish.** Legolas, Companion of the Ring 11_21.
 Strength 6, vitality 3; his only text is +2 strength and resistance at a battleground or forest, which no site of
 `FellowshipSites` is. An archer Legolas stops the skippers ("Archers get in the way"); 11_22 and 15_18 (hunter 1) are
