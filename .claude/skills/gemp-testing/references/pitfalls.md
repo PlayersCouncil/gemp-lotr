@@ -535,7 +535,9 @@ cards in the deck under them, or a reading of "on top" cannot be told from one o
 **When a wound or an overwhelm kills and something answers it.** The Free Peoples player, whoever owns the trigger,
 gets a "Required responses" decision listing the rule and the trigger (an overwhelm, which places no wound, raises
 it as well: Goblin Spear 1_182's burden reads 0 after `PassSkirmishActions()` until it is answered; a Shadow card's "wins a skirmish" trigger
-beside "Resolve skirmish damage" is the same decision, and so is a Free Peoples companion's own required "each
+beside "Resolve skirmish damage" is the same decision, the minion's own required "each time this minion wins a
+skirmish" included, in the fierce round as well (Tower Lieutenant 1_280: `FreepsResolveRuleFirst()` after the passes
+that end each skirmish, `PassFierceSkirmishActions()` in the fierce round, Card_01_280_Tests), and so is a Free Peoples companion's own required "each
 time X wins a skirmish", Boromir 59_31: left unanswered, the only sign is that the beaten minion is still in play
 after `PassSkirmishActions()`; a companion's own required "each time X loses a skirmish" raises it too, Isildur
 18_54: until `FreepsResolveRuleFirst()` his wound for losing reads 0 after `PassCurrentPhaseActions()`; it is not
@@ -1084,6 +1086,9 @@ assertEquals(!shown, scn.AwaitingFellowshipPhaseActions());`
 Where it is a NUMBER to choose (the bounds of a heal), the test reads the bounds and ends on the pending decision's
 text, `assertTrue(scn.FreepsDecisionAvailable("Choose cards to heal"))`, which lint's bookend rule takes
 (Card_03_043_Tests.TheNumberHealedIsTheCostOfTheCardShownAndNotOfAnotherCardOfTheHand).
+A random DISCARD that shows nothing ("discards 2 cards at random from hand", Tower Lieutenant 1_280) is read by
+counts: the hand down by N, the discard pile up by N, the draw deck unchanged and none of the hand's cards in it,
+and another player's hand untouched (Card_01_280_Tests).
 
 **The fierce round reads as the first does.** After a skirmish that leaves a fierce minion in play,
 `GetCurrentPhase()` is `Phase.ASSIGNMENT` again and `AwaitingFreepsAssignmentPhaseActions()` is true, exactly as
