@@ -571,7 +571,7 @@ one is carried out with nobody asked. Beside another required trigger of the sam
 at the start of the fellowship phase; Silinde 1_60's copy of the site's text on the move there) the Free Peoples
 player gets "Required responses" with the check listed under its card's name
 (`FreepsResolveActionOrder("Rivendell Waterfall")`), and it is collected again for whatever is carried out ahead
-of it: after a wound that kills, the next ordering lists the death and the card twice. What the check gives is not
+of it: after a wound that kills, the next ordering lists the death (an entry with no text) and the card twice, one copy in play or not, and the second entry does nothing once the first has run (`FreepsResolveRuleFirst()`, Sauron's Defenses 1_274). What the check gives is not
 there until it is carried out (the move limit reads 2 at the turn's sanctuary-healing decision and while an
 ordering waits, the ranger standing at the site), and its requirements are run again at that moment, so a check
 whose condition has ended by then does nothing: right for a standing discard, and for a "+1 for this turn" the
