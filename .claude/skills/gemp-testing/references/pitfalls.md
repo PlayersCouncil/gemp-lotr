@@ -461,7 +461,10 @@ Grishnákh 5_100's exertion, `Card_05_100_Tests`, dec-b5_100). A
 response event with no such text is read with `ShadowPlayAvailable` (Ravage the Defeated 4_32; Gondor Will See It
 Done 2_34, `FreepsPlayAvailable`, Card_10_119_Tests).
 
-**Using a card's action.** `FreepsUseCardAction(card)` and `ShadowUseCardAction(card)` take the action `FreepsActionAvailable(card)` sees, even where the game lists another of the card's actions first (a possession that another companion could bear lists "Transfer" before "Use"). A card that offers no such action has the first action listed for it taken, as before: an optional trigger or a response is accepted this way. `FreepsUseCardAction(card, "Use")` is no longer needed to get past a transfer.
+**Using a card's action.** `FreepsUseCardAction(card)` and `ShadowUseCardAction(card)` take the action `FreepsActionAvailable(card)` sees, even where the game lists another of the card's actions first (a possession that another companion could bear lists "Transfer" before "Use"). A card that offers no such action has the first action listed for it taken, as before: an optional trigger or a response is accepted this way. `FreepsUseCardAction(card, "Use")` is no longer needed to get past a transfer. Two abilities of one card that exclude each other by a requirement (Frodo's Cloak 4_303: "At sites 1[T] to
+4[T], ... At any other site, ...") are both "Use", and the first listed is taken, so a second wrongly on offer leaves
+every result the same: where one is offered, read `FreepsGetActionCount()` as well, on the board where the other must
+not be (Card_04_303_Tests; mutate.py survivors there before the count was read).
 
 **Two copies of one card.** `FreepsActionAvailable(card)`, `FreepsPlayAvailable(card)`,
 `FreepsTransferAvailable(card)` and their Shadow twins answer for the physical card they are given: with two
@@ -693,7 +696,9 @@ deck reads its printed cost, and 2 more in the first fellowship phase. The cost 
 companion whose play ends the first player's choice cannot be read from the pool, which reads 0 again as the
 next choice begins: read `GetTwilightCost(card)` of a card still in the draw deck while its owner chooses, which
 answers with a starting-fellowship discount in force (Gondorian Knight 5_35 reads 2 before Alcarin 5_31 is chosen and 1 after;
-Card_05_031_Tests). A starting fellowship
+Card_05_031_Tests). A discount a card gives its OWN cost (`modifyOwnCost`) is not always in that reading: Elite Rider
+4_265 reads 2 as the choice begins, but once one Rider is chosen the second reads 3 and is charged 2 (he is
+offered at a total of 2, and after him Merry 1_302 at 1 is not; Card_04_265_Tests): read such a cost by the offers. A starting fellowship
 is Free Peoples cards: where a card lets other card types in
 (Race Text 94_3), a Shadow card of those types in the draw deck is never offered, whatever the running total
 (Q-0189, F-0343; mechanics/game/StartingFellowshipIsFreePeoplesCardsTests).
