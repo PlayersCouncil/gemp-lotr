@@ -328,7 +328,8 @@ a skirmish").
 
 **An ally who bears a weapon, or three cards.** Farmer Maggot, Chaser of Rascals 1_288; Bilbo, Retired Adventurer
 1_284; with Hobbit Sword 1_299, Orc Armor 10_113, Salt from the Shire 11_171. A Hobbit ally lawfully bears whatever
-says "Bearer must be a Hobbit". Maggot: unique [shire] Hobbit ally, cost 1, strength 2, vitality 3, home 1F;
+says "Bearer must be a Hobbit", so with one in play beside Frodo (Bounder 1_286) the bearer of such a card is
+asked, not chosen unasked (Card_04_343_Tests). Maggot: unique [shire] Hobbit ally, cost 1, strength 2, vitality 3, home 1F;
 "Fellowship: Exert Farmer Maggot to heal Merry or Pippin". Bilbo: the same at cost 2, home 3F; "Fellowship: Exert
 Bilbo to shuffle a [shire] card from your discard pile into your draw deck". Both abilities are used only on
 purpose. Hobbit Sword: [shire] hand weapon, cost 1, strength +2, no other text. Orc Armor: [shire] armor, cost 1;
@@ -363,6 +364,8 @@ companion. A Wizard who is an ally and WINS a skirmish is Radagast, The Brown 31
 Shaman 1_152 (8, vitality 2) without killing it (`Card_13_078_Tests.AWizardWhoIsAnAllyAndWinsASkirmishMakesItAMinion`).
 His 10 overwhelms a minion of strength 5 or less (Uruk Savage 1_151 is discarded, not wounded): for a wound to
 read, lay a minion of strength 6 to 9; or read the kill (`Card_11_244_Tests`, dec-b11_244).
+On the Towers path no Hobbit ally is at home (each one's home is F or H), and this event is how one skirmishes there:
+Bounder 1_286 with Aragorn in play, in the maneuver phase (`Card_04_321_Tests`, for "a skirmish involving a Hobbit").
 
 **An ally in a skirmish at any site, with no Aragorn needed.** Thrarin, Dwarven Smith 1_27: unique [dwarven] Dwarf
 ally, strength 4, vitality 2, home 3F. "Maneuver: Exert Thrarin to allow him to participate in archery fire and

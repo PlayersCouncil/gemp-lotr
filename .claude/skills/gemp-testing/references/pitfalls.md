@@ -1745,6 +1745,9 @@ Site 5, Deeping Wall 4_348: a battleground; "Shadow: Play Saruman from your draw
 battleground; each character damage +1 while 6 companions can be spotted. Site 8, Ring of Isengard 4_358: "Shadow:
 Play a [dunland] minion to draw a card". Site 9, Palantír Chamber 4_363: "Shadow: Remove 2 burdens to play a minion
 from your discard pile", on offer at site 9 with 2 burdens and a minion in the discard pile (dec-b12_18).
+A Towers site under test may itself be one of these nine, and the sentence naming it is then withheld in stage 1:
+compare its number and title with `VirtualTableScenario.TowersSites`; where it is there, read it with
+`GetFreepsSite(n)` and do not lay it again, and expect the other eight sites' texts on the same path.
 
 **The sites of `KingSites` have texts that reach a test.** Site 1, Edoras Hall 7_330: each [rohan] possession is
 twilight cost -1 while the fellowship is there. Site 2, King's Tent 7_335: a Shadow action (initiative and a minion of

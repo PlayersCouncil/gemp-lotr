@@ -388,7 +388,8 @@ the untouched control is a different card. For a Skirmish ability on "this minio
 skirmish: one in another skirmish lets `choose(minion,inSkirmish)` pass, a lone candidate being chosen unasked (7_190).
 
 **Whose a card is and where it stands.** What the wording does not mention includes whose a card is and where it
-stands: for a bare race word ("a Man", Q-0058) one valid candidate is the opponent's, where a card of his of that
+stands: for a bare race word ("a Man", Q-0058) one valid candidate is the opponent's, beside the companion and the
+ally the paragraph above asks for (all three for "a Hobbit": 4_321), where a card of his of that
 race can be in play at that moment (no minion is in a fellowship phase: then Notes says none can be, and no board
 is made for it) (but a player's own Shadow cards are inactive on his turn, so for a "Shadow condition" chosen by a
 Free Peoples ability they are no candidates at all); for "a minion" or "an Uruk-hai" on a Skirmish event, one valid
