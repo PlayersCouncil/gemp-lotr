@@ -1,10 +1,14 @@
 package com.gempukku.lotro.cards.unofficial.rtmd.set_92_rotk;
 
 import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Keyword;
+import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -15,19 +19,23 @@ import static org.junit.Assert.assertTrue;
 
 public class Card_92_015_Tests
 {
-	private final HashMap<String, String> cards = new HashMap<>() {{
-		// Gimli, Dwarf of Erebor (1_13): Dwarven companion, strength 6, vitality 3
-		put("gimli", "1_13");
-		// Aragorn, Ranger of the North (1_89): Gondor companion, strength 8, vitality 4
-		put("aragorn", "1_89");
-		// Legolas, Greenleaf (1_50): Elven companion, strength 6, vitality 3
-		put("legolas", "1_50");
-		// Orthanc Berserker: Isengard Uruk-hai minion, strength 11, vitality 3, damage +1
-		put("berserker", "3_66");
-	}};
-
 	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("gimli", "1_13");       // Gimli, Son of Gloin: [dwarven] Dwarf companion, strength 6, vitality 3; Damage +1
+					put("grimir", "1_17");      // Grimir, Dwarven Elder: [dwarven] Dwarf ally, strength 3, vitality 3, home site 3
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion, strength 8, vitality 4
+					put("legolas", "1_50");     // Legolas, Greenleaf: [elven] Elf companion, strength 6, vitality 3; Archer
+					// One Whom Men Would Follow: Maneuver event, cost 0. Exert Aragorn, and an ally is strength +2
+					// and takes part in skirmishes until the regroup phase.
+					put("follow", "1_109");
+					put("berserker", "3_66");   // Orthanc Berserker: [isengard] Uruk-hai, strength 11, vitality 3; Damage +1
+					put("party1", "1_158");     // Uruk-hai Raiding Party: [isengard] Uruk-hai, strength 9, vitality 3; Damage +1 is its whole text
+					put("party2", "1_158");
+					put("marksman1", "1_176");  // Goblin Marksman: [moria] Orc, strength 7, vitality 1; Archer is its whole text
+					put("marksman2", "1_176");
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -36,7 +44,22 @@ public class Card_92_015_Tests
 	}
 
 	protected VirtualTableScenario GetShadowScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("gimli", "1_13");       // Gimli, Son of Gloin: [dwarven] Dwarf companion, strength 6, vitality 3; Damage +1
+					put("grimir", "1_17");      // Grimir, Dwarven Elder: [dwarven] Dwarf ally, strength 3, vitality 3, home site 3
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion, strength 8, vitality 4
+					put("legolas", "1_50");     // Legolas, Greenleaf: [elven] Elf companion, strength 6, vitality 3; Archer
+					// One Whom Men Would Follow: Maneuver event, cost 0. Exert Aragorn, and an ally is strength +2
+					// and takes part in skirmishes until the regroup phase.
+					put("follow", "1_109");
+					put("berserker", "3_66");   // Orthanc Berserker: [isengard] Uruk-hai, strength 11, vitality 3; Damage +1
+					put("party1", "1_158");     // Uruk-hai Raiding Party: [isengard] Uruk-hai, strength 9, vitality 3; Damage +1 is its whole text
+					put("party2", "1_158");
+					put("marksman1", "1_176");  // Goblin Marksman: [moria] Orc, strength 7, vitality 1; Archer is its whole text
+					put("marksman2", "1_176");
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -50,6 +73,7 @@ public class Card_92_015_Tests
 		 * Set: RTMD 92
 		 * Name: Race Text 92_15
 		 * Type: MetaSite
+		 * Intensity: -3
 		 * Game Text: Your Dwarves are strength +1 and cannot take more than one wound during each skirmish phase.
 		 */
 
@@ -59,6 +83,7 @@ public class Card_92_015_Tests
 
 		assertEquals("Race Text 92_15", card.getBlueprint().getTitle());
 		assertEquals(CardType.METASITE, card.getBlueprint().getCardType());
+		assertEquals(-3, card.getBlueprint().getIntensity());
 	}
 
 	@Test
@@ -90,12 +115,14 @@ public class Card_92_015_Tests
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(gimli, berserker);
 		scn.ShadowDeclineAssignments();
+		assertEquals(0, scn.GetWoundsOn(gimli));
 		scn.FreepsResolveSkirmish(gimli);
 		scn.PassCurrentPhaseActions();
 
-		// Gimli lost the skirmish (7 vs 10). Damage +1 would normally mean 2 wounds.
+		// Gimli lost the skirmish (7 vs 11, not overwhelmed). Damage +1 would normally mean 2 wounds.
 		// But modifier caps at 1 wound per skirmish phase.
 		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
 	@Test
@@ -123,7 +150,7 @@ public class Card_92_015_Tests
 		scn.FreepsResolveSkirmish(legolas);
 		scn.PassCurrentPhaseActions();
 
-		// Legolas killed (str 6 vs 10, damage+1 = 2 wounds, already had 2 = dead)
+		// Legolas killed (str 6 vs 11, already had 2 wounds of his vitality 3 = dead)
 		assertInZone(Zone.DEAD, legolas);
 
 		// 2 threat wounds to assign. Choose Gimli for the first.
@@ -137,6 +164,11 @@ public class Card_92_015_Tests
 		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(gimli));
 		assertEquals(1, scn.GetWoundsOn(gimli));
+
+		scn.FreepsChooseCard(aragorn);
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
 	@Test
@@ -144,12 +176,146 @@ public class Card_92_015_Tests
 		var scn = GetShadowScenario();
 
 		var gimli = scn.GetFreepsCard("gimli");
+		var berserker = scn.GetShadowCard("berserker");
 
 		scn.MoveCompanionsToTable(gimli);
+		scn.MoveMinionsToTable(berserker);
 
 		scn.StartGame();
 
 		// No strength bonus — shadow owns the modifier
 		assertEquals(6, scn.GetStrength(gimli));
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gimli, berserker);
+		scn.ShadowDeclineAssignments();
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		scn.FreepsResolveSkirmish(gimli);
+		scn.PassCurrentPhaseActions();
+
+		// And no cap: Gimli lost (6 vs 11, not overwhelmed) and Damage +1 makes it 2 wounds.
+		assertEquals(2, scn.GetWoundsOn(gimli));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void ADwarfAllyIsStrengthPlusOneAndAManAndAnElfAreNot() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
+
+		var gimli = scn.GetFreepsCard("gimli");
+		var grimir = scn.GetFreepsCard("grimir");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var legolas = scn.GetFreepsCard("legolas");
+
+		scn.MoveCompanionsToTable(gimli, aragorn, legolas);
+		scn.MoveAlliesToTable(grimir);
+
+		scn.StartGame();
+
+		// A Dwarf companion and a Dwarf ally: Gimli 6 + 1, Grimir 3 + 1.
+		assertEquals(7, scn.GetStrength(gimli));
+		assertEquals(4, scn.GetStrength(grimir));
+		// The Man and the Elf keep their printed strength.
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertEquals(6, scn.GetStrength(legolas));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void TwoWoundsInTheArcheryPhaseAreBothTaken() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
+
+		var gimli = scn.GetFreepsCard("gimli");
+		var marksman1 = scn.GetShadowCard("marksman1");
+		var marksman2 = scn.GetShadowCard("marksman2");
+
+		scn.MoveCompanionsToTable(gimli);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(marksman1, marksman2);
+
+		// Two Shadow archers: a minion archery total of 2, and the archery phase is no skirmish phase.
+		scn.SkipToArcheryWounds();
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		scn.FreepsChooseCard(gimli);
+		assertEquals(1, scn.GetWoundsOn(gimli));
+
+		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli));
+		scn.FreepsChooseCard(gimli);
+		assertEquals(2, scn.GetWoundsOn(gimli));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
+
+	@Test
+	public void ADwarfAllyInASkirmishTakesOneWoundAndAManTakesBoth() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
+
+		var grimir = scn.GetFreepsCard("grimir");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var follow = scn.GetFreepsCard("follow");
+		var party1 = scn.GetShadowCard("party1");
+		var party2 = scn.GetShadowCard("party2");
+
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveAlliesToTable(grimir);
+		scn.MoveCardsToHand(follow);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(party1, party2);
+
+		// One Whom Men Would Follow: Aragorn exerts, and Grimir fights until the regroup phase
+		// at strength 3 + 1 from the modifier + 2 from the event.
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPlayCard(follow);
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(6, scn.GetStrength(grimir));
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{grimir, party1}, new PhysicalCardImpl[]{aragorn, party2});
+
+		// Each loses to a Raiding Party's 9 without being overwhelmed, and Damage +1 makes it 2 wounds.
+		assertEquals(0, scn.GetWoundsOn(grimir));
+		scn.FreepsResolveSkirmish(grimir);
+		scn.PassCurrentPhaseActions();
+		// The Dwarf ally takes the first and not the second.
+		assertEquals(1, scn.GetWoundsOn(grimir));
+
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.PassCurrentPhaseActions();
+		// The Man, a companion who is no Dwarf, takes both: 1 from his exertion + 2.
+		assertEquals(3, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void TheCapRenewsInTheFierceSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
+
+		var gimli = scn.GetFreepsCard("gimli");
+		var berserker = scn.GetShadowCard("berserker");
+
+		scn.MoveCompanionsToTable(gimli);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(berserker);
+		// The Berserker made fierce, so that Gimli loses to it in two skirmish phases of one turn.
+		scn.ApplyAdHocModifier(new AddKeywordModifier(null, berserker, null, Keyword.FIERCE));
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gimli, berserker);
+		scn.FreepsResolveSkirmish(gimli);
+		scn.PassCurrentPhaseActions();
+		assertEquals(1, scn.GetWoundsOn(gimli));
+
+		scn.PassFierceAssignmentActions();
+		scn.FreepsAssignToMinions(gimli, berserker);
+		scn.FreepsResolveSkirmish(gimli);
+		scn.PassCurrentPhaseActions();
+
+		// One wound in each skirmish phase. A cap for the whole turn would leave him at 1, and with no cap
+		// the two skirmishes' four wounds would have killed him (vitality 3).
+		assertEquals(2, scn.GetWoundsOn(gimli));
+		assertInZone(Zone.FREE_CHARACTERS, gimli);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }

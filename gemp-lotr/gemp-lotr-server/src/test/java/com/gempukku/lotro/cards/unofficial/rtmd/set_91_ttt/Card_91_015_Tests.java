@@ -1,6 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.rtmd.set_91_ttt;
 
 import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -9,25 +10,23 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_91_015_Tests
 {
-	private final HashMap<String, String> cards = new HashMap<>()
-	{{
-		// Aragorn, Ranger of the North (1_89): FP Man companion, twilight 4
-		put("aragorn", "1_89");
-		// Legolas, Greenleaf (1_50): FP Elf companion, twilight 2
-		put("legolas", "1_50");
-		// Barliman Butterbur (1_70): FP Man ally, twilight 0, allyHome 1F
-		put("barliman", "1_70");
-		// Band of Wild Men (4_4): Shadow Man minion, twilight 5
-		put("wildmen", "4_4");
-		// Goblin Runner (1_178): Shadow Orc minion, twilight 1
-		put("runner", "1_178");
-	}};
-
 	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a [gondor] Man companion, twilight 4
+					put("legolas", "1_50");     // Legolas, Greenleaf: an Elf companion, twilight 2
+					put("barliman", "1_70");    // Barliman Butterbur: a [gandalf] Man ally, twilight 0
+					put("wildmen", "4_4");      // Band of Wild Men: a [dunland] Man minion, twilight 5, site 3
+					put("bree", "11_90");       // Man of Bree: a [men] Man minion, twilight 2, site 4
+					// Ted Sandyman, Chief's Men's Ally: a minion of the [men] culture whose race is Hobbit, twilight 1, site 2
+					put("ted", "18_75");
+					put("runner", "1_178");     // Goblin Runner: an Orc minion, twilight 1, site 4
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -36,7 +35,18 @@ public class Card_91_015_Tests
 	}
 
 	protected VirtualTableScenario GetShadowScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a [gondor] Man companion, twilight 4
+					put("legolas", "1_50");     // Legolas, Greenleaf: an Elf companion, twilight 2
+					put("barliman", "1_70");    // Barliman Butterbur: a [gandalf] Man ally, twilight 0
+					put("wildmen", "4_4");      // Band of Wild Men: a [dunland] Man minion, twilight 5, site 3
+					put("bree", "11_90");       // Man of Bree: a [men] Man minion, twilight 2, site 4
+					// Ted Sandyman, Chief's Men's Ally: a minion of the [men] culture whose race is Hobbit, twilight 1, site 2
+					put("ted", "18_75");
+					put("runner", "1_178");     // Goblin Runner: an Orc minion, twilight 1, site 4
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -50,6 +60,7 @@ public class Card_91_015_Tests
 		 * Set: RTMD 91
 		 * Name: Race Text 91_15
 		 * Type: MetaSite
+		 * Intensity: 2
 		 * Game Text: You may not play Men.
 		 */
 
@@ -59,6 +70,7 @@ public class Card_91_015_Tests
 
 		assertEquals("Race Text 91_15", card.getBlueprint().getTitle());
 		assertEquals(CardType.METASITE, card.getBlueprint().getCardType());
+		assertEquals(2, card.getBlueprint().getIntensity());
 	}
 
 	@Test
@@ -72,7 +84,7 @@ public class Card_91_015_Tests
 		var legolas = scn.GetFreepsCard("legolas");
 		var barliman = scn.GetFreepsCard("barliman");
 
-		scn.MoveCardsToHand(aragorn, legolas);
+		scn.MoveCardsToHand(aragorn, legolas, barliman);
 
 		scn.StartGame();
 
@@ -82,8 +94,8 @@ public class Card_91_015_Tests
 		assertFalse(scn.FreepsPlayAvailable(barliman));
 		// Legolas (Elf) should be playable
 		assertTrue(scn.FreepsPlayAvailable(legolas));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
-
 
 	@Test
 	public void FreepsCannotSelectManInStartingFellowship() throws DecisionResultInvalidException, CardNotFoundException {
@@ -97,7 +109,8 @@ public class Card_91_015_Tests
 
 		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
 
-		// Aragorn (Man) should NOT be available for starting fellowship
+		// Aragorn (Man) should NOT be available for starting fellowship,
+		// though his cost of 4 is within what the rule allows
 		assertFalse(scn.FreepsHasCardChoiceAvailable(aragorn));
 		// Legolas (Elf) should be available
 		assertTrue(scn.FreepsHasCardChoiceAvailable(legolas));
@@ -111,18 +124,26 @@ public class Card_91_015_Tests
 		var scn = GetShadowScenario();
 
 		var wildmen = scn.GetShadowCard("wildmen");
+		var bree = scn.GetShadowCard("bree");
+		var ted = scn.GetShadowCard("ted");
 		var runner = scn.GetShadowCard("runner");
 
-		scn.MoveCardsToShadowHand("wildmen", "runner");
+		scn.MoveCardsToShadowHand("wildmen", "runner", "bree", "ted");
 
 		scn.StartGame();
+		// Enough for any of them: the dearest is the Band, 5 + 2 roaming
 		scn.SetTwilight(10);
 		scn.FreepsPass(); // move to site 2
 
 		// Band of Wild Men (Man) should NOT be playable
 		assertFalse(scn.ShadowPlayAvailable(wildmen));
+		// nor Man of Bree, a Man of another culture
+		assertFalse(scn.ShadowPlayAvailable(bree));
 		// Goblin Runner (Orc) should be playable
 		assertTrue(scn.ShadowPlayAvailable(runner));
+		// and so should Ted Sandyman: he is of the culture called Men, and a Hobbit
+		assertTrue(scn.ShadowPlayAvailable(ted));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
@@ -133,8 +154,9 @@ public class Card_91_015_Tests
 		var scn = GetFreepsScenario();
 
 		var wildmen = scn.GetShadowCard("wildmen");
+		var bree = scn.GetShadowCard("bree");
 
-		scn.MoveCardsToShadowHand("wildmen");
+		scn.MoveCardsToShadowHand("wildmen", "bree");
 
 		scn.StartGame();
 		scn.SetTwilight(10);
@@ -142,5 +164,31 @@ public class Card_91_015_Tests
 
 		// Shadow should still be able to play Band of Wild Men
 		assertTrue(scn.ShadowPlayAvailable(wildmen));
+		// and Man of Bree
+		assertTrue(scn.ShadowPlayAvailable(bree));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void FreepsCanStillPlayMenWhenShadowHasMod() throws DecisionResultInvalidException, CardNotFoundException {
+		// 91_15: Only Shadow has the modifier. Freeps should still be able to play Man companions and allies.
+
+		var scn = GetShadowScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var barliman = scn.GetFreepsCard("barliman");
+
+		scn.MoveCardsToHand(aragorn, barliman);
+
+		scn.StartGame();
+
+		assertTrue(scn.FreepsPlayAvailable(aragorn));
+		assertTrue(scn.FreepsPlayAvailable(barliman));
+		assertEquals(0, scn.GetTwilight());
+
+		scn.FreepsPlayCard(aragorn);
+		assertInZone(Zone.FREE_CHARACTERS, aragorn);
+		assertEquals(4, scn.GetTwilight());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }
