@@ -396,7 +396,8 @@ kind stands beside it and is read as untouched (for "each time a companion is pl
 companion already in play, or `all(companion)` passes, 91_9; where the effect then takes "that <card>" out of a
 PILE, "each time ... discards an [isengard] Orc, you may stack that Orc", the other card of its kind lies in that
 pile when the offer is taken, or a choice from the pile passes, 6_63); where a second copy cannot change a reading,
-the untouched control is a different card. For a Skirmish ability on "this minion", the copy stands in the SAME
+the untouched control is a different card. That holds for a UNIQUE card's "here" too: Tom Bombadil's Hat 0_60's
+token trigger is read beside Kept Safe 6_111 holding [shire] tokens, or `select: self` widened passes. For a Skirmish ability on "this minion", the copy stands in the SAME
 skirmish: one in another skirmish lets `choose(minion,inSkirmish)` pass, a lone candidate being chosen unasked (7_190).
 
 **Whose a card is and where it stands.** What the wording does not mention includes whose a card is and where it
@@ -517,7 +518,8 @@ Which checks a clause lists follows from its words, and the analyst is expected 
   card's to show. (For an EVENT it is the rule. For an ability of a card in play Ketura has ruled it card by card: a
   snapshot where the cards it names are on the table when it is used, the standing filter where its text could do
   nothing as a snapshot, as Not Feared in Sunlight 52_107, F-0217: `lookup.py "make each"`. A trigger of a card in
-  play that lays "each X is ... until ..." is read as an ability is: Madril 15_64.)
+  play that lays "each X is ... until ..." is read as an ability is: Madril 15_64. A Skirmish ability on "each minion
+  skirmishing him" owes the clause, the minions being there: Anárion 0_58, with Controlled By The Ring 15_41.)
 - "lose…", "cannot…" for a time → a `Ruling` clause: "can't" beats "can", so what was lost is not given back
   by another card before the time is up. Where the card's own text says so ("loses fierce and cannot gain fierce
   until ...", Prized Lagan 68_110), the "cannot gain" half may stand as an `Effect` clause of its own listing
