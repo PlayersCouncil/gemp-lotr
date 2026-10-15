@@ -805,7 +805,8 @@ Stop work on the card, record what is in the way, and move to the next. Do not f
   already passes stays active, with the question on the ledger's `Findings:` line: switched off, it would take
   away the one thing that notices a mistake there. A doubt that no reachable board can raise (two cards of one
   title, possible only with sets outside the campaign) is a line in Notes and not a question. So is a doubt the
-  glossary settles once two entries are read together, or one whose two readings leave the players the same
+  glossary settles once two entries are read together (where the game departs from what they settle, that is a
+  finding), or one whose two readings leave the players the same
   outcomes (an offer made or withheld is an outcome: Q-0034). A doubt that hangs on a question already open is a rider to that question, not a new one. It hangs on it only where that
   question's answer would settle it: the same kind of doubt about another card's sentence is reported as a question
   that names the open one, and the lander says whether it takes a number of its own (8_119 beside Q-0255).

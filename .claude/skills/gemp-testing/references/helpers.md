@@ -340,7 +340,10 @@ which is how an ally comes to bear a weapon, or three cards of different classes
 **A [rohan] Man who is an ally (and a second).** Guma, Plains Farmer 4_277; Hlafwine, Village Farmhand 4_281. Each:
 unique, cost 1, strength 4, vitality 2, home 4T (never fighting on a Fellowship path), Villager; discarded if an
 opponent controls his home site. Guma: "Fellowship: Exert Guma to heal a [rohan] Man"; Hlafwine: "Skirmish: Exert
-Hlafwine to make a [rohan] Man strength +2"; both used only on purpose.
+Hlafwine to make a [rohan] Man strength +2"; both used only on purpose. Not unique, and with no "discarded" text:
+Rohirrim Herdsman 7_247 (cost 1, strength 4, vitality 2, home 3T, Villager; "To play, spot 2 [rohan] Men", which
+`MoveAlliesToTable` passes over; a regroup ability used only on purpose). On the Towers path his home is Barrows of
+Edoras 4_337, a sanctuary; with Westemnet Plains 4_342 as site 3 it is a plains (Card_05_094_Tests).
 
 **An ally whose home is site 3 or 6 of a block other than the Fellowship's (beside "an ally whose home is site
 6").** Aldor, Soldier of Edoras 4_262. [rohan] Man ally, unique, cost 1, strength 3, vitality 2, homes 3T and 6T;

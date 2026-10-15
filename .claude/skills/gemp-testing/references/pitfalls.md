@@ -1045,6 +1045,9 @@ last fierce skirmish is over. A "this phase" effect from the first assignment ph
 The assignment actions are pending again too, and nothing has passed them as `SkipToAssignments()` did the first
 time: call `PassFierceAssignmentActions()` before `FreepsAssignToMinions`, or the assignment is refused with a
 bare `DecisionResultInvalidException` (Card_09_031_ErrataTests).
+In either round the Free Peoples player may assign a companion to one minion only (more with defender: "Who is
+offered for assignment"), so a board with several minions on one companion gives him one and has the Shadow
+player assign the rest after him, `ShadowAssignToMinions(companion, m2, m3)` (Card_04_181_Tests).
 In the first round it is the other way about: `SkipToAssignments()` is `SkipToPhase(Phase.ASSIGNMENT)` and then
 the assignment actions passed, so it rests at "Assign minions"; a `PassAssignmentActions()` after it passes the
 assignment itself by, and a later `FreepsAssignToMinions` is refused (dec-b10_23, Shelob 10_23).
