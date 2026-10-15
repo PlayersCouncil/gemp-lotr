@@ -348,3 +348,9 @@ THE COST OF ASSIGNING (set 7's Morgul Orcs; built by engine pass 26, item assign
   assignment already paid for is not asked to pay again).
 
 - Alive and Unspoiled 1_120 carries F-0516 (confirmed, hjson-logic: its "you may" is asked with X=0, nothing revealed): whoever works the card corrects it in the same batch.
+
+- Engine pass 48 (F-0518, an ally is at his home site) changed the definitions of 1_26, 2_12, 3_28, 4_42, 7_253,
+  11_3, 11_16, 11_20, 11_55, 11_58, 11_59, 11_156, 12_4, 12_8, 12_29, 12_52, 13_17, 13_145, 13_146 to `atSite(...)`
+  and put one ally test in each file but 11_58's, beside the skeleton tests (no ledger yet). Whoever works one of these
+  keeps that test (or folds it into his own, the same board and reading), claims it in the ledger, and reads
+  shapes.md's F-0380 entry and pitfalls.md "An ally is at his home site, not the fellowship's" first.
