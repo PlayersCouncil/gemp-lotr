@@ -842,6 +842,9 @@ discard pile.
 heal each Nazgûl" (wound the Nazgûl first); its Response answers a reconcile by returning the bearer to hand.
 Cloak: unique [shire] possession, cost 2, on Frodo; away from sites 1T to 4T, "Skirmish: discard this possession to
 remove a burden and heal Frodo" (at those sites it adds a burden to cancel his skirmish).
+A burden removed by a non-Hobbit CHARACTER's own text (the F of "except by a Hobbit's game text"): Járnsmid, Barding
+Emissary 12_30, unique [gandalf] Man companion; "At the start of each skirmish involving Járnsmid, you may remove a
+burden (or 2 burdens if you can spot another [gandalf] companion)": two at once beside Gandalf 1_72 (Card_03_113_Tests).
 
 **A burden a Shadow card adds: one the Free Peoples player chooses; two at once.** Desperate Defense of the Ring
 1_244; Eye of Barad-dûr 5_96. Defense: [sauron] condition on a companion (cheat it on; to play it exerts a [sauron]

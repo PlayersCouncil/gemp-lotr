@@ -941,7 +941,7 @@ and the minions are discarded (Mountain-troll 65_112's tests). So a test of a re
 the second move by `SkipToPhase(Phase.REGROUP); PassCurrentPhaseActions(); FreepsChooseToMove()` over empty hands
 (a one-card deck, its other copy put in the discard pile): one more card in the deck and the last call fails on
 the Shadow player's reconcile. Write `SkipToMovementDecision()` for the first two (92_11, 92_14).
-A mover who is barred from choosing to move (Race Text 94_5, `CantMove`) is not asked either, and
+A mover who is barred from choosing to move (Race Text 94_5, `CantMove`; Eastfold 4_331's Shadow action) is not asked either, and
 `SkipToMovementDecision()` does not stop where its name says: with a hand he is left at his own "Reconcile"
 decision, still in the regroup phase with `GetMoveCount()` 1 of `GetMoveLimit()` 2; with an empty hand the
 skipper runs on into the other player's fellowship phase, where an `assertFalse` of "another move" shows
@@ -1762,7 +1762,8 @@ throws).
 **The sites of `TowersSites` have texts that reach a test.** Site 1, Eastemnet Gullies 4_325: "Fellowship: Exert 2
 unbound companions to play Legolas from your draw deck" (a Legolas in the deck of a player with two unbound
 companions who can exert is in its reach). Site 2, Eastfold 4_331: plains; a Shadow action that needs 3 [isengard]
-trackers. Site 3, Barrows of Edoras 4_337: a sanctuary; "Fellowship: Place your hand beneath your draw deck and draw
+trackers (it bars another move: put a card in the mover's hand, or `SkipToMovementDecision()` runs on into the
+other player's turn; the pitfall "A mover who is barred from choosing to move"). Site 3, Barrows of Edoras 4_337: a sanctuary; "Fellowship: Place your hand beneath your draw deck and draw
 4 cards", on offer to the mover with a card in hand and, since F-0429, with none while he may still draw a card
 (Q-0249: `CanDraw`): `FreepsActionAvailable(<site 3>)` is true there, and a test that counts the fellowship actions on offer at
 site 3 counts it. Site 4, White Rocks 4_346: a battleground; its Shadow number is +1 for each mounted companion, so a test that mounts companions and moves to site 4 counts them in the pool.
