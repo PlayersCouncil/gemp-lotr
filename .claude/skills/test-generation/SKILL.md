@@ -953,3 +953,5 @@ bookends, and that none of the ledger has leaked into the test file. Its warning
    `fromSupport: true`, Lost in the Woods 11_212): neither alone shows, so replace both in one mutate.py run.
    A choice whose filter has a branch of its own is this too: each branch's guard word is a filter word owed a
    board (Gwaihir 17_20's `and(wizard,canWound)` beside `and(not(wizard),canExert)`: an exhausted Wizard minion).
+   A loop written out as nested copies is this too (Mithril Shaft 1_22: its "go on?" `optional` and `addTwilight`
+   at each of four depths): name the copies in the ledger's Notes and give each a board that reaches it (F-0529).
