@@ -517,7 +517,8 @@ Which checks a clause lists follows from its words, and the analyst is expected 
   already is not "nothing" and is offered (Q-0245: A, Band of Wild Men 4_4: "the effect still has potential to alter
   that calculus"). Where a board can have the card hold that keyword already (the ability used once, then
   offered again: Lurtz 1_127), that offer is owed and read. With a cost it is offered there and used for
-  nothing, which is read under `F` or `+` as for an event, and is no `-`. A play of a card after
+  nothing, which is read under `F` or `+` as for an event, and is no `-`; the board is owed all the same, with the
+  cost payable at the second offer (Uruk-hai Rampage 1_159: (3) in the pool again for the fierce win). A play of a card after
   the "to" is itself a cost (Q-0062): "add a burden to play a [shire] tale" with no tale in hand that can be
   played is not offered, and that board is its `C-`
 - "may" → `O`. A response or any other special ability is the player's to use or not without the text saying

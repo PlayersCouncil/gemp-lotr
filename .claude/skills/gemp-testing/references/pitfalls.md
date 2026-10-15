@@ -162,6 +162,10 @@ shows nothing: `ShadowPass()` first, then read it beside `AwaitingFreeps...Phase
 lint warns `not-asked` where an offer is read as absent (or the `...NotAvailable` twin as true) and nothing between
 the test's last play, answer or skip and its next shows that player being asked: his own `Awaiting...PhaseActions()`,
 a decision of his by its words, another offer to him read as made, or his answer coming next (a pass shows nothing).
+A response EVENT held by a player who is asked nothing at that moment (Wariness 1_161 against a Stealth CONDITION
+played in the fellowship phase: no "Optional responses" comes up) has its `-` read at the next decision the game
+stops at, the other player's (`AwaitingFellowshipPhaseActions()`), with the event still in hand: a wrong offer
+would stand in front of it (Card_01_161_Tests; Orc Ambusher 1_261 for a response ability).
 
 **A number with no upper bound.** `FreepsGetChoiceMax()` reads `Integer.MAX_VALUE` where a player is choosing a
 number and the game sets no maximum (a `chooseANumber` with no `to`: Gathering Wind 10_16, Beneath the Mountains
@@ -349,7 +353,10 @@ Optional triggers are still offered. A Response special ability with a cost is t
 it is offered again for the same play for as long as its cost can still be paid (CR 4.2 "response": "You may
 respond more than once to the same situation"; Q-0034). A second use gains nothing after a cancel, but an effect
 that can be had twice is had twice: Uruk Bloodlust 1_144's re-offer, one for each winner it memorized, heals a
-second wound on the same winner (dec-b1_141). That second "Optional
+second wound on the same winner (dec-b1_141). The offers are collected again after each use, so a mistake
+in what such a trigger reads of its winner (`not(fierce)` on Uruk-hai Rampage 1_159) is noticed by a two-winner
+test through the ORDER of the offers, not the board it is about: that board is the same winner, already holding
+what the mistake reads, offered again with the cost payable (Card_01_159_Tests, dec-b1_159). That second "Optional
 responses" decision stands in front of whatever comes next: decline it, or the played event stays in the void
 and a reading written for after the play reads VOID (Shrouded Elf 63_23). Not so after a PREVENTION: a Response
 that prevents what it answers ("... is about to ..., exert X to prevent this") leaves nothing to answer, and the
