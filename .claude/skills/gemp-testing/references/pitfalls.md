@@ -414,7 +414,9 @@ card: `FreepsHasOptionalTriggerAvailable(card)` goes by the card each offered ac
 prompt says. Where one card offers two optional actions in the same decision (Ethereal Banner 103_21's trigger
 and its response, on an overwhelm), add words from the action's description:
 `FreepsHasOptionalTriggerAvailable(card, text)` and `FreepsChooseOptionalTrigger(card, text)`, as
-`FreepsUseCardAction(card, text)` does for phase actions.
+`FreepsUseCardAction(card, text)` does for phase actions. A response EVENT in hand that answers an "is about to"
+window is read and played the same way, by the card: `FreepsHasOptionalTriggerAvailable(card)` and
+`FreepsChooseOptionalTrigger(card)` (Intimidate 1_76, dec-b1_71).
 
 **Toil is a choice of cards, asked only when there is something to choose** (CR 4.2 "toil"; mechanics/keywords/ToilTests).
 A toil card is offered when the pool covers its cost less the toil number for each character of its culture its
