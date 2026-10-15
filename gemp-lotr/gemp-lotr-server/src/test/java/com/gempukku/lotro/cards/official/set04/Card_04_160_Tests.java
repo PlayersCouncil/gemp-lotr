@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_04_160_Tests
@@ -17,8 +18,20 @@ public class Card_04_160_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "4_160");
-					// put other cards in here as needed for the test case
+					put("mauhur", "4_160");
+					// Uruk Seeker: another [isengard] Uruk-hai tracker, strength 6, vitality 2, fierce; its bonus
+					// needs a character bearing a search card
+					put("seeker", "4_195");
+					// Uruk Savage: an [isengard] Uruk-hai who is no tracker; Damage +1 is its whole text
+					put("savage", "1_151");
+					// Orc Searcher: a [sauron] Orc tracker; its skirmish ability is used only on purpose
+					put("searcher", "102_64");
+					// Aragorn, Ranger of the North: [gondor] Man companion, strength 8, vitality 4; a maneuver ability
+					// used only on purpose
+					put("aragorn", "1_89");
+					// Ranger's Sword: on Aragorn, strength +2 and damage +1, so that he beats Mauhur (9) without
+					// doubling him and places two wounds
+					put("rsword", "1_112");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +59,7 @@ public class Card_04_160_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("mauhur");
 
 		assertEquals("Mauhúr", card.getBlueprint().getTitle());
 		assertEquals("Patrol Leader", card.getBlueprint().getSubtitle());
@@ -63,18 +76,87 @@ public class Card_04_160_Tests
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void MauhurTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void SkirmishAbilityRemovesTwoToSpareTheChosenIsengardTrackerHisWoundsForThatSkirmishOnly() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var mauhur = scn.GetShadowCard("mauhur");
+		var seeker = scn.GetShadowCard("seeker");
+		var savage = scn.GetShadowCard("savage");
+		var searcher = scn.GetShadowCard("searcher");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var rsword = scn.GetFreepsCard("rsword");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.AttachCardsTo(aragorn, rsword);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(mauhur, seeker, savage, searcher);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, mauhur);
+		// The other three stay out of the skirmishes.
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.SetTwilight(3);
+		scn.FreepsPass();
 
 		assertEquals(3, scn.GetTwilight());
+		assertEquals(10, scn.GetStrength(aragorn));
+		assertEquals(0, scn.GetWoundsOn(mauhur));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		assertTrue(scn.ShadowActionAvailable(mauhur));
+
+		scn.ShadowUseCardAction(mauhur);
+		assertEquals(1, scn.GetTwilight());
+		// Mauhur in the skirmish and the Seeker in none are [isengard] trackers; the Savage is no tracker and the
+		// Searcher is of [sauron].
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		assertTrue(scn.ShadowHasCardChoiceAvailable(mauhur, seeker));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(savage, searcher));
+		scn.ShadowChooseCard(mauhur);
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+
+		scn.PassSkirmishActions();
+		// Aragorn won, 10 to 9, with damage +1: neither wound is placed.
+		assertEquals(0, scn.GetWoundsOn(mauhur));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertInZone(Zone.SHADOW_CHARACTERS, mauhur);
+		assertTrue(scn.InFierceRound());
+
+		// The fierce skirmish is a skirmish phase of its own.
+		scn.PassFierceAssignmentActions();
+		scn.FreepsAssignToMinions(aragorn, mauhur);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
+		assertEquals(0, scn.GetWoundsOn(mauhur));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+
+		scn.PassFierceSkirmishActions();
+		// Two wounds on vitality 2
+		assertInZone(Zone.DISCARD, mauhur);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void SkirmishAbilityIsNotOfferedWithLessThanTwoInThePool() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var mauhur = scn.GetShadowCard("mauhur");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(mauhur);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(aragorn, mauhur);
+		scn.SetTwilight(1);
+		scn.FreepsPass();
+
+		assertEquals(1, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(mauhur));
+
+		scn.SetTwilight(2);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.ShadowActionAvailable(mauhur));
 	}
 }
