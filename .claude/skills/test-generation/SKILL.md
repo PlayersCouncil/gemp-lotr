@@ -418,7 +418,10 @@ candidate is another card that meets the requirement (lint warns `if-is` where a
 named> is ..." sentence lists no `F`: 2_79's "If the Ring-bearer is then exhausted" wanted an exhausted companion
 beside a Ring-bearer who is not). That holds where the requirement is the condition of a
 trigger and not of an ability: for "While Boromir is the Ring-bearer, at the start of each skirmish involving him"
-it is the real Ring-bearer in a skirmish of his own while Boromir is a plain companion (59_31). Where the requirement
+it is the real Ring-bearer in a skirmish of his own while Boromir is a plain companion (59_31).
+Where the condition is on the card an effect acts on ("make an [isengard] Orc strength +2 (and heal it if mounted)",
+5_68), the chosen card fails it while another card of the kind meets it beside it, or a check that spots any such
+card in place of the chosen one passes. Where the requirement
 stands on a Skirmish ability ("Skirmish: If bearer is an unbound Hobbit, discard this possession to ..."), a bearer who
 meets it outside the skirmish is a valid candidate (the text names no skirmish), and the requirement owes the culture
 spread of "Bearer must be a Hobbit" (11_171: Pippin, Trollslayer beside Merry); for "unbound" the invalid candidates
