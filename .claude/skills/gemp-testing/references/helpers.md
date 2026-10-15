@@ -670,7 +670,8 @@ whose effect would last the current phase: a skirmish wound shows nothing there 
 
 **A Free Peoples wound on a minion in the maneuver phase.** Defend It and Hope 4_115. [gondor] Maneuver event, cost
 0: exert a [gondor] Man to wound a minion once, or twice if it is an Uruk-hai. Kills a minion of 1 vitality to
-leave a board with no minion to spot.
+leave a board with no minion to spot. Or Baruk Khazâd 5_5: [dwarven] Maneuver event, cost 0, exert a Dwarf to
+wound a minion; the Free Peoples player then takes the next maneuver action, not the Shadow player (Card_05_005_Tests).
 
 **The only minion of a skirmish removed during it, where the companion is neither the Ring-bearer nor a
 signet-bearer.** Long I Fell 4_97. [gandalf] Skirmish event (Spell), cost 2: "Spot Gandalf to prevent all wounds to

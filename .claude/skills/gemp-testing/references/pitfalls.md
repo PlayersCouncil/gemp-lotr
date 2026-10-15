@@ -47,7 +47,9 @@ check's invalid candidate "among them" cannot be shown against such an effect, w
 wounds of a LOST SKIRMISH are not such an effect: every loser is wounded together, in one window naming them all
 (`Wound A, B, C - Optional "is about to" responses`), and a prevention that names a kind is then asked "Choose
 characters to prevent effect to" among the matching losers only, so its `F` lays several losers, valid and
-invalid, in one skirmish (Hides 4_19: two [dunland] Men, a Man of another culture and Saruman 4_33). That
+invalid, in one skirmish (Hides 4_19: two [dunland] Men, a Man of another culture and Saruman 4_33); where no
+loser can fail the filter ("your minion": every loser is the Shadow player's), two losers are still laid and the
+choice read, as that is what tells `choose` from `all` (Saruman's Laboratory 6_120, Nan Curunír 5_119). That
 board is for minions only: a skirmish has one Free Peoples character (CR 4.2 "assignment phase"), so a response
 to a wound on one kind of FREE PEOPLES character ("an unbound Hobbit", Skinbark 6_35) meets each candidate
 alone in its own window, and its `F` "among them" is a line in Notes (dec-b11_78 found no board). Nobody
@@ -637,7 +639,7 @@ with the game over. To test something at site 9, `SkipToSite(8)` and then pass t
 fellowship moves, and the test is in the Shadow phase at site 9. If that Shadow phase ends with no minion in
 play the game is over at once and no regroup decision arrives (a probe: the Shadow player passes, the phase
 reads REGROUP, `GameIsFinished()`, nobody asked): a test there that plays no minion rests on the Shadow player's
-decision or on `GameIsFinished()`, never on `AwaitingFreepsRegroupPhaseActions()` (Card_01_363_Tests). So is a fellowship that comes through its last skirmish at site 9 in the default format: `GameIsFinished()` is true as soon as that skirmish resolves, the minion still in play, and no regroup phase comes (Card_04_360_Tests). In the PC
+decision or on `GameIsFinished()`, never on `AwaitingFreepsRegroupPhaseActions()` (Card_01_363_Tests). So is a fellowship that comes through its last skirmish at site 9 in the default format: `GameIsFinished()` is true as soon as that skirmish resolves, the minion still in play, and no regroup phase comes (Card_04_360_Tests). No wound of that skirmish is placed, so a response to a loser's wound is never offered there: a lost skirmish at site 9 wants the PCMovie table (Card_06_120_Tests.GetPCScenario; a probe showed no decision, no wound). In the PC
 formats (`winAtEndOfRegroup: true` in lotrFormats.hjson; `"pc_fotr_block"` as the scenario's format) the
 regroup phase at site 9 IS played (the five-argument constructor with `VirtualTableScenario.PCMovie` as its last argument does it:
 Card_07_363_Tests.GetRegroupAtSite9Scenario), so a regroup text at site 9 is a board in play there (Speak "Friend" and
