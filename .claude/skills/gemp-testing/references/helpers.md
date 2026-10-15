@@ -432,7 +432,8 @@ and no Orc: Half-troll 14_12. [dunland] and no Man: Saruman, Rabble-rouser 4_33 
 a skirmish" until he bears Saruman's Staff 4_174 and its maneuver ability is used (lay him after the move: "Each
 time the fellowship moves, the Free Peoples player must exert a companion for each [dunland] Man you can spot");
 then (strength 10, fierce, damage +1) he is the invalid candidate for a [dunland] Man who wins, loses or is in a
-skirmish (Card_04_032_Tests). [gandalf] and no Wizard: Ent Avenger 6_27 and the [gandalf] Men ("A [gandalf] Man").
+skirmish (Card_04_032_Tests). His text has no bar on wounds (3_68, 3_69, 4_173 and 5_56 have one), so with no
+Staff, laid after the move, he is the invalid candidate for a bar on wounds to [dunland] Men (Card_04_342_Tests). [gandalf] and no Wizard: Ent Avenger 6_27 and the [gandalf] Men ("A [gandalf] Man").
 A Wizard or a Wraith who is not [gandalf] or [gondor] is on the Shadow side only (Saruman, Keeper of Isengard 3_68;
 Corpse Lights 6_99, a [sauron] Wraith), for a text that names no side. NONE in print, and so never asked for: an
 Elf outside [elven] or an [elven] character who is no Elf (141 of each, the same 141); the same for Dwarf and

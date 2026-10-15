@@ -590,6 +590,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A site can be controlled only once every marker has passed it [Q-0230]
 - A Decipher site 1's Fellowship action whose only price is a burden, with no requirement (The Prancing Pony 1_324), has no `-` and no `C-` board [Q-0237]
 - A site 9's "When the fellowship moves to this site" (Dagorlad 7_360) has no `-` board
+- A site 1's "When the fellowship moves from <this site>" (Western Emyn Muil 4_329) takes the next move as its `-`
 - "Stacked on a site you control": no board tells `controlledSite` from `site` (Above the Battlement 7_262, Gorgoroth Pillager 7_275)
 - "Assign a minion to <a character>": no board tells `minion: choose(minion)` from `choose(character)` (Into the Caves 17_100)
 - "An enduring minion": no board tells `choose(enduring,minion)` from `choose(enduring)` (City of the Dead 8_118)

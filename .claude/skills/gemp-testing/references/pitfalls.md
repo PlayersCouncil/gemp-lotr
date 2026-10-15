@@ -1168,7 +1168,8 @@ no companion is offered from hand whatever else he needs, and other cards are pl
 **Damage bonuses add up, and "loses all damage bonuses" shuts later ones out** (CR 4.2 "damage bonus").
 `GetKeywordCount(card, Keyword.DAMAGE)` is a character's bonus: his own, what a card in play gives him and what an
 event gave him for the skirmish, added together. The winners place one wound and one more for each damage +1
-among them, so two minions of damage +1 place three; a loser's bonus places nothing. After "loses all damage
+among them, so two minions of damage +1 place three; a loser's bonus places nothing. So check D's skirmish for an
+ability that grants damage +1 ends with 2 wounds on the minion beaten (Card_05_082_Tests). After "loses all damage
 bonuses" the count reads 0, and a bonus given later does not land though its event is played and paid for
 (Seek and Hide 3_112, then Lurtz's Battle Cry 1_128). The rule is shown in mechanics/keywords/DamageBonusTests: a card that
 gives or takes a bonus shows the count and one skirmish's wounds, not the arithmetic again.
