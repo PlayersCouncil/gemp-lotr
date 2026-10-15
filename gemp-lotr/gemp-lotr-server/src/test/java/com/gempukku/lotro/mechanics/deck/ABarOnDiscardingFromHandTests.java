@@ -23,6 +23,13 @@ import static org.junit.Assert.*;
  * The Dark Lord Advances 3_87 is the Shadow card: "Exert a [sauron] minion to reveal a card at random from the Free
  * Peoples player's hand.  That player must discard X cards from hand, where X is the twilight cost of the card
  * revealed."  Both cards in his hand cost 1, so X is 1 and he has a card to choose.
+ *
+ * A "you may" whose yes is such a discard is not asked under the bar either, since yes would do nothing (F-0515;
+ * F-0379): the definition says so with the requirement `canDiscardFromHand` on its `optional`, which is the question
+ * the discard asks.  Alive and Unspoiled 1_120 is the Shadow card: "Shadow: Remove (3) and spot X burdens to make the
+ * Free Peoples player reveal X cards at random from hand.  You may discard 1 revealed card."  It is the one Shadow
+ * card with a forced discard from the Free Peoples hand inside an `optional`; an optional trigger whose whole effect
+ * is one (Orc Inquisitor 1_268) is withheld under the bar by the rule of Q-0224, with no requirement.
  */
 public class ABarOnDiscardingFromHandTests
 {
@@ -38,6 +45,24 @@ public class ABarOnDiscardingFromHandTests
 					put("sam", "1_311");        // Sam, Son of Hamfast: a Ring-bound companion, and so not one of the three
 					put("guard", "1_7");        // Dwarf Guard: twilight cost 1, a card in the Free Peoples hand
 					put("bow", "1_41");         // Elven Bow: twilight cost 1, a card in the Free Peoples hand
+				}},
+				VirtualTableScenario.FellowshipSites,
+				"4_301",
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetAliveScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("alive", "1_120");      // Alive and Unspoiled
+					put("gimli", "1_13");
+					put("arwen", "7_16");
+					put("boromir", "1_97");
+					put("sam", "1_311");
+					put("guard", "1_7");
+					put("bow", "1_41");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				"4_301",
@@ -122,5 +147,73 @@ public class ABarOnDiscardingFromHandTests
 		assertInHand(guard);
 		assertEquals(1, scn.GetFreepsHandCount());
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void AYouMayWhoseYesIsADiscardFromABarredHandIsNotAsked() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetAliveScenario();
+
+		var gimli = scn.GetFreepsCard("gimli");
+		var arwen = scn.GetFreepsCard("arwen");
+		var boromir = scn.GetFreepsCard("boromir");
+		var guard = scn.GetFreepsCard("guard");
+		var bow = scn.GetFreepsCard("bow");
+		var alive = scn.GetShadowCard("alive");
+		// Three unbound companions: Frodo's bar is in force.
+		scn.MoveCompanionsToTable(gimli, arwen, boromir);
+		scn.MoveCardsToHand(guard, bow);
+		scn.MoveCardsToSupportArea(alive);
+
+		scn.StartGame();
+		scn.AddBurdens(1);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		assertTrue(scn.ShadowActionAvailable(alive));
+		scn.ShadowUseCardAction(alive);
+		assertTrue(scn.ShadowDecisionAvailable("Choose how many burdens to spot"));
+		scn.ShadowChoose("1");
+		assertEquals(1, scn.ShadowGetTotalRevealedCardCount());
+		scn.DismissRevealedCards();
+
+		// Yes would discard nothing: the Shadow player is not asked, and the phase goes on.
+		assertFalse(scn.ShadowDecisionAvailable("Would you like to discard one of the revealed cards?"));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertInHand(guard, bow);
+		assertEquals(2, scn.GetFreepsHandCount());
+		assertEquals(0, scn.GetFreepsDiscardCount());
+	}
+
+	@Test
+	public void WithoutTheBarTheYouMayIsAskedAndYesDiscardsTheRevealedCard() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetAliveScenario();
+
+		var gimli = scn.GetFreepsCard("gimli");
+		var arwen = scn.GetFreepsCard("arwen");
+		var sam = scn.GetFreepsCard("sam");
+		var guard = scn.GetFreepsCard("guard");
+		var bow = scn.GetFreepsCard("bow");
+		var alive = scn.GetShadowCard("alive");
+		// Two unbound companions, one short, beside a Ring-bound one: the bar is not in force.
+		scn.MoveCompanionsToTable(gimli, arwen, sam);
+		scn.MoveCardsToHand(guard, bow);
+		scn.MoveCardsToSupportArea(alive);
+
+		scn.StartGame();
+		scn.AddBurdens(1);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		scn.ShadowUseCardAction(alive);
+		scn.ShadowChoose("1");
+		assertEquals(1, scn.ShadowGetTotalRevealedCardCount());
+		scn.DismissRevealedCards();
+
+		assertTrue(scn.ShadowDecisionAvailable("Would you like to discard one of the revealed cards?"));
+		scn.ShadowChooseYes();
+		// The one card revealed is the one the choice can take, and it is discarded.
+		assertEquals(1, scn.GetFreepsHandCount());
+		assertEquals(1, scn.GetFreepsDiscardCount());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

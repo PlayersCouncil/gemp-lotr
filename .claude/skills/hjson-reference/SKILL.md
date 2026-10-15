@@ -399,6 +399,7 @@ Boolean checks. Used in `requires: []` arrays.
 | `HaveInitiative` | side | Side has initiative. Asked of a card the Free Peoples player is playing from his hand (an event's `requires`, a condition inside its `cost`), that card is not counted: four cards beside it (F-0464) |
 | `CanMove` | — | FP can still move |
 | `CanAddBurdens` | player? | A burden could be added by this card now: false while the Ring-bearer is hindered or a `CantAddBurdens` reaches the card. For a standing text that must know ahead whether a burden it adds later can be added (69_38, F-0308) |
+| `CanDiscardFromHand` | hand? | This card may make a forced discard from that hand (default you) now: false while a bar such as Frodo, Courteous Halfling 4_301's reaches the card. For an `optional` whose yes is that discard (Alive and Unspoiled 1_120, F-0515); a `forced: false` discard is never barred |
 | `CanDraw` | player? | The player (default you) may draw a card now: false once the Rule of 4 is spent in his own fellowship phase and while a card bars him from drawing (Race Text 94_30); his draw deck is not asked. Barrows of Edoras 4_337 (Q-0249) |
 | `FierceSkirmish` | — | In fierce assignment/skirmish |
 | `RingIsOn` | — | Ring-bearer wearing ring |

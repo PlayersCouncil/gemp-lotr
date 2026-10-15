@@ -48,6 +48,10 @@
 					{
 						type: optional
 						text: Would you like to discard one of the revealed cards?
+						requires: {
+							type: canDiscardFromHand
+							hand: fp
+						}
 						effect: {
 							type: discardFromHand
 							hand: fp

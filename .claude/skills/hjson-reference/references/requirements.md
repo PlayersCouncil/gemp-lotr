@@ -62,6 +62,10 @@ Meta-level operations that modify the output of other requirements or value eval
 
 ## Function Requirements
 
+* CanDiscardFromHand
+  True if this card may make a forced discard from `hand` (default you) now: false while a bar on discarding from that hand reaches the card ("Shadow cards may not discard cards from your hand", 4_301, 19_28).  The question a forced `DiscardFromHand` asks; for an `optional` whose yes is that discard (1_120, F-0515).
+    * hand
+      default: you
 * CanMove
   True if the current Free Peoples player's move count is less than the move limit, no `CantMove` is in force and the fellowship has an unhindered companion (CR 5.0 "hinder"), i.e. they can voluntarily choose to move again if they so desire.  The same reading the regroup phase makes before asking (`RuleUtils.canChooseToMoveAgain`).
 * CanSelfBePlayed
