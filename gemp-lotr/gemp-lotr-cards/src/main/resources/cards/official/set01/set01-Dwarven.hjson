@@ -297,6 +297,10 @@
 					{
 						type: optional
 						text: Would you like to heal bearer?
+						requires: {
+							type: canSpot
+							filter: bearer,wounded
+						}
 						effect: {
 							type: heal
 							select: bearer
@@ -305,6 +309,10 @@
 					{
 						type: optional
 						text: Would you like to heal bearer?
+						requires: {
+							type: canSpot
+							filter: bearer,wounded
+						}
 						effect: {
 							type: heal
 							select: bearer
