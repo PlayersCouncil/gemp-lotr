@@ -816,6 +816,12 @@ or ally". Only the wounded are offered. Elrond is an ally (his start-of-turn hea
 wound the companions after `StartGame()`). It is also the heal of a Wizard by legal play, in the fellowship phase
 or the regroup phase: Gandalf 1_364, or the ally Radagast 31_17 (`Card_13_080_Tests`).
 
+**A heal that names several companions at once (one "is about to heal" window for all of them).** Minas Tirith
+Third Circle 7_352, King block site 6, put as `site6` on `FellowshipSites`: "If the fellowship moves from this site
+during the regroup phase, heal each Hobbit companion" (`heal` of `all(hobbit,companion)`, one effect). `SkipToSite(5)`,
+wound the Hobbits, move to it, and move on from it in the regroup phase: an "about to heal" response sees them
+together (Extraordinary Resilience 1_287 replaces Frodo's heal and Sam's goes on: `Card_01_287_Tests`).
+
 **A way to discard a [moria] condition.** Song of Durin 3_5. Free Peoples event: "discard up to 2 [moria]
 conditions".
 
