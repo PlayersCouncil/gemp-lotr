@@ -3,25 +3,31 @@ package com.gempukku.lotro.cards.official.set01;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
+import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_01_088_Tests
 {
 
+	// With no minion in play the game goes from the Shadow phase straight to the regroup phase.
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "1_88");
-					// put other cards in here as needed for the test case
+					put("guide", "1_88");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a [gondor] ranger
+					put("arwen", "1_30");       // Arwen, Daughter of Elrond: an [elven] ranger
+					put("boromir", "1_97");     // Boromir, Son of Denethor: a [gondor] Man who is no ranger
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +52,7 @@ public class Card_01_088_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("guide");
 
 		assertEquals("An Able Guide", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -54,22 +60,82 @@ public class Card_01_088_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertTrue(scn.HasTimeword(card, Timeword.REGROUP));
+		assertTrue(scn.HasTimeword(card, Timeword.REGROUP));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void AnAbleGuideTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void SpottingAGondorRangerRemovesFourTwilight() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var guide = scn.GetFreepsCard("guide");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToHand(guide);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.SetTwilight(6);
 
+		assertEquals(6, scn.GetTwilight());
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		assertTrue(scn.FreepsPlayAvailable(guide));
+
+		scn.FreepsPlayCard(guide);
+
+		// 6 - 4: four removed, not all of it.
+		assertEquals(2, scn.GetTwilight());
+		// The ranger is spotted, not exerted.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertInZone(Zone.DISCARD, guide);
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+	}
+
+	@Test
+	public void AnElvenRangerIsSpottedAndWithFewerThanFourInThePoolAllOfItIsRemoved() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var guide = scn.GetFreepsCard("guide");
+		var arwen = scn.GetFreepsCard("arwen");
+		scn.MoveCompanionsToTable(arwen);
+		scn.MoveCardsToHand(guide);
+
+		scn.StartGame();
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.SetTwilight(3);
+
+		assertEquals(3, scn.GetTwilight());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		assertTrue(scn.FreepsPlayAvailable(guide));
+
+		scn.FreepsPlayCard(guide);
+
+		// CR 4.2 "effect": as much as can be removed is removed.
 		assertEquals(0, scn.GetTwilight());
+		assertEquals(0, scn.GetWoundsOn(arwen));
+		assertInZone(Zone.DISCARD, guide);
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+	}
+
+	@Test
+	public void CannotBePlayedWithNoRangerToSpot() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var guide = scn.GetFreepsCard("guide");
+		var boromir = scn.GetFreepsCard("boromir");
+		scn.MoveCompanionsToTable(boromir);
+		scn.MoveCardsToHand(guide);
+
+		scn.StartGame();
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.SetTwilight(6);
+		scn.FreepsRefreshDecision();
+
+		// A [gondor] Man who is no ranger, and twilight to remove.
+		assertInZone(Zone.FREE_CHARACTERS, boromir);
+		assertEquals(6, scn.GetTwilight());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		assertFalse(scn.FreepsPlayAvailable(guide));
 	}
 }
