@@ -347,7 +347,8 @@ board can isolate an excluded thing ("your" tale, when the opponent's is inactiv
 candidate down and say so in Notes. A Notes line that says no board tells two readings apart says, in words, how the
 other reading was tried: the `mutate.py` run (what was changed, and that it SURVIVED) or the board laid and what it
 showed, so that the reviewer need not try it again to know the line is true (4_361's `cantSpot name(Saruman)`,
-redundant beside the uniqueness rule; dec-b4_274).
+redundant beside the uniqueness rule; dec-b4_274). The same is owed for a word the definition has and the text does not name, made redundant by a rule
+(`canBeReturnedToHand` beside `unbound`, since the Ring-bearer is always Ring-bound: 5_51); name that rule in the line.
 
 **Cards picked out by title.** Where the text picks cards out by title and a type word ("these characters:
 Celeborn, Elrond, Galadriel, Saruman"), an invalid candidate is a card of that title and another type (a follower

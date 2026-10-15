@@ -1347,6 +1347,10 @@ area", used by you, does not). For "your / an opponent's support area" the valid
 there and one borne by an ally or a controlled site there; the invalid ones are the same card on a companion
 and a card of the right owner borne by a card in the other player's area.
 
+**`assertInHand` reads the zone, not whose hand.** `assertInHand` (as every `assertInZone`) passes for a card in
+either player's hand, so it cannot show "to their owners' hands": read `GetFreepsHand().contains(card)` and
+`GetShadowHand().contains(card)`, with each hand's count before and after (Gríma, Chief Counselor 5_51; dec-b4_92).
+
 **The twilight cost of a card depends on where it is.** `GetTwilightCost(card)` answers for where the card is:
 for a card in play, the number printed on it (F-0109, Q-0073); for a card in a hand or pile, what it would cost
 to play now, roaming apart; for a site, its Shadow number as it stands. To read a cost modifier, read a card in
