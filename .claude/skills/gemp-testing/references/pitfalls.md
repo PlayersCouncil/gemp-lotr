@@ -1282,6 +1282,9 @@ turn, and "remove an [elven] token to ..." is not offered when his is the only o
 an invalid candidate by rule, not by the card's filter. It cuts the other way after `SkipToOtherPlayersTurn()`:
 your own Free Peoples cards are then the inactive ones, and a bonus from your condition reads as the bearer's
 printed number whatever the card does (Brought Down from Inside 69_24): read it on its owner's turn.
+The Free Peoples player's cards are active on his turn whoever acts: where the Shadow player uses a Free Peoples-worded
+ability (a site's Maneuver or Regroup text), the Free Peoples player's cards in play are active and not the actor's, so a
+`your` there owes that board (Balin's Tomb 1_343: `choose(your,tale)` widened survived until his tale was laid; dec-b1_336).
 A card that is not active has no text in force either, whenever a test lays it (G-0055, engine pass 28): the game
 starts a card's text as the card comes into play only if the card is active, and once as each turn begins in
 which it is. His Free Peoples card, cheated in before `StartGame()` or during your turn, changes no number on

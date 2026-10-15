@@ -803,7 +803,7 @@ hand to heal your companion"); its cost is a choice "from play / from hand" when
 put every other tale of the deck in the discard pile at the start (F-0264): The Saga of Elendil dealt in by a
 turn-skipper failed the test about one run in five, and so
 does Gondor Bowmen 3_41, a [gondor] tale too (Card_10_020_Tests). With no tale in hand the tale in play is
-discarded unasked. One event that heals one companion three times: Peace of Mind
+discarded unasked; and on the "from hand" branch a lone tale in hand is discarded unasked as well, so lay two to read that choice (Card_01_343_Tests, dec-b1_336). One event that heals one companion three times: Peace of Mind
 ([gandalf] Regroup event, cost 4, "Spot Gandalf to heal an unbound Hobbit 3 times"); three heals, each answered in
 its turn. The SHADOW player healing a companion: Dark Temptation ([wraith] support-area condition, "Each time you
 play a Nazgûl, you may heal the Ring-bearer twice to add a burden": the heals are its cost) and Enemy in Your Midst
