@@ -943,7 +943,8 @@ bookends, and that none of the ledger has leaked into the test file. Its warning
    (lint does not read comments): take the words out, or add the reading where a rule or ruling settles it.
    Nor does lint see a pool read after a helper's play made only to meet a requirement: E2 takes it out (1_165, 9_47).
 3. Would the test fail if the card were wrong? Imagine the filter one word wider and one word narrower, the
-   number one off, the trigger on the neighbouring event. If the test would still pass, it is not testing that.
+   number one off, the trigger on the neighbouring event, the effect's verb its neighbour (a wound read as an
+   exertion: lay a character the wound kills). If the test would still pass, it is not testing that.
    Reading settles most of these (is there a candidate on the table that tells the two apart?);
    `mutate.py <id> --replace <old> <new>` tries one mistake where reading does not (sparingly: the run of
    stock mistakes, `mutate.py <id>` on its own, is no longer part of the campaign); and

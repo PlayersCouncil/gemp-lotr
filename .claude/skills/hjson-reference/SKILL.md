@@ -187,6 +187,7 @@ For event cards. `Event` for phase events, `ResponseEvent` for response events.
   effect: [ ... ]
 }
 ```
+`requiresRanger: true` on an `Event` gates nothing on the card itself: it tags the event as one "that requires a ranger", which an `ExtraCostToPlay` with `requiresRanger: true` reads (a [raider] condition of set 4 charges a wound on such events). About a dozen [gondor] events carry it (Gondor's Vengeance 1_106, Pursuit Just Behind 1_111); a card's own tests do not read it.
 
 ### Other Effect Types
 

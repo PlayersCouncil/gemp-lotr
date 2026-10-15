@@ -373,6 +373,8 @@ companion. A Wizard who is an ally and WINS a skirmish is Radagast, The Brown 31
 Shaman 1_152 (8, vitality 2) without killing it (`Card_13_078_Tests.AWizardWhoIsAnAllyAndWinsASkirmishMakesItAMinion`).
 His 10 overwhelms a minion of strength 5 or less (Uruk Savage 1_151 is discarded, not wounded): for a wound to
 read, lay a minion of strength 6 to 9; or read the kill (`Card_11_244_Tests`, dec-b11_244).
+`FreepsCanAssign(ally)` reads his taking part in any phase: false before the event, true after it, false again at
+the first regroup decision (`Card_01_109_Tests`).
 On the Towers path no Hobbit ally is at home (each one's home is F or H), and this event is how one skirmishes there:
 Bounder 1_286 with Aragorn in play, in the maneuver phase (`Card_04_321_Tests`, for "a skirmish involving a Hobbit").
 
