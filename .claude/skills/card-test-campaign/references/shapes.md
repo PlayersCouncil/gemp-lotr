@@ -216,6 +216,10 @@ minion. The 45 other definitions that ask the number are unchanged; Morgai Footh
 An effect that only COUNTS what is spotted keeps the number prompt: "Draw a card for each Elf companion you spot"
 (Alliance Reforged 4_58, F-0497) is `chooseHowManyToSpot` and `drawCards` with `count: fromMemory`; a
 `forEachYouCanSpot` count there is the reading of "you CAN spot" and a finding.
+A strength bonus is the same: "Make a [moria] Orc strength +1 for each other [moria] Orc you spot (limit +4)"
+(Denizens Enraged 1_167, F-0533) is `chooseActiveCards` into a memory, `chooseHowManyToSpot` of the others, and
+`modifyStrength` of the memory by `fromMemory` with `limit: 4`; read the strength unchanged between the choice and
+the number. Death to the Strawheads 4_8 ("for each companion you spot") is still built with `forEachYouCanSpot`.
 "X is the number of Free Peoples cultures you spot over N" is such a count: a `chooseANumber` from 0 to `forEachFPCulture` with `over: N` is the shape (Orc Insurgent 6_104), as `chooseHowManyFPCulturesToSpot` would be.
 
 **A reveal before "to" is a cost, and an empty draw deck cannot pay it (F-0022, F-0249).** "Reveal the top card
