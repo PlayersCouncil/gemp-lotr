@@ -3801,10 +3801,11 @@
 					type: discardFromHand
 					forced: false
 					count: 2
+					memorize: discardedCards
 				}
 				effect: {
 					type: putCardsFromDiscardIntoHand
-					select: choose(culture(isengard),tracker)
+					select: choose(culture(isengard),tracker,not(memory(discardedCards)))
 				}
 			}
 		]
