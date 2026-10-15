@@ -2301,6 +2301,10 @@
 					type: played
 					filter: self
 				}
+				requires: {
+					type: canSpot
+					filter: machine
+				}
 				effect: {
 					type: AddCultureTokens
 					culture: isengard
