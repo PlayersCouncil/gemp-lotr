@@ -282,7 +282,9 @@ apart (65_148); "mounted" is an item class too (bearing a possession of the clas
 bearing a possession that is no mount (Gimli 1_13 with Dwarven Armor 1_8, 4_346); for a number with two bounds, a card on each side (a bound no board can reach, as site 1 of
 "sites 1 to 5" for a skirmish, is stood for by the nearest reachable value inside it, site 2, and Notes says so). Where the type word has a character neighbour (companion against ally), the card of the first word that is no X
 is a character where print allows (Barliman Butterbur 1_70, a [gandalf] ally, for "a [gandalf] companion"), or the
-type widened to `character` passes (Alatar 13_28). For "an X skirmishing a Y" that is an X assigned
+type widened to `character` passes (Alatar 13_28). Where it has an item neighbour (possession against artifact), the card of
+the first word that is no X is the other item where print allows: beside a [gondor] possession and a [rohan] condition
+alone, `choose(culture(rohan),or(possession,artifact))` passes for "a [rohan] possession" (Herugrim 54_280, 5_93). For "an X skirmishing a Y" that is an X assigned
 to another Y whose skirmish has not begun, not an X fighting something else. That is the candidate for the word
 "skirmishing"; the word "a Y" wants its own, an X fighting a character who is no Y, read DURING that skirmish (fight
 it first), or `inSkirmish` alone passes. Where Y is one character (bearer, Frodo), the first is an X assigned to him

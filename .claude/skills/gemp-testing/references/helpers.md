@@ -541,7 +541,7 @@ Inside 19_24; Protecting the Hall 11_149; Herugrim (the two PC errata) 54_280, 5
 conditions, "Bearer must be a [rohan] Man": 19_24 offers a transfer at the start of each skirmish while another
 [rohan] Man is in play and goes back to hand at the end of a turn its bearer won no skirmish in; 11_149 has toil 2
 and "Assignment: Discard this condition from play to make bearer defender +1". The Herugrims are [rohan] artifacts,
-hand weapons, "Bearer must be Théoden" (so the Man is a Théoden: Son of Thengel 4_292, cost 2, vitality 2), one
+hand weapons, "Bearer must be Théoden" (so the Man is a Théoden: Son of Thengel 4_292, cost 2, vitality 2, or King of the Golden Hall 5_93), one
 unique title between them; no other artifact for a [rohan] Man was found.
 
 **A Shadow card that is not what its culture mostly is.** Morgul Creeper 8_75; Strength Born of Fear 1_278. Morgul
