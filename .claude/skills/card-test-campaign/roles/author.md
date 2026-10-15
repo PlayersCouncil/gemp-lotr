@@ -218,7 +218,8 @@ search that found no card.
 
 Nor is a card owed what a mechanics class holds (Ketura, 2026-10-12): a card that bars an act is tested on ONE
 act it stops and its control, and a card of each definition word that does the act is the mechanics' (Q-0264:
-B2); an exertion is not owed as the nearest miss of a wound trigger (Q-0265: A); the account-name check is
+B2); an exertion is not owed as the nearest miss of a wound trigger (Q-0265: A), nor a wound as the nearest
+miss of an "each time X exerts" trigger (Q-0315: A, `mechanics/wounds/AWoundIsNoExertionTests`); the account-name check is
 shown once, card-agnostic (Q-0271: C). A choice the game carries out unasked is no such thing: it shows
 nothing of the invalid card, so a second valid candidate is laid and the invalid one read "not offered"
 (Q-0266: B). The Standard has each where it applies.

@@ -51,7 +51,8 @@ step where you can, and do not look at the same thing twice.
    choice the game carries out unasked, one valid card on the table, with no "not offered" read on an invalid
    one (Q-0266: B). Not gaps since Ketura's answers of 2026-10-12: a card that bars an act tested on one act it
    stops and its control, with no card of each definition word (Q-0264: B2, the mechanics hold those); no
-   exertion beside a "takes a wound" or "is about to take a wound" trigger (Q-0265: A); no test that only plays
+   exertion beside a "takes a wound" or "is about to take a wound" trigger (Q-0265: A); no wound beside an "each
+   time X exerts" trigger (Q-0315: A, `mechanics/wounds/AWoundIsNoExertionTests`); no test that only plays
    the card and no `P1` (Q-0279: B: a card's play is tested only where its own text bears on it, by the test of
    that clause, and lint's `plain-play` asks for that test). A test that only plays the card is a fix: take it out.
 
