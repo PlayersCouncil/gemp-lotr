@@ -990,7 +990,7 @@ that order is meant is Q-0253).
 of 2 a penalty of 1 and a penalty of 2 both read 1, and a "move limit is -1" card whose every board starts from 2
 passes with its amount one off. Raise the limit first by legal play and read the sum: Durin's Secret 1_71 (a
 Fellowship event: spot Gandalf, a Dwarf and an Elf to make the move limit for this turn +1), then 2 + 1 - 1 reads 2
-and a penalty of 2 would read 1 (Card_01_260_ErrataTests, Card_91_008_Tests).
+and a penalty of 2 would read 1 (Card_01_260_Tests and Card_01_142_Tests for "for this turn"; Card_91_008_Tests).
 
 **`until: end(regroup)` ends as a regroup move is finished, not with the turn.** When the fellowship moves again
 the engine runs the move and THEN ends the regroup phase (`FellowshipPlayerChoosesToMoveOrStayGameProcess`), so
@@ -1098,6 +1098,11 @@ assignment itself by, and a later `FreepsAssignToMinions` is refused (dec-b10_23
 The round comes about with nobody assigned at all: where a fierce minion is in play and both players decline to
 assign, the fierce assignment phase follows, which is the cheapest way to stand just before the regroup phase
 (a D check on "until the regroup phase", Prized Lagan 68_110).
+
+**A bonus "until the regroup phase" from a skirmish trigger is gone once the last skirmish resolves.** The regroup
+phase begins at once, so a reading straight after the only (or last) skirmish shows the printed number, as if the
+trigger never fired. Read it with another skirmish still waiting ("Choose next skirmish to resolve") or in the
+fierce round, and read it gone in the regroup phase (Card_01_263_Tests.EachLossToASauronOrcAddsAnotherPlusOneUntilTheRegroupPhase).
 The relentless round (CR 5.0 "relentless"; a third round after the fierce one, or a second where no minion is
 fierce) reads as the first does too: `Phase.ASSIGNMENT`, the assignment actions
 pending, `InFierceRound()` FALSE. `InRelentlessRound()` names it (G-0043): true from the game's "Relentless
