@@ -37,8 +37,8 @@ var GempScenarioAuthor = Class.extend({
         "zone:minions", "pile:self.deck", "pile:self.discard", "pile:self.deadPile", "pile:self.adventureDeck",
         "pile:self.removed", "pile:self.hand", "pile:opp.deck", "pile:opp.discard", "pile:opp.deadPile",
         "pile:opp.adventureDeck", "pile:opp.removed", "pile:opp.hand", "ui:twilightPool", "ui:phase", "ui:initiative",
-        "ui:ruleof4", "ui:clock", "ui:advPath", "ui:alertBox", "ui:gameLog", "ui:skirmish", "ui:skirmish:fpStrength", "ui:skirmish:freeps", "ui:skirmish:shadow",
-        "ui:skirmish:shadowStrength", "ui:stats", "ui:stats:archery", "ui:stats:move", "ui:chat", "ui:settings",
+        "ui:ruleof4", "ui:clock", "ui:advPath", "ui:alertBox", "ui:gameLog", "ui:skirmish", "ui:skirmish:selfStrength", "ui:skirmish:selfDamage", "ui:skirmish:freeps", "ui:skirmish:shadow",
+        "ui:skirmish:oppStrength", "ui:skirmish:oppDamage", "ui:stats", "ui:stats:archery", "ui:stats:move", "ui:chat", "ui:settings",
         "ui:dialog", "ui:cardInfo", "ui:button:pass", "ui:button:done", "ui:button:reset"],
     TABS: [["timeline", "Timeline"], ["step", "Step"], ["opponent", "Opponent"], ["board", "Board"], ["scenario", "Scenario"]],
     /** The parts of a step that a file can have written out in full, as { ... }: typed here as the file has them. */
@@ -940,7 +940,7 @@ var GempScenarioAuthor = Class.extend({
         var box = $("<input type='checkbox'/>").prop("checked", !blank(work.until)).change(function () {
             if (this.checked) {
                 if (blank(work.until))
-                    work.until = that.nextUntil(work.when);
+                    work.until = that.untilFromNext(that.form == null ? -1 : that.form.index) || that.nextUntil(work.when);
                 untilInput.val(work.until || "").trigger("sa-fit");
                 shown.show();
                 if (blank(work.until))
@@ -1003,6 +1003,77 @@ var GempScenarioAuthor = Class.extend({
         shown.append(this.el("div", "sa-bar").append(until));
         row.append(shown.toggle(!blank(work.until)));
         return row;
+    },
+
+    /** Whether a step can be joined into one before it that waits for the same (see joinAlike). */
+    joinable: function (step) {
+        return step != null && step.anyOrder == null && !step.pause && !step.checkpoint && step.end == null && (step.messages || []).length == 0
+            && (step.until == null || ("" + step.until).trim() == "") && !step["if"] && !step.unless && !step["do"] && !step.skipWhen;
+    },
+
+    /** How many steps straight after this one wait for exactly what it waits for, and could be joined into it. */
+    alikeAfter: function (index) {
+        var steps = this.draft.steps, top = steps[index];
+        if (top == null || top.anyOrder != null || top.pause || typeof top.when != "string" || this.isOpening(top))
+            return 0;
+        var count = 0;
+        for (var i = index + 1; i < steps.length && typeof steps[i].when == "string" && steps[i].when == top.when && this.joinable(steps[i]); i++)
+            count++;
+        return count;
+    },
+
+    /** The When of the first step after this one that waits for something else: what this one would repeat until. */
+    untilFromNext: function (index) {
+        var steps = this.draft.steps;
+        if (index < 0 || steps[index] == null)
+            return null;
+        for (var i = index + 1; i < steps.length; i++)
+            if (JSON.stringify(steps[i].when) != JSON.stringify(steps[index].when) && steps[i].when != null)
+                return typeof steps[i].when == "string" ? steps[i].when : JSON.stringify(steps[i].when, null, "\t");
+        return null;
+    },
+
+    /** Joins the count steps after this one into it, as one step that repeats (see alikeAfter). */
+    joinAlike: function (index, count) {
+        var that = this;
+        var steps = this.draft.steps, uids = this.state.uids;
+        var top = steps[index];
+        var allowOf = function (step) {
+            return step.allow == null ? "" : typeof step.allow == "string" ? step.allow : (step.allow.answers || "");
+        };
+        var allowed = [], answers = [];
+        for (var i = index; i <= index + count; i++) {
+            $.each(this.splitTerms(allowOf(steps[i])), function (n, term) {
+                term = term.replace(/\?$/, "");
+                if ($.inArray(term, allowed) < 0)
+                    allowed.push(term);
+            });
+            //(what the script plays: the step's answers, or what it allows if that is one thing)
+            var own = this.splitTerms(steps[i].answer || "");
+            if (own.length == 0 && this.splitTerms(allowOf(steps[i])).length == 1)
+                own = this.splitTerms(allowOf(steps[i]));
+            answers = answers.concat(own);
+        }
+        var set = {until: this.untilFromNext(index + count) || this.nextUntil(top.when)};
+        if (top.allow != null && typeof top.allow == "object") {
+            var allow = this.clone(top.allow);
+            allow.answers = allowed.join(", ");
+            set.allow = allow;
+        } else if (allowed.length > 0) {
+            set.allow = allowed.join(", ");
+        }
+        //(answers for some of the decisions and not others would not line up: then the script plays what is allowed)
+        var answered = $.grep(steps.slice(index, index + count + 1), function (step) {
+            return that.splitTerms(step.answer || "").length > 0 || that.splitTerms(allowOf(step)).length == 1;
+        }).length == count + 1;
+        var ops = [{op: "merge", uid: uids[index], set: set, unset: answered && answers.length > 0 ? [] : ["answer"]}];
+        if (answered && answers.length > 0)
+            set.answer = answers.join(", ");
+        for (var k = 1; k <= count; k++)
+            ops.push({op: "delete", uid: uids[index + k]});
+        this.flush(function () {
+            that.changeSteps(ops, index + 1, index + 1);
+        });
     },
 
     /** What a step that repeats is likely to repeat until: the phase after the one its When names, or the next turn. */
@@ -1132,7 +1203,7 @@ var GempScenarioAuthor = Class.extend({
         var who = step.pause || this.isOpening(step) ? "Read" : seat == null ? "Any" : this.isHumanSeat(seat) ? "You" : "Opp";
         var act = "";
         if (step.anyOrder != null)
-            return {who: "Block", when: rest.join(" "), act: "any order, until " + (typeof step.until == "string" ? step.until : "{...}")};
+            return {who: "Block", when: rest.join(" "), act: (step.skirmishes ? "skirmishes" : "any order") + ", until " + (typeof step.until == "string" ? step.until : "{...}")};
         if (this.isOpening(step))
             act = step["do"] || "";
         else if (step.answer)
@@ -1365,6 +1436,14 @@ var GempScenarioAuthor = Class.extend({
                 block.when = "turn(" + position.turn + ")";
             that.insertStep(index, block);
         }));
+        foot.append(this.button("+ Skirmishes", "A turn's assignment and skirmishes, after the selected step: a block whose steps are shown skirmish by skirmish (whichever is fought first), "
+            + "and what comes after each. It starts as this turn, until the regroup phase; with the game in it, what you do is written into the skirmish you do it in.", function () {
+            var index = that.ui.selected == null ? steps.length : that.ui.selected;
+            var block = {skirmishes: true, until: "phase(regroup)", anyOrder: []};
+            if (position.turn > 0)
+                block.when = "turn(" + position.turn + ")";
+            that.insertStep(index, block);
+        }));
         foot.append(this.button("Rewrite from here", "Take the step the game is at, and every step after it, out of the script, and play on from here writing new ones", function () {
             var from = position.step;
             if (from > steps.length || !confirm("Take steps " + from + " to " + steps.length + " out of the script, messages and all, and write them again by playing?"))
@@ -1532,7 +1611,7 @@ var GempScenarioAuthor = Class.extend({
                 out.text = "";
             return out;
         };
-        $.each(["id", "note", "checkpoint", "pause", "once", "if", "unless", "when", "until", "skipWhen", "do"], function (index, name) {
+        $.each(["id", "note", "checkpoint", "pause", "once", "if", "unless", "when", "until", "skipWhen", "do", "skirmishes"], function (index, name) {
             if (!blank(work[name]))
                 step[name] = work[name];
         });
@@ -2029,6 +2108,15 @@ var GempScenarioAuthor = Class.extend({
                 : "Take step " + number + " out of the script?"))
                 that.changeSteps([{op: "delete", uid: topUid}], number, Math.max(1, number - 1));
         }, "sa-danger"));
+        //Several steps in a row that wait for the same thing (a sanctuary's heals, one at a time) can be one step that
+        // repeats, for as many of those decisions as come
+        var alike = this.alikeAfter(index);
+        if (alike > 0)
+            acts.append(this.button("Join the next " + (alike == 1 ? "step" : alike + " steps") + " into this one",
+                "The step" + (alike == 1 ? "" : "s") + " after this one wait" + (alike == 1 ? "s" : "") + " for the same as it does. Joined, this step repeats until the step after them comes: "
+                + "however many of these decisions there are, one or several, they are all this step's. What each allowed it allows, and their answers are its answers, in order.", function () {
+                    that.joinAlike(index, alike);
+                }));
         //A step next to a block can be made one of the block's
         if (!isBlock && !this.isOpening(top)) {
             var into = function (toIndex, first) {
@@ -2077,6 +2165,10 @@ var GempScenarioAuthor = Class.extend({
             return;
         }
 
+        if (top.skirmishes) {
+            this.skirmishPage(box, index, top);
+            return;
+        }
         box.append(this.el("div", "sa-note", "A block: steps for a stretch of the game whose decisions come in no order the script can know. "
             + "Each decision goes to the first of its steps that fits it, wherever in the list that step comes, until a decision arrives that fits the block's Until."));
         var own = this.blockPanel(box, -1);
@@ -2111,11 +2203,192 @@ var GempScenarioAuthor = Class.extend({
     },
 
     /**
+     * Where a step of a skirmishes block belongs: {part: "before" (the assignment, say), "first" (the first choice of
+     * a skirmish), "fight" (a decision in that character's skirmish), "after" (between that skirmish and the next),
+     * who}.  Read off its When: fighting(x), after(x), text(next skirmish).
+     */
+    skirmishPart: function (step) {
+        var when = step.when;
+        var fighting = null, after = null, next = false, skirmish = false;
+        if (typeof when == "string") {
+            $.each(this.splitTerms(when), function (i, term) {
+                if (/^phase\(\s*skirmish\s*\)$/i.test(term))
+                    skirmish = true;
+                var m = /^(fighting|after|text)\((.*)\)$/i.exec(term);
+                if (m == null)
+                    return;
+                var what = m[1].toLowerCase(), arg = $.trim(m[2]);
+                if (what == "fighting")
+                    fighting = arg;
+                else if (what == "after")
+                    after = arg;
+                else if (/next skirmish/i.test(arg))
+                    next = true;
+            });
+        } else if (when != null && typeof when == "object") {
+            fighting = when.fighting || null;
+            after = when.after || null;
+            next = /next skirmish/i.test(when.text || "");
+            skirmish = /^skirmish$/i.test(when.phase || "");
+        }
+        if (fighting != null)
+            return {part: "fight", who: fighting};
+        if (after != null)
+            return {part: "after", who: after};
+        return {part: next ? "first" : skirmish ? "every" : "before", who: null};
+    },
+
+    /**
+     * A block that is a turn's skirmishes, shown the way they are fought: what comes before them (the assignment);
+     * the first choice of which skirmish is fought; and for each character's skirmish, the steps of it in the order
+     * they come, and then what comes after it (the choice of the next).  Underneath it is a block like any other: a
+     * step of a skirmish says fighting(that character), a step after it after(that character), and each takes the
+     * first decision that fits it.
+     */
+    skirmishPage: function (box, index, top) {
+        var that = this;
+        var form = this.form, number = index + 1;
+        var human = this.draft.human || "freeps";
+        var kids = this.kidsOf(index);
+        box.append(this.el("div", "sa-note", "The skirmishes of a turn, whichever order they are fought in: what comes first, then each character's skirmish, "
+            + "a step at a time in the order its decisions come, and what comes after it. What you do in the game is written into the skirmish it is done in."));
+        var own = this.blockPanel(box, -1);
+        if (own != null)
+            this.buildFields(own);
+        //Its steps by part, in their order in the block
+        var parts = {before: [], first: [], every: []}, fights = [], afters = {};
+        var cards = (this.state.board && this.state.board.cards) || [];
+        var cardOf = function (alias) {
+            return $.grep(cards, function (card) {
+                return card.alias == alias;
+            })[0];
+        };
+        //(a skirmish is the Free Peoples character's: a step for one a minion is in is for whichever skirmish that is)
+        var minion = function (alias) {
+            var card = cardOf(alias);
+            return card != null && card.owner != human;
+        };
+        var shortName = function (alias) {
+            var card = cardOf(alias);
+            return card == null ? alias : card.name.split(",")[0];
+        };
+        $.each(top.anyOrder, function (sub, step) {
+            var place = that.skirmishPart(step);
+            if (place.part == "fight" || place.part == "after") {
+                if ($.inArray(place.who, fights) < 0)
+                    fights.push(place.who);
+                var key = place.part + ":" + place.who;
+                (parts[key] = parts[key] || []).push(sub);
+                if (place.part == "after")
+                    afters[place.who] = true;
+            } else {
+                parts[place.part].push(sub);
+            }
+        });
+        $.each(this.ui.newFights || [], function (i, who) {
+            if ($.inArray(who, fights) < 0 && $.inArray(who, that.aliases()) > -1)
+                fights.push(who);
+        });
+        var firstChoice = parts.first.length > 0 ? parts.first[0] : top.anyOrder.length;
+        var group = function (title, note, subs, add) {
+            var section = that.el("div", "sa-skirmishpart").appendTo(box);
+            section.append(that.el("div", "sa-heading sa-substeps", title));
+            if (note)
+                section.append(that.el("div", "sa-note", note));
+            $.each(subs, function (i, sub) {
+                var body = that.blockPanel(section, sub, {prev: i > 0 ? subs[i - 1] : null, next: i < subs.length - 1 ? subs[i + 1] : null});
+                if (body != null)
+                    that.buildFields(body);
+            });
+            if (add != null)
+                section.append(that.el("div", "sa-bar").append(add));
+            return section;
+        };
+        var adding = function (label, title, at, step) {
+            return that.button(label, title, function () {
+                var open = that.state.uncovered;
+                if (open != null && open.problem == null && open.block == number && !that.state.position.over && that.fitsHere(step)) {
+                    that.addStepHere();
+                    return;
+                }
+                that.insertInBlock(index, at, step, true);
+            });
+        };
+        var after = function (subs) {
+            return subs.length == 0 ? top.anyOrder.length : subs[subs.length - 1] + 1;
+        };
+        group("Before the skirmishes, or at any moment", "The assignment, and anything else not said to be in one skirmish or after it.", parts.before,
+            adding("+ Step", "A step for a decision before the skirmishes", after(parts.before), {once: true, when: human + ", assign"}));
+        group("Choosing the first skirmish", "Said when the player chooses which skirmish is fought first.", parts.first,
+            parts.first.length > 0 ? null : adding("+ Step", "A step for the first choice of skirmish", top.anyOrder.length,
+                {once: true, when: human + ", cards, text(next skirmish)"}));
+        if (parts.every.length > 0)
+            group("In every skirmish", "Steps for any skirmish, whoever is fighting it: after the steps of the skirmish being fought, which come first if they fit.", parts.every, null);
+        //(the steps for one skirmish come before the ones for every skirmish, which would otherwise take its decisions)
+        var firstEvery = parts.every.length > 0 ? parts.every[0] : null;
+        $.each($.grep(fights, minion), function (i, who) {
+            group("Any skirmish " + shortName(who) + " (" + who + ") is in", "Steps for the skirmish this minion is in, whichever character it fights.",
+                parts["fight:" + who] || [], null);
+        });
+        $.each($.grep(fights, function (who) {
+            return !minion(who);
+        }), function (i, who) {
+            var name = shortName(who);
+            var fight = parts["fight:" + who] || [];
+            var end = fight.length > 0 ? after(fight) : firstEvery != null ? firstEvery : top.anyOrder.length;
+            if (fight.length > 0 && firstEvery != null && end > firstEvery)
+                end = firstEvery;
+            group(name + "'s skirmish", null, fight,
+                adding("+ Step", "A step for the next decision in this skirmish", end, {once: true, when: human + ", action, fighting(" + who + ")"}));
+            var afterSubs = parts["after:" + who] || [];
+            //(before the first choice's step, which would otherwise take the choices after a skirmish too)
+            group("After " + name + "'s skirmish", "Said at the decision after it: the choice of the next skirmish, if there is one to choose.", afterSubs,
+                afterSubs.length > 0 ? null : adding("+ Step", "A step for the decision after this skirmish", Math.min(firstChoice, top.anyOrder.length),
+                    {once: true, when: human + ", cards, after(" + who + "), text(next skirmish)"}));
+        });
+        //Another character's skirmish, to write steps for
+        var mine = $.grep(cards, function (card) {
+            return card.owner == human && (card.type == "COMPANION" || card.type == "ALLY") && $.inArray(card.alias, fights) < 0;
+        });
+        var foot = this.el("div", "sa-bar").appendTo(box);
+        if (mine.length > 0)
+            foot.append(this.select([["", "+ a skirmish for\u2026"]].concat($.map(mine, function (card) {
+                return [[card.alias, card.alias + " (" + card.name + ")"]];
+            })), "", function (who) {
+                if (who == "")
+                    return;
+                that.ui.newFights = (that.ui.newFights || []).concat([who]);
+                that.remember();
+                that.flush(function () {
+                    that.form = null;
+                    that.render();
+                });
+            }).attr("title", "Steps for that character's skirmish, whenever it is fought"));
+        foot.append(this.button("+ Pause", "A step of this block that is only read: once, over the first of the player's decisions that fits it", function () {
+            that.insertInBlock(index, top.anyOrder.length, {pause: true, when: human + ", action", messages: [{text: "..."}]});
+        }));
+        this.renderStepHead();
+        var opened = box.find(".sa-panel.sa-open");
+        if (form.sub > -1 && opened.length > 0 && this.panelShown != form.uid)
+            box.scrollTop(Math.max(0, box.scrollTop() + opened.position().top - 70));
+        this.panelShown = form.uid;
+    },
+
+    /** Whether the decision waiting (no step of the block covering it) is one the step about to be added is for. */
+    fitsHere: function (step) {
+        var open = this.state.uncovered;
+        if (open == null || open.when == null)
+            return false;
+        var want = this.skirmishPart(step), have = this.skirmishPart({when: open.when});
+        return want.part == have.part && want.who == have.who;
+    },
+
+    /**
      * One section of a block's page: the block itself (sub -1), or one of the steps in it.  Its head says what it
      * is and is the way to open it; the one that is open is the form.
      * @return where the open section's form goes; null for a section that is not open
      */
-    blockPanel: function (box, sub) {
+    blockPanel: function (box, sub, order) {
         var that = this;
         var form = this.form, index = form.index, number = index + 1;
         var top = this.draft.steps[index], kids = this.kidsOf(index);
@@ -2175,21 +2448,23 @@ var GempScenarioAuthor = Class.extend({
                 }
                 that.insertInBlock(index, sub, {once: true, when: (that.draft.human || "freeps") + ", action"}, true);
             }));
+            //(on a skirmishes page, earlier and later among the steps of the same part of it)
+            var prev = order != null ? order.prev : sub - 1, next = order != null ? order.next : sub + 1;
             line.append(this.button("\u2191", "Earlier in the block. (Where a step comes matters only when a decision fits more than one of them: it goes to the first.)", function () {
                 that.flush(function () {
-                    that.changeBlock([{op: "move", uid: uid, before: kids[sub - 1]}], index, sub - 1);
+                    that.changeBlock([{op: "move", uid: uid, before: kids[prev]}], index, prev);
                 });
-            }).prop("disabled", sub == 0));
+            }).prop("disabled", prev == null || prev < 0));
             line.append(this.button("\u2193", "Later in the block", function () {
                 that.flush(function () {
                     var op = {op: "move", uid: uid};
-                    if (kids[sub + 2] != null)
-                        op.before = kids[sub + 2];
+                    if (kids[next + 1] != null)
+                        op.before = kids[next + 1];
                     else
                         op.into = that.state.uids[index];
-                    that.changeBlock([op], index, sub + 1);
+                    that.changeBlock([op], index, next);
                 });
-            }).prop("disabled", sub >= kids.length - 1));
+            }).prop("disabled", next == null || next > kids.length - 1));
             line.append(this.button("Out", "Take this step out of the block, and make it the step of the script after the block", function () {
                 that.flush(function () {
                     that.changeSteps([{op: "move", uid: uid, before: that.state.uids[index + 1] || null}], number, number + 1);
@@ -2398,6 +2673,16 @@ var GempScenarioAuthor = Class.extend({
                 "The block is over at the first decision that fits this, which goes to the step after the block: phase(regroup), say, or turn(3). A block has to have one. "
                 + "Written like When: a line of terms, or in full as the file has it, in HJSON."));
             ends.append(this.field("Skip when", this.bound(work, "skipWhen", "hjson"), "Given up on, before any of its steps has applied, if a decision that fits this arrives"));
+            ends.append(this.el("label", "sa-check sa-block").attr("title", "Its steps shown by the skirmish they are in, and after: for a turn's assignment and skirmishes")
+                .append(this.bound(work, "skirmishes", "check", function () {
+                    //(the page is laid out afresh, skirmish by skirmish or not, once the change has gone through)
+                    setTimeout(function () {
+                        that.sendStep(function () {
+                            that.form = null;
+                            that.render();
+                        });
+                    }, 0);
+                })).append(document.createTextNode(" the skirmishes of a turn (shown skirmish by skirmish)")));
         } else if (!work.pause) {
             var does = this.el("div", "sa-section").appendTo(box);
             does.append(this.el("div", "sa-heading", "What is done"));

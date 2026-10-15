@@ -90,6 +90,8 @@ public class GameState {
     // The events printed with several phases that are being played, each with the phase it is being played in
     private final Map<PhysicalCard, Timeword> _phaseOfEventBeingPlayed = new HashMap<>();
     private Skirmish _skirmish = null;
+    private PhysicalCard _lastSkirmishCharacter;
+    private int _lastSkirmishTurn = -1;
 
     private final Set<GameStateListener> _gameStateListeners = new HashSet<>();
     // While events are held back (holdBackEvents): what would have been sent, in order, and each listener as the
@@ -1303,8 +1305,15 @@ public class GameState {
         return _skirmish;
     }
 
+    /** The Free Peoples character of the last skirmish this turn that has been fought to its end; null if none has. */
+    public PhysicalCard getLastSkirmishCharacter() {
+        return _lastSkirmishTurn == getTurnNumber() ? _lastSkirmishCharacter : null;
+    }
+
     public void finishSkirmish() {
         if (_skirmish != null) {
+            _lastSkirmishCharacter = _skirmish.getFellowshipCharacter();
+            _lastSkirmishTurn = getTurnNumber();
             _skirmish = null;
             for (GameStateListener listener : getAllGameStateListeners())
                 listener.finishSkirmish();

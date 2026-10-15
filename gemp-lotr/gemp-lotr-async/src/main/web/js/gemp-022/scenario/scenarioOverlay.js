@@ -98,8 +98,16 @@ var ScenarioAnchors = {
                 //(the cards on one side of the skirmish being fought, whichever they are)
                 if (side == "freeps" || side == "shadow")
                     return ScenarioAnchors.rectOf(ScenarioAnchors.cardsIn(side == "freeps" ? game.skirmishFellowshipGroup : game.skirmishShadowGroup));
+                //(the totals and the damage bonuses, the person's side and the other: fpStrength and shadowStrength
+                // are what the first two were once called, for a Free Peoples player)
+                var humanShadow = game.scenario != null && game.scenario.info != null && game.scenario.info.humanSeat == "shadow";
+                var freeps = side == "fpstrength" || ((side == "selfstrength" || side == "selfdamage") != humanShadow && side != "shadowstrength");
+                var damage = side == "selfdamage" || side == "oppdamage";
                 elem = sub == null ? game.skirmishGroupDiv
-                    : side == "fpstrength" ? game.fpStrengthDiv : game.shadowStrengthDiv;
+                    : damage ? (freeps ? game.fpDamageBonusDiv : game.shadowDamageBonusDiv)
+                    : freeps ? game.fpStrengthDiv : game.shadowStrengthDiv;
+                if (damage && elem != null && !elem.is(":visible"))
+                    return null;
             } else if (name == "stats") {
                 elem = sub == null ? game.statsDiv
                     : sub.toLowerCase() == "archery" ? $(".fpArchery, .shadowArchery") : $(".stats .move");

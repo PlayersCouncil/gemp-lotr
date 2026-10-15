@@ -340,7 +340,7 @@ public final class ScenarioParser {
             throw new ScenarioFormatException(place + ": '" + step.id + "' is not usable as a step's name (letters, digits, dashes and underscores; starting with a letter)");
         String context = parent == null ? "step " + step.label() : place;
         checkFields(object, context, "id", "note", "when", "until", "skipWhen", "checkpoint", "pause", "if", "unless", "do",
-                "messages", "allow", "answer", "end", "anyOrder", "once");
+                "messages", "allow", "answer", "end", "anyOrder", "once", "skirmishes");
         step.note = optionalString(object, "note", null, context);
         step.once = optionalBoolean(object, "once", false, context);
         if (step.once && parent == null)
@@ -397,6 +397,8 @@ public final class ScenarioParser {
         }
 
         JsonValue anyOrder = object.get("anyOrder");
+        if (anyOrder == null && object.get("skirmishes") != null)
+            throw new ScenarioFormatException(context + ": 'skirmishes' is said of an 'anyOrder' block");
         if (anyOrder != null) {
             //A block: steps for a stretch of the game whose decisions come in no order the script can know
             if (parent != null)
@@ -410,6 +412,7 @@ public final class ScenarioParser {
             if (step.when.opening)
                 throw new ScenarioFormatException(context + ": the opening is one moment, and is a step by itself");
             step.block = true;
+            step.skirmishes = optionalBoolean(object, "skirmishes", false, context);
             int place2 = 0;
             for (JsonValue child : anyOrder.asArray()) {
                 place2++;
@@ -484,7 +487,7 @@ public final class ScenarioParser {
         When when = new When();
         if (value.isObject()) {
             JsonObject object = value.asObject();
-            checkFields(object, context, "seat", "decision", "text", "phase", "turn", "skirmish", "offers", "fighting", "require");
+            checkFields(object, context, "seat", "decision", "text", "phase", "turn", "skirmish", "offers", "fighting", "after", "require");
             when.source = object.toString();
             if (object.get("seat") != null)
                 when.seat = parseSeat(def, scalar(object.get("seat"), context + ".seat"), context + ".seat");
@@ -501,6 +504,8 @@ public final class ScenarioParser {
                 when.offers = card(def, scalar(object.get("offers"), context + ".offers"), context + ".offers").alias();
             if (object.get("fighting") != null)
                 when.fighting = card(def, scalar(object.get("fighting"), context + ".fighting"), context + ".fighting").alias();
+            if (object.get("after") != null)
+                when.after = card(def, scalar(object.get("after"), context + ".after"), context + ".after").alias();
             if (object.get("require") != null)
                 when.require = jsonArrayText(object.get("require"), context + ".require");
             return when;
@@ -524,6 +529,8 @@ public final class ScenarioParser {
                 when.offers = card(def, term.arg(0, context), context).alias();
             else if (term.is("fighting"))
                 when.fighting = card(def, term.arg(0, context), context).alias();
+            else if (term.is("after"))
+                when.after = card(def, term.arg(0, context), context).alias();
             else if (term.is("text"))
                 when.text = term.wholeArg();
             else if (term.args().isEmpty() && term.is("opening"))
@@ -531,10 +538,10 @@ public final class ScenarioParser {
             else
                 throw new ScenarioFormatException(context + ": don't know what '" + term.raw() + "' means.  Expected a seat "
                         + "(freeps, shadow, human, opponent), a kind of decision (action, actionChoice, cards, arbitrary, choice, "
-                        + "number, assign), or one of phase(...), turn(...), skirmish(n), fighting(card), offers(card), text(...)");
+                        + "number, assign), or one of phase(...), turn(...), skirmish(n), fighting(card), after(card), offers(card), text(...)");
         }
         if (when.opening && (when.seat != null || when.decision != null || when.text != null || when.phase != null || when.turn != null
-                || when.skirmish != null || when.offers != null || when.fighting != null))
+                || when.skirmish != null || when.offers != null || when.fighting != null || when.after != null))
             throw new ScenarioFormatException(context + ": 'opening' is the moment before the first turn, and stands by itself");
         return when;
     }
@@ -678,15 +685,15 @@ public final class ScenarioParser {
                 checkFields(object, entryContext, "note", "header", "text", "anchor", "highlight", "highlightStyle", "avoid", "side", "gap", "advance", "on",
                         "zoom", "focus", "magnify", "choices");
                 message.note = optionalString(object, "note", null, entryContext);
-                message.header = optionalString(object, "header", null, entryContext);
-                message.text = requireString(object, "text", entryContext);
-                message.anchor = list(object.get("anchor"), entryContext + ".anchor");
+                message.header = sidesNamed(def, optionalString(object, "header", null, entryContext));
+                message.text = sidesNamed(def, requireString(object, "text", entryContext));
+                message.anchor = sidesNamed(def, list(object.get("anchor"), entryContext + ".anchor"));
                 message.gap = gap(optionalString(object, "gap", null, entryContext), entryContext + ".gap");
-                message.highlight = list(object.get("highlight"), entryContext + ".highlight");
+                message.highlight = sidesNamed(def, list(object.get("highlight"), entryContext + ".highlight"));
                 message.highlightStyle = optionalString(object, "highlightStyle", "gold", entryContext).toLowerCase(Locale.ROOT);
                 if (!HIGHLIGHT_STYLES.contains(message.highlightStyle))
                     throw new ScenarioFormatException(entryContext + ".highlightStyle: has to be one of " + String.join(", ", HIGHLIGHT_STYLES));
-                message.avoid = list(object.get("avoid"), entryContext + ".avoid");
+                message.avoid = sidesNamed(def, list(object.get("avoid"), entryContext + ".avoid"));
                 message.side = optionalString(object, "side", "auto", entryContext).toLowerCase(Locale.ROOT);
                 if (!List.of("auto", "above", "below", "left", "right").contains(message.side))
                     throw new ScenarioFormatException(entryContext + ".side: has to be auto, above, below, left or right");
@@ -724,7 +731,7 @@ public final class ScenarioParser {
                 if (message.on != null && (message.advance == Advance.INSPECT || message.advance == Advance.CLOSE))
                     throw new ScenarioFormatException(entryContext + ".advance: a message tied to a moment ('on') stays until the next moment or the answer");
             } else {
-                message.text = scalar(entry, entryContext);
+                message.text = sidesNamed(def, scalar(entry, entryContext));
             }
 
             for (String anchor : message.anchor)
@@ -739,6 +746,28 @@ public final class ScenarioParser {
             result.add(message);
         }
         return result;
+    }
+
+    /**
+     * The skirmish box's totals were once named for the sides of the game (fpStrength, shadowStrength); they are
+     * named for the person's side and the other (selfStrength, oppStrength), and what is written the old way is read
+     * the new.
+     */
+    static String sidesNamed(ScenarioDefinition def, String text) {
+        if (text == null)
+            return null;
+        boolean freeps = def.human == Seat.FREEPS;
+        return text.replaceAll("(?i)(ui:skirmish:)fpStrength\\b", "$1" + (freeps ? "selfStrength" : "oppStrength"))
+                .replaceAll("(?i)(ui:skirmish:)shadowStrength\\b", "$1" + (freeps ? "oppStrength" : "selfStrength"))
+                .replaceAll("(?i)\\{fpStrength}", freeps ? "{selfStrength}" : "{oppStrength}")
+                .replaceAll("(?i)\\{shadowStrength}", freeps ? "{oppStrength}" : "{selfStrength}");
+    }
+
+    static List<String> sidesNamed(ScenarioDefinition def, List<String> anchors) {
+        List<String> named = new ArrayList<>();
+        for (String anchor : anchors)
+            named.add(sidesNamed(def, anchor));
+        return named;
     }
 
     /**

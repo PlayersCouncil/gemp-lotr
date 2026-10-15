@@ -454,7 +454,17 @@ public class ScenarioAuthoring {
             when.append(table.SeatOf(player).key()).append(", ").append(AnswerCompiler.typeName(decision.getDecisionType()));
             Phase phase = table.GetCurrentPhase();
             String name = phase.name().toLowerCase(Locale.ROOT);
-            if (Phase.findPhase(name) == phase && (block == null || block.when.phase != phase))
+            //In a block, a skirmish's decisions are that skirmish's (whichever comes first), and those between
+            // skirmishes come after the one just fought
+            String fighting = null, after = null;
+            if (block != null) {
+                var skirmish = table.gameState().getSkirmish();
+                if (skirmish != null && skirmish.getFellowshipCharacter() != null)
+                    fighting = table.AliasOf(skirmish.getFellowshipCharacter());
+                else if (phase == Phase.SKIRMISH && table.gameState().getLastSkirmishCharacter() != null)
+                    after = table.AliasOf(table.gameState().getLastSkirmishCharacter());
+            }
+            if (Phase.findPhase(name) == phase && (block == null || block.when.phase != phase) && fighting == null && after == null)
                 when.append(", phase(").append(name).append(")");
             if (block == null || block.when.turn == null)
                 when.append(", turn(").append(table.gameState().getTurnNumber()).append(")");
@@ -463,6 +473,13 @@ public class ScenarioAuthoring {
             String said = decision.getText() == null ? "" : decision.getText().replaceAll("<[^>]*>", "").trim();
             if (decision.getDecisionType() == AwaitingDecisionType.CARD_ACTION_CHOICE && said.matches("(?i)(optional|required) responses"))
                 when.append(", text(").append(said).append(")");
+            if (fighting != null)
+                when.append(", fighting(").append(fighting).append(")");
+            if (after != null)
+                when.append(", after(").append(after).append(")");
+            //(which skirmish is next: in a block, told apart from the other choices of cards there)
+            if (block != null && said.toLowerCase(Locale.ROOT).contains("next skirmish"))
+                when.append(", text(next skirmish)");
             return when.toString();
         }
 
@@ -526,6 +543,8 @@ public class ScenarioAuthoring {
                 kept.offers = until.offers;
             if (until.fighting != null && fits(director, player, decision, part -> part.fighting = until.fighting))
                 kept.fighting = until.fighting;
+            if (until.after != null && fits(director, player, decision, part -> part.after = until.after))
+                kept.after = until.after;
             if (until.text != null && fits(director, player, decision, part -> part.text = until.text))
                 kept.text = until.text;
             When own = repeating.when;
@@ -555,6 +574,8 @@ public class ScenarioAuthoring {
                 terms.add("offers(" + kept.offers + ")");
             if (kept.fighting != null)
                 terms.add("fighting(" + kept.fighting + ")");
+            if (kept.after != null)
+                terms.add("after(" + kept.after + ")");
             if (kept.text != null)
                 terms.add("text(" + kept.text + ")");
             return String.join(", ", terms);
@@ -2146,13 +2167,9 @@ public class ScenarioAuthoring {
                     return "Step " + had.label() + " is a pause: it is read, and its decision goes to whichever step comes next.";
                 ScenarioDirector director = sitting.live.Session().Director();
                 Step block = had.parent;
+                //(in a skirmish, that skirmish and not the others the block covers; between skirmishes, after the one
+                // just fought: see whenFor)
                 StringBuilder when = new StringBuilder(sitting.whenFor(waiting.player(), waiting.decision(), block));
-                //(in a skirmish, that skirmish and not the others the block covers)
-                var skirmish = sitting.live.Table().gameState().getSkirmish();
-                String fighting = skirmish == null || skirmish.getFellowshipCharacter() == null ? null
-                        : sitting.live.Table().AliasOf(skirmish.getFellowshipCharacter());
-                if (fighting != null)
-                    when.append(", fighting(").append(fighting).append(")");
                 try {
                     JsonObject json = new JsonObject();
                     json.add("when", when.toString());

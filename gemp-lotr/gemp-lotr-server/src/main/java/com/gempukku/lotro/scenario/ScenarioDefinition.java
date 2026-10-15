@@ -133,6 +133,11 @@ public final class ScenarioDefinition {
         public String offers;
         /** A card that has to be in the skirmish being fought: the character on either side of it. */
         public String fighting;
+        /**
+         * A Free Peoples character whose skirmish is the last one fought this turn, with no skirmish being fought now:
+         * the moment after that skirmish (choosing the next one, as a rule).
+         */
+        public String after;
         /** Card-definition requirements, as JSON array text. */
         public String require;
         /**
@@ -145,7 +150,7 @@ public final class ScenarioDefinition {
 
         public boolean isEmpty() {
             return seat == null && decision == null && text == null && phase == null && turn == null
-                    && skirmish == null && offers == null && fighting == null && require == null && !opening;
+                    && skirmish == null && offers == null && fighting == null && after == null && require == null && !opening;
         }
     }
 
@@ -332,6 +337,11 @@ public final class ScenarioDefinition {
          * steps take has to fit as well.
          */
         public boolean block;
+        /**
+         * A block that is the skirmishes of a turn ("skirmishes: true"): the same as any block to the game; the
+         * authoring tool shows its steps by the skirmish they are in (fighting(x)), and after it (after(x)).
+         */
+        public boolean skirmishes;
         /** A block's steps, in the order they are tried. */
         public List<Step> children = new ArrayList<>();
         /** The block a step is in; null for a step of the script itself. */

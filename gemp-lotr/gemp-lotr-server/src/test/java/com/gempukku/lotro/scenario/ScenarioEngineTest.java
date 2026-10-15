@@ -835,6 +835,32 @@ public class ScenarioEngineTest {
     }
 
     @Test
+    public void aStepCanBeForWhatComesAfterOneSkirmish() throws Exception {
+        //Said between Gandalf's skirmish and the next, whichever order they come in
+        String scenario = twoSkirmishes().replace("anyOrder: [", "skirmishes: true\n\t\t\tanyOrder: [").replace(
+                "\t\t\t\t{\n\t\t\t\t\twhen: freeps, cards, text(next skirmish)",
+                "\t\t\t\t{\n\t\t\t\t\tonce: true\n\t\t\t\t\twhen: freeps, cards, after(gandalf)\n\t\t\t\t\tmessages: [\n\t\t\t\t\t\tGandalf has won his.\n\t\t\t\t\t]\n"
+                        + "\t\t\t\t\tallow: choose(aragorn)\n\t\t\t\t}\n\t\t\t\t{\n\t\t\t\t\twhen: freeps, cards, text(next skirmish)");
+        ScenarioDefinition def = ScenarioParser.parse(scenario);
+        assertTrue(def.steps.getFirst().skirmishes);
+        assertEquals("gandalf", def.steps.getFirst().children.get(1).when.after);
+        String written = ScenarioWriter.toJson(def).toString();
+        assertTrue(written, written.contains("\"skirmishes\":true"));
+        assertTrue(written, written.contains("after(gandalf)"));
+
+        ScenarioRunReport report = ScenarioRunner.run(def, ScenarioTesting.library(), ScenarioTesting.format("scenario"));
+        assertTrue(report.toString(), report.passed());
+        List<String> order = report.decisions.stream().map(ScenarioRunReport.Decision::step).filter(java.util.Objects::nonNull).toList();
+        assertEquals("Gandalf's skirmish, what comes after it, then Aragorn's", List.of("1.1", "1.3", "1.5", "1.2", "1.4 (aragornFights)", "2"), order);
+
+        report = ScenarioRunner.run(ScenarioParser.parse(scenario.replace("answer: choose(gandalf), choose(aragorn)", "answer: choose(aragorn), choose(gandalf)")),
+                ScenarioTesting.library(), ScenarioTesting.format("scenario"));
+        assertTrue(report.toString(), report.passed());
+        order = report.decisions.stream().map(ScenarioRunReport.Decision::step).filter(java.util.Objects::nonNull).toList();
+        assertEquals("Aragorn's first: nothing is said after it, and Gandalf's comes last", List.of("1.1", "1.3", "1.4 (aragornFights)", "1.3", "1.5", "2"), order);
+    }
+
+    @Test
     public void aBlocksStepsApplyOnceOrForAsLongAsItLasts() throws Exception {
         ScenarioTable table = new ScenarioTable(ScenarioParser.parse(twoSkirmishes()), ScenarioTesting.library(), ScenarioTesting.format("scenario"), HUMAN, OPPONENT);
         ScenarioSession session = new ScenarioSession(table);

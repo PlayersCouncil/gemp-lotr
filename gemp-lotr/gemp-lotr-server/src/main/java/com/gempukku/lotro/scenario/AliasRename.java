@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
  *                                               assign(x: y + z), move(x, freeps.hand).  What a term quotes from the
  *                                               game (text(...), option(...), the words after the card in use(x, ...))
  *                                               is left as it is.
- *     when, until, skipWhen                     offers(x), fighting(x)
+ *     when, until, skipWhen                     offers(x), fighting(x), after(x)
  *     a message's anchor, highlight, avoid,     card:x, card:x:part, ui:assignment:x
  *     zoom
  *     a message's advance and on                inspect(x), picked(x), assigned(x)
@@ -49,7 +49,7 @@ final class AliasRename {
         _from = from;
         _to = to;
         String name = Pattern.quote(from);
-        _asked = Pattern.compile("(?i)(?<![A-Za-z0-9_-])(offers|fighting)\\(\\s*(?-i:" + name + ")\\s*\\)");
+        _asked = Pattern.compile("(?i)(?<![A-Za-z0-9_-])(offers|fighting|after)\\(\\s*(?-i:" + name + ")\\s*\\)");
         _filtered = Pattern.compile("(?i)(?<![A-Za-z0-9_-])(alias)\\(\\s*(?-i:" + name + ")\\s*\\)");
         _anchor = Pattern.compile("(?<![A-Za-z0-9_:-])(card:|ui:assignment:)" + name + "(?![A-Za-z0-9_-])");
         _bracketed = Pattern.compile("\\(\\s*" + name + "\\s*\\)");
@@ -222,7 +222,7 @@ final class AliasRename {
         JsonObject object = object(value);
         if (object == null)
             return strings(value, text -> _asked.matcher(text).replaceAll(match -> Matcher.quoteReplacement(match.group(1) + "(" + _to + ")")));
-        for (String part : List.of("offers", "fighting"))
+        for (String part : List.of("offers", "fighting", "after"))
             if (object.get(part) != null)
                 object.set(part, exact(object.get(part)));
         if (object.get("require") != null)
