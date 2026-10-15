@@ -37,6 +37,7 @@ public class Card_03_113_Tests
 					// Jarnsmid, Barding Emissary: a [gandalf] Man companion, no Hobbit; at the start of his skirmish he
 					// may remove a burden (one, with no other [gandalf] companion)
 					put("jarnsmid", "12_30");
+					put("gandalf", "1_72");     // Gandalf, Friend of the Shirefolk: the other [gandalf] companion beside Jarnsmid; strength +1 for each race spotted only
 					put("troop", "1_177");      // Goblin Patrol Troop: a minion with no text, strength 13, vitality 3
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -375,5 +376,53 @@ public class Card_03_113_Tests
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+	}
+
+	@Test
+	public void TwoBurdensRemovedByOneEffectAreTwoRemovalsAndOfferTwoHeals() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var countryside = scn.GetFreepsCard("countryside");
+		var jarnsmid = scn.GetFreepsCard("jarnsmid");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCardsToSupportArea(countryside);
+		scn.MoveCompanionsToTable(jarnsmid, gandalf, aragorn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+		scn.AddBurdens(2);
+		scn.AddWoundsToChar(aragorn, 2);
+		assertInZone(Zone.SUPPORT, countryside);
+		assertEquals(2, scn.GetBurdens());
+		assertEquals(2, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(jarnsmid));
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(jarnsmid, troop);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(jarnsmid);
+
+		// Jarnsmid's text, with Gandalf the other [gandalf] companion spotted: two burdens removed by one effect.
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(jarnsmid));
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(0, scn.GetBurdens());
+
+		// Q-0322: A. Each burden is a removal of its own: the first offer, and Aragorn, the only wounded companion,
+		// healed unasked ...
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(countryside));
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+
+		// ... and the second, which heals him again.
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(countryside));
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(jarnsmid));
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 }

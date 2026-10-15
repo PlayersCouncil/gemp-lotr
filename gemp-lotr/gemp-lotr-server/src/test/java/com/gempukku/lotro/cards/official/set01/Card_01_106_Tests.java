@@ -26,6 +26,8 @@ public class Card_01_106_Tests
 					put("patrol", "1_177");     // Goblin Patrol Troop: [moria] Orc, no text
 					put("savage", "1_151");     // Uruk Savage: [isengard] Uruk-hai, damage +1 only
 					put("greed", "1_125");      // Greed: [isengard] condition in the support area; its maneuver ability needs 6 companions
+					put("wrath", "4_261");      // Wrath of Harad: [raider] support condition; while a [raider] Man is spotted, each Free Peoples event that spots or exerts a ranger gains the cost "wound a companion"
+					put("axeman", "4_224");     // Easterling Axeman: [raider] Man, strength 6, vitality 2, site 4; strength +3 and fierce only at 2 burdens
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -173,6 +175,48 @@ public class Card_01_106_Tests
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertInDiscard(vengeance);
 		assertInZone(Zone.SUPPORT, greed);
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+	}
+
+	@Test
+	public void UnderWrathOfHaradItAlsoCostsAWoundOnACompanionOfThePlayersChoice() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var vengeance = scn.GetFreepsCard("vengeance");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		scn.MoveCompanionsToTable(aragorn, boromir);
+		scn.MoveCardsToHand(vengeance);
+
+		var wrath = scn.GetShadowCard("wrath");
+		var axeman = scn.GetShadowCard("axeman");
+		scn.MoveCardsToSupportArea(wrath);
+		assertInZone(Zone.SUPPORT, wrath);
+
+		scn.StartGame();
+		scn.FreepsPass();
+		scn.MoveMinionsToTable(axeman);
+		scn.SkipToPhase(Phase.REGROUP);
+
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(boromir));
+		assertInZone(Zone.SUPPORT, wrath);
+		assertInZone(Zone.SHADOW_CHARACTERS, axeman);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		assertTrue(scn.FreepsPlayAvailable(vengeance));
+
+		scn.FreepsPlayCard(vengeance);
+		// The event exerts a ranger companion (Aragorn, the only one, unasked), so Wrath of Harad, with a [raider] Man
+		// spotted, adds "wound a companion" to its cost: a cost of the Free Peoples player's event, which he pays and
+		// so chooses (CR 4.2 "cost").
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, boromir));
+		scn.FreepsChooseCard(boromir);
+
+		assertEquals(1, scn.GetWoundsOn(boromir));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// The only minion is discarded unasked.
+		assertInDiscard(axeman);
+		assertInDiscard(vengeance);
 		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 	}
 }

@@ -34,6 +34,8 @@ public class Card_01_104_Tests
 					put("lemenya", "1_232");    // Úlairë Lemenya: Nazgûl, strength 9, site 3: roaming; her text is about [wraith] conditions on companions
 					put("nertea", "1_234");     // Úlairë Nertëa: Nazgûl, strength 9, site 3: roaming; her trigger on being played needs 5 companions
 					put("fell", "15_182");      // A Shadow Fell Over Them: "Assignment: Spot a Nazgûl and remove (4) to play a Nazgûl from your discard pile."
+					put("wrath", "4_261");      // Wrath of Harad: [raider] support condition; while a [raider] Man is spotted, each Free Peoples event that spots or exerts a ranger gains the cost "wound a companion"
+					put("axeman", "4_224");     // Easterling Axeman: [raider] Man, strength 6, vitality 2, site 4; strength +3 and fierce only at 2 burdens
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -232,5 +234,47 @@ public class Card_01_104_Tests
 		assertEquals(9, scn.GetStrength(nertea));
 		assertEquals(6, scn.GetStrength(lemenya));
 		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
+
+	@Test
+	public void UnderWrathOfHaradItAlsoCostsAWoundOnACompanionOfThePlayersChoice() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var trails = scn.GetFreepsCard("trails");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var knight = scn.GetFreepsCard("knight");
+		scn.MoveCompanionsToTable(aragorn, knight);
+		scn.MoveCardsToHand(trails);
+
+		var wrath = scn.GetShadowCard("wrath");
+		var axeman = scn.GetShadowCard("axeman");
+		scn.MoveCardsToSupportArea(wrath);
+		assertInZone(Zone.SUPPORT, wrath);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(axeman);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(knight));
+		assertInZone(Zone.SUPPORT, wrath);
+		assertTrue(scn.HasKeyword(axeman, Keyword.ROAMING));
+		assertEquals(6, scn.GetStrength(axeman));
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+		assertTrue(scn.FreepsPlayAvailable(trails));
+
+		scn.FreepsPlayCard(trails);
+		// The event exerts a ranger (Aragorn, the only one, unasked), so Wrath of Harad, with a [raider] Man spotted,
+		// adds "wound a companion" to its cost: a cost of the Free Peoples player's event, which he pays and so
+		// chooses (CR 4.2 "cost").
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, knight));
+		scn.FreepsChooseCard(knight);
+
+		assertEquals(1, scn.GetWoundsOn(knight));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// The Axeman, site 4, roams at site 2.
+		assertEquals(3, scn.GetStrength(axeman));
+		assertInDiscard(trails);
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 }

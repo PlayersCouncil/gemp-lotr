@@ -6,6 +6,7 @@ import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
@@ -28,6 +29,8 @@ public class Card_01_099_Tests
 					put("arwen", "1_30");       // Arwen, Daughter of Elrond: an [elven] Elf ranger, vitality 3; strength against a Nazgul only
 					put("knight", "5_35");      // Gondorian Knight: a [gondor] Man who is no ranger, Knight only
 					put("legolas", "1_50");     // Legolas, Greenleaf: an Elf who is no ranger; an archery ability only
+					put("wrath", "4_261");      // Wrath of Harad: [raider] support condition; while a [raider] Man is spotted, each Free Peoples event that spots or exerts a ranger gains the cost "wound a companion"
+					put("axeman", "4_224");     // Easterling Axeman: [raider] Man, strength 6, vitality 2, site 4; strength +3 and fierce only at 2 burdens
 
 					// The Shadow player's hand and draw deck are made of these: Goblin Patrol Troop, a minion with no text.
 					put("s1", "1_177");
@@ -169,5 +172,47 @@ public class Card_01_099_Tests
 		scn.FreepsRefreshDecision();
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 		assertTrue(scn.FreepsPlayAvailable(plans));
+	}
+
+	@Test
+	public void UnderWrathOfHaradItAlsoCostsAWoundOnACompanionOfThePlayersChoice() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var plans = scn.GetFreepsCard("plans");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var knight = scn.GetFreepsCard("knight");
+		scn.MoveCompanionsToTable(aragorn, knight);
+		scn.MoveCardsToHand(plans);
+
+		var wrath = scn.GetShadowCard("wrath");
+		var axeman = scn.GetShadowCard("axeman");
+		scn.MoveCardsToSupportArea(wrath);
+		assertInZone(Zone.SUPPORT, wrath);
+
+		scn.StartGame();
+		scn.FreepsPass();
+		scn.MoveMinionsToTable(axeman);
+		scn.SkipToPhase(Phase.REGROUP);
+
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(knight));
+		assertEquals(0, scn.GetShadowHandCount());
+		assertInZone(Zone.SUPPORT, wrath);
+		assertInZone(Zone.SHADOW_CHARACTERS, axeman);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		assertTrue(scn.FreepsPlayAvailable(plans));
+
+		scn.FreepsPlayCard(plans);
+		// The event exerts a ranger (Aragorn, the only one, unasked), so Wrath of Harad, with a [raider] Man spotted,
+		// adds "wound a companion" to its cost: a cost of the Free Peoples player's event, which he pays and so
+		// chooses (CR 4.2 "cost").
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, knight));
+		scn.FreepsChooseCard(knight);
+
+		assertEquals(1, scn.GetWoundsOn(knight));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(8, scn.GetShadowHandCount());
+		assertInDiscard(plans);
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 	}
 }

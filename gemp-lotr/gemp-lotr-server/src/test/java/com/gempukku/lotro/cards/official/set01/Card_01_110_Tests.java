@@ -28,6 +28,9 @@ public class Card_01_110_Tests
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: the ranger spotted
 					put("arwen", "1_30");       // Arwen, Daughter of Elrond: an [elven] ranger
 					put("boromir", "1_97");     // Boromir, Son of Denethor: a [gondor] Man who is no ranger
+
+					put("wrath", "4_261");      // Wrath of Harad: [raider] support condition; while a [raider] Man is spotted, each Free Peoples event that spots or exerts a ranger gains the cost "wound a companion"
+					put("axeman", "4_224");     // Easterling Axeman: [raider] Man, strength 6, vitality 2, site 4; strength +3 and fierce only at 2 burdens
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -218,5 +221,48 @@ public class Card_01_110_Tests
 		assertEquals(1, scn.GetCurrentSiteNumber());
 		assertInZone(Zone.DISCARD, pathfinder, pathfinder2);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void UnderWrathOfHaradItAlsoCostsAWoundOnACompanionOfThePlayersChoice() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetNextSiteScenario();
+
+		var pathfinder = scn.GetFreepsCard("pathfinder");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		scn.MoveCompanionsToTable(aragorn, boromir);
+		scn.MoveCardsToHand(pathfinder);
+
+		var wrath = scn.GetShadowCard("wrath");
+		var axeman = scn.GetShadowCard("axeman");
+		scn.MoveCardsToSupportArea(wrath);
+		assertInZone(Zone.SUPPORT, wrath);
+		var freepsSite3 = scn.GetFreepsSite(3);
+
+		scn.StartGame();
+		scn.FreepsPass();
+		scn.MoveMinionsToTable(axeman);
+		scn.SkipToPhase(Phase.REGROUP);
+
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertNull(scn.GetSite(3));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(boromir));
+		assertInZone(Zone.SUPPORT, wrath);
+		assertInZone(Zone.SHADOW_CHARACTERS, axeman);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		assertTrue(scn.FreepsPlayAvailable(pathfinder));
+
+		scn.FreepsPlayCard(pathfinder);
+		// The event spots a ranger, so Wrath of Harad, with a [raider] Man spotted, adds "wound a companion" to its
+		// cost: a cost of the Free Peoples player's event, which he pays and so chooses (CR 4.2 "cost").
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, boromir));
+		scn.FreepsChooseCard(boromir);
+
+		assertEquals(1, scn.GetWoundsOn(boromir));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertSame(freepsSite3, scn.GetSite(3));
+		assertInZone(Zone.DISCARD, pathfinder);
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 	}
 }

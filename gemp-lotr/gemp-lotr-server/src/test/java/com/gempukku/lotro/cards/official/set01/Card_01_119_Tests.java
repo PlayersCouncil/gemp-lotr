@@ -35,6 +35,8 @@ public class Card_01_119_Tests
 					put("lemenya", "1_232");
 					// Goblin Man: [isengard] Orc, site 2, not roaming at site 2; his Shadow ability is used only on purpose
 					put("goblinman", "2_42");
+					put("wrath", "4_261");      // Wrath of Harad: [raider] support condition; while a [raider] Man is spotted, each Free Peoples event that spots or exerts a ranger gains the cost "wound a companion"
+					put("axeman", "4_224");     // Easterling Axeman: [raider] Man, strength 6, vitality 2, site 4; strength +3 and fierce only at 2 burdens
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -184,6 +186,46 @@ public class Card_01_119_Tests
 
 		assertInZone(Zone.DISCARD, whatarethey);
 		assertInZone(Zone.SHADOW_CHARACTERS, goblinman);
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Test
+	public void UnderWrathOfHaradItAlsoCostsAWoundOnACompanionOfThePlayersChoice() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var whatarethey = scn.GetFreepsCard("whatarethey");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		scn.MoveCompanionsToTable(aragorn, boromir);
+		scn.MoveCardsToHand(whatarethey);
+
+		var wrath = scn.GetShadowCard("wrath");
+		var axeman = scn.GetShadowCard("axeman");
+		scn.MoveCardsToSupportArea(wrath);
+		assertInZone(Zone.SUPPORT, wrath);
+
+		scn.StartGame();
+		scn.FreepsPass();
+		scn.MoveMinionsToTable(axeman);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(boromir));
+		assertInZone(Zone.SUPPORT, wrath);
+		assertTrue(scn.HasKeyword(axeman, Keyword.ROAMING));
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+		assertTrue(scn.FreepsPlayAvailable(whatarethey));
+
+		scn.FreepsPlayCard(whatarethey);
+		// The event spots a ranger, so Wrath of Harad, with a [raider] Man spotted, adds "wound a companion" to its
+		// cost: a cost of the Free Peoples player's event, which he pays and so chooses (CR 4.2 "cost").
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, boromir));
+		scn.FreepsChooseCard(boromir);
+
+		assertEquals(1, scn.GetWoundsOn(boromir));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		// The Axeman, site 4, roams at site 2: the one roaming minion goes unasked.
+		assertInZone(Zone.DISCARD, axeman, whatarethey);
 		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 }
