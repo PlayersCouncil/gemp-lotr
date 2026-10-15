@@ -256,7 +256,8 @@ neither, not every type in print; a bare owner word, "each of your cards", owes 
 side, 94_27; for a keyword or item class alone, "a pipeweed", "a pipe", cards of two cultures wherever printed
 cards have them: beside [shire] ones alone, `pipeweed` narrowed to `culture(shire)` passes, 92_4; for a terrain word
 on a site ("a river"), two sites of it that differ in another keyword (Buckleberry Ferry 1_330 and Ford of Bruinen
-1_338, a sanctuary): beside the Ferry alone, `river,not(sanctuary)` passes, 1_46; for a culture word
+1_338, a sanctuary): beside the Ferry alone, `river,not(sanctuary)` passes, 1_46; for "sanctuary" or "not a
+sanctuary", a site 3 and a site 6: at site 3 alone `not(siteNumber(3))` passes, 1_129; for a culture word
 on a kind a title is printed in ("a [gollum] minion"), one of another title, also inside an effect's "If that
 minion is ...": beside Gollum alone `name(Gollum)` passes, 15_51 (Shelob 8_26); and a card of the
 other culture whose own text stays out of the way is looked for before the culture is left out, and where printed
@@ -658,7 +659,7 @@ the play comes ahead of the act and the act is read refused; the test without th
 Peoples possession") reads the board once: its counts are cheated, at the two counts `S` asks for (92_25, 92_26).
 
 **Read before and after.** An assertion after an action means little without the same reading before it. If an
-ability exerts, read 0 wounds, act, read 1; that holds for a helper's own cost too, where its reading is the evidence that the helper's action was taken (an Explorer's exertion). A state the test laid by a cheat (wounds added, an item attached, a card put in a zone) is read too, before the action that changes it, and so is one the action must leave alone (a control's cheated wounds, a copy cheated onto a bearer that a declined offer leaves there): "unchanged" after means nothing without the reading before (dec-b7_354). A card cheated into a zone the action takes it from is put there early enough to be read there first (a Nazgûl cheated into the discard pile he is then played from); the one state not read before is one the action removes at once, an item discarded as soon as it is attached (Q-0307). Where the amount is not in the wording ("heal a minion", "wound a companion"), the target
+ability exerts, read 0 wounds, act, read 1; that holds for a helper's own cost too, where its reading is the evidence that the helper's action was taken (an Explorer's exertion). A state the test laid by a cheat (wounds added, an item attached, a card put in a zone) is read too, before the action that changes it and before the game first moves on after the cheat (a pass, a skip, `StartGame`: lint's `read-before`, 1_123, 1_129), and so is one the action must leave alone (a control's cheated wounds, a copy cheated onto a bearer that a declined offer leaves there): "unchanged" after means nothing without the reading before (dec-b7_354). A card cheated into a zone the action takes it from is put there early enough to be read there first (a Nazgûl cheated into the discard pile he is then played from); the one state not read before is one the action removes at once, an item discarded as soon as it is attached (Q-0307). Where the amount is not in the wording ("heal a minion", "wound a companion"), the target
 carries more than the effect should change: one wound healed from two reads 1, which "heal two" would not.
 Where the target's vitality holds only one wound and no printed card raises it (a Hobbit ally healing itself), its vitality is
 raised by hand, `VitalityModifier` after it is in play: a number that only arranges the board (Q-0213: E; 1_297).
