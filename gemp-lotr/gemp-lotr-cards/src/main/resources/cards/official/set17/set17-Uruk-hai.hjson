@@ -348,10 +348,11 @@
 					forced: false
 					select: choose(culture(uruk-hai))
 					count: 2
+					memorize: discardedCards
 				}
 				effect: {
 					type: playCardFromDiscard
-					select: choose(culture(uruk-hai),hunter)
+					select: choose(culture(uruk-hai),hunter,not(memory(discardedCards)))
 				}
 			}
 			{

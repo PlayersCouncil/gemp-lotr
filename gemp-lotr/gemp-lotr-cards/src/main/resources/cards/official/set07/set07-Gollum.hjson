@@ -131,10 +131,11 @@
 					type: discardFromHand
 					forced: false
 					count: 3
+					memorize: discardedCards
 				}
 				effect: {
 					type: playCardFromDiscard
-					select: choose(name(Sméagol))
+					select: choose(name(Sméagol),not(memory(discardedCards)))
 				}
 			}
 		]

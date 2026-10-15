@@ -1393,10 +1393,11 @@
 			type: discardFromHand
 			forced: false
 			count: 2
+			memorize: discardedCards
 		  }
 		  effect: {
 			type: playCardFromDiscard
-			select: choose(minion)
+			select: choose(minion,not(memory(discardedCards)))
 		  }
 		}
 	]

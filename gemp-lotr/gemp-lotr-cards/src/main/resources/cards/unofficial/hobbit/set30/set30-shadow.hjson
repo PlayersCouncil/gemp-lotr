@@ -89,10 +89,11 @@
 				forced: false
 				select: choose(any)
 				count: 3
+				memorize: discardedCards
 			}
 			effect: {
 				type: playCardFromDiscard
-				select: choose(orc)
+				select: choose(orc,not(memory(discardedCards)))
 			}
 		}
 	}
