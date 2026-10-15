@@ -106,12 +106,12 @@ public class Card_01_010_Tests
 		scn.FreepsChooseCard(gimli);
 		assertAttachedTo(heart, gimli);
 
-		// Up to 2 times: asked each time, and taken each time.
-		assertTrue(scn.FreepsDecisionAvailable("heal bearer"));
-		scn.FreepsChooseYes();
-		assertEquals(2, scn.GetWoundsOn(gimli));
-		assertTrue(scn.FreepsDecisionAvailable("heal bearer"));
-		scn.FreepsChooseYes();
+		// Up to 2 times: one number, 0 to 2, filled in with 2 (Q-0325: B), and 2 named.
+		assertTrue(scn.FreepsDecisionAvailable("Choose how many times to heal bearer"));
+		assertEquals(0, scn.FreepsGetChoiceMin());
+		assertEquals(2, scn.FreepsGetChoiceMax());
+		assertEquals(Integer.valueOf(2), scn.FreepsGetChoiceDefault());
+		scn.FreepsChoose("2");
 
 		// Two of his three wounds, and nobody else's.
 		assertEquals(1, scn.GetWoundsOn(gimli));
@@ -140,26 +140,21 @@ public class Card_01_010_Tests
 		assertEquals(2, scn.GetWoundsOn(gimli));
 		assertEquals(2, scn.GetWoundsOn(farin));
 
-		// Once: the first heal declined, the second taken.
+		// Once: 1 named.
 		scn.FreepsPlayCard(heart);
 		scn.FreepsChooseCard(gimli);
-		assertTrue(scn.FreepsDecisionAvailable("heal bearer"));
-		scn.FreepsChooseNo();
-		assertEquals(2, scn.GetWoundsOn(gimli));
-		assertTrue(scn.FreepsDecisionAvailable("heal bearer"));
-		scn.FreepsChooseYes();
+		assertTrue(scn.FreepsDecisionAvailable("Choose how many times to heal bearer"));
+		scn.FreepsChoose("1");
 		assertEquals(1, scn.GetWoundsOn(gimli));
 		assertEquals(2, scn.GetWoundsOn(farin));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
-		// None: both declined.  The second Heart's play is not the first Heart's own: Gimli is not healed again.
+		// None: 0 named.  The second Heart's play is not the first Heart's own: Gimli is not healed again.
 		scn.FreepsPlayCard(heart2);
 		scn.FreepsChooseCard(farin);
 		assertAttachedTo(heart2, farin);
-		assertTrue(scn.FreepsDecisionAvailable("heal bearer"));
-		scn.FreepsChooseNo();
-		assertTrue(scn.FreepsDecisionAvailable("heal bearer"));
-		scn.FreepsChooseNo();
+		assertTrue(scn.FreepsDecisionAvailable("Choose how many times to heal bearer"));
+		scn.FreepsChoose("0");
 		assertEquals(2, scn.GetWoundsOn(farin));
 		assertEquals(1, scn.GetWoundsOn(gimli));
 		assertAttachedTo(heart, gimli);
@@ -167,7 +162,7 @@ public class Card_01_010_Tests
 	}
 
 	@Test
-	public void ABearerWithOneWoundIsHealedOnceAndNotAskedASecondTime() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ABearerWithOneWoundIsHealedOnceThoughTwoHealsAreNamed() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var heart = scn.GetFreepsCard("heart");
@@ -185,12 +180,15 @@ public class Card_01_010_Tests
 
 		scn.FreepsPlayCard(heart);
 		scn.FreepsChooseCard(gimli);
-		assertTrue(scn.FreepsDecisionAvailable("heal bearer"));
-		scn.FreepsChooseYes();
+		// The number is not held to his wounds, as on Elrond 3_13: 0 to 2, and 2 named.
+		assertTrue(scn.FreepsDecisionAvailable("Choose how many times to heal bearer"));
+		assertEquals(0, scn.FreepsGetChoiceMin());
+		assertEquals(2, scn.FreepsGetChoiceMax());
+		scn.FreepsChoose("2");
+
+		// His one wound is healed; the second heal goes to nobody else, and nothing more is asked.
 		assertEquals(0, scn.GetWoundsOn(gimli));
 		assertEquals(1, scn.GetWoundsOn(farin));
-
-		// Nothing is left to heal on him: a second yes would do nothing, and nothing is asked.
 		assertFalse(scn.FreepsDecisionAvailable("heal bearer"));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -215,7 +213,7 @@ public class Card_01_010_Tests
 		scn.FreepsChooseCard(gimli);
 		assertAttachedTo(heart, gimli);
 
-		// Yes would do nothing to him, and the wounded Farin is not his bearer: nothing is asked.
+		// A heal would do nothing to him, and the wounded Farin is not his bearer: no number is asked.
 		assertFalse(scn.FreepsDecisionAvailable("heal bearer"));
 		assertEquals(0, scn.GetWoundsOn(gimli));
 		assertEquals(1, scn.GetWoundsOn(farin));

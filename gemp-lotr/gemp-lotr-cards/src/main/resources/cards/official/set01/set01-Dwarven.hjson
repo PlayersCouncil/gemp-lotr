@@ -293,30 +293,23 @@
 					type: played
 					filter: self
 				}
+				requires: {
+					type: canSpot
+					filter: bearer,wounded
+				}
 				effect: [
 					{
-						type: optional
-						text: Would you like to heal bearer?
-						requires: {
-							type: canSpot
-							filter: bearer,wounded
-						}
-						effect: {
-							type: heal
-							select: bearer
-						}
+						type: ChooseANumber
+						text: Choose how many times to heal bearer
+						from: 0
+						to: 2
+						default: 2
+						memorize: healing
 					}
 					{
-						type: optional
-						text: Would you like to heal bearer?
-						requires: {
-							type: canSpot
-							filter: bearer,wounded
-						}
-						effect: {
-							type: heal
-							select: bearer
-						}
+						type: heal
+						select: bearer
+						times: memory(healing)
 					}
 				]
 			}

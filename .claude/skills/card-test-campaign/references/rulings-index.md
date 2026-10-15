@@ -475,6 +475,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Place your hand beneath your draw deck and draw N cards" wants no card in hand (F-0429, Barrows of Edoras 4_337; Q-0249: kept, and built by engine pass 28) [Q-0029]
 - "May draw a card for each X over N" requires N+1 of X (Q-0033, F-0320)
 - "You may add threats up to the number of <things> you can spot": the player names the number, from 0 (F-0419, Shelob, Menace 18_34) [F-0417, Q-0034]
+- "Heal <a character> up to N times" is one number choice, 0 to N, filled in with N (Q-0325: B, on F-0419's words; engine pass 49) [F-0379, F-0528]
 - A phase action on a Race to Mount Doom modifier is its owner's where the text says "your" (F-0312) [Q-0194, F-0335, Q-0183, Q-0188]
 - A Race to Mount Doom modifier's own discard from hand writes `forced: true`, and no card can tell (F-0205)
 - Mistakes on a Race to Mount Doom modifier that no board tells apart (92_8, 92_10) [F-0312]
