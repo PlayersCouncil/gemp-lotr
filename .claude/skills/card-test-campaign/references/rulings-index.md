@@ -576,6 +576,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Themselves again once it is over" wants the source of the modifier still in play (Lórien Swordsman 4_78)
 - A card that bars an act ("may not look at or reveal", "cannot take wounds", "may not be assigned", "cannot use special abilities") is tested on ONE act it stops, and its control (Q-0264: B2; built by engine pass 30) [Q-0265, Q-0315]
 - A ruling that a switching card has NO effect on certain named cards (Legacy Ruling 6, Saruman's Staff 4_174; F-0426; Q-0246: keep) [Q-0236, Q-0034, Q-0224]
+- "Each Free Peoples event that spots or exerts a ranger gains this cost: 'wound a companion'" (Wrath of Harad 4_261; F-0531, Q-0236)
 - Check D on "until the end of the turn" for a card the end of the turn removes
 - Check D on "until the regroup phase" for an effect that can begin in a regroup phase (Q-0160, open)
 - Check D on a delayed "at the start of the regroup phase" that an ability sets up: fight a skirmish between (Under Foot 60_52, Flaming Brand 52_32) [Q-0164, Q-0310]

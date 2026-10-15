@@ -187,7 +187,7 @@ For event cards. `Event` for phase events, `ResponseEvent` for response events.
   effect: [ ... ]
 }
 ```
-`requiresRanger: true` on an `Event` gates nothing on the card itself: it tags the event as one "that requires a ranger", which an `ExtraCostToPlay` with `requiresRanger: true` reads (a [raider] condition of set 4 charges a wound on such events). About a dozen [gondor] events carry it (Gondor's Vengeance 1_106, Pursuit Just Behind 1_111); a card's own tests do not read it.
+`requiresRanger: true` on an `Event` gates nothing on the card itself: it tags the event as one "that requires a ranger", which an `ExtraCostToPlay` with `requiresRanger: true` reads (Wrath of Harad 4_261 charges a wound on such events). Eleven [gondor] events carry it (Gondor's Vengeance 1_106, Pursuit Just Behind 1_111); each card's own tests read it under Wrath of Harad (Q-0236; shapes.md, "Each Free Peoples event that spots or exerts a ranger"). An `ExtraCostToPlay` cost runs in the modifier card's own context, so its performer is that card's owner unless the cost says `player:` (4_261's wound wants `player: fp`, F-0531).
 
 ### Other Effect Types
 
