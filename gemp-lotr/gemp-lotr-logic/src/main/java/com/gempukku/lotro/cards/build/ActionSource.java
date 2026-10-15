@@ -19,4 +19,13 @@ public interface ActionSource {
     boolean isValid(ActionContext actionContext);
 
     void createAction(CostToEffectAction action, ActionContext actionContext);
+
+    /**
+     * Whether the uses of this ability are limited ("limit once per phase", "(limit +3)", "limit once per site"):
+     * such an ability cannot be used for ever, so the loop step never takes it for part of a loop.
+     * @return True if the definition sets any limit on its uses or on what it gives.
+     */
+    default boolean isLimited() {
+        return false;
+    }
 }

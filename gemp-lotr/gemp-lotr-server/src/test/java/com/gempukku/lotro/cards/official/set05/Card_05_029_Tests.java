@@ -184,10 +184,10 @@ public class Card_05_029_Tests
 	}
 
 	@Test
-	public void AtAnduinBanksTheBurdenLoopRunsForAsLongAsBothPlayersKeepIt() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AtAnduinBanksTheBurdenLoopIsFoundAtItsThirdRound() throws DecisionResultInvalidException, CardNotFoundException {
 		// CR 4.2 "loops": Sméagol skirmishing a minion at Anduin Banks.  Each use of his ability adds the burden the
-		// next use of the site's ability removes; the game has each player take his own action in turn, and the
-		// skirmish is resolved when both pass.
+		// next use of the site's ability removes.  After two rounds, the board as it was, the loop is found: the Free
+		// Peoples player names how many more times it runs and the Shadow player agrees or lowers it (Q-0329).
 		var scn = GetScenario();
 
 		var smeagol = scn.GetFreepsCard("smeagol");
@@ -230,7 +230,14 @@ public class Card_05_029_Tests
 		assertEquals(0, scn.GetBurdens());
 		assertEquals(9, scn.GetStrength(pursuer));
 
-		// The loop could go on: he is offered it again, and stops it by passing.
+		// He would be offered his ability a third time: the loop is found, and put to the players.
+		assertFalse(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertTrue(scn.FreepsDecisionAvailable("[[Sméagol, Slinker]] and [[Anduin Banks]] can be used forever."));
+		scn.FreepsNameLoopIterations(3);
+		assertTrue(scn.ShadowDecisionAvailable("the loop between [[Sméagol, Slinker]] and [[Anduin Banks]] will be performed **3** more times."));
+		scn.ShadowAgreeToLoop();
+
+		// The run of the iterations is not built yet: he is offered his ability again, and passes.
 		assertTrue(scn.FreepsActionAvailable(smeagol));
 		scn.PassSkirmishActions();
 

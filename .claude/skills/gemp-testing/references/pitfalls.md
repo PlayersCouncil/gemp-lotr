@@ -221,6 +221,16 @@ card, or by its words with `FreepsChooseAction(text)`. Still read that the choic
 by text (`FreepsDecisionAvailable("Choose action to perform")`): with no action on offer the answer goes to
 whatever is asked.
 
+**A loop of both players' actions is put to them at its third round** (CR 4.2 "loops"; Q-0329, engine pass 51).
+Where the two players take the same two actions in turn (the same ability of the same card, each his own) in a
+skirmish or in the maneuver, archery, assignment or regroup actions, with no pass between, and the board at the
+start of the third round is the board at the start of the second, the player who opened the round is not offered
+his actions: the Free Peoples player is asked how many more times the loop runs (`FreepsNameLoopIterations`), and
+the Shadow player agrees or lowers it (`ShadowAgreeToLoop`, `ShadowLowerLoop`). A round that spends anything (a
+wound, a card, twilight, a token) never matches, and an ability with a limit is never part of a loop. Until the
+run of the iterations is built (the loop-run item of engine pass 51) the player is then asked as before.
+`mechanics/actions/VoluntaryLoopTests`, `FiniteRepeatsAreNoLoopTests`.
+
 ## What is offered, and what an offer does
 
 **Costs gate an action; effects are only attempted.** An action is offered when its requirements are met and its

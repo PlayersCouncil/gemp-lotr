@@ -345,6 +345,14 @@ Decisions will always come with at least one choice, even if that single choice 
 - `boolean HasCardChoiceAvailable(String player, PhysicalCardImpl card, boolean selectable)` — Checks whether the given card is one of the options being presented to the player.  `player`: The player currently presented with a decision  `card`: The card to search for  `selectable`: True if we are looking for a selectable card, false otherwise
 - `void FreepsChooseCardIDFromSelection(PhysicalCardImpl...cards)  ·  ShadowChooseCardIDFromSelection` — Causes that player to issue a decision response composed of a comma-separated list of the provided card IDs.
 - `void ChooseCardIDFromSelection(String player, PhysicalCardImpl...cards)` — Causes the given player to issue a decision response composed of a comma-separated list of the provided card IDs.
+- `void FreepsNameLoopIterations(int iterations)  ·  ShadowNameLoopIterations` — Has that player (player 1) answer the loop step's first prompt (CR 4.2 "loops", LoopNegotiation): the number of more times a loop that has been found will run.
+- `void NameLoopIterations(String player, int iterations)` — Has the given player answer the loop step's first prompt: the number of more times the loop will run.
+- `void ShadowAgreeToLoop()` — Has the Shadow player (player 2) agree to the number of iterations the Free Peoples player named for a loop (CR 4.2 "loops"): the loop goes that many times, and the Free Peoples player takes the next action.
+- `void FreepsAgreeToLoop()` — Has the Free Peoples player (player 1) agree to a loop's iterations, as the Shadow player of player 2's turn.
+- `void AgreeToLoop(String player)` — Has the given player agree to the number of iterations named for a loop.
+- `void ShadowLowerLoop(int iterations)` — Has the Shadow player (player 2) choose a lower number of iterations for a loop than the Free Peoples player named (CR 4.2 "loops"), and name it: the loop goes that many times, and the Shadow player takes the next action.
+- `void FreepsLowerLoop(int iterations)` — Has the Free Peoples player (player 1) choose and name a lower number of iterations for a loop, as the Shadow player of player 2's turn.
+- `void LowerLoop(String player, int iterations)` — Has the given player choose a lower number of iterations for a loop and name it.
 
 ## Assignments and skirmishes
 
@@ -563,4 +571,4 @@ This interface holds the handful of accessors that every other virtual table int
 - `void Verify(boolean condition, String message)` — A sanity check on the table's own bookkeeping, used where a procedure has to end up in a known state for whatever follows it to make sense.
 
 ---
-455 entries, 213 of them with no description in the source.
+463 entries, 213 of them with no description in the source.

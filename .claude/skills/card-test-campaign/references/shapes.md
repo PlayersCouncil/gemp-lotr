@@ -202,9 +202,10 @@ offered for the next copy; a bearer of a DIFFERENT card of the same kind (anothe
 which does not count against the limit) and a bearer of nothing are; and with every legal bearer bearing one the
 card cannot be played though its other requirements are met (Card_01_282_ErrataTests).
 
-**The CR 4.2 "loops" example (Sam, Faithful Companion 1_310; Q-0321).** Gemp names no number of repetitions and
-the plain alternation of actions stands until a loop design is approved, so the `Rule` clause is shown as the
-action having no limit: offered again after its use in the same phase, and used again
+**The CR 4.2 "loops" example (Sam, Faithful Companion 1_310; Q-0321).** Gemp names no number of repetitions for a
+loop one player makes alone in his own phase (the loop step of Q-0329 is for two players' actions taken in turn:
+`LoopTracker`), so the `Rule` clause is shown as the action having no limit: offered again after its use in the
+same phase, and used again
 (Card_01_310_Tests.FellowshipAbilityIsUsedAgainInTheSamePhaseAndWithNoBillInTheDeckPlaysNothing).
 
 ## Costs, and playing cards from piles and hands
