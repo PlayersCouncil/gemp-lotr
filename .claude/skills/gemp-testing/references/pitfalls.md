@@ -529,8 +529,9 @@ cards in the deck under them, or a reading of "on top" cannot be told from one o
 
 **Two offers of one response.** When the same card offers the same trigger or response twice in one decision (two Nazgul winning one skirmish), each offer's text ends with " (for <the cards its trigger memorized>)". A single offer reads as before. Choose between them by that text.
 
-**When a wound kills and something answers the same wound.** The Free Peoples player, whoever owns the trigger,
-gets a "Required responses" decision listing the rule and the trigger (a Shadow card's "wins a skirmish" trigger
+**When a wound or an overwhelm kills and something answers it.** The Free Peoples player, whoever owns the trigger,
+gets a "Required responses" decision listing the rule and the trigger (an overwhelm, which places no wound, raises
+it as well: Goblin Spear 1_182's burden reads 0 after `PassSkirmishActions()` until it is answered; a Shadow card's "wins a skirmish" trigger
 beside "Resolve skirmish damage" is the same decision, and so is a Free Peoples companion's own required "each
 time X wins a skirmish", Boromir 59_31: left unanswered, the only sign is that the beaten minion is still in play
 after `PassSkirmishActions()`; a companion's own required "each time X loses a skirmish" raises it too, Isildur
