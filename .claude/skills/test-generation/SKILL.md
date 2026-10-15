@@ -305,7 +305,9 @@ who is not the Ring-bearer (Sam), not just any companion; a Ring-bearer who is n
 a card that says "the Ring-bearer" (Q-0213: A: no definition has ever written Frodo for him; the tests that have
 one stay, and no Frodo stands beside him, Q-0159: B). Where it is the text that names Frodo ("Bearer must be
 Frodo", "If Frodo dies") and a test wants a Frodo who is not the Ring-bearer, he is Frodo, Frenzied Fighter 13_149,
-the only Frodo who can be in play beside another Ring-bearer (51_313, 51_311; Q-0212).
+the only Frodo who can be in play beside another Ring-bearer (51_313, 51_311; Q-0212). Where the definition writes the title
+again as an exclusion ("Frodo or 2 other companions", `not(name(Frodo))` in the second branch), that board is owed
+there too: the other Ring-bearer offered and that Frodo not, or `not(ringBearer)` passes (1_346).
 
 **A phrase the text carries more than once.** Where the text names its target more than once ("make that Dwarf A,
 or make that Dwarf B"), the candidate not chosen is read under each. Where the same phrase stands in several
@@ -481,7 +483,8 @@ Which checks a clause lists follows from its words, and the analyst is expected 
   or refreshed after the wound: pitfalls, "A board changed under a pending decision"; 1_58); where the cost names a kind ("exert
   your [isengard] Man"), the only one of that kind exhausted with others able to exert beside him. A board with
   nobody of the kind shows the filter (`F`) and cannot tell an exertion from a wound (92_2). An exert EFFECT ("make
-  the opponent exert 2 companions") owes the same under `F`: an exhausted candidate, not offered (1_137). A wound
+  the opponent exert 2 companions") owes the same under `F`: an exhausted candidate, not offered (1_137), and one that every other word of the
+  text admits (an exhausted Frodo beside "2 other companions" is kept out by "other" as well and shows nothing: 1_346). A wound
   EFFECT owes the reverse: an exhausted candidate, offered (an exert written in its place leaves him out: 1_164). A wound cost's `C-`
   is a bar on wounds or a cap reached: Armor 1_92 ("takes no more than 1 wound during each skirmish phase") after
   one wound that phase (Faramir 17_28). A `no C-` search for a wound cost takes in "no more than". An "add (or remove, or reinforce) a [culture] token" cost: Redhorn Pass 13_194 ("Culture tokens cannot be
@@ -678,7 +681,7 @@ the play comes ahead of the act and the act is read refused; the test without th
 Peoples possession") reads the board once: its counts are cheated, at the two counts `S` asks for (92_25, 92_26).
 
 **Read before and after.** An assertion after an action means little without the same reading before it. If an
-ability exerts, read 0 wounds, act, read 1; that holds for a helper's own cost too, where its reading is the evidence that the helper's action was taken (an Explorer's exertion). A state the test laid by a cheat (wounds added, an item attached, a card put in a zone) is read too, before the action that changes it and before the game first moves on after the cheat (a pass, a skip, `StartGame`: lint's `read-before`, 1_123, 1_129), and so is one the action must leave alone (a control's cheated wounds, a copy cheated onto a bearer that a declined offer leaves there): "unchanged" after means nothing without the reading before (dec-b7_354). A card cheated into a zone the action takes it from is put there early enough to be read there first (a Nazgûl cheated into the discard pile he is then played from); the one state not read before is one the action removes at once, an item discarded as soon as it is attached (Q-0307). Where the amount is not in the wording ("heal a minion", "wound a companion"), the target
+ability exerts, read 0 wounds, act, read 1; that holds for a helper's own cost too, where its reading is the evidence that the helper's action was taken (an Explorer's exertion). A state the test laid by a cheat (wounds added, an item attached, a card put in a zone, the top of a draw deck included) is read too, before the action that changes it and before the game first moves on after the cheat (a pass, a skip, `StartGame`: lint's `read-before`, 1_123, 1_129), and so is one the action must leave alone (a control's cheated wounds, a copy cheated onto a bearer that a declined offer leaves there): "unchanged" after means nothing without the reading before (dec-b7_354). A card cheated into a zone the action takes it from is put there early enough to be read there first (a Nazgûl cheated into the discard pile he is then played from); the one state not read before is one the action removes at once, an item discarded as soon as it is attached (Q-0307). Where the amount is not in the wording ("heal a minion", "wound a companion"), the target
 carries more than the effect should change: one wound healed from two reads 1, which "heal two" would not.
 Where the target's vitality holds only one wound and no printed card raises it (a Hobbit ally healing itself), its vitality is
 raised by hand, `VitalityModifier` after it is in play: a number that only arranges the board (Q-0213: E; 1_297).
