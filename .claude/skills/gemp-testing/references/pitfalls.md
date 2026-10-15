@@ -1538,7 +1538,9 @@ the card revealed is 0.
 (Questions That Need Answering 1_81) gives its player "Cards on top of deck" with no card: the count of cards
 shown reads 0 and `FreepsDismissRevealedCards()` answers it (there it does not fail, though no card is shown);
 until it is answered the event lies in the void. This is the game as built, with Q-0104's "showing nothing" the
-nearest ruling and none on the card itself; the play is not flagged no-effect (`Card_01_081_Tests`).
+nearest ruling and none on the card itself; the play is not flagged no-effect (`Card_01_081_Tests`). A REVEAL of
+an empty deck is not so: `revealTopCardsOfDrawDeck` with nothing to reveal shows nothing and asks nothing, and the
+game goes straight on (Fool of a Took! 1_170's second copy, `Card_01_170_Tests`): no dismiss is called.
 `FreepsChooseCard(card)` answers a choice from a deck as well, and by blueprint all the same: give the card to be
 taken a blueprint no other card of that deck has (fillers of another kind), or another copy goes to hand and
 `assertInZone(Zone.HAND, card)` fails.

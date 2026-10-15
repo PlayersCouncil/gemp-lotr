@@ -568,6 +568,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - revealHand of an empty hand (Q-0144) [F-0420, F-0391, Q-0263]
 - FreepsGetCardChoiceCount() while cards are only shown
 - A search of another player's draw deck shuffles the deck searched (F-0298, F-0369; Grond 68_82 and 18_82) [Q-0172]
+- "Reveal cards from the top of your draw deck until you reveal one that is not <X>. Take the revealed cards into hand" (Fool of a Took! 1_170, as built; dec-b1_169) [Q-0013]
 
 ## Boards, readings and tools
 
