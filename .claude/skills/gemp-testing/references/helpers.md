@@ -923,7 +923,9 @@ Reach 1_137, with Uruk Savage 1_151. [isengard] Maneuver event, cost 0: "Exert a
 choose to either exert 2 companions or make the Ring-bearer put on The One Ring until the regroup phase." With the
 Ring-bearer the only companion there are no two to exert: nothing is asked, the Ring goes on and no burden is
 added. It stays on through the archery phase and the skirmishes (Card_04_001_Tests). pitfalls.md, "No cheat puts
-The One Ring on", has the other two cards.
+The One Ring on", has the other two cards. The same event is the nearest miss of an "If the Ring-bearer puts on
+The One Ring" trigger: with a second companion on the table, `FreepsChoose("Exert 2 companions")` and the Ring
+stays off, so the trigger is not offered (Card_01_228_Tests, The Twilight World 1_228, lays both boards).
 
 **A printed card that hinders the Ring-bearer (why a hindered Ring-bearer is a board in play).** For the Shire
 103_108; One Ill Turn Deserves Another 103_38; Ill Wind 103_67. For the Shire (Free Peoples event) hinders "all
