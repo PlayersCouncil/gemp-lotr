@@ -239,8 +239,9 @@ which matters only where roaming or a site number does.
 
 **A Hobbit companion at strength 0 by cards in play, with no event played.** Saruman's Frost 1_135; Isengard Sword
 11_192 on White Hand Destroyer 17_124. Frost: [isengard] condition played on a site, limit 1 per site (to play,
-exert an [isengard] minion: attach it to the current site); each Hobbit COMPANION is strength -2 while the
-fellowship is there (as built: its text says "Each Hobbit at this site"); discarded at the end of the turn. Sword:
+exert an [isengard] minion: attach it to the current site); each Hobbit at that site is strength -2: companions
+and Hobbit minions while the fellowship is there, a Hobbit ally at his home site wherever the fellowship is
+(F-0532); discarded at the end of the turn. Sword:
 [uruk-hai] hand weapon on an [uruk-hai] minion, "Each character skirmishing bearer is strength -2". Destroyer:
 unique [uruk-hai] Uruk-hai, strength 10, vitality 3, fierce, no damage bonus. Sam 1_311 skirmishing it reads 0 (3 -
 2 - 2): overwhelmed by a side of any strength (CR 4.2 "overwhelmed"), and one wound where he is not
