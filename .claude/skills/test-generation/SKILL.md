@@ -263,7 +263,9 @@ hand", a card of another culture in the hand: beside [moria] cards alone, `choos
 a bearer by race ("Bearer must be a Hobbit"), the Ring-bearer and a Hobbit of another culture (Pippin, Trollslayer
 103_31): beside [shire] Hobbits who are not the Ring-bearer, `hobbit,culture(shire)` passes, 3_108; for "bearer" in a
 Modifier or Restriction on a card that a companion and an ally can both come to bear (a transfer to "a character"),
-one bearer of each: with companions alone bearing it, `and(companion,hasAttached(self))` passes, 1_207; for "a
+one bearer of each: with companions alone bearing it, `and(companion,hasAttached(self))` passes, 1_207; for "bearer" in a trigger ("each skirmish involving bearer") on a card whose `PlayOn` narrows the bearer, the
+control is a character the `PlayOn` would take who does not bear it: beside a [gondor] Man, `culture(rohan),man`
+passes for `bearer`, 4_287; for "a
 companion of each culture", a companion of each culture a printed companion has, the Hobbit sets aside (Q-0303;
 Notes name a culture only they have): with three laid, a line written for the wrong culture passes, 13_189.
 A kind no printed card can make a candidate drops out of the spread, and Notes say why: for "Bearer must be a Dwarf"

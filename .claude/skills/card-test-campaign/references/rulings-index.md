@@ -472,6 +472,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "(limit +N)" is the card's for the whole phase (F-0135, F-0125) [F-0213, F-0456]
 - A printed "(limit (N))" or "(limit -N)" is the card's for the whole phase, but not on a play's discount; "(limit X)" is per use (Q-0134, Q-0141, ... [Q-0152, F-0135, F-0245]
 - A bar that a trigger lays "while at <a place>" has the place in it twice (92_35) [F-0319]
+- "At the start of the first <phase> ... (limit once per turn)" (F-0517, Wizard's Vale 4_359)
 - "Limit 1 per bearer" is a Restriction that lists `L`
 
 ## Costs, and playing cards from piles and hands
