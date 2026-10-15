@@ -9,10 +9,13 @@ import com.gempukku.lotro.common.Timeword;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
+import com.gempukku.lotro.common.Phase;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_01_026_Tests
 {
@@ -21,8 +24,14 @@ public class Card_01_026_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "1_26");
-					// put other cards in here as needed for the test case
+					put("halls", "1_26");
+
+					put("gimli", "1_13");       // Gimli, Son of Gloin: Dwarf companion, strength 6; a skirmish ability used only on purpose
+					put("grimir", "1_17");      // Grimir, Dwarven Elder: Dwarf ally, home 3F, strength 3; a fellowship ability only
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion, strength 8; a maneuver ability used only on purpose
+
+					put("runner", "1_178");     // Goblin Runner: Orc, strength 5, vitality 1
+					put("runner2", "1_178");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -67,7 +76,7 @@ public class Card_01_026_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("halls");
 
 		assertEquals("Their Halls of Stone", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -79,19 +88,61 @@ public class Card_01_026_Tests
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void TheirHallsofStoneTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void AwayFromUndergroundADwarfIsStrengthPlus2ForThatSkirmishOnly() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var halls = scn.GetFreepsCard("halls");
+		var gimli = scn.GetFreepsCard("gimli");
+		var grimir = scn.GetFreepsCard("grimir");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var frodo = scn.GetRingBearer();
+		scn.MoveCompanionsToTable(gimli, aragorn);
+		scn.MoveAlliesToTable(grimir);
+		scn.MoveCardsToHand(halls);
+
+		var runner = scn.GetShadowCard("runner");
+		var runner2 = scn.GetShadowCard("runner2");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(runner, runner2);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		// Ettenmoors, site 2: a plains, not underground.
+		assertEquals("Ettenmoors", scn.GetCurrentSite().getBlueprint().getTitle());
+		assertFalse(scn.HasKeyword(scn.GetCurrentSite(), Keyword.UNDERGROUND));
+		// Not a Skirmish phase: not playable among the assignment actions.
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+		assertFalse(scn.FreepsPlayAvailable(halls));
 
-		assertEquals(0, scn.GetTwilight());
+		scn.PassCurrentPhaseActions();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{gimli, runner}, new PhysicalCardImpl[]{aragorn, runner2});
+		scn.FreepsResolveSkirmish(gimli);
+		assertEquals(6, scn.GetStrength(gimli));
+		assertEquals(3, scn.GetStrength(grimir));
+		assertTrue(scn.FreepsPlayAvailable(halls));
+
+		scn.FreepsPlayCard(halls);
+		// A Dwarf in the skirmish and a Dwarf in none are offered; companions who are no Dwarf are not.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli, grimir));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn, frodo));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+
+		scn.FreepsChooseCard(gimli);
+		assertEquals(8, scn.GetStrength(gimli));
+		assertEquals(3, scn.GetStrength(grimir));
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertInDiscard(halls);
+
+		// Still +2 at the next decision of the skirmish.
+		scn.ShadowPass();
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertEquals(8, scn.GetStrength(gimli));
+
+		// Gimli beats the Runner; in the next skirmish, a phase of its own, he is 6 again.
+		scn.FreepsPass();
+		scn.FreepsResolveSkirmish(aragorn);
+		assertEquals(6, scn.GetStrength(gimli));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 
 	@Test
@@ -117,6 +168,9 @@ public class Card_01_026_Tests
 		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.UNDERGROUND));
 		scn.FreepsAssignToMinions(aragorn, troop);
 		scn.FreepsResolveSkirmish(aragorn);
+
+		assertEquals(5, scn.GetStrength(farin));
+		assertEquals(4, scn.GetStrength(thrarin));
 
 		// The companion is with the fellowship, underground: 5 + 4.
 		scn.FreepsPlayCard(halls);

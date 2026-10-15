@@ -965,10 +965,17 @@
 				}
 				{
 					type: addTwilight
+					amount: {
+						type: forEachInMemory
+						memory: discardedCard
+					}
 				}
 				{
 					type: optional
 					text: Would you like to continue discarding?
+					requires: {
+						type: HasCardInDrawDeck
+					}
 					effect: [
 						{
 							type: discardTopCardsFromDeck
@@ -977,10 +984,17 @@
 						}
 						{
 							type: addTwilight
+							amount: {
+								type: forEachInMemory
+								memory: discardedCard
+							}
 						}
 						{
 							type: optional
 							text: Would you like to continue discarding?
+							requires: {
+								type: HasCardInDrawDeck
+							}
 							effect: [
 								{
 									type: discardTopCardsFromDeck
@@ -989,10 +1003,17 @@
 								}
 								{
 									type: addTwilight
+									amount: {
+										type: forEachInMemory
+										memory: discardedCard
+									}
 								}
 								{
 									type: optional
 									text: Would you like to continue discarding?
+									requires: {
+										type: HasCardInDrawDeck
+									}
 									effect: [
 										{
 											type: discardTopCardsFromDeck
@@ -1001,10 +1022,17 @@
 										}
 										{
 											type: addTwilight
+											amount: {
+												type: forEachInMemory
+												memory: discardedCard
+											}
 										}
 										{
 											type: optional
 											text: Would you like to continue discarding?
+											requires: {
+												type: HasCardInDrawDeck
+											}
 											effect: [
 												{
 													type: discardTopCardsFromDeck
@@ -1013,6 +1041,10 @@
 												}
 												{
 													type: addTwilight
+													amount: {
+														type: forEachInMemory
+														memory: discardedCard
+													}
 												}
 											]
 										}
