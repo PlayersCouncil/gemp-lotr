@@ -18,8 +18,16 @@ public class Card_01_054_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "1_54");
-					// put other cards in here as needed for the test case
+					put("mallorn", "1_54");
+
+					put("song", "1_39");        // Elf-song: an [elven] event, held in hand
+					put("lorienelf", "1_53");   // Lorien Elf: an [elven] companion, held in hand
+					put("cloak", "1_42");       // Elven Cloak: an [elven] possession, held in hand
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a [gondor] companion, held in hand
+					put("celeborn", "1_34");    // Celeborn, Lord of Lorien: an [elven] ally in play; a fellowship ability used only on purpose
+					put("bow", "1_41");         // Elven Bow: an [elven] possession, in the Shadow player's hand
+
+					put("troop", "1_177");      // Goblin Patrol Troop: a minion with no text, so that there is a maneuver phase
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -53,13 +61,13 @@ public class Card_01_054_Tests
 		 * Culture: Elven
 		 * Twilight Cost: 1
 		 * Type: Condition
-		 * Subtype: 
+		 * Subtype: Support Area
 		 * Game Text: Plays to your support area.<br><b>Fellowship:</b> Reveal an [elven] card from hand and place it beneath your draw deck.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("mallorn");
 
 		assertEquals("Mallorn-trees", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -88,12 +96,14 @@ public class Card_01_054_Tests
 		scn.StartGame();
 
 		// A card in hand, and it is [dwarven].
+		assertInHand(guard);
 		assertEquals(1, scn.GetFreepsHandCount());
 		assertFalse(scn.FreepsActionAvailable(mallorn));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
 		// Two [elven] cards beside it.
 		scn.MoveCardsToHand(haldir, elf);
+		assertInHand(haldir, elf);
 		scn.FreepsRefreshDecision();
 		assertTrue(scn.FreepsActionAvailable(mallorn));
 		scn.FreepsUseCardAction(mallorn);
@@ -114,18 +124,94 @@ public class Card_01_054_Tests
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void MallorntreesTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void AnElvenCardOfEachTypeInHandIsOfferedAndTheOneChosenIsShownToTheShadowPlayerAndPlacedBeneathTheDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var mallorn = scn.GetFreepsCard("mallorn");
+		var song = scn.GetFreepsCard("song");
+		var lorienelf = scn.GetFreepsCard("lorienelf");
+		var cloak = scn.GetFreepsCard("cloak");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var celeborn = scn.GetFreepsCard("celeborn");
+		var bow = scn.GetShadowCard("bow");
+		scn.MoveCardsToSupportArea(mallorn);
+		scn.MoveAlliesToTable(celeborn);
+		scn.MoveCardsToHand(song, lorienelf, cloak, aragorn, bow);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		assertInHand(song, lorienelf, cloak, aragorn, bow);
+		assertEquals(4, scn.GetFreepsHandCount());
+		assertNotEquals(cloak, scn.GetFreepsBottomOfDeck());
+		assertTrue(scn.FreepsActionAvailable(mallorn));
+		scn.FreepsUseCardAction(mallorn);
+
+		// An [elven] event, companion and possession in hand are offered.  Not offered: a [gondor] card in hand,
+		// [elven] cards in play (Celeborn, and Mallorn-trees itself), and an [elven] card in the other player's hand.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(song, lorienelf, cloak));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn, celeborn, mallorn, bow));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		scn.FreepsChooseCard(cloak);
+
+		// Revealed from hand: the Shadow player is shown it, and its owner is shown nothing.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(cloak, false));
+		assertEquals(1, scn.ShadowGetTotalRevealedCardCount());
+		assertEquals(0, scn.FreepsGetTotalRevealedCardCount());
+		scn.ShadowDismissRevealedCards();
+
+		assertEquals(cloak, scn.GetFreepsBottomOfDeck());
+		assertInHand(song, lorienelf, aragorn, bow);
+		assertEquals(3, scn.GetFreepsHandCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void AnElvenEventAloneInHandIsEnoughToOfferTheAbility() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var mallorn = scn.GetFreepsCard("mallorn");
+		var song = scn.GetFreepsCard("song");
+		scn.MoveCardsToSupportArea(mallorn);
+		scn.MoveCardsToHand(song);
+
+		scn.StartGame();
+
+		// The one [elven] card in hand is an event: neither a companion nor a possession, which the other tests rest on.
+		assertInHand(song);
+		assertEquals(1, scn.GetFreepsHandCount());
+		assertNotEquals(song, scn.GetFreepsBottomOfDeck());
+		assertTrue(scn.FreepsActionAvailable(mallorn));
+
+		// The only card to choose is chosen unasked.
+		scn.FreepsUseCardAction(mallorn);
+		assertTrue(scn.ShadowHasCardChoiceAvailable(song, false));
+		assertEquals(1, scn.ShadowGetTotalRevealedCardCount());
+		scn.ShadowDismissRevealedCards();
+
+		assertEquals(song, scn.GetFreepsBottomOfDeck());
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void IsNotOfferedInTheManeuverPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var mallorn = scn.GetFreepsCard("mallorn");
+		var cloak = scn.GetFreepsCard("cloak");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCardsToSupportArea(mallorn);
+		scn.MoveCardsToHand(cloak);
+
+		scn.StartGame();
+		assertTrue(scn.FreepsActionAvailable(mallorn));
+
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertInHand(cloak);
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(mallorn));
 	}
 }
