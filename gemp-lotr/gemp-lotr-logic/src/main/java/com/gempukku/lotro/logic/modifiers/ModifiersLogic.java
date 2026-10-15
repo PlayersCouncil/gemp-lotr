@@ -21,6 +21,9 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     private final List<Modifier> _untilEndOfTurnModifiers = new LinkedList<>();
 
     private final Set<Modifier> _skipSet = new HashSet<>();
+    // The modifiers isInForce is working out, innermost last; the first _workingOutDepth entries are in use.
+    private final List<WorkingOut> _workingOut = new ArrayList<>();
+    private int _workingOutDepth = 0;
 
     private final Map<Phase, Map<String, LimitCounter>> _endOfPhaseLimitCounters = new HashMap<>();
     private final Map<Phase, Map<String, LimitCounter>> _startOfPhaseLimitCounters = new HashMap<>();
@@ -221,16 +224,11 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
 
             if (keyword == null || keywordMatches) {
                 if (!_skipSet.contains(modifier)) {
-                    _skipSet.add(modifier);
-                    Condition condition = modifier.getCondition();
-                    if (condition == null || condition.isFullfilled(game))
-                        if (modifierEffect == ModifierEffect.TEXT_MODIFIER || modifier.getSource() == null ||
-                                modifier.isNonCardTextModifier() ||
-                                !hasTextRemoved(game, modifier.getSource())) {
-                            if (card == null || modifier.affectsCard(game, card))
-                                liveModifiers.add(modifier);
-                        }
-                    _skipSet.remove(modifier);
+                    if (isInForce(game, modifierEffect, modifier, card))
+                        liveModifiers.add(modifier);
+                } else if (isAssumedInForce(modifier, card)) {
+                    // Worked out as if it were in force, to see whether its answer leans on itself (CR 4.2 "loops").
+                    liveModifiers.add(modifier);
                 } else if (isHeldWhileBeingWorkedOut(game, modifier, modifierEffect)
                         && (card == null || modifier.affectsCard(game, card))) {
                     // Asked about while its own condition is being worked out: in force if it held (Q-0276).
@@ -240,6 +238,109 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
         }
 
         return liveModifiers;
+    }
+
+    /**
+     * Whether a modifier is in force for a card (or, with no card, at all): its condition holds, the text of its
+     * card has not been taken away, and it affects the card.  While this is worked out the modifier is left out of
+     * every question asked inside it (the skip set), so that two texts that read each other do not ask each other
+     * for ever.
+     *
+     * That alone gives the wrong answer where the two texts undo each other.  CR 4.2 "loops": "When an infinite
+     * loop occurs that includes no voluntary actions, the loop ends immediately with no effect", with Frodo, Weary
+     * From the Journey 15_144 skirmishing Black Land Observer 15_101 or Wandering Hillman 15_94: "Neither the
+     * minions nor Frodo would get the strength bonuses."  Frodo's +2 makes him 10, which gives the Observer +3,
+     * which takes the +2 away; worked out with his own +2 left out, each of the two saw the other without its bonus
+     * and both applied (F-0536).
+     *
+     * So when the working out asked about this very modifier for this very card again, and the answer is that it is
+     * in force, it is worked out a second time as if it were in force.  If it then is not, its answer undoes itself,
+     * which is the loop going round, and it is not in force: no effect.  If it still is, its answer does not lean on
+     * itself and stands.  A modifier that is not in force with itself left out stays so either way, so a text that
+     * holds only because it holds is not in force, as before.  A loop of texts that answer the same either way
+     * (Frodo at 10 before his bonus: the Observer is 11 whatever Frodo gets) is no loop, and the texts apply.  A
+     * modifier asked about again only for ANOTHER card is not worked out twice: it is left out there, as before.
+     * The second working out costs nothing where no text reads itself back.  A condition that counts its own grant
+     * (SelfSpottingCondition, Q-0276) is held as it was and is not worked out twice.
+     */
+    private boolean isInForce(LotroGame game, ModifierEffect modifierEffect, Modifier modifier, PhysicalCard card) {
+        final WorkingOut workingOut = pushWorkingOut(modifier, card);
+        _skipSet.add(modifier);
+        try {
+            boolean inForce = worksOutInForce(game, modifierEffect, modifier, card);
+            if (inForce && workingOut.askedAgain && !(modifier.getCondition() instanceof SelfSpottingCondition)) {
+                workingOut.assumedInForce = true;
+                inForce = worksOutInForce(game, modifierEffect, modifier, card);
+            }
+            return inForce;
+        } finally {
+            _skipSet.remove(modifier);
+            popWorkingOut();
+        }
+    }
+
+    private boolean worksOutInForce(LotroGame game, ModifierEffect modifierEffect, Modifier modifier, PhysicalCard card) {
+        Condition condition = modifier.getCondition();
+        if (condition != null && !condition.isFullfilled(game))
+            return false;
+        if (modifierEffect != ModifierEffect.TEXT_MODIFIER && modifier.getSource() != null
+                && !modifier.isNonCardTextModifier() && hasTextRemoved(game, modifier.getSource()))
+            return false;
+        return card == null || modifier.affectsCard(game, card);
+    }
+
+    /**
+     * A modifier that isInForce is working out, met again inside its own working out: notes that it was met again
+     * if it is met for the same card, and answers whether it is being worked out as if in force.  A modifier left
+     * out by any other part of this class (affectsCardWithSkipSet, hasKeywordAsGiven) has no entry and answers false.
+     */
+    private boolean isAssumedInForce(Modifier modifier, PhysicalCard card) {
+        for (int i = _workingOutDepth - 1; i >= 0; i--) {
+            final WorkingOut workingOut = _workingOut.get(i);
+            if (workingOut.modifier == modifier) {
+                if (workingOut.card != card)
+                    return false;
+                workingOut.askedAgain = true;
+                return workingOut.assumedInForce;
+            }
+        }
+        return false;
+    }
+
+    private WorkingOut pushWorkingOut(Modifier modifier, PhysicalCard card) {
+        final WorkingOut workingOut;
+        if (_workingOutDepth == _workingOut.size()) {
+            workingOut = new WorkingOut();
+            _workingOut.add(workingOut);
+        } else {
+            workingOut = _workingOut.get(_workingOutDepth);
+        }
+        _workingOutDepth++;
+        workingOut.modifier = modifier;
+        workingOut.card = card;
+        workingOut.assumedInForce = false;
+        workingOut.askedAgain = false;
+        return workingOut;
+    }
+
+    private void popWorkingOut() {
+        final WorkingOut workingOut = _workingOut.get(--_workingOutDepth);
+        workingOut.modifier = null;
+        workingOut.card = null;
+    }
+
+    /** One modifier that isInForce is working out; kept in a stack that is reused, as this is asked very often. */
+    private static final class WorkingOut {
+        private Modifier modifier;
+        private PhysicalCard card;
+        private boolean assumedInForce;
+        private boolean askedAgain;
+    }
+
+    private static boolean namesKeyword(Modifier modifier, Keyword keyword) {
+        Modifier named = modifier instanceof DelegateModifier delegateModifier ? delegateModifier.delegate : modifier;
+        return named instanceof KeywordAffectingModifier keyModifier && keyModifier.getKeywords() != null
+                && keyModifier.getKeywords().contains(keyword);
     }
 
     /**
@@ -475,6 +576,12 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
                             // Only a modifier that counts its own grant reaches here while it is being worked
                             // out (isHeldWhileBeingWorkedOut): it gives what it held (Q-0276).
                             if (modifier.hasKeyword(game, physicalCard, keyword))
+                                return true;
+                        } else if (isAssumedInForce(modifier, physicalCard)) {
+                            // Worked out as if in force (isInForce, CR 4.2 "loops"): it gives the keyword it names.
+                            // One that names none (a copy of another card's keywords) is read as giving nothing,
+                            // as it was before, and is not asked, as asking could come back here.
+                            if (namesKeyword(modifier, keyword))
                                 return true;
                         } else {
                             return false;

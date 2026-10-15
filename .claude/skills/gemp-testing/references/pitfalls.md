@@ -1467,6 +1467,12 @@ holds is worked out at each step of the game and whenever it is asked about, so 
 away and gives it back with no step between (`ApplyAdHocModifier` and a read) finds it still held, where any
 step in between (a pass) loses it. Every other "while you can spot" leaves out the card's own grant, as before.
 
+**Two standing texts that undo each other both lapse** (CR 4.2 "loops"; F-0536, engine pass 50). Frodo, Weary From
+the Journey 15_144 skirmishing Black Land Observer 15_101 or Wandering Hillman 15_94 at 8 or 9 before his +2 gets no
++2, and the minion no +3. Where one of the two answers the same either way (Frodo at 7, or at 10 and up) both read
+as printed. The same holds against Uruk Infantry 15_175 (Frodo at 8 or 9), Black Land Commander 15_100 (10 or 11) and
+Black Land Spy 15_105 (11 or 12). `mechanics/modifiers/AnInvoluntaryLoopEndsWithNoEffectTests`.
+
 **"Unable to gain game text keywords" keeps what the card had when it was laid** (`cantGainKeywords`, Into the Caves
 17_100; Q-0282). Nothing is gained from any card, its own text included, and no more of a keyword it has (damage +1
 stays +1); a keyword it had and lost by its own text may come back up to what it had. Roaming is no game text keyword.
