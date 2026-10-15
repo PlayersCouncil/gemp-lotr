@@ -1594,12 +1594,8 @@
 				type: modifier
 				modifier: {
 					type: modifyStrength
-					filter: culture(rohan),man
+					filter: culture(rohan),man,atSite(bearer)
 					amount: 1
-					requires: {
-						type: location
-						filter: bearer
-					}
 				}
 			}
 		]

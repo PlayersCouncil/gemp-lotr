@@ -567,7 +567,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "If a Shadow player has replaced the fellowship's current site this turn" is asked of the site the fellowship is at NOW (Q-0234: A; built by engine pass 26; Many Miles 13_21) [Q-0259]
 - A site's continuous text: `modifier` holds only while the fellowship is there, `PermanentSiteModifier` wherever the site lies (CR 4.2 "active", LR 3; Q-0173: B)
 - A site whose text names the site by its title goes by `name(<title>)`, never by `self` or by nothing (Q-0027; F-0043, F-0381, F-0382, F-0383) [F-0390]
-- "While bearer is at a <terrain> site", "if that <character> is at a <terrain>": the character's place is `atSite(<terrain>)`, and an ally is at his home site (F-0380, F-0503, F-0518; built by engine pass 48) [Q-0252, F-0233]
+- "While bearer is at a <terrain> site", "if that <character> is at a <terrain>": the character's place is `atSite(<terrain>)`, and an ally is at his home site (F-0380, F-0503, F-0518; built by engine pass 48) [Q-0252, F-0233, F-0519, F-0532]
 - "<Do X>; <Y> during this skirmish" on an event that makes the skirmish: Y is laid only if the skirmish was made (F-0386, Return to Its Master 1_224)
 - A Ring's `ringIsActive` requirement is shown in Return to Its Master 1_224's file, not the Ring's own
 - A Frodo with the Ring-bearer keyword, and CR 4.2 "Ring-bearer" ("If a character other than Frodo is your Ring-bearer, you cannot play any version of Frodo with the Ring-bearer keyword") [Q-0159]
