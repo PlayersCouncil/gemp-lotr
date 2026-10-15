@@ -183,6 +183,12 @@ is only ever used on purpose.
 
 **A weak companion.** Dwarf Guard 1_7. Strength 4, vitality 2; needs a Dwarf spotted to be played, so cheat it in.
 
+**Hand weapons for a Dwarf, one or two.** Dwarven Axe 1_9; Hand Axe 2_10. Both [dwarven] possessions of cost 0
+that a Dwarf bears. The Axe (strength +2) has a REQUIRED "each time a player's minion loses a skirmish to bearer":
+the minion its bearer beats is still in play after `PassSkirmishActions()` until `FreepsResolveRuleFirst()`. The
+Hand Axe (strength +1; an archery ability that discards it, used only on purpose) "may be borne in addition to 1
+other hand weapon", so the two make a Dwarf's pair (lint-ok on the attach; Card_02_005_Tests).
+
 **An archer, when archery is the point.** Legolas, Greenleaf 1_50. Strength 6, vitality 3; Archer, with an archery
 ability.
 
@@ -459,7 +465,9 @@ A Wizard or a Wraith who is not [gandalf] or [gondor] is on the Shadow side only
 Corpse Lights 6_99, a [sauron] Wraith), for a text that names no side. NONE in print, and so never asked for: an
 Elf outside [elven] or an [elven] character who is no Elf (141 of each, the same 141); the same for Dwarf and
 [dwarven] (53); a Free Peoples Wizard outside [gandalf]; a Free Peoples Wraith outside [gondor]. `lint.py` reports
-a definition that goes by the one where its text names the other (`race-culture`): a finding to file.
+a definition that goes by the one where its text names the other (`race-culture`): a finding to file. Those are
+CHARACTERS: for "spot a Dwarf", whose candidates need not be characters, a [dwarven] condition is the printed
+invalid one (Lord of Moria 1_21 in the support area; Card_01_011_Tests, Card_02_006_Tests).
 
 **An Aragorn who is not [gondor].** Aragorn, Defender of Rohan 17_93. The only Aragorn of another culture
 ([rohan]), and no signet; his text does nothing unless the Ring-bearer is assigned to a skirmish. Without him a

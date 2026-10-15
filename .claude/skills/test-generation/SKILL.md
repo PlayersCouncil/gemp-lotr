@@ -674,7 +674,8 @@ until the card is transcribed from its image (`Card_30_051_Tests`).
 
 **Arrange by cheating, act by playing.** Put the board where it needs to be with the rig's cheats, then do the
 thing under test the way a player would. Never cheat the thing under test, and never play out something that is
-only set-up. Where a clause counts something ("strength +2 while he bears 3 items"), changing the counted thing
+only set-up. That takes in the card under test: where its text does not bear on its own play, it is cheated into
+play ahead of a reading of its standing text, not played from hand (Merry 1_303, Glóin 2_7). Where a clause counts something ("strength +2 while he bears 3 items"), changing the counted thing
 is part of the act: do it by legal play in one test, which shows the modifier switching on as the count is
 reached, and cheat it in the others. That is for a standing text, which has to be seen to switch on. Where nothing the
 text bars can happen in the phase the count is changed in (a bar on Shadow acts, reached by playing a companion),

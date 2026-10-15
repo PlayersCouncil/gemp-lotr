@@ -542,7 +542,9 @@ skirmish" included, in the fierce round as well (Tower Lieutenant 1_280: `Freeps
 that end each skirmish, `PassFierceSkirmishActions()` in the fierce round, Card_01_280_Tests), and so is a Free Peoples companion's own required "each
 time X wins a skirmish", Boromir 59_31: left unanswered, the only sign is that the beaten minion is still in play
 after `PassSkirmishActions()`; a companion's own required "each time X loses a skirmish" raises it too, Isildur
-18_54: until `FreepsResolveRuleFirst()` his wound for losing reads 0 after `PassCurrentPhaseActions()`; it is not
+18_54: until `FreepsResolveRuleFirst()` his wound for losing reads 0 after `PassCurrentPhaseActions()`; so does a hand weapon's required "each time a
+minion loses a skirmish to bearer", Dwarven Axe 1_9 on the winner: the beaten minion stays in play until it is
+answered, Card_02_005_Tests; it is not
 only for deaths). Two copies of a card with such a required trigger make it one decision of three entries, the
 rule and each copy's trigger; after `FreepsResolveRuleFirst()` both triggers are carried out and no second
 ordering is asked (Sudden Fury 12_132, two copies and a [shire] companion who loses). The rule's entry may have no action
