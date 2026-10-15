@@ -18,6 +18,8 @@ What the campaign has learned about particular shapes of card text: what a rulin
 
 **A spot that stands after "to" is an effect (Q-0085).** A spot that stands after "to" is an effect: the ability is offered though nothing can be spotted (Q-0085). A definition that has such a spot among its costs is a finding of its own. A spot INSIDE a sentence of costs with no "to" ("Maneuver: Exert Boromir and spot an ally.", Horn of Boromir 3_42; Q-0058) is a requirement (CR 4.2 "spot"): the ability is not offered with nothing to spot, the `-` is that board, and a definition without `requires: canSpot` is a finding (F-0492; Aldor 4_262 is built so). Do not carry over the reading of an erratum that moved the spot after "to" (53_42).
 
+**A bare cost sentence with no "to", then the effect sentences (Q-0058).** "Response: If the Ring-bearer puts on The One Ring, exert this minion. Discard ... Add a burden ..." (Uruk Spy 1_155), like "Exert bearer and discard this" (Wizard's Stash 103_7): the sentence with no "to" is the price of the sentences after it, paid in `cost`, and its `C-` is that cost unpayable (an exhausted Spy is not offered: `Card_01_155_Tests.AnExhaustedSpyCannotRespond`). It is not asked as a question (dec-b1_155).
+
 **"Remove X ... to <do something to> a card costing X or less" (Q-0087, F-0133).** "Remove X ... to <do something to> a card costing X or less" has no cap on X but what there is to remove (Q-0087). A cap by "the highest cost" is a finding; ForEachTwilightCost over HighestTwilight adds up ties (F-0133).
 
 **"The <other> player may make you <do X> to prevent this" (Q-0088).** "The <other> player may make you <do X> to prevent this": "you" chooses what X is done to (Q-0088). Built the other way is a finding.

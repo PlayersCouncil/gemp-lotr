@@ -1261,7 +1261,10 @@ that is not active).
 event, a response event included, is in `Zone.VOID`; only then is it in the discard pile. `assertInDiscard(event)`
 while a choice or a prevention of its effect is still pending fails. An event whose effect begins a skirmish
 (A Dark Shape Sprang 10_19) lies in the void through the whole of that skirmish: read it in the discard pile
-once the skirmish has resolved and the suspended phase has resumed.
+once the skirmish has resolved and the suspended phase has resumed. A response to that event's effect is carried
+out while it is still in the void, so it is not in the discard pile a response reads ("each Shadow card discarded
+in this way"): a control card "already in the discard pile" is a separate card put there (Uruk Spy 1_155 after
+Saruman's Reach 1_137).
 
 **An event printed with several phases is an event of the phase it is played in (F-0292).** While it is being
 played, and when its cost to play is read (`GetTwilightCost` of the card in hand, the play itself), a "Skirmish

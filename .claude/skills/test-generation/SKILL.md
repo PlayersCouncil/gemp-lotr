@@ -460,7 +460,8 @@ may be on another block's sites (Gondorian Merchant 7_97, the only [gondor] ally
 
 Which checks a clause lists follows from its words, and the analyst is expected to justify leaving one out:
 
-- anything before "to" in "X to Y" is a cost → `C`, and `C-` where the board can make it unpayable. A card
+- anything before "to" in "X to Y" is a cost → `C`, and `C-` where the board can make it unpayable. A sentence
+  of costs with no "to" before the sentences it buys ("exert this minion. Discard ...") is a cost too (Q-0058). A card
   discarding itself as its only cost ("discard this condition to …") can always pay: no `C-`, and no `no C-:`
   line. An exert cost's `C-` board is the one who must exert, exhausted (wounded before the skip into the phase read,
   or refreshed after the wound: pitfalls, "A board changed under a pending decision"; 1_58); where the cost names a kind ("exert
