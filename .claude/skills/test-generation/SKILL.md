@@ -832,7 +832,9 @@ Stop work on the card, record what is in the way, and move to the next. Do not f
 - **The game disagrees with the text.** Keep the test asserting what the text says. Park it with
   `@Ignore("F-0000: ...")`, and record the finding with what was expected, what happened, and which of these it
   looks like: a typo in the definition, an oversight in the implementation, wrong displayed text, an engine bug, a
-  rig bug, a wrong spreadsheet row. Do not edit the definition or the engine.
+  rig bug, a wrong spreadsheet row. Do not edit the definition or the engine. A wrong label on an ability (its
+  `text:` misspelt, while the ability works) is filed with its correction and parks no test, since the game's
+  wording is no expectation; `mutate.py --replace` alone shows the correction harms nothing: SURVIVED (6_50, F-0522).
 
 A parked card is committed as far as it got and marked parked, with the id that is holding it. `@Ignore` stands
 on a line of its own, above or below `@Test` (the tools that count and switch on parked tests look for it there, and
