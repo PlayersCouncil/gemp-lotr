@@ -582,6 +582,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A filter that feeds a count. Where a filter feeds a COUNT ("for each X stacked here", "for each X you can spot"), lay the board so the count under ...
 - A phrase the definition writes twice: in a requirement and in the choice (Beorning Axe 18_18, "a [gandalf] card" as `HasCardInDiscard` and as the `choose` of `putCardsFromDiscardIntoHand`)
 - "Each site" on a modifier: the sites laid, and a path of a second block (No Stranger to the Shadows 1_108)
+- A site NUMBER in a text ("at site 6, 7, or 8", "at sites 1 to 5") is a site of the card's own block (CR 4.2 "block symbol"; Fellowship block sites have none, so a set 1 to 3 card means Fellowship sites)
 - A draw of 4 in a fellowship phase cannot be told from a draw of 5 or more
 - A count "this phase" against the same count this turn
 - A threshold that is a percentage wants a board large enough to tell the neighbouring numbers apart (94_5) [F-0325]

@@ -309,7 +309,10 @@ clauses, or in a condition or a trigger and not a choice ("a site bearing a weat
 invalid candidate. Where a trigger and the choice it leads to each carry the phrase ("If a [sauron] Orc wins a
 skirmish, make that Orc ...", whose definition filters the winner and then the choice), the invalid candidates take
 part in the very event the valid ones do (a [moria] Orc and a [sauron] Uruk-hai winning that same skirmish) and are
-read as not offered: on a board where the trigger never fires, the choice's own filter goes unchallenged (1_247).
+read as not offered: on a board where the trigger never fires, the choice's own filter goes unchallenged (1_247). Where
+the DEFINITION writes one phrase twice, as a requirement and the choice it gates ("reveal an [elven] card from
+hand"), each owes its spread: a board where the offer rests on a card of each kind alone (shapes.md, "A phrase
+the definition writes twice"; 1_54).
 
 **A spot requirement.** A spot requirement owes its valid candidates as a choice does, on one board or across the
 tests: for "spot an Elf companion", Elf companions of two titles, or `name(Legolas)` passes (91_12). A spot that
