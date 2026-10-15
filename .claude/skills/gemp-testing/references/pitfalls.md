@@ -483,6 +483,9 @@ not be (Card_04_303_Tests; mutate.py survivors there before the count was read).
 `FreepsTransferAvailable(card)` and their Shadow twins answer for the physical card they are given: with two
 copies in play, each is asked about separately, and a per-copy limit is tested by asking about each copy. The
 overloads that take text (`FreepsActionAvailable("Use Orc Taskmaster")`) still match any action so described.
+Two copies of a required trigger at one moment that is no "is about to" (Bent on Discovery 1_206's end of the
+Shadow phase) are not put to their player to order: the copy put into play first is carried out first
+(Card_01_206_Tests), so a test can tell the copies apart by placing them in order.
 The card-choice checks are different where the cards are in a pile or are only shown: see the next entry.
 
 **A choice from a pile, and a showing, are read by blueprint.** Where a decision lists cards that are not in
@@ -1047,6 +1050,8 @@ his deck, so a draw read there wants `SetShadowDrawDeck(...)` first (Card_11_260
 A short scenario runs short as well. `SetFreepsHand(...)` after a skipper puts the rest of the hand back on the
 draw deck, and once a test moves the last of those into hand or play a "draw a card" draws nothing and the hand
 reads one short: keep one named card in the deck and read it in hand after the draw (Card_01_060_Tests, Gimli).
+A single test that lays every alias on the table empties the deck the same way, so that a draw trigger looks like
+it never fired (Card_01_206_Tests keeps two spare aliases in the Shadow deck for its six-card board).
 **A board copied from an erratum's file rests on the erratum's numbers.** Where the original differs in a number the
 board leans on (burdens, resistance, vitality, strength), re-count each copied test under the original's: Boromir
 9_31 adds 3 burdens at resistance 6 where 59_31 adds 2 at 7, so the erratum's fierce-round test corrupts or kills him.
