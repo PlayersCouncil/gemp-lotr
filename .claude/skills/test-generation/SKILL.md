@@ -433,7 +433,8 @@ chooser's piles do not hold: a choice from a pile is read by blueprint (pitfalls
 owed where the definition word could name the other player's pile (a `player` field: `PlayCardFromDiscard`,
 `PutCardsFromDiscardIntoHand`); a word that reads only its performer's own pile (`PlayCardFromDrawDeck`,
 `PutCardsFromDeckIntoHand`, `ShuffleCardsFromDiscardIntoDrawDeck`: no `player` or deck field) owes no such board,
-since no definition of it can differ there (15_51, dec-b13_53).
+since no definition of it can differ there (15_51, dec-b13_53); a landed file that lays one anyway (Orkish Smith
+61_132) is no sign that one is owed.
 
 **A condition inside a modifier; "bearer" or "self" with a requirement.** Where the excluded thing is part of a
 condition inside a modifier ("in a skirmish involving an [isengard] minion"), the candidates are in skirmishes, not
