@@ -3,6 +3,7 @@ package com.gempukku.lotro.cards.official.set02;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -13,13 +14,41 @@ import static org.junit.Assert.*;
 
 public class Card_02_012_Tests
 {
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "2_12");
-					// put other cards in here as needed for the test case
+					put("realm", "2_12");
+
+					put("gimli", "1_13");       // Gimli, Son of Gloin: Dwarf companion, strength 6, damage +1, a skirmish ability only
+					put("guard", "1_7");        // Dwarf Guard: Dwarf companion, strength 4, no text but its own play requirement
+					put("grimir", "1_17");      // Grimir, Dwarven Elder: Dwarf ally, a fellowship ability only
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a companion who is not a Dwarf
+
+					put("troop", "1_177");      // Goblin Patrol Troop: minion, strength 13, no text
+					put("troop2", "1_177");
+
+					// Draw deck fillers: no text at all.
+					for (int i = 1; i <= 50; i++) {
+						put("filler" + i, "1_177");
+					}
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetShortDeckScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("realm", "2_12");
+					put("gimli", "1_13");       // Gimli, Son of Gloin: Dwarf companion
+					// The Free Peoples player's draw deck is his copy of the troop and the two fillers: 3 cards.
+					put("troop", "1_177");      // Goblin Patrol Troop: minion, strength 13, no text
+					put("filler1", "1_177");
+					put("filler2", "1_177");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -79,13 +108,13 @@ public class Card_02_012_Tests
 		 * Culture: Dwarven
 		 * Twilight Cost: 1
 		 * Type: Condition
-		 * Subtype: 
+		 * Subtype: Support Area
 		 * Game Text: Plays to your support area.<br><b>Skirmish:</b> Discard the top 3 cards from your draw deck to make a Dwarf strength +1 (limit +3) and, if underground, <b>damage +1</b> (limit +3).
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("realm");
 
 		assertEquals("Realm of Dwarrowdelf", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -95,6 +124,123 @@ public class Card_02_012_Tests
 		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
+	}
+
+	@Test
+	public void DiscardingTheTopThreeCardsMakesADwarfStrengthPlusOneAndNotDamagePlusOneAwayFromUnderground() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var realm = scn.GetFreepsCard("realm");
+		var gimli = scn.GetFreepsCard("gimli");
+		var guard = scn.GetFreepsCard("guard");
+		var grimir = scn.GetFreepsCard("grimir");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var troop = scn.GetShadowCard("troop");
+
+		scn.MoveCardsToSupportArea(realm);
+		scn.MoveCompanionsToTable(gimli, guard, aragorn);
+		scn.MoveAlliesToTable(grimir);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gimli, troop);
+		scn.FreepsResolveSkirmish(gimli);
+
+		// Site 2, Ettenmoors, is a plains site.
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		int deck = scn.GetFreepsDeckCount();
+		int discard = scn.GetFreepsDiscardCount();
+		assertEquals(6, scn.GetStrength(gimli));
+		assertEquals(1, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
+		assertTrue(scn.FreepsActionAvailable(realm));
+
+		scn.FreepsUseCardAction(realm);
+		assertEquals(deck - 3, scn.GetFreepsDeckCount());
+		assertEquals(discard + 3, scn.GetFreepsDiscardCount());
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli, guard, grimir));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn, troop));
+		scn.FreepsChooseCard(gimli);
+
+		assertEquals(7, scn.GetStrength(gimli));
+		assertEquals(1, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
+		assertEquals(4, scn.GetStrength(guard));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
+	@Test
+	public void UndergroundBothBonusesAreTheCardsToPlusThreeInEachSkirmishPhaseAndLastThePhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var realm = scn.GetFreepsCard("realm");
+		var gimli = scn.GetFreepsCard("gimli");
+		var guard = scn.GetFreepsCard("guard");
+		var troop = scn.GetShadowCard("troop");
+		var troop2 = scn.GetShadowCard("troop2");
+
+		scn.MoveCardsToSupportArea(realm);
+		scn.MoveCompanionsToTable(gimli, guard);
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+		scn.MoveMinionsToTable(troop, troop2);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{gimli, troop}, new PhysicalCardImpl[]{guard, troop2});
+		scn.FreepsResolveSkirmish(gimli);
+
+		// Site 4, Balin's Tomb, is underground.
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		assertEquals(6, scn.GetStrength(gimli));
+		assertEquals(1, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
+		assertEquals(4, scn.GetStrength(guard));
+		assertEquals(0, scn.GetKeywordCount(guard, Keyword.DAMAGE));
+
+		scn.FreepsUseCardAction(realm);
+		scn.FreepsChooseCard(gimli);
+		assertEquals(7, scn.GetStrength(gimli));
+		assertEquals(2, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
+
+		// The limit is the card's, not each Dwarf's: +2 to Gimli and +1 to the guard reach it.
+		scn.ShadowPass();
+		scn.FreepsUseCardAction(realm);
+		scn.FreepsChooseCard(guard);
+		assertEquals(5, scn.GetStrength(guard));
+		assertEquals(1, scn.GetKeywordCount(guard, Keyword.DAMAGE));
+
+		scn.ShadowPass();
+		scn.FreepsUseCardAction(realm);
+		scn.FreepsChooseCard(gimli);
+		assertEquals(8, scn.GetStrength(gimli));
+		assertEquals(3, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
+
+		// A fourth use is still offered and its cost is paid, but it gives nothing.
+		scn.ShadowPass();
+		int deck = scn.GetFreepsDeckCount();
+		assertTrue(scn.FreepsActionAvailable(realm));
+		scn.FreepsUseCardAction(realm);
+		scn.FreepsChooseCard(guard);
+		assertEquals(deck - 3, scn.GetFreepsDeckCount());
+		assertEquals(5, scn.GetStrength(guard));
+		assertEquals(8, scn.GetStrength(gimli));
+		assertEquals(3, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
+
+		// Gimli's skirmish resolves (8 against 13); in the next skirmish phase the bonuses are gone and the limit is new.
+		scn.ShadowPass();
+		scn.FreepsPass();
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		scn.FreepsResolveSkirmish(guard);
+
+		assertEquals(6, scn.GetStrength(gimli));
+		assertEquals(1, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
+		assertEquals(4, scn.GetStrength(guard));
+		assertEquals(0, scn.GetKeywordCount(guard, Keyword.DAMAGE));
+
+		scn.FreepsUseCardAction(realm);
+		scn.FreepsChooseCard(guard);
+		assertEquals(5, scn.GetStrength(guard));
+		assertEquals(1, scn.GetKeywordCount(guard, Keyword.DAMAGE));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
 
 	// "... and, if underground, damage +1 (limit +3)": the limit is the card's for the whole phase, whichever
@@ -142,19 +288,34 @@ public class Card_02_012_Tests
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void RealmofDwarrowdelfTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void NotOfferedWithTwoCardsInTheDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetShortDeckScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var realm = scn.GetFreepsCard("realm");
+		var gimli = scn.GetFreepsCard("gimli");
+		var filler2 = scn.GetFreepsCard("filler2");
+		var troop = scn.GetShadowCard("troop");
+
+		scn.MoveCardsToSupportArea(realm);
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveCardsToHand(filler2);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gimli, troop);
+		scn.FreepsResolveSkirmish(gimli);
 
-		assertEquals(1, scn.GetTwilight());
+		assertEquals(2, scn.GetFreepsDeckCount());
+		assertFalse(scn.FreepsActionAvailable(realm));
+
+		scn.MoveCardsToTopOfDeck(filler2);
+		scn.FreepsRefreshDecision();
+
+		assertEquals(3, scn.GetFreepsDeckCount());
+		assertTrue(scn.FreepsActionAvailable(realm));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 
 	@Test
