@@ -479,7 +479,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 
 - "<do> a companion for each <thing>" may be spread (F-0224) [F-0458, F-0459, Q-0141, Q-0248, F-0497]
 - A reveal before "to" is a cost, and an empty draw deck cannot pay it (F-0022, F-0249) [Q-0104, Q-0029]
-- A reveal that what follows reads must be able to happen (Q-0148, F-0284) [F-0022, Q-0104, Q-0029]
+- A reveal that what follows reads must be able to happen (Q-0148, F-0284) [F-0022, Q-0163, Q-0104, Q-0029]
 - A reveal that a cost buys is offered with that draw deck empty, and flagged (Q-0163: B; built by engine pass 21). "<cost> to reveal the top N cards ... [Q-0148]
 - What bounds an X: the action's costs, never what its effect can use (Q-0069, Q-0087, Q-0094, F-0067, F-0111). The rulings on X look two ways and are ... [Q-0062, Q-0015, Q-0034, Q-0191]
 - "Spot a Dwarf who is damage +X and exert that Dwarf ... to <do> X": X is the bonus he had when he was spotted (Q-0256: A; built by engine pass 28), ... [Q-0015]

@@ -226,7 +226,9 @@ optional look or draw of Q-0104 and Q-0029, which is an effect and is offered wi
 deck. <Something that reads the card revealed: the card, its twilight cost, its type.>" has no "to", so by F-0022
 the reveal is an effect; but the rest hangs on it. Ketura: "I would consider this either a requirement or a cost.
 Either way, it has to happen for the rest to occur, so an empty deck should disallow the ability." So with or
-without a "to" after the reveal, the ability is not offered (the event not played) with an empty draw deck. With
+without a "to" after the reveal, the ability is not offered (the event not played) with an empty draw deck. This
+is only for a reveal with nothing printed before it: "<spot or cost> to reveal the top N cards" ("Spot a Dwarf to
+reveal ...", Wealth of Moria 1_28) is Q-0163's, offered with the deck empty and flagged (the next entry). With
 no "to", write `requires: {type: HasCardInDrawDeck}` on the ability and leave the reveal its first effect
 (Glorfindel, Revealed in Wrath 59_16 and 9_16); without the requirement the card is a finding, already ruled. The
 `-` is the ability not offered with the deck emptied, and offered with one card left in it. This is not the

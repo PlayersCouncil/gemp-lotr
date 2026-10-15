@@ -719,7 +719,9 @@ possession that makes its bearer an archer (a bow) is the same: `AttachCardsTo` 
 (Long Battle Bow 11_89 in Little Golden Flower 65_148's tests). An archer MINION wanted in the skirmishes goes
 down between the two phases: `SkipToPhase(Phase.ASSIGNMENT)` with another minion on the table, `MoveMinionsToTable(archer)`,
 `PassAssignmentActions()`; after `SkipToAssignments()` the assignment already asked does not list it
-(Goblin Archer 1_172 in mechanics/keywords/DamageBonusTests).
+(Goblin Archer 1_172 in mechanics/keywords/DamageBonusTests). A Free Peoples archer COMPANION (Legolas 1_50) fires
+too: his wound is placed unasked only while exactly one minion is on the table, so any second minion goes down
+after `SkipToPhase(Phase.ASSIGNMENT)` the same way, and the one minion down reads a wound (Border Defenses 1_32).
 
 **`SkipToPhase` declines optional triggers it meets on the way.** A trigger that is offered while the phase is
 still the old one (an "each time the fellowship moves" trigger, offered before the fellowship phase is left) is
