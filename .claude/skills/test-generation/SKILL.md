@@ -403,7 +403,8 @@ you control"), is two alternatives and lists `B`, each taken alone (1_40 above; 
 unique and its text says "here", "this condition", "this minion" or the like, a second copy is in play wherever it
 could change a reading: the test shows which copy a card went to or came from (`ShadowChooseOptionalTrigger(card)`
 where each copy makes its own offer), that a standing modifier tied to those words does not stack (a numeric
-modifier with no such words does stack, and two copies are no gap there), that a trigger fires once for its own
+modifier with no such words does stack, and two copies are no gap there; nor where it lays a state the engine asks
+once, yes or no, as Goblin Domain 1_175's "comes into play exhausted"), that a trigger fires once for its own
 copy. Where an effect acts on the card itself, or on "that <card>" a trigger has just named, another card of its
 kind stands beside it and is read as untouched (for "each time a companion is played, that companion ...", a
 companion already in play, or `all(companion)` passes, 91_9; where the effect then takes "that <card>" out of a
