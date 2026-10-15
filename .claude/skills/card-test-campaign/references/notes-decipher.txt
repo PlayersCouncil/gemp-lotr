@@ -338,3 +338,5 @@ THE COST OF ASSIGNING (set 7's Morgul Orcs; built by engine pass 26, item assign
 - The three Orcs are worked and landed (the batch dec-b19_1).
 - F-0425 is answered (the section above); Q-0247 is kept (the payment's source is the charging card; an
   assignment already paid for is not asked to pay again).
+
+- Alive and Unspoiled 1_120 carries F-0516 (confirmed, hjson-logic: its "you may" is asked with X=0, nothing revealed): whoever works the card corrects it in the same batch.
