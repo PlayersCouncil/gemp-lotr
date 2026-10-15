@@ -1126,7 +1126,11 @@ For "exert ... twice" he needs 3 left: Filibert Bolger 2_101 (vitality 2) read a
 Hobbit companion twice" showed nothing of `companion`; Bilbo 1_284, a Hobbit ally of vitality 3, does (dec-b1_49).
 The other way, an effect that WOUNDS read only on characters with vitality to spare cannot be told from an
 exertion (`type: wound` made `type: exert` survived): lay one the wound kills, as Dunlending Brigand 4_10 (minion,
-vitality 1, no text) beside the rest of "wound every minion" (Card_01_111_Tests, dec-b1_106).
+vitality 1, no text) beside the rest of "wound every minion" (Card_01_111_Tests, dec-b1_106). Likewise an EFFECT
+that exerts, read only on characters with vitality to spare, cannot be told from a wound (`type: exert` made `type:
+wound` survived): lay one with a single vitality left of the kind it reaches, read not offered (a choice) or not
+exerted and still in play ("each ... must exert"): Ent Avenger 6_27 at 3 wounds beside the Gandalfs of No Ordinary
+Storm 1_130, Merry 1_302 at 3 wounds among the Hobbits of Saruman's Chill 1_134 (dec-b1_130).
 
 **Allies live in the support area.** `MoveAlliesToTable` puts allies there, where an ally played legally goes.
 `MoveCompanionsToTable` takes companions only and fails the test if handed anything else, as `MoveAlliesToTable`
