@@ -232,7 +232,7 @@ public class Card_01_182_Tests
 	}
 
 	@Test
-	public void ACompanionKilledInTheBearersSkirmishByAnotherMinionsWoundAddsABurden() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ACompanionKilledInTheBearersSkirmishByAnotherMinionsWoundAddsNoBurden() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var spear = scn.GetShadowCard("spear");
@@ -259,13 +259,12 @@ public class Card_01_182_Tests
 		assertEquals(0, scn.GetBurdens());
 
 		scn.FreepsPass();
-		// The Orc Soldier's own wound kills Gimli. A kill in the bearer's skirmish counts, whatever dealt the
-		// last wound (Ketura on "killed by", Q-0123: A).
+		// The Orc Soldier's own wound kills Gimli, before he has lost to the bearer: the bearer's text did not kill
+		// him, nor did his losing (CR 4.2 Section Three's "kills", Q-0328: B).
 		scn.ShadowUseCardAction(soldier);
-		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
-		scn.FreepsResolveRuleFirst();
+		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
 		assertInZone(Zone.DEAD, gimli);
-		assertEquals(1, scn.GetBurdens());
+		assertEquals(0, scn.GetBurdens());
 		// With its only companion gone the skirmish is over, and so are the skirmishes.
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}

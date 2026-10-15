@@ -534,7 +534,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Each time this is hindered/discarded" is answered after the removal (F-0120, F-0121)
 - memorizeLoser holds everyone in the skirmish but the winner (F-0115, F-0136) [F-0422, F-0480]
 - "If your <kind> wins a skirmish, <do something to> that <kind>" built as a `winsSkirmish` trigger whose effect CHOOSES among `inSkirmish` cards of the same filter (Goblin Swarms 1_183, as built; dec-b2_122) [Q-0224]
-- "If <X> kills a companion in a skirmish" (or "killed by <X>") built as a `killed` trigger beside `canSpot <X>,inSkirmish`, with no `killer` (Q-0123: A, kept as built; Goblin Spear 1_182, Orc Butchery 1_265) [F-0534, F-0535, Q-0328]
+- "If <X> kills a companion" (or "killed by <X>", "kills a companion in a skirmish") is CR 4.2's definition, built as a `killed` trigger with `killer: <X>` (Q-0328: B, in place of Q-0123's loose reading; engine pass 49: Orc Butchery 1_265 and 51_265, The Ring's Oppression 1_273, Goblin Spear 1_182 with `killer: bearer` beside its `canSpot bearer,inSkirmish`; Mind and Body 7_183 was already so)
 - Built by engine pass 7 (F-0126, F-0131, F-0137, F-0140, Q-0081)
 - A card that leaves play as it comes into play was not played (F-0139, built)
 - "<A character> comes into play exhausted" (Q-0302; F-0500, F-0501)

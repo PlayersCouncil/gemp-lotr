@@ -549,6 +549,9 @@ the Dead…", null]`; Ferocious Haradrim 11_80 answering a death: `[null, "Requi
 Haradrim"]`). `FreepsResolveRuleFirst()` resolves the rule, the entry that belongs to no card, wherever it is
 listed; `FreepsResolveActionOrder(text)` resolves the entry whose wording contains the text and passes over an
 entry with no wording.
+A trigger that names who kills (`killed` with `killer`: "if X kills a companion", CR 4.2's definition, Q-0328: B) is
+answered for a kill by X's own text or by losing a skirmish X is in (every minion of it is a killer), not for another
+minion's wound in X's skirmish; a required one answers the wound that kills as well (engine pass 49; mechanics/wounds/WhoKillsACharacterTests).
 A trigger added for the skirmish ("if that minion is overwhelmed, ...") raises the decision even when its effect
 will come to nothing (Cirdan 60_8 with one [elven] event: half, rounded down, is none): `FreepsResolveRuleFirst()`
 is still needed, and nothing is asked after it. So does a card's standing required "each time X wins a

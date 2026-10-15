@@ -25,6 +25,7 @@ public class Card_01_265_ErrataTests
 					put("troop", "1_177");      // Goblin Patrol Troop: [moria] Orc, strength 13, vitality 3, no text
 					put("servant", "3_58");     // Isengard Servant: [isengard] Orc, strength 7, vitality 3; "Regroup: Exert this minion to make the Free Peoples player wound a companion."
 					put("cuguard", "10_81");    // Cirith Ungol Guard: [sauron] Uruk-hai (not an Orc), strength 9, vitality 2, damage +1
+					put("scout", "15_116");     // Scouting Orc: [orc] Orc, strength 8, vitality 2; "Skirmish: Exert this minion to wound a companion it is skirmishing."
 
 					put("sam", "2_114");        // Sam, Proper Poet: companion, strength 3, vitality 4; his texts are used only on purpose or answer Frodo's death
 					put("sword", "1_299");      // Hobbit Sword: strength +2, no other text
@@ -168,6 +169,38 @@ public class Card_01_265_ErrataTests
 		assertInZone(Zone.DISCARD, top1, top2, top3, top4);
 		assertInZone(Zone.DECK, top5);
 		assertEquals(shadowDeck, scn.GetShadowDeckCount());
+		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void ACompanionKilledInTheOrcsSkirmishByAnotherMinionsWoundDoesNotLetItBePlayed() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var butchery = scn.GetShadowCard("butchery");
+		var slayer = scn.GetShadowCard("slayer");
+		var scout = scn.GetShadowCard("scout");
+		var sam = scn.GetFreepsCard("sam");
+		scn.MoveCardsToHand(butchery);
+		scn.MoveCompanionsToTable(sam);
+
+		scn.StartGame();
+		scn.AddWoundsToChar(sam, 3);
+		assertEquals(3, scn.GetWoundsOn(sam));
+		scn.MoveMinionsToTable(slayer, scout);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(sam, slayer);
+		// The Shadow player puts the [orc] Orc in the same skirmish.
+		scn.ShadowAssignToMinions(sam, scout);
+		scn.FreepsResolveSkirmish(sam);
+
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(scout);
+		// The [orc] Orc's own wound kills Sam, before he has lost to the [sauron] Orc: its text did not kill him, nor did
+		// his losing (CR 4.2 Section Three, The Ring's Oppression 1_273; Q-0328: B).
+		assertInZone(Zone.DEAD, sam);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(butchery));
+		assertInHand(butchery);
 		assertEquals(0, scn.GetBurdens());
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
@@ -421,7 +454,7 @@ public class Card_01_265_ErrataTests
 		scn.MoveCardsToHand(butchery);
 		scn.MoveCompanionsToTable(sam);
 		scn.MoveCardsToDeadPile(guard1);
-		scn.MoveCardsToFreepsDiscard("troop", "cuguard", "assassin", "silinde", "servant");
+		scn.MoveCardsToFreepsDiscard("troop", "cuguard", "assassin", "silinde", "servant", "scout");
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(slayer);

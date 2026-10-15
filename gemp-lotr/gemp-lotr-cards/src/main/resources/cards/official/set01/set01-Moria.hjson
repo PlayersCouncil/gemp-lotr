@@ -783,8 +783,11 @@
 			type: Trigger
 			optional: false
 			trigger: {
+				// "Kills": the bearer's own game text, or the companion losing a skirmish the bearer is in (CR 4.2 Section
+				// Three, The Ring's Oppression 1_273, read for Goblin Spear by Q-0328: B); not another minion's wound
 				type: killed
 				filter: companion
+				killer: bearer
 				memorize: killedCompanion
 			}
 			requires: {

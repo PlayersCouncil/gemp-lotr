@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -281,45 +280,6 @@ public class Card_01_273_Tests
 	}
 
 	@Test
-	public void ACompanionKilledInTheOrcsSkirmishByAnotherMinionsWoundAddsOneBurden() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var oppression = scn.GetShadowCard("oppression");
-		var chieftain = scn.GetShadowCard("chieftain");
-		var scout = scn.GetShadowCard("scout");
-		var dwarfguard = scn.GetFreepsCard("dwarfguard");
-		scn.MoveCompanionsToTable(dwarfguard);
-		scn.MoveCardsToHand(oppression);
-
-		scn.StartGame();
-		// Dwarf Guard has one vitality left.
-		scn.AddWoundsToChar(dwarfguard, 1);
-		assertEquals(1, scn.GetWoundsOn(dwarfguard));
-		scn.MoveMinionsToTable(chieftain, scout);
-		assertInHand(oppression);
-
-		scn.SkipToAssignments();
-		scn.FreepsAssignToMinions(dwarfguard, chieftain);
-		// The Shadow player puts the [orc] Orc in the same skirmish.
-		scn.ShadowAssignToMinions(dwarfguard, scout);
-		scn.SetTwilight(3);
-		scn.FreepsResolveSkirmish(dwarfguard);
-		assertEquals(0, scn.GetBurdens());
-
-		scn.FreepsPass();
-		scn.ShadowUseCardAction(scout);
-		// The [orc] Orc's own wound kills Dwarf Guard in the [sauron] Orc's skirmish (Q-0123: A, a kill in its skirmish counts).
-		assertInZone(Zone.DEAD, dwarfguard);
-		assertTrue(scn.ShadowPlayAvailable(oppression));
-		scn.ShadowPlayCard(oppression);
-
-		assertEquals(1, scn.GetBurdens());
-		assertInDiscard(oppression);
-		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
-	}
-
-	@Test
-	@Ignore("Q-0328: CR 4.2 Section Three (filed under this card) says a [Sauron] Orc kills a companion by the game text of its own card or by the companion losing a skirmish involving it, so another minion's wound in its skirmish would not count; Q-0123 A, which this definition keeps, was answered on the footing that no such definition exists")
 	public void ACompanionKilledInTheOrcsSkirmishByAnotherMinionsWoundDoesNotAddABurden() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
