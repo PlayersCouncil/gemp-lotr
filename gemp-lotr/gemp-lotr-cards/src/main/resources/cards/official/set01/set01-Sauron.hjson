@@ -1579,28 +1579,53 @@
 		twilight: 3
 		type: Event
 		timewords: Response
-		effects: {
-			type: responseEvent
-			requires: {
-				type: canSpot
-				filter: culture(sauron),orc,inSkirmish
-			}
-			trigger: {
-				type: killed
-				filter: companion
-			}
-			effect: {
-				type: addBurdens
-				amount: {
-					type: Conditional
-					requires: {
-						type: ringIsOn
+		effects: [
+			{
+				type: responseEvent
+				requires: {
+					type: canSpot
+					filter: culture(sauron),orc,inSkirmish
+				}
+				trigger: {
+					type: killed
+					filter: companion
+				}
+				effect: {
+					type: addBurdens
+					amount: {
+						type: Conditional
+						requires: {
+							type: ringIsOn
+						}
+						true: 3
+						false: 1
 					}
-					true: 3
-					false: 1
 				}
 			}
-		}
+			{
+				type: responseEvent
+				requires: {
+					type: cantSpot
+					filter: culture(sauron),orc,inSkirmish
+				}
+				trigger: {
+					type: TakesWound
+					filter: companion,zone(dead)
+					source: culture(sauron),orc
+				}
+				effect: {
+					type: addBurdens
+					amount: {
+						type: Conditional
+						requires: {
+							type: ringIsOn
+						}
+						true: 3
+						false: 1
+					}
+				}
+			}
+		]
 		gametext: <b>Response:</b> If a [sauron] Orc kills a companion, add 1 burden (or 3 if the Ring-bearer wears The One Ring).
 		lore: "The Ring that hung upon its chain about his neck grew heavy, heavier than a great stone, and his head was dragged downwards."
 		promotext: ""
