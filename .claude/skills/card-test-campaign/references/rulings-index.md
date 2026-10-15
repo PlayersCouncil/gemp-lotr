@@ -625,6 +625,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Takes no more than N wound(s) during each skirmish phase until the regroup phase": no board tells the cap's `until: regroup` from `end(regroup)` (Valiant Man of the West 1_118; dec-b1_118)
 - "Return an unbound companion to hand": no board tells `choose(unbound,companion,canBeReturnedToHand)` from `choose(unbound,companion)` (Gríma, Chief Counselor 5_51; dec-b4_92)
 - "Play a [culture] skirmish event from hand" in a Skirmish ability: no board tells `timeword(skirmish),event` from the culture word alone (Anárion 0_58; dec-b0_58) [F-0186]
+- "Play a companion or ally" on the Free Peoples player's own action: no board tells `choose(or(companion,ally))` from `choose(character)` (Westfarthing 1_326; dec-b1_325)
 - "Spot X to add (N)": no board tells `addTwilight` in `cost` from the same in `effect` (Isengard Ruined 7_331; F-0022)
 - "Skirmish: Exert this minion to make a Nazgûl or [wraith] Orc strength +1" (Morgul Regiment 7_197; Morgul Lackey 7_193 and Morgul Predator 7_196 print it word for word and are built with the same filter, `or(nazgul,and(culture(wraith),orc))`)
 - Sentences set 4 shares outside a twins.py group (dec-b4_353)
