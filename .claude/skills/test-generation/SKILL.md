@@ -189,6 +189,8 @@ Notes: Elrond is himself an ally whose home is site 3, so C2 heals him too.
 - **`R` clauses are everything that is not printed on the card**: a ruling that names it, an interaction from a
   rules example, a rule that differs by format. Their text says where they come from. A rules example that names
   the card is owed even where it hinders (Gwemegil 1_47 in CR 5.0 "hinder"): Q-0237 waives only boards it names none in.
+  It is owed too where a `mechanics/` class already lays it on this very card, and a glossary entry's own example
+  naming this card alone is typed `Rule` (`Ruling` is Section Three; 1_47's `Ruling` is not wrong): 3_35 in CR 4.2 "limit".
 - A clause line is `ID Type [checks] text`. Long text continues on following lines, indented.
 - **Under each clause, one line per test that claims any of its checks**: `checks -> TestMethodName`. A test may
   claim checks of several clauses and a check may be claimed by several tests; the checks on a claim line may
