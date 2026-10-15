@@ -354,3 +354,7 @@ THE COST OF ASSIGNING (set 7's Morgul Orcs; built by engine pass 26, item assign
   and put one ally test in each file but 11_58's, beside the skeleton tests (no ledger yet). Whoever works one of these
   keeps that test (or folds it into his own, the same board and reading), claims it in the ledger, and reads
   shapes.md's F-0380 entry and pitfalls.md "An ally is at his home site, not the fellowship's" first.
+
+- A card that prints no game text and no keyword (Gandalf, Stormcrow 0_64, and about 33 more): its ledger has no
+  clause lines (Sources, Findings, Dropped and Notes only), its stats test header writes `Game Text: (none)`, and
+  lint accepts that. Do not invent a placeholder clause.
