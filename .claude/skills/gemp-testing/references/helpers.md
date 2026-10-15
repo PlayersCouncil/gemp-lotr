@@ -399,6 +399,12 @@ spot 3 Elves, an Elf ally among them: Orophin 1_56) and Phial of Galadriel, Star
 Fleet of Corsair Ships 18_66 (possession, cost 3, support area; its play has a "you may add a [men] token"
 trigger); Man of Bree 11_90 is the [men] minion not offered (`Card_12_073_Tests`).
 
+**A [rohan] mount whose text reaches no test (to make a [rohan] Man "mounted", or a mount on Éomer).** Firefoot,
+Mearas of The Mark 13_126 and Snowmane, Noble Mearas 13_136: unique, cost 2, strength +1 (Snowmane resistance +1 as
+well), "Bearer must be a [rohan] Man". Each play trigger reinforces a [rohan] token and is withheld with none in
+play; 13_126's maneuver trigger and 13_136's skirmish ability need Éomer or Théoden and 2 [rohan] tokens. 13_126 is
+titled Firefoot, so it is never on a board with Firefoot 4_274 (`Card_04_268_Tests`).
+
 ## A culture without its race, a race without its culture, a card against its type
 
 **A culture without its race, or a race without its culture: a printed card, never a modifier (Q-0213: B).** By
@@ -430,6 +436,11 @@ a definition that goes by the one where its text names the other (`race-culture`
 `name(Aragorn)` filter narrowed to [gondor] passes every test. Aragorn signet: 1_365 (optional start-of-turn
 trigger, so put him down after `StartGame()`), 4_364. Gandalf signet: 1_89, 4_109. There is no Boromir outside
 [gondor].
+
+**A Saruman who is no minion (the follower, for a bare "Saruman" crossing type, Q-0306).** Saruman, Servant of
+Sauron 17_38: unique [isengard] follower, cost 1, Aid - (1); a skirmish-win trigger only. A site's "Play Saruman
+from your discard pile; his twilight cost is -2" plays him to the support area for 0 (Orthanc Balcony 4_361,
+`Card_04_361_Tests.PlaysTheSarumanFollowerFromTheDiscardPileAtNoCost`). His Aid is offered as the maneuver phase starts.
 
 **A Hobbit who is not [shire].** Pippin, Trollslayer 103_31; Merry, Master Holbytla 103_85. The only two Free
 Peoples ones. Pippin is [gondor] (to play, spot a [gondor] companion: cheat him in; a skirmish ability used only on
