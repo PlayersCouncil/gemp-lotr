@@ -423,7 +423,8 @@ stands: for a bare race word ("a Man", Q-0058) one valid candidate is the oppone
 ally the paragraph above asks for (all three for "a Hobbit": 4_321), where a card of his of that
 race can be in play at that moment (no minion is in a fellowship phase: then Notes says none can be, and no board
 is made for it) (but a player's own Shadow cards are inactive on his turn, so for a "Shadow condition" chosen by a
-Free Peoples ability they are no candidates at all); for "a minion" or "an Uruk-hai" on a Skirmish event, one valid
+Free Peoples ability they are no candidates at all, as his own Free Peoples cards are none for a Shadow event
+played on the other player's turn: pitfalls, "The other player's Free Peoples cards are not active"); for "a minion" or "an Uruk-hai" on a Skirmish event, one valid
 candidate is not assigned to a skirmish, and so on a Skirmish special ability whose text names no assignment
 (Noble Leaders 7_112: `assignedToSkirmish(minion)` added to its choice survived without one). A Skirmish action's choice that is not limited to the skirmish ("your
 [sauron] minion", Morgul Vale 7_357) also wants one valid candidate IN the skirmish being resolved, or a choice

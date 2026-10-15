@@ -873,7 +873,7 @@ Emissary 12_30, unique [gandalf] Man companion; "At the start of each skirmish i
 burden (or 2 burdens if you can spot another [gandalf] companion)": two at once beside Gandalf 1_72 (Card_03_113_Tests).
 
 **A burden a Shadow card adds: one the Free Peoples player chooses; two at once.** Desperate Defense of the Ring
-1_244; Eye of Barad-dûr 5_96. Defense: [sauron] condition on a companion (cheat it on; to play it exerts a [sauron]
+1_244; Eye of Barad-dûr 5_96. Defense 1_244: [sauron] condition on a companion (cheat it on; to play it exerts a [sauron]
 Orc): each time bearer is assigned to a skirmish the Free Peoples player chooses "Discard 3 cards from hand" or
 "Add a burden"; give him 3 or more cards in hand, or there is no choice to put (F-0310). Eye: [sauron] event, cost
 0, whose Response is played when a Free Peoples player reveals it from the Shadow hand, and adds 2 burdens:
