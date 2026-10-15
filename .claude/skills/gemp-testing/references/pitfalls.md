@@ -605,7 +605,9 @@ the same skirmish (`mechanics/actions/RequiredActionsAnsweringOneTriggerTests`).
 **A candidate a helper's own text refuses shows nothing of the card under test.** A Hobbit already assigned is
 not offered to a second Orc Assassin 1_262's "assign a Hobbit to skirmish this minion" at any site, so reading him
 refused at Caras Galadhon 3_115 showed nothing of the site's bar (dec-b1_286, reviewer). Read the same candidate on
-the control board: if it is refused there too, the reading belongs to the helper; drop it.
+the control board: if it is refused there too, the reading belongs to the helper; drop it. A helper's own "To play" requirement is such a text: Dwarf Guard 1_7 in hand
+with no Dwarf in play is refused by any play ability whatever its filter, so lay what it needs (Grimir 1_17) and read
+`FreepsPlayAvailable` on it before reading it not offered (1_364, dec-b1_357, reviewer: shown by a mutation).
 
 ## Getting to the moment: set-up, the skippers and turns
 

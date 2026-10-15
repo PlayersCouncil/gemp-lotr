@@ -307,7 +307,9 @@ Brandywine 1_303. The Aragorn signet in three cultures ([elven], [gondor], [shir
 Aragorn 1_89 (Gandalf, Friend of the Shirefolk 1_72 has the Frodo signet: he is the Gandalf to spot and the
 candidate not offered). Frodo signet: Legolas 1_50 and Frodo 1_290 himself, whose own fellowship ability exerts
 another companion of that signet to heal him, so another card's fellowship action beside him is read and taken by
-card. No signet: Haldir 1_48 and Lórien Elf 1_53 (each needs an Elf spotted: cheat them in). Théoden signet: its
+card. No signet: Haldir 1_48 and Lórien Elf 1_53 (each needs an Elf spotted: cheat them in), and Dwarf Guard 1_7 ("To
+play, spot a Dwarf": as a not-offered candidate in hand, lay the Dwarf ally Grimir 1_17 and read the Guard
+playable, or its own text refuses it; Card_01_364_Tests). Théoden signet: its
 readers (I Am Here 5_84, Forth Eorlingas! 4_275, No Living Man 8_90) each exert Théoden; the Théoden who can exert
 twice and has not the signet himself is Tall and Proud 8_92 (vitality 3, Aragorn signet; the three of sets 4 and 5
 have vitality 2). Horn of the Mark 9_45 gives it to Merry or Pippin beside his printed signet. `packet.py --find`
@@ -511,7 +513,9 @@ his fellowship ability plays a Gandalf from the discard pile and is used only on
 player's Gandalf and this ally, and all three are offered (CR 4.2 "Shadow phase(s)", Q-0058; `Card_13_079_Tests`,
 and Staff of Saruman 13_81 in `Card_13_080_Tests`). Glamdring 30_29 is a [gandalf] artifact hand weapon
 (strength +2, on Gandalf by name; an optional trigger when he wins a skirmish): it tells `weapon` from
-`possession`, and shares its unique title with Glamdring 1_75, so never both on one board.
+`possession`, and shares its unique title with Glamdring 1_75, so never both on one board. Orcrist 30_17 is the one
+[dwarven] weapon that is no possession (an artifact hand weapon, strength +2, damage +1, on Thorin by name: Thorin,
+Oakenshield 30_19), laid under Q-0312 for a [dwarven] text that says "weapon" (Card_02_001_Tests).
 
 **A Wizard in a dead pile or discard pile who cannot be played (the `C-` of "play a Wizard / Gandalf from your dead
 pile", Q-0062).** Gandalf, Powerful Guide 15_29. Unique [gandalf] Wizard companion, cost 4, strength 8, vitality 4,
