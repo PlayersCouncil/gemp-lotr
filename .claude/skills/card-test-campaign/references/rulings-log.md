@@ -2199,7 +2199,7 @@ once the game state changes". The iterations: "the server should still perform t
 disable transmission/recording of the game events while doing so, only sending the final 1-2 actions with updated
 stats." Tests: "checking the way both decisions fall out, so that it alters whether 1 additional action is added on
 the end or not depending on the decisions made; whether it ends on the detected cycle or one action out of sync."
-*[2026-10-15]*
+ Her later word (answers/2026-10-15-d.md): "I meant imposed, right." / "I actually meant only the ability that was looping; if something like Faramir, Wizard's Pupil with multiple abilities gets hit, only his looping ability should get restricted." / "Rest of the phase: should mean the end of that skirmish phase. The bar should not persist to a second skirmish; each skirmish is its own phase and the engine knows this already." *[2026-10-15]*
 
 **An involuntary loop ends with no effect (F-0536, 2026-10-15).** Frodo, Weary From the Journey 15_144 against Black
 Land Observer 15_101 (and Wandering Hillman 15_94), CR 4.2 "loops": "Good catch, let's fix this and get some
