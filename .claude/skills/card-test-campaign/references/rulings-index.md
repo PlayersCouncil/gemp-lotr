@@ -403,6 +403,8 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Discard ... until you choose to stop" discards one first (Q-0326, 2026-10-15)
 - A site-replacing card of a block lays its own block's site, on any path (Q-0327, 2026-10-15)
 - "A [Sauron] Orc kills a companion" is CR 4.2's definition (Q-0328, 2026-10-15) [Q-0123]
+- The voluntary-loop step: approved in its broad strokes, with her wording (Q-0329, 2026-10-15)
+- An involuntary loop ends with no effect (F-0536, 2026-10-15)
 
 # Settled shapes (shapes.md)
 

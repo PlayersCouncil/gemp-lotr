@@ -2180,3 +2180,27 @@ with a Towers/King site." *[2026-10-15]*
 Oppression 1_273, Goblin Spear 1_182: "B, good find." A kill counts when the game text that kills comes from a
 [sauron] Orc minion card, or the companion loses a skirmish involving a [sauron] Orc; a kill in that skirmish by
 another minion's wound does not. Q-0123's loose reading gives way to the definition. *[2026-10-15]*
+
+**The voluntary-loop step: approved in its broad strokes, with her wording (Q-0329, 2026-10-15).** Engine pass 49's
+loop-proposal (detector keyed on both players repeating the same abilities with the board unchanged; the CR's two
+prompts; the server runs the loop): "I approve of the overall broad strokes here. We're going to want some extensive
+tests to ensure that merely large yet finite repeats do not trigger the loop detection." Her prompt texts, exactly
+(answers/2026-10-15-c.md): to the Free Peoples player "LOOP DETECTED: [See loop handling rules
+here.](https://wiki.lotrtcgpc.net/wiki/Comprehensive_Rules_4.2#loops) / [[Smeagol, Slinker]] and [[Anduin Banks]] can be
+used forever. / Choose how many more times this loop will execute."; to the Shadow player "LOOP DETECTED: [...] / The
+Free Peoples player has decided that the loop between [[Smeagol, Slinker]] and [[Anduin Banks]] will be performed **6**
+more times.", choices "Agree: the loop goes **6** more times, and Free Peoples takes the next action." and "Choose a
+lower number: Shadow will take the next action.", then "Choose a number lower than **6**. The loop between [[Smeagol,
+Slinker]] and [[Anduin Banks]] will be performed that many times, ending so that you will take the next action." After
+the loop: "both cards involved need to have their actions barred from use for the rest of the phase. This should
+involve sending a "loop-banned" flag on the action, similar to the "noeffect" tag, which will draw a dark grey border
+and disallow selection (I'll have another instance handle the front end for this). I would not re-enable the actions
+once the game state changes". The iterations: "the server should still perform that many iterations, but it should
+disable transmission/recording of the game events while doing so, only sending the final 1-2 actions with updated
+stats." Tests: "checking the way both decisions fall out, so that it alters whether 1 additional action is added on
+the end or not depending on the decisions made; whether it ends on the detected cycle or one action out of sync."
+*[2026-10-15]*
+
+**An involuntary loop ends with no effect (F-0536, 2026-10-15).** Frodo, Weary From the Journey 15_144 against Black
+Land Observer 15_101 (and Wandering Hillman 15_94), CR 4.2 "loops": "Good catch, let's fix this and get some
+mechanical tests in place to ensure it works with this minion and the other one mentioned in the CR." *[2026-10-15]*
