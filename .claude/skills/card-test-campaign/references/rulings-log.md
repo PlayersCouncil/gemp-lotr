@@ -2123,3 +2123,60 @@ Q-0265: "So long as the relevant triggers are tested in the mechanics tests, I'd
 it on all relevant cards. A." It is shown once, in a mechanics test (a wound does not set off an exertion trigger).
 *[2026-10-14]*
 
+
+**A forced assignment with one candidate is the forcing player's, for every reader (Q-0316, 2026-10-15).** Engine pass
+45 (F-0513) credits an assignment the Free Peoples player is made to make with no choice to the Shadow player, in the
+log, `assignedToSkirmish`, `assignedAgainst` and ambush alike: "keep". F-0513 is fixed-approved. *[2026-10-15]*
+
+**An unprinted guard on "Play Saruman from your draw deck" stays (Q-0317, 2026-10-15).** Deeping Wall 4_348 (and
+4_332, 4_341, 4_315): the ability is not offered while a Saruman is in play: "A". *[2026-10-15]*
+
+**An ally is at each of his home sites laid on the path (Q-0318, 2026-10-15).** Aldor 4_262 (3T and 6T) is at Westemnet
+Plains as site 3 while the fellowship is at site 6 (engine pass 48, `atSite`): "keep". *[2026-10-15]*
+
+**"If at a <terrain>" with no character named reads the fellowship's site, for now (Q-0319, 2026-10-15).** Release the
+Angry Flood 2_19, Hospitality of the Dwarves 101_1: "Oooh, interesting. That's going to need a ruling. We'll keep
+this for now, but that's another thing to bring to the Rules Council." Kept as built; for the Rules Council.
+*[2026-10-15]*
+
+**A card discarded from hand as a cost is not the card taken back (Q-0320, 2026-10-15).** Final Account 11_31 and 61_31:
+"The precedence of the They Are Coming ruling applies here: discarding cards from hand as a cost to play from the
+discard pile cannot then retrieve those discarded cards. A." So Q-0192 reaches events too: the cost's cards are
+memorized and left out of the take; 61_31's landed test is turned round. *[2026-10-15]*
+
+**Voluntary loops (Q-0321, 2026-10-15).** Sméagol, Slinker 5_29 against Anduin Banks 7_341, CR 4.2 "loops": "As of
+today there is no handling of infinite voluntary loops on Gemp; and in fact this comes up with some regularity, where
+two stubborn players keep playing the same actions ... I would like loop support to be added, I'm just uncertain what
+form it would take. Keep a running tally of top-level actions performed, and intervene when both players choose the
+same non-pass actions 3 times in a row? Attempt to detect when the cost of one action is the effect of the opponent's
+action? If a subagent can investigate and propose how the server-side aspect would work, I'm willing to consider how
+to handle this." She believes involuntary loops are handled (Frodo, Weary From the Journey against Black Land
+Observer). Until a design is approved the alternation stands and 5_29's test reads it; the proposal is an engine-pass
+item that builds nothing. *[2026-10-15]*
+
+**Several burdens or threats moved by one effect are counted one by one (Q-0322, Q-0324, 2026-10-15).** The Shire
+Countryside 3_113 ("each time you remove a burden"): "A"; Tom Bombadil's Hat 0_60 ("each time a Shadow card adds a
+burden or a threat"): "B". Two removed or added at once set the trigger off twice, as built. *[2026-10-15]*
+
+**A Decipher card is built as printed, not narrowed to the skirmish (F-0527, 2026-10-15).** Vengeance 4_208, "Make an
+[isengard] tracker strength +2 for each card borne by the character it is skirmishing": "I think sadly we need to go
+B." `InSkirmish` comes out of the choice; a tracker in no skirmish may be chosen and gains nothing. Q-0095's text
+change stays for PC cards whose text she updates. *[2026-10-15]*
+
+**A defender assigned to two minions counts each minion (Q-0323, 2026-10-15).** Weary 4_212, "Each time the Free Peoples
+player assigns bearer to skirmish an [isengard] tracker, bearer must exert": "I think B." Two [isengard] trackers in
+one answer are two exertions. *[2026-10-15]*
+
+**"Discard ... until you choose to stop" discards one first (Q-0326, 2026-10-15).** Mithril Shaft 1_22: "A". *[2026-10-15]*
+
+**A site-replacing card of a block lays its own block's site, on any path (Q-0327, 2026-10-15).** Paths Seldom Trodden
+1_222 (and 1_233, 2_55; Grimbold 7_233 for the King block): "So long as the player's site in their adventure deck is a
+Fellowship block site, we'll let it work. This means a default FOTR block path (of course), and Multipath if the owner
+has chosen Fellowship sites (which means it could replace a Towers or King site with a Fellowship site). This would
+continue to be barred from replacing a Towers site with a King site or vice versa, or replacing a Fellowship site
+with a Towers/King site." *[2026-10-15]*
+
+**"A [Sauron] Orc kills a companion" is CR 4.2's definition (Q-0328, 2026-10-15).** Orc Butchery 1_265, The Ring's
+Oppression 1_273, Goblin Spear 1_182: "B, good find." A kill counts when the game text that kills comes from a
+[sauron] Orc minion card, or the companion loses a skirmish involving a [sauron] Orc; a kill in that skirmish by
+another minion's wound does not. Q-0123's loose reading gives way to the definition. *[2026-10-15]*

@@ -391,6 +391,18 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "If a <kind> ... is about to be discarded ... to prevent that" saves the one card (Q-0313, 2026-10-14) [Q-0250]
 - "You may X. Then, Y": the "Then" sentence is a separate, required effect (Q-0314, 2026-10-14)
 - A wound is not owed against an "each time X exerts" trigger card by card (Q-0315, 2026-10-14) [Q-0265]
+- A forced assignment with one candidate is the forcing player's, for every reader (Q-0316, 2026-10-15) [F-0513]
+- An unprinted guard on "Play Saruman from your draw deck" stays (Q-0317, 2026-10-15)
+- An ally is at each of his home sites laid on the path (Q-0318, 2026-10-15)
+- "If at a <terrain>" with no character named reads the fellowship's site, for now (Q-0319, 2026-10-15)
+- A card discarded from hand as a cost is not the card taken back (Q-0320, 2026-10-15) [Q-0192]
+- Voluntary loops (Q-0321, 2026-10-15)
+- Several burdens or threats moved by one effect are counted one by one (Q-0322, Q-0324, 2026-10-15)
+- A Decipher card is built as printed, not narrowed to the skirmish (F-0527, 2026-10-15) [Q-0095]
+- A defender assigned to two minions counts each minion (Q-0323, 2026-10-15)
+- "Discard ... until you choose to stop" discards one first (Q-0326, 2026-10-15)
+- A site-replacing card of a block lays its own block's site, on any path (Q-0327, 2026-10-15)
+- "A [Sauron] Orc kills a companion" is CR 4.2's definition (Q-0328, 2026-10-15) [Q-0123]
 
 # Settled shapes (shapes.md)
 
