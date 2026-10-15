@@ -662,7 +662,9 @@ Every tale is on a card of a Free Peoples culture.
 **[shire] tales of each kind, for "a tale" or "a [shire] tale".** Stone Trolls 1_314; There and Back Again 1_317;
 Three Monstrous Trolls 3_114; Red Book of Westmarch 2_113. Stone Trolls: condition any character bears, cost 2, not
 unique, and so the Free Peoples card a MINION can bear, for a text that reaches cards on "the companion he was
-skirmishing" (4_32); to play, spot Bilbo, so it is cheated on; strength +3 only against a Troll or Uruk-hai. There
+skirmishing" (4_32); to play, spot Bilbo, so it is cheated on, or put on a minion legally by Bilbo, Bearer of
+Things Burgled 9_49 ("Regroup: Add a burden to play a [shire] tale"; laid after the move, which his required move
+trigger answers: Card_01_314_Tests); strength +3 only against a Troll or Uruk-hai. There
 and Back Again: unique condition on a Hobbit companion, cost 1; "Maneuver: Discard this condition to make each
 Hobbit companion strength +2", used only on purpose. Three Monstrous Trolls: support-area condition, cost 0; its
 Response needs a Hobbit ally to exert. Red Book: unique POSSESSION in the support area, cost 2; its trigger needs
