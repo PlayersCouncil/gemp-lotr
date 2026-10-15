@@ -121,6 +121,9 @@ public class Card_04_208_Tests
 		assertEquals(9, scn.GetStrength(scout));
 		assertEquals(8, scn.GetStrength(tracker));
 		scn.ShadowPlayCard(vengeance);
+		// Any [isengard] tracker may be chosen: the Uruk Runner, whose skirmish is still to come, is offered too.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(scout, tracker));
+		scn.ShadowChooseCard(scout);
 
 		// The three cards Aragorn bears count; the spear on the Uruk himself, The One Ring on Frodo and the armor
 		// on Gimli do not: 9 + 2 x 3
@@ -143,13 +146,14 @@ public class Card_04_208_Tests
 
 		// Gimli bears one card: 8 + 2
 		scn.ShadowPlayCard(vengeance2);
+		scn.ShadowChooseCard(tracker);
 		assertEquals(10, scn.GetStrength(tracker));
 		assertEquals(9, scn.GetStrength(scout));
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 
 	@Test
-	public void OnlyAnIsengardTrackerInTheSkirmishMayBeChosen() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AnIsengardTrackerInNoSkirmishMayBeChosenAndGainsNothing() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var vengeance = scn.GetShadowCard("vengeance");
@@ -177,18 +181,22 @@ public class Card_04_208_Tests
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 		assertEquals(7, scn.GetStrength(scout));
 		assertEquals(8, scn.GetStrength(tracker));
+		assertEquals(5, scn.GetStrength(pursuer));
 		scn.ShadowPlayCard(vengeance);
 
-		// Two [isengard] trackers in the skirmish; not a [sauron] tracker or an [isengard] Uruk-hai who is no
-		// tracker in it, and not an [isengard] tracker who is in no skirmish.
-		assertTrue(scn.ShadowHasCardChoiceAvailable(scout, tracker));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(orcpursuer, savage, pursuer));
+		// As printed, "an [isengard] tracker": the two in the skirmish and the one in no skirmish; not a [sauron]
+		// tracker or an [isengard] Uruk-hai who is no tracker.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(scout, tracker, pursuer));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(orcpursuer, savage));
 		assertEquals(1, scn.ShadowGetChoiceMin());
-		scn.ShadowChooseCard(tracker);
+		scn.ShadowChooseCard(pursuer);
 
-		// Aragorn bears one card: 8 + 2, and the other tracker is unchanged.
-		assertEquals(10, scn.GetStrength(tracker));
+		// The Pursuer skirmishes nobody, so there are no cards to count: he gains nothing, and the two trackers in
+		// the skirmish are unchanged.
+		assertEquals(5, scn.GetStrength(pursuer));
 		assertEquals(7, scn.GetStrength(scout));
+		assertEquals(8, scn.GetStrength(tracker));
+		assertInDiscard(vengeance);
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 

@@ -3558,7 +3558,7 @@
 			effect: [
 				{
 					type: ChooseActiveCards
-					select: choose(culture(isengard),tracker,InSkirmish)
+					select: choose(culture(isengard),tracker)
 					memorize: chosenTracker
 					text: Choose {Isengard} tracker to pump
 				}
