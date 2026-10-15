@@ -959,7 +959,9 @@ bookends, and that none of the ledger has leaked into the test file. Its warning
 4. Did an expectation come from the definition or from running the game?
 5. Is any helper card doing something the test does not account for? Where a helper's own ability is what a
    test reads as NOT working (a question's reading included), a control shows it working without the card under
-   test (Gwemegil 1_47's +1 against a minion that is no Troop of Uruk-hai, Card_01_143_Tests).
+   test (Gwemegil 1_47's +1 against a minion that is no Troop of Uruk-hai, Card_01_143_Tests). That holds in a
+   `+` test too, where a helper event the card cancels or prevents is read as having no effect: the control is
+   the same board with the response offered and not taken (Relentless 1_194 and Depart Silently 3_31).
 6. For a failure: is the test wrong, or is it a finding? Check the rules before deciding, and ask if unsure.
 7. Does the definition say one thing twice? Where it repeats an effect in two branches (the same blocks under
    an `If`'s true and false), tests written from the text tend to hold one copy only. A mistake that survives in

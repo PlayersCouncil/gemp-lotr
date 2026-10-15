@@ -838,6 +838,8 @@ moved to the top or bottom of a draw deck before `StartGame()` does not stay the
 c)` puts each on top in turn, so the last one named is the top card. A skipper that plays whole turns
 (`SkipToSite`, `SkipToOtherPlayersTurn`) then draws from that deck, so a card cheated into it before the skip is
 likely in hand after it: lay a draw deck the test reads after the skip (City of the Dead 8_118's tests).
+`GetFromTopOf...Deck(n)` and `GetFromBottomOf...Deck(n)` count from 1: 1 is the top (bottom) card itself, 2 the
+one next to it; 0 is out of range (`PileProperties`; Card_01_200_Tests, dec-b1_194).
 
 **Only the table-laying cheats take aliases.** `MoveCompanionsToTable` and `MoveMinionsToTable` take alias strings
 as well as cards; `AttachCardsTo`, `MoveCardsToSupportArea`, `MoveCardsToDiscard` and `MoveCardsToHand` take cards
