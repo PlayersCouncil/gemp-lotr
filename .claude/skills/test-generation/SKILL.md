@@ -777,7 +777,9 @@ it; neither does one with a limit on uses ("limit once per phase", a `limitPerPh
 which is withheld at its limit and has no flag to read; and neither does one whose cap is written inside its
 effect and not on the ability (a `CardPhaseLimit` or `CardAffectedLimitPerPhase` amount, `limitPerCardThisPhase`):
 the game flags some of those at the cap and not others (hjson-reference, "Limits"), and which is the
-mechanic's to show, not the card's. An ability
+mechanic's to show, not the card's. A printed "(limit +N)" with a cost can be either: stage 1, blind to the
+definition, may plan the `R` clause for the flag, and stage 2 keeps it or drops it by the field the definition
+writes (Hrethel 6_95, a `cardPhaseLimit`, has none). An ability
 or optional trigger with no cost that is offered though it would do nothing is not a flag matter: by Q-0034 it
 is withheld, and since Q-0224 the game withholds it wherever its effects can say that they will do nothing
 (shapes, "An optional trigger or ability that costs nothing", has the kinds). The card's test reads the offer

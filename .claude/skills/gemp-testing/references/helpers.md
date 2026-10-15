@@ -759,7 +759,8 @@ and the skirmish is cancelled (`Card_02_040_Tests`).
 Heal a minion skirmishing Hrethel to make Hrethel strength +3 (limit +3)"; to play, spot a [rohan] Man); Uruk
 Shaman 1_152 ("Maneuver: Remove (2) to heal an Uruk-hai"; damage +1). Hrethel is the only printed card by which a
 Free Peoples player heals a minion: the minion candidate for a text that counts or limits "your" heals of "a
-character" (92_35). A Wizard minion who heals, by his own text: Saruman, Agent of the Dark Lord 12_144 (unique
+character" (92_35). His heal is the COST of his ability (`heal` of `choose(minion,inSkirmishAgainst(self))`):
+lay the minion wounded and skirmishing him, as `Card_06_095_Tests` does. A Wizard minion who heals, by his own text: Saruman, Agent of the Dark Lord 12_144 (unique
 [uruk-hai] Wizard, strength 8, vitality 4, lurker; "Each time a companion is killed, you may heal Saruman"), laid
 wounded, when Gandalf, Mithrandir 6_30 ("Each time the fellowship moves, wound Gandalf") with 3 wounds dies at the
 move (`Card_13_080_Tests.ASarumanWhoHealsMakesItAMinion`).
