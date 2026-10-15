@@ -846,7 +846,9 @@ overwhelms: Goblin Patrol Troop (13) kills any companion of strength 6 or less, 
 Guard (4). The companion is then in the dead pile and `GetWoundsOn` reads 0, which looks like a wound that never
 came. For a loss the loser survives keep the winner under double: Dunlending Brigand 4_10 (8) against a
 companion of 5 to 7, Goblin Runner 1_178 (5) against one of 3 or 4, the Troop against Aragorn 1_89 (8).
-The same the other way: a companion of twice a minion's strength kills it whatever its vitality.
+The same the other way: a companion of twice a minion's strength kills it whatever its vitality, and that
+includes a minion the card under test has made weaker (Uruk Savage 1_151 at 5 - 3 against Arwen 1_30, 6: 1_104).
+Where D reads the weakened minion after its skirmish, pick one that stays above half: Goblin Patrol Troop 1_177 at 13 - 3.
 
 **A second assignment or skirmish phase in one turn takes a second move.** To show something renew or end at the
 next phase of the same name: after the skirmishes, `SkipToMovementDecision()`, `FreepsChooseToMove()`, put a
