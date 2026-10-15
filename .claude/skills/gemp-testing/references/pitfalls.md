@@ -637,7 +637,7 @@ with the game over. To test something at site 9, `SkipToSite(8)` and then pass t
 fellowship moves, and the test is in the Shadow phase at site 9. If that Shadow phase ends with no minion in
 play the game is over at once and no regroup decision arrives (a probe: the Shadow player passes, the phase
 reads REGROUP, `GameIsFinished()`, nobody asked): a test there that plays no minion rests on the Shadow player's
-decision or on `GameIsFinished()`, never on `AwaitingFreepsRegroupPhaseActions()` (Card_01_363_Tests). In the PC
+decision or on `GameIsFinished()`, never on `AwaitingFreepsRegroupPhaseActions()` (Card_01_363_Tests). So is a fellowship that comes through its last skirmish at site 9 in the default format: `GameIsFinished()` is true as soon as that skirmish resolves, the minion still in play, and no regroup phase comes (Card_04_360_Tests). In the PC
 formats (`winAtEndOfRegroup: true` in lotrFormats.hjson; `"pc_fotr_block"` as the scenario's format) the
 regroup phase at site 9 IS played (the five-argument constructor with `VirtualTableScenario.PCMovie` as its last argument does it:
 Card_07_363_Tests.GetRegroupAtSite9Scenario), so a regroup text at site 9 is a board in play there (Speak "Friend" and
