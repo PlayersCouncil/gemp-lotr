@@ -479,9 +479,12 @@ play (a search of a deck, a play from a discard pile, a reveal), `FreepsHasCardC
 `FreepsHasCardChoiceNotAvailable(card)` and the `(card, false)` reading of a showing match by blueprint: any
 copy answers for any other, the other player's copy in his own pile or hand included. An invalid candidate
 there, and a card left out of a reveal, needs a blueprint no valid or shown card has (another title, or another
-version of the title); a test that reads where the chosen card went keeps one copy in the pile. The ANSWER need
-not go by blueprint: `ShadowChooseCards(card)` takes that very card out of a discard pile (Mountain-troll
-65_112's tests), and lint's `same-blueprint` warning is only for the `...BPFromSelection` calls. It says nothing
+version of the title); a test that reads where the chosen card went keeps one copy in the pile. The ANSWER goes
+by the kind of decision (`ChooseCardsHoweverAsked` in the rig's Choices.java): where the pile's cards are asked as
+a card selection by id, `ShadowChooseCards(card)` takes that very card (Mountain-troll 65_112's tests); where they
+are shown as arbitrary cards, it answers by blueprint and the FIRST copy listed goes, whichever copy was named
+(Morgul Blade 1_216's `transferFromDiscard`: `ShadowChooseCards(tip2)` moved `tip`; the test names the first).
+lint's `same-blueprint` warning is only for the `...BPFromSelection` calls. It says nothing
 where the twin is never named in the test (it lies in the draw deck), the chosen card was cheated out of the draw
 deck, and the card's text takes nothing from a draw deck.
 It cuts both ways (and `same-blueprint` warns of this too, at a choice the test goes on to answer by blueprint):
