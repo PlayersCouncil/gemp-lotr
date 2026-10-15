@@ -14,7 +14,7 @@ import static com.gempukku.lotro.framework.Assertions.*;
 public class Card_01_233_Tests
 {
 
-	// The Fellowship block format on the Fellowship sites: the one format the ruling on this card lets it work in.
+	// The Fellowship block format on the Fellowship sites.
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
@@ -64,6 +64,31 @@ public class Card_01_233_Tests
 					put("nelya", "1_233");
 				}},
 				VirtualTableScenario.KingSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
+				VirtualTableScenario.Multipath
+		);
+	}
+
+	// The default format, multipath, on the Towers sites, with the nine Fellowship sites put in each player's
+	// adventure deck as well; the test makes the first player's adventure deck Towers sites and the second player's
+	// the Fellowship sites (in multipath all of a player's sites are of one block).
+	protected VirtualTableScenario GetTowersPathScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("nelya", "1_233");
+					put("bagend", "1_319");       // the Fellowship sites of VirtualTableScenario.FellowshipSites
+					put("ettenmoors", "1_331");
+					put("rivendell", "1_341");
+					put("balinstomb", "1_343");
+					put("bridge", "1_349");
+					put("glade", "1_351");
+					put("confluence", "1_353");
+					put("banks", "1_356");
+					put("emynmuil", "1_360");
+				}},
+				VirtualTableScenario.TowersSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
 				VirtualTableScenario.Multipath
@@ -205,7 +230,7 @@ public class Card_01_233_Tests
 	}
 
 	@Test
-	public void OnAShadowsBlockPathTheAbilityReplacesNothing() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NotOfferedOnAShadowsBlockPath() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetShadowsScenario();
 
 		var nelya = scn.GetShadowCard("nelya");
@@ -224,18 +249,16 @@ public class Card_01_233_Tests
 		assertInZone(Zone.ADVENTURE_DECK, shadowSite1);
 		assertEquals(0, scn.GetWoundsOn(nelya));
 
-		// The ability has a cost, so it is offered and paid; no site in the Shadow player's adventure deck has a
-		// number, so none is his site of the same number.
-		scn.ShadowUseCardAction(nelya);
-
-		assertEquals(1, scn.GetWoundsOn(nelya));
+		// The opponent's site 1 is there to spot and Nelya can exert, but the Shadow player's adventure deck holds
+		// Shadows-block sites, none of them a Fellowship-block site: there is no site to lay, and the ability is
+		// not offered (Q-0327).
+		assertFalse(scn.ShadowActionAvailable(nelya));
 		assertSame(freepsSite1, scn.GetSite(1));
 		assertInZone(Zone.ADVENTURE_DECK, shadowSite1);
-		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
-	public void OnAnotherBlocksNumberedPathTheAbilityReplacesNothing() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NotOfferedWhereHisSiteOfThatNumberIsAKingSite() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetKingScenario();
 
 		var nelya = scn.GetShadowCard("nelya");
@@ -253,13 +276,48 @@ public class Card_01_233_Tests
 		assertInZone(Zone.ADVENTURE_DECK, shadowSite1);
 		assertEquals(0, scn.GetWoundsOn(nelya));
 
-		// "Your site of the same number" on a set 1 card is a Fellowship-block site: the Shadow player's King-block
-		// site 1 is not one, so nothing is replaced, though the cost is paid.
-		scn.ShadowUseCardAction(nelya);
-
-		assertEquals(1, scn.GetWoundsOn(nelya));
+		// The opponent's site 1 is there to spot and Nelya can exert, and the Shadow player has a site 1, but of
+		// the King block: there is no Fellowship-block site to lay, and the ability is not offered (Q-0327).
+		assertFalse(scn.ShadowActionAvailable(nelya));
 		assertSame(freepsSite1, scn.GetSite(1));
 		assertInZone(Zone.ADVENTURE_DECK, shadowSite1);
+	}
+
+	@Test
+	public void InTheMultipathFormatItReplacesATowersSiteWithHisFellowshipSite() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetTowersPathScenario();
+
+		var nelya = scn.GetShadowCard("nelya");
+		var towersSite1 = scn.GetFreepsSite("site1");
+		var bagEnd = scn.GetShadowCard("bagend");
+		var ettenmoors = scn.GetShadowCard("ettenmoors");
+
+		// Each adventure deck holds two site 1s: the first player starts on his Towers site 1.
+		scn.StartGame(towersSite1);
+		scn.SetFreepsAdventureDeck(scn.GetFreepsSite("site2"), scn.GetFreepsSite("site3"), scn.GetFreepsSite("site4"),
+				scn.GetFreepsSite("site5"), scn.GetFreepsSite("site6"), scn.GetFreepsSite("site7"), scn.GetFreepsSite("site8"),
+				scn.GetFreepsSite("site9"));
+		scn.SetShadowAdventureDeck(bagEnd, ettenmoors, scn.GetShadowCard("rivendell"), scn.GetShadowCard("balinstomb"),
+				scn.GetShadowCard("bridge"), scn.GetShadowCard("glade"), scn.GetShadowCard("confluence"),
+				scn.GetShadowCard("banks"), scn.GetShadowCard("emynmuil"));
+		scn.MoveMinionsToTable(nelya);
+		// The move lays the Shadow player's Fellowship-block site 2: the first player's Towers site 1 is the one
+		// opponent's site.
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertSame(towersSite1, scn.GetSite(1));
+		assertSame(ettenmoors, scn.GetSite(2));
+		assertTrue(scn.ShadowActionAvailable(nelya));
+
+		scn.ShadowUseCardAction(nelya);
+
+		// His Fellowship-block site 1 takes the place of the Towers-block site (Q-0327).
+		assertEquals(1, scn.GetWoundsOn(nelya));
+		assertSame(bagEnd, scn.GetSite(1));
+		assertInZone(Zone.ADVENTURE_PATH, bagEnd);
+		assertInZone(Zone.ADVENTURE_DECK, towersSite1);
+		assertSame(ettenmoors, scn.GetSite(2));
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 

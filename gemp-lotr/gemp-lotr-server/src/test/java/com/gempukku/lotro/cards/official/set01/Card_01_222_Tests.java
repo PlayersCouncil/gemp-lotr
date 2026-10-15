@@ -62,6 +62,45 @@ public class Card_01_222_Tests
 		);
 	}
 
+	// The default format, multipath, on the King sites, with the nine Fellowship sites put in each player's adventure
+	// deck as well; each test makes the first player's adventure deck King sites and the second player's the
+	// Fellowship sites (in multipath all of a player's sites are of one block).
+	protected VirtualTableScenario GetKingPathScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("paths", "1_222");
+					put("bagend", "1_319");       // the Fellowship sites of VirtualTableScenario.FellowshipSites
+					put("ettenmoors", "1_331");
+					put("rivendell", "1_341");
+					put("balinstomb", "1_343");
+					put("bridge", "1_349");
+					put("glade", "1_351");
+					put("confluence", "1_353");
+					put("banks", "1_356");
+					put("emynmuil", "1_360");
+				}},
+				VirtualTableScenario.KingSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
+				VirtualTableScenario.Multipath
+		);
+	}
+
+	// The default format, multipath, on the Towers sites: both players' sites are Towers sites.
+	protected VirtualTableScenario GetTowersScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("paths", "1_222");
+				}},
+				VirtualTableScenario.TowersSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
+				VirtualTableScenario.Multipath
+		);
+	}
+
 	// A Shadows-block path, whose sites have no number until they are played.
 	protected VirtualTableScenario GetShadowsScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
@@ -208,7 +247,7 @@ public class Card_01_222_Tests
 	}
 
 	@Test
-	public void AtHisOwnSiteTheTwilightIsRemovedAndNothingIsReplaced() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NotOfferedAtHisOwnSite() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var paths = scn.GetShadowCard("paths");
@@ -228,15 +267,12 @@ public class Card_01_222_Tests
 		// 10 + 2 for Ettenmoors + 1 companion
 		assertEquals(13, scn.GetTwilight());
 
-		// The ability has a cost, and is offered; his version of the site is already there, and the other
-		// player's is not his.
-		assertTrue(scn.ShadowActionAvailable(paths));
-		scn.ShadowUseCardAction(paths);
-
-		assertEquals(10, scn.GetTwilight());
+		// His version of the site is there already, and his adventure deck holds no other site 2 (the other
+		// player's is not his): there is no site to lay, and the ability is not offered (Q-0327).
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(paths));
 		assertSame(shadowSite2, scn.GetSite(2));
 		assertInZone(Zone.ADVENTURE_DECK, freepsSite2);
-		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
@@ -299,7 +335,7 @@ public class Card_01_222_Tests
 	}
 
 	@Test
-	public void OnAShadowsBlockPathNothingIsReplaced() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NotOfferedOnAShadowsBlockPath() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetShadowsScenario();
 
 		var paths = scn.GetShadowCard("paths");
@@ -321,15 +357,12 @@ public class Card_01_222_Tests
 		// 10 + 0 for Abandoned Mine Shaft + 1 companion
 		assertEquals(11, scn.GetTwilight());
 
-		// The ability has a cost, and is offered; the Shadow player's adventure deck holds no site of the same
-		// number (his copy of Abandoned Mine Shaft has none until it is played), and nothing is replaced.
-		assertTrue(scn.ShadowActionAvailable(paths));
-		scn.ShadowUseCardAction(paths);
-
-		assertEquals(8, scn.GetTwilight());
+		// The Shadow player's adventure deck holds Shadows-block sites, none of them a Fellowship-block site: there
+		// is no site to lay, and the ability is not offered (Q-0327).
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(paths));
 		assertSame(freepsSite2, scn.GetCurrentSite());
 		assertInZone(Zone.ADVENTURE_DECK, shadowSite2);
-		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
@@ -362,5 +395,72 @@ public class Card_01_222_Tests
 		assertSame(shadowSite2, scn.GetCurrentSite());
 		assertInZone(Zone.ADVENTURE_DECK, trollshaw);
 		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void InTheMultipathFormatItReplacesAKingSiteWithHisFellowshipSite() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetKingPathScenario();
+
+		var paths = scn.GetShadowCard("paths");
+		var kingSite2 = scn.GetFreepsSite("site2");
+		var ettenmoors = scn.GetShadowCard("ettenmoors");
+
+		// Each adventure deck holds two site 1s: the first player starts on his King site 1.
+		scn.StartGame(scn.GetFreepsSite("site1"));
+
+		// The first player's sites are King sites, and he lays his own site 2 himself (as a card that plays the
+		// next site would); the second player's are the Fellowship sites.
+		scn.SetFreepsAdventureDeck(scn.GetFreepsSite("site3"), scn.GetFreepsSite("site4"), scn.GetFreepsSite("site5"),
+				scn.GetFreepsSite("site6"), scn.GetFreepsSite("site7"), scn.GetFreepsSite("site8"), scn.GetFreepsSite("site9"));
+		scn.SetShadowAdventureDeck(scn.GetShadowCard("bagend"), ettenmoors, scn.GetShadowCard("rivendell"),
+				scn.GetShadowCard("balinstomb"), scn.GetShadowCard("bridge"), scn.GetShadowCard("glade"),
+				scn.GetShadowCard("confluence"), scn.GetShadowCard("banks"), scn.GetShadowCard("emynmuil"));
+		scn.MoveCardToAdventurePath(kingSite2);
+		scn.MoveCardsToSupportArea(paths);
+		scn.SetTwilight(10);
+		assertSame(kingSite2, scn.GetSite(2));
+
+		scn.FreepsPass();
+
+		assertSame(kingSite2, scn.GetCurrentSite());
+		int twilight = scn.GetTwilight();
+		assertTrue(scn.ShadowActionAvailable(paths));
+		scn.ShadowUseCardAction(paths);
+
+		// His Fellowship-block site 2 takes the place of the King-block site the fellowship is at (Q-0327).
+		assertEquals(twilight - 3, scn.GetTwilight());
+		assertSame(ettenmoors, scn.GetCurrentSite());
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertInZone(Zone.ADVENTURE_DECK, kingSite2);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void NotOfferedWhereHisSiteOfThatNumberIsATowersSite() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetTowersScenario();
+
+		var paths = scn.GetShadowCard("paths");
+		var freepsSite2 = scn.GetFreepsSite("site2");
+		var shadowSite2 = scn.GetShadowSite("site2");
+
+		scn.StartGame();
+
+		// The first player lays his own site 2 himself; the second player's site 2, Eastfold 4_331, is in his
+		// adventure deck.
+		scn.MoveCardToAdventurePath(freepsSite2);
+		scn.MoveCardsToSupportArea(paths);
+		scn.SetTwilight(10);
+		assertSame(freepsSite2, scn.GetSite(2));
+		assertInZone(Zone.ADVENTURE_DECK, shadowSite2);
+
+		scn.FreepsPass();
+
+		// He has a site 2, but of the Towers block: there is no Fellowship-block site to lay, and the ability
+		// is not offered (Q-0327).
+		assertSame(freepsSite2, scn.GetCurrentSite());
+		assertTrue(scn.GetTwilight() >= 3);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(paths));
+		assertInZone(Zone.ADVENTURE_DECK, shadowSite2);
 	}
 }

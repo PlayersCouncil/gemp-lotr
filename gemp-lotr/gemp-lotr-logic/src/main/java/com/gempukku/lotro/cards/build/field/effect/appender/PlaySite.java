@@ -8,8 +8,6 @@ import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResol
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.common.Filterable;
 import com.gempukku.lotro.common.SitesBlock;
-import com.gempukku.lotro.filters.Filter;
-import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
@@ -40,26 +38,7 @@ public class PlaySite implements EffectAppenderProducer {
                 final Filterable filterable = filterableSource.getFilterable(actionContext);
                 final String playerId = playerSource.getPlayer(actionContext);
 
-                if (siteNumber > 9 || siteNumber < 1)
-                    return false;
-
-                if (!game.getGameState().usesUnorderedSites(playerId)) {
-                    Filter printedSiteNumber = new Filter() {
-                        @Override
-                        public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
-                            return physicalCard.getBlueprint().getSiteNumber() == siteNumber;
-                        }
-                    };
-                    if (block != null)
-                        return Filters.acceptsAny(game, game.getGameState().getAdventureDeck(playerId), Filters.and(filterable, printedSiteNumber, Filters.siteBlock(block)));
-                    else
-                        return Filters.acceptsAny(game, game.getGameState().getAdventureDeck(playerId), Filters.and(filterable, printedSiteNumber));
-                } else {
-                    if (block != null)
-                        return Filters.acceptsAny(game, game.getGameState().getAdventureDeck(playerId), Filters.and(filterable, Filters.siteBlock(block)));
-                    else
-                        return Filters.acceptsAny(game, game.getGameState().getAdventureDeck(playerId), filterable);
-                }
+                return !PlaySiteEffect.findSitesToPlay(game, playerId, block, siteNumber, filterable).isEmpty();
             }
 
             @Override

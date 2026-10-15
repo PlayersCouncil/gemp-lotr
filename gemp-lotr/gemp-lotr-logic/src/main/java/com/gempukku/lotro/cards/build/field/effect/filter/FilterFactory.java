@@ -272,6 +272,11 @@ public class FilterFactory {
                     final FilterableSource siteFilterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
                     return (actionContext) -> Filters.atSite(siteFilterableSource.getFilterable(actionContext));
                 });
+        parameterFilters.put("samenumberinyouradventuredeck",
+                (parameter, environment) -> {
+                    final FilterableSource deckSiteFilterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
+                    return (actionContext) -> Filters.sameNumberInAdventureDeck(actionContext.getPerformingPlayer(), deckSiteFilterableSource.getFilterable(actionContext));
+                });
         parameterFilters.put("allyinregion",
                 (parameter, environment) -> {
                     final String[] parameterSplit = parameter.split(",");

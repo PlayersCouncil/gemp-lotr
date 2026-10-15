@@ -10,6 +10,7 @@ import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.game.state.Skirmish;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.PlayUtils;
+import com.gempukku.lotro.logic.effects.PlaySiteEffect;
 import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import com.gempukku.lotro.logic.timing.RuleUtils;
 
@@ -636,6 +637,25 @@ public class Filters {
             }
             final PhysicalCard currentSite = game.getGameState().getCurrentSite();
             return currentSite != null && accepts(game, currentSite, siteFilter);
+        };
+    }
+
+    /**
+     * A site on the adventure path of whose number the given player's adventure deck holds a site the given filter
+     * accepts: the site a card that replaces it "with your site of the same number" would lay
+     * (PlaySiteEffect.findSitesToPlay, asked as the definition's playSite asks it, the block in the filter).  The
+     * definition word sameNumberInYourAdventureDeck(...), the player the one whose action it is.  Paths Seldom
+     * Trodden 1_222, Úlairë Nelya 1_233 and Dark Places 2_55 lay only their own block's site, on any path, and are
+     * not offered where there is none to lay (Q-0327, the shape of F-0379).  What would bar the replacing at
+     * resolution ("cannot be replaced", a bar on playing sites) is not asked here.  A site with no number (one
+     * not laid) is not accepted; a controlled site keeps its number and is.
+     */
+    public static Filter sameNumberInAdventureDeck(final String playerId, final Filterable deckSiteFilter) {
+        return (game, physicalCard) -> {
+            final Integer siteNumber = physicalCard.getSiteNumber();
+            if (physicalCard.getBlueprint().getCardType() != CardType.SITE || siteNumber == null)
+                return false;
+            return !PlaySiteEffect.findSitesToPlay(game, playerId, null, siteNumber, deckSiteFilter).isEmpty();
         };
     }
 

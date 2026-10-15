@@ -575,7 +575,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - The CR 4.2 "response" example (Isildur wearing Answer To All Riddles 4_1, Sapling of the White Tree 9_35) is shown in the Ring's file
 - The CR 4.2 "modifier" example (Shelob, Her Ladyship 10_23 with Sent Back 9_27) is shown in Shelob's file, and the "effect" and "preventing effects" example (Morgul Destroyer with the Sapling 9_35) in Morgul Destroyer's
 - The CR 4.2 "modifier" example on Orc Ambusher 1_261 ("It does not specifically name itself, so this does not apply to Orc Ambusher when it is played") is owed as a `Rule` clause by every card that prints its sentence
-- "This card can replace sites only in the Fellowship block format" (CR 4.2 Section Three: Paths Seldom Trodden 1_222, Úlairë Nelya 1_233, Dark Places 2_55; Grimbold 7_233 with "King block") is open as Q-0327
+- "This card can replace sites only in the Fellowship block format" (CR 4.2 Section Three: Paths Seldom Trodden 1_222, Úlairë Nelya 1_233, Dark Places 2_55; Grimbold 7_233 with "King block") lays the player's site of the card's own block, on any path, and is not offered where he has none to lay (Q-0327, Ketura 2026-10-15; engine pass 49)
 
 ## Reveals, draw decks and shuffles
 
