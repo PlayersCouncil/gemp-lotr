@@ -32,6 +32,12 @@ a stub has no behavioural test to account for, and the erratum's file is still w
   PLAYS from the discard pile, the original's play is itself a cost (Q-0062) and its ability is not offered with
   nothing there to play (68_12's WithNoElvenConditionInTheDiscardPileTheTokenIsRemovedForNothing became 18_12's
   WithNoElvenConditionInTheDiscardPileTheRegroupAbilityIsNotOffered).
+  A reading Q-0279: E2 now forbids (the pool after a card the event plays from a pile, a plain cost) is not
+  copied, though an erratum's file may still have it (landed before E2: `helper-pool` is left off landed files);
+  the claim it carried goes to another test of the clause that shows it some other way, or the
+  check gets a `no` line saying why none can: 4_289's R2 + ("You must still pay any costs and meet
+  requirements") moved from the pool after each play onto the played possession's own bearer requirement (Frodo
+  not offered as the Sword's bearer).
   Check each copied board against the original's own numbers as well as its words (burdens, resistance, vitality:
   59_31's fierce-round board corrupts or kills 9_31's Boromir, of 3 burdens and resistance 6), and where the
   erratum's test gives a keyword or a number by hand (fierce, a strength), take the printed helper `helpers.md` names
@@ -40,7 +46,9 @@ a stub has no behavioural test to account for, and the erratum's file is still w
   An erratum's board is settled only for the zones the ERRATUM's text reads: where the original's text reads
   another zone (a draw deck, a discard pile), lay that zone yourself; the erratum's scenario may leave it empty.
   Where the erratum's ledger says on its Sources line that it is a new text sharing no sentence with the
-  original (59_46 for 9_46), nothing carries over and its test file need not be read. Where the texts differ and
+  original (59_46 for 9_46), no clause, check or board carries over; its test file is still worth opening for how
+  it lays a table the original needs too (a site put on the path, `MoveCardToAdventurePath` of the Shadow player's
+  copy: 54_355 for 4_355) and for its helpers, which are chosen afresh by their definitions as any helper is. Where the texts differ and
   the Sources line does not say so (51_361 counts companions where 1_361 counts minions), compare them yourself:
   a sentence the two share carries its boards and helpers over; one of the erratum's own carries no clause, though
   its board may serve as a start.

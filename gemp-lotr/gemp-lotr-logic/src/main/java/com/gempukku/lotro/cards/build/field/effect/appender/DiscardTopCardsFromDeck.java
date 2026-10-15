@@ -38,10 +38,13 @@ public class DiscardTopCardsFromDeck implements EffectAppenderProducer {
                 final String deckId = playerSource.getPlayer(actionContext);
                 final int count = countSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
 
-                // Don't check if can discard top cards, since it's a cost
+                // A bar on discarding from the top of a deck protects the deck's owner (Frodo, Courteous Halfling
+                // 4_301: "... from the top of your draw deck"), so it is asked of deckId, as the forecast and
+                // DiscardTopCardFromDeckEffect ask it, not of the performing player: a Shadow card's cost on the Free
+                // Peoples deck under the bar cannot be paid (Corsair Ruffian 10_39; engine pass 48).
                 final LotroGame game = actionContext.getGame();
                 return game.getGameState().getDeck(deckId).size() >= count
-                        && (!forced || game.getModifiersQuerying().canDiscardCardsFromTopOfDeck(game, actionContext.getPerformingPlayer(), actionContext.getSource()));
+                        && (!forced || game.getModifiersQuerying().canDiscardCardsFromTopOfDeck(game, deckId, actionContext.getSource()));
             }
 
             @Override

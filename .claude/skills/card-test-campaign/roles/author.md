@@ -95,7 +95,11 @@ card are. A ledger is judged apart from its test file: one that names a batch ca
 tell a board in its Notes from a description, and the test file beside it may still be open. Another card that
 shares a title with one of yours (a second Denethor) may be read as a helper like any other, and a landed card
 with the SAME text as yours, or a sentence of it, is the quickest source of boards and helpers (`packet.py --find`
-on the first sentence of the game text: Uruk Veteran 4_201 is Uruk Trooper 4_199 word for word): its test file and
+on EACH sentence of the game text, the card's own name in it made a wildcard, and not only on the first, which
+may be a keyword: Uruk Veteran 4_201 is Uruk Trooper 4_199 word for word, and `twins.py` groups whole texts only, so
+Uruk Follower 4_186 and Uruk Pursuer 4_190 sharing "Unbound Hobbits may not be discarded" with Uruk Hunter 4_188, or
+Guma 4_277, Hlafwine 4_281 and Weland 4_295 sharing "Discard <name> if an opponent controls his home site" with Léod
+4_285, are found by `--find` alone): its test file and
 ledger are open whatever they name (Merry 17_107's ledger names Pippin 17_109, whose first sentence it prints; the
 twins rule of notes-decipher.txt), and only its definition is shut (`--defs` says so).
 
@@ -105,7 +109,10 @@ that card: its plan is saved first. (`--with-test` prints the blind packet and t
 of it.) A long test file overruns the output limit and the middle of it is cut out of the print: where the print
 says so, read the test file itself for the rest. An entry the packet heads "A ruling on another card names this
 card" is that card's ruling: where its ledger already holds it as an `R` clause (5_60's `R1`, for 8_3), cite it
-under `Sources:` and do not test it again.
+under `Sources:` and do not test it again. The reverse is not waived: a Section Three ruling on THIS card that names
+another card is this card's `Ruling` clause and its own test, though the other card's file already lays the same
+board as a check of its own; name that file in Notes (Fortress Never Fallen 4_276 beside Siege Engine 5_60; the
+Standard's `Interaction` row).
 
 No test reads a printed cost or bonus doing its ordinary work (Q-0279: E2; the Standard's "No reading of a printed
 cost or bonus"): not the pool across a plain play, not a bearer's strength, vitality or resistance for a borne card's
@@ -155,7 +162,10 @@ parked (6_63's kill test, written for F-0444, passed).
 Every step you take re-reads everything you have read so far, so steps are what cost. Read several files in one
 step where you can (the packets of all your cards, the helper cards you mean to use), and do not look at the same
 thing twice. What you write is what takes time: write each file once and put it right with `Edit` (or `sed`),
-never by writing the whole file out again, and keep the plan to one line per check.
+never by writing the whole file out again, and keep the plan to one line per check. For the second card of a twin
+group (`twins.py`), making its test file and ledger from the first's by a substitution of names, ids and numbers
+(`sed` into the new file) is writing it once; its definition is then read as any card's, and whatever differs is
+put right by `Edit` (4_193 from 4_181).
 
 Choose helper cards by reading their definitions (`packet.py <helper id>`), never by name. Reading a helper
 card's definition is fine at any stage; it is only the card under test whose implementation stays shut in stage 1.

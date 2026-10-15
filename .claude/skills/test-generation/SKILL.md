@@ -344,7 +344,10 @@ card no printed card with that keyword resembles (an Orc made a Southron, an all
 every printed card with the keyword is of one culture, race or type, that word cannot be told from the keyword,
 which is a line in Notes. So is a type word beside something only that type has (a signet, a timeword), or that the rest of its phrase keeps to that type ("a minion a Hobbit companion is skirmishing": only a minion skirmishes a companion, 4_299). Where no
 board can isolate an excluded thing ("your" tale, when the opponent's is inactive anyway), put the nearest
-candidate down and say so in Notes.
+candidate down and say so in Notes. A Notes line that says no board tells two readings apart says, in words, how the
+other reading was tried: the `mutate.py` run (what was changed, and that it SURVIVED) or the board laid and what it
+showed, so that the reviewer need not try it again to know the line is true (4_361's `cantSpot name(Saruman)`,
+redundant beside the uniqueness rule; dec-b4_274).
 
 **Cards picked out by title.** Where the text picks cards out by title and a type word ("these characters:
 Celeborn, Elrond, Galadriel, Saruman"), an invalid candidate is a card of that title and another type (a follower

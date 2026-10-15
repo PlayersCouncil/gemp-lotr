@@ -1114,9 +1114,16 @@ def lint_file(path: Path):
             # is a candidate, or the Notes say why none can stand (9_8's "Bearer must be a Wizard").
             if cid.startswith("C") and (ctype == "PlayOn" or "F" in codes) and card is not None:
                 races = "|".join(race_word(r) for r in races_on_both_sides())
-                bare = re.search(r"(?<!your )(?<!\] )(?<!Peoples )(?<!Shadow )\b(?:an?|each|every|any|another)\s+"
+                # "Skirmishing a <race>" on a Free Peoples card (Sword of Gondor 4_134, "while skirmishing a Man or
+                # ..."): a Free Peoples character skirmishes only minions, and a minion only the Free Peoples
+                # player's own characters, so no card of the other side can be the one skirmished (dec-b6_97).
+                fp_card = (card.field("side", "") or "").strip().lower() == "free peoples"
+                bare = next((m for m in re.finditer(
+                                 r"(?<!your )(?<!\] )(?<!Peoples )(?<!Shadow )\b(?:an?|each|every|any|another)\s+"
                                  r"(?:exhausted\s+|wounded\s+)?(%s)\b(?!\s+(?:companion|ally|allies|minion|follower)s?\b)" % races,
-                                 plain) if races else None
+                                 plain)
+                             if not (fp_card and re.search(r"\bskirmishing\s+(?:(?:an?\s+)?(?:\w+\s+)?or\s+)?$",
+                                                           plain[:m.start()], re.I))), None) if races else None
                 if bare and not re.search(r"Q-0058|opponent|other player|either side|both sides", notes_text, re.I):
                     add("warning", "race-side", None, "%s: \"%s\" names no side (Q-0058), and cards of both sides are %s: the "
                         "opponent's card of that race is a candidate (an F test, or a Notes line saying why no board can "
@@ -1541,7 +1548,13 @@ def lint_file(path: Path):
     # "Mounted" is bearing a mount (CR 4.2 "mounted").  A definition that reads it as bearing any possession
     # (`hasAttached(possession)`) passes every test whose characters bear mounts or nothing (White Rocks 4_346,
     # dec-b4_336): the nearest invalid candidate is a character bearing a possession that is no mount.
-    if card is not None and re.search(r"\bmounted\b", g.plain_text(card.field("gametext", "") or ""), re.I):
+    # A possession whose own text says "if (or while) bearer is mounted" (Rider's Spear 4_288) is itself the
+    # possession that is no mount, borne on every board its text is read on, so the warning stands for nothing there
+    # (dec-b4_288).
+    own_bearer = card is not None and (card.field("type", "") or "").strip().lower() == "possession" \
+        and "mount" not in item_classes(card) \
+        and re.search(r"\b(?:if|while) bearer is mounted\b", g.plain_text(card.field("gametext", "") or ""), re.I)
+    if card is not None and not own_bearer and re.search(r"\bmounted\b", g.plain_text(card.field("gametext", "") or ""), re.I):
         laid = set(re.findall(r'"(\d+_\d+)"', raw)) - {card_id}
         other_items = [x for x in laid if x in g.card_index()
                        and (g.card_index()[x].field("type", "") or "").strip().lower() in ("possession", "artifact")
@@ -1550,6 +1563,36 @@ def lint_file(path: Path):
             add("warning", "mounted", None, "the text says \"mounted\", and the file lays no possession or artifact that is "
                 "no mount: the nearest invalid candidate is a character bearing one (a hand weapon, armor), or a "
                 "definition that reads \"mounted\" as bearing any possession passes every test (White Rocks 4_346)")
+
+    # A Restriction whose doers are a bare side word ("Shadow cards may not discard ...", "cannot be removed by Free
+    # Peoples cards") owes, among its F candidates, a character, an item and a card that is neither, all of that side
+    # (the Standard's Restriction row, 10_47); Frodo 4_301 had no item until review, and `side(shadow),not(possession)`
+    # passed every test (dec-b4_301).  Judged on the cards the file lays, the card itself left out.
+    if card is not None and clauses:
+        laid_cards = [g.card_index()[x] for x in set(re.findall(r'"(\d+_\d+)"', raw)) - {card_id} if x in g.card_index()]
+        for cid, (ctype, codes, text, line, waived) in clauses.items():
+            plain_c = re.sub(r"\s+", " ", text)
+            m = re.search(r"\b(Shadow|Free Peoples) cards\b", plain_c)
+            if not (cid.startswith("C") and ctype == "Restriction" and "F" in codes and m):
+                continue
+            side = m.group(1).lower()
+            kinds = {"character": ("companion", "ally", "minion"), "item": ("possession", "artifact")}
+            have = set()
+            for c in laid_cards:
+                if (c.field("side", "") or "").strip().lower() != side:
+                    continue
+                t = (c.field("type", "") or "").strip().lower()
+                have.add(next((k for k, ts in kinds.items() if t in ts), "neither"))
+            lacking = [k for k in ("character", "item", "neither") if k not in have]
+            # Answered in Notes where no printed card of a kind can do the act (as 4_301's "bare side word" line).
+            if lacking and not re.search(r"bare side word|10_47", notes_text, re.I):
+                add("warning", "side-doers", None, "%s: \"%s cards\" is a bare side word, so the doers owed are a character, "
+                    "an item (a possession or an artifact) and a card that is neither, each of that side (the Standard's "
+                    "Restriction row, 10_47), and the file lays no %s card that is %s (or a Notes line naming the bare side word "
+                    "says why none can stand)" % (
+                        cid, m.group(1), m.group(1),
+                        " or ".join({"character": "a character", "item": "a possession or artifact",
+                                     "neither": "neither"}[k] for k in lacking)))
 
     if card is not None:
         import cardinfo

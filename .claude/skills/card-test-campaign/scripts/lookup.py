@@ -21,6 +21,10 @@ and where that finds nothing either, each word of the terms (of three letters or
 looked for on its own, in any order: "from your discard pile into hand" then finds "take a <card> into hand from
 your discard pile".
 
+A card id also matches an entry that names a mechanics/ class built on the card (the class's alias map or
+Ring-bearer has it, and no more than five classes have it: the classes --skip keeps shut), and the classes are named
+on a line before the entries: lookup.py 4_299 finds what names ABarOnRemovingBurdensTests.  Not with --skip.
+
 A number looked up by itself (no other term, no --in) is also read in the campaign's registers, after the entries:
 a finding's row of findings.tsv (its status, what was found and its outcome, which may leave something open that
 no ruling says), and a question's entry in questions.md: whole while it is open, and Ketura's answer once it has one.
@@ -446,6 +450,20 @@ def main(argv):
             terms.append(argv[i])
             i += 1
     pats = [matcher(t) for t in terms]
+    # A card id also finds the entries that name a mechanics/ class built on the card (the classes stage 1 keeps
+    # shut: pitfalls and shapes name ABarOnRemovingBurdensTests, built on 4_299, and never the id; dec-b4_282).
+    # Stage 2 only: with --skip the id is looked up as written.
+    built_on = {}
+    for p, t in zip(pats, terms):
+        if p.card_id and not skipped:
+            built_on[t] = sorted(classes_built_on([t]))
+            if built_on[t]:
+                p.pattern = re.compile(p.pattern.pattern + "".join(r"|(?<![\w])%s(?![\w])" % re.escape(n)
+                                                                    for n in built_on[t]))
+    built_on = {t: c for t, c in built_on.items() if c}
+    if built_on:
+        print("(a card id also matches the mechanics/ classes built on it: %s)\n"
+              % "; ".join("%s: %s" % (t, ", ".join(c)) for t, c in built_on.items()))
     hits = []
     found = [(key, heading, text) for key in where for heading, text in entries(FILES[key])]
     hits = [e for e in found if all(p.search(e[2]) for p in pats)]

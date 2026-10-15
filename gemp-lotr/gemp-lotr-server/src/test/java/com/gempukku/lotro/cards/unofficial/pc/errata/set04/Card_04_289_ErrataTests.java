@@ -93,7 +93,7 @@ public class Card_04_289_ErrataTests
 	}
 
 	@Test
-	public void WithTwoRohanMenToSpotPlaysARohanCompanionFromTheDrawDeckPayingItsCostAndReshufflesTheDeck() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WithTwoRohanMenToSpotPlaysARohanCompanionFromTheDrawDeckAndReshufflesTheDeck() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var simbelmyne = scn.GetFreepsCard("simbelmyne");
@@ -116,7 +116,7 @@ public class Card_04_289_ErrataTests
 		scn.StartGame();
 
 		assertInZone(Zone.DECK, guard, aldor, sword, arrow, supplies, fight, coat, aragorn);
-		assertEquals(0, scn.GetTwilight());
+		assertInZone(Zone.DISCARD, eored3);
 		int deck = scn.GetFreepsDeckCount();
 		int shuffles = scn.GetFreepsDeckShuffleCount();
 		int opponentShuffles = scn.GetShadowDeckShuffleCount();
@@ -134,7 +134,6 @@ public class Card_04_289_ErrataTests
 		assertEquals(1, scn.FreepsGetChoiceMax());
 		scn.FreepsChooseCardBPFromSelection(guard);
 
-		assertEquals(3, scn.GetTwilight()); // 1 for the event + 2 for Household Guard
 		assertInZone(Zone.FREE_CHARACTERS, guard);
 		assertInZone(Zone.DECK, aldor, sword, arrow);
 		assertInDiscard(simbelmyne);
@@ -160,7 +159,6 @@ public class Card_04_289_ErrataTests
 		scn.StartGame();
 
 		assertInZone(Zone.DECK, sword);
-		assertEquals(0, scn.GetTwilight());
 		int deck = scn.GetFreepsDeckCount();
 		int shuffles = scn.GetFreepsDeckShuffleCount();
 
@@ -173,12 +171,10 @@ public class Card_04_289_ErrataTests
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(frodo));
 		scn.FreepsChooseCard(eored2);
 
-		assertEquals(2, scn.GetTwilight()); // 1 for the event + 1 for Sword of Rohan
 		assertAttachedTo(sword, eored2);
 		assertInDiscard(simbelmyne);
 		assertEquals(deck - 1, scn.GetFreepsDeckCount());
-		// The play onto a bearer shuffles the deck as well, so more than once.
-		assertTrue(scn.GetFreepsDeckShuffleCount() > shuffles);
+		assertEquals(shuffles + 2, scn.GetFreepsDeckShuffleCount()); // as the card left the deck, and the definition's own shuffle after the play (F-0313)
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
@@ -196,7 +192,6 @@ public class Card_04_289_ErrataTests
 		scn.StartGame();
 
 		assertInZone(Zone.DECK, arrow);
-		assertEquals(0, scn.GetTwilight());
 		int deck = scn.GetFreepsDeckCount();
 		int shuffles = scn.GetFreepsDeckShuffleCount();
 
@@ -205,7 +200,6 @@ public class Card_04_289_ErrataTests
 		assertTrue(scn.FreepsHasCardChoiceAvailable(arrow));
 		scn.FreepsChooseCardBPFromSelection(arrow);
 
-		assertEquals(1, scn.GetTwilight()); // 1 for the event + 0 for The Red Arrow
 		assertInZone(Zone.SUPPORT, arrow);
 		assertInDiscard(simbelmyne);
 		assertEquals(deck - 1, scn.GetFreepsDeckCount());
@@ -243,10 +237,10 @@ public class Card_04_289_ErrataTests
 		// The second [rohan] Man is an ally, so that Merry is still no Man: a third [rohan] companion would make
 		// him one, and a valiant one.
 		scn.FreepsPlayCard(aldor);
-		assertEquals(1, scn.GetTwilight());
+		assertInZone(Zone.SUPPORT, aldor);
 		assertFalse(scn.IsRace(merry, Race.MAN));
 
-		// Two [rohan] Men.
+		// Two [rohan] Men, a companion and an ally.
 		assertTrue(scn.FreepsPlayAvailable(simbelmyne));
 		assertInZone(Zone.DECK, guard);
 		int deck = scn.GetFreepsDeckCount();
@@ -259,7 +253,6 @@ public class Card_04_289_ErrataTests
 		assertEquals(0, scn.FreepsGetChoiceMin());
 		scn.FreepsDeclineChoosing();
 
-		assertEquals(2, scn.GetTwilight()); // 1 for Aldor + 1 for the event, and nothing more
 		assertInZone(Zone.DECK, guard);
 		assertEquals(deck, scn.GetFreepsDeckCount());
 		assertInDiscard(simbelmyne);
@@ -281,7 +274,6 @@ public class Card_04_289_ErrataTests
 
 		assertTrue(scn.HasKeyword(guard, Keyword.VALIANT));
 		assertInZone(Zone.DECK, aldor);
-		assertEquals(0, scn.GetTwilight());
 		int shuffles = scn.GetFreepsDeckShuffleCount();
 		assertTrue(scn.FreepsPlayAvailable(simbelmyne));
 
@@ -290,7 +282,6 @@ public class Card_04_289_ErrataTests
 		assertTrue(scn.FreepsHasCardChoiceAvailable(aldor));
 		scn.FreepsChooseCardBPFromSelection(aldor);
 
-		assertEquals(2, scn.GetTwilight()); // 1 for the event + 1 for Aldor
 		assertInZone(Zone.SUPPORT, aldor);
 		assertInDiscard(simbelmyne);
 		assertEquals(shuffles + 2, scn.GetFreepsDeckShuffleCount()); // as the card left the deck, and the definition's own shuffle after the play (F-0313)
@@ -315,7 +306,7 @@ public class Card_04_289_ErrataTests
 		assertFalse(scn.FreepsPlayAvailable(simbelmyne));
 
 		scn.FreepsPlayCard(eored1);
-		assertEquals(2, scn.GetTwilight());
+		assertInZone(Zone.FREE_CHARACTERS, eored1);
 
 		// A companion and an ally: two [rohan] Men.
 		assertTrue(scn.FreepsPlayAvailable(simbelmyne));
@@ -324,7 +315,6 @@ public class Card_04_289_ErrataTests
 		assertTrue(scn.FreepsHasCardChoiceAvailable(guard));
 		scn.FreepsDeclineChoosing();
 
-		assertEquals(3, scn.GetTwilight()); // 2 for Éored Warrior + 1 for the event
 		assertInDiscard(simbelmyne);
 		assertInZone(Zone.DECK, guard);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
@@ -361,7 +351,6 @@ public class Card_04_289_ErrataTests
 		// The deck is still looked through, and there is nothing in it to choose.
 		scn.FreepsDismissRevealedCards();
 
-		assertEquals(1, scn.GetTwilight()); // the event only
 		assertEquals(deck, scn.GetFreepsDeckCount());
 		assertInDiscard(simbelmyne);
 		assertEquals(shuffles + 1, scn.GetFreepsDeckShuffleCount());
