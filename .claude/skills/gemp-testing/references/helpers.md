@@ -1136,6 +1136,10 @@ can read (no Fellowship-block site 2 has a fellowship action): for "your site N"
 number as the invalid candidate (Hobbit Farmer 1_295), a Nazgûl in the mover's hand keeps her printed cost while
 the fellowship is at site 1 and Weatherhills lies ahead (Card_01_295_Tests).
 
+**A character at a Fellowship site 2 who is not in the fellowship ("only Hobbits are in the fellowship", "each Hobbit
+moves to").** Goldberry 9_51 and Tom Bombadil 9_52 are the only allies who are no Hobbit with home 2F (Bounder 1_286
+is the Hobbit one): an ally is no member of the fellowship and does not move with it (Card_01_330_Tests, Card_01_332_Tests).
+
 **A card that reads the terrain of the fellowship's site (to show a site has gained or lost one).** Duilin, Ranger
 From Blackroot Vale 14_7. Unique [gondor] Man, cost 2, strength 5, vitality 3, Ranger; "While the fellowship is at
 a forest or river site, Duilin is strength +3" is his whole text, so 5 or 8 reads the site. A keyword on a site
