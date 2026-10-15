@@ -5,7 +5,6 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -406,7 +405,6 @@ public class Card_04_301_Tests
 	}
 
 	@Test
-	@Ignore("F-0514: a Shadow card's forced discard from hand under the bar still asks the Free Peoples player to choose a card, then discards none")
 	public void WithThreeUnboundCompanionsAShadowCardMakesYouChooseNoCardFromHandAndDiscardsNone() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetBarScenario();
 
