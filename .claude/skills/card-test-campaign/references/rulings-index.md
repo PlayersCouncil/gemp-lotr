@@ -592,7 +592,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 
 ## Boards, readings and tools
 
-- An old test that is kept and put in form, and stands on a board outside play [Q-0178, Q-0237, F-0179]
+- An old test that is kept and put in form, and stands on a board outside play [Q-0178, Q-0237, F-0179, Q-0279]
 - FreepsGetCardChoiceCount() at a choice of phase actions
 - Check D on a change that lasts the turn: read it in a later phase than the one it was made in (Radagast 59_26)
 - "Themselves again once it is over" wants the source of the modifier still in play (Lórien Swordsman 4_78)
@@ -602,6 +602,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Check D on "until the end of the turn" for a card the end of the turn removes
 - Check D on "until the regroup phase" for an effect that can begin in a regroup phase (Q-0160, open)
 - Check D on a delayed "at the start of the regroup phase" that an ability sets up: fight a skirmish between (Under Foot 60_52, Flaming Brand 52_32) [Q-0164, Q-0310]
+- Check D on "skip his or her next Shadow phase": read the second Shadow phase of the same turn (What Are We Waiting For? 2_15; dec-b2_14)
 - A filter that feeds a count. Where a filter feeds a COUNT ("for each X stacked here", "for each X you can spot"), lay the board so the count under ...
 - A phrase the definition writes twice: in a requirement and in the choice (Beorning Axe 18_18, "a [gandalf] card" as `HasCardInDiscard` and as the `choose` of `putCardsFromDiscardIntoHand`)
 - "Each site" on a modifier: the sites laid, and a path of a second block (No Stranger to the Shadows 1_108)
@@ -626,6 +627,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Return an unbound companion to hand": no board tells `choose(unbound,companion,canBeReturnedToHand)` from `choose(unbound,companion)` (Gríma, Chief Counselor 5_51; dec-b4_92)
 - "Play a [culture] skirmish event from hand" in a Skirmish ability: no board tells `timeword(skirmish),event` from the culture word alone (Anárion 0_58; dec-b0_58) [F-0186]
 - "Play a companion or ally" on the Free Peoples player's own action: no board tells `choose(or(companion,ally))` from `choose(character)` (Westfarthing 1_326; dec-b1_325)
+- "Each time a <kind> companion moves from <a site>, you may <do X to> that <kind>": no board tells one optional `movesFrom` trigger with a choice of 1 to N from one "may" for each companion (Till Durin Wakes Again 2_14; dec-b2_14) [Q-0224]
 - "Spot X to add (N)": no board tells `addTwilight` in `cost` from the same in `effect` (Isengard Ruined 7_331; F-0022)
 - "Skirmish: Exert this minion to make a Nazgûl or [wraith] Orc strength +1" (Morgul Regiment 7_197; Morgul Lackey 7_193 and Morgul Predator 7_196 print it word for word and are built with the same filter, `or(nazgul,and(culture(wraith),orc))`)
 - Sentences set 4 shares outside a twins.py group (dec-b4_353)
