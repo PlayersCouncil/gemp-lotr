@@ -1065,7 +1065,12 @@ def lint_file(path: Path):
         add("error", "ledger", None, "no ledger file (%s)" % (ledger_file if ledger_file else "unknown card"))
         clauses, claims = {}, {}
     else:
-        if not clauses:
+        # A card that prints no game text and no keyword (Gandalf, Stormcrow 0_64; 34 such printed cards) has
+        # nothing for a clause to name: its ledger is Sources, Findings, Dropped and Notes, and its stats test
+        # header writes `Game Text: (none)` (orchestrator, 2026-10-15, dec-b0_63).
+        blank = card is not None and not g.plain_text(card.field("gametext", "") or "").strip("\"' ") \
+            and card.field("keywords") is None and card.field("keyword") is None and card.field("effects") is None
+        if not clauses and not blank:
             add("error", "ledger", None, "the ledger has no clause lines (ID Type [checks] text)")
         for at, what in faults:
             add("error", "ledger", None, "ledger line %d: %s" % (at, what))
