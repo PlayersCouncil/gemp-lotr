@@ -1211,26 +1211,49 @@
 		twilight: 0
 		type: Event
 		timewords: Response
-		effects: {
-			type: responseEvent
-			requires: {
-				type: canSpot
-				filter: culture(sauron),orc,inSkirmish
-			}
-			trigger: {
-				type: killed
-				filter: companion
-			}
-			effect: {
-				type: discardTopCardsFromDeck
-				deck: fp
-				forced: true
-				count: {
-					type: forEachInDeadPile
-					multiplier: 3
+		effects: [
+			{
+				type: responseEvent
+				requires: {
+					type: canSpot
+					filter: culture(sauron),orc,inSkirmish
+				}
+				trigger: {
+					type: killed
+					filter: companion
+				}
+				effect: {
+					type: discardTopCardsFromDeck
+					deck: fp
+					forced: true
+					count: {
+						type: forEachInDeadPile
+						multiplier: 3
+					}
 				}
 			}
-		}
+			{
+				type: responseEvent
+				requires: {
+					type: cantSpot
+					filter: culture(sauron),orc,inSkirmish
+				}
+				trigger: {
+					type: TakesWound
+					filter: companion,zone(dead)
+					source: culture(sauron),orc
+				}
+				effect: {
+					type: discardTopCardsFromDeck
+					deck: fp
+					forced: true
+					count: {
+						type: forEachInDeadPile
+						multiplier: 3
+					}
+				}
+			}
+		]
 		gametext: <b>Response:</b> If a companion is killed by a [sauron] Orc, the Free Peoples player must discard 3 cards from the top of his draw deck for each card in the dead pile.
 		lore: "For sport, Orcs hew cruelly at the bodies of those they slay."
 		promotext: ""
