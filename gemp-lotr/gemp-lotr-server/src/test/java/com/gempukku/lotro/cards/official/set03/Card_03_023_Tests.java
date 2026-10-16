@@ -19,8 +19,17 @@ public class Card_03_023_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "3_23");
-					// put other cards in here as needed for the test case
+					put("nenya", "3_23");
+					put("galadriel", "1_45");   // Galadriel, Lady of Light: Elf ally; a start-of-turn heal of site-6 allies and a fellowship ability used only on purpose
+					put("galadriel2", "10_11"); // Galadriel, Lady Redeemed: Elf companion; a fellowship/regroup ability used only on purpose
+					put("arwen", "3_7");        // Arwen, Elven Rider: an Elf companion of another title; her response is only for the Ring-bearer
+					put("silinde", "1_60");     // Silinde, Elf of Mirkwood: an Elf ally of another title; her text needs Freeps' site 3 in play
+
+					// For the hand: a companion, a possession, an event and a minion, none played.
+					put("legolas", "1_50");     // Legolas, Greenleaf: Elf companion
+					put("sword", "1_160");      // Uruk-hai Sword: [isengard] possession
+					put("defiance", "1_37");    // Defiance: [elven] skirmish event
+					put("runner", "1_178");     // Goblin Runner: [moria] minion
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -57,13 +66,13 @@ public class Card_03_023_Tests
 		 * Twilight Cost: 0
 		 * Type: Artifact
 		 * Subtype: Ring
-		 * Vitality: 1
+		 * Vitality: +1
 		 * Game Text: Bearer must be Galadriel.<br>At the start of each regroup phase, you may discard up to 2 cards from hand to draw the same number of cards.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("nenya");
 
 		assertEquals("Nenya", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -105,6 +114,7 @@ public class Card_03_023_Tests
 
 		// A second move, and a second regroup phase with three cards in hand.
 		scn.SetFreepsHand(filler1, filler2, filler3);
+		assertInZone(Zone.HAND, filler1, filler2, filler3);
 		scn.SkipToMovementDecision();
 		scn.FreepsChooseToMove();
 		scn.ShadowPass();
@@ -126,18 +136,134 @@ public class Card_03_023_Tests
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void NenyaTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void CanBePlayedOnlyOnGaladrielAndGoesOnTheAlly() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var nenya = scn.GetFreepsCard("nenya");
+		var galadriel = scn.GetFreepsCard("galadriel");
+		var arwen = scn.GetFreepsCard("arwen");
+		var silinde = scn.GetFreepsCard("silinde");
+		scn.MoveCompanionsToTable(arwen);
+		scn.MoveAlliesToTable(silinde);
+		scn.MoveCardsToHand(nenya);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(0, scn.GetTwilight());
+		// An Elf companion and an Elf ally of other titles, and the Ring-bearer: no bearer.
+		assertInZone(Zone.HAND, nenya);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertFalse(scn.FreepsPlayAvailable(nenya));
+
+		scn.MoveAlliesToTable(galadriel);
+		scn.FreepsRefreshDecision();
+		assertTrue(scn.FreepsPlayAvailable(nenya));
+		// Galadriel is the one bearer it may go on, so it goes on her unasked.
+		scn.FreepsPlayCard(nenya);
+		assertAttachedTo(nenya, galadriel);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void CanBePlayedOnGaladrielTheCompanion() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var nenya = scn.GetFreepsCard("nenya");
+		var galadriel = scn.GetFreepsCard("galadriel2");
+		var arwen = scn.GetFreepsCard("arwen");
+		var silinde = scn.GetFreepsCard("silinde");
+		scn.MoveCompanionsToTable(galadriel, arwen);
+		scn.MoveAlliesToTable(silinde);
+		scn.MoveCardsToHand(nenya);
+
+		scn.StartGame();
+
+		assertInZone(Zone.HAND, nenya);
+		assertTrue(scn.FreepsPlayAvailable(nenya));
+		scn.FreepsPlayCard(nenya);
+		assertAttachedTo(nenya, galadriel);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void AtTheStartOfTheRegroupPhaseAnyTwoCardsFromHandAreDiscardedToDrawTwo() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var nenya = scn.GetFreepsCard("nenya");
+		var galadriel = scn.GetFreepsCard("galadriel");
+		var legolas = scn.GetFreepsCard("legolas");
+		var sword = scn.GetFreepsCard("sword");
+		var defiance = scn.GetFreepsCard("defiance");
+		var runner = scn.GetFreepsCard("runner");
+		var arwen = scn.GetFreepsCard("arwen");
+		var silinde = scn.GetFreepsCard("silinde");
+		var galadriel2 = scn.GetFreepsCard("galadriel2");
+
+		scn.StartGame();
+		scn.MoveAlliesToTable(galadriel);
+		scn.AttachCardsTo(galadriel, nenya);
+		scn.SetFreepsHand(legolas, sword, defiance, runner);
+		scn.SetFreepsDrawDeck(arwen, silinde, galadriel2);
+
+		assertAttachedTo(nenya, galadriel);
+		assertInZone(Zone.HAND, legolas, sword, defiance, runner);
+		assertEquals(4, scn.GetFreepsHandCount());
+		assertEquals(3, scn.GetFreepsDeckCount());
+
+		// No minion: the Shadow phase leads straight to the regroup phase.  Nothing is offered as the Shadow phase starts.
+		scn.FreepsPass();
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		scn.ShadowPass();
+
+		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(nenya));
+		scn.FreepsAcceptOptionalTrigger();
+
+		// Any card of the hand, whatever its type or side; one or two of them.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(legolas, sword, defiance, runner));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		assertEquals(2, scn.FreepsGetChoiceMax());
+		scn.FreepsChooseCards(legolas, sword);
+
+		// Two discarded, the top two cards of the deck drawn.
+		assertInZone(Zone.DISCARD, legolas, sword);
+		assertInZone(Zone.HAND, defiance, runner, arwen, silinde);
+		assertEquals(4, scn.GetFreepsHandCount());
+		assertEquals(1, scn.GetFreepsDeckCount());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void DeclinedItLeavesTheHandAndTheDeckAsTheyWere() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var nenya = scn.GetFreepsCard("nenya");
+		var galadriel = scn.GetFreepsCard("galadriel");
+		var defiance = scn.GetFreepsCard("defiance");
+		var runner = scn.GetFreepsCard("runner");
+		var arwen = scn.GetFreepsCard("arwen");
+		var silinde = scn.GetFreepsCard("silinde");
+
+		scn.StartGame();
+		scn.MoveAlliesToTable(galadriel);
+		scn.AttachCardsTo(galadriel, nenya);
+		scn.SetFreepsHand(defiance, runner);
+		scn.SetFreepsDrawDeck(arwen, silinde);
+
+		assertAttachedTo(nenya, galadriel);
+		assertEquals(2, scn.GetFreepsHandCount());
+		assertEquals(2, scn.GetFreepsDeckCount());
+
+		scn.FreepsPass();
+		scn.ShadowPass();
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(nenya));
+		scn.FreepsDeclineOptionalTrigger();
+
+		assertInZone(Zone.HAND, defiance, runner);
+		assertEquals(2, scn.GetFreepsHandCount());
+		assertEquals(2, scn.GetFreepsDeckCount());
+		assertInZone(Zone.DECK, arwen, silinde);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }
