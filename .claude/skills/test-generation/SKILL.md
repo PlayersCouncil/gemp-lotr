@@ -739,6 +739,8 @@ trigger's yes ("When you play this minion, you may heal a [moria] minion": 1_187
 effect, a card and then the bearer it is played on: Goblin Scavengers 1_179, or a bearer and then its own "when you play"
 trigger's choice: Relentless Warg 17_89) has the minimum of each read, once;
 a card played on a bearer has its bearer choice's minimum read even where that is its only choice (17_24, 18_26, 11_171).
+"Only choice" means the text's only choice, not one candidate: with one legal bearer the card goes on him unasked
+and nothing is read (a unique title's bearer, 9_18; pitfalls, "One candidate is chosen for you").
 
 **Say what the game is waiting for.** After a test's last action, assert the decision the game has come to rest
 on: `AwaitingFellowshipPhaseActions()` and its kin, a named decision, a pending optional trigger, or
