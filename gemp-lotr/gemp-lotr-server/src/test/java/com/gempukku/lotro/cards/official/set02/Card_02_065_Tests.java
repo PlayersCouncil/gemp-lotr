@@ -3,12 +3,12 @@ package com.gempukku.lotro.cards.official.set02;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_02_065_Tests
@@ -18,8 +18,16 @@ public class Card_02_065_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "2_65");
-					// put other cards in here as needed for the test case
+					put("spearman1", "2_65");
+					put("spearman2", "2_65");
+					// Goblin Spear: [moria] hand weapon, twilight 1; bearer must be a [moria] minion; its trigger
+					// answers only a companion killed by its bearer
+					put("spear", "1_182");
+					put("spear2", "1_182");
+					// Goblin Scimitar: [moria] hand weapon of another title; its trigger answers only its own play
+					put("scimitar", "1_180");
+					// Goblin Patrol Troop: [moria] Orc, no text
+					put("troop", "1_177");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +55,7 @@ public class Card_02_065_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("spearman1");
 
 		assertEquals("Goblin Spearman", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +70,56 @@ public class Card_02_065_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GoblinSpearmanTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void SpearmanIsDamagePlusTwoOnceAGoblinSpearIsPlayedOnHim() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var spearman1 = scn.GetShadowCard("spearman1");
+		var spearman2 = scn.GetShadowCard("spearman2");
+		var spear = scn.GetShadowCard("spear");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveCardsToHand(spear);
+		assertInHand(spear);
+		scn.FreepsPass(); // to site 2: the Shadow phase
+		scn.MoveMinionsToTable(spearman1, spearman2);
+		scn.SetTwilight(10);
+		scn.ShadowRefreshDecision();
 
-		assertEquals(2, scn.GetTwilight());
+		assertEquals(0, scn.GetKeywordCount(spearman1, Keyword.DAMAGE));
+		assertEquals(0, scn.GetKeywordCount(spearman2, Keyword.DAMAGE));
+
+		scn.ShadowPlayCard(spear);
+		assertTrue(scn.ShadowHasCardChoiceAvailable(spearman1, spearman2));
+		scn.ShadowChooseCard(spearman1);
+
+		assertAttachedTo(spear, spearman1);
+		assertEquals(2, scn.GetKeywordCount(spearman1, Keyword.DAMAGE));
+		// The other copy, bearing nothing, is untouched.
+		assertEquals(0, scn.GetKeywordCount(spearman2, Keyword.DAMAGE));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void AnotherWeaponGivesNothingAndAnotherMinionBearingAGoblinSpearGainsNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var spearman = scn.GetShadowCard("spearman1");
+		var scimitar = scn.GetShadowCard("scimitar");
+		var troop = scn.GetShadowCard("troop");
+		var spear = scn.GetShadowCard("spear2");
+
+		scn.StartGame();
+		scn.FreepsPass(); // to site 2: the Shadow phase
+		scn.MoveMinionsToTable(spearman, troop);
+		scn.AttachCardsTo(spearman, scimitar);
+		scn.AttachCardsTo(troop, spear);
+
+		assertAttachedTo(scimitar, spearman);
+		assertAttachedTo(spear, troop);
+		// A hand weapon of another title on him, and a Goblin Spear on another [moria] Orc beside him.
+		assertEquals(0, scn.GetKeywordCount(spearman, Keyword.DAMAGE));
+		assertEquals(0, scn.GetKeywordCount(troop, Keyword.DAMAGE));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }
