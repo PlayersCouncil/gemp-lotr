@@ -466,6 +466,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "<Do X> or choose an opponent who may <do Y>": with nothing for the opponent to do the choice is still asked, and the opponent may be chosen for nothing (Crashed Gate 8_119; Q-0257: A) [F-0341, Q-0255]
 - A parenthesis with its own price (Q-0089) [Q-0035, F-0491]
 - "<Do X to> a <kind> (or 2 <culture> <kind>s)": an unconditional parenthesis that names a second target is done whenever it can be (F-0554, Memory of Many Things 2_88; Perilous Ventures 6_54) [Q-0035, F-0491]
+- "You may <do X to> a <side> <kind> (or N <kind>s if ...)" on a trigger or ability: 0 to 1 of the first noun, or 0 to N of the parenthesis's noun as printed, any side (Q-0339, Dunlending Pillager 4_13; engine pass 53) [Q-0224, F-0491]
 - One thing left to do is done without a second question (Q-0090) [Q-0121, F-0387]
 - A yes/no before a choice whose minimum is 0 (Q-0143, F-0277) [F-0278, F-0285, Q-0102, F-0385]
 - A number that can only be one number is not asked for (F-0147) [F-0392]

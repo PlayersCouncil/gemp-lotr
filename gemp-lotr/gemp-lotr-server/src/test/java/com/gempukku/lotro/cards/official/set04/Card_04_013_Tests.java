@@ -145,11 +145,12 @@ public class Card_04_013_Tests
 		scn.ShadowAcceptOptionalTrigger();
 
 		// A Free Peoples possession, on a companion, on an ally and in the support area; not the Free Peoples
-		// artifact, nor the Shadow possession.  One, not two: five companions are spotted, and the ally is none.
+		// artifact, nor the Shadow possession.  Up to one, not two: five companions are spotted, and the ally is
+		// none (Q-0339: 0 to 1 Free Peoples possession).
 		assertEquals(3, scn.ShadowGetCardChoiceCount());
 		assertTrue(scn.ShadowHasCardChoiceAvailable(armor, sword, toby));
 		assertTrue(scn.ShadowHasCardChoiceNotAvailable(shards, hides));
-		assertEquals(1, scn.ShadowGetChoiceMin());
+		assertEquals(0, scn.ShadowGetChoiceMin());
 		assertEquals(1, scn.ShadowGetChoiceMax());
 
 		scn.ShadowChooseCard(toby);
@@ -161,7 +162,7 @@ public class Card_04_013_Tests
 	}
 
 	@Test
-	public void WithSixCompanionsItDiscardsTwoFreePeoplesPossessions() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WithSixCompanionsItDiscardsUpToTwoPossessionsOfEitherSide() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetPillagerScenario();
 
 		var pillager = scn.GetShadowCard("pillager");
@@ -200,18 +201,104 @@ public class Card_04_013_Tests
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(pillager));
 		scn.ShadowAcceptOptionalTrigger();
 
-		// Two of the three Free Peoples possessions, exactly: the branch in parentheses is taken when it can be.
-		// Neither the artifact nor the Shadow possession is among them.
-		assertEquals(3, scn.ShadowGetCardChoiceCount());
-		assertTrue(scn.ShadowHasCardChoiceAvailable(armor, sword, sword2));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(shards, hides));
-		assertEquals(2, scn.ShadowGetChoiceMin());
+		// Q-0339: with 6 companions spotted, 0 to 2 possessions of either side.  The three Free Peoples
+		// possessions and the Shadow player's own Hides are offered; the artifact, which is no possession, is not.
+		assertEquals(4, scn.ShadowGetCardChoiceCount());
+		assertTrue(scn.ShadowHasCardChoiceAvailable(armor, sword, sword2, hides));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(shards));
+		assertEquals(0, scn.ShadowGetChoiceMin());
 		assertEquals(2, scn.ShadowGetChoiceMax());
 
-		scn.ShadowChooseCards(armor, sword2);
-		assertInDiscard(armor, sword2);
+		scn.ShadowChooseCards(sword2, hides);
+		assertInDiscard(sword2, hides);
+		assertAttachedTo(armor, gimli);
 		assertAttachedTo(sword, bilbo);
-		assertInZone(Zone.SUPPORT, shards, hides);
+		assertInZone(Zone.SUPPORT, shards);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void WithSixCompanionsTheTriggerTakenMayDiscardNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetPillagerScenario();
+
+		var pillager = scn.GetShadowCard("pillager");
+		var hides = scn.GetShadowCard("hides");
+		var knight = scn.GetFreepsCard("knight");
+		var gimli = scn.GetFreepsCard("gimli");
+		var armor = scn.GetFreepsCard("armor");
+		var sam = scn.GetFreepsCard("sam");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var pippin = scn.GetFreepsCard("pippin");
+		var sword2 = scn.GetFreepsCard("sword2");
+		// Frodo and five more: six companions.
+		scn.MoveCompanionsToTable(knight, gimli, sam, aragorn, pippin);
+		scn.AttachCardsTo(gimli, armor);
+		scn.AttachCardsTo(sam, sword2);
+
+		scn.StartGame();
+		scn.MoveCardsToSupportArea(hides);
+		scn.MoveMinionsToTable(pillager);
+		assertAttachedTo(armor, gimli);
+		assertAttachedTo(sword2, sam);
+		assertInZone(Zone.SUPPORT, hides);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(knight, pillager);
+		scn.FreepsResolveSkirmish(knight);
+
+		scn.PassCurrentPhaseActions();
+		assertEquals(1, scn.GetWoundsOn(knight));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(pillager));
+		scn.ShadowAcceptOptionalTrigger();
+
+		// The minimum of the 6-companion branch is 0: taken, the trigger may still discard nothing.
+		assertEquals(3, scn.ShadowGetCardChoiceCount());
+		assertEquals(0, scn.ShadowGetChoiceMin());
+		assertEquals(2, scn.ShadowGetChoiceMax());
+		scn.ShadowChooseCards();
+
+		assertAttachedTo(armor, gimli);
+		assertAttachedTo(sword2, sam);
+		assertInZone(Zone.SUPPORT, hides);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void WithFewerThanSixCompanionsTheTriggerTakenMayDiscardNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetPillagerScenario();
+
+		var pillager = scn.GetShadowCard("pillager");
+		var hides = scn.GetShadowCard("hides");
+		var knight = scn.GetFreepsCard("knight");
+		var gimli = scn.GetFreepsCard("gimli");
+		var armor = scn.GetFreepsCard("armor");
+		scn.MoveCompanionsToTable(knight, gimli);
+		scn.AttachCardsTo(gimli, armor);
+
+		scn.StartGame();
+		scn.MoveCardsToSupportArea(hides);
+		scn.MoveMinionsToTable(pillager);
+		assertAttachedTo(armor, gimli);
+		assertInZone(Zone.SUPPORT, hides);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(knight, pillager);
+		scn.FreepsResolveSkirmish(knight);
+
+		scn.PassCurrentPhaseActions();
+		assertEquals(1, scn.GetWoundsOn(knight));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(pillager));
+		scn.ShadowAcceptOptionalTrigger();
+
+		// The minimum of the other branch is 0 as well, with its one Free Peoples possession: still asked, and
+		// Hides, the Shadow player's own, not among it.
+		assertEquals(1, scn.ShadowGetCardChoiceCount());
+		assertTrue(scn.ShadowHasCardChoiceAvailable(armor));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(hides));
+		assertEquals(0, scn.ShadowGetChoiceMin());
+		assertEquals(1, scn.ShadowGetChoiceMax());
+		scn.ShadowChooseCards();
+
+		assertAttachedTo(armor, gimli);
+		assertInZone(Zone.SUPPORT, hides);
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
@@ -366,6 +453,10 @@ public class Card_04_013_Tests
 		assertEquals(2, scn.GetWoundsOn(knight));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(pillager));
 		scn.ShadowAcceptOptionalTrigger();
+		// One left, and still asked: the choice runs from 0 (Q-0339).
+		assertEquals(1, scn.ShadowGetCardChoiceCount());
+		assertEquals(0, scn.ShadowGetChoiceMin());
+		scn.ShadowChooseCard(sword);
 
 		assertInDiscard(armor, sword);
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
