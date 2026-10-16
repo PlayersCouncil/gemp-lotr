@@ -182,15 +182,22 @@
 				count: 2
 				filter: hobbit
 			}
-			effect: {
-				type: AddModifier
-				until: EndOfTurn
-				modifier: {
-					type: ModifyCost
+			effect: [
+				{
+					type: MemorizeActive
 					filter: site
-					amount: -2
+					memory: sites
 				}
-			}
+				{
+					type: AddModifier
+					until: EndOfTurn
+					modifier: {
+						type: ModifyCost
+						filter: memory(sites)
+						amount: -2
+					}
+				}
+			]
 		}
 		gametext: <b>Stealth</b>.<br><b>Regroup:</b> Spot 2 Hobbits to make each site's Shadow number -2 until the end of the turn.
 		lore: "They possessed from the first the art of disappearing swiftly and silently, when large folk who they do not wish to meet come blundering by."

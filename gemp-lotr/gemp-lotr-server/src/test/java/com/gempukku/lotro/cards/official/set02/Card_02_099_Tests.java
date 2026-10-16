@@ -4,7 +4,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -172,7 +171,6 @@ public class Card_02_099_Tests
 		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
 	}
 
-	@Ignore("F-0555: the definition lays a standing ModifyCost over `site` until the end of the turn, so a site laid after the event is played is -2 too; CR 4.2 \"event\" gives this very card as its example (\"affects only sites that are in play when it is played\"). Site 5, laid by the second move, reads 4 and the move adds 6; it should read 6 and add 8.")
 	@Test
 	public void ASiteLaidByTheSecondMoveKeepsItsPrintedShadowNumber() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
