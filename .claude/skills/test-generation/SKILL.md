@@ -411,7 +411,9 @@ taken from ("from play or from hand"), the candidates are laid out in each. Wher
 place, the invalid candidate can be paid for there, so that only the wording keeps it out (10_19: Shelob in the
 discard pile with a pool too small for her let "Gollum" widened to any minion pass; a Free Peoples card adds its
 cost and needs no pool laid). An "or" inside the noun phrase
-("a [gandalf] or [elven] event") is F's business, one valid candidate for each side of it, and needs no `B`. An "or"
+("a [gandalf] or [elven] event") is F's business, one valid candidate for each side of it, and needs no `B`; where a
+side is a bare race word ("an Elf or Dwarf"), that side owes the whole spread a bare race word owes (below), an Elf
+ally as well as an Elf companion (2_69). An "or"
 between two noun phrases, each with its own article or a name ("Gandalf or an Elf", "a [sauron] engine or a site
 you control"), is two alternatives and lists `B`, each taken alone (1_40 above; 8_95).
 
