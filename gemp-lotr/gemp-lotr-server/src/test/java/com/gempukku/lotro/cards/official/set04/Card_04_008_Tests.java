@@ -153,6 +153,8 @@ public class Card_04_008_Tests
 		// Three companions, Frodo, Aragorn and Gimli, of three cultures and races; not the ally or the minions.
 		assertEquals(0, scn.ShadowGetChoiceMin());
 		assertEquals(3, scn.ShadowGetChoiceMax());
+		// The number comes filled in with all three (F-0561), and fewer may be named.
+		assertEquals(Integer.valueOf(3), scn.ShadowGetChoiceDefault());
 		scn.ShadowChoose("2");
 
 		assertInDiscard(strawheads1);

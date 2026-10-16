@@ -149,6 +149,8 @@ public class Card_01_167_Tests
 		// to those 2.  Not the Runner chosen, the [moria] Troll or the [sauron] Orc.
 		assertEquals(0, scn.ShadowGetChoiceMin());
 		assertEquals(2, scn.ShadowGetChoiceMax());
+		// The number comes filled in with both of them (F-0561), and fewer may be named.
+		assertEquals(Integer.valueOf(2), scn.ShadowGetChoiceDefault());
 		scn.ShadowChoose("1");
 
 		// One named of the two: 5 + 1, not + 2.
@@ -195,6 +197,8 @@ public class Card_01_167_Tests
 		assertEquals(13, scn.GetStrength(troop));
 		assertEquals(0, scn.ShadowGetChoiceMin());
 		assertEquals(5, scn.ShadowGetChoiceMax());
+		// Filled in with all five there are, not with the +4 the limit lets count (F-0561).
+		assertEquals(Integer.valueOf(5), scn.ShadowGetChoiceDefault());
 		scn.ShadowChoose("5");
 		// Five named, limit +4: 13 + 4.
 		assertEquals(17, scn.GetStrength(troop));
