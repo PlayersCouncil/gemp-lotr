@@ -132,7 +132,9 @@ roaming at site 2: the minion beside a roaming one); nothing else below 2 burden
 Ring-bearer (at either she is fierce and damage +1: on a board that wounds or exerts the Ring-bearer use Attëa).
 Úlairë Attëa 2_82 is another, cheated in (strength 12, vitality 3; when played, may wound an ally); 2_83, 2_85 and
 3_86 have optional "wins a skirmish" triggers. A Nazgûl neither twilight nor fierce: Úlairë Lemenya 1_232. Twilight
-and no Nazgûl: Corpse Lights 6_99.
+and no Nazgûl: Corpse Lights 6_99. Every twilight Nazgûl in print is [wraith] and every twilight [wraith] MINION is a
+Nazgûl, so no minion tells `culture(wraith),twilight` from `twilight,nazgul`; the only twilight [wraith] cards that are
+no Nazgûl are the conditions Cover of Darkness 103_64 and 103_65, which a spot could see and a wound cannot (dec-b2_76).
 
 **The Balrog, for a card that plays "The Balrog".** The Balrog, The Terror of Khazad-dûm 12_79. [moria] Balrog,
 cost 12, site number 4 (12 + 2 roaming at site 2), strength 17, vitality 5, damage +1; nothing is needed to play it

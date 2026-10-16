@@ -381,6 +381,9 @@ and a reading written for after the play reads VOID (Shrouded Elf 63_23). Not so
 that prevents what it answers ("... is about to ..., exert X to prevent this") leaves nothing to answer, and the
 game goes straight on though the cost could be paid again (Ceorl 4_264 against a site taken, Sam 4_316 against a
 burden: the regroup actions, "Choose next skirmish to resolve"). A decline written there answers the wrong decision.
+"Nothing to answer" is in that window only: where it still holds another wound the Response may prevent (the losers
+of one skirmish, wounded together), it is offered again for that one, and not once none is left; a damage +1
+winner's second wound is a window of its own (His Terrible Servants 2_77, Card_02_077_Tests).
 A Response to "is about to be overwhelmed" that only adds strength (Footman's Armor 7_93) is offered again while
 its bearer is still doubled (CR 4.2, the ruling on the card) and not once he is not, though the cost could be
 paid: the skirmish then resolves at once and the bonus ends with it, so the bonus itself is read only between two
