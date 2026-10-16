@@ -323,32 +323,29 @@ public class Card_03_006_Tests
 	}
 
 	@Test
-	public void WithTheShadowHandEmptyTheEventIsPlayedAndNothingIsShuffledIn() throws DecisionResultInvalidException, CardNotFoundException {
+	public void IsNotPlayableWithTheShadowHandEmpty() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetRevealScenario();
 
 		var storm = scn.GetFreepsCard("storm");
 		var gimli = scn.GetFreepsCard("gimli");
+		var scimitar = scn.GetShadowCard("scimitar");
 		scn.MoveCardsToHand(storm);
 		scn.MoveCardsToDiscard(gimli);
 
 		scn.StartGame();
 
+		// A [dwarven] card in the discard pile, and no card in the Shadow hand to reveal: the reveal must be able to
+		// happen for the shuffle to read it, so the event is not playable (Q-0336: B).
 		assertEquals(0, scn.GetShadowHandCount());
 		assertInZone(Zone.DISCARD, gimli);
-		int shuffles = scn.GetFreepsDeckShuffleCount();
+		assertFalse(scn.FreepsPlayAvailable(storm));
 
-		// The reveal is no requirement: the event is played with nothing to reveal.
+		// One card there, of cost 0, and it is playable.
+		scn.MoveCardsToHand(scimitar);
+		scn.FreepsRefreshDecision();
+		assertEquals(1, scn.GetShadowHandCount());
 		assertTrue(scn.FreepsPlayAvailable(storm));
-		scn.MarkGameLog();
-		scn.FreepsPlayCard(storm);
-
-		// Nobody is shown anything, and the game log says the hand was empty (Q-0144).
-		assertTrue(scn.GameLogSinceMarkSays("no cards in " + scn.P2() + "'s hand"));
-		assertEquals(0, scn.FreepsGetTotalRevealedCardCount());
-		// Nothing revealed, so X is 0; a shuffle into a draw deck always shuffles (Q-0102).
-		assertInZone(Zone.DISCARD, gimli, storm);
-		assertEquals(shuffles + 1, scn.GetFreepsDeckShuffleCount());
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertInZone(Zone.HAND, storm);
 	}
 
 	@Test

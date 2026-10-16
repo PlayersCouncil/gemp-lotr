@@ -76,7 +76,8 @@ public class Card_01_261_Tests
 					put("elf", "1_53");         // Lorien Elf: Elf companion; "To play, spot an Elf", so he is cheated in
 
 					// Coming for the Ring: [isengard] Shadow Regroup event, "Reveal a card at random from the Free
-					// Peoples player's hand. Heal X [isengard] minions ..."; with his hand empty it reveals nothing
+					// Peoples player's hand. Heal X [isengard] minions ..."; not playable with his hand empty (Q-0336),
+					// and with no [isengard] minion in play it heals nobody
 					put("coming", "3_51");
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -355,7 +356,8 @@ public class Card_01_261_Tests
 
 		var ambusher1 = scn.GetShadowCard("ambusher1");
 		var coming = scn.GetShadowCard("coming");
-		scn.MoveCardsToHand(coming);
+		var arwen = scn.GetFreepsCard("arwen");
+		scn.MoveCardsToHand(coming, arwen);
 
 		scn.StartGame();
 		scn.SetTwilight(5);
@@ -367,6 +369,7 @@ public class Card_01_261_Tests
 		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 
 		scn.ShadowPlayCard(coming);
+		scn.ShadowDismissRevealedCards();
 		// No offer stops the play: the event is carried out and the Free Peoples player is asked for regroup
 		// actions again.
 		assertEquals(0, scn.GetWoundsOn(ambusher1));

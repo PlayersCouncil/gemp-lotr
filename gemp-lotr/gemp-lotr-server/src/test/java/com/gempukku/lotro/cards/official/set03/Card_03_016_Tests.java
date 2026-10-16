@@ -287,12 +287,13 @@ public class Card_03_016_Tests
 	}
 
 	@Test
-	public void WithAnEmptyHandNothingIsRevealedAndNobodyIsHealed() throws DecisionResultInvalidException, CardNotFoundException {
+	public void IsNotPlayableWithTheShadowHandEmpty() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var friends = scn.GetFreepsCard("friends");
 		var orophin = scn.GetFreepsCard("orophin");
 		var golradir = scn.GetFreepsCard("golradir");
+		var wreathed = scn.GetShadowCard("wreathed");
 		scn.MoveCardsToHand(friends);
 		scn.MoveAlliesToTable(orophin, golradir);
 
@@ -301,23 +302,19 @@ public class Card_03_016_Tests
 		scn.AddWoundsToChar(golradir, 1);
 		scn.FreepsRefreshDecision();
 
+		// Wounded [elven] allies, and no card in the Shadow hand to reveal: the reveal must be able to happen for
+		// the heal to read it, so the event is not playable (Q-0336: B).
 		assertEquals(1, scn.GetWoundsOn(orophin));
 		assertEquals(1, scn.GetWoundsOn(golradir));
 		assertEquals(0, scn.GetShadowHandCount());
-		// An event may be played though it will do nothing.
+		assertFalse(scn.FreepsPlayAvailable(friends));
+
+		// One card there, of cost 0, and it is playable.
+		scn.MoveCardsToHand(wreathed);
+		scn.FreepsRefreshDecision();
+		assertEquals(1, scn.GetShadowHandCount());
 		assertTrue(scn.FreepsPlayAvailable(friends));
-
-		scn.MarkGameLog();
-		scn.FreepsPlayCard(friends);
-
-		// Nobody is shown anything, the log says why, and nobody is healed.
-		assertEquals(0, scn.FreepsGetTotalRevealedCardCount());
-		assertFalse(scn.ShadowAnyDecisionsAvailable());
-		assertTrue(scn.GameLogSinceMarkSays("no cards in " + scn.P2() + "'s hand"));
-		assertEquals(1, scn.GetWoundsOn(orophin));
-		assertEquals(1, scn.GetWoundsOn(golradir));
-		assertInZone(Zone.DISCARD, friends);
-		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertInZone(Zone.HAND, friends);
 	}
 
 	@Test

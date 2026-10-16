@@ -1152,7 +1152,8 @@ reveal is shown to BOTH players, so `DismissRevealedCards()`, not one side's, be
 **A Free Peoples card that has the SHADOW player draw, with no choice in it.** Drawing His Eye 10_29; What Are We
 Waiting For? 2_15. Drawing His Eye: [gondor] Fellowship event, cost 2; one card of the Shadow hand revealed at
 random for each [gondor] companion spotted (Aragorn 1_89), a revealed Shadow card discarded, then "its owner draws
-a card" (`drawCards`, `player: shadow`). A Shadow hand of one card makes the reveal and the discard certain.
+a card" (`drawCards`, `player: shadow`). A Shadow hand of one card makes the reveal and the discard certain; with that hand
+empty the event is not playable (Q-0336: B, engine pass 53).
 What Are We Waiting For?: [dwarven] Fellowship event, cost 1; exert a Dwarf "to make an opponent draw 2 cards", who
 then discards 2 Shadow cards from hand or skips his next Shadow phase. As built, each is the Shadow player's own draw
 (Q-0334, open; Card_02_094_Tests.TheShadowPlayerDrawingInTheFellowshipPhaseAddsNoBurden).

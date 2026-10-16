@@ -258,8 +258,13 @@ no "to", write `requires: {type: HasCardInDrawDeck}` on the ability and leave th
 optional look of Q-0104 or the optional draw of Q-0029, which stay on offer with an empty deck. A reveal that a
 cost buys is the next entry. NOT ruled: "you may reveal the top card ..." on an optional trigger with no cost.
 Do not read Q-0148 onto that; ask.
-A reveal at random from a HAND with nothing before it (Storm of Argument 3_6, Friends of Old 3_16) is played
-with that hand empty, X 0, as built and landed: whether Q-0148 reaches it is asked under Q-0336.
+Q-0148 reaches a HAND too (Q-0336: B, Ketura 2026-10-16: "given that it has to reveal 'a' card ... I would read
+that as a cost. If there are no cards to reveal, the card should not be playable"). A reveal at random from an
+opponent's hand with nothing before it writes `requires: {type: HasCardInHand, player: <that hand>}` on the event
+and keeps the reveal its first effect (Storm of Argument 3_6, Friends of Old 3_16, Coming for the Ring 3_51, and
+Drawing His Eye 10_29, whose "for each [gondor] companion you spot" is no cost; engine pass 53). The `-` is the event
+not playable with that hand empty, and playable with one card put there. With a card in the hand and the reveal
+barred (No Business of Ours 2_44), the event is still played and X is 0, as before.
 
 **A reveal that a cost buys is offered with that draw deck empty, and flagged (Q-0163: B; built by engine pass
 21).** "<cost> to reveal the top N cards of a draw deck. <What is done with the cards revealed.>" (War-beacon
