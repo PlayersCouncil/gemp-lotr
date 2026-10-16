@@ -1099,6 +1099,14 @@ not drawn: Master Proudfoot 1_301 (ally; "Fellowship: If the twilight pool has f
 `DismissRevealedCards()` after it). The card that answers either is Verily I Come 2_94, on the Ring-bearer, a
 burden for each in the fellowship phase (F-0376; mechanics/deck/DrawnOrTakenIntoHandTests, Card_07_195_Tests).
 
+**A Free Peoples card that has the SHADOW player draw, with no choice in it.** Drawing His Eye 10_29; What Are We
+Waiting For? 2_15. Drawing His Eye: [gondor] Fellowship event, cost 2; one card of the Shadow hand revealed at
+random for each [gondor] companion spotted (Aragorn 1_89), a revealed Shadow card discarded, then "its owner draws
+a card" (`drawCards`, `player: shadow`). A Shadow hand of one card makes the reveal and the discard certain.
+What Are We Waiting For?: [dwarven] Fellowship event, cost 1; exert a Dwarf "to make an opponent draw 2 cards", who
+then discards 2 Shadow cards from hand or skips his next Shadow phase. As built, each is the Shadow player's own draw
+(Q-0334, open; Card_02_094_Tests.TheShadowPlayerDrawingInTheFellowshipPhaseAddsNoBurden).
+
 **A hand revealed by its own owner, on each side (the invalid doer and the invalid hand for a bar on looking at or
 revealing a hand).** Troll's Keyward, Keeper of the Beast 12_105; Mallorn-trees 1_54. Keyward: unique [orc] Orc,
 cost 3, strength 8, vitality 3, site 4, lurker; "Shadow: Exert Troll's Keyward and reveal your hand to add (1) for
