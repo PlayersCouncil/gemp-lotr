@@ -1007,7 +1007,7 @@ offered to: "A meta-site's optional trigger is offered to every player", its las
 allows, both players passing in the regroup phase ends the turn at once and the other player's "Play Fellowship
 action or Pass" decision is next; no "another move" question is asked. As the turn ends (at the limit, or after
 `FreepsChooseToStay()` below it) the Free Peoples player reconciles first: with cards in hand he is asked
-"Reconcile" (`FreepsDeclineReconciliation()`) before the next turn's decision can be read (Card_07_355_Tests). Below the limit the Free Peoples
+"Reconcile" (`FreepsDeclineReconciliation()`) before the next turn's decision can be read (Card_07_355_Tests). An "at the end of each turn" trigger (`endOfTurn`) is offered only after that reconcile: on turn 1 with an empty hand `FreepsChooseToStay()` leads straight to its "Optional responses", while on turn 3 the hand turn 1's reconcile drew is reconciled first (Citadel of Minas Tirith 3_40's tests). Below the limit the Free Peoples
 player is asked "Do you want to make another move?". Either comes only after the Shadow player's reconciliation:
 with cards in his hand he is first asked "Reconcile - choose card to discard or press DONE"
 (`ShadowDeclineReconciliation()`); with an empty hand nothing is asked (Radagast 59_26's tests). An empty hand

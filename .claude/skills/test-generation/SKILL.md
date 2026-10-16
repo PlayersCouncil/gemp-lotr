@@ -336,6 +336,8 @@ the definition writes twice"; 1_54).
 tests: for "spot an Elf companion", Elf companions of two titles, or `name(Legolas)` passes (91_12). A spot that
 must FAIL ("moves ... without a ranger") is the same: the cards that would stop it are its valid candidates, each
 read stopping it, and one that fails a word (the other player's ranger, not in the fellowship that moves) is read not stopping it (1_355).
+So is a condition on who lost or won ("no companion or ally lost a skirmish"): the losers read stopping it differ in
+what the text does not mention (culture, race), or a type pair narrowed to one culture passes (3_40).
 
 **What a response saves; who did the thing; a card being played; the player who does it.** Where a response picks
 what it saves from several cards affected at once, an invalid candidate is among them (for "your [sauron] condition
