@@ -296,9 +296,8 @@ public class Card_03_107_Tests
 		// The pipeweed is paid whatever X is, so X of 0 is a use like another (Gandalf's Pipe 1_74).
 		assertEquals(0, scn.FreepsGetChoiceMin());
 		scn.FreepsChoose("0");
-		// The companion is still chosen, and is healed no times.
-		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, legolas));
-		scn.FreepsChooseCard(legolas);
+		// Healed no times: nobody is asked for (Q-0337).
+		assertFalse(scn.FreepsDecisionAvailable("Choose cards to heal"));
 
 		assertEquals(1, scn.GetWoundsOn(legolas));
 		assertEquals(1, scn.GetWoundsOn(frodo));

@@ -233,9 +233,9 @@ public class Card_03_084_Tests
 		assertTrue(scn.ShadowHasCardChoiceAvailable(wreathed, false));
 		scn.ShadowDismissRevealedCards();
 
-		// Wreathed in Shadow costs 0.  The game still asks for the companion, and the one chosen exerts no times.
-		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, arwen));
-		scn.ShadowChooseCard(aragorn);
+		// Wreathed in Shadow costs 0: with two companions bearing a ranged weapon nobody is asked which exerts no
+		// times (Q-0337: B), and nobody exerts.
+		assertFalse(scn.ShadowDecisionAvailable("Choose cards to exert"));
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(arwen));
 		assertInDiscard(hunting);

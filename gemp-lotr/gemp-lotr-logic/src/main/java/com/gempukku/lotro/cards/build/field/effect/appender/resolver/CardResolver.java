@@ -703,6 +703,12 @@ public class CardResolver {
                 Evaluator evaluator = countSource.getEvaluator(playerContext);
                 int min = evaluator.getMinimum(playerContext.getGame(), null);
                 int max = evaluator.getMaximum(playerContext.getGame(), null);
+                // As an effect, a choice of at most 0 cards is no choice: it is made of no card and nothing is
+                // asked, as a choice in play, from a discard pile or from another player's hand already was.  The
+                // choices from one's own hand and from a stack asked a selection of 0 to 0 (F-0560, The Dark Lord
+                // Advances 3_87; Q-0337).  A cost is left as it was.
+                if (!cost && max <= 0)
+                    return effectSource.createEffect(Collections.emptyList(), action, playerContext, 0, 0);
                 return effectSource.createEffect(filterCards(playerContext, choiceFilter), action, playerContext, min, max);
             }
 
