@@ -430,6 +430,13 @@ shown the same way.
 
 **"Support" and support(<whose>) (Q-0099, Q-0101).** Q-0099 is BUILT in this clone (engine pass 9): the filter `support` is a "support card": a card lying in a support area or borne, at any depth, by a card that is (what an ally or a controlled site bears; not what a companion or minion bears). Assert it: a Shadow condition on an ally is a valid candidate for "a Shadow support card", the same card on a companion the invalid one beside it (mechanics/inplay/SupportAreaTests has the boards). `zone(support)` is the zone alone ("transfer this from your support area", "if this is in your support area"). Never write or(support,AttachedTo(support)). Decipher's "in / from a player's support area" is ruled the same way (Q-0101) and is built: `support(<whose>)`, below.
 
+**"Transfer <another card> from your support area to <a character>" on a trigger with a cost (Úlairë Otsëa 3_86; F-0559).**
+Q-0022's requirement is for a card that transfers ITSELF from the support area; a trigger with a cost that moves
+another card is offered with none there and paid for nothing (Q-0034): lay that board as C F, not as `-`. A
+"Limit 1 per character" of the card moved (Blade Tip 1_209) lives only in its own transfer's `where`, so the moving
+card's `where` carries `not(hasAttached(name(<card>)))` (Morgul Blade 1_216, Otsëa since F-0559): lay a target who
+bears one already.
+
 **A character hindered while assigned or skirmishing leaves it, and a minion so freed is not a leftover minion (CR 5.0 "hinder"; CR 4.2 "assignment phase").** `mechanics/hinder/HinderedCharacterCannotSkirmishTests` holds the rule on real cards: neither character is assigned afterwards; a skirmish that loses its only minion, or its companion, is over with no wound to anyone; one that keeps a second minion goes on with that minion's strength alone. Where the assignment was made by an assignment ACTION, the character that was NOT hindered is on the Free Peoples player's list again at the ordinary assignment that follows, and the hindered one is not. Where it was made at the ordinary step (Úlairë Toldëa 103_79 hindering the stronger companion given to him), the freed minion is NOT offered to the Shadow player, and that is the rule, not a doubt: "If an assigned minion subsequently becomes unassigned as a result of a card's game text (e.g. a triggered ability), it is not a leftover minion and is not eligible to be assigned by the Shadow player." Do not raise it as a question.
 
 **A hindered Ring-bearer cannot be discarded or returned to hand (F-0174).** FIXED in this clone (F-0174): a hindered Ring-bearer cannot be discarded or returned to hand by anything; a definition needs no not(ring bearer) for that.
