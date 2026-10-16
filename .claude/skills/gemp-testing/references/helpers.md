@@ -484,6 +484,11 @@ well), "Bearer must be a [rohan] Man". Each play trigger reinforces a [rohan] to
 play; 13_126's maneuver trigger and 13_136's skirmish ability need Éomer or Théoden and 2 [rohan] tokens. 13_126 is
 titled Firefoot, so it is never on a board with Firefoot 4_274 (`Card_04_268_Tests`).
 
+**A Free Peoples possession that nobody bears (support area), beside borne ones.** Old Toby 1_305 ([shire]
+pipeweed possession, not unique, Support Area; its only text an optional draw on its own play, which
+`MoveCardsToSupportArea` before `StartGame()` does not set off). For "discard a Free Peoples possession" with only
+borne possessions laid, `attachedTo(any)` added to the choice survived; with Old Toby laid it is noticed (`Card_04_013_Tests`).
+
 ## A culture without its race, a race without its culture, a card against its type
 
 **A culture without its race, or a race without its culture: a printed card, never a modifier (Q-0213: B).** By

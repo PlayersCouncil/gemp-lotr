@@ -277,7 +277,8 @@ possessions alone, `weapon` narrowed to `possession,weapon` passes, 1_230 and 1_
 every possession the card could bear is a hand weapon (a [moria] Creature: Foul Tentacle 2_58), no board tells
 `weapon` from `possession`, and the Notes say so and name the search that found no other; for a count or spot of an item
 type ("each [gondor] artifact you can spot"), one in a support area and one borne (helpers.md, "A [gondor] artifact
-that someone bears"): beside support-area cards alone, `zone(support)` added passes, 9_36; for "discard N cards from
+that someone bears"): beside support-area cards alone, `zone(support)` added passes, 9_36; the same for a CHOICE of one ("discard a Free
+Peoples possession": Old Toby 1_305 beside borne ones; `attachedTo(any)` added passes, 4_13); for "discard N cards from
 hand", a card of another culture in the hand: beside [moria] cards alone, `choose(culture(moria))` passes, 1_196; for
 a bearer by race ("Bearer must be a Hobbit"), the Ring-bearer and a Hobbit of another culture (Pippin, Trollslayer
 103_31): beside [shire] Hobbits who are not the Ring-bearer, `hobbit,culture(shire)` passes, 3_108; for "bearer" in a

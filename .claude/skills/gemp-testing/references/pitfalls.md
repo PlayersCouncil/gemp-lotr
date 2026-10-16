@@ -694,7 +694,8 @@ test then rests on the Shadow player's). There `ShadowPass()` alone ends the ski
 **A skirmish whose only Free Peoples character is killed mid-skirmish is over at once.** Killed by a Shadow skirmish event where his was the only skirmish, he leaves no skirmish to pass: the next decision is the Free Peoples player's regroup actions (`AwaitingFreepsRegroupPhaseActions()`, Card_01_255_Tests's ally test), not a skirmish action. The same holds for the minion side: a Skirmish event that discards the only minion of the skirmish (Staff Asunder 2_27) ends it at once, and the game rests at `AwaitingFreepsRegroupPhaseActions()` where that was the last skirmish (Card_02_027_Tests).
 
 **No minions, no combat.** With no minion in play when the Shadow phase ends, the game goes straight to regroup.
-A test that needs a maneuver phase needs a minion on the table.
+A test that needs a maneuver phase needs a minion on the table: one stacked on a site or a card is not in play and
+does not count (Dunlending Looter 4_11 lays Goblin Patrol Troop 1_177 beside its stacked Looters, as Uruk Trooper 4_199).
 The maneuver, archery and assignment phases are each passed over when no active minion is in play
 (`ManeuverGameProcess`, `ArcheryGameProcess`, `AssignmentGameProcess`), so a trigger at the start of one of them
 that does something to "a minion" always has one: its `requires: CanSpot minion` cannot differ in play, and no
