@@ -300,6 +300,20 @@
 		keywords: Spell
 		effects: {
 			type: event
+			# Costs are judged in the order printed (Q-0080): the staff's own vitality is gone before he exerts (F-0000).
+			requires: {
+				type: or
+				requires: [
+					{
+						type: canSpot
+						filter: name(Gandalf),minVitality(4)
+					}
+					{
+						type: canSpot
+						filter: name(Gandalf),minVitality(3),not(hasAttached(staff,minVitality(1)))
+					}
+				]
+			}
 			cost: [
 				{
 					type: discard
