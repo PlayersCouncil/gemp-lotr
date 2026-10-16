@@ -780,7 +780,8 @@ is Free Peoples cards: where a card lets other card types in
 triggers, but it does not assign archery wounds. An archer on the table stops it, or kills the minion the test
 was about. Leave archers out of a scenario unless they are the point, or put them down after skipping. A
 possession that makes its bearer an archer (a bow) is the same: `AttachCardsTo` it after `SkipToAssignments()`
-(Long Battle Bow 11_89 in Little Golden Flower 65_148's tests). An archer MINION wanted in the skirmishes goes
+(Long Battle Bow 11_89 in Little Golden Flower 65_148's tests), or for a regroup-phase test after
+`SkipToPhase(Phase.REGROUP)` and before the first pass (Elven Bow 1_41 in Isengard Smith 3_60's tests). An archer MINION wanted in the skirmishes goes
 down between the two phases: `SkipToPhase(Phase.ASSIGNMENT)` with another minion on the table, `MoveMinionsToTable(archer)`,
 `PassAssignmentActions()`; after `SkipToAssignments()` the assignment already asked does not list it
 (Goblin Archer 1_172 in mechanics/keywords/DamageBonusTests). A Free Peoples archer COMPANION (Legolas 1_50) fires
