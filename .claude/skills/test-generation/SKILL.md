@@ -293,7 +293,8 @@ Gondorian Merchant 7_97 bearing Narsil 9_34 can exert, 5_39; helpers.md.)
 a [sauron] card that is no minion, and a minion of another culture; for an item class ("bearing a hand weapon") one
 of them is a weapon of another class on a bearer of the right kind (a ranged weapon), where a card in play can bear
 one, since the game has a `weapon` filter one word wider and a possession that is no weapon cannot tell the two
-apart (65_148); "mounted" is an item class too (bearing a possession of the class mount), and owes a companion
+apart (65_148); for "bearing a weapon" the invalid one bears an ITEM that is no weapon, and The One Ring is no item
+(a Hobbit with The Gaffer's Pipe 1_292: 2_103, helpers.md); "mounted" is an item class too (bearing a possession of the class mount), and owes a companion
 bearing a possession that is no mount (Gimli 1_13 with Dwarven Armor 1_8, 4_346); for a number with two bounds, a card on each side (a bound no board can reach, as site 1 of
 "sites 1 to 5" for a skirmish, is stood for by the nearest reachable value inside it, site 2, and Notes says so). Where the type word has a character neighbour (companion against ally), the card of the first word that is no X
 is a character where print allows (Barliman Butterbur 1_70, a [gandalf] ally, for "a [gandalf] companion"), or the

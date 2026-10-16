@@ -369,6 +369,21 @@ each Orc and each Uruk-hai skirmishing bearer is strength -1. Salt from the Shir
 +2; two abilities that discard it, used only on purpose. With a pipe (Bilbo's Pipe 1_285) that is four classes,
 which is how an ally comes to bear a weapon, or three cards of different classes.
 
+**A Bilbo of each card type, for a text that names Bilbo.** The ally Bilbo, Retired Adventurer 1_284 (home 3F;
+above); the companion Bilbo, Melancholy Hobbit 12_119 ([shire] Hobbit, Ring-bound, strength 3, vitality 4); Bilbo,
+Bearer of Things Burgled 9_49 as Ring-bearer ("A Ring-bearer who is not Frodo"). One title: one at a time. 12_119's
+"At the start of each skirmish involving Bilbo, you may exert him to ..." has a cost, so it is offered in each of his
+skirmishes whatever is in the discard pile: decline it (`FreepsDeclineOptionalTrigger()`) right after
+`FreepsResolveSkirmish`, or the next pass is refused (Card_02_097_Tests).
+
+**A Hobbit bearing a weapon of each item type, and one bearing an item that is none.** Hobbit Sword 1_299 (a
+possession) on Sam 1_311; Sting 30_47 (Hobbit set: the one ARTIFACT weapon a Hobbit can bear, owed under Q-0312;
+`target: name(Bilbo)`, so on Bilbo 1_284; unique title shared with Sting 1_313); the opponent's Hobbit Ted Sandyman
+18_75 bearing Poleaxe 11_95 ([men] hand weapon, strength +2; its skirmish ability used only on purpose). The
+invalid one is Frodo bearing The Gaffer's Pipe 1_292 (a Pipe possession, "Bearer must be a Hobbit"; its fellowship
+ability not reached). The Ruling Ring is NOT that card: its type is The One Ring, no item, so `hasAttached(item)`
+passes it and only the Pipe tells `weapon` from `item` (Card_02_103_Tests).
+
 **A [rohan] Man who is an ally (and a second).** Guma, Plains Farmer 4_277; Hlafwine, Village Farmhand 4_281. Each:
 unique, cost 1, strength 4, vitality 2, home 4T (never fighting on a Fellowship path), Villager; discarded if an
 opponent controls his home site. Guma: "Fellowship: Exert Guma to heal a [rohan] Man"; Hlafwine: "Skirmish: Exert
