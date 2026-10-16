@@ -420,6 +420,12 @@ Bane of Darkness 103_1: unique [elven] artifact (phial), cost 1, vitality +1, "B
 (2 burdens) and its Ring-bearer responses are used only on purpose. The other Phials, 10_13 and 53_24, cost 0 and
 show no discount (Card_02_102_Tests, "each artifact").
 
+**A Free Peoples shield, armor or hand weapon of cost 2, to read a discount of 1 (a cost never reads below 0).**
+Mithril-coat 2_105 (unique [shire] artifact armor, "Bearer must be Frodo"; archery total -1, no weapon bonuses for
+minions skirmishing him), Glamdring 1_75 (unique [gandalf] possession hand weapon, on Gandalf; damage +1, a
+fellowship ability used only on purpose), Sturdy Shield 15_141 ([rohan] possession, on a [rohan] Man). No helm in
+print costs more than 1 (Card_02_025_Tests).
+
 **Seven [elven] artifacts in play at once, for a count that stops at +6 ("(limit +6)", Aiglos 9_12).** Each unique,
 of its own title. Aiglos 9_12 and Vilya 9_23 (cost 0, "Bearer must be Elrond or Gil-galad") on Gil-galad 9_15;
 Phial of Galadriel, Star-glass 10_13 (cost 0, on a Hobbit: the Ring-bearer); in the support area Library of

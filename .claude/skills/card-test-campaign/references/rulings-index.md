@@ -509,7 +509,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - The twilight cost of a card in play (F-0109, built)
 - The CR 4.2 "twilight cost" example (Rohirrim Road 7_332 with Catapult 8_32) is shown twice, and rightly
 - LeastDiscountToPlay bounds X in "remove X ... to play ... from your discard pile" (F-0067) [F-0392]
-- Costs, and effects, in the order printed (Q-0080) [F-0123]
+- Costs, and effects, in the order printed (Q-0080) [F-0123, F-0549]
 - What the text prints before "to" is PAID in `cost`, also where the player first chooses it into a memory (F-0477, The Highest Quality 11_60 and An End Worthy of Remembrance 102_46)
 - "When you play this minion, you may discard N <cards> from play to make it twilight cost -M and <keyword>" is a discount inside the play (Mountain-troll 15_112; F-0482 and F-0483, built by engine pass 28; Q-0275: A) [Q-0279]
 - "When you play <this>, you may exert any number of minions. For each minion you exert, <this> is twilight cost -X" is a `perExert` discount, asked as one choice (Sauron 13_140; F-0385, Q-0143)
@@ -518,7 +518,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "If you have initiative, you may play this <card> from your discard pile" is a clause of its own, typed `Activated [+ -]` (Hobbitses Are Dead 7_61; F-0055)
 - "If you have initiative, <pay> to <do>" on a Free Peoples event wants four cards beside the event (F-0464, built by engine pass 28)
 - "Hinder/remove X ... to play X cards from your discard pile": X is capped (Q-0094)
-- An action's costs are judged in order, with its own exertions counted (F-0184) [F-0486]
+- An action's costs are judged in order, with its own exertions counted (F-0184) [F-0549, F-0486]
 - Response events are not played by "play an event from ..." (F-0186)
 - "Play a <kind of> Free Peoples card from your draw deck" never offers a Shadow card, whatever the filter says (Dammed Gate-stream 11_235, Green Dragon Inn 11_242)
 - "Ignoring all costs" passes over the cost in an event's own text (F-0316, built by engine pass 20) [Q-0201]

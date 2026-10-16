@@ -667,7 +667,7 @@ skirmish resolves, and its second pass goes to whatever the Free Peoples player 
 the next skirmish (DecisionResultInvalidException from a CardsSelectionDecision) or his regroup decision (the
 test then rests on the Shadow player's). There `ShadowPass()` alone ends the skirmish.
 
-**A skirmish whose only Free Peoples character is killed mid-skirmish is over at once.** Killed by a Shadow skirmish event where his was the only skirmish, he leaves no skirmish to pass: the next decision is the Free Peoples player's regroup actions (`AwaitingFreepsRegroupPhaseActions()`, Card_01_255_Tests's ally test), not a skirmish action.
+**A skirmish whose only Free Peoples character is killed mid-skirmish is over at once.** Killed by a Shadow skirmish event where his was the only skirmish, he leaves no skirmish to pass: the next decision is the Free Peoples player's regroup actions (`AwaitingFreepsRegroupPhaseActions()`, Card_01_255_Tests's ally test), not a skirmish action. The same holds for the minion side: a Skirmish event that discards the only minion of the skirmish (Staff Asunder 2_27) ends it at once, and the game rests at `AwaitingFreepsRegroupPhaseActions()` where that was the last skirmish (Card_02_027_Tests).
 
 **No minions, no combat.** With no minion in play when the Shadow phase ends, the game goes straight to regroup.
 A test that needs a maneuver phase needs a minion on the table.
