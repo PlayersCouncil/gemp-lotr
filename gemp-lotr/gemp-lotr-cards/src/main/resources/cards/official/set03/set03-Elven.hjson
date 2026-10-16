@@ -566,6 +566,10 @@
 			{
 				type: activated
 				phase: regroup
+				requires: {
+					type: canSpot
+					filter: minion
+				}
 				cost: {
 					type: exert
 					select: self
