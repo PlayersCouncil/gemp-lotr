@@ -418,7 +418,8 @@ cost and needs no pool laid). An "or" inside the noun phrase
 side is a bare race word ("an Elf or Dwarf"), that side owes the whole spread a bare race word owes (below), an Elf
 ally as well as an Elf companion (2_69). An "or"
 between two noun phrases, each with its own article or a name ("Gandalf or an Elf", "a [sauron] engine or a site
-you control"), is two alternatives and lists `B`, each taken alone (1_40 above; 8_95).
+you control"), is two alternatives and lists `B`, each taken alone (1_40 above; 8_95); two bare names ("Gandalf or
+Aragorn") are two such phrases (2_110; 52_110's ledger, landed earlier, called it F's).
 
 **A card that is not unique, and "that card": the second copy and the untouched control.** Where the card is not
 unique and its text says "here", "this condition", "this minion" or the like, a second copy is in play wherever it

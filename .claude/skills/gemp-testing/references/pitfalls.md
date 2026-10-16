@@ -52,7 +52,9 @@ loser can fail the filter ("your minion": every loser is the Shadow player's), t
 choice read, as that is what tells `choose` from `all` (Saruman's Laboratory 6_120, Nan Curunír 5_119). That
 board is for minions only: a skirmish has one Free Peoples character (CR 4.2 "assignment phase"), so a response
 to a wound on one kind of FREE PEOPLES character ("an unbound Hobbit", Skinbark 6_35) meets each candidate
-alone in its own window, and its `F` "among them" is a line in Notes (dec-b11_78 found no board). Nobody
+alone in its own window, and its `F` "among them" is a line in Notes (dec-b11_78 found no board). A bare race
+word that a printed minion has is no such kind: "a Hobbit" reaches Ted Sandyman 18_75 (Q-0058), so its `F` lays
+him beside a minion who is no Hobbit, both losing to one companion (Nice Imitation 2_106). Nobody
 is asked the order: cards in play that an effect takes together are taken in the order of their card ids, the
 same in every run (Q-0142, F-0268). A card gets a new id as it comes into play, so that is the
 order they came into play: lay them down one at a time (`MoveMinionsToTable(a); MoveMinionsToTable(b);`) and a
