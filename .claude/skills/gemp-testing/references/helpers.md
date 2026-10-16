@@ -457,6 +457,12 @@ Rivendell 101_11, Galadriel's Silver Ewer 18_11 (its bonuses are for Galadriel a
 Galadriel 15_22 (to play, spot 3 Elves: cheat it in; answers a draw) and Gift of the Evenstar 15_16 (answers a won
 skirmish and the start of a maneuver phase). Their abilities are used only on purpose (`Card_09_012_Tests`).
 
+**The title half of "Elrond (or 2 [elven] allies)" alone (Master of Healing 3_22).** Elrond, Lord of Rivendell 1_40
+is himself an [elven] ally, so with one more [elven] ally beside him the two-allies half is met too and the title
+is never what lets the card be played (`name(Elrond),companion` survived such a board, dec-b3_18). Lay him with no
+other [elven] ally (Albert Dreary 1_69, a [gandalf] ally, may stand beside him); the Elrond who is a companion is
+Elrond, Witness to History 12_17 (`Card_03_022_Tests`).
+
 **Cards for "play a <culture> artifact (condition, possession) from your draw deck", one for each place it goes.**
 [elven] artifacts: The Mirror of Galadriel, Dangerous Guide 15_22 (unique, cost 2, to the support area; to play,
 spot 3 Elves, an Elf ally among them: Orophin 1_56) and Phial of Galadriel, Star-glass 10_13 (unique, cost 0,
@@ -1182,6 +1188,12 @@ offered and left at 0, where -2 would leave 1 and a pool of 1 withholds the play
 until the end of the turn", both sides' cards. Uruk-hai Armory 1_157 (cost 1) then reads 3 in the Shadow hand
 (`Card_07_332_Tests`, on a King-block path). It would show No Business of Ours 52_44's -3, which its file still
 shows with an ad hoc `TwilightCostModifier` (approved in the errata phase).
+
+**A card in a hand whose cost a site 1 lowers (the CR 4.2 "twilight cost" example read by a Fellowship event on
+turn 1).** Edoras Hall 7_330, the site 1 of `KingSites`: "The twilight cost of each [rohan] possession is -1".
+Sturdy Shield 15_141 ([rohan] possession, printed 2) in the Shadow hand reads 1 there, and a text that reads "the
+twilight cost of the card revealed" reads 2 (Card_03_016_Tests). Weatherhills 1_335 (Card_03_043_Tests) is site 2:
+the turns `SkipToSite(2)` plays reconcile cards into the Shadow hand, which a random reveal then takes.
 
 ## Sites and moves
 

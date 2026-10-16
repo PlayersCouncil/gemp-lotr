@@ -419,7 +419,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Reinforcing more than one token (F-0113)
 - "Its skirmish" on a minion (F-0114) [F-0321]
 - "By another card" (Q-0079). "By another card" in a card's text is a card other than THAT card (Q-0079, Corsair Helmsman 103_46): a [raider] minion ...
-- A spot that stands after "to" is an effect (Q-0085) [Q-0058, F-0492]
+- A spot that stands after "to" is an effect (Q-0085) [Q-0058, F-0492, F-0022, F-0440, F-0557]
 - A bare cost sentence with no "to", then the effect sentences (Q-0058)
 - "Remove X ... to <do something to> a card costing X or less" (Q-0087, F-0133)
 - "The <other> player may make you <do X> to prevent this" (Q-0088)
@@ -502,7 +502,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 
 - "<do> a companion for each <thing>" may be spread (F-0224) [F-0458, F-0459, Q-0141, Q-0248, F-0497, F-0533]
 - A reveal before "to" is a cost, and an empty draw deck cannot pay it (F-0022, F-0249) [Q-0104, Q-0029]
-- A reveal that what follows reads must be able to happen (Q-0148, F-0284) [F-0022, Q-0163, Q-0104, Q-0029]
+- A reveal that what follows reads must be able to happen (Q-0148, F-0284) [F-0022, Q-0163, Q-0104, Q-0029, Q-0336]
 - A reveal that a cost buys is offered with that draw deck empty, and flagged (Q-0163: B; built by engine pass 21). "<cost> to reveal the top N cards ... [Q-0148]
 - What bounds an X: the action's costs, never what its effect can use (Q-0069, Q-0087, Q-0094, F-0067, F-0111). The rulings on X look two ways and are ... [Q-0062, Q-0015, Q-0034, Q-0191]
 - "Spot a Dwarf who is damage +X and exert that Dwarf ... to <do> X": X is the bonus he had when he was spotted (Q-0256: A; built by engine pass 28), ... [Q-0015]
@@ -611,7 +611,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Check D on a delayed "at the start of the regroup phase" that an ability sets up: fight a skirmish between (Under Foot 60_52, Flaming Brand 52_32) [Q-0164, Q-0310]
 - Check D on "skip his or her next Shadow phase": read the second Shadow phase of the same turn (What Are We Waiting For? 2_15; dec-b2_14)
 - A filter that feeds a count. Where a filter feeds a COUNT ("for each X stacked here", "for each X you can spot"), lay the board so the count under ...
-- A phrase the definition writes twice: in a requirement and in the choice (Beorning Axe 18_18, "a [gandalf] card" as `HasCardInDiscard` and as the `choose` of `putCardsFromDiscardIntoHand`)
+- A phrase the definition writes twice: in a requirement and in the choice (Beorning Axe 18_18, "a [gandalf] card" as `HasCardInDiscard` and as the `choose` of `putCardsFromDiscardIntoHand`) [F-0557]
 - "Each site" on a modifier: the sites laid, and a path of a second block (No Stranger to the Shadows 1_108)
 - A site NUMBER in a text ("at site 6, 7, or 8", "at sites 1 to 5") is a site of the card's own block (CR 4.2 "block symbol"; Fellowship block sites have none, so a set 1 to 3 card means Fellowship sites)
 - A draw of 4 in a fellowship phase cannot be told from a draw of 5 or more
