@@ -269,7 +269,9 @@ other culture whose own text stays out of the way is looked for before the cultu
 cards of more than one type have the keyword, one of each type ("a fortification": a condition and Stronghold of My
 Fathers 102_48, a possession): beside conditions alone, `condition,fortification` passes, 10_117; for a bare `weapon`,
 a possession and an artifact (Narsil 9_34 on a [gondor] Man, The Balrog's Sword 2_50 on The Balrog 12_79): beside
-possessions alone, `weapon` narrowed to `possession,weapon` passes, 1_230 and 1_173; for a count or spot of an item
+possessions alone, `weapon` narrowed to `possession,weapon` passes, 1_230 and 1_173; for a bar on "possessions" where
+every possession the card could bear is a hand weapon (a [moria] Creature: Foul Tentacle 2_58), no board tells
+`weapon` from `possession`, and the Notes say so and name the search that found no other; for a count or spot of an item
 type ("each [gondor] artifact you can spot"), one in a support area and one borne (helpers.md, "A [gondor] artifact
 that someone bears"): beside support-area cards alone, `zone(support)` added passes, 9_36; for "discard N cards from
 hand", a card of another culture in the hand: beside [moria] cards alone, `choose(culture(moria))` passes, 1_196; for
@@ -971,7 +973,8 @@ bookends, and that none of the ledger has leaked into the test file. Its warning
    candidate, a `D` that only looks at one side of the boundary, all pass the conformance check. So does a
    card that is not unique and says "this condition" or "here" with no second copy in play in the test where
    it matters: the check warns (`second-copy`) only where no scenario has two aliases of the card at all.
-   A comment that says a thing is "untouched" or "still there" with no assertion under it shows nothing either
+   A comment that says a thing is "untouched" or "still there", or that an event is "still being played" (in
+   `Zone.VOID`: pitfalls, "An event is in the void"), with no assertion under it shows nothing either
    (lint does not read comments): take the words out, or add the reading where a rule or ruling settles it.
    Nor does lint see a pool read after a helper's play made only to meet a requirement: E2 takes it out (1_165, 9_47).
    Nor does it see the card under test played out where its play is only set-up ("Arrange by cheating, act by

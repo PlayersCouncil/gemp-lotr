@@ -159,7 +159,9 @@ stacking a [sauron] Orc from play on a controlled site.
 fetches, so cheat them in. No tentacle has more than 2 vitality. Away from a marsh the others are discarded: lay a
 real marsh and never give a site the keyword (Q-0213: F). Midgewater Marshes (1_332; each Hobbit exerts on moving
 there) goes in the site map as site 2, with a site after it that is no marsh; Moria Lake (1_346; Frodo or 2 other
-companions exert on moving there) is the marsh of site 4.
+companions exert on moving there) is the marsh of site 4. Neither has another keyword: where two marshes that differ in one are wanted, Watcher in the Water 19_21 ("The
+fellowship's current site gains marsh"; it discards every other minion but tentacles) makes plains Ettenmoors 1_331
+a marsh too (Card_02_058_Tests).
 
 **A [sauron] Orc played by another card where his cost is read; an Orc who is not [sauron].** Orc Chieftain 1_266;
 Morgul Hound 7_192. Chieftain: cost 2, strength 7, vitality 2, site 6; his text answers only a weapon played on

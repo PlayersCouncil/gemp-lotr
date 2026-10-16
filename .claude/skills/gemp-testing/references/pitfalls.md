@@ -628,6 +628,13 @@ the control board: if it is refused there too, the reading belongs to the helper
 with no Dwarf in play is refused by any play ability whatever its filter, so lay what it needs (Grimir 1_17) and read
 `FreepsPlayAvailable` on it before reading it not offered (1_364, dec-b1_357, reviewer: shown by a mutation).
 
+**"Is about to end" comes after the skirmish has resolved.** LR 8 (preliminary) says Gemp once moved "skirmish about to
+end" triggers ahead of resolution; this engine has them after it: `SkirmishPhaseAction` queues the
+`SkirmishAboutToEndResult` behind `ResolveSkirmishEffect`, so the loser's wounds are on (or he is dead) when the
+response is offered (Card_02_057_Tests, Card_07_182_Tests). Who was involved is recorded as the skirmish phase begins,
+but the trigger's filter is asked of those cards as they are then: a minion killed by his loser's wound bears
+nothing any more (Q-0332).
+
 ## Getting to the moment: set-up, the skippers and turns
 
 **Set the twilight pool before the Shadow phase starts.** Because the engine asks once, a pool set while the
@@ -1329,7 +1336,8 @@ while a choice or a prevention of its effect is still pending fails. An event wh
 once the skirmish has resolved and the suspended phase has resumed. A response to that event's effect is carried
 out while it is still in the void, so it is not in the discard pile a response reads ("each Shadow card discarded
 in this way"): a control card "already in the discard pile" is a separate card put there (Uruk Spy 1_155 after
-Saruman's Reach 1_137).
+Saruman's Reach 1_137). An event that plays a minion from a pile stays in the void while that minion's own "when you play" trigger waits,
+and is in the discard pile only once it is answered (Foul Things 2_59 with Goblin Scavengers 1_179).
 
 **An event printed with several phases is an event of the phase it is played in (F-0292).** While it is being
 played, and when its cost to play is read (`GetTwilightCost` of the card in hand, the play itself), a "Skirmish
