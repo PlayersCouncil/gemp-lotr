@@ -495,7 +495,9 @@ A response EVENT whose definition gives its play a `text:` (Beyond Dark Mountain
 death of <the character>"; and four more: 4_37, Unheeded 8_115 ("Wound {exertedMinion}"), 10_3, 13_122) is
 read by neither at its "Optional responses" decision:
 `ShadowPlayAvailable(card)` and `ShadowActionAvailable(card)` are both false there, though `ShadowPlayCard(card)`
-plays it. Read the offer with `ShadowHasOptionalTriggerAvailable(card)` (probed at the landing of dec-b4_78), and
+plays it. The two-argument `ShadowActionAvailable(card, text)` and `ShadowUseCardAction(card, text)` do read and
+take it, by words of its own text: where that text names a memory (4_37's "Make {winner} Fierce and +4 Strength")
+the name tells one winner's offer from another's (`Card_04_037_Tests`, dec-b4_37). Or read the offer with `ShadowHasOptionalTriggerAvailable(card)` (probed at the landing of dec-b4_78), and
 take it with `FreepsChooseOptionalTrigger(card)` where it is the Free Peoples player's (Unheeded answering
 Grishnákh 5_100's exertion, `Card_05_100_Tests`, dec-b5_100). A
 response event with no such text is read with `ShadowPlayAvailable` (Ravage the Defeated 4_32; Gondor Will See It
