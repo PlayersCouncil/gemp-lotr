@@ -580,6 +580,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A Frodo with the Ring-bearer keyword, and CR 4.2 "Ring-bearer" ("If a character other than Frodo is your Ring-bearer, you cannot play any version of Frodo with the Ring-bearer keyword") [Q-0159]
 - Helpless 2_76, "Sam's game text does not apply": a Sam who is not the Ring-bearer is no longer Ring-bound
 - The CR 4.2 "response" example (Isildur wearing Answer To All Riddles 4_1, Sapling of the White Tree 9_35) is shown in the Ring's file
+- The CR 4.2 "discard" example (Watcher in the Water 2_73 with Goblin Runner 1_178) is shown in Goblin Runner's file
 - The CR 4.2 "modifier" example (Shelob, Her Ladyship 10_23 with Sent Back 9_27) is shown in Shelob's file, and the "effect" and "preventing effects" example (Morgul Destroyer with the Sapling 9_35) in Morgul Destroyer's
 - The CR 4.2 "modifier" example on Orc Ambusher 1_261 ("It does not specifically name itself, so this does not apply to Orc Ambusher when it is played") is owed as a `Rule` clause by every card that prints its sentence
 - "This card can replace sites only in the Fellowship block format" (CR 4.2 Section Three: Paths Seldom Trodden 1_222, Úlairë Nelya 1_233, Dark Places 2_55; Grimbold 7_233 with "King block") lays the player's site of the card's own block, on any path, and is not offered where he has none to lay (Q-0327, Ketura 2026-10-15; engine pass 49)
@@ -655,5 +656,5 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - lint's `plain-play` warning (Q-0279: C; engine pass 29)
 - lint's `stale`, `race-side`, `pile-cost`, `rule-of-4`, `self-bar`, `item-class` and `bearer-min` warnings (engine pass 39) [Q-0058, F-0510, Q-0062, Q-0262]
 - lint's `read-before`, `helper-pool` and `mounted` warnings (engine pass 44) [Q-0307, Q-0279]
-- lint's `side-doers` warning (engine pass 48)
+- lint's `side-doers` warning (engine pass 48) [F-0551]
 - No Play clause, and no test that only plays a card (Q-0279: B; engine pass 31) [Q-0220]
