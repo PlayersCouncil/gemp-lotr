@@ -1102,7 +1102,9 @@ offer plays ANY minion from the discard pile: `ShadowUseCardAction(peril)`, `Sha
 one minion there (Card_01_350_Tests). In the ASSIGNMENT phase: A Shadow Fell Over Them 15_182 ([wraith]
 support-area condition; "Assignment: Spot a Nazgûl and remove (4) to play a Nazgûl from your discard pile") plays
 Nertëa (in the discard pile) beside Úlairë Lemenya 1_232, the pool set high, which is the legal play of "a minion
-that comes into play afterwards" for a Maneuver event's snapshot (Card_10_016_Tests). In the maneuver phase itself,
+that comes into play afterwards" for a Maneuver event's snapshot (Card_10_016_Tests). Her offer plays a minion of ANY
+culture: a [dunland] Man for Wake of Destruction 4_35, where the [dunland] cards that play one outside the
+Shadow phase make him fierce themselves (4_9, 4_23, 4_38, 6_6; Card_04_035_Tests). In the maneuver phase itself,
 read and not run: Stampeding Savage 17_53 ("Maneuver: Discard this minion and X minions stacked on a [men]
 possession to play a [men] minion from your discard pile").
 

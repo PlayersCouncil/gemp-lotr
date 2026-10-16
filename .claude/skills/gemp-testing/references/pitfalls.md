@@ -1013,7 +1013,10 @@ is his site, not the one player 1's fellowship reached. One player's marker, who
 text compares the two markers ("ahead on the adventure path", CR 4.2 "ahead"), read both at each step
 (Card_13_003_Tests). The card on the path is the copy of whoever laid it: from site 2 on, on
 player 1's first turn, the Shadow player's. `GetCurrentSite()` and `GetSite(n)` return that card and
-`GetFreepsSite(n)` a different one, so compare with `GetSite(n)` or by blueprint. A site's own trigger offer is
+`GetFreepsSite(n)` a different one, so compare with `GetSite(n)` or by blueprint. `GetSite(n)` is null for a site not
+yet laid (on `FellowshipSites`, any site past the fellowship's), and the null fails further on with no rig
+message (`GetTwilightCost`: a NullPointerException in `ModifiersLogic.getCurrentTwilightCost`; dec-b4_29);
+`GetFreepsSite(n)` and `GetShadowSite(n)` fall back to the player's adventure deck. A site's own trigger offer is
 read on that card too: `FreepsHasOptionalTriggerAvailable(GetFreepsSite(3))` reads false while the trigger of
 the copy laid there is offered, so read it on `GetCurrentSite()` after the move (Card_03_119_Tests). It also gives a site's
 trigger on "the fellowship" a board that tells the mover from the site's owner: read both players' burdens
