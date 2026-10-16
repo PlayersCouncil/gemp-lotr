@@ -573,7 +573,9 @@ Which checks a clause lists follows from its words, and the analyst is expected 
   snapshot where the cards it names are on the table when it is used, the standing filter where its text could do
   nothing as a snapshot, as Not Feared in Sunlight 52_107, F-0217: `lookup.py "make each"`. A trigger of a card in
   play that lays "each X is ... until ..." is read as an ability is: Madril 15_64. A Skirmish ability on "each minion
-  skirmishing him" owes the clause, the minions being there: Anárion 0_58, with Controlled By The Ring 15_41.)
+  skirmishing him" owes the clause, the minions being there: Anárion 0_58, with Controlled By The Ring 15_41.
+  An event's bar on a kind for a time is the same snapshot: "prevent Hobbits from being assigned to skirmishes
+  until the regroup phase", Depart Silently 3_31, F-0558.)
 - "lose…", "cannot…" for a time → a `Ruling` clause: "can't" beats "can", so what was lost is not given back
   by another card before the time is up. Where the card's own text says so ("loses fierce and cannot gain fierce
   until ...", Prized Lagan 68_110), the "cannot gain" half may stand as an `Effect` clause of its own listing

@@ -1121,6 +1121,9 @@ not drawn: Master Proudfoot 1_301 (ally; "Fellowship: If the twilight pool has f
 (2) to reveal the top 3 cards of your draw deck. Take all [shire] cards revealed into hand and discard the rest";
 `DismissRevealedCards()` after it). The card that answers either is Verily I Come 2_94, on the Ring-bearer, a
 burden for each in the fellowship phase (F-0376; mechanics/deck/DrawnOrTakenIntoHandTests, Card_07_195_Tests).
+The Shadow player's take from his draw deck: Fool of a Took! 1_170 ([moria] Shadow event; spot a Hobbit other than
+the Ring-bearer; reveals from the top until a card that is no [moria] minion and takes them all into hand). Its
+reveal is shown to BOTH players, so `DismissRevealedCards()`, not one side's, before the take (Card_03_029_Tests).
 
 **A Free Peoples card that has the SHADOW player draw, with no choice in it.** Drawing His Eye 10_29; What Are We
 Waiting For? 2_15. Drawing His Eye: [gondor] Fellowship event, cost 2; one card of the Shadow hand revealed at

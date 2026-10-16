@@ -1580,7 +1580,8 @@ the Shadow player's Urgency 19_17 count. The bonus still reaches only a count wh
 asks for a choice, and so does a play from the draw deck (`playCardFromDrawDeck`: Éomer 12_112's "You may inspect
 the contents of your deck" comes before "Choose cards from deck", Card_01_317_Tests). `FreepsDismissRevealedCards()` answers the showing; then choose with
 `FreepsChooseCardBPFromSelection(card)`, which picks by blueprint because cards in hidden zones are not identified
-to the client. To take nothing from a choice whose minimum is 0, `FreepsDeclineChoosing()`: a
+to the client. A `FreepsChooseCardBPFromSelection` sent while the showing is still pending is taken without a
+complaint and chooses nothing: the card stays in the deck and the test fails later, far from the cause (Éomer 12_112). To take nothing from a choice whose minimum is 0, `FreepsDeclineChoosing()`: a
 `FreepsChooseCardBPFromSelection()` with no card does not compile (two overloads fit).
 Where nothing in the zone can be chosen, the showing is the only decision ("... while retrieving cards", nothing
 selectable; Saved From the Fire 8_20 with no card of the culture in the deck): answer it once. `FreepsDeclineChoosing()`

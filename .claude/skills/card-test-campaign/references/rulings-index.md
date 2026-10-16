@@ -448,7 +448,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 
 - The no-effect flag: which cards assert it [Q-0034, Q-0111, Q-0127]
 - An optional trigger or ability that costs nothing and would do nothing is withheld by the engine (Q-0224: A2; Q-0231: B; engine pass 26) [Q-0034, F-0407, F-0408, F-0402, F-0406, Q-0262, F-0426, Q-0246, F-0423, F-0476, F-0496, Q-0238, Q-0033, F-0411, F-0417, Q-0248, F-0428, F-0420, F-0526, F-0413, Q-0104, F-0410, F-0506, Q-0243, Q-0112, F-0473, Q-0102, Q-0245, Q-0062, Q-0029, F-0379, Q-0107]
-- A choice whose every branch has nothing to act on (F-0116) [F-0293, Q-0220, Q-0224, F-0471, Q-0255, F-0525, F-0370, F-0366]
+- A choice whose every branch has nothing to act on (F-0116) [F-0293, Q-0220, Q-0224, F-0471, Q-0255, F-0525, F-0370, F-0366, Q-0102]
 - "<Do X> or <do Y>": each branch is written as the effect itself (F-0310, Here Lies Balin 1_19) [Q-0209, F-0222]
 - "Discard his or her hand or <do Y>": with no card in hand the choice is still asked, and the discard may be taken for nothing (Pelennor Flat 7_345; Q-0255: B) [Q-0224]
 - "<Do X> or choose an opponent who may <do Y>": with nothing for the opponent to do the choice is still asked, and the opponent may be chosen for nothing (Crashed Gate 8_119; Q-0257: A) [F-0341, Q-0255]
@@ -550,7 +550,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Discard this when at / if <where>" on the move that takes the fellowship there (F-0233, Q-0133)
 - "Each time your fellowship moves, ... (or N if at site X or higher)" reads the site left (Q-0184: A; built by engine pass 21)
 - "When <this card> leaves play, this bonus is lost" as a turn-long added trigger names `self` (F-0270, Radagast 59_26)
-- "Make each ... until" is a snapshot on an event; on an ability only where the cards it names are on the table when it is used (Q-0011, F-0144, F-0217)
+- "Make each ... until" is a snapshot on an event; on an ability only where the cards it names are on the table when it is used (Q-0011, F-0144, F-0217) [F-0558]
 - "Each X is <number> +1 for each Y you can spot until <a time>" on a trigger: the count is taken once, as the trigger is carried out (as built; Madril 15_64; Q-0270: A)
 - Keywords copied "until ..." are a snapshot (Q-0096); race and "unloaded keywords" (Q-0097)
 - "Exert X twice" sets off an "each time ... exerts" trigger twice [F-0145]
