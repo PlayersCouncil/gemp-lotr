@@ -818,7 +818,9 @@ start-of-turn or start-of-fellowship trigger, put into play before `StartGame()`
 `StartGame()` returns. Answer it, or put the card down afterwards. A card with no trigger at the start of the turn,
 a minion included, may go down before `StartGame()` and is still on the table in the turn's later phases
 (Card_91_013_Tests; probed): "minions go down after StartGame" is the habit of new tests, and an old file's order
-is left as it is. A card put down afterwards is not in the decision already pending: before its own fellowship
+is left as it is. `SkipToSite(n)` likewise arrives at site n with a start-of-fellowship offer pending and the scenario's small
+draw deck drawn out by the reconciles; `SetFreepsHand()` and `SetFreepsDrawDeck(...)` under that offer keep it
+(Card_03_001_Tests). A card put down afterwards is not in the decision already pending: before its own fellowship
 ability is read or used, call `FreepsRefreshDecision()` ("A board changed under a pending decision"; Galadriel
 3_17, Card_03_017_Tests).
 

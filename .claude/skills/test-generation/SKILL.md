@@ -262,7 +262,7 @@ side, 94_27, and a bare "cards" ("discard up to 2 cards from hand") owes it thou
 cards have them: beside [shire] ones alone, `pipeweed` narrowed to `culture(shire)` passes, 92_4; for a terrain word
 on a site ("a river"), two sites of it that differ in another keyword (Buckleberry Ferry 1_330 and Ford of Bruinen
 1_338, a sanctuary): beside the Ferry alone, `river,not(sanctuary)` passes, 1_46, and so for the fellowship's site ("while the fellowship
-is at a forest": Derndingle 4_330 and Rivendell Waterfall 1_342, 2_35), every terrain word, underground too (Balin's Tomb and The Dimholt 8_117, a sanctuary, 2_42); for "sanctuary" or "not a
+is at a forest": Derndingle 4_330 and Rivendell Waterfall 1_342, 2_35), every terrain word, underground too (Balin's Tomb and The Dimholt 8_117, a sanctuary, 2_42; for a Shadow number lowered, Caves of Aglarond 4_352, 2_121); for "sanctuary" or "not a
 sanctuary", a site 3 and a site 6: at site 3 alone `not(siteNumber(3))` passes, 1_129; for a culture word
 on a kind a title is printed in ("a [gollum] minion"), one of another title, also inside an effect's "If that
 minion is ...": beside Gollum alone `name(Gollum)` passes, 15_51 (Shelob 8_26); and a card of the
@@ -546,7 +546,7 @@ Which checks a clause lists follows from its words, and the analyst is expected 
   offer itself (Q-0224): the test reads it absent, and no requirement is written for it unless the offer is still
   made there (shapes, "An optional trigger or ability that costs nothing"). On a `Trigger` this `-` is owed beside
   the neighbouring-event `-`, and neither stands in for the other (Heights of Isengard 11_244). For a draw that can come in its
-  player's fellowship phase the board is the Rule of 4 spent (Q-0262: B; an empty deck still asks, Q-0029); a Fellowship
+  player's fellowship phase the board is the Rule of 4 spent (Q-0262: B; an empty deck still asks, Q-0029); a trigger at the very start of the fellowship phase has nothing ahead of it that could spend the Rule, so the Notes say so (3_1); a Fellowship
   EVENT that draws owes no such board (the rule's, shown with Delving 1_6 in mechanics/deck/RuleOfFourTests). A keyword given to a card that has it
   already is not "nothing" and is offered (Q-0245: A, Band of Wild Men 4_4: "the effect still has potential to alter
   that calculus"). That board is owed by every trigger or ability that gives a keyword, with a cost as without,
