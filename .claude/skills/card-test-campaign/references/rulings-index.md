@@ -553,6 +553,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "If a Free Peoples player reveals this card from your hand" asks whose CARD revealed (Eye of Barad-dûr 5_96; Q-0251: B) [Q-0171]
 - "Each time your condition is hindered or discarded" (Q-0075)
 - "Each time this is hindered/discarded" is answered after the removal (F-0120, F-0121)
+- The skirmish procedure, and "is about to end" at its step 6 (Q-0332: B, Ketura 2026-10-16; engine pass 53) [F-0563]
 - memorizeLoser holds everyone in the skirmish but the winner (F-0115, F-0136) [F-0422, F-0480]
 - "If your <kind> wins a skirmish, <do something to> that <kind>" built as a `winsSkirmish` trigger whose effect CHOOSES among `inSkirmish` cards of the same filter (Goblin Swarms 1_183, as built; dec-b2_122) [Q-0224]
 - "If <X> kills a companion" (or "killed by <X>", "kills a companion in a skirmish") is CR 4.2's definition, built as a `killed` trigger with `killer: <X>` (Q-0328: B, in place of Q-0123's loose reading; engine pass 49: Orc Butchery 1_265 and 51_265, The Ring's Oppression 1_273, Goblin Spear 1_182 with `killer: bearer` beside its `canSpot bearer,inSkirmish`; Mind and Body 7_183 was already so) [F-0546, F-0547]

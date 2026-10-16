@@ -11,7 +11,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.StrengthModifier;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -44,6 +43,13 @@ public class Card_02_057_Tests
 					// Thrarin, Dwarven Smith: a Dwarf ally, strength 4, vitality 2.  "Maneuver: Exert Thrarin to allow
 					// him to participate in archery fire and skirmishes until the regroup phase."
 					put("thrarin", "1_27");
+					// Merry, From O'er the Brandywine: a Hobbit, strength 3, vitality 4; +2 bearing a weapon, and he bears none.
+					put("merry", "1_303");
+					// Hobbit Stealth: "Skirmish: At sites 1 to 5, cancel a skirmish involving a Hobbit."
+					put("stealth", "1_298");
+					// Smeagol, Slippery Sneak: a companion; "Skirmish: Add threats equal to the total vitality of the
+					// minions Smeagol is skirmishing to discard Smeagol."  His regroup ability is never used.
+					put("smeagol", "8_27");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -255,8 +261,7 @@ public class Card_02_057_Tests
 	}
 
 	@Test
-	@Ignore("Q-0332: a skirmish that involved The Balrog bearing the Whip is still one after he is killed in it")
-	public void TheBalrogKilledInTheSkirmishItStillInvolvedHimAndTheEventIsOffered() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheBalrogKilledByHisLosersWoundBearsNoWhipAsTheSkirmishIsAboutToEndAndItIsNotOffered() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var cry = scn.GetShadowCard("cry");
@@ -266,12 +271,14 @@ public class Card_02_057_Tests
 		scn.MoveCompanionsToTable(aragorn);
 		scn.MoveCardsToHand(cry);
 
+		assertInZone(Zone.HAND, cry);
 		scn.StartGame();
 		scn.MoveMinionsToTable(balrog);
 		scn.AttachCardsTo(balrog, whip);
 		scn.AddWoundsToChar(balrog, 4);
 		assertAttachedTo(whip, balrog);
 		assertEquals(4, scn.GetWoundsOn(balrog));
+		// 8 + 15 against 17 + 1: Aragorn wins, and not by double.
 		scn.ApplyAdHocModifier(new StrengthModifier(null, aragorn, null, 15));
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(aragorn, balrog);
@@ -280,13 +287,133 @@ public class Card_02_057_Tests
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
 
-		// The loser's wound is his fifth: The Balrog is killed, and the Whip goes with him.
+		// The loser's wound is his fifth: The Balrog is killed and the Whip goes with him, before the skirmish is
+		// about to end (Q-0332: B; the skirmish procedure's step 5 comes before its step 6).  The game has gone on
+		// to the regroup phase with no offer.
 		assertInDiscard(balrog, whip);
 		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertInZone(Zone.HAND, cry);
+		assertEquals(3, scn.GetTwilight());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void TheCompanionKilledByLosingItIsOfferedAndWoundsNobody() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var cry = scn.GetShadowCard("cry");
+		var balrog = scn.GetShadowCard("balrog");
+		var whip = scn.GetShadowCard("whip");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var frodo = scn.GetRingBearer();
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToHand(cry);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(balrog);
+		scn.AttachCardsTo(balrog, whip);
+		assertAttachedTo(whip, balrog);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, balrog);
+		scn.SetTwilight(3);
+
+		scn.FreepsResolveSkirmish(aragorn);
+		// 17 + 1 against 8: at least double.
+		assertEquals(18, scn.GetStrength(balrog));
+		assertEquals(8, scn.GetStrength(aragorn));
+		scn.PassSkirmishActions();
+
+		// Aragorn is overwhelmed and killed (step 5); The Balrog, bearing the Whip, is still in the skirmish as it
+		// is about to end (step 6).
+		assertInZone(Zone.DEAD, aragorn);
+		assertAttachedTo(whip, balrog);
 		assertTrue(scn.ShadowPlayAvailable(cry));
 		scn.ShadowPlayCard(cry);
 
-		assertEquals(2, scn.GetWoundsOn(aragorn));
+		// No companion is left in that skirmish: Frodo, in none, is not wounded.
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(balrog));
+		assertInDiscard(cry);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void ACanceledSkirmishIsAboutToEndAndTheCompanionInItIsWoundedTwice() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var cry = scn.GetShadowCard("cry");
+		var balrog = scn.GetShadowCard("balrog");
+		var whip = scn.GetShadowCard("whip");
+		var merry = scn.GetFreepsCard("merry");
+		var stealth = scn.GetFreepsCard("stealth");
+		var frodo = scn.GetRingBearer();
+		scn.MoveCompanionsToTable(merry);
+		scn.MoveCardsToHand(cry, stealth);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(balrog);
+		scn.AttachCardsTo(balrog, whip);
+		assertAttachedTo(whip, balrog);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(merry, balrog);
+		scn.SetTwilight(3);
+
+		// At Ettenmoors, site 2: Hobbit Stealth cancels the skirmish (step 2a), which goes straight to step 6.
+		scn.FreepsResolveSkirmish(merry);
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		scn.FreepsPlayCard(stealth);
+
+		// Nobody won or lost: no wound was placed.
+		assertEquals(0, scn.GetWoundsOn(merry));
+		assertEquals(0, scn.GetWoundsOn(balrog));
+		assertAttachedTo(whip, balrog);
+		assertTrue(scn.ShadowPlayAvailable(cry));
+		scn.ShadowPlayCard(cry);
+
+		// Merry is still in that skirmish as it is about to end (he is unassigned at step 7): the two wounds are his.
+		assertEquals(2, scn.GetWoundsOn(merry));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertInDiscard(cry);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void ASkirmishWhoseCompanionIsRemovedFromItIsAboutToEndAndItIsOffered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var cry = scn.GetShadowCard("cry");
+		var balrog = scn.GetShadowCard("balrog");
+		var whip = scn.GetShadowCard("whip");
+		var smeagol = scn.GetFreepsCard("smeagol");
+		var frodo = scn.GetRingBearer();
+		scn.MoveCompanionsToTable(smeagol);
+		scn.MoveCardsToHand(cry);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(balrog);
+		scn.AttachCardsTo(balrog, whip);
+		// The Balrog has 1 vitality left, so that Smeagol's ability costs 1 threat.
+		scn.AddWoundsToChar(balrog, 4);
+		assertAttachedTo(whip, balrog);
+		assertEquals(4, scn.GetWoundsOn(balrog));
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(smeagol, balrog);
+		scn.SetTwilight(3);
+
+		// Smeagol discards himself: the last character of his side is removed (step 2c), the Free Peoples side has
+		// lost, and a side already removed takes no loss effects (step 5a).
+		scn.FreepsResolveSkirmish(smeagol);
+		scn.FreepsUseCardAction(smeagol);
+		assertInDiscard(smeagol);
+		assertEquals(1, scn.GetThreats());
+
+		assertEquals(4, scn.GetWoundsOn(balrog));
+		assertAttachedTo(whip, balrog);
+		assertTrue(scn.ShadowPlayAvailable(cry));
+		scn.ShadowPlayCard(cry);
+
+		// No companion is left in that skirmish, and Frodo is in none.
+		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertInDiscard(cry);
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}

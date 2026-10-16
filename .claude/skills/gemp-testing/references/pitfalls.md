@@ -646,12 +646,14 @@ the control board: if it is refused there too, the reading belongs to the helper
 with no Dwarf in play is refused by any play ability whatever its filter, so lay what it needs (Grimir 1_17) and read
 `FreepsPlayAvailable` on it before reading it not offered (1_364, dec-b1_357, reviewer: shown by a mutation).
 
-**"Is about to end" comes after the skirmish has resolved.** LR 8 (preliminary) says Gemp once moved "skirmish about to
-end" triggers ahead of resolution; this engine has them after it: `SkirmishPhaseAction` queues the
+**"Is about to end" comes after the skirmish has resolved.** It is step 6 of her skirmish procedure (Q-0332, binding;
+shapes.md, "The skirmish procedure"), and the engine has it there: `SkirmishPhaseAction` queues the
 `SkirmishAboutToEndResult` behind `ResolveSkirmishEffect`, so the loser's wounds are on (or he is dead) when the
-response is offered (Card_02_057_Tests, Card_07_182_Tests). Who was involved is recorded as the skirmish phase begins,
-but the trigger's filter is asked of those cards as they are then: a minion killed by his loser's wound bears
-nothing any more (Q-0332).
+response is offered, and a cancel or the removal of a side's last character reaches it with no wound placed
+(mechanics/skirmishes/TheSkirmishIsAboutToEndAtStepSixTests). Who was involved is recorded as the skirmish phase
+begins (a character who joins it later, in another's place, is not among them: F-0563), but the trigger's filter is
+asked of those cards as they are then: a minion killed by his loser's wound bears nothing any more (Q-0332: B), and
+is still of his race.
 
 ## Getting to the moment: set-up, the skippers and turns
 
