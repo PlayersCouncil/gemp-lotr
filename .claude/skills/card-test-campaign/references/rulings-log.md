@@ -2204,3 +2204,16 @@ the end or not depending on the decisions made; whether it ends on the detected 
 **An involuntary loop ends with no effect (F-0536, 2026-10-15).** Frodo, Weary From the Journey 15_144 against Black
 Land Observer 15_101 (and Wandering Hillman 15_94), CR 4.2 "loops": "Good catch, let's fix this and get some
 mechanical tests in place to ensure it works with this minion and the other one mentioned in the CR." *[2026-10-15]*
+
+**A defender on two [isengard] Men exerts twice under Unferth (Q-0330, 2026-10-16).** Unferth, Gríma's Bodyguard 4_178,
+after engine pass 49's per-minion assignment (Q-0323: B): "Keep, that's fine." *[2026-10-16]*
+
+**A card the cost milled off the draw deck is not the card taken or played (Q-0331, F-0548, 2026-10-16).** Great Works
+Begun There 2_9 ("discard the top 2 cards from your draw deck to take a [dwarven] event into hand from your discard
+pile"): "A"; Beneath the Mountains 2_1 and 52_1 ("Discard the top 3 cards from your draw deck to play a [dwarven]
+weapon from your discard pile"): "A". The They Are Coming principle (Q-0192, Q-0320, CR 4.2 "effect") reaches a
+deck-top cost: the cards it discards are memorized and left out of the take or play. *[2026-10-16]*
+
+**The loop prompts' [[...]] are card hints (Q-0329, 2026-10-16).** "Oh, my mistake: I had meant for the [[brackets]] to
+indicate a card hint using the existing mechanism for that, not necessarily a literal." So a card named in the prompt
+is sent as `GameUtils.getCardLink(card)` (the cardHint div the game log uses). *[2026-10-16]*

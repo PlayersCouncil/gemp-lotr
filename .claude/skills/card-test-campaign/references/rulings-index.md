@@ -405,6 +405,9 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "A [Sauron] Orc kills a companion" is CR 4.2's definition (Q-0328, 2026-10-15) [Q-0123]
 - The voluntary-loop step: approved in its broad strokes, with her wording (Q-0329, 2026-10-15)
 - An involuntary loop ends with no effect (F-0536, 2026-10-15)
+- A defender on two [isengard] Men exerts twice under Unferth (Q-0330, 2026-10-16) [Q-0323]
+- A card the cost milled off the draw deck is not the card taken or played (Q-0331, F-0548, 2026-10-16) [Q-0192, Q-0320]
+- The loop prompts' [[...]] are card hints (Q-0329, 2026-10-16)
 
 # Settled shapes (shapes.md)
 
