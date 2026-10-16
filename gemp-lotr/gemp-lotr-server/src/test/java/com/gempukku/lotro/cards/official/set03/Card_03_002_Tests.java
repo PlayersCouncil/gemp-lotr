@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_03_002_Tests
@@ -18,7 +19,19 @@ public class Card_03_002_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "3_2");
+					put("pipe", "3_2");
+					put("gimli", "1_13");       // Gimli, Son of Gloin: vitality 3; a skirmish ability used only on purpose
+					put("guard", "1_7");        // Dwarf Guard: a [dwarven] Dwarf companion who is no Gimli, vitality 2
+					put("gandalf", "1_72");     // Gandalf, Friend of the Shirefolk: a Wizard companion with no ability
+					// Gandalf's Pipe: "Bearer must be Gandalf.  Fellowship: Discard a pipeweed possession and spot X
+					// pipes to remove X burdens."  Its X is where the number of pipes that can be spotted is read.
+					put("gandalfspipe", "1_74");
+					// Wizard's Stash: a pipeweed possession on a Wizard.  "Regroup: Exert bearer and discard this.
+					// This phase you may use special abilities on pipes as if it were the Fellowship phase."
+					put("stash", "103_7");
+					// Old Toby: a pipeweed possession in the support area; its own text answers its being played.
+					put("toby1", "1_305");
+					put("toby2", "1_305");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -64,7 +77,7 @@ public class Card_03_002_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("pipe");
 
 		assertEquals("Gimli's Pipe", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -94,6 +107,7 @@ public class Card_03_002_Tests
 
 		scn.StartGame();
 		scn.AddBurdens(7);
+		assertEquals(7, scn.GetBurdens());
 
 		// Two pipes are in play, Gimli's and Gandalf's: 2 is the most that can be spotted.
 		scn.FreepsUseCardAction(gandalfsPipe);
@@ -125,5 +139,104 @@ public class Card_03_002_Tests
 		scn.FreepsChoose("2");
 		assertEquals(0, scn.GetBurdens());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void PlaysOnGimliAndOnNoOtherDwarf() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var pipe = scn.GetFreepsCard("pipe");
+		var gimli = scn.GetFreepsCard("gimli");
+		var guard = scn.GetFreepsCard("guard");
+		scn.MoveCompanionsToTable(guard);
+		scn.MoveCardsToHand(pipe);
+
+		scn.StartGame();
+		assertInHand(pipe);
+		// A Dwarf companion who is no Gimli, and the Ring-bearer: no bearer
+		assertFalse(scn.FreepsPlayAvailable(pipe));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		scn.MoveCompanionsToTable(gimli);
+		scn.FreepsRefreshDecision();
+		assertTrue(scn.FreepsPlayAvailable(pipe));
+		scn.FreepsPlayCard(pipe);
+		// Gimli is the one bearer it may have, so none is asked for.
+		assertAttachedTo(pipe, gimli);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void WithGimliExhaustedTheAbilityIsNotOfferedThoughAnotherDwarfCouldExert() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var pipe = scn.GetFreepsCard("pipe");
+		var gimli = scn.GetFreepsCard("gimli");
+		var guard = scn.GetFreepsCard("guard");
+		scn.MoveCompanionsToTable(gimli, guard);
+		scn.AttachCardsTo(gimli, pipe);
+		// Vitality 3 with 2 wounds: exhausted
+		scn.AddWoundsToChar(gimli, 2);
+		assertEquals(2, scn.GetWoundsOn(gimli));
+		assertEquals(0, scn.GetWoundsOn(guard));
+		assertAttachedTo(pipe, gimli);
+
+		scn.StartGame();
+
+		assertFalse(scn.FreepsActionAvailable(pipe));
+		assertEquals(2, scn.GetWoundsOn(gimli));
+		assertEquals(0, scn.GetWoundsOn(guard));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void TheAddedPipeIsGoneOnceTheFellowshipPhaseIsOver() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var pipe = scn.GetFreepsCard("pipe");
+		var gimli = scn.GetFreepsCard("gimli");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var gandalfsPipe = scn.GetFreepsCard("gandalfspipe");
+		var stash = scn.GetFreepsCard("stash");
+		var toby1 = scn.GetFreepsCard("toby1");
+		var toby2 = scn.GetFreepsCard("toby2");
+		scn.MoveCompanionsToTable(gimli, gandalf);
+		scn.AttachCardsTo(gimli, pipe);
+		scn.AttachCardsTo(gandalf, gandalfsPipe, stash);
+		scn.MoveCardsToSupportArea(toby1, toby2);
+		assertAttachedTo(stash, gandalf);
+		assertInZone(Zone.SUPPORT, toby1, toby2);
+
+		scn.StartGame();
+		scn.AddBurdens(5);
+		assertEquals(5, scn.GetBurdens());
+
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		scn.FreepsUseCardAction(pipe);
+		assertEquals(1, scn.GetWoundsOn(gimli));
+
+		// Gimli's pipe and Gandalf's, and one more: 3 in the fellowship phase it was used in.
+		scn.FreepsUseCardAction(gandalfsPipe);
+		scn.FreepsChooseCard(toby1);
+		assertEquals(3, scn.FreepsGetChoiceMax());
+		scn.FreepsChoose("3");
+		assertEquals(2, scn.GetBurdens());
+
+		scn.SkipToPhase(Phase.REGROUP);
+		assertFalse(scn.FreepsActionAvailable(gandalfsPipe));
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+		scn.FreepsUseCardAction(stash);
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+		assertInDiscard(stash);
+		scn.ShadowPass();
+
+		// In the regroup phase the same two pipes are 2 again.
+		assertTrue(scn.FreepsActionAvailable(gandalfsPipe));
+		scn.FreepsUseCardAction(gandalfsPipe);
+		assertInDiscard(toby2);
+		assertEquals(2, scn.FreepsGetChoiceMax());
+		scn.FreepsChoose("2");
+		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 	}
 }
