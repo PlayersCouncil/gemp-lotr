@@ -1255,11 +1255,14 @@ differ in the sanctuary, so they are a valid spread for "a river" (`Card_01_046_
 
 **A turn with THREE moves, so that the same minions are on the table at two moves ("each time the fellowship moves"
 with minions to act on; no minion is in play at the move that ends a fellowship phase).** Rivendell Waterfall
-1_342, as site 3 of `FellowshipSites`, with a ranger. Forest, sanctuary: "While you can spot a ranger at Rivendell
+1_342, laid as site 3 by `putAll(FellowshipSites); put("site3", "1_342")` (the stock site 3 is Rivendell Valley
+1_341), with a ranger. Forest, sanctuary: "While you can spot a ranger at Rivendell
 Waterfall, the move limit is +1 for this turn". With a ranger among the companions (Aragorn 1_89 or 4_364):
 `FreepsPass()`, minions cheated in, `SkipToMovementDecision()`, `FreepsChooseToMove()` (to the Waterfall;
 `GetMoveLimit()` is 3 once the Shadow actions wait), `SkipToMovementDecision()`, `FreepsChooseToMove()` again
-(`Card_04_364_Tests`, `Card_01_342_Tests`).
+(`Card_04_364_Tests`, `Card_01_342_Tests`, `Card_04_021_Tests`). Read in a `moves` trigger, `GetCurrentSiteNumber()`
+is the site being left (pitfalls, "Inside an "each time the fellowship moves" trigger the marker is still on the
+site left").
 
 **A site taken under control, and one liberated, by legal play; a card that counts "each site you control"; a
 battleground to control.** Southron Explorer 4_250; Théoden, Son of Thengel 4_292 with Guma 4_277; Uruk-hai Band
@@ -1271,8 +1274,9 @@ opponent controls site 4 of a Towers path). The Band is strength 10 and +2 for e
 (`putAll(TowersSites); put("site2", "4_335")`): Advance Uruk Patrol 4_136 is strength +4 while its owner controls
 it. For a board that only needs a site in someone's hands, the cheat (`ShadowTakeControlOfSite()`,
 `FreepsTakeControlOfSite()`): never on player 1's first turn, where player 2's marker is still on site 1 and the cheat
-finds no site even with the fellowship at site 2; `StartGame(); SkipToSite(2);` puts player 1's second turn at site 3
-with site 1 behind every marker (Card_08_095_Tests). Pitfalls,
+finds no site even with the fellowship at site 2; `StartGame(); SkipToSite(2);` is player 1's second turn,
+in the fellowship phase at site 2 with player 2's marker on site 2 as well, so site 1 is behind every marker (and a
+pass moves the fellowship on to site 3: Card_08_095_Tests). Pitfalls,
 "A site is controlled lowest first"; mechanics/sites/ControlOfSitesTests.
 
 **The next site played, and a site replaced, by legal play.** Pathfinder 1_110; Úlairë Nelya, Lieutenant of Morgul

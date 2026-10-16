@@ -186,7 +186,7 @@ The sites of `FellowshipSites`, for tests that turn on terrain or on where the f
 | 8 | Anduin Banks 1_356 | 6 | River. Adds to the minion archery total for each companion over 4 |
 | 9 | Emyn Muil 1_360 | 9 | Maneuver: exert your minion to make it fierce |
 
-`SkipToSite(n)` ends in the fellowship phase at site n, and any skip on from there (`SkipToPhase`,
+`SkipToSite(n)` ends in player 1's fellowship phase at site n, with player 2's marker on site n too, and any skip on from there (`SkipToPhase`,
 `SkipToAssignments`) or a `FreepsPass()` moves the fellowship to site n + 1: `SkipToSite(3)` and then
 `SkipToPhase(Phase.MANEUVER)` is the maneuver phase at site 4. So a test of a site's own text (its move trigger,
 its maneuver, archery, skirmish or regroup phase) wants `SkipToSite(n - 1)`, with the minions laid there, and then
