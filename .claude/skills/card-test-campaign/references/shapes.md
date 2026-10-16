@@ -265,7 +265,9 @@ with that hand empty, X 0, as built and landed: whether Q-0148 reaches it is ask
 21).** "<cost> to reveal the top N cards of a draw deck. <What is done with the cards revealed.>" (War-beacon
 103_35, His Cruelty and Malice 53_91; The Dark Lord's Summons 1_242, Into the West 7_23), and an event of the
 shape (Wealth of Moria 1_28), gets no `HasCardInDrawDeck`: that is Q-0148's, for a reveal with no cost. With the
-deck the reveal names empty the action is offered and reads `"effect"`; taken, it pays its cost and does nothing.
+deck the reveal names empty the action is offered and reads `"effect"`; a reveal at random from a HAND that a spot
+buys is the same (Might of Númenor 3_43, Meant to Be Alone 3_109: played with that hand empty, it does nothing; not
+Q-0336's, which is for a reveal with nothing before it); taken, it pays its cost and does nothing.
 With one card there it reads `"false"`. The game flags it only where the reveal is the first effect and all that
 follows deals with the cards revealed and nothing else (taken, discarded or put back by a `select` of the reveal's
 memory, an `If` on `MemoryMatches`, a `Repeat` of `ForEachInMemory`); with anything else after it (a heal or a

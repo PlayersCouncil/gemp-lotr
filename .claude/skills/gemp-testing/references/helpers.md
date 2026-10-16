@@ -901,7 +901,8 @@ discard one of his own conditions. Brooding on Tomorrow 10_14 does the same on a
 **A doer that is no Shadow card, and a Shadow item, for "Shadow cards may not discard cards from your hand or from the
 top of your draw deck".** Midgewater Moors 1_333; Uruk-hai Sword 1_160. The Moors (FOTR site 2, plains): "Each time a
 minion is played, the Free Peoples player discards a card from hand", written `forced: true`, so the bar is asked of
-it and only its side lets it through. The bar is asked only of a discard written `forced: true`: Search Far and Wide
+it and only its side lets it through; it is the site doer for "a Shadow card makes you discard from hand" too (Old
+Noakes 3_111, Card_03_111_Tests). The bar is asked only of a discard written `forced: true`: Search Far and Wide
 4_56's cost (the top card of the deck) writes `false` and shows nothing as a candidate, whatever its side. The Sword
 ([isengard] hand weapon on an Uruk-hai, Uruk-hai Band 4_202): "Each time bearer wins a skirmish, the Free Peoples
 player must discard the top card of his or her draw deck"; the loser's wound and its trigger are ordered by the Free
@@ -938,13 +939,17 @@ A burden removed by a non-Hobbit CHARACTER's own text (the F of "except by a Hob
 Emissary 12_30, unique [gandalf] Man companion; "At the start of each skirmish involving Járnsmid, you may remove a
 burden (or 2 burdens if you can spot another [gandalf] companion)": two at once beside Gandalf 1_72 (Card_03_113_Tests).
 
-**A burden a Shadow card adds: one the Free Peoples player chooses; two at once.** Desperate Defense of the Ring
-1_244; Eye of Barad-dûr 5_96. Defense 1_244: [sauron] condition on a companion (cheat it on; to play it exerts a [sauron]
+**A burden a Shadow card adds: one the Free Peoples player chooses; two at once; one a minion's own ability adds. A
+burden a site adds.** Desperate Defense of the Ring 1_244; Eye of Barad-dûr 5_96; Orc Miscreant 11_131; Eregion Hills 3_116. Defense 1_244: [sauron] condition on a companion (cheat it on; to play it exerts a [sauron]
 Orc): each time bearer is assigned to a skirmish the Free Peoples player chooses "Discard 3 cards from hand" or
 "Add a burden"; give him 3 or more cards in hand, or there is no choice to put (F-0310). Eye: [sauron] event, cost
 0, whose Response is played when a Free Peoples player reveals it from the Shadow hand, and adds 2 burdens:
 Glamdring 1_75 on Gandalf 1_72 reveals that hand in the fellowship phase (`FreepsUseCardAction(glamdring)`,
-`FreepsDismissRevealedCards()`, `ShadowPlayCard(eye)`; Card_04_316_Tests, Card_05_096_Tests).
+`FreepsDismissRevealedCards()`, `ShadowPlayCard(eye)`; Card_04_316_Tests, Card_05_096_Tests). Miscreant: [orc] Orc
+minion, vitality 3, "Regroup: Exert this minion to add a burden" (cheat it in; to play it spots an [orc] minion),
+nothing else in the way, and usable twice in one regroup phase. Eregion Hills, of no side: site 4 of a custom FOTR site
+map, "When the fellowship moves to Eregion Hills, add a burden" (Card_03_110_Tests, beside Sméagol 7_71's "To play,
+add a burden" for a Free Peoples doer).
 
 **A threat removed as a Shadow card's COST; as a Free Peoples card's EFFECT (a possession's, a condition's); as a
 Free Peoples card's COST; by a site, which has no side.** Sauron's Hatred 7_310; Sting, Elven Long Knife 18_113;

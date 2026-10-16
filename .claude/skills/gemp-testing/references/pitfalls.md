@@ -629,7 +629,9 @@ is true, read what is to be ordered with `FreepsGetActionCount()` and `FreepsAct
 entry carries its card's name: "Elrond", "Dwarven Heart", "The One Ring", "Gimli's Helm"), and name the first with
 `FreepsResolveActionOrder("<card title>")`. `FreepsChoiceAvailable(text)` reads only a multiple choice's answers and is
 false there. Two required answers to one "is about to take a wound" are put to the player again for every wound of
-the same skirmish (`mechanics/actions/RequiredActionsAnsweringOneTriggerTests`).
+the same skirmish (`mechanics/actions/RequiredActionsAnsweringOneTriggerTests`). It comes wherever two required
+triggers answer one moment, wounds or none: a minion played at Midgewater Moors 1_333 with a required when-played
+trigger of its own (Goblin Runner 1_178: `FreepsResolveActionOrder("Midgewater Moors")`, Card_03_111_Tests).
 
 **A candidate a helper's own text refuses shows nothing of the card under test.** A Hobbit already assigned is
 not offered to a second Orc Assassin 1_262's "assign a Hobbit to skirmish this minion" at any site, so reading him
@@ -1150,7 +1152,9 @@ text, `assertTrue(scn.FreepsDecisionAvailable("Choose cards to heal"))`, which l
 (Card_03_043_Tests.TheNumberHealedIsTheCostOfTheCardShownAndNotOfAnotherCardOfTheHand).
 A random DISCARD that shows nothing ("discards 2 cards at random from hand", Tower Lieutenant 1_280) is read by
 counts: the hand down by N, the discard pile up by N, the draw deck unchanged and none of the hand's cards in it,
-and another player's hand untouched (Card_01_280_Tests).
+and another player's hand untouched (Card_01_280_Tests). Its cards go one at a time, and a trigger on a discard from
+hand is asked after EACH, before the next goes: at the first offer the hand of 3 reads 2, at the second 1
+(Card_03_111_Tests.TwoCardsDiscardedAtRandomAtOnceOfferItTwice).
 
 **The fierce round reads as the first does.** After a skirmish that leaves a fierce minion in play,
 `GetCurrentPhase()` is `Phase.ASSIGNMENT` again and `AwaitingFreepsAssignmentPhaseActions()` is true, exactly as
