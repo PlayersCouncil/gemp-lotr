@@ -452,7 +452,8 @@ and its response, on an overwhelm), add words from the action's description:
 `FreepsHasOptionalTriggerAvailable(card, text)` and `FreepsChooseOptionalTrigger(card, text)`, as
 `FreepsUseCardAction(card, text)` does for phase actions. A response EVENT in hand that answers an "is about to"
 window is read and played the same way, by the card: `FreepsHasOptionalTriggerAvailable(card)` and
-`FreepsChooseOptionalTrigger(card)` (Intimidate 1_76, dec-b1_71).
+`FreepsChooseOptionalTrigger(card)` (Intimidate 1_76, dec-b1_71). So is one at a win (Nobody Tosses a Dwarf 1_23 at a Dwarf's
+win, Card_09_010_Tests) and a Response ability of a card in play (Ring of Retribution 9_9, dec-b9_2).
 
 **Toil is a choice of cards, asked only when there is something to choose** (CR 4.2 "toil"; mechanics/keywords/ToilTests).
 A toil card is offered when the pool covers its cost less the toil number for each character of its culture its
@@ -1419,6 +1420,8 @@ take one back) and Teeth of Mordor 5_110 (a [sauron] Orc from play, regroup phas
 "A card stacked on <a kind of card>" is found only under an ACTIVE card of that kind (F-0424: B, engine pass 28):
 a card stacked on the other player's own Free Peoples card on this turn, or on a hindered card, pays no cost, is
 not offered to be chosen and is not counted. Lay his stack before `StartGame()` and read the ability as not offered.
+A stacked card that another card lets be played (Sindri 9_10's `canPlayStackedCards`) is read and played as one
+in hand: `FreepsPlayAvailable(card)` and `FreepsPlayCard(card)` (Card_09_010_Tests, StackingTests; dec-b9_2).
 
 **The Ring is attached to the Ring-bearer.** `GetAttachedCards(ringBearer)` includes The One Ring, so "nothing
 else attached" is a size of 1. `assertNotAttachedTo` is the safer reading.
