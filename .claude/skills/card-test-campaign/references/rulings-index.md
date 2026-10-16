@@ -630,6 +630,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Stacked on a site you control": no board tells `controlledSite` from `site` (Above the Battlement 7_262, Gorgoroth Pillager 7_275)
 - "Assign a minion to <a character>": no board tells `minion: choose(minion)` from `choose(character)` (Into the Caves 17_100)
 - "Each unique [culture] minion is strength +N": no board tells `unique,culture(moria),minion` from `unique,culture(moria)` (Dark Places 2_55; dec-b2_55)
+- "Discard your [culture] condition" on a Shadow card's cost: no board tells `choose(your,culture(sauron),condition)` from `choose(culture(sauron),condition)` (Orc Veteran 3_100, Orc Warrior 3_101; dec-b3_98)
 - "An enduring minion": no board tells `choose(enduring,minion)` from `choose(enduring)` (City of the Dead 8_118)
 - "Each roaming minion" and "Exert a [culture] character": no board tells `all(roaming,minion)` from `all(roaming)`, nor `choose(culture(gondor),character)` in an exert cost from `choose(culture(gondor))` (Eregion's Trails 1_104, Foes of Mordor 1_105; dec-b1_102)
 - "Until the regroup phase, that ally ... participates in archery fire and skirmishes": no board tells the participation's `until: start(regroup)` from `end(assignment)` (One Whom Men Would Follow 1_109; dec-b1_106)
