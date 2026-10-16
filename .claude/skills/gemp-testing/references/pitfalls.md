@@ -679,7 +679,10 @@ taken before that pair. `PassSkirmishActions()` and its kin pass for whoever hol
 holds in the other shared phases: a test that ends on a Free Peoples maneuver ability rests on
 `AwaitingShadowManeuverPhaseActions()`, and one on a Free Peoples regroup ability on
 `AwaitingShadowRegroupPhaseActions()` (Glamdring 1_75); a second use by the Free Peoples player needs `ShadowPass()`
-first (Elven Guardian 67_7's tests).
+first (Elven Guardian 67_7's tests). The other way about, a Shadow event in those phases hands the next
+decision to the Free Peoples player's own phase actions, so `assertFalse(scn.FreepsAnyDecisionsAvailable())` after
+it reads nothing about the event (it does after a Shadow-phase event, Dangerous Gamble 3_76): rest on
+`AwaitingFreepsManeuverPhaseActions()` and its kin (They Will Never Stop Hunting You 3_84).
 `PassSkirmishActions()` is the wrong call once the Free Peoples player has already passed in that skirmish (a
 `FreepsPass()` made only to read what the Shadow player is offered): it passes for the Shadow player, the
 skirmish resolves, and its second pass goes to whatever the Free Peoples player is asked next, the choice of
@@ -1083,6 +1086,10 @@ left, `GetMoveCount()` does not yet count the move, the text of the site left is
 The pool is the one from before the move too: "each time the fellowship moves, remove (2)" (Aragorn 3_38) on
 turn 1 removes nothing from an empty pool, and the move's twilight is then added in full. `SetTwilight(3)`
 first, and spell the sum: 3 - 2 + 2 for the site + 2 companions.
+A `moves` trigger that ADDS twilight has no `-` board: the one non-move, the Free Peoples player staying at the
+regroup move decision, ends the turn, and the turn's end empties the pool (5 at the decision, 0 after
+`FreepsChooseToStay()`). A stay board serves only an effect that outlasts the turn, as wounds do (1_281); the
+ledger writes a `no -:` line (The Ring Draws Them 3_83).
 
 **A draw deck runs short in a long file.** Every Free Peoples card a scenario names and a test does not place
 sits in the Free Peoples draw deck. A "discard the top N cards" with few such cards can find fewer than N by a
