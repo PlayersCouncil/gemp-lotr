@@ -19,7 +19,7 @@ public class Card_02_042_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "2_42");
+					put("goblinman", "2_42");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -37,6 +37,47 @@ public class Card_02_042_Tests
 					put("armor", "1_8");        // Dwarven Armor
 					put("runner", "1_178");     // Goblin Runner
 					put("gimli", "1_13");       // Gimli, Son of Glóin: left in the Free Peoples draw deck
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetUndergroundScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("goblinman1", "2_42");
+					put("goblinman2", "2_42");  // a second copy, played where the first was discarded
+					put("troop", "1_177");      // Goblin Patrol Troop: [moria] Orc minion with no text, beside him at the same sites
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetUndergroundSanctuaryScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("goblinman", "2_42");
+					put("troop", "1_177");      // Goblin Patrol Troop: [moria] Orc minion with no text, beside him at the same sites
+				}},
+				VirtualTableScenario.KingSites,   // site 3, The Dimholt 8_117: underground and a sanctuary
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetTwoCopiesScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("goblinman1", "2_42");
+					put("goblinman2", "2_42");  // a second copy: "this minion" is the one that exerts
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a card for the Free Peoples hand
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -64,7 +105,7 @@ public class Card_02_042_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("goblinman");
 
 		assertEquals("Goblin Man", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -89,6 +130,7 @@ public class Card_02_042_Tests
 		var runner = scn.GetFreepsCard("runner");
 		var gimli = scn.GetFreepsCard("gimli");
 		scn.MoveCardsToHand(aragorn, armor, runner);
+		assertInZone(Zone.HAND, aragorn, armor, runner);
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(goblinMan);
@@ -116,5 +158,101 @@ public class Card_02_042_Tests
 		assertEquals(3, scn.GetFreepsHandCount());
 		assertInZone(Zone.HAND, aragorn, armor, runner);
 		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void DiscardedWhenTheFellowshipMovesUndergroundAndWhenPlayedThere() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetUndergroundScenario();
+
+		var goblinman1 = scn.GetShadowCard("goblinman1");
+		var goblinman2 = scn.GetShadowCard("goblinman2");
+		var troop = scn.GetShadowCard("troop");
+
+		scn.StartGame();
+		scn.SkipToSite(2);
+		scn.MoveCardsToHand(goblinman1, goblinman2);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		// Rivendell Valley, site 3, is not underground: the Goblin Man is played and stays.
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertFalse(scn.HasKeyword(scn.GetCurrentSite(), Keyword.UNDERGROUND));
+		scn.ShadowPlayCard(goblinman1);
+		assertInZone(Zone.SHADOW_CHARACTERS, goblinman1);
+		// A minion beside him, which underground sites do not touch.
+		scn.MoveMinionsToTable(troop);
+
+		scn.SkipToMovementDecision();
+		assertInZone(Zone.SHADOW_CHARACTERS, goblinman1);
+		assertInZone(Zone.SHADOW_CHARACTERS, troop);
+
+		// Balin's Tomb, site 4, is underground.
+		scn.FreepsChooseToMove();
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.UNDERGROUND));
+		assertInDiscard(goblinman1);
+		assertInZone(Zone.SHADOW_CHARACTERS, troop);
+
+		// The second copy, played at Balin's Tomb, is discarded as it comes into play, its cost spent.
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		int twilight = scn.GetTwilight();
+		scn.ShadowPlayCard(goblinman2);
+		assertEquals(twilight - 2, scn.GetTwilight());
+		assertInDiscard(goblinman1, goblinman2);
+		assertInZone(Zone.SHADOW_CHARACTERS, troop);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void DiscardedWhenTheFellowshipMovesToAnUndergroundSiteThatIsASanctuaryToo() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetUndergroundSanctuaryScenario();
+
+		var goblinman = scn.GetShadowCard("goblinman");
+		var troop = scn.GetShadowCard("troop");
+
+		scn.StartGame();
+		scn.SkipToSite(2);
+		scn.MoveMinionsToTable(goblinman, troop);
+		assertInZone(Zone.SHADOW_CHARACTERS, goblinman);
+		assertInZone(Zone.SHADOW_CHARACTERS, troop);
+		assertFalse(scn.HasKeyword(scn.GetCurrentSite(), Keyword.UNDERGROUND));
+
+		// The Dimholt, site 3, is underground and a sanctuary.
+		scn.FreepsPass();
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.UNDERGROUND));
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.SANCTUARY));
+		assertInDiscard(goblinman);
+		assertInZone(Zone.SHADOW_CHARACTERS, troop);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void ExhaustedAGoblinManCannotLookAgainWhileAnotherCopyStillCan() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetTwoCopiesScenario();
+
+		var goblinman1 = scn.GetShadowCard("goblinman1");
+		var goblinman2 = scn.GetShadowCard("goblinman2");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCardsToHand(aragorn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(goblinman1, goblinman2);
+		scn.FreepsPass();
+
+		assertEquals(0, scn.GetWoundsOn(goblinman1));
+		assertEquals(0, scn.GetWoundsOn(goblinman2));
+		assertTrue(scn.ShadowActionAvailable(goblinman1));
+		assertTrue(scn.ShadowActionAvailable(goblinman2));
+
+		// The copy used exerts, and the other does not.
+		scn.ShadowUseCardAction(goblinman1);
+		assertEquals(1, scn.GetWoundsOn(goblinman1));
+		assertEquals(0, scn.GetWoundsOn(goblinman2));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, false));
+		scn.ShadowDismissRevealedCards();
+
+		// Vitality 2 with 1 wound: exhausted, so this copy can no longer pay; the other still can.
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(goblinman1));
+		assertTrue(scn.ShadowActionAvailable(goblinman2));
 	}
 }
