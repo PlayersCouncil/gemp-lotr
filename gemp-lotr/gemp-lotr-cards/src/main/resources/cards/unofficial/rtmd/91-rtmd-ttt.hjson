@@ -374,20 +374,14 @@
 		intensity: 5
 		effects: [
 			{
-				type: Trigger
-				optional: false
-				trigger: {
-					type: Played
+				type: Modifier
+				modifier: {
+					type: ComesIntoPlayExhausted
 					filter: companion
-					memorize: playedCompanion
-				}
-				requires: {
-					type: Location
-					filter: not(siteNumber(1))
-				}
-				effect: {
-					type: Exhaust
-					select: memory(playedCompanion)
+					requires: {
+						type: Location
+						filter: not(siteNumber(1))
+					}
 				}
 			}
 		]
@@ -473,10 +467,11 @@
 					type: DiscardFromHand
 					count: 3
 					forced: false
+					memorize: discardedCards
 				}
 				effect: {
 					type: PlayCardFromDiscard
-					select: choose(your,condition)
+					select: choose(your,condition,not(memory(discardedCards)))
 				}
 			}
 		]

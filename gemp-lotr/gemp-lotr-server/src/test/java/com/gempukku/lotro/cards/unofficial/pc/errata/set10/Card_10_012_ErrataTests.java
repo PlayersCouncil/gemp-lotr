@@ -316,6 +316,7 @@ public class Card_10_012_ErrataTests
 
 		// Two cards more, and a discard from five to four, give the Free Peoples player initiative again.
 		scn.MoveCardsToHand(filler5, filler6);
+		scn.FreepsRefreshDecision();
 		scn.FreepsUseCardAction(smeagol);
 		scn.FreepsChooseCard(filler2);
 		assertTrue(scn.FreepsHasInitiative());

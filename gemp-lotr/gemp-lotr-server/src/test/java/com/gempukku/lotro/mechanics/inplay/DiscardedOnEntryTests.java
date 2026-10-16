@@ -593,6 +593,7 @@ public class DiscardedOnEntryTests
 		scn.SkipToSite(6);
 		scn.MoveCardsToHand(pipe, armor);
 		scn.MoveCardsToTopOfFreepsDeck("aragorn", "boromir");
+		scn.FreepsRefreshDecision();
 
 		var site = scn.GetCurrentSite();
 		assertEquals("Hornburg Armory", site.getBlueprint().getTitle());

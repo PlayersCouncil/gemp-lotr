@@ -29,6 +29,11 @@ import static org.junit.Assert.*;
  *
  * The Aragorn of the rules' example is Aragorn, Ranger of the North 1_89, who makes himself defender +1 with his
  * own maneuver ability; that is how the keyword comes onto the table here.
+ *
+ * A companion assigned to two minions in one answer is assigned to skirmish each of them: the rules word the
+ * second minion as a further assignment of "that character" (Q-0323: B, Weary 4_212). The engine reports each
+ * pairing as an assignment of its own; Weary, whose trigger reads the [isengard] tracker its bearer is assigned
+ * to, shows it.
  */
 public class DefenderTests
 {
@@ -52,6 +57,74 @@ public class DefenderTests
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
+	}
+
+	protected VirtualTableScenario GetWearyScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// Weary: "Each time the Free Peoples player assigns bearer to skirmish an [isengard] tracker, bearer must exert."
+					put("weary", "4_212");
+					put("heir", "4_109");       // Aragorn, Heir of Elendil: defender +1 is his whole text; vitality 4
+					put("pursuer", "4_190");    // Uruk Pursuer: an [isengard] tracker; its texts are about unbound Hobbits
+					put("footsoldier", "4_187");// Uruk Foot Soldier: an [isengard] tracker; its text is about a fierce skirmish
+					put("savage", "1_151");     // Uruk Savage: an [isengard] Uruk-hai who is no tracker; damage +1 only
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	@Test
+	public void ACompanionWithDefenderAssignedToTwoMinionsInOneAnswerIsAssignedToSkirmishEachOfThem() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetWearyScenario();
+
+		var weary = scn.GetShadowCard("weary");
+		var heir = scn.GetFreepsCard("heir");
+		var pursuer = scn.GetShadowCard("pursuer");
+		var footsoldier = scn.GetShadowCard("footsoldier");
+		scn.MoveCompanionsToTable(heir);
+
+		scn.StartGame();
+		scn.AttachCardsTo(heir, weary);
+		scn.MoveMinionsToTable(pursuer, footsoldier);
+		scn.SkipToAssignments();
+
+		assertEquals(1, scn.GetKeywordCount(heir, Keyword.DEFENDER));
+		assertEquals(0, scn.GetWoundsOn(heir));
+		scn.FreepsAssignToMinions(heir, pursuer, footsoldier);
+
+		assertTrue(scn.IsCharAssignedAgainst(heir, pursuer));
+		assertTrue(scn.IsCharAssignedAgainst(heir, footsoldier));
+		// Two [isengard] trackers: two assignments of bearer, two exertions.
+		assertEquals(2, scn.GetWoundsOn(heir));
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
+	}
+
+	@Test
+	public void ACompanionWithDefenderAssignedToTwoMinionsInOneAnswerIsReadAgainstEachMinionAlone() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetWearyScenario();
+
+		var weary = scn.GetShadowCard("weary");
+		var heir = scn.GetFreepsCard("heir");
+		var pursuer = scn.GetShadowCard("pursuer");
+		var savage = scn.GetShadowCard("savage");
+		scn.MoveCompanionsToTable(heir);
+
+		scn.StartGame();
+		scn.AttachCardsTo(heir, weary);
+		scn.MoveMinionsToTable(pursuer, savage);
+		scn.SkipToAssignments();
+
+		assertEquals(0, scn.GetWoundsOn(heir));
+		scn.FreepsAssignToMinions(heir, pursuer, savage);
+
+		assertTrue(scn.IsCharAssignedAgainst(heir, pursuer));
+		assertTrue(scn.IsCharAssignedAgainst(heir, savage));
+		// One [isengard] tracker and an [isengard] minion who is none: one exertion.
+		assertEquals(1, scn.GetWoundsOn(heir));
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 	}
 
 	@Test

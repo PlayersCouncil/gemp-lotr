@@ -84,6 +84,7 @@ public class Card_07_035_ErrataTests
 
 		scn.StartGame();
 		scn.MoveCardsToSupportArea(scn.GetShadowCard("tidings"));
+		scn.FreepsRefreshDecision();
 
 		// A [gandalf] companion of another title.
 		assertFalse(scn.FreepsPlayAvailable(hope));
@@ -116,6 +117,7 @@ public class Card_07_035_ErrataTests
 		scn.StartGame();
 		scn.MoveCardsToSupportArea(tidings, beetles, heavy);
 		scn.AttachCardsTo(aragorn, wielding, poison);
+		scn.FreepsRefreshDecision();
 		scn.HinderCard(heavy);
 
 		assertTrue(scn.FreepsPlayAvailable(hope));
@@ -169,6 +171,7 @@ public class Card_07_035_ErrataTests
 		scn.StartGame();
 		scn.MoveCardsToSupportArea(tidings, beetles, heavy);
 		scn.AttachCardsTo(aragorn, wielding, poison);
+		scn.FreepsRefreshDecision();
 		scn.HinderCard(heavy);
 
 		int shadowDiscard = scn.GetShadowDiscardCount();
@@ -217,6 +220,7 @@ public class Card_07_035_ErrataTests
 		scn.StartGame();
 		scn.MoveCardsToSupportArea(tidings, tidings2, beetles);
 		scn.AttachCardsTo(aragorn, wielding);
+		scn.FreepsRefreshDecision();
 
 		// One card discarded: one Shadow condition to discard.
 		scn.FreepsPlayCard(hope);
@@ -264,6 +268,7 @@ public class Card_07_035_ErrataTests
 		scn.MoveCardsToSupportArea(heavy);
 		scn.HinderCard(heavy);
 		scn.AttachCardsTo(aragorn, poison);
+		scn.FreepsRefreshDecision();
 
 		assertTrue(scn.FreepsPlayAvailable(hope));
 		scn.FreepsPlayCard(hope);
@@ -288,6 +293,7 @@ public class Card_07_035_ErrataTests
 		scn.StartGame();
 		// A Shadow condition that either branch could act on, if X were more than zero.
 		scn.MoveCardsToSupportArea(tidings);
+		scn.FreepsRefreshDecision();
 
 		assertTrue(scn.FreepsPlayAvailable(hope));
 		scn.FreepsPlayCard(hope);

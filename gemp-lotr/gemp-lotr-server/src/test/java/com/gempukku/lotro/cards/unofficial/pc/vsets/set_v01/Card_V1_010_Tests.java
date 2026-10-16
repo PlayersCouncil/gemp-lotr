@@ -109,6 +109,7 @@ public class Card_V1_010_Tests
 
 		// A second unique [elven] companion, so that the bearer is a choice.
 		scn.MoveCompanionsToTable(arwen);
+		scn.FreepsRefreshDecision();
 
 		scn.FreepsPlayCard(darts);
 		assertTrue(scn.FreepsHasCardChoiceAvailable(legolas, arwen));

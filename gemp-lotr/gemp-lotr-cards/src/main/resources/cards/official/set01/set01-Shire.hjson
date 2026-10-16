@@ -146,12 +146,20 @@
 				type: aboutToHeal
 				filter: ring bearer
 			}
-			cost: {
-				type: preventHeal
-				select: choose(ring bearer)
-			}
 			effect: {
-				type: removeBurdens
+				type: If
+				check: {
+					type: canSpotBurdens
+				}
+				true: [
+					{
+						type: preventHeal
+						select: choose(ring bearer)
+					}
+					{
+						type: removeBurdens
+					}
+				]
 			}
 		}
 		gametext: <b>Response:</b> If the Ring-bearer is about to heal, remove a burden instead.

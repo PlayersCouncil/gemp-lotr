@@ -150,10 +150,16 @@
 					player: you
 					filter: self
 				}
-				requires: {
-					type: canSpot
-					filter: another,nazgul
-				}
+				requires: [
+					{
+						type: canSpot
+						filter: another,nazgul
+					}
+					{
+						type: canSpot
+						filter: wounded,companion
+					}
+				]
 				effect: {
 					type: drawCards
 					count: {

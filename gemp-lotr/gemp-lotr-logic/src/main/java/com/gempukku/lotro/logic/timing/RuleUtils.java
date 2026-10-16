@@ -13,6 +13,7 @@ import com.gempukku.lotro.logic.modifiers.CantBeOverwhelmedModifier;
 import com.gempukku.lotro.logic.modifiers.ModifierFlag;
 import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -371,6 +372,23 @@ public class RuleUtils {
         }
 
         return false;
+    }
+
+    /**
+     * The sites an ally is at by CR 4.2 "ally" ("Each ally in your support area is considered to be at his home
+     * site"): for each of his homes, the site of that number on the adventure path, if one has been laid there and
+     * it is of the home's block ("Block symbol is a factor in determining an ally's home site").  Empty for a home
+     * not yet laid and on a path of another block or a Shadows path ("Allies have no home sites on adventure paths
+     * from the Shadows expansion set onward").  Read by Filters.atSite.
+     */
+    public static List<PhysicalCard> getAllyHomeSitesOnThePath(LotroGame game, PhysicalCard ally) {
+        List<PhysicalCard> sites = new ArrayList<>();
+        for (var home : ally.getBlueprint().getAllyHomes()) {
+            final PhysicalCard site = game.getGameState().getSite(home.siteNum());
+            if (site != null && site.getBlueprint().getSiteBlock() == home.block() && !sites.contains(site))
+                sites.add(site);
+        }
+        return sites;
     }
 
     public static boolean isAllyInRegion(PhysicalCard ally, int regionNumber, SitesBlock siteBlock) {

@@ -231,6 +231,7 @@ public class Card_V2_008_Tests
 		// A valiant archer who is no Elf.
 		scn.ApplyAdHocModifier(new AddKeywordModifier(null, guard, null, Keyword.ARCHER));
 		scn.MoveMinionsToTable(scn.GetShadowCard("troop"));
+		scn.FreepsRefreshDecision();
 
 		// Three archers: the valiant Elf, the Elf who is not valiant and the valiant Man.
 		assertEquals(3, scn.GetFreepsArcheryTotal());

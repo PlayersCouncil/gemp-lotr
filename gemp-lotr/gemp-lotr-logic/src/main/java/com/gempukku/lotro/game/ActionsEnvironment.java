@@ -6,6 +6,7 @@ import com.gempukku.lotro.logic.actions.OptionalTriggerAction;
 import com.gempukku.lotro.logic.timing.Action;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.EffectResult;
+import com.gempukku.lotro.logic.timing.loops.LoopTracker;
 
 import java.util.Collection;
 import java.util.List;
@@ -69,4 +70,21 @@ public interface ActionsEnvironment {
     List<EffectResult> getTurnEffectResults();
 
     List<EffectResult> getPhaseEffectResults();
+
+    /**
+     * Bars one ability of one card until the end of the current phase, each skirmish being a phase of its own: the
+     * looping ability of each card of a voluntary loop, once the loop has run (CR 4.2 "loops"; Ketura on Q-0329,
+     * answers/2026-10-15-c.md and -d.md, LoopRun).  The card's other abilities, and the same ability of another copy,
+     * are not barred, and nothing that happens on the board lifts the bar.
+     * @param ability The card and the ability.
+     */
+    void barUntilEndOfPhase(LoopTracker.Ability ability);
+
+    /**
+     * Whether an action is a use of an ability barred by {@link #barUntilEndOfPhase}.  Such an action is still
+     * offered among the phase actions, flagged "loopBanned" (CardActionSelectionDecision), and is refused if taken.
+     * @param action The action.
+     * @return True if it is barred.
+     */
+    boolean isLoopBanned(Action action);
 }

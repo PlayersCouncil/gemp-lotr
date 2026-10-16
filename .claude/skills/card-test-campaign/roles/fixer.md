@@ -29,7 +29,8 @@ questions are parked applies to you unchanged. What differs:
 When every item is dealt with, `lint.py <id>` must report no errors and `cardtest.py run <id> --out <your folder
 name>` must pass, apart from parked tests. Do not run the whole set of stock mistakes (`mutate.py <id>` on its
 own): where an item closes a gap, check it with the one mistake the item names
-(`mutate.py <id> --replace "<old>" "<new>" --all`), which must now be noticed.
+(`mutate.py <id> --replace "<old>" "<new>" --all`, with `--every` where the old text stands in more than one place
+of the card's block: without it only the first is changed), which must now be noticed.
 
 Every step you take re-reads everything you have read so far, so steps are what cost: read several files in one
 step where you can.

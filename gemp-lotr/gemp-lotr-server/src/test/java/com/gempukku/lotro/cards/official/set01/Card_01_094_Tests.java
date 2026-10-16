@@ -83,6 +83,7 @@ public class Card_01_094_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertNull(card.getBlueprint().getPossessionClasses());
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
@@ -152,6 +153,7 @@ public class Card_01_094_Tests
 		// A wound on an ally and a Shadow condition on no companion: nothing for either half to act on.
 		scn.AddWoundsToChar(bounder, 1);
 		scn.MoveCardsToSupportArea(tip);
+		scn.FreepsRefreshDecision();
 
 		assertTrue(scn.FreepsActionAvailable(athelas));
 
@@ -182,6 +184,7 @@ public class Card_01_094_Tests
 		scn.AddWoundsToChar(gimli, 1);
 		scn.AddWoundsToChar(bounder, 1);
 		scn.MoveCardsToSupportArea(tip);
+		scn.FreepsRefreshDecision();
 
 		scn.FreepsUseCardAction(athelas);
 		assertInZone(Zone.DISCARD, athelas);
@@ -227,6 +230,7 @@ public class Card_01_094_Tests
 		scn.AttachCardsTo(aragorn, defense);
 		scn.AttachCardsTo(bounder, weary);
 		scn.MoveCardsToSupportArea(tip);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(0, scn.GetShadowDiscardCount());
 
@@ -268,6 +272,7 @@ public class Card_01_094_Tests
 		// The wound and the Black Breath are on different companions: Black Breath's bearer may not be healed.
 		scn.AddWoundsToChar(gimli, 2);
 		scn.AttachCardsTo(aragorn, breath);
+		scn.FreepsRefreshDecision();
 
 		scn.FreepsUseCardAction(athelas);
 		assertInZone(Zone.DISCARD, athelas);
@@ -296,6 +301,7 @@ public class Card_01_094_Tests
 		scn.StartGame();
 		scn.AddWoundsToChar(gimli, 2);
 		scn.AttachCardsTo(aragorn, breath);
+		scn.FreepsRefreshDecision();
 
 		scn.FreepsUseCardAction(athelas);
 		assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));

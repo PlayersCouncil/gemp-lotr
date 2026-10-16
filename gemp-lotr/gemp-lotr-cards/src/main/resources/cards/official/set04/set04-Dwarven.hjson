@@ -82,11 +82,13 @@
 				{
 					type: modifyStrength
 					select: choose(dwarf)
+					memorize: chosenDwarf
 					amount: {
 						type: Conditional
 						requires: {
-							type: location
-							filter: battleground
+							type: memoryMatches
+							memory: chosenDwarf
+							filter: atSite(battleground)
 						}
 						true: 4
 						false: 2

@@ -124,6 +124,7 @@ public class Card_V3_063_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
 		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
+		assertNull(card.getBlueprint().getPossessionClasses());
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
@@ -251,6 +252,7 @@ public class Card_V3_063_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(runner);
+		scn.FreepsRefreshDecision();
 
 		// Site 1, the fellowship phase
 		assertEquals(1, scn.GetCurrentSiteNumber());
@@ -301,6 +303,7 @@ public class Card_V3_063_Tests
 		assertInZone(Zone.SUPPORT, watcher);
 		// The reconciles on the way may have emptied the draw deck.
 		scn.MoveCardsToTopOfDeck(lemenya, khamul);
+		scn.FreepsRefreshDecision();
 
 		// Once for each site in a turn: on a new turn the site's draw is there again.
 		hand = scn.GetShadowHandCount();
@@ -350,6 +353,7 @@ public class Card_V3_063_Tests
 
 		// The minion leaves the draw deck or the hand, so the counts are read afresh.
 		scn.MoveMinionsToTable(runner);
+		scn.FreepsRefreshDecision();
 		hand = scn.GetShadowHandCount();
 		deck = scn.GetShadowDeckCount();
 

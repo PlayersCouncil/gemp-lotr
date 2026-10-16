@@ -1,8 +1,11 @@
 package com.gempukku.lotro.cards.official.set18;
 
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Keyword;
+import com.gempukku.lotro.common.SitesBlock;
 import com.gempukku.lotro.framework.VirtualTableScenario;
-import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -12,15 +15,18 @@ import static org.junit.Assert.*;
 
 public class Card_18_138_Tests
 {
-
+	// Sirannon Ruins stands in each adventure deck in place of site 9, which no test reaches.
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "18_138");
-					// put other cards in here as needed for the test case
 				}},
-				VirtualTableScenario.FellowshipSites,
+				new HashMap<>()
+				{{
+					putAll(VirtualTableScenario.FellowshipSites);
+					remove("site9");
+					put("ruins", "18_138");
+				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -32,42 +38,27 @@ public class Card_18_138_Tests
 		/**
 		 * Set: 18
 		 * Name: Sirannon Ruins
-		 * Unique: False
-		 * Side: 
-		 * Culture: 
-		 * Shadow Number: 4
+		 * Unique: false
 		 * Type: Site
-		 * Subtype: 
-		 * Site Number: *
+		 * Block: Shadows
+		 * Shadow Number: 4
+		 * Direction: Right
 		 * Game Text: <b>River</b>.
-		*/
+		 */
 
 		var scn = GetScenario();
 
-		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite();
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsSite("ruins");
 
 		assertEquals("Sirannon Ruins", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.RIVER));
+		assertEquals(SitesBlock.SHADOWS, card.getBlueprint().getSiteBlock());
+		// A Shadows-block site has no site number of its own.
+		assertEquals(0, card.getBlueprint().getSiteNumber());
 		assertEquals(4, card.getBlueprint().getTwilightCost());
-	}
-
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SirannonRuinsTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-
-		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(4, scn.GetTwilight());
+		assertEquals(LotroCardBlueprint.Direction.RIGHT, card.getBlueprint().getSiteDirection());
+		assertTrue(scn.HasKeyword(card, Keyword.RIVER));
 	}
 }

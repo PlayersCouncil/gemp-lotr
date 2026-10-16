@@ -1594,12 +1594,8 @@
 				type: modifier
 				modifier: {
 					type: modifyStrength
-					filter: culture(rohan),man
+					filter: culture(rohan),man,atSite(bearer)
 					amount: 1
-					requires: {
-						type: location
-						filter: bearer
-					}
 				}
 			}
 		]
@@ -1633,11 +1629,7 @@
 				type: modifier
 				modifier: {
 					type: cantTakeMoreWoundsThan
-					requires: {
-						type: location
-						filter: plains
-					}
-					filter: bearer
+					filter: bearer,atSite(plains)
 					amount: 1
 					phase: skirmish
 				}

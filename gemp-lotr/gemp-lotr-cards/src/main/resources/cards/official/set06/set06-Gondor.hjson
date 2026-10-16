@@ -109,7 +109,7 @@
 			{
 				type: activated
 				phase: skirmish
-				text: Remove an {elven} token to make minion skirmishing Aragorin strength -3
+				text: Remove an {elven} token to make a minion skirmishing Aragorn strength -3
 				cost: {
 					type: RemoveCultureTokens
 					culture: elven

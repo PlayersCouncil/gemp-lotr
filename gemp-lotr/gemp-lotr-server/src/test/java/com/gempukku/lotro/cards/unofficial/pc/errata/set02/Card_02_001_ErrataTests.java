@@ -90,6 +90,7 @@ public class Card_02_001_ErrataTests
 
 		scn.StartGame();
 		scn.MoveCardsToTopOfDeck(filler4, filler3, filler2, filler1);
+		scn.FreepsRefreshDecision();
 
 		int deck = scn.GetFreepsDeckCount();
 		assertEquals(0, scn.GetTwilight());
@@ -133,6 +134,7 @@ public class Card_02_001_ErrataTests
 		scn.StartGame();
 		// The battle axe is the second card down, so the cost itself puts it in the discard pile.
 		scn.MoveCardsToTopOfDeck(filler2, battleaxe, filler1);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(0, scn.GetTwilight());
 		scn.FreepsUseCardAction(card, "play a");
@@ -229,6 +231,7 @@ public class Card_02_001_ErrataTests
 		scn.StartGame();
 		// From the top: filler1 to aragorn, then thrarin, then the armor, which no discard in this test reaches.
 		scn.MoveCardsToTopOfDeck(armor, thrarin, aragorn, filler4, filler3, filler2, filler1);
+		scn.FreepsRefreshDecision();
 
 		int deck = scn.GetFreepsDeckCount();
 		assertEquals(0, scn.GetFreepsDiscardCount());

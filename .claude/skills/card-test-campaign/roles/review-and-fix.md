@@ -44,19 +44,26 @@ step where you can, and do not look at the same thing twice.
 
 3. **Read each test against the checks the ledger says it claims.** The test file itself carries no ledger and
    no clause ids, by design; if you find any, that is a fix. Does it really show that check? The usual failures:
-   a `-` that is not the nearest miss; an `F` with only one valid candidate, or no invalid one; a `D` that looks
+   a `-` that is not the nearest miss; an `F` with only one valid candidate, or no invalid one, or an invalid
+   candidate of an exertion cost who could not have paid it (Filibert 2_101 at vitality 1); a `D` that looks
    at only one side of the boundary; an assertion after an action with no reading before it; an expected value
    that could only have come from running the game; a helper card whose own text is doing part of the work; a
    choice the game carries out unasked, one valid card on the table, with no "not offered" read on an invalid
    one (Q-0266: B). Not gaps since Ketura's answers of 2026-10-12: a card that bars an act tested on one act it
    stops and its control, with no card of each definition word (Q-0264: B2, the mechanics hold those); no
-   exertion beside a "takes a wound" or "is about to take a wound" trigger (Q-0265: A); no test that only plays
+   exertion beside a "takes a wound" or "is about to take a wound" trigger (Q-0265: A); no wound beside an "each
+   time X exerts" trigger (Q-0315: A, `mechanics/wounds/AWoundIsNoExertionTests`); no test that only plays
    the card and no `P1` (Q-0279: B: a card's play is tested only where its own text bears on it, by the test of
    that clause, and lint's `plain-play` asks for that test). A test that only plays the card is a fix: take it out.
 
    Where you suspect a gap, name the wrong definition that would pass. If reading the test settles it (no
    candidate on the table tells the two apart), fix it without more ado. Only where you cannot tell by reading,
    prove it with that one mistake: `mutate.py <id> --replace "<old>" "<new>" --all --out <your folder name>-m`
+   (`--all` there only lists every test that noticed; the mistake is made where the old text FIRST stands in the
+   card's block: `--every` makes it in every place, as one mistake, and `--nth N` in the Nth; a filter phrase in
+   both a `filter:` and a `select: choose(...)` wants `--every`, 11_61. Where the board that would tell is one the
+   card's tests lack, copy the test file under your folder, add the board there, and run the mistake against the
+   copy with `--test /tmp/<your folder name>/<the file>.java`, 15_164; the card's own file is changed only as a fix)
    (at most two runs a card that try a mistake to settle a doubt: each is a step, and steps are what cost.
    Runs side by side under separate `--out` names that try one definition's several guards of one kind each alone
    (three `until: regroup` lines, by `--nth`) count as one.
@@ -88,7 +95,8 @@ step where you can, and do not look at the same thing twice.
    definition exists, try one yourself before agreeing (for a standing check, a second trigger collected in the
    same window as the other required triggers: 1_342), and say what was tried. Where the correction is an engine
    change and no definition change can show it, say so, and say what the parked test would read once the engine
-   does it.
+   does it; it is seen failing by a copy of the class with that `@Ignore` line out, through `cardtest.py probe`
+   (author.md says how).
    Where the wrong text is in another card's definition, use a probe. For a question about how a sentence is
    to be parsed, look at how other cards with the same shape of sentence are worded and built (`grep` the game
    texts). For a question parked with `Q-...`, check that the rules, the rulings and the settled shapes really do

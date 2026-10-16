@@ -123,6 +123,7 @@ public class Card_01_356_Tests
 		scn.MoveAlliesToTable(grimir);
 		scn.MoveCardsToDeadPile(knight);
 		scn.MoveCardsToHand(boromir, gandalf);
+		scn.FreepsRefreshDecision();
 
 		// Four companions with Frodo, an ally beside them and a fifth companion in the dead pile: nothing is added.
 		// Legolas is the fellowship's archer, and that total is not touched.

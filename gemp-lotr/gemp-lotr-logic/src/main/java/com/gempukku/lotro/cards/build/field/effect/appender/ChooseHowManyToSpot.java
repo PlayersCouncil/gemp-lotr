@@ -8,6 +8,7 @@ import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
 import com.gempukku.lotro.common.Filterable;
+import com.gempukku.lotro.common.SpotOverride;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
@@ -35,7 +36,7 @@ public class ChooseHowManyToSpot implements EffectAppenderProducer {
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                 final Filterable filterable = filterableSource.getFilterable(actionContext);
-                final int count = Filters.countSpottable(actionContext.getGame(), filterable);
+                final int count = Filters.countSpottable(actionContext.getGame(), actionContext.getPerformingPlayer(), SpotOverride.NONE, filterable);
                 return new PlayoutDecisionEffect(actionContext.getPerformingPlayer(),
                         new IntegerAwaitingDecision(1, GameUtils.substituteText(text, actionContext), 0, count, count) {
                             @Override

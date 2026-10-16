@@ -78,6 +78,7 @@ public class Card_02_076_ErrataTests
 
 		scn.StartGame();
 		scn.AddBurdens(1);
+		scn.FreepsRefreshDecision();
 
 		// A burden to remove and Sam able to exert: only Helpless stands in the way.
 		assertEquals(1, scn.GetBurdens());

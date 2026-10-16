@@ -214,6 +214,7 @@ public class Card_08_020_ErrataTests
 		// The reconciles on the way drew most of the small deck into the hand: the four [gondor] cards go back,
 		// from wherever they are.
 		scn.MoveCardsToTopOfDeck(boromir, armor, swordarm, mail);
+		scn.FreepsRefreshDecision();
 		assertInZone(Zone.DECK, boromir, armor, swordarm, mail);
 		assertInDiscard(shield);
 

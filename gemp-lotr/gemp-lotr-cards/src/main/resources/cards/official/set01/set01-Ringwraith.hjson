@@ -720,24 +720,46 @@
 					}
 				]
 				effect: {
-					type: choice
-					texts: [
-						Transfer Blade Tip from your support area to a companion bearer is skirmishing
-						Transfer Blade Tip from your discard pile to a companion bearer is skirmishing
-					]
-					effects: [
+					type: If
+					check: [
 						{
-							type: transfer
-							select: choose(name(Blade Tip),zone(support))
-							where: choose(companion,inSkirmishAgainst(memory(oldBearer)),not(hasAttached(name(Blade Tip))))
-							fromSupport: true
+							type: CanSpot
+							filter: companion,inSkirmishAgainst(memory(oldBearer)),not(hasAttached(name(Blade Tip)))
 						}
 						{
-							type: transferFromDiscard
-							select: choose(name(Blade Tip))
-							where: choose(companion,inSkirmishAgainst(memory(oldBearer)),not(hasAttached(name(Blade Tip))))
+							type: or
+							requires: [
+								{
+									type: CanSpot
+									filter: name(Blade Tip),zone(support)
+								}
+								{
+									type: HasCardInDiscard
+									filter: name(Blade Tip)
+								}
+							]
 						}
 					]
+					true: {
+						type: choice
+						texts: [
+							Transfer Blade Tip from your support area to a companion bearer is skirmishing
+							Transfer Blade Tip from your discard pile to a companion bearer is skirmishing
+						]
+						effects: [
+							{
+								type: transfer
+								select: choose(name(Blade Tip),zone(support))
+								where: choose(companion,inSkirmishAgainst(memory(oldBearer)),not(hasAttached(name(Blade Tip))))
+								fromSupport: true
+							}
+							{
+								type: transferFromDiscard
+								select: choose(name(Blade Tip))
+								where: choose(companion,inSkirmishAgainst(memory(oldBearer)),not(hasAttached(name(Blade Tip))))
+							}
+						]
+					}
 				}
 			}
 		]
@@ -978,6 +1000,10 @@
 			{
 				type: activated
 				phase: shadow
+				requires: {
+					type: canSpot
+					filter: currentSite,sameNumberInYourAdventureDeck(siteBlock(fellowship))
+				}
 				cost: {
 					type: removeTwilight
 					amount: 3
@@ -1479,7 +1505,7 @@
 				}
 				{
 					type: spot
-					select: choose(not(your),site)
+					select: choose(not(your),site,sameNumberInYourAdventureDeck(siteBlock(fellowship)))
 					memorize: spottedSite
 				}
 			]

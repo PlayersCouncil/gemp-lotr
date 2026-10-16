@@ -545,6 +545,7 @@ public class Card_V3_126_Tests
 		scn.FreepsPass();
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.MoveMinionsToTable(runner, gollum);
+		scn.FreepsRefreshDecision();
 		scn.FreepsPlayCard(pathfinder);
 		assertEquals(8, scn.GetCurrentSiteNumber());
 		assertEquals("Cracks of Doom", scn.GetSite(9).getBlueprint().getTitle());

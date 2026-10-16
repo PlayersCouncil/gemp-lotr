@@ -156,6 +156,7 @@ public class Card_07_082_ErrataTests
 		// Left in the deck: beacon3, the Signal-fire, Gondor Calls For Aid!, Armor and cards that are no beacons.
 		scn.MoveCardsToDiscard(beacon4);
 		scn.MoveCardsToHand(beacon5);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(0, scn.GetWoundsOn(cirion));
 		assertEquals(0, scn.GetWoundsOn(aragorn));

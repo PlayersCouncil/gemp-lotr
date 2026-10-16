@@ -8,20 +8,24 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_04_302_Tests
 {
 
+	// Frodo, Tired Traveller is the table's Ring-bearer.
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "4_302");
-					// put other cards in here as needed for the test case
+					put("sam", "1_311");        // Sam, Son of Hamfast: [shire] Hobbit, Ring-bound by rule, cost 2; a fellowship ability used only on purpose
+					put("sam2", "1_311");
+					put("faramir", "4_117");    // Faramir, Son of Denethor: [gondor] Man, Ring-bound, cost 3; his text reads only skirmishes
+					put("merry", "1_302");      // Merry, Friend to Sam: an unbound [shire] Hobbit companion, cost 1; a skirmish ability used only on purpose
 				}},
 				VirtualTableScenario.FellowshipSites,
-				VirtualTableScenario.FOTRFrodo,
+				"4_302",
 				VirtualTableScenario.RulingRing
 		);
 	}
@@ -42,12 +46,13 @@ public class Card_04_302_Tests
 		 * Vitality: 4
 		 * Resistance: 10
 		 * Signet: Gandalf
-		 * Game Text: <b>Ring-bearer (resistance 10)</b>. <b>Ring-bound</b>.<br><b>Fellowship:</b> Play a Ring-bound companion to remove a burden.
-		*/
+		 * Game Text: <b>Ring-bearer (resistance 10)</b>. <b>Ring-bound</b>.
+		 * 	<b>Fellowship:</b> Play a Ring-bound companion to remove a burden.
+		 */
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetRingBearer();
 
 		assertEquals("Frodo", card.getBlueprint().getTitle());
 		assertEquals("Tired Traveller", card.getBlueprint().getSubtitle());
@@ -61,21 +66,62 @@ public class Card_04_302_Tests
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
 		assertEquals(10, card.getBlueprint().getResistance());
-		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
+		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet());
+		assertTrue(card.getBlueprint().canStartWithRing());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void FrodoTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void FellowshipActionPlaysARingBoundCompanionFromHandToRemoveABurden() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		var faramir = scn.GetFreepsCard("faramir");
+		var merry = scn.GetFreepsCard("merry");
+		scn.MoveCardsToHand(sam, faramir, merry);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.AddBurdens(2);
+		assertEquals(2, scn.GetBurdens());
+		assertInHand(sam, faramir, merry);
+		assertTrue(scn.FreepsActionAvailable(frodo));
 
-		assertEquals(0, scn.GetTwilight());
+		scn.FreepsUseCardAction(frodo);
+		// Ring-bound companions of two cultures and races; not Merry, a Hobbit companion who is not Ring-bound.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(sam, faramir));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(merry));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		scn.FreepsChooseCard(faramir);
+
+		assertInZone(Zone.FREE_CHARACTERS, faramir);
+		assertInHand(sam, merry);
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void NotOfferedWhileTheOnlyRingBoundCompanionInHandCannotBePlayed() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		var sam2 = scn.GetFreepsCard("sam2");
+		var merry = scn.GetFreepsCard("merry");
+		scn.MoveCompanionsToTable(sam);
+		scn.MoveCardsToHand(sam2, merry);
+
+		scn.StartGame();
+		scn.AddBurdens(1);
+		scn.FreepsRefreshDecision();
+		assertEquals(1, scn.GetBurdens());
+		assertInZone(Zone.FREE_CHARACTERS, sam);
+		assertInHand(sam2, merry);
+
+		// Sam is unique and in play, so the second Sam cannot be played; Merry can, and is no Ring-bound companion.
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertFalse(scn.FreepsPlayAvailable(sam2));
+		assertTrue(scn.FreepsPlayAvailable(merry));
+		assertFalse(scn.FreepsActionAvailable(frodo));
+		assertEquals(1, scn.GetBurdens());
 	}
 }

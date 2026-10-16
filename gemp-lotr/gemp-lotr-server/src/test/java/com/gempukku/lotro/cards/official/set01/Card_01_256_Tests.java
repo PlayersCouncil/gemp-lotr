@@ -83,6 +83,7 @@ public class Card_01_256_Tests
 		scn.StartGame();
 		// Laid in the fellowship phase to read the count change as a companion is played.
 		scn.MoveMinionsToTable(hunter, hunter2, troop);
+		scn.FreepsRefreshDecision();
 
 		// 9 + 2 for Frodo and Aragorn; the ally and the three minions are no companions. Each Hunter counts for
 		// itself, and the Troop is untouched.

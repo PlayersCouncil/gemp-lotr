@@ -1015,13 +1015,9 @@
 		keywords: Tale
 		effects: {
 			type: event
-			requires: {
-				type: location
-				filter: or(river,forest)
-			}
 			cost: {
 				type: exert
-				select: choose(elf)
+				select: choose(elf,atSite(or(river,forest)))
 				memorize: exertedElf
 			}
 			effect: {

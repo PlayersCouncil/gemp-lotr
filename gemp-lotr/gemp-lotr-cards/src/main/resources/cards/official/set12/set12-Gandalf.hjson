@@ -262,8 +262,8 @@
 						{
 							type: If
 							check: {
-								type: location
-								filter: battleground
+								type: canSpot
+								filter: culture(gandalf),wizard,atSite(battleground)
 							}
 							true: {
 								type: discard

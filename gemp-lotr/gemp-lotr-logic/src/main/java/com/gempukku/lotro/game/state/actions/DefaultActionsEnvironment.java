@@ -13,6 +13,7 @@ import com.gempukku.lotro.logic.timing.Action;
 import com.gempukku.lotro.logic.timing.ActionStack;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.EffectResult;
+import com.gempukku.lotro.logic.timing.loops.LoopTracker;
 import com.gempukku.lotro.logic.timing.results.PlayCardResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,6 +36,9 @@ public class DefaultActionsEnvironment implements ActionsEnvironment {
 
     // Cards played from hand that are in play with their play not yet announced.
     private final Set<PhysicalCard> _enteringPlayFromHand = new HashSet<>();
+
+    // The abilities a voluntary loop has used, barred until the end of the phase (CR 4.2 "loops", LoopRun).
+    private final List<LoopTracker.Ability> _barredUntilEndOfPhase = new LinkedList<>();
 
     public DefaultActionsEnvironment(LotroGame lotroGame, ActionStack actionStack) {
         _lotroGame = lotroGame;
@@ -109,11 +113,13 @@ public class DefaultActionsEnvironment implements ActionsEnvironment {
             list.clear();
         }
         phaseEffectResults.clear();
+        _barredUntilEndOfPhase.clear();
     }
 
     public void signalEndOfTurn() {
         _actionProxies.removeAll(_untilEndOfTurnActionProxies);
         _untilEndOfTurnActionProxies.clear();
+        _barredUntilEndOfPhase.clear();
         turnEffectResults.clear();
         _enteringPlayFromHand.clear();
     }
@@ -288,6 +294,19 @@ public class DefaultActionsEnvironment implements ActionsEnvironment {
         }
 
         return result;
+    }
+
+    @Override
+    public void barUntilEndOfPhase(LoopTracker.Ability ability) {
+        if (!_barredUntilEndOfPhase.contains(ability))
+            _barredUntilEndOfPhase.add(ability);
+    }
+
+    @Override
+    public boolean isLoopBanned(Action action) {
+        if (_barredUntilEndOfPhase.isEmpty())
+            return false;
+        return _barredUntilEndOfPhase.contains(LoopTracker.Ability.of(_lotroGame, action));
     }
 
     @Override

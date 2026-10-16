@@ -33,9 +33,11 @@ public class DiscardBottomCardsFromDeck implements EffectAppenderProducer {
                 final String deckId = playerSource.getPlayer(actionContext);
                 final int count = countSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
 
+                // The bar is asked of the deck's owner, as DiscardBottomCardFromDeckEffect asks it (engine pass 48;
+                // no printed card writes this word with forced: true).
                 final LotroGame game = actionContext.getGame();
                 return game.getGameState().getDeck(deckId).size() >= count
-                        && (!forced || game.getModifiersQuerying().canDiscardCardsFromTopOfDeck(game, actionContext.getPerformingPlayer(), actionContext.getSource()));
+                        && (!forced || game.getModifiersQuerying().canDiscardCardsFromTopOfDeck(game, deckId, actionContext.getSource()));
             }
 
             @Override

@@ -264,6 +264,19 @@ public class FilterFactory {
                     int number = Integer.parseInt(parameterSplit[1]);
                     return (actionContext) -> Filters.isAllyHome(number, sitesBlock);
                 });
+        // A card at a site the filter given accepts, "while bearer is at a plains site": an ally at his home site,
+        // every other card at the fellowship's (Filters.atSite; CR 4.2 "ally", F-0518).  Where the text names the
+        // character's place; "while the fellowship is at" is the location requirement.
+        parameterFilters.put("atsite",
+                (parameter, environment) -> {
+                    final FilterableSource siteFilterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
+                    return (actionContext) -> Filters.atSite(siteFilterableSource.getFilterable(actionContext));
+                });
+        parameterFilters.put("samenumberinyouradventuredeck",
+                (parameter, environment) -> {
+                    final FilterableSource deckSiteFilterableSource = environment.getFilterFactory().generateFilter(parameter, environment);
+                    return (actionContext) -> Filters.sameNumberInAdventureDeck(actionContext.getPerformingPlayer(), deckSiteFilterableSource.getFilterable(actionContext));
+                });
         parameterFilters.put("allyinregion",
                 (parameter, environment) -> {
                     final String[] parameterSplit = parameter.split(",");
@@ -791,7 +804,7 @@ public class FilterFactory {
                                 return false;
 
                             for(var race : races) {
-                                if(Filters.canSpot(game, race))
+                                if(Filters.canSpot(game, actionContext.getPerformingPlayer(), 1, SpotOverride.NONE, race))
                                     return false;
                             }
                             return true;

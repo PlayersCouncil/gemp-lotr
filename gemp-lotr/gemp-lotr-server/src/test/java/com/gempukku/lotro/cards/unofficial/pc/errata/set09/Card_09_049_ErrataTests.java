@@ -220,6 +220,7 @@ public class Card_09_049_ErrataTests
 		scn.StartGame();
 		// Three tokens in the pool keep Bilbo's other text quiet when the fellowship moves.
 		scn.SetTwilight(3);
+		scn.FreepsRefreshDecision();
 		// Not a fellowship action.
 		assertFalse(scn.FreepsActionAvailable(bilbo));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());

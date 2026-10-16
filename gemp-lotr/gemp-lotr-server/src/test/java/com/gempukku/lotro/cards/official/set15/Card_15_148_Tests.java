@@ -102,6 +102,7 @@ public class Card_15_148_Tests
 		// A Hobbit who bears a weapon that is no hand weapon: the only one there is sits on the other side.
 		scn.MoveMinionsToTable(ted);
 		scn.AttachCardsTo(ted, bow);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(4, scn.GetVitality(sam));
 		assertEquals(4, scn.GetVitality(merry));

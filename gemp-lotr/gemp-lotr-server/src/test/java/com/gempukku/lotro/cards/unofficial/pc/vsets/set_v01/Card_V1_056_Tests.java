@@ -151,6 +151,7 @@ public class Card_V1_056_Tests
 		scn.StartGame();
 		scn.AddWoundsToChar(frodo, 1);
 		scn.AddWoundsToChar(gimli, 1);
+		scn.FreepsRefreshDecision();
 
 		assertFalse(scn.FreepsPlayAvailable(coming));
 

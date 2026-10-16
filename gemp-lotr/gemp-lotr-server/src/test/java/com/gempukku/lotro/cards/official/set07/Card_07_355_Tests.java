@@ -93,6 +93,7 @@ public class Card_07_355_Tests
 		scn.StartGame();
 		scn.SkipToSite(6);
 		scn.MoveCardsToHand(secret);
+		scn.FreepsRefreshDecision();
 		scn.FreepsPlayCard(secret);
 		assertEquals(3, scn.GetMoveLimit()); // 2 + 1
 		// Laid in the fellowship phase at site 6, to be on the table in the Shadow phase at the Capitol.

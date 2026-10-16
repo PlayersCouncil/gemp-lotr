@@ -375,13 +375,13 @@
 				phase: shadow
 				requires: {
 					type: canSpot
-					filter: not(your),site
+					filter: not(your),site,sameNumberInYourAdventureDeck(siteBlock(fellowship),or(marsh,underground))
 				}
 				effect: [
 					{
 						type: chooseActiveCards
 						text: Choose opponent's site
-						select: choose(not(your),site)
+						select: choose(not(your),site,sameNumberInYourAdventureDeck(siteBlock(fellowship),or(marsh,underground)))
 						memorize: chosenSite
 					}
 					{

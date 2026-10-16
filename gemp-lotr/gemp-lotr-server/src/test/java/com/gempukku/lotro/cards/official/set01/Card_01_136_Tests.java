@@ -113,6 +113,7 @@ public class Card_01_136_Tests
 
 		var site = scn.GetCurrentSite();
 		scn.AttachCardsTo(site, arms, spies);
+		scn.ShadowRefreshDecision();
 
 		assertEquals(0, scn.GetWoundsOn(servant));
 		assertTrue(scn.ShadowPlayAvailable(power));

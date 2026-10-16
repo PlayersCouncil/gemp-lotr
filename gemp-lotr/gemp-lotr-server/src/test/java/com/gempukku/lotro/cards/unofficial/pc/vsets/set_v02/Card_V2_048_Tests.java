@@ -78,6 +78,7 @@ public class Card_V2_048_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertNull(card.getBlueprint().getPossessionClasses());
 		assertTrue(scn.HasKeyword(card, Keyword.FORTIFICATION));
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());

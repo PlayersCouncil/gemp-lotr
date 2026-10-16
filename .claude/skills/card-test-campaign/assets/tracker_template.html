@@ -254,6 +254,7 @@ function start() {
 
   // Findings.
   const F = DATA.findings || [];
+  document.getElementById("tab-findings").textContent = "Findings (" + F.length + ")";
   const FS = ["candidate", "question", "confirmed", "fixed", "fixed-approved", "not-a-bug"];
   const FLABEL = { "candidate": "Waiting on Ketura", "question": "Question open", "confirmed": "Fix pending", "fixed": "Fixed",
     "fixed-approved": "Fixed with approval", "not-a-bug": "Not a bug" };

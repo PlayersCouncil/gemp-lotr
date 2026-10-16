@@ -210,6 +210,7 @@ public class Card_V2_061_Tests
 		scn.StartGame();
 		scn.AddBurdens(3);
 		scn.MoveMinionsToTable(wight1, wight2, lights);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(3, scn.GetBurdens());
 		assertEquals(0, scn.GetKeywordCount(wight1, Keyword.DAMAGE));

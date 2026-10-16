@@ -19,8 +19,39 @@ public class Card_12_174_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "12_174");
-					// put other cards in here as needed for the test case
+					put("cantea", "12_174");
+					put("steed", "1_208");      // Black Steed: a [wraith] possession, the other [wraith] card; +2, +2 more at plains
+					// Five burdens take a companion of resistance 5 to 0, one of 6 to 1, and Frodo's 10 to 5.
+					put("sam", "1_311");        // Sam, Son of Hamfast: [shire] Hobbit, resistance 5
+					put("boromir", "11_57");    // Boromir, Hero of Osgiliath: [gondor] Man, resistance 5
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: resistance 6
+					put("guard1", "1_7");       // Dwarf Guard: resistance 6, no text once in play
+					put("guard2", "1_7");
+					// Thrarin, Dwarven Smith: an ally (resistance 0 by rule) who can be made to take part in skirmishes
+					put("thrarin", "1_27");
+					put("visitor", "7_126");    // Unexpected Visitor: gives each minion "Assignment: Assign this minion to bearer"
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetSkirmishScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("cantea", "12_174");
+					put("lemenya", "1_232");    // Úlairë Lemenya, Lieutenant of Morgul: a [wraith] minion; strength 9
+					put("troop", "1_177");      // Goblin Patrol Troop: a [moria] minion, strength 13, no text
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, vitality 4
+					put("gimli", "1_13");       // Gimli, Son of Glóin: strength 6, vitality 3
+					// Dwarf Guard: a companion with no text once in play
+					put("guard1", "1_7");
+					put("guard2", "1_7");
+					put("guard3", "1_7");
+					// Thrarin, Dwarven Smith: an ally who can be made to take part in skirmishes
+					put("thrarin", "1_27");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -67,20 +98,20 @@ public class Card_12_174_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var cantea = scn.GetFreepsCard("cantea");
 
-		assertEquals("Úlairë Cantëa", card.getBlueprint().getTitle());
-		assertEquals("Black Assassin", card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.NAZGUL, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.FIERCE));
-		assertEquals(5, card.getBlueprint().getTwilightCost());
-		assertEquals(10, card.getBlueprint().getStrength());
-		assertEquals(3, card.getBlueprint().getVitality());
-		assertEquals(3, card.getBlueprint().getSiteNumber());
+		assertEquals("Úlairë Cantëa", cantea.getBlueprint().getTitle());
+		assertEquals("Black Assassin", cantea.getBlueprint().getSubtitle());
+		assertTrue(cantea.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, cantea.getBlueprint().getSide());
+		assertEquals(Culture.WRAITH, cantea.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, cantea.getBlueprint().getCardType());
+		assertEquals(Race.NAZGUL, cantea.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(cantea, Keyword.FIERCE));
+		assertEquals(5, cantea.getBlueprint().getTwilightCost());
+		assertEquals(10, cantea.getBlueprint().getStrength());
+		assertEquals(3, cantea.getBlueprint().getVitality());
+		assertEquals(3, cantea.getBlueprint().getSiteNumber());
 	}
 
 	// Ketura on Q-0034: an optional action with no cost that would do nothing is not offered (a spot is no
@@ -123,18 +154,206 @@ public class Card_12_174_Tests
 		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void UlaireCanteaTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void AssignsHimselfToACompanionAtResistanceZeroAndThenKillsHimBesideACardHeBears() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var sam = scn.GetFreepsCard("sam");
+		var boromir = scn.GetFreepsCard("boromir");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var guard1 = scn.GetFreepsCard("guard1");
+		var guard2 = scn.GetFreepsCard("guard2");
+		var thrarin = scn.GetFreepsCard("thrarin");
+		// Six companions with Frodo
+		scn.MoveCompanionsToTable(sam, boromir, aragorn, guard1, guard2);
+		scn.MoveAlliesToTable(thrarin);
+		var frodo = scn.GetRingBearer();
+
+		var cantea = scn.GetShadowCard("cantea");
+		var steed = scn.GetShadowCard("steed");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(cantea);
+		scn.AttachCardsTo(cantea, steed);
+		scn.AddBurdens(5);
 
-		assertEquals(5, scn.GetTwilight());
+		// Thrarin takes part in skirmishes from now to the regroup phase.
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsUseCardAction(thrarin);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		assertEquals(0, scn.GetResistance(sam));
+		assertEquals(0, scn.GetResistance(boromir));
+		assertEquals(1, scn.GetResistance(aragorn));
+		assertEquals(1, scn.GetResistance(guard1));
+		assertEquals(5, scn.GetResistance(frodo));
+		assertEquals(0, scn.GetResistance(thrarin));
+		assertFalse(scn.IsCharAssigned(cantea));
+
+		scn.FreepsPass();
+		assertTrue(scn.ShadowActionAvailable(cantea));
+		scn.ShadowUseCardAction(cantea);
+		// The two companions at resistance 0, a [shire] Hobbit and a [gondor] Man; not the companions at 1 or 5, nor
+		// the ally, who has resistance 0 and can be assigned.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(sam, boromir));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(aragorn, guard1, guard2, frodo, thrarin));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		scn.ShadowChooseCard(boromir);
+		assertTrue(scn.IsCharAssignedAgainst(boromir, cantea));
+		assertFalse(scn.IsCharAssigned(sam));
+
+		scn.PassAssignmentActions();
+		scn.FreepsResolveSkirmish(boromir);
+		scn.FreepsPass();
+		// Six companions, and Black Steed is another [wraith] card.
+		assertTrue(scn.IsCharSkirmishingAgainst(boromir, cantea));
+		assertTrue(scn.ShadowActionAvailable(cantea));
+		scn.ShadowUseCardAction(cantea);
+		assertInZone(Zone.DEAD, boromir);
+		assertInZone(Zone.FREE_CHARACTERS, sam);
+		assertInZone(Zone.FREE_CHARACTERS, aragorn);
+		assertInZone(Zone.ATTACHED, steed);
+		// His skirmish was the only one; he is fierce, and the fierce round begins with its assignment actions.
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
+
+	@Test
+	public void WithNoCompanionBelowResistanceOneTheAssignmentIsNotOfferedThoughAnAllyHasResistanceZero() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var sam = scn.GetFreepsCard("sam");
+		var boromir = scn.GetFreepsCard("boromir");
+		var thrarin = scn.GetFreepsCard("thrarin");
+		scn.MoveCompanionsToTable(sam, boromir);
+		scn.MoveAlliesToTable(thrarin);
+
+		var cantea = scn.GetShadowCard("cantea");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(cantea);
+		scn.AddBurdens(4);
+
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsUseCardAction(thrarin);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		assertEquals(1, scn.GetResistance(sam));
+		assertEquals(1, scn.GetResistance(boromir));
+		assertEquals(0, scn.GetResistance(thrarin));
+
+		scn.FreepsPass();
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(cantea));
+	}
+
+	@Test
+	public void OnceHeIsAssignedHisAssignmentIsNotOfferedThoughACompanionAtResistanceZeroIsUnassigned() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var sam = scn.GetFreepsCard("sam");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var visitor = scn.GetFreepsCard("visitor");
+		scn.MoveCompanionsToTable(sam, aragorn);
+		scn.AttachCardsTo(aragorn, visitor);
+
+		var cantea = scn.GetShadowCard("cantea");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(cantea);
+		scn.AddBurdens(5);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		assertEquals(0, scn.GetResistance(sam));
+		scn.FreepsPass();
+		assertTrue(scn.ShadowActionAvailable(cantea, "Unexpected Visitor"));
+		assertTrue(scn.ShadowActionAvailable(cantea));
+		scn.ShadowUseCardAction(cantea, "Unexpected Visitor");
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, cantea));
+
+		scn.FreepsPass();
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+		assertFalse(scn.IsCharAssigned(sam));
+		assertFalse(scn.ShadowActionAvailable(cantea));
+	}
+
+	@Test
+	public void WithFiveCompanionsBesideAnAllyTheKillIsNotOffered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetSkirmishScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var thrarin = scn.GetFreepsCard("thrarin");
+		// Five companions with Frodo, and an ally
+		scn.MoveCompanionsToTable(aragorn, gimli, scn.GetFreepsCard("guard1"), scn.GetFreepsCard("guard2"));
+		scn.MoveAlliesToTable(thrarin);
+
+		var cantea = scn.GetShadowCard("cantea");
+		var lemenya = scn.GetShadowCard("lemenya");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(cantea, lemenya);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, lemenya}, new PhysicalCardImpl[]{gimli, cantea});
+
+		scn.FreepsResolveSkirmish(gimli);
+		scn.FreepsPass();
+		assertTrue(scn.IsCharSkirmishingAgainst(gimli, cantea));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(cantea));
+	}
+
+	@Test
+	public void WithNoOtherWraithCardTheKillIsNotOffered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetSkirmishScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		// Six companions with Frodo
+		scn.MoveCompanionsToTable(aragorn, gimli, scn.GetFreepsCard("guard1"), scn.GetFreepsCard("guard2"),
+				scn.GetFreepsCard("guard3"));
+
+		var cantea = scn.GetShadowCard("cantea");
+		var troop = scn.GetShadowCard("troop");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(cantea, troop);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, troop}, new PhysicalCardImpl[]{gimli, cantea});
+
+		// The other minion is [moria]; Úlairë Cantëa is the only [wraith] card.
+		scn.FreepsResolveSkirmish(gimli);
+		scn.FreepsPass();
+		assertTrue(scn.IsCharSkirmishingAgainst(gimli, cantea));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(cantea));
+	}
+
+	@Test
+	public void AnAllyHeIsSkirmishingIsNoCompanionAndTheKillIsNotOffered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetSkirmishScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var thrarin = scn.GetFreepsCard("thrarin");
+		// Six companions with Frodo, and an ally
+		scn.MoveCompanionsToTable(aragorn, gimli, scn.GetFreepsCard("guard1"), scn.GetFreepsCard("guard2"),
+				scn.GetFreepsCard("guard3"));
+		scn.MoveAlliesToTable(thrarin);
+
+		var cantea = scn.GetShadowCard("cantea");
+		var lemenya = scn.GetShadowCard("lemenya");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(cantea, lemenya);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsUseCardAction(thrarin);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, lemenya}, new PhysicalCardImpl[]{thrarin, cantea});
+
+		scn.FreepsResolveSkirmish(thrarin);
+		scn.FreepsPass();
+		assertTrue(scn.IsCharSkirmishingAgainst(thrarin, cantea));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(cantea));
 	}
 }

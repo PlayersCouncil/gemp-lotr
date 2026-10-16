@@ -133,6 +133,10 @@ agent in turn (`roles/engine.md`), which commits it and writes `engine-pass-<n>/
   report); run it yourself (`cardtest.py suite all`, nothing else running in that tree) only if commits have
   arrived since (card batches alone: `cardtest.py suite`, which leaves out the server's tests that no card or
   rule reaches). Then read each item's `needs_orchestrator`, and launch the next pass.
+- If close.py says "main tree NOT rebuilt" after an engine change, do not wait for the tree to be free: as soon as
+  no Java process runs there (`pgrep -af java`), run `cardtest.py setup` in it. Definitions are read from the
+  source tree, so a stale build cannot load a card that uses a new definition word, and any test that lays one
+  fails with "Card 'x' does not exist" (2026-10-15, pass 48's `atSite`: Card_01_026_Tests failed on the stale build).
 - If a pass is cut off, the item in hand may have left uncommitted work in the tree. Leave it, put a note about it
   at the top of the queue file, and launch again from that item.
 
@@ -184,8 +188,12 @@ happened three times, each under two or more Java processes.
    it is and put a note about it at the top of the queue file, for the agent that takes the item up.
 3. Launch again from a scheduled turn, with only the batches or items that are left. (`resumeFromRunId` picks a
    run up where it stopped while its journal is there; after a restart a fresh launch has been the surer way.)
-4. Tell Ketura that it happened and what was relaunched. After a second restart in one session she was told that
-   a third would not be relaunched without her: keep to that.
+4. Tell Ketura that it happened and what was relaunched. Do NOT wait for her word (Ketura, 2026-10-14, after a
+   restart left the 3K stopped for seven hours: "let's adjust the procedure to not wait on my mark for that; that's a
+   good 7 hours that went undone"). The one brake: two restarts within an hour of each other under load point to
+   memory, so then relaunch with ONE pipeline (write 1 to `<work>/pipelines`), tell her, and go back to two only on
+   her word. An idle restart (nothing running) counts for nothing. A usage-limit failure is not a restart: that one
+   still waits for the limit's reset and tells her.
 
 ## HANDOFF.md, and a compacted context
 

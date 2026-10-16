@@ -201,6 +201,7 @@ public class Card_09_034_Tests
 
 		// Six: 8 + 6.
 		scn.MoveCardsToSupportArea(scn.GetFreepsCard("orthanc"));
+		scn.FreepsRefreshDecision();
 		assertEquals(14, scn.GetStrength(elendil));
 
 		// A seventh, played: still 8 + 6.

@@ -1,6 +1,8 @@
 package com.gempukku.lotro.logic.effects;
 
+import com.gempukku.lotro.common.Token;
 import com.gempukku.lotro.common.Zone;
+import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.GameUtils;
@@ -33,6 +35,13 @@ import java.util.Collections;
  * whatever took it out, is not announced at all (CR 4.2 "discard": "If a card is discarded when it comes into
  * play, ignore any effects triggered when it comes into play").
  *
+ * A character that "comes into play exhausted" is placed with the wounds that leave it 1 vitality, before anything
+ * is published: it is exhausted from the moment it is in play, and so when its play is answered (Q-0302).  It does
+ * so when the effect that plays it says so (setComesIntoPlayExhausted; Gothmog 18_80, F-0500), and when another
+ * card says so of it (ModifiersQuerying.comesIntoPlayExhausted, asked as it is placed; Goblin Domain 1_175, F-0501).  The
+ * wounds are laid, not taken: no character exerts or is wounded, and nothing that answers an exertion or a wound is
+ * set off.
+ *
  * completePlay() is the last step, "The card is played", taken by the play action when everything answering the
  * play has finished.  A play whose card is not in play then did not happen: it pays no cost, and it is taken
  * back out of the record of what was played this phase and this turn.
@@ -45,6 +54,8 @@ public class PlayCardEffect extends AbstractEffect {
     private final Zone _zone;
     private final PhysicalCard _attachedOrStackedPlayedFrom;
     private final boolean _paidToil;
+
+    private boolean _comesIntoPlayExhausted;
 
     private boolean _ownTextStepTaken;
     private boolean _publishStepTaken;
@@ -67,6 +78,15 @@ public class PlayCardEffect extends AbstractEffect {
         _attachedOrStackedPlayedFrom = attachedOrStackedPlayedFrom;
         _paidToil = paidToil;
         _zone = Zone.ATTACHED;
+    }
+
+    /**
+     * Says that the card comes into play exhausted: a character is placed with as many wounds as leave it 1
+     * vitality, as it is placed and before its entering or its play is published (F-0500).  A card that is no
+     * character is placed as it would be.
+     */
+    public void setComesIntoPlayExhausted(boolean comesIntoPlayExhausted) {
+        _comesIntoPlayExhausted = comesIntoPlayExhausted;
     }
 
     public PhysicalCard getPlayedCard() {
@@ -99,6 +119,16 @@ public class PlayCardEffect extends AbstractEffect {
             game.getGameState().attachCard(game, _cardPlayed, _attachedToCard);
         } else {
             game.getGameState().addCardToZone(game, _cardPlayed, _zone);
+        }
+
+        if (Filters.character.accepts(game, _cardPlayed)
+                && (_comesIntoPlayExhausted || game.getModifiersQuerying().comesIntoPlayExhausted(game, _cardPlayed))) {
+            // Read with the card's own text in force, as an exhaustion would read it.
+            final int wounds = game.getModifiersQuerying().getVitality(game, _cardPlayed) - 1;
+            if (wounds > 0) {
+                game.getGameState().addTokens(_cardPlayed, Token.WOUND, wounds);
+                game.getGameState().sendMessage(GameUtils.getCardLink(_cardPlayed) + " comes into play exhausted");
+            }
         }
 
         game.getActionsEnvironment().noteCardEnteringPlay(_cardPlayed, _playedFrom);

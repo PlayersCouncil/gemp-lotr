@@ -1213,13 +1213,12 @@
 		timewords: Response
 		effects: {
 			type: responseEvent
-			requires: {
-				type: canSpot
-				filter: culture(sauron),orc,inSkirmish
-			}
 			trigger: {
+				// CR 4.2 (Section Three, The Ring's Oppression 1_273): killed by the game text of a [sauron] Orc, or by
+				// losing a skirmish one is in; another minion's wound in its skirmish is no kill of the Orc's (Q-0328: B)
 				type: killed
 				filter: companion
+				killer: culture(sauron),orc
 			}
 			effect: {
 				type: discardTopCardsFromDeck
@@ -1558,13 +1557,12 @@
 		timewords: Response
 		effects: {
 			type: responseEvent
-			requires: {
-				type: canSpot
-				filter: culture(sauron),orc,inSkirmish
-			}
 			trigger: {
+				// CR 4.2 Section Three, this card: killed by the game text of a [sauron] Orc minion card, or by losing a
+				// skirmish involving one (Q-0328: B)
 				type: killed
 				filter: companion
+				killer: culture(sauron),orc
 			}
 			effect: {
 				type: addBurdens

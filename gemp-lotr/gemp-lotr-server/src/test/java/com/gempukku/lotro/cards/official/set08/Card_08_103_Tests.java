@@ -71,6 +71,7 @@ public class Card_08_103_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertNull(card.getBlueprint().getPossessionClasses());
 		assertTrue(scn.HasKeyword(card, Keyword.ENGINE));
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(3, card.getBlueprint().getTwilightCost());

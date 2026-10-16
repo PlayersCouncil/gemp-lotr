@@ -19,7 +19,23 @@ public class Card_01_244_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "1_244");
+					put("defense", "1_244");
+					put("soldier", "1_271");    // Orc Soldier: [sauron] Orc, strength 7, vitality 2; a skirmish ability only
+					put("chieftain", "1_266");  // Orc Chieftain: [sauron] Orc, vitality 2; his text answers a weapon played on him
+					put("guard", "10_81");      // Cirith Ungol Guard: a [sauron] minion who is no Orc (Uruk-hai), damage +1 only
+					put("troop", "1_177");      // Goblin Patrol Troop: an Orc who is not [sauron] ([moria]), no text
+					put("runner", "1_178");     // Goblin Runner: a [moria] Orc, strength 5; his text answers only his own play
+
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a companion who is not the Ring-bearer, strength 8
+					put("grimir", "1_17");      // Grimir, Dwarven Elder: an ally, a character who is no companion
+
+					// Dwarf Guard: plain cards for the Free Peoples hand
+					put("dwarf1", "1_7");
+					put("dwarf2", "1_7");
+					put("dwarf3", "1_7");
+					put("dwarf4", "1_7");
+					put("dwarf5", "1_7");
+					put("dwarf6", "1_7");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +63,7 @@ public class Card_01_244_Tests
 	}
 
 	@Test
-	public void DesperateDefensebroftheRingStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void DesperateDefenseoftheRingStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
 		 * Set: 1
@@ -63,7 +79,7 @@ public class Card_01_244_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("defense");
 
 		assertEquals("Desperate Defense of the Ring", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -88,6 +104,7 @@ public class Card_01_244_Tests
 		scn.MoveCompanionsToTable(aragorn);
 		scn.AttachCardsTo(aragorn, defense);
 		scn.MoveCardsToHand(gimli, sam);
+		assertInHand(gimli, sam);
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(savage, runner);
@@ -104,6 +121,190 @@ public class Card_01_244_Tests
 		assertEquals(1, scn.GetBurdens());
 		assertEquals(2, scn.GetFreepsHandCount());
 		assertInHand(gimli, sam);
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
+	}
+
+	@Test
+	public void ToPlayAShadowPlayerExertsASauronOrcAndPutsItOnACompanion() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var defense = scn.GetShadowCard("defense");
+		var soldier = scn.GetShadowCard("soldier");
+		var chieftain = scn.GetShadowCard("chieftain");
+		var guard = scn.GetShadowCard("guard");
+		var troop = scn.GetShadowCard("troop");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var grimir = scn.GetFreepsCard("grimir");
+		var frodo = scn.GetRingBearer();
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveAlliesToTable(grimir);
+		scn.MoveCardsToHand(defense);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(soldier, chieftain, guard, troop);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertEquals(0, scn.GetWoundsOn(soldier));
+		assertEquals(0, scn.GetWoundsOn(chieftain));
+		assertTrue(scn.ShadowPlayAvailable(defense));
+
+		scn.ShadowPlayCard(defense);
+		// The bearer: either companion, the Ring-bearer or not; not the ally, nor a minion.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(frodo, aragorn));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(grimir, soldier, chieftain, guard, troop));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		scn.ShadowChooseCard(aragorn);
+
+		// The cost: either [sauron] Orc; not the [sauron] Uruk-hai nor the [moria] Orc.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(soldier, chieftain));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(guard, troop));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		scn.ShadowChooseCard(chieftain);
+
+		assertAttachedTo(defense, aragorn);
+		assertEquals(1, scn.GetWoundsOn(chieftain));
+		assertEquals(0, scn.GetWoundsOn(soldier));
+		assertEquals(0, scn.GetWoundsOn(guard));
+		assertEquals(0, scn.GetWoundsOn(troop));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void CannotBePlayedWhileTheOnlySauronOrcIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var defense = scn.GetShadowCard("defense");
+		var soldier = scn.GetShadowCard("soldier");
+		var guard = scn.GetShadowCard("guard");
+		var troop = scn.GetShadowCard("troop");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToHand(defense);
+		assertInHand(defense);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(soldier, guard, troop);
+		// Vitality 2: one wound exhausts the only [sauron] Orc.  The Uruk-hai and the [moria] Orc could exert.
+		scn.AddWoundsToChar(soldier, 1);
+		assertEquals(1, scn.GetWoundsOn(soldier));
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		assertEquals(1, scn.GetWoundsOn(soldier));
+		assertEquals(0, scn.GetWoundsOn(guard));
+		assertEquals(0, scn.GetWoundsOn(troop));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertFalse(scn.ShadowPlayAvailable(defense));
+		assertInHand(defense);
+	}
+
+	@Test
+	public void EachTimeBearerIsAssignedTheFreePeoplesPlayerDiscardsThreeCardsOrAddsABurden() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var defense = scn.GetShadowCard("defense");
+		var soldier = scn.GetShadowCard("soldier");
+		var runner = scn.GetShadowCard("runner");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var dwarf1 = scn.GetFreepsCard("dwarf1");
+		var dwarf2 = scn.GetFreepsCard("dwarf2");
+		var dwarf3 = scn.GetFreepsCard("dwarf3");
+		var dwarf4 = scn.GetFreepsCard("dwarf4");
+		var dwarf5 = scn.GetFreepsCard("dwarf5");
+		var dwarf6 = scn.GetFreepsCard("dwarf6");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.AttachCardsTo(aragorn, defense);
+		scn.MoveCardsToHand(dwarf1, dwarf2, dwarf3, dwarf4, dwarf5, dwarf6);
+		assertAttachedTo(defense, aragorn);
+		assertInHand(dwarf1, dwarf2, dwarf3, dwarf4, dwarf5, dwarf6);
+		assertEquals(6, scn.GetFreepsHandCount());
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(soldier);
+		scn.SkipToAssignments();
+
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(6, scn.GetFreepsHandCount());
+		scn.FreepsAssignToMinions(aragorn, soldier);
+
+		// The Free Peoples player chooses, and both are open to him.
+		assertTrue(scn.FreepsChoiceAvailable("Discard 3 cards from hand"));
+		assertTrue(scn.FreepsChoiceAvailable("Add a burden"));
+		scn.FreepsChooseOption("Discard 3 cards from hand");
+		assertTrue(scn.FreepsHasCardChoiceAvailable(dwarf1, dwarf2, dwarf3, dwarf4, dwarf5, dwarf6));
+		assertEquals(3, scn.FreepsGetChoiceMin());
+		assertEquals(3, scn.FreepsGetChoiceMax());
+		scn.FreepsChooseCards(dwarf1, dwarf2, dwarf3);
+
+		assertInDiscard(dwarf1, dwarf2, dwarf3);
+		assertInHand(dwarf4, dwarf5, dwarf6);
+		assertEquals(3, scn.GetFreepsHandCount());
+		assertEquals(0, scn.GetBurdens());
+
+		// Aragorn (8) beats the Soldier (7); then the fellowship moves again and a second assignment phase comes.
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.SkipToMovementDecision();
+		scn.FreepsChooseToMove();
+		scn.MoveMinionsToTable(runner);
+		scn.ShadowRefreshDecision();
+		scn.SkipToAssignments();
+
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(3, scn.GetFreepsHandCount());
+		scn.FreepsAssignToMinions(aragorn, runner);
+
+		assertTrue(scn.FreepsChoiceAvailable("Discard 3 cards from hand"));
+		assertTrue(scn.FreepsChoiceAvailable("Add a burden"));
+		scn.FreepsChooseOption("Add a burden");
+
+		assertEquals(1, scn.GetBurdens());
+		assertEquals(3, scn.GetFreepsHandCount());
+		assertInHand(dwarf4, dwarf5, dwarf6);
+		// The Soldier, who lived through the first skirmish, is left over for the Shadow player to assign.
+		assertTrue(scn.ShadowDecisionAvailable("Assign minions"));
+	}
+
+	@Test
+	public void AnAssignmentOfAnotherCompanionAsksNothingAndTheShadowPlayersAssignmentOfBearerAsks() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var defense = scn.GetShadowCard("defense");
+		var runner = scn.GetShadowCard("runner");
+		var troop = scn.GetShadowCard("troop");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var dwarf1 = scn.GetFreepsCard("dwarf1");
+		var dwarf2 = scn.GetFreepsCard("dwarf2");
+		var dwarf3 = scn.GetFreepsCard("dwarf3");
+		var frodo = scn.GetRingBearer();
+		scn.MoveCompanionsToTable(aragorn);
+		scn.AttachCardsTo(aragorn, defense);
+		scn.MoveCardsToHand(dwarf1, dwarf2, dwarf3);
+		assertAttachedTo(defense, aragorn);
+		assertInHand(dwarf1, dwarf2, dwarf3);
+		assertEquals(3, scn.GetFreepsHandCount());
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner, troop);
+		scn.SkipToAssignments();
+
+		assertEquals(0, scn.GetBurdens());
+		// Frodo, who does not bear it, is assigned; Aragorn is left for the Shadow player.
+		scn.FreepsAssignToMinions(frodo, runner);
+		assertFalse(scn.FreepsChoiceAvailable("Add a burden"));
+		assertTrue(scn.ShadowDecisionAvailable("assign"));
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(3, scn.GetFreepsHandCount());
+
+		scn.ShadowAssignToMinions(aragorn, troop);
+		// A hand of exactly three: both are open to him.
+		assertTrue(scn.FreepsChoiceAvailable("Discard 3 cards from hand"));
+		assertTrue(scn.FreepsChoiceAvailable("Add a burden"));
+		scn.FreepsChooseOption("Add a burden");
+
+		assertEquals(1, scn.GetBurdens());
+		assertEquals(3, scn.GetFreepsHandCount());
 		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 	}
 }

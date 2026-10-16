@@ -22,16 +22,10 @@
 				}
 			}
 			{
-				type: Trigger
-				optional: false
-				trigger: {
-					type: played
+				type: modifier
+				modifier: {
+					type: comesIntoPlayExhausted
 					filter: culture(sauron),orc
-					memorize: playedOrc
-				}
-				effect: {
-					type: exhaust
-					select: memory(playedOrc)
 				}
 			}
 			{

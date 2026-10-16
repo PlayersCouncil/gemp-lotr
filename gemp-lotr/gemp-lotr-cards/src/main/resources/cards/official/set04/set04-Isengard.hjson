@@ -2301,6 +2301,10 @@
 					type: played
 					filter: self
 				}
+				requires: {
+					type: canSpot
+					filter: machine
+				}
 				effect: {
 					type: AddCultureTokens
 					culture: isengard
@@ -3122,12 +3126,17 @@
 				trigger: {
 					type: Killed
 					filter: or(companion,ally)
-					killer: urukHai
-					inSkirmish: true
 				}
-				requires: {
-					type: SiteAvailableToControl
-				}
+				requires: [
+					{
+						// "During a skirmish involving an Uruk-hai": whatever killed him, not "killed by" (F-0546).
+						type: canSpot
+						filter: urukHai,inSkirmish
+					}
+					{
+						type: SiteAvailableToControl
+					}
+				]
 				effect: {
 					type: takeControlOfSite
 				}
@@ -3554,7 +3563,7 @@
 			effect: [
 				{
 					type: ChooseActiveCards
-					select: choose(culture(isengard),tracker,InSkirmish)
+					select: choose(culture(isengard),tracker)
 					memorize: chosenTracker
 					text: Choose {Isengard} tracker to pump
 				}
@@ -3801,10 +3810,11 @@
 					type: discardFromHand
 					forced: false
 					count: 2
+					memorize: discardedCards
 				}
 				effect: {
 					type: putCardsFromDiscardIntoHand
-					select: choose(culture(isengard),tracker)
+					select: choose(culture(isengard),tracker,not(memory(discardedCards)))
 				}
 			}
 		]

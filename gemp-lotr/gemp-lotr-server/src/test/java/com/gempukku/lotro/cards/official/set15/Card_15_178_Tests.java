@@ -32,6 +32,7 @@ public class Card_15_178_Tests
 				{{
 					put("stormer", "15_178");
 					put("guard", "1_7");        // Dwarf Guard: strength 4, vitality 2; overwhelmed by the Stormer's 10
+					put("scout", "15_116");     // Scouting Orc: [orc] Orc; "Skirmish: Exert this minion to wound a companion it is skirmishing."
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -139,5 +140,43 @@ public class Card_15_178_Tests
 
 		assertEquals(0, scn.GetShadowControlledSiteCount());
 		assertEquals(1, scn.GetFreepsControlledSiteCount());
+	}
+
+	// "Killed during a skirmish involving an [uruk-hai] minion" is any kill in that skirmish, whatever wound
+	// dealt it, and not "killed by" one (Q-0328 is for "<X> kills"): a kill by another minion's own wound is
+	// answered. Uruk Stormer 4_198 and Uruk Slaughterer 12_154 were built the other way (F-0546, F-0547).
+	@Test
+	public void ACompanionKilledInAnUrukHaiMinionsSkirmishByAnotherMinionsWoundOffersIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetSiteControlScenario();
+
+		var stormer = scn.GetShadowCard("stormer");
+		var scout = scn.GetShadowCard("scout");
+		var guard = scn.GetFreepsCard("guard");
+
+		scn.StartGame();
+		scn.SkipToSite(2);
+		var site1 = scn.GetSite(1);
+		scn.MoveCompanionsToTable(guard);
+		scn.AddWoundsToChar(guard, 1);
+		scn.MoveMinionsToTable(stormer, scout);
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(guard, stormer);
+		// The Shadow player puts the [orc] Orc in the same skirmish.
+		scn.ShadowAssignToMinions(guard, scout);
+		scn.FreepsResolveSkirmish(guard);
+
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(scout);
+		// The Orc's wound kills the Guard before the skirmish is resolved.
+		assertInZone(Zone.DEAD, guard);
+		assertFalse(scn.IsSiteControlled(site1));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(stormer));
+		scn.ShadowAcceptOptionalTrigger();
+
+		assertTrue(scn.ShadowControls(site1));
+		assertEquals(1, scn.GetShadowControlledSiteCount());
+		// The Guard was the skirmish's only Free Peoples character: it is over, and so is the phase.
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }

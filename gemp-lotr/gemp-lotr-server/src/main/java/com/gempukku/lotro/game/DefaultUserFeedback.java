@@ -45,6 +45,9 @@ public class DefaultUserFeedback implements UserFeedback {
     public void decisionAccepted(String playerId, AwaitingDecision decision, String answer) {
         for (DecisionObserver observer : _observers)
             observer.decisionAnswered(playerId, decision, answer);
+        // The game's own feedback keeps it if the loop step needs it (LoopFeedback).
+        if (_game != null && _game.getUserFeedback() != this)
+            _game.getUserFeedback().decisionAnswered(playerId, decision, answer);
     }
 
     public void participantDecided(String playerId) {

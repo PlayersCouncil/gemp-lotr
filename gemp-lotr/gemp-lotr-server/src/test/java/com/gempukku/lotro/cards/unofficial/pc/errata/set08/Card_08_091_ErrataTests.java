@@ -121,6 +121,7 @@ public class Card_08_091_ErrataTests
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.MoveMinionsToTable(patrol, brigand);
 		scn.MoveCardsToSupportArea(ladder);
+		scn.FreepsRefreshDecision();
 		scn.SetTwilight(1);
 
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
@@ -158,6 +159,7 @@ public class Card_08_091_ErrataTests
 		scn.StartGame();
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.MoveMinionsToTable(patrol, brigand);
+		scn.FreepsRefreshDecision();
 
 		scn.FreepsPlayCard(army);
 		assertTrue(scn.FreepsHasCardChoiceAvailable(patrol, brigand));
@@ -200,6 +202,7 @@ public class Card_08_091_ErrataTests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(patrol);
+		scn.FreepsRefreshDecision();
 
 		scn.FreepsPlayCard(guard);
 

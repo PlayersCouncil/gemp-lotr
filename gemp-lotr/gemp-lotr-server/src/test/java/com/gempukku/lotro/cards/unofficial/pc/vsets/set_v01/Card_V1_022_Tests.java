@@ -95,6 +95,7 @@ public class Card_V1_022_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
+		assertNull(card.getBlueprint().getPossessionClasses());
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
@@ -359,6 +360,7 @@ public class Card_V1_022_Tests
 		scn.StartGame();
 		scn.AddBurdens(1);
 		scn.MoveMinionsToTable(troop);
+		scn.FreepsRefreshDecision();
 
 		assertTrue(scn.FreepsActionAvailable(memorial));
 

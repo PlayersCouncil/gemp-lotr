@@ -96,6 +96,7 @@ public class Card_03_008_ErrataTests
 		scn.StartGame();
 		// Galadriel's own start-of-turn trigger is kept out of the way by putting her down after it.
 		scn.MoveAlliesToTable(galadriel);
+		scn.FreepsRefreshDecision();
 
 		// The second [elven] ally of home site 3 is played.
 		scn.FreepsPlayCard(galdor);

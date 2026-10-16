@@ -437,6 +437,7 @@ public class ChoiceOfWhatCanBeDoneInFullTests
 		// deck" cannot be performed in full; the other deck has 5, with these three on top.
 		scn.MoveCardsToDiscard(scn.GetFreepsCard("runner"), scn.GetFreepsCard("savage"));
 		scn.MoveCardsToTopOfDeck(sword, savage, runner);
+		scn.FreepsRefreshDecision();
 		assertEquals(1, scn.GetFreepsDeckCount());
 		assertEquals(5, scn.GetShadowDeckCount());
 

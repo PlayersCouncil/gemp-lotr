@@ -479,6 +479,7 @@ public class Card_V3_083_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(runner);
+		scn.FreepsRefreshDecision();
 
 		// A beacon to hinder, but nothing in the discard pile that is an item for a Man.
 		assertFalse(scn.FreepsActionAvailable(gcfa));

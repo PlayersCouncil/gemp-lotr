@@ -112,6 +112,7 @@ public class Card_02_107_ErrataTests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(nelya, attea, ambusher);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(10, scn.GetStrength(nelya));
 		assertEquals(12, scn.GetStrength(attea));
@@ -143,6 +144,7 @@ public class Card_02_107_ErrataTests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(nelya);
+		scn.FreepsRefreshDecision();
 
 		assertTrue(scn.FreepsActionAvailable(sunlight));
 
@@ -169,6 +171,7 @@ public class Card_02_107_ErrataTests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(nelya, lemenya);
+		scn.FreepsRefreshDecision();
 
 		scn.FreepsUseCardAction(sunlight);
 		assertEquals(6, scn.GetStrength(nelya));

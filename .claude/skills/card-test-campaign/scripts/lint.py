@@ -4,12 +4,14 @@
     lint.py <what...>               what is a blueprint id, a test file, or a selector (set:1, seg:vset, ...)
     lint.py <what...> --quiet       one line per file
     lint.py --summary <what...>     counts only, by rule
+    lint.py <what...> --landed-too  also the `read-before` and `helper-pool` warnings on a landed card (approved or
+                                    ready in status.tsv), which are otherwise left off it: a later pass's work
     lint.py --form <file.java> [--only <Test,Test>]
                                     only the rules about how a test is written (bookend, reach, exception, adhoc,
                                     assert, ignore, style, helper, field, scenario, in-file, alias, same-blueprint,
-                                    conditional, not-asked, not-in-hand, copies), for a mechanics class or a card's
-                                    file that has no ledger yet; with --only, only what lies inside the tests named
-                                    (a lone test added to an old file)
+                                    conditional, not-asked, not-in-hand, copies, stale, item-class), for a
+                                    mechanics class or a card's file that has no ledger yet; with --only, only
+                                    what lies inside the tests named (a lone test added to an old file)
 
 Exit status is 0 when every file given is free of errors.  Warnings do not fail a file.
 
@@ -61,6 +63,11 @@ METHOD_OPENS = re.compile(r"^\s*(public|protected|private)\s+(?:static\s+)?([\w<
 # A field of the class: a declaration at the class's own depth that is no method.
 FIELD = re.compile(r"^\s*(?:(?:public|protected|private|static|final|volatile|transient)\s+)*[\w<>\[\], .?]+?\s+(\w+)\s*(?:=|;)")
 
+# What a clause does that lasts: a strength or keyword made, gained or lost (the `duration` warning).
+LASTING_CHANGE = re.compile(r"\bmakes?\b[^.]*?\b(?:strength|vitality|resistance) [+-]|\bmakes?\b[^.]*?\b(?:fierce|damage \+|"
+                            r"an archer|defender \+)|\b(?:gains?|loses?)\b[^.]*?\b(?:fierce|damage|archer|ambush|hunter|bonus|"
+                            r"bonuses|keywords?|game text)\b|\b(?:is|are) strength [+-]", re.I)
+
 FORBIDDEN = [
     (r"\bscn\s*\.\s*(game|gameState|userFeedback)\s*\(\s*\)", "reaches past the rig into the engine; ask for a rig method instead"),
     (r"\bgetModifiersQuerying\b", "reaches past the rig into the engine; ask for a rig method instead"),
@@ -98,6 +105,29 @@ ITSELF = re.compile(r"\bthis (?:companion|minion|ally|follower|condition|possess
 # card is in play to be used, so a `no C-` line under it tells the reviewer nothing.
 SELF_DISCARD = re.compile(r"(?:^|(?P<lead>[:,.])\s+|\bmay\s+)discard this(?:\s+[a-z]+)?(?:\s+from play)?\s+to\b", re.I)
 
+
+# A special ability that plays another card from the discard pile ("Shadow: Play ...", "... to play ..."): the play
+# is a cost wherever it stands (Q-0062), so its `C-` is a board where nothing there can be paid for (5_95, 9_36).
+PILE_PLAY = re.compile(r"(?:\bto|:)\s+play\b(?!\s+(?:this|it)\b)[^.]*?\bfrom your discard pile\b", re.I)
+# A clause whose whole effect is a draw, with nothing paid for it: once the Rule of 4 is spent in its player's
+# fellowship phase it is not offered (Q-0262: B).
+DRAW_ONLY = re.compile(r"(?:^|[.,:]\s+)(?:you may )?draw (?:a|one|two|three|\d) cards?\.?$", re.I)
+# A bar the card lays on itself: "This minion may not ...", "<its title> cannot ..." at a sentence's start.
+SELF_BAR = r"(?:^|[.:]\s+)(?:this (?:minion|companion|ally|character|follower)|%s)\s+(?:may not|cannot|can't|is not|are not)\b"
+# A board change by the rig.  A pending decision is not worked out again after one (pitfalls, "A board changed under
+# a pending decision"), so an offer read before the next answer or refresh is the offer as it stood before it.
+CHEAT = re.compile(r"\bscn\s*\.\s*(?:Move\w*To\w*|AttachCardsTo|StackCardsOn|AddWoundsToChar|RemoveWoundsFromChar|"
+                   r"AddTokensToCard|RemoveTokensFromCard|AddBurdens|RemoveBurdens|AddThreats|RemoveThreats|SetTwilight|"
+                   r"Set\w*Hand|Set\w*DrawDeck|ApplyAdHoc\w*|HinderCard\w*|RestoreCard\w*|\w*TakeControlOfSite)\s*\(")
+# What works a pending choice of phase actions out afresh: the refresh itself, and (since engine pass 40, G-0060)
+# the cheats that end with one (SetHand, SetDrawDeck and MoveCardsToDiscard, with their twins and by-name variants).
+REFRESH = re.compile(r"Refresh(?:Decision|PendingPhaseActions)\s*\(|\bscn\s*\.\s*(?:Set(?:Freeps|Shadow)?(?:Hand|DrawDeck)|"
+                     r"MoveCards(?:To|ToFreeps|ToShadow)Discard)\s*\(")
+# The cheats that move cards (into a hand, onto a deck, onto the table, onto a bearer or a stack), and a card's action
+# taken from a pending choice of actions or read as offered there (engine pass 50).
+MOVED = re.compile(r"\bscn\s*\.\s*(?:Move\w*To\w*|AttachCardsTo|StackCardsOn)\s*\(")
+TAKEN = re.compile(r"\bscn\s*\.\s*(Freeps|Shadow)(PlayCard|UseCardAction|TransferCard|DiscardToHeal)\s*\(|"
+                   r"\bassertTrue\s*\(\s*scn\s*\.\s*(Freeps|Shadow)(\w*(?:Action|Play|Transfer)\w*Available|AnyActionsAvailable)\s*\(")
 
 # How the R clause for a site left behind speaks: by the rule it stands on, or by where the fellowship then is.
 SITE_LEFT = re.compile(r"unless the fellowship is at that site|behind the fellowship|left behind|CR 4\.2 \"active\"|"
@@ -196,6 +226,107 @@ _OUT_OF_PLAY = [(re.compile(r"^MoveCards?To(?:Hand|Discard|DeadPile|TopOfDeck|Bo
                 (re.compile(r"^MoveCardsTo(?:TopOf|BottomOf)?Freeps(?:Hand|Discard|Deck)$"), "Freeps"),
                 (re.compile(r"^MoveCardsTo(?:TopOf|BottomOf)?Shadow(?:Hand|Discard|Deck)$"), "Shadow")]
 COPIES_WORDS = {1: "one dot: the title is unique", 2: "two dots", 3: "three dots"}
+
+
+_plain_by_keep = None
+
+
+def plain_by_keep_list(card_id) -> bool:
+    """Whether another version of the card (its erratum or its original) is on engine pass 28's plainplay-keep.tsv
+    with the strip list's verdict "strip": a play the generator names though it is plain, whose test the version on
+    the list keeps under a `P1` clause (68_112 beside 18_112).  Its other versions have no `P1`, and the plain-play
+    warning would only say again what that list settled."""
+    global _plain_by_keep
+    if _plain_by_keep is None:
+        _plain_by_keep = set()
+        keep = g.state_dir() / "orchestrator" / "engine-pass-28" / "tools-files" / "plainplay-keep.tsv"
+        if keep.is_file():
+            rows = [r.split("\t") for r in keep.read_text(encoding="utf-8").splitlines()[1:] if r.strip()]
+            _plain_by_keep = {r[0] for r in rows if len(r) > 4 and r[4].strip().lower() == "strip"}
+    if not _plain_by_keep:
+        return False
+    cards = g.card_index()
+
+    def original(cid):
+        m = re.search(r"^\s*parent\s*:\s*(\d+_\d+)", cards[cid].raw, re.M) if cid in cards else None
+        return m.group(1) if m else cid
+
+    mine = original(card_id)
+    return any(k != card_id and original(k) == mine for k in _plain_by_keep)
+
+
+# Words of a card's own text that make the pool after another card's play its business (the helper-pool warning).
+COST_WORDS = re.compile(r"twilight|cost|roaming|\(\d\)|\(X\)|toil|muster|ambush", re.I)
+# The cheats whose state the Standard has read before the action (Q-0307), and the readings of that state.
+CHEATED_STATE = [
+    # (cheat, which argument names the card or None for a number of the game, what is read, its name in a warning)
+    (re.compile(r"\bscn\s*\.\s*(?:Add|Remove)WoundsToChar\s*\(\s*(\w+)"), "wounds",
+     lambda v: re.compile(r"\bGet(?:WoundsOn|Vitality)\s*\(\s*%s\s*\)" % v), "the wounds on %s"),
+    (re.compile(r"\bscn\s*\.\s*(?:Add|Remove)TokensToCard\s*\(\s*(\w+)"), "tokens",
+     lambda v: re.compile(r"\bGet\w*Tokens?\w*\s*\(\s*%s\b" % v), "the tokens on %s"),
+    (re.compile(r"\bscn\s*\.\s*(?:Add|Remove)Burdens\s*\("), None,
+     lambda v: re.compile(r"\bGetBurdens\s*\("), "the burdens"),
+    (re.compile(r"\bscn\s*\.\s*(?:Add|Remove)Threats\s*\("), None,
+     lambda v: re.compile(r"\bGetThreats\s*\("), "the threats"),
+    (re.compile(r"\bscn\s*\.\s*AttachCardsTo\s*\(\s*\w+\s*,\s*([\w\s,]+)\)"), "zone",
+     None, "where %s lies"),
+    (re.compile(r"\bscn\s*\.\s*(?:MoveCardsTo\w*|StackCardsOn)\s*\(\s*([\w\s,]+)\)"), "zone", None, "where %s lies"),
+]
+ZONE_READ = r"\bassert(?:InZone\s*\(\s*[\w.]+\s*,|In\w+\s*\(|NotIn\w*\s*\(\s*(?:[\w.]+\s*,)?|AttachedTo\s*\(|NotAttachedTo\s*\(|StackedOn\s*\(|NotStackedOn\s*\()[^;]*\b%s\b"
+
+
+def unread_cheats(body) -> list:
+    """For a test's lines: (the line of the first reading, the cheat's line, the reading's line, what is read) for
+    each state a cheat laid whose first reading after the cheat comes after an act (a play, an answer, a pass)."""
+    out = []
+    for n, line in enumerate(body):
+        for cheat, kind, read, said in CHEATED_STATE:
+            m = cheat.search(line)
+            if not m:
+                continue
+            if kind is None:
+                targets = [(None, read(None), said)]
+            elif kind == "zone":
+                names = [x.strip() for x in m.group(1).split(",") if re.match(r"^[a-z]\w*$", x.strip())]
+                if "StackCardsOn" in line:
+                    names = names[1:]
+                targets = [(v, re.compile(ZONE_READ % re.escape(v)), said % v) for v in names]
+            else:
+                targets = [(m.group(1), read(re.escape(m.group(1))), said % m.group(1))]
+            for v, reading, what in targets:
+                acted = None
+                for r in range(n + 1, len(body)):
+                    later = body[r]
+                    if cheat.search(later) and (v is None or re.search(r"\b%s\b" % re.escape(v), later)):
+                        break  # laid again: that cheat answers for itself
+                    if reading.search(later):
+                        played = v is not None and re.search(r"MoveCards\w*ToHand\s*\(", line) and any(
+                            re.search(r"\b(?:Freeps|Shadow)PlayCard\s*\(\s*%s\b" % re.escape(v), x) for x in body[n + 1:r])
+                        if acted is not None and not played:  # played from the hand it was put in: the play says where it was
+                            out.append((acted, n, r, what))
+                        break
+                    if acted is None and ACTS.search(later):
+                        acted = r
+    return out
+
+
+# Left off a landed card's file unless --landed-too is given (main()).
+LATER_RULES = {"read-before", "helper-pool"}
+_landed = None
+
+
+def landed_already(card_id) -> bool:
+    """Whether the card's status in the campaign's status.tsv is approved or ready (landed)."""
+    global _landed
+    if _landed is None:
+        _landed = set()
+        path = g.state_dir() / "status.tsv"
+        if path.is_file():
+            for row in path.read_text(encoding="utf-8").split("\n")[1:]:
+                cells = row.split("\t")
+                if len(cells) > 1 and cells[1].strip() in ("approved", "ready"):
+                    _landed.add(cells[0].strip())
+    return card_id in _landed
 
 
 def dots(card):
@@ -449,6 +580,34 @@ _FILTER_KEY = re.compile(r"(filter|select|target|^on$|bearer|against|where|kille
 # What stands in a filter and is no race or culture word of the filter's own.
 _NOT_THE_FILTER = re.compile(r"\b(?:name|title|memory|nameFromMemory|titleFromMemory|allyHome|signet|siteBlock|hasAttachedCount)"
                              r"\([^()]*\)", re.I)
+
+
+_both_sides = None
+
+
+def races_on_both_sides() -> list:
+    """The races that cards of both sides have (Man, Hobbit, Wizard, Wraith), as a regular expression's words each:
+    a bare race word in a text ("Bearer must be a Wizard") names no side (Q-0058), and for these the opponent's card
+    of that race is a candidate a board can hold."""
+    global _both_sides
+    if _both_sides is None:
+        sides = {}
+        for cid, c in g.card_index().items():
+            race, side = (c.field("race", "") or "").strip().lower(), (c.field("side", "") or "").strip().lower()
+            if race and side:
+                sides.setdefault(race, set()).add(side)
+        _both_sides = sorted(r for r, s in sides.items() if len(s) > 1)
+    return _both_sides
+
+
+def race_word(race: str) -> str:
+    return {"man": "Man|Men", "elf": "Elf|Elves", "dwarf": "Dwarf|Dwarves"}.get(race, re.escape(race.capitalize()) + "s?")
+
+
+def item_classes(card) -> list:
+    """The item classes printed on a card, in lower case."""
+    m = re.search(r"^\s*itemclass\s*:\s*(\[.*?\]|[^\n\[]*)", card.raw, re.S | re.M | re.I) if card is not None else None
+    return [w.strip().lower() for w in re.split(r"[\n,\[\]]", m.group(1)) if w.strip()] if m else []
 
 
 def race_culture_slips(card, raw=None):
@@ -792,6 +951,30 @@ def squash(text: str) -> str:
     return re.sub(r"[\s.]+", "", g.plain_text(text))
 
 
+def ledger_text_gap(card, clauses) -> str:
+    """Where the C clauses part from the game text: the first sentence of the text they do not hold as it stands,
+    and a clause that is not a C clause holding text of the card's (a keyword written `K1`)."""
+    text = g.plain_text(card.field("gametext", "") or "")
+    c_clauses = sorted((c for cid, c in clauses.items() if cid.startswith("C")), key=lambda c: c[3])
+    have = squash(" ".join(c[2] for c in c_clauses))
+    sentences = [x for x in re.split(r"(?<=[.!?])\s+", text) if x.strip()]
+    said, at = [], 0
+    for sentence in sentences:
+        piece = squash(sentence)
+        if have[at:at + len(piece)] == piece:
+            at += len(piece)
+            continue
+        said.append("the first sentence they do not hold, in order, is \"%s\"" % sentence.strip())
+        break
+    if not said and at < len(have):
+        said.append("they hold more than the text: \"%s\"" % have[at:at + 60])
+    stray = [cid for cid, c in clauses.items() if not cid.startswith("C") and squash(c[2]) and squash(c[2]) in squash(text)]
+    if stray:
+        said.append("%s %s text of the card's, and only C clauses hold the game text (a keyword line is a C clause "
+                    "typed Keyword)" % (" and ".join(sorted(stray)), "holds" if len(stray) == 1 else "hold"))
+    return "; ".join(said) if said else "the difference is in punctuation or spacing the check does not show"
+
+
 _by_path = None
 
 
@@ -855,6 +1038,13 @@ def lint_file(path: Path):
     stats = [m for m in tests if re.search(r"Stats(AndKeywords)?AreCorrect$", m[0])]
     if not stats:
         add("error", "stats", None, "no ...StatsAndKeywordsAreCorrect test")
+    # A possession or artifact that prints no item class reads null (the Standard, "The stats test"; 3_106, 1_55):
+    # otherwise a class written into its definition passes every test.
+    if card is not None and (card.field("type", "") or "").strip().lower() in ("possession", "artifact") and not item_classes(card):
+        for name, start, end, above, ret in stats:
+            if not any(re.search(r"\bgetPossessionClasses\s*\(", line) for line in code[start:end + 1]):
+                add("error", "stats", start, "%s: the card prints no item class, and the test never reads "
+                                             "assertNull(card.getBlueprint().getPossessionClasses())" % name)
     # A Race to Mount Doom modifier's intensity is a printed field of it (the Standard, "The stats test").
     if card is not None and (card.field("type", "") or "").strip().lower() == "metasite":
         for name, start, end, above, ret in stats:
@@ -871,13 +1061,21 @@ def lint_file(path: Path):
             add("error", "in-file", i, "a clause tag comment in the test file: which test claims what is recorded in the ledger file")
 
     ledger_file = g.ledger_path(card_id) if card_id else None
+    card_type = (card.field("type", "") or "").strip().lower() if card is not None else ""
     clauses, claims, cited, faults = parse_ledger(ledger_file) if ledger_file else (None, None, [], [])
+    ledger_text = ledger_file.read_text(encoding="utf-8") if ledger_file is not None and ledger_file.is_file() else ""
+    notes_text = ledger_text.partition("\nNotes:")[2]
     test_names = {m[0] for m in tests}
     if clauses is None:
         add("error", "ledger", None, "no ledger file (%s)" % (ledger_file if ledger_file else "unknown card"))
         clauses, claims = {}, {}
     else:
-        if not clauses:
+        # A card that prints no game text and no keyword (Gandalf, Stormcrow 0_64; 34 such printed cards) has
+        # nothing for a clause to name: its ledger is Sources, Findings, Dropped and Notes, and its stats test
+        # header writes `Game Text: (none)` (orchestrator, 2026-10-15, dec-b0_63).
+        blank = card is not None and not g.plain_text(card.field("gametext", "") or "").strip("\"' ") \
+            and card.field("keywords") is None and card.field("keyword") is None and card.field("effects") is None
+        if not clauses and not blank:
             add("error", "ledger", None, "the ledger has no clause lines (ID Type [checks] text)")
         for at, what in faults:
             add("error", "ledger", None, "ledger line %d: %s" % (at, what))
@@ -892,7 +1090,10 @@ def lint_file(path: Path):
                 if check in codes:
                     add("error", "ledger", None, "%s: lists %s and also says it has none" % (cid, check))
                 elif check == "C-" and only_cost_is_discarding_itself(text):
-                    pass  # always payable: the line needs no reading (and the Standard no longer asks for it)
+                    # Always payable while the card is in play to be used: the Standard asks for no line (9_35 had one).
+                    add("warning", "waived", None, "%s: a `no C-` line under a clause whose only cost is the card discarding "
+                        "itself, which the Standard no longer asks for: take the line out (shapes.md, \"lint's `title-kinds` "
+                        "warning, and a `no C-` it passes over\")" % cid)
                 else:
                     add("warning", "waived", None, "%s: no %s, with a reason given in the ledger (for the reviewer to read)" % (cid, check))
             missing = CORE[ctype] - codes - waived
@@ -908,6 +1109,59 @@ def lint_file(path: Path):
                     "(the Standard, \"A condition inside a modifier; 'bearer' or 'self' with a requirement\"; 2_79, an "
                     "exhausted companion beside a Ring-bearer who is not), in a test that claims F, or a `no F:` line "
                     "under the clause says why none can stand" % (cid, named[0], named[1]))
+            # A phase ability, a trigger's or an event's effect that changes something and names no duration has
+            # one by rule (CR 4.2 "phase action"; Q-0018): the Standard's `D` (1_298's "make a Hobbit strength +2"
+            # on a Skirmish event, and I Would Have Gone With You to the End 101_23 went without one).
+            if cid.startswith("C") and "D" not in codes and "D" not in waived and "D" not in waived.waits \
+                    and (ctype in ("Activated", "Trigger", "Response", "Event") or (ctype == "Effect" and card_type == "event")) \
+                    and LASTING_CHANGE.search(text) and not re.search(r"\buntil\b", text, re.I):
+                add("warning", "duration", None, "%s: the clause changes something and names no duration, so it lasts to "
+                    "the end of the phase by rule (CR 4.2 \"phase action\"; Q-0018): a `D` reads it in force at the "
+                    "phase's last decision and gone in the next (each skirmish is a phase), or a `no D:` line says why "
+                    "none can be shown" % cid)
+            plain = re.sub(r"\s+", " ", text)
+            # A bare race word that cards of both sides have names no side (Q-0058): the opponent's card of that race
+            # is a candidate, or the Notes say why none can stand (9_8's "Bearer must be a Wizard").
+            if cid.startswith("C") and (ctype == "PlayOn" or "F" in codes) and card is not None:
+                races = "|".join(race_word(r) for r in races_on_both_sides())
+                # "Skirmishing a <race>" on a Free Peoples card (Sword of Gondor 4_134, "while skirmishing a Man or
+                # ..."): a Free Peoples character skirmishes only minions, and a minion only the Free Peoples
+                # player's own characters, so no card of the other side can be the one skirmished (dec-b6_97).
+                fp_card = (card.field("side", "") or "").strip().lower() == "free peoples"
+                bare = next((m for m in re.finditer(
+                                 r"(?<!your )(?<!\] )(?<!Peoples )(?<!Shadow )\b(?:an?|each|every|any|another)\s+"
+                                 r"(?:exhausted\s+|wounded\s+)?(%s)\b(?!\s+(?:companion|ally|allies|minion|follower)s?\b)" % races,
+                                 plain)
+                             if not (fp_card and re.search(r"\bskirmishing\s+(?:(?:an?\s+)?(?:\w+\s+)?or\s+)?$",
+                                                           plain[:m.start()], re.I))), None) if races else None
+                if bare and not re.search(r"Q-0058|opponent|other player|either side|both sides", notes_text, re.I):
+                    add("warning", "race-side", None, "%s: \"%s\" names no side (Q-0058), and cards of both sides are %s: the "
+                        "opponent's card of that race is a candidate (an F test, or a Notes line saying why no board can "
+                        "hold one)" % (cid, bare.group(0), bare.group(1)))
+            # A play from the discard pile is a cost wherever it is written (Q-0062): its `C-` is a board where
+            # nothing there can be paid for (5_95, whose only board was a card of another culture).
+            if cid.startswith("C") and ctype == "Activated" and PILE_PLAY.search(plain) \
+                    and "C-" not in codes and "C-" not in waived and "C-" not in waived.waits:
+                add("warning", "pile-cost", None, "%s: the clause plays a card from the discard pile, a cost wherever it is "
+                    "written (Q-0062), and lists no C-: the board where nothing there can be paid for (shapes.md, Q-0086), "
+                    "or a `no C-:` line saying why none can stand" % cid)
+            # A no-cost offer whose whole effect is a draw is not made once the Rule of 4 is spent (Q-0262: B).
+            if cid.startswith("C") and card_type and (card.field("side", "") or "").strip().lower() != "shadow" \
+                    and ((ctype == "Trigger" and re.search(r"\byou may\b", plain, re.I)) or
+                         (ctype == "Activated" and re.match(r"(?:Fellowship|[A-Z][a-z]+ or Fellowship|Fellowship or [A-Z][a-z]+): Draw\b", plain)))\
+                    and DRAW_ONLY.search(plain) \
+                    and not re.search(r"\b(?:shadow|maneuver|archery|assignment|skirmish|regroup) phases?\b", plain, re.I) \
+                    and not re.search(r"Rule of 4|Q-0262", ledger_text):
+                add("warning", "rule-of-4", None, "%s: the clause's whole effect is a draw, which may come in its player's "
+                    "fellowship phase: once the Rule of 4 is spent there it is not offered (Q-0262: B; pitfalls, \"The Rule of "
+                    "4\"), a `-` board the ledger does not mention" % cid)
+            # A bar the card lays on itself owes another card of its kind read as not barred (the Standard's
+            # Restriction row; 19_18, where `self` mutated to `minion` passed every test).
+            if cid.startswith("C") and ctype == "Restriction" and card is not None and "F" not in codes \
+                    and "F" not in waived and "F" not in waived.waits \
+                    and re.search(SELF_BAR % re.escape(g.plain_text(card.field("title", "") or "")), plain, re.I):
+                add("warning", "self-bar", None, "%s: a bar the card lays on itself, and the clause lists no F: another card "
+                    "of its kind on the board, read as not barred (the Standard's Restriction row, 19_18)" % cid)
         # No Play clause is asked for since Q-0279: B (engine pass 31): a card's play is tested by the test of the
         # clause that bears on it, and the `plain-play` warning below asks for that test.
         if card is not None:
@@ -915,7 +1169,8 @@ def lint_file(path: Path):
             text_clauses = [c for cid, c in clauses.items() if cid.startswith("C")]
             have = squash(" ".join(c[2] for c in sorted(text_clauses, key=lambda c: c[3])))
             if want != have:
-                add("error", "ledger-text", None, "the C clauses, read in order, are not the card's game text word for word")
+                add("error", "ledger-text", None, "the C clauses, read in order, are not the card's game text word for word: "
+                    + ledger_text_gap(card, clauses))
 
     # Which tests the ledger says claim what.
     claimed_tests = set()
@@ -973,6 +1228,9 @@ def lint_file(path: Path):
                 add("error", "exception", start, "%s: %s" % (name, NO_EXCEPTIONS))
 
     alias_bp = dict(re.findall(r'put\(\s*"([^"]+)"\s*,\s*"(\d+_\d+)"\s*\)', raw))
+    own_aliases = {a for a, b in alias_bp.items() if b == card_id}
+    file_var_alias = dict(re.findall(r'\bvar\s+(\w+)\s*=\s*scn\s*\.\s*Get\w*Card\s*\(\s*"([^"]+)"', raw))
+    own_text = g.plain_text(card.field("gametext", "") or "") if card is not None else ""
     # Copies of one title in play (Q-0239).  Not followed in a file that names a card which changes how many copies
     # a title may have (Race Text 94_16, "Minions are not unique"): what its tables allow is the card's own text.
     tables = scenario_tables(lines, others)
@@ -1041,6 +1299,95 @@ def lint_file(path: Path):
                            "to choose cards" if twin else "anything",
                            "a card read as offered in that choice, its minimum, or the decision by its words" if twin else
                            "his Awaiting...PhaseActions(), a decision of his, or another offer to him read as made"))
+        # An offer read as absent after a cheat, with no answer or refresh between: the pending decision still offers
+        # what it did before the cheat, so the reading shows the board as it was (8_77's three "not offered").
+        stale_at = None
+        for n, line in enumerate(body):
+            if MOVES_ON.search(line) or REFRESH.search(line):
+                stale_at = None
+                continue
+            if CHEAT.search(line) and any(MOVES_ON.search(x) for x in body[:n]):
+                stale_at = n
+            m = NOT_OFFERED.search(line)
+            if m and stale_at is not None and not let_off(start + n):
+                add("warning", "stale", start + n, "%s: %s%s is read after a cheat on line %d with no answer or %sRefreshDecision() "
+                    "between: a pending decision offers what it did before the cheat, so the reading shows the board as it "
+                    "was (pitfalls, \"A board changed under a pending decision\")"
+                    % (name, m.group(1) or m.group(3), m.group(2) or m.group(4), start + stale_at + 1, m.group(1) or m.group(3)))
+        # The same for a card's action TAKEN from that decision, or read as offered, after a cheat that moved cards (a
+        # hand, a deck, a zone): what was offered turned on where the cards lay as it was worked out, which after a
+        # skipper's draws is chance (Card_01_175_Tests and Card_04_346_Tests failed about one run in ten; engine pass 50).
+        moved_at = None
+        for n, line in enumerate(body):
+            m = TAKEN.search(line)
+            if m and moved_at is not None and not let_off(start + n):
+                side = m.group(1) or m.group(3)
+                add("warning", "stale", start + n, "%s: %s%s is taken from a decision worked out before the cheat on line %d, with "
+                    "no answer or %sRefreshDecision() between: whether it is offered turns on where the cards lay before "
+                    "the cheat (pitfalls, \"A board changed under a pending decision\")"
+                    % (name, side, m.group(2) or m.group(4), start + moved_at + 1, side))
+                moved_at = None
+            if MOVES_ON.search(line) or REFRESH.search(line):
+                moved_at = None
+                continue
+            if MOVED.search(line) and any(MOVES_ON.search(x) for x in body[:n]):
+                moved_at = n
+        # The pool read straight after a helper's plain play (Q-0279: E2, the readings of a printed cost on the way to
+        # something else come out; 68_12 and 18_12, dec-b17_89).  Not where the card's own text speaks of a cost, the
+        # pool, roaming or a twilight number, which may be what the reading is for.
+        if not is_stats and own_aliases and not COST_WORDS.search(own_text):
+            for n, line in enumerate(body[:-1]):
+                m = re.search(r"\b(?:Freeps|Shadow)PlayCard\s*\(\s*(\w+)\s*\)", line)
+                if m and file_var_alias.get(m.group(1)) not in (None, *own_aliases) \
+                        and re.search(r"\bassertEquals\s*\(\s*\d+\s*,\s*scn\s*\.\s*GetTwilight\s*\(\s*\)\s*\)", body[n + 1]) \
+                        and not let_off(start + n + 1):
+                    add("warning", "helper-pool", start + n + 1, "%s: the pool is read straight after %s, a helper, is played: "
+                        "its printed cost doing its ordinary work, which Q-0279: E2 takes out of the tests (mechanics/costs/"
+                        "TwilightPoolTests shows it); keep it only where this card changes that cost, and say so on the line"
+                        % (name, m.group(1)))
+        # A state laid by a cheat and first read only after the game has moved on (the Standard's "Read before and
+        # after", Q-0307: A, every cheated state is read before the action that changes it, save one the action
+        # removes at once).  Reviewers added such readings by hand in batch after batch (dec-b13_182, dec-b5_23,
+        # dec-b12_30, dec-b12_18).
+        if not is_stats:
+            for kind, n, r, said in unread_cheats(body):
+                if not let_off(start + r):
+                    add("warning", "read-before", start + r, "%s: %s, laid by the cheat on line %d, is first read here, after "
+                        "the game has moved on (line %d): read it before that as well (the Standard's \"Read before and "
+                        "after\"; Q-0307: A), or, where the action removes it at once (an item discarded as soon as it is "
+                        "attached), let the line off with `// lint-ok:` and why" % (name, said, start + n + 1, start + kind + 1))
+        # The card played on a bearer chosen from several, with the choice's minimum never read (the Standard: where
+        # the text says neither "may" nor "up to", a choice that has wrongly become optional looks the same otherwise).
+        if card_id and any(c[0] == "PlayOn" and not re.search(r"\bmay\b|\bup to\b", c[2], re.I) for c in clauses.values()):
+            mine = {v for v, a in re.findall(r'\bvar\s+(\w+)\s*=\s*scn\.Get(?:Freeps|Shadow)Card\(\s*"([^"]+)"', "\n".join(lines[start:end + 1]))
+                    if alias_bp.get(a) == card_id}
+            for n, line in enumerate(body):
+                m = re.search(r"\b(Freeps|Shadow)PlayCard\s*\(\s*(\w+)\s*\)", line)
+                if not m or m.group(2) not in mine:
+                    continue
+                after = body[n + 1:]
+                upto = next((k for k, x in enumerate(after) if MOVES_ON.search(x)), len(after))
+                asked = any(re.search(r"\b%sHasCardChoiceAvailable\s*\(" % m.group(1), x) for x in after[:upto])
+                if asked and not any(re.search(r"\b%sGetChoiceMin\s*\(" % m.group(1), x) for x in after[:upto]) \
+                        and not re.search(r"GetChoiceMin\s*\(", "\n".join(code)) and not let_off(start + n):
+                    add("warning", "bearer-min", start + n, "%s: %s is played on a bearer chosen from several and the choice's "
+                        "minimum is read nowhere in the file: where the text says neither \"may\" nor \"up to\", read "
+                        "%sGetChoiceMin() at one such choice (the Standard; a choice wrongly made optional looks the same)"
+                        % (name, m.group(2), m.group(1)))
+                    break
+        # Two items of one class cheated onto one bearer (Q-0213: H): no game reaches it unless a card's text allows it.
+        named = dict(re.findall(r'\bvar\s+(\w+)\s*=\s*scn\.Get(?:Freeps|Shadow)Card\(\s*"([^"]+)"', "\n".join(lines[start:end + 1])))
+        on = {}
+        for n, line in enumerate(body):
+            for bearer, items in re.findall(r"\bAttachCardsTo\s*\(\s*(\w+)\s*,([^;]*)\)", line):
+                for item in re.findall(r"\w+", items):
+                    for cl in item_classes(g.card_index().get(alias_bp.get(named.get(item, item)))):
+                        on.setdefault((bearer, cl), []).append((n, item))
+        for (bearer, cl), items in sorted(on.items()):
+            if len(items) > 1 and not let_off(start + items[-1][0]):
+                add("warning", "item-class", start + items[-1][0], "%s: %s are each a %s on %s: no game puts two items of one class on "
+                    "one bearer (the Standard's \"A board a game could reach\"; Q-0213: H) unless a card's text allows it, "
+                    "which this line then says (// lint-ok: ...)" % (name, " and ".join(i for _, i in items), cl, bearer))
         for offset, alias, title, there, limit in ([] if loosened else copies_over_the_dots(lines[start:end + 1], tables)):
             if not let_off(start + offset):
                 add("warning", "copies", start + offset, "%s: with %s there are %d cards titled %s in play for one player (%s), "
@@ -1126,7 +1473,7 @@ def lint_file(path: Path):
     # generator's reading calls plain.  Read on every card, whether its ledger has a Play clause or not.
     if card is not None and (card.field("type", "") or "").strip().lower() in PLAYED:
         bears = bears_on_play(card_id)
-        if bears and not plays_from_hand(lines, card_id):
+        if bears and not plays_from_hand(lines, card_id) and not plain_by_keep_list(card_id):
             add("warning", "plain-play", None, "no live test plays the card from hand, and by gen_play.py's reading its "
                 "definition or text has something that bears on its play (%s): a test plays it by legal play, the test of "
                 "the clause that says so (the stats test and the mechanics classes of a plain play see none of it; Q-0279: C)"
@@ -1158,34 +1505,122 @@ def lint_file(path: Path):
     # something the check cannot see.  Where text and definition agree, nothing is said.
     if card is not None:
         import census
+        # A ledger whose Notes name the census and each word it found has said what carries them (3_115, 1_183).
+        notes = ledger_file.read_text(encoding="utf-8").partition("\nNotes:")[2] if ledger_file is not None and ledger_file.is_file() else ""
         for which, words, message in census.check(card_id):
+            if re.search(r"\bcensus\b", notes, re.I) and all(re.search(r"\b%s" % re.escape(w.strip()), notes, re.I)
+                                                              for w in words.split(",")):
+                continue
             add("warning", "census", None, "%s: read the definition against the text there; where the definition is at "
                 "fault that is a finding to file (`hjson-logic`), and where something else carries the words (a trigger "
                 "only such a card can set off, a rule of the game) the ledger's Notes say what (Q-0220: B; `census.py %s`)"
                 % (message, card_id))
 
     # A title that cards of more than one culture or type carry (Gollum is [gollum] and [wraith]; Saruman a minion
-    # and a follower): with one kind of it on every table, a culture or type written beside the name in the
-    # definition passes every test (60_20).  Like second-copy, this reads which cards the file names at all, not
+    # and a follower): with one type or one culture of it on every table, a type or culture written beside the name
+    # in the definition passes every test (60_20).  Like second-copy, this reads which cards the file names at all, not
     # which of them a test puts in play.  A card that names its own title is left alone ("limit 1 per bearer",
     # "another Elf"): the other kind is then its own original or erratum.
     if card is not None:
         in_file = set(re.findall(r'"(\d+_\d+)"', raw)) | {card_id}
         own = same_title(card.field("title", ""))
+        bodies = {name: "\n".join(lines[start:end + 1]) for name, start, end, above, ret in tests}
+
+        def laid_by(names):
+            """The ids the tests named lay: their aliases through the file's scenario maps, and any id written in them."""
+            ids = set()
+            for n in names:
+                body = bodies.get(n, "")
+                ids |= set(re.findall(r'"(\d+_\d+)"', body))
+                called = re.search(r"\b(Get\w*Scenario\w*)\s*\(", body)
+                deck, bearer = tables.get(called.group(1), ({}, None)) if called else ({}, None)
+                deck = deck or alias_bp
+                ids |= {deck[a] for a in re.findall(r'Get(?:Freeps|Shadow)Card\(\s*"([^"]+)"', body) if a in deck}
+                if bearer and re.search(r"\bGetRingBearer\s*\(", body):
+                    ids.add(bearer)
+            return ids
+
         for title in sorted({same_title(t) for t in re.findall(r"\b(?:name|title)\(([^()]+)\)", card.raw, re.I)} - {own}):
             kinds = title_kinds().get(title)
             if not kinds:
                 continue
-            have = sorted(k for k, ids in kinds.items() if in_file & set(ids))
-            if len(have) == 1:
-                def words(kind):
-                    return ("[%s] %s" % kind) if kind[0] else kind[1]
-                others = ", ".join("%s (%s)" % (words(k), " ".join(sorted(ids, key=g.id_sort_key)[:3]) + (" ..." if len(ids) > 3 else ""))
-                                   for k, ids in sorted(kinds.items()) if k != have[0])
-                add("warning", "title-kinds", None, "the definition names %s, and every card of that title in this file is "
-                    "%s; there is also %s: where the text names the title with no culture or type word, each kind "
-                    "is a valid candidate in a test of its own (the Standard's F), or a culture or type written beside "
-                    "the name passes every test" % (g.plain_text(g.card_index()[kinds[have[0]][0]].field("title", title)), words(have[0]), others))
+            # Judged clause by clause where the ledger's clauses name the title (Sting 11_173: C2, "if bearer is
+            # Bilbo", was read for the ally Bilbo alone and passed because C1 named both; dec-b11_212): each such
+            # clause's own tests. Where none names it, the file as a whole.
+            said = re.compile(r"(?<![\[\w])%s(?![\]\w])" % re.escape(title))
+            scopes = [("the tests of %s" % cid, laid_by({t for ts in claims.get(cid, {}).values() for t in ts}))
+                      for cid in sorted(clauses) if cid.startswith("C") and said.search(same_title(clauses[cid][2]))]
+            for scope, ids in scopes or [("this file", in_file)]:
+                have = sorted(k for k, cids in kinds.items() if ids & set(cids))
+                if not have:
+                    continue
+                # Owed (Q-0306): each TYPE the title has, and a second CULTURE where it has more than one; not every
+                # culture (Saruman is a minion of four).
+                types_missing = sorted({t for c, t in kinds} - {t for c, t in have})
+                one_culture = len({c for c, t in kinds}) > 1 and len({c for c, t in have}) == 1
+                if types_missing or one_culture:
+                    def words(kind):
+                        return ("[%s] %s" % kind) if kind[0] else kind[1]
+                    owed = [k for k in sorted(kinds) if k not in have and (k[1] in types_missing or (one_culture and k[0] != have[0][0]))]
+                    others = ", ".join("%s (%s)" % (words(k), " ".join(sorted(kinds[k], key=g.id_sort_key)[:3]) + (" ..." if len(kinds[k]) > 3 else ""))
+                                       for k in owed)
+                    lacks = " and ".join(x for x in ("no %s" % "/".join(types_missing) if types_missing else "",
+                                                     "one culture" if one_culture else "") if x)
+                    add("warning", "title-kinds", None, "the definition names %s, and the cards of that title in %s are "
+                        "%s: %s; there is also %s: where the text names the title with no culture or type word, each type "
+                        "of the title and a second culture are valid candidates, each in a test of its own (the Standard's F, "
+                        "Q-0306), or a culture or type written beside the name passes every test"
+                        % (g.plain_text(g.card_index()[kinds[have[0]][0]].field("title", title)), scope,
+                           ", ".join(words(k) for k in have), lacks, others))
+
+    # "Mounted" is bearing a mount (CR 4.2 "mounted").  A definition that reads it as bearing any possession
+    # (`hasAttached(possession)`) passes every test whose characters bear mounts or nothing (White Rocks 4_346,
+    # dec-b4_336): the nearest invalid candidate is a character bearing a possession that is no mount.
+    # A possession whose own text says "if (or while) bearer is mounted" (Rider's Spear 4_288) is itself the
+    # possession that is no mount, borne on every board its text is read on, so the warning stands for nothing there
+    # (dec-b4_288).
+    own_bearer = card is not None and (card.field("type", "") or "").strip().lower() == "possession" \
+        and "mount" not in item_classes(card) \
+        and re.search(r"\b(?:if|while) bearer is mounted\b", g.plain_text(card.field("gametext", "") or ""), re.I)
+    if card is not None and not own_bearer and re.search(r"\bmounted\b", g.plain_text(card.field("gametext", "") or ""), re.I):
+        laid = set(re.findall(r'"(\d+_\d+)"', raw)) - {card_id}
+        other_items = [x for x in laid if x in g.card_index()
+                       and (g.card_index()[x].field("type", "") or "").strip().lower() in ("possession", "artifact")
+                       and "mount" not in [c.lower() for c in item_classes(g.card_index()[x])]]
+        if not other_items:
+            add("warning", "mounted", None, "the text says \"mounted\", and the file lays no possession or artifact that is "
+                "no mount: the nearest invalid candidate is a character bearing one (a hand weapon, armor), or a "
+                "definition that reads \"mounted\" as bearing any possession passes every test (White Rocks 4_346)")
+
+    # A Restriction whose doers are a bare side word ("Shadow cards may not discard ...", "cannot be removed by Free
+    # Peoples cards") owes, among its F candidates, a character, an item and a card that is neither, all of that side
+    # (the Standard's Restriction row, 10_47); Frodo 4_301 had no item until review, and `side(shadow),not(possession)`
+    # passed every test (dec-b4_301).  Judged on the cards the file lays, the card itself left out.
+    if card is not None and clauses:
+        laid_cards = [g.card_index()[x] for x in set(re.findall(r'"(\d+_\d+)"', raw)) - {card_id} if x in g.card_index()]
+        for cid, (ctype, codes, text, line, waived) in clauses.items():
+            plain_c = re.sub(r"\s+", " ", text)
+            m = re.search(r"\b(Shadow|Free Peoples) cards\b", plain_c)
+            if not (cid.startswith("C") and ctype == "Restriction" and "F" in codes and m):
+                continue
+            side = m.group(1).lower()
+            kinds = {"character": ("companion", "ally", "minion"), "item": ("possession", "artifact")}
+            have = set()
+            for c in laid_cards:
+                if (c.field("side", "") or "").strip().lower() != side:
+                    continue
+                t = (c.field("type", "") or "").strip().lower()
+                have.add(next((k for k, ts in kinds.items() if t in ts), "neither"))
+            lacking = [k for k in ("character", "item", "neither") if k not in have]
+            # Answered in Notes where no printed card of a kind can do the act (as 4_301's "bare side word" line).
+            if lacking and not re.search(r"bare side word|10_47", notes_text, re.I):
+                add("warning", "side-doers", None, "%s: \"%s cards\" is a bare side word, so the doers owed are a character, "
+                    "an item (a possession or an artifact) and a card that is neither, each of that side (the Standard's "
+                    "Restriction row, 10_47), and the file lays no %s card that is %s (or a Notes line naming the bare side word "
+                    "says why none can stand)" % (
+                        cid, m.group(1), m.group(1),
+                        " or ".join({"character": "a character", "item": "a possession or artifact",
+                                     "neither": "neither"}[k] for k in lacking)))
 
     if card is not None:
         import cardinfo
@@ -1207,7 +1642,7 @@ def lint_file(path: Path):
 # pass 27): a board no game reaches is no better laid in a mechanics class or a lone test than in a card's own file
 # (Q-0239), and the rule needs only the file's Get...Scenario() methods, not a card or a ledger.
 FORM_RULES = {"bookend", "reach", "exception", "adhoc", "assert", "ignore", "style", "helper", "field", "scenario", "in-file",
-              "alias", "same-blueprint", "conditional", "not-asked", "not-in-hand", "copies"}
+              "alias", "same-blueprint", "conditional", "not-asked", "not-in-hand", "copies", "stale", "item-class"}
 
 
 def main(argv):
@@ -1245,6 +1680,11 @@ def main(argv):
             failed += 1
             continue
         findings, lets_off = lint_file(f)
+        if "--landed-too" not in argv and landed_already(_ids_by_path().get(str(f.resolve()))):
+            # Warnings that came in after most cards had landed (engine pass 44), measured over the landed files then:
+            # read-before about 6,600 readings in 835 files, helper-pool 66 in 58.  Too many to be read as work left
+            # on every landed card; they are a later pass's.  New work, and --landed-too, see them.
+            findings = [x for x in findings if x.rule not in LATER_RULES]
         if "--form" in argv:
             findings = [x for x in findings if x.rule in FORM_RULES]
             if only:

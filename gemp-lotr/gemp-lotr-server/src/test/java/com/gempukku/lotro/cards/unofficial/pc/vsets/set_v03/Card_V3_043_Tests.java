@@ -63,6 +63,7 @@ public class Card_V3_043_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
+		assertNull(card.getBlueprint().getPossessionClasses());
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(4, card.getBlueprint().getTwilightCost());
 		// The strength of 5 and vitality of 5 are printed on the card, but it has neither until its Maneuver

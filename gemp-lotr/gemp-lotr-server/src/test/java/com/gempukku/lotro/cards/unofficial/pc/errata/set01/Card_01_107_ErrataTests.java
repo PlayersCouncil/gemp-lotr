@@ -136,6 +136,7 @@ public class Card_01_107_ErrataTests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(marksman1, marksman2);
+		scn.FreepsRefreshDecision();
 
 		// Two Shadow archers; Legolas is the one Free Peoples archer.
 		assertEquals(2, scn.GetShadowArcheryTotal());

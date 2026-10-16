@@ -228,6 +228,7 @@ public class Card_01_261_Tests
 		// ones still standing after the skirmishes.
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.MoveMinionsToTable(ambusher1, ambusher2);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(ambusher1));
@@ -267,6 +268,7 @@ public class Card_01_261_Tests
 		scn.StartGame();
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.MoveMinionsToTable(ambusher1, guard);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(0, scn.GetWoundsOn(ambusher1));
 		assertEquals(0, scn.GetWoundsOn(guard));
@@ -386,6 +388,7 @@ public class Card_01_261_Tests
 		scn.StartGame();
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.MoveMinionsToTable(ambusher1, ambusher2);
+		scn.FreepsRefreshDecision();
 		// Vitality 2 with 1 wound: exhausted.
 		scn.AddWoundsToChar(ambusher1, 1);
 

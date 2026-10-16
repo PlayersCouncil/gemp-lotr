@@ -92,6 +92,7 @@ public class Card_02_038_ErrataTests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable("marksman", "marksman2");
+		scn.FreepsRefreshDecision();
 
 		assertEquals(2, scn.GetShadowArcheryTotal());
 		assertEquals(1, scn.GetFreepsArcheryTotal());

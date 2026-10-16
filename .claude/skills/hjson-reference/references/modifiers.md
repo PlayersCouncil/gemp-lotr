@@ -372,6 +372,12 @@ In general, although the names of modifiers are case-insensitive, the names of t
       optional
     * requires [ ]
       optional
+* ComesIntoPlayExhausted
+  A character matching `filter` comes into play exhausted while the `requires` requirements are met: as it is played, it is placed with the wounds that leave it 1 vitality, before anything answers its play, and the wounds are no exertions (Q-0302, F-0501).  Read only as a card is placed; it does nothing to a card already in play.
+    * filter
+      required
+    * requires [ ]
+      optional
 * DisableGameText
   Prevents the game text of cards matching `filter` from being used, so long as the given `requires` requirements are met.  See Helpless).
     * filter

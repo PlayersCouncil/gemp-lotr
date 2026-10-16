@@ -3,6 +3,7 @@ package com.gempukku.lotro.cards.official.set11;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -13,14 +14,19 @@ import static org.junit.Assert.*;
 public class Card_11_263_Tests
 {
 
+	// The Fellowship path, with West Gate of Moria in each deck in place of site 9 (which no test reaches); a test
+	// lays it on the path as the site after the fellowship's.
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "11_263");
-					// put other cards in here as needed for the test case
 				}},
-				VirtualTableScenario.FellowshipSites,
+				new HashMap<>()
+				{{
+					putAll(VirtualTableScenario.FellowshipSites);
+					remove("site9");
+					put("westgate", "11_263");
+				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -33,41 +39,51 @@ public class Card_11_263_Tests
 		 * Set: 11
 		 * Name: West Gate of Moria
 		 * Unique: False
-		 * Side: 
-		 * Culture: 
-		 * Shadow Number: 2
 		 * Type: Site
-		 * Subtype: 
-		 * Site Number: *
+		 * Block: Shadows
+		 * Shadow Number: 2
+		 * Direction: Right
 		 * Game Text: <b>Underground</b>. When the fellowship moves from this site, remove (2).
 		*/
 
 		var scn = GetScenario();
 
-		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite();
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsSite("westgate");
 
 		assertEquals("West Gate of Moria", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.UNDERGROUND));
+		assertEquals(SitesBlock.SHADOWS, card.getBlueprint().getSiteBlock());
+		assertEquals(0, card.getBlueprint().getSiteNumber());
 		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(LotroCardBlueprint.Direction.RIGHT, card.getBlueprint().getSiteDirection());
+		assertTrue(scn.HasKeyword(card, Keyword.UNDERGROUND));
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void WestGateofMoriaTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void MovingThereRemovesNothingAndMovingOnFromItRemovesTwo() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		// The Shadow player's copy, as a site 2 is on the first player's first turn.
+		var westgate = scn.GetShadowSite("westgate");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveCardToAdventurePath(westgate);
+		scn.SetTwilight(4);
 
+		// The move to it: 4 + 2 for its Shadow number + 1 companion, and nothing removed.
+		scn.FreepsPass();
+		assertSame(westgate, scn.GetCurrentSite());
+		assertEquals(7, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		// The regroup move from it to Rivendell Valley (Shadow number 0): 3 - 2 + 0 + 1 companion.
+		scn.SkipToMovementDecision();
+		scn.SetTwilight(3);
+		scn.FreepsChooseToMove();
+		assertEquals(3, scn.GetCurrentSiteNumber());
 		assertEquals(2, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

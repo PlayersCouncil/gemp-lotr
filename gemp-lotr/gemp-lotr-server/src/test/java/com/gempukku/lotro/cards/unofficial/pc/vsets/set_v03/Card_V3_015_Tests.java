@@ -497,14 +497,15 @@ public class Card_V3_015_Tests
 		scn.SkipToAssignments();
 
 		assertEquals(5, scn.GetStrength(mad));
+		// Mad Thing's own text: to assign him, the Free Peoples player makes him strength +3 until the
+		// regroup phase, paid ahead as he starts assigning (Q-0221, Q-0283).
+		scn.FreepsChooseOptionalTrigger(mad);
+		scn.FreepsChoose("strength +3");
+		assertEquals(8, scn.GetStrength(mad));
 		scn.FreepsAssignToMinions(
 				new PhysicalCardImpl[] { aragorn, runner },
 				new PhysicalCardImpl[] { glorfindel, mad }
 		);
-		// Mad Thing's own text: to assign him, the Free Peoples player makes him strength +3 until the
-		// regroup phase.
-		scn.FreepsChoose("strength +3");
-		assertEquals(8, scn.GetStrength(mad));
 
 		// Aragorn's skirmish against the Runner; Gollum is assigned to Glorfindel and waiting.
 		scn.FreepsResolveSkirmish(aragorn);

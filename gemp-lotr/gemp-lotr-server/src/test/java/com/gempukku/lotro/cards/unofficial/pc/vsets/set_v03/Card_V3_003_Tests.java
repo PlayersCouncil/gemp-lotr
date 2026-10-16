@@ -134,6 +134,7 @@ public class Card_V3_003_Tests
 		scn.StartGame();
 		// Narya goes on after the start of the turn, when it would have made its own offer.
 		scn.AttachCardsTo(gandalf, narya);
+		scn.FreepsRefreshDecision();
 		// A [gondor] companion, a [shire] possession and a Shadow condition, all hindered.
 		scn.HinderCard(aragorn, toby, armory);
 
@@ -242,6 +243,7 @@ public class Card_V3_003_Tests
 		scn.StartGame();
 		scn.HinderCard(aragorn);
 		scn.MoveMinionsToTable(savage);
+		scn.FreepsRefreshDecision();
 
 		// A [gandalf] event with no Spell keyword
 		scn.FreepsPlayCard(folly);
@@ -331,6 +333,7 @@ public class Card_V3_003_Tests
 
 		scn.StartGame();
 		scn.AttachCardsTo(gandalf, narya);
+		scn.FreepsRefreshDecision();
 
 		scn.FreepsPlayCard(treachery);
 

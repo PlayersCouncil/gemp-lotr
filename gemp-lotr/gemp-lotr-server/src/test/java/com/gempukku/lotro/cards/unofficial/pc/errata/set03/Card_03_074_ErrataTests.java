@@ -150,6 +150,7 @@ public class Card_03_074_ErrataTests
 		scn.StartGame();
 		scn.MoveMinionsToTable(raider);
 		scn.MoveCardsToSupportArea(armory);
+		scn.FreepsRefreshDecision();
 		scn.AddBurdens(1);
 
 		// A companion exerting does not set it off.
@@ -199,6 +200,7 @@ public class Card_03_074_ErrataTests
 		scn.StartGame();
 		scn.MoveMinionsToTable(raider);
 		scn.MoveCardsToSupportArea(armory);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(6, scn.GetStrength(raider));
 		assertEquals(0, scn.GetKeywordCount(raider, Keyword.DAMAGE));
@@ -230,6 +232,7 @@ public class Card_03_074_ErrataTests
 		scn.StartGame();
 		// The Raider itself is the only [isengard] card; the other minion is [moria].
 		scn.MoveMinionsToTable(raider, runner);
+		scn.FreepsRefreshDecision();
 
 		scn.FreepsUseCardAction(rosie);
 		assertEquals(1, scn.GetWoundsOn(rosie));
@@ -253,6 +256,7 @@ public class Card_03_074_ErrataTests
 		scn.StartGame();
 		scn.MoveMinionsToTable(raider);
 		scn.MoveCardsToSupportArea(armory);
+		scn.FreepsRefreshDecision();
 		// Vitality 2 with 1 wound: exhausted.
 		scn.AddWoundsToChar(raider, 1);
 
@@ -278,6 +282,7 @@ public class Card_03_074_ErrataTests
 		scn.StartGame();
 		// No other [isengard] card: each Raider spots the other.
 		scn.MoveMinionsToTable(raider, raider2);
+		scn.FreepsRefreshDecision();
 
 		scn.FreepsUseCardAction(elrond);
 		assertEquals(1, scn.GetWoundsOn(elrond));

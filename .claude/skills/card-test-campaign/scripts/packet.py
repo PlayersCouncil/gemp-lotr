@@ -20,9 +20,15 @@
                                     without the indentation and with a newline between them.  So "." and ".*"
                                     stay inside one line ("keywords:.*Ranger" is the keyword, never the word in
                                     a game text), "\\n" steps to the next ("\\[shire\\].*\\n.*keywords:.*Tale"
-                                    is a [shire] tale), "^" is the start of the id line, and the text has no
-                                    markup in it (no <b>, no </b>): "\\[gollum\\] condition",
-                                    "^1_.*\\[gandalf\\].* Man\\b".
+                                    is a [shire] tale), "^" is the start of the id line and "$" the end of the
+                                    card's LAST line (its game text, where it has one), not of the id line: to
+                                    anchor at the end of the id line write "(\\n|$)" ('minion.*site 3(\\n|$)'
+                                    finds every minion of site 3, 'minion.*site 3$' only the few with no game
+                                    text).  The id line ends with the last of its numbers: a minion's "site N",
+                                    an ally's "home ...", a companion's "resistance N" or "signet <name>", a
+                                    site's "direction <side>", and "; unique" or the type where nothing is
+                                    printed after it.  The text has no markup in it (no <b>, no </b):
+                                    "\\[gollum\\] condition", "^1_.*\\[gandalf\\].* Man\\b".
                                     The id line opens with the id, two spaces, the name, two spaces, so "^Saruman"
                                     finds nothing: a title is "^\\S+  Saruman(,|  )" (every Saruman, whatever
                                     its subtitle), or --title.
@@ -48,11 +54,24 @@
                                     the definitions of helper cards and nothing else, without their cardInfo,
                                     lore and alternate images
 
+    packet.py --landed <ids>         for stage 1: the landed test files, mechanics classes and ledgers that name a
+                                    card of the batch (by id, by its test class, or by a name only it has), or
+                                    another version of one, each said open or shut, by file name only and with
+                                    nothing of what they say.  A file is judged by itself: a test file or
+                                    mechanics class that names a batch card only in its scenario maps (a helper
+                                    laid, a site of a path) and never fetches it by its alias is open; one that
+                                    names it anywhere else is shut.  A ledger that names one is shut (prose: no
+                                    script can tell a board from a description).  The files and ledger of a card
+                                    of the same text as a batch card (twins.py) are open whatever they name (the
+                                    twins rule of notes-decipher.txt); its definition stays shut to --defs.  The
+                                    batch's own files and their versions' are not listed: they are shut
+
 --skip takes the ids of your batch (separated by spaces or commas): their definitions and those of their other
 versions (the original of an erratum, the errata of an original, an erratum's fellow errata) stay shut in stage 1,
 and neither --find nor --defs will print them.  --defs also keeps shut, in stage 1, a card whose game text is a
-batch card's own with a word or two changed (Uruviel 1_67 beside Silinde 1_60): its definition would show how the
-batch card is built.  Ask for it again in stage 2, without --skip.
+batch card's own with a word or two changed (Uruviel 1_67 beside Silinde 1_60), or that prints a whole sentence of
+a batch card's word for word, of eight words or more (Rider's Mount 4_287 beside Brego 4_263): its definition would
+show how the batch card is built.  Ask for it again in stage 2, without --skip.
 
 A packet is: where the card lives, the picture the client shows for it (PC cards), what the reviewed spreadsheet
 says it is (Decipher cards) or the errata sheet's row, a later row of that sheet where it has one above the
@@ -64,6 +83,7 @@ quote another card of its title and the rulings on other cards that only have it
 glossary entries its text touches, and its other versions.
 """
 import re
+from pathlib import Path
 import sys
 
 import cardinfo
@@ -279,6 +299,15 @@ def text_words(card) -> list:
     return re.findall(r"[^\W_]+|[~+\-]", text.lower())
 
 
+def sentences(card) -> set:
+    """A card's game text as its sentences, each as text_words gives it (its own title "~"), joined by spaces."""
+    text = g.plain_text(card.field("gametext", "") or "")
+    for name in sorted({g.plain_text(card.field("title", "") or ""), g.plain_text(card.field("subtitle", "") or "")}, key=len, reverse=True):
+        if len(name) > 2:
+            text = re.sub(re.escape(name), "~", text, flags=re.I)
+    return {" ".join(re.findall(r"[^\W_]+|[~+\-]", part.lower())) for part in re.split(r"(?<=[.!?])\s+", text) if part.strip()}
+
+
 # A text of fewer words is a keyword line or a "To play, spot an Elf" that scores of cards share word for word.
 SISTER_WORDS = 8
 SISTER_RATIO = 0.85
@@ -296,6 +325,21 @@ def sister_of(card, skipped):
         theirs = text_words(cards[other]) if other in cards else []
         if len(theirs) >= SISTER_WORDS and difflib.SequenceMatcher(None, mine, theirs, autojunk=False).ratio() >= SISTER_RATIO:
             return other
+    return None
+
+
+def shares_a_sentence(card, skipped):
+    """(the id, the sentence) of the first of the ids given that prints a whole sentence of SISTER_WORDS words or more
+    that this card prints too, word for word (its own title aside), or None.  Rider's Mount 4_287 prints Brego 4_263's
+    "At the start of each skirmish involving bearer, each minion skirmishing bearer must exert", and its definition
+    would show how that sentence of Brego's is built."""
+    cards = g.card_index()
+    mine = {x for x in sentences(card) if len(x.split()) >= SISTER_WORDS}
+    for other in skipped:
+        if other in cards:
+            both = mine & sentences(cards[other])
+            if both:
+                return other, sorted(both, key=len)[-1]
     return None
 
 
@@ -330,6 +374,11 @@ def find(argv) -> int:
     except re.error as e:
         print("--find: '%s' is not a regular expression (%s)" % (pattern, e))
         return 1
+    if pattern is not None and re.search(r"</?[A-Za-z]+>", pattern):
+        # Refused before the search, which could only find nothing (dec-b18_47).
+        print("--find: the text searched has no markup, so a pattern with a tag in it (<b>, </b>) matches nothing: "
+              "leave the tags out ('Aid' for '<b>Aid</b>')")
+        return 1
     skipped = shut(take_ids(argv, "--skip"))
     found, left_out = 0, []
     for card_id, card in sorted(g.card_index().items(), key=lambda kv: g.id_sort_key(kv[0])):
@@ -346,6 +395,10 @@ def find(argv) -> int:
         for line in lines[1:]:
             print("    " + line)
     asked = " and ".join(([] if title is None else ["have the title \"%s\"" % title]) + ([] if pattern is None else ["match /%s/" % pattern]))
+    if pattern is not None and re.search(r"(?<!\\)\$", pattern) and "\\n|$" not in pattern:
+        # Found or not: a "$" meant for the end of the id line silently finds only the cards with no game text.
+        print("(\"$\" is the end of a card's LAST line, its game text where it has one, not of the id line: to anchor "
+              "at the end of the id line write (\\n|$), as in 'minion.*site 3(\\n|$)')")
     print("%d card(s) %s%s" % (found, asked, "; left out as shut: " + ", ".join(left_out) if left_out else ""))
     if not found and not left_out:
         # What a search that finds nothing most often got wrong about the text it is tried against.
@@ -359,8 +412,6 @@ def find(argv) -> int:
                            if pattern is not None else "")))
         if pattern is None:
             return 0
-        if re.search(r"</?[A-Za-z]+>", pattern):
-            print("(the text searched has no markup: a pattern with a tag in it, like <b> or </b>, matches nothing)")
         if re.match(r"\^\(?[A-Za-z]", pattern):
             print("(\"^\" is the start of the id line, which opens with the card's id and not its name: for a title, "
                   "--title <name>, or '^\\S+  <title>(,|  )')")
@@ -408,6 +459,11 @@ def defs(argv) -> int:
             print("# %s  %s: shut in stage 1 (its game text is %s's with a word or two changed, so its definition would show "
                   "how %s is built: choose another helper, or ask again in stage 2, without --skip)\n"
                   % (card_id, g.full_name(card), sister_of(card, batch), sister_of(card, batch)))
+        elif shares_a_sentence(card, batch):
+            other, said = shares_a_sentence(card, batch)
+            print("# %s  %s: shut in stage 1 (it prints a sentence of %s's word for word, \"%s\", so its definition would "
+                  "show how that sentence of %s is built: choose another helper, or ask again in stage 2, without --skip)\n"
+                  % (card_id, g.full_name(card), other, said, other))
         else:
             print("# %s  %s (%s line %d)" % (card_id, g.full_name(card), card.rel_file, card.line))
             print("```hjson")
@@ -416,7 +472,86 @@ def defs(argv) -> int:
     return 0
 
 
+def landed_files(argv) -> int:
+    """--landed: which landed files a stage-1 author may open, for the batch's ids."""
+    cards = g.card_index()
+    batch = [i for i in take_ids(argv, "--landed") if i in cards]
+    if not batch:
+        print("--landed: give the ids of your batch")
+        return 1
+    versions = shut(batch)
+    sys.path.insert(0, str(Path(__file__).resolve().parent / "orchestrator"))
+    import twins
+    tw = twins.Twins()
+    groups = {tw.group_of[b] for b in versions if b in tw.group_of}
+    same_text = {c for c, n in tw.group_of.items() if n in groups} - versions
+    # A card that prints a sentence of a batch card's, or its text with a word or two changed: its boards are the
+    # quickest source (author.md), and only its definition is shut (--defs).
+    def model(cid):
+        return cid in same_text or (cid in cards and cid not in versions
+                                    and bool(sister_of(cards[cid], batch) or shares_a_sentence(cards[cid], batch)))
+    # The names a file may give a batch card by: its id, its test class, its full name, and its title where that is
+    # two words or more that no card outside the versions has (lookup.py's --skip reads them so).
+    holders = {}
+    for cid, c in cards.items():
+        holders.setdefault(g.plain_text(c.field("title", "") or "").strip().lower(), set()).add(cid)
+    names = []
+    tests = g.test_index()
+    for cid in sorted(versions, key=g.id_sort_key):
+        c = cards[cid]
+        names.append(r"(?<![\w])%s(?![\d_])" % re.escape(cid))
+        if cid in tests:
+            names.append(r"\b%s\b" % re.escape(tests[cid].stem))
+        if c.field("subtitle", ""):
+            names.append(r"(?<![\w])%s(?![\w])" % re.escape(g.plain_text(g.full_name(c))))
+        title = g.plain_text(c.field("title", "") or "").strip()
+        if len(title.split()) > 1 and holders.get(title.lower(), set()) <= versions:
+            names.append(r"(?<![\w])%s(?![\w])" % re.escape(title))
+    named = re.compile("|".join(names))
+    map_line = re.compile(r'^\s*put\(\s*"([^"]+)"\s*,\s*"(\d+_\d+)"\s*\)\s*;?\s*(//.*)?$')
+    by_path = {str(path): cid for cid, path in tests.items()}
+    rows = []
+    files = sorted(set(g.CARD_TESTS.rglob("*Tests.java")) | set((g.TEST_ROOT / "mechanics").rglob("*.java")))
+    for path in files:
+        cid = by_path.get(str(path))
+        if cid in versions:
+            continue
+        lines = [g.plain_text(x) for x in path.read_text(encoding="utf-8", errors="replace").split("\n")]
+        hits = [x for x in lines if named.search(x)]
+        if not hits:
+            continue
+        what = path.name if cid else "mechanics/" + str(path.relative_to(g.TEST_ROOT / "mechanics"))
+        if cid and model(cid):
+            rows.append(("open", what, "its text is or shares a sentence of a batch card's: read it for boards; its definition stays shut"))
+            continue
+        aliases = {m.group(1) for x in hits for m in [map_line.match(x)] if m and m.group(2) in versions}
+        fetched = [a for a in aliases if re.search(r'Get\w*Card\(\s*"%s"\s*\)' % re.escape(a), "\n".join(lines))]
+        if all(map_line.match(x) for x in hits) and not fetched:
+            rows.append(("open", what, "names it only in a scenario map, and no test fetches it"))
+        else:
+            rows.append(("shut", what, "names it %s" % ("in a test that fetches it" if fetched and all(map_line.match(x) for x in hits)
+                                                          else "outside its scenario maps")))
+    ledgers = g.state_dir() / "ledgers"
+    for path in sorted(ledgers.rglob("*.txt")) if ledgers.is_dir() else []:
+        cid = path.stem
+        if cid in versions:
+            continue
+        if not named.search(g.plain_text(path.read_text(encoding="utf-8", errors="replace"))):
+            continue
+        if model(cid):
+            rows.append(("open", "ledger %s" % cid, "its text is or shares a sentence of a batch card's: read it for boards; its definition stays shut"))
+        else:
+            rows.append(("shut", "ledger %s" % cid, "names it"))
+    print("Test files and ledgers that name a card of the batch (%s) or another version of one: %d" % (" ".join(batch), len(rows)))
+    for state, what, why in rows:
+        print("  %-4s  %s  (%s)" % (state, what, why))
+    print("Every other test file and ledger names none of them, by id, test class or a name of its own.")
+    return 0
+
+
 def main(argv):
+    if "--landed" in argv:
+        return landed_files(argv)
     if "--find" in argv or "--title" in argv:
         return find(argv)
     if "--defs" in argv:
@@ -457,9 +592,16 @@ def main(argv):
         revision = re.search(r"^\s*revision\s*:\s*(\d+)", card.raw, re.M)
         if revision and revision.group(1) != "0":
             print("- This is revision %s of the card: its text has been changed since it was first released." % revision.group(1))
-        for relation, other in errata_family(card_id):
+        family = errata_family(card_id)
+        for relation, other in family:
             other_card = cards.get(other)
-            print("- Versions: %s %s%s" % (relation, other, "  " + g.full_name(other_card) if other_card else ""))
+            landed = ""
+            if relation == "has a version" and g.segment_of(card_id) == "decipher":
+                # The Decipher notes start stage 2 from a landed erratum's file: say whether there is one to start from.
+                landed = " (its ledger is written: a landed erratum)" if g.ledger_path(other).is_file() else " (no ledger yet: not landed)"
+            print("- Versions: %s %s%s%s" % (relation, other, "  " + g.full_name(other_card) if other_card else "", landed))
+        if not family and g.segment_of(card_id) == "decipher":
+            print("- Versions: none: no PC erratum, so no erratum's file to start from")
         image = g.client_image(card_id)
         if image:
             print("- Picture the client shows: %s (PC_Cards.js line %d)" % image)
@@ -580,6 +722,7 @@ def main(argv):
         hints = [] if only_withheld else [msg for pat, msg in FORMAT_HINTS if re.search(pat, text)]
         if hints:
             print("## Format-sensitive rules to consider")
+            print("(the rules, and the words that bring each into play: .claude/skills/test-generation/references/format-rules.md)")
             for h in hints:
                 print("- " + h)
             print()

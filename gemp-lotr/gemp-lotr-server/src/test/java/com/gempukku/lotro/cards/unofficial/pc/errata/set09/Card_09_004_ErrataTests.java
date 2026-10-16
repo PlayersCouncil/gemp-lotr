@@ -26,6 +26,10 @@ public class Card_09_004_ErrataTests
 					put("guile", "9_8");        // Ring of Guile: Dwarf artifact, bearer is damage +1; a maneuver ability used only on purpose
 					put("savage", "1_151");     // Uruk Savage: strength 5, vitality 3, damage +1 and nothing else
 					put("savage2", "1_151");
+					// Saruman, Mind of Metal and Wheels: "Companions skirmishing [Isengard] Orcs lose all damage
+					// bonuses"; he may not be assigned, and his response is used only on purpose.
+					put("saruman", "102_29");
+					put("worker", "3_62");      // Isengard Worker: [isengard] Orc, strength 5, vitality 3; a regroup ability used only on purpose
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -285,5 +289,33 @@ public class Card_09_004_ErrataTests
 		assertEquals(7, scn.GetResistance(gimli));
 		assertEquals(6, scn.GetResistance(guard));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void GimliIsHisPrintedResistanceWhileHeHasNoDamageBonus() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gimli = scn.GetFreepsCard("gimli");
+		var saruman = scn.GetShadowCard("saruman");
+		var worker = scn.GetShadowCard("worker");
+		scn.MoveCompanionsToTable(gimli);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(saruman, worker);
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gimli, worker);
+
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(1, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
+		// 5 printed + 1, while he is only assigned.
+		assertEquals(6, scn.GetResistance(gimli));
+
+		// Skirmishing an [isengard] Orc under Saruman he loses his damage bonus: X is 0.
+		scn.FreepsResolveSkirmish(gimli);
+		assertTrue(scn.IsCharSkirmishingAgainst(gimli, worker));
+		assertEquals(0, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
+		assertEquals(5, scn.GetResistance(gimli));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 }

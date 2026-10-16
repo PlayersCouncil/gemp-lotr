@@ -84,6 +84,7 @@ public class Card_V3_086_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertNull(card.getBlueprint().getPossessionClasses());
 		assertTrue(scn.HasKeyword(card, Keyword.BEACON));
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
@@ -189,6 +190,7 @@ public class Card_V3_086_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(explorer);
+		scn.FreepsRefreshDecision();
 
 		assertFalse(scn.FreepsActionAvailable(calenhad1));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());

@@ -27,6 +27,24 @@ public class Card_11_055_Tests
 		);
 	}
 
+	// The Towers path: site 4 is White Rocks 4_346, a battleground (its Shadow number counts mounted companions).
+	// Site 3, the home of the Gondorian Merchant (3T), is Barrows of Edoras 4_337, a sanctuary and no
+	// battleground.  The Merchant is the only [gondor] ally, and no ally's home is a battleground.
+	protected VirtualTableScenario GetAllyScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("armor", "11_55");
+					put("armor2", "11_55");
+					put("knight", "5_35");      // Gondorian Knight: [gondor] Man companion; "Knight." is his whole text
+					put("merchant", "7_97");    // Gondorian Merchant: [gondor] Man ally, home 3T; a maneuver ability used only on purpose
+				}},
+				VirtualTableScenario.TowersSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
 	@Test
 	public void ArmoroftheCitadelStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
@@ -69,5 +87,31 @@ public class Card_11_055_Tests
 		scn.FreepsPlayCard(card);
 
 		assertEquals(2, scn.GetTwilight());
+	}
+
+	@Test
+	public void BorneByAnAllyWhoseHomeIsNoBattlegroundItGivesNoDefenderWithTheFellowshipAtABattleground() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetAllyScenario();
+
+		var armor = scn.GetFreepsCard("armor");
+		var armor2 = scn.GetFreepsCard("armor2");
+		var knight = scn.GetFreepsCard("knight");
+		var merchant = scn.GetFreepsCard("merchant");
+		scn.MoveCompanionsToTable(knight);
+		scn.MoveAlliesToTable(merchant);
+		scn.AttachCardsTo(knight, armor);
+		scn.AttachCardsTo(merchant, armor2);
+
+		scn.StartGame();
+		scn.SkipToSite(4);
+		assertEquals("White Rocks", scn.GetCurrentSite().getBlueprint().getTitle());
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.BATTLEGROUND));
+		assertEquals(0, scn.GetWoundsOn(knight));
+		assertEquals(0, scn.GetWoundsOn(merchant));
+
+		// Both unwounded.  The companion is with the fellowship, at the battleground; the Merchant is at his home
+		// site, Barrows of Edoras (CR 4.2 "ally").
+		assertTrue(scn.HasKeyword(knight, Keyword.DEFENDER));
+		assertFalse(scn.HasKeyword(merchant, Keyword.DEFENDER));
 	}
 }

@@ -304,6 +304,7 @@ public class Card_01_342_Tests
 		// text, but the fellowship is not at the Waterfall, so playing a card gives the check something to react to
 		// and still no bonus.
 		scn.MoveCardToAdventurePath(freepsWaterfall);
+		scn.FreepsRefreshDecision();
 		assertInZone(Zone.ADVENTURE_PATH, freepsWaterfall);
 		scn.FreepsPlayCard(toby);
 		// Old Toby's own offer of a draw

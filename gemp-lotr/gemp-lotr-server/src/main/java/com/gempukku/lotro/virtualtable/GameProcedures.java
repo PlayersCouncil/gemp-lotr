@@ -24,6 +24,15 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 	}
 
 
+	/**
+	 * Plays on into the assignment phase ({@link #SkipToPhase}) and passes its actions for both players, so that it
+	 * rests at the Free Peoples player's "Assign minions" decision, nothing assigned.  It answers no optional
+	 * trigger of its own: where something is offered as the maneuver phase starts, the passes fall out of step.  A
+	 * Shadow follower's Aid (Saruman 17_38 in the support area or borne by a minion) is such an offer: the call then
+	 * rests at the Shadow player's "Play Assignment action or Pass", and an assignment after it finds no "Assign
+	 * minions" to answer.  There, skip to the maneuver phase, decline the Aid ({@code ShadowDeclineOptionalTrigger()})
+	 * and then call this.
+	 */
 	default void SkipToAssignments() {
 		SkipToPhase(Phase.ASSIGNMENT);
 		PassCurrentPhaseActions();
@@ -270,6 +279,7 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 	 * @param target The phase the tester actually wants to be in
 	 */
     default void SkipToPhase(Phase target) {
+		VerifyGameBegun("SkipToPhase(" + target + ")");
 		Phase current = gameState().getCurrentPhase();
 		try {
 			for (int attempts = 1; attempts <= 20; attempts++) {
@@ -319,6 +329,7 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 	 * @param target The phase of player 2's turn that the tester wants to be in.
 	 */
 	default void SkipToPhaseInverted(Phase target) {
+		VerifyGameBegun("SkipToPhaseInverted(" + target + ")");
 		for(int attempts = 1; attempts <= 20; attempts++)
 		{
 			Phase current = gameState().getCurrentPhase();
@@ -342,7 +353,18 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 		}
 	}
 
+	/**
+	 * Every skipper plays turns that have begun.  Before the first turn (the bid, the starting fellowships and the
+	 * mulligans still to come, as a table is before {@code StartGame()}) a skip fails here, naming itself, rather
+	 * than further on with "halted in phase BETWEEN_TURNS" or a missing site.
+	 */
+	private void VerifyGameBegun(String skipper) {
+		Verify(gameState().getTurnNumber() > 0, skipper + " was called before the first turn began: call StartGame() "
+				+ "first (or, with the starting fellowships played by hand, answer them and the mulligans), then skip.");
+	}
+
 	default void SkipToSite(int siteNum) {
+		VerifyGameBegun("SkipToSite(" + siteNum + ")");
 		for(int i = GetCurrentSite().getSiteNumber(); i < siteNum; i = GetCurrentSite().getSiteNumber())
 		{
 			SkipCurrentSite();
@@ -350,6 +372,7 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 	}
 
 	default void SkipCurrentSite() {
+		VerifyGameBegun("SkipCurrentSite()");
 		SkipToPhase(Phase.REGROUP);
 		PhysicalCardImpl site = GetCurrentSite();
 		if(site.getSiteNumber() == 9)

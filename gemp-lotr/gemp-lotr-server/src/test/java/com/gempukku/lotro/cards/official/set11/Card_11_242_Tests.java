@@ -160,7 +160,7 @@ public class Card_11_242_Tests
 		// 5 + 2 for Sam
 		assertEquals(7, scn.GetTwilight());
 		assertEquals(deck - 1, scn.GetFreepsDeckCount());
-		assertTrue(scn.GetFreepsDeckShuffleCount() > shuffles);
+		assertEquals(shuffles + 2, scn.GetFreepsDeckShuffleCount()); // as the card left the deck, and the definition's own shuffle after the play
 		assertEquals(shadowShuffles, scn.GetShadowDeckShuffleCount());
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());

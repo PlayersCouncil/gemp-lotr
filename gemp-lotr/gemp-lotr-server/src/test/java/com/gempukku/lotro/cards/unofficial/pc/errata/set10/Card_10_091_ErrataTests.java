@@ -135,6 +135,7 @@ public class Card_10_091_ErrataTests
 		scn.SetTwilight(5);
 		scn.FreepsPass();
 		scn.MoveMinionsToTable(brigand);
+		scn.ShadowRefreshDecision();
 
 		// 5 set + 1 companion + 2 for the site
 		assertEquals(8, scn.GetTwilight());

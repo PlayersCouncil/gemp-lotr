@@ -6,26 +6,47 @@
     lookup.py prevent --in pitfalls       one file only: rulings, shapes, pitfalls, helpers, standard, rig, hjson, all
     lookup.py valiant --in helpers        the helper cards found for a need: a word of it, a card's name or an id
     lookup.py Q-0027 --skip 1_338,1_342   stage 1 of a batch: what says how one of these cards is BUILT stays shut
+    lookup.py burdens --full              an entry longer than about 1,500 characters is cut short unless --full
     lookup.py --index                     rebuild card-test-campaign/references/rulings-index.md, and the
                                           pitfall index and the helper index in the gemp-testing skill
 
 An entry is a paragraph (or a list that stands as one block) under a heading, and is printed only when it
 contains EVERY term given: look up separate subjects with separate commands. By default the rulings log, the
 settled shapes, the rig's pitfalls and the helper cards are searched. A term that looks like a finding, question or rig-request
-number (F-0123, Q-0045, G-0012) matches that number only; any other term is a regular expression. Where no entry
+number (F-0123, Q-0045, G-0012) matches that number only, and one that is a card id (1_38) that id only (not
+101_38, not 1_389); any other term is a regular expression. Where no entry
 matches that way, the terms are tried again as plain words, whatever the punctuation and markup on either side,
-so that an entry's first words can be given as rulings-index.md prints them: lookup.py "The Hobbit sets (30 to 33)".
+so that an entry's first words can be given as rulings-index.md prints them: lookup.py "The Hobbit sets (30 to 33)";
+and where that finds nothing either, each word of the terms (of three letters or more, the small words left out) is
+looked for on its own, in any order: "from your discard pile into hand" then finds "take a <card> into hand from
+your discard pile".
+
+A card id also matches an entry that names a mechanics/ class built on the card (the class's alias map or
+Ring-bearer has it, and no more than five classes have it: the classes --skip keeps shut), and the classes are named
+on a line before the entries: lookup.py 4_299 finds what names ABarOnRemovingBurdensTests.  Not with --skip.
 
 A number looked up by itself (no other term, no --in) is also read in the campaign's registers, after the entries:
 a finding's row of findings.tsv (its status, what was found and its outcome, which may leave something open that
 no ruling says), and a question's entry in questions.md: whole while it is open, and Ketura's answer once it has one.
 
 --skip takes the ids of your batch (separated by spaces or commas).  An entry of the shapes, the pitfalls or any
-other file but the rulings log that names one of them, or another version of one (its original, its errata), is
-named by its heading and not printed, and so is such a finding's row of findings.tsv: they say what a definition
-holds and how it was put right, which stage 1 does not read.  The rulings log and a question's entry are printed
-whatever they name: what Ketura ruled a card does is what stage 1 is written from.  Look again in stage 2, without
---skip.
+other file but the rulings log that names one of them, or another version of one (its original, its errata, unless
+that version is a new text sharing no sentence with it), by its id or by its full name (a title of two words or
+more that no other card has will do: Rivendell Valley), or that names a mechanics/ class built on one of them (the
+class's alias map or Ring-bearer has the card, and no more than five classes have it), says how it is built or
+tested, which stage 1 does not read.  Where the entry's first sentence (its bold lead) does so, the entry is named
+by its heading and not printed; elsewhere only the sentences that do so are left out, and the entry's general rule
+is printed with a line saying how many.  Such a finding's row of findings.tsv is named and not printed.  The
+rulings log and a question's entry are printed whatever card they name: what Ketura ruled a card does is what
+stage 1 is written from; only a sentence of the log that points to a mechanics/ class built on a batch card is
+left out.  Look again in stage 2, without --skip.
+
+--max N prints the first N entries whole and lists the rest by their first words; --max 0 lists them all so, for
+choosing what to read (a broad word, "underground", "named", matches many long entries).
+
+An entry printed whole would overrun the output: one longer than about 1,500 characters is printed to a line's end
+there, then the lines further on that hold a term, then how much was left out; --full prints it whole.  A ruling
+is always printed whole: what Ketura said is not cut.
 
 The exit status is 0 whether or not anything matched: "no entry matches" is an answer, and a chain of lookups in
 one step is not cut short by it.
@@ -92,8 +113,11 @@ class matcher:
 
     def __init__(self, term):
         self.number = bool(re.fullmatch(r"[QFG]-\d{4}", term))
+        self.card_id = bool(re.fullmatch(r"\d+_\d+", term))
         if self.number:
             self.pattern = re.compile(r"\b" + re.escape(term) + r"\b")
+        elif self.card_id:  # a whole id: 1_38 is not 101_38, 1_389 or 7_13's list "11_38"
+            self.pattern = re.compile(r"(?<![\w])" + re.escape(term) + r"(?![\d_])")
         else:
             try:
                 self.pattern = re.compile(term, re.IGNORECASE)
@@ -101,7 +125,7 @@ class matcher:
                 self.pattern = re.compile(re.escape(term), re.IGNORECASE)
         copied = re.sub(r"\s*\[(?:[QFG]-\d{4}(?:,\s*)?)+\]\s*$", "", term)
         copied = re.sub(r"\s*\.\.\.\s*$", "", copied)
-        self.words = "" if self.number else words(copied)
+        self.words = "" if self.number or self.card_id else words(copied)
 
     def search(self, text, as_words=None):
         """as_words: the entry's plain words, where the term may match by its words as well."""
@@ -149,12 +173,96 @@ RIG_SKILL = SKILLS / "gemp-testing" / "SKILL.md"
 
 def shut(skipped) -> set:
     """The ids given to --skip with every other version of each (packet.py's rule), or the ids alone where there
-    are no definitions to read the versions from."""
+    are no definitions to read the versions from.  A version that is a new text, sharing no sentence with any card
+    given and little of its wording (59_46 for 9_46; 61_232 for 11_232), is left open: what is written of it tells
+    nothing of how the card given is built or tested."""
     try:
         import packet
-        return packet.shut(skipped)
+        every = packet.shut(skipped)
     except BaseException:  # run from a copy of the skill with no repository round it
         return set(skipped)
+    return {v for v in every if v in skipped or not new_text(v, skipped)}
+
+
+NEW_TEXT_RATIO = 0.5
+
+
+def new_text(version: str, skipped) -> bool:
+    """Whether a version's game text shares no sentence with the game text of any of the cards given, and is under
+    half like each of them word by word (a one-sentence card with a word changed is no new text)."""
+    import difflib
+    import gempcards
+    import packet
+    cards = gempcards.card_index()
+
+    def sentences(card) -> set:
+        return {x for x in packet.sentences(card) if len(x.split()) > 2}
+    mine = cards.get(version)
+    if mine is None:
+        return False
+    for other in skipped:
+        theirs = cards.get(other)
+        if theirs is None:
+            return False
+        if sentences(mine) & sentences(theirs):
+            return False
+        if difflib.SequenceMatcher(None, packet.text_words(mine), packet.text_words(theirs), autojunk=False).ratio() >= NEW_TEXT_RATIO:
+            return False
+    return True
+
+
+# A card in the alias maps of more mechanics/ classes than this is a table's furniture (Aragorn 1_89, Goblin Runner
+# 1_178), not what a class is built on.
+FURNITURE = 5
+
+
+def classes_built_on(ids) -> dict:
+    """{class name: id} for each mechanics/ test class built on one of the ids: one whose alias map has the card
+    (`put("pallando", "13_37")`) or whose Ring-bearer is it (a constant of TestConstants: GaladrielRB, 9_14), where
+    the card is in no more than FURNITURE classes.  The brief keeps such a class shut in stage 1 (AidTests, built on
+    Pallando 13_37; CostOfAssigningTests on Morgul Spawn 7_200).  {} where there is no repository to read."""
+    try:
+        import gempcards
+        root = gempcards.TEST_ROOT / "mechanics"
+        constants = dict(re.findall(r'\bString\s+(\w+)\s*=\s*"(\d+_\d+)"\s*;',
+                                    (gempcards.FRAMEWORK_DIR / "TestConstants.java").read_text(encoding="utf-8")))
+        files = sorted(root.rglob("*.java"))
+    except BaseException:
+        return {}
+    holders = {}
+    for f in files:
+        text = f.read_text(encoding="utf-8", errors="replace")
+        held = set(re.findall(r'put\(\s*"[^"]+"\s*,\s*"(\d+_\d+)"\s*\)', text))
+        held |= {constants[n] for n in re.findall(r"\b(?:VirtualTableScenario|TestConstants)\.(\w+)", text) if n in constants}
+        for cid in held:
+            holders.setdefault(cid, []).append(f.stem)
+    out = {}
+    for cid in ids:
+        if 0 < len(holders.get(cid, [])) <= FURNITURE:
+            for name in holders[cid]:
+                out.setdefault(name, cid)
+    return out
+
+
+def names_a_class(text: str, classes: dict) -> str:
+    """The first of `classes` (classes_built_on) that the text names, as "<id> (by mechanics/ class <name>)", or ""."""
+    for name in sorted(classes):
+        if re.search(r"(?<![\w])%s(?![\w])" % re.escape(name), text):
+            return "%s (by mechanics/ class %s, built on it)" % (classes[name], name)
+    return ""
+
+
+def sentences_of(text: str) -> list:
+    """An entry cut into its sentences, each with what stood after it (the space or line break), so that the
+    sentences kept can be put back as they stood.  A sentence ends at ".", "!" or "?" (a bold lead's "**" after
+    it included) followed by white space."""
+    parts = re.split(r"((?<=[.!?])(?:\*\*|\*|`|\)|\")?\s+)", text)
+    out = []
+    for i in range(0, len(parts), 2):
+        piece = parts[i] + (parts[i + 1] if i + 1 < len(parts) and parts[i + 1] else "")
+        if piece.strip():
+            out.append(piece)
+    return out
 
 
 def names_one_of(text: str, ids) -> str:
@@ -163,6 +271,60 @@ def names_one_of(text: str, ids) -> str:
         if re.search(r"(?<![\w])%s(?![\d_])" % re.escape(card_id), text):
             return card_id
     return ""
+
+
+def titles_of(ids) -> dict:
+    """For --skip: the names an entry may give one of these cards by, instead of its id: {name: id}.  Its full name
+    ("Gandalf, The Grey"), and its title alone where that is two words or more and no card outside `ids` has it
+    (Rivendell Valley; not Sting, not a title another card shares).  {} where there are no definitions to read."""
+    try:
+        import gempcards
+        cards = gempcards.card_index()
+    except BaseException:  # run from a copy of the skill with no repository round it
+        return {}
+    holders = {}
+    for cid, c in cards.items():
+        holders.setdefault((c.field("title", "") or "").strip().lower(), set()).add(cid)
+    out = {}
+    for cid in ids:
+        c = cards.get(cid)
+        if c is None:
+            continue
+        title = (c.field("title", "") or "").strip()
+        if c.field("subtitle", ""):
+            out[gempcards.plain_text(gempcards.full_name(c))] = cid
+        if len(title.split()) > 1 and holders.get(title.lower(), set()) <= set(ids):
+            out[gempcards.plain_text(title)] = cid
+    return out
+
+
+def names_one_by_title(text: str, names: dict) -> str:
+    """The first card of `names` (titles_of) that the text names by name, as "<id> (by its name, <name>)", or ""."""
+    for name in sorted(names, key=len, reverse=True):
+        if re.search(r"(?<![\w])%s(?![\w])" % re.escape(name), text):
+            return "%s (by its name, %s)" % (names[name], name)
+    return ""
+
+
+CUT = 1500
+# Words left out when the words of a term are looked for one by one.
+SMALL_WORDS = {"the", "and", "you", "your", "from", "into", "that", "this", "with", "for", "are", "his", "her", "its",
+               "has", "have", "may", "can", "not", "who", "each", "any", "all", "one", "out", "when", "while", "where"}
+
+
+def shown(text: str, pats, full: bool) -> str:
+    """An entry as printed: whole, or, past about CUT characters, to the end of a sentence there, then the sentences
+    further on that hold a term (four at most), then how much was left out."""
+    if full or len(text) <= CUT:
+        return text
+    at = max(text.rfind(". ", 0, CUT), text.rfind("\n", 0, CUT))
+    at = at + 1 if at > CUT // 2 else text.rfind(" ", 0, CUT)
+    head, rest = text[:at].rstrip(), text[at:]
+    sentences = [s.strip() for s in re.split(r"(?<=[.!?])\s+", rest) if s.strip()]
+    hits = [s if len(s) <= 400 else s[:397] + "..." for s in sentences if any(p.search(s) for p in pats)][:4]
+    left = len(text) - len(head) - sum(len(s) for s in hits)
+    return "\n".join([head] + ["  [...] " + s for s in hits] +
+                     ["  [... %d more characters of this entry: --full prints it whole]" % max(left, 0)])
 
 
 WITHHELD = "withheld in stage 1 (it names %s, an id after --skip or another version of one): read it in stage 2, without --skip"
@@ -257,7 +419,8 @@ def main(argv):
         for made in MADE_LISTS:
             build_skill_index(*made)
         return 0
-    where, terms, limit, narrowed, skipped = DEFAULT, [], 8, False, []
+    where, terms, limit, narrowed, skipped, full = DEFAULT, [], 8, False, [], False
+    limit_given = False
     i = 0
     while i < len(argv):
         if argv[i] == "--skip":
@@ -270,15 +433,37 @@ def main(argv):
                 return 1
         elif argv[i] == "--in":
             where = list(FILES) if argv[i + 1] == "all" else argv[i + 1].split(",")
+            unknown = [w for w in where if w not in FILES]
+            if unknown:
+                print("--in %s: no such file to search. --in takes %s, all (a finding's or a question's register "
+                      "is read by its number alone: lookup.py Q-0123)" % (",".join(unknown), ", ".join(FILES)))
+                return 1
             narrowed = True
             i += 2
+        elif argv[i] == "--full":
+            full = True
+            i += 1
         elif argv[i] == "--max":
-            limit = int(argv[i + 1])
+            limit, limit_given = int(argv[i + 1]), True
             i += 2
         else:
             terms.append(argv[i])
             i += 1
     pats = [matcher(t) for t in terms]
+    # A card id also finds the entries that name a mechanics/ class built on the card (the classes stage 1 keeps
+    # shut: pitfalls and shapes name ABarOnRemovingBurdensTests, built on 4_299, and never the id; dec-b4_282).
+    # Stage 2 only: with --skip the id is looked up as written.
+    built_on = {}
+    for p, t in zip(pats, terms):
+        if p.card_id and not skipped:
+            built_on[t] = sorted(classes_built_on([t]))
+            if built_on[t]:
+                p.pattern = re.compile(p.pattern.pattern + "".join(r"|(?<![\w])%s(?![\w])" % re.escape(n)
+                                                                    for n in built_on[t]))
+    built_on = {t: c for t, c in built_on.items() if c}
+    if built_on:
+        print("(a card id also matches the mechanics/ classes built on it: %s)\n"
+              % "; ".join("%s: %s" % (t, ", ".join(c)) for t, c in built_on.items()))
     hits = []
     found = [(key, heading, text) for key in where for heading, text in entries(FILES[key])]
     hits = [e for e in found if all(p.search(e[2]) for p in pats)]
@@ -287,10 +472,49 @@ def main(argv):
         hits = [e for e in found if all(p.search(e[2], words(e[2])) for p in pats)]
         if hits:
             print("(no entry matches as a regular expression; matched as plain words)\n")
-    # Stage 1 of a batch: what says how one of its cards is built is named and not shown.
+    if not hits:
+        # Nor as plain words: each word on its own, in any order (a phrase written in another word order than the
+        # entry's: "from your discard pile into hand" for "take a <card> into hand from your discard pile").
+        each = [w for t in terms if not re.fullmatch(r"[QFG]-\d{4}|\d+_\d+", t) for w in words(t).split()
+                if len(w) > 2 and w not in SMALL_WORDS]
+        each += [t for t in terms if re.fullmatch(r"[QFG]-\d{4}|\d+_\d+", t)]
+        if each and len(each) > len(terms):
+            loose = [matcher(w) for w in dict.fromkeys(each)]
+            hits = [e for e in found if all(p.search(e[2], words(e[2])) for p in loose)]
+            if hits:
+                print("(no entry holds the terms as written; matched by their words one by one, in any order: %s)\n"
+                      % ", ".join(dict.fromkeys(each)))
+                if len(hits) > 3 and not limit_given:
+                    limit = 0  # a loose match: listed by first words, to be read by name
+    # Stage 1 of a batch: what says how one of its cards is built is named and not shown: the whole entry where its
+    # lead does, else only the sentences that do.
     skipped = shut(skipped) if skipped else set()
-    withheld = [(e, names_one_of(e[2], skipped)) for e in hits if e[0] != "rulings" and names_one_of(e[2], skipped)] if skipped else []
-    hits = [e for e in hits if e not in [w[0] for w in withheld]]
+    by_name = titles_of(skipped) if skipped else {}
+    classes = classes_built_on(skipped) if skipped else {}
+
+    def names_one(text, key):
+        if key == "rulings":
+            return names_a_class(text, classes)
+        return names_one_of(text, skipped) or names_one_by_title(text, by_name) or names_a_class(text, classes)
+    withheld, kept, notes = [], [], {}
+    for e in hits:
+        if not skipped:
+            kept.append(e)
+            continue
+        parts = sentences_of(e[2])
+        named = [names_one(x, e[0]) for x in parts]
+        if not any(named):
+            kept.append(e)
+        elif e[0] != "rulings" and (named[0] or all(named)):
+            withheld.append((e, named[0] or next(n for n in named if n)))
+        else:
+            left = [x for x, n in zip(parts, named) if not n]
+            out = sorted(dict.fromkeys(n.split(" ")[0] for n in named if n))
+            notes[(e[0], e[1], "".join(left).rstrip())] = ("  [%d sentence(s) of this entry left out in stage 1: they name %s, "
+                                                          "an id after --skip or another version of one, or a mechanics/ "
+                                                          "class built on one]" % (sum(1 for n in named if n), " and ".join(out)))
+            kept.append((e[0], e[1], "".join(left).rstrip()))
+    hits = kept
     # A number asked for by itself is read in the registers too.
     registers = [r for r in (in_registers(t, skipped) for t in terms if narrowed is False and len(terms) == 1 and pats[0].number) if r]
     if not hits and not withheld and registers:
@@ -299,9 +523,11 @@ def main(argv):
     elif not hits and not withheld:
         print("no entry matches", " and ".join(repr(t) for t in terms), "in", ", ".join(where))
     for key, heading, text in hits[:limit]:
-        print(f"== {key} > {heading}\n{text}\n")
+        note = notes.get((key, heading, text))
+        print(f"== {key} > {heading}\n{shown(text, pats, full or key == 'rulings')}" + ("\n" + note if note else "") + "\n")
     if len(hits) > limit:
-        print(f"... and {len(hits) - limit} more (narrow the search, or --max N):")
+        print(f"{len(hits)} entries match; by their first words:" if limit == 0 else
+              f"... and {len(hits) - limit} more (narrow the search, or --max N):")
         for key, heading, text in hits[limit:]:
             print(f"   {key} > {heading}: {lead(text, 100)}")
     for (key, heading, text), named in withheld:

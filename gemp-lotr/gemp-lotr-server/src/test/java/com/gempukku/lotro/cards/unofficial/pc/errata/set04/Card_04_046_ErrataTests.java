@@ -92,6 +92,7 @@ public class Card_04_046_ErrataTests
 		scn.StartGame();
 		// f1 on top, f7 seventh.
 		scn.MoveCardsToTopOfDeck(f7, f6, f5, f4, f3, f2, f1);
+		scn.FreepsRefreshDecision();
 		int deck = scn.GetFreepsDeckCount();
 		int shadowDeck = scn.GetShadowDeckCount();
 
@@ -139,6 +140,7 @@ public class Card_04_046_ErrataTests
 
 		scn.StartGame();
 		scn.MoveCardsToTopOfDeck(f2, f1);
+		scn.FreepsRefreshDecision();
 		int deck = scn.GetFreepsDeckCount();
 		int hand = scn.GetFreepsHandCount();
 
@@ -179,6 +181,7 @@ public class Card_04_046_ErrataTests
 
 		scn.StartGame();
 		scn.MoveCardsToTopOfDeck(f1);
+		scn.FreepsRefreshDecision();
 		int deck = scn.GetFreepsDeckCount();
 		int hand = scn.GetFreepsHandCount();
 
@@ -256,6 +259,7 @@ public class Card_04_046_ErrataTests
 		scn.StartGame();
 		// From the top: f1 to f7, then aragorn, thrarin, mountains, and the sword eleventh.
 		scn.MoveCardsToTopOfDeck(sword, mountains, thrarin, aragorn, f7, f6, f5, f4, f3, f2, f1);
+		scn.FreepsRefreshDecision();
 		int deck = scn.GetFreepsDeckCount();
 		assertTrue(deck >= 15);
 		int stacked = scn.GetStackedCards(emhr).size();

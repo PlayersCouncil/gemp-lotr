@@ -126,6 +126,7 @@ public class Card_V3_007_Tests
 		// being played only when Merry's Pipe (103_113) plays it back from the discard pile in the regroup
 		// phase; the minions are put down in the fellowship phase here to ask the same thing the short way.
 		scn.MoveMinionsToTable(saruman, troop);
+		scn.FreepsRefreshDecision();
 
 		scn.FreepsPlayCard(stash);
 

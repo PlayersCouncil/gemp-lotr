@@ -285,6 +285,7 @@ public class Card_V1_066_Tests
 		scn.SetTwilight(2);
 		scn.FreepsPass();
 		scn.MoveMinionsToTable(vile);
+		scn.ShadowRefreshDecision();
 
 		// 2 set + 1 companion + 1 for Midgewater Marshes: exactly what it costs to play here.
 		assertEquals(4, scn.GetTwilight());
@@ -371,6 +372,7 @@ public class Card_V1_066_Tests
 		scn.SetTwilight(10);
 		scn.FreepsPass();
 		scn.MoveMinionsToTable(vile);
+		scn.ShadowRefreshDecision();
 
 		// 10 set + 1 companion + 1 for Midgewater Marshes: three times what it costs.
 		assertEquals(12, scn.GetTwilight());

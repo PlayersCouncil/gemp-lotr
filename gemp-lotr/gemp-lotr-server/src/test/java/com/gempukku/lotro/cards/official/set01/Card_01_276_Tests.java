@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_01_276_Tests
@@ -17,8 +18,13 @@ public class Card_01_276_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "1_276");
-					// put other cards in here as needed for the test case
+					put("seeking", "1_276");
+					put("soldier", "1_271");    // Orc Soldier: [sauron] Orc, vitality 2; a skirmish ability only
+					put("chieftain", "1_266");  // Orc Chieftain: [sauron] Orc, vitality 2; adds (2) only when a weapon is played on him
+					put("guard", "10_81");      // Cirith Ungol Guard: [sauron] Uruk-hai, a [sauron] minion who is no Orc; damage +1 only
+					put("troop", "1_177");      // Goblin Patrol Troop: [moria] Orc, vitality 3, an Orc who is not [sauron]; no text
+					put("drawn", "1_272");      // Orc War Band: left in the draw deck, the card to draw
+					put("spare", "1_272");      // a second Orc War Band beneath it, so that a draw of two would show
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -37,36 +43,122 @@ public class Card_01_276_Tests
 		 * Culture: Sauron
 		 * Twilight Cost: 1
 		 * Type: Condition
-		 * Subtype: 
-		 * Game Text: Plays to your support area.<br><b>Shadow:</b> Exert a [sauron] Orc and remove (2) to draw a card.
+		 * Subtype: Support Area
+		 * Game Text: Plays to your support area.
+		 * 	Shadow: Exert a [sauron] Orc and remove (2) to draw a card.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var seeking = scn.GetFreepsCard("seeking");
 
-		assertEquals("Seeking Its Master", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals("Seeking Its Master", seeking.getBlueprint().getTitle());
+		assertNull(seeking.getBlueprint().getSubtitle());
+		assertFalse(seeking.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, seeking.getBlueprint().getSide());
+		assertEquals(Culture.SAURON, seeking.getBlueprint().getCulture());
+		assertEquals(CardType.CONDITION, seeking.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(seeking, Keyword.SUPPORT_AREA));
+		assertEquals(1, seeking.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SeekingItsMasterTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void ShadowAbilityExertsASauronOrcAndRemovesTwoToDrawACard() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var seeking = scn.GetShadowCard("seeking");
+		var soldier = scn.GetShadowCard("soldier");
+		var chieftain = scn.GetShadowCard("chieftain");
+		var guard = scn.GetShadowCard("guard");
+		var troop = scn.GetShadowCard("troop");
+		var drawn = scn.GetShadowCard("drawn");
+		var spare = scn.GetShadowCard("spare");
+		scn.MoveCardsToSupportArea(seeking);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(soldier, chieftain, guard, troop);
+		scn.MoveCardsToTopOfDeck(spare, drawn);
+		assertInZone(Zone.DECK, drawn, spare);
 
-		assertEquals(1, scn.GetTwilight());
+		scn.FreepsPass();
+		// Exactly the (2) the ability removes.
+		scn.SetTwilight(2);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertTrue(scn.ShadowActionAvailable(seeking));
+		assertEquals(2, scn.GetTwilight());
+		assertEquals(0, scn.GetWoundsOn(soldier));
+		assertEquals(0, scn.GetWoundsOn(chieftain));
+		assertEquals(0, scn.GetShadowHandCount());
+		assertEquals(2, scn.GetShadowDeckCount());
+
+		scn.ShadowUseCardAction(seeking);
+		// The exertion: either [sauron] Orc; not the [sauron] Uruk-hai nor the [moria] Orc.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(soldier, chieftain));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(guard, troop));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		scn.ShadowChooseCard(soldier);
+
+		assertEquals(1, scn.GetWoundsOn(soldier));
+		assertEquals(0, scn.GetWoundsOn(chieftain));
+		assertEquals(0, scn.GetWoundsOn(guard));
+		assertEquals(0, scn.GetWoundsOn(troop));
+		assertEquals(0, scn.GetTwilight());
+		// One card drawn, the top one; the second stays in the deck.
+		assertEquals(1, scn.GetShadowHandCount());
+		assertEquals(1, scn.GetShadowDeckCount());
+		assertInHand(drawn);
+		assertInZone(Zone.DECK, spare);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void IsNotOfferedWhenTheOnlySauronOrcIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var seeking = scn.GetShadowCard("seeking");
+		var soldier = scn.GetShadowCard("soldier");
+		var guard = scn.GetShadowCard("guard");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCardsToSupportArea(seeking);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(soldier, guard, troop);
+		// Vitality 2: one wound exhausts the only [sauron] Orc.  The Uruk-hai and the [moria] Orc could exert.
+		scn.AddWoundsToChar(soldier, 1);
+		assertEquals(1, scn.GetWoundsOn(soldier));
+		assertEquals(0, scn.GetWoundsOn(guard));
+		assertEquals(0, scn.GetWoundsOn(troop));
+
+		scn.FreepsPass();
+		scn.SetTwilight(2);
+		scn.ShadowRefreshDecision();
+		assertEquals(2, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(seeking));
+	}
+
+	@Test
+	public void IsNotOfferedWithOneTwilightInThePoolAndIsWithTwo() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var seeking = scn.GetShadowCard("seeking");
+		var soldier = scn.GetShadowCard("soldier");
+		scn.MoveCardsToSupportArea(seeking);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(soldier);
+
+		scn.FreepsPass();
+		scn.SetTwilight(1);
+		scn.ShadowRefreshDecision();
+		assertEquals(0, scn.GetWoundsOn(soldier));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(seeking));
+
+		scn.SetTwilight(2);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertTrue(scn.ShadowActionAvailable(seeking));
 	}
 }

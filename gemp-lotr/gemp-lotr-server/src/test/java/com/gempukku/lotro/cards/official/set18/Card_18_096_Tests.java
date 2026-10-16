@@ -10,6 +10,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_18_096_Tests
 {
@@ -18,8 +19,24 @@ public class Card_18_096_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "18_96");
-					// put other cards in here as needed for the test case
+					put("horn", "18_96");
+					put("guard", "5_83");         // Household Guard: [rohan] Man, strength 6, vitality 3; Valiant is its whole text
+					put("guard2", "5_83");
+					put("eomer", "4_267");        // Eomer, Third Marshal of Riddermark: [rohan] Man, strength 7; stronger only against a wounded minion
+					put("erkenbrand", "0_59");    // Erkenbrand, Master of Westfold: [rohan] Man, strength 7; his texts are about playing him
+					put("guma", "4_277");         // Guma, Plains Farmer: [rohan] Man ally; a fellowship ability used only on purpose
+					put("merry", "103_85");       // Merry, Master Holbytla: [rohan] Hobbit, a Man only beside 3 [rohan] companions or Eowyn
+					put("aragorn", "1_89");       // Aragorn, Ranger of the North: [gondor] Man
+
+					put("worker", "15_135");      // Rohan Worker: [rohan] follower, cost 1, changes no number
+					put("worker2", "15_135");
+					put("stablemaster", "15_134"); // Rohan Stable Master: [rohan] follower, cost 2; to play, spot a [rohan] Man
+					put("servant", "18_52");      // Gondorian Servant: [gondor] follower, cost 0, changes no strength
+
+					put("saruman", "17_38");      // Saruman, Servant of Sauron: the Shadow player's [isengard] follower
+					put("savage", "1_151");       // Uruk Savage: strength 5, vitality 3
+					put("troop", "1_177");        // Goblin Patrol Troop: strength 13, no text
+					put("runner", "1_178");       // Goblin Runner: strength 5
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -38,13 +55,15 @@ public class Card_18_096_Tests
 		 * Culture: Rohan
 		 * Twilight Cost: 0
 		 * Type: Possession
-		 * Subtype: 
-		 * Game Text: Bearer must be a [rohan] Man.<br><b>Fellowship:</b> Exert bearer to play a follower from your draw deck. Reshuffle your draw deck.<br><b>Skirmish:</b> Discard a follower from play to make bearer strength +4 (if bearer is Erkenbrand, he is strength +5 instead).
-		*/
+		 * Game Text: Bearer must be a [rohan] Man.
+		 * 	Fellowship: Exert bearer to play a follower from your draw deck. Reshuffle your draw deck.
+		 * 	Skirmish: Discard a follower from play to make bearer strength +4 (if bearer is Erkenbrand, he is
+		 * 	strength +5 instead).
+		 */
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("horn");
 
 		assertEquals("Erkenbrand's Horn", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -52,21 +71,295 @@ public class Card_18_096_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertNull(card.getBlueprint().getPossessionClasses());
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void ErkenbrandsHornTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void CannotBePlayedUntilARohanManIsInPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var horn = scn.GetFreepsCard("horn");
+		var eomer = scn.GetFreepsCard("eomer");
+		var merry = scn.GetFreepsCard("merry");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		// A [rohan] Hobbit and a [gondor] Man.
+		scn.MoveCompanionsToTable(merry, aragorn);
+		scn.MoveCardsToHand(horn, eomer);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		assertFalse(scn.FreepsPlayAvailable(horn));
 
-		assertEquals(0, scn.GetTwilight());
+		scn.FreepsPlayCard(eomer);
+		assertTrue(scn.FreepsPlayAvailable(horn));
+
+		scn.FreepsPlayCard(horn);
+		assertInZone(Zone.ATTACHED, horn);
+		assertEquals(eomer, horn.getAttachedTo());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void MayBePlayedOnARohanManWhoIsACompanionOrAnAlly() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var horn = scn.GetFreepsCard("horn");
+		var eomer = scn.GetFreepsCard("eomer");
+		var guma = scn.GetFreepsCard("guma");
+		var merry = scn.GetFreepsCard("merry");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var frodo = scn.GetRingBearer();
+		scn.MoveCompanionsToTable(eomer, merry, aragorn);
+		scn.MoveAlliesToTable(guma);
+		scn.MoveCardsToHand(horn);
+
+		scn.StartGame();
+		assertTrue(scn.FreepsPlayAvailable(horn));
+
+		scn.FreepsPlayCard(horn);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(eomer, guma));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(merry, aragorn, frodo));
+
+		scn.FreepsChooseCard(guma);
+		assertInZone(Zone.ATTACHED, horn);
+		assertEquals(guma, horn.getAttachedTo());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void FellowshipAbilityExertsBearerToPlayAFollowerOfAnyCultureFromTheDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var horn = scn.GetFreepsCard("horn");
+		var guard = scn.GetFreepsCard("guard");
+		var guard2 = scn.GetFreepsCard("guard2");
+		var eomer = scn.GetFreepsCard("eomer");
+		var worker = scn.GetFreepsCard("worker");
+		var stablemaster = scn.GetFreepsCard("stablemaster");
+		var servant = scn.GetFreepsCard("servant");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(guard, eomer);
+		scn.AttachCardsTo(guard, horn);
+
+		scn.StartGame();
+		assertTrue(scn.FreepsActionAvailable(horn));
+		assertEquals(0, scn.GetWoundsOn(guard));
+		assertEquals(0, scn.GetWoundsOn(eomer));
+		assertInZone(Zone.DECK, servant);
+		int deck = scn.GetFreepsDeckCount();
+		int freepsShuffles = scn.GetFreepsDeckShuffleCount();
+		int shadowShuffles = scn.GetShadowDeckShuffleCount();
+
+		scn.FreepsUseCardAction(horn);
+		assertEquals(1, scn.GetWoundsOn(guard));
+		assertEquals(0, scn.GetWoundsOn(eomer));
+
+		// The deck is shown, and then every follower in it is offered, the [gondor] one as well as the [rohan]
+		// ones: not the cards that are no follower (a second Household Guard, Aragorn).
+		scn.FreepsDismissRevealedCards();
+		assertTrue(scn.FreepsHasCardChoiceAvailable(worker, stablemaster, servant));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(guard2, aragorn));
+		assertEquals(0, scn.FreepsGetChoiceMin());
+		assertEquals(1, scn.FreepsGetChoiceMax());
+
+		scn.FreepsChooseCardBPFromSelection(servant);
+		assertInZone(Zone.SUPPORT, servant);
+		assertEquals(deck - 1, scn.GetFreepsDeckCount());
+		assertInZone(Zone.DECK, worker, stablemaster);
+		assertEquals(freepsShuffles + 2, scn.GetFreepsDeckShuffleCount()); // as the card left the deck, and the reshuffle after the play (F-0313)
+		assertEquals(shadowShuffles, scn.GetShadowDeckShuffleCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void FellowshipAbilityMayPlayNothingAndIsNotOfferedOnceBearerIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var horn = scn.GetFreepsCard("horn");
+		var guard = scn.GetFreepsCard("guard");
+		var eomer = scn.GetFreepsCard("eomer");
+		var worker = scn.GetFreepsCard("worker");
+		var servant = scn.GetFreepsCard("servant");
+		scn.MoveCompanionsToTable(guard, eomer);
+		scn.AttachCardsTo(guard, horn);
+		scn.AddWoundsToChar(guard, 1);
+
+		scn.StartGame();
+		assertTrue(scn.FreepsActionAvailable(horn));
+		assertEquals(1, scn.GetWoundsOn(guard));
+		int deck = scn.GetFreepsDeckCount();
+		int freepsShuffles = scn.GetFreepsDeckShuffleCount();
+		int shadowShuffles = scn.GetShadowDeckShuffleCount();
+
+		scn.FreepsUseCardAction(horn);
+		scn.FreepsDismissRevealedCards();
+		assertTrue(scn.FreepsHasCardChoiceAvailable(worker, servant));
+		assertEquals(0, scn.FreepsGetChoiceMin());
+
+		scn.FreepsDeclineChoosing();
+		assertEquals(2, scn.GetWoundsOn(guard));
+		assertInZone(Zone.DECK, worker, servant);
+		assertEquals(deck, scn.GetFreepsDeckCount());
+		assertEquals(freepsShuffles + 1, scn.GetFreepsDeckShuffleCount());
+		assertEquals(shadowShuffles, scn.GetShadowDeckShuffleCount());
+
+		// Vitality 3 with 2 wounds: the bearer cannot exert, though the other [rohan] Man could.
+		assertEquals(0, scn.GetWoundsOn(eomer));
+		assertFalse(scn.FreepsActionAvailable(horn));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void FellowshipAbilityIsOfferedAndPaidForWithNoFollowerInTheDrawDeck() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var horn = scn.GetFreepsCard("horn");
+		var guard = scn.GetFreepsCard("guard");
+		var guard2 = scn.GetFreepsCard("guard2");
+		scn.MoveCompanionsToTable(guard);
+		scn.AttachCardsTo(guard, horn);
+		// Every Free Peoples follower out of the deck; a [rohan] companion stays in it.
+		scn.MoveCardsToFreepsDiscard("worker", "worker2", "stablemaster", "servant");
+
+		scn.StartGame();
+		assertTrue(scn.FreepsActionAvailable(horn));
+		assertEquals(0, scn.GetWoundsOn(guard));
+		int deck = scn.GetFreepsDeckCount();
+		int freepsShuffles = scn.GetFreepsDeckShuffleCount();
+
+		scn.FreepsUseCardAction(horn);
+		// Shown the deck, with nothing in it to play.
+		scn.FreepsDismissRevealedCards();
+		assertEquals(1, scn.GetWoundsOn(guard));
+		assertInZone(Zone.DECK, guard2);
+		assertEquals(deck, scn.GetFreepsDeckCount());
+		assertEquals(freepsShuffles + 1, scn.GetFreepsDeckShuffleCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void SkirmishAbilityDiscardsAFollowerFromPlayToMakeBearerStrengthPlus4ForThatSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var horn = scn.GetFreepsCard("horn");
+		var guard = scn.GetFreepsCard("guard");
+		var eomer = scn.GetFreepsCard("eomer");
+		var erkenbrand = scn.GetFreepsCard("erkenbrand");
+		var worker = scn.GetFreepsCard("worker");
+		var worker2 = scn.GetFreepsCard("worker2");
+		var servant = scn.GetFreepsCard("servant");
+		var savage = scn.GetShadowCard("savage");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCompanionsToTable(guard, eomer, erkenbrand);
+		// The Household Guard bears the Horn.  Followers: one on the bearer, one on another companion, one in the
+		// support area.
+		scn.AttachCardsTo(guard, horn, worker);
+		scn.AttachCardsTo(eomer, servant);
+		scn.MoveCardsToSupportArea(worker2);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(savage, troop);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{eomer, savage}, new PhysicalCardImpl[]{guard, troop});
+
+		// Eomer's skirmish: the bearer is not in it.
+		scn.FreepsResolveSkirmish(eomer);
+		assertTrue(scn.FreepsActionAvailable(horn));
+		assertEquals(6, scn.GetStrength(guard));
+		assertEquals(7, scn.GetStrength(eomer));
+		assertEquals(7, scn.GetStrength(erkenbrand));
+
+		scn.FreepsUseCardAction(horn);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(worker, worker2, servant));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(horn, guard, eomer, erkenbrand));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		assertEquals(1, scn.FreepsGetChoiceMax());
+
+		scn.FreepsChooseCard(servant);
+		assertInDiscard(servant);
+		assertInZone(Zone.ATTACHED, worker);
+		assertInZone(Zone.SUPPORT, worker2);
+		// Erkenbrand is in play, and is not the bearer: +4.
+		assertEquals(10, scn.GetStrength(guard));
+		assertEquals(7, scn.GetStrength(eomer));
+		assertEquals(7, scn.GetStrength(erkenbrand));
+
+		// The next skirmish is another phase: the bonus is gone.
+		scn.PassCurrentPhaseActions();
+		scn.FreepsResolveSkirmish(guard);
+		assertEquals(6, scn.GetStrength(guard));
+
+		scn.FreepsUseCardAction(horn);
+		scn.FreepsChooseCard(worker2);
+		assertInDiscard(worker2);
+		assertInZone(Zone.ATTACHED, worker);
+		assertEquals(10, scn.GetStrength(guard));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
+	@Test
+	public void TheShadowPlayersFollowerMayBeDiscardedToPayForTheSkirmishAbility() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var horn = scn.GetFreepsCard("horn");
+		var guard = scn.GetFreepsCard("guard");
+		var worker = scn.GetFreepsCard("worker");
+		var saruman = scn.GetShadowCard("saruman");
+		var savage = scn.GetShadowCard("savage");
+		scn.MoveCompanionsToTable(guard);
+		scn.AttachCardsTo(guard, horn);
+		// "A follower from play": the Free Peoples player's own in his support area, and the Shadow player's in his.
+		scn.MoveCardsToSupportArea(worker, saruman);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(savage);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(guard, savage);
+		scn.FreepsResolveSkirmish(guard);
+
+		assertTrue(scn.FreepsActionAvailable(horn));
+		assertEquals(6, scn.GetStrength(guard));
+
+		scn.FreepsUseCardAction(horn);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(worker, saruman));
+
+		scn.FreepsChooseCard(saruman);
+		assertInDiscard(saruman);
+		assertInZone(Zone.SUPPORT, worker);
+		assertEquals(10, scn.GetStrength(guard));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
+	@Test
+	public void OnErkenbrandItIsPlus5AndIsNotOfferedWithNoFollowerLeftInPlay() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var horn = scn.GetFreepsCard("horn");
+		var erkenbrand = scn.GetFreepsCard("erkenbrand");
+		var worker = scn.GetFreepsCard("worker");
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveCompanionsToTable(erkenbrand);
+		scn.AttachCardsTo(erkenbrand, horn);
+		scn.MoveCardsToSupportArea(worker);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(erkenbrand, runner);
+		scn.FreepsResolveSkirmish(erkenbrand);
+
+		assertTrue(scn.FreepsActionAvailable(horn));
+		assertEquals(7, scn.GetStrength(erkenbrand));
+		assertInZone(Zone.SUPPORT, worker);
+
+		// His one follower is the one discarded: +5, not +4 and not +4 and +5.
+		scn.FreepsUseCardAction(horn);
+		assertInDiscard(worker);
+		assertEquals(12, scn.GetStrength(erkenbrand));
+
+		// No follower is left in play.
+		scn.ShadowPass();
+		assertFalse(scn.FreepsActionAvailable(horn));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 }

@@ -130,6 +130,7 @@ public class Card_07_331_Tests
 		scn.StartGame();
 		// Each player's own Dwarf Guard is the top card of his own draw deck.
 		scn.MoveCardsToTopOfDeck(freepsGuard, shadowGuard);
+		scn.FreepsRefreshDecision();
 		var site = scn.GetCurrentSite();
 
 		assertEquals(1, scn.GetCurrentSiteNumber());

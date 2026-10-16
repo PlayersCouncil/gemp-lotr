@@ -4,6 +4,7 @@ import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
+import com.gempukku.lotro.logic.timing.loops.LoopNegotiation;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -818,5 +819,103 @@ public interface Choices extends Decisions {
 		}
 
 		PlayerDecided(player, String.join(",", ids));
+	}
+
+	/**
+	 * Has the Free Peoples player (player 1) answer the loop step's first prompt (CR 4.2 "loops", LoopNegotiation):
+	 * the number of more times a loop that has been found will run.  Fails, answering nothing, if that player is
+	 * not being asked it.
+	 * @param iterations The number named, 1 to 99.
+	 */
+	default void FreepsNameLoopIterations(int iterations) { NameLoopIterations(P1(), iterations); }
+	/**
+	 * Has the Shadow player (player 2) answer the loop step's first prompt, as the Free Peoples player of player 2's
+	 * turn.  Fails, answering nothing, if that player is not being asked it.
+	 * @param iterations The number named, 1 to 99.
+	 */
+	default void ShadowNameLoopIterations(int iterations) { NameLoopIterations(P2(), iterations); }
+	/**
+	 * Has the given player answer the loop step's first prompt: the number of more times the loop will run.
+	 * Fails, answering nothing, if that player is not being asked it.
+	 * @param player The player, who is the Free Peoples player of the turn.
+	 * @param iterations The number named, 1 to 99.
+	 */
+	default void NameLoopIterations(String player, int iterations) {
+		AwaitingDecision decision = GetAwaitingDecision(player);
+		Verify(decision != null && decision.getDecisionType() == AwaitingDecisionType.INTEGER
+						&& decision.getText().startsWith(LoopNegotiation.HEADER),
+				player + " was to name the loop's iterations, but is not being asked them: "
+						+ (decision == null ? "nothing is asked" : decision.getText()));
+		PlayerDecided(player, String.valueOf(iterations));
+	}
+
+	/**
+	 * Has the Shadow player (player 2) agree to the number of iterations the Free Peoples player named for a loop
+	 * (CR 4.2 "loops"): the loop goes that many times, and the Free Peoples player takes the next action.  Fails,
+	 * answering nothing, if that player is not being asked to agree or lower it.
+	 */
+	default void ShadowAgreeToLoop() { AgreeToLoop(P2()); }
+	/**
+	 * Has the Free Peoples player (player 1) agree to a loop's iterations, as the Shadow player of player 2's turn.
+	 * Fails, answering nothing, if that player is not being asked to agree or lower it.
+	 */
+	default void FreepsAgreeToLoop() { AgreeToLoop(P1()); }
+	/**
+	 * Has the given player agree to the number of iterations named for a loop.  Fails, answering nothing, if that
+	 * player is not being asked to agree or lower it.
+	 * @param player The player, who is the Shadow player of the turn.
+	 */
+	default void AgreeToLoop(String player) {
+		PlayerDecided(player, String.valueOf(LoopChoiceIndex(player, true)));
+	}
+
+	/**
+	 * Has the Shadow player (player 2) choose a lower number of iterations for a loop than the Free Peoples player
+	 * named (CR 4.2 "loops"), and name it: the loop goes that many times, and the Shadow player takes the next
+	 * action.  Where the number named was 1 the lower number can only be 0, and is not asked: give 0.  Fails,
+	 * answering nothing, if that player is not being asked to agree or lower it.
+	 * @param iterations The lower number, from 0 to one less than the number named.
+	 */
+	default void ShadowLowerLoop(int iterations) { LowerLoop(P2(), iterations); }
+	/**
+	 * Has the Free Peoples player (player 1) choose and name a lower number of iterations for a loop, as the
+	 * Shadow player of player 2's turn.  Where the number named was 1 the lower number can only be 0, and is not
+	 * asked: give 0.  Fails, answering nothing, if that player is not being asked to agree or lower it.
+	 * @param iterations The lower number, from 0 to one less than the number named.
+	 */
+	default void FreepsLowerLoop(int iterations) { LowerLoop(P1(), iterations); }
+	/**
+	 * Has the given player choose a lower number of iterations for a loop and name it.  Where the number named
+	 * was 1 the lower number can only be 0, and is not asked: give 0, or it fails.  Fails, answering nothing, if
+	 * that player is not being asked to agree or lower it.
+	 * @param player The player, who is the Shadow player of the turn.
+	 * @param iterations The lower number, from 0 to one less than the number named.
+	 */
+	default void LowerLoop(String player, int iterations) {
+		PlayerDecided(player, String.valueOf(LoopChoiceIndex(player, false)));
+		AwaitingDecision decision = GetAwaitingDecision(player);
+		if (decision != null && decision.getDecisionType() == AwaitingDecisionType.INTEGER
+				&& decision.getText().startsWith("Choose a number lower than")) {
+			PlayerDecided(player, String.valueOf(iterations));
+		} else {
+			Verify(iterations == 0, player + " was to name " + iterations
+					+ " for the loop, but the only lower number is 0, which is not asked");
+		}
+	}
+
+	// Which answer of the Shadow player's loop prompt agrees (or lowers), checking that the prompt is the one asked.
+	private int LoopChoiceIndex(String player, boolean agree) {
+		AwaitingDecision decision = GetAwaitingDecision(player);
+		Verify(decision != null && decision.getDecisionType() == AwaitingDecisionType.MULTIPLE_CHOICE
+						&& decision.getText().startsWith(LoopNegotiation.HEADER),
+				player + " was to " + (agree ? "agree to" : "lower") + " the loop's iterations, but is not being asked: "
+						+ (decision == null ? "nothing is asked" : decision.getText()));
+		List<String> results = GetADParamAsList(player, "results");
+		for (int i = 0; i < results.size(); i++) {
+			if (agree ? results.get(i).startsWith("Agree:") : results.get(i).equals(LoopNegotiation.lowerChoice()))
+				return i;
+		}
+		Verify(false, "The loop prompt has no choice to " + (agree ? "agree" : "lower") + ": " + results);
+		return -1;
 	}
 }

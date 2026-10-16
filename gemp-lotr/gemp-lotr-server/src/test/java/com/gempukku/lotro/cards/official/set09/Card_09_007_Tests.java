@@ -208,6 +208,7 @@ public class Card_09_007_Tests
 		scn.StartGame();
 		scn.AddWoundsToChar(gimli, 1);
 		scn.AddWoundsToChar(farin, 1);
+		scn.FreepsRefreshDecision();
 
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 		assertFalse(scn.FreepsActionAvailable(fury));

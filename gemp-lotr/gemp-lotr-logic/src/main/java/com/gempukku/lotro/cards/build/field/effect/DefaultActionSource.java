@@ -386,7 +386,15 @@ public class DefaultActionSource implements ActionSource {
     }
 
     @Override
+    public boolean isLimited() {
+        return !limitRequirements.isEmpty() || !limitGate.isEmpty();
+    }
+
+    @Override
     public void createAction(CostToEffectAction action, ActionContext actionContext) {
+        // Which ability of the card this is: the loop step tells one use from another by it.
+        action.setAbility(this);
+
         if (text != null)
             action.setText(GameUtils.substituteText(text, actionContext));
 

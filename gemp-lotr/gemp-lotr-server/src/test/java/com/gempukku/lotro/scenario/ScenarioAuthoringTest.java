@@ -1026,11 +1026,17 @@ public class ScenarioAuthoringTest {
         authoring.open(player, "strictopp", true);
         authoring.settings(player, null, false, null);
         Client client = new Client(game());
-        for (int i = 0; i < 6; i++) {
+        //The opponent answers on a timer, opponentDelayMs (900) after its decision comes, and the problem is noted as
+        //the decision comes: wait for both, not for a fixed time, answering the author's decisions until then
+        for (int i = 0; i < 100; i++) {
+            JSONObject now = state();
+            if (now.getJSONArray("problems").toString().contains("fallback is 'fail'")
+                    && now.getJSONObject("waiting").getJSONObject("opponent") == null)
+                break;
             client.poll();
             if (client.decision != null)
                 client.answer("");
-            Thread.sleep(150);
+            Thread.sleep(100);
         }
         //The Shadow had a runner it could play, nobody to say so, and a fallback of 'fail': it passed, and said why
         JSONObject state = state();

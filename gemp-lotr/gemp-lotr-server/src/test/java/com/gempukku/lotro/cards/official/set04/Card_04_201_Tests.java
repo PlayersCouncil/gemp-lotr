@@ -276,6 +276,7 @@ public class Card_04_201_Tests
 		scn.SetTwilight(13);
 		scn.FreepsPass();
 		scn.MoveMinionsToTable(troop);
+		scn.ShadowRefreshDecision();
 		assertEquals(20, scn.GetTwilight());
 		assertInZone(Zone.STACKED, veteran, veteran2);
 

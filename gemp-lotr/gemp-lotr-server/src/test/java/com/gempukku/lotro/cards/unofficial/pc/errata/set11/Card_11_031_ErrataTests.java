@@ -141,19 +141,20 @@ public class Card_11_031_ErrataTests
 	}
 
 	@Test
-	public void AShadowCardDiscardedToPayForItMayBeTheCardTaken() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AShadowCardDiscardedToPayForItIsNotTheCardTaken() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var account = scn.GetFreepsCard("account");
 		var gandalf = scn.GetFreepsCard("gandalf");
 		var avenger = scn.GetFreepsCard("avenger");
 		var troop = scn.GetFreepsCard("troop");
+		var fear = scn.GetFreepsCard("fear");
 		var raiders = scn.GetFreepsCard("raiders");
 		var armor = scn.GetFreepsCard("armor");
 
 		scn.MoveCompanionsToTable(gandalf, avenger);
 		scn.MoveCardsToHand(account, armor, raiders);
-		scn.MoveCardsToDiscard(troop);
+		scn.MoveCardsToDiscard(troop, fear);
 
 		scn.StartGame();
 
@@ -170,16 +171,17 @@ public class Card_11_031_ErrataTests
 		scn.FreepsChooseCard(raiders);
 		assertInDiscard(raiders);
 
-		// The cost is paid before the card to take is chosen, so the minion just discarded is a Shadow card in
-		// the discard pile like the one that was there before.
-		assertTrue(scn.FreepsHasCardChoiceAvailable(troop, raiders));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(armor));
-		scn.FreepsChooseCardBPFromSelection(raiders);
+		// The minion just discarded for the cost lies in the discard pile, and is not offered (Q-0320: A, the
+		// They Are Coming ruling of Q-0192): the two Shadow cards that were there before are.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(troop, fear));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(raiders, armor));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		scn.FreepsChooseCardBPFromSelection(troop);
 
-		assertInHand(raiders, armor);
-		assertInDiscard(troop, account);
+		assertInHand(troop, armor);
+		assertInDiscard(raiders, fear, account);
 		assertEquals(2, scn.GetFreepsHandCount());
-		assertEquals(2, scn.GetFreepsDiscardCount());
+		assertEquals(3, scn.GetFreepsDiscardCount());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

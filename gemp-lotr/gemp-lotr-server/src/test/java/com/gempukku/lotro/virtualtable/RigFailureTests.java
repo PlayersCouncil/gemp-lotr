@@ -22,7 +22,9 @@ import static org.junit.Assert.*;
  * declining to choose where the game is not asking for cards or will not take none, and so does the catch-all
  * FreepsChoose(text) at a choice of actions, where it used to take whichever action had the words, and so does
  * accepting an optional trigger where no choice of actions is pending, where it used to answer "0".  Also the one
- * reading that is no failure: the maximum of a number the game sets no upper bound on.
+ * reading that is no failure: the maximum of a number the game sets no upper bound on.  And a skipper called
+ * before the first turn has begun (before StartGame()) fails naming itself, not further on in the turn it cannot
+ * play.
  */
 public class RigFailureTests
 {
@@ -319,6 +321,7 @@ public class RigFailureTests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(runner, troop);
+		scn.FreepsRefreshDecision();
 
 		// Cards the game shows, from the discard pile: answered by their places in the showing, not by card id.
 		scn.FreepsUseCardAction(barliman);
@@ -450,6 +453,7 @@ public class RigFailureTests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(runner);
+		scn.FreepsRefreshDecision();
 
 		String notActions = " was to accept an optional trigger, but the decision in front of that player is not a choice of actions.";
 
@@ -513,6 +517,7 @@ public class RigFailureTests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(runner, troop);
+		scn.FreepsRefreshDecision();
 
 		// Cards where they lie, of which none need be chosen: "discard up to 3 cards from hand".  No card is
 		// discarded and none drawn; Ottar's exertion, the cost, is paid.
@@ -648,5 +653,22 @@ public class RigFailureTests
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		assertEquals(1, scn.GetMoveCount());
 		assertTrue(scn.FreepsDecisionAvailable("Reconcile"));
+	}
+
+	@Test
+	public void ASkipBeforeTheFirstTurnIsRefusedNamingItselfAndStartGame() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		// The table rests after the bid: no turn has begun.
+		assertRefused(() -> scn.SkipToPhase(Phase.REGROUP), "SkipToPhase(REGROUP) was called before the first turn began", "StartGame()");
+		assertRefused(() -> scn.SkipToPhaseInverted(Phase.MANEUVER), "SkipToPhaseInverted(MANEUVER) was called before the first turn began");
+		assertRefused(() -> scn.SkipToSite(3), "SkipToSite(3) was called before the first turn began");
+		assertRefused(scn::SkipToAssignments, "SkipToPhase(ASSIGNMENT) was called before the first turn began");
+
+		// Once it has, the same skip goes where it says.
+		scn.StartGame();
+		scn.SkipToSite(3);
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

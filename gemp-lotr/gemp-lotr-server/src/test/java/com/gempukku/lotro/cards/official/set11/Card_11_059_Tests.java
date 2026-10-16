@@ -27,6 +27,29 @@ public class Card_11_059_Tests
 		);
 	}
 
+	// The Fellowship path with Buckleberry Ferry 1_330 as site 2: a river ("While only Hobbits are in the
+	// fellowship, there are no assignment and skirmish phases at Buckleberry Ferry").  The Gondorian Merchant's home
+	// is site 3 of the Towers path, so he has none on this one; he is the only [gondor] ally, and no [gondor] ally
+	// is a ranger.
+	protected VirtualTableScenario GetAllyScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("blade", "11_59");
+					put("blade2", "11_59");
+					put("knight", "5_35");      // Gondorian Knight: [gondor] Man companion, no ranger; "Knight." is his whole text
+					put("merchant", "7_97");    // Gondorian Merchant: [gondor] Man ally, home 3T; a maneuver ability used only on purpose
+				}},
+				new HashMap<>()
+				{{
+					putAll(VirtualTableScenario.FellowshipSites);
+					put("site2", "1_330");
+				}},
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
 	@Test
 	public void GondorianBladeStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
@@ -71,5 +94,29 @@ public class Card_11_059_Tests
 		scn.FreepsPlayCard(card);
 
 		assertEquals(1, scn.GetTwilight());
+	}
+
+	@Test
+	public void BorneByAnAllyWithNoHomeSiteOnThePathItGivesNothingWithTheFellowshipAtARiver() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetAllyScenario();
+
+		var blade = scn.GetFreepsCard("blade");
+		var blade2 = scn.GetFreepsCard("blade2");
+		var knight = scn.GetFreepsCard("knight");
+		var merchant = scn.GetFreepsCard("merchant");
+		scn.MoveCompanionsToTable(knight);
+		scn.MoveAlliesToTable(merchant);
+		scn.AttachCardsTo(knight, blade);
+		scn.AttachCardsTo(merchant, blade2);
+
+		scn.StartGame();
+		scn.SkipToSite(2);
+		assertEquals("Buckleberry Ferry", scn.GetCurrentSite().getBlueprint().getTitle());
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.RIVER));
+
+		// The companion is with the fellowship, at the river.  The Merchant's home is on another block's path: on
+		// this one he is at no site (CR 4.2 "ally").
+		assertEquals(1, scn.GetKeywordCount(knight, Keyword.DAMAGE));
+		assertEquals(0, scn.GetKeywordCount(merchant, Keyword.DAMAGE));
 	}
 }

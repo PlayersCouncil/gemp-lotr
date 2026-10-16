@@ -193,6 +193,7 @@ public class Card_15_170_Tests
 		scn.StartGame();
 		// The minions are laid early, to read the Sentry before and after a companion is played.
 		scn.MoveMinionsToTable(sentry, ruthless);
+		scn.FreepsRefreshDecision();
 
 		assertFalse(scn.HasKeyword(sentry, Keyword.HUNTER));
 		assertEquals(0, scn.GetKeywordCount(sentry, Keyword.HUNTER));
@@ -252,6 +253,7 @@ public class Card_15_170_Tests
 		scn.StartGame();
 		// The minions are laid early, to read the Sentry before and after the artifact is played.
 		scn.MoveMinionsToTable(sentry, ruthless);
+		scn.FreepsRefreshDecision();
 
 		assertFalse(scn.HasKeyword(grimir, Keyword.DAMAGE));
 		assertFalse(scn.HasKeyword(sentry, Keyword.DAMAGE));

@@ -3,6 +3,7 @@ package com.gempukku.lotro.cards.official.set04;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -13,14 +14,33 @@ import static org.junit.Assert.*;
 public class Card_04_342_Tests
 {
 
+	// The Towers path with Westemnet Plains as its site 3.  Site 2 is Eastfold (a Shadow action that needs 3
+	// [isengard] trackers) and site 4 White Rocks (Shadow number +1 for each mounted companion: none here).
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "4_342");
-					// put other cards in here as needed for the test case
+					put("legolas", "1_50");     // Legolas, Greenleaf: [elven] Elf companion, the fellowship's one archer; his archery ability used only on purpose
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion; a Maneuver ability used only on purpose
+					put("defend", "4_115");     // Defend It and Hope: [gondor] Maneuver event, exert a [gondor] Man to wound a minion (twice if an Uruk-hai)
+
+					put("band", "4_4");         // Band of Wild Men: [dunland] Man minion, vitality 2; a trigger on its winning only
+					put("chief", "4_20");       // Hill Chief: [dunland] Man minion, vitality 2; a Shadow ability used only on purpose
+					put("saruman", "4_33");     // Saruman, Rabble-rouser: a [dunland] minion who is no Man (a Wizard); laid after the move, which his trigger answers
+					put("axeman", "4_224");     // Easterling Axeman: [raider] Man minion, vitality 2; strength +3 and fierce only at 2 burdens
 				}},
-				VirtualTableScenario.FellowshipSites,
+				new HashMap<>()
+				{{
+					put("site1", "4_325");
+					put("site2", "4_331");
+					put("site3", "4_342");
+					put("site4", "4_346");
+					put("site5", "4_348");
+					put("site6", "4_352");
+					put("site7", "102_71");
+					put("site8", "4_358");
+					put("site9", "4_363");
+				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -33,43 +53,129 @@ public class Card_04_342_Tests
 		 * Set: 4
 		 * Name: Westemnet Plains
 		 * Unique: False
-		 * Side: 
-		 * Culture: 
-		 * Shadow Number: 1
-		 * Type: Sanctuary
-		 * Subtype: 
+		 * Type: Site
+		 * Block: Towers
 		 * Site Number: 3T
+		 * Shadow Number: 1
+		 * Direction: Right
 		 * Game Text: <b>Plains</b>. <b>Sanctuary</b>. Each [dunland] Man may not take wounds during the archery phase.
 		*/
 
 		var scn = GetScenario();
 
-		//Use this once you have set the deck up properly
-		//var card = scn.GetFreepsSite(3);
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsSite(3);
 
 		assertEquals("Westemnet Plains", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
+		assertEquals(SitesBlock.TWO_TOWERS, card.getBlueprint().getSiteBlock());
+		assertEquals(3, card.getBlueprint().getSiteNumber());
+		assertEquals(1, card.getBlueprint().getTwilightCost());
+		assertEquals(LotroCardBlueprint.Direction.RIGHT, card.getBlueprint().getSiteDirection());
 		assertTrue(scn.HasKeyword(card, Keyword.PLAINS));
 		assertTrue(scn.HasKeyword(card, Keyword.SANCTUARY));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
-		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void WestemnetPlainsTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void AtThePlainsTheFellowshipArcheryWoundCannotBePlacedOnADunlandMan() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var legolas = scn.GetFreepsCard("legolas");
+		var band = scn.GetShadowCard("band");
+		var chief = scn.GetShadowCard("chief");
+		var saruman = scn.GetShadowCard("saruman");
+		var axeman = scn.GetShadowCard("axeman");
+		scn.MoveCompanionsToTable(legolas);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToSite(2);
+		scn.FreepsPass();
+		assertEquals("Westemnet Plains", scn.GetCurrentSite().getBlueprint().getTitle());
+		scn.MoveMinionsToTable(band, chief, saruman, axeman);
 
-		assertEquals(1, scn.GetTwilight());
+		scn.SkipToArcheryWounds();
+		assertEquals(1, scn.GetFreepsArcheryTotal());
+		assertEquals(0, scn.GetWoundsOn(band));
+		assertEquals(0, scn.GetWoundsOn(chief));
+		assertEquals(0, scn.GetWoundsOn(saruman));
+		assertEquals(0, scn.GetWoundsOn(axeman));
+
+		// The two [dunland] Men cannot take it; the [dunland] Wizard and the [raider] Man can.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(saruman, axeman));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(band, chief));
+		scn.ShadowChooseCard(axeman);
+
+		assertEquals(1, scn.GetWoundsOn(axeman));
+		assertEquals(0, scn.GetWoundsOn(saruman));
+		assertEquals(0, scn.GetWoundsOn(band));
+		assertEquals(0, scn.GetWoundsOn(chief));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
+
+	@Test
+	public void AtThePlainsADunlandManTakesAWoundInTheManeuverPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var defend = scn.GetFreepsCard("defend");
+		var band = scn.GetShadowCard("band");
+		var chief = scn.GetShadowCard("chief");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToHand(defend);
+
+		scn.StartGame();
+		scn.SkipToSite(2);
+		scn.FreepsPass();
+		assertEquals("Westemnet Plains", scn.GetCurrentSite().getBlueprint().getTitle());
+		scn.MoveMinionsToTable(band, chief);
+
+		scn.SkipToPhase(Phase.MANEUVER);
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(band));
+		assertEquals(0, scn.GetWoundsOn(chief));
+		assertTrue(scn.FreepsPlayAvailable(defend));
+
+		// Aragorn, the one [gondor] Man, exerts unasked; the wound may go on a [dunland] Man outside the archery phase.
+		scn.FreepsPlayCard(defend);
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(band, chief));
+		scn.FreepsChooseCard(band);
+
+		assertEquals(1, scn.GetWoundsOn(band));
+		assertEquals(0, scn.GetWoundsOn(chief));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Test
+	public void OnceTheFellowshipHasLeftThePlainsADunlandManTakesAnArcheryWound() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var legolas = scn.GetFreepsCard("legolas");
+		var band = scn.GetShadowCard("band");
+		var chief = scn.GetShadowCard("chief");
+		var axeman = scn.GetShadowCard("axeman");
+		scn.MoveCompanionsToTable(legolas);
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+		scn.FreepsPass();
+		assertEquals("White Rocks", scn.GetCurrentSite().getBlueprint().getTitle());
+		scn.MoveMinionsToTable(band, chief, axeman);
+
+		scn.SkipToArcheryWounds();
+		assertEquals(1, scn.GetFreepsArcheryTotal());
+		assertEquals(0, scn.GetWoundsOn(band));
+		assertEquals(0, scn.GetWoundsOn(chief));
+		assertEquals(0, scn.GetWoundsOn(axeman));
+
+		// The Plains lie behind: their text no longer applies, and every minion may take the wound.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(band, chief, axeman));
+		scn.ShadowChooseCard(band);
+
+		assertEquals(1, scn.GetWoundsOn(band));
+		assertEquals(0, scn.GetWoundsOn(chief));
+		assertEquals(0, scn.GetWoundsOn(axeman));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
 }

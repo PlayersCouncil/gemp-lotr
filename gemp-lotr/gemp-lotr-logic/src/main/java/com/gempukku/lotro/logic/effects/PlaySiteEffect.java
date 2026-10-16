@@ -47,27 +47,37 @@ public class PlaySiteEffect extends AbstractEffect {
     }
 
     private Collection<PhysicalCard> getMatchingSites(LotroGame game) {
-        final int siteNumber = getSiteNumberToPlay(game);
+        return findSitesToPlay(game, _playerId, _siteBlock, getSiteNumberToPlay(game), _extraSiteFilters);
+    }
 
+    /**
+     * The sites of a player's adventure deck that a laying of the given site number chooses among: on a numbered
+     * path, those printed with that number; where the player's sites are unordered (GameState.usesUnorderedSites),
+     * any.  Each is also of the given block (null for any) and accepted by the filters.  Empty for a number off the
+     * path.  This is the one reading of what a site-laying card can lay; the definition word
+     * sameNumberInYourAdventureDeck (Filters.sameNumberInAdventureDeck) asks it too, so that an action is not
+     * offered where its laying would find nothing (Q-0327).
+     */
+    public static Collection<PhysicalCard> findSitesToPlay(LotroGame game, String playerId, SitesBlock siteBlock, int siteNumber, Filterable... extraSiteFilters) {
         if (siteNumber > 9 || siteNumber < 1)
             return Collections.emptySet();
 
-        if (!game.getGameState().usesUnorderedSites(_playerId)) {
+        if (!game.getGameState().usesUnorderedSites(playerId)) {
             Filter printedSiteNumber = new Filter() {
                 @Override
                 public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
                     return physicalCard.getBlueprint().getSiteNumber() == siteNumber;
                 }
             };
-            if (_siteBlock != null)
-                return Filters.filter(game, game.getGameState().getAdventureDeck(_playerId), Filters.and(_extraSiteFilters, printedSiteNumber, Filters.siteBlock(_siteBlock)));
+            if (siteBlock != null)
+                return Filters.filter(game, game.getGameState().getAdventureDeck(playerId), Filters.and(extraSiteFilters, printedSiteNumber, Filters.siteBlock(siteBlock)));
             else
-                return Filters.filter(game, game.getGameState().getAdventureDeck(_playerId), Filters.and(_extraSiteFilters, printedSiteNumber));
+                return Filters.filter(game, game.getGameState().getAdventureDeck(playerId), Filters.and(extraSiteFilters, printedSiteNumber));
         } else {
-            if (_siteBlock != null)
-                return Filters.filter(game, game.getGameState().getAdventureDeck(_playerId), Filters.and(_extraSiteFilters, Filters.siteBlock(_siteBlock)));
+            if (siteBlock != null)
+                return Filters.filter(game, game.getGameState().getAdventureDeck(playerId), Filters.and(extraSiteFilters, Filters.siteBlock(siteBlock)));
             else
-                return Filters.filter(game, game.getGameState().getAdventureDeck(_playerId), _extraSiteFilters);
+                return Filters.filter(game, game.getGameState().getAdventureDeck(playerId), extraSiteFilters);
         }
     }
 

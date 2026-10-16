@@ -247,6 +247,7 @@ public class Card_94_028_Tests
 		scn.StartGame();
 		// The owner's draw deck, top first: Aragorn, Merry, Sam, Legolas, Boromir, Arwen.
 		scn.MoveCardsToTopOfDeck(arwen, boromir, legolas, sam, merry, aragorn);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(6, scn.GetFreepsDeckCount());
 		assertEquals(1, scn.GetFreepsHandCount());
@@ -310,6 +311,7 @@ public class Card_94_028_Tests
 		scn.StartGame();
 		// The owner's draw deck, top first: Aragorn, Merry, Sam, Legolas, Boromir, Arwen.
 		scn.MoveCardsToTopOfDeck(arwen, boromir, legolas, sam, merry, aragorn);
+		scn.FreepsRefreshDecision();
 
 		scn.FreepsPlayCard(delving1);
 		scn.ShadowChooseCardBPFromSelection(merry);

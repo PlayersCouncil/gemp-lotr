@@ -107,6 +107,7 @@ public class Card_V2_069_Tests
 
 		assertEquals("Westfold Plains", scn.GetCurrentSite().getBlueprint().getTitle());
 		scn.MoveCardsToHand(steed, knightsMount, spear);
+		scn.FreepsRefreshDecision();
 		assertEquals(0, scn.GetTwilight());
 
 		// The Rider, who is to bear a mount and is not one: his printed 2.
@@ -186,6 +187,7 @@ public class Card_V2_069_Tests
 		assertEquals("Westfold Plains", scn.GetSite(4).getBlueprint().getTitle());
 		assertInZone(Zone.ADVENTURE_PATH, scn.GetSite(4));
 		scn.MoveCardsToHand(steed);
+		scn.FreepsRefreshDecision();
 		assertEquals(0, scn.GetTwilight());
 
 		scn.FreepsPlayCard(rider);
@@ -214,6 +216,7 @@ public class Card_V2_069_Tests
 
 		assertEquals("Westfold Plains", scn.GetCurrentSite().getBlueprint().getTitle());
 		scn.AttachCardsTo(rider, steed);
+		scn.FreepsRefreshDecision();
 		scn.FreepsPlayCard(spear);
 		scn.FreepsChooseCard(rider);
 		assertEquals(1, scn.GetTwilight());     // the Spear

@@ -19,8 +19,7 @@ public class Card_18_080_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "18_80");
-					// put other cards in here as needed for the test case
+					put("gothmog", "18_80");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -36,6 +35,64 @@ public class Card_18_080_Tests
 					put("gothmog", "18_80");
 					// Mountain Orc: [orc] Orc, cost 3, site number 4, vitality 2; its text answers an assignment
 					put("orc", "11_129");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetArcheryScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("gothmog", "18_80");
+					put("legolas", "1_50");         // Legolas, Greenleaf: archer; an archery ability used only on purpose
+					put("marksman", "1_176");       // Goblin Marksman: archer, and no other text
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetChoiceScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("gothmog", "18_80");
+					// Orc Miscreant: [orc] Orc, cost 3, site 4, vitality 3; to play, spot an [orc] minion; a regroup
+					// ability used only on purpose
+					put("miscreant", "11_131");
+					// Half-troll of Far Harad: [orc] minion who is no Orc, cost 3, site 4; a start-of-assignment trigger
+					put("halftroll", "14_12");
+					// The Beckoning Shadow: [orc] condition, cost 0 (to play, exert an [orc] minion)
+					put("beckoning", "12_83");
+					put("soldier", "1_271");        // Orc Soldier: [sauron] Orc, cost 2, site 6; a skirmish ability
+					// Scurrying Goblin: [orc] Orc, cost 1; adds (2) only at an underground site
+					put("goblin", "11_137");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetNerteaScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("gothmog", "18_80");
+					put("miscreant", "11_131");
+					// Isengard Informant: "Regroup: Exert this minion to play an [orc] Troll from your discard pile."
+					put("informant", "13_110");
+					// Beastly Olog-hai: [orc] Troll, cost 6, site 5; to play, spot an [orc] minion
+					put("olog", "11_108");
+					// Orc Spear: [orc] possession, cost 1, bearer must be an [orc] minion
+					put("spear", "12_96");
+					// Úlairë Nertëa, Sanctified for Cruelty: "Each time you play a minion, you may exert it to play a
+					// possession on it from your discard pile"
+					put("nertea", "103_77");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -63,7 +120,7 @@ public class Card_18_080_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("gothmog");
 
 		assertEquals("Gothmog", card.getBlueprint().getTitle());
 		assertEquals("Morgul Leader", card.getBlueprint().getSubtitle());
@@ -119,18 +176,151 @@ public class Card_18_080_Tests
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GothmogTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void TheFellowshipAndMinionArcheryTotalsAreEachThreeHigherOnceGothmogIsInPlay() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetArcheryScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var legolas = scn.GetFreepsCard("legolas");
+		scn.MoveCompanionsToTable(legolas);
+
+		var gothmog = scn.GetShadowCard("gothmog");
+		var marksman = scn.GetShadowCard("marksman");
+		scn.MoveCardsToHand(gothmog);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(marksman);
+		// Gothmog is 6, and roaming at site 2.
+		scn.SetTwilight(8);
+		scn.FreepsPass();
 
-		assertEquals(6, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		// One archer on each side.
+		assertEquals(1, scn.GetFreepsArcheryTotal());
+		assertEquals(1, scn.GetShadowArcheryTotal());
+
+		scn.ShadowPlayCard(gothmog);
+
+		assertInZone(Zone.SHADOW_CHARACTERS, gothmog);
+		assertEquals(4, scn.GetFreepsArcheryTotal());
+		assertEquals(4, scn.GetShadowArcheryTotal());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void RegroupAbilityRemoves2ToPlayAnOrcMinionFromYourDiscardPileExhausted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetChoiceScenario();
+
+		var gothmog = scn.GetShadowCard("gothmog");
+		var miscreant = scn.GetShadowCard("miscreant");
+		var halftroll = scn.GetShadowCard("halftroll");
+		var beckoning = scn.GetShadowCard("beckoning");
+		var soldier = scn.GetShadowCard("soldier");
+		scn.MoveCardsToDiscard(miscreant, halftroll, beckoning, soldier);
+		// The Free Peoples player's own [orc] Orc, in his discard pile: a title the Shadow player's piles do not hold.
+		var goblin = scn.GetFreepsCard("goblin");
+		scn.MoveCardsToDiscard(goblin);
+
+		scn.StartGame();
+		scn.FreepsPass();
+		scn.ShadowPass();
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		scn.MoveMinionsToTable(gothmog);
+
+		// 2 removed + 3 for the Miscreant or the Half-troll + 2 roaming at site 2: exactly enough.
+		scn.SetTwilight(7);
+		scn.FreepsPass();
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+		assertTrue(scn.ShadowActionAvailable(gothmog));
+		assertInDiscard(miscreant, halftroll, beckoning, soldier, goblin);
+
+		scn.ShadowUseCardAction(gothmog);
+		// The (2) is gone before the minion is chosen.
+		assertEquals(5, scn.GetTwilight());
+		// An [orc] Orc and an [orc] Half-troll are offered. An [orc] condition, a [sauron] Orc (2 + 2 roaming: the
+		// pool would pay for him) and the other player's [orc] Orc in his own pile are not.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(miscreant, halftroll));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(beckoning, soldier, goblin));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		scn.ShadowChooseCards(miscreant);
+
+		assertInZone(Zone.SHADOW_CHARACTERS, miscreant);
+		// Vitality 3: exhausted is 2 wounds.
+		assertEquals(2, scn.GetWoundsOn(miscreant));
+		assertTrue(scn.IsExhausted(miscreant));
+		// Gothmog, another [orc] minion, is untouched, and the Half-troll is still in the discard pile.
+		assertEquals(0, scn.GetWoundsOn(gothmog));
+		assertInDiscard(halftroll, beckoning, soldier, goblin);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void NotOfferedWithNoOrcMinionInYourDiscardPile() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetChoiceScenario();
+
+		var gothmog = scn.GetShadowCard("gothmog");
+		var beckoning = scn.GetShadowCard("beckoning");
+		var soldier = scn.GetShadowCard("soldier");
+		scn.MoveCardsToDiscard(beckoning, soldier);
+		var goblin = scn.GetFreepsCard("goblin");
+		scn.MoveCardsToDiscard(goblin);
+
+		scn.StartGame();
+		scn.FreepsPass();
+		scn.ShadowPass();
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		scn.MoveMinionsToTable(gothmog);
+
+		// Enough to remove (2) and play any of them; only none is an [orc] minion of his own discard pile.
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(gothmog));
+		assertEquals(10, scn.GetTwilight());
+		assertInDiscard(beckoning, soldier, goblin);
+	}
+
+	@Test
+	public void TheMinionPlayedIsExhaustedAsItComesIntoPlaySoItCannotExertForUlaireNertea() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetNerteaScenario();
+
+		var gothmog = scn.GetShadowCard("gothmog");
+		var informant = scn.GetShadowCard("informant");
+		var nertea = scn.GetShadowCard("nertea");
+		var miscreant = scn.GetShadowCard("miscreant");
+		var olog = scn.GetShadowCard("olog");
+		var spear = scn.GetShadowCard("spear");
+		scn.MoveCardsToDiscard(miscreant, olog, spear);
+
+		scn.StartGame();
+		scn.FreepsPass();
+		scn.ShadowPass();
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		scn.MoveMinionsToTable(gothmog, informant, nertea);
+		scn.SetTwilight(20);
+		scn.FreepsPass();
+
+		// The control: an [orc] Troll played from the discard pile by Isengard Informant comes into play fresh, and
+		// Nertëa offers to exert it to play the Orc Spear on it.
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+		scn.ShadowUseCardAction(informant);
+		assertInZone(Zone.SHADOW_CHARACTERS, olog);
+		assertEquals(0, scn.GetWoundsOn(olog));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(nertea));
+		scn.ShadowDeclineOptionalTrigger();
+		assertInDiscard(spear);
+
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		scn.FreepsPass();
+		assertTrue(scn.ShadowActionAvailable(gothmog));
+		scn.ShadowUseCardAction(gothmog);
+
+		// "Comes into play exhausted": by the time its play is answered the Miscreant cannot exert, so Nertëa
+		// has nothing to offer.
+		assertInZone(Zone.SHADOW_CHARACTERS, miscreant);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(nertea));
+		assertEquals(2, scn.GetWoundsOn(miscreant));
+		assertInDiscard(spear);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }

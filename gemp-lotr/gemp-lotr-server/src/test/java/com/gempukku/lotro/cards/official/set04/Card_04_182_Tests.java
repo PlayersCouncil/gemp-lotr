@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_04_182_Tests
@@ -17,8 +18,16 @@ public class Card_04_182_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "4_182");
-					// put other cards in here as needed for the test case
+					put("troop", "4_182");
+					put("troop2", "4_182");
+					// Battering Ram: an [isengard] machine, a condition; its Shadow and Skirmish abilities used only on purpose
+					put("ram", "5_44");
+					// Uruk Shield Wall: an [isengard] machine, a possession; its trigger answers only an Uruk-hai costing
+					// as many as its tokens, outside a skirmish, about to be wounded
+					put("wall", "102_35");
+					// What Did You Discover?: an [isengard] support-area condition that is no machine; a regroup trigger only
+					put("discover", "4_213");
+					put("savage", "1_151");     // Uruk Savage: an [isengard] Uruk-hai, cost 2, damage +1 and nothing else
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +55,7 @@ public class Card_04_182_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("troop");
 
 		assertEquals("Uruk Crossbow Troop", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +71,125 @@ public class Card_04_182_Tests
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void UrukCrossbowTroopTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void WhenPlayedItMayPlaceAnIsengardTokenOnAMachineOfEitherType() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var troop = scn.GetShadowCard("troop");
+		var ram = scn.GetShadowCard("ram");
+		var wall = scn.GetShadowCard("wall");
+		var discover = scn.GetShadowCard("discover");
+		scn.MoveCardsToHand(troop);
+		scn.MoveCardsToSupportArea(ram, wall, discover);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
 
-		assertEquals(4, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertEquals(0, scn.GetCultureTokensOn(ram));
+		assertEquals(0, scn.GetCultureTokensOn(wall));
+		assertEquals(0, scn.GetCultureTokensOn(discover));
+
+		scn.ShadowPlayCard(troop);
+		assertInZone(Zone.SHADOW_CHARACTERS, troop);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(troop));
+		scn.ShadowAcceptOptionalTrigger();
+
+		// A condition and a possession that are machines; an [isengard] support-area condition that is none.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(ram, wall));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(discover, troop));
+		scn.ShadowChooseCard(wall);
+
+		assertEquals(1, scn.GetCultureTokensOn(wall));
+		assertEquals(0, scn.GetCultureTokensOn(ram));
+		assertEquals(0, scn.GetCultureTokensOn(discover));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void DecliningPlacesNoToken() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var troop = scn.GetShadowCard("troop");
+		var ram = scn.GetShadowCard("ram");
+		var wall = scn.GetShadowCard("wall");
+		scn.MoveCardsToHand(troop);
+		scn.MoveCardsToSupportArea(ram, wall);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		assertEquals(0, scn.GetCultureTokensOn(ram));
+		assertEquals(0, scn.GetCultureTokensOn(wall));
+
+		scn.ShadowPlayCard(troop);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(troop));
+		scn.ShadowDeclineOptionalTrigger();
+
+		assertInZone(Zone.SHADOW_CHARACTERS, troop);
+		assertEquals(0, scn.GetCultureTokensOn(ram));
+		assertEquals(0, scn.GetCultureTokensOn(wall));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void AnotherMinionPlayedAfterItOffersNothingAndASecondCopyOffersOnlyItsOwn() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var troop = scn.GetShadowCard("troop");
+		var troop2 = scn.GetShadowCard("troop2");
+		var savage = scn.GetShadowCard("savage");
+		var ram = scn.GetShadowCard("ram");
+		scn.MoveCardsToHand(troop2, savage);
+		scn.MoveCardsToSupportArea(ram);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+		scn.SetTwilight(12);
+		scn.FreepsPass();
+
+		assertInZone(Zone.SHADOW_CHARACTERS, troop);
+		assertEquals(0, scn.GetCultureTokensOn(ram));
+
+		// Another Uruk-hai played while this one is in play.
+		scn.ShadowPlayCard(savage);
+		assertInZone(Zone.SHADOW_CHARACTERS, savage);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertEquals(0, scn.GetCultureTokensOn(ram));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		// A second copy played: its own offer, and none from the copy already in play.
+		scn.ShadowPlayCard(troop2);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(troop2));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(troop));
+		scn.ShadowAcceptOptionalTrigger();
+
+		// The one machine takes the token unasked, and nothing more is offered.
+		assertEquals(1, scn.GetCultureTokensOn(ram));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void WithNoMachineInPlayNothingIsOffered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var troop = scn.GetShadowCard("troop");
+		var discover = scn.GetShadowCard("discover");
+		scn.MoveCardsToHand(troop);
+		scn.MoveCardsToSupportArea(discover);
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		assertEquals(0, scn.GetCultureTokensOn(discover));
+
+		scn.ShadowPlayCard(troop);
+		assertInZone(Zone.SHADOW_CHARACTERS, troop);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertEquals(0, scn.GetCultureTokensOn(discover));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

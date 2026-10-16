@@ -174,16 +174,17 @@
 					type: discardFromHand
 					forced: false
 					count: 2
+					memorize: discardedCards
 				}
 			]
 			effect: [
 				{
 					type: putCardsFromDiscardIntoHand
-					select: choose(side(free people))
+					select: choose(side(free people),not(memory(discardedCards)))
 				}
 				{
 					type: putCardsFromDiscardIntoHand
-					select: choose(side(shadow))
+					select: choose(side(shadow),not(memory(discardedCards)))
 				}
 			]
 		}

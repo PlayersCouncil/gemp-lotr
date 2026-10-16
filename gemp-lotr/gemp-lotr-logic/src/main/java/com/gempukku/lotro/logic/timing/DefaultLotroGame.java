@@ -16,6 +16,7 @@ import com.gempukku.lotro.logic.PlayerOrder;
 import com.gempukku.lotro.logic.modifiers.ModifiersEnvironment;
 import com.gempukku.lotro.logic.modifiers.ModifiersLogic;
 import com.gempukku.lotro.logic.modifiers.ModifiersQuerying;
+import com.gempukku.lotro.logic.timing.loops.LoopFeedback;
 import com.gempukku.lotro.logic.timing.rules.CharacterDeathRule;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.packs.PackOpener;
@@ -31,7 +32,8 @@ public class DefaultLotroGame implements LotroGame {
     private final ModifiersLogic _modifiersLogic = new ModifiersLogic();
     private PackOpener _packOpener;
     private final DefaultActionsEnvironment _actionsEnvironment;
-    private final UserFeedback _userFeedback;
+    // The game's own feedback, which hands decisions on to the players' feedback (LoopFeedback)
+    private final LoopFeedback _userFeedback;
     private final TurnProcedure _turnProcedure;
     private final ActionStack _actionStack;
     private boolean _cancelled;
@@ -124,10 +126,12 @@ public class DefaultLotroGame implements LotroGame {
         _gameState = new GameState();
         _gameState.setGame(this);
 
+        _userFeedback = new LoopFeedback(this, userFeedback);
+
         CharacterDeathRule characterDeathRule = new CharacterDeathRule(_actionsEnvironment);
         characterDeathRule.applyRule();
 
-        _turnProcedure = new TurnProcedure(this, decks.keySet(), userFeedback, _actionStack,
+        _turnProcedure = new TurnProcedure(this, decks.keySet(), _userFeedback, _actionStack,
                 new PlayerOrderFeedback() {
                     @Override
                     public void setPlayerOrder(PlayerOrder playerOrder, String firstPlayer) {
@@ -162,7 +166,6 @@ public class DefaultLotroGame implements LotroGame {
                         _gameState.initPreGame(preGameInfo, decks, metaSiteBlueprintIds, library, DefaultLotroGame.this);
                     }
                 }, characterDeathRule);
-        _userFeedback = userFeedback;
 
         RuleSet ruleSet = new RuleSet(this, _actionsEnvironment, _modifiersLogic);
         ruleSet.applyRuleSet();
@@ -208,15 +211,18 @@ public class DefaultLotroGame implements LotroGame {
     }
 
     public void startGame() {
-        if (!_cancelled) {
-            _turnProcedure.carryOutPendingActionsUntilDecisionNeeded();
-            _userFeedback.atRest();
-        }
+        carryOutPendingActionsUntilDecisionNeeded();
     }
 
+    /**
+     * Carries the game on until it is waiting on a player's decision, or is over.  A decision asked while a voluntary
+     * loop is being run is answered as the run says, and the game goes on (LoopFeedback).
+     */
     public void carryOutPendingActionsUntilDecisionNeeded() {
         if (!_cancelled) {
-            _turnProcedure.carryOutPendingActionsUntilDecisionNeeded();
+            do {
+                _turnProcedure.carryOutPendingActionsUntilDecisionNeeded();
+            } while (_userFeedback.answerHeldDecision());
             _userFeedback.atRest();
         }
     }

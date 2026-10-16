@@ -343,6 +343,34 @@ def quotes_another(card_id: str, passage: str) -> list:
     return sorted(set(found), key=g.id_sort_key)
 
 
+def _word_set(text: str) -> set:
+    return set(re.findall(r"[a-z0-9]+", plain(text).lower()))
+
+
+def read_as_another(card_id: str, ruling: str) -> list:
+    """For a ruling that names a card by its title alone, where other cards of that title have other texts: the
+    other cards whose game text holds most of the ruling's words where this card's holds half of them or fewer (a
+    Clarification quotes the card's text: Caves of Aglarond 4_352's for 13_186).  [] where no other card has the
+    title, or this card's text is near the ruling's words."""
+    global _title_texts
+    if _title_texts is None:
+        quotes_another(card_id, "")  # fills the table of the texts of each title
+    me = g.card_index().get(card_id)
+    if me is None:
+        return []
+    same = _title_texts.get(norm(me.field("title", "") or ""), {})
+    words = _word_set(ruling)
+    if len(same) < 2 or not words:
+        return []
+    def score(cid):
+        return len(words & _word_set(g.plain_text(g.card_index()[cid].field("gametext", "") or ""))) / len(words)
+    mine = score(card_id) if card_id in same else 0.0
+    if mine > 0.5:  # a reprint's text, or one near it (Drawn to Its Power 11_209 beside 1_211): still this card's
+        return []
+    closer = [cid for cid in same if cid != card_id and same[cid] != same.get(card_id) and score(cid) >= 0.6]
+    return sorted(closer, key=g.id_sort_key)
+
+
 def _quoting(ids: list) -> str:
     return ": quotes %s%s, not this card" % (", ".join(ids[:4]), " and %d more" % (len(ids) - 4) if len(ids) > 4 else "")
 MENTIONS = ("The rest only mention the name: each is a ruling on another card, or a council page about another card, "
@@ -401,6 +429,13 @@ def card_rulings(arg: str, held=None):
         if hit or soft:
             if pc_erratum and kind.strip().lower() == "erratum":
                 kind += " (the original's text)"
+            # A card of no subtitle is named by its title, which another card may share: a ruling whose words are
+            # the other's text is that card's (13_186 was shown 4_352's Clarification, 15_192 7_331's).
+            others = read_as_another(arg, text) if is_id and hit and not soft else []
+            if others and not pc_erratum:
+                other_title.append("### Individual ruling, %s line %d: %s%s\nCards: %s\n%s"
+                                   % (book.name, line_no, kind, _quoting(others), "; ".join(names), text))
+                continue
             named.append("### Individual ruling, %s line %d: %s%s\nCards: %s\n%s"
                          % (book.name, line_no, kind, "" if hit else TITLE_ONLY, "; ".join(names), text))
 

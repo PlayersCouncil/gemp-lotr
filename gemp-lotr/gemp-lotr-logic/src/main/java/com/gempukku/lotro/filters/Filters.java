@@ -10,6 +10,7 @@ import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.game.state.Skirmish;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.PlayUtils;
+import com.gempukku.lotro.logic.effects.PlaySiteEffect;
 import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import com.gempukku.lotro.logic.timing.RuleUtils;
 
@@ -84,6 +85,14 @@ public class Filters {
         return countSpottable(game, spotOverrides, filters) >= count;
     }
 
+    /**
+     * Whether the spotting player can spot this many cards, counting the bonuses to his own count
+     * ({@link #countSpottable(LotroGame, String, Map, Filterable...)}).
+     */
+    public static boolean canSpot(LotroGame game, String spottingPlayer, int count, Map<InactiveReason, Boolean> spotOverrides, Filterable... filters) {
+        return countSpottable(game, spottingPlayer, spotOverrides, filters) >= count;
+    }
+
     public static boolean hasActive(LotroGame game, Filterable... filters) {
         return findFirstActive(game, SpotOverride.NONE, filters) != null;
     }
@@ -135,12 +144,21 @@ public class Filters {
 
     public static int countSpottable(LotroGame game, Filterable... filters) { return countSpottable(game, SpotOverride.NONE, filters); }
     public static int countSpottable(LotroGame game, Map<InactiveReason, Boolean> spotOverrides, Filterable... filters) {
+        return countSpottable(game, null, spotOverrides, filters);
+    }
+
+    /**
+     * The number of cards the spotting player can spot. With one filter, the bonuses to that player's own count are
+     * added ("add 1 to the number of Ents you can spot" raises its owner's count and no other: F-0502); a count made
+     * for no player (null) gets none.
+     */
+    public static int countSpottable(LotroGame game, String spottingPlayer, Map<InactiveReason, Boolean> spotOverrides, Filterable... filters) {
         GetCardsMatchingFilterVisitor matchingFilterVisitor = new GetCardsMatchingFilterVisitor(game, Filters.and(filters, Filters.spottable));
         game.getGameState().iterateActiveCards(matchingFilterVisitor, spotOverrides);
         int result = matchingFilterVisitor.getCounter();
         //TODO: make this less dependent on how the definition is arranged
-        if (filters.length == 1)
-            result += game.getModifiersQuerying().getSpotBonus(game, filters[0]);
+        if (filters.length == 1 && spottingPlayer != null)
+            result += game.getModifiersQuerying().getSpotBonus(game, filters[0], spottingPlayer);
         return result;
     }
 
@@ -591,6 +609,55 @@ public class Filters {
     public static final Filter allyAtHome = Filters.and(
             CardType.ALLY,
             (Filter) (game, physicalCard) -> RuleUtils.isAllyAtHome(physicalCard, game.getGameState().getCurrentSiteNumber(), game.getGameState().getCurrentSiteBlock()));
+
+    /**
+     * A card at a site the given filter accepts: "while bearer is at a plains site", "heal that Man if at a
+     * plains" (the definition word atSite(...)).  CR 4.2 "ally": "Each ally in your support area is considered to
+     * be at his home site.  When your fellowship is at your ally's home site, that ally is considered to be at the
+     * same site as the fellowship."  So an ally is at each of his home sites that lies on the adventure path
+     * (RuleUtils.getAllyHomeSitesOnThePath), wherever the fellowship is, and in a skirmish away from home as well
+     * (Ketura on F-0503); an ally with no home on the path (a home not yet laid, a path of another block, a
+     * Shadows path, where "allies have no home sites") is at no site and is at a site of no terrain.  Every other
+     * card is at the site the fellowship is at.  A card borne is where the card at the bottom of its bearers is,
+     * and an ally is known by what is printed on him, so a hindered ally is still at his home site (Q-0252).
+     * The site is asked the filter as it stands, a terrain a card has given it included.  F-0518, engine pass 48.
+     */
+    public static Filter atSite(final Filterable siteFilter) {
+        return (game, physicalCard) -> {
+            PhysicalCard at = physicalCard;
+            // A card is borne by one card at most, so the walk ends; the count is against a chain that is broken.
+            for (int depth = 0; at.getAttachedTo() != null && depth < 50; depth++)
+                at = at.getAttachedTo();
+            if (at.getBlueprint().getCardType() == CardType.ALLY) {
+                for (PhysicalCard homeSite : RuleUtils.getAllyHomeSitesOnThePath(game, at)) {
+                    if (accepts(game, homeSite, siteFilter))
+                        return true;
+                }
+                return false;
+            }
+            final PhysicalCard currentSite = game.getGameState().getCurrentSite();
+            return currentSite != null && accepts(game, currentSite, siteFilter);
+        };
+    }
+
+    /**
+     * A site on the adventure path of whose number the given player's adventure deck holds a site the given filter
+     * accepts: the site a card that replaces it "with your site of the same number" would lay
+     * (PlaySiteEffect.findSitesToPlay, asked as the definition's playSite asks it, the block in the filter).  The
+     * definition word sameNumberInYourAdventureDeck(...), the player the one whose action it is.  Paths Seldom
+     * Trodden 1_222, Úlairë Nelya 1_233 and Dark Places 2_55 lay only their own block's site, on any path, and are
+     * not offered where there is none to lay (Q-0327, the shape of F-0379).  What would bar the replacing at
+     * resolution ("cannot be replaced", a bar on playing sites) is not asked here.  A site with no number (one
+     * not laid) is not accepted; a controlled site keeps its number and is.
+     */
+    public static Filter sameNumberInAdventureDeck(final String playerId, final Filterable deckSiteFilter) {
+        return (game, physicalCard) -> {
+            final Integer siteNumber = physicalCard.getSiteNumber();
+            if (physicalCard.getBlueprint().getCardType() != CardType.SITE || siteNumber == null)
+                return false;
+            return !PlaySiteEffect.findSitesToPlay(game, playerId, null, siteNumber, deckSiteFilter).isEmpty();
+        };
+    }
 
     /**
      * A character a card says "may not participate in archery fire" (Streets of Edoras). Participating has

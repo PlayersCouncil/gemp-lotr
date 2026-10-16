@@ -34,6 +34,8 @@ The unit test rig: a virtual table with two made-up players, where every card th
 - `void InitializeGameWithDecks(Map<String, LotroDeck> decks, String formatName, String freepsMetaSiteId, String shadowMetaSiteId, Map<String, RTMDGameInfo.LeaguePlacement> playerPlacements)` — Starts up a game of LOTR-TCG with the given decks and format.  `decks`: A map of decks for each player in the game; key is the player name.  `formatName`: Name of the format this table should be following.  `freepsMetaSiteId`: Blueprint ID of the Race to Mount Doom meta-sites used by player 1, or else null  `shadowMetaSiteId`: Blueprint ID of the Race to Mount Doom meta-sites used by player 2, or else null  `playerPlacements`: Race to Mount Doom league placements per player (keyed by P1() / P2()), or else null
 - `void UseTestBoosters()` — When testing the live mid-game booster pack opening, we obviously want to be able to have deterministic booster pack results, which requires that we override the default pack opener with a custom one.
 - `void UseBoosterOf(String... blueprintIds)` — Has the game's pack opener offer one pack, "Test - Booster", whose contents are exactly the cards given, in the order given, every time it is opened: the pack for a test that needs a card the fixed test pack of UseTestBoosters() does not hold.
+- `void MarkGameEvents()` — Starts reading what the game sends from here: joins, for each seat, a channel to the game as the replay recorder joins one for each player (GameRecorder.recordGame: a GameCommunicationChannel that is no live connection, so it cuts nobody off), and drops any joined by an earlier call.
+- `List<GameEvent> GetGameEventsSinceMark(String player)`
 
 ## The table itself
 
@@ -120,9 +122,9 @@ While the ability to programmatically execute games is a boon to testing efforts
 - `void MoveCardsToBottomOfFreepsDeck(String...names)` — Puts the Free Peoples player's named cards on the bottom of that player's draw deck one at a time, in the order given, so the last card named ends as the bottom card.
 - `void MoveCardsToBottomOfShadowDeck(String...names)` — Puts the Shadow player's named cards on the bottom of that player's draw deck one at a time, in the order given, so the last card named ends as the bottom card.
 - `void MoveCardsToBottomOfDeck(PhysicalCardImpl...cards)` — Puts the given cards on the bottom of their owners' draw decks one at a time, in the order given, so the last card named ends as the bottom card.
-- `void MoveCardsToFreepsDiscard(String...names)`
-- `void MoveCardsToShadowDiscard(String...names)`
-- `void MoveCardsToDiscard(PhysicalCardImpl...cards)`
+- `void MoveCardsToFreepsDiscard(String...names)` — Puts the Free Peoples player's named cards in his discard pile, as `MoveCardsToDiscard` does.
+- `void MoveCardsToShadowDiscard(String...names)` — Puts the Shadow player's named cards in his discard pile, as `MoveCardsToDiscard` does.
+- `void MoveCardsToDiscard(PhysicalCardImpl...cards)` — Puts the given cards in their owners' discard piles, from wherever they were, without discarding them: nothing answers it.
 - `void MoveCardToAdventurePath(PhysicalCardImpl card)` — Lays the given card on the adventure path as the site after the one the fellowship is at, whatever number is printed on it and whatever block it is of: its site number becomes the current site's plus one.
 - `void MoveCardsToAdventureDeck(PhysicalCardImpl...cards)`
 - `void SetFreepsAdventureDeck(PhysicalCardImpl...sites)` — Makes the Free Peoples player's (player 1's) adventure deck exactly the given sites.
@@ -161,7 +163,7 @@ While the ability to programmatically execute games is a boon to testing efforts
 These functions are for progressing through the game itself.  For instance, if your test is really about battle attrition and the phases before that point are just in the way, here you will find functions to skip past phases so that your test can remain mostly clean of irrelevant procedure. Do be warned that these functions assume a best-case scenario that can be safely passed through; if a card has a required decision that does not have an obvious "decline" option, then these functions will fail and you will have to do it manually.  If you actually do need such a pestering card on the table, it is advised that you only place it at the last possible second rather than putting it down early and requiring you to do all the manual procedure.
 
 - `void SkipToArcheryWounds()`
-- `void SkipToAssignments()`
+- `void SkipToAssignments()` — Plays on into the assignment phase (`SkipToPhase`) and passes its actions for both players, so that it rests at the Free Peoples player's "Assign minions" decision, nothing assigned.
 - `void FreepsResolveSkirmish(PhysicalCardImpl comp)  ·  ShadowResolveSkirmish`
 - `void SkipToMovementDecision()` — Stops at the regroup "do you want to make another move?" decision of whichever player's turn is under way or, where the mover is not asked that, at his reconcile or in the other player's fellowship phase.
 - `void SkipToOtherPlayersTurn()` — Plays out the rest of the turn that is under way and stops at the start of the other player's fellowship phase; the moving fellowship declines the optional regroup move.
@@ -218,6 +220,9 @@ Actions are top-level decisions that involve legal game operations available to 
 - `String FreepsActionNoEffect(PhysicalCardImpl card)  ·  ShadowActionNoEffect` — Reads the no-effect flag of one action of one particular card in the choice of actions that player is facing.  Here `text` is null.
 - `String FreepsActionNoEffect(PhysicalCardImpl card, String text)  ·  ShadowActionNoEffect` — Reads the no-effect flag of one action of one particular card in the choice of actions that player is facing.
 - `String CardActionNoEffect(String player, PhysicalCardImpl card, String text)` — Reads the no-effect flag of one action of one particular card in the choice of actions the given player is facing.
+- `boolean FreepsActionLoopBanned(PhysicalCardImpl card)  ·  ShadowActionLoopBanned` — Reads the "loopBanned" flag of one action of one particular card in the choice of actions that player is facing: whether it is a use of an ability a voluntary loop used, barred to the end of the phase (CR 4.2 "loops"; ActionsEnvironment.barUntilEndOfPhase).  Here `text` is null.
+- `boolean FreepsActionLoopBanned(PhysicalCardImpl card, String text)  ·  ShadowActionLoopBanned` — Reads the "loopBanned" flag of one action of one particular card in the choice of actions that player is facing: whether it is a use of an ability a voluntary loop used, barred to the end of the phase (CR 4.2 "loops"; ActionsEnvironment.barUntilEndOfPhase).
+- `boolean CardActionLoopBanned(String player, PhysicalCardImpl card, String text)` — Reads the "loopBanned" flag of one action of one particular card in the choice of actions the given player is facing: whether it is a use of an ability a voluntary loop used, barred to the end of the phase (CR 4.2 "loops"; ActionsEnvironment.barUntilEndOfPhase).
 - `void FreepsTransferCard(PhysicalCardImpl card)  ·  ShadowTransferCard`
 - `void FreepsPlayCard(PhysicalCardImpl card)  ·  ShadowPlayCard` — Causes that player to play that card from hand as if they had clicked it in the UI.
 - `boolean FreepsHasDiscardToHealAvailable()` — Causes the Free Peoples player to select a unique character in hand, which will then be discarded to heal a copy of that character in play.
@@ -241,6 +246,7 @@ A set of functions within the test rig that pertain to decisions.  Decisions in 
 - `boolean AwaitingFellowshipPhaseActions()`
 - `void FreepsRefreshDecision()  ·  ShadowRefreshDecision` — Has that player's pending choice of phase actions worked out afresh and sent again, so that it offers what the board allows now.
 - `void RefreshDecision(String player)` — Has the given player's pending choice of phase actions worked out afresh and sent again.
+- `void RefreshPendingPhaseActions()` — Has every pending choice of phase actions ("Play ...
 - `boolean AwaitingShadowPhaseActions()`
 - `boolean AwaitingFreepsManeuverPhaseActions()`
 - `boolean AwaitingShadowManeuverPhaseActions()`
@@ -344,6 +350,14 @@ Decisions will always come with at least one choice, even if that single choice 
 - `boolean HasCardChoiceAvailable(String player, PhysicalCardImpl card, boolean selectable)` — Checks whether the given card is one of the options being presented to the player.  `player`: The player currently presented with a decision  `card`: The card to search for  `selectable`: True if we are looking for a selectable card, false otherwise
 - `void FreepsChooseCardIDFromSelection(PhysicalCardImpl...cards)  ·  ShadowChooseCardIDFromSelection` — Causes that player to issue a decision response composed of a comma-separated list of the provided card IDs.
 - `void ChooseCardIDFromSelection(String player, PhysicalCardImpl...cards)` — Causes the given player to issue a decision response composed of a comma-separated list of the provided card IDs.
+- `void FreepsNameLoopIterations(int iterations)  ·  ShadowNameLoopIterations` — Has that player (player 1) answer the loop step's first prompt (CR 4.2 "loops", LoopNegotiation): the number of more times a loop that has been found will run.
+- `void NameLoopIterations(String player, int iterations)` — Has the given player answer the loop step's first prompt: the number of more times the loop will run.
+- `void ShadowAgreeToLoop()` — Has the Shadow player (player 2) agree to the number of iterations the Free Peoples player named for a loop (CR 4.2 "loops"): the loop goes that many times, and the Free Peoples player takes the next action.
+- `void FreepsAgreeToLoop()` — Has the Free Peoples player (player 1) agree to a loop's iterations, as the Shadow player of player 2's turn.
+- `void AgreeToLoop(String player)` — Has the given player agree to the number of iterations named for a loop.
+- `void ShadowLowerLoop(int iterations)` — Has the Shadow player (player 2) choose a lower number of iterations for a loop than the Free Peoples player named (CR 4.2 "loops"), and name it: the loop goes that many times, and the Shadow player takes the next action.
+- `void FreepsLowerLoop(int iterations)` — Has the Free Peoples player (player 1) choose and name a lower number of iterations for a loop, as the Shadow player of player 2's turn.
+- `void LowerLoop(String player, int iterations)` — Has the given player choose a lower number of iterations for a loop and name it.
 
 ## Assignments and skirmishes
 
@@ -555,10 +569,11 @@ This interface holds the handful of accessors that every other virtual table int
 - `String P1()`
 - `String P2()`
 - `SeatChannel seatChannel(String player)` — What the table has kept of all that the given player's seat has been sent by the game.
+- `void RefreshPendingPhaseActions()` — Has every pending choice of phase actions worked out afresh, and does nothing else.
 - `PhysicalCardImpl GetFreepsCard(String cardName)`
 - `PhysicalCardImpl GetShadowCard(String cardName)`
 - `PhysicalCardImpl GetCard(String player, String cardName)`
 - `void Verify(boolean condition, String message)` — A sanity check on the table's own bookkeeping, used where a procedure has to end up in a known state for whatever follows it to make sense.
 
 ---
-453 entries, 217 of them with no description in the source.
+468 entries, 214 of them with no description in the source.

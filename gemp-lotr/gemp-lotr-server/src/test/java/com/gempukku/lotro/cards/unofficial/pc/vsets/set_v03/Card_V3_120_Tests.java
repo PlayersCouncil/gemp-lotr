@@ -149,6 +149,7 @@ public class Card_V3_120_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(runner);
+		scn.FreepsRefreshDecision();
 
 		assertTrue(scn.IsHindered(pippin));
 		assertTrue(scn.IsHindered(hinderedArmory));

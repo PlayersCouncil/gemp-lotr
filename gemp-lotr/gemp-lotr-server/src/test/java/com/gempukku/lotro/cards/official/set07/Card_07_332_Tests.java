@@ -281,6 +281,7 @@ public class Card_07_332_Tests
 		scn.SkipToPhase(Phase.MANEUVER);
 		// Uruk-hai Armory, printed cost 1, is the card to be revealed; in hand it would cost 3.
 		scn.MoveCardsToTopOfDeck(armory);
+		scn.FreepsRefreshDecision();
 
 		assertTrue(scn.FreepsActionAvailable(catapult));
 		scn.FreepsUseCardAction(catapult);

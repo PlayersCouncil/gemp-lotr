@@ -19,7 +19,23 @@ public class Card_01_268_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "1_268");
+					put("inquisitor", "1_268");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetDiscardScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("inquisitor1", "1_268");
+					put("inquisitor2", "1_268");
+					put("slayer", "3_93");      // Morgul Slayer: [sauron] Orc, cost 2, site 6; a regroup ability only, nothing on being played
+					put("guard1", "1_7");       // Dwarf Guard: here only cards in the Free Peoples hand
+					put("guard2", "1_7");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -60,7 +76,7 @@ public class Card_01_268_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("inquisitor");
 
 		assertEquals("Orc Inquisitor", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -84,6 +100,7 @@ public class Card_01_268_Tests
 		// The Free Peoples player's own copy of the minion is the one card in his hand.
 		var spare = scn.GetFreepsCard("inquisitor1");
 		scn.MoveCardsToHand(inquisitor1, inquisitor2, spare);
+		assertInHand(spare);
 
 		scn.StartGame();
 		// Each Inquisitor costs 3 + 2 for roaming.
@@ -105,6 +122,100 @@ public class Card_01_268_Tests
 		scn.ShadowPlayCard(inquisitor2);
 		assertInZone(Zone.SHADOW_CHARACTERS, inquisitor2);
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable(inquisitor2));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void WhenPlayedItMayMakeTheFreePeoplesPlayerDiscardACardAtRandom() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetDiscardScenario();
+
+		var inquisitor = scn.GetShadowCard("inquisitor1");
+		var slayer = scn.GetShadowCard("slayer");
+		scn.MoveCardsToHand(inquisitor, slayer);
+		scn.MoveCardsToFreepsHand("guard1", "guard2");
+		assertInHand(slayer);
+
+		scn.StartGame();
+		// 3 to play + 2 roaming (a site 6 minion at site 2)
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertEquals(2, scn.GetFreepsHandCount());
+		assertEquals(0, scn.GetFreepsDiscardCount());
+		assertEquals(2, scn.GetShadowHandCount());
+		assertEquals(0, scn.GetShadowDiscardCount());
+
+		scn.ShadowPlayCard(inquisitor);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(inquisitor));
+		scn.ShadowChooseOptionalTrigger(inquisitor);
+
+		// One of his two Guards, at random: he is not asked which.
+		assertEquals(1, scn.GetFreepsHandCount());
+		assertEquals(1, scn.GetFreepsDiscardCount());
+		// The Shadow player's own hand is not touched.
+		assertEquals(1, scn.GetShadowHandCount());
+		assertInHand(slayer);
+		assertEquals(0, scn.GetShadowDiscardCount());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void TheShadowPlayerMayDeclineTheDiscard() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetDiscardScenario();
+
+		var inquisitor = scn.GetShadowCard("inquisitor1");
+		scn.MoveCardsToHand(inquisitor);
+		scn.MoveCardsToFreepsHand("guard1", "guard2");
+
+		scn.StartGame();
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		assertEquals(2, scn.GetFreepsHandCount());
+		assertEquals(0, scn.GetFreepsDiscardCount());
+
+		scn.ShadowPlayCard(inquisitor);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(inquisitor));
+		scn.ShadowDeclineOptionalTrigger();
+		assertEquals(2, scn.GetFreepsHandCount());
+		assertEquals(0, scn.GetFreepsDiscardCount());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void OnlyItsOwnPlaySetsItOff() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetDiscardScenario();
+
+		var inquisitor1 = scn.GetShadowCard("inquisitor1");
+		var inquisitor2 = scn.GetShadowCard("inquisitor2");
+		var slayer = scn.GetShadowCard("slayer");
+		scn.MoveCardsToHand(inquisitor2, slayer);
+		scn.MoveCardsToFreepsHand("guard1", "guard2");
+
+		scn.StartGame();
+		scn.SetTwilight(20);
+		scn.FreepsPass();
+		// Put into play, not played: no offer.
+		scn.MoveMinionsToTable(inquisitor1);
+		scn.ShadowRefreshDecision();
+		assertInZone(Zone.SHADOW_CHARACTERS, inquisitor1);
+		assertEquals(2, scn.GetFreepsHandCount());
+
+		// Another [sauron] Orc played while an Inquisitor is in play.
+		scn.ShadowPlayCard(slayer);
+		assertInZone(Zone.SHADOW_CHARACTERS, slayer);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertEquals(2, scn.GetFreepsHandCount());
+
+		// The second copy played offers its own discard, and the first makes no offer.
+		scn.ShadowPlayCard(inquisitor2);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(inquisitor2));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(inquisitor1));
+		scn.ShadowChooseOptionalTrigger(inquisitor2);
+		assertEquals(1, scn.GetFreepsHandCount());
+		assertEquals(1, scn.GetFreepsDiscardCount());
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

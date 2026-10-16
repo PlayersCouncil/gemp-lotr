@@ -30,12 +30,15 @@ import java.util.List;
 public class PlayCardFromDrawDeck implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "select", "on", "discount", "mustExist", "memorize", "shuffle", "showAll");
+        FieldUtils.validateAllowedFields(effectObject, "select", "on", "discount", "mustExist", "memorize", "shuffle", "showAll", "exhausted");
 
         final String select = FieldUtils.getString(effectObject.get("select"), "select");
         final String onFilter = FieldUtils.getString(effectObject.get("on"), "on");
         final ValueSource costModifierSource = ValueResolver.resolveEvaluator(effectObject.get("discount"), 0, environment);
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
+        // "It comes into play exhausted" (F-0500): the card is placed exhausted, before its play is answered.  Only a
+        // card played to the table can be a character; anything else is played as it would be.
+        final boolean exhausted = FieldUtils.getBoolean(effectObject.get("exhausted"), "exhausted", false);
         boolean shuffle = FieldUtils.getBoolean(effectObject.get("shuffle"), "shuffle");
         boolean showAll = FieldUtils.getBoolean(effectObject.get("showAll"), "showAll");
 
@@ -92,6 +95,8 @@ public class PlayCardFromDrawDeck implements EffectAppenderProducer {
                             Filterable onFilterable = (onFilterableSource != null) ? onFilterableSource.getFilterable(actionContext) : Filters.any;
 
                             final CostToEffectAction playCardAction = PlayUtils.getPlayCardAction(actionContext.getGame(), cardsToPlay.iterator().next(), costModifier, onFilterable, false);
+                            if (exhausted && playCardAction instanceof PlayPermanentAction playPermanentAction)
+                                playPermanentAction.setComesIntoPlayExhausted();
                             // showAll is the player looking through the whole deck for the card.  A card that goes
                             // onto a bearer and an event shuffle the deck they leave in any case; a card played to
                             // the table or the support area does so only when told the deck was looked through.

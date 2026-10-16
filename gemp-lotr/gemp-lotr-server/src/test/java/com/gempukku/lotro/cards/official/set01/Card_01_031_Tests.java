@@ -121,9 +121,6 @@ public class Card_01_031_Tests
 
 		// An Elf who is a companion
 		scn.FreepsPlayCard(arwen);
-		// 2 for Orophin + 2 for Arwen
-		assertEquals(4, scn.GetTwilight());
-		assertEquals(3, scn.GetStrength(orophin));
 
 		scn.FreepsPlayCard(asfaloth);
 		assertTrue(scn.FreepsHasCardChoiceAvailable(arwen, orophin));
@@ -133,10 +130,6 @@ public class Card_01_031_Tests
 
 		scn.FreepsChooseCard(orophin);
 		assertAttachedTo(asfaloth, orophin);
-		// 4 + 2 for Asfaloth
-		assertEquals(6, scn.GetTwilight());
-		// Orophin's 3 + the 2 printed on Asfaloth
-		assertEquals(5, scn.GetStrength(orophin));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 

@@ -83,6 +83,7 @@ public class Card_V1_049_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(warden, swordsman, troop, mouth);
+		scn.FreepsRefreshDecision();
 		scn.AddBurdens(3);
 		// Tokens that are not burdens.
 		scn.AddThreats(2);
@@ -129,6 +130,7 @@ public class Card_V1_049_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(warden, swordsman, troop, mouth);
+		scn.FreepsRefreshDecision();
 		scn.AddBurdens(5);
 		// Tokens that are not burdens.
 		scn.AddThreats(2);

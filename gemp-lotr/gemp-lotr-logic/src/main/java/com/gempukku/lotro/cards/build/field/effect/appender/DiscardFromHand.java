@@ -35,8 +35,13 @@ public class DiscardFromHand implements EffectAppenderProducer {
 
         MultiEffectAppender result = new MultiEffectAppender();
 
+        // A forced discard from a hand its owner is protected from ("Shadow cards may not discard cards from your
+        // hand", Frodo, Courteous Halfling 4_301 and Frodo, Little Master 19_28) has no card to be chosen: none of
+        // them can be discarded, so nobody is asked for one (F-0514, F-0116), as ChooseAndDiscardCardsFromHandEffect
+        // already asks nothing.  The bar is read as the choice comes up, which is where DiscardCardsFromHandEffect
+        // would read it.
         EffectAppender cardResolver = CardResolver.resolveCardsInHand(select,
-                actionContext -> Filters.not(actionContext.getSource()),
+                actionContext -> isBarred(actionContext, forced, handSource) ? Filters.none : Filters.not(actionContext.getSource()),
                 countSource, memorize, player, hand, "Choose cards from hand to discard", true, environment);
 
         EffectUtils.validatePreEvaluate(cost, effectObject, handSource, playerSource, countSource, cardResolver);
@@ -61,16 +66,32 @@ public class DiscardFromHand implements EffectAppenderProducer {
                                 && !game.getModifiersQuerying().canLookOrRevealCardsInHand(game, handPlayer, choosingPlayer))
                             return false;
 
-                        return (!forced || game.getModifiersQuerying().canDiscardCardsFromHand(game, handPlayer, actionContext.getSource()));
+                        return !isBarred(actionContext, forced, handSource);
                     }
                 });
 
         // Taught for Q-0224 (IdleOffers): with no card in that hand for the choice to be made from, nothing is
-        // discarded ("you may discard up to 2 cards from hand", the hand empty).  A choice it is a branch of
-        // hears that too, except of the whole hand: "discard your hand" with none in it is a real choice
-        // (Ketura on Q-0255, Pelennor Flat 7_345).
-        final EffectAppender taught = TaughtForecast.actsOnWhatItFindsInHand(result, handSource, cardResolver);
+        // discarded ("you may discard up to 2 cards from hand", the hand empty), nor from a hand this card may not
+        // discard from (Q-0231, F-0514): what DiscardCardsFromHandEffect itself asks before it discards, as
+        // DiscardCardAtRandomFromHand's forecast knows it.  The bar is no secret of the hand's, so it is said of
+        // another player's hand too.  A choice it is a branch of hears that, except of the whole hand: "discard
+        // your hand" with none in it is a real choice (Ketura on Q-0255, Pelennor Flat 7_345).  What the bar adds
+        // here is exercised by no printed card (engine pass 46): the two cards that lay it bar Shadow cards, and no
+        // Shadow card's forced discard from hand is an optional trigger or ability that pays nothing, or a branch
+        // of a choice (1_120, 2_91, 3_87, 3_104, 12_80, 31_36 are events, required triggers or paid abilities).
+        final EffectAppender taught = TaughtForecast.actsOnWhatItFindsInHand(result, handSource, cardResolver,
+                actionContext -> isBarred(actionContext, forced, handSource));
         return select.toLowerCase().startsWith("all(") ? TaughtForecast.forOffersOnly(taught) : taught;
+    }
+
+    // Whether a forced discard from the hand is barred for the card doing it (canDiscardCardsFromHand).  A discard
+    // the player chooses to make is never barred (CR 4.2 line 2480: "If a Shadow card gives you a choice, you may
+    // choose to discard"; Q-0171, F-0205).
+    private static boolean isBarred(ActionContext actionContext, boolean forced, PlayerSource handSource) {
+        if (!forced)
+            return false;
+        final LotroGame game = actionContext.getGame();
+        return !game.getModifiersQuerying().canDiscardCardsFromHand(game, handSource.getPlayer(actionContext), actionContext.getSource());
     }
 
 }

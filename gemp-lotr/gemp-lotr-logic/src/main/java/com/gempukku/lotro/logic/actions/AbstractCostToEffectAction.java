@@ -1,5 +1,6 @@
 package com.gempukku.lotro.logic.actions;
 
+import com.gempukku.lotro.cards.build.ActionSource;
 import com.gempukku.lotro.common.Timeword;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.effects.DiscountEffect;
@@ -20,6 +21,7 @@ public abstract class AbstractCostToEffectAction implements CostToEffectAction {
 
     private String text;
     private String offeredFor;
+    private ActionSource ability;
 
     private Timeword _actionTimeword;
     private String _performingPlayer;
@@ -112,6 +114,16 @@ public abstract class AbstractCostToEffectAction implements CostToEffectAction {
     @Override
     public String getOfferedFor() {
         return offeredFor;
+    }
+
+    @Override
+    public void setAbility(ActionSource ability) {
+        this.ability = ability;
+    }
+
+    @Override
+    public ActionSource getAbility() {
+        return ability;
     }
 
     protected boolean isCostFailed() {

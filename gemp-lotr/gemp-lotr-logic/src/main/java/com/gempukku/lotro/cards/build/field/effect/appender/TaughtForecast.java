@@ -11,6 +11,7 @@ import com.gempukku.lotro.logic.actions.CostToEffectAction;
 
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * For the rule of Q-0224 (IdleOffers), which withholds an offer that pays nothing and would do nothing: an effect
@@ -69,9 +70,21 @@ public final class TaughtForecast implements EffectAppender {
      * from whether an offer is made.
      */
     public static EffectAppender actsOnWhatItFindsInHand(EffectAppender effect, PlayerSource hand, EffectAppender cardResolver) {
+        return actsOnWhatItFindsInHand(effect, hand, cardResolver, actionContext -> false);
+    }
+
+    /**
+     * The same, for an effect that a rule may bar from that hand as a whole ("Shadow cards may not discard cards
+     * from your hand", F-0514): while it is barred it does nothing, whoever's hand it is, since a bar in force is
+     * no secret of the hand's.
+     */
+    public static EffectAppender actsOnWhatItFindsInHand(EffectAppender effect, PlayerSource hand, EffectAppender cardResolver,
+                                                         Predicate<ActionContext> barred) {
         return teach(effect, actionContext -> {
             final String handPlayer = hand.getPlayer(actionContext);
             if (actionContext.getGame().getGameState().getHand(handPlayer).isEmpty())
+                return EffectForecast.NOTHING;
+            if (barred.test(actionContext))
                 return EffectForecast.NOTHING;
             if (!handPlayer.equals(actionContext.getPerformingPlayer()))
                 return EffectForecast.UNKNOWN;

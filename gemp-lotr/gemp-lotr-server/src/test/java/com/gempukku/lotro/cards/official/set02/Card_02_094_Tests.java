@@ -83,6 +83,7 @@ public class Card_02_094_Tests
 		scn.StartGame();
 		scn.AttachCardsTo(frodo, verily);
 		scn.MoveCardsToTopOfDeck(sword);
+		scn.FreepsRefreshDecision();
 
 		assertAttachedTo(verily, frodo);
 		assertEquals(0, scn.GetBurdens());

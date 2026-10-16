@@ -147,6 +147,7 @@ public class Card_02_022_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(savage);
+		scn.FreepsRefreshDecision();
 
 		assertEquals(0, scn.GetTwilight());
 		// A spell event: 3 - 1.

@@ -132,7 +132,7 @@ def now_block():
     lines.append("- Parked cards: %s." % (", ".join(parked) or "none"))
     props = STATE / "orchestrator/proposals.md"
     if props.is_file():
-        n = sum(1 for x in props.read_text(encoding="utf-8").split("\n") if " | " in x and not x.startswith("#"))
+        n = sum(1 for x in props.read_text(encoding="utf-8").split("\n") if x.startswith("- ") or (" | " in x and not x.startswith("#")))
         lines.append("- `orchestrator/proposals.md`: %d line(s) from landers and engine agents not yet gone through." % n)
     lines += ["<!-- now:end -->"]
     return "\n".join(lines)

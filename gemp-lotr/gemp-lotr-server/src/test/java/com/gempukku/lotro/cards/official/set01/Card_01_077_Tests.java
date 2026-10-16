@@ -21,8 +21,11 @@ public class Card_01_077_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "1_77");
-					// put other cards in here as needed for the test case
+					put("folly", "1_77");
+					put("gimli", "1_13");       // Gimli, Son of Gloin: [dwarven] Dwarf companion, vitality 3, a skirmish ability only
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion, vitality 4, a maneuver ability only
+					put("legolas", "1_50");     // Legolas, Greenleaf: [elven] Elf companion, vitality 3, an archery ability only
+					put("bounder", "1_286");    // Bounder: [shire] Hobbit ally, vitality 2; able to exert, and no companion
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -61,7 +64,7 @@ public class Card_01_077_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("folly");
 
 		assertEquals("Let Folly Be Our Cloak", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -69,7 +72,7 @@ public class Card_01_077_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertTrue(scn.HasTimeword(card, Timeword.FELLOWSHIP));
+		assertTrue(scn.HasTimeword(card, Timeword.FELLOWSHIP));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
@@ -99,6 +102,9 @@ public class Card_01_077_Tests
 		scn.RemoveWoundsFromChar(frodo, 3);
 		scn.RemoveWoundsFromChar(aragorn, 3);
 		scn.FreepsRefreshDecision();
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(3, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(folly));
 		scn.FreepsPlayCard(folly);
 
@@ -113,18 +119,82 @@ public class Card_01_077_Tests
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void LetFollyBeOurCloakTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void OnlyCompanionsAbleToExertAreOfferedAndOneExertingRemovesOne() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var folly = scn.GetFreepsCard("folly");
+		var frodo = scn.GetRingBearer();
+		var gimli = scn.GetFreepsCard("gimli");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var legolas = scn.GetFreepsCard("legolas");
+		var bounder = scn.GetFreepsCard("bounder");
+		scn.MoveCompanionsToTable(gimli, aragorn, legolas);
+		// An ally can exert as well as anyone, and is no companion
+		scn.MoveAlliesToTable(bounder);
+		// Legolas has vitality 3: with 2 wounds he is exhausted and cannot exert
+		scn.AddWoundsToChar(legolas, 2);
+		scn.MoveCardsToHand(folly);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SetTwilight(5);
+		scn.FreepsRefreshDecision();
 
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(2, scn.GetWoundsOn(legolas));
+		assertEquals(0, scn.GetWoundsOn(bounder));
+		assertEquals(5, scn.GetTwilight());
+		assertTrue(scn.FreepsPlayAvailable(folly));
+
+		scn.FreepsPlayCard(folly);
+		// The Ring-bearer and two companions of other cultures and races can exert; X is at least 1
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, gimli, aragorn));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(legolas, bounder));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		assertEquals(3, scn.FreepsGetChoiceMax());
+		scn.FreepsChooseCards(gimli);
+
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(2, scn.GetWoundsOn(legolas));
+		assertEquals(0, scn.GetWoundsOn(bounder));
+		// The event costs nothing: 5 - 1 removed
+		assertEquals(4, scn.GetTwilight());
+		assertInDiscard(folly);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void XIsNotHeldToTheTwilightInThePool() throws DecisionResultInvalidException, CardNotFoundException {
+		// X is what is paid, whatever it buys: two companions may exert to empty a pool of 1.
+		var scn = GetScenario();
+
+		var folly = scn.GetFreepsCard("folly");
+		var frodo = scn.GetRingBearer();
+		var gimli = scn.GetFreepsCard("gimli");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(gimli, aragorn);
+		scn.MoveCardsToHand(folly);
+
+		scn.StartGame();
+		scn.SetTwilight(1);
+		scn.FreepsRefreshDecision();
+
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetTwilight());
+		assertTrue(scn.FreepsPlayAvailable(folly));
+		scn.FreepsPlayCard(folly);
+		assertEquals(3, scn.FreepsGetChoiceMax());
+		scn.FreepsChooseCards(gimli, aragorn);
+
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertEquals(0, scn.GetTwilight());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

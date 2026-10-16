@@ -355,11 +355,7 @@
 					select: choose(companion)
 					showAll: true
 					shuffle: true
-					memorize: playedCompanion
-				}
-				{
-					type: Exhaust
-					select: memory(playedCompanion)
+					exhausted: true
 				}
 			]
 		}

@@ -57,6 +57,12 @@ public interface TableBase {
 	 */
 	SeatChannel seatChannel(String player);
 
+	/**
+	 * Has every pending choice of phase actions worked out afresh, and does nothing else.  Declared here so that the
+	 * cheats of ZoneManipulation can call it; it is Decisions' (see Decisions.RefreshPendingPhaseActions).
+	 */
+	void RefreshPendingPhaseActions();
+
 	PhysicalCardImpl GetFreepsCard(String cardName);
 	PhysicalCardImpl GetShadowCard(String cardName);
 	PhysicalCardImpl GetCard(String player, String cardName);

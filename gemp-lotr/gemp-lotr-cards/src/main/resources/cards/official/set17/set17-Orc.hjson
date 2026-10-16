@@ -805,10 +805,11 @@
 					type: discardFromHand
 					forced: false
 					select: choose(culture(orc))
+					memorize: discardedCard
 				}
 				effect: {
 					type: playCardFromDiscard
-					select: choose(culture(orc),mount)
+					select: choose(culture(orc),mount,not(memory(discardedCard)))
 				}
 			}
 		]

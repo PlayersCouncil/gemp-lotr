@@ -293,22 +293,23 @@
 					type: played
 					filter: self
 				}
+				requires: {
+					type: canSpot
+					filter: bearer,wounded
+				}
 				effect: [
 					{
-						type: optional
-						text: Would you like to heal bearer?
-						effect: {
-							type: heal
-							select: bearer
-						}
+						type: ChooseANumber
+						text: Choose how many times to heal bearer
+						from: 0
+						to: 2
+						default: 2
+						memorize: healing
 					}
 					{
-						type: optional
-						text: Would you like to heal bearer?
-						effect: {
-							type: heal
-							select: bearer
-						}
+						type: heal
+						select: bearer
+						times: memory(healing)
 					}
 				]
 			}
@@ -957,10 +958,17 @@
 				}
 				{
 					type: addTwilight
+					amount: {
+						type: forEachInMemory
+						memory: discardedCard
+					}
 				}
 				{
 					type: optional
 					text: Would you like to continue discarding?
+					requires: {
+						type: HasCardInDrawDeck
+					}
 					effect: [
 						{
 							type: discardTopCardsFromDeck
@@ -969,10 +977,17 @@
 						}
 						{
 							type: addTwilight
+							amount: {
+								type: forEachInMemory
+								memory: discardedCard
+							}
 						}
 						{
 							type: optional
 							text: Would you like to continue discarding?
+							requires: {
+								type: HasCardInDrawDeck
+							}
 							effect: [
 								{
 									type: discardTopCardsFromDeck
@@ -981,10 +996,17 @@
 								}
 								{
 									type: addTwilight
+									amount: {
+										type: forEachInMemory
+										memory: discardedCard
+									}
 								}
 								{
 									type: optional
 									text: Would you like to continue discarding?
+									requires: {
+										type: HasCardInDrawDeck
+									}
 									effect: [
 										{
 											type: discardTopCardsFromDeck
@@ -993,10 +1015,17 @@
 										}
 										{
 											type: addTwilight
+											amount: {
+												type: forEachInMemory
+												memory: discardedCard
+											}
 										}
 										{
 											type: optional
 											text: Would you like to continue discarding?
+											requires: {
+												type: HasCardInDrawDeck
+											}
 											effect: [
 												{
 													type: discardTopCardsFromDeck
@@ -1005,6 +1034,10 @@
 												}
 												{
 													type: addTwilight
+													amount: {
+														type: forEachInMemory
+														memory: discardedCard
+													}
 												}
 											]
 										}
@@ -1157,11 +1190,13 @@
 			effect: {
 				type: modifyStrength
 				select: choose(dwarf)
+				memorize: chosenDwarf
 				amount: {
 					type: Conditional
 					requires: {
-						type: location
-						filter: underground
+						type: memoryMatches
+						memory: chosenDwarf
+						filter: atSite(underground)
 					}
 					true: 4
 					false: 2

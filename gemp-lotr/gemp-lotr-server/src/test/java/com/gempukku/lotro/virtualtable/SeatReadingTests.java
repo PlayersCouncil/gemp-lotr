@@ -91,6 +91,7 @@ public class SeatReadingTests implements TestConstants
 
 		scn.StartGame();
 		scn.MoveCardsToTopOfDeck(legolas);
+		scn.FreepsRefreshDecision();
 
 		assertFalse(scn.FreepsHandIsRevealed());
 		assertFalse(scn.ShadowHandIsRevealed());
@@ -133,6 +134,7 @@ public class SeatReadingTests implements TestConstants
 
 		scn.StartGame();
 		scn.MoveCardsToTopOfDeck(legolas);
+		scn.FreepsRefreshDecision();
 
 		assertTrue(scn.FreepsHandIsRevealed());
 		assertFalse(scn.ShadowHandIsRevealed());
@@ -218,6 +220,7 @@ public class SeatReadingTests implements TestConstants
 
 		scn.StartGame();
 		scn.MoveCardsToTopOfDeck(legolas);
+		scn.FreepsRefreshDecision();
 
 		// A card in a hand is before its owner there, and nowhere before the other player.
 		assertTrue(scn.FreepsSeesCardInZone(gimli, Zone.HAND));

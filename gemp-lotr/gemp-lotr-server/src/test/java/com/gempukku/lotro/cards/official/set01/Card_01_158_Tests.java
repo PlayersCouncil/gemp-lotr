@@ -17,8 +17,7 @@ public class Card_01_158_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "1_158");
-					// put other cards in here as needed for the test case
+					put("party", "1_158");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,35 +45,20 @@ public class Card_01_158_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var party = scn.GetFreepsCard("party");
 
-		assertEquals("Uruk-hai Raiding Party", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.URUK_HAI, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
-		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
-		assertEquals(4, card.getBlueprint().getTwilightCost());
-		assertEquals(9, card.getBlueprint().getStrength());
-		assertEquals(3, card.getBlueprint().getVitality());
-		assertEquals(5, card.getBlueprint().getSiteNumber());
-	}
-
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void UrukhaiRaidingPartyTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-
-		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(4, scn.GetTwilight());
+		assertEquals("Uruk-hai Raiding Party", party.getBlueprint().getTitle());
+		assertNull(party.getBlueprint().getSubtitle());
+		assertFalse(party.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, party.getBlueprint().getSide());
+		assertEquals(Culture.ISENGARD, party.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, party.getBlueprint().getCardType());
+		assertEquals(Race.URUK_HAI, party.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(party, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(party, Keyword.DAMAGE));
+		assertEquals(4, party.getBlueprint().getTwilightCost());
+		assertEquals(9, party.getBlueprint().getStrength());
+		assertEquals(3, party.getBlueprint().getVitality());
+		assertEquals(5, party.getBlueprint().getSiteNumber());
 	}
 }

@@ -139,6 +139,7 @@
 				requires: {
 					type: canSpot
 					filter: companion,signet(Théoden)
+					count: 3
 				}
 				cost: {
 					type: discardFromHand

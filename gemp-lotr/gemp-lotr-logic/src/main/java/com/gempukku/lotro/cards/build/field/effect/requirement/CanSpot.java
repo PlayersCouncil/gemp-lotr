@@ -7,7 +7,7 @@ import com.gempukku.lotro.cards.build.Requirement;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.common.Filterable;
 import com.gempukku.lotro.common.SpotOverride;
-import com.gempukku.lotro.logic.timing.PlayConditions;
+import com.gempukku.lotro.filters.Filters;
 import org.json.simple.JSONObject;
 
 public class CanSpot implements RequirementProducer {
@@ -23,10 +23,10 @@ public class CanSpot implements RequirementProducer {
         return (actionContext) -> {
             final Filterable filterable = filterableSource.getFilterable(actionContext);
             if(hindered) {
-                return PlayConditions.canSpot(actionContext.getGame(), count, SpotOverride.INCLUDE_HINDERED, filterable);
+                return Filters.canSpot(actionContext.getGame(), actionContext.getPerformingPlayer(), count, SpotOverride.INCLUDE_HINDERED, filterable);
             }
             else {
-                return PlayConditions.canSpot(actionContext.getGame(), count, SpotOverride.NONE, filterable);
+                return Filters.canSpot(actionContext.getGame(), actionContext.getPerformingPlayer(), count, SpotOverride.NONE, filterable);
             }
 
         };

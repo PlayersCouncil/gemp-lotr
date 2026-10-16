@@ -3,12 +3,12 @@ package com.gempukku.lotro.cards.official.set04;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_04_090_Tests
@@ -18,8 +18,11 @@ public class Card_04_090_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "4_90");
-					// put other cards in here as needed for the test case
+					put("gandalf", "4_90");
+
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8; a maneuver ability only ever used on purpose
+					put("bounder", "1_286");    // Bounder: [shire] ally of cost 1; a skirmish ability only ever used on purpose
+					put("troop", "1_177");      // Goblin Patrol Troop: [moria] minion of cost 6, site 4, no text
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -48,7 +51,7 @@ public class Card_04_090_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("gandalf");
 
 		assertEquals("Gandalf", card.getBlueprint().getTitle());
 		assertEquals("The White Wizard", card.getBlueprint().getSubtitle());
@@ -61,21 +64,71 @@ public class Card_04_090_Tests
 		assertEquals(7, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
 		assertEquals(6, card.getBlueprint().getResistance());
-		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
+		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GandalfTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void StrengthPlus3WhileThreeOrMoreTwilightTokensCanBeSpottedAndNotAtTwo() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(gandalf, aragorn);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// Tokens that are not twilight: a burden and a wound.
+		scn.AddBurdens(1);
+		scn.AddWoundsToChar(aragorn, 1);
+		assertEquals(1, scn.GetBurdens());
+		assertEquals(1, scn.GetWoundsOn(aragorn));
 
-		assertEquals(4, scn.GetTwilight());
+		scn.SetTwilight(2);
+		assertEquals(2, scn.GetTwilight());
+		assertEquals(7, scn.GetStrength(gandalf));
+		assertEquals(8, scn.GetStrength(aragorn));
+
+		scn.SetTwilight(3);
+		assertEquals(3, scn.GetTwilight());
+		assertEquals(10, scn.GetStrength(gandalf));
+		// Another companion is not made stronger.
+		assertEquals(8, scn.GetStrength(aragorn));
+
+		scn.SetTwilight(5);
+		assertEquals(5, scn.GetTwilight());
+		assertEquals(10, scn.GetStrength(gandalf));
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void TheBonusComesAsAPlayAddsTheThirdTokenAndGoesAsAMinionsPlayTakesThePoolBelowThree() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var bounder = scn.GetFreepsCard("bounder");
+		var troop = scn.GetShadowCard("troop");
+		scn.MoveCompanionsToTable(gandalf, aragorn);
+		scn.MoveCardsToHand(bounder, troop);
+
+		scn.StartGame();
+		scn.SetTwilight(2);
+		assertEquals(7, scn.GetStrength(gandalf));
+
+		// Bounder's cost of 1 is added to the pool.
+		scn.FreepsPlayCard(bounder);
+		assertEquals(3, scn.GetTwilight());
+		assertEquals(10, scn.GetStrength(gandalf));
+
+		scn.FreepsPass();
+		// 3 + 3 companions + 2 for Ettenmoors.
+		assertEquals(8, scn.GetTwilight());
+		assertEquals(10, scn.GetStrength(gandalf));
+
+		// 6 to play + 2 roaming: the pool is emptied.
+		scn.ShadowPlayCard(troop);
+		assertEquals(0, scn.GetTwilight());
+		assertEquals(7, scn.GetStrength(gandalf));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

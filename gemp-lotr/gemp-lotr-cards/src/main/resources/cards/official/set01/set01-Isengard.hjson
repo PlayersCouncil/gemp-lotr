@@ -48,6 +48,17 @@
 					{
 						type: optional
 						text: Would you like to discard one of the revealed cards?
+						requires: [
+							{
+								type: canDiscardFromHand
+								hand: fp
+							}
+							{
+								type: memoryMatches
+								memory: revealedCards
+								filter: any
+							}
+						]
 						effect: {
 							type: discardFromHand
 							hand: fp
@@ -705,11 +716,7 @@
 				type: modifier
 				modifier: {
 					type: modifyStrength
-					filter: hobbit,companion
-					requires: {
-						type: location
-						filter: hasAttached(self)
-					}
+					filter: hobbit,atSite(hasAttached(self))
 					amount: -2
 				}
 			}

@@ -991,6 +991,10 @@
 					type: played
 					filter: self
 				}
+				requires: {
+					type: canSpot
+					filter: machine
+				}
 				effect: {
 					type: AddCultureTokens
 					select: choose(machine)
@@ -1033,6 +1037,10 @@
 				trigger: {
 					type: played
 					filter: self
+				}
+				requires: {
+					type: canSpot
+					filter: machine
 				}
 				effect: {
 					type: AddCultureTokens

@@ -992,8 +992,11 @@
 				trigger: {
 					type: Killed
 					filter: companion
-					killer: culture(uruk-hai),minion
-					inSkirmish: true
+				}
+				// "In a skirmish involving an [uruk-hai] minion": whatever killed him, not "killed by" (F-0547).
+				requires: {
+					type: canSpot
+					filter: culture(uruk-hai),minion,inSkirmish
 				}
 				cost: {
 					type: discardFromHand

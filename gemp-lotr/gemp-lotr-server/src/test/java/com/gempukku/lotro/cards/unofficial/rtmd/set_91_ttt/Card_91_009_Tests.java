@@ -47,6 +47,23 @@ public class Card_91_009_Tests
 		);
 	}
 
+	protected VirtualTableScenario GetOutOfSightScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("gimli", "1_13");       // Gimli, Son of Gloin: cost 2, vitality 3; played at site 1 as the control
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: cost 4, vitality 4
+					// Out of Sight and Shot: "Each time a companion is played, the Free Peoples player must exert a
+					// companion."
+					put("outofsight", "7_204");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing,
+				"91_9", null
+		);
+	}
+
 	@Test
 	public void ExhaustedOnPlayStatsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 		/**
@@ -164,6 +181,7 @@ public class Card_91_009_Tests
 		scn.StartGame();
 		scn.SkipToSite(2);
 		scn.MoveCardsToHand(savage);
+		scn.FreepsRefreshDecision();
 
 		// A companion, an ally and a minion are played on one board away from site 1
 		scn.FreepsPlayCard(gimli);
@@ -180,5 +198,44 @@ public class Card_91_009_Tests
 		assertInZone(Zone.SHADOW_CHARACTERS, savage);
 		assertEquals(0, scn.GetWoundsOn(savage));
 		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	// "Comes into play exhausted": exhausted as the companion is placed, so it is exhausted already when its play is
+	// answered (Q-0302).  Out of Sight and Shot answers each companion's play with an exertion the Free Peoples
+	// player chooses: a companion played fresh at site 1 is among the candidates, and the one played at site 2 is
+	// not.  The modifier no longer answers the play, so nobody orders it against Out of Sight and Shot.
+	@Test
+	public void TheCompanionIsExhaustedAsItComesIntoPlaySoItCannotBeChosenToExertForOutOfSightAndShot() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetOutOfSightScenario();
+
+		var frodo = scn.GetRingBearer();
+		var gimli = scn.GetFreepsCard("gimli");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var outofsight = scn.GetShadowCard("outofsight");
+		scn.MoveCardsToSupportArea(outofsight);
+		scn.MoveCardsToHand(gimli, aragorn);
+
+		scn.StartGame();
+
+		// The control: at site 1 Gimli comes in fresh, and is one of the companions who may exert.
+		scn.FreepsPlayCard(gimli);
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, gimli));
+		scn.FreepsChooseCard(frodo);
+		assertEquals(1, scn.GetWoundsOn(frodo));
+
+		scn.SkipToSite(2);
+		scn.FreepsPlayCard(aragorn);
+
+		// Aragorn is in play exhausted by the time his play is answered: Frodo and Gimli may exert, and he may not.
+		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
+		assertInZone(Zone.FREE_CHARACTERS, aragorn);
+		assertEquals(3, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, gimli));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn));
+		scn.FreepsChooseCard(gimli);
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertEquals(3, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

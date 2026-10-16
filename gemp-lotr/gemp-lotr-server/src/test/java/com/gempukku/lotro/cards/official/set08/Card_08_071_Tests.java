@@ -94,6 +94,7 @@ public class Card_08_071_Tests
 
 		// One is stacked here as well, and the Shadow player is asked again after a play from hand.
 		scn.StackCardsOn(flung, onflung);
+		scn.ShadowRefreshDecision();
 		scn.ShadowPlayCard(inhand);
 		assertTrue(scn.ShadowActionAvailable(flung));
 

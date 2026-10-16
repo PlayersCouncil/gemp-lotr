@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.assertAttachedTo;
 import static org.junit.Assert.*;
 
 public class Card_94_020_Tests
@@ -25,6 +26,7 @@ public class Card_94_020_Tests
 					put("sam", "1_311");       // Sam, Son of Hamfast: Ring-bound and no Ring-bearer, vitality 4; a fellowship ability used only on purpose
 					put("isildur", "18_54");   // Isildur, Sword-bearer: strength 7, vitality 3; "Each time Isildur loses a skirmish, exert a companion."
 					put("friends", "2_98");    // Dear Friends: Fellowship event, cost 0, "Exert a companion to place a Free Peoples card from your discard pile beneath your draw deck"
+					put("sting", "1_313");     // Sting: [shire] possession, bearer must be Frodo; "Fellowship or Regroup: Exert Frodo to reveal an opponent's hand. Remove (1) for each Orc revealed"
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -86,6 +88,7 @@ public class Card_94_020_Tests
 					put("sam", "1_311");       // Sam, Son of Hamfast: Ring-bound and no Ring-bearer, vitality 4; a fellowship ability used only on purpose
 					put("isildur", "18_54");   // Isildur, Sword-bearer: strength 7, vitality 3; "Each time Isildur loses a skirmish, exert a companion."
 					put("friends", "2_98");    // Dear Friends: Fellowship event, cost 0, "Exert a companion to place a Free Peoples card from your discard pile beneath your draw deck"
+					put("sting", "1_313");     // Sting: [shire] possession, bearer must be Frodo; "Fellowship or Regroup: Exert Frodo to reveal an opponent's hand. Remove (1) for each Orc revealed"
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -301,5 +304,45 @@ public class Card_94_020_Tests
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
+	}
+
+	@Test
+	public void APossessionCannotExertTheRingBearer() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
+		var sting = scn.GetFreepsCard("sting");
+		var frodo = scn.GetRingBearer();
+
+		scn.AttachCardsTo(frodo, sting);
+		assertAttachedTo(sting, frodo);
+		scn.StartGame();
+
+		// Sting's own "Fellowship: Exert Frodo to ..." has its bearer, the Ring-bearer, for its only cost, and he
+		// is unwounded: a Free Peoples possession, so no legal payment.
+		assertAttachedTo(sting, frodo);
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(sting));
+	}
+
+	@Test
+	public void WithoutTheModAPossessionCanExertTheRingBearer() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetControlScenario();
+		var sting = scn.GetFreepsCard("sting");
+		var frodo = scn.GetRingBearer();
+
+		scn.AttachCardsTo(frodo, sting);
+		assertAttachedTo(sting, frodo);
+		scn.StartGame();
+
+		assertAttachedTo(sting, frodo);
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertEquals(0, scn.GetShadowHandCount());
+		assertTrue(scn.FreepsActionAvailable(sting));
+		scn.FreepsUseCardAction(sting);
+
+		// The Shadow player's hand is empty: nothing is revealed, and Frodo's exertion is all that is done.
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

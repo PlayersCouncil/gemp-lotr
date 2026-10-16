@@ -27,7 +27,6 @@ public class Card_01_092_ErrataTests
 					put("deadman", "10_27");    // Dead Man of Dunharrow: [gondor] Wraith companion (cheated in, so no threat and no exertions)
 					put("gimli", "1_13");       // Gimli, Son of Gloin: [dwarven] Dwarf companion, neither a Man nor [gondor]
 					put("barliman", "1_70");    // Barliman Butterbur: [gandalf] Man ally, a fellowship ability used only on purpose
-					put("brigand", "4_10");     // Dunlending Brigand: [dunland] Man minion, strength 8, no text
 					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion, strength 8, vitality 4
 
 					put("party1", "1_158");     // Uruk-hai Raiding Party: strength 9, vitality 3, damage +1 and nothing else
@@ -103,25 +102,22 @@ public class Card_01_092_ErrataTests
 	}
 
 	@Test
-	public void CanBeBorneByAManAllyOrAnOpponentsManMinion() throws DecisionResultInvalidException, CardNotFoundException {
+	public void CanBeBorneByAManAlly() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var armor = scn.GetFreepsCard("armor");
 		var boromir = scn.GetFreepsCard("boromir");
 		var gimli = scn.GetFreepsCard("gimli");
 		var barliman = scn.GetFreepsCard("barliman");
-		var brigand = scn.GetShadowCard("brigand");
 		scn.MoveCardsToHand(armor);
 		scn.MoveCompanionsToTable(boromir, gimli);
 		scn.MoveAlliesToTable(barliman);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(brigand);
 
 		scn.FreepsPlayCard(armor);
-		// "A Man" read on its own, as the original's "Bearer must be a Man" was: a Man ally may bear it, and,
-		// a race word with no "your" naming no side (Q-0058), so may the Shadow player's Man minion.
-		assertTrue(scn.FreepsHasCardChoiceAvailable(boromir, barliman, brigand));
+		// "A Man" read on its own, as the original's "Bearer must be a Man" was: a Man ally may bear it (Q-0118).
+		assertTrue(scn.FreepsHasCardChoiceAvailable(boromir, barliman));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(gimli));
 		scn.FreepsChooseCard(barliman);
 

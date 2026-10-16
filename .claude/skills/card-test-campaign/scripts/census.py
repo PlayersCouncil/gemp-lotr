@@ -237,6 +237,9 @@ def kinds(read):
         return []
     words = read.filter_words()
     js = read.json.replace(" ", "")
+    # A word an effect's or a modifier's own type carries (`noMoreThanOneMinionMayBeAssignedToEachSkirmish`, Caras
+    # Galadhon 3_115): the definition says it in the name of what it does, with no filter to hold it.
+    types = [v.lower() for node in _dicts(read.does) for k, v in node.items() if k.lower() == "type" and isinstance(v, str)]
     text = read.text
     for title in sorted(read.titles(), key=len, reverse=True):
         text = re.sub(r"(?<!\w)%s(?!\w)" % re.escape(title), " ", text, flags=re.I)
@@ -246,7 +249,7 @@ def kinds(read):
     for name, written, stands_for in KINDS:
         if not re.search(written, text, re.I if name[0].islower() else 0):
             continue
-        if any(w in words or (w + "(") in js or _word_in(w, js) for w in stands_for):
+        if any(w in words or (w + "(") in js or _word_in(w, js) or any(w in ty for ty in types) for w in stands_for):
             continue
         out.append(name)
     return out

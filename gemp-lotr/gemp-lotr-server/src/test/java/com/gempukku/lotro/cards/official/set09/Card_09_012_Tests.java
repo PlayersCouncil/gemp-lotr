@@ -209,6 +209,7 @@ public class Card_09_012_Tests
 		scn.SkipToPhase(Phase.REGROUP);
 		// Minions that came through the skirmishes.
 		scn.MoveMinionsToTable(troop, guard);
+		scn.FreepsRefreshDecision();
 
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 		assertAttachedTo(aiglos, gilgalad);
@@ -251,6 +252,7 @@ public class Card_09_012_Tests
 		scn.StartGame();
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.MoveMinionsToTable(troop, guard);
+		scn.FreepsRefreshDecision();
 
 		assertAttachedTo(aiglos, gilgalad);
 		scn.FreepsUseCardAction(aiglos);

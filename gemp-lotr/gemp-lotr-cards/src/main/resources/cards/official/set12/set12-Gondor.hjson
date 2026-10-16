@@ -500,8 +500,9 @@
 							{
 								type: Conditional
 								requires: {
-									type: location
-									filter: battleground
+									type: memoryMatches
+									memory: chosenMan
+									filter: atSite(battleground)
 								}
 								true: 1
 								false: 0

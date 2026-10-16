@@ -72,6 +72,7 @@ public class Card_V3_042_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.ARTIFACT, card.getBlueprint().getCardType());
+		assertNull(card.getBlueprint().getPossessionClasses());
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(5, card.getBlueprint().getTwilightCost());
 		// The strength and vitality printed on the card are those of the minion she becomes. The artifact
@@ -107,6 +108,7 @@ public class Card_V3_042_Tests
 		assertFalse(scn.IsType(matriarch, CardType.MINION));
 
 		scn.MoveMinionsToTable(warrior2, khamul, savage);
+		scn.ShadowRefreshDecision();
 
 		// A [raider] Man who is no Southron is played: nothing is offered.
 		scn.ShadowPlayCard(infantry);

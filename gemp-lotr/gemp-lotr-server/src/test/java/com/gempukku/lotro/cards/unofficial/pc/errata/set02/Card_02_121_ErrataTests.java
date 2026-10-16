@@ -77,6 +77,7 @@ public class Card_02_121_ErrataTests
 		scn.StartGame();
 		scn.SkipToSite(4);
 		scn.MoveCardsToHand(gimli);
+		scn.FreepsRefreshDecision();
 		scn.SetTwilight(0);
 
 		var ettenmoors = scn.GetFreepsSite(2);

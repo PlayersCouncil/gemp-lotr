@@ -6,6 +6,11 @@ import com.gempukku.lotro.logic.timing.EffectResult;
 import java.util.Collections;
 import java.util.Set;
 
+/**
+ * A character assigned to skirmish another: a Free Peoples character and a minion, from either side. The engine emits
+ * one for each pairing, both ways round, so a defender assigned to two minions makes two results with him as the
+ * assigned card, one against each minion (CR 4.2 "defender +X"; Q-0323).
+ */
 public class AssignAgainstResult extends EffectResult {
     private final String _playerId;
     private final PhysicalCard _assignedCard;

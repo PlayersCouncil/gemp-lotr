@@ -274,6 +274,16 @@ public final class EffectForecast {
      * what a play answers a choice it is a branch of, with no card that can be played.
      */
     public static boolean findsNoCardNow(ActionContext actionContext, EffectAppender cardResolver) {
+        final Collection<PhysicalCard> found = cardsFoundNow(actionContext, cardResolver);
+        return found != null && found.isEmpty();
+    }
+
+    /**
+     * The cards a card resolver, asked as it is when its effect is about to be carried out, would choose from or
+     * take now; null where it cannot say.  Asked again after the choice, with nothing done in between, it gives
+     * the cards that were on offer (AssignFpCharacterToSkirmish: whether the player made to assign had a choice).
+     */
+    public static Collection<PhysicalCard> cardsFoundNow(ActionContext actionContext, EffectAppender cardResolver) {
         final ActionContext atResolution = new DelegateActionContext(actionContext, actionContext.getPerformingPlayer()) {
             @Override
             public boolean isAtResolution() {
@@ -281,10 +291,9 @@ public final class EffectForecast {
             }
         };
         try {
-            final Collection<PhysicalCard> found = cardResolver.forecast(atResolution).getReach();
-            return found != null && found.isEmpty();
+            return cardResolver.forecast(atResolution).getReach();
         } catch (RuntimeException exp) {
-            return false;
+            return null;
         }
     }
 

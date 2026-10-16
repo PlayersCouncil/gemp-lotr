@@ -29,10 +29,11 @@ bears on their text, and every pitfall group their tests will touch, in as few s
 
 An entry is printed only when it contains every term given, so look up separate subjects with separate
 commands (chained with `;` in one step), not with one command of many terms. While a card is in stage 1, every
-lookup takes your batch's ids as well, `lookup.py <terms> --skip <your batch's ids>`: an entry of the shapes, the
-pitfalls or the helpers that names one of your cards, or another version of one, says how it is built, and is
-then named by its heading and not printed (a ruling is printed whatever it names). Look again in stage 2,
-without `--skip`.
+lookup takes your batch's ids as well, `lookup.py <terms> --skip <your batch's ids>`: what names one of your
+cards, another version of one, or a `mechanics/` class built on one says how it is built, and is left out: the
+whole entry where its first sentence does (named by its heading), else those sentences alone (a ruling is printed
+whatever card it names). A broad word matches many long entries: `--max 0` lists them by their first words, to
+choose from. Look again in stage 2, without `--skip`.
 
 An expectation rests on an entry's own words, never on its line in an index. A shape the index lists is settled:
 do not raise it as a question again, and where the game departs from it, that is a finding. When a test does
@@ -61,32 +62,46 @@ So the order matters and is not a formality.
 
 (for several cards, each into a file of its own, `> /tmp/<your folder name>/<id>.packet.txt`, and the files read
 side by side: printed in one step the packets overrun the output limit and the middle of them is cut out) and
-from that alone write the card's ledger file: the clauses, their types, the checks each one's wording calls
-for (the claim lines come later, when the tests exist). Then, for each check, write one line: the situation, and
-what the text and rules say happens. A card's play has no clause of its own (Q-0279: B): it is tested only where
+from that alone write the card's plan, `/tmp/<your folder name>/<id>.plan.md`: the clauses as the ledger will
+hold them (id, type, checks, text), and under each check one line: the situation, and what the text and rules say
+happens. A card's play has no clause of its own (Q-0279: B): it is tested only where
 the card's text bears on it (a bearer, a requirement or an extra cost to play, a cost its text changes, a card that
-answers its own play), by the test of that clause, which plays the card from hand. Save this as `/tmp/<your folder name>/<id>.plan.md` before going on. Do not open the card's `.hjson` file or its existing test
-file during this stage. If the text leaves a real doubt about what should happen, write the doubt down as a
+answers its own play), by the test of that clause, which plays the card from hand. The plan is stage 1's one file,
+saved before going on; the ledger file is written once, in stage 2, from the plan (its Sources, Findings, Dropped
+and Notes lines may go in at once), and its claim lines added with `Edit` as the tests exist. Do not open the
+card's `.hjson` file or its existing test file during this stage. If the text leaves a real doubt about what should happen, write the doubt down as a
 question with both readings; do not settle it by guessing, and do not settle it in stage 2 by seeing what the game
 does.
 
 A `grep` of a `.hjson` file prints whatever lines match, and a line range of one (`sed -n`, a `Read` with an
 offset) whatever cards lie there, those of your other cards and their originals among them. One card's block is
 read with its packet (`--only-withheld`, in stage 2), never out of the file; and to look for a helper or a
-printed text in stage 1, use `packet.py --find <regex> --skip <your batch's ids>`
+printed text in stage 1 (a follower's Aid, a phrase), use `packet.py --find <regex> --skip <your batch's ids>`, never
+a grep of the `.hjson` files, not even one that prints only `gametext:` lines
 (printed fields and game text with ids, nothing of the implementation, your batch and its other versions left out) and
 `packet.py --defs <ids> --skip <your batch's ids>` for a chosen helper's definition (it also keeps shut a helper
-whose game text is a batch card's own with a word or two changed: choose another, or read it in stage 2; asked
+whose game text is a batch card's own with a word or two changed, or prints a whole sentence of one: choose another, or read it in stage 2; asked
 for more than about twenty ids it overruns the output limit, so send it to a file under your folder and `Read`
-that). You may read another card's finished test file of the same shape, so long as that card is neither one of
-your batch nor another version of one: the Decipher original of an erratum, and the landed ERRATUM of an
-original, whose test file and ledger stay shut until stage 2 as your own files do (52_75 for 2_75). So does a
-`mechanics/` class built on one of your batch's cards (`CostOfAssigningTests` on Morgul Spawn 7_200), as the shapes
-and pitfalls that name a batch card do. Only those are shut: another card that shares a title with one of yours (a
-second Denethor) may be read as a helper like any other, and a landed card with the SAME text as yours is the
-quickest source of boards and helpers
-(`packet.py --find` on the first sentence of the game text: Uruk Veteran 4_201 is Uruk Trooper 4_199 word for
-word).
+that). You may read another card's finished test file of the same shape, and its ledger, so long as that card is
+neither one of your batch nor another version of one (the Decipher original of an erratum, and the landed ERRATUM
+of an original, whose test file and ledger stay shut until stage 2 as your own files do: 52_75 for 2_75) and the
+file does not name one. `packet.py --landed <your batch's ids>` lists the test files, `mechanics/` classes and
+ledgers that name one (by id, by test class, or by a name only it has, Crags of Emyn Muil), each open or shut, and
+prints nothing of what they say: run it before opening any. A test file or class that names a batch card only in a
+line of its scenario map (a helper laid, a site of a path: every Shadows-path file names 11_234) and never fetches
+it is open; one that names it anywhere else is shut (Dimrill Dale 1_350's Notes describe Great Chasm 2_118's
+definition; `CostOfAssigningTests` is built on Morgul Spawn 7_200), as the shapes and pitfalls that name a batch
+card are. A ledger is judged apart from its test file: one that names a batch card is shut, since no script can
+tell a board in its Notes from a description, and the test file beside it may still be open. Another card that
+shares a title with one of yours (a second Denethor) may be read as a helper like any other, and a landed card
+with the SAME text as yours, or a sentence of it, is the quickest source of boards and helpers (`packet.py --find`
+on EACH sentence of the game text, the card's own name in it made a wildcard, and not only on the first, which
+may be a keyword: Uruk Veteran 4_201 is Uruk Trooper 4_199 word for word, and `twins.py` groups whole texts only, so
+Uruk Follower 4_186 and Uruk Pursuer 4_190 sharing "Unbound Hobbits may not be discarded" with Uruk Hunter 4_188, or
+Guma 4_277, Hlafwine 4_281 and Weland 4_295 sharing "Discard <name> if an opponent controls his home site" with Léod
+4_285, are found by `--find` alone): its test file and
+ledger are open whatever they name (Merry 17_107's ledger names Pippin 17_109, whose first sentence it prints; the
+twins rule of notes-decipher.txt), and only its definition is shut (`--defs` says so).
 
 **Stage 2, with everything.** Run `packet.py <id> --only-withheld`, which prints what the blind packet held back
 (the definition in full, sheet against definition, an erratum's original, the test file) and so ends stage 1 for
@@ -94,7 +109,10 @@ that card: its plan is saved first. (`--with-test` prints the blind packet and t
 of it.) A long test file overruns the output limit and the middle of it is cut out of the print: where the print
 says so, read the test file itself for the rest. An entry the packet heads "A ruling on another card names this
 card" is that card's ruling: where its ledger already holds it as an `R` clause (5_60's `R1`, for 8_3), cite it
-under `Sources:` and do not test it again.
+under `Sources:` and do not test it again. The reverse is not waived: a Section Three ruling on THIS card that names
+another card is this card's `Ruling` clause and its own test, though the other card's file already lays the same
+board as a check of its own; name that file in Notes (Fortress Never Fallen 4_276 beside Siege Engine 5_60; the
+Standard's `Interaction` row).
 
 No test reads a printed cost or bonus doing its ordinary work (Q-0279: E2; the Standard's "No reading of a printed
 cost or bonus"): not the pool across a plain play, not a bearer's strength, vitality or resistance for a borne card's
@@ -144,7 +162,10 @@ parked (6_63's kill test, written for F-0444, passed).
 Every step you take re-reads everything you have read so far, so steps are what cost. Read several files in one
 step where you can (the packets of all your cards, the helper cards you mean to use), and do not look at the same
 thing twice. What you write is what takes time: write each file once and put it right with `Edit` (or `sed`),
-never by writing the whole file out again, and keep the plan to one line per check.
+never by writing the whole file out again, and keep the plan to one line per check. For the second card of a twin
+group (`twins.py`), making its test file and ledger from the first's by a substitution of names, ids and numbers
+(`sed` into the new file) is writing it once; its definition is then read as any card's, and whatever differs is
+put right by `Edit` (4_193 from 4_181).
 
 Choose helper cards by reading their definitions (`packet.py <helper id>`), never by name. Reading a helper
 card's definition is fine at any stage; it is only the card under test whose implementation stays shut in stage 1.
@@ -207,7 +228,8 @@ search that found no card.
 
 Nor is a card owed what a mechanics class holds (Ketura, 2026-10-12): a card that bars an act is tested on ONE
 act it stops and its control, and a card of each definition word that does the act is the mechanics' (Q-0264:
-B2); an exertion is not owed as the nearest miss of a wound trigger (Q-0265: A); the account-name check is
+B2); an exertion is not owed as the nearest miss of a wound trigger (Q-0265: A), nor a wound as the nearest
+miss of an "each time X exerts" trigger (Q-0315: A, `mechanics/wounds/AWoundIsNoExertionTests`); the account-name check is
 shown once, card-agnostic (Q-0271: C). A choice the game carries out unasked is no such thing: it shows
 nothing of the invalid card, so a second valid candidate is laid and the invalid one read "not offered"
 (Q-0266: B). The Standard has each where it applies.

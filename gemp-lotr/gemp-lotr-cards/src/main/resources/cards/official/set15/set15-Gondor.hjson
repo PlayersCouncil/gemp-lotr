@@ -738,8 +738,17 @@
 								filter: bearer,ranger
 							}
 							{
-								type: location
-								filter: forest
+								type: and
+								requires: [
+									{
+										type: canSpot
+										filter: bearer,companion
+									}
+									{
+										type: location
+										filter: forest
+									}
+								]
 							}
 						]
 					}

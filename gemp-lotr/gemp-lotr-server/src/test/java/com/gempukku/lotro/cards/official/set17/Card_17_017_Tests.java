@@ -123,6 +123,7 @@ public class Card_17_017_Tests
 		scn.StartGame();
 		// A bearer for the Beorning Axe and an Elf for the Elven Cloak: each could be played, but not on Gandalf.
 		scn.MoveCompanionsToTable("grimbeorn", "elf");
+		scn.FreepsRefreshDecision();
 
 		var freepsShuffles = scn.GetFreepsDeckShuffleCount();
 		var shadowShuffles = scn.GetShadowDeckShuffleCount();
@@ -178,6 +179,7 @@ public class Card_17_017_Tests
 
 		scn.StartGame();
 		scn.MoveCompanionsToTable("grimbeorn", "elf");
+		scn.FreepsRefreshDecision();
 
 		var freepsShuffles = scn.GetFreepsDeckShuffleCount();
 		var shadowShuffles = scn.GetShadowDeckShuffleCount();
@@ -249,6 +251,7 @@ public class Card_17_017_Tests
 
 		scn.StartGame();
 		scn.MoveCompanionsToTable("grimbeorn", "elf");
+		scn.FreepsRefreshDecision();
 
 		var freepsShuffles = scn.GetFreepsDeckShuffleCount();
 		scn.FreepsPlayCard(gandalf);
@@ -286,6 +289,7 @@ public class Card_17_017_Tests
 
 		scn.StartGame();
 		scn.MoveCompanionsToTable("grimbeorn", "elf");
+		scn.FreepsRefreshDecision();
 
 		var freepsShuffles = scn.GetFreepsDeckShuffleCount();
 		scn.FreepsPlayCard(gandalf);
@@ -322,6 +326,7 @@ public class Card_17_017_Tests
 
 		scn.StartGame();
 		scn.MoveCompanionsToTable("grimbeorn", "elf");
+		scn.FreepsRefreshDecision();
 
 		scn.FreepsPlayCard(gandalf);
 

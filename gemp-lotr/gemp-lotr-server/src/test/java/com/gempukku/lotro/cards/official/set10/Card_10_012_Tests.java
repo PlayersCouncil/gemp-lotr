@@ -274,6 +274,7 @@ public class Card_10_012_Tests
 		// Two cards more, and a discard from five to four: the Free Peoples player has initiative again, and
 		// the Shadow losing it asks nothing.
 		scn.MoveCardsToHand(filler5, filler6);
+		scn.FreepsRefreshDecision();
 		scn.FreepsUseCardAction(smeagol);
 		scn.FreepsChooseCard(filler2);
 		assertEquals(4, scn.GetFreepsHandCount());

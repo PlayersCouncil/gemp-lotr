@@ -93,6 +93,7 @@ public class DrawingCardsTests
 		scn.StartGame();
 		// From the top: first, second, third, fourth, fifth
 		scn.MoveCardsToTopOfDeck(fifth, fourth, third, second, first);
+		scn.FreepsRefreshDecision();
 
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 		assertEquals(5, scn.GetFreepsDeckCount());

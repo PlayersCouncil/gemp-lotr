@@ -114,6 +114,7 @@ public class Card_V1_012_Tests
 		scn.StartGame();
 
 		scn.MoveCardsToTopOfDeck(raiders);
+		scn.FreepsRefreshDecision();
 
 		// The ring is played, not cheated in: it is what the trigger spots.
 		scn.FreepsPlayCard(vilya);
@@ -359,6 +360,7 @@ public class Card_V1_012_Tests
 		scn.AddWoundsToChar(gandalf, 1);
 		scn.AddWoundsToChar(elrond, 1);
 		scn.MoveCardsToTopOfDeck(raiders);
+		scn.FreepsRefreshDecision();
 
 		// The third ring is played, not cheated in.  Two [elven] rings and a [gandalf] ring make three.
 		scn.FreepsPlayCard(narya);

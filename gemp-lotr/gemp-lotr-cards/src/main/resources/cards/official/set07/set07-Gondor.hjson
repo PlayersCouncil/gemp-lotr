@@ -1260,10 +1260,11 @@
 					type: discardFromHand
 					forced: false
 					count: 2
+					memorize: discardedCards
 				}
 				effect: {
 					type: playCardFromDiscard
-					select: choose(culture(gondor),fortification)
+					select: choose(culture(gondor),fortification,not(memory(discardedCards)))
 				}
 			}
 		]

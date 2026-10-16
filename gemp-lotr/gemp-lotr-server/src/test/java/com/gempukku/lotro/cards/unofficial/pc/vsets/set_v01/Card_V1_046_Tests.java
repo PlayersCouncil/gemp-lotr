@@ -137,6 +137,7 @@ public class Card_V1_046_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(soldier, guard, troop);
+		scn.FreepsRefreshDecision();
 		// A [moria] Orc whose site number is 1 whatever the burdens: 4 printed - 3.
 		scn.ApplyAdHocModifier(new MinionSiteNumberModifier(null, Culture.MORIA, null, -3));
 

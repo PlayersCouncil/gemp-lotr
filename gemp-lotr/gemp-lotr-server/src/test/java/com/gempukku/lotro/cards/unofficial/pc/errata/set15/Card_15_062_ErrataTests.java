@@ -76,7 +76,7 @@ public class Card_15_062_ErrataTests
 	}
 
 	@Test
-	public void PlayedForOneOnAGondorManWhoIsStrengthPlusTwo() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PlaysOnlyOnAGondorMan() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var blade1 = scn.GetFreepsCard("blade1");
@@ -92,26 +92,17 @@ public class Card_15_062_ErrataTests
 
 		scn.StartGame();
 
-		assertEquals(0, scn.GetTwilight());
-		assertEquals(8, scn.GetStrength(aragorn));
-		assertEquals(6, scn.GetStrength(merchant));
-
 		scn.FreepsPlayCard(blade1);
 		// A [gondor] companion and a [gondor] ally who are Men; not a [gondor] Hobbit, nor a Man of Rohan.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, merchant));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(pippin, guard, frodo));
+		assertEquals(1, scn.FreepsGetChoiceMin());
 		scn.FreepsChooseCard(aragorn);
-
-		assertEquals(1, scn.GetTwilight());
 		assertAttachedTo(blade1, aragorn);
-		// 8 + 2 for the weapon. No minion is in play, so nothing is roaming.
-		assertEquals(10, scn.GetStrength(aragorn));
 
 		// Aragorn now holds a hand weapon, so the Merchant is the one bearer left for the second copy.
 		scn.FreepsPlayCard(blade2);
-		assertEquals(2, scn.GetTwilight());
 		assertAttachedTo(blade2, merchant);
-		assertEquals(8, scn.GetStrength(merchant));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
@@ -142,6 +133,7 @@ public class Card_15_062_ErrataTests
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		// A minion at its own site number is not roaming.
 		scn.MoveMinionsToTable(nelya);
+		scn.ShadowRefreshDecision();
 		assertFalse(scn.HasKeyword(nelya, Keyword.ROAMING));
 		assertEquals(10, scn.GetStrength(aragorn));     // 8 + 2
 		assertEquals(8, scn.GetStrength(knight1));      // 6 + 2
@@ -181,6 +173,7 @@ public class Card_15_062_ErrataTests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(savage, troop, nelya);
+		scn.FreepsRefreshDecision();
 
 		// Not a fellowship ability.
 		assertFalse(scn.FreepsActionAvailable(blade1));

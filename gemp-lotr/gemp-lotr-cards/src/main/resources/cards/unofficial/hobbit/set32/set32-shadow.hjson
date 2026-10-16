@@ -1408,10 +1408,11 @@
 		  type: discardFromHand
 		  forced: false
 		  select: choose(orc)
+		  memorize: discardedCard
 		}
 		effect: {
 		  type: playCardFromDiscard
-		  select: choose(culture(wraith),minion)
+		  select: choose(culture(wraith),minion,not(memory(discardedCard)))
 		}
 	  }
 	]

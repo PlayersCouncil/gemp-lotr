@@ -1,5 +1,6 @@
 package com.gempukku.lotro.logic.actions;
 
+import com.gempukku.lotro.cards.build.ActionSource;
 import com.gempukku.lotro.logic.effects.DiscountEffect;
 import com.gempukku.lotro.logic.timing.Action;
 import com.gempukku.lotro.logic.timing.Effect;
@@ -47,6 +48,13 @@ public interface CostToEffectAction extends Action {
      * @param offeredFor The names of the cards the trigger remembered, or null.
      */
     default void setOfferedFor(String offeredFor) {
+    }
+
+    /**
+     * Says which ability of its card's definition built this action (see Action.getAbility).
+     * @param ability The ability.
+     */
+    default void setAbility(ActionSource ability) {
     }
 
     void setPaidToil(boolean toilPaid);

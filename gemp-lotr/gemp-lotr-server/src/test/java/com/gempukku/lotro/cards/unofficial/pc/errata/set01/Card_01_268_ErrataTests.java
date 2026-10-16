@@ -215,6 +215,7 @@ public class Card_01_268_ErrataTests
 		scn.FreepsPass();
 		// Put into play, not played: no offer.
 		scn.MoveMinionsToTable(inquisitor1);
+		scn.ShadowRefreshDecision();
 		int shadowDeck = scn.GetShadowDeckCount();
 
 		scn.ShadowPlayCard(slayer);

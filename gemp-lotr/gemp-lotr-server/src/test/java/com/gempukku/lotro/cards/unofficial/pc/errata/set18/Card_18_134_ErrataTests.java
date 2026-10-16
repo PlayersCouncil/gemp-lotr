@@ -307,6 +307,7 @@ public class Card_18_134_ErrataTests
 
 		// Doorway to Doom is on the path, site 3, ahead of the fellowship at Fangorn Glade, site 2.
 		scn.MoveCardToAdventurePath(doorway);
+		scn.FreepsRefreshDecision();
 		assertEquals(glade, scn.GetCurrentSite());
 		assertEquals(2, scn.GetCurrentSiteNumber());
 		assertEquals(doorway, scn.GetSite(3));

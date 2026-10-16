@@ -122,6 +122,7 @@ public class Card_01_361_ErrataTests
 
 		// One [isengard] minion, 2 minions against 4 companions: [isengard] minions are -1, and nothing else is.
 		scn.MoveMinionsToTable(savage1);
+		scn.ShadowRefreshDecision();
 		assertEquals(3, scn.GetTwilightCost(party1));
 		assertEquals(3, scn.GetTwilightCost(party2));
 		assertEquals(1, scn.GetTwilightCost(savage2));

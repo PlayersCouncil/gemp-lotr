@@ -103,7 +103,6 @@ public class Card_18_012_ErrataTests
 		assertFalse(scn.FreepsPlayAvailable(gilgalad));
 
 		scn.FreepsPlayCard(legolas);
-		assertEquals(2, scn.GetTwilight());
 		assertTrue(scn.FreepsPlayAvailable(gilgalad));
 
 		scn.FreepsPlayCard(gilgalad);

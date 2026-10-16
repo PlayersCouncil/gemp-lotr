@@ -620,7 +620,7 @@ The primary difference is that discrete effects can be undone by an opposite dis
     * memorize
       optional
 * DiscardFromHand
- Causes `player` to `select` and discard `count` cards from a `hand`.  If `forced`, some cards may protect from this action.  Optionally stores the discarded cards in `memorize`.
+ Causes `player` to `select` and discard `count` cards from a `hand`.  If `forced`, some cards may protect from this action: under such a bar ("Shadow cards may not discard cards from your hand", 4_301, 19_28) no card is offered to choose and none is discarded (F-0514, engine pass 46).  Optionally stores the discarded cards in `memorize`.
  See Desperate Defense of the Ring).
     * player
       default: you

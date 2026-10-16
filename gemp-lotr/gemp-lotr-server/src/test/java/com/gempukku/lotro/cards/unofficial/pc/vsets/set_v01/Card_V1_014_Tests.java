@@ -34,6 +34,9 @@ public class Card_V1_014_Tests
 					// Saruman, Keeper of Isengard: [isengard] minion, cost 4, site 4.  With no Uruk-hai about, his
 					// text does nothing.
 					put("saruman", "3_68");
+					// Saruman, Rabble-rouser: a [dunland] minion, cost 4, site 4.  His text exerts companions as the
+					// fellowship moves, one for each [dunland] Man, and he is played after the move with none in play.
+					put("rabble", "4_33");
 					// The three Elves again, each as the other kind of character, and never beside a namesake.
 					// Celeborn, Lord of the Galadhrim: a companion, cost 2; his trigger is at the start of his skirmishes.
 					put("celeborncompanion", "10_7");
@@ -392,6 +395,33 @@ public class Card_V1_014_Tests
 		// 7 + 1 for each of the three
 		assertEquals(10, scn.GetStrength(gandalf));
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void ASarumanOfDunlandIsWorthOneToo() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gandalf = scn.GetFreepsCard("gandalf");
+		// "Saruman" is named by title alone: a [dunland] Saruman counts as the [isengard] one does.
+		var rabble = scn.GetShadowCard("rabble");
+
+		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCardsToHand(rabble);
+
+		scn.StartGame();
+		scn.SetTwilight(2);
+
+		assertEquals(7, scn.GetStrength(gandalf));
+
+		// 2 set + 2 companions + 2 for site 2 as the fellowship moves: enough for Saruman at 4 + 2 roaming.
+		scn.SkipToPhase(Phase.SHADOW);
+		assertEquals(6, scn.GetTwilight());
+		assertEquals(7, scn.GetStrength(gandalf));
+
+		scn.ShadowPlayCard(rabble);
+		assertInZone(Zone.SHADOW_CHARACTERS, rabble);
+		assertEquals(8, scn.GetStrength(gandalf));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test

@@ -220,6 +220,7 @@ public class Card_94_030_Tests
 		scn.MoveCardsToHand(risk);
 		scn.StartGame();
 		scn.MoveCardsToTopOfDeck(merry);
+		scn.FreepsRefreshDecision();
 
 		scn.FreepsPlayCard(risk);
 		scn.FreepsDismissRevealedCards();
@@ -243,6 +244,7 @@ public class Card_94_030_Tests
 		scn.MoveCardsToHand(risk);
 		scn.StartGame();
 		scn.MoveCardsToTopOfDeck(merry);
+		scn.FreepsRefreshDecision();
 
 		scn.FreepsPlayCard(risk);
 		scn.FreepsDismissRevealedCards();
@@ -506,6 +508,7 @@ public class Card_94_030_Tests
 		scn.MoveCardsToHand(wizardlate, risk);
 		scn.StartGame();
 		scn.MoveCardsToTopOfDeck(merry);
+		scn.FreepsRefreshDecision();
 
 		assertTrue(scn.FreepsPlayAvailable(wizardlate));
 		scn.FreepsPlayCard(risk);
@@ -528,6 +531,7 @@ public class Card_94_030_Tests
 		scn.StartGame();
 		scn.SkipToPhase(Phase.SHADOW);
 		scn.SetTwilight(5);
+		scn.ShadowRefreshDecision();
 
 		assertFalse(scn.ShadowPlayAvailable(host));
 		assertInDiscard(backstabber);

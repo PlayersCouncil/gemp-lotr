@@ -65,6 +65,7 @@ public class Card_08_059_ErrataTests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
+		assertNull(card.getBlueprint().getPossessionClasses());
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
@@ -139,6 +140,7 @@ public class Card_08_059_ErrataTests
 		scn.FreepsPass();
 
 		scn.MoveMinionsToTable(freebooter);
+		scn.ShadowRefreshDecision();
 		// 5 [raider] tokens, on the Galley and on a minion, and an [isengard] token: 6 tokens, 5 of them [raider].
 		scn.AddTokensToCard(galley, 2);
 		scn.AddTokensToCard(freebooter, 3);
@@ -180,6 +182,7 @@ public class Card_08_059_ErrataTests
 		scn.FreepsPass();
 
 		scn.MoveMinionsToTable(khamul, brigand);
+		scn.ShadowRefreshDecision();
 		scn.AddTokensToCard(galley, 3);
 		scn.AddTokensToCard(sails, 3);
 

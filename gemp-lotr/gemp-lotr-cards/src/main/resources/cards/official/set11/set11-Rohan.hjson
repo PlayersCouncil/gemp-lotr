@@ -634,11 +634,7 @@
 				type: modifier
 				modifier: {
 					type: addKeyword
-					requires: {
-						type: location
-						filter: plains
-					}
-					filter: bearer
+					filter: bearer,atSite(plains)
 					keyword: defender
 					amount: 1
 				}

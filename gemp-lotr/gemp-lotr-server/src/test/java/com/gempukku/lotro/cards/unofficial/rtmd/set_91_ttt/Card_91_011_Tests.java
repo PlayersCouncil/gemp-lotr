@@ -25,6 +25,7 @@ public class Card_91_011_Tests
 					put("lemenya", "1_232");    // Ulaire Lemenya: a Nazgul to bear the Blade; his text reaches only bearers of [wraith] conditions
 					put("runner", "1_178");     // Goblin Runner: minion, cost 1, site 4 (roaming at site 2); adds (2) when played
 					put("ally", "1_69");        // Albert Dreary: a Free Peoples ally, no card the Shadow player may play
+					put("swarms", "1_183");     // Goblin Swarms: [moria] condition, support area, cost 1; a condition for the hand, of a blueprint in no pile
 					// Axe Strike, a Free Peoples event: cards to discard from hand
 					put("filler1", "1_3");
 					put("filler2", "1_3");
@@ -277,5 +278,44 @@ public class Card_91_011_Tests
 		assertInDiscard(condition);
 		assertEquals(4, scn.GetFreepsDiscardCount());
 		assertTrue(scn.FreepsDecisionAvailable("Play Shadow action or Pass"));
+	}
+
+	@Test
+	public void AConditionDiscardedToPayForItIsNotTheConditionPlayed() throws DecisionResultInvalidException, CardNotFoundException {
+		// CR 4.2 "effect" (the They Are Coming example, the same text) and Q-0320: a card discarded from hand to pay
+		// the cost cannot be the card then played from the discard pile (F-0544).
+		var scn = GetShadowScenario();
+
+		var shadowMod = scn.GetShadowCard("mod");
+		var condition = scn.GetShadowCard("condition");
+		var condition2 = scn.GetShadowCard("condition2");
+		var swarms = scn.GetShadowCard("swarms");
+
+		scn.MoveCardsToDiscard(condition, condition2);
+		scn.MoveCardsToShadowHand("swarms", "filler1", "filler2");
+
+		scn.StartGame();
+		scn.FreepsPass(); // move to site 2
+
+		// 2 for the site + 1 companion: enough for Goblin Swarms, which costs 1
+		assertEquals(3, scn.GetTwilight());
+		assertInHand(swarms);
+		assertInDiscard(condition, condition2);
+		assertTrue(scn.ShadowActionAvailable(shadowMod));
+		scn.ShadowUseCardAction(shadowMod);
+
+		// The whole hand of three pays the cost, Goblin Swarms among them
+		assertEquals(0, scn.GetShadowHandCount());
+		assertInDiscard(swarms);
+
+		// The two conditions that lay in the pile before the cost, and not the one that lies there now because it paid
+		assertTrue(scn.ShadowHasCardChoiceAvailable(condition, condition2));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(swarms));
+		assertEquals(2, scn.ShadowGetCardChoiceCount());
+		scn.ShadowChooseCard(condition);
+
+		assertInZone(Zone.SUPPORT, condition);
+		assertInDiscard(condition2, swarms);
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

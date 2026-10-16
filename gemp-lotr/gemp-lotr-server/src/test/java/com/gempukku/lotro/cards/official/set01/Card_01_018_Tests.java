@@ -106,6 +106,7 @@ public class Card_01_018_Tests
 		// The Shadow player's deck, from the top: a Goblin Runner, his copy of Dwarven Armor, Strength Born of
 		// Fear, and fourth an Uruk Savage.
 		scn.MoveCardsToTopOfDeck(savage, fear, armor, runner);
+		scn.FreepsRefreshDecision();
 		var shadowDeck = scn.GetShadowDeckCount();
 		var freepsDeck = scn.GetFreepsDeckCount();
 		var shadowShuffles = scn.GetShadowDeckShuffleCount();
@@ -193,6 +194,7 @@ public class Card_01_018_Tests
 		// The Free Peoples player's own deck, from the top: a Goblin Runner, a Dwarven Armor, Strength Born of
 		// Fear, and fourth an Uruk Savage.
 		scn.MoveCardsToTopOfDeck(savage, fear, armor, runner);
+		scn.FreepsRefreshDecision();
 		var freepsDeck = scn.GetFreepsDeckCount();
 		var freepsShuffles = scn.GetFreepsDeckShuffleCount();
 		var shadowDeck = scn.GetShadowDeckCount();
@@ -250,6 +252,7 @@ public class Card_01_018_Tests
 		scn.StartGame();
 		// From the top: a Goblin Runner, a Dwarven Armor, Strength Born of Fear, and fourth an Uruk Savage.
 		scn.MoveCardsToTopOfDeck(savage, fear, armor, runner);
+		scn.FreepsRefreshDecision();
 		var shadowDeck = scn.GetShadowDeckCount();
 		var shadowShuffles = scn.GetShadowDeckShuffleCount();
 
@@ -296,6 +299,7 @@ public class Card_01_018_Tests
 		scn.StartGame();
 		// From the top: a Dwarven Armor, a Dwarf Guard and Farin, and fourth, just out of reach, a Goblin Runner.
 		scn.MoveCardsToTopOfDeck(runner, farin, guard, armor);
+		scn.FreepsRefreshDecision();
 		var freepsDeck = scn.GetFreepsDeckCount();
 
 		scn.FreepsPlayCard(halls);
@@ -337,6 +341,7 @@ public class Card_01_018_Tests
 		// The Shadow player's deck, from the top: his copies of Dwarven Armor, a Dwarf Guard and Farin, and
 		// fourth, just out of reach, a Goblin Runner.
 		scn.MoveCardsToTopOfDeck(runner, farin, guard, armor);
+		scn.FreepsRefreshDecision();
 		var shadowDeck = scn.GetShadowDeckCount();
 
 		scn.FreepsPlayCard(halls);
@@ -378,6 +383,7 @@ public class Card_01_018_Tests
 		// Born of Fear.
 		scn.MoveCardsToDiscard(scn.GetShadowCard("halls"), scn.GetShadowCard("gimli"), scn.GetShadowCard("fear"));
 		scn.MoveCardsToTopOfDeck(fear, armor, runner);
+		scn.FreepsRefreshDecision();
 		var shadowTop = scn.GetShadowTopOfDeck();
 		assertEquals(2, scn.GetShadowDeckCount());
 		assertEquals(3, scn.GetFreepsDeckCount());

@@ -127,6 +127,7 @@ public class Card_01_198_ErrataTests
 		assertTrue(scn.ShadowPlayAvailable(ttmm));
 
 		scn.MoveMinionsToTable(troll);
+		scn.ShadowRefreshDecision();
 		assertEquals(0, scn.GetWoundsOn(troll));
 		assertEquals(0, scn.GetWoundsOn(scout));
 		assertEquals(0, scn.GetWoundsOn(soldier));
