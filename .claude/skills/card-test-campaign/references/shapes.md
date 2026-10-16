@@ -235,7 +235,7 @@ An effect that only COUNTS what is spotted keeps the number prompt: "Draw a card
 A strength bonus is the same: "Make a [moria] Orc strength +1 for each other [moria] Orc you spot (limit +4)"
 (Denizens Enraged 1_167, F-0533) is `chooseActiveCards` into a memory, `chooseHowManyToSpot` of the others, and
 `modifyStrength` of the memory by `fromMemory` with `limit: 4`; read the strength unchanged between the choice and
-the number. Death to the Strawheads 4_8 ("for each companion you spot") is still built with `forEachYouCanSpot`.
+the number. Death to the Strawheads 4_8 ("for each companion you spot") is the same, corrected so (F-0561, dec-b4_7).
 "X is the number of Free Peoples cultures you spot over N" is such a count: a `chooseANumber` from 0 to `forEachFPCulture` with `over: N` is the shape (Orc Insurgent 6_104), as `chooseHowManyFPCulturesToSpot` would be.
 
 **A reveal before "to" is a cost, and an empty draw deck cannot pay it (F-0022, F-0249).** "Reveal the top card
@@ -504,6 +504,8 @@ malformed board state" (rulings, "No two cards of one unique title in play"). Mo
 **FreepsGetCardChoiceCount() at a choice of phase actions.** The rig check `FreepsGetCardChoiceCount()` is NOT 0 at an ordinary phase-action decision (it counts the cards offering actions); to assert no card choice is pending use `AwaitingFreepsSkirmishPhaseActions()` and its kin.
 
 **Check D on a change that lasts the turn: read it in a later phase than the one it was made in (Radagast 59_26).** Made in the regroup phase, the last of the turn, a change lasting the phase and one lasting the turn read alike: three tests of "When Radagast leaves play, this bonus is immediately lost" took him out there, and `until: endOfTurn` made `end(current)` survived them all. Make the change in an earlier phase (Saved From the Fire 8_20 places a companion in the dead pile in the fellowship phase), read it at once and again in a later phase, and on the next turn where it should be gone. The same holds for a restriction that comes with a time limit of its own beside the main effect ("and cannot take wounds or bear other cards" until the regroup phase, each a line with its own `until`): read it in a phase after the one that laid it (Pallando Deceived 13_79).
+
+**Check D on a Shadow skirmish event's phase-long bonus: choose a minion whose skirmish is still to come (Death to the Strawheads 4_8, dec-b4_7).** A Decipher event that names no skirmish may choose a minion assigned elsewhere (F-0527). Assign a second minion of the kind to another companion, give it the bonus in the first skirmish, and read it at its printed strength once its own skirmish begins; the minion of the first skirmish may not live to the next one.
 
 **"Themselves again once it is over" wants the source of the modifier still in play (Lórien Swordsman 4_78).** A minion read at full strength after the skirmish of a companion who DIED in it shows only that a dead card's text is gone: the reading could not have come out otherwise. Read it after a skirmish the source survives (4_78: the second copy beats the Uruk Savage, who then reads 5 with 2 wounds on him), and where the source dies in the only skirmish there is, say in Notes that nothing rests on the reading (dec-b4_78, reviewer).
 

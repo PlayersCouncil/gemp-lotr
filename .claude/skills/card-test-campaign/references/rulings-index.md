@@ -500,7 +500,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 
 ## Costs, and playing cards from piles and hands
 
-- "<do> a companion for each <thing>" may be spread (F-0224) [F-0458, F-0459, Q-0141, Q-0248, F-0497, F-0533]
+- "<do> a companion for each <thing>" may be spread (F-0224) [F-0458, F-0459, Q-0141, Q-0248, F-0497, F-0533, F-0561]
 - A reveal before "to" is a cost, and an empty draw deck cannot pay it (F-0022, F-0249) [Q-0104, Q-0029]
 - A reveal that what follows reads must be able to happen (Q-0148, F-0284) [F-0022, Q-0163, Q-0104, Q-0029, Q-0336]
 - A reveal that a cost buys is offered with that draw deck empty, and flagged (Q-0163: B; built by engine pass 21). "<cost> to reveal the top N cards ... [Q-0148, Q-0336]
@@ -604,6 +604,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - An old test that is kept and put in form, and stands on a board outside play [Q-0178, Q-0237, F-0179, Q-0279]
 - FreepsGetCardChoiceCount() at a choice of phase actions
 - Check D on a change that lasts the turn: read it in a later phase than the one it was made in (Radagast 59_26)
+- Check D on a Shadow skirmish event's phase-long bonus: choose a minion whose skirmish is still to come (Death to the Strawheads 4_8, dec-b4_7) [F-0527]
 - "Themselves again once it is over" wants the source of the modifier still in play (Lórien Swordsman 4_78)
 - A card that bars an act ("may not look at or reveal", "cannot take wounds", "may not be assigned", "cannot use special abilities") is tested on ONE act it stops, and its control (Q-0264: B2; built by engine pass 30) [Q-0265, Q-0315]
 - A ruling that a switching card has NO effect on certain named cards (Legacy Ruling 6, Saruman's Staff 4_174; F-0426; Q-0246: keep) [Q-0236, Q-0034, Q-0224]
