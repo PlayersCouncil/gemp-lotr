@@ -275,7 +275,7 @@
 			effect: {
 				type: transfer
 				select: choose(name(Blade Tip),zone(support))
-				where: choose(ringBearer)
+				where: choose(ringBearer,not(hasAttached(name(Blade Tip))))
 			}
 		}
 		gametext: <b>Twilight</b>.<br>Each time Úlairë Otsëa wins a skirmish, you may exert him to transfer Blade Tip from your support area to the Ring-bearer.

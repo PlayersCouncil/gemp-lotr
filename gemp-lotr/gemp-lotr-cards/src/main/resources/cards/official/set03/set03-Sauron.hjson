@@ -29,8 +29,9 @@
 				{
 					type: If
 					check: {
-						type: HasCardInMemory
+						type: memoryMatches
 						memory: revealedCard
+						filter: minTwilight(1)
 					}
 					true: {
 						type: discardFromHand
