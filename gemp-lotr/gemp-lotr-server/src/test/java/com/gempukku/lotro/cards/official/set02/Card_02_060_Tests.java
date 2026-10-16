@@ -17,8 +17,7 @@ public class Card_02_060_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "2_60");
-					// put other cards in here as needed for the test case
+					put("bowman", "2_60");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +45,7 @@ public class Card_02_060_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("bowman");
 
 		assertEquals("Goblin Bowman", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -60,20 +59,5 @@ public class Card_02_060_Tests
 		assertEquals(4, card.getBlueprint().getStrength());
 		assertEquals(1, card.getBlueprint().getVitality());
 		assertEquals(4, card.getBlueprint().getSiteNumber());
-	}
-
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GoblinBowmanTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-
-		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(2, scn.GetTwilight());
 	}
 }
