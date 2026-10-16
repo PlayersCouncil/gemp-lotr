@@ -1009,7 +1009,9 @@ is his site, not the one player 1's fellowship reached. One player's marker, who
 text compares the two markers ("ahead on the adventure path", CR 4.2 "ahead"), read both at each step
 (Card_13_003_Tests). The card on the path is the copy of whoever laid it: from site 2 on, on
 player 1's first turn, the Shadow player's. `GetCurrentSite()` and `GetSite(n)` return that card and
-`GetFreepsSite(n)` a different one, so compare with `GetSite(n)` or by blueprint. It also gives a site's
+`GetFreepsSite(n)` a different one, so compare with `GetSite(n)` or by blueprint. A site's own trigger offer is
+read on that card too: `FreepsHasOptionalTriggerAvailable(GetFreepsSite(3))` reads false while the trigger of
+the copy laid there is offered, so read it on `GetCurrentSite()` after the move (Card_03_119_Tests). It also gives a site's
 trigger on "the fellowship" a board that tells the mover from the site's owner: read both players' burdens
 (Card_03_116_Tests). A site's `player: free people` trigger with `on: your,companion` takes "your" as the Free
 Peoples player of the turn, not the site's owner: the second player at the first player's Trollshaw Forest 11_260

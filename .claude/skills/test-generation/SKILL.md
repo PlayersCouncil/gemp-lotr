@@ -349,7 +349,9 @@ condition to prevent that") prevents the whole of that one simultaneous discard,
 the opponent's own among them, and they are read saved (Q-0250: B, "the action is all or nothing"; Siege Engine
 5_60, "one or more machines"). A singular "If a <kind> is about to be discarded" saves the one card, one at each use (Q-0313: A; shapes.md). Where a trigger names who did the thing
 ("exerted by a Free Peoples card", "uses a special ability"), one valid doer is neither the card itself nor its
-bearer, and one is no character where the wording allows (a possession's ability); where the wording names no side, a valid doer of each side is laid (Sharku's Warg 5_59's "a skirmish special ability": a minion's as well as a companion's, or `player: fp` passes). Where a condition or a trigger
+bearer, and one is no character where the wording allows (a possession's ability); a bare side word as the doer
+("a Shadow card is about to add twilight") owes the Restriction row's spread, a character, an item and a card that is
+neither (3_114: beside a minion and a possession, `or(minion,possession)` passed); where the wording names no side, a valid doer of each side is laid (Sharku's Warg 5_59's "a skirmish special ability": a minion's as well as a companion's, or `player: fp` passes). Where a condition or a trigger
 turns on a card of a kind being PLAYED ("unless a Shadow event is played"), each word owes a card that fails it
 alone and is played in that same window (a Shadow card that is no event, a Free Peoples event); a special ability
 used there stands in for neither (10_116). Where the wording names the PLAYER who does it ("the Free Peoples player
@@ -714,7 +716,8 @@ beside them (see "One candidate is chosen for you" in gemp-testing). Assert the 
 `FreepsHasCardChoiceAvailable(...)` and `FreepsHasCardChoiceNotAvailable(...)` before choosing. A choice the game
 carries out unasked, because one valid card is there, shows nothing of the invalid card beside it: a second valid
 candidate is laid and the invalid one read "not offered" (Q-0266: B; Ketura: "Yeah I think B is the way to go.").
-That is owed by the test that claims the choice's `F`; a `-`/`C-` test whose choice goes unasked because only one
+That is owed by the test that claims the choice's `F`, once: a later use of the same choice in that test, carried
+out unasked because an earlier use exhausted the other candidate, owes nothing more (3_114); a `-`/`C-` test whose choice goes unasked because only one
 candidate can be paid for owes nothing more there (8_30).
 Q-0266 is about choices of cards, an effect's own ("exert Faramir to wound that minion", 4_118) as well as a bearer's or
 a target's: "<do X> or <do Y>" carried out unasked because one branch cannot be done in full
