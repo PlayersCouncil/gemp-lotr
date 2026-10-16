@@ -234,6 +234,8 @@ more at the end where the rounds end on the wrong player; a choice inside the ro
 second round played by hand. The next decision is the other player's actions, and each looping ability (that card's,
 not its other abilities nor another copy's) is still offered, flagged, to the end of the phase or skirmish: read it
 with `FreepsActionLoopBanned(card)`; `FreepsActionAvailable` reads it as offered, and taking it is refused.
+The prompts are HTML (Q-0329, engine pass 52): a text read with `FreepsDecisionAvailable` names each card as the
+game log's card hint, `<div class='cardHint' value='5_29'>·Sméagol, Slinker</div>`, and the number as `<b>6</b>`.
 `mechanics/actions/VoluntaryLoopTests`, `FiniteRepeatsAreNoLoopTests`.
 
 ## What is offered, and what an offer does

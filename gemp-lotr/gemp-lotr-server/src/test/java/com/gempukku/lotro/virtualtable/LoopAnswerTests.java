@@ -114,7 +114,7 @@ public class LoopAnswerTests
 
 		scn.FreepsNameLoopIterations(5);
 		assertRefused(() -> scn.ShadowNameLoopIterations(2), "name the loop's iterations", "The Free Peoples player has decided");
-		assertTrue(scn.ShadowDecisionAvailable("will be performed **5** more times."));
+		assertTrue(scn.ShadowDecisionAvailable("will be performed <b>5</b> more times."));
 	}
 
 	@Test

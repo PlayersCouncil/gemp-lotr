@@ -234,9 +234,9 @@ public class Card_05_029_Tests
 
 		// He would be offered his ability a third time: the loop is found, and put to the players.
 		assertFalse(scn.AwaitingFreepsSkirmishPhaseActions());
-		assertTrue(scn.FreepsDecisionAvailable("[[Sméagol, Slinker]] and [[Anduin Banks]] can be used forever."));
+		assertTrue(scn.FreepsDecisionAvailable("<div class='cardHint' value='5_29'>·Sméagol, Slinker</div> and <div class='cardHint' value='7_341'>Anduin Banks</div> can be used forever."));
 		scn.FreepsNameLoopIterations(3);
-		assertTrue(scn.ShadowDecisionAvailable("the loop between [[Sméagol, Slinker]] and [[Anduin Banks]] will be performed **3** more times."));
+		assertTrue(scn.ShadowDecisionAvailable("the loop between <div class='cardHint' value='5_29'>·Sméagol, Slinker</div> and <div class='cardHint' value='7_341'>Anduin Banks</div> will be performed <b>3</b> more times."));
 		scn.ShadowAgreeToLoop();
 
 		// Three rounds, the site's action last: Sméagol 7 + 6, the Pursuer 9 + 6, no burden.  The Free Peoples

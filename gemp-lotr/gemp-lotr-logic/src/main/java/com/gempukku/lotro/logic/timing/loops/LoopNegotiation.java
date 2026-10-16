@@ -19,14 +19,16 @@ import java.util.function.Consumer;
  * and the Shadow player takes the next action.  Where the number named is 1, the lower number can only be 0 and
  * is not asked (PlayoutDecisionEffect, F-0147).
  * <p>
- * The texts are sent as she wrote them: a markdown link, the cards' titles in [[...]] and the number in **...**.
- * How a client draws them is the client's.
+ * The texts are her words, sent as HTML, since the client puts a decision's text in with jQuery's .html(): the
+ * rules link as an anchor, each card as GameUtils.getCardLink gives it (the cardHint div the game log uses; her
+ * [[...]], Q-0329, answers/2026-10-16-a.md), the number in &lt;b&gt;, and her line breaks as &lt;br&gt;.
  * <p>
  * What is settled is handed to the window that found the loop (LoopTracker.agreed), which carries it out (LoopRun).
  */
 public class LoopNegotiation extends SystemQueueAction {
     /** The first line of the Free Peoples player's prompt and of the Shadow player's. */
-    public static final String HEADER = "LOOP DETECTED: [See loop handling rules here.](https://wiki.lotrtcgpc.net/wiki/Comprehensive_Rules_4.2#loops)";
+    public static final String HEADER = "LOOP DETECTED: <a href=\"https://wiki.lotrtcgpc.net/wiki/Comprehensive_Rules_4.2#loops\""
+            + " target=\"_blank\">See loop handling rules here.</a>";
     /** The most iterations the Free Peoples player may name: it bounds the work the server does in one go. */
     public static final int MOST_ITERATIONS = 99;
     /** The number the Free Peoples player's prompt is filled in with. */
@@ -101,7 +103,7 @@ public class LoopNegotiation extends SystemQueueAction {
      * @return The Free Peoples player's prompt.
      */
     public static String freePeoplesPrompt(String cards) {
-        return HEADER + "\n" + cards + " can be used forever.\nChoose how many more times this loop will execute.";
+        return HEADER + "<br>" + cards + " can be used forever.<br>Choose how many more times this loop will execute.";
     }
 
     /**
@@ -110,8 +112,8 @@ public class LoopNegotiation extends SystemQueueAction {
      * @return The Shadow player's prompt.
      */
     public static String shadowPrompt(String cards, int named) {
-        return HEADER + "\nThe Free Peoples player has decided that the loop between " + cards + " will be performed **"
-                + named + "** more times.";
+        return HEADER + "<br>The Free Peoples player has decided that the loop between " + cards + " will be performed <b>"
+                + named + "</b> more times.";
     }
 
     /**
@@ -119,7 +121,7 @@ public class LoopNegotiation extends SystemQueueAction {
      * @return The Shadow player's first choice.
      */
     public static String agreeChoice(int named) {
-        return "Agree: the loop goes **" + named + "** more times, and Free Peoples takes the next action.";
+        return "Agree: the loop goes <b>" + named + "</b> more times, and Free Peoples takes the next action.";
     }
 
     /**
@@ -135,21 +137,22 @@ public class LoopNegotiation extends SystemQueueAction {
      * @return The Shadow player's prompt for a lower number.
      */
     public static String lowerPrompt(String cards, int named) {
-        return "Choose a number lower than **" + named + "**. The loop between " + cards
+        return "Choose a number lower than <b>" + named + "</b>. The loop between " + cards
                 + " will be performed that many times, ending so that you will take the next action.";
     }
 
     /**
-     * The loop's cards as the prompts name them: "[[Sméagol, Slinker]] and [[Anduin Banks]]", in the order the
-     * round takes them, and one name where both actions are of one card.
+     * The loop's cards as the prompts and the game log name them: each as GameUtils.getCardLink gives it (a
+     * cardHint div), the two joined by " and ", in the order the round takes them, and one card where both actions
+     * are of one card.
      * @param first The card of the round's first action.
      * @param second The card of its second.
      * @return The names.
      */
     public static String namesOf(PhysicalCard first, PhysicalCard second) {
-        final String firstName = "[[" + GameUtils.getFullName(first) + "]]";
+        final String firstName = GameUtils.getCardLink(first);
         if (second == null || second == first)
             return firstName;
-        return firstName + " and [[" + GameUtils.getFullName(second) + "]]";
+        return firstName + " and " + GameUtils.getCardLink(second);
     }
 }

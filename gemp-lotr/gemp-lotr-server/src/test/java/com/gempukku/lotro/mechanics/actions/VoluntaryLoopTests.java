@@ -27,8 +27,9 @@ import static org.junit.Assert.*;
  * The loop is found as the player who opened it is about to be offered its first action for the third time: each
  * player has used his action twice, and the board at the start of the third round is the board at the start of
  * the second.  The Free Peoples player then names a number (1 to 99, filled in with 3), whoever opened the loop,
- * and the Shadow player agrees to it or chooses a lower one (0 to one less).  The prompts are her words, with the
- * cards' titles in [[...]] and the number in **...**.
+ * and the Shadow player agrees to it or chooses a lower one (0 to one less).  The prompts are her words, sent as
+ * HTML (Q-0329, answers/2026-10-16-a.md): the rules link an anchor, each card the game log's card hint
+ * (GameUtils.getCardLink), the number in bold and her line breaks as breaks.  The first test reads each prompt whole.
  *
  * What the players settle is then carried out at once, before anybody is asked anything (LoopRun).  One iteration
  * is one round as found, the opener's action and then the other player's.  The Shadow player takes the last action
@@ -198,8 +199,8 @@ public class VoluntaryLoopTests
 		assertEquals(7, scn.GetStrength(smeagol));
 		assertEquals(9, scn.GetStrength(pursuer));
 		assertFalse(scn.AwaitingFreepsSkirmishPhaseActions());
-		assertTrue(scn.FreepsDecisionAvailable("LOOP DETECTED: [See loop handling rules here.](https://wiki.lotrtcgpc.net/wiki/Comprehensive_Rules_4.2#loops)\n[[Sméagol, Slinker]] and [[Anduin Banks]] can be used forever."
-				+ "\nChoose how many more times this loop will execute."));
+		assertTrue(scn.FreepsDecisionAvailable("LOOP DETECTED: <a href=\"https://wiki.lotrtcgpc.net/wiki/Comprehensive_Rules_4.2#loops\" target=\"_blank\">See loop handling rules here.</a><br><div class='cardHint' value='5_29'>·Sméagol, Slinker</div> and <div class='cardHint' value='7_341'>Anduin Banks</div> can be used forever."
+				+ "<br>Choose how many more times this loop will execute."));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		assertEquals(99, scn.FreepsGetChoiceMax());
 		assertEquals(Integer.valueOf(3), scn.FreepsGetChoiceDefault());
@@ -207,9 +208,9 @@ public class VoluntaryLoopTests
 
 		scn.FreepsNameLoopIterations(6);
 
-		assertTrue(scn.ShadowDecisionAvailable("LOOP DETECTED: [See loop handling rules here.](https://wiki.lotrtcgpc.net/wiki/Comprehensive_Rules_4.2#loops)\nThe Free Peoples player has decided that the loop between "
-				+ "[[Sméagol, Slinker]] and [[Anduin Banks]] will be performed **6** more times."));
-		assertEquals(List.of("Agree: the loop goes **6** more times, and Free Peoples takes the next action.",
+		assertTrue(scn.ShadowDecisionAvailable("LOOP DETECTED: <a href=\"https://wiki.lotrtcgpc.net/wiki/Comprehensive_Rules_4.2#loops\" target=\"_blank\">See loop handling rules here.</a><br>The Free Peoples player has decided that the loop between "
+				+ "<div class='cardHint' value='5_29'>·Sméagol, Slinker</div> and <div class='cardHint' value='7_341'>Anduin Banks</div> will be performed <b>6</b> more times."));
+		assertEquals(List.of("Agree: the loop goes <b>6</b> more times, and Free Peoples takes the next action.",
 				"Choose a lower number: Shadow will take the next action."), scn.ShadowGetMultipleChoices());
 		assertFalse(scn.FreepsAnyDecisionsAvailable());
 
@@ -254,8 +255,8 @@ public class VoluntaryLoopTests
 		scn.FreepsNameLoopIterations(6);
 		scn.ShadowChoose("Choose a lower number: Shadow will take the next action.");
 
-		assertTrue(scn.ShadowDecisionAvailable("Choose a number lower than **6**. The loop between [[Sméagol, Slinker]] "
-				+ "and [[Anduin Banks]] will be performed that many times, ending so that you will take the next action."));
+		assertTrue(scn.ShadowDecisionAvailable("Choose a number lower than <b>6</b>. The loop between <div class='cardHint' value='5_29'>·Sméagol, Slinker</div> "
+				+ "and <div class='cardHint' value='7_341'>Anduin Banks</div> will be performed that many times, ending so that you will take the next action."));
 		assertEquals(0, scn.ShadowGetChoiceMin());
 		assertEquals(5, scn.ShadowGetChoiceMax());
 
@@ -342,11 +343,11 @@ public class VoluntaryLoopTests
 		// 1 burden, as at the start of the second round.
 		assertEquals(1, scn.GetBurdens());
 		assertFalse(scn.ShadowAnyDecisionsAvailable());
-		assertTrue(scn.FreepsDecisionAvailable("LOOP DETECTED: [See loop handling rules here.](https://wiki.lotrtcgpc.net/wiki/Comprehensive_Rules_4.2#loops)\n[[Anduin Banks]] and [[Sméagol, Slinker]] can be used forever."
-				+ "\nChoose how many more times this loop will execute."));
+		assertTrue(scn.FreepsDecisionAvailable("LOOP DETECTED: <a href=\"https://wiki.lotrtcgpc.net/wiki/Comprehensive_Rules_4.2#loops\" target=\"_blank\">See loop handling rules here.</a><br><div class='cardHint' value='7_341'>Anduin Banks</div> and <div class='cardHint' value='5_29'>·Sméagol, Slinker</div> can be used forever."
+				+ "<br>Choose how many more times this loop will execute."));
 
 		scn.FreepsNameLoopIterations(4);
-		assertTrue(scn.ShadowDecisionAvailable("the loop between [[Anduin Banks]] and [[Sméagol, Slinker]] will be performed **4** more times."));
+		assertTrue(scn.ShadowDecisionAvailable("the loop between <div class='cardHint' value='7_341'>Anduin Banks</div> and <div class='cardHint' value='5_29'>·Sméagol, Slinker</div> will be performed <b>4</b> more times."));
 		scn.ShadowAgreeToLoop();
 
 		// Four rounds end with Sméagol's action, so the site's is taken once more to give the Shadow player the last
@@ -466,10 +467,10 @@ public class VoluntaryLoopTests
 		assertEquals(0, scn.GetThreats());
 		assertEquals(7, scn.GetStrength(merry));
 		assertEquals(11, scn.GetStrength(soldier));
-		assertTrue(scn.FreepsDecisionAvailable("LOOP DETECTED: [See loop handling rules here.](https://wiki.lotrtcgpc.net/wiki/Comprehensive_Rules_4.2#loops)\n[[Merry, Rohirrim Squire]] and [[Mordor Soldier]] can be used forever."));
+		assertTrue(scn.FreepsDecisionAvailable("LOOP DETECTED: <a href=\"https://wiki.lotrtcgpc.net/wiki/Comprehensive_Rules_4.2#loops\" target=\"_blank\">See loop handling rules here.</a><br><div class='cardHint' value='7_320'>·Merry, Rohirrim Squire</div> and <div class='cardHint' value='7_290'>Mordor Soldier</div> can be used forever."));
 
 		scn.FreepsNameLoopIterations(1);
-		assertTrue(scn.ShadowDecisionAvailable("will be performed **1** more times."));
+		assertTrue(scn.ShadowDecisionAvailable("will be performed <b>1</b> more times."));
 
 		// Lower than 1 can only be 0: it is not asked.
 		scn.ShadowLowerLoop(0);
@@ -565,7 +566,7 @@ public class VoluntaryLoopTests
 		scn.ShadowUseCardAction(soldier);
 		scn.FreepsUseCardAction(merry);
 		scn.ShadowUseCardAction(soldier);
-		assertTrue(scn.FreepsDecisionAvailable("[[Merry, Rohirrim Squire]] and [[Mordor Soldier]] can be used forever."));
+		assertTrue(scn.FreepsDecisionAvailable("<div class='cardHint' value='7_320'>·Merry, Rohirrim Squire</div> and <div class='cardHint' value='7_290'>Mordor Soldier</div> can be used forever."));
 		scn.FreepsNameLoopIterations(2);
 		scn.ShadowLowerLoop(1);
 
@@ -616,7 +617,7 @@ public class VoluntaryLoopTests
 		assertEquals(12, scn.GetStrength(denizen));
 		assertEquals(0, scn.GetThreats());
 
-		assertTrue(scn.FreepsDecisionAvailable("[[Merry, Rohirrim Squire]] and [[Troll of the Deep, Cave Troll]] can be used forever."));
+		assertTrue(scn.FreepsDecisionAvailable("<div class='cardHint' value='7_320'>·Merry, Rohirrim Squire</div> and <div class='cardHint' value='19_23'>·Troll of the Deep, Cave Troll</div> can be used forever."));
 		scn.FreepsNameLoopIterations(3);
 		scn.ShadowAgreeToLoop();
 
