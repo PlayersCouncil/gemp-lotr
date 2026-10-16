@@ -370,6 +370,10 @@ purpose. Hobbit Sword: [shire] hand weapon, cost 1, strength +2, no other text. 
 each Orc and each Uruk-hai skirmishing bearer is strength -1. Salt from the Shire: [shire] box, cost 1, resistance
 +2; two abilities that discard it, used only on purpose. With a pipe (Bilbo's Pipe 1_285) that is four classes,
 which is how an ally comes to bear a weapon, or three cards of different classes.
+An ally who bears a weapon with a DAMAGE bonus, and can skirmish: Thrarin, Dwarven Smith 1_27 (unique [dwarven]
+Dwarf ally, strength 4, vitality 2, home 3F; "Maneuver: Exert Thrarin to allow him to participate in archery fire
+and skirmishes until the regroup phase") bearing Gimli's Battle Axe, Trusted Weapon 7_9 (unique hand weapon, any
+Dwarf may bear it, strength +2; damage +1 while a threat can be spotted, so lay one; Card_03_072_Tests).
 
 **A Bilbo of each card type, for a text that names Bilbo.** The ally Bilbo, Retired Adventurer 1_284 (home 3F;
 above); the companion Bilbo, Melancholy Hobbit 12_119 ([shire] Hobbit, Ring-bound, strength 3, vitality 4); Bilbo,
