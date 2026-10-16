@@ -585,7 +585,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - The CR 4.2 "discard" example (Watcher in the Water 2_73 with Goblin Runner 1_178) is shown in Goblin Runner's file
 - The CR 4.2 "modifier" example (Shelob, Her Ladyship 10_23 with Sent Back 9_27) is shown in Shelob's file, and the "effect" and "preventing effects" example (Morgul Destroyer with the Sapling 9_35) in Morgul Destroyer's
 - The CR 4.2 "modifier" example on Orc Ambusher 1_261 ("It does not specifically name itself, so this does not apply to Orc Ambusher when it is played") is owed as a `Rule` clause by every card that prints its sentence
-- "This card can replace sites only in the Fellowship block format" (CR 4.2 Section Three: Paths Seldom Trodden 1_222, Úlairë Nelya 1_233, Dark Places 2_55; Grimbold 7_233 with "King block") lays the player's site of the card's own block, on any path, and is not offered where he has none to lay (Q-0327, Ketura 2026-10-15; engine pass 49)
+- "This card can replace sites only in the Fellowship block format" (CR 4.2 Section Three: Paths Seldom Trodden 1_222, Úlairë Nelya 1_233, Dark Places 2_55; Grimbold 7_233 with "King block") lays the player's site of the card's own block, on any path, and is not offered where he has none to lay (Q-0327, Ketura 2026-10-15; engine pass 49) [Q-0266]
 
 ## Reveals, draw decks and shuffles
 
@@ -627,6 +627,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A site 1's "When the fellowship moves from <this site>" (Western Emyn Muil 4_329) takes the next move as its `-`
 - "Stacked on a site you control": no board tells `controlledSite` from `site` (Above the Battlement 7_262, Gorgoroth Pillager 7_275)
 - "Assign a minion to <a character>": no board tells `minion: choose(minion)` from `choose(character)` (Into the Caves 17_100)
+- "Each unique [culture] minion is strength +N": no board tells `unique,culture(moria),minion` from `unique,culture(moria)` (Dark Places 2_55; dec-b2_55)
 - "An enduring minion": no board tells `choose(enduring,minion)` from `choose(enduring)` (City of the Dead 8_118)
 - "Each roaming minion" and "Exert a [culture] character": no board tells `all(roaming,minion)` from `all(roaming)`, nor `choose(culture(gondor),character)` in an exert cost from `choose(culture(gondor))` (Eregion's Trails 1_104, Foes of Mordor 1_105; dec-b1_102)
 - "Until the regroup phase, that ally ... participates in archery fire and skirmishes": no board tells the participation's `until: start(regroup)` from `end(assignment)` (One Whom Men Would Follow 1_109; dec-b1_106)

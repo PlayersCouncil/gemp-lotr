@@ -1945,7 +1945,9 @@ every move of either player and on the Fellowship and King paths alike (probed a
 copy still in the Free Peoples adventure deck.
 A site put in the CARD map (`put("trollshaw", "1_334")`, not the site map) goes into BOTH adventure decks as well,
 so each player holds two sites of that number: a plain `FreepsPass()` then stops at the Shadow player's "Choose
-site to play" and not at his Shadow phase, and "your site of the same number" can pick up the extra copy. Give each
+site to play" and not at his Shadow phase, `SkipToSite(n)` halts on that choice ("halted in phase FELLOWSHIP"),
+and "your site of the same number" can pick up the extra copy, so an ability read as offered may be offered on it
+(dec-b2_55). Set both decks before any move that lays a site. Give each
 player nine sites, one of each number (`SetFreepsAdventureDeck`, `SetShadowAdventureDeck`), then lay the card-map
 site with `MoveCardToAdventurePath`, which takes it even after the reset has taken it out (Card_01_222_Tests).
 
