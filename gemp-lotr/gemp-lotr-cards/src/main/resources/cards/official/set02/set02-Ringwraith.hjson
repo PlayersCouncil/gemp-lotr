@@ -288,7 +288,11 @@
 			effect: {
 				type: exert
 				count: {
-					type: forEachBurden
+					type: range
+					from: 1
+					to: {
+						type: forEachBurden
+					}
 				}
 				select: choose(companion)
 			}
