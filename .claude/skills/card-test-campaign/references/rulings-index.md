@@ -408,6 +408,17 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A defender on two [isengard] Men exerts twice under Unferth (Q-0330, 2026-10-16) [Q-0323]
 - A card the cost milled off the draw deck is not the card taken or played (Q-0331, F-0548, 2026-10-16) [Q-0192, Q-0320]
 - The loop prompts' [[...]] are card hints (Q-0329, 2026-10-16)
+- The skirmish procedure, steps 1 to 11, is binding (Q-0332, 2026-10-16)
+- "About to end" is step 6, after the loser is killed (Q-0332, 2026-10-16)
+- "Exert X companions" runs from 1 (Q-0333, 2026-10-16) [Q-0076]
+- A draw is the drawing hand's player's (Q-0334, 2026-10-16) [Q-0251]
+- Archery wounds have no source (Q-0335, 2026-10-16)
+- A random reveal from a hand is a cost: an empty hand makes the card unplayable (Q-0336, 2026-10-16) [Q-0148]
+- "When" and "each time" play alike (Q-0338, 2026-10-16)
+- A "may" with a parenthesis: 0-1 of the noun, or 0-N of the parenthesis's noun as printed (Q-0339, 2026-10-16)
+- A snapshot per CR 4.2 for Deft in Their Movements (F-0555, 2026-10-16) [Q-0220]
+- A "spot X" count defaults to all of them (F-0561, 2026-10-16) [Q-0248]
+- The loop scenarios she wants in the mechanical tests (2026-10-16)
 
 # Settled shapes (shapes.md)
 

@@ -356,3 +356,12 @@ THE COST OF ASSIGNING (set 7's Morgul Orcs; built by engine pass 26, item assign
 - A card that prints no game text and no keyword (Gandalf, Stormcrow 0_64, and about 33 more): its ledger has no
   clause lines (Sources, Findings, Dropped and Notes only), its stats test header writes `Game Text: (none)`, and
   lint accepts that. Do not invent a placeholder clause.
+
+- Ketura's answers of 2026-10-16 (rulings-log, entries of that date; engine pass 53 builds them). A random reveal from
+  an opponent's hand with no cost ahead of it is a cost: with that hand empty the card is NOT playable (Q-0336: B);
+  until pass 53 lands, a card of that shape gets the requirement at landing (`hasCardInHand` of that player) and a
+  finding naming Q-0336. Her skirmish procedure (Q-0332) is binding: "about to end" is step 6, after the loser's
+  wounds or kill (5b, 5c) and after a cancel (2a) or a removal (2c). "When" and "each time" play alike (Q-0338).
+  Archery wounds have no source (Q-0335). A draw is the player's whose hand it goes to (Q-0334). A "you may ...
+  (or N <noun> if ...)" on a trigger or ability is 0-1 of the first noun, or 0-N of the parenthesis's noun as printed
+  (Q-0339). A "spot X" number choice defaults to all that can be spotted (F-0561).

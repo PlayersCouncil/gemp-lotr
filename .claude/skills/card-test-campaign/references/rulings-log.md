@@ -2217,3 +2217,65 @@ deck-top cost: the cards it discards are memorized and left out of the take or p
 **The loop prompts' [[...]] are card hints (Q-0329, 2026-10-16).** "Oh, my mistake: I had meant for the [[brackets]] to
 indicate a card hint using the existing mechanism for that, not necessarily a literal." So a card named in the prompt
 is sent as `GameUtils.getCardLink(card)` (the cardHint div the game log uses). *[2026-10-16]*
+
+**The skirmish procedure, steps 1 to 11, is binding (Q-0332, 2026-10-16).** A Rules Council draft for CR "skirmish
+phase", "which outlines the specifics of skirmish resolution in a manner akin to `playing a card` for card plays. You
+may consider this binding moving forward." Transcribed in orchestrator/answers/2026-10-16-b.md (her image beside it).
+The steps that settle most cards: 2a, a canceled skirmish "ends immediately; neither side is a winner or loser ... Skip
+directly to step 6"; 2b, excess characters removed are neither winner nor loser; 2c, the last character of a side
+removed: "that side is declared the loser and the remaining side is the winner. Skip to step 4"; 3a, responses to
+"about to be overwhelmed" that alter strength return to the start of step 3; 3b, a tie goes to the Shadow side; 5a,
+a losing side already removed takes no loss effects; 5b, overwhelmed losers are killed "with no wounds applied"; 5d,
+a loser killed by these effects is "killed by" any of the winning side; 6, "The skirmish is about to end, whether
+canceled, removed, or resolved normally"; 7, the characters are no longer assigned. *[2026-10-16]*
+
+**"About to end" is step 6, after the loser is killed (Q-0332, 2026-10-16).** Final Cry 2_57: "In this we can clearly
+see that step 6 is where Loathsome and Final Cry (and Sting, Bane of the Eight Legs) respond. Given that the Balrog
+will have died from step 5b, the Whip would have been discarded and so would not be in the skirmish at the time that
+Final Cry responds in step 6. We do need to confirm that Final Cry responds to all other kinds of skirmish endings
+(death of the loser, canceled skirmish, removing the loser from the skirmish), but I think death of the Balrog is one
+case that legitimately cannot trigger Final Cry. B." *[2026-10-16]*
+
+**"Exert X companions" runs from 1 (Q-0333, 2026-10-16).** They Will Find the Ring 2_81: "A" (Q-0076). *[2026-10-16]*
+
+**A draw is the drawing hand's player's (Q-0334, 2026-10-16).** Verily I Come 2_94: "A". Drawing His Eye and 2_15 add no
+burden under Verily I Come; Q-0251 does not reach draws. *[2026-10-16]*
+
+**Archery wounds have no source (Q-0335, 2026-10-16).** Erestor 3_14: "A. As you say, archery total wounds are
+unsourced." A [sauron] archer in play does not make an archery wound "a wound from a [sauron] minion". *[2026-10-16]*
+
+**A random reveal from a hand is a cost: an empty hand makes the card unplayable (Q-0336, 2026-10-16).** Friends of Old
+3_16, Storm of Argument 3_6, 3_51: "I'm concerned about a NRE. Regardless, given that it has to reveal 'a' card, and
+the way it is configured I would read that as a cost. If there are no cards to reveal, the card should not be playable.
+B." Q-0148 reaches a hand. *[2026-10-16]*
+
+**"When" and "each time" play alike (Q-0338, 2026-10-16).** Dunlending Looter 4_11: "'When' and 'Each time' are for our
+purposes identical in execution. They are meant to aid understanding, but they aren't actually binding. In this case,
+the 'When' just indicates that upon activating, the Looter is removed from play, meaning that no further executions
+could possibly occur to warrant an 'Each time'. So this is A." A declined "when" trigger is offered again. *[2026-10-16]*
+
+**A "may" with a parenthesis: 0-1 of the noun, or 0-N of the parenthesis's noun as printed (Q-0339, 2026-10-16).**
+Dunlending Pillager 4_13 ("you may discard a Free Peoples possession (or 2 possessions if you spot 6 companions)"):
+"Hrrm. I suppose as written it could discard Shadow possessions. However since it is under a "may" clause, I would
+interpret this as a branch of 0-1 Free Peoples possessions, or 0-2 possessions of any side if the requirement is met.
+Since it is not an event the play execution is a little different from Secret Sentinels." *[2026-10-16]*
+
+**A snapshot per CR 4.2 for Deft in Their Movements (F-0555, 2026-10-16).** 2_99: "Yup, A. I didn't realize this one was
+broken, although it's possible it's only since the HJSON conversion." The sites in play when it is played are -2; a
+site laid later keeps its number. This replaces line 3 of Q-0220 J ("a snapshot would do nothing") for this card;
+We Must Go Warily 3_48 is read on the same words. *[2026-10-16]*
+
+**A "spot X" count defaults to all of them (F-0561, 2026-10-16).** Death to the Strawheads 4_8, asked how many
+companions to spot (Q-0248): "I don't disagree with your find, but make sure that the default answer presented to the
+player is all of them so they don't have to click three things." *[2026-10-16]*
+
+**The loop scenarios she wants in the mechanical tests (2026-10-16).** "Different-player infinite action loops which
+should be detected and barred: Smeagol, Slinker vs Anduin Banks; The One Ring, The Great Ring vs Morgul Brute; Hrethel
+vs any warg-rider with Warg. Single-player infinite action loops which should be detected and barred: Sam, Faithful
+Companion (with no Bill in play or in the deck); Bridge of Khazad-dum (with no Balrog in play or in the deck); 2 copies
+of Hobbit Party Guest infinitely healing each other. Non-infinite action loops which should not trip infinite loop
+detection: Gondorian Captain + Base of Mindolluin + a bunch of fortifications in the deck; the deck will run out of
+fortifications eventually, but it is not an infinite loop; Erkenbrand's Horn + New Chapter + a bunch of followers in
+the deck; the deck will run out of followers eventually, so it is not an infinite loop. Infinite non-action loops which
+should be detected and cause neither ability to function: Frodo, Weary From the Journey vs Black Land Observer; Frodo,
+Weary From the Journey vs Wandering Hillman." *[2026-10-16]*
