@@ -2279,3 +2279,8 @@ fortifications eventually, but it is not an infinite loop; Erkenbrand's Horn + N
 the deck; the deck will run out of followers eventually, so it is not an infinite loop. Infinite non-action loops which
 should be detected and cause neither ability to function: Frodo, Weary From the Journey vs Black Land Observer; Frodo,
 Weary From the Journey vs Wandering Hillman." *[2026-10-16]*
+
+**A one-player loop: three uses, then her prompt, then barred (2026-10-16).** "The `loops` section mentions in the first
+clause the Sam case; it should let the player do it three times and then prompt with: "LOOP DETECTED: Choose a number
+of times to repeat this action."  It should then perform that many, and then put the tag on that card action to block
+its future use." *[2026-10-16]*

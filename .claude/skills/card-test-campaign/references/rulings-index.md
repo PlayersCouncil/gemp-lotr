@@ -419,6 +419,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A snapshot per CR 4.2 for Deft in Their Movements (F-0555, 2026-10-16) [Q-0220]
 - A "spot X" count defaults to all of them (F-0561, 2026-10-16) [Q-0248]
 - The loop scenarios she wants in the mechanical tests (2026-10-16)
+- A one-player loop: three uses, then her prompt, then barred (2026-10-16)
 
 # Settled shapes (shapes.md)
 
