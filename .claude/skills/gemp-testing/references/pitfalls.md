@@ -619,6 +619,11 @@ error; the test fails some lines later. Read what is pending before answering (s
 for every response to a play, not only a response event in hand: a Response ability on a card in play (Shrouded
 Elf 63_23) is asked before the played event's effect chooses anything (CR 4.2 "playing a card", steps 5 and 6).
 
+**A condition played by another card's effect asks where it goes before its own cost.** Saruman's Frost 1_135
+played from the discard pile by A Fell Voice on the Air 3_52 first asks the site to attach to ("Choose target to
+attach to", every site on the path), and only then its own "to play, exert an [isengard] minion". Answer the target
+first (Card_03_052_Tests, dec-b3_50).
+
 **The entries of a required-response ordering are actions, not choices.** While `FreepsAwaitingRequiredResponseOrder()`
 is true, read what is to be ordered with `FreepsGetActionCount()` and `FreepsActionAvailable("<card title>")` (each
 entry carries its card's name: "Elrond", "Dwarven Heart", "The One Ring", "Gimli's Helm"), and name the first with
