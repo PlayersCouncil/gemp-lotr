@@ -4,7 +4,7 @@ What the campaign has learned about particular shapes of card text: what a rulin
 
 ## How card text is read
 
-**Any X of exertions is at least 1 (Q-0076).** Any X of exertions is at least 1: "exert X <cards>" as well as "exert X times" (Q-0076). X of zero by spotting, or of anything else, is still allowed.
+**Any X of exertions is at least 1 (Q-0076).** Any X of exertions is at least 1: "exert X <cards>" as well as "exert X times" (Q-0076). X of zero by spotting, or of anything else, is still allowed. Where one X is both spotted and exerted ("spot X burdens to exert X companions", They Will Find the Ring 2_81, F-0553), the exertion's floor wins: the choice of cards is `count: {type: range, from: 1, to: {type: forEachBurden}}` (with no burden its maximum is 0 and nobody exerts), not F-0552's number prompt from 0, and a test reads the minimum 1 and chooses fewer than the burdens.
 
 **A card that makes itself a minion (Q-0077, Q-0078).** A card that makes itself a minion from the support area offers that ability from the support area only (Q-0077, the Bladetusks); its definition's requirement is right. A sentence after the ability that calls the card "she"/"it" as the minion is part of the ability (Q-0078). Where the card answers a TRIGGER ("each time a Wizard heals"), the test of this is one in which the trigger's event happens while the card is already the minion, read as strength and vitality unchanged: see the next entry.
 
