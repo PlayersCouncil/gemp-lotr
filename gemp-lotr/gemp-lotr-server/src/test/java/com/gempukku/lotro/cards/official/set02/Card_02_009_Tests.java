@@ -4,7 +4,6 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -260,10 +259,9 @@ public class Card_02_009_Tests
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
-	// Q-0331: may the event be one the cost has just discarded from the top of the draw deck?  The likelier
-	// reading, after They Are Coming (CR 4.2 "effect") and Ketura's Q-0192 and Q-0320, is no.
+	// Q-0331: A (Ketura, 2026-10-16). A card the cost discards off the top of the draw deck is not the card taken
+	// (the They Are Coming principle, CR 4.2 "effect", as Q-0192 and Q-0320 apply it).
 	@Test
-	@Ignore("Q-0331: a [dwarven] event the cost just discarded from the draw deck is offered to be taken")
 	public void ADwarvenEventTheCostDiscardsIsNotTheOneTaken() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

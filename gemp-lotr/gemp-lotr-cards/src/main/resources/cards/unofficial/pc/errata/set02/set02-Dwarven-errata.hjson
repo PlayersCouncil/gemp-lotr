@@ -29,10 +29,12 @@
 					type: discardTopCardsFromDeck
 					forced: false
 					count: 3
+					memorize: milledCards
 				}
+				// A card the cost discarded is not the card played (F-0548: A; CR 4.2 "effect").
 				effect: {
 					type: playCardFromDiscard
-					select: choose(culture(dwarven),weapon)
+					select: choose(culture(dwarven),weapon,not(memory(milledCards)))
 				}
 			}
 			{
