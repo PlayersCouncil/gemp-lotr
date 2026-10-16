@@ -1088,10 +1088,13 @@ left, `GetMoveCount()` does not yet count the move, the text of the site left is
 The pool is the one from before the move too: "each time the fellowship moves, remove (2)" (Aragorn 3_38) on
 turn 1 removes nothing from an empty pool, and the move's twilight is then added in full. `SetTwilight(3)`
 first, and spell the sum: 3 - 2 + 2 for the site + 2 companions.
-A `moves` trigger that ADDS twilight has no `-` board: the one non-move, the Free Peoples player staying at the
-regroup move decision, ends the turn, and the turn's end empties the pool (5 at the decision, 0 after
-`FreepsChooseToStay()`). A stay board serves only an effect that outlasts the turn, as wounds do (1_281); the
-ledger writes a `no -:` line (The Ring Draws Them 3_83).
+A `moves` trigger that ADDS twilight has its `-` board in the one non-move, the Free Peoples player staying at
+the regroup move decision, only with a card in his hand: with an empty hand the stay ends the turn at once and
+the pool reads 0 (5 at the decision, 0 after `FreepsChooseToStay()`, as The Ring Draws Them 3_83's `no -:` line
+found); with one card (`SetFreepsHand(card)` before the stay) he is asked "Reconcile" first, and the pool read at
+`FreepsDecisionAvailable("Reconcile")` is the pool of the decision (probed: 3 and 3; Card_03_102_Tests,
+StayingAtTheRegroupDecisionAddsNothing; dec-b3_102). An effect that outlasts the turn, as wounds do (1_281),
+needs no hand.
 
 **A draw deck runs short in a long file.** Every Free Peoples card a scenario names and a test does not place
 sits in the Free Peoples draw deck. A "discard the top N cards" with few such cards can find fewer than N by a
