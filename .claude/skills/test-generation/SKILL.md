@@ -444,7 +444,8 @@ skirmish: one in another skirmish lets `choose(minion,inSkirmish)` pass, a lone 
 
 **Whose a card is and where it stands.** What the wording does not mention includes whose a card is and where it
 stands: for a bare race word ("a Man", Q-0058) one valid candidate is the opponent's, beside the companion and the
-ally the paragraph above asks for (all three for "a Hobbit": 4_321), where a card of his of that
+ally the paragraph above asks for (all three for "a Hobbit": 4_321; so for a bare keyword with no side, "wound an
+archer" on the Shadow event Malice 3_79 owes its player's own Goblin Bowman 2_60 beside an archer companion and ally), where a card of his of that
 race can be in play at that moment (no minion is in a fellowship phase, unless a printed card plays yours in a
 phase that has minions: search for one first, as Bilbo, Bearer of Things Burgled 9_49 plays a [shire] tale in
 the regroup phase, Stone Trolls 1_314 onto a minion; where none does, Notes says none can be, and no board
