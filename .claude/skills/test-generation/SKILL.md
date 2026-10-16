@@ -279,7 +279,9 @@ one bearer of each: with companions alone bearing it, `and(companion,hasAttached
 control is a character the `PlayOn` would take who does not bear it: beside a [gondor] Man, `culture(rohan),man`
 passes for `bearer`, 4_287; for "a
 companion of each culture", a companion of each culture a printed companion has, the Hobbit sets aside (Q-0303;
-Notes name a culture only they have): with three laid, a line written for the wrong culture passes, 13_189.
+Notes name a culture only they have): with three laid, a line written for the wrong culture passes, 13_189; for
+"wound each X" or any wound EFFECT, an exhausted X among them, wounded and so killed: beside unexhausted ones
+alone, `exert` written for `wound` passes, 2_19 (the exert and wound lines under "Which checks a clause lists").
 A kind no printed card can make a candidate drops out of the spread, and Notes say why: for "Bearer must be a Dwarf"
 there is no opponent's Dwarf, as no Shadow card is a Dwarf (9_8). (For "Exert a [gondor] Man" the ally IS owed:
 Gondorian Merchant 7_97 bearing Narsil 9_34 can exert, 5_39; helpers.md.)

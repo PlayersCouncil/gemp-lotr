@@ -319,7 +319,9 @@ playable, or its own text refuses it; Card_01_364_Tests). Théoden signet: its
 readers (I Am Here 5_84, Forth Eorlingas! 4_275, No Living Man 8_90) each exert Théoden; the Théoden who can exert
 twice and has not the signet himself is Tall and Proud 8_92 (vitality 3, Aragorn signet; the three of sets 4 and 5
 have vitality 2). Horn of the Mark 9_45 gives it to Merry or Pippin beside his printed signet. `packet.py --find`
-prints a signet at the end of the id line ("signet Frodo").
+prints a signet at the end of the id line ("signet Frodo"). A possession and an artifact on one Gandalf: Glamdring 1_75
+(hand weapon, cost 2) and Gandalf's Staff 2_22 (Staff, cost 2); Wizard Staff 2_29 is a Staff too, so beside Gandalf's
+Staff it is not offered to him (one item of a class; met while building Card_02_023_Tests, which lays the pair).
 
 **A Ring-bound companion who is not the Ring-bearer.** Sam, Son of Hamfast 1_311. Strength 3, vitality 4;
 Ring-bound by rule. A fellowship ability that is only ever used on purpose, and a response when Frodo dies. Without
@@ -1136,6 +1138,12 @@ of 3 would read 1 (`Card_15_064_Tests`; pitfalls, "A twilight cost never reads b
 bears a ranged weapon, the twilight cost of each Shadow possession is +2"; he then adds nothing to the fellowship
 archery total. A Goblin Spear 1_182 (cost 1) reads 3, and 2 at "twilight cost -1", so a pool of exactly 2 is
 offered and left at 0, where -2 would leave 1 and a pool of 1 withholds the play (`Card_01_193_Tests`).
+
+**A Shadow condition's twilight cost raised (to show the size of a discount on a cheap condition).** Rohirrim Road
+7_332, a King-block site 1: "Fellowship: Exert an Elf to make the twilight cost of each condition and possession +2
+until the end of the turn", both sides' cards. Uruk-hai Armory 1_157 (cost 1) then reads 3 in the Shadow hand
+(`Card_07_332_Tests`, on a King-block path). It would show No Business of Ours 52_44's -3, which its file still
+shows with an ad hoc `TwilightCostModifier` (approved in the errata phase).
 
 ## Sites and moves
 
