@@ -1932,7 +1932,9 @@ line (also where the twin is only among the sites offered and no test takes it: 
 opponent's site if necessary)" that a game reaches: the first player at site 3 (for a Fellowship action
 `SkipToSite(3)`, Card_02_026_Tests; for a Regroup one `SkipToSite(2)`, `FreepsPass()` and
 `SkipToPhase(Phase.REGROUP)`, Card_05_023_Tests), the second
-player's site 4 laid with `MoveCardToAdventurePath` (as where that player played his next site himself); the
+player's site 4 laid with `MoveCardToAdventurePath` (as where that player played his next site himself); for a
+site 1's own action that plays site 2 (Hobbiton Woods 2_116), the first player lays his own site 2 with it,
+`SkipToOtherPlayersTurn()`, and the second player uses the same site 1 on his first turn (Card_02_116_Tests); the
 nearest miss is a second copy played when the player's own site already lies next, which on a numbered path
 plays nothing (Card_02_026_Tests, Card_05_023_Tests; whether it may replace his own site on a Shadows-block path is Q-0238).
 A numbered path's site laid by a move, by `FreepsPass()` or by `SkipToSite(n)`, is the SHADOW player's copy, on

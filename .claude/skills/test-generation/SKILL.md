@@ -173,7 +173,8 @@ Notes: Elrond is himself an ally whose home is site 3, so C2 heals him too.
   by the test of that clause, which plays the card from hand by legal play and reads what it cost and where it
   went: a bearer (`PlayOn`), a requirement or an extra cost to play (`ToPlay`, `ExtraCost`), a cost its text
   changes or speaks of, toil, a text about when it may be played, a card that answers its own play or its being
-  in play. lint's `plain-play` reads the definition and the text for these (`gen_play.py`'s reading, which is
+  in play (a "When you play" trigger, and as well an "each time you play a <kind>" on a card of that kind:
+  shapes.md, Red Book of Westmarch 2_113). lint's `plain-play` reads the definition and the text for these (`gen_play.py`'s reading, which is
   cautious) and asks for a test that plays the card where it finds one and none does; where what it names is not
   a clause of the card's own play (a text about ANOTHER card's play), the card keeps a test that plays it, which
   claims a `P1 Play [+]` clause: the seven cards of `orchestrator/engine-pass-28/tools-files/plainplay-keep.tsv`
