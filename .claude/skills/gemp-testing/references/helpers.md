@@ -336,8 +336,10 @@ Staff it is not offered to him (one item of a class; met while building Card_02_
 Ring-bound by rule. A fellowship ability that is only ever used on purpose, and a response when Frodo dies. Without
 him "the Ring-bearer" written as `ring-bound` passes every test.
 
-**A Ring-bearer who is not Frodo.** `VirtualTableScenario.GimliRB` (Gimli, Bearer of Grudges 9_4), `GaladrielRB`
-(9_14) or `SamRB` (13_156) as the scenario's Ring-bearer, and NO Frodo beside him: no Frodo who may bear the Ring
+**A Ring-bearer who is not Frodo.** `VirtualTableScenario.GimliRB` (Gimli, Bearer of Grudges 9_4, a Dwarf),
+`GaladrielRB` (9_14, an Elf), `SmeagolRB` (9_30) or `SamRB` (13_156, a Hobbit) as the scenario's Ring-bearer; a
+cancel of a skirmish involving one race owes its `FormatRule` pair on the Ring-bearer of that race (Voice of
+Nimrodel 3_28: Galadriel 9_14 under `fotr_block` and `multipath`). And NO Frodo beside him: no Frodo who may bear the Ring
 is ever in play beside another Ring-bearer (CR 4.2 "Ring-bearer"; Q-0159: B). The one Frodo who can stand there is
 Frodo, Frenzied Fighter 13_149 ("This version of Frodo cannot become the Ring-bearer", CR 4.2; [shire] Hobbit,
 Ring-bound, strength 3, vitality 4, resistance 8; he cannot be overwhelmed short of triple while minions outnumber
