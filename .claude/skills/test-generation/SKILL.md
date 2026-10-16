@@ -713,7 +713,8 @@ he is never discarded (Q-0109): the bearer in such a test is another (Sam bearin
 says neither "may" nor "up to", read the minimum of one such choice (`FreepsGetChoiceMin()`; a play from a draw
 deck is 0 to 1 by Q-0019 whatever the text says: pitfalls, "A "play ... from your draw deck" action"): a choice that has
 wrongly become optional looks the same otherwise. A "may" that the game asks as a yes/no ("a minion may exert
-to prevent this") is answered by the yes: the choice of who does it has its minimum read too (5_89). A text with two choices (one for its cost, another for its
+to prevent this") is answered by the yes: the choice of who does it has its minimum read too (5_89); so does the choice after an optional
+trigger's yes ("When you play this minion, you may heal a [moria] minion": 1_187, 2_63). A text with two choices (one for its cost, another for its
 effect, a card and then the bearer it is played on: Goblin Scavengers 1_179, or a bearer and then its own "when you play"
 trigger's choice: Relentless Warg 17_89) has the minimum of each read, once;
 a card played on a bearer has its bearer choice's minimum read even where that is its only choice (17_24, 18_26, 11_171).

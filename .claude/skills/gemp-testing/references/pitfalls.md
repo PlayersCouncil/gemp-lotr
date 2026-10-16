@@ -1261,7 +1261,9 @@ among them, so two minions of damage +1 place three; a loser's bonus places noth
 ability that grants damage +1 ends with 2 wounds on the minion beaten (Card_05_082_Tests). After "loses all damage
 bonuses" the count reads 0, and a bonus given later does not land though its event is played and paid for
 (Seek and Hide 3_112, then Lurtz's Battle Cry 1_128). The rule is shown in mechanics/keywords/DamageBonusTests: a card that
-gives or takes a bonus shows the count and one skirmish's wounds, not the arithmetic again.
+gives or takes a bonus reads the count, on the bearer and on a card outside the scope (the Standard, "Tests that are
+not about a card": Ranger's Sword 1_112; Goblin Spearman 2_65), and fights a skirmish only where its own text or a
+check D needs one (Card_05_082_Tests above), not the arithmetic again.
 
 **The wounds of a lost skirmish are placed in rounds, one on every loser; a loser killed early leaves his own later wounds over.**
 `ResolveSkirmishDamageAction` wounds each loser once, then each again, 1 + the winners' damage bonuses times in
