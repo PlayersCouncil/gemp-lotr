@@ -820,7 +820,9 @@ fellowship phase" trigger of player 2's is left pending the same way, with the p
 that each have a required trigger at the start of the turn (Elrond 1_40 and Galadriel 1_45), the game is left
 asking the Free Peoples player which goes first, and the next action fails ("<card> is not offering Free
 Peoples Player a play.  Free Peoples Player is being asked "Required responses" ..."). Put the second such card
-down after `StartGame()`, or answer the ordering with `FreepsResolveActionOrder(text)`.
+down after `StartGame()`, or answer the ordering with `FreepsResolveActionOrder(text)`. One such card alone is
+carried out inside `StartGame()` unasked: Dwarven Heart 1_10 ("At the start of each of your turns, exert bearer")
+cheated onto its bearer before it has exerted him when `StartGame()` returns; attach it afterwards (Card_03_096_Tests).
 
 **An optional trigger at the start of the turn is the first thing asked.** A card with an optional
 start-of-turn or start-of-fellowship trigger, put into play before `StartGame()`, leaves its offer pending when

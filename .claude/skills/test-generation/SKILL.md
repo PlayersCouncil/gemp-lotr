@@ -800,7 +800,9 @@ needs more is no board (lint warns `copies` where a test's cheats, as far as it 
 their text allows, one of each class to a bearer: for "bears 3 cards" or "each weapon", items of different classes.
 No culture token is put on a card that nothing gives tokens to. A site of another block may stand in a path where
 its own text is what the test reads. The tests that landed with such a board before the ruling are relaid by a
-pass of their own (`orchestrator/engine-pass-24/relay-list.tsv`), not by whoever next opens the file.
+pass of their own (`orchestrator/engine-pass-24/relay-list.tsv`), not by whoever next opens the file. A lone
+test in the file of a card not yet landed is not one of them: the batch that works the card relays its board
+(shapes.md, "An old test that is kept and put in form"; two Dwarven Armors on Gimli in Card_03_096_Tests, dec-b3_94).
 WHEN a card is laid is another matter: cards that stand in play together later in the turn may be laid earlier in
 it, so a minion cheated onto the table in the fellowship phase, to read a standing text on it before and after a
 Free Peoples card is played there, is a shortening (Q-0228; Ketura, 2026-10-08: the cheats "short-circuit
