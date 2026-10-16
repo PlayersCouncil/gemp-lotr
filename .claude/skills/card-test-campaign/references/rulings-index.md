@@ -509,7 +509,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A bar that a trigger lays "while at <a place>" has the place in it twice (92_35) [F-0319]
 - "At the start of the first <phase> ... (limit once per turn)" (F-0517, Wizard's Vale 4_359)
 - "Limit 1 per bearer" is a Restriction that lists `L`
-- The CR 4.2 "loops" example (Sam, Faithful Companion 1_310; Q-0321) [Q-0329]
+- The CR 4.2 "loops" example (Sam, Faithful Companion 1_310; Q-0321)
 
 ## Costs, and playing cards from piles and hands
 

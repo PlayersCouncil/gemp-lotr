@@ -1,14 +1,17 @@
 package com.gempukku.lotro.mechanics.actions;
 
 import com.gempukku.lotro.common.Phase;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.assertInZone;
 import static org.junit.Assert.*;
 
 /**
@@ -21,6 +24,10 @@ import static org.junit.Assert.*;
  * as ever to the end.  Nor is one player using his own ability again and again, the other passing in between (Trust
  * Me as You Once Did, her example: "One player using a finite resource 3 times probably isn't a loop").  A pass,
  * or a third card's action, between the rounds of a real loop starts the count again.
+ *
+ * The same holds for one player's repeats in his own phase (OnePlayerLoopTests): her two finite scenarios (rulings
+ * log, 2026-10-16), Gondorian Captain with Base of Mindolluin and Erkenbrand's Horn with New Chapter, each move a
+ * card out of the draw deck each round, and go on until the deck has none left with no prompt.
  *
  * Every test reads, after each round, that the player who opens the round is offered his actions and not the loop's
  * prompt.  The skirmishes are fought at Ettenmoors 1_331 (site 2), whose "Skirmish: Exert your companion or minion
@@ -446,5 +453,144 @@ public class FiniteRepeatsAreNoLoopTests
 		assertEquals(1, scn.GetBurdens());
 		assertFalse(scn.AwaitingFreepsSkirmishPhaseActions());
 		assertTrue(scn.FreepsDecisionAvailable("LOOP DETECTED"));
+	}
+
+	// Gondorian Captain 7_96: "Fellowship: Discard a fortification to remove a threat."  Base of Mindolluin 10_117,
+	// laid as site 3 of the King path: "Fellowship: If you cannot spot 2 threats, add a threat to play a fortification
+	// from your draw deck."  First Level 7_92, four of them: a [gondor] fortification of cost 1 whose text is a
+	// Maneuver action.  Frodo and the Captain are two companions, so two threats can be added.
+	protected VirtualTableScenario GetFortificationsScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("captain", "7_96");
+					for (int i = 1; i <= 4; i++)
+						put("level" + i, "7_92");
+				}},
+				new HashMap<>()
+				{{
+					put("site1", "7_330");
+					put("site2", "7_335");
+					put("site3", "10_117");
+					put("site4", "7_342");
+					put("site5", "7_345");
+					put("site6", "7_350");
+					put("site7", "8_120");
+					put("site8", "10_120");
+					put("site9", "7_360");
+				}},
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// Erkenbrand's Horn 18_96 on Hrethel 6_95 (a [rohan] Man, vitality 3; his text is a Skirmish action):
+	// "Fellowship: Exert bearer to play a follower from your draw deck."  New Chapter 13_154: "Each time you play a
+	// follower, you may heal a companion (or heal Sam twice)"; its "To play, spot 2 Hobbits" does not stop a cheat.
+	// Rohan Worker 15_135, four of them: a follower of cost 1 whose texts answer a transfer and a skirmish won.
+	protected VirtualTableScenario GetFollowersScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("horn", "18_96");
+					put("hrethel", "6_95");
+					put("chapter", "13_154");
+					for (int i = 1; i <= 4; i++)
+						put("worker" + i, "15_135");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	@Test
+	public void GondorianCaptainAndBaseOfMindolluinGoOnUntilTheDeckHasNoFortificationWithNoPrompt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFortificationsScenario();
+
+		var captain = scn.GetFreepsCard("captain");
+		var levels = new PhysicalCardImpl[]{scn.GetFreepsCard("level1"), scn.GetFreepsCard("level2"),
+				scn.GetFreepsCard("level3"), scn.GetFreepsCard("level4")};
+		scn.MoveCompanionsToTable(captain);
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+		scn.MoveCardsToTopOfDeck(levels);
+		var base = scn.GetCurrentSite();
+		assertEquals("Base of Mindolluin", base.getBlueprint().getTitle());
+		assertInZone(Zone.DECK, levels);
+
+		// The look offers the copies by blueprint, so which copy comes out is not read: how many have.
+		for (int round = 1; round <= levels.length; round++) {
+			final var level = levels[0];
+			assertTrue(scn.AwaitingFellowshipPhaseActions());
+			assertFalse(scn.FreepsDecisionAvailable("LOOP DETECTED"));
+			scn.FreepsUseCardAction(base);
+			scn.FreepsDismissRevealedCards();
+			scn.FreepsChooseCardBPFromSelection(level);
+			assertEquals(1, scn.GetThreats());
+			assertEquals(1, Arrays.stream(levels).filter(card -> card.getZone() == Zone.SUPPORT).count());
+
+			assertTrue(scn.AwaitingFellowshipPhaseActions());
+			assertFalse(scn.FreepsDecisionAvailable("LOOP DETECTED"));
+			scn.FreepsUseCardAction(captain);
+			assertEquals(0, scn.GetThreats());
+			assertEquals(round, Arrays.stream(levels).filter(card -> card.getZone() == Zone.DISCARD).count());
+		}
+
+		// No fortification left in the deck, and none in play: the site plays nothing, and the Captain has nothing
+		// to discard.  Nobody was asked about a loop.
+		assertInZone(Zone.DISCARD, levels);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertFalse(scn.FreepsDecisionAvailable("LOOP DETECTED"));
+		assertFalse(scn.FreepsActionAvailable(captain));
+		scn.FreepsUseCardAction(base);
+		scn.FreepsDismissRevealedCards();
+		assertEquals(1, scn.GetThreats());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertFalse(scn.FreepsDecisionAvailable("LOOP DETECTED"));
+	}
+
+	@Test
+	public void ErkenbrandsHornAndNewChapterGoOnUntilTheDeckHasNoFollowerWithNoPrompt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFollowersScenario();
+
+		var horn = scn.GetFreepsCard("horn");
+		var hrethel = scn.GetFreepsCard("hrethel");
+		var chapter = scn.GetFreepsCard("chapter");
+		var workers = new PhysicalCardImpl[]{scn.GetFreepsCard("worker1"), scn.GetFreepsCard("worker2"),
+				scn.GetFreepsCard("worker3"), scn.GetFreepsCard("worker4")};
+		scn.MoveCompanionsToTable(hrethel);
+		scn.AttachCardsTo(hrethel, horn);
+		scn.MoveCardsToSupportArea(chapter);
+
+		scn.StartGame();
+		assertInZone(Zone.DECK, workers);
+
+		for (int round = 1; round <= workers.length; round++) {
+			final var worker = workers[0];
+			assertTrue(scn.AwaitingFellowshipPhaseActions());
+			assertFalse(scn.FreepsDecisionAvailable("LOOP DETECTED"));
+			scn.FreepsUseCardAction(horn);
+			scn.FreepsDismissRevealedCards();
+			scn.FreepsChooseCardBPFromSelection(worker);
+			assertEquals(1, scn.GetWoundsOn(hrethel));
+			assertEquals(round, Arrays.stream(workers).filter(card -> card.getZone() != Zone.DECK).count());
+
+			// New Chapter's heal, taken: Hrethel, the one companion it can heal, is chosen for the player.
+			scn.FreepsAcceptOptionalTrigger();
+			assertEquals(0, scn.GetWoundsOn(hrethel));
+		}
+
+		// No follower left in the deck: the Horn's look plays nothing, and nothing heals Hrethel.  Nobody was asked
+		// about a loop.
+		assertEquals(0, Arrays.stream(workers).filter(card -> card.getZone() == Zone.DECK).count());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertFalse(scn.FreepsDecisionAvailable("LOOP DETECTED"));
+		scn.FreepsUseCardAction(horn);
+		scn.FreepsDismissRevealedCards();
+		assertEquals(1, scn.GetWoundsOn(hrethel));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+		assertFalse(scn.FreepsDecisionAvailable("LOOP DETECTED"));
 	}
 }

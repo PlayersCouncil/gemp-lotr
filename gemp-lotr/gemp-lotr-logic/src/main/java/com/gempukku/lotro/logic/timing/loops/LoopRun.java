@@ -9,6 +9,7 @@ import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 import com.gempukku.lotro.logic.timing.Action;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
 import java.util.LinkedHashMap;
@@ -51,6 +52,13 @@ import java.util.Map;
  * <b>Afterwards.</b>  However the run ends, the two abilities it used are barred to the end of the phase
  * (ActionsEnvironment.barUntilEndOfPhase), each skirmish being a phase of its own; they are still offered, flagged
  * "loopBanned", and refused if taken.
+ * <p>
+ * <b>A loop of one player's actions</b> (OnePlayerLoopTracker; Ketura, answers/2026-10-16-c.md: "perform that many,
+ * and then put the tag on that card action to block its future use").  One iteration is one round as found, one
+ * action or two, all of the one player's; the run is that many iterations and no action more, the last round shown
+ * and the rest carried out unseen as above, and the board a round must give back is compared without the order of
+ * the draw decks (BoardFingerprint.ignoringDeckOrder).  Then every ability of the round is barred to the end of the
+ * phase, as above, and the player is asked for his actions again.
  */
 public class LoopRun {
     /**
@@ -75,8 +83,40 @@ public class LoopRun {
         }
 
         boolean fits(String player, AwaitingDecision decision) {
-            return this.player.equals(player) && type == decision.getDecisionType()
-                    && text.equals(decision.getText()) && parameters.equals(parametersOf(decision));
+            if (!this.player.equals(player) || type != decision.getDecisionType() || !text.equals(decision.getText()))
+                return false;
+            final Map<String, List<String>> now = parametersOf(decision);
+            if (parameters.equals(now))
+                return true;
+            // A choice of cards answered with none (a look through a deck that finds nothing to take, Sam, Faithful
+            // Companion's): the same cards in another order, after a shuffle, are the same decision.
+            return answer.isEmpty() && (type == AwaitingDecisionType.ARBITRARY_CARDS || type == AwaitingDecisionType.CARD_SELECTION)
+                    && optionsOf(parameters, type).equals(optionsOf(now, type));
+        }
+
+        // The options of a decision as a sorted list, each the values its parameters give it at one index, so that
+        // the same options in another order compare equal; a parameter that is not one value per option stays whole.
+        // The card ids of a choice of arbitrary cards are left out: they are "temp" and the card's place in the list.
+        private static List<String> optionsOf(Map<String, List<String>> parameters, AwaitingDecisionType type) {
+            int count = -1;
+            for (List<String> values : parameters.values())
+                count = Math.max(count, values.size());
+            final List<String> result = new ArrayList<>();
+            for (int i = 0; i < count; i++) {
+                final StringBuilder option = new StringBuilder();
+                for (Map.Entry<String, List<String>> parameter : parameters.entrySet()) {
+                    final List<String> values = parameter.getValue();
+                    if (values.size() == count && !(type == AwaitingDecisionType.ARBITRARY_CARDS && parameter.getKey().equals("cardId")))
+                        option.append(parameter.getKey()).append('=').append(values.get(i)).append(';');
+                }
+                result.add(option.toString());
+            }
+            result.sort(null);
+            for (Map.Entry<String, List<String>> parameter : parameters.entrySet()) {
+                if (parameter.getValue().size() != count)
+                    result.add(parameter.getKey() + "=" + parameter.getValue());
+            }
+            return result;
         }
 
         private static Map<String, List<String>> parametersOf(AwaitingDecision decision) {
@@ -88,7 +128,8 @@ public class LoopRun {
     }
 
     private final Step[] _round;
-    private final LoopNegotiation.Agreement _agreement;
+    // Whether the board a round gives back is compared with the order of the draw decks
+    private final boolean _deckOrderCounts;
     // The actions the run takes, the last one added if needed, and how many of them are taken unseen
     private final int _actions;
     private final int _unseen;
@@ -102,11 +143,27 @@ public class LoopRun {
 
     LoopRun(Step opening, Step closing, LoopNegotiation.Agreement agreement) {
         _round = new Step[]{opening, closing};
-        _agreement = agreement;
+        _deckOrderCounts = true;
         final boolean oneMore = !agreement.nextActor().equals(opening.key().player());
         _actions = 2 * agreement.iterations() + (oneMore ? 1 : 0);
         final int shown = oneMore ? 1 : Math.min(2, _actions);
         _unseen = _actions - shown;
+    }
+
+    /**
+     * The run of a loop of one player's actions (see the class's description).
+     * @param round The round as found: one action, or two.
+     * @param iterations How many times the player chose to repeat it, 0 or more.
+     */
+    LoopRun(List<Step> round, int iterations) {
+        _round = round.toArray(new Step[0]);
+        _deckOrderCounts = false;
+        _actions = _round.length * iterations;
+        _unseen = _actions - Math.min(_round.length, _actions);
+    }
+
+    private BoardFingerprint boardNow(LotroGame game) {
+        return _deckOrderCounts ? BoardFingerprint.of(game) : BoardFingerprint.ignoringDeckOrder(game);
     }
 
     /**
@@ -122,7 +179,7 @@ public class LoopRun {
         final GameState gameState = game.getGameState();
         if (!_started) {
             _started = true;
-            _board = BoardFingerprint.of(game);
+            _board = boardNow(game);
             final LoopFeedback feedback = LoopFeedback.of(game);
             if (feedback != null)
                 feedback.beginRun(this);
@@ -135,8 +192,8 @@ public class LoopRun {
             finish(game, null);
             return null;
         }
-        if (_taken > 0 && _taken % 2 == 0) {
-            if (!_board.equals(BoardFingerprint.of(game))) {
+        if (_taken > 0 && _taken % _round.length == 0) {
+            if (!_board.equals(boardNow(game))) {
                 stop(game, "the board was not as it was when the loop was found");
                 return null;
             }
@@ -146,11 +203,12 @@ public class LoopRun {
         if (_holding && _taken == _unseen) {
             _holding = false;
             gameState.releaseHeldBackEvents();
-            gameState.sendMessage("The loop between " + linksOf() + " was carried out " + (_unseen / 2)
-                    + (_unseen == 2 ? " time" : " times") + " without being shown");
+            final int unseenRounds = _unseen / _round.length;
+            gameState.sendMessage("The loop " + (_round.length == 1 ? "of " : "between ") + linksOf() + " was carried out " + unseenRounds
+                    + (unseenRounds == 1 ? " time" : " times") + " without being shown");
         }
 
-        final Step step = _round[_taken % 2];
+        final Step step = _round[_taken % _round.length];
         Action found = null;
         for (Action action : game.getActionsEnvironment().getPhaseActions(step.key().player())) {
             if (LoopTracker.Key.of(game, step.key().player(), action).equals(step.key())
@@ -205,11 +263,12 @@ public class LoopRun {
             feedback.endRun(this);
         for (Step step : _round)
             game.getActionsEnvironment().barUntilEndOfPhase(step.key().ability());
+        final String loop = "The loop " + (_round.length == 1 ? "of " : "between ") + linksOf();
         if (why == null)
-            game.getGameState().sendMessage("The loop between " + linksOf()
+            game.getGameState().sendMessage(loop
                     + " is over: the abilities it used cannot be used again this phase");
         else
-            game.getGameState().sendMessage("The loop between " + linksOf() + " stopped short, as " + why
+            game.getGameState().sendMessage(loop + " stopped short, as " + why
                     + ": the abilities it used cannot be used again this phase");
     }
 
@@ -228,12 +287,12 @@ public class LoopRun {
     public String getNextActor() {
         if (_taken == 0)
             return _round[0].key().player();
-        return _round[_taken % 2].key().player();
+        return _round[_taken % _round.length].key().player();
     }
 
     private String linksOf() {
         final PhysicalCard first = _round[0].card();
-        final PhysicalCard second = _round[1].card();
+        final PhysicalCard second = _round.length > 1 ? _round[1].card() : null;
         if (second == null || second == first)
             return GameUtils.getCardLink(first);
         return GameUtils.getCardLink(first) + " and " + GameUtils.getCardLink(second);

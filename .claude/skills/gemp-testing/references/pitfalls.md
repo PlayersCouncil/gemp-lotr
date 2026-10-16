@@ -241,7 +241,18 @@ not its other abilities nor another copy's) is still offered, flagged, to the en
 with `FreepsActionLoopBanned(card)`; `FreepsActionAvailable` reads it as offered, and taking it is refused.
 The prompts are HTML (Q-0329, engine pass 52): a text read with `FreepsDecisionAvailable` names each card as the
 game log's card hint, `<div class='cardHint' value='5_29'>·Sméagol, Slinker</div>`, and the number as `<b>6</b>`.
-`mechanics/actions/VoluntaryLoopTests`, `FiniteRepeatsAreNoLoopTests`.
+`mechanics/actions/VoluntaryLoopTests`, `FiniteRepeatsAreNoLoopTests`. A loop whose other half is a response inside
+the first player's action, with a pass between the rounds (Hrethel 6_95 against a Warg 5_65), is not found (F-0565).
+
+**A loop of one player's actions is put to him at its fourth use** (CR 4.2 "loops"; Ketura, answers/2026-10-16-c.md;
+engine pass 53). In the fellowship phase or a Shadow phase, where one ability (or two abilities, one after the
+other) has been used three times running with the board the same at the start of each round and after the third
+(the order of the draw deck left out: a look through it shuffles), he is not offered his actions a fourth time: he
+is asked "LOOP DETECTED: Choose a number of times to repeat this action." (`OnePlayerLoopTracker.PROMPT`, 0 to 99,
+filled in with 3; answer it with `FreepsChoose("5")`). The round is run that many times inside the answer, the last
+round shown, and each ability of the round is barred to the end of the phase (`FreepsActionLoopBanned`). A file that
+uses a cost-free ability four times or more in one phase on an unchanged board meets the prompt (Sam 1_310, The
+Bridge of Khazad-dûm 1_349 with no Balrog). `mechanics/actions/OnePlayerLoopTests`.
 
 ## What is offered, and what an offer does
 

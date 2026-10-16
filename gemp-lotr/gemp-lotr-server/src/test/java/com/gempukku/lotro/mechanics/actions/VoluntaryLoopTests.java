@@ -5,6 +5,7 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.game.state.GameEvent;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -159,6 +160,116 @@ public class VoluntaryLoopTests
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
+	}
+
+	// The One Ring, The Great Ring 19_1: "Skirmish: Add a burden to make the Ring-bearer strength +3."  Morgul Brute
+	// 7_188 (strength 6): "Skirmish: Remove a burden to make this minion strength +3."  Her scenario (rulings log,
+	// 2026-10-16), the rules' loop with the Ring for Sméagol.  Frodo 1_290 is strength 3.
+	protected VirtualTableScenario GetRingScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("brute", "7_188");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.GreatRing
+		);
+	}
+
+	// Hrethel, Rider of Rohan 6_95 (strength 6): "Skirmish: Heal a minion skirmishing Hrethel to make Hrethel
+	// strength +3 (limit +3)."  Isengard Flanker 5_52, a warg-rider (strength 7, fierce while not exhausted), bearing
+	// a Warg 5_65: "Response: If a skirmish special ability is used in a skirmish involving bearer, exert bearer to
+	// cancel that action."  Her scenario (rulings log, 2026-10-16).
+	protected VirtualTableScenario GetHrethelScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("hrethel", "6_95");
+					put("flanker", "5_52");
+					put("warg", "5_65");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	@Test
+	public void TheGreatRingAgainstMorgulBruteIsFoundAndBothAbilitiesAreBarred() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetRingScenario();
+
+		var frodo = scn.GetRingBearer();
+		var ring = scn.GetRing();
+		var brute = scn.GetShadowCard("brute");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(brute);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(frodo, brute);
+		scn.FreepsResolveSkirmish(frodo);
+
+		for (int round = 1; round <= 2; round++) {
+			assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+			assertFalse(scn.FreepsDecisionAvailable("LOOP DETECTED"));
+			scn.FreepsUseCardAction(ring);
+			assertEquals(1, scn.GetBurdens());
+			scn.ShadowUseCardAction(brute);
+			assertEquals(0, scn.GetBurdens());
+		}
+		assertEquals(9, scn.GetStrength(frodo));
+		assertEquals(12, scn.GetStrength(brute));
+
+		assertTrue(scn.FreepsDecisionAvailable("LOOP DETECTED: <a href=\"https://wiki.lotrtcgpc.net/wiki/Comprehensive_Rules_4.2#loops\" target=\"_blank\">See loop handling rules here.</a><br><div class='cardHint' value='19_1'>·The One Ring, The Great Ring</div> and <div class='cardHint' value='7_188'>Morgul Brute</div> can be used forever."
+				+ "<br>Choose how many more times this loop will execute."));
+		scn.FreepsNameLoopIterations(2);
+		scn.ShadowAgreeToLoop();
+
+		// Two more rounds: Frodo 9 + 6, the Brute 12 + 6, no burden; both abilities barred.
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(15, scn.GetStrength(frodo));
+		assertEquals(18, scn.GetStrength(brute));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertTrue(scn.FreepsActionLoopBanned(ring));
+		// A burden by a cheat, so that the Brute has one to remove when the Shadow player is next asked.
+		scn.AddBurdens(1);
+		scn.FreepsPass();
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		assertTrue(scn.ShadowActionAvailable(brute));
+		assertTrue(scn.ShadowActionLoopBanned(brute));
+	}
+
+	// F-0565: the Shadow player's half of the loop is a response inside the Free Peoples player's action, and he
+	// passes between the rounds; the step reads the pass as declining to go on, and finds nothing.  How it is to be
+	// put to the players is for Ketura: this asserts only that a loop is found.
+	@Ignore("F-0565: a loop whose second half is a response inside the first action, with a pass between the rounds, is not found")
+	@Test
+	public void HrethelAgainstAWargRiderBearingAWargIsFound() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetHrethelScenario();
+
+		var hrethel = scn.GetFreepsCard("hrethel");
+		var flanker = scn.GetShadowCard("flanker");
+		var warg = scn.GetShadowCard("warg");
+		scn.MoveCompanionsToTable(hrethel);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(flanker);
+		scn.AttachCardsTo(flanker, warg);
+		scn.AddWoundsToChar(flanker, 1);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(hrethel, flanker);
+		scn.FreepsResolveSkirmish(hrethel);
+
+		for (int round = 1; round <= 3 && !scn.FreepsDecisionAvailable("LOOP DETECTED"); round++) {
+			scn.FreepsUseCardAction(hrethel);
+			assertEquals(0, scn.GetWoundsOn(flanker));
+			scn.ShadowUseCardAction(warg);
+			assertEquals(1, scn.GetWoundsOn(flanker));
+			assertEquals(6, scn.GetStrength(hrethel));
+			scn.ShadowPass();
+		}
+
+		assertTrue(scn.FreepsDecisionAvailable("LOOP DETECTED"));
 	}
 
 	@Test

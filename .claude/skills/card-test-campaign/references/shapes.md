@@ -208,11 +208,14 @@ offered for the next copy; a bearer of a DIFFERENT card of the same kind (anothe
 which does not count against the limit) and a bearer of nothing are; and with every legal bearer bearing one the
 card cannot be played though its other requirements are met (Card_01_282_ErrataTests).
 
-**The CR 4.2 "loops" example (Sam, Faithful Companion 1_310; Q-0321).** Gemp names no number of repetitions for a
-loop one player makes alone in his own phase (the loop step of Q-0329 is for two players' actions taken in turn:
-`LoopTracker`), so the `Rule` clause is shown as the action having no limit: offered again after its use in the
-same phase, and used again
-(Card_01_310_Tests.FellowshipAbilityIsUsedAgainInTheSamePhaseAndWithNoBillInTheDeckPlaysNothing).
+**The CR 4.2 "loops" example (Sam, Faithful Companion 1_310; Q-0321).** The action has no limit: offered again after
+its use in the same phase, and used again
+(Card_01_310_Tests.FellowshipAbilityIsUsedAgainInTheSamePhaseAndWithNoBillInTheDeckPlaysNothing). A loop one player
+makes alone in his own phase is the engine's (Ketura, answers/2026-10-16-c.md; engine pass 53,
+`OnePlayerLoopTracker`): three uses on an unchanged board go unasked, and the fourth is "LOOP DETECTED: Choose a
+number of times to repeat this action.", after which the ability is barred to the end of the phase. A card's own
+file stays below four uses; the loop itself is shown in `mechanics/actions/OnePlayerLoopTests` (Sam, The Bridge of
+Khazad-dûm 1_349, two Hobbit Party Guests 1_297).
 
 ## Costs, and playing cards from piles and hands
 
