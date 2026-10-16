@@ -203,6 +203,11 @@ Strength 6, vitality 3; his only text is +2 strength and resistance at a battleg
 `FellowshipSites` is. An archer Legolas stops the skippers ("Archers get in the way"); 11_22 and 15_18 (hunter 1) are
 the other non-archers (Card_01_033_Tests).
 
+**A companion of another culture who is no archer, for "a [culture] companion wins (loses)".** Gimli, Son of
+Glóin 1_13 ([dwarven] Dwarf, strength 6, vitality 3; a skirmish ability used only on purpose; his Damage +1 adds a
+wound to a minion he beats). Legolas 1_51 in that place sets off an archery phase and stops the skippers ("Archers
+get in the way"; Card_02_033_Tests, Card_02_034_Tests).
+
 **A Free Peoples skirmish ability on a Ring-bound Man (Faramir 4_117), with no archer keyword.** Ranger's Bow 4_131:
 [gondor] possession, cost 1, bearer must be a Ring-bound Man; "Skirmish: If bearer is skirmishing a Man or a roaming
 minion, exert bearer to wound that minion." Faramir's Bow 4_118 does the same but makes him an archer ("Archers get
