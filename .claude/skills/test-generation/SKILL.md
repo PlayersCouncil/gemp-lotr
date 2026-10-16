@@ -253,7 +253,7 @@ no ally on the table `or(companion,minion)` passes, 61_100; for "each minion" or
 cultures and two races: beside Orcs alone, `minion` narrowed to `orc` passes, 60_91, and for "each minion
 skirmishing <X>" two minions in ONE skirmish as well, the second put on X by the Shadow player after the Free
 Peoples player's assignment (pitfalls, "One minion to a companion"): with one minion to a skirmish a definition
-that takes "a minion" passes, 11_243; for a bare type word or pair ("each companion and minion"), cards of each type differing in culture and race: beside two [gondor] Men, `companion` narrowed to `culture(gondor)` passes, 4_349; for a bare side word, "2 Free Peoples cards" from a deck, a card of each type
+that takes "a minion" passes, 11_243; for a bare type word or pair ("each companion and minion"), cards of each type differing in culture and race: beside two [gondor] Men, `companion` narrowed to `culture(gondor)` passes, 4_349, a counted one from a pile too ("shuffle X minions from your discard pile": beside Orcs alone `orc` passes, 2_41); for a bare side word, "2 Free Peoples cards" from a deck, a card of each type
 the place can hold, a companion, a possession and an event: beside companions alone, `side(freeps)` narrowed to
 `companion` passes, 68_82, and "each type" is a spread like that one, a character, an item and a card that is
 neither, not every type in print; a bare owner word, "each of your cards", owes that spread and a card of each
@@ -261,7 +261,7 @@ side, 94_27, and a bare "cards" ("discard up to 2 cards from hand") owes it thou
 cards have them: beside [shire] ones alone, `pipeweed` narrowed to `culture(shire)` passes, 92_4; for a terrain word
 on a site ("a river"), two sites of it that differ in another keyword (Buckleberry Ferry 1_330 and Ford of Bruinen
 1_338, a sanctuary): beside the Ferry alone, `river,not(sanctuary)` passes, 1_46, and so for the fellowship's site ("while the fellowship
-is at a forest": Derndingle 4_330 and Rivendell Waterfall 1_342, 2_35); for "sanctuary" or "not a
+is at a forest": Derndingle 4_330 and Rivendell Waterfall 1_342, 2_35), every terrain word, underground too (Balin's Tomb and The Dimholt 8_117, a sanctuary, 2_42); for "sanctuary" or "not a
 sanctuary", a site 3 and a site 6: at site 3 alone `not(siteNumber(3))` passes, 1_129; for a culture word
 on a kind a title is printed in ("a [gollum] minion"), one of another title, also inside an effect's "If that
 minion is ...": beside Gollum alone `name(Gollum)` passes, 15_51 (Shelob 8_26); and a card of the

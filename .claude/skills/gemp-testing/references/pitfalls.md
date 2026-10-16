@@ -769,6 +769,8 @@ down between the two phases: `SkipToPhase(Phase.ASSIGNMENT)` with another minion
 (Goblin Archer 1_172 in mechanics/keywords/DamageBonusTests). A Free Peoples archer COMPANION (Legolas 1_50) fires
 too: his wound is placed unasked only while exactly one minion is on the table, so any second minion goes down
 after `SkipToPhase(Phase.ASSIGNMENT)` the same way, and the one minion down reads a wound (Border Defenses 1_32).
+An archer minion that must be on the table BEFORE the archery phase (for his own maneuver ability) is got past it
+by `SkipToArcheryWounds()` and `FreepsChooseCard(companion)` (Lurtz 1_127 in Lurtz's Sword 2_43's R test).
 
 **`SkipToPhase` declines optional triggers it meets on the way.** A trigger that is offered while the phase is
 still the old one (an "each time the fellowship moves" trigger, offered before the fellowship phase is left) is
