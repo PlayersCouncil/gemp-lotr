@@ -595,7 +595,9 @@ given by hand (Card_06_076_Tests).
 Barahir goes on any Aragorn (17_93 makes its bearer a [rohan] companion); an optional start-of-turn trigger, so
 attach it after `StartGame()`. Narsil 9_34 goes on a [gondor] Man, the Merchant included; Narsil 17_31 on Elendil
 or Isildur only. The two Narsils share a unique title: never both in play. The Shards of Narsil 3_44 is a [gondor]
-artifact nobody bears.
+artifact nobody bears. The nearest miss for "spot The Shards of Narsil", a [gondor] artifact of another title in the
+support area: Seeing Stone of Minas Anor 9_37 (a regroup ability only), or Gilraen's Memorial 101_22 (a fellowship
+ability only; Card_03_046_Tests). Both go in by `MoveCardsToSupportArea`, which skips their costs to play.
 
 **Two hand weapons on one bearer by their own text; a weapon that bars every other.** Flaming Brand 2_32; Knife of
 the Galadhrim 9_17; The Balrog's Sword 2_50; Andúril, Flame of the West 7_79. Flaming Brand ([gondor] possession,
@@ -1045,6 +1047,12 @@ follows it (Card_10_012_Tests, Card_10_108_Tests). Skirmish and regroup: pitfall
 1_13 ([dwarven] Dwarf, cost 2) and Boromir, Son of Denethor 1_97 ([gondor] Man, cost 3): no requirement to play and
 no text that answers a play, so `FreepsPlayCard` in the fellowship phase asks nothing of its own. Bounder 1_286
 ([shire] Hobbit ally, cost 1, no requirement) is the ally played that must not set it off (Card_07_204_Tests).
+
+**A companion played in the maneuver phase, after an event (the board for "make each ... until" read as a
+snapshot).** Éomer, Éored Leader 12_112: "Maneuver: If you can spot more minions than companions, exert Éomer to
+play a [rohan] companion from your draw deck." The deck is shown first: `FreepsDismissRevealedCards()`, then
+`FreepsChooseCardBPFromSelection(card)` (pitfalls, "Searching a deck shows the deck first"). Théoden, Tall and
+Proud 8_92 is a [rohan] companion with the Aragorn signet (Card_03_047_Tests).
 
 **A minion's own assignment action, with no cost.** Reckless Pride 7_13; Ancient Blade 7_15; Unexpected Visitor
 7_126. Free Peoples conditions on a [dwarven], an [elven], a [gondor] companion: 'Each minion gains this ability:

@@ -892,7 +892,9 @@ one next to it; 0 is out of range (`PileProperties`; Card_01_200_Tests, dec-b1_1
 
 **Only the table-laying cheats take aliases.** `MoveCompanionsToTable` and `MoveMinionsToTable` take alias strings
 as well as cards; `AttachCardsTo`, `MoveCardsToSupportArea`, `MoveCardsToDiscard` and `MoveCardsToHand` take cards
-only (`scn.GetFreepsCard("x")`), and a string there does not compile.
+only (`scn.GetFreepsCard("x")`), and a string there does not compile. `MoveCardsToFreepsHand` and
+`MoveCardsToShadowHand` are the reverse, alias strings only; for cards already fetched use `MoveCardsToHand`, which
+puts each card in its OWNER's hand, a Shadow card's in the Shadow hand (Card_03_049_Tests, dec-b3_45).
 
 **The Ruling Ring interrupts skirmishes.** With the default Ring, a Ring-bearer about to take a wound in a
 skirmish gets an optional response. `FreepsDeclineOptionalTrigger()` declines it. Keep the Ring-bearer out of
