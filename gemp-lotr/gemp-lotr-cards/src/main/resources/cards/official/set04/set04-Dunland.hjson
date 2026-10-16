@@ -234,11 +234,23 @@
 			type: event
 			effect: [
 				{
-					type: modifyStrength
+					type: chooseActiveCards
 					select: choose(culture(dunland),man)
+					text: Choose a {dunland} Man to make strength +1 for each companion you spot
+					memorize: chosenMan
+				}
+				{
+					type: chooseHowManyToSpot
+					filter: companion
+					text: Choose how many companions to spot
+					memorize: spotCount
+				}
+				{
+					type: modifyStrength
+					select: memory(chosenMan)
 					amount: {
-							type: forEachYouCanSpot
-							filter: companion
+						type: fromMemory
+						memory: spotCount
 					}
 				}
 			]
