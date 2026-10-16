@@ -1120,6 +1120,8 @@ and another player's hand untouched (Card_01_280_Tests).
 `GetCurrentPhase()` is `Phase.ASSIGNMENT` again and `AwaitingFreepsAssignmentPhaseActions()` is true, exactly as
 the first time. `InFierceRound()` tells them apart (G-0031): true from the game's "Fierce skirmishes" until the
 last fierce skirmish is over. A "this phase" effect from the first assignment phase has ended by then.
+A text whose bonus is "if in a fierce skirmish" owes a card in NO skirmish chosen during another's fierce skirmish:
+a definition that reads the phase gives it the bonus (shapes.md, F-0550; Card_02_037_Tests).
 The assignment actions are pending again too, and nothing has passed them as `SkipToAssignments()` did the first
 time: call `PassFierceAssignmentActions()` before `FreepsAssignToMinions`, or the assignment is refused with a
 bare `DecisionResultInvalidException` (Card_09_031_ErrataTests).
@@ -1892,7 +1894,8 @@ unbound Hobbit is there). `TowersSites` has neither word at site 1 (4_325) or si
 `putAll(TowersSites); put("site2", "4_335")` and the fellowship's own two moves (`FreepsPass()`, then
 `SkipToMovementDecision()` and `FreepsChooseToMove()`) show "while at a battleground site" off, on and off again
 (`Card_15_017_ErrataTests`). The Fellowship path has neither: `FellowshipSites` has no forest (1_351 is a
-sanctuary only) and no battleground.
+sanctuary only) and no battleground. Rivendell Waterfall 1_342 (Forest, Sanctuary), put in as site 3, is one that
+`SkipToSite` reaches; with Derndingle 4_330 it gives two forests that differ in the sanctuary (Card_02_035_Tests).
 
 **A Hobbit-set card (sets 30 to 33) stands on the usual table for now.** The rig has no Hobbit constants: the
 Hobbit Draft Game's Ring-bearer is a Bilbo (30_43 to 30_46, `canStartWithRing`) and its One Ring 30_48 is a
