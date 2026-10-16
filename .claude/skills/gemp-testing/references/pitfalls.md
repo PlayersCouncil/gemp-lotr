@@ -100,7 +100,10 @@ asked "Choose next skirmish to resolve", and that is the bookend to assert after
 turn (engine pass 24); `lint.py` takes either form as a test's closing reading, and as showing that the player is
 being asked. With a
 minion left unassigned the Shadow player is asked "Assign minions" first. After an assignment ACTION in the
-assignment phase the bookend is the other player's `Awaiting...AssignmentPhaseActions()` (69_38).
+assignment phase the bookend is the other player's `Awaiting...AssignmentPhaseActions()` (69_38). Where assignment actions
+have already assigned every minion, nobody is asked "Assign minions": `FreepsDeclineAssignments()` there fails
+(DecisionResultInvalidException from CardsSelectionDecision); pass the assignment actions and read
+`FreepsAwaitingSkirmishChoice()` (Card_04_015_Tests, dec-b4_15).
 
 **One minion to a companion, and the minions left over.** The Free Peoples player may assign one minion to each
 companion (more takes defender): `FreepsAssignToMinions` with two minions in one group is refused by the game
