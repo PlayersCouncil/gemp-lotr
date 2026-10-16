@@ -362,22 +362,21 @@
 			},
 			effect: [
 				{
-					type: choice
-					texts: [
-						Discard a minion
-						Discard 2 {wraith} minions
-					]
-					effects: [
-						{
-							type: discard
-							select: choose(minion)
-						}
-						{
-							type: discard
-							select: choose(culture(wraith),minion)
-							count: 2
-						}
-					]
+					type: If
+					check: {
+						type: canSpot
+						filter: culture(wraith),minion
+						count: 2
+					}
+					true: {
+						type: discard
+						select: choose(culture(wraith),minion)
+						count: 2
+					}
+					false: {
+						type: discard
+						select: choose(minion)
+					}
 				}
 			]
 		}
