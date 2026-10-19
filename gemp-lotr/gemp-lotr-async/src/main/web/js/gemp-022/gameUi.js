@@ -600,6 +600,11 @@ var GempLotrGameUI = Class.extend({
         }
 
         this.tabPane = $("#bottomLeftTabs").tabs().css("visibility", "visible");
+        // a hidden tab forgets how far its log was scrolled, so put the chat back at the bottom when it is shown
+        this.tabPane.bind("tabsshow", function () {
+            if (that.chatBox != null)
+                that.chatBox.repinIfPinned();
+        });
 
         this.chatBoxDiv = $("#chatBox");
 
@@ -1316,6 +1321,30 @@ var GempLotrGameUI = Class.extend({
         }).text(text);
     },
 
+    // A modal question with a button to carry on and one to go back; the dialog is gone once either is pressed
+    showConfirmDialog: function (title, text, proceedLabel, backLabel, proceedFunction) {
+        var buttons = {};
+        buttons[proceedLabel] = function () {
+            $(this).dialog("close");
+            proceedFunction();
+        };
+        buttons[backLabel] = function () {
+            $(this).dialog("close");
+        };
+
+        $("<div></div>").text(text).dialog({
+            title: title,
+            resizable: false,
+            modal: true,
+            width: 400,
+            buttons: buttons,
+            close: function () {
+                $(this).dialog("destroy").remove();
+            }
+        });
+        $('.ui-dialog :button').blur();
+    },
+
     getCardModifiersFunction: function (cardId, func) {
         this.communication.getGameCardModifiers(cardId, func);
     },
@@ -1855,7 +1884,7 @@ var GempLotrGameUI = Class.extend({
                     var group = that.revealedHandGroups[playerId];
                     if (ownHand)
                         that.syncOwnRevealedHand(true);
-                    openSizeDialog(dialog);
+                    that.openCompactCardDialog(dialog, $(".card", dialog));
                     that.dialogResize(dialog, group);
                     group.layoutCards();
                 });
@@ -2373,7 +2402,7 @@ var GempLotrGameUI = Class.extend({
             this.PlaySound("awaitAction");
         }
 
-        openSizeDialog(this.cardActionDialog);
+        this.openCompactCardDialog(this.cardActionDialog, $("#arbitraryChoice .card"));
         this.arbitraryDialogResize(false);
         $('.ui-dialog :button').blur();
     },
@@ -3007,7 +3036,7 @@ var GempLotrGameUI = Class.extend({
             this.PlaySound("awaitAction");
         }
 
-        openSizeDialog(this.cardActionDialog);
+        this.openCompactCardDialog(this.cardActionDialog, $("#arbitraryChoice .card"));
         this.arbitraryDialogResize(false);
         $('.ui-dialog :button').blur();
     },
@@ -3097,6 +3126,10 @@ var GempLotrGameUI = Class.extend({
 
         var freeCharacters = this.getDecisionParameters(decision, "freeCharacters");
         var minions = this.getDecisionParameters(decision, "minions");
+        var maxAssignableParam = this.getDecisionParameter(decision, "maxAssignable");
+        var maxAssignable = maxAssignableParam == null ? null : parseInt(maxAssignableParam);
+        if (isNaN(maxAssignable))
+            maxAssignable = null;
 
         var that = this;
 
@@ -3106,6 +3139,7 @@ var GempLotrGameUI = Class.extend({
         if (!this.replayMode) {
             this.alertButtons.html("<button id='Done'>Done</button>");
             $("#Done").button().click(function () {
+                var assignedCount = 0;
                 var atLeastOnMinionUnassigned = false;
 
                 var assignmentMap = {};
@@ -3115,29 +3149,43 @@ var GempLotrGameUI = Class.extend({
                 if (minions.length > 0)
                     $(".card:cardId(" + minions + ")").each(function () {
                         var card = $(this).data("card");
-                        if (card.assign != null)
+                        if (card.assign != null) {
                             assignmentMap[card.assign] += " " + card.cardId;
-                        else
+                            assignedCount++;
+                        } else
                             atLeastOnMinionUnassigned = true;
                     });
 
-                if (atLeastOnMinionUnassigned && !confirm("At least one minion has not been assigned, do you want to proceed?"))
-                    return;
+                var sendAssignments = function () {
+                    var assignmentArray = new Array();
+                    for (var i = 0; i < freeCharacters.length; i++) {
+                        assignmentArray.push(assignmentMap[freeCharacters[i]]);
+                    }
 
-                var assignmentArray = new Array();
-                for (var i = 0; i < freeCharacters.length; i++) {
-                    assignmentArray.push(assignmentMap[freeCharacters[i]]);
-                }
+                    that.alertText.html("");
+                    // ****CCG League****: Border around alert box
+                    that.alertBox.css({"border-radius": "7px", "border-color": "", "border-width": "1px"});
+                    that.alertButtons.html("");
+                    that.clearSelection();
 
-                that.alertText.html("");
-                // ****CCG League****: Border around alert box
-                that.alertBox.css({"border-radius": "7px", "border-color": "", "border-width": "1px"});
-                that.alertButtons.html("");
-                that.clearSelection();
+                    that.decisionFunction(id, "" + assignmentArray);
 
-                that.decisionFunction(id, "" + assignmentArray);
-                
-                that.PlaySound("awaitAction");
+                    that.PlaySound("awaitAction");
+                };
+
+                // The server says how many minions can be assigned at most (more minions than companions, for
+                // example); with that known, only assigning fewer is worth a warning.  Without it, any unassigned
+                // minion is.
+                var warn = atLeastOnMinionUnassigned;
+                if (warn && maxAssignable != null)
+                    warn = assignedCount < maxAssignable;
+
+                if (warn)
+                    that.showConfirmDialog("Unassigned minions",
+                        "At least one minion has not been assigned, do you want to proceed?",
+                        "Proceed", "Go back", sendAssignments);
+                else
+                    sendAssignments();
             });
         }
 
@@ -3226,6 +3274,79 @@ var GempLotrGameUI = Class.extend({
         $(".noEffectCard").removeClass("noEffectCard");
         $(".selectedCard").removeClass("selectedCard");
         this.selectionFunction = null;
+    },
+
+    // Opens a dialog that shows cards sized to those cards rather than to most of the window: the cards at a
+    // comfortable height in as few rows as fit, never beyond 90% of the window (cards then shrink to fit).
+    // cardElems are the card divs the dialog's group will lay out.
+    openCompactCardDialog: function (dialog, cardElems) {
+        var cardHeight = 400;
+        var padding = this.padding;
+        var minContentWidth = 340;
+        // jQuery UI lays the dialog out inside a bit of padding, and the group's bounds are trimmed by 6 px
+        var slack = 16;
+
+        var widths = new Array();
+        var total = 0;
+        var widest = 0;
+        cardElems.each(function () {
+            var width = $(this).data("card").getWidthForMaxDimension(cardHeight);
+            widths.push(width);
+            total += width;
+            widest = Math.max(widest, width);
+        });
+        total += padding * Math.max(0, widths.length - 1);
+
+        dialog.dialog("open");
+
+        // What the dialog adds around its content (title bar, buttons, padding), measured now that it is laid out
+        var widget = dialog.dialog("widget");
+        var chromeWidth = dialog.dialog("option", "width") - dialog.width();
+        var chromeHeight = dialog.dialog("option", "height") - dialog.height();
+        if (!this.replayMode && widget.find(".ui-dialog-buttonpane").length == 0)
+            chromeHeight += 56;
+
+        var maxWidth = Math.floor($(window).width() * 0.9);
+        var maxHeight = Math.floor($(window).height() * 0.9);
+        var maxGroupWidth = maxWidth - chromeWidth - slack;
+        var maxGroupHeight = maxHeight - chromeHeight - slack;
+
+        var rowsNeeded = function (groupWidth) {
+            var rows = 1;
+            var x = 0;
+            for (var i = 0; i < widths.length; i++) {
+                if (x + widths[i] > groupWidth) {
+                    rows++;
+                    x = 0;
+                }
+                x += widths[i] + padding;
+            }
+            return rows;
+        };
+
+        var groupWidth = maxGroupWidth;
+        var groupHeight = maxGroupHeight;
+        for (var rows = 1; rows <= widths.length; rows++) {
+            var candidateWidth = Math.max(minContentWidth - slack, Math.ceil(total / rows) + widest);
+            var candidateHeight = rows * cardHeight + (rows - 1) * padding;
+            if (candidateWidth > maxGroupWidth || candidateHeight > maxGroupHeight)
+                continue;
+            if (rowsNeeded(candidateWidth) <= rows) {
+                groupWidth = candidateWidth;
+                groupHeight = candidateHeight;
+                break;
+            }
+        }
+        if (widths.length == 0) {
+            groupWidth = minContentWidth - slack;
+            groupHeight = Math.min(maxGroupHeight, cardHeight / 2);
+        }
+
+        dialog.dialog({
+            width: groupWidth + slack + chromeWidth,
+            height: groupHeight + slack + chromeHeight
+        });
+        dialog.dialog("option", "position", "center");
     },
 
     dialogResize: function (dialog, group) {

@@ -45,8 +45,10 @@ public class ShadowPlayerAssignsHisMinionsGameProcess implements GameProcess {
                                             CardType.COMPANION, CardType.ALLY),
                                     Filters.assignableToSkirmish(Side.SHADOW, true, true, false)));
 
+            Integer maxAssignable = MaximumAssignment.compute(game, Side.SHADOW, freePeopleTargets, minions);
+
             game.getUserFeedback().sendAwaitingDecision(_playerId,
-                    new PlayerAssignMinionsDecision(1, "Assign minions to companions or allies at home", freePeopleTargets, minions) {
+                    new PlayerAssignMinionsDecision(1, "Assign minions to companions or allies at home", freePeopleTargets, minions, maxAssignable) {
                         @Override
                         public void decisionMade(String result) throws DecisionResultInvalidException {
                             Map<PhysicalCard, Set<PhysicalCard>> assignments = getAssignmentsBasedOnResponse(result);
