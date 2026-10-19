@@ -655,7 +655,25 @@ var GempScenarioAuthor = Class.extend({
     aliases: function () {
         return $.map((this.state && this.state.board && this.state.board.cards) || [], function (card) {
             return card.alias;
+        }).concat(this.siteAliases());
+    },
+
+    /** The names of the sites, both seats' (site1, site1opp, or the names they have been given). */
+    siteAliases: function () {
+        var paths = (this.state && this.state.board && this.state.board.sites) || {};
+        var all = [];
+        $.each(["freeps", "shadow"], function (i, seat) {
+            $.each(paths[seat] || [], function (j, site) {
+                if (site.alias)
+                    all.push(site.alias);
+            });
         });
+        return all;
+    },
+
+    /** The name a site has when it has not been given one: site3, and site3opp for the opponent's. */
+    defaultSiteAlias: function (seat, number) {
+        return "site" + number + (this.isHumanSeat(seat) ? "" : "opp");
     },
 
     isHumanSeat: function (seat) {
@@ -1333,15 +1351,28 @@ var GempScenarioAuthor = Class.extend({
         "after-block": "After the block"
     },
 
-    /** The turn and phase a step's When names: {turn, phase}, each null where it names none. */
-    placeOf: function (step) {
+    /**
+     * The turn and phase a step comes in: {turn, phase}, each null where it cannot be told.  What its When names, or
+     * else where the game was when the step had its first decision (seen: {turn, phase} from the server, for a step
+     * that has been played to), or else what its When says about the decision (an assignment, a skirmish's).
+     */
+    placeOf: function (step, seen) {
         if (this.isOpening(step))
             return {turn: 0, phase: "opening"};
         var when = typeof step.when == "string" ? step.when : "";
         var turn = /turn\(\s*(\d+)\s*\)/i.exec(when), phase = /phase\(\s*([a-z_]+)\s*\)/i.exec(when);
+        var said = phase != null ? phase[1].toLowerCase() : null;
+        if (step.anyOrder != null)
+            said = said || "block";
+        else if (said == null && seen != null)
+            said = seen.phase;
+        else if (said == null && /(^|,)\s*assign\s*(,|$)/i.test(when))
+            said = "assignment";
+        else if (said == null && /\b(inSkirmish|fighting)\(|text\(\s*next skirmish\s*\)/i.test(when))
+            said = "skirmish";
         return {
-            turn: turn != null ? parseInt(turn[1]) : null,
-            phase: phase != null ? phase[1].toLowerCase() : step.anyOrder != null ? "block" : null
+            turn: turn != null ? parseInt(turn[1]) : seen != null ? seen.turn : null,
+            phase: said
         };
     },
 
@@ -1477,7 +1508,7 @@ var GempScenarioAuthor = Class.extend({
         // says neither is in the same place as the one before it.  Each phase has a colour down the rows' edge.
         var group = {turn: null, phase: null};
         $.each(steps, function (index, step) {
-            var where = that.placeOf(step);
+            var where = that.placeOf(step, (state.places || [])[index]);
             var turn = where.turn != null ? where.turn : group.turn;
             var phase = where.phase != null ? where.phase : group.phase;
             if (turn !== group.turn || phase !== group.phase) {
@@ -2367,7 +2398,7 @@ var GempScenarioAuthor = Class.extend({
     /**
      * Where a step of a skirmishes block belongs: {part: "before" (the assignment, say), "first" (the first choice of
      * a skirmish), "fight" (a decision in that character's skirmish), "after" (between that skirmish and the next),
-     * who}.  Read off its When: fighting(x), after(x), text(next skirmish).
+     * who}.  Read off its When: inSkirmish(x) (once fighting(x)), after(x), text(next skirmish).
      */
     skirmishPart: function (step) {
         var when = step.when;
@@ -2376,11 +2407,11 @@ var GempScenarioAuthor = Class.extend({
             $.each(this.splitTerms(when), function (i, term) {
                 if (/^phase\(\s*skirmish\s*\)$/i.test(term))
                     skirmish = true;
-                var m = /^(fighting|after|text)\((.*)\)$/i.exec(term);
+                var m = /^(fighting|inSkirmish|after|text)\((.*)\)$/i.exec(term);
                 if (m == null)
                     return;
                 var what = m[1].toLowerCase(), arg = $.trim(m[2]);
-                if (what == "fighting")
+                if (what == "fighting" || what == "inskirmish")
                     fighting = arg;
                 else if (what == "after")
                     after = arg;
@@ -2388,7 +2419,7 @@ var GempScenarioAuthor = Class.extend({
                     next = true;
             });
         } else if (when != null && typeof when == "object") {
-            fighting = when.fighting || null;
+            fighting = when.inSkirmish || when.fighting || null;
             after = when.after || null;
             next = /next skirmish/i.test(when.text || "");
             skirmish = /^skirmish$/i.test(when.phase || "");
@@ -2501,12 +2532,13 @@ var GempScenarioAuthor = Class.extend({
             if (fight.length > 0 && firstEvery != null && end > firstEvery)
                 end = firstEvery;
             group(name + "'s skirmish", null, fight,
-                adding("+ Step", "A step for the next decision in this skirmish", end, {once: true, when: human + ", action, fighting(" + who + ")"}));
+                adding("+ Step", "A step for the next decision in this skirmish", end, {once: true, when: human + ", action, inSkirmish(" + who + ")"}));
             var afterSubs = parts["after:" + who] || [];
             //(before the first choice's step, which would otherwise take the choices after a skirmish too)
-            group("After " + name + "'s skirmish", "Said at the decision after it: the choice of the next skirmish, if there is one to choose.", afterSubs,
-                afterSubs.length > 0 ? null : adding("+ Step", "A step for the decision after this skirmish", Math.min(firstChoice, top.anyOrder.length),
-                    {once: true, when: human + ", cards, after(" + who + "), text(next skirmish)"}));
+            group("After " + name + "'s skirmish", "Said at the first decision after it, whatever that is: the choice of the next skirmish, the next skirmish's own, "
+                + "a fierce assignment, or the first of the Regroup phase (the block's end does not cut it off).", afterSubs,
+                afterSubs.length > 0 ? null : adding("+ Step", "A pause read at the first decision after this skirmish", Math.min(firstChoice, top.anyOrder.length),
+                    {once: true, pause: true, when: human + ", after(" + who + ")", messages: [{text: "..."}]}));
         });
         //Another character's skirmish, to write steps for
         var mine = $.grep(cards, function (card) {
@@ -2794,7 +2826,7 @@ var GempScenarioAuthor = Class.extend({
             };
             syncWhen();
             when.append(pickers);
-            when.append(this.field("When", raw, "seat, kind of decision, phase(...), turn(...), skirmish(n), fighting(card), offers(card), text(part of what the decision says). "
+            when.append(this.field("When", raw, "seat, kind of decision, phase(...), turn(...), skirmish(n), inSkirmish(card), after(card), offers(card), text(part of what the decision says). "
                 + "Or written out in full, as the file has it, in HJSON: { seat: freeps, require: { ... } }. What is copied out of a file can be pasted here, with or without 'when:' in front."));
         }
         var flagsRow = this.el("div", "sa-row").appendTo(when).toggle(!opening);
@@ -2871,7 +2903,8 @@ var GempScenarioAuthor = Class.extend({
                 allowInput.prop("disabled", free);
             }
             does.append(this.field("Allow", allowInput,
-                "What the player may do: play(card), use(card), choose(card, card), option(text), number(n), assign(character: minion + minion), pass. Several, separated by commas: each is allowed when it is on offer (the other copy of a card, a way the player did not go), and something in it has to be. Empty: anything."));
+                "What the player may do: play(card), use(card), choose(card, card), option(text), number(n), assign(character: minion + minion), pass. Several, separated by commas: each is allowed when it is on offer (the other copy of a card, a way the player did not go), and something in it has to be. Empty: anything. "
+                + "choose(...) can pick a card by its skirmish and narrow it with card filters and a number: choose(skirmishing), choose(skirmishing(aragorn), title(Orthanc Warrior), 2), choose(aragorn, not(exhausted)). Sites are site1, site2... (site1opp... for the opponent's)."));
             //With its decision on the table: what else the decision offers, to be allowed as well with a click
             var asked = this.state.waiting && this.state.waiting.human;
             if (players && inHandNow && asked != null && !work.pause) {
@@ -4354,6 +4387,17 @@ var GempScenarioAuthor = Class.extend({
                 name.append(that.el("span", "sa-alias", "Site " + site.number));
                 name.append(that.el("span", "cardHint", " " + (site.name || "(no such card)")).attr("value", site.id).attr("title", ""));
                 name.append(that.el("span", "sa-note", " " + site.id));
+                //Its name in the scenario (the opponent's too, while the paths are the same), which steps pick it by
+                $.each(apart ? [seat] : ["freeps", "shadow"], function (k, whose) {
+                    var named = ((paths[whose] || [])[at] || {}).alias;
+                    if (!named)
+                        return;
+                    var holder = that.el("span", "sa-sitename").appendTo(name);
+                    holder.append(that.el("span", "sa-alias", " " + named).attr("title", "Its name in the scenario: choose(" + named + "), card:" + named));
+                    holder.append(that.button("\u270e", "Give this site another name in the scenario. Every part of the scenario that says the old name is changed to say the new one.", function () {
+                        that.renameCard({alias: named}, holder);
+                    }, "sa-rename"));
+                });
                 var controls = that.el("div", "sa-row").appendTo(row);
                 controls.append(that.siteFinder(site.number, function (id) {
                     change(at, id);
@@ -4406,7 +4450,19 @@ var GempScenarioAuthor = Class.extend({
     },
 
     putSites: function (freeps, shadow) {
-        this.edit({top: {sites: {freeps: freeps.join(", "), shadow: shadow.join(", ")}}}, null);
+        var that = this;
+        var paths = (this.state && this.state.board && this.state.board.sites) || {};
+        //Sites that have been given names keep them, place by place; the path is written with its names if any has one
+        var path = function (seat, ids) {
+            var named = false, object = {};
+            $.each(ids, function (at, id) {
+                var alias = ((paths[seat] || [])[at] || {}).alias || that.defaultSiteAlias(seat, at + 1);
+                named = named || alias != that.defaultSiteAlias(seat, at + 1);
+                object[alias] = id;
+            });
+            return named ? object : ids.join(", ");
+        };
+        this.edit({top: {sites: {freeps: path("freeps", freeps), shadow: path("shadow", shadow)}}}, null);
     },
 
     /** The seat's Ring-bearer and its Ring, chosen from its cards. */
@@ -4507,6 +4563,11 @@ var GempScenarioAuthor = Class.extend({
         var that = this;
         if (!/^[A-Za-z][A-Za-z0-9_]*$/.test(alias)) {
             this.problem = "A card's name in the scenario is made of letters, digits and underscores, starting with a letter.";
+            this.renderNotices();
+            return;
+        }
+        if ($.inArray(alias, this.siteAliases()) > -1) {
+            this.problem = alias + " is the name of a site of the scenario's: give the card another.";
             this.renderNotices();
             return;
         }

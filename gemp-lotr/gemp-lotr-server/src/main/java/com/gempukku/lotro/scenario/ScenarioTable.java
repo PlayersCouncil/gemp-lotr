@@ -484,6 +484,29 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
             else
                 bind(player, match, (PhysicalCardImpl) card);
         }
+
+        //The seat's sites, by their number: the ones still in its adventure deck, and the one on the path already
+        List<PhysicalCard> sites = new ArrayList<>(_gameState.getAdventureDeck(player));
+        for (PhysicalCard card : _gameState.getInPlay())
+            if (card.getBlueprint().getCardType() == com.gempukku.lotro.common.CardType.SITE && card.getOwner().equals(player))
+                sites.add(card);
+        List<String> aliases = _def.siteAliases.getOrDefault(seat, List.of());
+        List<String> blueprints = _def.sites.getOrDefault(seat, List.of());
+        for (int at = 0; at < aliases.size(); at++) {
+            int number = at + 1;
+            String blueprint = _format.applyErrata(blueprints.get(at));
+            PhysicalCard found = null;
+            for (PhysicalCard card : sites)
+                if (found == null && card.getBlueprintId().equals(blueprint) && !_aliases.containsValue(card))
+                    found = card;
+            for (PhysicalCard card : sites)
+                if (found == null && card.getBlueprint().getSiteNumber() == number && !_aliases.containsValue(card))
+                    found = card;
+            if (found == null)
+                _problems.add("Site " + number + " of the " + seat.key() + " seat (" + aliases.get(at) + ") is not in the game");
+            else
+                bind(player, aliases.get(at), (PhysicalCardImpl) found);
+        }
     }
 
     private void bind(String player, String alias, PhysicalCardImpl card) {
@@ -623,6 +646,72 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
         } catch (InvalidCardDefinitionException | ParseException exp) {
             throw new IllegalArgumentException(exp.getMessage(), exp);
         }
+    }
+
+    /** Filters whose parameter is itself a filter: a card's name in the scenario is looked for inside them. */
+    private static final java.util.Set<String> FILTER_HOLDERS = java.util.Set.of("not", "and", "or", "inskirmishagainst",
+            "recentlyinskirmishagainst", "attachedto", "hasattached", "hasstacked", "stackedon", "assignedtoskirmishagainst",
+            "notassignedtoskirmishagainst", "canexert");
+
+    /**
+     * Card filters as cards write them, with the scenario's names for its cards allowed in them: a word that is one
+     * (aragorn), on its own or inside not(...), inSkirmishAgainst(...) and the like, becomes alias(aragorn).
+     */
+    static String cardFilter(ScenarioDefinition def, String text) throws ScenarioFormatException {
+        List<String> parts = new ArrayList<>();
+        for (String part : Terms.split(text, ',', "filter")) {
+            int open = part.indexOf('(');
+            if (open < 0) {
+                parts.add(ScenarioParser.isAlias(def, part) ? "alias(" + part + ")" : part);
+                continue;
+            }
+            String name = part.substring(0, open).trim();
+            if (!FILTER_HOLDERS.contains(name.toLowerCase(java.util.Locale.ROOT)) || !part.endsWith(")")) {
+                parts.add(part);
+                continue;
+            }
+            parts.add(name + "(" + cardFilter(def, part.substring(open + 1, part.length() - 1)) + ")");
+        }
+        return String.join(",", parts);
+    }
+
+    private static final Map<String, com.gempukku.lotro.cards.build.FilterableSource> FILTERS = new java.util.concurrent.ConcurrentHashMap<>();
+
+    private static com.gempukku.lotro.cards.build.FilterableSource filter(String filter) {
+        return FILTERS.computeIfAbsent(filter, text -> {
+            try {
+                return BUILDER.getFilterFactory().generateFilter(text, BUILDER);
+            } catch (InvalidCardDefinitionException | RuntimeException exp) {
+                throw new IllegalArgumentException(exp.getMessage(), exp);
+            }
+        });
+    }
+
+    /** @throws IllegalArgumentException if the card builder does not understand the filter. */
+    public static void checkFilter(String filter) {
+        filter(filter);
+    }
+
+    /**
+     * @return Those of the cards that a choose(...)'s pick fits, in the order they were given.
+     * @param player Who "you" is in the pick's filters.
+     */
+    public List<PhysicalCard> Picked(ScenarioDefinition.Pick pick, String player, List<? extends PhysicalCard> among) {
+        ActionContext context = new DefaultActionContext(player, _game, _rulesCards.get(SeatOf(player)), null, null);
+        com.gempukku.lotro.common.Filterable filterable = filter(pick.asFilter()).getFilterable(context);
+        List<PhysicalCard> fit = new ArrayList<>();
+        for (PhysicalCard card : among)
+            if (card != null && com.gempukku.lotro.filters.Filters.accepts(_game, card, filterable))
+                fit.add(card);
+        return fit;
+    }
+
+    /** The player a decision waits for; the human if it is neither's (any more). */
+    public String PlayerOf(AwaitingDecision decision) {
+        for (Seat seat : Seat.values())
+            if (_userFeedback.getAwaitingDecision(Player(seat)) == decision)
+                return Player(seat);
+        return Player(_def.human);
     }
 
     /**

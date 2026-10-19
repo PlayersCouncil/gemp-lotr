@@ -164,6 +164,44 @@ public class ScenarioShelf {
                 ownId.equals(entry.id()) ? text : retitled(text, ownId, entry.def().title), meta);
     }
 
+    /**
+     * The player's own copy of a public scenario, linked to it (as copyPublic makes it, or a version of it that was
+     * submitted and sent back); null if they have none.  The first, if there are several.
+     */
+    public synchronized ScenarioLibrary.Entry ownCopy(String player, String id) {
+        for (ScenarioLibrary.Entry entry : _scenarios.getAll())
+            if (player.equals(entry.owner()) && id.equals(_scenarios.meta(player, entry.path()).origin))
+                return entry;
+        return null;
+    }
+
+    /**
+     * Puts the public scenario over the player's own copy of it (see ownCopy), as copyPublic would have made it,
+     * keeping the copy's file, id and what is noted about it.  With no copy, makes one.
+     * @return The copy.
+     */
+    public synchronized ScenarioLibrary.Entry overwriteCopy(String player, String id, boolean admin) throws ShelfException {
+        ScenarioLibrary.Entry entry = _scenarios.get(id);
+        if (entry == null || !entry.canonical() || !entry.openable() || (!admin && !_scenarios.listedFor(entry, player, false)))
+            throw new ShelfException("There is no public scenario called '" + id + "'.");
+        ScenarioLibrary.Entry copy = ownCopy(player, id);
+        if (copy == null)
+            return copyPublic(player, id, admin);
+        if (locked(player, copy.path()))
+            throw new ShelfException("Your copy is in review, and cannot be changed until an admin has approved or rejected it.");
+        String ownId = ScenarioLibrary.fileId(copy);
+        String text = read(null, entry.path());
+        //(what the copy had is kept in the archive, from which an admin can put it back)
+        try {
+            if (!read(player, copy.path()).equals(text))
+                _scenarios.archive(player, copy.path(), "written over with the public version", player);
+        } catch (IOException exp) {
+            throw new ShelfException("Your copy could not be archived before it was written over: " + exp.getMessage());
+        }
+        return write(player, copy.path(), ownId == null || ownId.equals(entry.id()) ? text : retitled(text, ownId, entry.def().title),
+                _scenarios.meta(player, copy.path()));
+    }
+
     /** Deletes one of a player's scenarios (it goes to the archive, from which an admin can put it back). */
     public synchronized void delete(String player, String path) throws ShelfException {
         //(a file that cannot be read as a scenario, or whose id another has, can be deleted all the same)
@@ -220,6 +258,14 @@ public class ScenarioShelf {
      * linked to (which stops it being approved as it is).  The archive: the latest records first, as many as 'limit'.
      */
     public synchronized Map<String, Object> adminState(int limit) {
+        return adminState(limit, null);
+    }
+
+    /**
+     * As adminState(limit), each public scenario saying, as 'ownCopy' ({id, title, path} or null), the admin's own
+     * copy of it (see ownCopy).
+     */
+    public synchronized Map<String, Object> adminState(int limit, String admin) {
         List<Map<String, Object>> publics = new ArrayList<>();
         List<Map<String, Object>> submissions = new ArrayList<>();
         for (ScenarioLibrary.Entry entry : _scenarios.getAll()) {
@@ -231,6 +277,8 @@ public class ScenarioShelf {
                 json.put("approvedAt", meta.approvedAt);
                 json.put("approvedBy", meta.approvedBy);
                 json.put("author", entry.def() == null ? null : entry.def().author);
+                ScenarioLibrary.Entry copy = admin == null || entry.id() == null ? null : ownCopy(admin, entry.id());
+                json.put("ownCopy", copy == null ? null : brief(copy));
                 publics.add(json);
                 continue;
             }

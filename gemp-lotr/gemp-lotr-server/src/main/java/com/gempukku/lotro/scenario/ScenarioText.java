@@ -71,6 +71,14 @@ public final class ScenarioText implements LiveScenario.TextRenderer {
                 check(step.allow.otherwise, step.describe() + " otherwise", problems);
                 for (String hint : step.allow.hints.values())
                     check(hint, step.describe() + " hints", problems);
+                //A hint is what is said when a card the step does not allow is picked: one for a card it allows is never said
+                for (String card : step.allow.hints.keySet())
+                    for (ScenarioDefinition.Answer answer : step.allow.answers)
+                        if (answer.cards().contains(card) && answer.kind() != ScenarioDefinition.AnswerKind.ASSIGN) {
+                            problems.add(step.describe() + " hints: " + card + " is among the answers the step allows ("
+                                    + answer.source() + "), so its hint is never shown: a hint is for a card that is not allowed");
+                            break;
+                        }
             }
         }
         check(def.outcome.offScriptMessage, "outcome.offScript.message", problems);

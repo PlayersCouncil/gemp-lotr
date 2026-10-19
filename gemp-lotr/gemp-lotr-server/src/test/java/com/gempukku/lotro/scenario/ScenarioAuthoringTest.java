@@ -503,7 +503,7 @@ public class ScenarioAuthoringTest {
         JSONArray kids = steps(state).getJSONObject(0).getJSONArray("anyOrder");
         assertEquals(5, kids.size());
         JSONObject made = kids.getJSONObject(3);
-        assertEquals("freeps, action, fighting(gandalf)", made.getString("when"));
+        assertEquals("freeps, action, inSkirmish(gandalf)", made.getString("when"));
         assertTrue(made.getBooleanValue("once"));
         assertEquals("It has the decision now", 4, state.getJSONObject("position").getIntValue("sub"));
         assertEquals("freeps, action, phase(skirmish)", kids.getJSONObject(4).getString("when"));

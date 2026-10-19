@@ -147,6 +147,12 @@ public class ScenarioAuthoring {
         final AtomicInteger revision = new AtomicInteger();
         /** Numbers the names steps are given (see Sitting.uid). */
         final AtomicInteger uids = new AtomicInteger();
+        /**
+         * Where in the game each step (by its name, see Sitting.uid) was last seen to have its first decision:
+         * [turn, phase].  Kept from one game of the draft to the next, so that the steps past where this one is
+         * still say where they come.
+         */
+        final Map<String, String[]> places = new java.util.concurrent.ConcurrentHashMap<>();
         volatile boolean dirty;
         /** Whether what is done where the script has nothing to say is written into the script. */
         volatile boolean recording = true;
@@ -474,7 +480,7 @@ public class ScenarioAuthoring {
             if (decision.getDecisionType() == AwaitingDecisionType.CARD_ACTION_CHOICE && said.matches("(?i)(optional|required) responses"))
                 when.append(", text(").append(said).append(")");
             if (fighting != null)
-                when.append(", fighting(").append(fighting).append(")");
+                when.append(", inSkirmish(").append(fighting).append(")");
             if (after != null)
                 when.append(", after(").append(after).append(")");
             //(which skirmish is next: in a block, told apart from the other choices of cards there)
@@ -573,7 +579,7 @@ public class ScenarioAuthoring {
             if (kept.offers != null)
                 terms.add("offers(" + kept.offers + ")");
             if (kept.fighting != null)
-                terms.add("fighting(" + kept.fighting + ")");
+                terms.add("inSkirmish(" + kept.fighting + ")");
             if (kept.after != null)
                 terms.add("after(" + kept.after + ")");
             if (kept.text != null)
@@ -1929,6 +1935,35 @@ public class ScenarioAuthoring {
                         throw new AuthoringException("The scenario already has a card called '" + name + "'.");
                     known |= from != null && seat.getValue().asObject().get(from) != null;
                 }
+                //A site is named as a card is.  A path written as a list has its sites called by their number, and
+                // is written out with its names once one of them is changed.
+                Seat human = "shadow".equalsIgnoreCase(json.getString("human", "freeps")) ? Seat.SHADOW : Seat.FREEPS;
+                JsonObject sites = json.get("sites") != null && json.get("sites").isObject() ? json.get("sites").asObject() : new JsonObject();
+                for (String seatName : new ArrayList<>(sites.names())) {
+                    Seat seat = seatName.equalsIgnoreCase("shadow") || (seatName.equalsIgnoreCase("opponent") && human == Seat.FREEPS)
+                            || (seatName.equalsIgnoreCase("human") && human == Seat.SHADOW) ? Seat.SHADOW : Seat.FREEPS;
+                    JsonValue path = sites.get(seatName);
+                    JsonObject named = new JsonObject();
+                    if (path.isObject()) {
+                        named = path.asObject();
+                    } else {
+                        List<String> blueprints = new ArrayList<>();
+                        if (path.isArray())
+                            path.asArray().forEach(one -> blueprints.add(one.asString().trim()));
+                        else
+                            for (String one : path.asString().split(","))
+                                if (!one.trim().isEmpty())
+                                    blueprints.add(one.trim());
+                        for (int at = 0; at < blueprints.size(); at++)
+                            named.add("site" + (at + 1) + (seat == human ? "" : "opp"), blueprints.get(at));
+                    }
+                    if (named.get(name) != null && !name.equals(from))
+                        throw new AuthoringException("The scenario already has a site called '" + name + "'.");
+                    if (from != null && named.get(from) != null) {
+                        known = true;
+                        sites.set(seatName, named);
+                    }
+                }
                 if (!known)
                     throw new AuthoringException("The scenario has no card called '" + from + "'.");
                 if (!name.equals(from))
@@ -2568,6 +2603,24 @@ public class ScenarioAuthoring {
             for (Step step : def.steps)
                 statuses.add(director.statuses().getOrDefault(step.label(), ScenarioDirector.StepStatus.UNREACHED).name().toLowerCase(Locale.ROOT));
             state.put("statuses", statuses);
+            //Where in the game each step comes, as far as it has been seen to: {turn, phase}, or null
+            List<Map<String, Object>> places = new ArrayList<>();
+            for (Step step : def.steps) {
+                String uid = sitting.uid(step);
+                String[] place = director.placeOf(step);
+                if (place != null && uid != null)
+                    session.places.put(uid, place);
+                else if (uid != null)
+                    place = session.places.get(uid);
+                Map<String, Object> json = null;
+                if (place != null) {
+                    json = new LinkedHashMap<>();
+                    json.put("turn", Integer.parseInt(place[0]));
+                    json.put("phase", place[1]);
+                }
+                places.add(json);
+            }
+            state.put("places", places);
             state.put("uids", sitting.uids());
             //The steps in each block: for each step in order, their names and what became of each (none, for a step
             // that is not a block)
@@ -2708,6 +2761,9 @@ public class ScenarioAuthoring {
                 Map<String, Object> site = new LinkedHashMap<>();
                 site.put("number", ++number);
                 site.put("id", id);
+                //(its name in the scenario, which is how a step picks it or points at it)
+                List<String> aliases = sitting.def.siteAliases.getOrDefault(seat, List.of());
+                site.put("alias", number <= aliases.size() ? aliases.get(number - 1) : null);
                 try {
                     site.put("name", GameUtils.getFullName(_library.getLotroCardBlueprint(id)));
                 } catch (CardNotFoundException exp) {

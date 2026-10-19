@@ -1825,14 +1825,15 @@ public class GameState {
      * @param label The name; labelling a second card with the same name replaces the first.
      */
     public void labelCard(String label, PhysicalCard card) {
-        _cardLabels.put(label, card);
+        //(names are told apart without regard to case: the card builder lowercases what it reads in a filter)
+        _cardLabels.put(label.toLowerCase(java.util.Locale.ROOT), card);
     }
 
     /**
      * @return The card that was given this name with labelCard, or null if there is none.
      */
     public PhysicalCard getLabeledCard(String label) {
-        return _cardLabels.get(label);
+        return label == null ? null : _cardLabels.get(label.toLowerCase(java.util.Locale.ROOT));
     }
 
     /**

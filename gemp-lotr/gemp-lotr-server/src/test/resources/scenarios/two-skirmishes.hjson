@@ -60,7 +60,7 @@
 				{
 					id: aragornFights
 					once: true
-					when: freeps, action, fighting(aragorn)
+					when: freeps, action, inSkirmish(aragorn)
 					messages: [
 						Aragorn's skirmish.
 					]

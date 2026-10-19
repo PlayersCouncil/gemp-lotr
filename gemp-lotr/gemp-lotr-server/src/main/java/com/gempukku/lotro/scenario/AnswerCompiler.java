@@ -69,46 +69,8 @@ public final class AnswerCompiler {
                 throw mismatch(table, decision, answer, "no such action is on offer");
             }
 
-            case CHOOSE: {
-                if (type == AwaitingDecisionType.CARD_SELECTION) {
-                    Set<String> offered = new HashSet<>(Arrays.asList(params.get("cardId")));
-                    StringJoiner ids = new StringJoiner(",");
-                    for (String alias : answer.cards()) {
-                        String id = String.valueOf(table.Card(alias).getCardId());
-                        if (!offered.contains(id))
-                            throw mismatch(table, decision, answer, "'" + alias + "' cannot be chosen");
-                        ids.add(id);
-                    }
-                    checkCount(table, decision, answer, answer.cards().size());
-                    return ids.toString();
-                }
-                if (type == AwaitingDecisionType.ARBITRARY_CARDS) {
-                    String[] tempIds = params.get("cardId");
-                    String[] selectable = params.get("selectable");
-                    String[] blueprintIds = params.get("blueprintId");
-                    List<? extends PhysicalCard> physical = decision instanceof ArbitraryCardsSelectionDecision arbitrary
-                            && arbitrary.getPhysicalCards() != null ? new ArrayList<>(arbitrary.getPhysicalCards()) : null;
-                    Set<Integer> used = new HashSet<>();
-                    StringJoiner ids = new StringJoiner(",");
-                    for (String alias : answer.cards()) {
-                        PhysicalCardImpl card = table.Card(alias);
-                        int found = -1;
-                        for (int i = 0; i < tempIds.length && found < 0; i++) {
-                            if (used.contains(i) || !selectable[i].equals("true"))
-                                continue;
-                            if (physical != null ? physical.get(i) == card : blueprintIds[i].equals(card.getBlueprintId()))
-                                found = i;
-                        }
-                        if (found < 0)
-                            throw mismatch(table, decision, answer, "'" + alias + "' cannot be chosen");
-                        used.add(found);
-                        ids.add(tempIds[found]);
-                    }
-                    checkCount(table, decision, answer, answer.cards().size());
-                    return ids.toString();
-                }
-                throw mismatch(table, decision, answer, "this decision is not a choice of cards");
-            }
+            case CHOOSE:
+                return chosen(table, decision, answer, false).getFirst();
 
             case OPTION: {
                 if (type != AwaitingDecisionType.MULTIPLE_CHOICE)
@@ -172,6 +134,84 @@ public final class AnswerCompiler {
 
     private static boolean textMatches(String actionText, String wanted) {
         return wanted == null || actionText.toLowerCase().contains(wanted.toLowerCase());
+    }
+
+    /**
+     * Every answer the game would take for a choose(...) that could be one of several cards: choose(skirmishing)
+     * with two minions in the skirmish is either of them.  Any other answer has only the one.
+     */
+    public static List<String> compileAll(ScenarioTable table, AwaitingDecision decision, Answer answer) throws ScenarioScriptException {
+        if (answer.kind() == ScenarioDefinition.AnswerKind.CHOOSE)
+            return chosen(table, decision, answer, true);
+        return List.of(compile(table, decision, answer));
+    }
+
+    /** One of the cards a decision offers to be chosen. */
+    private record Offered(String answer, PhysicalCard card, String blueprintId) { }
+
+    /**
+     * @param every Whether to give every way of choosing that fits (only where the answer is a single pick that
+     *              more than one card fits, and that does not say which of them); otherwise the one way.
+     */
+    private static List<String> chosen(ScenarioTable table, AwaitingDecision decision, Answer answer, boolean every) throws ScenarioScriptException {
+        AwaitingDecisionType type = decision.getDecisionType();
+        Map<String, String[]> params = decision.getDecisionParameters();
+        List<Offered> offered = new ArrayList<>();
+        if (type == AwaitingDecisionType.CARD_SELECTION) {
+            for (String id : params.get("cardId"))
+                offered.add(new Offered(id, table.gameState().findCardById(Integer.parseInt(id)), null));
+        } else if (type == AwaitingDecisionType.ARBITRARY_CARDS) {
+            String[] tempIds = params.get("cardId");
+            String[] selectable = params.get("selectable");
+            String[] blueprintIds = params.get("blueprintId");
+            List<? extends PhysicalCard> physical = decision instanceof ArbitraryCardsSelectionDecision arbitrary
+                    && arbitrary.getPhysicalCards() != null ? new ArrayList<>(arbitrary.getPhysicalCards()) : null;
+            for (int i = 0; i < tempIds.length; i++)
+                if (selectable[i].equals("true"))
+                    offered.add(new Offered(tempIds[i], physical != null ? physical.get(i) : null, blueprintIds[i]));
+        } else {
+            throw mismatch(table, decision, answer, "this decision is not a choice of cards");
+        }
+
+        List<ScenarioDefinition.Pick> picks = answer.picks().isEmpty()
+                ? answer.cards().stream().map(alias -> new ScenarioDefinition.Pick(alias, false, null, null, 0, alias)).toList()
+                : answer.picks();
+        String player = table.PlayerOf(decision);
+        Set<Offered> used = new HashSet<>();
+        List<String> ids = new ArrayList<>();
+        List<String> alternatives = null;
+        for (ScenarioDefinition.Pick pick : picks) {
+            List<Offered> fit = new ArrayList<>();
+            if (pick.plain()) {
+                PhysicalCardImpl card = table.Card(pick.alias());
+                for (Offered one : offered)
+                    if (!used.contains(one) && (one.card() != null ? one.card() == card : one.blueprintId().equals(card.getBlueprintId())))
+                        fit.add(one);
+            } else {
+                List<PhysicalCard> cards = new ArrayList<>();
+                for (Offered one : offered)
+                    if (!used.contains(one))
+                        cards.add(one.card());
+                List<PhysicalCard> picked = table.Picked(pick, player, cards);
+                for (Offered one : offered)
+                    if (!used.contains(one) && one.card() != null && picked.contains(one.card()))
+                        fit.add(one);
+            }
+            if (pick.ordinal() > 0) {
+                if (fit.size() < pick.ordinal())
+                    throw mismatch(table, decision, answer, "'" + pick.source() + "': " + (fit.isEmpty() ? "no card on offer fits"
+                            : "only " + fit.size() + " card(s) on offer fit"));
+                fit = List.of(fit.get(pick.ordinal() - 1));
+            }
+            if (fit.isEmpty())
+                throw mismatch(table, decision, answer, "'" + pick.source() + "' cannot be chosen");
+            if (every && picks.size() == 1 && fit.size() > 1)
+                alternatives = fit.stream().map(Offered::answer).toList();
+            used.add(fit.getFirst());
+            ids.add(fit.getFirst().answer());
+        }
+        checkCount(table, decision, answer, picks.size());
+        return alternatives != null ? alternatives : List.of(String.join(",", ids));
     }
 
     private static void checkCount(ScenarioTable table, AwaitingDecision decision, Answer answer, int count) throws ScenarioScriptException {
