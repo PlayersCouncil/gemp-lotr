@@ -3036,8 +3036,10 @@ var GempLotrGameUI = Class.extend({
             this.PlaySound("awaitAction");
         }
 
-        this.openCompactCardDialog(this.cardActionDialog, $("#arbitraryChoice .card"));
-        this.arbitraryDialogResize(false);
+        //(each card has its action's text under it)
+        this.openCompactCardDialog(this.cardActionDialog, $("#arbitraryChoice .card"), 36);
+        this.specialGroup.setBounds(this.padding, this.padding, this.cardActionDialog.width() + 10 - 2 * this.padding,
+            this.cardActionDialog.height() + 10 - 36 - 2 * this.padding);
         $('.ui-dialog :button').blur();
     },
 
@@ -3279,23 +3281,25 @@ var GempLotrGameUI = Class.extend({
     // Opens a dialog that shows cards sized to those cards rather than to most of the window: the cards at a
     // comfortable height in as few rows as fit, never beyond 90% of the window (cards then shrink to fit).
     // cardElems are the card divs the dialog's group will lay out.
-    openCompactCardDialog: function (dialog, cardElems) {
-        var cardHeight = 400;
+    /**
+     * Opens a dialog of cards at a size that suits them: as large as a comfortable card (up to 300px tall), in as
+     * few rows as fit, and no larger than 90% of the room there is (the window, less the scenario authoring panel
+     * where that is open).  Cards are made smaller only where that many would not otherwise fit.
+     * @param labelHeight Room to leave under each row of cards for a line of text (the action's, in a choice of
+     *                    actions); 0 for none.
+     */
+    openCompactCardDialog: function (dialog, cardElems, labelHeight) {
         var padding = this.padding;
         var minContentWidth = 340;
+        var label = labelHeight || 0;
         // jQuery UI lays the dialog out inside a bit of padding, and the group's bounds are trimmed by 6 px
         var slack = 16;
 
-        var widths = new Array();
-        var total = 0;
-        var widest = 0;
+        // each card's width for a height of 100, to scale by
+        var ratios = new Array();
         cardElems.each(function () {
-            var width = $(this).data("card").getWidthForMaxDimension(cardHeight);
-            widths.push(width);
-            total += width;
-            widest = Math.max(widest, width);
+            ratios.push($(this).data("card").getWidthForMaxDimension(100) / 100);
         });
-        total += padding * Math.max(0, widths.length - 1);
 
         dialog.dialog("open");
 
@@ -3306,47 +3310,54 @@ var GempLotrGameUI = Class.extend({
         if (!this.replayMode && widget.find(".ui-dialog-buttonpane").length == 0)
             chromeHeight += 56;
 
-        var maxWidth = Math.floor($(window).width() * 0.9);
-        var maxHeight = Math.floor($(window).height() * 0.9);
-        var maxGroupWidth = maxWidth - chromeWidth - slack;
-        var maxGroupHeight = maxHeight - chromeHeight - slack;
+        var panel = $("#scenarioAuthor:visible");
+        var roomWidth = $(window).width() - (panel.length > 0 ? panel.outerWidth() : 0);
+        var roomHeight = $(window).height();
+        var maxGroupWidth = Math.floor(roomWidth * 0.9) - chromeWidth - slack;
+        var maxGroupHeight = Math.floor(roomHeight * 0.9) - chromeHeight - slack;
 
-        var rowsNeeded = function (groupWidth) {
-            var rows = 1;
-            var x = 0;
-            for (var i = 0; i < widths.length; i++) {
-                if (x + widths[i] > groupWidth) {
-                    rows++;
-                    x = 0;
+        var layout = function (cardHeight) {
+            var widths = $.map(ratios, function (ratio) {
+                return Math.ceil(ratio * cardHeight);
+            });
+            var total = 0, widest = 0;
+            $.each(widths, function (i, width) {
+                total += width;
+                widest = Math.max(widest, width);
+            });
+            total += padding * Math.max(0, widths.length - 1);
+            var rowsNeeded = function (groupWidth) {
+                var rows = 1, x = 0;
+                for (var i = 0; i < widths.length; i++) {
+                    if (x > 0 && x + widths[i] > groupWidth) {
+                        rows++;
+                        x = 0;
+                    }
+                    x += widths[i] + padding;
                 }
-                x += widths[i] + padding;
+                return rows;
+            };
+            for (var rows = 1; rows <= widths.length; rows++) {
+                var width = Math.max(minContentWidth - slack, Math.min(total, Math.ceil(total / rows) + widest));
+                var height = rows * (cardHeight + label) + (rows - 1) * padding;
+                if (width <= maxGroupWidth && height <= maxGroupHeight && rowsNeeded(width) <= rows)
+                    return {width: width, height: height};
             }
-            return rows;
+            return null;
         };
 
-        var groupWidth = maxGroupWidth;
-        var groupHeight = maxGroupHeight;
-        for (var rows = 1; rows <= widths.length; rows++) {
-            var candidateWidth = Math.max(minContentWidth - slack, Math.ceil(total / rows) + widest);
-            var candidateHeight = rows * cardHeight + (rows - 1) * padding;
-            if (candidateWidth > maxGroupWidth || candidateHeight > maxGroupHeight)
-                continue;
-            if (rowsNeeded(candidateWidth) <= rows) {
-                groupWidth = candidateWidth;
-                groupHeight = candidateHeight;
-                break;
-            }
-        }
-        if (widths.length == 0) {
-            groupWidth = minContentWidth - slack;
-            groupHeight = Math.min(maxGroupHeight, cardHeight / 2);
-        }
+        var size = null;
+        if (ratios.length == 0)
+            size = {width: minContentWidth - slack, height: Math.min(maxGroupHeight, 150)};
+        for (var cardHeight = 300; size == null && cardHeight >= 100; cardHeight -= 20)
+            size = layout(cardHeight);
+        if (size == null)
+            size = {width: maxGroupWidth, height: maxGroupHeight};
 
-        dialog.dialog({
-            width: groupWidth + slack + chromeWidth,
-            height: groupHeight + slack + chromeHeight
-        });
-        dialog.dialog("option", "position", "center");
+        var width = size.width + slack + chromeWidth;
+        var height = size.height + slack + chromeHeight;
+        dialog.dialog({width: width, height: height});
+        dialog.dialog("option", "position", [Math.max(0, Math.floor((roomWidth - width) / 2)), Math.max(0, Math.floor((roomHeight - height) / 2))]);
     },
 
     dialogResize: function (dialog, group) {

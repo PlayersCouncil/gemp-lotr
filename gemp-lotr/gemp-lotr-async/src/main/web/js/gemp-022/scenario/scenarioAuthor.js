@@ -1368,7 +1368,7 @@ var GempScenarioAuthor = Class.extend({
             said = seen.phase;
         else if (said == null && /(^|,)\s*assign\s*(,|$)/i.test(when))
             said = "assignment";
-        else if (said == null && /\b(inSkirmish|fighting)\(|text\(\s*next skirmish\s*\)/i.test(when))
+        else if (said == null && /\b(inSkirmish|fighting)\(/i.test(when))
             said = "skirmish";
         return {
             turn: turn != null ? parseInt(turn[1]) : seen != null ? seen.turn : null,
