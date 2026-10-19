@@ -2284,3 +2284,13 @@ Weary From the Journey vs Wandering Hillman." *[2026-10-16]*
 clause the Sam case; it should let the player do it three times and then prompt with: "LOOP DETECTED: Choose a number
 of times to repeat this action."  It should then perform that many, and then put the tag on that card action to block
 its future use." *[2026-10-16]*
+
+**Skirmish win and loss are ordered steps, not simultaneous (2026-10-19).** The Rules Council's updated `skirmish phase`
+draft (answers/2026-10-19-a.md; its steps read as the 2026-10-16 draft's). "I believe the only major change is going to
+be that skirmish-win and skirmish-lose are going to no longer be tied ambiguous simultaneous triggers, but follow a set
+order as laid out here." Her cases: "in a scenario where Lurtz bearing Lurtz's Sword wins a skirmish with Worry on the
+table, I believe the current execution causes the skirmish wounds, Lurtz's Sword, and Worry to be a 3-way tie that the
+Free Peoples player has to disambiguate, but post-alteration it should trigger Lurtz's Sword as a response to winning,
+and then freeps only disambiguates Worry and the skirmish wounds." "Treebeard, Enraged Shepherd and End of the Game,
+which as triggers to winning and not losing should unambiguously evaluate before the skirmish has issued loser
+wounds." *[2026-10-19]*
