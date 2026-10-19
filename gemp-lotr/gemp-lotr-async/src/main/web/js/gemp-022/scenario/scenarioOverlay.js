@@ -1236,6 +1236,7 @@ var GempScenarioOverlay = Class.extend({
         var rect = ScenarioAnchors.rectOf(click.elem);
         this.hintShownAt = Date.now();
         this.hint.html(html).css({display: "block", left: 0, top: 0});
+        this.untitled(this.hint);
         var width = this.hint.outerWidth(), height = this.hint.outerHeight();
         var left = rect == null ? ($(window).width() - width) / 2 : rect.left + rect.width / 2 - width / 2;
         var top = rect == null ? 80 : rect.top - height - 10;
@@ -1274,7 +1275,7 @@ var GempScenarioOverlay = Class.extend({
         if (position > -1 && this.logged[key]) {
             //(an author's message is put up again each time they change it, and the log keeps up with it)
             if (this.info != null && this.info.author)
-                $(".msg-content[data-scenario-says='" + key + "']").html(message.html);
+                this.untitled($(".msg-content[data-scenario-says='" + key + "']").html(message.html));
             return;
         }
         this.logged[key] = true;
@@ -1282,6 +1283,16 @@ var GempScenarioOverlay = Class.extend({
         var from = $("<span></span>").text(name).html();
         chatBox.appendMessage("<div class='msg-identifier'><span> <b>" + from + ": </b></span></div>"
             + "<div class='msg-content' data-scenario-says='" + key + "'>" + message.html + "</div>", "chatMessage scenario-says");
+        this.untitled($(".msg-content[data-scenario-says='" + key + "']"));
+    },
+
+    /**
+     * A card link ([[Name]], which comes as a .cardHint span) shows the card's picture when it is hovered over; the name
+     * the server also puts in its title would come up as a tooltip beside that, saying what the link already says.
+     */
+    untitled: function (where) {
+        where.find(".cardHint").removeAttr("title");
+        return where;
     },
 
     showMessage: function (message) {
@@ -1300,7 +1311,7 @@ var GempScenarioOverlay = Class.extend({
         this.bubble.find(".scenario-title").text(message.header || "");
         this.bubble.toggleClass("scenario-headed", !!message.header);
         this.bubble.find(".scenario-count").text(count);
-        this.bubble.find(".scenario-body").html(message.html);
+        this.untitled(this.bubble.find(".scenario-body").html(message.html));
         //What takes the message away: Next; one of its own buttons; the player doing what it asks (answering the
         // decision, opening or closing a card's information window), for which there is nothing to press
         var that = this;
@@ -1898,7 +1909,7 @@ var GempScenarioOverlay = Class.extend({
         var panel = $("<div class='scenario-end scenario-end-" + event.result + "'><h2></h2><div class='scenario-end-body'></div>"
             + "<div class='scenario-end-buttons'></div></div>");
         panel.find("h2").text(headings[event.result] || "The scenario is over");
-        panel.find(".scenario-end-body").html(body);
+        this.untitled(panel.find(".scenario-end-body").html(body));
         panel.find(".scenario-end-body b:empty").text(this.info != null ? this.info.title : "this scenario");
 
         var buttons = panel.find(".scenario-end-buttons");
