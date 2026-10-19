@@ -218,6 +218,33 @@ public class ScenarioShelfTest {
     }
 
     @Test
+    public void AnAdminsOwnCopyOfAPublicScenarioCanBeWrittenOverWithIt() throws Exception {
+        write(shipped, "tutorials/one.hjson", working("one", "One"));
+        assertNull(shelf.ownCopy("ketura", "one"));
+        @SuppressWarnings("unchecked")
+        Map<String, Object> listed = ((List<Map<String, Object>>) shelf.adminState(10, "ketura").get("public")).getFirst();
+        assertNull(listed.get("ownCopy"));
+
+        ScenarioLibrary.Entry copy = shelf.copyPublic("ketura", "one", true);
+        write(own("ketura"), copy.path(), ScenarioShelf.retitle(read(own("ketura"), copy.path()), "one", "One, changed"));
+        assertEquals(copy.path(), shelf.ownCopy("ketura", "one").path());
+        @SuppressWarnings("unchecked")
+        Map<String, Object> again = ((List<Map<String, Object>>) shelf.adminState(10, "ketura").get("public")).getFirst();
+        assertEquals(copy.path(), ((Map<?, ?>) again.get("ownCopy")).get("path"));
+
+        //Written over: the same file and id, the public version in it, still linked, and no second copy
+        ScenarioLibrary.Entry over = shelf.overwriteCopy("ketura", "one", true);
+        assertEquals(copy.path(), over.path());
+        assertEquals("ketura/one", over.id());
+        assertEquals("One", over.def().title);
+        assertEquals("one", library.meta("ketura", over.path()).origin);
+        assertEquals(1, library.getAll().stream().filter(entry -> "ketura".equals(entry.owner())).count());
+
+        shelf.submit("ketura", over.path());
+        refused(() -> shelf.overwriteCopy("ketura", "one", true), "in review");
+    }
+
+    @Test
     public void ASubmittedScenarioIsLockedUntilItIsReviewed() throws Exception {
         write(own("ketura"), "mine.hjson", working("mine", "Mine"));
         write(own("ketura"), "bad.hjson", broken("bad"));

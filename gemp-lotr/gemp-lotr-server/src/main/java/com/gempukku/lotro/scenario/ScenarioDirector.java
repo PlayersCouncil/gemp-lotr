@@ -86,6 +86,8 @@ public class ScenarioDirector {
 
     private AwaitingDecision _lastDecision;
     private Step _lastMatch;
+    /** Where in the game each of the script's steps (a block, for its steps) first had a decision: [turn, phase]. */
+    private final Map<Step, String[]> _places = new java.util.IdentityHashMap<>();
 
     private Object _lastSkirmish;
     private int _skirmishOrdinal = 0;
@@ -260,6 +262,18 @@ public class ScenarioDirector {
         _lastMatch = null;
     }
 
+    private void seen(Step step) {
+        Step top = step.parent != null ? step.parent : step;
+        if (!_places.containsKey(top) && _table.Arranged())
+            _places.put(top, new String[] {String.valueOf(_table.gameState().getTurnNumber()),
+                    _table.GetCurrentPhase().name().toLowerCase(java.util.Locale.ROOT)});
+    }
+
+    /** Where in the game a step of the script's first had a decision, as [turn, phase]; null if it has not yet. */
+    public String[] placeOf(Step step) {
+        return _places.get(step);
+    }
+
     /** How many decisions the step the script is waiting on has applied to so far. */
     public int timesApplied() {
         return _timesApplied;
@@ -317,6 +331,10 @@ public class ScenarioDirector {
                 continue;
             observeSkirmish();
             if (step.block) {
+                //What is said about a skirmish that is over is said first, the end of the block notwithstanding
+                Step lingering = lingering(step, index == _index, when -> couldFit(when, player, phase, false));
+                if (lingering != null)
+                    return asks(lingering);
                 //If the block would be over at this decision, it is the steps after it that have a say.  If not,
                 // it is the first of its own steps that the decision could go to.
                 if ((index != _index || _timesApplied == 0) && step.skipWhen != null && couldFit(step.skipWhen, player, phase, false))
@@ -325,7 +343,7 @@ public class ScenarioDirector {
                     continue;
                 if (!couldFit(step.when, player, phase, false))
                     return false;
-                for (Step child : step.children) {
+                for (Step child : inTurn(step)) {
                     if ((index == _index && _spent.contains(child)) || !partOfTheGame(child))
                         continue;
                     //(the phase is said for it if the block says it for all its steps)
@@ -453,6 +471,9 @@ public class ScenarioDirector {
                 continue;
             }
             if (step.block) {
+                //(what is said about a skirmish that is over is read first, and has the player asked: see asksToPass)
+                if (lingering(step, index == _index, when -> fitsPass(when, player, phase)) != null)
+                    return AutoPass.NOT;
                 boolean firstTime = times == 0;
                 if (fitsPass(step.until, player, phase) || (firstTime && step.skipWhen != null && fitsPass(step.skipWhen, player, phase))) {
                     passedOver.add(() -> {
@@ -469,7 +490,7 @@ public class ScenarioDirector {
                 }
                 if (!fitsPass(step.when, player, phase))
                     return AutoPass.NOT;
-                for (Step child : step.children) {
+                for (Step child : inTurn(step)) {
                     if ((index == _index && _spent.contains(child)) || !partOfTheGame(child) || !fitsPass(child.when, player, phase))
                         continue;
                     target = child;
@@ -523,6 +544,7 @@ public class ScenarioDirector {
                 _table.Apply(op);
         }
         _lastAutoPassed = target;
+        seen(target);
         answered(target);
         return AutoPass.USED;
     }
@@ -574,6 +596,8 @@ public class ScenarioDirector {
             return _lastMatch;
         _lastDecision = decision;
         _lastMatch = findStep(player, decision);
+        if (_lastMatch != null)
+            seen(_lastMatch);
         return _lastMatch;
     }
 
@@ -591,6 +615,17 @@ public class ScenarioDirector {
             }
 
             if (step.block) {
+                //What is said about a skirmish that is over is said at the first decision after it, whatever that
+                // is: the next skirmish's, a fierce assignment, or the one that ends the block
+                Step lingering = lingering(step, true, when -> matches(when, player, decision));
+                if (lingering != null) {
+                    if (_applied.getOrDefault(lingering, 0) == 0) {
+                        _statuses.put(lingering.label(), StepStatus.MATCHED);
+                        for (DoOp op : lingering.doOps)
+                            _table.Apply(op);
+                    }
+                    return lingering;
+                }
                 boolean over = matches(step.until, player, decision);
                 if (over || (_timesApplied == 0 && step.skipWhen != null && matches(step.skipWhen, player, decision))) {
                     //The block is done.  Its steps that no decision went to were not needed this time.
@@ -604,7 +639,7 @@ public class ScenarioDirector {
                 }
                 if (!matches(step.when, player, decision))
                     return null;
-                for (Step child : step.children) {
+                for (Step child : inTurn(step)) {
                     if (_spent.contains(child))
                         continue;
                     if (!partOfTheGame(child)) {
@@ -739,6 +774,35 @@ public class ScenarioDirector {
         return times(step) > 0;
     }
 
+    /**
+     * A block's steps in the order a decision is offered to them: those about a skirmish that is over ('after')
+     * first, then the rest as they are written.
+     */
+    private static List<Step> inTurn(Step block) {
+        List<Step> ordered = new ArrayList<>();
+        for (Step child : block.children)
+            if (child.when.after != null)
+                ordered.add(child);
+        for (Step child : block.children)
+            if (child.when.after == null)
+                ordered.add(child);
+        return ordered;
+    }
+
+    /**
+     * In the block the script is at, once it is under way: a step of it about a skirmish that is over ('after') that
+     * has not been used and fits.  Such a step is not cut off by the block's end: the decision that ends the block
+     * (the first of the Regroup phase, say) is the first after the last skirmish.
+     */
+    private Step lingering(Step block, boolean current, java.util.function.Predicate<When> fits) {
+        if (!current || block != currentStep() || _timesApplied == 0)
+            return null;
+        for (Step child : block.children)
+            if (child.when.after != null && !_spent.contains(child) && partOfTheGame(child) && fits.test(child.when))
+                return child;
+        return null;
+    }
+
     /** Whether a card is in the skirmish being fought, on either side of it. */
     private boolean isFighting(String alias) {
         var skirmish = _table.gameState().getSkirmish();
@@ -748,10 +812,11 @@ public class ScenarioDirector {
         return skirmish.getFellowshipCharacter() == card || skirmish.getShadowCharacters().contains(card);
     }
 
-    /** Whether no skirmish is being fought, and the last one fought this turn was this character's. */
+    /**
+     * Whether the last skirmish finished this turn was this character's.  (Another may be being fought by now: what
+     * is said about the one that is over is said at the first decision after it, whatever that is.)
+     */
     private boolean isAfter(String alias) {
-        if (_table.gameState().getSkirmish() != null)
-            return false;
         PhysicalCard last = _table.gameState().getLastSkirmishCharacter();
         return last != null && last == _table.Card(alias);
     }
@@ -864,11 +929,11 @@ public class ScenarioDirector {
             List<String> notOffered = new ArrayList<>();
             for (Answer answer : allow.answers) {
                 try {
-                    String compiled = AnswerCompiler.compile(_table, decision, answer);
+                    List<String> compiled = AnswerCompiler.compileAll(_table, decision, answer);
                     if (answer.kind() == AnswerKind.PASS)
                         passAllowed = true;
                     else
-                        allowed.add(compiled);
+                        allowed.addAll(compiled);
                 } catch (ScenarioScriptException exp) {
                     notOffered.add(exp.getMessage());
                 }

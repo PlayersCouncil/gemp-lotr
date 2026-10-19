@@ -63,6 +63,18 @@ public final class ScenarioDefinition {
     public final Map<Seat, String> ring = new EnumMap<>(Seat.class);
     /** Site blueprints for each seat's adventure deck, site 1 first. */
     public final Map<Seat, List<String>> sites = new EnumMap<>(Seat.class);
+    /**
+     * Each site's name in the scenario, by seat, in the same order as sites: "site3" for the player's own site 3 and
+     * "site3opp" for the opponent's, unless the file names it otherwise.
+     */
+    public final Map<Seat, List<String>> siteAliases = new EnumMap<>(Seat.class);
+    /** Every site by its name in the scenario (a site is named, and picked, as a card is). */
+    public final Map<String, CardDef> siteCards = new LinkedHashMap<>();
+
+    /** The name a site has when the file does not give it one. */
+    public String defaultSiteAlias(Seat seat, int number) {
+        return "site" + number + (seat == human ? "" : "opp");
+    }
 
     /** Card-definition "effects" for each seat's rules card, as JSON array text.  Absent means no rules. */
     public final Map<Seat, String> rules = new EnumMap<>(Seat.class);
@@ -131,11 +143,16 @@ public final class ScenarioDefinition {
         public Integer skirmish;
         /** A card that has to be among the decision's options. */
         public String offers;
-        /** A card that has to be in the skirmish being fought: the character on either side of it. */
+        /**
+         * A card that has to be in the skirmish being fought: the character on either side of it.  Written
+         * inSkirmish(card); fighting(card), as it once was, is read as that.
+         */
         public String fighting;
         /**
-         * A Free Peoples character whose skirmish is the last one fought this turn, with no skirmish being fought now:
-         * the moment after that skirmish (choosing the next one, as a rule).
+         * A Free Peoples character whose skirmish is the last one finished this turn: the first decision after that
+         * skirmish, whatever it is (choosing the next skirmish, the next skirmish's own, a fierce assignment, or the
+         * first of the Regroup phase).  In a block, a step that waits for it is offered the decision before the
+         * block's other steps, and before the block's end.
          */
         public String after;
         /** Card-definition requirements, as JSON array text. */
@@ -167,7 +184,41 @@ public final class ScenarioDefinition {
      * offers is one.
      */
     public record Answer(AnswerKind kind, List<String> cards, String text, int number,
-                         Map<String, List<String>> assignments, String source) { }
+                         Map<String, List<String>> assignments, String source, List<Pick> picks) {
+        public Answer(AnswerKind kind, List<String> cards, String text, int number,
+                      Map<String, List<String>> assignments, String source) {
+            this(kind, cards, text, number, assignments, source, List.of());
+        }
+    }
+
+    /**
+     * One card a choose(...) picks.  It is a card by its name in the scenario, or whichever card is skirmishing
+     * ("skirmishing", or "skirmishing(aragorn)": in the skirmish against that character), narrowed by card filters
+     * as cards write them ("title(Orthanc Warrior)", "not(exhausted)"), and then, of the cards on offer that are
+     * left, by which one it is counting from 1 (0: whichever comes first).
+     * @param alias The card, by its name in the scenario; null if it is picked by its skirmish.
+     * @param skirmishing Whether it is picked by being in the skirmish being fought.
+     * @param against With skirmishing: the character it is skirmishing against; null for either side.
+     * @param filter Card filters it has to pass, with a comma between them, names in the scenario as alias(...);
+     *               null for none.
+     */
+    public record Pick(String alias, boolean skirmishing, String against, String filter, int ordinal, String source) {
+        public boolean plain() {
+            return alias != null && !skirmishing && filter == null && ordinal == 0;
+        }
+
+        /** The card filter that says it all, names in the scenario as alias(...). */
+        public String asFilter() {
+            List<String> parts = new java.util.ArrayList<>();
+            if (alias != null)
+                parts.add("alias(" + alias + ")");
+            if (skirmishing)
+                parts.add(against == null ? "inSkirmish" : "inSkirmishAgainst(alias(" + against + "))");
+            if (filter != null)
+                parts.add(filter);
+            return String.join(",", parts);
+        }
+    }
 
     /**
      * A standing order: what the opponent does whenever it is asked something that no step covers and this fits.

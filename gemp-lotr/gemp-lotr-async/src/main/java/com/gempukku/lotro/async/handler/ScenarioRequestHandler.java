@@ -346,7 +346,7 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
                     limit = asked == null ? null : Integer.parseInt(asked);
                 } catch (NumberFormatException ignored) {
                 }
-                Map<String, Object> state = _shelf.adminState(limit == null ? 100 : Math.max(1, limit));
+                Map<String, Object> state = _shelf.adminState(limit == null ? 100 : Math.max(1, limit), name);
                 //(the draft the admin has open in the authoring tool, which opening another drops)
                 state.put("authoring", _authoring.currentForHall(player));
                 responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(state));
@@ -364,7 +364,9 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
                     case "admin/reject" -> _shelf.reject(owner, path, getFormParameterSafely(form, "feedback"), name);
                     case "admin/disable" -> _shelf.disable(id, !"false".equals(getFormParameterSafely(form, "disabled")));
                     case "admin/delete" -> _shelf.deletePublic(path, name);
-                    case "admin/edit" -> copied(result, _shelf.copyPublic(name, id, true));
+                    //(over the admin's own copy of it, if they have one and say so; another copy otherwise)
+                    case "admin/edit" -> copied(result, "overwrite".equals(getFormParameterSafely(form, "copy"))
+                            ? _shelf.overwriteCopy(name, id, true) : _shelf.copyPublic(name, id, true));
                     case "admin/restore" -> {
                         ScenarioLibrary.Entry entry = _shelf.restore(getFormParameterSafely(form, "key"), name);
                         if (entry != null)

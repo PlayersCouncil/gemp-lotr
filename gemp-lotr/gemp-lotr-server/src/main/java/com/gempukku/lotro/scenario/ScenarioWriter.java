@@ -98,9 +98,24 @@ public final class ScenarioWriter {
         if (!def.ring.isEmpty())
             root.add("ring", perSeat(def.ring));
         JsonObject sites = new JsonObject();
-        for (Seat seat : Seat.values())
-            if (def.sites.containsKey(seat))
-                sites.add(seat.key(), String.join(", ", def.sites.get(seat)));
+        for (Seat seat : Seat.values()) {
+            if (!def.sites.containsKey(seat))
+                continue;
+            List<String> blueprints = def.sites.get(seat);
+            List<String> aliases = def.siteAliases.getOrDefault(seat, List.of());
+            boolean named = false;
+            for (int at = 0; at < aliases.size(); at++)
+                named |= !aliases.get(at).equals(def.defaultSiteAlias(seat, at + 1));
+            if (!named) {
+                sites.add(seat.key(), String.join(", ", blueprints));
+            } else {
+                //(sites given names of their own are written with them, in their order on the path)
+                JsonObject path = new JsonObject();
+                for (int at = 0; at < blueprints.size(); at++)
+                    path.add(aliases.get(at), blueprints.get(at));
+                sites.add(seat.key(), path);
+            }
+        }
         root.add("sites", sites);
 
         JsonObject rules = new JsonObject();
@@ -246,28 +261,8 @@ public final class ScenarioWriter {
     private static JsonValue when(When when) {
         if (when.require == null && !when.source.startsWith("{"))
             return JsonValue.valueOf(when.source);
-        if (when.require == null) {
-            StringJoiner terms = new StringJoiner(", ");
-            if (when.seat != null)
-                terms.add(when.seat.key());
-            if (when.decision != null)
-                terms.add(AnswerCompiler.typeName(when.decision));
-            if (when.phase != null)
-                terms.add("phase(" + lower(when.phase) + ")");
-            if (when.turn != null)
-                terms.add("turn(" + when.turn + ")");
-            if (when.skirmish != null)
-                terms.add("skirmish(" + when.skirmish + ")");
-            if (when.offers != null)
-                terms.add("offers(" + when.offers + ")");
-            if (when.fighting != null)
-                terms.add("fighting(" + when.fighting + ")");
-            if (when.after != null)
-                terms.add("after(" + when.after + ")");
-            if (when.text != null)
-                terms.add("text(" + when.text + ")");
-            return JsonValue.valueOf(terms.toString());
-        }
+        if (when.require == null)
+            return JsonValue.valueOf(terms(when));
         JsonObject json = new JsonObject();
         if (when.seat != null)
             json.add("seat", when.seat.key());
@@ -281,10 +276,36 @@ public final class ScenarioWriter {
         if (when.skirmish != null)
             json.add("skirmish", when.skirmish);
         addIfSet(json, "offers", when.offers);
-        addIfSet(json, "fighting", when.fighting);
+        addIfSet(json, "inSkirmish", when.fighting);
         addIfSet(json, "after", when.after);
         json.add("require", requirements(when.require));
         return json;
+    }
+
+    /** A 'when' without requirements, as terms. */
+    static String terms(When when) {
+        StringJoiner terms = new StringJoiner(", ");
+        if (when.seat != null)
+            terms.add(when.seat.key());
+        if (when.decision != null)
+            terms.add(AnswerCompiler.typeName(when.decision));
+        if (when.phase != null)
+            terms.add("phase(" + lower(when.phase) + ")");
+        if (when.turn != null)
+            terms.add("turn(" + when.turn + ")");
+        if (when.skirmish != null)
+            terms.add("skirmish(" + when.skirmish + ")");
+        if (when.offers != null)
+            terms.add("offers(" + when.offers + ")");
+        if (when.fighting != null)
+            terms.add("inSkirmish(" + when.fighting + ")");
+        if (when.after != null)
+            terms.add("after(" + when.after + ")");
+        if (when.text != null)
+            terms.add("text(" + when.text + ")");
+        if (when.opening)
+            terms.add("opening");
+        return terms.toString();
     }
 
     private static String answers(List<Answer> answers) {

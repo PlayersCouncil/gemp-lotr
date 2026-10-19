@@ -23,7 +23,8 @@ import java.util.regex.Pattern;
  *                                               assign(x: y + z), move(x, freeps.hand).  What a term quotes from the
  *                                               game (text(...), option(...), the words after the card in use(x, ...))
  *                                               is left as it is.
- *     when, until, skipWhen                     offers(x), fighting(x), after(x)
+ *     when, until, skipWhen                     offers(x), inSkirmish(x) (or fighting(x)), after(x)
+ *     sites                                     the name itself, where the path is written { name: site }
  *     a message's anchor, highlight, avoid,     card:x, card:x:part, ui:assignment:x
  *     zoom
  *     a message's advance and on                inspect(x), picked(x), assigned(x)
@@ -33,7 +34,7 @@ import java.util.regex.Pattern;
  *     allow.passWhen, outcome, rules)           wherever in them it is written
  */
 final class AliasRename {
-    private static final Set<String> QUOTED = Set.of("text", "option", "raw");
+    private static final Set<String> QUOTED = Set.of("text", "option", "raw", "title", "name");
     private static final Set<String> NO_CARDS = Set.of("draw", "twilight", "burdens", "threats", "number");
 
     private final String _from;
@@ -49,7 +50,7 @@ final class AliasRename {
         _from = from;
         _to = to;
         String name = Pattern.quote(from);
-        _asked = Pattern.compile("(?i)(?<![A-Za-z0-9_-])(offers|fighting|after)\\(\\s*(?-i:" + name + ")\\s*\\)");
+        _asked = Pattern.compile("(?i)(?<![A-Za-z0-9_-])(offers|fighting|inSkirmish|after)\\(\\s*(?-i:" + name + ")\\s*\\)");
         _filtered = Pattern.compile("(?i)(?<![A-Za-z0-9_-])(alias)\\(\\s*(?-i:" + name + ")\\s*\\)");
         _anchor = Pattern.compile("(?<![A-Za-z0-9_:-])(card:|ui:assignment:)" + name + "(?![A-Za-z0-9_-])");
         _bracketed = Pattern.compile("\\(\\s*" + name + "\\s*\\)");
@@ -67,6 +68,10 @@ final class AliasRename {
         if (cards != null)
             for (String seat : names(cards))
                 cards.set(seat, keys(cards.get(seat)));
+        JsonObject sites = object(root.get("sites"));
+        if (sites != null)
+            for (String seat : names(sites))
+                sites.set(seat, keys(sites.get(seat)));
         for (String part : List.of("ringBearer", "ring")) {
             JsonObject perSeat = object(root.get(part));
             if (perSeat != null)
@@ -222,7 +227,7 @@ final class AliasRename {
         JsonObject object = object(value);
         if (object == null)
             return strings(value, text -> _asked.matcher(text).replaceAll(match -> Matcher.quoteReplacement(match.group(1) + "(" + _to + ")")));
-        for (String part : List.of("offers", "fighting", "after"))
+        for (String part : List.of("offers", "fighting", "inSkirmish", "after"))
             if (object.get(part) != null)
                 object.set(part, exact(object.get(part)));
         if (object.get("require") != null)

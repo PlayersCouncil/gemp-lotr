@@ -861,6 +861,134 @@ public class ScenarioEngineTest {
     }
 
     @Test
+    public void whatIsSaidAfterASkirmishIsSaidAtTheFirstDecisionAfterItEvenWhenTheBlockIsEnding() throws Exception {
+        //Two pauses, one after each skirmish, written as they once were: for the choice of the next skirmish.  The
+        // one after the last skirmish has no such choice to wait for: it is read at the first decision of the Regroup
+        // phase, the one that ends the block.
+        String pauses = "\t\t\t\t{\n\t\t\t\t\tpause: true\n\t\t\t\t\tonce: true\n\t\t\t\t\twhen: freeps, cards, after(gandalf), text(next skirmish)\n"
+                + "\t\t\t\t\tmessages: [\n\t\t\t\t\t\tGandalf has won his.\n\t\t\t\t\t]\n\t\t\t\t}\n"
+                + "\t\t\t\t{\n\t\t\t\t\tpause: true\n\t\t\t\t\tonce: true\n\t\t\t\t\twhen: freeps, cards, after(aragorn), text(next skirmish)\n"
+                + "\t\t\t\t\tmessages: [\n\t\t\t\t\t\tAragorn has won his.\n\t\t\t\t\t]\n\t\t\t\t}\n";
+        String scenario = twoSkirmishes().replace("anyOrder: [", "skirmishes: true\n\t\t\tanyOrder: [").replace(
+                "\t\t\t\t{\n\t\t\t\t\twhen: freeps, cards, text(next skirmish)", pauses + "\t\t\t\t{\n\t\t\t\t\twhen: freeps, cards, text(next skirmish)");
+        ScenarioDefinition def = ScenarioParser.parse(scenario);
+        Step afterGandalf = def.steps.getFirst().children.get(1);
+        assertEquals("gandalf", afterGandalf.when.after);
+        assertNull("The choice of the next skirmish is no longer what it waits for", afterGandalf.when.text);
+        assertNull(afterGandalf.when.decision);
+        assertEquals("freeps, after(gandalf)", afterGandalf.when.source);
+
+        for (String first : List.of("gandalf", "aragorn")) {
+            String second = first.equals("gandalf") ? "aragorn" : "gandalf";
+            ScenarioTable table = new ScenarioTable(ScenarioParser.parse(scenario), ScenarioTesting.library(), ScenarioTesting.format("scenario"), HUMAN, OPPONENT);
+            ScenarioSession session = new ScenarioSession(table);
+            table.Start();
+            List<String> read = new java.util.ArrayList<>();
+            for (int guard = 0; guard < 40 && session.Director().currentStep() != null && session.Director().currentStep().number == 1; guard++) {
+                ScenarioSession.Ruling ruling = session.Ruling(HUMAN);
+                if (ruling == null) {
+                    ScenarioSession.Ruling theirs = session.Ruling(OPPONENT);
+                    table.PlayerDecided(OPPONENT, theirs != null && theirs.answer() != null ? theirs.answer() : "");
+                    continue;
+                }
+                if (ruling.step().pause) {
+                    read.add(ruling.shown().messages().getFirst().text());
+                    assertTrue(session.Read(HUMAN, ruling.step().number, null));
+                    continue;
+                }
+                if ("next skirmish".equals(ruling.step().when.text))
+                    table.PlayerDecided(HUMAN, String.valueOf(table.Card(read.isEmpty() ? first : second).getCardId()));
+                else
+                    table.PlayerDecided(HUMAN, ruling.answer() != null ? ruling.answer() : ruling.shown().allowed() != null && !ruling.shown().allowed().isEmpty() ? ruling.shown().allowed().getFirst() : "");
+            }
+            String name = first.equals("gandalf") ? "Gandalf" : "Aragorn", other = second.equals("gandalf") ? "Gandalf" : "Aragorn";
+            assertEquals(first + " first", List.of(name + " has won his.", other + " has won his."), read);
+            assertEquals("The script is at the Regroup phase's step", "2", session.Ruling(HUMAN).step().label());
+        }
+    }
+
+    @Test
+    public void aChoiceCanPickACardByItsSkirmishAndNarrowItWithCardFilters() throws Exception {
+        ScenarioDefinition def = ScenarioParser.parse(twoSkirmishes());
+        //Each card it names, or picks by its skirmish, begins a pick; numbers and filters narrow the pick before them
+        List<ScenarioDefinition.Pick> picks = ScenarioParser.parsePicks(def,
+                Terms.parse("choose(skirmishing(aragorn), title(Goblin Runner), 2, frodo, gandalf, not(exhausted))", "test").getFirst(), "test");
+        assertEquals(3, picks.size());
+        assertTrue(picks.get(0).skirmishing());
+        assertEquals("aragorn", picks.get(0).against());
+        assertEquals("title(Goblin Runner)", picks.get(0).filter());
+        assertEquals(2, picks.get(0).ordinal());
+        assertTrue(picks.get(1).plain());
+        assertEquals("gandalf", picks.get(2).alias());
+        assertEquals("not(exhausted)", picks.get(2).filter());
+        try {
+            ScenarioParser.parse(twoSkirmishes().replace("allow: choose(aragorn)?, choose(gandalf)?", "allow: choose(aragorn, exhaused)"));
+            fail("A filter the card builder does not know is a mistake");
+        } catch (ScenarioFormatException exp) {
+            assertTrue(exp.getMessage(), exp.getMessage().contains("neither a card of the scenario nor a card filter"));
+        }
+
+        //not(exhausted): Aragorn cannot be picked once he is exhausted
+        String narrowed = twoSkirmishes().replace("allow: choose(aragorn)?, choose(gandalf)?", "allow: choose(aragorn, not(exhausted)), choose(gandalf)");
+        for (boolean exhausted : List.of(false, true)) {
+            String text = exhausted ? narrowed.replace("\t\tshadow: {\n\t\t\tminions: runner1, runner2\n\t\t}",
+                    "\t\tshadow: {\n\t\t\tminions: runner1, runner2\n\t\t}\n\t\twounds: {\n\t\t\taragorn: 3\n\t\t}") : narrowed;
+            ScenarioTable table = new ScenarioTable(ScenarioParser.parse(text), ScenarioTesting.library(), ScenarioTesting.format("scenario"), HUMAN, OPPONENT);
+            ScenarioSession session = new ScenarioSession(table);
+            table.Start();
+            ScenarioSession.Ruling ruling = session.Ruling(HUMAN);
+            assertEquals("1.1", ruling.step().label());
+            table.PlayerDecided(HUMAN, ruling.answer() != null ? ruling.answer() : ruling.shown().allowed().getFirst());
+            ruling = session.Ruling(HUMAN);
+            assertEquals("1.2", ruling.step().label());
+            assertEquals(exhausted ? List.of(String.valueOf(table.Card("gandalf").getCardId()))
+                    : List.of(String.valueOf(table.Card("aragorn").getCardId()), String.valueOf(table.Card("gandalf").getCardId())), ruling.shown().allowed());
+
+            if (!exhausted) {
+                //In Aragorn's skirmish: the minion skirmishing him, picked by that
+                table.PlayerDecided(HUMAN, String.valueOf(table.Card("aragorn").getCardId()));
+                PhysicalCard runner = table.Card("runner1");
+                List<PhysicalCard> all = List.of(table.Card("runner1"), table.Card("runner2"), table.Card("gandalf"));
+                ScenarioDefinition.Pick against = ScenarioParser.parsePicks(def, Terms.parse("choose(skirmishing(aragorn))", "test").getFirst(), "test").getFirst();
+                assertEquals(List.of(runner), table.Picked(against, HUMAN, all));
+                ScenarioDefinition.Pick any = ScenarioParser.parsePicks(def, Terms.parse("choose(skirmishing, minion)", "test").getFirst(), "test").getFirst();
+                assertEquals(List.of(runner), table.Picked(any, HUMAN, all));
+                ScenarioDefinition.Pick second = ScenarioParser.parsePicks(def, Terms.parse("choose(skirmishing(gandalf))", "test").getFirst(), "test").getFirst();
+                assertEquals("Gandalf's skirmish is not being fought", List.of(), table.Picked(second, HUMAN, all));
+            }
+        }
+    }
+
+    @Test
+    public void sitesAreNamedAsCardsAre() throws Exception {
+        ScenarioDefinition def = ScenarioParser.parse(twoSkirmishes());
+        assertEquals(List.of("site1", "site2", "site3", "site4"), def.siteAliases.get(Seat.FREEPS));
+        assertEquals(List.of("site1opp", "site2opp", "site3opp", "site4opp"), def.siteAliases.get(Seat.SHADOW));
+        assertTrue("A path with its sites by their number is written as a list", ScenarioWriter.toJson(def).toString().contains("\"freeps\":\"1_323, 1_331, 1_340, 2_118\""));
+
+        //Named otherwise, the path is written with its names
+        String named = twoSkirmishes().replace("freeps: 1_323, 1_331, 1_340, 2_118", "freeps: {\n\t\t\tshire: 1_323\n\t\t\tbree: 1_331\n\t\t\tsite3: 1_340\n\t\t\tsite4: 2_118\n\t\t}");
+        def = ScenarioParser.parse(named);
+        assertEquals(List.of("shire", "bree", "site3", "site4"), def.siteAliases.get(Seat.FREEPS));
+        assertEquals(List.of("1_323", "1_331", "1_340", "2_118"), def.sites.get(Seat.FREEPS));
+        assertEquals("bree", ScenarioParser.parse(ScenarioWriter.toJson(def).toString()).siteAliases.get(Seat.FREEPS).get(1));
+
+        ScenarioTable table = new ScenarioTable(def, ScenarioTesting.library(), ScenarioTesting.format("scenario"), HUMAN, OPPONENT);
+        table.Start();
+        assertTrue(table.Problems().toString(), table.Problems().isEmpty());
+        assertEquals(2, table.Card("bree").getBlueprint().getSiteNumber());
+        assertEquals(HUMAN, table.Card("bree").getOwner());
+        assertEquals(OPPONENT, table.Card("site2opp").getOwner());
+        assertEquals(4, table.Card("site4opp").getBlueprint().getSiteNumber());
+        try {
+            ScenarioParser.parse(named.replace("bree: 1_331", "gandalf: 1_331"));
+            fail("A site cannot have a card's name");
+        } catch (ScenarioFormatException exp) {
+            assertTrue(exp.getMessage(), exp.getMessage().contains("already the name"));
+        }
+    }
+
+    @Test
     public void aBlocksStepsApplyOnceOrForAsLongAsItLasts() throws Exception {
         ScenarioTable table = new ScenarioTable(ScenarioParser.parse(twoSkirmishes()), ScenarioTesting.library(), ScenarioTesting.format("scenario"), HUMAN, OPPONENT);
         ScenarioSession session = new ScenarioSession(table);

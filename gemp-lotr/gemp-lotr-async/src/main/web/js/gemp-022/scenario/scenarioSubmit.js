@@ -6,9 +6,10 @@
 /**
  * A question with two answers, in the same box as the one for submitting (not the browser's own confirm(), which
  * looks like nothing else on the page and stops it dead).
- *     ScenarioConfirm.ask({title, text, yes, no, danger}, onYes)
+ *     ScenarioConfirm.ask({title, text, yes, no, danger, other, onOther}, onYes)
  * 'text' is a line or a list of lines; 'yes' and 'no' are the buttons' words; 'danger' colours the yes button as
- * something that cannot be taken back.  onYes is called from the click on yes, so it can open a tab.
+ * something that cannot be taken back; 'other' is a third answer, onOther being called for it.  onYes (and onOther)
+ * is called from the click, so it can open a tab.
  */
 var ScenarioConfirm = {
     ask: function (what, onYes) {
@@ -33,7 +34,14 @@ var ScenarioConfirm = {
         if (what.danger)
             yes.addClass("scenario-submit-danger");
         var no = $("<button type='button' class='scenario-submit-no'></button>").text(what.no || "Cancel").click(put);
-        buttons.append(yes).append(no);
+        buttons.append(yes);
+        //(a third answer, between the two, where there is one: what.other, and what.onOther called on its click)
+        if (what.other)
+            buttons.append($("<button type='button' class='scenario-submit-no'></button>").text(what.other).click(function () {
+                put();
+                what.onOther();
+            }));
+        buttons.append(no);
         shade.click(put);
         $(document).bind("keydown.scenarioSubmit", function (event) {
             if (event.keyCode == 27)

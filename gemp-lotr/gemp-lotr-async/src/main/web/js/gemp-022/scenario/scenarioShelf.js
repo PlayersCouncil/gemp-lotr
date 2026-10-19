@@ -668,7 +668,28 @@ ScenarioAdminUI.prototype = {
         if (this.busy)
             return;
         ScenarioShelfCommon.droppingDraft(this.state.authoring || null, function () {
-            that.copyAndEdit(scenario);
+            var copy = scenario.ownCopy;
+            if (copy == null) {
+                that.copyAndEdit(scenario, null);
+                return;
+            }
+            //A copy of it made before (and not yet approved over it) is written over, or opened as it is, rather
+            // than another copy made beside it
+            ScenarioConfirm.ask({
+                title: "Overwrite your existing personal copy of this scenario?",
+                text: ["You already have a copy of \u201c" + (scenario.title || scenario.fullId) + "\u201d in your scenarios: "
+                    + copy.path + (copy.title && copy.title != scenario.title ? " (\u201c" + copy.title + "\u201d)" : "") + ".",
+                    "Overwriting it puts the public version over it, and what you changed in it is archived. Or open your copy as it is."],
+                yes: "Overwrite my copy", danger: true,
+                other: "Open my copy as it is", onOther: function () {
+                    ScenarioShelfCommon.openForEdit({id: copy.id}, function (text, kind) {
+                        that.say(text, kind);
+                    });
+                },
+                no: "Cancel"
+            }, function () {
+                that.copyAndEdit(scenario, "overwrite");
+            });
         });
     },
 
@@ -676,7 +697,7 @@ ScenarioAdminUI.prototype = {
      * The copy for Edit public scenario: made, opened in the authoring tool in a new tab, and picked out in My
      * Scenarios, which this tab goes to, so that coming back to it says what happened.
      */
-    copyAndEdit: function (scenario) {
+    copyAndEdit: function (scenario, copy) {
         var that = this;
         //(the tab is opened now, on the click, and pointed at the tool once the copy and the draft are made)
         var win = ScenarioShelfCommon.reserveWindow();
@@ -689,13 +710,17 @@ ScenarioAdminUI.prototype = {
             that.say(ScenarioShelfCommon.errorOf(xhr, "It could not be copied"), "error");
             that.refresh();
         };
-        hall.comm.scenarioShelf("POST", "admin/edit", {id: scenario.fullId}, function (copied) {
+        var asked = {id: scenario.fullId};
+        if (copy)
+            asked.copy = copy;
+        hall.comm.scenarioShelf("POST", "admin/edit", asked, function (copied) {
             ScenarioShelfCommon.highlight = copied.path;
-            ScenarioShelfCommon.highlightSaying = "A copy of the public \u201c" + (scenario.title || scenario.fullId)
+            ScenarioShelfCommon.highlightSaying = (copy == "overwrite" ? "Your copy of the public \u201c" : "A copy of the public \u201c") + (scenario.title || scenario.fullId)
                 + "\u201d, for you to edit. It is open in the authoring tool, in another tab. Submit it and approve it to replace the public one.";
             hall.comm.scenarioAuthor("POST", "open", {id: copied.id}, function (result) {
                 that.busy = false;
-                that.say("Copied into your scenarios as " + copied.path + ", and opened in a new tab.", "success");
+                that.say((copy == "overwrite" ? "Your copy " + copied.path + " now has the public version, and is" : "Copied into your scenarios as " + copied.path + ", and")
+                    + " opened in a new tab.", "success");
                 ScenarioShelfCommon.openGame(win, result.gameId);
                 that.refresh();
                 if (window.GempLinks)
