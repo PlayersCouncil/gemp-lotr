@@ -71,6 +71,11 @@ var GempScenarioAuthor = Class.extend({
         this.overlay = overlay;
         this.authoring = authoring;
         this.ui = this.recall();
+        //What went wrong in the game the page has just left, in something that was sent across a change of game
+        if (this.ui.carried != null) {
+            this.problem = this.ui.carried;
+            delete this.ui.carried;
+        }
         this.build();
         this.refresh();
     },
@@ -338,7 +343,11 @@ var GempScenarioAuthor = Class.extend({
     /** What every change comes back with: a fresh game to go to, or the state of this one. */
     handle: function (result) {
         if (result.rebuilt && ("" + result.gameId) != this.gameId()) {
-            this.go(result.gameId);
+            //(a change that is part of several is not gone from until the rest have been made: see submitBoard)
+            if (this.holding)
+                this.arrived = result.gameId;
+            else
+                this.go(result.gameId);
             return;
         }
         if (result.state != null)
@@ -405,12 +414,17 @@ var GempScenarioAuthor = Class.extend({
         });
     },
 
-    /** Sends whatever of the step being edited has not been sent, and then does something (if that went through). */
-    flush: function (then) {
+    /**
+     * Sends whatever of the step being edited has not been sent, and then does something (if that went through).
+     * @param regardless whether to do it also when the server refused what was in the form (a save is of the draft as
+     *     it stands: a step in the form that is wrong is not a reason for it not to happen); 'then' is given whether
+     *     the form went through
+     */
+    flush: function (then, regardless) {
         if (this.form != null && this.dirty().any)
-            this.sendStep(then);
+            this.sendStep(then, regardless);
         else
-            then.call(this);
+            then.call(this, true);
     },
 
     restart: function (fromCheckpoint) {
@@ -839,8 +853,17 @@ var GempScenarioAuthor = Class.extend({
             if (!that.mayOverwrite())
                 return;
             buttons.find("button").prop("disabled", true);
-            that.flush(function () {
-                that.call("POST", "save", {}, away, failed);
+            that.flushForSave(function (unsent) {
+                that.call("POST", "save", {}, function (result) {
+                    if (unsent == null) {
+                        away();
+                        return;
+                    }
+                    //(the step that was not taken would be lost by leaving: the rest is saved, and the author stays)
+                    buttons.find("button").prop("disabled", false);
+                    said.text("The rest is saved. " + unsent + " Fix it and save again, or discard it by leaving with Discard changes.").show();
+                    that.afterSave(result, unsent);
+                }, failed);
             });
         }, "sa-primary"));
         buttons.append(this.button("Discard changes", "Go back to the Game Hall. The file stays as it was last saved; what has been changed since is lost.", function () {
@@ -1073,6 +1096,97 @@ var GempScenarioAuthor = Class.extend({
             ops.push({op: "delete", uid: uids[index + k]});
         this.flush(function () {
             that.changeSteps(ops, index + 1, index + 1);
+        });
+    },
+
+    /**
+     * Whether what a step waits for, or ends at, is in the assignment or the skirmishes: phase(assignment),
+     * phase(skirmish), an assign decision, fighting(...), inSkirmish(...), after(...), text(... skirmish ...), skirmish(n).
+     */
+    skirmishy: function (step) {
+        if (step == null)
+            return false;
+        var that = this;
+        var found = false;
+        $.each(["when", "until"], function (i, name) {
+            var value = step[name];
+            if (value == null)
+                return;
+            var text = typeof value == "string" ? value : JSON.stringify(value);
+            if (/phase\(\s*(assignment|skirmish)\s*\)|fighting\(|inSkirmish\(|\bafter\(|text\([^)]*skirmish|skirmish\(\s*\d+\s*\)/i.test(text))
+                found = true;
+            if ($.grep(that.splitTerms(typeof value == "string" ? value : ""), function (term) {
+                return term.toLowerCase() == "assign";
+            }).length > 0 || (typeof value == "object" && /^assign$/i.test(value.type || value.kind || "")))
+                found = true;
+        });
+        return found;
+    },
+
+    /** Whether the step at this place in the script, or either of its neighbours, is in the assignment or the skirmishes. */
+    nearSkirmishes: function (index) {
+        var steps = this.draft.steps;
+        return this.skirmishy(steps[index - 1]) || this.skirmishy(steps[index]) || this.skirmishy(steps[index + 1]);
+    },
+
+    /**
+     * Turns a step of the script into a block with the step as the first of its steps.  The block waits as the step did
+     * as far as the turn (and, for a block that is not the skirmishes of a turn, the phase) goes, and the step keeps the
+     * rest of what it waits for; it ends where the step after says (or where the step said it repeats until), and
+     * the step, which was one applying to one decision, now applies once in the block, as steps put into one do.
+     * @param skirmishes whether the block is a turn's skirmishes (see skirmishPage), as "+ Skirmishes" makes one
+     */
+    convertStep: function (index, skirmishes) {
+        var that = this;
+        this.flush(function () {
+            var steps = that.draft.steps;
+            var uid = that.state.uids[index];
+            var step = that.clone(steps[index]);
+            if (step == null || step.anyOrder != null)
+                return;
+            var turn = null, phase = null, kept = [];
+            var text = typeof step.when == "string" ? step.when : null;
+            $.each(text == null ? [] : that.splitTerms(text), function (i, term) {
+                if (turn == null && /^turn\(/i.test(term))
+                    turn = term;
+                else if (!skirmishes && phase == null && /^phase\(/i.test(term))
+                    phase = term;
+                else
+                    kept.push(term);
+            });
+            var block = {};
+            var when = $.grep([phase, turn], function (term) {
+                return term != null;
+            });
+            if (skirmishes && turn == null && that.state.position.turn > 0)
+                when = ["turn(" + that.state.position.turn + ")"];
+            if (when.length > 0)
+                block.when = when.join(", ");
+            //Where it ends: where the step says it repeats until; or the step after's When; or the end of the turn's phase as a
+            // step that repeats would end there; and as "+ Block" and "+ Skirmishes" end it, at the regroup, failing all that
+            var until = step.until != null && ("" + step.until).trim() != "" ? step.until
+                : skirmishes ? "phase(regroup)" : (that.untilFromNext(index) || that.nextUntil(step.when) || "phase(regroup)");
+            block.until = until;
+            //(what is said of a step as a whole of the script, and not of one decision, is said of the block)
+            $.each(["skipWhen", "checkpoint", "if", "unless"], function (i, name) {
+                if (step[name] != null && step[name] !== "" && step[name] !== false)
+                    block[name] = step[name];
+                delete step[name];
+            });
+            if (skirmishes)
+                block.skirmishes = true;
+            var repeating = step.until != null && ("" + step.until).trim() != "";
+            delete step.until;
+            if (text != null) {
+                if (kept.length > 0)
+                    step.when = kept.join(", ");
+                else
+                    delete step.when;
+            }
+            if (!step.pause && !repeating)
+                step.once = true;
+            block.anyOrder = [step];
+            that.changeSteps([{op: "set", uid: uid, step: block}], index + 1, index + 1);
         });
     },
 
@@ -1790,29 +1904,32 @@ var GempScenarioAuthor = Class.extend({
     /**
      * Sends the parts of the step that have been changed in the form, and only those: the rest is the server's,
      * which may know more about the step than this page does (the answer the game has just written into it).
-     * @param then what to do once they have gone through (and at once if there is nothing to send)
+     * @param then what to do once they have gone through (and at once if there is nothing to send); it is given
+     *     whether they did
+     * @param regardless whether 'then' is also to be done if the server refused them (the form then stays as it is)
      */
-    sendStep: function (then) {
+    sendStep: function (then, regardless) {
         var that = this;
         var form = this.form;
         clearTimeout(this.stepTimer);
         if (form == null) {
             if (then)
-                then.call(this);
+                then.call(this, true);
             return;
         }
         if (form.sending) {
             //One at a time: what has changed since goes when this one is back
             form.again = true;
             if (then)
-                (form.after = form.after || []).push(then);
+                (form.after = form.after || []).push({then: then, regardless: regardless});
             return;
         }
         var changes = this.dirty();
         var text = JSON.stringify(changes);
         if (!changes.any || text == form.refused) {
-            if (then && !changes.any)
-                then.call(this);
+            //(what was refused is refused again as it is: it is not sent again, and stays unsent)
+            if (then && (!changes.any || regardless))
+                then.call(this, !changes.any);
             return;
         }
         var sent = this.written(form.step);
@@ -1821,21 +1938,22 @@ var GempScenarioAuthor = Class.extend({
             form.sending = false;
             var after = form.after || [];
             form.after = null;
+            var run = function (list, did) {
+                $.each(list, function (i, each) {
+                    if (did || each.regardless)
+                        each.then.call(that, did);
+                });
+            };
             if (form.again) {
                 form.again = false;
                 if (that.form === form) {
-                    that.sendStep(function () {
-                        $.each(after, function (i, each) {
-                            each.call(that);
-                        });
-                    });
+                    that.sendStep(function (did) {
+                        run(after, did);
+                    }, true);
                     return;
                 }
             }
-            if (went)
-                $.each(after, function (i, each) {
-                    each.call(that);
-                });
+            run(after, went);
         };
         this.edit({steps: [{op: "merge", uid: form.uid, set: changes.set, unset: changes.unset}]}, null, function () {
             var name;
@@ -1870,7 +1988,7 @@ var GempScenarioAuthor = Class.extend({
             }
             finished(true);
             if (then)
-                then.call(that);
+                then.call(that, true);
         }, function () {
             //Refused: it stays unsent (and is not sent again as it is).  If several parts went together, each is
             // tried by itself, so that one that is wrong does not hold the others back.
@@ -1885,6 +2003,8 @@ var GempScenarioAuthor = Class.extend({
             if (parts.length < 2 || that.form !== form) {
                 form.refused = text;
                 finished(false);
+                if (then && regardless)
+                    then.call(that, false);
                 return;
             }
             var said = that.problem;
@@ -1895,6 +2015,8 @@ var GempScenarioAuthor = Class.extend({
                         that.problem = said;
                     that.renderNotices();
                     finished(false);
+                    if (then && regardless)
+                        then.call(that, false);
                     return;
                 }
                 var op = {op: "merge", uid: form.uid, set: {}, unset: []};
@@ -1964,8 +2086,22 @@ var GempScenarioAuthor = Class.extend({
             //Something a file can have written out in full: it is typed as the file has it, and the server reads
             // it.  It is as tall as what is in it, and is sent when it is left, not while it is half written.
             input.addClass("sa-code").attr("spellcheck", "false").bind("sa-fit", function () {
-                input.attr("rows", Math.max(1, Math.min(16, ("" + input.val()).split("\n").length)));
+                //(a line wider than the box wraps, and takes the rows it needs: of the box's own height, once it is on the page)
+                var lines = ("" + input.val()).split("\n").length;
+                input.attr("rows", Math.max(1, Math.min(16, lines)));
+                var area = input[0];
+                if (area.clientWidth > 0) {
+                    input.css("height", "auto");
+                    var extra = area.offsetHeight - area.clientHeight;
+                    var room = parseFloat(input.css("line-height")) || 15;
+                    if (area.scrollHeight > area.clientHeight)
+                        input.css("height", Math.min(area.scrollHeight, room * 16) + extra);
+                }
             }).trigger("sa-fit");
+            //(it has no width until it is on the page, and can have none again while its tab is away)
+            setTimeout(function () {
+                input.trigger("sa-fit");
+            }, 0);
             input.keydown(function (event) {
                 //(a tab is part of what is being written, not a way out of the box)
                 if (event.keyCode != 9 || event.shiftKey || event.ctrlKey || event.altKey || this.value.indexOf("\n") < 0)
@@ -2117,6 +2253,32 @@ var GempScenarioAuthor = Class.extend({
                 + "however many of these decisions there are, one or several, they are all this step's. What each allowed it allows, and their answers are its answers, in order.", function () {
                     that.joinAlike(index, alike);
                 }));
+        //A step of the script can be made a block of its own (and in the assignment or the skirmishes, the skirmishes of the
+        // turn); a block there can be made the turn's skirmishes.  (Not one of a block's steps, nor the skirmishes.)
+        if (form.sub < 0 && !this.isOpening(top)) {
+            var skirmishing = this.nearSkirmishes(index);
+            if (!isBlock) {
+                if (!skirmishing)
+                    acts.append(this.button("Convert", "Turn this step into a block, with this step as its first step: for a stretch of the game whose decisions come in no order the script can know. "
+                        + "It waits for the turn (and phase) this step does, and ends where the step after it begins.", function () {
+                            that.convertStep(index, false);
+                        }));
+                else
+                    acts.append(this.select([["", "Convert\u2026"], ["block", "Block"], ["skirmishes", "Skirmishes"]], "", function (kind) {
+                        if (kind != "")
+                            that.convertStep(index, kind == "skirmishes");
+                    }).attr("title", "Turn this step into a block with this step as its first step: an ordinary one (Block), or a turn's skirmishes, shown skirmish by skirmish (Skirmishes)"));
+            } else if (!top.skirmishes && skirmishing) {
+                acts.append(this.button("Convert to Skirmishes", "Show this block's steps skirmish by skirmish, as a turn's assignment and skirmishes are written: what it waits for and ends at stays as it is.", function () {
+                    that.flush(function () {
+                        that.edit({steps: [{op: "merge", uid: topUid, set: {skirmishes: true}, unset: []}]}, null, function () {
+                            that.form = null;
+                            that.render();
+                        });
+                    });
+                }));
+            }
+        }
         //A step next to a block can be made one of the block's
         if (!isBlock && !this.isOpening(top)) {
             var into = function (toIndex, first) {
@@ -3484,6 +3646,371 @@ var GempScenarioAuthor = Class.extend({
 
     /* ---------------------------------------------------------------- the board */
 
+    /**
+     * What the Board tab has gathered and not yet sent: {draft, ops, added, removed}.  'ops' are changes to the board
+     * ({name, args}: "wound", ["aragorn", 1]) in the order they were made; 'added' are cards to put in the scenario
+     * ({alias, blueprintId, name, type, seat, zone, host}, the zone as addCard has it); 'removed' are the names of cards
+     * to take out.  It is kept with what the panel remembers (a page can be left for a fresh game, and come back to it),
+     * for the draft it was gathered in.
+     */
+    gathered: function () {
+        var ui = this.ui, id = this.draft == null ? null : this.draft.id;
+        if (ui.board == null || ui.board.draft != id)
+            ui.board = {draft: id, ops: [], added: [], removed: []};
+        return ui.board;
+    },
+
+    gatheredCount: function () {
+        var gathered = this.gathered();
+        return gathered.ops.length + gathered.added.length + gathered.removed.length;
+    },
+
+    /** A change to the board as the server reads it. */
+    opText: function (op) {
+        return op.name + "(" + op.args.join(", ") + ")";
+    },
+
+    /**
+     * Gathers one change to the board.  A change that undoes or goes over the one before it (the same pile put in
+     * another order, a card moved again, a wound and then a healing, a total set again) takes its place.
+     */
+    gather: function (name, args) {
+        var gathered = this.gathered();
+        var ops = gathered.ops;
+        var last = ops.length == 0 ? null : ops[ops.length - 1];
+        var same = last != null && last.name == name && ("" + last.args[0]).toLowerCase() == ("" + args[0]).toLowerCase();
+        var signed = function (op) {
+            return (op.name == "heal" ? -1 : 1) * (parseInt(op.args[1]) || 0);
+        };
+        if (name == "order" || name == "move") {
+            if (same)
+                ops.pop();
+        } else if (name == "wound" || name == "heal") {
+            if (last != null && (last.name == "wound" || last.name == "heal") && last.args[0] == args[0]) {
+                var net = signed(last) + signed({name: name, args: args});
+                ops.pop();
+                if (net == 0) {
+                    this.remember();
+                    return;
+                }
+                name = net > 0 ? "wound" : "heal";
+                args = [args[0], Math.abs(net)];
+            }
+        } else if (name == "tokens") {
+            if (same) {
+                args = [args[0], (parseInt(last.args[1]) || 0) + (parseInt(args[1]) || 0)];
+                ops.pop();
+            }
+        } else if (name == "twilight" || name == "burdens" || name == "threats") {
+            //(a total is set to what it is to be, whatever it was set to before: and not at all if that is what it is)
+            gathered.ops = ops = $.grep(ops, function (op) {
+                return op.name != name;
+            });
+            if (this.state.board != null && this.state.board[name] == parseInt(args[0])) {
+                this.remember();
+                return;
+            }
+        }
+        ops.push({name: name, args: args});
+        this.remember();
+    },
+
+    /** Drops what has been gathered about a card (it is being taken out, or put in again as another). */
+    forgetCard: function (alias) {
+        var gathered = this.gathered();
+        var kept = [];
+        $.each(gathered.ops, function (i, op) {
+            if ($.inArray(op.name, ["wound", "heal", "tokens", "move"]) > -1 && op.args[0] == alias)
+                return;
+            if ($.inArray(op.name, ["attach", "stack"]) > -1 && (op.args[0] == alias || op.args[1] == alias))
+                return;
+            if (op.name == "order" && $.inArray(alias, op.args) > 0) {
+                var rest = $.grep(op.args, function (arg, at) {
+                    return at == 0 || arg != alias;
+                });
+                if (rest.length < 2)
+                    return;
+                op = {name: "order", args: rest};
+            }
+            kept.push(op);
+        });
+        gathered.ops = kept;
+    },
+
+    /** A card has been given another name: what has been gathered says the new one. */
+    renameGathered: function (from, to) {
+        var gathered = this.gathered();
+        var swap = function (alias) {
+            return alias == from ? to : alias;
+        };
+        $.each(gathered.ops, function (i, op) {
+            if (op.name == "order")
+                op.args = $.map(op.args, function (arg, at) {
+                    return at == 0 ? arg : swap(arg);
+                });
+            else if (op.name == "attach" || op.name == "stack")
+                op.args = [swap(op.args[0]), swap(op.args[1])];
+            else if ($.inArray(op.name, ["wound", "heal", "tokens", "move"]) > -1)
+                op.args[0] = swap(op.args[0]);
+        });
+        gathered.removed = $.map(gathered.removed, swap);
+        this.remember();
+    },
+
+    /** What was gathered about cards the scenario does not have (any more: the page may have been left for another game) is let go. */
+    pruneGathered: function () {
+        var gathered = this.gathered();
+        var known = {};
+        $.each(this.state.board.cards, function (i, card) {
+            known[card.alias] = true;
+        });
+        $.each(gathered.added, function (i, add) {
+            known[add.alias] = true;
+        });
+        gathered.removed = $.grep(gathered.removed, function (alias) {
+            return known[alias] === true && $.inArray(alias, $.map(gathered.added, function (add) {
+                return add.alias;
+            })) < 0;
+        });
+        gathered.ops = $.grep(gathered.ops, function (op) {
+            var named = op.name == "order" ? op.args.slice(1) : $.inArray(op.name, ["attach", "stack"]) > -1 ? op.args
+                : $.inArray(op.name, ["wound", "heal", "tokens", "move"]) > -1 ? [op.args[0]] : [];
+            for (var i = 0; i < named.length; i++)
+                if (known[named[i]] !== true)
+                    return false;
+            return true;
+        });
+    },
+
+    /**
+     * The board as it will be once what has been gathered is sent: the server's board with the changes made to it
+     * here.  Each card says whether anything was gathered about it ('touched'), whether it is to be added ('added') or
+     * taken out ('removing').
+     */
+    boardView: function () {
+        var that = this;
+        var board = this.state.board;
+        var gathered = this.gathered();
+        var view = {twilight: board.twilight, burdens: board.burdens, threats: board.threats, cards: []};
+        var added = {};
+        $.each(gathered.added, function (i, add) {
+            added[add.alias] = true;
+        });
+        $.each(board.cards, function (i, card) {
+            //(a card put in under the name of one the scenario has takes its place)
+            if (!added[card.alias])
+                view.cards.push(that.clone(card));
+        });
+        var serial = 0;
+        var find = function (alias) {
+            for (var i = 0; i < view.cards.length; i++)
+                if (view.cards[i].alias == alias)
+                    return view.cards[i];
+            return null;
+        };
+        var cardsIn = function (owner, zone) {
+            return $.grep(view.cards, function (card) {
+                return card.owner == owner && card.zone == zone;
+            }).sort(function (a, b) {
+                return (a.at == null ? 9999 : a.at) - (b.at == null ? 9999 : b.at);
+            });
+        };
+        $.each(gathered.added, function (i, add) {
+            var placed = add.zone == "" ? "deck" : add.zone == "attach" ? "attached" : add.zone == "stack" ? "stacked" : add.zone;
+            view.cards.push({alias: add.alias, blueprintId: add.blueprintId, name: add.name, type: add.type, owner: add.seat, zone: placed,
+                at: 1000 + (++serial), wounds: 0, tokens: 0, on: add.zone == "attach" || add.zone == "stack" ? add.host : null, added: true, touched: true});
+        });
+        $.each(gathered.removed, function (i, alias) {
+            var card = find(alias);
+            if (card != null) {
+                card.removing = true;
+                card.touched = true;
+            }
+        });
+        $.each(gathered.ops, function (i, op) {
+            var card = op.name == "order" ? null : find(op.args[0]);
+            if (op.name == "twilight" || op.name == "burdens" || op.name == "threats") {
+                view[op.name] = parseInt(op.args[0]) || 0;
+            } else if (op.name == "order") {
+                var parts = ("" + op.args[0]).split(".");
+                var there = cardsIn(parts[0], parts[1]);
+                var first = [];
+                $.each(op.args.slice(1), function (n, alias) {
+                    var each = find(alias);
+                    if (each != null && each.owner == parts[0] && each.zone == parts[1]) {
+                        first.push(each);
+                        each.touched = true;
+                    }
+                });
+                var order = first.concat($.grep(there, function (each) {
+                    return $.inArray(each, first) < 0;
+                }));
+                $.each(order, function (n, each) {
+                    each.at = n;
+                });
+            } else if (card == null) {
+                return;
+            } else if (op.name == "move") {
+                var to = ("" + op.args[1]).split(".");
+                card.zone = to[1];
+                card.on = null;
+                //(on the top of a pile is before every card, and before those put on the top earlier)
+                card.at = to[2] == "top" ? -1000 - (++serial) : 1000 + (++serial);
+                card.touched = true;
+            } else if (op.name == "attach" || op.name == "stack") {
+                card.zone = op.name == "attach" ? "attached" : "stacked";
+                card.on = op.args[1];
+                card.touched = true;
+            } else if (op.name == "wound") {
+                card.wounds += parseInt(op.args[1]) || 0;
+                card.touched = true;
+            } else if (op.name == "heal") {
+                card.wounds = Math.max(0, card.wounds - (parseInt(op.args[1]) || 0));
+                card.touched = true;
+            } else if (op.name == "tokens") {
+                card.tokens += parseInt(op.args[1]) || 0;
+                card.touched = true;
+            }
+        });
+        return view;
+    },
+
+    /** The names of the cards the scenario has, with the ones gathered to be added and without the ones gathered to be taken out. */
+    boardAliases: function () {
+        return $.map($.grep(this.boardView().cards, function (card) {
+            return !card.removing;
+        }), function (card) {
+            return card.alias;
+        });
+    },
+
+    /** The changes in the cards (adds and takings-out) as the scenario's top-level parts: {cards, setup}. */
+    cardChange: function () {
+        var that = this;
+        var gathered = this.gathered();
+        if (gathered.added.length == 0 && gathered.removed.length == 0)
+            return null;
+        var cards = this.clone(this.draft.cards) || {};
+        var setup = this.clone(this.draft.setup) || {};
+        //A card out of the scenario: out of its seat's cards and out of every place the setup puts it
+        var take = function (alias) {
+            $.each(["freeps", "shadow"], function (index, seat) {
+                if (cards[seat] != null)
+                    delete cards[seat][alias];
+                for (var zone in (setup[seat] || {}))
+                    if (setup[seat].hasOwnProperty(zone)) {
+                        var kept = $.grep(that.splitTerms(setup[seat][zone]), function (each) {
+                            return each != alias;
+                        });
+                        if (kept.length == 0)
+                            delete setup[seat][zone];
+                        else
+                            setup[seat][zone] = kept.join(", ");
+                    }
+                if (setup[seat] != null && $.isEmptyObject(setup[seat]))
+                    delete setup[seat];
+            });
+            $.each(["attach", "stack", "wounds", "tokens"], function (index, name) {
+                if (setup[name] != null) {
+                    delete setup[name][alias];
+                    if ($.isEmptyObject(setup[name]))
+                        delete setup[name];
+                }
+            });
+        };
+        $.each(gathered.removed, function (i, alias) {
+            take(alias);
+        });
+        $.each(gathered.added, function (i, add) {
+            //(one that is put in under the name of a card the scenario has is that card, replaced)
+            take(add.alias);
+            cards[add.seat] = cards[add.seat] || {};
+            cards[add.seat][add.alias] = add.blueprintId;
+            if (add.zone == "attach" || add.zone == "stack") {
+                setup[add.zone] = setup[add.zone] || {};
+                setup[add.zone][add.alias] = add.host;
+            } else if (add.zone != "") {
+                setup[add.seat] = setup[add.seat] || {};
+                setup[add.seat][add.zone] = setup[add.seat][add.zone] ? setup[add.seat][add.zone] + ", " + add.alias : add.alias;
+            }
+        });
+        return {cards: cards, setup: $.isEmptyObject(setup) ? null : setup};
+    },
+
+    /**
+     * Sends what the Board tab has gathered, all at once: the cards put in and taken out first, as one change to the
+     * scenario (which brings a fresh game), and then the changes to the board as one request, which the server makes
+     * in turn (in the scenario's setup, with one fresh game played for them all).
+     */
+    submitBoard: function () {
+        var that = this;
+        var gathered = this.gathered();
+        if (this.gatheredCount() == 0)
+            return;
+        var inSetup = this.ui.where == "setup";
+        var change = this.cardChange();
+        var ops = $.map(gathered.ops, function (op) {
+            return that.opText(op);
+        }).join(", ");
+        this.flush(function () {
+            //(a fresh game that the cards bring is gone to once the changes to the board have been made to it)
+            that.holding = true;
+            that.arrived = null;
+            var finish = function (failure) {
+                that.holding = false;
+                var arrived = that.arrived;
+                that.arrived = null;
+                if (failure != null && arrived != null)
+                    that.ui.carried = failure;
+                that.remember();
+                if (arrived != null)
+                    that.go(arrived);
+                else
+                    that.render();
+            };
+            var sendOps = function () {
+                if (ops == "") {
+                    finish(null);
+                    return;
+                }
+                that.call("POST", "do", {op: ops, setup: inSetup}, function () {
+                    that.gathered().ops = [];
+                    finish(null);
+                }, function () {
+                    //(in the game in hand the changes before the one that went wrong have been made, and the rest not: what
+                    // is left is not sent again.  In the setup nothing was made, and they stay to be put right.)
+                    var said = that.problem;
+                    if (!inSetup) {
+                        that.gathered().ops = [];
+                        that.problem = "Some changes to the board were made, and the rest were not: " + said;
+                    }
+                    finish(that.problem);
+                });
+            };
+            if (change == null) {
+                sendOps();
+                return;
+            }
+            that.edit({top: change}, null, function () {
+                var now = that.gathered();
+                now.added = [];
+                now.removed = [];
+                sendOps();
+            }, function () {
+                that.holding = false;
+                that.arrived = null;
+                that.render();
+            });
+        });
+    },
+
+    /** Lets go of what has been gathered, so that the board is as the scenario has it. */
+    resetBoard: function () {
+        this.ui.board = null;
+        this.remember();
+        this.renderBoard();
+    },
+
     renderBoard: function () {
         var that = this;
         var box = this.tabs.board;
@@ -3498,15 +4025,73 @@ var GempScenarioAuthor = Class.extend({
         }
         var inSetup = this.ui.where == "setup";
         var position = this.state.position;
-        var act = function (op) {
-            that.call("POST", "do", {op: op, setup: inSetup});
+        this.pruneGathered();
+        var gathered = this.gathered();
+        var count = this.gatheredCount();
+        //The board as it will be once what has been gathered is sent; each change is gathered, not sent
+        var view = this.boardView();
+        var queue = function (name, args) {
+            that.gather(name, args);
+            that.renderBoard();
         };
+
+        //Submit and Reset, and what is waiting to be sent
+        var bar = this.el("div", "sa-section sa-boardbar").appendTo(box);
+        var buttons = this.el("div", "sa-row").appendTo(bar);
+        buttons.append(this.button("Submit changes (" + count + ")", inSetup
+            ? "Makes all of them to the board the scenario starts with, and plays a fresh game by the script back to here"
+            : "Makes all of them at once to the board as it stands", function () {
+            that.submitBoard();
+        }, "sa-primary").prop("disabled", count == 0));
+        buttons.append(this.button("Reset", "Lets go of the changes gathered here: the board is as the scenario has it", function () {
+            that.resetBoard();
+        }).prop("disabled", count == 0));
+        if (count == 0) {
+            buttons.append(this.el("span", "sa-note", "Changes are gathered here until they are submitted."));
+        } else {
+            var list = this.el("div", "sa-gathered").appendTo(bar);
+            var line = function (text, undo) {
+                var row = that.el("div", "sa-gathered-row").appendTo(list);
+                row.append(that.el("span", "sa-gathered-text", text));
+                row.append(that.button("×", "Do not make this change", undo, "sa-undo"));
+            };
+            $.each(gathered.removed, function (i, alias) {
+                line("take out " + alias, function () {
+                    gathered.removed.splice(i, 1);
+                    that.remember();
+                    that.renderBoard();
+                });
+            });
+            $.each(gathered.added, function (i, add) {
+                line("add " + add.name + " as " + add.alias + " (" + add.seat + ", " + (add.zone == "" ? "deck" : add.zone == "attach" ? "on " + add.host
+                    : add.zone == "stack" ? "stacked on " + add.host : add.zone) + ")", function () {
+                    that.forgetCard(add.alias);
+                    gathered.added.splice(i, 1);
+                    that.remember();
+                    that.renderBoard();
+                });
+            });
+            $.each(gathered.ops, function (i, op) {
+                line(that.opText(op), function () {
+                    gathered.ops.splice(i, 1);
+                    that.remember();
+                    that.renderBoard();
+                });
+            });
+        }
 
         var where = this.el("div", "sa-section").appendTo(box);
         where.append(this.el("div", "sa-heading", "Changes are made"));
         var choose = function (value, label, note) {
             var row = that.el("label", "sa-check sa-block").appendTo(where);
             row.append($("<input type='radio' name='sa-where'/>").prop("checked", that.ui.where == value).change(function () {
+                //What has been gathered is for one of the two boards: it is sent, or let go of, before the other is chosen
+                if (that.gatheredCount() > 0) {
+                    that.problem = "Changes are waiting under Board: submit them or reset them before changing where changes are made.";
+                    that.renderNotices();
+                    that.renderBoard();
+                    return;
+                }
                 that.ui.where = value;
                 that.remember();
                 that.renderBoard();
@@ -3515,31 +4100,32 @@ var GempScenarioAuthor = Class.extend({
             row.append(that.el("div", "sa-note", note));
         };
         choose("now", "to the board as it stands", position.inHand
-            ? "Done at once, and by step " + position.step + " whenever the script is played. The decision on the screen was worked out before the change: it shows in what the game offers from the next decision on."
-            : "Done at once, and by the next step you write. The decision on the screen was worked out before the change.");
+            ? "Done once submitted, and by step " + position.step + " whenever the script is played. The decision on the screen was worked out before the change: it shows in what the game offers from the next decision on."
+            : "Done once submitted, and by the next step you write. The decision on the screen was worked out before the change.");
         choose("setup", "to the board the scenario starts with", "The setup is changed, and a fresh game is played by the script back to here.");
         if ((this.state.pending || []).length > 0)
             where.append(this.el("div", "sa-note sa-pending", "Waiting for a step to carry them: " + this.state.pending.join(", ")));
 
         var counters = this.el("div", "sa-section").appendTo(box);
-        var counter = function (label, name, value, disabled) {
-            var input = $("<input type='number' min='0'/>").addClass("sa-input sa-short").val(value);
+        var counter = function (label, name, disabled) {
+            var input = $("<input type='number' min='0'/>").addClass("sa-input sa-short").val(view[name]);
             var row = that.el("div", "sa-row").appendTo(counters);
+            row.toggleClass("sa-changed", view[name] != board[name]);
             row.append(that.el("span", "sa-label", label));
             row.append(input);
-            row.append(that.button("Set", "", function () {
-                act(name + "(" + (parseInt(input.val()) || 0) + ")");
+            row.append(that.button("Set", "Gathered with the other changes, and made when they are submitted", function () {
+                queue(name, [parseInt(input.val()) || 0]);
             }).prop("disabled", !!disabled));
         };
-        counter("Twilight", "twilight", board.twilight, inSetup);
-        counter("Burdens", "burdens", board.burdens);
-        counter("Threats", "threats", board.threats);
+        counter("Twilight", "twilight", inSetup);
+        counter("Burdens", "burdens");
+        counter("Threats", "threats");
 
         this.renderSites(box, board);
 
         //(what another card can be put on: anything on the table, a card that is itself on another included)
-        var bearers = $.grep(board.cards, function (card) {
-            return card.zone == "characters" || card.zone == "minions" || card.zone == "support" || card.zone == "attached";
+        var bearers = $.grep(view.cards, function (card) {
+            return !card.removing && (card.zone == "characters" || card.zone == "minions" || card.zone == "support" || card.zone == "attached");
         });
         $.each(["freeps", "shadow"], function (index, seat) {
             var section = that.el("div", "sa-section").appendTo(box);
@@ -3552,7 +4138,7 @@ var GempScenarioAuthor = Class.extend({
             // the order its cards come (which the arrows change)
             var places = that.PLACED.slice();
             var held = {};
-            $.each(board.cards, function (i, card) {
+            $.each(view.cards, function (i, card) {
                 if (card.owner != seat)
                     return;
                 if (held[card.zone] == null) {
@@ -3581,51 +4167,67 @@ var GempScenarioAuthor = Class.extend({
                 if (entry.first)
                     section.append(that.el("div", "sa-zonehead", entry.label));
                 var row = that.el("div", "sa-card").appendTo(section);
+                row.toggleClass("sa-changed", !!card.touched).toggleClass("sa-added", !!card.added).toggleClass("sa-removing", !!card.removing);
                 var name = that.el("div", "sa-cardname").appendTo(row);
                 //(a card hint, as the game's chat has them: the game screen shows the card while the pointer is on
                 // it, and opens its window on a click)
                 name.append(that.el("span", "sa-alias cardHint", card.alias).attr("value", card.blueprintId).attr("title", ""));
                 name.append(document.createTextNode(" " + card.name));
-                name.append(that.button("\u270e", "Give this card another name in the scenario. Every part of the scenario that says the old name is changed to say the new one.", function () {
-                    that.renameCard(card, name);
-                }, "sa-rename"));
+                if (card.added)
+                    name.append(that.el("span", "sa-tag", "new"));
+                else if (card.removing)
+                    name.append(that.el("span", "sa-tag", "to be taken out"));
+                else
+                    name.append(that.button("✎", "Give this card another name in the scenario. Every part of the scenario that says the old name is changed to say the new one.", function () {
+                        that.renameCard(card, name);
+                    }, "sa-rename"));
                 var controls = that.el("div", "sa-row").appendTo(row);
+                if (card.removing) {
+                    controls.append(that.button("Keep it", "Do not take this card out", function () {
+                        gathered.removed = $.grep(gathered.removed, function (alias) {
+                            return alias != card.alias;
+                        });
+                        that.remember();
+                        that.renderBoard();
+                    }));
+                    return;
+                }
                 if (entry.ordered) {
                     //Where it comes in its hand or pile: one place earlier or later, or first
                     var reorder = function (to) {
                         var aliases = $.map(entry.among, function (other) { return other.alias; });
                         aliases.splice(entry.at, 1);
                         aliases.splice(to, 0, card.alias);
-                        act("order(" + seat + "." + card.zone + ", " + aliases.join(", ") + ")");
+                        queue("order", [seat + "." + card.zone].concat(aliases));
                     };
                     var pile = card.zone != "hand";
-                    controls.append(that.button("\u2191", pile ? "One nearer the top" : "One earlier in the hand", function () {
+                    controls.append(that.button("↑", pile ? "One nearer the top" : "One earlier in the hand", function () {
                         reorder(entry.at - 1);
                     }, "sa-order").prop("disabled", entry.at == 0));
-                    controls.append(that.button("\u2193", pile ? "One nearer the bottom" : "One later in the hand", function () {
+                    controls.append(that.button("↓", pile ? "One nearer the bottom" : "One later in the hand", function () {
                         reorder(entry.at + 1);
                     }, "sa-order").prop("disabled", entry.at == entry.among.length - 1));
-                    controls.append(that.button("\u2912", pile ? "To the top" : "To the front of the hand", function () {
+                    controls.append(that.button("⤒", pile ? "To the top" : "To the front of the hand", function () {
                         reorder(0);
                     }, "sa-order").prop("disabled", entry.at == 0));
                 }
                 controls.append(that.select([["", card.zone + (card.on ? " on " + card.on : "")]].concat(zones), "", function (zone) {
                     if (zone != "")
-                        act("move(" + card.alias + ", " + zone + ")");
+                        queue("move", [card.alias, zone]);
                 }).attr("title", "Move it"));
                 var inPlay = card.zone == "characters" || card.zone == "minions";
                 if (inPlay || card.wounds > 0) {
-                    controls.append(that.button("\u2212", "Heal a wound", function () {
-                        act("heal(" + card.alias + ", 1)");
+                    controls.append(that.button("−", "Heal a wound", function () {
+                        queue("heal", [card.alias, 1]);
                     }).prop("disabled", card.wounds == 0));
                     controls.append(that.el("span", "sa-count", card.wounds + "w").attr("title", "wounds"));
                     controls.append(that.button("+", "Add a wound", function () {
-                        act("wound(" + card.alias + ", 1)");
+                        queue("wound", [card.alias, 1]);
                     }));
                 }
                 if (card.zone == "support" || card.tokens > 0)
                     controls.append(that.button("+token" + (card.tokens > 0 ? " (" + card.tokens + ")" : ""), "Add a culture token", function () {
-                        act("tokens(" + card.alias + ", 1)");
+                        queue("tokens", [card.alias, 1]);
                     }));
                 //Any card can be put on any other that is on the table: attached to it (as a possession is borne),
                 // or stacked on it (as cards are kept under another)
@@ -3633,17 +4235,16 @@ var GempScenarioAuthor = Class.extend({
                     return bearer.alias != card.alias;
                 });
                 if (hosts.length > 0)
-                    controls.append(that.select([["", "put on" + "\u2026"]].concat($.map(hosts, function (host) {
-                        return [["attach(" + card.alias + ", " + host.alias + ")", "attach to " + host.alias]];
+                    controls.append(that.select([["", "put on" + "…"]].concat($.map(hosts, function (host) {
+                        return [["attach|" + host.alias, "attach to " + host.alias]];
                     })).concat($.map(hosts, function (host) {
-                        return [["stack(" + card.alias + ", " + host.alias + ")", "stack on " + host.alias]];
-                    })), "", function (op) {
-                        if (op != "")
-                            act(op);
+                        return [["stack|" + host.alias, "stack on " + host.alias]];
+                    })), "", function (what) {
+                        if (what != "")
+                            queue(what.split("|")[0], [card.alias, what.split("|")[1]]);
                     }).attr("title", "Attach it to another card, or stack it on one"));
-                controls.append(that.button("\u00d7", "Take this card out of the scenario", function () {
-                    if (confirm("Take " + card.alias + " out of the scenario? (A fresh game is played back to here.)"))
-                        that.removeCard(card);
+                controls.append(that.button("×", card.added ? "Do not add this card" : "Take this card out of the scenario (when the changes are submitted)", function () {
+                    that.dropCard(card);
                 }, "sa-danger"));
             });
         });
@@ -3661,7 +4262,7 @@ var GempScenarioAuthor = Class.extend({
                 that.call("GET", "cards", {q: query.val()}, function (found) {
                     results.empty();
                     $.each(found.cards || [], function (i, card) {
-                        results.append(that.el("div", "sa-result", card.name + "  \u00b7  " + card.id + "  \u00b7  " + (card.culture || "") + " " + (card.type || "")
+                        results.append(that.el("div", "sa-result", card.name + "  ·  " + card.id + "  ·  " + (card.culture || "") + " " + (card.type || "")
                             + (card.cost != null ? " (" + card.cost + ")" : "")).click(function () {
                             offer(card);
                         }));
@@ -3674,7 +4275,7 @@ var GempScenarioAuthor = Class.extend({
         var offer = function (card) {
             results.empty();
             chosen.empty();
-            var taken = that.aliases();
+            var taken = that.boardAliases();
             //The first word of its name that says something: "The One Ring" is "one", not "the"
             var words = $.grep(card.name.toLowerCase().replace(/[^a-z0-9 ]/g, "").split(" "), function (word) {
                 return word.length > 0 && $.inArray(word, ["the", "a", "an", "of"]) < 0;
@@ -3692,15 +4293,15 @@ var GempScenarioAuthor = Class.extend({
             }), bearers.length > 0 ? bearers[0].alias : "").attr("title", "The card it is put on").hide();
             var places = [["", "deck (bottom)"], "hand", "characters", "support", "minions", "discard", "deadPile"];
             if (bearers.length > 0)
-                places = places.concat([["attach", "attached to" + "\u2026"], ["stack", "stacked on" + "\u2026"]]);
+                places = places.concat([["attach", "attached to" + "…"], ["stack", "stacked on" + "…"]]);
             var zone = that.select(places, card.side == "shadow" ? "" : "hand", function (value) {
                 host.toggle(value == "attach" || value == "stack");
             });
             chosen.append(that.el("div", "sa-cardname", card.name + " (" + card.id + ")"));
             var row = that.el("div", "sa-row sa-wrap").appendTo(chosen);
             row.append(that.el("span", "sa-label", "called")).append(name).append(seat).append(zone).append(host);
-            row.append(that.button("Add", "A fresh game is played by the script back to here", function () {
-                that.addCard(card.id, $.trim(name.val()), seat.val(), zone.val(), host.val());
+            row.append(that.button("Add", "Gathered with the other changes, and made when they are submitted", function () {
+                that.addCard(card, $.trim(name.val()), seat.val(), zone.val(), host.val());
             }, "sa-primary"));
         };
         box.scrollTop(scroll);
@@ -3866,17 +4467,20 @@ var GempScenarioAuthor = Class.extend({
                 leave();
                 return;
             }
-            if (!/^[A-Za-z][A-Za-z0-9_-]*$/.test(to) || $.inArray(to, that.aliases()) > -1) {
-                input.addClass("sa-bad").attr("title", $.inArray(to, that.aliases()) > -1 ? "The scenario already has a card called that"
+            if (!/^[A-Za-z][A-Za-z0-9_-]*$/.test(to) || $.inArray(to, that.boardAliases()) > -1) {
+                input.addClass("sa-bad").attr("title", $.inArray(to, that.boardAliases()) > -1 ? "The scenario already has a card called that"
                     : "Letters, digits, dashes and underscores, starting with a letter");
                 return;
             }
             that.flush(function () {
                 over = true;
+                //(what the Board tab has gathered about the card goes on being about it)
+                that.renameGathered(card.alias, to);
                 that.call("POST", "alias", {from: card.alias, to: to}, function () {
                     holder.empty();
                     that.render();
                 }, function () {
+                    that.renameGathered(to, card.alias);
                     holder.empty();
                     that.renderBoard();
                 });
@@ -3894,60 +4498,64 @@ var GempScenarioAuthor = Class.extend({
         input.focus().select();
     },
 
-    /** @param zone a zone of the seat's; "" for the deck; or "attach" / "stack", with the card it goes on as host */
-    addCard: function (blueprintId, alias, seat, zone, host) {
+    /**
+     * Gathers a card to be added to the scenario (a card of the library, as the search found it).  If the scenario
+     * already has a card by that name, the author is asked whether the new card is to take its place.
+     * @param zone a zone of the seat's; "" for the deck; or "attach" / "stack", with the card it goes on as host
+     */
+    addCard: function (found, alias, seat, zone, host) {
+        var that = this;
         if (!/^[A-Za-z][A-Za-z0-9_]*$/.test(alias)) {
             this.problem = "A card's name in the scenario is made of letters, digits and underscores, starting with a letter.";
             this.renderNotices();
             return;
         }
-        var cards = this.clone(this.draft.cards);
-        cards[seat] = cards[seat] || {};
-        cards[seat][alias] = blueprintId;
-        var top = {cards: cards};
-        if (zone == "attach" || zone == "stack") {
-            var onto = this.clone(this.draft.setup) || {};
-            onto[zone] = onto[zone] || {};
-            onto[zone][alias] = host;
-            top.setup = onto;
-        } else if (zone != "") {
-            var setup = this.clone(this.draft.setup) || {};
-            setup[seat] = setup[seat] || {};
-            setup[seat][zone] = setup[seat][zone] ? setup[seat][zone] + ", " + alias : alias;
-            top.setup = setup;
+        var gathered = this.gathered();
+        var existing = null;
+        $.each(this.boardView().cards, function (i, each) {
+            if (each.alias == alias && !each.removing)
+                existing = each;
+        });
+        var put = function () {
+            //(whatever was to be done to a card of that name was to be done to the one that is replaced)
+            that.forgetCard(alias);
+            gathered.removed = $.grep(gathered.removed, function (each) {
+                return each != alias;
+            });
+            gathered.added = $.grep(gathered.added, function (each) {
+                return each.alias != alias;
+            });
+            gathered.added.push({alias: alias, blueprintId: found.id, name: found.name, type: found.type, seat: seat, zone: zone, host: host});
+            that.remember();
+            that.renderBoard();
+        };
+        if (existing == null) {
+            put();
+            return;
         }
-        this.edit({top: top}, null);
+        ScenarioConfirm.ask({
+            title: "Replace " + alias + "?",
+            text: ["The scenario already has a card called " + alias + ": " + existing.name + " (" + existing.blueprintId + "), in the "
+                + (existing.owner == "freeps" ? "Free Peoples" : "Shadow") + " seat" + (existing.added ? ", which is waiting to be added" : "") + ".",
+                "Adding " + found.name + " under that name replaces it: everything in the scenario that says " + alias + " is then about the new card, "
+                + "and it goes where you chose, not where " + existing.name + " was."],
+            yes: "Replace " + alias,
+            no: "Cancel"
+        }, put);
     },
 
-    removeCard: function (card) {
-        var that = this;
-        var cards = this.clone(this.draft.cards);
-        delete cards[card.owner][card.alias];
-        var setup = this.clone(this.draft.setup);
-        if (setup != null) {
-            $.each(["freeps", "shadow"], function (index, seat) {
-                for (var zone in (setup[seat] || {}))
-                    if (setup[seat].hasOwnProperty(zone)) {
-                        var kept = $.grep(that.splitTerms(setup[seat][zone]), function (alias) {
-                            return alias != card.alias;
-                        });
-                        if (kept.length == 0)
-                            delete setup[seat][zone];
-                        else
-                            setup[seat][zone] = kept.join(", ");
-                    }
-                if (setup[seat] != null && $.isEmptyObject(setup[seat]))
-                    delete setup[seat];
+    /** A card's \u00d7: one that was to be added is not added after all; one the scenario has is gathered to be taken out. */
+    dropCard: function (card) {
+        var gathered = this.gathered();
+        this.forgetCard(card.alias);
+        if (card.added)
+            gathered.added = $.grep(gathered.added, function (add) {
+                return add.alias != card.alias;
             });
-            $.each(["attach", "stack", "wounds", "tokens"], function (index, name) {
-                if (setup[name] != null) {
-                    delete setup[name][card.alias];
-                    if ($.isEmptyObject(setup[name]))
-                        delete setup[name];
-                }
-            });
-        }
-        this.edit({top: {cards: cards, setup: setup == null || $.isEmptyObject(setup) ? null : setup}}, null);
+        else if ($.inArray(card.alias, gathered.removed) < 0)
+            gathered.removed.push(card.alias);
+        this.remember();
+        this.renderBoard();
     },
 
     /* ---------------------------------------------------------------- the scenario as a whole */
@@ -4304,12 +4912,13 @@ var GempScenarioAuthor = Class.extend({
             }
             if (!that.mayOverwrite())
                 return;
-            that.flush(function () {
+            that.flushForSave(function (unsent) {
                 that.call("POST", "save", {}, function (result) {
                     var saved = result.saved || {};
-                    if ((saved.errors || []).length > 0 || !saved.verified) {
-                        //(the server would refuse it: what is wrong is said as a save says it)
-                        that.afterSave(result);
+                    if ((saved.errors || []).length > 0 || !saved.verified || unsent != null) {
+                        //(the server would refuse it: what is wrong is said as a save says it.  A step that was not
+                        // taken is not in the file that would be submitted: that is said, and nothing is submitted)
+                        that.afterSave(result, unsent);
                         return;
                     }
                     send();
@@ -4323,9 +4932,31 @@ var GempScenarioAuthor = Class.extend({
         var data = {};
         if (!this.mayOverwrite())
             return;
-        this.flush(function () {
-            that.sendSave(data);
+        this.flushForSave(function (unsent) {
+            that.sendSave(data, unsent);
         });
+    },
+
+    /**
+     * Sends what is in the form, as flush does, for something that writes the draft to its file.  That is done
+     * whether or not the server took the step: it takes the draft as it stands, and a step that is wrong stays in the
+     * form (with what is wrong with it said) for the author to put right.
+     * @param then given a sentence to say with the result when the form's step was not taken, and otherwise null
+     */
+    flushForSave: function (then) {
+        var that = this;
+        var form = this.form;
+        this.flush(function (went) {
+            if (went === false)
+                that.unsentProblem = that.problem;
+            then.call(that, went === false ? that.unsentNote(form) : null);
+        }, true);
+    },
+
+    /** What is said of a step whose last change is in the form and not in the draft, because the server would not take it. */
+    unsentNote: function (form) {
+        return "Step " + this.numberOf(form.index, form.sub) + "'s last change is not in the file: the server would not take it (see the error), "
+            + "and it is still in the Step tab to be put right.";
     },
 
     /** Whether the file may be written over, where that loses the comments somebody wrote in it by hand. */
@@ -4405,14 +5036,14 @@ var GempScenarioAuthor = Class.extend({
                 path.addClass("sa-bad");
                 return;
             }
-            that.flush(function () {
+            that.flushForSave(function (unsent) {
                 that.call("POST", "save", {as: how, path: tidy, canonical: canonical.prop("checked")}, function (result) {
                     that.filing = null;
                     if (copy) {
-                        that.afterSave(result);
+                        that.afterSave(result, unsent);
                         return;
                     }
-                    that.saved = {good: true, stays: true, text: "The file is now " + result.renamed + "."};
+                    that.saved = {good: unsent == null, stays: true, text: "The file is now " + result.renamed + "." + (unsent == null ? "" : " " + unsent)};
                     that.render();
                 });
             });
@@ -4431,15 +5062,19 @@ var GempScenarioAuthor = Class.extend({
         return form;
     },
 
-    sendSave: function (data) {
+    sendSave: function (data, unsent) {
         var that = this;
         this.call("POST", "save", data, function (result) {
-            that.afterSave(result);
+            that.afterSave(result, unsent);
         });
     },
 
-    /** What is said about a save that went through: at the top of the panel, and in full under Scenario. */
-    afterSave: function (result) {
+    /**
+     * What is said about a save that went through: at the top of the panel, and in full under Scenario.
+     * @param unsent what to say of the step in the form that the server would not take, if there was one: the error it
+     *     was refused with stays up, and the form keeps the step
+     */
+    afterSave: function (result, unsent) {
         var that = this;
         (function () {
             var saved = result.saved || {};
@@ -4457,6 +5092,13 @@ var GempScenarioAuthor = Class.extend({
                     : saved.verified ? "Scenario validated." : "It does not play through yet.")
                     + (warnings > 0 ? " " + warnings + " warning" + (warnings == 1 ? "" : "s") + "." : "")
             };
+            if (unsent != null) {
+                that.saved.good = false;
+                that.saved.text += " " + unsent;
+                that.report += "\n\n" + unsent;
+                //(a save that goes through clears what was said to have gone wrong, which here is still so)
+                that.problem = that.unsentProblem;
+            }
             if (that.saved.good && warnings == 0 && that.ui.tab != "scenario")
                 that.report = null;
             that.render();

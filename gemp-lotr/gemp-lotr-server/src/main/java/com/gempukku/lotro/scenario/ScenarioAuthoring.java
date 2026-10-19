@@ -1851,50 +1851,58 @@ public class ScenarioAuthoring {
         synchronized (session) {
             Sitting sitting = session.sitting;
             requireAuthor(sitting);
-            DoOp op;
+            //(several changes, with commas between them, are made in turn: the Board tab sends what it has gathered
+            // all at once, and the setup's are made with one fresh game for them all)
+            List<DoOp> ops = new ArrayList<>();
             try {
                 List<Terms.Term> terms = Terms.parse(opText, "do");
-                if (terms.size() != 1)
-                    throw new ScenarioFormatException("do: one change at a time");
-                op = ScenarioParser.parseDo(sitting.def, terms.getFirst(), "do");
+                if (terms.isEmpty())
+                    throw new ScenarioFormatException("do: nothing to do");
+                for (Terms.Term term : terms)
+                    ops.add(ScenarioParser.parseDo(sitting.def, term, "do"));
             } catch (ScenarioFormatException exp) {
                 throw new AuthoringException(exp.getMessage());
             }
 
             if (inSetup) {
                 Carried carried = carry(sitting, null);
-                putInSetup(carried.draft(), op);
+                for (DoOp op : ops)
+                    putInSetup(carried.draft(), op);
                 start(session, carried.draft(), true, carried);
                 session.dirty = true;
                 return result(session, false, true);
             }
 
-            if (op.kind() == ScenarioDefinition.DoKind.DRAW && sitting.mediator.scenarioLocked(() -> sitting.inHand() == null))
-                throw new AuthoringException("Drawing is something a step does: write it in the step's Do.");
-            String problem = sitting.mediator.scenarioLocked(() -> {
-                if (sitting.over() || !sitting.live.Table().Arranged())
-                    return "The game is over: go back to a step first.";
-                Step opening = sitting.inHand();
-                if (opening != null && opening.when.opening) {
-                    //What the opening does, it does once it has been read: the board it is read on is the one laid out
-                    reordered(opening.doOps, op);
-                    opening.doOps.add(op);
-                    session.notice = "Written into the opening's Do: it happens once the opening has been read.";
+            for (DoOp op : ops) {
+                if (op.kind() == ScenarioDefinition.DoKind.DRAW && sitting.mediator.scenarioLocked(() -> sitting.inHand() == null))
+                    throw new AuthoringException("Drawing is something a step does: write it in the step's Do.");
+                String problem = sitting.mediator.scenarioLocked(() -> {
+                    if (sitting.over() || !sitting.live.Table().Arranged())
+                        return "The game is over: go back to a step first.";
+                    Step opening = sitting.inHand();
+                    if (opening != null && opening.when.opening) {
+                        //What the opening does, it does once it has been read: the board it is read on is the one laid out
+                        reordered(opening.doOps, op);
+                        opening.doOps.add(op);
+                        session.notice = "Written into the opening's Do: it happens once the opening has been read.";
+                        return null;
+                    }
+                    int before = sitting.live.Table().Problems().size();
+                    sitting.live.Table().Apply(op);
+                    List<String> problems = sitting.live.Table().Problems();
+                    if (problems.size() > before)
+                        return problems.getLast();
+                    Step inHand = sitting.inHand();
+                    List<DoOp> written = inHand != null ? inHand.doOps : sitting.pending;
+                    reordered(written, op);
+                    written.add(op);
                     return null;
+                });
+                if (problem != null) {
+                    session.changed();
+                    throw new AuthoringException(problem);
                 }
-                int before = sitting.live.Table().Problems().size();
-                sitting.live.Table().Apply(op);
-                List<String> problems = sitting.live.Table().Problems();
-                if (problems.size() > before)
-                    return problems.getLast();
-                Step inHand = sitting.inHand();
-                List<DoOp> ops = inHand != null ? inHand.doOps : sitting.pending;
-                reordered(ops, op);
-                ops.add(op);
-                return null;
-            });
-            if (problem != null)
-                throw new AuthoringException(problem);
+            }
             session.changed();
             return result(session, true, false);
         }

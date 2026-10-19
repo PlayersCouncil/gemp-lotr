@@ -766,7 +766,12 @@ textarea.sa-input {
 textarea.sa-code {
     font-family: Consolas, "Courier New", monospace;
     font-size: 11px;
-    white-space: pre;
+    /* A line wider than the box wraps (the box grows to show it: see "sa-fit"), rather than scrolling sideways with a
+       scrollbar as tall as a one-row box */
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    overflow-x: hidden;
     tab-size: 4;
     -moz-tab-size: 4;
 }
@@ -962,6 +967,65 @@ textarea.sa-code {
     padding-right: 4px;
 }
 
+/* The Board tab's Submit and Reset, kept in view as the tab is scrolled, and what it has gathered under them */
+.sa-section.sa-boardbar {
+    position: sticky;
+    top: -6px;
+    z-index: 3;
+    margin: -6px -8px 8px -8px;
+    padding: 6px 8px;
+    background: #17150f;
+    border-bottom: 1px solid #8c7436;
+}
+
+.sa-gathered {
+    max-height: 76px;
+    overflow-y: auto;
+    margin-top: 4px;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 11px;
+    color: #ffe9b0;
+}
+
+.sa-gathered-row {
+    display: flex;
+    align-items: center;
+}
+
+.sa-button.sa-undo {
+    margin: 0 0 0 4px;
+    padding: 0 5px;
+}
+
+.sa-gathered-text {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* a card, or a total, with a change gathered and not yet sent */
+.sa-card.sa-changed,
+.sa-row.sa-changed {
+    border-left: 3px solid #d8b24a;
+    padding-left: 4px;
+}
+
+.sa-card.sa-removing .sa-cardname {
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
+.sa-tag {
+    margin-left: 6px;
+    padding: 0 4px;
+    font-size: 10px;
+    color: #17150f;
+    background: #d8b24a;
+    border-radius: 3px;
+}
+
 .sa-cardname {
     white-space: nowrap;
     overflow: hidden;
@@ -1113,14 +1177,15 @@ body.sa-picking .scenario-pointer {
     border-left: 4px solid transparent;
 }
 
+/* Neighbours in a turn (fellowship, shadow, maneuver, archery, assignment, skirmish, regroup, between turns) are told apart by hue */
 .sa-ph-opening { border-left-color: #9a9a9a !important; }
 .sa-ph-fellowship { border-left-color: #6fae63 !important; }
 .sa-ph-shadow { border-left-color: #9a72c8 !important; }
-.sa-ph-maneuver { border-left-color: #d0913a !important; }
-.sa-ph-archery { border-left-color: #c2604f !important; }
+.sa-ph-maneuver { border-left-color: #2fb5b0 !important; }
+.sa-ph-archery { border-left-color: #b8d234 !important; }
 .sa-ph-assignment { border-left-color: #4f8fc4 !important; }
 .sa-ph-skirmish { border-left-color: #d24b4b !important; }
-.sa-ph-regroup { border-left-color: #3fb3a0 !important; }
+.sa-ph-regroup { border-left-color: #e8a33d !important; }
 .sa-ph-between_turns { border-left-color: #7d7d7d !important; }
 .sa-ph-block, .sa-ph-after-block { border-left-color: #c9a6ff !important; }
 .sa-ph-none { border-left-color: #4a4130 !important; }
