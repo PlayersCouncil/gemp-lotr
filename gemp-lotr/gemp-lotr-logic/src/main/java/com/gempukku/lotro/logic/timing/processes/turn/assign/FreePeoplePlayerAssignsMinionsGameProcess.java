@@ -57,8 +57,10 @@ public class FreePeoplePlayerAssignsMinionsGameProcess implements GameProcess {
                                                     Filters.assignableToSkirmish(Side.FREE_PEOPLE, false, false, false)));
 
 
+                            Integer maxAssignable = MaximumAssignment.compute(game, Side.FREE_PEOPLE, freePeopleTargets, minions);
+
                             game.getUserFeedback().sendAwaitingDecision(gameState.getCurrentPlayerId(),
-                                    new PlayerAssignMinionsDecision(1, "Assign minions to companions or allies at home", freePeopleTargets, minions) {
+                                    new PlayerAssignMinionsDecision(1, "Assign minions to companions or allies at home", freePeopleTargets, minions, maxAssignable) {
                                         @Override
                                         public void decisionMade(String result) throws DecisionResultInvalidException {
                                             Map<PhysicalCard, Set<PhysicalCard>> assignments = getAssignmentsBasedOnResponse(result);

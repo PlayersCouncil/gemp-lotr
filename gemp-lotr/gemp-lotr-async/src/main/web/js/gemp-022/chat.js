@@ -24,6 +24,14 @@ var ChatBoxUI = Class.extend({
 	hideSystemButton:null,
 
 	lockChat:false,
+
+	// True while the player is reading the newest messages, so that new ones are kept in view.  It goes false when
+	// they scroll up and true again when they scroll back to the bottom (see updatePinnedFromScroll).  The box starts
+	// pinned: messages that arrive before it has been laid out (a reload filling in the past) belong at the bottom.
+	pinnedToBottom:true,
+	repinScheduled:false,
+	// how far from the bottom still counts as being at the bottom, in px (fractional scroll positions, borders)
+	scrollTolerance:5,
 	stopUpdates: false,
 	
 	dialogListener: null,
@@ -61,6 +69,10 @@ var ChatBoxUI = Class.extend({
 			this.chatMessagesDiv = $("<div class='chatMessages'></div>");
 			this.div.append(this.chatMessagesDiv);
 		}
+
+		this.chatMessagesDiv.bind("scroll", function () {
+			that.updatePinnedFromScroll();
+		});
 
 		
 		this.comm = new GempLotrCommunication(url, function (xhr, ajaxOptions, thrownError) {
@@ -255,6 +267,7 @@ var ChatBoxUI = Class.extend({
 		if (index > -1) {
 			this.hiddenClasses.splice(index, 1);
 			$("div.message." + msgClass, this.chatMessagesDiv).show();
+			this.repinIfPinned();
 		}
 	},
 
@@ -288,6 +301,9 @@ var ChatBoxUI = Class.extend({
 
 			   this.chatTalkDiv.css({ position:"absolute", left:x + talkBoxPadding + "px", top:y - 2 * talkBoxPadding + (height - this.talkBoxHeight) + "px", width:width - 3 * talkBoxPadding - leftTextBoxPadding, height:this.talkBoxHeight });
 			}
+
+			// the box has just been given (or has changed) its height; if it was following the log, keep following
+			this.repinIfPinned();
 		}
 
 		this.handleChatVisibility();       
@@ -398,15 +414,11 @@ var ChatBoxUI = Class.extend({
 		if (msgClass == undefined)
 			msgClass = "chatMessage";
 		
-		var locked = false;
-		var scroll = this.chatMessagesDiv.scrollTop();
-		var maxScroll = this.chatMessagesDiv[0].scrollHeight - this.chatMessagesDiv.outerHeight();
-		var noScrollBars = maxScroll <= 0;
-		var ratio = scroll / maxScroll;
-		
-		if(msgClass === "warningMessage" || noScrollBars || maxScroll <= 30 || ratio >= 0.999)
-			locked = true;
-		
+		var that = this;
+
+		// Decided before the message goes in, from where the player has left the box, never from the box's size after
+		// the append (which has already moved the bottom away).
+		var locked = msgClass === "warningMessage" || this.pinnedToBottom;
 		if(this.pingRegex != null && this.pingRegex.test(message))
 		{
 			msgClass += " user-ping";
@@ -433,16 +445,68 @@ var ChatBoxUI = Class.extend({
 			$("div.message", this.chatMessagesDiv).first().remove();
 		}
 		
-		if(locked)
+		if(locked) {
 			this.scrollChatToBottom();
-		
+			// the box can still grow after this (layout that has not happened yet, images loading in)
+			this.scheduleRepin();
+			messageDiv.find("img").bind("load", function () {
+				that.repinIfPinned();
+			});
+		}
+
 		this.checkForEnd(message, msgClass);
 	},
 
 	monthNames:["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
 
 	scrollChatToBottom:function() {
+		this.pinnedToBottom = true;
 		this.chatMessagesDiv.prop({ scrollTop:this.chatMessagesDiv.prop("scrollHeight") })
+	},
+
+	// The box has no height while it is hidden (another tab, Discord) or before its first layout; there is nothing
+	// to read a scroll position from, and the browser forgets the position of a box that is hidden.
+	isLaidOut:function () {
+		return this.chatMessagesDiv != null && this.chatMessagesDiv[0].clientHeight > 0;
+	},
+
+	isScrolledToBottom:function () {
+		var box = this.chatMessagesDiv[0];
+		return box.scrollHeight - box.scrollTop - box.clientHeight <= this.scrollTolerance;
+	},
+
+	// Scrolling up unpins the box, scrolling back down to the bottom pins it again.  The log growing does not scroll
+	// the box, so this only ever sees the player's scrolling and our own scrolls to the bottom.
+	updatePinnedFromScroll:function () {
+		// a scroll we made ourselves a moment ago, with the box still growing under it, is not the player leaving
+		if (this.repinScheduled)
+			return;
+		if (this.isLaidOut())
+			this.pinnedToBottom = this.isScrolledToBottom();
+	},
+
+	// Back to the bottom, but only if the player has not scrolled away from it.
+	repinIfPinned:function () {
+		if (this.pinnedToBottom && this.isLaidOut() && !this.isScrolledToBottom())
+			this.chatMessagesDiv.prop({ scrollTop:this.chatMessagesDiv.prop("scrollHeight") });
+	},
+
+	// Once per frame at most, however many messages arrive
+	scheduleRepin:function () {
+		if (this.repinScheduled)
+			return;
+		this.repinScheduled = true;
+		var that = this;
+		var repin = function () {
+			if (!that.repinScheduled)
+				return;
+			that.repinScheduled = false;
+			that.repinIfPinned();
+		};
+		// the timer is for pages that are not being drawn (a background tab), where frames do not come
+		if (window.requestAnimationFrame)
+			window.requestAnimationFrame(repin);
+		setTimeout(repin, 250);
 	},
 	
 	formatToTwoDigits:function (no) {
