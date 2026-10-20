@@ -2284,3 +2284,12 @@ Weary From the Journey vs Wandering Hillman." *[2026-10-16]*
 clause the Sam case; it should let the player do it three times and then prompt with: "LOOP DETECTED: Choose a number
 of times to repeat this action."  It should then perform that many, and then put the tag on that card action to block
 its future use." *[2026-10-16]*
+
+**The skirmish procedure, amended draft (2026-10-20): supersedes the 2026-10-16 draft's step numbers and the 2026-10-19
+order of win and loss.** Engine pass 54 (win before loss) was reverted on her word: "we need to completely revert those
+two commits and re-evaluate based on the new draft". The draft is in orchestrator/answers/2026-10-20-a.md, ten steps.
+"About to end" is now step 5 (was 6). Step 4: "The characters of the winning side win the skirmish, and the characters
+of the losing side lose the skirmish. These occur simultaneously." 4A to 4D are "a sequence of automatic required
+effects triggered by the skirmish loss"; 4D: "Responses to the loser dying occur now, which will resolve before
+optional responses to wins or losses in step 4." Under review with her for holes before anything is built
+("let's inspect it and analyze it *first*"). *[2026-10-20]*
