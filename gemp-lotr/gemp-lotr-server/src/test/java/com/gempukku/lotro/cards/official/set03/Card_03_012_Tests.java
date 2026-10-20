@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_03_012_Tests
@@ -17,8 +18,9 @@ public class Card_03_012_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "3_12");
-					// put other cards in here as needed for the test case
+					put("dinendal", "3_12");
+
+					put("troop", "1_177");      // Goblin Patrol Troop: a minion with no text, so that there is a regroup phase to reach
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +48,7 @@ public class Card_03_012_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("dinendal");
 
 		assertEquals("Dínendal", card.getBlueprint().getTitle());
 		assertEquals("Silent Scout", card.getBlueprint().getSubtitle());
@@ -62,18 +64,57 @@ public class Card_03_012_Tests
 		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 6)));
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void DinendalTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void RegroupActionExertsDinendalToRemoveTwoTwilight() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var dinendal = scn.GetFreepsCard("dinendal");
+		scn.MoveAlliesToTable(dinendal);
+
+		var troop = scn.GetShadowCard("troop");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.FreepsPass();
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToPhase(Phase.REGROUP);
+		// Three in the pool, so that removing 2 is told from removing 1 and from removing all.
+		scn.SetTwilight(3);
 
-		assertEquals(2, scn.GetTwilight());
+		// At site 2, far from his home at site 6: an ally's special ability is used wherever the fellowship is.
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		assertEquals(3, scn.GetTwilight());
+		assertEquals(0, scn.GetWoundsOn(dinendal));
+		assertTrue(scn.FreepsActionAvailable(dinendal));
+
+		scn.FreepsUseCardAction(dinendal);
+		assertEquals(1, scn.GetWoundsOn(dinendal));
+		assertEquals(1, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+	}
+
+	@Test
+	public void ExhaustedDinendalCannotUseIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var dinendal = scn.GetFreepsCard("dinendal");
+		scn.MoveAlliesToTable(dinendal);
+
+		var troop = scn.GetShadowCard("troop");
+
+		scn.StartGame();
+		scn.AddWoundsToChar(dinendal, 2);
+		assertEquals(2, scn.GetWoundsOn(dinendal));
+		scn.FreepsPass();
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.SetTwilight(3);
+		scn.FreepsRefreshDecision();
+
+		// Vitality 3 with 2 wounds: he cannot exert, though there is twilight to remove.
+		assertEquals(2, scn.GetWoundsOn(dinendal));
+		assertEquals(3, scn.GetTwilight());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(dinendal));
 	}
 }

@@ -3,12 +3,12 @@ package com.gempukku.lotro.cards.official.set03;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_03_056_Tests
@@ -18,8 +18,8 @@ public class Card_03_056_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "3_56");
-					// put other cards in here as needed for the test case
+					put("forger1", "3_56");
+					put("forger2", "3_56");   // not unique: "this minion" is read beside another copy
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,33 +47,56 @@ public class Card_03_056_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var forger = scn.GetFreepsCard("forger1");
 
-		assertEquals("Isengard Forger", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.ORC, card.getBlueprint().getRace());
-		assertEquals(2, card.getBlueprint().getTwilightCost());
-		assertEquals(6, card.getBlueprint().getStrength());
-		assertEquals(2, card.getBlueprint().getVitality());
-		assertEquals(4, card.getBlueprint().getSiteNumber());
+		assertEquals("Isengard Forger", forger.getBlueprint().getTitle());
+		assertNull(forger.getBlueprint().getSubtitle());
+		assertFalse(forger.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, forger.getBlueprint().getSide());
+		assertEquals(Culture.ISENGARD, forger.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, forger.getBlueprint().getCardType());
+		assertEquals(Race.ORC, forger.getBlueprint().getRace());
+		assertEquals(2, forger.getBlueprint().getTwilightCost());
+		assertEquals(6, forger.getBlueprint().getStrength());
+		assertEquals(2, forger.getBlueprint().getVitality());
+		assertEquals(4, forger.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void IsengardForgerTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void ShadowAbilityExertsThisMinionToAddOneUntilItIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var forger1 = scn.GetShadowCard("forger1");
+		var forger2 = scn.GetShadowCard("forger2");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(forger1, forger2);
+		scn.FreepsPass();
 
-		assertEquals(2, scn.GetTwilight());
+		// 1 companion + 2 for Ettenmoors
+		assertEquals(3, scn.GetTwilight());
+		assertEquals(0, scn.GetWoundsOn(forger1));
+		assertEquals(0, scn.GetWoundsOn(forger2));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertTrue(scn.ShadowActionAvailable(forger1));
+		assertTrue(scn.ShadowActionAvailable(forger2));
+
+		scn.ShadowUseCardAction(forger1);
+		// The Forger used exerts, and the copy beside it does not.
+		assertEquals(4, scn.GetTwilight());
+		assertEquals(1, scn.GetWoundsOn(forger1));
+		assertEquals(0, scn.GetWoundsOn(forger2));
+		// Vitality 2 with 1 wound: exhausted, so it can no longer exert; the copy still can.
+		assertFalse(scn.ShadowActionAvailable(forger1));
+		assertTrue(scn.ShadowActionAvailable(forger2));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		scn.ShadowUseCardAction(forger2);
+		assertEquals(5, scn.GetTwilight());
+		assertEquals(1, scn.GetWoundsOn(forger1));
+		assertEquals(1, scn.GetWoundsOn(forger2));
+		assertFalse(scn.ShadowActionAvailable(forger1));
+		assertFalse(scn.ShadowActionAvailable(forger2));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

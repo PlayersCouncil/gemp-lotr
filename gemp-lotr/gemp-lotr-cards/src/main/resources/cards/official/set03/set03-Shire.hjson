@@ -334,6 +334,10 @@
 					player: you
 					filter: not(hobbit)
 				}
+				requires: {
+					type: canSpot
+					filter: companion,wounded
+				}
 				effect: {
 					type: heal
 					select: choose(companion)

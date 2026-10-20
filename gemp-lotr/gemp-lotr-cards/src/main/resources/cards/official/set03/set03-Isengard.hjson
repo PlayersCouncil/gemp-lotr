@@ -105,6 +105,10 @@
 		timewords: Regroup
 		effects: {
 			type: event
+			requires: {
+				type: HasCardInHand
+				player: fp
+			}
 			effect: [
 				{
 					type: revealRandomCardsFromHand
