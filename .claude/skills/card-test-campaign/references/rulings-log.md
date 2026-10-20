@@ -2311,3 +2311,13 @@ orchestrator/skirmish-procedure-2026-10-20.md (answers/2026-10-20-a.md and -b.md
   "We may need to implement Fishing Boat as a non-special-ability response if it's not being offered".
 - 2C: "that side and the last removed character is declared the loser" (Legacy Ruling 2).
 "About to end" is step 5 (Final Cry, Loathsome, Sting answer it; Q-0332 stands). *[2026-10-20]*
+
+**Ketura's answers of 2026-10-20 (d).** Q-0341, a "spot X" number on a plain number prompt (Orc Insurgent 6_104, Wind
+That Sped Ships 8_66, Sunland Trooper 17_59): "A" (defaults to all, as F-0561). Q-0340, Drawing His Eye 10_29 not
+playable with the Shadow hand empty: "Keep". F-0566, Fishing Boat 13_48: "there shouldn't be any interaction difference
+between Footman's Armor and Fishing Boat; the only difference is that FB is not a response special ability." F-0565, a
+loop with a Response inside one player's action and a pass between rounds (Hrethel 6_95 against a Warg 5_65): "I would
+present it the same as the top-level version I think, with the one major difference being that the Response should not
+be barred, only Hrethel (the response could respond to some other trigger and should not be locked out)." F-0563, a
+character who replaced another in a skirmish not "involved" at about-to-end (Sting 8_113, Brave and Loyal 10_105): "yeah
+that's a bug". *[2026-10-20]*

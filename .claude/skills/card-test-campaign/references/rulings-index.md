@@ -420,6 +420,9 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A "spot X" count defaults to all of them (F-0561, 2026-10-16) [Q-0248]
 - The loop scenarios she wants in the mechanical tests (2026-10-16)
 - A one-player loop: three uses, then her prompt, then barred (2026-10-16)
+- The skirmish procedure, amended draft (2026-10-20): supersedes the 2026-10-16 draft's step numbers and the 2026-10-19 order of win and loss. Engine ...
+- The skirmish procedure as amended, binding (2026-10-20) [F-0566, Q-0332]
+- Ketura's answers of 2026-10-20 (d) [Q-0341, F-0561, Q-0340, F-0566, F-0565, F-0563]
 
 # Settled shapes (shapes.md)
 
