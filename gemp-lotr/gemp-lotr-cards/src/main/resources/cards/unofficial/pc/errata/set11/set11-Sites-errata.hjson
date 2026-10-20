@@ -2,7 +2,10 @@
 
 	61_227: {
 		cardInfo: {
-			//id: 1_227.1
+			//id: 61_227.1
+			parent: 11_227
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN11E227.1.jpg
 			collInfo: 11U227
@@ -14,7 +17,7 @@
 		type: Site
 		block: Shadows
 		direction: Left
-		keyword: river
+		keywords: River
 		effects: [
 			{
 				type: modifier
@@ -132,7 +135,10 @@
 
 61_232: {
 		cardInfo: {
-			//id: 1_232.2
+			//id: 61_232.2
+			parent: 11_232
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 2
 			image: errata/LOTR-EN11E232.1.jpg
 			collInfo: 11S232
@@ -211,7 +217,10 @@
 	
 	61_249: {
 		cardInfo: {
-			//id: 1_249.1
+			//id: 61_249.1
+			parent: 11_249
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN11E249.1.jpg
 			collInfo: 11S249
@@ -224,7 +233,7 @@
 		block: Shadows
 		direction: Left
 		keywords: [
-			marsh
+			Marsh
 		]
 		effects: [
 			{

@@ -1,7 +1,10 @@
 {
 	69_1: {
 		cardInfo: {
-			//id: 9_1.1
+			//id: 69_1.1
+			parent: 19_1
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN19E001.1.jpg
 			collInfo: 19P1
@@ -11,7 +14,7 @@
 		subtitle: The Great Ring
 		unique: true
 		twilight: 0
-		type: the one ring
+		type: The One Ring
 		effects: [
 			{
 				type: modifier
@@ -55,9 +58,17 @@
 			}
 			{
 				type: activated
-				requires: {
-					type: ringIsActive
-				}
+				requires: [
+					{
+						type: ringIsActive
+					}
+					{
+						type: not
+						requires: {
+							type: ringIsOn
+						}
+					}
+				]
 				phase: maneuver
 				effect: {
 					type: putOnRing
@@ -84,7 +95,7 @@
 				}
 			}
 		]
-		gametext: While wearing The One Ring, burdens may not be removed and each time bearer is about to take a wound, add a burden instead.<br> <b>Maneuver:</b> Wear The One Ring until the regroup phase.\<b>Skirmish:</b> If wearing the One Ring, add a burden to make bearer strength +3.
+		gametext: While wearing The One Ring, burdens may not be removed and each time bearer is about to take a wound, add a burden instead.<br> <b>Maneuver:</b> Wear The One Ring until the regroup phase. <b>Skirmish:</b> If wearing the One Ring, add a burden to make bearer strength +3.
 		lore: ""
 		promotext: ""
 		alts: {
@@ -97,17 +108,21 @@
 	
 	69_24: {
 		cardInfo: {
-			//id: 9_24.1
+			//id: 69_24.1
+			parent: 19_24
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN19E024.1.jpg
 			collInfo: 19P24
 			rarity: P
 		}
-		title: Brought Down From Inside
+		title: Brought Down from Inside
 		unique: true
-		culture: rohan
+		side: Free Peoples
+		culture: Rohan
 		twilight: 2
-		type: condition
+		type: Condition
 		strength: 1
 		target: culture(rohan),man
 		effects: [
@@ -117,6 +132,10 @@
 				trigger: {
 					type: startOfPhase
 					phase: skirmish
+				}
+				requires: {
+					type: canSpot
+					filter: culture(rohan),man,not(hasAttached(self))
 				}
 				effect: {
 					type: transfer
@@ -144,7 +163,7 @@
 				}
 			}
 		]
-		gametext: Plays on a [rohan] Man.\At the start of each skirmish you may transfer this condition to a [rohan] Man.\At the end of each turn, if bearer did not win a skirmish this turn, return this condition to hand.
+		gametext: Plays on a [rohan] Man. At the start of each skirmish you may transfer this condition to a [rohan] Man. At the end of each turn, if bearer did not win a skirmish this turn, return this condition to hand.
 		lore: "'Bring it down! Bring it down! Bring it down!'"
 		promotext: ""
 		alts: {
@@ -157,7 +176,10 @@
 	
 	69_30: {
 		cardInfo: {
-			//id: 9_30.1
+			//id: 69_30.1
+			parent: 19_30
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN19E030.1.jpg
 			collInfo: 19P30
@@ -166,14 +188,15 @@
 		title: Pippin
 		subtitle: Steadfast Friend
 		unique: true
-		culture: shire
+		side: Free Peoples
+		culture: Shire
 		twilight: 1
-		type: companion
-		race: hobbit
+		type: Companion
+		race: Hobbit
 		strength: 3
 		vitality: 4
 		resistance: 8
-		keyword: fellowship
+		keywords: Fellowship
 		effects: {
 			type: modifier
 			modifier: {

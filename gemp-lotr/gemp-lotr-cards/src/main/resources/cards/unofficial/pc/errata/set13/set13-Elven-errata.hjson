@@ -3,6 +3,9 @@
 	63_20: {
 		cardInfo: {
 			//id: 63_20.1
+			parent: 13_20
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN13E020.1_card.jpg
 			collInfo: 13S20
@@ -65,6 +68,9 @@
 	63_23: {
 		cardInfo: {
 			//id: 63_23.1
+			parent: 13_23
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN13E023.1_card.jpg
 			collInfo: 13C23
@@ -98,6 +104,7 @@
 				}
 				effect: {
 					type: putPlayedEventOnTopOfDrawDeck
+					filter: played
 				}
 			}
 		]
