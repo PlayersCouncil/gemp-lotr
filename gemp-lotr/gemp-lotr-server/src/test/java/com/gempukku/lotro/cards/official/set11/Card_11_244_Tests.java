@@ -209,8 +209,7 @@ public class Card_11_244_Tests
 		scn.FreepsAssignToMinions(gandalf, pursuer);
 		scn.FreepsResolveSkirmish(gandalf);
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(1, scn.GetWoundsOn(pursuer));
+		assertEquals(2, scn.GetWoundsOn(pursuer));
 
 		// The second win sets it off again; the one condition left is discarded.
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(heights));

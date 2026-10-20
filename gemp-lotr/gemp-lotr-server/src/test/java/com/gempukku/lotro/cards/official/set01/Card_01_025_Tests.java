@@ -1,6 +1,5 @@
 package com.gempukku.lotro.cards.official.set01;
 
-import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Culture;
@@ -97,8 +96,7 @@ public class Card_01_025_Tests
 
 		// Gimli, 6, beats the Runner, 5.
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertInZone(Zone.SHADOW_CHARACTERS, runner);
+		assertInDiscard(runner);
 		assertTrue(scn.FreepsPlayAvailable(breath));
 
 		scn.FreepsPlayCard(breath);
@@ -148,8 +146,7 @@ public class Card_01_025_Tests
 		// Thrarin, 4 + 1 with the Ring, beats the Scrabbler, 4.
 		scn.FreepsResolveSkirmish(thrarin);
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertInZone(Zone.SHADOW_CHARACTERS, scrabbler);
+		assertInDiscard(scrabbler);
 		assertTrue(scn.FreepsPlayAvailable(breath));
 
 		scn.FreepsPlayCard(breath);
@@ -212,8 +209,7 @@ public class Card_01_025_Tests
 
 		// An event is played whatever its effect will do.
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertInZone(Zone.SHADOW_CHARACTERS, runner);
+		assertInDiscard(runner);
 		assertTrue(scn.FreepsPlayAvailable(breath));
 
 		scn.FreepsPlayCard(breath);

@@ -102,8 +102,7 @@ public class Card_04_040_Tests
 		// 11 against 8: the Footmen win.
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(wulf));
 		scn.ShadowDeclineOptionalTrigger();
 		assertEquals(0, scn.GetWoundsOn(wulf));
@@ -112,8 +111,7 @@ public class Card_04_040_Tests
 		// 8 against 6: the Brigand, a second title, wins.
 		scn.FreepsResolveSkirmish(gimli);
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertEquals(1, scn.GetWoundsOn(gimli));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(wulf));
 		scn.ShadowAcceptOptionalTrigger();
 

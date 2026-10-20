@@ -192,8 +192,7 @@ public class Card_12_018_Tests
 		scn.PassSkirmishActions();
 
 		// Arwen 6 + 2 against the Pursuer's 5: she wins, and the Pursuer takes 1 wound.
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(pursuer));
+		assertEquals(1, scn.GetWoundsOn(pursuer));
 		assertEquals(0, scn.GetWoundsOn(arwen));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(hadafang));
 
@@ -216,8 +215,7 @@ public class Card_12_018_Tests
 		scn.FreepsAssignToMinions(arwen, pursuer);
 		scn.FreepsResolveSkirmish(arwen);
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(1, scn.GetWoundsOn(pursuer));
+		assertEquals(2, scn.GetWoundsOn(pursuer));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(hadafang));
 
 		scn.FreepsAcceptOptionalTrigger();
@@ -262,8 +260,7 @@ public class Card_12_018_Tests
 		scn.PassSkirmishActions();
 
 		// Elrond 8 + 2 + 2 against the Raiding Party's 9: he wins.
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(raiders));
+		assertEquals(1, scn.GetWoundsOn(raiders));
 		assertEquals(0, scn.GetWoundsOn(elrond));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(hadafang));
 
@@ -307,8 +304,7 @@ public class Card_12_018_Tests
 
 		scn.FreepsResolveSkirmish(arwen);
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(savage2));
+		assertEquals(1, scn.GetWoundsOn(savage2));
 		assertEquals(0, scn.GetWoundsOn(arwen));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(hadafang));
 

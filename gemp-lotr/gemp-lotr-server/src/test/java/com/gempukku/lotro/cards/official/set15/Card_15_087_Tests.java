@@ -101,8 +101,7 @@ public class Card_15_087_Tests
 
 		scn.PassCurrentPhaseActions();
 		// 13 + 1 for the Dagger against 8: Aragorn loses, and takes a wound.
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(savage));
 		scn.ShadowAcceptOptionalTrigger();
 

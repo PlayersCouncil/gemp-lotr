@@ -157,8 +157,7 @@ public class Card_04_276_Tests
 		// A [rohan] Man wins.
 		scn.FreepsResolveSkirmish(guard);
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertInZone(Zone.SHADOW_CHARACTERS, runner1);
+		assertInDiscard(runner1);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(fortress));
 		assertEquals(0, scn.GetCultureTokensOn(fortress));
 		scn.FreepsAcceptOptionalTrigger();
@@ -189,8 +188,7 @@ public class Card_04_276_Tests
 		// The second Guard, 6, beats the Runner, 5: offered, and declined.
 		scn.FreepsResolveSkirmish(guard2);
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertInZone(Zone.SHADOW_CHARACTERS, runner1);
+		assertInDiscard(runner1);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(fortress));
 		scn.FreepsDeclineOptionalTrigger();
 		assertEquals(0, scn.GetCultureTokensOn(fortress));
@@ -199,8 +197,7 @@ public class Card_04_276_Tests
 		assertEquals(0, scn.GetWoundsOn(pursuer));
 		scn.FreepsResolveSkirmish(guard);
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(pursuer));
+		assertEquals(1, scn.GetWoundsOn(pursuer));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(fortress));
 		scn.FreepsAcceptOptionalTrigger();
 		assertEquals(1, scn.GetCultureTokensOn(fortress));
@@ -210,8 +207,7 @@ public class Card_04_276_Tests
 		scn.FreepsAssignToMinions(guard, pursuer);
 		scn.FreepsResolveSkirmish(guard);
 		scn.PassFierceSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(1, scn.GetWoundsOn(pursuer));
+		assertEquals(2, scn.GetWoundsOn(pursuer));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(fortress));
 		scn.FreepsAcceptOptionalTrigger();
 		assertEquals(2, scn.GetCultureTokensOn(fortress));
@@ -240,8 +236,7 @@ public class Card_04_276_Tests
 		scn.FreepsResolveSkirmish(sigewulf);
 		scn.PassSkirmishActions();
 
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertInZone(Zone.SHADOW_CHARACTERS, runner);
+		assertInDiscard(runner);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(fortress));
 		assertEquals(0, scn.GetCultureTokensOn(fortress));
 		scn.FreepsAcceptOptionalTrigger();

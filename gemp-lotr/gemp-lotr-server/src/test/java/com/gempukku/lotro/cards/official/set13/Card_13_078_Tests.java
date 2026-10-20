@@ -99,8 +99,8 @@ public class Card_13_078_Tests
 
 		// Gandalf 7 against 5: he wins.
 		scn.PassSkirmishActions();
-		// This card's trigger answers the win before the Uruk's wound for losing, with nothing to order (engine pass
-		// 54).
+		// The Uruk's wound for losing and this card's trigger come at one moment.
+		scn.FreepsResolveRuleFirst();
 		assertEquals(1, scn.GetWoundsOn(savage));
 
 		assertInZone(Zone.SHADOW_CHARACTERS, alatar);
@@ -145,7 +145,7 @@ public class Card_13_078_Tests
 		scn.FreepsAssignToMinions(gandalf, savage);
 		scn.FreepsResolveSkirmish(gandalf);
 		scn.PassSkirmishActions();
-		// What answers the win comes first, with nothing to order (engine pass 54).
+		scn.FreepsResolveRuleFirst();
 		assertEquals(2, scn.GetWoundsOn(savage));
 
 		assertInZone(Zone.SHADOW_CHARACTERS, alatar);
@@ -198,7 +198,7 @@ public class Card_13_078_Tests
 		// The Shadow player's own Wizard wins: Saruman's 8 against Aragorn's 8.
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
-		// What answers the win comes first, with nothing to order (engine pass 54).
+		scn.FreepsResolveRuleFirst();
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 
 		assertInZone(Zone.SHADOW_CHARACTERS, alatar);
@@ -242,7 +242,7 @@ public class Card_13_078_Tests
 
 		// 10 against 8
 		scn.PassSkirmishActions();
-		// What answers the win comes first, with nothing to order (engine pass 54).
+		scn.FreepsResolveRuleFirst();
 		assertEquals(1, scn.GetWoundsOn(shaman));
 
 		assertInZone(Zone.SHADOW_CHARACTERS, alatar);
@@ -284,10 +284,14 @@ public class Card_13_078_Tests
 
 		scn.ShadowPass();
 		scn.FreepsPass();
-		// Each of the two Wizards has won, and the trigger is there for each.  They answer the win before the
-		// wound for losing, and the two of them, of one card, are carried out with no order asked (engine pass
-		// 54; until then the wound stood with them and the Free Peoples player ordered all three).
-		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
+		// Each of the two Wizards has won, and the trigger is there for each beside the wound for losing.
+		assertTrue(scn.FreepsDecisionAvailable("Required responses"));
+		scn.FreepsResolveActionOrder("Alatar Deceived");
+		assertTrue(scn.IsType(alatar, CardType.MINION));
+		assertEquals(11, scn.GetStrength(alatar));
+
+		assertTrue(scn.FreepsDecisionAvailable("Required responses"));
+		scn.FreepsResolveActionOrder("Alatar Deceived");
 		// 1 for Ettenmoors and 1 for losing
 		assertEquals(2, scn.GetWoundsOn(aragorn));
 
@@ -319,7 +323,7 @@ public class Card_13_078_Tests
 		scn.FreepsResolveSkirmish(gandalf);
 		// Gandalf 7 against 5: the Uruk loses and takes a wound, as a minion does.
 		scn.PassSkirmishActions();
-		// What answers the win comes first, with nothing to order (engine pass 54).
+		scn.FreepsResolveRuleFirst();
 		assertEquals(1, scn.GetWoundsOn(pursuer));
 		assertTrue(scn.IsType(alatar, CardType.MINION));
 
@@ -372,7 +376,7 @@ public class Card_13_078_Tests
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(gandalf);
 		scn.PassSkirmishActions();
-		// What answers the win comes first, with nothing to order (engine pass 54).
+		scn.FreepsResolveRuleFirst();
 		assertTrue(scn.IsType(alatar, CardType.MINION));
 
 		// The fierce round: Aragorn, a [gondor] Man, against it and both Uruks.
@@ -420,7 +424,7 @@ public class Card_13_078_Tests
 				new PhysicalCardImpl[]{aragorn, shaman});
 		scn.FreepsResolveSkirmish(gandalf);
 		scn.PassSkirmishActions();
-		// What answers the win comes first, with nothing to order (engine pass 54).
+		scn.FreepsResolveRuleFirst();
 
 		assertInZone(Zone.SHADOW_CHARACTERS, alatar);
 		assertTrue(scn.IsType(alatar, CardType.MINION));

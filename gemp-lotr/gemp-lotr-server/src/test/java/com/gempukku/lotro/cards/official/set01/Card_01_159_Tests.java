@@ -143,8 +143,7 @@ public class Card_01_159_Tests
 		scn.PassSkirmishActions();
 
 		// 5 + 9 + 5 against 6: Gimli is overwhelmed, and all three minions win.
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertInZone(Zone.FREE_CHARACTERS, gimli);
+		assertInZone(Zone.DEAD, gimli);
 		assertEquals(6, scn.GetTwilight());
 		assertFalse(scn.HasKeyword(savage, Keyword.FIERCE));
 		assertFalse(scn.HasKeyword(guard, Keyword.FIERCE));
@@ -246,8 +245,7 @@ public class Card_01_159_Tests
 		scn.PassSkirmishActions();
 
 		// 9 against 6: the Guard wins (Gimli takes 1 + damage +1 and lives).
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertEquals(2, scn.GetWoundsOn(gimli));
 		assertFalse(scn.HasKeyword(guard, Keyword.FIERCE));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(rampage));
 
@@ -269,8 +267,7 @@ public class Card_01_159_Tests
 		scn.SetTwilight(3);
 		scn.PassFierceSkirmishActions();
 		// 9 against 8: the Guard wins again.
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(2, scn.GetWoundsOn(aragorn));
 		assertEquals(3, scn.GetTwilight());
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(rampage));
 

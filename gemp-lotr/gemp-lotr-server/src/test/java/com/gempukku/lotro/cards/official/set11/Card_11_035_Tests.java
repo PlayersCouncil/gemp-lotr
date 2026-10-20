@@ -113,8 +113,7 @@ public class Card_11_035_Tests
 		scn.PassSkirmishActions();
 
 		// 7 + 2 against 5: he wins.
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(pursuer));
+		assertEquals(1, scn.GetWoundsOn(pursuer));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(glamdring));
 		scn.FreepsAcceptOptionalTrigger();
 		assertEquals(1, scn.GetBurdens());
@@ -126,8 +125,7 @@ public class Card_11_035_Tests
 		scn.PassFierceSkirmishActions();
 
 		// He wins again, and the offer is made again; declined, the burden stays.
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(1, scn.GetWoundsOn(pursuer));
+		assertEquals(2, scn.GetWoundsOn(pursuer));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(glamdring));
 		scn.FreepsDeclineOptionalTrigger();
 		assertEquals(1, scn.GetBurdens());

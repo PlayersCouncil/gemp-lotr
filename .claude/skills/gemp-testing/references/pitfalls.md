@@ -573,27 +573,20 @@ cards in the deck under them, or a reading of "on top" cannot be told from one o
 
 **Two offers of one response.** When the same card offers the same trigger or response twice in one decision (two Nazgul winning one skirmish), each offer's text ends with " (for <the cards its trigger memorized>)". A single offer reads as before. Choose between them by that text.
 
-**A skirmish's win is answered before its loss (engine pass 54).** Step 4 of her skirmish procedure, then step 5
-(shapes.md, "The skirmish procedure"): `ResolveSkirmishEffect` emits the winners' results alone, and everything
-that answers them, required, optional and Responses of both players, is carried out before `getLossStep()` emits
-the loss (the rule's wounds or overwhelm kill, and each loser's lost result). At a win's offer the loser is
-unwounded and in play: a "wins a skirmish" text may choose, exert or strip him, and a damage bonus it gives counts
-in his wounds. A win trigger is never in the "Required responses" list beside the wounds (`FreepsResolveRuleFirst()`
-there fails), and a premise that the wound for losing has already killed or exhausted the loser no longer holds:
-lay the wounds beforehand. A loser gone from the skirmish by step 5 takes no wound or kill, and with none left no
-rule is resolved at all (5A), but each still loses (Worry 1_162 answers). The overwhelm is the one decided at step
-3 (mechanics/skirmishes/TheWinIsAnsweredBeforeTheLossTests).
-
 **When a wound or an overwhelm kills and something answers it.** The Free Peoples player, whoever owns the trigger,
 gets a "Required responses" decision listing the rule and the trigger (an overwhelm, which places no wound, raises
-it as well: Goblin Spear 1_182's burden reads 0 after `PassSkirmishActions()` until it is answered); what answers
-the WIN is not among them, having been carried out before (the entry above). A companion's own required "each
-time X loses a skirmish" raises it, Isildur 18_54: until `FreepsResolveRuleFirst()` his wound for losing reads 0
-after `PassCurrentPhaseActions()`; so does a hand weapon's required "each time a minion loses a skirmish to
-bearer", Dwarven Axe 1_9 on the winner: the beaten minion stays in play until it is answered, Card_02_005_Tests;
-it is not only for deaths). Two copies of a card with such a required trigger make it one decision of three
-entries, the rule and each copy's trigger; after `FreepsResolveRuleFirst()` both triggers are carried out and no
-second ordering is asked (Sudden Fury 12_132, two copies and a [shire] companion who loses). The rule's entry may have no action
+it as well: Goblin Spear 1_182's burden reads 0 after `PassSkirmishActions()` until it is answered; a Shadow card's "wins a skirmish" trigger
+beside "Resolve skirmish damage" is the same decision, the minion's own required "each time this minion wins a
+skirmish" included, in the fierce round as well (Tower Lieutenant 1_280: `FreepsResolveRuleFirst()` after the passes
+that end each skirmish, `PassFierceSkirmishActions()` in the fierce round, Card_01_280_Tests), and so is a Free Peoples companion's own required "each
+time X wins a skirmish", Boromir 59_31: left unanswered, the only sign is that the beaten minion is still in play
+after `PassSkirmishActions()`; a companion's own required "each time X loses a skirmish" raises it too, Isildur
+18_54: until `FreepsResolveRuleFirst()` his wound for losing reads 0 after `PassCurrentPhaseActions()`; so does a hand weapon's required "each time a
+minion loses a skirmish to bearer", Dwarven Axe 1_9 on the winner: the beaten minion stays in play until it is
+answered, Card_02_005_Tests; it is not
+only for deaths). Two copies of a card with such a required trigger make it one decision of three entries, the
+rule and each copy's trigger; after `FreepsResolveRuleFirst()` both triggers are carried out and no second
+ordering is asked (Sudden Fury 12_132, two copies and a [shire] companion who loses). The rule's entry may have no action
 text at all, and it is not always listed first (King of the Dead 103_27 killed: `["Required trigger from King of
 the Dead…", null]`; Ferocious Haradrim 11_80 answering a death: `[null, "Required trigger from Ferocious
 Haradrim"]`). `FreepsResolveRuleFirst()` resolves the rule, the entry that belongs to no card, wherever it is
@@ -604,7 +597,8 @@ answered for a kill by X's own text or by losing a skirmish X is in (every minio
 minion's wound in X's skirmish; a required one answers the wound that kills as well (engine pass 49; mechanics/wounds/WhoKillsACharacterTests).
 A trigger added for the skirmish ("if that minion is overwhelmed, ...") raises the decision even when its effect
 will come to nothing (Cirdan 60_8 with one [elven] event: half, rounded down, is none): `FreepsResolveRuleFirst()`
-is still needed, and nothing is asked after it.
+is still needed, and nothing is asked after it. So does a card's standing required "each time X wins a
+skirmish" with nothing to act on (Focus 65_15 with nobody to heal, before F-0289 made it optional).
 A required trigger whose `requires` is unmet is not listed at all: no ordering is asked and the rule's wound
 lands alone (The Mouth of Sauron 103_102 with neither a threat nor a burden possible, F-0154). A test knows which
 board it is on and asserts it: `FreepsResolveRuleFirst()` under an `if` passes whichever the game does.
@@ -613,8 +607,9 @@ simultaneous actions, whoever's they are.
 A companion whose own text answers his leaving play (Radagast 59_26) raises this decision whenever he is killed,
 by a wound or by a card that places him in the dead pile (not when he is discarded or returned to hand), and his
 text is carried out only once it is answered: as a helper to be killed in another card's test he leaves it pending.
-Treebeard 15_38's "the losing character's strength" is the strength it had as the skirmish resolved, wherever the
-loser has gone since (`memorizeLoserStrength`; F-0480, engine pass 30). A SITE's standing "each time a companion is killed" (Slag Mounds 7_363) raises it on every death,
+Which is taken first can change what the trigger does, except where it measures the loser: Treebeard 15_38's
+"the losing character's strength" is the strength it had as the skirmish resolved, whichever is first and though
+the rule's wound has killed or strengthened it (`memorizeLoserStrength`; F-0480, engine pass 30). A SITE's standing "each time a companion is killed" (Slag Mounds 7_363) raises it on every death,
 as `[null, "Required trigger from Slag Mounds"]`, and its burden is added only after `FreepsResolveRuleFirst()`. And an exert of "X minions" with X
 above the number able to exert asks nobody and exerts every one that can.
 

@@ -101,7 +101,7 @@ public class Card_01_150_Tests
 
 		// The Rager, 9, beats Aragorn, 8: 2 wounds with damage +1, and the top two cards go, with nothing asked.
 		scn.PassCurrentPhaseActions();
-		// What answers the win comes first, with nothing to order (engine pass 54).
+		scn.FreepsResolveRuleFirst();
 		assertEquals(2, scn.GetWoundsOn(aragorn));
 		assertInZone(Zone.DISCARD, top1, top2);
 		assertEquals(top3, scn.GetFreepsTopOfDeck());
@@ -158,7 +158,7 @@ public class Card_01_150_Tests
 		// The first Rager, 9, overwhelms the Guard, 4: two cards.
 		scn.FreepsResolveSkirmish(guard1);
 		scn.PassCurrentPhaseActions();
-		// What answers the win comes first, with nothing to order (engine pass 54).
+		scn.FreepsResolveRuleFirst();
 		assertInZone(Zone.DEAD, guard1);
 		assertEquals(deck - 2, scn.GetFreepsDeckCount());
 		assertEquals(discard + 2, scn.GetFreepsDiscardCount());
@@ -169,7 +169,7 @@ public class Card_01_150_Tests
 		scn.FreepsAssignToMinions(guard2, rager);
 		scn.FreepsResolveSkirmish(guard2);
 		scn.PassFierceSkirmishActions();
-		// What answers the win comes first, with nothing to order (engine pass 54).
+		scn.FreepsResolveRuleFirst();
 		assertInZone(Zone.DEAD, guard2);
 		assertEquals(deck - 4, scn.GetFreepsDeckCount());
 		assertEquals(discard + 4, scn.GetFreepsDiscardCount());

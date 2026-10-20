@@ -132,7 +132,8 @@ public class Card_09_031_Tests
 		// Boromir (7) beats the Uruk Savage (5, vitality 3): the one wound of the skirmish would not have
 		// removed it, and it is in the discard pile.  The Savage that fought Aragorn stays.
 		scn.PassSkirmishActions();
-		// Boromir's own text answers the win before the skirmish's wound, with nothing to order (engine pass 54).
+		// The skirmish's wound and Boromir's own text happen together: the wound first.
+		scn.FreepsResolveRuleFirst();
 		assertInZone(Zone.DISCARD, savage);
 		assertInZone(Zone.SHADOW_CHARACTERS, savage2);
 		assertEquals(0, scn.GetWoundsOn(boromir));
@@ -167,7 +168,7 @@ public class Card_09_031_Tests
 		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 
 		scn.PassSkirmishActions();
-		// What answers the win comes first, with nothing to order (engine pass 54).
+		scn.FreepsResolveRuleFirst();
 		assertInZone(Zone.DISCARD, savage);
 		assertEquals(2, scn.GetWoundsOn(boromir));
 		assertEquals(0, scn.GetBurdens());
@@ -253,7 +254,7 @@ public class Card_09_031_Tests
 
 		// 7 against 5: he wins and the Uruk Savage is discarded.
 		scn.PassSkirmishActions();
-		// What answers the win comes first, with nothing to order (engine pass 54).
+		scn.FreepsResolveRuleFirst();
 		assertInZone(Zone.DISCARD, savage);
 
 		// Aragorn (8) beats the Uruk Pursuer (5, vitality 3), which takes its wound and stays for the fierce round.
@@ -347,7 +348,8 @@ public class Card_09_031_Tests
 		assertInZone(Zone.SHADOW_CHARACTERS, troop, savage, savage2);
 
 		scn.PassSkirmishActions();
-		// Boromir's own text answers the win before the skirmish's wounds, with nothing to order (engine pass 54).
+		// The skirmish's wounds and Boromir's own text happen together: the wounds first.
+		scn.FreepsResolveRuleFirst();
 
 		// Both have vitality 3, so the wound each took for losing would have left them in play.
 		assertInZone(Zone.DISCARD, troop, savage);
@@ -380,7 +382,7 @@ public class Card_09_031_Tests
 		scn.FreepsResolveSkirmish(boromir);
 		// 7 against 5.
 		scn.PassSkirmishActions();
-		// What answers the win comes first, with nothing to order (engine pass 54).
+		scn.FreepsResolveRuleFirst();
 		assertInZone(Zone.DISCARD, savage);
 
 		// A second move, and a second Uruk Savage to fight.
@@ -395,7 +397,7 @@ public class Card_09_031_Tests
 		assertInZone(Zone.SHADOW_CHARACTERS, savage2);
 
 		scn.PassSkirmishActions();
-		// What answers the win comes first, with nothing to order (engine pass 54).
+		scn.FreepsResolveRuleFirst();
 		assertInZone(Zone.DISCARD, savage2);
 		assertEquals(0, scn.GetWoundsOn(boromir));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());

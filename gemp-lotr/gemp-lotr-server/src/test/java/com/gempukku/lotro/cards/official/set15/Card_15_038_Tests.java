@@ -159,19 +159,18 @@ public class Card_15_038_Tests
 		assertEquals(10, scn.GetStrength(warband));
 		scn.PassSkirmishActions();
 
-		// Treebeard's text answers the win before the War Band loses (engine pass 54: step 4 of the skirmish
-		// procedure, then step 5), so nothing is ordered and the War Band has no wound yet.
-		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
-		assertEquals(0, scn.GetWoundsOn(warband));
+		// The wound for losing and Treebeard's text come at once.  The wound first: the War Band is exhausted.
+		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
+		scn.FreepsResolveRuleFirst();
+		assertEquals(1, scn.GetWoundsOn(warband));
 
 		// 12 - 10: the Shadow player must exert 2 minions, and is not asked whether.
 		assertTrue(scn.ShadowDecisionAvailable("Choose cards to exert"));
 		assertEquals(2, scn.ShadowGetChoiceMin());
 		assertEquals(2, scn.ShadowGetChoiceMax());
-		// The loser among them, not yet wounded for losing.
-		assertTrue(scn.ShadowHasCardChoiceAvailable(warband, assassin, chieftain, hunters, savage));
-		// The Runner, of vitality 1, cannot exert; a companion is no minion.
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(runner, treebeard, gandalf, frodo));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(assassin, chieftain, hunters, savage));
+		// The exhausted War Band and the Runner, of vitality 1, cannot exert; a companion is no minion.
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(warband, runner, treebeard, gandalf, frodo));
 		assertEquals(0, scn.GetWoundsOn(assassin));
 		assertEquals(0, scn.GetWoundsOn(savage));
 
@@ -180,15 +179,13 @@ public class Card_15_038_Tests
 		assertEquals(1, scn.GetWoundsOn(savage));
 		assertEquals(0, scn.GetWoundsOn(chieftain));
 		assertEquals(0, scn.GetWoundsOn(hunters));
-		// Then the wound for losing.
-		assertEquals(1, scn.GetWoundsOn(warband));
 		assertEquals(0, scn.GetWoundsOn(treebeard));
 		assertEquals(0, scn.GetWoundsOn(gandalf));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
 	@Test
-	public void TheLosersStrengthIsWhatItWasAsTheSkirmishResolvedThoughHisExertionRaisesIt() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheLosersStrengthIsWhatItWasAsTheSkirmishResolvedThoughHisWoundForLosingRaisesIt() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var treebeard = scn.GetFreepsCard("treebeard");
@@ -215,18 +212,19 @@ public class Card_15_038_Tests
 		assertEquals(11, scn.GetStrength(thrall));
 		assertEquals(0, scn.GetWoundsOn(thrall));
 
-		// Treebeard's text answers the win before the Nazgul's wound for losing, with nothing to order (engine pass
-		// 54; until then the wound could be taken first, and enduring made him 13).
-		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
+		// The wound for losing is taken first: enduring, the Nazgul is now 13.
+		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
+		scn.FreepsResolveRuleFirst();
+		assertEquals(13, scn.GetStrength(thrall));
+		assertEquals(1, scn.GetWoundsOn(thrall));
 
-		// 14 - 11, the strength the Nazgul had as the skirmish resolved (F-0480: A): three minions.
+		// 14 - 11, the strength the Nazgul had as the skirmish resolved (F-0480: A), not 14 - 13: three minions.
 		assertTrue(scn.ShadowDecisionAvailable("Choose cards to exert"));
 		assertEquals(3, scn.ShadowGetChoiceMin());
 		assertEquals(3, scn.ShadowGetChoiceMax());
 		assertTrue(scn.ShadowHasCardChoiceAvailable(thrall, warband, assassin, chieftain));
 
-		// Treebeard is no Shadow card: the Nazgul may be exerted in a skirmish phase.  Enduring, his exertion makes
-		// him 13, and changes nothing already counted.  Then his wound for losing.
+		// Treebeard is no Shadow card: the Nazgul may be exerted in a skirmish phase.
 		scn.ShadowChooseCards(thrall, warband, assassin);
 		assertEquals(2, scn.GetWoundsOn(thrall));
 		assertEquals(1, scn.GetWoundsOn(warband));
@@ -262,8 +260,9 @@ public class Card_15_038_Tests
 		assertEquals(1, scn.GetWoundsOn(party));
 		scn.PassSkirmishActions();
 
-		// Treebeard's text answers the win ahead of the wound for losing, with nothing to order (engine pass 54).
-		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
+		// This time Treebeard's text is taken ahead of the wound for losing.
+		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
+		scn.FreepsResolveActionOrder("Treebeard");
 
 		// 12 - 11, not 12 - 9: one minion.  The loser has not yet been wounded for losing and may be the one.
 		assertTrue(scn.ShadowDecisionAvailable("Choose cards to exert"));
@@ -302,14 +301,13 @@ public class Card_15_038_Tests
 		scn.FreepsResolveSkirmish(treebeard);
 		scn.PassSkirmishActions();
 
-		// 12 against the Nazgul's 11: one minion.  Treebeard's text first, nothing to order (engine pass 54), and
-		// then the Nazgul's wound for losing.
-		assertEquals(0, scn.GetWoundsOn(lieutenant));
+		// 12 against the Nazgul's 11: one minion.
+		scn.FreepsResolveRuleFirst();
+		assertEquals(1, scn.GetWoundsOn(lieutenant));
 		assertEquals(1, scn.ShadowGetChoiceMin());
 		assertEquals(1, scn.ShadowGetChoiceMax());
 		scn.ShadowChooseCard(hunters);
 		assertEquals(1, scn.GetWoundsOn(hunters));
-		assertEquals(1, scn.GetWoundsOn(lieutenant));
 
 		// The Nazgul is fierce, and fights Treebeard again.
 		scn.PassFierceAssignmentActions();
@@ -323,7 +321,9 @@ public class Card_15_038_Tests
 		assertEquals(14, scn.GetStrength(treebeard));
 		assertEquals(1, scn.GetWoundsOn(treebeard));
 		scn.PassSkirmishActions();
-		assertEquals(1, scn.GetWoundsOn(lieutenant));
+
+		scn.FreepsResolveRuleFirst();
+		assertEquals(2, scn.GetWoundsOn(lieutenant));
 
 		// 14 - 11, not 12 - 11: three minions.
 		assertTrue(scn.ShadowDecisionAvailable("Choose cards to exert"));
@@ -363,9 +363,10 @@ public class Card_15_038_Tests
 		scn.FreepsResolveSkirmish(treebeard);
 		scn.PassSkirmishActions();
 
-		// 12 against 5: the Savage is overwhelmed.  Treebeard's text answers the win first, with nothing to order
-		// (engine pass 54).
-		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
+		// 12 against 5: the Savage is overwhelmed.  Treebeard's text is taken first here; taken after the
+		// overwhelming it measures the Savage as it was all the same (WhenTheLoserIsKilledByTheWoundForLosing...).
+		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
+		scn.FreepsResolveActionOrder("Treebeard");
 
 		// 12 - 5 is 7, and three minions can exert: all three do, with nothing to choose.
 		assertEquals(1, scn.GetWoundsOn(warband));
@@ -440,28 +441,26 @@ public class Card_15_038_Tests
 		scn.FreepsResolveSkirmish(treebeard);
 		scn.PassSkirmishActions();
 
-		// 12 against 5 + 6.  Treebeard's text answers the win before the losers' wounds (engine pass 54).
-		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
-		assertEquals(0, scn.GetWoundsOn(savage));
-		assertEquals(0, scn.GetWoundsOn(assassin));
+		// 12 against 5 + 6.  Each loser takes its wound: the Assassin is exhausted.
+		scn.FreepsResolveRuleFirst();
+		assertEquals(1, scn.GetWoundsOn(savage));
+		assertEquals(1, scn.GetWoundsOn(assassin));
 
 		// He won by 1: one minion, not the 7 or the 6 that either loser alone would give.
 		assertTrue(scn.ShadowDecisionAvailable("Choose cards to exert"));
 		assertEquals(1, scn.ShadowGetChoiceMin());
 		assertEquals(1, scn.ShadowGetChoiceMax());
-		assertTrue(scn.ShadowHasCardChoiceAvailable(savage, assassin, warband, chieftain));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(savage, warband, chieftain));
 
 		scn.ShadowChooseCard(warband);
 		assertEquals(1, scn.GetWoundsOn(warband));
 		assertEquals(0, scn.GetWoundsOn(chieftain));
-		// Then each loser takes its wound.
 		assertEquals(1, scn.GetWoundsOn(savage));
-		assertEquals(1, scn.GetWoundsOn(assassin));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
 	@Test
-	public void ALoserOneWoundFromDeathIsKilledByHisWoundForLosingAfterTheMinionsHaveExerted() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WhenTheLoserIsKilledByTheWoundForLosingTakenFirstTheDifferenceIsFromTheStrengthItHad() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var treebeard = scn.GetFreepsCard("treebeard");
@@ -485,25 +484,22 @@ public class Card_15_038_Tests
 		assertEquals(10, scn.GetStrength(warband));
 		scn.PassSkirmishActions();
 
-		// Treebeard's text answers the win first, with nothing to order (engine pass 54; until then the wound for
-		// losing could be taken first and kill the War Band, and the difference was from the strength it had).
-		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
-		assertInZone(Zone.SHADOW_CHARACTERS, warband);
+		// The wound for losing is taken first, and kills the War Band.
+		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
+		scn.FreepsResolveRuleFirst();
+		assertInDiscard(warband);
 
-		// 12 - 10: two minions of the four.  The exhausted War Band cannot exert.
+		// 12 - 10, the strength it had as the skirmish resolved (F-0480: A): two minions of the four.
 		assertTrue(scn.ShadowDecisionAvailable("Choose cards to exert"));
 		assertEquals(2, scn.ShadowGetChoiceMin());
 		assertEquals(2, scn.ShadowGetChoiceMax());
 		assertTrue(scn.ShadowHasCardChoiceAvailable(assassin, chieftain, hunters, savage));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(warband));
 
 		scn.ShadowChooseCards(assassin, savage);
 		assertEquals(1, scn.GetWoundsOn(assassin));
 		assertEquals(1, scn.GetWoundsOn(savage));
 		assertEquals(0, scn.GetWoundsOn(chieftain));
 		assertEquals(0, scn.GetWoundsOn(hunters));
-		// Then the wound for losing kills it.
-		assertInDiscard(warband);
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
@@ -540,9 +536,9 @@ public class Card_15_038_Tests
 		assertInDiscard(flankers);
 
 		// With no minion left in it the skirmish is over and Treebeard has won it (CR 4.2 "skirmish phase(s)"):
-		// the Flankers are the losing character.  The losing side is already removed, so there are no wounds for
-		// losing to order beside Treebeard's text (step 5A; engine pass 54).
-		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
+		// the Flankers are the losing character.
+		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
+		scn.FreepsResolveRuleFirst();
 
 		// 12 - 11: one minion of the three.
 		assertTrue(scn.ShadowDecisionAvailable("Choose cards to exert"));

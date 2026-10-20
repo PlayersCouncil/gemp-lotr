@@ -381,8 +381,7 @@ public class Card_04_002_Tests
 
 		// 8 against 11: Aragorn loses, and Enquea may exert to wound the Ring-bearer, who fought nobody.
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(enquea));
 		scn.ShadowAcceptOptionalTrigger();
 		assertEquals(1, scn.GetWoundsOn(enquea));

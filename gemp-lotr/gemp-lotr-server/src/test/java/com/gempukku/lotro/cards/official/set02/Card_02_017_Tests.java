@@ -21,7 +21,6 @@ public class Card_02_017_Tests
 				new HashMap<>()
 				{{
 					put("dismay", "2_17");
-					put("dismay2", "2_17");
 					put("legolas", "1_50");     // Legolas, Greenleaf: Elf archer companion, strength 6, vitality 3; an archery ability used only on purpose
 					put("arwen", "1_30");       // Arwen, Daughter of Elrond: an Elf companion who is no archer, strength 6
 					// Garrison of Gondor: an archer companion who is no Elf ([gondor] Man), strength 8; cheated in past
@@ -105,8 +104,7 @@ public class Card_02_017_Tests
 
 		// 6 against 5: the Savage takes its second wound and lives.
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(1, scn.GetWoundsOn(savage));
+		assertEquals(2, scn.GetWoundsOn(savage));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(dismay));
 		scn.FreepsChooseOptionalTrigger(dismay);
 
@@ -195,7 +193,7 @@ public class Card_02_017_Tests
 	}
 
 	@Test
-	public void TheOnlyMinionStillToDieOfTheLossIsTheOneToDiscardAndItsOwnerIsAskedToPrevent() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WhenTheOnlyMinionDiesOfTheLossItIsPlayedForNothingAndNoPreventionIsAsked() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var dismay = scn.GetFreepsCard("dismay");
@@ -217,52 +215,13 @@ public class Card_02_017_Tests
 		scn.SetTwilight(4);
 		scn.PassSkirmishActions();
 
-		// The response to the win comes before the Savage's wound for losing (engine pass 54; until then the
-		// Savage was dead of it, the event was played for nothing and no prevention was asked).
-		assertInZone(Zone.SHADOW_CHARACTERS, savage);
+		assertInDiscard(savage);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(dismay));
 		scn.FreepsChooseOptionalTrigger(dismay);
 
-		// The one minion is chosen unasked, and its owner may remove (3) to prevent the discard.
-		assertTrue(scn.ShadowDecisionAvailable("remove (3)"));
-		scn.ShadowChooseNo();
-		assertEquals(4, scn.GetTwilight());
-		assertInDiscard(savage, dismay);
-		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
-	}
-
-	@Test
-	public void ASecondCopyPlayedOnceTheOnlyMinionIsDiscardedIsPlayedForNothingAndNoPreventionIsAsked() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var dismay = scn.GetFreepsCard("dismay");
-		var dismay2 = scn.GetFreepsCard("dismay2");
-		var legolas = scn.GetFreepsCard("legolas");
-		var savage = scn.GetShadowCard("savage1");
-		scn.MoveCompanionsToTable(legolas);
-		scn.MoveCardsToHand(dismay, dismay2);
-
-		scn.StartGame();
-		scn.MoveMinionsToTable(savage);
-		scn.SkipToAssignments();
-		scn.FreepsAssignToMinions(legolas, savage);
-		scn.FreepsResolveSkirmish(legolas);
-		scn.SetTwilight(4);
-		scn.PassSkirmishActions();
-
-		// The first copy discards the only minion, its owner declining to prevent it.
-		scn.FreepsChooseOptionalTrigger(dismay);
-		scn.ShadowChooseNo();
-		assertInDiscard(savage, dismay);
-
-		// The second copy answers the same win.  (Until engine pass 54 a loser killed by his wound for losing
-		// left this board; now the win is answered first, and it is reached with a copy before.)  An event is
-		// offered whatever its effect will find to do; with no minion to discard, no prevention is asked.
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(dismay2));
-		scn.FreepsChooseOptionalTrigger(dismay2);
 		assertFalse(scn.ShadowDecisionAvailable("remove (3)"));
 		assertEquals(4, scn.GetTwilight());
-		assertInDiscard(dismay2);
+		assertInDiscard(dismay);
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
@@ -364,18 +323,13 @@ public class Card_02_017_Tests
 		scn.FreepsResolveSkirmish(orophin);
 		scn.SetTwilight(0);
 
-		// 5 against 4.  The response to the win comes before the Scrabbler's wound for losing (engine pass 54;
-		// until then the Scrabbler was dead of it, and the Savage was the one minion left to discard).
+		// 5 against 4: the Scrabbler dies of its wound, and the Savage is left to discard.
 		scn.PassSkirmishActions();
-		assertInZone(Zone.SHADOW_CHARACTERS, scrabbler);
+		assertInDiscard(scrabbler);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(dismay));
 		scn.FreepsChooseOptionalTrigger(dismay);
 
-		// The opponent chooses, and may choose the Scrabbler, who would die of its wound anyway.
-		assertTrue(scn.ShadowHasCardChoiceAvailable(scrabbler, savage));
-		scn.ShadowChooseCard(scrabbler);
-		assertInDiscard(scrabbler, dismay);
-		assertInZone(Zone.SHADOW_CHARACTERS, savage);
+		assertInDiscard(savage, dismay);
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }

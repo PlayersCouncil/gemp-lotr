@@ -181,12 +181,13 @@ public class Card_V1_024_Tests
 		assertEquals(0, scn.GetWoundsOn(nelya));
 
 		scn.PassSkirmishActions();
-		// The text has no "may": the game does not offer the condition's text, and it answers the win before
-		// the wound to the loser, with nothing to order (engine pass 54).
+		// The text has no "may": the game does not offer the condition's text, it asks which comes first,
+		// the wound to the loser or the condition's text.
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
-		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
+		assertTrue(scn.FreepsDecisionAvailable("Required responses"));
+		scn.FreepsResolveRuleFirst();
 
-		assertEquals(0, scn.GetWoundsOn(nelya));
+		assertEquals(1, scn.GetWoundsOn(nelya));
 		assertEquals(2, scn.FreepsGetMultipleChoiceCount());
 		assertTrue(scn.FreepsChoiceAvailable("Exert"));
 		assertTrue(scn.FreepsChoiceAvailable("Discard"));
@@ -198,8 +199,6 @@ public class Card_V1_024_Tests
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(arwen));
 		assertAttachedTo(sword, arwen);
-		// Then the wound for losing.
-		assertEquals(1, scn.GetWoundsOn(nelya));
 
 		// Nelya is fierce, so the same bearer fights and wins a second time this turn.
 		scn.PassFierceAssignmentActions();
@@ -208,10 +207,10 @@ public class Card_V1_024_Tests
 
 		scn.PassFierceSkirmishActions();
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
-		// The condition's text answers the win before the wound for losing, with nothing to order (engine pass 54).
-		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
+		assertTrue(scn.FreepsDecisionAvailable("Required responses"));
+		scn.FreepsResolveRuleFirst();
 
-		assertEquals(1, scn.GetWoundsOn(nelya));
+		assertEquals(2, scn.GetWoundsOn(nelya));
 		assertEquals(2, scn.FreepsGetMultipleChoiceCount());
 		assertTrue(scn.FreepsChoiceAvailable("Exert"));
 		assertTrue(scn.FreepsChoiceAvailable("Discard"));
@@ -220,7 +219,6 @@ public class Card_V1_024_Tests
 
 		scn.FreepsChooseOption("Discard");
 
-		assertEquals(2, scn.GetWoundsOn(nelya));
 		assertInZone(Zone.DISCARD, sword);
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(arwen));
@@ -254,8 +252,8 @@ public class Card_V1_024_Tests
 
 		scn.PassSkirmishActions();
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
-		// The condition's text answers the win before the wound for losing, with nothing to order (engine pass 54).
-		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
+		assertTrue(scn.FreepsDecisionAvailable("Required responses"));
+		scn.FreepsResolveRuleFirst();
 
 		// Only one of the two can be carried out, so it is what happens.
 		assertEquals(1, scn.GetWoundsOn(savage));
@@ -289,8 +287,8 @@ public class Card_V1_024_Tests
 
 		scn.PassSkirmishActions();
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
-		// The condition's text answers the win before the wound for losing, with nothing to order (engine pass 54).
-		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
+		assertTrue(scn.FreepsDecisionAvailable("Required responses"));
+		scn.FreepsResolveRuleFirst();
 
 		assertEquals(1, scn.GetWoundsOn(savage));
 		assertInZone(Zone.DISCARD, sword);

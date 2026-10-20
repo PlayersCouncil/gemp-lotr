@@ -353,8 +353,8 @@ public class Card_03_111_Tests
 		scn.FreepsResolveSkirmish(aragorn);
 		// Strength 10 against 8: the Lieutenant wins, and two cards go at random.
 		scn.PassCurrentPhaseActions();
-		// The Lieutenant's discard answers the win ahead of the skirmish damage, with nothing to order (engine pass
-		// 54).
+		// The Lieutenant's discard is put ahead of the skirmish damage.
+		scn.FreepsResolveActionOrder("Tower Lieutenant");
 
 		// The cards go one at a time (CR 4.2 "discard"), and he is asked after each.
 		assertEquals(2, scn.GetFreepsHandCount());

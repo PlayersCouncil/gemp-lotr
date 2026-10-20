@@ -106,8 +106,7 @@ public class Card_17_138_Tests
 		scn.PassCurrentPhaseActions();
 
 		// The Intruder, 9, beats Aragorn, 8: a wound and one more for damage +1.
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(2, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetShadowControlledSiteCount());
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(intruder));
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable(pain));
@@ -154,15 +153,16 @@ public class Card_17_138_Tests
 		scn.StartGame();
 		scn.SkipToSite(2);
 		scn.MoveMinionsToTable(intruder, aggressor1, aggressor2);
-		// Aragorn, the only unbound companion, is exhausted.  (The win is answered before his wounds for losing,
-		// engine pass 54; until then one wound and those two exhausted him.)
-		scn.AddWoundsToChar(aragorn, 3);
+		// One wound already, and two more from the skirmish he is about to lose: Aragorn, the only unbound
+		// companion, will be exhausted.
+		scn.AddWoundsToChar(aragorn, 1);
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(aragorn, intruder);
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassCurrentPhaseActions();
 
+		assertEquals(3, scn.GetWoundsOn(aragorn));
 		assertEquals(1, scn.GetVitality(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(intruder));
 
@@ -171,8 +171,7 @@ public class Card_17_138_Tests
 		scn.ShadowAcceptOptionalTrigger();
 		assertEquals(1, scn.GetShadowControlledSiteCount());
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable(pain));
-		// Then his wounds for losing kill him.
-		assertInZone(Zone.DEAD, aragorn);
+		assertEquals(3, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(sam));
 		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());

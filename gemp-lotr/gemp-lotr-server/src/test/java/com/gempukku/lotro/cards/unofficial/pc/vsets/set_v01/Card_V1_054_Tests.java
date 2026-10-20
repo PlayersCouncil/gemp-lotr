@@ -120,8 +120,7 @@ public class Card_V1_054_Tests
 		scn.FreepsResolveSkirmish(boromir);
 		assertEquals(1, scn.GetWoundsOn(boromir));
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertInZone(Zone.SHADOW_CHARACTERS, runner1);
+		assertInDiscard(runner1);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 
 		// Declined: nothing changes.
@@ -134,8 +133,7 @@ public class Card_V1_054_Tests
 		assertTrue(scn.IsCharSkirmishing(sam));
 		assertEquals(6, scn.GetStrength(sam));
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertInZone(Zone.SHADOW_CHARACTERS, runner2);
+		assertInDiscard(runner2);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 
 		// Accepted: one wound is removed.
@@ -191,8 +189,7 @@ public class Card_V1_054_Tests
 		scn.FreepsResolveSkirmish(boromir);
 		assertTrue(scn.IsCharSkirmishing(boromir));
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertInZone(Zone.SHADOW_CHARACTERS, runner1);
+		assertInDiscard(runner1);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();
 

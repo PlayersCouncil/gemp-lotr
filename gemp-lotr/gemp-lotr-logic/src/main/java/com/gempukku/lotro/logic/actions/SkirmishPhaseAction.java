@@ -46,10 +46,8 @@ public class SkirmishPhaseAction extends SystemQueueAction {
                     @Override
                     protected void doPlayEffect(LotroGame game) {
                         if (!game.getGameState().getSkirmish().isCancelled()) {
-                            // Steps 3 and 4, and then step 5: what answers the win is carried out, both
-                            // players' optional answers included, before the losers lose (Ketura, 2026-10-19)
-                            ResolveSkirmishEffect resolve = new ResolveSkirmishEffect();
-                            insertEffect(resolve, resolve.getLossStep());
+                            insertEffect(
+                                    new ResolveSkirmishEffect());
                         }
                     }
                 });

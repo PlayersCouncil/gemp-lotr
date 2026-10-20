@@ -120,19 +120,16 @@ public class Card_04_032_Tests
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 		assertFalse(scn.ShadowPlayAvailable(ravage));
 
-		// 8 against 3 + 1 for the Ring + 2 for the sword: Frodo loses.  The response to the win comes before his
-		// wound for losing (engine pass 54).
+		// 8 against 3 + 1 for the Ring + 2 for the sword: Frodo loses, and takes the wound without putting on the Ring.
 		scn.ShadowPass();
-		assertEquals(0, scn.GetWoundsOn(frodo));
+		scn.FreepsDeclineOptionalTrigger();
+		assertEquals(1, scn.GetWoundsOn(frodo));
 		assertTrue(scn.ShadowPlayAvailable(ravage));
 		assertAttachedTo(sword, frodo);
 		assertAttachedTo(coat, frodo);
 		assertAttachedTo(stone, frodo);
 
 		scn.ShadowPlayCard(ravage);
-		// Then the wound, taken without putting on the Ring.
-		scn.FreepsDeclineOptionalTrigger();
-		assertEquals(1, scn.GetWoundsOn(frodo));
 		assertInZone(Zone.DISCARD, ravage);
 		// A possession, an artifact and a condition, with nothing chosen.
 		assertInZone(Zone.DISCARD, sword, coat, stone);
@@ -171,8 +168,7 @@ public class Card_04_032_Tests
 		// 8 + 5 against 8: Aragorn loses to the two of them.
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowPlayAvailable(ravage));
 
 		scn.ShadowPlayCard(ravage);
@@ -213,8 +209,7 @@ public class Card_04_032_Tests
 
 		// 11 against 8 + 1 for the sword: Elrond loses.
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(elrond));
+		assertEquals(1, scn.GetWoundsOn(elrond));
 		assertTrue(scn.ShadowPlayAvailable(ravage));
 
 		scn.ShadowPlayCard(ravage);

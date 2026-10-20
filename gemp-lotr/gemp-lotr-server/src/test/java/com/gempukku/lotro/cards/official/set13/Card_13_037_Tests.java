@@ -361,8 +361,7 @@ public class Card_13_037_Tests
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
 
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(1, scn.GetWoundsOn(pursuer));
+		assertEquals(2, scn.GetWoundsOn(pursuer));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(pallando));
 		scn.FreepsAcceptOptionalTrigger();
 

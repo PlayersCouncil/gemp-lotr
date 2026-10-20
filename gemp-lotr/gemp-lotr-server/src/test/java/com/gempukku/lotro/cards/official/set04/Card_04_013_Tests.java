@@ -138,8 +138,7 @@ public class Card_04_013_Tests
 
 		// 9 against 6: the Pillager wins.
 		scn.PassCurrentPhaseActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(knight));
+		assertEquals(1, scn.GetWoundsOn(knight));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(pillager));
 		// "This minion": the other Pillager, unassigned, won nothing and offers nothing.
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable(pillager2));
@@ -198,8 +197,7 @@ public class Card_04_013_Tests
 		scn.FreepsResolveSkirmish(knight);
 
 		scn.PassCurrentPhaseActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(knight));
+		assertEquals(1, scn.GetWoundsOn(knight));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(pillager));
 		scn.ShadowAcceptOptionalTrigger();
 
@@ -248,8 +246,7 @@ public class Card_04_013_Tests
 		scn.FreepsResolveSkirmish(knight);
 
 		scn.PassCurrentPhaseActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(knight));
+		assertEquals(1, scn.GetWoundsOn(knight));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(pillager));
 		scn.ShadowAcceptOptionalTrigger();
 
@@ -287,8 +284,7 @@ public class Card_04_013_Tests
 		scn.FreepsResolveSkirmish(knight);
 
 		scn.PassCurrentPhaseActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(knight));
+		assertEquals(1, scn.GetWoundsOn(knight));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(pillager));
 		scn.ShadowAcceptOptionalTrigger();
 
@@ -325,8 +321,7 @@ public class Card_04_013_Tests
 		scn.FreepsResolveSkirmish(knight);
 
 		scn.PassCurrentPhaseActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(knight));
+		assertEquals(1, scn.GetWoundsOn(knight));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(pillager));
 		scn.ShadowDeclineOptionalTrigger();
 
@@ -442,8 +437,7 @@ public class Card_04_013_Tests
 		assertAttachedTo(sword, bilbo);
 
 		scn.PassCurrentPhaseActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(knight));
+		assertEquals(1, scn.GetWoundsOn(knight));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(pillager));
 		scn.ShadowAcceptOptionalTrigger();
 		scn.ShadowChooseCard(armor);
@@ -456,8 +450,7 @@ public class Card_04_013_Tests
 		scn.FreepsAssignToMinions(knight, pillager);
 		scn.FreepsResolveSkirmish(knight);
 		scn.PassFierceSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(1, scn.GetWoundsOn(knight));
+		assertEquals(2, scn.GetWoundsOn(knight));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(pillager));
 		scn.ShadowAcceptOptionalTrigger();
 		// One left, and still asked: the choice runs from 0 (Q-0339).

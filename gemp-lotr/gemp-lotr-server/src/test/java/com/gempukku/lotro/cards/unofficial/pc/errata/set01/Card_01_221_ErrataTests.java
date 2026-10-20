@@ -134,8 +134,7 @@ public class Card_01_221_ErrataTests
 		scn.FreepsAssignAndResolve(aragorn, witchking);
 		scn.PassSkirmishActions();
 
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(2, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(witchking));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(blade));
 		scn.ShadowAcceptOptionalTrigger();
@@ -156,8 +155,7 @@ public class Card_01_221_ErrataTests
 		scn.FreepsResolveSkirmish(guard);
 		scn.PassFierceSkirmishActions();
 
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertInZone(Zone.FREE_CHARACTERS, guard);
+		assertInZone(Zone.DEAD, guard);
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(blade));
 		scn.ShadowAcceptOptionalTrigger();
 		assertEquals(2, scn.GetWoundsOn(witchking));

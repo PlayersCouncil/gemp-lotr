@@ -646,15 +646,13 @@ public class Card_V3_087_Tests
 		scn.FreepsPass();
 		scn.ShadowPass();
 
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(1, scn.GetWoundsOn(gollum));
+		assertEquals(2, scn.GetWoundsOn(gollum));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(banner, "Exert a minion"));
 
 		scn.FreepsChooseOptionalTrigger(banner, "Exert a minion");
 
 		// The Banner, which the same Man bears and which is no mount, has exerted Gollum: nothing is offered for it.
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(2, scn.GetWoundsOn(gollum));
+		assertEquals(3, scn.GetWoundsOn(gollum));
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable(halifirien));
 		assertFalse(scn.IsHindered(halifirien));
 		assertFalse(scn.IsHindered(war1));

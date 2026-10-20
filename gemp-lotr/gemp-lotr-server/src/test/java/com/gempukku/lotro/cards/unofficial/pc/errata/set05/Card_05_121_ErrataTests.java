@@ -113,8 +113,7 @@ public class Card_05_121_ErrataTests
 		scn.PassSkirmishActions();
 
 		// Legolas 6 against 5: he wins.
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(1, scn.GetWoundsOn(savage));
+		assertEquals(2, scn.GetWoundsOn(savage));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(legolas));
 		scn.FreepsAcceptOptionalTrigger();
 
@@ -136,8 +135,7 @@ public class Card_05_121_ErrataTests
 		scn.FreepsResolveSkirmish(legolas);
 		scn.PassFierceSkirmishActions();
 
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertInZone(Zone.SHADOW_CHARACTERS, savage);
+		assertInDiscard(savage);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(legolas));
 		scn.FreepsAcceptOptionalTrigger();
 		assertTrue(scn.FreepsHasCardChoiceAvailable(farin, haldir));

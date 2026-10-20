@@ -171,7 +171,7 @@ public class Card_06_085_Tests
 		assertAttachedTo(saga, aragorn);
 		assertInZone(Zone.SUPPORT, mallorn, shards, ned);
 		assertAttachedTo(sword, toldea);
-		// What answers the win comes first, with nothing to order (engine pass 54).
+		scn.FreepsResolveRuleFirst();
 
 		// The Free Peoples player chooses: the Free Peoples possessions and conditions, borne or in the support area.
 		// Not a Free Peoples artifact, not the Sword (a Shadow possession), not a Shadow condition.
@@ -192,7 +192,7 @@ public class Card_06_085_Tests
 		scn.FreepsAssignToMinions(aragorn, toldea);
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
-		// What answers the win comes first, with nothing to order (engine pass 54).
+		scn.FreepsResolveRuleFirst();
 
 		assertTrue(scn.FreepsHasCardChoiceAvailable(armor, saga, mallorn));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(shards, sword, ned));

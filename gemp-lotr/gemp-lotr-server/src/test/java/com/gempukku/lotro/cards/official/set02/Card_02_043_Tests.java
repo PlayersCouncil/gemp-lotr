@@ -171,8 +171,8 @@ public class Card_02_043_Tests
 		int shadowDiscard = scn.GetShadowDiscardCount();
 
 		// Lurtz, 13 + 2, beats Aragorn, 8: 3 wounds with damage +2, and the top two cards go, with nothing asked.
-		// The Sword answers the win before the wounds, with nothing to order (engine pass 54).
 		scn.PassCurrentPhaseActions();
+		scn.FreepsResolveRuleFirst();
 		assertEquals(3, scn.GetWoundsOn(aragorn));
 		assertInZone(Zone.DISCARD, top1, top2);
 		assertEquals(top3, scn.GetFreepsTopOfDeck());
@@ -260,8 +260,8 @@ public class Card_02_043_Tests
 		int discard = scn.GetFreepsDiscardCount();
 
 		// Lurtz, 15, beats Aragorn, 8: two cards.
-		// The Sword answers the win before the wounds, with nothing to order (engine pass 54).
 		scn.PassCurrentPhaseActions();
+		scn.FreepsResolveRuleFirst();
 		assertEquals(3, scn.GetWoundsOn(aragorn));
 		assertEquals(deck - 2, scn.GetFreepsDeckCount());
 		assertEquals(discard + 2, scn.GetFreepsDiscardCount());
@@ -277,8 +277,8 @@ public class Card_02_043_Tests
 		scn.PassFierceAssignmentActions();
 		scn.FreepsAssignToMinions(boromir, lurtz);
 		scn.FreepsResolveSkirmish(boromir);
-		// The Sword answers the win before the wounds, with nothing to order (engine pass 54).
 		scn.PassFierceSkirmishActions();
+		scn.FreepsResolveRuleFirst();
 		assertInZone(Zone.DEAD, boromir);
 		assertEquals(deck - 4, scn.GetFreepsDeckCount());
 		assertEquals(discard + 4, scn.GetFreepsDiscardCount());
@@ -310,8 +310,8 @@ public class Card_02_043_Tests
 
 		// Lurtz, 13 + 2 (no companion exhausted yet), beats Aragorn, 8: two cards.
 		assertEquals(Culture.URUK_HAI, lurtz.getBlueprint().getCulture());
-		// The Sword answers the win before the wounds, with nothing to order (engine pass 54).
 		scn.PassCurrentPhaseActions();
+		scn.FreepsResolveRuleFirst();
 		assertEquals(3, scn.GetWoundsOn(aragorn));
 		assertEquals(deck - 2, scn.GetFreepsDeckCount());
 		assertEquals(discard + 2, scn.GetFreepsDiscardCount());

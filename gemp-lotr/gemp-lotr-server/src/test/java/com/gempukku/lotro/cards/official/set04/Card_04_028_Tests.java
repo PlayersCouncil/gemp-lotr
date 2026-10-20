@@ -211,8 +211,7 @@ public class Card_04_028_Tests
 
 		// 10 against 7: the Brigand wins; the War Club's offer is declined.
 		scn.PassCurrentPhaseActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertEquals(1, scn.GetWoundsOn(gimli));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(warclub));
 		scn.ShadowDeclineOptionalTrigger();
 

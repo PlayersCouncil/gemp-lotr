@@ -101,8 +101,7 @@ public class Card_07_206_Tests
 		// The first win at site 2: offered, and a token placed.
 		scn.FreepsResolveSkirmish(guard1);
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(guard1));
+		assertEquals(1, scn.GetWoundsOn(guard1));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(stronghold));
 		scn.ShadowAcceptOptionalTrigger();
 		assertEquals(1, scn.GetCultureTokensOn(stronghold));
@@ -123,8 +122,7 @@ public class Card_07_206_Tests
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(guard1);
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(1, scn.GetWoundsOn(guard1));
+		assertEquals(2, scn.GetWoundsOn(guard1));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(stronghold));
 		scn.ShadowAcceptOptionalTrigger();
 		assertEquals(2, scn.GetCultureTokensOn(stronghold));

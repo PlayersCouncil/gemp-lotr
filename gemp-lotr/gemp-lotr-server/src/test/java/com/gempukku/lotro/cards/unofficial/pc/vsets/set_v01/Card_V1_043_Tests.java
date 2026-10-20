@@ -245,8 +245,7 @@ public class Card_V1_043_Tests
 
 		scn.ShadowPass();
 		// 15 against Aragorn's 8: he loses and takes 1 wound + 1 for damage +1.
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(2, scn.GetWoundsOn(aragorn));
 		// The Witch-king's own text: he may exert when he wins a skirmish.
 		scn.ShadowDeclineOptionalTrigger();
 

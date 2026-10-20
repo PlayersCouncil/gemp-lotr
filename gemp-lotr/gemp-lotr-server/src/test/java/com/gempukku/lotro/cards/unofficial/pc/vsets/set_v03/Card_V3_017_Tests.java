@@ -321,8 +321,7 @@ public class Card_V3_017_Tests
 		// Strength 8 against 8: the Shadow wins a tie.
 		scn.PassCurrentPhaseActions();
 
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertFalse(scn.IsHindered(get));
 		assertFalse(scn.HasKeyword(shelob, Keyword.RELENTLESS));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(get));

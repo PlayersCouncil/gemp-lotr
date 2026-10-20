@@ -95,8 +95,7 @@ public class Card_01_240_Tests
 		scn.PassCurrentPhaseActions();
 
 		// Strength 12 against 8: the minion wins.
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertEquals(4, scn.GetTwilight());
 		assertEquals(3, scn.GetFreepsHandCount());
 		assertEquals(0, scn.GetFreepsDiscardCount());
@@ -215,8 +214,7 @@ public class Card_01_240_Tests
 
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassCurrentPhaseActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(band));
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable(band2));
 		scn.ShadowChooseOptionalTrigger(band);
@@ -248,8 +246,7 @@ public class Card_01_240_Tests
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassCurrentPhaseActions();
 
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetFreepsHandCount());
 		// The response has a cost, so it is offered though there is nothing to discard.
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(band));

@@ -99,8 +99,7 @@ public class Card_01_025_ErrataTests
 
 		// Gimli, 6, beats the Runner, 5.
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertInZone(Zone.SHADOW_CHARACTERS, runner);
+		assertInZone(Zone.DISCARD, runner);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(breath));
 		assertEquals(2, scn.GetFreepsHandCount());
 		assertEquals(2, scn.GetWoundsOn(gimli));
@@ -182,8 +181,7 @@ public class Card_01_025_ErrataTests
 		scn.MoveCardsToHand(armor);
 		scn.FreepsResolveSkirmish(farin);
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertInZone(Zone.SHADOW_CHARACTERS, runner2);
+		assertInZone(Zone.DISCARD, runner2);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(breath));
 		assertEquals(1, scn.GetWoundsOn(farin));
 
@@ -266,8 +264,7 @@ public class Card_01_025_ErrataTests
 		int hand = scn.GetFreepsHandCount();
 
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertInZone(Zone.SHADOW_CHARACTERS, runner);
+		assertInZone(Zone.DISCARD, runner);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(breath));
 
 		scn.FreepsChooseOptionalTrigger(breath);
@@ -282,8 +279,7 @@ public class Card_01_025_ErrataTests
 		// Gimli, 6, beats the other Runner.
 		scn.FreepsResolveSkirmish(gimli);
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertInZone(Zone.SHADOW_CHARACTERS, runner2);
+		assertInZone(Zone.DISCARD, runner2);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(breath));
 
 		scn.FreepsChooseOptionalTrigger(breath);
@@ -318,8 +314,7 @@ public class Card_01_025_ErrataTests
 
 		// Gimli, 6, beats the Savage, 5: 2 wounds of its 3, with his damage +1.
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(savage));
+		assertEquals(2, scn.GetWoundsOn(savage));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(breath));
 
 		scn.FreepsChooseOptionalTrigger(breath);
@@ -333,8 +328,7 @@ public class Card_01_025_ErrataTests
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable(breath));
 
 		scn.PassFierceSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertInZone(Zone.SHADOW_CHARACTERS, savage);
+		assertInZone(Zone.DISCARD, savage);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(breath));
 
 		scn.FreepsChooseOptionalTrigger(breath);
@@ -376,9 +370,8 @@ public class Card_01_025_ErrataTests
 		scn.FreepsResolveSkirmish(gimli);
 
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertInZone(Zone.SHADOW_CHARACTERS, runner);
-		assertInZone(Zone.SHADOW_CHARACTERS, runner2);
+		assertInZone(Zone.DISCARD, runner);
+		assertInZone(Zone.DISCARD, runner2);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(breath));
 
 		scn.FreepsChooseOptionalTrigger(breath);

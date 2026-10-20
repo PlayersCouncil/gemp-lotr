@@ -151,8 +151,7 @@ public class Card_01_033_Tests
 		// Legolas 6 + 1 for the bow against the Pursuer's 5: he wins, and the Pursuer takes the wound for losing.
 		scn.FreepsResolveSkirmish(legolas);
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(pursuer));
+		assertEquals(1, scn.GetWoundsOn(pursuer));
 		assertEquals(0, scn.GetWoundsOn(troop));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(bow));
 
@@ -171,8 +170,7 @@ public class Card_01_033_Tests
 		scn.FreepsAssignToMinions(legolas, pursuer);
 		scn.FreepsResolveSkirmish(legolas);
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(1, scn.GetWoundsOn(pursuer));
+		assertEquals(2, scn.GetWoundsOn(pursuer));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(bow));
 
 		// Declined, nothing more is wounded.
@@ -218,7 +216,7 @@ public class Card_01_033_Tests
 	}
 
 	@Test
-	public void TheMinionLegolasBeatIsStillThereToWoundAsTheBowIsOffered() throws DecisionResultInvalidException, CardNotFoundException {
+	public void IsNotOfferedWhenLegolasKillsTheOnlyMinion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var bow = scn.GetFreepsCard("bow");
@@ -233,18 +231,11 @@ public class Card_01_033_Tests
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(legolas, runner);
 
-		// Legolas 7 against the Runner's 5: he wins.  What answers the win comes before the loser loses (engine
-		// pass 54; until then the Runner, vitality 1, was dead of its wound by now and the Bow was not offered).
+		// Legolas 7 against the Runner's 5: he wins and the Runner, vitality 1, dies. No minion is left to wound.
 		scn.FreepsResolveSkirmish(legolas);
 		scn.PassSkirmishActions();
-		assertInZone(Zone.SHADOW_CHARACTERS, runner);
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(bow));
-
-		// The Runner is the one minion to wound, and the wound kills it.  Its side gone, there is no wound for
-		// losing to place (step 5A).
-		scn.FreepsChooseOptionalTrigger(bow);
 		assertInZone(Zone.DISCARD, runner);
-		assertEquals(0, scn.GetWoundsOn(legolas));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(bow));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }

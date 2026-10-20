@@ -123,8 +123,7 @@ public class Card_18_034_Tests
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
 
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(2, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(shelob));
 		scn.ShadowAcceptOptionalTrigger();
 		// "Up to" the one burden: none or one (F-0419).
@@ -152,8 +151,7 @@ public class Card_18_034_Tests
 		scn.PassSkirmishActions();
 
 		// Shelob (8) has beaten Aragorn (8).  Three burdens, no threat, four companions.
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertEquals(3, scn.GetBurdens());
 		assertEquals(0, scn.GetThreats());
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(shelob));
@@ -174,8 +172,7 @@ public class Card_18_034_Tests
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassFierceSkirmishActions();
 
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(2, scn.GetWoundsOn(aragorn));
 		assertEquals(3, scn.GetBurdens());
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(shelob));
 		scn.ShadowAcceptOptionalTrigger();

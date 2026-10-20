@@ -145,8 +145,7 @@ public class Card_17_020_Tests
 		scn.PassSkirmishActions();
 
 		// Gandalf 8 beats the Savage 5, who takes his wound.
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(savage));
+		assertEquals(1, scn.GetWoundsOn(savage));
 		assertEquals(0, scn.GetWoundsOn(troop));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(gwaihir));
 		scn.FreepsAcceptOptionalTrigger();
@@ -188,8 +187,7 @@ public class Card_17_020_Tests
 		scn.PassSkirmishActions();
 
 		// Radagast 9 beats the Savage: a [gandalf] Wizard of another title is a bearer the text takes.
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(savage));
+		assertEquals(1, scn.GetWoundsOn(savage));
 		assertEquals(0, scn.GetWoundsOn(troop));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(gwaihir));
 		scn.FreepsDeclineOptionalTrigger();
@@ -280,20 +278,20 @@ public class Card_17_020_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(savage);
-		scn.AddWoundsToChar(savage, 2);
+		scn.AddWoundsToChar(savage, 1);
 		scn.SkipToPhase(Phase.MANEUVER);
 		scn.FreepsDeclineOptionalTrigger();
 
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(gandalf, savage);
-		assertEquals(2, scn.GetWoundsOn(savage));
+		assertEquals(1, scn.GetWoundsOn(savage));
 		scn.FreepsResolveSkirmish(gandalf);
 		scn.PassSkirmishActions();
 
-		// The Savage, the only minion, has 2 wounds on vitality 3 as the win is answered: exhausted, and no
-		// Wizard.  (Its wound for losing comes after, engine pass 54; until then that wound exhausted it.)
+		// The Savage, the only minion, is left with 2 wounds on vitality 3: exhausted, and no Wizard.
+		assertEquals(2, scn.GetWoundsOn(savage));
+		assertTrue(scn.IsExhausted(savage));
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable(gwaihir));
-		assertInDiscard(savage);
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
@@ -326,8 +324,7 @@ public class Card_17_020_Tests
 		scn.PassSkirmishActions();
 
 		// Gandalf beats the fierce Pursuer a first time.
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(pursuer));
+		assertEquals(1, scn.GetWoundsOn(pursuer));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(gwaihir));
 		scn.FreepsAcceptOptionalTrigger();
 		assertTrue(scn.FreepsHasCardChoiceAvailable(pursuer, saruman, mouth));
@@ -346,8 +343,7 @@ public class Card_17_020_Tests
 		scn.PassSkirmishActions();
 
 		// And a second time: offered again.
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(1, scn.GetWoundsOn(pursuer));
+		assertEquals(2, scn.GetWoundsOn(pursuer));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(gwaihir));
 		scn.FreepsAcceptOptionalTrigger();
 		assertEquals(0, scn.GetWoundsOn(saruman));
@@ -398,8 +394,7 @@ public class Card_17_020_Tests
 
 		// Gandalf 8 beats the Savage 5. Two Wizard minions, of [men] and [isengard]: Saruman may be wounded and is
 		// offered; Pallando, a Wizard who cannot take wounds, would be wounded instead of exerted, and is not.
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(savage));
+		assertEquals(1, scn.GetWoundsOn(savage));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(gwaihir));
 		scn.FreepsAcceptOptionalTrigger();
 		assertTrue(scn.FreepsHasCardChoiceAvailable(savage, saruman));
@@ -442,8 +437,7 @@ public class Card_17_020_Tests
 		// Saruman, vitality 4 with 3 wounds, is exhausted and cannot be exerted; as a Wizard he is wounded instead,
 		// so he may be chosen beside the Savage, who can be exerted.
 		assertTrue(scn.IsExhausted(saruman));
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(savage));
+		assertEquals(1, scn.GetWoundsOn(savage));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(gwaihir));
 		scn.FreepsAcceptOptionalTrigger();
 		assertTrue(scn.FreepsHasCardChoiceAvailable(savage, saruman));

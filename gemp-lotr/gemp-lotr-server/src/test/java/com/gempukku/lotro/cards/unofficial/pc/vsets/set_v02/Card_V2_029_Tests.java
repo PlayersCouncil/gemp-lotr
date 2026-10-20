@@ -201,14 +201,14 @@ public class Card_V2_029_Tests
 		assertEquals(1, scn.GetKeywordCount(aragorn, Keyword.DAMAGE));
 		assertEquals(1, scn.GetKeywordCount(sam, Keyword.DAMAGE));
 
-		// Gimli wins, 6 + 2 against 5.  The Axe's "you may wound an Orc" answers the win first, and is left alone
-		// (engine pass 54: the win is answered before the loser loses).
+		// Gimli wins, 6 + 2 against 5, and the Worker takes the one wound of a lost skirmish and not three.
 		scn.PassSkirmishActions();
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(axe));
-		scn.FreepsDeclineOptionalTrigger();
-		// Then the Worker takes the one wound of a lost skirmish and not three.
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(saruman));
 		scn.ShadowDeclineOptionalTrigger();
+		assertEquals(1, scn.GetWoundsOn(worker));
+		// The Axe's "you may wound an Orc" is left alone.
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(axe));
+		scn.FreepsDeclineOptionalTrigger();
 		assertEquals(1, scn.GetWoundsOn(worker));
 
 		// His skirmish over, Gimli has both bonuses again.

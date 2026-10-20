@@ -112,10 +112,10 @@ public class Card_01_150_ErrataTests
 		int deck = scn.GetFreepsDeckCount();
 		int discard = scn.GetFreepsDiscardCount();
 
-		// The Rager, 9, beats Aragorn, 8: the trigger, then 2 wounds with damage +1.
+		// The Rager, 9, beats Aragorn, 8: 2 wounds with damage +1, then the trigger.
 		scn.PassCurrentPhaseActions();
-		// What answers the win comes first, with nothing to order (engine pass 54).
-		assertEquals(0, scn.GetWoundsOn(aragorn));
+		scn.FreepsResolveRuleFirst();
+		assertEquals(2, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.FreepsChoiceAvailable("Exert"));
 		assertTrue(scn.FreepsChoiceAvailable("Discard"));
 		assertFalse(scn.ShadowChoiceAvailable("Exert"));
@@ -159,8 +159,8 @@ public class Card_01_150_ErrataTests
 		int shadowDeck = scn.GetShadowDeckCount();
 
 		scn.PassCurrentPhaseActions();
-		// What answers the win comes first, with nothing to order (engine pass 54).
-		assertEquals(0, scn.GetWoundsOn(aragorn));
+		scn.FreepsResolveRuleFirst();
+		assertEquals(2, scn.GetWoundsOn(aragorn));
 
 		scn.FreepsChooseOption("Discard");
 		assertInZone(Zone.DISCARD, top1, top2, top3);
@@ -184,10 +184,9 @@ public class Card_01_150_ErrataTests
 		var top3 = scn.GetFreepsCard("guard2");
 		var top4 = scn.GetFreepsCard("silinde");
 		scn.MoveCompanionsToTable(aragorn);
-		// Vitality 4 each, both exhausted: the Rager's win is answered before Aragorn's wounds for losing (engine
-		// pass 54; until then 1 wound and those 2 exhausted him).
+		// Vitality 4 each: Frodo exhausted now, Aragorn once the skirmish's 2 wounds are placed.
 		scn.AddWoundsToChar(frodo, 3);
-		scn.AddWoundsToChar(aragorn, 3);
+		scn.AddWoundsToChar(aragorn, 1);
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(rager);
@@ -198,13 +197,12 @@ public class Card_01_150_ErrataTests
 		int deck = scn.GetFreepsDeckCount();
 
 		scn.PassCurrentPhaseActions();
-		// What answers the win comes first, with nothing to order (engine pass 54).
+		scn.FreepsResolveRuleFirst();
+		assertEquals(3, scn.GetWoundsOn(aragorn));
 		assertFalse(scn.FreepsChoiceAvailable("Exert"));
 		assertInZone(Zone.DISCARD, top1, top2, top3);
 		assertEquals(top4, scn.GetFreepsTopOfDeck());
 		assertEquals(deck - 3, scn.GetFreepsDeckCount());
-		// Then the wounds for losing kill him.
-		assertInZone(Zone.DEAD, aragorn);
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
@@ -228,8 +226,8 @@ public class Card_01_150_ErrataTests
 		scn.FreepsResolveSkirmish(aragorn);
 
 		scn.PassCurrentPhaseActions();
-		// What answers the win comes first, with nothing to order (engine pass 54).
-		assertEquals(0, scn.GetWoundsOn(aragorn));
+		scn.FreepsResolveRuleFirst();
+		assertEquals(2, scn.GetWoundsOn(aragorn));
 		assertFalse(scn.FreepsChoiceAvailable("Discard"));
 		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, guard1, frodo));
 
@@ -266,8 +264,8 @@ public class Card_01_150_ErrataTests
 		assertEquals(4, deck);
 
 		scn.PassCurrentPhaseActions();
-		// What answers the win comes first, with nothing to order (engine pass 54).
-		assertEquals(0, scn.GetWoundsOn(aragorn));
+		scn.FreepsResolveRuleFirst();
+		assertEquals(2, scn.GetWoundsOn(aragorn));
 		// Frodo stops Shadow cards that make the Free Peoples player discard, but the Rager gives him a choice
 		// and he may choose to discard (F-0205: not a fault): the discard is offered beside the exertion, and taken.
 		assertTrue(scn.FreepsChoiceAvailable("Exert"));
@@ -312,8 +310,8 @@ public class Card_01_150_ErrataTests
 		// The first Rager, 9, overwhelms the Guard, 4.
 		scn.FreepsResolveSkirmish(guard1);
 		scn.PassCurrentPhaseActions();
-		// What answers the win comes first, with nothing to order (engine pass 54).
-		assertInZone(Zone.FREE_CHARACTERS, guard1);
+		scn.FreepsResolveRuleFirst();
+		assertInZone(Zone.DEAD, guard1);
 		scn.FreepsChooseOption("Exert");
 		scn.FreepsChooseCard(aragorn);
 		assertEquals(1, scn.GetWoundsOn(aragorn));
@@ -324,8 +322,8 @@ public class Card_01_150_ErrataTests
 		scn.FreepsAssignToMinions(guard2, rager1);
 		scn.FreepsResolveSkirmish(guard2);
 		scn.PassFierceSkirmishActions();
-		// What answers the win comes first, with nothing to order (engine pass 54).
-		assertInZone(Zone.FREE_CHARACTERS, guard2);
+		scn.FreepsResolveRuleFirst();
+		assertInZone(Zone.DEAD, guard2);
 		scn.FreepsChooseOption("Discard");
 		assertEquals(deck - 3, scn.GetFreepsDeckCount());
 		assertEquals(1, scn.GetWoundsOn(aragorn));

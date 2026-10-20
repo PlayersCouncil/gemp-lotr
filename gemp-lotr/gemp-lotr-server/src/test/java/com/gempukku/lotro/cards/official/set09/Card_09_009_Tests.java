@@ -156,8 +156,7 @@ public class Card_09_009_Tests
 
 		scn.PassCurrentPhaseActions();
 		// Gimli, 6 + 1, beats the Runner's 5, who dies of the wound.
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertInZone(Zone.SHADOW_CHARACTERS, runner);
+		assertInDiscard(runner);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(ring));
 		scn.FreepsAcceptOptionalTrigger();
 
@@ -244,8 +243,7 @@ public class Card_09_009_Tests
 		assertEquals(0, scn.GetWoundsOn(uruk));
 		scn.PassCurrentPhaseActions();
 
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertInZone(Zone.SHADOW_CHARACTERS, brigand);
+		assertInDiscard(brigand);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(ring));
 		scn.FreepsAcceptOptionalTrigger();
 

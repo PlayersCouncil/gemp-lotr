@@ -129,8 +129,7 @@ public class Card_V3_021_Tests
 		// The King's 7 beats the Savage's 5 without overwhelming it.
 		scn.PassCurrentPhaseActions();
 
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(savage1));
+		assertEquals(1, scn.GetWoundsOn(savage1));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(banner));
 		assertEquals(0, scn.GetWoundsOn(deadman));
 		assertEquals(0, scn.GetWoundsOn(troop));
@@ -255,8 +254,7 @@ public class Card_V3_021_Tests
 		scn.PassCurrentPhaseActions();
 
 		// The King has won, and is still assigned to the Savage he beat until this skirmish phase is over.
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(savage1));
+		assertEquals(1, scn.GetWoundsOn(savage1));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(banner));
 		scn.FreepsChooseOptionalTrigger(banner);
 
@@ -285,8 +283,7 @@ public class Card_V3_021_Tests
 		scn.FreepsResolveSkirmish(king);
 		scn.PassCurrentPhaseActions();
 
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertInZone(Zone.SHADOW_CHARACTERS, savage1);
+		assertInZone(Zone.DISCARD, savage1);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(banner));
 		scn.FreepsChooseOptionalTrigger(banner);
 		scn.FreepsChooseCard(deadman);
@@ -429,15 +426,7 @@ public class Card_V3_021_Tests
 		assertEquals(3, scn.GetVitality(king));
 		scn.PassCurrentPhaseActions();
 
-		// The win is answered first (engine pass 54): the trigger, declined; the response answers the overwhelm,
-		// which comes after.
-		assertInZone(Zone.SHADOW_CHARACTERS, runner);
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(banner, "Exert a Wraith"));
-		assertFalse(scn.FreepsHasOptionalTriggerAvailable(banner, "wound 2 minions"));
-		scn.FreepsDeclineOptionalTrigger();
-
-		// Then the Runner is overwhelmed.
-		assertInDiscard(runner);
+		assertInZone(Zone.DISCARD, runner);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(banner, "wound 2 minions"));
 		assertAttachedTo(banner, king);
 		assertEquals(3, scn.GetThreats());
@@ -494,8 +483,7 @@ public class Card_V3_021_Tests
 		scn.FreepsResolveSkirmish(king);
 		scn.PassCurrentPhaseActions();
 
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(savage1));
+		assertEquals(1, scn.GetWoundsOn(savage1));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(banner, "Exert a Wraith"));
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable(banner, "wound 2 minions"));
 		scn.FreepsDeclineOptionalTrigger();
@@ -527,8 +515,7 @@ public class Card_V3_021_Tests
 		scn.FreepsResolveSkirmish(king);
 		scn.PassCurrentPhaseActions();
 
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertInZone(Zone.SHADOW_CHARACTERS, runner);
+		assertInZone(Zone.DISCARD, runner);
 		// The first sentence is offered for the win; the response is not.
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(banner, "Exert a Wraith"));
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable(banner, "wound 2 minions"));

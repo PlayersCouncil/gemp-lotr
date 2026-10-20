@@ -265,7 +265,7 @@ public class Card_17_140_Tests
 		// The event's trigger is taken ahead of the skirmish's own wound on the Troop.
 		assertEquals(0, scn.GetBurdens());
 		assertEquals(3, scn.GetWoundsOn(aragorn));
-		// What answers the win comes first, with nothing to order (engine pass 54).
+		scn.FreepsResolveActionOrder("Required trigger from");
 		scn.FreepsChooseOption("Heal");
 		assertEquals(2, scn.GetWoundsOn(aragorn));
 

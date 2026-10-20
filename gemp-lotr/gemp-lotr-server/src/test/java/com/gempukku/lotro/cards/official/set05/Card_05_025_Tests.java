@@ -117,8 +117,7 @@ public class Card_05_025_Tests
 
 		// 5 against 4: Gollum wins.
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(guard));
+		assertEquals(1, scn.GetWoundsOn(guard));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(gollum));
 		scn.ShadowAcceptOptionalTrigger();
 		assertEquals(1, scn.FreepsGetBurdens());
@@ -135,8 +134,7 @@ public class Card_05_025_Tests
 
 		// 6 against 4: Gollum wins again, and not by double.
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(guard2));
+		assertEquals(1, scn.GetWoundsOn(guard2));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(gollum));
 		scn.ShadowAcceptOptionalTrigger();
 		assertEquals(2, scn.FreepsGetBurdens());
@@ -161,8 +159,7 @@ public class Card_05_025_Tests
 		scn.FreepsResolveSkirmish(guard);
 		scn.PassSkirmishActions();
 
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(guard));
+		assertEquals(1, scn.GetWoundsOn(guard));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(gollum));
 		scn.ShadowDeclineOptionalTrigger();
 

@@ -126,8 +126,9 @@ public class Card_V2_012_Tests
 
 		// Arwen's 6 beats the Runner's 5.
 		scn.PassSkirmishActions();
-		// The condition answers the win before the Runner's wound, with nothing to order (engine pass 54).
-		assertInZone(Zone.SHADOW_CHARACTERS, runner);
+		// The Runner's wound and the condition are both required; the wound is placed first.
+		scn.FreepsResolveRuleFirst();
+		assertInZone(Zone.DISCARD, runner);
 
 		// An Elf won, so it is a Man or a Dwarf of mine: companions and allies alike.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, gimli, erland, grimir));
@@ -184,7 +185,7 @@ public class Card_V2_012_Tests
 
 		// Aragorn's 8 beats the Runner's 5.
 		scn.PassSkirmishActions();
-		// What answers the win comes first, with nothing to order (engine pass 54).
+		scn.FreepsResolveRuleFirst();
 
 		assertTrue(scn.FreepsHasCardChoiceAvailable(arwen, lorienelf, gimli, dwarfguard));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn, guard));
@@ -233,7 +234,7 @@ public class Card_V2_012_Tests
 
 		// Gimli's 6 beats the Runner's 5.
 		scn.PassSkirmishActions();
-		// What answers the win comes first, with nothing to order (engine pass 54).
+		scn.FreepsResolveRuleFirst();
 
 		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, guard, arwen, lorienelf));
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(gimli, dwarfguard));
@@ -285,7 +286,7 @@ public class Card_V2_012_Tests
 
 		// Elrond's 8 beats the Runner's 5.
 		scn.PassSkirmishActions();
-		// What answers the win comes first, with nothing to order (engine pass 54).
+		scn.FreepsResolveRuleFirst();
 
 		// An Elf has won, though not a companion.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, gimli));
@@ -383,7 +384,7 @@ public class Card_V2_012_Tests
 		// The Elf wins, and Aragorn is chosen.
 		scn.FreepsResolveSkirmish(arwen);
 		scn.PassSkirmishActions();
-		// What answers the win comes first, with nothing to order (engine pass 54).
+		scn.FreepsResolveRuleFirst();
 		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, gimli));
 		scn.FreepsChooseCard(aragorn);
 		assertEquals(9, scn.GetStrength(aragorn));
@@ -391,7 +392,7 @@ public class Card_V2_012_Tests
 		// The Dwarf wins, and Aragorn is chosen again.
 		scn.FreepsResolveSkirmish(gimli);
 		scn.PassSkirmishActions();
-		// What answers the win comes first, with nothing to order (engine pass 54).
+		scn.FreepsResolveRuleFirst();
 		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, arwen));
 		scn.FreepsChooseCard(aragorn);
 		assertEquals(10, scn.GetStrength(aragorn));
@@ -405,7 +406,7 @@ public class Card_V2_012_Tests
 
 		// The Man wins in his turn, and this time Gimli is chosen.
 		scn.PassSkirmishActions();
-		// What answers the win comes first, with nothing to order (engine pass 54).
+		scn.FreepsResolveRuleFirst();
 		assertTrue(scn.FreepsHasCardChoiceAvailable(arwen, gimli));
 		scn.FreepsChooseCard(gimli);
 

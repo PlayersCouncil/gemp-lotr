@@ -90,8 +90,7 @@ public class Card_04_004_Tests
 
 		// 11 against 6: the Band wins.
 		scn.ShadowPass();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertEquals(1, scn.GetWoundsOn(gimli));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(band));
 		assertFalse(scn.HasKeyword(band, Keyword.FIERCE));
 		assertFalse(scn.InFierceRound());
@@ -109,8 +108,7 @@ public class Card_04_004_Tests
 		scn.FreepsResolveSkirmish(gimli);
 		assertTrue(scn.HasKeyword(band, Keyword.FIERCE));
 		scn.PassFierceSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertEquals(2, scn.GetWoundsOn(gimli));
 
 		// It has won a second time, and is asked a second time.  Declined here, so that what is read in the
 		// regroup phase is the end of the first win's fierce.
@@ -136,8 +134,7 @@ public class Card_04_004_Tests
 		scn.FreepsResolveSkirmish(gimli);
 		scn.PassSkirmishActions();
 
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertEquals(1, scn.GetWoundsOn(gimli));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(band));
 
 		scn.ShadowDeclineOptionalTrigger();
@@ -167,8 +164,7 @@ public class Card_04_004_Tests
 		// 11 against 3: Sam is overwhelmed.
 		scn.FreepsResolveSkirmish(sam);
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertInZone(Zone.FREE_CHARACTERS, sam);
+		assertInZone(Zone.DEAD, sam);
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(band));
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable(band2));
 		assertFalse(scn.HasKeyword(band, Keyword.FIERCE));
@@ -180,8 +176,7 @@ public class Card_04_004_Tests
 		// 11 against 6: Gimli loses and dies of the wound.
 		scn.FreepsResolveSkirmish(gimli);
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertInZone(Zone.FREE_CHARACTERS, gimli);
+		assertInZone(Zone.DEAD, gimli);
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(band2));
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable(band));
 

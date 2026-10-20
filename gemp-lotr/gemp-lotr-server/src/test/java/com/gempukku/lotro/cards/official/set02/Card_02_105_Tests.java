@@ -205,8 +205,8 @@ public class Card_02_105_Tests
 		assertEquals(1, scn.GetKeywordCount(party, Keyword.DAMAGE));
 		scn.FreepsPass();
 		scn.ShadowPass();
-		// Aragorn loses to the sword's bearer: the sword's trigger answers the win before his wound, with nothing to
-		// order (engine pass 54).
+		// Aragorn loses to the sword's bearer: the wound he takes and the sword's trigger come at one moment.
+		scn.FreepsResolveRuleFirst();
 		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 
 		scn.FreepsResolveSkirmish(frodo);

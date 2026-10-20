@@ -120,8 +120,7 @@ public class Card_04_024_Tests
 
 		// 10 against 6: the Rabble wins.
 		scn.PassCurrentPhaseActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(knight));
+		assertEquals(1, scn.GetWoundsOn(knight));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(rabble));
 		// "This minion": the other Rabble won nothing and offers nothing.
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable(rabble2));
@@ -165,8 +164,7 @@ public class Card_04_024_Tests
 		scn.FreepsResolveSkirmish(knight);
 		scn.PassCurrentPhaseActions();
 
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(knight));
+		assertEquals(1, scn.GetWoundsOn(knight));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(rabble));
 		scn.ShadowDeclineOptionalTrigger();
 
@@ -274,8 +272,7 @@ public class Card_04_024_Tests
 		assertTrue(scn.HasKeyword(rabble, Keyword.FIERCE));
 
 		scn.PassCurrentPhaseActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(knight));
+		assertEquals(1, scn.GetWoundsOn(knight));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(rabble));
 		scn.ShadowDeclineOptionalTrigger();
 		assertInZone(Zone.SHADOW_CHARACTERS, rabble);
@@ -286,8 +283,7 @@ public class Card_04_024_Tests
 		scn.FreepsAssignToMinions(knight, rabble);
 		scn.FreepsResolveSkirmish(knight);
 		scn.PassFierceSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(1, scn.GetWoundsOn(knight));
+		assertEquals(2, scn.GetWoundsOn(knight));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(rabble));
 		scn.ShadowAcceptOptionalTrigger();
 

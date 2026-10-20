@@ -96,8 +96,7 @@ public class Card_03_086_Tests
 		scn.FreepsResolveSkirmish(sam);
 		scn.PassSkirmishActions();
 
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(sam));
+		assertEquals(1, scn.GetWoundsOn(sam));
 		assertEquals(0, scn.GetWoundsOn(otsea));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(otsea));
 
@@ -138,8 +137,7 @@ public class Card_03_086_Tests
 		scn.FreepsResolveSkirmish(sam);
 		scn.PassSkirmishActions();
 
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(sam));
+		assertEquals(1, scn.GetWoundsOn(sam));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(otsea));
 		scn.ShadowDeclineOptionalTrigger();
 
@@ -156,8 +154,7 @@ public class Card_03_086_Tests
 		scn.FreepsResolveSkirmish(sam);
 		scn.PassSkirmishActions();
 
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(1, scn.GetWoundsOn(sam));
+		assertEquals(2, scn.GetWoundsOn(sam));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(otsea));
 		scn.ShadowChooseOptionalTrigger(otsea);
 
@@ -217,8 +214,8 @@ public class Card_03_086_Tests
 		scn.FreepsResolveSkirmish(sam);
 		scn.PassSkirmishActions();
 
-		// He won, and Blade Tip's own response is offered before Sam takes his wound (engine pass 54).
-		assertEquals(0, scn.GetWoundsOn(sam));
+		// He won: Sam took his wound, and Blade Tip's own response is offered.
+		assertEquals(1, scn.GetWoundsOn(sam));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(tip));
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable(otsea));
 		assertEquals(2, scn.GetWoundsOn(otsea));
@@ -249,8 +246,7 @@ public class Card_03_086_Tests
 		scn.PassSkirmishActions();
 
 		// A trigger with a cost is offered though its effect will do nothing (Q-0034).
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(sam));
+		assertEquals(1, scn.GetWoundsOn(sam));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(otsea));
 		scn.ShadowChooseOptionalTrigger(otsea);
 
@@ -286,8 +282,7 @@ public class Card_03_086_Tests
 		scn.PassSkirmishActions();
 
 		// A trigger with a cost is offered though its effect cannot be carried out (Q-0034).
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(sam));
+		assertEquals(1, scn.GetWoundsOn(sam));
 		assertEquals(0, scn.GetWoundsOn(otsea));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(otsea));
 		scn.ShadowChooseOptionalTrigger(otsea);
@@ -301,7 +296,7 @@ public class Card_03_086_Tests
 	}
 
 	@Test
-	public void WhenFrodoIsOverwhelmedBladeTipIsTransferredToHimBeforeHeDiesAndSamTakesTheRing() throws DecisionResultInvalidException, CardNotFoundException {
+	public void IfFrodoDiesInHisSkirmishSamTakesTheRingBeforeBladeTipIsTransferredToHim() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var otsea = scn.GetShadowCard("otsea");
@@ -320,20 +315,17 @@ public class Card_03_086_Tests
 		scn.FreepsResolveSkirmish(frodo);
 		scn.PassSkirmishActions();
 
-		// 9 against 3 is more than double.  Otsea's win is answered before Frodo is overwhelmed (engine pass 54;
-		// until then Frodo was dead, Sam the Ring-bearer, and the Blade Tip went to Sam).
-		assertInZone(Zone.FREE_CHARACTERS, frodo);
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable(otsea));
-		scn.ShadowChooseOptionalTrigger(otsea);
-		assertEquals(1, scn.GetWoundsOn(otsea));
-
-		// The Blade Tip went to Frodo; then Frodo is overwhelmed and dies, the Blade Tip with him, and Sam's
-		// response makes him the Ring-bearer.
+		// 9 against 3 is more than double: Frodo is overwhelmed and dies.  Sam's response makes him the Ring-bearer.
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(sam));
 		scn.FreepsChooseOptionalTrigger(sam);
 		assertInZone(Zone.DEAD, frodo);
 		assertSame(sam, scn.GetRingBearer());
-		assertInDiscard(tip);
+
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(otsea));
+		scn.ShadowChooseOptionalTrigger(otsea);
+
+		assertEquals(1, scn.GetWoundsOn(otsea));
+		assertAttachedTo(tip, sam);
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }

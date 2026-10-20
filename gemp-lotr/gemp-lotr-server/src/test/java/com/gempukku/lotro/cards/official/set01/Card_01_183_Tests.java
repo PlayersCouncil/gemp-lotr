@@ -142,8 +142,7 @@ public class Card_01_183_Tests
 		scn.PassSkirmishActions();
 
 		// 13 + 2 against 8: the Troop wins, and each copy of Goblin Swarms offers its response.
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(swarms));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(swarms2));
 		assertEquals(1, scn.GetWoundsOn(troop));
@@ -218,8 +217,7 @@ public class Card_01_183_Tests
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
 
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertInZone(Zone.FREE_CHARACTERS, aragorn);
+		assertInZone(Zone.DEAD, aragorn);
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(swarms));
 		scn.ShadowChooseOptionalTrigger(swarms);
 

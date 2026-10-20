@@ -156,8 +156,7 @@ public class Card_17_027_Tests
 		scn.PassSkirmishActions();
 
 		// Aragorn 8 + 2 against the Vanquisher's 8: he wins, and the Vanquisher takes 1 wound and 1 for damage +1.
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(vanquisher));
+		assertEquals(2, scn.GetWoundsOn(vanquisher));
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(anduril));
 
@@ -177,8 +176,7 @@ public class Card_17_027_Tests
 		scn.FreepsAssignToMinions(aragorn, vanquisher);
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertInZone(Zone.SHADOW_CHARACTERS, vanquisher);
+		assertInDiscard(vanquisher);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(anduril));
 
 		// No site is controlled now: discarding the condition is the only choice that can be carried out, and Weary
@@ -222,8 +220,7 @@ public class Card_17_027_Tests
 		scn.PassSkirmishActions();
 
 		// Aragorn 8 + 2 against the Raiding Party's 9 - 1: he wins, and it lives through its 2 wounds.
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(raiders));
+		assertEquals(2, scn.GetWoundsOn(raiders));
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(anduril));
 
@@ -277,8 +274,7 @@ public class Card_17_027_Tests
 
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(raiders));
+		assertEquals(2, scn.GetWoundsOn(raiders));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(anduril));
 
 		scn.FreepsDeclineOptionalTrigger();

@@ -465,8 +465,7 @@ public class Card_01_009_ErrataTests
 		// The Guard's only opponent dies before strengths are compared: the skirmish is over and the Runner lost it.
 		scn.FreepsPlayCard(numenor);
 		assertInZone(Zone.DISCARD, runner);
-		// Its side already removed, there are no wounds for losing to resolve (step 5A), so the Axe's trigger has
-		// nothing to be ordered beside (engine pass 54).
+		scn.FreepsResolveRuleFirst();
 		assertTrue(scn.FreepsHasCardChoiceAvailable(soldier));
 
 		scn.FreepsChooseCard(soldier);

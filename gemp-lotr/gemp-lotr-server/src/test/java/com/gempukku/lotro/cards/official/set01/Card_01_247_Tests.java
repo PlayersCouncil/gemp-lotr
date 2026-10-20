@@ -93,8 +93,7 @@ public class Card_01_247_Tests
 
 		// 9 against 6: the Inquisitor wins.
 		scn.ShadowPass();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertEquals(1, scn.GetWoundsOn(gimli));
 		assertTrue(scn.ShadowPlayAvailable(foe));
 		assertFalse(scn.HasKeyword(inquisitor, Keyword.FIERCE));
 		assertFalse(scn.InFierceRound());
@@ -156,8 +155,7 @@ public class Card_01_247_Tests
 		// 7 + 7 + 5 + 8 against 18: all four win, and the Sentry's damage +1 makes it two wounds.
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(2, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowPlayAvailable(foe));
 
 		scn.ShadowPlayCard(foe);

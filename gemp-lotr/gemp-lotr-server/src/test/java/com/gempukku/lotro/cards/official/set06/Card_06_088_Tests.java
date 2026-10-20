@@ -10,7 +10,6 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_06_088_Tests
@@ -96,10 +95,10 @@ public class Card_06_088_Tests
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
 
-		// 12 against 8: she wins.  Her trigger answers the win before the wound for losing.
+		// 12 against 8: she wins.  The wound for losing goes first.
 		assertEquals(0, scn.GetWoundsOn(aragorn));
-		// What answers the win comes first, with nothing to order (engine pass 54).
-		assertEquals(0, scn.GetWoundsOn(aragorn));
+		scn.FreepsResolveRuleFirst();
+		assertEquals(1, scn.GetWoundsOn(aragorn));
 
 		// The Free Peoples player is the one who chooses.
 		assertEquals(List.of("Exert a companion", "Add a burden"), scn.FreepsGetMultipleChoices());
@@ -125,8 +124,8 @@ public class Card_06_088_Tests
 		scn.FreepsAssignToMinions(boromir, toldea);
 		scn.FreepsResolveSkirmish(boromir);
 		scn.PassSkirmishActions();
-		// What answers the win comes first, with nothing to order (engine pass 54).
-		assertEquals(1, scn.GetWoundsOn(boromir));
+		scn.FreepsResolveRuleFirst();
+		assertEquals(2, scn.GetWoundsOn(boromir));
 
 		assertEquals(List.of("Exert a companion", "Add a burden"), scn.FreepsGetMultipleChoices());
 		scn.FreepsChooseOption("Add a burden");
@@ -153,23 +152,27 @@ public class Card_06_088_Tests
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(toldea);
-		// Frodo and Aragorn are exhausted.  Elrond could exert, but is no companion.  (Her win is answered before
-		// Aragorn's wound for losing, engine pass 54; until then that wound was what exhausted him.)
+		// Frodo is exhausted, and the wound for losing will exhaust Aragorn.  Elrond could exert, but is no
+		// companion.
 		scn.AddWoundsToChar(frodo, 3);
-		scn.AddWoundsToChar(aragorn, 3);
+		scn.AddWoundsToChar(aragorn, 2);
 
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(aragorn, toldea);
 		scn.FreepsResolveSkirmish(aragorn);
-		assertEquals(0, scn.GetBurdens());
 		scn.PassSkirmishActions();
 
-		// The burden, with nothing asked; then the wound for losing kills Aragorn.
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(2, scn.GetWoundsOn(aragorn));
+		assertEquals(3, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(elrond));
+		scn.FreepsResolveRuleFirst();
+
+		assertEquals(3, scn.GetWoundsOn(aragorn));
 		assertEquals(3, scn.GetWoundsOn(frodo));
 		assertEquals(0, scn.GetWoundsOn(elrond));
 		assertEquals(1, scn.GetBurdens());
 		assertFalse(scn.FreepsDecisionAvailable("Exert a companion"));
-		assertInZone(Zone.DEAD, aragorn);
 		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
 
@@ -203,8 +206,8 @@ public class Card_06_088_Tests
 		// Her own skirmish, which she wins: now it is asked.
 		scn.FreepsResolveSkirmish(boromir);
 		scn.PassSkirmishActions();
-		// What answers the win comes first, with nothing to order (engine pass 54).
-		assertEquals(0, scn.GetWoundsOn(boromir));
+		scn.FreepsResolveRuleFirst();
+		assertEquals(1, scn.GetWoundsOn(boromir));
 		assertEquals(List.of("Exert a companion", "Add a burden"), scn.FreepsGetMultipleChoices());
 		scn.FreepsChooseOption("Add a burden");
 		assertEquals(1, scn.GetBurdens());

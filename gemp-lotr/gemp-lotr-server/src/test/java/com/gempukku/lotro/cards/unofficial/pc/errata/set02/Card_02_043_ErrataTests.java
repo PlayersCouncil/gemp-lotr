@@ -201,10 +201,10 @@ public class Card_02_043_ErrataTests
 		int deck = scn.GetFreepsDeckCount();
 		int discard = scn.GetFreepsDiscardCount();
 
-		// The Captain, 9 + 2, beats Aragorn, 8: the trigger, then 2 wounds with damage +1.
+		// The Captain, 9 + 2, beats Aragorn, 8: 2 wounds with damage +1, then the trigger.
 		scn.PassCurrentPhaseActions();
-		// The Sword answers the win before Aragorn's wounds for losing, with nothing to order (engine pass 54).
-		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
+		scn.FreepsResolveRuleFirst();
+		assertEquals(3, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.FreepsChoiceAvailable("Wound"));
 		assertTrue(scn.FreepsChoiceAvailable("Discard"));
 		assertFalse(scn.ShadowChoiceAvailable("Wound"));
@@ -251,8 +251,8 @@ public class Card_02_043_ErrataTests
 		int shadowDeck = scn.GetShadowDeckCount();
 
 		scn.PassCurrentPhaseActions();
-		// The Sword answers the win before Aragorn's wounds for losing, with nothing to order (engine pass 54).
-		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
+		scn.FreepsResolveRuleFirst();
+		assertEquals(2, scn.GetWoundsOn(aragorn));
 
 		scn.FreepsChooseOption("Discard");
 		assertInZone(Zone.DISCARD, top1, top2, top3);
@@ -287,8 +287,8 @@ public class Card_02_043_ErrataTests
 		scn.FreepsResolveSkirmish(aragorn);
 
 		scn.PassCurrentPhaseActions();
-		// The Sword answers the win before Aragorn's wounds for losing, with nothing to order (engine pass 54).
-		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
+		scn.FreepsResolveRuleFirst();
+		assertEquals(2, scn.GetWoundsOn(aragorn));
 		// The discard cannot be carried out in full, so only the wound is left to choose (CR 4.2 "effect").
 		assertFalse(scn.FreepsChoiceAvailable("Discard"));
 		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, guard, frodo));
@@ -329,8 +329,8 @@ public class Card_02_043_ErrataTests
 		assertTrue(deck > 3);
 
 		scn.PassCurrentPhaseActions();
-		// The Sword answers the win before Aragorn's wounds for losing, with nothing to order (engine pass 54).
-		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
+		scn.FreepsResolveRuleFirst();
+		assertEquals(2, scn.GetWoundsOn(aragorn));
 		// Frodo stops Shadow cards that make the Free Peoples player discard, but the Sword gives him a choice
 		// and he may choose to discard (F-0205: not a fault): the discard is offered beside the wound, and taken.
 		assertTrue(scn.FreepsChoiceAvailable("Wound"));
@@ -376,8 +376,8 @@ public class Card_02_043_ErrataTests
 		// The Captain, 9 + 2, beats Aragorn.
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassCurrentPhaseActions();
-		// The Sword answers the win before Aragorn's wounds for losing, with nothing to order (engine pass 54).
-		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
+		scn.FreepsResolveRuleFirst();
+		assertEquals(2, scn.GetWoundsOn(aragorn));
 		scn.FreepsChooseOption("Wound");
 		scn.FreepsChooseCard(sam);
 		assertEquals(3, scn.GetWoundsOn(sam));
@@ -388,10 +388,9 @@ public class Card_02_043_ErrataTests
 		scn.FreepsAssignToMinions(guard, captain);
 		scn.FreepsResolveSkirmish(guard);
 		scn.PassFierceSkirmishActions();
-		// The Sword answers the win before the Guard's wounds, with nothing to order (engine pass 54).
-		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
-		scn.FreepsChooseOption("Discard");
+		scn.FreepsResolveRuleFirst();
 		assertInZone(Zone.DEAD, guard);
+		scn.FreepsChooseOption("Discard");
 		assertEquals(deck - 3, scn.GetFreepsDeckCount());
 		assertEquals(3, scn.GetWoundsOn(sam));
 		assertEquals(2, scn.GetWoundsOn(aragorn));

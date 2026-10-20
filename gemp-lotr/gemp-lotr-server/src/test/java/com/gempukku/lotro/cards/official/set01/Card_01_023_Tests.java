@@ -109,8 +109,7 @@ public class Card_01_023_Tests
 		// 6 against 5: Gimli wins, and the Savage survives his two wounds.
 		scn.FreepsPass();
 		scn.ShadowPass();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(savage));
+		assertEquals(2, scn.GetWoundsOn(savage));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(nobody));
 
 		var shadowDeck = scn.GetShadowDeckCount();
@@ -201,8 +200,7 @@ public class Card_01_023_Tests
 		scn.FreepsAssignAndResolve(grimir, savage);
 		scn.FreepsPass();
 		scn.ShadowPass();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(savage));
+		assertEquals(1, scn.GetWoundsOn(savage));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(nobody));
 
 		var shadowDeck = scn.GetShadowDeckCount();

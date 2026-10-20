@@ -104,8 +104,7 @@ public class Card_15_015_ErrataTests
 		assertEquals(5, scn.GetStrength(uruk));
 		scn.PassSkirmishActions();
 
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(uruk));
+		assertEquals(1, scn.GetWoundsOn(uruk));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();
 
@@ -131,8 +130,7 @@ public class Card_15_015_ErrataTests
 		scn.FreepsResolveSkirmish(legolas);
 		scn.PassFierceSkirmishActions();
 
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertInZone(Zone.SHADOW_CHARACTERS, uruk);
+		assertInZone(Zone.DISCARD, uruk);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsAcceptOptionalTrigger();
 		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli, aragorn));
@@ -164,8 +162,7 @@ public class Card_15_015_ErrataTests
 		scn.PassSkirmishActions();
 
 		// 6 + 1 for a hunter against a minion that is none, against 5
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(savage));
+		assertEquals(1, scn.GetWoundsOn(savage));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable());
 		scn.FreepsDeclineOptionalTrigger();
 

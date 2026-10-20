@@ -104,8 +104,7 @@ public class Card_04_016_Tests
 
 		// 9 against 6: the Robber wins, short of overwhelming him (12).
 		scn.PassCurrentPhaseActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertEquals(1, scn.GetWoundsOn(gimli));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(robber));
 		// "This minion": the other Robber won nothing and offers nothing.
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable(robber2));
@@ -132,8 +131,7 @@ public class Card_04_016_Tests
 		assertEquals(11, scn.GetStrength(robber));
 		assertTrue(scn.HasKeyword(robber, Keyword.FIERCE));
 		scn.PassFierceSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertEquals(2, scn.GetWoundsOn(gimli));
 
 		// He has won a second time, fierce already, and is asked again.  Declined, so that what is read in the
 		// regroup phase is the end of the first win's bonus.
@@ -160,8 +158,7 @@ public class Card_04_016_Tests
 		scn.FreepsResolveSkirmish(gimli);
 		scn.PassCurrentPhaseActions();
 
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertEquals(1, scn.GetWoundsOn(gimli));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(robber));
 
 		scn.ShadowDeclineOptionalTrigger();

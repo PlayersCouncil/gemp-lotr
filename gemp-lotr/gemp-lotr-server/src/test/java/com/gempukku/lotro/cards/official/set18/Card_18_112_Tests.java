@@ -285,8 +285,7 @@ public class Card_18_112_Tests
 		assertEquals(6, scn.GetStrength(sam));
 		scn.FreepsAssignAndResolve(sam, brigand);
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(sam));
+		assertEquals(1, scn.GetWoundsOn(sam));
 
 		int pool = scn.GetTwilight();
 		assertTrue(scn.ShadowPlayAvailable(ravage));
@@ -341,8 +340,7 @@ public class Card_18_112_Tests
 		// The Brigand's 8 + 2 for the War Club, against Aragorn's 8.
 		scn.FreepsAssignAndResolve(aragorn, brigand);
 		scn.PassSkirmishActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
 
 		// The War Club's own text does the discarding: a Shadow card that is no character.
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(club));

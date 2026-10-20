@@ -133,8 +133,7 @@ public class Card_18_116_Tests
 		assertFalse(scn.IsSiteControlled(site1));
 
 		scn.PassCurrentPhaseActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(knight));
+		assertEquals(2, scn.GetWoundsOn(knight));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(fury));
 		scn.ShadowAcceptOptionalTrigger();
 
@@ -168,8 +167,7 @@ public class Card_18_116_Tests
 		assertEquals(1, scn.GetWoundsOn(aggressor));
 
 		scn.PassCurrentPhaseActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(knight));
+		assertEquals(2, scn.GetWoundsOn(knight));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(fury));
 		scn.ShadowAcceptOptionalTrigger();
 
@@ -205,8 +203,7 @@ public class Card_18_116_Tests
 		assertInZone(Zone.SUPPORT, worker);
 
 		scn.PassCurrentPhaseActions();
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(knight));
+		assertEquals(2, scn.GetWoundsOn(knight));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(fury));
 		scn.ShadowAcceptOptionalTrigger();
 

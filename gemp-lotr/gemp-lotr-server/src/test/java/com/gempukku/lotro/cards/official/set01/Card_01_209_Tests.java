@@ -88,8 +88,7 @@ public class Card_01_209_Tests
 		scn.PassSkirmishActions();
 
 		// 12 against 8: the Nazgûl wins, Aragorn takes his wound.
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(tip));
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable(tip2));
 
@@ -127,8 +126,7 @@ public class Card_01_209_Tests
 		scn.PassSkirmishActions();
 
 		// 10 + 5 against 8: not doubled, so Elrond loses and takes a wound.
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(elrond));
+		assertEquals(1, scn.GetWoundsOn(elrond));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(tip));
 
 		scn.ShadowChooseOptionalTrigger(tip);
@@ -186,8 +184,7 @@ public class Card_01_209_Tests
 		scn.PassSkirmishActions();
 
 		// 10 against 8. Black Breath on him does not count against the limit: both copies are offered.
-		// Engine pass 54: what answers the win comes before the loser loses.
-		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(tip));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(tip2));
 
