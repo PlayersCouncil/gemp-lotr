@@ -12,6 +12,7 @@ import com.gempukku.lotro.logic.timing.results.EndOfPhaseResult;
 import com.gempukku.lotro.logic.timing.results.SkirmishAboutToEndResult;
 import com.gempukku.lotro.logic.timing.results.StartOfPhaseResult;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class SkirmishPhaseAction extends SystemQueueAction {
@@ -51,8 +52,20 @@ public class SkirmishPhaseAction extends SystemQueueAction {
                         }
                     }
                 });
+        // Step 5: the skirmish is about to end, involving the characters it began with and any who came into it in
+        // another's place, in that one's stead (F-0563); read from the skirmish now, not as it began.
         appendEffect(
-                new TriggeringResultEffect(null, new SkirmishAboutToEndResult(fellowshipCharacter, shadowCharacters), "Skirmish about to end"));
+                new UnrespondableEffect() {
+                    @Override
+                    protected void doPlayEffect(LotroGame game) {
+                        var skirmish = game.getGameState().getSkirmish();
+                        var result = (skirmish == null)
+                                ? new SkirmishAboutToEndResult(fellowshipCharacter, shadowCharacters)
+                                : new SkirmishAboutToEndResult(skirmish.getInvolvedFellowshipCharacter(),
+                                        new HashSet<>(skirmish.getInvolvedShadowCharacters()));
+                        insertEffect(new TriggeringResultEffect(null, result, "Skirmish about to end"));
+                    }
+                });
         appendEffect(
                 new TriggeringResultEffect(null, new EndOfPhaseResult(Phase.SKIRMISH), "End of skirmish phase"));
         appendEffect(

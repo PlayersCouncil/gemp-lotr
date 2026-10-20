@@ -670,9 +670,10 @@ with no Dwarf in play is refused by any play ability whatever its filter, so lay
 `SkirmishAboutToEndResult` behind `ResolveSkirmishEffect`, so the loser's wounds are on (or he is dead) when the
 response is offered, and a cancel or the removal of a side's last character reaches it with no wound placed
 (mechanics/skirmishes/TheSkirmishIsAboutToEndAtStepSixTests, named by the 2026-10-16 numbering; each step of the
-procedure in mechanics/skirmishes/SkirmishProcedureTests). Who was involved is recorded as the skirmish phase
-begins (a character who joins it later, in another's place, is not among them: F-0563), but the trigger's filter is
-asked of those cards as they are then: a minion killed by his loser's wound bears nothing any more (Q-0332: B), and
+procedure in mechanics/skirmishes/SkirmishProcedureTests). Who was involved is the skirmish's own record
+(`Skirmish.getInvolvedFellowshipCharacter`, `getInvolvedShadowCharacters`): those it began with, a character who
+replaced another in the place of the one replaced (F-0563, engine pass 57), and still those removed or killed in it;
+the trigger's filter is asked of those cards as they are then: a minion killed by his loser's wound bears nothing any more (Q-0332: B), and
 is still of his race.
 
 ## Getting to the moment: set-up, the skippers and turns

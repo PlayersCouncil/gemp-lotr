@@ -1040,7 +1040,9 @@ public class GameState {
     }
 
     public void replaceInSkirmish(PhysicalCard card) {
+        var replaced = _skirmish.getFellowshipCharacter();
         _skirmish.setFellowshipCharacter(card);
+        _skirmish.noteReplacement(replaced, card);
         for (GameStateListener gameStateListener : getAllGameStateListeners()) {
             gameStateListener.finishSkirmish();
             sendSkirmish(gameStateListener);
@@ -1090,6 +1092,7 @@ public class GameState {
             removeFromSkirmish(card);
         }
         _skirmish.getShadowCharacters().add(card);
+        _skirmish.noteReplacement(removedMinion, card);
         for (GameStateListener listener : getAllGameStateListeners()) {
             listener.finishSkirmish();
             sendSkirmish(listener);
