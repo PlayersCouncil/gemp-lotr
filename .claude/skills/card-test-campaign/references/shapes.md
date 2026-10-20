@@ -243,8 +243,9 @@ A strength bonus is the same: "Make a [moria] Orc strength +1 for each other [mo
 the number. Death to the Strawheads 4_8 ("for each companion you spot") is the same, corrected so (F-0561, dec-b4_7).
 The number comes filled in with all there are (Ketura on F-0561: "the default answer presented to the player is all
 of them"): every `chooseHowManyTo...Spot` does so with no field written, and a test reads it
-(`ShadowGetChoiceDefault()`; 4_8, 1_167, 4_58). Three spot counts are built as a `chooseANumber` with no `default:`, filled in with 0 (Orc Insurgent 6_104, Wind That
-Sped Ships 8_66, Sunland Trooper 17_59), and wait on her word whether hers reaches them (engine pass 53).
+(`ShadowGetChoiceDefault()`; 4_8, 1_167, 4_58). A spot count built as a `chooseANumber` gives
+its `default:` the same value as its `to:` (Q-0341: A; Orc Insurgent 6_104, Wind That Sped Ships 8_66 capped at 6,
+Sunland Trooper 17_59), and a test reads it.
 "X is the number of Free Peoples cultures you spot over N" is such a count: a `chooseANumber` from 0 to `forEachFPCulture` with `over: N` is the shape (Orc Insurgent 6_104), as `chooseHowManyFPCulturesToSpot` would be.
 
 **A reveal before "to" is a cost, and an empty draw deck cannot pay it (F-0022, F-0249).** "Reveal the top card

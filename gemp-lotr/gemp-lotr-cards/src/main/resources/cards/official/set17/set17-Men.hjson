@@ -1082,6 +1082,12 @@
 							filter: culture(men),minion
 							on: culture(men),possession
 						}
+						// Filled in with all there are (Q-0341: A, as F-0561).
+						default: {
+							type: forEachStacked
+							filter: culture(men),minion
+							on: culture(men),possession
+						}
 						text: Choose how many {men} minions to spot
 						memorize: spotCount
 					}
