@@ -2293,3 +2293,21 @@ of the losing side lose the skirmish. These occur simultaneously." 4A to 4D are 
 effects triggered by the skirmish loss"; 4D: "Responses to the loser dying occur now, which will resolve before
 optional responses to wins or losses in step 4." Under review with her for holes before anything is built
 ("let's inspect it and analyze it *first*"). *[2026-10-20]*
+
+**The skirmish procedure as amended, binding (2026-10-20).** The full text with her edits is
+orchestrator/skirmish-procedure-2026-10-20.md (answers/2026-10-20-a.md and -b.md). Her words on the holes:
+- Step 4's loss sequence: "As a sequence of required effects, this block of effects is essentially a required 'each
+  time' rules trigger. It is indeed ordered by the Free Peoples player, which nukes my prior notes about Lurtz's
+  Sword." Lurtz's Sword, Worry and the loss sequence are ordered by the Free Peoples player (the engine as it is).
+- 4D: "That sentence was intended to fold in the rulings on Otsea + Plundered Armories as a reminder or clarification
+  rather than an alteration to anything; actions are responded to in the order which they occur, and so a wound
+  response/trigger occurs when the skirmish loss issues them, then the death response/trigger occurs if that happens
+  (as called out by 4D), and only after the interruptions to the resolution of the required triggers have been resolved
+  do the optional responses/triggers to 4 get to resolve."
+- 4B: the overwhelm is as decided "during step 3".
+- 3C (imported from CR "overwhelmed"): "A side with a total strength greater than zero will overwhelm a side whose total
+  strength is zero. If the strength of both sides is zero, the Shadow side wins the skirmish (but does not overwhelm)."
+- 3A's return to step 3: Fishing Boat 13_48 "should" be offered "on every iteration of the check" (F-0566 confirmed);
+  "We may need to implement Fishing Boat as a non-special-ability response if it's not being offered".
+- 2C: "that side and the last removed character is declared the loser" (Legacy Ruling 2).
+"About to end" is step 5 (Final Cry, Loathsome, Sting answer it; Q-0332 stands). *[2026-10-20]*
