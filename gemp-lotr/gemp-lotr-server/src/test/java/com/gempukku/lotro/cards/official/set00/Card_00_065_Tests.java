@@ -17,8 +17,7 @@ public class Card_00_065_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "0_65");
-					// put other cards in here as needed for the test case
+					put("boromir", "0_65");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -42,11 +41,11 @@ public class Card_00_065_Tests
 		 * Vitality: 3
 		 * Resistance: 6
 		 * Game Text: <b>Ring-bound</b>. <b>Knight</b>. <b>Ranger</b>.
-		*/
+		 */
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("boromir");
 
 		assertEquals("Boromir", card.getBlueprint().getTitle());
 		assertEquals("Steward's Heir", card.getBlueprint().getSubtitle());
@@ -62,20 +61,5 @@ public class Card_00_065_Tests
 		assertEquals(7, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
 		assertEquals(6, card.getBlueprint().getResistance());
-	}
-
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void BoromirTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-
-		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(3, scn.GetTwilight());
 	}
 }

@@ -5,10 +5,12 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.StrengthModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_01_101_Tests
@@ -18,8 +20,19 @@ public class Card_01_101_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "1_101");
-					// put other cards in here as needed for the test case
+					put("coat", "1_101");
+					put("coat2", "1_101");
+
+					put("boromir", "1_97");     // Boromir, Son of Denethor: [gondor] Man companion; a skirmish ability used only on purpose
+					put("guard1", "5_83");      // Household Guard: [rohan] Man companion, strength 6, vitality 3, valiant only
+					put("guard2", "5_83");
+					put("barliman", "1_70");    // Barliman Butterbur: [gandalf] Man ally; a fellowship ability used only on purpose
+					put("gimli", "1_13");       // Gimli, Son of Gloin: a Dwarf companion; a skirmish ability used only on purpose
+					put("erland", "2_21");      // Erland: [gandalf] Man ally, home site 3, strength 5, vitality 2; his text only bars looking at his owner's hand
+					put("hugin", "2_24");       // Hugin: [gandalf] Man ally, home site 3, strength 4, vitality 2; a fellowship ability used only on purpose
+
+					put("troop1", "1_177");     // Goblin Patrol Troop: strength 13, vitality 3, no text
+					put("troop2", "1_177");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -44,7 +57,7 @@ public class Card_01_101_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("coat");
 
 		assertEquals("Coat of Mail", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -53,21 +66,166 @@ public class Card_01_101_Tests
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.POSSESSION, card.getBlueprint().getCardType());
 		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.ARMOR));
+		assertEquals(1, card.getBlueprint().getPossessionClasses().size());
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void CoatofMailTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void PlaysOnAManCompanionOrAManAlly() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var coat = scn.GetFreepsCard("coat");
+		var boromir = scn.GetFreepsCard("boromir");
+		var guard = scn.GetFreepsCard("guard1");
+		var barliman = scn.GetFreepsCard("barliman");
+		var gimli = scn.GetFreepsCard("gimli");
+		var frodo = scn.GetRingBearer();
+		scn.MoveCardsToHand(coat);
+		scn.MoveCompanionsToTable(boromir, guard, gimli);
+		scn.MoveAlliesToTable(barliman);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		assertInHand(coat);
+		assertTrue(scn.FreepsPlayAvailable(coat));
+		scn.FreepsPlayCard(coat);
+		// Man companions of two cultures and a Man ally; not a Dwarf, nor a Hobbit.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(boromir, guard, barliman));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(gimli, frodo));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		scn.FreepsChooseCard(barliman);
+
+		assertAttachedTo(coat, barliman);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void BearerIsNotOverwhelmedAtDoubleStrengthAndAnotherManIs() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var coat = scn.GetFreepsCard("coat");
+		var guard1 = scn.GetFreepsCard("guard1");
+		var guard2 = scn.GetFreepsCard("guard2");
+		var troop1 = scn.GetShadowCard("troop1");
+		var troop2 = scn.GetShadowCard("troop2");
+		scn.MoveCompanionsToTable(guard1, guard2);
+		scn.AttachCardsTo(guard1, coat);
+
+		scn.StartGame();
+		assertAttachedTo(coat, guard1);
+		scn.MoveMinionsToTable(troop1, troop2);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{guard1, troop1}, new PhysicalCardImpl[]{guard2, troop2});
+
+		// 13 against 6: more than double, less than triple. The Coat spares him; he takes the 1 wound for losing.
+		scn.FreepsResolveSkirmish(guard1);
+		assertAttachedTo(coat, guard1);
+		assertEquals(6, scn.GetStrength(guard1));
+		assertEquals(13, scn.GetStrength(troop1));
+		assertEquals(0, scn.GetWoundsOn(guard1));
+		scn.PassSkirmishActions();
+		assertEquals(1, scn.GetWoundsOn(guard1));
+		assertInPlay(guard1);
+
+		// The same against the other Guard, who bears no Coat: overwhelmed.
+		scn.FreepsResolveSkirmish(guard2);
+		assertEquals(6, scn.GetStrength(guard2));
+		assertEquals(0, scn.GetFreepsDeadCount());
+		scn.PassSkirmishActions();
+		assertInZone(Zone.DEAD, guard2);
+		assertEquals(1, scn.GetFreepsDeadCount());
+
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void ABearerWhoIsAnAllyIsNotOverwhelmedAtDoubleStrengthAndAnotherAllyIs() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var coat = scn.GetFreepsCard("coat");
+		var erland = scn.GetFreepsCard("erland");
+		var hugin = scn.GetFreepsCard("hugin");
+		var troop1 = scn.GetShadowCard("troop1");
+		var troop2 = scn.GetShadowCard("troop2");
+		scn.MoveAlliesToTable(erland, hugin);
+		scn.AttachCardsTo(erland, coat);
+
+		scn.StartGame();
+		assertAttachedTo(coat, erland);
+		scn.SkipToSite(2);
+		scn.FreepsPass();
+		// Site 3: the home of both allies, where they may be assigned.
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		scn.MoveMinionsToTable(troop1, troop2);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{erland, troop1}, new PhysicalCardImpl[]{hugin, troop2});
+
+		// 13 against 5: more than double, less than triple. The Coat spares the ally; he takes the 1 wound for losing.
+		scn.FreepsResolveSkirmish(erland);
+		assertAttachedTo(coat, erland);
+		assertEquals(5, scn.GetStrength(erland));
+		assertEquals(13, scn.GetStrength(troop1));
+		assertEquals(0, scn.GetWoundsOn(erland));
+		scn.PassSkirmishActions();
+		assertEquals(1, scn.GetWoundsOn(erland));
+		assertInPlay(erland);
+
+		// The same against the other ally, who bears no Coat: overwhelmed.
+		scn.FreepsResolveSkirmish(hugin);
+		assertEquals(4, scn.GetStrength(hugin));
+		assertEquals(13, scn.GetStrength(troop2));
+		assertEquals(0, scn.GetFreepsDeadCount());
+		scn.PassSkirmishActions();
+		assertInZone(Zone.DEAD, hugin);
+		assertEquals(1, scn.GetFreepsDeadCount());
+
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void BearerIsOverwhelmedAtExactlyTripleStrengthAndNotOneShortOfIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var coat = scn.GetFreepsCard("coat");
+		var coat2 = scn.GetFreepsCard("coat2");
+		var guard1 = scn.GetFreepsCard("guard1");
+		var guard2 = scn.GetFreepsCard("guard2");
+		var troop1 = scn.GetShadowCard("troop1");
+		var troop2 = scn.GetShadowCard("troop2");
+		scn.MoveCompanionsToTable(guard1, guard2);
+		scn.AttachCardsTo(guard1, coat);
+		scn.AttachCardsTo(guard2, coat2);
+
+		scn.StartGame();
+		assertAttachedTo(coat, guard1);
+		assertAttachedTo(coat2, guard2);
+		scn.MoveMinionsToTable(troop1, troop2);
+		// Strengths that only set the board: 13 + 4 = 17, one short of triple a Guard's 6; 13 + 5 = 18, exactly triple.
+		scn.ApplyAdHocModifier(new StrengthModifier(null, troop1, null, 4));
+		scn.ApplyAdHocModifier(new StrengthModifier(null, troop2, null, 5));
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{guard1, troop1}, new PhysicalCardImpl[]{guard2, troop2});
+
+		scn.FreepsResolveSkirmish(guard1);
+		assertAttachedTo(coat, guard1);
+		assertEquals(6, scn.GetStrength(guard1));
+		assertEquals(17, scn.GetStrength(troop1));
+		assertEquals(0, scn.GetWoundsOn(guard1));
+		scn.PassSkirmishActions();
+		assertEquals(1, scn.GetWoundsOn(guard1));
+		assertInPlay(guard1);
+
+		scn.FreepsResolveSkirmish(guard2);
+		assertAttachedTo(coat2, guard2);
+		assertEquals(6, scn.GetStrength(guard2));
+		assertEquals(18, scn.GetStrength(troop2));
+		assertEquals(0, scn.GetWoundsOn(guard2));
+		assertEquals(0, scn.GetFreepsDeadCount());
+		scn.PassSkirmishActions();
+		// Vitality 3 and unwounded: the one wound for losing would not kill him; the overwhelm does.
+		assertInZone(Zone.DEAD, guard2);
+		assertEquals(1, scn.GetFreepsDeadCount());
+
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }

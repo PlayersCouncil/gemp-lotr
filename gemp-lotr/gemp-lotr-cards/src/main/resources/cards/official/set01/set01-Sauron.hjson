@@ -1100,8 +1100,8 @@
 						count: 2
 					}
 					{
-						type: cantspot
-						filter: AssignedToSkirmish(self)
+						type: canSpot
+						filter: hobbit,assignableToSkirmishAgainst(self)
 					}
 				]
 				effect: {
@@ -1213,13 +1213,12 @@
 		timewords: Response
 		effects: {
 			type: responseEvent
-			requires: {
-				type: canSpot
-				filter: culture(sauron),orc,inSkirmish
-			}
 			trigger: {
+				// CR 4.2 (Section Three, The Ring's Oppression 1_273): killed by the game text of a [sauron] Orc, or by
+				// losing a skirmish one is in; another minion's wound in its skirmish is no kill of the Orc's (Q-0328: B)
 				type: killed
 				filter: companion
+				killer: culture(sauron),orc
 			}
 			effect: {
 				type: discardTopCardsFromDeck
@@ -1354,6 +1353,11 @@
 				type: played
 				filter: self
 			}
+			requires: {
+				type: cardsInHandMoreThan
+				player: fp
+				count: 0
+			}
 			effect: {
 				type: discardCardAtRandomFromHand
 				hand: fp
@@ -1389,24 +1393,15 @@
 		effects: {
 			type: activated
 			phase: skirmish
-			requires: {
-				type: perPhaseLimit
-				limit: 3
-			}
+			effectLimitPerPhase: 3
 			cost: {
 				type: removeTwilight
 			}
-			effect: [
-				{
-					type: incrementPerPhaseLimit
-					limit: 3
-				}
-				{
-					type: modifyStrength
-					select: bearer
-					amount: 1
-				}
-			]
+			effect: {
+				type: modifyStrength
+				select: bearer
+				amount: 1
+			}
 		}
 		gametext: Bearer must be a [sauron] Orc.<br><b>Skirmish:</b> Remove (1) to make bearer strength +1 (limit +3).
 		lore: "An Orc's weapon reflects his passion for war and cruelty."
@@ -1562,13 +1557,12 @@
 		timewords: Response
 		effects: {
 			type: responseEvent
-			requires: {
-				type: canSpot
-				filter: culture(sauron),orc,inSkirmish
-			}
 			trigger: {
+				// CR 4.2 Section Three, this card: killed by the game text of a [sauron] Orc minion card, or by losing a
+				// skirmish involving one (Q-0328: B)
 				type: killed
 				filter: companion
+				killer: culture(sauron),orc
 			}
 			effect: {
 				type: addBurdens

@@ -476,7 +476,8 @@
 			cost: {
 				type: exert
 				select: choose(companion)
-				count: any
+				// At least one: "exert X companions" is an exertion cost and X is not zero (Q-0076).
+				count: anyNonZero
 				memorize: exertedCompanions
 			}
 			effect: {
@@ -676,7 +677,7 @@
 					type: PutCardsFromDeckIntoHand
 					count: 2
 					select: choose(memory(cardsOnTop))
-					reveal: true
+					reveal: false
 					shuffle: false
 					showAll: false
 				}
@@ -736,7 +737,7 @@
 					type: PutCardsFromDeckIntoHand
 					count: 1
 					select: choose(memory(cardsOnTop))
-					reveal: true
+					reveal: false
 					shuffle: false
 					showAll: false
 				}
