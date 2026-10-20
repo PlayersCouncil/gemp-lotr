@@ -623,12 +623,16 @@
 				}
 				effect: [
 					{
-						type: ReinforceTokens
-						culture: Raider
-						select: choose(any)
+						// One token at a time, each on a card of the player's choice (CR 4.2 "reinforce"; F-0113).
+						type: Repeat
 						times: {
 							type: ForEachInMemory
 							memory: hinderedCards
+						}
+						effect: {
+							type: ReinforceTokens
+							culture: Raider
+							select: choose(any)
 						}
 					}
 					{
@@ -695,7 +699,8 @@
 				type: Modifier
 				modifier: {
 					type: AddKeyword
-					filter: self
+					// Only while the Quartermaster is itself in the skirmish being fought (F-0114).
+					filter: self,InSkirmish
 					keyword: damage
 					amount: {
 						type: ForEachYouCanSpot
@@ -778,7 +783,7 @@
 				] 
 			}
 		]
-		gametext: <b>Corsair.</b><br>Response: If your [raider] card is about to be hindered or discarded by another card effect, exert or hinder this minion to prevent that.
+		gametext: <b>Corsair.</b><br>Response: If your [raider] card is about to be hindered or discarded by another card, exert or hinder this minion to prevent that.
 		lore: "They cried. 'Back to the walls! Come back to the City before all are overwhelmed!' But the wind that sped the ships blew all their clamour away."
 		promotext: ""
 		alts: {
@@ -1055,11 +1060,15 @@
 				}
 			}
 			{
-				type: trigger
+				// "Each time this minion is hindered" is answered once it has been (F-0120).
+				type: SelfRemovedFromPlayTrigger
+				method: hinder
 				optional: true
-				trigger: {
-					type: AboutToHinder
-					filter: self
+				// Not offered with no other [raider] minion to hinder or restore (Q-0034, F-0122).
+				requires: {
+					type: CanSpot
+					filter: another,culture(raider),minion
+					hindered: true
 				}
 				effect: {
 					type: Choice
@@ -1338,18 +1347,15 @@
 					type: Killed
 					filter: culture(raider),minion
 				}
+				cost: {
+					type: Exert
+					select: choose(culture(raider), minion)
+				}
 				effect: [
 					{
-						type: CostToEffect
-						cost: {
-							type: Exert
-							select: choose(culture(raider), minion)
-						}
-						effect: {
-							type: Exert
-							select: choose(unbound,companion)
-							memorize: exertedCompanion
-						}
+						type: Exert
+						select: choose(unbound,companion)
+						memorize: exertedCompanion
 					}
 					{
 						type: Optional
@@ -1410,7 +1416,6 @@
 				}
 				cost: {
 					type: Exert
-					ignoreCostCheckFailure: true
 					select: memory(playedSouthron)
 				}
 				effect: [
@@ -1485,13 +1490,14 @@
 						ignoreCostCheckFailure: true
 						select: all(minion,not(memory(chosenSouthron)))
 					}
-					{
-						type: Spot
-						select: choose(unbound, companion)
-						memorize: chosenCompanion
-					}
 				]
 				effect: [
+					{
+						type: ChooseActiveCards
+						select: choose(unbound, companion)
+						memorize: chosenCompanion
+						text: Choose an unbound companion to assign {chosenSouthron} to
+					}
 					{
 						type: Preventable
 						text: Would you like to make {chosenSouthron} strength +3, ambush (4), and fierce until the regroup phase to prevent assigning it to {chosenCompanion}?
@@ -1651,6 +1657,15 @@
 			{
 				type: Activated
 				phase: Maneuver
+				// Costs are paid in the order printed (Q-0080): the other Schooner is hindered first and its
+				// tokens are then out of reach, so the 3 must be found elsewhere (F-0123). Two dots: there
+				// is never more than one other Schooner of yours.
+				requires: {
+					type: CanSpotCultureTokens
+					culture: raider
+					amount: 3
+					filter: your,or(self,not(title(Raiding Schooner)))
+				}
 				cost: [
 					{
 						type: Spot
@@ -1835,10 +1850,18 @@
 				trigger: {
 					type: Moves
 				}
-				requires: {
-					type: CanSpot
-					filter: self,Zone(ATTACHED)
-				}
+				requires: [
+					{
+						type: CanSpot
+						filter: self,Zone(ATTACHED)
+					}
+					// Nothing is asked when neither branch has anything to hinder (F-0116, F-0124): a
+					// hindered bearer or item is not spotted.
+					{
+						type: CanSpot
+						filter: or(bearer, and(item, side(freeps), AttachedTo(bearer)))
+					}
+				]
 				effect: {
 					type: Choice
 					player: Freeps
@@ -2433,6 +2456,7 @@
 									type: DuplicateGameText
 									filter: memory(mumak)
 									from: memory(dupedMan)
+									snapshot: true
 								}
 								until: EndOfTurn
 							}
@@ -2442,6 +2466,7 @@
 									type: AddKeywordFromCards
 									filter: memory(mumak)
 									from: memory(dupedMan)
+									snapshot: true
 								}
 								until: EndOfTurn
 							}

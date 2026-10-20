@@ -1,34 +1,43 @@
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v03;
 
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Race;
-import com.gempukku.lotro.common.Side;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_V3_098_Tests
 {
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("assassin", "103_98");    // Red Eye Assassin
-					put("runner", "1_178");       // Goblin Runner
-					put("hollowing", "3_54");     // Hollowing of Isengard - Shadow condition
+					put("assassin", "103_98");
+					put("assassin2", "103_98");
+					put("soldier", "1_271");      // Orc Soldier: a [sauron] Orc, strength 7, vitality 2; a skirmish ability that is only ever used on purpose
+					put("troop", "1_177");        // Goblin Patrol Troop: an Orc with no text, strength 13
+					put("armory", "1_173");       // Goblin Armory: a Shadow condition in the support area
+					put("banner", "6_98");        // Banner of the Eye: a hand weapon for a [sauron] Orc, strength +1; its text answers a skirmish its bearer wins
+					put("breath", "1_207");       // Black Breath: a Shadow condition, cheated onto a companion; its bearer cannot heal
 
-					put("aragorn", "1_89");
-					put("anduril", "7_79");       // Anduril - Hand Weapon Artifact
-					put("bow", "1_90");           // Aragorn's Bow - Ranged Weapon Possession
-					put("athelas", "1_94");       // Athelas - non-weapon Possession
-					put("lastalliance", "1_49");  // Last Alliance - Condition on Gondor Man
+					put("aragorn", "1_89");       // Aragorn, Ranger of the North: strength 8, no skirmish ability
+					put("gimli", "1_13");         // Gimli, Son of Gloin: strength 6; damage +1
+					put("elrond", "1_40");        // Elrond, Lord of Rivendell: an ally, strength 8, home site 3
+					put("sword", "1_112");        // Ranger's Sword: a hand weapon, a possession; bearer must be Aragorn
+					put("bow", "1_90");           // Aragorn's Bow: a ranged weapon, a possession; its bearer is an archer
+					put("narsil", "9_34");        // Narsil, Blade of the Faithful: a hand weapon, an artifact, for a [gondor] Man; vitality +1; its response needs 2 [gondor] Men
+					put("brand", "2_32");         // Flaming Brand: a hand weapon for a Man, a possession, borne in addition to 1 other hand weapon
+					put("lindon", "11_16");       // Blade of Lindon: a hand weapon for an Elf, strength +1; its text needs a forest or river site
+					put("alliance", "1_49");      // The Last Alliance of Elves and Men: a Free Peoples condition a [gondor] Man bears
+					put("athelas", "1_94");       // Athelas: a possession that is no weapon
+					put("axe", "1_9");            // Dwarven Axe: a hand weapon for a Dwarf, strength +2
+					put("stairs", "1_24");        // Stairs of Khazad-dum: a Free Peoples condition in the support area
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -52,8 +61,8 @@ public class Card_V3_098_Tests
 		 * Vitality: 3
 		 * Site Number: 4
 		 * Game Text: This minion is strength +1 for each hindered card you can spot.
-		* 	Skirmish: Exert this minion to hinder a weapon or condition borne by a companion it is skirmishing.
-		*/
+		 * 	Skirmish: Exert this minion to hinder a weapon or condition borne by a companion it is skirmishing.
+		 */
 
 		var scn = GetScenario();
 
@@ -72,74 +81,225 @@ public class Card_V3_098_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-
 	@Test
-	public void AssassinStrengthScalesWithHinderedCards() throws DecisionResultInvalidException, CardNotFoundException {
+	public void IsStrengthPlusOneForEachHinderedCardOfEitherSideAndNoOtherMinionIs() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var assassin = scn.GetShadowCard("assassin");
-		var runner = scn.GetShadowCard("runner");
-		var hollowing = scn.GetShadowCard("hollowing");
+		var assassin2 = scn.GetShadowCard("assassin2");
+		var soldier = scn.GetShadowCard("soldier");
+		var troop = scn.GetShadowCard("troop");
+		var armory = scn.GetShadowCard("armory");
+		var breath = scn.GetShadowCard("breath");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		var anduril = scn.GetFreepsCard("anduril");
-		var lastalliance = scn.GetFreepsCard("lastalliance");
-
-		scn.MoveMinionsToTable(assassin, runner);
-		scn.MoveCardsToSupportArea(hollowing);
-		scn.MoveCompanionsToTable(aragorn);
-		scn.AttachCardsTo(aragorn, anduril, lastalliance);
+		var gimli = scn.GetFreepsCard("gimli");
+		var athelas = scn.GetFreepsCard("athelas");
+		var alliance = scn.GetFreepsCard("alliance");
+		var stairs = scn.GetFreepsCard("stairs");
+		scn.MoveCompanionsToTable(aragorn, gimli);
+		scn.AttachCardsTo(aragorn, athelas, alliance, breath);
+		scn.MoveCardsToSupportArea(armory, stairs);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(assassin, assassin2, soldier, troop);
 
-		// Base strength with 0 hindered
+		// Nothing is hindered.
 		assertEquals(6, scn.GetStrength(assassin));
+		assertEquals(6, scn.GetStrength(assassin2));
+		assertEquals(13, scn.GetStrength(troop));
 
-		// Hinder FP cards
-		scn.HinderCard(anduril);
-		assertEquals(7, scn.GetStrength(assassin));
-
-		scn.HinderCard(lastalliance);
+		// Two Free Peoples cards: a companion, and a possession another companion bears.
+		scn.HinderCard(gimli, athelas);
 		assertEquals(8, scn.GetStrength(assassin));
 
-		// Hinder Shadow card - should also count
-		scn.HinderCard(hollowing);
+		// The One Ring, which has no side.
+		scn.HinderCard(scn.GetRing());
 		assertEquals(9, scn.GetStrength(assassin));
+
+		// Three Shadow cards: a condition in the support area, a minion, and a condition a companion bears.
+		scn.HinderCard(armory, soldier, breath);
+		assertEquals(12, scn.GetStrength(assassin));
+		// Each copy counts them once for itself, and another Orc gets nothing.
+		assertEquals(12, scn.GetStrength(assassin2));
+		assertEquals(13, scn.GetStrength(troop));
+
+		// The other copy, hindered, is one more card for this one.
+		scn.HinderCard(assassin2);
+		assertEquals(13, scn.GetStrength(assassin));
+
+		// Restored, a card is counted no longer.
+		scn.RestoreCard(gimli, athelas);
+		assertEquals(11, scn.GetStrength(assassin));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	public void AssassinHindersWeaponsAndConditionsButNotOtherPossessions() throws DecisionResultInvalidException, CardNotFoundException {
+	public void SkirmishActionExertsItToHinderAWeaponOrConditionBorneByTheCompanionItFights() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var assassin = scn.GetShadowCard("assassin");
+		var soldier = scn.GetShadowCard("soldier");
+		var banner = scn.GetShadowCard("banner");
+		var breath = scn.GetShadowCard("breath");
 		var aragorn = scn.GetFreepsCard("aragorn");
-		var anduril = scn.GetFreepsCard("anduril");       // Hand Weapon Artifact - valid
-		var bow = scn.GetFreepsCard("bow");               // Ranged Weapon Possession - valid
-		var lastalliance = scn.GetFreepsCard("lastalliance"); // Condition - valid
-		var athelas = scn.GetFreepsCard("athelas");       // Non-weapon Possession - invalid
-
-		scn.MoveMinionsToTable(assassin);
-		scn.MoveCompanionsToTable(aragorn);
-		scn.AttachCardsTo(aragorn, anduril, bow, lastalliance, athelas);
+		var gimli = scn.GetFreepsCard("gimli");
+		var narsil = scn.GetFreepsCard("narsil");
+		var bow = scn.GetFreepsCard("bow");
+		var brand = scn.GetFreepsCard("brand");
+		var alliance = scn.GetFreepsCard("alliance");
+		var athelas = scn.GetFreepsCard("athelas");
+		var axe = scn.GetFreepsCard("axe");
+		var stairs = scn.GetFreepsCard("stairs");
+		scn.MoveCompanionsToTable(aragorn, gimli);
+		scn.MoveCardsToSupportArea(stairs);
 
 		scn.StartGame();
-		scn.SkipToAssignments();
-		scn.FreepsAssignToMinions(aragorn, assassin);
-		scn.FreepsResolveSkirmish(aragorn);
+		scn.MoveMinionsToTable(assassin, soldier);
 
-		//Removing the arrow from the bow
-		scn.RemoveWoundsFromChar(assassin, 1);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		// Everything is put on after the archery phase, the Bow making its bearer an archer. Each item is on a
+		// bearer its text allows: Narsil on a [gondor] Man, the Flaming Brand beside it (it "may be borne in
+		// addition to 1 other hand weapon"), the Bow on Aragorn, the Axe on a Dwarf, the Banner on a [sauron] Orc.
+		scn.AttachCardsTo(aragorn, narsil, bow, brand, alliance, breath, athelas);
+		scn.HinderCard(brand);
+		scn.AttachCardsTo(gimli, axe);
+		scn.AttachCardsTo(assassin, banner);
+
+		scn.FreepsPass();
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(assassin));
+		scn.ShadowPass();
+
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, assassin}, new PhysicalCardImpl[]{gimli, soldier});
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		assertEquals(0, scn.GetWoundsOn(assassin));
+		// 6 + 1 for the Banner + 1 for the one card hindered so far
+		assertEquals(8, scn.GetStrength(assassin));
+		assertTrue(scn.ShadowActionAvailable(assassin));
+
+		scn.ShadowUseCardAction(assassin);
+
+		assertEquals(1, scn.GetWoundsOn(assassin));
+		// On Aragorn: an artifact that is a hand weapon and a possession that is a ranged one, a Free Peoples
+		// condition and a Shadow one.
+		// Not offered: his possession that is no weapon, his weapon that is hindered already, the weapon of a
+		// companion waiting to fight another minion, the weapon the Assassin bears itself, a condition in the
+		// support area, and Aragorn.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(narsil, bow, alliance, breath));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(athelas, brand, axe, banner, stairs, aragorn));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		assertEquals(1, scn.ShadowGetChoiceMax());
+
+		scn.ShadowChooseCard(bow);
+
+		assertTrue(scn.IsHindered(bow));
+		assertFalse(scn.IsHindered(narsil));
+		assertFalse(scn.IsHindered(alliance));
+		assertFalse(scn.IsHindered(breath));
+		// The card it has just hindered is one more for it to count.
+		assertEquals(9, scn.GetStrength(assassin));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(assassin);
+		scn.ShadowChooseCard(breath);
+
+		assertEquals(2, scn.GetWoundsOn(assassin));
+		assertTrue(scn.IsHindered(breath));
+		assertEquals(10, scn.GetStrength(assassin));
+
+		// Vitality 3 with 2 wounds: it cannot exert, though two cards are still there to hinder.
+		scn.FreepsPass();
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(assassin));
+	}
+
+	@Test
+	public void WaitingForItsOwnSkirmishItMayExertButHindersNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var assassin = scn.GetShadowCard("assassin");
+		var assassin2 = scn.GetShadowCard("assassin2");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var sword = scn.GetFreepsCard("sword");
+		var axe = scn.GetFreepsCard("axe");
+		scn.MoveCompanionsToTable(aragorn, gimli);
+		scn.AttachCardsTo(aragorn, sword);
+		scn.AttachCardsTo(gimli, axe);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(assassin, assassin2);
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, assassin2}, new PhysicalCardImpl[]{gimli, assassin});
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.FreepsPass();
+
+		// Aragorn is fighting the other copy; this Assassin is assigned to Gimli and skirmishing nobody yet.
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		assertEquals(0, scn.GetWoundsOn(assassin));
+		assertEquals(0, scn.GetWoundsOn(assassin2));
+		assertTrue(scn.ShadowActionAvailable(assassin));
+
+		scn.ShadowUseCardAction(assassin);
+
+		// The copy that was used exerts, not the one that is fighting, and what that one's companion bears is
+		// not this one's to hinder.
+		assertEquals(1, scn.GetWoundsOn(assassin));
+		assertEquals(0, scn.GetWoundsOn(assassin2));
+		assertFalse(scn.IsHindered(sword));
+		assertFalse(scn.IsHindered(axe));
+		assertEquals(6, scn.GetStrength(assassin));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+
+		// Aragorn (8 + 2, damage +1) beats the other copy (6, vitality 3), which lives. In its own skirmish
+		// the Assassin hinders the one card there is: Gimli's Axe, and not the Sword.
+		scn.FreepsPass();
+		scn.ShadowPass();
+		scn.FreepsResolveSkirmish(gimli);
 		scn.FreepsPass();
 		scn.ShadowUseCardAction(assassin);
 
-		// Weapons and condition choosable, non-weapon possession not
-		assertTrue(scn.ShadowHasCardChoiceAvailable(anduril));
-		assertTrue(scn.ShadowHasCardChoiceAvailable(bow));
-		assertTrue(scn.ShadowHasCardChoiceAvailable(lastalliance));
-		assertFalse(scn.ShadowHasCardChoiceAvailable(athelas));
+		assertEquals(2, scn.GetWoundsOn(assassin));
+		assertTrue(scn.IsHindered(axe));
+		assertFalse(scn.IsHindered(sword));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
 
-		scn.ShadowChooseCard(anduril);
+	@Test
+	public void FightingAnAllyItHindersNothingTheAllyBears() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var assassin = scn.GetShadowCard("assassin");
+		var elrond = scn.GetFreepsCard("elrond");
+		// Blade of Lindon: a hand weapon whose bearer must be an Elf.
+		var lindon = scn.GetFreepsCard("lindon");
+		scn.MoveAlliesToTable(elrond);
+
+		scn.StartGame();
+		scn.SkipToSite(2);
+		scn.MoveMinionsToTable(assassin);
+		scn.AttachCardsTo(elrond, lindon);
+
+		// The fellowship moves to site 3, Elrond's home, where he may fight.
+		scn.SkipToAssignments();
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		scn.FreepsAssignToMinions(elrond, assassin);
+		scn.FreepsResolveSkirmish(elrond);
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		assertTrue(scn.ShadowActionAvailable(assassin));
+
+		scn.ShadowUseCardAction(assassin);
 
 		assertEquals(1, scn.GetWoundsOn(assassin));
-		assertTrue(scn.IsHindered(anduril));
+		assertFalse(scn.IsHindered(lindon));
+		assertEquals(6, scn.GetStrength(assassin));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 }
