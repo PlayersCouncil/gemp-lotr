@@ -53,6 +53,13 @@ import java.util.Map;
  * (ActionsEnvironment.barUntilEndOfPhase), each skirmish being a phase of its own; they are still offered, flagged
  * "loopBanned", and refused if taken.
  * <p>
+ * <b>A round closed by a pass</b> (LoopTracker; Ketura on F-0565, answers/2026-10-20-d.md).  The other player's
+ * half is the action he took inside the opener's, which is answered from the round played by hand like any other
+ * choice inside it, and then his pass, which is counted as a step and takes no action.  The numbers, who takes the
+ * last action and the action added at the end are as above; a run that ends on the pass leaves the opener to act
+ * with that pass made (endedOnPass).  Only the opener's ability is barred afterwards: the other player's action
+ * (a Response) may answer something else, and stays his to use.
+ * <p>
  * <b>A loop of one player's actions</b> (OnePlayerLoopTracker; Ketura, answers/2026-10-16-c.md: "perform that many,
  * and then put the tag on that card action to block its future use").  One iteration is one round as found, one
  * action or two, all of the one player's; the run is that many iterations and no action more, the last round shown
@@ -66,6 +73,11 @@ public class LoopRun {
      * in the round played by hand.
      */
     record Step(LoopTracker.Key key, PhysicalCard card, List<Answer> answers) {
+        // The other player's pass that closes a round whose other half he took inside the opener's action
+        // (LoopTracker, F-0565): no action is taken for it, and its card (his action's) is not barred.
+        boolean isPass() {
+            return key.isPass();
+        }
     }
 
     /**
@@ -80,6 +92,22 @@ public class LoopRun {
     public record Answer(String player, AwaitingDecisionType type, String text, Map<String, List<String>> parameters, String answer) {
         static Answer of(String player, AwaitingDecision decision, String answer) {
             return new Answer(player, decision.getDecisionType(), decision.getText(), parametersOf(decision), answer);
+        }
+
+        /**
+         * @return The id of the card whose action was chosen, where this is the answer to a choice of actions that
+         * took one; -1 otherwise.
+         */
+        int chosenActionCardId() {
+            if (type != AwaitingDecisionType.CARD_ACTION_CHOICE || answer.isEmpty())
+                return -1;
+            final List<String> cardIds = parameters.get("cardId");
+            try {
+                final int index = Integer.parseInt(answer);
+                return (cardIds != null && index >= 0 && index < cardIds.size()) ? Integer.parseInt(cardIds.get(index)) : -1;
+            } catch (NumberFormatException exp) {
+                return -1;
+            }
         }
 
         boolean fits(String player, AwaitingDecision decision) {
@@ -209,6 +237,11 @@ public class LoopRun {
         }
 
         final Step step = _round[_taken % _round.length];
+        if (step.isPass()) {
+            // The other player's pass: nothing to take, and the next step is looked at as any other.
+            _taken++;
+            return nextAction(game);
+        }
         Action found = null;
         for (Action action : game.getActionsEnvironment().getPhaseActions(step.key().player())) {
             if (LoopTracker.Key.of(game, step.key().player(), action).equals(step.key())
@@ -261,15 +294,30 @@ public class LoopRun {
         final LoopFeedback feedback = LoopFeedback.of(game);
         if (feedback != null)
             feedback.endRun(this);
-        for (Step step : _round)
-            game.getActionsEnvironment().barUntilEndOfPhase(step.key().ability());
+        boolean closedByPass = false;
+        for (Step step : _round) {
+            if (step.isPass())
+                closedByPass = true;
+            else
+                game.getActionsEnvironment().barUntilEndOfPhase(step.key().ability());
+        }
         final String loop = "The loop " + (_round.length == 1 ? "of " : "between ") + linksOf();
+        final String barred = closedByPass
+                ? "the ability of " + GameUtils.getCardLink(_round[0].card()) + " cannot be used again this phase"
+                : "the abilities it used cannot be used again this phase";
         if (why == null)
-            game.getGameState().sendMessage(loop
-                    + " is over: the abilities it used cannot be used again this phase");
+            game.getGameState().sendMessage(loop + " is over: " + barred);
         else
-            game.getGameState().sendMessage(loop + " stopped short, as " + why
-                    + ": the abilities it used cannot be used again this phase");
+            game.getGameState().sendMessage(loop + " stopped short, as " + why + ": " + barred);
+    }
+
+    /**
+     * @return Whether the last step the run took was the other player's pass (a round closed so: LoopTracker,
+     * F-0565), so that the player asked next is asked with one pass already made before him, as he would have been
+     * had the rounds been played by hand.
+     */
+    public boolean endedOnPass() {
+        return _taken > 0 && _round[(_taken - 1) % _round.length].isPass();
     }
 
     /**

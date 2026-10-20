@@ -91,6 +91,7 @@ public class SkirmishActionProcedureAction extends SystemQueueAction {
             _loopTracker.offering(game);
 
             String playerId;
+            int consecutivePasses = _consecutivePasses;
             final LoopRun run = _loopTracker.getRun();
             if (run != null) {
                 // CR 4.2 "loops": the loop the players settled is carried out, an action at a time, as if each
@@ -105,6 +106,9 @@ public class SkirmishActionProcedureAction extends SystemQueueAction {
                 _loopTracker.runOver();
                 game.getGameState().setConsecutiveAction(false);
                 playerId = takeTurnOf(run.getNextActor());
+                // A run that ended on the other player's pass (F-0565) leaves this player to act after that pass.
+                if (run.endedOnPass())
+                    consecutivePasses = 1;
             } else if (_playerToAsk != null) {
                 playerId = _playerToAsk;
             } else if (game.getGameState().isConsecutiveAction()) {
@@ -126,8 +130,9 @@ public class SkirmishActionProcedureAction extends SystemQueueAction {
                 return;
             }
 
+            final int passesBefore = consecutivePasses;
             if (countUsable(game, playableActions) == 0 && game.shouldAutoPass(playerId, Phase.SKIRMISH)) {
-                playerPassed();
+                playerPassed(playerId, passesBefore);
             } else {
                 game.getUserFeedback().sendAwaitingDecision(playerId,
                         new CardActionSelectionDecision(game, 1, "Choose action to play or Pass", playableActions) {
@@ -140,7 +145,7 @@ public class SkirmishActionProcedureAction extends SystemQueueAction {
                                             new CheckIfSkirmishFinishedEffect(_playOrder, 0));
                                     game.getActionsEnvironment().addActionToStack(action);
                                 } else {
-                                    playerPassed();
+                                    playerPassed(playerId, passesBefore);
                                 }
                             }
                         });
@@ -155,11 +160,11 @@ public class SkirmishActionProcedureAction extends SystemQueueAction {
             return playerId;
         }
 
-        private void playerPassed() {
-            _loopTracker.passed();
-            if (_consecutivePasses + 1 < _playOrder.getPlayerCount())
+        private void playerPassed(String playerId, int consecutivePasses) {
+            _loopTracker.passed(playerId);
+            if (consecutivePasses + 1 < _playOrder.getPlayerCount())
                 appendEffect(
-                        new PlayerPlaysNextActionEffect(_playOrder, _consecutivePasses + 1));
+                        new PlayerPlaysNextActionEffect(_playOrder, consecutivePasses + 1));
         }
     }
 }

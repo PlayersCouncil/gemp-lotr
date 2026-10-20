@@ -5,7 +5,6 @@ import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.game.state.GameEvent;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -239,10 +238,11 @@ public class VoluntaryLoopTests
 		assertTrue(scn.ShadowActionLoopBanned(brute));
 	}
 
-	// F-0565: the Shadow player's half of the loop is a response inside the Free Peoples player's action, and he
-	// passes between the rounds; the step reads the pass as declining to go on, and finds nothing.  How it is to be
-	// put to the players is for Ketura: this asserts only that a loop is found.
-	@Ignore("F-0565: a loop whose second half is a response inside the first action, with a pass between the rounds, is not found")
+	// F-0565 (Ketura, answers/2026-10-20-d.md): the Shadow player's half of the loop is the Warg's Response inside
+	// Hrethel's action, and then his pass.  "I would present it the same as the top-level version I think, with the
+	// one major difference being that the Response should not be barred, only Hrethel."  Each round heals the
+	// Flanker and exerts him again, and Hrethel never gains his +3: the board at the start of the third round is the
+	// board at the start of the second.
 	@Test
 	public void HrethelAgainstAWargRiderBearingAWargIsFound() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetHrethelScenario();
@@ -260,7 +260,9 @@ public class VoluntaryLoopTests
 		scn.FreepsAssignToMinions(hrethel, flanker);
 		scn.FreepsResolveSkirmish(hrethel);
 
-		for (int round = 1; round <= 3 && !scn.FreepsDecisionAvailable("LOOP DETECTED"); round++) {
+		for (int round = 1; round <= 2; round++) {
+			assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+			assertFalse(scn.FreepsDecisionAvailable("LOOP DETECTED"));
 			scn.FreepsUseCardAction(hrethel);
 			assertEquals(0, scn.GetWoundsOn(flanker));
 			scn.ShadowUseCardAction(warg);
@@ -269,7 +271,117 @@ public class VoluntaryLoopTests
 			scn.ShadowPass();
 		}
 
-		assertTrue(scn.FreepsDecisionAvailable("LOOP DETECTED"));
+		// Instead of his actions the third time, the Free Peoples player is asked, in the words of the top-level loop,
+		// the Warg named as the Shadow player's half.
+		assertFalse(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertTrue(scn.FreepsDecisionAvailable("LOOP DETECTED: <a href=\"https://wiki.lotrtcgpc.net/wiki/Comprehensive_Rules_4.2#loops\" target=\"_blank\">See loop handling rules here.</a><br><div class='cardHint' value='6_95'>·Hrethel, Rider of Rohan</div> and <div class='cardHint' value='5_65'>Warg</div> can be used forever."
+				+ "<br>Choose how many more times this loop will execute."));
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+		scn.FreepsNameLoopIterations(4);
+		assertTrue(scn.ShadowDecisionAvailable("LOOP DETECTED: <a href=\"https://wiki.lotrtcgpc.net/wiki/Comprehensive_Rules_4.2#loops\" target=\"_blank\">See loop handling rules here.</a><br>The Free Peoples player has decided that the loop between "
+				+ "<div class='cardHint' value='6_95'>·Hrethel, Rider of Rohan</div> and <div class='cardHint' value='5_65'>Warg</div> will be performed <b>4</b> more times."));
+		scn.MarkGameLog();
+		scn.ShadowAgreeToLoop();
+
+		// Three rounds unseen and the fourth shown; Hrethel alone is barred.
+		assertTrue(scn.GameLogSinceMarkSays("was carried out 3 times without being shown"));
+		assertTrue(scn.GameLogSinceMarkSays("is over: the ability of"));
+
+		// Four more rounds, each ending on the Shadow player's pass: the Flanker healed and exerted again, Hrethel 6.
+		// The Free Peoples player acts next; Hrethel's ability is barred.
+		assertEquals(1, scn.GetWoundsOn(flanker));
+		assertEquals(6, scn.GetStrength(hrethel));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertTrue(scn.FreepsActionLoopBanned(hrethel));
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+
+		// The Shadow player passed last, so the Free Peoples player's pass ends the skirmish, as it would have by hand.
+		scn.FreepsPass();
+		assertFalse(scn.AwaitingShadowSkirmishPhaseActions());
+		assertFalse(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
+
+	// F-0565: where the Shadow player lowers the number, the Free Peoples player takes the final action (Hrethel once
+	// more, the Warg's Response inside it as in the round played by hand) and the Shadow player acts next.
+	@Test
+	public void HrethelAgainstAWargLoweredEndsOnHrethelAndTheShadowPlayerActsNext() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetHrethelScenario();
+
+		var hrethel = scn.GetFreepsCard("hrethel");
+		var flanker = scn.GetShadowCard("flanker");
+		var warg = scn.GetShadowCard("warg");
+		scn.MoveCompanionsToTable(hrethel);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(flanker);
+		scn.AttachCardsTo(flanker, warg);
+		scn.AddWoundsToChar(flanker, 1);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(hrethel, flanker);
+		scn.FreepsResolveSkirmish(hrethel);
+
+		for (int round = 1; round <= 2; round++) {
+			scn.FreepsUseCardAction(hrethel);
+			scn.ShadowUseCardAction(warg);
+			scn.ShadowPass();
+		}
+
+		scn.FreepsNameLoopIterations(3);
+		scn.MarkGameLog();
+		scn.ShadowLowerLoop(1);
+
+		// One round unseen, then Hrethel's final use shown.
+		assertTrue(scn.GameLogSinceMarkSays("was carried out 1 time without being shown"));
+
+		assertEquals(1, scn.GetWoundsOn(flanker));
+		assertEquals(6, scn.GetStrength(hrethel));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		assertFalse(scn.FreepsAnyDecisionsAvailable());
+	}
+
+	// F-0565: the bar is on Hrethel's ability alone.  The Warg's Response is still offered, unflagged, to another
+	// skirmish special ability in the same skirmish: Ettenmoors 1_331 (site 2), "Skirmish: Exert your companion or
+	// minion to make that character strength +2", used by the Free Peoples player on Hrethel.
+	@Test
+	public void AfterTheHrethelLoopTheWargsResponseIsStillOfferedToAnotherSkirmishSpecialAbility() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetHrethelScenario();
+
+		var hrethel = scn.GetFreepsCard("hrethel");
+		var flanker = scn.GetShadowCard("flanker");
+		var warg = scn.GetShadowCard("warg");
+		scn.MoveCompanionsToTable(hrethel);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(flanker);
+		scn.AttachCardsTo(flanker, warg);
+		scn.AddWoundsToChar(flanker, 1);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(hrethel, flanker);
+		scn.FreepsResolveSkirmish(hrethel);
+
+		for (int round = 1; round <= 2; round++) {
+			scn.FreepsUseCardAction(hrethel);
+			scn.ShadowUseCardAction(warg);
+			scn.ShadowPass();
+		}
+		scn.FreepsNameLoopIterations(1);
+		scn.ShadowAgreeToLoop();
+		assertTrue(scn.FreepsActionLoopBanned(hrethel));
+
+		var ettenmoors = scn.GetCurrentSite();
+		assertEquals("Ettenmoors", ettenmoors.getBlueprint().getTitle());
+		assertFalse(scn.FreepsActionLoopBanned(ettenmoors));
+		scn.FreepsUseCardAction(ettenmoors);
+		// Frodo or Hrethel: Hrethel.
+		scn.FreepsChooseCard(hrethel);
+		assertEquals(1, scn.GetWoundsOn(hrethel));
+
+		assertTrue(scn.ShadowActionAvailable(warg));
+		assertFalse(scn.ShadowActionLoopBanned(warg));
+		scn.ShadowUseCardAction(warg);
+		// The Flanker exerted, and Ettenmoors' +2 cancelled.
+		assertEquals(2, scn.GetWoundsOn(flanker));
+		assertEquals(6, scn.GetStrength(hrethel));
 	}
 
 	@Test

@@ -241,8 +241,11 @@ not its other abilities nor another copy's) is still offered, flagged, to the en
 with `FreepsActionLoopBanned(card)`; `FreepsActionAvailable` reads it as offered, and taking it is refused.
 The prompts are HTML (Q-0329, engine pass 52): a text read with `FreepsDecisionAvailable` names each card as the
 game log's card hint, `<div class='cardHint' value='5_29'>·Sméagol, Slinker</div>`, and the number as `<b>6</b>`.
-`mechanics/actions/VoluntaryLoopTests`, `FiniteRepeatsAreNoLoopTests`. A loop whose other half is a response inside
-the first player's action, with a pass between the rounds (Hrethel 6_95 against a Warg 5_65), is not found (F-0565).
+`mechanics/actions/VoluntaryLoopTests`, `FiniteRepeatsAreNoLoopTests`. A round whose other half is the other
+player's response INSIDE the first action and then his pass (Hrethel 6_95 against a Warg 5_65; F-0565, engine pass 57)
+is found and put the same way; its run replays the response and counts the pass, a run ending on the pass leaves the
+opener to act with that pass made (his pass ends the window), and only the opener's ability is barred: the response
+stays on offer to anything else.
 
 **A loop of one player's actions is put to him at its fourth use** (CR 4.2 "loops"; Ketura, answers/2026-10-16-c.md;
 engine pass 53). In the fellowship phase or a Shadow phase, where one ability (or two abilities, one after the
