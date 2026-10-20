@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_01_152_ErrataTests
 {
@@ -18,9 +19,9 @@ public class Card_01_152_ErrataTests
 				new HashMap<>()
 				{{
 					put("shaman", "51_152");
-					put("uruk", "1_151");  // Uruk Lieutenant (Isengard Uruk-hai)
-					put("orc", "1_189");   // Goblin Sneak (Moria Goblin, not Isengard)
-					put("runner", "1_178");
+					put("servant", "3_58");     // Isengard Servant: [isengard] Orc minion, vitality 3; a regroup ability only
+					put("sentry", "10_84");     // Cirith Ungol Sentry: [sauron] Uruk-hai minion, vitality 2; Damage +1 is its whole text
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: companion, vitality 4; a maneuver ability used only on purpose
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -34,7 +35,7 @@ public class Card_01_152_ErrataTests
 		/**
 		 * Set: 1
 		 * Name: Uruk Shaman
-		 * Unique: false
+		 * Unique: False
 		 * Side: Shadow
 		 * Culture: Isengard
 		 * Twilight Cost: 3
@@ -43,8 +44,9 @@ public class Card_01_152_ErrataTests
 		 * Strength: 8
 		 * Vitality: 2
 		 * Site Number: 5
-		 * Game Text: <b>Damage +1</b>.<br><b>Maneuver:</b> Remove (2) to heal an [Isengard] minion.
-		*/
+		 * Game Text: <b>Damage +1</b>.
+		 * <b>Maneuver:</b> Remove (2) to heal an [Isengard] minion.
+		 */
 
 		var scn = GetScenario();
 
@@ -66,33 +68,82 @@ public class Card_01_152_ErrataTests
 	}
 
 	@Test
-	public void UrukShamanHealsIsengardMinionNotJustUrukHai() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void ManeuverRemovesTwoTwilightToHealAnIsengardMinionOfAnyRace() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var shaman = scn.GetShadowCard("shaman");
-		var uruk = scn.GetShadowCard("uruk");
-		var orc = scn.GetShadowCard("orc");
-
-		scn.MoveMinionsToTable(shaman, uruk, orc);
-		scn.AddWoundsToChar(uruk, 1);
-		scn.AddWoundsToChar(orc, 1);
+		var servant = scn.GetShadowCard("servant");
+		var sentry = scn.GetShadowCard("sentry");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.AddWoundsToChar(aragorn, 1);
 
 		scn.StartGame();
-
-		// Add twilight for the cost
-		scn.SetTwilight(4);
+		scn.MoveMinionsToTable(shaman, servant, sentry);
+		scn.AddWoundsToChar(shaman, 1);
+		// Two wounds on the Servant, so that healing one wound is told from healing two.
+		scn.AddWoundsToChar(servant, 2);
+		scn.AddWoundsToChar(sentry, 1);
 
 		scn.SkipToPhase(Phase.MANEUVER);
+		scn.SetTwilight(2);
 		scn.FreepsPass();
 
-		// Shaman ability should be available
 		assertTrue(scn.ShadowActionAvailable(shaman));
 		scn.ShadowUseCardAction(shaman);
+		assertEquals(0, scn.GetTwilight());
 
-		// Only the Uruk Lieutenant is an [Isengard] minion. The Goblin Sneak is [Moria].
-		// Auto-selected since there's only one valid target.
-		assertEquals(0, scn.GetWoundsOn(uruk));
-		assertEquals(1, scn.GetWoundsOn(orc));
+		// The Shaman himself and the [isengard] Orc; not the [sauron] Uruk-hai, nor a wounded companion.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(shaman, servant));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(sentry, aragorn));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+
+		scn.ShadowChooseCard(servant);
+		assertEquals(1, scn.GetWoundsOn(servant));
+		assertEquals(1, scn.GetWoundsOn(shaman));
+		assertEquals(1, scn.GetWoundsOn(sentry));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+	}
+
+	@Test
+	public void NotOfferedWithOnlyOneTwilightInThePool() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var shaman = scn.GetShadowCard("shaman");
+		var servant = scn.GetShadowCard("servant");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(shaman, servant);
+		scn.AddWoundsToChar(servant, 1);
+
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.SetTwilight(1);
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(shaman));
+		assertEquals(1, scn.GetWoundsOn(servant));
+		assertEquals(1, scn.GetTwilight());
+	}
+
+	@Test
+	public void NotOfferedInTheArcheryPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var shaman = scn.GetShadowCard("shaman");
+		var servant = scn.GetShadowCard("servant");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(shaman, servant);
+		scn.AddWoundsToChar(servant, 1);
+
+		scn.SkipToPhase(Phase.ARCHERY);
+		scn.SetTwilight(4);
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(shaman));
+		assertEquals(1, scn.GetWoundsOn(servant));
 	}
 }

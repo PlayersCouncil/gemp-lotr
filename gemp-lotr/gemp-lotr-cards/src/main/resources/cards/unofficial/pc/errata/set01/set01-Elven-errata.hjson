@@ -1,20 +1,22 @@
 {
 	51_29: {
 		cardInfo: {
-			//id: 1_29.1
+			//id: 51_29.1
 			parent: 1_29
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E029.1.jpg
 			collInfo: 1U29
 			rarity: U
 		}
 		title: Ancient Enmity
-		culture: elven
+		unique: false
+		side: Free Peoples
+		culture: Elven
 		twilight: 0
-		type: event
-		timeword: skirmish
+		type: Event
+		timewords: Skirmish
 		effects: {
 			type: event
 			effect: [
@@ -32,35 +34,48 @@
 						against: memory(chosenElf)
 						memorize: losingMinion
 					}
+					// One effect however many minions lose this skirmish to that Elf: "as if it said 'At the end of
+					// this skirmish, if at least 1 minion lost this skirmish to that Elf...'" (Ketura on Q-0113, F-0197).
+					limitPerPhase: 1
 					effect: [
 						{
 							type: chooseActiveCards
-							count: 1
+							// "You may heal an Elf": naming no Elf declines (F-0191). A memory of its own: chosenElf is
+							// what the trigger's `against` reads.
+							count: 0-1
 							select: choose(wounded,Elf)
-							memorize: chosenElf
+							memorize: healedElf
 							text: Choose Elf to heal
 						}
 						{
-							type: preventable
-							player: ownerFromMemory(losingMinion)
-							cost: {
-								type: DiscardFromHand
-								player: ownerFromMemory(losingMinion)
-								hand: ownerFromMemory(losingMinion)
-								count: 1
-								forced: false
+							// With no Elf named there is nothing to prevent (F-0192).
+							type: If
+							check: {
+								type: HasCardInMemory
+								memory: healedElf
 							}
-							text: Discard 1 card from hand to prevent healing {chosenElf}
-							effect: {
-								type: heal
-								select: memory(chosenElf)
+							true: {
+								type: preventable
+								player: ownerFromMemory(losingMinion)
+								cost: {
+									type: DiscardFromHand
+									player: ownerFromMemory(losingMinion)
+									hand: ownerFromMemory(losingMinion)
+									count: 1
+									forced: false
+								}
+								text: Discard 1 card from hand to prevent healing {healedElf}
+								effect: {
+									type: heal
+									select: memory(healedElf)
+								}
 							}
 						}
 					]
 				}
 			]
 		}
-		gametext: Make an Elf strength +1. \If a minion loses this skirmish to that Elf, you may heal an Elf; that minion's owner may discard a card from hand to prevent this.
+		gametext: Make an Elf strength +1. If a minion loses this skirmish to that Elf, you may heal an Elf; any Shadow player may discard a card from hand to prevent this.
 		lore: Hard and bitter is the Elven hatred of Orcs, for they have lost many kinsmen to Orc savagery.
 		promotext: ""
 		alts: {
@@ -73,20 +88,22 @@
 	
 	51_36: {
 		cardInfo: {
-			//id: 1_36.1
+			//id: 51_36.1
 			parent: 1_36
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E036.1.jpg
 			collInfo: 1R36
 			rarity: R
 		}
 		title: Curse Their Foul Feet!
-		culture: elven
+		unique: false
+		side: Free Peoples
+		culture: Elven
 		twilight: 2
-		type: event
-		timeword: fellowship
+		type: Event
+		timewords: Fellowship
 		effects: {
 			type: event
 			cost: {
@@ -167,10 +184,10 @@
 	
 	51_40: {
 		cardInfo: {
-			//id: 1_40.1
+			//id: 51_40.1
 			parent: 1_40
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/51_40.jpg
 			collInfo: 1R40
@@ -179,11 +196,12 @@
 		title: Elrond
 		subtitle: Lord of Rivendell
 		unique: true
-		culture: elven
+		side: Free Peoples
+		culture: Elven
 		twilight: 4
-		type: ally
+		type: Ally
 		allyHome: 3F
-		race: elf
+		race: Elf
 		strength: 8
 		vitality: 4
 		effects: [
@@ -241,10 +259,10 @@
 	
 	51_43: {
 		cardInfo: {
-			//id: 1_43.1
+			//id: 51_43.1
 			parent: 1_43
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E043.1.jpg
 			collInfo: 1C43
@@ -252,10 +270,11 @@
 		}
 		title: Far-seeing Eyes
 		unique: true
-		culture: elven
+		side: Free Peoples
+		culture: Elven
 		twilight: 2
-		type: condition
-		keyword: support area
+		type: Condition
+		keywords: Support Area
 		effects: {
 			type: Trigger
 			optional: false
@@ -339,7 +358,7 @@
 				}
 			]
 		}
-		gametext: <b>Fellowship:</b> Exert an Elf to reveal an opponent's hand. You may draw 2 cards if an [isengard] minion was revealed.
+		gametext: <b>Fellowship:</b> Exert an Elf to reveal an opponent's hand. If an [isengard] minion was revealed, you may draw 2 cards.
 		lore: "Saruman's Uruk-hai mirrored the singular focus of their master, viewing with contempt and disgust all they encountered."
 		promotext: ""
 		alts: {
@@ -352,10 +371,10 @@
 
 	51_45: {
 		cardInfo: {
-			//id: 1_45.1
+			//id: 51_45.1
 			parent: 1_45
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/51_45.jpg
 			collInfo: 1R45
@@ -364,11 +383,12 @@
 		title: Galadriel
 		subtitle: Lady of Light
 		unique: true
-		culture: elven
+		side: Free Peoples
+		culture: Elven
 		twilight: 3
-		type: ally
+		type: Ally
 		allyHome: 6F
-		race: elf
+		race: Elf
 		strength: 3
 		vitality: 3
 		effects: [
@@ -412,10 +432,10 @@
 	
 	51_48: {
 		cardInfo: {
-			//id: 1_48.1
+			//id: 51_48.1
 			parent: 1_48
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E048.1_card.jpg
 			collInfo: 1U48
@@ -555,20 +575,22 @@
 	
 	51_53: {
 		cardInfo: {
-			//id: 1_53.1
+			//id: 51_53.1
 			parent: 1_53
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/51_53.jpg
 			collInfo: 1C53
 			rarity: C
 		}
 		title: Lorien Elf
-		culture: elven
+		unique: false
+		side: Free Peoples
+		culture: Elven
 		twilight: 1
-		type: companion
-		race: elf
+		type: Companion
+		race: Elf
 		strength: 5
 		vitality: 2
 		resistance: 6
@@ -592,10 +614,10 @@
 
 	51_55: {
 		cardInfo: {
-			//id: 1_55.1
+			//id: 51_55.1
 			parent: 1_55
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/51_55.jpg
 			collInfo: 1R55
@@ -603,10 +625,11 @@
 		}
 		title: The Mirror of Galadriel
 		unique: true
-		culture: elven
+		side: Free Peoples
+		culture: Elven
 		twilight: 2
-		type: possession
-		keyword: support area
+		type: Possession
+		keywords: Support Area
 		effects: [
 			{
 				type: modifier
@@ -654,10 +677,10 @@
 	
 	51_59: {
 		cardInfo: {
-			//id: 1_59.1
+			//id: 51_59.1
 			parent: 1_59
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E059.1_card.jpg
 			collInfo: 1C59
@@ -669,7 +692,7 @@
 		culture: Elven
 		twilight: 1
 		type: Condition
-		keyword: support area
+		keywords: Support Area
 		effects: {
 			type: activated
 			phase: fellowship
@@ -725,7 +748,7 @@
 	
 	51_63: {
 		cardInfo: {
-			//id: 1_63.1
+			//id: 51_63.1
 			parent: 1_63
 			variant: ERRATA
 			variantPath: errata/pc
@@ -781,20 +804,22 @@
 	
 	51_68: {
 		cardInfo: {
-			//id: 1_68.1
+			//id: 51_68.1
 			parent: 1_68
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E068.1.jpg
 			collInfo: 1C68
 			rarity: C
 		}
 		title: The White Arrows of Lorien
-		culture: elven
+		unique: false
+		side: Free Peoples
+		culture: Elven
 		twilight: 1
-		type: condition
-		keyword: tale
+		type: Condition
+		keywords: Tale
 		target: elf,companion
 		effects: {
 			type: activated

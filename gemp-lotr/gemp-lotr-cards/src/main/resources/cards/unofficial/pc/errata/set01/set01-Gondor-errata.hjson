@@ -1,10 +1,10 @@
 {
 	51_92: {
 		cardInfo: {
-			//id: 1_92.1
+			//id: 51_92.1
 			parent: 1_92
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E092.1_card.jpg
 			collInfo: 1C92
@@ -40,10 +40,10 @@
 	
 	51_98: {
 		cardInfo: {
-			//id: 1_98.1
+			//id: 51_98.1
 			parent: 1_98
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E098.1_card.jpg
 			collInfo: 1U98
@@ -62,7 +62,6 @@
 				type: Response
 				trigger: {
 					type: usesSpecialAbility
-					phase: skirmish
 					player: shadow
 				}
 				requires: {
@@ -108,7 +107,7 @@
 				}
 			}
 		]
-		gametext: Bearer must be Boromir.<br><b>Maneuver:</b> Exert Boromir to discard a weather condition.\Response: If a skirmish event or special ability is used during a skirmish involving Boromir, discard this to prevent that.
+		gametext: Bearer must be Boromir.<br><b>Maneuver:</b> Exert Boromir to discard a weather condition. Response: If a skirmish event or special ability is used during a skirmish involving Boromir, discard this to prevent that.
 		lore: He was cloaked and booted as if for a journey on horseback; and indeed though his garments were rich, and his cloak was lined with fur, they were stained with 'long travel.
 		promotext: ""
 		alts: {
@@ -121,10 +120,10 @@
 	
 	51_101: {
 		cardInfo: {
-			//id: 1_101.1
+			//id: 51_101.1
 			parent: 1_101
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E101.1_card.jpg
 			collInfo: 1C101
@@ -158,10 +157,10 @@
 	
 	51_107: {
 		cardInfo: {
-			//id: 1_107.1
+			//id: 51_107.1
 			parent: 1_107
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E107.1_card.jpg
 			collInfo: 1C107
@@ -197,10 +196,10 @@
 	
 	51_108: {
 		cardInfo: {
-			//id: 1_108.1
+			//id: 51_108.1
 			parent: 1_108
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/51_108.jpg
 			collInfo: 1U108
@@ -208,11 +207,12 @@
 		}
 		title: No Stranger to the Shadows
 		unique: true
-		culture: gondor
+		side: Free Peoples
+		culture: Gondor
 		twilight: 0
-		type: condition
-		keyword: [
-			stealth
+		type: Condition
+		keywords: [
+			Stealth
 		]
 		target: ranger
 		effects: {
@@ -236,10 +236,10 @@
 	
 	51_115: {
 		cardInfo: {
-			//id: 1_115.1
+			//id: 51_115.1
 			parent: 1_115
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E115.1_card.jpg
 			collInfo: 1R115
@@ -251,7 +251,7 @@
 		culture: Gondor
 		twilight: 0
 		type: Event
-		timeword: response
+		timewords: Response
 		effects: {
 			type: responseEvent
 			requires: {

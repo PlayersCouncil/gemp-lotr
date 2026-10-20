@@ -1,20 +1,22 @@
 {
 	51_126: {
 		cardInfo: {
-			//id: 1_126.1
+			//id: 51_126.1
 			parent: 1_126
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E126.1.jpg
-			collInfo: 1C126
+			collInfo: 1U126
 			rarity: U
 		}
 		title: Hunt Them Down!
-		culture: isengard
+		unique: false
+		side: Shadow
+		culture: Isengard
 		twilight: 2
-		type: event
-		timeword: maneuver
+		type: Event
+		timewords: Maneuver
 		effects: {
 			type: event
 			effect: {
@@ -73,7 +75,7 @@
 				}
 			]
 		}
-		gametext: <b>Spell</b>.<br>Exert an [isengard] minion to discard a Free Peoples condition and then hinder all conditions.
+		gametext: <b>Spell</b>.<br>Exert an [isengard] minion to discard a Free Peoples condition and then hinder all other conditions.
 		lore: "The Uruks of Saruman are bred to be the instruments of his will, destroying his enemies with foul cruelty."
 		promotext: ""
 		alts: {
@@ -86,22 +88,24 @@
 	
 	51_138: {
 		cardInfo: {
-			//id: 1_138.1
+			//id: 51_138.1
 			parent: 1_138
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/51_138.jpg
 			collInfo: 1C138
 			rarity: C
 		}
 		title: Saruman's Snows
-		culture: isengard
+		unique: false
+		side: Shadow
+		culture: Isengard
 		twilight: 2
-		type: condition
-		keyword: [
-			spell
-			weather
+		type: Condition
+		keywords: [
+			Spell
+			Weather
 		]
 		target: site
 		effects: [
@@ -234,66 +238,56 @@
 	
 	51_139: {
 		cardInfo: {
-			//id: 1_139.3
+			//id: 51_139.3
 			parent: 1_139
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 3
 			image: errata/LOTR-EN01E139.2.jpg
 			collInfo: 1R139
 			rarity: R
 		}
-		title: Savagery To Match Their Numbers
-		culture: isengard
+		title: Savagery to Match Their Numbers
+		unique: false
+		side: Shadow
+		culture: Isengard
 		twilight: 1
-		type: event
-		timeword: skirmish
+		type: Event
+		timewords: Skirmish
 		effects: {
 			type: event
-			effect: {
-				type: choice
-				texts: [
-					Make an Uruk-hai strength +2
-					Make an Uruk-hai strength +2 (and +2 more and fierce until the regroup phase)
-				]
-				effects: [
-					{
-						type: modifyStrength
-						select: choose(uruk-hai)
-						amount: 2
+			effect: [
+				{
+					type: modifyStrength
+					select: choose(uruk-hai)
+					amount: 2
+					memorize: chosenUrukHai
+				}
+				{
+					type: If
+					check: {
+						type: canSpot
+						count: 5
+						filter: companion
 					}
-					{
-						type: If
-						check: {
-							type: canSpot
-							count: 5
-							filter: companion
+					true: [
+						{
+							type: modifyStrength
+							select: memory(chosenUrukHai)
+							amount: 2
+							until: start(regroup)
 						}
-						true: [
-							{
-								type: modifyStrength
-								select: choose(uruk-hai)
-								amount: 2
-								memorize: chosenUrukHai
-							}
-							{
-								type: modifyStrength
-								select: memory(chosenUrukHai)
-								amount: 2
-								until: start(regroup)
-							}
-							{
-								type: addKeyword
-								select: memory(chosenUrukHai)
-								keyword: fierce
-								until: start(regroup)
-							}
-						]
-					}
-				]
-			}
+						{
+							type: addKeyword
+							select: memory(chosenUrukHai)
+							keyword: fierce
+							until: start(regroup)
+						}
+					]
+				}
+			]
 		}
-		gametext: <b>Skirmish:</b> Make an Uruk-hai strength +2.\If you can spot 5 companions, also make it <b>fierce</b> and strength +2 more until the regroup phase).
+		gametext: <b>Skirmish:</b> Make an Uruk-hai strength +2. If you can spot 5 companions, also make it <b>fierce</b> and an additional strength +2 until the regroup phase.
 		lore: Uruk-hai match their enemies' strength with their own feral rage.
 		promotext: ""
 		alts: {
@@ -306,10 +300,10 @@
 	
 	51_142: {
 		cardInfo: {
-			//id: 1_142.1
+			//id: 51_142.1
 			parent: 1_142
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E142.1.jpg
 			collInfo: 1U142
@@ -334,52 +328,38 @@
 				}
 			}
 			{
-				type: Trigger
-				optional: false
-				trigger: {
-					type: ConstantlyCheck
+				type: activated
+				phase: regroup
+				requires: {
+					type: or
 					requires: [
 						{
-							type: perTurnLimit
-							limit: 1
+							type: CanSpot
+							filter: Isengard, minion
+							count: 4
 						}
 						{
-							type: or
-							requires: [
-								{
-									type: CanSpot
-									filter: Isengard, minion
-									count: 4
-								}
-								{
-									type: canSpot
-									filter: exhausted,ring bearer
-								}
-								{
-									type: canSpotBurdens
-									amount: 5
-								}
-							]
+							type: canSpot
+							filter: exhausted,ring bearer
+						}
+						{
+							type: canSpotBurdens
+							amount: 5
 						}
 					]
 				}
-				effect: [
-					{
-						type: incrementPerTurnLimit
-						limit: 1
+				limitPerPhase: 1
+				effect: {
+					type: addModifier
+					modifier: {
+						type: modifyMoveLimit
+						amount: -1
 					}
-					{
-						type: addModifier
-						modifier: {
-							type: modifyMoveLimit
-							amount: -1
-						}
-						until: endOfTurn
-					}
-				]
+					until: endOfTurn
+				}
 			}
 		]
-		gametext: <b>Search</b>. To play, spot an [isengard] minion.\Regroup: Spot 4 [isengard] minions, an exhausted Ring-bearer, or 5 burdens to make the move limit for this turn -1 (limit once per phase).
+		gametext: <b>Search</b>. To play, spot an [isengard] minion. <b>Regroup:</b> Spot 4 [isengard] minions, an exhausted Ring-bearer, or 5 burdens to make the move limit for this turn -1 (limit once per phase).
 		lore: "'In all the long wars with the Dark Tower treason has ever been our greatest foe.'"
 		promotext: ""
 		alts: {
@@ -392,24 +372,26 @@
 	
 	51_150: {
 		cardInfo: {
-			//id: 1_150.1
+			//id: 51_150.1
 			parent: 1_150
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E150.1.jpg
 			collInfo: 1C150
 			rarity: C
 		}
 		title: Uruk Rager
-		culture: isengard
+		unique: false
+		side: Shadow
+		culture: Isengard
 		twilight: 4
-		type: minion
-		race: uruk-hai
+		type: Minion
+		race: Uruk-hai
 		strength: 9
 		vitality: 2
 		site: 5
-		keyword: damage+1
+		keywords: Damage+1
 		effects: {
 			type: Trigger
 			optional: false
@@ -496,27 +478,28 @@
 	
 	51_154: {
 		cardInfo: {
-			//id: 1_154.1
+			//id: 51_154.1
 			parent: 1_154
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E154.1.jpg
 			collInfo: 1C154
 			rarity: C
 		}
 		title: Uruk Soldier
-		culture: isengard
+		unique: false
+		side: Shadow
+		culture: Isengard
 		twilight: 2
-		type: minion
-		race: uruk-hai
+		type: Minion
+		race: Uruk-hai
 		strength: 7
 		vitality: 1
 		site: 5
-		keyword: damage+1
+		keywords: Damage+1
 		effects: {
 			type: Trigger
-			optional: false
 			optional: false
 			trigger: {
 				type: played
@@ -525,7 +508,7 @@
 			effect: [
 				{
 					type: chooseActiveCards
-					select: choose(companion)
+					select: choose(companion,canExert)
 					memorize: chosenComp
 					text: Choose a companion to exert
 				}
@@ -696,20 +679,22 @@
 	
 	51_160: {
 		cardInfo: {
-			//id: 1_160.1
+			//id: 51_160.1
 			parent: 1_160
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN01E160.1.jpg
 			collInfo: 1C160
 			rarity: C
 		}
 		title: Uruk-hai Sword
-		culture: isengard
+		unique: false
+		side: Shadow
+		culture: Isengard
 		twilight: 1
-		type: possession
-		itemclass: hand weapon
+		type: Possession
+		itemclass: Hand weapon
 		strength: 2
 		target: uruk-hai
 		effects: {
