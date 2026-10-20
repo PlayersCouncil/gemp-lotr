@@ -90,7 +90,8 @@ public class Card_01_214_Tests
 
 		// 9 against 8: the [wraith] Nazgul wins, and Aragorn, not the Ring-bearer, is the loser.
 		scn.ShadowPass();
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertEquals(0, scn.GetWoundsOn(sam));
 		assertEquals(0, scn.FreepsGetBurdens());
@@ -132,7 +133,8 @@ public class Card_01_214_Tests
 		scn.PassSkirmishActions();
 
 		// 12 against 8, not doubled: the [raider] Nazgul wins.
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertEquals(0, scn.FreepsGetBurdens());
 		assertTrue(scn.ShadowPlayAvailable(wake));
@@ -171,7 +173,8 @@ public class Card_01_214_Tests
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
 
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.FreepsGetBurdens());
 		assertEquals(0, scn.GetWoundsOn(sam));
 		scn.ShadowPlayCard(wake);

@@ -106,7 +106,8 @@ public class Card_01_280_ErrataTests
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassCurrentPhaseActions();
 		// 10 against 8: the Lieutenant wins.
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(sam));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(lt));
 
@@ -143,7 +144,8 @@ public class Card_01_280_ErrataTests
 		scn.FreepsResolveSkirmish(aragorn);
 		int shadowHand = scn.GetShadowHandCount();
 		scn.PassCurrentPhaseActions();
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 
 		// Aragorn is the only companion who can be exhausted, so he is taken without a choice.
 		scn.ShadowChooseOptionalTrigger(lt);
@@ -176,11 +178,13 @@ public class Card_01_280_ErrataTests
 		scn.FreepsAssignToMinions(aragorn, lt);
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassCurrentPhaseActions();
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 
 		scn.ShadowChooseOptionalTrigger(lt);
 		assertFalse(scn.FreepsDecisionAvailable("prevent"));
-		assertEquals(3, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(1, scn.GetFreepsHandCount());
 		assertEquals(0, scn.GetFreepsDiscardCount());
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
@@ -221,18 +225,20 @@ public class Card_01_280_ErrataTests
 		scn.MoveCardsToFreepsHand("guard2", "guard3");
 
 		scn.StartGame();
-		scn.AddWoundsToChar(aragorn, 2);
+		// Aragorn and the Guard exhausted, and Frodo is the Ring-bearer.  (Aragorn's own wound for losing comes
+		// after the win is answered: engine pass 54.)
+		scn.AddWoundsToChar(aragorn, 3);
 		scn.AddWoundsToChar(guard1, 1);
 		scn.MoveMinionsToTable(lt);
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(aragorn, lt);
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassCurrentPhaseActions();
-		// Aragorn's wound for losing exhausts him; the Guard was exhausted already and Frodo is the Ring-bearer.
-		assertEquals(3, scn.GetWoundsOn(aragorn));
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable(lt));
 		assertFalse(scn.FreepsDecisionAvailable("prevent"));
 		assertEquals(2, scn.GetFreepsHandCount());
+		// The wound for losing kills him.
+		assertInZone(Zone.DEAD, aragorn);
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
@@ -284,7 +290,8 @@ public class Card_01_280_ErrataTests
 		scn.FreepsAssignToMinions(aragorn, lt);
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassCurrentPhaseActions();
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 
 		// No cards in the Free Peoples hand: nothing is asked of him.
 		scn.ShadowChooseOptionalTrigger(lt);
@@ -295,12 +302,14 @@ public class Card_01_280_ErrataTests
 		scn.FreepsAssignToMinions(aragorn, lt);
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassFierceSkirmishActions();
-		assertEquals(2, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(lt));
 
 		// Sam is exhausted now, so Aragorn is the only one left to choose.
 		scn.ShadowChooseOptionalTrigger(lt);
-		assertEquals(3, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(3, scn.GetWoundsOn(sam));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}

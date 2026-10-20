@@ -107,7 +107,8 @@ public class Card_06_008_ErrataTests
 		scn.PassSkirmishActions();
 
 		// The Brigand 8 against the Knight 6.
-		assertEquals(1, scn.GetWoundsOn(knight));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(knight));
 		assertFalse(scn.IsHindered(stairs));
 		assertFalse(scn.IsHindered(saga));
 		assertFalse(scn.IsHindered(ned));

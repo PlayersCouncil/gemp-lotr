@@ -171,13 +171,14 @@ public class Card_13_148_Tests
 		// Ted Sandyman, 3, beats Sam, 3: a tie goes to the Shadow side.
 		scn.PassSkirmishActions();
 
-		assertEquals(1, scn.GetWoundsOn(sam));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(sam));
 		assertEquals(2, scn.GetWoundsOn(merry));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(fates));
 
+		// Sam has no wound yet to heal (his wound for losing comes after the win is answered: engine pass 54), so
+		// Merry is healed with no choice.
 		scn.FreepsAcceptOptionalTrigger();
-		assertTrue(scn.FreepsHasCardChoiceAvailable(sam, merry));
-		scn.FreepsChooseCard(merry);
 
 		assertEquals(1, scn.GetWoundsOn(merry));
 		assertEquals(1, scn.GetWoundsOn(sam));

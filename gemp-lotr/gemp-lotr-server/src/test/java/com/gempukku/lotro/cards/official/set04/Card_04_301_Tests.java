@@ -354,9 +354,8 @@ public class Card_04_301_Tests
 
 		scn.FreepsPass();
 		scn.ShadowPass();
-		// The wound for losing and the Sword's trigger come at the same moment.
-		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
-		scn.FreepsResolveActionOrder("Uruk-hai Sword");
+		// The Sword's trigger answers the win before the wound for losing, with nothing to order (engine pass 54).
+		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
 
 		// Boromir lost: the Sword's bearer has won, and the three unbound companions keep the top of the deck as it was.
 		assertEquals(2, scn.GetWoundsOn(boromir));
@@ -393,9 +392,8 @@ public class Card_04_301_Tests
 
 		scn.FreepsPass();
 		scn.ShadowPass();
-		// The wound for losing and the Sword's trigger come at the same moment.
-		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
-		scn.FreepsResolveActionOrder("Uruk-hai Sword");
+		// The Sword's trigger answers the win before the wound for losing, with nothing to order (engine pass 54).
+		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
 
 		// Boromir (7) lost to the Band (10 + 2): the bearer has won, and the top card of the deck is discarded.
 		assertEquals(2, scn.GetWoundsOn(boromir));

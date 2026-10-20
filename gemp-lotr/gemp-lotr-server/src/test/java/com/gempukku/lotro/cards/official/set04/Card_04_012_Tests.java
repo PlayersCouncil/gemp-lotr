@@ -104,7 +104,8 @@ public class Card_04_012_Tests
 
 		// 7 against 6: the Madman wins.
 		scn.PassCurrentPhaseActions();
-		assertEquals(1, scn.GetWoundsOn(gimli));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(gimli));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(madman));
 		// "This minion": the other Madman won nothing and offers nothing.
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable(madman2));
@@ -130,7 +131,8 @@ public class Card_04_012_Tests
 		assertEquals(9, scn.GetStrength(madman));
 		assertTrue(scn.HasKeyword(madman, Keyword.FIERCE));
 		scn.PassFierceSkirmishActions();
-		assertEquals(2, scn.GetWoundsOn(gimli));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(1, scn.GetWoundsOn(gimli));
 
 		// He has won a second time, fierce already, and is asked again.  Declined, so that what is read in the
 		// regroup phase is the end of the first win's bonus.
@@ -157,7 +159,8 @@ public class Card_04_012_Tests
 		scn.FreepsResolveSkirmish(gimli);
 		scn.PassCurrentPhaseActions();
 
-		assertEquals(1, scn.GetWoundsOn(gimli));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(gimli));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(madman));
 
 		scn.ShadowDeclineOptionalTrigger();

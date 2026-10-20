@@ -147,9 +147,9 @@ public class Card_01_160_ErrataTests
 		scn.FreepsPass();
 		scn.ShadowPass();
 
-		// 9 + 2 against 8: the Guard wins.  The skirmish damage first: 1 + damage +1.
-		scn.FreepsResolveRuleFirst();
-		assertEquals(2, scn.GetWoundsOn(aragorn));
+		// 9 + 2 against 8: the Guard wins.  Its win is answered before the skirmish damage of 1 + damage +1 (engine
+		// pass 54).
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 
 		// The choice is the Free Peoples player's.
 		assertTrue(scn.FreepsChoiceAvailable("Exert a companion"));
@@ -198,8 +198,8 @@ public class Card_01_160_ErrataTests
 		scn.FreepsPass();
 		scn.ShadowPass();
 
-		scn.FreepsResolveRuleFirst();
-		assertEquals(2, scn.GetWoundsOn(aragorn));
+		// What answers the win comes first, with nothing to order (engine pass 54).
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		scn.FreepsChooseOption("Discard");
 
 		assertEquals(deck - 2, scn.GetFreepsDeckCount());
@@ -242,8 +242,8 @@ public class Card_01_160_ErrataTests
 		scn.FreepsPass();
 		scn.ShadowPass();
 
-		scn.FreepsResolveRuleFirst();
-		assertEquals(2, scn.GetWoundsOn(aragorn));
+		// What answers the win comes first, with nothing to order (engine pass 54).
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		// Frodo stops Shadow cards that make the Free Peoples player discard, but the Sword gives him a choice
 		// and he may choose to discard (F-0205: not a fault): the discard is offered beside the exertion, and taken.
 		assertTrue(scn.FreepsChoiceAvailable("Exert"));
@@ -284,8 +284,8 @@ public class Card_01_160_ErrataTests
 		scn.FreepsPass();
 		scn.ShadowPass();
 
-		scn.FreepsResolveRuleFirst();
-		assertEquals(2, scn.GetWoundsOn(aragorn));
+		// What answers the win comes first, with nothing to order (engine pass 54).
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 
 		// The top 2 cards cannot be discarded: exerting is what is left, and the companion is chosen.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, aragorn, sam));
@@ -308,9 +308,10 @@ public class Card_01_160_ErrataTests
 		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
-		// Frodo, vitality 4, exhausted; Aragorn, vitality 4, will be exhausted by the skirmish damage.
+		// Frodo and Aragorn, vitality 4, exhausted: the Guard's win is answered before Aragorn's wounds for losing
+		// (engine pass 54; until then 1 wound and those 2 exhausted him).
 		scn.AddWoundsToChar(frodo, 3);
-		scn.AddWoundsToChar(aragorn, 1);
+		scn.AddWoundsToChar(aragorn, 3);
 		scn.MoveMinionsToTable(guard);
 		scn.AttachCardsTo(guard, sword);
 		scn.SkipToAssignments();
@@ -320,14 +321,12 @@ public class Card_01_160_ErrataTests
 		scn.FreepsPass();
 		scn.ShadowPass();
 
-		scn.FreepsResolveRuleFirst();
-		assertEquals(3, scn.GetWoundsOn(aragorn));
-		assertTrue(scn.IsExhausted(aragorn));
-
+		// What answers the win comes first, with nothing to order (engine pass 54), and with nobody able to exert
+		// it discards without a question.
 		assertEquals(deck - 2, scn.GetFreepsDeckCount());
-		assertEquals(2, scn.GetFreepsDiscardCount());
 		assertEquals(3, scn.GetWoundsOn(frodo));
-		assertEquals(3, scn.GetWoundsOn(aragorn));
+		// Then the wounds for losing kill Aragorn: the two cards and his own.
+		assertInZone(Zone.DEAD, aragorn);
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
@@ -390,7 +389,7 @@ public class Card_01_160_ErrataTests
 		scn.FreepsPass();
 		scn.ShadowPass();
 
-		scn.FreepsResolveRuleFirst();
+		// What answers the win comes first, with nothing to order (engine pass 54).
 		scn.FreepsChooseOption("Discard");
 		assertEquals(deck - 2, scn.GetFreepsDeckCount());
 
@@ -401,8 +400,8 @@ public class Card_01_160_ErrataTests
 		scn.FreepsPass();
 		scn.ShadowPass();
 
-		scn.FreepsResolveRuleFirst();
-		assertInZone(Zone.DEAD, aragorn);
+		// What answers the win comes first, with nothing to order (engine pass 54).
+		assertInZone(Zone.FREE_CHARACTERS, aragorn);
 		scn.FreepsChooseOption("Discard");
 		assertEquals(deck - 4, scn.GetFreepsDeckCount());
 		assertEquals(4, scn.GetFreepsDiscardCount());

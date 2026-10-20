@@ -101,7 +101,7 @@ public class Card_01_020_Tests
 		scn.FreepsResolveSkirmish(gimli);
 		assertInPlay(worker);
 		scn.PassSkirmishActions();
-		scn.FreepsResolveRuleFirst();
+		// What answers the win comes first, with nothing to order (engine pass 54).
 		assertInDiscard(worker);
 		assertInPlay(letthem);
 
@@ -109,7 +109,7 @@ public class Card_01_020_Tests
 		scn.FreepsResolveSkirmish(thrarin);
 		assertInPlay(soldier);
 		scn.PassSkirmishActions();
-		scn.FreepsResolveRuleFirst();
+		// What answers the win comes first, with nothing to order (engine pass 54).
 		assertInDiscard(soldier);
 		assertInPlay(letthem);
 
@@ -149,7 +149,7 @@ public class Card_01_020_Tests
 		assertEquals(0, scn.GetWoundsOn(worker));
 		assertEquals(0, scn.GetWoundsOn(savage));
 		scn.PassSkirmishActions();
-		scn.FreepsResolveRuleFirst();
+		// What answers the win comes first, with nothing to order (engine pass 54).
 
 		// Each loser takes two wounds (damage +1) and lives; only the Orc is discarded.
 		assertInDiscard(worker);

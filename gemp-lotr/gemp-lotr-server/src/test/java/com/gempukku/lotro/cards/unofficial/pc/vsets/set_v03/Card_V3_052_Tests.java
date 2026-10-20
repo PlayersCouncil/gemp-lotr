@@ -393,7 +393,8 @@ public class Card_V3_052_Tests
 		scn.PassSkirmishActions();
 
 		// Southron Explorer 9 beats Aragorn 8
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(hailing));
 		assertFalse(scn.IsHindered(hailing));
 		assertFalse(scn.HasKeyword(explorer, Keyword.RELENTLESS));
@@ -448,7 +449,8 @@ public class Card_V3_052_Tests
 		scn.PassSkirmishActions();
 
 		// Bladetusk Charger 12 beats Aragorn 8
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(hailing));
 		assertFalse(scn.IsHindered(hailing));
 		assertFalse(scn.HasKeyword(charger, Keyword.RELENTLESS));
@@ -550,7 +552,8 @@ public class Card_V3_052_Tests
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
 		// Southron Explorer 5 + 4 for the War Mumak beats Aragorn 8
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertFalse(scn.HasKeyword(explorer, Keyword.RELENTLESS));
 
 		scn.ShadowChooseOptionalTrigger(hailing);

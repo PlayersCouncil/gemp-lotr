@@ -143,10 +143,10 @@ public class Card_01_160_Tests
 		assertEquals(deck, scn.GetFreepsDeckCount());
 		assertEquals(top1, scn.GetFreepsTopOfDeck());
 
-		// The bearer, 8 + 2 against 6, wins: the skirmish damage first, then the top card of the Free Peoples deck.
+		// The bearer, 8 + 2 against 6, wins: the top card of the Free Peoples deck, then the skirmish damage.
 		scn.FreepsResolveSkirmish(gimli);
 		scn.PassSkirmishActions();
-		scn.FreepsResolveRuleFirst();
+		// What answers the win comes first, with nothing to order (engine pass 54).
 		assertEquals(2, scn.GetWoundsOn(gimli));
 
 		assertEquals(deck - 1, scn.GetFreepsDeckCount());
@@ -218,7 +218,7 @@ public class Card_01_160_Tests
 
 		// The bearer, 5 + 2 against 6, wins: one card.
 		scn.PassSkirmishActions();
-		scn.FreepsResolveRuleFirst();
+		// What answers the win comes first, with nothing to order (engine pass 54).
 		assertEquals(1, scn.GetWoundsOn(gimli));
 		assertEquals(deck - 1, scn.GetFreepsDeckCount());
 		assertInDiscard(top1);
@@ -230,7 +230,7 @@ public class Card_01_160_Tests
 		scn.FreepsAssignToMinions(gimli, pursuer);
 		scn.FreepsResolveSkirmish(gimli);
 		scn.PassFierceSkirmishActions();
-		scn.FreepsResolveRuleFirst();
+		// What answers the win comes first, with nothing to order (engine pass 54).
 		assertEquals(2, scn.GetWoundsOn(gimli));
 		assertEquals(deck - 2, scn.GetFreepsDeckCount());
 		assertInDiscard(top1, top2);

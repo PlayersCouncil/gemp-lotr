@@ -129,7 +129,8 @@ public class Card_04_025_Tests
 
 		scn.PassCurrentPhaseActions();
 		// 9 against 6: the Knight loses, and takes a wound.
-		assertEquals(1, scn.GetWoundsOn(knight));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(knight));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(tribe));
 		scn.ShadowAcceptOptionalTrigger();
 
@@ -199,7 +200,8 @@ public class Card_04_025_Tests
 
 		scn.PassCurrentPhaseActions();
 		// 9 against 6: the Tribe wins.
-		assertEquals(1, scn.GetWoundsOn(knight));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(knight));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(tribe));
 		scn.ShadowAcceptOptionalTrigger();
 
@@ -381,7 +383,8 @@ public class Card_04_025_Tests
 		assertEquals(0, scn.GetShadowControlledSiteCount());
 
 		scn.PassCurrentPhaseActions();
-		assertEquals(1, scn.GetWoundsOn(knight));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(knight));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(tribe));
 		scn.ShadowAcceptOptionalTrigger();
 		assertTrue(scn.ShadowControls(site1));
@@ -392,7 +395,8 @@ public class Card_04_025_Tests
 		scn.FreepsAssignToMinions(knight, tribe);
 		scn.FreepsResolveSkirmish(knight);
 		scn.PassCurrentPhaseActions();
-		assertEquals(2, scn.GetWoundsOn(knight));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(1, scn.GetWoundsOn(knight));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(tribe));
 		scn.ShadowAcceptOptionalTrigger();
 

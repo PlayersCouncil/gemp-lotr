@@ -109,7 +109,8 @@ public class Card_V3_039_Tests
 		scn.PassSkirmishActions();
 
 		// Raiding Party 9 beats Aragorn 8: 1 exertion for Spider Poison + 2 wounds from a damage +1 minion
-		assertEquals(3, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(1, scn.GetWoundsOn(aragorn));
 		// Each copy offers to discard the other.
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(fury1));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(fury2));
@@ -153,11 +154,9 @@ public class Card_V3_039_Tests
 		scn.FreepsAssignToMinions(frodo, party);
 		scn.FreepsResolveSkirmish(frodo);
 		scn.PassSkirmishActions();
-		// Raiding Party 9 beats Frodo 3 + 2 for the sword, and is short of double. 2 wounds from a damage +1
-		// minion; the Ring's offer to take each as a burden is declined.
-		scn.FreepsDeclineOptionalTrigger();
-		scn.FreepsDeclineOptionalTrigger();
-		assertEquals(2, scn.GetWoundsOn(frodo));
+		// Raiding Party 9 beats Frodo 3 + 2 for the sword, and is short of double.  The win is answered before
+		// Frodo's wounds for losing (engine pass 54).
+		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(fury1));
 		assertFalse(scn.IsHindered(sword));
 		assertFalse(scn.IsHindered(ring));
@@ -168,6 +167,11 @@ public class Card_V3_039_Tests
 		assertTrue(scn.IsHindered(sword));
 		assertFalse(scn.IsHindered(ring));
 		assertFalse(scn.IsHindered(frodo));
+
+		// Then 2 wounds from a damage +1 minion; the Ring's offer to take each as a burden is declined.
+		scn.FreepsDeclineOptionalTrigger();
+		scn.FreepsDeclineOptionalTrigger();
+		assertEquals(2, scn.GetWoundsOn(frodo));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
@@ -195,7 +199,8 @@ public class Card_V3_039_Tests
 		scn.PassSkirmishActions();
 
 		// Isengard Rider 8 beats Boromir 7
-		assertEquals(1, scn.GetWoundsOn(boromir));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(boromir));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(fury1));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(fury2));
 
@@ -210,7 +215,8 @@ public class Card_V3_039_Tests
 		scn.FreepsResolveSkirmish(boromir);
 		scn.PassFierceSkirmishActions();
 
-		assertEquals(2, scn.GetWoundsOn(boromir));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(1, scn.GetWoundsOn(boromir));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(fury1));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(fury2));
 
@@ -330,7 +336,8 @@ public class Card_V3_039_Tests
 		scn.PassSkirmishActions();
 
 		// Raiding Party 9 beats Elrond 8, with damage +1
-		assertEquals(2, scn.GetWoundsOn(elrond));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(elrond));
 		// The other copy can be discarded, so the offer is made.
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(fury1));
 

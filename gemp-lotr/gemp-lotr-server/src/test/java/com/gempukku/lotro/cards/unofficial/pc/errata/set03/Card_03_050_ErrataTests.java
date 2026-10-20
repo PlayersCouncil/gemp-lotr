@@ -133,16 +133,14 @@ public class Card_03_050_ErrataTests
 		assertEquals(0, scn.GetBurdens());
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
-		// The burden and the skirmish's wound come at once; the Free Peoples player orders them.
-		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
-		scn.FreepsResolveRuleFirst();
+		// The burden answers the win before the skirmish's wound, with nothing to order (engine pass 54).
+		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
 		// Strength 8 against the Uruk-hai's 5.
 		assertEquals(1, scn.GetWoundsOn(savage));
 		assertEquals(1, scn.GetBurdens());
 
 		scn.FreepsResolveSkirmish(boromir);
 		scn.PassSkirmishActions();
-		scn.FreepsResolveRuleFirst();
 		// Strength 7 against the Orc's 6.
 		assertEquals(1, scn.GetWoundsOn(forger));
 		assertEquals(2, scn.GetBurdens());
@@ -214,7 +212,7 @@ public class Card_03_050_ErrataTests
 		assertEquals(0, scn.GetBurdens());
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
-		scn.FreepsResolveRuleFirst();
+		// What answers the win comes first, with nothing to order (engine pass 54).
 		assertEquals(1, scn.GetWoundsOn(savage));
 		assertEquals(1, scn.GetBurdens());
 
@@ -222,7 +220,7 @@ public class Card_03_050_ErrataTests
 		scn.FreepsAssignToMinions(aragorn, savage);
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
-		scn.FreepsResolveRuleFirst();
+		// What answers the win comes first, with nothing to order (engine pass 54).
 		assertEquals(2, scn.GetWoundsOn(savage));
 		assertEquals(2, scn.GetBurdens());
 		assertTrue(scn.FreepsDecisionAvailable("exert"));

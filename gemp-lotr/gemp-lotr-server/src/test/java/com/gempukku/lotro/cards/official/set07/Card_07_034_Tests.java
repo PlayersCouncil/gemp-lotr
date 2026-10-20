@@ -93,7 +93,8 @@ public class Card_07_034_Tests
 		scn.FreepsPass();
 		scn.ShadowPass();
 
-		assertEquals(1, scn.GetWoundsOn(savage));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(savage));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(echoes));
 		assertEquals(0, scn.GetWoundsOn(gandalf));
 		assertEquals(0, scn.GetFreepsHandCount());
@@ -125,7 +126,8 @@ public class Card_07_034_Tests
 		scn.FreepsPass();
 		scn.ShadowPass();
 
-		assertEquals(1, scn.GetWoundsOn(savage));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(savage));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(echoes));
 
 		scn.FreepsDeclineOptionalTrigger();
@@ -203,7 +205,8 @@ public class Card_07_034_Tests
 		scn.FreepsPass();
 		scn.ShadowPass();
 
-		assertEquals(2, scn.GetWoundsOn(savage));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(1, scn.GetWoundsOn(savage));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(echoes));
 		scn.FreepsAcceptOptionalTrigger();
 		assertEquals(2, scn.GetWoundsOn(gandalf));

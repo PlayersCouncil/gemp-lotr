@@ -157,7 +157,8 @@ public class Card_04_276_ErrataTests
 		// A [rohan] Man wins.
 		scn.FreepsResolveSkirmish(guard);
 		scn.PassSkirmishActions();
-		assertInDiscard(runner1);
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertInZone(Zone.SHADOW_CHARACTERS, runner1);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(fortress));
 		assertEquals(0, scn.GetCultureTokensOn(fortress));
 		scn.FreepsAcceptOptionalTrigger();
@@ -190,14 +191,16 @@ public class Card_04_276_ErrataTests
 
 		scn.FreepsResolveSkirmish(rider);
 		scn.PassSkirmishActions();
-		assertInDiscard(runner1);
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertInZone(Zone.SHADOW_CHARACTERS, runner1);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(fortress));
 		scn.FreepsDeclineOptionalTrigger();
 		assertEquals(0, scn.GetCultureTokensOn(fortress));
 
 		scn.FreepsResolveSkirmish(guard);
 		scn.PassSkirmishActions();
-		assertEquals(1, scn.GetWoundsOn(savage));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(savage));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(fortress));
 		scn.FreepsAcceptOptionalTrigger();
 		assertEquals(1, scn.GetCultureTokensOn(fortress));
@@ -206,7 +209,8 @@ public class Card_04_276_ErrataTests
 		scn.FreepsAssignToMinions(guard, savage);
 		scn.FreepsResolveSkirmish(guard);
 		scn.PassFierceSkirmishActions();
-		assertEquals(2, scn.GetWoundsOn(savage));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(1, scn.GetWoundsOn(savage));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(fortress));
 		scn.FreepsAcceptOptionalTrigger();
 		assertEquals(2, scn.GetCultureTokensOn(fortress));
@@ -235,7 +239,8 @@ public class Card_04_276_ErrataTests
 		scn.FreepsResolveSkirmish(sigewulf);
 		scn.PassSkirmishActions();
 
-		assertInDiscard(runner);
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertInZone(Zone.SHADOW_CHARACTERS, runner);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(fortress));
 		assertEquals(0, scn.GetCultureTokensOn(fortress));
 		scn.FreepsAcceptOptionalTrigger();

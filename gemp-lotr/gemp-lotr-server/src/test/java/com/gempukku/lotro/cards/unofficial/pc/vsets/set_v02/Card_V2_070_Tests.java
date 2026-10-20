@@ -332,7 +332,8 @@ public class Card_V2_070_Tests
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassCurrentPhaseActions();
 
-		assertEquals(2, scn.GetWoundsOn(aragorn));      // 1 for losing + 1 for damage +1
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));      // 1 for losing + 1 for damage +1
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(intruder));
 		// Declined, so that he still controls no site at the Wall.
 		scn.ShadowDeclineOptionalTrigger();

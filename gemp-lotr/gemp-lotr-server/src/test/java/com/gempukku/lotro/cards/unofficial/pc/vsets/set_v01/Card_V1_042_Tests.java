@@ -119,7 +119,8 @@ public class Card_V1_042_Tests
 		scn.FreepsAssignAndResolve(aragorn, attea);
 		scn.PassSkirmishActions();
 
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(walks));
 		assertEquals(0, scn.GetWoundsOn(attea));
 		assertEquals(0, scn.GetWoundsOn(nelya));
@@ -219,7 +220,8 @@ public class Card_V1_042_Tests
 		// A twilight Nazgul wins: Attea 12 against Aragorn 8.
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(walks));
 
 		scn.ShadowDeclineOptionalTrigger();
@@ -356,7 +358,8 @@ public class Card_V1_042_Tests
 		assertEquals(12, scn.GetStrength(aragorn));
 
 		scn.PassSkirmishActions();
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 
 		// One offer for each of the two winners.
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(walks));

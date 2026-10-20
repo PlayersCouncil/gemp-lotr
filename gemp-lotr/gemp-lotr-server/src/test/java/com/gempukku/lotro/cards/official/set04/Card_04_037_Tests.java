@@ -98,7 +98,8 @@ public class Card_04_037_Tests
 
 		// 8 against 6: the Brigand wins.
 		scn.ShadowPass();
-		assertEquals(1, scn.GetWoundsOn(gimli));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(gimli));
 		// The play is worded with the winner's name, and read by it.
 		assertTrue(scn.ShadowActionAvailable(warcry, "Brigand"));
 		assertEquals(8, scn.GetStrength(brigand));
@@ -171,7 +172,8 @@ public class Card_04_037_Tests
 		// 8 + 11 + 6 against 13: all three win.
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 
 		// An offer for each [dunland] Man who won, from each copy; none for the [raider] Man who won beside them, or
 		// for the [dunland] Man still waiting.

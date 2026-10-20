@@ -317,7 +317,8 @@ public class Card_09_010_Tests
 		scn.PassCurrentPhaseActions();
 
 		// Gimli, 6 against 5, wins: a [dwarven] event played in the skirmish phase, but no skirmish event.
-		assertInDiscard(runner1);
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertInZone(Zone.SHADOW_CHARACTERS, runner1);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(tosses2));
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable(tosses1));
 		assertInZone(Zone.STACKED, tosses1);

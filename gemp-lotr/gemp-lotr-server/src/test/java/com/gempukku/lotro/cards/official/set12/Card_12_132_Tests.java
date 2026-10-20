@@ -301,8 +301,9 @@ public class Card_12_132_Tests
 		scn.ShadowChooseNo();
 		assertInZone(Zone.DISCARD, merry);
 
-		// Nobody is left on his side: the skirmish is over and he has lost it.
-		scn.FreepsResolveRuleFirst();
+		// Nobody is left on his side: the skirmish is over and he has lost it.  His side already removed, there
+		// are no wounds for losing to resolve (step 5A), so the trigger has nothing to be ordered beside (engine
+		// pass 54).
 		assertEquals(1, scn.GetCultureTokensOn(fury));
 		assertEquals(0, scn.GetWoundsOn(savage));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());

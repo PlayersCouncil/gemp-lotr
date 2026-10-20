@@ -87,7 +87,7 @@ public class Card_05_007_Tests
 	// not offered (F-0347).  The old at/ test (TriggersAtTest.fpCharWinsSkirmish) had the offer made with the only
 	// minion already killed.
 	@Test
-	public void WinningMayWoundAMinionAssignedToAnUnboundCompanionAndIsNotOfferedWhenThereIsNoSuchMinion() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WinningMayWoundAMinionAssignedToAnUnboundCompanionTheMinionHeBeatAmongThem() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetSkirmishWinScenario();
 
 		var gimli = scn.GetFreepsCard("gimli");
@@ -107,18 +107,24 @@ public class Card_05_007_Tests
 		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{gimli, runner1}, new PhysicalCardImpl[]{aragorn, troop});
 		scn.ShadowDeclineAssignments();
 
-		// Gimli 6 against the Runner's 5: he wins and kills it.  The Troop is waiting on Aragorn.
+		// Gimli 6 against the Runner's 5: he wins.  The Troop is waiting on Aragorn.  His win is answered before
+		// the Runner loses (engine pass 54), so the Runner is still there.
 		scn.FreepsResolveSkirmish(gimli);
 		scn.PassSkirmishActions();
-		assertInZone(Zone.DISCARD, runner1);
+		assertInZone(Zone.SHADOW_CHARACTERS, runner1);
 		assertEquals(0, scn.GetWoundsOn(troop));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(gimli));
 
-		// The Troop is the one minion assigned to skirmish an unbound companion; the Runner assigned to nobody
-		// is not wounded.
+		// The Troop and the Runner he beat are the minions assigned to skirmish an unbound companion; the
+		// Runner assigned to nobody is not one of them.
 		scn.FreepsAcceptOptionalTrigger();
+		assertTrue(scn.FreepsHasCardChoiceAvailable(runner1, troop));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(runner2));
+		scn.FreepsChooseCard(troop);
 		assertEquals(1, scn.GetWoundsOn(troop));
 		assertEquals(0, scn.GetWoundsOn(runner2));
+		// Then the Runner he beat is killed by its wound for losing.
+		assertInDiscard(runner1);
 		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 
 		// Aragorn 8 against the Troop's 13: he loses and lives.
@@ -133,10 +139,14 @@ public class Card_05_007_Tests
 		scn.FreepsResolveSkirmish(gimli);
 		scn.PassSkirmishActions();
 
-		// Gimli has won again, the Runner he beat is dead, and the Troop is assigned to nobody: there is no
-		// minion his text could wound, so nothing is offered and the game goes on to the regroup phase.
-		assertInZone(Zone.DISCARD, runner2);
-		assertFalse(scn.FreepsHasOptionalTriggerAvailable(gimli));
+		// Gimli has won again, and the Troop is assigned to nobody.  The Runner he beat is still in his skirmish
+		// as the win is answered (engine pass 54; until then it was dead by now, and nothing was offered), so it
+		// is a minion his text could wound.  Declined.
+		assertInZone(Zone.SHADOW_CHARACTERS, runner2);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(gimli));
+		scn.FreepsDeclineOptionalTrigger();
+		// Then the Runner is killed by its wound for losing.
+		assertInDiscard(runner2);
 		assertEquals(1, scn.GetWoundsOn(troop));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}

@@ -131,7 +131,8 @@ public class Card_04_027_Tests
 
 		// 8 + 6 against 8: the minions win, without overwhelming Éomer (16).
 		scn.PassCurrentPhaseActions();
-		assertEquals(1, scn.GetWoundsOn(eomer));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(eomer));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(rock));
 		assertFalse(scn.InFierceRound());
 
@@ -158,7 +159,8 @@ public class Card_04_027_Tests
 		assertEquals(10, scn.GetStrength(brigand));
 		assertTrue(scn.HasKeyword(brigand, Keyword.FIERCE));
 		scn.PassFierceSkirmishActions();
-		assertEquals(2, scn.GetWoundsOn(eomer));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(1, scn.GetWoundsOn(eomer));
 
 		// "Each time": he has won a second skirmish against a [rohan] Man and is asked again.  Declined, so that
 		// what is read in the regroup phase is the end of the first win's bonus.
@@ -196,7 +198,8 @@ public class Card_04_027_Tests
 
 		// 7 against 4: the Elder wins, without overwhelming the Herdsman (8).
 		scn.PassCurrentPhaseActions();
-		assertEquals(1, scn.GetWoundsOn(herdsman));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(herdsman));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(rock));
 		scn.ShadowAcceptOptionalTrigger();
 
@@ -227,7 +230,8 @@ public class Card_04_027_Tests
 
 		// 11 against 8: the Savage wins, without overwhelming Éomer (16).
 		scn.PassCurrentPhaseActions();
-		assertEquals(1, scn.GetWoundsOn(eomer));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(eomer));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(rock));
 
 		scn.ShadowDeclineOptionalTrigger();

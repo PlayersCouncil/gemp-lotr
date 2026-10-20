@@ -216,7 +216,8 @@ public class Card_V2_066_Tests
 		// 9 + 10 against 13.
 		scn.FreepsPass();
 		scn.ShadowPass();
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
 		assertEquals(0, scn.GetWoundsOn(lights));
 		assertEquals(0, scn.GetBurdens());
@@ -259,7 +260,8 @@ public class Card_V2_066_Tests
 		// 12 against Aragorn's 8.
 		scn.FreepsPass();
 		scn.ShadowPass();
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
 
 		scn.ShadowDeclineOptionalTrigger();
@@ -410,7 +412,8 @@ public class Card_V2_066_Tests
 		// 12 against Aragorn's 8: Nelya wins the skirmish the event was played in, and exerts for a burden.
 		scn.FreepsPass();
 		scn.ShadowPass();
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
 		scn.ShadowAcceptOptionalTrigger();
 		assertEquals(1, scn.GetWoundsOn(nelya));

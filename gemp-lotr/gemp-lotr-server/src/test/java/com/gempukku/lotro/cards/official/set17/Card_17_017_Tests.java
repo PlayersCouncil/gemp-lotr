@@ -410,7 +410,8 @@ public class Card_17_017_Tests
 		scn.PassCurrentPhaseActions();
 
 		// 7 against 5
-		assertEquals(1, scn.GetWoundsOn(pursuer));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(pursuer));
 		assertEquals(1, scn.GetCultureTokensOn(evenstar));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(gandalf));
 		scn.FreepsAcceptOptionalTrigger();
@@ -433,7 +434,8 @@ public class Card_17_017_Tests
 		scn.FreepsResolveSkirmish(gandalf);
 		scn.PassCurrentPhaseActions();
 
-		assertEquals(2, scn.GetWoundsOn(pursuer));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(1, scn.GetWoundsOn(pursuer));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(gandalf));
 		scn.FreepsDeclineOptionalTrigger();
 

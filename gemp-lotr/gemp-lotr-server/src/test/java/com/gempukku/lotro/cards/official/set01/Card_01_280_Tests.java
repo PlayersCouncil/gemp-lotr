@@ -103,8 +103,8 @@ public class Card_01_280_Tests
 
 		// The Lieutenant, 10, beats Aragorn, 8: two of the four cards go, and nobody is asked which.
 		scn.PassCurrentPhaseActions();
-		// The wound for losing and the Lieutenant's trigger come at the same moment.
-		scn.FreepsResolveRuleFirst();
+		// The Lieutenant's trigger answers the win before the wound for losing, with nothing to order (engine
+		// pass 54).
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertEquals(2, scn.GetFreepsHandCount());
 		assertEquals(discard + 2, scn.GetFreepsDiscardCount());
@@ -182,7 +182,7 @@ public class Card_01_280_Tests
 
 		// The first win: two of five go.
 		scn.PassCurrentPhaseActions();
-		scn.FreepsResolveRuleFirst();
+		// What answers the win comes first, with nothing to order (engine pass 54).
 		assertEquals(3, scn.GetFreepsHandCount());
 		assertEquals(discard + 2, scn.GetFreepsDiscardCount());
 
@@ -197,7 +197,7 @@ public class Card_01_280_Tests
 		scn.FreepsAssignToMinions(aragorn, lieutenant);
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassFierceSkirmishActions();
-		scn.FreepsResolveRuleFirst();
+		// What answers the win comes first, with nothing to order (engine pass 54).
 		assertEquals(2, scn.GetWoundsOn(aragorn));
 		assertEquals(1, scn.GetFreepsHandCount());
 		assertEquals(discard + 4, scn.GetFreepsDiscardCount());

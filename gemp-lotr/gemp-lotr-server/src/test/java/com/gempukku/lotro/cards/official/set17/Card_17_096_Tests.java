@@ -200,7 +200,8 @@ public class Card_17_096_Tests
 		// Aragorn's skirmish: 8 against 9.  The Skirmisher wins and may exert twice to wound any companion.
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassCurrentPhaseActions();
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(skirmisher));
 		scn.ShadowAcceptOptionalTrigger();
 		assertEquals(2, scn.GetWoundsOn(skirmisher));

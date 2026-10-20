@@ -95,7 +95,8 @@ public class Card_04_069_Tests
 		scn.PassSkirmishActions();
 
 		// Legolas has won: the offer is made, and declined.
-		assertEquals(1, scn.GetWoundsOn(savage));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(savage));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(count));
 		assertEquals(0, scn.GetCultureTokensOn(count));
 		scn.FreepsDeclineOptionalTrigger();
@@ -109,7 +110,8 @@ public class Card_04_069_Tests
 		scn.FreepsResolveSkirmish(legolas);
 		scn.PassSkirmishActions();
 
-		assertEquals(2, scn.GetWoundsOn(savage));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(1, scn.GetWoundsOn(savage));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(count));
 		scn.FreepsAcceptOptionalTrigger();
 		assertEquals(1, scn.GetCultureTokensOn(count));

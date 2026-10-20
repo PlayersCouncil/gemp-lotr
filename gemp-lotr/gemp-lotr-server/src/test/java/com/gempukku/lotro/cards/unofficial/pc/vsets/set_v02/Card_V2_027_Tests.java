@@ -274,7 +274,8 @@ public class Card_V2_027_Tests
 
 		// The Legion wins, 20 to 8.  A Response is a special ability and not a skirmish one: it is offered
 		// while the Legion's skirmish is still going on.
-		assertInZone(Zone.DEAD, gimli);
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertInZone(Zone.FREE_CHARACTERS, gimli);
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(bloodlust));
 		scn.ShadowChooseOptionalTrigger(bloodlust);
 		assertEquals(5, scn.GetTwilight());

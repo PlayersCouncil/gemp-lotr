@@ -98,7 +98,8 @@ public class Card_01_144_Tests
 		scn.PassSkirmishActions();
 
 		// 5 + 8 + 5 against 6: Gimli is overwhelmed, and all three minions win.
-		assertInZone(Zone.DEAD, gimli);
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertInZone(Zone.FREE_CHARACTERS, gimli);
 		assertEquals(3, scn.GetTwilight());
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(bloodlust, "Uruk Savage"));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(bloodlust, "Cirith Ungol Sentry"));
@@ -215,7 +216,8 @@ public class Card_01_144_Tests
 		scn.ShadowAcceptOptionalTrigger();
 		assertEquals(2, scn.GetTwilight());
 		assertEquals(0, scn.GetWoundsOn(guard));
-		assertEquals(2, scn.GetWoundsOn(gimli));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(gimli));
 
 		// Offered again while the pool can pay; declined, the game goes on to the regroup phase.
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(bloodlust));

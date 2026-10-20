@@ -146,7 +146,8 @@ public class Card_18_018_ErrataTests
 		assertEquals(4, scn.GetFreepsDiscardCount());
 		scn.PassSkirmishActions();
 
-		assertEquals(1, scn.GetWoundsOn(savage));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(savage));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(axe));
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable(axe2));
 		scn.FreepsAcceptOptionalTrigger();
@@ -201,7 +202,8 @@ public class Card_18_018_ErrataTests
 		scn.PassSkirmishActions();
 
 		// Nothing was taken at the first win, so the once has not been used.
-		assertEquals(2, scn.GetWoundsOn(savage));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(1, scn.GetWoundsOn(savage));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(axe));
 		scn.FreepsAcceptOptionalTrigger();
 		scn.FreepsChooseCards(secret);

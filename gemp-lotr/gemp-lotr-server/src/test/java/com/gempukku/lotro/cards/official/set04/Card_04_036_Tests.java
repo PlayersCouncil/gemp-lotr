@@ -163,7 +163,8 @@ public class Card_04_036_Tests
 		// The bearer wins: 10 against 7.
 		scn.FreepsResolveSkirmish(boromir);
 		scn.PassSkirmishActions();
-		assertEquals(1, scn.GetWoundsOn(boromir));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(boromir));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(club));
 
 		scn.ShadowAcceptOptionalTrigger();
@@ -211,7 +212,8 @@ public class Card_04_036_Tests
 		scn.FreepsResolveSkirmish(boromir);
 		// 12 against 7.
 		scn.PassSkirmishActions();
-		assertEquals(1, scn.GetWoundsOn(boromir));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(boromir));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(club));
 
 		scn.ShadowDeclineOptionalTrigger();
@@ -225,7 +227,8 @@ public class Card_04_036_Tests
 		scn.FreepsAssignToMinions(boromir, wulf);
 		scn.FreepsResolveSkirmish(boromir);
 		scn.PassFierceSkirmishActions();
-		assertEquals(2, scn.GetWoundsOn(boromir));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(1, scn.GetWoundsOn(boromir));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(club));
 
 		scn.ShadowAcceptOptionalTrigger();

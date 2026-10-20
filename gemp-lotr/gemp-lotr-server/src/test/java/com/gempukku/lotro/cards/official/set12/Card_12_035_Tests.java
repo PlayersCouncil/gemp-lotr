@@ -171,7 +171,8 @@ public class Card_12_035_Tests
 		scn.PassSkirmishActions();
 
 		// 8 against 5: he wins.  The offer is his copy's, not Gandalf's.
-		assertEquals(1, scn.GetWoundsOn(pursuer));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(pursuer));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(watch1));
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable(watch2));
 		scn.FreepsAcceptOptionalTrigger();
@@ -185,7 +186,8 @@ public class Card_12_035_Tests
 		scn.PassFierceSkirmishActions();
 
 		// He wins again, and the offer is made again; declined, the burden stays.
-		assertEquals(2, scn.GetWoundsOn(pursuer));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(1, scn.GetWoundsOn(pursuer));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(watch1));
 		scn.FreepsDeclineOptionalTrigger();
 		assertEquals(1, scn.GetBurdens());

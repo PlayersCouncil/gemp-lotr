@@ -554,13 +554,14 @@ public class AnOfferThatCostsNothingAndWouldDoNothingIsNotMadeTests
 		scn.FreepsAssignToMinions(gimli, runner);
 		scn.FreepsResolveSkirmish(gimli);
 
-		// 6 against 5: a Dwarf wins.
+		// 6 against 5: a Dwarf wins.  What answers the win comes before the loser's wound (engine pass 54).
 		scn.PassSkirmishActions();
-		assertInZone(Zone.DISCARD, runner);
+		assertInZone(Zone.SHADOW_CHARACTERS, runner);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(stout));
 
 		scn.FreepsAcceptOptionalTrigger();
 		assertEquals(1, scn.GetCultureTokensOn(stout));
+		assertInZone(Zone.DISCARD, runner);
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
@@ -688,13 +689,15 @@ public class AnOfferThatCostsNothingAndWouldDoNothingIsNotMadeTests
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
 
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// What answers the win comes before the loser's wound (engine pass 54).
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(1, scn.GetShadowControlledSiteCount());
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(looter));
 
 		scn.ShadowAcceptOptionalTrigger();
 		assertInZone(Zone.STACKED, looter);
 		assertTrue(scn.GetStackedCards(scn.GetSite(1)).contains(looter));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
@@ -741,12 +744,14 @@ public class AnOfferThatCostsNothingAndWouldDoNothingIsNotMadeTests
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
 
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// What answers the win comes before the loser's wound (engine pass 54).
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(savage));
 
 		scn.ShadowAcceptOptionalTrigger();
 		assertInZone(Zone.STACKED, corps);
 		assertTrue(scn.GetStackedCards(fleet).contains(corps));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
@@ -845,8 +850,8 @@ public class AnOfferThatCostsNothingAndWouldDoNothingIsNotMadeTests
 		scn.FreepsResolveSkirmish(gandalf);
 		scn.PassSkirmishActions();
 
-		// The Uruk Savage lost, took a wound, and can still exert.
-		assertEquals(1, scn.GetWoundsOn(savage));
+		// The Uruk Savage lost and can exert; what answers the win comes before his wound (engine pass 54).
+		assertEquals(0, scn.GetWoundsOn(savage));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(gwaihir));
 
 		scn.FreepsAcceptOptionalTrigger();
@@ -1102,11 +1107,13 @@ public class AnOfferThatCostsNothingAndWouldDoNothingIsNotMadeTests
 		scn.PassSkirmishActions();
 
 		// The mounted Warg-master (8 + 2) has beaten Aragorn (8), and the Free Peoples player holds one card.
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// What answers the win comes before the loser's wound (engine pass 54).
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(1, scn.GetFreepsHandCount());
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(master));
 
 		scn.ShadowAcceptOptionalTrigger();
+		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetFreepsHandCount());
 		assertSame(gimli, scn.GetFreepsTopOfDeck());
 

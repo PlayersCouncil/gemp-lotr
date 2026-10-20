@@ -157,24 +157,27 @@ public class Card_08_024_Tests
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
 
-		// Aragorn, 8, loses to Gollum and the Skirmisher, 14, and takes a wound.
-		assertEquals(1, scn.GetWoundsOn(aragorn));
-		// Any companion who can exert; not the exhausted Guard, not the ally.
-		assertTrue(scn.ShadowHasCardChoiceAvailable(frodo, sam, aragorn, gimli));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(guard, barliman));
-		assertEquals(1, scn.ShadowGetChoiceMin());
-		scn.ShadowChooseCard(gimli);
-		assertEquals(1, scn.GetWoundsOn(gimli));
-
-		// The Skirmisher won: it exerts twice to wound Sam, who is in no skirmish, while Gollum's skirmish goes on.
+		// Aragorn, 8, loses to Gollum and the Skirmisher, 14.  The win is answered before he takes his wound
+		// (engine pass 54).  The Skirmisher won: it exerts twice to wound Sam, who is in no skirmish, while
+		// Gollum's skirmish goes on.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(skirmisher));
 		scn.ShadowAcceptOptionalTrigger();
 		scn.ShadowChooseCard(sam);
 		assertEquals(1, scn.GetWoundsOn(sam));
 		assertEquals(2, scn.GetWoundsOn(skirmisher));
 
+		// Any companion who can exert; not the exhausted Guard, not the ally.
 		assertTrue(scn.ShadowHasCardChoiceAvailable(frodo, sam, aragorn, gimli));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(guard, barliman));
+		assertEquals(1, scn.ShadowGetChoiceMin());
 		scn.ShadowChooseCard(frodo);
+		assertEquals(1, scn.GetWoundsOn(frodo));
+
+		// Then Aragorn takes his wound for losing, and a companion exerts again.
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(frodo, sam, aragorn, gimli));
+		scn.ShadowChooseCard(gimli);
 		assertEquals(1, scn.GetWoundsOn(frodo));
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertEquals(1, scn.GetWoundsOn(sam));

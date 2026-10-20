@@ -160,7 +160,8 @@ public class Card_04_094_Tests
 		scn.PassSkirmishActions();
 
 		// The Nazgûl wins and Blade Tip's response is offered
-		assertEquals(1, scn.GetWoundsOn(theoden));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(theoden));
 		assertInZone(Zone.SUPPORT, bladetip);
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(bladetip));
 		scn.ShadowAcceptOptionalTrigger();

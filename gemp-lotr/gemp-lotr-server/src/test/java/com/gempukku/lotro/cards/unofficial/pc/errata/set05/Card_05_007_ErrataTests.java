@@ -188,11 +188,16 @@ public class Card_05_007_ErrataTests
 		scn.FreepsResolveSkirmish(gimli);
 		scn.PassFierceSkirmishActions();
 
-		// The savage, already on 2 wounds, is killed by losing again, so the troop is the one minion left to choose.
-		assertInDiscard(savage);
+		// The savage, already on 2 wounds, has not yet lost again: the win is answered first (engine pass 54;
+		// until then it was killed by losing, and the troop was the one minion left to choose).
+		assertInZone(Zone.SHADOW_CHARACTERS, savage);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(gimli));
 		scn.FreepsAcceptOptionalTrigger();
+		assertTrue(scn.FreepsHasCardChoiceAvailable(savage, troop));
+		scn.FreepsChooseCard(troop);
 		assertEquals(2, scn.GetWoundsOn(troop));
+		// Then the savage is killed by losing.
+		assertInDiscard(savage);
 		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 	}
 

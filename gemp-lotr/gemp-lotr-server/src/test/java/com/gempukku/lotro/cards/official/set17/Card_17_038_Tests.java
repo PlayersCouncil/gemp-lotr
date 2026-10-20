@@ -135,7 +135,8 @@ public class Card_17_038_Tests
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(saruman));
 		scn.ShadowAcceptOptionalTrigger();
 
@@ -179,7 +180,8 @@ public class Card_17_038_Tests
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
 
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(frodo));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(saruman));
 		scn.ShadowDeclineOptionalTrigger();
@@ -203,9 +205,9 @@ public class Card_17_038_Tests
 		var troop = scn.GetShadowCard("troop");
 
 		scn.StartGame();
-		// Frodo is exhausted (vitality 4); Aragorn (vitality 4) is one wound short of it.
+		// Frodo and Aragorn (vitality 4 each) are exhausted.
 		scn.AddWoundsToChar(frodo, 3);
-		scn.AddWoundsToChar(aragorn, 2);
+		scn.AddWoundsToChar(aragorn, 3);
 		scn.MoveMinionsToTable(troop);
 		scn.AttachCardsTo(troop, saruman);
 		scn.SkipToPhase(Phase.MANEUVER);
@@ -216,13 +218,13 @@ public class Card_17_038_Tests
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
 
-		// Aragorn's wound for losing exhausts him.  An ally and the bearer himself could exert; no companion can.
-		assertEquals(3, scn.GetWoundsOn(aragorn));
-		assertTrue(scn.IsExhausted(aragorn));
+		// An ally and the bearer himself could exert; no companion can.  (The win is answered before Aragorn's
+		// wound for losing, engine pass 54; until then that wound was what exhausted him.)  The wound kills him.
 		assertTrue(scn.IsExhausted(frodo));
 		assertEquals(0, scn.GetWoundsOn(thrarin));
 		assertEquals(0, scn.GetWoundsOn(troop));
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable(saruman));
+		assertInZone(Zone.DEAD, aragorn);
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
@@ -249,7 +251,8 @@ public class Card_17_038_Tests
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
 
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(gimli));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(saruman));
 		scn.ShadowAcceptOptionalTrigger();
@@ -263,7 +266,8 @@ public class Card_17_038_Tests
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
 
-		assertEquals(2, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(saruman));
 		scn.ShadowAcceptOptionalTrigger();
 		scn.ShadowChooseCard(gimli);

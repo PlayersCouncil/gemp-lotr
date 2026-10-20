@@ -98,7 +98,8 @@ public class Card_V2_040_Tests
 		// Gimli's 6 loses to the Commander's 7.
 		scn.PassSkirmishActions();
 
-		assertEquals(1, scn.GetWoundsOn(gimli));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(gimli));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(fire));
 		assertEquals(2, scn.GetThreats());
 
@@ -163,7 +164,8 @@ public class Card_V2_040_Tests
 		scn.PassSkirmishActions();
 
 		// Damage +1
-		assertEquals(2, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(1, scn.GetThreats());
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(fire));
 	}
@@ -248,7 +250,8 @@ public class Card_V2_040_Tests
 		scn.PassSkirmishActions();
 
 		// The Troll's 15 beats Aragorn's 8, with Damage +1.
-		assertEquals(2, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(fire));
 
 		scn.ShadowDeclineOptionalTrigger();
@@ -262,15 +265,15 @@ public class Card_V2_040_Tests
 		scn.FreepsAssignAndResolve(aragorn, troll);
 		scn.PassFierceSkirmishActions();
 
-		// 4 wounds of 5 vitality: Aragorn is exhausted and cannot exert.
-		assertEquals(4, scn.GetWoundsOn(aragorn));
+		// The win is answered before Aragorn's 2 wounds for losing (engine pass 54): with 2 wounds of 5 vitality he
+		// can still be exerted.  (Until then he had 4 by now, exhausted.)
+		assertEquals(2, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(fire));
 
 		scn.ShadowAcceptOptionalTrigger();
 
 		assertEquals(1, scn.GetThreats());
-		assertTrue(scn.ShadowHasCardChoiceAvailable(gimli, frodo));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(aragorn));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(gimli, frodo, aragorn));
 
 		scn.ShadowChooseCard(frodo);
 
@@ -302,14 +305,16 @@ public class Card_V2_040_Tests
 		scn.FreepsAssignAndResolve(gimli, commander);
 		scn.PassSkirmishActions();
 
-		assertEquals(2, scn.GetWoundsOn(gimli));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(1, scn.GetWoundsOn(gimli));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(fire));
 		assertEquals(1, scn.GetThreats());
 
 		scn.ShadowAcceptOptionalTrigger();
 
 		assertEquals(0, scn.GetThreats());
-		assertEquals(2, scn.GetWoundsOn(gimli));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(gimli));
 		assertEquals(3, scn.GetWoundsOn(frodo));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}

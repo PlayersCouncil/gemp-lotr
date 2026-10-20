@@ -158,9 +158,9 @@ public class OptionalActionsAnsweringOneTriggerTests
 		scn.FreepsResolveSkirmish(gimli);
 		scn.PassSkirmishActions();
 
-		// The wound for losing, which is required, has been placed before anything optional is offered.  Then
-		// both cards that answer the win are on offer at once.
-		assertInZone(Zone.DISCARD, runner1);
+		// Both cards that answer the win are on offer at once, before the loser's wound for losing (engine pass
+		// 54: the win is answered at step 4 of the skirmish procedure, the loss at step 5).
+		assertInZone(Zone.SHADOW_CHARACTERS, runner1);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(gimli));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(stout));
 		assertEquals(0, scn.GetCultureTokensOn(stout));
@@ -173,9 +173,14 @@ public class OptionalActionsAnsweringOneTriggerTests
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable(stout));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(gimli));
 
-		// The Troop, waiting on Aragorn, is the one minion assigned to skirmish an unbound companion.
+		// The Troop, waiting on Aragorn, is chosen; the Runner Gimli has beaten is still there to choose, its wound
+		// for losing being still to come (engine pass 54).
 		scn.FreepsChooseOptionalTrigger(gimli);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(runner1, troop));
+		scn.FreepsChooseCard(troop);
 		assertEquals(1, scn.GetWoundsOn(troop));
+		// Both answers taken, the loser's wound is placed.
+		assertInZone(Zone.DISCARD, runner1);
 		assertEquals(1, scn.GetCultureTokensOn(stout));
 		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 
@@ -191,12 +196,14 @@ public class OptionalActionsAnsweringOneTriggerTests
 		scn.FreepsResolveSkirmish(gimli);
 		scn.PassSkirmishActions();
 
-		assertInZone(Zone.DISCARD, runner2);
+		// The Runner's wound for losing comes after what answers the win (engine pass 54).
+		assertInZone(Zone.SHADOW_CHARACTERS, runner2);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(gimli));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(stout));
 
 		// Gimli's first this time: Stout and Strong's is still there.
 		scn.FreepsChooseOptionalTrigger(gimli);
+		scn.FreepsChooseCard(troop);
 		assertEquals(2, scn.GetWoundsOn(troop));
 		assertEquals(1, scn.GetCultureTokensOn(stout));
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable(gimli));

@@ -146,7 +146,8 @@ public class Card_18_018_Tests
 		scn.PassSkirmishActions();
 
 		// 4 + 2 against 5: he wins.
-		assertEquals(1, scn.GetWoundsOn(savage));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(savage));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(axe));
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable(axe2));
 		scn.FreepsAcceptOptionalTrigger();
@@ -187,7 +188,8 @@ public class Card_18_018_Tests
 		scn.FreepsResolveSkirmish(grimbeorn);
 		scn.PassSkirmishActions();
 
-		assertEquals(1, scn.GetWoundsOn(pursuer));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(pursuer));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(axe));
 		scn.FreepsAcceptOptionalTrigger();
 		// The event is taken, so that the one [gandalf] card left in the pile is a condition: the second offer
@@ -203,7 +205,8 @@ public class Card_18_018_Tests
 		scn.PassFierceSkirmishActions();
 
 		// He wins again, and the offer is made again: there is no limit on it.
-		assertEquals(2, scn.GetWoundsOn(pursuer));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(1, scn.GetWoundsOn(pursuer));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(axe));
 		scn.FreepsDeclineOptionalTrigger();
 

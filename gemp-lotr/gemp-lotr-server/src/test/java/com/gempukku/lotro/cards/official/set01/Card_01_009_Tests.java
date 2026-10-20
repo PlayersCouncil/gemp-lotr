@@ -390,11 +390,9 @@ public class Card_01_009_Tests
 		// Gimli's only opponent dies before strengths are compared: the skirmish is over and the Runner lost it.
 		scn.FreepsUseCardAction(preparations);
 		assertInZone(Zone.DISCARD, runner);
-		// The skirmish's own resolution and the Axe's discard come at the one moment.
-		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
-		assertTrue(scn.FreepsActionAvailable("Dwarven Axe"));
-		assertInZone(Zone.DECK, top);
-		scn.FreepsResolveRuleFirst();
+		// The losing side was removed before the skirmish resolved, so it takes no loss effects (step 5A) and the
+		// Axe's discard has nothing to be ordered beside (engine pass 54).
+		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
 
 		assertInZone(Zone.DISCARD, top);
 		assertInZone(Zone.DECK, next);

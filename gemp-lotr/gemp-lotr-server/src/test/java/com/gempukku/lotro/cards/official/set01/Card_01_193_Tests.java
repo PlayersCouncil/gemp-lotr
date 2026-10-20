@@ -324,7 +324,7 @@ public class Card_01_193_Tests
 	}
 
 	@Test
-	public void AWeaponWhoseBearerLosesASkirmishIsPlayedBackBeforeTheWinnersOptionalTrigger() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheWinnersOptionalTriggerComesBeforeTheLoserDiesAndHisWeaponIsPlayedBack() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var armories = scn.GetShadowCard("armories");
@@ -349,20 +349,21 @@ public class Card_01_193_Tests
 		scn.SetTwilight(2);
 		scn.PassSkirmishActions();
 
-		// Gimli (6 + 2) beats the Runner (5 + 2), who dies with the Spear.
-		assertInDiscard(runner, spear);
+		// Gimli (6 + 2) beats the Runner (5 + 2).  The winner's optional trigger comes first, before the Runner
+		// loses (engine pass 54; until then the Runner had died with the Spear and the Armories came first).
+		assertInZone(Zone.SHADOW_CHARACTERS, runner);
+		assertAttachedTo(spear, runner);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(gimliaxe));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(armories));
+		scn.FreepsDeclineOptionalTrigger();
+		assertEquals(0, scn.GetWoundsOn(troop));
 
-		// Plundered Armories first; Gimli's Battle Axe is not asked yet.
+		// Then the Runner dies of its wound for losing, with the Spear, and Plundered Armories answers.
+		assertInDiscard(runner);
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(armories));
-		assertFalse(scn.FreepsHasOptionalTriggerAvailable(gimliaxe));
 		scn.ShadowChooseOptionalTrigger(armories);
 		// The Troop is the one [moria] minion left: the Spear goes on him unasked.
 		assertAttachedTo(spear, troop);
-
-		// Then the winner's optional trigger.
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(gimliaxe));
-		scn.FreepsDeclineOptionalTrigger();
-		assertEquals(0, scn.GetWoundsOn(troop));
 		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
 	}
 

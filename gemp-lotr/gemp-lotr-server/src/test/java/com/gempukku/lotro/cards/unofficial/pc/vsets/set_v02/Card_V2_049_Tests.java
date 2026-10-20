@@ -172,7 +172,8 @@ public class Card_V2_049_Tests
 		scn.PassSkirmishActions();
 
 		// 1 wound for losing + 1 for Eomer's damage +1; the Savage has vitality 3.
-		assertEquals(2, scn.GetWoundsOn(savage));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(savage));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(guthwine));
 		scn.FreepsAcceptOptionalTrigger();
 
@@ -192,7 +193,8 @@ public class Card_V2_049_Tests
 		scn.FreepsAssignAndResolve(eomer, savage);
 		scn.PassFierceSkirmishActions();
 
-		assertInDiscard(savage);
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertInZone(Zone.SHADOW_CHARACTERS, savage);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(guthwine));
 		scn.FreepsAcceptOptionalTrigger();
 		assertTrue(scn.FreepsHasCardChoiceAvailable(doom, freely));
@@ -235,7 +237,8 @@ public class Card_V2_049_Tests
 		scn.FreepsAssignAndResolve(northman, runner);
 		scn.PassSkirmishActions();
 
-		assertInDiscard(runner);
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertInZone(Zone.SHADOW_CHARACTERS, runner);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(guthwine));
 		scn.FreepsDeclineOptionalTrigger();
 

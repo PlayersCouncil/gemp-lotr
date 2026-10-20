@@ -312,8 +312,7 @@ public class Card_V1_018_Tests
 		// Hobbit and + 1 for the Man in the fellowship), and Curunir heals the wounded one.
 		scn.FreepsResolveSkirmish(gandalf);
 		scn.PassSkirmishActions();
-		// Curunir's trigger and the skirmish's wound come at once, and the game asks which is first.
-		scn.FreepsResolveRuleFirst();
+		// Curunir's trigger answers the win before the skirmish's wound, with nothing to order (engine pass 54).
 		assertEquals(1, scn.GetWoundsOn(gandalf));
 		assertEquals(1, scn.GetWoundsOn(tracker3));
 

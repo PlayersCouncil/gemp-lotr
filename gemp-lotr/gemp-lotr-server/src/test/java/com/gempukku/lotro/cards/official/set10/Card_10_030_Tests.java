@@ -126,10 +126,10 @@ public class Card_10_030_Tests
         assertEquals(3, scn.GetWoundsOn(aragorn));
         assertEquals(0, scn.GetWoundsOn(troop));
 
-        // Aragorn, 10, beats the Troop, 9; at 8 he would have lost.  His win is answered beside the wound the
-        // Troop takes for losing.
+        // Aragorn, 10, beats the Troop, 9; at 8 he would have lost.  His win is answered before the wound the
+        // Troop takes for losing, with nothing to order (engine pass 54).
         scn.FreepsPass();
-        scn.FreepsResolveActionOrder("End of the Game");
+        assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
         assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
         assertEquals(2, scn.FreepsGetMultipleChoiceCount());
         assertEquals(3, scn.GetWoundsOn(aragorn));
@@ -175,8 +175,8 @@ public class Card_10_030_Tests
         scn.ShadowPass();
         scn.FreepsPass();
 
-        // His win is answered before the Troop's wounds are placed.
-        scn.FreepsResolveActionOrder("End of the Game");
+        // His win is answered before the Troop's wounds are placed, with nothing to order (engine pass 54).
+        assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
         assertTrue(scn.FreepsDecisionAvailable("Choose action to perform"));
         assertEquals(0, scn.GetWoundsOn(troop));
 
@@ -219,8 +219,8 @@ public class Card_10_030_Tests
         scn.ShadowPass();
         scn.FreepsPass();
 
-        // He cannot be healed, so the choice is not his to make: the other thing is what happens.
-        scn.FreepsResolveActionOrder("End of the Game");
+        // He cannot be healed, so the choice is not his to make: the other thing is what happens.  His win is
+        // answered before the Troop's wounds, with nothing to order (engine pass 54).
         assertFalse(scn.FreepsDecisionAvailable("Choose action to perform"));
         assertEquals(3, scn.GetWoundsOn(aragorn));
         // 1 wound for losing + 1 for the damage bonus

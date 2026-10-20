@@ -111,7 +111,8 @@ public class Card_09_005_Tests
 		scn.PassFierceSkirmishActions();
 
 		// He beats it again in its fierce skirmish: he may heal, and the heal is his, not the other wounded Dwarf's.
-		assertEquals(2, scn.GetWoundsOn(pursuer));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(1, scn.GetWoundsOn(pursuer));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(linnar));
 		scn.FreepsAcceptOptionalTrigger();
 		assertEquals(0, scn.GetWoundsOn(linnar));
@@ -168,7 +169,8 @@ public class Card_09_005_Tests
 		// Thrarin, an ally, beats the other Pursuer: offered a second time, and declined.
 		scn.FreepsResolveSkirmish(thrarin);
 		scn.PassFierceSkirmishActions();
-		assertEquals(1, scn.GetWoundsOn(pursuer2));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(pursuer2));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(linnar));
 		scn.FreepsDeclineOptionalTrigger();
 		assertEquals(1, scn.GetWoundsOn(thrarin));

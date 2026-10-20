@@ -220,10 +220,9 @@ public class Card_V3_091_Tests
 		assertEquals(0, scn.GetWoundsOn(guard));
 
 		scn.PassCurrentPhaseActions();
-		// The skirmish's own wound first.
-		scn.FreepsResolveRuleFirst();
+		// The win is answered before the skirmish's own wound (engine pass 54).
 
-		assertEquals(2, scn.GetWoundsOn(savage));
+		assertEquals(1, scn.GetWoundsOn(savage));
 		assertEquals(1, scn.GetWoundsOn(guard));
 		// The minion beaten, a minion waiting for another skirmish and a minion nobody fights.
 		assertTrue(scn.FreepsHasCardChoiceAvailable(savage, runner, troop));
@@ -390,7 +389,7 @@ public class Card_V3_091_Tests
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(guard);
 		scn.PassCurrentPhaseActions();
-		scn.FreepsResolveRuleFirst();
+		// What answers the win comes first, with nothing to order (engine pass 54).
 
 		assertEquals(1, scn.GetWoundsOn(guard));
 		assertTrue(scn.FreepsHasCardChoiceAvailable(savage, troop));
@@ -406,17 +405,22 @@ public class Card_V3_091_Tests
 		scn.FreepsAssignToMinions(guard, savage);
 		scn.FreepsResolveSkirmish(guard);
 		scn.PassCurrentPhaseActions();
-		scn.FreepsResolveRuleFirst();
+		// What answers the win comes first, with nothing to order (engine pass 54).
 
-		// The Savage is killed by the skirmish's wound, which leaves the Troop as the only minion to wound.
-		assertInZone(Zone.DISCARD, savage);
+		// The win is answered before the Savage's wound for losing (engine pass 54; until then the wound killed it
+		// first and left the Troop as the only minion to wound), so it may still be chosen.
+		assertInZone(Zone.SHADOW_CHARACTERS, savage);
 		assertEquals(2, scn.GetWoundsOn(guard));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(savage, troop));
+		scn.FreepsChooseCard(troop);
 		assertEquals(2, scn.GetWoundsOn(troop));
+		// Then the Savage is killed by the skirmish's wound.
+		assertInDiscard(savage);
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
 	@Test
-	public void WithNoMinionLeftToWoundTheBearerExertsAllTheSame() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AgainstARunnerOfVitalityOneTheBearerExertsAndHisWoundKillsIt() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var lance = scn.GetFreepsCard("lance");
@@ -438,9 +442,9 @@ public class Card_V3_091_Tests
 		assertEquals(0, scn.GetWoundsOn(guard));
 
 		scn.PassCurrentPhaseActions();
-		// The skirmish's own wound first, which kills the only minion.
-		scn.FreepsResolveRuleFirst();
-
+		// The win is answered before the skirmish's own wound (engine pass 54; until then that wound killed the
+		// only minion first and the bearer exerted with nothing to wound): the bearer exerts and wounds the
+		// Runner, the one minion, which dies; its side gone, no wound for losing follows (step 5A).
 		assertInZone(Zone.DISCARD, runner);
 		assertEquals(1, scn.GetWoundsOn(guard));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());

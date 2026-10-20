@@ -140,7 +140,8 @@ public class Card_01_221_Tests
 		scn.PassSkirmishActions();
 
 		// One wound for losing and one for the Witch-king's damage +1.
-		assertEquals(2, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(twk));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(paleblade));
 		scn.ShadowAcceptOptionalTrigger();

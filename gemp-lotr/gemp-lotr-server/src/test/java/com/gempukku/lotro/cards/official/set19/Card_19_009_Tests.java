@@ -169,7 +169,8 @@ public class Card_19_009_Tests
 		// Aragorn (8 + 2) beats Uruk Seeker (6), who lives through it: only the copy he bears is offered.
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
-		assertEquals(1, scn.GetWoundsOn(seeker));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(seeker));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(words));
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable(words2));
 

@@ -92,7 +92,8 @@ public class Card_04_079_Tests
 		scn.FreepsPass();
 		scn.ShadowPass();
 
-		assertEquals(1, scn.GetWoundsOn(savage));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(savage));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(night));
 		assertEquals(0, scn.GetWoundsOn(pengedhel));
 
@@ -138,7 +139,8 @@ public class Card_04_079_Tests
 		scn.FreepsPass();
 		scn.ShadowPass();
 
-		assertEquals(1, scn.GetWoundsOn(savage));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(savage));
 		assertTrue(scn.ShadowControls(site1));
 		assertTrue(scn.ShadowControls(site2));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(night));
@@ -160,7 +162,7 @@ public class Card_04_079_Tests
 	}
 
 	@Test
-	public void WithNoMinionLeftToWoundTheSiteIsLiberatedWithoutAChoice() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WithTheBeatenMinionStillInPlayTheChoiceIsOfferedAndTheSiteMayBeLiberated() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var night = scn.GetFreepsCard("night");
@@ -178,19 +180,24 @@ public class Card_04_079_Tests
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(pengedhel, runner);
 		scn.FreepsResolveSkirmish(pengedhel);
-		// 6 against 5: the Runner, vitality 1, is killed.
+		// 6 against 5.  The response to the win comes before the Runner's wound for losing (engine pass 54;
+		// until then the Runner was dead, no minion was left to wound, and the site was liberated unasked).
 		scn.FreepsPass();
 		scn.ShadowPass();
 
-		assertInDiscard(runner);
+		assertInZone(Zone.SHADOW_CHARACTERS, runner);
 		assertTrue(scn.ShadowControls(site1));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(night));
 
 		scn.FreepsChooseOptionalTrigger(night);
+		assertTrue(scn.FreepsChoiceAvailable("Wound a minion"));
+		scn.FreepsChooseOption("Liberate a site");
 
 		assertEquals(1, scn.GetWoundsOn(pengedhel));
 		assertFalse(scn.IsSiteControlled(site1));
 		assertInDiscard(night);
+		// Then the Runner, vitality 1, is killed by its wound for losing.
+		assertInDiscard(runner);
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
@@ -217,7 +224,8 @@ public class Card_04_079_Tests
 		scn.ShadowPass();
 
 		assertEquals(3, scn.GetCurrentSiteNumber());
-		assertEquals(1, scn.GetWoundsOn(savage));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(savage));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(night));
 		assertEquals(0, scn.GetWoundsOn(elrond));
 
@@ -300,7 +308,8 @@ public class Card_04_079_Tests
 		scn.FreepsResolveSkirmish(erethon);
 		scn.FreepsPass();
 		scn.ShadowPass();
-		assertEquals(1, scn.GetWoundsOn(savage2));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(savage2));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(night));
 
 		scn.FreepsChooseOptionalTrigger(night);

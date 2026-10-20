@@ -182,7 +182,8 @@ public class Card_V2_010_Tests
 		scn.FreepsAssignAndResolve(defender, runner);
 		scn.PassSkirmishActions();
 
-		assertInZone(Zone.DISCARD, runner);
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertInZone(Zone.SHADOW_CHARACTERS, runner);
 		assertEquals(0, scn.GetWoundsOn(defender));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(armaments));
 
@@ -299,7 +300,8 @@ public class Card_V2_010_Tests
 		// The Defender wins: his own copy offers, and Balglin's does not.
 		scn.FreepsResolveSkirmish(defender);
 		scn.PassSkirmishActions();
-		assertInZone(Zone.DISCARD, runner2);
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertInZone(Zone.SHADOW_CHARACTERS, runner2);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(armaments));
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable(armaments2));
 
@@ -317,7 +319,8 @@ public class Card_V2_010_Tests
 		// valiant Elf, with the wound of his own exertion to heal.
 		scn.FreepsResolveSkirmish(balglin);
 		scn.PassSkirmishActions();
-		assertInZone(Zone.DISCARD, runner3);
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertInZone(Zone.SHADOW_CHARACTERS, runner3);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(armaments2));
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable(armaments));
 
@@ -391,7 +394,8 @@ public class Card_V2_010_Tests
 		scn.FreepsAssignAndResolve(defender, savage);
 		scn.PassSkirmishActions();
 
-		assertEquals(1, scn.GetWoundsOn(savage));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(savage));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(armaments));
 		scn.FreepsAcceptOptionalTrigger();
 		// Balglin is the only other valiant Elf, so he is healed without a choice.
@@ -402,7 +406,8 @@ public class Card_V2_010_Tests
 		scn.FreepsAssignAndResolve(defender, savage);
 		scn.PassFierceSkirmishActions();
 
-		assertEquals(2, scn.GetWoundsOn(savage));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(1, scn.GetWoundsOn(savage));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(armaments));
 		scn.FreepsAcceptOptionalTrigger();
 
@@ -444,7 +449,8 @@ public class Card_V2_010_Tests
 
 		// The bearer won and can exert.  The exertion would heal nobody, and the offer is made all the same:
 		// the text asks only that the cost can be paid.
-		assertEquals(1, scn.GetWoundsOn(savage));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(savage));
 		assertEquals(0, scn.GetWoundsOn(balglin));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(armaments));
 
@@ -459,7 +465,8 @@ public class Card_V2_010_Tests
 		scn.FreepsAssignAndResolve(defender, savage);
 		scn.PassFierceSkirmishActions();
 
-		assertEquals(2, scn.GetWoundsOn(savage));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(1, scn.GetWoundsOn(savage));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(armaments));
 
 		scn.FreepsAcceptOptionalTrigger();

@@ -103,7 +103,8 @@ public class Card_15_157_Tests
 
 		scn.PassCurrentPhaseActions();
 		// 10 + 1 for hunter 1 against 6: the Knight loses, and takes a wound.
-		assertEquals(1, scn.GetWoundsOn(knight));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(knight));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(chaser));
 		scn.ShadowAcceptOptionalTrigger();
 

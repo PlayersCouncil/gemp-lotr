@@ -99,7 +99,8 @@ public class Card_17_127_Tests
 
 		scn.PassCurrentPhaseActions();
 		// 9 against 6: the Knight loses, and takes 2 wounds for damage +1.
-		assertEquals(2, scn.GetWoundsOn(knight));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(knight));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(intruder));
 		scn.ShadowAcceptOptionalTrigger();
 

@@ -138,7 +138,7 @@ public class Card_V3_109_Tests
 		// 7 against 5: Sam wins and the Runner dies.
 		scn.ShadowPass();
 		scn.FreepsPass();
-		scn.FreepsResolveRuleFirst();
+		// What answers the win comes first, with nothing to order (engine pass 54).
 		assertInZone(Zone.DISCARD, runner1);
 		assertEquals(0, scn.GetWoundsOn(sam));
 		assertEquals(1, scn.GetThreats());
@@ -154,7 +154,7 @@ public class Card_V3_109_Tests
 		// 7 against 5: Sam wins again; the Savage has vitality 3 and lives.
 		scn.FreepsPass();
 		scn.ShadowPass();
-		scn.FreepsResolveRuleFirst();
+		// What answers the win comes first, with nothing to order (engine pass 54).
 		assertEquals(1, scn.GetWoundsOn(savage));
 		assertEquals(0, scn.GetWoundsOn(sam));
 		assertEquals(2, scn.GetThreats());
@@ -300,7 +300,7 @@ public class Card_V3_109_Tests
 		scn.FreepsChooseCard(runner1);
 		scn.ShadowPass();
 		scn.FreepsPass();
-		scn.FreepsResolveRuleFirst();
+		// What answers the win comes first, with nothing to order (engine pass 54).
 		assertInZone(Zone.DISCARD, runner1);
 		assertEquals(1, scn.GetThreats());
 		assertEquals(0, scn.GetBurdens());
@@ -308,7 +308,7 @@ public class Card_V3_109_Tests
 		scn.FreepsChooseCard(runner2);
 		scn.FreepsPass();
 		scn.ShadowPass();
-		scn.FreepsResolveRuleFirst();
+		// What answers the win comes first, with nothing to order (engine pass 54).
 		assertInZone(Zone.DISCARD, runner2);
 		assertEquals(0, scn.GetWoundsOn(sam));
 		assertEquals(2, scn.GetThreats());
@@ -365,7 +365,7 @@ public class Card_V3_109_Tests
 		// who was skirmishing more than 1 minion.
 		scn.ShadowPass();
 		scn.FreepsPass();
-		scn.FreepsResolveRuleFirst();
+		// What answers the win comes first, with nothing to order (engine pass 54).
 		assertInZone(Zone.DISCARD, ted);
 		assertEquals(1, scn.GetThreats());
 		assertEquals(0, scn.GetBurdens());
@@ -373,7 +373,7 @@ public class Card_V3_109_Tests
 		scn.FreepsChooseCard(runner1);
 		scn.FreepsPass();
 		scn.ShadowPass();
-		scn.FreepsResolveRuleFirst();
+		// What answers the win comes first, with nothing to order (engine pass 54).
 		assertInZone(Zone.DISCARD, runner1);
 		assertEquals(0, scn.GetWoundsOn(sam));
 		assertEquals(2, scn.GetThreats());

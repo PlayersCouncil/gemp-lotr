@@ -112,7 +112,8 @@ public class Card_V3_071_Tests
 		scn.PassSkirmishActions();
 
 		int deck = scn.GetShadowDeckCount();
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// The event answers the win before Aragorn's wound for losing (engine pass 54).
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(lemenya));
 		assertEquals(0, scn.GetWoundsOn(otsea));
 		assertEquals(3, scn.GetShadowHandCount());
@@ -308,7 +309,8 @@ public class Card_V3_071_Tests
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
 
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// The event answers the win before Aragorn's wound for losing (engine pass 54).
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(lemenya));
 		assertEquals(0, scn.GetWoundsOn(otsea));
 		// The event is offered once for each Nazgul who won, and each offer names its Nazgul.
@@ -368,7 +370,8 @@ public class Card_V3_071_Tests
 		assertEquals(8, scn.GetShadowHandCount());
 		assertInHand(khamul);
 		assertTrue(scn.ShadowDecisionAvailable("discard a Nazgul"));
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// Aragorn's wound for losing is still to come (engine pass 54).
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(boromir));
 		assertEquals(1, scn.GetWoundsOn(lemenya));
 
@@ -383,7 +386,8 @@ public class Card_V3_071_Tests
 		assertInDiscard(khamul);
 		assertInHand(rider);
 		assertEquals(7, scn.GetShadowHandCount());
-		// One wound, on the companion Lemenya was skirmishing; none on the companion assigned to Otsea.
+		// One wound, on the companion Lemenya was skirmishing, and then his wound for losing; none on the companion
+		// assigned to Otsea.
 		assertEquals(2, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(boromir));
 		assertEquals(1, scn.GetWoundsOn(lemenya));
@@ -424,7 +428,8 @@ public class Card_V3_071_Tests
 
 		assertTrue(scn.ShadowDecisionAvailable("discard a Nazgul"));
 		assertEquals(8, scn.GetShadowHandCount());
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// Aragorn's wound for losing is still to come (engine pass 54).
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 
 		scn.ShadowChooseNo();
 
@@ -436,7 +441,7 @@ public class Card_V3_071_Tests
 	}
 
 	@Test
-	public void TheDiscardIsStillOfferedWhenTheCompanionDiedInTheSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheCompanionAboutToBeOverwhelmedIsStillThereToWoundAndIsKilledAfter() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var hour = scn.GetShadowCard("hour");
@@ -459,12 +464,14 @@ public class Card_V3_071_Tests
 		// Lemenya, strength 9, overwhelms the Dwarf Guard, strength 4.
 		scn.PassSkirmishActions();
 
-		assertInZone(Zone.DEAD, guard);
+		// The event answers the win before the overwhelm (engine pass 54; until then the Guard was dead by now,
+		// and the discard was offered with nobody left to wound).
+		assertInZone(Zone.FREE_CHARACTERS, guard);
 
 		scn.ShadowChooseOptionalTrigger(hour);
 		scn.ShadowDeclineReconciliation();
 
-		// Discarding from hand is a cost a player may want for itself: it is offered with nobody left to wound.
+		// The Guard is the companion Lemenya was skirmishing.
 		assertTrue(scn.ShadowDecisionAvailable("discard a Nazgul"));
 		assertInHand(rider);
 
@@ -474,6 +481,8 @@ public class Card_V3_071_Tests
 		assertInDiscard(rider);
 		assertEquals(7, scn.GetShadowHandCount());
 		assertEquals(0, scn.GetWoundsOn(aragorn));
+		// The Guard took the wound, and then was overwhelmed.
+		assertInZone(Zone.DEAD, guard);
 		assertEquals(1, scn.GetWoundsOn(lemenya));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
@@ -504,7 +513,8 @@ public class Card_V3_071_Tests
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
 
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// The event answers the win before Aragorn's wound for losing (engine pass 54).
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(cur));
 
 		scn.ShadowChooseOptionalTrigger(hour);
@@ -512,7 +522,8 @@ public class Card_V3_071_Tests
 		scn.ShadowChooseYes();
 
 		assertInDiscard(rider);
-		// The companion Lemenya was skirmishing is wounded; the Orc who fought beside Lemenya is no companion.
+		// The companion Lemenya was skirmishing is wounded, and then takes his wound for losing; the Orc who fought
+		// beside Lemenya is no companion.
 		assertEquals(2, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetWoundsOn(cur));
 		assertEquals(1, scn.GetWoundsOn(lemenya));
@@ -545,7 +556,8 @@ public class Card_V3_071_Tests
 		scn.FreepsResolveSkirmish(bounder);
 		scn.PassSkirmishActions();
 
-		assertEquals(1, scn.GetWoundsOn(bounder));
+		// The event answers the win before the Bounder's wound for losing (engine pass 54).
+		assertEquals(0, scn.GetWoundsOn(bounder));
 
 		scn.ShadowChooseOptionalTrigger(hour);
 		scn.ShadowDeclineReconciliation();

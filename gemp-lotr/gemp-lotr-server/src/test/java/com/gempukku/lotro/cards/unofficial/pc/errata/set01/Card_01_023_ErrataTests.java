@@ -36,6 +36,8 @@ public class Card_01_023_ErrataTests
 					put("greed2", "1_125");
 					put("scimitar", "1_180");     // Goblin Scimitar: Shadow possession borne by a [moria] Orc, strength +2
 					put("poison", "8_28");        // Spider Poison: Shadow possession a companion bears; nothing unless he is assigned
+					// Gimli's Battle Axe: strength +2, damage +1.  "Each time Gimli wins a skirmish, you may wound an Orc."
+					put("axe", "1_14");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -125,7 +127,8 @@ public class Card_01_023_ErrataTests
 		// 6 against 5: Gimli wins, and the Savage survives his two wounds.
 		scn.FreepsPass();
 		scn.ShadowPass();
-		assertEquals(2, scn.GetWoundsOn(savage));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(savage));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(nobody));
 
 		scn.FreepsChooseOptionalTrigger(nobody);
@@ -329,7 +332,8 @@ public class Card_01_023_ErrataTests
 		scn.FreepsAssignAndResolve(grimir, savage);
 		scn.FreepsPass();
 		scn.ShadowPass();
-		assertEquals(1, scn.GetWoundsOn(savage));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(savage));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(nobody));
 
 		scn.FreepsChooseOptionalTrigger(nobody);
@@ -343,7 +347,7 @@ public class Card_01_023_ErrataTests
 	}
 
 	@Test
-	public void IsOfferedThoughTheWinKilledTheOnlyShadowCardInPlay() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheLoserIsStillInPlayAsTheEventIsOfferedAndMayBeTheShadowCardDiscarded() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var nobody = scn.GetFreepsCard("nobody");
@@ -360,10 +364,20 @@ public class Card_01_023_ErrataTests
 		scn.FreepsPass();
 		scn.ShadowPass();
 
-		// The Runner, vitality 1, is dead; an event may be played whatever its effect will find to do.
-		assertInZone(Zone.DISCARD, runner);
-		assertInZone(Zone.HAND, nobody);
+		// What answers the win comes before the loser loses (engine pass 54): the Runner, the only Shadow card in
+		// play, has not yet taken the wound for losing that would kill it.
+		assertInZone(Zone.SHADOW_CHARACTERS, runner);
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(nobody));
+
+		scn.FreepsChooseOptionalTrigger(nobody);
+		// The one Shadow card is chosen with nothing to ask, and its owner declines to prevent it.
+		assertTrue(scn.ShadowDecisionAvailable("discard the bottom 3 cards"));
+		scn.ShadowChooseNo();
+		assertInZone(Zone.DISCARD, runner);
+		assertInZone(Zone.DISCARD, nobody);
+		// Its side already removed, the loser takes no wounds (step 5A), and the winner none.
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 
 	@Test
@@ -372,9 +386,11 @@ public class Card_01_023_ErrataTests
 
 		var nobody = scn.GetFreepsCard("nobody");
 		var gimli = scn.GetFreepsCard("gimli");
+		var axe = scn.GetFreepsCard("axe");
 		var runner = scn.GetShadowCard("runner");
 		scn.MoveCardsToHand(nobody);
 		scn.MoveCompanionsToTable(gimli);
+		scn.AttachCardsTo(gimli, axe);
 
 		scn.StartGame();
 		scn.MoveMinionsToTable(runner);
@@ -384,9 +400,14 @@ public class Card_01_023_ErrataTests
 		scn.FreepsPass();
 		scn.ShadowPass();
 
+		// The Axe answers the win first and wounds the Runner, vitality 1, the only Shadow card in play.  (Until
+		// engine pass 54 the Runner's wound for losing had killed it before anything optional was offered.)
 		var shadowDeck = scn.GetShadowDeckCount();
+		scn.FreepsChooseOptionalTrigger(axe);
 		assertInZone(Zone.DISCARD, runner);
 
+		// An event may be played whatever its effect will find to do.
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(nobody));
 		scn.FreepsChooseOptionalTrigger(nobody);
 		assertFalse(scn.ShadowDecisionAvailable("discard the bottom 3 cards"));
 		assertInZone(Zone.DISCARD, nobody);

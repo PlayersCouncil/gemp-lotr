@@ -110,7 +110,8 @@ public class Card_04_029_Tests
 		scn.PassSkirmishActions();
 
 		// 9 against 6: the Looter wins, and his owner stacks him on the one site he controls.
-		assertEquals(1, scn.GetWoundsOn(gimli));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(gimli));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(looter));
 		scn.ShadowAcceptOptionalTrigger();
 		assertInZone(Zone.STACKED, looter);

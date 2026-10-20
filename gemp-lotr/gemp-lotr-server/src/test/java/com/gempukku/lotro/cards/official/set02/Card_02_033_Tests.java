@@ -121,7 +121,8 @@ public class Card_02_033_Tests
 
 		// Aragorn 8 against Corpse Lights' 7: he wins, and Corpse Lights is left exhausted by the wound.
 		scn.PassSkirmishActions();
-		assertEquals(1, scn.GetWoundsOn(lights));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(lights));
 		assertTrue(scn.FreepsPlayAvailable(flee1));
 
 		scn.FreepsPlayCard(flee1);
@@ -282,11 +283,17 @@ public class Card_02_033_Tests
 		// Pippin 8 against the other Runner's 5: a [gondor] Hobbit wins.
 		scn.FreepsResolveSkirmish(pippin);
 		scn.PassSkirmishActions();
-		assertInDiscard(runner2);
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertInZone(Zone.SHADOW_CHARACTERS, runner2);
 		assertTrue(scn.FreepsPlayAvailable(flee));
 		scn.SetTwilight(0);
 		scn.FreepsPlayCard(flee);
+		// The Runner Pippin beat, of vitality 1, is an exhausted Orc still in play beside the Swordsman.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(runner2, swordsman));
+		scn.FreepsChooseCard(swordsman);
 		assertInDiscard(flee, swordsman);
+		// Then the Runner dies of its wound for losing.
+		assertInDiscard(runner2);
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 

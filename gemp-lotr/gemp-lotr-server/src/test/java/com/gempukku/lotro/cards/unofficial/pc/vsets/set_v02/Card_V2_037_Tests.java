@@ -107,7 +107,8 @@ public class Card_V2_037_Tests
 		scn.FreepsResolveSkirmish(aragorn);
 		assertEquals(0, scn.GetWoundsOn(aragorn));
 		scn.PassSkirmishActions();
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 
 		// Each copy offers once, for the Goblin Runner; nothing is offered for the Orc that won beside it.
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(evil1));
@@ -133,7 +134,8 @@ public class Card_V2_037_Tests
 		// The Balrog, unique and no Orc, overwhelms Pippin.
 		scn.FreepsResolveSkirmish(pippin);
 		scn.PassSkirmishActions();
-		assertInZone(Zone.DEAD, pippin);
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertInZone(Zone.FREE_CHARACTERS, pippin);
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(evil1));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(evil2));
 		scn.ShadowChooseOptionalTrigger(evil1);
@@ -204,7 +206,8 @@ public class Card_V2_037_Tests
 		// 13 against 8: Goblin Patrol Troop wins without overwhelming.
 		scn.FreepsAssignAndResolve(aragorn, troop);
 		scn.PassSkirmishActions();
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(evil));
 		scn.ShadowDeclineOptionalTrigger();
 		assertInZone(Zone.SHADOW_CHARACTERS, troop);
@@ -214,7 +217,8 @@ public class Card_V2_037_Tests
 		scn.PassFierceAssignmentActions();
 		scn.FreepsAssignAndResolve(aragorn, troop);
 		scn.PassFierceSkirmishActions();
-		assertEquals(2, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(evil));
 		scn.ShadowAcceptOptionalTrigger();
 		assertInZone(Zone.STACKED, troop);
@@ -243,7 +247,8 @@ public class Card_V2_037_Tests
 		// 5 + 5 against 8.
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 
 		// One offer for each Goblin Runner.
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(evil));

@@ -487,18 +487,16 @@ public class DecisionReadingTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					// Ethereal Banner: "Each time bearer wins a skirmish, you may exert a Wraith and a minion it is
-					// assigned to skirmish.  Response: If bearer overwhelms a minion, discard this possession and
-					// remove 2 threats to wound 2 minions."  A win that is an overwhelm sets off both, and both are
-					// this one card's: the game words them "Exert a Wraith and a minion it is assigned to" and
-					// "Discard this and remove 2 threats to wound 2 minions".
-					put("banner", "103_21");
-					// King of the Dead, Oathbreaker: a [gondor] Wraith, strength 7, vitality 4, enduring.  With two
-					// wounds he is 11, more than double a Goblin Runner's 5.
-					put("king", "8_38");
+					// Banner of Westernesse: "Each time bearer wins a skirmish, you may heal another [gondor]
+					// companion.  Response: If bearer wins a skirmish, discard this possession to liberate a site."
+					// A win sets off both, and both are this one card's: the game words them "Heal another [gondor]
+					// companion" and "Discard to liberate a site".  (Until engine pass 54 this was the Ethereal
+					// Banner 103_21, whose response answers the loser's overwhelm: that is step 5 of the skirmish
+					// procedure now, apart from the win of step 4.)
+					put("banner", "6_51");
+					put("aragorn", "1_89");         // Aragorn, Ranger of the North: a [gondor] companion, strength 8
+					put("boromir", "1_97");         // Boromir, Lord of Gondor: a [gondor] companion, for the heal
 					put("runner", "1_178");         // Goblin Runner: strength 5, vitality 1
-					put("savage1", "1_151");        // Uruk Savage: vitality 3, and nothing to say about any of this
-					put("savage2", "1_151");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -511,98 +509,84 @@ public class DecisionReadingTests
 		var scn = GetTwoOffersScenario();
 
 		var banner = scn.GetFreepsCard("banner");
-		var king = scn.GetFreepsCard("king");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
 		var runner = scn.GetShadowCard("runner");
-		var savage1 = scn.GetShadowCard("savage1");
-		var savage2 = scn.GetShadowCard("savage2");
-		scn.MoveCompanionsToTable(king);
-		scn.AttachCardsTo(king, banner);
+		scn.MoveCompanionsToTable(aragorn, boromir);
+		scn.AttachCardsTo(aragorn, banner);
 
 		scn.StartGame();
-		scn.AddWoundsToChar(king, 2);
-		scn.AddThreats(3);
-		scn.MoveMinionsToTable(runner, savage1, savage2);
+		scn.AddWoundsToChar(boromir, 1);
+		scn.MoveMinionsToTable(runner);
 		scn.SkipToAssignments();
-		scn.FreepsAssignToMinions(king, runner);
-		scn.ShadowDeclineAssignments();
-		scn.FreepsResolveSkirmish(king);
+		scn.FreepsAssignToMinions(aragorn, runner);
+		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassCurrentPhaseActions();
 
-		// The King has overwhelmed the Runner.  The Banner offers its trigger and its response in one decision,
-		// and the card alone does not say which is meant.
-		assertInZone(Zone.DISCARD, runner);
+		// Aragorn has beaten the Runner.  The Banner offers its trigger and its response in one decision, and the
+		// card alone does not say which is meant.
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(banner));
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(banner, "Exert a Wraith"));
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(banner, "wound 2 minions"));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(banner, "Heal another"));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(banner, "liberate a site"));
 		// Not words that neither has, not another card with the right words, and not the player who is not asked.
-		assertFalse(scn.FreepsHasOptionalTriggerAvailable(banner, "heal"));
-		assertFalse(scn.FreepsHasOptionalTriggerAvailable(king, "wound 2 minions"));
-		assertFalse(scn.ShadowHasOptionalTriggerAvailable(banner, "wound 2 minions"));
-		assertTrue(Refused(() -> scn.FreepsChooseOptionalTrigger(banner, "heal")));
-		assertTrue(Refused(() -> scn.FreepsChooseOptionalTrigger(king, "wound 2 minions")));
-		assertTrue(Refused(() -> scn.ShadowChooseOptionalTrigger(banner, "wound 2 minions")));
-		assertTrue(scn.FreepsHasOptionalTriggerAvailable(banner, "wound 2 minions"));
-		assertEquals(3, scn.GetThreats());
-		assertEquals(2, scn.GetWoundsOn(king));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(banner, "wound"));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(aragorn, "liberate a site"));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(banner, "liberate a site"));
+		assertTrue(Refused(() -> scn.FreepsChooseOptionalTrigger(banner, "wound")));
+		assertTrue(Refused(() -> scn.FreepsChooseOptionalTrigger(aragorn, "liberate a site")));
+		assertTrue(Refused(() -> scn.ShadowChooseOptionalTrigger(banner, "liberate a site")));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(banner, "liberate a site"));
+		assertEquals(1, scn.GetWoundsOn(boromir));
 
-		scn.FreepsChooseOptionalTrigger(banner, "wound 2 minions");
+		scn.FreepsChooseOptionalTrigger(banner, "liberate a site");
 
-		// The response, and not the trigger: the Banner and two threats are spent, the two minions left are
-		// wounded, and the King has not exerted.
+		// The response, and not the trigger: the Banner is spent and Boromir is not healed.
 		assertInZone(Zone.DISCARD, banner);
-		assertEquals(1, scn.GetThreats());
-		assertEquals(1, scn.GetWoundsOn(savage1));
-		assertEquals(1, scn.GetWoundsOn(savage2));
-		assertEquals(2, scn.GetWoundsOn(king));
+		assertEquals(1, scn.GetWoundsOn(boromir));
 	}
 
 	@Test
 	public void OnTheSecondPlayersTurnTheShadowMethodsFindAndTakeOneOfTwoOptionalActionsOfACard() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetTwoOffersScenario();
 
-		// Player 2's own Banner and King on his own turn, against player 1's minions.
+		// Player 2's own Banner and companions on his own turn, against player 1's minion.
 		var banner = scn.GetShadowCard("banner");
-		var king = scn.GetShadowCard("king");
+		var aragorn = scn.GetShadowCard("aragorn");
+		var boromir = scn.GetShadowCard("boromir");
 		var runner = scn.GetFreepsCard("runner");
-		var savage1 = scn.GetFreepsCard("savage1");
-		var savage2 = scn.GetFreepsCard("savage2");
 
 		scn.StartGame();
 		scn.SkipToOtherPlayersTurn();
 
-		scn.MoveCompanionsToTable(king);
-		scn.AttachCardsTo(king, banner);
-		scn.AddWoundsToChar(king, 2);
-		scn.AddThreats(3);
-		scn.MoveMinionsToTable(runner, savage1, savage2);
+		scn.MoveCompanionsToTable(aragorn, boromir);
+		scn.AttachCardsTo(aragorn, banner);
+		scn.AddWoundsToChar(boromir, 1);
+		scn.MoveMinionsToTable(runner);
 		scn.SkipToPhaseInverted(Phase.ASSIGNMENT);
 		scn.PassCurrentPhaseActions();
-		scn.ShadowAssignToMinions(king, runner);
-		scn.FreepsDeclineAssignments();
-		scn.ShadowResolveSkirmish(king);
+		scn.ShadowAssignToMinions(aragorn, runner);
+		scn.ShadowResolveSkirmish(aragorn);
 		scn.PassCurrentPhaseActions();
 
-		assertInZone(Zone.DISCARD, runner);
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(banner));
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable(banner, "Exert a Wraith"));
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable(banner, "wound 2 minions"));
-		assertFalse(scn.ShadowHasOptionalTriggerAvailable(banner, "heal"));
-		assertFalse(scn.ShadowHasOptionalTriggerAvailable(king, "Exert a Wraith"));
-		assertFalse(scn.FreepsHasOptionalTriggerAvailable(banner, "Exert a Wraith"));
-		assertTrue(Refused(() -> scn.ShadowChooseOptionalTrigger(banner, "heal")));
-		assertTrue(Refused(() -> scn.FreepsChooseOptionalTrigger(banner, "Exert a Wraith")));
-		assertEquals(2, scn.GetWoundsOn(king));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(banner, "Heal another"));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(banner, "liberate a site"));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(banner, "wound"));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(aragorn, "Heal another"));
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(banner, "Heal another"));
+		assertTrue(Refused(() -> scn.ShadowChooseOptionalTrigger(banner, "wound")));
+		assertTrue(Refused(() -> scn.FreepsChooseOptionalTrigger(banner, "Heal another")));
+		assertEquals(1, scn.GetWoundsOn(boromir));
 
-		scn.ShadowChooseOptionalTrigger(banner, "Exert a Wraith");
+		scn.ShadowChooseOptionalTrigger(banner, "Heal another");
 
-		// The trigger, and not the response: the King, the one Wraith there is, has exerted, and nothing was spent.
-		assertEquals(3, scn.GetWoundsOn(king));
-		assertAttachedTo(banner, king);
-		assertEquals(3, scn.GetThreats());
-		assertEquals(0, scn.GetWoundsOn(savage1));
+		// The trigger, and not the response: Boromir, the one other [gondor] companion, is healed, and the Banner
+		// is still borne.
+		assertEquals(0, scn.GetWoundsOn(boromir));
+		assertAttachedTo(banner, aragorn);
 		// The response is still his to take for the same win, and the trigger is not offered a second time.
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable(banner, "wound 2 minions"));
-		assertFalse(scn.ShadowHasOptionalTriggerAvailable(banner, "Exert a Wraith"));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(banner, "liberate a site"));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(banner, "Heal another"));
 	}
 
 	protected VirtualTableScenario GetNumberScenario() throws CardNotFoundException, DecisionResultInvalidException {

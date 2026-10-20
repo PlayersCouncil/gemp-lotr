@@ -118,7 +118,8 @@ public class Card_V3_078_Tests
 		scn.PassSkirmishActions();
 
 		// Otsea 10 beats Aragorn 8
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(otsea));
 		assertEquals(0, scn.GetWoundsOn(otsea));
 		assertEquals(5, scn.GetTwilight());
@@ -150,7 +151,8 @@ public class Card_V3_078_Tests
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
 
-		assertEquals(2, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(otsea));
 
 		scn.ShadowChooseOptionalTrigger(otsea);
@@ -195,7 +197,8 @@ public class Card_V3_078_Tests
 		scn.PassSkirmishActions();
 
 		// The [ringwraith] Lemenya, 9, overwhelms Sam, 3.
-		assertInZone(Zone.DEAD, sam);
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertInZone(Zone.FREE_CHARACTERS, sam);
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(otsea));
 
 		scn.ShadowChooseOptionalTrigger(otsea);
@@ -216,7 +219,8 @@ public class Card_V3_078_Tests
 		scn.PassSkirmishActions();
 
 		// The [raider] Khamul, 12, beats Aragorn, 8.
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(otsea));
 
 		scn.ShadowChooseOptionalTrigger(otsea);
@@ -289,7 +293,8 @@ public class Card_V3_078_Tests
 		scn.FreepsResolveSkirmish(gimli);
 		scn.PassSkirmishActions();
 
-		assertEquals(2, scn.GetWoundsOn(gimli));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(1, scn.GetWoundsOn(gimli));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(otsea));
 	}
 
@@ -313,7 +318,8 @@ public class Card_V3_078_Tests
 		scn.SetTwilight(5);
 		scn.PassSkirmishActions();
 
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(otsea));
 
 		scn.ShadowDeclineOptionalTrigger();
@@ -361,7 +367,8 @@ public class Card_V3_078_Tests
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
 
-		assertEquals(2, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(otsea));
 	}
 

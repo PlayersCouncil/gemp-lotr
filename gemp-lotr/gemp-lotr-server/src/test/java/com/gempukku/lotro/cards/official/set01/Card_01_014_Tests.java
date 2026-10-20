@@ -139,7 +139,8 @@ public class Card_01_014_Tests
 		// 1 wound for losing + 1 for Gimli's own damage +1 + 1 for the axe's.
 		scn.FreepsResolveSkirmish(gimli);
 		scn.PassSkirmishActions();
-		assertEquals(3, scn.GetWoundsOn(veteran));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(veteran));
 		assertEquals(0, scn.GetWoundsOn(troop));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(axe));
 
@@ -160,7 +161,8 @@ public class Card_01_014_Tests
 		scn.FreepsAssignToMinions(gimli, shelob);
 		scn.FreepsResolveSkirmish(gimli);
 		scn.PassSkirmishActions();
-		assertEquals(3, scn.GetWoundsOn(shelob));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(shelob));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(axe));
 
 		// Declined, nothing more is wounded.

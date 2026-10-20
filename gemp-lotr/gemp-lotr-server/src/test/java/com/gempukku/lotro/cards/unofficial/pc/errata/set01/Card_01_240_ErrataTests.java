@@ -94,7 +94,8 @@ public class Card_01_240_ErrataTests
 		scn.PassCurrentPhaseActions();
 
 		// Strength 12 against 8: the minion wins.
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertEquals(0, scn.GetBurdens());
 		assertEquals(3, scn.GetTwilight());
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(band));
@@ -298,7 +299,8 @@ public class Card_01_240_ErrataTests
 
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassCurrentPhaseActions();
-		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(band));
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable(band2));
 		scn.ShadowChooseOptionalTrigger(band);
@@ -341,7 +343,8 @@ public class Card_01_240_ErrataTests
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassFierceSkirmishActions();
 
-		assertEquals(2, scn.GetWoundsOn(aragorn));
+		// Engine pass 54: what answers the win comes before the loser loses.
+		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(band));
 		scn.ShadowChooseOptionalTrigger(band);
 		assertEquals(4, scn.GetBurdens());
