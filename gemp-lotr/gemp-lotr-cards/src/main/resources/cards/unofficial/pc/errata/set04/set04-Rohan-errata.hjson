@@ -236,7 +236,7 @@
 				}
 			]
 		}
-		gametext: <b>Fellowship:</b> Spot 2 [rohan] Men (or 1 valiant [rohan] Man) to play a [rohan] character or [rohan] item from your draw deck.
+		gametext: Spot 2 [rohan] Men (or 1 valiant [rohan] Man) to play a [rohan] character or [rohan] item from your draw deck.
 		lore: "'How fair are the bright eyes in the grass! Evermind they are called... for they blossom in all seasons of the year, and grow where dead men rest.'"
 		promotext: ""
 		alts: {

@@ -1,10 +1,10 @@
 {
 	54_46: {
 		cardInfo: {
-			//id: 4_46.1
+			//id: 54_46.1
 			parent: 4_46
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN04E046.1.jpg
 			collInfo: 4R46
@@ -12,10 +12,11 @@
 		}
 		title: Ever My Heart Rises
 		unique: true
+		side: Free Peoples
 		culture: Dwarven
 		twilight: 3
-		type: condition
-		keyword: [
+		type: Condition
+		keywords: [
 			Support Area
 			Tale
 		]
@@ -63,6 +64,9 @@
 						type: canSpot
 						filter: dwarf
 					}
+					{
+						type: HasCardInDrawDeck
+					}
 				]
 				effect: [
 					{
@@ -83,7 +87,7 @@
 				]
 			}
 		]
-		gametext: <b>Tale.</b> When you play this condition, reveal the top 6 cards of your draw deck and stack them here.<br><b>Fellowship:</b> Spot a Dwarf and discard the top card of your draw deck to take a Free Peoples card stacked here into hand.\Fellowship: Spot a Dwarf to discard the top 5 cards of your draw deck.
+		gametext: <b>Tale.</b> When you play this condition, reveal the top 6 cards of your draw deck and stack them here.<br><b>Fellowship:</b> Spot a Dwarf and discard the top card of your draw deck to take a Free Peoples card stacked here into hand. Fellowship: Spot a Dwarf to discard the top 5 cards of your draw deck.
 		lore: ""
 		promotext: ""
 		alts: {
