@@ -589,12 +589,12 @@ minion loses a skirmish to bearer", Dwarven Axe 1_9 on the winner: the beaten mi
 answered, Card_02_005_Tests; it is not
 only for deaths). Two copies of a card with such a required trigger make it one decision of three entries, the
 rule and each copy's trigger; after `FreepsResolveRuleFirst()` both triggers are carried out and no second
-ordering is asked (Sudden Fury 12_132, two copies and a [shire] companion who loses). The rule's entry may have no action
-text at all, and it is not always listed first (King of the Dead 103_27 killed: `["Required trigger from King of
-the Dead…", null]`; Ferocious Haradrim 11_80 answering a death: `[null, "Required trigger from Ferocious
-Haradrim"]`). `FreepsResolveRuleFirst()` resolves the rule, the entry that belongs to no card, wherever it is
-listed; `FreepsResolveActionOrder(text)` resolves the entry whose wording contains the text and passes over an
-entry with no wording.
+ordering is asked (Sudden Fury 12_132, two copies and a [shire] companion who loses). The rule's entry is not always listed first (King of the Dead 103_27 killed with a threat out: `["Required
+trigger from King of the Dead…", "Threat wounds: remove every threat, then wound a companion for each"]`; Ferocious
+Haradrim 11_80 answering a death: the threat wounds first). `FreepsResolveRuleFirst()` resolves the rule, the entry
+that belongs to no card, wherever it is listed; `FreepsResolveActionOrder(text)` resolves the entry whose wording
+contains the text. A death with NO threat on the dead pile raises no threat entry at all (F-0567, engine pass 56):
+a card's lone required trigger on that death is carried out with nothing to order, so no `FreepsResolveRuleFirst()`.
 A trigger that names who kills (`killed` with `killer`: "if X kills a companion", CR 4.2's definition, Q-0328: B) is
 answered for a kill by X's own text or by losing a skirmish X is in (every minion of it is a killer), not for another
 minion's wound in X's skirmish; a required one answers the wound that kills as well (engine pass 49; mechanics/wounds/WhoKillsACharacterTests).
@@ -1301,7 +1301,7 @@ is being paid for: beside the Ring-bearer alone with 1 threat he is not offered,
 (`Card_10_026_Tests`).
 
 **Threat wounds are asked for one at a time, and the threats are gone before the first.** When a companion is
-killed with threats on the table, the Shadow player first has 'Before threat wounds are placed - Optional "is
+killed with threats on the table (with none, the rule does nothing and asks nothing: F-0567), the Shadow player first has 'Before threat wounds are placed - Optional "is
 about to" responses' where a card answers it (Mordor Assassin 7_284: `ShadowHasOptionalTriggerAvailable(card)`).
 Then `GetThreats()` reads 0 at once, and the Free Peoples player is asked "Choose characters to wound" once for
 each threat there was, a choice of one companion each time (minimum 1). A threat removed in that window as a cost

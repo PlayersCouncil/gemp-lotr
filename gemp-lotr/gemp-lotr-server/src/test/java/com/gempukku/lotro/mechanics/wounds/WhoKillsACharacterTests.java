@@ -121,9 +121,6 @@ public class WhoKillsACharacterTests
 
 		// 7 + 7 against 3: Merry is overwhelmed, by both.  A Hobbit: the Spear adds 2.
 		scn.PassSkirmishActions();
-		// The kill of an overwhelm names both as its killers; the Spear's trigger is ordered with the rule's own answer.
-		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
-		scn.FreepsResolveRuleFirst();
 		assertInZone(Zone.DEAD, merry);
 		assertEquals(2, scn.GetBurdens());
 

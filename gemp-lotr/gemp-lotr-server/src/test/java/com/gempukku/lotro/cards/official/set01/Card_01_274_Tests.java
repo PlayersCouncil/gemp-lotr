@@ -179,9 +179,6 @@ public class Card_01_274_Tests
 		// 13 against 4: Dwarf Guard is overwhelmed, the third companion in the dead pile.
 		scn.PassSkirmishActions();
 		assertInZone(Zone.DEAD, dwarfguard);
-		// The card's standing check is a required action, ordered by the Free Peoples player beside the rule's.
-		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
-		scn.FreepsResolveRuleFirst();
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 		assertEquals(1, scn.GetMoveCount());
 		assertEquals(1, scn.GetMoveLimit());

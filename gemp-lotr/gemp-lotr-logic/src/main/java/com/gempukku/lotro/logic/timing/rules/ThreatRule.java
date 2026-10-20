@@ -19,6 +19,8 @@ import java.util.List;
 
 public class ThreatRule {
     public static String ThreatRuleSource = "Threat Rule";
+    /** The text of the rule's entry among the required responses to the kill of a companion or ally. */
+    public static final String ThreatWoundsText = "Threat wounds: remove every threat, then wound a companion for each";
     private final DefaultActionsEnvironment _actionsEnvironment;
 
     public ThreatRule(DefaultActionsEnvironment actionsEnvironment) {
@@ -32,8 +34,16 @@ public class ThreatRule {
                     public List<? extends RequiredTriggerAction> getRequiredAfterTriggers(LotroGame game, EffectResult effectResult) {
                         if (effectResult.getType() == EffectResult.Type.ANY_NUMBER_KILLED) {
                             KilledResult killResult = (KilledResult) effectResult;
-                            if (Filters.acceptsAny(game, killResult.getKilledCards(), Filters.or(CardType.COMPANION, CardType.ALLY))) {
+                            // CR 4.2 "threats": the threats on the dead pile are counted, removed and that many wounds
+                            // assigned.  With none there is nothing to count, remove or assign, and nothing is raised:
+                            // no entry is put to the Free Peoples player to order among the kill's other required
+                            // triggers, and no "threat wounds are about to be placed" window opens (Mordor Assassin
+                            // 7_284, the one card that answers it, pays a threat).  Where there are threats the entry
+                            // says what it does (F-0567; F-0116, "the prompt should be smarter").
+                            if (game.getGameState().getThreats() > 0
+                                    && Filters.acceptsAny(game, killResult.getKilledCards(), Filters.or(CardType.COMPANION, CardType.ALLY))) {
                                 RequiredTriggerAction action = new RequiredTriggerAction(null);
+                                action.setText(ThreatWoundsText);
                                 action.appendEffect(
                                         new ThreatWoundsEffect(killResult));
                                 return Collections.singletonList(action);
