@@ -12,6 +12,7 @@ import com.gempukku.lotro.logic.timing.results.*;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -66,6 +67,15 @@ public class ResolveSkirmishEffect extends AbstractEffect {
 		} else {
 			return Result.SHADOW_LOSES;
 		}
+	}
+
+	/**
+	 * The total strength of each side as step 3 compares them: the Free Peoples side, then the Shadow side. A change
+	 * in either while the skirmish is about to resolve is a return to the start of step 3 (3A), where an optional
+	 * trigger used before it may be used again (TurnProcedure).
+	 */
+	public List<Integer> getSideStrengths(LotroGame game) {
+		return List.of(RuleUtils.getFellowshipSkirmishStrength(game), RuleUtils.getShadowSkirmishStrength(game));
 	}
 
 	/**

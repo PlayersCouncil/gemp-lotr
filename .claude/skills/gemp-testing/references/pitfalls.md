@@ -403,7 +403,10 @@ winner's second wound is a window of its own (His Terrible Servants 2_77, Card_0
 A Response to "is about to be overwhelmed" that only adds strength (Footman's Armor 7_93) is offered again while
 its bearer is still doubled (CR 4.2, the ruling on the card) and not once he is not, though the cost could be
 paid: the skirmish then resolves at once and the bonus ends with it, so the bonus itself is read only between two
-offers, on a board where one use is not enough (`Card_07_093_Tests`).
+offers, on a board where one use is not enough (`Card_07_093_Tests`). An optional TRIGGER there goes the same way
+(engine pass 56, F-0566): an optional trigger is otherwise offered once in an "is about to" window, but in the
+skirmish's resolution window a change of either side's strength is a return to the start of step 3 (3A), and the
+triggers used before it are offered again (Fishing Boat 13_48, `AnAboutToBeOverwhelmedTriggerAtEachReturnToStepThreeTests`).
 A response EVENT with another copy in hand goes the same way: once one copy is played, "Optional responses" comes
 back with the other copy for the same death, and `ShadowDeclineOptionalTrigger()` answers it before the next
 skirmish can be chosen (Beyond Dark Mountains 4_141; probed at the landing of dec-b4_78).
