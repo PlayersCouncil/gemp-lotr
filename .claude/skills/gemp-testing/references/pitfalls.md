@@ -593,7 +593,9 @@ ordering is asked (Sudden Fury 12_132, two copies and a [shire] companion who lo
 trigger from King of the Dead…", "Threat wounds: remove every threat, then wound a companion for each"]`; Ferocious
 Haradrim 11_80 answering a death: the threat wounds first). `FreepsResolveRuleFirst()` resolves the rule, the entry
 that belongs to no card, wherever it is listed; `FreepsResolveActionOrder(text)` resolves the entry whose wording
-contains the text. A death with NO threat on the dead pile raises no threat entry at all (F-0567, engine pass 56):
+contains the text. A skirmish whose losing side was already removed (step 2C) raises no "Resolve skirmish damage"
+entry (4A, engine pass 56): a required win or loss trigger of that skirmish (Dwarven Axe 1_9, Treebeard 15_38) is
+carried out with nothing to order. A death with NO threat on the dead pile raises no threat entry at all (F-0567, engine pass 56):
 a card's lone required trigger on that death is carried out with nothing to order, so no `FreepsResolveRuleFirst()`.
 A trigger that names who kills (`killed` with `killer`: "if X kills a companion", CR 4.2's definition, Q-0328: B) is
 answered for a kill by X's own text or by losing a skirmish X is in (every minion of it is a killer), not for another
@@ -660,11 +662,12 @@ the control board: if it is refused there too, the reading belongs to the helper
 with no Dwarf in play is refused by any play ability whatever its filter, so lay what it needs (Grimir 1_17) and read
 `FreepsPlayAvailable` on it before reading it not offered (1_364, dec-b1_357, reviewer: shown by a mutation).
 
-**"Is about to end" comes after the skirmish has resolved.** It is step 6 of her skirmish procedure (Q-0332, binding;
-shapes.md, "The skirmish procedure"), and the engine has it there: `SkirmishPhaseAction` queues the
+**"Is about to end" comes after the skirmish has resolved.** It is step 5 of her skirmish procedure as amended
+(2026-10-20, binding; Q-0332; shapes.md, "The skirmish procedure"), and the engine has it there: `SkirmishPhaseAction` queues the
 `SkirmishAboutToEndResult` behind `ResolveSkirmishEffect`, so the loser's wounds are on (or he is dead) when the
 response is offered, and a cancel or the removal of a side's last character reaches it with no wound placed
-(mechanics/skirmishes/TheSkirmishIsAboutToEndAtStepSixTests). Who was involved is recorded as the skirmish phase
+(mechanics/skirmishes/TheSkirmishIsAboutToEndAtStepSixTests, named by the 2026-10-16 numbering; each step of the
+procedure in mechanics/skirmishes/SkirmishProcedureTests). Who was involved is recorded as the skirmish phase
 begins (a character who joins it later, in another's place, is not among them: F-0563), but the trigger's filter is
 asked of those cards as they are then: a minion killed by his loser's wound bears nothing any more (Q-0332: B), and
 is still of his race.

@@ -536,9 +536,9 @@ public class Card_15_038_Tests
 		assertInDiscard(flankers);
 
 		// With no minion left in it the skirmish is over and Treebeard has won it (CR 4.2 "skirmish phase(s)"):
-		// the Flankers are the losing character.
-		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
-		scn.FreepsResolveRuleFirst();
+		// the Flankers are the losing character.  Treebeard's trigger comes with nothing to order (no loss sequence
+		// for a side already removed: 4A, engine pass 56).
+		assertFalse(scn.FreepsAwaitingRequiredResponseOrder());
 
 		// 12 - 11: one minion of the three.
 		assertTrue(scn.ShadowDecisionAvailable("Choose cards to exert"));

@@ -13,11 +13,12 @@ import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 /**
- * "The skirmish is about to end" is step 6 of the skirmish procedure (the Rules Council's draft for CR "skirmish
- * phase", binding on the campaign: Ketura on Q-0332, 2026-10-16): after the loser's wounds, or his kill, at step 5
- * ("whether canceled, removed, or resolved normally"), and before step 7, where the characters of the skirmish are
- * no longer assigned.  A canceled skirmish (step 2a) skips straight to step 6; a skirmish whose last character of
- * one side is removed (step 2c) skips to step 4, and the side already removed takes no loss effects (step 5a).
+ * "The skirmish is about to end" is step 5 of the skirmish procedure as amended (binding: Ketura, 2026-10-20;
+ * Q-0332, 2026-10-16, numbered it 6, as this class's name still does): after the loser's wounds, or his kill, at
+ * step 4 ("whether canceled, ended due a removed side, or resolved normally"), and before step 6, where the
+ * characters of the skirmish are no longer assigned.  A canceled skirmish (step 2A) skips straight to step 5; a
+ * skirmish whose last character of one side is removed (step 2C) skips to step 4, and the side already removed
+ * takes no loss effects (step 4A).  Every step: SkirmishProcedureTests.
  *
  * Shown with her two cards: Loathsome 7_182 ("If a skirmish that involved a Nazgûl is about to end, discard a
  * possession borne by a companion in that skirmish") and Sting, Bane of the Eight Legs 8_113 ("If a fierce
@@ -74,7 +75,7 @@ public class TheSkirmishIsAboutToEndAtStepSixTests
 		assertEquals(9, scn.GetStrength(lemenya));
 		scn.PassSkirmishActions();
 
-		// Step 5 before step 6: the loser's wound is on as the response is offered.
+		// Step 4 before step 5: the loser's wound is on as the response is offered.
 		assertEquals(1, scn.GetWoundsOn(aragorn));
 		assertTrue(scn.ShadowPlayAvailable(loathsome));
 		scn.ShadowPlayCard(loathsome);
@@ -108,7 +109,7 @@ public class TheSkirmishIsAboutToEndAtStepSixTests
 		assertEquals(11, scn.GetStrength(sam));
 		scn.PassFierceSkirmishActions();
 
-		// Step 5 before step 6: Shelob's wound is on as Sting is offered.
+		// Step 4 before step 5: Shelob's wound is on as Sting is offered.
 		assertEquals(1, scn.GetWoundsOn(shelob));
 		assertEquals(0, scn.GetWoundsOn(sam));
 		assertTrue(scn.FreepsHasOptionalTriggerAvailable(sting));
@@ -143,7 +144,7 @@ public class TheSkirmishIsAboutToEndAtStepSixTests
 		assertEquals(8, scn.GetStrength(shelob));
 		scn.PassFierceSkirmishActions();
 
-		// His wound is his fourth: he is killed at step 5, and Sting goes with him before step 6.
+		// His wound is his fourth: he is killed at step 4, and Sting goes with him before step 5.
 		assertInZone(Zone.DEAD, sam);
 		assertInDiscard(sting);
 		assertEquals(0, scn.GetWoundsOn(shelob));
@@ -175,8 +176,8 @@ public class TheSkirmishIsAboutToEndAtStepSixTests
 		assertEquals(10, scn.GetStrength(aragorn));
 		scn.PassSkirmishActions();
 
-		// Lemenya's wound is her second: she is killed at step 5.  The skirmish involved a Nazgûl all the same (CR
-		// 4.2 on Loathsome), and a Nazgûl she remains in the discard pile; it is about to end at step 6.
+		// Lemenya's wound is her second: she is killed at step 4.  The skirmish involved a Nazgûl all the same (CR
+		// 4.2 on Loathsome), and a Nazgûl she remains in the discard pile; it is about to end at step 5.
 		assertInDiscard(lemenya);
 		assertTrue(scn.ShadowPlayAvailable(loathsome));
 		scn.ShadowPlayCard(loathsome);
@@ -206,7 +207,7 @@ public class TheSkirmishIsAboutToEndAtStepSixTests
 		scn.SetTwilight(3);
 		scn.FreepsResolveSkirmish(merry);
 		assertEquals(2, scn.GetCurrentSiteNumber());
-		// Step 2a: canceled, it skips to step 6.
+		// Step 2A: canceled, it skips to step 5.
 		scn.FreepsPlayCard(stealth);
 
 		assertEquals(0, scn.GetWoundsOn(merry));
@@ -214,7 +215,7 @@ public class TheSkirmishIsAboutToEndAtStepSixTests
 		assertTrue(scn.ShadowPlayAvailable(loathsome));
 		scn.ShadowPlayCard(loathsome);
 
-		// Merry is still the companion in that skirmish at step 6.
+		// Merry is still the companion in that skirmish at step 5.
 		assertInDiscard(sword, loathsome);
 		assertEquals(0, scn.GetWoundsOn(merry));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
@@ -236,12 +237,12 @@ public class TheSkirmishIsAboutToEndAtStepSixTests
 		scn.FreepsAssignToMinions(smeagol, lemenya);
 		scn.SetTwilight(3);
 		scn.FreepsResolveSkirmish(smeagol);
-		// Step 2c: Sméagol discards himself (2 threats, for Lemenya's 2 vitality), and his side has lost.
+		// Step 2C: Sméagol discards himself (2 threats, for Lemenya's 2 vitality), and his side has lost.
 		scn.FreepsUseCardAction(smeagol);
 		assertInDiscard(smeagol);
 		assertEquals(2, scn.GetThreats());
 
-		// Step 5a: the side already removed takes no loss effects, and the winner no wound.  Step 6 is reached.
+		// Step 4A: the side already removed takes no loss effects, and the winner no wound.  Step 5 is reached.
 		assertEquals(0, scn.GetWoundsOn(lemenya));
 		assertTrue(scn.ShadowPlayAvailable(loathsome));
 		scn.ShadowPlayCard(loathsome);
