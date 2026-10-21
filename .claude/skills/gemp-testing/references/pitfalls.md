@@ -1806,6 +1806,8 @@ Once the four are spent an optional trigger or a no-cost ability whose whole eff
 all (Q-0262: B; the fifth Old Toby 1_305 asks nothing), where an empty draw deck alone still asks (Q-0029).
 The move at the end of the fellowship phase is part of it: a draw from a "when your fellowship moves from" trigger
 counts, and is withheld once four are drawn (Moria Guardroom 11_247, Card_11_247_Tests).
+`FreepsAcceptOptionalTrigger()` also answers a phase's choice of actions, so where the trigger is withheld it takes
+whatever action is first on offer: read `FreepsHasOptionalTriggerAvailable` before each accept of a run (dec-b19_2).
 
 **A player barred from taking cards into hand draws only when reconciling.** At a table where a player holds
 Race Text 94_30 (`CantTakeCardsIntoHandFromDeckOrDiscardPile`), a card drawn is a card taken into hand from the

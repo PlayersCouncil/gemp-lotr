@@ -540,6 +540,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Play any number of / up to N ... from your discard pile" is withheld when nothing can be played (Q-0086)
 - "If you have initiative, you may play this <card> from your discard pile" is a clause of its own, typed `Activated [+ -]` (Hobbitses Are Dead 7_61; F-0055)
 - "If you have initiative, <pay> to <do>" on a Free Peoples event wants four cards beside the event (F-0464, built by engine pass 28)
+- "If there are N or more <cards> in your discard pile, <effect>" opening an event is a requirement to play (CR 4.2 "cost": Madril's "If you have initiative, ..." is checked before the cost is paid)
 - "Hinder/remove X ... to play X cards from your discard pile": X is capped (Q-0094)
 - An action's costs are judged in order, with its own exertions counted (F-0184) [F-0549, F-0486]
 - Response events are not played by "play an event from ..." (F-0186)

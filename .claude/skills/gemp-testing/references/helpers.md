@@ -317,6 +317,10 @@ whole text. Every card PRINTED valiant is a companion, and no ally is given the 
 game reaches a valiant ally by two printed cards, so "valiant companion" is told from "valiant" with those ("A
 valiant ally").
 
+**A "fellowship companion" (set 19's Fellowship keyword), and a companion without it.** The printed Fellowship
+companions are 19_2, 19_7, 19_8, 19_12, 19_13, 19_28, 19_29, 19_30, 19_32 and 69_30; no ally has the keyword, so the
+invalid candidate is a companion without it (Aragorn 1_89; Gimli 1_13 for a Gimli who is none: Card_19_004_Tests).
+
 **A valiant ally (no ally is valiant in print; beside "each valiant companion"); a valiant Ring-bound companion.**
 Northern Signal-fire, Flame of Calenhad 103_86; Royal Guard 102_54; Erkenbrand, Kinsman of the House of Eorl
 102_47. Flame ([rohan] possession, Beacon, Support Area; to play, hinder 2 beacons: cheat it into the support
