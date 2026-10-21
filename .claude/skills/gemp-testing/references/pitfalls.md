@@ -1602,6 +1602,8 @@ either player's hand, so it cannot show "to their owners' hands": read `GetFreep
 for a card in play, the number printed on it (F-0109, Q-0073); for a card in a hand or pile, what it would cost
 to play now, roaming apart; for a site, its Shadow number as it stands. To read a cost modifier, read a card in
 hand, or play the card and read the pool. A transfer costs the printed number and nothing else (Q-0053, Q-0074).
+A filter's `minTwilight(N)` reads the PRINTED cost of a card in hand, not that number: Rohirrim Soldier 15_138
+(printed 3, 2 in hand beside a [rohan] Man) passes Éowyn 19_26's `minTwilight(3)` (Q-0356 open on the reading).
 A Free Peoples card's play ADDS its cost to the pool and needs none in it: an invalid Free Peoples candidate "that
 can be paid for" wants no `SetTwilight` (Card_11_259_Tests); only a Shadow card wants a pool laid for it.
 A plain play (the printed cost added or removed, roaming, where each type goes) is shown once by
