@@ -1,14 +1,17 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set05;
 
-import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
+import com.gempukku.lotro.logic.modifiers.StrengthModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.assertInZone;
 import static org.junit.Assert.*;
 
 public class Card_05_010_ErrataTests
@@ -18,8 +21,14 @@ public class Card_05_010_ErrataTests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "55_10");
-					// put other cards in here as needed for the test case
+					put("balglin", "55_10");
+					put("arwen", "1_30");       // Arwen, Daughter of Elrond: Elf companion, strength 6, vitality 3; Ranger, +3 only against a Nazgul
+					put("elrond", "1_40");      // Elrond, Lord of Rivendell: Elf ally
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion: a companion who is no Elf
+					put("finalcount", "4_69");  // Final Count: [elven] condition in the support area, a card of the culture that is no Elf; nothing without Legolas
+
+					put("savage", "1_151");     // Uruk Savage: strength 5, vitality 3, damage +1 and nothing else
+					put("savage2", "1_151");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -42,13 +51,14 @@ public class Card_05_010_ErrataTests
 		 * Strength: 5
 		 * Vitality: 3
 		 * Resistance: 6
-		 * Game Text: <b>Valiant.</b> 
-		* 	To play, spot an Elf.<br>While skirmishing a wounded minion, Balglin takes no more than 1 wound during each skirmish phase.
-		*/
+		 * Game Text: <b>Valiant.</b>
+		 * To play, spot an Elf.
+		 * While skirmishing a wounded minion, Balglin takes no more than 1 wound during each skirmish phase.
+		 */
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("balglin");
 
 		assertEquals("Balglin", card.getBlueprint().getTitle());
 		assertEquals("Elven Warrior", card.getBlueprint().getSubtitle());
@@ -64,18 +74,113 @@ public class Card_05_010_ErrataTests
 		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void BalglinTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void BalglinCanBePlayedForTwoOnlyOnceAnElfCompanionIsInPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var balglin = scn.GetFreepsCard("balglin");
+		var arwen = scn.GetFreepsCard("arwen");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var finalcount = scn.GetFreepsCard("finalcount");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToSupportArea(finalcount);
+		scn.MoveCardsToHand(balglin, arwen);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
+		// A companion who is no Elf and an [elven] condition in play, and no Elf.
+		assertFalse(scn.FreepsPlayAvailable(balglin));
+
+		scn.FreepsPlayCard(arwen);
 		assertEquals(2, scn.GetTwilight());
+		assertTrue(scn.FreepsPlayAvailable(balglin));
+
+		scn.FreepsPlayCard(balglin);
+		assertInZone(Zone.FREE_CHARACTERS, balglin);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void AnElfAllyIsEnoughToPlayBalglin() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var balglin = scn.GetFreepsCard("balglin");
+		var elrond = scn.GetFreepsCard("elrond");
+		scn.MoveAlliesToTable(elrond);
+		scn.MoveCardsToHand(balglin);
+
+		scn.StartGame();
+
+		assertTrue(scn.FreepsPlayAvailable(balglin));
+		scn.FreepsPlayCard(balglin);
+		assertInZone(Zone.FREE_CHARACTERS, balglin);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void AgainstAWoundedMinionBalglinTakesOneWoundInEachSkirmishPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var balglin = scn.GetFreepsCard("balglin");
+		scn.MoveCompanionsToTable(balglin);
+
+		var savage = scn.GetShadowCard("savage");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(savage);
+		scn.AddWoundsToChar(savage, 1);
+		// Fierce, so that it skirmishes Balglin a second time in a skirmish phase of its own.
+		scn.ApplyAdHocModifier(new AddKeywordModifier(null, savage, null, Keyword.FIERCE));
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(balglin, savage);
+		scn.FreepsResolveSkirmish(balglin);
+
+		assertEquals(0, scn.GetWoundsOn(balglin));
+		// 5 against 5: the Shadow side wins a tie.  1 wound + 1 for the Savage's damage, held to 1.
+		scn.PassSkirmishActions();
+		assertEquals(1, scn.GetWoundsOn(balglin));
+		assertEquals(1, scn.GetWoundsOn(savage));
+
+		scn.PassFierceAssignmentActions();
+		scn.FreepsAssignToMinions(balglin, savage);
+		scn.FreepsResolveSkirmish(balglin);
+		scn.PassFierceSkirmishActions();
+
+		// The fierce skirmish is another skirmish phase: 1 more wound, not 0 and not 2.
+		assertEquals(2, scn.GetWoundsOn(balglin));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void AgainstAnUnwoundedMinionBalglinTakesEveryWoundAndAnotherElfIsNotProtected() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var balglin = scn.GetFreepsCard("balglin");
+		var arwen = scn.GetFreepsCard("arwen");
+		scn.MoveCompanionsToTable(balglin, arwen);
+
+		var savage = scn.GetShadowCard("savage");
+		var savage2 = scn.GetShadowCard("savage2");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(savage, savage2);
+		scn.AddWoundsToChar(savage2, 1);
+		// 7 against Arwen's 6, so that she loses.
+		scn.ApplyAdHocModifier(new StrengthModifier(null, savage2, null, 2));
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{balglin, savage}, new PhysicalCardImpl[]{arwen, savage2});
+
+		// The wounded minion is on the table, waiting for Arwen, but Balglin's own minion is unwounded.
+		scn.FreepsResolveSkirmish(balglin);
+		scn.PassSkirmishActions();
+		// 5 against 5: 1 wound + 1 for the Savage's damage.
+		assertEquals(2, scn.GetWoundsOn(balglin));
+
+		scn.FreepsResolveSkirmish(arwen);
+		scn.PassSkirmishActions();
+		assertEquals(2, scn.GetWoundsOn(arwen));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }
