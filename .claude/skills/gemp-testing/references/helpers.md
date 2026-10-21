@@ -195,7 +195,8 @@ Hand Axe (strength +1; an archery ability that discards it, used only on purpose
 other hand weapon", so the two make a Dwarf's pair (lint-ok on the attach; Card_02_005_Tests).
 
 **An archer, when archery is the point.** Legolas, Greenleaf 1_50. Strength 6, vitality 3; Archer, with an archery
-ability.
+ability. Not as a plain [elven] or unbound companion: with two minions down his wound choice stops `SkipToPhase(Phase.ASSIGNMENT)`
+("Archers get in the way"; Card_08_018_Tests took the Ent Avenger 6_27 instead).
 
 **A Free Peoples archer in a skirmish, for a Shadow text's "if skirmishing an archer".** Companions: Legolas 1_50 and
 Garrison of Gondor 8_36 ([gondor] Man, unique, strength 8, vitality 3; Knight, Archer; cheat it in past "spot 3
@@ -584,7 +585,8 @@ triggers (a spell played: add a burden to wound a minion; the start of his own s
 only once he is in play.
 
 **A [gandalf] companion who is not Gandalf; a second Ent.** Ent Avenger 6_27. Strength 6, vitality 4, not unique; a
-strength bonus only when 3 Ents can be spotted. Tells `name(Gandalf)` from `culture(gandalf)`. The Ent of another
+strength bonus only when 3 Ents can be spotted. Tells `name(Gandalf)` from `culture(gandalf)`. Also the unbound companion who is no Man, not [gondor] and no archer, beside Aragorn 1_89, to
+show "an unbound companion" not narrowed to a culture or a race (Card_08_018_Tests). The Ent of another
 title and type beside the ally Treebeard, Earthborn 4_103 (vitality 4, unhasty; a response and a fellowship ability
 about unbound Hobbits stacked on him).
 
