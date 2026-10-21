@@ -507,6 +507,9 @@ titled Firefoot, so it is never on a board with Firefoot 4_274 (`Card_04_268_Tes
 pipeweed possession, not unique, Support Area; its only text an optional draw on its own play, which
 `MoveCardsToSupportArea` before `StartGame()` does not set off). For "discard a Free Peoples possession" with only
 borne possessions laid, `attachedTo(any)` added to the choice survived; with Old Toby laid it is noticed (`Card_04_013_Tests`).
+To PLAY one where the Shadow player answers the play with a response, take Gandalf's Cart 1_73 (unique [gandalf]
+possession, cost 1, Support Area, no play trigger; `Card_10_098_Tests`): Old Toby's draw is offered both before the
+response and again after it resolves (dec-b10_96, on a probe).
 
 ## A culture without its race, a race without its culture, a card against its type
 

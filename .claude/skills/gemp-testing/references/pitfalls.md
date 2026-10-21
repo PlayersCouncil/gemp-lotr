@@ -474,7 +474,8 @@ with `FreepsChoose(option)`; with one option payable nothing is asked (Elven Swo
 option that names a culture comes through as HTML (`Discard a <span class='cultureHint' ...> Raider</span> card from
 hand`), so neither reads it: count the options with `ShadowGetMultipleChoiceCount()`, read each with
 `ShadowChoiceAvailable(<words>)` and answer with `ShadowChooseOption(<words>)`, which match on part of the text
-(Ships of Great Draught 8_65). An EFFECT that is a choice (`type: choice` with its `texts:`) is asked the same way:
+(Ships of Great Draught 8_65): take a fragment with no culture word in it ("minion" for "Discard a [sauron] minion",
+Rank and File 10_96). An EFFECT that is a choice (`type: choice` with its `texts:`) is asked the same way:
 its options are the definition's `texts`, read with `FreepsChoiceAvailable("Liberate a site")` and answered with
 `FreepsChoose(<the whole text>)` (Andúril 17_27, "liberate a site or discard a condition borne by a companion").
 
