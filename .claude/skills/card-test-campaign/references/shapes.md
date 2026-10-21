@@ -197,10 +197,10 @@ heal, a minion: the Shadow player heals it and its owner then heals his one woun
 Hrethel 6_95), and the owner heals it and the Shadow player then heals it again (Hrethel, then the Ladder).
 
 **"At the start of the first <phase> ... (limit once per turn)" (F-0517, Wizard's Vale 4_359).** "The first Shadow
-phase" is the turn's first: `startOfPhase` with `not` of `moveCountMinimum` 2 beside the `perTurnLimit`, which alone let
-a site reached by the turn's second move add at that Shadow phase. The limit binds nothing apart from "first" (no
-turn has two Shadow phases at one site), so the ledger writes `no L` with that reason, and the `-` that parts the two
-is the turn's second Shadow phase at the site (Card_04_359_Tests.TheSecondShadowPhaseOfATurnGetsNothing).
+phase" is the first Shadow PLAYER's phase, a gate against several Shadow players, not the turn's first move (Ketura,
+2026-10-21): plain `startOfPhase` with the `perTurnLimit`, no `moveCountMinimum`. A site reached by the turn's second
+move still adds (Card_04_359_Tests.ASecondMoveOfTheTurnToWizardsValeStillAddsFour). The limit binds nothing a board can
+reach (no turn has two Shadow phases at one site), so the ledger writes `no L` with that reason.
 
 **"Limit 1 per bearer" is a Restriction that lists `L`.** Typed `Restriction [+ - L]`, as on Frostbite 101_27
 and The Weight of a Legacy 51_282. One test can claim all three: a bearer who has a copy is not
