@@ -2334,3 +2334,12 @@ wounds". Commit messages and comments name Ketura, never "her" (roles, "Name Ket
 **"Place X wounds on minions" spreads the wounds as the player wishes (Q-0345, 2026-10-21).** Battle in Earnest 8_2:
 "Yes, this is A; 'place X wounds on Y' is the same structure as 'wound a Y for each X'". One minion may take several
 of the X wounds. *[2026-10-21]*
+
+**Above the Battlement 7_262 is settled by CR 4.2 Section Three (2026-10-21).** Ketura recalled the ruling: "there was
+an official Decipher ruling for this card in Section Three that specified that the correct interpretation is a choice
+between two actions: either play a besieger from a site you control, or remove a burden to play the orc from
+discard." The ruling, as the card's ledger (R1) quotes it: "When you play this card you must choose one of the
+following actions: (1) play a besieger stacked on a site you control; or (2) remove a burden to play a [Sauron] Orc
+from your discard pile." Q-0254's open point (Ketura, 2026-10-11: "I'll ask the Council") needs no Council reading.
+The card is built and tested on that reading already (F-0465; WithBothOpenThePlayerChoosesOneAndOnlyTheSecondTakesABurden).
+When a question's own text quotes a CR 4.2 ruling that settles it, the orchestrator says so to Ketura plainly. *[2026-10-21]*
