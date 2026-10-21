@@ -586,6 +586,10 @@ and the last, unasked, lies on top (`GetFreepsTopOfDeck()`, `GetFromTopOfFreepsD
 `putCardsFromHandOnTopOfDeck` asks it too, after the choice of cards from hand: Nenya 9_20 with two chosen asks
 once (`FreepsChooseCard(first)`), and the order read is the player's own answer (`Card_09_020_Tests`). Leave other
 cards in the deck under them, or a reading of "on top" cannot be told from one of "anywhere in the deck".
+`putCardsFromHandOnBottomOfDeck` asks the hand's owner the same way ("Choose card to put beneath draw deck",
+`FreepsChooseCard(card)`): the first chosen goes beneath first, and the last, unasked, is the bottom card (Beyond All
+Darkness 8_68, `Card_08_068_Tests`). While the choice waits the hand count is unchanged, so a `-` board ("the hand is
+kept") reads `FreepsDecisionAvailable(...)` false and the state the game then waits in, not the count alone.
 
 **Two offers of one response.** When the same card offers the same trigger or response twice in one decision (two Nazgul winning one skirmish), each offer's text ends with " (for <the cards its trigger memorized>)". A single offer reads as before. Choose between them by that text. The same holds for a response EVENT in hand whose trigger memorizes (Sack of the Shire 9_40: "Play Sack of the Shire (for Uruk-hai Raiding Party)"): "that minion" is picked by the offer taken, and the event's own choice is never asked, so read `ShadowActionAvailable("Play X (for Y)")` and `ShadowGetActionCount()` and take one with `ShadowChooseAction(text)`, not a card choice.
 

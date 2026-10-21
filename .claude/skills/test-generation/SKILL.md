@@ -458,7 +458,7 @@ is made for it) (but a player's own Shadow cards are inactive on his turn, so fo
 Free Peoples ability they are no candidates at all, as his own Free Peoples cards are none for a Shadow event
 played on the other player's turn: pitfalls, "The other player's Free Peoples cards are not active"; but where the
 Shadow player can use a "your" ability, a site's Maneuver text, the Free Peoples player's cards in play ARE active and
-not his, and one is laid as his invalid candidate: Balin's Tomb 1_343); for "a minion" or "an Uruk-hai" on a Skirmish event, one valid
+not his, and one is laid as his invalid candidate: Balin's Tomb 1_343); for "a minion" or "an Uruk-hai" (any kind of minion: "a corsair", Wind That Sped Ships 8_66) on a Skirmish event, one valid
 candidate is not assigned to a skirmish, and so on a Skirmish special ability whose text names no assignment
 (Noble Leaders 7_112: `assignedToSkirmish(minion)` added to its choice survived without one). A Skirmish action's choice that is not limited to the skirmish ("your
 [sauron] minion", Morgul Vale 7_357) also wants one valid candidate IN the skirmish being resolved, or a choice
