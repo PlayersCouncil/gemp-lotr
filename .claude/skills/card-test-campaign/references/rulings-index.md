@@ -598,6 +598,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Ruled on the night of 2026-10-07, and built by engine pass 12 (Q-0103 to Q-0108, F-0175 to F-0179) [Q-0105, Q-0023, Q-0104, Q-0107, F-0176, F-0178, F-0196]
 - Whose support area: support(you), support(opponent) and the rest (F-0177, Q-0101)
 - "If a Shadow player has replaced the fellowship's current site this turn" is asked of the site the fellowship is at NOW (Q-0234: A; built by engine pass 26; Many Miles 13_21) [Q-0259]
+- "Play the fellowship's next site. The Shadow number of the fellowship's next site is -1" reaches the next site whether or not one was played (F-0576, Still Far Ahead 8_29)
 - A site's continuous text: `modifier` holds only while the fellowship is there, `PermanentSiteModifier` wherever the site lies (CR 4.2 "active", LR 3; Q-0173: B)
 - A site whose text names the site by its title goes by `name(<title>)`, never by `self` or by nothing (Q-0027; F-0043, F-0381, F-0382, F-0383) [F-0390]
 - "While bearer is at a <terrain> site", "if that <character> is at a <terrain>": the character's place is `atSite(<terrain>)`, and an ally is at his home site (F-0380, F-0503, F-0518; built by engine pass 48) [Q-0252, F-0233, F-0519, F-0532]

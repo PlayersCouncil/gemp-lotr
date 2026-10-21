@@ -270,6 +270,11 @@ and nothing else happens; with no cost it is not offered at that limit either. A
 therefore no requirement: an event so built is played with nothing to spot (Honed 8_6, F-0573); "Spot X to" wants a
 `spot` cost (or a requirement).
 
+**A requirement beside a cost can hide the cost's own filters.** Where the definition also has a requirement (a
+`canSpot` count of 2), a board that leaves the cost unpayable may fail the requirement first, and shows nothing of
+the cost's filter: Elessar's Edict 8_33's `C-` passed over both of its cost's [gondor] filters. Give each branch
+of the cost a board the requirement lets through (a [sauron] Wraith minion, an exhausted [gondor] Man; dec-b8_28).
+
 **An event's random discard from hand does not count the event itself** (F-0498, We Must Have It 5_30; engine
 pass 39). `discardCardAtRandomFromHand` judges its cost against the hand without the card being played, as a chosen
 `discardFromHand` leaves it out of its choice (CR 4.2 "playing a card": "You cannot discard The Card to pay a cost"):
@@ -375,6 +380,9 @@ else to take, an ability with a cost is offered all the same (Q-0034): the cost 
 card or a bearer, and the flag reads `"false"`. Strange-looking Men 11_100 are Men: they are offered as bearers
 of an Armor themselves (Q-0058). `mechanics/inplay/CardThatCannotBeTransferredTests`. A follower's Aid asks the
 same (F-0363, engine pass 26): see "A follower's Aid" below.
+It is the same where the card can be transferred and no character matches the bearer after "to": Spider Poison
+8_28 in a skirmish of Gollum's, not Shelob's, is offered, its threat or burden paid, and nobody is asked for a
+bearer (`RemovingAThreatTransfersItToTheCompanionSkirmishingShelobAndToNobodyInAnotherSkirmish`).
 
 **A response event is not played by another card's effect.** "Play a(n) ... event from your discard pile /
 stacked here / from hand" neither offers a response event nor counts one towards being usable; an event that
