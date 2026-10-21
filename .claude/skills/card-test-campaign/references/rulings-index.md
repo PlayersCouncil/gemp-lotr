@@ -669,6 +669,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Skirmish: Exert this minion to make a Nazgûl or [wraith] Orc strength +1" (Morgul Regiment 7_197; Morgul Lackey 7_193 and Morgul Predator 7_196 print it word for word and are built with the same filter, `or(nazgul,and(culture(wraith),orc))`)
 - Sentences set 4 shares outside a twins.py group (dec-b4_353) [Q-0338]
 - Set 8's token conditions (dec-b8_8)
+- Sentences set 8 shares outside a twins.py group (dec-b8_61)
 - A required start-of-turn trigger with a 0-to-N choice
 - "At the start of each of your turns" reads BETWEEN_TURNS; read every counter before as well as after
 - The turn-skippers do not lay sites

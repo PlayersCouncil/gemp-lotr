@@ -1069,7 +1069,7 @@ Ring-bearer to a skirmish"), played after `FreepsPass()`; he picks ANY minion fo
 **A card played only to take the hand from four to three (a loss of initiative).** Stairs of Khazad-dûm 1_24
 ([dwarven] condition, cost 0, support area, no requirement) in the fellowship phase; Elendil's Valor 1_103 ([gondor]
 Maneuver event, cost 0) in the maneuver phase, which picks a lone [gondor] companion unasked, so no `FreepsChooseCard`
-follows it (Card_10_012_Tests, Card_10_108_Tests). Skirmish and regroup: pitfalls, "The loss of initiative comes with the play".
+follows it (Card_10_012_Tests, Card_10_108_Tests). Skirmish and regroup: pitfalls, "The loss of initiative comes with the play". At a site above 1, set the hand after the skip with `SetFreepsHand` (pitfalls, "`SkipToSite` plays whole turns"; Card_08_061_Tests).
 
 **A companion played, and an ally played beside it (for "each time a companion is played").** Gimli, Son of Glóin
 1_13 ([dwarven] Dwarf, cost 2) and Boromir, Son of Denethor 1_97 ([gondor] Man, cost 3): no requirement to play and
