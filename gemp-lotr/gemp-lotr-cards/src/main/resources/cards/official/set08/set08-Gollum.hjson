@@ -423,7 +423,11 @@
 			effect: [
 				{
 					type: playNextSite
-					memorize: playedSite
+				}
+				{
+					type: memorize
+					filter: nextSite
+					memory: playedSite
 				}
 				{
 					type: addModifier
