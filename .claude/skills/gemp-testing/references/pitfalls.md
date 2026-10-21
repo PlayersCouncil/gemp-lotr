@@ -266,7 +266,9 @@ check the game is back at the phase's actions. An event is the same: with nothin
 is still offered, and playing it pays for it and discards it. An ability at its limit goes by the kind of
 limit (Q-0093). A limit on uses ("limit once per turn") withholds it, cost or no cost. A limit on what its effect
 gives ("(limit +3)", "add a threat (limit 1)") leaves an ability with a cost on offer (Q-0041): the cost is paid
-and nothing else happens; with no cost it is not offered at that limit either.
+and nothing else happens; with no cost it is not offered at that limit either. A "spot" written as the effect's own `choose(...)` is
+therefore no requirement: an event so built is played with nothing to spot (Honed 8_6, F-0573); "Spot X to" wants a
+`spot` cost (or a requirement).
 
 **An event's random discard from hand does not count the event itself** (F-0498, We Must Have It 5_30; engine
 pass 39). `discardCardAtRandomFromHand` judges its cost against the hand without the card being played, as a chosen

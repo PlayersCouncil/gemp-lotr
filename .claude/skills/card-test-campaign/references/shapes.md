@@ -324,9 +324,9 @@ built on 8_3, 58_3 and 10_1, `choose(dwarf,damage,...)`; an event's X of zero ma
 Q-0015, so this is no question): the `-` for the word "damage" is such a Dwarf able to pay, beside a character
 who has the bonus and is no Dwarf, with the event not playable (Grimir 1_17 and Huorn 9_25 in 8_3's tests; the
 filter without `damage` passed every test until that board was laid). Aggression 8_1's Fellowship ability and Battle in Earnest 8_2
-were built with `choose(dwarf)` and are corrected so (F-0571, F-0572; dec-b9_51). Honed 8_6 (`choose(dwarf)`) and
-Unheard of 8_7 (a `winsSkirmish` of `dwarf`) were seen built the same way, in the definition only, not run: the
-same finding when their batch comes.
+were built with `choose(dwarf)` and are corrected so (F-0571, F-0572; dec-b9_51). Honed 8_6 had the spot as the
+effect's own `choose(dwarf)`, so it was played with no Dwarf at all: now a `spot` cost of `choose(dwarf,damage)`
+and the effect on `memory(...)` (F-0573); Unheard of 8_7's `winsSkirmish` trigger is `dwarf,damage` (F-0574; dec-b8_4).
 
 **"Exert your Wizard to choose a number. Make each minion with that twilight cost ..." (Gathering Wind 10_16): the
 number is part of the cost (F-0474).** By the words alone the choice stands after "to" and would be an effect;

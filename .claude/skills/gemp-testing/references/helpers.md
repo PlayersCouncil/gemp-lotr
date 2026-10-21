@@ -186,6 +186,7 @@ Shadow ability used only on purpose. Orc Chieftain 1_266 (cost 2, site 6) is the
 is only ever used on purpose.
 
 **A weak companion.** Dwarf Guard 1_7. Strength 4, vitality 2; needs a Dwarf spotted to be played, so cheat it in.
+Vitality 2: with one wound he is exhausted and is not offered to an exertion, so he is no "wounded control" for one.
 
 **Hand weapons for a Dwarf, one or two.** Dwarven Axe 1_9; Hand Axe 2_10. Both [dwarven] possessions of cost 0
 that a Dwarf bears. The Axe (strength +2) has a REQUIRED "each time a player's minion loses a skirmish to bearer":
