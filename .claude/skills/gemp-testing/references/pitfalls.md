@@ -64,7 +64,9 @@ in that order in the game log. `mechanics/actions/TakenTogetherInCardIdOrderTest
 
 **A stack from play asks where first, then what.** `StackCardsFromPlay` resolves its `where` ("Choose card to stack
 on") before its `select` ("Choose cards to stack"), whatever the text's word order: "stack your [sauron] minion on a
-site you control" asks the site, then the minion (Their Marching Companies 8_107, Card_08_107_Tests).
+site you control" asks the site, then the minion (Their Marching Companies 8_107, Card_08_107_Tests). Where the `where` finds
+no card (no site he controls), the choice of what to stack is still asked when there is more than one candidate,
+and nothing is stacked (F-0579, open; Troll of Gorgoroth 8_108): lay a single candidate unless the test reads that question.
 
 **Choosing which skirmish to resolve is always asked.** Even when only one skirmish is left, the Free Peoples
 player is asked to choose it. `FreepsAssignAndResolve` answers that for the skirmish it sets up;
@@ -2024,7 +2026,8 @@ from your draw deck". Site 5, Pelennor Flat 7_345: at the start of each maneuver
 must choose to discard his hand or add 2 burdens (asked with an empty hand too: Q-0255), so a test in site 5's
 maneuver phase answers that first. Site 6, Minas Tirith Seventh Circle 7_350: a regroup move from it heals each
 [elven] companion. Site 9, Dagorlad 7_360: the move to it adds 3 threats (up to the limit), so a test that reads
-threats at site 9 counts them in (Card_07_360_Tests).
+threats at site 9 counts them in (Card_07_360_Tests). A test of a card whose text names no block, that needs three or more controlled sites
+and then a maneuver or regroup phase, takes `FellowshipSites` and so stays clear of Pelennor Flat (Card_08_107_Tests, Card_08_108_Tests).
 
 **A battleground or a forest site needs no cheat.** The Towers path has both at site 2: Uruk Camp 4_335
 (Battleground, Plains; each Uruk-hai played must exert) and Derndingle 4_330 (Forest; move limit +1 while an

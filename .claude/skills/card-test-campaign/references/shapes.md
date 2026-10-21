@@ -235,7 +235,9 @@ offers the next inside an `If` that `HasCardInMemory` of the last choice, so the
 `count: 0-1` choice, with no `If` (No Living Man 8_90, "exert a minion for each [Théoden] signet you spot"), asks
 once per thing counted even after a none: the same outcomes, 0 to N, and no finding (dec-b8_87). One 0-to-N prompt cannot place two wounds on one
 minion. The 45 other definitions that ask the number are unchanged; Morgai Foothills 8_110's regroup ability
-("discard a card from hand for each ... you spot") is already a 0-to-N choice of cards.
+("discard a card from hand for each ... you spot") is already a 0-to-N choice of cards. Its first sentence has no "to" and so
+reads as Q-0058's price, but it is carried out in `effect`: nothing cancels a Free Peoples condition's ability and a
+price sized from 0 can always be paid, so no board tells the two apart and nothing is filed (dec-b8_108).
 An effect that only COUNTS what is spotted keeps the number prompt: "Draw a card for each Elf companion you spot"
 (Alliance Reforged 4_58, F-0497) is `chooseHowManyToSpot` and `drawCards` with `count: fromMemory`; a
 `forEachYouCanSpot` count there is the reading of "you CAN spot" and a finding.
