@@ -231,7 +231,9 @@ Merry's Sword 57_242 counts every [rohan] companion unasked and was kept so (Q-0
 Wingfoot 4_364 asks with no number prompt (Q-0248, engine pass 28): the things are counted (`memorizeNumber` of a
 `forEachYouCanSpot`), one `wound` with `count: 0-1` and `memorize` is offered, and a `Repeat` of the count less 1
 offers the next inside an `If` that `HasCardInMemory` of the last choice, so the first choice of none ends them
-(read with `FreepsDeclineChoosing()`, and no further decision). One 0-to-N prompt cannot place two wounds on one
+(read with `FreepsDeclineChoosing()`, and no further decision). A plain `Repeat` of `forEachYouCanSpot` round a
+`count: 0-1` choice, with no `If` (No Living Man 8_90, "exert a minion for each [Théoden] signet you spot"), asks
+once per thing counted even after a none: the same outcomes, 0 to N, and no finding (dec-b8_87). One 0-to-N prompt cannot place two wounds on one
 minion. The 45 other definitions that ask the number are unchanged; Morgai Foothills 8_110's regroup ability
 ("discard a card from hand for each ... you spot") is already a 0-to-N choice of cards.
 An effect that only COUNTS what is spotted keeps the number prompt: "Draw a card for each Elf companion you spot"

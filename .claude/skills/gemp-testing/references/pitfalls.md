@@ -1740,11 +1740,18 @@ A look that plays nothing reads one, the definition's own, and is the test that 
 true`, whether the play is an EFFECT or a COST ("Play Gollum from your draw deck ... to add a threat", Captured
 by the Ring 7_53: the shuffle is made ahead of the failed play, and the cost is still unpaid; F-0494, engine pass 35). A card played OUT OF a deck onto a bearer, and an event played out of a deck, shuffle it as they leave even where nobody looked (`showAll: false`; an event played from hand that plays a card out of the deck counts as that card does);
 a card played to the table or the support area does not (a minion revealed by From Deep in Shadow 12_38, a
-starting fellowship). On a card's own board read the EXACT count wherever the board fixes it: `> shuffles` after a
+starting fellowship). Two possessions played onto a bearer out of one reveal of the top cards read `shuffles + 3`:
+one as each leaves, and the definition's own (Éomer, Keeper of Oaths 8_87). On a card's own board read the EXACT count wherever the board fixes it: `> shuffles` after a
 card played out of a looked-through deck passes with the definition's `shuffle: true` gone, and `shuffles + 2`
 does not (The Prancing Pony 11_256; mechanics/deck/DrawDeckShuffledWhenTheLookIsOverTests). A reveal or look at the TOP
 cards is no search and writes `shuffle: false` (Q-0013): where a test reads the deck after one, read the count
 unchanged too, since the top card's order notices a stray shuffle only by chance (Master Proudfoot 1_301).
+
+**"You may play each <kind> revealed" asks once for each such card, a decline included.** Éomer, Keeper of Oaths
+8_87 is a `Repeat` whose `times` counts the revealed [rohan] possessions, round a 0-1 choice: with two revealed,
+playing none takes two `FreepsDeclineChoosing()`, and that second prompt is no fault (the text gives each its own
+"may"). The `Repeat`'s filter is a second place the phrase stands: lay a revealed card each neighbouring filter
+would count (a [gondor] possession, a [rohan] artifact) and decline, so a wrong count shows as one prompt too many.
 
 **A "play ... from your draw deck" action with no cost is offered whatever the deck holds, and a look that plays
 nothing is a use.** `PlayCardFromDrawDeck` without `mustExist` (Race Text 92_28, "Fellowship or Shadow: Play an
