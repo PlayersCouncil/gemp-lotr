@@ -1227,7 +1227,8 @@ the two are one round, `InRelentlessRound()` true, with the relentless minions a
 
 **Before `StartGame()` the burdens read 1.** The constructor has bid 1 burden for player 1 and placed the
 Ring-bearers; `StartGame()` then takes 1 burden off (`RemoveBurdens(1)`). A burden a card added at set-up would
-show as 2 before it and 1 after (Sméagol 59_30, who adds none when he starts as the Ring-bearer, reads 1 and 0).
+show as 2 before it and 1 after (a Ring-bearer-capable companion who adds none when he starts as the Ring-bearer
+reads 1 and 0; one who is no Ring-bearer and pays his burden reads 2 and 1).
 That holds while player 1's starting fellowship is pending, which takes a companion in the decks. `GetBurdens()`
 reads the player set-up has reached: with no companion in the decks the game has gone on to the mulligan question
 and it reads PLAYER 2's bid (0 on a default table; with a bid handler of 7 and 2 it reads 2, and 7 where a
