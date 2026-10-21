@@ -327,7 +327,8 @@ play, spot a Dwarf": as a not-offered candidate in hand, lay the Dwarf ally Grim
 playable, or its own text refuses it; Card_01_364_Tests). Théoden signet: its
 readers (I Am Here 5_84, Forth Eorlingas! 4_275, No Living Man 8_90) each exert Théoden; the Théoden who can exert
 twice and has not the signet himself is Tall and Proud 8_92 (vitality 3, Aragorn signet; the three of sets 4 and 5
-have vitality 2). Horn of the Mark 9_45 gives it to Merry or Pippin beside his printed signet. `packet.py --find`
+have vitality 2). Horn of the Mark 9_45 gives it to Merry or Pippin beside his printed signet. The rig reads no signet, so a signet another card
+gives is read through one of these readers (Card_09_045_Tests: I Am Here 5_84). `packet.py --find`
 prints a signet at the end of the id line ("signet Frodo"). A possession and an artifact on one Gandalf: Glamdring 1_75
 (hand weapon, cost 2) and Gandalf's Staff 2_22 (Staff, cost 2); Wizard Staff 2_29 is a Staff too, so beside Gandalf's
 Staff it is not offered to him (one item of a class; met while building Card_02_023_Tests, which lays the pair).

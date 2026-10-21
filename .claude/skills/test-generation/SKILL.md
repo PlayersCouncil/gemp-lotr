@@ -484,7 +484,9 @@ card in place of the chosen one passes. Where the requirement
 stands on a Skirmish ability ("Skirmish: If bearer is an unbound Hobbit, discard this possession to ..."), a bearer who
 meets it outside the skirmish is a valid candidate (the text names no skirmish), and the requirement owes the culture
 spread of "Bearer must be a Hobbit" (11_171: Pippin, Trollslayer beside Merry); for "unbound" the invalid candidates
-are a Ring-bound companion (Sam) and an ally of the race (Bounder 1_286: only companions are unbound, CR 4.2). The same
+are a Ring-bound companion (Sam) and an ally of the race (Bounder 1_286: only companions are unbound, CR 4.2). Where the
+text also asks a number no ally of the race has in print (vitality over 3), raise the ally's by hand (Q-0213: E), so
+that only "unbound" keeps him out (Everyone Knows 9_50). The same
 holds for "unbound" in a spot ("While you can spot an unbound Hobbit", Derndingle 4_330): lay the ally in the support
 area whatever his home site, since a spot does not ask where he stands, or `hobbit,not(ring-bound)` passes.
 

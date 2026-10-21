@@ -731,6 +731,10 @@ that does something to "a minion" always has one: its `requires: CanSpot minion`
 `-` on a board with nothing to act on (Q-0034) is owed for it (Race Text 94_11). That covers the minion only:
 where the trigger needs a second card as well ("assign a minion to skirmish the Ring-bearer", Race Text 94_26), a
 board on which it does nothing still arises (the Ring-bearer hindered) and the `-` is owed (F-0337).
+With a minion in play left UNASSIGNED, `SkipToAssignments()`, `FreepsDeclineAssignments()` and
+`ShadowDeclineAssignments()` do not reach the regroup phase: the game is still in the assignment phase at the
+Free Peoples "Play Assignment action" choice, and passing it asks him to assign again (probe, dec-b9_44-l).
+`SkipToPhase(Phase.REGROUP)` reaches the regroup phase with the minions unassigned (Card_09_044_Tests).
 
 **Minions do not survive a turn.** `SkipToSite(n)` plays whole turns for both players and ends in player 1's
 fellowship phase at site n. Minions and anything attached to them are discarded on the way, so put Shadow cards
@@ -1073,6 +1077,9 @@ decision, still in the regroup phase with `GetMoveCount()` 1 of `GetMoveLimit()`
 skipper runs on into the other player's fellowship phase, where an `assertFalse` of "another move" shows
 nothing. With player 1 as the mover, a card put in his hand (`MoveCardsToHand`) is enough to stop the skipper
 at his "Reconcile" (Shores of Nen Hithoel 1_359's tests).
+A Shadow Response to his own regroup reconcile (Ring of Rancor 9_44, "If a player reconciles") stops
+`SkipToMovementDecision()` short too: at the Shadow player's "Optional responses", ahead of "another move";
+answer it (`ShadowDeclineOptionalTrigger()`) and the question follows (Card_09_044_Tests).
 Keep an undrawn card in the mover's deck and read the count, the limit and the reconcile
 (Card_94_005_Tests).
 The trigger `FPDecidedToStay` (Very Nice Friends 7_76, "If you do not move again this turn", its only user) fires
