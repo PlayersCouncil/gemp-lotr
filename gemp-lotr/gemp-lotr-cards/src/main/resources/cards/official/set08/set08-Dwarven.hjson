@@ -33,7 +33,7 @@
 				cost: {
 					type: spot
 					text: Choose a Dwarf to spot
-					select: choose(dwarf)
+					select: choose(dwarf,damage)
 					memorize: chosenDwarf
 				}
 				effect: [
@@ -81,7 +81,7 @@
 			cost: {
 				type: spot
 				text: Choose a Dwarf to spot
-				select: choose(dwarf)
+				select: choose(dwarf,damage)
 				memorize: chosenDwarf
 			}
 			effect: [
