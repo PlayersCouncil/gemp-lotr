@@ -414,6 +414,10 @@ invalid one is Frodo bearing The Gaffer's Pipe 1_292 (a Pipe possession, "Bearer
 ability not reached). The Ruling Ring is NOT that card: its type is The One Ring, no item, so `hasAttached(item)`
 passes it and only the Pipe tells `weapon` from `item` (Card_02_103_Tests).
 
+**A Hobbit companion who wins a skirmish, by printed cards alone.** Merry 1_303 bearing Hobbit Sword 1_299 (3, +2
+for the Sword, +2 while he bears a weapon: 7); Sam, Loyal Friend 19_32 bearing a Hobbit Sword with three [shire]
+companions spotted (3 +2 +2: 7). Each beats a Goblin Runner 1_178 (strength 5) with no pump (Card_19_031_Tests).
+
 **A [rohan] Man who is an ally (and a second).** Guma, Plains Farmer 4_277; Hlafwine, Village Farmhand 4_281. Each:
 unique, cost 1, strength 4, vitality 2, home 4T (never fighting on a Fellowship path), Villager; discarded if an
 opponent controls his home site. Guma: "Fellowship: Exert Guma to heal a [rohan] Man"; Hlafwine: "Skirmish: Exert
@@ -960,7 +964,9 @@ discard one of his own conditions. Brooding on Tomorrow 10_14 does the same on a
 top of your draw deck".** Midgewater Moors 1_333; Uruk-hai Sword 1_160. The Moors (FOTR site 2, plains): "Each time a
 minion is played, the Free Peoples player discards a card from hand", written `forced: true`, so the bar is asked of
 it and only its side lets it through; it is the site doer for "a Shadow card makes you discard from hand" too (Old
-Noakes 3_111, Card_03_111_Tests). The bar is asked only of a discard written `forced: true`: Search Far and Wide
+Noakes 3_111, Card_03_111_Tests). A Goblin Runner 1_178 played there sets off its own "add (2)" (built required,
+F-0009) beside the Moors, so the Free Peoples player orders the two first: `FreepsResolveActionOrder("Midgewater
+Moors")` before the discard choice is read (Card_19_028_Tests). The bar is asked only of a discard written `forced: true`: Search Far and Wide
 4_56's cost (the top card of the deck) writes `false` and shows nothing as a candidate, whatever its side. The Sword
 ([isengard] hand weapon on an Uruk-hai, Uruk-hai Band 4_202): "Each time bearer wins a skirmish, the Free Peoples
 player must discard the top card of his or her draw deck"; the loser's wound and its trigger are ordered by the Free
