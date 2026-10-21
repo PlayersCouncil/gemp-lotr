@@ -74,7 +74,9 @@ public final class ScenarioText implements LiveScenario.TextRenderer {
                 //A hint is what is said when a card the step does not allow is picked: one for a card it allows is never said
                 for (String card : step.allow.hints.keySet())
                     for (ScenarioDefinition.Answer answer : step.allow.answers)
-                        if (answer.cards().contains(card) && answer.kind() != ScenarioDefinition.AnswerKind.ASSIGN) {
+                        //(one allowed only while a filter holds, choose(boromir, not(exhausted)), has its hint for when it does not)
+                        if (answer.cards().contains(card) && answer.kind() != ScenarioDefinition.AnswerKind.ASSIGN
+                                && answer.picks().stream().noneMatch(pick -> card.equals(pick.alias()) && !pick.plain())) {
                             problems.add(step.describe() + " hints: " + card + " is among the answers the step allows ("
                                     + answer.source() + "), so its hint is never shown: a hint is for a card that is not allowed");
                             break;

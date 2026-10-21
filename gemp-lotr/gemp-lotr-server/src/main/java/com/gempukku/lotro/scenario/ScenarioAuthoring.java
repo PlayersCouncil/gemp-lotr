@@ -328,7 +328,11 @@ public class ScenarioAuthoring {
          */
         @Override
         public boolean writesInto(Step step) {
-            return session.recording && step.until != null && step.parent == null && !step.pause && !step.block;
+            //(only the script's last step, which is the one being written, or one waiting for its answer: a repeating
+            // step further back is played by what it says, so that what it allows can be tried while "Write down
+            // what I do" is on)
+            return session.recording && step.until != null && step.parent == null && !step.pause && !step.block
+                    && ((!def.steps.isEmpty() && def.steps.getLast() == step) || awaiting.contains(step));
         }
 
         /**
@@ -669,6 +673,12 @@ public class ScenarioAuthoring {
                 for (Answer one : step.allow.answers)
                     if (one.source().equals(term))
                         allowed = true;
+            //(nor is anything the step already allowed, however it says so: choose(boromir, not(exhausted)) allows
+            // choose(boromir) while he is not exhausted, and writing that in as well would allow him for good)
+            var shown = ruling.shown();
+            if (shown != null && shown.allowed() != null && (pass ? shown.passAllowed()
+                    : shown.allowed().stream().anyMatch(one -> sameAnswer(ruling.decision(), one, answer))))
+                allowed = true;
             if (!allowed && !(pass && step.allow != null && step.allow.passWhen != null)) {
                 JsonValue allow = json.get("allow");
                 if (allow == null) {
@@ -2901,13 +2911,14 @@ public class ScenarioAuthoring {
         List<Map<String, Object>> found = new ArrayList<>();
         if (query == null || query.trim().length() < 2)
             return found;
-        String[] words = query.trim().toLowerCase(Locale.ROOT).split("\\s+");
+        //(without regard to accents, as the deck builder searches: "palantir" finds Palantír)
+        String[] words = com.gempukku.lotro.common.Names.SanitizeDisplayName(query.trim()).toLowerCase(Locale.ROOT).split("\\s+");
         List<Map.Entry<String, LotroCardBlueprint>> matches = new ArrayList<>();
         for (Map.Entry<String, LotroCardBlueprint> card : _library.getBaseCards().entrySet()) {
             LotroCardBlueprint blueprint = card.getValue();
             if (blueprint == null || blueprint.getTitle() == null || (blueprint.getCardType() == CardType.SITE) != sites)
                 continue;
-            String name = GameUtils.getFullName(blueprint).toLowerCase(Locale.ROOT);
+            String name = com.gempukku.lotro.common.Names.SanitizeDisplayName(GameUtils.getFullName(blueprint)).toLowerCase(Locale.ROOT);
             boolean all = true;
             for (String word : words)
                 if (!name.contains(word) && !card.getKey().equalsIgnoreCase(word))

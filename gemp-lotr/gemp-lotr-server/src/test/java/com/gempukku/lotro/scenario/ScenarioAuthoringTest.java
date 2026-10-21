@@ -642,6 +642,40 @@ public class ScenarioAuthoringTest {
     }
 
     @Test
+    public void ARepeatingStepWithStepsAfterItHoldsItsAuthorToWhatItAllowsWhileWritingDown() throws Exception {
+        Files.createDirectories(new File(canon, "tutorials").toPath());
+        Files.writeString(new File(canon, "tutorials/both.hjson").toPath(), ScenarioTesting.scenario("""
+                	opponent: {
+                		fallback: pass
+                	}
+                	setup: {
+                		freeps: {
+                			hand: aragorn, boromir
+                		}
+                	}
+                	steps: [
+                		{
+                			when: freeps, action, phase(fellowship), turn(1)
+                			until: phase(shadow)
+                			allow: play(aragorn), pass
+                		}
+                		{
+                			when: opponent, action, phase(shadow), turn(1)
+                			answer: pass
+                		}
+                	]
+                """).replace("id: test", "id: both"), StandardCharsets.UTF_8);
+        authoring.open(player, "both", true);
+        assertTrue(state().getBoolean("recording"));
+        Client client = new Client(game());
+        //It is not the step being written (the script goes on past it), so what it says is what may be done
+        JSONObject shown = client.lastStep();
+        assertNotNull("The step is shown with what it allows", shown.get("allow"));
+        assertTrue(shown.getJSONObject("allow").getBooleanValue("pass"));
+        assertEquals(1, shown.getJSONObject("allow").getJSONArray("answers").size());
+    }
+
+    @Test
     public void TheWayTheAuthorWentAtAForkIsTheWayAFreshGameGoes() throws Exception {
         Files.createDirectories(new File(canon, "tutorials").toPath());
         Files.writeString(new File(canon, "tutorials/fork.hjson").toPath(), ScenarioTesting.scenario("""

@@ -529,9 +529,22 @@ body.scenario-authoring #scenarioLayer {
     background: #3a3220;
 }
 
+/* Where the game is: plain to see among the rest */
 .sa-step.sa-current,
 .sa-end.sa-current {
-    box-shadow: inset 4px 0 0 #d8b24a;
+    background: #4d3f14 !important;
+    box-shadow: inset 0 0 0 1px #f0cf6a, inset 6px 0 0 #f0cf6a;
+    font-weight: bold;
+}
+
+.sa-step.sa-current .sa-when,
+.sa-step.sa-current .sa-act {
+    color: #fff;
+}
+
+.sa-step.sa-current .sa-num::before {
+    content: "\25b6\00a0";
+    color: #f0cf6a;
 }
 
 .sa-num {
@@ -599,13 +612,9 @@ body.scenario-authoring #scenarioLayer {
     border-radius: 3px;
 }
 
-.sa-tag.sa-bubbles {
-    color: #f0cf6a;
-}
-
+.sa-tag.sa-bubbles,
 .sa-tag.sa-flag {
-    color: #8fd08a;
-    border-color: #3d6a3a;
+    color: #17150f;
 }
 
 .sa-button.sa-go {
@@ -630,7 +639,7 @@ body.scenario-authoring #scenarioLayer {
 }
 
 .sa-step.sa-substep.sa-current {
-    box-shadow: inset 4px 0 0 #d8b24a;
+    box-shadow: inset 0 0 0 1px #f0cf6a, inset 6px 0 0 #f0cf6a;
 }
 
 .sa-step.sa-substep .sa-num {
@@ -1182,12 +1191,13 @@ body.sa-picking .scenario-pointer {
 .sa-ph-fellowship { border-left-color: #6fae63 !important; }
 .sa-ph-shadow { border-left-color: #9a72c8 !important; }
 .sa-ph-maneuver { border-left-color: #2fb5b0 !important; }
-.sa-ph-archery { border-left-color: #b8d234 !important; }
-.sa-ph-assignment { border-left-color: #4f8fc4 !important; }
-.sa-ph-skirmish { border-left-color: #d24b4b !important; }
-.sa-ph-regroup { border-left-color: #e8a33d !important; }
+.sa-ph-archery { border-left-color: #e8a33d !important; }
+.sa-ph-assignment { border-left-color: #c9a6ff !important; }
+.sa-ph-skirmish, .sa-ph-skirmishes { border-left-color: #d24b4b !important; }
+.sa-ph-regroup { border-left-color: #cdb184 !important; }
 .sa-ph-between_turns { border-left-color: #7d7d7d !important; }
-.sa-ph-block, .sa-ph-after-block { border-left-color: #c9a6ff !important; }
+/* (a block of several phases, and what follows it until a phase is named; a skirmishes block is the skirmish's) */
+.sa-ph-block, .sa-ph-after-block { border-left-color: #4f8fc4 !important; }
 .sa-ph-none { border-left-color: #4a4130 !important; }
 
 .sa-stephead .sa-tocurrent {

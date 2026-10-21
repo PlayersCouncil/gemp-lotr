@@ -1348,6 +1348,7 @@ var GempScenarioAuthor = Class.extend({
     PHASE_NAMES: {
         opening: "Before the first turn", fellowship: "Fellowship", shadow: "Shadow", maneuver: "Maneuver", archery: "Archery",
         assignment: "Assignment", skirmish: "Skirmish", regroup: "Regroup", between_turns: "Between turns", block: "Several phases, in any order",
+        skirmishes: "Assignment and skirmishes, in any order",
         "after-block": "After the block"
     },
 
@@ -1363,7 +1364,7 @@ var GempScenarioAuthor = Class.extend({
         var turn = /turn\(\s*(\d+)\s*\)/i.exec(when), phase = /phase\(\s*([a-z_]+)\s*\)/i.exec(when);
         var said = phase != null ? phase[1].toLowerCase() : null;
         if (step.anyOrder != null)
-            said = said || "block";
+            said = step.skirmishes ? "skirmishes" : said || "block";
         else if (said == null && seen != null)
             said = seen.phase;
         else if (said == null && /(^|,)\s*assign\s*(,|$)/i.test(when))
@@ -1477,10 +1478,9 @@ var GempScenarioAuthor = Class.extend({
                 tags.append(that.el("span", "sa-tag sa-bubbles", "\u25ac" + count).attr("title", count + " message" + (count == 1 ? "" : "s")));
             if (step.once)
                 tags.append(that.el("span", "sa-tag", "once").attr("title", "It applies to one decision. Without this, a step in a block applies to every decision that fits it, for as long as the block lasts."));
-            if (that.passesByItself(step)) {
-                row.addClass("sa-silent");
-                tags.append(that.el("span", "sa-tag", "by itself").attr("title", that.SILENT));
-            }
+            //(faded, and said on hover: a pass the game makes by itself)
+            if (that.passesByItself(step))
+                row.addClass("sa-silent").attr("title", that.SILENT);
             if (step.checkpoint)
                 tags.append(that.el("span", "sa-tag sa-flag", "\u2691").attr("title", "A checkpoint"));
             if (step.end)
@@ -3914,7 +3914,7 @@ var GempScenarioAuthor = Class.extend({
             return !card.removing;
         }), function (card) {
             return card.alias;
-        });
+        }).concat(this.siteAliases());
     },
 
     /** The changes in the cards (adds and takings-out) as the scenario's top-level parts: {cards, setup}. */
@@ -4310,7 +4310,9 @@ var GempScenarioAuthor = Class.extend({
             chosen.empty();
             var taken = that.boardAliases();
             //The first word of its name that says something: "The One Ring" is "one", not "the"
-            var words = $.grep(card.name.toLowerCase().replace(/[^a-z0-9 ]/g, "").split(" "), function (word) {
+            //(accents taken off first: Palantír is "palantir")
+            var plain = card.name.normalize ? card.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "") : card.name;
+            var words = $.grep(plain.toLowerCase().replace(/[^a-z0-9 ]/g, "").split(" "), function (word) {
                 return word.length > 0 && $.inArray(word, ["the", "a", "an", "of"]) < 0;
             });
             var stem = words[0] || "card";
