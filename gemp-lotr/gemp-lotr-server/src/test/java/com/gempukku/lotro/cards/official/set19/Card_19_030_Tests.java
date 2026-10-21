@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_19_030_Tests
@@ -17,8 +18,21 @@ public class Card_19_030_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "19_30");
-					// put other cards in here as needed for the test case
+					put("pippin", "19_30");
+
+					// Tales of three kinds, none of them [shire].
+					// Thorin's Harp: a [dwarven] condition in the support area, cost 0; a maneuver ability used only on purpose
+					put("harp", "18_3");
+					// The Saga of Elendil: a [gondor] condition a [gondor] companion bears (vitality +1)
+					put("saga", "1_114");
+					// Scroll of Isildur: a [gondor] artifact in the support area; to play, spot a [gondor] Man
+					put("scroll", "9_36");
+					// Banner of the White Tree: a tale that is a Maneuver event, never in play
+					put("banner1", "3_39");
+					put("banner2", "3_39");
+					put("lord", "1_21");          // Lord of Moria: a [dwarven] support-area condition that is no tale; it concerns Dwarves only
+
+					put("aragorn", "1_89");       // Aragorn, Ranger of the North: a [gondor] Man, strength 8; a maneuver ability only
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +60,7 @@ public class Card_19_030_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("pippin");
 
 		assertEquals("Pippin", card.getBlueprint().getTitle());
 		assertEquals("Steadfast Friend", card.getBlueprint().getSubtitle());
@@ -62,18 +76,52 @@ public class Card_19_030_Tests
 		assertEquals(8, card.getBlueprint().getResistance());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void PippinTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void StrengthPlus1ForEachTaleInPlayOfWhateverCultureOrType() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var pippin = scn.GetFreepsCard("pippin");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var harp = scn.GetFreepsCard("harp");
+		var saga = scn.GetFreepsCard("saga");
+		var scroll = scn.GetFreepsCard("scroll");
+		var bannerInHand = scn.GetFreepsCard("banner1");
+		var bannerInDiscard = scn.GetFreepsCard("banner2");
+		var lord = scn.GetFreepsCard("lord");
+
+		// Frodo and Pippin are the only [shire] companions: a bonus capped at that count would stop at +2.
+		scn.MoveCompanionsToTable(pippin, aragorn);
+		scn.MoveCardsToSupportArea(lord);
+		scn.MoveCardsToHand(harp, saga, scroll, bannerInHand);
+		scn.MoveCardsToDiscard(bannerInDiscard);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		// A condition that is no tale in play, a tale in hand and a tale in the discard pile: nothing to spot.
+		assertInZone(Zone.SUPPORT, lord);
+		assertInHand(bannerInHand);
+		assertInZone(Zone.DISCARD, bannerInDiscard);
+		assertEquals(3, scn.GetStrength(pippin));
+		assertEquals(8, scn.GetStrength(aragorn));
+
+		// A [dwarven] tale in the support area.
+		scn.FreepsPlayCard(harp);
+		assertInZone(Zone.SUPPORT, harp);
+		assertEquals(4, scn.GetStrength(pippin));
+
+		// A [gondor] tale borne by Aragorn, the only [gondor] companion.
+		scn.FreepsPlayCard(saga);
+		assertAttachedTo(saga, aragorn);
+		assertEquals(5, scn.GetStrength(pippin));
+
+		// A tale that is an artifact: three tales, +3, past the two [shire] companions.
+		scn.FreepsPlayCard(scroll);
+		assertInZone(Zone.SUPPORT, scroll);
+		assertEquals(6, scn.GetStrength(pippin));
+
+		// Pippin alone.
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertInHand(bannerInHand);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }
