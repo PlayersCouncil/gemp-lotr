@@ -386,6 +386,16 @@ public class DefaultLotroFormat implements LotroFormat {
 
     @Override
     public String validateCard(String blueprintId) {
+        return validateCard(blueprintId, true);
+    }
+
+    /**
+     * What this format has against one card, or null if nothing.
+     * @param heldToSets False for a card that need not come from one of this format's sets: a site in the adventure
+     * deck of a player whose sites may be of any block.  The X-list and the errata are read against it all the
+     * same, since they are the format's word on that one card and not on which sets or blocks it plays.
+     */
+    private String validateCard(String blueprintId, boolean heldToSets) {
         blueprintId = _library.getBaseBlueprintId(blueprintId);
         if (LotroCardBlueprintLibrary.isPlaceholderId(blueprintId))
             return "Future prize placeholders cannot be played";
@@ -394,7 +404,7 @@ public class DefaultLotroFormat implements LotroFormat {
             if (_validCards.contains(blueprintId) || _errataCardMap.containsValue(blueprintId))
                 return null;
 
-            if (!_validSets.isEmpty() && !isValidInSets(blueprintId))
+            if (heldToSets && !_validSets.isEmpty() && !isValidInSets(blueprintId))
                 return "Card not from valid set: " + GameUtils.getFullName(_library.getLotroCardBlueprint(blueprintId));
 
             // Banned cards
@@ -758,15 +768,22 @@ public class DefaultLotroFormat implements LotroFormat {
 
         if (skipBlockValidation) {
             // Meta-site override: skip normal block/set validation for sites.
-            // Only check that each card is actually a site, and enforce the
-            // "Movie-mix OR Shadows-only, not both" rule.
+            // Check that each card is actually a site, enforce the
+            // "Movie-mix OR Shadows-only, not both" rule, and hold each site to
+            // the format's X-list and errata, which are not rules of block:
+            // "sites from any block" lifts the block rule and nothing else.
             boolean hasMovieBlock = false;
             boolean hasShadows = false;
             for (String site : sites) {
                 try {
                     LotroCardBlueprint bp = _library.getLotroCardBlueprint(site);
+                    // The one reading of a single site under the override: the deck builder's card list
+                    // asks it too, so the list offers the sites that validate here
+                    String invalid = validateSite(site, context);
+                    if (invalid != null && !invalid.isEmpty()) {
+                        result += invalid + "\n";
+                    }
                     if (bp.getCardType() != CardType.SITE) {
-                        result += "Card assigned as Site is not really a site.\n";
                         continue;
                     }
                     SitesBlock block = bp.getSiteBlock();
@@ -787,7 +804,7 @@ public class DefaultLotroFormat implements LotroFormat {
             for (String site : sites) {
                 var valid = validateSite(site);
                 if (valid != null) {
-                    result += valid;
+                    result += valid + "\n";
                 }
             }
             if (_siteBlock == SitesBlock.MULTIPATH) {
@@ -814,6 +831,43 @@ public class DefaultLotroFormat implements LotroFormat {
 
     @Override
     public String validateSite(String blueprintId) {
+        return validateSite(blueprintId, null);
+    }
+
+    /**
+     * The blocks that "sites from any block" opens to an adventure deck: the three of the Movie and Shadows, the
+     * ones the parenthesis of that text names ("You may either mix any Movie block sites together, or use any
+     * Shadow sites, but not both"; Q-0219).
+     */
+    private static final Set<SitesBlock> BLOCKS_OPENED_BY_ANY_BLOCK =
+            EnumSet.of(SitesBlock.FELLOWSHIP, SitesBlock.TWO_TOWERS, SitesBlock.KING, SitesBlock.SHADOWS);
+
+    /**
+     * Whether a site is of a block this format plays on its own account, with no override: a site of its one
+     * block, or, for a format of any one path (Multipath), a site it has as a card of its own (what validateCard
+     * does not call "not from valid set").
+     */
+    private boolean isOfOwnBlock(String blueprintId, LotroCardBlueprint site) {
+        if (_siteBlock != SitesBlock.MULTIPATH)
+            return site.getSiteBlock() == _siteBlock;
+        String baseId = _library.getBaseBlueprintId(blueprintId);
+        return _validCards.contains(baseId) || _errataCardMap.containsValue(baseId)
+                || _validSets.isEmpty() || isValidInSets(baseId);
+    }
+
+    /**
+     * What this format has against one site, or null if nothing.
+     * @param context The deck building overrides of the player whose adventure deck the site is for, or null.
+     * Where they say his sites may be of any block (skipSiteBlockValidation), the site need not be of this
+     * format's block nor from one of its sets; the X-list and the errata are read against it all the same.
+     * "Any block" is the Fellowship, Towers, King and Shadows blocks: a site of another block (a Hobbit site) is
+     * refused for its block unless this format plays it with no override (Q-0219).
+     * This is the one reading of a single site: deck validation and the deck builder's card list both ask it.
+     */
+    @Override
+    public String validateSite(String blueprintId, DeckValidationContext context) {
+        boolean anyBlock = context != null && context.shouldSkipSiteBlockValidation();
+
         LotroCardBlueprint bp;
         try {
             bp = _library.getLotroCardBlueprint(blueprintId);
@@ -826,14 +880,17 @@ public class DefaultLotroFormat implements LotroFormat {
         if (bp.getCardType() != CardType.SITE) {
             return "Card assigned as Site is not really a site.";
         }
-        else if (bp.getSiteBlock() != _siteBlock && _siteBlock != SitesBlock.MULTIPATH) {
+        else if (!anyBlock && bp.getSiteBlock() != _siteBlock && _siteBlock != SitesBlock.MULTIPATH) {
+            return "Site does not use supported block: " + GameUtils.getFullName(bp);
+        }
+        else if (anyBlock && !BLOCKS_OPENED_BY_ANY_BLOCK.contains(bp.getSiteBlock()) && !isOfOwnBlock(blueprintId, bp)) {
             return "Site does not use supported block: " + GameUtils.getFullName(bp);
         }
 //        else if (_siteBlock == SitesBlock.MULTIPATH && bp.getSiteBlock() == SitesBlock.SHADOWS) {
 //            return "Post-Shadows site not allowed in Multipath: " + GameUtils.getFullName(bp);
 //        }
         else {
-            String invalid = validateCard(blueprintId);
+            String invalid = validateCard(blueprintId, !anyBlock);
             if(invalid != null && !invalid.isEmpty()) {
                 return invalid;
             }

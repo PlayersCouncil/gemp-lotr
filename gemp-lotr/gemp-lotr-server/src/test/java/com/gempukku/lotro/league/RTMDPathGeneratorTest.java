@@ -1,6 +1,6 @@
 package com.gempukku.lotro.league;
 
-import com.gempukku.lotro.at.AbstractAtTest;
+import com.gempukku.lotro.framework.LoadedLibraries;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
  * mapping.  Most tests run against a synthetic pool so that the expectations do not move when cards are added;
  * the last one checks the real card library still produces a usable path.
  */
-public class RTMDPathGeneratorTest extends AbstractAtTest {
+public class RTMDPathGeneratorTest extends LoadedLibraries {
 
     // ------------------------------------------------------------------------------------------------
     // Fixtures

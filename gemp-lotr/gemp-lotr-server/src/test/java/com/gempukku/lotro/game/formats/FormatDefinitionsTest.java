@@ -1,6 +1,6 @@
 package com.gempukku.lotro.game.formats;
 
-import com.gempukku.lotro.at.AbstractAtTest;
+import com.gempukku.lotro.framework.LoadedLibraries;
 import com.gempukku.lotro.game.LotroFormat;
 import com.gempukku.lotro.logic.GameUtils;
 import org.junit.Test;
@@ -13,7 +13,7 @@ import java.util.Map;
 import static org.junit.Assert.*;
 
 /** Help › Format Definitions data (GET /hall/formats/json), against the real formats and cards. */
-public class FormatDefinitionsTest extends AbstractAtTest {
+public class FormatDefinitionsTest extends LoadedLibraries {
 
     @SuppressWarnings("unchecked")
     private static List<Map<String, Object>> list(Map<String, Object> entry, String name) {

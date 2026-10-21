@@ -244,7 +244,7 @@ public class LotroGameMediator {
                             .append(card.getOwner());
                 }
 
-                Map<Token, Integer> map = _lotroGame.getGameState().getTokens(card);
+                Map<Token, Integer> map = _lotroGame.getGameState().getTokensHeld(card);
                 if (map != null && map.size() > 0) {
                     sb.append("<br><b>Tokens:</b>");
                     for (Map.Entry<Token, Integer> tokenIntegerEntry : map.entrySet()) {
@@ -272,7 +272,11 @@ public class LotroGameMediator {
                 sb.append("<br><br><b>Effective stats:</b>");
                 try {
                     PhysicalCard target = card.getAttachedTo();
-                    int twilightCost = _lotroGame.getModifiersQuerying().getTwilightCostToPlay(_lotroGame, card, target, 0, false);
+                    // A card in play costs the number printed on it (CR 4.2 "twilight cost"), and a site there
+                    // shows its Shadow number as it stands; a card anywhere else shows what it would cost to play.
+                    int twilightCost = card.getZone() != null && card.getZone().isInPlay()
+                            ? _lotroGame.getModifiersQuerying().getCurrentTwilightCost(_lotroGame, card)
+                            : _lotroGame.getModifiersQuerying().getTwilightCostToPlay(_lotroGame, card, target, 0, false);
                     sb.append("<br><b>Twilight cost:</b> ")
                             .append(twilightCost);
                 } catch (UnsupportedOperationException ignored) {
@@ -442,6 +446,7 @@ public class LotroGameMediator {
                             try {
                                 _userFeedback.participantDecided(playerName);
                                 awaitingDecision.decisionMade(answer);
+                                _userFeedback.decisionAccepted(playerName, awaitingDecision, answer);
 
                                 // Decision successfully made, add the time to user clock
                                 addTimeSpentOnDecisionToUserClock(playerName);
@@ -494,6 +499,8 @@ public class LotroGameMediator {
                         if (!accepted.equals(answer))
                             LOG.warn("Bot " + botName + " game=" + _gameId + " decision=\"" + awaitingDecision.getText()
                                     + "\": answer \"" + answer + "\" was rejected, used fallback \"" + accepted + "\"");
+
+                        _userFeedback.decisionAccepted(botName, awaitingDecision, accepted);
 
                         // Decision successfully made, add the time to user clock
                         addTimeSpentOnDecisionToUserClock(botName);

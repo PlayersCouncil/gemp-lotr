@@ -1,6 +1,6 @@
 package com.gempukku.lotro.league;
 
-import com.gempukku.lotro.at.AbstractAtTest;
+import com.gempukku.lotro.framework.LoadedLibraries;
 import com.gempukku.lotro.common.DateUtils;
 import org.junit.Test;
 
@@ -8,7 +8,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class ConstructedLeagueTest extends AbstractAtTest {
+public class ConstructedLeagueTest extends LoadedLibraries {
     @Test
     public void testParameters() {
         //20240726,default,0.7,1,1,pc_movie,3,6
