@@ -308,7 +308,8 @@ of a `cardtest.py run` or `probe` turns the rule off for that run.
 **A choice between two things to do offers what can be done in full** (F-0310; CR 4.2 "effect"). Of "<do X> or
 <do Y>" as an effect the game offers the branches that can be performed in full, and carries out a lone one with
 no question. Where none can be but something can be done, every branch is offered and as much of the one chosen
-as can be done is done; where nothing can be done on any, nothing is asked (F-0116). Here Lies Balin 1_19: no
+as can be done is done, a branch that can do nothing at all included (Make Haste 10_109, a pool of 1 and no
+minion: both offered, "remove (2)" takes the 1; Nine-fingered Frodo 10_112, no burden and 1 threat); where nothing can be done on any, nothing is asked (F-0116). Here Lies Balin 1_19: no
 Orc, nothing asked; one Orc of 1 vitality, both offered; two such Orcs, "wound 2 Orcs" unasked; one Orc of 3
 vitality, "wound 1 Orc twice" unasked (mechanics/choices/ChoiceOfWhatCanBeDoneInFullTests). A choice's `memorize` holds
 the text of the branch taken, asked or not.
