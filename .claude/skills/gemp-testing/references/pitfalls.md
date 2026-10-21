@@ -28,7 +28,7 @@ has a candidate, and a `ShadowChoose("draw deck")` then fails inside the next de
 discard pile always, and for the draw deck only where its branch says `mustExist: true`: without it a play from
 a draw deck can always be tried (Q-0019), so with the one candidate in the discard pile both piles are still
 offered and the test answers `FreepsChoose("discard pile")` (A Wizard Is Never Late 30_23, `Card_31_019_Tests`).
-So does a transfer: with one legal bearer it is made without asking, and so does a card played on a bearer (Merry's Dagger 9_18 with Merry the only Merry beside Pippin: attached unasked, the game back at fellowship actions). So does a play from a pile: with one card the
+So does a transfer: with one legal bearer it is made without asking, and so does a card played on a bearer (Merry's Dagger 9_18 with Merry the only Merry beside Pippin: attached unasked, the game back at fellowship actions). A card moved on from its bearer has that bearer as no candidate: with two minions in play, the second transfer goes to the other one unasked (Fifth Level 10_32). So does a play from a pile: with one card the
 effect could play there, it is played unasked (Final Strike 10_20 lays two Gollums in the discard pile to show
 the choice).
 

@@ -592,6 +592,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Borne by a <race or type>" and a hindered bearer (Q-0108, F-0212; in the engine since engine pass 26, Q-0220: E) [Q-0237, Q-0252]
 - "Support" and support(<whose>) (Q-0099, Q-0101)
 - "Transfer <another card> from your support area to <a character>" on a trigger with a cost (Úlairë Otsëa 3_86; F-0559) [Q-0022, Q-0034]
+- "Transfer this <card> to <a character>" with no "from your support area" (Q-0022: asked card by card) [Q-0064, Q-0349]
 - A character hindered while assigned or skirmishing leaves it, and a minion so freed is not a leftover minion (CR 5.0 "hinder"; CR 4.2 "assignment phase")
 - A hindered Ring-bearer cannot be discarded or returned to hand (F-0174)
 - "Discard <X> he bears" beside a bar on X ("cannot bear", "may not be played on") is a standing discard, built as Shadowfax 17_24 is (Q-0223: B; Q-0229: C; built by engine pass 26) [F-0427, F-0361]
