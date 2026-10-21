@@ -577,7 +577,7 @@ and the last, unasked, lies on top (`GetFreepsTopOfDeck()`, `GetFromTopOfFreepsD
 once (`FreepsChooseCard(first)`), and the order read is the player's own answer (`Card_09_020_Tests`). Leave other
 cards in the deck under them, or a reading of "on top" cannot be told from one of "anywhere in the deck".
 
-**Two offers of one response.** When the same card offers the same trigger or response twice in one decision (two Nazgul winning one skirmish), each offer's text ends with " (for <the cards its trigger memorized>)". A single offer reads as before. Choose between them by that text.
+**Two offers of one response.** When the same card offers the same trigger or response twice in one decision (two Nazgul winning one skirmish), each offer's text ends with " (for <the cards its trigger memorized>)". A single offer reads as before. Choose between them by that text. The same holds for a response EVENT in hand whose trigger memorizes (Sack of the Shire 9_40: "Play Sack of the Shire (for Uruk-hai Raiding Party)"): "that minion" is picked by the offer taken, and the event's own choice is never asked, so read `ShadowActionAvailable("Play X (for Y)")` and `ShadowGetActionCount()` and take one with `ShadowChooseAction(text)`, not a card choice.
 
 **When a wound or an overwhelm kills and something answers it.** The Free Peoples player, whoever owns the trigger,
 gets a "Required responses" decision listing the rule and the trigger (an overwhelm, which places no wound, raises
