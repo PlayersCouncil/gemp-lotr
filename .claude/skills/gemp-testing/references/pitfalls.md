@@ -1374,6 +1374,10 @@ exertion's included, and loses it as a wound is healed: a helper that is wounded
 no companion is offered from hand whatever else he needs, and other cards are played as ever
 (mechanics/game/RuleOfNineTests). `MoveCompanionsToTable` and `MoveCardsToDeadPile` do not ask.
 
+**`MoveCardsToDeadPile` puts a card in its OWNER's dead pile.** A Shadow player's copy goes to his own pile, not
+to "the dead pile" of a Decipher text (the Free Peoples player's, Q-0131); `assertInZone(Zone.DEAD, ...)` does not
+tell the piles apart, and `GetFreepsDeadCount` does (Card_10_061_Tests, the Shadow player's Boromir 1_97; dec-b10_61).
+
 **Damage bonuses add up, and "loses all damage bonuses" shuts later ones out** (CR 4.2 "damage bonus").
 `GetKeywordCount(card, Keyword.DAMAGE)` is a character's bonus: his own, what a card in play gives him and what an
 event gave him for the skirmish, added together. The winners place one wound and one more for each damage +1
