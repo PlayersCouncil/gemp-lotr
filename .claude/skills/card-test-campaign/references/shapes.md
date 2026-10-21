@@ -308,7 +308,9 @@ that lets X run past it is a finding; otherwise X runs as far as its own cost ca
 and Q-0034, under "What is offered and what is asked" in the rulings log.
 None of this speaks of an X that is a number taken off a value ("make your minion damage -X to ...", Race Text
 94_10): built, and asserted by its old tests, as held to the bonus the chosen minion has, with a minion that has
-none not offered; whether a value may be driven below what is there to pay such a price is asked (Q-0191, open).
+none not offered; such an X is held to the value there (Q-0191: A, Ketura 2026-10-09). Whether a printed floor,
+"make the fellowship archery total -X (to a minimum of 0)" (Reckless We Rode 8_12, A Grey Ship 8_9), lets X pass
+the total is asked (Q-0346, open); both are built and tested as held to the total.
 
 **"Spot a Dwarf who is damage +X and exert that Dwarf ... to <do> X": X is the bonus he had when he was spotted (Q-0256: A; built by engine pass 28), and a Dwarf
 with no bonus.** The erratum Blood Runs Chill 58_3 remembers the bonus BEFORE the exertion (a `spot` with
