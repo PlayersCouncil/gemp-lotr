@@ -671,6 +671,10 @@ false there. Two required answers to one "is about to take a wound" are put to t
 the same skirmish (`mechanics/actions/RequiredActionsAnsweringOneTriggerTests`). It comes wherever two required
 triggers answer one moment, wounds or none: a minion played at Midgewater Moors 1_333 with a required when-played
 trigger of its own (Goblin Runner 1_178: `FreepsResolveActionOrder("Midgewater Moors")`, Card_03_111_Tests).
+A skirmish event's REQUIRED added `winsSkirmish` trigger ("If that Nazgûl wins this skirmish, ...": Unhindered 8_82)
+is such a pair with the loser's wound: after the passes that end the skirmish the wound is not yet placed; read
+`FreepsAwaitingRequiredResponseOrder()` and answer `FreepsResolveRuleFirst()` (Card_08_082_Tests; an optional one,
+Mastered By Madness 8_73, never meets it).
 
 **A candidate a helper's own text refuses shows nothing of the card under test.** A Hobbit already assigned is
 not offered to a second Orc Assassin 1_262's "assign a Hobbit to skirmish this minion" at any site, so reading him
