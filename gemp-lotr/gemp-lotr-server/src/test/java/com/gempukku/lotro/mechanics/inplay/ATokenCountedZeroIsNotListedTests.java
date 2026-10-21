@@ -17,9 +17,9 @@ import static org.junit.Assert.*;
 /**
  * A token taken off a card to the last one is no longer listed in the client's card info (Ketura's item, engine pass
  * 59).  The game keeps a count of 0 for a kind of token once had: a companion whose one wound was healed read
- * "Tokens: WOUND: 0" in the card info, and so did a card whose culture tokens were all removed.  The count is kept,
- * since a definition reads it (RemoveCultureTokens with no culture: Grond 58_103's "remove X" with X 0, whose own
- * test reads it after its tokens are gone); the card info lists GameState.getTokensHeld, which leaves it out.
+ * "Tokens: WOUND: 0" in the card info, and so did a card whose culture tokens were all removed.  The count is kept
+ * (no filter tells it from no count at all since engine pass 60: Filters.hasAnyCultureTokens at 0 is true of every
+ * card, F-0578); the card info lists GameState.getTokensHeld, which leaves it out.
  *
  * The card info itself is built by the server's game mediator, which no table reaches; getTokensHeld, what it
  * lists, is read here directly.  The table is the Fellowship block's, with Frodo, Son of Drogo as the Ring-bearer.

@@ -1526,8 +1526,8 @@ public class GameState {
     /**
      * The tokens a card has, each kind with its count, leaving out a kind whose count has come down to 0 (a wound
      * healed, the last culture token removed): what the card info lists (engine pass 59).  getTokens keeps such a
-     * kind at 0, and the definition word RemoveCultureTokens with no culture reads that 0 (hasAnyCultureTokens with
-     * a count of 0: Grond 58_103's "remove X" with X 0; F-0578), so the count is left there and only the listing drops it.
+     * kind at 0; no filter tells that 0 from a kind never held (Filters.hasAnyCultureTokens at 0 is true of every
+     * card since engine pass 60, F-0578), and only the listing drops it.
      * @param card The card.
      * @return The tokens on it, in no order; empty when it has none.
      */

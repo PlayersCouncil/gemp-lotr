@@ -1479,8 +1479,10 @@ cards on both sides (Larder 8_23 against Gladden Homestead 13_49 and Nice Fish 1
 for one at a time, and a card that leaves play keeps none of its tokens. The rule is shown in
 `mechanics/inplay/CultureTokensTests`: a card's own file reads its own candidates and count and no more, and never
 asserts that another player's card with such a token is NOT offered.
-A kind of token taken off to the last is kept at a count of 0 (`GameState.getTokens`; Grond 58_103's "remove X"
-with X 0 reads it), and the card info no longer lists it (`getTokensHeld`, engine pass 59; `mechanics/inplay/ATokenCountedZeroIsNotListedTests`).
+A kind of token taken off to the last is kept at a count of 0 (`GameState.getTokens`), and the card info no longer
+lists it (`getTokensHeld`, engine pass 59; `mechanics/inplay/ATokenCountedZeroIsNotListedTests`).  No filter tells
+that 0 from no count at all: `hasAnyCultureTokens(0)`, like `hasToken(token, 0)`, is true of every card (F-0578,
+engine pass 60: Grond 58_103 at X 0 did nothing on a Grond that never had a token; its file tests both).
 
 **A stacked card is not in play** (CR 4.2 "stack"). It cannot be spotted, does not count for uniqueness (a copy
 of a stacked unique card is played, and a third copy stacked beside it), is no companion for a move's twilight
