@@ -22,11 +22,12 @@
 			cost: {
 				type: discard
 				select: choose(culture(rohan),possession)
+				memorize: discardedPossession
 			},
 			effect: [
 				{
 					type: playCardFromDiscard
-					select: choose(culture(rohan),possession)
+					select: choose(culture(rohan),possession,not(memory(discardedPossession)))
 				}
 			]
 		}
