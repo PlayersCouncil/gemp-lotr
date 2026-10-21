@@ -21,23 +21,45 @@
 			}
 			effect: [
 				{
-					type: choice
-					texts: [
-						Exchange with card in dead pile
-						Exchange with card in discard
-					]
-					effects: [
+					type: If
+					check: [
 						{
-							type: exchangeCardsInHandWithCardsInDeadPile
-							selectInHand: choose(companion)
-							selectInDeadPile: choose(companion)
+							type: hasCardInHand
+							filter: companion
 						}
 						{
-							type: exchangeCardsInHandWithCardsInDiscard
-							selectInHand: choose(companion)
-							selectInDiscard: choose(companion)
+							type: or
+							requires: [
+								{
+									type: hasCardInDeadPile
+									filter: companion
+								}
+								{
+									type: hasCardInDiscard
+									filter: companion
+								}
+							]
 						}
 					]
+					true: {
+						type: choice
+						texts: [
+							Exchange with card in dead pile
+							Exchange with card in discard
+						]
+						effects: [
+							{
+								type: exchangeCardsInHandWithCardsInDeadPile
+								selectInHand: choose(companion)
+								selectInDeadPile: choose(companion)
+							}
+							{
+								type: exchangeCardsInHandWithCardsInDiscard
+								selectInHand: choose(companion)
+								selectInDiscard: choose(companion)
+							}
+						]
+					}
 				}
 			]
 		}
