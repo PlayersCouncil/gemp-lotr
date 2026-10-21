@@ -797,7 +797,10 @@ keeps the running total of the costs played in the twilight pool: `GetTwilight()
 companion, a card offered only while the total with its cost is 4 or less), and the pool is emptied as turn 1
 begins (Card_94_003_Tests). The total begins again at 0 as the next player's choice begins and the LAST player's
 total is still in the pool at the mulligan question: a pool read as 0 there, after `ShadowDeclineChoosing()`,
-shows nothing. Read "no tokens for a starting fellowship" in the first fellowship phase, with player 2 having
+shows nothing. A pending "Starting fellowship" choice is a showing of cards: `FreepsGetTotalRevealedCardCount()`
+reads 4 while player 1 chooses and `ShadowGetTotalRevealedCardCount()` 4 once player 2 does (each player's own
+choice; both 0 once it is answered: probe, dec-b8_34), so a reveal count read while one is pending shows nothing
+of a reveal (Faramir 8_34). Read "no tokens for a starting fellowship" in the first fellowship phase, with player 2 having
 played somebody too (mechanics/game/StartingFellowshipTests). Every rig table gives both players the same deck, so a
 directive's "the game goes on to the mulligan question" is: player 1 asked nothing
 (`FreepsAnyDecisionsAvailable()` false), player 2's "Starting fellowship" pending, and the mulligan question

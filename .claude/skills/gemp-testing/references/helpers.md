@@ -20,6 +20,11 @@ sites 2 or 3 it is roaming and costs 1 + 2, before its own (2) is added (Card_12
 **A weak minion that survives a hit.** Uruk Savage 1_151. Strength 5, vitality 3; Damage +1 is its whole text. An
 unboosted strength-6 companion beats it without killing it.
 
+**A minion of vitality 4, for "exhaust".** Siege Troop 8_106. A [sauron] Orc, strength 20, vitality 4, cost 8,
+site 5; Besieger and a regroup ability that exerts it twice to take control of a site, used only on purpose. On a
+vitality-3 minion exhaust, exert twice and wound twice are all 3 wounds; on this one exhaust is 3 and the others 2
+(Fourth Level 8_35, Card_08_035_Tests).
+
 **A minion with damage +1 and nothing else.** Uruk-hai Raiding Party 1_158. Strength 9, vitality 3, cost 4, site 5;
 Damage +1 is its whole text. With vitality 2: Orthanc Warrior 4_165 (strength 7, cost 2, site 5), killed by exactly
 two wounds, which tells "wound twice" from one wound and from two exertions.
@@ -420,7 +425,8 @@ among the candidates for "a character" or "a Man" (he may bear Flaming Brand 2_3
 exertion or a vitality threshold: Narsil 9_34 (hand weapon) and Ranger's Cloak 15_68 (cloak), each vitality +1 and
 "Bearer must be a [gondor] Man", make him 2 or 3 (Card_09_038_Tests, Card_09_046_Tests); for "exert bearer twice"
 on a hand weapon (Ithilien Blade 15_62, so no Narsil) +2 vitality by hand (Card_15_062_Tests), which is what notices a
-`companion` added to "a [gondor] Man".
+`companion` added to "a [gondor] Man". He is also the ally skirmishing for "a minion skirmishing a [gondor] Man":
+on the Towers path at site 3 (Card_08_035_Tests' GetTowersScenario), which is what notices `companion` added there.
 
 **An ally in a skirmish away from any home site (a Shadows-block path).** One Whom Men Would Follow 1_109. [gondor]
 Maneuver event, cost 0: exert Aragorn (any Aragorn; he keeps the wound), and a chosen ally is strength +2 and takes
