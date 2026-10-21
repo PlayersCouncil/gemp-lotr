@@ -782,6 +782,12 @@ companion (except the Ring-bearer)." Two copies wound one companion twice in one
 read "until the regroup phase" at its boundary. One wound from it is also the `-` of a trigger on an exertion
 whose effect would last the current phase: a skirmish wound shows nothing there (Card_13_075_Tests).
 
+**A Shadow CHARACTER whose effect exerts a character in the skirmish phase (the character doer of a bare "Shadow
+cards cannot exert X during a skirmish phase").** Shagrat, Captain of Cirith Ungol 10_99: [sauron] Uruk-hai,
+strength 13, damage +1; "Each time Shagrat loses a skirmish, you may exert a character" (`choose(character)`, any
+side). Raise his companion's strength by hand to beat 13; the trigger is offered while the skirmish phase resolves
+and the bar's phase still holds (Card_10_067_Tests, Card_10_068_Tests, Card_10_068_ErrataTests).
+
 **A Free Peoples wound on a minion in the maneuver phase.** Defend It and Hope 4_115. [gondor] Maneuver event, cost
 0: exert a [gondor] Man to wound a minion once, or twice if it is an Uruk-hai. Kills a minion of 1 vitality to
 leave a board with no minion to spot. Or Baruk Khazâd 5_5: [dwarven] Maneuver event, cost 0, exert a Dwarf to
