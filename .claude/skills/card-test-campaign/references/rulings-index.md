@@ -528,7 +528,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - What bounds an X: the action's costs, never what its effect can use (Q-0069, Q-0087, Q-0094, F-0067, F-0111). The rulings on X look two ways and are ... [Q-0062, Q-0015, Q-0034, Q-0191, Q-0346]
 - "Spot a Dwarf who is damage +X and exert that Dwarf ... to <do> X": X is the bonus he had when he was spotted (Q-0256: A; built by engine pass 28), ... [Q-0015, F-0571, F-0572, F-0573, F-0574]
 - "Exert your Wizard to choose a number. Make each minion with that twilight cost ..." (Gathering Wind 10_16): the number is part of the cost (F-0474). ...
-- "Discard a <kind> from hand to take a <kind> into hand from the discard pile" does not take back the card just discarded (Q-0192: A) [Q-0034, F-0521, Q-0320, F-0538, F-0543, F-0544, F-0545, Q-0331, F-0548]
+- "Discard a <kind> from hand to take a <kind> into hand from the discard pile" does not take back the card just discarded (Q-0192: A) [Q-0034, F-0521, Q-0320, F-0538, F-0543, F-0544, F-0545, Q-0331, F-0548, F-0577, F-0464]
 - The twilight cost of a card in play (F-0109, built)
 - The CR 4.2 "twilight cost" example (Rohirrim Road 7_332 with Catapult 8_32) is shown twice, and rightly
 - LeastDiscountToPlay bounds X in "remove X ... to play ... from your discard pile" (F-0067) [F-0392]
