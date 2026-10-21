@@ -2330,3 +2330,7 @@ support (yet). So the idea is that only [the first Shadow player] triggers the t
 (4) per Shadow player. This second-move requirement should be removed." So "the first Shadow phase" in a card's text
 names the first Shadow PLAYER's phase, not the turn's first move. The threat rule's entry text is "Assign threat
 wounds". Commit messages and comments name Ketura, never "her" (roles, "Name Ketura"). *[2026-10-21]*
+
+**"Place X wounds on minions" spreads the wounds as the player wishes (Q-0345, 2026-10-21).** Battle in Earnest 8_2:
+"Yes, this is A; 'place X wounds on Y' is the same structure as 'wound a Y for each X'". One minion may take several
+of the X wounds. *[2026-10-21]*
