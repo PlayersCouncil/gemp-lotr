@@ -224,7 +224,8 @@ several times (CR 4.2 "for each"). Built as `times` on one choice it is a findin
 round a single choice (12_99, 17_128). "Wound a minion ... once for each <thing>" is the same sentence (Behold the
 White Rider 4_88, Preparations 7_12: F-0458, F-0459, engine pass 26), and so is "Wound a companion ... Do this
 once for each companion over 5" (A Host Avails Little 1_251, whose CR 4.2 Section Three ruling says the same
-companion may be wounded twice: at seven companions the one wounded first is offered again; dec-b1_251). "For each <thing> YOU SPOT" is the player's count: he names a number
+companion may be wounded twice: at seven companions the one wounded first is offered again; dec-b1_251). "For each companion over N" with no "you spot" (Easterling Pillager 10_41, F-0582) is a count of
+the fellowship and asks nothing: `addBurdens` with `forEachYouCanSpot companion, over: N`. "For each <thing> YOU SPOT" is the player's count: he names a number
 from 0 to all there are (CR 4.2 "spot"; `chooseHowManyToSpot` and a `Repeat` that reads the number;
 `mechanics/choices/ChoosingHowManyToSpotTests`), and a test reads the number's bounds and names fewer than there are.
 Merry's Sword 57_242 counts every [rohan] companion unasked and was kept so (Q-0141: that card alone). Aragorn,

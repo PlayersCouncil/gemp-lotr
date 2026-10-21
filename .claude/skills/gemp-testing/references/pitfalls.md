@@ -147,8 +147,8 @@ card's rule: true while the cost can be paid. The Shadow player's own assignment
 you can spot") can be paid only if every repetition can (F-0425, engine pass 28): with fewer exertions left among
 the companions than Nazgûl the Regiment is not offered and nobody exerts.
 
-**`IsCharAssigned` reads only the skirmishes still waiting.** The game takes an assignment off its list as that
-skirmish begins, so `IsCharAssigned(card)` is false for the characters of the skirmish being fought
+**`IsCharAssigned` and `IsCharAssignedAgainst` read only the skirmishes still waiting.** The game takes an assignment off its list as that
+skirmish begins, so `IsCharAssigned(card)` and `IsCharAssignedAgainst(card, opponent)` (the same list) are false for the characters of the skirmish being fought
 (`IsCharSkirmishing` is true of them), while the definition word `assignedToSkirmish` counts them until the
 skirmish phase ends, which is after its win and lose triggers have been carried out (CR 4.2 "skirmish
 phase(s)"). A test of "assigned to a skirmish" at a win or lose trigger rests on that rule and reads the
