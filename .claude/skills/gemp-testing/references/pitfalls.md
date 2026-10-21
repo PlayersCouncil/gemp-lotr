@@ -62,6 +62,10 @@ test may say whose window comes first. It holds for cards a player chose togethe
 was named first, and one effect that takes several at once (exert every, heal, hinder, discard each) names them
 in that order in the game log. `mechanics/actions/TakenTogetherInCardIdOrderTests` shows each.
 
+**A stack from play asks where first, then what.** `StackCardsFromPlay` resolves its `where` ("Choose card to stack
+on") before its `select` ("Choose cards to stack"), whatever the text's word order: "stack your [sauron] minion on a
+site you control" asks the site, then the minion (Their Marching Companies 8_107, Card_08_107_Tests).
+
 **Choosing which skirmish to resolve is always asked.** Even when only one skirmish is left, the Free Peoples
 player is asked to choose it. `FreepsAssignAndResolve` answers that for the skirmish it sets up;
 after other skirmishes, call `FreepsResolveSkirmish(companion)`.
@@ -1244,7 +1248,9 @@ assign, the fierce assignment phase follows, which is the cheapest way to stand 
 
 **A bonus "until the regroup phase" from a skirmish trigger is gone once the last skirmish resolves.** The regroup
 phase begins at once, so a reading straight after the only (or last) skirmish shows the printed number, as if the
-trigger never fired. Read it with another skirmish still waiting ("Choose next skirmish to resolve") or in the
+trigger never fired. That holds for a trigger on the last skirmish's own win too: the bonus on the Troll that
+Olog-hai of Mordor 8_105 plays after the final fierce skirmish is gone as the trigger finishes, so its D reading
+comes from an earlier win (Card_08_105_Tests). Read it with another skirmish still waiting ("Choose next skirmish to resolve") or in the
 fierce round, and read it gone in the regroup phase (Card_01_263_Tests.EachLossToASauronOrcAddsAnotherPlusOneUntilTheRegroupPhase).
 The relentless round (CR 5.0 "relentless"; a third round after the fierce one, or a second where no minion is
 fierce) reads as the first does too: `Phase.ASSIGNMENT`, the assignment actions
