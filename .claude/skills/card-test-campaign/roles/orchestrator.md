@@ -240,3 +240,5 @@ context is compacted, and the summary that replaces it is somebody's recollectio
   change of plan.
 - A finding can turn out to need no change (F-0201). Close it `not-a-bug` with what was found, tell her, and ask
   the question her earlier answer now leaves open.
+
+**Name Ketura; no pronouns for Ketura in what is kept (Ketura, 2026-10-21).** In commit messages, code comments (Java, HJSON) and test Javadoc, write "Ketura's ruling", "Ketura's item", "Ketura (Q-0329)", never "her item", "her word", "she said": a reader of the history has no one for "her" to refer to. Quote Ketura's words with the name before them.

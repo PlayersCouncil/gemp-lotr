@@ -2321,3 +2321,12 @@ present it the same as the top-level version I think, with the one major differe
 be barred, only Hrethel (the response could respond to some other trigger and should not be locked out)." F-0563, a
 character who replaced another in a skirmish not "involved" at about-to-end (Sting 8_113, Brave and Loyal 10_105): "yeah
 that's a bug". *[2026-10-20]*
+
+**Ketura's answers of 2026-10-21.** Q-0344 (a character replaced in a skirmish no longer "involved" at about-to-end):
+"Keep. Strictly speaking I can see where you're coming from, but I don't think the replacement case needs tracked for
+these." F-0517, Wizard's Vale 4_359 ("At the start of the first Shadow phase ... (limit once per turn)"): "this is
+focused on the wrong 'first'. The wording here is a gate against *multiple* Shadow players, something Gemp doesn't
+support (yet). So the idea is that only [the first Shadow player] triggers the text during their Shadow phase, and not
+(4) per Shadow player. This second-move requirement should be removed." So "the first Shadow phase" in a card's text
+names the first Shadow PLAYER's phase, not the turn's first move. The threat rule's entry text is "Assign threat
+wounds". Commit messages and comments name Ketura, never "her" (roles, "Name Ketura"). *[2026-10-21]*

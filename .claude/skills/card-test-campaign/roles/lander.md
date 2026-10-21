@@ -215,3 +215,5 @@ registers and your batch report.
 - `needs_orchestrator`: only what somebody must act on and no register holds: a card held, a correction taken back
   out, a test of another card left failing. One line each. Usually empty.
 - the commit, as `finish` printed it.
+
+**Name Ketura; no pronouns for Ketura in what is kept (Ketura, 2026-10-21).** In commit messages, code comments (Java, HJSON) and test Javadoc, write "Ketura's ruling", "Ketura's item", "Ketura (Q-0329)", never "her item", "her word", "she said": a reader of the history has no one for "her" to refer to. Quote Ketura's words with the name before them.

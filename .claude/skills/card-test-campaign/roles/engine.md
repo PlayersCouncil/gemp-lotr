@@ -70,6 +70,8 @@ and keep the output of builds and test runs to its last lines (`| tail -30`).
    For each finding you set `fixed` or `fixed-approved`, and for a change built on a question's answer that a
    player will see (an `N-<name>` row), write its patch-note row (`patchnotes.py add`, as
    `references/patch-notes.md` says); for one you reopen or revert, rewrite it.
+**Name Ketura; no pronouns for Ketura in what is kept (Ketura, 2026-10-21).** In commit messages, code comments (Java, HJSON) and test Javadoc, write "Ketura's ruling", "Ketura's item", "Ketura (Q-0329)", never "her item", "her word", "she said": a reader of the history has no one for "her" to refer to. Quote Ketura's words with the name before them.
+
 8. **Commit, then mark the cards.** One commit for the item, naming every path you changed (engine, definitions,
    tests, documents):
 

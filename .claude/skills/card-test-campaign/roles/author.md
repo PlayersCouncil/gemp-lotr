@@ -274,3 +274,5 @@ Wizard allies; Bilbo 12_119 is a Ring-bound Hobbit companion). And before leavin
 own text keeps it off the board, look for the card that lifts that: "may not be assigned to a skirmish" on a
 Saruman is lifted by Saruman's Staff 4_174, which any Saruman bears, so Saruman, Rabble-rouser 4_33 IS the
 [dunland] minion who is no Man for "a [dunland] Man wins / loses / is in a skirmish" (`lookup.py 4_33 --in helpers`).
+
+**Name Ketura; no pronouns for Ketura in what is kept (Ketura, 2026-10-21).** In commit messages, code comments (Java, HJSON) and test Javadoc, write "Ketura's ruling", "Ketura's item", "Ketura (Q-0329)", never "her item", "her word", "she said": a reader of the history has no one for "her" to refer to. Quote Ketura's words with the name before them.

@@ -367,3 +367,5 @@ THE COST OF ASSIGNING (set 7's Morgul Orcs; built by engine pass 26, item assign
   Archery wounds have no source (Q-0335). A draw is the player's whose hand it goes to (Q-0334). A "you may ...
   (or N <noun> if ...)" on a trigger or ability is 0-1 of the first noun, or 0-N of the parenthesis's noun as printed
   (Q-0339). A "spot X" number choice defaults to all that can be spotted (F-0561).
+
+- Name Ketura; no pronouns for Ketura in what is kept (Ketura, 2026-10-21). In commit messages, code comments (Java, HJSON) and test Javadoc, write "Ketura's ruling", "Ketura's item", "Ketura (Q-0329)", never "her item", "her word", "she said": a reader of the history has no one for "her" to refer to. Quote Ketura's words with the name before them.

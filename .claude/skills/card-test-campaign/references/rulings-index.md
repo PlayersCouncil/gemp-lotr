@@ -423,6 +423,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - The skirmish procedure, amended draft (2026-10-20): supersedes the 2026-10-16 draft's step numbers and the 2026-10-19 order of win and loss. Engine ...
 - The skirmish procedure as amended, binding (2026-10-20) [F-0566, Q-0332]
 - Ketura's answers of 2026-10-20 (d) [Q-0341, F-0561, Q-0340, F-0566, F-0565, F-0563]
+- Ketura's answers of 2026-10-21 [Q-0344, F-0517]
 
 # Settled shapes (shapes.md)
 
