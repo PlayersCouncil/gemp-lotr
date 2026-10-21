@@ -18,9 +18,14 @@ public class Card_10_045_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "10_45");
+					put("chieftain", "10_45");
+					put("chieftain2", "10_45");
 					// Mûmak: a [raider] mount, cost 2, strength +3; "Bearer must be a Southron."  Bearer is fierce.
 					put("mumak", "5_73");
+					put("warmumak", "5_78");    // War Mûmak: a [raider] mount, cost 3, on a Southron; fierce, an overwhelm trigger
+					put("mumakil", "8_64");     // Mûmakil: a [raider] mount, cost 3, on a Southron; fierce, damage +1 at initiative or 4 threats
+					put("spear", "4_255");      // Southron Spear: a [raider] hand weapon a Southron bears, no mount
+					put("explorer", "4_250");   // Southron Explorer: another Southron, cost 2; a regroup ability only
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -48,7 +53,7 @@ public class Card_10_045_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("chieftain");
 
 		assertEquals("Mûmak Chieftain", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -68,10 +73,11 @@ public class Card_10_045_Tests
 	public void AMountCostingTwoIsPlayedOnHimFromTheDiscardPileForNothingWithAnEmptyPool() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var chieftain = scn.GetShadowCard("card");
+		var chieftain = scn.GetShadowCard("chieftain");
 		var mumak = scn.GetShadowCard("mumak");
 		scn.MoveCardsToHand(chieftain);
 		scn.MoveCardsToDiscard(mumak);
+		assertInDiscard(mumak);
 
 		scn.StartGame();
 		// 4 set + 1 companion + 2 for the site make 7: the 5 he costs and 2 for roaming, a site 4 minion at site 2.
@@ -83,17 +89,179 @@ public class Card_10_045_Tests
 		scn.ShadowPlayCard(chieftain);
 		assertEquals(0, scn.GetTwilight());
 		assertInZone(Zone.SHADOW_CHARACTERS, chieftain);
-		assertInZone(Zone.DISCARD, mumak);
-		// 11 in print
-		assertEquals(11, scn.GetStrength(chieftain));
+		assertInDiscard(mumak);
 
 		// The pool is empty and the mount costs 2 - 2: it is offered, and played for nothing.
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(chieftain));
 		scn.ShadowAcceptOptionalTrigger();
 		assertAttachedTo(mumak, chieftain);
-		// 11 + 3 for the Mûmak
-		assertEquals(14, scn.GetStrength(chieftain));
 		assertEquals(0, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void WhenPlayedHePlaysAMountOnHimselfFromYourDiscardPileForTwoLess() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var chieftain = scn.GetShadowCard("chieftain");
+		var warmumak = scn.GetShadowCard("warmumak");
+		var mumakil = scn.GetShadowCard("mumakil");
+		var spear = scn.GetShadowCard("spear");
+		var explorer = scn.GetShadowCard("explorer");
+		scn.MoveCardsToHand(chieftain);
+		scn.MoveCardsToDiscard(warmumak, mumakil, spear);
+		// The Free Peoples player's own Mûmak, in his own discard pile: a title in none of the Shadow player's piles.
+		var freepsMumak = scn.GetFreepsCard("mumak");
+		scn.MoveCardsToDiscard(freepsMumak);
+		assertInDiscard(warmumak, mumakil, spear, freepsMumak);
+
+		scn.StartGame();
+		// Another Southron who could bear a mount.
+		scn.MoveMinionsToTable(explorer);
+		// 6 set + 1 companion + 2 for the site make 9
+		scn.SetTwilight(6);
+		scn.FreepsPass();
+
+		assertEquals(9, scn.GetTwilight());
+		scn.ShadowPlayCard(chieftain);
+		// 9 - 5 he costs - 2 for roaming
+		assertEquals(2, scn.GetTwilight());
+
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(chieftain));
+		scn.ShadowAcceptOptionalTrigger();
+		assertTrue(scn.ShadowHasCardChoiceAvailable(warmumak, mumakil));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(spear, freepsMumak));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		scn.ShadowChooseCardBPFromSelection(warmumak);
+
+		// On him, with no choice of bearer though the Explorer could bear it.
+		assertAttachedTo(warmumak, chieftain);
+		assertInDiscard(mumakil, spear, freepsMumak);
+		// 2 - (3 - 2) for the War Mûmak
+		assertEquals(1, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void DecliningLeavesTheMountInTheDiscardPile() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var chieftain = scn.GetShadowCard("chieftain");
+		var warmumak = scn.GetShadowCard("warmumak");
+		scn.MoveCardsToHand(chieftain);
+		scn.MoveCardsToDiscard(warmumak);
+		assertInDiscard(warmumak);
+
+		scn.StartGame();
+		scn.SetTwilight(6);
+		scn.FreepsPass();
+		scn.ShadowPlayCard(chieftain);
+		// 9 - 5 he costs - 2 for roaming
+		assertEquals(2, scn.GetTwilight());
+
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(chieftain));
+		scn.ShadowDeclineOptionalTrigger();
+		assertInDiscard(warmumak);
+		assertEquals(2, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void WithNoMountInTheDiscardPileNothingIsOffered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var chieftain = scn.GetShadowCard("chieftain");
+		var spear = scn.GetShadowCard("spear");
+		scn.MoveCardsToHand(chieftain);
+		// A possession he could bear, but no mount.
+		scn.MoveCardsToDiscard(spear);
+		assertInDiscard(spear);
+
+		scn.StartGame();
+		scn.SetTwilight(6);
+		scn.FreepsPass();
+		scn.ShadowPlayCard(chieftain);
+		assertInZone(Zone.SHADOW_CHARACTERS, chieftain);
+
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(chieftain));
+		assertInDiscard(spear);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void WithTooLittleTwilightForTheMountEvenAtTwoLessNothingIsOffered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var chieftain = scn.GetShadowCard("chieftain");
+		var warmumak = scn.GetShadowCard("warmumak");
+		scn.MoveCardsToHand(chieftain);
+		scn.MoveCardsToDiscard(warmumak);
+		assertInDiscard(warmumak);
+
+		scn.StartGame();
+		scn.SetTwilight(4);
+		scn.FreepsPass();
+		scn.ShadowPlayCard(chieftain);
+		// 7 - 5 he costs - 2 for roaming leave nothing for the War Mûmak's 3 - 2.
+		assertEquals(0, scn.GetTwilight());
+
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(chieftain));
+		assertInDiscard(warmumak);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void AnotherSouthronPlayedAfterHimIsGivenNoMount() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var chieftain = scn.GetShadowCard("chieftain");
+		var explorer = scn.GetShadowCard("explorer");
+		var warmumak = scn.GetShadowCard("warmumak");
+		scn.MoveCardsToHand(explorer);
+		scn.MoveCardsToDiscard(warmumak);
+		assertInHand(explorer);
+		assertInDiscard(warmumak);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(chieftain);
+		scn.SetTwilight(6);
+		scn.FreepsPass();
+
+		scn.ShadowPlayCard(explorer);
+		assertInZone(Zone.SHADOW_CHARACTERS, explorer);
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(chieftain));
+		assertInDiscard(warmumak);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void WithASecondChieftainInPlayOnlyTheOnePlayedTakesAMount() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var chieftain = scn.GetShadowCard("chieftain");
+		var chieftain2 = scn.GetShadowCard("chieftain2");
+		var warmumak = scn.GetShadowCard("warmumak");
+		var mumakil = scn.GetShadowCard("mumakil");
+		scn.MoveCardsToHand(chieftain);
+		scn.MoveCardsToDiscard(warmumak, mumakil);
+		assertInHand(chieftain);
+		assertInDiscard(warmumak, mumakil);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(chieftain2);
+		assertInZone(Zone.SHADOW_CHARACTERS, chieftain2);
+		scn.SetTwilight(6);
+		scn.FreepsPass();
+		scn.ShadowPlayCard(chieftain);
+
+		// Only the copy just played answers its own play.
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(chieftain));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(chieftain2));
+		scn.ShadowAcceptOptionalTrigger();
+		scn.ShadowChooseCardBPFromSelection(warmumak);
+		assertAttachedTo(warmumak, chieftain);
+		assertEquals(0, scn.GetAttachedCards(chieftain2).size());
+		assertInDiscard(mumakil);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }
