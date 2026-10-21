@@ -1573,6 +1573,11 @@ area", used by you, does not). For "your / an opponent's support area" the valid
 there and one borne by an ally or a controlled site there; the invalid ones are the same card on a companion
 and a card of the right owner borne by a card in the other player's area.
 
+**"A site in a support area" is a controlled site, either player's.** A site is in a support area only once a
+player controls it (CR 4.2 "control"), and a site in ANY player's support area is active (CR 4.2 "active"), so a
+site the Free Peoples player took control of on his opponent's turn counts too. Lay it with
+`ShadowTakeControlOfSite()` or `FreepsTakeControlOfSite()` once the markers have passed it (Fleet-footed 10_10).
+
 **`assertInHand` reads the zone, not whose hand.** `assertInHand` (as every `assertInZone`) passes for a card in
 either player's hand, so it cannot show "to their owners' hands": read `GetFreepsHand().contains(card)` and
 `GetShadowHand().contains(card)`, with each hand's count before and after (Gríma, Chief Counselor 5_51; dec-b4_92).
