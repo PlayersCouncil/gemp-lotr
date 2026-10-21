@@ -679,6 +679,9 @@ more Southron Men from play as its cost, and adds a threat at the start of each 
 Matriarch 103_42 is the third ("A Shadow card of twilight 5 in play that is no minion"). They are the printed
 Southrons who are no Men, so "an Orc made a Southron" is still a keyword given to a card that no printed card
 resembles.
+The Rearguard made a minion in the maneuver phase stays a Southron minion who is no Man to the end of the turn, so it is
+on the table to be spotted in the regroup phase; with no other minion there is no maneuver phase, so lay one who is
+no Southron beside it (Easterling Axeman 4_224: Card_10_036_Tests.ASouthronWhoIsNoManIsSpottedToo).
 
 **A Shadow card of twilight 5 in play that is no minion.** Bladetusk Matriarch 103_42. [raider] artifact, unique,
 cost 5, Support Area keyword. Its optional trigger answers a Southron being played; its Maneuver ability removes

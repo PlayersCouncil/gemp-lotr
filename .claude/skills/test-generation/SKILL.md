@@ -601,7 +601,7 @@ Which checks a clause lists follows from its words, and the analyst is expected 
   card prints "Shuffle your draw deck." as a sentence, that sentence's clause owes these claims and stands for
   the Rule clause (Saved From the Fire 8_20), and so where it follows a reveal of the TOP cards, which is no search
   (Q-0013): one shuffle after the reveal, none when declined (Faramir 8_34); where the card always looks, with no other pile and nothing to
-  decline first, there is no `-`, and the clause carries a `no -:` line saying so (Sudden Strike 15_51)
+  decline first, there is no `-`, and the clause carries a `no -:` line saying so (Sudden Strike 15_51); an Activated ability whose effect plays a card from the deck is the same shape, and lint's `waived` warning on its `no -` is expected (Corsair Boatswain 10_37)
 - "reveal" → the card is shown to the other player, who has a decision to dismiss. One test reads the showing
   for each player (the shown card listed and not selectable, a card not revealed absent); the others only
   dismiss (the dismiss methods fail the test when that player is being shown nothing). A reveal from a hand is

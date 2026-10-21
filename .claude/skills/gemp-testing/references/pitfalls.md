@@ -710,7 +710,7 @@ is still of his race.
 **Set the twilight pool before the Shadow phase starts.** Because the engine asks once, a pool set while the
 Shadow player's decision is already pending does not make a minion playable. Set it during the fellowship phase,
 then pass. The move then adds one for each companion plus the new site's shadow number, so a test that needs an
-exact pool adds those in: `// 10 set + 1 companion + 2 for the site`. No region twilight (CR 4.2's +3 / +6) is
+exact pool adds those in: `// 10 set + 1 companion + 2 for the site`. A pool read as "unchanged" is read after that pass, never taken to be the number set (Corsair Boatswain 10_37). No region twilight (CR 4.2's +3 / +6) is
 added on the ordered `FellowshipSites`, `TowersSites` or `KingSites` paths; only an unordered path adds it. A pool that is too small shows only as the rig's
 `<card> is not offering Shadow Player a play.`: count the roaming penalty as well as the cost.
 To read both sides of a cost in one Shadow phase, set the pool there and refresh: `SetTwilight(3)`,
