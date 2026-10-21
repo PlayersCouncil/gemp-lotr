@@ -516,6 +516,10 @@ whose definition gives it its own `text:` (Library of Rivendell's "Stack your ta
 well as one the game words "Use <card name>". Where a card offers several actions, name the one meant:
 `FreepsActionAvailable(card, "from hand")` and `FreepsUseCardAction(card, "from hand")`. Both read a use: a
 card in hand that can be played, an event included, is read with `FreepsPlayAvailable(card)`.
+The words are matched by a case-blind "contains", first offer first: where one ability's text lies inside
+another's (Gorgoroth Berserker 8_96's "Exert this minion twice to take control of a site" inside its "Remove a
+threat and exert ..."), the shorter words read both, and single out the shorter only on a board where the longer
+is shown not offered (`Card_08_096_Tests`, dec-b8_91).
 A card's own "you may play this ... from your discard pile" is a use too (Gollum, Plotting Deceiver 7_58: "Use
 Gollum, Plotting Deceiver"): `ShadowPlayAvailable(card)` is false for the card lying in the pile, and
 `ShadowActionAvailable(card)` and `ShadowUseCardAction(card)` read and take it (`Card_07_058_Tests`).
