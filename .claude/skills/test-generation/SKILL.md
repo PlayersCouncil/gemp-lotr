@@ -153,7 +153,8 @@ Notes: Elrond is himself an ally whose home is site 3, so C2 heals him too.
   effect in parentheses that is game text ("(and heal a companion if you can spot 3 rings)") may be cut off as an
   `Effect` clause of its own, since it has checks of its own. A parenthesis inside a sentence stays in that
   sentence's clause ("defender +1 (or defender +2 if you spot an Orc) until the regroup phase", 2_2): the
-  conformance check reads the clauses as the text in order. A sentence whose "and" joins two predicates of
+  conformance check reads the clauses as the text in order. One that closes its sentence may be cut off or kept
+  whole: both conform (Mordor Fiend 60_91 cuts "(or (5) if this minion is roaming)" off, 10_91 keeps it). A sentence whose "and" joins two predicates of
   different types ("This minion may not bear possessions and is discarded if not at a marsh") is cut at the
   "and": left whole, a claim for either half satisfies the conformance check for both. So is one whose "and"
   joins two predicates of ONE type that are shown on different boards ("Saruman may not take wounds during the
