@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_08_062_Tests
@@ -17,8 +18,9 @@ public class Card_08_062_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "8_62");
-					// put other cards in here as needed for the test case
+					put("axeman", "8_62");
+					put("attacker", "7_141");   // Easterling Attacker: [raider] Easterling Man minion, strength 6; a Skirmish ability only
+					put("smeagol", "7_71");     // Smeagol, Always Helps: companion, "To play, add a burden"
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +48,7 @@ public class Card_08_062_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("axeman");
 
 		assertEquals("Heavy Axeman", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +64,44 @@ public class Card_08_062_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void HeavyAxemanTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void AtFourBurdensHeIsStrengthPlus4AndFierceAndAtThreeHeIsNeither() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var frodo = scn.GetRingBearer();
+		var smeagol = scn.GetFreepsCard("smeagol");
+		scn.MoveCardsToHand(smeagol);
+
+		var axeman = scn.GetShadowCard("axeman");
+		var attacker = scn.GetShadowCard("attacker");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(axeman, attacker);
+		scn.AddBurdens(3);
+		// A wound on the Ring-bearer and a threat, which are no burdens.
+		scn.AddWoundsToChar(frodo, 1);
+		scn.AddThreats(1);
+		scn.FreepsRefreshDecision();
 
-		assertEquals(5, scn.GetTwilight());
+		assertEquals(3, scn.GetBurdens());
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(1, scn.GetThreats());
+		assertEquals(11, scn.GetStrength(axeman));
+		assertFalse(scn.HasKeyword(axeman, Keyword.FIERCE));
+		assertEquals(6, scn.GetStrength(attacker));
+		assertFalse(scn.HasKeyword(attacker, Keyword.FIERCE));
+
+		// Smeagol's play adds the fourth burden.
+		scn.FreepsPlayCard(smeagol);
+		assertInZone(Zone.FREE_CHARACTERS, smeagol);
+		assertEquals(4, scn.GetBurdens());
+
+		// 11 + 4
+		assertEquals(15, scn.GetStrength(axeman));
+		assertTrue(scn.HasKeyword(axeman, Keyword.FIERCE));
+		// The other Easterling is untouched.
+		assertEquals(6, scn.GetStrength(attacker));
+		assertFalse(scn.HasKeyword(attacker, Keyword.FIERCE));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }
