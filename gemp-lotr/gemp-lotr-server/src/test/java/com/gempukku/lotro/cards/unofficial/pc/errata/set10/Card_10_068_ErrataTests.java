@@ -5,6 +5,7 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.StrengthModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -26,8 +27,10 @@ public class Card_10_068_ErrataTests
 					put("darkness", "8_68");        // Beyond All Darkness: Shadow Skirmish event, cost 3, "Exert a Nazgûl to make him strength +2 and damage +1"
 					put("charge", "1_223");         // Relentless Charge: Shadow event, cost 0, "Maneuver: Exert a Nazgûl to wound every archer companion"
 					put("winged", "6_89");          // Winged and Ominous: Shadow condition, "Regroup: Exert a Nazgûl to place a [wraith] token on this card"
+					put("shagrat", "10_99");        // Shagrat, Captain of Cirith Ungol: a Shadow character; "Each time Shagrat loses a skirmish, you may exert a character"
 
 					put("aragorn", "1_89");         // Aragorn, Ranger of the North: strength 8, vitality 4; no archer
+					put("boromir", "1_97");         // Boromir, Son of Denethor: a skirmish ability used only on purpose
 					put("rider", "4_286");          // Rider of Rohan: strength 5, vitality 3; his ability needs a mount
 					put("mount", "4_287");          // Rider's Mount: Free Peoples possession, "At the start of each skirmish involving bearer, each minion skirmishing bearer must exert"
 				}},
@@ -209,6 +212,45 @@ public class Card_10_068_ErrataTests
 		assertEquals(2, scn.GetWoundsOn(enquea));
 		assertEquals(1, scn.GetCultureTokensOn(winged));
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void AShadowCharactersEffectInTheSkirmishPhaseMayExertAnotherCharacterButNotEnquea() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		scn.MoveCompanionsToTable(aragorn, boromir);
+
+		var enquea = scn.GetShadowCard("enquea");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var shagrat = scn.GetShadowCard("shagrat");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(enquea, lemenya, shagrat);
+		// Strength that only arranges the board: Aragorn beats Shagrat's 13.
+		scn.ApplyAdHocModifier(new StrengthModifier(null, aragorn, null, 10));
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, shagrat}, new PhysicalCardImpl[]{boromir, enquea});
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.PassCurrentPhaseActions();
+
+		// Shagrat has lost: his "may exert a character" is offered while the skirmish phase is resolved.
+		assertEquals(1, scn.GetWoundsOn(shagrat));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(shagrat));
+		scn.ShadowAcceptOptionalTrigger();
+
+		assertEquals(0, scn.GetWoundsOn(enquea));
+		assertEquals(0, scn.GetWoundsOn(lemenya));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(aragorn, boromir, lemenya));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(enquea));
+		scn.ShadowChooseCard(lemenya);
+
+		assertEquals(1, scn.GetWoundsOn(lemenya));
+		assertEquals(0, scn.GetWoundsOn(enquea));
+		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 	}
 
 	@Test
