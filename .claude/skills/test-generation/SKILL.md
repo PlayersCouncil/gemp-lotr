@@ -254,7 +254,8 @@ What the `F` row asks, for each shape of wording the campaign has met. A clause 
 word, "your archers", a companion and an ally: with no ally `all(your,archer,or(companion,minion))` passes, 94_13;
 for "a character" or "borne by a character", a companion, an ally and a minion, the three kinds of character: with
 no ally on the table `or(companion,minion)` passes, 61_100; for "each minion" or "another minion", minions of two
-cultures and two races: beside Orcs alone, `minion` narrowed to `orc` passes, 60_91, and for "each minion
+cultures and two races: beside Orcs alone, `minion` narrowed to `orc` passes, 60_91 (the two races are owed still where the text
+allows one culture only: "a [wraith] minion stacked here", 8_71), and for "each minion
 skirmishing <X>" two minions in ONE skirmish as well, the second put on X by the Shadow player after the Free
 Peoples player's assignment (pitfalls, "One minion to a companion"): with one minion to a skirmish a definition
 that takes "a minion" passes, 11_243; for a bare type word or pair ("each companion and minion"), cards of each type differing in culture and race: beside two [gondor] Men, `companion` narrowed to `culture(gondor)` passes, 4_349, a counted one from a pile too ("shuffle X minions from your discard pile": beside Orcs alone `orc` passes, 2_41); for a bare side word, "2 Free Peoples cards" from a deck, a card of each type

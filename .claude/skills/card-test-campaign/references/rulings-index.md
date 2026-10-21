@@ -560,6 +560,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Each time you play a <kind>" on a card that is itself of that kind answers its own play
 - "You may <do X>. Then, <Y>": the trigger is required, X a choice of 0 to 1, and Y done whatever was chosen (Q-0314; Home and Hearth 12_122, engine pass 44) [F-0512]
 - "If a Free Peoples player reveals this card from your hand" asks whose CARD revealed (Eye of Barad-dûr 5_96; Q-0251: B) [Q-0171]
+- "Make a <kind> strength +N. If that <kind> wins this skirmish, you may <do X>" (Mastered By Madness 8_73; Trapped in its Gaze 102_66; F-0082, F-0083, Q-0051)
 - "Each time your condition is hindered or discarded" (Q-0075)
 - "Each time this is hindered/discarded" is answered after the removal (F-0120, F-0121)
 - The skirmish procedure as amended, and "is about to end" at its step 5 (Ketura, 2026-10-20, binding; Q-0332; engine passes 53 and 56) [F-0566, F-0563]

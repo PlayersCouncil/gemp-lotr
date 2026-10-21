@@ -652,7 +652,8 @@ so cheat it in; nothing below 5 burdens and an empty Free Peoples draw deck).
 **A Nazgûl who is not [ringwraith].** Ulaire Attea, Khamul of the East 103_61. [raider], strength 12, vitality 3;
 his text needs 3 burdens. Fierce, so keep him out of tests that run past the skirmishes. He may bear a Nazgûl's
 mount: with Fell Beast 6_83 (strength +2; to play, discard 2 cards from hand: attach it) he is the one mounted
-[raider] minion who is no Southron, and at 14 he overwhelms a companion of 7 or less.
+[raider] minion who is no Southron, and at 14 he overwhelms a companion of 7 or less. On Black Steed 1_208 at site 2 of
+`FellowshipSites` (Ettenmoors, a plains) he is 16, not 14: the Steed's +2 and its plains +2 (Card_08_073_Tests).
 
 **An [uruk-hai] minion who is no Uruk-hai; an Uruk-hai of another culture.** Saruman, Master of the White Hand
 17_116; Cirith Ungol Guard 10_81. Saruman: [uruk-hai] Wizard, unique, cost 4, strength 8, vitality 4, site 4; each
