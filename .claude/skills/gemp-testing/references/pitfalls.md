@@ -1471,6 +1471,10 @@ vitality 4 with 3 wounds reads 1. The printed number is the blueprint's, as the 
 companion, not the Ring-bearer alone: with 3 burdens Frodo 1_290 (resistance 10) reads 7 and Sam 1_311 (5) reads 2
 (`mechanics/ring/RingBearerSuccessionTests`).
 
+**A borne card's text bonus adds to its printed bonus.** "If bearer is an Uruk-hai, it is strength +2" on a possession printed
++1 (Uruk Axe 10_102) makes the Uruk-hai bearer +3 in all: the text's `modifyStrength` stands beside the printed number,
+which it does not replace (Card_10_102_Tests reads 9 + 1 + 2 = 12, and 7 + 1 = 8 for a bearer who is no Uruk-hai).
+
 **The card info names a borne card's printed bonus for that card** (engine pass 59). `GetAffectingCard(card)` reads
 the card info's "Affecting card" lines ("Glamdring: Strength +2", "System: Ring-Bound" for a rule's). The printed
 numbers of borne cards are one rules modifier with no source card (`StatModifiersRule`), shown one line per borne
