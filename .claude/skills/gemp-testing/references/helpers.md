@@ -755,6 +755,10 @@ the support area) are the two to hinder: their abilities are fellowship ones and
 unbound Man. With one beacon in play the Flame cannot be played, with both it can (Card_07_321_Tests, beside
 `PlayableOn(any)` in a play-from-discard requirement). Two Signal-fires in play is the title's 2 dots, no more.
 
+**A corsair against its culture or type: there is none.** Every card with the Corsair keyword (15, sets 8, 10, 58 and
+103) is a [raider] Man minion, and no text gives the keyword. "Corsair" in the title only: Corsair Champion 13_84 and
+Castamir, Corsair Vandal 12_56 ([men] Man minions), the [men] Corsair weapons 18_60 to 18_64 (Card_08_055_Tests).
+
 ## Wounds, exertions, heals, kills and discards that a printed card does
 
 **Wounds in the regroup phase.** Morgul Slayer 3_93. Strength 7, vitality 2; "Regroup: Exert this minion to wound a
