@@ -418,12 +418,12 @@ public class ThreatsTests
 		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
 		var entries = scn.FreepsGetAvailableActions();
 		assertEquals(2, entries.size());
-		assertTrue(entries.contains("Threat wounds: remove every threat, then wound a companion for each"));
+		assertTrue(entries.contains("Assign threat wounds"));
 		assertFalse(entries.contains(null));
 		assertFalse(entries.contains("null"));
 
 		// Taken first, it removes the threats and asks for the two wounds before the burden is added.
-		scn.FreepsResolveActionOrder("Threat wounds");
+		scn.FreepsResolveActionOrder("Assign threat wounds");
 		assertEquals(0, scn.GetThreats());
 		assertEquals(0, scn.GetBurdens());
 		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, aragorn));

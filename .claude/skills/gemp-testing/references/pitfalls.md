@@ -593,7 +593,7 @@ answered, Card_02_005_Tests; it is not
 only for deaths). Two copies of a card with such a required trigger make it one decision of three entries, the
 rule and each copy's trigger; after `FreepsResolveRuleFirst()` both triggers are carried out and no second
 ordering is asked (Sudden Fury 12_132, two copies and a [shire] companion who loses). The rule's entry is not always listed first (King of the Dead 103_27 killed with a threat out: `["Required
-trigger from King of the Dead…", "Threat wounds: remove every threat, then wound a companion for each"]`; Ferocious
+trigger from King of the Dead…", "Assign threat wounds"]`; Ferocious
 Haradrim 11_80 answering a death: the threat wounds first). `FreepsResolveRuleFirst()` resolves the rule, the entry
 that belongs to no card, wherever it is listed; `FreepsResolveActionOrder(text)` resolves the entry whose wording
 contains the text. A skirmish whose losing side was already removed (step 2C) raises no "Resolve skirmish damage"

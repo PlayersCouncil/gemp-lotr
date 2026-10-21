@@ -19,8 +19,9 @@ import java.util.List;
 
 public class ThreatRule {
     public static String ThreatRuleSource = "Threat Rule";
-    /** The text of the rule's entry among the required responses to the kill of a companion or ally. */
-    public static final String ThreatWoundsText = "Threat wounds: remove every threat, then wound a companion for each";
+    /** The text of the rule's entry among the required responses to the kill of a companion or ally (Ketura's
+     *  wording, 2026-10-21). */
+    public static final String ThreatWoundsText = "Assign threat wounds";
     private final DefaultActionsEnvironment _actionsEnvironment;
 
     public ThreatRule(DefaultActionsEnvironment actionsEnvironment) {
