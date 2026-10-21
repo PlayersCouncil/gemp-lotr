@@ -2343,3 +2343,8 @@ following actions: (1) play a besieger stacked on a site you control; or (2) rem
 from your discard pile." Q-0254's open point (Ketura, 2026-10-11: "I'll ask the Council") needs no Council reading.
 The card is built and tested on that reading already (F-0465; WithBothOpenThePlayerChoosesOneAndOnlyTheSecondTakesABurden).
 When a question's own text quotes a CR 4.2 ruling that settles it, the orchestrator says so to Ketura plainly. *[2026-10-21]*
+
+**Release the Angry Flood 2_19: the Rules Council's reading (Ketura, 2026-10-21).** "it was unanimously voted to rule
+it as '(or twice if the fellowship is at a river)' (In actuality it was voted to read it as 'or twice if that Nazgul is
+at a river', but these are indistinguishable and we don't need to check for minion position lol)". As built (Q-0319).
+Hospitality of the Dwarves 101_1, the other card of Q-0319, keeps its Q-0319 reading (the fellowship's site). *[2026-10-21]*
