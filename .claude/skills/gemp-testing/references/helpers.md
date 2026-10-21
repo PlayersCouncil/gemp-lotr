@@ -863,7 +863,9 @@ nothing. Isildur ([gondor] Man, unique, strength 7, vitality 3, resistance 1): a
 a skirmish, exert a companion", an exertion that is an EFFECT (`FreepsResolveRuleFirst()` first: pitfalls, "When a
 wound kills"); when he wins he heals a companion. Ettenmoors, site 2 of `FellowshipSites`: "Skirmish: Exert your
 companion or minion to make that character strength +2" takes any companion of the user's, skirmishing or not, and
-a site has no side: the invalid doer for "by a Free Peoples card" (Card_94_020_Tests).
+a site has no side: the invalid doer for "by a Free Peoples card" (Card_94_020_Tests). The Free Peoples player is
+always asked which companion, the Ring-bearer being one, even with one other laid: answer the choice before reading
+a wound (Card_08_115_Tests, dec-b8_112).
 
 **One cost that exerts a character more than once (the R of "each time ... exerts").** Tom Bombadil, The Master
 9_52. [shire] ally with no race, vitality 9 (to play, remove 2 burdens or 2 threats: cheat him in); "Skirmish: Spot
