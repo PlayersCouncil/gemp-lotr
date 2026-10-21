@@ -574,7 +574,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Each time your fellowship moves, ... (or N if at site X or higher)" reads the site left (Q-0184: A; built by engine pass 21)
 - "Each time the fellowship moves during the regroup phase" is a `moves` trigger with `requires: phase regroup` (Spies of Mordor 2_92, Depths of Moria 3_77, What Did You Discover? 4_213)
 - "When <this card> leaves play, this bonus is lost" as a turn-long added trigger names `self` (F-0270, Radagast 59_26)
-- "Make each ... until" is a snapshot on an event; on an ability only where the cards it names are on the table when it is used (Q-0011, F-0144, F-0217) [F-0558, F-0555, F-0109]
+- "Make each ... until" is a snapshot on an event; on an ability only where the cards it names are on the table when it is used (Q-0011, F-0144, F-0217) [F-0558, F-0555, F-0109, Q-0352]
 - "Each X is <number> +1 for each Y you can spot until <a time>" on a trigger: the count is taken once, as the trigger is carried out (as built; Madril 15_64; Q-0270: A)
 - Keywords copied "until ..." are a snapshot (Q-0096); race and "unloaded keywords" (Q-0097)
 - "Exert X twice" sets off an "each time ... exerts" trigger twice [F-0145]
@@ -663,6 +663,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Each roaming minion" and "Exert a [culture] character": no board tells `all(roaming,minion)` from `all(roaming)`, nor `choose(culture(gondor),character)` in an exert cost from `choose(culture(gondor))` (Eregion's Trails 1_104, Foes of Mordor 1_105; dec-b1_102)
 - "Until the regroup phase, that ally ... participates in archery fire and skirmishes": no board tells the participation's `until: start(regroup)` from `end(assignment)` (One Whom Men Would Follow 1_109; dec-b1_106)
 - "Takes no more than N wound(s) during each skirmish phase until the regroup phase": no board tells the cap's `until: regroup` from `end(regroup)` (Valiant Man of the West 1_118; dec-b1_118)
+- "Until the end of the assignment phase, each time a <minion kind> is about to take a wound": no board tells `until: end(assignment)` from `start(assignment)` (High Vantage 10_44; dec-b10_44)
 - "Return an unbound companion to hand": no board tells `choose(unbound,companion,canBeReturnedToHand)` from `choose(unbound,companion)` (Gríma, Chief Counselor 5_51; dec-b4_92)
 - "Play a [culture] skirmish event from hand" in a Skirmish ability: no board tells `timeword(skirmish),event` from the culture word alone (Anárion 0_58; dec-b0_58) [F-0186]
 - "Play a companion or ally" on the Free Peoples player's own action: no board tells `choose(or(companion,ally))` from `choose(character)` (Westfarthing 1_326; dec-b1_325)
