@@ -183,8 +183,9 @@ him. Not Orc Assassin 1_262 (cost 2, site 6): in play he makes the roaming penal
 is no Nazgûl.
 
 **Two [wraith] Orcs of different titles with no text in the way; a [wraith] minion who is no Orc.** Morgul Hound
-7_192, Morgul Mongrel 7_194; Úlairë Lemenya 1_232. Mongrel: cost 3, strength 7, vitality 2, site 4; fierce and
-damage +1 only at 3 wounds on the Ring-bearer (the Hound's text needs 2). Lemenya: [wraith] Nazgûl, strength 9; her
+7_192, Morgul Mongrel 7_194; Úlairë Lemenya 1_232. Hound: cost 2, strength 5, vitality 2, site 4; strength +4 and
+fierce only at 2 wounds on the Ring-bearer. Mongrel: cost 3, strength 7, vitality 2, site 4; fierce and damage +1
+only at 3 wounds on the Ring-bearer. Lemenya: [wraith] Nazgûl, strength 9; her
 text reaches only a companion or ally bearing a [wraith] condition. With Orc Chieftain 1_266 beside her, no [wraith]
 Orc is on the table (Card_08_078_Tests).
 
@@ -789,6 +790,12 @@ Castamir, Corsair Vandal 12_56 ([men] Man minions), the [men] Corsair weapons 18
 companion (except the Ring-bearer)." Two copies wound one companion twice in one regroup phase, which is how to
 read "until the regroup phase" at its boundary. One wound from it is also the `-` of a trigger on an exertion
 whose effect would last the current phase: a skirmish wound shows nothing there (Card_13_075_Tests).
+
+**A companion who can use a special ability both in a skirmish and in the regroup phase (check D of "cannot use
+special abilities until the regroup phase").** Huorn 9_25, unbound, not unique: "Response: If this companion is about
+to take a wound, exert an Ent to prevent that", with Ent Avenger 6_27 as the Ent. Wound him in the skirmish by a loss
+to Goblin Patrol Troop 1_177 and in the regroup phase by Morgul Slayer 3_93; a second Huorn is the control
+(Card_19_016_Tests).
 
 **A Shadow CHARACTER whose effect exerts a character in the skirmish phase (the character doer of a bare "Shadow
 cards cannot exert X during a skirmish phase").** Shagrat, Captain of Cirith Ungol 10_99: [sauron] Uruk-hai,
