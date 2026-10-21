@@ -30,9 +30,20 @@ import java.util.Objects;
  *     <li>the round's first action is on offer again now and is not known to do nothing, and neither ability has
  *     a limit on its uses ({@link ActionSource#isLimited}): an ability with a limit cannot go on for ever.</li>
  * </ul>
+ * <p>
+ * A round may also be one player's action with the other player's action taken INSIDE it (a Response, or anything
+ * else he chose while it was carried out), and then the other player's pass (Ketura on F-0565, answers/2026-10-20-d.md:
+ * Hrethel, Rider of Rohan 6_95 against a warg-rider bearing a Warg 5_65, whose Response cancels Hrethel's ability).
+ * It is found as the two-action round is, the pass standing as the other player's half: the last two rounds are the
+ * same action of the opener, each with an action of the same card chosen inside it by the other player, each
+ * followed by that player's pass, and the board is as it was.  It is put to the players with the same prompts.  Its
+ * run takes the opener's action, the other player's choices inside it made as in the round played by hand, and counts
+ * the pass (LoopRun); afterwards only the opener's ability is barred, and the other player's Response is not, since
+ * it may answer something else (her words: "the Response should not be barred, only Hrethel").
+ * <p>
  * A pump war that spends something (exertions, cards, twilight, tokens) changes the board each round and is never
- * found, however long it runs; nor is one player using his own ability again and again, since the other player
- * passes in between.  Longer chains (three or more actions to a round) are left alone, as she said ("we'll leave
+ * found, however long it runs; nor is one player using his own ability again and again while the other passes in
+ * between with nothing chosen inside it (F-0565's report names that case and leaves it alone).  Longer chains (three or more actions to a round) are left alone, as she said ("we'll leave
  * off complicated chains of actions while trying to figure out the simple 2-action case"), and so is any loop
  * whose board only grows or that has a shuffle or a random choice in it: those go on as before.
  * <p>
@@ -59,6 +70,8 @@ public class LoopTracker {
     private LoopNegotiation.Agreement _lastAgreement;
     // The round of the loop last found: its second round, as it was played by hand
     private List<Entry> _foundRound;
+    // The other player's card in the loop last found (for a round closed by a pass, the card of his action inside)
+    private PhysicalCard _foundOtherCard;
     private LoopRun _run;
 
     /**
@@ -69,10 +82,16 @@ public class LoopTracker {
     }
 
     /**
-     * A player passed: he has declined to go on, and nothing chosen before counts towards a loop.
+     * A player passed.  The pass is kept as a choice of its own: it is the other half of a round in which he took an
+     * action inside the opener's (see the class's description), and in any other round it breaks the pattern.
+     * @param playerId The player who passed.
      */
-    public void passed() {
-        _entries.clear();
+    public void passed(String playerId) {
+        if (!_enabled)
+            return;
+        _entries.addLast(new Entry(Key.pass(playerId), null, null, null, List.of()));
+        while (_entries.size() > 4)
+            _entries.removeFirst();
     }
 
     /**
@@ -126,10 +145,19 @@ public class LoopTracker {
         final Entry third = iterator.next();
         final Entry fourth = iterator.next();
 
-        if (!first.key.equals(third.key) || !second.key.equals(fourth.key))
+        if (!first.key.equals(third.key) || !second.key.equals(fourth.key) || first.key.isPass())
             return null;
         if (!first.key.player().equals(playerId) || second.key.player().equals(playerId))
             return null;
+        // A round closed by the other player's pass: his half is the action he chose inside the opener's, the same
+        // card's in both rounds (F-0565).
+        PhysicalCard otherCard = second.card;
+        if (second.key.isPass()) {
+            final PhysicalCard inside = chosenInside(game, first, second.key.player());
+            if (inside == null || inside != chosenInside(game, third, second.key.player()))
+                return null;
+            otherCard = inside;
+        }
         if (isLimited(first) || isLimited(second))
             return null;
         if (third.fingerprint == null)
@@ -149,7 +177,18 @@ public class LoopTracker {
             return null;
 
         _foundRound = List.of(third, fourth);
-        return new Loop(first.key.player(), first.card, second.key.player(), second.card);
+        _foundOtherCard = otherCard;
+        return new Loop(first.key.player(), first.card, second.key.player(), otherCard);
+    }
+
+    // The card of the first action the given player chose while the entry's action was carried out, or null.
+    private static PhysicalCard chosenInside(LotroGame game, Entry entry, String playerId) {
+        for (LoopRun.Answer answer : entry.answers) {
+            final int cardId = answer.chosenActionCardId();
+            if (answer.player().equals(playerId) && cardId >= 0)
+                return game.getGameState().findCardById(cardId);
+        }
+        return null;
     }
 
     /**
@@ -163,7 +202,7 @@ public class LoopTracker {
         final Entry second = _foundRound.get(1);
         _run = new LoopRun(
                 new LoopRun.Step(first.key, first.card, first.answers),
-                new LoopRun.Step(second.key, second.card, second.answers),
+                new LoopRun.Step(second.key, second.key.isPass() ? _foundOtherCard : second.card, second.answers),
                 agreement);
         _foundRound = null;
         _entries.clear();
@@ -255,9 +294,18 @@ public class LoopTracker {
         static Key of(LotroGame game, String playerId, Action action) {
             return new Key(playerId, Ability.of(game, action));
         }
+
+        // A pass by the player: no ability.
+        static Key pass(String playerId) {
+            return new Key(playerId, null);
+        }
+
+        boolean isPass() {
+            return ability == null;
+        }
     }
 
-    // One action chosen: what it was a use of, its card, the ability that built it, the board as it was chosen (only
+    // One action chosen (or a pass, with no card and no ability): what it was a use of, its card, the ability that built it, the board as it was chosen (only
     // where it repeats the choice two before it), and the answers to the decisions asked while it was carried out.
     private record Entry(Key key, PhysicalCard card, ActionSource ability, BoardFingerprint fingerprint, List<LoopRun.Answer> answers) {
     }

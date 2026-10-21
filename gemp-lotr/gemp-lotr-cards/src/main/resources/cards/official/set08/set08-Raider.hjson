@@ -996,6 +996,15 @@
 						}
 						secondNumber: 6
 					}
+					// Filled in with all there are, up to the limit (Q-0341: A, as F-0561).
+					default: {
+						type: Min
+						firstNumber: {
+							type: ForEachCultureToken
+							culture: raider
+						}
+						secondNumber: 6
+					}
 					memorize: spotCount
 				}
 				{

@@ -71,6 +71,9 @@ public class PlayersPlayPhaseActionsInOrderGameProcess implements GameProcess {
                 _loopTracker.runOver();
                 game.getGameState().setConsecutiveAction(false);
                 playerId = takeTurnOf(run.getNextActor());
+                // A run that ended on the other player's pass (F-0565) leaves this player to act after that pass.
+                if (run.endedOnPass())
+                    _consecutivePasses = 1;
             } else if (_playerToAsk != null) {
                 playerId = _playerToAsk;
             } else if (game.getGameState().isConsecutiveAction()) {
@@ -92,7 +95,7 @@ public class PlayersPlayPhaseActionsInOrderGameProcess implements GameProcess {
             }
 
             if (countUsable(game, playableActions) == 0 && game.shouldAutoPass(playerId, game.getGameState().getCurrentPhase())) {
-                playerPassed();
+                playerPassed(playerId);
             } else {
                 game.getUserFeedback().sendAwaitingDecision(playerId,
                         new CardActionSelectionDecision(game, 1, "Play " + game.getGameState().getCurrentPhase().getHumanReadable() + " action or Pass", playableActions) {
@@ -104,7 +107,7 @@ public class PlayersPlayPhaseActionsInOrderGameProcess implements GameProcess {
                                     _nextProcess = new PlayersPlayPhaseActionsInOrderGameProcess(_playOrder, 0, _followingGameProcess, _loopTracker, null);
                                     game.getActionsEnvironment().addActionToStack(action);
                                 } else {
-                                    playerPassed();
+                                    playerPassed(playerId);
                                 }
                             }
                         });
@@ -130,8 +133,8 @@ public class PlayersPlayPhaseActionsInOrderGameProcess implements GameProcess {
         return count;
     }
 
-    private void playerPassed() {
-        _loopTracker.passed();
+    private void playerPassed(String playerId) {
+        _loopTracker.passed(playerId);
         _consecutivePasses++;
         if (_consecutivePasses >= _playOrder.getPlayerCount())
             _nextProcess = _followingGameProcess;

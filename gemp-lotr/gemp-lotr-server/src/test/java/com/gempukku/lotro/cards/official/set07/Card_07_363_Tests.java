@@ -133,17 +133,14 @@ public class Card_07_363_Tests
 		// A Dwarf overwhelmed: 13 is more than twice 4.
 		scn.FreepsResolveSkirmish(guard);
 		scn.PassSkirmishActions();
-		// The site's trigger is ordered against the rule's own business of the death.
+		// With no threats on the dead pile, the site's trigger is the one thing that answers the death.
 		assertInZone(Zone.DEAD, guard);
-		assertTrue(scn.FreepsDecisionAvailable("Required responses"));
-		scn.FreepsResolveRuleFirst();
 		assertEquals(1, scn.GetBurdens());
 
 		// A Man killed by his last wound: 8 beats 7.
 		scn.FreepsResolveSkirmish(boromir);
 		scn.PassSkirmishActions();
 		assertInZone(Zone.DEAD, boromir);
-		scn.FreepsResolveRuleFirst();
 		assertEquals(2, scn.GetBurdens());
 		assertTrue(scn.GameIsFinished());
 	}

@@ -73,6 +73,12 @@ public class ThreatsTests
 					put("troop", "1_177");      // Goblin Patrol Troop: strength 13, vitality 3, no text
 					put("runner", "1_178");     // Goblin Runner: strength 5, vitality 1; its text is about being played
 					put("assassin", "2_93");    // Tower Assassin: "Maneuver: Exert Tower Assassin to wound an ally."
+					// Úlairë Lemenya: Nazgûl, strength 9, vitality 2.  "Each companion or ally who bears a [wraith]
+					// condition is strength -2": nobody bears one here.
+					put("lemenya", "1_232");
+					// Drawn to Its Power: [wraith] support-area condition.  "Each time a companion is killed in a
+					// skirmish involving a Nazgûl, add a burden": a required trigger on the same kill as the threats.
+					put("drawn", "1_211");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -347,5 +353,84 @@ public class ThreatsTests
 		assertEquals(0, scn.GetFreepsHandCount());
 		assertEquals(3, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void ACompanionKilledWithNoThreatsOnTheDeadPilePutsNothingOfTheThreatsToTheFreePeoplesPlayer() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var guard = scn.GetFreepsCard("guard");
+		scn.MoveCompanionsToTable(aragorn, guard);
+
+		var lemenya = scn.GetShadowCard("lemenya");
+		var drawn = scn.GetShadowCard("drawn");
+		scn.MoveCardsToSupportArea(drawn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(lemenya);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(guard, lemenya);
+
+		assertEquals(0, scn.GetThreats());
+		assertEquals(0, scn.GetBurdens());
+
+		// The Guard, 4, is overwhelmed by Lemenya, 9, and killed.  With no threat on the dead pile there is no
+		// threat to remove and no wound to place: the rule puts nothing to the Free Peoples player, so Drawn to
+		// Its Power's trigger, the one thing left that answers the kill, is carried out with nothing to order.
+		scn.FreepsResolveSkirmish(guard);
+		scn.PassSkirmishActions();
+		assertInZone(Zone.DEAD, guard);
+		assertFalse(scn.FreepsDecisionAvailable("Required responses"));
+		assertEquals(1, scn.GetBurdens());
+		assertEquals(0, scn.GetThreats());
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void ACompanionKilledWithThreatsOnTheDeadPileListsTheThreatWoundsByNameAmongTheRequiredResponses() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var guard = scn.GetFreepsCard("guard");
+		scn.MoveCompanionsToTable(aragorn, guard);
+
+		var lemenya = scn.GetShadowCard("lemenya");
+		var drawn = scn.GetShadowCard("drawn");
+		scn.MoveCardsToSupportArea(drawn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(lemenya);
+		scn.AddThreats(2);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(guard, lemenya);
+
+		scn.FreepsResolveSkirmish(guard);
+		scn.PassSkirmishActions();
+		assertInZone(Zone.DEAD, guard);
+
+		// Two things answer the kill: the threats, and Drawn to Its Power.  The Free Peoples player orders them,
+		// and the rule's entry says what it does.
+		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
+		var entries = scn.FreepsGetAvailableActions();
+		assertEquals(2, entries.size());
+		assertTrue(entries.contains("Threat wounds: remove every threat, then wound a companion for each"));
+		assertFalse(entries.contains(null));
+		assertFalse(entries.contains("null"));
+
+		// Taken first, it removes the threats and asks for the two wounds before the burden is added.
+		scn.FreepsResolveActionOrder("Threat wounds");
+		assertEquals(0, scn.GetThreats());
+		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, aragorn));
+		scn.FreepsChooseCard(aragorn);
+		scn.FreepsChooseCard(aragorn);
+		assertEquals(2, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }

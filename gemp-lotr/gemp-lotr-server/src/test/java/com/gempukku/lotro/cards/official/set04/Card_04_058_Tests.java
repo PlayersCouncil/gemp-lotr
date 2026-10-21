@@ -91,6 +91,8 @@ public class Card_04_058_Tests
 		// Legolas and Arwen; not Orophin (an Elf ally), Aragorn or Frodo (companions who are no Elves).
 		assertEquals(0, scn.FreepsGetChoiceMin());
 		assertEquals(2, scn.FreepsGetChoiceMax());
+		// The number comes filled in with both of them (F-0561), and fewer may be named.
+		assertEquals(Integer.valueOf(2), scn.FreepsGetChoiceDefault());
 
 		// One is named, and one card drawn, not two.
 		scn.FreepsChoose("1");
@@ -122,6 +124,7 @@ public class Card_04_058_Tests
 
 		assertEquals(0, scn.FreepsGetChoiceMin());
 		assertEquals(3, scn.FreepsGetChoiceMax());
+		assertEquals(Integer.valueOf(3), scn.FreepsGetChoiceDefault());
 
 		// Three draws, within the Rule of 4.
 		scn.FreepsChoose("3");

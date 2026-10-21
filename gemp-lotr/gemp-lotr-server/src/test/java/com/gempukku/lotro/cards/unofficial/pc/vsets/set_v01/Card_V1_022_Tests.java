@@ -179,10 +179,9 @@ public class Card_V1_022_Tests
 		scn.PassSkirmishActions();
 		assertInZone(Zone.DEAD, aragorn);
 
-		// His death leaves a rule and the artifact's trigger waiting together, and the Free Peoples player says
-		// which is carried out first.  Neither is his to decline.
+		// With no threats on the dead pile, the artifact's trigger is the one thing that answers his death, and
+		// it is not his to decline.
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
-		scn.FreepsResolveRuleFirst();
 		assertInDiscard(memorial);
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}

@@ -70,10 +70,15 @@ public class Wound implements EffectAppenderProducer {
                         (actionContext) -> Filters.canTakeWounds(actionContext.getSource(), times.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null)),
                         valueSource, memory, player, "Choose cards to wound", environment);
 
+        final boolean timesReadsMemory = NoTimesNoChoice.readsMemory(effectObject.get("times"));
+
         MultiEffectAppender result = new MultiEffectAppender() {
-            // With nobody who can take a wound it does nothing; a wound is never a matter of one skirmish only.
+            // With nobody who can take a wound it does nothing; as an effect, nor with X times come to 0 (Q-0337).
+            // A wound is never a matter of one skirmish only.
             @Override
             public EffectForecast forecast(ActionContext actionContext) {
+                if (NoTimesNoChoice.isCertainlyNoTimes(cost, actionContext, times, timesReadsMemory))
+                    return EffectForecast.NOTHING;
                 return EffectForecast.givenTo(cardResolver.forecast(actionContext), false);
             }
 
@@ -89,7 +94,8 @@ public class Wound implements EffectAppenderProducer {
             }
         };
 
-        result.addEffectAppender(cardResolver);
+        // As an effect, "wound X times" with X come to 0 chooses nobody and asks nothing (Q-0337).
+        result.addEffectAppender(NoTimesNoChoice.resolver(cost, chosen, cardResolver, times, memory));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

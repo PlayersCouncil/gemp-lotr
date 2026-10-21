@@ -2204,3 +2204,129 @@ the end or not depending on the decisions made; whether it ends on the detected 
 **An involuntary loop ends with no effect (F-0536, 2026-10-15).** Frodo, Weary From the Journey 15_144 against Black
 Land Observer 15_101 (and Wandering Hillman 15_94), CR 4.2 "loops": "Good catch, let's fix this and get some
 mechanical tests in place to ensure it works with this minion and the other one mentioned in the CR." *[2026-10-15]*
+
+**A defender on two [isengard] Men exerts twice under Unferth (Q-0330, 2026-10-16).** Unferth, Gríma's Bodyguard 4_178,
+after engine pass 49's per-minion assignment (Q-0323: B): "Keep, that's fine." *[2026-10-16]*
+
+**A card the cost milled off the draw deck is not the card taken or played (Q-0331, F-0548, 2026-10-16).** Great Works
+Begun There 2_9 ("discard the top 2 cards from your draw deck to take a [dwarven] event into hand from your discard
+pile"): "A"; Beneath the Mountains 2_1 and 52_1 ("Discard the top 3 cards from your draw deck to play a [dwarven]
+weapon from your discard pile"): "A". The They Are Coming principle (Q-0192, Q-0320, CR 4.2 "effect") reaches a
+deck-top cost: the cards it discards are memorized and left out of the take or play. *[2026-10-16]*
+
+**The loop prompts' [[...]] are card hints (Q-0329, 2026-10-16).** "Oh, my mistake: I had meant for the [[brackets]] to
+indicate a card hint using the existing mechanism for that, not necessarily a literal." So a card named in the prompt
+is sent as `GameUtils.getCardLink(card)` (the cardHint div the game log uses). *[2026-10-16]*
+
+**The skirmish procedure, steps 1 to 11, is binding (Q-0332, 2026-10-16).** A Rules Council draft for CR "skirmish
+phase", "which outlines the specifics of skirmish resolution in a manner akin to `playing a card` for card plays. You
+may consider this binding moving forward." Transcribed in orchestrator/answers/2026-10-16-b.md (her image beside it).
+The steps that settle most cards: 2a, a canceled skirmish "ends immediately; neither side is a winner or loser ... Skip
+directly to step 6"; 2b, excess characters removed are neither winner nor loser; 2c, the last character of a side
+removed: "that side is declared the loser and the remaining side is the winner. Skip to step 4"; 3a, responses to
+"about to be overwhelmed" that alter strength return to the start of step 3; 3b, a tie goes to the Shadow side; 5a,
+a losing side already removed takes no loss effects; 5b, overwhelmed losers are killed "with no wounds applied"; 5d,
+a loser killed by these effects is "killed by" any of the winning side; 6, "The skirmish is about to end, whether
+canceled, removed, or resolved normally"; 7, the characters are no longer assigned. *[2026-10-16]*
+
+**"About to end" is step 6, after the loser is killed (Q-0332, 2026-10-16).** Final Cry 2_57: "In this we can clearly
+see that step 6 is where Loathsome and Final Cry (and Sting, Bane of the Eight Legs) respond. Given that the Balrog
+will have died from step 5b, the Whip would have been discarded and so would not be in the skirmish at the time that
+Final Cry responds in step 6. We do need to confirm that Final Cry responds to all other kinds of skirmish endings
+(death of the loser, canceled skirmish, removing the loser from the skirmish), but I think death of the Balrog is one
+case that legitimately cannot trigger Final Cry. B." *[2026-10-16]*
+
+**"Exert X companions" runs from 1 (Q-0333, 2026-10-16).** They Will Find the Ring 2_81: "A" (Q-0076). *[2026-10-16]*
+
+**A draw is the drawing hand's player's (Q-0334, 2026-10-16).** Verily I Come 2_94: "A". Drawing His Eye and 2_15 add no
+burden under Verily I Come; Q-0251 does not reach draws. *[2026-10-16]*
+
+**Archery wounds have no source (Q-0335, 2026-10-16).** Erestor 3_14: "A. As you say, archery total wounds are
+unsourced." A [sauron] archer in play does not make an archery wound "a wound from a [sauron] minion". *[2026-10-16]*
+
+**A random reveal from a hand is a cost: an empty hand makes the card unplayable (Q-0336, 2026-10-16).** Friends of Old
+3_16, Storm of Argument 3_6, 3_51: "I'm concerned about a NRE. Regardless, given that it has to reveal 'a' card, and
+the way it is configured I would read that as a cost. If there are no cards to reveal, the card should not be playable.
+B." Q-0148 reaches a hand. *[2026-10-16]*
+
+**"When" and "each time" play alike (Q-0338, 2026-10-16).** Dunlending Looter 4_11: "'When' and 'Each time' are for our
+purposes identical in execution. They are meant to aid understanding, but they aren't actually binding. In this case,
+the 'When' just indicates that upon activating, the Looter is removed from play, meaning that no further executions
+could possibly occur to warrant an 'Each time'. So this is A." A declined "when" trigger is offered again. *[2026-10-16]*
+
+**A "may" with a parenthesis: 0-1 of the noun, or 0-N of the parenthesis's noun as printed (Q-0339, 2026-10-16).**
+Dunlending Pillager 4_13 ("you may discard a Free Peoples possession (or 2 possessions if you spot 6 companions)"):
+"Hrrm. I suppose as written it could discard Shadow possessions. However since it is under a "may" clause, I would
+interpret this as a branch of 0-1 Free Peoples possessions, or 0-2 possessions of any side if the requirement is met.
+Since it is not an event the play execution is a little different from Secret Sentinels." *[2026-10-16]*
+
+**A snapshot per CR 4.2 for Deft in Their Movements (F-0555, 2026-10-16).** 2_99: "Yup, A. I didn't realize this one was
+broken, although it's possible it's only since the HJSON conversion." The sites in play when it is played are -2; a
+site laid later keeps its number. This replaces line 3 of Q-0220 J ("a snapshot would do nothing") for this card;
+We Must Go Warily 3_48 is read on the same words. *[2026-10-16]*
+
+**A "spot X" count defaults to all of them (F-0561, 2026-10-16).** Death to the Strawheads 4_8, asked how many
+companions to spot (Q-0248): "I don't disagree with your find, but make sure that the default answer presented to the
+player is all of them so they don't have to click three things." *[2026-10-16]*
+
+**The loop scenarios she wants in the mechanical tests (2026-10-16).** "Different-player infinite action loops which
+should be detected and barred: Smeagol, Slinker vs Anduin Banks; The One Ring, The Great Ring vs Morgul Brute; Hrethel
+vs any warg-rider with Warg. Single-player infinite action loops which should be detected and barred: Sam, Faithful
+Companion (with no Bill in play or in the deck); Bridge of Khazad-dum (with no Balrog in play or in the deck); 2 copies
+of Hobbit Party Guest infinitely healing each other. Non-infinite action loops which should not trip infinite loop
+detection: Gondorian Captain + Base of Mindolluin + a bunch of fortifications in the deck; the deck will run out of
+fortifications eventually, but it is not an infinite loop; Erkenbrand's Horn + New Chapter + a bunch of followers in
+the deck; the deck will run out of followers eventually, so it is not an infinite loop. Infinite non-action loops which
+should be detected and cause neither ability to function: Frodo, Weary From the Journey vs Black Land Observer; Frodo,
+Weary From the Journey vs Wandering Hillman." *[2026-10-16]*
+
+**A one-player loop: three uses, then her prompt, then barred (2026-10-16).** "The `loops` section mentions in the first
+clause the Sam case; it should let the player do it three times and then prompt with: "LOOP DETECTED: Choose a number
+of times to repeat this action."  It should then perform that many, and then put the tag on that card action to block
+its future use." *[2026-10-16]*
+
+**The skirmish procedure, amended draft (2026-10-20): supersedes the 2026-10-16 draft's step numbers and the 2026-10-19
+order of win and loss.** Engine pass 54 (win before loss) was reverted on her word: "we need to completely revert those
+two commits and re-evaluate based on the new draft". The draft is in orchestrator/answers/2026-10-20-a.md, ten steps.
+"About to end" is now step 5 (was 6). Step 4: "The characters of the winning side win the skirmish, and the characters
+of the losing side lose the skirmish. These occur simultaneously." 4A to 4D are "a sequence of automatic required
+effects triggered by the skirmish loss"; 4D: "Responses to the loser dying occur now, which will resolve before
+optional responses to wins or losses in step 4." Under review with her for holes before anything is built
+("let's inspect it and analyze it *first*"). *[2026-10-20]*
+
+**The skirmish procedure as amended, binding (2026-10-20).** The full text with her edits is
+orchestrator/skirmish-procedure-2026-10-20.md (answers/2026-10-20-a.md and -b.md). Her words on the holes:
+- Step 4's loss sequence: "As a sequence of required effects, this block of effects is essentially a required 'each
+  time' rules trigger. It is indeed ordered by the Free Peoples player, which nukes my prior notes about Lurtz's
+  Sword." Lurtz's Sword, Worry and the loss sequence are ordered by the Free Peoples player (the engine as it is).
+- 4D: "That sentence was intended to fold in the rulings on Otsea + Plundered Armories as a reminder or clarification
+  rather than an alteration to anything; actions are responded to in the order which they occur, and so a wound
+  response/trigger occurs when the skirmish loss issues them, then the death response/trigger occurs if that happens
+  (as called out by 4D), and only after the interruptions to the resolution of the required triggers have been resolved
+  do the optional responses/triggers to 4 get to resolve."
+- 4B: the overwhelm is as decided "during step 3".
+- 3C (imported from CR "overwhelmed"): "A side with a total strength greater than zero will overwhelm a side whose total
+  strength is zero. If the strength of both sides is zero, the Shadow side wins the skirmish (but does not overwhelm)."
+- 3A's return to step 3: Fishing Boat 13_48 "should" be offered "on every iteration of the check" (F-0566 confirmed);
+  "We may need to implement Fishing Boat as a non-special-ability response if it's not being offered".
+- 2C: "that side and the last removed character is declared the loser" (Legacy Ruling 2).
+"About to end" is step 5 (Final Cry, Loathsome, Sting answer it; Q-0332 stands). *[2026-10-20]*
+
+**Ketura's answers of 2026-10-20 (d).** Q-0341, a "spot X" number on a plain number prompt (Orc Insurgent 6_104, Wind
+That Sped Ships 8_66, Sunland Trooper 17_59): "A" (defaults to all, as F-0561). Q-0340, Drawing His Eye 10_29 not
+playable with the Shadow hand empty: "Keep". F-0566, Fishing Boat 13_48: "there shouldn't be any interaction difference
+between Footman's Armor and Fishing Boat; the only difference is that FB is not a response special ability." F-0565, a
+loop with a Response inside one player's action and a pass between rounds (Hrethel 6_95 against a Warg 5_65): "I would
+present it the same as the top-level version I think, with the one major difference being that the Response should not
+be barred, only Hrethel (the response could respond to some other trigger and should not be locked out)." F-0563, a
+character who replaced another in a skirmish not "involved" at about-to-end (Sting 8_113, Brave and Loyal 10_105): "yeah
+that's a bug". *[2026-10-20]*
+
+**Ketura's answers of 2026-10-21.** Q-0344 (a character replaced in a skirmish no longer "involved" at about-to-end):
+"Keep. Strictly speaking I can see where you're coming from, but I don't think the replacement case needs tracked for
+these." F-0517, Wizard's Vale 4_359 ("At the start of the first Shadow phase ... (limit once per turn)"): "this is
+focused on the wrong 'first'. The wording here is a gate against *multiple* Shadow players, something Gemp doesn't
+support (yet). So the idea is that only [the first Shadow player] triggers the text during their Shadow phase, and not
+(4) per Shadow player. This second-move requirement should be removed." So "the first Shadow phase" in a card's text
+names the first Shadow PLAYER's phase, not the turn's first move. The threat rule's entry text is "Assign threat
+wounds". Commit messages and comments name Ketura, never "her" (roles, "Name Ketura"). *[2026-10-21]*

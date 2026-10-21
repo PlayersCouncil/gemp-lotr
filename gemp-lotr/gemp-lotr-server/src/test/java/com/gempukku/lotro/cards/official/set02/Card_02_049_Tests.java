@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_02_049_Tests
@@ -17,8 +18,13 @@ public class Card_02_049_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "2_49");
-					// put other cards in here as needed for the test case
+					put("commander", "2_49");
+					put("marksman", "1_176");   // Goblin Marksman: [moria] Orc archer, strength 7; Archer is its whole text
+					put("bowman", "2_60");      // Goblin Bowman: [moria] Orc archer, strength 4; Archer is its whole text
+					put("runner", "1_178");     // Goblin Runner: [moria] Orc who is no archer, strength 5; its trigger is on being played
+					// Orc Archer Troop: a [sauron] Orc archer, strength 15; its text gives fierce and an archery bonus
+					// with initiative, and no strength
+					put("troop", "7_294");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,34 +52,58 @@ public class Card_02_049_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var commander = scn.GetFreepsCard("commander");
 
-		assertEquals("Archer Commander", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.MORIA, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.ORC, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.ARCHER));
-		assertEquals(4, card.getBlueprint().getTwilightCost());
-		assertEquals(8, card.getBlueprint().getStrength());
-		assertEquals(2, card.getBlueprint().getVitality());
-		assertEquals(4, card.getBlueprint().getSiteNumber());
+		assertEquals("Archer Commander", commander.getBlueprint().getTitle());
+		assertNull(commander.getBlueprint().getSubtitle());
+		assertTrue(commander.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, commander.getBlueprint().getSide());
+		assertEquals(Culture.MORIA, commander.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, commander.getBlueprint().getCardType());
+		assertEquals(Race.ORC, commander.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(commander, Keyword.ARCHER));
+		assertEquals(4, commander.getBlueprint().getTwilightCost());
+		assertEquals(8, commander.getBlueprint().getStrength());
+		assertEquals(2, commander.getBlueprint().getVitality());
+		assertEquals(4, commander.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void ArcherCommanderTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void EachOtherMoriaArcherIsStrengthPlus2WhileHeIsInPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var commander = scn.GetShadowCard("commander");
+		var marksman = scn.GetShadowCard("marksman");
+		var bowman = scn.GetShadowCard("bowman");
+		var runner = scn.GetShadowCard("runner");
+		var troop = scn.GetShadowCard("troop");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.FreepsPass();
+		scn.MoveMinionsToTable(marksman, bowman, runner, troop);
 
-		assertEquals(4, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertEquals(7, scn.GetStrength(marksman));
+		assertEquals(4, scn.GetStrength(bowman));
+		assertEquals(5, scn.GetStrength(runner));
+		assertEquals(15, scn.GetStrength(troop));
+
+		scn.MoveMinionsToTable(commander);
+
+		// Two [moria] archers of different titles; not a [moria] Orc who is no archer, nor an archer of another
+		// culture, nor the Commander himself.
+		assertEquals(9, scn.GetStrength(marksman));
+		assertEquals(6, scn.GetStrength(bowman));
+		assertEquals(5, scn.GetStrength(runner));
+		assertEquals(15, scn.GetStrength(troop));
+		assertEquals(8, scn.GetStrength(commander));
+
+		scn.MoveCardsToDiscard(commander);
+
+		// With him gone, the bonus goes too.
+		assertInDiscard(commander);
+		assertEquals(7, scn.GetStrength(marksman));
+		assertEquals(4, scn.GetStrength(bowman));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

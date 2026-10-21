@@ -115,7 +115,7 @@ public class Card_02_001_Tests
 	}
 
 	@Test
-	public void WeaponAbilityOffersOnlyDwarvenWeaponsInYourDiscardPileIncludingOneTheCostDiscarded() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WeaponAbilityOffersOnlyDwarvenWeaponsAlreadyInYourDiscardPileAndNotOneTheCostDiscarded() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("mountains");
@@ -148,10 +148,12 @@ public class Card_02_001_Tests
 		assertInZone(Zone.DECK, filler1, battleaxe, filler2);
 		scn.FreepsUseCardAction(card);
 
-		// A possession and an artifact, one of them put there by the cost.
+		// A possession and an artifact that were there before the action began; not the battle axe the cost has
+		// just discarded (F-0548: A, CR 4.2 "effect": a card played from the discard pile must be there before the
+		// action begins).
 		assertInDiscard(filler1, battleaxe, filler2);
-		assertTrue(scn.FreepsHasCardChoiceAvailable(axe, battleaxe, orcrist));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(armor, sword, handaxe));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(axe, orcrist));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(battleaxe, armor, sword, handaxe));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 
 		scn.FreepsChooseCardBPFromSelection(orcrist);

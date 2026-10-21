@@ -76,10 +76,14 @@ public class Exert implements EffectAppenderProducer {
 
         EffectUtils.validatePreEvaluate(cost, effectObject, valueSource, timesSource, cardResolver);
 
+        final boolean timesReadsMemory = NoTimesNoChoice.readsMemory(effectObject.get("times"));
+
         MultiEffectAppender result = new MultiEffectAppender() {
-            // With nobody who can exert it does nothing.
+            // With nobody who can exert it does nothing; as an effect, nor with X times come to 0 (Q-0337).
             @Override
             public EffectForecast forecast(ActionContext actionContext) {
+                if (NoTimesNoChoice.isCertainlyNoTimes(cost, actionContext, timesSource, timesReadsMemory))
+                    return EffectForecast.NOTHING;
                 return EffectForecast.givenTo(cardResolver.forecast(actionContext), false);
             }
 
@@ -122,8 +126,9 @@ public class Exert implements EffectAppenderProducer {
             }
         };
 
+        // As an effect, "exert X times" with X come to 0 chooses nobody and asks nothing (Q-0337: B).
         result.addEffectAppender(
-                cardResolver);
+                NoTimesNoChoice.resolver(cost, chosen, cardResolver, timesSource, memory));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

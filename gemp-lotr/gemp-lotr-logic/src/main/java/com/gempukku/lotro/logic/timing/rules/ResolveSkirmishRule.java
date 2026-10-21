@@ -33,6 +33,10 @@ public class ResolveSkirmishRule {
                     public List<? extends RequiredTriggerAction> getRequiredAfterTriggers(LotroGame lotroGame, EffectResult effectResult) {
                         if (effectResult.getType() == EffectResult.Type.SKIRMISH_FINISHED_NORMALLY) {
                             NormalSkirmishResult skirmishResult = (NormalSkirmishResult) effectResult;
+                            // Skirmish procedure 4A (Ketura, 2026-10-20): a losing side already removed from the
+                            // skirmish (2C) skips the loss effects, so there is no sequence to order
+                            if (skirmishResult.getInSkirmishLosers().isEmpty())
+                                return null;
                             ResolveSkirmishDamageAction action = new ResolveSkirmishDamageAction(skirmishResult);
                             return Collections.singletonList(action);
                         } else if (effectResult.getType() == EffectResult.Type.SKIRMISH_FINISHED_WITH_OVERWHELM) {

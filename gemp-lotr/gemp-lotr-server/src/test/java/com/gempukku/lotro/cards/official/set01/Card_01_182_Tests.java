@@ -173,16 +173,12 @@ public class Card_01_182_Tests
 		// 15 against 3: a [shire] Hobbit overwhelmed.
 		scn.FreepsResolveSkirmish(merry);
 		scn.PassSkirmishActions();
-		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
-		scn.FreepsResolveRuleFirst();
 		assertInZone(Zone.DEAD, merry);
 		assertEquals(2, scn.GetBurdens());
 
 		// A [gondor] Hobbit is a Hobbit as well.
 		scn.FreepsResolveSkirmish(pippin);
 		scn.PassSkirmishActions();
-		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
-		scn.FreepsResolveRuleFirst();
 		assertInZone(Zone.DEAD, pippin);
 		assertEquals(4, scn.GetBurdens());
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());

@@ -295,9 +295,6 @@ public class Card_V2_017_Tests
 		assertInZone(Zone.FREE_CHARACTERS, aragorn);
 		scn.FreepsChooseCard(aragorn);
 		assertInZone(Zone.DEAD, aragorn);
-		// The rules' own business with the death and the event's are required at the same moment, and the
-		// Free Peoples player says which goes first.
-		scn.FreepsResolveRuleFirst();
 
 		// 6 + 2 + 1 and 5 + 2 + 1.
 		assertEquals(9, scn.GetStrength(guard));
@@ -465,7 +462,6 @@ public class Card_V2_017_Tests
 		scn.ShadowUseCardAction(slayer);
 		scn.ShadowChooseCard(aragorn);
 		assertInZone(Zone.DEAD, aragorn);
-		scn.FreepsResolveRuleFirst();
 		assertEquals(7, scn.GetStrength(guard));
 		assertEquals(6, scn.GetStrength(defender));
 		assertEquals(5, scn.GetStrength(rider));
@@ -558,9 +554,6 @@ public class Card_V2_017_Tests
 		);
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
-		// The rules' own business with the death and the event's are required at the same moment, and the
-		// Free Peoples player says which goes first.
-		scn.FreepsResolveRuleFirst();
 		assertInZone(Zone.DEAD, aragorn);
 		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 

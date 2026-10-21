@@ -103,6 +103,8 @@ public class Card_06_104_Tests
 		// 5 cultures over 2: X is up to 3, the player's to name.
 		assertEquals(0, scn.ShadowGetChoiceMin());
 		assertEquals(3, scn.ShadowGetChoiceMax());
+		// The number comes filled in with the most (Q-0341: A, as F-0561), and the player accepts it.
+		assertEquals(Integer.valueOf(3), scn.ShadowGetChoiceDefault());
 		scn.ShadowChoose("3");
 
 		assertEquals(3, scn.GetShadowHandCount());
@@ -136,6 +138,8 @@ public class Card_06_104_Tests
 		assertEquals(1, scn.GetWoundsOn(insurgent));
 		assertEquals(0, scn.ShadowGetChoiceMin());
 		assertEquals(2, scn.ShadowGetChoiceMax());
+		// Filled in with the most (Q-0341: A), and fewer may be named.
+		assertEquals(Integer.valueOf(2), scn.ShadowGetChoiceDefault());
 		scn.ShadowChoose("1");
 
 		assertEquals(1, scn.GetShadowHandCount());

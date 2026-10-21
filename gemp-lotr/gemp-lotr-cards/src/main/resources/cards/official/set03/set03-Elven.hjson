@@ -456,6 +456,10 @@
 		timewords: Fellowship
 		effects: {
 			type: event
+			requires: {
+				type: HasCardInHand
+				player: shadow
+			}
 			effect: [
 				{
 					type: revealRandomCardsFromHand
@@ -566,6 +570,10 @@
 			{
 				type: activated
 				phase: regroup
+				requires: {
+					type: canSpot
+					filter: minion
+				}
 				cost: {
 					type: exert
 					select: self

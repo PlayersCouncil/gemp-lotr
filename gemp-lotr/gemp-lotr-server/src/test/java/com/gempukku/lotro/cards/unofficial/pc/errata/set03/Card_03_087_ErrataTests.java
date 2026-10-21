@@ -388,9 +388,8 @@ public class Card_03_087_ErrataTests
 		// X is 0, and X may be 0: the Free Peoples player may prevent this by discarding no cards.
 		assertTrue(scn.FreepsDecisionAvailable("prevent"));
 		scn.FreepsChooseYes();
-		// The game still asks which cards, and there are none to choose.
-		assertEquals(0, scn.FreepsGetChoiceMax());
-		scn.FreepsDeclineChoosing();
+		// A choice of 0 cards from hand is not asked (Q-0337).
+		assertFalse(scn.FreepsDecisionAvailable("Choose cards from hand to discard"));
 
 		assertEquals(1, scn.GetFreepsHandCount());
 		assertEquals(0, scn.GetFreepsDiscardCount());

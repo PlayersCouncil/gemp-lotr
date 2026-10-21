@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.assertInZone;
 import static org.junit.Assert.*;
 
 public class Card_17_059_Tests
@@ -18,8 +19,12 @@ public class Card_17_059_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "17_59");
-					// put other cards in here as needed for the test case
+					put("trooper", "17_59");
+
+					put("oath", "17_66");       // Wildman's Oath: [men] possession played to the support area; stacks a [men] minion discarded in the maneuver phase (declined); a skirmish ability never used here
+					put("haradrim", "11_74");   // Detachment of Haradrim: a [men] minion to lie stacked on a possession
+					put("corps", "11_73");      // Corps of Harad: a second [men] minion to lie stacked on a possession
+					put("runner", "1_178");     // Goblin Runner: a [moria] minion to lie stacked on a possession, not counted
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +52,7 @@ public class Card_17_059_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("trooper");
 
 		assertEquals("Sunland Trooper", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +67,41 @@ public class Card_17_059_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SunlandTrooperTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void TheNumberOfMinionsToSpotComesFilledInWithAllStackedOnMenPossessions() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var trooper = scn.GetShadowCard("trooper");
+		var oath = scn.GetShadowCard("oath");
+		var haradrim = scn.GetShadowCard("haradrim");
+		var corps = scn.GetShadowCard("corps");
+		var runner = scn.GetShadowCard("runner");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveCardsToSupportArea(oath);
+		scn.StackCardsOn(oath, haradrim, corps, runner);
+		scn.MoveMinionsToTable(trooper);
 
-		assertEquals(3, scn.GetTwilight());
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+		int pool = scn.GetTwilight();
+		assertTrue(scn.ShadowActionAvailable(trooper));
+		scn.ShadowUseCardAction(trooper);
+
+		// Two [men] minions stacked on a [men] possession; the [moria] Orc beside them is not one.  The box comes
+		// filled in with both (Q-0341: A, as F-0561), and the player accepts it.
+		assertEquals(0, scn.ShadowGetChoiceMin());
+		assertEquals(2, scn.ShadowGetChoiceMax());
+		assertEquals(Integer.valueOf(2), scn.ShadowGetChoiceDefault());
+		scn.ShadowChoose("2");
+
+		// The Trooper is a [men] minion discarded in the maneuver phase: the Oath may stack him, and is declined.
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(oath));
+		scn.ShadowDeclineOptionalTrigger();
+		assertInZone(Zone.DISCARD, trooper);
+		assertEquals(pool + 2, scn.GetTwilight());
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
 }

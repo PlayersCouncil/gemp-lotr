@@ -181,10 +181,12 @@ game as built and file nothing.)
 - "Draws a card (or takes a card into hand)" (Verily I Come 2_94, Betrayal of Isengard 3_29 and 12_25) is ONE
   trigger, `playerDrawsCard` with `orTakesIntoHand: true`: no second trigger is owed for the take. "Draws a card"
   alone has no such field and answers a draw only. (Q-0205, F-0376; mechanics/deck/DrawnOrTakenIntoHandTests.)
-- "Make each ... until" on an EVENT is a snapshot, but not where it changes the COST of cards that are not yet
-  played: Deft in Their Movements 2_99 ("each site's Shadow number -2") and We Must Go Warily 3_48 ("each
-  minion's twilight cost +1") are rightly a standing `modifyCost` over a filter, as Rohirrim Road 7_332 is as an
-  ability. A snapshot would do nothing there. (F-0217; the snapshot itself is Q-0011.)
+- "Make each ... until" on an EVENT is a snapshot, a site's Shadow number included: Deft in Their Movements 2_99
+  ("each site's Shadow number -2") is a `memorizeActive` of `site` with the `modifyCost` over the memory, and a
+  site laid after it keeps its number (CR 4.2 "event" names the card; F-0555). Not where it changes the twilight
+  COST of cards not yet played: a card in play costs its printed number (CR 4.2 "twilight cost", F-0109), so a
+  snapshot would do nothing, and We Must Go Warily 3_48 ("each minion's twilight cost +1") is rightly a standing
+  `modifyCost` over `minion`, as Rohirrim Road 7_332 is as an ability. (F-0217 is on abilities; Q-0011.)
 - "Wears The One Ring until the regroup phase" (every One Ring, Saruman's Reach 1_137, Resistance Becomes
   Unbearable 2_79, Narchost 7_362) has no `until:` in the definition: `putOnRing` takes none, and the game takes
   the Ring off itself as the regroup phase starts, or as it ends where the Ring was put on in it.
@@ -356,3 +358,14 @@ THE COST OF ASSIGNING (set 7's Morgul Orcs; built by engine pass 26, item assign
 - A card that prints no game text and no keyword (Gandalf, Stormcrow 0_64, and about 33 more): its ledger has no
   clause lines (Sources, Findings, Dropped and Notes only), its stats test header writes `Game Text: (none)`, and
   lint accepts that. Do not invent a placeholder clause.
+
+- Ketura's answers of 2026-10-16 (rulings-log, entries of that date; engine pass 53 builds them). A random reveal from
+  an opponent's hand with no cost ahead of it is a cost: with that hand empty the card is NOT playable (Q-0336: B);
+  until pass 53 lands, a card of that shape gets the requirement at landing (`hasCardInHand` of that player) and a
+  finding naming Q-0336. Her skirmish procedure (Q-0332) is binding: "about to end" is step 6, after the loser's
+  wounds or kill (5b, 5c) and after a cancel (2a) or a removal (2c). "When" and "each time" play alike (Q-0338).
+  Archery wounds have no source (Q-0335). A draw is the player's whose hand it goes to (Q-0334). A "you may ...
+  (or N <noun> if ...)" on a trigger or ability is 0-1 of the first noun, or 0-N of the parenthesis's noun as printed
+  (Q-0339). A "spot X" number choice defaults to all that can be spotted (F-0561).
+
+- Name Ketura; no pronouns for Ketura in what is kept (Ketura, 2026-10-21). In commit messages, code comments (Java, HJSON) and test Javadoc, write "Ketura's ruling", "Ketura's item", "Ketura (Q-0329)", never "her item", "her word", "she said": a reader of the history has no one for "her" to refer to. Quote Ketura's words with the name before them.

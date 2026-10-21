@@ -310,7 +310,9 @@
 				amount: {
 					type: Conditional
 					requires: {
-						type: fierceSkirmish
+						type: memoryMatches
+						memory: chosenCompanion
+						filter: inFierceSkirmish
 					}
 					true: 4
 					false: 2

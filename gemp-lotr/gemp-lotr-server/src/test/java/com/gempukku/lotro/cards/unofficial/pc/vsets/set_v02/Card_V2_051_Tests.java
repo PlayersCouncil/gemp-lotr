@@ -142,8 +142,7 @@ public class Card_V2_051_Tests
 		assertAttachedTo(javelin, deor);
 
 		scn.ShadowPlayCard(terror);
-		// Both allies are dying at once: the Free Peoples player orders the deaths and the tokens.
-		scn.FreepsResolveRuleFirst();
+		// Both allies are dying at once.
 
 		assertInZone(Zone.DEAD, deor, bounder);
 		assertInZone(Zone.DISCARD, javelin);
@@ -288,8 +287,6 @@ public class Card_V2_051_Tests
 		// 6 + 1 for the Javelin against 13: he loses, and is not overwhelmed.
 		assertEquals(7, scn.GetStrength(rguard));
 		scn.PassSkirmishActions();
-		// The rest of the skirmish's resolution and the two tokens come at once, and are put in order.
-		scn.FreepsResolveRuleFirst();
 
 		assertInZone(Zone.DEAD, rguard);
 		assertInZone(Zone.DISCARD, javelin, shield);

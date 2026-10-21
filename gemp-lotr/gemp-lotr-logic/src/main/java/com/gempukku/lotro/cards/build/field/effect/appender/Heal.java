@@ -42,15 +42,22 @@ public class Heal implements EffectAppenderProducer {
                         },
                         count, memory, player, "Choose cards to heal", environment);
 
+        final boolean chosen = select != null && select.startsWith("choose(") && select.endsWith(")");
+        final boolean timesReadsMemory = NoTimesNoChoice.readsMemory(effectObject.get("times"));
+
         MultiEffectAppender result = new MultiEffectAppender() {
-            // With nobody who has a wound that can be healed it does nothing.
+            // With nobody who has a wound that can be healed it does nothing; as an effect, nor with X times come
+            // to 0 (Q-0337).
             @Override
             public EffectForecast forecast(ActionContext actionContext) {
+                if (NoTimesNoChoice.isCertainlyNoTimes(cost, actionContext, times, timesReadsMemory))
+                    return EffectForecast.NOTHING;
                 return EffectForecast.givenTo(cardResolver.forecast(actionContext), false);
             }
         };
 
-        result.addEffectAppender(cardResolver);
+        // As an effect, "heal X times" with X come to 0 chooses nobody and asks nothing (Q-0337).
+        result.addEffectAppender(NoTimesNoChoice.resolver(cost, chosen, cardResolver, times, memory));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

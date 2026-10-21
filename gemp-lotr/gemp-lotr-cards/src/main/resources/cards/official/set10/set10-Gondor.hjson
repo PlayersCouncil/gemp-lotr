@@ -266,6 +266,10 @@
 		timewords: Fellowship
 		effects: {
 			type: event
+			requires: {
+				type: HasCardInHand
+				player: shadow
+			}
 			effect: [
 				{
 					type: chooseHowManyToSpot

@@ -8,6 +8,7 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.modifiers.AddKeywordModifier;
+import com.gempukku.lotro.logic.timing.rules.ThreatRule;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -383,10 +384,10 @@ public class DecisionReadingTests
 		scn.ShadowChooseCard(king);
 
 		// A companion's death turns the threat into a wound, by rule, and sets off the King's own text.  The
-		// King's trigger is listed first; the rule is second, and the game gives it no wording.
+		// King's trigger is listed first; the rule is second, and is found by its source, not its wording.
 		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
 		assertEquals(Arrays.asList("103_27", "rules"), scn.FreepsGetADParamAsList("blueprintId"));
-		assertNull(scn.FreepsGetADParamAsList("actionText").get(1));
+		assertEquals(ThreatRule.ThreatWoundsText, scn.FreepsGetADParamAsList("actionText").get(1));
 		assertEquals(1, scn.GetWoundsOn(deadman));
 
 		scn.FreepsResolveRuleFirst();
@@ -405,7 +406,7 @@ public class DecisionReadingTests
 	}
 
 	@Test
-	public void ACardsTriggerIsNamedPastARuleThatHasNoWording() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ACardsTriggerIsNamedPastARuleListedBeforeIt() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetDeathScenario();
 
 		var guard = scn.GetFreepsCard("guard");
@@ -424,10 +425,10 @@ public class DecisionReadingTests
 		scn.ShadowUseCardAction(slayer);
 		scn.ShadowChooseCard(guard);
 
-		// Here the rule is listed first, with no wording, and the card's trigger second.
+		// Here the rule is listed first, and the card's trigger second.
 		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
 		assertEquals(Arrays.asList("rules", "11_80"), scn.FreepsGetADParamAsList("blueprintId"));
-		assertNull(scn.FreepsGetADParamAsList("actionText").get(0));
+		assertEquals(ThreatRule.ThreatWoundsText, scn.FreepsGetADParamAsList("actionText").get(0));
 		assertEquals(12, scn.GetStrength(haradrim));
 
 		scn.FreepsResolveActionOrder("Ferocious Haradrim");
@@ -446,7 +447,7 @@ public class DecisionReadingTests
 	}
 
 	@Test
-	public void TheRuleWithNoWordingIsResolvedFirstWhereItIsListedFirst() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheRuleIsResolvedFirstWhereItIsListedFirst() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetDeathScenario();
 
 		var guard = scn.GetFreepsCard("guard");

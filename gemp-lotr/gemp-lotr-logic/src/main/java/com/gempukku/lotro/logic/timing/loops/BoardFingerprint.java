@@ -23,7 +23,8 @@ import java.util.TreeMap;
  * the limit counters (an ability with a limit is never part of a loop: LoopTracker), and the phase's and turn's
  * lists of what has happened.
  * <p>
- * It is taken only where an alternation of actions has repeated itself (LoopTracker), never on every action.
+ * It is taken only where an alternation of actions has repeated itself (LoopTracker), never on every action; for a
+ * loop of one player's actions (OnePlayerLoopTracker), with each action chosen, and without the order of the decks.
  */
 public final class BoardFingerprint {
     private final String _value;
@@ -38,6 +39,22 @@ public final class BoardFingerprint {
      * @return The fingerprint.
      */
     public static BoardFingerprint of(LotroGame game) {
+        return of(game, true);
+    }
+
+    /**
+     * Takes the fingerprint of the board as it stands, the order of the draw decks and how often they were shuffled
+     * left out: which cards are in each deck is kept.  This is the board as the loop step compares it for a loop of
+     * one player's actions (OnePlayerLoopTracker), where the CR 4.2 example, Sam, Faithful Companion with no Bill
+     * the Pony to find, looks through the deck and shuffles it each time and is a loop all the same.
+     * @param game The game.
+     * @return The fingerprint.
+     */
+    public static BoardFingerprint ignoringDeckOrder(LotroGame game) {
+        return of(game, false);
+    }
+
+    private static BoardFingerprint of(LotroGame game, boolean deckOrderCounts) {
         final GameState gameState = game.getGameState();
         final StringBuilder sb = new StringBuilder();
         sb.append(gameState.getCurrentPhase()).append('|')
@@ -50,9 +67,13 @@ public final class BoardFingerprint {
         for (String player : gameState.getPlayerOrder().getAllPlayers()) {
             sb.append('P').append(player).append(':')
                     .append(gameState.getPlayerPosition(player)).append(':')
-                    .append(gameState.getDeckShuffleCount(player)).append(":D");
-            for (PhysicalCard card : gameState.getDeck(player))
-                sb.append(card.getCardId()).append(',');
+                    .append(deckOrderCounts ? gameState.getDeckShuffleCount(player) : "-").append(":D");
+            if (deckOrderCounts) {
+                for (PhysicalCard card : gameState.getDeck(player))
+                    sb.append(card.getCardId()).append(',');
+            } else {
+                sb.append(idsOf(gameState.getDeck(player)));
+            }
             sb.append('|');
         }
 
@@ -69,9 +90,14 @@ public final class BoardFingerprint {
                     .append(':').append(card.getSiteNumber())
                     .append(':').append(card.isFlipped())
                     .append(':').append(gameState.isHindered(card));
-            final Map<Token, Integer> tokens = gameState.getTokens(card);
+            // A token counted 0 (a wound healed) is no token: the card is as it was before it had one.
+            final Map<Token, Integer> tokens = new TreeMap<>();
+            for (Map.Entry<Token, Integer> token : gameState.getTokens(card).entrySet()) {
+                if (token.getValue() != null && token.getValue() != 0)
+                    tokens.put(token.getKey(), token.getValue());
+            }
             if (!tokens.isEmpty())
-                sb.append(':').append(new TreeMap<>(tokens));
+                sb.append(':').append(tokens);
             final PhysicalCard.WhileInZoneData data = card.getWhileInZoneData();
             if (data != null)
                 sb.append(':').append(data.getValue());

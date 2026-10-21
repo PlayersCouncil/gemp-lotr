@@ -25,17 +25,17 @@ public class Card_02_044_ErrataTests
 					put("uruk", "1_151");       // Uruk Savage: [isengard] Uruk-hai, damage +1 and nothing else
 					put("servant", "3_58");     // Isengard Servant: [isengard] Orc; a regroup ability only used on purpose
 					put("whu", "18_131");       // White Hand Uruk: [uruk-hai] Uruk-hai; its play requirement does not matter when cheated in
-					put("troop1", "1_177");     // Goblin Patrol Troop: a minion with no text, to fill the Shadow player's hand
-					put("troop2", "1_177");
+					put("armory", "1_157");     // Uruk-hai Armory: [isengard] condition, cost 1; its text is about archery
+					put("keyward", "12_105");   // Troll's Keyward: [orc] Orc lurker. "Shadow: Exert Troll's Keyward and reveal your hand to add (1) for each [orc] Troll revealed."
 
-					put("mirror", "1_55");      // The Mirror of Galadriel: "Maneuver: If an opponent has at least 7 cards in hand, exert Galadriel to look at 2 of those cards at random. Discard one ..."
 					put("curse1", "1_36");      // Curse Their Foul Feet!: "Fellowship: Exert an Elf to reveal an opponent's hand. That player discards a card from hand for each Orc revealed."
 					put("curse2", "1_36");
 					put("galadriel", "6_18");   // Galadriel, Keeper of Nenya: Elf ally, vitality 3; heals herself at the start of each turn; a skirmish ability
-
-					put("advances", "53_87");   // The Dark Lord Advances: Shadow regroup event; exert a [sauron] minion to reveal a card at random from the Free Peoples player's hand
-					put("sentry", "10_84");     // Cirith Ungol Sentry: [sauron] Uruk-hai, damage +1 and nothing else
+					put("arwen", "1_30");       // Arwen, Daughter of Elrond: Elf companion, vitality 3; her text is about skirmishing a Nazgul
+					put("gandalf", "1_72");     // Gandalf, Friend of the Shirefolk: a [gandalf] Wizard companion; his text is about his own strength
+					put("inspiration", "11_36");// Inspiration: Skirmish event. "Spot a [gandalf] Wizard to reveal your hand and make a minion strength -3 for each companion in your hand ..."
 				}},
+				// Site 6 is Galadriel's Glade: "Sanctuary. Fellowship: Exert an Elf to look at an opponent's hand."
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
@@ -148,7 +148,8 @@ public class Card_02_044_ErrataTests
 
 		var business = scn.GetShadowCard("business");
 		var servant = scn.GetShadowCard("servant");
-		scn.MoveCardsToHand(business);
+		var armory = scn.GetShadowCard("armory");
+		scn.MoveCardsToHand(business, armory);
 
 		scn.StartGame();
 		// Something else makes every condition cost 1 more. A cost does not go below 0, so without it
@@ -159,10 +160,13 @@ public class Card_02_044_ErrataTests
 
 		// 3 printed + 1 more, no [isengard] minion to spot.
 		assertEquals(4, scn.GetTwilightCost(business));
+		assertEquals(2, scn.GetTwilightCost(armory));
 		scn.MoveMinionsToTable(servant);
 		scn.ShadowRefreshDecision();
 		// 3 printed + 1 more - 3.
 		assertEquals(1, scn.GetTwilightCost(business));
+		// The discount is this card's own: another condition in the same hand is not -3.
+		assertEquals(2, scn.GetTwilightCost(armory));
 		int twilight = scn.GetTwilight();
 
 		scn.ShadowPlayCard(business);
@@ -209,79 +213,115 @@ public class Card_02_044_ErrataTests
 	}
 
 	@Test
-	public void TheFreePeoplesPlayerCannotLookAtCardsInTheShadowPlayersHand() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheFreePeoplesPlayerCannotLookAtTheShadowHandByASitesTextEither() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var business = scn.GetShadowCard("business");
 		var uruk = scn.GetShadowCard("uruk");
-		var galadriel = scn.GetFreepsCard("galadriel");
-		var mirror = scn.GetFreepsCard("mirror");
-		scn.MoveCardsToSupportArea(mirror);
-		scn.MoveAlliesToTable(galadriel);
-		// The card under test waits in the discard pile, where the Mirror's random look and discard cannot reach
-		// it (F-0264); it is put into play from there below.
+		var armory = scn.GetShadowCard("armory");
+		// The card under test waits in the discard pile until it is cheated into play below.
 		scn.MoveCardsToDiscard(business);
-		// Eight cards in hand, so that after one is discarded the Mirror's 7 are still there.
-		scn.MoveCardsToHand(scn.GetShadowCard("business2"), scn.GetShadowCard("servant"), scn.GetShadowCard("whu"),
-				scn.GetShadowCard("troop1"), scn.GetShadowCard("troop2"), scn.GetShadowCard("mirror"),
-				scn.GetShadowCard("curse1"), scn.GetShadowCard("curse2"));
+		assertInDiscard(business);
+		var arwen = scn.GetFreepsCard("arwen");
+		scn.MoveCompanionsToTable(arwen);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(uruk);
-		scn.SkipToPhase(Phase.MANEUVER);
-		assertEquals(8, scn.GetShadowHandCount());
-		assertInDiscard(business);
+		scn.SkipToSite(6);
+		scn.SetShadowHand(uruk, armory);
+		var glade = scn.GetCurrentSite();
 
-		// Without the card, the Mirror looks at 2 cards and discards one.
-		scn.FreepsUseCardAction(mirror);
-		assertEquals(1, scn.GetWoundsOn(galadriel));
-		assertTrue(scn.FreepsDecisionAvailable("Opponent's hand"));
-		assertEquals(2, scn.FreepsGetCardChoiceCount());
+		assertEquals(6, scn.GetCurrentSiteNumber());
+		assertEquals(0, scn.GetWoundsOn(arwen));
+		assertTrue(scn.FreepsActionAvailable(glade));
+
+		// The bar is the player's, not his cards': without the card the site shows the whole hand.
+		scn.FreepsUseCardAction(glade);
+		assertEquals(1, scn.GetWoundsOn(arwen));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(uruk, false));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(armory, false));
+		assertEquals(2, scn.FreepsGetTotalRevealedCardCount());
 		scn.FreepsDismissRevealedCards();
-		scn.FreepsChooseAny();
-		assertEquals(7, scn.GetShadowHandCount());
-		scn.ShadowPass();
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 
 		scn.MoveCardsToSupportArea(business);
 		scn.FreepsRefreshDecision();
 		assertInZone(Zone.SUPPORT, business);
 
-		// With it, the Mirror is still used and its cost paid, and nothing is looked at or discarded.
-		assertEquals(7, scn.GetShadowHandCount());
-		assertTrue(scn.FreepsActionAvailable(mirror));
-		scn.FreepsUseCardAction(mirror);
-		assertEquals(2, scn.GetWoundsOn(galadriel));
-		assertFalse(scn.FreepsDecisionAvailable("Opponent's hand"));
-		assertEquals(7, scn.GetShadowHandCount());
-		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+		// With it, Arwen, the only Elf, still exerts and nothing is shown.
+		assertTrue(scn.FreepsActionAvailable(glade));
+		scn.FreepsUseCardAction(glade);
+		assertEquals(2, scn.GetWoundsOn(arwen));
+		assertEquals(0, scn.FreepsGetTotalRevealedCardCount());
+		assertEquals(2, scn.GetShadowHandCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	public void TheShadowPlayerMayStillRevealTheFreePeoplesPlayersHand() throws DecisionResultInvalidException, CardNotFoundException {
+	public void TheShadowPlayerMayStillRevealHisOwnHand() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var business = scn.GetShadowCard("business");
-		var advances = scn.GetShadowCard("advances");
-		var sentry = scn.GetShadowCard("sentry");
-		var galadriel = scn.GetFreepsCard("galadriel");
-		scn.MoveCardsToHand(advances);
-		scn.MoveCardsToHand(galadriel);
+		var keyward = scn.GetShadowCard("keyward");
+		var uruk = scn.GetShadowCard("uruk");
+		var armory = scn.GetShadowCard("armory");
 		scn.MoveCardsToSupportArea(business);
 
 		scn.StartGame();
-		scn.MoveMinionsToTable(sentry);
-		scn.SkipToPhase(Phase.REGROUP);
-		scn.SetTwilight(10);
+		scn.SetShadowHand(uruk, armory);
+		scn.MoveMinionsToTable(keyward);
 		scn.FreepsPass();
 
-		// The restriction is the Free Peoples player's: the Shadow player is shown the one card in that hand.
-		scn.ShadowPlayCard(advances);
-		assertEquals(1, scn.GetWoundsOn(sentry));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertInZone(Zone.SUPPORT, business);
+		assertEquals(2, scn.GetShadowHandCount());
+		assertEquals(0, scn.GetWoundsOn(keyward));
+		int twilight = scn.GetTwilight();
+
+		// The bar is on the Free Peoples player: a Shadow hand its own owner reveals is shown to him.
+		scn.ShadowUseCardAction(keyward);
+		assertEquals(1, scn.GetWoundsOn(keyward));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(uruk, false));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(armory, false));
+		assertEquals(2, scn.FreepsGetTotalRevealedCardCount());
+		scn.FreepsDismissRevealedCards();
+		// No [orc] Troll among them, so nothing is added.
+		assertEquals(twilight, scn.GetTwilight());
+		assertEquals(2, scn.GetShadowHandCount());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void TheFreePeoplesPlayerMayStillRevealHisOwnHand() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var business = scn.GetShadowCard("business");
+		var uruk = scn.GetShadowCard("uruk");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var arwen = scn.GetFreepsCard("arwen");
+		var inspiration = scn.GetFreepsCard("inspiration");
+		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCardsToSupportArea(business);
+
+		scn.StartGame();
+		scn.SetFreepsHand(inspiration, arwen);
+		scn.MoveMinionsToTable(uruk);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gandalf, uruk);
+		scn.FreepsResolveSkirmish(gandalf);
+
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertInZone(Zone.SUPPORT, business);
+		assertEquals(2, scn.GetFreepsHandCount());
+		int strength = scn.GetStrength(uruk);
+
+		// The bar is on a Shadow player's hand: the Free Peoples player's own, revealed by him, is shown to the Shadow player.
+		scn.FreepsPlayCard(inspiration);
+		assertTrue(scn.ShadowHasCardChoiceAvailable(arwen, false));
 		assertEquals(1, scn.ShadowGetTotalRevealedCardCount());
-		scn.DismissRevealedCards();
 		scn.ShadowDismissRevealedCards();
-		scn.ShadowDeclineChoosing();
-		assertEquals(1, scn.GetFreepsHandCount());
-		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		// One companion in the hand revealed: the only minion is strength -3.
+		assertEquals(strength - 3, scn.GetStrength(uruk));
+		assertInHand(arwen);
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
 }

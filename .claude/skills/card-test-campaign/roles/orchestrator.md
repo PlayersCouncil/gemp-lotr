@@ -182,6 +182,11 @@ Files and `/tmp` survive; every running workflow has stopped, and its notificati
 happened three times, each under two or more Java processes.
 
 1. `wf.py status`, and `git status --short` in both trees.
+   Then `readlink /mnt/user-data/outputs`: while the state store is down (HANDOFF, "THE STATE STORE IS DOWN") it must
+   be `/home/claude/work/state-local`. A restart puts it back to `/mnt/attach/outputs`, the stale store, and every
+   script and agent then reads and writes that (2026-10-16 02:05Z: dec-b2_57 and dec-b2_61 wrote their ledgers there).
+   Re-point it (`ln -sfn /home/claude/work/state-local /mnt/user-data/outputs`) BEFORE relaunching, and copy back
+   anything written to `/mnt/attach/outputs/card-tests` since the restart (`find ... -newermt`).
 2. A stage that had finished is in the run's journal (`wf.py show <folder>`). A stage cut off in the middle left
    its work uncommitted. For a batch of cards: look at what is uncommitted (it should be that
    batch's files and nothing else), discard it, and run the batch again. For an engine item: leave the work where
@@ -235,3 +240,5 @@ context is compacted, and the summary that replaces it is somebody's recollectio
   change of plan.
 - A finding can turn out to need no change (F-0201). Close it `not-a-bug` with what was found, tell her, and ask
   the question her earlier answer now leaves open.
+
+**Name Ketura; no pronouns for Ketura in what is kept (Ketura, 2026-10-21).** In commit messages, code comments (Java, HJSON) and test Javadoc, write "Ketura's ruling", "Ketura's item", "Ketura (Q-0329)", never "her item", "her word", "she said": a reader of the history has no one for "her" to refer to. Quote Ketura's words with the name before them.

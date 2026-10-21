@@ -132,7 +132,9 @@ roaming at site 2: the minion beside a roaming one); nothing else below 2 burden
 Ring-bearer (at either she is fierce and damage +1: on a board that wounds or exerts the Ring-bearer use Attëa).
 Úlairë Attëa 2_82 is another, cheated in (strength 12, vitality 3; when played, may wound an ally); 2_83, 2_85 and
 3_86 have optional "wins a skirmish" triggers. A Nazgûl neither twilight nor fierce: Úlairë Lemenya 1_232. Twilight
-and no Nazgûl: Corpse Lights 6_99.
+and no Nazgûl: Corpse Lights 6_99. Every twilight Nazgûl in print is [wraith] and every twilight [wraith] MINION is a
+Nazgûl, so no minion tells `culture(wraith),twilight` from `twilight,nazgul`; the only twilight [wraith] cards that are
+no Nazgûl are the conditions Cover of Darkness 103_64 and 103_65, which a spot could see and a wound cannot (dec-b2_76).
 
 **The Balrog, for a card that plays "The Balrog".** The Balrog, The Terror of Khazad-dûm 12_79. [moria] Balrog,
 cost 12, site number 4 (12 + 2 roaming at site 2), strength 17, vitality 5, damage +1; nothing is needed to play it
@@ -159,7 +161,9 @@ stacking a [sauron] Orc from play on a controlled site.
 fetches, so cheat them in. No tentacle has more than 2 vitality. Away from a marsh the others are discarded: lay a
 real marsh and never give a site the keyword (Q-0213: F). Midgewater Marshes (1_332; each Hobbit exerts on moving
 there) goes in the site map as site 2, with a site after it that is no marsh; Moria Lake (1_346; Frodo or 2 other
-companions exert on moving there) is the marsh of site 4.
+companions exert on moving there) is the marsh of site 4. Neither has another keyword: where two marshes that differ in one are wanted, Watcher in the Water 19_21 ("The
+fellowship's current site gains marsh"; it discards every other minion but tentacles) makes plains Ettenmoors 1_331
+a marsh too (Card_02_058_Tests).
 
 **A [sauron] Orc played by another card where his cost is read; an Orc who is not [sauron].** Orc Chieftain 1_266;
 Morgul Hound 7_192. Chieftain: cost 2, strength 7, vitality 2, site 6; his text answers only a weapon played on
@@ -202,6 +206,11 @@ archery too, so only a minion with vitality to spare may be on the table before 
 Strength 6, vitality 3; his only text is +2 strength and resistance at a battleground or forest, which no site of
 `FellowshipSites` is. An archer Legolas stops the skippers ("Archers get in the way"); 11_22 and 15_18 (hunter 1) are
 the other non-archers (Card_01_033_Tests).
+
+**A companion of another culture who is no archer, for "a [culture] companion wins (loses)".** Gimli, Son of
+Glóin 1_13 ([dwarven] Dwarf, strength 6, vitality 3; a skirmish ability used only on purpose; his Damage +1 adds a
+wound to a minion he beats). Legolas 1_51 in that place sets off an archery phase and stops the skippers ("Archers
+get in the way"; Card_02_033_Tests, Card_02_034_Tests).
 
 **A Free Peoples skirmish ability on a Ring-bound Man (Faramir 4_117), with no archer keyword.** Ranger's Bow 4_131:
 [gondor] possession, cost 1, bearer must be a Ring-bound Man; "Skirmish: If bearer is skirmishing a Man or a roaming
@@ -319,14 +328,18 @@ playable, or its own text refuses it; Card_01_364_Tests). Théoden signet: its
 readers (I Am Here 5_84, Forth Eorlingas! 4_275, No Living Man 8_90) each exert Théoden; the Théoden who can exert
 twice and has not the signet himself is Tall and Proud 8_92 (vitality 3, Aragorn signet; the three of sets 4 and 5
 have vitality 2). Horn of the Mark 9_45 gives it to Merry or Pippin beside his printed signet. `packet.py --find`
-prints a signet at the end of the id line ("signet Frodo").
+prints a signet at the end of the id line ("signet Frodo"). A possession and an artifact on one Gandalf: Glamdring 1_75
+(hand weapon, cost 2) and Gandalf's Staff 2_22 (Staff, cost 2); Wizard Staff 2_29 is a Staff too, so beside Gandalf's
+Staff it is not offered to him (one item of a class; met while building Card_02_023_Tests, which lays the pair).
 
 **A Ring-bound companion who is not the Ring-bearer.** Sam, Son of Hamfast 1_311. Strength 3, vitality 4;
 Ring-bound by rule. A fellowship ability that is only ever used on purpose, and a response when Frodo dies. Without
 him "the Ring-bearer" written as `ring-bound` passes every test.
 
-**A Ring-bearer who is not Frodo.** `VirtualTableScenario.GimliRB` (Gimli, Bearer of Grudges 9_4), `GaladrielRB`
-(9_14) or `SamRB` (13_156) as the scenario's Ring-bearer, and NO Frodo beside him: no Frodo who may bear the Ring
+**A Ring-bearer who is not Frodo.** `VirtualTableScenario.GimliRB` (Gimli, Bearer of Grudges 9_4, a Dwarf),
+`GaladrielRB` (9_14, an Elf), `SmeagolRB` (9_30) or `SamRB` (13_156, a Hobbit) as the scenario's Ring-bearer; a
+cancel of a skirmish involving one race owes its `FormatRule` pair on the Ring-bearer of that race (Voice of
+Nimrodel 3_28: Galadriel 9_14 under `fotr_block` and `multipath`). And NO Frodo beside him: no Frodo who may bear the Ring
 is ever in play beside another Ring-bearer (CR 4.2 "Ring-bearer"; Q-0159: B). The one Frodo who can stand there is
 Frodo, Frenzied Fighter 13_149 ("This version of Frodo cannot become the Ring-bearer", CR 4.2; [shire] Hobbit,
 Ring-bound, strength 3, vitality 4, resistance 8; he cannot be overwhelmed short of triple while minions outnumber
@@ -357,6 +370,25 @@ purpose. Hobbit Sword: [shire] hand weapon, cost 1, strength +2, no other text. 
 each Orc and each Uruk-hai skirmishing bearer is strength -1. Salt from the Shire: [shire] box, cost 1, resistance
 +2; two abilities that discard it, used only on purpose. With a pipe (Bilbo's Pipe 1_285) that is four classes,
 which is how an ally comes to bear a weapon, or three cards of different classes.
+An ally who bears a weapon with a DAMAGE bonus, and can skirmish: Thrarin, Dwarven Smith 1_27 (unique [dwarven]
+Dwarf ally, strength 4, vitality 2, home 3F; "Maneuver: Exert Thrarin to allow him to participate in archery fire
+and skirmishes until the regroup phase") bearing Gimli's Battle Axe, Trusted Weapon 7_9 (unique hand weapon, any
+Dwarf may bear it, strength +2; damage +1 while a threat can be spotted, so lay one; Card_03_072_Tests).
+
+**A Bilbo of each card type, for a text that names Bilbo.** The ally Bilbo, Retired Adventurer 1_284 (home 3F;
+above); the companion Bilbo, Melancholy Hobbit 12_119 ([shire] Hobbit, Ring-bound, strength 3, vitality 4); Bilbo,
+Bearer of Things Burgled 9_49 as Ring-bearer ("A Ring-bearer who is not Frodo"). One title: one at a time. 12_119's
+"At the start of each skirmish involving Bilbo, you may exert him to ..." has a cost, so it is offered in each of his
+skirmishes whatever is in the discard pile: decline it (`FreepsDeclineOptionalTrigger()`) right after
+`FreepsResolveSkirmish`, or the next pass is refused (Card_02_097_Tests).
+
+**A Hobbit bearing a weapon of each item type, and one bearing an item that is none.** Hobbit Sword 1_299 (a
+possession) on Sam 1_311; Sting 30_47 (Hobbit set: the one ARTIFACT weapon a Hobbit can bear, owed under Q-0312;
+`target: name(Bilbo)`, so on Bilbo 1_284; unique title shared with Sting 1_313); the opponent's Hobbit Ted Sandyman
+18_75 bearing Poleaxe 11_95 ([men] hand weapon, strength +2; its skirmish ability used only on purpose). The
+invalid one is Frodo bearing The Gaffer's Pipe 1_292 (a Pipe possession, "Bearer must be a Hobbit"; its fellowship
+ability not reached). The Ruling Ring is NOT that card: its type is The One Ring, no item, so `hasAttached(item)`
+passes it and only the Pipe tells `weapon` from `item` (Card_02_103_Tests).
 
 **A [rohan] Man who is an ally (and a second).** Guma, Plains Farmer 4_277; Hlafwine, Village Farmhand 4_281. Each:
 unique, cost 1, strength 4, vitality 2, home 4T (never fighting on a Fellowship path), Villager; discarded if an
@@ -418,12 +450,24 @@ Bane of Darkness 103_1: unique [elven] artifact (phial), cost 1, vitality +1, "B
 (2 burdens) and its Ring-bearer responses are used only on purpose. The other Phials, 10_13 and 53_24, cost 0 and
 show no discount (Card_02_102_Tests, "each artifact").
 
+**A Free Peoples shield, armor or hand weapon of cost 2, to read a discount of 1 (a cost never reads below 0).**
+Mithril-coat 2_105 (unique [shire] artifact armor, "Bearer must be Frodo"; archery total -1, no weapon bonuses for
+minions skirmishing him), Glamdring 1_75 (unique [gandalf] possession hand weapon, on Gandalf; damage +1, a
+fellowship ability used only on purpose), Sturdy Shield 15_141 ([rohan] possession, on a [rohan] Man). No helm in
+print costs more than 1 (Card_02_025_Tests).
+
 **Seven [elven] artifacts in play at once, for a count that stops at +6 ("(limit +6)", Aiglos 9_12).** Each unique,
 of its own title. Aiglos 9_12 and Vilya 9_23 (cost 0, "Bearer must be Elrond or Gil-galad") on Gil-galad 9_15;
 Phial of Galadriel, Star-glass 10_13 (cost 0, on a Hobbit: the Ring-bearer); in the support area Library of
 Rivendell 101_11, Galadriel's Silver Ewer 18_11 (its bonuses are for Galadriel as Ring-bearer), The Mirror of
 Galadriel 15_22 (to play, spot 3 Elves: cheat it in; answers a draw) and Gift of the Evenstar 15_16 (answers a won
 skirmish and the start of a maneuver phase). Their abilities are used only on purpose (`Card_09_012_Tests`).
+
+**The title half of "Elrond (or 2 [elven] allies)" alone (Master of Healing 3_22).** Elrond, Lord of Rivendell 1_40
+is himself an [elven] ally, so with one more [elven] ally beside him the two-allies half is met too and the title
+is never what lets the card be played (`name(Elrond),companion` survived such a board, dec-b3_18). Lay him with no
+other [elven] ally (Albert Dreary 1_69, a [gandalf] ally, may stand beside him); the Elrond who is a companion is
+Elrond, Witness to History 12_17 (`Card_03_022_Tests`).
 
 **Cards for "play a <culture> artifact (condition, possession) from your draw deck", one for each place it goes.**
 [elven] artifacts: The Mirror of Galadriel, Dangerous Guide 15_22 (unique, cost 2, to the support area; to play,
@@ -439,6 +483,11 @@ Mearas of The Mark 13_126 and Snowmane, Noble Mearas 13_136: unique, cost 2, str
 well), "Bearer must be a [rohan] Man". Each play trigger reinforces a [rohan] token and is withheld with none in
 play; 13_126's maneuver trigger and 13_136's skirmish ability need Éomer or Théoden and 2 [rohan] tokens. 13_126 is
 titled Firefoot, so it is never on a board with Firefoot 4_274 (`Card_04_268_Tests`).
+
+**A Free Peoples possession that nobody bears (support area), beside borne ones.** Old Toby 1_305 ([shire]
+pipeweed possession, not unique, Support Area; its only text an optional draw on its own play, which
+`MoveCardsToSupportArea` before `StartGame()` does not set off). For "discard a Free Peoples possession" with only
+borne possessions laid, `attachedTo(any)` added to the choice survived; with Old Toby laid it is noticed (`Card_04_013_Tests`).
 
 ## A culture without its race, a race without its culture, a card against its type
 
@@ -555,7 +604,9 @@ given by hand (Card_06_076_Tests).
 Barahir goes on any Aragorn (17_93 makes its bearer a [rohan] companion); an optional start-of-turn trigger, so
 attach it after `StartGame()`. Narsil 9_34 goes on a [gondor] Man, the Merchant included; Narsil 17_31 on Elendil
 or Isildur only. The two Narsils share a unique title: never both in play. The Shards of Narsil 3_44 is a [gondor]
-artifact nobody bears.
+artifact nobody bears. The nearest miss for "spot The Shards of Narsil", a [gondor] artifact of another title in the
+support area: Seeing Stone of Minas Anor 9_37 (a regroup ability only), or Gilraen's Memorial 101_22 (a fellowship
+ability only; Card_03_046_Tests). Both go in by `MoveCardsToSupportArea`, which skips their costs to play.
 
 **Two hand weapons on one bearer by their own text; a weapon that bars every other.** Flaming Brand 2_32; Knife of
 the Galadhrim 9_17; The Balrog's Sword 2_50; Andúril, Flame of the West 7_79. Flaming Brand ([gondor] possession,
@@ -855,7 +906,8 @@ discard one of his own conditions. Brooding on Tomorrow 10_14 does the same on a
 **A doer that is no Shadow card, and a Shadow item, for "Shadow cards may not discard cards from your hand or from the
 top of your draw deck".** Midgewater Moors 1_333; Uruk-hai Sword 1_160. The Moors (FOTR site 2, plains): "Each time a
 minion is played, the Free Peoples player discards a card from hand", written `forced: true`, so the bar is asked of
-it and only its side lets it through. The bar is asked only of a discard written `forced: true`: Search Far and Wide
+it and only its side lets it through; it is the site doer for "a Shadow card makes you discard from hand" too (Old
+Noakes 3_111, Card_03_111_Tests). The bar is asked only of a discard written `forced: true`: Search Far and Wide
 4_56's cost (the top card of the deck) writes `false` and shows nothing as a candidate, whatever its side. The Sword
 ([isengard] hand weapon on an Uruk-hai, Uruk-hai Band 4_202): "Each time bearer wins a skirmish, the Free Peoples
 player must discard the top card of his or her draw deck"; the loser's wound and its trigger are ordered by the Free
@@ -892,13 +944,17 @@ A burden removed by a non-Hobbit CHARACTER's own text (the F of "except by a Hob
 Emissary 12_30, unique [gandalf] Man companion; "At the start of each skirmish involving Járnsmid, you may remove a
 burden (or 2 burdens if you can spot another [gandalf] companion)": two at once beside Gandalf 1_72 (Card_03_113_Tests).
 
-**A burden a Shadow card adds: one the Free Peoples player chooses; two at once.** Desperate Defense of the Ring
-1_244; Eye of Barad-dûr 5_96. Defense 1_244: [sauron] condition on a companion (cheat it on; to play it exerts a [sauron]
+**A burden a Shadow card adds: one the Free Peoples player chooses; two at once; one a minion's own ability adds. A
+burden a site adds.** Desperate Defense of the Ring 1_244; Eye of Barad-dûr 5_96; Orc Miscreant 11_131; Eregion Hills 3_116. Defense 1_244: [sauron] condition on a companion (cheat it on; to play it exerts a [sauron]
 Orc): each time bearer is assigned to a skirmish the Free Peoples player chooses "Discard 3 cards from hand" or
 "Add a burden"; give him 3 or more cards in hand, or there is no choice to put (F-0310). Eye: [sauron] event, cost
 0, whose Response is played when a Free Peoples player reveals it from the Shadow hand, and adds 2 burdens:
 Glamdring 1_75 on Gandalf 1_72 reveals that hand in the fellowship phase (`FreepsUseCardAction(glamdring)`,
-`FreepsDismissRevealedCards()`, `ShadowPlayCard(eye)`; Card_04_316_Tests, Card_05_096_Tests).
+`FreepsDismissRevealedCards()`, `ShadowPlayCard(eye)`; Card_04_316_Tests, Card_05_096_Tests). Miscreant: [orc] Orc
+minion, vitality 3, "Regroup: Exert this minion to add a burden" (cheat it in; to play it spots an [orc] minion),
+nothing else in the way, and usable twice in one regroup phase. Eregion Hills, of no side: site 4 of a custom FOTR site
+map, "When the fellowship moves to Eregion Hills, add a burden" (Card_03_110_Tests, beside Sméagol 7_71's "To play,
+add a burden" for a Free Peoples doer).
 
 **A threat removed as a Shadow card's COST; as a Free Peoples card's EFFECT (a possession's, a condition's); as a
 Free Peoples card's COST; by a site, which has no side.** Sauron's Hatred 7_310; Sting, Elven Long Knife 18_113;
@@ -1006,6 +1062,12 @@ follows it (Card_10_012_Tests, Card_10_108_Tests). Skirmish and regroup: pitfall
 no text that answers a play, so `FreepsPlayCard` in the fellowship phase asks nothing of its own. Bounder 1_286
 ([shire] Hobbit ally, cost 1, no requirement) is the ally played that must not set it off (Card_07_204_Tests).
 
+**A companion played in the maneuver phase, after an event (the board for "make each ... until" read as a
+snapshot).** Éomer, Éored Leader 12_112: "Maneuver: If you can spot more minions than companions, exert Éomer to
+play a [rohan] companion from your draw deck." The deck is shown first: `FreepsDismissRevealedCards()`, then
+`FreepsChooseCardBPFromSelection(card)` (pitfalls, "Searching a deck shows the deck first"). Théoden, Tall and
+Proud 8_92 is a [rohan] companion with the Aragorn signet (Card_03_047_Tests).
+
 **A minion's own assignment action, with no cost.** Reckless Pride 7_13; Ancient Blade 7_15; Unexpected Visitor
 7_126. Free Peoples conditions on a [dwarven], an [elven], a [gondor] companion: 'Each minion gains this ability:
 "Assignment: Assign this minion to bearer of <this card>."' `ShadowUseCardAction(minion, "<the card's name>")`
@@ -1040,7 +1102,9 @@ offer plays ANY minion from the discard pile: `ShadowUseCardAction(peril)`, `Sha
 one minion there (Card_01_350_Tests). In the ASSIGNMENT phase: A Shadow Fell Over Them 15_182 ([wraith]
 support-area condition; "Assignment: Spot a Nazgûl and remove (4) to play a Nazgûl from your discard pile") plays
 Nertëa (in the discard pile) beside Úlairë Lemenya 1_232, the pool set high, which is the legal play of "a minion
-that comes into play afterwards" for a Maneuver event's snapshot (Card_10_016_Tests). In the maneuver phase itself,
+that comes into play afterwards" for a Maneuver event's snapshot (Card_10_016_Tests). Her offer plays a minion of ANY
+culture: a [dunland] Man for Wake of Destruction 4_35, where the [dunland] cards that play one outside the
+Shadow phase make him fierce themselves (4_9, 4_23, 4_38, 6_6; Card_04_035_Tests). In the maneuver phase itself,
 read and not run: Stampeding Savage 17_53 ("Maneuver: Discard this minion and X minions stacked on a [men]
 possession to play a [men] minion from your discard pile").
 
@@ -1081,6 +1145,18 @@ not drawn: Master Proudfoot 1_301 (ally; "Fellowship: If the twilight pool has f
 (2) to reveal the top 3 cards of your draw deck. Take all [shire] cards revealed into hand and discard the rest";
 `DismissRevealedCards()` after it). The card that answers either is Verily I Come 2_94, on the Ring-bearer, a
 burden for each in the fellowship phase (F-0376; mechanics/deck/DrawnOrTakenIntoHandTests, Card_07_195_Tests).
+The Shadow player's take from his draw deck: Fool of a Took! 1_170 ([moria] Shadow event; spot a Hobbit other than
+the Ring-bearer; reveals from the top until a card that is no [moria] minion and takes them all into hand). Its
+reveal is shown to BOTH players, so `DismissRevealedCards()`, not one side's, before the take (Card_03_029_Tests).
+
+**A Free Peoples card that has the SHADOW player draw, with no choice in it.** Drawing His Eye 10_29; What Are We
+Waiting For? 2_15. Drawing His Eye: [gondor] Fellowship event, cost 2; one card of the Shadow hand revealed at
+random for each [gondor] companion spotted (Aragorn 1_89), a revealed Shadow card discarded, then "its owner draws
+a card" (`drawCards`, `player: shadow`). A Shadow hand of one card makes the reveal and the discard certain; with that hand
+empty the event is not playable (Q-0336: B, engine pass 53).
+What Are We Waiting For?: [dwarven] Fellowship event, cost 1; exert a Dwarf "to make an opponent draw 2 cards", who
+then discards 2 Shadow cards from hand or skips his next Shadow phase. As built, each is the Shadow player's own draw
+(Q-0334, open; Card_02_094_Tests.TheShadowPlayerDrawingInTheFellowshipPhaseAddsNoBurden).
 
 **A hand revealed by its own owner, on each side (the invalid doer and the invalid hand for a bar on looking at or
 revealing a hand).** Troll's Keyward, Keeper of the Beast 12_105; Mallorn-trees 1_54. Keyward: unique [orc] Orc,
@@ -1137,6 +1213,18 @@ bears a ranged weapon, the twilight cost of each Shadow possession is +2"; he th
 archery total. A Goblin Spear 1_182 (cost 1) reads 3, and 2 at "twilight cost -1", so a pool of exactly 2 is
 offered and left at 0, where -2 would leave 1 and a pool of 1 withholds the play (`Card_01_193_Tests`).
 
+**A Shadow condition's twilight cost raised (to show the size of a discount on a cheap condition).** Rohirrim Road
+7_332, a King-block site 1: "Fellowship: Exert an Elf to make the twilight cost of each condition and possession +2
+until the end of the turn", both sides' cards. Uruk-hai Armory 1_157 (cost 1) then reads 3 in the Shadow hand
+(`Card_07_332_Tests`, on a King-block path). It would show No Business of Ours 52_44's -3, which its file still
+shows with an ad hoc `TwilightCostModifier` (approved in the errata phase).
+
+**A card in a hand whose cost a site 1 lowers (the CR 4.2 "twilight cost" example read by a Fellowship event on
+turn 1).** Edoras Hall 7_330, the site 1 of `KingSites`: "The twilight cost of each [rohan] possession is -1".
+Sturdy Shield 15_141 ([rohan] possession, printed 2) in the Shadow hand reads 1 there, and a text that reads "the
+twilight cost of the card revealed" reads 2 (Card_03_016_Tests). Weatherhills 1_335 (Card_03_043_Tests) is site 2:
+the turns `SkipToSite(2)` plays reconcile cards into the Shadow hand, which a random reveal then takes.
+
 ## Sites and moves
 
 **Two sites whose standing texts read as one number.** Weatherhills 1_335; Ford of Bruinen 1_338; The Witch-king,
@@ -1147,6 +1235,11 @@ is about strength) in the Shadow player's hand reads 8 with neither text in forc
 can read (no Fellowship-block site 2 has a fellowship action): for "your site N" with the owner's site of another
 number as the invalid candidate (Hobbit Farmer 1_295), a Nazgûl in the mover's hand keeps her printed cost while
 the fellowship is at site 1 and Weatherhills lies ahead (Card_01_295_Tests).
+
+**An underground sanctuary whose Shadow number a discount can lower ("each underground site's Shadow number is
+-2").** Caves of Aglarond 4_352: Towers site 6 (`TowersSites`), underground and a sanctuary, Shadow number 3, so
+-2 reads 1. The Dimholt 8_117 (King site 3) is the underground sanctuary for a terrain word, but its Shadow number
+of 1 floors at 0 under -2 (Card_02_121_Tests.AnUndergroundSanctuaryIsShadowNumberMinus2Too).
 
 **A character at a Fellowship site 2 who is not in the fellowship ("only Hobbits are in the fellowship", "each Hobbit
 moves to").** Goldberry 9_51 and Tom Bombadil 9_52 are the only allies who are no Hobbit with home 2F (Bounder 1_286
@@ -1165,11 +1258,14 @@ differ in the sanctuary, so they are a valid spread for "a river" (`Card_01_046_
 
 **A turn with THREE moves, so that the same minions are on the table at two moves ("each time the fellowship moves"
 with minions to act on; no minion is in play at the move that ends a fellowship phase).** Rivendell Waterfall
-1_342, as site 3 of `FellowshipSites`, with a ranger. Forest, sanctuary: "While you can spot a ranger at Rivendell
+1_342, laid as site 3 by `putAll(FellowshipSites); put("site3", "1_342")` (the stock site 3 is Rivendell Valley
+1_341), with a ranger. Forest, sanctuary: "While you can spot a ranger at Rivendell
 Waterfall, the move limit is +1 for this turn". With a ranger among the companions (Aragorn 1_89 or 4_364):
 `FreepsPass()`, minions cheated in, `SkipToMovementDecision()`, `FreepsChooseToMove()` (to the Waterfall;
 `GetMoveLimit()` is 3 once the Shadow actions wait), `SkipToMovementDecision()`, `FreepsChooseToMove()` again
-(`Card_04_364_Tests`, `Card_01_342_Tests`).
+(`Card_04_364_Tests`, `Card_01_342_Tests`, `Card_04_021_Tests`). Read in a `moves` trigger, `GetCurrentSiteNumber()`
+is the site being left (pitfalls, "Inside an "each time the fellowship moves" trigger the marker is still on the
+site left").
 
 **A site taken under control, and one liberated, by legal play; a card that counts "each site you control"; a
 battleground to control.** Southron Explorer 4_250; Théoden, Son of Thengel 4_292 with Guma 4_277; Uruk-hai Band
@@ -1181,8 +1277,9 @@ opponent controls site 4 of a Towers path). The Band is strength 10 and +2 for e
 (`putAll(TowersSites); put("site2", "4_335")`): Advance Uruk Patrol 4_136 is strength +4 while its owner controls
 it. For a board that only needs a site in someone's hands, the cheat (`ShadowTakeControlOfSite()`,
 `FreepsTakeControlOfSite()`): never on player 1's first turn, where player 2's marker is still on site 1 and the cheat
-finds no site even with the fellowship at site 2; `StartGame(); SkipToSite(2);` puts player 1's second turn at site 3
-with site 1 behind every marker (Card_08_095_Tests). Pitfalls,
+finds no site even with the fellowship at site 2; `StartGame(); SkipToSite(2);` is player 1's second turn,
+in the fellowship phase at site 2 with player 2's marker on site 2 as well, so site 1 is behind every marker (and a
+pass moves the fellowship on to site 3: Card_08_095_Tests). Pitfalls,
 "A site is controlled lowest first"; mechanics/sites/ControlOfSitesTests.
 
 **The next site played, and a site replaced, by legal play.** Pathfinder 1_110; Úlairë Nelya, Lieutenant of Morgul

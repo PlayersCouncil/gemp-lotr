@@ -65,23 +65,21 @@
 			select: choose(culture(sauron),orc)
 			}
 			effect: {
-			type: choice
-			texts: [
-				Discard an ally
-				Discard 2 ELVEN allies
-			]
-			effects:
-			[
-				{
-					type: discard
-					select: choose(ally)
+				type: If
+				check: {
+					type: canSpot
+					filter: culture(elven),ally
+					count: 2
 				}
-				{
+				true: {
 					type: discard
 					select: choose(culture(elven),ally)
 					count: 2
 				}
-			]
+				false: {
+					type: discard
+					select: choose(ally)
+				}
 			}
 		}
 		gametext: <b>Maneuver:</b> Exert a [sauron] Orc to discard an ally (or 2 [elven] allies).

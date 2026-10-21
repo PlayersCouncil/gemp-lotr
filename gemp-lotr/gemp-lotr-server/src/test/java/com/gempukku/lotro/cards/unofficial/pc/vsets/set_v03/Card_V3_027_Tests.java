@@ -141,9 +141,7 @@ public class Card_V3_027_Tests
 
 		scn.ShadowUseCardAction(slayer1);
 		scn.ShadowChooseCard(king);
-		// The rule that follows a death and the King's own text answer the same wound, and the Free Peoples
-		// player says which comes first. With no threats on the dead pile it makes no difference.
-		scn.FreepsResolveActionOrder("King of the Dead");
+		// With no threats on the dead pile, the King's own text is the one thing that answers his death.
 
 		assertInZone(Zone.DEAD, king);
 		// One wound off each Wraith: two [gondor] companions and a [sauron] minion.
@@ -165,7 +163,6 @@ public class Card_V3_027_Tests
 
 		scn.ShadowUseCardAction(slayer2);
 		scn.ShadowChooseCard(king);
-		scn.FreepsResolveActionOrder("King of the Dead");
 
 		assertInZone(Zone.DEAD, king);
 		assertEquals(0, scn.GetWoundsOn(deadman1));

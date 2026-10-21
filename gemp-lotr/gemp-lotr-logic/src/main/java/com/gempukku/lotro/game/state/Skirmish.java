@@ -29,10 +29,46 @@ public class Skirmish {
     // character, and the skirmish has no fellowship character while it lies there.
     private PhysicalCard _leftInFellowshipPlace;
 
+    // The characters this skirmish involves, for "a skirmish involving X is about to end" (F-0563): those it began
+    // with, and a character who replaced another in it in the place of the one he replaced.  A character removed
+    // from it, or killed in it, is still among them (Q-0332: the skirmish "involved" him).
+    private PhysicalCard _involvedFellowshipCharacter;
+    private final Set<PhysicalCard> _involvedShadowCharacters;
+
     public Skirmish(PhysicalCard fellowshipCharacter, Set<PhysicalCard> shadowCharacters) {
         _fellowshipCharacter = fellowshipCharacter;
         _shadowCharacters = shadowCharacters;
         _pendingShadowCharacters = new HashSet<>();
+        _involvedFellowshipCharacter = fellowshipCharacter;
+        _involvedShadowCharacters = new LinkedHashSet<>(shadowCharacters);
+    }
+
+    /**
+     * @return The Free Peoples character this skirmish involves: the one it began with, or the one who replaced him
+     * (F-0563).  Still him once he is removed or killed.
+     */
+    public PhysicalCard getInvolvedFellowshipCharacter() {
+        return _involvedFellowshipCharacter;
+    }
+
+    /**
+     * @return The minions this skirmish involves: those it began with, any who replaced one of them in the place of
+     * the one replaced (F-0563), removed and killed ones included.
+     */
+    public Set<PhysicalCard> getInvolvedShadowCharacters() {
+        return _involvedShadowCharacters;
+    }
+
+    /**
+     * Notes that a character has replaced another in this skirmish: from now on the skirmish involves the one who
+     * came in, and no longer the one he replaced (F-0563).
+     */
+    public void noteReplacement(PhysicalCard replaced, PhysicalCard replacedBy) {
+        if (replaced != null && _involvedFellowshipCharacter == replaced) {
+            _involvedFellowshipCharacter = replacedBy;
+        } else if (_involvedShadowCharacters.remove(replaced)) {
+            _involvedShadowCharacters.add(replacedBy);
+        }
     }
 
     public Evaluator getFpStrengthOverrideEvaluator() {
@@ -111,6 +147,7 @@ public class Skirmish {
     }
 
     public void replaceCharacterInSkirmish(PhysicalCard oldCard, PhysicalCard newCard) {
+        noteReplacement(oldCard, newCard);
         if(_fellowshipCharacter == oldCard) {
             _fellowshipCharacter = newCard;
             return;
@@ -128,6 +165,9 @@ public class Skirmish {
         skirmish._removedFromSkirmish.addAll(_removedFromSkirmish);
         skirmish._strengthWhenRemoved.putAll(_strengthWhenRemoved);
         skirmish._leftInFellowshipPlace = _leftInFellowshipPlace;
+        skirmish._involvedFellowshipCharacter = _involvedFellowshipCharacter;
+        skirmish._involvedShadowCharacters.clear();
+        skirmish._involvedShadowCharacters.addAll(_involvedShadowCharacters);
         skirmish._fpStrengthOverrideEvaluator = _fpStrengthOverrideEvaluator;
         skirmish._shadowStrengthOverrideEvaluator = _shadowStrengthOverrideEvaluator;
 

@@ -405,19 +405,38 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "A [Sauron] Orc kills a companion" is CR 4.2's definition (Q-0328, 2026-10-15) [Q-0123]
 - The voluntary-loop step: approved in its broad strokes, with her wording (Q-0329, 2026-10-15)
 - An involuntary loop ends with no effect (F-0536, 2026-10-15)
+- A defender on two [isengard] Men exerts twice under Unferth (Q-0330, 2026-10-16) [Q-0323]
+- A card the cost milled off the draw deck is not the card taken or played (Q-0331, F-0548, 2026-10-16) [Q-0192, Q-0320]
+- The loop prompts' [[...]] are card hints (Q-0329, 2026-10-16)
+- The skirmish procedure, steps 1 to 11, is binding (Q-0332, 2026-10-16)
+- "About to end" is step 6, after the loser is killed (Q-0332, 2026-10-16)
+- "Exert X companions" runs from 1 (Q-0333, 2026-10-16) [Q-0076]
+- A draw is the drawing hand's player's (Q-0334, 2026-10-16) [Q-0251]
+- Archery wounds have no source (Q-0335, 2026-10-16)
+- A random reveal from a hand is a cost: an empty hand makes the card unplayable (Q-0336, 2026-10-16) [Q-0148]
+- "When" and "each time" play alike (Q-0338, 2026-10-16)
+- A "may" with a parenthesis: 0-1 of the noun, or 0-N of the parenthesis's noun as printed (Q-0339, 2026-10-16)
+- A snapshot per CR 4.2 for Deft in Their Movements (F-0555, 2026-10-16) [Q-0220]
+- A "spot X" count defaults to all of them (F-0561, 2026-10-16) [Q-0248]
+- The loop scenarios she wants in the mechanical tests (2026-10-16)
+- A one-player loop: three uses, then her prompt, then barred (2026-10-16)
+- The skirmish procedure, amended draft (2026-10-20): supersedes the 2026-10-16 draft's step numbers and the 2026-10-19 order of win and loss. Engine ...
+- The skirmish procedure as amended, binding (2026-10-20) [F-0566, Q-0332]
+- Ketura's answers of 2026-10-20 (d) [Q-0341, F-0561, Q-0340, F-0566, F-0565, F-0563]
+- Ketura's answers of 2026-10-21 [Q-0344, F-0517]
 
 # Settled shapes (shapes.md)
 
 ## How card text is read
 
-- Any X of exertions is at least 1 (Q-0076)
+- Any X of exertions is at least 1 (Q-0076) [F-0553, F-0552]
 - A card that makes itself a minion (Q-0077, Q-0078)
 - "This condition becomes a <keyword> <race> minion until the start of the regroup phase that has N strength and M vitality, and cannot take wounds or bear other cards. This card is still a condition." (the Deceived conditions 13_78, 13_79, 13_80; A Shadow Rises 11_216 has it with no wound bar) [Q-0077]
 - Reinforcing more than one token (F-0113)
 - "Its skirmish" on a minion (F-0114) [F-0321]
 - "By another card" (Q-0079). "By another card" in a card's text is a card other than THAT card (Q-0079, Corsair Helmsman 103_46): a [raider] minion ...
-- A spot that stands after "to" is an effect (Q-0085) [Q-0058, F-0492]
-- A bare cost sentence with no "to", then the effect sentences (Q-0058)
+- A spot that stands after "to" is an effect (Q-0085) [Q-0058, F-0492, F-0022, F-0440, F-0557]
+- A bare cost sentence with no "to", then the effect sentences (Q-0058) [F-0562, Q-0148, F-0569]
 - "Remove X ... to <do something to> a card costing X or less" (Q-0087, F-0133)
 - "The <other> player may make you <do X> to prevent this" (Q-0088)
 - "A <thing>" is one (F-0136). "A <thing>" is one: a choice of one, not all that match (F-0136).
@@ -425,6 +444,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "May X, and must Y for each X"; "copies of that card"; "is considered a <race>" (Q-0091, Q-0092)
 - "A minion" on a Skirmish event that reaches only minions in the skirmish (Q-0095) [F-0527]
 - "<Exert> a <kind> to <do X to> a character he is skirmishing" on a Skirmish event (Mordor's Strength 1_255) [F-0527]
+- "Make a <kind> strength +N (or +M if in a fierce skirmish)" (F-0550, Sentinels of Númenor 2_37)
 - "Wound X twice" written as an exertion (F-0148)
 - "Make allies take wounds from archery fire instead of companions" (Q-0136, Q-0137, Q-0147, F-0243, F-0244, F-0275) [Q-0034]
 - "Participates in archery fire and skirmishes" against "may not participate" (Q-0150, F-0281) [F-0283]
@@ -443,12 +463,14 @@ finding an entry, not for applying one: read the entry itself before an expectat
 ## What is offered and what is asked
 
 - The no-effect flag: which cards assert it [Q-0034, Q-0111, Q-0127]
-- An optional trigger or ability that costs nothing and would do nothing is withheld by the engine (Q-0224: A2; Q-0231: B; engine pass 26) [Q-0034, F-0407, F-0408, F-0402, F-0406, Q-0262, F-0426, Q-0246, F-0423, F-0476, F-0496, Q-0238, Q-0033, F-0411, F-0417, Q-0248, F-0428, F-0420, F-0526, F-0413, Q-0104, F-0410, F-0506, Q-0243, Q-0112, F-0473, Q-0102, Q-0245, Q-0062, Q-0029, F-0379, Q-0107]
-- A choice whose every branch has nothing to act on (F-0116) [F-0293, Q-0220, Q-0224, F-0471, Q-0255, F-0525, F-0370, F-0366]
+- An optional trigger or ability that costs nothing and would do nothing is withheld by the engine (Q-0224: A2; Q-0231: B; engine pass 26) [Q-0034, Q-0337, F-0407, F-0408, F-0402, F-0406, Q-0262, F-0426, Q-0246, F-0423, F-0476, F-0496, Q-0238, Q-0033, F-0411, F-0417, Q-0248, F-0428, F-0420, F-0526, F-0413, Q-0104, F-0410, F-0506, Q-0243, Q-0112, F-0473, Q-0102, Q-0245, Q-0062, Q-0029, F-0379, Q-0107]
+- A choice whose every branch has nothing to act on (F-0116) [F-0293, Q-0220, Q-0224, F-0471, Q-0255, F-0525, F-0370, F-0366, Q-0102, Q-0337, F-0560]
 - "<Do X> or <do Y>": each branch is written as the effect itself (F-0310, Here Lies Balin 1_19) [Q-0209, F-0222]
 - "Discard his or her hand or <do Y>": with no card in hand the choice is still asked, and the discard may be taken for nothing (Pelennor Flat 7_345; Q-0255: B) [Q-0224]
 - "<Do X> or choose an opponent who may <do Y>": with nothing for the opponent to do the choice is still asked, and the opponent may be chosen for nothing (Crashed Gate 8_119; Q-0257: A) [F-0341, Q-0255]
 - A parenthesis with its own price (Q-0089) [Q-0035, F-0491]
+- "<Do X to> a <kind> (or 2 <culture> <kind>s)": an unconditional parenthesis that names a second target is done whenever it can be (F-0554, Memory of Many Things 2_88; Perilous Ventures 6_54) [Q-0035, F-0491]
+- "You may <do X to> a <side> <kind> (or N <kind>s if ...)" on a trigger or ability: 0 to 1 of the first noun, or 0 to N of the parenthesis's noun as printed, any side (Q-0339, Dunlending Pillager 4_13; engine pass 53) [Q-0224, F-0491]
 - One thing left to do is done without a second question (Q-0090) [Q-0121, F-0387]
 - A yes/no before a choice whose minimum is 0 (Q-0143, F-0277) [F-0278, F-0285, Q-0102, F-0385]
 - A number that can only be one number is not asked for (F-0147) [F-0392]
@@ -491,22 +513,22 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A bar that a trigger lays "while at <a place>" has the place in it twice (92_35) [F-0319]
 - "At the start of the first <phase> ... (limit once per turn)" (F-0517, Wizard's Vale 4_359)
 - "Limit 1 per bearer" is a Restriction that lists `L`
-- The CR 4.2 "loops" example (Sam, Faithful Companion 1_310; Q-0321) [Q-0329]
+- The CR 4.2 "loops" example (Sam, Faithful Companion 1_310; Q-0321)
 
 ## Costs, and playing cards from piles and hands
 
-- "<do> a companion for each <thing>" may be spread (F-0224) [F-0458, F-0459, Q-0141, Q-0248, F-0497, F-0533]
+- "<do> a companion for each <thing>" may be spread (F-0224) [F-0458, F-0459, Q-0141, Q-0248, F-0497, F-0533, F-0561, Q-0341]
 - A reveal before "to" is a cost, and an empty draw deck cannot pay it (F-0022, F-0249) [Q-0104, Q-0029]
-- A reveal that what follows reads must be able to happen (Q-0148, F-0284) [F-0022, Q-0163, Q-0104, Q-0029]
-- A reveal that a cost buys is offered with that draw deck empty, and flagged (Q-0163: B; built by engine pass 21). "<cost> to reveal the top N cards ... [Q-0148]
+- A reveal that what follows reads must be able to happen (Q-0148, F-0284) [F-0022, Q-0163, Q-0104, Q-0029, Q-0336]
+- A reveal that a cost buys is offered with that draw deck empty, and flagged (Q-0163: B; built by engine pass 21). "<cost> to reveal the top N cards ... [Q-0148, Q-0336]
 - What bounds an X: the action's costs, never what its effect can use (Q-0069, Q-0087, Q-0094, F-0067, F-0111). The rulings on X look two ways and are ... [Q-0062, Q-0015, Q-0034, Q-0191]
-- "Spot a Dwarf who is damage +X and exert that Dwarf ... to <do> X": X is the bonus he had when he was spotted (Q-0256: A; built by engine pass 28), ... [Q-0015]
+- "Spot a Dwarf who is damage +X and exert that Dwarf ... to <do> X": X is the bonus he had when he was spotted (Q-0256: A; built by engine pass 28), ... [Q-0015, F-0571, F-0572]
 - "Exert your Wizard to choose a number. Make each minion with that twilight cost ..." (Gathering Wind 10_16): the number is part of the cost (F-0474). ...
 - "Discard a <kind> from hand to take a <kind> into hand from the discard pile" does not take back the card just discarded (Q-0192: A) [Q-0034, F-0521, Q-0320, F-0538, F-0543, F-0544, F-0545, Q-0331, F-0548]
 - The twilight cost of a card in play (F-0109, built)
 - The CR 4.2 "twilight cost" example (Rohirrim Road 7_332 with Catapult 8_32) is shown twice, and rightly
 - LeastDiscountToPlay bounds X in "remove X ... to play ... from your discard pile" (F-0067) [F-0392]
-- Costs, and effects, in the order printed (Q-0080) [F-0123]
+- Costs, and effects, in the order printed (Q-0080) [F-0123, F-0549]
 - What the text prints before "to" is PAID in `cost`, also where the player first chooses it into a memory (F-0477, The Highest Quality 11_60 and An End Worthy of Remembrance 102_46)
 - "When you play this minion, you may discard N <cards> from play to make it twilight cost -M and <keyword>" is a discount inside the play (Mountain-troll 15_112; F-0482 and F-0483, built by engine pass 28; Q-0275: A) [Q-0279]
 - "When you play <this>, you may exert any number of minions. For each minion you exert, <this> is twilight cost -X" is a `perExert` discount, asked as one choice (Sauron 13_140; F-0385, Q-0143)
@@ -515,7 +537,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "If you have initiative, you may play this <card> from your discard pile" is a clause of its own, typed `Activated [+ -]` (Hobbitses Are Dead 7_61; F-0055)
 - "If you have initiative, <pay> to <do>" on a Free Peoples event wants four cards beside the event (F-0464, built by engine pass 28)
 - "Hinder/remove X ... to play X cards from your discard pile": X is capped (Q-0094)
-- An action's costs are judged in order, with its own exertions counted (F-0184) [F-0486]
+- An action's costs are judged in order, with its own exertions counted (F-0184) [F-0549, F-0486]
 - Response events are not played by "play an event from ..." (F-0186)
 - "Play a <kind of> Free Peoples card from your draw deck" never offers a Shadow card, whatever the filter says (Dammed Gate-stream 11_235, Green Dragon Inn 11_242)
 - "Ignoring all costs" passes over the cost in an event's own text (F-0316, built by engine pass 20) [Q-0201]
@@ -531,10 +553,12 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Each time the Free Peoples player plays the fellowship's next site" asks who plays it (F-0479, Fearless Approach 13_164 and Caravan From the South 13_83) [F-0302]
 - "Each time the Free Peoples player assigns a companion or ally to a skirmish" asks who assigns (F-0513, Wold of Rohan 4_336; Q-0251, Q-0171) [Q-0323, Q-0330]
 - "Each time you play a <race>" names its player (F-0510, Home and Hearth 12_122)
+- "Each time you play a <kind>" on a card that is itself of that kind answers its own play
 - "You may <do X>. Then, <Y>": the trigger is required, X a choice of 0 to 1, and Y done whatever was chosen (Q-0314; Home and Hearth 12_122, engine pass 44) [F-0512]
 - "If a Free Peoples player reveals this card from your hand" asks whose CARD revealed (Eye of Barad-dûr 5_96; Q-0251: B) [Q-0171]
 - "Each time your condition is hindered or discarded" (Q-0075)
 - "Each time this is hindered/discarded" is answered after the removal (F-0120, F-0121)
+- The skirmish procedure as amended, and "is about to end" at its step 5 (Ketura, 2026-10-20, binding; Q-0332; engine passes 53 and 56) [F-0566, F-0563]
 - memorizeLoser holds everyone in the skirmish but the winner (F-0115, F-0136) [F-0422, F-0480]
 - "If your <kind> wins a skirmish, <do something to> that <kind>" built as a `winsSkirmish` trigger whose effect CHOOSES among `inSkirmish` cards of the same filter (Goblin Swarms 1_183, as built; dec-b2_122) [Q-0224]
 - "If <X> kills a companion" (or "killed by <X>", "kills a companion in a skirmish") is CR 4.2's definition, built as a `killed` trigger with `killer: <X>` (Q-0328: B, in place of Q-0123's loose reading; engine pass 49: Orc Butchery 1_265 and 51_265, The Ring's Oppression 1_273, Goblin Spear 1_182 with `killer: bearer` beside its `canSpot bearer,inSkirmish`; Mind and Body 7_183 was already so) [F-0546, F-0547]
@@ -543,8 +567,9 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "<A character> comes into play exhausted" (Q-0302; F-0500, F-0501)
 - "Discard this when at / if <where>" on the move that takes the fellowship there (F-0233, Q-0133)
 - "Each time your fellowship moves, ... (or N if at site X or higher)" reads the site left (Q-0184: A; built by engine pass 21)
+- "Each time the fellowship moves during the regroup phase" is a `moves` trigger with `requires: phase regroup` (Spies of Mordor 2_92, Depths of Moria 3_77, What Did You Discover? 4_213)
 - "When <this card> leaves play, this bonus is lost" as a turn-long added trigger names `self` (F-0270, Radagast 59_26)
-- "Make each ... until" is a snapshot on an event; on an ability only where the cards it names are on the table when it is used (Q-0011, F-0144, F-0217)
+- "Make each ... until" is a snapshot on an event; on an ability only where the cards it names are on the table when it is used (Q-0011, F-0144, F-0217) [F-0558, F-0555, F-0109]
 - "Each X is <number> +1 for each Y you can spot until <a time>" on a trigger: the count is taken once, as the trigger is carried out (as built; Madril 15_64; Q-0270: A)
 - Keywords copied "until ..." are a snapshot (Q-0096); race and "unloaded keywords" (Q-0097)
 - "Exert X twice" sets off an "each time ... exerts" trigger twice [F-0145]
@@ -561,6 +586,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A number in a filter and a hindered card (CR 5.0 "hinder", Grond 8_103) [Q-0098]
 - "Borne by a <race or type>" and a hindered bearer (Q-0108, F-0212; in the engine since engine pass 26, Q-0220: E) [Q-0237, Q-0252]
 - "Support" and support(<whose>) (Q-0099, Q-0101)
+- "Transfer <another card> from your support area to <a character>" on a trigger with a cost (Úlairë Otsëa 3_86; F-0559) [Q-0022, Q-0034]
 - A character hindered while assigned or skirmishing leaves it, and a minion so freed is not a leftover minion (CR 5.0 "hinder"; CR 4.2 "assignment phase")
 - A hindered Ring-bearer cannot be discarded or returned to hand (F-0174)
 - "Discard <X> he bears" beside a bar on X ("cannot bear", "may not be played on") is a standing discard, built as Shadowfax 17_24 is (Q-0223: B; Q-0229: C; built by engine pass 26) [F-0427, F-0361]
@@ -576,9 +602,10 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A Frodo with the Ring-bearer keyword, and CR 4.2 "Ring-bearer" ("If a character other than Frodo is your Ring-bearer, you cannot play any version of Frodo with the Ring-bearer keyword") [Q-0159]
 - Helpless 2_76, "Sam's game text does not apply": a Sam who is not the Ring-bearer is no longer Ring-bound
 - The CR 4.2 "response" example (Isildur wearing Answer To All Riddles 4_1, Sapling of the White Tree 9_35) is shown in the Ring's file
+- The CR 4.2 "discard" example (Watcher in the Water 2_73 with Goblin Runner 1_178) is shown in Goblin Runner's file
 - The CR 4.2 "modifier" example (Shelob, Her Ladyship 10_23 with Sent Back 9_27) is shown in Shelob's file, and the "effect" and "preventing effects" example (Morgul Destroyer with the Sapling 9_35) in Morgul Destroyer's
 - The CR 4.2 "modifier" example on Orc Ambusher 1_261 ("It does not specifically name itself, so this does not apply to Orc Ambusher when it is played") is owed as a `Rule` clause by every card that prints its sentence
-- "This card can replace sites only in the Fellowship block format" (CR 4.2 Section Three: Paths Seldom Trodden 1_222, Úlairë Nelya 1_233, Dark Places 2_55; Grimbold 7_233 with "King block") lays the player's site of the card's own block, on any path, and is not offered where he has none to lay (Q-0327, Ketura 2026-10-15; engine pass 49)
+- "This card can replace sites only in the Fellowship block format" (CR 4.2 Section Three: Paths Seldom Trodden 1_222, Úlairë Nelya 1_233, Dark Places 2_55; Grimbold 7_233 with "King block") lays the player's site of the card's own block, on any path, and is not offered where he has none to lay (Q-0327, Ketura 2026-10-15; engine pass 49) [Q-0266]
 
 ## Reveals, draw decks and shuffles
 
@@ -595,6 +622,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - An old test that is kept and put in form, and stands on a board outside play [Q-0178, Q-0237, F-0179, Q-0279]
 - FreepsGetCardChoiceCount() at a choice of phase actions
 - Check D on a change that lasts the turn: read it in a later phase than the one it was made in (Radagast 59_26)
+- Check D on a Shadow skirmish event's phase-long bonus: choose a minion whose skirmish is still to come (Death to the Strawheads 4_8, dec-b4_7) [F-0527]
 - "Themselves again once it is over" wants the source of the modifier still in play (Lórien Swordsman 4_78)
 - A card that bars an act ("may not look at or reveal", "cannot take wounds", "may not be assigned", "cannot use special abilities") is tested on ONE act it stops, and its control (Q-0264: B2; built by engine pass 30) [Q-0265, Q-0315]
 - A ruling that a switching card has NO effect on certain named cards (Legacy Ruling 6, Saruman's Staff 4_174; F-0426; Q-0246: keep) [Q-0236, Q-0034, Q-0224]
@@ -604,7 +632,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - Check D on a delayed "at the start of the regroup phase" that an ability sets up: fight a skirmish between (Under Foot 60_52, Flaming Brand 52_32) [Q-0164, Q-0310]
 - Check D on "skip his or her next Shadow phase": read the second Shadow phase of the same turn (What Are We Waiting For? 2_15; dec-b2_14)
 - A filter that feeds a count. Where a filter feeds a COUNT ("for each X stacked here", "for each X you can spot"), lay the board so the count under ...
-- A phrase the definition writes twice: in a requirement and in the choice (Beorning Axe 18_18, "a [gandalf] card" as `HasCardInDiscard` and as the `choose` of `putCardsFromDiscardIntoHand`)
+- A phrase the definition writes twice: in a requirement and in the choice (Beorning Axe 18_18, "a [gandalf] card" as `HasCardInDiscard` and as the `choose` of `putCardsFromDiscardIntoHand`) [F-0557]
 - "Each site" on a modifier: the sites laid, and a path of a second block (No Stranger to the Shadows 1_108)
 - A site NUMBER in a text ("at site 6, 7, or 8", "at sites 1 to 5") is a site of the card's own block (CR 4.2 "block symbol"; Fellowship block sites have none, so a set 1 to 3 card means Fellowship sites)
 - A draw of 4 in a fellowship phase cannot be told from a draw of 5 or more
@@ -620,6 +648,8 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - A site 1's "When the fellowship moves from <this site>" (Western Emyn Muil 4_329) takes the next move as its `-`
 - "Stacked on a site you control": no board tells `controlledSite` from `site` (Above the Battlement 7_262, Gorgoroth Pillager 7_275)
 - "Assign a minion to <a character>": no board tells `minion: choose(minion)` from `choose(character)` (Into the Caves 17_100)
+- "Each unique [culture] minion is strength +N": no board tells `unique,culture(moria),minion` from `unique,culture(moria)` (Dark Places 2_55; dec-b2_55)
+- "Discard your [culture] condition" on a Shadow card's cost: no board tells `choose(your,culture(sauron),condition)` from `choose(culture(sauron),condition)` (Orc Veteran 3_100, Orc Warrior 3_101; dec-b3_98)
 - "An enduring minion": no board tells `choose(enduring,minion)` from `choose(enduring)` (City of the Dead 8_118)
 - "Each roaming minion" and "Exert a [culture] character": no board tells `all(roaming,minion)` from `all(roaming)`, nor `choose(culture(gondor),character)` in an exert cost from `choose(culture(gondor))` (Eregion's Trails 1_104, Foes of Mordor 1_105; dec-b1_102)
 - "Until the regroup phase, that ally ... participates in archery fire and skirmishes": no board tells the participation's `until: start(regroup)` from `end(assignment)` (One Whom Men Would Follow 1_109; dec-b1_106)
@@ -630,7 +660,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Each time a <kind> companion moves from <a site>, you may <do X to> that <kind>": no board tells one optional `movesFrom` trigger with a choice of 1 to N from one "may" for each companion (Till Durin Wakes Again 2_14; dec-b2_14) [Q-0224]
 - "Spot X to add (N)": no board tells `addTwilight` in `cost` from the same in `effect` (Isengard Ruined 7_331; F-0022)
 - "Skirmish: Exert this minion to make a Nazgûl or [wraith] Orc strength +1" (Morgul Regiment 7_197; Morgul Lackey 7_193 and Morgul Predator 7_196 print it word for word and are built with the same filter, `or(nazgul,and(culture(wraith),orc))`)
-- Sentences set 4 shares outside a twins.py group (dec-b4_353)
+- Sentences set 4 shares outside a twins.py group (dec-b4_353) [Q-0338]
 - A required start-of-turn trigger with a 0-to-N choice
 - "At the start of each of your turns" reads BETWEEN_TURNS; read every counter before as well as after
 - The turn-skippers do not lay sites
@@ -651,5 +681,5 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - lint's `plain-play` warning (Q-0279: C; engine pass 29)
 - lint's `stale`, `race-side`, `pile-cost`, `rule-of-4`, `self-bar`, `item-class` and `bearer-min` warnings (engine pass 39) [Q-0058, F-0510, Q-0062, Q-0262]
 - lint's `read-before`, `helper-pool` and `mounted` warnings (engine pass 44) [Q-0307, Q-0279]
-- lint's `side-doers` warning (engine pass 48)
+- lint's `side-doers` warning (engine pass 48) [F-0551]
 - No Play clause, and no test that only plays a card (Q-0279: B; engine pass 31) [Q-0220]

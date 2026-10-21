@@ -320,6 +320,11 @@
 							type: forEachFPCulture
 							over: 2
 						}
+						// Filled in with all there are (Q-0341: A, as F-0561).
+						default: {
+							type: forEachFPCulture
+							over: 2
+						}
 						memorize: chosenNumber
 					}
 					{

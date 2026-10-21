@@ -166,8 +166,6 @@ public class Card_09_026_ErrataTests
 
 		scn.ShadowUseCardAction(slayer2);
 		assertInZone(Zone.DEAD, radagast);
-		// His death and the loss of the bonus answer the same wound; the Free Peoples player puts them in order.
-		scn.FreepsResolveRuleFirst();
 		assertEquals(2, scn.GetMoveLimit());
 
 		// Two moves of two: where a third was on offer with Radagast alive, the turn now ends.
@@ -262,7 +260,6 @@ public class Card_09_026_ErrataTests
 		// The first phase of the turn: Saved From the Fire places Radagast in the dead pile.
 		scn.FreepsPlayCard(saved);
 		scn.FreepsChooseCard(radagast);
-		scn.FreepsResolveRuleFirst();
 		// The search of the deck: shown first, and nothing taken.
 		scn.FreepsDismissRevealedCards();
 		scn.FreepsDeclineChoosing();
@@ -312,7 +309,6 @@ public class Card_09_026_ErrataTests
 		scn.FreepsPlayCard(saved);
 		assertTrue(scn.FreepsHasCardChoiceAvailable(radagast, gandalf));
 		scn.FreepsChooseCard(radagast);
-		scn.FreepsResolveRuleFirst();
 		scn.FreepsDeclineChoosing();
 		assertInZone(Zone.DEAD, radagast);
 		assertEquals(2, scn.GetMoveLimit());
@@ -330,7 +326,6 @@ public class Card_09_026_ErrataTests
 		scn.FreepsPass();
 		scn.ShadowUseCardAction(slayer1);
 		scn.ShadowChooseCard(radagast2);
-		scn.FreepsResolveRuleFirst();
 
 		// No Radagast in play, no bonus: the move limit is 2 again, and with one move made a second is on offer.
 		assertInZone(Zone.DEAD, radagast2);

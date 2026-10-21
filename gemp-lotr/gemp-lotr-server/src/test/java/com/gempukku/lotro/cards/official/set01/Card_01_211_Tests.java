@@ -93,16 +93,12 @@ public class Card_01_211_Tests
 		// A [wraith] Nazgûl beats a [gondor] Man, 9 against 8, without overwhelming him: the wound kills him.
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
-		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
-		scn.FreepsResolveRuleFirst();
 		assertInZone(Zone.DEAD, aragorn);
 		assertEquals(1, scn.GetBurdens());
 
 		// A [raider] Nazgûl overwhelms a [shire] Hobbit, 12 against 3: a second kill, a second burden.
 		scn.FreepsResolveSkirmish(sam);
 		scn.PassSkirmishActions();
-		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
-		scn.FreepsResolveRuleFirst();
 		assertInZone(Zone.DEAD, sam);
 		assertEquals(2, scn.GetBurdens());
 		assertInZone(Zone.SUPPORT, drawn);
@@ -143,8 +139,6 @@ public class Card_01_211_Tests
 		// The control on the same board: the Nazgûl's own skirmish kills Aragorn.
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
-		assertTrue(scn.FreepsAwaitingRequiredResponseOrder());
-		scn.FreepsResolveRuleFirst();
 		assertInZone(Zone.DEAD, aragorn);
 		assertEquals(1, scn.GetBurdens());
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());

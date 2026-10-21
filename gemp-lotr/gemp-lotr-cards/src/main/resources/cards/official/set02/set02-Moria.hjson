@@ -1118,7 +1118,7 @@
 				modifier: {
 					type: cantBeExerted
 					filter: bearer
-					by: side(Free People)
+					by: not(side(Shadow))
 				}
 			}
 		]
@@ -1148,17 +1148,24 @@
 		timewords: Shadow
 		effects: {
 			type: event
-			cost: {
-				type: exert
-				select: choose(culture(moria),minion)
-			}
+			cost: [
+				{
+					type: exert
+					select: choose(culture(moria),minion)
+				}
+				{
+					type: chooseHowManyBurdensToSpot
+					memorize: spottedBurdens
+				}
+			]
 			effect: {
 				type: addTwilight
 				amount: {
 					type: min
 					firstNumber: 5
 					secondNumber: {
-						type: forEachBurden
+						type: fromMemory
+						memory: spottedBurdens
 					}
 				}
 			}

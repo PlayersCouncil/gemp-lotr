@@ -21,10 +21,16 @@
 				type: startOfPhase
 				phase: fellowship
 			}
-			requires: {
-				type: location
-				filter: siteNumber(4-100), SiteBlock(Fellowship)
-			}
+			requires: [
+				{
+					type: location
+					filter: siteNumber(4-100), SiteBlock(Fellowship)
+				}
+				{
+					type: canSpot
+					filter: dwarf,companion
+				}
+			]
 			effect: {
 				type: drawCards
 				count: {
@@ -228,6 +234,10 @@
 		timewords: Fellowship
 		effects: {
 			type: event
+			requires: {
+				type: HasCardInHand
+				player: shadow
+			}
 			effect: [
 				{
 					type: revealRandomCardsFromHand

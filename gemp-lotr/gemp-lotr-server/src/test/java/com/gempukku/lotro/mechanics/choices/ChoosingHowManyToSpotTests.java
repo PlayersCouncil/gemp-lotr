@@ -23,7 +23,9 @@ import static org.junit.Assert.*;
  * number from none to all there are, and the card goes by the number named.  Each test here puts more than one of
  * the thing on the table and names fewer than there are, since a card that counted everything would read the same
  * as one that counted the number named when the player names them all.  The four are burdens, Free Peoples
- * cultures, threats and twilight tokens: each is counted by the game in a way of its own.
+ * cultures, threats and twilight tokens: each is counted by the game in a way of its own.  The number comes filled
+ * in with all there are, so that spotting everything takes no typing (Ketura on F-0561: "make sure that the default
+ * answer presented to the player is all of them").
  *
  * ("You can spot" is not the player's to count short, and is each card's own to show.)
  */
@@ -97,6 +99,8 @@ public class ChoosingHowManyToSpotTests
 		// None, or any number up to the 3 there are.
 		assertEquals(0, scn.ShadowGetChoiceMin());
 		assertEquals(3, scn.ShadowGetChoiceMax());
+		// Filled in with all there are (F-0561).
+		assertEquals(Integer.valueOf(3), scn.ShadowGetChoiceDefault());
 
 		// Two are named, and Aragorn is 2 weaker and not 3.
 		scn.ShadowChoose("2");
@@ -133,6 +137,8 @@ public class ChoosingHowManyToSpotTests
 		// A culture is spotted once, however many cards show it: 4 and not 5.
 		assertEquals(0, scn.ShadowGetChoiceMin());
 		assertEquals(4, scn.ShadowGetChoiceMax());
+		// Filled in with all there are (F-0561).
+		assertEquals(Integer.valueOf(4), scn.ShadowGetChoiceDefault());
 
 		// Three are named, one over 2: one companion is exerted and one threat added, where all four would
 		// have made it two of each.
@@ -181,6 +187,8 @@ public class ChoosingHowManyToSpotTests
 
 		assertEquals(0, scn.ShadowGetChoiceMin());
 		assertEquals(2, scn.ShadowGetChoiceMax());
+		// Filled in with all there are (F-0561).
+		assertEquals(Integer.valueOf(2), scn.ShadowGetChoiceDefault());
 
 		// One threat is named, and one token added and not two.
 		scn.ShadowChoose("1");
@@ -217,6 +225,8 @@ public class ChoosingHowManyToSpotTests
 		assertEquals(4, scn.GetTwilight());
 		assertEquals(0, scn.FreepsGetChoiceMin());
 		assertEquals(4, scn.FreepsGetChoiceMax());
+		// Filled in with all there are (F-0561).
+		assertEquals(Integer.valueOf(4), scn.FreepsGetChoiceDefault());
 
 		// Two are named, and Gandalf is 2 stronger and not 4.
 		scn.FreepsChoose("2");

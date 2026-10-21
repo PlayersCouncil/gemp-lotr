@@ -172,6 +172,7 @@
 				phase: fellowship
 				cost: {
 					type: discardStackedCards
+					select: choose(side(free people))
 					on: self
 				}
 				effect: {

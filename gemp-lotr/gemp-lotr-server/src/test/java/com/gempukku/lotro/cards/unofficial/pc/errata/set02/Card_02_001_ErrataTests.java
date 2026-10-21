@@ -26,6 +26,7 @@ public class Card_02_001_ErrataTests
 					put("axe", "1_9");          // Dwarven Axe: [dwarven] hand weapon, cost 0, bearer must be a Dwarf
 					put("battleaxe", "7_9");    // Gimli's Battle Axe, Trusted Weapon: unique [dwarven] hand weapon, cost 2, bearer must be a Dwarf
 					put("handaxe", "2_10");     // Hand Axe: [dwarven] hand weapon, cost 0, bearer must be a Dwarf
+					put("khazad", "11_3");      // Axe of Khazad-dum: [dwarven] hand weapon, cost 1, bearer must be a Dwarf; damage +1 at a mountain only
 					put("armor", "1_8");        // Dwarven Armor: [dwarven] possession that is not a weapon, cost 0, bearer must be a Dwarf
 					put("sword", "1_299");      // Hobbit Sword: [shire] hand weapon, cost 1, bearer must be a Hobbit (Frodo)
 
@@ -112,7 +113,7 @@ public class Card_02_001_ErrataTests
 	}
 
 	@Test
-	public void WeaponAbilityOffersOnlyDwarvenWeaponsInYourDiscardPileIncludingOneTheCostDiscarded() throws DecisionResultInvalidException, CardNotFoundException {
+	public void WeaponAbilityOffersOnlyDwarvenWeaponsAlreadyInYourDiscardPileAndNotOneTheCostDiscarded() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var card = scn.GetFreepsCard("mountains");
@@ -121,33 +122,38 @@ public class Card_02_001_ErrataTests
 		var battleaxe = scn.GetFreepsCard("battleaxe");
 		var armor = scn.GetFreepsCard("armor");
 		var sword = scn.GetFreepsCard("sword");
+		var khazad = scn.GetFreepsCard("khazad");
 		var handaxe = scn.GetShadowCard("handaxe");
 		var filler1 = scn.GetFreepsCard("filler1");
 		var filler2 = scn.GetFreepsCard("filler2");
 		scn.MoveCardsToSupportArea(card);
 		scn.MoveCompanionsToTable(guard);
 		// Armor could go on the guard and the sword on Frodo: each is playable, and neither is a [dwarven] weapon.
-		scn.MoveCardsToDiscard(axe, armor, sword);
+		scn.MoveCardsToDiscard(battleaxe, khazad, armor, sword);
 		// A [dwarven] weapon in the other player's discard pile.
 		scn.MoveCardsToDiscard(handaxe);
 
 		scn.StartGame();
-		// The battle axe is the second card down, so the cost itself puts it in the discard pile.
-		scn.MoveCardsToTopOfDeck(filler2, battleaxe, filler1);
+		// The Dwarven Axe is the second card down, so the cost itself puts it in the discard pile.
+		scn.MoveCardsToTopOfDeck(filler2, axe, filler1);
 		scn.FreepsRefreshDecision();
 
+		assertInDiscard(battleaxe, khazad, armor, sword, handaxe);
+		assertEquals(axe, scn.GetFromTopOfFreepsDeck(2));
 		assertEquals(0, scn.GetTwilight());
 		scn.FreepsUseCardAction(card, "play a");
 
-		assertInDiscard(filler1, battleaxe, filler2);
-		assertTrue(scn.FreepsHasCardChoiceAvailable(axe, battleaxe));
-		assertTrue(scn.FreepsHasCardChoiceNotAvailable(armor, sword, handaxe));
+		// The weapons that were there before the action began; not the axe the cost has just discarded (F-0548: A,
+		// CR 4.2 "effect": a card played from the discard pile must be there before the action begins).
+		assertInDiscard(filler1, axe, filler2);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(battleaxe, khazad));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(axe, armor, sword, handaxe));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 
 		scn.FreepsChooseCardBPFromSelection(battleaxe);
 
 		assertAttachedTo(battleaxe, guard);
-		assertInDiscard(axe, armor, sword);
+		assertInDiscard(axe, khazad, armor, sword);
 		assertEquals(2, scn.GetTwilight());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
@@ -163,7 +169,7 @@ public class Card_02_001_ErrataTests
 		scn.MoveCompanionsToTable(guard);
 		scn.MoveCardsToDiscard(axe);
 		// Everything else but two fillers out of the draw deck.
-		scn.MoveCardsToFreepsHand("thrarin", "aragorn", "battleaxe", "handaxe", "armor", "sword", "filler1", "filler2");
+		scn.MoveCardsToFreepsHand("thrarin", "aragorn", "battleaxe", "handaxe", "khazad", "armor", "sword", "filler1", "filler2");
 
 		scn.StartGame();
 
@@ -276,7 +282,7 @@ public class Card_02_001_ErrataTests
 		scn.MoveCardsToSupportArea(card);
 		scn.MoveCompanionsToTable(guard);
 		// Everything but the four fillers out of the draw deck.
-		scn.MoveCardsToFreepsHand("thrarin", "aragorn", "axe", "battleaxe", "handaxe", "armor", "sword");
+		scn.MoveCardsToFreepsHand("thrarin", "aragorn", "axe", "battleaxe", "handaxe", "khazad", "armor", "sword");
 
 		scn.StartGame();
 
@@ -322,7 +328,7 @@ public class Card_02_001_ErrataTests
 		var thrarin = scn.GetFreepsCard("thrarin");
 		scn.MoveCardsToSupportArea(card);
 		scn.MoveAlliesToTable(thrarin);
-		scn.MoveCardsToFreepsHand("guard", "aragorn", "axe", "battleaxe", "handaxe", "armor", "sword", "filler1", "filler2", "filler3");
+		scn.MoveCardsToFreepsHand("guard", "aragorn", "axe", "battleaxe", "handaxe", "khazad", "armor", "sword", "filler1", "filler2", "filler3");
 
 		scn.StartGame();
 
@@ -339,7 +345,7 @@ public class Card_02_001_ErrataTests
 		var guard = scn.GetFreepsCard("guard");
 		scn.MoveCardsToSupportArea(card);
 		scn.MoveCompanionsToTable(guard);
-		scn.MoveCardsToFreepsHand("thrarin", "aragorn", "axe", "battleaxe", "handaxe", "armor", "sword", "filler1", "filler2", "filler3", "filler4");
+		scn.MoveCardsToFreepsHand("thrarin", "aragorn", "axe", "battleaxe", "handaxe", "khazad", "armor", "sword", "filler1", "filler2", "filler3", "filler4");
 
 		scn.StartGame();
 

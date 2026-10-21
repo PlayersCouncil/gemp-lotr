@@ -655,12 +655,12 @@
 		effects: {
 			type: activated
 			phase: skirmish
+			cost: {
+				type: discardTopCardsFromDeck
+				forced: false
+				memorize: discardedCard
+			}
 			effect: [
-				{
-					type: discardTopCardsFromDeck
-					forced: false
-					memorize: discardedCard
-				}
 				{
 					type: modifyStrength
 					select: choose(minion,inSkirmishAgainst(elf))

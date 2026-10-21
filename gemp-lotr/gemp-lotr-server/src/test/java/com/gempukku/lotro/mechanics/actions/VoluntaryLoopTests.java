@@ -27,8 +27,9 @@ import static org.junit.Assert.*;
  * The loop is found as the player who opened it is about to be offered its first action for the third time: each
  * player has used his action twice, and the board at the start of the third round is the board at the start of
  * the second.  The Free Peoples player then names a number (1 to 99, filled in with 3), whoever opened the loop,
- * and the Shadow player agrees to it or chooses a lower one (0 to one less).  The prompts are her words, with the
- * cards' titles in [[...]] and the number in **...**.
+ * and the Shadow player agrees to it or chooses a lower one (0 to one less).  The prompts are her words, sent as
+ * HTML (Q-0329, answers/2026-10-16-a.md): the rules link an anchor, each card the game log's card hint
+ * (GameUtils.getCardLink), the number in bold and her line breaks as breaks.  The first test reads each prompt whole.
  *
  * What the players settle is then carried out at once, before anybody is asked anything (LoopRun).  One iteration
  * is one round as found, the opener's action and then the other player's.  The Shadow player takes the last action
@@ -160,6 +161,229 @@ public class VoluntaryLoopTests
 		);
 	}
 
+	// The One Ring, The Great Ring 19_1: "Skirmish: Add a burden to make the Ring-bearer strength +3."  Morgul Brute
+	// 7_188 (strength 6): "Skirmish: Remove a burden to make this minion strength +3."  Her scenario (rulings log,
+	// 2026-10-16), the rules' loop with the Ring for Sméagol.  Frodo 1_290 is strength 3.
+	protected VirtualTableScenario GetRingScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("brute", "7_188");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.GreatRing
+		);
+	}
+
+	// Hrethel, Rider of Rohan 6_95 (strength 6): "Skirmish: Heal a minion skirmishing Hrethel to make Hrethel
+	// strength +3 (limit +3)."  Isengard Flanker 5_52, a warg-rider (strength 7, fierce while not exhausted), bearing
+	// a Warg 5_65: "Response: If a skirmish special ability is used in a skirmish involving bearer, exert bearer to
+	// cancel that action."  Her scenario (rulings log, 2026-10-16).
+	protected VirtualTableScenario GetHrethelScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("hrethel", "6_95");
+					put("flanker", "5_52");
+					put("warg", "5_65");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	@Test
+	public void TheGreatRingAgainstMorgulBruteIsFoundAndBothAbilitiesAreBarred() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetRingScenario();
+
+		var frodo = scn.GetRingBearer();
+		var ring = scn.GetRing();
+		var brute = scn.GetShadowCard("brute");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(brute);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(frodo, brute);
+		scn.FreepsResolveSkirmish(frodo);
+
+		for (int round = 1; round <= 2; round++) {
+			assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+			assertFalse(scn.FreepsDecisionAvailable("LOOP DETECTED"));
+			scn.FreepsUseCardAction(ring);
+			assertEquals(1, scn.GetBurdens());
+			scn.ShadowUseCardAction(brute);
+			assertEquals(0, scn.GetBurdens());
+		}
+		assertEquals(9, scn.GetStrength(frodo));
+		assertEquals(12, scn.GetStrength(brute));
+
+		assertTrue(scn.FreepsDecisionAvailable("LOOP DETECTED: <a href=\"https://wiki.lotrtcgpc.net/wiki/Comprehensive_Rules_4.2#loops\" target=\"_blank\">See loop handling rules here.</a><br><div class='cardHint' value='19_1'>·The One Ring, The Great Ring</div> and <div class='cardHint' value='7_188'>Morgul Brute</div> can be used forever."
+				+ "<br>Choose how many more times this loop will execute."));
+		scn.FreepsNameLoopIterations(2);
+		scn.ShadowAgreeToLoop();
+
+		// Two more rounds: Frodo 9 + 6, the Brute 12 + 6, no burden; both abilities barred.
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(15, scn.GetStrength(frodo));
+		assertEquals(18, scn.GetStrength(brute));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertTrue(scn.FreepsActionLoopBanned(ring));
+		// A burden by a cheat, so that the Brute has one to remove when the Shadow player is next asked.
+		scn.AddBurdens(1);
+		scn.FreepsPass();
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		assertTrue(scn.ShadowActionAvailable(brute));
+		assertTrue(scn.ShadowActionLoopBanned(brute));
+	}
+
+	// F-0565 (Ketura, answers/2026-10-20-d.md): the Shadow player's half of the loop is the Warg's Response inside
+	// Hrethel's action, and then his pass.  "I would present it the same as the top-level version I think, with the
+	// one major difference being that the Response should not be barred, only Hrethel."  Each round heals the
+	// Flanker and exerts him again, and Hrethel never gains his +3: the board at the start of the third round is the
+	// board at the start of the second.
+	@Test
+	public void HrethelAgainstAWargRiderBearingAWargIsFound() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetHrethelScenario();
+
+		var hrethel = scn.GetFreepsCard("hrethel");
+		var flanker = scn.GetShadowCard("flanker");
+		var warg = scn.GetShadowCard("warg");
+		scn.MoveCompanionsToTable(hrethel);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(flanker);
+		scn.AttachCardsTo(flanker, warg);
+		scn.AddWoundsToChar(flanker, 1);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(hrethel, flanker);
+		scn.FreepsResolveSkirmish(hrethel);
+
+		for (int round = 1; round <= 2; round++) {
+			assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+			assertFalse(scn.FreepsDecisionAvailable("LOOP DETECTED"));
+			scn.FreepsUseCardAction(hrethel);
+			assertEquals(0, scn.GetWoundsOn(flanker));
+			scn.ShadowUseCardAction(warg);
+			assertEquals(1, scn.GetWoundsOn(flanker));
+			assertEquals(6, scn.GetStrength(hrethel));
+			scn.ShadowPass();
+		}
+
+		// Instead of his actions the third time, the Free Peoples player is asked, in the words of the top-level loop,
+		// the Warg named as the Shadow player's half.
+		assertFalse(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertTrue(scn.FreepsDecisionAvailable("LOOP DETECTED: <a href=\"https://wiki.lotrtcgpc.net/wiki/Comprehensive_Rules_4.2#loops\" target=\"_blank\">See loop handling rules here.</a><br><div class='cardHint' value='6_95'>·Hrethel, Rider of Rohan</div> and <div class='cardHint' value='5_65'>Warg</div> can be used forever."
+				+ "<br>Choose how many more times this loop will execute."));
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+		scn.FreepsNameLoopIterations(4);
+		assertTrue(scn.ShadowDecisionAvailable("LOOP DETECTED: <a href=\"https://wiki.lotrtcgpc.net/wiki/Comprehensive_Rules_4.2#loops\" target=\"_blank\">See loop handling rules here.</a><br>The Free Peoples player has decided that the loop between "
+				+ "<div class='cardHint' value='6_95'>·Hrethel, Rider of Rohan</div> and <div class='cardHint' value='5_65'>Warg</div> will be performed <b>4</b> more times."));
+		scn.MarkGameLog();
+		scn.ShadowAgreeToLoop();
+
+		// Three rounds unseen and the fourth shown; Hrethel alone is barred.
+		assertTrue(scn.GameLogSinceMarkSays("was carried out 3 times without being shown"));
+		assertTrue(scn.GameLogSinceMarkSays("is over: the ability of"));
+
+		// Four more rounds, each ending on the Shadow player's pass: the Flanker healed and exerted again, Hrethel 6.
+		// The Free Peoples player acts next; Hrethel's ability is barred.
+		assertEquals(1, scn.GetWoundsOn(flanker));
+		assertEquals(6, scn.GetStrength(hrethel));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertTrue(scn.FreepsActionLoopBanned(hrethel));
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+
+		// The Shadow player passed last, so the Free Peoples player's pass ends the skirmish, as it would have by hand.
+		scn.FreepsPass();
+		assertFalse(scn.AwaitingShadowSkirmishPhaseActions());
+		assertFalse(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
+
+	// F-0565: where the Shadow player lowers the number, the Free Peoples player takes the final action (Hrethel once
+	// more, the Warg's Response inside it as in the round played by hand) and the Shadow player acts next.
+	@Test
+	public void HrethelAgainstAWargLoweredEndsOnHrethelAndTheShadowPlayerActsNext() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetHrethelScenario();
+
+		var hrethel = scn.GetFreepsCard("hrethel");
+		var flanker = scn.GetShadowCard("flanker");
+		var warg = scn.GetShadowCard("warg");
+		scn.MoveCompanionsToTable(hrethel);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(flanker);
+		scn.AttachCardsTo(flanker, warg);
+		scn.AddWoundsToChar(flanker, 1);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(hrethel, flanker);
+		scn.FreepsResolveSkirmish(hrethel);
+
+		for (int round = 1; round <= 2; round++) {
+			scn.FreepsUseCardAction(hrethel);
+			scn.ShadowUseCardAction(warg);
+			scn.ShadowPass();
+		}
+
+		scn.FreepsNameLoopIterations(3);
+		scn.MarkGameLog();
+		scn.ShadowLowerLoop(1);
+
+		// One round unseen, then Hrethel's final use shown.
+		assertTrue(scn.GameLogSinceMarkSays("was carried out 1 time without being shown"));
+
+		assertEquals(1, scn.GetWoundsOn(flanker));
+		assertEquals(6, scn.GetStrength(hrethel));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		assertFalse(scn.FreepsAnyDecisionsAvailable());
+	}
+
+	// F-0565: the bar is on Hrethel's ability alone.  The Warg's Response is still offered, unflagged, to another
+	// skirmish special ability in the same skirmish: Ettenmoors 1_331 (site 2), "Skirmish: Exert your companion or
+	// minion to make that character strength +2", used by the Free Peoples player on Hrethel.
+	@Test
+	public void AfterTheHrethelLoopTheWargsResponseIsStillOfferedToAnotherSkirmishSpecialAbility() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetHrethelScenario();
+
+		var hrethel = scn.GetFreepsCard("hrethel");
+		var flanker = scn.GetShadowCard("flanker");
+		var warg = scn.GetShadowCard("warg");
+		scn.MoveCompanionsToTable(hrethel);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(flanker);
+		scn.AttachCardsTo(flanker, warg);
+		scn.AddWoundsToChar(flanker, 1);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(hrethel, flanker);
+		scn.FreepsResolveSkirmish(hrethel);
+
+		for (int round = 1; round <= 2; round++) {
+			scn.FreepsUseCardAction(hrethel);
+			scn.ShadowUseCardAction(warg);
+			scn.ShadowPass();
+		}
+		scn.FreepsNameLoopIterations(1);
+		scn.ShadowAgreeToLoop();
+		assertTrue(scn.FreepsActionLoopBanned(hrethel));
+
+		var ettenmoors = scn.GetCurrentSite();
+		assertEquals("Ettenmoors", ettenmoors.getBlueprint().getTitle());
+		assertFalse(scn.FreepsActionLoopBanned(ettenmoors));
+		scn.FreepsUseCardAction(ettenmoors);
+		// Frodo or Hrethel: Hrethel.
+		scn.FreepsChooseCard(hrethel);
+		assertEquals(1, scn.GetWoundsOn(hrethel));
+
+		assertTrue(scn.ShadowActionAvailable(warg));
+		assertFalse(scn.ShadowActionLoopBanned(warg));
+		scn.ShadowUseCardAction(warg);
+		// The Flanker exerted, and Ettenmoors' +2 cancelled.
+		assertEquals(2, scn.GetWoundsOn(flanker));
+		assertEquals(6, scn.GetStrength(hrethel));
+	}
+
 	@Test
 	public void SmeagolAgainstAnduinBanksIsFoundAsHeWouldBeOfferedHisAbilityTheThirdTime() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
@@ -198,8 +422,8 @@ public class VoluntaryLoopTests
 		assertEquals(7, scn.GetStrength(smeagol));
 		assertEquals(9, scn.GetStrength(pursuer));
 		assertFalse(scn.AwaitingFreepsSkirmishPhaseActions());
-		assertTrue(scn.FreepsDecisionAvailable("LOOP DETECTED: [See loop handling rules here.](https://wiki.lotrtcgpc.net/wiki/Comprehensive_Rules_4.2#loops)\n[[Sméagol, Slinker]] and [[Anduin Banks]] can be used forever."
-				+ "\nChoose how many more times this loop will execute."));
+		assertTrue(scn.FreepsDecisionAvailable("LOOP DETECTED: <a href=\"https://wiki.lotrtcgpc.net/wiki/Comprehensive_Rules_4.2#loops\" target=\"_blank\">See loop handling rules here.</a><br><div class='cardHint' value='5_29'>·Sméagol, Slinker</div> and <div class='cardHint' value='7_341'>Anduin Banks</div> can be used forever."
+				+ "<br>Choose how many more times this loop will execute."));
 		assertEquals(1, scn.FreepsGetChoiceMin());
 		assertEquals(99, scn.FreepsGetChoiceMax());
 		assertEquals(Integer.valueOf(3), scn.FreepsGetChoiceDefault());
@@ -207,9 +431,9 @@ public class VoluntaryLoopTests
 
 		scn.FreepsNameLoopIterations(6);
 
-		assertTrue(scn.ShadowDecisionAvailable("LOOP DETECTED: [See loop handling rules here.](https://wiki.lotrtcgpc.net/wiki/Comprehensive_Rules_4.2#loops)\nThe Free Peoples player has decided that the loop between "
-				+ "[[Sméagol, Slinker]] and [[Anduin Banks]] will be performed **6** more times."));
-		assertEquals(List.of("Agree: the loop goes **6** more times, and Free Peoples takes the next action.",
+		assertTrue(scn.ShadowDecisionAvailable("LOOP DETECTED: <a href=\"https://wiki.lotrtcgpc.net/wiki/Comprehensive_Rules_4.2#loops\" target=\"_blank\">See loop handling rules here.</a><br>The Free Peoples player has decided that the loop between "
+				+ "<div class='cardHint' value='5_29'>·Sméagol, Slinker</div> and <div class='cardHint' value='7_341'>Anduin Banks</div> will be performed <b>6</b> more times."));
+		assertEquals(List.of("Agree: the loop goes <b>6</b> more times, and Free Peoples takes the next action.",
 				"Choose a lower number: Shadow will take the next action."), scn.ShadowGetMultipleChoices());
 		assertFalse(scn.FreepsAnyDecisionsAvailable());
 
@@ -254,8 +478,8 @@ public class VoluntaryLoopTests
 		scn.FreepsNameLoopIterations(6);
 		scn.ShadowChoose("Choose a lower number: Shadow will take the next action.");
 
-		assertTrue(scn.ShadowDecisionAvailable("Choose a number lower than **6**. The loop between [[Sméagol, Slinker]] "
-				+ "and [[Anduin Banks]] will be performed that many times, ending so that you will take the next action."));
+		assertTrue(scn.ShadowDecisionAvailable("Choose a number lower than <b>6</b>. The loop between <div class='cardHint' value='5_29'>·Sméagol, Slinker</div> "
+				+ "and <div class='cardHint' value='7_341'>Anduin Banks</div> will be performed that many times, ending so that you will take the next action."));
 		assertEquals(0, scn.ShadowGetChoiceMin());
 		assertEquals(5, scn.ShadowGetChoiceMax());
 
@@ -342,11 +566,11 @@ public class VoluntaryLoopTests
 		// 1 burden, as at the start of the second round.
 		assertEquals(1, scn.GetBurdens());
 		assertFalse(scn.ShadowAnyDecisionsAvailable());
-		assertTrue(scn.FreepsDecisionAvailable("LOOP DETECTED: [See loop handling rules here.](https://wiki.lotrtcgpc.net/wiki/Comprehensive_Rules_4.2#loops)\n[[Anduin Banks]] and [[Sméagol, Slinker]] can be used forever."
-				+ "\nChoose how many more times this loop will execute."));
+		assertTrue(scn.FreepsDecisionAvailable("LOOP DETECTED: <a href=\"https://wiki.lotrtcgpc.net/wiki/Comprehensive_Rules_4.2#loops\" target=\"_blank\">See loop handling rules here.</a><br><div class='cardHint' value='7_341'>Anduin Banks</div> and <div class='cardHint' value='5_29'>·Sméagol, Slinker</div> can be used forever."
+				+ "<br>Choose how many more times this loop will execute."));
 
 		scn.FreepsNameLoopIterations(4);
-		assertTrue(scn.ShadowDecisionAvailable("the loop between [[Anduin Banks]] and [[Sméagol, Slinker]] will be performed **4** more times."));
+		assertTrue(scn.ShadowDecisionAvailable("the loop between <div class='cardHint' value='7_341'>Anduin Banks</div> and <div class='cardHint' value='5_29'>·Sméagol, Slinker</div> will be performed <b>4</b> more times."));
 		scn.ShadowAgreeToLoop();
 
 		// Four rounds end with Sméagol's action, so the site's is taken once more to give the Shadow player the last
@@ -466,10 +690,10 @@ public class VoluntaryLoopTests
 		assertEquals(0, scn.GetThreats());
 		assertEquals(7, scn.GetStrength(merry));
 		assertEquals(11, scn.GetStrength(soldier));
-		assertTrue(scn.FreepsDecisionAvailable("LOOP DETECTED: [See loop handling rules here.](https://wiki.lotrtcgpc.net/wiki/Comprehensive_Rules_4.2#loops)\n[[Merry, Rohirrim Squire]] and [[Mordor Soldier]] can be used forever."));
+		assertTrue(scn.FreepsDecisionAvailable("LOOP DETECTED: <a href=\"https://wiki.lotrtcgpc.net/wiki/Comprehensive_Rules_4.2#loops\" target=\"_blank\">See loop handling rules here.</a><br><div class='cardHint' value='7_320'>·Merry, Rohirrim Squire</div> and <div class='cardHint' value='7_290'>Mordor Soldier</div> can be used forever."));
 
 		scn.FreepsNameLoopIterations(1);
-		assertTrue(scn.ShadowDecisionAvailable("will be performed **1** more times."));
+		assertTrue(scn.ShadowDecisionAvailable("will be performed <b>1</b> more times."));
 
 		// Lower than 1 can only be 0: it is not asked.
 		scn.ShadowLowerLoop(0);
@@ -565,7 +789,7 @@ public class VoluntaryLoopTests
 		scn.ShadowUseCardAction(soldier);
 		scn.FreepsUseCardAction(merry);
 		scn.ShadowUseCardAction(soldier);
-		assertTrue(scn.FreepsDecisionAvailable("[[Merry, Rohirrim Squire]] and [[Mordor Soldier]] can be used forever."));
+		assertTrue(scn.FreepsDecisionAvailable("<div class='cardHint' value='7_320'>·Merry, Rohirrim Squire</div> and <div class='cardHint' value='7_290'>Mordor Soldier</div> can be used forever."));
 		scn.FreepsNameLoopIterations(2);
 		scn.ShadowLowerLoop(1);
 
@@ -616,7 +840,7 @@ public class VoluntaryLoopTests
 		assertEquals(12, scn.GetStrength(denizen));
 		assertEquals(0, scn.GetThreats());
 
-		assertTrue(scn.FreepsDecisionAvailable("[[Merry, Rohirrim Squire]] and [[Troll of the Deep, Cave Troll]] can be used forever."));
+		assertTrue(scn.FreepsDecisionAvailable("<div class='cardHint' value='7_320'>·Merry, Rohirrim Squire</div> and <div class='cardHint' value='19_23'>·Troll of the Deep, Cave Troll</div> can be used forever."));
 		scn.FreepsNameLoopIterations(3);
 		scn.ShadowAgreeToLoop();
 

@@ -28,13 +28,13 @@ has a candidate, and a `ShadowChoose("draw deck")` then fails inside the next de
 discard pile always, and for the draw deck only where its branch says `mustExist: true`: without it a play from
 a draw deck can always be tried (Q-0019), so with the one candidate in the discard pile both piles are still
 offered and the test answers `FreepsChoose("discard pile")` (A Wizard Is Never Late 30_23, `Card_31_019_Tests`).
-So does a transfer: with one legal bearer it is made without asking. So does a play from a pile: with one card the
+So does a transfer: with one legal bearer it is made without asking, and so does a card played on a bearer (Merry's Dagger 9_18 with Merry the only Merry beside Pippin: attached unasked, the game back at fellowship actions). So does a play from a pile: with one card the
 effect could play there, it is played unasked (Final Strike 10_20 lays two Gollums in the discard pile to show
 the choice).
 
-**A board changed under a pending decision: an action offered though its cost cannot be paid, or withheld though it now can.** The game works out what a decision offers when it sends it. After a cheat that changes the board while a player is at a choice of phase actions, call `FreepsRefreshDecision()` / `ShadowRefreshDecision()` before reading what is on offer; they fail unless that player is at such a choice. Wounds or discards cheated on turn 1 after `StartGame()` are the usual case: an action whose cost can no longer be paid still reads as offered, and looks like a cost-gating fault in the engine (Green Dragon Inn 1_322); used, it does nothing: no cost is paid and the card stays where it was (Thrór's Map 1_318, its Hobbits wounded after `StartGame()` so that none could exert). Five cheats need no refresh (engine pass 40): `SetFreepsHand`, `SetShadowHand`, `SetFreepsDrawDeck`, `SetShadowDrawDeck` and `MoveCardsToDiscard` (with `MoveCardsToFreepsDiscard` / `MoveCardsToShadowDiscard`) have a pending choice of phase actions worked out afresh as they finish, for either player, and leave any other decision as it was; before that, a card dealt into hand on the way and cheated into the discard pile still read as offered, and a bar on plays from the discard pile looked broken (The Great River 3_118). Every other cheat (`MoveCardsToHand`, `MoveCompanionsToTable`, `AddWoundsToChar` ...) still wants the refresh. It hides an offer as well: a minion cheated in at the Free Peoples player's pending regroup decision is not counted in it, so a site's "your minion" read on HIS side (a site's "you" is each player, Q-0140) needs the minion laid before `SkipToPhase(Phase.REGROUP)` (Osgiliath Channel 8_120). A play is the same: a companion cheated onto the table in the middle of a fellowship phase is no bearer for a card in hand until the refresh, and `FreepsPlayAvailable` reads false with no other sign (Frodo, Frenzied Fighter 13_149 for Sting 5_116, Card_05_116_Tests); so is a card put into the hand by `MoveCardsToHand` after `StartGame()`, which `FreepsPlayCard` cannot play until the refresh (Rohirrim Shield 5_91, Card_05_091_Tests). A minion's own Shadow ability is the same: a minion cheated in once the Shadow player is already at "Play Shadow action or Pass" is offered nothing (`ShadowGetAvailableActions()` empty, `AwaitingShadowPhaseActions()` true, so lint's `not-asked` is silent and a "not offered" reading passes for nothing); lay it before the move into the Shadow phase (Morgul Squealer 8_77, Card_08_077_Tests). A minion so cheated in is no bearer either: a possession in the Shadow hand that needs him reads "not offered" (`ShadowPlayAvailable` false), and lint's `stale` does not flag it; lay the minions before the `FreepsPass()` that opens the Shadow phase (Sharku's Warg 5_59, Card_05_059_Tests); so is an event whose extra cost exerts such a minion: Under the Watching Eye 1_281's "exert a [sauron] tracker" read not playable until the trackers went down before that pass (Card_01_281_Tests). lint's `stale` warning (engine pass 39) names an offer read as absent after a cheat with no answer or refresh between; since engine pass 41 the five cheats above count as a refresh. Since engine pass 50 it also names a card's action taken (`FreepsPlayCard`, `FreepsUseCardAction` ...), or read as offered, after a cheat that moved cards (`Move...To...`, `AttachCardsTo`, `StackCardsOn`) with no answer or refresh between: after a skipper's draws the card may or may not have been dealt into the hand the decision was worked out from, and the test passes or fails by chance (Card_01_175_Tests and Card_04_346_Tests, `SkipToSite` then `MoveCardsToHand`, failed about one run in ten). Engine pass 50 put the refresh into the 333 landed tests of that shape.
+**A board changed under a pending decision: an action offered though its cost cannot be paid, or withheld though it now can.** The game works out what a decision offers when it sends it. After a cheat that changes the board while a player is at a choice of phase actions, call `FreepsRefreshDecision()` / `ShadowRefreshDecision()` before reading what is on offer; they fail unless that player is at such a choice. Wounds or discards cheated on turn 1 after `StartGame()` are the usual case: an action whose cost can no longer be paid still reads as offered, and looks like a cost-gating fault in the engine (Green Dragon Inn 1_322); used, it does nothing: no cost is paid and the card stays where it was (Thrór's Map 1_318, its Hobbits wounded after `StartGame()` so that none could exert). Five cheats need no refresh (engine pass 40): `SetFreepsHand`, `SetShadowHand`, `SetFreepsDrawDeck`, `SetShadowDrawDeck` and `MoveCardsToDiscard` (with `MoveCardsToFreepsDiscard` / `MoveCardsToShadowDiscard`) have a pending choice of phase actions worked out afresh as they finish, for either player, and leave any other decision as it was; before that, a card dealt into hand on the way and cheated into the discard pile still read as offered, and a bar on plays from the discard pile looked broken (The Great River 3_118). Every other cheat (`MoveCardsToHand`, `MoveCompanionsToTable`, `AddWoundsToChar` ...) still wants the refresh. `AddBurdens` and `AddThreats` are among them: in a fellowship phase after `StartGame()` a "To play, remove 2 burdens or 2 threats" is judged on the counts before the cheat until the refresh, so a "not playable" reading taken there passes for nothing (Tom Bombadil, The Master 9_52, Card_09_052_Tests). It hides an offer as well: a minion cheated in at the Free Peoples player's pending regroup decision is not counted in it, so a site's "your minion" read on HIS side (a site's "you" is each player, Q-0140) needs the minion laid before `SkipToPhase(Phase.REGROUP)` (Osgiliath Channel 8_120). A play is the same: a companion cheated onto the table in the middle of a fellowship phase is no bearer for a card in hand until the refresh, and `FreepsPlayAvailable` reads false with no other sign (Frodo, Frenzied Fighter 13_149 for Sting 5_116, Card_05_116_Tests); so is a card put into the hand by `MoveCardsToHand` after `StartGame()`, which `FreepsPlayCard` cannot play until the refresh (Rohirrim Shield 5_91, Card_05_091_Tests). A minion's own Shadow ability is the same: a minion cheated in once the Shadow player is already at "Play Shadow action or Pass" is offered nothing (`ShadowGetAvailableActions()` empty, `AwaitingShadowPhaseActions()` true, so lint's `not-asked` is silent and a "not offered" reading passes for nothing); lay it before the move into the Shadow phase (Morgul Squealer 8_77, Card_08_077_Tests). A minion so cheated in is no bearer either: a possession in the Shadow hand that needs him reads "not offered" (`ShadowPlayAvailable` false), and lint's `stale` does not flag it; lay the minions before the `FreepsPass()` that opens the Shadow phase (Sharku's Warg 5_59, Card_05_059_Tests); so is an event whose extra cost exerts such a minion: Under the Watching Eye 1_281's "exert a [sauron] tracker" read not playable until the trackers went down before that pass (Card_01_281_Tests); so is a card whose "To play, spot" needs him: Tower of Orthanc 3_71's "To play, spot an [isengard] minion" read not playable with the minion cheated in after that pass (Card_03_071_Tests). lint's `stale` warning (engine pass 39) names an offer read as absent after a cheat with no answer or refresh between; since engine pass 41 the five cheats above count as a refresh. Since engine pass 50 it also names a card's action taken (`FreepsPlayCard`, `FreepsUseCardAction` ...), or read as offered, after a cheat that moved cards (`Move...To...`, `AttachCardsTo`, `StackCardsOn`) with no answer or refresh between: after a skipper's draws the card may or may not have been dealt into the hand the decision was worked out from, and the test passes or fails by chance (Card_01_175_Tests and Card_04_346_Tests, `SkipToSite` then `MoveCardsToHand`, failed about one run in ten). Engine pass 50 put the refresh into the 333 landed tests of that shape.
 
-**A number that can only be one number is not asked for** (F-0147). Where an effect or a cost asks for a number and only one can be named (X from 1 to 1, "how many to spot" with none to spot, "remove X tokens" with none there), the game takes it. Burdens that may not be removed count as none: "remove up to N burdens" as an effect under a bar on removing them (Black Breath 1_207 on the Ring-bearer) asks nothing and does nothing (F-0512, engine pass 45; mechanics/ring/ABarOnRemovingBurdensTests). A test of such a board does not answer the question, and an answer written "to be safe" goes to the NEXT decision (the symptom is a wrong number later, not an error). To read the bounds of an X, arrange a board where two numbers can be named.
+**A number that can only be one number is not asked for** (F-0147). Where an effect or a cost asks for a number and only one can be named (X from 1 to 1, "how many to spot" with none to spot, "remove X tokens" with none there), the game takes it. Burdens that may not be removed count as none: "remove up to N burdens" as an effect under a bar on removing them (Black Breath 1_207 on the Ring-bearer) asks nothing and does nothing (F-0512, engine pass 45; mechanics/ring/ABarOnRemovingBurdensTests). A test of such a board does not answer the question, and an answer written "to be safe" goes to the NEXT decision (the symptom is a wrong number later, not an error). To read the bounds of an X, arrange a board where two numbers can be named. A choice of CARDS whose count comes to 0, as an effect, is not asked either, from a hand or a stack as from play (a forced `discardFromHand` of X, X = 0: The Dark Lord Advances 3_87, F-0560), and an `exert`, `wound` or `heal` effect of X times with X 0 chooses nobody (Q-0337, engine pass 53; mechanics/choices/AnEffectDoneNoTimesChoosesNobodyTests). As a COST such a choice is still asked, a selection of 0 to 0 over a hand that is not empty.
 
 **A choice with nothing on any branch is not asked** (F-0116, F-0293). Where a `choice` comes up as an effect and no branch can be carried out in full, the player is asked to pick among all of them (a branch may still be done in part: Dwarrowdelf Chamber 1_344 with one companion to exert), unless every branch is a single effect that is certain to do nothing: nobody to exert, heal, wound or discard, no burden or threat to remove, no site to liberate. Then nothing is asked and nothing happens, and a test of that board answers no "Choose action to perform" (assert `assertFalse(scn.FreepsDecisionAvailable("Choose action to perform"))`; mechanics/choices/ChoiceWithNothingOnAnyBranchTests). Since engine pass 26 (Q-0220: D) a branch that holds others says so too (mechanics/choices/ChoiceWithABranchThatHoldsOthersTests): an `if` by the side its check picks (a failed check with no `false` is nothing); a `costToEffect` by its cost alone, so one that cannot be paid for (or whose own `requires` fails) is nothing and one that can never is, whatever it buys (Arwen's Fate 1_93: Aragorn exerts for an Arwen who is not there); a play by whether a card can be played (a play from a draw deck only with `mustExist`); several effects by each in turn. The question is still kept by a branch with an `optional`, a `repeat` or a `preventable` in it, by one that first remembers something for its next effect (`memorize`, `memorizeActive`), and by one whose effect cannot tell. Since engine pass 32 a branch also answers with what it was taught for the rule of the next section (an empty pool to remove twilight from, no card in a hand to discard or place, no card to choose), and an assignment with nobody to assign answers (Duality 13_47 with no Shadow card in hand and an empty pool asks nothing); a discard or placing of a WHOLE hand still keeps the question (Q-0255).
 
@@ -52,7 +52,9 @@ loser can fail the filter ("your minion": every loser is the Shadow player's), t
 choice read, as that is what tells `choose` from `all` (Saruman's Laboratory 6_120, Nan Curunír 5_119). That
 board is for minions only: a skirmish has one Free Peoples character (CR 4.2 "assignment phase"), so a response
 to a wound on one kind of FREE PEOPLES character ("an unbound Hobbit", Skinbark 6_35) meets each candidate
-alone in its own window, and its `F` "among them" is a line in Notes (dec-b11_78 found no board). Nobody
+alone in its own window, and its `F` "among them" is a line in Notes (dec-b11_78 found no board). A bare race
+word that a printed minion has is no such kind: "a Hobbit" reaches Ted Sandyman 18_75 (Q-0058), so its `F` lays
+him beside a minion who is no Hobbit, both losing to one companion (Nice Imitation 2_106). Nobody
 is asked the order: cards in play that an effect takes together are taken in the order of their card ids, the
 same in every run (Q-0142, F-0268). A card gets a new id as it comes into play, so that is the
 order they came into play: lay them down one at a time (`MoveMinionsToTable(a); MoveMinionsToTable(b);`) and a
@@ -98,7 +100,10 @@ asked "Choose next skirmish to resolve", and that is the bookend to assert after
 turn (engine pass 24); `lint.py` takes either form as a test's closing reading, and as showing that the player is
 being asked. With a
 minion left unassigned the Shadow player is asked "Assign minions" first. After an assignment ACTION in the
-assignment phase the bookend is the other player's `Awaiting...AssignmentPhaseActions()` (69_38).
+assignment phase the bookend is the other player's `Awaiting...AssignmentPhaseActions()` (69_38). Where assignment actions
+have already assigned every minion, nobody is asked "Assign minions": `FreepsDeclineAssignments()` there fails
+(DecisionResultInvalidException from CardsSelectionDecision); pass the assignment actions and read
+`FreepsAwaitingSkirmishChoice()` (Card_04_015_Tests, dec-b4_15).
 
 **One minion to a companion, and the minions left over.** The Free Peoples player may assign one minion to each
 companion (more takes defender): `FreepsAssignToMinions` with two minions in one group is refused by the game
@@ -234,7 +239,23 @@ more at the end where the rounds end on the wrong player; a choice inside the ro
 second round played by hand. The next decision is the other player's actions, and each looping ability (that card's,
 not its other abilities nor another copy's) is still offered, flagged, to the end of the phase or skirmish: read it
 with `FreepsActionLoopBanned(card)`; `FreepsActionAvailable` reads it as offered, and taking it is refused.
-`mechanics/actions/VoluntaryLoopTests`, `FiniteRepeatsAreNoLoopTests`.
+The prompts are HTML (Q-0329, engine pass 52): a text read with `FreepsDecisionAvailable` names each card as the
+game log's card hint, `<div class='cardHint' value='5_29'>·Sméagol, Slinker</div>`, and the number as `<b>6</b>`.
+`mechanics/actions/VoluntaryLoopTests`, `FiniteRepeatsAreNoLoopTests`. A round whose other half is the other
+player's response INSIDE the first action and then his pass (Hrethel 6_95 against a Warg 5_65; F-0565, engine pass 57)
+is found and put the same way; its run replays the response and counts the pass, a run ending on the pass leaves the
+opener to act with that pass made (his pass ends the window), and only the opener's ability is barred: the response
+stays on offer to anything else.
+
+**A loop of one player's actions is put to him at its fourth use** (CR 4.2 "loops"; Ketura, answers/2026-10-16-c.md;
+engine pass 53). In the fellowship phase or a Shadow phase, where one ability (or two abilities, one after the
+other) has been used three times running with the board the same at the start of each round and after the third
+(the order of the draw deck left out: a look through it shuffles), he is not offered his actions a fourth time: he
+is asked "LOOP DETECTED: Choose a number of times to repeat this action." (`OnePlayerLoopTracker.PROMPT`, 0 to 99,
+filled in with 3; answer it with `FreepsChoose("5")`). The round is run that many times inside the answer, the last
+round shown, and each ability of the round is barred to the end of the phase (`FreepsActionLoopBanned`). A file that
+uses a cost-free ability four times or more in one phase on an unchanged board meets the prompt (Sam 1_310, The
+Bridge of Khazad-dûm 1_349 with no Balrog). `mechanics/actions/OnePlayerLoopTests`.
 
 ## What is offered, and what an offer does
 
@@ -379,10 +400,16 @@ and a reading written for after the play reads VOID (Shrouded Elf 63_23). Not so
 that prevents what it answers ("... is about to ..., exert X to prevent this") leaves nothing to answer, and the
 game goes straight on though the cost could be paid again (Ceorl 4_264 against a site taken, Sam 4_316 against a
 burden: the regroup actions, "Choose next skirmish to resolve"). A decline written there answers the wrong decision.
+"Nothing to answer" is in that window only: where it still holds another wound the Response may prevent (the losers
+of one skirmish, wounded together), it is offered again for that one, and not once none is left; a damage +1
+winner's second wound is a window of its own (His Terrible Servants 2_77, Card_02_077_Tests).
 A Response to "is about to be overwhelmed" that only adds strength (Footman's Armor 7_93) is offered again while
 its bearer is still doubled (CR 4.2, the ruling on the card) and not once he is not, though the cost could be
 paid: the skirmish then resolves at once and the bonus ends with it, so the bonus itself is read only between two
-offers, on a board where one use is not enough (`Card_07_093_Tests`).
+offers, on a board where one use is not enough (`Card_07_093_Tests`). An optional TRIGGER there goes the same way
+(engine pass 56, F-0566): an optional trigger is otherwise offered once in an "is about to" window, but in the
+skirmish's resolution window a change of either side's strength is a return to the start of step 3 (3A), and the
+triggers used before it are offered again (Fishing Boat 13_48, `AnAboutToBeOverwhelmedTriggerAtEachReturnToStepThreeTests`).
 A response EVENT with another copy in hand goes the same way: once one copy is played, "Optional responses" comes
 back with the other copy for the same death, and `ShadowDeclineOptionalTrigger()` answers it before the next
 skirmish can be chosen (Beyond Dark Mountains 4_141; probed at the landing of dec-b4_78).
@@ -442,7 +469,8 @@ and its response, on an overwhelm), add words from the action's description:
 `FreepsHasOptionalTriggerAvailable(card, text)` and `FreepsChooseOptionalTrigger(card, text)`, as
 `FreepsUseCardAction(card, text)` does for phase actions. A response EVENT in hand that answers an "is about to"
 window is read and played the same way, by the card: `FreepsHasOptionalTriggerAvailable(card)` and
-`FreepsChooseOptionalTrigger(card)` (Intimidate 1_76, dec-b1_71).
+`FreepsChooseOptionalTrigger(card)` (Intimidate 1_76, dec-b1_71). So is one at a win (Nobody Tosses a Dwarf 1_23 at a Dwarf's
+win, Card_09_010_Tests) and a Response ability of a card in play (Ring of Retribution 9_9, dec-b9_2).
 
 **Toil is a choice of cards, asked only when there is something to choose** (CR 4.2 "toil"; mechanics/keywords/ToilTests).
 A toil card is offered when the pool covers its cost less the toil number for each character of its culture its
@@ -485,7 +513,9 @@ A response EVENT whose definition gives its play a `text:` (Beyond Dark Mountain
 death of <the character>"; and four more: 4_37, Unheeded 8_115 ("Wound {exertedMinion}"), 10_3, 13_122) is
 read by neither at its "Optional responses" decision:
 `ShadowPlayAvailable(card)` and `ShadowActionAvailable(card)` are both false there, though `ShadowPlayCard(card)`
-plays it. Read the offer with `ShadowHasOptionalTriggerAvailable(card)` (probed at the landing of dec-b4_78), and
+plays it. The two-argument `ShadowActionAvailable(card, text)` and `ShadowUseCardAction(card, text)` do read and
+take it, by words of its own text: where that text names a memory (4_37's "Make {winner} Fierce and +4 Strength")
+the name tells one winner's offer from another's (`Card_04_037_Tests`, dec-b4_37). Or read the offer with `ShadowHasOptionalTriggerAvailable(card)` (probed at the landing of dec-b4_78), and
 take it with `FreepsChooseOptionalTrigger(card)` where it is the Free Peoples player's (Unheeded answering
 Grishnákh 5_100's exertion, `Card_05_100_Tests`, dec-b5_100). A
 response event with no such text is read with `ShadowPlayAvailable` (Ravage the Defeated 4_32; Gondor Will See It
@@ -547,7 +577,7 @@ and the last, unasked, lies on top (`GetFreepsTopOfDeck()`, `GetFromTopOfFreepsD
 once (`FreepsChooseCard(first)`), and the order read is the player's own answer (`Card_09_020_Tests`). Leave other
 cards in the deck under them, or a reading of "on top" cannot be told from one of "anywhere in the deck".
 
-**Two offers of one response.** When the same card offers the same trigger or response twice in one decision (two Nazgul winning one skirmish), each offer's text ends with " (for <the cards its trigger memorized>)". A single offer reads as before. Choose between them by that text.
+**Two offers of one response.** When the same card offers the same trigger or response twice in one decision (two Nazgul winning one skirmish), each offer's text ends with " (for <the cards its trigger memorized>)". A single offer reads as before. Choose between them by that text. The same holds for a response EVENT in hand whose trigger memorizes (Sack of the Shire 9_40: "Play Sack of the Shire (for Uruk-hai Raiding Party)"): "that minion" is picked by the offer taken, and the event's own choice is never asked, so read `ShadowActionAvailable("Play X (for Y)")` and `ShadowGetActionCount()` and take one with `ShadowChooseAction(text)`, not a card choice.
 
 **When a wound or an overwhelm kills and something answers it.** The Free Peoples player, whoever owns the trigger,
 gets a "Required responses" decision listing the rule and the trigger (an overwhelm, which places no wound, raises
@@ -562,12 +592,14 @@ minion loses a skirmish to bearer", Dwarven Axe 1_9 on the winner: the beaten mi
 answered, Card_02_005_Tests; it is not
 only for deaths). Two copies of a card with such a required trigger make it one decision of three entries, the
 rule and each copy's trigger; after `FreepsResolveRuleFirst()` both triggers are carried out and no second
-ordering is asked (Sudden Fury 12_132, two copies and a [shire] companion who loses). The rule's entry may have no action
-text at all, and it is not always listed first (King of the Dead 103_27 killed: `["Required trigger from King of
-the Dead…", null]`; Ferocious Haradrim 11_80 answering a death: `[null, "Required trigger from Ferocious
-Haradrim"]`). `FreepsResolveRuleFirst()` resolves the rule, the entry that belongs to no card, wherever it is
-listed; `FreepsResolveActionOrder(text)` resolves the entry whose wording contains the text and passes over an
-entry with no wording.
+ordering is asked (Sudden Fury 12_132, two copies and a [shire] companion who loses). The rule's entry is not always listed first (King of the Dead 103_27 killed with a threat out: `["Required
+trigger from King of the Dead…", "Threat wounds: remove every threat, then wound a companion for each"]`; Ferocious
+Haradrim 11_80 answering a death: the threat wounds first). `FreepsResolveRuleFirst()` resolves the rule, the entry
+that belongs to no card, wherever it is listed; `FreepsResolveActionOrder(text)` resolves the entry whose wording
+contains the text. A skirmish whose losing side was already removed (step 2C) raises no "Resolve skirmish damage"
+entry (4A, engine pass 56): a required win or loss trigger of that skirmish (Dwarven Axe 1_9, Treebeard 15_38) is
+carried out with nothing to order. A death with NO threat on the dead pile raises no threat entry at all (F-0567, engine pass 56):
+a card's lone required trigger on that death is carried out with nothing to order, so no `FreepsResolveRuleFirst()`.
 A trigger that names who kills (`killed` with `killer`: "if X kills a companion", CR 4.2's definition, Q-0328: B) is
 answered for a kill by X's own text or by losing a skirmish X is in (every minion of it is a killer), not for another
 minion's wound in X's skirmish; a required one answers the wound that kills as well (engine pass 49; mechanics/wounds/WhoKillsACharacterTests).
@@ -612,12 +644,19 @@ error; the test fails some lines later. Read what is pending before answering (s
 for every response to a play, not only a response event in hand: a Response ability on a card in play (Shrouded
 Elf 63_23) is asked before the played event's effect chooses anything (CR 4.2 "playing a card", steps 5 and 6).
 
+**A condition played by another card's effect asks where it goes before its own cost.** Saruman's Frost 1_135
+played from the discard pile by A Fell Voice on the Air 3_52 first asks the site to attach to ("Choose target to
+attach to", every site on the path), and only then its own "to play, exert an [isengard] minion". Answer the target
+first (Card_03_052_Tests, dec-b3_50).
+
 **The entries of a required-response ordering are actions, not choices.** While `FreepsAwaitingRequiredResponseOrder()`
 is true, read what is to be ordered with `FreepsGetActionCount()` and `FreepsActionAvailable("<card title>")` (each
 entry carries its card's name: "Elrond", "Dwarven Heart", "The One Ring", "Gimli's Helm"), and name the first with
 `FreepsResolveActionOrder("<card title>")`. `FreepsChoiceAvailable(text)` reads only a multiple choice's answers and is
 false there. Two required answers to one "is about to take a wound" are put to the player again for every wound of
-the same skirmish (`mechanics/actions/RequiredActionsAnsweringOneTriggerTests`).
+the same skirmish (`mechanics/actions/RequiredActionsAnsweringOneTriggerTests`). It comes wherever two required
+triggers answer one moment, wounds or none: a minion played at Midgewater Moors 1_333 with a required when-played
+trigger of its own (Goblin Runner 1_178: `FreepsResolveActionOrder("Midgewater Moors")`, Card_03_111_Tests).
 
 **A candidate a helper's own text refuses shows nothing of the card under test.** A Hobbit already assigned is
 not offered to a second Orc Assassin 1_262's "assign a Hobbit to skirmish this minion" at any site, so reading him
@@ -625,6 +664,17 @@ refused at Caras Galadhon 3_115 showed nothing of the site's bar (dec-b1_286, re
 the control board: if it is refused there too, the reading belongs to the helper; drop it. A helper's own "To play" requirement is such a text: Dwarf Guard 1_7 in hand
 with no Dwarf in play is refused by any play ability whatever its filter, so lay what it needs (Grimir 1_17) and read
 `FreepsPlayAvailable` on it before reading it not offered (1_364, dec-b1_357, reviewer: shown by a mutation).
+
+**"Is about to end" comes after the skirmish has resolved.** It is step 5 of her skirmish procedure as amended
+(2026-10-20, binding; Q-0332; shapes.md, "The skirmish procedure"), and the engine has it there: `SkirmishPhaseAction` queues the
+`SkirmishAboutToEndResult` behind `ResolveSkirmishEffect`, so the loser's wounds are on (or he is dead) when the
+response is offered, and a cancel or the removal of a side's last character reaches it with no wound placed
+(mechanics/skirmishes/TheSkirmishIsAboutToEndAtStepSixTests, named by the 2026-10-16 numbering; each step of the
+procedure in mechanics/skirmishes/SkirmishProcedureTests). Who was involved is the skirmish's own record
+(`Skirmish.getInvolvedFellowshipCharacter`, `getInvolvedShadowCharacters`): those it began with, a character who
+replaced another in the place of the one replaced (F-0563, engine pass 57), and still those removed or killed in it;
+the trigger's filter is asked of those cards as they are then: a minion killed by his loser's wound bears nothing any more (Q-0332: B), and
+is still of his race.
 
 ## Getting to the moment: set-up, the skippers and turns
 
@@ -660,17 +710,21 @@ taken before that pair. `PassSkirmishActions()` and its kin pass for whoever hol
 holds in the other shared phases: a test that ends on a Free Peoples maneuver ability rests on
 `AwaitingShadowManeuverPhaseActions()`, and one on a Free Peoples regroup ability on
 `AwaitingShadowRegroupPhaseActions()` (Glamdring 1_75); a second use by the Free Peoples player needs `ShadowPass()`
-first (Elven Guardian 67_7's tests).
+first (Elven Guardian 67_7's tests). The other way about, a Shadow event in those phases hands the next
+decision to the Free Peoples player's own phase actions, so `assertFalse(scn.FreepsAnyDecisionsAvailable())` after
+it reads nothing about the event (it does after a Shadow-phase event, Dangerous Gamble 3_76): rest on
+`AwaitingFreepsManeuverPhaseActions()` and its kin (They Will Never Stop Hunting You 3_84).
 `PassSkirmishActions()` is the wrong call once the Free Peoples player has already passed in that skirmish (a
 `FreepsPass()` made only to read what the Shadow player is offered): it passes for the Shadow player, the
 skirmish resolves, and its second pass goes to whatever the Free Peoples player is asked next, the choice of
 the next skirmish (DecisionResultInvalidException from a CardsSelectionDecision) or his regroup decision (the
 test then rests on the Shadow player's). There `ShadowPass()` alone ends the skirmish.
 
-**A skirmish whose only Free Peoples character is killed mid-skirmish is over at once.** Killed by a Shadow skirmish event where his was the only skirmish, he leaves no skirmish to pass: the next decision is the Free Peoples player's regroup actions (`AwaitingFreepsRegroupPhaseActions()`, Card_01_255_Tests's ally test), not a skirmish action.
+**A skirmish whose only Free Peoples character is killed mid-skirmish is over at once.** Killed by a Shadow skirmish event where his was the only skirmish, he leaves no skirmish to pass: the next decision is the Free Peoples player's regroup actions (`AwaitingFreepsRegroupPhaseActions()`, Card_01_255_Tests's ally test), not a skirmish action. The same holds for the minion side: a Skirmish event that discards the only minion of the skirmish (Staff Asunder 2_27) ends it at once, and the game rests at `AwaitingFreepsRegroupPhaseActions()` where that was the last skirmish (Card_02_027_Tests).
 
 **No minions, no combat.** With no minion in play when the Shadow phase ends, the game goes straight to regroup.
-A test that needs a maneuver phase needs a minion on the table.
+A test that needs a maneuver phase needs a minion on the table: one stacked on a site or a card is not in play and
+does not count (Dunlending Looter 4_11 lays Goblin Patrol Troop 1_177 beside its stacked Looters, as Uruk Trooper 4_199).
 The maneuver, archery and assignment phases are each passed over when no active minion is in play
 (`ManeuverGameProcess`, `ArcheryGameProcess`, `AssignmentGameProcess`), so a trigger at the start of one of them
 that does something to "a minion" always has one: its `requires: CanSpot minion` cannot differ in play, and no
@@ -761,12 +815,15 @@ is Free Peoples cards: where a card lets other card types in
 triggers, but it does not assign archery wounds. An archer on the table stops it, or kills the minion the test
 was about. Leave archers out of a scenario unless they are the point, or put them down after skipping. A
 possession that makes its bearer an archer (a bow) is the same: `AttachCardsTo` it after `SkipToAssignments()`
-(Long Battle Bow 11_89 in Little Golden Flower 65_148's tests). An archer MINION wanted in the skirmishes goes
+(Long Battle Bow 11_89 in Little Golden Flower 65_148's tests), or for a regroup-phase test after
+`SkipToPhase(Phase.REGROUP)` and before the first pass (Elven Bow 1_41 in Isengard Smith 3_60's tests). An archer MINION wanted in the skirmishes goes
 down between the two phases: `SkipToPhase(Phase.ASSIGNMENT)` with another minion on the table, `MoveMinionsToTable(archer)`,
 `PassAssignmentActions()`; after `SkipToAssignments()` the assignment already asked does not list it
 (Goblin Archer 1_172 in mechanics/keywords/DamageBonusTests). A Free Peoples archer COMPANION (Legolas 1_50) fires
 too: his wound is placed unasked only while exactly one minion is on the table, so any second minion goes down
 after `SkipToPhase(Phase.ASSIGNMENT)` the same way, and the one minion down reads a wound (Border Defenses 1_32).
+An archer minion that must be on the table BEFORE the archery phase (for his own maneuver ability) is got past it
+by `SkipToArcheryWounds()` and `FreepsChooseCard(companion)` (Lurtz 1_127 in Lurtz's Sword 2_43's R test).
 
 **`SkipToPhase` declines optional triggers it meets on the way.** A trigger that is offered while the phase is
 still the old one (an "each time the fellowship moves" trigger, offered before the fellowship phase is left) is
@@ -795,14 +852,18 @@ fellowship phase" trigger of player 2's is left pending the same way, with the p
 that each have a required trigger at the start of the turn (Elrond 1_40 and Galadriel 1_45), the game is left
 asking the Free Peoples player which goes first, and the next action fails ("<card> is not offering Free
 Peoples Player a play.  Free Peoples Player is being asked "Required responses" ..."). Put the second such card
-down after `StartGame()`, or answer the ordering with `FreepsResolveActionOrder(text)`.
+down after `StartGame()`, or answer the ordering with `FreepsResolveActionOrder(text)`. One such card alone is
+carried out inside `StartGame()` unasked: Dwarven Heart 1_10 ("At the start of each of your turns, exert bearer")
+cheated onto its bearer before it has exerted him when `StartGame()` returns; attach it afterwards (Card_03_096_Tests).
 
 **An optional trigger at the start of the turn is the first thing asked.** A card with an optional
 start-of-turn or start-of-fellowship trigger, put into play before `StartGame()`, leaves its offer pending when
 `StartGame()` returns. Answer it, or put the card down afterwards. A card with no trigger at the start of the turn,
 a minion included, may go down before `StartGame()` and is still on the table in the turn's later phases
 (Card_91_013_Tests; probed): "minions go down after StartGame" is the habit of new tests, and an old file's order
-is left as it is. A card put down afterwards is not in the decision already pending: before its own fellowship
+is left as it is. `SkipToSite(n)` likewise arrives at site n with a start-of-fellowship offer pending and the scenario's small
+draw deck drawn out by the reconciles; `SetFreepsHand()` and `SetFreepsDrawDeck(...)` under that offer keep it
+(Card_03_001_Tests). A card put down afterwards is not in the decision already pending: before its own fellowship
 ability is read or used, call `FreepsRefreshDecision()` ("A board changed under a pending decision"; Galadriel
 3_17, Card_03_017_Tests).
 
@@ -874,7 +935,9 @@ one next to it; 0 is out of range (`PileProperties`; Card_01_200_Tests, dec-b1_1
 
 **Only the table-laying cheats take aliases.** `MoveCompanionsToTable` and `MoveMinionsToTable` take alias strings
 as well as cards; `AttachCardsTo`, `MoveCardsToSupportArea`, `MoveCardsToDiscard` and `MoveCardsToHand` take cards
-only (`scn.GetFreepsCard("x")`), and a string there does not compile.
+only (`scn.GetFreepsCard("x")`), and a string there does not compile. `MoveCardsToFreepsHand` and
+`MoveCardsToShadowHand` are the reverse, alias strings only; for cards already fetched use `MoveCardsToHand`, which
+puts each card in its OWNER's hand, a Shadow card's in the Shadow hand (Card_03_049_Tests, dec-b3_45).
 
 **The Ruling Ring interrupts skirmishes.** With the default Ring, a Ring-bearer about to take a wound in a
 skirmish gets an optional response. `FreepsDeclineOptionalTrigger()` declines it. Keep the Ring-bearer out of
@@ -976,7 +1039,12 @@ is his site, not the one player 1's fellowship reached. One player's marker, who
 text compares the two markers ("ahead on the adventure path", CR 4.2 "ahead"), read both at each step
 (Card_13_003_Tests). The card on the path is the copy of whoever laid it: from site 2 on, on
 player 1's first turn, the Shadow player's. `GetCurrentSite()` and `GetSite(n)` return that card and
-`GetFreepsSite(n)` a different one, so compare with `GetSite(n)` or by blueprint. It also gives a site's
+`GetFreepsSite(n)` a different one, so compare with `GetSite(n)` or by blueprint. `GetSite(n)` is null for a site not
+yet laid (on `FellowshipSites`, any site past the fellowship's), and the null fails further on with no rig
+message (`GetTwilightCost`: a NullPointerException in `ModifiersLogic.getCurrentTwilightCost`; dec-b4_29);
+`GetFreepsSite(n)` and `GetShadowSite(n)` fall back to the player's adventure deck. A site's own trigger offer is
+read on that card too: `FreepsHasOptionalTriggerAvailable(GetFreepsSite(3))` reads false while the trigger of
+the copy laid there is offered, so read it on `GetCurrentSite()` after the move (Card_03_119_Tests). It also gives a site's
 trigger on "the fellowship" a board that tells the mover from the site's owner: read both players' burdens
 (Card_03_116_Tests). A site's `player: free people` trigger with `on: your,companion` takes "your" as the Free
 Peoples player of the turn, not the site's owner: the second player at the first player's Trollshaw Forest 11_260
@@ -989,7 +1057,7 @@ offered to: "A meta-site's optional trigger is offered to every player", its las
 allows, both players passing in the regroup phase ends the turn at once and the other player's "Play Fellowship
 action or Pass" decision is next; no "another move" question is asked. As the turn ends (at the limit, or after
 `FreepsChooseToStay()` below it) the Free Peoples player reconciles first: with cards in hand he is asked
-"Reconcile" (`FreepsDeclineReconciliation()`) before the next turn's decision can be read (Card_07_355_Tests). Below the limit the Free Peoples
+"Reconcile" (`FreepsDeclineReconciliation()`) before the next turn's decision can be read (Card_07_355_Tests). An "at the end of each turn" trigger (`endOfTurn`) is offered only after that reconcile: on turn 1 with an empty hand `FreepsChooseToStay()` leads straight to its "Optional responses", while on turn 3 the hand turn 1's reconcile drew is reconciled first (Citadel of Minas Tirith 3_40's tests). Below the limit the Free Peoples
 player is asked "Do you want to make another move?". Either comes only after the Shadow player's reconciliation:
 with cards in his hand he is first asked "Reconcile - choose card to discard or press DONE"
 (`ShadowDeclineReconciliation()`); with an empty hand nothing is asked (Radagast 59_26's tests). An empty hand
@@ -1057,6 +1125,13 @@ left, `GetMoveCount()` does not yet count the move, the text of the site left is
 The pool is the one from before the move too: "each time the fellowship moves, remove (2)" (Aragorn 3_38) on
 turn 1 removes nothing from an empty pool, and the move's twilight is then added in full. `SetTwilight(3)`
 first, and spell the sum: 3 - 2 + 2 for the site + 2 companions.
+A `moves` trigger that ADDS twilight has its `-` board in the one non-move, the Free Peoples player staying at
+the regroup move decision, only with a card in his hand: with an empty hand the stay ends the turn at once and
+the pool reads 0 (5 at the decision, 0 after `FreepsChooseToStay()`, as The Ring Draws Them 3_83's `no -:` line
+found); with one card (`SetFreepsHand(card)` before the stay) he is asked "Reconcile" first, and the pool read at
+`FreepsDecisionAvailable("Reconcile")` is the pool of the decision (probed: 3 and 3; Card_03_102_Tests,
+StayingAtTheRegroupDecisionAddsNothing; dec-b3_102). An effect that outlasts the turn, as wounds do (1_281),
+needs no hand.
 
 **A draw deck runs short in a long file.** Every Free Peoples card a scenario names and a test does not place
 sits in the Free Peoples draw deck. A "discard the top N cards" with few such cards can find fewer than N by a
@@ -1112,12 +1187,16 @@ text, `assertTrue(scn.FreepsDecisionAvailable("Choose cards to heal"))`, which l
 (Card_03_043_Tests.TheNumberHealedIsTheCostOfTheCardShownAndNotOfAnotherCardOfTheHand).
 A random DISCARD that shows nothing ("discards 2 cards at random from hand", Tower Lieutenant 1_280) is read by
 counts: the hand down by N, the discard pile up by N, the draw deck unchanged and none of the hand's cards in it,
-and another player's hand untouched (Card_01_280_Tests).
+and another player's hand untouched (Card_01_280_Tests). Its cards go one at a time, and a trigger on a discard from
+hand is asked after EACH, before the next goes: at the first offer the hand of 3 reads 2, at the second 1
+(Card_03_111_Tests.TwoCardsDiscardedAtRandomAtOnceOfferItTwice).
 
 **The fierce round reads as the first does.** After a skirmish that leaves a fierce minion in play,
 `GetCurrentPhase()` is `Phase.ASSIGNMENT` again and `AwaitingFreepsAssignmentPhaseActions()` is true, exactly as
 the first time. `InFierceRound()` tells them apart (G-0031): true from the game's "Fierce skirmishes" until the
 last fierce skirmish is over. A "this phase" effect from the first assignment phase has ended by then.
+A text whose bonus is "if in a fierce skirmish" owes a card in NO skirmish chosen during another's fierce skirmish:
+a definition that reads the phase gives it the bonus (shapes.md, F-0550; Card_02_037_Tests).
 The assignment actions are pending again too, and nothing has passed them as `SkipToAssignments()` did the first
 time: call `PassFierceAssignmentActions()` before `FreepsAssignToMinions`, or the assignment is refused with a
 bare `DecisionResultInvalidException` (Card_09_031_ErrataTests).
@@ -1148,7 +1227,8 @@ the two are one round, `InRelentlessRound()` true, with the relentless minions a
 
 **Before `StartGame()` the burdens read 1.** The constructor has bid 1 burden for player 1 and placed the
 Ring-bearers; `StartGame()` then takes 1 burden off (`RemoveBurdens(1)`). A burden a card added at set-up would
-show as 2 before it and 1 after (Sméagol 59_30, who adds none when he starts as the Ring-bearer, reads 1 and 0).
+show as 2 before it and 1 after (a Ring-bearer-capable companion who adds none when he starts as the Ring-bearer
+reads 1 and 0; one who is no Ring-bearer and pays his burden reads 2 and 1).
 That holds while player 1's starting fellowship is pending, which takes a companion in the decks. `GetBurdens()`
 reads the player set-up has reached: with no companion in the decks the game has gone on to the mulligan question
 and it reads PLAYER 2's bid (0 on a default table; with a bid handler of 7 and 2 it reads 2, and 7 where a
@@ -1229,7 +1309,7 @@ is being paid for: beside the Ring-bearer alone with 1 threat he is not offered,
 (`Card_10_026_Tests`).
 
 **Threat wounds are asked for one at a time, and the threats are gone before the first.** When a companion is
-killed with threats on the table, the Shadow player first has 'Before threat wounds are placed - Optional "is
+killed with threats on the table (with none, the rule does nothing and asks nothing: F-0567), the Shadow player first has 'Before threat wounds are placed - Optional "is
 about to" responses' where a card answers it (Mordor Assassin 7_284: `ShadowHasOptionalTriggerAvailable(card)`).
 Then `GetThreats()` reads 0 at once, and the Free Peoples player is asked "Choose characters to wound" once for
 each threat there was, a choice of one companion each time (minimum 1). A threat removed in that window as a cost
@@ -1255,7 +1335,9 @@ among them, so two minions of damage +1 place three; a loser's bonus places noth
 ability that grants damage +1 ends with 2 wounds on the minion beaten (Card_05_082_Tests). After "loses all damage
 bonuses" the count reads 0, and a bonus given later does not land though its event is played and paid for
 (Seek and Hide 3_112, then Lurtz's Battle Cry 1_128). The rule is shown in mechanics/keywords/DamageBonusTests: a card that
-gives or takes a bonus shows the count and one skirmish's wounds, not the arithmetic again.
+gives or takes a bonus reads the count, on the bearer and on a card outside the scope (the Standard, "Tests that are
+not about a card": Ranger's Sword 1_112; Goblin Spearman 2_65), and fights a skirmish only where its own text or a
+check D needs one (Card_05_082_Tests above), not the arithmetic again.
 
 **The wounds of a lost skirmish are placed in rounds, one on every loser; a loser killed early leaves his own later wounds over.**
 `ResolveSkirmishDamageAction` wounds each loser once, then each again, 1 + the winners' damage bonuses times in
@@ -1321,7 +1403,8 @@ while a choice or a prevention of its effect is still pending fails. An event wh
 once the skirmish has resolved and the suspended phase has resumed. A response to that event's effect is carried
 out while it is still in the void, so it is not in the discard pile a response reads ("each Shadow card discarded
 in this way"): a control card "already in the discard pile" is a separate card put there (Uruk Spy 1_155 after
-Saruman's Reach 1_137).
+Saruman's Reach 1_137). An event that plays a minion from a pile stays in the void while that minion's own "when you play" trigger waits,
+and is in the discard pile only once it is answered (Foul Things 2_59 with Goblin Scavengers 1_179).
 
 **An event printed with several phases is an event of the phase it is played in (F-0292).** While it is being
 played, and when its cost to play is read (`GetTwilightCost` of the card in hand, the play itself), a "Skirmish
@@ -1361,6 +1444,8 @@ take one back) and Teeth of Mordor 5_110 (a [sauron] Orc from play, regroup phas
 "A card stacked on <a kind of card>" is found only under an ACTIVE card of that kind (F-0424: B, engine pass 28):
 a card stacked on the other player's own Free Peoples card on this turn, or on a hindered card, pays no cost, is
 not offered to be chosen and is not counted. Lay his stack before `StartGame()` and read the ability as not offered.
+A stacked card that another card lets be played (Sindri 9_10's `canPlayStackedCards`) is read and played as one
+in hand: `FreepsPlayAvailable(card)` and `FreepsPlayCard(card)` (Card_09_010_Tests, StackingTests; dec-b9_2).
 
 **The Ring is attached to the Ring-bearer.** `GetAttachedCards(ringBearer)` includes The One Ring, so "nothing
 else attached" is a size of 1. `assertNotAttachedTo` is the safer reading.
@@ -1541,7 +1626,7 @@ the Shadow player's Urgency 19_17 count. The bonus still reaches only a count wh
 
 **A card that leaves play as it comes into play was not played.** A minion played beside Watcher in the Water, a tentacle played away from a marsh, a possession or weapon played on a bearer of Shadowfax, Greatest of the Mearas (17_24 and its erratum 67_24, a standing discard by LR 1; no other Shadowfax): the card goes to the discard pile, what it cost stays paid, and nothing that answers a play happens or is offered: not its own "when you play", not another card's "each time you play", not a response (CR 4.2 "discard"; `mechanics/inplay/DiscardedOnEntryTests`). The standing discard is done before the play is announced, so no "Required responses" question is asked between it and a play's own triggers, for a card that stays either. The game log has a line "<card> left play as it came into play".
 
-**A card played "exhausted" is exhausted as it comes into play (F-0500, engine pass 37; F-0501, engine pass 38).** A play with `exhausted: true` (Gothmog 18_80, Spied From Above 6_84, Peril 6_105, Mountain-troll 65_112, Race Text 93_9), and a character another card says comes into play exhausted (the `ComesIntoPlayExhausted` modifier: Goblin Domain 1_175, Blood of Númenor 2_31, Race Text 91_9, Not at Home 30_37), is placed with its wounds before anything answers the play, and nobody is asked to order anything against it: Úlairë Nertëa 103_77 makes no offer for it, and a choice of who exerts does not list it. A wound count read after the play reads the same either way; the reading that tells is something that answers the play, beside a control played fresh in the same phase (Card_18_080_Tests). The wounds are laid, not taken: no "each time ... exerts" or "is wounded" answers them.
+**A card played "exhausted" is exhausted as it comes into play (F-0500, engine pass 37; F-0501, engine pass 38).** A play with `exhausted: true` (Gothmog 18_80, Spied From Above 6_84, Peril 6_105, Mountain-troll 65_112, Race Text 93_9), and a character another card says comes into play exhausted (the `ComesIntoPlayExhausted` modifier: Goblin Domain 1_175, Blood of Númenor 2_31, Race Text 91_9, Not at Home 30_37), is placed with its wounds before anything answers the play, and nobody is asked to order anything against it: Úlairë Nertëa 103_77 makes no offer for it, and a choice of who exerts does not list it. A wound count read after the play reads the same either way; the reading that tells is something that answers the play, beside a control played fresh in the same phase (Card_18_080_Tests). Where the modifier reaches every card that could answer the play (Blood of Númenor 2_31 on a [sauron] Orc, with Úlairë Nertëa's possessions all "Bearer must be a [sauron] Orc"), no fresh control can share the phase: the control is a test of its own without the card (Card_02_031_Tests). The wounds are laid, not taken: no "each time ... exerts" or "is wounded" answers them.
 
 **A play as a cost can come to nothing.** An ability whose cost is to play a card is offered, takes its other costs and the card's twilight, and does nothing if the card has left play by the time its play is complete, whatever removed it. Read the costs as paid, the effect as not done, and the phase's decision.
 
@@ -1557,7 +1642,8 @@ the Shadow player's Urgency 19_17 count. The bonus still reaches only a count wh
 asks for a choice, and so does a play from the draw deck (`playCardFromDrawDeck`: Éomer 12_112's "You may inspect
 the contents of your deck" comes before "Choose cards from deck", Card_01_317_Tests). `FreepsDismissRevealedCards()` answers the showing; then choose with
 `FreepsChooseCardBPFromSelection(card)`, which picks by blueprint because cards in hidden zones are not identified
-to the client. To take nothing from a choice whose minimum is 0, `FreepsDeclineChoosing()`: a
+to the client. A `FreepsChooseCardBPFromSelection` sent while the showing is still pending is taken without a
+complaint and chooses nothing: the card stays in the deck and the test fails later, far from the cause (Éomer 12_112). To take nothing from a choice whose minimum is 0, `FreepsDeclineChoosing()`: a
 `FreepsChooseCardBPFromSelection()` with no card does not compile (two overloads fit).
 Where nothing in the zone can be chosen, the showing is the only decision ("... while retrieving cards", nothing
 selectable; Saved From the Fire 8_20 with no card of the culture in the deck): answer it once. `FreepsDeclineChoosing()`
@@ -1890,7 +1976,8 @@ unbound Hobbit is there). `TowersSites` has neither word at site 1 (4_325) or si
 `putAll(TowersSites); put("site2", "4_335")` and the fellowship's own two moves (`FreepsPass()`, then
 `SkipToMovementDecision()` and `FreepsChooseToMove()`) show "while at a battleground site" off, on and off again
 (`Card_15_017_ErrataTests`). The Fellowship path has neither: `FellowshipSites` has no forest (1_351 is a
-sanctuary only) and no battleground.
+sanctuary only) and no battleground. Rivendell Waterfall 1_342 (Forest, Sanctuary), put in as site 3, is one that
+`SkipToSite` reaches; with Derndingle 4_330 it gives two forests that differ in the sanctuary (Card_02_035_Tests).
 
 **A Hobbit-set card (sets 30 to 33) stands on the usual table for now.** The rig has no Hobbit constants: the
 Hobbit Draft Game's Ring-bearer is a Bilbo (30_43 to 30_46, `canStartWithRing`) and its One Ring 30_48 is a
@@ -1910,7 +1997,9 @@ line (also where the twin is only among the sites offered and no test takes it: 
 opponent's site if necessary)" that a game reaches: the first player at site 3 (for a Fellowship action
 `SkipToSite(3)`, Card_02_026_Tests; for a Regroup one `SkipToSite(2)`, `FreepsPass()` and
 `SkipToPhase(Phase.REGROUP)`, Card_05_023_Tests), the second
-player's site 4 laid with `MoveCardToAdventurePath` (as where that player played his next site himself); the
+player's site 4 laid with `MoveCardToAdventurePath` (as where that player played his next site himself); for a
+site 1's own action that plays site 2 (Hobbiton Woods 2_116), the first player lays his own site 2 with it,
+`SkipToOtherPlayersTurn()`, and the second player uses the same site 1 on his first turn (Card_02_116_Tests); the
 nearest miss is a second copy played when the player's own site already lies next, which on a numbered path
 plays nothing (Card_02_026_Tests, Card_05_023_Tests; whether it may replace his own site on a Shadows-block path is Q-0238).
 A numbered path's site laid by a move, by `FreepsPass()` or by `SkipToSite(n)`, is the SHADOW player's copy, on
@@ -1919,7 +2008,9 @@ every move of either player and on the Fellowship and King paths alike (probed a
 copy still in the Free Peoples adventure deck.
 A site put in the CARD map (`put("trollshaw", "1_334")`, not the site map) goes into BOTH adventure decks as well,
 so each player holds two sites of that number: a plain `FreepsPass()` then stops at the Shadow player's "Choose
-site to play" and not at his Shadow phase, and "your site of the same number" can pick up the extra copy. Give each
+site to play" and not at his Shadow phase, `SkipToSite(n)` halts on that choice ("halted in phase FELLOWSHIP"),
+and "your site of the same number" can pick up the extra copy, so an ability read as offered may be offered on it
+(dec-b2_55). Set both decks before any move that lays a site. Give each
 player nine sites, one of each number (`SetFreepsAdventureDeck`, `SetShadowAdventureDeck`), then lay the card-map
 site with `MoveCardToAdventurePath`, which takes it even after the reset has taken it out (Card_01_222_Tests).
 

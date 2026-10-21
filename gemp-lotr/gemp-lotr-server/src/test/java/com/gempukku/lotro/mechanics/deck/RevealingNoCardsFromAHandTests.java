@@ -26,6 +26,12 @@ import static org.junit.Assert.*;
  * `revealHand` (the whole hand), `revealRandomCardsFromHand` (cards at random) and `revealCardsFromHand` (cards
  * its owner chooses, or all of them by its `select`).
  *
+ * The cards at random from an empty hand are revealed by Meant to Be Alone 3_109, whose reveal a spot buys and
+ * which is played with that hand empty (Q-0163).  Friends of Old 3_16, which reveals with nothing printed before
+ * it, was the card here until Ketura's Q-0336: B (2026-10-16): "given that it has to reveal 'a' card ... I would
+ * read that as a cost.  If there are no cards to reveal, the card should not be playable."  It is not, and it
+ * stays for the hand of one card.
+ *
  * A chosen reveal that finds no card of the kind asked for, in a hand that holds cards or in its owner's empty
  * hand, is no longer shown here.  The one printed card that could come to it was Mallorn-trees 1_54, whose
  * ability is not offered with no [elven] card in hand (F-0420; Ketura on Q-0034), and no card that exists reaches
@@ -35,7 +41,7 @@ import static org.junit.Assert.*;
  * Storm of Argument 3_6 ("Reveal a card at random from an opponent's hand"), and two tests stood on it: the card
  * was shown to the player who does not own the hand, and an empty hand was named in the game log as its owner's
  * (F-0274).  Written that way the event went past No Business of Ours 2_44 (F-0391), and it is now written as
- * its three siblings are, `revealRandomCardsFromHand` (Friends of Old 3_16 above; His First Serious Check 3_33,
+ * its three siblings are, `revealRandomCardsFromHand` (Friends of Old 3_16; His First Serious Check 3_33,
  * Might of Númenor 3_43).  Ketura, 2026-10-11: "Seems pretty clear that it should be rewritten to use
  * revealRandomCardsFromHand.  If the other test can't then be tested, then it seems that edge case isn't
  * something we really need to worry about, if there are no other candidates in the entire card base."  There are
@@ -60,6 +66,12 @@ public class RevealingNoCardsFromAHandTests
 					// Friends of Old: "Fellowship: Reveal a card at random from an opponent's hand.  Heal X
 					// [elven] allies, where X is the twilight cost of the card revealed."
 					put("friends", "3_16");
+					// Meant to Be Alone: "Fellowship: Spot a Hobbit companion (except the Ring-bearer) to reveal a card
+					// at random from an opponent's hand.  Remove (X), where X is the twilight cost of the card
+					// revealed."  The spot before "to" is what is asked of it (Q-0163), so it is played with that hand
+					// empty, where Friends of Old is not (Q-0336: B).
+					put("alone", "3_109");
+					put("sam", "1_311");        // Sam, Son of Hamfast: a Hobbit companion; his abilities are used only on purpose
 					// Mallorn-trees: "Fellowship: Reveal an [elven] card from hand and place it beneath your draw
 					// deck."
 					put("mallorn", "1_54");
@@ -160,19 +172,25 @@ public class RevealingNoCardsFromAHandTests
 	public void CardsAtRandomFromAnEmptyHandAreShownToNobodyAndTheLogSaysThereWasNothingToReveal() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
+		var alone = scn.GetFreepsCard("alone");
+		var sam = scn.GetFreepsCard("sam");
 		var friends = scn.GetFreepsCard("friends");
-		scn.MoveCardsToHand(friends);
+		scn.MoveCompanionsToTable(sam);
+		scn.MoveCardsToHand(alone, friends);
 
 		scn.StartGame();
 
 		assertEquals(0, scn.GetShadowHandCount());
+		// A reveal with nothing printed before it is not played on an empty hand (Q-0336: B); one bought by a spot is.
+		assertFalse(scn.FreepsPlayAvailable(friends));
+		assertTrue(scn.FreepsPlayAvailable(alone));
 
 		scn.MarkGameLog();
-		scn.FreepsPlayCard(friends);
+		scn.FreepsPlayCard(alone);
 		assertEquals(0, scn.FreepsGetTotalRevealedCardCount());
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 		assertFalse(scn.ShadowAnyDecisionsAvailable());
-		assertInZone(Zone.DISCARD, friends);
+		assertInZone(Zone.DISCARD, alone);
 		// The same words as for the whole hand.
 		assertTrue(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkSays("no cards in " + scn.P2() + "'s hand"));
 		assertTrue(scn.GetGameLogSinceMark().toString(), scn.GameLogSinceMarkSays("to reveal"));

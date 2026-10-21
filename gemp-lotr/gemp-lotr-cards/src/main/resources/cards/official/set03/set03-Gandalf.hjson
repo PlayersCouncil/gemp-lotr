@@ -120,6 +120,11 @@
 			}
 			effect: [
 				{
+					type: memorizeActive
+					filter: hobbit
+					memory: hobbits
+				}
+				{
 					type: If
 					check: {
 						type: location
@@ -129,7 +134,7 @@
 						type: addModifier
 						modifier: {
 							type: cantBeAssignedToSkirmish
-							filter: hobbit
+							filter: memory(hobbits)
 						}
 						until: start(regroup)
 					}

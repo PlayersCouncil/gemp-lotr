@@ -25,10 +25,12 @@
 					type: discardTopCardsFromDeck
 					forced: false
 					count: 3
+					memorize: milledCards
 				}
+				// A card the cost discarded is not the card played (F-0548: A; CR 4.2 "effect").
 				effect: {
 					type: playCardFromDiscard
-					select: choose(culture(dwarven),weapon)
+					select: choose(culture(dwarven),weapon,not(memory(milledCards)))
 				}
 			}
 		]
@@ -409,10 +411,12 @@
 				type: discardTopCardsFromDeck
 				count: 2
 				forced: false
+				memorize: milledCards
 			}
+			// A card the cost discarded is not the card taken (Q-0331: A).
 			effect: {
 				type: putCardsFromDiscardIntoHand
-				select: choose(culture(dwarven),event)
+				select: choose(culture(dwarven),event,not(memory(milledCards)))
 			}
 		}
 		gametext: <b>Tale</b>. Plays to your support area.<br>Each time you play a Dwarf, you may discard the top 2 cards from your draw deck to take a [dwarven] event into hand from your discard pile.
