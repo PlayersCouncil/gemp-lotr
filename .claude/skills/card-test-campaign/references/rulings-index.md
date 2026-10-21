@@ -427,6 +427,7 @@ finding an entry, not for applying one: read the entry itself before an expectat
 - "Place X wounds on minions" spreads the wounds as the player wishes (Q-0345, 2026-10-21)
 - Above the Battlement 7_262 is settled by CR 4.2 Section Three (2026-10-21) [Q-0254, F-0465]
 - Release the Angry Flood 2_19: the Rules Council's reading (Ketura, 2026-10-21) [Q-0319]
+- "-X (to a minimum of 0)" as a price: X is held to the value there (Q-0346, 2026-10-21) [Q-0191]
 
 # Settled shapes (shapes.md)
 

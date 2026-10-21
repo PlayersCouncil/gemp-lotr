@@ -2348,3 +2348,9 @@ When a question's own text quotes a CR 4.2 ruling that settles it, the orchestra
 it as '(or twice if the fellowship is at a river)' (In actuality it was voted to read it as 'or twice if that Nazgul is
 at a river', but these are indistinguishable and we don't need to check for minion position lol)". As built (Q-0319).
 Hospitality of the Dwarves 101_1, the other card of Q-0319, keeps its Q-0319 reading (the fellowship's site). *[2026-10-21]*
+
+**"-X (to a minimum of 0)" as a price: X is held to the value there (Q-0346, 2026-10-21).** Reckless We Rode 8_12 and A
+Grey Ship 8_9 ("make the fellowship archery total -X (to a minimum of 0) to ..."): "Oh yes, X is bounded to the current
+archery total; the intent is to prevent you from saying -100 and immediately wounding everything, to no penalty because
+a negative archery total doesn't mean anything. 94_10 also has a similar limit built into it. A." As built; Q-0191
+(Race Text 94_10) and this are one rule. *[2026-10-21]*
