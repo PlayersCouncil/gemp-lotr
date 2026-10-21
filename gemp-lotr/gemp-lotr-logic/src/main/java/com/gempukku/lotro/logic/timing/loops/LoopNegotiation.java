@@ -19,9 +19,9 @@ import java.util.function.Consumer;
  * and the Shadow player takes the next action.  Where the number named is 1, the lower number can only be 0 and
  * is not asked (PlayoutDecisionEffect, F-0147).
  * <p>
- * The texts are her words, sent as HTML, since the client puts a decision's text in with jQuery's .html(): the
- * rules link as an anchor, each card as GameUtils.getCardLink gives it (the cardHint div the game log uses; her
- * [[...]], Q-0329, answers/2026-10-16-a.md), the number in &lt;b&gt;, and her line breaks as &lt;br&gt;.
+ * The texts are Ketura's words, sent as HTML, since the client puts a decision's text in with jQuery's .html(): the
+ * rules link as an anchor, each card as GameUtils.getCardLink gives it (the cardHint div the game log uses; Ketura's
+ * [[...]], Q-0329, answers/2026-10-16-a.md), the number in &lt;b&gt;, and Ketura's line breaks as &lt;br&gt;.
  * <p>
  * What is settled is handed to the window that found the loop (LoopTracker.agreed), which carries it out (LoopRun).
  */

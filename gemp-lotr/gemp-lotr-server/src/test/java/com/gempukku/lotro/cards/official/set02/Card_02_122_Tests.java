@@ -150,7 +150,7 @@ public class Card_02_122_Tests
 	}
 
 	// Ketura on Q-0029: an optional draw is still offered with no card in the draw deck ("a bit of a chance for
-	// them to *realize* they have no cards in their deck ... I'd say let it ask with 0 cards in deck"), and her
+	// them to *realize* they have no cards in their deck ... I'd say let it ask with 0 cards in deck"), and Ketura's
 	// later rule that an optional action which would do nothing is withheld (Q-0034) left that standing.  The old
 	// at/ test (TimingAtTest.playMultipleOptionalEffectsInOrder) read this offer with an empty draw deck.
 	@Test

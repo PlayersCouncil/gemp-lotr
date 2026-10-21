@@ -24,7 +24,7 @@ import static org.junit.Assert.*;
  * Decipher's ruling on Bill the Pony (3_106: "The Shadow number of each site is -1.  Discard Bill the Pony when
  * at an underground site."), which Ketura quoted on Q-0133, 2026-10-08: "When the fellowship moves with Bill the
  * Pony to an underground site, the Shadow number of that site is reduced before Bill the Pony is discarded."
- * Her answer to the question itself was that the discard is "a continuous effect, same as the Watcher": a state
+ * Ketura's answer to the question itself was that the discard is "a continuous effect, same as the Watcher": a state
  * the card is in, not something that happens once on arriving.
  *
  * So the game looks at such a check all the time, except between the moving of the marker and the adding of the

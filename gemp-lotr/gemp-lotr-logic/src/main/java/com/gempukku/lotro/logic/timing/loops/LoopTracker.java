@@ -39,11 +39,11 @@ import java.util.Objects;
  * followed by that player's pass, and the board is as it was.  It is put to the players with the same prompts.  Its
  * run takes the opener's action, the other player's choices inside it made as in the round played by hand, and counts
  * the pass (LoopRun); afterwards only the opener's ability is barred, and the other player's Response is not, since
- * it may answer something else (her words: "the Response should not be barred, only Hrethel").
+ * it may answer something else (Ketura's words: "the Response should not be barred, only Hrethel").
  * <p>
  * A pump war that spends something (exertions, cards, twilight, tokens) changes the board each round and is never
  * found, however long it runs; nor is one player using his own ability again and again while the other passes in
- * between with nothing chosen inside it (F-0565's report names that case and leaves it alone).  Longer chains (three or more actions to a round) are left alone, as she said ("we'll leave
+ * between with nothing chosen inside it (F-0565's report names that case and leaves it alone).  Longer chains (three or more actions to a round) are left alone, as Ketura said ("we'll leave
  * off complicated chains of actions while trying to figure out the simple 2-action case"), and so is any loop
  * whose board only grows or that has a shuffle or a random choice in it: those go on as before.
  * <p>

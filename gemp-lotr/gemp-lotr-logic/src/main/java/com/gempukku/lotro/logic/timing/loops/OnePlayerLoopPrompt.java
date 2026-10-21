@@ -15,7 +15,7 @@ import java.util.function.IntConsumer;
  * The prompt of a loop of one player's actions (CR 4.2 "loops"; OnePlayerLoopTracker), in Ketura's words
  * (answers/2026-10-16-c.md): "LOOP DETECTED: Choose a number of times to repeat this action."  The player names a
  * number from 0 to 99 ({@link LoopNegotiation#MOST_ITERATIONS}), filled in with 3 as the two players' prompt is;
- * 0 repeats nothing and only bars the loop's abilities.  Her words name no card, so the game log names them as the
+ * 0 repeats nothing and only bars the loop's abilities.  Ketura's words name no card, so the game log names them as the
  * prompt is asked, each as GameUtils.getCardLink gives it (the card hint), and says the number chosen.
  * <p>
  * The number is handed to the window that found the loop (OnePlayerLoopTracker.agreed), which carries it out
