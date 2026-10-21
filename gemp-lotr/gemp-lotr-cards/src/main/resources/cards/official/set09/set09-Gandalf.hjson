@@ -219,7 +219,7 @@
 					{
 						type: chooseActiveCards
 						text: Choose Wizard to put in dead pile
-						select: choose(wizard,inSkirmish)
+						select: choose(wizard,inSkirmishAgainst(minion))
 						memorize: chosenWizard
 					}
 					{
