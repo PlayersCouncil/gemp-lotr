@@ -1884,7 +1884,7 @@ var GempLotrGameUI = Class.extend({
                     var group = that.revealedHandGroups[playerId];
                     if (ownHand)
                         that.syncOwnRevealedHand(true);
-                    that.openCompactCardDialog(dialog, $(".card", dialog));
+                    that.capCards(group, that.openCompactCardDialog(dialog, $(".card", dialog)));
                     that.dialogResize(dialog, group);
                     group.layoutCards();
                 });
@@ -2402,7 +2402,7 @@ var GempLotrGameUI = Class.extend({
             this.PlaySound("awaitAction");
         }
 
-        this.openCompactCardDialog(this.cardActionDialog, $("#arbitraryChoice .card"));
+        this.capCards(this.specialGroup, this.openCompactCardDialog(this.cardActionDialog, $("#arbitraryChoice .card")));
         this.arbitraryDialogResize(false);
         $('.ui-dialog :button').blur();
     },
@@ -3037,7 +3037,7 @@ var GempLotrGameUI = Class.extend({
         }
 
         //(each card has its action's text under it)
-        this.openCompactCardDialog(this.cardActionDialog, $("#arbitraryChoice .card"), 36);
+        this.capCards(this.specialGroup, this.openCompactCardDialog(this.cardActionDialog, $("#arbitraryChoice .card"), 36));
         this.specialGroup.setBounds(this.padding, this.padding, this.cardActionDialog.width() + 10 - 2 * this.padding,
             this.cardActionDialog.height() + 10 - 36 - 2 * this.padding);
         $('.ui-dialog :button').blur();
@@ -3282,7 +3282,7 @@ var GempLotrGameUI = Class.extend({
     // comfortable height in as few rows as fit, never beyond 90% of the window (cards then shrink to fit).
     // cardElems are the card divs the dialog's group will lay out.
     /**
-     * Opens a dialog of cards at a size that suits them: as large as a comfortable card (up to 300px tall), in as
+     * Opens a dialog of cards at a size that suits them: as large as a comfortable card (up to 500px tall), in as
      * few rows as fit, and no larger than 90% of the room there is (the window, less the scenario authoring panel
      * where that is open).  Cards are made smaller only where that many would not otherwise fit.
      * @param labelHeight Room to leave under each row of cards for a line of text (the action's, in a choice of
@@ -3338,26 +3338,44 @@ var GempLotrGameUI = Class.extend({
                 return rows;
             };
             for (var rows = 1; rows <= widths.length; rows++) {
-                var width = Math.max(minContentWidth - slack, Math.min(total, Math.ceil(total / rows) + widest));
+                // as wide as the widest row, the cards shared out evenly between the rows
+                var perRow = Math.ceil(widths.length / rows);
+                var widestRow = 0;
+                for (var first = 0; first < widths.length; first += perRow) {
+                    var row = 0;
+                    for (var i = first; i < Math.min(widths.length, first + perRow); i++)
+                        row += widths[i] + (i > first ? padding : 0);
+                    widestRow = Math.max(widestRow, row);
+                }
+                var width = Math.max(minContentWidth - slack, widestRow);
                 var height = rows * (cardHeight + label) + (rows - 1) * padding;
                 if (width <= maxGroupWidth && height <= maxGroupHeight && rowsNeeded(width) <= rows)
-                    return {width: width, height: height};
+                    return {width: width, height: height, cardHeight: cardHeight};
             }
             return null;
         };
 
         var size = null;
         if (ratios.length == 0)
-            size = {width: minContentWidth - slack, height: Math.min(maxGroupHeight, 150)};
-        for (var cardHeight = 300; size == null && cardHeight >= 100; cardHeight -= 20)
+            size = {width: minContentWidth - slack, height: Math.min(maxGroupHeight, 150), cardHeight: null};
+        for (var cardHeight = 500; size == null && cardHeight >= 80; cardHeight -= 20)
             size = layout(cardHeight);
         if (size == null)
-            size = {width: maxGroupWidth, height: maxGroupHeight};
+            size = {width: maxGroupWidth, height: maxGroupHeight, cardHeight: null};
 
         var width = size.width + slack + chromeWidth;
         var height = size.height + slack + chromeHeight;
         dialog.dialog({width: width, height: height});
         dialog.dialog("option", "position", [Math.max(0, Math.floor((roomWidth - width) / 2)), Math.max(0, Math.floor((roomHeight - height) / 2))]);
+        return size.cardHeight;
+    },
+
+    /**
+     * Lays a dialog's cards out at the height openCompactCardDialog planned them for: the group would otherwise fill
+     * its height with fewer, larger rows than the width was planned for, and fall back to more, smaller ones.
+     */
+    capCards: function (group, cardHeight) {
+        group.maxCardHeight = cardHeight != null ? cardHeight : CardGroup.prototype.maxCardHeight;
     },
 
     dialogResize: function (dialog, group) {
