@@ -114,7 +114,8 @@ Card_01_150_Tests (dec-b1_146). Any [wraith] minion (an Orc as well as a Nazgûl
 [wraith] Nazgûl, cost 4, strength 9, vitality 3, site 3, "Shadow: Exert Úlairë Otsëa to make a [wraith] minion
 fierce until the regroup phase" (she is a candidate herself, so the choice is asked). Any minion of the player's own:
 Emyn Muil 1_360 (site 9, "Maneuver: Exert your minion to make that minion fierce", which takes the fellowship to site 9);
-where neither fits the board, a fierce keyword by hand is allowed (dec-b10_53, Card_10_054_Tests).
+where neither fits the board, a fierce keyword by hand is allowed (dec-b10_53, Card_10_054_Tests; a [gollum] minion
+away from site 9, which none of these reaches: Card_19_010_Tests).
 
 **A minion with ambush and nothing else; a second instance of ambush.** Southron Soldier 4_254; Raider Bow 7_155.
 Soldier: [raider] Man, not unique, cost 2, strength 4, vitality 1, site 4; "Southron. Ambush (2)" is its whole
