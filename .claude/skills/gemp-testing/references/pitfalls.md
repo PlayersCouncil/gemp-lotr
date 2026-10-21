@@ -2040,7 +2040,9 @@ from your draw deck". Site 5, Pelennor Flat 7_345: at the start of each maneuver
 must choose to discard his hand or add 2 burdens (asked with an empty hand too: Q-0255), so a test in site 5's
 maneuver phase answers that first. Site 6, Minas Tirith Seventh Circle 7_350: a regroup move from it heals each
 [elven] companion. Site 9, Dagorlad 7_360: the move to it adds 3 threats (up to the limit), so a test that reads
-threats at site 9 counts them in (Card_07_360_Tests). A test of a card whose text names no block, that needs three or more controlled sites
+threats at site 9 counts them in (Card_07_360_Tests). That trigger is required, so another card's required trigger on the
+move to site 9 makes an ordering decision first: `FreepsAwaitingRequiredResponseOrder()`, then
+`FreepsResolveActionOrder("<title>")` (Barren Land 10_79, Card_10_079_Tests). A test of a card whose text names no block, that needs three or more controlled sites
 and then a maneuver or regroup phase, takes `FellowshipSites` and so stays clear of Pelennor Flat (Card_08_107_Tests, Card_08_108_Tests).
 
 **A battleground or a forest site needs no cheat.** The Towers path has both at site 2: Uruk Camp 4_335

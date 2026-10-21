@@ -575,7 +575,8 @@ Which checks a clause lists follows from its words, and the analyst is expected 
 - "for each", "X" → `S` (and for an X, the zero case). "For each X you spot" is the player's count: he decides how
   many, and where the effect is a choice of cards it is asked as a choice of 0 to N of them with no number prompt
   (Q-0248, Aragorn, Wingfoot 4_364: "as a 0-N choice of cards to wound"; shapes.md, "<do> a companion for each
-  <thing>"). An X read off the card a cost acts on ("a Dwarf who is damage +X ... exert that Dwarf") is what it was
+  <thing>"). "Make each X you spot" outside a count is the same: a choice of any number of X, from 0 (CR 4.2
+  "spot"; Advance Scout 10_78), never every X in play. An X read off the card a cost acts on ("a Dwarf who is damage +X ... exert that Dwarf") is what it was
   when spotted, before the cost (Q-0256: A)
 - "each time" → `R`
 - "or", "choose one" → `B`; so is an "or" between two printed phases ("Fellowship or Regroup:"), each phase taken in a test
