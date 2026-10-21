@@ -28,6 +28,16 @@ public class VitalityModifier extends AbstractModifier {
         _nonCardTextModifier = nonCardTextModifier;
     }
 
+    /** "Vitality +1", "Vitality -2", as StrengthModifier words its own (it read "Vitality modifier" before engine pass 59). */
+    @Override
+    public String getText(LotroGame game, PhysicalCard self) {
+        final int value = _modifier.evaluateExpression(game, self);
+        if (value >= 0)
+            return "Vitality +" + value;
+        else
+            return "Vitality " + value;
+    }
+
     @Override
     public int getVitalityModifier(LotroGame game, PhysicalCard physicalCard) {
         return _modifier.evaluateExpression(game, physicalCard);

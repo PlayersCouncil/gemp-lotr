@@ -34,6 +34,11 @@ public interface ModifiersQuerying {
 
     LimitCounter getSiteLimitCounter(PhysicalCard card, String prefix);
 
+    /**
+     * The modifiers listed in a card's information ("Affecting card"), each as Modifier.getShownAsAffecting gives
+     * it: a rule's sum of the numbers printed on borne cards comes as one modifier for each borne card that adds
+     * something, with that card as its source.  For showing only; the game reads its numbers elsewhere.
+     */
     Collection<Modifier> getModifiersAffecting(LotroGame game, PhysicalCard card);
 
     Evaluator getFPStrengthOverrideEvaluator(LotroGame game, PhysicalCard fpCharacter);

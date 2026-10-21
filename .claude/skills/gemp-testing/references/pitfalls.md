@@ -1450,6 +1450,11 @@ vitality 4 with 3 wounds reads 1. The printed number is the blueprint's, as the 
 companion, not the Ring-bearer alone: with 3 burdens Frodo 1_290 (resistance 10) reads 7 and Sam 1_311 (5) reads 2
 (`mechanics/ring/RingBearerSuccessionTests`).
 
+**The card info names a borne card's printed bonus for that card** (engine pass 59). `GetAffectingCard(card)` reads
+the card info's "Affecting card" lines ("Glamdring: Strength +2", "System: Ring-Bound" for a rule's). The printed
+numbers of borne cards are one rules modifier with no source card (`StatModifiersRule`), shown one line per borne
+card that adds something, none for a 0; the game still reads the sum (`mechanics/inplay/AffectingCardListTests`).
+
 **Culture tokens are of the card's own culture.** `AddTokensToCard`, `RemoveTokensFromCard` and
 `GetCultureTokensOn` deal only in the token of the culture of the card they are given, so the invalid candidate
 for "an [elven] token" is a card of another culture carrying its own tokens. Put tokens only on a card that

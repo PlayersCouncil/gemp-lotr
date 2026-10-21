@@ -4,6 +4,7 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.GameUtils;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -268,6 +269,25 @@ public interface CardProperties extends TableBase {
 	 * @return That text; null if the card's definition has none.
 	 */
 	default String GetDisplayableInformation(PhysicalCardImpl card) { return card.getBlueprint().getDisplayableInformation(card); }
+
+	/**
+	 * The "Affecting card" list of a card's info as the client shows it, one line for each modifier, as
+	 * "&lt;source's title&gt;: &lt;modifier's text&gt;" ("Glamdring: Strength +2"), and "System: &lt;text&gt;" for a
+	 * modifier with no source card (a rule's).  The lines are what the card info reads
+	 * (ModifiersQuerying.getModifiersAffecting), in alphabetical order; the card info itself shows them unordered and
+	 * links each source.
+	 * @param card The card to inspect.
+	 * @return The lines; empty when nothing affects the card.
+	 */
+	default List<String> GetAffectingCard(PhysicalCardImpl card) {
+		List<String> lines = new ArrayList<>();
+		for (var modifier : game().getModifiersQuerying().getModifiersAffecting(game(), card)) {
+			var source = modifier.getSource();
+			lines.add((source == null ? "System" : source.getBlueprint().getTitle()) + ": " + modifier.getText(game(), card));
+		}
+		Collections.sort(lines);
+		return lines;
+	}
 
 	default boolean IsHindered(PhysicalCardImpl card) { return HasKeyword(card, Keyword.HINDERED); }
 	default void HinderCard(PhysicalCardImpl...cards) {

@@ -17,6 +17,18 @@ public interface Modifier {
 
     String getText(LotroGame game, PhysicalCard self);
 
+    /**
+     * This modifier as the card's information lists it ("Affecting card"), one entry for each source it is shown
+     * as coming from: itself, for every modifier but the rules' sums of borne cards' printed numbers, which are
+     * shown card by card (StatModifiersRule; engine pass 59).  For showing only: nothing the game decides reads it.
+     * @param game The game.
+     * @param card The card the modifier affects.
+     * @return The modifiers to list, each with its own source and text.
+     */
+    default List<Modifier> getShownAsAffecting(LotroGame game, PhysicalCard card) {
+        return List.of(this);
+    }
+
     ModifierEffect getModifierEffect();
 
     boolean isNonCardTextModifier();
