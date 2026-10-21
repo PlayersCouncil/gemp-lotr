@@ -1302,7 +1302,9 @@ it. For a board that only needs a site in someone's hands, the cheat (`ShadowTak
 `FreepsTakeControlOfSite()`): never on player 1's first turn, where player 2's marker is still on site 1 and the cheat
 finds no site even with the fellowship at site 2; `StartGame(); SkipToSite(2);` is player 1's second turn,
 in the fellowship phase at site 2 with player 2's marker on site 2 as well, so site 1 is behind every marker (and a
-pass moves the fellowship on to site 3: Card_08_095_Tests). Pitfalls,
+pass moves the fellowship on to site 3: Card_08_095_Tests). Sites in both hands: `SkipToSite(4)`,
+then `FreepsTakeControlOfSite()` and `ShadowTakeControlOfSite()` twice, gives site 1 to the Free Peoples player and
+sites 2 and 3 to the Shadow player, with the fellowship moving on to site 5 (Card_08_097_Tests). Pitfalls,
 "A site is controlled lowest first"; mechanics/sites/ControlOfSitesTests.
 
 **The next site played, and a site replaced, by legal play.** Pathfinder 1_110; Úlairë Nelya, Lieutenant of Morgul
