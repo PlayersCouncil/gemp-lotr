@@ -166,9 +166,9 @@ own regroup action stacks him on a controlled site. Garrison: besieger Orc, cost
 actions taken by text, "Stack a besieger" (discard 1 card from hand) and "Stack a non-besieger" (discard 2), each
 stacking a [sauron] Orc from play on a controlled site.
 
-**A tentacle that stays put.** Vile Tentacle 101_36. The only tentacle not discarded away from a marsh. Reaching
-(19_19) and Strong (19_20) have nothing on being played; Foul (2_58) and Huge (2_66) have optional when-played
-fetches, so cheat them in. No tentacle has more than 2 vitality. Away from a marsh the others are discarded: lay a
+**A tentacle that stays put.** Vile Tentacle 101_36. The only tentacle not discarded away from a marsh. Foul (2_58)
+and Huge (2_66) have optional when-played fetches, so cheat them in. Reaching (19_19) and Strong (19_20) have
+nothing on being played. No tentacle has more than 2 vitality. Away from a marsh the others are discarded: lay a
 real marsh and never give a site the keyword (Q-0213: F). Midgewater Marshes (1_332; each Hobbit exerts on moving
 there) goes in the site map as site 2, with a site after it that is no marsh; Moria Lake (1_346; Frodo or 2 other
 companions exert on moving there) is the marsh of site 4. Neither has another keyword: where two marshes that differ in one are wanted, Watcher in the Water 19_21 ("The
