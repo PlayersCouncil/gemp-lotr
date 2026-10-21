@@ -295,6 +295,10 @@
 			{
 				type: activated
 				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: self,inSkirmish
+				}
 				cost: {
 					type: addThreats
 					amount: {
