@@ -833,7 +833,9 @@ directive's "the game goes on to the mulligan question" is: player 1 asked nothi
 (`FreepsAnyDecisionsAvailable()` false), player 2's "Starting fellowship" pending, and the mulligan question
 only after his answer. While a player chooses, only HIS cards on the table are in force, and `GetBurdens()` is
 his: Éomer 4_267 reads 2 with his own player's Elite Rider 4_265 down and 3 again once the other player is
-choosing. Read a cost, a spot or a resistance while its player is the one being asked. Site 1's text is not in
+choosing. Read a cost, a spot or a resistance while its player is the one being asked. A starting companion's
+"To play, add a threat" is paid there, as its "When you play" is used (Q-0305), but `GetThreats()` reads 0 once
+player 2 is choosing: read the threat after `StartGame(true, false)` (Cursed of Erech 10_26, Card_10_026_Tests). Site 1's text is not in
 force while either player chooses, and its keyword is not counted (CR 4.2 "starting fellowship"; F-0470;
 mechanics/sites/SiteTextIsNotActiveWhileStartingFellowshipsArePlayedTests): at East Road 1_320 a companion in the draw
 deck reads its printed cost, and 2 more in the first fellowship phase. The cost of the
@@ -1341,6 +1343,8 @@ SkipToOtherPlayersTurn();` is back in player 1's fellowship phase with `ShadowGe
 A burden added as a turn ENDS (Thin and Stretched 1_279, "at the end of each turn") is not read by `GetBurdens()`
 at the next decision, which is the other player's: read 0 at the mover's last decision ("another move"), end the
 turn, and read `FreepsGetBurdens()` at the other player's first decision (Card_01_279_Tests).
+`GetThreats()` is the current player's too (`GameState.getThreats` reads `getCurrentPlayerId()`), and the rig has
+no per-player threat reading.
 
 **Threats stop at the number of companions** (CR 4.2 "threats": none can be added while there are as many
 threats as companions in play). A board that is to read N threats needs N companions: the control in
