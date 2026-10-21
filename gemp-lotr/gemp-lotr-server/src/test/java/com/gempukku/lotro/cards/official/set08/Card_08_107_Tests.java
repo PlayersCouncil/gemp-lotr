@@ -241,11 +241,12 @@ public class Card_08_107_Tests
 	}
 
 	@Test
-	public void RegroupAbilityWithNoSiteHeControlsRemovesTheThreatForNothing() throws DecisionResultInvalidException, CardNotFoundException {
+	public void RegroupAbilityWithNoSiteHeControlsRemovesTheThreatForNothingAndAsksForNoMinion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var companies = scn.GetShadowCard("companies");
 		var chieftain = scn.GetShadowCard("chieftain");
+		var guard = scn.GetShadowCard("guard");
 
 		scn.StartGame();
 		scn.SkipToSite(2);
@@ -253,7 +254,8 @@ public class Card_08_107_Tests
 		scn.FreepsTakeControlOfSite();
 		var site1 = scn.GetSite(1);
 		scn.MoveCardsToSupportArea(companies);
-		scn.MoveMinionsToTable(chieftain);
+		// Two [sauron] minions of his, so that a choice of minion would be a real one.
+		scn.MoveMinionsToTable(chieftain, guard);
 		scn.AddThreats(1);
 		assertEquals(1, scn.GetThreats());
 		assertTrue(scn.FreepsControls(site1));
@@ -263,12 +265,16 @@ public class Card_08_107_Tests
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.FreepsPass();
 		assertEquals(1, scn.GetThreats());
-		assertInZone(Zone.SHADOW_CHARACTERS, chieftain);
+		assertInZone(Zone.SHADOW_CHARACTERS, chieftain, guard);
+		// Offered, its cost being payable (Q-0034), and flagged as doing nothing: nowhere to stack.
 		assertTrue(scn.ShadowActionAvailable(companies));
+		assertEquals("effect", scn.ShadowActionNoEffect(companies));
 
 		scn.ShadowUseCardAction(companies);
+		// The threat is removed; with no site to stack on, no minion is asked for (F-0579) and none is stacked.
 		assertEquals(0, scn.GetThreats());
-		assertInZone(Zone.SHADOW_CHARACTERS, chieftain);
+		assertFalse(scn.ShadowDecisionAvailable("Choose cards to stack"));
+		assertInZone(Zone.SHADOW_CHARACTERS, chieftain, guard);
 		assertTrue(scn.GetStackedCards(site1).isEmpty());
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}

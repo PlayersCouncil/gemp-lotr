@@ -323,4 +323,91 @@ public class StackingTests
 		assertTrue(scn.FreepsActionAvailable(liking, "Stack top card"));
 		assertFalse(scn.FreepsActionAvailable(liking, "Take a Free Peoples card"));
 	}
+
+	/**
+	 * A stack from play whose "where" finds no card stacks nothing, and the choice of what to stack is then not
+	 * asked (Ketura on F-0116: "the prompt should be smarter"; F-0579).  The effect says it will do nothing, so an
+	 * action with a cost is still offered (Q-0034) and is flagged as doing nothing.  Gorgoroth Garrison 7_273 is
+	 * the card: "Regroup: Discard 2 cards from hand to stack a [sauron] Orc on a site you control (or discard 1
+	 * card from hand if that Orc is a besieger)", with two besiegers of his in play.
+	 */
+	protected VirtualTableScenario GetStackOnASiteScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// Gorgoroth Garrison: [sauron] Orc besieger; the two regroup abilities above
+					put("garrison", "7_273");
+					// Gorgoroth Pillager: [sauron] Orc besieger; its text works only while stacked
+					put("pillager", "7_275");
+					// Orc Chieftain: a card in hand to discard; his text answers a weapon played on him
+					put("chieftain", "1_266");
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	@Test
+	public void AStackFromPlayWithNowhereToStackAsksNothingOfWhatToStackAndIsFlagged() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetStackOnASiteScenario();
+
+		var garrison = scn.GetShadowCard("garrison");
+		var pillager = scn.GetShadowCard("pillager");
+		var chieftain = scn.GetShadowCard("chieftain");
+
+		scn.StartGame();
+		scn.SkipToSite(2);
+		// The other player controls site 1; the Shadow player controls none.
+		scn.FreepsTakeControlOfSite();
+		var site1 = scn.GetSite(1);
+		scn.MoveMinionsToTable(garrison, pillager);
+		scn.MoveCardsToHand(chieftain);
+		assertEquals(0, scn.GetShadowControlledSiteCount());
+
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.FreepsPass();
+		assertTrue(scn.ShadowActionAvailable(garrison, "Stack a besieger"));
+		assertEquals("effect", scn.ShadowActionNoEffect(garrison, "Stack a besieger"));
+
+		scn.ShadowUseCardAction(garrison, "Stack a besieger");
+		// The card is discarded; nothing is asked of which besieger, and nothing is stacked.
+		assertInZone(Zone.DISCARD, chieftain);
+		assertFalse(scn.ShadowDecisionAvailable("Choose cards to stack"));
+		assertInZone(Zone.SHADOW_CHARACTERS, garrison, pillager);
+		assertTrue(scn.GetStackedCards(site1).isEmpty());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void AStackFromPlayWithASiteToStackOnAsksWhatToStack() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetStackOnASiteScenario();
+
+		var garrison = scn.GetShadowCard("garrison");
+		var pillager = scn.GetShadowCard("pillager");
+		var chieftain = scn.GetShadowCard("chieftain");
+
+		scn.StartGame();
+		scn.SkipToSite(2);
+		scn.ShadowTakeControlOfSite();
+		var site1 = scn.GetSite(1);
+		scn.MoveMinionsToTable(garrison, pillager);
+		scn.MoveCardsToHand(chieftain);
+		assertTrue(scn.ShadowControls(site1));
+
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.FreepsPass();
+		assertTrue(scn.ShadowActionAvailable(garrison, "Stack a besieger"));
+		assertEquals("false", scn.ShadowActionNoEffect(garrison, "Stack a besieger"));
+
+		scn.ShadowUseCardAction(garrison, "Stack a besieger");
+		assertInZone(Zone.DISCARD, chieftain);
+		// His one site is taken with nothing asked; the besieger is asked for, from both.
+		assertTrue(scn.ShadowDecisionAvailable("Choose cards to stack"));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(garrison, pillager));
+		scn.ShadowChooseCard(pillager);
+		assertInZone(Zone.STACKED, pillager);
+		assertTrue(scn.GetStackedCards(site1).contains(pillager));
+		assertInZone(Zone.SHADOW_CHARACTERS, garrison);
+	}
 }

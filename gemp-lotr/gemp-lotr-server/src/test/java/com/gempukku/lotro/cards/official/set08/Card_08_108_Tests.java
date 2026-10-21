@@ -291,30 +291,35 @@ public class Card_08_108_Tests
 	}
 
 	@Test
-	public void RegroupAbilityWithNoSiteHeControlsExertsTheTrollForNothing() throws DecisionResultInvalidException, CardNotFoundException {
+	public void RegroupAbilityWithNoSiteHeControlsExertsTheTrollForNothingAndAsksForNoBesieger() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var troll = scn.GetShadowCard("troll");
+		var pillager = scn.GetShadowCard("pillager");
 
 		scn.StartGame();
 		scn.SkipToSite(2);
 		// The player whose fellowship is moving controls site 1; the Shadow player controls none.
 		scn.FreepsTakeControlOfSite();
 		var site1 = scn.GetSite(1);
-		// The Troll is his only besieger, so the choice of besieger goes unasked.
-		scn.MoveMinionsToTable(troll);
+		// Two besiegers of his, so that a choice of besieger would be a real one.
+		scn.MoveMinionsToTable(troll, pillager);
 		assertTrue(scn.FreepsControls(site1));
 		assertEquals(0, scn.GetShadowControlledSiteCount());
-		assertInZone(Zone.SHADOW_CHARACTERS, troll);
+		assertInZone(Zone.SHADOW_CHARACTERS, troll, pillager);
 		assertEquals(0, scn.GetWoundsOn(troll));
 
 		scn.SkipToPhase(Phase.REGROUP);
 		scn.FreepsPass();
+		// Offered, its cost being payable (Q-0034), and flagged as doing nothing: nowhere to stack.
 		assertTrue(scn.ShadowActionAvailable(troll));
+		assertEquals("effect", scn.ShadowActionNoEffect(troll));
 
 		scn.ShadowUseCardAction(troll);
+		// The exertion is paid; with no site to stack on, no besieger is asked for (F-0579) and none is stacked.
 		assertEquals(1, scn.GetWoundsOn(troll));
-		assertInZone(Zone.SHADOW_CHARACTERS, troll);
+		assertFalse(scn.ShadowDecisionAvailable("Choose cards to stack"));
+		assertInZone(Zone.SHADOW_CHARACTERS, troll, pillager);
 		assertTrue(scn.GetStackedCards(site1).isEmpty());
 		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}

@@ -64,9 +64,10 @@ in that order in the game log. `mechanics/actions/TakenTogetherInCardIdOrderTest
 
 **A stack from play asks where first, then what.** `StackCardsFromPlay` resolves its `where` ("Choose card to stack
 on") before its `select` ("Choose cards to stack"), whatever the text's word order: "stack your [sauron] minion on a
-site you control" asks the site, then the minion (Their Marching Companies 8_107, Card_08_107_Tests). Where the `where` finds
-no card (no site he controls), the choice of what to stack is still asked when there is more than one candidate,
-and nothing is stacked (F-0579, open; Troll of Gorgoroth 8_108): lay a single candidate unless the test reads that question.
+site you control" asks the site, then the minion (Their Marching Companies 8_107, Card_08_107_Tests). Where the `where`
+finds no card (no site he controls), the choice of what to stack is not asked and nothing is stacked, and the effect
+says it will do nothing: an action with a cost is offered and flagged (F-0579, engine pass 61; Troll of Gorgoroth
+8_108, mechanics/inplay/StackingTests). As a cost, a stack with nowhere to go is not offered at all.
 
 **Choosing which skirmish to resolve is always asked.** Even when only one skirmish is left, the Free Peoples
 player is asked to choose it. `FreepsAssignAndResolve` answers that for the skirmish it sets up;
