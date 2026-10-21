@@ -177,6 +177,12 @@ him. Not Orc Assassin 1_262 (cost 2, site 6): in play he makes the roaming penal
 2, strength 5, vitality 2, site 4; +4 and fierce only at 2 wounds on the Ring-bearer: also the [wraith] minion who
 is no Nazgûl.
 
+**Two [wraith] Orcs of different titles with no text in the way; a [wraith] minion who is no Orc.** Morgul Hound
+7_192, Morgul Mongrel 7_194; Úlairë Lemenya 1_232. Mongrel: cost 3, strength 7, vitality 2, site 4; fierce and
+damage +1 only at 3 wounds on the Ring-bearer (the Hound's text needs 2). Lemenya: [wraith] Nazgûl, strength 9; her
+text reaches only a companion or ally bearing a [wraith] condition. With Orc Chieftain 1_266 beside her, no [wraith]
+Orc is on the table (Card_08_078_Tests).
+
 **A card that says minions are not roaming; a card that changes a site number.** Bill Ferny, Swarthy Sneering
 Fellow 2_75; Grishnákh, Orc Captain 5_100. Bill: unique [wraith] Man, cost 2, vitality 1, site 2; "Nazgûl are not
 roaming"; the Free Peoples player may not assign to him; discarded underground. Úlairë Lemenya 1_232 (Nazgûl, cost
