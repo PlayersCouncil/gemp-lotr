@@ -17,10 +17,24 @@ public class Card_02_121_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "2_121");
-					// put other cards in here as needed for the test case
+					put("gimli", "2_121");
 				}},
+				// Site 2 Ettenmoors (plains, Shadow number 2), 4 Balin's Tomb (underground, 3),
+				// 5 The Bridge of Khazad-dum (underground, 6)
 				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetTowersScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("gimli", "2_121");
+				}},
+				// Site 6 Caves of Aglarond: underground and a sanctuary, Shadow number 3
+				VirtualTableScenario.TowersSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -47,7 +61,7 @@ public class Card_02_121_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("gimli");
 
 		assertEquals("Gimli", card.getBlueprint().getTitle());
 		assertEquals("Dwarf of the Mountain-race", card.getBlueprint().getSubtitle());
@@ -65,18 +79,57 @@ public class Card_02_121_Tests
 		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GimliTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void EachUndergroundSiteIsShadowNumberMinus2AndNoOtherSiteIs() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var gimli = scn.GetFreepsCard("gimli");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToSite(4);
+		scn.SetTwilight(0);
 
-		assertEquals(2, scn.GetTwilight());
+		var ettenmoors = scn.GetFreepsSite(2);
+		var balinsTomb = scn.GetFreepsSite(4);
+		var bridge = scn.GetFreepsSite(5);
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		assertEquals(0, scn.GetTwilight());
+		assertEquals(2, scn.GetTwilightCost(ettenmoors));
+		assertEquals(3, scn.GetTwilightCost(balinsTomb));
+		assertEquals(6, scn.GetTwilightCost(bridge));
+
+		scn.MoveCompanionsToTable(gimli);
+		// Balin's Tomb is underground, Ettenmoors is not; 3 - 2 = 1 is above the floor of 0, so -2 is told from -3
+		assertEquals(1, scn.GetTwilightCost(balinsTomb));
+		assertEquals(2, scn.GetTwilightCost(ettenmoors));
+		// The Bridge is underground too, though the fellowship is not at it yet
+		assertEquals(4, scn.GetTwilightCost(bridge));
+
+		scn.FreepsPass();
+		assertEquals(5, scn.GetCurrentSiteNumber());
+		assertEquals(4, scn.GetTwilightCost(scn.GetCurrentSite()));
+		// 2 companions + 4 for the Bridge (6 - 2)
+		assertEquals(6, scn.GetTwilight());
+		// Balin's Tomb, left behind, is still underground
+		assertEquals(1, scn.GetTwilightCost(balinsTomb));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void AnUndergroundSanctuaryIsShadowNumberMinus2Too() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetTowersScenario();
+
+		var gimli = scn.GetFreepsCard("gimli");
+
+		scn.StartGame();
+		scn.SkipToSite(6);
+
+		var caves = scn.GetFreepsSite(6);
+		assertEquals(6, scn.GetCurrentSiteNumber());
+		assertEquals(3, scn.GetTwilightCost(caves));
+
+		scn.MoveCompanionsToTable(gimli);
+		assertEquals(1, scn.GetTwilightCost(caves));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }
