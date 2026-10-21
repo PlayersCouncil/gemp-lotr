@@ -1655,7 +1655,8 @@ to the client. A `FreepsChooseCardBPFromSelection` sent while the showing is sti
 complaint and chooses nothing: the card stays in the deck and the test fails later, far from the cause (Éomer 12_112). To take nothing from a choice whose minimum is 0, `FreepsDeclineChoosing()`: a
 `FreepsChooseCardBPFromSelection()` with no card does not compile (two overloads fit).
 Where nothing in the zone can be chosen, the showing is the only decision ("... while retrieving cards", nothing
-selectable; Saved From the Fire 8_20 with no card of the culture in the deck): answer it once. `FreepsDeclineChoosing()`
+selectable; Saved From the Fire 8_20 with no card of the culture in the deck): answer it once. It lists the
+deck's cards as not selectable, so `(card, false)` reads them there (Shelob, Eater of Light 8_25, dec-b8_23). `FreepsDeclineChoosing()`
 answers a showing as readily as a choice, so one too few leaves "Choose cards from deck" pending. One too many
 fails the test, saying what is being asked instead (G-0034; it used to pass the phase in silence): delete the line.
 `FreepsAcceptOptionalTrigger()` answers only a choice of actions (an optional trigger, the order of required
