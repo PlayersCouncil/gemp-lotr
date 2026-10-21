@@ -13,7 +13,9 @@ playable, complete the pending decision with a real action and look at the next 
 **One candidate is chosen for you; none is skipped.** When a choice (a cost's as well as a target's: 2 cards to discard from a hand of 2) has exactly as many valid candidates as it
 needs, the engine makes it without asking, and a `FreepsChooseCard` written for it fails, naming the decision
 the game has gone on to (G-0032). When it has none, that part of the effect is skipped; so is a choice among
-cards an earlier effect set aside (`ChooseArbitraryCards`) when it set none aside (F-0338). So a test that
+cards an earlier effect set aside (`ChooseArbitraryCards`) when it set none aside (F-0338). With ONE card set
+aside that choice is still asked, 1 of 1, of each player it names (Birthday Present 10_104: the Free Peoples
+player chooses the one [shire] event, then the opponent chooses it; dec-b10_104). So a test that
 means to inspect a choice has to supply one more valid candidate than the choice needs, and at least one invalid
 one beside them. A parked test of a NUMBER the game reads otherwise ("X Shadow cards", 1 by the text and 3 as
 built) wants one more candidate than the LARGER of the two readings, or the game takes them all unasked and the
