@@ -1140,7 +1140,8 @@ possession to play a [men] minion from your discard pile").
 minions).** Éowyn, Daughter of Éomund 5_122 with Rider's Spear 4_288; Théoden, King of the Golden Hall 5_93. Éowyn:
 [rohan] companion, strength 6, vitality 3; "Maneuver: Play a [rohan] possession on Éowyn to heal her": the play is
 the ability's cost, `FreepsUseCardAction(eowyn)` with one such possession in hand plays it unasked, and a response
-to the play is answered before her heal (Card_10_019_Tests). Spear: [rohan] hand weapon, cost 1, strength +2, on a
+to the play is answered before her heal (Card_10_019_Tests); a response that takes the possession out of play
+(Stampeded 10_51) leaves the heal undone (pitfalls, "A play as a cost can come to nothing"; Card_10_051_Tests). Spear: [rohan] hand weapon, cost 1, strength +2, on a
 [rohan] Man. Théoden (read, not run): the same ability, healing a [rohan] ally.
 
 **A Shadow card that cancels a Free Peoples event (tells an event's cost from its effect: what is asked before the
