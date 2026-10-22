@@ -91,6 +91,7 @@ public class GameState {
     private final Map<PhysicalCard, Timeword> _phaseOfEventBeingPlayed = new HashMap<>();
     private Skirmish _skirmish = null;
     private PhysicalCard _lastSkirmishCharacter;
+    private List<PhysicalCard> _lastSkirmishMinions = List.of();
     private int _lastSkirmishTurn = -1;
 
     private final Set<GameStateListener> _gameStateListeners = new HashSet<>();
@@ -1310,9 +1311,16 @@ public class GameState {
         return _lastSkirmishTurn == getTurnNumber() ? _lastSkirmishCharacter : null;
     }
 
+    /** The Shadow characters of the last skirmish finished this turn; empty if none has been. */
+    public List<PhysicalCard> getLastSkirmishMinions() {
+        return _lastSkirmishTurn == getTurnNumber() ? _lastSkirmishMinions : List.of();
+    }
+
     public void finishSkirmish() {
         if (_skirmish != null) {
-            _lastSkirmishCharacter = _skirmish.getFellowshipCharacter();
+            _lastSkirmishCharacter = _skirmish.getFellowshipCharacter() != null ? _skirmish.getFellowshipCharacter() : _skirmish.getInvolvedFellowshipCharacter();
+            //(every minion that was in it, killed or not: a skirmish's losers are gone from it by the time it finishes)
+            _lastSkirmishMinions = List.copyOf(_skirmish.getInvolvedShadowCharacters());
             _lastSkirmishTurn = getTurnNumber();
             _skirmish = null;
             for (GameStateListener listener : getAllGameStateListeners())
