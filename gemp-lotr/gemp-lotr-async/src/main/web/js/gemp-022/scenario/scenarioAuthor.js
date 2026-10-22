@@ -2152,8 +2152,10 @@ var GempScenarioAuthor = Class.extend({
                 changed(value);
             if (kind == "hjson")
                 input.trigger("sa-fit");
-            if (kind != "hjson" || now)
-                that.stepChanged(now);
+            //What is typed goes to the server when the field is left (or Enter is pressed in a line), not each time
+            // the typing pauses: each send can bring a fresh game, which is no thing to have happen mid-sentence
+            if (now)
+                that.stepChanged(true);
         };
         if (kind == "check") {
             input.change(function () {

@@ -649,7 +649,8 @@ public final class ScenarioParser {
     /**
      * The cards a choose(...) picks.  Each of its parameters that names a card ("aragorn"), or picks one by its
      * skirmish ("skirmishing", "skirmishing(aragorn)"), begins another pick; a number says which of the cards it could
-     * be (counting from 1), and anything else is a card filter that narrows the pick before it:
+     * be (counting from 1), and anything else is a card filter that narrows the pick before it (or, first of all, is
+     * the pick: choose(or(helm, shield, armor))):
      * choose(skirmishing(aragorn), title(Orthanc Warrior), 2), choose(aragorn, not(exhausted)), choose(frodo, sam).
      */
     static List<Pick> parsePicks(ScenarioDefinition def, Terms.Term term, String context) throws ScenarioFormatException {
@@ -677,10 +678,16 @@ public final class ScenarioParser {
                 }
                 continue;
             }
-            if (!open)
-                throw new ScenarioFormatException(context + ": in '" + term.raw() + "', '" + arg + "' comes before any card: "
-                        + "begin with a card's name in the scenario, or skirmishing / skirmishing(character)");
-            source += ", " + arg;
+            if (!open) {
+                //(a pick can be nothing but card filters: choose(or(helm, shield, armor)) is whichever such card is on offer)
+                if (arg.matches("\\d+"))
+                    throw new ScenarioFormatException(context + ": in '" + term.raw() + "', '" + arg + "' comes before any card: "
+                            + "begin with a card's name in the scenario, skirmishing / skirmishing(character), or a card filter");
+                open = true;
+                alias = null; against = null; skirmishing = false; filters = new ArrayList<>(); ordinal = 0; source = arg;
+            } else {
+                source += ", " + arg;
+            }
             if (arg.matches("\\d+")) {
                 ordinal = Integer.parseInt(arg);
                 if (ordinal < 1)
