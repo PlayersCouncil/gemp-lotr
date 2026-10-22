@@ -817,8 +817,10 @@ public class ScenarioDirector {
      * is said about the one that is over is said at the first decision after it, whatever that is.)
      */
     private boolean isAfter(String alias) {
+        //(a minion's skirmish as much as a companion's: the last skirmish finished had it on either side)
+        PhysicalCard card = _table.Card(alias);
         PhysicalCard last = _table.gameState().getLastSkirmishCharacter();
-        return last != null && last == _table.Card(alias);
+        return (last != null && last == card) || _table.gameState().getLastSkirmishMinions().contains(card);
     }
 
     private void observeSkirmish() {
@@ -957,8 +959,10 @@ public class ScenarioDirector {
 
     private List<RenderedMessage> render(Step step) {
         List<RenderedMessage> messages = new ArrayList<>();
-        if (!isContinuing(step))
-            for (Message message : step.messages)
+        //(the first time the step applies, all of them; after that, those that are said every time)
+        boolean again = isContinuing(step);
+        for (Message message : step.messages)
+            if (!again || !message.once)
                 messages.add(new RenderedMessage(message,
                         message.header == null ? null : Templates.render(_table, message.header),
                         Templates.render(_table, message.text)));

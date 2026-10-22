@@ -1318,7 +1318,9 @@ var GempScenarioAuthor = Class.extend({
     /* ---------------------------------------------------------------- the timeline */
 
     summary: function (step) {
-        var when = typeof step.when == "string" ? step.when : (step.when != null ? "{...}" : "");
+        //(a When with requirements reads as its terms, marked as having more to it)
+        var parts = this.whenParts(step.when);
+        var when = typeof step.when == "string" ? step.when : parts != null ? parts.terms + ", only while\u2026" : (step.when != null ? "{...}" : "");
         var seat = null, rest = [];
         var terms = this.splitTerms(when);
         for (var i = 0; i < terms.length; i++) {
@@ -1701,9 +1703,16 @@ var GempScenarioAuthor = Class.extend({
         var filed = function (value, text) {
             return value == null || typeof value == "string" ? value : text != null ? text : JSON.stringify(value, null, "\t");
         };
+        //A When with requirements is edited as its terms and, beside them, its requirements, where the rest of it can
+        // be said as terms; otherwise it is edited as the file has it
+        var split = this.whenParts(this.own(step).when);
         $.each(this.TYPED, function (index, name) {
             work[name] = filed(work[name], texts[name]);
         });
+        if (split != null) {
+            work.when = split.terms;
+            work.whenRequire = split.require;
+        }
         work.messages = $.map(this.messagesOf(step), function (message) {
             return [typeof message == "string" ? {text: message} : that.clone(message)];
         });
@@ -1729,6 +1738,33 @@ var GempScenarioAuthor = Class.extend({
         return work;
     },
 
+    /**
+     * A When written as an object with requirements, as {terms, require}: the line of terms its other parts make, and
+     * its requirements as HJSON text.  Null if it has no requirements, or has something terms cannot say.
+     */
+    whenParts: function (when) {
+        if (when == null || typeof when != "object" || $.isArray(when) || when.require == null)
+            return null;
+        var terms = [];
+        var simple = {seat: 1, decision: 1, phase: 1, turn: 1, skirmish: 1, offers: 1, inSkirmish: 1, fighting: 1, after: 1, text: 1, terms: 1, require: 1};
+        for (var name in when)
+            if (when.hasOwnProperty(name) && !simple[name])
+                return null;
+        if (when.terms)
+            terms.push(when.terms);
+        if (when.seat)
+            terms.push(when.seat);
+        if (when.decision)
+            terms.push(when.decision);
+        $.each(["phase", "turn", "skirmish", "offers", "inSkirmish", "after", "text"], function (i, name) {
+            if (when[name] != null && when[name] !== "")
+                terms.push(name + "(" + when[name] + ")");
+        });
+        if (when.fighting)
+            terms.push("inSkirmish(" + when.fighting + ")");
+        return {terms: terms.join(", "), require: JSON.stringify(when.require, null, "\t")};
+    },
+
     /** The working copy as the step its file would have. */
     written: function (work) {
         var blank = function (value) {
@@ -1738,7 +1774,7 @@ var GempScenarioAuthor = Class.extend({
         var tidy = function (message) {
             var out = {};
             for (var name in message)
-                if (message.hasOwnProperty(name) && !blank(message[name])) {
+                if (message.hasOwnProperty(name) && (!blank(message[name]) || (name == "once" && message.once === false))) {
                     if (name == "choices") {
                         var choices = {}, any = false;
                         for (var choice in message.choices)
@@ -1760,6 +1796,9 @@ var GempScenarioAuthor = Class.extend({
             if (!blank(work[name]))
                 step[name] = work[name];
         });
+        //(its requirements make the When an object, its terms one part of it)
+        if (!blank(work.whenRequire) && $.trim(work.whenRequire) != "")
+            step.when = "{\n\tterms: " + JSON.stringify($.trim(work.when || "")) + "\n\trequire: " + $.trim(work.whenRequire) + "\n}";
         if (work.messages.length > 0)
             step.messages = $.map(work.messages, function (message) {
                 return [tidy(message)];
@@ -2521,20 +2560,24 @@ var GempScenarioAuthor = Class.extend({
             group("In every skirmish", "Steps for any skirmish, whoever is fighting it: after the steps of the skirmish being fought, which come first if they fit.", parts.every, null);
         //(the steps for one skirmish come before the ones for every skirmish, which would otherwise take its decisions)
         var firstEvery = parts.every.length > 0 ? parts.every[0] : null;
-        $.each($.grep(fights, minion), function (i, who) {
-            group("Any skirmish " + shortName(who) + " (" + who + ") is in", "Steps for the skirmish this minion is in, whichever character it fights.",
-                parts["fight:" + who] || [], null);
-        });
-        $.each($.grep(fights, function (who) {
+        //Each skirmish, the characters' first and then the minions': its steps, a step at a time, and what is said after
+        // it.  A minion's skirmish is whichever skirmish it is in, against whichever character; its steps are the
+        // opponent's to begin with.
+        var opponent = human == "freeps" ? "shadow" : "freeps";
+        var ordered = $.grep(fights, function (who) {
             return !minion(who);
-        }), function (i, who) {
+        }).concat($.grep(fights, minion));
+        $.each(ordered, function (i, who) {
             var name = shortName(who);
+            var isMinion = minion(who);
             var fight = parts["fight:" + who] || [];
             var end = fight.length > 0 ? after(fight) : firstEvery != null ? firstEvery : top.anyOrder.length;
             if (fight.length > 0 && firstEvery != null && end > firstEvery)
                 end = firstEvery;
-            group(name + "'s skirmish", null, fight,
-                adding("+ Step", "A step for the next decision in this skirmish", end, {once: true, when: human + ", action, inSkirmish(" + who + ")"}));
+            group(isMinion ? "Any skirmish " + name + " (" + who + ") is in" : name + "'s skirmish",
+                isMinion ? "Steps for the skirmish this minion is in, whichever character it fights." : null, fight,
+                adding("+ Step", "A step for the next decision in this skirmish", end,
+                    {once: true, when: (isMinion ? opponent : human) + ", action, inSkirmish(" + who + ")"}));
             var afterSubs = parts["after:" + who] || [];
             //(before the first choice's step, which would otherwise take the choices after a skirmish too)
             group("After " + name + "'s skirmish", "Said at the first decision after it, whatever that is: the choice of the next skirmish, the next skirmish's own, "
@@ -2542,14 +2585,17 @@ var GempScenarioAuthor = Class.extend({
                 afterSubs.length > 0 ? null : adding("+ Step", "A pause read at the first decision after this skirmish", Math.min(firstChoice, top.anyOrder.length),
                     {once: true, pause: true, when: human + ", after(" + who + ")", messages: [{text: "..."}]}));
         });
-        //Another character's skirmish, to write steps for
-        var mine = $.grep(cards, function (card) {
-            return card.owner == human && (card.type == "COMPANION" || card.type == "ALLY") && $.inArray(card.alias, fights) < 0;
+        //Another skirmish to write steps for: a character's, or a minion's
+        var others = $.grep(cards, function (card) {
+            return $.inArray(card.alias, fights) < 0 && (card.owner == human ? (card.type == "COMPANION" || card.type == "ALLY") : card.type == "MINION");
+        });
+        others.sort(function (x, y) {
+            return (x.owner == human ? 0 : 1) - (y.owner == human ? 0 : 1);
         });
         var foot = this.el("div", "sa-bar").appendTo(box);
-        if (mine.length > 0)
-            foot.append(this.select([["", "+ a skirmish for\u2026"]].concat($.map(mine, function (card) {
-                return [[card.alias, card.alias + " (" + card.name + ")"]];
+        if (others.length > 0)
+            foot.append(this.select([["", "+ a skirmish for\u2026"]].concat($.map(others, function (card) {
+                return [[card.alias, card.alias + " (" + card.name + (card.owner == human ? "" : ", minion") + ")"]];
             })), "", function (who) {
                 if (who == "")
                     return;
@@ -2559,7 +2605,7 @@ var GempScenarioAuthor = Class.extend({
                     that.form = null;
                     that.render();
                 });
-            }).attr("title", "Steps for that character's skirmish, whenever it is fought"));
+            }).attr("title", "Steps for that character's skirmish, or for the skirmish that minion is in, whenever it is fought"));
         foot.append(this.button("+ Pause", "A step of this block that is only read: once, over the first of the player's decisions that fits it", function () {
             that.insertInBlock(index, top.anyOrder.length, {pause: true, when: human + ", action", messages: [{text: "..."}]});
         }));
@@ -2830,6 +2876,11 @@ var GempScenarioAuthor = Class.extend({
             when.append(pickers);
             when.append(this.field("When", raw, "seat, kind of decision, phase(...), turn(...), skirmish(n), inSkirmish(card), after(card), offers(card), text(part of what the decision says). "
                 + "Or written out in full, as the file has it, in HJSON: { seat: freeps, require: { ... } }. What is copied out of a file can be pasted here, with or without 'when:' in front."));
+            //Requirements as cards write them, which the game has to meet as well: what can be on the table, say
+            if (typeof work.when != "string" || $.trim(work.when).charAt(0) != "{")
+                when.append(this.field("Only while", this.bound(work, "whenRequire", "hjson").attr("placeholder", "{\n\ttype: canSpot\n\tfilter: alias(smith), minVitality(2)\n}"),
+                    "Requirements as cards write them, in HJSON as the file has them (one { ... } or a [ list ], a line to each part), which have to hold as well as the When. "
+                    + "For instance, type: canSpot and filter: or(helm,shield,armor), attachedTo(inSkirmishAgainst(alias(balrog))). Names in the scenario are alias(name)."));
         }
         var flagsRow = this.el("div", "sa-row").appendTo(when).toggle(!opening);
         if (!block)
@@ -3072,6 +3123,17 @@ var GempScenarioAuthor = Class.extend({
                 card.append(that.field("Heading", that.bound(message, "header", "text")));
                 return;
             }
+            //Said the first time its step applies (the usual), or every time: a step that repeats, or one of a block's
+            // that is not 'once', applies to more than one decision
+            card.append(that.el("label", "sa-check sa-msgonce").attr("title", "Ticked: said the first time the step applies, and not when it applies "
+                + "again (a step that repeats, or a block's step that is not 'once'). Unticked: said every time.")
+                .append($("<input type='checkbox'/>").prop("checked", message.once !== false).change(function () {
+                    if (this.checked)
+                        delete message.once;
+                    else
+                        message.once = false;
+                    that.stepChanged(true);
+                })).append(document.createTextNode(" once")));
 
             var anchor = that.bound(message, "anchor", "text");
             var anchorRow = that.el("div", "sa-row sa-anchor").appendTo(card);

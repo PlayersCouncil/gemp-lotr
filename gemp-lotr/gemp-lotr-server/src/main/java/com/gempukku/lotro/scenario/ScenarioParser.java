@@ -493,13 +493,29 @@ public final class ScenarioParser {
         When when = new When();
         if (value.isObject()) {
             JsonObject object = value.asObject();
-            checkFields(object, context, "seat", "decision", "text", "phase", "turn", "skirmish", "offers", "inSkirmish", "fighting", "after", "require");
+            checkFields(object, context, "terms", "seat", "decision", "text", "phase", "turn", "skirmish", "offers", "inSkirmish", "fighting", "after", "require");
+            //(what can be said as terms can be, in 'terms': the rest of the object adds to it, its requirements above all)
+            if (object.get("terms") != null) {
+                When said = parseWhen(def, JsonValue.valueOf(scalar(object.get("terms"), context + ".terms")), context + ".terms");
+                when.seat = said.seat;
+                when.decision = said.decision;
+                when.text = said.text;
+                when.phase = said.phase;
+                when.turn = said.turn;
+                when.skirmish = said.skirmish;
+                when.offers = said.offers;
+                when.fighting = said.fighting;
+                when.after = said.after;
+                if (said.opening)
+                    throw new ScenarioFormatException(context + ": 'opening' stands by itself");
+            }
             when.source = object.toString();
             if (object.get("seat") != null)
                 when.seat = parseSeat(def, scalar(object.get("seat"), context + ".seat"), context + ".seat");
             if (object.get("decision") != null)
                 when.decision = parseDecisionType(scalar(object.get("decision"), context + ".decision"), context + ".decision");
-            when.text = optionalString(object, "text", null, context);
+            if (object.get("text") != null)
+                when.text = optionalString(object, "text", null, context);
             if (object.get("phase") != null)
                 when.phase = parsePhase(scalar(object.get("phase"), context + ".phase"), context + ".phase");
             if (object.get("turn") != null)
@@ -812,8 +828,9 @@ public final class ScenarioParser {
                 if (object.get("title") != null)
                     throw new ScenarioFormatException(entryContext + ": a message's heading is called 'header', not 'title' (and most messages want none)");
                 checkFields(object, entryContext, "note", "header", "text", "anchor", "highlight", "highlightStyle", "avoid", "side", "gap", "advance", "on",
-                        "zoom", "focus", "magnify", "choices");
+                        "zoom", "focus", "magnify", "choices", "once");
                 message.note = optionalString(object, "note", null, entryContext);
+                message.once = optionalBoolean(object, "once", true, entryContext);
                 message.header = sidesNamed(def, optionalString(object, "header", null, entryContext));
                 message.text = sidesNamed(def, requireString(object, "text", entryContext));
                 message.anchor = sidesNamed(def, list(object.get("anchor"), entryContext + ".anchor"));
