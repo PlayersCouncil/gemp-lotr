@@ -23,6 +23,7 @@ replay
 logs/nohup.out
 nohup.out
 gemp-lotr/docker/docker-compose.yml
+m2-offline/
 
 # Card test working material (ledgers, campaign state): never committed
 Claude outputs/
