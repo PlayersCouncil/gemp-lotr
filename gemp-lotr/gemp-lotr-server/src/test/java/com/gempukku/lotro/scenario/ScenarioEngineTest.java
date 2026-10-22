@@ -921,6 +921,12 @@ public class ScenarioEngineTest {
         assertTrue(picks.get(1).plain());
         assertEquals("gandalf", picks.get(2).alias());
         assertEquals("not(exhausted)", picks.get(2).filter());
+        //A pick can be nothing but filters: whichever card of that kind is on offer
+        List<ScenarioDefinition.Pick> kinds = ScenarioParser.parsePicks(def, Terms.parse("choose(or(helm, shield, armor))", "test").getFirst(), "test");
+        assertEquals(1, kinds.size());
+        assertNull(kinds.getFirst().alias());
+        assertEquals("or(helm,shield,armor)", kinds.getFirst().filter());
+        assertEquals("or(helm,shield,armor)", kinds.getFirst().asFilter());
         try {
             ScenarioParser.parse(twoSkirmishes().replace("allow: choose(aragorn)?, choose(gandalf)?", "allow: choose(aragorn, exhaused)"));
             fail("A filter the card builder does not know is a mistake");
