@@ -300,6 +300,11 @@ public final class ScenarioDefinition {
         public String note;
         /** A heading over the text.  Most messages have none. */
         public String header;
+        /**
+         * Said the first time its step applies, and not again when the step applies to more decisions (a step that
+         * repeats, or one of a block's that is not 'once').  False: said every time the step applies.
+         */
+        public boolean once = true;
         public String text;
         /**
          * What the bubble points at: usually one thing, which it sits beside; with several it sits beside them all

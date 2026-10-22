@@ -908,6 +908,76 @@ public class ScenarioEngineTest {
     }
 
     @Test
+    public void aMessageCanBeSaidEveryTimeItsStepApplies() throws Exception {
+        //The block's step for choosing a skirmish applies twice: one message is said the first time, the other each time
+        String scenario = twoSkirmishes().replace("\t\t\t\t\twhen: freeps, cards, text(next skirmish)\n",
+                "\t\t\t\t\twhen: freeps, cards, text(next skirmish)\n\t\t\t\t\tmessages: [\n\t\t\t\t\t\tThe first time.\n"
+                        + "\t\t\t\t\t\t{\n\t\t\t\t\t\t\ttext: Every time.\n\t\t\t\t\t\t\tonce: false\n\t\t\t\t\t\t}\n\t\t\t\t\t]\n");
+        ScenarioDefinition def = ScenarioParser.parse(scenario);
+        assertFalse(def.steps.getFirst().children.get(1).messages.get(1).once);
+        assertTrue(ScenarioWriter.toJson(def).toString(), ScenarioWriter.toJson(def).toString().contains("\"once\":false"));
+        ScenarioTable table = new ScenarioTable(def, ScenarioTesting.library(), ScenarioTesting.format("scenario"), HUMAN, OPPONENT);
+        ScenarioSession session = new ScenarioSession(table);
+        table.Start();
+        ScenarioSession.Ruling ruling = session.Ruling(HUMAN);
+        table.PlayerDecided(HUMAN, ruling.answer() != null ? ruling.answer() : ruling.shown().allowed().getFirst());
+        ruling = session.Ruling(HUMAN);
+        assertEquals("1.2", ruling.step().label());
+        assertEquals(2, ruling.shown().messages().size());
+        table.PlayerDecided(HUMAN, String.valueOf(table.Card("aragorn").getCardId()));
+        for (int guard = 0; guard < 10 && !"1.2".equals(session.Ruling(HUMAN).step().label()); guard++)
+            table.PlayerDecided(HUMAN, "");
+        ruling = session.Ruling(HUMAN);
+        assertEquals("1.2", ruling.step().label());
+        assertEquals(List.of("Every time."), ruling.shown().messages().stream().map(ScenarioDirector.RenderedMessage::text).map(String::trim)
+                .map(text -> text.replaceAll("<[^>]*>", "").trim()).toList());
+    }
+
+    @Test
+    public void afterCanBeAMinionsSkirmishAndAWhenCanBeTermsWithRequirements() throws Exception {
+        //A pause after the first Goblin Runner's skirmish, whoever it fought; a When given as terms and requirements
+        String scenario = twoSkirmishes().replace("\t\t\t\t{\n\t\t\t\t\twhen: freeps, cards, text(next skirmish)",
+                "\t\t\t\t{\n\t\t\t\t\tpause: true\n\t\t\t\t\tonce: true\n\t\t\t\t\twhen: freeps, after(runner1)\n\t\t\t\t\tmessages: [\n\t\t\t\t\t\tThe first Runner's skirmish is over.\n\t\t\t\t\t]\n\t\t\t\t}\n"
+                        + "\t\t\t\t{\n\t\t\t\t\twhen: freeps, cards, text(next skirmish)");
+        String read = null;
+        for (String first : List.of("aragorn", "gandalf")) {
+            ScenarioTable table = new ScenarioTable(ScenarioParser.parse(scenario), ScenarioTesting.library(), ScenarioTesting.format("scenario"), HUMAN, OPPONENT);
+            ScenarioSession session = new ScenarioSession(table);
+            table.Start();
+            String fought = null;
+            for (int guard = 0; guard < 40 && session.Director().currentStep() != null && session.Director().currentStep().number == 1; guard++) {
+                ScenarioSession.Ruling ruling = session.Ruling(HUMAN);
+                if (ruling == null) {
+                    ScenarioSession.Ruling theirs = session.Ruling(OPPONENT);
+                    table.PlayerDecided(OPPONENT, theirs != null && theirs.answer() != null ? theirs.answer() : "");
+                    continue;
+                }
+                if (ruling.step().pause) {
+                    read = fought;
+                    assertTrue(session.Read(HUMAN, ruling.step().number, null));
+                    continue;
+                }
+                if ("next skirmish".equals(ruling.step().when.text)) {
+                    fought = fought == null ? first : first.equals("aragorn") ? "gandalf" : "aragorn";
+                    table.PlayerDecided(HUMAN, String.valueOf(table.Card(fought).getCardId()));
+                } else {
+                    table.PlayerDecided(HUMAN, ruling.answer() != null ? ruling.answer() : ruling.shown().allowed() != null && !ruling.shown().allowed().isEmpty() ? ruling.shown().allowed().getFirst() : "");
+                }
+            }
+            assertEquals("Read after the skirmish runner1 was in (Aragorn's), whichever was fought first", "aragorn", read);
+        }
+
+        ScenarioDefinition def = ScenarioParser.parse(twoSkirmishes().replace("\t\t\t\t\twhen: freeps, assign\n",
+                "\t\t\t\t\twhen: {\n\t\t\t\t\t\tterms: freeps, assign, turn(1)\n\t\t\t\t\t\trequire: {\n\t\t\t\t\t\t\ttype: canSpot\n\t\t\t\t\t\t\tfilter: alias(runner1), minion\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n"));
+        ScenarioDefinition.When when = def.steps.getFirst().children.getFirst().when;
+        assertEquals(Seat.FREEPS, when.seat);
+        assertEquals(1, (int) when.turn);
+        assertNotNull(when.require);
+        ScenarioRunReport report = ScenarioRunner.run(def, ScenarioTesting.library(), ScenarioTesting.format("scenario"));
+        assertTrue(report.toString(), report.passed());
+    }
+
+    @Test
     public void aChoiceCanPickACardByItsSkirmishAndNarrowItWithCardFilters() throws Exception {
         ScenarioDefinition def = ScenarioParser.parse(twoSkirmishes());
         //Each card it names, or picks by its skirmish, begins a pick; numbers and filters narrow the pick before them

@@ -354,6 +354,8 @@ public final class ScenarioWriter {
         if (!"auto".equals(message.side))
             json.add("side", message.side);
         addIfSet(json, "gap", message.gap);
+        if (!message.once)
+            json.add("once", false);
         //(a card shown large always waits for Next; the parser fills that in, and it need not be said)
         if (message.advance != null && !(message.zoom != null && message.advance == Advance.NEXT))
             json.add("advance", message.advance == Advance.INSPECT && message.advanceCard != null
