@@ -22,10 +22,10 @@ import static org.junit.Assert.*;
  * it was (VoluntaryLoopTests).  A pump war spends something each round, exertions, cards, twilight or tokens, and
  * so ends when one side runs dry: it is not a loop however long it runs, and both players are offered their actions
  * as ever to the end.  Nor is one player using his own ability again and again, the other passing in between (Trust
- * Me as You Once Did, her example: "One player using a finite resource 3 times probably isn't a loop").  A pass,
+ * Me as You Once Did, Ketura's example: "One player using a finite resource 3 times probably isn't a loop").  A pass,
  * or a third card's action, between the rounds of a real loop starts the count again.
  *
- * The same holds for one player's repeats in his own phase (OnePlayerLoopTests): her two finite scenarios (rulings
+ * The same holds for one player's repeats in his own phase (OnePlayerLoopTests): Ketura's two finite scenarios (rulings
  * log, 2026-10-16), Gondorian Captain with Base of Mindolluin and Erkenbrand's Horn with New Chapter, each move a
  * card out of the draw deck each round, and go on until the deck has none left with no prompt.
  *

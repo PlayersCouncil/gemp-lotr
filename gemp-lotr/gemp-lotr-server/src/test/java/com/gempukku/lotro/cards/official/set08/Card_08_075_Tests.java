@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set08;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,10 @@ public class Card_08_075_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "8_75");
-					// put other cards in here as needed for the test case
+					put("creeper", "8_75");
+					put("smeagol", "7_71");     // Smeagol, Always Helps: companion, "To play, add a burden"; assignment ability only
+					put("gimli", "1_13");       // Gimli, Son of Gloin: companion; skirmish ability only
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: companion; maneuver ability only
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +48,7 @@ public class Card_08_075_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("creeper");
 
 		assertEquals("Morgul Creeper", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +63,40 @@ public class Card_08_075_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void MorgulCreeperTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void TwoBurdensBesideThreeThreatsAddNothingAndTheThirdBurdenMakesTheMinionArcheryTotalPlus2() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var creeper = scn.GetShadowCard("creeper");
+		var smeagol = scn.GetFreepsCard("smeagol");
+		var gimli = scn.GetFreepsCard("gimli");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		// Three companions with Frodo, so that three threats can lie.
+		scn.MoveCompanionsToTable(gimli, aragorn);
+		scn.MoveCardsToHand(smeagol);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(creeper);
+		scn.AddBurdens(2);
+		// Three threats beside the burdens: a token that is no burden counts for nothing.
+		scn.AddThreats(3);
+		scn.FreepsRefreshDecision();
 
-		assertEquals(3, scn.GetTwilight());
+		assertEquals(2, scn.GetBurdens());
+		assertEquals(3, scn.GetThreats());
+		// No archer on either side: the totals are only what cards add.
+		assertEquals(0, scn.GetShadowArcheryTotal());
+		assertEquals(0, scn.GetFreepsArcheryTotal());
+
+		scn.FreepsPlayCard(smeagol);
+		assertEquals(3, scn.GetBurdens());
+		assertEquals(2, scn.GetShadowArcheryTotal());
+		assertEquals(0, scn.GetFreepsArcheryTotal());
+
+		// A fourth burden: "3 burdens" is at least 3.
+		scn.AddBurdens(1);
+		assertEquals(4, scn.GetBurdens());
+		assertEquals(2, scn.GetShadowArcheryTotal());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

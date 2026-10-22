@@ -99,14 +99,20 @@ public class Card_04_359_Tests
 		assertEquals(9, scn.GetTwilight());
 	}
 
+	/**
+	 * "The first Shadow phase" names the first Shadow PLAYER's phase, not the turn's first move (Ketura's ruling on
+	 * F-0517, 2026-10-21: "The wording here is a gate against *multiple* Shadow players ... only [the first Shadow
+	 * player] triggers the text during their Shadow phase, and not (4) per Shadow player.").  So a Shadow phase at
+	 * Wizard's Vale reached by the turn's second move adds (4), the limit not yet used that turn.
+	 */
 	@Test
-	public void TheSecondShadowPhaseOfATurnGetsNothing() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ASecondMoveOfTheTurnToWizardsValeStillAddsFour() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		scn.StartGame();
 		scn.SkipToSite(6);
 
-		// The first move of the turn is to Helm's Tower: the first Shadow phase is there.
+		// The first move of the turn is to Helm's Tower, where Wizard's Vale is not active.
 		scn.FreepsPass();
 		assertEquals(7, scn.GetCurrentSiteNumber());
 		assertTrue(scn.AwaitingShadowPhaseActions());
@@ -116,10 +122,10 @@ public class Card_04_359_Tests
 		assertEquals(0, scn.GetTwilight());
 		scn.FreepsChooseToMove();
 
-		// The second move, to Wizard's Vale: 0 + 6 + 1 = 7, fewer than 9, but this is the turn's second Shadow phase.
+		// The second move, to Wizard's Vale: 0 + 6 + 1 = 7, fewer than 9, and 4 more.
 		assertEquals(8, scn.GetCurrentSiteNumber());
 		assertEquals(2, scn.GetMoveCount());
 		assertTrue(scn.AwaitingShadowPhaseActions());
-		assertEquals(7, scn.GetTwilight());
+		assertEquals(11, scn.GetTwilight());
 	}
 }

@@ -393,21 +393,37 @@
 			}
 			effect: [
 				{
-					type: choice
-					texts: [
-						Discard a stacked Shadow card
-						Wound a minion bearing fortification
-					]
-					effects: [
-						{
-							type: discardStackedCards
-							select: choose(side(shadow))
-						}
-						{
-							type: wound
-							select: choose(minion,hasAttached(fortification))
-						}
-					]
+					type: If
+					check: {
+						type: Or
+						requires: [
+							{
+								type: HasCardStacked
+								filter: side(shadow)
+							}
+							{
+								type: CanSpot
+								filter: minion,hasAttached(fortification)
+							}
+						]
+					}
+					true: {
+						type: choice
+						texts: [
+							Discard a stacked Shadow card
+							Wound a minion bearing fortification
+						]
+						effects: [
+							{
+								type: discardStackedCards
+								select: choose(side(shadow))
+							}
+							{
+								type: wound
+								select: choose(minion,hasAttached(fortification))
+							}
+						]
+					}
 				}
 			]
 		}

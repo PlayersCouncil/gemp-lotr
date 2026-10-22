@@ -30,7 +30,7 @@ import static org.junit.Assert.*;
  * Ketura, 2026-10-07 (F-0139), on a game that added Northern Ithilien's burdens for a Gollum the Watcher had
  * already discarded: "Step 5 is when Watcher would respond and discard the card, while it is not until Step 7
  * that 'The card is played', at which point we can interpret it to have fulfilled the cost in the case of
- * Northern Ithilien."  Her steps: 4, the card is placed and is in play; 5, respond to the playing of the card and
+ * Northern Ithilien."  Ketura's steps: 4, the card is placed and is in play; 5, respond to the playing of the card and
  * to losing initiative; 6, perform effects; 7, the card is played.  And: "If anything in step 5 (a
  * Shadowplay/Unheeded combo is the classic example) causes it to exit play before it has made it to step 7, I
  * would count that as not fulfilling the cost."  A card's own "when you play this ... or discard it" is step 5

@@ -18,19 +18,19 @@ import static org.junit.Assert.*;
  * A loop of one player's actions is found, and put to him (CR 4.2 "loops"; Ketura, answers/2026-10-16-c.md).
  *
  * Comprehensive Rules 4.2, "loops", names Sam, Faithful Companion ("Fellowship: Play Bill the Pony from your draw
- * deck") with no Bill the Pony to play.  Her word: "it should let the player do it three times and then prompt
+ * deck") with no Bill the Pony to play.  Ketura's word: "it should let the player do it three times and then prompt
  * with: "LOOP DETECTED: Choose a number of times to repeat this action."  It should then perform that many, and then
- * put the tag on that card action to block its future use."  Her scenarios (rulings log, 2026-10-16): Sam with no
+ * put the tag on that card action to block its future use."  Ketura's scenarios (rulings log, 2026-10-16): Sam with no
  * Bill in play or in the deck; The Bridge of Khazad-dûm with no Balrog in play or in the deck; two Hobbit Party
  * Guests healing each other.
  *
  * So a round, one action or two taken one after the other, goes three times unasked, the board the same at the
  * start of each round and after the third (the order of the draw deck left out: Sam and the Bridge look through it
- * and shuffle it); as the player would be offered it a fourth time, the prompt is asked of him instead, in her words,
+ * and shuffle it); as the player would be offered it a fourth time, the prompt is asked of him instead, in Ketura's words,
  * from 0 to 99, filled in with 3.  The round is repeated that many times, unseen but for the last round, and then
  * each ability of the round is barred to the end of the phase: still offered, flagged "loopBanned", and refused.
  * Each repetition of Sam's or the Bridge's ability shuffles the deck once more, which is how the number carried out
- * is read.  The finite repeats of one player she named are in FiniteRepeatsAreNoLoopTests.
+ * is read.  The finite repeats of one player Ketura named are in FiniteRepeatsAreNoLoopTests.
  */
 public class OnePlayerLoopTests
 {
@@ -120,7 +120,7 @@ public class OnePlayerLoopTests
 			}
 		}
 
-		// The fourth: her prompt, in her words, to him alone.
+		// The fourth: the prompt, in Ketura's words, to him alone.
 		assertFalse(scn.AwaitingFellowshipPhaseActions());
 		assertTrue(scn.FreepsDecisionAvailable(OnePlayerLoopTracker.PROMPT));
 		assertEquals("LOOP DETECTED: Choose a number of times to repeat this action.", scn.FreepsGetAwaitingDecision().getText());

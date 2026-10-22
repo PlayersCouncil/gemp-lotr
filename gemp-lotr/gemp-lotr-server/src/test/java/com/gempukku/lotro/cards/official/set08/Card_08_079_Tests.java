@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_08_079_Tests
@@ -17,8 +18,11 @@ public class Card_08_079_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "8_79");
-					// put other cards in here as needed for the test case
+					put("attea", "8_79");
+					put("hound", "7_192");      // Morgul Hound: a [wraith] Orc, vitality 2; its text needs 2 wounds on the Ring-bearer
+					put("lemenya", "1_232");    // Úlairë Lemenya, Lieutenant of Morgul: a [wraith] Nazgûl; her text reads [wraith] conditions on companions
+					put("soldier", "1_271");    // Orc Soldier: a [sauron] Orc; a skirmish ability never used
+					put("answers", "7_185");    // Morgul Answers: a [wraith] condition in the support area; a skirmish ability never used
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +50,7 @@ public class Card_08_079_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("attea");
 
 		assertEquals("Úlairë Attëa", card.getBlueprint().getTitle());
 		assertEquals("Thrall of The One", card.getBlueprint().getSubtitle());
@@ -62,18 +66,111 @@ public class Card_08_079_Tests
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void UlaireAtteaTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void RegroupAbilityExertsHerToReturnYourWraithMinionToYourHand() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var attea = scn.GetShadowCard("attea");
+		var hound = scn.GetShadowCard("hound");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var soldier = scn.GetShadowCard("soldier");
+		var answers = scn.GetShadowCard("answers");
+		scn.MoveCardsToSupportArea(answers);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// No minions on the way, so no skirmish: the minions are laid in the regroup phase, as if they had lived
+		// through their skirmishes.
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.MoveMinionsToTable(attea, hound, lemenya, soldier);
+		assertInZone(Zone.SHADOW_CHARACTERS, attea, hound, lemenya, soldier);
+		assertInZone(Zone.SUPPORT, answers);
+		assertEquals(0, scn.GetWoundsOn(attea));
+		assertEquals(0, scn.GetShadowHandCount());
+		scn.FreepsPass();
 
-		assertEquals(6, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+		assertTrue(scn.ShadowActionAvailable(attea));
+		scn.ShadowUseCardAction(attea);
+		assertEquals(1, scn.GetWoundsOn(attea));
+
+		// Your [wraith] minions of either race, Attëa herself among them ("your [wraith] minion", not "another");
+		// not the [sauron] Orc, nor the [wraith] card that is no minion.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(attea, hound, lemenya));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(soldier, answers));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		scn.ShadowChooseCard(hound);
+
+		assertInZone(Zone.HAND, hound);
+		assertEquals(1, scn.GetShadowHandCount());
+		assertInZone(Zone.SHADOW_CHARACTERS, attea, lemenya, soldier);
+		assertInZone(Zone.SUPPORT, answers);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void AsTheOnlyWraithMinionSheReturnsHerselfToYourHand() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var attea = scn.GetShadowCard("attea");
+		var soldier = scn.GetShadowCard("soldier");
+		var answers = scn.GetShadowCard("answers");
+		scn.MoveCardsToSupportArea(answers);
+
+		scn.StartGame();
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.MoveMinionsToTable(attea, soldier);
+		assertInZone(Zone.SHADOW_CHARACTERS, attea, soldier);
+		assertInZone(Zone.SUPPORT, answers);
+		assertEquals(0, scn.GetShadowHandCount());
+		scn.FreepsPass();
+
+		// She is the one [wraith] minion to spot: the ability is hers to use on herself.
+		assertTrue(scn.ShadowActionAvailable(attea));
+		scn.ShadowUseCardAction(attea);
+
+		// The one valid candidate is chosen unasked.
+		assertInZone(Zone.HAND, attea);
+		assertEquals(1, scn.GetShadowHandCount());
+		assertInZone(Zone.SHADOW_CHARACTERS, soldier);
+		assertInZone(Zone.SUPPORT, answers);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void RegroupAbilityIsNotOfferedInTheManeuverPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var attea = scn.GetShadowCard("attea");
+		var hound = scn.GetShadowCard("hound");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(attea, hound);
+		assertEquals(0, scn.GetWoundsOn(attea));
+
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(attea));
+	}
+
+	@Test
+	public void RegroupAbilityIsNotOfferedWhileSheIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var attea = scn.GetShadowCard("attea");
+		var hound = scn.GetShadowCard("hound");
+
+		scn.StartGame();
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.MoveMinionsToTable(attea, hound);
+		// Vitality 3 with 2 wounds: she cannot exert.
+		scn.AddWoundsToChar(attea, 2);
+		assertEquals(2, scn.GetWoundsOn(attea));
+		assertInZone(Zone.SHADOW_CHARACTERS, hound);
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(attea));
 	}
 }

@@ -20,6 +20,11 @@ sites 2 or 3 it is roaming and costs 1 + 2, before its own (2) is added (Card_12
 **A weak minion that survives a hit.** Uruk Savage 1_151. Strength 5, vitality 3; Damage +1 is its whole text. An
 unboosted strength-6 companion beats it without killing it.
 
+**A minion of vitality 4, for "exhaust".** Siege Troop 8_106. A [sauron] Orc, strength 20, vitality 4, cost 8,
+site 5; Besieger and a regroup ability that exerts it twice to take control of a site, used only on purpose. On a
+vitality-3 minion exhaust, exert twice and wound twice are all 3 wounds; on this one exhaust is 3 and the others 2
+(Fourth Level 8_35, Card_08_035_Tests).
+
 **A minion with damage +1 and nothing else.** Uruk-hai Raiding Party 1_158. Strength 9, vitality 3, cost 4, site 5;
 Damage +1 is its whole text. With vitality 2: Orthanc Warrior 4_165 (strength 7, cost 2, site 5), killed by exactly
 two wounds, which tells "wound twice" from one wound and from two exertions.
@@ -105,7 +110,12 @@ minion fierce until the regroup phase". Axeman ([raider] Man, strength 6, vitali
 the regroup phase". Neither is unique: a second copy is the control (68_110). Any Uruk-hai, either culture, made
 fierce by a printed card and not by hand: Hunt Them Down! 1_126, [isengard] Maneuver event, twilight 3, "Make an
 Uruk-hai fierce until the regroup phase" (a choice of `uruk-hai`; one Uruk-hai is taken unasked): Card_01_147_Tests,
-Card_01_150_Tests (dec-b1_146).
+Card_01_150_Tests (dec-b1_146). Any [wraith] minion (an Orc as well as a Nazgûl): Úlairë Otsëa 1_235, unique
+[wraith] Nazgûl, cost 4, strength 9, vitality 3, site 3, "Shadow: Exert Úlairë Otsëa to make a [wraith] minion
+fierce until the regroup phase" (she is a candidate herself, so the choice is asked). Any minion of the player's own:
+Emyn Muil 1_360 (site 9, "Maneuver: Exert your minion to make that minion fierce", which takes the fellowship to site 9);
+where neither fits the board, a fierce keyword by hand is allowed (dec-b10_53, Card_10_054_Tests; a [gollum] minion
+away from site 9, which none of these reaches: Card_19_010_Tests).
 
 **A minion with ambush and nothing else; a second instance of ambush.** Southron Soldier 4_254; Raider Bow 7_155.
 Soldier: [raider] Man, not unique, cost 2, strength 4, vitality 1, site 4; "Southron. Ambush (2)" is its whole
@@ -156,9 +166,9 @@ own regroup action stacks him on a controlled site. Garrison: besieger Orc, cost
 actions taken by text, "Stack a besieger" (discard 1 card from hand) and "Stack a non-besieger" (discard 2), each
 stacking a [sauron] Orc from play on a controlled site.
 
-**A tentacle that stays put.** Vile Tentacle 101_36. The only tentacle not discarded away from a marsh. Reaching
-(19_19) and Strong (19_20) have nothing on being played; Foul (2_58) and Huge (2_66) have optional when-played
-fetches, so cheat them in. No tentacle has more than 2 vitality. Away from a marsh the others are discarded: lay a
+**A tentacle that stays put.** Vile Tentacle 101_36. The only tentacle not discarded away from a marsh. Foul (2_58)
+and Huge (2_66) have optional when-played fetches, so cheat them in. Reaching (19_19) and Strong (19_20) have
+nothing on being played. No tentacle has more than 2 vitality. Away from a marsh the others are discarded: lay a
 real marsh and never give a site the keyword (Q-0213: F). Midgewater Marshes (1_332; each Hobbit exerts on moving
 there) goes in the site map as site 2, with a site after it that is no marsh; Moria Lake (1_346; Frodo or 2 other
 companions exert on moving there) is the marsh of site 4. Neither has another keyword: where two marshes that differ in one are wanted, Watcher in the Water 19_21 ("The
@@ -171,6 +181,13 @@ him. Not Orc Assassin 1_262 (cost 2, site 6): in play he makes the roaming penal
 -1, so no cost is read beside him (stacked, he is the [sauron] Orc who is no besieger). Hound: [wraith] Orc, cost
 2, strength 5, vitality 2, site 4; +4 and fierce only at 2 wounds on the Ring-bearer: also the [wraith] minion who
 is no Nazgûl.
+
+**Two [wraith] Orcs of different titles with no text in the way; a [wraith] minion who is no Orc.** Morgul Hound
+7_192, Morgul Mongrel 7_194; Úlairë Lemenya 1_232. Hound: cost 2, strength 5, vitality 2, site 4; strength +4 and
+fierce only at 2 wounds on the Ring-bearer. Mongrel: cost 3, strength 7, vitality 2, site 4; fierce and damage +1
+only at 3 wounds on the Ring-bearer. Lemenya: [wraith] Nazgûl, strength 9; her
+text reaches only a companion or ally bearing a [wraith] condition. With Orc Chieftain 1_266 beside her, no [wraith]
+Orc is on the table (Card_08_078_Tests).
 
 **A card that says minions are not roaming; a card that changes a site number.** Bill Ferny, Swarthy Sneering
 Fellow 2_75; Grishnákh, Orc Captain 5_100. Bill: unique [wraith] Man, cost 2, vitality 1, site 2; "Nazgûl are not
@@ -186,6 +203,7 @@ Shadow ability used only on purpose. Orc Chieftain 1_266 (cost 2, site 6) is the
 is only ever used on purpose.
 
 **A weak companion.** Dwarf Guard 1_7. Strength 4, vitality 2; needs a Dwarf spotted to be played, so cheat it in.
+Vitality 2: with one wound he is exhausted and is not offered to an exertion, so he is no "wounded control" for one.
 
 **Hand weapons for a Dwarf, one or two.** Dwarven Axe 1_9; Hand Axe 2_10. Both [dwarven] possessions of cost 0
 that a Dwarf bears. The Axe (strength +2) has a REQUIRED "each time a player's minion loses a skirmish to bearer":
@@ -194,7 +212,8 @@ Hand Axe (strength +1; an archery ability that discards it, used only on purpose
 other hand weapon", so the two make a Dwarf's pair (lint-ok on the attach; Card_02_005_Tests).
 
 **An archer, when archery is the point.** Legolas, Greenleaf 1_50. Strength 6, vitality 3; Archer, with an archery
-ability.
+ability. Not as a plain [elven] or unbound companion: with two minions down his wound choice stops `SkipToPhase(Phase.ASSIGNMENT)`
+("Archers get in the way"; Card_08_018_Tests took the Ent Avenger 6_27 instead).
 
 **A Free Peoples archer in a skirmish, for a Shadow text's "if skirmishing an archer".** Companions: Legolas 1_50 and
 Garrison of Gondor 8_36 ([gondor] Man, unique, strength 8, vitality 3; Knight, Archer; cheat it in past "spot 3
@@ -300,6 +319,10 @@ whole text. Every card PRINTED valiant is a companion, and no ally is given the 
 game reaches a valiant ally by two printed cards, so "valiant companion" is told from "valiant" with those ("A
 valiant ally").
 
+**A "fellowship companion" (set 19's Fellowship keyword), and a companion without it.** The printed Fellowship
+companions are 19_2, 19_7, 19_8, 19_12, 19_13, 19_28, 19_29, 19_30, 19_32 and 69_30; no ally has the keyword, so the
+invalid candidate is a companion without it (Aragorn 1_89; Gimli 1_13 for a Gimli who is none: Card_19_004_Tests).
+
 **A valiant ally (no ally is valiant in print; beside "each valiant companion"); a valiant Ring-bound companion.**
 Northern Signal-fire, Flame of Calenhad 103_86; Royal Guard 102_54; Erkenbrand, Kinsman of the House of Eorl
 102_47. Flame ([rohan] possession, Beacon, Support Area; to play, hinder 2 beacons: cheat it into the support
@@ -327,7 +350,8 @@ play, spot a Dwarf": as a not-offered candidate in hand, lay the Dwarf ally Grim
 playable, or its own text refuses it; Card_01_364_Tests). Théoden signet: its
 readers (I Am Here 5_84, Forth Eorlingas! 4_275, No Living Man 8_90) each exert Théoden; the Théoden who can exert
 twice and has not the signet himself is Tall and Proud 8_92 (vitality 3, Aragorn signet; the three of sets 4 and 5
-have vitality 2). Horn of the Mark 9_45 gives it to Merry or Pippin beside his printed signet. `packet.py --find`
+have vitality 2). Horn of the Mark 9_45 gives it to Merry or Pippin beside his printed signet. The rig reads no signet, so a signet another card
+gives is read through one of these readers (Card_09_045_Tests: I Am Here 5_84). `packet.py --find`
 prints a signet at the end of the id line ("signet Frodo"). A possession and an artifact on one Gandalf: Glamdring 1_75
 (hand weapon, cost 2) and Gandalf's Staff 2_22 (Staff, cost 2); Wizard Staff 2_29 is a Staff too, so beside Gandalf's
 Staff it is not offered to him (one item of a class; met while building Card_02_023_Tests, which lays the pair).
@@ -390,6 +414,10 @@ invalid one is Frodo bearing The Gaffer's Pipe 1_292 (a Pipe possession, "Bearer
 ability not reached). The Ruling Ring is NOT that card: its type is The One Ring, no item, so `hasAttached(item)`
 passes it and only the Pipe tells `weapon` from `item` (Card_02_103_Tests).
 
+**A Hobbit companion who wins a skirmish, by printed cards alone.** Merry 1_303 bearing Hobbit Sword 1_299 (3, +2
+for the Sword, +2 while he bears a weapon: 7); Sam, Loyal Friend 19_32 bearing a Hobbit Sword with three [shire]
+companions spotted (3 +2 +2: 7). Each beats a Goblin Runner 1_178 (strength 5) with no pump (Card_19_031_Tests).
+
 **A [rohan] Man who is an ally (and a second).** Guma, Plains Farmer 4_277; Hlafwine, Village Farmhand 4_281. Each:
 unique, cost 1, strength 4, vitality 2, home 4T (never fighting on a Fellowship path), Villager; discarded if an
 opponent controls his home site. Guma: "Fellowship: Exert Guma to heal a [rohan] Man"; Hlafwine: "Skirmish: Exert
@@ -417,7 +445,8 @@ among the candidates for "a character" or "a Man" (he may bear Flaming Brand 2_3
 exertion or a vitality threshold: Narsil 9_34 (hand weapon) and Ranger's Cloak 15_68 (cloak), each vitality +1 and
 "Bearer must be a [gondor] Man", make him 2 or 3 (Card_09_038_Tests, Card_09_046_Tests); for "exert bearer twice"
 on a hand weapon (Ithilien Blade 15_62, so no Narsil) +2 vitality by hand (Card_15_062_Tests), which is what notices a
-`companion` added to "a [gondor] Man".
+`companion` added to "a [gondor] Man". He is also the ally skirmishing for "a minion skirmishing a [gondor] Man":
+on the Towers path at site 3 (Card_08_035_Tests' GetTowersScenario), which is what notices `companion` added there.
 
 **An ally in a skirmish away from any home site (a Shadows-block path).** One Whom Men Would Follow 1_109. [gondor]
 Maneuver event, cost 0: exert Aragorn (any Aragorn; he keeps the wound), and a chosen ally is strength +2 and takes
@@ -488,6 +517,9 @@ titled Firefoot, so it is never on a board with Firefoot 4_274 (`Card_04_268_Tes
 pipeweed possession, not unique, Support Area; its only text an optional draw on its own play, which
 `MoveCardsToSupportArea` before `StartGame()` does not set off). For "discard a Free Peoples possession" with only
 borne possessions laid, `attachedTo(any)` added to the choice survived; with Old Toby laid it is noticed (`Card_04_013_Tests`).
+To PLAY one where the Shadow player answers the play with a response, take Gandalf's Cart 1_73 (unique [gandalf]
+possession, cost 1, Support Area, no play trigger; `Card_10_098_Tests`): Old Toby's draw is offered both before the
+response and again after it resolves (dec-b10_96, on a probe).
 
 ## A culture without its race, a race without its culture, a card against its type
 
@@ -582,7 +614,8 @@ triggers (a spell played: add a burden to wound a minion; the start of his own s
 only once he is in play.
 
 **A [gandalf] companion who is not Gandalf; a second Ent.** Ent Avenger 6_27. Strength 6, vitality 4, not unique; a
-strength bonus only when 3 Ents can be spotted. Tells `name(Gandalf)` from `culture(gandalf)`. The Ent of another
+strength bonus only when 3 Ents can be spotted. Tells `name(Gandalf)` from `culture(gandalf)`. Also the unbound companion who is no Man, not [gondor] and no archer, beside Aragorn 1_89, to
+show "an unbound companion" not narrowed to a culture or a race (Card_08_018_Tests). The Ent of another
 title and type beside the ally Treebeard, Earthborn 4_103 (vitality 4, unhasty; a response and a fellowship ability
 about unbound Hobbits stacked on him).
 
@@ -642,9 +675,12 @@ so cheat it in; nothing below 5 burdens and an empty Free Peoples draw deck).
 **A Nazgûl who is not [ringwraith].** Ulaire Attea, Khamul of the East 103_61. [raider], strength 12, vitality 3;
 his text needs 3 burdens. Fierce, so keep him out of tests that run past the skirmishes. He may bear a Nazgûl's
 mount: with Fell Beast 6_83 (strength +2; to play, discard 2 cards from hand: attach it) he is the one mounted
-[raider] minion who is no Southron, and at 14 he overwhelms a companion of 7 or less.
+[raider] minion who is no Southron, and at 14 he overwhelms a companion of 7 or less. On Black Steed 1_208 at site 2 of
+`FellowshipSites` (Ettenmoors, a plains) he is 16, not 14: the Steed's +2 and its plains +2 (Card_08_073_Tests).
+His title is "Ulaire Attea": he is an Úlairë Attëa (Q-0239, by title), so he never stands beside any Úlairë Attëa
+(1_x, 8_79 and the rest); a [wraith] card that names Attëa takes another helper (dec-b8_79).
 
-**An [uruk-hai] minion who is no Uruk-hai; an Uruk-hai of another culture.** Saruman, Master of the White Hand
+**An [uruk-hai] minion who is no Uruk-hai; an Uruk-hai of another culture than [uruk-hai] (a [sauron] one).** Saruman, Master of the White Hand
 17_116; Cirith Ungol Guard 10_81. Saruman: [uruk-hai] Wizard, unique, cost 4, strength 8, vitality 4, site 4; each
 companion is resistance -1, and a skirmish ability (exert him to discard a condition borne by a companion
 skirmishing an [uruk-hai] minion) used only on purpose. The printed culture without the race for "an Uruk-hai": no
@@ -660,6 +696,9 @@ more Southron Men from play as its cost, and adds a threat at the start of each 
 Matriarch 103_42 is the third ("A Shadow card of twilight 5 in play that is no minion"). They are the printed
 Southrons who are no Men, so "an Orc made a Southron" is still a keyword given to a card that no printed card
 resembles.
+The Rearguard made a minion in the maneuver phase stays a Southron minion who is no Man to the end of the turn, so it is
+on the table to be spotted in the regroup phase; with no other minion there is no maneuver phase, so lay one who is
+no Southron beside it (Easterling Axeman 4_224: Card_10_036_Tests.ASouthronWhoIsNoManIsSpottedToo).
 
 **A Shadow card of twilight 5 in play that is no minion.** Bladetusk Matriarch 103_42. [raider] artifact, unique,
 cost 5, Support Area keyword. Its optional trigger answers a Southron being played; its Maneuver ability removes
@@ -745,12 +784,28 @@ the support area) are the two to hinder: their abilities are fellowship ones and
 unbound Man. With one beacon in play the Flame cannot be played, with both it can (Card_07_321_Tests, beside
 `PlayableOn(any)` in a play-from-discard requirement). Two Signal-fires in play is the title's 2 dots, no more.
 
+**A corsair against its culture or type: there is none.** Every card with the Corsair keyword (15, sets 8, 10, 58 and
+103) is a [raider] Man minion, and no text gives the keyword. "Corsair" in the title only: Corsair Champion 13_84 and
+Castamir, Corsair Vandal 12_56 ([men] Man minions), the [men] Corsair weapons 18_60 to 18_64 (Card_08_055_Tests).
+
 ## Wounds, exertions, heals, kills and discards that a printed card does
 
 **Wounds in the regroup phase.** Morgul Slayer 3_93. Strength 7, vitality 2; "Regroup: Exert this minion to wound a
 companion (except the Ring-bearer)." Two copies wound one companion twice in one regroup phase, which is how to
 read "until the regroup phase" at its boundary. One wound from it is also the `-` of a trigger on an exertion
 whose effect would last the current phase: a skirmish wound shows nothing there (Card_13_075_Tests).
+
+**A companion who can use a special ability both in a skirmish and in the regroup phase (check D of "cannot use
+special abilities until the regroup phase").** Huorn 9_25, unbound, not unique: "Response: If this companion is about
+to take a wound, exert an Ent to prevent that", with Ent Avenger 6_27 as the Ent. Wound him in the skirmish by a loss
+to Goblin Patrol Troop 1_177 and in the regroup phase by Morgul Slayer 3_93; a second Huorn is the control
+(Card_19_016_Tests).
+
+**A Shadow CHARACTER whose effect exerts a character in the skirmish phase (the character doer of a bare "Shadow
+cards cannot exert X during a skirmish phase").** Shagrat, Captain of Cirith Ungol 10_99: [sauron] Uruk-hai,
+strength 13, damage +1; "Each time Shagrat loses a skirmish, you may exert a character" (`choose(character)`, any
+side). Raise his companion's strength by hand to beat 13; the trigger is offered while the skirmish phase resolves
+and the bar's phase still holds (Card_10_067_Tests, Card_10_068_Tests, Card_10_068_ErrataTests).
 
 **A Free Peoples wound on a minion in the maneuver phase.** Defend It and Hope 4_115. [gondor] Maneuver event, cost
 0: exert a [gondor] Man to wound a minion once, or twice if it is an Uruk-hai. Kills a minion of 1 vitality to
@@ -840,7 +895,9 @@ nothing. Isildur ([gondor] Man, unique, strength 7, vitality 3, resistance 1): a
 a skirmish, exert a companion", an exertion that is an EFFECT (`FreepsResolveRuleFirst()` first: pitfalls, "When a
 wound kills"); when he wins he heals a companion. Ettenmoors, site 2 of `FellowshipSites`: "Skirmish: Exert your
 companion or minion to make that character strength +2" takes any companion of the user's, skirmishing or not, and
-a site has no side: the invalid doer for "by a Free Peoples card" (Card_94_020_Tests).
+a site has no side: the invalid doer for "by a Free Peoples card" (Card_94_020_Tests). The Free Peoples player is
+always asked which companion, the Ring-bearer being one, even with one other laid: answer the choice before reading
+a wound (Card_08_115_Tests, dec-b8_112).
 
 **One cost that exerts a character more than once (the R of "each time ... exerts").** Tom Bombadil, The Master
 9_52. [shire] ally with no race, vitality 9 (to play, remove 2 burdens or 2 threats: cheat him in); "Skirmish: Spot
@@ -907,7 +964,9 @@ discard one of his own conditions. Brooding on Tomorrow 10_14 does the same on a
 top of your draw deck".** Midgewater Moors 1_333; Uruk-hai Sword 1_160. The Moors (FOTR site 2, plains): "Each time a
 minion is played, the Free Peoples player discards a card from hand", written `forced: true`, so the bar is asked of
 it and only its side lets it through; it is the site doer for "a Shadow card makes you discard from hand" too (Old
-Noakes 3_111, Card_03_111_Tests). The bar is asked only of a discard written `forced: true`: Search Far and Wide
+Noakes 3_111, Card_03_111_Tests). A Goblin Runner 1_178 played there sets off its own "add (2)" (built required,
+F-0009) beside the Moors, so the Free Peoples player orders the two first: `FreepsResolveActionOrder("Midgewater
+Moors")` before the discard choice is read (Card_19_028_Tests). The bar is asked only of a discard written `forced: true`: Search Far and Wide
 4_56's cost (the top card of the deck) writes `false` and shows nothing as a candidate, whatever its side. The Sword
 ([isengard] hand weapon on an Uruk-hai, Uruk-hai Band 4_202): "Each time bearer wins a skirmish, the Free Peoples
 player must discard the top card of his or her draw deck"; the loser's wound and its trigger are ordered by the Free
@@ -1055,7 +1114,7 @@ Ring-bearer to a skirmish"), played after `FreepsPass()`; he picks ANY minion fo
 **A card played only to take the hand from four to three (a loss of initiative).** Stairs of Khazad-dûm 1_24
 ([dwarven] condition, cost 0, support area, no requirement) in the fellowship phase; Elendil's Valor 1_103 ([gondor]
 Maneuver event, cost 0) in the maneuver phase, which picks a lone [gondor] companion unasked, so no `FreepsChooseCard`
-follows it (Card_10_012_Tests, Card_10_108_Tests). Skirmish and regroup: pitfalls, "The loss of initiative comes with the play".
+follows it (Card_10_012_Tests, Card_10_108_Tests). Skirmish and regroup: pitfalls, "The loss of initiative comes with the play". At a site above 1, set the hand after the skip with `SetFreepsHand` (pitfalls, "`SkipToSite` plays whole turns"; Card_08_061_Tests).
 
 **A companion played, and an ally played beside it (for "each time a companion is played").** Gimli, Son of Glóin
 1_13 ([dwarven] Dwarf, cost 2) and Boromir, Son of Denethor 1_97 ([gondor] Man, cost 3): no requirement to play and
@@ -1112,7 +1171,8 @@ possession to play a [men] minion from your discard pile").
 minions).** Éowyn, Daughter of Éomund 5_122 with Rider's Spear 4_288; Théoden, King of the Golden Hall 5_93. Éowyn:
 [rohan] companion, strength 6, vitality 3; "Maneuver: Play a [rohan] possession on Éowyn to heal her": the play is
 the ability's cost, `FreepsUseCardAction(eowyn)` with one such possession in hand plays it unasked, and a response
-to the play is answered before her heal (Card_10_019_Tests). Spear: [rohan] hand weapon, cost 1, strength +2, on a
+to the play is answered before her heal (Card_10_019_Tests); a response that takes the possession out of play
+(Stampeded 10_51) leaves the heal undone (pitfalls, "A play as a cost can come to nothing"; Card_10_051_Tests). Spear: [rohan] hand weapon, cost 1, strength +2, on a
 [rohan] Man. Théoden (read, not run): the same ability, healing a [rohan] ally.
 
 **A Shadow card that cancels a Free Peoples event (tells an event's cost from its effect: what is asked before the
@@ -1279,7 +1339,11 @@ it. For a board that only needs a site in someone's hands, the cheat (`ShadowTak
 `FreepsTakeControlOfSite()`): never on player 1's first turn, where player 2's marker is still on site 1 and the cheat
 finds no site even with the fellowship at site 2; `StartGame(); SkipToSite(2);` is player 1's second turn,
 in the fellowship phase at site 2 with player 2's marker on site 2 as well, so site 1 is behind every marker (and a
-pass moves the fellowship on to site 3: Card_08_095_Tests). Pitfalls,
+pass moves the fellowship on to site 3: Card_08_095_Tests). Sites in both hands: `SkipToSite(4)`,
+then `FreepsTakeControlOfSite()` and `ShadowTakeControlOfSite()` twice, gives site 1 to the Free Peoples player and
+sites 2 and 3 to the Shadow player, with the fellowship moving on to site 5 (Card_08_097_Tests). Read whose a site is
+on the path's own card, `ShadowControls(scn.GetSite(n))`: `GetFreepsSite(2)` after `SkipToSite(3)` is the copy still in
+the Free Peoples adventure deck and reads false (pitfalls, "Whose site"; dec-b10_87). Pitfalls,
 "A site is controlled lowest first"; mechanics/sites/ControlOfSitesTests.
 
 **The next site played, and a site replaced, by legal play.** Pathfinder 1_110; Úlairë Nelya, Lieutenant of Morgul

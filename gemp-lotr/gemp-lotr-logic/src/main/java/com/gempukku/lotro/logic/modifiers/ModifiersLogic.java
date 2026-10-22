@@ -465,13 +465,13 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
 
     @Override
     public Collection<Modifier> getModifiersAffecting(LotroGame game, PhysicalCard card) {
-        Set<Modifier> result = new HashSet<>();
+        Set<Modifier> result = new LinkedHashSet<>();
         for (List<Modifier> modifiers : _modifiers.values()) {
             for (Modifier modifier : modifiers) {
                 Condition condition = modifier.getCondition();
                 if (condition == null || condition.isFullfilled(game))
                     if (affectsCardWithSkipSet(game, card, modifier))
-                        result.add(modifier);
+                        result.addAll(modifier.getShownAsAffecting(game, card));
             }
         }
         return result;

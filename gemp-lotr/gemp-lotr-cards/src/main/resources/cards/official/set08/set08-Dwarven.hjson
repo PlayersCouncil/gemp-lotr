@@ -290,11 +290,16 @@
 		timewords: Skirmish
 		effects: {
 			type: event
+			cost: {
+				type: spot
+				text: Choose a Dwarf to spot
+				select: choose(dwarf,damage)
+				memorize: chosenDwarf
+			}
 			effect: [
 				{
 					type: modifyStrength
-					select: choose(dwarf)
-					memorize: chosenDwarf
+					select: memory(chosenDwarf)
 					amount: {
 						type: forEachKeywordOnCardInMemory
 						memory: chosenDwarf
@@ -331,7 +336,7 @@
 			type: responseEvent
 			trigger: {
 				type: winsSkirmish
-				filter: dwarf
+				filter: dwarf,damage
 				memorize: winningDwarf
 			}
 			effect: [

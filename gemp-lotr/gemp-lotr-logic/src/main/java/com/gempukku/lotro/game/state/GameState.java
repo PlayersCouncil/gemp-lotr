@@ -1532,6 +1532,23 @@ public class GameState {
         return Collections.unmodifiableMap(map);
     }
 
+    /**
+     * The tokens a card has, each kind with its count, leaving out a kind whose count has come down to 0 (a wound
+     * healed, the last culture token removed): what the card info lists (engine pass 59).  getTokens keeps such a
+     * kind at 0; no filter tells that 0 from a kind never held (Filters.hasAnyCultureTokens at 0 is true of every
+     * card since engine pass 60, F-0578), and only the listing drops it.
+     * @param card The card.
+     * @return The tokens on it, in no order; empty when it has none.
+     */
+    public Map<Token, Integer> getTokensHeld(PhysicalCard card) {
+        Map<Token, Integer> held = new HashMap<>();
+        for (Map.Entry<Token, Integer> entry : getTokens(card).entrySet()) {
+            if (entry.getValue() != null && entry.getValue() > 0)
+                held.put(entry.getKey(), entry.getValue());
+        }
+        return held;
+    }
+
     public int getTokenCount(PhysicalCard physicalCard, Token token) {
         Map<Token, Integer> tokens = _cardTokens.get(physicalCard);
         if (tokens == null)

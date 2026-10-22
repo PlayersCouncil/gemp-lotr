@@ -1237,26 +1237,23 @@
 				type: exert
 				select: choose(culture(sauron),minion)
 			},
-			effect: [
-				{
-					type: choice
-					texts: [
-						Return a condition
-						Return 2 {shire} conditions
-					]
-					effects: [
-						{
-							type: returnToHand
-							select: choose(side(free people),condition)
-						}
-						{
-							type: returnToHand
-							select: choose(side(free people),condition,culture(shire))
-							count: 2
-						}
-					]
+			effect: {
+				type: If
+				check: {
+					type: canSpot
+					filter: side(free people),condition,culture(shire)
+					count: 2
 				}
-			]
+				true: {
+					type: returnToHand
+					select: choose(side(free people),condition,culture(shire))
+					count: 2
+				}
+				false: {
+					type: returnToHand
+					select: choose(side(free people),condition)
+				}
+			}
 		}
 		gametext: Exert a [sauron] minion to return a Free Peoples condition to its owner's hand (or 2 if both are [shire] conditions).
 		lore: "'Go slow! Bring no fire to this place while Faramir lives! Do nothing until Gandalf comes!'"

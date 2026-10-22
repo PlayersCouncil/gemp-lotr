@@ -294,6 +294,102 @@ public class Card_08_103_ErrataTests
 	}
 
 	@Test
+	public void AtXZeroAGrondThatNeverHadATokenDiscardsAMinionAndACostZeroFreePeoplesCard() throws DecisionResultInvalidException, CardNotFoundException {
+		// F-0578 (Ketura, 2026-10-21: "this should definitely behave the same in both situations"): a Grond that
+		// never had a token was offered the ability and, used, did nothing at all.
+		var scn = GetScenario();
+
+		var grond = scn.GetShadowCard("grond");
+		var soldier = scn.GetShadowCard("soldier");
+		var sentry = scn.GetShadowCard("sentry");
+		scn.MoveCardsToSupportArea(grond);
+
+		var thrarin = scn.GetFreepsCard("thrarin");
+		var guard = scn.GetFreepsCard("guard");
+		var armor = scn.GetFreepsCard("armor");
+		var armor2 = scn.GetFreepsCard("armor2");
+		var toby = scn.GetFreepsCard("toby");
+		scn.MoveAlliesToTable(thrarin);
+		scn.MoveCompanionsToTable(guard);
+		scn.AttachCardsTo(thrarin, armor);
+		scn.AttachCardsTo(guard, armor2);
+		scn.MoveCardsToSupportArea(toby);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(soldier, sentry);
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.FreepsPass();
+
+		assertEquals(0, scn.GetCultureTokensOn(grond));
+		assertTrue(scn.ShadowActionAvailable(grond));
+		scn.ShadowUseCardAction(grond);
+		// With no token on Grond, X can only be 0 and is not asked
+		assertTrue(scn.ShadowHasCardChoiceAvailable(soldier, sentry));
+		scn.ShadowChooseCard(soldier);
+		// Both suits of Dwarven Armor cost 0; Old Toby costs 1
+		assertTrue(scn.ShadowHasCardChoiceAvailable(armor, armor2));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(toby));
+		scn.ShadowChooseCard(armor);
+
+		assertInZone(Zone.DISCARD, soldier, armor);
+		assertInZone(Zone.SHADOW_CHARACTERS, sentry);
+		assertAttachedTo(armor2, guard);
+		assertEquals(0, scn.GetCultureTokensOn(grond));
+		// The armor was borne by an ally, and so was in the support area: Grond stays
+		assertInZone(Zone.SUPPORT, grond, thrarin, toby);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void AtXZeroAGrondWhoseTokensWereAllRemovedDoesTheSameAsOneThatNeverHadAny() throws DecisionResultInvalidException, CardNotFoundException {
+		// F-0578: the same board as the test before, but Grond once held a token; the outcome is the same.
+		var scn = GetScenario();
+
+		var grond = scn.GetShadowCard("grond");
+		var soldier = scn.GetShadowCard("soldier");
+		var sentry = scn.GetShadowCard("sentry");
+		scn.MoveCardsToSupportArea(grond);
+
+		var thrarin = scn.GetFreepsCard("thrarin");
+		var guard = scn.GetFreepsCard("guard");
+		var armor = scn.GetFreepsCard("armor");
+		var armor2 = scn.GetFreepsCard("armor2");
+		var toby = scn.GetFreepsCard("toby");
+		scn.MoveAlliesToTable(thrarin);
+		scn.MoveCompanionsToTable(guard);
+		scn.AttachCardsTo(thrarin, armor);
+		scn.AttachCardsTo(guard, armor2);
+		scn.MoveCardsToSupportArea(toby);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(soldier, sentry);
+		// One [sauron] token put on Grond and taken off again
+		scn.AddTokensToCard(grond, 1);
+		scn.RemoveTokensFromCard(grond, 1);
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.FreepsPass();
+
+		assertEquals(0, scn.GetCultureTokensOn(grond));
+		assertTrue(scn.ShadowActionAvailable(grond));
+		scn.ShadowUseCardAction(grond);
+		// With no token on Grond, X can only be 0 and is not asked
+		assertTrue(scn.ShadowHasCardChoiceAvailable(soldier, sentry));
+		scn.ShadowChooseCard(soldier);
+		// Both suits of Dwarven Armor cost 0; Old Toby costs 1
+		assertTrue(scn.ShadowHasCardChoiceAvailable(armor, armor2));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(toby));
+		scn.ShadowChooseCard(armor);
+
+		assertInZone(Zone.DISCARD, soldier, armor);
+		assertInZone(Zone.SHADOW_CHARACTERS, sentry);
+		assertAttachedTo(armor2, guard);
+		assertEquals(0, scn.GetCultureTokensOn(grond));
+		// The armor was borne by an ally, and so was in the support area: Grond stays
+		assertInZone(Zone.SUPPORT, grond, thrarin, toby);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
 	public void RegroupAbilityIsNotOfferedWithoutASauronMinionToDiscard() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 

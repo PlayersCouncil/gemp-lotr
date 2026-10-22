@@ -226,7 +226,17 @@ public class Filters {
         return hasAnyCultureTokens(1);
     }
 
+    /**
+     * A card with at least the given number of culture tokens of any one culture on it.  A count of 0 or less is true
+     * of every card, as hasToken's is: the game keeps a culture's count at 0 on a card whose tokens of it were all
+     * removed, and a card that never had one has no count at all, so reading the counts would tell the two apart
+     * (F-0578: Grond 58_103's "remove X [sauron] tokens here" at X = 0 did nothing on a Grond that never had a token).
+     * @param count How many tokens of one culture the card must have.
+     * @return The filter.
+     */
     public static Filter hasAnyCultureTokens(final int count) {
+        if (count <= 0)
+            return (game, physicalCard) -> true;
         return (game, physicalCard) -> {
             Map<Token, Integer> tokens = game.getGameState().getTokens(physicalCard);
             for (Map.Entry<Token, Integer> tokenCount : tokens.entrySet()) {

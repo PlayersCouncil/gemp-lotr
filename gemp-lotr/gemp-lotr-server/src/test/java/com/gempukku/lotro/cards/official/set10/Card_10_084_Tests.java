@@ -17,8 +17,7 @@ public class Card_10_084_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "10_84");
-					// put other cards in here as needed for the test case
+					put("sentry", "10_84");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,35 +45,20 @@ public class Card_10_084_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var sentry = scn.GetFreepsCard("sentry");
 
-		assertEquals("Cirith Ungol Sentry", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.URUK_HAI, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
-		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
-		assertEquals(8, card.getBlueprint().getStrength());
-		assertEquals(2, card.getBlueprint().getVitality());
-		assertEquals(6, card.getBlueprint().getSiteNumber());
-	}
-
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void CirithUngolSentryTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-
-		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(2, scn.GetTwilight());
+		assertEquals("Cirith Ungol Sentry", sentry.getBlueprint().getTitle());
+		assertNull(sentry.getBlueprint().getSubtitle());
+		assertFalse(sentry.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, sentry.getBlueprint().getSide());
+		assertEquals(Culture.SAURON, sentry.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, sentry.getBlueprint().getCardType());
+		assertEquals(Race.URUK_HAI, sentry.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(sentry, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(sentry, Keyword.DAMAGE));
+		assertEquals(2, sentry.getBlueprint().getTwilightCost());
+		assertEquals(8, sentry.getBlueprint().getStrength());
+		assertEquals(2, sentry.getBlueprint().getVitality());
+		assertEquals(6, sentry.getBlueprint().getSiteNumber());
 	}
 }

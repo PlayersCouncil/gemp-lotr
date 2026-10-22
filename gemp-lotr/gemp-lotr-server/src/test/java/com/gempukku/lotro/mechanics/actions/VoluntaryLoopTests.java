@@ -27,9 +27,9 @@ import static org.junit.Assert.*;
  * The loop is found as the player who opened it is about to be offered its first action for the third time: each
  * player has used his action twice, and the board at the start of the third round is the board at the start of
  * the second.  The Free Peoples player then names a number (1 to 99, filled in with 3), whoever opened the loop,
- * and the Shadow player agrees to it or chooses a lower one (0 to one less).  The prompts are her words, sent as
+ * and the Shadow player agrees to it or chooses a lower one (0 to one less).  The prompts are Ketura's words, sent as
  * HTML (Q-0329, answers/2026-10-16-a.md): the rules link an anchor, each card the game log's card hint
- * (GameUtils.getCardLink), the number in bold and her line breaks as breaks.  The first test reads each prompt whole.
+ * (GameUtils.getCardLink), the number in bold and Ketura's line breaks as breaks.  The first test reads each prompt whole.
  *
  * What the players settle is then carried out at once, before anybody is asked anything (LoopRun).  One iteration
  * is one round as found, the opener's action and then the other player's.  The Shadow player takes the last action
@@ -162,7 +162,7 @@ public class VoluntaryLoopTests
 	}
 
 	// The One Ring, The Great Ring 19_1: "Skirmish: Add a burden to make the Ring-bearer strength +3."  Morgul Brute
-	// 7_188 (strength 6): "Skirmish: Remove a burden to make this minion strength +3."  Her scenario (rulings log,
+	// 7_188 (strength 6): "Skirmish: Remove a burden to make this minion strength +3."  Ketura's scenario (rulings log,
 	// 2026-10-16), the rules' loop with the Ring for Sméagol.  Frodo 1_290 is strength 3.
 	protected VirtualTableScenario GetRingScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
@@ -179,7 +179,7 @@ public class VoluntaryLoopTests
 	// Hrethel, Rider of Rohan 6_95 (strength 6): "Skirmish: Heal a minion skirmishing Hrethel to make Hrethel
 	// strength +3 (limit +3)."  Isengard Flanker 5_52, a warg-rider (strength 7, fierce while not exhausted), bearing
 	// a Warg 5_65: "Response: If a skirmish special ability is used in a skirmish involving bearer, exert bearer to
-	// cancel that action."  Her scenario (rulings log, 2026-10-16).
+	// cancel that action."  Ketura's scenario (rulings log, 2026-10-16).
 	protected VirtualTableScenario GetHrethelScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()

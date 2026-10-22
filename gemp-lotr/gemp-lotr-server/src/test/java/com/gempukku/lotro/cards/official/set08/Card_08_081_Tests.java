@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_08_081_Tests
@@ -17,8 +18,7 @@ public class Card_08_081_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "8_81");
-					// put other cards in here as needed for the test case
+					put("otsea", "8_81");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +46,7 @@ public class Card_08_081_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("otsea");
 
 		assertEquals("Úlairë Otsëa", card.getBlueprint().getTitle());
 		assertEquals("Thrall of The One", card.getBlueprint().getSubtitle());
@@ -63,18 +63,75 @@ public class Card_08_081_Tests
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void UlaireOtseaTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void RegroupAbilityDiscardsHerToAddTwoAtSite2() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var otsea = scn.GetShadowCard("otsea");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// No minions on the way, so no skirmish: she is laid in the regroup phase, as if she had lived through hers.
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.MoveMinionsToTable(otsea);
+		scn.SetTwilight(3);
+		assertInZone(Zone.SHADOW_CHARACTERS, otsea);
+		assertEquals(3, scn.GetTwilight());
+		scn.FreepsPass();
 
-		assertEquals(4, scn.GetTwilight());
+		// The fellowship is at site 2; the Shadow player's marker is still at site 1, and her own site number is 3.
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertEquals(1, scn.ShadowGetSiteNumber());
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+		assertTrue(scn.ShadowActionAvailable(otsea));
+		scn.ShadowUseCardAction(otsea);
+
+		assertInDiscard(otsea);
+		// 3 + 2 for site 2
+		assertEquals(5, scn.GetTwilight());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void AtSite4TheRegroupAbilityAddsFour() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var otsea = scn.GetShadowCard("otsea");
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.MoveMinionsToTable(otsea);
+		scn.SetTwilight(3);
+		assertInZone(Zone.SHADOW_CHARACTERS, otsea);
+		assertEquals(3, scn.GetTwilight());
+		scn.FreepsPass();
+
+		// Site 4 is Balin's Tomb, Shadow number 3; the Shadow player's marker is at site 3, her own site number.
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		assertEquals(3, scn.ShadowGetSiteNumber());
+		assertTrue(scn.ShadowActionAvailable(otsea));
+		scn.ShadowUseCardAction(otsea);
+
+		assertInDiscard(otsea);
+		// 3 + 4 for site 4
+		assertEquals(7, scn.GetTwilight());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void RegroupAbilityIsNotOfferedInTheManeuverPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var otsea = scn.GetShadowCard("otsea");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(otsea);
+		assertInZone(Zone.SHADOW_CHARACTERS, otsea);
+
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(otsea));
 	}
 }

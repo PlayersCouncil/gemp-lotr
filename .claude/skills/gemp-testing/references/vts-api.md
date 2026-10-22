@@ -483,6 +483,7 @@ Functions for checking aspects of a card, such as numeric states and other state
 - `boolean IsType(PhysicalCardImpl card, CardType type)`
 - `boolean IsRace(PhysicalCardImpl card, Race race)`
 - `String GetDisplayableInformation(PhysicalCardImpl card)` — What a card adds of its own to what the client shows of it, under "Extra information" in its card info: the text of its definition's displayableInformation, with the value the card has stored on itself (a race, a culture or a keyword named as it was played) in place of {stored}.
+- `List<String> GetAffectingCard(PhysicalCardImpl card)` — The "Affecting card" list of a card's info as the client shows it, one line for each modifier, as "&lt;source's title&gt;: &lt;modifier's text&gt;" ("Glamdring: Strength +2"), and "System: &lt;text&gt;" for a modifier with no source card (a rule's).
 - `boolean IsHindered(PhysicalCardImpl card)`
 - `void HinderCard(PhysicalCardImpl...cards)`
 - `void RestoreCard(PhysicalCardImpl...cards)`
@@ -576,4 +577,4 @@ This interface holds the handful of accessors that every other virtual table int
 - `void Verify(boolean condition, String message)` — A sanity check on the table's own bookkeeping, used where a procedure has to end up in a known state for whatever follows it to make sense.
 
 ---
-468 entries, 214 of them with no description in the source.
+469 entries, 214 of them with no description in the source.

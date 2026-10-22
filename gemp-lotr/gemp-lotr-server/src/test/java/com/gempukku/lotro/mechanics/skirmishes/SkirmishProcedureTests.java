@@ -157,7 +157,7 @@ public class SkirmishProcedureTests
 	}
 
 	/**
-	 * The board of her item 1: Lurtz bearing his Sword (15, damage +2) against Aragorn (8), Worry in play, with the
+	 * The board of Ketura's item 1: Lurtz bearing his Sword (15, damage +2) against Aragorn (8), Worry in play, with the
 	 * skirmish actions passed.  A Goblin Runner is on the table so that the turn reaches the assignment phase; Lurtz,
 	 * an archer, comes after archery.
 	 */

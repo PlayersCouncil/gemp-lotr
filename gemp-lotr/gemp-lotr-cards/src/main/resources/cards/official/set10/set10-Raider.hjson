@@ -306,15 +306,10 @@
 				]
 				effect: [
 					{
-						type: chooseHowManyToSpot
-						filter: companion
-						memorize: spotCount
-					}
-					{
 						type: addBurdens
 						amount: {
-							type: fromMemory
-							memory: spotCount
+							type: forEachYouCanSpot
+							filter: companion
 							over: 5
 						}
 					}

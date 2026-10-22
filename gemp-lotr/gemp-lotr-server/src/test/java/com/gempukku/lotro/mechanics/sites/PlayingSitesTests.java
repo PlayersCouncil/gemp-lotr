@@ -42,7 +42,7 @@ import static org.junit.Assert.*;
  *
  * The same entry ends "You can't replace a site card with the same site card."  The rig gives both players the
  * same nine sites, so on a numbered path one player's site is replaced by the other's copy of it, which the game
- * allows; whether it should is asked of Ketura as Q-0226 and parked by her, and the test that replaces a site so
+ * allows; whether it should is asked as Q-0226 and parked by Ketura, and the test that replaces a site so
  * reads whose card lies there and nothing else.  Where a player's own site lies next, a card that plays his next
  * site replaces that as well (Q-0238: A).
  *

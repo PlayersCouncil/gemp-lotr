@@ -312,7 +312,7 @@ public class LotroGameMediator {
                             .append(card.getOwner());
                 }
 
-                Map<Token, Integer> map = _lotroGame.getGameState().getTokens(card);
+                Map<Token, Integer> map = _lotroGame.getGameState().getTokensHeld(card);
                 if (map != null && map.size() > 0) {
                     sb.append("<br><b>Tokens:</b>");
                     for (Map.Entry<Token, Integer> tokenIntegerEntry : map.entrySet()) {

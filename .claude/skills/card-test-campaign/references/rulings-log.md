@@ -2330,3 +2330,27 @@ support (yet). So the idea is that only [the first Shadow player] triggers the t
 (4) per Shadow player. This second-move requirement should be removed." So "the first Shadow phase" in a card's text
 names the first Shadow PLAYER's phase, not the turn's first move. The threat rule's entry text is "Assign threat
 wounds". Commit messages and comments name Ketura, never "her" (roles, "Name Ketura"). *[2026-10-21]*
+
+**"Place X wounds on minions" spreads the wounds as the player wishes (Q-0345, 2026-10-21).** Battle in Earnest 8_2:
+"Yes, this is A; 'place X wounds on Y' is the same structure as 'wound a Y for each X'". One minion may take several
+of the X wounds. *[2026-10-21]*
+
+**Above the Battlement 7_262 is settled by CR 4.2 Section Three (2026-10-21).** Ketura recalled the ruling: "there was
+an official Decipher ruling for this card in Section Three that specified that the correct interpretation is a choice
+between two actions: either play a besieger from a site you control, or remove a burden to play the orc from
+discard." The ruling, as the card's ledger (R1) quotes it: "When you play this card you must choose one of the
+following actions: (1) play a besieger stacked on a site you control; or (2) remove a burden to play a [Sauron] Orc
+from your discard pile." Q-0254's open point (Ketura, 2026-10-11: "I'll ask the Council") needs no Council reading.
+The card is built and tested on that reading already (F-0465; WithBothOpenThePlayerChoosesOneAndOnlyTheSecondTakesABurden).
+When a question's own text quotes a CR 4.2 ruling that settles it, the orchestrator says so to Ketura plainly. *[2026-10-21]*
+
+**Release the Angry Flood 2_19: the Rules Council's reading (Ketura, 2026-10-21).** "it was unanimously voted to rule
+it as '(or twice if the fellowship is at a river)' (In actuality it was voted to read it as 'or twice if that Nazgul is
+at a river', but these are indistinguishable and we don't need to check for minion position lol)". As built (Q-0319).
+Hospitality of the Dwarves 101_1, the other card of Q-0319, keeps its Q-0319 reading (the fellowship's site). *[2026-10-21]*
+
+**"-X (to a minimum of 0)" as a price: X is held to the value there (Q-0346, 2026-10-21).** Reckless We Rode 8_12 and A
+Grey Ship 8_9 ("make the fellowship archery total -X (to a minimum of 0) to ..."): "Oh yes, X is bounded to the current
+archery total; the intent is to prevent you from saying -100 and immediately wounding everything, to no penalty because
+a negative archery total doesn't mean anything. 94_10 also has a similar limit built into it. A." As built; Q-0191
+(Race Text 94_10) and this are one rule. *[2026-10-21]*

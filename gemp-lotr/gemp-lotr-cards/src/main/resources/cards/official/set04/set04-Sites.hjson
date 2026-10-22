@@ -1535,13 +1535,6 @@
 				}
 				requires: [
 					{
-						type: not
-						requires: {
-							type: moveCountMinimum
-							amount: 2
-						}
-					}
-					{
 						type: perTurnLimit
 						limit: 1
 					}
