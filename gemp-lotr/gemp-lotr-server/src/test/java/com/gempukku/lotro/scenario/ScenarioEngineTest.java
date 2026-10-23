@@ -978,6 +978,51 @@ public class ScenarioEngineTest {
     }
 
     @Test
+    public void otherAnswersThePlayerMayGiveAreTriedUpToTheNextStep() throws Exception {
+        //The first step allows anything and is answered with a pass; playing a companion instead brings another
+        // fellowship decision, which no step covers
+        String once = ScenarioTesting.scenario("""
+                	options: {
+                		autoPass: true
+                	}
+                	opponent: {
+                		fallback: pass
+                	}
+                	setup: {
+                		freeps: {
+                			hand: aragorn, boromir
+                		}
+                	}
+                	steps: [
+                		{
+                			when: freeps, action, phase(fellowship), turn(1)
+                			answer: pass
+                		}
+                		{
+                			when: freeps, choice, phase(regroup), turn(1)
+                			answer: option(No)
+                			end: complete
+                		}
+                	]
+                """);
+        ScenarioDefinition def = ScenarioParser.parse(once);
+        assertTrue(ScenarioRunner.run(def, ScenarioTesting.library(), ScenarioTesting.format("scenario")).toString(),
+                ScenarioRunner.run(def, ScenarioTesting.library(), ScenarioTesting.format("scenario")).passed());
+        ScenarioRunner.OffScriptReport report = ScenarioRunner.offScript(def, ScenarioTesting.library(), ScenarioTesting.format("scenario"));
+        assertEquals("Each of the two companions, and moving on at the regroup", 3, report.tries);
+        assertEquals(report.toString(), 1, report.faults.size());
+        String found = report.toString();
+        assertTrue(found, found.contains("play(aragorn): No step covers this decision"));
+        assertTrue(found, found.contains("play(boromir): No step covers this decision"));
+
+        //Repeating until the Regroup phase, the step takes whatever the player does in the fellowship phase
+        report = ScenarioRunner.offScript(ScenarioParser.parse(once.replace("\t\t\tanswer: pass\n", "\t\t\tuntil: phase(regroup)\n\t\t\tanswer: pass\n")),
+                ScenarioTesting.library(), ScenarioTesting.format("scenario"));
+        assertTrue(report.toString(), report.faults.isEmpty());
+        assertEquals(report.toString(), 3, report.tries);
+    }
+
+    @Test
     public void aChoiceCanPickACardByItsSkirmishAndNarrowItWithCardFilters() throws Exception {
         ScenarioDefinition def = ScenarioParser.parse(twoSkirmishes());
         //Each card it names, or picks by its skirmish, begins a pick; numbers and filters narrow the pick before them

@@ -475,6 +475,7 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
                         result.put("ok", true);
                     }
                     case "check" -> result = _authoring.check(player);
+                    case "offscript" -> result = _authoring.offScript(player);
                     case "test" -> {
                         Integer step = number(form, "step");
                         result = _authoring.test(player, step == null ? 1 : step);
