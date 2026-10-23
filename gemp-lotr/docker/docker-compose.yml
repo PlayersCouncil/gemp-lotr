@@ -38,6 +38,10 @@ services:
          target: /etc/gemp-lotr/replay
          consistency: consistent
        - type: bind
+         source: ../../scenarios
+         target: /etc/gemp-lotr/scenarios
+         consistency: consistent
+       - type: bind
          source: ../../logs/nohup.out
          target: /etc/gemp-lotr/nohup.out
          consistency: consistent

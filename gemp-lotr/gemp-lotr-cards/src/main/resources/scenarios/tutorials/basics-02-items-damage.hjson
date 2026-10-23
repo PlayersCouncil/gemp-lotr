@@ -1,0 +1,658 @@
+{
+	id: basics-02-items-damage
+	version: 1
+	kind: tutorial
+	title: The Basics: Items and Damage
+	author: asdf
+	format: scenario
+	human: freeps
+	opponent: {
+		name: Items Tutorial
+		fallback: pass
+	}
+	coverage: strict
+	options: {
+		autoPass: maneuver, archery, assignment, regroup
+	}
+	cards: {
+		freeps: {
+			# Frodo, Resolute Hobbit
+			frodo: 10_121
+			# The One Ring, The Ruling Ring
+			ring: 1_2
+			# Aragorn, Heir of Elendil
+			aragorn: 4_109
+			# Ranger's Sword
+			rangersword: 1_112
+			# Gondorian Blade
+			blade: 11_59
+			# Great Shield
+			shield: 1_107
+			# Athelas
+			athelas: 1_94
+			# Narya
+			narya: 3_34
+			# Hobbit Sword
+			hobbitsword: 1_299
+			# Athelas
+			athelas2: 1_94
+			# Old Toby
+			old: 1_305
+			# Gandalf, The Grey Pilgrim
+			gandalf: 2_122
+			# Glamdring
+			glamdring: 1_75
+			# Armor
+			armor: 1_92
+			# Gimli's Battle Axe
+			battleaxe: 1_14
+			# Gimli's Helm
+			helm: 1_15
+			# Coat of Mail
+			mail: 1_101
+		}
+		shadow: {
+			# Frodo, Resolute Hobbit
+			oppFrodo: 10_121
+			# The One Ring, The Ruling Ring
+			oppRing: 1_2
+			# Uruk-hai Raiding Party
+			raidingparty: 1_158
+			# Orthanc Berserker
+			berserker: 3_66
+			# Orthanc Warrior
+			warrior1: 4_165
+			# Orthanc Warrior
+			warrior2: 4_165
+			# Bred for Battle
+			bred: 1_121
+			# Lurtz's Sword
+			lurtzs: 2_43
+		}
+	}
+	ringBearer: {
+		freeps: frodo
+		shadow: oppFrodo
+	}
+	ring: {
+		freeps: ring
+		shadow: oppRing
+	}
+	# Green Hill Country, Trollshaw Forest, Rivendell Valley, Pass of Caradhras, The Bridge of Khazad-dûm, Dimrill Dale, Silverlode Banks, Pillars of the Kings, Summit of Amon Hen
+	sites: {
+		freeps: 1_323, 1_334, 1_341, 1_348, 1_349, 1_350, 1_355, 1_358, 1_362
+		shadow: 1_323, 1_334, 1_341, 1_348, 1_349, 1_350, 1_355, 1_358, 1_362
+	}
+	rules: {
+		oneSided: true
+		freeps: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyHandSize
+					amount: -3
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: disableGameText
+					filter: name(The One Ring)
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: skipPhase
+					phase: maneuver
+				}
+			}
+		]
+		shadow: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyRoamingPenalty
+					filter: minion
+					amount: -2
+				}
+			}
+		]
+	}
+	setup: {
+		freeps: {
+			characters: aragorn
+			hand: rangersword, blade, shield, athelas, hobbitsword, athelas2, old
+			deck: narya
+		}
+		shadow: {
+			hand: raidingparty, berserker
+		}
+	}
+	outcome: {
+		lose: {
+			type: hasCardInDeadPile
+			filter: companion
+		}
+		loseMessage: One of your companions has fallen, and the fellowship cannot go on without them. Go back to the last checkpoint and look at the numbers again: who is about to be overwhelmed, and which card in your hand can stop it?
+	}
+	steps: [
+		# ---- 1
+		{
+			pause: true
+			when: freeps, action, phase(fellowship), turn(1)
+			messages: [
+				{
+					header: The Basics, Part 2: Items and Damage
+					text: "In the previous tutorial, your fellowship fought past the hordes of [Moria] Moria with nothing but their own power and the occasional burst of energy via Events.\n\nToday we will look at the importance of **Items**, which are **Possessions** and **Artifacts** your companions will wield to defend themselves and their friends."
+				}
+				{
+					text: **Possessions** represent different weapons, cloaks, staves, shields, and other physical objects that people carry with them.
+					zoom: card:rangersword
+					focus: type
+				}
+				{
+					text: "Most often these items will grant some sort of strength or vitality bonus to their bearer, but many also come with useful game text.  The right sword in the right hand can make all the difference.\n\nThe game text will also tell you who can hold the possession."
+					zoom: card:rangersword
+					focus: strength, text
+				}
+			]
+		}
+		# ---- 2
+		{
+			when: freeps, action, phase(fellowship), turn(1)
+			messages: [
+				{
+					text: Let's play the Ranger's Sword on Aragorn.
+					anchor: card:rangersword
+					highlight: card:rangersword
+				}
+			]
+			allow: play(rangersword)
+		}
+		# ---- 3
+		{
+			when: freeps, action, phase(fellowship), turn(1)
+			messages: [
+				{
+					text: As you can see, cards played on companions are placed underneath with the left edge sticking out.  This lets us see the stat bonuses and title of those cards without taking up so much space.
+					anchor: card:rangersword
+					highlight: card:rangersword
+					side: above
+				}
+				{
+					text: Gemp has automatically increased Aragorn's strength to show the sum of his parts: 8 base strength + 2 strength from the sword.  Remember, you can hover over Aragorn or right-click him to see the actual numbers on the card itself.
+					anchor: card:aragorn:strength
+					highlight: card:aragorn
+					side: right
+				}
+				{
+					text: The [[Ranger's Sword]] has an **Item Class** of "Hand Weapon".  Characters can only hold 1 kind of each item class at a time: they may only have 1 hand weapon, 1 cloak, 1 armor, and so on.
+					anchor: card:rangersword
+					highlight: card:rangersword
+					side: above
+				}
+				{
+					text: Since [[Gondorian Blade]] is also a **Hand Weapon**, Aragorn cannot wield it; he already has one sword and can't hold another.
+					anchor: card:blade
+					highlight: card:blade
+					highlightStyle: red
+					side: above
+				}
+				{
+					text: However, he can hold a [[Great Shield]], since its item class is **Shield** and he does not have one of those.  Let's put that on him now.
+					anchor: card:shield
+					highlight: card:shield
+				}
+			]
+			allow: play(shield)
+		}
+		# ---- 4
+		{
+			when: freeps, action, phase(fellowship), turn(1)
+			messages: [
+				{
+					text: "[[Athelas]] does not have an Item Class.  You can have as many such items as you want on your characters.   Play both copies of Athelas on him now."
+					anchor: zone:self.hand
+					highlight: card:athelas, card:athelas2
+					highlightStyle: green
+					side: above
+				}
+			]
+			allow: play(athelas)?, play(athelas2)?
+			answer: play(athelas)
+		}
+		# ---- 5
+		{
+			when: freeps, action, phase(fellowship), turn(1)
+			messages: [
+				{
+					text: "[[Athelas]] does not have an Item Class.  You can have as many such items as you want on your characters.   Play both copies of Athelas on him now."
+					anchor: zone:self.hand
+					highlight: card:athelas, card:athelas2
+					highlightStyle: green
+					side: above
+				}
+			]
+			allow: play(athelas)?, play(athelas2)?
+			answer: play(athelas2)
+		}
+		# ---- 6
+		{
+			when: freeps, action, phase(fellowship), turn(1)
+			messages: [
+				{
+					text: "All four of these Possessions were automatically played on Aragorn, because he is the only [Gondor] **Gondor** Companion on the table.\n\nWhen you only have 1 valid target for a card, Gemp will choose that target for you automatically."
+					anchor: card:rangersword
+					highlight: card:rangersword
+					side: above
+				}
+				{
+					text: Remember, the Ring-bearer is the most important companion on the field.  Let's play a [[Hobbit Sword]] on Frodo so he can defend himself.
+					anchor: card:hobbitsword
+					highlight: card:hobbitsword
+					side: above
+				}
+			]
+			allow: play(hobbitsword)
+		}
+		# ---- 7
+		{
+			when: freeps, action, phase(fellowship), turn(1)
+			messages: [
+				{
+					text: +2 strength may not seem like a lot, but Frodo can now only be overwhelmed by minions totalling strength 12 or more (instead of 8).  Even a little bit adds up.
+					anchor: card:frodo
+					highlight: card:frodo:strength
+					side: above
+				}
+				{
+					text: "[[Old Toby]] is a Possession that is not held by a companion.  Instead, it goes to the **Support Area**, a place where cards go to represent being available to the Fellowship without being in any one particular place.\n\nLet's play Old Toby."
+					anchor: card:old
+					highlight: card:old
+					side: above
+				}
+			]
+			allow: play(old)
+		}
+		# ---- 8
+		{
+			when: freeps, action, phase(fellowship), turn(1)
+			messages: [
+				{
+					text: Old Toby is now in the **Support Area**, in a row beneath your companions.
+					anchor: card:old
+					highlight: card:old
+					side: above
+				}
+				{
+					text: Your opponent's **Support Area** is up here.  Keep an eye on cards that they play here; unlike Minions, Possessions and other cards in the Support Area are not discarded automatically when you reconcile.  They will continue to affect the world for many turns to come.
+					anchor: zone:opp.support
+					highlight: zone:opp.support
+				}
+				{
+					text: Old Toby has game text that triggers when it plays to draw a card.  Since it is optional, you have to click on Old Toby to activate it, or else Pass.
+					anchor: card:old
+					highlight: card:old
+				}
+			]
+			allow: use(old)?, pass?
+			answer: use(old)
+		}
+		# ---- 9
+		{
+			when: freeps, action, phase(fellowship), turn(1)
+			messages: [
+				{
+					text: Now that we've played our items, let's move to the next site.
+					anchor: ui:button:pass
+					highlight: ui:button:pass
+					side: right
+				}
+			]
+			allow: pass
+		}
+		# ---- 10
+		{
+			when: shadow, action, phase(shadow), turn(1)
+			answer: play(berserker)
+		}
+		# ---- 11
+		{
+			when: shadow, action, phase(shadow), turn(1)
+			answer: play(raidingparty)
+		}
+		# ---- 12
+		{
+			pause: true
+			when: freeps, assign, phase(assignment), turn(1)
+			messages: [
+				During the **Shadow Phase**, your opponent played a pair of Minions.
+				{
+					text: "We saw [Moria] **Moria** Orcs last time, but this time we see [Isengard] **Isengard** Uruk-hai.  \n\nThese uruks are savage and powerful, and almost all of them have the **Damage +1** keyword.  This means that at the end of a skirmish, if they win, they will apply 1 more wound than normal.  Those wounds will add up fast!"
+					zoom: card:raidingparty
+				}
+				"With both minions at least strength 9, Frodo would have been in trouble without his sword.  \n\nAnd with both Uruks combining to 20 strength, Aragorn would be overwhelmed if he took on both at once, so it's a good thing that our Ring-bearer can defend himself!"
+			]
+		}
+		# ---- 13 (skirmish1)
+		{
+			id: skirmish1
+			checkpoint: true
+			when: freeps, assign, phase(assignment), turn(1)
+			messages: [
+				{
+					text: Assign the Uruks to your companions and resolve their skirmishes.  Don't forget to click Done to lock in your assignment choice.
+					anchor: card:berserker
+					highlight: card:berserker
+					side: above
+				}
+			]
+			answer: assign(frodo: raidingparty, aragorn: berserker)
+		}
+		# ---- 14
+		{
+			when: freeps, cards, phase(assignment), turn(1)
+			answer: choose(aragorn)
+		}
+		# ---- 15
+		{
+			when: freeps, action, phase(skirmish), turn(1)
+			allow: pass
+		}
+		# ---- 16
+		{
+			when: freeps, cards, phase(skirmish), turn(1)
+			answer: choose(frodo)
+		}
+		# ---- 17
+		{
+			when: freeps, action, phase(skirmish), turn(1)
+			allow: pass
+		}
+		# ---- 18
+		{
+			when: freeps, choice, phase(regroup), turn(1)
+			messages: [
+				{
+					text: That extra damage is stacking up!
+					anchor: card:frodo:wounds
+					side: above
+				}
+				{
+					text: We had better stay and hide, reconciling our hand and getting rid of these ferocious Uruks.
+					anchor: ui:dialog
+				}
+			]
+			allow: option(No)
+		}
+		# ---- 19
+		{
+			when: freeps, cards, phase(regroup), turn(1)
+			messages: [
+				{
+					text: We don't want to discard any of the cards we have now when reconciling, so let's just click Done.
+					anchor: ui:button:done
+					highlight: ui:button:done
+				}
+			]
+			allow: pass
+		}
+		# ---- 20
+		{
+			when: freeps, action, phase(fellowship), turn(2)
+			messages: [
+				{
+					text: Oh good, we've found Gandalf!  Let's play him so you can also play some of his items.
+					anchor: card:gandalf
+					highlight: card:gandalf
+				}
+			]
+			allow: play(gandalf)
+		}
+		# ---- 21
+		{
+			when: freeps, action, phase(fellowship), turn(2)
+			messages: [
+				{
+					text: "[[Glamdring]] is a Hand Weapon, granting Gandalf +2 strength and **Damage +1** of his own.  In addition, it has a very handy Fellowship special ability!  Let's play it now."
+					anchor: card:glamdring
+					highlight: card:glamdring
+				}
+			]
+			allow: play(glamdring)
+		}
+		# ---- 22
+		{
+			pause: true
+			when: freeps, action, phase(fellowship), turn(2)
+			messages: [
+				{
+					text: Site 2, [[Trollshaw Forest]], activated an automatic required trigger by playing a possession.  Because it's not optional (no "may"), we did not have to click on it to draw a card.
+					anchor: ui:site:2
+					highlight: ui:site:2
+					side: right
+				}
+			]
+		}
+		# ---- 23
+		{
+			when: freeps, action, phase(fellowship), turn(2)
+			messages: [
+				{
+					text: "But back to Glamdring.\n\n**Special Abilities** are bold text actions that you can use in the matching phases, like Events.  Unlike Events, you do not discard the card afterwards, and so you can use the ability as many times as you can afford to do so."
+					zoom: card:glamdring
+				}
+				{
+					text: "[[Glamdring]]'s **Fellowship** ability has two parts: its **Costs** and **Effects**, separated by the word \"to\". \n\nIn this case, if we use its ability, we have to exert Gandalf as a cost.  The effect will be revealing our opponent's hand, and removing twilight from the **Twilight Pool**."
+					zoom: card:glamdring
+					focus: text
+				}
+				{
+					text: "Remember, \"exert\" means to put a non-lethal wound on a character.\n\nClick on Glamdring to use its ability."
+					anchor: card:glamdring
+					highlight: card:glamdring
+					side: above
+				}
+			]
+			allow: use(glamdring)
+		}
+		# ---- 24
+		{
+			when: freeps, arbitrary, phase(fellowship), turn(2)
+			messages: [
+				{
+					text: "Here is your opponent's hand. The contents of the revealed cards will also show up in the **Combat Log** if you need to refer to them later.\n\nClick Done to dismiss the window."
+					anchor: ui:dialog
+					side: above
+				}
+			]
+			allow: pass
+		}
+		# ---- 25
+		{
+			when: freeps, action, phase(fellowship), turn(2)
+			messages: [
+				{
+					text: "Glamdring's special ability could be used again if you wanted to, but in this case it wouldn't do you any good since you've already seen what's in your opponent's hand.\n\n(The twilight removal might matter on a repeat in some cases, but your opponent had no Orcs this time.)\n\nIn general, bold text special abilities can be used as many times as you can afford it."
+					anchor: card:glamdring
+					highlight: card:glamdring
+					side: above
+				}
+				{
+					text: One of the cards you drew was Narya; let's look closer at that.
+					anchor: card:narya
+					highlight: card:narya
+				}
+				{
+					text: "[[Narya]] is an **Artifact**, not a Possession.  In practice, these two card types behave almost the same; the only important distinction is that if a card targets a Possession, it cannot target an Artifact, or vice versa.\n\nArtifacts tend to be more powerful than Possessions; +1 **Vitality** is a strong basic effect, even without the card text.\n\nHaving more vitality is one way to combat additional damage bonuses!"
+					zoom: card:narya
+				}
+				{
+					text: Play [[Narya]] on Gandalf.
+					anchor: card:narya
+					highlight: card:narya
+				}
+			]
+			allow: play(narya)
+		}
+		# ---- 26
+		{
+			note: You've also drawn [[Armor]].  Let's play that on Aragorn.
+			when: freeps, action, phase(fellowship), turn(2)
+			messages: [
+				{
+					text: You also drew [[Armor]].
+					anchor: card:armor
+					highlight: card:armor
+					side: above
+				}
+				{
+					text: "[[Armor]] protects the bearer from taking more than one wound in a skirmish.  This makes it ideal for shrugging off the extra hits from **Damage +1** Uruk-hai."
+					zoom: card:armor
+				}
+				{
+					text: Play [[Armor]] on Aragorn.
+					anchor: card:armor
+					highlight: card:armor
+					side: above
+				}
+			]
+			allow: play(armor)
+		}
+		# ---- 27
+		{
+			when: freeps, action, phase(fellowship), turn(2)
+			messages: [
+				{
+					text: The [[Athelas]] that you played earlier also has a special ability: when used, you can discard Athelas to heal a companion.  Let's use both of these to heal up your companions.
+					anchor: card:shield
+					highlight: card:athelas
+					side: above
+				}
+			]
+			allow: use(athelas)?, use(athelas2)?
+			answer: use(athelas)
+		}
+		# ---- 28
+		{
+			when: freeps, cards, phase(fellowship), turn(2)
+			skipWhen: freeps, action, phase(fellowship), turn(2)
+			messages: [
+				{
+					text: The [[Athelas]] that you played earlier also has a special ability: when used, you can discard Athelas to heal a companion.  Let's use both of these to heal up your companions.
+					anchor: card:armor
+					side: above
+				}
+			]
+			allow: choose(gandalf)?, choose(frodo)?, choose(aragorn)?
+			answer: choose(frodo)
+		}
+		# ---- 29
+		{
+			when: freeps, action, phase(fellowship), turn(2)
+			messages: [
+				{
+					text: "Athelas requires you to discard itself, so we can't really use its ability more than once.\n\nHowever, you can use the second copy.  Use that to heal up your companions."
+					anchor: card:shield
+					side: above
+				}
+			]
+			allow: use(athelas)?, use(athelas2)?
+			answer: use(athelas2)
+		}
+		# ---- 30
+		{
+			when: freeps, cards, phase(fellowship), turn(2)
+			skipWhen: freeps, action, phase(fellowship), turn(2)
+			messages: [
+				{
+					text: The [[Athelas]] that you played earlier also has a special ability: when used, you can discard Athelas to heal a companion.  Let's use these to heal up Gandalf and Frodo.
+					anchor: card:shield
+					side: above
+				}
+			]
+			allow: choose(gandalf)?, choose(frodo)?, choose(aragorn)?
+			answer: choose(gandalf)
+		}
+		# ---- 31
+		{
+			when: freeps, action, phase(fellowship), turn(2)
+			messages: [
+				{
+					text: We've played all the items we can manage for now.  Click Pass to end the **Fellowship Phase** and move on to the next site.
+					anchor: ui:button:pass
+					highlight: ui:button:pass
+					side: right
+				}
+			]
+			allow: pass
+		}
+		# ---- 32
+		{
+			when: shadow, action, phase(shadow), turn(2)
+			answer: play(warrior1)
+		}
+		# ---- 33
+		{
+			when: shadow, action, phase(shadow), turn(2)
+			answer: play(warrior2)
+		}
+		# ---- 34: these in whatever order the game asks for them
+		{
+			note: Turn 2. The assignment and both skirmishes, in whatever order the player takes them.
+			when: turn(2)
+			until: phase(regroup)
+			anyOrder: [
+				# -- 34.1
+				{
+					once: true
+					when: freeps, assign
+					messages: [
+						"Your opponent played 2 Uruk-hai during their **Shadow Phase**.\n\nNow that we're in the **Assignment Phase**, assign the Warriors to Aragorn and Gandalf.  There's no need to have Frodo skirmish this time since you have ample protectors.\n\nClick Done once you're ready to lock in your assignments."
+					]
+					allow: {
+						answers: assign(aragorn: warrior1, gandalf: warrior2)?, assign(aragorn: warrior2, gandalf: warrior1)?
+						otherwise: Frodo would lose a skirmish, and there's no need to take those extra wounds given that Gandalf and Aragorn are both strong enough to win their respective skirmishes.
+					}
+					answer: assign(aragorn: warrior1, gandalf: warrior2)
+				}
+				# -- 34.2
+				{
+					when: freeps, cards, text(next skirmish)
+					answer: choose(gandalf), choose(aragorn)
+				}
+				# -- 34.3
+				{
+					once: true
+					when: freeps, action, fighting(aragorn)
+					allow: pass
+				}
+				# -- 34.4
+				{
+					once: true
+					when: opponent, action, fighting(aragorn)
+					messages: [
+						Here come the drums.
+					]
+					answer: play(bred)
+				}
+				# -- 34.5
+				{
+					when: opponent, cards, fighting(warrior1)
+					answer: choose(warrior1)
+				}
+				# -- 34.6
+				{
+					when: opponent, cards
+					answer: choose(warrior2)
+				}
+				# -- 34.7
+				{
+					when: freeps, action, phase(skirmish)
+					answer: pass
+				}
+			]
+		}
+	]
+}
