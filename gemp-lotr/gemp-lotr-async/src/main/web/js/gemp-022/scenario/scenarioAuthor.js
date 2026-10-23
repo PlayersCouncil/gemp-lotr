@@ -1711,7 +1711,8 @@ var GempScenarioAuthor = Class.extend({
         });
         if (split != null) {
             work.when = split.terms;
-            work.whenRequire = split.require;
+            //(as the file has it, in HJSON, where the server gives it so)
+            work.whenRequire = texts.whenRequire != null ? texts.whenRequire : split.require;
         }
         work.messages = $.map(this.messagesOf(step), function (message) {
             return [typeof message == "string" ? {text: message} : that.clone(message)];
@@ -4736,6 +4737,18 @@ var GempScenarioAuthor = Class.extend({
             that.call("POST", "check", {}, function (result) {
                 that.report = (result.passed ? "Scenario validated.\n\n" : "It does not play through.\n\n") + result.report
                     + ((result.warnings || []).length > 0 ? "\n\nWarnings:\n" + result.warnings.join("\n") : "");
+                that.renderScenario();
+            });
+        }));
+        buttons.append(this.button("Try other answers", "Play the draft again wherever the player could answer otherwise (anything a step allows, "
+            + "or anything at all where it allows anything), each time up to the script's next step, and say where the script does not handle it. Takes a while.", function () {
+            that.report = "Trying other answers...";
+            that.renderScenario();
+            that.call("POST", "offscript", {}, function (result) {
+                that.report = (result.handled ? "Every other answer is handled.\n\n" : "Some other answers are not handled.\n\n") + result.report;
+                that.renderScenario();
+            }, function () {
+                that.report = null;
                 that.renderScenario();
             });
         }));

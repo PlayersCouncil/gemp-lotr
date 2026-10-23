@@ -353,6 +353,53 @@ public final class AnswerCompiler {
     /**
      * @return What to answer when nobody has said what to answer: do as little as the decision allows.
      */
+    /**
+     * The answers the game would take to a decision, one thing at a time, as the game takes them: each action (and
+     * passing, where it may be passed), each card alone, each option, the least and the most of a number.  Not
+     * assignments, which have too many to try.  For trying what a player might do instead of what the script does.
+     */
+    public static List<String> alternatives(AwaitingDecision decision) {
+        Map<String, String[]> params = decision.getDecisionParameters();
+        List<String> all = new ArrayList<>();
+        switch (decision.getDecisionType()) {
+            case CARD_ACTION_CHOICE -> {
+                all.addAll(Arrays.asList(params.get("actionId")));
+                all.add("");
+            }
+            case ACTION_CHOICE -> all.addAll(Arrays.asList(params.get("actionId")));
+            case CARD_SELECTION -> {
+                int min = Integer.parseInt(params.get("min")[0]), max = Integer.parseInt(params.get("max")[0]);
+                if (min <= 1 && max >= 1)
+                    all.addAll(Arrays.asList(params.get("cardId")));
+                if (min == 0)
+                    all.add("");
+            }
+            case ARBITRARY_CARDS -> {
+                int min = Integer.parseInt(params.get("min")[0]), max = Integer.parseInt(params.get("max")[0]);
+                String[] tempIds = params.get("cardId");
+                String[] selectable = params.get("selectable");
+                if (min <= 1 && max >= 1)
+                    for (int i = 0; i < tempIds.length; i++)
+                        if (selectable[i].equals("true"))
+                            all.add(tempIds[i]);
+                if (min == 0)
+                    all.add("");
+            }
+            case MULTIPLE_CHOICE -> {
+                for (int i = 0; i < params.get("results").length; i++)
+                    all.add(String.valueOf(i));
+            }
+            case INTEGER -> {
+                if (params.containsKey("min"))
+                    all.add(params.get("min")[0]);
+                if (params.containsKey("max") && !all.contains(params.get("max")[0]))
+                    all.add(params.get("max")[0]);
+            }
+            default -> { }
+        }
+        return all;
+    }
+
     public static String leastAnswer(AwaitingDecision decision) {
         Map<String, String[]> params = decision.getDecisionParameters();
         switch (decision.getDecisionType()) {

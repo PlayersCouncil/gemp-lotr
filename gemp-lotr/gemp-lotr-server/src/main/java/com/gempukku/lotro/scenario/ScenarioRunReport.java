@@ -42,6 +42,21 @@ public class ScenarioRunReport {
     public final List<List<String>> offered = new ArrayList<>();
 
     /**
+     * A decision of the player's, in this run, where the step in hand would have taken another answer than the
+     * script's: one it allows, or anything where it allows anything (see ScenarioRunner.offScript).
+     * @param number The decision's place in the run.
+     * @param step The step's label.
+     * @param top The number of the step of the script it is (a block's, for one of a block's steps).
+     * @param decision The decision, described.
+     * @param answer What the script answered, in the scenario's terms.
+     * @param others The other answers, as the game takes them, each with how the scenario would say it.
+     */
+    public record OffScriptPoint(int number, String step, int top, String decision, String answer, List<String[]> others) { }
+
+    /** Where this run could have gone another way (only a run that follows the script records them). */
+    public final List<OffScriptPoint> offScriptPoints = new ArrayList<>();
+
+    /**
      * Several runs of the same scenario, one for each way through it, as one report: it passes if they all do, and
      * a step counts as reached if any of them reached it.
      */

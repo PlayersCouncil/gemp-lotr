@@ -86,6 +86,112 @@ public final class ScenarioRunner {
     /** A scenario with more ways through it than this is not played through all of them. */
     private static final int WAYS_LIMIT = 64;
 
+    /** How many other answers are tried at one decision, and in all. */
+    private static final int OTHERS_AT_ONE = 8;
+    private static final int OTHERS_IN_ALL = 200;
+
+    /**
+     * What a player might do instead of what the script does: wherever a step would take another answer than the
+     * script's (one it allows, or anything, where it allows anything), the scenario is played again, the same way up
+     * to there, with that answer instead, and then on until the script comes to its next step.  What the script
+     * cannot handle on the way there is a fault: a decision no step covers, an answer of the opponent's that no
+     * longer fits, a step that allows nothing that is on offer, the game going wrong.  The scenario ending (as it
+     * says, or with the game won or lost) counts as handled.  Once answered another way, the player's later answers
+     * are the script's where they still fit, and otherwise what the step allows, or as little as can be done.
+     * @return One line for each fault, with the other answers that came to it.
+     */
+    public static OffScriptReport offScript(ScenarioDefinition def, LotroCardBlueprintLibrary library, LotroFormat format) {
+        OffScriptReport result = new OffScriptReport();
+        //Every way through, as the script plays it
+        java.util.ArrayDeque<List<String>> waiting = new java.util.ArrayDeque<>();
+        waiting.add(List.of());
+        List<ScenarioRunReport> runs = new java.util.ArrayList<>();
+        while (!waiting.isEmpty() && runs.size() < WAYS_LIMIT) {
+            List<String> forced = waiting.poll();
+            ScenarioRunReport one = run(def, library, format, false, forced);
+            runs.add(one);
+            for (int i = forced.size(); i < one.taken.size(); i++)
+                for (String other : one.offered.get(i))
+                    if (!other.equals(one.taken.get(i))) {
+                        List<String> way = new java.util.ArrayList<>(one.taken.subList(0, i));
+                        way.add(other);
+                        waiting.add(way);
+                    }
+        }
+        Map<String, List<String>> faults = new java.util.LinkedHashMap<>();
+        java.util.Set<String> tried = new java.util.HashSet<>();
+        for (ScenarioRunReport way : runs) {
+            //(a way through that does not play through as it is can still be tried another way up to where it stops)
+            if (!way.failures.isEmpty())
+                result.notTried.add("A way through stops (" + way.stopped + "): nothing after that was tried");
+            for (ScenarioRunReport.OffScriptPoint point : way.offScriptPoints) {
+                int atThis = 0;
+                for (String[] other : point.others()) {
+                    //(the same decision on two ways through, answered the same other way, is one try)
+                    if (!tried.add(point.step() + "|" + point.decision() + "|" + other[1]))
+                        continue;
+                    if (atThis++ >= OTHERS_AT_ONE) {
+                        result.notTried.add("step " + point.step() + ": only " + OTHERS_AT_ONE + " of the " + point.others().size() + " other answers to \""
+                                + point.decision() + "\" were tried");
+                        break;
+                    }
+                    if (result.tries >= OTHERS_IN_ALL) {
+                        result.notTried.add("More than " + OTHERS_IN_ALL + " other answers in all: the rest were not tried");
+                        return result.with(faults);
+                    }
+                    result.tries++;
+                    ScenarioRunReport run = run(def, library, format, false, way.taken, new Deviation(point.number(), other[0], point.top(), point.decision()));
+                    //(nor is what goes wrong on the way through as the script plays it: that is said by Check)
+                    if (run.failures.isEmpty() || way.failures.contains(run.failures.getFirst()))
+                        continue;
+                    if ("not replayed".equals(run.stopped)) {
+                        result.notTried.add("step " + point.step() + ": " + other[1] + " could not be tried (the run did not come to the same decision again)");
+                        continue;
+                    }
+                    //By the decision answered another way: what each other answer came to
+                    String where = "step " + point.step() + ", " + brief(point.decision()) + ", where the script answers " + point.answer() + ":";
+                    faults.computeIfAbsent(where, x -> new java.util.ArrayList<>()).add(other[1] + ": " + brief(run.failures.getFirst()));
+                }
+            }
+        }
+        return result.with(faults);
+    }
+
+    /** A decision as it is described, without the list of what it offers (which the other answer says enough of). */
+    private static String brief(String described) {
+        return described.replaceAll(" offering: .*?(  \\[turn)", "$1").replaceAll(" offering nothing but Pass", "");
+    }
+
+    /** What offScript found. */
+    public static final class OffScriptReport {
+        /** How many other answers were tried. */
+        public int tries;
+        /** For each decision where another answer came to a fault: each such answer, and the fault. */
+        public final Map<String, List<String>> faults = new java.util.LinkedHashMap<>();
+        /** What could not be tried, and why. */
+        public final List<String> notTried = new java.util.ArrayList<>();
+
+        private OffScriptReport with(Map<String, List<String>> found) {
+            faults.putAll(found);
+            return this;
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder();
+            sb.append(tries).append(" other answer(s) tried; ").append(faults.isEmpty() ? "the script handled them all."
+                    : "at " + faults.size() + " decision(s), some were not handled:");
+            for (Map.Entry<String, List<String>> fault : faults.entrySet()) {
+                sb.append("\n\n").append(fault.getKey());
+                for (String how : fault.getValue())
+                    sb.append("\n  - ").append(how);
+            }
+            for (String one : notTried)
+                sb.append("\n").append(one);
+            return sb.toString();
+        }
+    }
+
     /**
      * Plays a scenario as far as its script goes and then keeps going, answering every decision the script does not
      * cover by doing as little as possible (passing, choosing the minimum).  The report's list of decisions is then
@@ -108,6 +214,21 @@ public final class ScenarioRunner {
     private static final int EXPLORE_LIMIT = 60;
 
     private static ScenarioRunReport run(ScenarioDefinition def, LotroCardBlueprintLibrary library, LotroFormat format, boolean explore, List<String> choices) {
+        return run(def, library, format, explore, choices, null);
+    }
+
+    /**
+     * A run that follows the script up to one of the player's decisions, answers that one another way, and then
+     * plays on until the script has come to its next step.
+     * @param at The decision's place in the run.
+     * @param answer The other answer, as the game takes it.
+     * @param top The number of the step of the script the decision belongs to: coming to a later one is the end of it.
+     * @param decision The decision as the run that followed the script described it, to be sure this run is at the same.
+     */
+    private record Deviation(int at, String answer, int top, String decision) { }
+
+    private static ScenarioRunReport run(ScenarioDefinition def, LotroCardBlueprintLibrary library, LotroFormat format, boolean explore, List<String> choices,
+                                         Deviation deviation) {
         ScenarioRunReport report = new ScenarioRunReport(def.id);
         report.required = def.runnerLevel != null ? def.runnerLevel
                 : def.coverage == Coverage.STRICT ? RunnerLevel.FULL : RunnerLevel.PREFIX;
@@ -132,7 +253,7 @@ public final class ScenarioRunner {
 
         boolean completed = false;
         try {
-            completed = play(def, session, report, explore, choices);
+            completed = play(def, session, report, explore, choices, deviation);
         } catch (RuntimeException exp) {
             report.failures.add("The game threw " + exp + rootCause(exp));
             report.stopped = "the game threw an exception";
@@ -145,7 +266,7 @@ public final class ScenarioRunner {
         for (String problem : table.Problems())
             report.failures.add(problem);
 
-        if (completed)
+        if (completed && deviation == null)
             for (RngEntry entry : table.Random().remaining())
                 report.failures.add("rng: " + entry.kind().name().toLowerCase() + "(" + entry.seat().key() + "." + entry.zone()
                         + ": " + String.join(", ", entry.result()) + ") was never used");
@@ -157,7 +278,8 @@ public final class ScenarioRunner {
     /**
      * @return Whether the scenario reached its end.
      */
-    private static boolean play(ScenarioDefinition def, ScenarioSession session, ScenarioRunReport report, boolean explore, List<String> choices) {
+    private static boolean play(ScenarioDefinition def, ScenarioSession session, ScenarioRunReport report, boolean explore, List<String> choices,
+                                Deviation deviation) {
         ScenarioTable table = session.Table();
         ScenarioDirector director = session.Director();
         boolean strict = def.coverage == Coverage.STRICT;
@@ -167,6 +289,9 @@ public final class ScenarioRunner {
             if (table.GameIsFinished()) {
                 String winner = table.game().getWinnerPlayerId();
                 report.stopped = "the game ended" + (winner == null ? " with no winner" : ": the " + table.SeatOf(winner).key() + " seat won");
+                //(answered another way, the game ending is the game handling it: the player is shown how it ended)
+                if (deviation != null)
+                    return true;
                 if (def.outcome.win == null && director.end() == null) {
                     report.failures.add("The game ended before the scenario did (" + report.stopped + ")");
                     return false;
@@ -191,6 +316,12 @@ public final class ScenarioRunner {
             String description = director.describe(player, decision);
             String answer;
             String note = null;
+            //Answered another way: done once the script has come to a later step (it handled what was done)
+            boolean deviated = deviation != null && number > deviation.at();
+            if (deviated && step != null && (step.parent != null ? step.parent.number : step.number) > deviation.top()) {
+                report.stopped = "came to step " + step.label();
+                return true;
+            }
 
             //What the step says, with its numbers filled in from the game as it stands: worth reading against the
             // decisions around it, since nothing else checks that the words are true
@@ -215,7 +346,8 @@ public final class ScenarioRunner {
                 session.Read(player, step.number, choice);
                 if (director.end() != null) {
                     report.stopped = "the scenario ended (" + director.end().result.name().toLowerCase() + ")";
-                    if (director.end().result == EndResult.FAIL) {
+                    //(answered another way, an ending the scenario has for it is the scenario handling it)
+                    if (director.end().result == EndResult.FAIL && deviation == null) {
                         report.failures.add("The scripted path ends in failure");
                         return false;
                     }
@@ -224,9 +356,41 @@ public final class ScenarioRunner {
                 continue;
             }
 
+            if (deviation != null && number == deviation.at()) {
+                if (!human || !description.equals(deviation.decision())) {
+                    report.failures.add("The run did not come to the same decision again (" + description + "), so the other answer was not tried");
+                    report.stopped = "not replayed";
+                    return false;
+                }
+                report.decisions.add(new ScenarioRunReport.Decision(number, description, step == null ? null : step.label(), deviation.answer(),
+                        "(answered another way)"));
+                try {
+                    table.PlayerDecided(player, deviation.answer());
+                } catch (RuntimeException exp) {
+                    report.failures.add("the game rejected the answer \"" + deviation.answer() + "\" to: " + description);
+                    report.stopped = "the game rejected an answer";
+                    return false;
+                }
+                if (director.end() != null) {
+                    report.stopped = "the scenario ended (" + director.end().result.name().toLowerCase() + ")";
+                    return true;
+                }
+                continue;
+            }
+
             try {
                 if (ruling.problem() != null)
                     throw new ScenarioScriptException(ruling.problem());
+                //Once answered another way, the player's later answers are whatever fits: what the script says if it
+                // still can be, or else something the step allows, or else as little as can be done
+                if (deviated && human && step != null && (ruling.noAnswer() != null || ruling.answer() == null)) {
+                    ScenarioDirector.Presentation shown = ruling.shown();
+                    answer = shown != null && shown.allowed() != null && !shown.allowed().isEmpty() ? shown.allowed().getFirst()
+                            : AnswerCompiler.leastAnswer(decision);
+                    report.decisions.add(new ScenarioRunReport.Decision(number, description, step.label(), answer, "(answered another way earlier: what fits)"));
+                    table.PlayerDecided(player, answer);
+                    continue;
+                }
                 //With nobody at the table, the script's answer is the only answer there is
                 if (ruling.noAnswer() != null)
                     throw new ScenarioScriptException(ruling.noAnswer());
@@ -292,6 +456,44 @@ public final class ScenarioRunner {
                 return false;
             }
 
+            //Where the player could have done otherwise, as the step has it: for trying those other ways (see offScript)
+            if (deviation == null && !explore && human && step != null && ruling.shown() != null && answer != null
+                    && decision.getDecisionType() != com.gempukku.lotro.logic.decisions.AwaitingDecisionType.ASSIGN_MINIONS) {
+                ScenarioDirector.Presentation shown = ruling.shown();
+                List<String> others = new java.util.ArrayList<>();
+                if (shown.allowed() == null) {
+                    others.addAll(AnswerCompiler.alternatives(decision));
+                } else {
+                    for (String one : shown.allowed())
+                        if (!others.contains(one))
+                            others.add(one);
+                    if (shown.passAllowed() && !others.contains(""))
+                        others.add("");
+                }
+                final String given = answer;
+                others.removeIf(one -> one.equals(given));
+                if (!others.isEmpty()) {
+                    List<String[]> said = new java.util.ArrayList<>();
+                    for (String one : others) {
+                        String term;
+                        try {
+                            term = AnswerCompiler.decompile(table, decision, one);
+                        } catch (RuntimeException exp) {
+                            term = "raw(" + one + ")";
+                        }
+                        said.add(new String[] {one, term});
+                    }
+                    String scripted;
+                    try {
+                        scripted = AnswerCompiler.decompile(table, decision, answer);
+                    } catch (RuntimeException exp) {
+                        scripted = "raw(" + answer + ")";
+                    }
+                    report.offScriptPoints.add(new ScenarioRunReport.OffScriptPoint(number, step.label(),
+                            step.parent != null ? step.parent.number : step.number, description, scripted, said));
+                }
+            }
+
             report.decisions.add(new ScenarioRunReport.Decision(number, description, step == null ? null : step.label(), answer, note));
             try {
                 table.PlayerDecided(player, answer);
@@ -306,7 +508,7 @@ public final class ScenarioRunner {
 
             if (director.end() != null) {
                 report.stopped = "the scenario ended (" + director.end().result.name().toLowerCase() + ")";
-                if (director.end().result == EndResult.FAIL) {
+                if (director.end().result == EndResult.FAIL && deviation == null) {
                     report.failures.add("The scripted path ends in failure");
                     return false;
                 }
@@ -314,6 +516,9 @@ public final class ScenarioRunner {
             }
             if (def.outcome.lose != null && table.Holds(def.outcome.lose, table.HumanPlayer())) {
                 report.stopped = "the scenario's lose condition came true";
+                //(answered another way, losing as the scenario says is the scenario handling it)
+                if (deviation != null)
+                    return true;
                 report.failures.add("The scripted path meets the scenario's lose condition");
                 return false;
             }

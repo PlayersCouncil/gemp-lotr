@@ -2491,6 +2491,37 @@ public class ScenarioAuthoring {
         }
     }
 
+    /**
+     * The draft played again wherever the player could have answered otherwise (see ScenarioRunner.offScript): what
+     * the script does not handle when they do.
+     */
+    public Map<String, Object> offScript(Player player) throws AuthoringException {
+        Session session = session(player);
+        synchronized (session) {
+            Sitting sitting = session.sitting;
+            ScenarioDefinition def = sitting.mediator.scenarioLocked(() -> {
+                try {
+                    return copy(sitting.def, null);
+                } catch (AuthoringException exp) {
+                    return null;
+                }
+            });
+            if (def == null)
+                throw new AuthoringException("The draft cannot be written out and read back.");
+            ScenarioRunner.OffScriptReport report;
+            try {
+                report = ScenarioRunner.offScript(def, _library, sitting.format);
+            } catch (RuntimeException exp) {
+                throw new AuthoringException("Playing it through threw " + exp);
+            }
+            Map<String, Object> result = new LinkedHashMap<>();
+            result.put("tries", report.tries);
+            result.put("handled", report.faults.isEmpty());
+            result.put("report", report.toString());
+            return result;
+        }
+    }
+
     /** A player's game of the draft from a step on: what they will see, with nothing of the author's in the way. */
     public Map<String, Object> test(Player player, int step) throws AuthoringException {
         Session session = session(player);
@@ -2657,6 +2688,10 @@ public class ScenarioAuthoring {
                 for (String name : TYPED)
                     if (written.get(name) != null && !written.get(name).isString())
                         parts.put(name, ScenarioWriter.text(written.get(name)));
+                //(a When's requirements, by themselves, for the field beside its terms)
+                org.hjson.JsonValue when = written.get("when");
+                if (when != null && when.isObject() && when.asObject().get("require") != null)
+                    parts.put("whenRequire", ScenarioWriter.text(when.asObject().get("require")));
                 org.hjson.JsonValue allow = written.get("allow");
                 if (allow != null && allow.isObject() && allow.asObject().get("passWhen") != null)
                     parts.put("passWhen", ScenarioWriter.text(allow.asObject().get("passWhen")));
