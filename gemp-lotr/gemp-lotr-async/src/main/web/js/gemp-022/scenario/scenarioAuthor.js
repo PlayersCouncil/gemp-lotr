@@ -3075,6 +3075,12 @@ var GempScenarioAuthor = Class.extend({
         box.empty();
         $.each(messages, function (position, message) {
             var card = that.el("div", "sa-message").appendTo(box);
+            //What a message says is tried on the screen as it is typed (a moment after the typing stops), so that
+            // it can be seen as the player will see it; the ending's messages wait for their fields to be left
+            if (!closing)
+                card.delegate("input[type=text], textarea", "input", function () {
+                    that.stepChanged(false);
+                });
             var focus = function () {
                 if (!closing)
                     that.focusMessage = {step: number, sub: child ? form.sub + 1 : 0, index: position};
@@ -4275,10 +4281,15 @@ var GempScenarioAuthor = Class.extend({
                     name.append(that.el("span", "sa-tag", "new"));
                 else if (card.removing)
                     name.append(that.el("span", "sa-tag", "to be taken out"));
-                else
+                else {
                     name.append(that.button("✎", "Give this card another name in the scenario. Every part of the scenario that says the old name is changed to say the new one.", function () {
                         that.renameCard(card, name);
                     }, "sa-rename"));
+                    //(another card, or another version of the same one, under the same name and in the same place)
+                    name.append(that.cardFinder(card, function (id) {
+                        that.changeCard(card, id);
+                    }));
+                }
                 var controls = that.el("div", "sa-row").appendTo(row);
                 if (card.removing) {
                     controls.append(that.button("Keep it", "Do not take this card out", function () {
@@ -4514,6 +4525,57 @@ var GempScenarioAuthor = Class.extend({
             query.focus();
         }));
         return holder;
+    },
+
+    /**
+     * A button that opens a search for the card to put in a card's place: its other versions come up at once, and
+     * any card can be found by name.  done(id) with the one chosen.
+     */
+    cardFinder: function (card, done) {
+        var that = this;
+        var holder = this.el("span", "sa-sitefinder");
+        holder.append(this.button("Change", "Put another card (another version of this one, say) in its place: the same name in the scenario, the same place on the board", function () {
+            holder.empty();
+            var query = $("<input type='text'/>").addClass("sa-input sa-short").attr("placeholder", "name of a card").val((card.name || "").split(",")[0]);
+            var results = that.el("div", "sa-results");
+            holder.append(query).append(that.button("Cancel", "", function () {
+                that.renderBoard();
+            })).append(results);
+            var search = null;
+            var find = function () {
+                that.call("GET", "cards", {q: query.val()}, function (found) {
+                    results.empty();
+                    $.each(found.cards || [], function (i, one) {
+                        results.append(that.el("div", "sa-result" + (one.id == card.blueprintId ? " sa-current" : ""), one.name + "  \u00b7  " + one.id + "  \u00b7  "
+                            + (one.culture || "") + " " + (one.type || "") + (one.cost != null ? " (" + one.cost + ")" : "")
+                            + (one.id == card.blueprintId ? "  \u00b7  this one" : "")).click(function () {
+                            if (one.id != card.blueprintId)
+                                done(one.id);
+                            else
+                                that.renderBoard();
+                        }));
+                    });
+                    if ((found.cards || []).length == 0)
+                        results.append(that.el("div", "sa-note", "No card by that name."));
+                });
+            };
+            query.bind("input", function () {
+                clearTimeout(search);
+                search = setTimeout(find, 300);
+            });
+            find();
+            query.focus().select();
+        }));
+        return holder;
+    },
+
+    /** One of the scenario's cards becomes another (by its blueprint), keeping its name and its place. */
+    changeCard: function (card, blueprintId) {
+        var cards = this.clone(this.draft.cards);
+        if (cards[card.owner] == null || cards[card.owner][card.alias] == null)
+            return;
+        cards[card.owner][card.alias] = blueprintId;
+        this.edit({top: {cards: cards}}, null);
     },
 
     putSites: function (freeps, shadow) {
