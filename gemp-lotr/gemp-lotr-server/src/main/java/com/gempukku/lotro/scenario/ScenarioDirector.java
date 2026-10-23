@@ -331,9 +331,11 @@ public class ScenarioDirector {
                 continue;
             observeSkirmish();
             if (step.block) {
-                //What is said about a skirmish that is over is said first, the end of the block notwithstanding
+                //What is said about a skirmish that is over waits for the first decision the player is asked, with one
+                // exception: the decision that ends the block (the Regroup phase's first, say), which has the player
+                // asked so that it can be said there, since the block's steps are done with after it
                 Step lingering = lingering(step, index == _index, when -> couldFit(when, player, phase, false));
-                if (lingering != null)
+                if (lingering != null && couldFit(step.until, player, phase, false))
                     return asks(lingering);
                 //If the block would be over at this decision, it is the steps after it that have a say.  If not,
                 // it is the first of its own steps that the decision could go to.
@@ -344,7 +346,7 @@ public class ScenarioDirector {
                 if (!couldFit(step.when, player, phase, false))
                     return false;
                 for (Step child : inTurn(step)) {
-                    if ((index == _index && _spent.contains(child)) || !partOfTheGame(child))
+                    if ((index == _index && _spent.contains(child)) || !partOfTheGame(child) || waitsToBeAsked(child))
                         continue;
                     //(the phase is said for it if the block says it for all its steps)
                     if (couldFit(child.when, player, phase, !(saysPhase(child.when, phase) || (child.when.phase == null && step.when.phase == phase))))
@@ -471,8 +473,9 @@ public class ScenarioDirector {
                 continue;
             }
             if (step.block) {
-                //(what is said about a skirmish that is over is read first, and has the player asked: see asksToPass)
-                if (lingering(step, index == _index, when -> fitsPass(when, player, phase)) != null)
+                //(what is said about a skirmish that is over, where this pass would end the block, has had the player
+                // asked: see asksToPass)
+                if (lingering(step, index == _index, when -> fitsPass(when, player, phase)) != null && fitsPass(step.until, player, phase))
                     return AutoPass.NOT;
                 boolean firstTime = times == 0;
                 if (fitsPass(step.until, player, phase) || (firstTime && step.skipWhen != null && fitsPass(step.skipWhen, player, phase))) {
@@ -491,7 +494,7 @@ public class ScenarioDirector {
                 if (!fitsPass(step.when, player, phase))
                     return AutoPass.NOT;
                 for (Step child : inTurn(step)) {
-                    if ((index == _index && _spent.contains(child)) || !partOfTheGame(child) || !fitsPass(child.when, player, phase))
+                    if ((index == _index && _spent.contains(child)) || !partOfTheGame(child) || waitsToBeAsked(child) || !fitsPass(child.when, player, phase))
                         continue;
                     target = child;
                     block = step;
@@ -787,6 +790,14 @@ public class ScenarioDirector {
             if (child.when.after == null)
                 ordered.add(child);
         return ordered;
+    }
+
+    /**
+     * A pause about a skirmish that is over: read over the first decision after it that the player is actually asked,
+     * not one of the passes the game makes for them in between (a fierce assignment's Assignment phase, say).
+     */
+    private static boolean waitsToBeAsked(Step step) {
+        return step.pause && step.when.after != null;
     }
 
     /**
