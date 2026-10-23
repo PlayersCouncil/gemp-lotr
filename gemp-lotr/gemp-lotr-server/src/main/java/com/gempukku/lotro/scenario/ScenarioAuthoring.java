@@ -2961,7 +2961,12 @@ public class ScenarioAuthoring {
             if (all)
                 matches.add(card);
         }
-        matches.sort(Map.Entry.comparingByValue((one, other) -> GameUtils.getFullName(one).compareToIgnoreCase(GameUtils.getFullName(other))));
+        //(a card whose title is what was asked for comes first: its versions, ahead of the cards named after it)
+        String asked = com.gempukku.lotro.common.Names.SanitizeDisplayName(query.trim()).toLowerCase(Locale.ROOT);
+        java.util.function.Function<LotroCardBlueprint, Integer> rank = blueprint ->
+                com.gempukku.lotro.common.Names.SanitizeDisplayName(blueprint.getTitle()).toLowerCase(Locale.ROOT).equals(asked) ? 0 : 1;
+        matches.sort(Map.Entry.comparingByValue((one, other) -> rank.apply(one) != rank.apply(other) ? rank.apply(one) - rank.apply(other)
+                : GameUtils.getFullName(one).compareToIgnoreCase(GameUtils.getFullName(other))));
         for (Map.Entry<String, LotroCardBlueprint> card : matches) {
             if (found.size() >= SEARCH_LIMIT)
                 break;
