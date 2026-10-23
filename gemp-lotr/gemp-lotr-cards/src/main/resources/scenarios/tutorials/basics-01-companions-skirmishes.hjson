@@ -1,16 +1,15 @@
 {
-	id: basics-01-into-the-wild
+	id: basics-01
 	version: 1
 	kind: tutorial
-	title: Into the Wild
-	summary: Frodo sets out alone across four sites. Learn the phases of a turn, twilight, skirmishes and overwhelming, events, sanctuaries, and how to keep a fellowship alive.
+	title: The Basics: Companions and Skirmishes
+	summary: Learn about guiding your Ring-bearer through sites, and defend against a swarm of Orcs along the way.
 	author: ketura
 	tags: basics, phases, twilight, archery, assignment, skirmish, overwhelm, events, sanctuary, defender
-	note: Tutorial 1.  The messages are ketura's script as she wrote it, except where a message's note says otherwise: CHANGED is a message of hers that was altered (the note says how, and why); NEW (Claude) is a message that is not hers (the script was silent there, or had not got that far).  outcome.loseMessage is NEW (Claude).  Numbers in the messages are filled in from the game ({strength:frodo}, {twilight}) wherever one can be, so that a card being swapped cannot leave a sentence untrue.  To read every message with its numbers filled in, beside the decisions the game asks around it: mvn test -pl gemp-lotr-server -Dtest=ScenarioCanonTest -DargLine="-Dscenario.explore=basics-01" (add -Dscenario.choose=plan inside the quotes for the "I have a plan" way through the last turn).  CARDS are declared in the order of the deck, and so in the order they are drawn.  Free Peoples: gandalf to noble1 are drawn at the end of turn 1 (a hand of 6), aragorn to noble2 at the end of turn 2.  Shadow: bowman starts in hand (see setup), soldier to scout are drawn at the end of turn 1 (a hand of 8), host at the end of turn 2; oppFrodo is the opponent's own Ring-bearer, which the game puts on the table for each player and which never takes a turn.  SITES: Green Hill Country (0), Breeland Forest (1), Rivendell Valley (0, sanctuary), Great Chasm (4).  RULES, Free Peoples: a hand of 6, so that the draws come out as the lessons need them; The One Ring's text is off (it is on the table from the first lesson, but what it does is a later one); Gandalf's text is off (his "you may draw a card" would be a prompt at the start of turn 3 that no message is about, with nothing in the deck to draw); the maneuver phase is skipped (a later lesson).  Shadow: no roaming penalty (a later lesson: minions cost what their card says).  options.autoPass: the player is passed through those phases when there is nothing to play, EXCEPT where a step is about that very pass (turn 1's archery phase).
 	format: scenario
 	human: freeps
 	opponent: {
-		name: The Shadow
+		name: Basic Shadow
 		fallback: pass
 	}
 	coverage: strict
@@ -86,7 +85,7 @@
 				type: modifier
 				modifier: {
 					type: modifyHandSize
-					amount: -2
+					amount: -3
 				}
 			}
 			{
@@ -94,13 +93,6 @@
 				modifier: {
 					type: disableGameText
 					filter: name(The One Ring)
-				}
-			}
-			{
-				type: modifier
-				modifier: {
-					type: disableGameText
-					filter: name(Gandalf)
 				}
 			}
 			{
@@ -132,17 +124,19 @@
 			type: hasCardInDeadPile
 			filter: companion
 		}
-		loseMessage: One of your companions has fallen, and the fellowship cannot go on without them. Go back to the last checkpoint and look at the numbers again: who is about to be overwhelmed, and which card in your hand can stop it?
+		loseMessage: One of your companions has fallen, but there was a way for all companions to make it through. Go back to the last checkpoint and look at the numbers again: who is about to be overwhelmed, and which card in your hand can stop it?  The order you perform your skirmishes in can sometimes be important as well.
 	}
 	steps: [
 		# ---- 1
 		{
-			note: TURN 1: site 1 to site 2, alone
 			when: freeps, action, phase(fellowship), turn(1)
 			messages: [
-				Welcome to the Lord of the Rings Trading Card Game!  In this tutorial series, you will play through several simplified scenarios which will slowly introduce you to each of the mechanics of the game and the interface here on Gemp.  Let's get started!
 				{
-					text: This is Frodo.  He is your **Ring-bearer**.  The Ring-bearer is your most important character; if he dies or falls to temptation, **you lose the game**.  Frodo bears...
+					header: Welcome to the Lord of the Rings Trading Card Game!
+					text: "In this tutorial series, you will play through several scenarios which will teach you the mechanics of the game and the interface here on Gemp.  \n\nThe rules will be simplified from the real game to help you learn, but as you progress we will slowly mix in the real rules until you're ready to face real players.\n\nLet's get started!"
+				}
+				{
+					text: "This is Frodo.  He is your **Ring-bearer**.  The Ring-bearer is your most important character; if he dies or falls to temptation, **you lose the game**.  \n\nUnderneath him, Frodo bears..."
 					anchor: card:frodo
 					highlight: card:frodo
 				}
@@ -150,32 +144,39 @@
 					text: ...The One Ring!  This is a special card with special rules, but all you need to remember for now is that your Ring-bearer holds it and keeps it safe from the forces of evil.
 					anchor: card:ring
 					highlight: card:ring
+					avoid: card:frodo, ui:alertBox, zone:self.support
 				}
 				{
-					text: This is a **Site** card.  It is placed horizontally and represents where your Ring-bearer currently is in the wide world of Middle-earth.  Today we start the game at **[[Green Hill Country]]**.
+					text: "This is a **Site** card.  It is placed horizontally and represents where your Ring-bearer currently is in the wide world of Middle-earth.  \n\nToday we start the game at **[[Green Hill Country]]**."
 					anchor: ui:site:1
 					highlight: ui:site:1
+					avoid: ui:twilightPool, ui:advPath, ui:phase, zone:opp.support, zone:opp.characters
 				}
 				{
-					text: This is the **Adventure Path**.  Frodo will have to journey through 9 sites on his way to destroy the Ring, getting as close to Mount Doom as he can.  If your Ring-bearer survives combat on Site 9, you win!  Today, we will journey through 4 sites.
+					text: "This is the **Adventure Path**.  Frodo will have to journey through 9 sites on his way to destroy the Ring, getting as close to Mount Doom as he can.  \n\nIf your Ring-bearer survives combat on Site 9, you win!\n\nIn this tutorial, we will journey through 4 sites."
 					anchor: ui:advPath
 					highlight: ui:advPath
 				}
 				{
-					text: On Gemp, you can hover over cards with your mouse to get a readable preview of the card.  You can also right-click (or swipe up on mobile devices) to open a card preview window.  Right-click on Frodo now.
+					text: "On Gemp, you can hover over cards with your mouse to get a readable preview of the card.  You can also right-click (or swipe up on mobile devices) to open a card preview window.  \n\nRight-click on Frodo now."
 					anchor: card:frodo
 					highlight: card:frodo
 					advance: inspect(frodo)
 				}
 				{
-					text: Here you can see the text on the card, as well as a readout that tells you all the different effects which are altering Frodo's state.  In some games, you'll need to view this screen a lot!  Click outside this window or press ESC to dismiss it.
+					text: "Here you can see the text on the card, as well as a readout that tells you all the different effects which are altering Frodo's state.  In some games, you'll need to view this screen a lot!  \n\nClick outside this window or press ESC to dismiss it."
 					anchor: ui:cardInfo
 					advance: close
 				}
 				{
-					text: The game is divided into **Phases**.  Right now, it is the **Fellowship Phase**, but Frodo is all alone, with no friends or equipment.  He's going to try to travel anyway, so we will go with him!  Click Pass to end the phase and move to the next site.
+					text: "The game is divided into **Phases**.  Keep an eye on this area as gameplay advances.\n\nRight now, it is the **Fellowship Phase**, but Frodo is all alone and has no equipment for you to play."
 					anchor: ui:phase
 					highlight: ui:phase
+				}
+				{
+					text: "Frodo is going to start his journey, so we will go with him!  \n\nClick Pass to end the Fellowship Phase and move to the next site."
+					anchor: ui:button:pass
+					highlight: ui:button:pass
 				}
 			]
 			allow: pass
@@ -185,17 +186,18 @@
 			when: opponent, action, phase(shadow), turn(1)
 			messages: [
 				{
-					text: Frodo has traveled to the **[[Breeland Forest]]** for Site 2.  When traveling, our heroes must avoid the attention of the forces of Shadow, but they are always watching and waiting....
+					text: Frodo has traveled to the **[[Breeland Forest]]** for Site 2.  When traveling, we attract the attention of the forces of Shadow.
 					anchor: ui:site:2
 					highlight: ui:site:2
+					side: below
 				}
 				{
-					text: This is the **Twilight Pool**.  It represents how much attention Frodo has drawn on his journey.  The more Twilight is added to the pool, the more the forces of Shadow will start to take notice and pursue him.
+					text: This is the **Twilight Pool**.  It represents how much attention Frodo has drawn.  The more Twilight is added to the pool, the more resources your opponent will have to punish you.
 					anchor: ui:twilightPool
 					highlight: ui:twilightPool
 				}
 				{
-					text: Every time you move to a new site, you will add 1 twilight per companion in your fellowship.  You will also add twilight equal to the new site's **Shadow Number**, shown here in the black orb in the upper right.
+					text: "Each time you move to a new site, you will add (1) twilight token per companion in your fellowship.  \n\nYou will also add twilight equal to the new site's **Shadow Number**, shown here in the black orb in the upper right."
 					zoom: site:2
 					focus: shadowNumber
 				}
@@ -208,10 +210,15 @@
 			when: opponent, action, phase(shadow), turn(1)
 			messages: [
 				{
-					note: CHANGED: "It costs 2 ... leaving 1 remaining" are now filled in from the game (2, and 0 at Breeland Forest)
-					text: It is now the **Shadow Phase**, and your opponent is sending creatures to hunt down Frodo.  This [[Goblin Bowman]] has sniffed him out!  It costs {cost:bowman} twilight, which is removed from the Twilight Pool, leaving {twilight} remaining.
+					text: It is now the **Shadow Phase**, and your opponent is sending creatures to hunt down Frodo.
 					anchor: card:bowman
 					highlight: card:bowman, ui:twilightPool
+				}
+				{
+					text: This [[Goblin Bowman]] costs {cost:bowman} twilight, which has been removed from the Twilight Pool, leaving {twilight} remaining.
+					highlight: ui:twilightPool
+					zoom: card:bowman
+					focus: cost
 				}
 			]
 			answer: pass
@@ -221,9 +228,20 @@
 			when: freeps, action, phase(archery), turn(1)
 			messages: [
 				{
-					text: After the Shadow player has finished making actions, we move on to other phases.  Now we are at the **Archery Phase**.  This Goblin has the bold keyword **Archer** in its game text, which means it will fire one arrow at us.  You don't have any archers of your own, so click Pass.
+					text: After the Shadow player has finished making actions, we move on to other phases.  Now we are at the **Archery Phase**.
+					anchor: ui:phase
+					highlight: ui:phase
+				}
+				{
+					text: This Goblin has the bold keyword **Archer** in its game text, which means it will automatically fire one arrow at us at the end of the phase.  More archers means more arrows, but for now there's only one.
 					anchor: card:bowman
-					highlight: card:bowman:text
+					highlight: card:bowman:text, ui:phase
+				}
+				During each phase, both players will have an opportunity to make actions keyed to that phase, back and forth, until both players pass.
+				{
+					text: You don't have any archery actions of your own, so click Pass.
+					anchor: ui:button:pass
+					highlight: ui:button:pass
 				}
 			]
 			allow: pass
@@ -234,34 +252,39 @@
 			messages: [
 				{
 					text: Ouch!  Frodo has taken an arrow.  That **wound** is represented with a red bead.
-					anchor: card:frodo
-					highlight: card:frodo:wounds
+					anchor: card:frodo:wounds
 					highlightStyle: red
+					avoid: card:frodo, zone:minions
+					side: right
 				}
 				{
-					note: CHANGED: "from 4 to 3": the 3 is filled in from the game
-					text: Frodo's **Vitality** (shown in the red orb) has gone down, from 4 to {vitality:frodo}.  If he takes too many more wounds, he will die, and his quest will fail.  Keep your Ring-bearer safe!
+					text: Frodo's **Vitality** is shown in the red orb.  If he takes this many wounds, he will die, and his quest will fail.
 					anchor: card:frodo
 					highlight: card:frodo:vitality
 					highlightStyle: red
+					zoom: card:frodo
+					focus: vitality
 				}
 				{
-					text: **Minions** are cards representing the evil creatures and people in the world.  The [[Goblin Bowman]] is ready to fight, so we must draw our swords.
-					anchor: card:bowman
-					highlight: card:bowman
+					text: Gemp will automatically update the numbers on card stats for you to help you keep track.  Frodo's 4 vitality has been reduced by his 1 wound, showing 3 remaining.
+					anchor: card:frodo:vitality
+					highlight: card:frodo:vitality
+					avoid: ui:advPath, ui:alertBox, zone:self.support
+					side: right
+					gap: 12
 				}
 				{
-					text: During the **Assignment Phase**, you will choose who fights.  Every minion must be assigned to one of your companions.  Click on the Goblin to assign it.
+					text: "After Archery, we move to skirmish combat.\n\nDuring the **Assignment Phase**, you will choose who fights who.  Every minion must be assigned to one of your companions.  \n\nClick on the Goblin to assign it."
 					anchor: card:bowman
 					avoid: card:frodo
 				}
 				{
-					text: Once clicked, you will have to choose who fights it.  Frodo is the only companion you have, so click on him.
+					text: Once clicked, you will have to choose who will fight that minion.  Frodo is the only companion you have, so select him.
 					anchor: card:frodo
 					on: picked(bowman)
 				}
 				{
-					text: There are no other minions to assign, so click Done.
+					text: There are no other minions to assign, so lock in your assignments by clicking Done.
 					anchor: ui:button:done
 					on: ready
 				}
@@ -273,7 +296,7 @@
 			when: freeps, cards, text(next skirmish), turn(1)
 			messages: [
 				{
-					text: Now we move on to the **Skirmish Phase**.  Every assigned pair of characters will fight in their own individual battle.  Click on Frodo to begin his skirmish.
+					text: "Now we move on to the **Skirmish Phase**.  Every assigned pair of characters will fight in their own individual battle.  \n\nClick on Frodo to begin his skirmish."
 					anchor: ui:assignment:frodo
 				}
 			]
@@ -284,9 +307,14 @@
 			when: freeps, action, phase(skirmish), turn(1)
 			messages: [
 				{
-					text: Skirmishes are a contest of **Strength**. Strength is the number on the brown shield icon, and represents battle prowess.  Whoever has more strength wins the skirmish.  But right now, both sides are tied!  Shadow plays dirty, so minions always win skirmish ties.  Click Pass to end the skirmish.
+					text: "Skirmishes are a contest of **Strength**. Strength is the number on the brown shield icon, and represents battle prowess.  Whoever has more strength wins the skirmish.  \n\nFrodo's strength is increased by the One Ring, putting him from 3 to 4.\n\nBut right now, both sides are tied!  Shadow plays dirty, so minions always win skirmish ties."
 					anchor: ui:skirmish
 					highlight: card:frodo:strength, card:bowman:strength
+				}
+				{
+					text: You don't have any skirmish actions, so click Pass to end the skirmish.
+					anchor: ui:button:pass
+					highlight: ui:button:pass
 				}
 			]
 			allow: pass
@@ -296,14 +324,12 @@
 			when: freeps, choice, text(another move), turn(1)
 			messages: [
 				{
-					note: CHANGED: "down to 2 vitality": filled in from the game
 					text: The loser of a skirmish takes 1 wound.  Frodo is now down to {vitality:frodo} vitality, and in dire need of help.
-					anchor: card:frodo
-					highlight: card:frodo:wounds
+					anchor: card:frodo:wounds
 					highlightStyle: red
 				}
 				{
-					text: In the **Regroup Phase**, your fellowship must choose whether to continue traveling, or to hide.  If you stay and hide, all minions on the table will be discarded, and you will **reconcile** your hand.  Let's stay; choose No on the pop-up.
+					text: "In the **Regroup Phase**, your fellowship must choose whether to continue traveling, or to hide.  \n\nIf you stay and hide, all minions on the table will be discarded, and you will **reconcile** your hand, drawing more cards.  \n\nLet's choose to stay; choose No on the pop-up."
 					anchor: ui:dialog
 					avoid: card:frodo
 				}
@@ -317,17 +343,16 @@
 			when: freeps, action, phase(fellowship), turn(2)
 			messages: [
 				{
-					text: Now we have reconciled our hand, drawing cards!  Since we chose to stay, it is now the **Fellowship Phase** once again.  This is our chance to play companions and other cards.
+					text: "Now you have reconciled your hand, drawing some cards!  \n\n(In a real game, reconciling has a much bigger impact, but we are skipping over those rules for now.)"
 					anchor: zone:self.hand
 					highlight: zone:self.hand
 					side: above
 				}
 				{
-					note: CHANGED: "costs 4": filled in from the game
-					text: We've drawn Gandalf!  Gandalf is a companion who costs {cost:gandalf}; a hefty sum but a Wizard is always worth it.
+					text: "Since you chose to stay, it is now the **Fellowship Phase** once again.  This is your chance to play companions and other cards.\n\nYou've drawn Gandalf!  Gandalf is a companion who costs {cost:gandalf}; a hefty sum but a Wizard is always worth it.\n\nClick on Gandalf to play him from hand."
 					anchor: card:gandalf
 					highlight: card:gandalf
-					avoid: zone:self.characters
+					side: above
 				}
 			]
 			allow: play(gandalf)
@@ -342,10 +367,25 @@
 					highlight: card:gandalf
 				}
 				{
-					text: These other cards are Events.  They represent moments of bravery, luck, or skill, and we will have a chance to use them later. Click Pass to end the Fellowship Phase.
+					text: Like Minions, Companions have a **Twilight Cost** in the upper left corner of the card.
+					zoom: card:gandalf
+					focus: cost
+				}
+				{
+					text: Because Gandalf is a Free Peoples card, you have put 4 tokens *into* the Twilight Pool, which will be used later by your opponent to pay for their minions.
+					anchor: ui:twilightPool
+					highlight: ui:twilightPool
+				}
+				{
+					text: These other cards are Events.  They represent moments of bravery, luck, or skill, and we will have a chance to use them later.
 					anchor: zone:self.hand
 					highlight: zone:self.hand
 					side: above
+				}
+				{
+					text: Click Pass to end the Fellowship Phase.
+					anchor: ui:button:pass
+					highlight: ui:button:pass
 				}
 			]
 			allow: pass
@@ -355,10 +395,10 @@
 			when: opponent, action, phase(shadow), turn(2)
 			messages: [
 				{
-					note: CHANGED: "putting us at (6) total": filled in from the game
-					text: The fellowship has made it to Rivendell at Site 3...but they are being chased by Orcs! Rivendell has a Shadow Number of 0, but we still add (1) per companion, putting us at ({twilight}) total (remember, we paid ({cost:gandalf}) twilight for Gandalf).
+					text: "The fellowship has made it to [[Rivendell Valley]] at Site 3.\n\nRivendell has a Shadow Number of (0), but we still add (1) per companion, putting us at ({twilight}) total after paying for Gandalf and moving.\n\nNext your opponent will have a chance to play cards during the **Shadow Phase**."
 					anchor: ui:twilightPool
 					highlight: ui:twilightPool, ui:site:3
+					side: right
 				}
 			]
 			answer: play(soldier)
@@ -370,12 +410,18 @@
 		}
 		# ---- 13
 		{
+			when: shadow, action, phase(shadow), turn(2)
+			answer: pass
+		}
+		# ---- 14
+		{
 			when: freeps, assign, turn(2)
 			messages: [
 				{
-					text: There are no archers this time, so we proceed to the Assignment Phase. There are 2 minions, so we will have to assign them to 2 companions.  Assign the Soldier to Gandalf.
+					text: "There are no archers this time, so we proceed to the **Assignment Phase**.\n\nSince there are 2 minions, we will have to assign them to 2 companions.  \n\nAssign the Soldier to Gandalf."
 					anchor: card:soldier
 					avoid: card:gandalf, card:frodo, card:chieftain
+					side: right
 				}
 				{
 					text: Next, assign the Chieftain to Frodo.
@@ -384,38 +430,38 @@
 					on: assigned(gandalf)
 				}
 				{
-					text: If you ever make a mistake, you can click on an assigned minion to assign it to someone else (or click on it again to unassign it).  Click Done to lock in these assignments.
+					text: Click Done to lock in these assignments.
 					anchor: ui:button:done
 					on: ready
 				}
 			]
 			allow: assign(gandalf: soldier, frodo: chieftain)
 		}
-		# ---- 14
+		# ---- 15
 		{
 			when: freeps, cards, text(next skirmish), turn(2)
 			messages: [
 				{
 					text: Now that there are two skirmishes, you must decide which order to perform them in.  Let's do Gandalf's skirmish first.
 					anchor: ui:assignment:gandalf
+					side: left
 				}
 			]
 			allow: choose(gandalf)
 		}
-		# ---- 15
+		# ---- 16
 		{
-			note: The 'otherwise' line is NEW (Claude).
 			when: freeps, action, phase(skirmish), turn(2)
 			messages: [
 				{
-					text: Some fights are so one-sided that the loser has no chance of getting away.  If one side **doubles** the strength of the other at the end of a skirmish, the loser is **overwhelmed** and immediately dies, regardless of how much vitality they have left.
-					anchor: ui:skirmish
+					text: "Some skirmishes are so one-sided that the loser has no chance of getting away.  If one side **doubles** the strength of the other at the end of a skirmish, the loser is **overwhelmed** and immediately dies, indicated here by the red strength total.\n\nThe Soldier here has 2 vitality, which means it should be able to take a hit, but because his strength is less than half of Gandalf's, he won't survive the fight."
+					anchor: ui:skirmish:shadowStrength
+					highlight: ui:skirmish:shadowStrength
 				}
 				{
-					note: CHANGED: "Gandalf's 7 strength ... the Soldier's 3": filled in from the game
-					text: Gandalf's {strength:gandalf} strength is more than double the Soldier's {strength:soldier} strength.  Click Pass to end the skirmish and put the Orc in the ground.
-					anchor: ui:skirmish
-					highlight: ui:skirmish:fpStrength, ui:skirmish:shadowStrength
+					text: Click Pass to end the skirmish and put the Orc in the ground.
+					anchor: ui:button:pass
+					highlight: ui:button:pass
 				}
 			]
 			allow: {
@@ -423,7 +469,12 @@
 				otherwise: Gandalf doesn't need any help with this one. Save your Events for a fight that does.
 			}
 		}
-		# ---- 16
+		# ---- 17
+		{
+			when: shadow, action, phase(skirmish), turn(2)
+			answer: pass
+		}
+		# ---- 18
 		{
 			when: freeps, cards, text(next skirmish), turn(2)
 			messages: [
@@ -434,24 +485,23 @@
 			]
 			allow: choose(frodo)
 		}
-		# ---- 17
+		# ---- 19
 		{
 			note: Either copy will do.  The ? says "if it is on offer": by the next step one of them has been played.
 			when: freeps, action, phase(skirmish), turn(2)
 			messages: [
 				{
-					note: CHANGED: "His 4 strength ... the Chieftain's 9": filled in from the game
-					text: Frodo is in trouble.  His {strength:frodo} strength isn't enough to survive against the Chieftain's {strength:chieftain}!  Let's play an Event to rescue him!
+					text: Frodo is in trouble, and is in danger of being overwhelmed.  His {strength:frodo} strength isn't enough to survive against the Chieftain's {strength:chieftain}!  Let's play an Event to rescue him.
 					anchor: ui:skirmish
 					highlight: ui:skirmish:fpStrength, ui:skirmish:shadowStrength
 				}
 				{
-					text: Events will say in their game text or type bar when they can be played.  [[Servant of the Secret Fire]] has **Skirmish** in its game text, and it is the Skirmish phase, so now is the perfect time.
+					text: "**Events** are cards that you play once and then discard, getting whatever bonuses their text says until the end of the current phase.\n\nEvents will say in their game text or type bar when they can be played.  [[Servant of the Secret Fire]] has a bold **Skirmish** in its game text, and it is the Skirmish phase, so now is the perfect time.\n\n\"**Spot** X\" means that X must be on the table and active.  We can spot Gandalf, so we are permitted to play this now."
 					zoom: card:servant1
 					focus: text
 				}
 				{
-					text: "\"Spot X\" means that X must be on the table and active.  We can spot Gandalf, so we are permitted to play this now."
+					text: Let's play a copy of [[Servant of the Secret Fire]].
 					anchor: card:servant1
 					highlight: card:gandalf
 				}
@@ -459,90 +509,105 @@
 			allow: play(servant1)?, play(servant2)?
 			answer: play(servant1)
 		}
-		# ---- 18
+		# ---- 20
 		{
 			when: opponent, action, phase(skirmish), turn(2)
 			messages: [
 				{
-					note: CHANGED: "from 9 to 7": Servant of the Secret Fire is strength -3, so the game says 6
 					text: The Chieftain has been reduced from 9 to {strength:chieftain} strength.  Frodo may survive this yet!
 					anchor: card:chieftain
 					highlight: card:chieftain:strength
+					side: left
 				}
 			]
 			answer: play(drums1)
 		}
-		# ---- 19
+		# ---- 21
 		{
 			when: freeps, action, phase(skirmish), turn(2)
 			messages: [
 				{
-					text: Oh no!  Your opponent played an event of their own!  Look down here in the **Combat Log** to see it.  You can click or hover over the blue text to see what was played if you missed it, and scroll up to see a log of everything that's happened recently.
+					text: "Oh no!  Your opponent played an event of their own!  Look down here in the **Combat Log** to see it.  \n\nYou can click or hover over the name of a card to see what was played if you missed it.  If you need to, you can scroll up to see a log of everything that's happened recently."
 					anchor: ui:gameLog
 					highlight: ui:gameLog
 					highlightStyle: blue
+					avoid: zone:self.support
+					side: above
 				}
 				{
 					text: **[[Drums in the Deep]]** made the Chieftain strength +2.  Frodo is once more in danger of being overwhelmed.  Let's play the second copy of [[Servant of the Secret Fire]].
 					anchor: zone:self.hand
-					highlight: ui:skirmish:fpStrength, ui:skirmish:shadowStrength
+					highlight: zone:self.hand
 				}
 			]
 			allow: play(servant1)?, play(servant2)?
 			answer: play(servant2)
 		}
-		# ---- 20
+		# ---- 22
 		{
 			when: freeps, action, phase(skirmish), turn(2)
 			messages: [
 				{
-					text: Phew, our opponent didn't play another event.  Click Pass to end the skirmish.
+					text: Phew, our opponent didn't play another event.  Frodo will lose his skirmish, but live to fight another day.
 					anchor: ui:skirmish
-				}
-			]
-			allow: pass
-		}
-		# ---- 21
-		{
-			when: freeps, choice, text(another move), turn(2)
-			messages: [
-				{
-					text: Frodo took 1 wound and avoided being overwhelmed.  However, he is now **exhausted**--only 1 wound away from death.  Some cards will punish you for being exhausted, but more importantly, he's almost dead!
-					anchor: card:frodo
-					highlight: card:frodo:wounds
-					highlightStyle: red
+					highlight: ui:button:pass
 				}
 				{
-					text: It is now the Regroup phase.  Time to hide from these Orcs, and reconcile our hand again.
-					anchor: ui:dialog
-					avoid: card:frodo
-				}
-			]
-			allow: option(No)
-		}
-		# ---- 22
-		{
-			note: The game asks this whenever you reconcile with cards in hand, so it has to be answered.
-			when: freeps, cards, text(Reconcile), turn(2)
-			messages: [
-				{
-					note: NEW (Claude): the script has nothing for this prompt
-					text: When you reconcile, you may first discard one card from your hand, to make room for one more new one.  We want to keep all of these, so click Done.
-					anchor: zone:self.hand
-					side: above
+					text: Click Pass to end the skirmish.
+					anchor: ui:button:pass
+					highlight: ui:button:pass
 				}
 			]
 			allow: pass
 		}
 		# ---- 23
 		{
+			when: shadow, cards, phase(regroup), turn(2)
+			answer: pass
+		}
+		# ---- 24
+		{
+			when: freeps, choice, text(another move), turn(2)
+			messages: [
+				{
+					text: "Frodo took 1 wound and avoided being overwhelmed.  \n\nHowever, he is now **exhausted**--only 1 wound away from death.  Some cards will punish you for being exhausted, but more importantly, he's almost dead!"
+					anchor: card:frodo:vitality
+					highlight: card:frodo:wounds
+					highlightStyle: red
+					side: below
+					gap: 5
+				}
+				{
+					text: "It is now the **Regroup Phase**.  \n\nWith Frodo like this, you are in no state to keep running.  Time to hide from these Orcs, and reconcile our hand again."
+					anchor: ui:dialog
+					avoid: card:frodo
+				}
+			]
+			allow: option(No)
+		}
+		# ---- 25
+		{
+			note: The game asks this whenever you reconcile with cards in hand, so it has to be answered.
+			when: freeps, cards, text(Reconcile), turn(2)
+			messages: [
+				{
+					text: "Normally when you reconcile, you may first discard 1 card from your hand, to make room for more when you draw.  \n\nHowever, we want to keep all of these, so click Done."
+					anchor: ui:button:done
+					highlight: ui:button:done
+					side: above
+				}
+			]
+			allow: pass
+		}
+		# ---- 26
+		{
 			note: TURN 3: site 3 to site 4, the whole fellowship
 			checkpoint: true
 			when: freeps, cards, text(Sanctuary healing)
-			until: freeps, action, phase(fellowship)
+			until: freeps, action
 			messages: [
 				{
-					text: It is the start of the **Fellowship Phase** once more!  Rivendell is a **sanctuary**, which you can tell by its grey color.  All site 3s and site 6s are sanctuaries, which are a place where you can rest and heal.  You may heal up to 5 wounds from your companions now, so get Frodo all healed up!
+					text: "It is the start of the **Fellowship Phase** once more!  \n\nRivendell is a **sanctuary**, which you can tell by its grey color.  All site 3s and site 6s are sanctuaries, which are a place where you can rest and heal.  \n\nAt the start of your Fellowship Phase after you choose to stay at a sanctuary, you may heal up to 5 wounds from your companions, so click on Frodo to heal him up!"
 					anchor: card:frodo
 					highlight: ui:site:3
 				}
@@ -550,14 +615,35 @@
 			allow: choose(frodo)
 			answer: choose(frodo), choose(frodo), choose(frodo)
 		}
-		# ---- 24
+		# ---- 27
 		{
-			note: The 'otherwise' line is NEW (Claude).
+			when: freeps, action, phase(between_turns), turn(3), text(Optional responses)
+			messages: [
+				{
+					text: After sanctuary healing, your usual turn starts.  Gandalf has game text that lets you draw an extra card at the start of your turn.
+					anchor: card:gandalf:text
+					highlight: card:gandalf:text
+				}
+				{
+					text: Since this is an optional trigger ("you **may** draw a card"), you have the option to pass.  But why give up a free card?
+					anchor: ui:button:pass
+					highlight: ui:button:pass
+				}
+				{
+					text: Click on Gandalf to activate his optional trigger.
+					anchor: card:gandalf
+					highlight: card:gandalf
+				}
+			]
+			allow: use(gandalf)
+		}
+		# ---- 28
+		{
 			when: freeps, action, phase(fellowship), turn(3)
 			until: phase(shadow)
 			messages: [
 				{
-					text: And now it is time to play more companions.  Add Aragorn and Boromir to the fellowship, and click Pass once you are ready to move on.
+					text: "And now it is time to play more companions.  Add Aragorn and Boromir to the fellowship.\n\nClick Pass once you are ready to move on."
 					anchor: zone:self.hand
 					highlight: card:aragorn, card:boromir
 					side: above
@@ -579,52 +665,51 @@
 			}
 			answer: play(aragorn), play(boromir), pass
 		}
-		# ---- 25
+		# ---- 29
 		{
 			when: opponent, action, phase(shadow), turn(3)
 			messages: [
 				{
-					note: CHANGED: "15 twilight": filled in from the game
-					text: We add (4) for our growing fellowship, and (4) more from the site.  {twilight} twilight is quite a lot...
+					text: "You added (7) twilight when playing Aragorn and Boromir. \n\nAnd when moving, you added (4) for our growing fellowship ((1) per companion), and (4) more from the site.  {twilight} twilight is quite a lot..."
 					anchor: ui:twilightPool
 					highlight: ui:twilightPool
 				}
 			]
 			answer: play(runner1)
 		}
-		# ---- 26
+		# ---- 30
 		{
 			when: opponent, action, phase(shadow), turn(3)
 			messages: [
 				{
-					text: Your opponent has played a [[Goblin Runner]].  It has game text that triggers upon being played, which in this case adds (2) twilight.  But it's just one Orc, so...
+					text: Your opponent has played a [[Goblin Runner]].  It has game text that triggers upon being played, which in this case adds (2) twilight.
 					anchor: card:runner1
 					highlight: card:runner1:text
 				}
 			]
 			answer: play(runner2)
 		}
-		# ---- 27
+		# ---- 31
 		{
 			when: opponent, action, phase(shadow), turn(3)
 			answer: play(bowman2)
 		}
-		# ---- 28
+		# ---- 32
 		{
 			when: opponent, action, phase(shadow), turn(3)
 			answer: play(marksman)
 		}
-		# ---- 29
+		# ---- 33
 		{
 			when: opponent, action, phase(shadow), turn(3)
 			answer: play(scout)
 		}
-		# ---- 30
+		# ---- 34
 		{
 			when: opponent, action, phase(shadow), turn(3)
 			answer: play(host)
 		}
-		# ---- 31
+		# ---- 35
 		{
 			note: Host of Moria's trigger is optional, so the opponent is asked whether to use it
 			when: opponent, action, text(Optional responses), turn(3)
@@ -638,84 +723,99 @@
 			]
 			answer: use(host)
 		}
-		# ---- 32
+		# ---- 36
 		{
 			when: opponent, arbitrary, turn(3)
 			answer: choose(chieftain)
 		}
-		# ---- 33
+		# ---- 37
 		{
 			when: opponent, action, phase(shadow), turn(3)
 			messages: [
 				{
-					text: ...we've seen this [[Ancient Chieftain]] before.  Minions cannot ever truly die; while you can chase them into the discard pile, they might find a way to claw their way back to your fellowship.
+					text: "...we've seen this [[Ancient Chieftain]] before.  Minions cannot ever truly die; while you can chase them into the discard pile, they might find a way to claw their way back to your fellowship.\n\nHis game text didn't matter when we saw him before, but now that there's so many Orcs with him, his strength has grown considerably."
 					anchor: card:chieftain
 					highlight: card:chieftain
 				}
 			]
 			answer: pass
 		}
-		# ---- 34
+		# ---- 38
 		{
 			when: freeps, cards, text(archery wound), turn(3)
 			until: freeps, assign
 			messages: [
 				{
-					text: 2 of your enemies have the **archer** keyword, so they will fire 2 arrows at you.  Mercifully, you get to decide where those arrows land.  Choose wisely.
-					anchor: zone:self.characters
+					text: (Did you notice that Moria Scout also had a card trigger?  But because there are no Elves on the table to spot, the ability failed to work.)
+					anchor: card:scout
+					highlight: card:scout
+				}
+				{
+					text: "2 of your enemies have the **archer** keyword, so during the **Archery Phase** they will fire 2 arrows at you.  Mercifully, you get to decide where those arrows land.  \n\nChoose wisely."
+					anchor: card:bowman2
 					highlight: card:bowman2, card:marksman
 					highlightStyle: red
+					side: above
 				}
-				note: "NEW (Claude).  Two arrows on Boromir and he dies when he loses his skirmish, so he is kept out of it."
 			]
 			allow: {
 				answers: choose(frodo), choose(gandalf), choose(aragorn)
 				hints: {
-					boromir: Boromir has the least vitality of your Men, and the biggest Orc on the table is coming for him.  Let someone sturdier take the arrow.
+					boromir: Boromir has the least vitality of your companions, so it is better for someone sturdier to take it.
 				}
 			}
 			answer: choose(frodo), choose(frodo)
 		}
-		# ---- 35
+		# ---- 39
 		{
 			when: freeps, assign, turn(3)
 			messages: [
 				{
-					text: Aragorn has **Defender +1**.  This means that you can assign 1 additional minion to him, letting him fight 2 Orcs at once.  Let's assign a [[Goblin Marksman]] and a [[Goblin Bowman]] to him.
+					text: Aragorn has **Defender +1**.  This means that you can assign 1 additional minion to him, letting him fight 2 Orcs at once.
 					anchor: card:aragorn
 					highlight: card:aragorn:text
 				}
 				{
+					text: Let's assign the [[Goblin Marksman]] and [[Goblin Bowman]] to Aragorn.
+					highlight: card:marksman, card:bowman2
+					highlightStyle: red
+					avoid: zone:self.characters
+					side: above
+				}
+				{
 					text: Boromir is a brave warrior, so assign the [[Host of Moria]] to him.
-					anchor: card:boromir
+					anchor: card:host
+					highlight: card:host
 					on: assigned(aragorn)
 				}
 				{
 					text: Gandalf will take on the [[Ancient Chieftain]].
-					anchor: card:gandalf
+					anchor: card:chieftain
+					highlight: card:chieftain
+					side: above
 					on: assigned(boromir)
 				}
 				{
-					note: CHANGED: was "And Frodo can fight the other Bowman."  There is only one Bowman on the table (and only 2 archers); the Scout is the minion left over that there is one of.
 					text: And Frodo can fight the [[Moria Scout]].
-					anchor: card:frodo
+					anchor: card:scout
+					highlight: card:scout
+					side: above
 					on: assigned(gandalf)
 				}
 				{
-					note: CHANGED: the last sentence is added.  This is said before the assignment is confirmed, and Gemp asks "At least one minion has not been assigned, do you want to proceed?" when Done is clicked.
-					text: ...there are too many of them.  You have no more companions left, so your opponent gets to decide who the remaining minions will fight.  Click Done, and tell Gemp that yes, you mean it.
+					text: "...there are too many of them.  You have no more companions left, so your opponent gets to decide who the remaining minions will fight.  \n\nClick Done to lock in these assignments.\n\nAfterwards, Gemp will give you a pop-up asking if you meant to leave minions unassigned.  You don't have a choice, so click OK."
 					anchor: ui:button:done
 					on: ready
 				}
 			]
 			allow: assign(aragorn: marksman + bowman2, boromir: host, gandalf: chieftain, frodo: scout)
 		}
-		# ---- 36
+		# ---- 40
 		{
 			when: opponent, assign, turn(3)
 			answer: assign(frodo: runner1 + runner2)
 		}
-		# ---- 37
+		# ---- 41
 		{
 			note: Read, not answered: the decision underneath (which skirmish first) belongs to whichever step follows.
 			checkpoint: true
@@ -723,7 +823,7 @@
 			when: freeps, cards, text(next skirmish), turn(3)
 			messages: [
 				{
-					text: As expected, they seek out the Ring and attack Frodo.  This looks bad.  Take a moment and think; read the cards on the table and in your hand and see if you can make a plan for how to execute each skirmish to keep all of your companions alive.
+					text: "As expected, the extra minions seek out the Ring and attack Frodo.  \n\nThis looks bad.  \n\nTake a moment and think; read the cards on the table and in your hand and see if you can make a plan for how to execute each skirmish to keep all of your companions alive."
 					anchor: ui:assignment:frodo
 					highlight: ui:assignment:frodo
 					highlightStyle: red
@@ -734,7 +834,7 @@
 				}
 			]
 		}
-		# ---- 38
+		# ---- 42
 		{
 			note: "\"I have a plan\": the skirmishes are the player's What the headless runner plays, to prove this way through can be won"
 			if: plan
@@ -742,7 +842,7 @@
 			until: freeps, action, phase(regroup)
 			answer: choose(boromir), play(swordarm1), choose(boromir), pass, choose(aragorn), play(swordarm2), choose(aragorn), pass, choose(gandalf), pass, choose(frodo), play(noble1), choose(aragorn), play(noble2), choose(gandalf), pass
 		}
-		# ---- 39
+		# ---- 43
 		{
 			note: "\"Help me see victory\": one skirmish at a time"
 			if: help
@@ -755,13 +855,12 @@
 			]
 			allow: choose(boromir)
 		}
-		# ---- 40
+		# ---- 44
 		{
 			if: help
 			when: freeps, action, phase(skirmish), turn(3)
 			messages: [
 				{
-					note: CHANGED: "7 strength to the Host's 15": filled in from the game
 					text: Boromir is {strength:boromir} strength to the Host's {strength:host}, which is very close to the overwhelm boundary.  Play a [[Swordarm of the White Tower]] to push him into safety.  He is not defender +1, so he only gets +2 strength.
 					anchor: ui:skirmish
 					highlight: ui:skirmish:fpStrength, ui:skirmish:shadowStrength
@@ -770,9 +869,9 @@
 			allow: play(swordarm1)?, play(swordarm2)?
 			answer: play(swordarm1)
 		}
-		# ---- 41
+		# ---- 45
 		{
-			note: The card asks who gets the strength.  No message of yours for this one, so there is only a hint. The 'otherwise' line is NEW (Claude).
+			note: The card asks who gets the strength.  No message of yours for this one, so there is only a hint.
 			if: help
 			when: freeps, cards, text(modify strength), turn(3)
 			allow: {
@@ -780,67 +879,13 @@
 				otherwise: This one is for Boromir.  He is the one in trouble right now.
 			}
 		}
-		# ---- 42
-		{
-			if: help
-			when: freeps, action, phase(skirmish), turn(3)
-			messages: [
-				{
-					note: NEW (Claude): the script has no message for this pass
-					text: Boromir is now {strength:boromir} strength.  He will lose and take a wound, but he will not be overwhelmed.  Click Pass.
-					anchor: ui:skirmish
-					highlight: ui:skirmish:fpStrength, ui:skirmish:shadowStrength
-				}
-			]
-			allow: pass
-		}
-		# ---- 43
-		{
-			if: help
-			when: freeps, cards, text(next skirmish), turn(3)
-			messages: [
-				{
-					text: Aragorn next.
-					anchor: ui:assignment:aragorn
-				}
-			]
-			allow: choose(aragorn)
-		}
-		# ---- 44
-		{
-			if: help
-			when: freeps, action, phase(skirmish), turn(3)
-			messages: [
-				{
-					note: CHANGED: "8 strength versus a combined 12": filled in from the game.  Marksman 7 + Bowman 4 is 11; at 12 Aragorn's 12 would only tie, and ties go to the Shadow.
-					text: Aragorn is {strength:aragorn} strength versus a combined {shadowStrength} strength against him.  However he *is* defender +1, so let's play the other Swordarm.
-					anchor: ui:skirmish
-					highlight: ui:skirmish:fpStrength, ui:skirmish:shadowStrength
-				}
-			]
-			allow: play(swordarm1)?, play(swordarm2)?
-			answer: play(swordarm2)
-		}
-		# ---- 45
-		{
-			if: help
-			when: freeps, cards, text(modify strength), turn(3)
-			messages: [
-				{
-					text: Make sure to select Aragorn as your target and not Boromir!  Both of them are [gondor] companions, so don't misclick!
-					anchor: card:aragorn
-					avoid: card:boromir
-				}
-			]
-			allow: choose(aragorn)
-		}
 		# ---- 46
 		{
 			if: help
 			when: freeps, action, phase(skirmish), turn(3)
 			messages: [
 				{
-					text: Aragorn was made +4 strength, pushing him to be the winner!  Each loser in this skirmish will get 1 wound, which kills them both.
+					text: Boromir is now {strength:boromir} strength.  He will lose and take a wound, but he will not be overwhelmed.  Click Pass.
 					anchor: ui:skirmish
 					highlight: ui:skirmish:fpStrength, ui:skirmish:shadowStrength
 				}
@@ -853,11 +898,11 @@
 			when: freeps, cards, text(next skirmish), turn(3)
 			messages: [
 				{
-					text: Gandalf is next.
-					anchor: ui:assignment:gandalf
+					text: Aragorn next.
+					anchor: ui:assignment:aragorn
 				}
 			]
-			allow: choose(gandalf)
+			allow: choose(aragorn)
 		}
 		# ---- 48
 		{
@@ -865,63 +910,51 @@
 			when: freeps, action, phase(skirmish), turn(3)
 			messages: [
 				{
-					note: CHANGED: "is therefore only 13": filled in from the game.  "was 15" is written out (9, +1 for each of the six other [moria] Orcs).
-					text: The Chieftain was 15 strength, but because Aragorn killed two Orcs, they are no longer on the table and thus no longer able to be spotted.  Chieftain is therefore only {strength:chieftain}, not enough to overwhelm Gandalf.
+					text: Aragorn is {strength:aragorn} strength versus a combined {shadowStrength} strength against him.  However he *is* defender +1, so let's play the other Swordarm.
 					anchor: ui:skirmish
-					highlight: card:chieftain:strength
+					highlight: ui:skirmish:fpStrength, ui:skirmish:shadowStrength
+				}
+			]
+			allow: play(swordarm1)?, play(swordarm2)?
+			answer: play(swordarm2)
+		}
+		# ---- 49
+		{
+			if: help
+			when: freeps, cards, text(modify strength), turn(3)
+			messages: [
+				{
+					text: Make sure to select Aragorn as your target and not Boromir!  Both of them are [gondor] companions, so don't misclick!
+					anchor: card:aragorn
+					avoid: card:boromir
+				}
+			]
+			allow: choose(aragorn)
+		}
+		# ---- 50
+		{
+			if: help
+			when: freeps, action, phase(skirmish), turn(3)
+			messages: [
+				{
+					text: Aragorn was made +4 strength, pushing him to be the winner!  Each loser in this skirmish will get 1 wound, which kills them both.
+					anchor: ui:skirmish
+					highlight: ui:skirmish:fpStrength, ui:skirmish:shadowStrength
 				}
 			]
 			allow: pass
 		}
-		# ---- 49
+		# ---- 51
 		{
 			if: help
 			when: freeps, cards, text(next skirmish), turn(3)
 			messages: [
 				{
-					text: That leaves Frodo at the last.
-					anchor: ui:assignment:frodo
+					text: Gandalf is next.
+					anchor: ui:assignment:gandalf
 				}
 			]
-			allow: choose(frodo)
-		}
-		# ---- 50
-		{
-			note: Everything from here to the end is NEW (Claude): your messages stop at "That leaves Frodo at the last."
-			if: help
-			when: freeps, action, phase(skirmish), turn(3)
-			messages: [
-				{
-					text: Three Orcs with {shadowStrength} strength between them, against Frodo's {strength:frodo}.  He cannot win this.  He doesn't have to!  He only has to avoid being overwhelmed, and for that he needs more than half their strength.
-					anchor: ui:skirmish
-					highlight: ui:skirmish:fpStrength, ui:skirmish:shadowStrength
-				}
-				{
-					text: "[[Noble Intentions]] lets one of his friends lend him theirs.  It has a cost: you must **exert** a companion who is not a Hobbit.  Exerting means that character takes a wound, as payment."
-					zoom: card:noble1
-					focus: text
-				}
-				{
-					text: A wound is a fair price for Frodo's life.  Play [[Noble Intentions]] now.
-					anchor: zone:self.hand
-					side: above
-				}
-			]
-			allow: play(noble1)?, play(noble2)?
-			answer: play(noble1)
-		}
-		# ---- 51
-		{
-			note: Who pays is left to the player: whoever can still exert is on offer, and any of them will do
-			if: help
-			when: freeps, cards, text(exert), turn(3)
-			messages: [
-				{
-					text: Choose who exerts.  They will take the wound, so pick someone who can spare it.
-					anchor: zone:self.characters
-				}
-			]
-			answer: choose(aragorn)
+			allow: choose(gandalf)
 		}
 		# ---- 52
 		{
@@ -929,19 +962,29 @@
 			when: freeps, action, phase(skirmish), turn(3)
 			messages: [
 				{
-					text: Frodo is up to {strength:frodo}, but {shadowStrength} is still more than double that.  You have a second copy.  Play it!
+					text: The Chieftain was 15 strength, but because Aragorn killed two Orcs, they are no longer on the table and thus no longer able to be spotted.  Chieftain is therefore only {strength:chieftain}, not enough to overwhelm Gandalf.
 					anchor: ui:skirmish
-					highlight: ui:skirmish:fpStrength, ui:skirmish:shadowStrength
+					highlight: card:chieftain:strength
+				}
+				{
+					text: Click Pass to end the Skirmish.
+					anchor: ui:button:pass
+					highlight: ui:button:pass
 				}
 			]
-			allow: play(noble1)?, play(noble2)?
-			answer: play(noble2)
+			allow: pass
 		}
 		# ---- 53
 		{
 			if: help
-			when: freeps, cards, text(exert), turn(3)
-			answer: choose(gandalf)
+			when: freeps, cards, text(next skirmish), turn(3)
+			messages: [
+				{
+					text: That leaves Frodo for last.
+					anchor: ui:assignment:frodo
+				}
+			]
+			allow: choose(frodo)
 		}
 		# ---- 54
 		{
@@ -949,26 +992,82 @@
 			when: freeps, action, phase(skirmish), turn(3)
 			messages: [
 				{
-					text: "{strength:frodo} against {shadowStrength}.  Frodo will lose, and take a wound for it, but he will live.  Click Pass."
+					text: Three Orcs with {shadowStrength} strength between them, against Frodo's {strength:frodo}.  We need to get him to at least 9 strength to avoid an overwhelm.
+					anchor: ui:skirmish
+					highlight: ui:skirmish:fpStrength, ui:skirmish:shadowStrength
+				}
+				{
+					text: "[[Noble Intentions]] lets one of Frodo's friends lend him part of their strength.  \n\nThis event has a cost: you must **exert** a companion who is not a Hobbit.  Exerting means that character takes a voluntary wound, representing effort, strain, or fatigue.\n\nThe only difference between exerting and wounding is that you cannot exert yourself to death.  Once placed, the token persists as an ongoing wound regardless of how it got there."
+					zoom: card:noble1
+					focus: text
+				}
+				{
+					text: An exertion is a fair price for Frodo's life.  Play [[Noble Intentions]] now.
+					anchor: card:noble1
+					highlight: card:noble1
+					side: above
+				}
+			]
+			allow: play(noble1)?, play(noble2)?
+			answer: play(noble1)
+		}
+		# ---- 55
+		{
+			note: Who pays is left to the player: whoever can still exert is on offer, and any of them will do
+			if: help
+			when: freeps, cards, text(exert), turn(3)
+			messages: [
+				Choose who exerts.  Be sure to pick someone who can spare it.
+			]
+			answer: choose(aragorn)
+		}
+		# ---- 56
+		{
+			if: help
+			when: freeps, action, phase(skirmish), turn(3)
+			messages: [
+				{
+					text: "Frodo is up to {strength:frodo}, but {shadowStrength} is still more than double that.  You have a second copy of [[Noble Intentions]].\n\nPlay it!"
+					anchor: card:noble2
+					highlight: ui:skirmish:fpStrength, ui:skirmish:shadowStrength
+					side: above
+				}
+			]
+			allow: play(noble1)?, play(noble2)?
+			answer: play(noble2)
+		}
+		# ---- 57
+		{
+			if: help
+			when: freeps, cards, text(exert), turn(3)
+			answer: choose(gandalf)
+		}
+		# ---- 58
+		{
+			if: help
+			when: freeps, action, phase(skirmish), turn(3)
+			messages: [
+				{
+					text: "{strength:frodo} against {shadowStrength}.  Frodo will lose, and take a wound for it, but he will survive.  Click Pass to end the skirmish."
 					anchor: ui:skirmish
 					highlight: ui:skirmish:fpStrength, ui:skirmish:shadowStrength
 				}
 			]
 			allow: pass
 		}
-		# ---- 55
+		# ---- 59
 		{
 			note: both ways through end here Regroup is passed for the player (options.autoPass), but they are asked here because this step is over that pass.  Being a pause, it ends the scenario when it has been read.
 			pause: true
 			when: freeps, action, phase(regroup), turn(3)
 			messages: [
 				{
-					text: The Orcs have nothing to show for it.  Every one of your companions is still standing, and the Ring is still safe in Frodo's keeping.
+					text: "The Orcs were vicious, but they have nothing to show for it.  Even outnumbered, every one of your companions is still standing, and the Ring is still safe in Frodo's keeping.\n\nOf course, the wounds are beginning to stack up, and exhaustion can take its toll.  How many more sites of this can your fellowship survive...?"
 					anchor: zone:self.characters
 					highlight: zone:self.characters
 					highlightStyle: green
 				}
-				In a full game the road goes on all the way to Site 9, with a deck of your own, an opponent who is trying to get their own Ring-bearer there first, and a Ring that does a great deal more than sit there.  All of that is still to come.  For today, you have brought the fellowship through alive.  Well done!
+				"In a full game the road goes on all the way to Site 9, but we will stop here.  You've now seen the basics of skirmishing, and are ready to move on.\n\nCongratulations!"
 			]
 			end: complete
 		}
