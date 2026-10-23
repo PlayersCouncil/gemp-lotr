@@ -107,6 +107,30 @@ public class ScenarioParserTest {
     }
 
     @Test
+    public void aScenarioFixesThePlayersDeckRevealAndAnimationSettings() throws Exception {
+        ScenarioDefinition stock = ScenarioTesting.parse("");
+        assertTrue("A tutorial skips the look through one's own deck unless it says otherwise", stock.dismissesDeckReveal());
+        assertNull("...and leaves the animation speed to the player", stock.animationSpeed);
+        String stockWritten = ScenarioWriter.toHjson(stock, ScenarioTesting.library());
+        assertFalse(stockWritten, stockWritten.contains("autoDismissDeckReveal"));
+        assertFalse(stockWritten, stockWritten.contains("animationSpeed"));
+
+        assertFalse("Anything other than a tutorial shows it", ScenarioTesting.parse("\tkind: puzzle").dismissesDeckReveal());
+
+        ScenarioDefinition def = ScenarioTesting.parse("\toptions: {\n\t\tautoDismissDeckReveal: false\n\t\tanimationSpeed: -2\n\t}");
+        assertFalse(def.dismissesDeckReveal());
+        assertEquals(Integer.valueOf(-2), def.animationSpeed);
+        String written = ScenarioWriter.toHjson(def, ScenarioTesting.library());
+        assertTrue(written, written.contains("autoDismissDeckReveal: false"));
+        assertTrue(written, written.contains("animationSpeed: -2"));
+        ScenarioDefinition again = ScenarioParser.parse(written);
+        assertEquals(Boolean.FALSE, again.autoDismissDeckReveal);
+        assertEquals(Integer.valueOf(-2), again.animationSpeed);
+
+        assertRejected("\toptions: {\n\t\tanimationSpeed: 5\n\t}", "from -4");
+    }
+
+    @Test
     public void aMessageCanPointAtSeveralThingsAndSayHowFarOffItSits() throws Exception {
         String steps = """
                 	options: {
