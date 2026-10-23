@@ -82,7 +82,7 @@ public final class ScenarioParser {
 
         JsonObject options = optionalObject(object, "options", "scenario");
         if (options != null) {
-            checkFields(options, "options", "autoPass", "autoAccept", "rngDefault", "opponentDelayMs", "runnerLevel", "bubbleGap");
+            checkFields(options, "options", "autoPass", "autoAccept", "autoDismissDeckReveal", "animationSpeed", "rngDefault", "opponentDelayMs", "runnerLevel", "bubbleGap");
             JsonValue autoPass = get(options, "autoPass");
             if (autoPass != null) {
                 String written = autoPass.isArray() ? "" : scalar(autoPass, "options.autoPass");
@@ -95,6 +95,13 @@ public final class ScenarioParser {
                 }
             }
             def.autoAccept = optionalBoolean(options, "autoAccept", true, "options");
+            if (get(options, "autoDismissDeckReveal") != null)
+                def.autoDismissDeckReveal = optionalBoolean(options, "autoDismissDeckReveal", true, "options");
+            if (get(options, "animationSpeed") != null) {
+                def.animationSpeed = optionalInt(options, "animationSpeed", 0, "options");
+                if (def.animationSpeed < -4 || def.animationSpeed > 4)
+                    throw new ScenarioFormatException("options.animationSpeed: has to be from -4 (slowest) to 4 (fastest); 0 is the game's own speed");
+            }
             def.rngDefault = optionalEnum(options, "rngDefault", RngDefault.class, RngDefault.IDENTITY, "options");
             def.opponentDelayMs = optionalInt(options, "opponentDelayMs", 900, "options");
             def.runnerLevel = optionalEnum(options, "runnerLevel", RunnerLevel.class, null, "options");

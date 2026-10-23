@@ -457,6 +457,16 @@ var GempScenarioAuthor = Class.extend({
 
     /* ---------------------------------------------------------------- state */
 
+    /** The player's settings the draft fixes for its game (see GempScenarioOverlay.applySettings), as the game has them. */
+    settingsOf: function (draft) {
+        var options = draft.options || {};
+        return {
+            autoAccept: options.autoAccept !== false,
+            autoDismissDeckReveal: options.autoDismissDeckReveal != null ? options.autoDismissDeckReveal : (draft.kind || "tutorial") == "tutorial",
+            animationSpeed: options.animationSpeed
+        };
+    },
+
     setState: function (state) {
         //The same as last time: nothing is drawn again, and nothing anybody was in the middle of is disturbed
         var text = JSON.stringify(state);
@@ -484,6 +494,7 @@ var GempScenarioAuthor = Class.extend({
         }
         if (same)
             return;
+        this.overlay.applySettings(this.settingsOf(this.draft));
         var steps = this.draft.steps;
         var uids = state.uids || [];
         if ((state.mode == "test") != this.panel.hasClass("sa-floating"))
@@ -4900,6 +4911,36 @@ var GempScenarioAuthor = Class.extend({
                 top("options", $.isEmptyObject(changed) ? null : changed);
             })).append(document.createTextNode(" " + phase)));
         });
+
+        //The player's own settings, fixed for the scenario's game (the Settings tab shows them and cannot change them)
+        var setOption = function (name, value) {
+            var changed = that.clone(options);
+            if (value == null)
+                delete changed[name];
+            else
+                changed[name] = value;
+            top("options", $.isEmptyObject(changed) ? null : changed);
+        };
+        var settings = this.settingsOf(draft);
+        play.append(this.el("label", "sa-check sa-block").attr("title", "A click that completes a choice is sent at once, with no Done to press. Whatever the player's own setting is.")
+            .append($("<input type='checkbox'/>").prop("checked", settings.autoAccept).change(function () {
+                setOption("autoAccept", this.checked ? null : false);
+            })).append(document.createTextNode(" Auto-accept after selecting a card or action")));
+        var revealByKind = (draft.kind || "tutorial") == "tutorial";
+        play.append(this.el("label", "sa-check sa-block").attr("title", "When the player searches their own draw deck, the popup showing the whole deck is skipped "
+            + "(it is answered at once, as if they had pressed Done: a step written for that popup goes by unread). Whatever the player's own setting is. "
+            + "Unless it is set otherwise, on for a tutorial and off for anything else.")
+            .append($("<input type='checkbox'/>").prop("checked", settings.autoDismissDeckReveal).change(function () {
+                setOption("autoDismissDeckReveal", this.checked == revealByKind ? null : this.checked);
+            })).append(document.createTextNode(" Auto-dismiss deck reveal when searching their own deck")));
+        var speeds = [["", "the player's own"]];
+        $.each([-4, -3, -2, -1, 0, 1, 2, 3, 4], function (index, speed) {
+            speeds.push(["" + speed, speed == 0 ? "0: the game's usual speed"
+                : (speed > 0 ? "+" : "") + speed + ": " + Math.pow(2, Math.abs(speed)) + "\u00d7 as " + (speed > 0 ? "fast" : "slow")]);
+        });
+        play.append(this.field("Animation speed", this.select(speeds, options.animationSpeed == null ? "" : "" + options.animationSpeed, function (value) {
+            setOption("animationSpeed", value == "" ? null : parseInt(value, 10));
+        }), "The speed the game's animations play at, whatever the player's own setting is (the Settings tab's slider, in steps)"));
 
         var bubbleGap = $("<input type='text'/>").addClass("sa-input sa-short").val(options.bubbleGap || "").attr("placeholder", this.overlay.STOCK_GAP).change(function () {
             var changed = that.clone(options);

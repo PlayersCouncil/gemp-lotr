@@ -50,6 +50,21 @@ public final class ScenarioDefinition {
      * game, whatever the person's own setting is, so that the scenario's text can say what will happen.
      */
     public boolean autoAccept = true;
+    /**
+     * Whether the look through the person's own deck that comes with searching it is skipped (the person's own
+     * "auto-dismiss deck reveal" setting, fixed for the game).  Null: on for a tutorial, off for anything else.
+     */
+    public Boolean autoDismissDeckReveal;
+    /**
+     * The animation speed the game is shown at, fixed for the game: the steps of the Settings tab's slider, from -4
+     * (16 times as slow) through 0 (as the game comes) to 4 (16 times as fast).  Null: the person's own setting.
+     */
+    public Integer animationSpeed;
+
+    /** Whether the look through one's own deck is skipped, as the file says or as the scenario's kind has it. */
+    public boolean dismissesDeckReveal() {
+        return autoDismissDeckReveal != null ? autoDismissDeckReveal : kind == Kind.TUTORIAL;
+    }
     public RngDefault rngDefault = RngDefault.IDENTITY;
     public int opponentDelayMs = 900;
     /** How far a bubble sits from what it points at, where its message does not say (see Message.gap); null for the stock distance. */

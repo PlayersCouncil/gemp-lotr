@@ -755,11 +755,8 @@ var GempScenarioOverlay = Class.extend({
         var game = this.game;
         $("body").addClass("scenario-game scenario-" + info.kind);
 
-        //A scenario's text talks about confirming choices, so a click must not be sent off by itself; and the server
-        // has already settled where the player is asked to pass.  Neither changes the player's own saved settings.
-        game.settingsAutoAccept = info.autoAccept;
-        game.settingsAutoDismissDeckReveal = false;
-        $("#autoAccept, #autoDismissDeckReveal").attr("disabled", "disabled");
+        //The server has already settled where the player is asked to pass
+        this.applySettings(info);
         $("#settingsBox .setting-group").first().find("input").attr("disabled", "disabled");
 
         this.renameOpponent();
@@ -774,6 +771,39 @@ var GempScenarioOverlay = Class.extend({
 
         if (!game.replayMode && ($(window).width() < this.MIN_WIDTH || $(window).height() < this.MIN_HEIGHT))
             this.showTooSmall();
+    },
+
+    /**
+     * The player's own settings that a scenario fixes for its game: whether a click that completes a choice is sent
+     * without a Done (a scenario's text talks about confirming choices), whether the look through one's own deck that
+     * comes with searching it is skipped, and the animation speed if the scenario gives one.  The Settings tab shows
+     * what the game is played with and cannot be changed meanwhile; what the player has saved is left as it is.
+     * @param settings autoAccept, autoDismissDeckReveal and animationSpeed (null: the player's own).
+     */
+    applySettings: function (settings) {
+        var game = this.game;
+        game.settingsAutoAccept = !!settings.autoAccept;
+        game.settingsAutoDismissDeckReveal = !!settings.autoDismissDeckReveal;
+        //(setting a box's checked state does not count as the player changing it, so nothing is saved)
+        $("#autoAccept").prop("checked", game.settingsAutoAccept).attr("disabled", "disabled");
+        $("#autoDismissDeckReveal").prop("checked", game.settingsAutoDismissDeckReveal).attr("disabled", "disabled");
+
+        var slider = $("#animation-slider");
+        var speed = settings.animationSpeed;
+        var fixed = speed != null && speed !== "";
+        if (!fixed && !this.speedFixed)
+            return;
+        //(an author can take the scenario's speed away again: the player's own comes back)
+        if (!fixed)
+            speed = loadFromCookie("animation-speed", 0);
+        speed = parseInt(speed, 10) || 0;
+        game.animations.replaySpeed = Math.pow(2, -speed);
+        if (slider.data("slider")) {
+            slider.slider("value", speed);
+            slider.slider(fixed ? "disable" : "enable");
+        }
+        slider.attr("title", fixed ? "This scenario is played at this speed" : "");
+        this.speedFixed = fixed;
     },
 
     /**
