@@ -762,6 +762,9 @@ public class LiveScenario implements ScenarioSession.Listener {
         event.put("opponent", _opponent);
         event.put("opponentName", _def.opponentDisplayName());
         event.put("autoAccept", _def.autoAccept);
+        event.put("autoDismissDeckReveal", _def.dismissesDeckReveal());
+        //(null: the person's own speed)
+        event.put("animationSpeed", _def.animationSpeed);
         //How far a bubble sits from what it points at where its message does not say; null for the stock distance
         event.put("bubbleGap", _def.bubbleGap);
         //Set if the game did not start at the beginning: the checkpoint step it was brought back to

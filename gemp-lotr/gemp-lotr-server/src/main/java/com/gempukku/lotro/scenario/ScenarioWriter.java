@@ -75,6 +75,10 @@ public final class ScenarioWriter {
         }
         if (!def.autoAccept)
             options.add("autoAccept", false);
+        if (def.autoDismissDeckReveal != null)
+            options.add("autoDismissDeckReveal", def.autoDismissDeckReveal.booleanValue());
+        if (def.animationSpeed != null)
+            options.add("animationSpeed", def.animationSpeed.intValue());
         if (def.rngDefault != RngDefault.IDENTITY)
             options.add("rngDefault", lower(def.rngDefault));
         if (def.opponentDelayMs != 900)
