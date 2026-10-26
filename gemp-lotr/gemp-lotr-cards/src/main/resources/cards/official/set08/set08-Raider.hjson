@@ -97,7 +97,16 @@
 						cost: {
 							type: chooseANumber
 							text: Choose how many {raider} tokens to remove
-							from: 0
+							from: {
+								type: LeastDiscountToPlay
+								fromZone: DISCARD
+								filter: corsair
+								max: {
+									type: ForEachCultureToken
+									culture: raider
+									filter: self
+								}
+							}
 							to: {
 								type: ForEachCultureToken
 								culture: raider
@@ -980,6 +989,15 @@
 					text: Choose how many {raider} tokens to spot
 					from: 0
 					to: {
+						type: Min
+						firstNumber: {
+							type: ForEachCultureToken
+							culture: raider
+						}
+						secondNumber: 6
+					}
+					// Filled in with all there are, up to the limit (Q-0341: A, as F-0561).
+					default: {
 						type: Min
 						firstNumber: {
 							type: ForEachCultureToken
