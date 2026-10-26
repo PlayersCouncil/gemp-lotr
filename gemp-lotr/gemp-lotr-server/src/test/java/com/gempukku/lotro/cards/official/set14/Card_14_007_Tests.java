@@ -13,14 +13,26 @@ import static org.junit.Assert.*;
 public class Card_14_007_Tests
 {
 
+	// Site 1 has no terrain, 2 is a forest, 3 a river and a sanctuary, 4 underground, 6 a forest and a sanctuary, 7 a river.
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "14_7");
-					// put other cards in here as needed for the test case
+					put("duilin", "14_7");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man ranger, strength 8; a maneuver ability only
 				}},
-				VirtualTableScenario.FellowshipSites,
+				new HashMap<>()
+				{{
+					put("site1", "1_319");  // Bag End: no terrain
+					put("site2", "1_334");  // Trollshaw Forest: forest alone; draws on a possession played on a companion
+					put("site3", "1_338");  // Ford of Bruinen: river, sanctuary; a discount for a Nazgul
+					put("site4", "1_343");  // Balin's Tomb: underground
+					put("site5", "1_349");
+					put("site6", "1_352");  // Lothlorien Woods: forest, sanctuary; strengthens allies whose home is site 6
+					put("site7", "1_353");  // Anduin Confluence: river alone; discards every ally as the fellowship moves here
+					put("site8", "1_356");
+					put("site9", "1_360");
+				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -46,7 +58,7 @@ public class Card_14_007_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("duilin");
 
 		assertEquals("Duilin", card.getBlueprint().getTitle());
 		assertEquals("Ranger From Blackroot Vale", card.getBlueprint().getSubtitle());
@@ -62,18 +74,54 @@ public class Card_14_007_Tests
 		assertEquals(5, card.getBlueprint().getResistance());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void DuilinTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void IsStrengthPlus3AtAForestAndAtARiverAndNotAtASiteThatIsNeither() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var duilin = scn.GetFreepsCard("duilin");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(duilin, aragorn);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(2, scn.GetTwilight());
+		// Bag End: no terrain.
+		assertEquals(1, scn.GetCurrentSiteNumber());
+		assertEquals(5, scn.GetStrength(duilin));
+		assertEquals(8, scn.GetStrength(aragorn));
+
+		// The fellowship's own move to Trollshaw Forest: a forest with no sanctuary.
+		scn.FreepsPass();
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertEquals(8, scn.GetStrength(duilin));
+		// Another [gondor] Man ranger beside him is not raised.
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		// Ford of Bruinen: a river, and a sanctuary.
+		scn.SkipToSite(3);
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertEquals(8, scn.GetStrength(duilin));
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// Balin's Tomb: underground, neither a forest nor a river.
+		scn.FreepsPass();
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		assertEquals(5, scn.GetStrength(duilin));
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		// Lothlorien Woods: a forest, and a sanctuary.
+		scn.SkipToSite(6);
+		assertEquals(6, scn.GetCurrentSiteNumber());
+		assertEquals(8, scn.GetStrength(duilin));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		// Anduin Confluence: a river with no sanctuary.
+		scn.SkipToSite(7);
+		assertEquals(7, scn.GetCurrentSiteNumber());
+		assertEquals(8, scn.GetStrength(duilin));
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_14_013_Tests
@@ -17,8 +18,14 @@ public class Card_14_013_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "14_13");
-					// put other cards in here as needed for the test case
+					put("horror", "14_13");
+					// Two [orc] characters of the Shadow player's, of two titles and races, to exert for toil.
+					// Denizen of Khazad-dûm: [orc] Orc, vitality 2; strength +2 at an underground site, which reaches no reading.
+					put("denizen", "11_115");
+					// Half-troll of Far Harad: [orc] Half-troll, vitality 2; its only text is a start-of-assignment trigger.
+					put("halftroll", "14_12");
+					// Goblin Patrol Troop: a [moria] Orc with no text, vitality 3: a character of his of another culture.
+					put("troop", "1_177");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +53,7 @@ public class Card_14_013_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("horror");
 
 		assertEquals("Horror of Harad", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -70,18 +77,51 @@ public class Card_14_013_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void HorrorofHaradTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void ToilTakesTwoOffHisCostForEachOrcCharacterExertedAsHeIsPlayed() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var horror = scn.GetShadowCard("horror");
+		var denizen = scn.GetShadowCard("denizen");
+		var halftroll = scn.GetShadowCard("halftroll");
+		var troop = scn.GetShadowCard("troop");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToSite(3);
+		scn.SetShadowHand(horror);
+		scn.MoveMinionsToTable(denizen, halftroll, troop);
+		scn.FreepsPass();
+		// Site 4 is his site number: he is not roaming.
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 
-		assertEquals(4, scn.GetTwilight());
+		// 4 - 2 - 2: with both [orc] characters exerted he costs nothing; the [moria] Troop does not count.
+		// Toil 1, or only one of them counted, would want 2.
+		scn.SetTwilight(0);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.ShadowPlayAvailable(horror));
+
+		scn.SetTwilight(2);
+		scn.ShadowRefreshDecision();
+		assertEquals(0, scn.GetWoundsOn(denizen));
+		assertEquals(0, scn.GetWoundsOn(halftroll));
+		assertEquals(0, scn.GetWoundsOn(troop));
+
+		scn.ShadowPlayCard(horror);
+		// The pool is 2 short of his 4: one exertion is owed, and the second is his to make or not.
+		// Toil 1 would owe two.
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		assertEquals(2, scn.ShadowGetChoiceMax());
+		assertTrue(scn.ShadowHasCardChoiceAvailable(denizen, halftroll));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(troop));
+
+		scn.ShadowChooseCard(halftroll);
+		assertInZone(Zone.SHADOW_CHARACTERS, horror);
+		assertEquals(0, scn.GetWoundsOn(denizen));
+		assertEquals(1, scn.GetWoundsOn(halftroll));
+		assertEquals(0, scn.GetWoundsOn(troop));
+		// 2 - (4 - 2); toil 3 would leave 1.
+		assertEquals(0, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }
