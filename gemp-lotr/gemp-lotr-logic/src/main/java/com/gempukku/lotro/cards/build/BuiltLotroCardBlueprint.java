@@ -43,6 +43,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     // As of V3, uniqueness can now be any number 1-4, with 1 being "unique" and 4 "nonunique", and
     // 2-3 meaning that the card is limited to that many copies in play at once
     private int uniqueCopies = 4;
+    private boolean uniquePerPlayer;
     private Side side;
     private CardType cardType;
     private Culture culture;
@@ -76,6 +77,8 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     private List<ActionSource> requiredAfterTriggers;
     private List<ActionSource> optionalBeforeTriggers;
     private List<ActionSource> optionalAfterTriggers;
+    private int optionalTriggerTexts;
+    private final Map<ActionSource, Integer> optionalTriggerTextOf = new IdentityHashMap<>();
 
     private List<ActionSource> beforeActivatedTriggers;
     private List<ActionSource> afterActivatedTriggers;
@@ -246,16 +249,39 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         afterInDiscardActivatedTriggers.add(actionSource);
     }
 
-    public void appendOptionalBeforeTrigger(ActionSource actionSource) {
+    /**
+     * Numbers the next optional trigger text of this blueprint: one call for each "you may" text (each `Trigger`
+     * entry of the definition), whatever number of trigger conditions it lists.  The number is given to each
+     * {@link #appendOptionalBeforeTrigger} and {@link #appendOptionalAfterTrigger} of that text.
+     */
+    public int nextOptionalTriggerText() {
+        return optionalTriggerTexts++;
+    }
+
+    public void appendOptionalBeforeTrigger(ActionSource actionSource, int triggerText) {
         if (optionalBeforeTriggers == null)
             optionalBeforeTriggers = new LinkedList<>();
         optionalBeforeTriggers.add(actionSource);
+        optionalTriggerTextOf.put(actionSource, triggerText);
     }
 
-    public void appendOptionalAfterTrigger(ActionSource actionSource) {
+    public void appendOptionalAfterTrigger(ActionSource actionSource, int triggerText) {
         if (optionalAfterTriggers == null)
             optionalAfterTriggers = new LinkedList<>();
         optionalAfterTriggers.add(actionSource);
+        optionalTriggerTextOf.put(actionSource, triggerText);
+    }
+
+    /**
+     * The identifier of an optional trigger of this blueprint's text on a card, which is what marks it used for the
+     * moment it answers ({@link com.gempukku.lotro.logic.timing.EffectResult#optionalTriggerUsed}, and the
+     * "is about to" window's set in TurnProcedure).  Each text of a card is a trigger of its own and is offered once
+     * for each moment (F-0617, Shelob, Menace 18_34: taking "play Gollum" no longer withdraws "add threats").  The
+     * conditions listed in one text ("each time X or Y") share its number, so that text is still offered once.
+     * The blueprint's id is part of it so that a text copied from another card is not taken for the card's own.
+     */
+    private String optionalTriggerIdentifier(PhysicalCard self, ActionSource trigger) {
+        return self.getCardId() + ":" + id + ":" + optionalTriggerTextOf.get(trigger);
     }
 
     public void appendPlayRequirement(Requirement requirement) {
@@ -407,6 +433,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
 
     public void setUnique(boolean unique) { uniqueCopies = unique ? 1 : 4; }
     public void setUniqueness(int amount) { uniqueCopies = amount; }
+    public void setUniquePerPlayer(boolean perPlayer) { uniquePerPlayer = perPlayer; }
 
     public void setSide(Side side) {
         this.side = side;
@@ -531,6 +558,9 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
 
     @Override
     public int getUniqueRestriction() { return uniqueCopies; }
+
+    @Override
+    public boolean isUniquePerPlayer() { return uniquePerPlayer; }
 
     @Override
     public String getTitle() { return title; }
@@ -668,12 +698,12 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
 
     @Override
     public List<? extends Action> getPhaseActionsFromDiscard(String playerId, LotroGame game, PhysicalCard self) {
-        return getActivatedActions(playerId, game, self, inDiscardPhaseActions);
+        return getActivatedOrPlayPermissionActions(playerId, game, self, inDiscardPhaseActions);
     }
 
     @Override
     public List<? extends Action> getPhaseActionsFromDrawDeck(String playerId, LotroGame game, PhysicalCard self) {
-        return getActivatedActions(playerId, game, self, inDrawDeckPhaseActions);
+        return getActivatedOrPlayPermissionActions(playerId, game, self, inDrawDeckPhaseActions);
     }
 
 
@@ -791,7 +821,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
                     return false;
             }
 
-        if (playEventAction != null && !playEventAction.isValid(dummy))
+        if (playEventAction != null && !playEventAction.isValid(new EventPlayabilityContext(dummy)))
             return false;
 
         return true;
@@ -813,8 +843,17 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
 
     @Override
     public PlayEventAction getPlayEventCardAction(String playerId, LotroGame game, PhysicalCard self) {
+        return getPlayEventCardAction(playerId, game, self, false);
+    }
+
+    @Override
+    public PlayEventAction getPlayEventCardActionIgnoringCosts(String playerId, LotroGame game, PhysicalCard self) {
+        return getPlayEventCardAction(playerId, game, self, true);
+    }
+
+    private PlayEventAction getPlayEventCardAction(String playerId, LotroGame game, PhysicalCard self, boolean costsIgnored) {
         DefaultActionContext actionContext = new DefaultActionContext(playerId, game, self, null, null);
-        PlayEventAction action = new PlayEventAction(self, playEventAction.requiresRanger());
+        PlayEventAction action = new PlayEventAction(self, playEventAction.requiresRanger(), costsIgnored);
         playEventAction.createAction(action, actionContext);
         return action;
     }
@@ -936,6 +975,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
 
             if (optionalBeforeTrigger.isValid(actionContext)) {
                 OptionalTriggerAction action = new OptionalTriggerAction(self);
+                action.setTriggerIdentifier(optionalTriggerIdentifier(self, optionalBeforeTrigger));
                 optionalBeforeTrigger.createAction(action, actionContext);
                 result.add(action);
             }
@@ -985,6 +1025,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
 
             if (optionalAfterTrigger.isValid(actionContext)) {
                 OptionalTriggerAction action = new OptionalTriggerAction(self);
+                action.setTriggerIdentifier(optionalTriggerIdentifier(self, optionalAfterTrigger));
                 optionalAfterTrigger.createAction(action, actionContext);
                 result.add(action);
             }
@@ -1022,6 +1063,14 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         }
 
         return result;
+    }
+
+    /**
+     * The card's own Response abilities that answer an effect before it happens, as its definition writes them
+     * (no copied text): the toil rule asks them of the toil about to be paid (ToilRule, Q-0381).
+     */
+    public List<ActionSource> getOwnInPlayBeforeResponses() {
+        return beforeActivatedTriggers == null ? Collections.emptyList() : Collections.unmodifiableList(beforeActivatedTriggers);
     }
 
     List<ActivateCardAction> getOwnOptionalInPlayBeforeActions(String playerId, LotroGame game, Effect effect, PhysicalCard self) {
@@ -1193,7 +1242,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
                 actionContext = new DefaultActionContext(optionalInHandBeforeAction.getPlayer().getPlayer(actionContext), game, self, null, effect);
             }
 
-            if (optionalInHandBeforeAction.isValid(actionContext)) {
+            if (optionalInHandBeforeAction.isValid(new EventPlayabilityContext(actionContext))) {
                 PlayEventAction action = new PlayEventAction(self);
                 optionalInHandBeforeAction.createAction(action, actionContext);
                 result.add(action);
@@ -1216,7 +1265,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
                 actionContext = new DefaultActionContext(optionalInHandAfterAction.getPlayer().getPlayer(actionContext), game, self, effectResult, null);
             }
 
-            if (optionalInHandAfterAction.isValid(actionContext)) {
+            if (optionalInHandAfterAction.isValid(new EventPlayabilityContext(actionContext))) {
                 PlayEventAction action = new PlayEventAction(self);
                 optionalInHandAfterAction.createAction(action, actionContext);
                 result.add(action);
@@ -1328,12 +1377,20 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         }
     }
 
+    // A card's own "discarded from play" or "hindered" trigger is that card's and its owner's: "you" in its
+    // text is the owner and "this card" and "another" are counted from the card itself, whoever removed it and
+    // with whatever card.  What did the removing stays in the result, where the trigger's "source" condition
+    // reads it (SelfRemovedFromPlayTriggerEffectProcessor).
+    private static DefaultActionContext ownRemovalContext(LotroGame game, PhysicalCard removedCard, EffectResult result) {
+        return new DefaultActionContext(removedCard.getOwner(), game, removedCard, result, null);
+    }
+
     @Override
     public RequiredTriggerAction getDiscardedFromPlayRequiredTrigger(LotroGame game, DiscardCardsFromPlayResult result) {
         if (discardedFromPlayRequiredTriggerAction == null)
             return null;
 
-        DefaultActionContext actionContext = new DefaultActionContext(result.getPerformingPlayer(), game, result.getSource(), result, null);
+        DefaultActionContext actionContext = ownRemovalContext(game, result.getDiscardedCard(), result);
         if (discardedFromPlayRequiredTriggerAction.isValid(actionContext)) {
             RequiredTriggerAction action = new RequiredTriggerAction(result.getDiscardedCard());
             discardedFromPlayRequiredTriggerAction.createAction(action, actionContext);
@@ -1347,7 +1404,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         if (discardedFromPlayOptionalTriggerAction == null)
             return null;
 
-        DefaultActionContext actionContext = new DefaultActionContext(result.getPerformingPlayer(), game, result.getSource(), null, null);
+        DefaultActionContext actionContext = ownRemovalContext(game, result.getDiscardedCard(), result);
         if (discardedFromPlayOptionalTriggerAction.isValid(actionContext)) {
             OptionalTriggerAction action = new OptionalTriggerAction(result.getDiscardedCard());
             discardedFromPlayOptionalTriggerAction.createAction(action, actionContext);
@@ -1362,7 +1419,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         if (hinderedFromPlayRequiredTriggerAction == null)
             return null;
 
-        DefaultActionContext actionContext = new DefaultActionContext(result.getPerformingPlayer(), game, result.getSource(), result, null);
+        DefaultActionContext actionContext = ownRemovalContext(game, result.getHinderedCard(), result);
         if (hinderedFromPlayRequiredTriggerAction.isValid(actionContext)) {
             RequiredTriggerAction action = new RequiredTriggerAction(result.getHinderedCard());
             hinderedFromPlayRequiredTriggerAction.createAction(action, actionContext);
@@ -1376,7 +1433,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         if (hinderedFromPlayOptionalTriggerAction == null)
             return null;
 
-        DefaultActionContext actionContext = new DefaultActionContext(result.getPerformingPlayer(), game, result.getSource(), null, null);
+        DefaultActionContext actionContext = ownRemovalContext(game, result.getHinderedCard(), result);
         if (hinderedFromPlayOptionalTriggerAction.isValid(actionContext)) {
             OptionalTriggerAction action = new OptionalTriggerAction(result.getHinderedCard());
             hinderedFromPlayOptionalTriggerAction.createAction(action, actionContext);
@@ -1446,6 +1503,11 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     }
 
     @Override
+    public Integer getAidTwilightCost() {
+        return aidCostSource == null ? null : aidCostSource.getTwilightCost();
+    }
+
+    @Override
     public boolean skipUniquenessCheck() {
         return false;
     }
@@ -1480,6 +1542,26 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         return result;
     }
 
+    // The actions a card offers from the discard pile or draw deck.  Each is a special ability unless its definition
+    // says it is only a permission to play the card (see ActionSource.isSpecialAbility).
+    private List<CostToEffectAction> getActivatedOrPlayPermissionActions(String playerId, LotroGame game, PhysicalCard self, List<ActionSource> sources) {
+        if (sources == null)
+            return null;
+
+        List<CostToEffectAction> result = new LinkedList<>();
+        for (ActionSource source : sources) {
+            DefaultActionContext actionContext = new DefaultActionContext(playerId, game, self, null, null);
+            if (source.isValid(actionContext)) {
+                CostToEffectAction action = source.isSpecialAbility()
+                        ? new ActivateCardAction(self, playerId)
+                        : new PlayPermissionAction(self, playerId);
+                source.createAction(action, actionContext);
+                result.add(action);
+            }
+        }
+        return result;
+    }
+
     private static Set<String> frodosThatCantStartWithRing = Sets.newHashSet("Frenzied Fighter");
     private static Set<String> samsWithNon5Resistance = Sets.newHashSet("Loyal Friend", "Dropper of Eaves", "Humble Halfling", "Steadfast Friend", "Innocent Traveler", "Undaunted");
 
@@ -1492,6 +1574,8 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
             throw new InvalidCardDefinitionException("All cards except The One Ring, Sites, Maps, and Meta-Sites must have a side defined");
         if (cardType != CardType.THE_ONE_RING && cardType != CardType.SITE && cardType != CardType.MAP && cardType != CardType.METASITE && culture == null)
             throw new InvalidCardDefinitionException("All cards except The One Ring, Sites, Maps, and Meta-Sites have a culture defined");
+        if (uniquePerPlayer && uniqueCopies == 4)
+            throw new InvalidCardDefinitionException("uniquePerPlayer is for a card that is unique or has a number of dots");
         if (siteNumber != 0
                 && cardType != CardType.SITE
                 && cardType != CardType.MINION
