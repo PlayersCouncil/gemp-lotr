@@ -1,11 +1,9 @@
 package com.gempukku.lotro.logic.timing.processes.turn.assign;
 
 import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Keyword;
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
-import com.gempukku.lotro.game.state.Assignment;
 import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.GameUtils;
@@ -14,6 +12,7 @@ import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.decisions.PlayerAssignMinionsDecision;
 import com.gempukku.lotro.logic.effects.AssignmentPhaseEffect;
 import com.gempukku.lotro.logic.effects.TriggeringResultEffect;
+import com.gempukku.lotro.logic.timing.RuleUtils;
 import com.gempukku.lotro.logic.timing.UnrespondableEffect;
 import com.gempukku.lotro.logic.timing.processes.GameProcess;
 import com.gempukku.lotro.logic.timing.results.FreePlayerStartsAssigningResult;
@@ -44,6 +43,9 @@ public class FreePeoplePlayerAssignsMinionsGameProcess implements GameProcess {
                     @Override
                     protected void doPlayEffect(final LotroGame game) {
                         final GameState gameState = game.getGameState();
+                        // His own assigning: a minion with a cost of assigning is his only if it was paid for
+                        // ahead, as he started assigning (AssignmentCostRule; Q-0283)
+                        gameState.setFreePeoplesPlayerAssigning(true);
 
                         final Collection<PhysicalCard> minions = Filters.filterActive(game, CardType.MINION, Filters.assignableToSkirmish(Side.FREE_PEOPLE, false, false, false));
                         if (!minions.isEmpty()) {
@@ -73,7 +75,7 @@ public class FreePeoplePlayerAssignsMinionsGameProcess implements GameProcess {
                                             // (while incidentally double-checking that freeps did not violate assignment boundaries)
                                             for (PhysicalCard freeCard : assignments.keySet()) {
                                                 Set<PhysicalCard> minionsAssigned = assignments.get(freeCard);
-                                                if (minionsAssigned.size() + getMinionsAssignedBeforeCount(freeCard, gameState) > 1 + game.getModifiersQuerying().getKeywordCount(game, freeCard, Keyword.DEFENDER))
+                                                if (!RuleUtils.hasRoomForAssignments(game, freeCard, minionsAssigned.size()))
                                                     throw new DecisionResultInvalidException(GameUtils.getFullName(freeCard) + " can't have so many minions assigned");
                                                 unassignedMinions.removeAll(minionsAssigned);
                                             }
@@ -85,22 +87,26 @@ public class FreePeoplePlayerAssignsMinionsGameProcess implements GameProcess {
 
                                             action.appendEffect(
                                                     new AssignmentPhaseEffect(gameState.getCurrentPlayerId(), assignments, "Free People player assignments"));
+                                            action.appendEffect(endOfHisAssigning());
                                         }
                                     });
                         } else {
                             _leftoverMinions = new HashSet<>(Filters.filterActive(game, CardType.MINION));
+                            gameState.setFreePeoplesPlayerAssigning(false);
                         }
                     }
                 });
         game.getActionsEnvironment().addActionToStack(action);
     }
 
-    private int getMinionsAssignedBeforeCount(PhysicalCard freeCard, GameState gameState) {
-        for (Assignment assignment : gameState.getAssignments()) {
-            if (assignment.getFellowshipCharacter() == freeCard)
-                return assignment.getShadowCharacters().size();
-        }
-        return 0;
+    // A cost of assigning paid ahead for a minion he did not then assign is lost (Q-0283)
+    private static UnrespondableEffect endOfHisAssigning() {
+        return new UnrespondableEffect() {
+            @Override
+            protected void doPlayEffect(LotroGame game) {
+                game.getGameState().setFreePeoplesPlayerAssigning(false);
+            }
+        };
     }
 
     @Override

@@ -23,6 +23,8 @@ public class RuleSet {
 
         new MusterRule(_actionsEnvironment).applyRule();
 
+        new AssignmentCostRule(_actionsEnvironment).applyRule();
+
         new AmbushRule(_actionsEnvironment).applyRule();
 
         new ResolveSkirmishRule(_game, _actionsEnvironment).applyRule();
@@ -66,8 +68,6 @@ public class RuleSet {
         new HealByDiscardRule(_actionsEnvironment).applyRule();
 
         new TakeOffRingRule(_actionsEnvironment).applyRule();
-        new ConcealedRule(_actionsEnvironment).applyRule();
         new HinderedRule(_modifiersLogic, _actionsEnvironment).applyRule();
-        new RestoreRule(_actionsEnvironment).applyRule();
     }
 }

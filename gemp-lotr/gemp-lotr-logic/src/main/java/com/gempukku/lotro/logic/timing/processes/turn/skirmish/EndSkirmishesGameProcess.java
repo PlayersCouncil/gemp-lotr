@@ -28,11 +28,14 @@ public class EndSkirmishesGameProcess implements GameProcess {
             return new GameProcess() {
                 @Override
                 public void process(LotroGame game) {
+                    // A card's additional phase and the relentless round are one round when both come (Q-0267):
+                    // the round is relentless, and the card's flag is set beside it, so that the minions its
+                    // card names take part beside the relentless ones (SetupExtraAssignmentAndSkirmishes).
                     if(_afterAllSkirmishesResult.isRelentlessPhase(game)) {
                         game.getGameState().setRelentlessSkirmishes(true);
                         game.getGameState().sendMessage("Relentless skirmishes.");
                     }
-                    else {
+                    if(_afterAllSkirmishesResult.isExtraPhaseSetUpByACard()) {
                         game.getGameState().setExtraSkirmishes(true);
                         game.getGameState().sendMessage("Extra skirmish.");
                     }

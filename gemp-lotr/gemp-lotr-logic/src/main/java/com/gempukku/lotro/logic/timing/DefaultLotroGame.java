@@ -16,6 +16,7 @@ import com.gempukku.lotro.logic.PlayerOrder;
 import com.gempukku.lotro.logic.modifiers.ModifiersEnvironment;
 import com.gempukku.lotro.logic.modifiers.ModifiersLogic;
 import com.gempukku.lotro.logic.modifiers.ModifiersQuerying;
+import com.gempukku.lotro.logic.timing.loops.LoopFeedback;
 import com.gempukku.lotro.logic.timing.rules.CharacterDeathRule;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.packs.PackOpener;
@@ -31,7 +32,8 @@ public class DefaultLotroGame implements LotroGame {
     private final ModifiersLogic _modifiersLogic = new ModifiersLogic();
     private PackOpener _packOpener;
     private final DefaultActionsEnvironment _actionsEnvironment;
-    private final UserFeedback _userFeedback;
+    // The game's own feedback, which hands decisions on to the players' feedback (LoopFeedback)
+    private final LoopFeedback _userFeedback;
     private final TurnProcedure _turnProcedure;
     private final ActionStack _actionStack;
     private boolean _cancelled;
@@ -42,6 +44,7 @@ public class DefaultLotroGame implements LotroGame {
 
     private final Set<String> _allPlayers;
     private final Map<String, Set<Phase>> _autoPassConfiguration = new HashMap<>();
+    private java.util.function.BiPredicate<String, Phase> _askToPass;
 
     private String _winnerPlayerId;
     private final Map<String, String> _losers = new HashMap<>();
@@ -122,10 +125,12 @@ public class DefaultLotroGame implements LotroGame {
         _gameState = new GameState();
         _gameState.setGame(this);
 
+        _userFeedback = new LoopFeedback(this, userFeedback);
+
         CharacterDeathRule characterDeathRule = new CharacterDeathRule(_actionsEnvironment);
         characterDeathRule.applyRule();
 
-        _turnProcedure = new TurnProcedure(this, decks.keySet(), userFeedback, _actionStack,
+        _turnProcedure = new TurnProcedure(this, decks.keySet(), _userFeedback, _actionStack,
                 new PlayerOrderFeedback() {
                     @Override
                     public void setPlayerOrder(PlayerOrder playerOrder, String firstPlayer) {
@@ -160,7 +165,6 @@ public class DefaultLotroGame implements LotroGame {
                         _gameState.initPreGame(preGameInfo, decks, metaSiteBlueprintIds, library, DefaultLotroGame.this);
                     }
                 }, characterDeathRule);
-        _userFeedback = userFeedback;
 
         RuleSet ruleSet = new RuleSet(this, _actionsEnvironment, _modifiersLogic);
         ruleSet.applyRuleSet();
@@ -171,6 +175,8 @@ public class DefaultLotroGame implements LotroGame {
 
     @Override
     public boolean shouldAutoPass(String playerId, Phase phase) {
+        if (_askToPass != null && _askToPass.test(playerId, phase))
+            return false;
         final Set<Phase> passablePhases = _autoPassConfiguration.get(playerId);
         if (passablePhases == null)
             return false;
@@ -201,13 +207,20 @@ public class DefaultLotroGame implements LotroGame {
     }
 
     public void startGame() {
-        if (!_cancelled)
-            _turnProcedure.carryOutPendingActionsUntilDecisionNeeded();
+        carryOutPendingActionsUntilDecisionNeeded();
     }
 
+    /**
+     * Carries the game on until it is waiting on a player's decision, or is over.  A decision asked while a voluntary
+     * loop is being run is answered as the run says, and the game goes on (LoopFeedback).
+     */
     public void carryOutPendingActionsUntilDecisionNeeded() {
-        if (!_cancelled)
-            _turnProcedure.carryOutPendingActionsUntilDecisionNeeded();
+        if (!_cancelled) {
+            do {
+                _turnProcedure.carryOutPendingActionsUntilDecisionNeeded();
+            } while (_userFeedback.answerHeldDecision());
+            _userFeedback.atRest();
+        }
     }
 
     @Override
@@ -394,5 +407,13 @@ public class DefaultLotroGame implements LotroGame {
 
     public void setPlayerAutoPassSettings(String playerId, Set<Phase> phases) {
         _autoPassConfiguration.put(playerId, phases);
+    }
+
+    /**
+     * Has a player asked to pass in a phase even though their settings would pass it for them, whenever this says
+     * so.  It is asked each time the question comes up, so the answer can depend on how the game stands.
+     */
+    public void setAskToPass(java.util.function.BiPredicate<String, Phase> askToPass) {
+        _askToPass = askToPass;
     }
 }

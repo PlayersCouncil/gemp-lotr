@@ -17,6 +17,14 @@ public class AfterAllSkirmishesResult extends EffectResult {
         return _createAnExtraAssignmentAndSkirmishPhases || isRelentlessPhase(game);
     }
 
+    /**
+     * Whether a card has set up an additional assignment and skirmish phase (The Witch-king's Beast 12_184), as
+     * apart from the relentless round that a relentless minion in play brings.
+     */
+    public boolean isExtraPhaseSetUpByACard() {
+        return _createAnExtraAssignmentAndSkirmishPhases;
+    }
+
     public boolean isRelentlessPhase(LotroGame game) {
         return Filters.countActive(game, CardType.MINION, Keyword.RELENTLESS) > 0;
     }
