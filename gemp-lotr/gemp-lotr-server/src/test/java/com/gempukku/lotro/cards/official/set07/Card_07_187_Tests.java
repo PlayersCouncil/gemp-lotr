@@ -3,12 +3,12 @@ package com.gempukku.lotro.cards.official.set07;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_07_187_Tests
@@ -18,8 +18,17 @@ public class Card_07_187_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "7_187");
-					// put other cards in here as needed for the test case
+					put("brawler", "7_187");
+					put("brawler2", "7_187");
+					// Goblin Runner: another minion, strength 5; its text answers only its own play
+					put("runner", "1_178");
+					// Ulaire Lemenya, Lieutenant of Morgul: the Nazgul the Brute spots; her text reaches only a companion or
+					// ally bearing a [wraith] condition
+					put("lemenya", "1_232");
+					// Morgul Brute: played with a Nazgul to spot, it may add a burden, which the Free Peoples player may
+					// prevent by wounding the Ring-bearer (the legal wound that exhausts him)
+					put("brute", "7_188");
+					put("sam", "1_311");        // Sam, Son of Hamfast: Ring-bound, not the Ring-bearer; vitality 4
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,33 +56,72 @@ public class Card_07_187_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var brawler = scn.GetFreepsCard("brawler");
 
-		assertEquals("Morgul Brawler", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.ORC, card.getBlueprint().getRace());
-		assertEquals(4, card.getBlueprint().getTwilightCost());
-		assertEquals(10, card.getBlueprint().getStrength());
-		assertEquals(1, card.getBlueprint().getVitality());
-		assertEquals(4, card.getBlueprint().getSiteNumber());
+		assertEquals("Morgul Brawler", brawler.getBlueprint().getTitle());
+		assertNull(brawler.getBlueprint().getSubtitle());
+		assertFalse(brawler.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, brawler.getBlueprint().getSide());
+		assertEquals(Culture.WRAITH, brawler.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, brawler.getBlueprint().getCardType());
+		assertEquals(Race.ORC, brawler.getBlueprint().getRace());
+		assertEquals(4, brawler.getBlueprint().getTwilightCost());
+		assertEquals(10, brawler.getBlueprint().getStrength());
+		assertEquals(1, brawler.getBlueprint().getVitality());
+		assertEquals(4, brawler.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void MorgulBrawlerTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void WhileTheRingBearerIsExhaustedEachCopyIsStrengthPlus3FierceAndDamagePlus1() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		// Frodo, Son of Drogo, vitality 4: 2 wounds leave him 2, one short of exhausted. Sam is exhausted.
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		scn.MoveCompanionsToTable(sam);
+		scn.AddWoundsToChar(frodo, 2);
+		scn.AddWoundsToChar(sam, 3);
+		assertEquals(2, scn.GetVitality(frodo));
+		assertEquals(1, scn.GetVitality(sam));
+
+		var brawler = scn.GetShadowCard("brawler");
+		var brawler2 = scn.GetShadowCard("brawler2");
+		var runner = scn.GetShadowCard("runner");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var brute = scn.GetShadowCard("brute");
+		scn.MoveCardsToHand(brute);
+		assertInHand(brute);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(brawler, brawler2, runner, lemenya);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
 
-		assertEquals(4, scn.GetTwilight());
+		assertEquals(10, scn.GetStrength(brawler));
+		assertFalse(scn.HasKeyword(brawler, Keyword.FIERCE));
+		assertEquals(0, scn.GetKeywordCount(brawler, Keyword.DAMAGE));
+
+		// The Brute's burden, prevented by a wound on the Ring-bearer, which exhausts him.
+		scn.ShadowPlayCard(brute);
+		scn.ShadowAcceptOptionalTrigger();
+		assertTrue(scn.FreepsDecisionAvailable("prevent"));
+		scn.FreepsChooseYes();
+		assertEquals(1, scn.GetVitality(frodo));
+
+		assertEquals(13, scn.GetStrength(brawler)); // 10 + 3
+		assertTrue(scn.HasKeyword(brawler, Keyword.FIERCE));
+		assertEquals(1, scn.GetKeywordCount(brawler, Keyword.DAMAGE));
+		// The second copy has its own bonus and no more: neither adds to the other.
+		assertEquals(13, scn.GetStrength(brawler2));
+		assertTrue(scn.HasKeyword(brawler2, Keyword.FIERCE));
+		assertEquals(1, scn.GetKeywordCount(brawler2, Keyword.DAMAGE));
+		// Other minions are untouched.
+		assertEquals(5, scn.GetStrength(runner));
+		assertFalse(scn.HasKeyword(runner, Keyword.FIERCE));
+		assertEquals(0, scn.GetKeywordCount(runner, Keyword.DAMAGE));
+		assertEquals(6, scn.GetStrength(brute));
+		assertFalse(scn.HasKeyword(brute, Keyword.FIERCE));
+		assertEquals(0, scn.GetKeywordCount(brute, Keyword.DAMAGE));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

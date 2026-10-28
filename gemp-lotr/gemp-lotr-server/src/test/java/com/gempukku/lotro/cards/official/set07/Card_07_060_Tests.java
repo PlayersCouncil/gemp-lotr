@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_07_060_Tests
@@ -17,8 +18,15 @@ public class Card_07_060_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "7_60");
-					// put other cards in here as needed for the test case
+					put("heavy", "7_60");
+					// Gollum, Nasty Treacherous Creature: the [gollum] Gollum; "Regroup: Discard Gollum to exert a
+					// companion or ally"
+					put("gollum", "5_24");
+					// Gollum, Half a Wraith Himself: the [wraith] Gollum; his texts answer a Nazgûl played and the
+					// assignment phase
+					put("wraithgollum", "103_66");
+					// Shelob, Last Child of Ungoliant: a [gollum] minion who is no Gollum; enduring, fierce
+					put("shelob", "8_26");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -43,7 +51,7 @@ public class Card_07_060_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("heavy");
 
 		assertEquals("Heavy Burden", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -55,18 +63,101 @@ public class Card_07_060_Tests
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void HeavyBurdenTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void RegroupAbilityDiscardsGollumAndRemovesAThreatToAddABurden() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var heavy = scn.GetShadowCard("heavy");
+		var gollum = scn.GetShadowCard("gollum");
+		var shelob = scn.GetShadowCard("shelob");
+		scn.MoveCardsToSupportArea(heavy);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(gollum, shelob);
+		scn.AddThreats(1);
+		assertEquals(1, scn.GetThreats());
 
-		assertEquals(1, scn.GetTwilight());
+		// "Regroup:" is not the maneuver phase, though both costs can be paid there.
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(heavy));
+
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.FreepsPass();
+
+		assertEquals(1, scn.GetThreats());
+		assertEquals(0, scn.GetBurdens());
+		assertInZone(Zone.SHADOW_CHARACTERS, gollum, shelob);
+		assertTrue(scn.ShadowActionAvailable(heavy));
+		scn.ShadowUseCardAction(heavy);
+
+		// Gollum is the one card of his title, and goes without a question; Shelob stays.
+		assertInZone(Zone.DISCARD, gollum);
+		assertInZone(Zone.SHADOW_CHARACTERS, shelob);
+		assertEquals(0, scn.GetThreats());
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void TheWraithGollumPaysTheDiscardToo() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var heavy = scn.GetShadowCard("heavy");
+		var gollum = scn.GetShadowCard("wraithgollum");
+		scn.MoveCardsToSupportArea(heavy);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(gollum);
+		scn.AddThreats(1);
+		assertEquals(1, scn.GetThreats());
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.FreepsPass();
+
+		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.ShadowActionAvailable(heavy));
+		scn.ShadowUseCardAction(heavy);
+
+		assertInZone(Zone.DISCARD, gollum);
+		assertEquals(0, scn.GetThreats());
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void NotOfferedWithoutGollumOrWithoutAThreat() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var heavy = scn.GetShadowCard("heavy");
+		var gollum = scn.GetShadowCard("gollum");
+		var shelob = scn.GetShadowCard("shelob");
+		scn.MoveCardsToSupportArea(heavy);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(shelob);
+		scn.AddThreats(1);
+		assertEquals(1, scn.GetThreats());
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.FreepsPass();
+
+		// A threat, and a [gollum] minion who is no Gollum.
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(heavy));
+
+		// Gollum, and no threat.
+		scn.MoveMinionsToTable(gollum);
+		scn.RemoveThreats(1);
+		scn.ShadowRefreshDecision();
+		assertEquals(0, scn.GetThreats());
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(heavy));
+
+		// Both: offered.
+		scn.AddThreats(1);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.ShadowActionAvailable(heavy));
+		assertInZone(Zone.SHADOW_CHARACTERS, gollum, shelob);
+		assertEquals(0, scn.GetBurdens());
 	}
 }

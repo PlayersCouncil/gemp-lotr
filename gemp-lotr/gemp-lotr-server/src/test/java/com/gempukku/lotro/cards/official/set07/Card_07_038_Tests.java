@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_07_038_Tests
@@ -18,8 +19,10 @@ public class Card_07_038_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "7_38");
-					// put other cards in here as needed for the test case
+					put("staff", "7_38");
+					put("gandalf", "1_72");     // Gandalf, Friend of the Shirefolk: +1 for each race spotted (Frodo's Hobbit: 7)
+					put("avenger", "6_27");     // Ent Avenger: a [gandalf] companion who is not Gandalf
+					put("merry", "1_302");      // Merry, Friend to Sam: a companion of cost 1, a Hobbit like Frodo
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -39,13 +42,14 @@ public class Card_07_038_Tests
 		 * Twilight Cost: 2
 		 * Type: Artifact
 		 * Subtype: Staff
-		 * Vitality: 1
-		 * Game Text: Bearer must be Gandalf.<br>While you can spot 4 twilight tokens, Gandalf is strength +1.
-		*/
+		 * Vitality: +1
+		 * Game Text: Bearer must be Gandalf.
+		 * While you can spot 4 twilight tokens, Gandalf is strength +1.
+		 */
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("staff");
 
 		assertEquals("Gandalf's Staff", card.getBlueprint().getTitle());
 		assertEquals("Focus of Power", card.getBlueprint().getSubtitle());
@@ -58,18 +62,56 @@ public class Card_07_038_Tests
 		assertEquals(1, card.getBlueprint().getVitality());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GandalfsStaffTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void IsPlayedOnGandalfAndNotOnAnotherGandalfCompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var staff = scn.GetFreepsCard("staff");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var avenger = scn.GetFreepsCard("avenger");
+		scn.MoveCompanionsToTable(avenger);
+		scn.MoveCardsToHand(staff, gandalf);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(2, scn.GetTwilight());
+		// A [gandalf] companion of another title is no bearer.
+		assertFalse(scn.FreepsPlayAvailable(staff));
+
+		scn.FreepsPlayCard(gandalf);
+		assertTrue(scn.FreepsPlayAvailable(staff));
+		scn.FreepsPlayCard(staff);
+		assertAttachedTo(staff, gandalf);
+		assertNotAttachedTo(staff, avenger);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void WhileFourTwilightTokensCanBeSpottedGandalfIsStrengthPlus1() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var staff = scn.GetFreepsCard("staff");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var merry = scn.GetFreepsCard("merry");
+		scn.MoveCompanionsToTable(gandalf);
+		scn.AttachCardsTo(gandalf, staff);
+		scn.MoveCardsToHand(merry);
+
+		scn.StartGame();
+		scn.SetTwilight(3);
+
+		assertEquals(3, scn.GetTwilight());
+		assertEquals(7, scn.GetStrength(gandalf));    // 6 + 1 for Frodo's Hobbit
+		int frodoStrength = scn.GetStrength(frodo);
+
+		// Merry's cost of 1 makes the pool 4.
+		scn.FreepsPlayCard(merry);
+		assertEquals(8, scn.GetStrength(gandalf));    // 6 + 1 + 1
+		// The bonus is Gandalf's alone.
+		assertEquals(frodoStrength, scn.GetStrength(frodo));
+
+		scn.SetTwilight(5);
+		assertEquals(8, scn.GetStrength(gandalf));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

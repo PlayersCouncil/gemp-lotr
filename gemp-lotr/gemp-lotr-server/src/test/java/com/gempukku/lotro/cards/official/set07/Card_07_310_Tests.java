@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_07_310_Tests
@@ -17,8 +18,30 @@ public class Card_07_310_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "7_310");
-					// put other cards in here as needed for the test case
+					put("hatred", "7_310");
+					put("chieftain", "1_266");  // Orc Chieftain: [sauron] Orc, cost 2, site 6; its text answers a weapon played on it
+					put("soldier", "1_271");    // Orc Soldier: [sauron] Orc, cost 2, site 6; a skirmish ability only
+					put("sentry", "10_84");     // Cirith Ungol Sentry: a [sauron] minion who is an Uruk-hai; Damage +1 is its whole text
+					put("hound", "7_192");      // Morgul Hound: a [wraith] Orc; stronger and fierce only at 2 wounds on the Ring-bearer
+					put("runner", "1_178");     // Goblin Runner: a [moria] Orc, cost 1, site 4; its text is about being played
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a second companion, so that a threat can be added; a maneuver ability only
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetRoamingScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("hatred", "7_310");
+					put("chieftain", "1_266");  // Orc Chieftain: [sauron] Orc, cost 2, site 6; its text answers a weapon played on it
+					put("soldier", "1_271");    // Orc Soldier: [sauron] Orc, cost 2, site 6; a skirmish ability only
+					put("sentry", "10_84");     // Cirith Ungol Sentry: a [sauron] Uruk-hai, cost 2, site 6; Damage +1 is its whole text
+					put("runner", "1_178");     // Goblin Runner: a [moria] Orc, cost 1, site 4; its text is about being played
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a second companion, so that 2 threats can lie
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -37,36 +60,268 @@ public class Card_07_310_Tests
 		 * Culture: Sauron
 		 * Twilight Cost: 0
 		 * Type: Condition
-		 * Subtype: Support area
-		 * Game Text: To play, spot a [sauron] Orc.<br><b>Shadow:</b> Remove a threat to play a [sauron] Orc without paying any roaming penalty.<br><b>Regroup:</b> Spot a [sauron] Orc and remove (4) to add a threat.
+		 * Subtype: Support Area
+		 * Game Text: To play, spot a [sauron] Orc.
+		 * <b>Shadow:</b> Remove a threat to play a [sauron] Orc without paying any roaming penalty.
+		 * <b>Regroup:</b> Spot a [sauron] Orc and remove (4) to add a threat.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var hatred = scn.GetFreepsCard("hatred");
 
-		assertEquals("Sauron's Hatred", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(0, card.getBlueprint().getTwilightCost());
+		assertEquals("Sauron's Hatred", hatred.getBlueprint().getTitle());
+		assertNull(hatred.getBlueprint().getSubtitle());
+		assertFalse(hatred.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, hatred.getBlueprint().getSide());
+		assertEquals(Culture.SAURON, hatred.getBlueprint().getCulture());
+		assertEquals(CardType.CONDITION, hatred.getBlueprint().getCardType());
+		assertTrue(scn.HasKeyword(hatred, Keyword.SUPPORT_AREA));
+		assertEquals(0, hatred.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SauronsHatredTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void IsPlayedToTheSupportAreaWithASauronOrcToSpot() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var hatred = scn.GetShadowCard("hatred");
+		var chieftain = scn.GetShadowCard("chieftain");
+		scn.MoveCardsToHand(hatred);
+		assertInHand(hatred);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(chieftain);
+		scn.FreepsPass();
+
+		assertTrue(scn.ShadowPlayAvailable(hatred));
+		scn.ShadowPlayCard(hatred);
+		assertInZone(Zone.SUPPORT, hatred);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void CannotBePlayedUntilASauronOrcIsSpotted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var hatred = scn.GetShadowCard("hatred");
+		var soldier = scn.GetShadowCard("soldier");
+		var hound = scn.GetShadowCard("hound");
+		var sentry = scn.GetShadowCard("sentry");
+		scn.MoveCardsToHand(hatred, soldier);
+		assertInHand(hatred, soldier);
+
+		scn.StartGame();
+		// A [wraith] Orc and a [sauron] Uruk-hai: an Orc of another culture and a [sauron] minion who is no Orc.
+		scn.MoveMinionsToTable(hound, sentry);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertFalse(scn.ShadowPlayAvailable(hatred));
+
+		scn.ShadowPlayCard(soldier);
+		assertInZone(Zone.SHADOW_CHARACTERS, soldier);
+		assertTrue(scn.ShadowPlayAvailable(hatred));
+
+		scn.ShadowPlayCard(hatred);
+		assertInZone(Zone.SUPPORT, hatred);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void ShadowAbilityIsNotOfferedWithNoThreatToRemove() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		var hatred = scn.GetShadowCard("hatred");
+		var chieftain = scn.GetShadowCard("chieftain");
+		scn.MoveCardsToSupportArea(hatred);
+		scn.MoveCardsToHand(chieftain);
+		assertInZone(Zone.SUPPORT, hatred);
+		assertInHand(chieftain);
+
+		scn.StartGame();
+		assertEquals(0, scn.GetThreats());
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		// The Chieftain could be played (it is, in the ordinary way), but there is no threat to remove.
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertTrue(scn.ShadowPlayAvailable(chieftain));
+		assertFalse(scn.ShadowActionAvailable(hatred));
+		assertEquals(0, scn.GetThreats());
+	}
+
+	@Test
+	public void ShadowAbilityIsNotOfferedUntilThePoolHoldsTheSauronOrcsOwnCost() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		var hatred = scn.GetShadowCard("hatred");
+		var chieftain = scn.GetShadowCard("chieftain");
+		var sentry = scn.GetShadowCard("sentry");
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveCardsToSupportArea(hatred);
+		scn.MoveCardsToHand(chieftain, sentry, runner);
+		assertInZone(Zone.SUPPORT, hatred);
+		assertInHand(chieftain, sentry, runner);
+
+		scn.StartGame();
+		scn.AddThreats(1);
+		assertEquals(1, scn.GetThreats());
+		scn.FreepsPass();
+		assertEquals(2, scn.GetCurrentSiteNumber());
+
+		// With (1) the only Orc the pool could pay for is the [moria] Goblin Runner: no [sauron] Orc can be played.
+		scn.SetTwilight(1);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(hatred));
+
+		// With (2), the Chieftain's own cost and short of the 2 more his roaming would ask, it is offered.
+		scn.SetTwilight(2);
+		scn.ShadowRefreshDecision();
+		assertFalse(scn.ShadowPlayAvailable(chieftain));
+		assertTrue(scn.ShadowActionAvailable(hatred));
+		assertEquals(1, scn.GetThreats());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void RegroupAbilityRemovesFourToAddAThreat() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		var hatred = scn.GetShadowCard("hatred");
+		var chieftain = scn.GetShadowCard("chieftain");
+		scn.MoveCardsToSupportArea(hatred);
+		assertInZone(Zone.SUPPORT, hatred);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(chieftain);
+		scn.SkipToAssignments();
+		scn.FreepsDeclineAssignments();
+		scn.ShadowDeclineAssignments();
+
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		scn.FreepsPass();
+
+		// (3) is one short of the cost.
+		scn.SetTwilight(3);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(hatred));
+
+		scn.SetTwilight(4);
+		scn.ShadowRefreshDecision();
+		assertEquals(0, scn.GetThreats());
+		assertTrue(scn.ShadowActionAvailable(hatred));
+		scn.ShadowUseCardAction(hatred);
 
 		assertEquals(0, scn.GetTwilight());
+		assertEquals(1, scn.GetThreats());
+		assertInPlay(chieftain);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void RegroupAbilityNeedsASauronOrcToSpot() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		var hatred = scn.GetShadowCard("hatred");
+		var soldier = scn.GetShadowCard("soldier");
+		var hound = scn.GetShadowCard("hound");
+		var sentry = scn.GetShadowCard("sentry");
+		scn.MoveCardsToSupportArea(hatred);
+		assertInZone(Zone.SUPPORT, hatred);
+
+		scn.StartGame();
+		// A [wraith] Orc and a [sauron] Uruk-hai.
+		scn.MoveMinionsToTable(hound, sentry);
+		scn.SkipToAssignments();
+		scn.FreepsDeclineAssignments();
+		scn.ShadowDeclineAssignments();
+
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		scn.FreepsPass();
+
+		scn.SetTwilight(5);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(hatred));
+
+		// An Orc Soldier, a [sauron] Orc of another title than the Chieftain.
+		scn.MoveMinionsToTable(soldier);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.ShadowActionAvailable(hatred));
+		assertEquals(0, scn.GetThreats());
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+	}
+
+	@Test
+	public void ShadowAbilityRemovesAThreatToPlayASauronOrcForItsPrintedCostAndTheOrcIsStillRoaming() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetRoamingScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		var hatred = scn.GetShadowCard("hatred");
+		var chieftain = scn.GetShadowCard("chieftain");
+		var soldier = scn.GetShadowCard("soldier");
+		var sentry = scn.GetShadowCard("sentry");
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveCardsToSupportArea(hatred);
+		scn.MoveCardsToHand(chieftain, soldier, sentry, runner);
+		assertInHand(chieftain, soldier, sentry, runner);
+
+		scn.StartGame();
+		// Two companions hold the 2 threats.
+		scn.AddThreats(2);
+		assertEquals(2, scn.GetThreats());
+		// The fellowship moves to site 2, where every minion in the Shadow hand is roaming (sites 6, 6, 6 and 4).
+		scn.FreepsPass();
+		assertEquals(2, scn.GetCurrentSiteNumber());
+
+		// With 4 in the pool the Chieftain is played from hand in the ordinary way: 2 to play + 2 roaming.
+		scn.SetTwilight(4);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.ShadowPlayAvailable(chieftain));
+
+		// With exactly its printed cost in the pool it is not, and the Hatred's ability is offered all the same.
+		scn.SetTwilight(2);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertFalse(scn.ShadowPlayAvailable(chieftain));
+		assertFalse(scn.ShadowPlayAvailable(soldier));
+		assertTrue(scn.ShadowActionAvailable(hatred));
+		assertEquals(2, scn.GetThreats());
+		assertInZone(Zone.HAND, chieftain);
+
+		scn.ShadowUseCardAction(hatred);
+		// The two [sauron] Orcs are the choice.  The [sauron] Uruk-hai (cost 2) and the [moria] Orc (cost 1) are
+		// not, though the pool would pay for either once the penalty is waived.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(chieftain, soldier));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(sentry, runner));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		scn.ShadowChooseCard(chieftain);
+
+		// One threat is the cost.
+		assertEquals(1, scn.GetThreats());
+		assertInZone(Zone.SHADOW_CHARACTERS, chieftain);
+		assertInZone(Zone.HAND, soldier, sentry, runner);
+		// 2 to play and no roaming penalty: 2 - 2.
+		assertEquals(0, scn.GetTwilight());
+		// The penalty is waived, not the roaming: a minion of site 6 at site 2.
+		assertTrue(scn.HasKeyword(chieftain, Keyword.ROAMING));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

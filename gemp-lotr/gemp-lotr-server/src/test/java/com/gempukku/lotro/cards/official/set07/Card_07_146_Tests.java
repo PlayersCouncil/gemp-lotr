@@ -17,8 +17,14 @@ public class Card_07_146_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "7_146");
-					// put other cards in here as needed for the test case
+					put("sergeant", "7_146");
+					put("sergeant2", "7_146");
+					// Easterling Ransacker: a [raider] Easterling Man; his only text is a skirmish ability
+					put("ransacker", "7_144");
+					// Ulaire Attea, Khamul of the East: a [raider] Nazgûl who is an Easterling; his texts need 3 and 5 burdens
+					put("khamul", "103_61");
+					// Desert Soldier: a [raider] Man who is a Southron and no Easterling; his text is a skirmish trigger
+					put("soldier", "4_220");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +52,7 @@ public class Card_07_146_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("sergeant");
 
 		assertEquals("Easterling Sergeant", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +68,119 @@ public class Card_07_146_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void EasterlingSergeantTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void ManeuverAbilityExertsHimToAddABurdenOnlyWhileNoBurdenCanBeSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var sergeant = scn.GetShadowCard("sergeant");
+		var sergeant2 = scn.GetShadowCard("sergeant2");
+		var ransacker = scn.GetShadowCard("ransacker");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(sergeant, sergeant2, ransacker);
 
-		assertEquals(3, scn.GetTwilight());
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(0, scn.GetWoundsOn(sergeant));
+		assertEquals(0, scn.GetWoundsOn(sergeant2));
+		assertEquals(0, scn.GetWoundsOn(ransacker));
+		assertTrue(scn.ShadowActionAvailable(sergeant));
+
+		scn.ShadowUseCardAction(sergeant);
+
+		// He exerts himself, and nobody else.
+		assertEquals(1, scn.GetWoundsOn(sergeant));
+		assertEquals(0, scn.GetWoundsOn(sergeant2));
+		assertEquals(0, scn.GetWoundsOn(ransacker));
+		assertEquals(1, scn.GetBurdens());
+
+		// With a burden to spot, the other Sergeant is not offered his own, though he could exert and the
+		// Ransacker is still another Easterling.
+		scn.FreepsPass();
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(sergeant2));
+		assertFalse(scn.ShadowActionAvailable(sergeant));
+		assertEquals(0, scn.GetWoundsOn(sergeant2));
+		assertEquals(1, scn.GetBurdens());
+	}
+
+	@Test
+	public void ManeuverAbilityIsNotOfferedWhileHeIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var sergeant = scn.GetShadowCard("sergeant");
+		var ransacker = scn.GetShadowCard("ransacker");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(sergeant, ransacker);
+		// Vitality 2: one wound exhausts him.
+		scn.AddWoundsToChar(sergeant, 1);
+		assertEquals(1, scn.GetWoundsOn(sergeant));
+
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(0, scn.GetWoundsOn(ransacker));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(sergeant));
+	}
+
+	@Test
+	public void AnotherEasterlingIsOneOtherThanHimselfAndNoOtherRaiderMan() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var sergeant = scn.GetShadowCard("sergeant");
+		var soldier = scn.GetShadowCard("soldier");
+		var khamul = scn.GetShadowCard("khamul");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(sergeant, soldier);
+
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+
+		// Himself and a [raider] Man who is no Easterling: not offered.
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(0, scn.GetWoundsOn(sergeant));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(sergeant));
+
+		// An Easterling who is a Nazgûl and no Man.
+		scn.MoveMinionsToTable(khamul);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.ShadowActionAvailable(sergeant));
+		scn.ShadowUseCardAction(sergeant);
+		assertEquals(1, scn.GetWoundsOn(sergeant));
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+	}
+
+	@Test
+	public void AnotherCopyOfThisMinionIsAnotherEasterling() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var sergeant = scn.GetShadowCard("sergeant");
+		var sergeant2 = scn.GetShadowCard("sergeant2");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(sergeant, sergeant2);
+
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(0, scn.GetWoundsOn(sergeant));
+		assertEquals(0, scn.GetWoundsOn(sergeant2));
+		assertTrue(scn.ShadowActionAvailable(sergeant));
+		assertTrue(scn.ShadowActionAvailable(sergeant2));
+
+		scn.ShadowUseCardAction(sergeant2);
+		assertEquals(0, scn.GetWoundsOn(sergeant));
+		assertEquals(1, scn.GetWoundsOn(sergeant2));
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
 	}
 }

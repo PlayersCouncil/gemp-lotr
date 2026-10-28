@@ -1,24 +1,43 @@
 package com.gempukku.lotro.cards.official.set07;
 
-import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_07_091_Tests
 {
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "7_91");
-					// put other cards in here as needed for the test case
+					put("faramir", "7_91");
+					put("gandalf", "1_364");    // Gandalf, The Grey Wizard: strength 7, vitality 4; a fellowship ability used only on purpose
+					put("avenger", "6_27");     // Ent Avenger: a [gandalf] companion who is not Gandalf; text only with 3 Ents
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man; a maneuver ability used only on purpose
+
+					put("horseman", "7_226");   // Enraged Horseman: [rohan] Man companion, cost 2; text only in a skirmish
+					put("aldor", "4_262");      // Aldor, Soldier of Edoras: [rohan] Man ally, cost 1; an archery ability used only on purpose
+					// Merry, Master Holbytla: a [rohan] Hobbit companion (a Man only with 3 [rohan] companions or Eowyn);
+					// an optional trigger when another [rohan] Man exerts, and a skirmish ability used only on purpose
+					put("merry", "103_85");
+					put("pippin", "1_306");     // Pippin, Friend to Frodo: [shire] Hobbit companion, strength 3; text about tales
+					put("sam", "1_311");        // Sam, Son of Hamfast: a Ring-bound Hobbit who is not the Ring-bearer
+					put("bounder", "1_286");    // Bounder: a Hobbit ally (not unbound); a skirmish ability used only on purpose
+					put("guard", "1_7");        // Dwarf Guard: strength 4, vitality 2; "To play, spot a Dwarf", cheated in
+
+					put("runner1", "1_178");    // Goblin Runner: strength 5; its text is on being played
+					put("runner2", "1_178");
+					put("soldier", "1_271");    // Orc Soldier: strength 7; Skirmish: exert to wound a character he is skirmishing
+					put("slayer", "3_93");      // Morgul Slayer: Regroup: exert to wound a companion (except the Ring-bearer)
+					put("berserker", "3_66");   // Orthanc Berserker: strength 11, damage +1; its maneuver ability needs 5 burdens
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -42,40 +61,318 @@ public class Card_07_091_Tests
 		 * Vitality: 3
 		 * Resistance: 6
 		 * Signet: Frodo
-		 * Game Text: <b>Ranger</b>.<br><b>Fellowship:</b> Play a [rohan] Man to heal Faramir.<br><b>Skirmish:</b> Exert Faramir to make an unbound Hobbit strength +2.<br><b>Skirmish:</b> Exert Gandalf to prevent all wounds to Faramir.
-		*/
+		 * Game Text: Ranger.
+		 * Fellowship: Play a [rohan] Man to heal Faramir.
+		 * Skirmish: Exert Faramir to make an unbound Hobbit strength +2.
+		 * Skirmish: Exert Gandalf to prevent all wounds to Faramir.
+		 */
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var faramir = scn.GetFreepsCard("faramir");
 
-		assertEquals("Faramir", card.getBlueprint().getTitle());
-		assertEquals("Wizard's Pupil", card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
-		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
-		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.RANGER));
-		assertEquals(3, card.getBlueprint().getTwilightCost());
-		assertEquals(7, card.getBlueprint().getStrength());
-		assertEquals(3, card.getBlueprint().getVitality());
-		assertEquals(6, card.getBlueprint().getResistance());
-		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
+		assertEquals("Faramir", faramir.getBlueprint().getTitle());
+		assertEquals("Wizard's Pupil", faramir.getBlueprint().getSubtitle());
+		assertTrue(faramir.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, faramir.getBlueprint().getSide());
+		assertEquals(Culture.GONDOR, faramir.getBlueprint().getCulture());
+		assertEquals(CardType.COMPANION, faramir.getBlueprint().getCardType());
+		assertEquals(Race.MAN, faramir.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(faramir, Keyword.RANGER));
+		assertEquals(3, faramir.getBlueprint().getTwilightCost());
+		assertEquals(7, faramir.getBlueprint().getStrength());
+		assertEquals(3, faramir.getBlueprint().getVitality());
+		assertEquals(6, faramir.getBlueprint().getResistance());
+		assertEquals(Signet.FRODO, faramir.getBlueprint().getSignet());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void FaramirTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void FellowshipPlaysARohanManFromHandToHealFaramir() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var faramir = scn.GetFreepsCard("faramir");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var horseman = scn.GetFreepsCard("horseman");
+		var aldor = scn.GetFreepsCard("aldor");
+		var merry = scn.GetFreepsCard("merry");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(faramir, gandalf);
+		scn.AddWoundsToChar(faramir, 2);
+		scn.AddWoundsToChar(gandalf, 1);
+		assertEquals(1, scn.GetWoundsOn(gandalf));
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(3, scn.GetTwilight());
+		// A [rohan] Hobbit and a [gondor] Man in hand, and no [rohan] Man: nothing to pay with.
+		scn.MoveCardsToHand(merry, aragorn);
+		assertInHand(merry, aragorn);
+		scn.FreepsRefreshDecision();
+		assertFalse(scn.FreepsActionAvailable(faramir));
+
+		scn.MoveCardsToHand(horseman, aldor);
+		assertInHand(horseman, aldor);
+		scn.FreepsRefreshDecision();
+		assertEquals(2, scn.GetWoundsOn(faramir));
+		assertTrue(scn.FreepsActionAvailable(faramir));
+
+		scn.FreepsUseCardAction(faramir);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(horseman, aldor));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(merry, aragorn));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+
+		scn.FreepsChooseCard(horseman);
+		assertInZone(Zone.FREE_CHARACTERS, horseman);
+		assertInHand(aldor, merry, aragorn);
+		assertEquals(1, scn.GetWoundsOn(faramir));
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void SkirmishExertsFaramirToMakeAnUnboundHobbitStrongerForThatSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var faramir = scn.GetFreepsCard("faramir");
+		var pippin = scn.GetFreepsCard("pippin");
+		var merry = scn.GetFreepsCard("merry");
+		var sam = scn.GetFreepsCard("sam");
+		var bounder = scn.GetFreepsCard("bounder");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var frodo = scn.GetRingBearer();
+		var runner1 = scn.GetShadowCard("runner1");
+		var runner2 = scn.GetShadowCard("runner2");
+		scn.MoveCompanionsToTable(faramir, pippin, merry, sam, aragorn);
+		scn.MoveAlliesToTable(bounder);
+		scn.AddWoundsToChar(faramir, 2);
+		assertEquals(2, scn.GetWoundsOn(faramir));
+
+		scn.StartGame();
+
+		scn.MoveMinionsToTable(runner1, runner2);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{pippin, runner1}, new PhysicalCardImpl[]{sam, runner2});
+		scn.FreepsResolveSkirmish(pippin);
+
+		// Faramir exhausted: this ability cannot be paid for.
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(faramir, "unbound Hobbit"));
+
+		scn.RemoveWoundsFromChar(faramir, 1);
+		scn.FreepsRefreshDecision();
+		assertTrue(scn.FreepsActionAvailable(faramir, "unbound Hobbit"));
+		assertEquals(3, scn.GetStrength(pippin));
+		assertEquals(3, scn.GetStrength(merry));
+
+		scn.FreepsUseCardAction(faramir, "unbound Hobbit");
+		assertEquals(2, scn.GetWoundsOn(faramir));
+		// Pippin in this skirmish and Merry in none; not the Ring-bearer, not Ring-bound Sam, not the Hobbit ally,
+		// not Aragorn (an unbound companion who is no Hobbit), not Faramir.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(pippin, merry));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(frodo, sam, bounder, aragorn, faramir));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+
+		scn.FreepsChooseCard(merry);
+		assertEquals(5, scn.GetStrength(merry));
+		assertEquals(3, scn.GetStrength(pippin));
+
+		// Still in force to the end of this skirmish; gone in the next one, which is another skirmish phase.
+		scn.ShadowPass();
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertEquals(5, scn.GetStrength(merry));
+		scn.FreepsPass();
+		assertEquals(3, scn.GetStrength(merry));
+		scn.FreepsResolveSkirmish(sam);
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertEquals(3, scn.GetStrength(merry));
+	}
+
+	@Test
+	public void SkirmishExertsGandalfToPreventAllWoundsToFaramirForThatSkirmishPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var faramir = scn.GetFreepsCard("faramir");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var soldier = scn.GetShadowCard("soldier");
+		var slayer = scn.GetShadowCard("slayer");
+		scn.MoveCompanionsToTable(faramir, gandalf);
+
+		scn.StartGame();
+
+		scn.MoveMinionsToTable(soldier);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(faramir, soldier);
+		scn.FreepsResolveSkirmish(faramir);
+
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+		assertEquals(0, scn.GetWoundsOn(faramir));
+		assertTrue(scn.FreepsActionAvailable(faramir, "Gandalf"));
+
+		scn.FreepsUseCardAction(faramir, "Gandalf");
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+		assertEquals(0, scn.GetWoundsOn(faramir));
+
+		// Orc Soldier's own wound is prevented, and so is the wound for losing (strength 7 against 7, a tie).
+		scn.ShadowUseCardAction(soldier);
+		assertEquals(1, scn.GetWoundsOn(soldier));
+		assertEquals(0, scn.GetWoundsOn(faramir));
+		scn.PassSkirmishActions();
+		assertEquals(0, scn.GetWoundsOn(faramir));
+
+		// The regroup phase: the skirmish phase is over, and Faramir can be wounded again.
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		scn.MoveMinionsToTable(slayer);
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(slayer);
+		assertTrue(scn.ShadowHasCardChoiceAvailable(faramir, gandalf));
+		scn.ShadowChooseCard(faramir);
+		assertEquals(1, scn.GetWoundsOn(faramir));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void SkirmishAbilityNeedsGandalfAbleToExert() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var faramir = scn.GetFreepsCard("faramir");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var avenger = scn.GetFreepsCard("avenger");
+		var soldier = scn.GetShadowCard("soldier");
+		scn.MoveCompanionsToTable(faramir, avenger);
+
+		scn.StartGame();
+
+		scn.MoveMinionsToTable(soldier);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(faramir, soldier);
+		scn.FreepsResolveSkirmish(faramir);
+
+		// A [gandalf] companion who is not Gandalf.
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertTrue(scn.FreepsActionAvailable(faramir, "unbound Hobbit"));
+		assertFalse(scn.FreepsActionAvailable(faramir, "Gandalf"));
+
+		// Gandalf exhausted (3 wounds, vitality 4).
+		scn.MoveCompanionsToTable(gandalf);
+		scn.AddWoundsToChar(gandalf, 3);
+		scn.FreepsRefreshDecision();
+		assertFalse(scn.FreepsActionAvailable(faramir, "Gandalf"));
+
+		scn.RemoveWoundsFromChar(gandalf, 1);
+		scn.FreepsRefreshDecision();
+		assertTrue(scn.FreepsActionAvailable(faramir, "Gandalf"));
+		assertEquals(0, scn.GetWoundsOn(avenger));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
+
+	@Test
+	public void FellowshipAbilityIsOfferedWithFaramirUnwoundedAndPlaysTheRohanManForNoHeal() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var faramir = scn.GetFreepsCard("faramir");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var horseman = scn.GetFreepsCard("horseman");
+		scn.MoveCompanionsToTable(faramir, gandalf);
+		scn.AddWoundsToChar(gandalf, 1);
+		scn.MoveCardsToHand(horseman);
+		assertInHand(horseman);
+
+		scn.StartGame();
+
+		// Playing the Man is the cost, and it can be paid: offered though Faramir has no wound to heal.
+		assertEquals(0, scn.GetWoundsOn(faramir));
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+		assertTrue(scn.FreepsActionAvailable(faramir));
+
+		scn.FreepsUseCardAction(faramir);
+		assertInZone(Zone.FREE_CHARACTERS, horseman);
+		assertEquals(0, scn.GetWoundsOn(faramir));
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void SkirmishAbilityWithNoUnboundHobbitExertsFaramirAndStrengthensNobody() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var faramir = scn.GetFreepsCard("faramir");
+		var sam = scn.GetFreepsCard("sam");
+		var bounder = scn.GetFreepsCard("bounder");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var frodo = scn.GetRingBearer();
+		var runner1 = scn.GetShadowCard("runner1");
+		scn.MoveCompanionsToTable(faramir, sam, aragorn);
+		scn.MoveAlliesToTable(bounder);
+
+		scn.StartGame();
+
+		scn.MoveMinionsToTable(runner1);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, runner1);
+		scn.FreepsResolveSkirmish(aragorn);
+
+		// Hobbits who are Ring-bound or an ally, and an unbound companion who is no Hobbit: nobody to strengthen,
+		// and the exertion is still a cost that can be paid.
+		assertTrue(scn.FreepsActionAvailable(faramir, "unbound Hobbit"));
+		assertEquals(0, scn.GetWoundsOn(faramir));
+		var frodoStrength = scn.GetStrength(frodo);
+		assertEquals(3, scn.GetStrength(sam));
+		assertEquals(2, scn.GetStrength(bounder));
+		assertEquals(8, scn.GetStrength(aragorn));
+
+		scn.FreepsUseCardAction(faramir, "unbound Hobbit");
+		assertEquals(1, scn.GetWoundsOn(faramir));
+		assertEquals(frodoStrength, scn.GetStrength(frodo));
+		assertEquals(3, scn.GetStrength(sam));
+		assertEquals(2, scn.GetStrength(bounder));
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
+	@Test
+	public void AfterTheGandalfAbilityFaramirMayStillBeAssignedAThreatWoundAndItIsPreventedWhileSamTakesHis() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var faramir = scn.GetFreepsCard("faramir");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var guard = scn.GetFreepsCard("guard");
+		var sam = scn.GetFreepsCard("sam");
+		var frodo = scn.GetRingBearer();
+		var berserker = scn.GetShadowCard("berserker");
+		scn.MoveCompanionsToTable(faramir, gandalf, guard, sam);
+
+		scn.StartGame();
+
+		scn.MoveMinionsToTable(berserker);
+		scn.AddThreats(2);
+		assertEquals(2, scn.GetThreats());
+		// The Guard's skirmish; Faramir is in none.
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(guard, berserker);
+		assertFalse(scn.IsCharSkirmishing(faramir));
+		assertTrue(scn.FreepsActionAvailable(faramir, "Gandalf"));
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+
+		scn.FreepsUseCardAction(faramir, "Gandalf");
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+		assertEquals(2, scn.GetThreats());
+
+		// The Guard, strength 4, is overwhelmed by the Berserker, strength 11, and killed: the two threats come off as
+		// two wounds to assign, in the same skirmish phase. A prevented wound may still be assigned (CR 4.2 "wound",
+		// whose example is this ability), so Faramir is offered for it, and it is prevented.
+		scn.PassSkirmishActions();
+		assertInZone(Zone.DEAD, guard);
+		assertEquals(0, scn.GetThreats());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(faramir, sam, frodo));
+		assertEquals(0, scn.GetWoundsOn(faramir));
+		scn.FreepsChooseCard(faramir);
+		assertEquals(0, scn.GetWoundsOn(faramir));
+
+		// Offered again for the second; the wound to Sam is not prevented.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(faramir, sam, frodo));
+		assertEquals(0, scn.GetWoundsOn(sam));
+		scn.FreepsChooseCard(sam);
+		assertEquals(0, scn.GetWoundsOn(faramir));
+		assertEquals(1, scn.GetWoundsOn(sam));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }

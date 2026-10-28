@@ -3,12 +3,12 @@ package com.gempukku.lotro.cards.official.set07;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_07_191_Tests
@@ -18,8 +18,15 @@ public class Card_07_191_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "7_191");
-					// put other cards in here as needed for the test case
+					put("detachment", "7_191");
+					put("detachment2", "7_191");
+					// Morgul Creeper: a [wraith] Orc who is no Nazgul; its text reads 3 burdens
+					put("creeper", "8_75");
+					// Ulaire Lemenya, Lieutenant of Morgul: a [wraith] Nazgul; her text reaches only a companion or ally
+					// bearing a [wraith] condition
+					put("lemenya", "1_232");
+					// Ulaire Attea, Khamul of the East: a [raider] Nazgul; fierce, and his texts read burdens only
+					put("khamul", "103_61");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,33 +54,69 @@ public class Card_07_191_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var detachment = scn.GetFreepsCard("detachment");
 
-		assertEquals("Morgul Detachment", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.ORC, card.getBlueprint().getRace());
-		assertEquals(7, card.getBlueprint().getTwilightCost());
-		assertEquals(15, card.getBlueprint().getStrength());
-		assertEquals(4, card.getBlueprint().getVitality());
-		assertEquals(4, card.getBlueprint().getSiteNumber());
+		assertEquals("Morgul Detachment", detachment.getBlueprint().getTitle());
+		assertNull(detachment.getBlueprint().getSubtitle());
+		assertFalse(detachment.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, detachment.getBlueprint().getSide());
+		assertEquals(Culture.WRAITH, detachment.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, detachment.getBlueprint().getCardType());
+		assertEquals(Race.ORC, detachment.getBlueprint().getRace());
+		assertEquals(7, detachment.getBlueprint().getTwilightCost());
+		assertEquals(15, detachment.getBlueprint().getStrength());
+		assertEquals(4, detachment.getBlueprint().getVitality());
+		assertEquals(4, detachment.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void MorgulDetachmentTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void IsFierceAndDamagePlus1OnceAWraithNazgulIsPlayedAndNotForAWraithOrc() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var detachment = scn.GetShadowCard("detachment");
+		var detachment2 = scn.GetShadowCard("detachment2");
+		var creeper = scn.GetShadowCard("creeper");
+		var lemenya = scn.GetShadowCard("lemenya");
+		scn.MoveCardsToHand(lemenya);
+		assertInHand(lemenya);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(detachment, detachment2, creeper);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
 
-		assertEquals(7, scn.GetTwilight());
+		// A [wraith] minion who is no Nazgul is in play.
+		assertFalse(scn.HasKeyword(detachment, Keyword.FIERCE));
+		assertEquals(0, scn.GetKeywordCount(detachment, Keyword.DAMAGE));
+		assertFalse(scn.HasKeyword(detachment2, Keyword.FIERCE));
+		assertEquals(0, scn.GetKeywordCount(detachment2, Keyword.DAMAGE));
+
+		scn.ShadowPlayCard(lemenya);
+		assertInZone(Zone.SHADOW_CHARACTERS, lemenya);
+
+		assertTrue(scn.HasKeyword(detachment, Keyword.FIERCE));
+		assertEquals(1, scn.GetKeywordCount(detachment, Keyword.DAMAGE));
+		// Each copy has its own bonus and no more; the other Orc is untouched.
+		assertTrue(scn.HasKeyword(detachment2, Keyword.FIERCE));
+		assertEquals(1, scn.GetKeywordCount(detachment2, Keyword.DAMAGE));
+		assertFalse(scn.HasKeyword(creeper, Keyword.FIERCE));
+		assertEquals(0, scn.GetKeywordCount(creeper, Keyword.DAMAGE));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void ARaiderNazgulIsSpottedToo() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var detachment = scn.GetShadowCard("detachment");
+		var khamul = scn.GetShadowCard("khamul");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(detachment, khamul);
+		scn.FreepsPass();
+
+		assertTrue(scn.HasKeyword(detachment, Keyword.FIERCE));
+		assertEquals(1, scn.GetKeywordCount(detachment, Keyword.DAMAGE));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

@@ -3,12 +3,12 @@ package com.gempukku.lotro.cards.official.set07;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_07_323_Tests
@@ -18,8 +18,12 @@ public class Card_07_323_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "7_323");
-					// put other cards in here as needed for the test case
+					put("pippin", "7_323");
+					// Merry, From O'er the Brandywine: another Hobbit companion, strength 3; his text needs a weapon
+					put("merry", "1_303");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a fourth companion; a maneuver ability only
+					// Sting, Elven Long Knife: on Frodo; "Regroup: Exert bearer to remove a threat"
+					put("sting", "18_113");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -48,7 +52,7 @@ public class Card_07_323_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("pippin");
 
 		assertEquals("Pippin", card.getBlueprint().getTitle());
 		assertEquals("Sworn to Service", card.getBlueprint().getSubtitle());
@@ -64,18 +68,69 @@ public class Card_07_323_Tests
 		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void PippinTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void StrengthIsPlusOneForEachThreatWhileFewerThanFourCanBeSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var pippin = scn.GetFreepsCard("pippin");
+		var merry = scn.GetFreepsCard("merry");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		// Four companions, so that four threats can lie.
+		scn.MoveCompanionsToTable(pippin, merry, aragorn);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		assertEquals(0, scn.GetThreats());
+		assertEquals(3, scn.GetStrength(pippin));
+		assertEquals(3, scn.GetStrength(merry));
 
-		assertEquals(1, scn.GetTwilight());
+		scn.AddThreats(1);
+		assertEquals(1, scn.GetThreats());
+		assertEquals(4, scn.GetStrength(pippin));
+		assertEquals(3, scn.GetStrength(merry));
+
+		scn.AddThreats(2);
+		assertEquals(3, scn.GetThreats());
+		// 3 + 3 threats
+		assertEquals(6, scn.GetStrength(pippin));
+		assertEquals(3, scn.GetStrength(merry));
+
+		// Four threats can be spotted: no bonus at all.
+		scn.AddThreats(1);
+		assertEquals(4, scn.GetThreats());
+		assertEquals(3, scn.GetStrength(pippin));
+		assertEquals(3, scn.GetStrength(merry));
+	}
+
+	@Test
+	public void AtFourThreatsTheBonusIsGoneAndComesBackWhenOneIsRemoved() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var pippin = scn.GetFreepsCard("pippin");
+		var merry = scn.GetFreepsCard("merry");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var sting = scn.GetFreepsCard("sting");
+		scn.MoveCompanionsToTable(pippin, merry, aragorn);
+		scn.AttachCardsTo(frodo, sting);
+		assertEquals(frodo, sting.getAttachedTo());
+
+		scn.StartGame();
+		scn.AddThreats(4);
+		assertEquals(4, scn.GetThreats());
+		assertEquals(3, scn.GetStrength(pippin));
+
+		// No minion is played, so the turn goes from the move to site 2 straight to the regroup phase.
+		scn.SkipToPhase(Phase.REGROUP);
+		assertEquals(4, scn.GetThreats());
+		assertEquals(3, scn.GetStrength(pippin));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+
+		scn.FreepsUseCardAction(sting);
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(3, scn.GetThreats());
+		// 3 + 3 threats
+		assertEquals(6, scn.GetStrength(pippin));
+		assertEquals(3, scn.GetStrength(merry));
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
 	}
 }

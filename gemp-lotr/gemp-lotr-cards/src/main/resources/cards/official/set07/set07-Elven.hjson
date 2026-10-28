@@ -20,10 +20,14 @@
 					type: addActivated
 					filter: minion
 					phase: assignment
-					text: Assign this minion to bearer of Reckless Pride.
+					text: Assign this minion to bearer of Ancient Blade.
+					requires: {
+						type: canSpot
+						filter: hasAttached(name(Ancient Blade)),assignableToSkirmishAgainst(self)
+					}
 					effect: {
 						type: assignFpCharacterToSkirmish
-						fpCharacter: choose(hasAttached(name(Reckless Pride)))
+						fpCharacter: choose(hasAttached(name(Ancient Blade)))
 						minion: self
 					}
 				}

@@ -18,8 +18,11 @@ public class Card_07_299_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "7_299");
-					// put other cards in here as needed for the test case
+					put("destroyer", "7_299");
+					put("chieftain", "1_266");  // Orc Chieftain: [sauron] Orc, strength 7; his text answers a weapon played on him
+					put("soldier", "1_271");    // Orc Soldier: [sauron] Orc of another title; a skirmish ability used only on purpose
+					put("sentry", "10_84");     // Cirith Ungol Sentry: a [sauron] minion who is no Orc (Uruk-hai); damage +1 only
+					put("hound", "7_192");      // Morgul Hound: an Orc who is not [sauron] ([wraith]); his text needs 2 wounds on the Ring-bearer
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +50,7 @@ public class Card_07_299_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("destroyer");
 
 		assertEquals("Orc Destroyer", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +65,75 @@ public class Card_07_299_Tests
 		assertEquals(6, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void OrcDestroyerTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void ShadowAbilityRemoves3AndSpotsThreeSauronOrcsItselfAmongThemToDrawACard() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var destroyer = scn.GetShadowCard("destroyer");
+		var chieftain = scn.GetShadowCard("chieftain");
+		var soldier = scn.GetShadowCard("soldier");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(destroyer, chieftain, soldier);
+		scn.FreepsPass();
 
+		scn.SetTwilight(3);
+		scn.ShadowRefreshDecision();
 		assertEquals(3, scn.GetTwilight());
+		int hand = scn.GetShadowHandCount();
+		int deck = scn.GetShadowDeckCount();
+		// The Destroyer and two other [sauron] Orcs: no "other" in the text, so he is the third.
+		assertTrue(scn.ShadowActionAvailable(destroyer));
+
+		scn.ShadowUseCardAction(destroyer);
+
+		assertEquals(0, scn.GetTwilight());
+		assertEquals(hand + 1, scn.GetShadowHandCount());
+		assertEquals(deck - 1, scn.GetShadowDeckCount());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void WithTwoSauronOrcsBesideASauronUrukHaiAndAWraithOrcItIsNotOffered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var destroyer = scn.GetShadowCard("destroyer");
+		var chieftain = scn.GetShadowCard("chieftain");
+		var sentry = scn.GetShadowCard("sentry");
+		var hound = scn.GetShadowCard("hound");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(destroyer, chieftain, sentry, hound);
+		scn.FreepsPass();
+
+		scn.SetTwilight(3);
+		scn.ShadowRefreshDecision();
+		assertEquals(3, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(destroyer));
+	}
+
+	@Test
+	public void WithTwoTwilightTokensItIsNotOfferedAndWithThreeItIs() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var destroyer = scn.GetShadowCard("destroyer");
+		var chieftain = scn.GetShadowCard("chieftain");
+		var soldier = scn.GetShadowCard("soldier");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(destroyer, chieftain, soldier);
+		scn.FreepsPass();
+
+		scn.SetTwilight(2);
+		scn.ShadowRefreshDecision();
+		assertEquals(2, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(destroyer));
+
+		scn.SetTwilight(3);
+		scn.ShadowRefreshDecision();
+		assertEquals(3, scn.GetTwilight());
+		assertTrue(scn.ShadowActionAvailable(destroyer));
 	}
 }

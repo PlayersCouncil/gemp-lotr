@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_07_298_Tests
@@ -17,8 +18,16 @@ public class Card_07_298_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "7_298");
-					// put other cards in here as needed for the test case
+					put("chaser", "7_298");
+					put("chaser2", "7_298");
+					put("chieftain", "1_266");  // Orc Chieftain: [sauron] Orc, site 6, strength 7; his text answers a weapon played on him
+					put("pillager", "7_275");   // Gorgoroth Pillager: [sauron] Orc, site 5; his text works only while he is stacked
+					put("sentry", "10_84");     // Cirith Ungol Sentry: a [sauron] minion who is no Orc (Uruk-hai), site 6; damage +1 only
+					put("hound", "7_192");      // Morgul Hound: an Orc who is not [sauron] ([wraith]), site 4; his text needs 2 wounds on the Ring-bearer
+					put("stairs", "1_24");      // Stairs of Khazad-dum: a Free Peoples condition of cost 0, played only to take the hand from four to three
+					put("hand1", "1_7");        // Dwarf Guard: cards for the Free Peoples hand, which decides initiative
+					put("hand2", "1_7");
+					put("hand3", "1_7");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -41,12 +50,14 @@ public class Card_07_298_Tests
 		 * Strength: 6
 		 * Vitality: 2
 		 * Site Number: 6
-		 * Game Text: <b>Tracker</b>.<br>The site number of each [sauron] Orc is -1.<br>While you have initiative, this minion is strength +6.
+		 * Game Text: <b>Tracker</b>.
+		 * The site number of each [sauron] Orc is -1.
+		 * While you have initiative, this minion is strength +6.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("chaser");
 
 		assertEquals("Orc Chaser", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +73,121 @@ public class Card_07_298_Tests
 		assertEquals(6, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void OrcChaserTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void TheSiteNumberOfEachSauronOrcIsMinusOneItsOwnIncluded() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var chaser = scn.GetShadowCard("chaser");
+		var chieftain = scn.GetShadowCard("chieftain");
+		var pillager = scn.GetShadowCard("pillager");
+		var sentry = scn.GetShadowCard("sentry");
+		var hound = scn.GetShadowCard("hound");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(chieftain, pillager, sentry, hound);
 
+		// Before the Chaser is in play: printed site numbers.
+		assertEquals(6, scn.GetMinionSiteNumber(chaser));
+		assertEquals(6, scn.GetMinionSiteNumber(chieftain));
+		assertEquals(5, scn.GetMinionSiteNumber(pillager));
+		assertEquals(6, scn.GetMinionSiteNumber(sentry));
+		assertEquals(4, scn.GetMinionSiteNumber(hound));
+
+		scn.MoveMinionsToTable(chaser);
+
+		assertEquals(5, scn.GetMinionSiteNumber(chaser));
+		assertEquals(5, scn.GetMinionSiteNumber(chieftain));
+		assertEquals(4, scn.GetMinionSiteNumber(pillager));
+		// The [sauron] Uruk-hai and the [wraith] Orc are no [sauron] Orcs.
+		assertEquals(6, scn.GetMinionSiteNumber(sentry));
+		assertEquals(4, scn.GetMinionSiteNumber(hound));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void AtSite5ASauronOrcOfSiteNumber6RoamsNoLongerOnceTheChaserIsInPlay() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var chaser = scn.GetShadowCard("chaser");
+		var chieftain = scn.GetShadowCard("chieftain");
+		var sentry = scn.GetShadowCard("sentry");
+
+		scn.StartGame();
+		scn.SkipToSite(4);
+		scn.MoveMinionsToTable(chieftain, sentry);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertEquals(5, scn.GetCurrentSiteNumber());
+		assertTrue(scn.HasKeyword(chieftain, Keyword.ROAMING));
+		assertTrue(scn.HasKeyword(sentry, Keyword.ROAMING));
+
+		scn.MoveMinionsToTable(chaser);
+
+		// 6 - 1 is 5, the fellowship's site: the Chieftain is not roaming; the [sauron] Uruk-hai still is.
+		assertFalse(scn.HasKeyword(chieftain, Keyword.ROAMING));
+		assertFalse(scn.HasKeyword(chaser, Keyword.ROAMING));
+		assertTrue(scn.HasKeyword(sentry, Keyword.ROAMING));
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+	}
+
+	@Test
+	public void ASauronOrcPlayedAtSite5BesideTheChaserPaysNoRoamingPenalty() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var chaser = scn.GetShadowCard("chaser");
+		var chieftain = scn.GetShadowCard("chieftain");
+
+		scn.StartGame();
+		scn.SkipToSite(4);
+		scn.MoveMinionsToTable(chaser);
+		scn.MoveCardsToHand(chieftain);
+		scn.FreepsPass();
+
+		assertEquals(5, scn.GetCurrentSiteNumber());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		scn.SetTwilight(2);
+		scn.ShadowRefreshDecision();
 		assertEquals(2, scn.GetTwilight());
+		// The Chieftain's site number is 5 at site 5: his cost of 2 and no roaming penalty of 2.
+		assertTrue(scn.ShadowPlayAvailable(chieftain));
+
+		scn.ShadowPlayCard(chieftain);
+
+		assertInZone(Zone.SHADOW_CHARACTERS, chieftain);
+		assertEquals(0, scn.GetTwilight());
+		assertFalse(scn.HasKeyword(chieftain, Keyword.ROAMING));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void WhileTheShadowHasInitiativeTheChaserIsStrengthPlus6AndNoOtherOrcIs() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var chaser = scn.GetShadowCard("chaser");
+		var chaser2 = scn.GetShadowCard("chaser2");
+		var chieftain = scn.GetShadowCard("chieftain");
+		var stairs = scn.GetFreepsCard("stairs");
+
+		scn.MoveCardsToHand(stairs, scn.GetFreepsCard("hand1"), scn.GetFreepsCard("hand2"), scn.GetFreepsCard("hand3"));
+		scn.StartGame();
+		scn.MoveMinionsToTable(chaser, chaser2, chieftain);
+		scn.FreepsRefreshDecision();
+
+		// Four cards in the Free Peoples hand: the Free Peoples player has initiative.
+		assertEquals(4, scn.GetFreepsHandCount());
+		assertTrue(scn.FreepsHasInitiative());
+		assertEquals(6, scn.GetStrength(chaser));
+		assertEquals(6, scn.GetStrength(chaser2));
+		assertEquals(7, scn.GetStrength(chieftain));
+
+		scn.FreepsPlayCard(stairs);
+
+		// Three left: the Shadow has initiative. Each Chaser is +6 for itself alone, and the Chieftain is not.
+		assertEquals(3, scn.GetFreepsHandCount());
+		assertFalse(scn.FreepsHasInitiative());
+		assertEquals(12, scn.GetStrength(chaser));
+		assertEquals(12, scn.GetStrength(chaser2));
+		assertEquals(7, scn.GetStrength(chieftain));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

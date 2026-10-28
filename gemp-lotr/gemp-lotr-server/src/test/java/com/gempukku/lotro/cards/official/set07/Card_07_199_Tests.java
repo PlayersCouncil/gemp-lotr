@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set07;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,18 @@ public class Card_07_199_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "7_199");
-					// put other cards in here as needed for the test case
+					put("soldier", "7_199");
+					// Úlairë Lemenya, Lieutenant of Morgul: a [wraith] Nazgûl, strength 9; her text is about companions
+					// bearing [wraith] conditions
+					put("lemenya", "1_232");
+					// Ulaire Attea, Khamul of the East: a Nazgûl who is [raider], strength 12; his text needs 3 burdens
+					put("khamul", "103_61");
+					// Morgul Creeper: a [wraith] Orc, strength 8; its text needs 3 burdens
+					put("creeper", "8_75");
+					// Bill Ferny, Swarthy Sneering Fellow: a [wraith] Man, strength 4.  "Nazgûl are not roaming. ..."
+					put("ferny", "2_75");
+
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8; a maneuver ability only
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +56,7 @@ public class Card_07_199_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("soldier");
 
 		assertEquals("Morgul Soldier", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +71,38 @@ public class Card_07_199_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void MorgulSoldierTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void EachNazgulOfEitherCultureIsStrengthPlusOneAndNoOtherCharacterIs() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var soldier = scn.GetShadowCard("soldier");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var khamul = scn.GetShadowCard("khamul");
+		var creeper = scn.GetShadowCard("creeper");
+		var ferny = scn.GetShadowCard("ferny");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(lemenya, khamul, creeper, ferny);
 
-		assertEquals(2, scn.GetTwilight());
+		// Without the Soldier: each at its printed strength.
+		assertEquals(9, scn.GetStrength(lemenya));
+		assertEquals(12, scn.GetStrength(khamul));
+		assertEquals(8, scn.GetStrength(creeper));
+		assertEquals(4, scn.GetStrength(ferny));
+		assertEquals(8, scn.GetStrength(aragorn));
+
+		scn.MoveMinionsToTable(soldier);
+
+		// Both Nazgûl, the [wraith] one and the [raider] one, are 1 stronger.  The [wraith] Orc, the [wraith] Man,
+		// the Soldier itself and the companion are not.
+		assertEquals(10, scn.GetStrength(lemenya));
+		assertEquals(13, scn.GetStrength(khamul));
+		assertEquals(8, scn.GetStrength(creeper));
+		assertEquals(4, scn.GetStrength(ferny));
+		assertEquals(6, scn.GetStrength(soldier));
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

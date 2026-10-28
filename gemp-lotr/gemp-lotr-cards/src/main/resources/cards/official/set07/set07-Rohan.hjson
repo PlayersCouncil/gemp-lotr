@@ -73,36 +73,44 @@
 					memorize: exertedCharacter
 				}
 				{
-					type: doWhile
+					type: If
 					check: {
 						type: memoryMatches
 						memory: exertedCharacter
 						filter: character
 					}
-					effect: [
-						{
-							type: exert
-							player: ownerFromMemory(exertedCharacter)
-							select: choose(companion)
-							count: 0-1
-							memorize: exertedCharacter
+					true: {
+						type: doWhile
+						check: {
+							type: memoryMatches
+							memory: exertedCharacter
+							filter: character
 						}
-						{
-							type: If
-							check: {
-								type: memoryMatches
-								memory: exertedCharacter
-								filter: character
-							}
-							true: {
+						effect: [
+							{
 								type: exert
-								player: free people
-								select: choose(minion)
+								player: ownerFromMemory(exertedCharacter)
+								select: choose(companion)
 								count: 0-1
 								memorize: exertedCharacter
 							}
-						}
-					]
+							{
+								type: If
+								check: {
+									type: memoryMatches
+									memory: exertedCharacter
+									filter: character
+								}
+								true: {
+									type: exert
+									player: free people
+									select: choose(minion)
+									count: 0-1
+									memorize: exertedCharacter
+								}
+							}
+						]
+					}
 				}
 			]
 		}
@@ -611,7 +619,7 @@
 				}
 				effect: {
 					type: discardFromHand
-					forced: true
+					forced: false
 				}
 			}
 		]
@@ -1594,12 +1602,8 @@
 				type: modifier
 				modifier: {
 					type: modifyStrength
-					filter: culture(rohan),man
+					filter: culture(rohan),man,atSite(bearer)
 					amount: 1
-					requires: {
-						type: location
-						filter: bearer
-					}
 				}
 			}
 		]
@@ -1633,11 +1637,7 @@
 				type: modifier
 				modifier: {
 					type: cantTakeMoreWoundsThan
-					requires: {
-						type: location
-						filter: plains
-					}
-					filter: bearer
+					filter: bearer,atSite(plains)
 					amount: 1
 					phase: skirmish
 				}
@@ -1805,7 +1805,9 @@
 			cost: {
 				type: exert
 				select: choose(mounted,companion)
-				count: any
+				// At least one: "exert X mounted companions" is an exertion cost and X is not zero (Q-0076; CR 4.2
+				// "exert" names this card).
+				count: anyNonZero
 				memorize: exertedCompanions
 			},
 			effect: [
