@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_12_064_Tests
@@ -17,8 +18,9 @@ public class Card_12_064_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "12_64");
-					// put other cards in here as needed for the test case
+					put("southron", "12_64");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a ranger, to spot for What Are They?; a maneuver ability used only on purpose
+					put("whatare", "1_119");    // What Are They?: Maneuver event, spot a ranger to discard a roaming minion
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +48,7 @@ public class Card_12_064_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("southron");
 
 		assertEquals("Enraged Southron", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -63,18 +65,51 @@ public class Card_12_064_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void EnragedSouthronTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void TheMoveLimitIsPlusOneForTheWholeTurnOnceItIsPlayedThoughItLeavesPlay() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var southron = scn.GetShadowCard("southron");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var whatare = scn.GetFreepsCard("whatare");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToHand(whatare);
+		scn.SetShadowHand(southron);
+		assertInHand(whatare, southron);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// Enough for its 4 and the roaming 2 at site 2.
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+		assertTrue(scn.AwaitingShadowPhaseActions());
 
-		assertEquals(4, scn.GetTwilight());
+		assertEquals(2, scn.GetMoveLimit());
+		scn.ShadowPlayCard(southron);
+		assertInZone(Zone.SHADOW_CHARACTERS, southron);
+		assertEquals(3, scn.GetMoveLimit());
+
+		// It roams at site 2, and What Are They? discards it in the maneuver phase.
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPlayCard(whatare);
+		assertInDiscard(southron);
+
+		// CR 4.2 "move limit": a modification for a turn is in effect for the whole turn, even if the conditions
+		// for it change.
+		assertEquals(3, scn.GetMoveLimit());
+		scn.SkipToMovementDecision();
+		scn.FreepsChooseToMove();
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertEquals(3, scn.GetMoveLimit());
+
+		scn.SkipToMovementDecision();
+		assertTrue(scn.FreepsDecisionAvailable("another move"));
+
+		// The turn ends, and so does the +1.
+		scn.FreepsChooseToStay();
+		scn.PassReconcile(VirtualTableScenario.P1);
+		scn.PassReconcile(VirtualTableScenario.P2);
+		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
+		assertEquals(2, scn.GetMoveLimit());
 	}
 }
