@@ -52,7 +52,13 @@ regular hall at `http://localhost:4200/gemp-lotr/` and then open the deck builde
 | `src/app/core/deck/` | Deck helpers, e.g. the `deckContents` string the server expects. |
 | `src/app/core/delivery/` | `PackDeliveryService`: the opened-pack "New items" contents. |
 | `src/app/core/session/` | `SessionService`: the optional `?participantId=` (admins acting as a player). |
+| `src/app/layout/` | The page frame: `page-layout.ts` reproduces the legacy `jquery.layout` panes (deck, collection, resizer bar), and `deck-layout.ts` is the legacy `layoutUI` positioning of the deck slots. |
+| `src/app/deck/` | Deck builder components, e.g. the top toolbar. |
+| `src/app/shared/` | `gempUiButton`: jQuery UI button classes and hover/pressed states, so the dark-hive theme applies. |
 | `src/testing/` | Test helpers and `server-responses/`, real server responses the parser tests run against. |
+
+The page uses the legacy stylesheets where they are (linked in `src/index.html` from `/gemp-lotr/css/...`), keeping the
+legacy element IDs and classes, so it looks the same and later fixes to those stylesheets apply to both deck builders.
 
 `card-blueprint.parity.spec.ts` runs the legacy `Card.js` side by side with the port on over 50,000 blueprint IDs, so a
 change to `Card.js` that isn't mirrored in `card-blueprint.ts` fails the build.

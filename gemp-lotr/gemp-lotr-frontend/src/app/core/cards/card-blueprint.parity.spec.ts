@@ -11,6 +11,9 @@ import { LegacyCardDataService } from './legacy-card-data.service';
  * horizontal range, a remade errata, ...) without updating card-blueprint.ts, this fails.
  */
 
+/** The checks below run tens of thousands of comparisons; give them room when other test files run alongside. */
+const HEAVY_TEST_TIMEOUT = 60_000;
+
 /** The legacy code links the Future Prize image relative to the page; the port uses the same image, absolutely. */
 const normalise = (url: string): string => (url.startsWith('images/') ? `/gemp-lotr/${url}` : url);
 
@@ -87,7 +90,7 @@ describe('card-blueprint parity with the legacy Card.js', () => {
       );
     }
     expect(mismatches).toEqual([]);
-  });
+  }, HEAVY_TEST_TIMEOUT);
 
   describe('CardImageService matches new Card(...)', () => {
     let service: CardImageService;
@@ -127,7 +130,7 @@ describe('card-blueprint parity with the legacy Card.js', () => {
         }
       }
       expect(mismatches).toEqual([]);
-    });
+    }, HEAVY_TEST_TIMEOUT);
 
     it('for the "rules" card', () => {
       expect(service.resolve('rules').imageUrl).toBe(new legacy.Card('rules').imageUrl);
