@@ -43,6 +43,20 @@ GEMP_SERVER=http://localhost:17001 npm start # other server (this is the default
 legacy CSS/JS) to that server. Requests are same-origin, so the login cookie works: log in through the
 regular hall at `http://localhost:4200/gemp-lotr/` and then open the deck builder URL.
 
+## Code layout
+
+| Folder | What it holds |
+|---|---|
+| `src/app/core/api/` | `DeckbuilderApi`: every server call the deck builder makes, typed. Sent via `GempHttp`, which adds `participantId`, encodes form data strictly (a `+` stays a `+`), turns failures into `ApiError` and spots the opened-pack header. `parsers.ts` reads the server's XML. |
+| `src/app/core/cards/` | Card images. `card-blueprint.ts` is a port of the legacy `Card.js` rules; the image tables still come from the legacy files (`PC_Cards.js`, `hobbit.js`, `set40.js`, `cards/CardImages.js`, `cards/PackImages.js`), loaded at startup by `LegacyCardDataService`. Add new card images there, as before. |
+| `src/app/core/deck/` | Deck helpers, e.g. the `deckContents` string the server expects. |
+| `src/app/core/delivery/` | `PackDeliveryService`: the opened-pack "New items" contents. |
+| `src/app/core/session/` | `SessionService`: the optional `?participantId=` (admins acting as a player). |
+| `src/testing/` | Test helpers and `server-responses/`, real server responses the parser tests run against. |
+
+`card-blueprint.parity.spec.ts` runs the legacy `Card.js` side by side with the port on over 50,000 blueprint IDs, so a
+change to `Card.js` that isn't mirrored in `card-blueprint.ts` fails the build.
+
 ## Tests
 
 ```
