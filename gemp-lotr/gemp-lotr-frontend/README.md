@@ -1,0 +1,51 @@
+# gemp-lotr-frontend
+
+The new Angular frontend, which replaces the jQuery client in `gemp-lotr-async/src/main/web` one page at a time.
+The first page being ported is the **deck builder**. For now it is an opt-in preview and does not replace `deckBuild.html`.
+
+| | |
+|---|---|
+| Opt-in URL | `/gemp-lotr/ng/deckbuilder/` (e.g. http://localhost:17001/gemp-lotr/ng/deckbuilder/) |
+| Legacy deck builder (unchanged) | `/gemp-lotr/deckBuild.html` |
+| Build output | `../gemp-lotr-async/src/main/web/ng/deckbuilder/` (gitignored, generated) |
+| Stack | Angular 22 (standalone components, signals), Vitest |
+
+## Building with Maven (normal workflow)
+
+Nothing extra needs installing. This module is part of the Maven reactor, and `frontend-maven-plugin` downloads Node into
+`gemp-lotr-frontend/node/` (gitignored). It then runs `npm ci`, the unit tests (`test` phase) and `ng build` (`compile` phase).
+`gemp-lotr-async` depends on this module, so the Angular output is always in the web folder before the server is packaged.
+
+```
+mvn install                                  # everything, including frontend tests and build
+mvn install -DskipTests                      # skips Java and frontend tests
+mvn install -Dskip.frontend=true             # skips the frontend entirely (keeps the last build output)
+```
+
+On Alpine (the Docker app image), the plugin detects musl and downloads Node from unofficial-builds.nodejs.org.
+That build needs `libstdc++`, which `docker/gemp_app.Dockerfile` installs.
+
+The server caches static files in memory until it restarts, so restart the server after a rebuild that it should serve.
+`ng serve` (below) avoids this during development.
+
+## Developing with `ng serve`
+
+Requires Node 24 (`node -v`). Start a Gemp server first, for example the Docker setup from `gemp-lotr/docker`.
+
+```
+cd gemp-lotr/gemp-lotr-frontend
+npm ci
+npm start                                    # http://localhost:4200/gemp-lotr/ng/deckbuilder/
+GEMP_SERVER=http://localhost:17001 npm start # other server (this is the default)
+```
+
+`proxy.conf.mjs` forwards `/gemp-lotr-server/*` (API) and every `/gemp-lotr/*` path except the app's own (images and
+legacy CSS/JS) to that server. Requests are same-origin, so the login cookie works: log in through the
+regular hall at `http://localhost:4200/gemp-lotr/` and then open the deck builder URL.
+
+## Tests
+
+```
+npm test               # watch mode
+npm test -- --watch=false
+```

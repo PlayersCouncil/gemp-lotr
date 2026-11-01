@@ -40,6 +40,10 @@ public class WebRequestHandler implements UriRequestHandler {
         if (!file.getCanonicalPath().startsWith(_root))
             throw new HttpProcessingException(403);
 
+        // A directory serves its index.html (e.g. /gemp-lotr/ng/deckbuilder/ for the Angular deck builder)
+        if (file.isDirectory())
+            file = new File(file, "index.html");
+
         if (!file.exists())
             throw new HttpProcessingException(404);
 

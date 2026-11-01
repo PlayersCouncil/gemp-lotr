@@ -1,0 +1,8 @@
+/* Global styles. Phase 3 will load the legacy deck builder stylesheets here to keep the current look. */
+html, body {
+  margin: 0;
+  height: 100%;
+  background-color: #000000;
+  color: #ffffff;
+  font-family: Verdana, Arial, sans-serif;
+}

@@ -175,6 +175,29 @@ public class GempukkuHttpRequestHandler extends SimpleChannelInboundHandler<Full
         else if (fileName.endsWith(".wav")) {
             cache = true;
             contentType = "audio/wav";
+        } else if (fileName.endsWith(".mjs")) {
+            contentType = "application/javascript; charset=UTF-8";
+        } else if (fileName.endsWith(".json") || fileName.endsWith(".map")) {
+            contentType = "application/json; charset=UTF-8";
+        } else if (fileName.endsWith(".webmanifest")) {
+            contentType = "application/manifest+json; charset=UTF-8";
+        } else if (fileName.endsWith(".txt")) {
+            contentType = "text/plain; charset=UTF-8";
+        } else if (fileName.endsWith(".webp")) {
+            cache = true;
+            contentType = "image/webp";
+        } else if (fileName.endsWith(".ico")) {
+            cache = true;
+            contentType = "image/x-icon";
+        } else if (fileName.endsWith(".woff2")) {
+            cache = true;
+            contentType = "font/woff2";
+        } else if (fileName.endsWith(".woff")) {
+            cache = true;
+            contentType = "font/woff";
+        } else if (fileName.endsWith(".ttf")) {
+            cache = true;
+            contentType = "font/ttf";
         } else {
             contentType = "application/octet-stream";
         }
