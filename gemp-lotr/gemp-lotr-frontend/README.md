@@ -1,12 +1,12 @@
 # gemp-lotr-frontend
 
 The new Angular frontend, which replaces the jQuery client in `gemp-lotr-async/src/main/web` one page at a time.
-The first page being ported is the **deck builder**. For now it is an opt-in preview and does not replace `deckBuild.html`.
+The first page being ported is the **deck builder**. The hall's Deck-builder button opens it; `deckBuild.html` is still there.
 
 | | |
 |---|---|
-| Opt-in URL | `/gemp-lotr/ng/deckbuilder/` (e.g. http://localhost:17001/gemp-lotr/ng/deckbuilder/) |
-| Legacy deck builder (unchanged) | `/gemp-lotr/deckBuild.html` |
+| URL (hall button) | `/gemp-lotr/ng/deckbuilder/` (e.g. http://localhost:17001/gemp-lotr/ng/deckbuilder/) |
+| Legacy deck builder (unchanged, still reachable by URL) | `/gemp-lotr/deckBuild.html` |
 | Build output | `../gemp-lotr-async/src/main/web/ng/deckbuilder/` (gitignored, generated) |
 | Stack | Angular 22 (standalone components, signals), Vitest |
 
@@ -25,8 +25,16 @@ mvn install -Dskip.frontend=true             # skips the frontend entirely (keep
 On Alpine (the Docker app image), the plugin detects musl and downloads Node from unofficial-builds.nodejs.org.
 That build needs `libstdc++`, which `docker/gemp_app.Dockerfile` installs.
 
-The server caches static files in memory until it restarts, so restart the server after a rebuild that it should serve.
-`ng serve` (below) avoids this during development.
+The server reads static files from disk (its file cache lasts only one connection), so a rebuild is served at once,
+without a restart.
+
+## Deploying: the `frontend` Docker service
+
+The build output is not in git, so after a `git pull` something has to run `ng build`. In the Docker setup that's the
+`frontend` service (`docker/docker-compose.yml`, `docker/frontend-watch.sh`). It checks the frontend sources every 5
+seconds and, when they change, builds into `web/ng/.deckbuilder-build/` while the old build stays live, then swaps
+the new build in. A build that fails leaves the old one in place (see `docker logs gemp_frontend_1`). So deploying a
+frontend change is just `git pull`, as with the legacy pages.
 
 ## Developing with `ng serve`
 

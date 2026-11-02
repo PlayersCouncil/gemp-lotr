@@ -71,6 +71,8 @@ gemp_app is slightly more complicated.  Gemp is a Java server, is built using Ma
 
 At this point, editing the code is a matter of changing the files on your local machine and either re-running step 9, or re-compiling the code base in your IDE of choice.  
 
+Web page changes need neither: the server reads the pages from `gemp-lotr-async/src/main/web` on disk.  For the Angular pages, the `frontend` container (started by `docker-compose up -d` along with the others) rebuilds them into that folder within a few seconds of their sources changing, e.g. after a `git pull`.  It builds next to the live copy and swaps the result in only when the build succeeds.  Follow it with `docker logs -f gemp_frontend_1`.  
+
 Run the following commands to ensure that you don't have local configuration showing up in your commits:
 
 1. `git update-index --assume-unchanged ./logs/nohup.out`
