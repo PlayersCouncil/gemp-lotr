@@ -19,6 +19,9 @@ const KEY_PAGES = 5;
     '(mousedown)': 'onMouseDown($event)',
   },
   template: `
+    @if (range() === 'min') {
+      <div class="ui-slider-range ui-widget-header ui-slider-range-min" [style.width]="percent() + '%'"></div>
+    }
     <a
       #handle
       class="ui-slider-handle ui-state-default ui-corner-all"
@@ -47,7 +50,12 @@ export class UiSliderComponent {
   /** The starting value; afterwards the slider keeps its own value, as the jQuery UI widget did. */
   readonly initialValue = input(0, { alias: 'value' });
   readonly disabled = input(false);
+  /** "min" fills the track up to the handle (jQuery UI's range: "min"). */
+  readonly range = input<'min' | null>(null);
   readonly slide = output<number>();
+  /** Sliding started / stopped (mouse or keys), like jQuery UI's start and stop events. */
+  readonly slideStart = output<void>();
+  readonly slideStop = output<void>();
 
   private readonly current = signal<number | null>(null);
   readonly value = computed(() => this.current() ?? this.initialValue());
@@ -84,6 +92,7 @@ export class UiSliderComponent {
     };
 
     this.active.set(true);
+    this.slideStart.emit();
     handle.focus();
     if (!onHandle) {
       this.slideTo(valueAt(event.clientX));
@@ -93,6 +102,7 @@ export class UiSliderComponent {
       document.removeEventListener('mousemove', move);
       document.removeEventListener('mouseup', up);
       this.active.set(false);
+      this.slideStop.emit();
     };
     document.addEventListener('mousemove', move);
     document.addEventListener('mouseup', up);
@@ -135,6 +145,7 @@ export class UiSliderComponent {
     if (!this.keySliding) {
       this.keySliding = true;
       this.active.set(true);
+      this.slideStart.emit();
     }
     this.slideTo(next);
   }
@@ -143,6 +154,7 @@ export class UiSliderComponent {
     if (this.keySliding) {
       this.keySliding = false;
       this.active.set(false);
+      this.slideStop.emit();
     }
   }
 

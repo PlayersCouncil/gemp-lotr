@@ -68,7 +68,7 @@ export class DeckAreaComponent {
           overlayImage: race.overlayBlueprintId ? this.images.imageUrl(race.overlayBlueprintId) : null,
         },
         rect: layout.card,
-        ref: { kind: 'race', blueprintId: race.blueprintId },
+        ref: { kind: 'race', blueprintId: race.blueprintId, overlayBlueprintId: race.overlayBlueprintId },
         role: '',
       },
     ];

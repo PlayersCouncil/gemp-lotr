@@ -7,6 +7,7 @@ import { CollectionService, DEFAULT_FILTER_OVERRIDE } from '../collection/collec
 import { FormatsService } from '../formats/formats.service';
 import { PageLayoutService } from '../../layout/page-layout.service';
 import { formatUsesMap } from './deck-contents';
+import { formatDecklist } from './deck-import';
 import {
   addBySide,
   addDrawCopy,
@@ -275,6 +276,84 @@ export class DeckService {
       return this.saveCurrentDeck();
     }
     return true;
+  }
+
+  // --- Deck list, library, import, notes ---
+
+  /** Opens one of the player's decks (deck list's "Open deck"). */
+  loadDeck(name: string): void {
+    this.api.getDeck(name).subscribe({
+      next: (deck) => deck && this.setupDeck(deck, name),
+      error: () => alert(GENERIC_COMMUNICATION_ERROR),
+    });
+  }
+
+  /** Opens a library deck: it keeps the library deck's name and counts as unsaved. */
+  loadLibraryDeck(name: string): void {
+    this.api.getLibraryDeck(name).subscribe({
+      next: (deck) => {
+        if (deck) {
+          this.setupDeck(deck, name);
+          this.deckModified(true);
+        }
+      },
+      error: () => alert(GENERIC_COMMUNICATION_ERROR),
+    });
+  }
+
+  /** A saved deck was renamed from the deck list: the open deck follows if it was that one. */
+  deckRenamed(oldName: string, newName: string): void {
+    if (this.deckName() === oldName) {
+      this.deckName.set(newName);
+      this.deckModified(this.contentsDirty());
+    }
+  }
+
+  /** A saved deck was deleted from the deck list: if it was the open one, a new deck takes its place. */
+  deckDeleted(name: string): void {
+    if (this.deckName() === name) {
+      this.deckName.set(null);
+      this.clearDeck();
+    }
+  }
+
+  /**
+   * Replaces the deck with the cards the server recognises in a pasted decklist (parseDecklist). The deck has no name
+   * and is shown as "Imported Deck (unsaved)".
+   */
+  importDecklist(text: string): void {
+    this.deckName.set(null);
+    this.clearDeck();
+    this.api.importDecklist(formatDecklist(text)).subscribe({
+      next: (items) => {
+        let state = this.deck();
+        for (const item of items) {
+          if (item.kind !== 'card') {
+            continue;
+          }
+          for (let copy = 0; copy < item.count; copy++) {
+            if (item.group === 'ringBearer' || item.group === 'ring' || item.group === 'map') {
+              state = addToSlot(state, item.group, item.blueprintId);
+            } else {
+              state = addBySide(state, item.blueprintId, item.side);
+            }
+          }
+        }
+        this.deck.set(state);
+        this.deckModified(true);
+        this.label.set({ text: 'Imported Deck (unsaved)', modified: false });
+      },
+      error: (error: unknown) =>
+        alert(ApiError.from(error).is(414) ? 'Deck too large to import.' : GENERIC_COMMUNICATION_ERROR),
+    });
+  }
+
+  /** The notes were edited (the notes dialog). */
+  setNotes(notes: string): void {
+    if (notes !== this.notes()) {
+      this.notes.set(notes);
+      this.deckModified(true);
+    }
   }
 
   // --- Cards ---

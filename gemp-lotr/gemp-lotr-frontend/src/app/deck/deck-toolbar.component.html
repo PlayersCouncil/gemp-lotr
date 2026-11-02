@@ -10,13 +10,13 @@
 <button id="copyDeckBut" title="Copy deck to new" class="menu-button" gempUiButton (click)="deck.copyDeck()">
   <span class="ui-button-text"><span class="ui-icon ui-icon-copy"></span></span>
 </button>
-<button id="importDeckBut" title="Import Deck" class="menu-button" gempUiButton>
+<button id="importDeckBut" title="Import Deck" class="menu-button" gempUiButton (click)="dialogs.openImport()">
   <span class="ui-button-text"><span class="ui-icon ui-icon-arrowthickstop-1-s"></span></span>
 </button>
-<button id="libraryListBut" title="Open Library" class="menu-button" gempUiButton>
+<button id="libraryListBut" title="Open Library" class="menu-button" gempUiButton (click)="dialogs.openLibrary()">
   <span class="ui-button-text"><span class="ui-icon ui-icon-bookmark"></span></span>
 </button>
-<button id="deckListBut" title="Deck list" class="menu-button" gempUiButton>
+<button id="deckListBut" title="Deck list" class="menu-button" gempUiButton (click)="dialogs.openDeckList()">
   <span class="ui-button-text"><span class="ui-icon ui-icon-suitcase"></span></span>
 </button>
 <button
@@ -38,7 +38,7 @@
   }
 </select>
 
-<button id="notesBut" title="Add/Edit Notes" class="menu-button" gempUiButton>
+<button id="notesBut" title="Add/Edit Notes" class="menu-button" gempUiButton (click)="dialogs.openNotes()">
   <span class="ui-button-text"><span class="ui-icon ui-icon-plus"></span></span>
 </button>
 
@@ -58,11 +58,14 @@
   }
 </select>
 
-<button id="auto-zoom-toggle" gempUiButton="icon" title="Auto-zoom cards on hover">
-  <span
-    class="ui-button-icon-primary ui-icon"
-    [class.ui-icon-search]="autoZoomEnabled()"
-    [class.ui-icon-circle-close]="!autoZoomEnabled()"
-  ></span>
-  <span class="ui-button-text">Auto-zoom cards on hover</span>
-</button>
+<!-- Not on touch devices, where cards don't zoom on hover -->
+@if (!zoom.touchDevice) {
+  <button id="auto-zoom-toggle" gempUiButton="icon" title="Auto-zoom cards on hover" (click)="zoom.toggle()">
+    <span
+      class="ui-button-icon-primary ui-icon"
+      [class.ui-icon-search]="zoom.enabled()"
+      [class.ui-icon-circle-close]="!zoom.enabled()"
+    ></span>
+    <span class="ui-button-text">Auto-zoom cards on hover</span>
+  </button>
+}

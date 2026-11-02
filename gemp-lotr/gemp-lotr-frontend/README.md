@@ -55,14 +55,18 @@ regular hall at `http://localhost:4200/gemp-lotr/` and then open the deck builde
 | `src/app/core/delivery/` | `PackDeliveryService`: the opened-pack "New items" contents. |
 | `src/app/core/session/` | `SessionService`: the optional `?participantId=` (admins acting as a player). |
 | `src/app/layout/` | The page frame: `page-layout.ts` reproduces the legacy `jquery.layout` panes (deck, collection, resizer bar), and `deck-layout.ts` is the legacy `layoutUI` positioning of the deck slots. |
-| `src/app/cards/` | Card display: `gempCard` (the legacy card element with its errata, foil, count, border and meta-site layers), `card-group-layout.ts` (the `NormalCardGroup` rows and the `VerticalBarGroup` sites column) and `CardRegistry` (what each card element stands for). |
+| `src/app/cards/` | Card display: `gempCard` (the legacy card element with its errata, foil, count, border and meta-site layers), `gemp-card-display` (the large card of the info dialog and the hover zoom), `card-group-layout.ts` (the `NormalCardGroup` rows and the `VerticalBarGroup` sites column) and `CardRegistry` (what each card element stands for). |
 | `src/app/collection/` | The collection pane: the filter (`gempCardFilter`) and the cards of the current page (`gempCollectionDisplay`). |
 | `src/app/deck/` | The deck pane (`gempDeckArea`: slots, piles, stats), the top toolbar, and `CardClicksService`, the page-wide card mouse handling (click adds/removes; shift-click, right-click or dragging up asks for card details). |
-| `src/app/shared/` | jQuery UI look-alikes, so the dark-hive theme applies: `gempUiButton` (button classes and hover/pressed states) and `gempUiSlider` (the slider). |
+| `src/app/dialogs/` | The dialogs: deck list and library, import, notes (`DeckDialogsService`), card information (`CardInfoService`), the hover zoom (`AutoZoomService`), pack opening, the selection-pack chooser and the "New items" popups (`PacksService`). |
+| `src/app/shared/` | jQuery UI look-alikes, so the dark-hive theme applies: `gempUiButton` (button classes and hover/pressed states), `gempUiSlider` (the slider) and `gemp-ui-dialog` (the dialog: centred, draggable, resizable, modal overlay, Escape). |
 | `src/testing/` | Test helpers and `server-responses/`, real server responses the parser tests run against. |
 
 `index.html` keeps the legacy page's XHTML Transitional doctype. It puts the browser in "limited quirks" mode, where an
 image alone on a line adds no space below it; with `<!doctype html>` the culture buttons are 4px taller.
+
+Settings kept in cookies (auto-zoom on/off, the card info zoom) are written with the legacy pages' path (`/gemp-lotr`),
+so both deck builders share them.
 
 The page uses the legacy stylesheets where they are (linked in `src/index.html` from `/gemp-lotr/css/...`), keeping the
 legacy element IDs and classes, so it looks the same and later fixes to those stylesheets apply to both deck builders.

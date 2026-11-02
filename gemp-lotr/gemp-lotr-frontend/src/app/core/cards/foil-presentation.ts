@@ -1,3 +1,5 @@
+import { readCookie } from '../cookies';
+
 /**
  * How foil cards are drawn (Card.getFoilPresentation), from the "foilPresentation" cookie the game settings write:
  * "static" (a holo layer, the default), "animated" (foil.gif) or "none". Cookies from before 2025 stored true/false.
@@ -23,18 +25,4 @@ export function foilOverlayImage(presentation: FoilPresentation): string | null 
     return null;
   }
   return `/gemp-lotr/images/${presentation === 'animated' ? 'foil.gif' : 'holo.jpg'}`;
-}
-
-function readCookie(cookies: string, name: string): string | null {
-  for (const part of cookies.split(';')) {
-    const separator = part.indexOf('=');
-    if (separator > 0 && part.substring(0, separator).trim() === name) {
-      try {
-        return decodeURIComponent(part.substring(separator + 1).trim());
-      } catch {
-        return part.substring(separator + 1).trim();
-      }
-    }
-  }
-  return null;
 }
