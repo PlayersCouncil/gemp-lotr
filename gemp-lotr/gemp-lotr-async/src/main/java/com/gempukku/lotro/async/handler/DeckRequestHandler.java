@@ -102,6 +102,10 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
             getAllFormats(request, responseWriter);
         } else if (uri.equals("/convert") && request.method() == HttpMethod.POST) {
             convertErrata(request, responseWriter);
+        } else if (uri.equals("/statsJson") && request.method() == HttpMethod.POST) {
+            getDeckStatsJson(request, responseWriter);
+        } else if (uri.equals("/convertJson") && request.method() == HttpMethod.POST) {
+            convertErrataJson(request, responseWriter);
         }else {
             throw new HttpProcessingException(404);
         }
@@ -266,6 +270,112 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
             sb.append(invalid);
 
             responseWriter.writeHtmlResponse(sb.toString());
+        } finally {
+            postDecoder.destroy();
+        }
+    }
+
+    /**
+     * JSON version of /stats for callers outside the deckbuilder (Red Book).  Public: no login, so it validates the
+     * deck against the format only, without the collection check or a league's deck context, which need a player.
+     * Same rules otherwise, including the second pass with errata applied.
+     *
+     * Parameters: targetFormat (format code or name; unknown names fall back to Anything Goes, as /stats does, so the
+     * response names the format actually used), deckContents (ring-bearer|ring|sites|draw deck[|map]).
+     */
+    private void getDeckStatsJson(HttpRequest request, ResponseWriter responseWriter) throws IOException, HttpProcessingException {
+        HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
+        try {
+            String targetFormat = getFormParameterSafely(postDecoder, "targetFormat");
+            String contents = getFormParameterSafely(postDecoder, "deckContents");
+
+            Map<String, Object> result = new LinkedHashMap<>();
+
+            LotroFormat format = targetFormat == null ? null : validateFormat(targetFormat);
+            if (format == null) {
+                result.put("error", "Invalid format: " + targetFormat);
+                responseWriter.writeJsonResponse(400, JsonUtils.Serialize(result));
+                return;
+            }
+
+            LotroDeck deck = contents == null ? null : _lotroServer.createDeckWithValidate("tempDeck", contents, targetFormat, "");
+            if (deck == null) {
+                result.put("error", "Invalid deck contents");
+                responseWriter.writeJsonResponse(400, JsonUtils.Serialize(result));
+                return;
+            }
+
+            int fpCount = 0;
+            int shadowCount = 0;
+            for (String card : deck.getDrawDeckCards()) {
+                Side side;
+                try {
+                    side = _library.getLotroCardBlueprint(card).getSide();
+                } catch (CardNotFoundException e) {
+                    result.put("error", "Unknown card: " + card);
+                    responseWriter.writeJsonResponse(400, JsonUtils.Serialize(result));
+                    return;
+                }
+                if (side == Side.SHADOW)
+                    shadowCount++;
+                else if (side == Side.FREE_PEOPLE)
+                    fpCount++;
+            }
+
+            List<String> validation = format.validateDeck(deck, null);
+            List<String> errataValidation = null;
+            if (!format.getErrataCardMap().isEmpty()) {
+                LotroDeck deckWithErrata = format.applyErrata(deck);
+                errataValidation = format.validateDeck(deckWithErrata, null);
+            }
+
+            result.put("formatCode", format.getCode());
+            result.put("formatName", format.getName());
+            result.put("freePeoplesCount", fpCount);
+            result.put("shadowCount", shadowCount);
+            result.put("valid", validation.isEmpty());
+            result.put("problems", validation);
+            // Only when the format has errata: whether the deck would be valid with them applied, and what's left
+            result.put("validWithErrata", errataValidation == null ? null : errataValidation.isEmpty());
+            result.put("problemsWithErrata", errataValidation);
+
+            responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(result));
+        } finally {
+            postDecoder.destroy();
+        }
+    }
+
+    /**
+     * JSON version of /convert: the deck with the target format's errata applied.  Public, no login.
+     *
+     * Parameters: targetFormat, deckContents (as /statsJson).
+     */
+    private void convertErrataJson(HttpRequest request, ResponseWriter responseWriter) throws IOException, HttpProcessingException {
+        HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
+        try {
+            String targetFormat = getFormParameterSafely(postDecoder, "targetFormat");
+            String contents = getFormParameterSafely(postDecoder, "deckContents");
+
+            Map<String, Object> result = new LinkedHashMap<>();
+            if (targetFormat == null || contents == null) {
+                result.put("error", "targetFormat and deckContents are required");
+                responseWriter.writeJsonResponse(400, JsonUtils.Serialize(result));
+                return;
+            }
+
+            var format = validateFormat(targetFormat);
+            var converted = format.applyErrata(DeckSerialization.buildDeckFromContents("", contents, format.getName(), ""));
+
+            result.put("formatCode", format.getCode());
+            result.put("formatName", format.getName());
+            result.put("ringBearer", converted.getRingBearer());
+            result.put("ring", converted.getRing());
+            result.put("sites", converted.getSites());
+            result.put("drawDeck", converted.getDrawDeckCards());
+            result.put("map", converted.getMap());
+            result.put("deckContents", DeckSerialization.buildContentsFromDeck(converted));
+
+            responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(result));
         } finally {
             postDecoder.destroy();
         }

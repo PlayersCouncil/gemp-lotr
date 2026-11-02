@@ -138,6 +138,8 @@ const packBlueprints = {
     "(S)KSSealed-S1": "/gemp-lotr/images/boosters/starter_selection.png",
     "(S)KSSealed-S2": "/gemp-lotr/images/boosters/starter_selection.png",
     "(S)KSSealed-S3": "/gemp-lotr/images/boosters/starter_selection.png",
+    
+    "(S)KS Choice - Booster": "/gemp-lotr/images/boosters/booster_selection.png",
 
     "Expanded": "/gemp-lotr/images/boosters/expanded.png",
     "Wraith": "/gemp-lotr/images/boosters/wraith.png",
