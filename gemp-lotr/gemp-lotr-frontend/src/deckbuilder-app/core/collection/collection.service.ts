@@ -1,8 +1,10 @@
 import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core';
-import { catchError, EMPTY, Subject, switchMap } from 'rxjs';
+import { catchError, EMPTY, from, map, Observable, of, Subject, switchMap } from 'rxjs';
 import { ApiError, GENERIC_COMMUNICATION_ERROR } from '../api/api-error';
 import { DeckbuilderApi } from '../api/deckbuilder-api.service';
 import { BlockFilter, CollectionPage, CollectionTypeInfo } from '../api/models';
+import { CardImageService } from '../cards/card-image.service';
+import { ImagePreloader } from '../cards/image-preloader.service';
 import {
   blockOptions,
   buildFilterString,
@@ -53,11 +55,14 @@ interface CollectionRequest {
  * the collection type, the filter fields, paging, and the page of cards from GET /collection/{type}.
  *
  * Unlike the legacy page, only the newest request is shown: answers to older ones (e.g. while the page size slider is
- * dragged) are dropped instead of possibly arriving last and replacing the newer page.
+ * dragged) are dropped instead of possibly arriving last and replacing the newer page. And a new page appears all at
+ * once when its card images have loaded, instead of card by card as each image arrives.
  */
 @Injectable({ providedIn: 'root' })
 export class CollectionService {
   private readonly api = inject(DeckbuilderApi);
+  private readonly images = inject(CardImageService);
+  private readonly preloader = inject(ImagePreloader);
 
   /** The selected collection (#collectionSelect). */
   readonly collectionType = signal('default');
@@ -102,6 +107,8 @@ export class CollectionService {
       .pipe(
         switchMap((request) =>
           this.api.getCollection(request.type, request.filter, request.start, request.count).pipe(
+            // The new page shows when its card images are ready, all at once (a newer request still replaces it)
+            switchMap((page) => this.withImagesLoaded(page)),
             catchError((error: unknown) => {
               alert(
                 ApiError.from(error).is(404) ? "You don't have collection of that type." : GENERIC_COMMUNICATION_ERROR,
@@ -262,6 +269,20 @@ export class CollectionService {
       siteOverride: this.siteOverride,
       cardsInDeck: this.cardsInDeck,
     });
+  }
+
+  /** Waits for the page's card images (and the errata/foil layers), up to IMAGE_PRELOAD_TIMEOUT_MS. */
+  private withImagesLoaded(page: CollectionPage): Observable<CollectionPage> {
+    if (!this.preloader.supported) {
+      return of(page);
+    }
+    const urls = new Set<string>();
+    for (const item of page.items) {
+      const image = this.images.resolve(item.blueprintId, item.kind === 'pack' ? 'pack' : item.side);
+      urls.add(image.imageUrl);
+      if (item.kind === 'card' && image.errata) urls.add('/gemp-lotr/images/errata-vertical.png');
+    }
+    return from(this.preloader.load(urls)).pipe(map(() => page));
   }
 
   private display(page: CollectionPage): void {

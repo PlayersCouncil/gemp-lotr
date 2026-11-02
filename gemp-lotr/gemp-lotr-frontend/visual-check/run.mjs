@@ -161,8 +161,10 @@ async function capture(pagePath, scenario, size, file) {
   });
   page.on('request', (request) => {
     const url = request.url();
-    if (!url.includes('/gemp-lotr-server/')) return;
+    // Every request counts as pending, including card images: the Angular page shows a new collection page only once
+    // its images have loaded
     pending.add(request);
+    if (!url.includes('/gemp-lotr-server/')) return;
     const route = url.replace(/.*\/gemp-lotr-server/, '').replace(/\?.*/, '');
     if (route.startsWith('/collection/') && request.method() === 'GET') {
       requests.collection = `${route}?${normalize(url.replace(/^[^?]*\??/, ''))}`;
