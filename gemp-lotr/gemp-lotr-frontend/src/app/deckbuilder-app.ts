@@ -30,7 +30,7 @@ const PANE_STYLE = {
  * like the legacy page's jquery.layout.
  */
 @Component({
-  selector: 'app-root',
+  selector: 'deckbuilder-app',
   imports: [
     DeckAreaComponent,
     CardFilterComponent,
@@ -40,10 +40,10 @@ const PANE_STYLE = {
     PackDialogsComponent,
     AutoZoomComponent,
   ],
-  templateUrl: './app.html',
+  templateUrl: './deckbuilder-app.html',
   host: { style: 'display: contents' },
 })
-export class App {
+export class DeckbuilderApp {
   protected readonly layout = inject(PageLayoutService);
   protected readonly rectStyle = rectStyle;
 

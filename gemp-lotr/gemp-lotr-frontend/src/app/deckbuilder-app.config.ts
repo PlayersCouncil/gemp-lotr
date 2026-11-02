@@ -2,7 +2,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { ApplicationConfig, inject, provideAppInitializer, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { LegacyCardDataService } from './core/cards/legacy-card-data.service';
 
-export const appConfig: ApplicationConfig = {
+export const deckbuilderAppConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideHttpClient(),

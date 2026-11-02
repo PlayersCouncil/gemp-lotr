@@ -47,6 +47,7 @@ regular hall at `http://localhost:4200/gemp-lotr/` and then open the deck builde
 
 | Folder | What it holds |
 |---|---|
+| `src/app/deckbuilder-app.*` | The deck builder's root component (`DeckbuilderApp`, element `<deckbuilder-app>`), its page frame template and its providers (`deckbuilder-app.config.ts`); `src/main.ts` starts it. Named for the deck builder so it can sit beside other pages in the coming whole-site Angular frontend. |
 | `src/app/core/api/` | `DeckbuilderApi`: every server call the deck builder makes, typed. Sent via `GempHttp`, which adds `participantId`, encodes form data strictly (a `+` stays a `+`), turns failures into `ApiError` and spots the opened-pack header. `parsers.ts` reads the server's XML. |
 | `src/app/core/cards/` | Card images. `card-blueprint.ts` is a port of the legacy `Card.js` rules; the image tables still come from the legacy files (`PC_Cards.js`, `hobbit.js`, `set40.js`, `cards/CardImages.js`, `cards/PackImages.js`), loaded at startup by `LegacyCardDataService`. Add new card images there, as before. |
 | `src/app/core/collection/` | The collection pane's state: `card-filter.ts` (filter fields, Block/Set lists, culture buttons and the filter string, ported from `CardFilter.js`) and `CollectionService` (collection type, paging, the current page from `/collection/{type}`). |

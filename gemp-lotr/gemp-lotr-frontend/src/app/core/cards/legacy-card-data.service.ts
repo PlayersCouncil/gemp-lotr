@@ -33,7 +33,7 @@ export function evaluateLegacyTable(source: string, tableName: string): ImageTab
 
 /**
  * The card image tables, loaded from the same files the legacy pages use (see LEGACY_CARD_DATA_FILES), so the
- * maintainers keep a single place to add card images. Loaded once before the app starts (app.config.ts).
+ * maintainers keep a single place to add card images. Loaded once before the app starts (deckbuilder-app.config.ts).
  */
 @Injectable({ providedIn: 'root' })
 export class LegacyCardDataService {

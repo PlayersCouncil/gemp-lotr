@@ -1,16 +1,16 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { App } from './app';
+import { DeckbuilderApp } from './deckbuilder-app';
 import { PageLayoutService } from './layout/page-layout.service';
 
-describe('App', () => {
+describe('DeckbuilderApp', () => {
   async function render() {
     TestBed.configureTestingModule({ providers: [provideHttpClient(), provideHttpClientTesting()] });
     const layout = TestBed.inject(PageLayoutService);
     layout.viewportWidth.set(1280);
     layout.viewportHeight.set(800);
-    const fixture = TestBed.createComponent(App);
+    const fixture = TestBed.createComponent(DeckbuilderApp);
     await fixture.whenStable();
     return { fixture, layout, el: fixture.nativeElement as HTMLElement };
   }
