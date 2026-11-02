@@ -49,16 +49,27 @@ regular hall at `http://localhost:4200/gemp-lotr/` and then open the deck builde
 |---|---|
 | `src/app/core/api/` | `DeckbuilderApi`: every server call the deck builder makes, typed. Sent via `GempHttp`, which adds `participantId`, encodes form data strictly (a `+` stays a `+`), turns failures into `ApiError` and spots the opened-pack header. `parsers.ts` reads the server's XML. |
 | `src/app/core/cards/` | Card images. `card-blueprint.ts` is a port of the legacy `Card.js` rules; the image tables still come from the legacy files (`PC_Cards.js`, `hobbit.js`, `set40.js`, `cards/CardImages.js`, `cards/PackImages.js`), loaded at startup by `LegacyCardDataService`. Add new card images there, as before. |
+| `src/app/core/collection/` | The collection pane's state: `card-filter.ts` (filter fields, Block/Set lists, culture buttons and the filter string, ported from `CardFilter.js`) and `CollectionService` (collection type, paging, the current page from `/collection/{type}`). |
+| `src/app/core/formats/` | `FormatsService`: the formats from `/deck/formats`, fetched once. |
 | `src/app/core/deck/` | Deck helpers, e.g. the `deckContents` string the server expects. |
 | `src/app/core/delivery/` | `PackDeliveryService`: the opened-pack "New items" contents. |
 | `src/app/core/session/` | `SessionService`: the optional `?participantId=` (admins acting as a player). |
 | `src/app/layout/` | The page frame: `page-layout.ts` reproduces the legacy `jquery.layout` panes (deck, collection, resizer bar), and `deck-layout.ts` is the legacy `layoutUI` positioning of the deck slots. |
+| `src/app/cards/` | Card display: `gempCard` (the legacy card element with its errata, foil, count and border layers) and `card-group-layout.ts` (the `NormalCardGroup` row layout). |
+| `src/app/collection/` | The collection pane: the filter (`gempCardFilter`) and the cards of the current page (`gempCollectionDisplay`). |
 | `src/app/deck/` | Deck builder components, e.g. the top toolbar. |
-| `src/app/shared/` | `gempUiButton`: jQuery UI button classes and hover/pressed states, so the dark-hive theme applies. |
+| `src/app/shared/` | jQuery UI look-alikes, so the dark-hive theme applies: `gempUiButton` (button classes and hover/pressed states) and `gempUiSlider` (the slider). |
 | `src/testing/` | Test helpers and `server-responses/`, real server responses the parser tests run against. |
+
+`index.html` keeps the legacy page's XHTML Transitional doctype. It puts the browser in "limited quirks" mode, where an
+image alone on a line adds no space below it; with `<!doctype html>` the culture buttons are 4px taller.
 
 The page uses the legacy stylesheets where they are (linked in `src/index.html` from `/gemp-lotr/css/...`), keeping the
 legacy element IDs and classes, so it looks the same and later fixes to those stylesheets apply to both deck builders.
+
+`card-group-layout.spec.ts` checks the card layout against 150 layouts recorded from the legacy `NormalCardGroup`
+(`src/testing/legacy-card-group-layouts.json`; `legacy-card-group-layouts.generator.js` records them again in the legacy
+page's browser console).
 
 `card-blueprint.parity.spec.ts` runs the legacy `Card.js` side by side with the port on over 50,000 blueprint IDs, so a
 change to `Card.js` that isn't mirrored in `card-blueprint.ts` fails the build.

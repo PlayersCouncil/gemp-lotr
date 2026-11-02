@@ -1,4 +1,9 @@
 import { Component, computed, inject, signal } from '@angular/core';
+import { CardFilterComponent } from './collection/card-filter.component';
+import { CollectionDisplayComponent } from './collection/collection-display.component';
+import { ApiError, GENERIC_COMMUNICATION_ERROR } from './core/api/api-error';
+import { CollectionService, DEFAULT_FILTER_OVERRIDE } from './core/collection/collection.service';
+import { DEFAULT_FORMAT_CODE, FormatsService } from './core/formats/formats.service';
 import { DeckToolbarComponent } from './deck/deck-toolbar.component';
 import { eastWidthForResizerAt, PANE_BORDER, PANE_PADDING, RESIZER_SIZE, TOGGLER_LENGTH } from './layout/page-layout';
 import { PageLayoutService } from './layout/page-layout.service';
@@ -19,11 +24,11 @@ const PANE_STYLE = {
 
 /**
  * The deck builder page: the deck pane (center), the collection pane (east) and the resizer bar between them, laid out
- * like the legacy page's jquery.layout. The collection pane is filled in Phase 4.
+ * like the legacy page's jquery.layout.
  */
 @Component({
   selector: 'app-root',
-  imports: [DeckToolbarComponent],
+  imports: [DeckToolbarComponent, CardFilterComponent, CollectionDisplayComponent],
   templateUrl: './app.html',
   host: { style: 'display: contents' },
 })
@@ -33,6 +38,21 @@ export class App {
 
   /** Left edge of the resizer copy that follows the mouse while dragging; null when not dragging. */
   protected readonly dragLeft = signal<number | null>(null);
+
+  constructor() {
+    const collection = inject(CollectionService);
+    // As the legacy page started: the formats first, then the collection in the default format with the default
+    // filter, then the limited collections. Choosing another format comes with the format selector (Phase 5).
+    inject(FormatsService).formats$.subscribe({
+      next: (formats) => {
+        collection.updateFormat(DEFAULT_FORMAT_CODE, formats[DEFAULT_FORMAT_CODE]?.blockFilters ?? null);
+        collection.setFilterOverride(DEFAULT_FILTER_OVERRIDE);
+        collection.loadCollectionTypes();
+      },
+      error: (error: unknown) =>
+        alert(ApiError.from(error).is(400) ? 'Could not retrieve formats.' : GENERIC_COMMUNICATION_ERROR),
+    });
+  }
 
   protected readonly centerStyle = computed(() => {
     const page = this.layout.page();
@@ -91,15 +111,18 @@ export class App {
 
   /** Dragging the open resizer bar (not its toggler) shows a copy following the mouse; the pane resizes on release. */
   protected startResize(event: MouseEvent): void {
-    if (this.layout.page().eastHidden || event.button !== 0 || (event.target as Element).closest('.ui-layout-toggler')) {
+    if (
+      this.layout.page().eastHidden ||
+      event.button !== 0 ||
+      (event.target as Element).closest('.ui-layout-toggler')
+    ) {
       return;
     }
     event.preventDefault();
     const viewportWidth = this.layout.viewportWidth();
     const offset = event.clientX - (viewportWidth - this.layout.page().resizerRight - RESIZER_SIZE);
     // Keep the copy within the pane's size limits, as jquery.layout did
-    const clampLeft = (left: number) =>
-      viewportWidth - RESIZER_SIZE - eastWidthForResizerAt(left, viewportWidth);
+    const clampLeft = (left: number) => viewportWidth - RESIZER_SIZE - eastWidthForResizerAt(left, viewportWidth);
     const move = (e: MouseEvent) => this.dragLeft.set(clampLeft(e.clientX - offset));
     const stop = (e: MouseEvent) => {
       document.removeEventListener('mousemove', move);

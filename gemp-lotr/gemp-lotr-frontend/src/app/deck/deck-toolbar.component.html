@@ -39,10 +39,17 @@
 
 <span id="editingDeck">{{ deckName() }}</span>
 
-<select id="collectionSelect">
-  <option value="default">All cards</option>
-  <option value="permanent">My cards</option>
-  <option value="trophy">Trophies</option>
+<select id="collectionSelect" (change)="selectCollection($event)">
+  @for (collection of baseCollections; track collection.type) {
+    <option [value]="collection.type" [selected]="collection.type === collectionType()">
+      {{ collection.name }}
+    </option>
+  }
+  @for (collection of limitedCollections(); track $index) {
+    <option [value]="collection.type" [selected]="collection.type === collectionType()">
+      {{ collection.name }}
+    </option>
+  }
 </select>
 
 <button id="auto-zoom-toggle" gempUiButton="icon" title="Auto-zoom cards on hover">
