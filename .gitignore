@@ -1,4 +1,5 @@
-target/
+# Maven
+**/target/
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
@@ -7,19 +8,45 @@ release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
-# https://github.com/takari/maven-wrapper#usage-without-binary-jar
 .mvn/wrapper/maven-wrapper.jar
 
+# database files
 database/*
 !database/.placeholder
-logs/*
+
+# log files
+**/logs/
 !logs/.placeholder
-**/logs
-.idea/
-*.iml
-remote-sync
-replay
-!replay/.placeholder
 logs/nohup.out
 nohup.out
-gemp-lotr/docker/docker-compose.yml
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# Ignore VS Code transient files
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+remote-sync
+
+# gemp replay directory
+replay
+!replay/.placeholder
+
+# test output files
+gemp-lotr/gemp-lotr-server/IdealShuffleResult.txt
+
+# MacOS and Windows junk files
+.DS_Store
+Thumbs.db
