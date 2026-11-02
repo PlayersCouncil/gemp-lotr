@@ -1,6 +1,6 @@
 /** Test-only: the legacy card scripts, loaded from disk, for parity checks and for feeding LegacyCardDataService. */
 import { HttpTestingController } from '@angular/common/http/testing';
-import { LEGACY_CARD_DATA_FILES, LEGACY_WEB_ROOT } from '../app/core/cards/legacy-card-data.service';
+import { LEGACY_CARD_DATA_FILES, LEGACY_WEB_ROOT } from '../deckbuilder-app/core/cards/legacy-card-data.service';
 import { readLegacyWebFile } from './files';
 
 /** The subset of the legacy Card class (js/gemp-022/cards/Card.js) the parity tests call. */
