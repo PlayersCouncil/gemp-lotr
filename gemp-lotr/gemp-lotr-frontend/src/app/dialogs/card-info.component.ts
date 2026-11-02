@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, computed, inject, Injectable, signal, viewChild } from '@angular/core';
+import { Component, computed, effect, inject, Injectable, signal, untracked, viewChild } from '@angular/core';
 import { CardDisplayComponent, cardDisplayData, cardDisplaySize, TARGET_LONG } from '../cards/card-display.component';
 import { CardRef, zoneOf } from '../cards/card-registry';
 import { parseBlueprint } from '../core/cards/card-blueprint';
@@ -66,6 +66,7 @@ export class CardInfoService {
         [width]="v.width"
         [height]="v.height"
         (closed)="info.close()"
+        (contentMouseDown)="swipeArea($event)"
       >
         <div
           id="card-info-outer"
@@ -146,18 +147,48 @@ export class CardInfoComponent {
     };
   });
 
+  constructor() {
+    // Another card shown while the dialog is open (e.g. dragged up): it takes that card's size
+    let shown: CardRef | null = null;
+    effect(() => {
+      const card = this.info.card();
+      const wasOpen = shown !== null;
+      shown = card;
+      if (card && wasOpen) {
+        untracked(() => this.resize());
+      }
+    });
+  }
+
   protected setZoom(value: number): void {
     writeCookie(this.document, ZOOM_COOKIE, `${value}`);
     this.zoom.set(value);
+    this.resize();
+  }
+
+  /**
+   * CardInfoDialog.resize on the open dialog: the new size, and when the dialog would now leave the area it may use,
+   * closed and opened again (which centres it and focuses its first control).
+   */
+  private resize(): void {
     const view = this.view();
     const dialog = this.dialog();
     if (view && dialog) {
       dialog.setSize(view.width, view.height);
-      // Re-centre when the bigger dialog would leave the area it may use
-      const rect = dialog.rect();
+      const rect = dialog.contentRect();
       if (rect.top + view.height + 10 > this.maxHeight || rect.left + view.width + 10 > this.maxWidth) {
-        dialog.recenter();
+        dialog.reopen();
       }
+    }
+  }
+
+  /**
+   * The legacy dialog's content had jQuery touchSwipe (swiping scrolled it on phones), which on desktop also cancelled
+   * every mouse press on it except on controls: pressing there selects nothing and leaves the focus where it was.
+   */
+  protected swipeArea(event: MouseEvent): void {
+    if (!(event.target as Element).closest('button, input, select, textarea, a, .noSwipe')) {
+      event.preventDefault();
     }
   }
 

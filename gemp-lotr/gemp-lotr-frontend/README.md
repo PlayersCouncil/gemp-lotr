@@ -84,3 +84,10 @@ change to `Card.js` that isn't mirrored in `card-blueprint.ts` fails the build.
 npm test               # watch mode
 npm test -- --watch=false
 ```
+
+## Comparing with the legacy deck builder
+
+`visual-check/` holds a Playwright check that loads `deckBuild.html` and this page side by side in a real browser,
+goes through the deck builder's features on both, and compares screenshots and server requests. See
+`visual-check/README.md`. It is separate from the Maven build and needs a running server.
+

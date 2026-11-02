@@ -83,7 +83,12 @@ const TABBABLE = 'input, select, textarea, button, a[href], [tabindex]';
           ><span class="ui-icon ui-icon-closethick">{{ closeText() }}</span></a
         >
       </div>
-      <div #content class="ui-dialog-content ui-widget-content" [class]="contentClass()">
+      <div
+        #content
+        class="ui-dialog-content ui-widget-content"
+        [class]="contentClass()"
+        (mousedown)="contentMouseDown.emit($event)"
+      >
         <ng-content />
       </div>
       @if (resizable()) {
@@ -131,6 +136,8 @@ export class UiDialogComponent {
   readonly closed = output<void>();
   /** The content's size (jQuery's .width()/.height() of the content) changed by opening or resizing. */
   readonly contentResized = output<{ width: number; height: number }>();
+  /** A mouse button pressed over the content. */
+  readonly contentMouseDown = output<MouseEvent>();
   /** The player resized the dialog: its new width and height options. */
   readonly sizeChanged = output<{ width: number; height: number }>();
 
@@ -164,14 +171,17 @@ export class UiDialogComponent {
     this.emitContentSize();
   }
 
-  /** Centres the dialog again (what reopening it did). */
-  recenter(): void {
+  /** Closing and opening it again, as the legacy code did to bring a dialog back on screen: centred, in front, focused. */
+  reopen(): void {
     this.position();
+    this.z = this.stack.nextZ();
+    this.dialogRef().nativeElement.style.zIndex = `${this.z}`;
+    this.focusFirst();
   }
 
-  /** The dialog's box on the page. */
-  rect(): DOMRect {
-    return this.dialogRef().nativeElement.getBoundingClientRect();
+  /** The content's box on the page (the element jQuery UI's dialog() was called on). */
+  contentRect(): DOMRect {
+    return this.contentRef().nativeElement.getBoundingClientRect();
   }
 
   close(): void {

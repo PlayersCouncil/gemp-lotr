@@ -193,5 +193,33 @@ describe('deck builder dialogs', () => {
       );
       expect(el.querySelector('.ui-dialog-titlebar-close .ui-icon')!.textContent).toBe('');
     });
+
+    it('keeps the focus where it is when the card area is pressed (the legacy swipe handler)', async () => {
+      const fixture = TestBed.createComponent(CardInfoComponent);
+      TestBed.inject(CardInfoService).show({ kind: 'shown', blueprintId: '2_16', zone: 'player', role: '' });
+      await fixture.whenStable();
+      const el = fixture.nativeElement as HTMLElement;
+      const press = (target: Element) => {
+        const event = new MouseEvent('mousedown', { bubbles: true, cancelable: true });
+        target.dispatchEvent(event);
+        return event.defaultPrevented;
+      };
+      expect(press(el.querySelector('#card-info-inner')!)).toBe(true);
+      expect(press(el.querySelector('.card-info-footer a')!)).toBe(false);
+    });
+
+    it('takes the size of another card shown while open', async () => {
+      const fixture = TestBed.createComponent(CardInfoComponent);
+      const info = TestBed.inject(CardInfoService);
+      info.show({ kind: 'shown', blueprintId: '2_16', zone: 'player', role: '' });
+      await fixture.whenStable();
+      const dialog = (fixture.nativeElement as HTMLElement).querySelector<HTMLElement>('.ui-dialog')!;
+      expect(dialog.style.width).toBe('397px');
+      // A landscape site is wider
+      info.show({ kind: 'shown', blueprintId: '1_319', zone: 'player', role: '' });
+      await fixture.whenStable();
+      expect((fixture.nativeElement as HTMLElement).querySelector('.ui-dialog')).toBe(dialog);
+      expect(parseInt(dialog.style.width)).toBeGreaterThan(397);
+    });
   });
 });
