@@ -61,7 +61,7 @@ export class CollectionService {
 
   /** The selected collection (#collectionSelect). */
   readonly collectionType = signal('default');
-  /** The limited collections the player has, appended to #collectionSelect. */
+  /** The limited collections the player has, appended to #collectionSelect (loaded by DeckService). */
   readonly limitedCollections = signal<readonly CollectionTypeInfo[]>([]);
 
   readonly fields = signal<FilterFields>(EMPTY_FILTER);
@@ -113,14 +113,6 @@ export class CollectionService {
       )
       .subscribe((page) => this.display(page));
     inject(DestroyRef).onDestroy(() => subscription.unsubscribe());
-  }
-
-  /** Loads the player's limited collections into the collection selector (deckBuildingUi.getCollectionTypes). */
-  loadCollectionTypes(): void {
-    this.api.getCollectionTypes().subscribe({
-      next: (types) => this.limitedCollections.set(types),
-      error: () => alert(GENERIC_COMMUNICATION_ERROR),
-    });
   }
 
   /** The deck's format changed (CardFilter.updateFormat): rebuilds the Block and Set lists and reloads. */

@@ -6,6 +6,7 @@ import { foilOverlayImage, readFoilPresentation } from '../core/cards/foil-prese
 import { CollectionService } from '../core/collection/collection.service';
 import { PageLayoutService } from '../layout/page-layout.service';
 import { CardComponent, CardFace } from '../cards/card.component';
+import { CardRef } from '../cards/card-registry';
 import { CardRect, groupArea, GroupBounds, layoutNormalGroup } from '../cards/card-group-layout';
 
 /** Space the legacy layoutUI kept for the filter above the cards: the group is the pane's height minus 400. */
@@ -23,6 +24,7 @@ export interface CollectionCardView {
   role: CollectionItemRole;
   face: CardFace;
   rect: CardRect;
+  ref: CardRef;
 }
 
 /**
@@ -35,7 +37,7 @@ export interface CollectionCardView {
   template: `
     <div class="ui-widget-content" [style]="boxStyle()"></div>
     @for (view of views(); track $index) {
-      <div [gempCard]="view.face" [rect]="view.rect" [class]="view.role"></div>
+      <div [gempCard]="view.face" [rect]="view.rect" [cardRef]="view.ref" [class]="view.role"></div>
     }
   `,
 })
@@ -87,6 +89,7 @@ export class CollectionDisplayComponent {
       role: faces[i].role,
       face: faces[i].face,
       rect: rects[i].card,
+      ref: { kind: 'collection', role: faces[i].role, blueprintId: item.blueprintId, item },
     }));
   });
 

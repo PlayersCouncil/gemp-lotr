@@ -190,3 +190,24 @@ export function layoutNormalGroup(
   }
   return layoutInRow(single);
 }
+
+/**
+ * VerticalBarGroup.layoutCards (the sites column) for the area returned by groupArea(): the cards at full width, one
+ * below the other after a 20px gap for the title, squeezed together when they don't fit.
+ */
+export function layoutVerticalBar(
+  cards: readonly { horizontal: boolean }[],
+  area: GroupBounds,
+  padding = 5,
+): CardRect[] {
+  const topGap = 20;
+  const heights = cards.map((card) => heightForWidth(card.horizontal, area.width));
+  const totalHeight = heights.reduce((sum, h) => sum + h, 0);
+  const gap = Math.min(padding, (area.height - totalHeight - topGap) / (cards.length - 1));
+  let y = area.top + topGap;
+  return heights.map((height, i) => {
+    const result = rect(area.left, y, area.width, height, 10 + i);
+    y += height + gap;
+    return result;
+  });
+}

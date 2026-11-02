@@ -180,10 +180,4 @@ describe('CollectionService', () => {
     pending()[0].flush('', { status: 404, statusText: 'Not Found' });
     expect(alerts).toEqual(["You don't have collection of that type."]);
   });
-
-  it('loads the limited collections', () => {
-    service.loadCollectionTypes();
-    backend.expectOne((req) => req.url.endsWith('/collection')).flush(readServerResponse('collection-types.xml'));
-    expect(service.limitedCollections().length).toBeGreaterThan(0);
-  });
 });

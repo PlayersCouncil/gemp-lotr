@@ -1,13 +1,12 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CardFilterComponent } from './collection/card-filter.component';
 import { CollectionDisplayComponent } from './collection/collection-display.component';
-import { ApiError, GENERIC_COMMUNICATION_ERROR } from './core/api/api-error';
-import { CollectionService, DEFAULT_FILTER_OVERRIDE } from './core/collection/collection.service';
-import { DEFAULT_FORMAT_CODE, FormatsService } from './core/formats/formats.service';
-import { DeckToolbarComponent } from './deck/deck-toolbar.component';
+import { DeckService } from './core/deck/deck.service';
+import { CardClicksService } from './deck/card-clicks.service';
+import { DeckAreaComponent } from './deck/deck-area.component';
 import { eastWidthForResizerAt, PANE_BORDER, PANE_PADDING, RESIZER_SIZE, TOGGLER_LENGTH } from './layout/page-layout';
 import { PageLayoutService } from './layout/page-layout.service';
-import { Rect, rectStyle } from './layout/rect';
+import { rectStyle } from './layout/rect';
 
 /** Inline styles jquery.layout's default styles put on both panes (plus the black background deckBuilder.js set). */
 const PANE_STYLE = {
@@ -28,7 +27,7 @@ const PANE_STYLE = {
  */
 @Component({
   selector: 'app-root',
-  imports: [DeckToolbarComponent, CardFilterComponent, CollectionDisplayComponent],
+  imports: [DeckAreaComponent, CardFilterComponent, CollectionDisplayComponent],
   templateUrl: './app.html',
   host: { style: 'display: contents' },
 })
@@ -40,18 +39,8 @@ export class App {
   protected readonly dragLeft = signal<number | null>(null);
 
   constructor() {
-    const collection = inject(CollectionService);
-    // As the legacy page started: the formats first, then the collection in the default format with the default
-    // filter, then the limited collections. Choosing another format comes with the format selector (Phase 5).
-    inject(FormatsService).formats$.subscribe({
-      next: (formats) => {
-        collection.updateFormat(DEFAULT_FORMAT_CODE, formats[DEFAULT_FORMAT_CODE]?.blockFilters ?? null);
-        collection.setFilterOverride(DEFAULT_FILTER_OVERRIDE);
-        collection.loadCollectionTypes();
-      },
-      error: (error: unknown) =>
-        alert(ApiError.from(error).is(400) ? 'Could not retrieve formats.' : GENERIC_COMMUNICATION_ERROR),
-    });
+    inject(DeckService).init();
+    inject(CardClicksService).listen();
   }
 
   protected readonly centerStyle = computed(() => {
@@ -104,10 +93,6 @@ export class App {
     width: `${RESIZER_SIZE}px`,
     top: '0px',
   }));
-
-  protected style(rect: Rect | null): Record<string, string> {
-    return rect ? rectStyle(rect) : { display: 'none' };
-  }
 
   /** Dragging the open resizer bar (not its toggler) shows a copy following the mouse; the pane resizes on release. */
   protected startResize(event: MouseEvent): void {

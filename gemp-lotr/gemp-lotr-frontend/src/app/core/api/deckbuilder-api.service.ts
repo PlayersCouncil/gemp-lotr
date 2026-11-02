@@ -69,7 +69,7 @@ export class DeckbuilderApi {
   getDeckStatsHtml(
     deckContents: string,
     targetFormat: string,
-    collectionName: string,
+    collectionName: string | null,
     leagueCode: string | null,
   ): Observable<string> {
     return this.http.postText('/deck/stats', { targetFormat, collectionName, deckContents, leagueCode });

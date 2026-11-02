@@ -1,56 +1,11 @@
-@let deck = layout.deck();
 @let closed = layout.page().eastHidden;
 
-<div id="deckDiv" class="ui-layout-center ui-layout-pane ui-layout-pane-center" [style]="centerStyle()">
-  <div id="manageDecks" gempDeckToolbar [style]="rectStyle(deck.manageDecks)"></div>
-
-  <div id="ringBearerDiv" [style]="rectStyle(deck.ringBearer)">
-    <div id="rb-content" class="ui-widget-content card-group">
-      Ring-bearer
-      <div class="helper-text">(Click here to select your Ring-bearer.)</div>
-    </div>
-  </div>
-  <div id="ringDiv" [style]="rectStyle(deck.ring)">
-    <div id="ring-content" class="ui-widget-content card-group">
-      The One Ring
-      <div class="helper-text">(Click here to select your Ring.)</div>
-    </div>
-  </div>
-  <div id="map-div" [style]="style(deck.map)">
-    <div id="map-content" class="ui-widget-content card-group">
-      Map
-      <div class="helper-text">
-        (Click here to select your Map.)
-        <br /><br /><i><a href="https://wiki.lotrtcgpc.net/wiki/Map" target="_blank">See here for details.</a></i>
-      </div>
-    </div>
-  </div>
-
-  <div id="raceDiv" [style]="style(deck.race)">
-    <div id="race-content" class="ui-widget-content card-group">
-      Race
-      <div class="helper-text">(Your current Race to Mount Doom meta-site.)</div>
-    </div>
-  </div>
-
-  <div id="sitesDiv" [style]="rectStyle(deck.sites)">
-    <div id="sites-content" class="ui-widget-content card-group">
-      Sites
-      <div class="helper-text" style="top: 10%">
-        (Click here to select Sites. When done, you will need to manually reset the Card Type filter.)
-      </div>
-    </div>
-  </div>
-
-  <div id="statsDiv" [style]="rectStyle(deck.stats)">
-    <div id="deckStats"></div>
-  </div>
-
-  <div id="decksRegion" [style]="rectStyle(deck.drawDeck)">
-    <div class="ui-widget-content" style="border-radius: 7px" [style]="rectStyle(deck.freePeoples)"></div>
-    <div class="ui-widget-content" style="border-radius: 7px" [style]="rectStyle(deck.shadow)"></div>
-  </div>
-</div>
+<div
+  id="deckDiv"
+  class="ui-layout-center ui-layout-pane ui-layout-pane-center"
+  gempDeckArea
+  [style]="centerStyle()"
+></div>
 
 <div id="collectionDiv" class="ui-layout-east ui-layout-pane ui-layout-pane-east" [style]="eastStyle()">
   <div id="cardCollectionDiv"></div>

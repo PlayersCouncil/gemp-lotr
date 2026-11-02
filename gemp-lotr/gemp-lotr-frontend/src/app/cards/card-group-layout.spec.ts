@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { CardRect, groupArea, GroupCard, layoutNormalGroup } from './card-group-layout';
+import { CardRect, groupArea, GroupCard, layoutNormalGroup, layoutVerticalBar } from './card-group-layout';
 
 type Rect = [number, number, number, number, number];
 interface LegacyCase {
@@ -83,6 +83,25 @@ describe('layoutNormalGroup', () => {
         expect(card.left + card.width).toBeLessThanOrEqual(area.left + area.width);
         expect(card.width).toBeGreaterThan(0);
       }
+    }
+  });
+});
+
+describe('layoutVerticalBar', () => {
+  /** Sites columns laid out by the legacy VerticalBarGroup (src/testing/legacy-vertical-bar-layouts.generator.js). */
+  const cases: { width: number; height: number; cards: number[]; expected: Rect[] }[] = JSON.parse(
+    readFileSync(resolve(process.cwd(), 'src/testing/legacy-vertical-bar-layouts.json'), 'utf8'),
+  );
+
+  it(`matches the legacy VerticalBarGroup in ${cases.length} recorded layouts`, () => {
+    for (const legacy of cases) {
+      const rects = layoutVerticalBar(
+        legacy.cards.map((h) => ({ horizontal: h === 1 })),
+        groupArea({ left: 0, top: 0, width: legacy.width, height: legacy.height }),
+      );
+      expect(rects.map(asArray), `${legacy.width}x${legacy.height}, ${legacy.cards.length} cards`).toEqual(
+        legacy.expected,
+      );
     }
   });
 });
