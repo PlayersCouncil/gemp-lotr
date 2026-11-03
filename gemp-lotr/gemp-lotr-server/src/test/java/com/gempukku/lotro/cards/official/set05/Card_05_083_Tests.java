@@ -17,8 +17,7 @@ public class Card_05_083_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "5_83");
-					// put other cards in here as needed for the test case
+					put("guard", "5_83");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +45,7 @@ public class Card_05_083_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("guard");
 
 		assertEquals("Household Guard", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -60,20 +59,5 @@ public class Card_05_083_Tests
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
 		assertEquals(6, card.getBlueprint().getResistance());
-	}
-
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void HouseholdGuardTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-
-		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(2, scn.GetTwilight());
 	}
 }

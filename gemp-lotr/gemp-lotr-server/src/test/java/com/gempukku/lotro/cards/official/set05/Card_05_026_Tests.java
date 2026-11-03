@@ -1,16 +1,14 @@
 package com.gempukku.lotro.cards.official.set05;
 
 import com.gempukku.lotro.framework.VirtualTableScenario;
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_05_026_Tests
@@ -20,8 +18,17 @@ public class Card_05_026_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "5_26");
-					// put other cards in here as needed for the test case
+					put("look", "5_26");
+					// Sméagol, Poor Creature: [gollum] companion; a skirmish ability used only on purpose
+					put("smeagol", "6_45");
+					// Smeagol, Once Like Us: the [shire] Sméagol; an assignment ability used only on purpose
+					put("shiresmeagol", "103_116");
+					// Gollum, Stinker: [gollum] minion; strength +1 for each burden, and a trigger on his own win
+					put("gollum", "5_25");
+					// Gollum, Half a Wraith Himself: the [wraith] Gollum; a trigger on playing a Nazgûl, and an assignment ability
+					put("wraithgollum", "103_66");
+					// Shelob, Last Child of Ungoliant: a [gollum] minion who is no Gollum; damage +1 only in a fierce skirmish
+					put("shelob", "8_26");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +53,7 @@ public class Card_05_026_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("look");
 
 		assertEquals("Look at Him", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -54,22 +61,128 @@ public class Card_05_026_Tests
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
 		assertEquals(Culture.GOLLUM, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertTrue(scn.HasTimeword(card, Timeword.SHADOW));
+		assertTrue(scn.HasTimeword(card, Timeword.SHADOW));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void LookatHimTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void SpottingTheFreePeoplesPlayersSmeagolAddsOneForEachBurden() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var look = scn.GetShadowCard("look");
+		var smeagol = scn.GetFreepsCard("smeagol");
+		scn.MoveCompanionsToTable(smeagol);
+		scn.MoveCardsToHand(look);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.AddBurdens(2);
+		assertEquals(2, scn.GetBurdens());
+		scn.FreepsPass();
 
-		assertEquals(0, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		int pool = scn.GetTwilight();
+		assertTrue(scn.ShadowPlayAvailable(look));
+
+		scn.ShadowPlayCard(look);
+		// Twilight cost 0, and (1) for each of the 2 burdens.
+		assertEquals(pool + 2, scn.GetTwilight());
+		assertEquals(2, scn.GetBurdens());
+		assertInDiscard(look);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void SpottingTheShireSmeagolAddsOneForEachBurden() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var look = scn.GetShadowCard("look");
+		var shiresmeagol = scn.GetFreepsCard("shiresmeagol");
+		scn.MoveCompanionsToTable(shiresmeagol);
+		scn.MoveCardsToHand(look);
+
+		scn.StartGame();
+		scn.AddBurdens(3);
+		assertEquals(3, scn.GetBurdens());
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		int pool = scn.GetTwilight();
+		assertTrue(scn.ShadowPlayAvailable(look));
+
+		scn.ShadowPlayCard(look);
+		// Twilight cost 0, and (1) for each of the 3 burdens.
+		assertEquals(pool + 3, scn.GetTwilight());
+		assertInDiscard(look);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void SpottingTheShadowPlayersGollumAddsOneForEachBurden() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var look = scn.GetShadowCard("look");
+		var gollum = scn.GetShadowCard("gollum");
+		scn.MoveCardsToHand(look);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(gollum);
+		scn.AddBurdens(1);
+		assertEquals(1, scn.GetBurdens());
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		int pool = scn.GetTwilight();
+		assertTrue(scn.ShadowPlayAvailable(look));
+
+		scn.ShadowPlayCard(look);
+		// Twilight cost 0, and (1) for the one burden.
+		assertEquals(pool + 1, scn.GetTwilight());
+		assertInDiscard(look);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void SpottingTheWraithGollumAddsOneForEachBurden() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var look = scn.GetShadowCard("look");
+		var wraithgollum = scn.GetShadowCard("wraithgollum");
+		scn.MoveCardsToHand(look);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(wraithgollum);
+		scn.AddBurdens(2);
+		assertEquals(2, scn.GetBurdens());
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		int pool = scn.GetTwilight();
+		assertTrue(scn.ShadowPlayAvailable(look));
+
+		scn.ShadowPlayCard(look);
+		assertEquals(pool + 2, scn.GetTwilight());
+		assertInDiscard(look);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void CannotBePlayedWithNeitherSmeagolNorGollumInPlay() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var look = scn.GetShadowCard("look");
+		var shelob = scn.GetShadowCard("shelob");
+		scn.MoveCardsToHand(look);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(shelob);
+		scn.AddBurdens(2);
+		assertEquals(2, scn.GetBurdens());
+		assertInZone(Zone.HAND, look);
+		scn.FreepsPass();
+
+		// Shelob is a [gollum] minion, but no Gollum.
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertInZone(Zone.HAND, look);
+		assertFalse(scn.ShadowPlayAvailable(look));
 	}
 }

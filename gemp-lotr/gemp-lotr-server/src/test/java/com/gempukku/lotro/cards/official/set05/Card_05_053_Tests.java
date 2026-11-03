@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_05_053_Tests
@@ -17,8 +18,12 @@ public class Card_05_053_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "5_53");
-					// put other cards in here as needed for the test case
+					put("rider", "5_53");
+					put("rider2", "5_53");
+					put("warwarg", "5_64");     // War-warg: [isengard] mount on a warg-rider, strength +4, vitality +2; a skirmish Response
+					put("troop", "1_177");      // Goblin Patrol Troop: a minion with no text, strength 13, vitality 3
+
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a Maneuver ability only
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -41,12 +46,13 @@ public class Card_05_053_Tests
 		 * Strength: 8
 		 * Vitality: 3
 		 * Site Number: 4
-		 * Game Text: <b>Warg-rider</b>.<br>While this minion is not exhausted, he is <b>fierce</b>.
+		 * Game Text: <b>Warg-rider</b>.
+		 * While this minion is not exhausted, he is <b>fierce</b>.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("rider");
 
 		assertEquals("Isengard Rider", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +68,58 @@ public class Card_05_053_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void IsengardRiderTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void ExhaustedHeIsNotFierceUntilAWarWargPlayedOnHimLeavesHimMoreThanOneVitality() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var rider = scn.GetShadowCard("rider");
+		var rider2 = scn.GetShadowCard("rider2");
+		var warwarg = scn.GetShadowCard("warwarg");
+		var troop = scn.GetShadowCard("troop");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToHand(warwarg);
+		assertInHand(warwarg);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(rider, rider2, troop);
+		// Vitality 3: with 1 wound he has 2 left, one above exhausted, and is fierce.
+		assertEquals(0, scn.GetWoundsOn(rider));
+		scn.AddWoundsToChar(rider, 1);
+		assertEquals(1, scn.GetWoundsOn(rider));
+		assertEquals(2, scn.GetVitality(rider));
+		assertFalse(scn.IsExhausted(rider));
+		assertTrue(scn.HasKeyword(rider, Keyword.FIERCE));
+		scn.AddWoundsToChar(rider, 1);
+		assertEquals(2, scn.GetWoundsOn(rider));
+		assertEquals(0, scn.GetWoundsOn(rider2));
+		scn.AddWoundsToChar(rider2, 1);
+		assertEquals(1, scn.GetWoundsOn(rider2));
+		scn.FreepsPass();
 
-		assertEquals(3, scn.GetTwilight());
+		// Vitality 3 with 2 wounds: exhausted, and not fierce.  The other Rider goes by his own state, 1 wound
+		// and fierce; the Troop, not exhausted, is not fierce either.
+		assertEquals(2, scn.GetWoundsOn(rider));
+		assertTrue(scn.IsExhausted(rider));
+		assertFalse(scn.HasKeyword(rider, Keyword.FIERCE));
+		assertEquals(1, scn.GetWoundsOn(rider2));
+		assertFalse(scn.IsExhausted(rider2));
+		assertTrue(scn.HasKeyword(rider2, Keyword.FIERCE));
+		assertFalse(scn.IsExhausted(troop));
+		assertFalse(scn.HasKeyword(troop, Keyword.FIERCE));
+
+		// Both Riders are warg-riders the War-warg could go on.
+		scn.ShadowPlayCard(warwarg);
+		scn.ShadowChooseCard(rider);
+		assertAttachedTo(warwarg, rider);
+
+		// 3 + 2 less 2 wounds: 3 left, not exhausted, fierce.
+		assertEquals(2, scn.GetWoundsOn(rider));
+		assertEquals(3, scn.GetVitality(rider));
+		assertFalse(scn.IsExhausted(rider));
+		assertTrue(scn.HasKeyword(rider, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(rider2, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(troop, Keyword.FIERCE));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

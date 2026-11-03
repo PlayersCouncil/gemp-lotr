@@ -115,6 +115,10 @@
 				type: winsSkirmish
 				filter: self
 			}
+			requires: {
+				type: canSpot
+				filter: minion,assignedToSkirmish(unbound,companion)
+			}
 			effect: {
 				type: wound
 				select: choose(minion,assignedToSkirmish(unbound,companion))
@@ -154,16 +158,9 @@
 					select: choose(dwarf,companion)
 				}
 				effect: {
-					type: addModifier
-					modifier: {
-						type: removeKeyword
-						filter: minion
-						requires: {
-							type: location
-							filter: battleground
-						}
-						keyword: damage
-					}
+					type: removeKeyword
+					select: all(minion,atSite(battleground))
+					keyword: damage
 					until: regroup
 				}
 			}
@@ -198,6 +195,9 @@
 				phase: maneuver
 				text: Stack top card from draw deck
 				limitPerPhase: 1
+				requires: {
+					type: HasCardInDrawDeck
+				}
 				effect: {
 					type: stackTopCardsOfDrawDeck
 					where: self
