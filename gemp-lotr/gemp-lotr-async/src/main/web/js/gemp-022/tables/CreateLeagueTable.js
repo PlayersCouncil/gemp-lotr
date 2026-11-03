@@ -112,7 +112,7 @@ class CreateLeagueTable extends TableFlow {
 					limited = true;
 			}
 			if (limited) {
-				buttons.append($("<a class='ui-button ui-widget ui-corner-all' href='deckBuild.html' target='_blank' rel='noopener'></a>")
+				buttons.append($("<a class='ui-button ui-widget ui-corner-all' href='ng/deckbuilder/' target='_blank' rel='noopener'></a>")
 					.text("Open the deck builder"));
 				that.nextSteps.append($("<div class='page-hint'></div>").text(
 					"This league issues its own cards: in the deck builder, choose the league's collection to open your packs"

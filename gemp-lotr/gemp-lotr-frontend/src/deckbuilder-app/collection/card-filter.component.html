@@ -1,0 +1,358 @@
+@let pack = collection.isPackProduct();
+@let hidden = collection.hiddenCultureGroups();
+
+<ng-template #select let-id="id" let-field="field" let-options="options" let-disabled="disabled">
+  <select [id]="id" class="filterInput" [disabled]="disabled" (change)="set(field, $event)">
+    @for (option of options; track $index) {
+      <option [value]="option.value" [selected]="isSelected(field, option)">
+        {{ option.label }}
+      </option>
+    }
+  </select>
+</ng-template>
+
+<ng-template #numeric let-stat="stat">
+  <select
+    [id]="stat + 'CompareSelect'"
+    class="filterInput"
+    [disabled]="pack"
+    (change)="set(compareField(stat), $event)"
+  >
+    @for (option of options.compare; track $index) {
+      <option [value]="option.value" [selected]="isSelected(compareField(stat), option)">
+        {{ option.label }}
+      </option>
+    }
+  </select>
+  <input
+    [id]="stat + 'ValueInput'"
+    type="number"
+    min="0"
+    max="12"
+    class="filterInput"
+    style="width: 35px"
+    [hidden]="value(compareField(stat)) === ''"
+    [value]="value(valueField(stat))"
+    (change)="set(valueField(stat), $event)"
+  />
+</ng-template>
+
+<div id="card-navigation" style="display: flex; flex-direction: row; gap: 2px; align-items: center">
+  <button
+    id="previousPage"
+    class="navigation-butt"
+    gempUiButton="icon"
+    title=""
+    [disabled]="collection.previousDisabled()"
+    (click)="collection.previousPage()"
+  >
+    <span class="ui-button-icon-primary ui-icon ui-icon-circle-triangle-w"></span><span class="ui-button-text"></span>
+  </button>
+  <div
+    id="countSlider"
+    style="flex-grow: 1"
+    gempUiSlider
+    [min]="pageSize.min"
+    [max]="pageSize.max"
+    [value]="pageSize.start"
+    [disabled]="collection.sliderDisabled()"
+    (slide)="collection.setPageSize($event)"
+  ></div>
+  <button
+    id="nextPage"
+    class="navigation-butt"
+    gempUiButton="icon"
+    title=""
+    [disabled]="collection.nextDisabled()"
+    (click)="collection.nextPage()"
+  >
+    <span class="ui-button-icon-primary ui-icon ui-icon-circle-triangle-e"></span><span class="ui-button-text"></span>
+  </button>
+</div>
+
+<div id="filter-inputs" style="display: flex; flex-wrap: wrap">
+  <table id="filterTable">
+    <tbody>
+      <tr>
+        <td><label for="productSelect" class="filterLabel">Product:</label></td>
+        <td>
+          <ng-container
+            *ngTemplateOutlet="
+              select;
+              context: {
+                id: 'productSelect',
+                field: 'product',
+                options: options.product,
+                disabled: false,
+              }
+            "
+          />
+        </td>
+        <td><label for="raritySelect" class="filterLabel">Rarity:</label></td>
+        <td>
+          <ng-container
+            *ngTemplateOutlet="
+              select;
+              context: {
+                id: 'raritySelect',
+                field: 'rarity',
+                options: options.rarity,
+                disabled: pack,
+              }
+            "
+          />
+        </td>
+      </tr>
+      <tr>
+        <td><label for="blockSelect" class="filterLabel">Block:</label></td>
+        <td>
+          <ng-container
+            *ngTemplateOutlet="
+              select;
+              context: {
+                id: 'blockSelect',
+                field: 'block',
+                options: collection.blockOptions(),
+                disabled: pack,
+              }
+            "
+          />
+        </td>
+        <td><label for="setSelect" class="filterLabel">Set:</label></td>
+        <td>
+          <ng-container
+            *ngTemplateOutlet="
+              select;
+              context: {
+                id: 'setSelect',
+                field: 'set',
+                options: collection.setOptions(),
+                disabled: pack,
+              }
+            "
+          />
+        </td>
+      </tr>
+      <tr>
+        <td><label for="sideSelect" class="filterLabel">Side:</label></td>
+        <td>
+          <ng-container
+            *ngTemplateOutlet="
+              select;
+              context: { id: 'sideSelect', field: 'side', options: options.side, disabled: pack }
+            "
+          />
+        </td>
+        <td><label for="sortSelect" class="filterLabel">Sort by:</label></td>
+        <td>
+          <ng-container
+            *ngTemplateOutlet="
+              select;
+              context: { id: 'sortSelect', field: 'sort', options: options.sort, disabled: pack }
+            "
+          />
+        </td>
+      </tr>
+      <tr>
+        <td><label for="cardTypeSelect" class="filterLabel">Card&nbsp;Type:</label></td>
+        <td colspan="3">
+          <ng-container
+            *ngTemplateOutlet="
+              select;
+              context: {
+                id: 'cardTypeSelect',
+                field: 'cardType',
+                options: options.cardType,
+                disabled: pack,
+              }
+            "
+          />
+        </td>
+      </tr>
+      <tr>
+        <td colspan="4">
+          <div class="cardFilterText">
+            Advanced filters (<a target="_blank" href="https://wiki.lotrtcgpc.net/wiki/Special:RunQuery/CardSearch"
+              >See more on the Wiki.</a
+            >)
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td><label for="nameInput" class="filterLabel">Name&nbsp;contains:</label></td>
+        <td colspan="3">
+          <input
+            id="nameInput"
+            type="text"
+            maxlength="100"
+            class="filterInput"
+            style="width: 250px"
+            [value]="value('name')"
+            (change)="set('name', $event)"
+          />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label for="gametextInput" class="filterLabel">Game&nbsp;Text&nbsp;contains:</label>
+        </td>
+        <td colspan="3">
+          <input
+            id="gametextInput"
+            type="text"
+            maxlength="100"
+            class="filterInput"
+            style="width: 250px"
+            [disabled]="pack"
+            [value]="value('gametext')"
+            (change)="set('gametext', $event)"
+          />
+        </td>
+      </tr>
+      <tr>
+        <td><label for="keywordSelect" class="filterLabel">Keyword:</label></td>
+        <td>
+          <ng-container
+            *ngTemplateOutlet="
+              select;
+              context: {
+                id: 'keywordSelect',
+                field: 'keyword',
+                options: options.keyword,
+                disabled: pack,
+              }
+            "
+          />
+        </td>
+        <td><label for="phaseSelect" class="filterLabel">Phase:</label></td>
+        <td>
+          <ng-container
+            *ngTemplateOutlet="
+              select;
+              context: { id: 'phaseSelect', field: 'phase', options: options.phase, disabled: pack }
+            "
+          />
+        </td>
+      </tr>
+      <tr>
+        <td><label for="raceSelect" class="filterLabel">Race:</label></td>
+        <td>
+          <ng-container
+            *ngTemplateOutlet="
+              select;
+              context: { id: 'raceSelect', field: 'race', options: options.race, disabled: pack }
+            "
+          />
+        </td>
+        <td><label for="itemClassSelect" class="filterLabel">Item Class:</label></td>
+        <td>
+          <ng-container
+            *ngTemplateOutlet="
+              select;
+              context: {
+                id: 'itemClassSelect',
+                field: 'itemClass',
+                options: options.itemClass,
+                disabled: pack,
+              }
+            "
+          />
+        </td>
+      </tr>
+      <tr>
+        <td><label for="twilightCompareSelect" class="filterLabel">Twilight:</label></td>
+        <td><ng-container *ngTemplateOutlet="numeric; context: { stat: 'twilight' }" /></td>
+        <td><label for="siteNumberCompareSelect" class="filterLabel">Site Number:</label></td>
+        <td><ng-container *ngTemplateOutlet="numeric; context: { stat: 'siteNumber' }" /></td>
+      </tr>
+      <tr>
+        <td><label for="strengthCompareSelect" class="filterLabel">Strength:</label></td>
+        <td><ng-container *ngTemplateOutlet="numeric; context: { stat: 'strength' }" /></td>
+        <td><label for="signetSelect" class="filterLabel">Signet:</label></td>
+        <td>
+          <ng-container
+            *ngTemplateOutlet="
+              select;
+              context: {
+                id: 'signetSelect',
+                field: 'signet',
+                options: options.signet,
+                disabled: pack,
+              }
+            "
+          />
+        </td>
+      </tr>
+      <tr>
+        <td><label for="vitalityCompareSelect" class="filterLabel">Vitality:</label></td>
+        <td><ng-container *ngTemplateOutlet="numeric; context: { stat: 'vitality' }" /></td>
+        <td><label for="resistanceCompareSelect" class="filterLabel">Resistance:</label></td>
+        <td><ng-container *ngTemplateOutlet="numeric; context: { stat: 'resistance' }" /></td>
+      </tr>
+      <tr>
+        <td colspan="4">
+          <!-- The legacy page copied these two buttons as HTML after jQuery UI had styled them, so they have the button
+               look but no hover, pressed or focus states. Kept that way. -->
+          <div class="cardFilterText flex-horiz">
+            <button
+              id="resetAdvancedFiltersButton"
+              class="ui-button-icon-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+              role="button"
+              aria-disabled="false"
+              (click)="collection.resetAdvanced()"
+            >
+              <span class="ui-button-text">Reset advanced filters only</span>
+            </button>
+            <button
+              id="resetAllFiltersButton"
+              class="ui-button-icon-primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+              role="button"
+              aria-disabled="false"
+              (click)="collection.resetAll()"
+            >
+              <span class="ui-button-text">Reset all filters</span>
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div id="culture-buttons" class="ui-buttonset">
+  @for (group of cultureGroups; track group.id) {
+    <div [id]="group.id" [style.display]="hidden.has(group.id) ? 'none' : null">
+      @for (culture of group.cultures; track culture.code) {
+        @let active = isCultureActive(culture.code);
+        <input
+          type="checkbox"
+          [id]="culture.code"
+          class="ui-helper-hidden-accessible"
+          [checked]="active"
+          (change)="collection.toggleCulture(culture.code)"
+          (focus)="focusedCulture.set(culture.code)"
+          (blur)="focusedCulture.set(null)"
+        /><label
+          [for]="culture.code"
+          [id]="'label' + culture.code"
+          class="ui-button ui-widget ui-state-default ui-button-text-only"
+          [class.culture]="culture.cultureClass"
+          [class.ui-corner-left]="culture.code === firstCulture"
+          [class.ui-corner-right]="culture.code === lastCulture"
+          [class.ui-state-hover]="hoveredCulture() === culture.code"
+          [class.ui-state-active]="active"
+          [class.ui-state-focus]="focusedCulture() === culture.code"
+          [attr.aria-pressed]="active"
+          role="button"
+          aria-disabled="false"
+          (mouseenter)="hoveredCulture.set(culture.code)"
+          (mouseleave)="hoveredCulture.set(null)"
+          (mousedown)="cultureMouseDown($event)"
+          (mouseup)="cultureMouseUp($event)"
+          (click)="cultureClick($event)"
+          ><span class="ui-button-text"><img [src]="culture.image" /></span
+        ></label>
+      }
+    </div>
+  }
+</div>

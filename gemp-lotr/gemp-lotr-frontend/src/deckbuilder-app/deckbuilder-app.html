@@ -1,0 +1,53 @@
+@let closed = layout.page().eastHidden;
+
+<div
+  id="deckDiv"
+  class="ui-layout-center ui-layout-pane ui-layout-pane-center"
+  gempDeckArea
+  [style]="centerStyle()"
+></div>
+
+<div id="collectionDiv" class="ui-layout-east ui-layout-pane ui-layout-pane-east" [style]="eastStyle()">
+  <div id="cardCollectionDiv"></div>
+  <div id="filter-main" gempCardFilter style="display: flex; flex-direction: column; align-items: stretch"></div>
+  <div
+    id="collection-display"
+    gempCollectionDisplay
+    style="display: flex; flex-direction: column; position: relative"
+  ></div>
+</div>
+
+<div
+  class="ui-layout-resizer ui-layout-resizer-east"
+  [class.ui-layout-resizer-open]="!closed"
+  [class.ui-layout-resizer-east-open]="!closed"
+  [class.ui-layout-resizer-closed]="closed"
+  [class.ui-layout-resizer-east-closed]="closed"
+  [class.ui-layout-resizer-drag]="dragLeft() !== null"
+  [title]="closed ? 'Open' : 'Resize'"
+  [style]="resizerStyle()"
+  (mousedown)="startResize($event)"
+  (click)="onResizerClick($event)"
+>
+  <div
+    class="ui-layout-toggler ui-layout-toggler-east"
+    [class.ui-layout-toggler-open]="!closed"
+    [class.ui-layout-toggler-east-open]="!closed"
+    [class.ui-layout-toggler-closed]="closed"
+    [class.ui-layout-toggler-east-closed]="closed"
+    [title]="closed ? 'Open' : 'Close'"
+    [style]="togglerStyle()"
+  ></div>
+</div>
+
+@if (dragLeft() !== null) {
+  <div
+    class="ui-layout-resizer ui-layout-resizer-east ui-layout-resizer-dragging ui-layout-resizer-east-dragging"
+    [style]="dragHelperStyle()"
+  ></div>
+}
+
+<gemp-card-info />
+<gemp-deck-dialogs />
+<gemp-pack-dialogs />
+<gemp-auto-zoom />

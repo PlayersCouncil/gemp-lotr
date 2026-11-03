@@ -1,0 +1,33 @@
+import { Component, inject } from '@angular/core';
+import { BASE_COLLECTION_TYPES, CollectionService } from '../core/collection/collection.service';
+import { DeckService } from '../core/deck/deck.service';
+import { AutoZoomService } from '../dialogs/auto-zoom.component';
+import { DeckDialogsService } from '../dialogs/deck-dialogs.component';
+import { UiButtonDirective } from '../shared/ui-button.directive';
+
+/**
+ * The deck builder's top bar (#manageDecks): deck buttons, format and collection selectors, the deck name and the
+ * auto-zoom toggle. Same markup as the legacy page after jQuery UI had turned the buttons into widgets.
+ */
+@Component({
+  selector: '[gempDeckToolbar]',
+  imports: [UiButtonDirective],
+  templateUrl: './deck-toolbar.component.html',
+})
+export class DeckToolbarComponent {
+  protected readonly deck = inject(DeckService);
+  protected readonly dialogs = inject(DeckDialogsService);
+  protected readonly zoom = inject(AutoZoomService);
+  private readonly collection = inject(CollectionService);
+  protected readonly baseCollections = BASE_COLLECTION_TYPES;
+  protected readonly limitedCollections = this.collection.limitedCollections;
+  protected readonly collectionType = this.collection.collectionType;
+
+  protected selectFormat(event: Event): void {
+    this.deck.selectFormat((event.target as HTMLSelectElement).selectedIndex);
+  }
+
+  protected selectCollection(event: Event): void {
+    this.collection.selectCollectionType((event.target as HTMLSelectElement).value);
+  }
+}
