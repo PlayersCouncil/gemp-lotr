@@ -17,7 +17,6 @@
 		effects: [
 			{
 				type: Trigger
-				optional: false
 				text: Exert a minion
 				optional: true
 				trigger: {
