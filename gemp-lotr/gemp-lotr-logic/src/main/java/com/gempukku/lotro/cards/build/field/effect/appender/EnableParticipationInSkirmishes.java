@@ -32,8 +32,8 @@ public class EnableParticipationInSkirmishes implements EffectAppenderProducer {
 
         MultiEffectAppender result = new MultiEffectAppender();
 
-        result.addEffectAppender(
-                CardResolver.resolveCards(select, valueSource, memory, "you", "Choose cards to make participate in skirmishes", environment));
+        final EffectAppender cardResolver = CardResolver.resolveCards(select, valueSource, memory, "you", "Choose cards to make participate in skirmishes", environment);
+        result.addEffectAppender(cardResolver);
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
@@ -44,6 +44,10 @@ public class EnableParticipationInSkirmishes implements EffectAppenderProducer {
                     }
                 });
 
-        return result;
+        // Taught for Q-0224 (IdleOffers): with nobody to give it to nothing is given.
+        // No test exercises this (engine pass 27): where a printed card has it in an offer that pays nothing
+        // (Dunlending Warrior 4_18, Dunlending Ravager 4_15), a requirement written by hand answers first
+        // (IdleOffers).  Crown of Erebor 32_1 has none, and is of the Hobbit sets, which are worked last.
+        return TaughtForecast.actsOnWhatItFinds(result, cardResolver);
     }
 }

@@ -28,9 +28,10 @@ public class ChooseActiveCards implements EffectAppenderProducer {
         if (text == null)
             throw new InvalidCardDefinitionException("You need to define text to show");
 
-        if(hindered)
-            return CardResolver.resolveCards(select, SpotOverride.INCLUDE_HINDERED, null, valueSource, memorize, player, text, environment);
-        else
-            return CardResolver.resolveCards(select, SpotOverride.NONE, null, valueSource, memorize, player, text, environment);
+        final EffectAppender cardResolver = hindered
+                ? CardResolver.resolveCards(select, SpotOverride.INCLUDE_HINDERED, null, valueSource, memorize, player, text, environment)
+                : CardResolver.resolveCards(select, SpotOverride.NONE, null, valueSource, memorize, player, text, environment);
+        // Taught for Q-0224 (IdleOffers): with nothing to choose from nothing is chosen, and nothing remembered.
+        return TaughtForecast.actsOnWhatItFinds(cardResolver, cardResolver);
     }
 }

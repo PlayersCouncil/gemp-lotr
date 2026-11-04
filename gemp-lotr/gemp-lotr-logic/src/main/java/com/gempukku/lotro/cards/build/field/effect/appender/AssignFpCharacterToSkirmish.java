@@ -4,6 +4,7 @@ import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.CardResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.common.Filterable;
@@ -13,7 +14,10 @@ import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import com.gempukku.lotro.logic.effects.AssignmentEffect;
+import com.gempukku.lotro.logic.effects.StackActionEffect;
+import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.timing.Effect;
+import com.gempukku.lotro.logic.timing.UnrespondableEffect;
 import org.json.simple.JSONObject;
 
 import java.util.Collection;
@@ -48,23 +52,71 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
 
         final FilterableSource minionFilter = getSource(minion, environment);
 
-        MultiEffectAppender result = new MultiEffectAppender();
-        result.addEffectAppender(
-                CardResolver.resolveCard(fpCharacter,
+        final EffectAppender fpCharacterResolver = CardResolver.resolveCard(fpCharacter,
                         (actionContext) -> {
                             final String assigningPlayer = playerSource.getPlayer(actionContext);
                             Side assigningSide = GameUtils.getSide(actionContext.getGame(), assigningPlayer);
                             final Filterable filter = minionFilter.getFilterable(actionContext);
                             return Filters.assignableToSkirmishAgainst(assigningSide, filter, ignoreExistingAssignments, ignoreDefender, ignoreAllyLocation);
-                        }, fpCharacterMemory, player, "Choose character to assign to skirmish", environment));
-        result.addEffectAppender(
+                        }, fpCharacterMemory, player, "Choose character to assign to skirmish", environment);
+
+        // An assignment that is a cost ("Exert Éowyn and assign a minion to the Ring-bearer to ...", 17_96; in
+        // a definition, the cost of a costToEffect among the action's effects) can be paid while there is a
+        // character one of those minions can be assigned to, and that is asked of the character alone: the
+        // minion is chosen once the character is, and the character is offered only where a minion can be
+        // assigned to it and any cost of assigning that minion paid (ExtraAssignmentCostModifier).  The action
+        // is withheld without it, and it is asked on the board as the action's own costs will leave it
+        // (CostToEffect, DefaultActionSource.addEffectCheck), so that an exertion the action itself takes
+        // first is not counted on again to pay for the minion (F-0486; F-0184).
+        //
+        // An assignment that is an effect is asked the same way where something asks it whether it can be done
+        // in full: a choice one of whose branches it is ("Remove a burden to choose one: assign a [wraith] minion
+        // to a companion who has resistance 0; or ...", Pull of the Ring 18_133; F-0624).  Asked of every part in
+        // turn, the minion's part would read the character remembered, which is not chosen yet, and the
+        // assignment would never be doable.  As an effect it is not something the action is withheld without
+        // (isPlayabilityCheckedAsCostOfEffect stays the cost's alone).  One whose character or minion is read from
+        // the action's memory is asked as before, since nothing can be asked of it before the action is taken.
+        final boolean readsNoMemory = !CardResolver.readsMemory(fpCharacter) && !CardResolver.readsMemory(minion);
+        final boolean askedAheadAsCost = cost && readsNoMemory;
+        MultiEffectAppender result = new MultiEffectAppender() {
+            @Override
+            public boolean isPlayableInFull(ActionContext actionContext) {
+                if (readsNoMemory)
+                    return fpCharacterResolver.isPlayableInFull(actionContext);
+                return super.isPlayableInFull(actionContext);
+            }
+
+            @Override
+            public boolean isPlayabilityCheckedAsCostOfEffect() {
+                return askedAheadAsCost;
+            }
+
+            // With no character one of those minions could be assigned to, nobody is assigned (engine pass 32).
+            // This is the effect's own forecast, so it is heard by the no-effect flag (an ability with a cost is
+            // offered and flagged: "Exert Lurtz twice to assign it to an unbound companion", Lurtz 18_118, with
+            // none), by a choice it is a branch of and by a prevention, as well as by the rule of Q-0224
+            // (IdleOffers), which had it alone until then.  Where the character is read from memory, or is not
+            // found by a choice, the resolver cannot say whom it finds and nothing is said.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                final EffectForecast found = fpCharacterResolver.forecast(actionContext);
+                if (found.getReach() != null && found.getReach().isEmpty())
+                    return EffectForecast.NOTHING;
+                return super.forecast(actionContext);
+            }
+        };
+        result.addEffectAppender(fpCharacterResolver);
+        final EffectAppender minionResolver =
                 CardResolver.resolveCard(minion,
                         (actionContext) -> {
                             final String assigningPlayer = playerSource.getPlayer(actionContext);
                             Side assigningSide = GameUtils.getSide(actionContext.getGame(), assigningPlayer);
                             final Collection<? extends PhysicalCard> fpChar = actionContext.getCardsFromMemory(fpCharacterMemory);
                             return Filters.assignableToSkirmishAgainst(assigningSide, Filters.in(fpChar), ignoreExistingAssignments, ignoreDefender, ignoreAllyLocation);
-                        }, minionMemory, player, "Choose minion to assign to character", environment));
+                        }, minionMemory, player, "Choose minion to assign to character", environment);
+        result.addEffectAppender(minionResolver);
+        final boolean characterIsChosen = fpCharacter.startsWith("choose(");
+        final boolean minionIsChosen = minion.startsWith("choose(");
 
         DelayedAppender assignAppender = new DelayedAppender() {
             @Override
@@ -73,7 +125,40 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
                 final Collection<? extends PhysicalCard> fpChar = actionContext.getCardsFromMemory(fpCharacterMemory);
                 final Collection<? extends PhysicalCard> minion = actionContext.getCardsFromMemory(minionMemory);
                 if (fpChar.size() == 1 && minion.size() == 1) {
-					return new AssignmentEffect(assigningPlayer, fpChar.iterator().next(), minion.iterator().next(), ignoreExistingAssignments, ignoreDefender, ignoreAllyLocation);
+                    final PhysicalCard assignedCharacter = fpChar.iterator().next();
+                    final PhysicalCard assignedMinion = minion.iterator().next();
+                    // A card that makes another player assign ("Make the Free Peoples player assign this minion to
+                    // an unwounded companion", Barbaric Uruk 12_135) has him do it where he has a choice in it, of
+                    // the character or of the minion, and is itself the one assigning where he has none (Q-0251
+                    // with Q-0171; F-0513): what "each time the Free Peoples player assigns ..." reads is then
+                    // credited to the card's player.  What may be assigned, and what is paid to assign it, are
+                    // still judged for the player made to assign, as he was asked.  The choices change nothing on
+                    // the board, so the candidates found now are the ones he was offered.
+                    String doer = assigningPlayer;
+                    if (!assigningPlayer.equals(actionContext.getPerformingPlayer())
+                            && !wasOfferedAChoice(characterIsChosen, fpCharacterResolver, actionContext)
+                            && !wasOfferedAChoice(minionIsChosen, minionResolver, actionContext))
+                        doer = actionContext.getPerformingPlayer();
+                    final AssignmentEffect assignment = new AssignmentEffect(assigningPlayer, doer, assignedCharacter, assignedMinion, ignoreExistingAssignments, ignoreDefender, ignoreAllyLocation);
+
+                    // A cost of assigning this pair ("the Free Peoples player must exert a companion to assign
+                    // this minion", ExtraCostToAssign) is paid here, the pair being known, and the assignment is
+                    // the effect of the payment: unpaid (a burden prevented, nobody left to exert) it is not
+                    // made.  Where the assignment is itself a cost of the card's action, that cost then fails
+                    // (Q-0221).  Paid, the minion is marked paid for, and the assignment uses the mark at once
+                    // (GameState.isAssignmentPaidFor; Q-0283).
+                    final CostToEffectAction payment = actionContext.getGame().getModifiersQuerying()
+                            .getAssignmentCosts(actionContext.getGame(), assigningPlayer, assignedCharacter, assignedMinion);
+                    if (payment == null)
+                        return assignment;
+                    payment.appendEffect(new UnrespondableEffect() {
+                        @Override
+                        protected void doPlayEffect(LotroGame game) {
+                            game.getGameState().markAssignmentPaidFor(assignedMinion);
+                        }
+                    });
+                    payment.appendEffect(assignment);
+                    return new StackActionEffect(payment);
                 } else {
                     return null;
                 }
@@ -93,6 +178,18 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
         }
 
         return result;
+    }
+
+    /**
+     * Whether the player who chose by this resolver had more than one card to choose from.  A card found by the
+     * definition (self, bearer, memory) was no choice of his; a resolver that cannot say what it found is taken
+     * to have offered one.
+     */
+    private static boolean wasOfferedAChoice(boolean chosen, EffectAppender resolver, ActionContext actionContext) {
+        if (!chosen)
+            return false;
+        final Collection<PhysicalCard> candidates = EffectForecast.cardsFoundNow(actionContext, resolver);
+        return candidates == null || candidates.size() > 1;
     }
 
     private FilterableSource getSource(String filter, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {

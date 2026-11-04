@@ -7,6 +7,7 @@ import com.gempukku.lotro.cards.build.ValueSource;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.CardResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.common.Culture;
@@ -39,7 +40,19 @@ public class AddCultureTokens implements EffectAppenderProducer {
         if (culture == null)
             throw new InvalidCardDefinitionException("'culture' is a required field for AddCultureTokens");
 
-        MultiEffectAppender result = new MultiEffectAppender();
+        MultiEffectAppender result = new MultiEffectAppender() {
+            // About to be carried out where culture tokens cannot be added (Redhorn Pass 13_194), it places
+            // none: so a prevention of it is put to nobody (Ketura on Q-0114; F-0612), as for a draw from an
+            // empty deck.  Said only at resolution: the no-effect flag of an action on offer is left as it was.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                final LotroGame game = actionContext.getGame();
+                if (actionContext.isAtResolution()
+                        && game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.CANT_TOUCH_CULTURE_TOKENS))
+                    return EffectForecast.NOTHING;
+                return super.forecast(actionContext);
+            }
+        };
 
         result.addEffectAppender(
                 CardResolver.resolveCards(select,
@@ -66,7 +79,13 @@ public class AddCultureTokens implements EffectAppenderProducer {
                     }
                 });
 
-        return result;
+        // Taught for Q-0224 (IdleOffers): where culture tokens cannot be added (Redhorn Pass 13_194) no token is
+        // placed, so a "you may place a [culture] token" that costs nothing is not offered there (F-0423).
+        return TaughtForecast.teach(result, actionContext -> {
+            final LotroGame game = actionContext.getGame();
+            return game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.CANT_TOUCH_CULTURE_TOKENS)
+                    ? EffectForecast.NOTHING : EffectForecast.UNKNOWN;
+        });
     }
 
 }

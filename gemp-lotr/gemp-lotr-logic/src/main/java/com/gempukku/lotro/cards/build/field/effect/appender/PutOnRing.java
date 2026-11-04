@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
@@ -15,7 +16,8 @@ public class PutOnRing implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject);
-        return new DelayedAppender() {
+        // Taught for Q-0224 (IdleOffers): the Ring that is already worn is not put on.
+        return TaughtForecast.teach(new DelayedAppender() {
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                 return new PutOnTheOneRingEffect();
@@ -25,7 +27,8 @@ public class PutOnRing implements EffectAppenderProducer {
             public boolean isPlayableInFull(ActionContext actionContext) {
                 return !actionContext.getGame().getGameState().isWearingRing();
             }
-        };
+        }, actionContext -> actionContext.getGame().getGameState().isWearingRing()
+                ? EffectForecast.NOTHING : EffectForecast.UNKNOWN);
     }
 
 }

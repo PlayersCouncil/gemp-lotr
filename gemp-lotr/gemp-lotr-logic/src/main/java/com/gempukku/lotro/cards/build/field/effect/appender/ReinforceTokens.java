@@ -7,6 +7,7 @@ import com.gempukku.lotro.cards.build.ValueSource;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.CardResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.common.Culture;
@@ -40,11 +41,27 @@ public class ReinforceTokens implements EffectAppenderProducer {
 
         Filter tokenFilter = token != null ? Filters.hasToken(token, 1) : Filters.hasAnyCultureTokens(1);
 
-        MultiEffectAppender result = new MultiEffectAppender();
+        MultiEffectAppender result = new MultiEffectAppender() {
+            // About to be carried out where culture tokens cannot be reinforced (Redhorn Pass 13_194), it reinforces
+            // none: so a prevention of it is put to nobody (Ketura on Q-0114; F-0612), as for a draw from an
+            // empty deck.  Said only at resolution: the no-effect flag of an action on offer is left as it was.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                final LotroGame game = actionContext.getGame();
+                if (actionContext.isAtResolution()
+                        && game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.CANT_TOUCH_CULTURE_TOKENS))
+                    return EffectForecast.NOTHING;
+                return super.forecast(actionContext);
+            }
+        };
 
-        result.addEffectAppender(
-                CardResolver.resolveCard(select, (actionContext) -> tokenFilter,
-                        memory, player, "Choose card to reinforce tokens on", environment));
+        // Any active card with such a token may be chosen, either player's.  CR 4.2 "reinforce" says "a card that
+        // already has a token of the same culture" and then "any of your cards"; Ketura is asking the rules
+        // council which governs, and until it answers the choice is not held to the reinforcing player's own
+        // cards (F-0468, 2026-10-11).
+        final EffectAppender cardResolver = CardResolver.resolveCard(select, (actionContext) -> tokenFilter,
+                        memory, player, "Choose card to reinforce tokens on", environment);
+        result.addEffectAppender(cardResolver);
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
@@ -75,7 +92,15 @@ public class ReinforceTokens implements EffectAppenderProducer {
                     }
                 });
 
-        return result;
+        // Taught for Q-0224 (IdleOffers): with no card that has such a token there is nothing to reinforce, and
+        // where culture tokens cannot be reinforced (Redhorn Pass 13_194) nothing is reinforced either.
+        return TaughtForecast.teach(result, actionContext -> {
+            final LotroGame game = actionContext.getGame();
+            if (game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.CANT_TOUCH_CULTURE_TOKENS))
+                return EffectForecast.NOTHING;
+            final EffectForecast found = cardResolver.forecast(actionContext);
+            return found.getReach() != null && found.getReach().isEmpty() ? EffectForecast.NOTHING : EffectForecast.UNKNOWN;
+        });
     }
 
     private Token getFirstCultureToken(Map<Token, Integer> tokens) {

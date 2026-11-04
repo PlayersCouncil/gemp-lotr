@@ -2,10 +2,13 @@ package com.gempukku.lotro.cards.build.field.effect.appender;
 
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
+import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class MultiEffectAppender implements EffectAppender {
     private boolean playabilityCheckedForEffect;
@@ -37,7 +40,29 @@ public class MultiEffectAppender implements EffectAppender {
     }
 
     @Override
+    public int getThreatsAddedAsCost(ActionContext actionContext) {
+        int result = 0;
+        for (EffectAppender effectAppender : effectAppenders)
+            result += effectAppender.getThreatsAddedAsCost(actionContext);
+        return result;
+    }
+
+    @Override
+    public void tallyWoundsPlacedAsCost(ActionContext actionContext, Map<PhysicalCard, Integer> tally) {
+        for (EffectAppender effectAppender : effectAppenders)
+            effectAppender.tallyWoundsPlacedAsCost(actionContext, tally);
+    }
+
+    @Override
     public boolean isPlayabilityCheckedForEffect() {
         return playabilityCheckedForEffect;
+    }
+
+    // All of the parts happen, one after another.  An effect that is built of a card resolver and what is then
+    // done with the cards says something better of itself (see EffectForecast.givenTo); left to this, it says
+    // UNKNOWN, since its second part does.
+    @Override
+    public EffectForecast forecast(ActionContext actionContext) {
+        return EffectForecast.together(actionContext, effectAppenders.toArray(new EffectAppender[0]));
     }
 }

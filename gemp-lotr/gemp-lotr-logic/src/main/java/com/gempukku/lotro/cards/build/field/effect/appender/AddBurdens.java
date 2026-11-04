@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
@@ -29,7 +30,18 @@ public class AddBurdens implements EffectAppenderProducer {
 
         String memorize = "_temp";
 
-        MultiEffectAppender result = new MultiEffectAppender();
+        MultiEffectAppender result = new MultiEffectAppender() {
+            // About to be carried out while burdens cannot be added, it does nothing.  How many it would add is
+            // not worked out.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                final LotroGame game = actionContext.getGame();
+                if (actionContext.isAtResolution()
+                        && !game.getModifiersQuerying().canAddBurden(game, playerSource.getPlayer(actionContext), actionContext.getSource()))
+                    return EffectForecast.NOTHING;
+                return EffectForecast.UNKNOWN;
+            }
+        };
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

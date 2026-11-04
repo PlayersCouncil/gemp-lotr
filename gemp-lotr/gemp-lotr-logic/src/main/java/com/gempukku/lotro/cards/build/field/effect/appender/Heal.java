@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
@@ -32,17 +33,31 @@ public class Heal implements EffectAppenderProducer {
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
         final PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
 
-        MultiEffectAppender result = new MultiEffectAppender();
-
-        result.addEffectAppender(
-                CardResolver.resolveCards(select,
+        final EffectAppender cardResolver = CardResolver.resolveCards(select,
                         SpotOverride.NONE,
-                        (actionContext) -> Filters.canHeal,
+                        (actionContext) -> Filters.canHeal(playerSource.getPlayer(actionContext), actionContext.getSource()),
                         (actionContext) -> (Filter) (game, physicalCard) -> {
                             final int healTimes = times.getEvaluator(actionContext).evaluateExpression(game, physicalCard);
-                            return game.getGameState().getWounds(physicalCard) >= healTimes && game.getModifiersQuerying().canBeHealed(game, physicalCard);
+                            return game.getGameState().getWounds(physicalCard) >= healTimes && game.getModifiersQuerying().canBeHealed(game, playerSource.getPlayer(actionContext), physicalCard, actionContext.getSource());
                         },
-                        count, memory, player, "Choose cards to heal", environment));
+                        count, memory, player, "Choose cards to heal", environment);
+
+        final boolean chosen = select != null && select.startsWith("choose(") && select.endsWith(")");
+        final boolean timesReadsMemory = NoTimesNoChoice.readsMemory(effectObject.get("times"));
+
+        MultiEffectAppender result = new MultiEffectAppender() {
+            // With nobody who has a wound that can be healed it does nothing; as an effect, nor with X times come
+            // to 0 (Q-0337).
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                if (NoTimesNoChoice.isCertainlyNoTimes(cost, actionContext, times, timesReadsMemory))
+                    return EffectForecast.NOTHING;
+                return EffectForecast.givenTo(cardResolver.forecast(actionContext), false);
+            }
+        };
+
+        // As an effect, "heal X times" with X come to 0 chooses nobody and asks nothing (Q-0337).
+        result.addEffectAppender(NoTimesNoChoice.resolver(cost, chosen, cardResolver, times, memory));
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

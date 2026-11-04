@@ -26,6 +26,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ModifyResistance implements EffectAppenderProducer {
+    // The name of the source card's counter for a "(limit +N)" on resistance.
+    private static final String LIMIT_COUNTER = "resistanceLimit-";
+
     @Override
     public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         FieldUtils.validateAllowedFields(effectObject, "amount", "count", "select", "until", "memorize", "limitPerCardThisPhase");
@@ -52,14 +55,16 @@ public class ModifyResistance implements EffectAppenderProducer {
                         LotroGame game = actionContext.getGame();
                         final int amount = evaluator.evaluateExpression(game, actionContext.getSource());
 
-                        if (limit != -1) {
+                        if (limit != -1 && amount != 0) {
+                            // As for strength: the limit is the source card's for the whole phase (CR 4.2
+                            // "limit"; Ketura on F-0125), not one for each card affected.
                             int absAmount = Math.abs(amount);
                             int multiplier = absAmount / amount;
                             List<Modifier> modifiers = new LinkedList<>();
-                            for (PhysicalCard affectedCard : cardsFromMemory) {
-                                int incrementedBy = game.getModifiersQuerying().getUntilEndOfPhaseLimitCounter(action.getActionSource(), affectedCard.getCardId() + "-", game.getGameState().getCurrentPhase()).incrementToLimit(limit, absAmount);
+                            if (!cardsFromMemory.isEmpty()) {
+                                int incrementedBy = game.getModifiersQuerying().getUntilEndOfPhaseLimitCounter(action.getActionSource(), LIMIT_COUNTER, game.getGameState().getCurrentPhase()).incrementToLimit(limit, absAmount);
                                 if (incrementedBy > 0) {
-                                    modifiers.add(new ResistanceModifier(actionContext.getSource(), affectedCard, null, multiplier * incrementedBy));
+                                    modifiers.add(new ResistanceModifier(actionContext.getSource(), Filters.in(cardsFromMemory), null, multiplier * incrementedBy));
                                 }
                             }
                             return new AddUntilModifierEffect(modifiers, time);

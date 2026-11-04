@@ -12,6 +12,9 @@ import com.gempukku.lotro.cards.build.field.effect.appender.resolver.CardResolve
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.common.Culture;
 import com.gempukku.lotro.common.Token;
+import com.gempukku.lotro.cards.build.FilterableSource;
+import com.gempukku.lotro.common.SpotOverride;
+import com.gempukku.lotro.filters.Filter;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
@@ -42,15 +45,31 @@ public class RemoveCultureTokens implements EffectAppenderProducer {
 
         MultiEffectAppender result = new MultiEffectAppender();
 
-        EffectAppender cardResolver = CardResolver.resolveCards(select,
+        // "Remove N tokens from <a card>".  A cost, and whether the removal can be done in full (what a choice of
+        // branches offers, F-0310), want a card holding the full N.  As an effect a chosen card is one holding the
+        // full N while there is one to choose (a choice is of what can be fully performed, as Exert's is on F-0131);
+        // with none, any card holding a token may be chosen and gives up as many as it has, up to N (CR 4.2
+        // "effect"; Ketura on F-0702: "effects should do as much as they can").  Where nobody chooses ("self", a
+        // memory, "all(...)") the effect takes what it can from each card holding a token.
+        final boolean chosen = select.startsWith("choose(") && select.endsWith(")");
+        final FilterableSource chosenFrom = chosen
+                ? environment.getFilterFactory().generateFilter(select.substring(select.indexOf("(") + 1, select.lastIndexOf(")")), environment)
+                : null;
+
+        final FilterableSource inFull = actionContext -> tokenFilter(token,
+                valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null));
+
+        EffectAppender cardResolver = CardResolver.resolveCards(select, SpotOverride.NONE,
                 actionContext -> {
                     final int tokenCount = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
-                    if (token != null)
-                        return Filters.hasToken(token, tokenCount);
-                    else
-                        return Filters.hasAnyCultureTokens(tokenCount);
+                    final Filter full = tokenFilter(token, tokenCount);
+                    if (cost || tokenCount <= 1)
+                        return full;
+                    if (chosen && Filters.countActive(actionContext.getGame(), chosenFrom.getFilterable(actionContext), full) > 0)
+                        return full;
+                    return tokenFilter(token, 1);
                 },
-                actionContext -> new ConstantEvaluator(1), memory, "you", "Choose card to remove tokens from", environment);
+                inFull, actionContext -> new ConstantEvaluator(1), memory, "you", "Choose card to remove tokens from", environment);
 
         EffectUtils.validatePreEvaluate(cost, effectObject, valueSource, cardResolver);
 
@@ -86,6 +105,10 @@ public class RemoveCultureTokens implements EffectAppenderProducer {
                 });
 
         return result;
+    }
+
+    private static Filter tokenFilter(Token token, int count) {
+        return (token != null) ? Filters.hasToken(token, count) : Filters.hasAnyCultureTokens(count);
     }
 
     private Token getCultureTokenOnCard(LotroGame game, PhysicalCard card) {
