@@ -46,6 +46,9 @@ public abstract class RevealRandomCardsFromHandEffect extends AbstractEffect {
 
                 String nextPlayer;
                 while ((nextPlayer = playerOrder.getNextPlayer()) != null) {
+                    // The owner of the hand knows his own cards and has the game log: he is shown nothing.
+                    if (nextPlayer.equals(_playerHand))
+                        continue;
                     game.getUserFeedback().sendAwaitingDecision(nextPlayer,
                             new ArbitraryCardsSelectionDecision(1, _playerHand+" revealed card(s) from hand at random", randomCards, Collections.emptySet(), 0, 0) {
                                 @Override
@@ -57,7 +60,8 @@ public abstract class RevealRandomCardsFromHandEffect extends AbstractEffect {
                 game.getGameState().sendMessage(GameUtils.getCardLink(_source) + " revealed cards from " + _playerHand + " hand at random - " + getAppendedNames(randomCards));
             }
             else {
-                game.getGameState().sendMessage("No cards in " + _playerHand + " hand to reveal");
+                // Nobody is shown a list of no cards: the game log says there was nothing to reveal (Q-0144).
+                game.getGameState().sendMessage(GameUtils.getNoCardsRevealedFromHandMessage(game, _source, _playerHand));
             }
             cardsRevealed(randomCards);
             for (PhysicalCard randomCard : randomCards)

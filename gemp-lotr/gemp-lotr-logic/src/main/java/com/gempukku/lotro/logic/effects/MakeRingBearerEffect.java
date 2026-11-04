@@ -26,6 +26,8 @@ public class MakeRingBearerEffect extends UnrespondableEffect {
 
         game.getGameState().sendMessage(_newRingBearer.getOwner() + " makes " + GameUtils.getCardLink(_newRingBearer) + " a new Ring-bearer");
         //The fellowship may not be carrying The One Ring at all (e.g. a lesson that has not introduced it yet)
+        //Otherwise it is in play and is taken up from wherever it is: on the old Ring-bearer, or lying where he
+        // was killed (GameState.layCardWhereItsBearerWas), a place in his skirmish included.
         if (theOneRing != null) {
             game.getGameState().removeCardsFromZone(_newRingBearer.getOwner(), Collections.singleton(theOneRing));
             game.getGameState().attachCard(game, theOneRing, _newRingBearer);

@@ -26,6 +26,7 @@ import java.util.List;
 public class PlaySiteEffect extends AbstractEffect {
     private final Action _action;
     private final String _playerId;
+    private final String _deckPlayerId;
     private final SitesBlock _siteBlock;
     private final int _siteNumber;
     private final Filterable[] _extraSiteFilters;
@@ -35,8 +36,21 @@ public class PlaySiteEffect extends AbstractEffect {
     }
 
     public PlaySiteEffect(Action action, String playerId, SitesBlock siteBlock, int siteNumber, Filterable... extraSiteFilters) {
+        this(action, playerId, playerId, siteBlock, siteNumber, extraSiteFilters);
+    }
+
+    /**
+     * A site laid by one player from another player's adventure deck.  The player who plays is the one who lays and
+     * replaces: the bars on playing and replacing sites are asked of him, he chooses among the sites found, and the
+     * mark "a Shadow player has replaced the fellowship's current site", the ReplaceSiteResult and the PlayCardResult
+     * are his.  The deck player's adventure deck is the one searched.  Savage Southron 15_92 ("randomly choose a
+     * site from that deck"): the Free Peoples player chooses nothing, so the replacement is the Shadow player's
+     * (Ketura, Q-0251; F-0715).
+     */
+    public PlaySiteEffect(Action action, String playerId, String deckPlayerId, SitesBlock siteBlock, int siteNumber, Filterable... extraSiteFilters) {
         _action = action;
         _playerId = playerId;
+        _deckPlayerId = deckPlayerId;
         _siteBlock = siteBlock;
         _siteNumber = siteNumber;
         _extraSiteFilters = extraSiteFilters;
@@ -47,27 +61,37 @@ public class PlaySiteEffect extends AbstractEffect {
     }
 
     private Collection<PhysicalCard> getMatchingSites(LotroGame game) {
-        final int siteNumber = getSiteNumberToPlay(game);
+        return findSitesToPlay(game, _deckPlayerId, _siteBlock, getSiteNumberToPlay(game), _extraSiteFilters);
+    }
 
+    /**
+     * The sites of a player's adventure deck that a laying of the given site number chooses among: on a numbered
+     * path, those printed with that number; where the player's sites are unordered (GameState.usesUnorderedSites),
+     * any.  Each is also of the given block (null for any) and accepted by the filters.  Empty for a number off the
+     * path.  This is the one reading of what a site-laying card can lay; the definition word
+     * sameNumberInYourAdventureDeck (Filters.sameNumberInAdventureDeck) asks it too, so that an action is not
+     * offered where its laying would find nothing (Q-0327).
+     */
+    public static Collection<PhysicalCard> findSitesToPlay(LotroGame game, String playerId, SitesBlock siteBlock, int siteNumber, Filterable... extraSiteFilters) {
         if (siteNumber > 9 || siteNumber < 1)
             return Collections.emptySet();
 
-        if (!game.getGameState().usesUnorderedSites(_playerId)) {
+        if (!game.getGameState().usesUnorderedSites(playerId)) {
             Filter printedSiteNumber = new Filter() {
                 @Override
                 public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
                     return physicalCard.getBlueprint().getSiteNumber() == siteNumber;
                 }
             };
-            if (_siteBlock != null)
-                return Filters.filter(game, game.getGameState().getAdventureDeck(_playerId), Filters.and(_extraSiteFilters, printedSiteNumber, Filters.siteBlock(_siteBlock)));
+            if (siteBlock != null)
+                return Filters.filter(game, game.getGameState().getAdventureDeck(playerId), Filters.and(extraSiteFilters, printedSiteNumber, Filters.siteBlock(siteBlock)));
             else
-                return Filters.filter(game, game.getGameState().getAdventureDeck(_playerId), Filters.and(_extraSiteFilters, printedSiteNumber));
+                return Filters.filter(game, game.getGameState().getAdventureDeck(playerId), Filters.and(extraSiteFilters, printedSiteNumber));
         } else {
-            if (_siteBlock != null)
-                return Filters.filter(game, game.getGameState().getAdventureDeck(_playerId), Filters.and(_extraSiteFilters, Filters.siteBlock(_siteBlock)));
+            if (siteBlock != null)
+                return Filters.filter(game, game.getGameState().getAdventureDeck(playerId), Filters.and(extraSiteFilters, Filters.siteBlock(siteBlock)));
             else
-                return Filters.filter(game, game.getGameState().getAdventureDeck(_playerId), _extraSiteFilters);
+                return Filters.filter(game, game.getGameState().getAdventureDeck(playerId), extraSiteFilters);
         }
     }
 
@@ -109,20 +133,31 @@ public class PlaySiteEffect extends AbstractEffect {
                             Zone zone = null;
                             String controlled = null;
                             List<PhysicalCard> stacked = null;
+                            List<PhysicalCard> playedOn = Collections.emptyList();
 
                             if (oldSite != null) {
                                 controlled = oldSite.getCardController();
-                                if (controlled != null)
+                                if (controlled != null) {
                                     zone = oldSite.getZone();
+                                    //The old site goes back to its owner's adventure deck as nobody's (CR 4.2 "control")
+                                    gameState.loseControlOfCard(oldSite, Zone.ADVENTURE_PATH);
+                                }
                                 stacked = new LinkedList<>(gameState.getStackedCards(oldSite));
+                                playedOn = new LinkedList<>(gameState.getAttachedCards(oldSite));
 
                                 gameState.removeCardsFromZone(_playerId, Collections.singleton(oldSite));
                                 oldSite.setSiteNumber(null);
                                 gameState.addCardToZone(game, oldSite, Zone.ADVENTURE_DECK);
-                                if (gameState.getCurrentSiteNumber() == siteNumber
-                                        && !_playerId.equals(gameState.getCurrentPlayerId()))
+                                //"A Shadow player has replaced the fellowship's current site this turn": the mark is
+                                //that site's, laid wherever the fellowship stood when the site was replaced (a site
+                                //ahead of it that it comes to later in the turn was replaced this turn all the same:
+                                //Q-0259).  It is in force only while the fellowship is at that site, and a site the
+                                //fellowship has moved on from marks nothing (Q-0234)
+                                if (!_playerId.equals(gameState.getCurrentPlayerId()))
                                     game.getModifiersEnvironment().addUntilEndOfTurnModifier(
-                                            new SpecialFlagModifier(null, null, ModifierFlag.SHADOW_PLAYER_REPLACED_CURRENT_SITE));
+                                            new SpecialFlagModifier(null,
+                                                    gameNow -> gameNow.getGameState().getCurrentSiteNumber() == siteNumber,
+                                                    ModifierFlag.SHADOW_PLAYER_REPLACED_CURRENT_SITE));
 
                                 game.getActionsEnvironment().emitEffectResult(new ReplaceSiteResult(_playerId, siteNumber));
                             }
@@ -132,11 +167,13 @@ public class PlaySiteEffect extends AbstractEffect {
                             gameState.addCardToZone(game, newSite, Zone.ADVENTURE_PATH);
                             gameState.sendMessage(newSite.getOwner() + " plays " + GameUtils.getCardLink(newSite));
 
-                            if (controlled != null) {
+                            if (controlled != null)
                                 gameState.takeControlOfCard(controlled, game, newSite, zone);
-                                for (PhysicalCard physicalCard : stacked)
-                                    gameState.stackCard(game, physicalCard, newSite);
-                            }
+
+                            //"When a site is replaced, all cards played on or stacked on the old site are moved to
+                            //the new site" (CR 4.2 "site"): the cards played on it on a controlled site and on the
+                            //adventure path alike, the cards stacked on it where it was controlled
+                            moveCardsOnSite(game, _playerId, controlled != null ? stacked : Collections.emptyList(), playedOn, newSite);
 
                             sitePlayedCallback(newSite);
                             game.getActionsEnvironment().emitEffectResult(new PlayCardResult(_playerId, Zone.ADVENTURE_DECK, newSite, null, null, false));
@@ -149,8 +186,31 @@ public class PlaySiteEffect extends AbstractEffect {
             game.getGameState().sendMessage("Can't play a site");
             return new FullEffectResult(false);
         } else {
-            game.getGameState().sendMessage("Can't find a matching site to play in " + _playerId + " adventure deck");
+            game.getGameState().sendMessage("Can't find a matching site to play in " + _deckPlayerId + " adventure deck");
             return new FullEffectResult(false);
+        }
+    }
+
+    /**
+     * Moves the cards that were stacked on and played on a site that has left its place to the site that took it:
+     * the move a replacement makes (CR 4.2 "site": "all cards played on or stacked on the old site are moved to the
+     * new site"), made also by an exchange of sites for the cards on the site given (Ketura, Q-0404).  The lists are
+     * taken before the old site moves.  A stacked card is taken off the old site first (a card stacked again while
+     * still stacked is listed twice).  A card played on the old site never leaves play: it is handed to the new site
+     * as a card that changes bearer is, keeping its card id and its tokens, and a text that is in force (not that of
+     * a card inactive this turn, or hindered) is stopped and started once so that it answers for the new site
+     * (F-0467).
+     */
+    public static void moveCardsOnSite(LotroGame game, String playerId, List<PhysicalCard> stacked, List<PhysicalCard> playedOn, PhysicalCard newSite) {
+        GameState gameState = game.getGameState();
+        gameState.removeCardsFromZone(playerId, stacked);
+        for (PhysicalCard physicalCard : stacked)
+            gameState.stackCard(game, physicalCard, newSite);
+
+        for (PhysicalCard physicalCard : playedOn) {
+            gameState.transferCard(physicalCard, newSite);
+            if (gameState.isCardInPlayActive(physicalCard))
+                gameState.reapplyAffectingForCard(game, physicalCard);
         }
     }
 

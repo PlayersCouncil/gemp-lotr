@@ -46,6 +46,12 @@ public class RevealCardsFromYourHandEffect extends AbstractEffect {
 
     @Override
     protected FullEffectResult playEffectReturningResult(LotroGame game) {
+        if (_cards.isEmpty()) {
+            // Nobody is shown a list of no cards: the game log says that nothing was revealed (Q-0144).
+            game.getGameState().sendMessage(GameUtils.getNoCardsRevealedFromHandMessage(game, _source, _handPlayerId));
+            return new FullEffectResult(true);
+        }
+
         game.getGameState().sendMessage(GameUtils.getCardLink(_source) + " revealed " + _handPlayerId + " cards in hand - " + getAppendedNames(_cards));
 
         final PlayOrder playerOrder = game.getGameState().getPlayerOrder().getCounterClockwisePlayOrder(_handPlayerId, false);

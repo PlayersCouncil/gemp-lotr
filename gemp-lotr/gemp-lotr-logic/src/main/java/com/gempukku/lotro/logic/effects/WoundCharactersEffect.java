@@ -88,7 +88,13 @@ public class WoundCharactersEffect extends AbstractPreventableCardEffect {
             super.preventEffect(game, card);
     }
 
+    /**
+     * The definition word `negateWound`: the card takes no wound, and something else is done instead (a Ring's
+     * "add a burden instead", Held 6_109, Force of Uruk-hai 11_184).  This is no prevention (a bar on preventing
+     * wounds does not stop it), and the wound counts as done: a wound paid as a cost this way is paid (F-0507).
+     * No wound is placed, so nothing that answers a wound taken is set off.
+     */
     public void negateWound(LotroGame game, PhysicalCard card) {
-        super.preventEffect(game, card);
+        replaceEffect(game, card);
     }
 }

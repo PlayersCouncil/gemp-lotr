@@ -8,7 +8,10 @@ import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.results.AssignAgainstResult;
 import com.gempukku.lotro.logic.timing.results.AssignedToSkirmishResult;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -65,9 +68,15 @@ public class AssignmentPhaseEffect extends AbstractEffect {
             game.getGameState().assignToSkirmishes(fpChar, minions);
 
 
-            game.getActionsEnvironment().emitEffectResult(new AssignAgainstResult(_playerId, fpChar, minions));
-            for (PhysicalCard minion : minions)
+            // One result for each pairing of the character with a minion, in card-id order: a defender assigned to
+            // two minions is assigned to skirmish each of them (CR 4.2 "defender +X"; Q-0323, Weary 4_212), as an
+            // AssignmentEffect already reports a card's assignment.
+            List<PhysicalCard> minionsInOrder = new ArrayList<>(minions);
+            minionsInOrder.sort(Comparator.comparingInt(PhysicalCard::getCardId));
+            for (PhysicalCard minion : minionsInOrder) {
+                game.getActionsEnvironment().emitEffectResult(new AssignAgainstResult(_playerId, fpChar, minion));
                 game.getActionsEnvironment().emitEffectResult(new AssignAgainstResult(_playerId, minion, fpChar));
+            }
         }
         return new FullEffectResult(true);
     }
