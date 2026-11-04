@@ -21,7 +21,8 @@
 				modifier: {
 					type: addKeyword
 					requires: {
-						type: ControlsSite
+						type: canSpot
+						filter: site,not(uncontrolled)
 						count: 2
 					}
 					filter: bearer
@@ -34,7 +35,8 @@
 				modifier: {
 					type: addKeyword
 					requires: {
-						type: ControlsSite
+						type: canSpot
+						filter: site,not(uncontrolled)
 						count: 4
 					}
 					filter: bearer
@@ -145,6 +147,7 @@
 					text: Would you like to liberate a site to make {chosenUrukHai} strength +2 and damage +1?
 					cost: {
 						type: liberateSite
+						select: choose(controlledSite)
 					}
 					effect: [
 						{
@@ -348,10 +351,11 @@
 					forced: false
 					select: choose(culture(uruk-hai))
 					count: 2
+					memorize: discardedCards
 				}
 				effect: {
 					type: playCardFromDiscard
-					select: choose(culture(uruk-hai),hunter)
+					select: choose(culture(uruk-hai),hunter,not(memory(discardedCards)))
 				}
 			}
 			{
@@ -495,9 +499,15 @@
 					type: startOfPhase
 					phase: archery
 				}
-				requires: {
-					type: controlsSite
-				}
+				requires: [
+					{
+						type: controlsSite
+					}
+					{
+						type: canSpotFPCultures
+						amount: 3
+					}
+				]
 				effect: {
 					type: modifyArcheryTotal
 					side: shadow
@@ -660,6 +670,7 @@
 				}
 				cost: {
 					type: liberateSite
+					select: choose(controlledSite)
 					memorize: liberatedSite
 				}
 				effect: {
@@ -753,10 +764,17 @@
 					type: winsSkirmish
 					filter: self
 				}
-				requires: {
-					type: cantSpot
-					filter: siteYouControl
-				}
+				requires: [
+					{
+						type: not
+						requires: {
+							type: controlsSite
+						}
+					}
+					{
+						type: SiteAvailableToControl
+					}
+				]
 				effect: {
 					type: takeControlOfSite
 				}
@@ -1085,7 +1103,7 @@
 					keyword: damage
 					amount: {
 						type: forEachYouCanSpot
-						filter: hunter,assignedToSkirmish(any)
+						filter: culture(uruk-hai),hunter,assignedToSkirmish(any)
 					}
 				}
 			}
@@ -1170,7 +1188,7 @@
 		effects: [
 			{
 				type: Trigger
-				optional: false
+				optional: true
 				trigger: {
 					type: assignedAgainst
 					filter: self
@@ -1250,11 +1268,17 @@
 				trigger: {
 					type: SiteControlled
 				}
-				requires: {
-					type: canSpot
-					filter: culture(uruk-hai),minion
-					count: 3
-				}
+				requires: [
+					{
+						type: canSpot
+						filter: culture(uruk-hai),minion
+						count: 3
+					}
+					{
+						type: canSpot
+						filter: unbound,companion,canExert
+					}
+				]
 				effect: {
 					type: exert
 					select: choose(unbound,companion)
@@ -1265,6 +1289,7 @@
 				phase: skirmish
 				cost: {
 					type: liberateSite
+					select: choose(controlledSite)
 				}
 				effect: {
 					type: addKeyword

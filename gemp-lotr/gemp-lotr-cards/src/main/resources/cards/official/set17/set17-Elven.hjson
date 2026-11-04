@@ -69,35 +69,68 @@
 				type: canSpot
 				filter: culture(elven),hunter
 			}
-			effect: [
-				{
-					type: choice
-					texts: [
-						Draw a card for each hunter
-						Reinforce an {elven} token for each hunter
-					]
-					effects: [
-						{
-							type: drawCards
-							count: {
-								type: forEachYouCanSpot
-								filter: hunter
-							}
-						}
-						{
-							type: repeat
-							times: {
-								type: forEachYouCanSpot
-								filter: hunter
-							}
-							effect: {
-								type: reinforceTokens
-								culture: elven
-							}
-						}
-					]
+			effect: {
+				// Only a branch that can be done in full is offered (F-0310); a repeat cannot say it would do nothing, so the If asks each half.
+				type: If
+				check: {
+					type: CanSpotCultureTokens
+					culture: elven
 				}
-			]
+				true: {
+					type: If
+					check: {
+						type: HasCardInDrawDeck
+					}
+					true: {
+						type: choice
+						texts: [
+							Draw a card for each hunter
+							Reinforce an {elven} token for each hunter
+						]
+						effects: [
+							{
+								type: repeat
+								times: {
+									type: forEachYouCanSpot
+									filter: hunter
+								}
+								effect: {
+									type: drawCards
+								}
+							}
+							{
+								type: repeat
+								times: {
+									type: forEachYouCanSpot
+									filter: hunter
+								}
+								effect: {
+									type: reinforceTokens
+									culture: elven
+								}
+							}
+						]
+					}
+					false: {
+						type: repeat
+						times: {
+							type: forEachYouCanSpot
+							filter: hunter
+						}
+						effect: {
+							type: reinforceTokens
+							culture: elven
+						}
+					}
+				}
+				false: {
+					type: drawCards
+					count: {
+						type: forEachYouCanSpot
+						filter: hunter
+					}
+				}
+			}
 		}
 		gametext: Spot an [elven] hunter and choose one: draw a card for each hunter you can spot or reinforce an [elven] token for each hunter you can spot.
 		lore: "Until at last our toil be past / our journey done, our errand sped."

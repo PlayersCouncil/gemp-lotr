@@ -88,7 +88,7 @@
 				type: modifier
 				modifier: {
 					type: modifyCost
-					filter: minion
+					filter: your,minion
 					amount: 1
 				}
 			}
@@ -439,10 +439,16 @@
 					type: played
 					filter: self
 				}
-				requires: {
-					type: canSpot
-					filter: another,culture(orc),minion
-				}
+				requires: [
+					{
+						type: canSpot
+						filter: another,culture(orc),minion
+					}
+					{
+						type: canSpotFPCultures
+						amount: 3
+					}
+				]
 				effect: {
 					type: repeat
 					times: {
@@ -805,10 +811,11 @@
 					type: discardFromHand
 					forced: false
 					select: choose(culture(orc))
+					memorize: discardedCard
 				}
 				effect: {
 					type: playCardFromDiscard
-					select: choose(culture(orc),mount)
+					select: choose(culture(orc),mount,not(memory(discardedCard)))
 				}
 			}
 		]
@@ -1183,7 +1190,7 @@
 				type: modifier
 				modifier: {
 					type: modifyStrength
-					filter: bearer,inSkirmishAgainst(race(stored))
+					filter: bearer,inSkirmishAgainst(companion,race(stored))
 					amount: 3
 				}
 			}
@@ -1191,7 +1198,7 @@
 				type: modifier
 				modifier: {
 					type: addKeyword
-					filter: bearer,inSkirmishAgainst(race(stored))
+					filter: bearer,inSkirmishAgainst(companion,race(stored))
 					keyword: damage
 					amount: 1
 				}

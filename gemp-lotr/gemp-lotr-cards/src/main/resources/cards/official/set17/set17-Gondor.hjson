@@ -588,11 +588,17 @@
 			{
 				type: Trigger
 				optional: true
-				trigger: {
-					# this also covered a killed minions
-					type: discarded
-					filter: minion
-				}
+				trigger: [
+					# "killed or discarded from play": a killed minion is not discarded (CR 4.2 "killed"; F-0444)
+					{
+						type: killed
+						filter: minion
+					}
+					{
+						type: discarded
+						filter: minion
+					}
+				]
 				requires: {
 					type: phase
 					phase: skirmish
