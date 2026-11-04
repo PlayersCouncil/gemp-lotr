@@ -216,6 +216,10 @@
 					type: played
 					filter: self
 				}
+				requires: {
+					type: canSpot
+					filter: side(free people),or(possession,artifact)
+				}
 				effect: {
 					type: addThreats
 					amount: {
@@ -667,12 +671,23 @@
 					type: played
 					filter: self
 				}
+				requires: {
+					type: canSpot
+					filter: culture(orc),or(possession,artifact)
+				}
+				// "You may discard a fortification for each ...": after the yes, a choice of 0 up to the count, as
+				// Ketura read a "may" before a counted effect (Q-0248, Q-0339, Q-0397; Q-0399).  Fortifications are
+				// cards in play, none taken twice, so one choice carries it.
 				effect: {
 					type: discard
 					select: choose(fortification)
 					count: {
-						type: forEachYouCanSpot
-						filter: culture(orc),or(possession,artifact)
+						type: range
+						from: 0
+						to: {
+							type: forEachYouCanSpot
+							filter: culture(orc),or(possession,artifact)
+						}
 					}
 				}
 			}
@@ -714,15 +729,32 @@
 					type: played
 					filter: self
 				}
-				effect: {
-					type: discardTopCardsFromDeck
-					forced: true
-					deck: free people
-					count: {
-						type: forEachYouCanSpot
-						filter: hunter,character
+				effect: [
+					// Q-0399 (B): after the yes, 0 up to the count, filled in with the count (Ketura, F-0419).
+					{
+						type: chooseANumber
+						text: Choose how many cards to discard
+						from: 0
+						to: {
+							type: forEachYouCanSpot
+							filter: hunter,character
+						}
+						default: {
+							type: forEachYouCanSpot
+							filter: hunter,character
+						}
+						memorize: chosenNumber
 					}
-				}
+					{
+						type: discardTopCardsFromDeck
+						forced: true
+						deck: free people
+						count: {
+							type: fromMemory
+							memory: chosenNumber
+						}
+					}
+				]
 			}
 		]
 		gametext: <b>Hunter 3</b>. <helper>(While skirmishing a non-hunter character, this character is strength +3.)</helper><br>When you play Gorbag, you may discard a card from the top of the Free Peoples player's deck for each hunter character you can spot.
@@ -902,7 +934,7 @@
 				effect: [
 					{
 						type: playCardFromDiscard
-						removedTwilight: 2
+						removedTwilight: 3
 						select: choose(culture(orc), orc)
 						memorize: PlayedOrc
 						discount: -2

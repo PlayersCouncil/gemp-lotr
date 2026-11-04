@@ -227,6 +227,10 @@
 					type: winsSkirmish
 					filter: name(Legolas)
 				}
+				requires: {
+					type: canSpot
+					filter: wounded,hunter,or(and(culture(dwarven),dwarf),and(culture(gondor),man))
+				}
 				effect: {
 					type: heal
 					select: choose(hunter,or(and(culture(dwarven),dwarf),and(culture(gondor),man)))
@@ -613,11 +617,12 @@
 						reveal: true
 						shuffle: false
 						showAll: false
+						inPlaceOfDraw: true
 					}
 					{
 						type: putCardsFromDeckOnBottomOfDeck
 						select: memory(cards)
-						reveal: true
+						reveal: false
 					}
 				]
 			}
