@@ -4,6 +4,7 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.communication.GameStateListener;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.logic.PlayerOrder;
+import com.gempukku.lotro.logic.modifiers.ModifiersLogic;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.modifiers.ModifierFlag;
 import com.gempukku.lotro.logic.timing.GameStats;
@@ -25,6 +26,7 @@ public class GameState {
 
     private final Map<String, List<PhysicalCardImpl>> _adventureDecks = new HashMap<>();
     private final Map<String, List<PhysicalCardImpl>> _decks = new HashMap<>();
+    private final Map<String, Integer> _deckShuffles = new HashMap<>();
     private final Map<String, List<PhysicalCardImpl>> _hands = new HashMap<>();
     private final Map<String, List<PhysicalCardImpl>> _discards = new HashMap<>();
     private final Map<String, List<PhysicalCardImpl>> _deadPiles = new HashMap<>();
@@ -52,6 +54,7 @@ public class GameState {
     private int _twilightPool;
 
     private int _moveCount;
+    private boolean _fellowshipArriving;
     private int turnNumber;
     private boolean _fierceSkirmishes;
     private boolean _relentlessSkirmishes;
@@ -76,10 +79,25 @@ public class GameState {
     private LotroGame _lotroGame;
 
     private final List<Assignment> _assignments = new LinkedList<>();
+    private int _threatsToCome;
+    // The minions whose cost of assigning has been paid for the assignment being made (Q-0283)
+    private final Set<PhysicalCard> _assignmentsPaidFor = new HashSet<>();
+    // True while the Free Peoples player's own assigning is asked and made (Q-0283)
+    private boolean _freePeoplesPlayerAssigning;
+    private Map<PhysicalCard, Integer> _woundsToCome = Collections.emptyMap();
+    // The events printed with several phases that are being played, each with the phase it is being played in
+    private final Map<PhysicalCard, Timeword> _phaseOfEventBeingPlayed = new HashMap<>();
     private Skirmish _skirmish = null;
 
     private final Set<GameStateListener> _gameStateListeners = new HashSet<>();
+    // While events are held back (holdBackEvents): what would have been sent, in order, and each listener as the
+    // senders see it then; null when nothing is held back
+    private List<Runnable> _heldBackEvents;
+    private List<GameStateListener> _heldBackListeners;
+    private GameStats _heldBackGameStats;
     private final LinkedList<String> _lastMessages = new LinkedList<>();
+    // Every message sent since startMessageRecord() was last called; null until somebody asks for a record
+    private List<String> _messageRecord;
 
     private PreGameInfo _preGameInfo;
 
@@ -300,7 +318,79 @@ public class GameState {
     }
 
     private Collection<GameStateListener> getAllGameStateListeners() {
+        if (_heldBackEvents != null)
+            return _heldBackListeners;
         return Collections.unmodifiableSet(_gameStateListeners);
+    }
+
+    /**
+     * From now on nothing is sent to the players, nor to anything else listening to the game (the replay's
+     * recording, a bot): each event is kept back instead, until {@link #releaseHeldBackEvents} sends what is kept
+     * or {@link #dropHeldBackEvents} drops it.  For the rounds of a voluntary loop carried out unseen (CR 4.2
+     * "loops"; Ketura on Q-0329: "disable transmission/recording of the game events while doing so, only sending
+     * the final 1-2 actions with updated stats"; LoopRun).  The game log's lines are kept back with the rest, from
+     * the record of messages too, and the game stats are not sent at all until the release, which sends them as
+     * they then stand.  Nothing changes in the game itself.
+     */
+    public void holdBackEvents() {
+        if (_heldBackEvents != null)
+            return;
+        _heldBackEvents = new ArrayList<>();
+        _heldBackListeners = new ArrayList<>();
+        for (GameStateListener listener : _gameStateListeners)
+            _heldBackListeners.add(heldBack(listener));
+    }
+
+    /**
+     * Drops what has been held back so far, which is then never sent; events go on being held back.  For when what
+     * the players last saw is again how the game stands.
+     */
+    public void dropHeldBackEvents() {
+        if (_heldBackEvents != null)
+            _heldBackEvents.clear();
+    }
+
+    /**
+     * Stops holding events back, sends what was held, in order, and then the game stats as they stand if any were
+     * held back.  An event held back is worked out as it is sent: a card is described as it is now.
+     */
+    public void releaseHeldBackEvents() {
+        if (_heldBackEvents == null)
+            return;
+        final List<Runnable> held = _heldBackEvents;
+        final GameStats gameStats = _heldBackGameStats;
+        _heldBackEvents = null;
+        _heldBackListeners = null;
+        _heldBackGameStats = null;
+        for (Runnable event : held)
+            event.run();
+        if (gameStats != null)
+            sendGameStats(gameStats);
+    }
+
+    // A listener as the senders see it while events are held back: what it is told is kept back for it, and what
+    // is asked of it (whose it is, whether it is a person's) it answers at once.
+    private GameStateListener heldBack(GameStateListener listener) {
+        return (GameStateListener) java.lang.reflect.Proxy.newProxyInstance(GameStateListener.class.getClassLoader(),
+                new Class<?>[]{GameStateListener.class},
+                (proxy, method, args) -> {
+                    if (method.getReturnType() != void.class)
+                        return invoke(listener, method, args);
+                    _heldBackEvents.add(() -> invoke(listener, method, args));
+                    return null;
+                });
+    }
+
+    private static Object invoke(GameStateListener listener, java.lang.reflect.Method method, Object[] args) {
+        try {
+            return method.invoke(listener, args);
+        } catch (java.lang.reflect.InvocationTargetException exp) {
+            if (exp.getCause() instanceof RuntimeException runtime)
+                throw runtime;
+            throw new IllegalStateException(exp.getCause());
+        } catch (IllegalAccessException exp) {
+            throw new IllegalStateException(exp);
+        }
     }
 
     private String getPhaseString() {
@@ -393,7 +483,7 @@ public class GameState {
             }
 
             if (_skirmish != null)
-                listener.startSkirmish(_skirmish.getFellowshipCharacter(), _skirmish.getShadowCharacters());
+                sendSkirmish(listener);
 
             for (Map.Entry<PhysicalCard, Map<Token, Integer>> physicalCardMapEntry : _cardTokens.entrySet()) {
                 PhysicalCard card = physicalCardMapEntry.getKey();
@@ -428,10 +518,32 @@ public class GameState {
         }
     }
 
+    /**
+     * Starts a full record of the messages sent to the players from now on, dropping any record kept before.  The
+     * last few messages are always kept for players who connect later; this is for a reader that needs every one
+     * (the virtual table's reading of the game log).  Nothing is recorded until this is first called.
+     */
+    public void startMessageRecord() {
+        _messageRecord = new ArrayList<>();
+    }
+
+    /**
+     * @return Every message sent since startMessageRecord() was last called, oldest first, or null if it never was.
+     */
+    public List<String> getMessageRecord() {
+        return _messageRecord == null ? null : Collections.unmodifiableList(_messageRecord);
+    }
+
     public void sendMessage(String message) {
+        if (_heldBackEvents != null) {
+            _heldBackEvents.add(() -> sendMessage(message));
+            return;
+        }
         _lastMessages.add(message);
         if (_lastMessages.size() > LAST_MESSAGE_STORED_COUNT)
             _lastMessages.removeFirst();
+        if (_messageRecord != null)
+            _messageRecord.add(message);
         for (GameStateListener listener : getAllGameStateListeners())
             listener.sendMessage(message);
     }
@@ -462,6 +574,36 @@ public class GameState {
 
         for (GameStateListener listener : getAllGameStateListeners()) {
             listener.cardMoved(card);
+        }
+    }
+
+    /**
+     * Lays a card that a character bore where that character was, when the character has left play and the card
+     * has not gone with him: The One Ring, which is never discarded, when its bearer is killed (Q-0109, Q-0232).
+     * The card does not leave play at any point.  It keeps its card id and its text stays in force, though with no
+     * bearer for it to speak of; it lies in the zone the bearer was in, borne by nobody, and the clients are told
+     * it has moved there.  If the bearer was the fellowship character of the skirmish being fought, the card is
+     * also shown in his place in that skirmish (Skirmish.getCardLeftInFellowshipPlace), which gives the skirmish no
+     * fellowship character: nothing skirmishes the card and no rule reads it as skirmishing.
+     *
+     * Called once the bearer is out of play (removeCardsFromZone), with what was read of him before he went.  The
+     * card lies there until it is taken up: MakeRingBearerEffect removes it from its zone and attaches it to the
+     * new Ring-bearer.  An assignment the bearer had to a skirmish not yet begun is gone with him, and the card is
+     * given no part in it.
+     * @param card The card left behind, still attached to the bearer who has gone.
+     * @param bearersZone The zone the bearer was in while in play.
+     * @param bearerWasInSkirmish Whether the bearer was the fellowship character of the skirmish being fought.
+     */
+    public void layCardWhereItsBearerWas(PhysicalCard card, Zone bearersZone, boolean bearerWasInSkirmish) {
+        ((PhysicalCardImpl) card).attachTo(null);
+        ((PhysicalCardImpl) card).setZone(bearersZone);
+        for (GameStateListener listener : getAllGameStateListeners())
+            listener.cardMoved(card);
+
+        if (bearerWasInSkirmish && _skirmish != null && _skirmish.getFellowshipCharacter() == null) {
+            _skirmish.setCardLeftInFellowshipPlace(card);
+            for (GameStateListener listener : getAllGameStateListeners())
+                listener.addToSkirmish(card);
         }
     }
 
@@ -507,6 +649,77 @@ public class GameState {
     public void eventPlayed(PhysicalCard card) {
         for (GameStateListener listener : getAllGameStateListeners())
             listener.eventPlayed(card);
+    }
+
+    /**
+     * Comprehensive Rules 4.2, "phase action": "If a phase action can be played in multiple phases (for example,
+     * "Maneuver or Skirmish:"), its action type is of the phase during which the action is taken."  So an event
+     * printed with several phases is, while it is being played, an event of the phase it is played in and of no
+     * other: Sword-wall ("Skirmish or Regroup") played in the regroup phase is a regroup event and no skirmish
+     * event (F-0292).
+     *
+     * This is that one phase.  It is null for a card that is not being played (nor being priced for a play:
+     * asIfBeingPlayed), wherever it lies, and for an event printed with one phase, with or without "Response":
+     * such a card is what is printed on it.  Filters.timeword is the reader.
+     */
+    public Timeword getPhaseOfEventBeingPlayed(PhysicalCard card) {
+        if (_phaseOfEventBeingPlayed.isEmpty())
+            return null;
+        return _phaseOfEventBeingPlayed.get(card);
+    }
+
+    /**
+     * The play of an event begins (PlayEventAction).  From here to eventPlayFinished an event printed with
+     * several phases, the current one among them, is an event of the current phase alone.
+     */
+    public void eventPlayStarted(PhysicalCard event) {
+        final Timeword phase = getPhaseAnEventWouldBePlayedIn(event);
+        if (phase != null)
+            _phaseOfEventBeingPlayed.put(event, phase);
+    }
+
+    /**
+     * The play of an event is over, whatever became of the card: it is again what is printed on it.
+     */
+    public void eventPlayFinished(PhysicalCard event) {
+        _phaseOfEventBeingPlayed.remove(event);
+    }
+
+    /**
+     * Answers a question about playing a card now as it will be answered while the card is being played: what an
+     * event printed with several phases costs to play is what it costs as an event of this phase ("each skirmish
+     * event you play is twilight cost -1" takes nothing off a "Maneuver or Skirmish" event in the maneuver
+     * phase), before the play as well as during it.  Nothing else is changed, and nothing at all for any other
+     * card.
+     */
+    public <T> T asIfBeingPlayed(PhysicalCard card, java.util.function.Supplier<T> question) {
+        if (_phaseOfEventBeingPlayed.containsKey(card))
+            return question.get();
+        final Timeword phase = getPhaseAnEventWouldBePlayedIn(card);
+        if (phase == null)
+            return question.get();
+
+        _phaseOfEventBeingPlayed.put(card, phase);
+        try {
+            return question.get();
+        } finally {
+            _phaseOfEventBeingPlayed.remove(card);
+        }
+    }
+
+    // The current phase, if the card is an event printed with it and with at least one other phase; else null.
+    private Timeword getPhaseAnEventWouldBePlayedIn(PhysicalCard card) {
+        final LotroCardBlueprint blueprint = card.getBlueprint();
+        if (blueprint.getCardType() != CardType.EVENT)
+            return null;
+        final Timeword current = Timeword.findByPhase(getCurrentPhase());
+        if (current == null || !blueprint.hasTimeword(current))
+            return null;
+        for (Timeword other : Timeword.values()) {
+            if (other != current && other.getPhase() != null && blueprint.hasTimeword(other))
+                return current;
+        }
+        return null;
     }
 
     public void activatedCard(String playerPerforming, PhysicalCard card) {
@@ -568,6 +781,12 @@ public class GameState {
                 _log.error("Card was not found in the expected zone");
         }
 
+        // A character leaving the skirmish with these cards is measured before any of them stops affecting the game
+        if (!skipSkirmishReset) {
+            for (PhysicalCard card : cards)
+                noteStrengthIfSkirmishing(card);
+        }
+
         for (PhysicalCard card : cards) {
             Zone zone = card.getZone();
 
@@ -616,6 +835,14 @@ public class GameState {
     }
 
     private void addCardToZone(LotroGame game, PhysicalCard card, Zone zone, boolean end) {
+        addCardToZone(game, card, zone, end, null);
+    }
+
+    /**
+     * @param cardIdInPlay the id the card is to have once in play, where it takes the place of another card and
+     *                     so its id; null for a card coming into play in its own right, which is given a new one.
+     */
+    private void addCardToZone(LotroGame game, PhysicalCard card, Zone zone, boolean end, Integer cardIdInPlay) {
         if (zone == Zone.DISCARD && game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.REMOVE_CARDS_GOING_TO_DISCARD))
             zone = Zone.REMOVED;
 
@@ -625,7 +852,13 @@ public class GameState {
         }
 
         if (zone.isInPlay()) {
-            assignNewCardId(card);
+            if (cardIdInPlay != null) {
+                _allCards.remove(card.getCardId());
+                reassignCardId(card, cardIdInPlay);
+            }
+            else {
+                assignNewCardId(card);
+            }
         }
 
         List<PhysicalCardImpl> zoneCards = getZoneCards(card.getOwner(), zone);
@@ -657,7 +890,16 @@ public class GameState {
 
         if (_currentPhase.isCardsAffectGame()) {
             if (zone.isInPlay()) {
-                if (card.getBlueprint().getCardType() != CardType.SITE || (getCurrentPhase() != Phase.PLAY_STARTING_FELLOWSHIP && getCurrentSite() == card)) {
+                if (card.getBlueprint().getCardType() == CardType.SITE) {
+                    if (getCurrentPhase() != Phase.PLAY_STARTING_FELLOWSHIP && getCurrentSite() == card)
+                        startAffecting(game, card);
+                }
+                // A card that is not active as it comes into play has no text in force (CR 4.2 "active"), so its
+                // text is not started here: startAffectingCardsForCurrentPlayer starts it, once, when a turn
+                // begins in which it is active.  Asked as that method asks it.  No play puts such a card on the
+                // table; a card laid directly for the player whose turn it is not is one (G-0055), and started
+                // here as well it was in force out of turn and counted twice in its owner's.
+                else if (isCardInPlayActive(card)) {
                     startAffecting(game, card);
                 }
             }
@@ -694,39 +936,41 @@ public class GameState {
     }
 
     /**
-     * Replaces a character on table with another character.  The calling function should handle discarding the old one.
+     * Replaces a character on table with another character.  The new card takes the old card's place entire: its
+     * zone, its card id (so that whatever was tracking the old character goes on tracking the new one), its tokens,
+     * its assignment, its skirmish, and the cards it bore or had stacked on it, which stay in play as they are and
+     * are simply handed over.  The old card is left in the void under a new id; the calling function takes it out
+     * of there (removeCardsFromZone) and puts it wherever it is to go.
      * @param oldCard the old card
      * @param newCard the new card
      */
     public void replaceCharacterOnTable(LotroGame game,  PhysicalCard oldCard, PhysicalCard newCard) {
         int oldCardId = oldCard.getCardId();
 
-        // Remove new card from zone
-        removeCardsFromZone(null, Collections.singleton(newCard));
-
-        //Skirmish assignments will get bulldozed when we remove the old card from its zone, so we back them up first.
+        //Skirmish assignments will get bulldozed when we remove the old card from its zone, so we back them up first,
+        // along with everything else that removing the old card would lose track of.
         var assignment = findAssignment(oldCard);
         var skirmish = findSkirmish(oldCard);
         var tokens = new HashMap<>(getTokens(oldCard));
         var zone = oldCard.getZone();
+        var attachedTo = oldCard.getAttachedTo();
+        var attachedCardList = getAttachedCards(oldCard);
+        var stackedCardList = getStackedCards(oldCard);
 
-        // Put the card where the old card was
+        // Remove new card from zone
+        removeCardsFromZone(null, Collections.singleton(newCard));
         newCard.copyCardStats(oldCard);
-        if(oldCard.getAttachedTo() != null) {
-            attachCard(game, newCard, oldCard.getAttachedTo());
-        }
 
         // Remove old card from zone
         removeCardsFromZone(null, Collections.singleton(oldCard), true);
-        addCardToZone(game, oldCard, Zone.VOID);
         assignNewCardId(oldCard);
+        addCardToZone(game, oldCard, Zone.VOID);
 
-        addCardToZone(game, newCard, zone);
-        // Give new card the card ID of the replaced card
-        reassignCardId(newCard, oldCardId);
-
-        // Add new card to zone
-        getZoneCards(newCard.getOwner(), zone).add((PhysicalCardImpl) newCard);
+        // Put the new card where the old card was, once, under the card ID of the replaced card
+        if (attachedTo != null) {
+            ((PhysicalCardImpl) newCard).attachTo((PhysicalCardImpl) attachedTo);
+        }
+        addCardToZone(game, newCard, zone, true, oldCardId);
 
         for(var pair : tokens.entrySet()) {
             addTokens(newCard, pair.getKey(), pair.getValue());
@@ -741,34 +985,28 @@ public class GameState {
             restartSkirmish(_skirmish);
         }
 
-
-        var attachedCardList = getAttachedCards(oldCard);
-        var stackedCardList = getStackedCards(oldCard);
-
-        for (GameStateListener listener : getAllGameStateListeners())
-            listener.cardCreated(newCard);
-
-        // Transfer attached cards to the new card
+        // Hand attached cards to the new card.  They never leave play: they keep their card IDs and their own
+        // tokens, and their modifiers are stopped and started once so that they answer for the new bearer.
         for (PhysicalCard attachedCard : attachedCardList) {
-            attachCard(game, attachedCard, newCard);
-        }
-
-        // Transfer stacked cards to the new card
-        for (PhysicalCard stackedCard : stackedCardList) {
-            stackCard(game, stackedCard, newCard);
-        }
-
-        startAffecting(game, newCard);
-        for (PhysicalCard attachedCard : getAttachedCards(newCard)) {
+            transferCard(attachedCard, newCard);
             reapplyAffectingForCard(game, attachedCard);
+        }
+
+        // Hand stacked cards to the new card
+        for (PhysicalCard stackedCard : stackedCardList) {
+            ((PhysicalCardImpl) stackedCard).stackOn((PhysicalCardImpl) newCard);
+            for (GameStateListener listener : getAllGameStateListeners())
+                listener.cardMoved(stackedCard);
         }
     }
 
     public void replaceInSkirmish(PhysicalCard card) {
+        var replaced = _skirmish.getFellowshipCharacter();
         _skirmish.setFellowshipCharacter(card);
+        _skirmish.noteReplacement(replaced, card);
         for (GameStateListener gameStateListener : getAllGameStateListeners()) {
             gameStateListener.finishSkirmish();
-            gameStateListener.startSkirmish(_skirmish.getFellowshipCharacter(), _skirmish.getShadowCharacters());
+            sendSkirmish(gameStateListener);
         }
     }
 
@@ -815,9 +1053,10 @@ public class GameState {
             removeFromSkirmish(card);
         }
         _skirmish.getShadowCharacters().add(card);
+        _skirmish.noteReplacement(removedMinion, card);
         for (GameStateListener listener : getAllGameStateListeners()) {
             listener.finishSkirmish();
-            listener.startSkirmish(_skirmish.getFellowshipCharacter(), _skirmish.getShadowCharacters());
+            sendSkirmish(listener);
         }
     }
 
@@ -827,6 +1066,8 @@ public class GameState {
     private void removeFromSkirmish(PhysicalCard card, boolean notify) {
         if (_skirmish == null)
             return;
+
+        noteStrengthIfSkirmishing(card);
 
         if (_skirmish.getFellowshipCharacter() == card) {
             _skirmish.setFellowshipCharacter(null);
@@ -839,6 +1080,16 @@ public class GameState {
         }
         if (_skirmish.getShadowCharacters().remove(card)) {
             _skirmish.addRemovedFromSkirmish(card);
+            if (notify) {
+                for (GameStateListener listener : getAllGameStateListeners()) {
+                    listener.removeFromSkirmish(card);
+                }
+            }
+        }
+        // A card that lay where the fellowship character was is taken up from there.  It was never in the skirmish
+        // for any rule, so it is not among those removed from it.
+        if (_skirmish.getCardLeftInFellowshipPlace() == card) {
+            _skirmish.setCardLeftInFellowshipPlace(null);
             if (notify) {
                 for (GameStateListener listener : getAllGameStateListeners()) {
                     listener.removeFromSkirmish(card);
@@ -990,13 +1241,23 @@ public class GameState {
     private void startSkirmish(Skirmish skirmish) {
         _skirmish = skirmish;
         for (GameStateListener listener : getAllGameStateListeners())
-            listener.startSkirmish(_skirmish.getFellowshipCharacter(), _skirmish.getShadowCharacters());
+            sendSkirmish(listener);
     }
 
     public void restartSkirmish(Skirmish skirmish) {
         _skirmish = skirmish;
         for (GameStateListener listener : getAllGameStateListeners())
-            listener.startSkirmish(_skirmish.getFellowshipCharacter(), _skirmish.getShadowCharacters());
+            sendSkirmish(listener);
+    }
+
+    /**
+     * Tells a client of the skirmish as it stands: who fights in it, and the card, if any, that lies where its
+     * fellowship character was (Skirmish.getCardLeftInFellowshipPlace).
+     */
+    private void sendSkirmish(GameStateListener listener) {
+        listener.startSkirmish(_skirmish.getFellowshipCharacter(), _skirmish.getShadowCharacters());
+        if (_skirmish.getCardLeftInFellowshipPlace() != null)
+            listener.addToSkirmish(_skirmish.getCardLeftInFellowshipPlace());
     }
 
     public Skirmish getSkirmish() {
@@ -1018,6 +1279,8 @@ public class GameState {
             zoneCards.add((PhysicalCardImpl) card);
 
             ((PhysicalCardImpl) card).setZone(Zone.DECK);
+            //A hindered card moved to a draw deck does not remain hindered (as in addCardToZone)
+            card.setFlipped(false);
         }
 
         shuffleDeck(playerId);
@@ -1181,13 +1444,51 @@ public class GameState {
         _playerThreats.put(playerId, oldThreats - count);
     }
 
+    /**
+     * Two sites change places, each taking the other's site number (Uruk Cavern Striker 15_174's exchange).  Where
+     * one of them is the fellowship's current site, the fellowship stays where it is, at the site that now has that
+     * number (Ketura, Q-0403: "there's no issue with swapping position of two sites"), so the text of the site it
+     * was at stops and that of the site now there starts, as on a move.  Control is not touched here.
+     */
+    public void exchangeSiteNumbers(LotroGame game, PhysicalCard site1, PhysicalCard site2) {
+        PhysicalCard currentSite = getCurrentSite();
+        boolean currentSiteExchanged = currentSite == site1 || currentSite == site2;
+        if (currentSiteExchanged)
+            stopAffecting(currentSite);
+        Integer site1Number = site1.getSiteNumber();
+        site1.setSiteNumber(site2.getSiteNumber());
+        site2.setSiteNumber(site1Number);
+        if (currentSiteExchanged && _currentPhase.isCardsAffectGame() && _currentPhase != Phase.PLAY_STARTING_FELLOWSHIP)
+            startAffecting(game, getCurrentSite());
+    }
+
     public void movePlayerToNextSite(LotroGame game) {
         final String currentPlayerId = getCurrentPlayerId();
         final int oldPlayerPosition = getPlayerPosition(currentPlayerId);
         stopAffecting(getCurrentSite());
         setPlayerPosition(currentPlayerId, oldPlayerPosition + 1);
         increaseMoveCount();
+        // What is limited "per site" starts afresh at the site moved to.
+        if (game.getModifiersEnvironment() instanceof ModifiersLogic modifiersLogic)
+            modifiersLogic.signalFellowshipMoved();
         startAffecting(game, getCurrentSite());
+    }
+
+    /**
+     * True while a move is being finished: from the moment the player marker has been put on the next site until
+     * the twilight of that move has been added.  The rules have the fellowship at the new site only then
+     * ("After you have completed any moving actions and have added twilight tokens to the twilight pool, the
+     * fellowship has moved to the new site"), so a card's standing check on where the fellowship is ("discard
+     * this possession when at an underground site") is not looked at in between.  Everything else reads the
+     * new site from the moment the marker moves, "when the fellowship moves to" triggers included.
+     */
+    public boolean isFellowshipArriving() {
+        return _fellowshipArriving;
+    }
+
+    /** For the move itself (MovementGameProcess): see isFellowshipArriving. */
+    public void setFellowshipArriving(boolean arriving) {
+        _fellowshipArriving = arriving;
     }
 
     public int getPlayerPosition(String playerId) {
@@ -1199,6 +1500,23 @@ public class GameState {
         if (map == null)
             return Collections.emptyMap();
         return Collections.unmodifiableMap(map);
+    }
+
+    /**
+     * The tokens a card has, each kind with its count, leaving out a kind whose count has come down to 0 (a wound
+     * healed, the last culture token removed): what the card info lists (engine pass 59).  getTokens keeps such a
+     * kind at 0; no filter tells that 0 from a kind never held (Filters.hasAnyCultureTokens at 0 is true of every
+     * card since engine pass 60, F-0578), and only the listing drops it.
+     * @param card The card.
+     * @return The tokens on it, in no order; empty when it has none.
+     */
+    public Map<Token, Integer> getTokensHeld(PhysicalCard card) {
+        Map<Token, Integer> held = new HashMap<>();
+        for (Map.Entry<Token, Integer> entry : getTokens(card).entrySet()) {
+            if (entry.getValue() != null && entry.getValue() > 0)
+                held.put(entry.getKey(), entry.getValue());
+        }
+        return held;
     }
 
     public int getTokenCount(PhysicalCard physicalCard, Token token) {
@@ -1232,7 +1550,33 @@ public class GameState {
     }
 
     public int getWounds(PhysicalCard physicalCard) {
-        return getTokenCount(physicalCard, Token.WOUND);
+        final int wounds = getTokenCount(physicalCard, Token.WOUND);
+        if (_woundsToCome.isEmpty())
+            return wounds;
+        return wounds + _woundsToCome.getOrDefault(physicalCard, 0);
+    }
+
+    /**
+     * Answers a question as it would be answered once the given wounds had been placed: the wounds an action
+     * will place as its own costs (exerting its own card twice), while a later cost of that action, or a card
+     * the action would then play, is asked whether it can be paid or played.  They are counted by getWounds,
+     * and so by vitality and by everything that asks whether a character can exert or is wounded, and change
+     * nothing else: no token is placed and nobody is told.  Nothing is to come except inside this call.
+     */
+    public <T> T withWoundsToCome(Map<PhysicalCard, Integer> wounds, java.util.function.Supplier<T> question) {
+        if (wounds == null || wounds.isEmpty())
+            return question.get();
+
+        final Map<PhysicalCard, Integer> before = _woundsToCome;
+        final Map<PhysicalCard, Integer> together = new HashMap<>(before);
+        for (Map.Entry<PhysicalCard, Integer> entry : wounds.entrySet())
+            together.merge(entry.getKey(), Math.max(0, entry.getValue()), Integer::sum);
+        _woundsToCome = together;
+        try {
+            return question.get();
+        } finally {
+            _woundsToCome = before;
+        }
     }
 
     public void addBurdens(int burdens) {
@@ -1255,6 +1599,70 @@ public class GameState {
         return _playerThreats.get(getCurrentPlayerId());
     }
 
+    /**
+     * Threats that are not on the table yet and are counted as if they were while a question is being answered:
+     * the threats an action will add as its own cost, while a card that action would then play is asked whether
+     * it could be played.  They take up room under the threat limit (PlayConditions.getMaxAddThreatCount) and
+     * change nothing else.  Zero except inside withThreatsToCome.
+     */
+    public int getThreatsToCome() {
+        return _threatsToCome;
+    }
+
+    /**
+     * Answers a question as it would be answered once the given number of threats had been added.
+     */
+    public <T> T withThreatsToCome(int threats, java.util.function.Supplier<T> question) {
+        final int before = _threatsToCome;
+        _threatsToCome = before + Math.max(0, threats);
+        try {
+            return question.get();
+        } finally {
+            _threatsToCome = before;
+        }
+    }
+
+    /**
+     * Whether the cost of assigning this minion (ExtraAssignmentCostModifier) has been paid for the assignment
+     * being made: the mark "its cost of assigning is paid" (Q-0283).  Two things set it, and both ask it first, so
+     * that neither charges twice: the payment the Free Peoples player makes ahead of his own assigning
+     * (AssignmentCostRule), and the payment of an assignment a card has him make (AssignFpCharacterToSkirmish),
+     * which the assignment then uses at once.  While it is set the cost is not asked for again, since what paid
+     * it (the last exertion a companion had) may not be there to pay twice.
+     */
+    public boolean isAssignmentPaidFor(PhysicalCard minion) {
+        return _assignmentsPaidFor.contains(minion);
+    }
+
+    /** Marks the cost of assigning this minion paid (Q-0283; isAssignmentPaidFor). */
+    public void markAssignmentPaidFor(PhysicalCard minion) {
+        _assignmentsPaidFor.add(minion);
+    }
+
+    /** The mark of isAssignmentPaidFor is used: by the assignment it paid for, or as that assignment is not made. */
+    public void useAssignmentPaidFor(PhysicalCard minion) {
+        _assignmentsPaidFor.remove(minion);
+    }
+
+    /**
+     * Whether the Free Peoples player's own assigning (FreePeoplePlayerAssignsMinionsGameProcess) is being asked
+     * and made.  At it a minion with a cost of assigning that has not been paid for ahead is not his to assign
+     * (Q-0283; ExtraAssignmentCostModifier).
+     */
+    public boolean isFreePeoplesPlayerAssigning() {
+        return _freePeoplesPlayerAssigning;
+    }
+
+    /**
+     * Begins or ends the Free Peoples player's own assigning (isFreePeoplesPlayerAssigning).  As it ends, every
+     * mark of a cost of assigning paid is gone: used by the assignment made, or lost with the one not made.
+     */
+    public void setFreePeoplesPlayerAssigning(boolean assigning) {
+        _freePeoplesPlayerAssigning = assigning;
+        if (!assigning)
+            _assignmentsPaidFor.clear();
+    }
+
     public void removeBurdens(int burdens) {
         removeTokens(_ringBearers.get(getCurrentPlayerId()), Token.BURDEN, Math.max(0, burdens));
     }
@@ -1263,11 +1671,25 @@ public class GameState {
         addTokens(card, Token.WOUND, 1);
     }
 
+    /**
+     * Notes the strength of a character of the current skirmish as it is about to leave it (F-0480), for Legacy
+     * Ruling 2's final removed character, whom the skirmish's winner measures as "the losing character" though he may
+     * be out of play by then (ResolveSkirmishEffect).  Called while the card is still in play with its text in force.
+     */
+    private void noteStrengthIfSkirmishing(PhysicalCard card) {
+        if (_skirmish == null || _lotroGame == null)
+            return;
+        if (_skirmish.getFellowshipCharacter() == card || _skirmish.getShadowCharacters().contains(card))
+            _skirmish.noteStrengthWhenRemoved(card, _lotroGame.getModifiersQuerying().getStrength(_lotroGame, card));
+    }
+
     public void removeWound(PhysicalCard card) {
         removeTokens(card, Token.WOUND, 1);
     }
 
     public void hinder(Collection<PhysicalCard> cards) {
+        for(var card : cards)
+            noteStrengthIfSkirmishing(card);
         for(var card : cards) {
             card.setFlipped(true);
             stopAffecting(card);
@@ -1319,7 +1741,9 @@ public class GameState {
 //        if(bp.getCardType() == CardType.EVENT)
 //            return zone == Zone.VOID_FROM_HAND;
 
-        if(bp.getCardType() == CardType.SITE)
+        //Sites cannot be hindered (CR 5.0 "hinder").  Neither can a Map or a Race to Mount Doom meta-site: they
+        // lie in a support area and do nothing there, and are not cards to be hindered (Ketura on Q-0110).
+        if(bp.getCardType() == CardType.SITE || bp.getCardType() == CardType.MAP || bp.getCardType() == CardType.METASITE)
             return false;
 
         //Finally, anything currently active on the table can be hindered
@@ -1395,6 +1819,7 @@ public class GameState {
         }
         setTwilight(0);
         _moveCount = 0;
+        _fellowshipArriving = false;
         _fierceSkirmishes = false;
 
         for (var listener : getAllGameStateListeners()) {
@@ -1592,6 +2017,8 @@ public class GameState {
 
     public void setCurrentPhase(Phase phase) {
         _currentPhase = phase;
+        // A cost of assigning paid in one assignment phase pays for nothing in the next (Q-0283)
+        _assignmentsPaidFor.clear();
         for (GameStateListener listener : getAllGameStateListeners())
             listener.setCurrentPhase(getPhaseString());
     }
@@ -1673,6 +2100,15 @@ public class GameState {
     public void shuffleDeck(String player) {
         List<PhysicalCardImpl> deck = _decks.get(player);
         _random.shuffleDeck(player, deck);
+        _deckShuffles.merge(player, 1, Integer::sum);
+    }
+
+    /**
+     * @return How many times that player's draw deck has been shuffled so far this game, the shuffle before the
+     * opening hand included.  Kept so that a test can tell that a card shuffled a deck, or left it alone.
+     */
+    public int getDeckShuffleCount(String player) {
+        return _deckShuffles.getOrDefault(player, 0);
     }
 
     /**
@@ -1690,6 +2126,10 @@ public class GameState {
     }
 
     public void sendGameStats(GameStats gameStats) {
+        if (_heldBackEvents != null) {
+            _heldBackGameStats = gameStats;
+            return;
+        }
         for (GameStateListener listener : getAllGameStateListeners())
             listener.sendGameStats(gameStats);
         _mostRecentGameStats = gameStats;
