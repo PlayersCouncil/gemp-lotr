@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_18_126_Tests
@@ -17,8 +18,13 @@ public class Card_18_126_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "18_126");
-					// put other cards in here as needed for the test case
+					put("marchers", "18_126");
+
+					put("hounding", "11_188");   // Hounding Uruk: [uruk-hai] Uruk-hai, cost 2, strength 5; +3 only while a companion is exhausted
+					put("saruman", "17_116");    // Saruman, Master of the White Hand: an [uruk-hai] Wizard, cost 4, strength 8;
+					                             // companions resistance -1, and a skirmish ability used only on purpose
+					put("guard", "10_81");       // Cirith Ungol Guard: a [sauron] Uruk-hai, damage +1, no other text
+					put("endless", "13_161");    // Endless Assault: an [uruk-hai] condition; a skirmish ability used only on purpose
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,35 +52,73 @@ public class Card_18_126_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var marchers = scn.GetFreepsCard("marchers");
 
-		assertEquals("White Hand Marchers", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.URUK_HAI, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.URUK_HAI, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
-		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
-		assertEquals(4, card.getBlueprint().getTwilightCost());
-		assertEquals(9, card.getBlueprint().getStrength());
-		assertEquals(2, card.getBlueprint().getVitality());
-		assertEquals(5, card.getBlueprint().getSiteNumber());
+		assertEquals("White Hand Marchers", marchers.getBlueprint().getTitle());
+		assertNull(marchers.getBlueprint().getSubtitle());
+		assertTrue(marchers.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, marchers.getBlueprint().getSide());
+		assertEquals(Culture.URUK_HAI, marchers.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, marchers.getBlueprint().getCardType());
+		assertEquals(Race.URUK_HAI, marchers.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(marchers, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(marchers, Keyword.DAMAGE));
+		assertEquals(4, marchers.getBlueprint().getTwilightCost());
+		assertEquals(9, marchers.getBlueprint().getStrength());
+		assertEquals(2, marchers.getBlueprint().getVitality());
+		assertEquals(5, marchers.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void WhiteHandMarchersTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void StrengthPlus1ForEachOtherUrukHaiCultureMinionAndNotForAnUrukHaiOfAnotherCultureOrAnUrukHaiCondition() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var marchers = scn.GetShadowCard("marchers");
+		var hounding = scn.GetShadowCard("hounding");
+		var saruman = scn.GetShadowCard("saruman");
+		var guard = scn.GetShadowCard("guard");
+		var endless = scn.GetShadowCard("endless");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveCardsToHand(hounding, saruman);
+		scn.MoveMinionsToTable(marchers, guard);
+		scn.MoveCardsToSupportArea(endless);
+		scn.SetTwilight(10);
+		assertInHand(hounding, saruman);
+		assertInZone(Zone.SUPPORT, endless);
+		scn.FreepsPass();
 
-		assertEquals(4, scn.GetTwilight());
+		// A [sauron] Uruk-hai and an [uruk-hai] condition count for nothing, and the Marchers do not count
+		// themselves: printed 9.
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertEquals(9, scn.GetStrength(marchers));
+
+		// An [uruk-hai] Uruk-hai.
+		scn.ShadowPlayCard(hounding);
+		assertEquals(10, scn.GetStrength(marchers));
+		// The minion counted is not strengthened itself: printed 5, with no companion exhausted.
+		assertEquals(5, scn.GetStrength(hounding));
+
+		// An [uruk-hai] minion who is no Uruk-hai.
+		scn.ShadowPlayCard(saruman);
+		assertEquals(11, scn.GetStrength(marchers));
+		assertEquals(8, scn.GetStrength(saruman));
+		assertEquals(9, scn.GetStrength(guard));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void AnUrukHaiCultureWizardAloneMakesTheMarchersStrength10() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var marchers = scn.GetShadowCard("marchers");
+		var saruman = scn.GetShadowCard("saruman");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(marchers, saruman);
+
+		// The count is the culture's, not the race's: Saruman is no Uruk-hai and is counted.
+		assertEquals(10, scn.GetStrength(marchers));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

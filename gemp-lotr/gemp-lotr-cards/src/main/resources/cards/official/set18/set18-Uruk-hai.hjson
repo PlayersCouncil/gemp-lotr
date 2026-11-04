@@ -18,6 +18,11 @@
 			{
 				type: activated
 				phase: regroup
+				// "From your support area" is a requirement where the card prints it (Q-0022), as on First Level 7_92, Fifth Level 10_32 and Disarmed 18_46
+				requires: {
+					type: CanSpot
+					filter: self,Zone(SUPPORT)
+				}
 				cost: {
 					type: exert
 					select: choose(culture(uruk-hai),hunter)
@@ -122,6 +127,22 @@
 				trigger: {
 					type: winsSkirmish
 					filter: bearer
+				}
+				requires: {
+					type: or
+					requires: [
+						{
+							type: canSpot
+							filter: follower
+						}
+						{
+							type: canSpot
+							filter: culture(uruk-hai),minion,wounded
+						}
+						{
+							type: SiteAvailableToControl
+						}
+					]
 				}
 				effect: {
 					type: choice
@@ -690,6 +711,9 @@
 				trigger: {
 					type: winsSkirmish
 					filter: self
+				}
+				requires: {
+					type: SiteAvailableToControl
 				}
 				effect: {
 					type: takeControlOfSite

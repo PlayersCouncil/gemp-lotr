@@ -162,11 +162,8 @@
 					{
 						type: playCardFromDiscard
 						select: choose(culture(orc),minion)
-						memorize: playedMinion
-					}
-					{
-						type: exhaust
-						select: memory(playedMinion)
+						removedTwilight: 2
+						exhausted: true
 					}
 				]
 			}
@@ -266,14 +263,20 @@
 					type: discard
 					select: self
 				}
-				effect: {
-					type: removeCardsInDeckFromGame
-					deck: free people
-					count: 2
-					select: choose(side(free people))
-					shuffle: true
-					showAll: true
-				}
+				effect: [
+					{
+						type: removeCardsInDeckFromGame
+						deck: free people
+						count: 2
+						select: choose(side(free people))
+						shuffle: false
+						showAll: true
+					}
+					{
+						type: ShuffleDeck
+						deck: free people
+					}
+				]
 			}
 		]
 		gametext: To play, spot an [orc] minion.<br>Each time the fellowship moves in the regroup phase, you may discard this possession to search the Free Peoples player's draw deck and choose 2 Free Peoples cards found there. Remove those cards from the game.
@@ -657,10 +660,16 @@
 			{
 				type: activated
 				phase: assignment
-				requires: {
-					type: canSpot
-					filter: another,culture(orc),orc
-				}
+				requires: [
+					{
+						type: canSpot
+						filter: another,culture(orc),orc
+					}
+					{
+						type: canSpot
+						filter: not(culture(shire)),ringBearer,assignableToSkirmishAgainst(self)
+					}
+				]
 				effect: [
 					{
 						type: assignFPCharacterToSkirmish

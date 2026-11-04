@@ -145,7 +145,7 @@
 				{
 					type: putCardsFromDeckOnTopOfDeck
 					select: memory(setAsideCards)
-					reveal: true
+					reveal: false
 				}
 			]
 		}

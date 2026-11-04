@@ -1,16 +1,14 @@
 package com.gempukku.lotro.cards.official.set18;
 
 import com.gempukku.lotro.framework.VirtualTableScenario;
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_18_079_Tests
@@ -20,8 +18,13 @@ public class Card_18_079_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "18_79");
-					// put other cards in here as needed for the test case
+					put("frenzy", "18_79");
+					// Denizen of Moria: an [orc] Orc who is no archer; a bonus only at an underground site.
+					put("denizen", "11_116");
+					// Goblin Bowman: a [moria] Orc archer with no other text.
+					put("bowman", "2_60");
+					// Legolas, Greenleaf: a Free Peoples archer, no minion; an archery ability never used.
+					put("legolas", "1_50");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,30 +49,45 @@ public class Card_18_079_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var frenzy = scn.GetFreepsCard("frenzy");
 
-		assertEquals("Frenzy of Arrows", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.ORC, card.getBlueprint().getCulture());
-		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertTrue(scn.HasTimeword(card, Timeword.ARCHERY));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals("Frenzy of Arrows", frenzy.getBlueprint().getTitle());
+		assertNull(frenzy.getBlueprint().getSubtitle());
+		assertFalse(frenzy.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, frenzy.getBlueprint().getSide());
+		assertEquals(Culture.ORC, frenzy.getBlueprint().getCulture());
+		assertEquals(CardType.EVENT, frenzy.getBlueprint().getCardType());
+		assertTrue(scn.HasTimeword(frenzy, Timeword.ARCHERY));
+		assertEquals(2, frenzy.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void FrenzyofArrowsTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void CannotBePlayedWithoutAnOrcArcherMinionWhichNoPrintedCardMakes() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var legolas = scn.GetFreepsCard("legolas");
+		var frenzy = scn.GetShadowCard("frenzy");
+		var denizen = scn.GetShadowCard("denizen");
+		var bowman = scn.GetShadowCard("bowman");
+		scn.MoveCompanionsToTable(legolas);
+		scn.MoveCardsToHand(frenzy);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		assertInZone(Zone.HAND, frenzy);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+		scn.MoveMinionsToTable(denizen, bowman);
+		scn.ShadowRefreshDecision();
+		scn.SkipToPhase(Phase.ARCHERY);
+		scn.FreepsPass();
 
-		assertEquals(2, scn.GetTwilight());
+		// An [orc] minion who is no archer, an archer minion of another culture, and an archer who is no minion:
+		// none of them is "an [orc] archer minion", and no printed card makes an [orc] minion an archer.
+		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
+		assertTrue(scn.HasKeyword(bowman, Keyword.ARCHER));
+		assertTrue(scn.HasKeyword(legolas, Keyword.ARCHER));
+		assertFalse(scn.HasKeyword(denizen, Keyword.ARCHER));
+		assertFalse(scn.ShadowPlayAvailable(frenzy));
+		assertInZone(Zone.HAND, frenzy);
 	}
 }

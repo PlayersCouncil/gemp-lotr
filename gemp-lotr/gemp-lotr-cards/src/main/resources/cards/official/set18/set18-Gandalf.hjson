@@ -24,6 +24,10 @@
 					type: winsSkirmish
 					filter: bearer,name(Grimbeorn)
 				}
+				requires: {
+					type: HasCardInDiscard
+					filter: culture(gandalf)
+				}
 				effect: {
 					type: putCardsFromDiscardIntoHand
 					select: choose(culture(gandalf))
@@ -422,29 +426,29 @@
 			{
 				type: activated
 				phase: maneuver
-				cost: [
-					{
-						type: addThreats
-						amount: 2
-					}
+				cost: {
+					type: addThreats
+					amount: 2
+				}
+				requires: {
+					type: canSpot
+					filter: wizard
+				}
+				effect: [
 					{
 						type: spot
 						select: choose(minion)
 						memorize: spottedMinion
 					}
-				]
-				requires: {
-					type: canSpot
-					filter: wizard
-				}
-				effect: {
-					type: addModifier
-					modifier: {
-						type: CantUseSpecialAbilities
-						filter: memory(spottedMinion)
+					{
+						type: addModifier
+						modifier: {
+							type: CantUseSpecialAbilities
+							filter: memory(spottedMinion)
+						}
+						until: regroup
 					}
-					until: regroup
-				}
+				]
 			}
 		]
 		gametext: <b>Maneuver:</b> Add 2 threats and spot a Wizard to spot a minion in play. That minion cannot use special abilities until the regroup phase.
@@ -528,10 +532,17 @@
 					player: you
 					filter: pipeweed
 				}
-				requires: {
-					type: canSpot
-					filter: name(Gandalf)
-				}
+				// Withheld with the draw deck empty: the spot pays nothing, so this is a no-cost reveal (Ketura's
+				// ruling, Q-0365: A, folding in Q-0348).
+				requires: [
+					{
+						type: canSpot
+						filter: name(Gandalf)
+					}
+					{
+						type: HasCardInDrawDeck
+					}
+				]
 				effect: [
 					{
 						type: revealTopCardsOfDrawDeck
