@@ -332,6 +332,10 @@
 							type: location
 							filter: battleground
 						}
+						{
+							type: HasCardInDrawDeck
+							player: free people
+						}
 				]
 				effect: [
 					{

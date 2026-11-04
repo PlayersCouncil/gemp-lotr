@@ -18,8 +18,13 @@ public class Card_11_120_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "11_120");
-					// put other cards in here as needed for the test case
+					put("orc", "11_120");
+					put("orc2", "11_120");
+					put("farin", "11_7");       // Farin, Emissary of Erebor: [dwarven] Dwarf, unbound, resistance 6; muster at a battleground or underground site only
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man, unbound, resistance 6; a maneuver ability only
+					put("gimli", "11_8");       // Gimli, Lively Combatant: [dwarven] Dwarf, unbound, resistance 7; a trigger on his win only
+					put("sam", "1_311");        // Sam, Son of Hamfast: Ring-bound, resistance 5; abilities used only on purpose
+					put("bounder", "1_286");    // Bounder: a Hobbit ALLY (resistance 0), home site 2; a skirmish ability used only on purpose
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +52,7 @@ public class Card_11_120_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("orc");
 
 		assertEquals("Entrapping Orc", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +67,94 @@ public class Card_11_120_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void EntrappingOrcTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void AssignmentAbilityAssignsThisMinionToAnUnboundCompanionOfResistance4OrLessAndOnlyOnce() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var frodo = scn.GetRingBearer();
+		var farin = scn.GetFreepsCard("farin");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var sam = scn.GetFreepsCard("sam");
+		var bounder = scn.GetFreepsCard("bounder");
+		var orc = scn.GetShadowCard("orc");
+		var orc2 = scn.GetShadowCard("orc2");
+
+		scn.MoveCompanionsToTable(farin, aragorn, gimli, sam);
+		scn.MoveAlliesToTable(bounder);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.AddBurdens(2);
+		scn.MoveMinionsToTable(orc, orc2);
 
-		assertEquals(3, scn.GetTwilight());
+		// Each burden is -1 to every companion's resistance.
+		assertEquals(2, scn.GetBurdens());
+		assertEquals(4, scn.GetResistance(farin));
+		assertEquals(4, scn.GetResistance(aragorn));
+		assertEquals(5, scn.GetResistance(gimli));
+		assertEquals(3, scn.GetResistance(sam));
+		assertEquals(8, scn.GetResistance(frodo));
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+		assertTrue(scn.ShadowActionAvailable(orc));
+		scn.ShadowUseCardAction(orc);
+
+		// Two unbound companions at 4, of two cultures and races.  Not Gimli at 5, not Sam or Frodo, who are
+		// Ring-bound, not Bounder, an ally at his home site.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(farin, aragorn));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(gimli, sam, frodo, bounder));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		scn.ShadowChooseCard(farin);
+
+		// This copy, and not the other.
+		assertTrue(scn.IsCharAssignedAgainst(farin, orc));
+		assertFalse(scn.IsCharAssigned(orc2));
+		assertFalse(scn.IsCharAssigned(aragorn));
+
+		// An assigned minion cannot be assigned again (CR 4.2 "assignment phase"); the other copy still can.
+		scn.FreepsPass();
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(orc));
+		assertTrue(scn.ShadowActionAvailable(orc2));
+	}
+
+	@Test
+	public void NotOfferedUntilAnUnboundCompanionHasResistance4OrLess() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var gimli = scn.GetFreepsCard("gimli");
+		var sam = scn.GetFreepsCard("sam");
+		var bounder = scn.GetFreepsCard("bounder");
+		var orc = scn.GetShadowCard("orc");
+
+		scn.MoveCompanionsToTable(gimli, sam);
+		scn.MoveAlliesToTable(bounder);
+
+		scn.StartGame();
+		scn.AddBurdens(2);
+		scn.MoveMinionsToTable(orc);
+
+		assertEquals(5, scn.GetResistance(gimli));
+		assertEquals(3, scn.GetResistance(sam));
+		assertEquals(8, scn.GetResistance(frodo));
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPass();
+
+		// Nobody the ability could assign it to: Gimli at 5, Ring-bound Sam and Frodo, the ally Bounder.
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(orc));
+
+		// A third burden puts Gimli at 4.
+		scn.AddBurdens(1);
+		assertEquals(4, scn.GetResistance(gimli));
+		scn.ShadowRefreshDecision();
+
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+		assertTrue(scn.ShadowActionAvailable(orc));
 	}
 }

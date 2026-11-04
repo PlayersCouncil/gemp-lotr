@@ -14,14 +14,21 @@ import static org.junit.Assert.*;
 public class Card_11_077_Tests
 {
 
+	// The Towers path: site 1 (Eastemnet Gullies) has no terrain, site 2 (Eastfold) is a plains and nothing more,
+	// site 3 (Westemnet Plains) a plains and a sanctuary, site 4 (White Rocks) a battleground and no plains.
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "11_77");
-					// put other cards in here as needed for the test case
+					put("elder", "11_77");
+					put("legion", "11_88");     // Legion of Harad: a [men] Man minion with no text but toil
 				}},
-				VirtualTableScenario.FellowshipSites,
+				new HashMap<>()
+				{{
+					putAll(VirtualTableScenario.TowersSites);
+					// Westemnet Plains: Plains. Sanctuary. Its bar on [dunland] Men's archery wounds reaches no test.
+					put("site3", "4_342");
+				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -47,7 +54,7 @@ public class Card_11_077_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("elder");
 
 		assertEquals("Elder of Dunland", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +69,55 @@ public class Card_11_077_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void ElderofDunlandTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void IsDamagePlus1OnlyOnceTheFellowshipIsAtAPlainsSiteAndNoOtherMinionIs() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var elder = scn.GetShadowCard("elder");
+		var legion = scn.GetShadowCard("legion");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// Laid early, in the fellowship phase at site 1, to be read before and after the move.
+		scn.MoveMinionsToTable(elder, legion);
 
-		assertEquals(4, scn.GetTwilight());
+		assertEquals(1, scn.GetCurrentSiteNumber());
+		assertFalse(scn.HasKeyword(scn.GetCurrentSite(), Keyword.PLAINS));
+		assertEquals(0, scn.GetKeywordCount(elder, Keyword.DAMAGE));
+		assertEquals(0, scn.GetKeywordCount(legion, Keyword.DAMAGE));
+
+		// The fellowship moves to Eastfold.
+		scn.FreepsPass();
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.PLAINS));
+		assertEquals(1, scn.GetKeywordCount(elder, Keyword.DAMAGE));
+		// Another [men] Man at the same plains is not made damage +1.
+		assertEquals(0, scn.GetKeywordCount(legion, Keyword.DAMAGE));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void IsDamagePlus1AtAPlainsThatIsASanctuaryAndNotAtABattleground() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var elder = scn.GetShadowCard("elder");
+		var legion = scn.GetShadowCard("legion");
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+		scn.MoveMinionsToTable(elder, legion);
+
+		// Westemnet Plains.
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.PLAINS));
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.SANCTUARY));
+		assertEquals(1, scn.GetKeywordCount(elder, Keyword.DAMAGE));
+		assertEquals(0, scn.GetKeywordCount(legion, Keyword.DAMAGE));
+
+		// The fellowship moves to White Rocks, a battleground and no plains.
+		scn.FreepsPass();
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		assertFalse(scn.HasKeyword(scn.GetCurrentSite(), Keyword.PLAINS));
+		assertEquals(0, scn.GetKeywordCount(elder, Keyword.DAMAGE));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

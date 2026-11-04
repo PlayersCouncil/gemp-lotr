@@ -40,7 +40,10 @@
 					select: choose(culture(gandalf))
 				}
 				effect: {
+					// Ketura (Q-0364: C, 2026-10-28): a card returned to a hand goes to its owner's; only the
+					// player's own cards stacked here are taken
 					type: putStackedCardsIntoHand
+					select: choose(your)
 					on: self
 				}
 			}
@@ -174,16 +177,17 @@
 					type: discardFromHand
 					forced: false
 					count: 2
+					memorize: discardedCards
 				}
 			]
 			effect: [
 				{
 					type: putCardsFromDiscardIntoHand
-					select: choose(side(free people))
+					select: choose(side(free people),not(memory(discardedCards)))
 				}
 				{
 					type: putCardsFromDiscardIntoHand
-					select: choose(side(shadow))
+					select: choose(side(shadow),not(memory(discardedCards)))
 				}
 			]
 		}

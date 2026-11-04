@@ -21,7 +21,7 @@
 					filter: your,culture(orc),minion
 				}
 			]
-			effect: [
+			cost: [
 				{
 					type: if
 					check: {
@@ -872,7 +872,7 @@
 					type: winsSkirmish
 					filter: self
 				}
-				cost: {
+				effect: {
 					type: exert
 					select: all(companion,maxResistance(4))
 				}
@@ -1051,14 +1051,9 @@
 					against: companion
 					memorizeAgainst: assignedComp
 				}
-				effect: 
-				{
-					type: Optional
-					text: Would you like to exert {assignedComp}?
-					effect: {
-						type: exert
-						select: memory(assignedComp)
-					}
+				effect: {
+					type: exert
+					select: memory(assignedComp)
 				}
 			}
 		]
@@ -1092,7 +1087,7 @@
 		effects: [
 			{
 				type: Trigger
-				optional: true
+				optional: false
 				trigger: {
 					type: assignedAgainst
 					filter: self
@@ -1130,7 +1125,7 @@
 		type: Possession
 		strength: 1
 		itemclass: Hand weapon
-		target: culture(orc),minion
+		target: culture(orc),orc
 		effects: [
 			{
 				type: Trigger
@@ -1268,10 +1263,18 @@
 					type: played
 					filter: self
 				}
-				requires: {
-					type: canSpot
-					filter: another,culture(orc),minion
-				}
+				// Withheld with the Free Peoples draw deck empty: the spot pays nothing, so this is a no-cost reveal
+				// (Ketura's ruling, Q-0365: A, folding in Q-0348).
+				requires: [
+					{
+						type: canSpot
+						filter: another,culture(orc),minion
+					}
+					{
+						type: HasCardInDrawDeck
+						player: free people
+					}
+				]
 				effect: [
 					{
 						type: revealTopCardsOfDrawDeck
@@ -1743,10 +1746,16 @@
 					type: played
 					filter: self
 				}
-				requires: {
-					type: canSpot
-					filter: another,culture(orc),minion
-				}
+				requires: [
+					{
+						type: canSpot
+						filter: another,culture(orc),minion
+					}
+					{
+						type: hasCardInAdventureDeck
+						filter: underground
+					}
+				]
 				effect: {
 					type: playSite
 					number: {

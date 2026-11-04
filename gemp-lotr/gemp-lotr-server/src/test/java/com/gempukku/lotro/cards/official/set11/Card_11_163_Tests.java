@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set11;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,10 +17,24 @@ public class Card_11_163_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "11_163");
-					// put other cards in here as needed for the test case
+					put("maggot", "11_163");
+					put("merry", "1_302");      // Merry, Friend to Sam: another Hobbit companion; his skirmish ability is
+					                            //   used only on purpose
 				}},
-				VirtualTableScenario.FellowshipSites,
+				new HashMap<>()
+				{{
+					putAll(VirtualTableScenario.FellowshipSites);
+					// Site 1 is Bag End, which has no terrain.
+					put("site2", "4_330");      // Derndingle: a forest; "While you can spot an unbound Hobbit at Derndingle,
+					                            //   the move limit is +1 for this turn"
+					put("site3", "1_342");      // Rivendell Waterfall: a forest and a sanctuary; a move-limit text for a ranger
+					remove("site8");
+					remove("site9");
+					// Shadows-block sites, laid on the path by MoveCardToAdventurePath as the sites after site 3.
+					put("bree", "18_140");      // Streets of Bree: a dwelling; a bar on transferring followers
+					put("valley", "11_261");    // Valley of the Silverlode: a dwelling and a river; "When your fellowship
+					                            //   moves to this site, you may heal each Hobbit companion"
+				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -47,7 +60,7 @@ public class Card_11_163_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("maggot");
 
 		assertEquals("Farmer Maggot", card.getBlueprint().getTitle());
 		assertEquals("Hobbit of the Marish", card.getBlueprint().getSubtitle());
@@ -62,18 +75,53 @@ public class Card_11_163_Tests
 		assertEquals(8, card.getBlueprint().getResistance());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void FarmerMaggotTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void HeIsStrengthPlus4AtEachForestAndEachDwellingSiteAndNotElsewhereAndNoOtherHobbitIs() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var maggot = scn.GetFreepsCard("maggot");
+		var merry = scn.GetFreepsCard("merry");
+		scn.MoveCompanionsToTable(maggot, merry);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// Bag End: no terrain.
+		assertEquals(1, scn.GetCurrentSiteNumber());
+		assertEquals(3, scn.GetStrength(maggot));
+		assertEquals(3, scn.GetStrength(merry));
 
-		assertEquals(1, scn.GetTwilight());
+		// Derndingle, a forest.
+		scn.SkipToSite(2);
+		assertSame(scn.GetFreepsSite("site2").getBlueprint(), scn.GetCurrentSite().getBlueprint());
+		assertEquals(7, scn.GetStrength(maggot));
+		assertEquals(3, scn.GetStrength(merry));
+
+		// Rivendell Waterfall, a forest that is also a sanctuary.
+		scn.SkipToSite(3);
+		assertSame(scn.GetFreepsSite("site3").getBlueprint(), scn.GetCurrentSite().getBlueprint());
+		assertEquals(7, scn.GetStrength(maggot));
+		assertEquals(3, scn.GetStrength(merry));
+
+		// Streets of Bree, a dwelling.
+		scn.MoveCardToAdventurePath(scn.GetShadowSite("bree"));
+		scn.FreepsPass();
+		assertSame(scn.GetShadowSite("bree"), scn.GetCurrentSite());
+		assertEquals(7, scn.GetStrength(maggot));
+		assertEquals(3, scn.GetStrength(merry));
+
+		// Valley of the Silverlode, a dwelling that is also a river, by a second move.
+		scn.MoveCardToAdventurePath(scn.GetShadowSite("valley"));
+		scn.SkipToMovementDecision();
+		scn.FreepsChooseToMove();
+		assertSame(scn.GetShadowSite("valley"), scn.GetCurrentSite());
+		assertEquals(7, scn.GetStrength(maggot));
+		assertEquals(3, scn.GetStrength(merry));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		// Galadriel's Glade, on the next turn: a sanctuary that is neither a forest nor a dwelling.
+		scn.SkipToSite(6);
+		assertEquals(6, scn.GetCurrentSiteNumber());
+		assertEquals(3, scn.GetStrength(maggot));
+		assertEquals(3, scn.GetStrength(merry));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

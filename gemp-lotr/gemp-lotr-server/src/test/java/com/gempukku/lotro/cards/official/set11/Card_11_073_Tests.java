@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set11;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -13,15 +12,20 @@ import static org.junit.Assert.*;
 
 public class Card_11_073_Tests
 {
-
+	// The Towers path: site 1 (Eastemnet Gullies) has no terrain, site 2 (Uruk Camp) is a battleground and a plains,
+	// site 4 (White Rocks) a battleground and no plains.
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "11_73");
-					// put other cards in here as needed for the test case
+					put("corps", "11_73");
+					put("legion", "11_88");     // Legion of Harad: a [men] Man minion with no text but toil
 				}},
-				VirtualTableScenario.FellowshipSites,
+				new HashMap<>()
+				{{
+					putAll(VirtualTableScenario.TowersSites);
+					put("site2", "4_335");      // Uruk Camp: Battleground. Plains. Exerts each Uruk-hai played; none is
+				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -47,7 +51,7 @@ public class Card_11_073_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("corps");
 
 		assertEquals("Corps of Harad", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +66,49 @@ public class Card_11_073_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void CorpsofHaradTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void IsFierceOnlyOnceTheFellowshipIsAtABattlegroundSiteAndNoOtherMinionIs() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var corps = scn.GetShadowCard("corps");
+		var legion = scn.GetShadowCard("legion");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// Laid early, in the fellowship phase at site 1, to be read before and after the move.
+		scn.MoveMinionsToTable(corps, legion);
 
-		assertEquals(4, scn.GetTwilight());
+		assertEquals(1, scn.GetCurrentSiteNumber());
+		assertFalse(scn.HasKeyword(scn.GetCurrentSite(), Keyword.BATTLEGROUND));
+		assertFalse(scn.HasKeyword(corps, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(legion, Keyword.FIERCE));
+
+		// The fellowship moves to Uruk Camp.
+		scn.FreepsPass();
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.BATTLEGROUND));
+		assertTrue(scn.HasKeyword(corps, Keyword.FIERCE));
+		// Another [men] Man at the same battleground is not made fierce.
+		assertFalse(scn.HasKeyword(legion, Keyword.FIERCE));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void IsFierceAtABattlegroundThatIsNoPlains() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var corps = scn.GetShadowCard("corps");
+		var legion = scn.GetShadowCard("legion");
+
+		scn.StartGame();
+		scn.SkipToSite(4);
+		scn.MoveMinionsToTable(corps, legion);
+
+		// White Rocks.
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.BATTLEGROUND));
+		assertFalse(scn.HasKeyword(scn.GetCurrentSite(), Keyword.PLAINS));
+		assertTrue(scn.HasKeyword(corps, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(legion, Keyword.FIERCE));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

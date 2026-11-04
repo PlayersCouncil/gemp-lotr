@@ -4,10 +4,12 @@ import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.StrengthModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_11_008_Tests
@@ -17,8 +19,8 @@ public class Card_11_008_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "11_8");
-					// put other cards in here as needed for the test case
+					put("gimli", "11_8");
+					put("pursuer", "4_190");    // Uruk Pursuer: [isengard] Uruk-hai, strength 5, vitality 3, fierce; its texts are about unbound Hobbits
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +48,7 @@ public class Card_11_008_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("gimli");
 
 		assertEquals("Gimli", card.getBlueprint().getTitle());
 		assertEquals("Lively Combatant", card.getBlueprint().getSubtitle());
@@ -63,18 +65,74 @@ public class Card_11_008_Tests
 		assertEquals(7, card.getBlueprint().getResistance());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GimliTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void EachSkirmishGimliWinsOffersADrawWhichCanBeTakenOrDeclined() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCompanionsToTable(gimli);
+
+		var pursuer = scn.GetShadowCard("pursuer");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(pursuer);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gimli, pursuer);
+		scn.FreepsResolveSkirmish(gimli);
 
-		assertEquals(2, scn.GetTwilight());
+		int hand = scn.GetFreepsHandCount();
+		int deck = scn.GetFreepsDeckCount();
+		assertTrue(deck > 0);
+		scn.PassSkirmishActions();
+
+		// Gimli's 6 beats the Pursuer's 5; the Pursuer takes 2 wounds (damage +1) and lives on, fierce.
+		assertEquals(2, scn.GetWoundsOn(pursuer));
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(gimli));
+		scn.FreepsAcceptOptionalTrigger();
+		assertEquals(hand + 1, scn.GetFreepsHandCount());
+		assertEquals(deck - 1, scn.GetFreepsDeckCount());
+
+		// The fierce round: Gimli wins a second skirmish in the same turn and is offered the draw again.
+		assertTrue(scn.InFierceRound());
+		scn.PassFierceAssignmentActions();
+		scn.FreepsAssignToMinions(gimli, pursuer);
+		scn.FreepsResolveSkirmish(gimli);
+		scn.PassFierceSkirmishActions();
+
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(gimli));
+		scn.FreepsDeclineOptionalTrigger();
+		assertEquals(hand + 1, scn.GetFreepsHandCount());
+		assertEquals(deck - 1, scn.GetFreepsDeckCount());
+		assertInDiscard(pursuer);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void GimliLosingASkirmishAndLivingOffersNoDraw() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCompanionsToTable(gimli);
+
+		var pursuer = scn.GetShadowCard("pursuer");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(pursuer);
+		// The Pursuer made 8 by hand: Gimli's 6 loses, and is not overwhelmed (8 is less than 12).
+		scn.ApplyAdHocModifier(new StrengthModifier(null, pursuer, null, 3));
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(gimli, pursuer);
+		scn.FreepsResolveSkirmish(gimli);
+
+		int hand = scn.GetFreepsHandCount();
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		scn.PassSkirmishActions();
+
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertInZone(Zone.FREE_CHARACTERS, gimli);
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(gimli));
+		assertEquals(hand, scn.GetFreepsHandCount());
+		assertTrue(scn.InFierceRound());
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
 }
