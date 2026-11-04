@@ -343,6 +343,7 @@
 			{
 				type: activatedInDiscard
 				phase: skirmish
+				specialAbility: false
 				cost: {
 					type: removeCardsInDiscardFromGame
 					select: choose(other,culture(gandalf))
@@ -432,6 +433,9 @@
 		title: The Palantír of Orthanc
 		subtitle: Recovered Seeing Stone
 		unique: true
+		// Only this player's Palantírs of Orthanc bar its play (CR 4.2 "unique", one per player; F-0655): the Shadow
+		// player's 3_67 or 4_166 is the card its "discard it" is for.
+		uniquePerPlayer: true
 		side: Free Peoples
 		culture: Gandalf
 		twilight: 0

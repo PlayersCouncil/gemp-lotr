@@ -156,32 +156,60 @@
 					amount: -1
 				}
 			}
+			// Q-0339 (Ketura, 2026-10-16): a "you may" with a parenthesis is "a branch of 0-1 ..., or 0-2 ... if the
+			// requirement is met".  One trigger for each branch, their requirements negating each other, so that
+			// only one is offered; above the spot the second token is a "you may" of its own.
 			{
 				type: Trigger
 				optional: true
 				trigger: {
 					type: moves
 				}
-				requires: {
-					type: phase
-					phase: regroup
-				}
-				effect: {
-					type: repeat
-					times: {
-						type: Conditional
-						requires: {
-							type: canSpot
-							filter: or(name(Éomer),name(Théoden))
-						}
-						true: 2
-						false: 1
+				requires: [
+					{
+						type: phase
+						phase: regroup
 					}
-					effect: {
+					{
+						type: cantSpot
+						filter: or(name(Éomer),name(Théoden))
+					}
+				]
+				effect: {
+					type: reinforceTokens
+					culture: rohan
+				}
+			}
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: moves
+				}
+				requires: [
+					{
+						type: phase
+						phase: regroup
+					}
+					{
+						type: canSpot
+						filter: or(name(Éomer),name(Théoden))
+					}
+				]
+				effect: [
+					{
 						type: reinforceTokens
 						culture: rohan
 					}
-				}
+					{
+						type: optional
+						text: Would you like to reinforce a second {rohan} token?
+						effect: {
+							type: reinforceTokens
+							culture: rohan
+						}
+					}
+				]
 			}
 		]
 		gametext: Each possession you play on Éowyn during the fellowship phase is twilight cost -1.<br>Each time the fellowship moves during the regroup phase, you may reinforce a [rohan] token (or reinforce 2 [rohan] tokens if you can spot Éomer or Théoden).
@@ -491,6 +519,7 @@
 			{
 				type: activatedInDiscard
 				phase: skirmish
+				specialAbility: false
 				cost: {
 					type: removeCardsInDiscardFromGame
 					select: choose(other,culture(rohan))
@@ -1061,9 +1090,19 @@
 					type: AddCultureTokens
 					culture: rohan
 					select: self
+					// Ketura (Q-0383: A, 2026-10-28): two counts added together, so a site of both kinds adds two
 					count: {
-						type: forEachYouCanSpot
-						filter: or(plains,battleground),site,zone(adventure path)
+						type: sum
+						source: [
+							{
+								type: forEachYouCanSpot
+								filter: plains,site,zone(adventure path)
+							}
+							{
+								type: forEachYouCanSpot
+								filter: battleground,site,zone(adventure path)
+							}
+						]
 					}
 				}
 			}

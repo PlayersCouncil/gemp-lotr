@@ -364,10 +364,20 @@
 				trigger: {
 					type: moves
 				}
-				requires: {
-					type: phase
-					phase: regroup
-				}
+				// Withheld with the draw deck empty: there is nothing to reveal (Ketura's ruling, Q-0348, folded into this card 2026-10-26).
+				requires: [
+					{
+						type: phase
+						phase: regroup
+					}
+					{
+						type: HasCardInDrawDeck
+					}
+					{
+						type: canSpot
+						filter: forest,zone(adventure path)
+					}
+				]
 				effect: [
 					{
 						type: revealTopCardsOfDrawDeck
@@ -429,6 +439,10 @@
 				}
 				{
 					type: optional
+					requires: {
+						type: canSpot
+						filter: hasCultureToken(elven)
+					}
 					text: Would you like to reinforce {elven} token?
 					effect: {
 						type: reinforceTokens
@@ -465,6 +479,7 @@
 			{
 				type: activatedInDiscard
 				phase: skirmish
+				specialAbility: false
 				cost: {
 					type: removeCardsInDiscardFromGame
 					select: choose(other,culture(elven))
@@ -484,16 +499,9 @@
 				type: event
 				effect: [
 					{
-						type: If
-						check: {
-							type: location
-							filter: or(forest,river)
-						}
-						true: {
-							type: modifyStrength
-							select: choose(minion,inSkirmishAgainst(your,elf))
-							amount: -3
-						}
+						type: modifyStrength
+						select: choose(minion,inSkirmishAgainst(your,elf,atSite(or(forest,river))))
+						amount: -3
 					}
 				]
 			}
@@ -534,6 +542,10 @@
 				trigger: {
 					type: startOfPhase
 					phase: archery
+				}
+				// Withheld with the draw deck empty: there is nothing to reveal (Ketura's ruling, Q-0348, as Q-0148).
+				requires: {
+					type: HasCardInDrawDeck
 				}
 				effect: [
 					{
@@ -748,9 +760,19 @@
 					type: AddCultureTokens
 					culture: elven
 					select: self
+					// Ketura (Q-0383: A, 2026-10-28): two counts added together, so a site of both kinds adds two
 					count: {
-						type: forEachYouCanSpot
-						filter: or(forest,river),zone(adventure path)
+						type: sum
+						source: [
+							{
+								type: forEachYouCanSpot
+								filter: forest,zone(adventure path)
+							}
+							{
+								type: forEachYouCanSpot
+								filter: river,zone(adventure path)
+							}
+						]
 					}
 				}
 			}
@@ -825,6 +847,7 @@
 				}
 				effect: {
 					type: putPlayedEventOnTopOfDrawDeck
+					filter: played
 				}
 			}
 		]
@@ -903,6 +926,7 @@
 					memorize: chosenMinion
 					amount: {
 						type: sum
+						multiplier: -1
 						source: [
 							{
 								type: Conditional
@@ -911,7 +935,7 @@
 									memory: chosenMinion
 									filter: inSkirmishAgainst(companion,minResistance(4))
 								}
-								true: -1
+								true: 1
 								false: 0
 							}
 							{
@@ -921,7 +945,7 @@
 									memory: chosenMinion
 									filter: wounded
 								}
-								true: -1
+								true: 1
 								false: 0
 							}
 							{
@@ -930,7 +954,7 @@
 									type: canSpot
 									filter: elf,archer
 								}
-								true: -1
+								true: 1
 								false: 0
 							}
 							{
@@ -939,7 +963,7 @@
 									type: location
 									filter: forest
 								}
-								true: -1
+								true: 1
 								false: 0
 							}
 						]
@@ -1050,10 +1074,16 @@
 				trigger: {
 					type: moves
 				}
-				requires: {
-					type: phase
-					phase: regroup
-				}
+				requires: [
+					{
+						type: phase
+						phase: regroup
+					}
+					{
+						type: canSpot
+						filter: or(title(Arwen),title(Celeborn),title(Galadriel))
+					}
+				]
 				effect: {
 					type: drawCards
 					count: {

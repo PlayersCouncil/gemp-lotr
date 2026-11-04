@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_13_171_Tests
@@ -17,8 +18,16 @@ public class Card_13_171_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "13_171");
-					// put other cards in here as needed for the test case
+					put("invader1", "13_171");
+					put("invader2", "13_171");
+					put("guard", "10_81");      // Cirith Ungol Guard: a minion of cost 3, damage +1 only, kept in hand
+					put("warrior", "4_165");    // Orthanc Warrior: a minion in play, damage +1 only
+
+					// Companions with no text that reaches a test, of printed resistance 6, 6 and 7
+					put("knight", "5_35");      // Gondorian Knight: [gondor] Man, resistance 6
+					put("gandalf", "1_72");     // Gandalf, Friend of the Shirefolk: [gandalf] Wizard, resistance 6
+					put("faramir", "12_47");    // Faramir, Dunadan of Gondor: resistance 7; a skirmish ability never used
+					put("thrarin", "1_27");     // Thrarin, Dwarven Smith: an ally, resistance 0; his ability is never used
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -41,12 +50,13 @@ public class Card_13_171_Tests
 		 * Strength: 9
 		 * Vitality: 2
 		 * Site Number: 5
-		 * Game Text: <b>Damage +1</b>.<br>This minion is twilight cost -1 for each companion who has resistance 2 or less.
+		 * Game Text: <b>Damage +1</b>.
+		 * 	This minion is twilight cost -1 for each companion who has resistance 2 or less.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("invader1");
 
 		assertEquals("Uruk Invader", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -63,18 +73,119 @@ public class Card_13_171_Tests
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void UrukInvaderTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void CostsOneLessForEachOfTwoCompanionsAtResistance2AndNotForAnAllyOrMinion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var frodo = scn.GetRingBearer();
+		var knight = scn.GetFreepsCard("knight");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var faramir = scn.GetFreepsCard("faramir");
+		var thrarin = scn.GetFreepsCard("thrarin");
+		scn.MoveCompanionsToTable(knight, gandalf, faramir);
+		scn.MoveAlliesToTable(thrarin);
+
+		var invader1 = scn.GetShadowCard("invader1");
+		var invader2 = scn.GetShadowCard("invader2");
+		var guard = scn.GetShadowCard("guard");
+		var warrior = scn.GetShadowCard("warrior");
+		scn.MoveCardsToHand(invader1, invader2, guard);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		assertInHand(invader1);
+		// Each burden takes 1 from every companion's resistance.
+		scn.AddBurdens(4);
+		assertEquals(4, scn.GetBurdens());
+		assertEquals(2, scn.GetResistance(knight));
+		assertEquals(2, scn.GetResistance(gandalf));
+		assertEquals(3, scn.GetResistance(faramir));
+		assertEquals(6, scn.GetResistance(frodo));
+		assertEquals(0, scn.GetResistance(thrarin));
 
-		assertEquals(4, scn.GetTwilight());
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+		// A minion in play has no resistance to count.
+		scn.MoveMinionsToTable(warrior);
+		scn.ShadowRefreshDecision();
+
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		// The Knight and Gandalf, of two cultures and races; not Faramir at 3, nor the ally, nor the minion.
+		// 4 - 2 = 2, for each copy; another minion in hand costs what it prints.
+		assertEquals(2, scn.GetTwilightCost(invader1));
+		assertEquals(2, scn.GetTwilightCost(invader2));
+		assertEquals(3, scn.GetTwilightCost(guard));
+
+		assertInHand(invader1);
+		int twilight = scn.GetTwilight();
+		scn.ShadowPlayCard(invader1);
+		assertInZone(Zone.SHADOW_CHARACTERS, invader1);
+		// 4 - 2 for the companions, + 2 roaming at site 2
+		assertEquals(twilight - 4, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void CostsOneLessForEachOfThreeCompanionsAtResistance2() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var knight = scn.GetFreepsCard("knight");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var faramir = scn.GetFreepsCard("faramir");
+		scn.MoveCompanionsToTable(knight, gandalf, faramir);
+
+		var invader1 = scn.GetShadowCard("invader1");
+		scn.MoveCardsToHand(invader1);
+
+		scn.StartGame();
+		assertInHand(invader1);
+		scn.AddBurdens(5);
+		assertEquals(1, scn.GetResistance(knight));
+		assertEquals(1, scn.GetResistance(gandalf));
+		assertEquals(2, scn.GetResistance(faramir));
+
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		// 4 - 3 = 1
+		assertEquals(1, scn.GetTwilightCost(invader1));
+		assertInHand(invader1);
+		int twilight = scn.GetTwilight();
+		scn.ShadowPlayCard(invader1);
+		assertInZone(Zone.SHADOW_CHARACTERS, invader1);
+		// 4 - 3 for the companions, + 2 roaming at site 2
+		assertEquals(twilight - 3, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void CompanionsAtResistance3GiveNoDiscount() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var knight = scn.GetFreepsCard("knight");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.MoveCompanionsToTable(knight, gandalf);
+
+		var invader1 = scn.GetShadowCard("invader1");
+		scn.MoveCardsToHand(invader1);
+
+		scn.StartGame();
+		assertInHand(invader1);
+		scn.AddBurdens(3);
+		assertEquals(3, scn.GetResistance(knight));
+		assertEquals(3, scn.GetResistance(gandalf));
+
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertEquals(4, scn.GetTwilightCost(invader1));
+		assertInHand(invader1);
+		int twilight = scn.GetTwilight();
+		scn.ShadowPlayCard(invader1);
+		assertInZone(Zone.SHADOW_CHARACTERS, invader1);
+		// 4, + 2 roaming at site 2
+		assertEquals(twilight - 6, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }
