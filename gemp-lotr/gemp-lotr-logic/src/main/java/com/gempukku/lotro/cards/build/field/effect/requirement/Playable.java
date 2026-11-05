@@ -39,7 +39,12 @@ public class Playable implements RequirementProducer {
             final var filter = filterableSource.getFilterable(actionContext);
 
             if(zone == Zone.DISCARD) {
-                return PlayConditions.canPlayFromDiscard(player, game, discount, filter);
+                // The requirement is asked before the action is paid for.  Where the action is an event still
+                // to be played, its own twilight cost leaves the pool before the card could be played: playing
+                // from the discard pile as an effect is to be treated as a cost, and both have to be payable
+                // (Ketura on F-0046; F-0058).  This is what PlayCardFromDiscard counts when it is asked
+                // beforehand; it is zero for every action but an event being asked whether it can be played.
+                return PlayConditions.canPlayFromDiscard(player, game, discount, actionContext.getUnpaidTwilightCost(), filter);
             }
 
             if(zone == Zone.DECK) {
