@@ -1,44 +1,64 @@
-
 package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v01;
 
+import com.gempukku.lotro.common.CardType;
+import com.gempukku.lotro.common.Keyword;
+import com.gempukku.lotro.common.Phase;
+import com.gempukku.lotro.common.SitesBlock;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.framework.VirtualTableScenario;
-import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.modifiers.MoveLimitModifier;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static com.gempukku.lotro.framework.Assertions.*;
+import static org.junit.Assert.*;
 
 public class Card_V1_060_Tests
 {
-
+	// The Ring-bearer is Frodo, Son of Drogo.  He is kept out of every skirmish here: in this format his skirmish
+	// may not be canceled whatever the site says.
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
-				new HashMap<>() {{
-					put("sam", "1_311");
-					put("merry", "1_302");
+				new HashMap<>()
+				{{
+					// Three Hobbits of strength 3 and vitality 4, none with text that comes into play here
+					put("merry", "1_302");      // Merry, Friend to Sam
+					put("pippin", "1_306");     // Pippin, Friend to Frodo
+					put("sam", "1_311");        // Sam, Son of Hamfast
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8
+					// Hobbit Stealth: "Skirmish: At sites 1 to 5, cancel a skirmish involving a Hobbit."  Costs 1.
 					put("stealth1", "1_298");
 					put("stealth2", "1_298");
 					put("stealth3", "1_298");
 
-
-					put("chieftain", "1_163");
+					// Cave Troll of Moria, Scourge of the Black Pit: unique [moria] Troll, strength 15, vitality 4,
+					// damage +1, fierce.  "To play, spot a [moria] Orc.  At an underground site, Cave Troll of
+					// Moria's twilight cost is -3."  Costs 10.
+					put("troll", "1_165");
+					// Guard Commander: unique [moria] Orc, strength 7, vitality 2; a skirmish ability the Shadow
+					// player never uses here
+					put("commander", "1_186");
+					// Goblin Runner: [moria] Orc, not unique, strength 5, vitality 1
 					put("runner", "1_178");
-					put("uruk", "1_151");
+					put("runner2", "1_178");
+					put("savage", "1_151");     // Uruk Savage: [isengard], not unique, strength 5, vitality 3
+					// Ulaire Lemenya: unique [ringwraith] Nazgul; his text needs a [ringwraith] condition on a companion
+					put("lemenya", "1_232");
+					// The Long Dark: unique [moria] condition; adds twilight for Dwarf companions, of whom there are none
+					put("longDark", "1_188");
 				}},
-				new HashMap<>() {{
+				new HashMap<>()
+				{{
 					put("site1", "1_319");
-					put("site2", "1_327");
-					put("site3", "1_337");
+					put("site2", "1_331");
+					put("site3", "1_341");
 					put("site4", "101_60");
 					put("site5", "1_349");
-					put("site6", "1_350");
+					put("site6", "1_351");
 					put("site7", "1_353");
 					put("site8", "1_356");
 					put("site9", "1_360");
@@ -52,169 +72,251 @@ public class Card_V1_060_Tests
 	public void MoriaCrossroadsStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: V1
-		* Title: Moria Crossroads
-		* Side: Free Peoples
-		* Culture: 
-		* Twilight Cost: 3
-		* Type: site
-		* Subtype: 
-		* Site Number: 4
-		* Game Text: Underground. While you can spot a unique [moria] minion, skirmishes involving [moria] minions may not be cancelled.
-		*/
+		 * Set: V1
+		 * Name: Moria Crossroads
+		 * Unique: False
+		 * Type: Site
+		 * Block: Fellowship
+		 * Site Number: 4
+		 * Shadow Number: 3
+		 * Direction: Right
+		 * Game Text: Underground. While you can spot a unique [moria] minion, skirmishes involving [moria] minions
+		 * 	may not be canceled.
+		 */
 
-		//Pre-game setup
-		VirtualTableScenario scn = GetScenario();
+		var scn = GetScenario();
 
-		PhysicalCardImpl site4 = scn.GetFreepsSite(4);
+		var card = scn.GetFreepsSite(4);
 
-		assertFalse(site4.getBlueprint().isUnique());
-		//assertEquals(Side.FREE_PEOPLE, site4.getBlueprint().getSide());
-		//assertEquals(Culture., card.getBlueprint().getCulture());
-		assertEquals(CardType.SITE, site4.getBlueprint().getCardType());
-		//assertEquals(Race.CREATURE, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(site4, Keyword.UNDERGROUND)); // test for keywords as needed
-		assertEquals(3, site4.getBlueprint().getTwilightCost());
-		//assertEquals(, card.getBlueprint().getStrength());
-		//assertEquals(, card.getBlueprint().getVitality());
-		//assertEquals(, card.getBlueprint().getResistance());
-		//assertEquals(Signet., card.getBlueprint().getSignet()); 
-		assertEquals(4, site4.getBlueprint().getSiteNumber()); // Change this to getAllyHomeSiteNumbers for allies
-
+		assertEquals("Moria Crossroads", card.getBlueprint().getTitle());
+		assertNull(card.getBlueprint().getSubtitle());
+		assertFalse(card.getBlueprint().isUnique());
+		assertEquals(CardType.SITE, card.getBlueprint().getCardType());
+		assertEquals(SitesBlock.FELLOWSHIP, card.getBlueprint().getSiteBlock());
+		assertEquals(4, card.getBlueprint().getSiteNumber());
+		assertEquals(3, card.getBlueprint().getTwilightCost());
+		assertEquals(LotroCardBlueprint.Direction.RIGHT, card.getBlueprint().getSiteDirection());
+		assertTrue(scn.HasKeyword(card, Keyword.UNDERGROUND));
 	}
 
 	@Test
-	public void UniqueMoriaMinionBlocksSkirmishCancelingInMoriaSkirmishes() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		VirtualTableScenario scn = GetScenario();
+	public void WithAUniqueMoriaMinionInPlayOnlySkirmishesInvolvingMoriaMinionsAreKeptFromBeingCanceled() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
 
-		PhysicalCardImpl frodo = scn.GetRingBearer();
-		PhysicalCardImpl sam = scn.GetFreepsCard("sam");
-		PhysicalCardImpl merry = scn.GetFreepsCard("merry");
-		PhysicalCardImpl stealth1 = scn.GetFreepsCard("stealth1");
-		PhysicalCardImpl stealth2 = scn.GetFreepsCard("stealth2");
-		PhysicalCardImpl stealth3 = scn.GetFreepsCard("stealth3");
+		var merry = scn.GetFreepsCard("merry");
+		var pippin = scn.GetFreepsCard("pippin");
+		var sam = scn.GetFreepsCard("sam");
+		var stealth1 = scn.GetFreepsCard("stealth1");
+		var stealth2 = scn.GetFreepsCard("stealth2");
+		var stealth3 = scn.GetFreepsCard("stealth3");
+		scn.MoveCompanionsToTable(merry, pippin, sam);
+
+		var troll = scn.GetShadowCard("troll");
+		var runner = scn.GetShadowCard("runner");
+		var savage = scn.GetShadowCard("savage");
+
+		scn.StartGame();
+		scn.SkipToSite(3);
 
 		scn.MoveCardsToHand(stealth1, stealth2, stealth3);
-		scn.MoveCompanionsToTable(sam, merry);
+		scn.MoveCardsToHand(troll);
+		scn.MoveMinionsToTable(runner, savage);
+		assertEquals(0, scn.GetTwilight());
 
-		PhysicalCardImpl runner = scn.GetShadowCard("runner");
-		PhysicalCardImpl chieftain = scn.GetShadowCard("chieftain");
-		PhysicalCardImpl uruk = scn.GetShadowCard("uruk");
-		scn.MoveMinionsToTable(runner, chieftain, uruk);
+		scn.FreepsPass();
+		assertEquals("Moria Crossroads", scn.GetCurrentSite().getBlueprint().getTitle());
 
-		//Max out the move limit so we don't have to juggle play back and forth
-		scn.ApplyAdHocModifier(new MoveLimitModifier(null, 10));
+		// The unique [moria] minion is played from hand, and is a Troll: the site asks for a minion, not an Orc.
+		// 4 companions + 3 for the site; the Cave Troll costs 10 - 3 at an underground site, which this site is.
+		assertEquals(7, scn.GetTwilight());
+		scn.ShadowPlayCard(troll);
+		assertEquals(0, scn.GetTwilight());
+		assertInZone(Zone.SHADOW_CHARACTERS, troll);
 
-		scn.StartGame();
-
-		//Site 2
-		scn.SkipToPhase(Phase.REGROUP);
-		scn.PassCurrentPhaseActions();
-		if(scn.ShadowDecisionAvailable("reconcile"))
-		{
-			scn.ShadowDeclineReconciliation();
-		}
-		scn.FreepsChooseToMove();
-
-		//Site 3
-		scn.SkipToPhase(Phase.REGROUP);
-		scn.PassCurrentPhaseActions();
-		if(scn.ShadowDecisionAvailable("reconcile"))
-		{
-			scn.ShadowDeclineReconciliation();
-		}
-		scn.FreepsChooseToMove();
-
-		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.PassCurrentPhaseActions();
-
+		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(
-				new PhysicalCardImpl[]{merry, uruk},
-				new PhysicalCardImpl[]{sam, runner},
-				new PhysicalCardImpl[]{frodo, chieftain}
+				new PhysicalCardImpl[]{merry, savage},
+				new PhysicalCardImpl[]{pippin, runner},
+				new PhysicalCardImpl[]{sam, troll}
 		);
 
-		// We cannot actually test ahead of time whether Stealth will be allowed to resolve, since per RAW effects
-		// are to be attempted as much as possible and if they fail, they fail.
+		// A skirmish involving an [isengard] minion and no [moria] one is canceled as usual.
 		scn.FreepsResolveSkirmish(merry);
+		assertTrue(scn.IsCharSkirmishingAgainst(merry, savage));
+		assertTrue(scn.FreepsPlayAvailable(stealth1));
 		scn.FreepsPlayCard(stealth1);
-
-		//non-moria skirmish stealth allowed, skipped to next skirmish
+		assertInDiscard(stealth1);
+		assertFalse(scn.IsCharSkirmishing(merry));
+		assertFalse(scn.IsCharAssigned(merry));
+		assertEquals(0, scn.GetWoundsOn(merry));
+		assertEquals(0, scn.GetWoundsOn(savage));
 		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
 
-		scn.FreepsResolveSkirmish(sam);
+		// A skirmish involving a [moria] minion that is not unique, while the unique one waits for its own skirmish:
+		// the event is played and paid for, and the skirmish goes on and is lost.  3 against 5.
+		scn.FreepsResolveSkirmish(pippin);
+		assertEquals(1, scn.GetTwilight());
 		scn.FreepsPlayCard(stealth2);
-		//non-unique moria skirmish stealth BLOCKED, so shadow action next as normal
-		assertTrue(scn.ShadowDecisionAvailable("Choose action to play or Pass"));
+		assertInDiscard(stealth2);
+		assertEquals(2, scn.GetTwilight());
+		assertTrue(scn.IsCharSkirmishingAgainst(pippin, runner));
+		assertFalse(scn.IsCharSkirmishing(troll));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		assertEquals(0, scn.GetWoundsOn(pippin));
+		scn.ShadowPass();
+		scn.FreepsPass();
+		assertEquals(1, scn.GetWoundsOn(pippin));
+		assertEquals(0, scn.GetWoundsOn(runner));
 
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
-
-		scn.FreepsResolveSkirmish(frodo);
+		// The skirmish of the unique [moria] minion itself, with no Orc in it.  3 against 15: Sam is overwhelmed.
+		scn.FreepsResolveSkirmish(sam);
 		scn.FreepsPlayCard(stealth3);
-		//unique moria skirmish stealth BLOCKED, so shadow action next as normal
-		assertTrue(scn.ShadowDecisionAvailable("Choose action to play or Pass"));
+		assertInDiscard(stealth3);
+		assertTrue(scn.IsCharSkirmishingAgainst(sam, troll));
+		assertEquals(15, scn.GetStrength(troll));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		scn.ShadowPass();
+		scn.FreepsPass();
+		assertInZone(Zone.DEAD, sam);
+
+		// The Cave Troll is fierce and lives, so the skirmishes are followed by a second assignment.
+		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
 
 	@Test
-	public void NonUniqueMoriaMinionDoesNotBlocksSkirmishCanceling() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		VirtualTableScenario scn = GetScenario();
+	public void OnceTheUniqueMoriaMinionIsKilledASkirmishInvolvingAMoriaMinionIsCanceledAgain() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
 
-		PhysicalCardImpl frodo = scn.GetRingBearer();
-		PhysicalCardImpl sam = scn.GetFreepsCard("sam");
-		PhysicalCardImpl merry = scn.GetFreepsCard("merry");
-		PhysicalCardImpl stealth1 = scn.GetFreepsCard("stealth1");
-		PhysicalCardImpl stealth2 = scn.GetFreepsCard("stealth2");
+		var merry = scn.GetFreepsCard("merry");
+		var pippin = scn.GetFreepsCard("pippin");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var stealth1 = scn.GetFreepsCard("stealth1");
+		var stealth2 = scn.GetFreepsCard("stealth2");
+		scn.MoveCompanionsToTable(merry, pippin, aragorn);
 
-		scn.MoveCardsToHand(stealth1, stealth2);
-		scn.MoveCompanionsToTable(sam, merry);
-
-		PhysicalCardImpl runner = scn.GetShadowCard("runner");
-		PhysicalCardImpl uruk = scn.GetShadowCard("uruk");
-		scn.MoveMinionsToTable(runner, uruk);
-
-		//Max out the move limit so we don't have to juggle play back and forth
-		scn.ApplyAdHocModifier(new MoveLimitModifier(null, 10));
+		var commander = scn.GetShadowCard("commander");
+		var runner = scn.GetShadowCard("runner");
+		var runner2 = scn.GetShadowCard("runner2");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var longDark = scn.GetShadowCard("longDark");
 
 		scn.StartGame();
+		scn.SkipToSite(3);
 
-		//Site 2
-		scn.SkipToPhase(Phase.REGROUP);
-		scn.PassCurrentPhaseActions();
-		if(scn.ShadowDecisionAvailable("reconcile"))
-		{
-			scn.ShadowDeclineReconciliation();
-		}
-		scn.FreepsChooseToMove();
+		scn.MoveCardsToHand(stealth1, stealth2);
+		scn.MoveMinionsToTable(commander, runner, runner2, lemenya);
+		// The Guard Commander (vitality 2) is one wound from death.
+		scn.AddWoundsToChar(commander, 1);
 
-		//Site 3
-		scn.SkipToPhase(Phase.REGROUP);
-		scn.PassCurrentPhaseActions();
-		if(scn.ShadowDecisionAvailable("reconcile"))
-		{
-			scn.ShadowDeclineReconciliation();
-		}
-		scn.FreepsChooseToMove();
+		scn.FreepsPass();
+		assertEquals("Moria Crossroads", scn.GetCurrentSite().getBlueprint().getTitle());
+		scn.MoveCardsToSupportArea(longDark);
 
-		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.PassCurrentPhaseActions();
-
+		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(
-				new PhysicalCardImpl[]{merry, uruk},
-				new PhysicalCardImpl[]{sam, runner}
+				new PhysicalCardImpl[]{merry, runner},
+				new PhysicalCardImpl[]{aragorn, commander},
+				new PhysicalCardImpl[]{pippin, runner2}
 		);
+		// Ulaire Lemenya is left out of the fighting.
+		scn.ShadowDeclineAssignments();
 
+		// With the Guard Commander alive, Merry's skirmish with a Goblin Runner is not canceled.  3 against 5.
 		scn.FreepsResolveSkirmish(merry);
 		scn.FreepsPlayCard(stealth1);
-		//non-moria skirmish stealth allowed, skipped to next skirmish
-		assertTrue(scn.FreepsDecisionAvailable("Choose next skirmish to resolve"));
+		assertInDiscard(stealth1);
+		assertTrue(scn.IsCharSkirmishingAgainst(merry, runner));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		scn.ShadowPass();
+		scn.FreepsPass();
+		assertEquals(1, scn.GetWoundsOn(merry));
 
+		// Aragorn kills the Guard Commander.  8 against 7.
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.PassSkirmishActions();
+		assertInDiscard(commander);
+		assertEquals(0, scn.GetWoundsOn(aragorn));
 
-		scn.FreepsResolveSkirmish(sam);
+		// Still in play: two [moria] minions that are not unique, a unique minion that is not [moria], and a unique
+		// [moria] card that is not a minion.
+		assertInZone(Zone.SHADOW_CHARACTERS, runner, runner2, lemenya);
+		assertInZone(Zone.SUPPORT, longDark);
+
+		// Pippin's skirmish with the other Goblin Runner is canceled.
+		scn.FreepsResolveSkirmish(pippin);
+		assertTrue(scn.IsCharSkirmishingAgainst(pippin, runner2));
 		scn.FreepsPlayCard(stealth2);
-		//non-unique moria skirmish stealth ALLOWED
-		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
+		assertInDiscard(stealth2);
+		assertFalse(scn.IsCharSkirmishing(pippin));
+		assertFalse(scn.IsCharAssigned(pippin));
+		assertEquals(0, scn.GetWoundsOn(pippin));
+		assertEquals(0, scn.GetWoundsOn(runner2));
+
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void OnceTheFellowshipHasLeftTheCrossroadsASkirmishInvolvingAMoriaMinionIsCanceledThoughTheUniqueOneLives() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var merry = scn.GetFreepsCard("merry");
+		var pippin = scn.GetFreepsCard("pippin");
+		var stealth1 = scn.GetFreepsCard("stealth1");
+		var stealth2 = scn.GetFreepsCard("stealth2");
+		scn.MoveCompanionsToTable(merry, pippin);
+
+		var commander = scn.GetShadowCard("commander");
+		var runner = scn.GetShadowCard("runner");
+		var runner2 = scn.GetShadowCard("runner2");
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+
+		scn.MoveCardsToHand(stealth1, stealth2);
+		scn.MoveMinionsToTable(commander, runner, runner2);
+
+		scn.FreepsPass();
+		var crossroads = scn.GetCurrentSite();
+		assertEquals("Moria Crossroads", crossroads.getBlueprint().getTitle());
+
+		// At the Crossroads, with the Guard Commander in play and assigned to nobody, Merry's skirmish with a
+		// Goblin Runner is not canceled.  3 against 5.
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(merry, runner);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(merry);
+		scn.FreepsPlayCard(stealth1);
+		assertInDiscard(stealth1);
+		assertTrue(scn.IsCharSkirmishingAgainst(merry, runner));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		scn.ShadowPass();
+		scn.FreepsPass();
+		assertEquals(1, scn.GetWoundsOn(merry));
+
+		// The fellowship moves again, to site 5, and the Crossroads lie behind it.  The same three minions are
+		// still on the table.
+		scn.SkipToMovementDecision();
+		scn.FreepsChooseToMove();
+		assertEquals(5, scn.GetCurrentSiteNumber());
+		assertSame(crossroads, scn.GetSite(4));
+		assertInZone(Zone.SHADOW_CHARACTERS, commander, runner, runner2);
+
+		// The text of a site binds only while the fellowship is at it: Pippin's skirmish with the other Goblin
+		// Runner is canceled, the unique [moria] minion still in play.
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(pippin, runner2);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(pippin);
+		assertTrue(scn.IsCharSkirmishingAgainst(pippin, runner2));
+		scn.FreepsPlayCard(stealth2);
+		assertInDiscard(stealth2);
+		assertFalse(scn.IsCharSkirmishing(pippin));
+		assertFalse(scn.IsCharAssigned(pippin));
+		assertEquals(0, scn.GetWoundsOn(pippin));
+		assertEquals(0, scn.GetWoundsOn(runner2));
+		assertInZone(Zone.SHADOW_CHARACTERS, commander);
+
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }
