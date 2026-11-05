@@ -1,16 +1,14 @@
 package com.gempukku.lotro.cards.official.set04;
 
 import com.gempukku.lotro.framework.VirtualTableScenario;
-import com.gempukku.lotro.common.CardType;
-import com.gempukku.lotro.common.Culture;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_04_308_Tests
@@ -20,8 +18,16 @@ public class Card_04_308_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "4_308");
-					// put other cards in here as needed for the test case
+					put("knocked", "4_308");
+					put("merry", "1_302");      // Merry, Friend to Sam: a [shire] unbound Hobbit; a skirmish ability used only on purpose
+					// Pippin, Trollslayer: a [gondor] unbound Hobbit; to play, spot a [gondor] companion (Boromir)
+					put("trollslayer", "103_31");
+					put("sam", "1_311");        // Sam, Son of Hamfast: a Ring-bound Hobbit companion
+					put("maggot", "1_288");     // Farmer Maggot, Chaser of Rascals: a Hobbit ally
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: an unbound companion who is no Hobbit
+					put("boromir", "0_65");     // Boromir, Steward's Heir: a [gondor] companion with keywords only
+					// Pippin, Friend to Frodo: an unbound Hobbit, laid in the OTHER player's discard pile
+					put("pippin", "1_306");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +52,7 @@ public class Card_04_308_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("knocked");
 
 		assertEquals("Knocked on the Head", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -54,22 +60,64 @@ public class Card_04_308_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-        assertTrue(scn.HasTimeword(card, Timeword.REGROUP));
+		assertTrue(scn.HasTimeword(card, Timeword.REGROUP));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void KnockedontheHeadTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void PlaysAnUnboundHobbitOfAnyCultureFromYourDiscardPileAndNoOtherCard() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var knocked = scn.GetFreepsCard("knocked");
+		var merry = scn.GetFreepsCard("merry");
+		var trollslayer = scn.GetFreepsCard("trollslayer");
+		var sam = scn.GetFreepsCard("sam");
+		var maggot = scn.GetFreepsCard("maggot");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		var pippin = scn.GetShadowCard("pippin");
+		scn.MoveCompanionsToTable(boromir);
+		scn.MoveCardsToDiscard(merry, trollslayer, sam, maggot, aragorn, pippin);
+		scn.MoveCardsToHand(knocked);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		assertInDiscard(merry, trollslayer, sam, maggot, aragorn, pippin);
 
-		assertEquals(0, scn.GetTwilight());
+		scn.SkipToPhase(Phase.REGROUP);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		assertTrue(scn.FreepsPlayAvailable(knocked));
+		scn.FreepsPlayCard(knocked);
+
+		// A [shire] and a [gondor] unbound Hobbit; not a Ring-bound Hobbit, a Hobbit ally, an unbound Man,
+		// nor the other player's unbound Hobbit in his own discard pile.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(merry, trollslayer));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(sam, maggot, aragorn, pippin));
+		scn.FreepsChooseCard(trollslayer);
+
+		assertInZone(Zone.FREE_CHARACTERS, trollslayer);
+		assertInDiscard(knocked, merry, sam, maggot, aragorn, pippin);
+		// The regroup phase goes on, the Shadow player next to act.
+		assertTrue(scn.ShadowDecisionAvailable("Play Regroup action or Pass"));
+	}
+
+	@Test
+	public void CannotBePlayedWithNoUnboundHobbitInYourDiscardPile() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var knocked = scn.GetFreepsCard("knocked");
+		var sam = scn.GetFreepsCard("sam");
+		var maggot = scn.GetFreepsCard("maggot");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var pippin = scn.GetShadowCard("pippin");
+		scn.MoveCardsToDiscard(sam, maggot, aragorn, pippin);
+		scn.MoveCardsToHand(knocked);
+
+		scn.StartGame();
+		assertInDiscard(sam, maggot, aragorn, pippin);
+
+		scn.SkipToPhase(Phase.REGROUP);
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		assertFalse(scn.FreepsPlayAvailable(knocked));
+		assertInHand(knocked);
 	}
 }

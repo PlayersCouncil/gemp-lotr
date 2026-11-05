@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_04_138_Tests
@@ -17,8 +18,11 @@ public class Card_04_138_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "4_138");
-					// put other cards in here as needed for the test case
+					put("bowmen", "4_138");
+
+					// Southron Explorer: strength 5, vitality 3, no archer. "Regroup: Exert this minion and remove
+					// (5) to take control of a site."
+					put("explorer", "4_250");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +50,7 @@ public class Card_04_138_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("bowmen");
 
 		assertEquals("Band of Uruk Bowmen", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -64,18 +68,55 @@ public class Card_04_138_Tests
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void BandofUrukBowmenTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void MinionArcheryTotalIsPlus1OnceItsOwnerTakesControlOfASite() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var bowmen = scn.GetShadowCard("bowmen");
+		var explorer = scn.GetShadowCard("explorer");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToSite(2);
+		var site1 = scn.GetSite(1);
+		scn.MoveMinionsToTable(explorer);
+		// The fellowship moves to site 3; both markers have passed site 1.
+		scn.SkipToPhase(Phase.REGROUP);
+		// The archer is laid once the archery phase is behind, where minions that lived through it stand.
+		scn.MoveMinionsToTable(bowmen);
+		scn.SetTwilight(10);
 
-		assertEquals(5, scn.GetTwilight());
+		// The archer's own 1, and no site controlled.
+		assertEquals(0, scn.GetShadowControlledSiteCount());
+		assertEquals(1, scn.GetShadowArcheryTotal());
+
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(explorer);
+		assertTrue(scn.ShadowControls(site1));
+		// 1 for the archer + 1 while a site is controlled
+		assertEquals(2, scn.GetShadowArcheryTotal());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void MinionArcheryTotalIsNotPlus1WhileOnlyTheOtherPlayerControlsASite() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var bowmen = scn.GetShadowCard("bowmen");
+
+		scn.StartGame();
+		scn.SkipToSite(2);
+		var site1 = scn.GetSite(1);
+		// The Free Peoples player took site 1 on a turn of his as the Shadow player.
+		scn.FreepsTakeControlOfSite();
+		scn.MoveMinionsToTable(bowmen);
+
+		assertTrue(scn.FreepsControls(site1));
+		assertEquals(0, scn.GetShadowControlledSiteCount());
+		// The archer's own 1 alone.
+		assertEquals(1, scn.GetShadowArcheryTotal());
+
+		scn.FreepsPass();
+		assertEquals(1, scn.GetShadowArcheryTotal());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

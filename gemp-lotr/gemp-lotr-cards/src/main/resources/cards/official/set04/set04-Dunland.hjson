@@ -234,11 +234,23 @@
 			type: event
 			effect: [
 				{
-					type: modifyStrength
+					type: chooseActiveCards
 					select: choose(culture(dunland),man)
+					text: Choose a {dunland} Man to make strength +1 for each companion you spot
+					memorize: chosenMan
+				}
+				{
+					type: chooseHowManyToSpot
+					filter: companion
+					text: Choose how many companions to spot
+					memorize: spotCount
+				}
+				{
+					type: modifyStrength
+					select: memory(chosenMan)
 					amount: {
-							type: forEachYouCanSpot
-							filter: companion
+						type: fromMemory
+						memory: spotCount
 					}
 				}
 			]
@@ -412,7 +424,6 @@
 			{
 				type: Trigger
 				optional: true
-				trigger: optional
 				trigger: {
 						type: winsSkirmish
 						filter: self
@@ -461,26 +472,44 @@
 		vitality: 1
 		site: 3
 		effects: [
+			// Q-0339 (Ketura, 2026-10-16): "a branch of 0-1 Free Peoples possessions, or 0-2 possessions of any
+			// side if the requirement is met".  One trigger for each branch, so that each is offered only where it
+			// has something to discard (Q-0224): an If inside one trigger would be offered, with fewer than 6
+			// companions, for a Shadow possession it could not take.
 			{
 				type: Trigger
 				optional: true
 				trigger: {
-						type: winsSkirmish
-						filter: self
+					type: winsSkirmish
+					filter: self
+				}
+				requires: {
+					type: cantSpot
+					filter: companion
+					count: 6
 				}
 				effect: {
-						type: discard
-						select: choose(side(free),possession)
-						count: {
-								type: Conditional
-								requires: {
-										type: canSpot
-										filter: companion
-										count: 6
-								}
-								true: 2
-								false: 1
-						}
+					type: discard
+					select: choose(side(free),possession)
+					count: 0-1
+				}
+			}
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				requires: {
+					type: canSpot
+					filter: companion
+					count: 6
+				}
+				effect: {
+					type: discard
+					select: choose(possession)
+					count: 0-2
 				}
 			}
 		]
@@ -519,10 +548,15 @@
 						type: winsSkirmish
 						filter: self
 				}
-				requires: {
-						type: canSpot
-						filter: another,culture(dunland),man
-				}
+				requires: [
+						{
+								type: canSpot
+								filter: another,culture(dunland),man
+						}
+						{
+								type: SiteAvailableToControl
+						}
+				]
 				effect: {
 						type: takeControlOfSite
 				}
@@ -567,14 +601,17 @@
 			{
 				type: activated
 				phase: assignment
+				# An ally this minion could be assigned to once the ally participates in skirmishes: with
+				# none (no ally, every ally assigned already or barred from skirmishes, or this minion
+				# assigned already) the ability would do nothing and is not offered (Q-0034, F-0283).
 				requires: {
 						type: canSpot
-						filter: ally
+						filter: ally,AssignableToSkirmishAgainstIgnoringAllyLocation(self)
 				}
 				effect: [
 						{
 								type: enableParticipationInSkirmishes
-								select: choose(ally)
+								select: choose(ally,AssignableToSkirmishAgainstIgnoringAllyLocation(self))
 								memorize: chosenAlly
 						}
 						{
@@ -694,14 +731,17 @@
 			{
 				type: activated
 				phase: assignment
+				# An ally this minion could be assigned to once the ally participates in skirmishes: with
+				# none (no ally, every ally assigned already or barred from skirmishes, or this minion
+				# assigned already) the ability would do nothing and is not offered (Q-0034, F-0283).
 				requires: {
 						type: canSpot
-						filter: ally
+						filter: ally,AssignableToSkirmishAgainstIgnoringAllyLocation(self)
 				}
 				effect: [
 						{
 								type: enableParticipationInSkirmishes
-								select: choose(ally)
+								select: choose(ally,AssignableToSkirmishAgainstIgnoringAllyLocation(self))
 								memorize: chosenAlly
 						}
 						{
@@ -857,10 +897,15 @@
 						trigger: {
 								type: moves
 						}
-						requires: {
-								type: canSpot
-								filter: another,culture(dunland),man
-						}
+						requires: [
+								{
+										type: canSpot
+										filter: another,culture(dunland),man
+								}
+								{
+										type: SiteAvailableToControl
+								}
+						]
 						effect: {
 								type: takeControlOfSite
 						}
@@ -1077,10 +1122,15 @@
 						type: winsSkirmish
 						filter: self
 				}
-				requires: {
-						type: canSpot
-						filter: another,culture(dunland),minion
-				}
+				requires: [
+						{
+								type: canSpot
+								filter: another,culture(dunland),minion
+						}
+						{
+								type: SiteAvailableToControl
+						}
+				]
 				effect: {
 						type: takeControlOfSite
 				}
@@ -1216,15 +1266,15 @@
 										select: choose(culture(dunland),man)
 										memorize: chosenMan
 								}
-								{
-										type: addModifier
-										modifier: {
-												type: cancelStrengthBonus
-												filter: inSkirmishAgainst(memory(chosenMan))
-												from: possession
-										}
-								}
 						]
+						effect: {
+								type: addModifier
+								modifier: {
+										type: cancelStrengthBonus
+										filter: inSkirmishAgainst(memory(chosenMan))
+										from: possession
+								}
+						}
 				}
 		]
 		gametext: Plays to your support area.<br><b>Shadow:</b> Remove (3) to place a [dunland] token here.<br><b>Skirmish:</b> Spot a [dunland] Man and remove a [dunland] token from this card. A character skirmishing that [dunland] Man does not gain strength bonuses from possessions.
@@ -1387,7 +1437,7 @@
 			effect: [
 				{
 					type: discard
-					select: all(side(free),attachedTo(memory(loser)))
+					select: all(side(free),attachedTo(memory(loser),or(companion,ally)))
 				}
 			]
 		}
@@ -1437,12 +1487,15 @@
 								type: moves
 						}
 						effect: {
-								type: exert
-								player: fp
-								select: choose(companion)
-								count: {
+								type: repeat
+								times: {
 										type: forEachYouCanSpot
 										filter: culture(dunland),man
+								}
+								effect: {
+										type: exert
+										player: fp
+										select: choose(companion)
 								}
 						}
 				}

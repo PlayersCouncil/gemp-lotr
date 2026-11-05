@@ -17,10 +17,35 @@ public class Card_04_218_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "4_218");
-					// put other cards in here as needed for the test case
+					put("legion", "4_218");
+					put("troop", "1_177");      // Goblin Patrol Troop: [moria] Orc, strength 13, no text
 				}},
 				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// The Fellowship path with Eregion Hills 3_116 as site 4: "When the fellowship moves to Eregion Hills, add a burden."
+	protected VirtualTableScenario GetEregionHillsScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("legion", "4_218");
+					put("troop", "1_177");      // Goblin Patrol Troop: [moria] Orc, strength 13, no text
+				}},
+				new HashMap<>()
+				{{
+					put("site1", "1_319");
+					put("site2", "1_331");
+					put("site3", "1_341");
+					put("site4", "3_116");
+					put("site5", "1_349");
+					put("site6", "1_351");
+					put("site7", "1_353");
+					put("site8", "1_356");
+					put("site9", "1_360");
+				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -46,36 +71,89 @@ public class Card_04_218_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var legion = scn.GetFreepsCard("legion");
 
-		assertEquals("Desert Legion", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.SOUTHRON));
-		assertTrue(scn.HasKeyword(card, Keyword.AMBUSH));
-		assertEquals(1, scn.GetKeywordCount(card, Keyword.AMBUSH));
-		assertEquals(6, card.getBlueprint().getTwilightCost());
-		assertEquals(13, card.getBlueprint().getStrength());
-		assertEquals(3, card.getBlueprint().getVitality());
-		assertEquals(4, card.getBlueprint().getSiteNumber());
+		assertEquals("Desert Legion", legion.getBlueprint().getTitle());
+		assertNull(legion.getBlueprint().getSubtitle());
+		assertTrue(legion.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, legion.getBlueprint().getSide());
+		assertEquals(Culture.RAIDER, legion.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, legion.getBlueprint().getCardType());
+		assertEquals(Race.MAN, legion.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(legion, Keyword.SOUTHRON));
+		assertTrue(scn.HasKeyword(legion, Keyword.AMBUSH));
+		assertEquals(1, scn.GetKeywordCount(legion, Keyword.AMBUSH));
+		assertEquals(6, legion.getBlueprint().getTwilightCost());
+		assertEquals(13, legion.getBlueprint().getStrength());
+		assertEquals(3, legion.getBlueprint().getVitality());
+		assertEquals(4, legion.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void DesertLegionTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void StrengthFierceAndDamageComeAtFourFiveAndSixBurdens() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var legion = scn.GetShadowCard("legion");
+		var troop = scn.GetShadowCard("troop");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(legion, troop);
+		scn.AddBurdens(3);
 
-		assertEquals(6, scn.GetTwilight());
+		assertEquals(3, scn.GetBurdens());
+		assertEquals(13, scn.GetStrength(legion));
+		assertFalse(scn.HasKeyword(legion, Keyword.FIERCE));
+		assertEquals(0, scn.GetKeywordCount(legion, Keyword.DAMAGE));
+
+		scn.AddBurdens(1);
+		assertEquals(4, scn.GetBurdens());
+		assertEquals(18, scn.GetStrength(legion));
+		assertFalse(scn.HasKeyword(legion, Keyword.FIERCE));
+		assertEquals(0, scn.GetKeywordCount(legion, Keyword.DAMAGE));
+
+		scn.AddBurdens(1);
+		assertEquals(5, scn.GetBurdens());
+		assertEquals(18, scn.GetStrength(legion));
+		assertTrue(scn.HasKeyword(legion, Keyword.FIERCE));
+		assertEquals(0, scn.GetKeywordCount(legion, Keyword.DAMAGE));
+
+		scn.AddBurdens(1);
+		assertEquals(6, scn.GetBurdens());
+		assertEquals(18, scn.GetStrength(legion));
+		assertTrue(scn.HasKeyword(legion, Keyword.FIERCE));
+		assertEquals(1, scn.GetKeywordCount(legion, Keyword.DAMAGE));
+
+		// The other minion is neither stronger, fierce nor damage +1.
+		assertEquals(13, scn.GetStrength(troop));
+		assertFalse(scn.HasKeyword(troop, Keyword.FIERCE));
+		assertEquals(0, scn.GetKeywordCount(troop, Keyword.DAMAGE));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void ABurdenAddedByMovingToEregionHillsMakesItStrengthPlusFive() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetEregionHillsScenario();
+
+		var legion = scn.GetShadowCard("legion");
+		var troop = scn.GetShadowCard("troop");
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+		scn.MoveMinionsToTable(legion, troop);
+		scn.AddBurdens(3);
+
+		assertEquals(3, scn.GetBurdens());
+		assertEquals(13, scn.GetStrength(legion));
+		assertEquals(13, scn.GetStrength(troop));
+
+		// The fellowship moves to Eregion Hills, site 4, which adds the fourth burden.
+		scn.FreepsPass();
+
+		assertEquals("Eregion Hills", scn.GetCurrentSite().getBlueprint().getTitle());
+		assertEquals(4, scn.GetBurdens());
+		assertEquals(18, scn.GetStrength(legion));
+		assertFalse(scn.HasKeyword(legion, Keyword.FIERCE));
+		assertEquals(13, scn.GetStrength(troop));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

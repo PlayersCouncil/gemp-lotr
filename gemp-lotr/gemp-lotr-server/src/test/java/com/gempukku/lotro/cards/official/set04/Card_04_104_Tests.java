@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_04_104_Tests
@@ -17,8 +18,16 @@ public class Card_04_104_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "4_104");
-					// put other cards in here as needed for the test case
+					put("treebeard", "4_104");
+					// In play, to be healed or not
+					put("gandalf", "1_72");     // Gandalf, Friend of the Shirefolk: an unbound Wizard
+					put("gimli", "1_13");       // Gimli, Son of Gloin: an unbound Dwarf; a skirmish ability only
+					put("sam", "1_311");        // Sam, Son of Hamfast: Ring-bound, not the Ring-bearer; his abilities are not used
+					// In hand, to be discarded or not
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: an unbound [gondor] Man
+					put("merry", "1_302");      // Merry, Friend to Sam: an unbound [shire] Hobbit
+					put("samcard", "1_311");    // a second Sam, held in hand: a Ring-bound companion card
+					put("bounder", "1_286");    // Bounder: an ally card, which is no companion
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +55,7 @@ public class Card_04_104_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("treebeard");
 
 		assertEquals("Treebeard", card.getBlueprint().getTitle());
 		assertEquals("Oldest Living Thing", card.getBlueprint().getSubtitle());
@@ -63,18 +72,137 @@ public class Card_04_104_Tests
 		assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.TWO_TOWERS, 8)));
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void TreebeardTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void FellowshipAbilityExertsTreebeardAndDiscardsAnUnboundCompanionFromHandToHealAnUnboundCompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var treebeard = scn.GetFreepsCard("treebeard");
+		var frodo = scn.GetRingBearer();
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var gimli = scn.GetFreepsCard("gimli");
+		var sam = scn.GetFreepsCard("sam");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var merry = scn.GetFreepsCard("merry");
+		var samcard = scn.GetFreepsCard("samcard");
+		var bounder = scn.GetFreepsCard("bounder");
+		scn.MoveAlliesToTable(treebeard);
+		scn.MoveCompanionsToTable(gandalf, gimli, sam);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveCardsToHand(aragorn, merry, samcard, bounder);
+		scn.AddWoundsToChar(gandalf, 2);
+		scn.AddWoundsToChar(gimli, 1);
+		scn.AddWoundsToChar(sam, 1);
+		scn.AddWoundsToChar(frodo, 1);
+		scn.FreepsRefreshDecision();
 
-		assertEquals(4, scn.GetTwilight());
+		assertInHand(aragorn, merry, samcard, bounder);
+		assertEquals(0, scn.GetWoundsOn(treebeard));
+		assertEquals(2, scn.GetWoundsOn(gandalf));
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertEquals(1, scn.GetWoundsOn(sam));
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertTrue(scn.FreepsActionAvailable(treebeard));
+		scn.FreepsUseCardAction(treebeard);
+
+		// The exertion, then the card from hand: the unbound companions, not the Ring-bound one or the ally.
+		assertEquals(1, scn.GetWoundsOn(treebeard));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(aragorn, merry));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(samcard, bounder));
+		scn.FreepsChooseCard(aragorn);
+		assertInZone(Zone.DISCARD, aragorn);
+		assertInHand(merry, samcard, bounder);
+
+		// The heal: the wounded unbound companions, not Sam, not the Ring-bearer, not Treebeard, a wounded ally.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(gandalf, gimli));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(sam, frodo, treebeard));
+		scn.FreepsChooseCard(gandalf);
+		// One wound of two
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertEquals(1, scn.GetWoundsOn(sam));
+		assertEquals(1, scn.GetWoundsOn(frodo));
+		assertEquals(1, scn.GetWoundsOn(treebeard));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void FellowshipAbilityIsNotOfferedWhileTreebeardIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var treebeard = scn.GetFreepsCard("treebeard");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveAlliesToTable(treebeard);
+		scn.MoveCompanionsToTable(gandalf);
+
+		scn.StartGame();
+		scn.MoveCardsToHand(aragorn);
+		scn.AddWoundsToChar(gandalf, 1);
+		// Vitality 4 with 3 wounds: exhausted.
+		scn.AddWoundsToChar(treebeard, 3);
+		scn.FreepsRefreshDecision();
+
+		assertInHand(aragorn);
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+		assertEquals(3, scn.GetWoundsOn(treebeard));
+		assertFalse(scn.FreepsActionAvailable(treebeard));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void FellowshipAbilityIsNotOfferedWithNoUnboundCompanionInHand() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var treebeard = scn.GetFreepsCard("treebeard");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var samcard = scn.GetFreepsCard("samcard");
+		var bounder = scn.GetFreepsCard("bounder");
+		scn.MoveAlliesToTable(treebeard);
+		scn.MoveCompanionsToTable(gandalf);
+
+		scn.StartGame();
+		// A Ring-bound companion and an ally in hand, and nothing else.
+		scn.MoveCardsToHand(samcard, bounder);
+		scn.AddWoundsToChar(gandalf, 1);
+		scn.FreepsRefreshDecision();
+
+		assertInHand(samcard, bounder);
+		assertEquals(2, scn.GetFreepsHandCount());
+		assertEquals(0, scn.GetWoundsOn(treebeard));
+		assertEquals(1, scn.GetWoundsOn(gandalf));
+		assertFalse(scn.FreepsActionAvailable(treebeard));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void WithNoWoundedUnboundCompanionTheCostsArePaidForNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var treebeard = scn.GetFreepsCard("treebeard");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var sam = scn.GetFreepsCard("sam");
+		var merry = scn.GetFreepsCard("merry");
+		scn.MoveAlliesToTable(treebeard);
+		scn.MoveCompanionsToTable(gandalf, sam);
+
+		scn.StartGame();
+		scn.MoveCardsToHand(merry);
+		// Only Sam, who is Ring-bound, is wounded.
+		scn.AddWoundsToChar(sam, 1);
+		scn.FreepsRefreshDecision();
+
+		assertInHand(merry);
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+		assertEquals(1, scn.GetWoundsOn(sam));
+		assertTrue(scn.FreepsActionAvailable(treebeard));
+		scn.FreepsUseCardAction(treebeard);
+
+		// Both costs are paid, the lone card in hand unasked, and nothing is healed.
+		assertEquals(1, scn.GetWoundsOn(treebeard));
+		assertInZone(Zone.DISCARD, merry);
+		assertEquals(1, scn.GetWoundsOn(sam));
+		assertEquals(0, scn.GetWoundsOn(gandalf));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

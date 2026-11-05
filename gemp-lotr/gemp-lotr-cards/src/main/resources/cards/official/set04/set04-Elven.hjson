@@ -18,10 +18,15 @@
 			type: event
 			effect: [
 				{
+					type: chooseHowManyToSpot
+					filter: elf,companion
+					memorize: spotCount
+				}
+				{
 					type: drawCards
 					count: {
-						type: forEachYouCanSpot
-						filter: elf,companion
+						type: fromMemory
+						memory: spotCount
 					}
 				}
 			]
@@ -55,7 +60,8 @@
 			cost: {
 				type: exert
 				select: choose(elf,companion)
-				count: any
+				// At least one: "exert X Elf companions" is an exertion cost and X is not zero (Q-0076).
+				count: anyNonZero
 				memorize: exertedElves
 			},
 			effect: [
@@ -540,7 +546,7 @@
 		effects: [
 			{
 				type: Trigger
-				optional: false
+				optional: true
 				trigger: {
 					type: winsSkirmish
 					filter: name(Legolas)
@@ -1040,7 +1046,6 @@
 			cost: {
 				type: exert
 				select: memory(winner)
-				ignoreCostCheckFailure: true
 			},
 			effect: [
 				{
