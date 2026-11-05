@@ -25,6 +25,20 @@ public interface ModifiersQuerying {
 
     LimitCounter getUntilEndOfTurnLimitCounter(PhysicalCard card, String prefix);
 
+    /**
+     * Counts the uses of a card at the site the fellowship is at: "limit once per site".  The count is cleared
+     * when the fellowship moves to another site and at the end of the turn, so it is once for each site in a turn
+     * (Ketura on Q-0084 and F-0146).
+     */
+    LimitCounter getSiteLimitCounter(PhysicalCard card);
+
+    LimitCounter getSiteLimitCounter(PhysicalCard card, String prefix);
+
+    /**
+     * The modifiers listed in a card's information ("Affecting card"), each as Modifier.getShownAsAffecting gives
+     * it: a rule's sum of the numbers printed on borne cards comes as one modifier for each borne card that adds
+     * something, with that card as its source.  For showing only; the game reads its numbers elsewhere.
+     */
     Collection<Modifier> getModifiersAffecting(LotroGame game, PhysicalCard card);
 
     Evaluator getFPStrengthOverrideEvaluator(LotroGame game, PhysicalCard fpCharacter);
@@ -60,7 +74,22 @@ public interface ModifiersQuerying {
 
     // Twilight cost
     int getTwilightCostToPlay(LotroGame game, PhysicalCard physicalCard, PhysicalCard target, int twilightCostModifier, boolean ignoreRoamingPenalty);
+    /**
+     * The twilight cost of a card that is not being played.  For a card in play that is the number printed on it:
+     * nothing another card does to a twilight cost reaches a card that is not coming into play (CR 4.2 "twilight
+     * cost"), and the card's own text about its cost is read the same way (Ketura, 2026-10-06, on Q-0073).  For a
+     * card anywhere else it is what the card would cost to play, the roaming penalty apart.  A site answers with
+     * its Shadow number as it stands, which is not a twilight cost and is changed where the site lies.
+     */
     int getCurrentTwilightCost(LotroGame game, PhysicalCard physicalCard);
+
+    /**
+     * What it costs to transfer a card.  A transfer pays the card's twilight cost again and is not a play (CR 4.2
+     * "transfer"), so the card is in play and not coming into play: it costs the number printed on it, whatever
+     * another card or its own text says about its twilight cost (CR 4.2 "twilight cost"; Ketura, 2026-10-06, on
+     * Q-0053 and Q-0074).
+     */
+    int getTwilightCostToTransfer(LotroGame game, PhysicalCard physicalCard);
 
     int getRoamingPenalty(LotroGame game, PhysicalCard physicalCard);
 
@@ -93,7 +122,14 @@ public interface ModifiersQuerying {
 
     boolean canBeExerted(LotroGame game, PhysicalCard exertionSource, PhysicalCard exertedCard);
 
-    boolean canBeHealed(LotroGame game, PhysicalCard card);
+    /**
+     * Whether performingPlayer may heal a wound from the card: the card is not hindered and no bar on healing
+     * that reaches it stops this player.  The player is whoever the heal is made by (HealResult's performing
+     * player); a bar that names a player (CantHealModifier with a banned player) stops only that player's heals.
+     * healSource is the card whose text makes the heal (HealCharactersEffect's source; the site for a sanctuary's
+     * heal), or null: a bar that excepts some sources (CantHealModifier's `by`; Q-0357) holds for a null one.
+     */
+    boolean canBeHealed(LotroGame game, String performingPlayer, PhysicalCard card, PhysicalCard healSource);
 
     boolean canAddBurden(LotroGame game, String performingPlayer, PhysicalCard source);
 
@@ -108,12 +144,25 @@ public interface ModifiersQuerying {
 
     boolean isUnhastyCompanionAllowedToParticipateInSkirmishes(LotroGame game, PhysicalCard card);
 
+    /**
+     * Whether a card has this ally participate in archery fire (be counted for the fellowship archery total, be
+     * assigned archery wounds) where the rules alone would not: away from home.  A card that says he may not
+     * participate beats every card that says he may ("can't" beats "can"), so this is false of an ally of whom
+     * isAllyPreventedFromParticipatingInArcheryFire is true, whatever allows him.
+     */
     boolean isAllyAllowedToParticipateInArcheryFire(LotroGame game, PhysicalCard card);
 
+    /**
+     * Whether a card has this ally participate in skirmishes (be assigned to a minion by that side's player, and
+     * fight) where the rules alone would not: away from home.  False of an ally of whom
+     * isAllyPreventedFromParticipatingInSkirmishes is true, whatever allows him.
+     */
     boolean isAllyAllowedToParticipateInSkirmishes(LotroGame game, Side sidePlayer, PhysicalCard card);
 
+    /** Whether a card says this ally may not participate in skirmishes, at home or anywhere else. */
     boolean isAllyPreventedFromParticipatingInSkirmishes(LotroGame game, Side sidePlayer, PhysicalCard card);
 
+    /** Whether a card says this ally may not participate in archery fire, at home or anywhere else. */
     boolean isAllyPreventedFromParticipatingInArcheryFire(LotroGame game, PhysicalCard card);
 
     boolean isValidAssignments(LotroGame game, Side side, Map<PhysicalCard, Set<PhysicalCard>> assignments);
@@ -164,13 +213,30 @@ public interface ModifiersQuerying {
 
     Side hasInitiative(LotroGame game);
 
+    /**
+     * Which side has initiative as a requirement of the given card reads it.  As hasInitiative, except that a
+     * card the Free Peoples player is playing from his hand is not counted in that hand: while it lies there,
+     * and while it lies in the void from hand with its costs being paid (CR 4.2 "playing a card": "You cannot
+     * count The Card for initiative. ... If you are the Free Peoples player and initiative is a requirement for
+     * playing The Card, you must have four cards in your hand not counting The Card"; F-0464).  For any other
+     * card, a card in play or in another player's hand, the answer is hasInitiative's.  The HaveInitiative
+     * requirement is its one caller; whether a side has lost initiative is still read by hasInitiative, which
+     * counts the card until its play is announced.
+     */
+    Side hasInitiativeNotCounting(LotroGame game, PhysicalCard cardAsking);
+
     int getNumberOfSpottableFPCultures(LotroGame game, String playerId);
 
     int getNumberOfSpottableShadowCultures(LotroGame game, String playerId);
 
     int getNumberOfSpottableControlledSites(LotroGame game, String playerId);
 
-    int getSpotBonus(LotroGame game, Filterable filter);
+    /**
+     * What the modifiers in force add to the spotting player's count of cards matching this one filter (Merry, In
+     * the Bloom of Health 17_107: "add 1 to the number of Ents you can spot"). Null for a count that is no player's,
+     * which gets no bonus (F-0502).
+     */
+    int getSpotBonus(LotroGame game, Filterable filter, String spottingPlayer);
 
     boolean hasFlagActive(LotroGame game, ModifierFlag modifierFlag);
 
@@ -186,7 +252,23 @@ public interface ModifiersQuerying {
 
     boolean canPlaySite(LotroGame game, String playerId);
 
-    boolean assignmentCostWasPaid(LotroGame game, PhysicalCard card);
+    /**
+     * What the player must pay to assign the minion to skirmish the character, as an action whose costs are that
+     * payment (ExtraAssignmentCostModifier: "the Free Peoples player must exert a companion to assign this minion
+     * to a skirmish"), or null where the assignment costs nothing: nobody charges for this pair, or the player is
+     * not the Free Peoples player.  Asked by a card's assignment once the pair is known and before the
+     * assignment is made: the caller stacks the action, and a payment that was not carried out in full
+     * (wasCarriedOut) means that one assignment is not made (Q-0221).  The Free Peoples player's own assigning
+     * pays ahead instead (appendAssignmentCosts; Q-0283).
+     */
+    CostToEffectAction getAssignmentCosts(LotroGame game, String assigningPlayer, PhysicalCard fpCharacter, PhysicalCard minion);
+
+    /**
+     * Appends to the action, as costs, every cost of assigning the minion to skirmish the character, as
+     * getAssignmentCosts has them, and says whether there was any.  For the payment the Free Peoples player is
+     * offered ahead of his own assigning (AssignmentCostRule; Q-0283), which is the minion's optional trigger.
+     */
+    boolean appendAssignmentCosts(LotroGame game, CostToEffectAction action, PhysicalCard fpCharacter, PhysicalCard minion);
 
     int getSanctuaryHealModifier(LotroGame game);
 
@@ -203,6 +285,12 @@ public interface ModifiersQuerying {
     void appendPotentialDiscounts(LotroGame game, CostToEffectAction action, PhysicalCard playedCard);
 
     boolean deadPileGoesToDiscard(LotroGame game, PhysicalCard card);
+
+    /**
+     * Whether another card says that this card comes into play exhausted ("Each [sauron] Orc comes into play
+     * exhausted", Blood of Númenor 2_31): PlayCardEffect asks it of a character as it is placed (Q-0302).
+     */
+    boolean comesIntoPlayExhausted(LotroGame game, PhysicalCard card);
 
     boolean sanctuaryMayRemoveBurdens(LotroGame game, String playerId);
 }
