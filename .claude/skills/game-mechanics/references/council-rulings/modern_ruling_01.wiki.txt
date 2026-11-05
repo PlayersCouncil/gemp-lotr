@@ -1,0 +1,79 @@
+{{CardSplashImage|White Hand Attacker}}
+'''Status: Discussion (2025-04-13)'''
+= Terrain Keywords =
+
+__TOC__
+
+The Set 17 {{Card|White Hand Attacker}} (not to be confused with another minion of the same name from set 18) reads thusly:
+
+{{CardText|White Hand Attacker}}
+
+"Terrain" keyword remains undefined and could use a rules entry added.
+
+== Definition ==
+
+It is clear that "terrain" is meant to refer to [[Keyword]]s that are unique to sites, such as '''Underground''', '''Plains''', and '''Forest'''. The total list is as follows:
+
+* [[Battleground]]
+* [[Dwelling]]
+* [[Forest]]
+* [[Marsh]]
+* [[Mountain]]
+* [[Plains]]
+* [[River]]
+* [[Sanctuary]]
+* [[Underground]]
+
+There are however some differing viewpoints on what exactly should or shouldn't be included on that list.  For example
+
+* '''Battleground''' could be set aside as it is not strictly speaking a description of "terrain".
+* '''Sanctuary''' could be set aside for being a loaded keyword that was later subsumed into the rules itself.
+
+In the base game, White Hand Attacker is not playable on site paths besides Shadows, so the Sanctuary consideration cannot come up.  However when playing a format using [[Multipath]] rules, such as [[PC-Movie]], the interaction becomes possible.
+
+In addition, {{Card|Sirannon Dam}} also utilizes the "terrain" terminology, though in a negative sense (it detects sites with ''no'' terrain keywords, so whether or not Sanctuary counts would affect its detection).
+
+== Gemp ==
+As of the Grand Card Rework, {{Card|White Hand Attacker}} is coded to copy *all* keywords that a site has, regardless of kind or source.  
+
+{{Card|Sirannon Dam}} is hard-coded with the full list of keywords in the above bullet list, including Sanctuary.
+
+
+
+== The Question ==
+
+What definition should be used for "terrain", and what keywords should be included?
+
+
+== 2025-04-25 Decision ==
+
+The Legacy and Modern Rules teams together opted for a definition that included all site-specific unloaded keywords and specifically excluded '''[[Sanctuary]]'''.  The Comprehensive Rules 4.2 and 5.0 will both have the following entry added under Section Two: Glossary of Terms:
+
+{{Quote|title=terrain|text=
+A '''terrain''' keyword is an unloaded keyword that is only found on sites.  The following are all terrain keywords:
+
+* Battleground
+* Dwelling
+* Forest
+* Marsh
+* Mountain
+* Plains
+* River
+* Underground
+
+'''Sanctuary''' is a loaded keyword that appears on some Movie Block era sites.  It is not a terrain keyword.
+
+See also '''keyword''', '''unloaded keyword'''.
+
+}}
+
+In addition, a "See also '''terrain'''" line will be added to the end of the Sanctuary entry.
+
+=== Clarifying Opinion ===
+The intent behind the term "terrain" is fairly clear, even if the necessity of ''having'' the term is more dubious.  (After all, {{Card|White Hand Attacker}} could have just said "each keyword" and nothing would have changed.)  By the time of Hunters Block, '''sanctuary''' was no longer a term printed on cards and was relegated to a rules-based application, which meant that there was never an opportunity for that keyword to misbehave during the Decipher era.  If such a circumstance were to arise however, it is fairly obvious that applying '''sanctuary''' to sites that did not originally have them is rife for chaos.  None of the other site keywords, being unloaded, could come close in impact.
+
+
+----
+
+
+{{Rules_Table}}

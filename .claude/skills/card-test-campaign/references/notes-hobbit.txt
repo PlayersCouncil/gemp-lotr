@@ -1,0 +1,66 @@
+NOTES FOR THE HOBBIT DRAFT GAME (Gemp sets 30 to 33; begun 2026-10-10; the phase opened 2026-11-04 on Ketura's word.
+The orchestrator adds to this file; a batch's `notes` argument points its agents here.)
+
+THE PHASE (Ketura, 2026-11-04)
+- The Hobbit Draft Game (HDG) is its own row of the campaign ("hobbit" in the tracker), worked one HDG pack at a time
+  (Starter, Main Deck, Free Peoples Pack, Beatdown and Swarm Packs 1 to 3, Supplement Packs A to L).
+- The sheet: generator_sheets/CardDataHobbit_modified_final.csv (Ketura's, "supposed to have all the hobbit card
+  info"; Windows-1252). It numbers the cards in three sets (30, 31, 32) by pack, HDG300001 and on; Gemp has them in
+  four sets (30 to 33) in another order, so NO sheet number is a Gemp number. references/hobbit-sheet-map.tsv gives
+  each HDG id its Gemp id and pack (matched on title, and on stats and text for three goblin minions whose sheet
+  names differ). `packet.py` shows the sheet's row ("Hobbit Draft Game sheet, HDG...") for reference, below the
+  picture's (next point).
+- The CARD'S PICTURE IS THE ARBITER (Ketura, 2026-11-04: "we will have to treat the card image as the final arbiter in
+  the cases where the sheet and the hjson disagree"). The pictures are transcribed, all 255, in
+  generator_sheets/hobbit_card_images.tsv (its `unsure` column marks what was not read for certain; the pictures are
+  /home/claude/work/hdg-images/<id>.jpg). The tools read it (engine pass 77): `packet.py` shows a Hobbit card's row
+  as "The card's picture, transcribed", with its `unsure`, lore and footer, ABOVE the sheet's row (kept for reference),
+  and `reconcile.py` (and so `packet.py`'s "Picture against definition" and lint's sheet check) compares the
+  definition with the picture's row, the sheet's value shown beside each difference; a full-art [smaug] card's picture
+  prints no culture icon, so its culture is not compared. The sheet is a scrounged copy and decides nothing: never change a definition
+  on the sheet's word. Where the definition and the picture differ, the picture wins (a misprint, such as 33_34's
+  "The Elvenkng", goes to Ketura instead). The picture has sided with the definition and with the sheet alike, and
+  in a few places with neither (31_43 "Skillful Negotiator", 33_29 Ancient Grudge unique, 31_42 Old Thrush's subtitle).
+- The bookkeeping (engine pass 77): all 255 definitions now carry what the other sets carry, from the PICTURE's row
+  (not the sheet): `gametext` in the Gemp markup ([dwarven], (2), <b>Fellowship:</b>, <b>Aid</b> – ... <helper>(...)
+  </helper>, <br> between abilities), `lore` (printed quotes as '...'), `side`, `unique` written out, `cardInfo`
+  (hobbit/HDG<set><num>.jpg), `promotext` and `alts`, and the plural `keywords`/`timewords` (the loader reads both
+  the same way). Titles, subtitles, twilight, uniqueness, item class and keywords were put right to the pictures
+  (accents and capitals too: Glóin, Thrór, Roäc, Baïn, "Caught In A Sack"); the six printed sanctuaries carry
+  `sanctuary`. Misprints, by Ketura's word (2026-11-05): 33_34's title "The Elvenkng" is not
+  copied (F-0738, 'Do the corrected "Elvenking"'; the definition keeps "The Elvenking"), and 31_7's "Regroup"
+  without its colon is mended (F-0739, "Go ahead and add the colon": "<b>Regroup:</b>"). A printed misspelling of a
+  title is not copied into a definition (this one by Ketura's word); a new one still goes to Ketura. A batch writes its card's text claims
+  from this gametext, and checks it on the picture where the row's `unsure` touches it.
+- Ketura's HDG-only points (2026-11-04):
+  * Followers have a race (Old Thrush is a Bird), which the rules otherwise do not allow. A Hobbit follower's `race` is
+    right, not a definition error; nothing outside the HDG changes for it.
+  * A "doubt" is the HDG's skin for a burden. The code says burden everywhere: no alias, no `doubt` effect, filter or
+    keyword, no second name of any kind. A card's gametext keeps the printed word "doubt"; its definition and tests use
+    the burden effects and the rig's burden helpers.
+  * The One Ring is handled differently: The One Ring 30_48 is a [shire] artifact borne by Bilbo, not a card in the
+    Ring slot (see the rig line below).
+- The HDG has rules of its own (a doubt is its burden; reconciling; Bilbo as Ring-bearer with The One Ring 30_48 a
+  [shire] artifact on him; its own site path). Hold them at arm's length: they must not change how any other card or
+  format plays. Make NO engine change for the HDG on your own: what a Hobbit card needs from the engine is reported
+  (needs_orchestrator) and goes to Ketura first. A card-level definition fix is fine, as anywhere.
+
+- Their test files go under `cards/unofficial/hobbit/set<NN>/` (Ketura, 2026-10-10: not under `pc/`, "as the PC
+  doesn't run that"). Four files are there already, each with a stats test and one lone test from the conversion
+  of the old `at` tests (30_33, 30_51, 31_19, 33_25).
+- (Before 2026-11-04 no sheet had these cards; the HDG sheet above now does.)
+- What the rig has for them (engine pass 77, before the first batch): the Hobbit table, `new VirtualTableScenario(cards,
+  null, null, null, HobbitDraft)`, laid on the HDG format's own rules: the path `HobbitSites` (30_49 to 30_57), the
+  Ring-bearer `BilboRB` (30_46; another Bilbo by id), and no card in the Ring slot (`GetRing()` is null; a ringID is
+  refused). The One Ring is `HobbitRing` 30_48, named in the card map and put on Bilbo by playing it or with
+  `AttachCardsTo(scn.GetRingBearer(), ring)`; its Skirmish action wears it and the game takes it off at regroup
+  (virtualtable/HobbitTableTests; pitfalls, "A Hobbit-set card"). A Hobbit-set card's tests stand on that table. The
+  seven older files (30_33, 30_34, 30_51, 31_19, 31_59, 32_58, 33_25) stand on `FOTRFrodo` and `RulingRing` and are
+  moved to it when their batch reaches them. What the engine does not do for the HDG's Ring (it knows only a Ring in
+  the slot) is listed in the engine pass 77 report, hobbit-rig, for Ketura.
+- Saruman's Staff 4_174 plays on a bare `title(Saruman)`, so on the other player's Saruman, The White 32_24 too
+  (seen on a throwaway board by the batch dec-b4_78; it agrees with Q-0058, and nothing of the Staff's text reaches
+  him). The four Gandalfs 30_25 to 30_28 read Saruman's flag (F-0037, confirmed; Ketura: "Those hobbit cards
+  should have made their own flag"): two parked tests wait for that, in Card_V1_018_Tests and
+  Card_04_174_Tests, and both go live when the Gandalfs get a flag of their own. Dark Sorcery 33_61 throws the
+  same flag.

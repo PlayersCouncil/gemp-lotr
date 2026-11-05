@@ -27,7 +27,7 @@ Simple filters do not contain any parameters and are for the most part one-word 
  
 
 * All Card Types
-* All Keywords
+* All Keywords, as bare words (`damage`, `fierce`, `archer`), not `keyword(damage)`
 * All Item Classes
 * All Races
 * Another | Other
@@ -37,7 +37,7 @@ Simple filters do not contain any parameters and are for the most part one-word 
 * AttachedToInSameRegion
   Matches sites this card is attached to that are in the fellowship's current region
 * Bearer
-  Matches the card this card is attached to
+  Matches the card this card is attached to, whether or not this card is hindered (`HasAttached` counts active attachments only).
 * CanBeDiscarded
   Matches cards which can be discarded by the currently acting player (i.e. cards which are not protected by "cannot be discarded by X" defenses).
 * CanBeReturnedToHand
@@ -106,7 +106,7 @@ Simple filters do not contain any parameters and are for the most part one-word 
 * OnePerBearer | LimitOnePerBearer|Limit1PerBearer
   Matches cards that do not already bear a card with the same title as the currently executing card, which is used for cards which say "Limit 1 per bearer" 
 * Playable
-  Matches cards which could be legally played.  This is intended to be used with cards that are not currently in play.
+  Matches cards which could be legally played.  This is intended to be used with cards that are not currently in play.  Filters in a list are asked in order, so put exclusions ahead of this one: asked of the very card whose text is doing the asking, it asks that card's own requirements again and can recurse.
 * PlayableFromDeadPile
   Matches cards which could be legally played even if already in the dead pile.  This is intended to be used with cards already in the dead pile, but be warned that if used on a unique card outside the dead pile it will ignore its dead brother.
 * RingBearer | `Ring-Bearer
@@ -176,7 +176,7 @@ These filters require parameters to be passed in, in the form of "name(param1,pa
     Matches all cards which are currently assigned to (or actively skirmishing against) the cards matching `filter`.
 * AttachedTo
     * [0]: filter
-    Matches all cards currently attached to the cards matched by `filter`.
+    Matches all cards currently attached to the cards matched by `filter`.  A hindered bearer is matched only where `filter` is one word that names it as a card (`self`, `bearer`, `memory(...)`, `ring-bearer`, `any`); a type, race, culture, title, keyword or number, an `or(...)` or `not(...)`, or a second word of any sort leaves a hindered bearer out (CR 5.0 "hinder", Q-0108).
 * CardTypeFromMemory
     * [0]: memory
     Matches all cards which share a card type with any card in the given `memory` location.
@@ -287,6 +287,9 @@ These filters require parameters to be passed in, in the form of "name(param1,pa
         Matches all cards with the race stored in the `In-Zone Data`. See Úlairë Nertëa, Dark Horseman)`.
     * race(cannotSpot)
         Matches cards who have a race that cannot be spotted on the table. See The Nine Walkers).
+* ReplaceableFromDiscard
+    * [0]: filter
+    Matches cards for which the performing player's discard pile holds a card that matches `filter` and has the same title and another subtitle: what `ReplaceCardInPlayWithCardInDiscard` can act on.  Use it in both the requirement and the choice of the card to replace.  See Two-faced).
 * RegionNumber
     * [0]: value OR range
     Matches all cards with a site number in the `value` region or in regions fitting within `range`.  Works on both Sites and Minions.
@@ -316,7 +319,7 @@ These filters require parameters to be passed in, in the form of "name(param1,pa
     Matches all cards which share a subtitle with one of the cards stored in the given `memory` location.
 * Timeword
     * [0]: timeword
-    Matches all cards (mostly if not entirely events) with the given `timeword` (i.e. a phase or Response).  If "current" is provided, it will match cards with a timeword matching the current phase.
+    Matches all cards (mostly if not entirely events) with the given `timeword` (i.e. a phase or Response).  If "current" is provided, it will match cards with a timeword matching the current phase.  An event printed with several phases ("Skirmish or Regroup") matches each of them wherever it lies, except while it is being played (and while its cost to play is worked out): then it matches the phase it is played in and no other (CR 4.2 "phase action").
 * Zone
     * [0]: zone
     Matches all cards within the given `zone`.  See `Zone` for a list of acceptable values.

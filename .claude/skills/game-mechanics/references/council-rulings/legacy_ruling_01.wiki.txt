@@ -1,0 +1,93 @@
+{{CardSplashImage|Shadowfax, Greatest of the Mearas}}
+'''Status: Ruling Enacted on Gemp (2025-04-18)'''
+= Shadowfax, Greatest of the Mearas =
+
+__TOC__
+
+
+
+{{Card|Shadowfax, Greatest of the Mearas}} is a card released in set 17.  As is common with cards from sets 17/18, the wording of the card has an issue which does not make it immediately clear what it is intended to do.
+
+Shadowfax, Greatest of the Mearas reads:
+
+{{CardText|Shadowfax, Greatest of the Mearas}}
+
+The first phrase of the second sentence is ambiguous. There are two ways to read it:
+
+* '''When you play Shadowfax''', discard all other possessions on bearer. 
+
+or
+
+* '''While you can spot Shadowfax, continually''' discard all other possession on bearer.
+
+== Similar Cards ==
+
+There are various other cards to be referenced for what might have been meant:
+
+* {{Card|The Balrog, Durin's Bane}} uses "While you can spot The Balrog, discard" for its continuous effect.  However, it also skips the "while you can spot" preamble for the self-discard clause:
+{{CardText|The Balrog, Durin's Bane}}
+
+* {{Card|Anduril, Flame of the West}} uses the templating that Shadowfax likely drew from: 
+{{CardText|Anduril, Flame of the West}}
+
+* {{Card|Hearken to Me}} is the first card to use that Anduril wording.
+
+* {{Card|Disarmed}} uses an clearer "when transferred, discard" / "cannot bear" pair that is more explicit than Anduril:
+{{CardText|Disarmed}}
+
+* Watcher in the Water uses ''both'' styles to indicate a continuous passive discard:
+** {{Card|Watcher in the Water, Keeper of Westgate}} uses the "while you can spot" preamble:
+{{CardText|Watcher in the Water, Keeper of Westgate}}
+** {{Card|Watcher in the Water, Many-Tentacled Creature}} uses the preamble-less version:
+{{CardText|Watcher in the Water, Many-Tentacled Creature}}
+
+
+== Ramifications ==
+
+In Anduril's case, the closest template to Shadowfax, the situation isn't ambiguous because both the "discard" and "cannot bear" clauses target the same thing, so while it is possibly redundant, it doesn't matter if it's a continuous effect or an on-play effect, because either way the first clause gets rid of possession and the second clause keeps them from being added. Thus due to the second clause we never find out how (nor care how) the first is behaving.
+
+For Shadowfax however, since you are discarding something different (possessions) from what is being kept off (hand weapons), the expected behavior is different depending on how the first clause is to be read:
+
+* A: If it means "when you play", then upon play various possessions will be lost, but so long as they are not hand weapons they can be played again later.
+* B: If it means "continuous discard", then the bearer is forever denied access to both possessions and hand weapons (the latter of which is only relevant if there were perhaps an artifact Glamdring).
+
+If we rule A, then we will likely need to rule on similar cards such as the set 19 Watcher, which uses identical wording and will be a shift in how that card is commonly understood.
+
+
+== Precedent ==
+
+There is [https://lotrtcgwiki.com/forums/index.php/topic,2872.0.html an old thread on TLHH from 2009] that came to the conclusion that it meant "When you play". However, the main thrust of this argument is that if Decipher wanted it to be a continuous effect on possessions, that the "cannot bear" clause would have been updated to match as it was on Anduril. This seems to completely ignore (or more charitably, be completely unaware of) the fact that Decipher was not exactly at the top of its game for sets 17/18 and so attributes more intent than warranted.  This discussion also ignores the existence of other preamble-less continuous discard effects as listed above.
+
+== Gemp ==
+
+Before the Grand Card Rework, [[GEMP]] followed the "continuous discard" reading, and post GCR it now follows the "when you play" reading.  Thus MarcinS has read the card and implemented the card both ways, underlining the ambiguity.
+
+
+== The Question ==
+
+Do we:
+
+* '''A''': adhere to the 2009 community ruling and ratify it, reading Shadowfax as "when you play" and permitting possessions to be played after it has been attached
+
+or
+
+* '''B''': do we read it to mean a continuous discard effect is applied, barring the bearer from bearing both possessions and hand weapons so long as Shadowfax is attached
+
+
+== 2025-04-14 Decision ==
+
+The Legacy Rules Team opted for option B.  The Comprehensive Rules 4.2 will have the following individual card ruling added:
+
+{{Quote|title=skirmish phase(s)|text=
+* '''Card''': Shadowfax, Greatest of the Mearas (17R24)
+** '''Ruling Type''': Ruling
+** '''Ruling Text''': This card continuously discards all possessions on its bearer.  Possessions may still be played on or transferred to bearer, but they will immediately be discarded once attached.
+}}
+
+
+The gameplay consistency of option B is the main factor; option A leads to an unintuitive back-and-forth where possessions are discarded, yet allowed to be replayed. The continuous discard option consistently takes them off and keeps them off.  As part of the rollout of this ruling, the [[PC Errata]] of this card will be updated to align with this interpretation.
+
+----
+
+
+{{Rules_Table}}

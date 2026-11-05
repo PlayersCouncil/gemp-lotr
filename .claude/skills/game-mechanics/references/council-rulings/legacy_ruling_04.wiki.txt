@@ -1,0 +1,77 @@
+{{CardSplashImage|Harrowdale}}
+'''Status: Ruling Enacted on Gemp (2025-04-25)'''
+= Harrowdale =
+
+__TOC__
+
+
+
+{{Card|Harrowdale}} reads:
+
+{{CardText|Harrowdale}}
+
+The way that this card should be interpreted is unclear.  It could be:
+
+* '''A''': When the fellowship moves to or from this site, the following is in force until the regroup phase: At the start of each skirmish involving a {{CI|Rohan}} companion, make each minion in that skirmish lose fierce and unable to gain fierce until the regroup phase.
+* '''B''': While at this site, at the start of each skirmish involving a {{CI|Rohan}} companion, make each minion in that skirmish lose fierce and unable to gain fierce until the regroup phase.
+
+The basic difference is that A enforces the fierce-loss when the fellowship begins their turn at Harrowdale, while B is only valid when the fellowship moves to the site.
+
+The main source of the question comes from the observation that this is a card clearly intended to benefit the {{C|Rohan}} player, but consider: if it is B, ''they only gain benefit if Shadow plays the site'' (barring effects like {{Card|Pathfinder}}).  
+
+== Similar Cards ==
+There are a variety of cards which use the nonstandard arrangement of putting "until the regroup phase" at the start of an effect, usually when there are multiple clauses and the designer wants to be clear that all of them are affected:
+
+* {{Card|Support of the Last Homely House}} (and various other ally-calling effects from Fellowship Block)
+{{CardText|Support of the Last Homely House}}
+* {{Card|Phial of Galadriel, Star-glass}}
+{{CardText|Phial of Galadriel, Star-glass}}
+* {{Card|Sack of the Shire}}
+{{CardText|Sack of the Shire}}
+
+Sack of the Shire in particular is an obvious result of confusion surrounding the earlier {{Card|Savagery to Match Their Numbers}}:
+{{CardText|Savagery to Match Their Numbers}}
+
+As the original wording makes it ambiguous whether the "until" clause is meant to apply to the fierce addition or both fierce and strength.
+
+
+
+
+== Precedent ==
+
+* In 2012, [https://lotrtcgwiki.com/forums/index.php?topic=7727.0 this same question was brought up] due to a [https://lotrtcgwiki.com/forums/index.php/topic,7592.msg75683.html#msg75683 bug report on the fledgling Gemp].  It was attested by one player within that thread that the [[Lord of the Rings Online TCG]] platform operated as option B, but option A was mentioned as being done in physical (casual) play.  
+* Harrowdale is mentioned [http://web.archive.org/web/20050523030439/http://lotrtcg.fanhq.com:80/Articles/Article.aspx?ID=806 in an article on Decipher's website] as clearly a fellowship-focused site, but leaves the execution unmentioned.
+* Gemp as of the Grand Card Rework currently implements option B.
+
+
+== The Question ==
+
+Do we:
+
+* '''A''': make Harrowdale function when moving away from it for one site
+
+or
+
+* '''B''': do we apparently follow LOTRO and make it only function when the fellowship moves to the site
+
+
+== 2025-04-25 Decision ==
+
+The Legacy Rules Team opted for option B.  The Comprehensive Rules 4.2 will have the following individual card ruling added:
+
+ 
+{{Quote|title={{Card|Harrowdale}}|text=
+* '''Ruling Type''': Ruling
+* '''Ruling Text''': While the fellowship is at this site, at the start of each skirmish involving a {{C|Rohan}} companion, make each minion in that skirmish lose fierce and unable to gain fierce until the regroup phase.  This effect does not "follow" the fellowship to a second site.
+  
+}}
+
+=== Clarifying Opinion ===
+Harrowdale suffers from being a site, which historically have very little space to clarify the exact way that they are meant to be read.  This often results in sites needing to rely on non-standard wording or other space-saving tricks to squeeze all the text onto the card, and so it is common to need to be more lenient in the reading of sites to account for their narrow spacing.  In that light, the alternate reading of Harrowdale is an attempt to "de-compress" the wording and read more into it than what was actually written.  
+ 
+However, any de-compressed wording has to still be consistent and sensible.  In particular, the 2-site version relies on the regroup phase clause "double-dipping" and applying to two things at once: the duration of the fierce loss, *and* the duration of the effect itself.  This stretches the text to the breaking point and makes it an unsuitable reading.
+
+----
+
+
+{{Rules_Table}}
