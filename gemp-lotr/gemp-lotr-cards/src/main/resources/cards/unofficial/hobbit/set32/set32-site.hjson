@@ -6,11 +6,12 @@
 			rarity: _
 		}
 		title: Dol Guldur
+		unique: false
 		twilight: 8
 		type: site
 		block: hobbit
 		site: 5
-		keyword: forest
+		keywords: forest
 		effects: {
 			type: Trigger
 			optional: true
@@ -32,7 +33,17 @@
 				until: start(regroup)
 			}
 		}
+		gametext: <b>Forest</b>. At the start of the Shadow phase, you may discard Gandalf. If you do, Wise allies participate in skirmishes until the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_47: {
 		cardInfo: {
 			image: hobbit/HDG3247.jpg
@@ -40,11 +51,15 @@
 			rarity: _
 		}
 		title: Town Hall
+		unique: false
 		twilight: 3
 		type: site
 		block: hobbit
 		site: 6
-		keyword: river
+		keywords: [
+			river
+			sanctuary
+		]
 		effects: {
 			type: activated
 			phase: fellowship
@@ -58,7 +73,17 @@
 				select: choose(weapon)
 			}
 		}
+		gametext: <b>River</b>. <b>Sanctuary</b>. <b>Fellowship:</b> Exert a [esgaroth] ally to play a weapon from your discard pile (limit once per turn).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_48: {
 		cardInfo: {
 			image: hobbit/HDG3248.jpg
@@ -66,11 +91,12 @@
 			rarity: _
 		}
 		title: Secret Door
+		unique: false
 		twilight: 8
 		type: site
 		block: hobbit
 		site: 7
-		keyword: mountain
+		keywords: mountain
 		effects: {
 			type: modifier
 			modifier: {
@@ -83,7 +109,17 @@
 				amount: -3
 			}
 		}
+		gametext: <b>Mountain</b>. While you can spot Thrór's Key, the Shadow number of Secret Door is -3.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_49: {
 		cardInfo: {
 			image: hobbit/HDG3249.jpg
@@ -91,11 +127,12 @@
 			rarity: _
 		}
 		title: Northern Slopes
+		unique: false
 		twilight: 9
 		type: site
 		block: hobbit
 		site: 9
-		keyword: [
+		keywords: [
 			Mountain
 			Battleground
 		]
@@ -103,13 +140,29 @@
 			type: activated
 			phase: shadow
 			limitPerTurn: 1
+			requires: {
+				type: canSpot
+				filter: side(shadow)
+			}
 			effect: {
-				type: exert
-				select: choose(culture(dwarven),character)
-				count: {
+				type: repeat
+				times: {
 					type: forEachCulture
 					filter: side(shadow)
 				}
+				effect: {
+					type: exert
+					select: choose(culture(dwarven),character)
+				}
+			}
+		}
+		gametext: <b>Mountain</b>. <b>Battleground</b>. <b>Shadow:</b> Exert a [dwarven] character for each Shadow culture you can spot (limit once per turn).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
 			}
 		}
 	}
