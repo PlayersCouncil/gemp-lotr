@@ -7,11 +7,11 @@
 		}
 		title: Better Than Nothing
 		unique: true
-		culture: gollum
 		side: shadow
+		culture: gollum
 		twilight: 0
 		type: condition
-		keyword: support area
+		keywords: support area
 		effects: [
 			{
 				type: modifier
@@ -51,6 +51,7 @@
 							select: choose(name(Gollum))
 							showAll: true
 							shuffle: true
+							mustExist: true
 						}
 						{
 							type: playCardFromDiscard
@@ -60,7 +61,17 @@
 				}
 			}
 		]
+		gametext: While you can spot Gollum, each [gandalf] event gains this cost: "add a doubt."<br>At the end of your Shadow phase, you may discard an Orc from play to play Gollum from your draw deck or discard pile.
+		lore: "'Nasty goblinses are better than old bones, precious. Better than nothing!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	31_20: {
 		cardInfo: {
 			image: hobbit/HDG3120.jpg
@@ -70,8 +81,8 @@
 		title: Gollum
 		subtitle: Small Slimy Creature
 		unique: true
-		culture: gollum
 		side: shadow
+		culture: gollum
 		twilight: 2
 		type: minion
 		strength: 5
@@ -126,7 +137,17 @@
 				]
 			}
 		]
+		gametext: Each time Gollum wins a skirmish, you may add a doubt.<br><b>Assignment:</b> If Gollum is not roaming, exert Gollum and assign him to Bilbo to make Gollum strength +1 (or +3 at an underground site) until the regroup phase.
+		lore: "'Games?! Oh, we love games, doesn't we, precious?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	31_21: {
 		cardInfo: {
 			image: hobbit/HDG3121.jpg
@@ -134,11 +155,12 @@
 			rarity: _
 		}
 		title: If He Loses
-		culture: gollum
+		unique: false
 		side: shadow
+		culture: gollum
 		twilight: 2
 		type: event
-		timeword: skirmish
+		timewords: skirmish
 		effects: [
 			{
 				type: activatedInDiscard
@@ -177,7 +199,17 @@
 				]
 			}
 		]
+		gametext: You may exert Gollum twice to play this event from your discard pile.<br>Make a minion strength +2. If this minion wins this skirmish, you may add a doubt.
+		lore: "'And if it loses, what then? Well, if it loses, precious, then we eats it!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	31_22: {
 		cardInfo: {
 			image: hobbit/HDG3122.jpg
@@ -186,11 +218,11 @@
 		}
 		title: Riddles in the Dark
 		unique: true
-		culture: gollum
 		side: shadow
+		culture: gollum
 		twilight: 2
 		type: condition
-		keyword: support area
+		keywords: support area
 		effects: [
 			{
 				type: Trigger
@@ -241,7 +273,17 @@
 				}
 			}
 		]
+		gametext: Each time the fellowship moves, add (2).<br><b>Response:</b> If Bilbo exerts or takes a wound, exert a minion and discard a card from hand to discard a [shire] card (except Bilbo). The Free Peoples player may discard 2 cards from hand to prevent this.
+		lore: "'It like riddles, praps it does, does it?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	31_23: {
 		cardInfo: {
 			image: hobbit/HDG3123.jpg
@@ -251,6 +293,7 @@
 		title: Azog
 		subtitle: The Defiler
 		unique: true
+		side: Shadow
 		culture: gundabad
 		twilight: 4
 		type: minion
@@ -258,7 +301,7 @@
 		strength: 9
 		vitality: 3
 		site: 3
-		keyword: damage+1
+		keywords: damage+1
 		effects: {
 			type: Trigger
 			optional: true
@@ -272,7 +315,17 @@
 				select: choose(culture(dwarven),companion)
 			}
 		}
+		gametext: <b>Damage +1</b>.<br>Each time you play a mount, you may make the Free Peoples player exert a [dwarven] companion.
+		lore: "'Do you smell it? The scent of fear? I remember your father reeked of it... Thorin, son of Thrain.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	31_24: {
 		cardInfo: {
 			image: hobbit/HDG3124.jpg
@@ -282,6 +335,7 @@
 		title: Bolg
 		subtitle: Son of Azog
 		unique: true
+		side: Shadow
 		culture: gundabad
 		twilight: 4
 		type: minion
@@ -289,7 +343,7 @@
 		strength: 9
 		vitality: 3
 		site: 3
-		keyword: damage+1
+		keywords: damage+1
 		effects: {
 			type: Trigger
 			optional: true
@@ -307,7 +361,17 @@
 				amount: 1
 			}
 		}
+		gametext: <b>Damage +1</b>.<br>Each time Bolg wins a skirmish, you may exert him twice to add a doubt.
+		lore: "Hardly any different from Azog, Bolg is a callous, idealistic, merciless and cruel warrior."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	31_25: {
 		cardInfo: {
 			image: hobbit/HDG3125.jpg
@@ -315,6 +379,8 @@
 			rarity: _
 		}
 		title: Savage Warg
+		unique: false
+		side: Shadow
 		culture: gundabad
 		twilight: 3
 		type: possession
@@ -338,19 +404,39 @@
 					type: winsSkirmish
 					filter: bearer
 				}
-				effect: {
-					type: exert
-					player: fp
-					select: choose(culture(dwarven),companion)
-					count: {
-						type: forEachYouCanSpot
+				effect: [
+					{
+						type: chooseHowManyToSpot
 						filter: culture(gandalf)
-						divider: 2
+						memorize: spotCount
 					}
-				}
+					{
+						type: repeat
+						times: {
+							type: fromMemory
+							memory: spotCount
+							divider: 2
+						}
+						effect: {
+							type: exert
+							player: fp
+							select: choose(culture(dwarven),companion)
+						}
+					}
+				]
 			}
 		]
+		gametext: Bearer must be an Orc.<br>Bearer is <b>fierce</b>.<br>Each time bearer wins a skirmish, the Free Peoples player must exert a [dwarven] companion for each 2 [gandalf] cards you spot.
+		lore: "'The Dwarf-scum are over there! After them!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	31_26: {
 		cardInfo: {
 			image: hobbit/HDG3126.jpg
@@ -358,6 +444,8 @@
 			rarity: _
 		}
 		title: Threatening Warg
+		unique: false
+		side: Shadow
 		culture: gundabad
 		twilight: 4
 		type: possession
@@ -402,7 +490,17 @@
 				}
 			}
 		]
+		gametext: Bearer must be a [gundabad] Orc.<br>Bearer is <b>fierce</b>.<br><b>Assignment:</b> Exert bearer twice or remove 2 doubts to assign bearer to Thorin.
+		lore: "'Bring me the Dwarf's head.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	31_27: {
 		cardInfo: {
 			image: hobbit/HDG3127.jpg
@@ -410,6 +508,8 @@
 			rarity: _
 		}
 		title: Warg
+		unique: false
+		side: Shadow
 		culture: gundabad
 		twilight: 2
 		type: possession
@@ -443,14 +543,26 @@
 				}
 			}
 		]
+		gametext: Bearer must be a [gundabad] Orc.<br>Bearer is <b>fierce</b>.<br><b>Regroup:</b> If you cannot spot Thorin, exert bearer to wound an ally.
+		lore: "'These are Gundabad wargs. They will outrun you!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	31_28: {
 		cardInfo: {
 			image: hobbit/HDG3128.jpg
 			collInfo: 31_28
 			rarity: _
 		}
-		title: War-warg
+		title: War-Warg
+		unique: false
+		side: Shadow
 		culture: gundabad
 		twilight: 3
 		type: possession
@@ -485,7 +597,17 @@
 				}
 			}
 		]
+		gametext: Bearer must be a [gundabad] Orc.<br>Bearer is <b>fierce</b>.<br><b>Regroup:</b> If you cannot spot Thorin, exert bearer to make the Free Peoples player wound a companion.
+		lore: "'Warg scouts! Which means an orc pack is not far behind!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	31_29: {
 		cardInfo: {
 			image: hobbit/HDG3129.jpg
@@ -494,9 +616,10 @@
 		}
 		title: Ancestral Feuds
 		unique: true
+		side: Shadow
 		culture: mirkwood
 		type: condition
-		keyword: support area
+		keywords: support area
 		twilight: 2
 		effects: [
 			{
@@ -518,22 +641,40 @@
 					type: removeTwilight
 					amount: 3
 				}
-				effect: {
-					type: modifyStrength
-					select: choose(culture(dwarven),character)
-					amount: {
-						type: cardAffectedLimitPerPhase
-						limit: 3
-						source: {
-							type: forEachYouCanSpot
-							filter: culture(elven),ally
-						}
-						multiplier: -1
+				effect: [
+					{
+						type: chooseHowManyToSpot
+						filter: culture(elven),ally
+						text: Choose how many {elven} allies to spot
+						memorize: spotCount
 					}
-				}
+					{
+						type: modifyStrength
+						select: choose(culture(dwarven),character)
+						amount: {
+							type: cardAffectedLimitPerPhase
+							limit: 3
+							source: {
+								type: fromMemory
+								memory: spotCount
+							}
+							multiplier: -1
+						}
+					}
+				]
 			}
 		]
+		gametext: Each time the fellowship moves to site 5, discard each weapon borne by a [dwarven] companion.<br><b>Skirmish:</b> Remove (3) to make a [dwarven] character strength -X (limit -3), where X is the number of [elven] allies you spot.
+		lore: "'Stay here if you will, and rot.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	31_30: {
 		cardInfo: {
 			image: hobbit/HDG3130.jpg
@@ -541,6 +682,8 @@
 			rarity: _
 		}
 		title: Goblin Runner
+		unique: false
+		side: Shadow
 		culture: moria
 		twilight: 1
 		type: minion
@@ -564,7 +707,17 @@
 				amount: 2
 			}
 		}
+		gametext: When you play this minion, you may spot another [moria] card to add (2).
+		lore: "'Dwarves, your Malevolence. We found them on the front porch.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	31_31: {
 		cardInfo: {
 			image: hobbit/HDG3131.jpg
@@ -572,6 +725,8 @@
 			rarity: _
 		}
 		title: Goblin Scimitar
+		unique: false
+		side: Shadow
 		culture: moria
 		twilight: 0
 		type: possession
@@ -598,7 +753,17 @@
 				}
 			}
 		]
+		gametext: To play, spot a [moria] card.<br>Bearer must be an Orc.<br>When you play this possession, you may draw a card.
+		lore: "'You'll be beaten and battered, from racks you'll be hung!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	31_32: {
 		cardInfo: {
 			image: hobbit/HDG3132.jpg
@@ -606,6 +771,8 @@
 			rarity: _
 		}
 		title: Goblin Sneak
+		unique: false
+		side: Shadow
 		culture: moria
 		twilight: 1
 		type: minion
@@ -613,28 +780,53 @@
 		strength: 5
 		vitality: 1
 		site: 4
-		effects: {
-			type: Trigger
-			optional: true
-			trigger: {
-				type: played
-				filter: self
-			}
-			effect: {
-				type: putCardsFromDiscardOnBottomOfDeck
-				select: choose(orc)
-				count: {
-					type: Conditional
-					requires: {
-						type: location
-						filter: underground
-					}
-					true: 2
-					false: 1
+		effects: [
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
 				}
+				requires: {
+					type: location
+					filter: not(underground)
+				}
+				effect: {
+					type: putCardsFromDiscardOnBottomOfDeck
+					select: choose(orc)
+					count: 0-1
+				}
+			}
+			{
+				type: Trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				requires: {
+					type: location
+					filter: underground
+				}
+				effect: {
+					type: putCardsFromDiscardOnBottomOfDeck
+					select: choose(orc)
+					count: 0-2
+				}
+			}
+		]
+		gametext: When you play this minion, you may place an Orc (or 2 Orcs at an underground site) from your discard pile beneath your draw deck.
+		lore: "'Dwarves are set upon by goblins and taken prisoner."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
 			}
 		}
 	}
+
 	31_33: {
 		cardInfo: {
 			image: hobbit/HDG3133.jpg
@@ -642,823 +834,1132 @@
 			rarity: _
 		}
 		title: Goblin Song
+		unique: false
+		side: Shadow
 		culture: moria
 		twilight: 1
 		type: event
-		timeword: maneuver
+		timewords: maneuver
 		effects: [
 			{
 				type: activatedInDiscard
-		phase: maneuver
-		cost: {
-		  type: exert
-		  select: choose(name(The Great Goblin))
-		  times: 2
-		}
-		effect: {
-		  type: playCardFromDiscard
-		  select: self
-		}
-	  }
-	  {
-		type: event
-		cost: {
-		  type: exert
-		  count: 2
-		  select: choose(orc)
-		}
-		effect: {
-		  type: discard
-		  select: choose(culture(dwarven),or(possession,artifact),attachedTo(companion))
-		}
-	  }
-	]
-  }
-  31_34: {
-	title: Goblin Swarms
-	culture: moria
-	twilight: 1
-	type: condition
-	keyword: support area
-	effects: [
-		{
-			type: toPlay
-			requires: {
-			  type: canSpot
-			  filter: culture(moria)
-			}
-		}
-	  {
-		type: Response
-		trigger: {
-		  type: winsSkirmish
-		  filter: your,orc,inSkirmish
-		}
-		effect: {
-		  type: StackCardsFromPlay
-		  select: choose(your,orc,inSkirmish)
-		  where: self
-		}
-	  }
-	  {
-		type: activated
-		phase: shadow
-		effect: {
-		  type: playCardFromStacked
-		  select: choose(orc)
-		  on: self
-		}
-	  }
-	]
-  }
-  31_35: {
-	title: Great Goblin's Power
-	culture: moria
-	twilight: 0
-	type: condition
-	keyword: support area
-	effects: [
-		{
-			type: toPlay
-			requires: {
-			  type: canSpot
-			  filter: culture(moria)
-			}
-		}
-	  {
-		type: Trigger
-		optional: false
-		trigger: {
-		  type: played
-		  filter: your,weapon
-		}
-		effect: {
-		  type: addTwilight
-		  amount: 1
-		}
-	  }
-	  {
-		type: Response
-		trigger: {
-		  type: aboutToTakeWound
-		  filter: orc
-		}
-		cost: {
-		  type: choice
-		  texts: [
-			Discard this condition
-			Remove (3)
-		  ]
-		  effects: [
-			{
-			  type: discard
-			  select: self
+				phase: maneuver
+				cost: {
+					type: exert
+					select: choose(name(The Great Goblin))
+					times: 2
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: self
+				}
 			}
 			{
-			  type: removeTwilight
-			  amount: 3
+				type: event
+				cost: {
+					type: exert
+					count: 2
+					select: choose(orc)
+				}
+				effect: {
+					type: discard
+					select: choose(culture(dwarven),or(possession,artifact),attachedTo(companion))
+				}
 			}
-		  ]
-		}
-		effect: {
-		  type: preventWound
-		  select: choose(orc)
-		}
-	  }
-	]
-  }
-  31_36: {
-	title: The Great Goblin
-	subtitle: Chieftain of the Misty Mountains
-		unique: true
-	culture: moria
-	twilight: 4
-	type: minion
-	race: orc
-	strength: 10
-	vitality: 3
-	site: 4
-	keyword: fierce
-	effects: {
-	  type: activated
-	  phase: maneuver
-	  cost: {
-		type: exert
-		select: self
-		times: 2
-	  }
-	  effect: [
-		{
-		  type: revealHand
-		  hand: fp
-		  memorize: revealedCards
-		}
-		{
-		  type: discardFromHand
-		  hand: fp
-		  select: choose(culture(dwarven),event)
-		  forced: true
-		}
-	  ]
-	}
-  }
-  31_37: {
-	title: Bolg
-	subtitle: Servant of Sauron
-		unique: true
-	culture: sauron
-	type: minion
-	race: orc
-	twilight: 4
-	strength: 9
-	vitality: 3
-	site: 5
-	keyword: damage+1
-	effects: [
-	  {
-		type: Trigger
-		optional: false
-		trigger: {
-		  type: played
-		  filter: self
-		}
-		effect: {
-		  type: repeat
-		  times: {
-			type: forEachYouCanSpot
-			filter: culture(dwarven),companion
-			over: 3
-		  }
-		  effect: {
-			type: optional
-			text: Do you want to play an Orc from your discard pile?
-			effect: {
-			  type: playCardFromDiscard
-			  select: choose(orc)
-			}
-		  }
-		}
-	  }
-	  {
-		type: activated
-		phase: maneuver
-		requires: {
-		  type: canSpot
-		  filter: culture(elven),archer
-		}
-		effect: {
-		  type: addKeyword
-		  select: self
-		  keyword: fierce
-		  until: start(regroup)
-		}
-	  }
-	]
-  }
-  31_48: {
-	title: The Arkenstone
-	subtitle: King's Jewel
-		unique: true
-	culture: smaug
-	type: artifact
-	twilight: 2
-	strength: -2
-	target: name(Bilbo)
-	effects: [
-	  {
-		type: trigger
-		optional: false
-		requires: {
-		  type: location
-		  filter: siteNumber(7-9)
-		}
-		trigger: {
-		  type: endOfPhase
-		  phase: maneuver
-		}
-		effect: [
-		  {
-			type: If
-			check: {
-			  type: canSpot
-			  filter: self,attachedTo(name(Bilbo))
-			}
-			true: {
-			  type: addBurdens
-			  amount: 1
-			}
-		  }
-		  {
-			type: If
-			check: {
-			  type: canSpot
-			  filter: self,attachedTo(not(name(Bilbo)))
-			}
-			true: {
-			  type: wound
-			  select: bearer
-			}
-		  }
 		]
-	  }
-	  {
-		type: modifier
-		modifier: {
-		  type: addActivated
-		  filter: name(Thorin)
-		  phase: maneuver
-		  text: Add a doubt to transfer The Arkenstone
-		  cost: {
-			type: addBurdens
-			amount: 1
-		  }
-		  effect: {
-			type: transfer
-			select: choose(name(The Arkenstone))
-			where: self
-		  }
+		gametext: You may exert The Great Goblin twice to play this event from your discard pile.<br>Exert 2 Orcs to discard a [dwarven] possession or [dwarven] artifact borne by a companion.
+		lore: "'That's not a song. It's an abomination!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
 		}
-	  }
-	  {
-		type: modifier
-		modifier: {
-		  type: addActivated
-		  filter: name(Thorin)
-		  phase: maneuver
-		  text: Add 3 doubts to discard The Arkenstone
-		  cost: {
-			type: addBurdens
-			amount: 3
-		  }
-		  effect: {
-			type: discard
-			select: choose(name(The Arkenstone))
-		  }
-		}
-	  }
-	]
-  }
-  31_49: {
-	title: Crazy Cob
-		unique: true
-	culture: spider
-	twilight: 3
-	type: minion
-	race: spider
-	strength: 9
-	vitality: 3
-	site: 5
-	keyword: fierce
-	effects: {
-	  type: trigger
-	  optional: true
-	  trigger: [
-		{
-		  type: killed
-		  filter: orc
-		}
-		{
-		  type: discarded
-		  filter: orc
-		}
-	  ]
-	  requires: {
-		type: not
-		requires: {
-		  type: phase
-		  phase: regroup
-		}
-	  }
-	  effect: [
-		{
-		  type: PlayCardFromHand
-		  select: choose(spider)
-		  discount: -2
-		  memorize: playedSpider
-		}
-		{
-		  type: modifyStrength
-		  select: memory(playedSpider)
-		  amount: 2
-		  until: start(regroup)
-		}
-	  ]
 	}
-  }
-  31_50: {
-	title: Enchanted River
-		unique: true
-	culture: spider
-	twilight: 2
-	type: condition
-	keyword: support area
-	effects: [
-	  {
-		type: Trigger
-		optional: false
-		trigger: {
-		  type: played
-		  filter: or(companion,follower)
+
+	31_34: {
+		cardInfo: {
+			image: hobbit/HDG3134.jpg
+			collInfo: 31_34
+			rarity: _
 		}
-		requires: {
-		  type: location
-		  filter: siteNumber(5)
-		}
-		effect: {
-		  type: exert
-		  player: fp
-		  count: 2
-		  select: choose(culture(dwarven),companion)
-		}
-	  }
-	  {
-		type: activated
-		phase: shadow
-		cost: {
-		  type: choice
-		  texts: [
-			Discard this condition
-			Exert 3 Spiders
-		  ]
-		  effects: [
+		title: Goblin Swarms
+		unique: false
+		side: Shadow
+		culture: moria
+		twilight: 1
+		type: condition
+		keywords: support area
+		effects: [
 			{
-			  type: discard
-			  select: self
-			}
-			{
-			  type: exert
-			  count: 3
-			  select: choose(spider)
-			}
-		  ]
-		}
-		effect: {
-		  type: drawCards
-		  count: 3
-		}
-	  }
-	]
-  }
-  31_51: {
-	title: Fat Spider
-	culture: spider
-	twilight: 3
-	type: minion
-	race: spider
-	strength: 8
-	vitality: 2
-	site: 5
-	keyword: fierce
-	effects: [
-	  {
-		type: modifyOwnCost
-		amount: {
-		  type: forEachBurden
-		  multiplier: -1
-		}
-	  }
-	  {
-		type: activated
-		phase: regroup
-		cost: {
-		  type: discard
-		  select: self
-		}
-		effect: {
-		  type: addBurdens
-		  amount: 1
-		}
-	  }
-	]
-  }
-  31_52: {
-	title: Lazy Lob
-		unique: true
-	culture: spider
-	twilight: 4
-	type: minion
-	race: spider
-	strength: 9
-	vitality: 2
-	site: 5
-	keyword: fierce
-	effects: [
-	  {
-		type: modifyOwnCost
-		amount: {
-		  type: forEachYouCanSpot
-		  filter: orc
-		  multiplier: -1
-		}
-	  }
-	  {
-		type: activated
-		phase: skirmish
-		cost: {
-		  type: discard
-		  select: choose(orc)
-		}
-		effect: {
-		  type: addKeyword
-		  select: choose(spider)
-		  keyword: damage+1
-		}
-	  }
-	]
-  }
-  31_53: {
-	title: Old Tomnoddy
-	culture: spider
-	twilight: 4
-	type: minion
-	race: spider
-	strength: 8
-	vitality: 3
-	site: 5
-	keyword: fierce
-	effects: {
-	  type: trigger
-	  optional: true
-	  trigger: {
-		type: played
-		filter: self
-	  }
-	  cost: {
-		type: removeTwilight
-		amount: 1
-	  }
-	  effect: {
-		type: playCardFromDiscard
-		select: choose(or(spider,orc))
-		removedTwilight: 1
-	  }
-	}
-  }
-  31_54: {
-	title: Spider Nest
-	culture: spider
-	twilight: 2
-	type: condition
-	keyword: support area
-	effects: [
-		{
-			type: toPlay
-			requires: {
-			  type: canSpot
-			  filter: spider
-			}
-		}
-		{
-		  type: activated
-		  phase: assignment
-		  cost: {
-			type: discard
-			select: choose(orc)
-		  }
-		  effect: {
-			type: choice
-			texts: [
-			  Play a Spider from your draw deck
-			  Play a Spider from your discard pile
-			]
-			effects: [
-			  {
-				type: playCardFromDrawDeck
-				select: choose(spider)
-				discount: {
-				  type: Conditional
-				  requires: {
-					type: location
-					filter: forest
-				  }
-				  true: -4
-				  false: -2
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(moria)
 				}
-				showAll: true
-				shuffle: true
-			  }
-			  {
+			}
+			{
+				type: Response
+				trigger: {
+					type: winsSkirmish
+					filter: your,orc,inSkirmish
+				}
+				effect: {
+					type: StackCardsFromPlay
+					select: choose(your,orc,inSkirmish)
+					where: self
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				effect: {
+					type: playCardFromStacked
+					select: choose(orc)
+					on: self
+				}
+			}
+		]
+		gametext: To play, spot a [moria] card.<br><b>Response:</b> If your Orc wins a skirmish, discard cards and wounds on that Orc and stack that Orc on this condition.<br><b>Shadow:</b> Play an Orc stacked here as if played from hand.
+		lore: "'Bones will be shattered, necks will be wrung!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	31_35: {
+		cardInfo: {
+			image: hobbit/HDG3135.jpg
+			collInfo: 31_35
+			rarity: _
+		}
+		title: Great Goblin's Power
+		unique: false
+		side: Shadow
+		culture: moria
+		twilight: 0
+		type: condition
+		keywords: support area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: culture(moria)
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: played
+					filter: your,weapon
+				}
+				effect: {
+					type: addTwilight
+					amount: 1
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToTakeWound
+					filter: orc
+				}
+				cost: {
+					type: choice
+					texts: [
+						Discard this condition
+						Remove (3)
+					]
+					effects: [
+						{
+							type: discard
+							select: self
+						}
+						{
+							type: removeTwilight
+							amount: 3
+						}
+					]
+				}
+				effect: {
+					type: preventWound
+					select: choose(orc)
+				}
+			}
+		]
+		gametext: To play, spot a [moria] card.<br>Each time you play a weapon, add (1).<br><b>Response:</b> If an Orc is about to take a wound, discard this condition or remove (3) to prevent that wound.
+		lore: "'You will die down here and never be found, down in the deep of Goblin town.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	31_36: {
+		cardInfo: {
+			image: hobbit/HDG3136.jpg
+			collInfo: 31_36
+			rarity: _
+		}
+		title: The Great Goblin
+		subtitle: Chieftain of the Misty Mountains
+		unique: true
+		side: Shadow
+		culture: moria
+		twilight: 4
+		type: minion
+		race: orc
+		strength: 10
+		vitality: 3
+		site: 4
+		keywords: fierce
+		effects: {
+			type: activated
+			phase: maneuver
+			cost: {
+				type: exert
+				select: self
+				times: 2
+			}
+			effect: [
+				{
+					type: revealHand
+					hand: fp
+					memorize: revealedCards
+				}
+				{
+					type: discardFromHand
+					hand: fp
+					select: choose(culture(dwarven),event)
+					forced: true
+				}
+			]
+		}
+		gametext: <b>Fierce</b>.<br><b>Maneuver:</b> Exert The Great Goblin twice to reveal the Free Peoples player's hand. Choose and discard a revealed [dwarven] event.
+		lore: "'Well, well, well! Look who it is! Thorin, son of Thrain, son of Thror, king under the mountain.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	31_37: {
+		cardInfo: {
+			image: hobbit/HDG3137.jpg
+			collInfo: 31_37
+			rarity: _
+		}
+		title: Bolg
+		subtitle: Servant of Sauron
+		unique: true
+		side: Shadow
+		culture: sauron
+		type: minion
+		race: orc
+		twilight: 4
+		strength: 9
+		vitality: 3
+		site: 5
+		keywords: damage+1
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: repeat
+					times: {
+						type: forEachYouCanSpot
+						filter: culture(dwarven),companion
+						over: 3
+					}
+					effect: {
+						type: optional
+						text: Do you want to play an Orc from your discard pile?
+						effect: {
+							type: playCardFromDiscard
+							select: choose(orc)
+						}
+					}
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				requires: {
+					type: canSpot
+					filter: culture(elven),archer
+				}
+				effect: {
+					type: addKeyword
+					select: self
+					keyword: fierce
+					until: start(regroup)
+				}
+			}
+		]
+		gametext: <b>Damage +1</b>.<br>When you play Bolg, you may play an Orc from your discard pile for each [dwarven] companion over 3.<br><b>Maneuver:</b> Spot an [elven] archer to make Bolg fierce until the regroup phase.
+		lore: "'Woodland Elves! The King's son and a She-elf.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	31_48: {
+		cardInfo: {
+			image: hobbit/HDG3148.jpg
+			collInfo: 31_48
+			rarity: _
+		}
+		title: The Arkenstone
+		subtitle: King's Jewel
+		unique: true
+		side: Shadow
+		culture: smaug
+		type: artifact
+		twilight: 2
+		strength: -2
+		target: name(Bilbo)
+		effects: [
+			{
+				type: trigger
+				optional: false
+				requires: {
+					type: location
+					filter: siteNumber(7-9)
+				}
+				trigger: {
+					type: endOfPhase
+					phase: maneuver
+				}
+				effect: [
+					{
+						type: If
+						check: {
+							type: canSpot
+							filter: self,attachedTo(name(Bilbo))
+						}
+						true: {
+							type: addBurdens
+							amount: 1
+						}
+					}
+					{
+						type: If
+						check: {
+							type: canSpot
+							filter: self,attachedTo(not(name(Bilbo)))
+						}
+						true: {
+							type: wound
+							select: bearer
+						}
+					}
+				]
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addActivated
+					filter: name(Thorin)
+					phase: maneuver
+					text: Add a doubt to transfer The Arkenstone
+					cost: {
+						type: addBurdens
+						amount: 1
+					}
+					effect: {
+						type: transfer
+						select: choose(name(The Arkenstone))
+						where: self
+					}
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addActivated
+					filter: name(Thorin)
+					phase: maneuver
+					text: Add 3 doubts to discard The Arkenstone
+					cost: {
+						type: addBurdens
+						amount: 3
+					}
+					effect: {
+						type: discard
+						select: choose(name(The Arkenstone))
+					}
+				}
+			}
+		]
+		gametext: Plays on Bilbo.<br>At sites 7 to 9, wound bearer at the end of the maneuver phase. (If bearer is Bilbo, add a doubt instead.)<br>Thorin gains this ability: "Maneuver: Add a doubt to transfer the Arkenstone to Thorin (or add 3 doubts to discard it)."
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	31_49: {
+		cardInfo: {
+			image: hobbit/HDG3149.jpg
+			collInfo: 31_49
+			rarity: _
+		}
+		title: Crazy Cob
+		unique: true
+		side: Shadow
+		culture: spider
+		twilight: 3
+		type: minion
+		race: spider
+		strength: 9
+		vitality: 3
+		site: 5
+		keywords: fierce
+		effects: {
+			type: trigger
+			optional: true
+			trigger: [
+				{
+					type: killed
+					filter: orc
+				}
+				{
+					type: discarded
+					filter: orc
+				}
+			]
+			requires: {
+				type: not
+				requires: {
+					type: phase
+					phase: regroup
+				}
+			}
+			effect: [
+				{
+					type: PlayCardFromHand
+					select: choose(spider)
+					discount: -2
+					memorize: playedSpider
+				}
+				{
+					type: modifyStrength
+					select: memory(playedSpider)
+					amount: 2
+					until: start(regroup)
+				}
+			]
+		}
+		gametext: <b>Fierce</b>.<br>Each time an Orc is killed or discarded from play (except during the regroup phase), you may play a Spider. Its twilight cost is -2 and strength +2 until the regroup phase.
+		lore: "'I'll wager there is good juice inside.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	31_50: {
+		cardInfo: {
+			image: hobbit/HDG3150.jpg
+			collInfo: 31_50
+			rarity: _
+		}
+		title: Enchanted River
+		unique: true
+		side: Shadow
+		culture: spider
+		twilight: 2
+		type: condition
+		keywords: support area
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: played
+					filter: or(companion,follower)
+				}
+				requires: {
+					type: location
+					filter: siteNumber(5)
+				}
+				effect: {
+					type: exert
+					player: fp
+					count: 2
+					select: choose(culture(dwarven),companion)
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: choice
+					texts: [
+						Discard this condition
+						Exert 3 Spiders
+					]
+					effects: [
+						{
+							type: discard
+							select: self
+						}
+						{
+							type: exert
+							count: 3
+							select: choose(spider)
+						}
+					]
+				}
+				effect: {
+					type: drawCards
+					count: 3
+				}
+			}
+		]
+		gametext: Each time a companion or a follower is played at site 5, the Free Peoples player must exert 2 [dwarven] companions.<br><b>Shadow:</b> Discard this condition or exert 3 Spiders to draw 3 cards.
+		lore: "'Bombur has fallen in! Bombur is drowning!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	31_51: {
+		cardInfo: {
+			image: hobbit/HDG3151.jpg
+			collInfo: 31_51
+			rarity: _
+		}
+		title: Fat Spider
+		unique: false
+		side: Shadow
+		culture: spider
+		twilight: 3
+		type: minion
+		race: spider
+		strength: 8
+		vitality: 2
+		site: 5
+		keywords: fierce
+		effects: [
+			{
+				type: modifyOwnCost
+				amount: {
+					type: forEachBurden
+					multiplier: -1
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: addBurdens
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Fierce</b>.<br>The twilight cost of this minion is -1 for each doubt.<br><b>Regroup:</b> Discard this minion to add a doubt.
+		lore: "'Bilbo was horrified, now that he noticed them for the first time dangling in the shadows.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	31_52: {
+		cardInfo: {
+			image: hobbit/HDG3152.jpg
+			collInfo: 31_52
+			rarity: _
+		}
+		title: Lazy Lob
+		unique: true
+		side: Shadow
+		culture: spider
+		twilight: 4
+		type: minion
+		race: spider
+		strength: 9
+		vitality: 2
+		site: 5
+		keywords: fierce
+		effects: [
+			{
+				type: modifyOwnCost
+				amount: {
+					type: forEachYouCanSpot
+					filter: orc
+					multiplier: -1
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: choose(orc)
+				}
+				effect: {
+					type: addKeyword
+					select: choose(spider)
+					keyword: damage+1
+				}
+			}
+		]
+		gametext: <b>Fierce</b>.<br>The twilight cost of this minion is -1 for each Orc you spot.<br><b>Skirmish:</b> Discard an Orc to make a Spider <b>damage +1</b>.
+		lore: "'...there were dozens of spiders sleeping in the branches higher above, and some of them were beginning to stir.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	31_53: {
+		cardInfo: {
+			image: hobbit/HDG3153.jpg
+			collInfo: 31_53
+			rarity: _
+		}
+		title: Old Tomnoddy
+		unique: false
+		side: Shadow
+		culture: spider
+		twilight: 4
+		type: minion
+		race: spider
+		strength: 8
+		vitality: 3
+		site: 5
+		keywords: fierce
+		effects: {
+			type: trigger
+			optional: true
+			trigger: {
+				type: played
+				filter: self
+			}
+			cost: {
+				type: removeTwilight
+				amount: 1
+			}
+			effect: {
 				type: playCardFromDiscard
-				select: choose(spider)
-				discount: {
-				  type: Conditional
-				  requires: {
-					type: location
-					filter: forest
-				  }
-				  true: -4
-				  false: -2
+				select: choose(or(spider,orc))
+				removedTwilight: 1
+			}
+		}
+		gametext: <b>Fierce</b>.<br>When you play this minion, you may remove (1) to play a Spider or an Orc from your discard pile.
+		lore: "'Again and again the spiders were beaten off... But it could not go on for long.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	31_54: {
+		cardInfo: {
+			image: hobbit/HDG3154.jpg
+			collInfo: 31_54
+			rarity: _
+		}
+		title: Spider Nest
+		unique: false
+		side: Shadow
+		culture: spider
+		twilight: 2
+		type: condition
+		keywords: support area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: spider
 				}
-			  }
-			]
-		  }
-		}
-	]
-  }
-  31_55: {
-	title: Wicked Spider
-	culture: spider
-	twilight: 2
-	type: minion
-	race: spider
-	strength: 7
-	vitality: 2
-	site: 5
-	keyword: fierce
-	effects: {
-	  type: activated
-	  phase: skirmish
-	  cost: {
-		type: discard
-		select: choose(orc)
-	  }
-	  effect: {
-		type: modifyStrength
-		select: choose(spider)
-		amount: {
-		  type: Conditional
-		  requires: {
-			type: canSpot
-			count: 6
-			filter: companion
-		  }
-		  true: 5
-		  false: 3
-		}
-		until: start(regroup)
-	  }
-	}
-  }
-  31_56: {
-	title: Bert
-	subtitle: Troll of Ettenmoors
-		unique: true
-	culture: troll
-	twilight: 5
-	type: minion
-	race: troll
-	strength: 11
-	vitality: 4
-	site: 2
-	keyword: fierce
-	effects: [
-	  {
-		type: extraCost
-		cost: {
-		  type: discard
-		  select: choose(orc)
-		}
-	  }
-	  {
-		type: modifier
-		modifier: {
-		  type: modifyCost
-		  filter: troll
-		  amount: -2
-		}
-	  }
-	  {
-		type: trigger
-		optional: true
-		trigger: {
-		  type: discarded
-		  filter: condition
-		  player: fp
-		}
-		effect: {
-		  type: discard
-		  select: choose(ally)
-		}
-	  }
-	]
-  }
-  31_57: {
-	title: Caught in a Sack
-	culture: troll
-	twilight: 0
-	type: condition
-	keyword: support area
-	effects: [
-	  {
-		type: Trigger
-		optional: false
-		trigger: {
-		  type: winsSkirmish
-		  filter: name(Bilbo)
-		}
-		effect: {
-		  type: discard
-		  select: self
-		}
-	  }
-	  {
-		type: activated
-		phase: regroup
-		cost: {
-		  type: choice
-		  texts: [
-			Discard a minion
-			Exert a Troll
-		  ]
-		  effects: [
-			{
-			  type: discard
-			  select: choose(minion)
 			}
 			{
-			  type: exert
-			  select: choose(troll)
+				type: activated
+				phase: assignment
+				cost: {
+					type: discard
+					select: choose(orc)
+				}
+				effect: {
+					type: choice
+					texts: [
+						Play a Spider from your draw deck
+						Play a Spider from your discard pile
+					]
+					effects: [
+						{
+							type: playCardFromDrawDeck
+							select: choose(spider)
+							discount: {
+								type: Conditional
+								requires: {
+									type: location
+									filter: forest
+								}
+								true: -4
+								false: -2
+							}
+							showAll: true
+							shuffle: true
+							mustExist: true
+						}
+						{
+							type: playCardFromDiscard
+							select: choose(spider)
+							discount: {
+								type: Conditional
+								requires: {
+									type: location
+									filter: forest
+								}
+								true: -4
+								false: -2
+							}
+						}
+					]
+				}
 			}
-		  ]
-		}
-		effect: {
-		  type: transfer
-		  select: self
-		  where: choose(culture(dwarven),companion)
-		}
-	  }
-	  {
-		type: modifier
-		modifier: {
-		  type: cantBeAssignedToSkirmishAgainst
-		  fpCharacter: bearer
-		  minion: any
-		}
-	  }
-	]
-  }
-  31_58: {
-	title: Tom
-	subtitle: Troll of Ettenmoors
-		unique: true
-	culture: troll
-	twilight: 5
-	type: minion
-	race: troll
-	strength: 11
-	vitality: 4
-	site: 2
-	keyword: fierce
-	effects: [
-	  {
-		type: extraCost
-		cost: {
-		  type: discard
-		  select: choose(orc)
-		}
-	  }
-	  {
-		type: modifier
-		modifier: {
-		  type: modifyCost
-		  filter: troll
-		  amount: -2
-		}
-	  }
-	  {
-		type: Trigger
-		optional: false
-		trigger: {
-		  type: losesSkirmish
-		  filter: companion
-		}
-		effect: {
-		  type: modifyStrength
-		  select: all(troll)
-		  amount: 1
-		  until: start(regroup)
-		}
-	  }
-	]
-  }
-  31_59: {
-	title: Troll Campfire
-		unique: true
-	culture: troll
-	twilight: 2
-	type: condition
-	keyword: support area
-	effects: [
-		{
-			type: toPlay
-			requires: {
-			  type: canSpot
-			  filter: troll
+		]
+		gametext: To play, spot a Spider.<br><b>Assignment:</b> Discard an Orc from play to play a Spider from your draw deck or discard pile. Its twilight cost is -2 (or -4 at a forest).
+		lore: "'... the cries of the others got steadily further and fainter...'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
 			}
 		}
-		{
-		  type: activated
-		  phase: shadow
-		  cost: {
-			type: discardFromHand
-			forced: false
-			count: 2
-		  }
-		  effect: {
-			type: playCardFromDiscard
-			select: choose(minion)
-		  }
-		}
-	]
-  }
-  31_60: {
-	title: Troll Knife
-	culture: troll
-	twilight: 2
-	type: possession
-	itemclass: hand weapon
-	strength: 3
-	target: troll
-	effects: {
-	  type: modifier
-	  modifier: {
-		type: addKeyword
-		filter: bearer
-		keyword: damage+1
-	  }
 	}
-  }
-  31_61: {
-	title: William
-	subtitle: Troll of Ettenmoors
+
+	31_55: {
+		cardInfo: {
+			image: hobbit/HDG3155.jpg
+			collInfo: 31_55
+			rarity: _
+		}
+		title: Wicked Spider
+		unique: false
+		side: Shadow
+		culture: spider
+		twilight: 2
+		type: minion
+		race: spider
+		strength: 7
+		vitality: 2
+		site: 5
+		keywords: fierce
+		effects: {
+			type: activated
+			phase: skirmish
+			cost: {
+				type: discard
+				select: choose(orc)
+			}
+			effect: {
+				type: modifyStrength
+				select: choose(spider)
+				amount: {
+					type: Conditional
+					requires: {
+						type: canSpot
+						count: 6
+						filter: companion
+					}
+					true: 5
+					false: 3
+				}
+				until: start(regroup)
+			}
+		}
+		gametext: <b>Fierce</b>.<br><b>Skirmish:</b> Discard an Orc to make a Spider strength +3 (or +5 if you spot 6 companions) until the regroup phase.
+		lore: "'...hairy legs waving, nippers an dspinners snapping, eyes popping, full of froth and rage.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	31_56: {
+		cardInfo: {
+			image: hobbit/HDG3156.jpg
+			collInfo: 31_56
+			rarity: _
+		}
+		title: Bert
+		subtitle: Troll of Ettenmoors
 		unique: true
-	culture: troll
-	twilight: 5
-	type: minion
-	race: troll
-	strength: 11
-	vitality: 4
-	site: 2
-	keyword: fierce
-	effects: [
-	  {
-		type: extraCost
-		cost: {
-		  type: discard
-		  select: choose(orc)
+		side: Shadow
+		culture: troll
+		twilight: 5
+		type: minion
+		race: troll
+		strength: 11
+		vitality: 4
+		site: 2
+		keywords: fierce
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: discard
+					select: choose(orc)
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					filter: troll
+					amount: -2
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: discarded
+					filter: condition
+					player: fp
+				}
+				effect: {
+					type: discard
+					select: choose(ally)
+				}
+			}
+		]
+		gametext: <b>Fierce</b>. To play, discard an Orc.<br>The twilight cost of each Troll is -2.<br>Each time the Free Peoples player discards a condition, you may discard an ally.
+		lore: "'I'm just saying, a little appreciation would be nice. Thank you very much, Bert. How hard is that?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
 		}
-	  }
-	  {
-		type: modifier
-		modifier: {
-		  type: modifyCost
-		  filter: troll
-		  amount: -2
+	}
+
+	31_57: {
+		cardInfo: {
+			image: hobbit/HDG3157.jpg
+			collInfo: 31_57
+			rarity: _
 		}
-	  }
-	  {
-		type: trigger
-		optional: true
-		trigger: {
-		  type: transferred
-		  filter: follower
-		  to: character
+		title: Caught In A Sack
+		unique: false
+		side: Shadow
+		culture: troll
+		twilight: 0
+		type: condition
+		keywords: support area
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: winsSkirmish
+					filter: name(Bilbo)
+				}
+				effect: {
+					type: discard
+					select: self
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: choice
+					texts: [
+						Discard a minion
+						Exert a Troll
+					]
+					effects: [
+						{
+							type: discard
+							select: choose(minion)
+						}
+						{
+							type: exert
+							select: choose(troll)
+						}
+					]
+				}
+				effect: {
+					type: transfer
+					select: self
+					where: choose(culture(dwarven),companion)
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantBeAssignedToSkirmishAgainst
+					fpCharacter: bearer
+					minion: any
+				}
+			}
+		]
+		gametext: Discard this condition if Bilbo wins a skirmish.<br><b>Regroup:</b> Discard a minion (or exert a Troll) to transfer this condition to a [dwarven] companion. Bearer cannot be assigned to a skirmish by any player.
+		lore: "'...a nasty smelly sack over his head.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
 		}
-		effect: {
-		  type: discard
-		  select: choose(hand weapon)
+	}
+
+	31_58: {
+		cardInfo: {
+			image: hobbit/HDG3158.jpg
+			collInfo: 31_58
+			rarity: _
 		}
-	  }
-	]
-  }
+		title: Tom
+		subtitle: Troll of Ettenmoors
+		unique: true
+		side: Shadow
+		culture: troll
+		twilight: 5
+		type: minion
+		race: troll
+		strength: 11
+		vitality: 4
+		site: 2
+		keywords: fierce
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: discard
+					select: choose(orc)
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					filter: troll
+					amount: -2
+				}
+			}
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: losesSkirmish
+					filter: companion
+				}
+				effect: {
+					type: modifyStrength
+					select: all(troll)
+					amount: 1
+					until: start(regroup)
+				}
+			}
+		]
+		gametext: <b>Fierce</b>. To play, discard an Orc.<br>The twilight cost of each Troll is -2.<br>Each time a companion loses a skirmish, each Troll is strength +1 until the regroup phase.
+		lore: "'Don't bother cooking 'em! Let's just sit on 'em and squash 'em into jelly!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	31_59: {
+		cardInfo: {
+			image: hobbit/HDG3159.jpg
+			collInfo: 31_59
+			rarity: _
+		}
+		title: Troll Campfire
+		unique: true
+		side: Shadow
+		culture: troll
+		twilight: 2
+		type: condition
+		keywords: support area
+		effects: [
+			{
+				type: toPlay
+				requires: {
+					type: canSpot
+					filter: troll
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 2
+					memorize: discardedCards
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(minion,not(memory(discardedCards)))
+				}
+			}
+		]
+		gametext: To play, spot a Troll.<br><b>Shadow:</b> Discard 2 cards from hand to play a minion from your discard pile.
+		lore: "'Mutton yesterday, mutton today. And blimey, if it don't look like mutton again tomorrow.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	31_60: {
+		cardInfo: {
+			image: hobbit/HDG3160.jpg
+			collInfo: 31_60
+			rarity: _
+		}
+		title: Troll Knife
+		unique: false
+		side: Shadow
+		culture: troll
+		twilight: 2
+		type: possession
+		itemclass: hand weapon
+		strength: 3
+		target: troll
+		effects: {
+			type: modifier
+			modifier: {
+				type: addKeyword
+				filter: bearer
+				keyword: damage+1
+			}
+		}
+		gametext: Bearer must be a Troll.<br>Bearer is <b>damage +1</b>.
+		lore: "'He drops Bilbo to the ground and William pulls out his knife, threatening Bilbo.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	31_61: {
+		cardInfo: {
+			image: hobbit/HDG3161.jpg
+			collInfo: 31_61
+			rarity: _
+		}
+		title: William
+		subtitle: Troll of Ettenmoors
+		unique: true
+		side: Shadow
+		culture: troll
+		twilight: 5
+		type: minion
+		race: troll
+		strength: 11
+		vitality: 4
+		site: 2
+		keywords: fierce
+		effects: [
+			{
+				type: extraCost
+				cost: {
+					type: discard
+					select: choose(orc)
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					filter: troll
+					amount: -2
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: transferred
+					filter: side(free people),follower
+					to: character
+				}
+				effect: {
+					type: discard
+					select: choose(hand weapon)
+				}
+			}
+		]
+		gametext: <b>Fierce</b>. To play, discard an Orc.<br>The twilight cost of each Troll is -2.<br>Each time the Free Peoples player transfers a follower, you may discard a hand weapon.
+		lore: "'Never mind the seasoning, we ain't got all night! I don't fancy been turned to stone.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
 }
