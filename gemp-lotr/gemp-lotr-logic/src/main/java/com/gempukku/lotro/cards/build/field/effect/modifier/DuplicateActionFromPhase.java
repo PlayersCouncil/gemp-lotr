@@ -10,7 +10,6 @@ import com.gempukku.lotro.logic.modifiers.AddActionToCardModifier;
 import com.gempukku.lotro.logic.modifiers.condition.AndCondition;
 import org.json.simple.JSONObject;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,8 +35,10 @@ public class DuplicateActionFromPhase implements ModifierSourceProducer {
 		final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
 		final Requirement[] requirements = environment.getRequirementFactory().getRequirements(requiresArray, environment);
 
-		Arrays.stream(oldphaseArray).forEach(x -> oldPhases.add(Phase.findPhase(x)));
-		Arrays.stream(newphaseArray).forEach(x -> newPhases.add(Phase.findPhase(x)));
+		for (String name : oldphaseArray)
+			oldPhases.add(resolvePhase(name, "oldPhase"));
+		for (String name : newphaseArray)
+			newPhases.add(resolvePhase(name, "newPhase"));
 
 
         return actionContext -> {
@@ -66,4 +67,13 @@ public class DuplicateActionFromPhase implements ModifierSourceProducer {
 			};
 		};
     }
+
+	// A name that is no phase is refused when the card is loaded.  Kept, it would be a phase the game is never
+	// in (newPhase), or would have the game ask for the actions of no phase at all (oldPhase).
+	private static Phase resolvePhase(String name, String field) throws InvalidCardDefinitionException {
+		final Phase phase = Phase.findPhase(name);
+		if (phase == null)
+			throw new InvalidCardDefinitionException("Unknown phase '" + name + "' in " + field + " field of DuplicateActionFromPhase modifier");
+		return phase;
+	}
 }
