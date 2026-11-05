@@ -32,6 +32,8 @@ public abstract class VirtualTable implements TableBase, Actions, CardProperties
     protected DefaultLotroGame _game;
     protected GameState _gameState;
     protected DefaultUserFeedback _userFeedback;
+    // Player name, then what that seat has been sent.  Empty unless the table asked for them: see KeepSeatChannels.
+    private final Map<String, SeatChannel> _seatChannels = new HashMap<>();
 
     /*
      * These functions are all used by the various interfaces and not so much by users of the table or in this class
@@ -40,6 +42,7 @@ public abstract class VirtualTable implements TableBase, Actions, CardProperties
     public DefaultLotroGame game() { return _game; }
     public GameState gameState() { return _gameState; }
     public DefaultUserFeedback userFeedback() { return _userFeedback; }
+    public SeatChannel seatChannel(String player) { return _seatChannels.get(player); }
 
     /**
      * Returns a card from the Free Peoples player's deck by its human-readable alias.
@@ -91,12 +94,50 @@ public abstract class VirtualTable implements TableBase, Actions, CardProperties
      *             meta-sites), or else null.
      */
     protected void InitializeGame(LotroFormat format, Map<String, LotroDeck> decks, LotroCardBlueprintLibrary library, GameExtraInfo info) {
+        CreateGame(format, decks, library, info);
+        _game.startGame();
+    }
+
+    /**
+     * Builds the game without setting it going, for a caller that has to hand the game to something else first (a
+     * live game's mediator, say).  The caller starts it with game().startGame().
+     */
+    protected void CreateGame(LotroFormat format, Map<String, LotroDeck> decks, LotroCardBlueprintLibrary library, GameExtraInfo info) {
         _userFeedback = new DefaultUserFeedback();
 
-        _game = new DefaultLotroGame(format, decks, _userFeedback, library, info);
+        _game = new DefaultLotroGame(format, decks, _userFeedback, library, TimerDescription(), SpectatorsAllowed(), GameName(), info);
         _userFeedback.setGame(_game);
-        _game.startGame();
         _gameState = _game.getGameState();
+        BeforeGameStarts();
+    }
+
+    /** What the players are told the game is, before it starts. */
+    protected String GameName() { return "Test Match"; }
+    protected String TimerDescription() { return "No timer"; }
+    protected boolean SpectatorsAllowed() { return false; }
+
+    /**
+     * Called once the game exists but before it has started running, for anything that has to be in place from the
+     * very first step (e.g. where the game gets its random outcomes from).  Does nothing by default.
+     */
+    protected void BeforeGameStarts() { }
+
+    /**
+     * Has the table keep a channel of its own to each seat, joined to the game as a client's connection is, so that
+     * what each seat has been sent can be read (HandIsRevealed, FreepsSeesCardInHand and their kin, which fail on a
+     * table that has not called this).  Call it from BeforeGameStarts(), so that the channels are sent everything
+     * from the first step on.
+     *
+     * Only for a table with no person at it.  Those readings join a further channel under the seat's name each time
+     * they are asked, and the game drops a person's own connection when another joins under that person's name
+     * (GameState.addGameStateListener): on a table with a client attached that would cut the client off.
+     */
+    protected void KeepSeatChannels() {
+        for (String player : List.of(P1(), P2())) {
+            var channel = new SeatChannel(player, _game.getFormat());
+            _game.addGameStateListener(player, channel);
+            _seatChannels.put(player, channel);
+        }
     }
 
     private final List<PhysicalCardImpl> _createdCards = new ArrayList<>();
@@ -241,18 +282,26 @@ public abstract class VirtualTable implements TableBase, Actions, CardProperties
     /**
      * Low-level function used by the rest of the virtual table to return a decision result back to the server.  This
      * is the beating heart of what is essentially a headless client.  You do not need to call this manually.
+     *
+     * Fails, saying what each player is in fact being asked, when the player is not being asked anything or there
+     * is no answer to give (the action or choice a caller looked for was not on offer).  Nothing is touched in
+     * either case: whatever is pending stays pending.
      * @param player The player making the decision
      * @param answer What decision is being returned to the server
      */
     public void PlayerDecided(String player, String answer) {
         var decision = userFeedback().getAwaitingDecision(player);
+        if(decision == null || answer == null)
+            Verify(false, DecisionGuard.cannotAnswer(this, player, answer));
         userFeedback().participantDecided(player);
         try {
             decision.decisionMade(answer);
         } catch (DecisionResultInvalidException exp) {
             userFeedback().sendAwaitingDecision(player, decision);
+            userFeedback().atRest();
             throw new RuntimeException(exp);
         }
+        userFeedback().decisionAccepted(player, decision, answer);
         game().carryOutPendingActionsUntilDecisionNeeded();
     }
 }

@@ -1,12 +1,20 @@
 package com.gempukku.lotro.virtualtable;
 
+import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.filters.Filters;
+import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.game.state.Assignment;
 import com.gempukku.lotro.game.state.Skirmish;
+import com.gempukku.lotro.logic.GameUtils;
+import com.gempukku.lotro.logic.timing.RuleUtils;
 
+import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public interface Skirmishes extends TableBase, Decisions, GameProcedures {
 
@@ -76,19 +84,61 @@ public interface Skirmishes extends TableBase, Decisions, GameProcedures {
 		return false;
 	}
 
+	/**
+	 * Whether the Free Peoples player's client has the given card before it as a card in the skirmish being
+	 * fought.  See PlayerSeesCardInSkirmish.
+	 */
+	default boolean FreepsSeesCardInSkirmish(PhysicalCardImpl card) { return PlayerSeesCardInSkirmish(P1(), card); }
+	/**
+	 * Whether the Shadow player's client has the given card before it as a card in the skirmish being fought.
+	 * See PlayerSeesCardInSkirmish.
+	 */
+	default boolean ShadowSeesCardInSkirmish(PhysicalCardImpl card) { return PlayerSeesCardInSkirmish(P2(), card); }
+	/**
+	 * Whether the given player's client has the given card before it as a card in the skirmish being fought:
+	 * true when that seat has been told so (as the skirmish started, or as the card was added to it) and has not
+	 * since been told the card left the skirmish or left play, or that the skirmish ended.  This is what a client
+	 * draws the skirmish by, and it is wider than IsCharSkirmishing, which asks the game who is fighting: a card
+	 * lying where the fellowship character of the skirmish was (The One Ring, when its bearer is killed in one)
+	 * is shown in the skirmish and fights nobody.
+	 *
+	 * Read as PlayerSeesCardInHand is: from the channel the table keeps for the seat and from a client joined to
+	 * the seat as the reading is made, failing if the two were told different things, and on a table that keeps
+	 * no such channels.
+	 * @param player The player whose seat is asked about.
+	 * @param card The card asked about.
+	 * @return True if that seat has the card before it as a card in the skirmish.
+	 */
+	default boolean PlayerSeesCardInSkirmish(String player, PhysicalCardImpl card) {
+		return SeatChannel.seesCardInSkirmish(this, player, card);
+	}
+
 	default Boolean CanBeAssignedViaAction(PhysicalCardImpl card)
 	{
 		return CanBeAssignedViaAction(card, Side.SHADOW) || CanBeAssignedViaAction(card, Side.FREE_PEOPLE);
 	}
 
+	/**
+	 * Asks the game's own rule for who may be assigned, not the decision in front of the player.
+	 * @param card A companion, ally or minion.
+	 * @return True if the Free Peoples player could assign that character in the ordinary assignment of the
+	 * assignment phase.  A companion or ally who already has a minion reads true only while defender leaves him
+	 * room for one more; a minion only while it is unassigned.
+	 */
 	default Boolean FreepsCanAssign(PhysicalCardImpl card)
 	{
 		return CanBeAssignedNormally(card, Side.FREE_PEOPLE);
 	}
 
+	/**
+	 * Asks the game's own rule for who may be assigned, not the decision in front of the player.
+	 * @param card A companion, ally or minion.
+	 * @return True if the Shadow player could assign that character in the ordinary assignment of the assignment
+	 * phase, which is of whatever the Free Peoples player left unassigned.
+	 */
 	default Boolean ShadowCanAssign(PhysicalCardImpl card)
 	{
-		return CanBeAssignedViaAction(card, Side.FREE_PEOPLE);
+		return CanBeAssignedNormally(card, Side.SHADOW);
 	}
 
 	default Boolean CanBeAssignedViaAction(PhysicalCardImpl card, Side side)
@@ -101,6 +151,75 @@ public interface Skirmishes extends TableBase, Decisions, GameProcedures {
 		return Filters.assignableToSkirmish(side, side == Side.SHADOW, side == Side.SHADOW, false).accepts(game(), card);
 	}
 
+	/**
+	 * Asks the game's own rule whether the Free Peoples player may assign one character to these minions in one
+	 * answer, which is what the game checks when an assignment is answered.  A restriction on a pair ("may not
+	 * assign a character to skirmish this minion", "cannot be assigned to skirmish companions of strength less
+	 * than 6") leaves both cards in the assignment decision's lists, so neither FreepsCanAssign nor
+	 * FreepsHasAssignmentTargetAvailable shows it.  Nor does either show how many minions a character may be
+	 * given: one, and one more for each defender +1, the minions he already has counted.
+	 * @param character A companion or ally.
+	 * @param minions One or more minions, each named once.
+	 * @return True if the Free Peoples player could assign that character to all of those minions in the ordinary
+	 * assignment of the assignment phase, as the board stands.
+	 */
+	default Boolean FreepsCanAssignAgainst(PhysicalCardImpl character, PhysicalCardImpl...minions)
+	{
+		return CanBeAssignedAgainst(Side.FREE_PEOPLE, character, minions);
+	}
+
+	/**
+	 * Asks the game's own rule whether the Shadow player may assign these minions to one character in one answer,
+	 * which is what the game checks when an assignment is answered.
+	 * @param character A companion or ally.
+	 * @param minions One or more minions, each named once.
+	 * @return True if the Shadow player could assign all of those minions to that character in the ordinary
+	 * assignment of the assignment phase, as the board stands.  The Shadow player may add any number of minions
+	 * to a character, one who already has a minion included; each minion must still be unassigned.  Whether a
+	 * minion is one the Free Peoples player left over is not read.
+	 */
+	default Boolean ShadowCanAssignAgainst(PhysicalCardImpl character, PhysicalCardImpl...minions)
+	{
+		return CanBeAssignedAgainst(Side.SHADOW, character, minions);
+	}
+
+	/**
+	 * Whether the player of the given side could assign the one character to all of the minions in one answer to
+	 * the ordinary assignment of the assignment phase: each card may be assigned by that side at all (as
+	 * CanBeAssignedNormally reads it for the character), the character has room for that many more where the
+	 * Free Peoples player is assigning (one to one, and one more for each defender +1: the count the game makes
+	 * of his answer, RuleUtils.hasRoomForAssignments), and no restriction on the group forbids it.  Fails unless
+	 * the character is a companion or ally and the rest are minions, at least one, each named once.
+	 * @param side The side doing the assigning.
+	 * @param character A companion or ally.
+	 * @param minions One or more minions.
+	 */
+	default Boolean CanBeAssignedAgainst(Side side, PhysicalCardImpl character, PhysicalCardImpl...minions)
+	{
+		Verify(Filters.or(CardType.COMPANION, CardType.ALLY).accepts(game(), character),
+				"CanBeAssignedAgainst takes a companion or ally and then minions; it was first given "
+						+ GameUtils.getFullName(character) + ".");
+		Verify(minions.length > 0, "CanBeAssignedAgainst takes a companion or ally and then at least one minion.");
+		Set<PhysicalCard> group = new LinkedHashSet<>();
+		for(PhysicalCardImpl minion : minions) {
+			Verify(Filters.and(CardType.MINION).accepts(game(), minion),
+					"CanBeAssignedAgainst takes a companion or ally and then minions; it was given "
+							+ GameUtils.getFullName(minion) + " as a minion.");
+			Verify(group.add(minion), "CanBeAssignedAgainst was given " + GameUtils.getFullName(minion) + " twice.");
+		}
+		if(!CanBeAssignedNormally(character, side))
+			return false;
+		// A minion is listed for either player only while it is unassigned.
+		for(PhysicalCard minion : group) {
+			if(!Filters.assignableToSkirmish(side, false, false, false).accepts(game(), minion))
+				return false;
+		}
+		if(side == Side.FREE_PEOPLE && !RuleUtils.hasRoomForAssignments(game(), character, group.size()))
+			return false;
+		Map<PhysicalCard, Set<PhysicalCard>> assignment = Collections.singletonMap(character, group);
+		return game().getModifiersQuerying().isValidAssignments(game(), side, assignment);
+	}
+
 	default Skirmish GetActiveSkirmish() { return gameState().getSkirmish(); }
 
 	default int FreepsGetFreepsAssignmentTargetCount() { return FreepsGetFreepsAssignmentTargets().size(); }
@@ -110,8 +229,8 @@ public interface Skirmishes extends TableBase, Decisions, GameProcedures {
 
 
 
-	default void FreepsDeclineAssignments() { FreepsPassCurrentPhaseAction(); }
-	default void ShadowDeclineAssignments() { ShadowPassCurrentPhaseAction(); }
+	default void FreepsDeclineAssignments() { FreepsPass(); }
+	default void ShadowDeclineAssignments() { ShadowPass(); }
 
 	default void FreepsAssignAndResolve(PhysicalCardImpl comp, PhysicalCardImpl...minions) {
 		AssignToMinions(P1(), comp, minions);

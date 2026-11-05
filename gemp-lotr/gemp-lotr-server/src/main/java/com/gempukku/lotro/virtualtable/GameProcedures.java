@@ -3,6 +3,8 @@ package com.gempukku.lotro.virtualtable;
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.SitesBlock;
 import com.gempukku.lotro.game.PhysicalCardImpl;
+import com.gempukku.lotro.logic.decisions.AwaitingDecision;
+import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 
 /**
  * These functions are for progressing through the game itself.  For instance, if your test is really about battle
@@ -22,6 +24,15 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 	}
 
 
+	/**
+	 * Plays on into the assignment phase ({@link #SkipToPhase}) and passes its actions for both players, so that it
+	 * rests at the Free Peoples player's "Assign minions" decision, nothing assigned.  It answers no optional
+	 * trigger of its own: where something is offered as the maneuver phase starts, the passes fall out of step.  A
+	 * Shadow follower's Aid (Saruman 17_38 in the support area or borne by a minion) is such an offer: the call then
+	 * rests at the Shadow player's "Play Assignment action or Pass", and an assignment after it finds no "Assign
+	 * minions" to answer.  There, skip to the maneuver phase, decline the Aid ({@code ShadowDeclineOptionalTrigger()})
+	 * and then call this.
+	 */
 	default void SkipToAssignments() {
 		SkipToPhase(Phase.ASSIGNMENT);
 		PassCurrentPhaseActions();
@@ -32,31 +43,28 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 
 	/**
 	 * Stops at the regroup "do you want to make another move?" decision of whichever player's turn is
-	 * under way.  On player 2's turn the roles are swapped, so the inverted primitives are used; on
+	 * under way or, where the mover is not asked that, at his reconcile or in the other player's fellowship phase.
+	 * On player 2's turn the roles are swapped, so the inverted primitives are used; on
 	 * player 1's turn the behaviour is unchanged.
+	 *
+	 * The question is asked only of a mover who may choose to move again.  Where he may not (the fellowship is
+	 * at the move limit, a card says it cannot move, no companion of his is unhindered) the game goes straight
+	 * on to his reconcile, and this does not stop where its name says: with cards in hand the mover is left at
+	 * his own "Reconcile" decision, still in the regroup phase; with an empty hand nothing is asked of him, the
+	 * turn ends, and this returns in the other player's fellowship phase.  Read which it was before answering.
 	 */
 	default void SkipToMovementDecision() {
 		if(GetCurrentPlayer().equals(P1())) {
 			SkipToPhase(Phase.REGROUP);
 			PassCurrentPhaseActions();
-			if(ShadowDecisionAvailable("reconcile")) {
-				ShadowDeclineReconciliation();
-			}
-			while(ShadowDecisionAvailable("discard down")) {
-				ShadowChooseCard((PhysicalCardImpl) GetShadowHand().getFirst());
-			}
+			PassReconcile(P2());
 		}
 		else {
 			SkipToPhaseInverted(Phase.REGROUP);
 			//Not BothPassInverted(): that passes player 1 first, but the Free Peoples player of the
 			//turn - player 2 here - is the one who acts first in the regroup phase.
 			PassCurrentPhaseActions();
-			if(FreepsDecisionAvailable("reconcile")) {
-				FreepsDeclineReconciliation();
-			}
-			while(FreepsDecisionAvailable("discard down")) {
-				FreepsChooseCard((PhysicalCardImpl) GetFreepsHand().getFirst());
-			}
+			PassReconcile(P1());
 		}
 	}
 
@@ -73,23 +81,13 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 			if(FreepsDecisionAvailable("another move")) {
 				FreepsChooseToStay();
 			}
-			if(FreepsDecisionAvailable("reconcile")) {
-				FreepsDeclineReconciliation();
-			}
-			while(FreepsDecisionAvailable("discard down")) {
-				FreepsChooseCard((PhysicalCardImpl) GetFreepsHand().getFirst());
-			}
+			PassReconcile(P1());
 		}
 		else {
 			if(ShadowDecisionAvailable("another move")) {
 				ShadowChooseToStay();
 			}
-			if(ShadowDecisionAvailable("reconcile")) {
-				ShadowDeclineReconciliation();
-			}
-			while(ShadowDecisionAvailable("discard down")) {
-				ShadowChooseCard((PhysicalCardImpl) GetShadowHand().getFirst());
-			}
+			PassReconcile(P2());
 		}
 	}
 
@@ -131,8 +129,31 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 	default void ShadowChooseToMove() { PlayerDecided(P2(), "0"); }
 	default void ShadowChooseToStay() { PlayerDecided(P2(), "1"); }
 
-	default void FreepsDeclineReconciliation() { FreepsPassCurrentPhaseAction(); }
-	default void ShadowDeclineReconciliation() { ShadowPassCurrentPhaseAction(); }
+	default void FreepsDeclineReconciliation() { FreepsPass(); }
+	default void ShadowDeclineReconciliation() { ShadowPass(); }
+
+	/**
+	 * Gets the given player through a reconcile, if that player is at one, keeping as much of the hand as the game
+	 * allows.  With a hand within the hand size the offer to discard a card is declined (and the hand is then drawn
+	 * up).  With a hand over it, "Choose cards to discard down to 8" wants every card to be discarded in one answer:
+	 * the first cards of the hand are given, as many as the decision asks for.  Every helper that plays a turn out
+	 * answers its reconciles with this.  Does nothing when the player is being asked something else, or nothing.
+	 * @param player The player who may be reconciling.
+	 */
+	default void PassReconcile(String player) {
+		if(DecisionAvailable(player, "reconcile")) {
+			PlayerDecided(player, "");
+		}
+		if(DecisionAvailable(player, "discard down")) {
+			int count = Integer.parseInt(GetAwaitingDecisionParam(player, "min")[0]);
+			var hand = GetHand(player);
+			PhysicalCardImpl[] cards = new PhysicalCardImpl[count];
+			for(int i = 0; i < count; i++) {
+				cards[i] = (PhysicalCardImpl) hand.get(i);
+			}
+			ChooseCards(player, cards);
+		}
+	}
 
 	/**
 	 * Causes both players to pass, first the player with a current decision and then the other.
@@ -181,17 +202,6 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 		}
 	}
 
-	default void FreepsPassCurrentPhaseAction() {
-		if(userFeedback().getAwaitingDecision(P1()) != null) {
-			PlayerDecided(P1(), "");
-		}
-	}
-
-	default void ShadowPassCurrentPhaseAction() {
-		if(userFeedback().getAwaitingDecision(P2()) != null) {
-			PlayerDecided(P2(), "");
-		}
-	}
 
 	/**
 	 * Causes both players to pass. Both will check to ensure that they have a currently available decision to be passing first.
@@ -269,6 +279,7 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 	 * @param target The phase the tester actually wants to be in
 	 */
     default void SkipToPhase(Phase target) {
+		VerifyGameBegun("SkipToPhase(" + target + ")");
 		Phase current = gameState().getCurrentPhase();
 		try {
 			for (int attempts = 1; attempts <= 20; attempts++) {
@@ -277,12 +288,12 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 					break;
 
 				if (current == Phase.FELLOWSHIP) {
-					FreepsPassCurrentPhaseAction();
+					FreepsPass();
 					if (game().getFormat().getSiteBlock() == SitesBlock.SHADOWS) {
 						ShadowChooseAnyCard();
 					}
 				} else if (current == Phase.SHADOW) {
-					ShadowPassCurrentPhaseAction();
+					ShadowPass();
 				} else {
 					var freeps = FreepsGetAwaitingDecision();
 					var shadow = ShadowGetAwaitingDecision();
@@ -309,7 +320,16 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 		}
     }
 
+	/**
+	 * SkipToPhase for player 2's turn, when player 2 is the one moving a fellowship and player 1 is the Shadow
+	 * player: both players pass until the given phase is current, player 2 passing the fellowship phase and
+	 * player 1 the Shadow phase, and in every other phase whoever is being asked and then the other.  It is the
+	 * plainer of the two: it takes no required response for either player and lays no site on a Shadows-block
+	 * path, so a turn that asks for either is driven by hand.  Only 20 rounds of passing are attempted.
+	 * @param target The phase of player 2's turn that the tester wants to be in.
+	 */
 	default void SkipToPhaseInverted(Phase target) {
+		VerifyGameBegun("SkipToPhaseInverted(" + target + ")");
 		for(int attempts = 1; attempts <= 20; attempts++)
 		{
 			Phase current = gameState().getCurrentPhase();
@@ -317,10 +337,10 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 				break;
 
 			if(current == Phase.FELLOWSHIP) {
-				ShadowPassCurrentPhaseAction();
+				ShadowPass();
 			}
 			else if(current == Phase.SHADOW) {
-				FreepsPassCurrentPhaseAction();
+				FreepsPass();
 			}
 			else {
 				PassCurrentPhaseActions();
@@ -333,64 +353,76 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 		}
 	}
 
+	/**
+	 * Every skipper plays turns that have begun.  Before the first turn (the bid, the starting fellowships and the
+	 * mulligans still to come, as a table is before {@code StartGame()}) a skip fails here, naming itself, rather
+	 * than further on with "halted in phase BETWEEN_TURNS" or a missing site.
+	 */
+	private void VerifyGameBegun(String skipper) {
+		Verify(gameState().getTurnNumber() > 0, skipper + " was called before the first turn began: call StartGame() "
+				+ "first (or, with the starting fellowships played by hand, answer them and the mulligans), then skip.");
+	}
+
+	/**
+	 * Declines, for either seat, an optional trigger left pending at the start of the phase a skipper has just
+	 * reached (a trigger at the start of the target phase is left pending), the player whose turn it is first.
+	 * One decline answers every offer of that "Optional responses" decision; a few rounds are allowed for an offer
+	 * the other seat is then made.
+	 */
+	private void DeclineStartOfPhaseOptionalTriggers() {
+		for(int rounds = 0; rounds < 4; rounds++) {
+			String current = GetCurrentPlayer();
+			String other = GetOffPlayer();
+			if(DecisionAvailable(current, "Optional"))
+				PlayerDecided(current, "");
+			else if(DecisionAvailable(other, "Optional"))
+				PlayerDecided(other, "");
+			else
+				return;
+		}
+	}
+
 	default void SkipToSite(int siteNum) {
+		VerifyGameBegun("SkipToSite(" + siteNum + ")");
 		for(int i = GetCurrentSite().getSiteNumber(); i < siteNum; i = GetCurrentSite().getSiteNumber())
 		{
 			SkipCurrentSite();
 		}
 	}
 
+	/**
+	 * Plays the rest of player 1's turn and the whole of player 2's, each fellowship moving once and staying at the
+	 * regroup phase, and ends between turns or in player 1's fellowship phase at the next site.  At site 9 it stops
+	 * in player 1's regroup phase, the game being over.  An optional trigger offered at the start of either regroup
+	 * phase (a site's "At the start of the regroup phase, you may ...", as Esgaroth 30_54's) is declined for
+	 * whichever seat it is offered to (G-0065, engine pass 78).
+	 */
 	default void SkipCurrentSite() {
+		VerifyGameBegun("SkipCurrentSite()");
 		SkipToPhase(Phase.REGROUP);
 		PhysicalCardImpl site = GetCurrentSite();
 		if(site.getSiteNumber() == 9)
 			return; // Game finished
+		DeclineStartOfPhaseOptionalTriggers();
 		PassCurrentPhaseActions();
-		if(ShadowDecisionAvailable("reconcile"))
-		{
-			ShadowDeclineReconciliation();
-		}
-		while(ShadowDecisionAvailable("discard down"))
-		{
-			ShadowChooseCard((PhysicalCardImpl) GetShadowHand().getFirst());
-		}
+		PassReconcile(P2());
 		if(FreepsDecisionAvailable("another move"))
 		{
 			FreepsChooseToStay();
 		}
-		if(FreepsDecisionAvailable("reconcile"))
-		{
-			FreepsDeclineReconciliation();
-		}
-		if(FreepsDecisionAvailable("discard down"))
-		{
-			FreepsChooseCard((PhysicalCardImpl) GetFreepsHand().getFirst());
-		}
+		PassReconcile(P1());
 
 		//Shadow player
 		SkipToPhaseInverted(Phase.REGROUP);
-		ShadowPassCurrentPhaseAction(); // actually freeps with the swap
-		FreepsPassCurrentPhaseAction(); // actually shadow with the swap
-		if(FreepsDecisionAvailable("reconcile"))
-		{
-			FreepsDeclineReconciliation();
-		}
-		if(FreepsDecisionAvailable("discard down"))
-		{
-			FreepsChooseCard((PhysicalCardImpl) GetFreepsHand().getFirst());
-		}
+		DeclineStartOfPhaseOptionalTriggers();
+		ShadowPass(); // actually freeps with the swap
+		FreepsPass(); // actually shadow with the swap
+		PassReconcile(P1());
 		if(ShadowDecisionAvailable("another move"))
 		{
 			ShadowChoose("1"); // Choose to stay
 		}
-		if(ShadowDecisionAvailable("reconcile"))
-		{
-			ShadowDeclineReconciliation();
-		}
-		if(ShadowDecisionAvailable("discard down"))
-		{
-			ShadowChooseCard((PhysicalCardImpl) GetShadowHand().getFirst());
-		}
+		PassReconcile(P2());
 
 		Verify(GetCurrentPhase() == Phase.BETWEEN_TURNS
 				|| GetCurrentPhase() == Phase.FELLOWSHIP,
@@ -400,11 +432,40 @@ public interface GameProcedures extends Actions, GameProperties, PileProperties 
 
 
 
-	default void FreepsDismissRevealedCards() { FreepsPassCurrentPhaseAction(); }
-	default void ShadowDismissRevealedCards() { ShadowPassCurrentPhaseAction(); }
+	/**
+	 * Dismisses the cards the Free Peoples player is being shown.  It is an error to call this when that player
+	 * is not being shown cards.
+	 */
+	default void FreepsDismissRevealedCards() { DismissRevealedCards(P1()); }
+
+	/**
+	 * Dismisses the cards the Shadow player is being shown.  It is an error to call this when that player is not
+	 * being shown cards.
+	 */
+	default void ShadowDismissRevealedCards() { DismissRevealedCards(P2()); }
+
+	default void DismissRevealedCards(String playerID) {
+		Verify(BeingShownCards(playerID), playerID + " is not being shown any cards to dismiss.");
+		PlayerDecided(playerID, "");
+	}
+
+	default boolean BeingShownCards(String playerID) {
+		AwaitingDecision decision = userFeedback().getAwaitingDecision(playerID);
+		return decision != null && decision.getDecisionType() == AwaitingDecisionType.ARBITRARY_CARDS;
+	}
+
+	/**
+	 * Dismisses the cards being shown to whichever players are being shown some, the Free Peoples player first.
+	 * It is an error to call this when neither player is being shown cards.
+	 */
 	default void DismissRevealedCards() {
-		FreepsDismissRevealedCards();
-		ShadowDismissRevealedCards();
+		boolean freeps = BeingShownCards(P1());
+		if(freeps)
+			PlayerDecided(P1(), "");
+		boolean shadow = BeingShownCards(P2());
+		if(shadow)
+			PlayerDecided(P2(), "");
+		Verify(freeps || shadow, "Neither player is being shown any cards to dismiss.");
 	}
 
 }
