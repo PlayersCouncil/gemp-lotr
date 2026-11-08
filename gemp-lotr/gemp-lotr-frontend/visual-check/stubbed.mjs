@@ -69,7 +69,8 @@ const FORMATS = {
 
 /** A collection of the first cards of set 1, a few of its sites (landscape cards) and two packs. */
 const COLLECTION = [
-  ...['FotR - Booster', '(S)FotR - Starter'].map((id) => ({ pack: id, count: 2 })),
+  { pack: 'FotR - Booster', count: 2 },
+  { pack: '(S)FotR - Starter', count: 2, contents: '1_1|1_2|1_3|1_4|1_319' },
   ...Array.from({ length: 60 }, (_, i) => ({
     id: `1_${i + 1}`,
     count: (i % 4) + 1,
@@ -84,7 +85,7 @@ function collectionXml(url) {
   const items = COLLECTION.slice(start, start + count)
     .map((item) =>
       item.pack
-        ? `<pack blueprintId="${item.pack}" count="${item.count}"/>`
+        ? `<pack blueprintId="${item.pack}" count="${item.count}"${item.contents ? ` contents="${item.contents}"` : ''}/>`
         : `<card blueprintId="${item.id}" count="${item.count}"${item.side ? ` side="${item.side}"` : ''}/>`,
     )
     .join('');
@@ -102,10 +103,23 @@ function placeholder(url) {
 <text x="178" y="340" font-family="sans-serif" font-size="34" fill="#fff" text-anchor="middle">${name}</text></svg>`;
 }
 
-function serverAnswer(url, request) {
+/** A few saved decks (and library decks), with a name to escape and a long one. */
+const DECKS = [
+  ['Fellowship Block', 'Test + deck &amp; co'],
+  ['Anything Goes', 'Aragorn and the Rangers'],
+  ['Movie Block (PC)', 'Gandalf the Grey, Gandalf the White and the Fellowship of the Ring on their way to Mordor'],
+  ['Fellowship Block', 'Moria Orcs'],
+];
+const DECKS_XML = `<?xml version="1.0" encoding="UTF-8"?><decks>${DECKS.map(
+  ([format, name]) => `<deck targetFormat="${format}">${name}</deck>`,
+).join('')}</decks>`;
+
+function serverAnswer(url, request, scenario) {
   const p = url.pathname.replace('/gemp-lotr-server', '');
+  const own = scenario.answers?.[p];
+  if (own) return own;
   if (p === '/deck/formats') return { json: FORMATS };
-  if (p === '/deck/list') return { file: 'deck-list.xml' };
+  if (p === '/deck/list' || p === '/deck/libraryList') return { xml: DECKS_XML };
   if (p === '/deck/stats') return { file: 'stats.html', type: 'text/html' };
   if (p === '/collection') return { file: 'collection-types.xml' };
   if (p.startsWith('/collection/')) return { xml: collectionXml(url) };
@@ -114,7 +128,7 @@ function serverAnswer(url, request) {
   return null;
 }
 
-async function route(context, log) {
+async function route(context, log, scenario) {
   await context.route(/.*/, async (route) => {
     const request = route.request();
     const url = new URL(request.url());
@@ -125,7 +139,7 @@ async function route(context, log) {
       return route.fulfill({ status: 404, body: '' });
     }
     if (url.pathname.startsWith('/gemp-lotr-server/')) {
-      const answer = serverAnswer(url, request);
+      const answer = serverAnswer(url, request, scenario);
       if (!answer) {
         log.push(`unanswered ${request.method()} ${url.pathname}`);
         return route.fulfill({ status: 404, body: '' });
@@ -161,6 +175,14 @@ const CONTROLS = {
   nextPage: { legacy: '#nextPage', angular: '.gd-pager__next' },
   side: { legacy: '#sideSelect', angular: '.gd-field[data-field="side"] select' },
   firstCard: { legacy: '#collection-display .card .actionArea', angular: '.gd-collection .gd-card' },
+  deckList: { legacy: '#deckListBut', angular: '.gd-toolbar [data-action="deck-list"]' },
+  library: { legacy: '#libraryListBut', angular: '.gd-toolbar [data-action="library"]' },
+  importDeck: { legacy: '#importDeckBut', angular: '.gd-toolbar [data-action="import"]' },
+  notes: { legacy: '#notesBut', angular: '.gd-toolbar [data-action="notes"]' },
+  /** The selection pack in the collection (the second item). */
+  selectionPack: { legacy: '#collection-display .card .actionArea', angular: '.gd-collection .gd-card' },
+  deleteDeck: { legacy: '.deckItem button[title="Delete deck"]', angular: '.gd-deck-list [data-action="delete"]' },
+  renameDeck: { legacy: '.deckItem button[title="Rename deck"]', angular: '.gd-deck-list [data-action="rename"]' },
   /** A card by its image, in the deck's piles or in the collection. */
   deckCard: (image) => ({
     legacy: `#decksRegion .card:has(img[src*="${image}"]) .actionArea`,
@@ -218,6 +240,70 @@ export const STUBBED_SCENARIOS = [
       await page.locator(CONTROLS.firstCard[which]).nth(2).click({ button: 'right' });
     },
   },
+  {
+    name: 'deck-list',
+    act: async (page, which) => {
+      await page.click(CONTROLS.deckList[which]);
+    },
+  },
+  {
+    name: 'library',
+    act: async (page, which) => {
+      await page.click(CONTROLS.library[which]);
+    },
+  },
+  {
+    name: 'import',
+    act: async (page, which) => {
+      await page.click(CONTROLS.importDeck[which]);
+    },
+  },
+  {
+    name: 'import-typed',
+    act: async (page, which) => {
+      await page.click(CONTROLS.importDeck[which]);
+      await page.waitForTimeout(200);
+      await page.fill(which === 'legacy' ? '#deckImport' : '.gd-import__text', '1x Gandalf\n3x Aragorn');
+      await page.mouse.move(0, 0);
+    },
+  },
+  {
+    name: 'notes',
+    act: async (page, which) => {
+      await page.click(CONTROLS.notes[which]);
+    },
+  },
+  {
+    name: 'selection',
+    act: async (page, which) => {
+      await page.locator(CONTROLS.selectionPack[which]).nth(1).click();
+    },
+  },
+  {
+    name: 'delivery',
+    answers: { '/delivery/packContents': { file: 'pack-delivery.xml' } },
+    act: async () => {},
+  },
+  /*
+   * The legacy page asked with the browser's own dialogs, which a screenshot doesn't show (Playwright answers them);
+   * the legacy side shows the page behind them.
+   */
+  {
+    name: 'confirm',
+    act: async (page, which) => {
+      await page.click(CONTROLS.deckList[which]);
+      await page.waitForTimeout(300);
+      await page.locator(CONTROLS.deleteDeck[which]).first().click();
+    },
+  },
+  {
+    name: 'prompt',
+    act: async (page, which) => {
+      await page.click(CONTROLS.deckList[which]);
+      await page.waitForTimeout(300);
+      await page.locator(CONTROLS.renameDeck[which]).first().click();
+    },
+  },
 ];
 
 /**
@@ -263,7 +349,7 @@ for (const size of sizes) {
     ]) {
       const context = await browser.newContext({ viewport: { width: size.width, height: size.height } });
       const log = [];
-      await route(context, log);
+      await route(context, log, scenario);
       const page = await context.newPage();
       page.on('pageerror', (error) => log.push(`page error: ${error.message}`));
       await page.goto(ORIGIN + address);
@@ -272,6 +358,14 @@ for (const size of sizes) {
       await settle(page);
       const file = path.join(outDir, `${scenario.name}-${size.label}-${which}.png`);
       await page.screenshot({ path: file });
+      if (process.env.MEASURE) {
+        const rects = await page.evaluate((selectors) => selectors.flatMap((sel) => [...document.querySelectorAll(sel)].slice(0, 3).map((el) => {
+          const r = el.getBoundingClientRect();
+          const cs = getComputedStyle(el);
+          return `${sel}: ${r.left.toFixed(2)},${r.top.toFixed(2)} ${r.width.toFixed(2)}x${r.height.toFixed(2)} font ${cs.fontSize} m ${cs.margin} p ${cs.padding} lh ${cs.lineHeight} va ${cs.verticalAlign} d ${cs.display}`;
+        })), process.env.MEASURE.split('|'));
+        console.log(rects.join('\n'));
+      }
       console.log(`${file}${log.length ? `\n  ${[...new Set(log)].join('\n  ')}` : ''}`);
       await context.close();
     }

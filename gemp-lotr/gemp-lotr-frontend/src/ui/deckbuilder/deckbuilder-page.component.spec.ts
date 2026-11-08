@@ -30,12 +30,17 @@ describe('DeckbuilderPageComponent', () => {
     const { el } = await render();
     expect(el.classList).toContain('gd-page');
     expect(el.dataset['collection']).toBe('open');
-    expect(Array.from(el.children).map((child) => child.className)).toEqual([
+    expect(Array.from(el.children).map((child) => child.className || child.localName)).toEqual([
       'gd-page__deck',
       'gd-page__separator',
       'gd-page__collection',
-      '',
-      '',
+      'gd-deck-list-dialog',
+      'gd-import-dialog',
+      'gd-notes-dialog',
+      'gd-pack-dialogs',
+      'gd-card-info',
+      'gd-auto-zoom',
+      'gd-notifier',
     ]);
     expect(el.querySelector('section.gd-page__deck > gd-deck.gd-deck')).not.toBeNull();
     expect(el.querySelector('gd-auto-zoom > .gd-zoom[hidden]')).not.toBeNull();

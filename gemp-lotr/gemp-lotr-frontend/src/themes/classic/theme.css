@@ -3,7 +3,7 @@
  * widgets, the legacy card layers). Built into theme-classic.css, which ThemeService loads; only one theme's
  * stylesheet is on the page at a time, so rules need no theme scope. Images are in public/themes/classic/ (served
  * next to the app, so referenced by their absolute address): the jQuery UI 1.8.16 "dark-hive" theme images (MIT
- * licensed, like the legacy copy in css/dark-hive) and the legacy errata marker.
+ * licensed, like the legacy copy in css/dark-hive), the legacy errata marker and hall.css's scroll buttons.
  *
  * The legacy stylesheets this replaces: css/gemp-001/{hall,deckBuild,cardFilter}.css and
  * css/dark-hive/jquery-ui-1.8.16.custom.css. Sizes below come from them (the jQuery UI widgets' font is
@@ -38,6 +38,60 @@ body {
   overflow: hidden;
   background: #000;
   font-size: 12px;
+}
+
+/* ---------------------------------------------------------------- scrollbars (hall.css) */
+
+/* Firefox, and Chrome where the standard properties apply (they win over the -webkit- ones) */
+div {
+  scrollbar-color: #6666 #222a;
+  scrollbar-width: auto;
+}
+
+::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #6666;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #8888;
+}
+
+::-webkit-scrollbar-button,
+::-webkit-scrollbar-track-piece,
+::-webkit-scrollbar-corner,
+::-webkit-resizer {
+  background-color: #222a;
+}
+
+::-webkit-scrollbar-button:start:decrement,
+::-webkit-scrollbar-button:end:increment {
+  display: block;
+}
+
+::-webkit-scrollbar-button:vertical:start:increment,
+::-webkit-scrollbar-button:vertical:end:decrement {
+  display: none;
+}
+
+::-webkit-scrollbar-button:vertical:end:increment {
+  background-image: url('/gemp-lotr/ng/deckbuilder/themes/classic/scroll-button-down.png');
+}
+
+::-webkit-scrollbar-button:vertical:start:decrement {
+  background-image: url('/gemp-lotr/ng/deckbuilder/themes/classic/scroll-button-up.png');
+}
+
+::-webkit-scrollbar-button:horizontal:end:increment {
+  background-image: url('/gemp-lotr/ng/deckbuilder/themes/classic/scroll-button-right.png');
+}
+
+::-webkit-scrollbar-button:horizontal:start:decrement {
+  background-image: url('/gemp-lotr/ng/deckbuilder/themes/classic/scroll-button-left.png');
 }
 
 /* ---------------------------------------------------------------- page frame (jquery.layout) */
@@ -1197,4 +1251,301 @@ button.gd-slot__label:focus-visible {
   .gd-card-info__zoom {
     display: none;
   }
+}
+
+/* ---------------------------------------------------------------- dialogs (jQuery UI dialog, dark-hive) */
+
+/*
+ * Sized with the jQuery UI options: `width` and `height` are the dialog's content box (the title bar and the content
+ * share the height), with .2em padding and a 1px border around. Centred in the window, as jQuery UI positioned them
+ * ("center", kept inside the window); moved by the title bar (data-placed) and resized from the corner.
+ */
+.gd-dialog {
+  --classic-dialog-width: 300px;
+  /* The height it is centred for; dialogs of the content's height are centred for their least height */
+  --classic-dialog-height: 150px;
+  /* The outer size, where the theme knows it: jQuery UI centred the whole-pixel box (offsetWidth, offsetHeight) */
+  --classic-dialog-outer-width: round(calc(var(--classic-dialog-width) + 0.4em + 2px), 1px);
+  position: fixed;
+  inset: 0;
+  z-index: calc(1000 + var(--gd-dialog-layer, 0));
+  box-sizing: content-box;
+  width: var(--classic-dialog-width);
+  height: fit-content;
+  min-width: calc(150px - 0.4em - 2px);
+  min-height: 150px;
+  max-width: none;
+  max-height: none;
+  margin: auto;
+  padding: 0.2em;
+  border: 1px solid #555;
+  border-radius: 6px;
+  background: var(--classic-content-bg);
+  color: #fff;
+  font-family: var(--classic-widget-font);
+  font-size: 13.2px;
+  overflow: hidden;
+  resize: both;
+}
+
+.gd-dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Placed at whole pixels, as jQuery UI did: half the free space around the whole-pixel box, rounded */
+.gd-dialog:not([data-placed]) {
+  inset: auto;
+  left: round(calc((100vw - var(--classic-dialog-outer-width)) / 2), 1px);
+  top: max(0px, round(calc((100vh - round(calc(var(--classic-dialog-height) + 0.4em + 2px), 1px)) / 2), 1px));
+  margin: 0;
+}
+
+/* .ui-widget's form controls */
+.gd-dialog :is(input, select, textarea) {
+  font-family: var(--classic-widget-font);
+  font-size: 1em;
+}
+
+/* hall.css's text fields */
+.gd-dialog :is(textarea, input) {
+  margin: 2px;
+  border-color: #666 #888 #888 #666;
+  background-color: #222;
+  color: #fff;
+}
+
+.gd-dialog[data-placed] {
+  inset: auto;
+  left: var(--gd-dialog-left);
+  top: var(--gd-dialog-top);
+  margin: 0;
+}
+
+.gd-dialog:focus {
+  outline: none;
+}
+
+/* The modal overlay */
+.gd-dialog::backdrop {
+  background: rgb(92 92 92 / 0.8);
+}
+
+/* The resize grip (.ui-resizable-se: the grip icon in the corner) */
+.gd-dialog::-webkit-resizer {
+  background: url('/gemp-lotr/ng/deckbuilder/themes/classic/ui-icons_cccccc_256x240.png') -80px -224px no-repeat;
+}
+
+.gd-dialog__header {
+  position: relative;
+  flex: none;
+  display: flex;
+  align-items: center;
+  padding: 0.4em 1em;
+  border: 1px solid #333;
+  border-radius: 6px;
+  background: var(--classic-header-bg);
+  cursor: move;
+}
+
+.gd-dialog__title {
+  margin: 0.1em 16px 0.1em 0;
+  overflow: hidden;
+  font-size: 1em;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.gd-dialog__close {
+  position: absolute;
+  right: 0.3em;
+  top: 50%;
+  width: 19px;
+  height: 18px;
+  margin-top: -10px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  cursor: pointer;
+}
+
+.gd-dialog__close::before {
+  content: '';
+  display: block;
+  width: 16px;
+  height: 16px;
+  background: var(--classic-icons-hover) -96px -128px no-repeat;
+}
+
+/* .ui-state-hover: a 1px border, which moves the icon */
+.gd-dialog__close:hover,
+.gd-dialog__close:focus-visible {
+  border: 1px solid #0b93d5;
+  background: var(--classic-hover-bg);
+  outline: none;
+}
+
+.gd-dialog__body {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 0.5em 1em;
+  overflow: auto;
+}
+
+/* jQuery UI focused the first button when a dialog opened, and its buttons drew focus like hover */
+.gd-dialog .gd-button:focus {
+  border-color: #0b93d5;
+  background: var(--classic-hover-bg);
+  color: #fff;
+  outline: none;
+}
+
+/*
+ * A jQuery UI text button (.ui-button-text-only): .2em .3em of padding, then the text at 70% (deckBuild.css) with
+ * .2em .3em of its own
+ */
+.gd-dialog .gd-button {
+  margin-right: 1.32px;
+  padding: calc(2.64px + 1.848px) calc(3.96px + 2.772px);
+  font-size: 9.24px;
+  line-height: 1.4;
+  vertical-align: baseline;
+}
+
+/* An icon in a text button (the deck list's buttons): the icon is the button's text */
+.gd-dialog .gd-button[data-action]:empty::before {
+  content: '';
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-image: var(--classic-icons);
+  background-repeat: no-repeat;
+}
+
+.gd-dialog .gd-button[data-action]:empty:is(:hover, :focus)::before {
+  background-image: var(--classic-icons-hover);
+}
+
+.gd-dialog .gd-button[data-action='open']::before {
+  background-position: -16px -96px;
+}
+
+.gd-dialog .gd-button[data-action='rename']::before {
+  background-position: -64px -112px;
+}
+
+.gd-dialog .gd-button[data-action='share']::before {
+  background-position: -32px -80px;
+}
+
+.gd-dialog .gd-button[data-action='delete']::before {
+  background-position: -176px -96px;
+}
+
+.gd-dialog .gd-button[data-action='deck-list']::before {
+  background-position: -160px -128px;
+}
+
+/* Deck list, library and notes: 700 x 400 */
+.gd-dialog:is([data-dialog='deck-list'], [data-dialog='library'], [data-dialog='notes']) {
+  --classic-dialog-width: 700px;
+  --classic-dialog-height: 400px;
+  height: var(--classic-dialog-height);
+}
+
+.gd-deck-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Import: opened before it had content, so placed as a 150px high dialog (its minimum), then grown downwards */
+.gd-dialog[data-dialog='import'] {
+  --classic-dialog-height: 150px;
+}
+
+/* Notes (.notesDialog, .notesText) */
+.gd-dialog[data-dialog='notes'] .gd-dialog__body {
+  display: flex;
+}
+
+.gd-notes__text {
+  flex-grow: 1;
+  margin: 5px;
+}
+
+/* Selection pack and new items: 80% of the window the first time (openSizeDialog) */
+.gd-dialog:is([data-dialog='selection'], [data-dialog='delivery']) {
+  --classic-dialog-width: round(down, 80vw, 0.01px);
+  --classic-dialog-height: round(down, 80vh, 0.01px);
+  height: var(--classic-dialog-height);
+}
+
+/*
+ * The cards (a NormalCardGroup over the content: from 5px in from its padding box's top left, as large as the
+ * content box)
+ */
+.gd-dialog:is([data-dialog='selection'], [data-dialog='delivery']) .gd-dialog__body {
+  display: flex;
+  padding: 5px calc(2em - 5px) calc(1em - 5px) 5px;
+  overflow: hidden;
+}
+
+.gd-shown-cards {
+  --gd-card-max-height: 497px;
+  --gd-card-gap: 5px;
+  --gd-card-fit: rows;
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: var(--gd-card-gap);
+}
+
+.gd-shown-cards > .gd-card {
+  top: var(--gd-card-offset, 0px);
+  margin-bottom: calc(var(--gd-card-height, 200px) - round(down, calc(var(--gd-card-width) * 490 / 350), 1px));
+}
+
+.gd-shown-cards > .gd-card[data-orientation='horizontal'] {
+  margin-bottom: calc(var(--gd-card-height, 200px) - round(down, calc(var(--gd-card-width) * 350 / 490), 1px));
+}
+
+/* The notifier: the browser's alert, confirm and prompt had no jQuery UI look; drawn as a dialog of the theme */
+.gd-dialog:is([data-dialog='alert'], [data-dialog='confirm'], [data-dialog='prompt']) {
+  --classic-dialog-width: 400px;
+  min-height: 0;
+  resize: none;
+}
+
+.gd-dialog:is([data-dialog='alert'], [data-dialog='confirm'], [data-dialog='prompt']):not([data-placed]) {
+  inset: 0;
+  margin: auto;
+}
+
+.gd-notifier__message {
+  margin: 0.5em 0;
+  white-space: pre-line;
+}
+
+.gd-notifier__input {
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* .ui-dialog-buttonpane */
+.gd-dialog__actions {
+  flex: none;
+  display: flex;
+  justify-content: flex-end;
+  margin: 0.5em 0 0;
+  padding: 0.3em 1em 0.5em 0.4em;
+  border-top: 1px solid #555;
+}
+
+.gd-dialog__actions .gd-button {
+  margin: 0.5em 0.4em 0.5em 0;
 }

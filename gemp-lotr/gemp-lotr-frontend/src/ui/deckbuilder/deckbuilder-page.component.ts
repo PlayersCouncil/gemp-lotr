@@ -6,6 +6,11 @@ import { CardInfoComponent } from './card-info/card-info.component';
 import { CollectionFilterComponent } from './collection/collection-filter.component';
 import { CollectionGridComponent } from './collection/collection-grid.component';
 import { DeckAreaComponent } from './deck/deck-area.component';
+import { DeckListDialogComponent } from './dialogs/deck-list-dialog.component';
+import { ImportDialogComponent } from './dialogs/import-dialog.component';
+import { NotesDialogComponent } from './dialogs/notes-dialog.component';
+import { PackDialogsComponent } from './dialogs/pack-dialogs.component';
+import { NotifierDialogComponent } from '../shared/notifier/notifier-dialog.component';
 
 /** Arrow keys on the resizer move it by this much (px). */
 export const RESIZE_STEP = 10;
@@ -17,11 +22,23 @@ export const RESIZE_STEP = 10;
  * DOM contract: `.gd-page` with `data-collection` (open, closed) and `--gd-collection-width` (px, once resized);
  * `section.gd-page__deck`, `div.gd-page__separator` (`role=separator`, `data-dragging` while dragged) holding
  * `button.gd-page__toggle` (`aria-expanded`), and `section.gd-page__collection` holding the filter and the cards; then
- * the card information dialog and the hover zoom.
+ * the dialogs (deck list and library, import, notes, selection pack, new items), the card information, the hover zoom
+ * and the notifier's dialog.
  */
 @Component({
   selector: 'deckbuilder-app',
-  imports: [DeckAreaComponent, CollectionFilterComponent, CollectionGridComponent, CardInfoComponent, AutoZoomComponent],
+  imports: [
+    DeckAreaComponent,
+    CollectionFilterComponent,
+    CollectionGridComponent,
+    CardInfoComponent,
+    AutoZoomComponent,
+    DeckListDialogComponent,
+    ImportDialogComponent,
+    NotesDialogComponent,
+    PackDialogsComponent,
+    NotifierDialogComponent,
+  ],
   host: {
     class: 'gd-page',
     '[attr.data-collection]': "collectionOpen() ? 'open' : 'closed'",
@@ -52,8 +69,13 @@ export const RESIZE_STEP = 10;
       <gd-collection-filter />
       <gd-collection-grid />
     </section>
+    <gd-deck-list-dialog />
+    <gd-import-dialog />
+    <gd-notes-dialog />
+    <gd-pack-dialogs />
     <gd-card-info />
     <gd-auto-zoom />
+    <gd-notifier />
   `,
 })
 export class DeckbuilderPageComponent {
