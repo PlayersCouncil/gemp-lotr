@@ -1,7 +1,8 @@
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting, TestRequest } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { readServerResponse } from '../../../testing/files';
+import { readServerResponse } from '../../testing/files';
+import { FakeNotifier, provideFakeNotifier } from '../../testing/fake-notifier';
 import { BlockFilter } from '../api/models';
 import { PAGE_QUERY_STRING } from '../session/session.service';
 import { CollectionService, DEFAULT_FILTER_OVERRIDE, INITIAL_PAGE_SIZE } from './collection.service';
@@ -20,14 +21,18 @@ const BLOCKS: BlockFilter[] = [
 describe('CollectionService', () => {
   let service: CollectionService;
   let backend: HttpTestingController;
-  let alerts: string[];
+  let notifier: FakeNotifier;
 
   beforeEach(() => {
-    alerts = [];
-    vi.spyOn(window, 'alert').mockImplementation((message) => alerts.push(String(message)));
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting(), { provide: PAGE_QUERY_STRING, useValue: '' }],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideFakeNotifier(),
+        { provide: PAGE_QUERY_STRING, useValue: '' },
+      ],
     });
+    notifier = TestBed.inject(FakeNotifier);
     service = TestBed.inject(CollectionService);
     backend = TestBed.inject(HttpTestingController);
   });
@@ -178,6 +183,6 @@ describe('CollectionService', () => {
     answer(start());
     service.selectCollectionType('someLeague');
     pending()[0].flush('', { status: 404, statusText: 'Not Found' });
-    expect(alerts).toEqual(["You don't have collection of that type."]);
+    expect(notifier.dialogs).toEqual(["alert: You don't have collection of that type."]);
   });
 });

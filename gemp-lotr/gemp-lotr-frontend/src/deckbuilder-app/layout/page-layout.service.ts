@@ -1,5 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core';
+import { DeckService } from '../../core/deck/deck.service';
 import { computeDeckLayout, DeckLayout } from './deck-layout';
 import { computePageLayout, EAST_MIN_WIDTH, hasRoomForEast, PageLayout } from './page-layout';
 
@@ -16,9 +17,10 @@ export class PageLayoutService {
   /** Outer width of the collection pane, as last set by the user (clamped when used). */
   readonly eastWidth = signal(EAST_MIN_WIDTH);
   readonly eastClosed = signal(false);
-  /** Whether the Map and Race slots are shown (set by the format selection in a later phase). */
-  readonly showMap = signal(false);
-  readonly showRace = signal(false);
+  private readonly deckService = inject(DeckService);
+  /** Whether the Map and Race slots are shown: the deck's format decides. */
+  readonly showMap = computed(() => this.deckService.usesMap());
+  readonly showRace = computed(() => this.deckService.usesRace());
 
   readonly page = computed<PageLayout>(() =>
     computePageLayout(this.viewportWidth(), this.viewportHeight(), this.eastWidth(), this.eastClosed()),

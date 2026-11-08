@@ -4,7 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { flushLegacyCardFiles } from '../../testing/legacy-cards';
 import { CardDisplayData } from '../cards/card-display.component';
 import { CardRegistry } from '../cards/card-registry';
-import { LegacyCardDataService } from '../core/cards/legacy-card-data.service';
+import { LegacyCardDataService } from '../../core/cards/legacy-card-data.service';
 import {
   AUTO_ZOOM_COOKIE,
   AutoZoomService,
@@ -12,7 +12,8 @@ import {
   HOVER_DELAY_MS,
   previewPlacement,
 } from './auto-zoom.component';
-import { CardInfoService } from './card-info.component';
+import { CardInfoService } from '../../core/cards/card-info.service';
+import { provideFakeNotifier } from '../../testing/fake-notifier';
 
 const UPRIGHT: CardDisplayData = { image: 'x', back: null, horizontal: false, foil: false, overlayImage: null };
 const rect = (left: number, top: number, right: number, bottom: number) => ({ left, top, right, bottom });
@@ -40,7 +41,9 @@ describe('AutoZoomService', () => {
   beforeEach(async () => {
     vi.useFakeTimers();
     document.cookie = `${AUTO_ZOOM_COOKIE}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/gemp-lotr`;
-    TestBed.configureTestingModule({ providers: [provideHttpClient(), provideHttpClientTesting()] });
+    TestBed.configureTestingModule({
+      providers: [provideHttpClient(), provideHttpClientTesting(), provideFakeNotifier()],
+    });
     const loading = TestBed.inject(LegacyCardDataService).load();
     flushLegacyCardFiles(TestBed.inject(HttpTestingController));
     await loading;

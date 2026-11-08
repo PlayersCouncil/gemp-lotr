@@ -1,7 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { flushLegacyCardFiles } from '../../../testing/legacy-cards';
+import { flushLegacyCardFiles } from '../../testing/legacy-cards';
 import { CardImageService } from './card-image.service';
 import { LegacyCardDataService } from './legacy-card-data.service';
 

@@ -5,7 +5,7 @@ import { Deck, GempFormat, League, MetaSite } from '../api/models';
 import { CardImageService } from '../cards/card-image.service';
 import { CollectionService, DEFAULT_FILTER_OVERRIDE } from '../collection/collection.service';
 import { FormatsService } from '../formats/formats.service';
-import { PageLayoutService } from '../../layout/page-layout.service';
+import { Notifier } from '../notifier/notifier';
 import { formatUsesMap } from './deck-contents';
 import { formatDecklist } from './deck-import';
 import {
@@ -56,14 +56,14 @@ export interface RaceCard {
 /**
  * The deck being edited and everything around it, ported from the legacy deckBuildingUi.js: the slots and piles, the
  * format list (with Map and Race slots), the deck stats, unsaved-changes tracking with its prompts, and the New, Save,
- * Rename, Copy and Convert to PC Errata buttons. The browser's alert/confirm/prompt dialogs are used as before.
+ * Rename, Copy and Convert to PC Errata buttons. Messages and questions go through the Notifier.
  */
 @Injectable({ providedIn: 'root' })
 export class DeckService {
   private readonly api = inject(DeckbuilderApi);
   private readonly collection = inject(CollectionService);
   private readonly formatsService = inject(FormatsService);
-  private readonly layout = inject(PageLayoutService);
+  private readonly notifier = inject(Notifier);
   private readonly images = inject(CardImageService);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -76,6 +76,10 @@ export class DeckService {
   readonly contentsDirty = signal(false);
   readonly statsHtml = signal('');
   readonly convertErrataEnabled = signal(false);
+  /** Whether the format has a Map slot. */
+  readonly usesMap = signal(false);
+  /** Whether the format is a Race to Mount Doom league, which shows the Race slot. */
+  readonly usesRace = signal(false);
 
   readonly formatOptions = signal<readonly FormatOption[]>(INITIAL_FORMAT_OPTIONS);
   readonly selectedFormatIndex = signal(0);
@@ -138,7 +142,7 @@ export class DeckService {
         this.loadCollectionTypes();
       },
       error: (error: unknown) =>
-        alert(ApiError.from(error).is(400) ? 'Could not retrieve formats.' : GENERIC_COMMUNICATION_ERROR),
+        this.tell(ApiError.from(error).is(400) ? 'Could not retrieve formats.' : GENERIC_COMMUNICATION_ERROR),
     });
     const timer = setInterval(() => {
       if (this.validationDirty) {
@@ -157,8 +161,8 @@ export class DeckService {
 
   // --- Toolbar ---
 
-  newDeck(): void {
-    if (this.savePromptOnNew()) {
+  async newDeck(): Promise<void> {
+    if (await this.savePromptOnNew()) {
       this.deckName.set(null);
       // Fixed: the legacy page kept the previous deck's notes, which were then saved with the new deck
       this.notes.set('');
@@ -167,18 +171,18 @@ export class DeckService {
   }
 
   /** Saves, asking for a name first if the deck has none. False if the player cancelled or the name was invalid. */
-  saveCurrentDeck(): boolean {
+  async saveCurrentDeck(): Promise<boolean> {
     const name = this.deckName();
     if (name !== null) {
       this.saveDeck();
       return true;
     }
-    const newName = prompt('Enter the name of the deck', '');
+    const newName = await this.notifier.askText('Enter the name of the deck', '');
     if (newName === null) {
       return false;
     }
     if (newName.length < 3 || newName.length > 100) {
-      alert('Deck name has to have at least 3 characters and at most 100 characters.');
+      await this.notifier.alert('Deck name has to have at least 3 characters and at most 100 characters.');
       return false;
     }
     this.deckName.set(newName);
@@ -187,16 +191,16 @@ export class DeckService {
     return true;
   }
 
-  renameCurrentDeck(): void {
+  async renameCurrentDeck(): Promise<void> {
     const name = this.deckName();
     if (name === null) {
-      this.saveCurrentDeck();
+      await this.saveCurrentDeck();
       return;
     }
-    this.renameDeck(name, (newName) => {
+    await this.renameDeck(name, async (newName) => {
       // Fixed: the legacy page saved the changes under the old name, re-creating the deck it had just renamed
       this.deckName.set(newName);
-      if (this.contentsDirty() && confirm('Do you wish to save this deck?')) {
+      if (this.contentsDirty() && (await this.notifier.confirm('Do you wish to save this deck?'))) {
         this.saveDeck();
       }
       this.deckModified(this.contentsDirty());
@@ -204,19 +208,19 @@ export class DeckService {
   }
 
   /** Asks for a new name and renames the saved deck on the server (also used by the deck list). */
-  renameDeck(oldName: string, renamed: (newName: string) => void): void {
-    const newName = prompt('Enter new name for the deck', oldName);
+  async renameDeck(oldName: string, renamed: (newName: string) => void | Promise<void>): Promise<void> {
+    const newName = await this.notifier.askText('Enter new name for the deck', oldName);
     if (newName === null) {
       return;
     }
     if (newName.length < 3 || newName.length > 100) {
-      alert('Deck name has to have at least 3 characters and at most 100 characters.');
+      await this.notifier.alert('Deck name has to have at least 3 characters and at most 100 characters.');
       return;
     }
     this.api.renameDeck(oldName, newName).subscribe({
-      next: () => renamed(newName),
+      next: () => void renamed(newName),
       error: (error: unknown) =>
-        alert(
+        this.tell(
           ApiError.from(error).is(404)
             ? "Couldn't find the deck to rename on the server."
             : GENERIC_COMMUNICATION_ERROR,
@@ -245,9 +249,9 @@ export class DeckService {
       error: (error: unknown) => {
         if (ApiError.from(error).is(400)) {
           this.convertErrataEnabled.set(true);
-          alert('Error processing errata conversion.');
+          this.tell('Error processing errata conversion.');
         } else {
-          alert(GENERIC_COMMUNICATION_ERROR);
+          this.tell(GENERIC_COMMUNICATION_ERROR);
         }
       },
     });
@@ -257,21 +261,25 @@ export class DeckService {
    * Before leaving the deck (deck list, library, import): offers to save unsaved changes. False if the player wanted
    * to save but the save did not start.
    */
-  savePrompt(): boolean {
+  async savePrompt(): Promise<boolean> {
     return (
       !this.contentsDirty() ||
-      (confirm('Your deck has been modified.  Would you like to save your deck before proceeding?') &&
-        this.saveCurrentDeck())
+      ((await this.notifier.confirm(
+        'Your deck has been modified.  Would you like to save your deck before proceeding?',
+      )) &&
+        (await this.saveCurrentDeck()))
     );
   }
 
   /** Before a new deck: OK saves, Cancel discards. False if saving was cancelled at the name prompt. */
-  savePromptOnNew(): boolean {
+  async savePromptOnNew(): Promise<boolean> {
     if (!this.contentsDirty()) {
       return true;
     }
     if (
-      confirm("Your deck has been modified.  Click 'OK' to save, or 'Cancel' to discard your changes without saving.")
+      await this.notifier.confirm(
+        "Your deck has been modified.  Click 'OK' to save, or 'Cancel' to discard your changes without saving.",
+      )
     ) {
       return this.saveCurrentDeck();
     }
@@ -284,7 +292,7 @@ export class DeckService {
   loadDeck(name: string): void {
     this.api.getDeck(name).subscribe({
       next: (deck) => deck && this.setupDeck(deck, name),
-      error: () => alert(GENERIC_COMMUNICATION_ERROR),
+      error: () => this.tell(GENERIC_COMMUNICATION_ERROR),
     });
   }
 
@@ -297,7 +305,7 @@ export class DeckService {
           this.deckModified(true);
         }
       },
-      error: () => alert(GENERIC_COMMUNICATION_ERROR),
+      error: () => this.tell(GENERIC_COMMUNICATION_ERROR),
     });
   }
 
@@ -344,7 +352,7 @@ export class DeckService {
         this.label.set({ text: 'Imported Deck (unsaved)', modified: false });
       },
       error: (error: unknown) =>
-        alert(ApiError.from(error).is(414) ? 'Deck too large to import.' : GENERIC_COMMUNICATION_ERROR),
+        this.tell(ApiError.from(error).is(414) ? 'Deck too large to import.' : GENERIC_COMMUNICATION_ERROR),
     });
   }
 
@@ -469,7 +477,7 @@ export class DeckService {
     }
     const format = this.effectiveFormat();
     const option = this.selectedFormat();
-    this.layout.showMap.set(formatUsesMap(format));
+    this.usesMap.set(formatUsesMap(format));
     const league = option.rtmd ? this.rtmdLeagues.get(option.value) : undefined;
     this.setRace(league ? league.metaSites : null);
     // PC formats and Anything Goes can be converted, though not when Anything Goes is just the page's default
@@ -480,7 +488,7 @@ export class DeckService {
 
   private setRace(metaSites: readonly MetaSite[] | null): void {
     this.metaSites.set(metaSites && metaSites.length > 0 ? metaSites : null);
-    this.layout.showRace.set(metaSites !== null);
+    this.usesRace.set(metaSites !== null);
     // A meta-site that allows other sites makes site searches include them
     this.collection.setSiteOverride((metaSites ?? []).some((site) => site.siteOverride));
   }
@@ -498,7 +506,7 @@ export class DeckService {
         this.deckModified(false);
         this.loadRtmdLeagues();
       },
-      error: () => alert(GENERIC_COMMUNICATION_ERROR),
+      error: () => this.tell(GENERIC_COMMUNICATION_ERROR),
     });
   }
 
@@ -508,7 +516,7 @@ export class DeckService {
         this.rtmdLeagues = new Map(leagues.map((league) => [league.code, league]));
         this.formatOptions.update((options) => [...options, ...rtmdFormatOptions(leagues)]);
       },
-      error: () => alert(GENERIC_COMMUNICATION_ERROR),
+      error: () => this.tell(GENERIC_COMMUNICATION_ERROR),
     });
   }
 
@@ -521,10 +529,10 @@ export class DeckService {
     this.api.saveDeck(name, this.selectedFormat().value, this.notes(), this.deckContents()).subscribe({
       next: () => {
         this.deckModified(false);
-        alert('Deck was saved.  Refresh the Game Hall to see it!');
+        this.tell('Deck was saved.  Refresh the Game Hall to see it!');
       },
       error: (error: unknown) =>
-        alert(ApiError.from(error).is(400) ? 'Invalid deck format.' : GENERIC_COMMUNICATION_ERROR),
+        this.tell(ApiError.from(error).is(400) ? 'Invalid deck format.' : GENERIC_COMMUNICATION_ERROR),
     });
   }
 
@@ -540,7 +548,12 @@ export class DeckService {
       .subscribe({
         next: (html) => this.statsHtml.set(html),
         error: (error: unknown) =>
-          alert(ApiError.from(error).is(400) ? 'Invalid deck for getting stats.' : GENERIC_COMMUNICATION_ERROR),
+          this.tell(ApiError.from(error).is(400) ? 'Invalid deck for getting stats.' : GENERIC_COMMUNICATION_ERROR),
       });
+  }
+
+  /** A message that needs no answer. */
+  private tell(message: string): void {
+    void this.notifier.alert(message);
   }
 }

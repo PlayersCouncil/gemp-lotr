@@ -1,12 +1,12 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
-import { CollectionItem } from '../core/api/models';
-import { CardImageService } from '../core/cards/card-image.service';
-import { foilOverlayImage, readFoilPresentation } from '../core/cards/foil-presentation';
-import { CollectionService } from '../core/collection/collection.service';
+import { CollectionItem } from '../../core/api/models';
+import { CardImageService } from '../../core/cards/card-image.service';
+import { foilOverlayImage, readFoilPresentation } from '../../core/cards/foil-presentation';
+import { CollectionService } from '../../core/collection/collection.service';
 import { PageLayoutService } from '../layout/page-layout.service';
 import { CardComponent, CardFace } from '../cards/card.component';
-import { CardRef } from '../cards/card-registry';
+import { CardRef } from '../../core/cards/card-ref';
 import { CardRect, groupArea, GroupBounds, layoutNormalGroup } from '../cards/card-group-layout';
 
 /** Space the legacy layoutUI kept for the filter above the cards: the group is the pane's height minus 400. */

@@ -1,5 +1,5 @@
 import { Component, computed, input, linkedSignal } from '@angular/core';
-import { CardImage } from '../core/cards/card-image.service';
+import { CardImage } from '../../core/cards/card-image.service';
 import { META_SITE_OVERLAY_HEIGHT } from './card.component';
 
 /** CardDisplay.TargetLong / TargetShort: the size of the remastered card images. */

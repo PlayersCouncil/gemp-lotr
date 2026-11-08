@@ -1,6 +1,7 @@
 import { Component, computed, effect, ElementRef, inject, input } from '@angular/core';
 import { CardRect } from './card-group-layout';
-import { CardRef, CardRegistry } from './card-registry';
+import { CardRef } from '../../core/cards/card-ref';
+import { CardRegistry } from './card-registry';
 
 /** What a card element shows: the arguments of the legacy Card.CreateCardDiv. */
 export interface CardFace {

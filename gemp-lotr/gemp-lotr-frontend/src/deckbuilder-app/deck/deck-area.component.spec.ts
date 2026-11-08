@@ -3,11 +3,12 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { flushLegacyCardFiles } from '../../testing/legacy-cards';
-import { LegacyCardDataService } from '../core/cards/legacy-card-data.service';
-import { DeckService } from '../core/deck/deck.service';
-import { PAGE_QUERY_STRING } from '../core/session/session.service';
+import { LegacyCardDataService } from '../../core/cards/legacy-card-data.service';
+import { DeckService } from '../../core/deck/deck.service';
+import { PAGE_QUERY_STRING } from '../../core/session/session.service';
 import { PageLayoutService } from '../layout/page-layout.service';
 import { DeckAreaComponent } from './deck-area.component';
+import { provideFakeNotifier } from '../../testing/fake-notifier';
 
 @Component({
   imports: [DeckAreaComponent],
@@ -20,7 +21,12 @@ describe('DeckAreaComponent', () => {
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting(), { provide: PAGE_QUERY_STRING, useValue: '' }],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideFakeNotifier(),
+        { provide: PAGE_QUERY_STRING, useValue: '' },
+      ],
     });
     const loading = TestBed.inject(LegacyCardDataService).load();
     flushLegacyCardFiles(TestBed.inject(HttpTestingController));
@@ -101,7 +107,7 @@ describe('DeckAreaComponent', () => {
   it('hides the Map and Race slots outside their formats', async () => {
     const { fixture, el } = await render();
     expect(el.querySelector<HTMLElement>('#map-div')!.style.display).toBe('none');
-    TestBed.inject(PageLayoutService).showMap.set(true);
+    deck.usesMap.set(true);
     await fixture.whenStable();
     expect(el.querySelector<HTMLElement>('#map-div')!.style.display).toBe('');
   });

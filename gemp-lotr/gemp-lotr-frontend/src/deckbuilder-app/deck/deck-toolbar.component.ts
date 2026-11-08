@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
-import { BASE_COLLECTION_TYPES, CollectionService } from '../core/collection/collection.service';
-import { DeckService } from '../core/deck/deck.service';
+import { BASE_COLLECTION_TYPES, CollectionService } from '../../core/collection/collection.service';
+import { DeckService } from '../../core/deck/deck.service';
 import { AutoZoomService } from '../dialogs/auto-zoom.component';
-import { DeckDialogsService } from '../dialogs/deck-dialogs.component';
+import { DeckLibraryService } from '../../core/deck/deck-library.service';
 import { UiButtonDirective } from '../shared/ui-button.directive';
 
 /**
@@ -16,7 +16,7 @@ import { UiButtonDirective } from '../shared/ui-button.directive';
 })
 export class DeckToolbarComponent {
   protected readonly deck = inject(DeckService);
-  protected readonly dialogs = inject(DeckDialogsService);
+  protected readonly dialogs = inject(DeckLibraryService);
   protected readonly zoom = inject(AutoZoomService);
   private readonly collection = inject(CollectionService);
   protected readonly baseCollections = BASE_COLLECTION_TYPES;

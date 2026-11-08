@@ -1,10 +1,11 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, computed, effect, inject, Injectable, signal, untracked, viewChild } from '@angular/core';
+import { Component, computed, effect, inject, signal, untracked, viewChild } from '@angular/core';
 import { CardDisplayComponent, cardDisplayData, cardDisplaySize, TARGET_LONG } from '../cards/card-display.component';
-import { CardRef, zoneOf } from '../cards/card-registry';
-import { parseBlueprint } from '../core/cards/card-blueprint';
-import { CardImageService } from '../core/cards/card-image.service';
-import { readCookie, writeCookie } from '../core/cookies';
+import { CardRef, zoneOf } from '../../core/cards/card-ref';
+import { parseBlueprint } from '../../core/cards/card-blueprint';
+import { CardInfoService } from '../../core/cards/card-info.service';
+import { CardImageService } from '../../core/cards/card-image.service';
+import { readCookie, writeCookie } from '../../core/cookies';
 import { UiDialogComponent } from '../shared/ui-dialog.component';
 import { UiSliderComponent } from '../shared/ui-slider.component';
 
@@ -21,33 +22,6 @@ const DEFAULT_ZOOM = 0.5;
 function isMetaSiteModifier(blueprintId: string): boolean {
   const { setNo } = parseBlueprint(blueprintId);
   return setNo >= 90 && setNo <= 94;
-}
-
-/** Whether the card info dialog is open, and its card (CardInfoDialog's state). */
-@Injectable({ providedIn: 'root' })
-export class CardInfoService {
-  readonly card = signal<CardRef | null>(null);
-  /** The slider is being used: a click then doesn't close the dialog. */
-  sliding = false;
-
-  isOpen(): boolean {
-    return this.card() !== null;
-  }
-
-  show(ref: CardRef): void {
-    this.card.set(ref);
-  }
-
-  close(): void {
-    this.card.set(null);
-  }
-
-  /** A click anywhere on the page closes the dialog, unless the zoom slider was just used (CardInfoDialog.mouseUp). */
-  pageClicked(): void {
-    if (!this.sliding) {
-      this.close();
-    }
-  }
 }
 
 /**

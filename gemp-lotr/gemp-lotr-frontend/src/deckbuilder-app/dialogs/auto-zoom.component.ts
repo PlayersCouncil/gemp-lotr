@@ -19,12 +19,13 @@ import {
   TARGET_SHORT,
   TARGET_VERT_RATIO,
 } from '../cards/card-display.component';
-import { CardRegistry, zoneOf } from '../cards/card-registry';
-import { stripBlueprintId } from '../core/cards/card-blueprint';
-import { CardImageService } from '../core/cards/card-image.service';
-import { foilOverlayImage, readFoilPresentation } from '../core/cards/foil-presentation';
-import { readCookie, writeCookie } from '../core/cookies';
-import { CardInfoService } from './card-info.component';
+import { zoneOf } from '../../core/cards/card-ref';
+import { CardRegistry } from '../cards/card-registry';
+import { stripBlueprintId } from '../../core/cards/card-blueprint';
+import { CardImageService } from '../../core/cards/card-image.service';
+import { foilOverlayImage, readFoilPresentation } from '../../core/cards/foil-presentation';
+import { readCookie, writeCookie } from '../../core/cookies';
+import { CardInfoService } from '../../core/cards/card-info.service';
 
 export const AUTO_ZOOM_COOKIE = 'autoZoomInDeckbuilder';
 /** The mouse has to rest this long on a card before its zoom shows (AutoZoom.HoverDelay). */

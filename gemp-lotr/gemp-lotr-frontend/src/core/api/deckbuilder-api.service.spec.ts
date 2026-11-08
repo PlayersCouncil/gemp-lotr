@@ -2,7 +2,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting, TestRequest } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { firstValueFrom, Observable } from 'rxjs';
-import { readServerResponse } from '../../../testing/files';
+import { readServerResponse } from '../../testing/files';
 import { PAGE_QUERY_STRING } from '../session/session.service';
 import { DeckbuilderApi } from './deckbuilder-api.service';
 
@@ -58,7 +58,13 @@ describe('DeckbuilderApi', () => {
   });
 
   it('loads a deck by name', async () => {
-    const deck = await call(api.getDeck('Test + deck & co'), 'GET', '/deck', { deckName: 'Test + deck & co' }, readServerResponse('deck.xml'));
+    const deck = await call(
+      api.getDeck('Test + deck & co'),
+      'GET',
+      '/deck',
+      { deckName: 'Test + deck & co' },
+      readServerResponse('deck.xml'),
+    );
     expect(deck!.ringBearer).toBe('1_2');
   });
 
@@ -68,13 +74,25 @@ describe('DeckbuilderApi', () => {
   });
 
   it('renames and deletes decks', async () => {
-    const renamed = await call(api.renameDeck('Old', 'New'), 'POST', '/deck/rename', { oldDeckName: 'Old', deckName: 'New' }, readServerResponse('deck.xml'));
+    const renamed = await call(
+      api.renameDeck('Old', 'New'),
+      'POST',
+      '/deck/rename',
+      { oldDeckName: 'Old', deckName: 'New' },
+      readServerResponse('deck.xml'),
+    );
     expect(renamed).not.toBeNull();
     await call(api.deleteDeck('New'), 'POST', '/deck/delete', { deckName: 'New' }, '<result>OK</result>');
   });
 
   it('gets the share URL as text', async () => {
-    const url = await call(api.shareDeckUrl('D'), 'GET', '/deck/share', { deckName: 'D' }, 'https://example/share?id=x');
+    const url = await call(
+      api.shareDeckUrl('D'),
+      'GET',
+      '/deck/share',
+      { deckName: 'D' },
+      'https://example/share?id=x',
+    );
     expect(url).toBe('https://example/share?id=x');
   });
 
@@ -108,14 +126,22 @@ describe('DeckbuilderApi', () => {
   });
 
   it('converts a deck to errata', async () => {
-    const deck = await call(api.convertErrata('pc_fotr_block', 'c'), 'POST', '/deck/convert', { targetFormat: 'pc_fotr_block', deckContents: 'c' }, readServerResponse('convert.xml'));
+    const deck = await call(
+      api.convertErrata('pc_fotr_block', 'c'),
+      'POST',
+      '/deck/convert',
+      { targetFormat: 'pc_fotr_block', deckContents: 'c' },
+      readServerResponse('convert.xml'),
+    );
     expect(deck!.targetFormat!.formatCode).toBe('pc_fotr_block');
   });
 
   it('lists and loads library decks', async () => {
     await call(api.listLibraryDecks(), 'GET', '/deck/libraryList', {}, '<decks/>');
     await call(api.getLibraryDeck('Starter'), 'GET', '/deck/library', { deckName: 'Starter' }, '<deck/>');
-    expect(api.libraryDeckHtmlUrl('FotR Starter #1')).toBe('/gemp-lotr-server/deck/libraryHtml?deckName=FotR%20Starter%20%231');
+    expect(api.libraryDeckHtmlUrl('FotR Starter #1')).toBe(
+      '/gemp-lotr-server/deck/libraryHtml?deckName=FotR%20Starter%20%231',
+    );
   });
 
   it('pages through a collection, with the collection type unencoded in the path', async () => {
@@ -130,18 +156,36 @@ describe('DeckbuilderApi', () => {
   });
 
   it('lists collection types', async () => {
-    const types = await call(api.getCollectionTypes(), 'GET', '/collection', {}, readServerResponse('collection-types.xml'));
+    const types = await call(
+      api.getCollectionTypes(),
+      'GET',
+      '/collection',
+      {},
+      readServerResponse('collection-types.xml'),
+    );
     expect(types).toHaveLength(2);
   });
 
   it('imports a decklist', async () => {
     const decklist = '1x Gandalf, Friend of the Shirefolk\n2x Bill the Pony';
-    const items = await call(api.importDecklist(decklist), 'GET', '/collection/import/', { decklist }, readServerResponse('collection-with-packs.xml'));
+    const items = await call(
+      api.importDecklist(decklist),
+      'GET',
+      '/collection/import/',
+      { decklist },
+      readServerResponse('collection-with-packs.xml'),
+    );
     expect(items.length).toBeGreaterThan(0);
   });
 
   it('opens packs and selection packs', async () => {
-    await call(api.openPack('permanent', 'FotR - Booster'), 'POST', '/collection/permanent', { pack: 'FotR - Booster' }, '<result>OK</result>');
+    await call(
+      api.openPack('permanent', 'FotR - Booster'),
+      'POST',
+      '/collection/permanent',
+      { pack: 'FotR - Booster' },
+      '<result>OK</result>',
+    );
     await call(
       api.openSelectionPack('permanent', '(S)FotR - Starter', '1_2'),
       'POST',

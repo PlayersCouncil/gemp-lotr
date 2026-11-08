@@ -3,11 +3,13 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { flushLegacyCardFiles } from '../../testing/legacy-cards';
-import { LegacyCardDataService } from '../core/cards/legacy-card-data.service';
-import { CollectionService } from '../core/collection/collection.service';
-import { PAGE_QUERY_STRING } from '../core/session/session.service';
+import { LegacyCardDataService } from '../../core/cards/legacy-card-data.service';
+import { DeckService } from '../../core/deck/deck.service';
+import { CollectionService } from '../../core/collection/collection.service';
+import { PAGE_QUERY_STRING } from '../../core/session/session.service';
 import { PageLayoutService } from '../layout/page-layout.service';
 import { CollectionDisplayComponent } from './collection-display.component';
+import { provideFakeNotifier } from '../../testing/fake-notifier';
 
 @Component({
   imports: [CollectionDisplayComponent],
@@ -20,7 +22,12 @@ describe('CollectionDisplayComponent', () => {
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting(), { provide: PAGE_QUERY_STRING, useValue: '' }],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideFakeNotifier(),
+        { provide: PAGE_QUERY_STRING, useValue: '' },
+      ],
     });
     const loading = TestBed.inject(LegacyCardDataService).load();
     flushLegacyCardFiles(TestBed.inject(HttpTestingController));
@@ -47,7 +54,8 @@ describe('CollectionDisplayComponent', () => {
   });
 
   it('shows packs first, each item with its role class and count', async () => {
-    collection.deckCounts.set(new Map([['1_1', 1]]));
+    // One copy in the deck is subtracted from the collection's count
+    TestBed.inject(DeckService).addFromCollection('1_1', 'FREE_PEOPLE');
     collection.page.set({
       total: 4,
       items: [

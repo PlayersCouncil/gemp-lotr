@@ -1,9 +1,9 @@
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting, TestRequest } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { readServerResponse } from '../../../testing/files';
-import { flushLegacyCardFiles } from '../../../testing/legacy-cards';
-import { PageLayoutService } from '../../layout/page-layout.service';
+import { readServerResponse } from '../../testing/files';
+import { flushLegacyCardFiles } from '../../testing/legacy-cards';
+import { FakeNotifier, provideFakeNotifier, settle } from '../../testing/fake-notifier';
 import { GempFormat } from '../api/models';
 import { LegacyCardDataService } from '../cards/legacy-card-data.service';
 import { CollectionService } from '../collection/collection.service';
@@ -43,16 +43,15 @@ describe('DeckService', () => {
 
   beforeEach(async () => {
     vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] });
-    dialogs = [];
-    answers = [];
-    vi.spyOn(window, 'alert').mockImplementation((m) => dialogs.push(`alert: ${m}`));
-    vi.spyOn(window, 'confirm').mockImplementation((m) => (dialogs.push(`confirm: ${m}`), answers.shift() === true));
-    vi.spyOn(window, 'prompt').mockImplementation(
-      (m) => (dialogs.push(`prompt: ${m}`), (answers.shift() as string) ?? null),
-    );
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting(), { provide: PAGE_QUERY_STRING, useValue: '' }],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideFakeNotifier(),
+        { provide: PAGE_QUERY_STRING, useValue: '' },
+      ],
     });
+    ({ dialogs, answers } = TestBed.inject(FakeNotifier));
     backend = TestBed.inject(HttpTestingController);
     const loading = TestBed.inject(LegacyCardDataService).load();
     flushLegacyCardFiles(backend);
@@ -163,25 +162,23 @@ describe('DeckService', () => {
 
   it('shows the Map slot for movie formats and sends the Map with the deck', () => {
     start();
-    const layout = TestBed.inject(PageLayoutService);
     service.selectFormat(2);
-    expect(layout.showMap()).toBe(true);
+    expect(service.usesMap()).toBe(true);
     expect(service.convertErrataEnabled()).toBe(true);
     service.slotClicked('map');
     service.addFromCollection('101_1', null);
     expect(service.deckContents()).toBe('||||101_1');
     service.selectFormat(1);
-    expect(layout.showMap()).toBe(false);
+    expect(service.usesMap()).toBe(false);
     expect(service.deckContents()).toBe('|||');
     collectionRequests();
   });
 
   it('shows the Race meta-site for an RTMD league and validates against the league', () => {
     start();
-    const layout = TestBed.inject(PageLayoutService);
     service.selectFormat(7);
     expect(service.effectiveFormat()).toBe('pc_movie');
-    expect(layout.showRace()).toBe(true);
+    expect(service.usesRace()).toBe(true);
     expect(service.raceCard()).toEqual({ blueprintId: '90_7', overlayBlueprintId: null });
     const req = statsRequest();
     expect(body(req)).toEqual({ targetFormat: 'pc_movie', deckContents: '||||', leagueCode: '1700000002' });
@@ -197,12 +194,12 @@ describe('DeckService', () => {
     collectionRequests();
   });
 
-  it('asks for a name when saving a new deck, and saves without "null" notes', () => {
+  it('asks for a name when saving a new deck, and saves without "null" notes', async () => {
     start();
     service.addFromCollection('1_12', 'FREE_PEOPLE');
-    answers = ['ab', 'My deck'];
-    expect(service.saveCurrentDeck()).toBe(false);
-    expect(service.saveCurrentDeck()).toBe(true);
+    answers.push('ab', 'My deck');
+    expect(await service.saveCurrentDeck()).toBe(false);
+    expect(await service.saveCurrentDeck()).toBe(true);
     const [save] = take('/deck');
     expect(body(save)).toEqual({
       deckName: 'My deck',
@@ -211,6 +208,7 @@ describe('DeckService', () => {
       deckContents: '|||1_12',
     });
     save.flush('<ok/>');
+    await settle();
     expect(dialogs).toEqual([
       'prompt: Enter the name of the deck',
       'alert: Deck name has to have at least 3 characters and at most 100 characters.',
@@ -221,15 +219,16 @@ describe('DeckService', () => {
     expect(service.contentsDirty()).toBe(false);
   });
 
-  it('saves changes under the new name when renaming a modified deck', () => {
+  it('saves changes under the new name when renaming a modified deck', async () => {
     start();
     service.setupDeck({ ...deckOf('1_12'), notes: 'n' }, 'Old');
     service.addFromCollection('1_13', 'FREE_PEOPLE');
-    answers = ['New', true];
-    service.renameCurrentDeck();
+    answers.push('New', true);
+    await service.renameCurrentDeck();
     const [rename] = take('/deck/rename');
     expect(body(rename)).toEqual({ oldDeckName: 'Old', deckName: 'New' });
     rename.flush(readServerResponse('deck.xml'));
+    await settle();
     const [save] = take('/deck');
     expect(body(save)).toMatchObject({ deckName: 'New', notes: 'n' });
     save.flush('<ok/>');
@@ -246,12 +245,12 @@ describe('DeckService', () => {
     collectionRequests();
   });
 
-  it('on New, offers to save; Cancel discards the deck and its notes', () => {
+  it('on New, offers to save; Cancel discards the deck and its notes', async () => {
     start();
     service.setupDeck({ ...deckOf('1_12'), notes: 'old notes' }, 'Mine');
     service.addFromCollection('1_13', 'FREE_PEOPLE');
-    answers = [false];
-    service.newDeck();
+    answers.push(false);
+    await service.newDeck();
     expect(service.deck().draw).toEqual([]);
     expect(service.deckName()).toBeNull();
     expect(service.notes()).toBe('');
@@ -259,12 +258,12 @@ describe('DeckService', () => {
     collectionRequests();
   });
 
-  it('asks before leaving a modified deck', () => {
+  it('asks before leaving a modified deck', async () => {
     start();
-    expect(service.savePrompt()).toBe(true);
+    expect(await service.savePrompt()).toBe(true);
     service.addFromCollection('1_12', 'FREE_PEOPLE');
-    answers = [false];
-    expect(service.savePrompt()).toBe(false);
+    answers.push(false);
+    expect(await service.savePrompt()).toBe(false);
     expect(dialogs.at(-1)).toBe(
       'confirm: Your deck has been modified.  Would you like to save your deck before proceeding?',
     );

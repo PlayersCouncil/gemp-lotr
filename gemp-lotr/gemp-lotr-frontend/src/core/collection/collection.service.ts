@@ -5,6 +5,7 @@ import { DeckbuilderApi } from '../api/deckbuilder-api.service';
 import { BlockFilter, CollectionPage, CollectionTypeInfo } from '../api/models';
 import { CardImageService } from '../cards/card-image.service';
 import { ImagePreloader } from '../cards/image-preloader.service';
+import { Notifier } from '../notifier/notifier';
 import {
   blockOptions,
   buildFilterString,
@@ -63,6 +64,7 @@ export class CollectionService {
   private readonly api = inject(DeckbuilderApi);
   private readonly images = inject(CardImageService);
   private readonly preloader = inject(ImagePreloader);
+  private readonly notifier = inject(Notifier);
 
   /** The selected collection (#collectionSelect). */
   readonly collectionType = signal('default');
@@ -110,7 +112,7 @@ export class CollectionService {
             // The new page shows when its card images are ready, all at once (a newer request still replaces it)
             switchMap((page) => this.withImagesLoaded(page)),
             catchError((error: unknown) => {
-              alert(
+              void this.notifier.alert(
                 ApiError.from(error).is(404) ? "You don't have collection of that type." : GENERIC_COMMUNICATION_ERROR,
               );
               return EMPTY;

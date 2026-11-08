@@ -1,4 +1,4 @@
-import { readServerXml } from '../../../testing/files';
+import { readServerXml } from '../../testing/files';
 import {
   parseCollectionPage,
   parseCollectionTypes,
@@ -27,7 +27,11 @@ describe('server response parsers', () => {
     it('reads a saved deck', () => {
       const deck = parseDeck(readServerXml('deck.xml'));
       expect(deck).not.toBeNull();
-      expect(deck!.targetFormat).toEqual({ formatName: 'Fellowship Block', formatCode: 'fotr_block', leagueCode: null });
+      expect(deck!.targetFormat).toEqual({
+        formatName: 'Fellowship Block',
+        formatCode: 'fotr_block',
+        leagueCode: null,
+      });
       expect(deck!.notes).toBe('Notes with + plus & ampersand');
       expect(deck!.ringBearer).toBe('1_2');
       expect(deck!.ring).toBe('1_1');
@@ -35,7 +39,15 @@ describe('server response parsers', () => {
       expect(deck!.sites).toEqual(['1_319', '1_327', '1_331', '1_337', '1_343', '1_349', '1_354', '1_356', '1_360']);
       // One entry per copy, in the server's order
       expect(deck!.drawDeck.map((c) => c.blueprintId)).toEqual([
-        '1_7', '1_12', '1_131', '1_178', '1_234', '1_234', '1_3', '1_3', '1_139',
+        '1_7',
+        '1_12',
+        '1_131',
+        '1_178',
+        '1_234',
+        '1_234',
+        '1_3',
+        '1_3',
+        '1_139',
       ]);
       expect(deck!.drawDeck.filter((c) => c.side === 'SHADOW')).toHaveLength(5);
     });

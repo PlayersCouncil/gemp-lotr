@@ -3,10 +3,13 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { DeckbuilderApp } from './deckbuilder-app';
 import { PageLayoutService } from './layout/page-layout.service';
+import { provideFakeNotifier } from '../testing/fake-notifier';
 
 describe('DeckbuilderApp', () => {
   async function render() {
-    TestBed.configureTestingModule({ providers: [provideHttpClient(), provideHttpClientTesting()] });
+    TestBed.configureTestingModule({
+      providers: [provideHttpClient(), provideHttpClientTesting(), provideFakeNotifier()],
+    });
     const layout = TestBed.inject(PageLayoutService);
     layout.viewportWidth.set(1280);
     layout.viewportHeight.set(800);
@@ -18,8 +21,21 @@ describe('DeckbuilderApp', () => {
   it('renders the legacy page structure with the same element IDs', async () => {
     const { el } = await render();
     for (const id of [
-      'deckDiv', 'manageDecks', 'ringBearerDiv', 'ringDiv', 'map-div', 'raceDiv', 'sitesDiv', 'statsDiv',
-      'deckStats', 'decksRegion', 'collectionDiv', 'newDeckBut', 'formatSelect', 'collectionSelect', 'editingDeck',
+      'deckDiv',
+      'manageDecks',
+      'ringBearerDiv',
+      'ringDiv',
+      'map-div',
+      'raceDiv',
+      'sitesDiv',
+      'statsDiv',
+      'deckStats',
+      'decksRegion',
+      'collectionDiv',
+      'newDeckBut',
+      'formatSelect',
+      'collectionSelect',
+      'editingDeck',
     ]) {
       expect(el.querySelector('#' + id), id).not.toBeNull();
     }

@@ -2,10 +2,11 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { BlockFilter } from '../core/api/models';
-import { CollectionService } from '../core/collection/collection.service';
-import { PAGE_QUERY_STRING } from '../core/session/session.service';
+import { BlockFilter } from '../../core/api/models';
+import { CollectionService } from '../../core/collection/collection.service';
+import { PAGE_QUERY_STRING } from '../../core/session/session.service';
 import { CardFilterComponent } from './card-filter.component';
+import { provideFakeNotifier } from '../../testing/fake-notifier';
 
 @Component({
   imports: [CardFilterComponent],
@@ -27,7 +28,12 @@ describe('CardFilterComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting(), { provide: PAGE_QUERY_STRING, useValue: '' }],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideFakeNotifier(),
+        { provide: PAGE_QUERY_STRING, useValue: '' },
+      ],
     });
     collection = TestBed.inject(CollectionService);
   });

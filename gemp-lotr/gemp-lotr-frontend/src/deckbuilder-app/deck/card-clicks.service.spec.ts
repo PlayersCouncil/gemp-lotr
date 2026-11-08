@@ -1,12 +1,14 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { CardRef, CardRegistry } from '../cards/card-registry';
-import { DeckService } from '../core/deck/deck.service';
-import { PAGE_QUERY_STRING } from '../core/session/session.service';
-import { CardInfoService } from '../dialogs/card-info.component';
-import { PacksService } from '../dialogs/pack-dialogs.component';
+import { CardRef } from '../../core/cards/card-ref';
+import { CardRegistry } from '../cards/card-registry';
+import { DeckService } from '../../core/deck/deck.service';
+import { PAGE_QUERY_STRING } from '../../core/session/session.service';
+import { CardInfoService } from '../../core/cards/card-info.service';
+import { PacksService } from '../../core/packs/packs.service';
 import { CardClicksService } from './card-clicks.service';
+import { provideFakeNotifier } from '../../testing/fake-notifier';
 
 describe('CardClicksService', () => {
   let clicks: CardClicksService;
@@ -26,6 +28,7 @@ describe('CardClicksService', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
+        provideFakeNotifier(),
         { provide: PAGE_QUERY_STRING, useValue: '' },
         { provide: DeckService, useValue: deck },
         { provide: PacksService, useValue: packs },

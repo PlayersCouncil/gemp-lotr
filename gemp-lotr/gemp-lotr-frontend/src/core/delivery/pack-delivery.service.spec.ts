@@ -1,7 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { readServerResponse } from '../../../testing/files';
+import { readServerResponse } from '../../testing/files';
 import { PackDelivery } from '../api/models';
 import { GempHttp, OPENED_PACK_HEADER } from '../api/gemp-http.service';
 import { PackDeliveryService } from './pack-delivery.service';

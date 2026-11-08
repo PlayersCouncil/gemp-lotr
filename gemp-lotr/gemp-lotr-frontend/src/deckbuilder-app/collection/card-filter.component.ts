@@ -16,13 +16,13 @@ import {
   SIDE_OPTIONS,
   SIGNET_OPTIONS,
   SORT_OPTIONS,
-} from '../core/collection/card-filter';
+} from '../../core/collection/card-filter';
 import {
   CollectionService,
   PAGE_SIZE_MAX,
   PAGE_SIZE_MIN,
   PAGE_SIZE_SLIDER_START,
-} from '../core/collection/collection.service';
+} from '../../core/collection/collection.service';
 import { UiButtonDirective } from '../shared/ui-button.directive';
 import { UiSliderComponent } from '../shared/ui-slider.component';
 

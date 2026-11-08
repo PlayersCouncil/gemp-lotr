@@ -1,8 +1,8 @@
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { readLegacyWebFile } from '../../../testing/files';
-import { flushLegacyCardFiles } from '../../../testing/legacy-cards';
+import { readLegacyWebFile } from '../../testing/files';
+import { flushLegacyCardFiles } from '../../testing/legacy-cards';
 import { evaluateLegacyTable, LEGACY_CARD_DATA_FILES, LegacyCardDataService } from './legacy-card-data.service';
 
 describe('LegacyCardDataService', () => {

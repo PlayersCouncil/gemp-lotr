@@ -1,13 +1,14 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CardFilterComponent } from './collection/card-filter.component';
 import { CollectionDisplayComponent } from './collection/collection-display.component';
-import { DeckService } from './core/deck/deck.service';
+import { DeckService } from '../core/deck/deck.service';
 import { CardClicksService } from './deck/card-clicks.service';
 import { DeckAreaComponent } from './deck/deck-area.component';
 import { AutoZoomComponent, AutoZoomService } from './dialogs/auto-zoom.component';
 import { CardInfoComponent } from './dialogs/card-info.component';
 import { DeckDialogsComponent } from './dialogs/deck-dialogs.component';
-import { PackDialogsComponent, PacksService } from './dialogs/pack-dialogs.component';
+import { PackDialogsComponent } from './dialogs/pack-dialogs.component';
+import { PacksService } from '../core/packs/packs.service';
 import { eastWidthForResizerAt, PANE_BORDER, PANE_PADDING, RESIZER_SIZE, TOGGLER_LENGTH } from './layout/page-layout';
 import { PageLayoutService } from './layout/page-layout.service';
 import { rectStyle } from './layout/rect';
