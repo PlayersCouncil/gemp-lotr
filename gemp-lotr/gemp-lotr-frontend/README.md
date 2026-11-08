@@ -13,7 +13,8 @@ The first page being ported is the **deck builder**. The hall's Deck-builder but
 ## Building with Maven (normal workflow)
 
 Nothing extra needs installing. This module is part of the Maven reactor, and `frontend-maven-plugin` downloads Node into
-`gemp-lotr-frontend/node/` (gitignored). It then runs `npm ci`, the unit tests (`test` phase) and `ng build` (`compile` phase).
+`gemp-lotr-frontend/node/` (gitignored). It then runs `npm ci`, the unit tests (`npm test`, `test` phase) and the build (`npm run build`, `compile` phase);
+both go through the npm scripts, so the card data is extracted first (see Card data below).
 `gemp-lotr-async` depends on this module, so the Angular output is always in the web folder before the server is packaged.
 
 ```
@@ -57,7 +58,7 @@ regular hall at `http://localhost:4200/gemp-lotr/` and then open the deck builde
 |---|---|
 | `src/core/` | State, rules and server calls, with no view code: nothing in it imports from the view folders, and it has no templates or styles, and only `core/platform/` touches the browser (`DOCUMENT`, `window`, cookies); `core-boundary.spec.ts` checks all of this. |
 | `src/core/api/` | `DeckbuilderApi`: every server call the deck builder makes, typed. Sent via `GempHttp`, which adds `participantId`, encodes form data strictly (a `+` stays a `+`), turns failures into `ApiError` and spots the opened-pack header. `parsers.ts` reads the server's XML. |
-| `src/core/cards/` | Card images. `card-blueprint.ts` is a port of the legacy `Card.js` rules; the image tables still come from the legacy files (`PC_Cards.js`, `hobbit.js`, `set40.js`, `cards/CardImages.js`, `cards/PackImages.js`): `scripts/extract-card-data.mjs` turns them into `src/generated/card-data.json` (not committed) before every `npm run build`, `npm start` and `npm test`, and `card-data.ts` provides it. Add new card images in the legacy files, as before; `card-data.parity.spec.ts` fails if the JSON doesn't match them. `card-ref.ts` is what a card on the page stands for; `CardInfoService` holds the card shown in the card information. |
+| `src/core/cards/` | Card images. `card-blueprint.ts` is a port of the legacy `Card.js` rules; the image tables come from `src/generated/card-data.json` via `card-data.ts` (see Card data below). `card-ref.ts` is what a card on the page stands for; `CardInfoService` holds the card shown in the card information. |
 | `src/core/collection/` | The collection pane's state: `card-filter.ts` (filter fields, Block/Set lists, culture buttons and the filter string, ported from `CardFilter.js`) and `CollectionService` (collection type, paging, the current page from `/collection/{type}`). |
 | `src/core/formats/` | `FormatsService`: the formats from `/deck/formats`, fetched once. |
 | `src/core/deck/` | The deck being edited: `deck-model.ts` (slots, piles, extra copies, the `deckContents` string), `format-options.ts` (the format list) and `DeckService` (format switching, Map/Race slots, deck stats, unsaved changes and the save prompts, New/Save/Rename/Copy/Convert). `DeckLibraryService`: the deck list and library, import and notes. |
@@ -83,6 +84,21 @@ No legacy stylesheet is linked: the themes draw the whole page.
 `card-blueprint.parity.spec.ts` runs the legacy `Card.js` side by side with the port on over 50,000 blueprint IDs, so a
 change to `Card.js` that isn't mirrored in `card-blueprint.ts` fails the build.
 
+## Card data
+
+The card image tables (`PC_Cards.js`, `hobbit.js`, `set40.js`, `cards/CardImages.js`, `cards/PackImages.js` in
+`gemp-lotr-async/src/main/web/js/gemp-022/`) are still the legacy pages' `.js` files, and those files are the source:
+add new card images there, as before. `scripts/extract-card-data.mjs` (`npm run card-data`) turns them into
+`src/generated/card-data.json`, which is gitignored and regenerated on every build path:
+
+- npm: `prestart`, `prebuild`, `prewatch` and `pretest` run `npm run card-data`;
+- Maven: `pom.xml` runs `npm test` and `npm run build`, so the pre-scripts apply;
+- Docker: `docker/frontend-watch.sh` runs `npm run card-data` before its `npx ng build` (which skips npm's pre-scripts),
+  and also rebuilds when one of the legacy files changes.
+
+`card-data.parity.spec.ts` fails if the JSON doesn't match the legacy files. Once the legacy pages are gone, the JSON
+becomes the source: commit it, edit it directly and drop the script and its pre-scripts.
+
 ## Themes
 
 The deck builder has two themes, `classic` (the legacy page's look) and `modern`. Each is a stylesheet built from
@@ -104,6 +120,19 @@ Scoping: only one theme's stylesheet is on the page at a time, so theme CSS is w
 The theme files are not hashed (their names are fixed so they can be linked at runtime); the server revalidates them
 with an ETag, like the legacy stylesheets.
 
+### Adding a theme
+
+1. Create `src/themes/<name>/theme.css`. It styles the `.gd-*` markup described below and nothing else; copy
+   `modern` or `classic` as a starting point. Images and other files go in `public/themes/<name>/` (served as
+   `/gemp-lotr/ng/deckbuilder/themes/<name>/...`; the classic theme refers to them by that absolute path).
+2. Add a bundle to `angular.json` (`projects.deckbuilder.architect.build.options.styles`):
+   `{ "input": "src/themes/<name>/theme.css", "bundleName": "theme-<name>", "inject": false }`.
+3. Register it in `src/core/platform/theme.service.ts`: add the name to `THEMES`, a label to `THEME_LABELS` (shown in
+   the toolbar's picker) and an entry to `THEME_VIEWPORTS` (`null` for the browser's default). Change `DEFAULT_THEME` or
+   `MOBILE_THEME` only if it should be picked by default.
+4. Show or hide the optional affordances (the tab bar, the cards' ⓘ, ...) and set the `fitCards` properties for its
+   card boxes. Check it with `npm run build` and `visual-check/stubbed.mjs --angular '/gemp-lotr/ng/deckbuilder/?theme=<name>'`.
+
 ## The UI and its DOM contract
 
 `src/ui` is the deck builder's view; it replaced the first Angular view (`src/deckbuilder-app`, which reused the legacy
@@ -115,10 +144,13 @@ The rules:
 - **Layers.** `core/` holds state, rules and server calls; `ui/` holds semantic markup and interaction; `themes/<name>/`
   holds every visual rule, layout included. `ui/` components have no styles (only `display: contents` on a few hosts)
   and no pixel sizes: anything a theme sizes comes from CSS, with custom properties where the markup needs a number
-  (e.g. `--gd-card-height` from `fitCards`).
+  (e.g. `--gd-card-height` from `fitCards`). `core/core-boundary.spec.ts` and `ui/ui-boundary.spec.ts` enforce this.
 - **Markup.** Native elements (`button`, `select`, `input type=range`, `label`, `dialog`); class names
   `gd-<block>__<element>`; state in `data-*` attributes (`data-role`, `data-orientation`, `data-active`, ...) and ARIA,
-  never in class names. Templates hold every affordance any theme needs; a theme hides what it doesn't use.
+  never in class names.
+- **Affordances.** Templates hold the union of the affordances any theme needs, for example the pane tab bar
+  (`.gd-page__tabs`) and the cards' ⓘ spot (`.gd-card__info`); each theme shows or hides them in CSS. A theme never
+  needs its own template, and a new affordance is added to the template (hidden by the themes that don't use it).
 - **Interaction** is theme-neutral and each component handles its own events (no page-wide listeners).
 
 | Element | Contract |
@@ -141,19 +173,16 @@ The rules:
 | Notifier (`gd-notifier`) | `p.gd-notifier__message` (line breaks kept), `input.gd-notifier__input` (prompt; focused, selected; Enter is OK), `.gd-dialog__actions` with `button.gd-button[data-action=ok]` and, for confirm and prompt, `[data-action=cancel]`. Escape and the close button are Cancel. One at a time, in the order asked. |
 | `div.gd-zoom` | The hover zoom: `aria-hidden`, `hidden` when nothing is zoomed; `--gd-zoom-left`/`-top`/`-width`/`-height` (px; placed and sized as the legacy AutoZoom did), `data-orientation`, `data-flipped` (back; Shift), `data-foil`; `img.gd-zoom__image`, `__overlay`, `__foil`. Shown after the mouse rests 500ms on a card (at once within 500ms of the last zoom); hidden by a press, when the toolbar's magnifier is off (`AutoZoomSetting`, legacy cookie) or the card information is open. |
 
-`visual-check/stubbed.mjs` screenshots the legacy page and this one (classic theme) side by side without a Gemp server (both served
-from disk, the server's answers stubbed); see its header.
-
-## Tests
+## Tests and the visual check
 
 ```
-npm test               # watch mode
-npm test -- --watch=false
+npm test                    # unit tests (Vitest), watch mode
+npm test -- --watch=false   # once, as Maven runs them
+npm run build               # both theme bundles: theme-classic.css, theme-modern.css
 ```
 
-## Comparing with the legacy deck builder
+`visual-check/` is a Playwright check, separate from the Maven build (see `visual-check/README.md`):
 
-`visual-check/` holds a Playwright check that loads `deckBuild.html` and this page side by side in a real browser,
-goes through the deck builder's features on both, and compares screenshots and server requests. See
-`visual-check/README.md`. It is separate from the Maven build and needs a running server.
-
+- `stubbed.mjs` needs no server: after `npm run build`, `cd visual-check && node stubbed.mjs` screenshots the legacy
+  page and this one side by side (`--angular '...?theme=modern' --touch` for the modern theme on a phone);
+- `run.mjs` (`npm run check`) compares both pages against a running server; it still uses the legacy element IDs.

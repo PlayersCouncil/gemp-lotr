@@ -50,8 +50,8 @@ build_and_swap() {
     rm -rf "$STAGE" "$OLD"
     log "Building $APP"
     # Step 1: build next to the live folder. With --output-path, Angular writes the served files to $STAGE/browser.
-    # The card data first: `npx ng build` doesn't run npm's prebuild script
-    if ! (cd "$FRONTEND_DIR" && node scripts/extract-card-data.mjs &&
+    # The card data first (the same npm script as prebuild): `npx ng build` doesn't run npm's prebuild script
+    if ! (cd "$FRONTEND_DIR" && npm run --silent card-data &&
         npx ng build --configuration production --output-path="$STAGE"); then
         log "Build FAILED, still serving the previous build"
         rm -rf "$STAGE"
