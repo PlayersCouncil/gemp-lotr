@@ -5,7 +5,9 @@
  *
  * Structure: tokens (light and dark palettes, spacing, radii, shadows), then the shared controls (buttons, fields,
  * sliders), then each part of the page. The desktop layout (two panes side by side, the deck as a CSS grid) is for
- * windows at least 1024px wide; narrower windows get a simple stacked flow (the phone layout is still to come).
+ * windows at least 1024px wide. Narrower windows (phones and tablets, see "phones and tablets" near the end) show one
+ * pane at a time, chosen in the tab bar at the bottom, and let the deck and the cards scroll. Touch screens
+ * (`pointer: coarse`) get 44px controls and the cards' ⓘ.
  *
  * Card sizes follow the fitCards contract: a box's --gd-card-height is the row height; an upright card is that high
  * and 350/490 of it wide, a landscape card is as wide as the row is high.
@@ -430,6 +432,7 @@ input[type='range']:disabled {
 }
 
 .gd-page__collection {
+  container: collection / inline-size;
   display: flex;
   flex-direction: column;
   gap: var(--m-space-3);
@@ -585,6 +588,23 @@ input[type='range']:disabled {
 .gd-pager {
   grid-area: pager;
   min-width: 180px;
+}
+
+/* A narrow collection pane: the reset buttons under the pager rather than over it */
+@container collection (max-width: 499.98px) {
+  .gd-filter {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'pager'
+      'resets'
+      'fields'
+      'cultures';
+  }
+
+  .gd-filter__resets {
+    justify-content: flex-start;
+    margin-top: calc(-1 * var(--m-space-2));
+  }
 }
 
 .gd-filter__fields {
@@ -794,14 +814,6 @@ input[type='range']:disabled {
   border-radius: var(--m-radius);
   background: var(--m-well);
   overflow: hidden;
-}
-
-@media (max-width: 1023.98px) {
-  .gd-collection__cards {
-    height: 60vh;
-    flex: none;
-    width: 100%;
-  }
 }
 
 /* Each card fills its row's height: landscape cards are centred in it */
@@ -1017,24 +1029,25 @@ input[type='range']:disabled {
   min-height: 30px;
 }
 
+/* Fixed widths, small enough for one row down to a deck pane about 790px wide; the name takes the rest */
 .gd-toolbar__format {
-  flex: 0 1 150px;
-  min-width: 110px;
+  flex: 0 1 130px;
+  min-width: 100px;
 }
 
 .gd-toolbar__collection {
-  flex: 0 1 110px;
-  min-width: 90px;
+  flex: 0 1 96px;
+  min-width: 84px;
 }
 
 .gd-toolbar__theme {
-  flex: 0 1 90px;
-  min-width: 84px;
+  flex: 0 1 88px;
+  min-width: 80px;
 }
 
 .gd-toolbar__deck-name {
   order: -1;
-  flex: 1 1 60px;
+  flex: 1 1 80px;
   min-width: 0;
   overflow: hidden;
   padding: 0 var(--m-space-2);
@@ -1187,20 +1200,22 @@ button.gd-slot__label:hover .gd-slot__hint {
   pointer-events: auto;
 }
 
-/* The sites: the column's full width, one under the other, squeezed together when they don't fit */
+/*
+ * The sites: two to a row across the column, the rows pushed together (overlapping) when they don't fit. One site a
+ * row made each one as wide as the column, too big on large windows.
+ */
 .gd-slot[data-slot='sites'] .gd-slot__cards {
-  --gd-card-height: 100cqw;
-  --m-site-h: round(down, calc(100cqw * 350 / 490), 1px);
-  --m-n: var(--gd-slot-count, 1);
+  --m-site-w: round(down, calc((100cqw - 6px) / 2), 1px);
+  --gd-card-height: var(--m-site-w);
+  --m-site-h: round(down, calc(var(--m-site-w) * 350 / 490), 1px);
+  --m-rows: round(up, calc(var(--gd-slot-count, 1) / 2), 1);
   container-type: size;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  align-content: normal;
-  gap: 0;
+  justify-content: flex-start;
+  gap: 0 6px;
 }
 
-.gd-slot[data-slot='sites'] .gd-card + .gd-card {
-  margin-top: min(6px, (100cqh - var(--m-n) * var(--m-site-h)) / (var(--m-n) - 1));
+.gd-slot[data-slot='sites'] .gd-card:nth-child(n + 3) {
+  margin-top: min(6px, (100cqh - var(--m-rows) * var(--m-site-h)) / max(var(--m-rows) - 1, 1));
 }
 
 .gd-pile {
@@ -1264,41 +1279,6 @@ button.gd-slot__label:hover .gd-slot__hint {
   font-weight: 500;
 }
 
-/* Narrow windows: the parts one under the other */
-@media (max-width: 1023.98px) {
-  .gd-deck {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(var(--m-slot-w), 1fr));
-  }
-
-  .gd-toolbar,
-  .gd-slot[data-slot='sites'],
-  .gd-pile,
-  .gd-stats {
-    grid-column: 1 / -1;
-  }
-
-  .gd-slot[data-slot='sites'] {
-    height: 260px;
-  }
-
-  .gd-slot[data-slot='sites'] .gd-slot__cards {
-    --gd-card-height: 160px;
-    --m-site-h: round(down, calc(160px * 350 / 490), 1px);
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .gd-slot[data-slot='sites'] .gd-card + .gd-card {
-    margin-top: 0;
-  }
-
-  .gd-pile {
-    height: 260px;
-  }
-}
-
 /*
  * Desktop: the toolbar across the top; the slots and the sites in a column on the left (the Ring-bearer and the Ring
  * side by side, then the Map and the Race, then the sites to the bottom); the two piles sharing the rest, the stats
@@ -1325,6 +1305,35 @@ button.gd-slot__label:hover .gd-slot__hint {
 
   .gd-toolbar {
     grid-area: toolbar;
+  }
+
+  /*
+   * A deck pane too narrow for one row: two planned rows rather than a ragged wrap. The name, the format and the
+   * notes on top; the deck actions, then the collection and theme pickers, below.
+   */
+  @container (max-width: 789.98px) {
+    .gd-toolbar::after {
+      content: '';
+      order: 1;
+      flex-basis: 100%;
+      margin-top: -6px;
+    }
+
+    .gd-toolbar__deck-actions {
+      order: 2;
+      margin-right: auto;
+      padding-right: 0;
+      border-right: 0;
+    }
+
+    .gd-toolbar__collection,
+    .gd-toolbar__theme {
+      order: 3;
+    }
+
+    .gd-toolbar__format {
+      flex-basis: 170px;
+    }
   }
 
   .gd-slot {
@@ -1816,6 +1825,480 @@ button.gd-slot__label:hover .gd-slot__hint {
 
 @media (pointer: coarse) {
   .gd-card-info__zoom {
+    display: none;
+  }
+}
+
+/* ---------------------------------------------------------------- phones and tablets */
+
+/*
+ * Windows narrower than 1024px show one pane at a time: the deck or the collection, chosen in the tab bar fixed at the
+ * bottom. The chosen pane fills the rest of the screen and scrolls; the separator is not used. Phones (under 768px)
+ * and tablets (768 to 1023px) share the layout; tablets get larger cards and more sites to a row. The page keeps clear
+ * of notches and the home indicator with the safe-area insets (the theme's viewport has viewport-fit=cover).
+ */
+@media (max-width: 1023.98px) {
+  html,
+  body {
+    overflow: hidden;
+  }
+
+  .gd-page {
+    --m-pad: var(--m-space-3);
+    --m-pile-card-h: 116px;
+    --m-collection-card-h: 150px;
+    --m-sites-per-row: 3;
+    position: fixed;
+    inset: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+    background: var(--m-bg);
+  }
+
+  .gd-page__separator {
+    display: none;
+  }
+
+  .gd-page__deck,
+  .gd-page__collection {
+    grid-row: 1;
+    grid-column: 1;
+    min-height: 0;
+    padding: max(var(--m-pad), env(safe-area-inset-top)) max(var(--m-pad), env(safe-area-inset-right)) var(--m-pad)
+      max(var(--m-pad), env(safe-area-inset-left));
+    border: 0;
+  }
+
+  .gd-page[data-pane='deck'] .gd-page__collection,
+  .gd-page[data-pane='collection'] .gd-page__deck {
+    display: none;
+  }
+
+  .gd-page__deck {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .gd-page__collection {
+    overflow: hidden;
+    background: var(--m-bg);
+  }
+
+  /* The tab bar */
+  .gd-page__tabs {
+    grid-row: 2;
+    grid-column: 1;
+    display: flex;
+    padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    border-top: 1px solid var(--m-border);
+    background: var(--m-surface);
+    box-shadow: 0 -4px 16px rgb(0 0 0 / 0.18);
+  }
+
+  .gd-page__tab {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    min-height: 56px;
+    padding: 6px 0;
+    border: 0;
+    background: none;
+    color: var(--m-text-muted);
+    font: 600 var(--m-font-size-xs) / 1 var(--m-font);
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: color var(--m-transition);
+  }
+
+  .gd-page__tab::before {
+    content: '';
+    width: 40px;
+    height: 26px;
+    border-radius: var(--m-radius-pill);
+    background: currentColor;
+    mask: var(--m-icon) center / 20px 20px no-repeat;
+    transition: background-color var(--m-transition);
+  }
+
+  .gd-page__tab[data-pane='deck'] {
+    --m-icon: var(--m-icon-list);
+  }
+
+  .gd-page__tab[data-pane='collection'] {
+    --m-icon: var(--m-icon-library);
+  }
+
+  .gd-page__tab[aria-selected='true'] {
+    color: var(--m-accent);
+  }
+
+  /* The chosen tab: the icon on a pill (drawn under the masked icon by a gradient layer) */
+  .gd-page__tab[aria-selected='true']::before {
+    background:
+      linear-gradient(currentColor, currentColor) center / 20px 20px no-repeat,
+      var(--m-accent-soft);
+    mask:
+      var(--m-icon) center / 20px 20px no-repeat,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+  }
+
+  .gd-page__tab:focus-visible {
+    outline-offset: -4px;
+  }
+
+  /* The toolbar: the name and the notes, then the deck actions, then the pickers */
+  .gd-toolbar {
+    gap: var(--m-space-2) 6px;
+  }
+
+  .gd-toolbar__deck-name {
+    order: -4;
+    flex: 1 1 0;
+    padding-left: var(--m-space-1);
+  }
+
+  .gd-toolbar [data-action='notes'],
+  .gd-toolbar [data-action='auto-zoom'] {
+    order: -3;
+  }
+
+  /* A line break after the name */
+  .gd-toolbar::after {
+    content: '';
+    order: -2;
+    flex-basis: 100%;
+    margin-top: calc(-1 * var(--m-space-2));
+  }
+
+  .gd-toolbar__deck-actions {
+    order: -1;
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: 100%;
+    padding-right: 0;
+    border-right: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .gd-toolbar__deck-actions::-webkit-scrollbar {
+    display: none;
+  }
+
+  .gd-toolbar__deck-actions .gd-button {
+    flex: none;
+  }
+
+  .gd-toolbar__format,
+  .gd-toolbar__collection,
+  .gd-toolbar__theme {
+    flex: 1 1 0;
+    max-width: none;
+  }
+
+  /* The deck: the slots side by side, then the sites, the piles and the stats; each as tall as its cards */
+  .gd-deck {
+    --m-slot-h: 170px;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .gd-slot {
+    flex: 1 1 var(--m-slot-w);
+  }
+
+  .gd-toolbar,
+  .gd-slot[data-slot='sites'],
+  .gd-pile,
+  .gd-stats {
+    flex: 1 1 100%;
+  }
+
+  .gd-slot[data-slot='sites'],
+  .gd-pile {
+    height: auto;
+  }
+
+  .gd-slot[data-slot='sites'] {
+    min-height: 120px;
+  }
+
+  .gd-slot[data-slot='sites'] .gd-slot__cards,
+  .gd-pile__cards {
+    position: relative;
+    inset: auto;
+    margin: 6px 10px 10px;
+  }
+
+  /* Under the title, which is in the slot's label (drawn over the whole slot) */
+  .gd-slot[data-slot='sites'] .gd-slot__cards {
+    margin-top: 28px;
+  }
+
+  .gd-slot[data-slot='sites'] .gd-slot__cards {
+    --m-site-w: round(down, calc((100cqw - (var(--m-sites-per-row) - 1) * 6px) / var(--m-sites-per-row)), 1px);
+    container-type: inline-size;
+    gap: 6px;
+  }
+
+  .gd-slot[data-slot='sites'] .gd-card:nth-child(n + 3) {
+    margin-top: 0;
+  }
+
+  /* The piles: cards at a fixed size, as many rows as they need */
+  .gd-pile__cards {
+    --gd-card-fit: none;
+    --gd-card-max-height: var(--m-pile-card-h);
+    min-height: 24px;
+  }
+
+  .gd-stats {
+    max-height: none;
+  }
+
+  /* The collection: the filter scrolls in at most half the pane; the cards scroll under it at a fixed size */
+  .gd-filter {
+    flex: 0 1 auto;
+    min-height: 0;
+    max-height: 45%;
+    margin: -4px;
+    padding: 4px;
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+
+  .gd-collection {
+    min-height: 0;
+  }
+
+  .gd-collection__cards {
+    --gd-card-fit: none;
+    --gd-card-max-height: var(--m-collection-card-h);
+    justify-content: center;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  /* No hover zoom here: the window is too small to show it beside the cards */
+  .gd-zoom {
+    display: none;
+  }
+}
+
+/* Tablets: larger cards, more sites to a row */
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .gd-page {
+    --m-pad: var(--m-space-4);
+    --m-pile-card-h: 150px;
+    --m-collection-card-h: 200px;
+    --m-sites-per-row: 5;
+  }
+
+  .gd-deck {
+    --m-slot-h: 200px;
+  }
+
+  /* The pickers stay on the deck actions' row */
+  .gd-toolbar__format,
+  .gd-toolbar__collection,
+  .gd-toolbar__theme {
+    flex: 1 1 100px;
+  }
+}
+
+/* Phones: every pixel counts */
+@media (max-width: 767.98px) {
+  .gd-page {
+    --m-pad: var(--m-space-2);
+  }
+
+  .gd-toolbar {
+    padding: var(--m-space-1) var(--m-space-2) var(--m-space-2);
+  }
+
+  /* The deck actions take a row of their own (scrolling if they don't fit) */
+  .gd-toolbar__deck-actions {
+    flex-basis: 100%;
+    justify-content: space-between;
+    gap: 0;
+  }
+
+  /* The deck list: the name above its buttons, in full */
+  .gd-deck-list__item {
+    flex-wrap: wrap;
+    padding: var(--m-space-2);
+  }
+
+  .gd-deck-list__name {
+    order: -1;
+    flex-basis: 100%;
+    margin: 0 0 2px;
+    white-space: normal;
+  }
+
+  .gd-slot__hint {
+    margin: 6px;
+    padding: 6px;
+  }
+
+  .gd-filter__basic,
+  .gd-filter__advanced {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+
+  .gd-field[data-wide] {
+    grid-column: 1 / -1;
+  }
+
+  /* Dialogs: a sheet across the bottom of the screen */
+  .gd-dialog,
+  .gd-dialog[data-placed] {
+    inset: auto 0 0;
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    max-height: calc(100dvh - max(24px, env(safe-area-inset-top)));
+    margin: 0;
+    border-width: 1px 0 0;
+    border-radius: var(--m-radius-lg) var(--m-radius-lg) 0 0;
+    resize: none;
+  }
+
+  .gd-dialog:is([data-dialog='deck-list'], [data-dialog='library'], [data-dialog='notes']) {
+    height: calc(100dvh - max(24px, env(safe-area-inset-top)));
+  }
+
+  .gd-dialog__header {
+    cursor: default;
+  }
+
+  .gd-dialog__actions {
+    padding-bottom: max(var(--m-space-3), env(safe-area-inset-bottom));
+  }
+
+  .gd-dialog__actions .gd-button {
+    flex: 1 1 0;
+  }
+
+  .gd-dialog__body:last-child {
+    padding-bottom: max(var(--m-space-4), env(safe-area-inset-bottom));
+  }
+
+  /* Card information: the card as large as the screen allows */
+  .gd-card-info {
+    --m-long-exact: min(calc(100dvh - 150px), calc((100vw - 34px) * 1039 / 745));
+    width: calc(100vw - 2px);
+  }
+
+  .gd-card-info:has(.gd-card-info__card[data-orientation='horizontal']) {
+    --m-long-exact: min(calc(100vw - 34px), calc((100dvh - 150px) * 1039 / 745));
+  }
+}
+
+/* ---------------------------------------------------------------- touch screens */
+
+@media (pointer: coarse) {
+  :root {
+    --m-control-height: 44px;
+  }
+
+  /* 16px text, so the browser doesn't zoom in on a field it focuses */
+  select,
+  input[type='text'],
+  input[type='number'],
+  input:not([type]),
+  textarea {
+    font-size: 16px;
+  }
+
+  .gd-toolbar .gd-button,
+  .gd-dialog__close,
+  .gd-card-info__close {
+    width: var(--m-control-height);
+    min-height: var(--m-control-height);
+    height: var(--m-control-height);
+  }
+
+  .gd-toolbar .gd-button:empty::before {
+    width: 20px;
+    height: 20px;
+  }
+
+  .gd-field__control > *,
+  .gd-filter__resets .gd-button {
+    min-height: var(--m-control-height);
+  }
+
+  .gd-culture {
+    width: 44px;
+    height: 44px;
+  }
+
+  input[type='range'] {
+    height: 44px;
+  }
+
+  input[type='range']::-webkit-slider-thumb {
+    width: 24px;
+    height: 24px;
+    margin-top: -10px;
+  }
+
+  input[type='range']::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+  }
+
+  .gd-dialog__header,
+  .gd-card-info__header {
+    min-height: 52px;
+  }
+}
+
+/* No hover on touch screens: a tapped card doesn't stay lifted */
+@media (hover: none) {
+  .gd-card:hover {
+    box-shadow: var(--m-card-shadow);
+    transform: none;
+  }
+}
+
+/*
+ * The cards' ⓘ: their details with a tap, on touch screens and small windows (a long press or a right-click does the
+ * same, but isn't discoverable). Not on the copies drawn behind a card, or on placeholders.
+ */
+@media (pointer: coarse), (max-width: 767.98px) {
+  .gd-card > .gd-card__info {
+    inset: auto 3px 3px auto;
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: rgb(12 14 20 / 0.72);
+    box-shadow: 0 0 0 1.5px rgb(255 255 255 / 0.85);
+    color: #fff;
+    font: italic 700 15px / 1 Georgia, 'Times New Roman', serif;
+  }
+
+  .gd-card > .gd-card__info::before {
+    content: 'i';
+  }
+
+  /* A 44px target around the 26px mark */
+  .gd-card > .gd-card__info::after {
+    content: '';
+    position: absolute;
+    inset: -9px;
+  }
+
+  .gd-card:is([data-role='copy'], [data-role='placeholder']) > .gd-card__info {
     display: none;
   }
 }
