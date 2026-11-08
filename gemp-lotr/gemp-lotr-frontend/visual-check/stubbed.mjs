@@ -15,6 +15,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 import { chromium } from 'playwright';
+import { CONTROLS } from './controls.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const FRONTEND = path.resolve(HERE, '..');
@@ -173,30 +174,6 @@ async function route(context, log, scenario) {
   });
 }
 
-/** The same control on each page: the legacy element IDs, and the Angular page's DOM contract. */
-const CONTROLS = {
-  nextPage: { legacy: '#nextPage', angular: '.gd-pager__next' },
-  side: { legacy: '#sideSelect', angular: '.gd-field[data-field="side"] select' },
-  firstCard: { legacy: '#collection-display .card .actionArea', angular: '.gd-collection .gd-card' },
-  deckList: { legacy: '#deckListBut', angular: '.gd-toolbar [data-action="deck-list"]' },
-  library: { legacy: '#libraryListBut', angular: '.gd-toolbar [data-action="library"]' },
-  importDeck: { legacy: '#importDeckBut', angular: '.gd-toolbar [data-action="import"]' },
-  notes: { legacy: '#notesBut', angular: '.gd-toolbar [data-action="notes"]' },
-  /** The selection pack in the collection (the second item). */
-  selectionPack: { legacy: '#collection-display .card .actionArea', angular: '.gd-collection .gd-card' },
-  deleteDeck: { legacy: '.deckItem button[title="Delete deck"]', angular: '.gd-deck-list [data-action="delete"]' },
-  renameDeck: { legacy: '.deckItem button[title="Rename deck"]', angular: '.gd-deck-list [data-action="rename"]' },
-  /** A card by its image, in the deck's piles or in the collection. */
-  deckCard: (image) => ({
-    legacy: `#decksRegion .card:has(img[src*="${image}"]) .actionArea`,
-    angular: `.gd-pile .gd-card:has(img[src*="${image}"])`,
-  }),
-  collectionCard: (image) => ({
-    legacy: `#collection-display .card:has(img[src*="${image}"]) .actionArea`,
-    angular: `.gd-collection .gd-card:has(img[src*="${image}"])`,
-  }),
-};
-
 /** Rests the mouse on a card past the hover zoom's delay. */
 async function hover(page, selector) {
   await page.hover(selector);
@@ -326,7 +303,7 @@ export const STUBBED_SCENARIOS = [
     act: async (page, which) => {
       await page.click(CONTROLS.deckList[which]);
       await page.waitForTimeout(300);
-      await page.locator(CONTROLS.renameDeck[which]).first().click();
+      await page.locator(CONTROLS.renameListedDeck[which]).first().click();
     },
   },
 ];

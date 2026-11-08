@@ -6,13 +6,16 @@ import path from 'node:path';
 import { parseArgs } from 'node:util';
 import { chromium } from 'playwright';
 import { PNG } from 'pngjs';
-import { FIXTURE_DECK, SCENARIOS } from './scenarios.mjs';
+import { CONTROLS } from './controls.mjs';
+import { FIXTURE_DECK, SCENARIOS, selectors } from './scenarios.mjs';
 
 const { values: options } = parseArgs({
   options: {
     server: { type: 'string', default: process.env.GEMP_SERVER ?? 'http://localhost:17001' },
     legacy: { type: 'string', default: '/gemp-lotr/deckBuild.html' },
     angular: { type: 'string', default: '/gemp-lotr/ng/deckbuilder/' },
+    // The Angular page's theme (its ?theme= parameter, unless --angular has one)
+    theme: { type: 'string', default: 'classic' },
     sizes: { type: 'string', default: '1280x800,1366x768,1920x1080' },
     only: { type: 'string' },
     mutating: { type: 'boolean', default: false },
@@ -23,6 +26,14 @@ const { values: options } = parseArgs({
     out: { type: 'string', default: 'report' },
   },
 });
+
+if (!['classic', 'modern'].includes(options.theme)) {
+  console.error(`Unknown theme ${options.theme}: use --theme=classic or --theme=modern.`);
+  process.exit(2);
+}
+const angularUrl = new URL(options.angular, 'http://server');
+if (!angularUrl.searchParams.has('theme')) angularUrl.searchParams.set('theme', options.theme);
+const angularPath = angularUrl.pathname + angularUrl.search;
 
 const user = process.env.GEMP_USER;
 const password = process.env.GEMP_PASSWORD;
@@ -90,7 +101,9 @@ async function settle(page, pending, quiet = 700, max = 15000) {
   }
   // Card images
   await page
-    .waitForFunction(() => Array.from(document.images).every((img) => img.complete), null, { timeout: 15000 })
+    .waitForFunction(() => Array.from(document.images).every((img) => img.complete), null, {
+      timeout: 15000,
+    })
     .catch(() => undefined);
 }
 
@@ -136,7 +149,44 @@ async function deliverCollectionsInOrder(page) {
   });
 }
 
-async function capture(pagePath, scenario, size, file) {
+/**
+ * Answers the Angular page's questions (its own alert, confirm and prompt dialogs, `gd-notifier`) from `page.answers`,
+ * as the dialog handler below does for the legacy page's browser dialogs, until `stop()` is called.
+ */
+function answerNotifier(page) {
+  let running = true;
+  const loop = (async () => {
+    while (running) {
+      const dialog = page.locator(
+        'dialog.gd-dialog[open]:is([data-dialog=alert],[data-dialog=confirm],[data-dialog=prompt])',
+      );
+      if ((await dialog.count().catch(() => 0)) > 0) {
+        const kind = await dialog
+          .first()
+          .getAttribute('data-dialog')
+          .catch(() => null);
+        const answer = kind === 'alert' ? true : page.answers.shift();
+        const step = async () => {
+          if (answer === undefined || answer === false) {
+            await dialog.first().locator('[data-action=cancel]').click();
+            return;
+          }
+          if (typeof answer === 'string') await dialog.first().locator('.gd-notifier__input').fill(answer);
+          await dialog.first().locator('[data-action=ok]').click();
+        };
+        await step().catch(() => undefined);
+      }
+      await page.waitForTimeout(100).catch(() => undefined);
+    }
+  })();
+  return async () => {
+    running = false;
+    await loop;
+  };
+}
+
+async function capture(which, scenario, size, file) {
+  const pagePath = which === 'legacy' ? options.legacy : angularPath;
   const context = await browser.newContext({
     viewport: { width: size.width, height: size.height },
     storageState: session,
@@ -178,14 +228,16 @@ async function capture(pagePath, scenario, size, file) {
 
   await deliverCollectionsInOrder(page);
   await page.goto(options.server + pagePath);
-  await page.waitForSelector('#collection-display .card', { timeout: 20000 }).catch(() => undefined);
+  await page.waitForSelector(CONTROLS.firstCard[which], { timeout: 20000 }).catch(() => undefined);
   await settle(page, pending);
+  const stopAnswering = which === 'angular' ? answerNotifier(page) : async () => {};
   try {
-    await scenario.run(page);
+    await scenario.run(page, selectors(which), which);
   } catch (error) {
     errors.push(`Scenario failed: ${error.message.split('\n')[0]}`);
   }
   await settle(page, pending);
+  await stopAnswering();
   if (!scenario.keepMouse) {
     await page.mouse.move(1, 1);
     await page.waitForTimeout(300);
@@ -223,10 +275,14 @@ function compareImages(fileA, fileB, diffFile) {
 
 async function check(scenario, size) {
   const base = `${scenario.name}-${size.label}`;
-  const files = { legacy: `${base}-legacy.png`, angular: `${base}-angular.png`, diff: `${base}-diff.png` };
+  const files = {
+    legacy: `${base}-legacy.png`,
+    angular: `${base}-angular.png`,
+    diff: `${base}-diff.png`,
+  };
   const [legacy, angular] = await Promise.all([
-    capture(options.legacy, scenario, size, path.join(outDir, files.legacy)),
-    capture(options.angular, scenario, size, path.join(outDir, files.angular)),
+    capture('legacy', scenario, size, path.join(outDir, files.legacy)),
+    capture('angular', scenario, size, path.join(outDir, files.angular)),
   ]);
   const pixels = compareImages(
     path.join(outDir, files.legacy),
@@ -286,7 +342,7 @@ function writeReport(results) {
 <style>body{font:14px sans-serif;margin:16px}table{border-collapse:collapse}td{border:1px solid #ccc;padding:6px;vertical-align:top}
 img{width:300px}tr.bad{background:#fee}.bad{color:#b00}</style>
 <h1>Deck builder visual check</h1>
-<p>${escape(options.server)}: <code>${escape(options.legacy)}</code> vs <code>${escape(options.angular)}</code>,
+<p>${escape(options.server)}: <code>${escape(options.legacy)}</code> vs <code>${escape(angularPath)}</code>,
 ${results.length} checks, <b>${failed.length} differ</b> (tolerance ${tolerance} px). Diff images show differing
 pixels in red.</p>
 <table><tr><th>Scenario</th><th>Result</th><th>Legacy</th><th>Angular</th><th>Diff</th></tr>

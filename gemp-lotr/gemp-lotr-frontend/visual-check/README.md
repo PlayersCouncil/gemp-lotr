@@ -1,9 +1,5 @@
 # Deck builder visual check
 
-> **Note:** `run.mjs` and `scenarios.mjs` still drive both pages through the legacy element IDs (`#collection-display`,
-> `#deckListBut`, ...), which the Angular page no longer has since its first view was replaced by `src/ui`; until the
-> scenarios are given the new UI's selectors (as `stubbed.mjs` does), use `stubbed.mjs` below.
-
 Compares the Angular deck builder (`/gemp-lotr/ng/deckbuilder/`) with the legacy one (`/gemp-lotr/deckBuild.html`) in a
 real browser (Chromium, via Playwright). Every scenario in `scenarios.mjs` runs on a fresh copy of each page. That
 covers the collection filters and paging, building a deck, formats, every dialog, card information and the hover
@@ -12,6 +8,11 @@ zoom, at several window sizes. Both pages must then:
 - look the same: full-page screenshots, with at most `--tolerance` pixels (default 60) differing by more than 2 colour
   levels (anti-aliasing of rounded corners and icons varies by a few pixels between two loads of the same page);
 - ask the server for the same collection page and the same deck stats.
+
+Each scenario does the same thing on both pages through `controls.mjs`: every control the scenarios use, as a pair of
+selectors, the legacy page's element IDs and the Angular page's DOM contract (the `.gd-*` markup and its `data-*`
+state, see the frontend README). `stubbed.mjs` uses the same file. The Angular page asks its questions in its own
+dialogs (`gd-notifier`) rather than the browser's; the check answers both from the scenario's `answers`.
 
 It writes `report/index.html` (screenshots of both pages and the differences in red) and exits with 1 if anything
 differs. It is not part of the Maven build: run it by hand after changing the deck builder or the legacy files it uses.
@@ -27,11 +28,18 @@ cd gemp-lotr/gemp-lotr-frontend/visual-check
 npm ci
 npx playwright install chromium
 GEMP_USER=tester GEMP_PASSWORD=secret npm run check -- --server http://localhost:17001
+GEMP_USER=tester GEMP_PASSWORD=secret npm run check -- --theme=modern --only start,deck-list --sizes 1366x768
 ```
+
+The legacy page is the classic look, so with `--theme=classic` (the default) both pages should match; with
+`--theme=modern` the screenshots are expected to differ and the report is for looking at them side by side, while
+the server requests must still be the same.
 
 | Option | Default | |
 |---|---|---|
 | `--server` | `$GEMP_SERVER` or `http://localhost:17001` | The Gemp server |
+| `--theme` | `classic` | The Angular page's theme, `classic` or `modern` (its `?theme=`, unless `--angular` has one) |
+| `--legacy`, `--angular` | `/gemp-lotr/deckBuild.html`, `/gemp-lotr/ng/deckbuilder/` | The two pages' paths |
 | `--sizes` | `1280x800,1366x768,1920x1080` | Window sizes |
 | `--only` | all | Comma-separated scenario names |
 | `--mutating` | off | Also run the scenarios that change the account (saving, renaming and copying decks) |
@@ -67,7 +75,7 @@ stubbed stats), `zoom-deck` and `zoom-collection` (the hover zoom), `card-info`,
 from a stubbed pack delivery), `pane-collection`, `pane-deck` and `info-button` (the tab bar and the cards' ⓘ, for a
 theme that shows them; the legacy side shows the page as loaded), `confirm` and `prompt` (deleting and renaming a deck; the legacy page used the
 browser's own dialogs, which screenshots don't show, so its side shows only the page behind). A scenario can answer
-server requests its own way (`answers`).
+server requests its own way (`answers`). Its selectors come from `controls.mjs`, shared with `run.mjs`.
 
 ```
 npm run build                      # in gemp-lotr-frontend
