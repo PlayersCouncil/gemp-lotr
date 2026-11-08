@@ -118,6 +118,28 @@ describe('CardComponent', () => {
       expect(actions.activate).not.toHaveBeenCalled();
     });
 
+    it('a click on the ⓘ spot shows the details', async () => {
+      const { el } = await render();
+      const info = el.querySelector<HTMLElement>('span.gd-card__info[aria-hidden="true"]')!;
+      info.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      expect(actions.showInfo).toHaveBeenCalledWith(CARD.ref);
+      expect(actions.activate).not.toHaveBeenCalled();
+    });
+
+    it('a mouse press on the ⓘ spot shows the details, though its click targets the card (pointer capture)', async () => {
+      const { el } = await render();
+      el.querySelector('.gd-card__info')!.dispatchEvent(pointer('pointerdown'));
+      el.dispatchEvent(pointer('pointerup'));
+      el.click();
+      expect(actions.showInfo).toHaveBeenCalledWith(CARD.ref);
+      expect(actions.activate).not.toHaveBeenCalled();
+      // The next click elsewhere on the card uses it again
+      el.dispatchEvent(pointer('pointerdown'));
+      el.dispatchEvent(pointer('pointerup'));
+      el.click();
+      expect(actions.activate).toHaveBeenCalledWith(CARD.ref);
+    });
+
     it('right-click (or the context-menu key) shows the details, without the browser menu', async () => {
       const { el } = await render();
       const event = new MouseEvent('contextmenu', { bubbles: true, cancelable: true });

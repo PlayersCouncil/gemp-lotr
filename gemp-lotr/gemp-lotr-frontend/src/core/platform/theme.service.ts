@@ -23,6 +23,18 @@ export const THEME_ATTRIBUTE = 'data-theme';
 /** Marks the theme's <link> (and only it), so a switch finds the one to replace. */
 export const THEME_LINK_ATTRIBUTE = 'data-theme-stylesheet';
 
+/**
+ * The page's `<meta name="viewport">` per theme. The classic theme keeps the legacy page's default (none: phones lay it
+ * out 980px wide and zoom out); the modern theme is laid out at the device's width, edge to edge (`viewport-fit=cover`,
+ * so its CSS can keep clear of notches with the safe-area insets).
+ */
+export const THEME_VIEWPORTS: Readonly<Record<ThemeName, string | null>> = {
+  classic: null,
+  modern: 'width=device-width, initial-scale=1, viewport-fit=cover',
+};
+/** Marks the viewport <meta> the service added, so it only ever removes its own. */
+export const THEME_VIEWPORT_ATTRIBUTE = 'data-theme-viewport';
+
 /** How long the first paint waits for the theme stylesheet before showing the page anyway. */
 export const THEME_LOAD_TIMEOUT_MS = 10_000;
 
@@ -124,7 +136,24 @@ export class ThemeService {
 
   private show(theme: ThemeName): void {
     this.document.documentElement.setAttribute(THEME_ATTRIBUTE, theme);
+    this.setViewport(THEME_VIEWPORTS[theme]);
     this.current.set(theme);
+  }
+
+  private setViewport(content: string | null): void {
+    const head = this.document.head;
+    let meta = head.querySelector<HTMLMetaElement>(`meta[${THEME_VIEWPORT_ATTRIBUTE}]`);
+    if (content === null) {
+      meta?.remove();
+      return;
+    }
+    if (!meta) {
+      meta = this.document.createElement('meta');
+      meta.name = 'viewport';
+      meta.setAttribute(THEME_VIEWPORT_ATTRIBUTE, '');
+      head.appendChild(meta);
+    }
+    meta.content = content;
   }
 
   /** Next to the app's other files, whatever the address it is served under (`<base href>`). */

@@ -64,13 +64,15 @@ server's answers come from `src/testing/server-responses` plus a generated colle
 labelled placeholders on both pages. It compares nothing by itself; look at the pairs in `report-stubbed/`. Scenarios: `collection`, `second-page`, `shadow-filter`, `deck` (a few cards, copies and sites in the deck, with the
 stubbed stats), `zoom-deck` and `zoom-collection` (the hover zoom), `card-info`, and the dialogs: `deck-list`,
 `library`, `import`, `import-typed`, `notes`, `selection` (the selection pack's "Choose one"), `delivery` ("New items",
-from a stubbed pack delivery), `confirm` and `prompt` (deleting and renaming a deck; the legacy page used the
+from a stubbed pack delivery), `pane-collection`, `pane-deck` and `info-button` (the tab bar and the cards' ⓘ, for a
+theme that shows them; the legacy side shows the page as loaded), `confirm` and `prompt` (deleting and renaming a deck; the legacy page used the
 browser's own dialogs, which screenshots don't show, so its side shows only the page behind). A scenario can answer
 server requests its own way (`answers`).
 
 ```
 npm run build                      # in gemp-lotr-frontend
 cd visual-check && node stubbed.mjs --sizes 1440x900,1280x800
+node stubbed.mjs --angular '/gemp-lotr/ng/deckbuilder/?theme=modern' --sizes 390x844 --touch   # a phone
 ```
 
 Playwright comes from `visual-check/node_modules` (`npm ci`). Where it is only installed globally, as in some

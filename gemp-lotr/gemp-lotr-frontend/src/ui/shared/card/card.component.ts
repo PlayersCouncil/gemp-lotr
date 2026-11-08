@@ -20,7 +20,8 @@ export const DRAG_UP_FOR_INFO = 20;
  * DOM contract: `button.gd-card` with `data-role` (card, pack, selection, placeholder), `data-orientation`
  * (vertical, horizontal), and `data-errata`, `data-foil`, `data-borderless` when they apply; inside,
  * `img.gd-card__image`, then `.gd-card__errata`, `img.gd-card__foil`, `img.gd-card__overlay` and `.gd-card__count`
- * when they apply. The theme sizes it (with `--gd-card-height` from fitCards) and draws the border and layers.
+ * when they apply, and always `.gd-card__info`: an ⓘ spot (part of the button, not a button of its own) that a theme
+ * may show; a click on it shows the details instead of using the card. The theme sizes it (with `--gd-card-height` from fitCards) and draws the border and layers.
  */
 @Component({
   selector: 'button[gdCard]',
@@ -57,6 +58,7 @@ export const DRAG_UP_FOR_INFO = 20;
     @if (card().count !== null) {
       <span class="gd-card__count">{{ card().count }}</span>
     }
+    <span class="gd-card__info" aria-hidden="true" title="Card details"></span>
   `,
 })
 export class CardComponent {
@@ -73,6 +75,11 @@ export class CardComponent {
   } | null = null;
   /** The details were just shown by a gesture: the click that ends it does nothing else. */
   private swallowClick = false;
+  /**
+   * The press started on the ⓘ spot. Kept from the press, since a mouse press captures the pointer and its click then
+   * targets the card itself.
+   */
+  private pressOnInfo = false;
 
   constructor() {
     inject(DestroyRef).onDestroy(() => {
@@ -88,12 +95,14 @@ export class CardComponent {
   }
 
   protected onClick(event: MouseEvent): void {
+    const onInfo = this.pressOnInfo || isInfoSpot(event.target);
+    this.pressOnInfo = false;
     if (this.swallowClick) {
       this.swallowClick = false;
       event.preventDefault();
       return;
     }
-    if (event.shiftKey) {
+    if (event.shiftKey || onInfo) {
       this.actions.showInfo(this.card().ref);
     } else {
       this.actions.activate(this.card().ref);
@@ -123,6 +132,7 @@ export class CardComponent {
   protected onPointerDown(event: PointerEvent): void {
     this.cancelPress();
     this.swallowClick = false;
+    this.pressOnInfo = isInfoSpot(event.target);
     if (event.pointerType === 'mouse') {
       this.hover.press();
     }
@@ -175,4 +185,8 @@ export class CardComponent {
     this.swallowClick = true;
     this.actions.showInfo(this.card().ref);
   }
+}
+
+function isInfoSpot(target: EventTarget | null): boolean {
+  return target instanceof Element && target.closest('.gd-card__info') !== null;
 }

@@ -96,6 +96,12 @@ div {
 
 /* ---------------------------------------------------------------- page frame (jquery.layout) */
 
+/* The phone tab bar and the cards' ⓘ spot are not used */
+.gd-page__tabs,
+.gd-card > .gd-card__info {
+  display: none;
+}
+
 .gd-page {
   position: fixed;
   inset: 0;

@@ -4,10 +4,12 @@
 // replaced by labelled placeholders, the same on both pages.
 //
 //   node stubbed.mjs [--angular '/gemp-lotr/ng/deckbuilder/?theme=classic'] [--sizes 1440x900]
-//                    [--theme classic] [--out report-stubbed] [--only collection,...]
+//                    [--theme classic] [--out report-stubbed] [--only collection,...] [--touch]
 //
 // Writes <out>/<scenario>-<size>-{legacy,angular}.png. Needs a build of the Angular page (npm run build). Unlike
-// run.mjs this compares nothing by itself: it is for looking at the two pages.
+// run.mjs this compares nothing by itself: it is for looking at the two pages. --touch emulates a phone or tablet (a
+// touch screen, so `pointer: coarse`). The `pane-*` and `info-button` scenarios use the Angular page's tab bar and ⓘ
+// spot, which only some themes show; the legacy page has neither and is shown as loaded.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -28,6 +30,7 @@ const { values: options } = parseArgs({
     sizes: { type: 'string', default: '1440x900' },
     only: { type: 'string' },
     out: { type: 'string', default: 'report-stubbed' },
+    touch: { type: 'boolean', default: false },
   },
 });
 
@@ -241,6 +244,28 @@ export const STUBBED_SCENARIOS = [
     },
   },
   {
+    name: 'pane-collection',
+    act: async (page, which) => {
+      if (which === 'angular') await showTab(page, 'collection');
+    },
+  },
+  {
+    name: 'pane-deck',
+    act: async (page, which) => {
+      if (which === 'angular') await addDeck(page, which);
+    },
+  },
+  {
+    name: 'info-button',
+    act: async (page, which) => {
+      if (which !== 'angular') return;
+      await showTab(page, 'collection');
+      await settle(page);
+      const info = page.locator('.gd-collection .gd-card').nth(2).locator('.gd-card__info');
+      if (await info.isVisible()) await info.click();
+    },
+  },
+  {
     name: 'deck-list',
     act: async (page, which) => {
       await page.click(CONTROLS.deckList[which]);
@@ -310,7 +335,16 @@ export const STUBBED_SCENARIOS = [
  * A few cards in the deck: Free Peoples and Shadow cards from the first page (one of them three times, so copies show
  * behind it) and three sites from the last page (12 items a page).
  */
+/** Chooses a pane in the Angular page's tab bar, when the theme shows it; true if it did. */
+async function showTab(page, pane) {
+  const tab = page.locator(`.gd-page__tab[data-pane="${pane}"]`);
+  if (!(await tab.isVisible())) return false;
+  await tab.click();
+  return true;
+}
+
 async function addDeck(page, which) {
+  const tabs = which === 'angular' && (await showTab(page, 'collection'));
   const cards = page.locator(CONTROLS.firstCard[which]);
   for (const index of [2, 3, 3, 3, 4, 5, 6, 7, 8, 9, 10, 11]) {
     await cards.nth(index).click();
@@ -324,6 +358,7 @@ async function addDeck(page, which) {
     await cards.nth(index).click();
     await page.waitForTimeout(50);
   }
+  if (tabs) await showTab(page, 'deck');
 }
 
 async function settle(page) {
@@ -347,7 +382,10 @@ for (const size of sizes) {
       ['legacy', options.legacy],
       ['angular', options.angular],
     ]) {
-      const context = await browser.newContext({ viewport: { width: size.width, height: size.height } });
+      const context = await browser.newContext({
+        viewport: { width: size.width, height: size.height },
+        ...(options.touch ? { isMobile: true, hasTouch: true } : {}),
+      });
       const log = [];
       await route(context, log, scenario);
       const page = await context.newPage();

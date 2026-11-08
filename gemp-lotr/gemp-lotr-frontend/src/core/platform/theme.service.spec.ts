@@ -7,6 +7,8 @@ import {
   THEME_COOKIE,
   THEME_LINK_ATTRIBUTE,
   THEME_LOAD_TIMEOUT_MS,
+  THEME_VIEWPORT_ATTRIBUTE,
+  THEME_VIEWPORTS,
   ThemeService,
 } from './theme.service';
 
@@ -64,6 +66,7 @@ describe('ThemeService', () => {
 
   afterEach(() => {
     themeLinks().forEach((link) => link.remove());
+    document.head.querySelectorAll(`meta[${THEME_VIEWPORT_ATTRIBUTE}]`).forEach((meta) => meta.remove());
     document.head.querySelectorAll('base').forEach((base) => base.remove());
     document.documentElement.removeAttribute(THEME_ATTRIBUTE);
     vi.restoreAllMocks();
@@ -175,6 +178,7 @@ describe('ThemeService', () => {
       expect(await settled(failing)).toBe(true);
 
       themeLinks().forEach((link) => link.remove());
+    document.head.querySelectorAll(`meta[${THEME_VIEWPORT_ATTRIBUTE}]`).forEach((meta) => meta.remove());
       TestBed.resetTestingModule();
       vi.useFakeTimers();
       const hanging = service().init();
@@ -241,6 +245,21 @@ describe('ThemeService', () => {
       const [link] = themeLinks();
       await themes.select('classic');
       expect(themeLinks()).toEqual([link]);
+    });
+
+    it("sets the theme's viewport: the device's width for modern, the default for classic", async () => {
+      const viewports = () =>
+        Array.from(document.head.querySelectorAll<HTMLMetaElement>('meta[name="viewport"]')).map((m) => m.content);
+      const themes = await started();
+      expect(viewports()).toEqual([]);
+      const switching = themes.select('modern');
+      loadLink('modern');
+      await switching;
+      expect(viewports()).toEqual([THEME_VIEWPORTS.modern]);
+      const back = themes.select('classic');
+      loadLink('classic');
+      await back;
+      expect(viewports()).toEqual([]);
     });
 
     it('ignores unknown names', async () => {
