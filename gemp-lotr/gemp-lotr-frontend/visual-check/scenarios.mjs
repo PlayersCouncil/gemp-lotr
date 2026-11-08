@@ -6,8 +6,8 @@
 //   run(page, $, which)  what the player does; `$` gives the selectors of the page it runs on (`$.nextPage`,
 //              `$.culture('ELVEN')`: controls.mjs), `which` is 'legacy' or 'angular' for the few steps that differ
 //   keepMouse  leave the mouse where the scenario put it (hover states); otherwise it is moved to the corner first
-//   answers    replies to the prompt/confirm dialogs, in order (true = OK, false = Cancel, text for prompts): the
-//              browser's on the legacy page, its own (gd-notifier) on the Angular one; alerts are always just accepted
+//   answers    replies to the prompt/confirm dialogs, in order (true = OK, false = Cancel, text for prompts); alerts are
+//              always just accepted
 //   mutating   changes the account (saves decks, ...): only run with --mutating
 //   note       why the scenario exists, shown in the report
 
@@ -47,6 +47,21 @@ async function rangeThumb(page, selector) {
 async function hover(page, locator, dx = 20, dy = 20) {
   const box = await locator.boundingBox();
   await page.mouse.move(box.x + dx, box.y + dy);
+}
+
+/** The page size slider's handle: the legacy slider's element, or the thumb of the Angular range input. */
+async function sliderHandle(page, $, which) {
+  return which === 'legacy' ? page.locator(`${$.pageSize} a`).boundingBox() : rangeThumb(page, $.pageSize);
+}
+
+async function moveToCentre(page, box) {
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+}
+
+/** Moves the mouse onto the element and presses without releasing, for pressed states. */
+async function holdMouse(page, selector) {
+  await page.hover(selector);
+  await page.mouse.down();
 }
 
 /** The deck the deck list scenarios open; created by run.mjs before the check (FIXTURE_DECK). */
@@ -478,6 +493,168 @@ export const SCENARIOS = [
       await pause(page, 300);
       await hover(page, page.locator($.siteCards).nth(2), 30, 5);
       await pause(page, 1200);
+    },
+  },
+
+  // --- Interaction states: the screenshot is taken while the mouse or keyboard focus stays where the scenario left it ---
+  {
+    name: 'state-button-hover',
+    keepMouse: true,
+    note: 'Toolbar button under the mouse',
+    run: async (page, $) => page.hover($.saveDeck),
+  },
+  {
+    name: 'state-button-pressed',
+    keepMouse: true,
+    note: 'Toolbar button held down (never released, so nothing is saved)',
+    run: async (page, $) => holdMouse(page, $.saveDeck),
+  },
+  {
+    name: 'state-button-focus',
+    keepMouse: true,
+    note: 'Toolbar button with the keyboard focus',
+    run: async (page, $) => page.focus($.notes),
+  },
+  {
+    name: 'state-button-disabled-hover',
+    keepMouse: true,
+    note: 'The disabled previous-page arrow under the mouse',
+    run: async (page, $) => page.hover($.previousPage, { force: true }),
+  },
+  {
+    name: 'state-culture-hover',
+    keepMouse: true,
+    note: 'Culture button under the mouse',
+    run: async (page, $) => page.hover($.culture('ELVEN')),
+  },
+  {
+    name: 'state-culture-pressed',
+    keepMouse: true,
+    note: 'Culture button held down',
+    run: async (page, $) => holdMouse(page, $.culture('ELVEN')),
+  },
+  {
+    name: 'state-culture-active-hover',
+    keepMouse: true,
+    note: 'Selected culture button still under the mouse',
+    run: async (page, $) => {
+      await page.click($.culture('ELVEN'));
+      await pause(page);
+    },
+  },
+  {
+    name: 'state-culture-focus',
+    keepMouse: true,
+    note: 'Culture button with the keyboard focus',
+    run: async (page, $) => page.focus($.cultureInput('ELVEN')),
+  },
+  {
+    name: 'state-slider-hover',
+    keepMouse: true,
+    note: 'Slider handle under the mouse',
+    run: async (page, $, which) => moveToCentre(page, await sliderHandle(page, $, which)),
+  },
+  {
+    name: 'state-slider-focus',
+    keepMouse: true,
+    note: 'Slider handle with the keyboard focus',
+    run: async (page, $, which) => page.focus(which === 'legacy' ? `${$.pageSize} a` : $.pageSize),
+  },
+  {
+    name: 'state-slider-pressed',
+    keepMouse: true,
+    note: 'Slider handle held down',
+    run: async (page, $, which) => {
+      await moveToCentre(page, await sliderHandle(page, $, which));
+      await page.mouse.down();
+    },
+  },
+  {
+    name: 'state-select-hover',
+    keepMouse: true,
+    note: 'Format list under the mouse',
+    run: async (page, $) => page.hover($.format),
+  },
+  {
+    name: 'state-input-focus',
+    keepMouse: true,
+    note: 'Text field with the keyboard focus',
+    run: async (page, $) => page.focus($.name),
+  },
+  {
+    name: 'state-link-hover',
+    keepMouse: true,
+    note: 'Link in the Map slot under the mouse',
+    run: async (page, $) => {
+      await page.selectOption($.format, 'pc_movie');
+      await pause(page, 1500);
+      await page.hover($.mapLink);
+    },
+  },
+  {
+    name: 'state-resizer-hover',
+    keepMouse: true,
+    note: 'Bar between the panes under the mouse',
+    run: async (page, $) => {
+      const bar = await page.locator($.separator).first().boundingBox();
+      await page.mouse.move(bar.x + 3, bar.y + 100);
+    },
+  },
+  {
+    name: 'state-toggler-hover',
+    keepMouse: true,
+    note: 'Open/close toggler under the mouse',
+    run: async (page, $) => page.hover($.toggleCollection),
+  },
+  {
+    name: 'state-resizer-dragging',
+    keepMouse: true,
+    note: 'Bar between the panes in the middle of a drag',
+    run: async (page, $) => {
+      const bar = await page.locator($.separator).first().boundingBox();
+      await page.mouse.move(bar.x + 3, bar.y + 100);
+      await page.mouse.down();
+      await page.mouse.move(bar.x - 97, bar.y + 100, { steps: 10 });
+    },
+  },
+  {
+    name: 'state-dialog-close-hover',
+    keepMouse: true,
+    note: "A dialog's close button under the mouse",
+    run: async (page, $) => {
+      await page.click($.notes);
+      await pause(page, 500);
+      await page.hover($.dialogClose);
+    },
+  },
+  {
+    name: 'state-dialog-close-focus',
+    keepMouse: true,
+    note: "A dialog's close button with the keyboard focus",
+    run: async (page, $) => {
+      await page.click($.notes);
+      await pause(page, 500);
+      await page.focus($.dialogClose);
+    },
+  },
+  {
+    name: 'state-dialog-button-hover',
+    keepMouse: true,
+    note: 'A button inside a dialog under the mouse',
+    run: async (page, $) => {
+      await page.click($.importDeck);
+      await pause(page);
+      await page.hover($.importButton);
+    },
+  },
+  {
+    name: 'state-deck-item-button-hover',
+    keepMouse: true,
+    note: 'A button of a deck list entry under the mouse',
+    run: async (page, $) => {
+      await page.click($.deckList);
+      await pause(page, 1500);
+      await page.locator($.deckListItem, { hasText: FIXTURE_DECK.name }).first().locator($.openDeck).hover();
     },
   },
 

@@ -11,8 +11,9 @@ zoom, at several window sizes. Both pages must then:
 
 Each scenario does the same thing on both pages through `controls.mjs`: every control the scenarios use, as a pair of
 selectors, the legacy page's element IDs and the Angular page's DOM contract (the `.gd-*` markup and its `data-*`
-state, see the frontend README). `stubbed.mjs` uses the same file. The Angular page asks its questions in its own
-dialogs (`gd-notifier`) rather than the browser's; the check answers both from the scenario's `answers`.
+state, see the frontend README). `stubbed.mjs` uses the same file. Both pages ask their questions in the browser's own
+dialogs, and the check answers them from the scenario's `answers`. It also answers `gd-notifier` dialogs, for when the
+redesign brings them back.
 
 It writes `report/index.html` (screenshots of both pages and the differences in red) and exits with 1 if anything
 differs. It is not part of the Maven build: run it by hand after changing the deck builder or the legacy files it uses.

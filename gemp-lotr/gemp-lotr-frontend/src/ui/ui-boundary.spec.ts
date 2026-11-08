@@ -59,12 +59,15 @@ describe('ui boundary', () => {
   });
 
   it("never uses the browser's alert, confirm or prompt (the Notifier asks the player)", () => {
-    const blocking = files.flatMap(({ name, source }) =>
-      // Calls, not the DialogNotifier's own methods (a declaration is followed by its typed parameters)
-      [...source.matchAll(/(?<![\w.])(alert|confirm|prompt)\s*\((?!\w+\s*:)|window\.(alert|confirm|prompt)\b/g)].map(
-        (match) => `${name}: ${match[0]}`,
-      ),
-    );
+    // WindowNotifier is the one place that may: it is the Notifier that keeps the browser's dialogs
+    const blocking = files
+      .filter(({ name }) => name !== 'ui/shared/notifier/window-notifier.ts')
+      .flatMap(({ name, source }) =>
+        // Calls, not the DialogNotifier's own methods (a declaration is followed by its typed parameters)
+        [...source.matchAll(/(?<![\w.])(alert|confirm|prompt)\s*\((?!\w+\s*:)|window\.(alert|confirm|prompt)\b/g)].map(
+          (match) => `${name}: ${match[0]}`,
+        ),
+      );
     expect(blocking).toEqual([]);
   });
 });

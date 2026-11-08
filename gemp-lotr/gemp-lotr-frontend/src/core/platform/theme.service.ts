@@ -12,8 +12,8 @@ export const THEME_LABELS: Readonly<Record<ThemeName, string>> = { classic: 'Cla
 
 /** Computers get the legacy look. */
 export const DEFAULT_THEME: ThemeName = 'classic';
-/** Phones and tablets (see isMobileDevice). */
-export const MOBILE_THEME: ThemeName = 'modern';
+/** Phones and tablets (see isMobileDevice): the legacy look too, until the redesign is approved. */
+export const MOBILE_THEME: ThemeName = 'classic';
 
 /** Remembers the player's choice on this device (path /gemp-lotr, like the legacy settings cookies). */
 export const THEME_COOKIE = 'deckbuilderTheme';

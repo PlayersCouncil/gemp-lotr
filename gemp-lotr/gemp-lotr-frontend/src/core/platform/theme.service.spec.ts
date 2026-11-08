@@ -78,14 +78,14 @@ describe('ThemeService', () => {
       expect(resolveTheme('modern', 'classic', false)).toBe('modern');
       expect(resolveTheme(null, 'modern', false)).toBe('modern');
       expect(resolveTheme(null, 'classic', true)).toBe('classic');
-      expect(resolveTheme(null, null, true)).toBe('modern');
+      expect(resolveTheme(null, null, true)).toBe('classic');
       expect(resolveTheme(null, null, false)).toBe('classic');
     });
 
     it('ignores unknown names', () => {
       expect(resolveTheme('neon', 'modern', false)).toBe('modern');
       expect(resolveTheme('neon', 'retro', false)).toBe('classic');
-      expect(resolveTheme('', 'MODERN', true)).toBe('modern');
+      expect(resolveTheme('', 'MODERN', true)).toBe('classic');
       expect(resolveTheme('toString', '__proto__', false)).toBe('classic');
     });
   });
@@ -121,14 +121,14 @@ describe('ThemeService', () => {
       expect(written).toEqual([]);
     });
 
-    it('uses the modern theme on a phone or tablet', async () => {
+    it('uses the classic theme on a phone or tablet too, until the redesign', async () => {
       fakeCookies();
       fakeDevice(true, 820, 1180);
       const themes = service();
       const starting = themes.init();
-      loadLink('modern');
+      loadLink('classic');
       await starting;
-      expect(themes.theme()).toBe('modern');
+      expect(themes.theme()).toBe('classic');
     });
 
     it('prefers the remembered choice to the device', async () => {

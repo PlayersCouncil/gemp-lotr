@@ -809,11 +809,9 @@ button.gd-slot__label:focus-visible {
   width: 100px;
 }
 
-/* Not on the legacy page: in the deck name's empty space, so the magnifier and the collection stay where they were */
+/* Not on the legacy page: hidden until the redesign is approved */
 .gd-toolbar__theme {
-  order: 1;
-  width: 72px;
-  margin-right: 2.35px;
+  display: none;
 }
 
 .gd-toolbar .gd-button[data-action='auto-zoom'] {

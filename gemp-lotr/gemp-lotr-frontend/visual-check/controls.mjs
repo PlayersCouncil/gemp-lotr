@@ -43,6 +43,11 @@ export const CONTROLS = {
   },
   /** A culture button, by its code (ELVEN, SHIRE, ...). */
   culture: (code) => ({ legacy: `#label${code}`, angular: `.gd-culture[data-culture="${code}"]` }),
+  /** The checkbox behind a culture button (it takes the keyboard focus). */
+  cultureInput: (code) => ({
+    legacy: `#${code}`,
+    angular: `.gd-culture[data-culture="${code}"] .gd-culture__input`,
+  }),
   /** The pane that scrolls the filter and the collection. */
   collectionPane: { legacy: '#collectionDiv', angular: '.gd-page__collection' },
   /** Every item of the collection (packs first). */
@@ -87,6 +92,7 @@ export const CONTROLS = {
   ringBearerSlot: { legacy: '#rb-content', angular: `${slot('ring-bearer')} .gd-slot__label` },
   ringSlot: { legacy: '#ring-content', angular: `${slot('ring')} .gd-slot__label` },
   sitesSlot: { legacy: '#sites-content', angular: `${slot('sites')} .gd-slot__label` },
+  mapLink: { legacy: '#map-content a', angular: `${slot('map')} .gd-slot__link` },
   ringBearerCard: {
     legacy: '#ringBearerDiv .cardInDeck .actionArea',
     angular: `${slot('ring-bearer')} .gd-card`,
@@ -103,6 +109,8 @@ export const CONTROLS = {
   }),
 
   // --- Dialogs ---
+  /** The close button of the open dialog (legacy dialogs stay in the page while closed, hence :visible). */
+  dialogClose: { legacy: '.ui-dialog-titlebar-close:visible', angular: 'dialog[open] .gd-dialog__close' },
   deckListItem: { legacy: '.deckItem', angular: '.gd-deck-list__item' },
   openDeck: { legacy: 'button[title="Open deck"]', angular: '[data-action="open"]' },
   deleteDeck: {
