@@ -2,6 +2,7 @@ import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { DeckbuilderActions } from '../../../core/actions/deckbuilder-actions.service';
 import { CardView } from '../../../core/cards/card-view';
+import { CardHover } from './card-hover';
 import { CardComponent, DRAG_UP_FOR_INFO, LONG_PRESS_MS } from './card.component';
 
 const CARD: CardView = {
@@ -171,6 +172,37 @@ describe('CardComponent', () => {
       const event = new Event('dragstart', { bubbles: true, cancelable: true });
       el.querySelector('img')!.dispatchEvent(event);
       expect(event.defaultPrevented).toBe(true);
+    });
+  });
+
+  describe('hover (for the hover zoom)', () => {
+    it('reports the mouse coming onto it, with where it is, leaving it and pressing on it', async () => {
+      const { fixture, el } = await render();
+      const hover = TestBed.inject(CardHover);
+      vi.spyOn(el, 'getBoundingClientRect').mockReturnValue({ left: 1, top: 2, right: 3, bottom: 4 } as DOMRect);
+      el.dispatchEvent(pointer('pointerenter'));
+      expect(hover.hovered()?.card).toEqual(CARD);
+      expect(hover.hovered()?.box).toEqual({ left: 1, top: 2, right: 3, bottom: 4 });
+      const presses = hover.presses();
+      el.dispatchEvent(pointer('pointerdown'));
+      expect(hover.presses()).toBe(presses + 1);
+      el.dispatchEvent(pointer('pointerleave'));
+      expect(hover.hovered()).toBeNull();
+
+      // A card taken away while hovered (e.g. clicked out of the deck) is no longer hovered
+      el.dispatchEvent(pointer('pointerenter'));
+      fixture.destroy();
+      expect(hover.hovered()).toBeNull();
+    });
+
+    it('ignores touch and pen, which do not hover', async () => {
+      const { el } = await render();
+      const hover = TestBed.inject(CardHover);
+      el.dispatchEvent(pointer('pointerenter', { pointerType: 'touch' }));
+      el.dispatchEvent(pointer('pointerdown', { pointerType: 'pen' }));
+      expect(hover.hovered()).toBeNull();
+      expect(hover.presses()).toBe(0);
+      vi.useFakeTimers();
     });
   });
 });

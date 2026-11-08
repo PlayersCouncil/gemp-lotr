@@ -1,6 +1,5 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import { CardFace, CardComponent } from '../cards/card.component';
 import { CardRect, groupArea, layoutNormalGroup, layoutVerticalBar } from '../cards/card-group-layout';
 import { CardRef } from '../../core/cards/card-ref';
@@ -38,12 +37,12 @@ export class DeckAreaComponent {
   protected readonly layout = inject(PageLayoutService);
   protected readonly deck = inject(DeckService);
   private readonly images = inject(CardImageService);
-  private readonly sanitizer = inject(DomSanitizer);
   private readonly foilImage = foilOverlayImage(readFoilPresentation(inject(DOCUMENT).cookie));
   protected readonly rectStyle = rectStyle;
 
-  /** The server's stats HTML, shown as-is (as the legacy page did). */
-  protected readonly statsHtml = computed(() => this.sanitizer.bypassSecurityTrustHtml(this.deck.statsHtml()));
+  /** The deck stats, in the legacy page's markup (`<b>` labels, `<font color>` verdicts, a `<br>` after each line). */
+  protected readonly stats = this.deck.stats;
+  protected readonly toneColors = { error: 'red', valid: 'green', warning: 'yellow' } as const;
 
   protected readonly ringBearerCards = computed(() => this.slotViews('ringBearer', this.layout.deck().ringBearer));
   protected readonly ringCards = computed(() => this.slotViews('ring', this.layout.deck().ring));

@@ -58,7 +58,8 @@ show them), and have some library decks (decks of the "Librarian" player, for "o
 While the new UI is being built, `stubbed.mjs` screenshots the legacy page and the new UI (`?ui=next&theme=classic`)
 side by side with no Gemp server: both are served from disk (the legacy web root and the Angular build output) and the
 server's answers come from `src/testing/server-responses` plus a generated collection. Card images are replaced by
-labelled placeholders on both pages. It compares nothing by itself; look at the pairs in `report-stubbed/`.
+labelled placeholders on both pages. It compares nothing by itself; look at the pairs in `report-stubbed/`. Scenarios: `collection`, `second-page`, `shadow-filter`, `deck` (a few cards, copies and sites in the deck, with the
+stubbed stats), `zoom-deck` and `zoom-collection` (the hover zoom), `card-info`.
 
 ```
 npm run build                      # in gemp-lotr-frontend

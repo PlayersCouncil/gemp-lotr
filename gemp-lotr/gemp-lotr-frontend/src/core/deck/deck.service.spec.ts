@@ -112,7 +112,9 @@ describe('DeckService', () => {
     const req = statsRequest();
     expect(body(req)).toEqual({ targetFormat: 'rev_tow_sta', collectionName: 'default', deckContents: '|||' });
     req.flush('<b>Free People</b>: 0');
-    expect(service.statsHtml()).toBe('<b>Free People</b>: 0');
+    expect(service.stats()).toEqual({
+      lines: [{ segments: [{ text: 'Free People', strong: true, tone: null }, { text: ': 0', strong: false, tone: null }] }],
+    });
     vi.advanceTimersByTime(STATS_INTERVAL_MS * 3);
     expect(take('/deck/stats').length).toBe(0);
 

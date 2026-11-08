@@ -35,7 +35,10 @@ describe('DeckbuilderPageComponent', () => {
       'gd-page__separator',
       'gd-page__collection',
       '',
+      '',
     ]);
+    expect(el.querySelector('section.gd-page__deck > gd-deck.gd-deck')).not.toBeNull();
+    expect(el.querySelector('gd-auto-zoom > .gd-zoom[hidden]')).not.toBeNull();
     expect(el.querySelector('section.gd-page__collection > gd-collection-filter.gd-filter')).not.toBeNull();
     expect(el.querySelector('section.gd-page__collection > gd-collection-grid.gd-collection')).not.toBeNull();
     expect(el.querySelector('gd-card-info dialog.gd-card-info')).not.toBeNull();

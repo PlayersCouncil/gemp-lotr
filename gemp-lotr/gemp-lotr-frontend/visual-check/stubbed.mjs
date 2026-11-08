@@ -161,7 +161,22 @@ const CONTROLS = {
   nextPage: { legacy: '#nextPage', angular: '.gd-pager__next' },
   side: { legacy: '#sideSelect', angular: '.gd-field[data-field="side"] select' },
   firstCard: { legacy: '#collection-display .card .actionArea', angular: '.gd-collection .gd-card' },
+  /** A card by its image, in the deck's piles or in the collection. */
+  deckCard: (image) => ({
+    legacy: `#decksRegion .card:has(img[src*="${image}"]) .actionArea`,
+    angular: `.gd-pile .gd-card:has(img[src*="${image}"])`,
+  }),
+  collectionCard: (image) => ({
+    legacy: `#collection-display .card:has(img[src*="${image}"]) .actionArea`,
+    angular: `.gd-collection .gd-card:has(img[src*="${image}"])`,
+  }),
 };
+
+/** Rests the mouse on a card past the hover zoom's delay. */
+async function hover(page, selector) {
+  await page.hover(selector);
+  await page.waitForTimeout(800);
+}
 
 /** Each scenario runs on a freshly loaded page; `act` does the same thing on both. */
 export const STUBBED_SCENARIOS = [
@@ -179,12 +194,51 @@ export const STUBBED_SCENARIOS = [
     },
   },
   {
+    name: 'deck',
+    act: async (page, which) => {
+      await addDeck(page, which);
+    },
+  },
+  {
+    name: 'zoom-deck',
+    act: async (page, which) => {
+      await addDeck(page, which);
+      await hover(page, CONTROLS.deckCard('LOTR01005')[which]);
+    },
+  },
+  {
+    name: 'zoom-collection',
+    act: async (page, which) => {
+      await hover(page, CONTROLS.collectionCard('LOTR01006')[which]);
+    },
+  },
+  {
     name: 'card-info',
     act: async (page, which) => {
       await page.locator(CONTROLS.firstCard[which]).nth(2).click({ button: 'right' });
     },
   },
 ];
+
+/**
+ * A few cards in the deck: Free Peoples and Shadow cards from the first page (one of them three times, so copies show
+ * behind it) and three sites from the last page (12 items a page).
+ */
+async function addDeck(page, which) {
+  const cards = page.locator(CONTROLS.firstCard[which]);
+  for (const index of [2, 3, 3, 3, 4, 5, 6, 7, 8, 9, 10, 11]) {
+    await cards.nth(index).click();
+    await page.waitForTimeout(50);
+  }
+  for (let i = 0; i < 5; i++) {
+    await page.click(CONTROLS.nextPage[which]);
+    await settle(page);
+  }
+  for (const index of [2, 3, 4]) {
+    await cards.nth(index).click();
+    await page.waitForTimeout(50);
+  }
+}
 
 async function settle(page) {
   await page.waitForLoadState('networkidle');

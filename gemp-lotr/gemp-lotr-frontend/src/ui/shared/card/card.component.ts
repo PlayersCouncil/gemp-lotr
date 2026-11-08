@@ -1,6 +1,7 @@
-import { DestroyRef, Component, inject, input } from '@angular/core';
+import { Component, DestroyRef, ElementRef, inject, input } from '@angular/core';
 import { DeckbuilderActions } from '../../../core/actions/deckbuilder-actions.service';
 import { CardView } from '../../../core/cards/card-view';
+import { CardHover } from './card-hover';
 
 /** How long a touch must be held on a card to show its details. */
 export const LONG_PRESS_MS = 500;
@@ -13,7 +14,8 @@ export const DRAG_UP_FOR_INFO = 20;
  * A card: a native button with the card image and its layers. Using it (click, Enter, Space) does what the card is
  * for (DeckbuilderActions.activate: add it to the deck, open the pack, ...); asking for its details (shift-click,
  * right-click or the context-menu key, a long press on a touch screen, or dragging it upwards with the mouse) shows
- * them (DeckbuilderActions.showInfo).
+ * them (DeckbuilderActions.showInfo). The mouse coming onto it, leaving it and pressing on it are reported to CardHover
+ * (for the hover zoom).
  *
  * DOM contract: `button.gd-card` with `data-role` (card, pack, selection, placeholder), `data-orientation`
  * (vertical, horizontal), and `data-errata`, `data-foil`, `data-borderless` when they apply; inside,
@@ -37,6 +39,8 @@ export const DRAG_UP_FOR_INFO = 20;
     '(pointermove)': 'onPointerMove($event)',
     '(pointerup)': 'onPointerUp($event)',
     '(pointercancel)': 'cancelPress()',
+    '(pointerenter)': 'onPointerEnter($event)',
+    '(pointerleave)': 'onPointerLeave()',
     '(dragstart)': '$event.preventDefault()',
   },
   template: `
@@ -59,12 +63,18 @@ export class CardComponent {
   readonly card = input.required<CardView>({ alias: 'gdCard' });
 
   private readonly actions = inject(DeckbuilderActions);
+  private readonly hover = inject(CardHover);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private press: { x: number; y: number; mouse: boolean; timer: ReturnType<typeof setTimeout> | null } | null = null;
   /** The details were just shown by a gesture: the click that ends it does nothing else. */
   private swallowClick = false;
 
   constructor() {
-    inject(DestroyRef).onDestroy(() => this.cancelPress());
+    inject(DestroyRef).onDestroy(() => {
+      this.cancelPress();
+      // A card removed while hovered (e.g. clicked out of the deck) is no longer under the mouse
+      this.hover.leave(this);
+    });
   }
 
   protected label(): string {
@@ -94,9 +104,23 @@ export class CardComponent {
     this.actions.showInfo(this.card().ref);
   }
 
+  protected onPointerEnter(event: PointerEvent): void {
+    if (event.pointerType === 'mouse') {
+      const { left, top, right, bottom } = this.host.getBoundingClientRect();
+      this.hover.enter(this, this.card(), { left, top, right, bottom });
+    }
+  }
+
+  protected onPointerLeave(): void {
+    this.hover.leave(this);
+  }
+
   protected onPointerDown(event: PointerEvent): void {
     this.cancelPress();
     this.swallowClick = false;
+    if (event.pointerType === 'mouse') {
+      this.hover.press();
+    }
     if (event.button !== 0) {
       return;
     }

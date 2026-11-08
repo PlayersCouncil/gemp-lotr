@@ -1,5 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { FitCard } from './fit-cards';
 import { CARD_HEIGHT_PROPERTY, FitCardsDirective } from './fit-cards.directive';
 
 /** A stand-in for the browser's ResizeObserver: the test says when and to what size the box resizes. */
@@ -31,7 +32,7 @@ class FakeResizeObserver {
   template: `<div class="box" [gdFitCards]="cards()"></div>`,
 })
 class Host {
-  readonly cards = signal<readonly boolean[]>(Array.from({ length: 12 }, () => false));
+  readonly cards = signal<readonly FitCard[]>(Array.from({ length: 12 }, () => ({ horizontal: false })));
 }
 
 describe('FitCardsDirective', () => {
@@ -78,7 +79,7 @@ describe('FitCardsDirective', () => {
     properties['--gd-card-fit'] = 'rows';
     observer.resize(372, 472);
     await fixture.whenStable();
-    expect(cardHeight(box)).toBe('114px');
+    expect(cardHeight(box)).toBe('114.25px');
 
     properties['--gd-card-max-height'] = '90px';
     observer.resize(1000, 472);
@@ -90,7 +91,7 @@ describe('FitCardsDirective', () => {
     const { fixture, box, observer } = await render();
     observer.resize(372, 472);
     await fixture.whenStable();
-    fixture.componentInstance.cards.set([false, false]);
+    fixture.componentInstance.cards.set([{ horizontal: false }, { horizontal: false }]);
     await fixture.whenStable();
     expect(cardHeight(box)).toBe('200px');
   });

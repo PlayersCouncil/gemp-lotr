@@ -8,18 +8,27 @@ export const CARD_SCALE = 350 / 490;
 
 /**
  * - `contain`: as large as fits (never above the maximum), so every card is visible without scrolling;
- * - `rows`: the legacy NormalCardGroup's way: the fewest rows the cards fit in, each row as high as the box allows
- *   (so cards can come out smaller than with `contain`);
+ * - `rows`: the legacy NormalCardGroup's way (see rowsFitHeight), so cards can come out smaller than with `contain`;
  * - `none`: always the maximum height; the cards wrap and the box scrolls.
  */
 export type CardFit = 'contain' | 'rows' | 'none';
+
+/** A card in the box, with the other copies drawn behind it (a draw deck pile), each showing a fifth of its width. */
+export interface FitCard {
+  /** A landscape card. */
+  horizontal: boolean;
+  /** One entry per copy behind it: whether it is landscape. */
+  behind?: readonly boolean[];
+}
+
+/** The share of a copy's width left showing beside the card in front of it. */
+export const BEHIND_SHOWN = 0.2;
 
 export interface FitCardsInput {
   /** The box's content size, in px. */
   width: number;
   height: number;
-  /** One entry per card: whether it is a landscape card. */
-  horizontal: readonly boolean[];
+  cards: readonly FitCard[];
   /** Space between cards, across and down. */
   gap: number;
   /** The largest row height. */
@@ -29,15 +38,24 @@ export interface FitCardsInput {
 
 /** The width a card takes in a row of the given height (rounded down, as card elements are). */
 export function cardWidth(horizontal: boolean, rowHeight: number): number {
-  return horizontal ? rowHeight : Math.floor(rowHeight * CARD_SCALE);
+  return horizontal ? Math.floor(rowHeight) : Math.floor(rowHeight * CARD_SCALE);
+}
+
+/** The width a card and the copies behind it take in a row (NormalCardGroup.layoutCard's rounding). */
+export function stackWidth(card: FitCard, rowHeight: number): number {
+  const behind = (card.behind ?? []).reduce(
+    (sum, landscape) => sum + Math.floor(cardWidth(landscape, rowHeight) * BEHIND_SHOWN),
+    0,
+  );
+  return behind + cardWidth(card.horizontal, rowHeight);
 }
 
 /** How many rows the cards need at that row height in a box that wide (Infinity if a card is wider than the box). */
-export function rowsNeeded(horizontal: readonly boolean[], rowHeight: number, width: number, gap: number): number {
+export function rowsNeeded(cards: readonly FitCard[], rowHeight: number, width: number, gap: number): number {
   let rows = 1;
   let x = 0;
-  for (const landscape of horizontal) {
-    const w = cardWidth(landscape, rowHeight);
+  for (const card of cards) {
+    const w = stackWidth(card, rowHeight);
     if (w > width) {
       return Infinity;
     }
@@ -52,26 +70,56 @@ export function rowsNeeded(horizontal: readonly boolean[], rowHeight: number, wi
 }
 
 function fits(input: FitCardsInput, rowHeight: number): boolean {
-  const rows = rowsNeeded(input.horizontal, rowHeight, input.width, input.gap);
+  const rows = rowsNeeded(input.cards, rowHeight, input.width, input.gap);
   return rows * rowHeight + (rows - 1) * input.gap <= input.height;
 }
 
+export interface CardFitResult {
+  /** The row height. */
+  height: number;
+  /**
+   * The space (px, whole) above the rows the height was chosen for when they are centred in the box: the legacy
+   * groups put their rows there (with `rows`, the rows tried, which the cards may not all fill). 0 when they don't fit.
+   */
+  offset: number;
+}
+
+/** The row height (fitCardHeight) and where the rows start. */
+export function fitCards(input: FitCardsInput): CardFitResult {
+  const { height, rows } = fitRows(input);
+  const used = rows * height + (rows - 1) * input.gap;
+  return { height, offset: Math.max(0, Math.floor((input.height - used) / 2)) };
+}
+
 /**
- * The row height for the cards: whole pixels, at least 1. With `contain`, the largest height up to `maxHeight` at
- * which all cards fit in the box (smaller rows never need more rows, so a binary search finds it).
+ * The row height for the cards, at least 1. With `contain`, the largest whole height up to `maxHeight` at which all
+ * cards fit in the box (smaller rows never need more rows, so a binary search finds it). With `rows`, the legacy
+ * height, which can have a fraction as it did there.
  */
 export function fitCardHeight(input: FitCardsInput): number {
+  return fitRows(input).height;
+}
+
+function fitRows(input: FitCardsInput): { height: number; rows: number } {
   const max = Math.max(1, Math.floor(input.maxHeight));
-  if (input.fit === 'none' || input.horizontal.length === 0 || fits(input, max)) {
-    return max;
+  const at = (height: number) => ({
+    height,
+    rows: input.cards.length ? rowsNeeded(input.cards, height, input.width, input.gap) : 0,
+  });
+  if (input.fit === 'none' || input.cards.length === 0) {
+    return at(max);
   }
   if (input.fit === 'rows') {
-    return rowsFitHeight(input, max);
+    const fit = rowsFitHeight(input, max);
+    return Number.isFinite(fit.height) && fit.height >= 1 ? fit : { height: 1, rows: 1 };
+  }
+  if (fits(input, max)) {
+    return at(max);
   }
   let low = 1;
   let high = max;
   if (!fits(input, low)) {
-    return low;
+    return at(low);
   }
   while (high - low > 1) {
     const middle = Math.floor((low + high) / 2);
@@ -81,24 +129,86 @@ export function fitCardHeight(input: FitCardsInput): number {
       high = middle;
     }
   }
-  return low;
+  return at(low);
+}
+
+/** Card.getWidthForMaxDimension: the width of a card whose longer side is `size`. */
+function widthForLongSide(horizontal: boolean, size: number): number {
+  return horizontal ? size : Math.floor(size * CARD_SCALE);
 }
 
 /**
- * NormalCardGroup.layoutCards: tries 1, 2, 3... rows, each `(height - gaps) / rows` high (capped at the maximum),
- * until the cards fit in that many rows.
+ * NormalCardGroup.layoutCards: the height of one row that holds every card if two rows of it wouldn't fit;
+ * otherwise 2, 3... rows, each `(height - gaps) / rows` high (capped at the maximum), until the cards fit in that
+ * many rows.
+ *
+ * Fixed: when a card was wider than the box at the tried height, the legacy code ignored it, so cards overflowed the
+ * box (only in tall, narrow boxes); here more rows are tried.
  */
-function rowsFitHeight(input: FitCardsInput, max: number): number {
-  for (let rows = 1; rows <= input.horizontal.length; rows++) {
-    const rowHeight = Math.min(max, Math.floor((input.height - input.gap * (rows - 1)) / rows));
+function rowsFitHeight({ width, height, cards, gap }: FitCardsInput, max: number): { height: number; rows: number } {
+  const capped = (rowHeight: number) => Math.min(max, rowHeight);
+  // Each card's width per pixel of height, from the legacy page's 1000px reference
+  const proportions = cards.map(
+    (card) =>
+      (widthForLongSide(card.horizontal, 1000) +
+        (card.behind ?? []).reduce((sum, landscape) => sum + widthForLongSide(landscape, 1000), 0) * BEHIND_SHOWN) /
+      1000,
+  );
+
+  const totalWidth = proportions.reduce((sum, proportion) => sum + proportion * height, 0);
+  const withoutGaps = width - gap * (cards.length - 1);
+  const single = totalWidth > withoutGaps ? Math.floor(height / (totalWidth / withoutGaps)) : height;
+  if (single * 2 + gap > height) {
+    return { height: capped(single), rows: 1 };
+  }
+
+  const canLayoutInRows = (rows: number, rowHeight: number) => {
+    let x = 0;
+    let row = 0;
+    for (const proportion of proportions) {
+      const w = proportion * rowHeight;
+      x += w;
+      if (x > width) {
+        row++;
+        if (row >= rows) {
+          return false;
+        }
+        x = w;
+      }
+      x += gap;
+    }
+    return true;
+  };
+  // The legacy row layout also gave up when a card ended past the box's edge
+  const layoutFits = (rowHeight: number) => {
+    let x = 0;
+    for (const card of cards) {
+      const w = stackWidth(card, rowHeight);
+      const share =
+        widthForLongSide(card.horizontal, rowHeight) +
+        (card.behind ?? []).reduce((sum, landscape) => sum + widthForLongSide(landscape, rowHeight), 0) * BEHIND_SHOWN;
+      if (x + share > width) {
+        x = 0;
+      }
+      x += w;
+      if (x > width) {
+        return false;
+      }
+      x += gap;
+    }
+    return true;
+  };
+  // Every extra row makes the cards smaller, so this ends; the cap only guards against bad input (NaN sizes)
+  for (let rows = 2; rows < 10_000; rows++) {
+    const rowHeight = capped((height - gap * (rows - 1)) / rows);
     if (rowHeight < 1) {
       break;
     }
-    if (rowsNeeded(input.horizontal, rowHeight, input.width, input.gap) <= rows) {
-      return rowHeight;
+    if (canLayoutInRows(rows, rowHeight) && layoutFits(rowHeight)) {
+      return { height: rowHeight, rows };
     }
   }
-  return 1;
+  return { height: capped(single), rows: 1 };
 }
 
 /** Reads a length custom property ("200px", "5") as px; `fallback` when unset or not a number. */

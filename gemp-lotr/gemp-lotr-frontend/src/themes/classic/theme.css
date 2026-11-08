@@ -426,6 +426,426 @@ a:visited {
   filter: invert(89%) sepia(64%) saturate(0%) hue-rotate(145deg) brightness(116%) contrast(101%);
 }
 
+/* ---------------------------------------------------------------- the deck side (GempLotrDeckBuildingUI.layoutUI) */
+
+/*
+ * Positioned as layoutUI did, from the pane's padding box: the pane's content size (pane-w x pane-h) gives a toolbar
+ * row, five slot rows beside a sites column at most 250px wide, and the draw deck with the stats under it. Each slot
+ * box is drawn 2px larger than its place (the legacy content-box borders); its cards keep 3px inside the place.
+ */
+.gd-page__deck {
+  position: relative;
+  container-type: size;
+}
+
+.gd-deck {
+  /* the container units measure the pane's content box */
+  --pane-w: 100cqw;
+  --pane-h: 100cqh;
+  --deck-h: calc(var(--pane-h) - 28px);
+  --row: round(down, calc((var(--deck-h) - 30px) / 5), 1px);
+  --sites-w: min(round(down, calc(var(--deck-h) * 1.5 / 5), 1px), 250px);
+  --half: round(down, calc((var(--sites-w) - 5px) / 2), 1px);
+  --right-half: round(down, calc((var(--sites-w) + 15px) / 2), 1px);
+  --draw-left: calc(10px + var(--sites-w));
+  --draw-w: calc(var(--pane-w) - var(--sites-w) - 10px);
+  --draw-h: calc(var(--deck-h) - 60px);
+  /* the Map and Race row, when the format has either */
+  --special-rows: 0;
+  position: absolute;
+  inset: 0;
+  color: #fff;
+  font-family: 'Times New Roman', serif;
+  font-size: 12px;
+}
+
+.gd-deck:has(.gd-slot[data-slot='map']:not([hidden]), .gd-slot[data-slot='race']:not([hidden])) {
+  --special-rows: 1;
+}
+
+.gd-slot,
+.gd-pile {
+  position: absolute;
+  box-sizing: border-box;
+  border: 1px solid #555;
+  border-radius: 7px;
+  background: var(--classic-content-bg);
+}
+
+.gd-slot[data-slot='ring-bearer'],
+.gd-slot[data-slot='map'] {
+  left: 5px;
+  width: calc(var(--half) + 2px);
+  height: calc(var(--row) + 2px);
+}
+
+.gd-slot[data-slot='ring'],
+.gd-slot[data-slot='race'] {
+  left: var(--right-half);
+  width: calc(var(--half) + 2px);
+  height: calc(var(--row) + 2px);
+}
+
+.gd-slot[data-slot='ring-bearer'],
+.gd-slot[data-slot='ring'] {
+  top: 33px;
+}
+
+.gd-slot[data-slot='map'],
+.gd-slot[data-slot='race'] {
+  top: calc(33px + var(--row));
+}
+
+.gd-slot[data-slot='sites'] {
+  left: 5px;
+  top: calc(38px + (1 + var(--special-rows)) * var(--row));
+  width: calc(var(--sites-w) + 2px);
+  height: calc(var(--deck-h) - (1 + var(--special-rows)) * var(--row) - 8px);
+}
+
+/* The whole box selects for the slot; the cards are drawn over it */
+.gd-slot__label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 7px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  line-height: normal;
+  text-align: center;
+  cursor: default;
+}
+
+button.gd-slot__label:focus-visible {
+  outline: 2px solid #0b93d5;
+  outline-offset: -2px;
+}
+
+.gd-slot__title,
+.gd-slot__hint {
+  display: block;
+}
+
+/* .helper-text */
+.gd-slot__hint {
+  position: relative;
+  top: 40%;
+  padding: 10px;
+  font-size: calc(0.3rem + 0.75vh);
+  transform: translateY(-50%);
+}
+
+.gd-slot[data-slot='sites'] .gd-slot__hint {
+  top: 10%;
+}
+
+/* Under the Map's hint, after a blank line, as the legacy hint's own link */
+.gd-slot__link {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(40% + 1em);
+  color: #fff;
+  font-size: calc(0.3rem + 0.75vh);
+  font-style: italic;
+  text-align: center;
+}
+
+.gd-slot__cards,
+.gd-pile__cards {
+  --gd-card-gap: 5px;
+  --gd-card-fit: rows;
+  position: absolute;
+  /* CardGroup.setBounds: 3px in from the place, which is 1px in from the box */
+  inset: 2px 4px 4px 2px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: var(--gd-card-gap);
+  pointer-events: none;
+}
+
+.gd-slot__cards {
+  --gd-card-max-height: 497px;
+}
+
+.gd-slot__cards > .gd-card,
+.gd-stack > .gd-card {
+  pointer-events: auto;
+}
+
+/*
+ * VerticalBarGroup: the sites at the column's full width, one under the other below a 20px title gap, 5px apart or
+ * squeezed together so the last one ends at the bottom.
+ */
+.gd-slot[data-slot='sites'] .gd-slot__cards {
+  --gd-card-height: 100cqw;
+  --site-h: round(down, calc(100cqw * 350 / 490), 1px);
+  --n: var(--gd-slot-count, 1);
+  container-type: size;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-content: normal;
+  gap: 0;
+  padding-top: 20px;
+}
+
+.gd-slot[data-slot='sites'] .gd-card {
+  top: 0;
+}
+
+.gd-slot[data-slot='sites'] .gd-card {
+  flex: none;
+}
+
+.gd-slot[data-slot='sites'] .gd-card + .gd-card {
+  margin-top: min(5px, (100cqh - 20px - var(--n) * var(--site-h)) / (var(--n) - 1));
+}
+
+.gd-pile {
+  left: var(--draw-left);
+  width: calc(var(--draw-w) + 2px);
+  height: calc(var(--draw-h) / 2 + 2px);
+}
+
+.gd-pile[data-side='free-peoples'] {
+  top: 33px;
+}
+
+.gd-pile[data-side='shadow'] {
+  top: calc(33px + var(--draw-h) / 2);
+}
+
+.gd-pile__cards {
+  --gd-card-max-height: 200px;
+}
+
+/* NormalCardGroup rows are as high as the row height */
+.gd-stack {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  height: var(--gd-card-height);
+}
+
+/* Each copy behind shows a fifth of its width (rounded down) */
+.gd-stack > .gd-card[data-role='copy'] {
+  margin-right: calc(round(down, calc(var(--gd-card-width) / 5), 1px) - var(--gd-card-width));
+}
+
+/* ---------------------------------------------------------------- deck toolbar (#manageDecks) */
+
+.gd-toolbar {
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  display: flex;
+  width: var(--pane-w);
+  height: 23px;
+  color: #fff;
+  font-size: 21.6px;
+}
+
+.gd-toolbar__deck-actions {
+  display: contents;
+}
+
+.gd-toolbar .gd-button {
+  flex: none;
+  width: 28px;
+  height: 23px;
+  /* jQuery UI's .1em between buttons */
+  margin-right: 2.35px;
+  padding: 0;
+}
+
+.gd-toolbar .gd-button::before {
+  content: '';
+  display: block;
+  width: 16px;
+  height: 16px;
+  margin: auto;
+  background: var(--classic-icons) no-repeat;
+  transform: translateY(0.8px);
+}
+
+.gd-toolbar .gd-button:enabled:hover::before,
+.gd-toolbar .gd-button:focus-visible::before {
+  background-image: var(--classic-icons-hover);
+}
+
+.gd-button[data-action='new']::before {
+  background-position: -32px -96px;
+}
+.gd-button[data-action='save']::before {
+  background-position: -96px -112px;
+}
+.gd-button[data-action='rename']::before {
+  background-position: -64px -112px;
+}
+.gd-button[data-action='copy']::before {
+  background-position: -176px -128px;
+}
+.gd-button[data-action='import']::before {
+  background-position: -224px -48px;
+}
+.gd-button[data-action='library']::before {
+  background-position: -224px -96px;
+}
+.gd-button[data-action='deck-list']::before {
+  background-position: -112px -96px;
+}
+.gd-button[data-action='convert-errata']::before {
+  background-position: -112px -80px;
+}
+.gd-button[data-action='notes']::before {
+  background-position: -16px -128px;
+}
+.gd-button[data-action='auto-zoom']::before {
+  background-position: -32px -192px;
+}
+.gd-button[data-action='auto-zoom'][aria-pressed='true']::before {
+  background-position: -160px -112px;
+}
+
+.gd-toolbar .gd-button[data-action='auto-zoom'] {
+  width: 27px;
+}
+
+.gd-toolbar .gd-button[data-action='auto-zoom']::before {
+  margin: 0 0 0 3.2px;
+  transform: translateY(1.3px);
+}
+
+.gd-toolbar select {
+  flex: none;
+  box-sizing: border-box;
+  height: 23px;
+  padding: 3px;
+  border: 1px solid #888;
+  border-color: #888 #666 #666 #888;
+  border-radius: 8px;
+  background-color: #222;
+  color: #fff;
+  font: 13.3333px Arial, sans-serif;
+}
+
+.gd-toolbar select:hover {
+  background-color: #444;
+}
+
+.gd-toolbar__format {
+  width: 200px;
+}
+
+.gd-toolbar__collection {
+  width: 100px;
+}
+
+/* Not on the legacy page: in the deck name's empty space, so the magnifier and the collection stay where they were */
+.gd-toolbar__theme {
+  order: 1;
+  width: 72px;
+  margin-right: 2.35px;
+}
+
+.gd-toolbar .gd-button[data-action='auto-zoom'] {
+  order: 2;
+}
+
+.gd-toolbar__collection {
+  order: 3;
+}
+
+/* #editingDeck */
+.gd-toolbar__deck-name {
+  flex-grow: 1;
+  min-width: 0;
+  padding-left: 3px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.gd-toolbar__deck-name[data-modified] {
+  color: orange;
+}
+
+/* ---------------------------------------------------------------- deck stats (#statsDiv) */
+
+.gd-stats {
+  position: absolute;
+  left: var(--draw-left);
+  top: calc(var(--deck-h) - 22px);
+  display: block;
+  width: var(--draw-w);
+  min-height: 70px;
+  line-height: 15px;
+}
+
+.gd-stats__line {
+  min-height: 15px;
+}
+
+.gd-stats [data-tone='error'] {
+  color: red;
+}
+
+.gd-stats [data-tone='valid'] {
+  color: green;
+}
+
+.gd-stats [data-tone='warning'] {
+  color: yellow;
+}
+
+/* ---------------------------------------------------------------- hover zoom (AutoZoom, #previewImage) */
+
+.gd-zoom {
+  --long: max(var(--gd-zoom-width), var(--gd-zoom-height));
+  position: fixed;
+  left: var(--gd-zoom-left);
+  top: var(--gd-zoom-top);
+  z-index: 1099;
+  width: var(--gd-zoom-width);
+  height: var(--gd-zoom-height);
+  pointer-events: none;
+}
+
+.gd-zoom > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 5%;
+}
+
+.gd-zoom__foil {
+  opacity: 0.2;
+}
+
+.gd-zoom > .gd-zoom__overlay {
+  top: auto;
+  height: 27%;
+  border-radius: 0;
+  object-fit: cover;
+  object-position: bottom;
+}
+
+/* CardDisplay's border: a 28th of the long side, 2px larger than the card */
+.gd-zoom::after {
+  content: '';
+  position: absolute;
+  inset: 0 -2px -2px 0;
+  border: round(down, calc(var(--long) / 28), 1px) solid #000;
+  border-radius: 5%;
+}
+
 /* ---------------------------------------------------------------- the collection's cards (NormalCardGroup) */
 
 .gd-collection {
@@ -433,7 +853,7 @@ a:visited {
   flex: 1 1 0;
   min-height: 0;
   /* layoutUI: the group is the pane's width minus 10px, and leaves room below */
-  margin: 1px 8px 10px 0;
+  margin: 1px 8px 9px 0;
 }
 
 .gd-collection__cards {
@@ -446,12 +866,33 @@ a:visited {
   flex-wrap: wrap;
   align-content: flex-start;
   gap: var(--gd-card-gap);
-  /* the 3px CardGroup keeps inside the box, plus the box's border */
-  padding: 3px;
+  /*
+   * The cards start 3px in from the box's edge, as the legacy group did; its area was 472px high in a 480px box, and
+   * wider than the box (the cards wrap a little sooner here)
+   */
+  padding: 2px 0 4px 2px;
   border: 1px solid #555;
   border-radius: 7px;
   background: var(--classic-content-bg);
   overflow: hidden;
+}
+
+/*
+ * NormalCardGroup's rows: as high as the row height, which can have a fraction (a card is a whole number of px), and
+ * centred as the rows it sized them for (moved, not laid out, so the box's size doesn't change)
+ */
+.gd-collection__cards > .gd-card,
+.gd-slot__cards > .gd-card,
+.gd-stack {
+  top: var(--gd-card-offset, 0px);
+}
+
+.gd-collection__cards > .gd-card {
+  margin-bottom: calc(var(--gd-card-height, 200px) - round(down, calc(var(--gd-card-width) * 490 / 350), 1px));
+}
+
+.gd-collection__cards > .gd-card[data-orientation='horizontal'] {
+  margin-bottom: calc(var(--gd-card-height, 200px) - round(down, calc(var(--gd-card-width) * 350 / 490), 1px));
 }
 
 /* ---------------------------------------------------------------- a card (Card.CreateCardDiv) */
@@ -491,6 +932,13 @@ a:visited {
 
 .gd-card__image {
   display: block;
+}
+
+/* autozoom.css rounded every card layer by 5% */
+.gd-card,
+.gd-card > *,
+.gd-card::after {
+  border-radius: 5%;
 }
 
 .gd-card__errata {

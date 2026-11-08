@@ -21,4 +21,10 @@ export interface CardView {
   overlayImage: string | null;
 }
 
-export type CardRole = 'card' | 'pack' | 'selection' | 'placeholder';
+/**
+ * - `card`: a card (in the collection, the deck or a slot);
+ * - `pack`, `selection`: a pack or a selection pack in the collection;
+ * - `placeholder`: a promised prize in the collection;
+ * - `copy`: another copy of a draw deck card, drawn behind it.
+ */
+export type CardRole = 'card' | 'pack' | 'selection' | 'placeholder' | 'copy';

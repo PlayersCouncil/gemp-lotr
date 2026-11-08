@@ -1,32 +1,34 @@
 import { Component, inject, signal } from '@angular/core';
 import { DeckService } from '../../core/deck/deck.service';
 import { PacksService } from '../../core/packs/packs.service';
+import { AutoZoomComponent } from './auto-zoom/auto-zoom.component';
 import { CardInfoComponent } from './card-info/card-info.component';
 import { CollectionFilterComponent } from './collection/collection-filter.component';
 import { CollectionGridComponent } from './collection/collection-grid.component';
+import { DeckAreaComponent } from './deck/deck-area.component';
 
 /** Arrow keys on the resizer move it by this much (px). */
 export const RESIZE_STEP = 10;
 
 /**
- * The deck builder page frame: the deck (left; built in a later step, empty for now), the collection (right) and the
- * separator between them, which resizes the collection by dragging or with the arrow keys and closes or opens it
- * with its toggle. The page only records the width asked for; the theme keeps it within its limits.
+ * The deck builder page frame: the deck (left), the collection (right) and the separator between them, which resizes
+ * the collection by dragging or with the arrow keys and closes or opens it with its toggle. The page only records the width asked for; the theme keeps it within its limits.
  *
  * DOM contract: `.gd-page` with `data-collection` (open, closed) and `--gd-collection-width` (px, once resized);
  * `section.gd-page__deck`, `div.gd-page__separator` (`role=separator`, `data-dragging` while dragged) holding
- * `button.gd-page__toggle` (`aria-expanded`), and `section.gd-page__collection` holding the filter and the cards.
+ * `button.gd-page__toggle` (`aria-expanded`), and `section.gd-page__collection` holding the filter and the cards; then
+ * the card information dialog and the hover zoom.
  */
 @Component({
   selector: 'deckbuilder-app',
-  imports: [CollectionFilterComponent, CollectionGridComponent, CardInfoComponent],
+  imports: [DeckAreaComponent, CollectionFilterComponent, CollectionGridComponent, CardInfoComponent, AutoZoomComponent],
   host: {
     class: 'gd-page',
     '[attr.data-collection]': "collectionOpen() ? 'open' : 'closed'",
     '[style.--gd-collection-width]': "collectionWidth() === null ? null : collectionWidth() + 'px'",
   },
   template: `
-    <section class="gd-page__deck" aria-label="Deck"></section>
+    <section class="gd-page__deck" aria-label="Deck"><gd-deck /></section>
     <div
       class="gd-page__separator"
       role="separator"
@@ -51,6 +53,7 @@ export const RESIZE_STEP = 10;
       <gd-collection-grid />
     </section>
     <gd-card-info />
+    <gd-auto-zoom />
   `,
 })
 export class DeckbuilderPageComponent {

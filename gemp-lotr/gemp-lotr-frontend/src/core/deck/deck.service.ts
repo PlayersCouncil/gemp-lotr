@@ -8,6 +8,7 @@ import { FormatsService } from '../formats/formats.service';
 import { Notifier } from '../notifier/notifier';
 import { formatUsesMap } from './deck-contents';
 import { formatDecklist } from './deck-import';
+import { DeckStats, EMPTY_STATS, parseDeckStats } from './deck-stats';
 import {
   addBySide,
   addDrawCopy,
@@ -74,7 +75,8 @@ export class DeckService {
   readonly label = signal<DeckLabel>({ text: 'New deck', modified: false });
   /** Unsaved changes. */
   readonly contentsDirty = signal(false);
-  readonly statsHtml = signal('');
+  /** The server's deck stats (counts and the format's verdict), as data. */
+  readonly stats = signal<DeckStats>(EMPTY_STATS);
   readonly convertErrataEnabled = signal(false);
   /** Whether the format has a Map slot. */
   readonly usesMap = signal(false);
@@ -546,7 +548,7 @@ export class DeckService {
         option.rtmd ? option.value : null,
       )
       .subscribe({
-        next: (html) => this.statsHtml.set(html),
+        next: (html) => this.stats.set(parseDeckStats(html)),
         error: (error: unknown) =>
           this.tell(ApiError.from(error).is(400) ? 'Invalid deck for getting stats.' : GENERIC_COMMUNICATION_ERROR),
       });

@@ -19,7 +19,7 @@ import { FitCardsDirective } from '../../shared/fit-cards/fit-cards.directive';
   imports: [CardComponent, FitCardsDirective],
   host: { class: 'gd-collection' },
   template: `
-    <div class="gd-collection__cards" [attr.data-count]="cards().length" [gdFitCards]="horizontal()">
+    <div class="gd-collection__cards" [attr.data-count]="cards().length" [gdFitCards]="fitCards()">
       @for (card of cards(); track $index) {
         <button [gdCard]="card"></button>
       }
@@ -39,5 +39,5 @@ export class CollectionGridComponent {
     }),
   );
 
-  protected readonly horizontal = computed(() => this.cards().map((card) => card.horizontal));
+  protected readonly fitCards = computed(() => this.cards().map((card) => ({ horizontal: card.horizontal })));
 }

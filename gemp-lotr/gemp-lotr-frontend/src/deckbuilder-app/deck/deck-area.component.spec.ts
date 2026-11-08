@@ -2,6 +2,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { parseDeckStats } from '../../core/deck/deck-stats';
 import { DeckService } from '../../core/deck/deck.service';
 import { PAGE_QUERY_STRING } from '../../core/platform/page-location';
 import { PageLayoutService } from '../layout/page-layout.service';
@@ -91,11 +92,11 @@ describe('DeckAreaComponent', () => {
     expect(label.textContent).toBe('*New deck - modified');
   });
 
-  it('shows the server stats HTML as-is', async () => {
-    deck.statsHtml.set("<b>Free People</b>: 0<br/><font color='red'>Deck doesn't have a Ring-bearer</font>");
+  it('shows the stats in the legacy markup', async () => {
+    deck.stats.set(parseDeckStats("<b>Free People</b>: 0<br/><font color='red'>Deck doesn't have a Ring-bearer</font>"));
     const { el } = await render();
-    expect(el.querySelector('#deckStats')!.innerHTML).toBe(
-      '<b>Free People</b>: 0<br><font color="red">Deck doesn\'t have a Ring-bearer</font>',
+    expect(el.querySelector('#deckStats')!.innerHTML.replace(/<!--.*?-->/g, '')).toBe(
+      '<b>Free People</b>: 0<br><font color="red">Deck doesn\'t have a Ring-bearer</font><br>',
     );
   });
 

@@ -56,7 +56,8 @@
 </div>
 
 <div id="statsDiv" [style]="rectStyle(deck.stats)">
-  <div id="deckStats" [innerHTML]="statsHtml()"></div>
+  <!-- prettier-ignore -->
+  <div id="deckStats">@for (line of stats().lines; track $index) {@for (part of line.segments; track $index) {@if (part.tone) {<font [attr.color]="toneColors[part.tone]">@if (part.strong) {<b>{{ part.text }}</b>} @else {{{ part.text }}}</font>} @else if (part.strong) {<b>{{ part.text }}</b>} @else {{{ part.text }}}}<br />}</div>
 </div>
 
 <div id="decksRegion" [style]="rectStyle(deck.drawDeck)">

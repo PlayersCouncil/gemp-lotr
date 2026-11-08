@@ -1,24 +1,28 @@
 import { DOCUMENT } from '@angular/common';
 import { afterNextRender, DestroyRef, Directive, effect, ElementRef, inject, input, signal } from '@angular/core';
 import { ThemeService } from '../../../core/platform/theme.service';
-import { fitCardHeight, parseFit, parsePx } from './fit-cards';
+import { FitCard, fitCards, parseFit, parsePx } from './fit-cards';
 
 /** Set on the host: the row height the cards should take (the theme sizes the cards with it). */
 export const CARD_HEIGHT_PROPERTY = '--gd-card-height';
+/** Set on the host: the space above the rows when they are centred (see CardFitResult.offset); a theme may use it. */
+export const CARD_OFFSET_PROPERTY = '--gd-card-offset';
 
 /**
  * Sizes a box of cards: whenever the box resizes or its cards change, works out the row height at which the cards fit
- * (fitCardHeight) and sets it on the box as `--gd-card-height`. The theme decides the rest, through custom properties
+ * (fitCards) and sets it on the box as `--gd-card-height`, with `--gd-card-offset` (the space above the rows when
+ * centred, as the legacy groups placed them). The theme decides the rest, through custom properties
  * on the box: `--gd-card-max-height` (largest row height, default 200px), `--gd-card-gap` (space between cards, default
- * 5px) and `--gd-card-fit` (`contain`, the default; `rows`, the legacy way; or `none` for always the largest and scrolling). Read again when
- * the theme changes.
+ * 5px) and `--gd-card-fit` (`contain`, the default; `rows`, the legacy way; or `none` for always the largest and
+ * scrolling). Read again when the theme changes.
  *
- * Usage: `<div class="gd-collection__cards" [gdFitCards]="horizontalFlags">` with one flag per card.
+ * Usage: `<div class="gd-collection__cards" [gdFitCards]="cards">` with one FitCard per card in the box (whether it
+ * is landscape, and the copies drawn behind it).
  */
 @Directive({ selector: '[gdFitCards]' })
 export class FitCardsDirective {
-  /** One entry per card in the box: whether it is a landscape card. */
-  readonly gdFitCards = input.required<readonly boolean[]>();
+  /** One entry per card (or stack of copies) in the box. */
+  readonly gdFitCards = input.required<readonly FitCard[]>();
 
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private readonly window = inject(DOCUMENT).defaultView;
@@ -46,21 +50,22 @@ export class FitCardsDirective {
 
   private apply(): void {
     const size = this.size();
-    const horizontal = this.gdFitCards();
+    const cards = this.gdFitCards();
     // Another theme may set other sizes
     this.theme();
     if (!size || !this.window) {
       return;
     }
     const style = this.window.getComputedStyle(this.host);
-    const height = fitCardHeight({
+    const { height, offset } = fitCards({
       width: size.width,
       height: size.height,
-      horizontal,
+      cards,
       gap: parsePx(style.getPropertyValue('--gd-card-gap'), 5),
       maxHeight: parsePx(style.getPropertyValue('--gd-card-max-height'), 200),
       fit: parseFit(style.getPropertyValue('--gd-card-fit')),
     });
     this.host.style.setProperty(CARD_HEIGHT_PROPERTY, `${height}px`);
+    this.host.style.setProperty(CARD_OFFSET_PROPERTY, `${offset}px`);
   }
 }
