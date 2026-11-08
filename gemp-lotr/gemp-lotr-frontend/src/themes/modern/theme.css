@@ -450,6 +450,18 @@ input[type='range']:disabled {
   outline-offset: -2px;
 }
 
+.gd-page__drag-preview {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: clamp(400px, var(--gd-drag-width), 65%);
+  z-index: 10000;
+  width: 12px;
+  border-radius: var(--m-radius-pill);
+  background: var(--m-accent, currentColor);
+  opacity: 0.5;
+}
+
 .gd-page__toggle {
   width: 44px;
   height: 20px;
@@ -622,6 +634,11 @@ input[type='range']:disabled {
   display: flex;
   align-items: center;
   gap: var(--m-space-2);
+}
+
+/* Only the classic theme draws the bar around the range input */
+.gd-pager__track {
+  display: contents;
 }
 
 .gd-pager__size {
@@ -1766,6 +1783,11 @@ button.gd-slot__label:hover .gd-slot__hint {
   margin: var(--m-space-3) var(--m-space-4) var(--m-space-4);
   border-radius: 4.5%;
   box-shadow: var(--m-shadow);
+}
+
+.gd-card-info__flip {
+  position: absolute;
+  inset: 0;
 }
 
 .gd-card-info__card[data-flippable] {

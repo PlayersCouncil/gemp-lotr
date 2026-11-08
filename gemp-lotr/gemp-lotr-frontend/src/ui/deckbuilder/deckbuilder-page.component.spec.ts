@@ -119,11 +119,10 @@ describe('DeckbuilderPageComponent', () => {
     expect(el.dataset['collection']).toBe('closed');
   });
 
-  it('resizes the collection by dragging the separator, keeping what the theme allowed', async () => {
+  it('resizes the collection when the dragged separator is released, keeping what the theme allowed', async () => {
     const { fixture, el, separator } = await render();
     vi.spyOn(el, 'getBoundingClientRect').mockReturnValue({ right: 1440 } as DOMRect);
-    const collection = el.querySelector<HTMLElement>('.gd-page__collection')!;
-    vi.spyOn(collection, 'getBoundingClientRect').mockReturnValue({ width: 700 } as DOMRect);
+    vi.spyOn(separator, 'getBoundingClientRect').mockReturnValue({ left: 1030 } as DOMRect);
     const pointer = (type: string, x: number) => {
       const event = new MouseEvent(type, {
         clientX: x,
@@ -139,11 +138,35 @@ describe('DeckbuilderPageComponent', () => {
     expect(separator.hasAttribute('data-dragging')).toBe(true);
     pointer('pointermove', 900);
     await fixture.whenStable();
-    expect(el.style.getPropertyValue('--gd-collection-width')).toBe('540px');
+    // Only a preview moves during the drag
+    expect(el.style.getPropertyValue('--gd-drag-width')).toBe('540px');
+    expect(el.style.getPropertyValue('--gd-collection-width')).toBe('');
+    const preview = el.querySelector<HTMLElement>('.gd-page__drag-preview')!;
+    // The theme keeps the preview at 700px from the right (its maximum): that is the width kept
+    vi.spyOn(preview, 'getBoundingClientRect').mockReturnValue({ right: 740 } as DOMRect);
     pointer('pointerup', 300);
     await fixture.whenStable();
     expect(separator.hasAttribute('data-dragging')).toBe(false);
-    // The theme kept it at 700px (its maximum): the next drag starts from there
+    expect(el.querySelector('.gd-page__drag-preview')).toBeNull();
+    expect(el.style.getPropertyValue('--gd-drag-width')).toBe('');
     expect(el.style.getPropertyValue('--gd-collection-width')).toBe('700px');
+  });
+
+  it('leaves the collection as it was when a drag is cancelled', async () => {
+    const { fixture, el, separator } = await render();
+    vi.spyOn(el, 'getBoundingClientRect').mockReturnValue({ right: 1440 } as DOMRect);
+    vi.spyOn(separator, 'getBoundingClientRect').mockReturnValue({ left: 1030 } as DOMRect);
+    const pointer = (type: string, x: number) => {
+      const event = new MouseEvent(type, { clientX: x, button: 0, bubbles: true, cancelable: true });
+      Object.assign(event, { pointerId: 1 });
+      separator.dispatchEvent(event);
+    };
+    pointer('pointerdown', 1030);
+    pointer('pointermove', 900);
+    await fixture.whenStable();
+    pointer('pointercancel', 900);
+    await fixture.whenStable();
+    expect(el.querySelector('.gd-page__drag-preview')).toBeNull();
+    expect(el.style.getPropertyValue('--gd-collection-width')).toBe('');
   });
 });

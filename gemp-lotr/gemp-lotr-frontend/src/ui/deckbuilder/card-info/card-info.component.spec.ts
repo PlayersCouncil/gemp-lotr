@@ -72,7 +72,7 @@ describe('CardInfoComponent', () => {
     const { fixture, dialog, click } = await render();
     info.show(CARD);
     await fixture.whenStable();
-    await click('.gd-card-info__image');
+    await click('.gd-card-info__flip');
     const card = dialog.querySelector<HTMLElement>('.gd-card-info__card')!;
     expect(card.dataset['flipped']).toBe('back');
     expect(card.querySelector('img')!.src).toBe('https://i.lotrtcgpc.net/decipher/LOTR00000.jpg');
@@ -93,6 +93,14 @@ describe('CardInfoComponent', () => {
     info.show(CARD);
     await fixture.whenStable();
     await click('dialog');
+    expect(info.isOpen()).toBe(false);
+  });
+
+  it('closes on a click on the frame around the picture, which does not flip the card', async () => {
+    const { fixture, click } = await render();
+    info.show(CARD);
+    await fixture.whenStable();
+    await click('.gd-card-info__image');
     expect(info.isOpen()).toBe(false);
   });
 

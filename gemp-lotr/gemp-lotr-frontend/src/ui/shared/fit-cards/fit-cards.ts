@@ -84,6 +84,27 @@ export interface CardFitResult {
   offset: number;
 }
 
+/**
+ * How far each card's row moves so it starts on a whole pixel, as the legacy groups rounded each row's position down
+ * (`rows` fit only: a fractional row height would otherwise put some rows a pixel lower). One entry per card.
+ */
+export function rowSnaps(cards: readonly FitCard[], rowHeight: number, width: number, gap: number): number[] {
+  const step = rowHeight + gap;
+  let x = 0;
+  let row = 0;
+  return cards.map((card) => {
+    const share =
+      widthForLongSide(card.horizontal, rowHeight) +
+      (card.behind ?? []).reduce((sum, landscape) => sum + widthForLongSide(landscape, rowHeight), 0) * BEHIND_SHOWN;
+    if (x > 0 && x + share > width) {
+      row++;
+      x = 0;
+    }
+    x += stackWidth(card, rowHeight) + gap;
+    return Math.floor(row * step) - row * step;
+  });
+}
+
 /** The row height (fitCardHeight) and where the rows start. */
 export function fitCards(input: FitCardsInput): CardFitResult {
   const { height, rows } = fitRows(input);

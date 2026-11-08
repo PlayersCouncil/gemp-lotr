@@ -87,8 +87,11 @@ export const CONTROLS = {
   collection: { legacy: '#collectionSelect', angular: 'select.gd-toolbar__collection' },
 
   // --- Deck ---
-  /** The draw deck's cards (copies included). */
-  drawDeckCards: { legacy: '#decksRegion .cardInDeck .actionArea', angular: '.gd-pile .gd-card' },
+  /** The draw deck's cards (not the copies drawn behind them, which clicks can't reach). */
+  drawDeckCards: {
+    legacy: '#decksRegion .cardInDeck .actionArea',
+    angular: '.gd-pile .gd-card:not([data-role="copy"])',
+  },
   ringBearerSlot: { legacy: '#rb-content', angular: `${slot('ring-bearer')} .gd-slot__label` },
   ringSlot: { legacy: '#ring-content', angular: `${slot('ring')} .gd-slot__label` },
   sitesSlot: { legacy: '#sites-content', angular: `${slot('sites')} .gd-slot__label` },
@@ -101,7 +104,7 @@ export const CONTROLS = {
   /** A card by its image, in the deck's piles or in the collection. */
   deckCard: (image) => ({
     legacy: `#decksRegion .card:has(img[src*="${image}"]) .actionArea`,
-    angular: `.gd-pile .gd-card:has(img[src*="${image}"])`,
+    angular: `.gd-pile .gd-card:not([data-role="copy"]):has(img[src*="${image}"])`,
   }),
   collectionCard: (image) => ({
     legacy: `#collection-display .card:has(img[src*="${image}"]) .actionArea`,

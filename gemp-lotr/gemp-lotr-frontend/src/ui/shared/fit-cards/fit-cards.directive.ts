@@ -1,12 +1,23 @@
 import { DOCUMENT } from '@angular/common';
-import { afterNextRender, DestroyRef, Directive, effect, ElementRef, inject, input, signal } from '@angular/core';
+import {
+  afterNextRender,
+  afterRenderEffect,
+  DestroyRef,
+  Directive,
+  ElementRef,
+  inject,
+  input,
+  signal,
+} from '@angular/core';
 import { ThemeService } from '../../../core/platform/theme.service';
-import { FitCard, fitCards, parseFit, parsePx } from './fit-cards';
+import { FitCard, fitCards, parseFit, parsePx, rowSnaps } from './fit-cards';
 
 /** Set on the host: the row height the cards should take (the theme sizes the cards with it). */
 export const CARD_HEIGHT_PROPERTY = '--gd-card-height';
 /** Set on the host: the space above the rows when they are centred (see CardFitResult.offset); a theme may use it. */
 export const CARD_OFFSET_PROPERTY = '--gd-card-offset';
+/** Set on each card of the box with `rows`: how far its row moves to start on a whole pixel. */
+export const CARD_SNAP_PROPERTY = '--gd-card-snap';
 
 /**
  * Sizes a box of cards: whenever the box resizes or its cards change, works out the row height at which the cards fit
@@ -45,7 +56,8 @@ export class FitCardsDirective {
       observer.observe(this.host);
       destroyRef.onDestroy(() => observer.disconnect());
     });
-    effect(() => this.apply());
+    // After rendering: the cards' own positions are set on the elements, which must be there
+    afterRenderEffect({ write: () => this.apply() });
   }
 
   private apply(): void {
@@ -57,15 +69,21 @@ export class FitCardsDirective {
       return;
     }
     const style = this.window.getComputedStyle(this.host);
+    const gap = parsePx(style.getPropertyValue('--gd-card-gap'), 5);
+    const fit = parseFit(style.getPropertyValue('--gd-card-fit'));
     const { height, offset } = fitCards({
       width: size.width,
       height: size.height,
       cards,
-      gap: parsePx(style.getPropertyValue('--gd-card-gap'), 5),
+      gap,
       maxHeight: parsePx(style.getPropertyValue('--gd-card-max-height'), 200),
-      fit: parseFit(style.getPropertyValue('--gd-card-fit')),
+      fit,
     });
     this.host.style.setProperty(CARD_HEIGHT_PROPERTY, `${height}px`);
     this.host.style.setProperty(CARD_OFFSET_PROPERTY, `${offset}px`);
+    const snaps = fit === 'rows' ? rowSnaps(cards, height, size.width, gap) : [];
+    Array.from(this.host.children).forEach((child, i) =>
+      (child as HTMLElement).style.setProperty(CARD_SNAP_PROPERTY, `${snaps[i] ?? 0}px`),
+    );
   }
 }

@@ -52,6 +52,7 @@ function isMetaSiteModifier(blueprintId: string): boolean {
       aria-labelledby="gd-card-info-title"
       [style.--gd-card-info-zoom]="zoom()"
       (close)="info.close()"
+      (mousedown)="keepFocus($event)"
       (click)="onClick($event)"
     >
       @if (view(); as v) {
@@ -88,6 +89,7 @@ function isMetaSiteModifier(blueprintId: string): boolean {
           @if (v.data.foil) {
             <img class="gd-card-info__foil" src="/gemp-lotr/images/holo.jpg" alt="" />
           }
+          <span class="gd-card-info__flip"></span>
         </div>
         @if (v.wikiUrl) {
           <a class="gd-card-info__wiki" [href]="v.wikiUrl" target="_blank">Go to Wiki Page</a>
@@ -160,13 +162,20 @@ export class CardInfoComponent {
     setTimeout(() => (this.sliding = false), 1);
   }
 
+  /** Pressing on the dialog's content leaves the focus where it is, as on the legacy dialog. */
+  protected keepFocus(event: MouseEvent): void {
+    if (!(event.target as Element).closest('button, input, select, textarea, a')) {
+      event.preventDefault();
+    }
+  }
+
   protected onClick(event: MouseEvent): void {
     const target = event.target as Element;
     if (target.closest('a, input, .gd-card-info__close')) {
       return;
     }
     const view = this.view();
-    if (view?.flippable && target.closest('.gd-card-info__card')) {
+    if (view?.flippable && target.closest('.gd-card-info__flip')) {
       this.flipped.update((flipped) => !flipped);
       return;
     }

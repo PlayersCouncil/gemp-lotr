@@ -232,7 +232,11 @@ export const SCENARIOS = [
         await collectionCard(page, $, i).click();
         await pause(page, 200);
       }
-      await page.locator($.drawDeckCards).first().click();
+      // The first card added: the two pages list the deck's cards in different orders
+      const added = await collectionCard(page, $, 0).evaluate((el) =>
+        (el.closest('.card') ?? el).querySelector('img').src.split('/').pop(),
+      );
+      await page.locator($.deckCard(added)).first().click();
       await pause(page, 1500);
     },
   },
@@ -436,8 +440,12 @@ export const SCENARIOS = [
     run: async (page, $) => {
       await page.selectOption($.collection, 'permanent');
       await pause(page, 1500);
-      await page.locator($.selectionPacks).first().click();
-      await pause(page, 1500);
+      // Nothing to open for a player without one, as with open-library-deck
+      const packs = page.locator($.selectionPacks);
+      if ((await packs.count()) > 0) {
+        await packs.first().click();
+        await pause(page, 1500);
+      }
     },
   },
 

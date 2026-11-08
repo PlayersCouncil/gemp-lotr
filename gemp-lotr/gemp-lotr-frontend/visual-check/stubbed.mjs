@@ -48,28 +48,8 @@ const TYPES = {
   '.woff2': 'font/woff2',
 };
 
-const FORMATS = {
-  Formats: Object.fromEntries(
-    [
-      ['rev_tow_sta', 'Anything Goes'],
-      ['fotr_block', 'Fellowship Block'],
-      ['pc_movie', 'Movie Block (PC)'],
-    ].map(([code, name], order) => [
-      code,
-      {
-        code,
-        name,
-        order,
-        hall: true,
-        usesMaps: false,
-        blockFilters: [
-          { filter: 'fotr_block', name: 'Fellowship Block', setFilters: { 'The Fellowship of the Ring': '1' } },
-        ],
-        errata: {},
-      },
-    ]),
-  ),
-};
+/** The formats as a real server lists them: their blocks decide which rows of culture buttons the filter shows. */
+const FORMATS = JSON.parse(fs.readFileSync(path.join(RESPONSES, 'formats.json'), 'utf8'));
 
 /** A collection of the first cards of set 1, a few of its sites (landscape cards) and two packs. */
 const COLLECTION = [

@@ -61,16 +61,18 @@
     [disabled]="collection.previousDisabled()"
     (click)="collection.previousPage()"
   ></button>
-  <input
-    class="gd-pager__size"
-    type="range"
-    aria-label="Cards per page"
-    [min]="pageSize.min"
-    [max]="pageSize.max"
-    [value]="pageSize.start"
-    [disabled]="collection.sliderDisabled()"
-    (input)="setPageSize($event)"
-  />
+  <div class="gd-pager__track">
+    <input
+      class="gd-pager__size"
+      type="range"
+      aria-label="Cards per page"
+      [min]="pageSize.min"
+      [max]="pageSize.max"
+      [value]="pageSize.start"
+      [disabled]="collection.sliderDisabled()"
+      (input)="setPageSize($event)"
+    />
+  </div>
   <button
     type="button"
     class="gd-pager__next gd-button"

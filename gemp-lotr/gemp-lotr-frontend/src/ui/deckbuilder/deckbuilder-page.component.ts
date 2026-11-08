@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { DeckService } from '../../core/deck/deck.service';
 import { PacksService } from '../../core/packs/packs.service';
 import { AutoZoomComponent } from './auto-zoom/auto-zoom.component';
@@ -50,6 +50,7 @@ export type PagePane = 'deck' | 'collection';
     '[attr.data-collection]': "collectionOpen() ? 'open' : 'closed'",
     '[attr.data-pane]': 'pane()',
     '[style.--gd-collection-width]': "collectionWidth() === null ? null : collectionWidth() + 'px'",
+    '[style.--gd-drag-width]': "dragWidth() === null ? null : dragWidth() + 'px'",
   },
   template: `
     <section class="gd-page__deck" id="gd-pane-deck" aria-label="Deck"><gd-deck /></section>
@@ -72,6 +73,9 @@ export type PagePane = 'deck' | 'collection';
         (click)="toggleCollection()"
       ></button>
     </div>
+    @if (dragWidth() !== null) {
+      <div #dragPreview class="gd-page__drag-preview" aria-hidden="true"></div>
+    }
     <section class="gd-page__collection" id="gd-pane-collection" aria-label="Collection" [hidden]="!collectionOpen()">
       <gd-collection-filter />
       <gd-collection-grid />
@@ -111,6 +115,9 @@ export class DeckbuilderPageComponent {
   /** The collection's width as last dragged to, or null for the theme's default. */
   protected readonly collectionWidth = signal<number | null>(null);
   protected readonly dragging = signal(false);
+  /** Where the drag would leave the collection's width, while the separator is being dragged. */
+  protected readonly dragWidth = signal<number | null>(null);
+  private readonly dragPreview = viewChild<ElementRef<HTMLElement>>('dragPreview');
 
   constructor() {
     inject(DeckService).init();
@@ -129,7 +136,7 @@ export class DeckbuilderPageComponent {
     this.collectionOpen.update((open) => !open);
   }
 
-  /** Dragging the separator: the collection's left edge follows the pointer. */
+  /** Dragging the separator: a preview of it follows the pointer, and the panes resize on release (as on the legacy page). */
   protected startResize(event: PointerEvent): void {
     if (!this.collectionOpen() || event.button !== 0 || (event.target as Element).closest('.gd-page__toggle')) {
       return;
@@ -139,24 +146,32 @@ export class DeckbuilderPageComponent {
     const page = separator.closest('.gd-page') as HTMLElement;
     separator.setPointerCapture?.(event.pointerId);
     this.dragging.set(true);
+    // Where on the separator it was grabbed stays under the pointer
+    const grabbedAt = event.clientX - separator.getBoundingClientRect().left;
     const move = (e: PointerEvent) => {
       const right = page.getBoundingClientRect().right;
-      this.collectionWidth.set(Math.round(right - e.clientX - separator.offsetWidth / 2));
+      this.dragWidth.set(Math.round(right - (e.clientX - grabbedAt) - separator.offsetWidth));
     };
-    const stop = () => {
+    const finish = () => {
       separator.removeEventListener('pointermove', move);
       separator.removeEventListener('pointerup', stop);
-      separator.removeEventListener('pointercancel', stop);
+      separator.removeEventListener('pointercancel', cancel);
       this.dragging.set(false);
-      // Keep what the theme allowed, so the next drag or key press starts from what is shown
-      const shown = page.querySelector<HTMLElement>('.gd-page__collection')?.getBoundingClientRect().width;
-      if (shown) {
-        this.collectionWidth.set(Math.round(shown));
-      }
+      this.dragWidth.set(null);
     };
+    const stop = () => {
+      // The preview is where the theme allowed it: the width kept is what it shows, so the next drag or key press
+      // starts from there
+      const preview = this.dragPreview()?.nativeElement.getBoundingClientRect();
+      if (preview) {
+        this.collectionWidth.set(Math.round(page.getBoundingClientRect().right - preview.right));
+      }
+      finish();
+    };
+    const cancel = () => finish();
     separator.addEventListener('pointermove', move);
     separator.addEventListener('pointerup', stop);
-    separator.addEventListener('pointercancel', stop);
+    separator.addEventListener('pointercancel', cancel);
   }
 
   /** Left makes the collection wider, Right narrower; Enter opens or closes it. */

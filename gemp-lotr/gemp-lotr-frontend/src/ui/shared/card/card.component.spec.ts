@@ -187,6 +187,9 @@ describe('CardComponent', () => {
       el.dispatchEvent(pointer('pointerdown', { x: 50, y: 100 }));
       el.dispatchEvent(pointer('pointerup', { x: 50, y: 100 - DRAG_UP_FOR_INFO }));
       el.click();
+      // Only after the release's click, which would otherwise close the dialog it opens
+      expect(actions.showInfo).not.toHaveBeenCalled();
+      await new Promise((resolve) => setTimeout(resolve));
       expect(actions.showInfo).toHaveBeenCalledWith(CARD.ref);
       expect(actions.activate).toHaveBeenCalledTimes(1);
     });

@@ -43,7 +43,7 @@ describe('CollectionFilterComponent', () => {
       const { el } = await render();
       expect(el.classList).toContain('gd-filter');
       expect(el.querySelector('.gd-pager > button.gd-pager__previous[data-icon="previous"]')).not.toBeNull();
-      expect(el.querySelector('.gd-pager > input[type="range"].gd-pager__size')).not.toBeNull();
+      expect(el.querySelector('.gd-pager > .gd-pager__track > input[type="range"].gd-pager__size')).not.toBeNull();
       expect(el.querySelector('.gd-pager > button.gd-pager__next[data-icon="next"]')).not.toBeNull();
       const fields = (part: string) =>
         Array.from(el.querySelectorAll<HTMLElement>(`.gd-filter__${part} label.gd-field`)).map((f) => [

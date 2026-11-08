@@ -166,7 +166,9 @@ export class CardComponent {
     this.cancelPress();
     if (press?.mouse && press.y - event.clientY >= DRAG_UP_FOR_INFO) {
       this.swallowClick = true;
-      this.actions.showInfo(this.card().ref);
+      // After this release's click: a dialog already open by then would take that click as "close"
+      const ref = this.card().ref;
+      setTimeout(() => this.actions.showInfo(ref));
     }
   }
 

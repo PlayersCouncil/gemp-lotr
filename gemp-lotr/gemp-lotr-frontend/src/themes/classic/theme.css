@@ -134,8 +134,16 @@ div {
   cursor: pointer;
 }
 
-.gd-page__separator[data-dragging] {
-  background: #aaa;
+/* The copy of the bar that follows the mouse; the panes resize when it is dropped. Within the collection's limits */
+.gd-page__drag-preview {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: clamp(410px, var(--gd-drag-width), calc((100% - 6px) / 2));
+  z-index: 10000;
+  width: 6px;
+  background: #ddd;
+  cursor: e-resize;
 }
 
 .gd-page__toggle {
@@ -284,7 +292,7 @@ div {
   background: var(--classic-active-bg);
 }
 
-.gd-pager__size:disabled {
+.gd-pager__track:has(.gd-pager__size:disabled) {
   opacity: 0.35;
 }
 
@@ -307,23 +315,70 @@ div {
   gap: 2px;
 }
 
-.gd-pager__size {
+/*
+ * The jQuery UI slider: the bar is drawn here, and the range input lies over it, reaching past both ends so its thumb
+ * (17.84px with its border) travels like the legacy handle, whose left edge is 0.6em before the value's place.
+ */
+.gd-pager__track {
+  position: relative;
   flex-grow: 1;
-  margin: 0 8px;
+  height: 10.56px;
+  border: 1px solid #555;
+  border-radius: 6px;
+  background: var(--classic-content-bg);
 }
 
+.gd-pager__size {
+  position: absolute;
+  left: -7.92px;
+  top: -3.95px;
+  width: calc(100% + 17.84px);
+  height: 17.84px;
+}
+
+.gd-pager__size::-webkit-slider-runnable-track {
+  height: 17.84px;
+  border: 0;
+  background: none;
+}
+
+.gd-pager__size::-moz-range-track {
+  height: 17.84px;
+  border: 0;
+  background: none;
+}
+
+.gd-pager__size::-webkit-slider-thumb {
+  width: 17.84px;
+  height: 17.84px;
+  margin-top: 0;
+}
+
+.gd-pager__size::-moz-range-thumb {
+  width: 17.84px;
+  height: 17.84px;
+}
+
+/* jQuery UI's button: a right margin of 0.1em at 13.2px */
 .gd-pager .gd-button {
   width: 25px;
-  height: 31px;
+  height: 31.19px;
+  margin-right: 1.32px;
   padding: 0;
+}
+
+/* Where jQuery UI's padding left the icon */
+.gd-pager .gd-button::before {
+  margin-left: 2.59px;
 }
 
 /* The legacy filter table: label, control, label, control; 2px cell spacing and 1px cell padding */
 .gd-filter__fields {
   display: grid;
-  grid-template-columns: repeat(4, max-content);
+  /* The first column is set by its widest label, "Game Text contains:", as the table rounded it */
+  grid-template-columns: 91.4px repeat(3, max-content);
   align-items: center;
-  column-gap: 4px;
+  column-gap: 2px;
   row-gap: 2px;
   padding: 2px;
   justify-content: start;
@@ -336,11 +391,11 @@ div {
 }
 
 .gd-field__label {
-  padding: 1px 5px 1px 1px;
+  /* The cell's 1px padding on both sides, and .filterLabel's 5px on the right */
+  padding: 1px 6px 1px 1px;
   color: #fff;
   font-weight: bolder;
   font-size: 80%;
-  white-space: nowrap;
 }
 
 .gd-field__control {
@@ -395,7 +450,8 @@ div {
 .gd-filter__advanced-title {
   grid-column: 1 / -1;
   margin: 0;
-  padding: 5px 0 2px;
+  /* .cardFilterText's 5px on top, and the table cell's 1px */
+  padding: 6px 0 1px;
   color: #fff;
   text-align: center;
   font-size: 90%;
@@ -408,16 +464,17 @@ a:visited {
 .gd-filter__resets {
   grid-column: 1;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px;
-  margin: 0 5px;
+  grid-template-columns: 175.77px 175.75px;
+  gap: 6.01px;
+  margin: 0 0 0 6px;
   padding-top: 9px;
 }
 
-/* 95% of the page's 12px, then jQuery UI's 70% for button text */
+/* 95% of the page's 12px, then 90% for the table text and jQuery UI's 70% for button text */
 .gd-filter__resets .gd-button {
-  padding: 3px 0.3em;
-  font-size: 7.98px;
+  height: 19px;
+  padding: 0;
+  font-size: 7.182px;
   line-height: 1.4;
 }
 
@@ -425,7 +482,7 @@ a:visited {
 .gd-cultures {
   display: flex;
   flex-wrap: wrap;
-  margin-top: 5px;
+  margin-top: 6px;
   margin-right: 7px;
   font-family: var(--classic-widget-font);
   font-size: 13.2px;
@@ -655,8 +712,9 @@ button.gd-slot__label:focus-visible {
   padding-top: 20px;
 }
 
+/* VerticalBarGroup rounded each card's position down; the browser would round a fractional one to the nearest */
 .gd-slot[data-slot='sites'] .gd-card {
-  top: 0;
+  top: -0.499px;
 }
 
 .gd-slot[data-slot='sites'] .gd-card {
@@ -664,7 +722,8 @@ button.gd-slot__label:focus-visible {
 }
 
 .gd-slot[data-slot='sites'] .gd-card + .gd-card {
-  margin-top: min(5px, (100cqh - 20px - var(--n) * var(--site-h)) / (var(--n) - 1));
+  /* 100cqh is the height left under the 20px title gap */
+  margin-top: min(5px, (100cqh - var(--n) * var(--site-h)) / (var(--n) - 1));
 }
 
 .gd-pile {
@@ -717,10 +776,10 @@ button.gd-slot__label:focus-visible {
 
 .gd-toolbar .gd-button {
   flex: none;
-  width: 28px;
+  width: 27.97px;
   height: 23px;
   /* jQuery UI's .1em between buttons */
-  margin-right: 2.35px;
+  margin-right: 2.376px;
   padding: 0;
 }
 
@@ -731,7 +790,9 @@ button.gd-slot__label:focus-visible {
   height: 16px;
   margin: auto;
   background: var(--classic-icons) no-repeat;
-  transform: translateY(0.8px);
+  /* Moved in layout, not with a transform: a fractional transform would blur the icon */
+  position: relative;
+  top: 0.8px;
 }
 
 .gd-toolbar .gd-button:enabled:hover::before,
@@ -779,7 +840,7 @@ button.gd-slot__label:focus-visible {
 
 .gd-toolbar .gd-button[data-action='auto-zoom']::before {
   margin: 0 0 0 3.2px;
-  transform: translateY(1.3px);
+  top: 2.25px;
 }
 
 .gd-toolbar select {
@@ -909,10 +970,11 @@ button.gd-slot__label:focus-visible {
 
 .gd-collection {
   display: flex;
-  flex: 1 1 0;
-  min-height: 0;
-  /* layoutUI: the group is the pane's width minus 10px, and leaves room below */
-  margin: 1px 8px 9px 0;
+  /* layoutUI: the group is the pane's height minus 400px, however tall the filter is (the pane then scrolls) */
+  flex: 0 0 auto;
+  height: max(0px, calc(100% - 398px));
+  /* layoutUI: the group is the pane's width minus 10px; the pane's padding doesn't add to how far it scrolls */
+  margin: 0 8px -10px 0;
 }
 
 .gd-collection__cards {
@@ -943,7 +1005,7 @@ button.gd-slot__label:focus-visible {
 .gd-collection__cards > .gd-card,
 .gd-slot__cards > .gd-card,
 .gd-stack {
-  top: var(--gd-card-offset, 0px);
+  top: calc(var(--gd-card-offset, 0px) + var(--gd-card-snap, 0px));
 }
 
 .gd-collection__cards > .gd-card {
@@ -973,7 +1035,7 @@ button.gd-slot__label:focus-visible {
 }
 
 .gd-card[data-orientation='horizontal'] {
-  --gd-card-width: var(--gd-card-height, 200px);
+  --gd-card-width: round(down, var(--gd-card-height, 200px), 1px);
   height: round(down, calc(var(--gd-card-width) * 350 / 490), 1px);
 }
 
@@ -1043,7 +1105,7 @@ button.gd-slot__label:focus-visible {
   color: #fff;
   font-size: 14.4px;
   font-weight: bolder;
-  line-height: 18px;
+  line-height: normal;
   text-align: center;
   opacity: 0.7;
 }
@@ -1063,10 +1125,18 @@ button.gd-slot__label:focus-visible {
   --card-height: var(--long);
   --frame: round(down, calc(var(--long) / 28), 1px);
   box-sizing: content-box;
-  width: max(calc(var(--card-width) + 25px), 175px);
-  height: calc(var(--card-height) + 50px);
+  --info-width: max(calc(var(--card-width) + 25px), 175px);
+  /* jQuery UI's height option, less the fraction it lost to the title bar */
+  --info-height: calc(var(--card-height) + 49.61px);
+  position: fixed;
+  inset: auto;
+  left: round(calc((100vw - var(--info-width) - 0.4em - 2px) / 2), 1px);
+  top: round(calc((100vh - var(--info-height) - 0.4em - 2px) / 2), 1px);
+  width: var(--info-width);
+  height: var(--info-height);
   max-width: none;
   max-height: none;
+  margin: 0;
   padding: 0.2em;
   border: 1px solid #555;
   border-radius: 6px;
@@ -1083,7 +1153,7 @@ button.gd-slot__label:focus-visible {
 }
 
 .gd-card-info:has(.gd-card-info__wiki) {
-  height: calc(var(--card-height) + 70px);
+  --info-height: calc(var(--card-height) + 69.61px);
 }
 
 /* The legacy dialog didn't dim the page */
@@ -1186,6 +1256,7 @@ button.gd-slot__label:focus-visible {
   outline: none;
 }
 
+.gd-pager__size:focus::-webkit-slider-thumb,
 .gd-card-info__zoom:focus::-webkit-slider-thumb {
   border-color: #101010;
   background: var(--classic-hover-bg);
@@ -1194,6 +1265,7 @@ button.gd-slot__label:focus-visible {
     0 0 0 2px #fff;
 }
 
+.gd-pager__size:focus::-moz-range-thumb,
 .gd-card-info__zoom:focus::-moz-range-thumb {
   border-color: #101010;
   background: var(--classic-hover-bg);
@@ -1233,6 +1305,12 @@ button.gd-slot__label:focus-visible {
   border-radius: 0;
   object-fit: cover;
   object-position: bottom;
+}
+
+/* Only the picture flips the card: a click on its black frame closes the dialog, as on the legacy page */
+.gd-card-info__flip {
+  position: absolute;
+  inset: var(--frame);
 }
 
 /* 2px larger than the card, as CardDisplay covered white-bordered cards a little better on the sides */
@@ -1457,7 +1535,8 @@ button.gd-slot__label:focus-visible {
 .gd-dialog:is([data-dialog='deck-list'], [data-dialog='library'], [data-dialog='notes']) {
   --classic-dialog-width: 700px;
   --classic-dialog-height: 400px;
-  height: var(--classic-dialog-height);
+  /* jQuery UI's height option, less the fraction it lost to the title bar */
+  height: calc(var(--classic-dialog-height) - 0.39px);
 }
 
 .gd-deck-list {
@@ -1484,7 +1563,7 @@ button.gd-slot__label:focus-visible {
   display: flex;
 }
 
-.gd-notes__text {
+.gd-dialog .gd-notes__text {
   flex-grow: 1;
   margin: 5px;
 }
@@ -1493,7 +1572,7 @@ button.gd-slot__label:focus-visible {
 .gd-dialog:is([data-dialog='selection'], [data-dialog='delivery']) {
   --classic-dialog-width: round(down, 80vw, 0.01px);
   --classic-dialog-height: round(down, 80vh, 0.01px);
-  height: var(--classic-dialog-height);
+  height: calc(var(--classic-dialog-height) - 0.39px);
 }
 
 /*
