@@ -55,6 +55,8 @@ describe('CardInfoComponent', () => {
     const zoom = dialog.querySelector<HTMLInputElement>('input[type="range"].gd-card-info__zoom')!;
     expect([zoom.min, zoom.max, zoom.step, zoom.value]).toEqual(['0.4', '1', '0.1', '0.7']);
     expect(dialog.style.getPropertyValue('--gd-card-info-zoom')).toBe('0.7');
+    // showModal focuses it, as the legacy dialog focused the slider's handle
+    expect(zoom.hasAttribute('autofocus')).toBe(true);
     const card = dialog.querySelector<HTMLElement>('.gd-card-info__card')!;
     expect(card.dataset['orientation']).toBe('vertical');
     expect(card.hasAttribute('data-flippable')).toBe(true);

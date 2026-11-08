@@ -543,9 +543,21 @@ a:visited {
 
 /* ---------------------------------------------------------------- card information (CardInfoDialog) */
 
+/*
+ * Sized like CardInfoDialog.resize and CardDisplay.resize: the long side is the slider's share of 1039px, at most the
+ * window's height less 75px and its width less 425px; the dialog is the card plus 25px wide and the card plus 50px
+ * (70px with the wiki link) high. The card's frame is a black border of a 28th of its long side, rounded by 5%.
+ */
 .gd-card-info {
-  --long: min(calc(var(--gd-card-info-zoom, 0.5) * 1039px), calc(100vh - 75px), calc(100vw - 425px));
-  box-sizing: border-box;
+  --long-exact: min(calc(var(--gd-card-info-zoom, 0.5) * 1039px), calc(100vh - 75px), calc(100vw - 425px));
+  --long: round(down, var(--long-exact), 1px);
+  --short: round(down, calc(var(--long-exact) * 745 / 1039), 1px);
+  --card-width: var(--short);
+  --card-height: var(--long);
+  --frame: round(down, calc(var(--long) / 28), 1px);
+  box-sizing: content-box;
+  width: max(calc(var(--card-width) + 25px), 175px);
+  height: calc(var(--card-height) + 50px);
   max-width: none;
   max-height: none;
   padding: 0.2em;
@@ -556,6 +568,15 @@ a:visited {
   font-family: var(--classic-widget-font);
   font-size: 13.2px;
   overflow: hidden;
+}
+
+.gd-card-info:has(.gd-card-info__card[data-orientation='horizontal']) {
+  --card-width: var(--long);
+  --card-height: var(--short);
+}
+
+.gd-card-info:has(.gd-card-info__wiki) {
+  height: calc(var(--card-height) + 70px);
 }
 
 /* The legacy dialog didn't dim the page */
@@ -570,6 +591,7 @@ a:visited {
 
 .gd-card-info__header {
   position: relative;
+  flex: none;
   display: flex;
   align-items: center;
   padding: 0.4em 1em;
@@ -613,23 +635,73 @@ a:visited {
   outline: none;
 }
 
+/*
+ * The legacy size slider was squeezed by its flex column down to its 1px borders: a 2px line, with the handle on it
+ * drawn over the card. The input is the handle's height but takes the line's 2px of the layout, and the handle
+ * overhangs the line's ends by 0.6em like a jQuery UI handle does, so the input is also wider than the line drawn on it.
+ */
 .gd-card-info__zoom {
-  margin: 0.5em 1em 0;
+  position: relative;
+  z-index: 1;
+  flex: none;
+  box-sizing: border-box;
+  width: calc(100% - 2 * 13.2px + 15.84px);
+  height: 17.84px;
+  margin: calc(6.6px - 2.95px) 0 calc(2px - 17.84px + 2.95px) calc(13.2px - 6.92px);
+  background: linear-gradient(#555, #555) 6.92px 2.95px / calc(100% - 15.84px) 2px no-repeat;
+}
+
+.gd-card-info__zoom::-webkit-slider-runnable-track {
+  height: 17.84px;
+  border: 0;
+  background: none;
+}
+
+.gd-card-info__zoom::-moz-range-track {
+  height: 17.84px;
+  border: 0;
+  background: none;
+}
+
+.gd-card-info__zoom::-webkit-slider-thumb {
+  width: 17.84px;
+  height: 17.84px;
+  margin-top: 0;
+}
+
+.gd-card-info__zoom::-moz-range-thumb {
+  width: 17.84px;
+  height: 17.84px;
+}
+
+/* The legacy dialog focused the handle when it opened: Chrome drew its focus ring (dark, then white) over the border */
+.gd-card-info__zoom:focus {
+  outline: none;
+}
+
+.gd-card-info__zoom:focus::-webkit-slider-thumb {
+  border-color: #101010;
+  background: var(--classic-hover-bg);
+  box-shadow:
+    0 0 0 1px #101010,
+    0 0 0 2px #fff;
+}
+
+.gd-card-info__zoom:focus::-moz-range-thumb {
+  border-color: #101010;
+  background: var(--classic-hover-bg);
+  box-shadow:
+    0 0 0 1px #101010,
+    0 0 0 2px #fff;
 }
 
 .gd-card-info__card {
   position: relative;
-  align-self: flex-start;
-  margin: 0.5em 1em;
-  height: var(--long);
-  aspect-ratio: 745 / 1039;
+  flex: none;
+  width: var(--card-width);
+  height: var(--card-height);
+  margin: 0 13.2px;
   cursor: default;
-}
-
-.gd-card-info__card[data-orientation='horizontal'] {
-  width: var(--long);
-  height: auto;
-  aspect-ratio: 1039 / 745;
 }
 
 .gd-card-info__card > img {
@@ -637,6 +709,7 @@ a:visited {
   inset: 0;
   width: 100%;
   height: 100%;
+  border-radius: 5%;
 }
 
 .gd-card-info__card[data-flipped='upside-down'] .gd-card-info__image {
@@ -647,22 +720,26 @@ a:visited {
   opacity: 0.2;
 }
 
-.gd-card-info__overlay {
+.gd-card-info__card > .gd-card-info__overlay {
   top: auto;
   height: 27%;
+  border-radius: 0;
   object-fit: cover;
   object-position: bottom;
 }
 
+/* 2px larger than the card, as CardDisplay covered white-bordered cards a little better on the sides */
 .gd-card-info__card::after {
   content: '';
   position: absolute;
-  inset: 0;
-  border: calc(var(--long) / 28) solid #000;
+  inset: 0 -2px -2px 0;
+  border: var(--frame) solid #000;
+  border-radius: 5%;
   pointer-events: none;
 }
 
 .gd-card-info__wiki {
+  flex: none;
   padding: 5px;
   color: #fff;
   text-align: center;

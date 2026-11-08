@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, computed, effect, ElementRef, inject, linkedSignal, signal, viewChild } from '@angular/core';
+import { afterRenderEffect, Component, computed, ElementRef, inject, linkedSignal, signal, viewChild } from '@angular/core';
 import { parseBlueprint } from '../../../core/cards/card-blueprint';
 import { cardDisplayData } from '../../../core/cards/card-display';
 import { CardImageService } from '../../../core/cards/card-image.service';
@@ -28,7 +28,8 @@ function isMetaSiteModifier(blueprintId: string): boolean {
  *
  * DOM contract: `dialog.gd-card-info` with `--gd-card-info-zoom` (0.4 to 1, the slider) for the theme to size the
  * card with; `.gd-card-info__header` (`.gd-card-info__title`, `button.gd-card-info__close`),
- * `input[type=range].gd-card-info__zoom`, `.gd-card-info__card` (`data-orientation`, `data-flipped` = back or
+ * `input[type=range].gd-card-info__zoom` (focused when the dialog opens, as the legacy one focused its handle),
+ * `.gd-card-info__card` (`data-orientation`, `data-flipped` = back or
  * upside-down, `data-flippable`, `data-foil`) holding `img.gd-card-info__image`, `img.gd-card-info__overlay` and
  * `img.gd-card-info__foil`, then `a.gd-card-info__wiki` when the card has a wiki page.
  */
@@ -52,6 +53,7 @@ function isMetaSiteModifier(blueprintId: string): boolean {
         <input
           class="gd-card-info__zoom"
           type="range"
+          autofocus
           aria-label="Card size"
           title="Card Size"
           [min]="zoomMin"
@@ -116,7 +118,8 @@ export class CardInfoComponent {
   protected readonly flipped = linkedSignal({ source: this.info.card, computation: () => false });
 
   constructor() {
-    effect(() => {
+    // After rendering, so the dialog's content is there when showModal focuses the size slider
+    afterRenderEffect(() => {
       const dialog = this.dialog().nativeElement;
       const open = this.view() !== null;
       if (open && !dialog.open) {

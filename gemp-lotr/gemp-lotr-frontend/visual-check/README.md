@@ -64,3 +64,7 @@ labelled placeholders on both pages. It compares nothing by itself; look at the 
 npm run build                      # in gemp-lotr-frontend
 cd visual-check && node stubbed.mjs --sizes 1440x900,1280x800
 ```
+
+Playwright comes from `visual-check/node_modules` (`npm ci`). Where it is only installed globally, as in some
+containers, make it resolvable with `npm link playwright` in `visual-check` (it must find a browser for that version; a
+global install usually brings its own).
