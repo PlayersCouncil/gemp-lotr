@@ -2,8 +2,8 @@
 # Keeps the Angular deck builder served by the Java server in step with its sources, so a `git pull` on the
 # server is enough to deploy a frontend change (as it is for the legacy jQuery pages).
 #
-# Run by the `frontend` service in docker-compose.yml. Every POLL_SECONDS it fingerprints the frontend sources;
-# when they change (and have stopped changing), it:
+# Run by the `frontend` service in docker-compose.yml. Every POLL_SECONDS it fingerprints the frontend sources and the
+# legacy card data files the card images are generated from; when they change (and have stopped changing), it:
 #   1. builds into a staging folder next to the live one, while the live folder keeps being served untouched;
 #   2. swaps it in: live -> old, staging -> live (two renames on the same file system), then deletes old.
 # A failed build leaves the live folder as it was. A changed package-lock.json reruns `npm ci` first.
@@ -22,10 +22,18 @@ OLD="$NG_DIR/.$APP-old"
 
 log() { echo "$(date '+%Y-%m-%d %H:%M:%S') $*"; }
 
-# Hash of the file contents that affect the build (a checkout that doesn't change content doesn't rebuild)
+# The legacy files the card image tables are generated from (see scripts/extract-card-data.mjs)
+LEGACY_CARD_DATA="../gemp-lotr-async/src/main/web/js/gemp-022"
+LEGACY_CARD_DATA_FILES="$LEGACY_CARD_DATA/PC_Cards.js $LEGACY_CARD_DATA/hobbit.js $LEGACY_CARD_DATA/set40.js
+    $LEGACY_CARD_DATA/cards/CardImages.js $LEGACY_CARD_DATA/cards/PackImages.js"
+
+# Hash of the file contents that affect the build (a checkout that doesn't change content doesn't rebuild).
+# src/generated is left out: the build writes it.
 sources_fingerprint() {
     cd "$FRONTEND_DIR" &&
-        find src public angular.json package.json package-lock.json tsconfig*.json -type f -exec md5sum {} + 2>/dev/null |
+        # shellcheck disable=SC2086 # the file list is split on purpose
+        find src public scripts angular.json package.json package-lock.json tsconfig*.json $LEGACY_CARD_DATA_FILES \
+            -path src/generated -prune -o -type f -exec md5sum {} + 2>/dev/null |
         sort | md5sum
 }
 
@@ -42,7 +50,9 @@ build_and_swap() {
     rm -rf "$STAGE" "$OLD"
     log "Building $APP"
     # Step 1: build next to the live folder. With --output-path, Angular writes the served files to $STAGE/browser.
-    if ! (cd "$FRONTEND_DIR" && npx ng build --configuration production --output-path="$STAGE"); then
+    # The card data first: `npx ng build` doesn't run npm's prebuild script
+    if ! (cd "$FRONTEND_DIR" && node scripts/extract-card-data.mjs &&
+        npx ng build --configuration production --output-path="$STAGE"); then
         log "Build FAILED, still serving the previous build"
         rm -rf "$STAGE"
         return 1

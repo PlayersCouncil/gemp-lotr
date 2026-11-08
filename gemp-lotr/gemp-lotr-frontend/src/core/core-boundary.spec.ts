@@ -35,10 +35,10 @@ describe('core boundary', () => {
     expect(files.length).toBeGreaterThan(20);
   });
 
-  it('imports nothing from outside core (no view, ui or themes)', () => {
+  it('imports nothing from outside core (no view, ui or themes), except the generated card data', () => {
     const outside = files.flatMap(({ file, name, source }) =>
       importedPaths(file, source)
-        .filter((path) => !path.startsWith('core/'))
+        .filter((path) => !path.startsWith('core/') && !path.startsWith('generated/'))
         .map((path) => `${name} -> ${path}`),
     );
     expect(outside).toEqual([]);

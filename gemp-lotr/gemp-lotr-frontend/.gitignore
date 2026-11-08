@@ -45,3 +45,6 @@ Thumbs.db
 
 # Node/npm downloaded by frontend-maven-plugin
 /node
+
+# Generated from the legacy card data files by scripts/extract-card-data.mjs
+/src/generated

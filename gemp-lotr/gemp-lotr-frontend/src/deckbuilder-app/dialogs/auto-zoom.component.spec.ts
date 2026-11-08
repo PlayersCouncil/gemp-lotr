@@ -1,10 +1,8 @@
 import { provideHttpClient } from '@angular/common/http';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { flushLegacyCardFiles } from '../../testing/legacy-cards';
 import { CardDisplayData } from '../cards/card-display.component';
 import { CardRegistry } from '../cards/card-registry';
-import { LegacyCardDataService } from '../../core/cards/legacy-card-data.service';
 import {
   AUTO_ZOOM_COOKIE,
   AutoZoomService,
@@ -44,9 +42,6 @@ describe('AutoZoomService', () => {
     TestBed.configureTestingModule({
       providers: [provideHttpClient(), provideHttpClientTesting(), provideFakeNotifier()],
     });
-    const loading = TestBed.inject(LegacyCardDataService).load();
-    flushLegacyCardFiles(TestBed.inject(HttpTestingController));
-    await loading;
     zoom = TestBed.inject(AutoZoomService);
     // jsdom reports touch support; the zoom is for mouse users
     Object.defineProperty(zoom, 'touchDevice', { value: false });

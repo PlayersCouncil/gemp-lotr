@@ -32,7 +32,7 @@ without a restart.
 
 The build output is not in git, so after a `git pull` something has to run `ng build`. In the Docker setup that's the
 `frontend` service (`docker/docker-compose.yml`, `docker/frontend-watch.sh`). It checks the frontend sources every 5
-seconds and, when they change, builds into `web/ng/.deckbuilder-build/` while the old build stays live, then swaps
+seconds (and the legacy card data files the card images are generated from) and, when they change, builds into `web/ng/.deckbuilder-build/` while the old build stays live, then swaps
 the new build in. A build that fails leaves the old one in place (see `docker logs gemp_frontend_1`). So deploying a
 frontend change is just `git pull`, as with the legacy pages.
 
@@ -58,7 +58,7 @@ regular hall at `http://localhost:4200/gemp-lotr/` and then open the deck builde
 | `src/deckbuilder-app/deckbuilder-app.*` | The deck builder's root component (`DeckbuilderApp`, element `<deckbuilder-app>`), its page frame template and its providers (`deckbuilder-app.config.ts`); `src/main.ts` starts it. Named for the deck builder so it can sit beside other pages in the coming whole-site Angular frontend. |
 | `src/core/` | State, rules and server calls, with no view code: nothing in it imports from the view folders, and it has no templates or styles (`core-boundary.spec.ts` checks this). |
 | `src/core/api/` | `DeckbuilderApi`: every server call the deck builder makes, typed. Sent via `GempHttp`, which adds `participantId`, encodes form data strictly (a `+` stays a `+`), turns failures into `ApiError` and spots the opened-pack header. `parsers.ts` reads the server's XML. |
-| `src/core/cards/` | Card images. `card-blueprint.ts` is a port of the legacy `Card.js` rules; the image tables still come from the legacy files (`PC_Cards.js`, `hobbit.js`, `set40.js`, `cards/CardImages.js`, `cards/PackImages.js`), loaded at startup by `LegacyCardDataService`. Add new card images there, as before. `card-ref.ts` is what a card on the page stands for; `CardInfoService` holds the card shown in the card information. |
+| `src/core/cards/` | Card images. `card-blueprint.ts` is a port of the legacy `Card.js` rules; the image tables still come from the legacy files (`PC_Cards.js`, `hobbit.js`, `set40.js`, `cards/CardImages.js`, `cards/PackImages.js`): `scripts/extract-card-data.mjs` turns them into `src/generated/card-data.json` (not committed) before every `npm run build`, `npm start` and `npm test`, and `card-data.ts` provides it. Add new card images in the legacy files, as before; `card-data.parity.spec.ts` fails if the JSON doesn't match them. `card-ref.ts` is what a card on the page stands for; `CardInfoService` holds the card shown in the card information. |
 | `src/core/collection/` | The collection pane's state: `card-filter.ts` (filter fields, Block/Set lists, culture buttons and the filter string, ported from `CardFilter.js`) and `CollectionService` (collection type, paging, the current page from `/collection/{type}`). |
 | `src/core/formats/` | `FormatsService`: the formats from `/deck/formats`, fetched once. |
 | `src/core/deck/` | The deck being edited: `deck-model.ts` (slots, piles, extra copies, the `deckContents` string), `format-options.ts` (the format list) and `DeckService` (format switching, Map/Race slots, deck stats, unsaved changes and the save prompts, New/Save/Rename/Copy/Convert). `DeckLibraryService`: the deck list and library, import and notes. |

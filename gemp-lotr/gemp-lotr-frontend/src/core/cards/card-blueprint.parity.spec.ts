@@ -1,10 +1,7 @@
-import { provideHttpClient } from '@angular/common/http';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { flushLegacyCardFiles, LegacyCardScripts, loadLegacyCardScripts } from '../../testing/legacy-cards';
+import { LegacyCardScripts, loadLegacyCardScripts } from '../../testing/legacy-cards';
 import * as blueprint from './card-blueprint';
 import { CardImageService } from './card-image.service';
-import { LegacyCardDataService } from './legacy-card-data.service';
 
 /**
  * Runs the legacy Card.js against the TypeScript port on many blueprint IDs. If someone changes Card.js (a new
@@ -133,11 +130,7 @@ describe('card-blueprint parity with the legacy Card.js', () => {
   describe('CardImageService matches new Card(...)', () => {
     let service: CardImageService;
 
-    beforeAll(async () => {
-      TestBed.configureTestingModule({ providers: [provideHttpClient(), provideHttpClientTesting()] });
-      const loading = TestBed.inject(LegacyCardDataService).load();
-      flushLegacyCardFiles(TestBed.inject(HttpTestingController));
-      await loading;
+    beforeAll(() => {
       service = TestBed.inject(CardImageService);
     });
 

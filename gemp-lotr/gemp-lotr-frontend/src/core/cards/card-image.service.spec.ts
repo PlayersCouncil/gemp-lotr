@@ -1,19 +1,11 @@
-import { provideHttpClient } from '@angular/common/http';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { flushLegacyCardFiles } from '../../testing/legacy-cards';
 import { CardImageService } from './card-image.service';
-import { LegacyCardDataService } from './legacy-card-data.service';
 
 /** Readable examples; card-blueprint.parity.spec.ts covers the full range against the legacy code. */
 describe('CardImageService', () => {
   let service: CardImageService;
 
-  beforeEach(async () => {
-    TestBed.configureTestingModule({ providers: [provideHttpClient(), provideHttpClientTesting()] });
-    const loading = TestBed.inject(LegacyCardDataService).load();
-    flushLegacyCardFiles(TestBed.inject(HttpTestingController));
-    await loading;
+  beforeEach(() => {
     service = TestBed.inject(CardImageService);
   });
 

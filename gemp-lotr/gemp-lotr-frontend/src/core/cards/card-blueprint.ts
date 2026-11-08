@@ -1,7 +1,7 @@
 /**
  * Card image and blueprint rules, ported from the legacy js/gemp-022/cards/Card.js (static methods).
- * The lookup tables stay in the legacy data files and are loaded at runtime (LegacyCardDataService), so adding cards
- * still means editing only those files. card-blueprint.parity.spec.ts runs the legacy Card.js against this port.
+ * The lookup tables stay in the legacy data files and are turned into JSON at build time (card-data.ts), so adding
+ * cards still means editing only those files. card-blueprint.parity.spec.ts runs the legacy Card.js against this port.
  *
  * Blueprint ID markers: "*" = foil, "^" = alternate image, "T" after the card number = tengwar, e.g. "1_2*", "1_2T".
  */
@@ -21,14 +21,6 @@ export interface CardImageTables {
   /** cards/PackImages.js: booster and starter product images */
   packBlueprints: ImageTable;
 }
-
-export const EMPTY_CARD_IMAGE_TABLES: CardImageTables = {
-  fixedImages: {},
-  set40: {},
-  hobbit: {},
-  PCCards: {},
-  packBlueprints: {},
-};
 
 export const CARD_BACK_BLUEPRINT = '-1_1';
 const DECIPHER_IMAGES = 'https://i.lotrtcgpc.net/decipher/';

@@ -1,9 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { flushLegacyCardFiles } from '../../testing/legacy-cards';
-import { LegacyCardDataService } from '../../core/cards/legacy-card-data.service';
 import { DeckService } from '../../core/deck/deck.service';
 import { CollectionService } from '../../core/collection/collection.service';
 import { PAGE_QUERY_STRING } from '../../core/session/session.service';
@@ -29,9 +27,6 @@ describe('CollectionDisplayComponent', () => {
         { provide: PAGE_QUERY_STRING, useValue: '' },
       ],
     });
-    const loading = TestBed.inject(LegacyCardDataService).load();
-    flushLegacyCardFiles(TestBed.inject(HttpTestingController));
-    await loading;
     // The 1280x800 page: the collection pane's content box is 388x778
     const layout = TestBed.inject(PageLayoutService);
     layout.viewportWidth.set(1280);

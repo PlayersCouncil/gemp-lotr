@@ -3,8 +3,6 @@ import { HttpTestingController, provideHttpClientTesting, TestRequest } from '@a
 import { TestBed } from '@angular/core/testing';
 import { FakeNotifier, provideFakeNotifier } from '../../testing/fake-notifier';
 import { readServerResponse } from '../../testing/files';
-import { flushLegacyCardFiles } from '../../testing/legacy-cards';
-import { LegacyCardDataService } from '../cards/legacy-card-data.service';
 import { PAGE_QUERY_STRING } from '../session/session.service';
 import { PacksService } from './packs.service';
 
@@ -23,9 +21,6 @@ describe('PacksService', () => {
     });
     ({ dialogs } = TestBed.inject(FakeNotifier));
     backend = TestBed.inject(HttpTestingController);
-    const loading = TestBed.inject(LegacyCardDataService).load();
-    flushLegacyCardFiles(backend);
-    await loading;
   });
 
   afterEach(() => vi.restoreAllMocks());

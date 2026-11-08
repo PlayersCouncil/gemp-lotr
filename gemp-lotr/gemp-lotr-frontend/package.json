@@ -3,9 +3,14 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
+    "card-data": "node scripts/extract-card-data.mjs",
+    "prestart": "npm run card-data",
     "start": "ng serve",
+    "prebuild": "npm run card-data",
     "build": "ng build",
+    "prewatch": "npm run card-data",
     "watch": "ng build --watch --configuration development",
+    "pretest": "npm run card-data",
     "test": "ng test"
   },
   "private": true,

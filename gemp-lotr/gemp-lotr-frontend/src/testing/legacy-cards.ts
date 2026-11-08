@@ -1,7 +1,18 @@
-/** Test-only: the legacy card scripts, loaded from disk, for parity checks and for feeding LegacyCardDataService. */
-import { HttpTestingController } from '@angular/common/http/testing';
-import { LEGACY_CARD_DATA_FILES, LEGACY_WEB_ROOT } from '../core/cards/legacy-card-data.service';
+/** Test-only: the legacy card scripts, loaded from disk, for the parity checks. */
+import { CardImageTables } from '../core/cards/card-blueprint';
 import { readLegacyWebFile } from './files';
+
+/**
+ * Each legacy data file and the global table it defines, as the legacy pages include them. Kept apart from the list in
+ * scripts/extract-card-data.mjs on purpose: card-data.parity.spec.ts fails if the two disagree.
+ */
+export const LEGACY_CARD_DATA_FILES: readonly { file: string; table: keyof CardImageTables }[] = [
+  { file: 'js/gemp-022/cards/CardImages.js', table: 'fixedImages' },
+  { file: 'js/gemp-022/set40.js', table: 'set40' },
+  { file: 'js/gemp-022/hobbit.js', table: 'hobbit' },
+  { file: 'js/gemp-022/PC_Cards.js', table: 'PCCards' },
+  { file: 'js/gemp-022/cards/PackImages.js', table: 'packBlueprints' },
+];
 
 /** The subset of the legacy Card class (js/gemp-022/cards/Card.js) the parity tests call. */
 export interface LegacyCardClass {
@@ -45,11 +56,4 @@ export function loadLegacyCardScripts(): LegacyCardScripts {
   const jQueryStub = { inArray: (value: unknown, array: unknown[]) => array.indexOf(value) };
   const result = new Function('$', `${source}\n;return { Card, tables: { ${tableNames.join(', ')} } };`)(jQueryStub);
   return result as LegacyCardScripts;
-}
-
-/** Answers LegacyCardDataService.load()'s requests with the real legacy files. */
-export function flushLegacyCardFiles(backend: HttpTestingController): void {
-  for (const { file } of LEGACY_CARD_DATA_FILES) {
-    backend.expectOne(LEGACY_WEB_ROOT + file).flush(readLegacyWebFile(file));
-  }
 }

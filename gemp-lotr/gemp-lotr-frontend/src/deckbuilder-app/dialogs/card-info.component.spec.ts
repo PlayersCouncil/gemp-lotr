@@ -1,9 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { flushLegacyCardFiles } from '../../testing/legacy-cards';
 import { CardInfoService } from '../../core/cards/card-info.service';
-import { LegacyCardDataService } from '../../core/cards/legacy-card-data.service';
 import { PAGE_QUERY_STRING } from '../../core/session/session.service';
 import { CardInfoComponent } from './card-info.component';
 import { provideFakeNotifier } from '../../testing/fake-notifier';
@@ -18,10 +16,6 @@ describe('card info dialog', () => {
         { provide: PAGE_QUERY_STRING, useValue: '' },
       ],
     });
-    const backend = TestBed.inject(HttpTestingController);
-    const loading = TestBed.inject(LegacyCardDataService).load();
-    flushLegacyCardFiles(backend);
-    await loading;
   });
 
   describe('CardInfoComponent', () => {

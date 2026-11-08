@@ -15,7 +15,7 @@ import {
   RULES_IMAGE,
   stripBlueprintId,
 } from './card-blueprint';
-import { LegacyCardDataService } from './legacy-card-data.service';
+import { CARD_IMAGE_TABLES } from './card-data';
 
 /** How to display one card: what the legacy `new Card(blueprintId, ...)` worked out. */
 export interface CardImage {
@@ -44,7 +44,7 @@ export interface CardImage {
 /** Resolves card images from blueprint IDs, using the legacy image tables. */
 @Injectable({ providedIn: 'root' })
 export class CardImageService {
-  private readonly data = inject(LegacyCardDataService);
+  private readonly tables = inject(CARD_IMAGE_TABLES);
   private readonly cache = new Map<string, CardImage>();
 
   /** Mirrors the legacy Card constructor. `zone` only affects `horizontal`. */
@@ -62,13 +62,8 @@ export class CardImageService {
     return this.resolve(blueprintId).imageUrl;
   }
 
-  /** Forgets resolved images (e.g. after the tables were reloaded). */
-  clearCache(): void {
-    this.cache.clear();
-  }
-
   private compute(blueprintId: string, zone: string | null | undefined): CardImage {
-    const tables = this.data.tables;
+    const tables = this.tables;
     let bareBlueprint = stripBlueprintId(blueprintId);
     if (isAlternateImage(blueprintId) && Object.hasOwn(tables.fixedImages, bareBlueprint + 'ai')) {
       bareBlueprint += 'ai';

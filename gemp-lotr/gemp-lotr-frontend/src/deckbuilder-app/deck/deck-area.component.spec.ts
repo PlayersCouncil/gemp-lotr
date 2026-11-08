@@ -2,8 +2,6 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { flushLegacyCardFiles } from '../../testing/legacy-cards';
-import { LegacyCardDataService } from '../../core/cards/legacy-card-data.service';
 import { DeckService } from '../../core/deck/deck.service';
 import { PAGE_QUERY_STRING } from '../../core/session/session.service';
 import { PageLayoutService } from '../layout/page-layout.service';
@@ -28,9 +26,6 @@ describe('DeckAreaComponent', () => {
         { provide: PAGE_QUERY_STRING, useValue: '' },
       ],
     });
-    const loading = TestBed.inject(LegacyCardDataService).load();
-    flushLegacyCardFiles(TestBed.inject(HttpTestingController));
-    await loading;
     const layout = TestBed.inject(PageLayoutService);
     layout.viewportWidth.set(1280);
     layout.viewportHeight.set(800);
