@@ -4,6 +4,7 @@ import { CardDisplayComponent, cardDisplayData, cardDisplaySize, TARGET_LONG } f
 import { CardRef, zoneOf } from '../../core/cards/card-ref';
 import { parseBlueprint } from '../../core/cards/card-blueprint';
 import { CardInfoService } from '../../core/cards/card-info.service';
+import { CardInfoSliderState } from './card-info-slider.service';
 import { CardImageService } from '../../core/cards/card-image.service';
 import { readCookie, writeCookie } from '../../core/platform/cookies';
 import { UiDialogComponent } from '../shared/ui-dialog.component';
@@ -58,7 +59,7 @@ function isMetaSiteModifier(blueprintId: string): boolean {
             range="min"
             [value]="zoom()"
             (slide)="setZoom($event)"
-            (slideStart)="info.sliding = true"
+            (slideStart)="slider.sliding = true"
             (slideStop)="slideStopped()"
           ></div>
           <div id="card-info-inner" style="display: flex; flex-direction: row; flex-grow: 1">
@@ -89,6 +90,7 @@ function isMetaSiteModifier(blueprintId: string): boolean {
 })
 export class CardInfoComponent {
   protected readonly info = inject(CardInfoService);
+  protected readonly slider = inject(CardInfoSliderState);
   private readonly images = inject(CardImageService);
   private readonly document = inject(DOCUMENT);
   private readonly dialog = viewChild(UiDialogComponent);
@@ -167,7 +169,7 @@ export class CardInfoComponent {
   }
 
   protected slideStopped(): void {
-    setTimeout(() => (this.info.sliding = false), 1);
+    setTimeout(() => (this.slider.sliding = false), 1);
   }
 
   private readZoom(): number {

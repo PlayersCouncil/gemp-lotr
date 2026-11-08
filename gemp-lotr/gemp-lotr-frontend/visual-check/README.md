@@ -52,3 +52,15 @@ show them), and have some library decks (decks of the "Librarian" player, for "o
   a disabled button left highlighted). Opening packs is not part of the check: it uses up the test player's packs, and
   each page would open a different one.
 - **Not covered:** the Race to Mount Doom slot (needs a running RTMD league with the test player in it).
+
+## Without a server: `stubbed.mjs`
+
+While the new UI is being built, `stubbed.mjs` screenshots the legacy page and the new UI (`?ui=next&theme=classic`)
+side by side with no Gemp server: both are served from disk (the legacy web root and the Angular build output) and the
+server's answers come from `src/testing/server-responses` plus a generated collection. Card images are replaced by
+labelled placeholders on both pages. It compares nothing by itself; look at the pairs in `report-stubbed/`.
+
+```
+npm run build                      # in gemp-lotr-frontend
+cd visual-check && node stubbed.mjs --sizes 1440x900,1280x800
+```

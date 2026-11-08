@@ -1,7 +1,675 @@
 /*
- * The classic theme: the legacy deck builder's look (deckBuild.html). Built into theme-classic.css, which
- * ThemeService loads; only one theme's stylesheet is on the page at a time, so rules need no theme scope.
- * Images and other assets go in public/themes/classic/.
+ * The classic theme: the legacy deck builder's look (deckBuild.html: jquery.layout panes, the jQuery UI "dark-hive"
+ * widgets, the legacy card layers). Built into theme-classic.css, which ThemeService loads; only one theme's
+ * stylesheet is on the page at a time, so rules need no theme scope. Images are in public/themes/classic/ (served
+ * next to the app, so referenced by their absolute address): the jQuery UI 1.8.16 "dark-hive" theme images (MIT
+ * licensed, like the legacy copy in css/dark-hive) and the legacy errata marker.
  *
- * Empty for now: the legacy stylesheets linked in index.html still style the page (until the new UI replaces it).
+ * The legacy stylesheets this replaces: css/gemp-001/{hall,deckBuild,cardFilter}.css and
+ * css/dark-hive/jquery-ui-1.8.16.custom.css. Sizes below come from them (the jQuery UI widgets' font is
+ * 1.1em of the page's 12px: 13.2px).
  */
+
+:root {
+  --classic-widget-font: Verdana, Arial, sans-serif;
+  --classic-content-bg: #000 url('/gemp-lotr/ng/deckbuilder/themes/classic/ui-bg_loop_25_000000_21x21.png') 50% 50%
+    repeat;
+  --classic-default-bg: #222 url('/gemp-lotr/ng/deckbuilder/themes/classic/ui-bg_highlight-soft_35_222222_1x100.png')
+    50% 50% repeat-x;
+  --classic-hover-bg: #003147 url('/gemp-lotr/ng/deckbuilder/themes/classic/ui-bg_highlight-soft_33_003147_1x100.png')
+    50% 50% repeat-x;
+  --classic-active-bg: #0972a5 url('/gemp-lotr/ng/deckbuilder/themes/classic/ui-bg_highlight-hard_20_0972a5_1x100.png')
+    50% 50% repeat-x;
+  --classic-header-bg: #444 url('/gemp-lotr/ng/deckbuilder/themes/classic/ui-bg_highlight-soft_44_444444_1x100.png') 50%
+    50% repeat-x;
+  --classic-icons: url('/gemp-lotr/ng/deckbuilder/themes/classic/ui-icons_cccccc_256x240.png');
+  --classic-icons-hover: url('/gemp-lotr/ng/deckbuilder/themes/classic/ui-icons_ffffff_256x240.png');
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+  font-size: 12px;
+}
+
+/* ---------------------------------------------------------------- page frame (jquery.layout) */
+
+.gd-page {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  /* east__minSize 410, east__maxSize 50% of what the 6px resizer leaves */
+  grid-template-columns: minmax(0, 1fr) 6px clamp(410px, var(--gd-collection-width, 410px), calc((100% - 6px) / 2));
+  grid-template-rows: 100%;
+}
+
+.gd-page[data-collection='closed'] {
+  grid-template-columns: minmax(0, 1fr) 6px 0;
+}
+
+.gd-page__deck,
+.gd-page__collection {
+  box-sizing: border-box;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid #bbb;
+  background: #000;
+  overflow: auto;
+}
+
+.gd-page__separator {
+  position: relative;
+  background: #ddd;
+  cursor: e-resize;
+}
+
+.gd-page[data-collection='closed'] .gd-page__separator {
+  cursor: pointer;
+}
+
+.gd-page__separator[data-dragging] {
+  background: #aaa;
+}
+
+.gd-page__toggle {
+  position: absolute;
+  left: 0;
+  top: calc(50% - 25px);
+  width: 6px;
+  height: 50px;
+  padding: 0;
+  border: 0;
+  background: #aaa;
+  cursor: pointer;
+}
+
+.gd-page__toggle:hover {
+  background: #888;
+}
+
+.gd-page__collection {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Narrower than the collection's minimum beside a deck: the legacy page hid the collection */
+@media (max-width: 825px) {
+  .gd-page {
+    grid-template-columns: minmax(0, 1fr) 6px 0;
+  }
+  .gd-page__collection {
+    display: none;
+  }
+}
+
+/* ---------------------------------------------------------------- jQuery UI widget look */
+
+.gd-button {
+  box-sizing: border-box;
+  border: 1px solid #444;
+  border-radius: 6px;
+  background: var(--classic-default-bg);
+  color: #eee;
+  font-family: var(--classic-widget-font);
+  cursor: pointer;
+}
+
+.gd-button:enabled:hover,
+.gd-button:focus-visible {
+  border-color: #0b93d5;
+  background: var(--classic-hover-bg);
+  color: #fff;
+  outline: none;
+}
+
+.gd-button:enabled:active {
+  border-color: #26b3f7;
+  background: var(--classic-active-bg);
+}
+
+.gd-button:disabled {
+  opacity: 0.35;
+  background-image: none;
+  cursor: default;
+}
+
+/* An icon from the jQuery UI sprite, drawn by ::before; data-icon picks it */
+.gd-button[data-icon]::before {
+  content: '';
+  display: block;
+  width: 16px;
+  height: 16px;
+  margin: auto;
+  background: var(--classic-icons) no-repeat;
+}
+
+.gd-button[data-icon]:enabled:hover::before,
+.gd-button[data-icon]:focus-visible::before {
+  background-image: var(--classic-icons-hover);
+}
+
+.gd-button[data-icon='previous']::before {
+  background-position: -80px -192px;
+}
+
+.gd-button[data-icon='next']::before {
+  background-position: -48px -192px;
+}
+
+/* The jQuery UI slider, on a native range input */
+.gd-pager__size,
+.gd-card-info__zoom {
+  appearance: none;
+  height: 16px;
+  margin: 0;
+  background: transparent;
+}
+
+.gd-pager__size::-webkit-slider-runnable-track,
+.gd-card-info__zoom::-webkit-slider-runnable-track {
+  box-sizing: border-box;
+  height: 10.6px;
+  border: 1px solid #555;
+  border-radius: 6px;
+  background: var(--classic-content-bg);
+}
+
+.gd-pager__size::-moz-range-track,
+.gd-card-info__zoom::-moz-range-track {
+  box-sizing: border-box;
+  height: 10.6px;
+  border: 1px solid #555;
+  border-radius: 6px;
+  background: var(--classic-content-bg);
+}
+
+.gd-pager__size::-webkit-slider-thumb,
+.gd-card-info__zoom::-webkit-slider-thumb {
+  appearance: none;
+  box-sizing: border-box;
+  width: 15.8px;
+  height: 15.8px;
+  margin-top: -3.6px;
+  border: 1px solid #444;
+  border-radius: 6px;
+  background: var(--classic-default-bg);
+}
+
+.gd-pager__size::-moz-range-thumb,
+.gd-card-info__zoom::-moz-range-thumb {
+  box-sizing: border-box;
+  width: 15.8px;
+  height: 15.8px;
+  border: 1px solid #444;
+  border-radius: 6px;
+  background: var(--classic-default-bg);
+}
+
+.gd-pager__size:enabled:hover::-webkit-slider-thumb,
+.gd-card-info__zoom:hover::-webkit-slider-thumb {
+  border-color: #0b93d5;
+  background: var(--classic-hover-bg);
+}
+
+.gd-pager__size:enabled:active::-webkit-slider-thumb,
+.gd-card-info__zoom:active::-webkit-slider-thumb {
+  border-color: #26b3f7;
+  background: var(--classic-active-bg);
+}
+
+.gd-pager__size:disabled {
+  opacity: 0.35;
+}
+
+/* ---------------------------------------------------------------- collection filter (CardFilter.buildUi) */
+
+.gd-filter {
+  /* The fields and the reset buttons are as wide as the legacy filter table; the pager and cultures span the pane */
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+}
+
+.gd-pager,
+.gd-cultures {
+  grid-column: 1 / -1;
+}
+
+.gd-pager {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.gd-pager__size {
+  flex-grow: 1;
+  margin: 0 8px;
+}
+
+.gd-pager .gd-button {
+  width: 25px;
+  height: 31px;
+  padding: 0;
+}
+
+/* The legacy filter table: label, control, label, control; 2px cell spacing and 1px cell padding */
+.gd-filter__fields {
+  display: grid;
+  grid-template-columns: repeat(4, max-content);
+  align-items: center;
+  column-gap: 4px;
+  row-gap: 2px;
+  padding: 2px;
+  justify-content: start;
+}
+
+.gd-filter__basic,
+.gd-filter__advanced,
+.gd-field {
+  display: contents;
+}
+
+.gd-field__label {
+  padding: 1px 5px 1px 1px;
+  color: #fff;
+  font-weight: bolder;
+  font-size: 80%;
+  white-space: nowrap;
+}
+
+.gd-field__control {
+  display: flex;
+  align-items: center;
+  padding: 1px;
+}
+
+.gd-field[data-wide] .gd-field__control {
+  grid-column: span 3;
+}
+
+.gd-field select,
+.gd-field input {
+  font-size: 80%;
+  padding-right: 5px;
+  color: #fff;
+  background-color: #222;
+}
+
+.gd-field select {
+  max-width: 100px;
+  padding: 3px 5px 3px 3px;
+  border-color: #888 #666 #666 #888;
+  border-radius: 8px;
+}
+
+.gd-field select:hover {
+  background-color: #444;
+}
+
+.gd-field input {
+  margin: 2px;
+  border-color: #666 #888 #888 #666;
+}
+
+.gd-field input[type='text'] {
+  width: 250px;
+  max-width: 230px;
+}
+
+.gd-field input[type='number'] {
+  width: 35px;
+}
+
+.gd-field select:disabled,
+.gd-field input:disabled {
+  color: #ddd;
+  background-color: #888;
+}
+
+.gd-filter__advanced-title {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 5px 0 2px;
+  color: #fff;
+  text-align: center;
+  font-size: 90%;
+}
+
+a:visited {
+  color: #bf6b04;
+}
+
+.gd-filter__resets {
+  grid-column: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin: 0 5px;
+  padding-top: 9px;
+}
+
+/* 95% of the page's 12px, then jQuery UI's 70% for button text */
+.gd-filter__resets .gd-button {
+  padding: 3px 0.3em;
+  font-size: 7.98px;
+  line-height: 1.4;
+}
+
+/* The culture toggles: a jQuery UI buttonset */
+.gd-cultures {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 5px;
+  margin-right: 7px;
+  font-family: var(--classic-widget-font);
+  font-size: 13.2px;
+}
+
+.gd-cultures__group {
+  display: flex;
+}
+
+.gd-culture {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0.2em;
+  margin-right: -0.2em;
+  /* .ui-button-text's padding, at its 70% font size */
+  padding: 1.85px 2.77px;
+  border: 1px solid #444;
+  background: var(--classic-default-bg);
+  cursor: pointer;
+  line-height: 1.4;
+}
+
+.gd-cultures__group:first-child .gd-culture:first-child {
+  border-radius: 6px 0 0 6px;
+}
+
+.gd-cultures__group:last-child .gd-culture:last-child {
+  border-radius: 0 6px 6px 0;
+}
+
+.gd-culture:hover,
+.gd-culture:has(.gd-culture__input:focus-visible) {
+  border-color: #0b93d5;
+  background: var(--classic-hover-bg);
+}
+
+.gd-culture[data-active] {
+  border-color: #26b3f7;
+  background: var(--classic-active-bg);
+}
+
+.gd-culture__input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+}
+
+.gd-culture__icon {
+  height: 20px;
+}
+
+.gd-culture[data-icon-kind='culture'] .gd-culture__icon {
+  /* Black SVGs drawn white (the legacy trick) */
+  filter: invert(89%) sepia(64%) saturate(0%) hue-rotate(145deg) brightness(116%) contrast(101%);
+}
+
+/* ---------------------------------------------------------------- the collection's cards (NormalCardGroup) */
+
+.gd-collection {
+  display: flex;
+  flex: 1 1 0;
+  min-height: 0;
+  /* layoutUI: the group is the pane's width minus 10px, and leaves room below */
+  margin: 1px 8px 10px 0;
+}
+
+.gd-collection__cards {
+  --gd-card-max-height: 200px;
+  --gd-card-gap: 5px;
+  --gd-card-fit: rows;
+  box-sizing: border-box;
+  flex: 1 1 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: var(--gd-card-gap);
+  /* the 3px CardGroup keeps inside the box, plus the box's border */
+  padding: 3px;
+  border: 1px solid #555;
+  border-radius: 7px;
+  background: var(--classic-content-bg);
+  overflow: hidden;
+}
+
+/* ---------------------------------------------------------------- a card (Card.CreateCardDiv) */
+
+.gd-card {
+  --gd-card-width: round(down, calc(var(--gd-card-height, 200px) * 350 / 490), 1px);
+  position: relative;
+  box-sizing: border-box;
+  width: var(--gd-card-width);
+  height: round(down, calc(var(--gd-card-width) * 490 / 350), 1px);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: default;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.gd-card[data-orientation='horizontal'] {
+  --gd-card-width: var(--gd-card-height, 200px);
+  height: round(down, calc(var(--gd-card-width) * 350 / 490), 1px);
+}
+
+.gd-card:focus-visible {
+  outline: 2px solid #0b93d5;
+  outline-offset: 1px;
+}
+
+.gd-card > * {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.gd-card__image {
+  display: block;
+}
+
+.gd-card__errata {
+  background: url('/gemp-lotr/ng/deckbuilder/themes/classic/errata-vertical.png') 0 0 / 100% 100% no-repeat;
+}
+
+.gd-card__foil {
+  opacity: 0.2;
+}
+
+.gd-card__overlay {
+  top: auto;
+  height: 27%;
+  object-fit: cover;
+  object-position: bottom;
+}
+
+/* The black border, 1/30 of the card's longer side, over the image */
+.gd-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 0 solid #000;
+  /* landscape: the width is the longer side */
+  border-width: round(down, calc(var(--gd-card-width) / 30), 1px);
+  pointer-events: none;
+}
+
+.gd-card[data-orientation='vertical']::after {
+  border-width: round(down, calc(var(--gd-card-width) * 490 / 350 / 30), 1px);
+}
+
+.gd-card[data-borderless]::after {
+  display: none;
+}
+
+/* The copy count in the middle of the card */
+.gd-card__count {
+  inset: calc(50% - 9px) auto auto calc(50% - 10px);
+  width: 20px;
+  height: 18px;
+  background-color: #000;
+  color: #fff;
+  font-size: 14.4px;
+  font-weight: bolder;
+  line-height: 18px;
+  text-align: center;
+  opacity: 0.7;
+}
+
+/* ---------------------------------------------------------------- card information (CardInfoDialog) */
+
+.gd-card-info {
+  --long: min(calc(var(--gd-card-info-zoom, 0.5) * 1039px), calc(100vh - 75px), calc(100vw - 425px));
+  box-sizing: border-box;
+  max-width: none;
+  max-height: none;
+  padding: 0.2em;
+  border: 1px solid #555;
+  border-radius: 6px;
+  background: var(--classic-content-bg);
+  color: #fff;
+  font-family: var(--classic-widget-font);
+  font-size: 13.2px;
+  overflow: hidden;
+}
+
+/* The legacy dialog didn't dim the page */
+.gd-card-info::backdrop {
+  background: transparent;
+}
+
+.gd-card-info[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.gd-card-info__header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0.4em 1em;
+  border: 1px solid #333;
+  border-radius: 6px;
+  background: var(--classic-header-bg);
+}
+
+.gd-card-info__title {
+  margin: 0.1em 16px 0.1em 0;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.gd-card-info__close {
+  position: absolute;
+  right: 0.3em;
+  top: 50%;
+  width: 19px;
+  height: 18px;
+  margin-top: -10px;
+  padding: 1px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: none;
+  cursor: pointer;
+}
+
+.gd-card-info__close::before {
+  content: '';
+  display: block;
+  width: 16px;
+  height: 16px;
+  background: url('/gemp-lotr/ng/deckbuilder/themes/classic/ui-icons_ffffff_256x240.png') -96px -128px no-repeat;
+}
+
+.gd-card-info__close:hover,
+.gd-card-info__close:focus-visible {
+  border-color: #0b93d5;
+  background: var(--classic-hover-bg);
+  outline: none;
+}
+
+.gd-card-info__zoom {
+  margin: 0.5em 1em 0;
+}
+
+.gd-card-info__card {
+  position: relative;
+  align-self: flex-start;
+  margin: 0.5em 1em;
+  height: var(--long);
+  aspect-ratio: 745 / 1039;
+  cursor: default;
+}
+
+.gd-card-info__card[data-orientation='horizontal'] {
+  width: var(--long);
+  height: auto;
+  aspect-ratio: 1039 / 745;
+}
+
+.gd-card-info__card > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.gd-card-info__card[data-flipped='upside-down'] .gd-card-info__image {
+  transform: rotate(180deg);
+}
+
+.gd-card-info__foil {
+  opacity: 0.2;
+}
+
+.gd-card-info__overlay {
+  top: auto;
+  height: 27%;
+  object-fit: cover;
+  object-position: bottom;
+}
+
+.gd-card-info__card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: calc(var(--long) / 28) solid #000;
+  pointer-events: none;
+}
+
+.gd-card-info__wiki {
+  padding: 5px;
+  color: #fff;
+  text-align: center;
+}
+
+@media (pointer: coarse) {
+  .gd-card-info__zoom {
+    display: none;
+  }
+}

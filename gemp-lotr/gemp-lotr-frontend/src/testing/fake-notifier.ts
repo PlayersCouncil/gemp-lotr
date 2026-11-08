@@ -1,10 +1,11 @@
-import { Provider } from '@angular/core';
+import { Injectable, Provider } from '@angular/core';
 import { Notifier } from '../core/notifier/notifier';
 
 /**
  * A Notifier for tests: records every message as "alert: ...", "confirm: ..." or "prompt: ..." in `dialogs`, and
  * answers confirm/askText from `answers` in order (confirm: true for OK; askText: the text, or null for Cancel).
  */
+@Injectable()
 export class FakeNotifier extends Notifier {
   readonly dialogs: string[] = [];
   readonly answers: (boolean | string | null)[] = [];

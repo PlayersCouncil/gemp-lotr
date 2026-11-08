@@ -4,6 +4,7 @@ import { CardRef } from '../../core/cards/card-ref';
 import { CardRegistry } from '../cards/card-registry';
 import { DeckbuilderActions } from '../../core/actions/deckbuilder-actions.service';
 import { CardInfoService } from '../../core/cards/card-info.service';
+import { CardInfoSliderState } from '../dialogs/card-info-slider.service';
 
 /** How far (px) a card has to be dragged upwards to show its details. */
 const DRAG_UP_FOR_INFO = 20;
@@ -23,6 +24,7 @@ export class CardClicksService {
   private readonly destroyRef = inject(DestroyRef);
   private readonly cardInfo = inject(CardInfoService);
   private readonly actions = inject(DeckbuilderActions);
+  private readonly slider = inject(CardInfoSliderState);
 
   private dragged: { ref: CardRef | null; startY: number } | null = null;
   private successfulDrag = false;
@@ -62,7 +64,10 @@ export class CardClicksService {
       return true;
     }
     if (!this.successfulDrag && this.cardInfo.isOpen()) {
-      this.cardInfo.pageClicked();
+      // CardInfoDialog.mouseUp: any click closes the dialog, unless its zoom slider was just used
+      if (!this.slider.sliding) {
+        this.cardInfo.close();
+      }
       return false;
     }
     if (!target.classList.contains('actionArea')) {

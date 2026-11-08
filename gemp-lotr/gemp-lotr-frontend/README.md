@@ -68,6 +68,7 @@ regular hall at `http://localhost:4200/gemp-lotr/` and then open the deck builde
 | `src/core/session/` | `SessionService`: the optional `?participantId=` (admins acting as a player). |
 | `src/core/platform/` | The browser, behind services: cookies, the page's query string, image preloading, opening links, and `ThemeService` (see Themes below). |
 | `src/themes/<name>/` | A theme's CSS (`theme.css`); its images and other files go in `public/themes/<name>/`. See Themes below. |
+| `src/ui/` | The new UI, being built (open it with `?ui=next`; see "The new UI" below): `ui/deckbuilder/` (the page frame, the collection filter and cards, the card information) and `ui/shared/` (the card, `fitCards`). Markup and interaction only; the themes draw it. `ui-boundary.spec.ts` checks it imports only core and ui and has no styles. |
 | `src/deckbuilder-app/layout/` | The page frame: `page-layout.ts` reproduces the legacy `jquery.layout` panes (deck, collection, resizer bar), and `deck-layout.ts` is the legacy `layoutUI` positioning of the deck slots. |
 | `src/deckbuilder-app/cards/` | Card display: `gempCard` (the legacy card element with its errata, foil, count, border and meta-site layers), `gemp-card-display` (the large card of the info dialog and the hover zoom), `card-group-layout.ts` (the `NormalCardGroup` rows and the `VerticalBarGroup` sites column) and `CardRegistry` (what each card element stands for). |
 | `src/deckbuilder-app/collection/` | The collection pane: the filter (`gempCardFilter`) and the cards of the current page (`gempCollectionDisplay`). |
@@ -111,6 +112,35 @@ Scoping: only one theme's stylesheet is on the page at a time, so theme CSS is w
 `<html data-theme="...">` is also set, for the rare rule that must know the theme from outside a theme stylesheet.
 The theme files are not hashed (their names are fixed so they can be linked at runtime); the server revalidates them
 with an ETag, like the legacy stylesheets.
+
+## The new UI and its DOM contract
+
+`src/ui` replaces the current view (`src/deckbuilder-app`) step by step. Until it is complete the current view stays the
+default; `?ui=next` (temporary, `src/ui-switch.ts`) starts the new one instead, with the legacy stylesheets removed so
+the themes are seen on their own. The deck side is still an empty placeholder.
+
+The rules:
+
+- **Layers.** `core/` holds state, rules and server calls; `ui/` holds semantic markup and interaction; `themes/<name>/`
+  holds every visual rule, layout included. `ui/` components have no styles (only `display: contents` on a few hosts)
+  and no pixel sizes: anything a theme sizes comes from CSS, with custom properties where the markup needs a number
+  (e.g. `--gd-card-height` from `fitCards`).
+- **Markup.** Native elements (`button`, `select`, `input type=range`, `label`, `dialog`); class names
+  `gd-<block>__<element>`; state in `data-*` attributes (`data-role`, `data-orientation`, `data-active`, ...) and ARIA,
+  never in class names. Templates hold every affordance any theme needs; a theme hides what it doesn't use.
+- **Interaction** is theme-neutral and each component handles its own events (no page-wide listeners).
+
+| Element | Contract |
+|---|---|
+| `.gd-page` (`<deckbuilder-app>`) | `data-collection` = open, closed; `--gd-collection-width` once resized (the theme clamps it). Children: `section.gd-page__deck`, `div.gd-page__separator` (`role=separator`; drag or arrow keys resize, Enter toggles; `data-dragging`) with `button.gd-page__toggle` (`aria-expanded`), `section.gd-page__collection`. |
+| `.gd-filter` | `.gd-pager` (`button.gd-pager__previous`/`__next` with `data-icon`, `input[type=range].gd-pager__size`); `.gd-filter__fields` with `.gd-filter__basic` and `.gd-filter__advanced` (`.gd-filter__advanced-title`); each field `label.gd-field` (`data-field`, `data-kind` = select/text/numeric, `data-wide`) with `.gd-field__label` and `.gd-field__control`; `.gd-filter__resets` (`button.gd-button[data-action]`); `.gd-cultures` > `.gd-cultures__group[data-group]` > `label.gd-culture` (`data-culture`, `data-active`, `data-icon-kind`) with a visually hidden `input.gd-culture__input` and `img.gd-culture__icon`. |
+| `.gd-collection` | `.gd-collection__cards` (the `fitCards` box, `data-count`) with a `button.gd-card` per item, packs first. |
+| `button.gd-card` | `data-role` = card, pack, selection, placeholder; `data-orientation` = vertical, horizontal; `data-errata`, `data-foil`, `data-borderless`. Inside: `img.gd-card__image`, and when they apply `.gd-card__errata`, `img.gd-card__foil`, `img.gd-card__overlay`, `.gd-card__count`. Click/Enter/Space uses the card; shift-click, right-click, a long press (touch) or dragging it up 20px (mouse) shows its details. |
+| `[gdFitCards]` | Sets `--gd-card-height` (px) on its box so the cards fit, from the box's size and the theme's `--gd-card-max-height` (default 200px), `--gd-card-gap` (5px) and `--gd-card-fit`: `contain` (largest that fits), `rows` (the legacy NormalCardGroup sizes) or `none` (always the maximum; the box scrolls). |
+| `dialog.gd-card-info` | Modal native dialog; `--gd-card-info-zoom` (0.4 to 1). `.gd-card-info__header` (`.gd-card-info__title`, `button.gd-card-info__close`), `input[type=range].gd-card-info__zoom`, `.gd-card-info__card` (`data-orientation`, `data-flipped` = back/upside-down, `data-flippable`, `data-foil`) with `img.gd-card-info__image`, `__overlay`, `__foil`; `a.gd-card-info__wiki`. Clicking the card flips it; any other click, the close button or Escape closes it. |
+
+`visual-check/stubbed.mjs` screenshots the legacy page and the new UI side by side without a Gemp server (both served
+from disk, the server's answers stubbed); see its header.
 
 ## Tests
 
