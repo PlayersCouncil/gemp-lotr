@@ -32,7 +32,9 @@ class FakeResizeObserver {
   template: `<div class="box" [gdFitCards]="cards()"></div>`,
 })
 class Host {
-  readonly cards = signal<readonly FitCard[]>(Array.from({ length: 12 }, () => ({ horizontal: false })));
+  readonly cards = signal<readonly FitCard[]>(
+    Array.from({ length: 12 }, () => ({ horizontal: false })),
+  );
 }
 
 describe('FitCardsDirective', () => {
@@ -41,11 +43,18 @@ describe('FitCardsDirective', () => {
   beforeEach(() => {
     FakeResizeObserver.instances = [];
     vi.stubGlobal('ResizeObserver', FakeResizeObserver);
-    properties = { '--gd-card-max-height': '200px', '--gd-card-gap': '5px', '--gd-card-fit': 'contain' };
+    properties = {
+      '--gd-card-max-height': '200px',
+      '--gd-card-gap': '5px',
+      '--gd-card-fit': 'contain',
+    };
     const real = window.getComputedStyle.bind(window);
     vi.spyOn(window, 'getComputedStyle').mockImplementation((element) => {
       const style = real(element);
-      return { ...style, getPropertyValue: (name: string) => properties[name] ?? '' } as CSSStyleDeclaration;
+      return {
+        ...style,
+        getPropertyValue: (name: string) => properties[name] ?? '',
+      } as CSSStyleDeclaration;
     });
   });
 

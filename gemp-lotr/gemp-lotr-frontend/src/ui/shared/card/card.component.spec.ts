@@ -26,7 +26,10 @@ class Host {
 }
 
 /** jsdom has no PointerEvent: a MouseEvent with the pointer fields. */
-function pointer(type: string, init: { x?: number; y?: number; pointerType?: string; button?: number } = {}): Event {
+function pointer(
+  type: string,
+  init: { x?: number; y?: number; pointerType?: string; button?: number } = {},
+): Event {
   const event = new MouseEvent(type, {
     bubbles: true,
     clientX: init.x ?? 0,
@@ -42,7 +45,9 @@ describe('CardComponent', () => {
 
   beforeEach(() => {
     actions = { activate: vi.fn(), showInfo: vi.fn() };
-    TestBed.configureTestingModule({ providers: [{ provide: DeckbuilderActions, useValue: actions }] });
+    TestBed.configureTestingModule({
+      providers: [{ provide: DeckbuilderActions, useValue: actions }],
+    });
   });
 
   afterEach(() => vi.useRealTimers());
@@ -90,7 +95,9 @@ describe('CardComponent', () => {
       expect(el.hasAttribute('data-borderless')).toBe(true);
       expect(el.querySelector('.gd-card__errata')).not.toBeNull();
       expect(el.querySelector<HTMLImageElement>('.gd-card__foil')!.src).toContain('holo.jpg');
-      expect(el.querySelector<HTMLImageElement>('.gd-card__overlay')!.src).toBe('https://example.com/modifier.jpg');
+      expect(el.querySelector<HTMLImageElement>('.gd-card__overlay')!.src).toBe(
+        'https://example.com/modifier.jpg',
+      );
       expect(el.querySelector('.gd-card__count')).toBeNull();
       expect(el.getAttribute('aria-label')).toBe('1_2');
     });
@@ -179,7 +186,12 @@ describe('CardComponent', () => {
     it('reports the mouse coming onto it, with where it is, leaving it and pressing on it', async () => {
       const { fixture, el } = await render();
       const hover = TestBed.inject(CardHover);
-      vi.spyOn(el, 'getBoundingClientRect').mockReturnValue({ left: 1, top: 2, right: 3, bottom: 4 } as DOMRect);
+      vi.spyOn(el, 'getBoundingClientRect').mockReturnValue({
+        left: 1,
+        top: 2,
+        right: 3,
+        bottom: 4,
+      } as DOMRect);
       el.dispatchEvent(pointer('pointerenter'));
       expect(hover.hovered()?.card).toEqual(CARD);
       expect(hover.hovered()?.box).toEqual({ left: 1, top: 2, right: 3, bottom: 4 });

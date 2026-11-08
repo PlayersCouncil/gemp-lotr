@@ -44,10 +44,16 @@ describe('DeckbuilderPageComponent', () => {
     ]);
     expect(el.querySelector('section.gd-page__deck > gd-deck.gd-deck')).not.toBeNull();
     expect(el.querySelector('gd-auto-zoom > .gd-zoom[hidden]')).not.toBeNull();
-    expect(el.querySelector('section.gd-page__collection > gd-collection-filter.gd-filter')).not.toBeNull();
-    expect(el.querySelector('section.gd-page__collection > gd-collection-grid.gd-collection')).not.toBeNull();
+    expect(
+      el.querySelector('section.gd-page__collection > gd-collection-filter.gd-filter'),
+    ).not.toBeNull();
+    expect(
+      el.querySelector('section.gd-page__collection > gd-collection-grid.gd-collection'),
+    ).not.toBeNull();
     expect(el.querySelector('gd-card-info dialog.gd-card-info')).not.toBeNull();
-    expect(el.querySelector('.gd-page__separator[role="separator"] > button.gd-page__toggle')).not.toBeNull();
+    expect(
+      el.querySelector('.gd-page__separator[role="separator"] > button.gd-page__toggle'),
+    ).not.toBeNull();
     expect(el.style.getPropertyValue('--gd-collection-width')).toBe('');
   });
 
@@ -77,7 +83,8 @@ describe('DeckbuilderPageComponent', () => {
     const { fixture, el, separator } = await render();
     const collection = el.querySelector<HTMLElement>('.gd-page__collection')!;
     vi.spyOn(collection, 'getBoundingClientRect').mockReturnValue({ width: 410 } as DOMRect);
-    const key = (k: string) => separator.dispatchEvent(new KeyboardEvent('keydown', { key: k, cancelable: true }));
+    const key = (k: string) =>
+      separator.dispatchEvent(new KeyboardEvent('keydown', { key: k, cancelable: true }));
     key('ArrowLeft');
     await fixture.whenStable();
     expect(el.style.getPropertyValue('--gd-collection-width')).toBe(`${410 + RESIZE_STEP}px`);
@@ -96,7 +103,12 @@ describe('DeckbuilderPageComponent', () => {
     const collection = el.querySelector<HTMLElement>('.gd-page__collection')!;
     vi.spyOn(collection, 'getBoundingClientRect').mockReturnValue({ width: 700 } as DOMRect);
     const pointer = (type: string, x: number) => {
-      const event = new MouseEvent(type, { clientX: x, button: 0, bubbles: true, cancelable: true });
+      const event = new MouseEvent(type, {
+        clientX: x,
+        button: 0,
+        bubbles: true,
+        cancelable: true,
+      });
       Object.assign(event, { pointerId: 1 });
       separator.dispatchEvent(event);
     };

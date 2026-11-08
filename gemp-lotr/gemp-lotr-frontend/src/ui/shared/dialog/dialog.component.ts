@@ -68,7 +68,13 @@ export class DialogLayers {
     >
       <header class="gd-dialog__header" (pointerdown)="startMove($event)">
         <h2 class="gd-dialog__title" [id]="titleId">{{ heading() }}</h2>
-        <button type="button" class="gd-dialog__close" aria-label="Close" title="Close" (click)="close()"></button>
+        <button
+          type="button"
+          class="gd-dialog__close"
+          aria-label="Close"
+          title="Close"
+          (click)="close()"
+        ></button>
       </header>
       <div class="gd-dialog__body">
         <ng-content />
@@ -197,11 +203,17 @@ export class DialogComponent {
       return;
     }
     const focused = dialog.ownerDocument.activeElement;
-    if (focused !== dialog && !focused?.matches('.gd-dialog__close')) {
+    if (
+      focused &&
+      focused !== dialog &&
+      dialog.contains(focused) &&
+      !focused.matches('.gd-dialog__close')
+    ) {
       return;
     }
     const first = Array.from(dialog.querySelectorAll<HTMLElement>(FOCUSABLE)).find(
-      (el) => !el.matches('.gd-dialog__close') && el.tabIndex >= 0 && !(el as HTMLButtonElement).disabled,
+      (el) =>
+        !el.matches('.gd-dialog__close') && el.tabIndex >= 0 && !(el as HTMLButtonElement).disabled,
     );
     first?.focus();
   }

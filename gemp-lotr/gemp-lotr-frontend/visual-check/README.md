@@ -59,7 +59,11 @@ While the new UI is being built, `stubbed.mjs` screenshots the legacy page and t
 side by side with no Gemp server: both are served from disk (the legacy web root and the Angular build output) and the
 server's answers come from `src/testing/server-responses` plus a generated collection. Card images are replaced by
 labelled placeholders on both pages. It compares nothing by itself; look at the pairs in `report-stubbed/`. Scenarios: `collection`, `second-page`, `shadow-filter`, `deck` (a few cards, copies and sites in the deck, with the
-stubbed stats), `zoom-deck` and `zoom-collection` (the hover zoom), `card-info`.
+stubbed stats), `zoom-deck` and `zoom-collection` (the hover zoom), `card-info`, and the dialogs: `deck-list`,
+`library`, `import`, `import-typed`, `notes`, `selection` (the selection pack's "Choose one"), `delivery` ("New items",
+from a stubbed pack delivery), `confirm` and `prompt` (deleting and renaming a deck; the legacy page used the
+browser's own dialogs, which screenshots don't show, so its side shows only the page behind). A scenario can answer
+server requests its own way (`answers`).
 
 ```
 npm run build                      # in gemp-lotr-frontend

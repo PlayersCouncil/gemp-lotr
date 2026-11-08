@@ -64,7 +64,11 @@ export class DeckListDialogComponent {
   ];
   private readonly libraryActions: readonly EntryAction[] = [
     { action: 'open', label: 'Open deck', run: (entry) => this.library.openDeck(entry) },
-    { action: 'deck-list', label: 'Deck list', run: (entry) => this.library.showLibraryDeck(entry) },
+    {
+      action: 'deck-list',
+      label: 'Deck list',
+      run: (entry) => this.library.showLibraryDeck(entry),
+    },
   ];
 
   protected readonly actions = computed(() =>

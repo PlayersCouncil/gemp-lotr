@@ -1,4 +1,13 @@
-import { cardWidth, fitCardHeight, FitCard, FitCardsInput, parseFit, parsePx, rowsNeeded, stackWidth } from './fit-cards';
+import {
+  cardWidth,
+  fitCardHeight,
+  FitCard,
+  FitCardsInput,
+  parseFit,
+  parsePx,
+  rowsNeeded,
+  stackWidth,
+} from './fit-cards';
 
 const upright = (n: number): FitCard[] => Array.from({ length: n }, () => ({ horizontal: false }));
 const cards = (...horizontal: boolean[]): FitCard[] => horizontal.map((h) => ({ horizontal: h }));
@@ -14,8 +23,12 @@ describe('fit-cards sizing', () => {
     // 137px cards: 27px of each copy shows
     expect(stackWidth({ horizontal: false, behind: [false, false] }, 192)).toBe(137 + 2 * 27);
     expect(stackWidth({ horizontal: false }, 192)).toBe(137);
-    expect(rowsNeeded([{ horizontal: false, behind: [false] }, ...upright(1)], 140, 230, 5)).toBe(1);
-    expect(rowsNeeded([{ horizontal: false, behind: [false, false] }, ...upright(1)], 140, 230, 5)).toBe(2);
+    expect(rowsNeeded([{ horizontal: false, behind: [false] }, ...upright(1)], 140, 230, 5)).toBe(
+      1,
+    );
+    expect(
+      rowsNeeded([{ horizontal: false, behind: [false, false] }, ...upright(1)], 140, 230, 5),
+    ).toBe(2);
   });
 
   it('counts the rows the cards wrap into', () => {
@@ -65,12 +78,18 @@ describe('fit-cards sizing', () => {
 
     it('rows: one row when two rows of it would not fit, centred by the theme (the legacy deck piles)', () => {
       // The legacy Shadow pile at 1440x900 (a 736x389 area): four cards at the 200px maximum
-      expect(fitCardHeight({ ...base, width: 736, height: 389, fit: 'rows', cards: upright(4) })).toBe(200);
+      expect(
+        fitCardHeight({ ...base, width: 736, height: 389, fit: 'rows', cards: upright(4) }),
+      ).toBe(200);
       // The Free Peoples pile: six cards, one with two copies behind it, need two rows of (389 - 5) / 2 = 192px
       const pile = [{ horizontal: false, behind: [false, false] }, ...upright(5)];
-      expect(fitCardHeight({ ...base, width: 736, height: 389, fit: 'rows', cards: pile })).toBe(192);
+      expect(fitCardHeight({ ...base, width: 736, height: 389, fit: 'rows', cards: pile })).toBe(
+        192,
+      );
       // Ten cards in a wide, low box: one row, as high as their total width allows (120 / (856.8 / 691) = 96.8)
-      expect(fitCardHeight({ ...base, width: 736, height: 120, fit: 'rows', cards: upright(10) })).toBe(96);
+      expect(
+        fitCardHeight({ ...base, width: 736, height: 120, fit: 'rows', cards: upright(10) }),
+      ).toBe(96);
     });
 
     it('none: always the largest height (the box scrolls)', () => {

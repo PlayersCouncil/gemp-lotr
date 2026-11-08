@@ -65,7 +65,12 @@ export class CardComponent {
   private readonly actions = inject(DeckbuilderActions);
   private readonly hover = inject(CardHover);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
-  private press: { x: number; y: number; mouse: boolean; timer: ReturnType<typeof setTimeout> | null } | null = null;
+  private press: {
+    x: number;
+    y: number;
+    mouse: boolean;
+    timer: ReturnType<typeof setTimeout> | null;
+  } | null = null;
   /** The details were just shown by a gesture: the click that ends it does nothing else. */
   private swallowClick = false;
 
@@ -139,7 +144,10 @@ export class CardComponent {
 
   protected onPointerMove(event: PointerEvent): void {
     const press = this.press;
-    if (press?.timer && Math.hypot(event.clientX - press.x, event.clientY - press.y) > LONG_PRESS_SLOP) {
+    if (
+      press?.timer &&
+      Math.hypot(event.clientX - press.x, event.clientY - press.y) > LONG_PRESS_SLOP
+    ) {
       // Scrolling, not pressing
       clearTimeout(press.timer);
       press.timer = null;

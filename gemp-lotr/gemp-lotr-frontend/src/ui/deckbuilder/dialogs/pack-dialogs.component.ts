@@ -22,7 +22,7 @@ function group(cards: CardView[]): ShownGroup {
 /**
  * The selection pack's "Choose one" (modal; using a card picks it and opens the pack) and a "New items - <collection>"
  * dialog per collection something was opened into (not modal). Their cards are sized to fit (fitCards), so they
- * follow the dialog's size. A "New items" dialog once opened stays on the page, closed, and so keeps the size the
+ * follow the dialog's size. Both focus themselves when they open, as the legacy ones did. A "New items" dialog once opened stays on the page, closed, and so keeps the size the
  * player gave it, as the legacy dialogs were kept.
  *
  * DOM contract: `gd-dialog`s with `data-dialog` = selection or delivery, each holding `.gd-shown-cards` (the fitCards
@@ -37,10 +37,15 @@ function group(cards: CardView[]): ShownGroup {
     <gd-dialog
       name="selection"
       heading="Choose one"
+      [focusSelf]="true"
       [open]="packs.selection() !== null"
       (closed)="packs.selection.set(null)"
     >
-      <div class="gd-shown-cards" [attr.data-count]="selection().cards.length" [gdFitCards]="selection().fit">
+      <div
+        class="gd-shown-cards"
+        [attr.data-count]="selection().cards.length"
+        [gdFitCards]="selection().fit"
+      >
         @for (card of selection().cards; track $index) {
           <button [gdCard]="card"></button>
         }
@@ -51,11 +56,16 @@ function group(cards: CardView[]): ShownGroup {
         name="delivery"
         [heading]="'New items - ' + name"
         [modal]="false"
+        [focusSelf]="true"
         [open]="deliveries().has(name)"
         (closed)="packs.closeDelivery(name)"
       >
         @if (deliveries().get(name); as shown) {
-          <div class="gd-shown-cards" [attr.data-count]="shown.cards.length" [gdFitCards]="shown.fit">
+          <div
+            class="gd-shown-cards"
+            [attr.data-count]="shown.cards.length"
+            [gdFitCards]="shown.fit"
+          >
             @for (card of shown.cards; track $index) {
               <button [gdCard]="card"></button>
             }
@@ -79,7 +89,10 @@ export class PackDialogsComponent {
   protected readonly deliveries = computed(
     () =>
       new Map(
-        [...this.packs.deliveries().entries()].map(([name, cards]) => [name, group(deliveredCards(cards, this.options))]),
+        [...this.packs.deliveries().entries()].map(([name, cards]) => [
+          name,
+          group(deliveredCards(cards, this.options)),
+        ]),
       ),
   );
 

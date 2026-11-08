@@ -51,7 +51,14 @@ const TITLES = { alert: 'Message', confirm: 'Please confirm', prompt: 'Please en
           OK
         </button>
         @if (request()?.kind !== 'alert') {
-          <button type="button" class="gd-button" data-action="cancel" (click)="notifier.answer(false)">Cancel</button>
+          <button
+            type="button"
+            class="gd-button"
+            data-action="cancel"
+            (click)="notifier.answer(false)"
+          >
+            Cancel
+          </button>
         }
       </div>
     </gd-dialog>

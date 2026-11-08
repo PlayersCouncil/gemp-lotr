@@ -358,14 +358,6 @@ for (const size of sizes) {
       await settle(page);
       const file = path.join(outDir, `${scenario.name}-${size.label}-${which}.png`);
       await page.screenshot({ path: file });
-      if (process.env.MEASURE) {
-        const rects = await page.evaluate((selectors) => selectors.flatMap((sel) => [...document.querySelectorAll(sel)].slice(0, 3).map((el) => {
-          const r = el.getBoundingClientRect();
-          const cs = getComputedStyle(el);
-          return `${sel}: ${r.left.toFixed(2)},${r.top.toFixed(2)} ${r.width.toFixed(2)}x${r.height.toFixed(2)} font ${cs.fontSize} m ${cs.margin} p ${cs.padding} lh ${cs.lineHeight} va ${cs.verticalAlign} d ${cs.display}`;
-        })), process.env.MEASURE.split('|'));
-        console.log(rects.join('\n'));
-      }
       console.log(`${file}${log.length ? `\n  ${[...new Set(log)].join('\n  ')}` : ''}`);
       await context.close();
     }

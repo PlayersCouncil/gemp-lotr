@@ -13,7 +13,12 @@ import { DialogComponent } from '../../shared/dialog/dialog.component';
   imports: [DialogComponent],
   host: { style: 'display: contents' },
   template: `
-    <gd-dialog name="notes" heading="Edit Deck Notes" [open]="library.notesOpen()" (closed)="closed()">
+    <gd-dialog
+      name="notes"
+      heading="Edit Deck Notes"
+      [open]="library.notesOpen()"
+      (closed)="closed()"
+    >
       @if (library.notesOpen()) {
         <textarea
           #notes

@@ -25,7 +25,13 @@ import { DialogComponent } from '../../shared/dialog/dialog.component';
     >
       @for (round of library.importOpen() ? [library.importRound()] : []; track round) {
         <div class="gd-import">
-          <textarea #decklist class="gd-import__text" rows="5" cols="30" aria-label="Decklist"></textarea
+          <textarea
+            #decklist
+            class="gd-import__text"
+            rows="5"
+            cols="30"
+            aria-label="Decklist"
+          ></textarea
           ><button
             type="button"
             class="gd-button"

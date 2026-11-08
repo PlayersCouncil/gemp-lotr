@@ -45,12 +45,26 @@ describe('ui boundary', () => {
 
   it('has no component styles, and no inline styles but `display: contents`', () => {
     const styled = files.flatMap(({ name, source }) => [
-      ...[...source.matchAll(/\bstyles\s*:|styleUrls?\s*:/g)].map((match) => `${name}: ${match[0]}`),
+      ...[...source.matchAll(/\bstyles\s*:|styleUrls?\s*:/g)].map(
+        (match) => `${name}: ${match[0]}`,
+      ),
       ...[...source.matchAll(/\bstyle="([^"]*)"|style:\s*'([^']*)'/g)]
         .filter((match) => (match[1] ?? match[2]).trim() !== 'display: contents')
         .map((match) => `${name}: ${match[0]}`),
       ...[...source.matchAll(/\[style\.(?!--)[\w-]+/g)].map((match) => `${name}: ${match[0]}`),
     ]);
     expect(styled).toEqual([]);
+  });
+
+  it("never uses the browser's alert, confirm or prompt (the Notifier asks the player)", () => {
+    const blocking = files.flatMap(({ name, source }) =>
+      // Calls, not the DialogNotifier's own methods (a declaration is followed by its typed parameters)
+      [
+        ...source.matchAll(
+          /(?<![\w.])(alert|confirm|prompt)\s*\((?!\w+\s*:)|window\.(alert|confirm|prompt)\b/g,
+        ),
+      ].map((match) => `${name}: ${match[0]}`),
+    );
+    expect(blocking).toEqual([]);
   });
 });

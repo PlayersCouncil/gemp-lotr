@@ -5,7 +5,12 @@ import { Notifier } from '../../../core/notifier/notifier';
 export type NotifierRequest =
   | { kind: 'alert'; message: string; resolve: () => void }
   | { kind: 'confirm'; message: string; resolve: (ok: boolean) => void }
-  | { kind: 'prompt'; message: string; defaultValue: string; resolve: (text: string | null) => void };
+  | {
+      kind: 'prompt';
+      message: string;
+      defaultValue: string;
+      resolve: (text: string | null) => void;
+    };
 
 /**
  * The Notifier of the page: each message or question is shown in turn by `gd-notifier` (NotifierDialogComponent), in
