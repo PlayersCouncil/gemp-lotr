@@ -26,10 +26,7 @@ class Host {
 }
 
 /** jsdom has no PointerEvent: a MouseEvent with the pointer fields. */
-function pointer(
-  type: string,
-  init: { x?: number; y?: number; pointerType?: string; button?: number } = {},
-): Event {
+function pointer(type: string, init: { x?: number; y?: number; pointerType?: string; button?: number } = {}): Event {
   const event = new MouseEvent(type, {
     bubbles: true,
     clientX: init.x ?? 0,
@@ -95,9 +92,7 @@ describe('CardComponent', () => {
       expect(el.hasAttribute('data-borderless')).toBe(true);
       expect(el.querySelector('.gd-card__errata')).not.toBeNull();
       expect(el.querySelector<HTMLImageElement>('.gd-card__foil')!.src).toContain('holo.jpg');
-      expect(el.querySelector<HTMLImageElement>('.gd-card__overlay')!.src).toBe(
-        'https://example.com/modifier.jpg',
-      );
+      expect(el.querySelector<HTMLImageElement>('.gd-card__overlay')!.src).toBe('https://example.com/modifier.jpg');
       expect(el.querySelector('.gd-card__count')).toBeNull();
       expect(el.getAttribute('aria-label')).toBe('1_2');
     });

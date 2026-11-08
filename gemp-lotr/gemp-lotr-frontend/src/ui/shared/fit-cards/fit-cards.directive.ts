@@ -1,14 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import {
-  afterNextRender,
-  DestroyRef,
-  Directive,
-  effect,
-  ElementRef,
-  inject,
-  input,
-  signal,
-} from '@angular/core';
+import { afterNextRender, DestroyRef, Directive, effect, ElementRef, inject, input, signal } from '@angular/core';
 import { ThemeService } from '../../../core/platform/theme.service';
 import { FitCard, fitCards, parseFit, parsePx } from './fit-cards';
 

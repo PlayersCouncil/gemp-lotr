@@ -18,7 +18,12 @@ export interface ZoomPlacement {
  * remastered size), right of the hovered card (overlapping it by 15px), else left of it, vertically centred on it and
  * kept within the window.
  */
-export function zoomPlacement(horizontal: boolean, card: CardBox, windowWidth: number, windowHeight: number): ZoomPlacement {
+export function zoomPlacement(
+  horizontal: boolean,
+  card: CardBox,
+  windowWidth: number,
+  windowHeight: number,
+): ZoomPlacement {
   const maxLongSide = (windowWidth / windowHeight <= 1 ? windowWidth : windowHeight) * 0.9;
   const targetLong = Math.min(maxLongSide, TARGET_LONG);
   const targetShort = Math.min((maxLongSide * TARGET_SHORT) / TARGET_LONG, TARGET_SHORT);

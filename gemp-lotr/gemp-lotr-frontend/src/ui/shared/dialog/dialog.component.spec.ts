@@ -50,9 +50,7 @@ describe('DialogComponent', () => {
     const title = dialog.querySelector('header.gd-dialog__header > h2.gd-dialog__title')!;
     expect(title.textContent).toBe('A title');
     expect(dialog.getAttribute('aria-labelledby')).toBe(title.id);
-    expect(
-      dialog.querySelector('header > button.gd-dialog__close')!.getAttribute('aria-label'),
-    ).toBe('Close');
+    expect(dialog.querySelector('header > button.gd-dialog__close')!.getAttribute('aria-label')).toBe('Close');
     expect(dialog.querySelector('.gd-dialog__body > input.first')).not.toBeNull();
   });
 
@@ -81,9 +79,7 @@ describe('DialogComponent', () => {
     const { fixture, host, dialog, show } = await render();
     host.modal.set(false);
     await show();
-    dialog
-      .querySelector('input')!
-      .dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    dialog.querySelector('input')!.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
     await fixture.whenStable();
     expect(host.closed).toBe(1);
   });
@@ -105,12 +101,8 @@ describe('DialogComponent', () => {
     await show();
     const header = dialog.querySelector<HTMLElement>('.gd-dialog__header')!;
     vi.spyOn(dialog, 'getBoundingClientRect').mockReturnValue(new DOMRect(100, 50, 300, 200));
-    header.dispatchEvent(
-      new PointerEvent('pointerdown', { bubbles: true, button: 0, clientX: 150, clientY: 60 }),
-    );
-    header.dispatchEvent(
-      new PointerEvent('pointermove', { bubbles: true, clientX: 170, clientY: 90 }),
-    );
+    header.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, button: 0, clientX: 150, clientY: 60 }));
+    header.dispatchEvent(new PointerEvent('pointermove', { bubbles: true, clientX: 170, clientY: 90 }));
     header.dispatchEvent(new PointerEvent('pointerup', { bubbles: true }));
     await fixture.whenStable();
     expect(dialog.hasAttribute('data-placed')).toBe(true);

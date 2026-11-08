@@ -18,8 +18,7 @@
 :root {
   color-scheme: dark;
 
-  --m-font:
-    system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+  --m-font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
   --m-font-size: 14px;
   --m-font-size-sm: 12px;
   --m-font-size-xs: 11px;
@@ -1417,8 +1416,7 @@ button.gd-slot__label:hover .gd-slot__hint {
   content: '';
   position: absolute;
   inset: 0;
-  border: round(down, calc(max(var(--gd-zoom-width), var(--gd-zoom-height)) / 34), 1px) solid
-    #0b0c0f;
+  border: round(down, calc(max(var(--gd-zoom-width), var(--gd-zoom-height)) / 34), 1px) solid #0b0c0f;
   border-radius: inherit;
 }
 
@@ -1703,14 +1701,12 @@ button.gd-slot__label:hover .gd-slot__hint {
   resize: none;
 }
 
-.gd-dialog:is([data-dialog='alert'], [data-dialog='confirm'], [data-dialog='prompt'])
-  .gd-dialog__header {
+.gd-dialog:is([data-dialog='alert'], [data-dialog='confirm'], [data-dialog='prompt']) .gd-dialog__header {
   min-height: 44px;
   border-bottom: 0;
 }
 
-.gd-dialog:is([data-dialog='alert'], [data-dialog='confirm'], [data-dialog='prompt'])
-  .gd-dialog__body {
+.gd-dialog:is([data-dialog='alert'], [data-dialog='confirm'], [data-dialog='prompt']) .gd-dialog__body {
   padding-top: 0;
 }
 
@@ -1733,11 +1729,7 @@ button.gd-slot__label:hover .gd-slot__hint {
  * is as wide as the card plus its padding.
  */
 .gd-card-info {
-  --m-long-exact: min(
-    calc(var(--gd-card-info-zoom, 0.5) * 1039px),
-    calc(100vh - 170px),
-    calc(100vw - 120px)
-  );
+  --m-long-exact: min(calc(var(--gd-card-info-zoom, 0.5) * 1039px), calc(100vh - 170px), calc(100vw - 120px));
   --m-long: round(down, var(--m-long-exact), 1px);
   --m-short: round(down, calc(var(--m-long-exact) * 745 / 1039), 1px);
   --m-card-width: var(--m-short);
@@ -2284,7 +2276,10 @@ button.gd-slot__label:hover .gd-slot__hint {
     background: rgb(12 14 20 / 0.72);
     box-shadow: 0 0 0 1.5px rgb(255 255 255 / 0.85);
     color: #fff;
-    font: italic 700 15px / 1 Georgia, 'Times New Roman', serif;
+    font:
+      italic 700 15px / 1 Georgia,
+      'Times New Roman',
+      serif;
   }
 
   .gd-card > .gd-card__info::before {

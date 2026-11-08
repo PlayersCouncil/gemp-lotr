@@ -1,10 +1,5 @@
 import { provideHttpClient } from '@angular/common/http';
-import {
-  ApplicationConfig,
-  inject,
-  provideAppInitializer,
-  provideBrowserGlobalErrorListeners,
-} from '@angular/core';
+import { ApplicationConfig, inject, provideAppInitializer, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { Notifier } from '../../core/notifier/notifier';
 import { ThemeService } from '../../core/platform/theme.service';
 import { DialogNotifier } from '../shared/notifier/dialog-notifier';

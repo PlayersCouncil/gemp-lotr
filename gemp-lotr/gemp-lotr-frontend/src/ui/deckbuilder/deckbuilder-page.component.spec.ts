@@ -45,16 +45,10 @@ describe('DeckbuilderPageComponent', () => {
     ]);
     expect(el.querySelector('section.gd-page__deck > gd-deck.gd-deck')).not.toBeNull();
     expect(el.querySelector('gd-auto-zoom > .gd-zoom[hidden]')).not.toBeNull();
-    expect(
-      el.querySelector('section.gd-page__collection > gd-collection-filter.gd-filter'),
-    ).not.toBeNull();
-    expect(
-      el.querySelector('section.gd-page__collection > gd-collection-grid.gd-collection'),
-    ).not.toBeNull();
+    expect(el.querySelector('section.gd-page__collection > gd-collection-filter.gd-filter')).not.toBeNull();
+    expect(el.querySelector('section.gd-page__collection > gd-collection-grid.gd-collection')).not.toBeNull();
     expect(el.querySelector('gd-card-info dialog.gd-card-info')).not.toBeNull();
-    expect(
-      el.querySelector('.gd-page__separator[role="separator"] > button.gd-page__toggle'),
-    ).not.toBeNull();
+    expect(el.querySelector('.gd-page__separator[role="separator"] > button.gd-page__toggle')).not.toBeNull();
     expect(el.style.getPropertyValue('--gd-collection-width')).toBe('');
   });
 
@@ -62,13 +56,9 @@ describe('DeckbuilderPageComponent', () => {
     const { fixture, el } = await render();
     expect(el.dataset['pane']).toBe('deck');
     const tabs = Array.from(
-      el.querySelectorAll<HTMLButtonElement>(
-        '.gd-page__tabs[role="tablist"] > button.gd-page__tab',
-      ),
+      el.querySelectorAll<HTMLButtonElement>('.gd-page__tabs[role="tablist"] > button.gd-page__tab'),
     );
-    expect(
-      tabs.map((tab) => [tab.dataset['pane'], tab.getAttribute('role'), tab.textContent!.trim()]),
-    ).toEqual([
+    expect(tabs.map((tab) => [tab.dataset['pane'], tab.getAttribute('role'), tab.textContent!.trim()])).toEqual([
       ['deck', 'tab', 'Deck'],
       ['collection', 'tab', 'Collection'],
     ]);
@@ -116,8 +106,7 @@ describe('DeckbuilderPageComponent', () => {
     const { fixture, el, separator } = await render();
     const collection = el.querySelector<HTMLElement>('.gd-page__collection')!;
     vi.spyOn(collection, 'getBoundingClientRect').mockReturnValue({ width: 410 } as DOMRect);
-    const key = (k: string) =>
-      separator.dispatchEvent(new KeyboardEvent('keydown', { key: k, cancelable: true }));
+    const key = (k: string) => separator.dispatchEvent(new KeyboardEvent('keydown', { key: k, cancelable: true }));
     key('ArrowLeft');
     await fixture.whenStable();
     expect(el.style.getPropertyValue('--gd-collection-width')).toBe(`${410 + RESIZE_STEP}px`);

@@ -154,10 +154,7 @@ export class CardComponent {
 
   protected onPointerMove(event: PointerEvent): void {
     const press = this.press;
-    if (
-      press?.timer &&
-      Math.hypot(event.clientX - press.x, event.clientY - press.y) > LONG_PRESS_SLOP
-    ) {
+    if (press?.timer && Math.hypot(event.clientX - press.x, event.clientY - press.y) > LONG_PRESS_SLOP) {
       // Scrolling, not pressing
       clearTimeout(press.timer);
       press.timer = null;

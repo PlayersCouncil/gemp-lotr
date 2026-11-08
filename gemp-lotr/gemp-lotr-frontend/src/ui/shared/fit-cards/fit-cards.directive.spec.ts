@@ -32,9 +32,7 @@ class FakeResizeObserver {
   template: `<div class="box" [gdFitCards]="cards()"></div>`,
 })
 class Host {
-  readonly cards = signal<readonly FitCard[]>(
-    Array.from({ length: 12 }, () => ({ horizontal: false })),
-  );
+  readonly cards = signal<readonly FitCard[]>(Array.from({ length: 12 }, () => ({ horizontal: false })));
 }
 
 describe('FitCardsDirective', () => {

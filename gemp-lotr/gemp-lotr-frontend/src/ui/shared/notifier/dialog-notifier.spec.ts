@@ -62,13 +62,9 @@ describe('DialogNotifier', () => {
       await stable();
       expect(dialog.open).toBe(true);
       expect(dialog.dataset['dialog']).toBe('alert');
-      expect(dialog.querySelector('p.gd-notifier__message')!.textContent).toBe(
-        'Line one\nline two',
-      );
+      expect(dialog.querySelector('p.gd-notifier__message')!.textContent).toBe('Line one\nline two');
       expect(dialog.querySelector('.gd-notifier__input')).toBeNull();
-      const buttons = dialog.querySelectorAll<HTMLButtonElement>(
-        '.gd-dialog__actions > button.gd-button',
-      );
+      const buttons = dialog.querySelectorAll<HTMLButtonElement>('.gd-dialog__actions > button.gd-button');
       expect(Array.from(buttons).map((b) => b.dataset['action'])).toEqual(['ok']);
       expect(document.activeElement).toBe(buttons[0]);
       buttons[0].click();

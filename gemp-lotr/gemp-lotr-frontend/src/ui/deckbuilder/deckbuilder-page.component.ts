@@ -72,12 +72,7 @@ export type PagePane = 'deck' | 'collection';
         (click)="toggleCollection()"
       ></button>
     </div>
-    <section
-      class="gd-page__collection"
-      id="gd-pane-collection"
-      aria-label="Collection"
-      [hidden]="!collectionOpen()"
-    >
+    <section class="gd-page__collection" id="gd-pane-collection" aria-label="Collection" [hidden]="!collectionOpen()">
       <gd-collection-filter />
       <gd-collection-grid />
     </section>
@@ -136,11 +131,7 @@ export class DeckbuilderPageComponent {
 
   /** Dragging the separator: the collection's left edge follows the pointer. */
   protected startResize(event: PointerEvent): void {
-    if (
-      !this.collectionOpen() ||
-      event.button !== 0 ||
-      (event.target as Element).closest('.gd-page__toggle')
-    ) {
+    if (!this.collectionOpen() || event.button !== 0 || (event.target as Element).closest('.gd-page__toggle')) {
       return;
     }
     event.preventDefault();
@@ -158,9 +149,7 @@ export class DeckbuilderPageComponent {
       separator.removeEventListener('pointercancel', stop);
       this.dragging.set(false);
       // Keep what the theme allowed, so the next drag or key press starts from what is shown
-      const shown = page
-        .querySelector<HTMLElement>('.gd-page__collection')
-        ?.getBoundingClientRect().width;
+      const shown = page.querySelector<HTMLElement>('.gd-page__collection')?.getBoundingClientRect().width;
       if (shown) {
         this.collectionWidth.set(Math.round(shown));
       }
@@ -180,8 +169,7 @@ export class DeckbuilderPageComponent {
       this.toggleCollection();
       return;
     }
-    const step =
-      event.key === 'ArrowLeft' ? RESIZE_STEP : event.key === 'ArrowRight' ? -RESIZE_STEP : 0;
+    const step = event.key === 'ArrowLeft' ? RESIZE_STEP : event.key === 'ArrowRight' ? -RESIZE_STEP : 0;
     if (step && this.collectionOpen()) {
       event.preventDefault();
       const collection = (event.currentTarget as HTMLElement)

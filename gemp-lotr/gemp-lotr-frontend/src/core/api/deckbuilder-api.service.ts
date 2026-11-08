@@ -42,9 +42,7 @@ export class DeckbuilderApi {
 
   /** saveDeck: creates or overwrites. 400 = the server could not build a deck from the contents. */
   saveDeck(deckName: string, targetFormat: string, notes: string, deckContents: string): Observable<void> {
-    return this.http
-      .postXml('/deck', { deckName, targetFormat, notes, deckContents })
-      .pipe(map(() => undefined));
+    return this.http.postXml('/deck', { deckName, targetFormat, notes, deckContents }).pipe(map(() => undefined));
   }
 
   /** renameDeck: answers the renamed deck. 404 = no deck with the old name. */
@@ -126,9 +124,7 @@ export class DeckbuilderApi {
 
   /** openPack: the contents arrive through PackDeliveryService. 404 = the pack could not be opened. */
   openPack(collectionType: string, packBlueprintId: string): Observable<void> {
-    return this.http
-      .postXml(this.collectionPath(collectionType), { pack: packBlueprintId })
-      .pipe(map(() => undefined));
+    return this.http.postXml(this.collectionPath(collectionType), { pack: packBlueprintId }).pipe(map(() => undefined));
   }
 
   /** openSelectionPack: takes the chosen card from a selection pack. 404 = the pack could not be opened. */

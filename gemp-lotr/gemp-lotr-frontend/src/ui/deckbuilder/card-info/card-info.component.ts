@@ -1,5 +1,14 @@
 import { DOCUMENT } from '@angular/common';
-import { afterRenderEffect, Component, computed, ElementRef, inject, linkedSignal, signal, viewChild } from '@angular/core';
+import {
+  afterRenderEffect,
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  linkedSignal,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { parseBlueprint } from '../../../core/cards/card-blueprint';
 import { cardDisplayData } from '../../../core/cards/card-display';
 import { CardImageService } from '../../../core/cards/card-image.service';

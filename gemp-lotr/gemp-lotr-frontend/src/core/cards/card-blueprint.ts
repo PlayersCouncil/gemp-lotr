@@ -51,7 +51,10 @@ export function parseBlueprint(blueprintId: string): { setNo: number; cardNo: nu
 
 /** Card.StripBlueprintId: removes the foil, alternate-image and tengwar markers. */
 export function stripBlueprintId(blueprintId: string): string {
-  return blueprintId.replace('*', '').replace('^', '').replace(/(_\d+)T/, '$1');
+  return blueprintId
+    .replace('*', '')
+    .replace('^', '')
+    .replace(/(_\d+)T/, '$1');
 }
 
 /** Card.GetFoil */

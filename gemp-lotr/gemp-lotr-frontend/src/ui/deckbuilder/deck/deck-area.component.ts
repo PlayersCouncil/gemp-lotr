@@ -99,7 +99,12 @@ function slotView(view: Omit<SlotView, 'fit'>): SlotView {
       </section>
     }
     @for (pile of piles(); track pile.side) {
-      <section class="gd-pile" [attr.data-side]="pile.name" [attr.data-count]="pile.count" [attr.aria-label]="pile.title">
+      <section
+        class="gd-pile"
+        [attr.data-side]="pile.name"
+        [attr.data-count]="pile.count"
+        [attr.aria-label]="pile.title"
+      >
         <div class="gd-pile__cards" [gdFitCards]="pile.fit">
           @for (stack of pile.stacks; track cardKey(stack.card)) {
             <div class="gd-stack">
@@ -125,13 +130,8 @@ export class DeckAreaComponent {
   protected readonly slots = computed<SlotView[]>(() => {
     const deck = this.deck.deck();
     const race = raceCardView(this.deck.raceCard(), this.options);
-    const slot = (
-      slot: DeckSlot,
-      name: string,
-      title: string,
-      hint: string,
-      hidden = false,
-    ): SlotView => slotView({ slot, name, title, hint, selectable: true, hidden, cards: slotCards(deck, slot, this.options) });
+    const slot = (slot: DeckSlot, name: string, title: string, hint: string, hidden = false): SlotView =>
+      slotView({ slot, name, title, hint, selectable: true, hidden, cards: slotCards(deck, slot, this.options) });
     return [
       slot('ringBearer', 'ring-bearer', 'Ring-bearer', '(Click here to select your Ring-bearer.)'),
       slot('ring', 'ring', 'The One Ring', '(Click here to select your Ring.)'),

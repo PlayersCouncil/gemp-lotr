@@ -21,9 +21,7 @@ export class PackDeliveryService {
   readonly deliveries$: Observable<PackDelivery[]> = this.deliveries.asObservable();
 
   constructor() {
-    this.http.openedPackAnnounced$
-      .pipe(takeUntilDestroyed(inject(DestroyRef)))
-      .subscribe(() => this.fetch());
+    this.http.openedPackAnnounced$.pipe(takeUntilDestroyed(inject(DestroyRef))).subscribe(() => this.fetch());
   }
 
   fetch(): void {

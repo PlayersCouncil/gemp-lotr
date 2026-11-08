@@ -35,17 +35,17 @@ The legacy page is the classic look, so with `--theme=classic` (the default) bot
 `--theme=modern` the screenshots are expected to differ and the report is for looking at them side by side, while
 the server requests must still be the same.
 
-| Option | Default | |
-|---|---|---|
-| `--server` | `$GEMP_SERVER` or `http://localhost:17001` | The Gemp server |
-| `--theme` | `classic` | The Angular page's theme, `classic` or `modern` (its `?theme=`, unless `--angular` has one) |
-| `--legacy`, `--angular` | `/gemp-lotr/deckBuild.html`, `/gemp-lotr/ng/deckbuilder/` | The two pages' paths |
-| `--sizes` | `1280x800,1366x768,1920x1080` | Window sizes |
-| `--only` | all | Comma-separated scenario names |
-| `--mutating` | off | Also run the scenarios that change the account (saving, renaming and copying decks) |
-| `--workers` | 4 | Scenarios run in parallel |
-| `--tolerance` | 60 | Differing pixels allowed |
-| `--out` | `report` | Report folder |
+| Option                  | Default                                                   |                                                                                             |
+| ----------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `--server`              | `$GEMP_SERVER` or `http://localhost:17001`                | The Gemp server                                                                             |
+| `--theme`               | `classic`                                                 | The Angular page's theme, `classic` or `modern` (its `?theme=`, unless `--angular` has one) |
+| `--legacy`, `--angular` | `/gemp-lotr/deckBuild.html`, `/gemp-lotr/ng/deckbuilder/` | The two pages' paths                                                                        |
+| `--sizes`               | `1280x800,1366x768,1920x1080`                             | Window sizes                                                                                |
+| `--only`                | all                                                       | Comma-separated scenario names                                                              |
+| `--mutating`            | off                                                       | Also run the scenarios that change the account (saving, renaming and copying decks)         |
+| `--workers`             | 4                                                         | Scenarios run in parallel                                                                   |
+| `--tolerance`           | 60                                                        | Differing pixels allowed                                                                    |
+| `--out`                 | `report`                                                  | Report folder                                                                               |
 
 For a fuller check, give the test player a few packs and a selection pack in "My cards" ("my-cards" and "selection-pack"
 show them), and have some library decks (decks of the "Librarian" player, for "open-library-deck").

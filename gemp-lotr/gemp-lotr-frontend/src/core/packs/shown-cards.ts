@@ -12,10 +12,7 @@ export interface ShownCardsOptions {
  * The choices of a selection pack ("Choose one"): drawn like collection cards, without counts; using one picks it
  * (`role` cardToSelect).
  */
-export function selectionChoiceCards(
-  choices: readonly string[],
-  { images, foilImage }: ShownCardsOptions,
-): CardView[] {
+export function selectionChoiceCards(choices: readonly string[], { images, foilImage }: ShownCardsOptions): CardView[] {
   return choices.map((blueprintId) => {
     const image = images.resolve(blueprintId, 'selection');
     return {
@@ -36,10 +33,7 @@ export function selectionChoiceCards(
  * What was opened ("New items"): packs, then cards, each with its count; never borderless, and packs never marked as
  * errata (deckbuilderDeliveryService.js).
  */
-export function deliveredCards(
-  cards: readonly ShownCard[],
-  { images, foilImage }: ShownCardsOptions,
-): CardView[] {
+export function deliveredCards(cards: readonly ShownCard[], { images, foilImage }: ShownCardsOptions): CardView[] {
   return cards.map((card) => {
     const image = images.resolve(card.blueprintId, 'player');
     return {

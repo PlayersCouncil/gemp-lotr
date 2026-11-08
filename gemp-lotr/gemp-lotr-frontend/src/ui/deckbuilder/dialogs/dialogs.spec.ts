@@ -65,24 +65,14 @@ describe('deck builder dialogs', () => {
         ['delete', 'Delete deck'],
       ]);
       // Names are text
-      expect(items[0].querySelector('.gd-deck-list__name')!.textContent).toBe(
-        '[Fellowship Block] - First <b>deck</b>',
-      );
-      expect(items[0].querySelector('b.gd-deck-list__format')!.textContent).toBe(
-        '[Fellowship Block]',
-      );
+      expect(items[0].querySelector('.gd-deck-list__name')!.textContent).toBe('[Fellowship Block] - First <b>deck</b>');
+      expect(items[0].querySelector('b.gd-deck-list__format')!.textContent).toBe('[Fellowship Block]');
     });
 
     it('runs the entry actions', async () => {
       const library = TestBed.inject(DeckLibraryService);
       const calls: string[] = [];
-      for (const method of [
-        'openDeck',
-        'renameDeck',
-        'shareDeck',
-        'deleteDeck',
-        'showLibraryDeck',
-      ] as const) {
+      for (const method of ['openDeck', 'renameDeck', 'shareDeck', 'deleteDeck', 'showLibraryDeck'] as const) {
         vi.spyOn(library, method).mockImplementation(
           ((entry: DeckSummary) => void calls.push(`${method} ${entry.name}`)) as never,
         );
@@ -100,11 +90,10 @@ describe('deck builder dialogs', () => {
       expect(dialog.dataset['dialog']).toBe('library');
       expect(dialog.querySelector('.gd-dialog__title')!.textContent).toBe('Library Decks');
       const first = dialog.querySelector('li')!;
-      expect(
-        Array.from(first.querySelectorAll<HTMLButtonElement>('button')).map(
-          (b) => b.dataset['action'],
-        ),
-      ).toEqual(['open', 'deck-list']);
+      expect(Array.from(first.querySelectorAll<HTMLButtonElement>('button')).map((b) => b.dataset['action'])).toEqual([
+        'open',
+        'deck-list',
+      ]);
       first.querySelector<HTMLButtonElement>('[data-action="deck-list"]')!.click();
       expect(calls).toEqual([
         'openDeck Second',
@@ -131,9 +120,7 @@ describe('deck builder dialogs', () => {
       const library = TestBed.inject(DeckLibraryService);
       const deck = TestBed.inject(DeckService);
       const imported: string[] = [];
-      vi.spyOn(deck, 'importDecklist').mockImplementation(
-        (text: string) => void imported.push(text),
-      );
+      vi.spyOn(deck, 'importDecklist').mockImplementation((text: string) => void imported.push(text));
       const { dialogs, stable } = await render(ImportDialogComponent);
       library.importRound.update((n) => n + 1);
       library.importOpen.set(true);
@@ -141,9 +128,7 @@ describe('deck builder dialogs', () => {
       const [dialog] = dialogs();
       expect(dialog.dataset['dialog']).toBe('import');
       expect(document.activeElement).toBe(dialog);
-      const text = dialog.querySelector<HTMLTextAreaElement>(
-        '.gd-import textarea.gd-import__text',
-      )!;
+      const text = dialog.querySelector<HTMLTextAreaElement>('.gd-import textarea.gd-import__text')!;
       text.value = '1x Gandalf';
       dialog.querySelector<HTMLButtonElement>('button.gd-button[data-action="import"]')!.click();
       expect(imported).toEqual(['1x Gandalf']);
@@ -212,9 +197,7 @@ describe('deck builder dialogs', () => {
       await stable();
       const delivery = dialogs()[1];
       expect(delivery.dataset['dialog']).toBe('delivery');
-      expect(delivery.querySelector('.gd-dialog__title')!.textContent).toBe(
-        'New items - permanent',
-      );
+      expect(delivery.querySelector('.gd-dialog__title')!.textContent).toBe('New items - permanent');
       expect(
         Array.from(delivery.querySelectorAll<HTMLElement>('.gd-card')).map((c) => [
           c.dataset['role'],

@@ -69,7 +69,9 @@ interface ToolbarAction {
     }
     <select class="gd-toolbar__collection" aria-label="Collection" (change)="selectCollection($event)">
       @for (collection of collections(); track collection.type) {
-        <option [value]="collection.type" [selected]="collection.type === collectionType()">{{ collection.name }}</option>
+        <option [value]="collection.type" [selected]="collection.type === collectionType()">
+          {{ collection.name }}
+        </option>
       }
     </select>
     <select class="gd-toolbar__theme" aria-label="Theme" title="Theme" (change)="selectTheme($event)">

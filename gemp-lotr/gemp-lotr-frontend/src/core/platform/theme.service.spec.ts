@@ -178,7 +178,7 @@ describe('ThemeService', () => {
       expect(await settled(failing)).toBe(true);
 
       themeLinks().forEach((link) => link.remove());
-    document.head.querySelectorAll(`meta[${THEME_VIEWPORT_ATTRIBUTE}]`).forEach((meta) => meta.remove());
+      document.head.querySelectorAll(`meta[${THEME_VIEWPORT_ATTRIBUTE}]`).forEach((meta) => meta.remove());
       TestBed.resetTestingModule();
       vi.useFakeTimers();
       const hanging = service().init();

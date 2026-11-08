@@ -41,11 +41,7 @@ function group(cards: CardView[]): ShownGroup {
       [open]="packs.selection() !== null"
       (closed)="packs.selection.set(null)"
     >
-      <div
-        class="gd-shown-cards"
-        [attr.data-count]="selection().cards.length"
-        [gdFitCards]="selection().fit"
-      >
+      <div class="gd-shown-cards" [attr.data-count]="selection().cards.length" [gdFitCards]="selection().fit">
         @for (card of selection().cards; track $index) {
           <button [gdCard]="card"></button>
         }
@@ -61,11 +57,7 @@ function group(cards: CardView[]): ShownGroup {
         (closed)="packs.closeDelivery(name)"
       >
         @if (deliveries().get(name); as shown) {
-          <div
-            class="gd-shown-cards"
-            [attr.data-count]="shown.cards.length"
-            [gdFitCards]="shown.fit"
-          >
+          <div class="gd-shown-cards" [attr.data-count]="shown.cards.length" [gdFitCards]="shown.fit">
             @for (card of shown.cards; track $index) {
               <button [gdCard]="card"></button>
             }

@@ -155,7 +155,9 @@ describe('DeckAreaComponent', () => {
   });
 
   it('renders the stats from data, toned', async () => {
-    deck.stats.set(parseDeckStats("<b>Free People</b>: 0<br/><font color='red'>No <script>x</script></font><br/><br/>"));
+    deck.stats.set(
+      parseDeckStats("<b>Free People</b>: 0<br/><font color='red'>No <script>x</script></font><br/><br/>"),
+    );
     const { el } = await render();
     const lines = Array.from(el.querySelectorAll('.gd-stats > .gd-stats__line'));
     expect(lines.map((line) => line.textContent)).toEqual(['Free People: 0', 'No <script>x</script>', '']);

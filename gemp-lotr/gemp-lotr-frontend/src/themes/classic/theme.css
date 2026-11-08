@@ -793,7 +793,9 @@ button.gd-slot__label:focus-visible {
   border-radius: 8px;
   background-color: #222;
   color: #fff;
-  font: 13.3333px Arial, sans-serif;
+  font:
+    13.3333px Arial,
+    sans-serif;
 }
 
 .gd-toolbar select:hover {

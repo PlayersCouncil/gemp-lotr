@@ -51,12 +51,7 @@ export function stackWidth(card: FitCard, rowHeight: number): number {
 }
 
 /** How many rows the cards need at that row height in a box that wide (Infinity if a card is wider than the box). */
-export function rowsNeeded(
-  cards: readonly FitCard[],
-  rowHeight: number,
-  width: number,
-  gap: number,
-): number {
+export function rowsNeeded(cards: readonly FitCard[], rowHeight: number, width: number, gap: number): number {
   let rows = 1;
   let x = 0;
   for (const card of cards) {
@@ -150,24 +145,19 @@ function widthForLongSide(horizontal: boolean, size: number): number {
  * Fixed: when a card was wider than the box at the tried height, the legacy code ignored it, so cards overflowed the
  * box (only in tall, narrow boxes); here more rows are tried.
  */
-function rowsFitHeight(
-  { width, height, cards, gap }: FitCardsInput,
-  max: number,
-): { height: number; rows: number } {
+function rowsFitHeight({ width, height, cards, gap }: FitCardsInput, max: number): { height: number; rows: number } {
   const capped = (rowHeight: number) => Math.min(max, rowHeight);
   // Each card's width per pixel of height, from the legacy page's 1000px reference
   const proportions = cards.map(
     (card) =>
       (widthForLongSide(card.horizontal, 1000) +
-        (card.behind ?? []).reduce((sum, landscape) => sum + widthForLongSide(landscape, 1000), 0) *
-          BEHIND_SHOWN) /
+        (card.behind ?? []).reduce((sum, landscape) => sum + widthForLongSide(landscape, 1000), 0) * BEHIND_SHOWN) /
       1000,
   );
 
   const totalWidth = proportions.reduce((sum, proportion) => sum + proportion * height, 0);
   const withoutGaps = width - gap * (cards.length - 1);
-  const single =
-    totalWidth > withoutGaps ? Math.floor(height / (totalWidth / withoutGaps)) : height;
+  const single = totalWidth > withoutGaps ? Math.floor(height / (totalWidth / withoutGaps)) : height;
   if (single * 2 + gap > height) {
     return { height: capped(single), rows: 1 };
   }
@@ -196,11 +186,7 @@ function rowsFitHeight(
       const w = stackWidth(card, rowHeight);
       const share =
         widthForLongSide(card.horizontal, rowHeight) +
-        (card.behind ?? []).reduce(
-          (sum, landscape) => sum + widthForLongSide(landscape, rowHeight),
-          0,
-        ) *
-          BEHIND_SHOWN;
+        (card.behind ?? []).reduce((sum, landscape) => sum + widthForLongSide(landscape, rowHeight), 0) * BEHIND_SHOWN;
       if (x + share > width) {
         x = 0;
       }

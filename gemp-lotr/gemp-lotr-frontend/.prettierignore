@@ -1,0 +1,18 @@
+# Build and generated output
+dist
+out-tsc
+.angular
+coverage
+node_modules
+node
+src/generated
+visual-check/node_modules
+visual-check/report*
+
+# Captured server responses, kept byte-for-byte
+src/testing/server-responses/*.html
+src/testing/server-responses/*.xml
+
+# Lockfiles
+package-lock.json
+visual-check/package-lock.json
