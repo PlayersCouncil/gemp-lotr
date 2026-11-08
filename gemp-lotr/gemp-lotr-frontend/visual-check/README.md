@@ -1,5 +1,9 @@
 # Deck builder visual check
 
+> **Note:** `run.mjs` and `scenarios.mjs` still drive both pages through the legacy element IDs (`#collection-display`,
+> `#deckListBut`, ...), which the Angular page no longer has since its first view was replaced by `src/ui`; until the
+> scenarios are given the new UI's selectors (as `stubbed.mjs` does), use `stubbed.mjs` below.
+
 Compares the Angular deck builder (`/gemp-lotr/ng/deckbuilder/`) with the legacy one (`/gemp-lotr/deckBuild.html`) in a
 real browser (Chromium, via Playwright). Every scenario in `scenarios.mjs` runs on a fresh copy of each page. That
 covers the collection filters and paging, building a deck, formats, every dialog, card information and the hover
@@ -55,8 +59,7 @@ show them), and have some library decks (decks of the "Librarian" player, for "o
 
 ## Without a server: `stubbed.mjs`
 
-While the new UI is being built, `stubbed.mjs` screenshots the legacy page and the new UI (`?ui=next&theme=classic`)
-side by side with no Gemp server: both are served from disk (the legacy web root and the Angular build output) and the
+`stubbed.mjs` screenshots the legacy page and the Angular one in the classic theme (`?theme=classic`) side by side with no Gemp server: both are served from disk (the legacy web root and the Angular build output) and the
 server's answers come from `src/testing/server-responses` plus a generated collection. Card images are replaced by
 labelled placeholders on both pages. It compares nothing by itself; look at the pairs in `report-stubbed/`. Scenarios: `collection`, `second-page`, `shadow-filter`, `deck` (a few cards, copies and sites in the deck, with the
 stubbed stats), `zoom-deck` and `zoom-collection` (the hover zoom), `card-info`, and the dialogs: `deck-list`,

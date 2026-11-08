@@ -1,7 +1,4 @@
-<!DOCTYPE html
-	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<!-- The legacy deck builder's doctype: it puts the browser in "limited quirks" mode, in which images on their own
-     in a line add no space below them (e.g. the culture buttons, the cards). Keep it while the page must look the same. -->
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -11,20 +8,8 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/gemp-lotr/images/icons/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/gemp-lotr/images/icons/favicon-16x16.png">
   <link rel="manifest" href="/gemp-lotr/images/icons/site.webmanifest">
-
-  <!-- The legacy deck builder's stylesheets, used in place (same files and order as deckBuild.html),
-       so the page looks the same and style fixes to them apply to both deck builders. The new UI (?ui=next, see
-       src/ui-switch.ts) removes them (data-legacy-stylesheet). -->
-  <link rel="stylesheet" type="text/css" data-beasties-skip data-legacy-stylesheet href="/gemp-lotr/css/gemp-001/deckBuild.css">
-  <link rel="stylesheet" type="text/css" data-beasties-skip data-legacy-stylesheet href="/gemp-lotr/css/gemp-001/hall.css">
-  <link rel="stylesheet" type="text/css" data-beasties-skip data-legacy-stylesheet href="/gemp-lotr/css/gemp-001/cardFilter.css">
-  <link rel="stylesheet" type="text/css" data-beasties-skip data-legacy-stylesheet href="/gemp-lotr/css/gemp-001/autozoom.css">
-  <link rel="stylesheet" type="text/css" data-beasties-skip data-legacy-stylesheet href="/gemp-lotr/css/dark-hive/jquery-ui-1.8.16.custom.css">
-  <link rel="stylesheet" type="text/css" data-beasties-skip data-legacy-stylesheet href="/gemp-lotr/css/jquery.contextMenu.css">
-  <link rel="stylesheet" type="text/css" data-beasties-skip data-legacy-stylesheet href="/gemp-lotr/js/jquery/styles/jquery.spinnercontrol.css">
-  <link rel="stylesheet" type="text/css" data-beasties-skip data-legacy-stylesheet href="/gemp-lotr/src/DeckBuilder/index.css">
 </head>
-<body class="ui-layout-container">
+<body>
   <deckbuilder-app></deckbuilder-app>
 </body>
 </html>

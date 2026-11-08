@@ -25,7 +25,6 @@
               }
             ],
             "styles": [
-              "src/styles.css",
               {
                 "input": "src/themes/classic/theme.css",
                 "bundleName": "theme-classic",

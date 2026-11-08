@@ -15,7 +15,7 @@ function sourceFiles(dir: string): string[] {
   });
 }
 
-/** Relative imports of a file, resolved against src/ ("core/deck/deck.service", "deckbuilder-app/layout/..."). */
+/** Relative imports of a file, resolved against src/ ("core/deck/deck.service", "ui/shared/..."). */
 function importedPaths(file: string, source: string): string[] {
   return [...source.matchAll(/(?:import|export)[^'"]*from\s*'(\.[^']+)'/g)].map((match) =>
     relative(SRC_DIR, resolve(file, '..', match[1]))

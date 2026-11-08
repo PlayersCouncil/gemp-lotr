@@ -55,7 +55,6 @@ regular hall at `http://localhost:4200/gemp-lotr/` and then open the deck builde
 
 | Folder | What it holds |
 |---|---|
-| `src/deckbuilder-app/deckbuilder-app.*` | The deck builder's root component (`DeckbuilderApp`, element `<deckbuilder-app>`), its page frame template and its providers (`deckbuilder-app.config.ts`); `src/main.ts` starts it. Named for the deck builder so it can sit beside other pages in the coming whole-site Angular frontend. |
 | `src/core/` | State, rules and server calls, with no view code: nothing in it imports from the view folders, and it has no templates or styles, and only `core/platform/` touches the browser (`DOCUMENT`, `window`, cookies); `core-boundary.spec.ts` checks all of this. |
 | `src/core/api/` | `DeckbuilderApi`: every server call the deck builder makes, typed. Sent via `GempHttp`, which adds `participantId`, encodes form data strictly (a `+` stays a `+`), turns failures into `ApiError` and spots the opened-pack header. `parsers.ts` reads the server's XML. |
 | `src/core/cards/` | Card images. `card-blueprint.ts` is a port of the legacy `Card.js` rules; the image tables still come from the legacy files (`PC_Cards.js`, `hobbit.js`, `set40.js`, `cards/CardImages.js`, `cards/PackImages.js`): `scripts/extract-card-data.mjs` turns them into `src/generated/card-data.json` (not committed) before every `npm run build`, `npm start` and `npm test`, and `card-data.ts` provides it. Add new card images in the legacy files, as before; `card-data.parity.spec.ts` fails if the JSON doesn't match them. `card-ref.ts` is what a card on the page stands for; `CardInfoService` holds the card shown in the card information. |
@@ -64,31 +63,22 @@ regular hall at `http://localhost:4200/gemp-lotr/` and then open the deck builde
 | `src/core/deck/` | The deck being edited: `deck-model.ts` (slots, piles, extra copies, the `deckContents` string), `format-options.ts` (the format list) and `DeckService` (format switching, Map/Race slots, deck stats, unsaved changes and the save prompts, New/Save/Rename/Copy/Convert). `DeckLibraryService`: the deck list and library, import and notes. |
 | `src/core/delivery/`, `src/core/packs/` | `PackDeliveryService`: the opened-pack "New items" contents. `PacksService`: opening packs, the selection-pack choice and the open "New items" dialogs; `shown-cards.ts` gives their cards. |
 | `src/core/actions/` | `DeckbuilderActions`: what using a card means (add it, remove it, open a pack, show its details), whatever gesture the view maps to it. |
-| `src/core/notifier/` | `Notifier`: messages and questions to the player (the legacy alert/confirm/prompt), all asynchronous. The view provides it: the new UI's `ui/shared/notifier/DialogNotifier` (shown by `gd-notifier`), the old view's `deckbuilder-app/notifier/WindowNotifier` (the browser's dialogs). Tests use `src/testing/fake-notifier.ts`. |
+| `src/core/notifier/` | `Notifier`: messages and questions to the player (the legacy alert/confirm/prompt), all asynchronous. The view provides it: `ui/shared/notifier/DialogNotifier` (shown by `gd-notifier`), in the page's own dialogs. Tests use `src/testing/fake-notifier.ts`. |
 | `src/core/session/` | `SessionService`: the optional `?participantId=` (admins acting as a player). |
 | `src/core/platform/` | The browser, behind services: cookies, the page's query string, image preloading, opening links, and `ThemeService` (see Themes below). |
 | `src/themes/<name>/` | A theme's CSS (`theme.css`); its images and other files go in `public/themes/<name>/`. See Themes below. |
-| `src/ui/` | The new UI, being built (open it with `?ui=next`; see "The new UI" below): `ui/deckbuilder/` (the page frame, the deck side, the collection filter and cards, the card information, the hover zoom, the dialogs) and `ui/shared/` (the card and its hover reporting, `fitCards`, the dialog, the notifier). Markup and interaction only; the themes draw it. `ui-boundary.spec.ts` checks it imports only core and ui and has no styles. |
-| `src/deckbuilder-app/layout/` | The page frame: `page-layout.ts` reproduces the legacy `jquery.layout` panes (deck, collection, resizer bar), and `deck-layout.ts` is the legacy `layoutUI` positioning of the deck slots. |
-| `src/deckbuilder-app/cards/` | Card display: `gempCard` (the legacy card element with its errata, foil, count, border and meta-site layers), `gemp-card-display` (the large card of the info dialog and the hover zoom), `card-group-layout.ts` (the `NormalCardGroup` rows and the `VerticalBarGroup` sites column) and `CardRegistry` (what each card element stands for). |
-| `src/deckbuilder-app/collection/` | The collection pane: the filter (`gempCardFilter`) and the cards of the current page (`gempCollectionDisplay`). |
-| `src/deckbuilder-app/deck/` | The deck pane (`gempDeckArea`: slots, piles, stats), the top toolbar, and `CardClicksService`, the page-wide card mouse handling (click activates the card; shift-click, right-click or dragging up asks for card details; both go to `DeckbuilderActions`). |
-| `src/deckbuilder-app/dialogs/` | The dialogs: deck list and library, import, notes, card information, the hover zoom (`AutoZoomService`), the selection-pack chooser and the "New items" popups. |
-| `src/deckbuilder-app/shared/` | jQuery UI look-alikes, so the dark-hive theme applies: `gempUiButton` (button classes and hover/pressed states), `gempUiSlider` (the slider) and `gemp-ui-dialog` (the dialog: centred, draggable, resizable, modal overlay, Escape). |
+| `src/ui/` | The view (see "The UI and its DOM contract" below): `ui/deckbuilder/` (the root component `DeckbuilderPageComponent`, element `<deckbuilder-app>`, started by `src/main.ts` with the providers in `deckbuilder-page.config.ts`; the page frame, the deck side, the collection filter and cards, the card information, the hover zoom, the dialogs) and `ui/shared/` (the card and its hover reporting, `fitCards`, the dialog, the notifier). Markup and interaction only; the themes draw it. `ui-boundary.spec.ts` checks it imports only core and ui and has no styles. |
 | `src/testing/` | Test helpers and `server-responses/`, real server responses the parser tests run against. |
 
-`index.html` keeps the legacy page's XHTML Transitional doctype. It puts the browser in "limited quirks" mode, where an
-image alone on a line adds no space below it; with `<!doctype html>` the culture buttons are 4px taller.
+`index.html` is a plain HTML5 page (`<!doctype html>`, standards mode). The legacy page's XHTML Transitional doctype
+put the browser in "limited quirks" mode, where an image or a textarea alone on a line adds no space below it for the
+text's descenders. The classic theme matches it without the quirk: its images and buttons sit in flex or block boxes,
+and the import dialog's textarea has `vertical-align: top`.
 
 Settings kept in cookies (auto-zoom on/off, the card info zoom) are written with the legacy pages' path (`/gemp-lotr`),
 so both deck builders share them.
 
-The page uses the legacy stylesheets where they are (linked in `src/index.html` from `/gemp-lotr/css/...`), keeping the
-legacy element IDs and classes, so it looks the same and later fixes to those stylesheets apply to both deck builders.
-
-`card-group-layout.spec.ts` checks the card layouts against layouts recorded from the legacy `NormalCardGroup` and
-`VerticalBarGroup` (`src/testing/legacy-*-layouts.json`; the matching `*.generator.js` scripts record them again in the
-legacy page's browser console).
+No legacy stylesheet is linked: the themes draw the whole page.
 
 `card-blueprint.parity.spec.ts` runs the legacy `Card.js` side by side with the port on over 50,000 blueprint IDs, so a
 change to `Card.js` that isn't mirrored in `card-blueprint.ts` fails the build.
@@ -113,12 +103,11 @@ Scoping: only one theme's stylesheet is on the page at a time, so theme CSS is w
 The theme files are not hashed (their names are fixed so they can be linked at runtime); the server revalidates them
 with an ETag, like the legacy stylesheets.
 
-## The new UI and its DOM contract
+## The UI and its DOM contract
 
-`src/ui` replaces the current view (`src/deckbuilder-app`) step by step. Until it is complete the current view stays the
-default; `?ui=next` (temporary, `src/ui-switch.ts`) starts the new one instead, with the legacy stylesheets removed so
-the themes are seen on their own, and with its own providers (`ui/deckbuilder/deckbuilder-page.config.ts`), whose
-Notifier is `DialogNotifier`: messages and questions in the page's own dialog instead of the browser's.
+`src/ui` is the deck builder's view; it replaced the first Angular view (`src/deckbuilder-app`, which reused the legacy
+stylesheets and element IDs). Its providers are in `ui/deckbuilder/deckbuilder-page.config.ts`, whose Notifier is
+`DialogNotifier`: messages and questions in the page's own dialog instead of the browser's.
 
 The rules:
 
@@ -151,7 +140,7 @@ The rules:
 | Notifier (`gd-notifier`) | `p.gd-notifier__message` (line breaks kept), `input.gd-notifier__input` (prompt; focused, selected; Enter is OK), `.gd-dialog__actions` with `button.gd-button[data-action=ok]` and, for confirm and prompt, `[data-action=cancel]`. Escape and the close button are Cancel. One at a time, in the order asked. |
 | `div.gd-zoom` | The hover zoom: `aria-hidden`, `hidden` when nothing is zoomed; `--gd-zoom-left`/`-top`/`-width`/`-height` (px; placed and sized as the legacy AutoZoom did), `data-orientation`, `data-flipped` (back; Shift), `data-foil`; `img.gd-zoom__image`, `__overlay`, `__foil`. Shown after the mouse rests 500ms on a card (at once within 500ms of the last zoom); hidden by a press, when the toolbar's magnifier is off (`AutoZoomSetting`, legacy cookie) or the card information is open. |
 
-`visual-check/stubbed.mjs` screenshots the legacy page and the new UI side by side without a Gemp server (both served
+`visual-check/stubbed.mjs` screenshots the legacy page and this one (classic theme) side by side without a Gemp server (both served
 from disk, the server's answers stubbed); see its header.
 
 ## Tests

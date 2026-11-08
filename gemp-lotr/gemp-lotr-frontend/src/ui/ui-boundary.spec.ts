@@ -2,8 +2,8 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative, resolve, sep } from 'node:path';
 
 /**
- * src/ui holds semantic markup and interaction: it builds on core, never on the old view (src/deckbuilder-app, which
- * goes away), and it has no visual CSS: the themes (src/themes) draw everything.
+ * src/ui holds semantic markup and interaction: it builds on core only, and it has no visual CSS: the themes
+ * (src/themes) draw everything.
  */
 const SRC_DIR = resolve(process.cwd(), 'src');
 const UI_DIR = join(SRC_DIR, 'ui');
@@ -29,7 +29,7 @@ describe('ui boundary', () => {
     expect(files.length).toBeGreaterThanOrEqual(8);
   });
 
-  it('imports only core and ui (not the old view, not the themes)', () => {
+  it('imports only core and ui (not the themes)', () => {
     const outside = files.flatMap(({ file, name, source }) =>
       [...source.matchAll(/(?:import|export)[^'"]*from\s*'(\.[^']+)'/g)]
         .map((match) =>

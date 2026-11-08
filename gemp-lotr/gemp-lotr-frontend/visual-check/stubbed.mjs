@@ -3,11 +3,11 @@
 // answers come from src/testing/server-responses plus a generated collection. Card images (on i.lotrtcgpc.net) are
 // replaced by labelled placeholders, the same on both pages.
 //
-//   node stubbed.mjs [--angular '/gemp-lotr/ng/deckbuilder/?ui=next&theme=classic'] [--sizes 1440x900]
+//   node stubbed.mjs [--angular '/gemp-lotr/ng/deckbuilder/?theme=classic'] [--sizes 1440x900]
 //                    [--theme classic] [--out report-stubbed] [--only collection,...]
 //
 // Writes <out>/<scenario>-<size>-{legacy,angular}.png. Needs a build of the Angular page (npm run build). Unlike
-// run.mjs this compares nothing by itself: it is for looking at the two pages while the new UI is being built.
+// run.mjs this compares nothing by itself: it is for looking at the two pages.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -24,7 +24,7 @@ const ORIGIN = 'http://gemp.test';
 const { values: options } = parseArgs({
   options: {
     legacy: { type: 'string', default: '/gemp-lotr/deckBuild.html' },
-    angular: { type: 'string', default: '/gemp-lotr/ng/deckbuilder/?ui=next&theme=classic' },
+    angular: { type: 'string', default: '/gemp-lotr/ng/deckbuilder/?theme=classic' },
     sizes: { type: 'string', default: '1440x900' },
     only: { type: 'string' },
     out: { type: 'string', default: 'report-stubbed' },
@@ -170,7 +170,7 @@ async function route(context, log, scenario) {
   });
 }
 
-/** The same control on each page: the legacy element IDs, and the new UI's DOM contract. */
+/** The same control on each page: the legacy element IDs, and the Angular page's DOM contract. */
 const CONTROLS = {
   nextPage: { legacy: '#nextPage', angular: '.gd-pager__next' },
   side: { legacy: '#sideSelect', angular: '.gd-field[data-field="side"] select' },
