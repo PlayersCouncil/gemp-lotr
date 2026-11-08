@@ -1,6 +1,6 @@
 #!/bin/sh
-# Keeps the Angular deck builder served by the Java server in step with its sources, so a `git pull` on the
-# server is enough to deploy a frontend change (as it is for the legacy jQuery pages).
+# Keeps the Angular app (the deck builder and the pages ported after it) served by the Java server in step with its
+# sources, so a `git pull` on the server is enough to deploy a frontend change (as it is for the legacy jQuery pages).
 #
 # Run by the `frontend` service in docker-compose.yml. Every POLL_SECONDS it fingerprints the frontend sources and the
 # legacy card data files the card images are generated from; when they change (and have stopped changing), it:
@@ -12,13 +12,14 @@ set -u
 
 FRONTEND_DIR=${FRONTEND_DIR:-/src/gemp-lotr-frontend}
 NG_DIR=${NG_DIR:-/src/gemp-lotr-async/src/main/web/ng}   # served by the Java server as /gemp-lotr/ng/
-APP=deckbuilder
 POLL_SECONDS=${POLL_SECONDS:-5}
 
-LIVE="$NG_DIR/$APP"
-# Dot-prefixed, so the web server never serves them (WebRequestHandler rejects paths with "/.")
-STAGE="$NG_DIR/.$APP-build"
-OLD="$NG_DIR/.$APP-old"
+LIVE="$NG_DIR"
+# Next to the live folder (the same file system, so the swap is two renames). Dot-prefixed, so the web server never
+# serves them (WebRequestHandler rejects paths with "/.")
+WEB_DIR=$(dirname "$NG_DIR")
+STAGE="$WEB_DIR/.ng-build"
+OLD="$WEB_DIR/.ng-old"
 
 log() { echo "$(date '+%Y-%m-%d %H:%M:%S') $*"; }
 
@@ -48,7 +49,7 @@ install_dependencies() {
 
 build_and_swap() {
     rm -rf "$STAGE" "$OLD"
-    log "Building $APP"
+    log "Building the app"
     # Step 1: build next to the live folder. With --output-path, Angular writes the served files to $STAGE/browser.
     # The card data first (the same npm script as prebuild): `npx ng build` doesn't run npm's prebuild script
     if ! (cd "$FRONTEND_DIR" && npm run --silent card-data &&
@@ -63,10 +64,10 @@ build_and_swap() {
     [ -d "$LIVE" ] && mv "$LIVE" "$OLD"
     mv "$STAGE/browser" "$LIVE"
     rm -rf "$OLD" "$STAGE"
-    log "Now serving the new $APP build"
+    log "Now serving the new build"
 }
 
-mkdir -p "$NG_DIR"
+mkdir -p "$WEB_DIR"
 # Leftovers from an interrupted run
 rm -rf "$STAGE" "$OLD"
 

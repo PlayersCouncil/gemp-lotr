@@ -37,10 +37,10 @@
               }
             ],
             "outputPath": {
-              "base": "../gemp-lotr-async/src/main/web/ng/deckbuilder",
+              "base": "../gemp-lotr-async/src/main/web/ng",
               "browser": ""
             },
-            "baseHref": "/gemp-lotr/ng/deckbuilder/"
+            "baseHref": "/gemp-lotr/ng/"
           },
           "configurations": {
             "production": {

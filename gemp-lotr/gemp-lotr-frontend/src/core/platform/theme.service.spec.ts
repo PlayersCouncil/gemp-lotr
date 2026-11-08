@@ -190,14 +190,14 @@ describe('ThemeService', () => {
     it("links the app's theme-<name>.css, relative to the <base href> it is served under", async () => {
       fakeCookies();
       const base = document.createElement('base');
-      base.href = 'http://localhost/gemp-lotr/ng/deckbuilder/';
+      base.href = 'http://localhost/gemp-lotr/ng/';
       document.head.prepend(base);
       const starting = service().init();
       loadLink('classic');
       await starting;
       const [link] = themeLinks();
       expect(link.rel).toBe('stylesheet');
-      expect(link.href).toBe('http://localhost/gemp-lotr/ng/deckbuilder/theme-classic.css');
+      expect(link.href).toBe('http://localhost/gemp-lotr/ng/theme-classic.css');
     });
   });
 

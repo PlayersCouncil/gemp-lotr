@@ -12,18 +12,17 @@
 
 :root {
   --classic-widget-font: Verdana, Arial, sans-serif;
-  --classic-content-bg: #000 url('/gemp-lotr/ng/deckbuilder/themes/classic/ui-bg_loop_25_000000_21x21.png') 50% 50%
-    repeat;
-  --classic-default-bg: #222 url('/gemp-lotr/ng/deckbuilder/themes/classic/ui-bg_highlight-soft_35_222222_1x100.png')
-    50% 50% repeat-x;
-  --classic-hover-bg: #003147 url('/gemp-lotr/ng/deckbuilder/themes/classic/ui-bg_highlight-soft_33_003147_1x100.png')
-    50% 50% repeat-x;
-  --classic-active-bg: #0972a5 url('/gemp-lotr/ng/deckbuilder/themes/classic/ui-bg_highlight-hard_20_0972a5_1x100.png')
-    50% 50% repeat-x;
-  --classic-header-bg: #444 url('/gemp-lotr/ng/deckbuilder/themes/classic/ui-bg_highlight-soft_44_444444_1x100.png') 50%
-    50% repeat-x;
-  --classic-icons: url('/gemp-lotr/ng/deckbuilder/themes/classic/ui-icons_cccccc_256x240.png');
-  --classic-icons-hover: url('/gemp-lotr/ng/deckbuilder/themes/classic/ui-icons_ffffff_256x240.png');
+  --classic-content-bg: #000 url('/gemp-lotr/ng/themes/classic/ui-bg_loop_25_000000_21x21.png') 50% 50% repeat;
+  --classic-default-bg: #222 url('/gemp-lotr/ng/themes/classic/ui-bg_highlight-soft_35_222222_1x100.png') 50% 50%
+    repeat-x;
+  --classic-hover-bg: #003147 url('/gemp-lotr/ng/themes/classic/ui-bg_highlight-soft_33_003147_1x100.png') 50% 50%
+    repeat-x;
+  --classic-active-bg: #0972a5 url('/gemp-lotr/ng/themes/classic/ui-bg_highlight-hard_20_0972a5_1x100.png') 50% 50%
+    repeat-x;
+  --classic-header-bg: #444 url('/gemp-lotr/ng/themes/classic/ui-bg_highlight-soft_44_444444_1x100.png') 50% 50%
+    repeat-x;
+  --classic-icons: url('/gemp-lotr/ng/themes/classic/ui-icons_cccccc_256x240.png');
+  --classic-icons-hover: url('/gemp-lotr/ng/themes/classic/ui-icons_ffffff_256x240.png');
 }
 
 [hidden] {
@@ -79,19 +78,19 @@ div {
 }
 
 ::-webkit-scrollbar-button:vertical:end:increment {
-  background-image: url('/gemp-lotr/ng/deckbuilder/themes/classic/scroll-button-down.png');
+  background-image: url('/gemp-lotr/ng/themes/classic/scroll-button-down.png');
 }
 
 ::-webkit-scrollbar-button:vertical:start:decrement {
-  background-image: url('/gemp-lotr/ng/deckbuilder/themes/classic/scroll-button-up.png');
+  background-image: url('/gemp-lotr/ng/themes/classic/scroll-button-up.png');
 }
 
 ::-webkit-scrollbar-button:horizontal:end:increment {
-  background-image: url('/gemp-lotr/ng/deckbuilder/themes/classic/scroll-button-right.png');
+  background-image: url('/gemp-lotr/ng/themes/classic/scroll-button-right.png');
 }
 
 ::-webkit-scrollbar-button:horizontal:start:decrement {
-  background-image: url('/gemp-lotr/ng/deckbuilder/themes/classic/scroll-button-left.png');
+  background-image: url('/gemp-lotr/ng/themes/classic/scroll-button-left.png');
 }
 
 /* ---------------------------------------------------------------- page frame (jquery.layout) */
@@ -1004,7 +1003,7 @@ button.gd-slot__label:focus-visible {
 }
 
 .gd-card__errata {
-  background: url('/gemp-lotr/ng/deckbuilder/themes/classic/errata-vertical.png') 0 0 / 100% 100% no-repeat;
+  background: url('/gemp-lotr/ng/themes/classic/errata-vertical.png') 0 0 / 100% 100% no-repeat;
 }
 
 .gd-card__foil {
@@ -1135,7 +1134,7 @@ button.gd-slot__label:focus-visible {
   display: block;
   width: 16px;
   height: 16px;
-  background: url('/gemp-lotr/ng/deckbuilder/themes/classic/ui-icons_ffffff_256x240.png') -96px -128px no-repeat;
+  background: url('/gemp-lotr/ng/themes/classic/ui-icons_ffffff_256x240.png') -96px -128px no-repeat;
 }
 
 .gd-card-info__close:hover,
@@ -1341,7 +1340,7 @@ button.gd-slot__label:focus-visible {
 
 /* The resize grip (.ui-resizable-se: the grip icon in the corner) */
 .gd-dialog::-webkit-resizer {
-  background: url('/gemp-lotr/ng/deckbuilder/themes/classic/ui-icons_cccccc_256x240.png') -80px -224px no-repeat;
+  background: url('/gemp-lotr/ng/themes/classic/ui-icons_cccccc_256x240.png') -80px -224px no-repeat;
 }
 
 .gd-dialog__header {

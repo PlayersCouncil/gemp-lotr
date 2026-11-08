@@ -27,6 +27,10 @@ describe('ui boundary', () => {
 
   it('finds the ui sources', () => {
     expect(files.length).toBeGreaterThanOrEqual(8);
+    // The app shell, the pages and their shared parts
+    for (const folder of ['ui/app/', 'ui/deckbuilder/', 'ui/shared/']) {
+      expect(files.some(({ name }) => name.startsWith(folder))).toBe(true);
+    }
   });
 
   it('imports only core and ui (not the themes)', () => {

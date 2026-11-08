@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { DeckbuilderPageComponent } from './ui/deckbuilder/deckbuilder-page.component';
-import { deckbuilderPageConfig } from './ui/deckbuilder/deckbuilder-page.config';
+import { AppComponent } from './ui/app/app.component';
+import { appConfig } from './ui/app/app.config';
 
-bootstrapApplication(DeckbuilderPageComponent, deckbuilderPageConfig).catch((err) => console.error(err));
+bootstrapApplication(AppComponent, appConfig).catch((err) => console.error(err));

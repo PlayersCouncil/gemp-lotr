@@ -20,7 +20,7 @@ import { CONTROLS } from './controls.mjs';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const FRONTEND = path.resolve(HERE, '..');
 const WEB = path.resolve(FRONTEND, '../gemp-lotr-async/src/main/web');
-const BUILD = path.join(WEB, 'ng/deckbuilder');
+const BUILD = path.join(WEB, 'ng');
 const RESPONSES = path.join(FRONTEND, 'src/testing/server-responses');
 const ORIGIN = 'http://gemp.test';
 
@@ -157,9 +157,11 @@ async function route(context, log, scenario) {
       });
     }
     let file;
-    if (url.pathname.startsWith('/gemp-lotr/ng/deckbuilder/')) {
-      file = path.join(BUILD, url.pathname.slice('/gemp-lotr/ng/deckbuilder/'.length));
-      if (!fs.existsSync(file) || fs.statSync(file).isDirectory()) file = path.join(BUILD, 'index.html');
+    if (url.pathname.startsWith('/gemp-lotr/ng/')) {
+      file = path.join(BUILD, url.pathname.slice('/gemp-lotr/ng/'.length));
+      // As the server does (WebRequestHandler): an app route (no extension) that isn't a file serves the app's index
+      const route = !path.basename(url.pathname).includes('.') || url.pathname.endsWith('/');
+      if (route && (!fs.existsSync(file) || fs.statSync(file).isDirectory())) file = path.join(BUILD, 'index.html');
     } else {
       file = path.join(WEB, url.pathname.replace(/^\/gemp-lotr\//, ''));
     }
