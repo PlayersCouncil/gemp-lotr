@@ -69,3 +69,9 @@
     <span class="ui-button-text">Auto-zoom cards on hover</span>
   </button>
 }
+
+<select id="themeSelect" title="Theme" aria-label="Theme" (change)="selectTheme($event)">
+  @for (option of themes; track option.name) {
+    <option [value]="option.name" [selected]="option.name === theme.theme()">{{ option.label }}</option>
+  }
+</select>

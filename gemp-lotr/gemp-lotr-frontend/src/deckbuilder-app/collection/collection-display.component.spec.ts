@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { DeckService } from '../../core/deck/deck.service';
 import { CollectionService } from '../../core/collection/collection.service';
-import { PAGE_QUERY_STRING } from '../../core/session/session.service';
+import { PAGE_QUERY_STRING } from '../../core/platform/page-location';
 import { PageLayoutService } from '../layout/page-layout.service';
 import { CollectionDisplayComponent } from './collection-display.component';
 import { provideFakeNotifier } from '../../testing/fake-notifier';

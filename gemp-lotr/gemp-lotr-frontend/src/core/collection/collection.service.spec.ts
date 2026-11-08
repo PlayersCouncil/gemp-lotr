@@ -4,7 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { readServerResponse } from '../../testing/files';
 import { FakeNotifier, provideFakeNotifier } from '../../testing/fake-notifier';
 import { BlockFilter } from '../api/models';
-import { PAGE_QUERY_STRING } from '../session/session.service';
+import { PAGE_QUERY_STRING } from '../platform/page-location';
 import { CollectionService, DEFAULT_FILTER_OVERRIDE, INITIAL_PAGE_SIZE } from './collection.service';
 
 const COLLECTION_XML = readServerResponse('collection-default.xml');

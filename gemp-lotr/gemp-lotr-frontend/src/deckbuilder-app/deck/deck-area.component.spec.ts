@@ -3,7 +3,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { DeckService } from '../../core/deck/deck.service';
-import { PAGE_QUERY_STRING } from '../../core/session/session.service';
+import { PAGE_QUERY_STRING } from '../../core/platform/page-location';
 import { PageLayoutService } from '../layout/page-layout.service';
 import { DeckAreaComponent } from './deck-area.component';
 import { provideFakeNotifier } from '../../testing/fake-notifier';

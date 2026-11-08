@@ -24,7 +24,7 @@ import { CardRegistry } from '../cards/card-registry';
 import { stripBlueprintId } from '../../core/cards/card-blueprint';
 import { CardImageService } from '../../core/cards/card-image.service';
 import { foilOverlayImage, readFoilPresentation } from '../../core/cards/foil-presentation';
-import { readCookie, writeCookie } from '../../core/cookies';
+import { readCookie, writeCookie } from '../../core/platform/cookies';
 import { CardInfoService } from '../../core/cards/card-info.service';
 
 export const AUTO_ZOOM_COOKIE = 'autoZoomInDeckbuilder';

@@ -25,7 +25,17 @@
               }
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              {
+                "input": "src/themes/classic/theme.css",
+                "bundleName": "theme-classic",
+                "inject": false
+              },
+              {
+                "input": "src/themes/modern/theme.css",
+                "bundleName": "theme-modern",
+                "inject": false
+              }
             ],
             "outputPath": {
               "base": "../gemp-lotr-async/src/main/web/ng/deckbuilder",

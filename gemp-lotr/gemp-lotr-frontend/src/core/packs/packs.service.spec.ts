@@ -3,7 +3,7 @@ import { HttpTestingController, provideHttpClientTesting, TestRequest } from '@a
 import { TestBed } from '@angular/core/testing';
 import { FakeNotifier, provideFakeNotifier } from '../../testing/fake-notifier';
 import { readServerResponse } from '../../testing/files';
-import { PAGE_QUERY_STRING } from '../session/session.service';
+import { PAGE_QUERY_STRING } from '../platform/page-location';
 import { PacksService } from './packs.service';
 
 describe('PacksService', () => {

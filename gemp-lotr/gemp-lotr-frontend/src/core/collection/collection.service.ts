@@ -4,7 +4,7 @@ import { ApiError, GENERIC_COMMUNICATION_ERROR } from '../api/api-error';
 import { DeckbuilderApi } from '../api/deckbuilder-api.service';
 import { BlockFilter, CollectionPage, CollectionTypeInfo } from '../api/models';
 import { CardImageService } from '../cards/card-image.service';
-import { ImagePreloader } from '../cards/image-preloader.service';
+import { ImagePreloader } from '../platform/image-preloader.service';
 import { Notifier } from '../notifier/notifier';
 import {
   blockOptions,

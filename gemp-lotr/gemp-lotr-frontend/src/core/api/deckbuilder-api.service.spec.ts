@@ -3,7 +3,7 @@ import { HttpTestingController, provideHttpClientTesting, TestRequest } from '@a
 import { TestBed } from '@angular/core/testing';
 import { firstValueFrom, Observable } from 'rxjs';
 import { readServerResponse } from '../../testing/files';
-import { PAGE_QUERY_STRING } from '../session/session.service';
+import { PAGE_QUERY_STRING } from '../platform/page-location';
 import { DeckbuilderApi } from './deckbuilder-api.service';
 
 /** Request bodies/params as a plain object, without the cache-busting "_" parameter. */

@@ -56,7 +56,7 @@ regular hall at `http://localhost:4200/gemp-lotr/` and then open the deck builde
 | Folder | What it holds |
 |---|---|
 | `src/deckbuilder-app/deckbuilder-app.*` | The deck builder's root component (`DeckbuilderApp`, element `<deckbuilder-app>`), its page frame template and its providers (`deckbuilder-app.config.ts`); `src/main.ts` starts it. Named for the deck builder so it can sit beside other pages in the coming whole-site Angular frontend. |
-| `src/core/` | State, rules and server calls, with no view code: nothing in it imports from the view folders, and it has no templates or styles (`core-boundary.spec.ts` checks this). |
+| `src/core/` | State, rules and server calls, with no view code: nothing in it imports from the view folders, and it has no templates or styles, and only `core/platform/` touches the browser (`DOCUMENT`, `window`, cookies); `core-boundary.spec.ts` checks all of this. |
 | `src/core/api/` | `DeckbuilderApi`: every server call the deck builder makes, typed. Sent via `GempHttp`, which adds `participantId`, encodes form data strictly (a `+` stays a `+`), turns failures into `ApiError` and spots the opened-pack header. `parsers.ts` reads the server's XML. |
 | `src/core/cards/` | Card images. `card-blueprint.ts` is a port of the legacy `Card.js` rules; the image tables still come from the legacy files (`PC_Cards.js`, `hobbit.js`, `set40.js`, `cards/CardImages.js`, `cards/PackImages.js`): `scripts/extract-card-data.mjs` turns them into `src/generated/card-data.json` (not committed) before every `npm run build`, `npm start` and `npm test`, and `card-data.ts` provides it. Add new card images in the legacy files, as before; `card-data.parity.spec.ts` fails if the JSON doesn't match them. `card-ref.ts` is what a card on the page stands for; `CardInfoService` holds the card shown in the card information. |
 | `src/core/collection/` | The collection pane's state: `card-filter.ts` (filter fields, Block/Set lists, culture buttons and the filter string, ported from `CardFilter.js`) and `CollectionService` (collection type, paging, the current page from `/collection/{type}`). |
@@ -66,6 +66,8 @@ regular hall at `http://localhost:4200/gemp-lotr/` and then open the deck builde
 | `src/core/actions/` | `DeckbuilderActions`: what using a card means (add it, remove it, open a pack, show its details), whatever gesture the view maps to it. |
 | `src/core/notifier/` | `Notifier`: messages and questions to the player (the legacy alert/confirm/prompt), all asynchronous. The view provides it; for now `deckbuilder-app/notifier/WindowNotifier` uses the browser's dialogs. Tests use `src/testing/fake-notifier.ts`. |
 | `src/core/session/` | `SessionService`: the optional `?participantId=` (admins acting as a player). |
+| `src/core/platform/` | The browser, behind services: cookies, the page's query string, image preloading, opening links, and `ThemeService` (see Themes below). |
+| `src/themes/<name>/` | A theme's CSS (`theme.css`); its images and other files go in `public/themes/<name>/`. See Themes below. |
 | `src/deckbuilder-app/layout/` | The page frame: `page-layout.ts` reproduces the legacy `jquery.layout` panes (deck, collection, resizer bar), and `deck-layout.ts` is the legacy `layoutUI` positioning of the deck slots. |
 | `src/deckbuilder-app/cards/` | Card display: `gempCard` (the legacy card element with its errata, foil, count, border and meta-site layers), `gemp-card-display` (the large card of the info dialog and the hover zoom), `card-group-layout.ts` (the `NormalCardGroup` rows and the `VerticalBarGroup` sites column) and `CardRegistry` (what each card element stands for). |
 | `src/deckbuilder-app/collection/` | The collection pane: the filter (`gempCardFilter`) and the cards of the current page (`gempCollectionDisplay`). |
@@ -89,6 +91,26 @@ legacy page's browser console).
 
 `card-blueprint.parity.spec.ts` runs the legacy `Card.js` side by side with the port on over 50,000 blueprint IDs, so a
 change to `Card.js` that isn't mirrored in `card-blueprint.ts` fails the build.
+
+## Themes
+
+The deck builder has two themes, `classic` (the legacy page's look) and `modern`. Each is a stylesheet built from
+`src/themes/<name>/theme.css` into `theme-<name>.css` next to the app (`angular.json`: `inject: false`, so it is not
+linked by default). `ThemeService` (`src/core/platform/theme.service.ts`) picks one:
+
+1. `?theme=classic` or `?theme=modern` in the address, which is also remembered;
+2. otherwise the `deckbuilderTheme` cookie (the player's choice, made in the toolbar's theme picker);
+3. otherwise the device: phones and tablets (a coarse pointer and a screen whose short side is under 1100px, the rule
+   of the legacy `mobileView.js`) get `modern`, everything else `classic`.
+
+Unknown names are ignored. The app starts only once the theme's stylesheet has loaded (an app initializer), so the page
+never shows unstyled. Switching loads the new stylesheet first and removes the old one after; only the CSS changes, so
+the deck being edited stays as it is.
+
+Scoping: only one theme's stylesheet is on the page at a time, so theme CSS is written without a theme prefix.
+`<html data-theme="...">` is also set, for the rare rule that must know the theme from outside a theme stylesheet.
+The theme files are not hashed (their names are fixed so they can be linked at runtime); the server revalidates them
+with an ETag, like the legacy stylesheets.
 
 ## Tests
 

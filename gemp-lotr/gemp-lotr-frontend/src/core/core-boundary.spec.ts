@@ -24,6 +24,18 @@ function importedPaths(file: string, source: string): string[] {
   );
 }
 
+/** The page and browser globals; DOCUMENT is Angular's token for the page. `Document` (a type, e.g. XML) is fine. */
+const BROWSER_GLOBALS =
+  /\b(DOCUMENT|window|document|globalThis|navigator|localStorage|sessionStorage|matchMedia|location)\b(?!\s*:)/g;
+
+/** Comments may mention the page ("in document order"), and module paths may too ('./page-location'). */
+function withoutComments(source: string): string {
+  return source
+    .replace(/from\s*'[^']*'/g, "from ''")
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/(^|[^:'"])\/\/[^\n]*/g, '$1');
+}
+
 describe('core boundary', () => {
   const files = sourceFiles(CORE_DIR).map((file) => ({
     file,
@@ -51,6 +63,15 @@ describe('core boundary', () => {
       ),
     );
     expect(calls).toEqual([]);
+  });
+
+  it('reaches the browser (DOCUMENT, window, document, navigator, storage) only in core/platform', () => {
+    const uses = files
+      .filter(({ name }) => !name.startsWith('core/platform/'))
+      .flatMap(({ name, source }) =>
+        [...withoutComments(source).matchAll(BROWSER_GLOBALS)].map((match) => `${name}: ${match[0]}`),
+      );
+    expect(uses).toEqual([]);
   });
 
   it('has no styles or templates', () => {

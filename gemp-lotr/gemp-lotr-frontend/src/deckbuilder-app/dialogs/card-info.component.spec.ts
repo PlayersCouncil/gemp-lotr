@@ -2,7 +2,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { CardInfoService } from '../../core/cards/card-info.service';
-import { PAGE_QUERY_STRING } from '../../core/session/session.service';
+import { PAGE_QUERY_STRING } from '../../core/platform/page-location';
 import { CardInfoComponent } from './card-info.component';
 import { provideFakeNotifier } from '../../testing/fake-notifier';
 

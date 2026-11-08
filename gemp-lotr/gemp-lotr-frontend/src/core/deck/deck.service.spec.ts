@@ -5,7 +5,7 @@ import { readServerResponse } from '../../testing/files';
 import { FakeNotifier, provideFakeNotifier, settle } from '../../testing/fake-notifier';
 import { GempFormat } from '../api/models';
 import { CollectionService } from '../collection/collection.service';
-import { PAGE_QUERY_STRING } from '../session/session.service';
+import { PAGE_QUERY_STRING } from '../platform/page-location';
 import { DeckService, STATS_INTERVAL_MS } from './deck.service';
 
 const format = (code: string, name: string, order: number): GempFormat => ({

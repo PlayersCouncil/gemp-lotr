@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { PAGE_QUERY_STRING, SessionService } from './session.service';
+import { PAGE_QUERY_STRING } from '../platform/page-location';
+import { SessionService } from './session.service';
 
 describe('SessionService', () => {
   function participantFor(queryString: string): string | null {

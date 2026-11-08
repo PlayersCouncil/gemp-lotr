@@ -1,4 +1,4 @@
-import { readCookie } from '../cookies';
+import { readCookie } from '../platform/cookies';
 
 /**
  * How foil cards are drawn (Card.getFoilPresentation), from the "foilPresentation" cookie the game settings write:

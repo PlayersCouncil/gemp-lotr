@@ -5,7 +5,7 @@ import { FakeNotifier, provideFakeNotifier, settle } from '../../testing/fake-no
 import { readServerResponse } from '../../testing/files';
 import { DeckLibraryService } from './deck-library.service';
 import { DeckService } from './deck.service';
-import { PAGE_QUERY_STRING } from '../session/session.service';
+import { PAGE_QUERY_STRING } from '../platform/page-location';
 
 describe('DeckLibraryService', () => {
   let backend: HttpTestingController;

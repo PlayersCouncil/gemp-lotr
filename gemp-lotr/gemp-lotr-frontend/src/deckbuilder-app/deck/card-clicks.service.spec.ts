@@ -4,7 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { CardRef } from '../../core/cards/card-ref';
 import { CardRegistry } from '../cards/card-registry';
 import { DeckService } from '../../core/deck/deck.service';
-import { PAGE_QUERY_STRING } from '../../core/session/session.service';
+import { PAGE_QUERY_STRING } from '../../core/platform/page-location';
 import { CardInfoService } from '../../core/cards/card-info.service';
 import { PacksService } from '../../core/packs/packs.service';
 import { CardClicksService } from './card-clicks.service';

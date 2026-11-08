@@ -5,7 +5,7 @@ import { CardRef, zoneOf } from '../../core/cards/card-ref';
 import { parseBlueprint } from '../../core/cards/card-blueprint';
 import { CardInfoService } from '../../core/cards/card-info.service';
 import { CardImageService } from '../../core/cards/card-image.service';
-import { readCookie, writeCookie } from '../../core/cookies';
+import { readCookie, writeCookie } from '../../core/platform/cookies';
 import { UiDialogComponent } from '../shared/ui-dialog.component';
 import { UiSliderComponent } from '../shared/ui-slider.component';
 

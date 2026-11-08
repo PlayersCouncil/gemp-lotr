@@ -1,0 +1,7 @@
+/*
+ * The modern theme: the default on phones and tablets. Built into theme-modern.css, which ThemeService loads;
+ * only one theme's stylesheet is on the page at a time, so rules need no theme scope.
+ * Images and other assets go in public/themes/modern/.
+ *
+ * Empty for now: the theme is written once the new UI is in place.
+ */

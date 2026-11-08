@@ -1,0 +1,7 @@
+/*
+ * The classic theme: the legacy deck builder's look (deckBuild.html). Built into theme-classic.css, which
+ * ThemeService loads; only one theme's stylesheet is on the page at a time, so rules need no theme scope.
+ * Images and other assets go in public/themes/classic/.
+ *
+ * Empty for now: the legacy stylesheets linked in index.html still style the page (until the new UI replaces it).
+ */

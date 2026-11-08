@@ -1,11 +1,5 @@
-import { DOCUMENT } from '@angular/common';
-import { InjectionToken, inject, Injectable } from '@angular/core';
-
-/** The page's query string (e.g. "?participantId=bob"); a token so tests can supply their own. */
-export const PAGE_QUERY_STRING = new InjectionToken<string>('PAGE_QUERY_STRING', {
-  providedIn: 'root',
-  factory: () => inject(DOCUMENT).defaultView?.location.search ?? '',
-});
+import { inject, Injectable } from '@angular/core';
+import { PAGE_QUERY_STRING } from '../platform/page-location';
 
 /**
  * Who the deck builder acts for. Authentication itself is the login cookie, sent automatically because the app is
