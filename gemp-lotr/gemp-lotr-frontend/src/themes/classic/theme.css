@@ -320,8 +320,8 @@ div {
 }
 
 /*
- * The jQuery UI slider: the bar is drawn here, and the range input lies over it, reaching past both ends so its thumb
- * (17.84px with its border) travels like the legacy handle, whose left edge is 0.6em before the value's place.
+ * The bar is drawn here, and the range input lies over it. The handle stays inside the bar, so that it never covers the
+ * arrow buttons (the legacy handle reached past both ends and did); the slider's starting value stays where it was.
  */
 .gd-pager__track {
   position: relative;
@@ -334,9 +334,9 @@ div {
 
 .gd-pager__size {
   position: absolute;
-  left: -7.92px;
+  left: -1px;
   top: -3.95px;
-  width: calc(100% + 17.84px);
+  width: 100%;
   height: 17.84px;
 }
 
