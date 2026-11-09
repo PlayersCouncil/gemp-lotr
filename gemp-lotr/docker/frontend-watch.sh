@@ -20,8 +20,6 @@ LIVE="$NG_DIR"
 # never serves them (WebRequestHandler rejects paths with "/.")
 WEB_DIR=$(dirname "$NG_DIR")
 STAGE="$WEB_DIR/.ng-build"
-# Left by earlier versions of this script
-OLD="$WEB_DIR/.ng-old"
 # The files of the build before this one
 PREVIOUS_FILES="$WEB_DIR/.ng-previous-files"
 
@@ -76,7 +74,7 @@ publish() {
 }
 
 build_and_publish() {
-    rm -rf "$STAGE" "$OLD"
+    rm -rf "$STAGE"
     log "Building the app"
     # Step 1: build next to the live folder. With --output-path, Angular writes the served files to $STAGE/browser.
     # The card data first (the same npm script as prebuild): `npx ng build` doesn't run npm's prebuild script
@@ -98,7 +96,7 @@ build_and_publish() {
 
 mkdir -p "$WEB_DIR"
 # Leftovers from an interrupted run
-rm -rf "$STAGE" "$OLD"
+rm -rf "$STAGE"
 
 lock=""
 built=""

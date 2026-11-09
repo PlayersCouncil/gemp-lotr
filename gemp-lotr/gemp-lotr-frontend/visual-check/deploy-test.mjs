@@ -434,7 +434,6 @@ async function main() {
       await waitForLogCount('Now serving the new build', 1);
       const loads = await stopLoading();
       expect(!fs.existsSync(path.join(CHECKOUT, web, '.ng-build')), 'The leftovers are still there');
-      expect(!fs.existsSync(path.join(CHECKOUT, web, '.ng-old')), 'The old build is still there');
       await expectServing('Deploy test three');
       return expectNoGaps(loads, 1);
     });
