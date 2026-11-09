@@ -66,6 +66,29 @@ show them), and have some library decks (decks of the "Librarian" player, for "o
   each page would open a different one.
 - **Not covered:** the Race to Mount Doom slot (needs a running RTMD league with the test player in it).
 
+## On a throwaway server, without a login
+
+`npm run check:local -- --mutating` runs the whole check against a server of its own (`local-server/compose.yml`), and
+needs nothing from whoever runs it but Docker, with the `gemp_app` image and a built `web.jar`. It builds the Angular
+page, starts the server on an empty in-memory database with its own port (17101, or `GEMP_CHECK_PORT`), creates the test
+players with a random password that is never written down (only its hash reaches the database), adds the test data
+(`local-server/seed.mjs`: packs, a selection pack, a foil, an errata card, a promised prize, trophies, library decks and
+a running Race to Mount Doom league the player is in), runs `run.mjs` and removes everything again. The development
+server isn't touched, and a rebuild elsewhere can't change the page during a run. The report goes to `report-local/`.
+
+`--keep` leaves the server up afterwards (`npm run check:local:down` stops it), `--skip-build` reuses the last build, and
+every other option goes to `run.mjs`.
+
+Both this and `check:deploy` below use `gemp-lotr-async/target/web.jar`; set `CHECK_WEB_JAR` to test another server build.
+
+## Deploying a frontend change
+
+`npm run check:deploy` tests what `docker/frontend-watch.sh` promises, on a throwaway copy of the repository with its own
+containers (`local-server/deploy-compose.yml`, port 17102): with the Java server running, a real `git pull` must rebuild
+the app and swap it in. It covers a brand-new container, a frontend change, a pull that changes no frontend file, a pull
+that breaks the build and the one that fixes it, a changed `package-lock.json`, a change to the legacy card data and a
+recreated container, and loads the page continuously during each swap to catch any moment players can't.
+
 ## Without a server or a login
 
 `npm run check:stubbed` runs the same comparison against `stub-server.mjs`: both pages are served from disk and the
