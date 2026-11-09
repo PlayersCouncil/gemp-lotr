@@ -1,4 +1,4 @@
-import { provideHttpClient } from '@angular/common/http';
+import { provideGempHttp } from './gemp-interceptors';
 import { HttpTestingController, provideHttpClientTesting, TestRequest } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { firstValueFrom, Observable } from 'rxjs';
@@ -25,7 +25,7 @@ describe('DeckbuilderApi', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        provideHttpClient(),
+        provideGempHttp(),
         provideHttpClientTesting(),
         { provide: PAGE_QUERY_STRING, useValue: '?participantId=admin-target' },
       ],

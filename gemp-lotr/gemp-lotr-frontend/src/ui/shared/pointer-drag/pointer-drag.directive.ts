@@ -1,12 +1,19 @@
 import { DestroyRef, Directive, ElementRef, inject, input } from '@angular/core';
 
+/** Keeps a pointer's events on the element, also outside it (where the browser can: jsdom has no capture). */
+export function capturePointer(element: Element, pointerId: number): void {
+  if ('setPointerCapture' in element) {
+    element.setPointerCapture(pointerId);
+  }
+}
+
 /** What a drag does. */
 export interface DragHandlers {
-  move(event: PointerEvent): void;
+  move: (event: PointerEvent) => void;
   /** The pointer was released. */
-  end(event: PointerEvent): void;
+  end: (event: PointerEvent) => void;
   /** The browser took the pointer away; `end` runs when this is left out. */
-  cancel?(event: PointerEvent): void;
+  cancel?: (event: PointerEvent) => void;
 }
 
 /**
@@ -37,11 +44,11 @@ export class PointerDragDirective {
       return;
     }
     event.preventDefault();
-    this.element.setPointerCapture?.(event.pointerId);
+    capturePointer(this.element, event.pointerId);
     this.stopListening?.();
     const finishWith = (handler: (e: PointerEvent) => void) => (e: PointerEvent) => {
       this.stopListening?.();
-      handler.call(handlers, e);
+      handler(e);
     };
     const listeners: [string, (e: PointerEvent) => void][] = [
       ['pointermove', (e) => handlers.move(e)],

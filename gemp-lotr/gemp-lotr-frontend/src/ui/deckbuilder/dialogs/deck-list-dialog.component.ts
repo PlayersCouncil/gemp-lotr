@@ -31,7 +31,7 @@ interface EntryAction {
       (closed)="library.deckList.set(null)"
     >
       <ul class="gd-deck-list">
-        @for (entry of list()?.decks ?? []; track $index) {
+        @for (entry of list()?.decks ?? []; track entry.name) {
           <li class="gd-deck-list__item">
             @for (button of actions(); track button.action) {
               <button

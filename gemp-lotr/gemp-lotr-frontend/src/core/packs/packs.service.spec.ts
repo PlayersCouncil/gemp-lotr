@@ -1,4 +1,5 @@
-import { provideHttpClient } from '@angular/common/http';
+import { provideDeckbuilderState } from '../deckbuilder-state';
+import { provideGempHttp } from '../api/gemp-interceptors';
 import { HttpTestingController, provideHttpClientTesting, TestRequest } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { FakeNotifier, provideFakeNotifier } from '../../testing/fake-notifier';
@@ -13,7 +14,8 @@ describe('PacksService', () => {
   beforeEach(async () => {
     TestBed.configureTestingModule({
       providers: [
-        provideHttpClient(),
+        ...provideDeckbuilderState(),
+        provideGempHttp(),
         provideHttpClientTesting(),
         provideFakeNotifier(),
         { provide: PAGE_QUERY_STRING, useValue: '' },

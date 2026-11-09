@@ -2,7 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { CardRef } from './card-ref';
 
 /** Whether the card information is shown, and for which card (CardInfoDialog's state). */
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class CardInfoService {
   readonly card = signal<CardRef | null>(null);
   /** Shown by dragging a card up: the click that ends that drag doesn't close it. */

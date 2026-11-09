@@ -76,7 +76,7 @@
                             <goal>npm</goal>
                         </goals>
                         <configuration>
-                            <arguments>test -- --watch=false</arguments>
+                            <arguments>test -- --watch=false --coverage</arguments>
                             <skip>${skipTests}</skip>
                         </configuration>
                     </execution>

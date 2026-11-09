@@ -1,3 +1,4 @@
+import { capturePointer } from '../pointer-drag/pointer-drag.directive';
 import { Component, DestroyRef, ElementRef, inject, input } from '@angular/core';
 import { DeckbuilderActions } from '../../../core/actions/deckbuilder-actions.service';
 import { CardView } from '../../../core/cards/card-view';
@@ -143,7 +144,7 @@ export class CardComponent {
     const mouse = event.pointerType === 'mouse';
     if (mouse) {
       // So the release comes here even when the card was dragged up and out of itself
-      (event.currentTarget as Element).setPointerCapture?.(event.pointerId);
+      capturePointer(event.currentTarget as Element, event.pointerId);
     }
     this.press = {
       x: event.clientX,
@@ -193,4 +194,9 @@ export class CardComponent {
 
 function isInfoSpot(target: EventTarget | null): boolean {
   return target instanceof Element && target.closest('.gd-card__info') !== null;
+}
+
+/** The card an event happened on, for other components that need to tell (the class is this component's own). */
+export function cardElementOf(target: EventTarget | null): Element | null {
+  return target instanceof Element ? target.closest('.gd-card') : null;
 }

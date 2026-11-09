@@ -1,5 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
-import { BASE_COLLECTION_TYPES, CollectionService } from '../../../core/collection/collection.service';
+import { BASE_COLLECTION_TYPES, CollectionBrowser } from '../../../core/collection/collection-browser.service';
 import { DeckLibraryService } from '../../../core/deck/deck-library.service';
 import { DeckChanges } from '../../../core/deck/deck-changes.service';
 import { DeckDraft } from '../../../core/deck/deck-draft.service';
@@ -100,7 +100,7 @@ export class DeckToolbarComponent {
   protected readonly library = inject(DeckLibraryService);
   protected readonly zoom = inject(AutoZoomSetting);
   protected readonly theme = inject(ThemeService);
-  private readonly collection = inject(CollectionService);
+  private readonly collection = inject(CollectionBrowser);
 
   protected readonly actions: readonly ToolbarAction[] = [
     { action: 'new', label: 'New deck', run: () => this.saver.newDeck() },

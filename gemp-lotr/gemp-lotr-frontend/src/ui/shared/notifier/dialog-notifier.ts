@@ -20,7 +20,7 @@ export type NotifierRequest =
 export class DialogNotifier extends Notifier {
   private readonly queue = signal<readonly NotifierRequest[]>([]);
   /** What is shown now. */
-  readonly current = () => this.queue()[0] ?? null;
+  readonly current = () => this.queue().at(0) ?? null;
 
   alert(message: string): Promise<void> {
     return new Promise((resolve) => this.push({ kind: 'alert', message, resolve }));

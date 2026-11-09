@@ -7,7 +7,7 @@ import { GempFormat } from '../api/models';
 export const DEFAULT_FORMAT_CODE = 'rev_tow_sta';
 
 /** The formats from POST /deck/formats, fetched once and shared. */
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class FormatsService {
   private readonly api = inject(DeckbuilderApi);
 

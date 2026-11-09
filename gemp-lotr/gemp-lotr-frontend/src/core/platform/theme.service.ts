@@ -1,11 +1,24 @@
 import { DOCUMENT } from '@angular/common';
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { readCookie, writeCookie } from './cookies';
 import { PAGE_QUERY_STRING } from './page-location';
 
 /** The deck builder's themes: each is a stylesheet bundle (angular.json, `theme-<name>.css`) of src/themes/<name>/. */
 export const THEMES = ['classic', 'modern'] as const;
 export type ThemeName = (typeof THEMES)[number];
+
+/** What a theme decides about behaviour, not looks. */
+export interface ThemeBehaviour {
+  /** The card information blocks the page behind it. */
+  cardInfoModal: boolean;
+  /** Closing a dialog gives the focus back to what had it (the legacy page left it nowhere). */
+  dialogsReturnFocus: boolean;
+}
+
+export const THEME_BEHAVIOUR: Readonly<Record<ThemeName, ThemeBehaviour>> = {
+  classic: { cardInfoModal: false, dialogsReturnFocus: false },
+  modern: { cardInfoModal: true, dialogsReturnFocus: true },
+};
 
 /** Shown in the theme picker. */
 export const THEME_LABELS: Readonly<Record<ThemeName, string>> = { classic: 'Classic', modern: 'Modern' };
@@ -51,7 +64,9 @@ export function isMobileDevice(window: Window | null): boolean {
     return false;
   }
   const coarse = typeof window.matchMedia === 'function' && window.matchMedia('(pointer: coarse)').matches;
-  const shortSide = Math.min(window.screen?.width ?? Infinity, window.screen?.height ?? Infinity);
+  // Not every browser environment has a screen
+  const screen = window.screen as Screen | undefined;
+  const shortSide = Math.min(screen?.width ?? Infinity, screen?.height ?? Infinity);
   return coarse && shortSide < 1100;
 }
 
@@ -81,6 +96,7 @@ export class ThemeService {
   private requested: ThemeName | null = null;
 
   readonly theme = this.current.asReadonly();
+  readonly behaviour = computed(() => THEME_BEHAVIOUR[this.current()]);
 
   /** Resolves the theme and waits for its stylesheet. A `?theme=` in the address is remembered, as a choice. */
   init(): Promise<void> {

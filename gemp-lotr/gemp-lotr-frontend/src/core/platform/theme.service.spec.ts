@@ -10,6 +10,7 @@ import {
   THEME_VIEWPORT_ATTRIBUTE,
   THEME_VIEWPORTS,
   ThemeService,
+  THEME_BEHAVIOUR,
 } from './theme.service';
 
 /** document.cookie, kept in memory: the tests' page isn't under /gemp-lotr, where the cookie is written. */
@@ -270,5 +271,10 @@ describe('ThemeService', () => {
       expect(themeLinks()).toHaveLength(1);
       expect(document.cookie).toBe(before);
     });
+  });
+
+  it('says how each theme behaves', () => {
+    expect(THEME_BEHAVIOUR.classic).toEqual({ cardInfoModal: false, dialogsReturnFocus: false });
+    expect(THEME_BEHAVIOUR.modern).toEqual({ cardInfoModal: true, dialogsReturnFocus: true });
   });
 });

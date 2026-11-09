@@ -1,8 +1,10 @@
-import { provideHttpClient } from '@angular/common/http';
+import { provideDeckbuilderState } from '../../../core/deckbuilder-state';
+import { provideGempHttp } from '../../../core/api/gemp-interceptors';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { BlockFilter } from '../../../core/api/models';
-import { CollectionService } from '../../../core/collection/collection.service';
+import { CollectionBrowser } from '../../../core/collection/collection-browser.service';
+import { CollectionQuery } from '../../../core/collection/collection-query.service';
 import { PAGE_QUERY_STRING } from '../../../core/platform/page-location';
 import { provideFakeNotifier } from '../../../testing/fake-notifier';
 import { CollectionFilterComponent } from './collection-filter.component';
@@ -13,18 +15,21 @@ const BLOCKS: BlockFilter[] = [
 ];
 
 describe('CollectionFilterComponent', () => {
-  let collection: CollectionService;
+  let collection: CollectionQuery;
+  let browser: CollectionBrowser;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        provideHttpClient(),
+        ...provideDeckbuilderState(),
+        provideGempHttp(),
         provideHttpClientTesting(),
         provideFakeNotifier(),
         { provide: PAGE_QUERY_STRING, useValue: '' },
       ],
     });
-    collection = TestBed.inject(CollectionService);
+    collection = TestBed.inject(CollectionQuery);
+    browser = TestBed.inject(CollectionBrowser);
   });
 
   afterEach(() => TestBed.inject(HttpTestingController).match(() => true));
@@ -135,14 +140,105 @@ describe('CollectionFilterComponent', () => {
     expect(el.querySelectorAll('.gd-field select:disabled').length).toBe(16);
   });
 
+  describe('the form', () => {
+    const control = <T extends HTMLElement>(el: HTMLElement, field: string, tag = 'select') =>
+      el.querySelector<T>(`[data-field="${field}"] ${tag}`)!;
+    const backendRequests = () => TestBed.inject(HttpTestingController).match((r) => r.url.includes('/collection/'));
+
+    it('asks the server only when typed text is finished, not at each key', async () => {
+      const { el, fixture } = await render();
+      backendRequests();
+      const name = control<HTMLInputElement>(el, 'name', 'input');
+      name.value = 'Gan';
+      name.dispatchEvent(new Event('input', { bubbles: true }));
+      await fixture.whenStable();
+      expect(backendRequests().length).toBe(0);
+      expect(collection.fields().name).toBe('');
+      name.dispatchEvent(new Event('change', { bubbles: true }));
+      expect(collection.fields().name).toBe('Gan');
+      expect(backendRequests().length).toBe(1);
+    });
+
+    it('shows a value changed elsewhere', async () => {
+      const { el, fixture } = await render();
+      collection.setField('side', 'SHADOW');
+      collection.setField('name', 'Aragorn');
+      await fixture.whenStable();
+      expect(control<HTMLSelectElement>(el, 'side').value).toBe('SHADOW');
+      expect(control<HTMLInputElement>(el, 'name', 'input').value).toBe('Aragorn');
+      backendRequests();
+    });
+
+    it('shows the fields emptied by the reset buttons', async () => {
+      const { el, fixture } = await render();
+      collection.setField('rarity', 'R');
+      collection.setField('name', 'Aragorn');
+      await fixture.whenStable();
+      el.querySelector<HTMLElement>('[data-action="reset-all"]')!.click();
+      await fixture.whenStable();
+      expect(control<HTMLSelectElement>(el, 'rarity').value).toBe('');
+      expect(control<HTMLInputElement>(el, 'name', 'input').value).toBe('');
+      backendRequests();
+    });
+
+    it('shows the block and set a new format selects, from their new lists', async () => {
+      const { el, fixture } = await render();
+      collection.updateFormat('fotr_block', BLOCKS.slice(0, 1));
+      await fixture.whenStable();
+      const block = control<HTMLSelectElement>(el, 'block');
+      expect([...block.options].map((o) => o.value)).toEqual(['', 'fotr_block']);
+      expect(block.value).toBe('fotr_block');
+      expect(control<HTMLSelectElement>(el, 'set').value).toBe(collection.fields().set);
+      backendRequests();
+    });
+
+    it('shows the number of a comparison, and empties it with the comparison', async () => {
+      const { el, fixture } = await render();
+      collection.setField('strengthCompare', 'EQUALS');
+      collection.setField('strengthValue', '7');
+      await fixture.whenStable();
+      const input = control<HTMLInputElement>(el, 'strength', 'input');
+      expect(input.value).toBe('7');
+      collection.setField('strengthCompare', '');
+      await fixture.whenStable();
+      expect(input.value).toBe('');
+      backendRequests();
+    });
+
+    it('limits the numbers and the texts as before', async () => {
+      const { el, fixture } = await render();
+      collection.setField('strengthCompare', 'EQUALS');
+      await fixture.whenStable();
+      const number = control<HTMLInputElement>(el, 'strength', 'input');
+      expect([number.min, number.max]).toEqual(['0', '12']);
+      expect(control<HTMLInputElement>(el, 'name', 'input').maxLength).toBe(100);
+      expect(control<HTMLInputElement>(el, 'gametext', 'input').maxLength).toBe(100);
+      backendRequests();
+    });
+
+    it('leaves the Product and Name usable for packs, and disables the rest', async () => {
+      const { el, fixture } = await render();
+      collection.setField('product', 'pack');
+      await fixture.whenStable();
+      expect(control<HTMLSelectElement>(el, 'product').disabled).toBe(false);
+      expect(control<HTMLInputElement>(el, 'name', 'input').disabled).toBe(false);
+      expect(control<HTMLSelectElement>(el, 'rarity').disabled).toBe(true);
+      expect(control<HTMLSelectElement>(el, 'twilight').disabled).toBe(true);
+      collection.setField('product', '');
+      await fixture.whenStable();
+      expect(control<HTMLSelectElement>(el, 'rarity').disabled).toBe(false);
+      backendRequests();
+    });
+  });
+
   it('pages, sizes pages and resets', async () => {
     const { fixture, el } = await render();
     const resetAll = vi.spyOn(collection, 'resetAll');
     const resetAdvanced = vi.spyOn(collection, 'resetAdvanced');
-    const next = vi.spyOn(collection, 'nextPage');
-    const size = vi.spyOn(collection, 'setPageSize');
-    collection.nextDisabled.set(false);
-    collection.sliderDisabled.set(false);
+    const next = vi.spyOn(browser, 'nextPage');
+    const size = vi.spyOn(browser, 'setPageSize');
+    browser.nextDisabled.set(false);
+    browser.sliderDisabled.set(false);
     await fixture.whenStable();
     el.querySelector<HTMLButtonElement>('.gd-pager__next')!.click();
     expect(next).toHaveBeenCalled();

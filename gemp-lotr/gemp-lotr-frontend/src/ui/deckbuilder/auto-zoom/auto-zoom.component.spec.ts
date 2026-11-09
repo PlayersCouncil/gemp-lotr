@@ -1,4 +1,5 @@
-import { provideHttpClient } from '@angular/common/http';
+import { provideDeckbuilderState } from '../../../core/deckbuilder-state';
+import { provideGempHttp } from '../../../core/api/gemp-interceptors';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { CardImageService } from '../../../core/cards/card-image.service';
@@ -31,7 +32,8 @@ describe('AutoZoomComponent', () => {
     vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
     TestBed.configureTestingModule({
       providers: [
-        provideHttpClient(),
+        ...provideDeckbuilderState(),
+        provideGempHttp(),
         provideHttpClientTesting(),
         provideFakeNotifier(),
         { provide: PAGE_QUERY_STRING, useValue: '' },

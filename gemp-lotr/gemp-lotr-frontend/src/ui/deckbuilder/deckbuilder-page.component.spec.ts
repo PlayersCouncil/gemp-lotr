@@ -1,15 +1,18 @@
-import { provideHttpClient } from '@angular/common/http';
+import { provideGempHttp } from '../../core/api/gemp-interceptors';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { DeckDraft } from '../../core/deck/deck-draft.service';
 import { PAGE_QUERY_STRING } from '../../core/platform/page-location';
 import { provideFakeNotifier } from '../../testing/fake-notifier';
 import { DeckbuilderPageComponent, RESIZE_STEP } from './deckbuilder-page.component';
+
+const COLLECTIONS = '<collections><collection format="fotr_block" name="Sealed" type="s1"/></collections>';
 
 describe('DeckbuilderPageComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        provideHttpClient(),
+        provideGempHttp(),
         provideHttpClientTesting(),
         provideFakeNotifier(),
         { provide: PAGE_QUERY_STRING, useValue: '' },
@@ -25,6 +28,39 @@ describe('DeckbuilderPageComponent', () => {
     const el = fixture.nativeElement as HTMLElement;
     return { fixture, el, separator: el.querySelector<HTMLElement>('.gd-page__separator')! };
   }
+
+  describe('its state belongs to the page', () => {
+    const answerStartup = () => {
+      const backend = TestBed.inject(HttpTestingController);
+      backend.expectOne((r) => r.url.endsWith('/deck/formats')).flush('{"Formats":{}}');
+      backend.expectOne((r) => r.url.endsWith('/collection')).flush(COLLECTIONS);
+      backend.expectOne((r) => r.url.endsWith('/league')).flush('<leagues/>');
+    };
+    const formatLabels = (el: HTMLElement) =>
+      [...el.querySelectorAll<HTMLOptionElement>('select.gd-toolbar__format option')].map((o) => o.label || o.text);
+
+    it('starts fresh when the page is left and opened again', async () => {
+      const first = await render();
+      answerStartup();
+      await first.fixture.whenStable();
+      const once = formatLabels(first.el);
+      TestBed.inject(HttpTestingController).match(() => true);
+      first.fixture.destroy();
+
+      const second = await render();
+      answerStartup();
+      await second.fixture.whenStable();
+      expect(formatLabels(second.el)).toEqual(once);
+    });
+
+    it('does not keep the deck of the previous visit', async () => {
+      const first = await render();
+      first.fixture.debugElement.injector.get(DeckDraft).deckName.set('Left behind');
+      first.fixture.destroy();
+      const second = await render();
+      expect(second.fixture.debugElement.injector.get(DeckDraft).deckName()).toBeNull();
+    });
+  });
 
   it('lays out the deck, the separator and the collection (DOM contract)', async () => {
     const { el } = await render();

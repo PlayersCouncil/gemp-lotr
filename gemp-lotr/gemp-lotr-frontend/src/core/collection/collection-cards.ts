@@ -5,7 +5,7 @@ import { CardView } from '../cards/card-view';
 
 export interface CollectionCardsOptions {
   images: CardImageService;
-  /** Copies of a card left once the deck's are taken out (CollectionService.availableCount). */
+  /** Copies of a card left once the deck's are taken out (CollectionCounts.available). */
   available: (blueprintId: string, count: number) => number;
   /** Foil layer image for foil cards (from the player's foil setting), or null to show foils plain. */
   foilImage: string | null;

@@ -15,7 +15,9 @@ import { CardImageService } from '../../../core/cards/card-image.service';
 import { CardInfoService } from '../../../core/cards/card-info.service';
 import { zoneOf } from '../../../core/cards/card-ref';
 import { siteImage } from '../../../core/platform/app-paths';
+import { ThemeService } from '../../../core/platform/theme.service';
 import { readCookie, writeCookie } from '../../../core/platform/cookies';
+import { cardElementOf } from '../../shared/card/card.component';
 import { DocumentPressDirective } from '../../shared/document-press/document-press.directive';
 
 /** Shared with the legacy card information dialog (the zoom slider's last value). */
@@ -37,8 +39,8 @@ function isMetaSiteModifier(blueprintId: string): boolean {
  * when it has none); clicking anywhere else, the close button or Escape closes it, unless the size slider was just
  * used. A click or right-click on a card behind it only closes it (other controls still work).
  *
- * Modal unless the theme sets `--gd-card-info-modal: no` on it, and always modal over another modal dialog (a card in
- * the selection dialog), which would otherwise cover it.
+ * Modal if the theme says so (ThemeBehaviour), and always over another modal dialog (a card in the selection dialog),
+ * which would otherwise cover it.
  *
  * DOM contract: `dialog.gd-card-info` with `--gd-card-info-zoom` (0.4 to 1, the slider) for the theme to size the
  * card with; `.gd-card-info__header` (`.gd-card-info__title`, `button.gd-card-info__close`),
@@ -110,6 +112,7 @@ function isMetaSiteModifier(blueprintId: string): boolean {
 export class CardInfoComponent {
   protected readonly info = inject(CardInfoService);
   private readonly images = inject(CardImageService);
+  private readonly theme = inject(ThemeService);
   private readonly document = inject(DOCUMENT);
   private readonly dialog = viewChild.required<ElementRef<HTMLDialogElement>>('dialog');
 
@@ -147,7 +150,7 @@ export class CardInfoComponent {
         // jsdom has no showModal/show
         if (typeof dialog.showModal !== 'function') {
           dialog.setAttribute('open', '');
-        } else if (this.opensModal(dialog)) {
+        } else if (this.opensModal()) {
           dialog.showModal();
         } else {
           dialog.show();
@@ -212,7 +215,7 @@ export class CardInfoComponent {
     if (!this.sliding) {
       this.info.close();
     }
-    if (target.closest('.gd-card')) {
+    if (cardElementOf(target)) {
       event.stopPropagation();
     }
   }
@@ -220,16 +223,13 @@ export class CardInfoComponent {
   /** A press on a card behind the dialog leaves the focus on its slider, as the legacy page's press on a card did. */
   private pressStarted(event: MouseEvent): void {
     this.info.forgetDragRelease();
-    if (this.info.isOpen() && (event.target as Element).closest('.gd-card')) {
+    if (this.info.isOpen() && cardElementOf(event.target)) {
       event.preventDefault();
     }
   }
 
-  private opensModal(dialog: HTMLDialogElement): boolean {
-    const style = this.document.defaultView?.getComputedStyle(dialog);
-    return (
-      style?.getPropertyValue('--gd-card-info-modal').trim() !== 'no' || !!this.document.querySelector('dialog:modal')
-    );
+  private opensModal(): boolean {
+    return this.theme.behaviour().cardInfoModal || this.document.querySelector('dialog:modal') !== null;
   }
 
   protected onClick(event: MouseEvent): void {

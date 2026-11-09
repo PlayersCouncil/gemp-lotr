@@ -8,7 +8,7 @@ import { Notifier } from '../../../core/notifier/notifier';
  */
 @Injectable()
 export class WindowNotifier extends Notifier {
-  private readonly window = inject(DOCUMENT).defaultView!;
+  private readonly window = inject(DOCUMENT).defaultView ?? globalThis.window;
 
   alert(message: string): Promise<void> {
     this.window.alert(message);

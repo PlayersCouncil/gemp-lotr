@@ -1,3 +1,4 @@
+import { provideDeckbuilderState } from '../deckbuilder-state';
 import { TestBed } from '@angular/core/testing';
 import { CardInfoService } from '../cards/card-info.service';
 import { CardRef } from '../cards/card-ref';
@@ -19,6 +20,7 @@ describe('DeckbuilderActions', () => {
     packs = { packClicked: vi.fn(), choose: vi.fn() };
     TestBed.configureTestingModule({
       providers: [
+        ...provideDeckbuilderState(),
         { provide: DeckEditing, useValue: deck },
         { provide: PacksService, useValue: packs },
       ],

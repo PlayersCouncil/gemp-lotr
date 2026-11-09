@@ -1,96 +1,74 @@
-import { SERVER_URL } from '../platform/app-paths';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { catchError, map, Observable, Subject, tap, throwError } from 'rxjs';
-import { SessionService } from '../session/session.service';
+import { map, Observable } from 'rxjs';
+import { SERVER_URL } from '../platform/app-paths';
 import { ApiError } from './api-error';
 import { FormData, toFormParams } from './form-codec';
+import { BYPASS_CACHE, SEND_PARTICIPANT } from './gemp-interceptors';
 import { parseXml } from './xml';
-
-/** Base path of the Gemp server API (RootUriRequestHandler). */
-
-/** Response header the server sets when opened-pack contents are waiting to be shown (Delivery-Service-Opened-Pack). */
-export const OPENED_PACK_HEADER = 'Delivery-Service-Opened-Pack';
 
 export interface RequestOptions {
   /** Send the session's participantId (default true; the legacy client sent it with nearly every call). */
   participant?: boolean;
-  /** GET only: add a cache-busting parameter, like jQuery's cache:false (default true). */
+  /** GET only: add a cache-busting parameter (default true). */
   noCache?: boolean;
 }
 
+function contextOf(options: RequestOptions): HttpContext {
+  return new HttpContext()
+    .set(SEND_PARTICIPANT, options.participant !== false)
+    .set(BYPASS_CACHE, options.noCache !== false);
+}
+
+function toXml(text: string): Document {
+  try {
+    return parseXml(text);
+  } catch (error) {
+    throw ApiError.from(error);
+  }
+}
+
+function toJson(text: string): unknown {
+  try {
+    return JSON.parse(text);
+  } catch (error) {
+    throw ApiError.from(error);
+  }
+}
+
 /**
- * Low-level access to the Gemp server, matching how the legacy communication.js talks to it:
- * form-encoded parameters (strictly encoded), participantId added, GETs not cached, failures turned into ApiError,
- * and the opened-pack delivery header reported through openedPackAnnounced$.
+ * The Gemp server's request formats: form-encoded parameters (strictly encoded), text, XML or JSON answers. What every
+ * call needs (participant, no caching, ApiError, the opened-pack header) is in the interceptors of provideGempHttp.
  */
 @Injectable({ providedIn: 'root' })
 export class GempHttp {
   private readonly http = inject(HttpClient);
-  private readonly session = inject(SessionService);
-  private readonly openedPackAnnounced = new Subject<void>();
-
-  /** Emits whenever a response says opened-pack contents are ready to be fetched (see PackDeliveryService). */
-  readonly openedPackAnnounced$: Observable<void> = this.openedPackAnnounced.asObservable();
 
   getText(path: string, data: FormData = {}, options: RequestOptions = {}): Observable<string> {
-    let params = toFormParams(this.withParticipant(data, options));
-    if (options.noCache !== false) {
-      params = params.set('_', String(Date.now()));
-    }
-    return this.handle(this.http.get(SERVER_URL + path, { params, responseType: 'text', observe: 'response' }));
+    return this.http.get(SERVER_URL + path, {
+      params: toFormParams(data),
+      responseType: 'text',
+      context: contextOf(options),
+    });
   }
 
   /** POSTs the data form-encoded (HttpParams bodies are sent as application/x-www-form-urlencoded). */
   postText(path: string, data: FormData = {}, options: RequestOptions = {}): Observable<string> {
-    const body = toFormParams(this.withParticipant(data, options));
-    return this.handle(this.http.post(SERVER_URL + path, body, { responseType: 'text', observe: 'response' }));
+    return this.http.post(SERVER_URL + path, toFormParams(data), {
+      responseType: 'text',
+      context: contextOf(options),
+    });
   }
 
   getXml(path: string, data: FormData = {}, options: RequestOptions = {}): Observable<Document> {
-    return this.getText(path, data, options).pipe(map(GempHttp.toXml));
+    return this.getText(path, data, options).pipe(map(toXml));
   }
 
   postXml(path: string, data: FormData = {}, options: RequestOptions = {}): Observable<Document> {
-    return this.postText(path, data, options).pipe(map(GempHttp.toXml));
+    return this.postText(path, data, options).pipe(map(toXml));
   }
 
   postJson<T>(path: string, data: FormData = {}, options: RequestOptions = {}): Observable<T> {
-    return this.postText(path, data, options).pipe(map((text) => GempHttp.toJson<T>(text)));
-  }
-
-  private withParticipant(data: FormData, options: RequestOptions): FormData {
-    if (options.participant === false) {
-      return data;
-    }
-    return { participantId: this.session.participantId, ...data };
-  }
-
-  private handle(response$: Observable<HttpResponse<string>>): Observable<string> {
-    return response$.pipe(
-      tap((response) => {
-        if (response.headers.get(OPENED_PACK_HEADER) === 'true') {
-          this.openedPackAnnounced.next();
-        }
-      }),
-      map((response) => response.body ?? ''),
-      catchError((error: unknown) => throwError(() => ApiError.from(error))),
-    );
-  }
-
-  private static toXml(text: string): Document {
-    try {
-      return parseXml(text);
-    } catch (error) {
-      throw ApiError.from(error);
-    }
-  }
-
-  private static toJson<T>(text: string): T {
-    try {
-      return JSON.parse(text) as T;
-    } catch (error) {
-      throw ApiError.from(error);
-    }
+    return this.postText(path, data, options).pipe(map((text) => toJson(text) as T));
   }
 }

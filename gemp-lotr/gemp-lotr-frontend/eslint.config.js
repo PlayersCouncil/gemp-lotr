@@ -9,12 +9,20 @@ module.exports = defineConfig([
     files: ['**/*.ts'],
     extends: [
       eslint.configs.recommended,
-      tseslint.configs.recommended,
-      tseslint.configs.stylistic,
+      tseslint.configs.strictTypeChecked,
+      tseslint.configs.stylisticTypeChecked,
       angular.configs.tsRecommended,
     ],
+    languageOptions: { parserOptions: { projectService: true, tsconfigRootDir: __dirname } },
     processor: angular.processInlineTemplates,
     rules: {
+      // `() => doSomething()` is the normal short form for a callback
+      '@typescript-eslint/no-confusing-void-expression': ['error', { ignoreArrowShorthand: true }],
+      '@typescript-eslint/restrict-template-expressions': ['error', { allowNumber: true }],
+      // Angular classes can be empty: the decorator is what counts
+      '@typescript-eslint/no-extraneous-class': ['error', { allowWithDecorator: true }],
+      '@angular-eslint/prefer-signals': 'error',
+      '@angular-eslint/prefer-output-readonly': 'error',
       '@angular-eslint/directive-selector': [
         'error',
         {
@@ -33,6 +41,12 @@ module.exports = defineConfig([
         },
       ],
     },
+  },
+  // The specs are checked by the compiler; the type-aware rules cost more than they find there
+  {
+    files: ['**/*.spec.ts', 'src/testing/**'],
+    extends: [tseslint.configs.disableTypeChecked],
+    rules: { '@typescript-eslint/no-non-null-assertion': 'off' },
   },
   {
     files: ['**/*.html'],

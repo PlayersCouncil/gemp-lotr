@@ -1,11 +1,14 @@
-import { provideHttpClient } from '@angular/common/http';
+import { provideDeckbuilderState } from '../deckbuilder-state';
+import { provideGempHttp } from '../api/gemp-interceptors';
 import { HttpTestingController, provideHttpClientTesting, TestRequest } from '@angular/common/http/testing';
-import { isSignal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { combined, Public } from '../../testing/combined';
 import { readServerResponse } from '../../testing/files';
 import { FakeNotifier, provideFakeNotifier, settle } from '../../testing/fake-notifier';
 import { GempFormat } from '../api/models';
-import { CollectionService } from '../collection/collection.service';
+import { CollectionBrowser } from '../collection/collection-browser.service';
+import { CollectionCounts } from '../collection/collection-counts.service';
+import { CollectionQuery } from '../collection/collection-query.service';
 import { PAGE_QUERY_STRING } from '../platform/page-location';
 import { DeckChanges } from './deck-changes.service';
 import { DeckDraft } from './deck-draft.service';
@@ -40,8 +43,6 @@ const FORMATS = {
   },
 };
 
-/** A class's public members only (its private fields would make the intersection below impossible). */
-type Public<T> = { [K in keyof T]: T[K] };
 type Parts = Public<DeckDraft> &
   Public<DeckFormatSelection> &
   Public<DeckChanges> &
@@ -55,7 +56,7 @@ type Parts = Public<DeckDraft> &
 function allParts(): Parts {
   const draft = TestBed.inject(DeckDraft);
   const formats = TestBed.inject(DeckFormatSelection);
-  const parts: object[] = [
+  return combined<Parts>(
     draft,
     formats,
     // Before the classes with a private field of the same name as its public `stats`
@@ -66,19 +67,16 @@ function allParts(): Parts {
     TestBed.inject(DeckSaver),
     TestBed.inject(DeckStartup),
     { deckContents: () => formats.contentsOf(draft.deck()) },
-  ];
-  return new Proxy({} as Parts, {
-    get: (_, name) => {
-      const owner = parts.find((part) => name in part) as Record<string | symbol, unknown>;
-      const value = owner[name];
-      return typeof value === 'function' && !isSignal(value) ? value.bind(owner) : value;
-    },
-  });
+  );
 }
 
 describe('editing a deck', () => {
   let service: Parts;
-  let collection: CollectionService;
+  let collection: {
+    limitedCollections: CollectionBrowser['limitedCollections'];
+    fields: CollectionQuery['fields'];
+    available: CollectionCounts['available'];
+  };
   let backend: HttpTestingController;
   let dialogs: string[];
   let answers: (string | boolean | null)[];
@@ -87,7 +85,8 @@ describe('editing a deck', () => {
     vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
     TestBed.configureTestingModule({
       providers: [
-        provideHttpClient(),
+        ...provideDeckbuilderState(),
+        provideGempHttp(),
         provideHttpClientTesting(),
         provideFakeNotifier(),
         { provide: PAGE_QUERY_STRING, useValue: '' },
@@ -96,7 +95,11 @@ describe('editing a deck', () => {
     ({ dialogs, answers } = TestBed.inject(FakeNotifier));
     backend = TestBed.inject(HttpTestingController);
     service = allParts();
-    collection = TestBed.inject(CollectionService);
+    collection = combined(
+      TestBed.inject(CollectionBrowser),
+      TestBed.inject(CollectionQuery),
+      TestBed.inject(CollectionCounts),
+    );
   });
 
   afterEach(() => {
@@ -181,7 +184,7 @@ describe('editing a deck', () => {
     expect(service.contentsDirty()).toBe(true);
     expect(service.convertErrataEnabled()).toBe(true);
     TestBed.tick();
-    expect(collection.availableCount('1_12', 4)).toBe(2);
+    expect(collection.available('1_12', 4)).toBe(2);
   });
 
   it('fills an empty special slot from the filtered collection, then goes back to the normal filter', () => {
@@ -733,7 +736,7 @@ describe('editing a deck', () => {
       start();
       service.selectFormat(7);
       TestBed.tick();
-      expect(collection.availableCount('90_7', 1)).toBe(0);
+      expect(collection.available('90_7', 1)).toBe(0);
       collectionRequests();
     });
   });
@@ -859,7 +862,9 @@ describe('editing a deck', () => {
     it('tells the collection which cards are in the deck, for "Special in Deck"', () => {
       start();
       service.addFromCollection('1_12', 'FREE_PEOPLE');
-      expect(collection.cardsInDeck()).toEqual(['1_12']);
+      service.addFromCollection('1_13', 'FREE_PEOPLE');
+      TestBed.inject(CollectionQuery).setField('product', 'specialForDeck');
+      expect(collectionRequests().at(-1)!.request.params.get('filter')).toContain('blueprints:1_12,1_13');
     });
   });
 

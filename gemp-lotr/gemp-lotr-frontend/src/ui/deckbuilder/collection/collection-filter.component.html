@@ -1,5 +1,4 @@
-@let pack = collection.isPackProduct();
-@let hidden = collection.hiddenCultureGroups();
+@let hidden = query.hiddenCultureGroups();
 
 <ng-template #fieldTemplate let-field>
   <!-- eslint-disable-next-line @angular-eslint/template/label-has-associated-control -- it wraps the control, inside the @switch -->
@@ -13,29 +12,19 @@
     <span class="gd-field__control">
       @switch (field.kind) {
         @case ('select') {
-          <select [disabled]="disabled(field)" (change)="set(field.field, $event)">
+          <select [formField]="control(field.field)" (change)="set(field.field, $event)">
             @for (option of field.options(); track $index) {
-              <option [value]="option.value" [selected]="value(field.field) === option.value">
-                {{ option.label }}
-              </option>
+              <option [value]="option.value">{{ option.label }}</option>
             }
           </select>
         }
         @case ('text') {
-          <input
-            type="text"
-            maxlength="100"
-            [disabled]="disabled(field)"
-            [value]="value(field.field)"
-            (change)="set(field.field, $event)"
-          />
+          <input type="text" [formField]="control(field.field)" (change)="set(field.field, $event)" />
         }
         @case ('numeric') {
-          <select [disabled]="pack" (change)="set(compareField(field.stat), $event)">
+          <select [formField]="control(compareField(field.stat))" (change)="set(compareField(field.stat), $event)">
             @for (option of compareOptions; track $index) {
-              <option [value]="option.value" [selected]="value(compareField(field.stat)) === option.value">
-                {{ option.label }}
-              </option>
+              <option [value]="option.value">{{ option.label }}</option>
             }
           </select>
           <input
@@ -59,8 +48,8 @@
     class="gd-pager__previous gd-button"
     data-icon="previous"
     aria-label="Previous page"
-    [disabled]="collection.previousDisabled()"
-    (click)="collection.previousPage()"
+    [disabled]="browser.previousDisabled()"
+    (click)="browser.previousPage()"
   ></button>
   <div class="gd-pager__track">
     <input
@@ -70,7 +59,7 @@
       [min]="pageSize.min"
       [max]="pageSize.max"
       [value]="pageSize.start"
-      [disabled]="collection.sliderDisabled()"
+      [disabled]="browser.sliderDisabled()"
       (input)="setPageSize($event)"
     />
   </div>
@@ -79,14 +68,14 @@
     class="gd-pager__next gd-button"
     data-icon="next"
     aria-label="Next page"
-    [disabled]="collection.nextDisabled()"
-    (click)="collection.nextPage()"
+    [disabled]="browser.nextDisabled()"
+    (click)="browser.nextPage()"
   ></button>
 </div>
 
 <div class="gd-filter__fields">
   <div class="gd-filter__basic">
-    @for (field of basicFields; track $index) {
+    @for (field of basicFields; track fieldName(field)) {
       <ng-container *ngTemplateOutlet="fieldTemplate; context: { $implicit: field }" />
     }
   </div>
@@ -94,19 +83,17 @@
     <p class="gd-filter__advanced-title">
       Advanced filters (<a [href]="wikiSearch" target="_blank">See more on the Wiki.</a>)
     </p>
-    @for (field of advancedFields; track $index) {
+    @for (field of advancedFields; track fieldName(field)) {
       <ng-container *ngTemplateOutlet="fieldTemplate; context: { $implicit: field }" />
     }
   </div>
 </div>
 
 <div class="gd-filter__resets">
-  <button type="button" class="gd-button" data-action="reset-advanced" (click)="collection.resetAdvanced()">
+  <button type="button" class="gd-button" data-action="reset-advanced" (click)="query.resetAdvanced()">
     Reset advanced filters only
   </button>
-  <button type="button" class="gd-button" data-action="reset-all" (click)="collection.resetAll()">
-    Reset all filters
-  </button>
+  <button type="button" class="gd-button" data-action="reset-all" (click)="query.resetAll()">Reset all filters</button>
 </div>
 
 <div class="gd-cultures" role="group" aria-label="Cultures">
@@ -125,7 +112,7 @@
             type="checkbox"
             [checked]="active"
             [attr.aria-label]="culture.code"
-            (change)="collection.toggleCulture(culture.code)"
+            (change)="query.toggleCulture(culture.code)"
           />
           <img class="gd-culture__icon" [src]="culture.image" alt="" />
         </label>

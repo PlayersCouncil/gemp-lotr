@@ -3,7 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ApiError, GENERIC_COMMUNICATION_ERROR } from '../api/api-error';
 import { DeckbuilderApi } from '../api/deckbuilder-api.service';
 import { PackDelivery } from '../api/models';
-import { CollectionService } from '../collection/collection.service';
+import { CollectionBrowser } from '../collection/collection-browser.service';
 import { PackDeliveryService } from '../delivery/pack-delivery.service';
 import { Notifier } from '../notifier/notifier';
 
@@ -20,10 +20,10 @@ export interface ShownCard {
  * Opening packs from the collection (deckBuildingUi.clickCardFunction), the "Choose one" dialog of selection packs,
  * and the "New items - <collection>" dialogs showing what was opened (deckbuilderDeliveryService.js).
  */
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class PacksService {
   private readonly api = inject(DeckbuilderApi);
-  private readonly collection = inject(CollectionService);
+  private readonly collection = inject(CollectionBrowser);
   private readonly delivery = inject(PackDeliveryService);
   private readonly notifier = inject(Notifier);
 

@@ -1,5 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { ThemeService } from '../../../core/platform/theme.service';
 import { DialogComponent } from './dialog.component';
 
 @Component({
@@ -90,6 +91,33 @@ describe('DialogComponent', () => {
     dialog.querySelector('input')!.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
     await fixture.whenStable();
     expect(host.closed).toBe(1);
+  });
+
+  describe('the focus after closing', () => {
+    let opener: HTMLButtonElement;
+
+    beforeEach(() => {
+      opener = document.body.appendChild(document.createElement('button'));
+    });
+    afterEach(() => opener.remove());
+
+    async function closedWithFocusOnOpener(behaviour: { dialogsReturnFocus: boolean }) {
+      TestBed.overrideProvider(ThemeService, { useValue: { behaviour: signal(behaviour) } });
+      const { dialog, show } = await render();
+      await show();
+      opener.focus();
+      dialog.dispatchEvent(new Event('close'));
+    }
+
+    it('is left nowhere in a theme that does not return it', async () => {
+      await closedWithFocusOnOpener({ dialogsReturnFocus: false });
+      expect(document.activeElement).toBe(document.body);
+    });
+
+    it('stays where the browser returned it in a theme that does', async () => {
+      await closedWithFocusOnOpener({ dialogsReturnFocus: true });
+      expect(document.activeElement).toBe(opener);
+    });
   });
 
   it('focuses the dialog itself, not its close button, when it has no control', async () => {

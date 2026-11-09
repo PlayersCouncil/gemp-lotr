@@ -1,3 +1,4 @@
+import { provideDeckbuilderState } from '../../../core/deckbuilder-state';
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { DeckbuilderActions } from '../../../core/actions/deckbuilder-actions.service';
@@ -47,7 +48,7 @@ describe('CardComponent', () => {
   beforeEach(() => {
     actions = { activate: vi.fn(), showInfo: vi.fn(), showDraggedInfo: vi.fn() };
     TestBed.configureTestingModule({
-      providers: [{ provide: DeckbuilderActions, useValue: actions }],
+      providers: [...provideDeckbuilderState(), { provide: DeckbuilderActions, useValue: actions }],
     });
   });
 

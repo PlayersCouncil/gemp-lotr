@@ -1,7 +1,10 @@
+import { provideDeckbuilderState } from '../deckbuilder-state';
 import { TestBed } from '@angular/core/testing';
 import { DeckDraft } from './deck-draft.service';
 
 describe('DeckDraft', () => {
+  beforeEach(() => TestBed.configureTestingModule({ providers: provideDeckbuilderState() }));
+
   let draft: DeckDraft;
 
   beforeEach(() => (draft = TestBed.inject(DeckDraft)));

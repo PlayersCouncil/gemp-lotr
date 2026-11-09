@@ -8,7 +8,7 @@ import { DeckFormatSelection } from './deck-format-selection.service';
 import { DECK_NAME_LENGTH_MESSAGE, isValidDeckName } from './deck-name';
 
 /** Keeping the deck: New, Save, Rename and Copy, and offering to save before unsaved changes would be lost. */
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class DeckSaver {
   private readonly api = inject(DeckbuilderApi);
   private readonly draft = inject(DeckDraft);

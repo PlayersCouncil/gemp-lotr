@@ -8,7 +8,7 @@ export interface DeckLabel {
 }
 
 /** The deck being edited: its cards, name and notes, and whether it has unsaved changes. Only state, no behaviour. */
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class DeckDraft {
   readonly deck = signal<DeckState>(EMPTY_DECK);
   /** Null for a deck that was never saved. */

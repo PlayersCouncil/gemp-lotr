@@ -1,26 +1,28 @@
-import { provideHttpClient } from '@angular/common/http';
+import { provideDeckbuilderState } from '../../../core/deckbuilder-state';
+import { provideGempHttp } from '../../../core/api/gemp-interceptors';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { DeckbuilderActions } from '../../../core/actions/deckbuilder-actions.service';
-import { CollectionService } from '../../../core/collection/collection.service';
+import { CollectionBrowser } from '../../../core/collection/collection-browser.service';
 import { DeckEditing } from '../../../core/deck/deck-editing.service';
 import { PAGE_QUERY_STRING } from '../../../core/platform/page-location';
 import { provideFakeNotifier } from '../../../testing/fake-notifier';
 import { CollectionGridComponent } from './collection-grid.component';
 
 describe('CollectionGridComponent', () => {
-  let collection: CollectionService;
+  let collection: CollectionBrowser;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        provideHttpClient(),
+        ...provideDeckbuilderState(),
+        provideGempHttp(),
         provideHttpClientTesting(),
         provideFakeNotifier(),
         { provide: PAGE_QUERY_STRING, useValue: '' },
       ],
     });
-    collection = TestBed.inject(CollectionService);
+    collection = TestBed.inject(CollectionBrowser);
   });
 
   afterEach(() => TestBed.inject(HttpTestingController).match(() => true));

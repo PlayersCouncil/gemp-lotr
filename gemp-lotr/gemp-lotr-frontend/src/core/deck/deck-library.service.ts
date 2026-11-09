@@ -16,7 +16,7 @@ export interface DeckListState {
  * The player's saved decks and the library, decklist import and notes (deckBuildingUi.loadDeckList, loadLibraryList,
  * importDecklist, editNotes): which of their dialogs are open and what they show. Leaving the current deck (deck list, library, import) first offers to save it.
  */
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class DeckLibraryService {
   private readonly api = inject(DeckbuilderApi);
   private readonly saver = inject(DeckSaver);

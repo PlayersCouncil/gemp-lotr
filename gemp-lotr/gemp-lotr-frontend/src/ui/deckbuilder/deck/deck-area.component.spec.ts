@@ -1,7 +1,8 @@
-import { provideHttpClient } from '@angular/common/http';
+import { provideDeckbuilderState } from '../../../core/deckbuilder-state';
+import { provideGempHttp } from '../../../core/api/gemp-interceptors';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { CollectionService } from '../../../core/collection/collection.service';
+import { CollectionQuery } from '../../../core/collection/collection-query.service';
 import { parseDeckStats } from '../../../core/deck/deck-stats';
 import { DeckDraft } from '../../../core/deck/deck-draft.service';
 import { DeckFormatSelection } from '../../../core/deck/deck-format-selection.service';
@@ -20,7 +21,8 @@ describe('DeckAreaComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        provideHttpClient(),
+        ...provideDeckbuilderState(),
+        provideGempHttp(),
         provideHttpClientTesting(),
         provideFakeNotifier(),
         { provide: PAGE_QUERY_STRING, useValue: '' },
@@ -134,7 +136,7 @@ describe('DeckAreaComponent', () => {
   it('removes a card when it is used, and selects for an empty slot when the slot is clicked', async () => {
     setUp();
     const { fixture, slot, pile } = await render();
-    const collection = TestBed.inject(CollectionService);
+    const collection = TestBed.inject(CollectionQuery);
     const override = vi.spyOn(collection, 'setFilterOverride');
 
     // The Ring-bearer's own card: removed, without selecting for the slot (it wasn't empty when clicked)
@@ -155,7 +157,7 @@ describe('DeckAreaComponent', () => {
   it('shows the sites in the collection when the sites or a site is clicked', async () => {
     setUp();
     const { fixture, slot } = await render();
-    const collection = TestBed.inject(CollectionService);
+    const collection = TestBed.inject(CollectionQuery);
     slot('sites').querySelector<HTMLButtonElement>('.gd-card')!.click();
     await fixture.whenStable();
     expect(draft.deck().sites.length).toBe(1);

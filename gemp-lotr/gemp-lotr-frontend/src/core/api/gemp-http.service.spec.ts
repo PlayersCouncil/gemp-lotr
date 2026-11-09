@@ -1,10 +1,12 @@
-import { provideHttpClient } from '@angular/common/http';
+import { provideGempHttp } from './gemp-interceptors';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { firstValueFrom } from 'rxjs';
 import { PAGE_QUERY_STRING } from '../platform/page-location';
 import { ApiError, INVALID_RESPONSE_STATUS } from './api-error';
-import { GempHttp, OPENED_PACK_HEADER } from './gemp-http.service';
+import { GempHttp } from './gemp-http.service';
+import { OPENED_PACK_HEADER } from './gemp-interceptors';
+import { OpenedPackAnnouncements } from './opened-pack-announcements';
 
 describe('GempHttp', () => {
   let http: GempHttp;
@@ -12,11 +14,7 @@ describe('GempHttp', () => {
 
   function setUp(queryString = '') {
     TestBed.configureTestingModule({
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        { provide: PAGE_QUERY_STRING, useValue: queryString },
-      ],
+      providers: [provideGempHttp(), provideHttpClientTesting(), { provide: PAGE_QUERY_STRING, useValue: queryString }],
     });
     http = TestBed.inject(GempHttp);
     backend = TestBed.inject(HttpTestingController);
@@ -104,7 +102,7 @@ describe('GempHttp', () => {
   it('announces opened-pack deliveries signalled in a response header', () => {
     setUp();
     let announcements = 0;
-    http.openedPackAnnounced$.subscribe(() => announcements++);
+    TestBed.inject(OpenedPackAnnouncements).announced$.subscribe(() => announcements++);
 
     http.getText('/collection/default').subscribe();
     backend.expectOne((r) => r.url === '/gemp-lotr-server/collection/default').flush('<collection/>');

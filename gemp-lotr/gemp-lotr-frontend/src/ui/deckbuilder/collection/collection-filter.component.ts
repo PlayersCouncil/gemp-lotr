@@ -1,13 +1,20 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, linkedSignal } from '@angular/core';
+import { disabled, form, FormField, maxLength } from '@angular/forms/signals';
+import {
+  CollectionBrowser,
+  PAGE_SIZE_MAX,
+  PAGE_SIZE_MIN,
+  PAGE_SIZE_SLIDER_START,
+} from '../../../core/collection/collection-browser.service';
+import { CollectionQuery, FilterFieldName } from '../../../core/collection/collection-query.service';
+import { CULTURE_GROUPS } from '../../../core/collection/filter-cultures';
+import { NUMERIC_FILTERS, NumericFilter } from '../../../core/collection/filter-fields';
 import {
   CARD_TYPE_OPTIONS,
   COMPARE_OPTIONS,
-  CULTURE_GROUPS,
-  FilterFields,
   ITEM_CLASS_OPTIONS,
   KEYWORD_OPTIONS,
-  NumericFilter,
   PHASE_OPTIONS,
   PRODUCT_OPTIONS,
   RACE_OPTIONS,
@@ -16,15 +23,9 @@ import {
   SIDE_OPTIONS,
   SIGNET_OPTIONS,
   SORT_OPTIONS,
-} from '../../../core/collection/card-filter';
-import {
-  CollectionService,
-  PAGE_SIZE_MAX,
-  PAGE_SIZE_MIN,
-  PAGE_SIZE_SLIDER_START,
-} from '../../../core/collection/collection.service';
+} from '../../../core/collection/filter-options';
 
-type TextField = Exclude<keyof FilterFields, 'cultures'>;
+type TextField = FilterFieldName;
 
 /** A select field of the filter, in the legacy filter table's order. */
 interface SelectField {
@@ -52,9 +53,26 @@ interface NumericField {
 
 type Field = SelectField | TextInputField | NumericField;
 
+/** What can't filter packs: every field but the Product and the name. */
+const FIELDS_OFF_FOR_PACKS: readonly TextField[] = [
+  'rarity',
+  'block',
+  'set',
+  'side',
+  'sort',
+  'cardType',
+  'gametext',
+  'keyword',
+  'phase',
+  'race',
+  'itemClass',
+  'signet',
+  ...NUMERIC_FILTERS.map((stat) => `${stat}Compare` as const),
+];
+
 /**
  * The collection filter: paging and page size, the filter fields (basic, then advanced), the two reset buttons and the
- * culture toggles. Every control is a native element; changes go straight to CollectionService.
+ * culture toggles. Every control is a native element, bound with Signal Forms; changes go to CollectionQuery and CollectionBrowser.
  *
  * DOM contract (`.gd-filter`):
  * - `.gd-pager`: `button.gd-pager__previous`, `input[type=range].gd-pager__size`, `button.gd-pager__next`, each
@@ -69,12 +87,13 @@ type Field = SelectField | TextInputField | NumericField;
  */
 @Component({
   selector: 'gd-collection-filter',
-  imports: [NgTemplateOutlet],
+  imports: [NgTemplateOutlet, FormField],
   host: { class: 'gd-filter' },
   templateUrl: './collection-filter.component.html',
 })
 export class CollectionFilterComponent {
-  protected readonly collection = inject(CollectionService);
+  protected readonly query = inject(CollectionQuery);
+  protected readonly browser = inject(CollectionBrowser);
 
   protected readonly pageSize = { min: PAGE_SIZE_MIN, max: PAGE_SIZE_MAX, start: PAGE_SIZE_SLIDER_START };
   protected readonly cultureGroups = CULTURE_GROUPS;
@@ -84,8 +103,8 @@ export class CollectionFilterComponent {
   protected readonly basicFields: readonly Field[] = [
     { kind: 'select', field: 'product', label: 'Product:', options: () => PRODUCT_OPTIONS, forPacks: true },
     { kind: 'select', field: 'rarity', label: 'Rarity:', options: () => RARITY_OPTIONS },
-    { kind: 'select', field: 'block', label: 'Block:', options: () => this.collection.blockOptions() },
-    { kind: 'select', field: 'set', label: 'Set:', options: () => this.collection.setOptions() },
+    { kind: 'select', field: 'block', label: 'Block:', options: () => this.query.blockOptions() },
+    { kind: 'select', field: 'set', label: 'Set:', options: () => this.query.setOptions() },
     { kind: 'select', field: 'side', label: 'Side:', options: () => SIDE_OPTIONS },
     { kind: 'select', field: 'sort', label: 'Sort by:', options: () => SORT_OPTIONS },
     { kind: 'select', field: 'cardType', label: 'Card\u00a0Type:', options: () => CARD_TYPE_OPTIONS, wide: true },
@@ -106,20 +125,36 @@ export class CollectionFilterComponent {
     { kind: 'numeric', stat: 'resistance', label: 'Resistance:' },
   ];
 
+  /**
+   * The form's controls show this copy of the filter fields. It follows the query, and what the player does goes to the
+   * query when a control's change is finished (so typing doesn't reload the collection at each key). The comparison
+   * numbers stay plain inputs: the form's number limits need a numeric model, and these are text for the server.
+   */
+  private readonly formValues = linkedSignal(() => this.query.fields());
+
+  protected readonly filterForm = form(this.formValues, (path) => {
+    const packs = () => this.query.isPackProduct();
+    for (const name of FIELDS_OFF_FOR_PACKS) {
+      disabled(path[name], { when: packs });
+    }
+    maxLength(path.name, 100);
+    maxLength(path.gametext, 100);
+  });
+
   protected fieldName(field: Field): string {
     return field.kind === 'numeric' ? field.stat : field.field;
   }
 
-  protected disabled(field: Field): boolean {
-    return field.kind !== 'numeric' && field.forPacks ? false : this.collection.isPackProduct();
+  protected control(field: TextField) {
+    return this.filterForm[field];
   }
 
   protected value(field: TextField): string {
-    return this.collection.fields()[field];
+    return this.query.fields()[field];
   }
 
   protected set(field: TextField, event: Event): void {
-    this.collection.setField(field, (event.target as HTMLInputElement | HTMLSelectElement).value);
+    this.query.setField(field, (event.target as HTMLInputElement | HTMLSelectElement).value);
   }
 
   protected compareField(stat: NumericFilter): TextField {
@@ -131,10 +166,10 @@ export class CollectionFilterComponent {
   }
 
   protected setPageSize(event: Event): void {
-    this.collection.setPageSize(Number((event.target as HTMLInputElement).value));
+    this.browser.setPageSize(Number((event.target as HTMLInputElement).value));
   }
 
   protected isCultureActive(code: string): boolean {
-    return this.collection.fields().cultures.includes(code);
+    return this.query.fields().cultures.includes(code);
   }
 }

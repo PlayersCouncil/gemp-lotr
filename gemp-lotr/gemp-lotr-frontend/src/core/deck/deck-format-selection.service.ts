@@ -18,9 +18,9 @@ export interface RaceCard {
 }
 
 /** The format list and which entry is selected, with what follows from that selection. Only state, no requests. */
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class DeckFormatSelection {
-  private readonly formats = signal<Readonly<Record<string, GempFormat>>>({});
+  private readonly formats = signal<ReadonlyMap<string, GempFormat>>(new Map());
   private readonly rtmdLeagues = signal<ReadonlyMap<string, League>>(new Map());
 
   readonly formatOptions = signal<readonly FormatOption[]>(INITIAL_FORMAT_OPTIONS);
@@ -59,7 +59,7 @@ export class DeckFormatSelection {
   showHallFormats(formats: Readonly<Record<string, GempFormat>>): void {
     const current = this.selectedFormat().value;
     const options = hallFormatOptions({ ...formats });
-    this.formats.set(formats);
+    this.formats.set(new Map(Object.entries(formats)));
     this.formatOptions.set(options);
     this.selectedFormatIndex.set(optionIndexOf(options, current));
   }
@@ -81,7 +81,7 @@ export class DeckFormatSelection {
   }
 
   blockFilters(format: string): readonly BlockFilter[] | null {
-    return this.formats()[format]?.blockFilters ?? null;
+    return this.formats().get(format)?.blockFilters ?? null;
   }
 
   /** The deckContents string for the server. */

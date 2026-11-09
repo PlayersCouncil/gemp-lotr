@@ -11,7 +11,7 @@ import { DeckStats, EMPTY_STATS, parseDeckStats } from './deck-stats';
 export const STATS_REFRESH_DELAY_MS = 500;
 
 /** The server's verdict on the deck (counts and the format's rules), asked for shortly after something changes. */
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class DeckStatsRefresher {
   private readonly api = inject(DeckbuilderApi);
   private readonly draft = inject(DeckDraft);

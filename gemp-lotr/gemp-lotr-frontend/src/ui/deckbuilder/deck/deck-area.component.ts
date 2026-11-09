@@ -8,7 +8,7 @@ import { DeckSlot } from '../../../core/deck/deck-model';
 import { DeckDraft } from '../../../core/deck/deck-draft.service';
 import { DeckEditing } from '../../../core/deck/deck-editing.service';
 import { DeckFormatSelection } from '../../../core/deck/deck-format-selection.service';
-import { CardComponent } from '../../shared/card/card.component';
+import { CardComponent, cardElementOf } from '../../shared/card/card.component';
 import { FitCard } from '../../shared/fit-cards/fit-cards';
 import { FitCardsDirective } from '../../shared/fit-cards/fit-cards.directive';
 import { DeckStatsComponent } from './deck-stats.component';
@@ -192,7 +192,7 @@ export class DeckAreaComponent {
 
   /** Clicking a site removes it and, as on the legacy page (whose sites box saw the click too), shows the sites. */
   protected siteClicked(event: MouseEvent): void {
-    if ((event.target as Element).closest('.gd-card')) {
+    if (cardElementOf(event.target)) {
       this.editing.slotClicked('sites');
     }
   }

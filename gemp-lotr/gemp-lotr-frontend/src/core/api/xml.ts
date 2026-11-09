@@ -11,7 +11,7 @@ export function parseXml(text: string): Document {
 /** The root element, checked against the expected tag name (the legacy client silently ignored other roots). */
 export function rootElement(doc: Document, expectedTag: string): Element | null {
   const root = doc.documentElement;
-  return root && root.tagName === expectedTag ? root : null;
+  return root.tagName === expectedTag ? root : null;
 }
 
 /** Direct child elements with the given tag name, in document order. */

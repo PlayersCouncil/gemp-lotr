@@ -1,5 +1,6 @@
 import { Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { DeckStartup } from '../../core/deck/deck-startup.service';
+import { provideDeckbuilderState } from '../../core/deckbuilder-state';
 import { PacksService } from '../../core/packs/packs.service';
 import { AutoZoomComponent } from './auto-zoom/auto-zoom.component';
 import { CardInfoComponent } from './card-info/card-info.component';
@@ -34,6 +35,7 @@ export type PagePane = 'deck' | 'collection';
  */
 @Component({
   selector: 'deckbuilder-app',
+  providers: provideDeckbuilderState(),
   imports: [
     PointerDragDirective,
     DeckAreaComponent,
@@ -120,6 +122,7 @@ export class DeckbuilderPageComponent {
   /** Where the drag would leave the collection's width, while the separator is being dragged. */
   protected readonly dragWidth = signal<number | null>(null);
   private readonly dragPreview = viewChild<ElementRef<HTMLElement>>('dragPreview');
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
 
   constructor() {
     inject(DeckStartup).init();
@@ -144,7 +147,7 @@ export class DeckbuilderPageComponent {
       return null;
     }
     const separator = event.currentTarget as HTMLElement;
-    const page = separator.closest('.gd-page') as HTMLElement;
+    const page = this.host;
     this.dragging.set(true);
     // Where on the separator it was grabbed stays under the pointer
     const grabbedAt = event.clientX - separator.getBoundingClientRect().left;

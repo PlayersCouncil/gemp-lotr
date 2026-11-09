@@ -1,12 +1,16 @@
+import { provideDeckbuilderState } from '../../../core/deckbuilder-state';
 import { TestBed } from '@angular/core/testing';
 import { CardInfoService } from '../../../core/cards/card-info.service';
 import { CardRef } from '../../../core/cards/card-ref';
+import { ThemeService } from '../../../core/platform/theme.service';
 import { CardInfoComponent, ZOOM_COOKIE } from './card-info.component';
 
 const CARD: CardRef = { kind: 'shown', blueprintId: '1_2', zone: 'COLLECTION', choosable: false };
 const META_SITE_MODIFIER: CardRef = { kind: 'shown', blueprintId: '90_1', zone: 'COLLECTION', choosable: false };
 
 describe('CardInfoComponent', () => {
+  beforeEach(() => TestBed.configureTestingModule({ providers: provideDeckbuilderState() }));
+
   let info: CardInfoService;
   let cookies: string[];
   let spies: { mockRestore(): void }[];
@@ -167,6 +171,62 @@ describe('CardInfoComponent', () => {
       card.dispatchEvent(press);
       expect(press.defaultPrevented).toBe(false);
       expect(activated).toHaveBeenCalledOnce();
+    });
+  });
+
+  describe('how it opens', () => {
+    let show: ReturnType<typeof vi.fn>;
+    let showModal: ReturnType<typeof vi.fn>;
+    let spy: { mockRestore(): void };
+    const proto = HTMLDialogElement.prototype as unknown as Record<string, unknown>;
+
+    beforeEach(() => {
+      show = vi.fn(function (this: HTMLDialogElement) {
+        this.setAttribute('open', '');
+      });
+      showModal = vi.fn(function (this: HTMLDialogElement) {
+        this.setAttribute('open', '');
+      });
+      proto['show'] = show;
+      proto['showModal'] = showModal;
+    });
+
+    afterEach(() => {
+      delete proto['show'];
+      delete proto['showModal'];
+      spy.mockRestore();
+    });
+
+    async function open(modalElsewhere: boolean) {
+      const real = document.querySelector.bind(document);
+      spy = vi
+        .spyOn(document, 'querySelector')
+        .mockImplementation((selector: string) =>
+          selector === 'dialog:modal' ? (modalElsewhere ? document.createElement('dialog') : null) : real(selector),
+        );
+      const { fixture } = await render();
+      info.show(CARD);
+      await fixture.whenStable();
+    }
+
+    it('is not modal in the classic theme', async () => {
+      await open(false);
+      expect(show).toHaveBeenCalledOnce();
+      expect(showModal).not.toHaveBeenCalled();
+    });
+
+    it('is modal over another modal dialog, which would otherwise cover it', async () => {
+      await open(true);
+      expect(showModal).toHaveBeenCalledOnce();
+    });
+
+    it('is modal in a theme that wants that', async () => {
+      vi.spyOn(TestBed.inject(ThemeService), 'behaviour').mockReturnValue({
+        cardInfoModal: true,
+        dialogsReturnFocus: true,
+      });
+      await open(false);
+      expect(showModal).toHaveBeenCalledOnce();
     });
   });
 

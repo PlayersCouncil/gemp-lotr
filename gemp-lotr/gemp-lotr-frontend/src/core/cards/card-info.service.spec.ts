@@ -1,3 +1,4 @@
+import { provideDeckbuilderState } from '../deckbuilder-state';
 import { TestBed } from '@angular/core/testing';
 import { CardInfoService } from './card-info.service';
 import { CardRef } from './card-ref';
@@ -5,6 +6,8 @@ import { CardRef } from './card-ref';
 const CARD: CardRef = { kind: 'shown', blueprintId: '1_2', zone: 'COLLECTION', choosable: false };
 
 describe('CardInfoService', () => {
+  beforeEach(() => TestBed.configureTestingModule({ providers: provideDeckbuilderState() }));
+
   let info: CardInfoService;
 
   beforeEach(() => (info = TestBed.inject(CardInfoService)));

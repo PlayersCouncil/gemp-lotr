@@ -15,6 +15,26 @@ import {
 const build = (...steps: ((deck: DeckState) => DeckState)[]) => steps.reduce((deck, step) => step(deck), EMPTY_DECK);
 
 describe('deck model', () => {
+  it('gives every card its own id, without any shared counter', () => {
+    const deck = build(
+      (d) => addToSlot(d, 'ring', '1_2'),
+      (d) => addDrawCopy(d, '1_3', 'SHADOW'),
+      (d) => addToSlot(d, 'sites', '1_319'),
+    );
+    expect([deck.ring[0].id, deck.draw[0].id, deck.sites[0].id]).toEqual([1, 2, 3]);
+    // The same steps from the same deck give the same result
+    expect(addDrawCopy(EMPTY_DECK, '1_3', 'SHADOW')).toEqual(addDrawCopy(EMPTY_DECK, '1_3', 'SHADOW'));
+  });
+
+  it('keeps ids unique after a card is removed', () => {
+    const deck = build(
+      (d) => addDrawCopy(d, '1_3', 'SHADOW'),
+      (d) => addDrawCopy(d, '1_4', 'SHADOW'),
+    );
+    const next = addDrawCopy(removeDrawCopy(deck, deck.draw[1].id), '1_5', 'SHADOW');
+    expect(new Set(next.draw.map((card) => card.id)).size).toBe(next.draw.length);
+  });
+
   it('stacks extra copies behind the first one, per pile, in the order added', () => {
     const deck = build(
       (d) => addDrawCopy(d, '1_2', 'FREE_PEOPLE'),

@@ -1,3 +1,4 @@
+import { OpenedPackAnnouncements } from '../api/opened-pack-announcements';
 import { DestroyRef, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { map, Observable, Subject } from 'rxjs';
@@ -12,7 +13,7 @@ import { parsePackDelivery } from '../api/parsers';
  * shows the popup (Phase 6) injects it. From then on it fetches whenever a response announces new contents, and the
  * UI should call fetch() once on start, as the legacy page did (forcePackDelivery).
  */
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class PackDeliveryService {
   private readonly http = inject(GempHttp);
   private readonly deliveries = new Subject<PackDelivery[]>();
@@ -21,7 +22,9 @@ export class PackDeliveryService {
   readonly deliveries$: Observable<PackDelivery[]> = this.deliveries.asObservable();
 
   constructor() {
-    this.http.openedPackAnnounced$.pipe(takeUntilDestroyed(inject(DestroyRef))).subscribe(() => this.fetch());
+    inject(OpenedPackAnnouncements)
+      .announced$.pipe(takeUntilDestroyed(inject(DestroyRef)))
+      .subscribe(() => this.fetch());
   }
 
   fetch(): void {

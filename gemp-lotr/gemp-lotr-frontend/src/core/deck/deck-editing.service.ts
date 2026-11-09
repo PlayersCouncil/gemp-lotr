@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { CollectionService, DEFAULT_FILTER_OVERRIDE } from '../collection/collection.service';
+import { CollectionQuery, DEFAULT_FILTER_OVERRIDE } from '../collection/collection-query.service';
 import { DeckChanges } from './deck-changes.service';
 import { DeckDraft } from './deck-draft.service';
 import { addBySide, addToSlot, DeckSlot, removeDrawCopy, removeFromSlot } from './deck-model';
@@ -12,11 +12,11 @@ const SLOT_FILTERS: Partial<Record<DeckSlot, string>> = {
 };
 
 /** The player changing the open deck by hand: adding and removing cards, filling a special slot, editing the notes. */
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class DeckEditing {
   private readonly draft = inject(DeckDraft);
   private readonly changes = inject(DeckChanges);
-  private readonly collection = inject(CollectionService);
+  private readonly collection = inject(CollectionQuery);
 
   /** Where a collection card clicked now goes: a special slot after clicking it, otherwise by the card's side. */
   private selectionSlot: DeckSlot | null = null;

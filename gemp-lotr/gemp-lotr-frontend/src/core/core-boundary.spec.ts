@@ -74,6 +74,22 @@ describe('core boundary', () => {
     expect(uses).toEqual([]);
   });
 
+  it("keeps the deck builder's state out of the app-wide injector (it belongs to the page)", () => {
+    const pageFolders = [
+      'core/deck/',
+      'core/collection/',
+      'core/packs/',
+      'core/delivery/',
+      'core/actions/',
+      'core/formats/',
+    ];
+    const app = files
+      .filter(({ name }) => pageFolders.some((folder) => name.startsWith(folder)))
+      .filter(({ source }) => source.includes("providedIn: 'root'"))
+      .map(({ name }) => name);
+    expect(app).toEqual([]);
+  });
+
   it('has no styles or templates', () => {
     const viewCode = files.filter(({ source }) => /@Component\(|@Directive\(|\.css'|styleUrl|templateUrl/.test(source));
     expect(viewCode.map(({ name }) => name)).toEqual([]);

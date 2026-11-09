@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { errorMessage } from '../api/api-error';
 import { DeckbuilderApi } from '../api/deckbuilder-api.service';
-import { CollectionService } from '../collection/collection.service';
+import { CollectionBrowser } from '../collection/collection-browser.service';
 import { FormatsService } from '../formats/formats.service';
 import { Notifier } from '../notifier/notifier';
 import { DeckChanges } from './deck-changes.service';
@@ -10,7 +10,7 @@ import { DeckFormatSelection } from './deck-format-selection.service';
 import { DeckStatsRefresher } from './deck-stats-refresher.service';
 
 /** Starts the page in order: the formats, then the collection, then the limited collections and RTMD leagues. */
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class DeckStartup {
   private readonly api = inject(DeckbuilderApi);
   private readonly formatsService = inject(FormatsService);
@@ -18,7 +18,7 @@ export class DeckStartup {
   private readonly changes = inject(DeckChanges);
   private readonly editing = inject(DeckEditing);
   private readonly stats = inject(DeckStatsRefresher);
-  private readonly collection = inject(CollectionService);
+  private readonly collection = inject(CollectionBrowser);
   private readonly notifier = inject(Notifier);
 
   init(): void {

@@ -1,16 +1,20 @@
-import { provideHttpClient } from '@angular/common/http';
+import { provideDeckbuilderState } from '../deckbuilder-state';
+import { provideGempHttp } from '../api/gemp-interceptors';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { readServerResponse } from '../../testing/files';
 import { PackDelivery } from '../api/models';
-import { GempHttp, OPENED_PACK_HEADER } from '../api/gemp-http.service';
+import { GempHttp } from '../api/gemp-http.service';
+import { OPENED_PACK_HEADER } from '../api/gemp-interceptors';
 import { PackDeliveryService } from './pack-delivery.service';
 
 describe('PackDeliveryService', () => {
   let backend: HttpTestingController;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({ providers: [provideHttpClient(), provideHttpClientTesting()] });
+    TestBed.configureTestingModule({
+      providers: [...provideDeckbuilderState(), provideGempHttp(), provideHttpClientTesting()],
+    });
     backend = TestBed.inject(HttpTestingController);
   });
 

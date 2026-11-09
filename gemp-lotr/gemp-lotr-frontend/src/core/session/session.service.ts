@@ -16,6 +16,6 @@ export class SessionService {
 
   private static readParticipantId(queryString: string): string | null {
     const value = new URLSearchParams(queryString).get('participantId');
-    return value ? value : null;
+    return value === '' ? null : value;
   }
 }

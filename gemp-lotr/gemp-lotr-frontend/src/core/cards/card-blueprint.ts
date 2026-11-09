@@ -31,7 +31,7 @@ const FUTURE_PRIZE_IMAGE = siteImage('future_prize.jpg');
 export const RULES_IMAGE = siteImage('rules.png');
 
 /** Cards whose errata got a remade image, by set (Card.remadeErratas). */
-const REMADE_ERRATAS: Readonly<Record<number, readonly number[]>> = {
+const REMADE_ERRATAS: Partial<Record<number, readonly number[]>> = {
   0: [7],
   1: [3, 12, 43, 46, 55, 109, 113, 138, 162, 211, 235, 263, 309, 318, 331, 338, 343, 360],
   3: [48, 110],
@@ -84,7 +84,7 @@ export function getFixedImage(tables: CardImageTables, blueprintId: string): str
 }
 
 function lookup(table: ImageTable, key: string): string | null {
-  return Object.hasOwn(table, key) && table[key] != null ? table[key] : null;
+  return Object.hasOwn(table, key) ? table[key] : null;
 }
 
 /** Card.isPack */
@@ -104,7 +104,7 @@ export function isPlaceholder(blueprintId: string | null): boolean {
 /** Card.getErrata: the remade errata image, if this card has one. */
 export function getErrataImage(setNo: number, cardNo: number): string | null {
   const cards = REMADE_ERRATAS[setNo];
-  if (cards && cards.includes(cardNo)) {
+  if (cards?.includes(cardNo)) {
     return siteImage(`erratas/LOTR${formatCardNo(setNo, cardNo)}.jpg`);
   }
   return null;

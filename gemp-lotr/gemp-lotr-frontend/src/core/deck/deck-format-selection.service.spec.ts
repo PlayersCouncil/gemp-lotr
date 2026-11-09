@@ -1,3 +1,4 @@
+import { provideDeckbuilderState } from '../deckbuilder-state';
 import { TestBed } from '@angular/core/testing';
 import { CollectionTypeInfo, GempFormat, League } from '../api/models';
 import { addToSlot, EMPTY_DECK } from './deck-model';
@@ -23,6 +24,8 @@ const league = (code: string, formatCode: string, metaSites: League['metaSites']
 const SITE = { blueprintId: '91_1', visualBlueprintId: '90_3', siteOverride: true } as League['metaSites'][number];
 
 describe('DeckFormatSelection', () => {
+  beforeEach(() => TestBed.configureTestingModule({ providers: provideDeckbuilderState() }));
+
   let formats: DeckFormatSelection;
 
   beforeEach(() => (formats = TestBed.inject(DeckFormatSelection)));

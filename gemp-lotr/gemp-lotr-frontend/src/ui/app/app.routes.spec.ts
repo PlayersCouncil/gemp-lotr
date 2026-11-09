@@ -1,4 +1,4 @@
-import { provideHttpClient } from '@angular/common/http';
+import { provideGempHttp } from '../../core/api/gemp-interceptors';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
@@ -14,7 +14,7 @@ describe('app routes', () => {
     TestBed.configureTestingModule({
       providers: [
         provideRouter(APP_ROUTES),
-        provideHttpClient(),
+        provideGempHttp(),
         provideHttpClientTesting(),
         provideFakeNotifier(),
         { provide: PAGE_QUERY_STRING, useValue: '' },

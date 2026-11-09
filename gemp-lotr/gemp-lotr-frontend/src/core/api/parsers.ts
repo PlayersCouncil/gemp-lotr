@@ -25,7 +25,7 @@ export function parseDeckList(doc: Document): DeckSummary[] {
     return [];
   }
   return childElements(root, 'deck').map((deck) => ({
-    name: deck.textContent ?? '',
+    name: deck.textContent,
     formatName: attr(deck, 'targetFormat') ?? '',
   }));
 }

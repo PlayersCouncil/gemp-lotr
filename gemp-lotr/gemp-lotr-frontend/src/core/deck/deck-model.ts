@@ -8,7 +8,7 @@ import { serializeDeckContents } from './deck-contents';
  */
 
 export interface DeckCard {
-  /** Unique within the page (the legacy lastCardId). */
+  /** Unique within the deck. */
   id: number;
   blueprintId: string;
 }
@@ -23,6 +23,8 @@ export interface DrawCopy extends DeckCard {
 export type DeckSlot = 'ringBearer' | 'ring' | 'map' | 'sites';
 
 export interface DeckState {
+  /** The id of the card added last. */
+  lastCardId: number;
   ringBearer: readonly DeckCard[];
   ring: readonly DeckCard[];
   map: readonly DeckCard[];
@@ -34,14 +36,7 @@ export interface DeckState {
   draw: readonly DrawCopy[];
 }
 
-export const EMPTY_DECK: DeckState = { ringBearer: [], ring: [], map: [], sites: [], draw: [] };
-
-let lastCardId = 0;
-
-/** A new page-unique card id. */
-export function nextCardId(): number {
-  return ++lastCardId;
-}
+export const EMPTY_DECK: DeckState = { lastCardId: 0, ringBearer: [], ring: [], map: [], sites: [], draw: [] };
 
 /**
  * Adds a card to a slot. A future-prize placeholder never goes into a deck (it is dropped, as the legacy page did).
@@ -50,7 +45,8 @@ export function addToSlot(deck: DeckState, slot: DeckSlot, blueprintId: string):
   if (isPlaceholder(blueprintId)) {
     return deck;
   }
-  return { ...deck, [slot]: [...deck[slot], { id: nextCardId(), blueprintId }] };
+  const id = deck.lastCardId + 1;
+  return { ...deck, lastCardId: id, [slot]: [...deck[slot], { id, blueprintId }] };
 }
 
 /** Adds one copy to the draw deck (deckBuildingUi.addCardToDeck). */
@@ -58,7 +54,8 @@ export function addDrawCopy(deck: DeckState, blueprintId: string, side: DrawSide
   if (isPlaceholder(blueprintId)) {
     return deck;
   }
-  return { ...deck, draw: [...deck.draw, { id: nextCardId(), blueprintId, side }] };
+  const id = deck.lastCardId + 1;
+  return { ...deck, lastCardId: id, draw: [...deck.draw, { id, blueprintId, side }] };
 }
 
 /**

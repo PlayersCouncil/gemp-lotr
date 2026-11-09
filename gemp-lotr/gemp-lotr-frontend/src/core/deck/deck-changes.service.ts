@@ -1,37 +1,24 @@
-import { effect, inject, Injectable, signal, untracked } from '@angular/core';
-import { CardImageService } from '../cards/card-image.service';
-import { CollectionService } from '../collection/collection.service';
+import { inject, Injectable, signal } from '@angular/core';
+import { CollectionQuery } from '../collection/collection-query.service';
 import { DeckDraft } from './deck-draft.service';
 import { DeckFormatSelection } from './deck-format-selection.service';
-import { deckCardCounts, EMPTY_DECK, shownDeckBlueprints } from './deck-model';
+import { EMPTY_DECK } from './deck-model';
 import { DeckStatsRefresher } from './deck-stats-refresher.service';
 
 /**
- * What follows when the deck or its format changes: the "modified" mark, the Convert button, the deck stats, and what
- * the collection needs to know.
+ * What follows when the deck or its format changes: the "modified" mark, the Convert button, the deck stats, and the
+ * collection's format.
  */
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class DeckChanges {
   private readonly draft = inject(DeckDraft);
   private readonly formats = inject(DeckFormatSelection);
   private readonly stats = inject(DeckStatsRefresher);
-  private readonly collection = inject(CollectionService);
-  private readonly images = inject(CardImageService);
+  private readonly collection = inject(CollectionQuery);
 
   readonly convertErrataEnabled = signal(false);
 
   private formatsLoaded = false;
-
-  constructor() {
-    // The collection counts what is on the deck side of the page, and lists the deck for "Special in Deck"
-    effect(() => {
-      const deck = this.draft.deck();
-      const race = this.formats.raceCard();
-      untracked(() => this.collection.deckCounts.set(deckCardCounts(deck, race ? [race.blueprintId] : [])));
-    });
-    this.collection.cardsInDeck = () =>
-      shownDeckBlueprints(this.draft.deck()).map((blueprintId) => this.images.resolve(blueprintId).bareBlueprint);
-  }
 
   /** Marks the deck as changed or saved. */
   deckModified(modified: boolean): void {

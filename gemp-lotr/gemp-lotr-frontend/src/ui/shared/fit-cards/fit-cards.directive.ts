@@ -48,7 +48,7 @@ export class FitCardsDirective {
         return;
       }
       const observer = new ResizeObserverClass((entries) => {
-        const box = entries[entries.length - 1]?.contentRect;
+        const box = entries.at(-1)?.contentRect;
         if (box) {
           this.size.set({ width: box.width, height: box.height });
         }

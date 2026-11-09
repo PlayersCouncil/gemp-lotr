@@ -1150,8 +1150,7 @@ button.gd-slot__label:focus-visible {
   --info-height: calc(var(--card-height) + 49.61px);
   position: absolute;
   inset: auto;
-  /* The legacy dialog stayed usable beside the page, and above everything else on it */
-  --gd-card-info-modal: no;
+  /* Above everything else on the page: in this theme it isn't modal (ThemeBehaviour) */
   z-index: 20000;
   /* jQuery UI centres by the whole-pixel outer size, and keeps the title bar on the screen */
   left: round(calc((100vw - round(calc(var(--info-width) + 0.4em + 2px), 1px)) / 2), 1px);
@@ -1385,7 +1384,6 @@ button.gd-slot__label:focus-visible {
   --classic-dialog-width: 300px;
   /* The height it is centred for; dialogs of the content's height are centred for their least height */
   --classic-dialog-height: 150px;
-  --gd-dialog-return-focus: no;
   /* The outer size, where the theme knows it: jQuery UI centred the whole-pixel box (offsetWidth, offsetHeight) */
   --classic-dialog-outer-width: round(calc(var(--classic-dialog-width) + 0.4em + 2px), 1px);
   position: absolute;

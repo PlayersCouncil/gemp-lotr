@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { ApiError, errorMessage } from '../api/api-error';
 import { DeckbuilderApi } from '../api/deckbuilder-api.service';
 import { Deck } from '../api/models';
-import { CollectionService } from '../collection/collection.service';
+import { CollectionBrowser } from '../collection/collection-browser.service';
 import { Notifier } from '../notifier/notifier';
 import { DeckChanges } from './deck-changes.service';
 import { DeckDraft } from './deck-draft.service';
@@ -11,13 +11,13 @@ import { formatDecklist } from './deck-import';
 import { addImportedCards, deckStateOf } from './deck-model';
 
 /** Bringing a deck in from the server: a saved deck, a library deck, a pasted decklist, or the PC errata conversion. */
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class DeckOpener {
   private readonly api = inject(DeckbuilderApi);
   private readonly draft = inject(DeckDraft);
   private readonly changes = inject(DeckChanges);
   private readonly formats = inject(DeckFormatSelection);
-  private readonly collection = inject(CollectionService);
+  private readonly collection = inject(CollectionBrowser);
   private readonly notifier = inject(Notifier);
 
   /** Opens one of the player's decks. */

@@ -1,7 +1,8 @@
-import { provideHttpClient } from '@angular/common/http';
+import { provideDeckbuilderState } from '../../../core/deckbuilder-state';
+import { provideGempHttp } from '../../../core/api/gemp-interceptors';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { CollectionService } from '../../../core/collection/collection.service';
+import { CollectionBrowser } from '../../../core/collection/collection-browser.service';
 import { DeckLibraryService } from '../../../core/deck/deck-library.service';
 import { DeckChanges } from '../../../core/deck/deck-changes.service';
 import { DeckDraft } from '../../../core/deck/deck-draft.service';
@@ -20,7 +21,8 @@ describe('DeckToolbarComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        provideHttpClient(),
+        ...provideDeckbuilderState(),
+        provideGempHttp(),
         provideHttpClientTesting(),
         provideFakeNotifier(),
         { provide: PAGE_QUERY_STRING, useValue: '' },
@@ -140,7 +142,7 @@ describe('DeckToolbarComponent', () => {
     format.dispatchEvent(new Event('change'));
     expect(selectFormat).toHaveBeenCalledWith(0);
 
-    const selectCollection = vi.spyOn(TestBed.inject(CollectionService), 'selectCollectionType').mockReturnValue();
+    const selectCollection = vi.spyOn(TestBed.inject(CollectionBrowser), 'selectCollectionType').mockReturnValue();
     const collection = el.querySelector<HTMLSelectElement>('.gd-toolbar__collection')!;
     collection.value = collection.options[1].value;
     collection.dispatchEvent(new Event('change'));

@@ -12,6 +12,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { DragHandlers, PointerDragDirective } from '../pointer-drag/pointer-drag.directive';
+import { ThemeService } from '../../../core/platform/theme.service';
 
 const FOCUSABLE = 'input, select, textarea, button, a[href], [tabindex]';
 
@@ -81,6 +82,7 @@ export class DialogLayers {
 })
 export class DialogComponent {
   private readonly layers = inject(DialogLayers);
+  private readonly theme = inject(ThemeService);
   private readonly window = inject(DOCUMENT).defaultView;
   private readonly dialog = viewChild.required<ElementRef<HTMLDialogElement>>('dialog');
 
@@ -94,7 +96,7 @@ export class DialogComponent {
   readonly focusSelf = input(false);
 
   /** Closed by the player (close button, Escape), not by `open` going false. */
-  readonly closed = output<void>();
+  readonly closed = output();
 
   protected readonly titleId = this.layers.nextId();
   protected readonly placed = signal<{ left: number; top: number } | null>(null);
@@ -110,12 +112,13 @@ export class DialogComponent {
       if (open && !dialog.open) {
         this.placed.set(null);
         this.layer.set(this.layers.next());
-        const show = modal ? dialog.showModal : dialog.show;
         // jsdom has no showModal/show
-        if (typeof show === 'function') {
-          show.call(dialog);
-        } else {
+        if (typeof dialog.showModal !== 'function') {
           dialog.setAttribute('open', '');
+        } else if (modal) {
+          dialog.showModal();
+        } else {
+          dialog.show();
         }
         this.focusContent(dialog);
       } else if (!open && dialog.open) {
@@ -143,18 +146,15 @@ export class DialogComponent {
     }
   }
 
-  /**
-   * The browser gives the focus back to what had it when the dialog opened. A theme can opt out with
-   * `--gd-dialog-return-focus: no` (the legacy dialogs left it nowhere, so the button that opened one wasn't highlighted).
-   */
+  /** The browser gives the focus back to what had it when the dialog opened; not every theme wants that. */
   private dropReturnedFocus(): void {
     const dialog = this.dialog().nativeElement;
     const returned = dialog.ownerDocument.activeElement;
     if (
+      !this.theme.behaviour().dialogsReturnFocus &&
       returned instanceof HTMLElement &&
       returned !== dialog.ownerDocument.body &&
-      !returned.closest('dialog') &&
-      this.window?.getComputedStyle(dialog).getPropertyValue('--gd-dialog-return-focus').trim() === 'no'
+      !returned.closest('dialog')
     ) {
       returned.blur();
     }
