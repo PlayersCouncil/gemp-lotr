@@ -133,10 +133,28 @@ export class DialogComponent {
   }
 
   protected onNativeClose(): void {
+    this.dropReturnedFocus();
     if (this.closingQuietly) {
       this.closingQuietly = false;
     } else {
       this.closed.emit();
+    }
+  }
+
+  /**
+   * The browser gives the focus back to what had it when the dialog opened. A theme can opt out with
+   * `--gd-dialog-return-focus: no` (the legacy dialogs left it nowhere, so the button that opened one wasn't highlighted).
+   */
+  private dropReturnedFocus(): void {
+    const dialog = this.dialog().nativeElement;
+    const returned = dialog.ownerDocument.activeElement;
+    if (
+      returned instanceof HTMLElement &&
+      returned !== dialog.ownerDocument.body &&
+      !returned.closest('dialog') &&
+      this.window?.getComputedStyle(dialog).getPropertyValue('--gd-dialog-return-focus').trim() === 'no'
+    ) {
+      returned.blur();
     }
   }
 
@@ -203,7 +221,13 @@ export class DialogComponent {
     const first = Array.from(dialog.querySelectorAll<HTMLElement>(FOCUSABLE)).find(
       (el) => !el.matches('.gd-dialog__close') && el.tabIndex >= 0 && !(el as HTMLButtonElement).disabled,
     );
-    first?.focus();
+    if (first) {
+      first.focus();
+    } else {
+      // Nothing to focus in it: the dialog itself, as jQuery UI did, not the close button the browser picks
+      dialog.tabIndex = -1;
+      dialog.focus();
+    }
   }
 
   private closeElement(dialog: HTMLDialogElement): void {

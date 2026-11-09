@@ -44,4 +44,9 @@ export class DeckbuilderActions {
   showInfo(ref: CardRef): void {
     this.cardInfo.show(ref);
   }
+
+  /** A card dragged upwards: on the release, whether or not the information is already open. */
+  showDraggedInfo(ref: CardRef): void {
+    this.cardInfo.showDragged(ref);
+  }
 }

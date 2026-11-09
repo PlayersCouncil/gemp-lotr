@@ -25,6 +25,14 @@ class HostComponent {
   closed = 0;
 }
 
+@Component({
+  imports: [DialogComponent],
+  template: `<gd-dialog name="empty" heading="Nothing here" [open]="open()" />`,
+})
+class EmptyHostComponent {
+  readonly open = signal(false);
+}
+
 describe('DialogComponent', () => {
   async function render() {
     const fixture = TestBed.createComponent(HostComponent);
@@ -82,6 +90,16 @@ describe('DialogComponent', () => {
     dialog.querySelector('input')!.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
     await fixture.whenStable();
     expect(host.closed).toBe(1);
+  });
+
+  it('focuses the dialog itself, not its close button, when it has no control', async () => {
+    const fixture = TestBed.createComponent(EmptyHostComponent);
+    await fixture.whenStable();
+    document.body.appendChild(fixture.nativeElement);
+    fixture.componentInstance.open.set(true);
+    await fixture.whenStable();
+    expect(document.activeElement).toBe(fixture.nativeElement.querySelector('dialog'));
+    (fixture.nativeElement as HTMLElement).remove();
   });
 
   it("focuses the content's first control, or the dialog itself when asked", async () => {

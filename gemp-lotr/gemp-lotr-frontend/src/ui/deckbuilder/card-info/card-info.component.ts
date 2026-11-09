@@ -3,6 +3,7 @@ import {
   afterRenderEffect,
   Component,
   computed,
+  DestroyRef,
   ElementRef,
   inject,
   linkedSignal,
@@ -31,9 +32,12 @@ function isMetaSiteModifier(blueprintId: string): boolean {
 
 /**
  * The card information (legacy CardInfoDialog): the card, large, with its wiki link and a size slider (remembered in a
- * cookie shared with the legacy page). A modal native `<dialog>`: clicking the card flips it (to its back, or upside
- * down when it has none); clicking anywhere else, the close button or Escape closes it, unless the size slider was
- * just used.
+ * cookie shared with the legacy page). A native `<dialog>`: clicking the card flips it (to its back, or upside down
+ * when it has none); clicking anywhere else, the close button or Escape closes it, unless the size slider was just
+ * used. A click or right-click on a card behind it only closes it (other controls still work).
+ *
+ * Modal unless the theme sets `--gd-card-info-modal: no` on it, and always modal over another modal dialog (a card in
+ * the selection dialog), which would otherwise cover it.
  *
  * DOM contract: `dialog.gd-card-info` with `--gd-card-info-zoom` (0.4 to 1, the slider) for the theme to size the
  * card with; `.gd-card-info__header` (`.gd-card-info__title`, `button.gd-card-info__close`),
@@ -52,6 +56,7 @@ function isMetaSiteModifier(blueprintId: string): boolean {
       aria-labelledby="gd-card-info-title"
       [style.--gd-card-info-zoom]="zoom()"
       (close)="info.close()"
+      (keydown.escape)="escape($event)"
       (mousedown)="keepFocus($event)"
       (click)="onClick($event)"
     >
@@ -134,11 +139,13 @@ export class CardInfoComponent {
       const dialog = this.dialog().nativeElement;
       const open = this.view() !== null;
       if (open && !dialog.open) {
-        // jsdom has no showModal
-        if (typeof dialog.showModal === 'function') {
+        // jsdom has no showModal/show
+        if (typeof dialog.showModal !== 'function') {
+          dialog.setAttribute('open', '');
+        } else if (this.opensModal(dialog)) {
           dialog.showModal();
         } else {
-          dialog.setAttribute('open', '');
+          dialog.show();
         }
       } else if (!open && dialog.open) {
         if (typeof dialog.close === 'function') {
@@ -147,6 +154,18 @@ export class CardInfoComponent {
           dialog.removeAttribute('open');
         }
       }
+    });
+
+    // Capturing, to see the state before the card under the mouse acts on the same event
+    const onPress = (event: MouseEvent) => this.pressedAnywhere(event);
+    const onMouseDown = (event: MouseEvent) => this.pressStarted(event);
+    this.document.addEventListener('mousedown', onMouseDown, true);
+    this.document.addEventListener('click', onPress, true);
+    this.document.addEventListener('contextmenu', onPress, true);
+    inject(DestroyRef).onDestroy(() => {
+      this.document.removeEventListener('mousedown', onMouseDown, true);
+      this.document.removeEventListener('click', onPress, true);
+      this.document.removeEventListener('contextmenu', onPress, true);
     });
   }
 
@@ -167,6 +186,50 @@ export class CardInfoComponent {
     if (!(event.target as Element).closest('button, input, select, textarea, a')) {
       event.preventDefault();
     }
+  }
+
+  protected escape(event: Event): void {
+    event.preventDefault();
+    this.info.close();
+  }
+
+  /** The legacy page's clickCardFunction, for a press that onClick doesn't get. */
+  private pressedAnywhere(event: MouseEvent): void {
+    const target = event.target as Element;
+    if (event.type === 'click' && this.info.draggedOpen) {
+      this.info.draggedOpen = false;
+      return;
+    }
+    if (!this.info.isOpen() || target.closest('a')) {
+      return;
+    }
+    const inside = this.dialog().nativeElement.contains(target);
+    if (event.type === 'contextmenu') {
+      event.preventDefault();
+    } else if (inside) {
+      return;
+    }
+    if (!this.sliding) {
+      this.info.close();
+    }
+    if (target.closest('.gd-card')) {
+      event.stopPropagation();
+    }
+  }
+
+  /** A press on a card behind the dialog leaves the focus on its slider, as the legacy page's press on a card did. */
+  private pressStarted(event: MouseEvent): void {
+    this.info.draggedOpen = false;
+    if (this.info.isOpen() && (event.target as Element).closest('.gd-card')) {
+      event.preventDefault();
+    }
+  }
+
+  private opensModal(dialog: HTMLDialogElement): boolean {
+    const style = this.document.defaultView?.getComputedStyle(dialog);
+    return (
+      style?.getPropertyValue('--gd-card-info-modal').trim() !== 'no' || !!this.document.querySelector('dialog:modal')
+    );
   }
 
   protected onClick(event: MouseEvent): void {

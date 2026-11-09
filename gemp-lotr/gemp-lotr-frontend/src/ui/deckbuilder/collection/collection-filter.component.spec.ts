@@ -58,7 +58,7 @@ describe('CollectionFilterComponent', () => {
         ['set', 'select', 'Set:'],
         ['side', 'select', 'Side:'],
         ['sort', 'select', 'Sort by:'],
-        ['cardType', 'select', 'Card Type:'],
+        ['cardType', 'select', 'Card\u00a0Type:'],
       ]);
       expect(fields('advanced').map(([name, kind]) => `${name}:${kind}`)).toEqual([
         'name:text',

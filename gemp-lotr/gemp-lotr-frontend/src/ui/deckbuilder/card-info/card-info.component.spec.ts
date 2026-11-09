@@ -104,6 +104,80 @@ describe('CardInfoComponent', () => {
     expect(info.isOpen()).toBe(false);
   });
 
+  describe('a press outside the dialog', () => {
+    async function renderWithCard() {
+      const rendered = await render();
+      const card = document.createElement('button');
+      card.className = 'gd-card';
+      const activated = vi.fn();
+      card.addEventListener('click', activated);
+      card.addEventListener('contextmenu', activated);
+      document.body.appendChild(card);
+      info.show(CARD);
+      await rendered.fixture.whenStable();
+      return { ...rendered, card, activated };
+    }
+
+    afterEach(() => document.querySelectorAll('button.gd-card').forEach((card) => card.remove()));
+
+    it('on a card closes it and leaves the card alone', async () => {
+      const { card, activated } = await renderWithCard();
+      card.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      expect(info.isOpen()).toBe(false);
+      expect(activated).not.toHaveBeenCalled();
+    });
+
+    it('with the right button closes it, without the browser menu', async () => {
+      const { card, activated } = await renderWithCard();
+      const press = new MouseEvent('contextmenu', { bubbles: true, cancelable: true });
+      card.dispatchEvent(press);
+      expect(info.isOpen()).toBe(false);
+      expect(press.defaultPrevented).toBe(true);
+      expect(activated).not.toHaveBeenCalled();
+    });
+
+    it('on another control closes it and lets the control work', async () => {
+      await renderWithCard();
+      const control = document.createElement('button');
+      const used = vi.fn();
+      control.addEventListener('click', used);
+      document.body.appendChild(control);
+      control.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      control.remove();
+      expect(info.isOpen()).toBe(false);
+      expect(used).toHaveBeenCalledOnce();
+    });
+
+    it('keeps it open for the click ending a drag up, but not for the next press', async () => {
+      const { card, fixture } = await renderWithCard();
+      info.showDragged(CARD);
+      await fixture.whenStable();
+      card.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      expect(info.isOpen()).toBe(true);
+      card.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+      card.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      expect(info.isOpen()).toBe(false);
+    });
+
+    it('does nothing when it is closed', async () => {
+      const { card, activated, fixture } = await renderWithCard();
+      info.close();
+      await fixture.whenStable();
+      const press = new MouseEvent('contextmenu', { bubbles: true, cancelable: true });
+      card.dispatchEvent(press);
+      expect(press.defaultPrevented).toBe(false);
+      expect(activated).toHaveBeenCalledOnce();
+    });
+  });
+
+  it('closes with Escape pressed inside it', async () => {
+    const { fixture, dialog } = await render();
+    info.show(CARD);
+    await fixture.whenStable();
+    dialog.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    expect(info.isOpen()).toBe(false);
+  });
+
   it('closes with the close button and with Escape (the dialog closing)', async () => {
     const { fixture, dialog, click } = await render();
     info.show(CARD);

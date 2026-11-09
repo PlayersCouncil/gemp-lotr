@@ -44,6 +44,15 @@ async function rangeThumb(page, selector) {
   return { x, y: box.y + box.height / 2 - thumb / 2, width: thumb, height: thumb };
 }
 
+/**
+ * The page size slider's track: the legacy slider's element, or the part of the Angular range input that matches it
+ * (the input is wider, so that its thumb can reach the same positions as the legacy handle).
+ */
+async function sliderTrack(page, $, which) {
+  const box = await page.locator($.pageSize).boundingBox();
+  return which === 'legacy' ? box : { ...box, x: box.x + 6.907, width: box.width - 15.828 };
+}
+
 async function hover(page, locator, dx = 20, dy = 20) {
   const box = await locator.boundingBox();
   await page.mouse.move(box.x + dx, box.y + dy);
@@ -105,7 +114,7 @@ export const SCENARIOS = [
     name: 'page-size-slider',
     note: 'Dragging the page size slider',
     run: async (page, $, which) => {
-      const track = await page.locator($.pageSize).boundingBox();
+      const track = await sliderTrack(page, $, which);
       const handle =
         which === 'legacy' ? await page.locator(`${$.pageSize} a`).boundingBox() : await rangeThumb(page, $.pageSize);
       await page.mouse.move(handle.x + handle.width / 2, handle.y + handle.height / 2);

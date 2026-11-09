@@ -38,10 +38,14 @@ function pointer(type: string, init: { x?: number; y?: number; pointerType?: str
 }
 
 describe('CardComponent', () => {
-  let actions: { activate: ReturnType<typeof vi.fn>; showInfo: ReturnType<typeof vi.fn> };
+  let actions: {
+    activate: ReturnType<typeof vi.fn>;
+    showInfo: ReturnType<typeof vi.fn>;
+    showDraggedInfo: ReturnType<typeof vi.fn>;
+  };
 
   beforeEach(() => {
-    actions = { activate: vi.fn(), showInfo: vi.fn() };
+    actions = { activate: vi.fn(), showInfo: vi.fn(), showDraggedInfo: vi.fn() };
     TestBed.configureTestingModule({
       providers: [{ provide: DeckbuilderActions, useValue: actions }],
     });
@@ -186,11 +190,9 @@ describe('CardComponent', () => {
 
       el.dispatchEvent(pointer('pointerdown', { x: 50, y: 100 }));
       el.dispatchEvent(pointer('pointerup', { x: 50, y: 100 - DRAG_UP_FOR_INFO }));
+      expect(actions.showDraggedInfo).toHaveBeenCalledWith(CARD.ref);
       el.click();
-      // Only after the release's click, which would otherwise close the dialog it opens
       expect(actions.showInfo).not.toHaveBeenCalled();
-      await new Promise((resolve) => setTimeout(resolve));
-      expect(actions.showInfo).toHaveBeenCalledWith(CARD.ref);
       expect(actions.activate).toHaveBeenCalledTimes(1);
     });
 

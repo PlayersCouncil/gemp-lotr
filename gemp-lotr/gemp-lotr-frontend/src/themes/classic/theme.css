@@ -101,8 +101,9 @@ div {
   display: none;
 }
 
+/* Not fixed: that would put the page on a layer of its own, and everything above it would lose subpixel text */
 .gd-page {
-  position: fixed;
+  position: absolute;
   inset: 0;
   display: grid;
   /* east__minSize 410, east__maxSize 50% of what the 6px resizer leaves */
@@ -158,10 +159,6 @@ div {
   cursor: pointer;
 }
 
-.gd-page__toggle:hover {
-  background: #888;
-}
-
 .gd-page__collection {
   display: flex;
   flex-direction: column;
@@ -189,12 +186,13 @@ div {
   cursor: pointer;
 }
 
+/* The toolbar's jQuery UI buttons also stayed highlighted after a click, until the focus moved on */
 .gd-button:enabled:hover,
-.gd-button:focus-visible {
+.gd-button:focus-visible,
+.gd-toolbar .gd-button:focus {
   border-color: #0b93d5;
   background: var(--classic-hover-bg);
   color: #fff;
-  outline: none;
 }
 
 .gd-button:enabled:active {
@@ -219,8 +217,14 @@ div {
 }
 
 .gd-button[data-icon]:enabled:hover::before,
-.gd-button[data-icon]:focus-visible::before {
+.gd-button[data-icon]:focus-visible::before,
+.gd-toolbar .gd-button[data-icon]:focus::before {
   background-image: var(--classic-icons-hover);
+}
+
+/* .ui-state-active .ui-icon */
+.gd-button[data-icon]:enabled:active::before {
+  background-image: url('/gemp-lotr/ng/themes/classic/ui-icons_222222_256x240.png');
 }
 
 .gd-button[data-icon='previous']::before {
@@ -552,6 +556,11 @@ a:visited {
 .gd-page__deck {
   position: relative;
   container-type: size;
+  /*
+   * The deck stats reach past the pane without making it scrollable, as on the legacy page. A scrollable pane would
+   * also get its own compositor layer, and dialogs above it would lose subpixel text.
+   */
+  overflow: hidden;
 }
 
 .gd-deck {
@@ -661,12 +670,17 @@ button.gd-slot__label:focus-visible {
   top: 10%;
 }
 
+/* The legacy hint held the link, two lines further down: the text is centred together with those lines */
+.gd-slot[data-slot='map'] .gd-slot__hint {
+  padding-bottom: calc(10px + 2lh);
+}
+
 /* Under the Map's hint, after a blank line, as the legacy hint's own link */
 .gd-slot__link {
   position: absolute;
   left: 0;
   right: 0;
-  top: calc(40% + 1em);
+  top: calc(40% + 15px + 1lh);
   color: #fff;
   font-size: calc(0.3rem + 0.75vh);
   font-style: italic;
@@ -714,7 +728,7 @@ button.gd-slot__label:focus-visible {
 
 /* VerticalBarGroup rounded each card's position down; the browser would round a fractional one to the nearest */
 .gd-slot[data-slot='sites'] .gd-card {
-  top: -0.499px;
+  top: -0.51px;
 }
 
 .gd-slot[data-slot='sites'] .gd-card {
@@ -722,8 +736,8 @@ button.gd-slot__label:focus-visible {
 }
 
 .gd-slot[data-slot='sites'] .gd-card + .gd-card {
-  /* 100cqh is the height left under the 20px title gap */
-  margin-top: min(5px, (100cqh - var(--n) * var(--site-h)) / (var(--n) - 1));
+  /* 100cqh is the height left under the 20px title gap. Down to a layout unit, or the error adds up over the column */
+  margin-top: round(down, min(5px, (100cqh - var(--n) * var(--site-h)) / (var(--n) - 1)), 0.015625px);
 }
 
 .gd-pile {
@@ -796,8 +810,12 @@ button.gd-slot__label:focus-visible {
 }
 
 .gd-toolbar .gd-button:enabled:hover::before,
-.gd-toolbar .gd-button:focus-visible::before {
+.gd-toolbar .gd-button:focus::before {
   background-image: var(--classic-icons-hover);
+}
+
+.gd-toolbar .gd-button:enabled:active::before {
+  background-image: url('/gemp-lotr/ng/themes/classic/ui-icons_222222_256x240.png');
 }
 
 .gd-button[data-action='new']::before {
@@ -1013,7 +1031,7 @@ button.gd-slot__label:focus-visible {
 }
 
 .gd-collection__cards > .gd-card[data-orientation='horizontal'] {
-  margin-bottom: calc(var(--gd-card-height, 200px) - round(down, calc(var(--gd-card-width) * 350 / 490), 1px));
+  margin-bottom: calc(var(--gd-card-height, 200px) - round(down, calc(var(--gd-card-height, 200px) * 350 / 490), 1px));
 }
 
 /* ---------------------------------------------------------------- a card (Card.CreateCardDiv) */
@@ -1036,7 +1054,8 @@ button.gd-slot__label:focus-visible {
 
 .gd-card[data-orientation='horizontal'] {
   --gd-card-width: round(down, var(--gd-card-height, 200px), 1px);
-  height: round(down, calc(var(--gd-card-width) * 350 / 490), 1px);
+  /* From the row's height before rounding: Card.getHeightForWidth got the unrounded width of a landscape card */
+  height: round(down, calc(var(--gd-card-height, 200px) * 350 / 490), 1px);
 }
 
 .gd-card:focus-visible {
@@ -1108,6 +1127,7 @@ button.gd-slot__label:focus-visible {
   line-height: normal;
   text-align: center;
   opacity: 0.7;
+  border-radius: 0;
 }
 
 /* ---------------------------------------------------------------- card information (CardInfoDialog) */
@@ -1128,10 +1148,14 @@ button.gd-slot__label:focus-visible {
   --info-width: max(calc(var(--card-width) + 25px), 175px);
   /* jQuery UI's height option, less the fraction it lost to the title bar */
   --info-height: calc(var(--card-height) + 49.61px);
-  position: fixed;
+  position: absolute;
   inset: auto;
-  left: round(calc((100vw - var(--info-width) - 0.4em - 2px) / 2), 1px);
-  top: round(calc((100vh - var(--info-height) - 0.4em - 2px) / 2), 1px);
+  /* The legacy dialog stayed usable beside the page, and above everything else on it */
+  --gd-card-info-modal: no;
+  z-index: 20000;
+  /* jQuery UI centres by the whole-pixel outer size, and keeps the title bar on the screen */
+  left: round(calc((100vw - round(calc(var(--info-width) + 0.4em + 2px), 1px)) / 2), 1px);
+  top: max(0px, round(calc((100vh - round(calc(var(--info-height) + 0.4em + 2px), 1px)) / 2), 1px));
   width: var(--info-width);
   height: var(--info-height);
   max-width: none;
@@ -1187,11 +1211,12 @@ button.gd-slot__label:focus-visible {
   position: absolute;
   right: 0.3em;
   top: 50%;
+  box-sizing: content-box;
   width: 19px;
   height: 18px;
-  margin-top: -10px;
-  padding: 1px;
-  border: 1px solid transparent;
+  margin-top: -11px;
+  padding: 0;
+  border: 0;
   border-radius: 6px;
   background: none;
   cursor: pointer;
@@ -1206,8 +1231,9 @@ button.gd-slot__label:focus-visible {
 }
 
 .gd-card-info__close:hover,
-.gd-card-info__close:focus-visible {
-  border-color: #0b93d5;
+.gd-card-info__close:focus {
+  margin-top: -10px;
+  border: 1px solid #0b93d5;
   background: var(--classic-hover-bg);
   outline: none;
 }
@@ -1252,6 +1278,7 @@ button.gd-slot__label:focus-visible {
 }
 
 /* The legacy dialog focused the handle when it opened: Chrome drew its focus ring (dark, then white) over the border */
+.gd-pager__size:focus,
 .gd-card-info__zoom:focus {
   outline: none;
 }
@@ -1272,6 +1299,17 @@ button.gd-slot__label:focus-visible {
   box-shadow:
     0 0 0 1px #101010,
     0 0 0 2px #fff;
+}
+
+/* Pressing the handle didn't draw the ring yet */
+.gd-pager__size:active::-webkit-slider-thumb,
+.gd-card-info__zoom:active::-webkit-slider-thumb {
+  box-shadow: none;
+}
+
+.gd-pager__size:active::-moz-range-thumb,
+.gd-card-info__zoom:active::-moz-range-thumb {
+  box-shadow: none;
 }
 
 .gd-card-info__card {
@@ -1347,9 +1385,10 @@ button.gd-slot__label:focus-visible {
   --classic-dialog-width: 300px;
   /* The height it is centred for; dialogs of the content's height are centred for their least height */
   --classic-dialog-height: 150px;
+  --gd-dialog-return-focus: no;
   /* The outer size, where the theme knows it: jQuery UI centred the whole-pixel box (offsetWidth, offsetHeight) */
   --classic-dialog-outer-width: round(calc(var(--classic-dialog-width) + 0.4em + 2px), 1px);
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: calc(1000 + var(--gd-dialog-layer, 0));
   box-sizing: content-box;
@@ -1380,7 +1419,15 @@ button.gd-slot__label:focus-visible {
 .gd-dialog:not([data-placed]) {
   inset: auto;
   left: round(calc((100vw - var(--classic-dialog-outer-width)) / 2), 1px);
-  top: max(0px, round(calc((100vh - round(calc(var(--classic-dialog-height) + 0.4em + 2px), 1px)) / 2), 1px));
+  top: max(
+    0px,
+    round(
+      calc(
+        (100vh - round(calc(var(--classic-dialog-centred-height, var(--classic-dialog-height)) + 0.4em + 2px), 1px)) / 2
+      ),
+      1px
+    )
+  );
   margin: 0;
 }
 
@@ -1409,14 +1456,15 @@ button.gd-slot__label:focus-visible {
   outline: none;
 }
 
-/* The modal overlay */
+/* The modal overlay. Not fixed: that would put the dialog on a layer of its own, without subpixel text */
 .gd-dialog::backdrop {
+  position: absolute;
   background: rgb(92 92 92 / 0.8);
 }
 
 /* The resize grip (.ui-resizable-se: the grip icon in the corner) */
 .gd-dialog::-webkit-resizer {
-  background: url('/gemp-lotr/ng/themes/classic/ui-icons_cccccc_256x240.png') -80px -224px no-repeat;
+  background: url('/gemp-lotr/ng/themes/classic/ui-icons_cccccc_256x240.png') -82px -226px no-repeat;
 }
 
 .gd-dialog__header {
@@ -1443,9 +1491,10 @@ button.gd-slot__label:focus-visible {
   position: absolute;
   right: 0.3em;
   top: 50%;
+  box-sizing: content-box;
   width: 19px;
   height: 18px;
-  margin-top: -10px;
+  margin-top: -11px;
   padding: 0;
   border: 0;
   border-radius: 6px;
@@ -1463,7 +1512,8 @@ button.gd-slot__label:focus-visible {
 
 /* .ui-state-hover: a 1px border, which moves the icon */
 .gd-dialog__close:hover,
-.gd-dialog__close:focus-visible {
+.gd-dialog__close:focus {
+  margin-top: -10px;
   border: 1px solid #0b93d5;
   background: var(--classic-hover-bg);
   outline: none;
@@ -1572,6 +1622,8 @@ button.gd-slot__label:focus-visible {
 .gd-dialog:is([data-dialog='selection'], [data-dialog='delivery']) {
   --classic-dialog-width: round(down, 80vw, 0.01px);
   --classic-dialog-height: round(down, 80vh, 0.01px);
+  /* The height it really gets (below): a whole pixel can depend on those 0.39px */
+  --classic-dialog-centred-height: calc(var(--classic-dialog-height) - 0.39px);
   height: calc(var(--classic-dialog-height) - 0.39px);
 }
 
@@ -1603,7 +1655,7 @@ button.gd-slot__label:focus-visible {
 }
 
 .gd-shown-cards > .gd-card[data-orientation='horizontal'] {
-  margin-bottom: calc(var(--gd-card-height, 200px) - round(down, calc(var(--gd-card-width) * 350 / 490), 1px));
+  margin-bottom: calc(var(--gd-card-height, 200px) - round(down, calc(var(--gd-card-height, 200px) * 350 / 490), 1px));
 }
 
 /* The notifier: the browser's alert, confirm and prompt had no jQuery UI look; drawn as a dialog of the theme */

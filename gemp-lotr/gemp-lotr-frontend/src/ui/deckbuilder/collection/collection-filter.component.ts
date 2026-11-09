@@ -88,12 +88,12 @@ export class CollectionFilterComponent {
     { kind: 'select', field: 'set', label: 'Set:', options: () => this.collection.setOptions() },
     { kind: 'select', field: 'side', label: 'Side:', options: () => SIDE_OPTIONS },
     { kind: 'select', field: 'sort', label: 'Sort by:', options: () => SORT_OPTIONS },
-    { kind: 'select', field: 'cardType', label: 'Card Type:', options: () => CARD_TYPE_OPTIONS, wide: true },
+    { kind: 'select', field: 'cardType', label: 'Card\u00a0Type:', options: () => CARD_TYPE_OPTIONS, wide: true },
   ];
 
   protected readonly advancedFields: readonly Field[] = [
-    { kind: 'text', field: 'name', label: 'Name contains:', forPacks: true },
-    { kind: 'text', field: 'gametext', label: 'Game Text contains:' },
+    { kind: 'text', field: 'name', label: 'Name\u00a0contains:', forPacks: true },
+    { kind: 'text', field: 'gametext', label: 'Game\u00a0Text\u00a0contains:' },
     { kind: 'select', field: 'keyword', label: 'Keyword:', options: () => KEYWORD_OPTIONS },
     { kind: 'select', field: 'phase', label: 'Phase:', options: () => PHASE_OPTIONS },
     { kind: 'select', field: 'race', label: 'Race:', options: () => RACE_OPTIONS },

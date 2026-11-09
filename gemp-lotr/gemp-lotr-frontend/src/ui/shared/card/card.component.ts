@@ -121,7 +121,7 @@ export class CardComponent {
   protected onPointerEnter(event: PointerEvent): void {
     if (event.pointerType === 'mouse') {
       const { left, top, right, bottom } = this.host.getBoundingClientRect();
-      this.hover.enter(this, this.card(), { left, top, right, bottom });
+      this.hover.enter(this, this.card(), { left, top: this.snap(top), right, bottom: this.snap(bottom) });
     }
   }
 
@@ -166,9 +166,7 @@ export class CardComponent {
     this.cancelPress();
     if (press?.mouse && press.y - event.clientY >= DRAG_UP_FOR_INFO) {
       this.swallowClick = true;
-      // After this release's click: a dialog already open by then would take that click as "close"
-      const ref = this.card().ref;
-      setTimeout(() => this.actions.showInfo(ref));
+      this.actions.showDraggedInfo(this.card().ref);
     }
   }
 
@@ -177,6 +175,12 @@ export class CardComponent {
       clearTimeout(this.press.timer);
     }
     this.press = null;
+  }
+
+  /** Sites sit on whole pixels on screen (the theme nudges each by a fraction): the zoom is placed from those. */
+  private snap(edge: number): number {
+    const ref = this.card().ref;
+    return ref.kind === 'slot' && ref.slot === 'sites' ? Math.round(edge) : edge;
   }
 
   private longPress(): void {
