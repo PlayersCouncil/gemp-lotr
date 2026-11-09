@@ -35,11 +35,11 @@ describe('collectionCards', () => {
       ['card', '1_319', 0, true],
     ]);
     expect(cards.map((card) => card.ref.kind === 'collection' && card.ref.role)).toEqual([
-      'packInCollection',
-      'selectionInCollection',
-      'cardInCollection',
-      'placeholderInCollection',
-      'cardInCollection',
+      'pack',
+      'selection',
+      'card',
+      'placeholder',
+      'card',
     ]);
     expect(cards[2].foilImage).toBe('/gemp-lotr/images/holo.jpg');
     expect(cards[2].imageUrl).toBe('https://i.lotrtcgpc.net/decipher/LOTR01002.jpg');

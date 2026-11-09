@@ -1,3 +1,4 @@
+import { siteImage } from '../platform/app-paths';
 import { BlockFilter } from '../api/models';
 
 /**
@@ -280,12 +281,12 @@ export interface CultureGroup {
 
 const svg = (code: string, file: string): Culture => ({
   code,
-  image: `/gemp-lotr/images/cultures/${file}.svg`,
+  image: siteImage(`cultures/${file}.svg`),
   cultureClass: true,
 });
 const png = (code: string, file: string): Culture => ({
   code,
-  image: `/gemp-lotr/images/cultures/${file}.png`,
+  image: siteImage(`cultures/${file}.png`),
   cultureClass: false,
 });
 

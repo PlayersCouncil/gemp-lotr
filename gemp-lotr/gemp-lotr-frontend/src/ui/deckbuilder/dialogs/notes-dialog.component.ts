@@ -1,6 +1,7 @@
 import { Component, ElementRef, inject, viewChild } from '@angular/core';
 import { DeckLibraryService } from '../../../core/deck/deck-library.service';
-import { DeckService } from '../../../core/deck/deck.service';
+import { DeckDraft } from '../../../core/deck/deck-draft.service';
+import { DeckEditing } from '../../../core/deck/deck-editing.service';
 import { DialogComponent } from '../../shared/dialog/dialog.component';
 
 /**
@@ -19,8 +20,8 @@ import { DialogComponent } from '../../shared/dialog/dialog.component';
           #notes
           class="gd-notes__text"
           aria-label="Deck notes"
-          [value]="deck.notes()"
-          (change)="deck.setNotes(notes.value)"
+          [value]="draft.notes()"
+          (change)="editing.setNotes(notes.value)"
         ></textarea>
       }
     </gd-dialog>
@@ -28,7 +29,8 @@ import { DialogComponent } from '../../shared/dialog/dialog.component';
 })
 export class NotesDialogComponent {
   protected readonly library = inject(DeckLibraryService);
-  protected readonly deck = inject(DeckService);
+  protected readonly draft = inject(DeckDraft);
+  protected readonly editing = inject(DeckEditing);
 
   private readonly notes = viewChild<ElementRef<HTMLTextAreaElement>>('notes');
 
@@ -36,7 +38,7 @@ export class NotesDialogComponent {
   protected closed(): void {
     const notes = this.notes();
     if (notes) {
-      this.deck.setNotes(notes.nativeElement.value);
+      this.editing.setNotes(notes.nativeElement.value);
     }
     this.library.notesOpen.set(false);
   }

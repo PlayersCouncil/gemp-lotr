@@ -10,13 +10,13 @@ export interface ShownCardsOptions {
 
 /**
  * The choices of a selection pack ("Choose one"): drawn like collection cards, without counts; using one picks it
- * (`role` cardToSelect).
+ * (`choosable`).
  */
 export function selectionChoiceCards(choices: readonly string[], { images, foilImage }: ShownCardsOptions): CardView[] {
   return choices.map((blueprintId) => {
     const image = images.resolve(blueprintId, 'selection');
     return {
-      ref: { kind: 'shown', blueprintId, zone: 'selection', role: 'cardToSelect' },
+      ref: { kind: 'shown', blueprintId, zone: 'selection', choosable: true },
       role: 'card',
       imageUrl: image.imageUrl,
       horizontal: image.horizontal,
@@ -37,7 +37,7 @@ export function deliveredCards(cards: readonly ShownCard[], { images, foilImage 
   return cards.map((card) => {
     const image = images.resolve(card.blueprintId, 'player');
     return {
-      ref: { kind: 'shown', blueprintId: card.blueprintId, zone: 'player', role: '' },
+      ref: { kind: 'shown', blueprintId: card.blueprintId, zone: 'player', choosable: false },
       role: card.pack ? 'pack' : 'card',
       imageUrl: image.imageUrl,
       horizontal: image.horizontal,

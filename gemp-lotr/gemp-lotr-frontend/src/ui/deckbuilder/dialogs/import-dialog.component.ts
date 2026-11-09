@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { DeckLibraryService } from '../../../core/deck/deck-library.service';
-import { DeckService } from '../../../core/deck/deck.service';
+import { DeckOpener } from '../../../core/deck/deck-opener.service';
 import { DialogComponent } from '../../shared/dialog/dialog.component';
 
 /**
@@ -31,7 +31,7 @@ import { DialogComponent } from '../../shared/dialog/dialog.component';
             class="gd-button"
             data-action="import"
             title="Import"
-            (click)="deck.importDecklist(decklist.value)"
+            (click)="opener.importDecklist(decklist.value)"
           >
             Import
           </button>
@@ -42,5 +42,5 @@ import { DialogComponent } from '../../shared/dialog/dialog.component';
 })
 export class ImportDialogComponent {
   protected readonly library = inject(DeckLibraryService);
-  protected readonly deck = inject(DeckService);
+  protected readonly opener = inject(DeckOpener);
 }

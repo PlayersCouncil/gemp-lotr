@@ -4,7 +4,8 @@ import { DeckbuilderApi } from '../api/deckbuilder-api.service';
 import { DeckSummary } from '../api/models';
 import { Notifier } from '../notifier/notifier';
 import { ExternalLinks } from '../platform/external-links.service';
-import { DeckService } from './deck.service';
+import { DeckOpener } from './deck-opener.service';
+import { DeckSaver } from './deck-saver.service';
 
 export interface DeckListState {
   kind: 'decks' | 'library';
@@ -18,7 +19,8 @@ export interface DeckListState {
 @Injectable({ providedIn: 'root' })
 export class DeckLibraryService {
   private readonly api = inject(DeckbuilderApi);
-  private readonly deck = inject(DeckService);
+  private readonly saver = inject(DeckSaver);
+  private readonly opener = inject(DeckOpener);
   private readonly notifier = inject(Notifier);
   private readonly links = inject(ExternalLinks);
 
@@ -30,12 +32,12 @@ export class DeckLibraryService {
 
   /** As in the legacy page, the list opens whatever the player answered to the save prompt. */
   async openDeckList(): Promise<void> {
-    await this.deck.savePrompt();
+    await this.saver.savePrompt();
     this.loadDeckList();
   }
 
   async openLibrary(): Promise<void> {
-    await this.deck.savePrompt();
+    await this.saver.savePrompt();
     this.api.listLibraryDecks().subscribe({
       next: (decks) => this.deckList.set({ kind: 'library', decks }),
       error: () => this.tell(GENERIC_COMMUNICATION_ERROR),
@@ -43,7 +45,7 @@ export class DeckLibraryService {
   }
 
   async openImport(): Promise<void> {
-    await this.deck.savePrompt();
+    await this.saver.savePrompt();
     this.importRound.update((n) => n + 1);
     this.importOpen.set(true);
   }
@@ -56,19 +58,19 @@ export class DeckLibraryService {
 
   openDeck(entry: DeckSummary): void {
     if (this.deckList()?.kind === 'library') {
-      this.deck.loadLibraryDeck(entry.name);
+      this.opener.loadLibraryDeck(entry.name);
     } else {
-      this.deck.loadDeck(entry.name);
+      this.opener.loadDeck(entry.name);
     }
   }
 
   async renameDeck(entry: DeckSummary): Promise<void> {
     const oldName = entry.name;
-    await this.deck.renameDeck(oldName, (newName) => {
+    await this.saver.renameDeck(oldName, (newName) => {
       this.deckList.update((list) =>
         list ? { ...list, decks: list.decks.map((d) => (d === entry ? { ...d, name: newName } : d)) } : list,
       );
-      this.deck.deckRenamed(oldName, newName);
+      this.saver.deckRenamed(oldName, newName);
     });
   }
 
@@ -91,7 +93,7 @@ export class DeckLibraryService {
     }
     this.api.deleteDeck(entry.name).subscribe({
       next: () => {
-        this.deck.deckDeleted(entry.name);
+        this.saver.deckDeleted(entry.name);
         this.loadDeckList();
       },
       error: () => this.tell(GENERIC_COMMUNICATION_ERROR),

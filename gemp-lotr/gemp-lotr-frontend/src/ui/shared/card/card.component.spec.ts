@@ -6,7 +6,7 @@ import { CardHover } from './card-hover';
 import { CardComponent, DRAG_UP_FOR_INFO, LONG_PRESS_MS } from './card.component';
 
 const CARD: CardView = {
-  ref: { kind: 'shown', blueprintId: '1_2', zone: 'COLLECTION', role: '' },
+  ref: { kind: 'shown', blueprintId: '1_2', zone: 'COLLECTION', choosable: false },
   role: 'card',
   imageUrl: 'https://i.lotrtcgpc.net/decipher/LOTR01002.jpg',
   horizontal: false,

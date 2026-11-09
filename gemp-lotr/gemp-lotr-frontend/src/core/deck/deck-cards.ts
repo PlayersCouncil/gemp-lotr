@@ -2,7 +2,7 @@ import { CardImageService } from '../cards/card-image.service';
 import { CardRef } from '../cards/card-ref';
 import { CardRole, CardView } from '../cards/card-view';
 import { DeckSlot, DeckState, drawPile, DrawSide } from './deck-model';
-import type { RaceCard } from './deck.service';
+import type { RaceCard } from './deck-format-selection.service';
 
 export interface DeckCardsOptions {
   images: CardImageService;

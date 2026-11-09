@@ -1,3 +1,4 @@
+import { siteImage } from '../../../core/platform/app-paths';
 import { DOCUMENT } from '@angular/common';
 import { Component, computed, DestroyRef, effect, inject, linkedSignal, signal, untracked } from '@angular/core';
 import { stripBlueprintId } from '../../../core/cards/card-blueprint';
@@ -50,13 +51,14 @@ const NO_ZOOM = new Set(['-1_1', '-1_2']);
           <img class="gd-zoom__overlay" [src]="overlay" alt="" />
         }
         @if (z.data.foil) {
-          <img class="gd-zoom__foil" src="/gemp-lotr/images/holo.jpg" alt="" />
+          <img class="gd-zoom__foil" [src]="holoImage" alt="" />
         }
       }
     </div>
   `,
 })
 export class AutoZoomComponent {
+  protected readonly holoImage = siteImage('holo.jpg');
   private readonly setting = inject(AutoZoomSetting);
   private readonly hover = inject(CardHover);
   private readonly images = inject(CardImageService);

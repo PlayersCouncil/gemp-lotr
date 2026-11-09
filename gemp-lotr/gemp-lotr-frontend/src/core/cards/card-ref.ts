@@ -5,9 +5,12 @@ import { DeckCard, DeckSlot, DrawCopy } from '../deck/deck-model';
  * What a card on the page stands for (the legacy code kept this as jQuery data "card" on the element): what clicking
  * it does, and which card its details show.
  */
+/** What an item of the collection is. */
+export type CollectionRole = 'card' | 'pack' | 'selection' | 'placeholder';
+
 export type CardRef =
-  /** A collection item; `role` is its class (cardInCollection, packInCollection, ...). */
-  | { kind: 'collection'; role: string; blueprintId: string; item: CollectionItem }
+  /** A collection item. */
+  | { kind: 'collection'; role: CollectionRole; blueprintId: string; item: CollectionItem }
   /** A card in a special slot or the sites. */
   | { kind: 'slot'; slot: DeckSlot; blueprintId: string; card: DeckCard }
   /** The shown card of a draw deck pile entry. */
@@ -16,8 +19,8 @@ export type CardRef =
   | { kind: 'behind'; blueprintId: string; card: DrawCopy }
   /** The Race to Mount Doom meta-site (display only), with its modifier drawn over it. */
   | { kind: 'race'; blueprintId: string; overlayBlueprintId: string | null }
-  /** A card that is only shown (opened-pack contents, selection pack choices); `role` is its class, if any. */
-  | { kind: 'shown'; blueprintId: string; zone: string; role: string };
+  /** A card that is only shown (opened-pack contents); `choosable` for a selection pack's choices. */
+  | { kind: 'shown'; blueprintId: string; zone: string; choosable: boolean };
 
 /** The zone the legacy page created the card with (it decides e.g. whether a site is drawn landscape). */
 export function zoneOf(ref: CardRef): string | null {

@@ -38,3 +38,8 @@ export class ApiError extends Error {
     return this.status === status;
   }
 }
+
+/** What to tell the player about a failed call: the message for its status, or else the generic one. */
+export function errorMessage(error: unknown, byStatus: Readonly<Record<number, string>> = {}): string {
+  return byStatus[ApiError.from(error).status] ?? GENERIC_COMMUNICATION_ERROR;
+}

@@ -1,7 +1,11 @@
 import { Component, computed, inject } from '@angular/core';
 import { BASE_COLLECTION_TYPES, CollectionService } from '../../../core/collection/collection.service';
 import { DeckLibraryService } from '../../../core/deck/deck-library.service';
-import { DeckService } from '../../../core/deck/deck.service';
+import { DeckChanges } from '../../../core/deck/deck-changes.service';
+import { DeckDraft } from '../../../core/deck/deck-draft.service';
+import { DeckFormatSelection } from '../../../core/deck/deck-format-selection.service';
+import { DeckOpener } from '../../../core/deck/deck-opener.service';
+import { DeckSaver } from '../../../core/deck/deck-saver.service';
 import { AutoZoomSetting } from '../../../core/platform/auto-zoom-setting';
 import { THEME_LABELS, THEMES, ThemeService } from '../../../core/platform/theme.service';
 
@@ -35,14 +39,18 @@ interface ToolbarAction {
           [attr.data-action]="button.action"
           [title]="button.label"
           [attr.aria-label]="button.label"
-          [disabled]="button.action === 'convert-errata' && !deck.convertErrataEnabled()"
+          [disabled]="button.action === 'convert-errata' && !changes.convertErrataEnabled()"
           (click)="button.run()"
         ></button>
       }
     </div>
     <select class="gd-toolbar__format" aria-label="Format" (change)="selectFormat($event)">
-      @for (option of deck.formatOptions(); track $index) {
-        <option [value]="option.value" [disabled]="option.disabled" [selected]="$index === deck.selectedFormatIndex()">
+      @for (option of formats.formatOptions(); track $index) {
+        <option
+          [value]="option.value"
+          [disabled]="option.disabled"
+          [selected]="$index === formats.selectedFormatIndex()"
+        >
           {{ option.label }}
         </option>
       }
@@ -55,7 +63,9 @@ interface ToolbarAction {
       aria-label="Add/Edit Notes"
       (click)="library.openNotes()"
     ></button>
-    <span class="gd-toolbar__deck-name" [attr.data-modified]="deck.label().modified ? '' : null">{{ deckName() }}</span>
+    <span class="gd-toolbar__deck-name" [attr.data-modified]="draft.label().modified ? '' : null">{{
+      deckName()
+    }}</span>
     @if (zoom.available) {
       <button
         type="button"
@@ -82,25 +92,29 @@ interface ToolbarAction {
   `,
 })
 export class DeckToolbarComponent {
-  protected readonly deck = inject(DeckService);
+  protected readonly draft = inject(DeckDraft);
+  protected readonly formats = inject(DeckFormatSelection);
+  protected readonly changes = inject(DeckChanges);
+  private readonly saver = inject(DeckSaver);
+  private readonly opener = inject(DeckOpener);
   protected readonly library = inject(DeckLibraryService);
   protected readonly zoom = inject(AutoZoomSetting);
   protected readonly theme = inject(ThemeService);
   private readonly collection = inject(CollectionService);
 
   protected readonly actions: readonly ToolbarAction[] = [
-    { action: 'new', label: 'New deck', run: () => this.deck.newDeck() },
-    { action: 'save', label: 'Save deck', run: () => this.deck.saveCurrentDeck() },
-    { action: 'rename', label: 'Rename deck', run: () => this.deck.renameCurrentDeck() },
-    { action: 'copy', label: 'Copy deck to new', run: () => this.deck.copyDeck() },
+    { action: 'new', label: 'New deck', run: () => this.saver.newDeck() },
+    { action: 'save', label: 'Save deck', run: () => this.saver.saveCurrentDeck() },
+    { action: 'rename', label: 'Rename deck', run: () => this.saver.renameCurrentDeck() },
+    { action: 'copy', label: 'Copy deck to new', run: () => this.saver.copyDeck() },
     { action: 'import', label: 'Import Deck', run: () => this.library.openImport() },
     { action: 'library', label: 'Open Library', run: () => this.library.openLibrary() },
     { action: 'deck-list', label: 'Deck list', run: () => this.library.openDeckList() },
-    { action: 'convert-errata', label: 'Convert to PC Errata', run: () => this.deck.convertErrata() },
+    { action: 'convert-errata', label: 'Convert to PC Errata', run: () => this.opener.convertErrata() },
   ];
 
   protected readonly deckName = computed(() => {
-    const { text, modified } = this.deck.label();
+    const { text, modified } = this.draft.label();
     return modified ? `*${text} - modified` : text;
   });
   protected readonly collectionType = this.collection.collectionType;
@@ -108,7 +122,7 @@ export class DeckToolbarComponent {
   protected readonly themes = THEMES.map((name) => ({ name, label: THEME_LABELS[name] }));
 
   protected selectFormat(event: Event): void {
-    this.deck.selectFormat((event.target as HTMLSelectElement).selectedIndex);
+    this.changes.selectFormat((event.target as HTMLSelectElement).selectedIndex);
   }
 
   protected selectCollection(event: Event): void {

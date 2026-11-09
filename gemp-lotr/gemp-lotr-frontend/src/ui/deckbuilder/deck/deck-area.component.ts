@@ -5,7 +5,9 @@ import { CardView } from '../../../core/cards/card-view';
 import { foilOverlayImage, readFoilPresentation } from '../../../core/cards/foil-presentation';
 import { pileStacks, raceCardView, slotCards } from '../../../core/deck/deck-cards';
 import { DeckSlot } from '../../../core/deck/deck-model';
-import { DeckService } from '../../../core/deck/deck.service';
+import { DeckDraft } from '../../../core/deck/deck-draft.service';
+import { DeckEditing } from '../../../core/deck/deck-editing.service';
+import { DeckFormatSelection } from '../../../core/deck/deck-format-selection.service';
 import { CardComponent } from '../../shared/card/card.component';
 import { FitCard } from '../../shared/fit-cards/fit-cards';
 import { FitCardsDirective } from '../../shared/fit-cards/fit-cards.directive';
@@ -84,6 +86,7 @@ function slotView(view: Omit<SlotView, 'fit'>): SlotView {
           <a class="gd-slot__link" href="https://wiki.lotrtcgpc.net/wiki/Map" target="_blank">See here for details.</a>
         }
         @if (slot.slot === 'sites') {
+          <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -- only hears clicks bubbling up from its card buttons -->
           <div class="gd-slot__cards" [style.--gd-slot-count]="slot.cards.length" (click)="siteClicked($event)">
             @for (card of slot.cards; track cardKey(card)) {
               <button [gdCard]="card"></button>
@@ -121,28 +124,30 @@ function slotView(view: Omit<SlotView, 'fit'>): SlotView {
   `,
 })
 export class DeckAreaComponent {
-  private readonly deck = inject(DeckService);
+  private readonly draft = inject(DeckDraft);
+  private readonly formats = inject(DeckFormatSelection);
+  private readonly editing = inject(DeckEditing);
   private readonly options = {
     images: inject(CardImageService),
     foilImage: foilOverlayImage(readFoilPresentation(inject(DOCUMENT).cookie)),
   };
 
   protected readonly slots = computed<SlotView[]>(() => {
-    const deck = this.deck.deck();
-    const race = raceCardView(this.deck.raceCard(), this.options);
+    const deck = this.draft.deck();
+    const race = raceCardView(this.formats.raceCard(), this.options);
     const slot = (slot: DeckSlot, name: string, title: string, hint: string, hidden = false): SlotView =>
       slotView({ slot, name, title, hint, selectable: true, hidden, cards: slotCards(deck, slot, this.options) });
     return [
       slot('ringBearer', 'ring-bearer', 'Ring-bearer', '(Click here to select your Ring-bearer.)'),
       slot('ring', 'ring', 'The One Ring', '(Click here to select your Ring.)'),
-      slot('map', 'map', 'Map', '(Click here to select your Map.)', !this.deck.usesMap()),
+      slot('map', 'map', 'Map', '(Click here to select your Map.)', !this.formats.usesMap()),
       slotView({
         slot: 'race',
         name: 'race',
         title: 'Race',
         hint: '(Your current Race to Mount Doom meta-site.)',
         selectable: false,
-        hidden: !this.deck.usesRace(),
+        hidden: !this.formats.usesRace(),
         cards: race ? [race] : [],
       }),
       slot(
@@ -155,7 +160,7 @@ export class DeckAreaComponent {
   });
 
   protected readonly piles = computed(() => {
-    const deck = this.deck.deck();
+    const deck = this.draft.deck();
     return (
       [
         ['FREE_PEOPLE', 'free-peoples', 'Free Peoples'],
@@ -181,14 +186,14 @@ export class DeckAreaComponent {
 
   protected select(slot: DeckSlot | 'race'): void {
     if (slot !== 'race') {
-      this.deck.slotClicked(slot);
+      this.editing.slotClicked(slot);
     }
   }
 
   /** Clicking a site removes it and, as on the legacy page (whose sites box saw the click too), shows the sites. */
   protected siteClicked(event: MouseEvent): void {
     if ((event.target as Element).closest('.gd-card')) {
-      this.deck.slotClicked('sites');
+      this.editing.slotClicked('sites');
     }
   }
 }

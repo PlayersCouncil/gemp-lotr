@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { CardInfoService } from '../cards/card-info.service';
 import { CardRef } from '../cards/card-ref';
-import { DeckService } from '../deck/deck.service';
+import { DeckEditing } from '../deck/deck-editing.service';
 import { PacksService } from '../packs/packs.service';
 import { DeckbuilderActions } from './deckbuilder-actions.service';
 
@@ -19,7 +19,7 @@ describe('DeckbuilderActions', () => {
     packs = { packClicked: vi.fn(), choose: vi.fn() };
     TestBed.configureTestingModule({
       providers: [
-        { provide: DeckService, useValue: deck },
+        { provide: DeckEditing, useValue: deck },
         { provide: PacksService, useValue: packs },
       ],
     });
@@ -31,7 +31,7 @@ describe('DeckbuilderActions', () => {
   it('adds a collection card to the deck, by its side', () => {
     actions.activate({
       kind: 'collection',
-      role: 'cardInCollection',
+      role: 'card',
       blueprintId: '1_12',
       item: { kind: 'card', blueprintId: '1_12', count: 4, side: 'FREE_PEOPLE', group: 'fp' },
     });
@@ -41,7 +41,7 @@ describe('DeckbuilderActions', () => {
   it('opens packs and selection packs from the collection', () => {
     actions.activate({
       kind: 'collection',
-      role: 'selectionInCollection',
+      role: 'selection',
       blueprintId: '(S)FotR - Starter',
       item: { kind: 'pack', blueprintId: '(S)FotR - Starter', count: 1, selection: ['1_1'] },
     });
@@ -49,8 +49,8 @@ describe('DeckbuilderActions', () => {
   });
 
   it('takes a selection pack choice; other shown cards do nothing', () => {
-    actions.activate({ kind: 'shown', blueprintId: '1_1', zone: 'selection', role: 'cardToSelect' });
-    actions.activate({ kind: 'shown', blueprintId: '1_2', zone: 'player', role: '' });
+    actions.activate({ kind: 'shown', blueprintId: '1_1', zone: 'selection', choosable: true });
+    actions.activate({ kind: 'shown', blueprintId: '1_2', zone: 'player', choosable: false });
     expect(packs.choose).toHaveBeenCalledExactlyOnceWith('1_1');
   });
 

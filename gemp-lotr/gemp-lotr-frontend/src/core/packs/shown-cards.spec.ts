@@ -8,7 +8,7 @@ describe('shown cards', () => {
   it('draws selection choices like collection cards, picked when used', () => {
     const [card] = selectionChoiceCards(['1_2'], options());
     expect(card).toMatchObject({
-      ref: { kind: 'shown', blueprintId: '1_2', zone: 'selection', role: 'cardToSelect' },
+      ref: { kind: 'shown', blueprintId: '1_2', zone: 'selection', choosable: true },
       role: 'card',
       border: true,
       count: null,
@@ -28,6 +28,6 @@ describe('shown cards', () => {
       ['pack', 2, true, false, null],
       ['card', 1, true, false, 'foil.png'],
     ]);
-    expect(cards[1].ref).toEqual({ kind: 'shown', blueprintId: '1_13*', zone: 'player', role: '' });
+    expect(cards[1].ref).toEqual({ kind: 'shown', blueprintId: '1_13*', zone: 'player', choosable: false });
   });
 });

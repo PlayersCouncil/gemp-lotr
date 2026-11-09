@@ -1,3 +1,5 @@
+import { siteImage } from '../platform/app-paths';
+
 /**
  * Card image and blueprint rules, ported from the legacy js/gemp-022/cards/Card.js (static methods).
  * The lookup tables stay in the legacy data files and are turned into JSON at build time (card-data.ts), so adding
@@ -25,8 +27,8 @@ export interface CardImageTables {
 export const CARD_BACK_BLUEPRINT = '-1_1';
 const DECIPHER_IMAGES = 'https://i.lotrtcgpc.net/decipher/';
 /** Absolute here: the legacy relative "images/..." would resolve against the Angular app's base URL. */
-const FUTURE_PRIZE_IMAGE = '/gemp-lotr/images/future_prize.jpg';
-export const RULES_IMAGE = '/gemp-lotr/images/rules.png';
+const FUTURE_PRIZE_IMAGE = siteImage('future_prize.jpg');
+export const RULES_IMAGE = siteImage('rules.png');
 
 /** Cards whose errata got a remade image, by set (Card.remadeErratas). */
 const REMADE_ERRATAS: Readonly<Record<number, readonly number[]>> = {
@@ -103,7 +105,7 @@ export function isPlaceholder(blueprintId: string | null): boolean {
 export function getErrataImage(setNo: number, cardNo: number): string | null {
   const cards = REMADE_ERRATAS[setNo];
   if (cards && cards.includes(cardNo)) {
-    return `/gemp-lotr/images/erratas/LOTR${formatCardNo(setNo, cardNo)}.jpg`;
+    return siteImage(`erratas/LOTR${formatCardNo(setNo, cardNo)}.jpg`);
   }
   return null;
 }

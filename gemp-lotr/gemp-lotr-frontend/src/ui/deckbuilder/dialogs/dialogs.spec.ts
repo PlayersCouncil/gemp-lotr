@@ -4,7 +4,9 @@ import { Type } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { DeckSummary } from '../../../core/api/models';
 import { DeckLibraryService } from '../../../core/deck/deck-library.service';
-import { DeckService } from '../../../core/deck/deck.service';
+import { DeckDraft } from '../../../core/deck/deck-draft.service';
+import { DeckEditing } from '../../../core/deck/deck-editing.service';
+import { DeckOpener } from '../../../core/deck/deck-opener.service';
 import { PAGE_QUERY_STRING } from '../../../core/platform/page-location';
 import { PacksService } from '../../../core/packs/packs.service';
 import { provideFakeNotifier } from '../../../testing/fake-notifier';
@@ -118,9 +120,10 @@ describe('deck builder dialogs', () => {
   describe('import', () => {
     it('imports the pasted decklist, starting empty each time (DOM contract)', async () => {
       const library = TestBed.inject(DeckLibraryService);
-      const deck = TestBed.inject(DeckService);
       const imported: string[] = [];
-      vi.spyOn(deck, 'importDecklist').mockImplementation((text: string) => void imported.push(text));
+      vi.spyOn(TestBed.inject(DeckOpener), 'importDecklist').mockImplementation(
+        (text: string) => void imported.push(text),
+      );
       const { dialogs, stable } = await render(ImportDialogComponent);
       library.importRound.update((n) => n + 1);
       library.importOpen.set(true);
@@ -141,8 +144,8 @@ describe('deck builder dialogs', () => {
   describe('notes', () => {
     it('edits the notes, kept on change and when closed (DOM contract)', async () => {
       const library = TestBed.inject(DeckLibraryService);
-      const deck = TestBed.inject(DeckService);
-      deck.setNotes('Old notes');
+      const deck = { draft: TestBed.inject(DeckDraft), editing: TestBed.inject(DeckEditing) };
+      deck.editing.setNotes('Old notes');
       const { dialogs, stable } = await render(NotesDialogComponent);
       library.openNotes();
       await stable();
@@ -152,11 +155,11 @@ describe('deck builder dialogs', () => {
       expect(text.value).toBe('Old notes');
       text.value = 'Changed';
       text.dispatchEvent(new Event('change'));
-      expect(deck.notes()).toBe('Changed');
+      expect(deck.draft.notes()).toBe('Changed');
       text.value = 'Typed, not yet changed';
       dialog.querySelector<HTMLButtonElement>('.gd-dialog__close')!.click();
       await stable();
-      expect(deck.notes()).toBe('Typed, not yet changed');
+      expect(deck.draft.notes()).toBe('Typed, not yet changed');
       expect(library.notesOpen()).toBe(false);
     });
   });

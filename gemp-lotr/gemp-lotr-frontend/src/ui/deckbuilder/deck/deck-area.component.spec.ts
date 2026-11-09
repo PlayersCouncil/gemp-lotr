@@ -3,13 +3,19 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed } from '@angular/core/testing';
 import { CollectionService } from '../../../core/collection/collection.service';
 import { parseDeckStats } from '../../../core/deck/deck-stats';
-import { DeckService } from '../../../core/deck/deck.service';
+import { DeckDraft } from '../../../core/deck/deck-draft.service';
+import { DeckFormatSelection } from '../../../core/deck/deck-format-selection.service';
+import { DeckOpener } from '../../../core/deck/deck-opener.service';
+import { DeckStatsRefresher } from '../../../core/deck/deck-stats-refresher.service';
 import { PAGE_QUERY_STRING } from '../../../core/platform/page-location';
 import { provideFakeNotifier } from '../../../testing/fake-notifier';
 import { DeckAreaComponent } from './deck-area.component';
 
 describe('DeckAreaComponent', () => {
-  let deck: DeckService;
+  let draft: DeckDraft;
+  let formats: DeckFormatSelection;
+  let opener: DeckOpener;
+  let deckStats: DeckStatsRefresher;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -20,7 +26,10 @@ describe('DeckAreaComponent', () => {
         { provide: PAGE_QUERY_STRING, useValue: '' },
       ],
     });
-    deck = TestBed.inject(DeckService);
+    draft = TestBed.inject(DeckDraft);
+    formats = TestBed.inject(DeckFormatSelection);
+    opener = TestBed.inject(DeckOpener);
+    deckStats = TestBed.inject(DeckStatsRefresher);
   });
 
   afterEach(() => TestBed.inject(HttpTestingController).match(() => true));
@@ -35,7 +44,7 @@ describe('DeckAreaComponent', () => {
   }
 
   function setUp() {
-    deck.setupDeck(
+    opener.setupDeck(
       {
         targetFormat: null,
         notes: '',
@@ -93,7 +102,9 @@ describe('DeckAreaComponent', () => {
     const { fixture, slot } = await render();
     expect(slot('map').hidden).toBe(true);
     expect(slot('race').hidden).toBe(true);
-    deck.usesMap.set(true);
+    formats.formatOptions.set([
+      { value: 'pc_movie', label: 'Movie', collectionType: 'default', disabled: false, rtmd: false },
+    ]);
     await fixture.whenStable();
     expect(slot('map').hidden).toBe(false);
     expect(slot('ring').hidden).toBe(false);
@@ -129,7 +140,7 @@ describe('DeckAreaComponent', () => {
     // The Ring-bearer's own card: removed, without selecting for the slot (it wasn't empty when clicked)
     slot('ring-bearer').querySelector<HTMLButtonElement>('.gd-card')!.click();
     await fixture.whenStable();
-    expect(deck.deck().ringBearer).toEqual([]);
+    expect(draft.deck().ringBearer).toEqual([]);
     expect(override).not.toHaveBeenCalled();
 
     slot('ring-bearer').querySelector<HTMLButtonElement>('.gd-slot__label')!.click();
@@ -147,7 +158,7 @@ describe('DeckAreaComponent', () => {
     const collection = TestBed.inject(CollectionService);
     slot('sites').querySelector<HTMLButtonElement>('.gd-card')!.click();
     await fixture.whenStable();
-    expect(deck.deck().sites.length).toBe(1);
+    expect(draft.deck().sites.length).toBe(1);
     expect(collection.fields().cardType).toBe('SITE');
     collection.setField('cardType', '');
     slot('sites').querySelector<HTMLButtonElement>('.gd-slot__label')!.click();
@@ -155,7 +166,7 @@ describe('DeckAreaComponent', () => {
   });
 
   it('renders the stats from data, toned', async () => {
-    deck.stats.set(
+    deckStats.stats.set(
       parseDeckStats("<b>Free People</b>: 0<br/><font color='red'>No <script>x</script></font><br/><br/>"),
     );
     const { el } = await render();

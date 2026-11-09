@@ -5,8 +5,8 @@ import { CardRef } from './card-ref';
 @Injectable({ providedIn: 'root' })
 export class CardInfoService {
   readonly card = signal<CardRef | null>(null);
-  /** Shown by dragging a card up: the click that ends the drag doesn't close it (the legacy successfulDrag). */
-  draggedOpen = false;
+  /** Shown by dragging a card up: the click that ends that drag doesn't close it. */
+  private dragRelease = false;
 
   isOpen(): boolean {
     return this.card() !== null;
@@ -17,8 +17,20 @@ export class CardInfoService {
   }
 
   showDragged(ref: CardRef): void {
-    this.draggedOpen = true;
+    this.dragRelease = true;
     this.card.set(ref);
+  }
+
+  /** Whether this click is the one ending a drag up (it counts only once). */
+  takeDragRelease(): boolean {
+    const release = this.dragRelease;
+    this.dragRelease = false;
+    return release;
+  }
+
+  /** A new press started, so the last drag is over. */
+  forgetDragRelease(): void {
+    this.dragRelease = false;
   }
 
   close(): void {

@@ -11,6 +11,7 @@ import {
   untracked,
   viewChild,
 } from '@angular/core';
+import { DragHandlers, PointerDragDirective } from '../pointer-drag/pointer-drag.directive';
 
 const FOCUSABLE = 'input, select, textarea, button, a[href], [tabindex]';
 
@@ -49,6 +50,7 @@ export class DialogLayers {
  */
 @Component({
   selector: 'gd-dialog',
+  imports: [PointerDragDirective],
   host: { style: 'display: contents' },
   template: `
     <dialog
@@ -66,7 +68,7 @@ export class DialogLayers {
       (keydown)="onKeyDown($event)"
       (pointerdown)="onPointerDown($event)"
     >
-      <header class="gd-dialog__header" (pointerdown)="startMove($event)">
+      <header class="gd-dialog__header" [gdPointerDrag]="moveDrag">
         <h2 class="gd-dialog__title" [id]="titleId">{{ heading() }}</h2>
         <button type="button" class="gd-dialog__close" aria-label="Close" title="Close" (click)="close()"></button>
       </header>
@@ -176,34 +178,24 @@ export class DialogComponent {
   }
 
   /** Dragging the title bar moves the dialog, kept inside the window. */
-  protected startMove(event: PointerEvent): void {
-    if (event.button !== 0 || (event.target as Element).closest('button')) {
-      return;
+  protected readonly moveDrag = (event: PointerEvent): DragHandlers | null => {
+    if ((event.target as Element).closest('button')) {
+      return null;
     }
-    event.preventDefault();
-    const header = event.currentTarget as HTMLElement;
-    const dialog = this.dialog().nativeElement;
-    const start = dialog.getBoundingClientRect();
-    const startX = event.clientX;
-    const startY = event.clientY;
-    header.setPointerCapture?.(event.pointerId);
-    const move = (e: PointerEvent) => {
-      const maxLeft = (this.window?.innerWidth ?? 0) - start.width;
-      const maxTop = (this.window?.innerHeight ?? 0) - start.height;
-      this.placed.set({
-        left: Math.round(Math.max(0, Math.min(maxLeft, start.left + e.clientX - startX))),
-        top: Math.round(Math.max(0, Math.min(maxTop, start.top + e.clientY - startY))),
-      });
+    const start = this.dialog().nativeElement.getBoundingClientRect();
+    const { clientX: startX, clientY: startY } = event;
+    return {
+      move: (e) => {
+        const maxLeft = (this.window?.innerWidth ?? 0) - start.width;
+        const maxTop = (this.window?.innerHeight ?? 0) - start.height;
+        this.placed.set({
+          left: Math.round(Math.max(0, Math.min(maxLeft, start.left + e.clientX - startX))),
+          top: Math.round(Math.max(0, Math.min(maxTop, start.top + e.clientY - startY))),
+        });
+      },
+      end: () => undefined,
     };
-    const stop = () => {
-      header.removeEventListener('pointermove', move);
-      header.removeEventListener('pointerup', stop);
-      header.removeEventListener('pointercancel', stop);
-    };
-    header.addEventListener('pointermove', move);
-    header.addEventListener('pointerup', stop);
-    header.addEventListener('pointercancel', stop);
-  }
+  };
 
   /**
    * Without an autofocus control, the browser focuses the first one, the title bar's close button; the content's

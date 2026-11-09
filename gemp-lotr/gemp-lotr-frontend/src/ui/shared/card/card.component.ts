@@ -24,6 +24,7 @@ export const DRAG_UP_FOR_INFO = 20;
  * may show; a click on it shows the details instead of using the card. The theme sizes it (with `--gd-card-height` from fitCards) and draws the border and layers.
  */
 @Component({
+  // eslint-disable-next-line @angular-eslint/component-selector -- a real <button>, so a card is focusable and clickable
   selector: 'button[gdCard]',
   host: {
     type: 'button',

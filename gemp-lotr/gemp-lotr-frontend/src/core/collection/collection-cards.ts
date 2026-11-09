@@ -1,16 +1,7 @@
 import { CollectionItem, CollectionPage } from '../api/models';
 import { CardImageService } from '../cards/card-image.service';
+import { CollectionRole } from '../cards/card-ref';
 import { CardView } from '../cards/card-view';
-
-/** The legacy click handling keyed on these classes (deckBuildingUi.addCardToCollection); CardRef still carries them. */
-const LEGACY_ROLES = {
-  card: 'cardInCollection',
-  pack: 'packInCollection',
-  selection: 'selectionInCollection',
-  placeholder: 'placeholderInCollection',
-} as const;
-
-type CollectionRole = keyof typeof LEGACY_ROLES;
 
 export interface CollectionCardsOptions {
   images: CardImageService;
@@ -31,7 +22,7 @@ export function collectionCards(page: CollectionPage | null, options: Collection
 
 function collectionCard(item: CollectionItem, { images, available, foilImage }: CollectionCardsOptions): CardView {
   const view = (role: CollectionRole, fields: Omit<CardView, 'ref' | 'role' | 'overlayImage'>): CardView => ({
-    ref: { kind: 'collection', role: LEGACY_ROLES[role], blueprintId: item.blueprintId, item },
+    ref: { kind: 'collection', role, blueprintId: item.blueprintId, item },
     role,
     overlayImage: null,
     ...fields,

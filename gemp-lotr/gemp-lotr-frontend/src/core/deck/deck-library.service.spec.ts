@@ -4,12 +4,17 @@ import { TestBed } from '@angular/core/testing';
 import { FakeNotifier, provideFakeNotifier, settle } from '../../testing/fake-notifier';
 import { readServerResponse } from '../../testing/files';
 import { DeckLibraryService } from './deck-library.service';
-import { DeckService } from './deck.service';
+import { DeckDraft } from './deck-draft.service';
+import { DeckEditing } from './deck-editing.service';
+import { DeckFormatSelection } from './deck-format-selection.service';
+import { DeckOpener } from './deck-opener.service';
 import { PAGE_QUERY_STRING } from '../platform/page-location';
 
 describe('DeckLibraryService', () => {
   let backend: HttpTestingController;
-  let deck: DeckService;
+  let draft: DeckDraft;
+  let editing: DeckEditing;
+  let opener: DeckOpener;
   let dialogs: string[];
   let answers: (string | boolean | null)[];
 
@@ -24,7 +29,9 @@ describe('DeckLibraryService', () => {
     });
     ({ dialogs, answers } = TestBed.inject(FakeNotifier));
     backend = TestBed.inject(HttpTestingController);
-    deck = TestBed.inject(DeckService);
+    draft = TestBed.inject(DeckDraft);
+    editing = TestBed.inject(DeckEditing);
+    opener = TestBed.inject(DeckOpener);
   });
 
   afterEach(() => vi.restoreAllMocks());
@@ -44,7 +51,7 @@ describe('DeckLibraryService', () => {
   beforeEach(() => (service = TestBed.inject(DeckLibraryService)));
 
   it('offers to save before listing the decks, then lists them', async () => {
-    deck.addFromCollection('1_12', 'FREE_PEOPLE');
+    editing.addFromCollection('1_12', 'FREE_PEOPLE');
     answers.push(false);
     await service.openDeckList();
     take('/deck/list').flush(readServerResponse('deck-list.xml'));
@@ -57,7 +64,7 @@ describe('DeckLibraryService', () => {
     const notifier = TestBed.inject(FakeNotifier);
     let answer!: (ok: boolean) => void;
     vi.spyOn(notifier, 'confirm').mockReturnValue(new Promise((resolve) => (answer = resolve)));
-    deck.addFromCollection('1_12', 'FREE_PEOPLE');
+    editing.addFromCollection('1_12', 'FREE_PEOPLE');
     const opening = service.openDeckList();
     await settle();
     backend.expectNone((req) => req.url.endsWith('/deck/list'));
@@ -68,7 +75,7 @@ describe('DeckLibraryService', () => {
   });
 
   it("saves first when the player chooses to, asking for the new deck's name", async () => {
-    deck.addFromCollection('1_12', 'FREE_PEOPLE');
+    editing.addFromCollection('1_12', 'FREE_PEOPLE');
     answers.push(true, 'Saved deck');
     await service.openDeckList();
     expect(params(take('/deck'))).toMatchObject({ deckName: 'Saved deck', deckContents: '|||1_12' });
@@ -83,7 +90,7 @@ describe('DeckLibraryService', () => {
     await service.openDeckList();
     take('/deck/list').flush(readServerResponse('deck-list.xml'));
     const entry = service.deckList()!.decks[0];
-    deck.setupDeck(
+    opener.setupDeck(
       {
         targetFormat: null,
         notes: '',
@@ -102,14 +109,14 @@ describe('DeckLibraryService', () => {
     expect(params(rename)).toEqual({ oldDeckName: entry.name, deckName: 'Brand new name' });
     rename.flush(readServerResponse('deck.xml'));
     expect(service.deckList()!.decks[0].name).toBe('Brand new name');
-    expect(deck.deckName()).toBe('Brand new name');
+    expect(draft.deckName()).toBe('Brand new name');
   });
 
   it('deletes a deck after confirming; the open deck becomes a new one', async () => {
     await service.openDeckList();
     take('/deck/list').flush(readServerResponse('deck-list.xml'));
     const entry = service.deckList()!.decks[0];
-    deck.setupDeck(
+    opener.setupDeck(
       {
         targetFormat: null,
         notes: '',
@@ -128,7 +135,7 @@ describe('DeckLibraryService', () => {
     answers.push(true);
     await service.deleteDeck(entry);
     take('/deck/delete').flush('<ok/>');
-    expect(deck.deckName()).toBeNull();
+    expect(draft.deckName()).toBeNull();
     take('/deck/list').flush(readServerResponse('deck-list.xml'));
   });
 
@@ -138,8 +145,8 @@ describe('DeckLibraryService', () => {
     expect(service.deckList()?.kind).toBe('library');
     service.openDeck(service.deckList()!.decks[0]);
     take('/deck/library').flush(readServerResponse('deck.xml'));
-    expect(deck.deckName()).toBe(service.deckList()!.decks[0].name);
-    expect(deck.contentsDirty()).toBe(true);
+    expect(draft.deckName()).toBe(service.deckList()!.decks[0].name);
+    expect(draft.contentsDirty()).toBe(true);
     backend.match(() => true);
   });
 
@@ -153,21 +160,21 @@ describe('DeckLibraryService', () => {
 
   describe('importing a decklist', () => {
     it('puts the recognised cards into the deck, by group', () => {
-      deck.importDecklist('1x The One Ring\nRing-bearer: Frodo');
+      opener.importDecklist('1x The One Ring\nRing-bearer: Frodo');
       const req = take('/collection/import/');
       expect(params(req)).toEqual({ decklist: '1x the one ring~frodo~' });
       req.flush(
         '<collection><card blueprintId="1_2" count="1" group="ring"/><card blueprintId="1_290" count="1" group="ringBearer"/>' +
           '<card blueprintId="1_12" count="2" group="fp" side="FREE_PEOPLE"/><card blueprintId="1_319" count="1" group="site"/></collection>',
       );
-      expect(deck.deckContents()).toBe('1_290|1_2|1_319|1_12,1_12');
-      expect(deck.label()).toEqual({ text: 'Imported Deck (unsaved)', modified: false });
-      expect(deck.contentsDirty()).toBe(true);
+      expect(TestBed.inject(DeckFormatSelection).contentsOf(draft.deck())).toBe('1_290|1_2|1_319|1_12,1_12');
+      expect(draft.label()).toEqual({ text: 'Imported Deck (unsaved)', modified: false });
+      expect(draft.contentsDirty()).toBe(true);
       backend.match(() => true);
     });
 
     it('alerts when the decklist is too long', () => {
-      deck.importDecklist('x');
+      opener.importDecklist('x');
       take('/collection/import/').flush('', { status: 414, statusText: 'URI Too Long' });
       expect(dialogs).toEqual(['alert: Deck too large to import.']);
     });

@@ -3,7 +3,6 @@ import {
   afterRenderEffect,
   Component,
   computed,
-  DestroyRef,
   ElementRef,
   inject,
   linkedSignal,
@@ -15,7 +14,9 @@ import { cardDisplayData } from '../../../core/cards/card-display';
 import { CardImageService } from '../../../core/cards/card-image.service';
 import { CardInfoService } from '../../../core/cards/card-info.service';
 import { zoneOf } from '../../../core/cards/card-ref';
+import { siteImage } from '../../../core/platform/app-paths';
 import { readCookie, writeCookie } from '../../../core/platform/cookies';
+import { DocumentPressDirective } from '../../shared/document-press/document-press.directive';
 
 /** Shared with the legacy card information dialog (the zoom slider's last value). */
 export const ZOOM_COOKIE = 'card-info-dialog-slider-last-value';
@@ -48,8 +49,10 @@ function isMetaSiteModifier(blueprintId: string): boolean {
  */
 @Component({
   selector: 'gd-card-info',
+  imports: [DocumentPressDirective],
   host: { style: 'display: contents' },
   template: `
+    <!-- eslint-disable-next-line @angular-eslint/template/interactive-supports-focus -- a <dialog> takes the focus -->
     <dialog
       #dialog
       class="gd-card-info"
@@ -57,6 +60,7 @@ function isMetaSiteModifier(blueprintId: string): boolean {
       [style.--gd-card-info-zoom]="zoom()"
       (close)="info.close()"
       (keydown.escape)="escape($event)"
+      (gdDocumentPress)="documentPress($event)"
       (mousedown)="keepFocus($event)"
       (click)="onClick($event)"
     >
@@ -92,7 +96,7 @@ function isMetaSiteModifier(blueprintId: string): boolean {
             <img class="gd-card-info__overlay" [src]="overlay" alt="" />
           }
           @if (v.data.foil) {
-            <img class="gd-card-info__foil" src="/gemp-lotr/images/holo.jpg" alt="" />
+            <img class="gd-card-info__foil" [src]="holoImage" alt="" />
           }
           <span class="gd-card-info__flip"></span>
         </div>
@@ -109,6 +113,7 @@ export class CardInfoComponent {
   private readonly document = inject(DOCUMENT);
   private readonly dialog = viewChild.required<ElementRef<HTMLDialogElement>>('dialog');
 
+  protected readonly holoImage = siteImage('holo.jpg');
   protected readonly zoomMin = ZOOM_MIN;
   protected readonly zoomMax = ZOOM_MAX;
   protected readonly zoomStep = ZOOM_STEP;
@@ -155,18 +160,6 @@ export class CardInfoComponent {
         }
       }
     });
-
-    // Capturing, to see the state before the card under the mouse acts on the same event
-    const onPress = (event: MouseEvent) => this.pressedAnywhere(event);
-    const onMouseDown = (event: MouseEvent) => this.pressStarted(event);
-    this.document.addEventListener('mousedown', onMouseDown, true);
-    this.document.addEventListener('click', onPress, true);
-    this.document.addEventListener('contextmenu', onPress, true);
-    inject(DestroyRef).onDestroy(() => {
-      this.document.removeEventListener('mousedown', onMouseDown, true);
-      this.document.removeEventListener('click', onPress, true);
-      this.document.removeEventListener('contextmenu', onPress, true);
-    });
   }
 
   protected setZoom(event: Event): void {
@@ -193,11 +186,18 @@ export class CardInfoComponent {
     this.info.close();
   }
 
-  /** The legacy page's clickCardFunction, for a press that onClick doesn't get. */
+  protected documentPress(event: MouseEvent): void {
+    if (event.type === 'mousedown') {
+      this.pressStarted(event);
+    } else {
+      this.pressedAnywhere(event);
+    }
+  }
+
+  /** A click or right-click anywhere, which onClick doesn't get. */
   private pressedAnywhere(event: MouseEvent): void {
     const target = event.target as Element;
-    if (event.type === 'click' && this.info.draggedOpen) {
-      this.info.draggedOpen = false;
+    if (event.type === 'click' && this.info.takeDragRelease()) {
       return;
     }
     if (!this.info.isOpen() || target.closest('a')) {
@@ -219,7 +219,7 @@ export class CardInfoComponent {
 
   /** A press on a card behind the dialog leaves the focus on its slider, as the legacy page's press on a card did. */
   private pressStarted(event: MouseEvent): void {
-    this.info.draggedOpen = false;
+    this.info.forgetDragRelease();
     if (this.info.isOpen() && (event.target as Element).closest('.gd-card')) {
       event.preventDefault();
     }

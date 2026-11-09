@@ -3,8 +3,8 @@ import { CardInfoService } from '../../../core/cards/card-info.service';
 import { CardRef } from '../../../core/cards/card-ref';
 import { CardInfoComponent, ZOOM_COOKIE } from './card-info.component';
 
-const CARD: CardRef = { kind: 'shown', blueprintId: '1_2', zone: 'COLLECTION', role: '' };
-const META_SITE_MODIFIER: CardRef = { kind: 'shown', blueprintId: '90_1', zone: 'COLLECTION', role: '' };
+const CARD: CardRef = { kind: 'shown', blueprintId: '1_2', zone: 'COLLECTION', choosable: false };
+const META_SITE_MODIFIER: CardRef = { kind: 'shown', blueprintId: '90_1', zone: 'COLLECTION', choosable: false };
 
 describe('CardInfoComponent', () => {
   let info: CardInfoService;

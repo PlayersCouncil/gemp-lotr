@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { CardInfoService } from '../cards/card-info.service';
 import { CardRef } from '../cards/card-ref';
-import { DeckService } from '../deck/deck.service';
+import { DeckEditing } from '../deck/deck-editing.service';
 import { PacksService } from '../packs/packs.service';
 
 /**
@@ -12,29 +12,29 @@ import { PacksService } from '../packs/packs.service';
  */
 @Injectable({ providedIn: 'root' })
 export class DeckbuilderActions {
-  private readonly deck = inject(DeckService);
+  private readonly editing = inject(DeckEditing);
   private readonly packs = inject(PacksService);
   private readonly cardInfo = inject(CardInfoService);
 
   activate(ref: CardRef): void {
     switch (ref.kind) {
       case 'collection':
-        if (ref.role === 'cardInCollection') {
-          this.deck.addFromCollection(ref.blueprintId, ref.item.kind === 'card' ? ref.item.side : null);
-        } else if (ref.role === 'packInCollection' || ref.role === 'selectionInCollection') {
+        if (ref.role === 'card') {
+          this.editing.addFromCollection(ref.blueprintId, ref.item.kind === 'card' ? ref.item.side : null);
+        } else if (ref.role === 'pack' || ref.role === 'selection') {
           this.packs.packClicked(ref.blueprintId, ref.item.kind === 'pack' ? ref.item.selection : null);
         }
         break;
       case 'shown':
-        if (ref.role === 'cardToSelect') {
+        if (ref.choosable) {
           this.packs.choose(ref.blueprintId);
         }
         break;
       case 'slot':
-        this.deck.removeSlotCard(ref.slot, ref.card.id);
+        this.editing.removeSlotCard(ref.slot, ref.card.id);
         break;
       case 'draw':
-        this.deck.removeDrawCard(ref.card.id);
+        this.editing.removeDrawCard(ref.card.id);
         break;
       default:
       // Copies behind a card and the Race card do nothing

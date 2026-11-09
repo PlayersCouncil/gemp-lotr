@@ -11,7 +11,8 @@
     "prewatch": "npm run card-data",
     "watch": "ng build --watch --configuration development",
     "pretest": "npm run card-data",
-    "test": "ng test"
+    "test": "ng test",
+    "lint": "ng lint"
   },
   "private": true,
   "packageManager": "npm@11.19.0",
@@ -29,10 +30,14 @@
     "@angular/build": "^22.2.5",
     "@angular/cli": "^22.2.5",
     "@angular/compiler-cli": "^22.2.0",
+    "@eslint/js": "^10.0.1",
     "@types/node": "^24.19.2",
+    "angular-eslint": "22.6.0",
+    "eslint": "^10.12.0",
     "jsdom": "^30.0.0",
     "prettier": "^3.8.1",
     "typescript": "~6.0.2",
+    "typescript-eslint": "8.71.0",
     "vitest": "^5.0.0"
   }
 }

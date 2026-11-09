@@ -2,6 +2,7 @@
 @let hidden = collection.hiddenCultureGroups();
 
 <ng-template #fieldTemplate let-field>
+  <!-- eslint-disable-next-line @angular-eslint/template/label-has-associated-control -- it wraps the control, inside the @switch -->
   <label
     class="gd-field"
     [attr.data-field]="fieldName(field)"

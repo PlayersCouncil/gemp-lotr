@@ -3,7 +3,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed } from '@angular/core/testing';
 import { DeckbuilderActions } from '../../../core/actions/deckbuilder-actions.service';
 import { CollectionService } from '../../../core/collection/collection.service';
-import { DeckService } from '../../../core/deck/deck.service';
+import { DeckEditing } from '../../../core/deck/deck-editing.service';
 import { PAGE_QUERY_STRING } from '../../../core/platform/page-location';
 import { provideFakeNotifier } from '../../../testing/fake-notifier';
 import { CollectionGridComponent } from './collection-grid.component';
@@ -32,7 +32,7 @@ describe('CollectionGridComponent', () => {
   }
 
   it('shows packs first, each item with its role and the copies still available', async () => {
-    TestBed.inject(DeckService).addFromCollection('1_1', 'FREE_PEOPLE');
+    TestBed.inject(DeckEditing).addFromCollection('1_1', 'FREE_PEOPLE');
     collection.page.set({
       total: 4,
       items: [
@@ -62,7 +62,7 @@ describe('CollectionGridComponent', () => {
     const { el } = await render();
     el.querySelector<HTMLButtonElement>('.gd-card')!.click();
     expect(activate).toHaveBeenCalledWith(
-      expect.objectContaining({ kind: 'collection', role: 'cardInCollection', blueprintId: '1_1' }),
+      expect.objectContaining({ kind: 'collection', role: 'card', blueprintId: '1_1' }),
     );
   });
 

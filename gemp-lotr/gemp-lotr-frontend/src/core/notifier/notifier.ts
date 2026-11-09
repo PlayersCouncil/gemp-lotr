@@ -11,6 +11,11 @@ export abstract class Notifier {
   /** Shows a message; resolves when the player has dismissed it. */
   abstract alert(message: string): Promise<void>;
 
+  /** A message that needs no answer. */
+  tell(message: string): void {
+    void this.alert(message);
+  }
+
   /** Asks a yes/no question; true for OK. */
   abstract confirm(message: string): Promise<boolean>;
 

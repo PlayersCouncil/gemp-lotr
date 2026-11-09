@@ -1,5 +1,5 @@
 import { Component, ElementRef, inject, signal, viewChild } from '@angular/core';
-import { DeckService } from '../../core/deck/deck.service';
+import { DeckStartup } from '../../core/deck/deck-startup.service';
 import { PacksService } from '../../core/packs/packs.service';
 import { AutoZoomComponent } from './auto-zoom/auto-zoom.component';
 import { CardInfoComponent } from './card-info/card-info.component';
@@ -11,6 +11,7 @@ import { ImportDialogComponent } from './dialogs/import-dialog.component';
 import { NotesDialogComponent } from './dialogs/notes-dialog.component';
 import { PackDialogsComponent } from './dialogs/pack-dialogs.component';
 import { NotifierDialogComponent } from '../shared/notifier/notifier-dialog.component';
+import { DragHandlers, PointerDragDirective } from '../shared/pointer-drag/pointer-drag.directive';
 
 /** Arrow keys on the resizer move it by this much (px). */
 export const RESIZE_STEP = 10;
@@ -34,6 +35,7 @@ export type PagePane = 'deck' | 'collection';
 @Component({
   selector: 'deckbuilder-app',
   imports: [
+    PointerDragDirective,
     DeckAreaComponent,
     CollectionFilterComponent,
     CollectionGridComponent,
@@ -61,7 +63,7 @@ export type PagePane = 'deck' | 'collection';
       aria-label="Resize the collection"
       tabindex="0"
       [attr.data-dragging]="dragging() ? '' : null"
-      (pointerdown)="startResize($event)"
+      [gdPointerDrag]="resizeDrag"
       (keydown)="resizeWithKeys($event)"
     >
       <button
@@ -120,7 +122,7 @@ export class DeckbuilderPageComponent {
   private readonly dragPreview = viewChild<ElementRef<HTMLElement>>('dragPreview');
 
   constructor() {
-    inject(DeckService).init();
+    inject(DeckStartup).init();
     inject(PacksService).start();
   }
 
@@ -137,42 +139,36 @@ export class DeckbuilderPageComponent {
   }
 
   /** Dragging the separator: a preview of it follows the pointer, and the panes resize on release (as on the legacy page). */
-  protected startResize(event: PointerEvent): void {
-    if (!this.collectionOpen() || event.button !== 0 || (event.target as Element).closest('.gd-page__toggle')) {
-      return;
+  protected readonly resizeDrag = (event: PointerEvent): DragHandlers | null => {
+    if (!this.collectionOpen() || (event.target as Element).closest('.gd-page__toggle')) {
+      return null;
     }
-    event.preventDefault();
     const separator = event.currentTarget as HTMLElement;
     const page = separator.closest('.gd-page') as HTMLElement;
-    separator.setPointerCapture?.(event.pointerId);
     this.dragging.set(true);
     // Where on the separator it was grabbed stays under the pointer
     const grabbedAt = event.clientX - separator.getBoundingClientRect().left;
-    const move = (e: PointerEvent) => {
-      const right = page.getBoundingClientRect().right;
-      this.dragWidth.set(Math.round(right - (e.clientX - grabbedAt) - separator.offsetWidth));
-    };
     const finish = () => {
-      separator.removeEventListener('pointermove', move);
-      separator.removeEventListener('pointerup', stop);
-      separator.removeEventListener('pointercancel', cancel);
       this.dragging.set(false);
       this.dragWidth.set(null);
     };
-    const stop = () => {
-      // The preview is where the theme allowed it: the width kept is what it shows, so the next drag or key press
-      // starts from there
-      const preview = this.dragPreview()?.nativeElement.getBoundingClientRect();
-      if (preview) {
-        this.collectionWidth.set(Math.round(page.getBoundingClientRect().right - preview.right));
-      }
-      finish();
+    return {
+      move: (e) => {
+        const right = page.getBoundingClientRect().right;
+        this.dragWidth.set(Math.round(right - (e.clientX - grabbedAt) - separator.offsetWidth));
+      },
+      end: () => {
+        // The preview is where the theme allowed it: the width kept is what it shows, so the next drag or key press
+        // starts from there
+        const preview = this.dragPreview()?.nativeElement.getBoundingClientRect();
+        if (preview) {
+          this.collectionWidth.set(Math.round(page.getBoundingClientRect().right - preview.right));
+        }
+        finish();
+      },
+      cancel: finish,
     };
-    const cancel = () => finish();
-    separator.addEventListener('pointermove', move);
-    separator.addEventListener('pointerup', stop);
-    separator.addEventListener('pointercancel', cancel);
-  }
+  };
 
   /** Left makes the collection wider, Right narrower; Enter opens or closes it. */
   protected resizeWithKeys(event: KeyboardEvent): void {

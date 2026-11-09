@@ -1,3 +1,4 @@
+import { siteImage } from '../platform/app-paths';
 import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core';
 import { catchError, EMPTY, from, map, Observable, of, Subject, switchMap } from 'rxjs';
 import { ApiError, GENERIC_COMMUNICATION_ERROR } from '../api/api-error';
@@ -68,7 +69,7 @@ export class CollectionService {
 
   /** The selected collection (#collectionSelect). */
   readonly collectionType = signal('default');
-  /** The limited collections the player has, appended to #collectionSelect (loaded by DeckService). */
+  /** The limited collections the player has, appended to #collectionSelect (loaded by DeckStartup). */
   readonly limitedCollections = signal<readonly CollectionTypeInfo[]>([]);
 
   readonly fields = signal<FilterFields>(EMPTY_FILTER);
@@ -282,7 +283,7 @@ export class CollectionService {
     for (const item of page.items) {
       const image = this.images.resolve(item.blueprintId, item.kind === 'pack' ? 'pack' : item.side);
       urls.add(image.imageUrl);
-      if (item.kind === 'card' && image.errata) urls.add('/gemp-lotr/images/errata-vertical.png');
+      if (item.kind === 'card' && image.errata) urls.add(siteImage('errata-vertical.png'));
     }
     return from(this.preloader.load(urls)).pipe(map(() => page));
   }

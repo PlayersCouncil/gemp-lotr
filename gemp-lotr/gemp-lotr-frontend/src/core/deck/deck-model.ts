@@ -1,9 +1,10 @@
+import { CollectionItem, Deck } from '../api/models';
 import { isPlaceholder } from '../cards/card-blueprint';
 import { serializeDeckContents } from './deck-contents';
 
 /**
  * The deck being edited, as the legacy deckBuildingUi.js kept it in the page's card elements: the special slots, the
- * sites and the draw deck. Pure functions; DeckService holds the state.
+ * sites and the draw deck. Pure functions; DeckDraft holds the state.
  */
 
 export interface DeckCard {
@@ -151,4 +152,43 @@ export function shownDeckBlueprints(deck: DeckState): string[] {
     .map((pile) => pile.card)
     .sort((a, b) => deck.draw.indexOf(a) - deck.draw.indexOf(b));
   return [...deck.ringBearer, ...deck.ring, ...deck.map, ...deck.sites, ...shownDraw].map((card) => card.blueprintId);
+}
+
+/** The deck state of a deck from the server; draw cards of neither side are left out. */
+export function deckStateOf(deck: Deck): DeckState {
+  let state = EMPTY_DECK;
+  for (const blueprintId of deck.ringBearer ? [deck.ringBearer] : []) {
+    state = addToSlot(state, 'ringBearer', blueprintId);
+  }
+  for (const blueprintId of deck.ring ? [deck.ring] : []) {
+    state = addToSlot(state, 'ring', blueprintId);
+  }
+  for (const blueprintId of deck.map ? [deck.map] : []) {
+    state = addToSlot(state, 'map', blueprintId);
+  }
+  for (const blueprintId of deck.sites) {
+    state = addToSlot(state, 'sites', blueprintId);
+  }
+  for (const { blueprintId, side } of deck.drawDeck) {
+    if (side === 'FREE_PEOPLE' || side === 'SHADOW') {
+      state = addDrawCopy(state, blueprintId, side as DrawSide);
+    }
+  }
+  return state;
+}
+
+/** Adds the cards the server recognised in a decklist: each by its group or, for the draw deck, its side. */
+export function addImportedCards(state: DeckState, items: readonly CollectionItem[]): DeckState {
+  for (const item of items) {
+    if (item.kind !== 'card') {
+      continue;
+    }
+    for (let copy = 0; copy < item.count; copy++) {
+      state =
+        item.group === 'ringBearer' || item.group === 'ring' || item.group === 'map'
+          ? addToSlot(state, item.group, item.blueprintId)
+          : addBySide(state, item.blueprintId, item.side);
+    }
+  }
+  return state;
 }

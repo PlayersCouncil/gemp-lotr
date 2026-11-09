@@ -1,3 +1,4 @@
+import { siteImage } from '../platform/app-paths';
 import { readCookie } from '../platform/cookies';
 
 /**
@@ -24,5 +25,5 @@ export function foilOverlayImage(presentation: FoilPresentation): string | null 
   if (presentation === 'none') {
     return null;
   }
-  return `/gemp-lotr/images/${presentation === 'animated' ? 'foil.gif' : 'holo.jpg'}`;
+  return siteImage(presentation === 'animated' ? 'foil.gif' : 'holo.jpg');
 }

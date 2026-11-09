@@ -1,3 +1,4 @@
+import { SERVER_URL } from '../platform/app-paths';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { catchError, map, Observable, Subject, tap, throwError } from 'rxjs';
@@ -7,7 +8,6 @@ import { FormData, toFormParams } from './form-codec';
 import { parseXml } from './xml';
 
 /** Base path of the Gemp server API (RootUriRequestHandler). */
-export const SERVER_URL = '/gemp-lotr-server';
 
 /** Response header the server sets when opened-pack contents are waiting to be shown (Delivery-Service-Opened-Pack). */
 export const OPENED_PACK_HEADER = 'Delivery-Service-Opened-Pack';

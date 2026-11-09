@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { GempHttp, SERVER_URL } from './gemp-http.service';
+import { SERVER_URL } from '../platform/app-paths';
+import { GempHttp } from './gemp-http.service';
 import {
   CollectionItem,
   CollectionPage,

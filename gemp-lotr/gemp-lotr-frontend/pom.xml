@@ -56,6 +56,17 @@
                             <arguments>ci --no-audit --no-fund</arguments>
                         </configuration>
                     </execution>
+                    <!-- After npm-ci (generate-resources), before the build: lint errors fail the build -->
+                    <execution>
+                        <id>npm-lint</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>run lint</arguments>
+                        </configuration>
+                    </execution>
                     <!-- Test and build go through the npm scripts, so their pretest/prebuild run
                          scripts/extract-card-data.mjs (src/generated/card-data.json) first -->
                     <execution>

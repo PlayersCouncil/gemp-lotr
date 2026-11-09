@@ -15,7 +15,7 @@ describe('AutoZoomComponent', () => {
   let setting: AutoZoomSetting;
 
   const card = (blueprintId: string): CardView => ({
-    ref: { kind: 'shown', blueprintId, zone: 'FREE_PEOPLE', role: '' },
+    ref: { kind: 'shown', blueprintId, zone: 'FREE_PEOPLE', choosable: false },
     role: 'card',
     imageUrl: TestBed.inject(CardImageService).imageUrl(blueprintId),
     horizontal: false,
@@ -111,7 +111,7 @@ describe('AutoZoomComponent', () => {
     expect(zoom.hidden).toBe(true);
     setting.enabled.set(true);
 
-    TestBed.inject(CardInfoService).show({ kind: 'shown', blueprintId: '1_1', zone: 'FREE_PEOPLE', role: '' });
+    TestBed.inject(CardInfoService).show({ kind: 'shown', blueprintId: '1_1', zone: 'FREE_PEOPLE', choosable: false });
     hover.enter({}, card('1_12'), box);
     step(HOVER_DELAY_MS);
     expect(zoom.hidden).toBe(true);

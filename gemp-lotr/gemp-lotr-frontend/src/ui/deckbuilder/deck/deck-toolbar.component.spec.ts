@@ -3,7 +3,9 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed } from '@angular/core/testing';
 import { CollectionService } from '../../../core/collection/collection.service';
 import { DeckLibraryService } from '../../../core/deck/deck-library.service';
-import { DeckService } from '../../../core/deck/deck.service';
+import { DeckChanges } from '../../../core/deck/deck-changes.service';
+import { DeckDraft } from '../../../core/deck/deck-draft.service';
+import { DeckSaver } from '../../../core/deck/deck-saver.service';
 import { AutoZoomSetting } from '../../../core/platform/auto-zoom-setting';
 import { PAGE_QUERY_STRING } from '../../../core/platform/page-location';
 import { ThemeService } from '../../../core/platform/theme.service';
@@ -11,7 +13,9 @@ import { provideFakeNotifier } from '../../../testing/fake-notifier';
 import { DeckToolbarComponent } from './deck-toolbar.component';
 
 describe('DeckToolbarComponent', () => {
-  let deck: DeckService;
+  let draft: DeckDraft;
+  let changes: DeckChanges;
+  let saver: DeckSaver;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -22,7 +26,9 @@ describe('DeckToolbarComponent', () => {
         { provide: PAGE_QUERY_STRING, useValue: '' },
       ],
     });
-    deck = TestBed.inject(DeckService);
+    draft = TestBed.inject(DeckDraft);
+    changes = TestBed.inject(DeckChanges);
+    saver = TestBed.inject(DeckSaver);
     // jsdom takes touch events, which counts as a touch device: these tests are on a computer unless they say not
     Object.defineProperty(TestBed.inject(AutoZoomSetting), 'available', { value: true });
   });
@@ -74,10 +80,10 @@ describe('DeckToolbarComponent', () => {
     const { button } = await render();
     const library = TestBed.inject(DeckLibraryService);
     const calls = {
-      newDeck: vi.spyOn(deck, 'newDeck').mockResolvedValue(),
-      save: vi.spyOn(deck, 'saveCurrentDeck').mockResolvedValue(true),
-      rename: vi.spyOn(deck, 'renameCurrentDeck').mockResolvedValue(),
-      copy: vi.spyOn(deck, 'copyDeck').mockReturnValue(),
+      newDeck: vi.spyOn(saver, 'newDeck').mockResolvedValue(),
+      save: vi.spyOn(saver, 'saveCurrentDeck').mockResolvedValue(true),
+      rename: vi.spyOn(saver, 'renameCurrentDeck').mockResolvedValue(),
+      copy: vi.spyOn(saver, 'copyDeck').mockReturnValue(),
       importDeck: vi.spyOn(library, 'openImport').mockResolvedValue(),
       libraryList: vi.spyOn(library, 'openLibrary').mockResolvedValue(),
       deckList: vi.spyOn(library, 'openDeckList').mockResolvedValue(),
@@ -94,14 +100,14 @@ describe('DeckToolbarComponent', () => {
   it('enables Convert to PC Errata when the deck can be converted', async () => {
     const { fixture, button } = await render();
     expect(button('convert-errata').disabled).toBe(true);
-    deck.convertErrataEnabled.set(true);
+    changes.convertErrataEnabled.set(true);
     await fixture.whenStable();
     expect(button('convert-errata').disabled).toBe(false);
   });
 
   it('shows a modified deck as the legacy page did', async () => {
     const { fixture, el } = await render();
-    deck.label.set({ text: 'Mine', modified: true });
+    draft.label.set({ text: 'Mine', modified: true });
     await fixture.whenStable();
     const name = el.querySelector<HTMLElement>('.gd-toolbar__deck-name')!;
     expect(name.textContent).toBe('*Mine - modified');
@@ -128,7 +134,7 @@ describe('DeckToolbarComponent', () => {
 
   it('selects the format, the collection and the theme', async () => {
     const { el } = await render();
-    const selectFormat = vi.spyOn(deck, 'selectFormat');
+    const selectFormat = vi.spyOn(changes, 'selectFormat');
     const format = el.querySelector<HTMLSelectElement>('.gd-toolbar__format')!;
     format.selectedIndex = 0;
     format.dispatchEvent(new Event('change'));
