@@ -9,7 +9,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.*;
 import io.netty.util.CharsetUtil;
-import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;import org.w3c.dom.Document;
 
@@ -34,7 +33,7 @@ public class GempukkuHttpRequestHandler extends SimpleChannelInboundHandler<Full
     private final static long SIX_MONTHS = 1000L * 60L * 60L * 24L * 30L * 6L;
     private static final Logger _log = LogManager.getLogger(GempukkuHttpRequestHandler.class);
     private static final Logger _accesslog = LogManager.getLogger("access");
-    private final Map<String, byte[]> _fileCache = Collections.synchronizedMap(new HashMap<>());
+    private final ConnectionFileCache _fileCache = new ConnectionFileCache();
 
     private final Map<Type, Object> _objects;
     private final UriRequestHandler _uriRequestHandler;
@@ -365,27 +364,15 @@ public class GempukkuHttpRequestHandler extends SimpleChannelInboundHandler<Full
         @Override
         public void writeFile(File file, Map<String, String> headers) {
             try {
-                String canonicalPath = file.getCanonicalPath();
-                byte[] fileBytes = _fileCache.get(canonicalPath);
-                if (fileBytes == null) {
-                    if (!file.exists() || !file.isFile()) {
-                        byte[] content = new byte[0];
-                        // Build the response object.
-                        FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, HttpResponseStatus.valueOf(404), Unpooled.wrappedBuffer(content), convertToHeaders(null), EmptyHttpHeaders.INSTANCE);
-                        sendResponse(ctx, request, response);
-                        return;
-                    }
-
-                    FileInputStream fis = new FileInputStream(file);
-                    try {
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        IOUtils.copyLarge(fis, baos);
-                        fileBytes = baos.toByteArray();
-                        _fileCache.put(canonicalPath, fileBytes);
-                    } finally {
-                        IOUtils.closeQuietly(fis);
-                    }
+                if (!file.exists() || !file.isFile()) {
+                    byte[] content = new byte[0];
+                    // Build the response object.
+                    FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, HttpResponseStatus.valueOf(404), Unpooled.wrappedBuffer(content), convertToHeaders(null), EmptyHttpHeaders.INSTANCE);
+                    sendResponse(ctx, request, response);
+                    return;
                 }
+
+                byte[] fileBytes = _fileCache.read(file);
 
                 HttpHeaders headers1 = convertToHeaders(getHeadersForFile(headers, file));
 

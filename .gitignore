@@ -29,3 +29,4 @@ gemp-lotr/gemp-lotr-async/src/main/web/ng/
 # docker/frontend-watch.sh's staging folders next to it
 gemp-lotr/gemp-lotr-async/src/main/web/.ng-build/
 gemp-lotr/gemp-lotr-async/src/main/web/.ng-old/
+gemp-lotr/gemp-lotr-async/src/main/web/.ng-previous-files

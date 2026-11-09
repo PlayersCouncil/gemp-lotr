@@ -48,8 +48,9 @@ without a restart.
 
 The build output is not in git, so after a `git pull` something has to run `ng build`. In the Docker setup that's the
 `frontend` service (`docker/docker-compose.yml`, `docker/frontend-watch.sh`). It checks the frontend sources every 5
-seconds (and the legacy card data files the card images are generated from) and, when they change, builds into `web/.ng-build/` while the old build stays live, then swaps
-the new build in. A build that fails leaves the old one in place (see `docker logs gemp_frontend_1`). So deploying a
+seconds (and the legacy card data files the card images are generated from) and, when they change, builds into `web/.ng-build/` while the old build stays live, then adds the
+new files next to the old ones and replaces `index.html` last, so the page and what it names are always there (the
+previous build's files stay until the next deploy). A build that fails leaves the old one in place (see `docker logs gemp_frontend_1`). So deploying a
 frontend change is just `git pull`, as with the legacy pages.
 
 ## Developing with `ng serve`
