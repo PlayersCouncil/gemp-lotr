@@ -9,6 +9,7 @@ import { DeckFormatSelection } from '../../../core/deck/deck-format-selection.se
 import { CardComponent, cardElementOf } from '../../shared/card/card.component';
 import { cardFits, FitCard } from '../../shared/fit-cards/fit-cards';
 import { FitCardsDirective } from '../../shared/fit-cards/fit-cards.directive';
+import { NoPressFocusDirective } from '../../shared/no-press-focus/no-press-focus.directive';
 import { DeckStatsComponent } from './deck-stats.component';
 import { DeckToolbarComponent } from './deck-toolbar.component';
 
@@ -57,7 +58,7 @@ function slotView(view: Omit<SlotView, 'fit'>): SlotView {
  */
 @Component({
   selector: 'gd-deck',
-  imports: [CardComponent, FitCardsDirective, DeckToolbarComponent, DeckStatsComponent],
+  imports: [CardComponent, FitCardsDirective, NoPressFocusDirective, DeckToolbarComponent, DeckStatsComponent],
   host: { class: 'gd-deck' },
   template: `
     <gd-deck-toolbar />
@@ -70,7 +71,7 @@ function slotView(view: Omit<SlotView, 'fit'>): SlotView {
         [hidden]="slot.hidden"
       >
         @if (slot.selectable) {
-          <button type="button" class="gd-slot__label" (click)="select(slot.slot)">
+          <button type="button" class="gd-slot__label" gdNoPressFocus (click)="select(slot.slot)">
             <span class="gd-slot__title">{{ slot.title }}</span>
             <span class="gd-slot__hint">{{ slot.hint }}</span>
           </button>

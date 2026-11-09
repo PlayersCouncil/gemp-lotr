@@ -12,6 +12,7 @@ import { ImportDialogComponent } from './dialogs/import-dialog.component';
 import { NotesDialogComponent } from './dialogs/notes-dialog.component';
 import { PackDialogsComponent } from './dialogs/pack-dialogs.component';
 import { NotifierDialogComponent } from '../shared/notifier/notifier-dialog.component';
+import { NoPressFocusDirective } from '../shared/no-press-focus/no-press-focus.directive';
 import { DragHandlers, PointerDragDirective } from '../shared/pointer-drag/pointer-drag.directive';
 
 /** Arrow keys on the resizer move it by this much (px). */
@@ -38,6 +39,7 @@ export type PagePane = 'deck' | 'collection';
   providers: provideDeckbuilderState(),
   imports: [
     PointerDragDirective,
+    NoPressFocusDirective,
     DeckAreaComponent,
     CollectionFilterComponent,
     CollectionGridComponent,
@@ -63,6 +65,7 @@ export type PagePane = 'deck' | 'collection';
       role="separator"
       aria-orientation="vertical"
       aria-label="Resize the collection"
+      [attr.title]="collectionOpen() ? 'Resize' : null"
       tabindex="0"
       [attr.data-dragging]="dragging() ? '' : null"
       [gdPointerDrag]="resizeDrag"
@@ -71,6 +74,7 @@ export type PagePane = 'deck' | 'collection';
       <button
         type="button"
         class="gd-page__toggle"
+        gdNoPressFocus
         [attr.aria-expanded]="collectionOpen()"
         [attr.aria-label]="collectionOpen() ? 'Close the collection' : 'Open the collection'"
         [title]="collectionOpen() ? 'Close' : 'Open'"
@@ -78,7 +82,7 @@ export type PagePane = 'deck' | 'collection';
       ></button>
     </div>
     @if (dragWidth() !== null) {
-      <div #dragPreview class="gd-page__drag-preview" aria-hidden="true"></div>
+      <div #dragPreview class="gd-page__drag-preview" aria-hidden="true" title="Resize"></div>
     }
     <section class="gd-page__collection" id="gd-pane-collection" aria-label="Collection" [hidden]="!collectionOpen()">
       <gd-collection-filter />

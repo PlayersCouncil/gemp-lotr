@@ -475,6 +475,13 @@ a:visited {
 }
 
 /* 95% of the page's 12px, then 90% for the table text and jQuery UI's 70% for button text */
+/* The legacy reset buttons didn't react to the mouse */
+.gd-filter__resets .gd-button:enabled:hover {
+  border-color: #666;
+  background: var(--classic-default-bg);
+  color: #ccc;
+}
+
 .gd-filter__resets .gd-button {
   height: 19px;
   padding: 0;
@@ -862,7 +869,6 @@ button.gd-slot__label:focus-visible {
 }
 
 .gd-toolbar select {
-  flex: none;
   box-sizing: border-box;
   height: 23px;
   padding: 3px;
@@ -904,10 +910,7 @@ button.gd-slot__label:focus-visible {
 /* #editingDeck */
 .gd-toolbar__deck-name {
   flex-grow: 1;
-  min-width: 0;
   padding-left: 3px;
-  overflow: hidden;
-  white-space: nowrap;
 }
 
 .gd-toolbar__deck-name[data-modified] {
@@ -1009,7 +1012,7 @@ button.gd-slot__label:focus-visible {
    * The cards start 3px in from the box's edge, as the legacy group did; its area was 472px high in a 480px box, and
    * wider than the box (the cards wrap a little sooner here)
    */
-  padding: 2px 0 4px 2px;
+  padding: 2px 4px 4px 2px;
   border: 1px solid #555;
   border-radius: 7px;
   background: var(--classic-content-bg);
@@ -1344,10 +1347,10 @@ button.gd-slot__label:focus-visible {
   object-position: bottom;
 }
 
-/* Only the picture flips the card: a click on its black frame closes the dialog, as on the legacy page */
+/* The picture and its black frame flip the card, as on the legacy page (the 2px its frame overhangs below don't) */
 .gd-card-info__flip {
   position: absolute;
-  inset: var(--frame);
+  inset: 0;
 }
 
 /* 2px larger than the card, as CardDisplay covered white-bordered cards a little better on the sides */

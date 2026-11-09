@@ -270,7 +270,7 @@ describe('editing a deck', () => {
     expect(service.contentsDirty()).toBe(false);
   });
 
-  it('saves changes under the new name when renaming a modified deck', async () => {
+  it('saves changes under the old name when renaming a modified deck, as the legacy page did', async () => {
     start();
     service.setupDeck({ ...deckOf('1_12'), notes: 'n' }, 'Old');
     service.addFromCollection('1_13', 'FREE_PEOPLE');
@@ -281,7 +281,7 @@ describe('editing a deck', () => {
     rename.flush(readServerResponse('deck.xml'));
     await settle();
     const [save] = take('/deck');
-    expect(body(save)).toMatchObject({ deckName: 'New', notes: 'n' });
+    expect(body(save)).toMatchObject({ deckName: 'Old', notes: 'n' });
     save.flush('<ok/>');
     expect(service.label()).toEqual({ text: 'New', modified: false });
     collectionRequests();

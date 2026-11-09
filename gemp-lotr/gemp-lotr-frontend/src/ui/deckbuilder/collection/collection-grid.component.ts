@@ -1,4 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
+import { DeckbuilderCardView } from '../../../core/actions/deckbuilder-card-ref';
 import { CardViews } from '../../../core/cards/card-views.service';
 import { collectionCards } from '../../../core/collection/collection-cards';
 import { CollectionBrowser } from '../../../core/collection/collection-browser.service';
@@ -20,7 +21,8 @@ import { FitCardsDirective } from '../../shared/fit-cards/fit-cards.directive';
   host: { class: 'gd-collection' },
   template: `
     <div class="gd-collection__cards" [attr.data-count]="cards().length" [gdFitCards]="fitCards()">
-      @for (card of cards(); track $index) {
+      <!-- New elements for each page, as on the legacy page: the browser then reports the card under a still mouse -->
+      @for (card of cards(); track itemOf(card)) {
         <button [gdCard]="card"></button>
       }
     </div>
@@ -37,6 +39,11 @@ export class CollectionGridComponent {
       available: (blueprintId, count) => this.counts.available(blueprintId, count),
     }),
   );
+
+  /** The server's item: the same object while only the copies left change, a new one on each page. */
+  protected itemOf(card: DeckbuilderCardView): unknown {
+    return card.ref.kind === 'collection' ? card.ref.item : card;
+  }
 
   protected readonly fitCards = computed(() => cardFits(this.cards()));
 }

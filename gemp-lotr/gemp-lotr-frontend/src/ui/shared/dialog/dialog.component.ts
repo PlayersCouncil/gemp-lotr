@@ -71,7 +71,7 @@ export class DialogLayers {
     >
       <header class="gd-dialog__header" [gdPointerDrag]="moveDrag">
         <h2 class="gd-dialog__title" [id]="titleId">{{ heading() }}</h2>
-        <button type="button" class="gd-dialog__close" aria-label="Close" title="Close" (click)="close()"></button>
+        <button type="button" class="gd-dialog__close" aria-label="Close" (click)="close()"></button>
       </header>
       <div class="gd-dialog__body">
         <ng-content />

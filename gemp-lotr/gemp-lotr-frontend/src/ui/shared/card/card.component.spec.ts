@@ -202,6 +202,26 @@ describe('CardComponent', () => {
       expect(actions.activate).toHaveBeenCalledTimes(1);
     });
 
+    it('a press with the main button leaves the keyboard focus where it was', async () => {
+      const { el } = await render();
+      const other = document.body.appendChild(document.createElement('button'));
+      other.focus();
+      const press = new MouseEvent('mousedown', { bubbles: true, cancelable: true, button: 0 });
+      el.dispatchEvent(press);
+      expect(press.defaultPrevented).toBe(true);
+      expect(document.activeElement).toBe(other);
+      other.remove();
+    });
+
+    it('a press with another button takes the keyboard focus away, without taking it', async () => {
+      const { el } = await render();
+      const other = document.body.appendChild(document.createElement('button'));
+      other.focus();
+      el.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true, button: 2 }));
+      expect(document.activeElement).toBe(document.body);
+      other.remove();
+    });
+
     it('cannot be dragged as an image', async () => {
       const { el } = await render();
       const event = new Event('dragstart', { bubbles: true, cancelable: true });

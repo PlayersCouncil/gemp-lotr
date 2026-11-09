@@ -53,10 +53,12 @@ export class DeckSaver {
       return;
     }
     await this.renameDeck(name, async (newName) => {
-      this.draft.deckName.set(newName);
+      // As on the legacy page, the changes are saved before the name changes, so they land in a new deck under the old
+      // name and the renamed deck keeps its previous cards. A known bug the owner chose to keep for now.
       if (this.draft.contentsDirty() && (await this.notifier.confirm('Do you wish to save this deck?'))) {
         this.saveDeck();
       }
+      this.draft.deckName.set(newName);
       this.changes.deckModified(this.draft.contentsDirty());
     });
   }

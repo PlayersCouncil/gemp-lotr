@@ -39,6 +39,7 @@ export const DRAG_UP_FOR_INFO = 20;
     '[attr.aria-label]': 'label()',
     '(click)': 'onClick($event)',
     '(contextmenu)': 'onContextMenu($event)',
+    '(mousedown)': 'onMouseDown($event)',
     '(pointerdown)': 'onPointerDown($event)',
     '(pointermove)': 'onPointerMove($event)',
     '(pointerup)': 'onPointerUp($event)',
@@ -126,6 +127,20 @@ export class CardComponent {
     if (event.pointerType === 'mouse') {
       const { left, top, right, bottom } = this.host.getBoundingClientRect();
       this.hover.enter(this, this.card(), { left, top: this.snap(top), right, bottom: this.snap(bottom) });
+    }
+  }
+
+  /**
+   * Pressing a card with the mouse leaves the keyboard focus where it was, or with the other buttons takes it away from
+   * what had it, as the legacy page's plain elements did. The keyboard still reaches the card with Tab.
+   */
+  protected onMouseDown(event: MouseEvent): void {
+    event.preventDefault();
+    if (event.button !== 0) {
+      const active = this.host.ownerDocument.activeElement;
+      if (active instanceof HTMLElement) {
+        active.blur();
+      }
     }
   }
 
