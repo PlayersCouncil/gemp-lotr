@@ -11,7 +11,7 @@ export const TEST_PLAYERS = [
 ];
 
 /** In "My cards": packs and a selection pack to open, a foil, an errata card and a promised prize. */
-const MY_CARDS = [
+export const MY_CARDS = [
   '3xFotR - Booster',
   '2x(S)FotR - Starter',
   '4x1_12',

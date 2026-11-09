@@ -99,6 +99,7 @@ function fixtureDeckXml() {
 
 function serverAnswer(url) {
   const p = url.pathname.replace('/gemp-lotr-server', '');
+  if (p === '/player') return { json: {} };
   if (p === '/deck/formats') return { json: FORMATS };
   if (p === '/deck') return { xml: fixtureDeckXml() };
   if (p === '/deck/list' || p === '/deck/libraryList') return { xml: DECKS_XML };

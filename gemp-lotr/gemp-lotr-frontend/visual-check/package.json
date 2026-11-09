@@ -8,8 +8,12 @@
     "check:stubbed": "node run.mjs --stubbed --out report-stubbed",
     "check:local": "node local-server.mjs",
     "check:local:down": "node local-server.mjs down",
+    "check:matrix": "node local-server.mjs --matrix --mutating --sizes 1366x768 --tolerance 80 --out report-matrix",
     "check:selftest": "node local-server.mjs --selftest",
-    "check:deploy": "node deploy-test.mjs"
+    "check:deploy": "node deploy-test.mjs",
+    "check:server-build": "node tools/build-server.mjs",
+    "check:all": "node tools/check-all.mjs",
+    "inspect": "node tools/inspect.mjs"
   },
   "devDependencies": {
     "playwright": "1.64.1",

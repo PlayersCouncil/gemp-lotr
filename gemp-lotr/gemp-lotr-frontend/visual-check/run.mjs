@@ -6,7 +6,8 @@ import path from 'node:path';
 import { parseArgs } from 'node:util';
 import { chromium } from 'playwright';
 import { CONTROLS } from './controls.mjs';
-import { acceptedFor } from './accepted.mjs';
+import { acceptedFor, withoutLegacyBugs } from './accepted.mjs';
+import { MY_CARDS } from './local-server/seed.mjs';
 import {
   compareRequests,
   compareStats,
@@ -17,6 +18,7 @@ import {
   readPageState,
 } from './compare.mjs';
 import { INJECTIONS } from './injections.mjs';
+import { coverageGaps, matrixScenarios } from './matrix.mjs';
 import { FIXTURE_DECK, SCENARIOS, selectors } from './scenarios.mjs';
 import { routeToStub, STUB_ORIGIN } from './stub-server.mjs';
 
@@ -39,6 +41,10 @@ const { values: options } = parseArgs({
     out: { type: 'string', default: 'report' },
     // The self-test (selftest.mjs): a deliberate bug put into the Angular page
     inject: { type: 'string' },
+    // Every control against every gesture (matrix.mjs), and what is on the pages against what is tested
+    matrix: { type: 'boolean', default: false },
+    // With --matrix: only the scenarios whose name contains this
+    filter: { type: 'string' },
   },
 });
 
@@ -64,7 +70,10 @@ const sizes = options.sizes.split(',').map((s) => {
   return { width, height, label: s };
 });
 const only = options.only ? new Set(options.only.split(',')) : null;
-const scenarios = SCENARIOS.filter((s) => (only ? only.has(s.name) : !s.mutating || options.mutating));
+const allScenarios = options.matrix ? matrixScenarios() : SCENARIOS;
+const scenarios = allScenarios.filter((s) =>
+  only ? only.has(s.name) : (!s.mutating || options.mutating) && (!options.filter || s.name.includes(options.filter)),
+);
 const tolerance = Number(options.tolerance);
 const outDir = path.resolve(options.out);
 fs.rmSync(outDir, { recursive: true, force: true });
@@ -208,6 +217,9 @@ if (options.inject && !injection) {
   process.exit(2);
 }
 
+/** The deck stats come from a request sent on a timer, so between steps they can be a moment behind: not compared then. */
+const STATS_AREA = { selector: '.gd-stats', margin: 2, maxPixels: Infinity };
+
 /** Runs in the page: where each accepted area is at the moment. */
 function readAreas(entries) {
   return entries.map(({ selector, margin }) => {
@@ -218,11 +230,48 @@ function readAreas(entries) {
   });
 }
 
-async function capture(which, scenario, size, file) {
+/**
+ * Random results of opening a pack: the first page's answers for collections and opened contents, given back to the
+ * second page in the same order, so both show the same thing. What each page asks the server is still compared.
+ */
+const REPLAYED = /\/gemp-lotr-server\/(collection\/|delivery\/packContents)/;
+
+function replayKey(request) {
+  const url = request.url();
+  return `${request.method()} ${url.replace(/\?.*/, '')} ${normalize(url.replace(/^[^?]*\??/, ''))}`;
+}
+
+function recordAnswers(page, answers) {
+  page.on('response', async (response) => {
+    const request = response.request();
+    if (!REPLAYED.test(request.url()) || request.method() !== 'GET') return;
+    const body = await response.body().catch(() => null);
+    if (body === null) return;
+    const key = replayKey(request);
+    answers.set(key, [...(answers.get(key) ?? []), { status: response.status(), headers: response.headers(), body }]);
+  });
+}
+
+async function replayAnswers(page, answers) {
+  await page.route(REPLAYED, async (route) => {
+    const request = route.request();
+    const saved = request.method() === 'GET' ? answers.get(replayKey(request)) : null;
+    if (!saved?.length) {
+      await route.fallback();
+      return;
+    }
+    // The last answer also serves any later asking of the same thing
+    const answer = saved.length > 1 ? saved.shift() : saved[0];
+    await route.fulfill(answer).catch(() => undefined);
+  });
+}
+
+async function capture(which, scenario, size, file, answers) {
   const pagePath = which === 'legacy' ? options.legacy : angularPath;
   const context = await browser.newContext({
     viewport: { width: size.width, height: size.height },
     storageState: session,
+    hasTouch: scenario.hasTouch ?? false,
   });
   const page = await context.newPage();
   const pending = new Set();
@@ -257,7 +306,11 @@ async function capture(which, scenario, size, file) {
     if (!url.includes('/gemp-lotr-server/')) return;
     const route = url.replace(/.*\/gemp-lotr-server/, '').replace(/\?.*/, '');
     const data = normalize(request.method() === 'GET' ? url.replace(/^[^?]*\??/, '') : (request.postData() ?? ''));
-    const entry = { method: request.method(), route, data };
+    const entry = {
+      method: request.method(),
+      route,
+      data: which === 'legacy' ? withoutLegacyBugs(data, 'request') : data,
+    };
     entries.set(request, entry);
     requests.push(entry);
   });
@@ -273,7 +326,7 @@ async function capture(which, scenario, size, file) {
 
   const snapshot = async ({ screen }) => {
     const state = await page.evaluate(readPageState, controls);
-    const areas = which === 'angular' ? await page.evaluate(readAreas, accepted) : [];
+    const areas = which === 'angular' ? await page.evaluate(readAreas, [...accepted, STATS_AREA]) : [];
     const shot = screen ? await page.screenshot() : null;
     steps.push({ state, areas, shot, requests, dialogs });
     requests = [];
@@ -295,10 +348,23 @@ async function capture(which, scenario, size, file) {
   if (which === 'angular' && injection) {
     await injection.apply(page);
   }
+  if (scenario.replay && answers) {
+    if (which === 'legacy') recordAnswers(page, answers);
+    else await replayAnswers(page, answers);
+  }
   await page.goto(options.server + pagePath);
   await page.waitForSelector(CONTROLS.firstCard[which], { timeout: 20000 }).catch(() => undefined);
   await settle(page, pending);
   const stopAnswering = which === 'angular' ? answerNotifier(page) : async () => {};
+  page.settleNow = () => settle(page, pending, 400);
+  if (scenario.setup) {
+    try {
+      await scenario.setup(page, selectors(which), which);
+    } catch (error) {
+      errors.push(`Could not reach the state: ${error.message.split('\n')[0]}`);
+    }
+    await page.settleNow();
+  }
   await page.checkpoint();
   try {
     await scenario.run(page, selectors(which), which);
@@ -358,6 +424,33 @@ async function resetAccount() {
   }
 }
 
+/** The matrix opens packs: back to the seeded number of each (the throwaway server only). */
+async function topUpCollection() {
+  if (!options.matrix) return;
+  const context = await browser.newContext({ storageState: session });
+  try {
+    const server = `${options.server}/gemp-lotr-server`;
+    const answer = await context.request.get(`${server}/collection/permanent`, {
+      params: { filter: '', start: 0, count: 1000 },
+    });
+    const xml = await answer.text();
+    for (const line of MY_CARDS) {
+      const [, wanted, blueprintId] = line.match(/^(\d+)x(.*)$/);
+      const tag = xml.match(
+        new RegExp(`<[^>]*blueprintId="${blueprintId.replace(/[.*+?^\${}()|[\]\\]/g, '\\$&')}"[^>]*>`),
+      )?.[0];
+      const have = Number(tag?.match(/count="(\d+)"/)?.[1] ?? 0);
+      if (have < Number(wanted)) {
+        await context.request.post(`${server}/admin/addItems`, {
+          form: { players: user, collectionType: 'permanent', product: `${Number(wanted) - have}x${blueprintId}` },
+        });
+      }
+    }
+  } finally {
+    await context.close();
+  }
+}
+
 /** What differs in one step, and the images to keep for it. */
 function compareStep(legacy, angular, areas, accepted, label, last) {
   const problems = [];
@@ -395,17 +488,24 @@ async function check(scenario, size) {
   const problems = [];
   if (scenario.mutating && !options.stubbed) {
     // One after the other, from the same saved decks: both change the same account
+    const answers = new Map();
     await resetAccount();
-    legacy = await capture('legacy', scenario, size, legacyFile);
-    const legacyDecks = await accountState();
+    await topUpCollection();
+    legacy = await capture('legacy', scenario, size, legacyFile, answers);
+    const legacyDecks = JSON.parse(withoutLegacyBugs(JSON.stringify(await accountState()), 'saved'));
     await resetAccount();
-    angular = await capture('angular', scenario, size, angularFile);
+    await topUpCollection();
+    angular = await capture('angular', scenario, size, angularFile, answers);
     const angularDecks = await accountState();
     await resetAccount();
-    if (JSON.stringify(legacyDecks) !== JSON.stringify(angularDecks)) {
+    const legacyJson = JSON.stringify(legacyDecks);
+    const angularJson = JSON.stringify(angularDecks);
+    if (legacyJson !== angularJson) {
+      let at = 0;
+      while (legacyJson[at] === angularJson[at]) at++;
+      const around = (text) => text.slice(Math.max(0, at - 70), at + 70);
       problems.push(
-        `what the server holds differs: legacy ${JSON.stringify(legacyDecks).slice(0, 400)}, ` +
-          `Angular ${JSON.stringify(angularDecks).slice(0, 400)}`,
+        `what the server holds differs: legacy ...${around(legacyJson)}..., Angular ...${around(angularJson)}...`,
       );
     }
   } else {
@@ -427,7 +527,10 @@ async function check(scenario, size) {
     const label = last ? 'end' : i === 0 ? 'on load' : `step ${i}`;
     const a = legacy.steps[i];
     const b = angular.steps[i];
-    const step = compareStep(a, b, b.areas, accepted, label, last);
+    // At the end the stats have arrived, and their area counts like any other
+    const stepAccepted = last ? accepted : [...accepted, STATS_AREA];
+    const stepAreas = b.areas.slice(0, stepAccepted.length);
+    const step = compareStep(a, b, stepAreas, stepAccepted, label, last);
     problems.push(...step.problems);
     if (last) pixels = step.pixels;
     if (a.shot && b.shot && (last || step.problems.length)) {
@@ -445,9 +548,62 @@ async function check(scenario, size) {
   }
   problems.push(...compareStats(legacy.steps, angular.steps));
   for (const e of angular.errors) problems.push(`Angular page: ${e}`);
-  const result = { scenario, size, files, pixels, legacy, angular, problems, stepImages, steps: count };
+  for (const e of legacy.errors.filter((text) => /^(Scenario failed|Could not reach)/.test(text))) {
+    problems.push(`Legacy page: ${e}`);
+  }
+  if (options.matrix && problems.length === 0) {
+    // A long list of scenarios: only the ones that differ keep their pictures
+    for (const file of Object.values(files)) fs.rmSync(path.join(outDir, file), { force: true });
+  }
+  const result = { scenario, size, files, pixels, problems, stepImages, steps: count, legacy, angular };
   console.log(`${problems.length ? 'DIFF' : 'ok  '} ${base}${problems.length ? ': ' + problems.join('; ') : ''}`);
   return result;
+}
+
+/** What is on both pages in each state, against the list of what is tested. */
+function findCoverageGaps() {
+  return coverageGaps(async (which, setup) => {
+    const context = await browser.newContext({ viewport: { width: 1366, height: 768 }, storageState: session });
+    const page = await context.newPage();
+    const pending = new Set();
+    page.on('request', (request) => pending.add(request));
+    page.on('requestfinished', (request) => pending.delete(request));
+    page.on('requestfailed', (request) => pending.delete(request));
+    page.on('dialog', (dialog) => void dialog.dismiss());
+    page.settleNow = () => settle(page, pending, 400);
+    await deliverCollectionsInOrder(page);
+    await page.goto(options.server + (which === 'legacy' ? options.legacy : angularPath));
+    await page.waitForSelector(CONTROLS.firstCard[which], { timeout: 20000 }).catch(() => undefined);
+    await settle(page, pending);
+    await setup(page, selectors(which), which);
+    await settle(page, pending);
+    return { page, close: () => context.close() };
+  });
+}
+
+/** A visitor who isn't logged in must land on the login page with no popup, and the page must not start loading its data. */
+async function findLoginProblems() {
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  const problems = [];
+  page.on('dialog', (dialog) => {
+    problems.push(`a popup appeared: ${dialog.message()}`);
+    void dialog.dismiss();
+  });
+  page.on('request', (request) => {
+    const address = new URL(request.url()).pathname;
+    if (page.url().includes('/ng/') && address.startsWith('/gemp-lotr-server/') && !address.endsWith('/player')) {
+      problems.push(`the page asked for ${address}`);
+    }
+  });
+  await page.goto(options.server + angularPath);
+  await page
+    .waitForURL((url) => url.pathname === '/gemp-lotr/', { timeout: 10000 })
+    .catch(() => {
+      problems.push(`was not sent to the login page, stayed on ${page.url()}`);
+    });
+  await context.close();
+  return problems;
 }
 
 /** Runs the jobs, `workers` at a time. */
@@ -468,9 +624,17 @@ async function runAll(jobs, workers) {
 const escape = (text) =>
   String(text ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 
-function writeReport(results) {
+function writeReport(results, gaps = []) {
   const failed = results.filter((r) => r.problems.length);
-  const rows = results
+  // For `npm run inspect -- summary <report>`
+  fs.writeFileSync(
+    path.join(outDir, 'results.json'),
+    JSON.stringify({
+      checks: results.map((r) => ({ name: `${r.scenario.name}-${r.size.label}`, problems: r.problems })),
+      gaps,
+    }),
+  );
+  const rows = (options.matrix ? failed : results)
     .map((r) => {
       const status = r.problems.length
         ? `<b class="bad">differs</b><br>${r.problems.map(escape).join('<br>')}`
@@ -501,6 +665,7 @@ img{width:300px}tr.bad{background:#fee}.bad{color:#b00}</style>
 <p>${escape(options.server)}: <code>${escape(options.legacy)}</code> vs <code>${escape(angularPath)}</code>,
 ${results.length} checks, <b>${failed.length} differ</b> (tolerance ${tolerance} px). Diff images show differing
 pixels in red.</p>
+${gaps.length ? `<h2>Not tested (${gaps.length})</h2><ul>${gaps.map((gap) => `<li>${escape(gap)}</li>`).join('')}</ul>` : ''}
 <table><tr><th>Scenario</th><th>Result</th><th>Legacy</th><th>Angular</th><th>Diff</th></tr>
 ${rows}</table>`,
   );
@@ -523,10 +688,16 @@ try {
     (a, b) =>
       scenarios.indexOf(a.scenario) - scenarios.indexOf(b.scenario) || sizes.indexOf(a.size) - sizes.indexOf(b.size),
   );
-  writeReport(results);
+  const gaps = options.matrix && !options.filter ? await findCoverageGaps() : [];
+  for (const gap of gaps) console.log(`GAP  ${gap}`);
+  const loginProblems = options.stubbed ? [] : await findLoginProblems();
+  for (const problem of loginProblems) console.log(`LOGIN not logged in: ${problem}`);
+  writeReport(results, gaps);
   const failed = results.filter((r) => r.problems.length).length;
-  console.log(`\n${results.length} checks, ${failed} differ. Report: ${path.join(outDir, 'index.html')}`);
-  process.exitCode = failed ? 1 : 0;
+  console.log(
+    `\n${results.length} checks, ${failed} differ${options.matrix ? `, ${gaps.length} not tested` : ''}. Report: ${path.join(outDir, 'index.html')}`,
+  );
+  process.exitCode = failed || gaps.length || loginProblems.length ? 1 : 0;
 } finally {
   await browser.close();
 }

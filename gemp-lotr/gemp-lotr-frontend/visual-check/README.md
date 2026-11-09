@@ -87,6 +87,19 @@ Everything else fails, so a clean run means no difference nobody has decided on.
 `npm run check:selftest` proves the check itself works: `injections.mjs` puts deliberate bugs into the Angular page, one
 at a time, and each must be reported in the way it should be, and not be reported without the bug.
 
+## All of it, and reading the results
+
+`npm run check:all` runs everything in order on throwaway copies: the frontend's lint, types, formatting and unit tests
+(`npm run verify` in the frontend), the Java server's build and web tests (`check:server-build`, which never replaces the
+jar a running server uses), the self-test, the comparison, the control-and-gesture matrix and the deploy test. `--quick`
+leaves out the matrix.
+
+`npm run check:matrix` tests every control against every gesture it can get, in each state it appears in (`matrix.mjs`),
+and lists what is really on both pages: a control with no test, or on one page only, fails it.
+
+`npm run inspect -- summary <report>` groups a report's differences by cause, `where <report> <name>` says where on the
+screen one is, and `crop <report> <name> x y w h [zoom]` makes one picture of the same area of both pages.
+
 ## On a throwaway server, without a login
 
 `npm run check:local -- --mutating` runs the whole check against a server of its own (`local-server/compose.yml`), and

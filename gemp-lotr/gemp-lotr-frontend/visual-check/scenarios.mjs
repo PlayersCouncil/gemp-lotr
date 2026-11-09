@@ -31,7 +31,7 @@ export function selectors(which) {
 
 const collectionCard = (page, $, i) => page.locator($.collectionCards).nth(i);
 /** Waits, and then compares the pages: every pause is a step of the scenario. */
-const pause = async (page, ms = 800) => {
+export const pause = async (page, ms = 800) => {
   await page.waitForTimeout(ms);
   await page.checkpoint?.();
 };

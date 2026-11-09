@@ -86,7 +86,7 @@ export const INJECTIONS = {
   'wrong-cursor': {
     what: 'A different mouse cursor',
     scenario: 'state-button-hover',
-    expect: /cursor: legacy/,
+    expect: /cursor \(over .*\): legacy/,
     apply: css('.gd-toolbar .gd-button { cursor: progress !important; }'),
   },
   'wrong-tooltip': {

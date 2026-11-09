@@ -1,6 +1,7 @@
 // What the check compares after each step of a scenario, on both pages: the screen, the requests, the browser's own
 // dialogs and the state of the page that a screenshot doesn't show.
 import { PNG } from 'pngjs';
+import { withAcceptedLink } from './accepted.mjs';
 import { CONTROLS } from './controls.mjs';
 
 /** The controls with one selector each, for the page's state (the ones that take arguments are compared by scenarios). */
@@ -15,7 +16,8 @@ export function fixedControls(which) {
 /** Keeps where the mouse is, for reading what is under it. Runs in the page. */
 export const MOUSE_TRACKER = () => {
   window.__mouse = null;
-  window.addEventListener('mousemove', (e) => (window.__mouse = { x: e.clientX, y: e.clientY }), true);
+  // Pointer events: after a press whose default is prevented (dragging the pane bar) there are no mouse events
+  window.addEventListener('pointermove', (e) => (window.__mouse = { x: e.clientX, y: e.clientY }), true);
 };
 
 /** The state of the page a screenshot doesn't show. Runs in the page; the same on both, so its results can be compared. */
@@ -48,6 +50,13 @@ export function readPageState(controls) {
     if (el.matches('select, input[type=text], input[type=number], textarea')) {
       entry.value = el.value;
     }
+    if (el.tagName === 'SELECT') {
+      entry.options = Array.from(el.options, (option) => `${option.value}=${option.text.trim()}`).join('|');
+    }
+    // Only for real links: the legacy dialogs' close button is an <a href="#">
+    if (el.tagName === 'A' && el.getAttribute('href') !== '#') {
+      entry.href = el.href;
+    }
     if (name === 'deckName' || name === 'stats' || name === 'dialogTitles') {
       entry.text = text(el);
     }
@@ -76,6 +85,7 @@ export function readPageState(controls) {
     if (under) {
       const cursor = getComputedStyle(under).cursor;
       state.cursor = cursor === 'auto' ? 'default' : cursor;
+      state.under = `${under.tagName.toLowerCase()}.${under.className}`;
       state.tooltip = under.closest('[title]')?.getAttribute('title') || null;
     }
   }
@@ -87,13 +97,14 @@ export function compareStates(legacy, angular, last) {
   const differences = [];
   const note = (what, a, b) => {
     if (JSON.stringify(a ?? null) !== JSON.stringify(b ?? null)) {
-      differences.push(`${what}: legacy ${JSON.stringify(a ?? null)}, Angular ${JSON.stringify(b ?? null)}`);
+      const show = (value) => JSON.stringify(value ?? null).slice(0, 260);
+      differences.push(`${what}: legacy ${show(a)}, Angular ${show(b)}`);
     }
   };
   note('focus', legacy.focus, angular.focus);
   // The browser reports the mouse's first position at a moment of its own
   if (legacy.mouse && angular.mouse) {
-    note('cursor', legacy.cursor, angular.cursor);
+    note(`cursor (over ${legacy.under} / ${angular.under})`, legacy.cursor, angular.cursor);
     note('tooltip', legacy.tooltip, angular.tooltip);
   }
   for (const name of new Set([...Object.keys(legacy.controls), ...Object.keys(angular.controls)])) {
@@ -101,7 +112,7 @@ export function compareStates(legacy, angular, last) {
     if (name === 'stats' && !last) {
       continue;
     }
-    note(name, legacy.controls[name], angular.controls[name]);
+    note(name, withAcceptedLink(legacy.controls[name]), angular.controls[name]);
   }
   return differences;
 }
@@ -113,6 +124,8 @@ export function compareStates(legacy, angular, last) {
 const LATEST_ONLY = /^GET \/collection\//;
 /** Sent on a timer after a change, so which step it falls in varies: compared over the whole scenario (compareStats). */
 const STATS = 'POST /deck/stats';
+/** The Angular page checks the login before opening (the owner's request, the legacy page has no such check). */
+const LOGIN_CHECK = 'GET /player';
 
 /** The requests of a step as one comparable list: in order within each address (separate addresses run in parallel). */
 export function requestList(requests) {
@@ -120,7 +133,7 @@ export function requestList(requests) {
   const byRoute = new Map();
   for (const { method, route, data } of live) {
     const key = `${method} ${route}`;
-    if (key === STATS) continue;
+    if (key === STATS || key === LOGIN_CHECK) continue;
     byRoute.set(key, LATEST_ONLY.test(key) ? [data] : [...(byRoute.get(key) ?? []), data]);
   }
   return [...byRoute.entries()].sort(([a], [b]) => a.localeCompare(b));

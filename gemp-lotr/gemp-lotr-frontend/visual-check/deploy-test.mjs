@@ -77,16 +77,22 @@ function stopEverything() {
   removeState();
 }
 
-/** A repository of its own, made from the files of this one (card images left out), with a remote to pull from. */
+/**
+ * A repository of its own, made from the files of this one as they are now, new ones not yet committed included (card
+ * images left out), with a remote to pull from.
+ */
 function createRepositories() {
   fs.mkdirSync(STATE_DIR, { recursive: true });
   const seed = path.join(STATE_DIR, 'seed');
   fs.mkdirSync(seed);
-  const files = run(
+  const listed = run(
     'git',
     [
       'ls-files',
       '-z',
+      '--cached',
+      '--others',
+      '--exclude-standard',
       '--',
       '.gitignore',
       'gemp-lotr/docker/frontend-watch.sh',
@@ -96,6 +102,11 @@ function createRepositories() {
     ],
     { cwd: REPOSITORY },
   );
+  // A tracked file deleted but not yet committed is still listed
+  const files = String(listed)
+    .split('\0')
+    .filter((file) => file && fs.existsSync(path.join(REPOSITORY, file)))
+    .join('\0');
   run('tar', ['--null', '-T', '-', '-cf', path.join(STATE_DIR, 'seed.tar')], { cwd: REPOSITORY, input: files });
   run('tar', ['-xf', path.join(STATE_DIR, 'seed.tar'), '-C', seed]);
   fs.rmSync(path.join(STATE_DIR, 'seed.tar'));
@@ -162,6 +173,9 @@ function get(url, agent) {
   });
 }
 
+/** The loads still running: a step that fails never reaches its own stop, and they would run for ever. */
+const activeLoads = new Set();
+
 /**
  * Loads the page and the script it names as fast as it can, as players do during a deploy, and records every failure
  * and the order in which builds were served. With `keepConnections`, over connections that stay open, as a browser's
@@ -202,7 +216,8 @@ function startLoading({ keepConnections }) {
     }
   };
   const loaders = Array.from({ length: 6 }, loader);
-  return async () => {
+  const stop = async () => {
+    activeLoads.delete(stop);
     running = false;
     await Promise.all(loaders);
     if (agent) {
@@ -210,6 +225,8 @@ function startLoading({ keepConnections }) {
     }
     return { failures, builds, requests };
   };
+  activeLoads.add(stop);
+  return stop;
 }
 
 function expect(condition, message) {
@@ -444,6 +461,7 @@ async function main() {
     console.error(`\nFAILED after ${results.length} steps: ${error.message}`);
     return 1;
   } finally {
+    await Promise.all([...activeLoads].map((stop) => stop()));
     await browser?.close();
     if (!keep) {
       console.log('Stopping and removing the copy...');
