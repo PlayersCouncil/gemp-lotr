@@ -66,6 +66,27 @@ show them), and have some library decks (decks of the "Librarian" player, for "o
   each page would open a different one.
 - **Not covered:** the Race to Mount Doom slot (needs a running RTMD league with the test player in it).
 
+## What is compared
+
+Every `pause` of a scenario is a step. After the page loads, after each step and at the end, both pages must agree on:
+
+- the screen;
+- the server requests since the last step, with their contents, in order for each address. A request the page cancelled
+  doesn't count, and for the collection only the newest does (only the newest answer is shown). Deck stats are sent on a
+  timer, so the last one of the scenario is what is compared;
+- the browser's own dialogs, with their text;
+- what a screenshot doesn't show: which control has the keyboard focus, the cursor and tooltip under the mouse, each
+  control's disabled state and value, the deck name, the dialog's title and (at the end) the deck stats;
+- for scenarios that change the account, every saved deck afterwards, each page having started from the same ones.
+
+Scenarios with `timing: true` depend on timers, so between steps they only compare what doesn't need waiting for.
+
+`accepted.mjs` lists the differences the owner has accepted, each limited to one area of the page and a number of pixels.
+Everything else fails, so a clean run means no difference nobody has decided on.
+
+`npm run check:selftest` proves the check itself works: `injections.mjs` puts deliberate bugs into the Angular page, one
+at a time, and each must be reported in the way it should be, and not be reported without the bug.
+
 ## On a throwaway server, without a login
 
 `npm run check:local -- --mutating` runs the whole check against a server of its own (`local-server/compose.yml`), and

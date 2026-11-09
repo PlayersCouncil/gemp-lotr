@@ -8,6 +8,7 @@
     "check:stubbed": "node run.mjs --stubbed --out report-stubbed",
     "check:local": "node local-server.mjs",
     "check:local:down": "node local-server.mjs down",
+    "check:selftest": "node local-server.mjs --selftest",
     "check:deploy": "node deploy-test.mjs"
   },
   "devDependencies": {

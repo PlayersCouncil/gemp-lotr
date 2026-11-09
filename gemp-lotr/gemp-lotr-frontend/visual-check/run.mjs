@@ -5,8 +5,18 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { parseArgs } from 'node:util';
 import { chromium } from 'playwright';
-import { PNG } from 'pngjs';
 import { CONTROLS } from './controls.mjs';
+import { acceptedFor } from './accepted.mjs';
+import {
+  compareRequests,
+  compareStats,
+  compareScreens,
+  compareStates,
+  fixedControls,
+  MOUSE_TRACKER,
+  readPageState,
+} from './compare.mjs';
+import { INJECTIONS } from './injections.mjs';
 import { FIXTURE_DECK, SCENARIOS, selectors } from './scenarios.mjs';
 import { routeToStub, STUB_ORIGIN } from './stub-server.mjs';
 
@@ -27,6 +37,8 @@ const { values: options } = parseArgs({
     // a few pixels between two loads of the same page)
     tolerance: { type: 'string', default: '60' },
     out: { type: 'string', default: 'report' },
+    // The self-test (selftest.mjs): a deliberate bug put into the Angular page
+    inject: { type: 'string' },
   },
 });
 
@@ -190,6 +202,22 @@ function answerNotifier(page) {
   };
 }
 
+const injection = options.inject ? INJECTIONS[options.inject] : null;
+if (options.inject && !injection) {
+  console.error(`No injection ${options.inject} in injections.mjs`);
+  process.exit(2);
+}
+
+/** Runs in the page: where each accepted area is at the moment. */
+function readAreas(entries) {
+  return entries.map(({ selector, margin }) => {
+    const box = document.querySelector(selector)?.getBoundingClientRect();
+    return box
+      ? { left: box.left - margin, top: box.top - margin, right: box.right + margin, bottom: box.bottom + margin }
+      : null;
+  });
+}
+
 async function capture(which, scenario, size, file) {
   const pagePath = which === 'legacy' ? options.legacy : angularPath;
   const context = await browser.newContext({
@@ -199,10 +227,17 @@ async function capture(which, scenario, size, file) {
   const page = await context.newPage();
   const pending = new Set();
   const errors = [];
-  const requests = { collection: null, stats: null };
+  const accepted = acceptedFor(scenario.name, size.label);
+  const controls = fixedControls(which);
+  const steps = [];
+  const entries = new Map();
+  let requests = [];
+  let dialogs = [];
+
   page.answers = [...(scenario.answers ?? [])];
   page.on('pageerror', (e) => errors.push(e.message));
   page.on('dialog', async (dialog) => {
+    dialogs.push(`${dialog.type()}: ${dialog.message()}`);
     if (dialog.type() === 'alert') {
       await dialog.accept();
       return;
@@ -221,25 +256,50 @@ async function capture(which, scenario, size, file) {
     pending.add(request);
     if (!url.includes('/gemp-lotr-server/')) return;
     const route = url.replace(/.*\/gemp-lotr-server/, '').replace(/\?.*/, '');
-    if (route.startsWith('/collection/') && request.method() === 'GET') {
-      requests.collection = `${route}?${normalize(url.replace(/^[^?]*\??/, ''))}`;
-    } else if (route === '/deck/stats') {
-      requests.stats = normalize(request.postData() ?? '');
-    }
+    const data = normalize(request.method() === 'GET' ? url.replace(/^[^?]*\??/, '') : (request.postData() ?? ''));
+    const entry = { method: request.method(), route, data };
+    entries.set(request, entry);
+    requests.push(entry);
   });
   const done = (request) => pending.delete(request);
   page.on('requestfinished', done);
-  page.on('requestfailed', done);
+  page.on('requestfailed', (request) => {
+    done(request);
+    // Cancelled by the page (a newer request replaced it): the server's answer never mattered
+    if (request.failure()?.errorText.includes('ABORTED') && entries.has(request)) {
+      entries.get(request).aborted = true;
+    }
+  });
 
+  const snapshot = async ({ screen }) => {
+    const state = await page.evaluate(readPageState, controls);
+    const areas = which === 'angular' ? await page.evaluate(readAreas, accepted) : [];
+    const shot = screen ? await page.screenshot() : null;
+    steps.push({ state, areas, shot, requests, dialogs });
+    requests = [];
+    dialogs = [];
+  };
+  page.checkpoint = async () => {
+    if (!scenario.timing) {
+      await settle(page, pending, 400);
+    }
+    await snapshot({ screen: !scenario.timing });
+  };
+
+  await page.addInitScript(MOUSE_TRACKER);
   if (options.stubbed) {
     await routeToStub(context, errors);
   } else {
     await deliverCollectionsInOrder(page);
   }
+  if (which === 'angular' && injection) {
+    await injection.apply(page);
+  }
   await page.goto(options.server + pagePath);
   await page.waitForSelector(CONTROLS.firstCard[which], { timeout: 20000 }).catch(() => undefined);
   await settle(page, pending);
   const stopAnswering = which === 'angular' ? answerNotifier(page) : async () => {};
+  await page.checkpoint();
   try {
     await scenario.run(page, selectors(which), which);
   } catch (error) {
@@ -251,35 +311,74 @@ async function capture(which, scenario, size, file) {
     await page.mouse.move(1, 1);
     await page.waitForTimeout(300);
   }
-  await page.screenshot({ path: file });
+  await snapshot({ screen: true });
+  fs.writeFileSync(file, steps.at(-1).shot);
   await context.close();
-  return { requests, errors };
+  return { steps, errors };
 }
 
-/** Pixels differing by more than 2 levels in any channel; writes a dimmed copy with them in red. */
-function compareImages(fileA, fileB, diffFile) {
-  const a = PNG.sync.read(fs.readFileSync(fileA));
-  const b = PNG.sync.read(fs.readFileSync(fileB));
-  if (a.width !== b.width || a.height !== b.height) {
-    return Infinity;
-  }
-  const diff = new PNG({ width: a.width, height: a.height });
-  let count = 0;
-  for (let i = 0; i < a.data.length; i += 4) {
-    const d = Math.max(
-      Math.abs(a.data[i] - b.data[i]),
-      Math.abs(a.data[i + 1] - b.data[i + 1]),
-      Math.abs(a.data[i + 2] - b.data[i + 2]),
-    );
-    if (d > 2) {
-      count++;
-      diff.data.set([255, 0, 0, 255], i);
-    } else {
-      diff.data.set([a.data[i] / 3, a.data[i + 1] / 3, a.data[i + 2] / 3, 255], i);
+/** Every saved deck of the test player, in full: what the server holds after a scenario. */
+async function accountState() {
+  const context = await browser.newContext({ storageState: session });
+  try {
+    const server = `${options.server}/gemp-lotr-server`;
+    const list = await (await context.request.get(`${server}/deck/list`)).text();
+    const names = [...list.matchAll(/<deck\b[^>]*>([^<]*)<\/deck>/g)].map((m) => m[1]).sort();
+    const decks = {};
+    for (const name of names) {
+      const deck = await context.request.get(`${server}/deck`, { params: { deckName: decodeXml(name) } });
+      decks[name] = await deck.text();
     }
+    return decks;
+  } finally {
+    await context.close();
   }
-  fs.writeFileSync(diffFile, PNG.sync.write(diff));
-  return count;
+}
+
+const decodeXml = (text) =>
+  text
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'");
+
+/** Back to only the fixture deck, so both pages start a scenario from the same saved decks. */
+async function resetAccount() {
+  const context = await browser.newContext({ storageState: session });
+  try {
+    for (const name of Object.keys(await accountState())) {
+      await context.request.post(`${options.server}/gemp-lotr-server/deck/delete`, {
+        form: { deckName: decodeXml(name) },
+      });
+    }
+    await createFixtureDeck(context);
+  } finally {
+    await context.close();
+  }
+}
+
+/** What differs in one step, and the images to keep for it. */
+function compareStep(legacy, angular, areas, accepted, label, last) {
+  const problems = [];
+  const add = (text) => problems.push(`${label}: ${text}`);
+  let pixels = null;
+  if (legacy.shot && angular.shot) {
+    const screens = compareScreens(legacy.shot, angular.shot, areas, false);
+    pixels = screens.outside + screens.areas.reduce((sum, count) => sum + count, 0);
+    if (screens.outside > tolerance) add(`${screens.outside} pixels differ`);
+    screens.areas.forEach((count, i) => {
+      if (count > accepted[i].maxPixels) {
+        add(`${count} pixels differ in the accepted area ${accepted[i].selector} (limit ${accepted[i].maxPixels})`);
+      }
+    });
+  }
+  for (const line of compareRequests(legacy.requests, angular.requests)) add(`request, ${line}`);
+  if (JSON.stringify(legacy.dialogs) !== JSON.stringify(angular.dialogs)) {
+    add(`browser dialogs: legacy ${JSON.stringify(legacy.dialogs)}, Angular ${JSON.stringify(angular.dialogs)}`);
+  }
+  for (const line of compareStates(legacy.state, angular.state, last)) add(line);
+  return { problems, pixels };
 }
 
 async function check(scenario, size) {
@@ -289,21 +388,64 @@ async function check(scenario, size) {
     angular: `${base}-angular.png`,
     diff: `${base}-diff.png`,
   };
-  const [legacy, angular] = await Promise.all([
-    capture('legacy', scenario, size, path.join(outDir, files.legacy)),
-    capture('angular', scenario, size, path.join(outDir, files.angular)),
-  ]);
-  const pixels = compareImages(
-    path.join(outDir, files.legacy),
-    path.join(outDir, files.angular),
-    path.join(outDir, files.diff),
-  );
+  const legacyFile = path.join(outDir, files.legacy);
+  const angularFile = path.join(outDir, files.angular);
+  let legacy;
+  let angular;
   const problems = [];
-  if (pixels > tolerance) problems.push(`${pixels} pixels differ`);
-  if (legacy.requests.collection !== angular.requests.collection) problems.push('different collection request');
-  if (legacy.requests.stats !== angular.requests.stats) problems.push('different deck stats request');
+  if (scenario.mutating && !options.stubbed) {
+    // One after the other, from the same saved decks: both change the same account
+    await resetAccount();
+    legacy = await capture('legacy', scenario, size, legacyFile);
+    const legacyDecks = await accountState();
+    await resetAccount();
+    angular = await capture('angular', scenario, size, angularFile);
+    const angularDecks = await accountState();
+    await resetAccount();
+    if (JSON.stringify(legacyDecks) !== JSON.stringify(angularDecks)) {
+      problems.push(
+        `what the server holds differs: legacy ${JSON.stringify(legacyDecks).slice(0, 400)}, ` +
+          `Angular ${JSON.stringify(angularDecks).slice(0, 400)}`,
+      );
+    }
+  } else {
+    [legacy, angular] = await Promise.all([
+      capture('legacy', scenario, size, legacyFile),
+      capture('angular', scenario, size, angularFile),
+    ]);
+  }
+
+  const accepted = acceptedFor(scenario.name, size.label);
+  const stepImages = [];
+  let pixels = 0;
+  if (legacy.steps.length !== angular.steps.length) {
+    problems.push(`the legacy page took ${legacy.steps.length} steps, the Angular page ${angular.steps.length}`);
+  }
+  const count = Math.min(legacy.steps.length, angular.steps.length);
+  for (let i = 0; i < count; i++) {
+    const last = i === count - 1;
+    const label = last ? 'end' : i === 0 ? 'on load' : `step ${i}`;
+    const a = legacy.steps[i];
+    const b = angular.steps[i];
+    const step = compareStep(a, b, b.areas, accepted, label, last);
+    problems.push(...step.problems);
+    if (last) pixels = step.pixels;
+    if (a.shot && b.shot && (last || step.problems.length)) {
+      const { image } = compareScreens(a.shot, b.shot, b.areas, true);
+      if (last) {
+        fs.writeFileSync(path.join(outDir, files.diff), image);
+      } else {
+        const stepBase = `${base}-step${i}`;
+        fs.writeFileSync(path.join(outDir, `${stepBase}-legacy.png`), a.shot);
+        fs.writeFileSync(path.join(outDir, `${stepBase}-angular.png`), b.shot);
+        fs.writeFileSync(path.join(outDir, `${stepBase}-diff.png`), image);
+        stepImages.push({ label, base: stepBase });
+      }
+    }
+  }
+  problems.push(...compareStats(legacy.steps, angular.steps));
   for (const e of angular.errors) problems.push(`Angular page: ${e}`);
-  const result = { scenario, size, files, pixels, legacy, angular, problems };
+  const result = { scenario, size, files, pixels, legacy, angular, problems, stepImages, steps: count };
   console.log(`${problems.length ? 'DIFF' : 'ok  '} ${base}${problems.length ? ': ' + problems.join('; ') : ''}`);
   return result;
 }
@@ -340,7 +482,12 @@ function writeReport(results) {
       return `<tr class="${r.problems.length ? 'bad' : ''}">
   <td><b>${escape(r.scenario.name)}</b><br>${escape(r.size.label)}<br><small>${escape(r.scenario.note)}</small></td>
   <td>${status}<br><small>${r.pixels} px differ</small>${legacyErrors}
-    <br><small>collection: ${escape(r.angular.requests.collection)}</small></td>
+    <br><small>${r.steps} steps compared</small>${r.stepImages
+      .map(
+        (s) =>
+          `<br><small>${escape(s.label)}: <a href="${s.base}-legacy.png">legacy</a>, <a href="${s.base}-angular.png">Angular</a>, <a href="${s.base}-diff.png">differences</a></small>`,
+      )
+      .join('')}</td>
   <td>${img(r.files.legacy, 'legacy')}</td><td>${img(r.files.angular, 'angular')}</td><td>${img(r.files.diff, 'diff')}</td>
 </tr>`;
     })

@@ -81,6 +81,11 @@ export const CONTROLS = {
   format: { legacy: '#formatSelect', angular: 'select.gd-toolbar__format' },
   collection: { legacy: '#collectionSelect', angular: 'select.gd-toolbar__collection' },
 
+  deckName: { legacy: '#editingDeck', angular: '.gd-toolbar__deck-name' },
+  stats: { legacy: '#deckStats', angular: '.gd-stats' },
+  /** The title of the frontmost open dialog. */
+  dialogTitles: { legacy: '.ui-dialog:not([style*="display: none"]) .ui-dialog-title', angular: 'dialog[open] h2' },
+
   // --- Deck ---
   ringBearerSlot: { legacy: '#rb-content', angular: `${slot('ring-bearer')} .gd-slot__label` },
   ringSlot: { legacy: '#ring-content', angular: `${slot('ring')} .gd-slot__label` },
@@ -99,7 +104,10 @@ export const CONTROLS = {
 
   // --- Dialogs ---
   /** The close button of the open dialog (legacy dialogs stay in the page while closed, hence :visible). */
-  dialogClose: { legacy: '.ui-dialog-titlebar-close:visible', angular: 'dialog[open] .gd-dialog__close' },
+  dialogClose: {
+    legacy: '.ui-dialog-titlebar-close:visible',
+    angular: 'dialog[open] :is(.gd-dialog__close, .gd-card-info__close)',
+  },
   deckListItem: { legacy: '.deckItem', angular: '.gd-deck-list__item' },
   openDeck: { legacy: 'button[title="Open deck"]', angular: '[data-action="open"]' },
   importText: { legacy: '#deckImport', angular: '.gd-import__text' },

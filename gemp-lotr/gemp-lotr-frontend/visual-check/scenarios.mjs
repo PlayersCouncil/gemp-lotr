@@ -8,7 +8,9 @@
 //   keepMouse  leave the mouse where the scenario put it (hover states); otherwise it is moved to the corner first
 //   answers    replies to the prompt/confirm dialogs, in order (true = OK, false = Cancel, text for prompts); alerts are
 //              always just accepted
-//   mutating   changes the account (saves decks, ...): only run with --mutating
+//   mutating   changes the account (saves decks, ...): only run with --mutating; run one page at a time, each from the
+//              same saved decks, and what the server holds afterwards is compared too
+//   timing     depends on timers (the hover zoom): between steps only the page's state is read, nothing is waited for
 //   note       why the scenario exists, shown in the report
 
 import { CONTROLS } from './controls.mjs';
@@ -28,7 +30,11 @@ export function selectors(which) {
 }
 
 const collectionCard = (page, $, i) => page.locator($.collectionCards).nth(i);
-const pause = (page, ms = 800) => page.waitForTimeout(ms);
+/** Waits, and then compares the pages: every pause is a step of the scenario. */
+const pause = async (page, ms = 800) => {
+  await page.waitForTimeout(ms);
+  await page.checkpoint?.();
+};
 
 /** Where the thumb of a range input is (the legacy slider's handle is an element of its own): a 16px box. */
 async function rangeThumb(page, selector) {
@@ -461,6 +467,7 @@ export const SCENARIOS = [
   // --- Hover zoom ---
   {
     name: 'zoom',
+    timing: true,
     keepMouse: true,
     note: 'Hover zoom of a collection card',
     run: async (page, $) => {
@@ -470,6 +477,7 @@ export const SCENARIOS = [
   },
   {
     name: 'zoom-next-card-shift',
+    timing: true,
     keepMouse: true,
     note: 'Moving to the next card zooms it at once; Shift flips it',
     run: async (page, $) => {
@@ -484,6 +492,7 @@ export const SCENARIOS = [
   },
   {
     name: 'zoom-off',
+    timing: true,
     keepMouse: true,
     note: 'Auto-zoom switched off: no zoom',
     run: async (page, $) => {
@@ -499,6 +508,7 @@ export const SCENARIOS = [
   },
   {
     name: 'zoom-deck-site',
+    timing: true,
     keepMouse: true,
     note: 'Hover zoom of a landscape site in an opened deck',
     run: async (page, $) => {

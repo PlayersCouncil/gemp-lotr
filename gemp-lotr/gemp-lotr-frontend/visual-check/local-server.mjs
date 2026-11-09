@@ -7,6 +7,7 @@
 //   npm run check:local -- --only start,deck-list --sizes 1366x768
 //   npm run check:local -- --keep           leaves the server up afterwards (npm run check:local:down stops it)
 //   npm run check:local -- --skip-build     uses the Angular build of the previous run
+//   npm run check:selftest                  proves the check catches bugs: see injections.mjs
 //
 // Any other option goes to run.mjs. See README.md.
 import { spawn, spawnSync } from 'node:child_process';
@@ -14,6 +15,7 @@ import { randomBytes } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { INJECTIONS } from './injections.mjs';
 import { playersSql, seedTestData, TEST_PLAYERS, waitForLogin } from './local-server/seed.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -61,6 +63,45 @@ function runCheck(args, user, password) {
   });
 }
 
+/**
+ * Each deliberate bug must be reported in the way it should be, and that report must not be there without the bug.
+ * Returns the number of bugs that went unnoticed.
+ */
+function runSelfTest(user, password) {
+  const check = (extra) =>
+    spawnSync(
+      process.execPath,
+      [path.join(HERE, 'run.mjs'), '--server', SERVER, '--sizes', '1366x768', '--out', 'report-selftest', ...extra],
+      {
+        cwd: HERE,
+        encoding: 'utf8',
+        maxBuffer: 64 * 1024 * 1024,
+        env: { ...process.env, GEMP_USER: user, GEMP_PASSWORD: password },
+      },
+    ).stdout;
+  const scenarios = [...new Set(Object.values(INJECTIONS).map((injection) => injection.scenario))];
+  console.log(`Without any bug (${scenarios.length} scenarios)...`);
+  const clean = check(['--only', scenarios.join(',')]);
+  const lineOf = (output, scenario) => output.split('\n').find((line) => line.includes(` ${scenario}-1366x768`)) ?? '';
+
+  let missed = 0;
+  for (const [name, injection] of Object.entries(INJECTIONS)) {
+    const line = lineOf(check(['--only', injection.scenario, '--inject', name]), injection.scenario);
+    const before = lineOf(clean, injection.scenario);
+    const caught = injection.expect.test(line) && !injection.expect.test(before);
+    if (!caught) {
+      missed++;
+    }
+    console.log(
+      `${caught ? 'caught' : 'MISSED'}  ${name}: ${injection.what}${caught ? '' : `\n        reported: ${line.slice(0, 500)}\n        without it: ${before.slice(0, 300)}`}`,
+    );
+  }
+  console.log(
+    `\n${Object.keys(INJECTIONS).length - missed} of ${Object.keys(INJECTIONS).length} deliberate bugs caught.`,
+  );
+  return missed;
+}
+
 function serverLogs() {
   spawnSync('docker', ['compose', '-f', COMPOSE_FILE, 'logs', '--tail', '40', 'app'], {
     env: composeEnv,
@@ -76,7 +117,8 @@ async function main() {
   }
   const keep = args.includes('--keep');
   const skipBuild = args.includes('--skip-build');
-  const checkArgs = args.filter((arg) => arg !== '--keep' && arg !== '--skip-build');
+  const selfTest = args.includes('--selftest');
+  const checkArgs = args.filter((arg) => !['--keep', '--skip-build', '--selftest'].includes(arg));
   // Apart from the report of a check against another server
   if (!checkArgs.some((arg) => arg === '--out' || arg.startsWith('--out='))) {
     checkArgs.push('--out', 'report-local');
@@ -97,6 +139,9 @@ async function main() {
     await waitForLogin(SERVER, player.name, password);
     console.log('Adding the test data...');
     await seedTestData(SERVER, password);
+    if (selfTest) {
+      return runSelfTest(player.name, password) === 0 ? 0 : 1;
+    }
     return await runCheck(checkArgs, player.name, password);
   } catch (error) {
     console.error(error.message);
