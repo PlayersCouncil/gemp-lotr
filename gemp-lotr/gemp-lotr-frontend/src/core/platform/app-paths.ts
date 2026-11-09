@@ -1,6 +1,9 @@
 /** Where the Gemp server answers. */
 export const SERVER_URL = '/gemp-lotr-server';
 
+/** The site's start page, where players log in. */
+export const LOGIN_PAGE_URL = '/gemp-lotr/';
+
 /** Where the site's own images are. */
 const IMAGES_URL = '/gemp-lotr/images';
 
