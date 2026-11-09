@@ -11,7 +11,7 @@ zoom, at several window sizes. Both pages must then:
 
 Each scenario does the same thing on both pages through `controls.mjs`: every control the scenarios use, as a pair of
 selectors, the legacy page's element IDs and the Angular page's DOM contract (the `.gd-*` markup and its `data-*`
-state, see the frontend README). `stubbed.mjs` uses the same file. Both pages ask their questions in the browser's own
+state, see the frontend README). Both pages ask their questions in the browser's own
 dialogs, and the check answers them from the scenario's `answers`. It also answers `gd-notifier` dialogs, for when the
 redesign brings them back.
 
@@ -66,23 +66,12 @@ show them), and have some library decks (decks of the "Librarian" player, for "o
   each page would open a different one.
 - **Not covered:** the Race to Mount Doom slot (needs a running RTMD league with the test player in it).
 
-## Without a server: `stubbed.mjs`
+## Without a server or a login
 
-`stubbed.mjs` screenshots the legacy page and the Angular one in the classic theme (`?theme=classic`) side by side with no Gemp server: both are served from disk (the legacy web root and the Angular build output) and the
-server's answers come from `src/testing/server-responses` plus a generated collection. Card images are replaced by
-labelled placeholders on both pages. It compares nothing by itself; look at the pairs in `report-stubbed/`. Scenarios: `collection`, `second-page`, `shadow-filter`, `deck` (a few cards, copies and sites in the deck, with the
-stubbed stats), `zoom-deck` and `zoom-collection` (the hover zoom), `card-info`, and the dialogs: `deck-list`,
-`library`, `import`, `import-typed`, `notes`, `selection` (the selection pack's "Choose one"), `delivery` ("New items",
-from a stubbed pack delivery), `pane-collection`, `pane-deck` and `info-button` (the tab bar and the cards' ⓘ, for a
-theme that shows them; the legacy side shows the page as loaded), `confirm` and `prompt` (deleting and renaming a deck; the legacy page used the
-browser's own dialogs, which screenshots don't show, so its side shows only the page behind). A scenario can answer
-server requests its own way (`answers`). Its selectors come from `controls.mjs`, shared with `run.mjs`.
-
-```
-npm run build                      # in gemp-lotr-frontend
-cd visual-check && node stubbed.mjs --sizes 1440x900,1280x800
-node stubbed.mjs --angular '/gemp-lotr/ng/deckbuilder/?theme=modern' --sizes 390x844 --touch   # a phone
-```
+`npm run check:stubbed` runs the same comparison against `stub-server.mjs`: both pages are served from disk and the
+server's answers are stubbed, with placeholder card art. It needs a build of the Angular page and writes
+`report-stubbed/index.html`. It covers the layout and the requests quickly, but not real card art, a real server's
+data or the scenarios that change the account, so run the real check before relying on it.
 
 Playwright comes from `visual-check/node_modules` (`npm ci`). Where it is only installed globally, as in some
 containers, make it resolvable with `npm link playwright` in `visual-check` (it must find a browser for that version; a

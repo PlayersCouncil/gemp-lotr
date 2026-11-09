@@ -40,7 +40,7 @@ function slotView(view: Omit<SlotView, 'fit'>): SlotView {
 }
 
 /**
- * The deck side of the page (the legacy #deckDiv): the toolbar, the Ring-bearer, Ring, Map and Race slots, the sites,
+ * The deck side of the page: the toolbar, the Ring-bearer, Ring, Map and Race slots, the sites,
  * the Free Peoples and Shadow piles of the draw deck, and the deck stats. Clicking a slot (outside its cards) selects
  * cards for it, as the legacy page did: the collection shows what fits it and the next card clicked goes there.
  * Clicking a site also shows the sites, as on the legacy page.

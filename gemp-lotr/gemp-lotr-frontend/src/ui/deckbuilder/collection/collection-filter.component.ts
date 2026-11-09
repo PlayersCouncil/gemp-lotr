@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { Component, inject, linkedSignal } from '@angular/core';
+import { Component, Directive, inject, linkedSignal } from '@angular/core';
 import { disabled, form, FormField, maxLength } from '@angular/forms/signals';
 import {
   CollectionBrowser,
@@ -70,6 +70,14 @@ const FIELDS_OFF_FOR_PACKS: readonly TextField[] = [
   ...NUMERIC_FILTERS.map((stat) => `${stat}Compare` as const),
 ];
 
+/** Makes `let-field` in the field template a Field, for the template's type checks. */
+@Directive({ selector: 'ng-template[gdFieldRow]' })
+export class FieldRowTemplate {
+  static ngTemplateContextGuard(_directive: FieldRowTemplate, context: unknown): context is { $implicit: Field } {
+    return context !== null;
+  }
+}
+
 /**
  * The collection filter: paging and page size, the filter fields (basic, then advanced), the two reset buttons and the
  * culture toggles. Every control is a native element, bound with Signal Forms; changes go to CollectionQuery and CollectionBrowser.
@@ -87,7 +95,7 @@ const FIELDS_OFF_FOR_PACKS: readonly TextField[] = [
  */
 @Component({
   selector: 'gd-collection-filter',
-  imports: [NgTemplateOutlet, FormField],
+  imports: [NgTemplateOutlet, FormField, FieldRowTemplate],
   host: { class: 'gd-filter' },
   templateUrl: './collection-filter.component.html',
 })
@@ -140,6 +148,10 @@ export class CollectionFilterComponent {
     maxLength(path.name, 100);
     maxLength(path.gametext, 100);
   });
+
+  protected isWide(field: Field): boolean {
+    return field.kind === 'text' || (field.kind === 'select' && field.wide === true);
+  }
 
   protected fieldName(field: Field): string {
     return field.kind === 'numeric' ? field.stat : field.field;

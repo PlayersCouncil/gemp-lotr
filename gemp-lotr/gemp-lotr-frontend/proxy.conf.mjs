@@ -6,13 +6,13 @@ const target = process.env.GEMP_SERVER ?? 'http://localhost:17001';
 export default {
   // API calls (deck, collection, delivery, league, ...)
   '/gemp-lotr-server': { target, changeOrigin: false },
-  // The dev server prefixes the absolute legacy stylesheet links in index.html with the app's base href
-  // (/gemp-lotr/ng/gemp-lotr/images/...); send those to the legacy files too. The production build keeps them.
+  // The dev server prefixes the absolute icon links in index.html with the app's base href; send those to the site's
+  // images. The production build keeps them as they are
   '^/gemp-lotr/ng/gemp-lotr/': {
     target,
     changeOrigin: false,
     pathRewrite: { '^/gemp-lotr/ng/gemp-lotr/': '/gemp-lotr/' },
   },
-  // Legacy static files (images, css, legacy js such as PC_Cards.js) but not this app's own path
+  // The site's other static files (images and so on), but not this app's own path
   '^/gemp-lotr/(?!ng/)': { target, changeOrigin: false },
 };

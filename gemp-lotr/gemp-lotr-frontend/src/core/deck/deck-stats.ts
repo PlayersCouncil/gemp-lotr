@@ -48,8 +48,9 @@ function decodeEntities(text: string): string {
 /** The innermost coloured `<font>` decides. */
 function innerTone(tones: readonly (StatsTone | null)[]): StatsTone | null {
   for (let i = tones.length - 1; i >= 0; i--) {
-    if (tones[i]) {
-      return tones[i];
+    const tone = tones[i];
+    if (tone) {
+      return tone;
     }
   }
   return null;
@@ -72,7 +73,7 @@ export function parseDeckStats(html: string): DeckStats {
 
   const flush = () => {
     if (text) {
-      lines[lines.length - 1].segments.push({
+      lines.at(-1)?.segments.push({
         text: decodeEntities(text),
         strong: strong > 0,
         tone: innerTone(tones),
@@ -92,7 +93,8 @@ export function parseDeckStats(html: string): DeckStats {
       continue;
     }
     flush();
-    const [whole, closing, name, attributes] = tag;
+    const whole = tag[0];
+    const [, closing, name = '', attributes = ''] = tag;
     switch (name.toLowerCase()) {
       case 'br':
         lines.push({ segments: [] });
@@ -111,8 +113,8 @@ export function parseDeckStats(html: string): DeckStats {
     rest = rest.slice(whole.length);
   }
   flush();
-  if (lines.length > 1 && lines[lines.length - 1].segments.length === 0) {
+  if (lines.length > 1 && lines.at(-1)?.segments.length === 0) {
     lines.pop();
   }
-  return lines.length === 1 && lines[0].segments.length === 0 ? EMPTY_STATS : { lines };
+  return lines.length === 1 && lines[0]?.segments.length === 0 ? EMPTY_STATS : { lines };
 }

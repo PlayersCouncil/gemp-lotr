@@ -22,9 +22,9 @@ import { DocumentPressDirective } from '../../shared/document-press/document-pre
 
 /** Shared with the legacy card information dialog (the zoom slider's last value). */
 export const ZOOM_COOKIE = 'card-info-dialog-slider-last-value';
-export const ZOOM_MIN = 0.4;
-export const ZOOM_MAX = 1;
-export const ZOOM_STEP = 0.1;
+const ZOOM_MIN = 0.4;
+const ZOOM_MAX = 1;
+const ZOOM_STEP = 0.1;
 const DEFAULT_ZOOM = 0.5;
 
 /** RTMD meta-site modifiers (sets 90-94) can't be flipped. */
@@ -34,7 +34,7 @@ function isMetaSiteModifier(blueprintId: string): boolean {
 }
 
 /**
- * The card information (legacy CardInfoDialog): the card, large, with its wiki link and a size slider (remembered in a
+ * The card information: the card, large, with its wiki link and a size slider (remembered in a
  * cookie shared with the legacy page). A native `<dialog>`: clicking the card flips it (to its back, or upside down
  * when it has none); clicking anywhere else, the close button or Escape closes it, unless the size slider was just
  * used. A click or right-click on a card behind it only closes it (other controls still work).

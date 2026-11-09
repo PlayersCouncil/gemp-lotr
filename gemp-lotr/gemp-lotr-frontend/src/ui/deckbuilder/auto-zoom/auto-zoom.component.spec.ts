@@ -8,7 +8,7 @@ import { CardView } from '../../../core/cards/card-view';
 import { AutoZoomSetting } from '../../../core/platform/auto-zoom-setting';
 import { PAGE_QUERY_STRING } from '../../../core/platform/page-location';
 import { provideFakeNotifier } from '../../../testing/fake-notifier';
-import { CardHover } from '../../shared/card/card-hover';
+import { CardHover } from '../../../core/cards/card-hover.service';
 import { AutoZoomComponent, HOVER_COOLDOWN_MS, HOVER_DELAY_MS } from './auto-zoom.component';
 
 describe('AutoZoomComponent', () => {

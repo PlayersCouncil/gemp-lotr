@@ -2,12 +2,12 @@ import { capturePointer } from '../pointer-drag/pointer-drag.directive';
 import { Component, DestroyRef, ElementRef, inject, input } from '@angular/core';
 import { DeckbuilderActions } from '../../../core/actions/deckbuilder-actions.service';
 import { CardView } from '../../../core/cards/card-view';
-import { CardHover } from './card-hover';
+import { CardHover } from '../../../core/cards/card-hover.service';
 
 /** How long a touch must be held on a card to show its details. */
 export const LONG_PRESS_MS = 500;
 /** A touch that moves further than this (px) is a scroll, not a long press. */
-export const LONG_PRESS_SLOP = 10;
+const LONG_PRESS_SLOP = 10;
 /** How far (px) a card has to be dragged upwards with the mouse to show its details (the legacy gesture). */
 export const DRAG_UP_FOR_INFO = 20;
 

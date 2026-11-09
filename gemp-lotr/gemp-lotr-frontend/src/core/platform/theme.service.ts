@@ -24,9 +24,9 @@ export const THEME_BEHAVIOUR: Readonly<Record<ThemeName, ThemeBehaviour>> = {
 export const THEME_LABELS: Readonly<Record<ThemeName, string>> = { classic: 'Classic', modern: 'Modern' };
 
 /** Computers get the legacy look. */
-export const DEFAULT_THEME: ThemeName = 'classic';
+const DEFAULT_THEME: ThemeName = 'classic';
 /** Phones and tablets (see isMobileDevice): the legacy look too, until the redesign is approved. */
-export const MOBILE_THEME: ThemeName = 'classic';
+const MOBILE_THEME: ThemeName = 'classic';
 
 /** Remembers the player's choice on this device (path /gemp-lotr, like the legacy settings cookies). */
 export const THEME_COOKIE = 'deckbuilderTheme';
@@ -51,7 +51,7 @@ export const THEME_VIEWPORT_ATTRIBUTE = 'data-theme-viewport';
 /** How long the first paint waits for the theme stylesheet before showing the page anyway. */
 export const THEME_LOAD_TIMEOUT_MS = 10_000;
 
-export function isThemeName(value: unknown): value is ThemeName {
+function isThemeName(value: unknown): value is ThemeName {
   return typeof value === 'string' && (THEMES as readonly string[]).includes(value);
 }
 
@@ -120,7 +120,7 @@ export class ThemeService {
   private async apply(theme: ThemeName): Promise<void> {
     this.requested = theme;
     const previous = this.document.head.querySelectorAll(`link[${THEME_LINK_ATTRIBUTE}]`);
-    if (previous.length === 1 && previous[0].getAttribute(THEME_LINK_ATTRIBUTE) === theme) {
+    if (previous.length === 1 && previous[0]?.getAttribute(THEME_LINK_ATTRIBUTE) === theme) {
       this.show(theme);
       return;
     }

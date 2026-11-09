@@ -14,7 +14,7 @@ describe('CardImageService', () => {
     expect(image.imageUrl).toBe('https://i.lotrtcgpc.net/decipher/LOTR01002.jpg');
     expect(image.backSideImageUrl).toBe('https://i.lotrtcgpc.net/decipher/LOTR00000.jpg');
     expect(image).toMatchObject({ foil: false, tengwar: false, errata: false, horizontal: false, hasWiki: true });
-    expect(image.wikiUrl).toBe('http://wiki.lotrtcgpc.net/wiki/LOTR01002');
+    expect(image.wikiUrl).toBe('https://wiki.lotrtcgpc.net/wiki/LOTR01002');
   });
 
   it('understands foil and tengwar markers', () => {

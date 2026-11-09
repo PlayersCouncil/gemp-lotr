@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { CardView } from '../../../core/cards/card-view';
+import { CardView } from './card-view';
 
 /** Where a hovered card is on the screen (its bounding box, in viewport px). */
 export interface CardBox {
@@ -20,7 +20,7 @@ export interface HoveredCard {
  * What the mouse is doing to the cards, for whatever shows a hovered card large (the auto-zoom): each card reports
  * the mouse coming onto it, leaving it and pressing a button on it. Only the mouse: touch and pen don't hover.
  */
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class CardHover {
   /** The card under the mouse, or null. */
   readonly hovered = signal<HoveredCard | null>(null);

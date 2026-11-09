@@ -1,5 +1,6 @@
 import { Provider } from '@angular/core';
 import { DeckbuilderActions } from './actions/deckbuilder-actions.service';
+import { CardHover } from './cards/card-hover.service';
 import { CardInfoService } from './cards/card-info.service';
 import { CollectionBrowser } from './collection/collection-browser.service';
 import { CollectionCounts } from './collection/collection-counts.service';
@@ -16,6 +17,7 @@ import { DeckStatsRefresher } from './deck/deck-stats-refresher.service';
 import { PackDeliveryService } from './delivery/pack-delivery.service';
 import { FormatsService } from './formats/formats.service';
 import { PacksService } from './packs/packs.service';
+import { PageLifetime } from './platform/page-lifetime.service';
 
 /**
  * The deck builder's state, for the providers of its page: it is created when the page opens and destroyed when the
@@ -23,6 +25,7 @@ import { PacksService } from './packs/packs.service';
  */
 export function provideDeckbuilderState(): Provider[] {
   return [
+    PageLifetime,
     DeckDraft,
     DeckFormatSelection,
     DeckStatsRefresher,
@@ -39,6 +42,7 @@ export function provideDeckbuilderState(): Provider[] {
     PackDeliveryService,
     PacksService,
     CardInfoService,
+    CardHover,
     DeckbuilderActions,
   ];
 }

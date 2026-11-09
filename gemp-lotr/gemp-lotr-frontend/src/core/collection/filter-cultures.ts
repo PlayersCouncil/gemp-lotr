@@ -75,7 +75,7 @@ const EXPANDED_BLOCKS = ['war_block', 'hunter_block'];
 const HOBBIT_BLOCKS = ['hobbit'];
 
 /**
- * The culture groups the format hides (CardFilter.setFilterChanged): Rohan and Gollum appear from the Towers block on,
+ * The culture groups the format hides: Rohan and Gollum appear from the Towers block on,
  * Dunland and Raider in movie blocks, Men/Orc/Uruk-hai in expanded blocks, the Hobbit cultures only for the Hobbit game.
  */
 export function hiddenCultureGroups(blocks: readonly BlockFilter[] | null): Set<CultureGroupId> {
@@ -93,9 +93,7 @@ export function hiddenCultureGroups(blocks: readonly BlockFilter[] | null): Set<
 }
 
 /**
- * Cultures still pressed once the hidden groups are released. The legacy code meant to release them too, but only
- * managed it for the Hobbit cultures (the other label IDs it used do not exist), so a hidden culture kept filtering
- * the collection without being visible. Here every hidden culture is released.
+ * Cultures still pressed once the hidden groups are released, so a hidden culture can't keep filtering the collection.
  */
 export function visibleCultures(cultures: readonly string[], hidden: ReadonlySet<CultureGroupId>): string[] {
   const hiddenCodes = new Set(

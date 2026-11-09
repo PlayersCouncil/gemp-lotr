@@ -21,7 +21,7 @@ export function serializeDeckContents(deck: DeckContents, includeMap: boolean): 
   return parts.join('|');
 }
 
-/** Format codes whose decks include a Map (legacy deckBuildingUi.js checks exactly these two). */
+/** Format codes whose decks include a Map. */
 const MAP_FORMATS: readonly string[] = ['pc_movie', 'test_pc_movie'];
 
 export function formatUsesMap(formatCode: string | null | undefined): boolean {

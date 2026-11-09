@@ -1,3 +1,4 @@
+import { PageLifetime } from '../platform/page-lifetime.service';
 import { inject, Injectable } from '@angular/core';
 import { ApiError, errorMessage } from '../api/api-error';
 import { DeckbuilderApi } from '../api/deckbuilder-api.service';
@@ -14,6 +15,7 @@ import { addImportedCards, deckStateOf } from './deck-model';
 @Injectable()
 export class DeckOpener {
   private readonly api = inject(DeckbuilderApi);
+  private readonly lifetime = inject(PageLifetime);
   private readonly draft = inject(DeckDraft);
   private readonly changes = inject(DeckChanges);
   private readonly formats = inject(DeckFormatSelection);
@@ -22,7 +24,7 @@ export class DeckOpener {
 
   /** Opens one of the player's decks. */
   loadDeck(name: string): void {
-    this.api.getDeck(name).subscribe({
+    this.lifetime.read(this.api.getDeck(name), {
       next: (deck) => deck && this.setupDeck(deck, name),
       error: (error: unknown) => this.notifier.tell(errorMessage(error)),
     });
@@ -30,7 +32,7 @@ export class DeckOpener {
 
   /** Opens a library deck: it keeps the library deck's name and counts as unsaved. */
   loadLibraryDeck(name: string): void {
-    this.api.getLibraryDeck(name).subscribe({
+    this.lifetime.read(this.api.getLibraryDeck(name), {
       next: (deck) => {
         if (deck) {
           this.setupDeck(deck, name);
@@ -66,7 +68,7 @@ export class DeckOpener {
   importDecklist(text: string): void {
     this.draft.deckName.set(null);
     this.changes.clearDeck();
-    this.api.importDecklist(formatDecklist(text)).subscribe({
+    this.lifetime.read(this.api.importDecklist(formatDecklist(text)), {
       next: (items) => {
         this.draft.deck.update((deck) => addImportedCards(deck, items));
         this.changes.deckModified(true);
@@ -78,22 +80,25 @@ export class DeckOpener {
 
   convertErrata(): void {
     const notes = this.draft.notes();
-    this.api.convertErrata(this.formats.effectiveFormat(), this.formats.contentsOf(this.draft.deck())).subscribe({
-      next: (deck) => {
-        if (deck) {
-          this.setupDeck(deck, this.draft.deckName());
-          // The converted deck comes back without notes
-          this.draft.notes.set(notes);
-        }
-        this.changes.deckModified(true);
-        this.changes.convertErrataEnabled.set(false);
+    this.lifetime.read(
+      this.api.convertErrata(this.formats.effectiveFormat(), this.formats.contentsOf(this.draft.deck())),
+      {
+        next: (deck) => {
+          if (deck) {
+            this.setupDeck(deck, this.draft.deckName());
+            // The converted deck comes back without notes
+            this.draft.notes.set(notes);
+          }
+          this.changes.deckModified(true);
+          this.changes.convertErrataEnabled.set(false);
+        },
+        error: (error: unknown) => {
+          if (ApiError.from(error).is(400)) {
+            this.changes.convertErrataEnabled.set(true);
+          }
+          this.notifier.tell(errorMessage(error, { 400: 'Error processing errata conversion.' }));
+        },
       },
-      error: (error: unknown) => {
-        if (ApiError.from(error).is(400)) {
-          this.changes.convertErrataEnabled.set(true);
-        }
-        this.notifier.tell(errorMessage(error, { 400: 'Error processing errata conversion.' }));
-      },
-    });
+    );
   }
 }

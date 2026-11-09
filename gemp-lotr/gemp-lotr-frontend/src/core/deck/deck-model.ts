@@ -3,7 +3,7 @@ import { isPlaceholder } from '../cards/card-blueprint';
 import { serializeDeckContents } from './deck-contents';
 
 /**
- * The deck being edited, as the legacy deckBuildingUi.js kept it in the page's card elements: the special slots, the
+ * The deck being edited: the special slots, the
  * sites and the draw deck. Pure functions; DeckDraft holds the state.
  */
 
@@ -49,7 +49,7 @@ export function addToSlot(deck: DeckState, slot: DeckSlot, blueprintId: string):
   return { ...deck, lastCardId: id, [slot]: [...deck[slot], { id, blueprintId }] };
 }
 
-/** Adds one copy to the draw deck (deckBuildingUi.addCardToDeck). */
+/** Adds one copy to the draw deck. */
 export function addDrawCopy(deck: DeckState, blueprintId: string, side: DrawSide): DeckState {
   if (isPlaceholder(blueprintId)) {
     return deck;

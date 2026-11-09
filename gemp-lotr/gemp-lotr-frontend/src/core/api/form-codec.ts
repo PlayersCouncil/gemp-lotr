@@ -4,7 +4,7 @@ import { HttpParameterCodec, HttpParams } from '@angular/common/http';
  * Encodes every reserved character, like jQuery does. Angular's default codec leaves '+' (and a few others) as-is,
  * which the server would decode as a space, corrupting deck notes or imported decklists that contain a '+'.
  */
-export class StrictFormCodec implements HttpParameterCodec {
+class StrictFormCodec implements HttpParameterCodec {
   encodeKey(key: string): string {
     return encodeURIComponent(key);
   }
@@ -22,7 +22,7 @@ export class StrictFormCodec implements HttpParameterCodec {
   }
 }
 
-export type FormValue = string | number | boolean | null | undefined;
+type FormValue = string | number | boolean | null | undefined;
 export type FormData = Record<string, FormValue>;
 
 /** Builds strictly encoded params, leaving out null/undefined values. */

@@ -3,13 +3,13 @@ import { SelectOption } from './filter-options';
 
 /** The Block and Set lists, built from the format. */
 
-/** Block list for a format (CardFilter.updateFormat), and the block selected with it: the only one, or "Any". */
+/** Block list for a format, and the block selected with it: the only one, or "Any". */
 export function blockOptions(blocks: readonly BlockFilter[]): {
   options: SelectOption[];
   selected: string;
 } {
   const options = [{ value: '', label: 'Any' }, ...blocks.map((block) => ({ value: block.filter, label: block.name }))];
-  return { options, selected: blocks.length === 1 ? options[1].value : '' };
+  return { options, selected: blocks.length === 1 ? (blocks[0]?.filter ?? '') : '' };
 }
 
 /**
@@ -34,5 +34,5 @@ export function setOptions(
     const bv = order(b.value);
     return av == bv ? 0 : av < bv ? -1 : 1;
   });
-  return { options, selected: options.length === 2 ? options[1].value : options[0].value };
+  return { options, selected: (options.length === 2 ? options[1] : options[0])?.value ?? '' };
 }

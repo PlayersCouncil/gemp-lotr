@@ -1,6 +1,6 @@
 import { CollectionTypeInfo, GempFormat, League } from '../api/models';
 
-/** One entry of the deck builder's format list (#formatSelect). */
+/** One entry of the deck builder's format list. */
 export interface FormatOption {
   /** Format code; for a Race to Mount Doom league, its league code (which is also what a saved deck stores). */
   value: string;
@@ -14,12 +14,16 @@ export interface FormatOption {
 }
 
 /** What the list shows before the formats have loaded (deckBuild.html). */
-export const INITIAL_FORMAT_OPTIONS: readonly FormatOption[] = [
-  { value: 'rev_tow_sta', label: 'Anything Goes', collectionType: null, disabled: false, rtmd: false },
-];
+export const INITIAL_FORMAT_OPTION: FormatOption = {
+  value: 'rev_tow_sta',
+  label: 'Anything Goes',
+  collectionType: null,
+  disabled: false,
+  rtmd: false,
+};
 
 /**
- * The formats shown in the game hall, in their display order (updateFormatOptions). As in the legacy code, two
+ * The formats shown in the game hall, in their display order. As in the legacy code, two
  * formats with the same order keep only the later one.
  */
 export function hallFormatOptions(formats: Record<string, GempFormat>): FormatOption[] {
@@ -81,10 +85,10 @@ export function rtmdFormatOptions(leagues: readonly League[]): FormatOption[] {
 }
 
 /**
- * The option a value selects, like jQuery's .val() on the list: the first one with that value, or the first option
- * when none has it.
+ * The option a value selects: the last enabled one with that value (a player's limited collection comes after the
+ * hall format it shares its value with, and is the one selected), or the first option when none has it.
  */
 export function optionIndexOf(options: readonly FormatOption[], value: string): number {
-  const index = options.findIndex((option) => option.value === value && !option.disabled);
+  const index = options.map((option) => option.value === value && !option.disabled).lastIndexOf(true);
   return index >= 0 ? index : 0;
 }

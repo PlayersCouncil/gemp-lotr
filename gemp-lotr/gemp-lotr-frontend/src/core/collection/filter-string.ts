@@ -13,9 +13,8 @@ export interface FilterContext {
 }
 
 /**
- * The filter string (CardFilter.calculateDeckFilter), in the same order. A field the predefined filter already sets
- * is left out. (The legacy code then appended the raw value without a separator, e.g. "sort:namefoil"; that is
- * fixed.) Multi-word game text now has every space turned into "_" (the legacy code replaced only the first one).
+ * The filter string for the server. A field the predefined filter already sets is left out. Multi-word game text has
+ * every space turned into "_".
  */
 export function buildFilterString(fields: FilterFields, context: FilterContext): string {
   const override = context.override;

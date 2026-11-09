@@ -1,3 +1,4 @@
+import { PageLifetime } from '../platform/page-lifetime.service';
 import { inject, Injectable } from '@angular/core';
 import { errorMessage } from '../api/api-error';
 import { DeckbuilderApi } from '../api/deckbuilder-api.service';
@@ -11,6 +12,7 @@ import { DECK_NAME_LENGTH_MESSAGE, isValidDeckName } from './deck-name';
 @Injectable()
 export class DeckSaver {
   private readonly api = inject(DeckbuilderApi);
+  private readonly lifetime = inject(PageLifetime);
   private readonly draft = inject(DeckDraft);
   private readonly changes = inject(DeckChanges);
   private readonly formats = inject(DeckFormatSelection);
@@ -69,7 +71,7 @@ export class DeckSaver {
       await this.notifier.alert(DECK_NAME_LENGTH_MESSAGE);
       return;
     }
-    this.api.renameDeck(oldName, newName).subscribe({
+    this.lifetime.write(this.api.renameDeck(oldName, newName), {
       next: () => void renamed(newName),
       error: (error: unknown) =>
         this.notifier.tell(errorMessage(error, { 404: "Couldn't find the deck to rename on the server." })),
@@ -129,19 +131,18 @@ export class DeckSaver {
       return;
     }
     // The RTMD option's value is the league code, which the server stores so the deck stays with the league
-    this.api
-      .saveDeck(
-        name,
-        this.formats.selectedFormat().value,
-        this.draft.notes(),
-        this.formats.contentsOf(this.draft.deck()),
-      )
-      .subscribe({
-        next: () => {
-          this.changes.deckModified(false);
-          this.notifier.tell('Deck was saved.  Refresh the Game Hall to see it!');
-        },
-        error: (error: unknown) => this.notifier.tell(errorMessage(error, { 400: 'Invalid deck format.' })),
-      });
+    const save = this.api.saveDeck(
+      name,
+      this.formats.selectedFormat().value,
+      this.draft.notes(),
+      this.formats.contentsOf(this.draft.deck()),
+    );
+    this.lifetime.write(save, {
+      next: () => {
+        this.changes.deckModified(false);
+        this.notifier.tell('Deck was saved.  Refresh the Game Hall to see it!');
+      },
+      error: (error: unknown) => this.notifier.tell(errorMessage(error, { 400: 'Invalid deck format.' })),
+    });
   }
 }

@@ -68,7 +68,7 @@ describe('CardInfoComponent', () => {
       'https://i.lotrtcgpc.net/decipher/LOTR01002.jpg',
     );
     expect(dialog.querySelector<HTMLAnchorElement>('a.gd-card-info__wiki')!.href).toBe(
-      'http://wiki.lotrtcgpc.net/wiki/LOTR01002',
+      'https://wiki.lotrtcgpc.net/wiki/LOTR01002',
     );
   });
 

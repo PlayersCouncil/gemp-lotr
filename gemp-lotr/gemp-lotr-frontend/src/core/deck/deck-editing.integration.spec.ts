@@ -695,6 +695,18 @@ describe('editing a deck', () => {
       collectionRequests();
     });
 
+    it("opens a deck under the player's limited collection of its format, and checks it against that", () => {
+      start();
+      service.setupDeck(
+        { ...deckOf('1_12'), targetFormat: { formatCode: 'fotr_block', formatName: 'x', leagueCode: null } },
+        'Limited',
+      );
+      expect(service.selectedFormat().label).toBe('Sealed League - FotR');
+      expect(service.effectiveFormat()).toBe('fotr_block');
+      expect(body(statsRequest())).toMatchObject({ targetFormat: 'fotr_block', collectionName: '1699999999:sealed' });
+      collectionRequests();
+    });
+
     it('keeps the selected format for a deck without one', () => {
       start();
       service.selectFormat(1);

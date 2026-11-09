@@ -15,16 +15,16 @@ import { FitCard, fitCards, parseFit, parsePx, rowSnaps } from './fit-cards';
 /** Set on the host: the row height the cards should take (the theme sizes the cards with it). */
 export const CARD_HEIGHT_PROPERTY = '--gd-card-height';
 /** Set on the host: the space above the rows when they are centred (see CardFitResult.offset); a theme may use it. */
-export const CARD_OFFSET_PROPERTY = '--gd-card-offset';
+const CARD_OFFSET_PROPERTY = '--gd-card-offset';
 /** Set on each card of the box with `rows`: how far its row moves to start on a whole pixel. */
-export const CARD_SNAP_PROPERTY = '--gd-card-snap';
+const CARD_SNAP_PROPERTY = '--gd-card-snap';
 
 /**
  * Sizes a box of cards: whenever the box resizes or its cards change, works out the row height at which the cards fit
  * (fitCards) and sets it on the box as `--gd-card-height`, with `--gd-card-offset` (the space above the rows when
  * centred, as the legacy groups placed them). The theme decides the rest, through custom properties
  * on the box: `--gd-card-max-height` (largest row height, default 200px), `--gd-card-gap` (space between cards, default
- * 5px) and `--gd-card-fit` (`contain`, the default; `rows`, the legacy way; or `none` for always the largest and
+ * 5px) and `--gd-card-fit` (`contain`, the default; `rows`, the classic layout; or `none` for always the largest and
  * scrolling). Read again when the theme changes.
  *
  * Usage: `<div class="gd-collection__cards" [gdFitCards]="cards">` with one FitCard per card in the box (whether it

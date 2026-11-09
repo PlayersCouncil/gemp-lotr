@@ -154,7 +154,8 @@ describe('card-blueprint parity with the legacy Card.js', () => {
               pack: card.isPack(),
               placeholder: card.isPlaceholder(),
               hasWiki: card.hasWiki,
-              wikiUrl: card.getWikiLink(),
+              // Deliberately https here; the legacy link is http
+              wikiUrl: card.getWikiLink().replace('http://', 'https://'),
             };
             const actual = Object.fromEntries(Object.keys(expected).map((k) => [k, image[k as keyof typeof image]]));
             if (JSON.stringify(actual) !== JSON.stringify(expected) && mismatches.length < 10) {

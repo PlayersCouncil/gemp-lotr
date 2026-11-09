@@ -1,6 +1,6 @@
 import { CardImage } from './card-image.service';
 
-/** What a large card view shows (CardDisplay.reloadFromCard). */
+/** What a large card view shows. */
 export interface CardDisplayData {
   image: string;
   /** The card back, shown when the card is flipped; null when it can't be flipped. */

@@ -2,7 +2,7 @@
  * The cookies the legacy pages keep settings in (jquery.cookie: values URI-encoded, kept for a year). They were set
  * from pages under /gemp-lotr/, so that is their path; this page writes with the same path to share them.
  */
-export const LEGACY_COOKIE_PATH = '/gemp-lotr';
+const LEGACY_COOKIE_PATH = '/gemp-lotr';
 
 export function readCookie(cookies: string, name: string): string | null {
   for (const part of cookies.split(';')) {

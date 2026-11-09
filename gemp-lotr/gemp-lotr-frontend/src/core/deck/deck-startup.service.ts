@@ -1,3 +1,4 @@
+import { PageLifetime } from '../platform/page-lifetime.service';
 import { inject, Injectable } from '@angular/core';
 import { errorMessage } from '../api/api-error';
 import { DeckbuilderApi } from '../api/deckbuilder-api.service';
@@ -13,6 +14,7 @@ import { DeckStatsRefresher } from './deck-stats-refresher.service';
 @Injectable()
 export class DeckStartup {
   private readonly api = inject(DeckbuilderApi);
+  private readonly lifetime = inject(PageLifetime);
   private readonly formatsService = inject(FormatsService);
   private readonly formats = inject(DeckFormatSelection);
   private readonly changes = inject(DeckChanges);
@@ -22,7 +24,7 @@ export class DeckStartup {
   private readonly notifier = inject(Notifier);
 
   init(): void {
-    this.formatsService.formats$.subscribe({
+    this.lifetime.read(this.formatsService.formats$, {
       next: (formats) => {
         this.formats.showHallFormats(formats);
         this.changes.formatChanged();
@@ -36,7 +38,7 @@ export class DeckStartup {
   }
 
   private loadCollectionTypes(): void {
-    this.api.getCollectionTypes().subscribe({
+    this.lifetime.read(this.api.getCollectionTypes(), {
       next: (types) => {
         this.collection.limitedCollections.set(types);
         this.formats.addLimitedCollections(types);
@@ -48,7 +50,7 @@ export class DeckStartup {
   }
 
   private loadRtmdLeagues(): void {
-    this.api.getMemberRtmdLeagues().subscribe({
+    this.lifetime.read(this.api.getMemberRtmdLeagues(), {
       next: (leagues) => this.formats.addRtmdLeagues(leagues),
       error: (error: unknown) => this.notifier.tell(errorMessage(error)),
     });

@@ -1,9 +1,12 @@
 import { provideGempHttp } from '../../core/api/gemp-interceptors';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DeckDraft } from '../../core/deck/deck-draft.service';
+import { DeckOpener } from '../../core/deck/deck-opener.service';
+import { DeckSaver } from '../../core/deck/deck-saver.service';
+import { PacksService } from '../../core/packs/packs.service';
 import { PAGE_QUERY_STRING } from '../../core/platform/page-location';
-import { provideFakeNotifier } from '../../testing/fake-notifier';
+import { FakeNotifier, provideFakeNotifier } from '../../testing/fake-notifier';
 import { DeckbuilderPageComponent, RESIZE_STEP } from './deckbuilder-page.component';
 
 const COLLECTIONS = '<collections><collection format="fotr_block" name="Sealed" type="s1"/></collections>';
@@ -51,6 +54,48 @@ describe('DeckbuilderPageComponent', () => {
       answerStartup();
       await second.fixture.whenStable();
       expect(formatLabels(second.el)).toEqual(once);
+    });
+
+    describe('work still running when the page closes', () => {
+      const backend = () => TestBed.inject(HttpTestingController);
+      const parts = (fixture: ComponentFixture<DeckbuilderPageComponent>) => fixture.debugElement.injector;
+
+      it('a save reaches the server, but its answer no longer tells the player anything', async () => {
+        const { fixture } = await render();
+        const injector = parts(fixture);
+        injector.get(DeckDraft).deckName.set('Mine');
+        await injector.get(DeckSaver).saveCurrentDeck();
+        fixture.destroy();
+        const [save] = backend().match((r) => r.url.endsWith('/deck') && r.method === 'POST');
+        expect(save.cancelled).toBe(false);
+        save.flush('<ok/>');
+        expect(TestBed.inject(FakeNotifier).dialogs).toEqual([]);
+      });
+
+      it('a deck being opened is cancelled', async () => {
+        const { fixture } = await render();
+        parts(fixture).get(DeckOpener).loadDeck('Mine');
+        fixture.destroy();
+        expect(backend().match((r) => r.url.endsWith('/deck') && r.method === 'GET')[0].cancelled).toBe(true);
+      });
+
+      it('does not fetch opened packs afterwards, which would use them up unseen', async () => {
+        vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+        try {
+          const fixture = TestBed.createComponent(DeckbuilderPageComponent);
+          TestBed.tick();
+          backend().match((r) => r.url.endsWith('/delivery/packContents'));
+          parts(fixture).get(PacksService).packClicked('FotR - Booster', null);
+          backend()
+            .match((r) => r.url.includes('/collection/'))[0]
+            ?.flush('<ok/>');
+          fixture.destroy();
+          vi.advanceTimersByTime(60_000);
+          expect(backend().match((r) => r.url.endsWith('/delivery/packContents'))).toEqual([]);
+        } finally {
+          vi.useRealTimers();
+        }
+      });
     });
 
     it('does not keep the deck of the previous visit', async () => {

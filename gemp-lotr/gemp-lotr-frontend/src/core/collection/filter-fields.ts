@@ -1,4 +1,4 @@
-import { INITIAL_BLOCK_OPTION, INITIAL_SET_OPTION, SORT_OPTIONS } from './filter-options';
+import { INITIAL_BLOCK_OPTION, INITIAL_SET_OPTION } from './filter-options';
 
 /** The values of the collection filter's fields, and what the two reset buttons do to them. */
 
@@ -35,13 +35,15 @@ export interface FilterFields {
   cultures: readonly string[];
 }
 
+const DEFAULT_SORT = 'name';
+
 export const EMPTY_FILTER: FilterFields = {
   product: '',
   rarity: '',
   block: INITIAL_BLOCK_OPTION.value,
   set: INITIAL_SET_OPTION.value,
   side: '',
-  sort: 'name',
+  sort: DEFAULT_SORT,
   cardType: '',
   name: '',
   gametext: '',
@@ -90,7 +92,7 @@ export function resetAll(fields: FilterFields): FilterFields {
     block: '',
     set: '',
     side: '',
-    sort: SORT_OPTIONS[0].value,
+    sort: DEFAULT_SORT,
     cardType: '',
     cultures: [],
   };

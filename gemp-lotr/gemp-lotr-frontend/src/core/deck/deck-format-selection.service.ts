@@ -5,7 +5,7 @@ import { formatUsesMap } from './deck-contents';
 import {
   FormatOption,
   hallFormatOptions,
-  INITIAL_FORMAT_OPTIONS,
+  INITIAL_FORMAT_OPTION,
   limitedFormatOptions,
   optionIndexOf,
   rtmdFormatOptions,
@@ -23,11 +23,9 @@ export class DeckFormatSelection {
   private readonly formats = signal<ReadonlyMap<string, GempFormat>>(new Map());
   private readonly rtmdLeagues = signal<ReadonlyMap<string, League>>(new Map());
 
-  readonly formatOptions = signal<readonly FormatOption[]>(INITIAL_FORMAT_OPTIONS);
+  readonly formatOptions = signal<readonly FormatOption[]>([INITIAL_FORMAT_OPTION]);
   readonly selectedFormatIndex = signal(0);
-  readonly selectedFormat = computed(
-    () => this.formatOptions()[this.selectedFormatIndex()] ?? INITIAL_FORMAT_OPTIONS[0],
-  );
+  readonly selectedFormat = computed(() => this.formatOptions()[this.selectedFormatIndex()] ?? INITIAL_FORMAT_OPTION);
 
   private readonly selectedLeague = computed(() => {
     const option = this.selectedFormat();

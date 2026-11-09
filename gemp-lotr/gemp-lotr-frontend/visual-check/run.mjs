@@ -8,6 +8,7 @@ import { chromium } from 'playwright';
 import { PNG } from 'pngjs';
 import { CONTROLS } from './controls.mjs';
 import { FIXTURE_DECK, SCENARIOS, selectors } from './scenarios.mjs';
+import { routeToStub, STUB_ORIGIN } from './stub-server.mjs';
 
 const { values: options } = parseArgs({
   options: {
@@ -19,6 +20,8 @@ const { values: options } = parseArgs({
     sizes: { type: 'string', default: '1280x800,1366x768,1920x1080' },
     only: { type: 'string' },
     mutating: { type: 'boolean', default: false },
+    // No server and no login: both pages run against stub-server.mjs, with placeholder card art
+    stubbed: { type: 'boolean', default: false },
     workers: { type: 'string', default: '4' },
     // Pixels allowed to differ by more than 2 colour levels (anti-aliasing of rounded corners and SVG edges varies by
     // a few pixels between two loads of the same page)
@@ -35,9 +38,11 @@ const angularUrl = new URL(options.angular, 'http://server');
 if (!angularUrl.searchParams.has('theme')) angularUrl.searchParams.set('theme', options.theme);
 const angularPath = angularUrl.pathname + angularUrl.search;
 
+if (options.stubbed) options.server = STUB_ORIGIN;
+
 const user = process.env.GEMP_USER;
 const password = process.env.GEMP_PASSWORD;
-if (!user || !password) {
+if (!options.stubbed && (!user || !password)) {
   console.error('Set GEMP_USER and GEMP_PASSWORD to a player on the server (see README.md).');
   process.exit(2);
 }
@@ -226,7 +231,11 @@ async function capture(which, scenario, size, file) {
   page.on('requestfinished', done);
   page.on('requestfailed', done);
 
-  await deliverCollectionsInOrder(page);
+  if (options.stubbed) {
+    await routeToStub(context, errors);
+  } else {
+    await deliverCollectionsInOrder(page);
+  }
   await page.goto(options.server + pagePath);
   await page.waitForSelector(CONTROLS.firstCard[which], { timeout: 20000 }).catch(() => undefined);
   await settle(page, pending);
@@ -351,10 +360,12 @@ ${rows}</table>`,
 }
 
 try {
-  const loggedIn = await login();
-  await createFixtureDeck(loggedIn);
-  session = await loggedIn.storageState();
-  await loggedIn.close();
+  if (!options.stubbed) {
+    const loggedIn = await login();
+    await createFixtureDeck(loggedIn);
+    session = await loggedIn.storageState();
+    await loggedIn.close();
+  }
   const jobs = (list) => list.flatMap((scenario) => sizes.map((size) => () => check(scenario, size)));
   // Scenarios that change the account run one at a time, after the others
   const results = [

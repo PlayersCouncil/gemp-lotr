@@ -75,4 +75,16 @@ describe('format options', () => {
     expect(optionIndexOf(options, 'b')).toBe(1);
     expect(optionIndexOf(options, 'missing')).toBe(0);
   });
+
+  it('selects the last option with a value when several have it, as a limited collection of that format does', () => {
+    const option = (value: string, label: string) => ({
+      value,
+      label,
+      collectionType: label,
+      disabled: false,
+      rtmd: false,
+    });
+    const options = [option('a', 'Format A'), option('b', 'Format B'), option('a', 'Sealed A')];
+    expect(options[optionIndexOf(options, 'a')].label).toBe('Sealed A');
+  });
 });

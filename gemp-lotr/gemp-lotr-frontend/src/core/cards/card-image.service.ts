@@ -83,7 +83,7 @@ export class CardImageService {
       pack: isPack(tables, blueprintId),
       placeholder: isPlaceholder(blueprintId),
       hasWiki: getFixedImage(tables, bareBlueprint) === null && !isPack(tables, bareBlueprint),
-      wikiUrl: `http://wiki.lotrtcgpc.net/wiki/${wikiName}`,
+      wikiUrl: `https://wiki.lotrtcgpc.net/wiki/${wikiName}`,
     };
 
     if (bareBlueprint === 'rules') {

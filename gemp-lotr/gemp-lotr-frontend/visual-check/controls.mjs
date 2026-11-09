@@ -1,6 +1,6 @@
 // The same control on each page, as { legacy, angular } selectors: the legacy page's element IDs and classes, and the
 // Angular page's DOM contract (the `.gd-*` markup and its data-* state, see the frontend README). Shared by run.mjs
-// (through scenarios.mjs) and stubbed.mjs. `which` is 'legacy' or 'angular'.
+// (through scenarios.mjs). `which` is 'legacy' or 'angular'.
 
 /** A field of the collection filter, by its `data-field`: its select or text input (numeric: its comparison select). */
 const field = (legacy, name, control = 'select') => ({
@@ -60,11 +60,6 @@ export const CONTROLS = {
     legacy: '.cardInCollection .actionArea',
     angular: '.gd-collection .gd-card[data-role="card"]',
   },
-  /** The selection pack in the collection (the second item). */
-  selectionPack: {
-    legacy: '#collection-display .card .actionArea',
-    angular: '.gd-collection .gd-card',
-  },
   /** Selection packs only. */
   selectionPacks: {
     legacy: '.selectionInCollection .actionArea',
@@ -87,11 +82,6 @@ export const CONTROLS = {
   collection: { legacy: '#collectionSelect', angular: 'select.gd-toolbar__collection' },
 
   // --- Deck ---
-  /** The draw deck's cards (not the copies drawn behind them, which clicks can't reach). */
-  drawDeckCards: {
-    legacy: '#decksRegion .cardInDeck .actionArea',
-    angular: '.gd-pile .gd-card:not([data-role="copy"])',
-  },
   ringBearerSlot: { legacy: '#rb-content', angular: `${slot('ring-bearer')} .gd-slot__label` },
   ringSlot: { legacy: '#ring-content', angular: `${slot('ring')} .gd-slot__label` },
   sitesSlot: { legacy: '#sites-content', angular: `${slot('sites')} .gd-slot__label` },
@@ -106,25 +96,12 @@ export const CONTROLS = {
     legacy: `#decksRegion .card:has(img[src*="${image}"]) .actionArea`,
     angular: `.gd-pile .gd-card:not([data-role="copy"]):has(img[src*="${image}"])`,
   }),
-  collectionCard: (image) => ({
-    legacy: `#collection-display .card:has(img[src*="${image}"]) .actionArea`,
-    angular: `.gd-collection .gd-card:has(img[src*="${image}"])`,
-  }),
 
   // --- Dialogs ---
   /** The close button of the open dialog (legacy dialogs stay in the page while closed, hence :visible). */
   dialogClose: { legacy: '.ui-dialog-titlebar-close:visible', angular: 'dialog[open] .gd-dialog__close' },
   deckListItem: { legacy: '.deckItem', angular: '.gd-deck-list__item' },
   openDeck: { legacy: 'button[title="Open deck"]', angular: '[data-action="open"]' },
-  deleteDeck: {
-    legacy: '.deckItem button[title="Delete deck"]',
-    angular: '.gd-deck-list [data-action="delete"]',
-  },
-  /** Rename in the deck list (not the toolbar's renameDeck). */
-  renameListedDeck: {
-    legacy: '.deckItem button[title="Rename deck"]',
-    angular: '.gd-deck-list [data-action="rename"]',
-  },
   importText: { legacy: '#deckImport', angular: '.gd-import__text' },
   importButton: {
     legacy: '.ui-dialog button[title="Import"]',

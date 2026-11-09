@@ -2,7 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import { inject, Injectable } from '@angular/core';
 
 /** The longest a page of cards waits for its images; a slow or missing image then shows as it arrives. */
-export const IMAGE_PRELOAD_TIMEOUT_MS = 3000;
+const IMAGE_PRELOAD_TIMEOUT_MS = 3000;
 
 /**
  * Loads images before they are shown, so a set of cards can change all at once instead of one card after another as

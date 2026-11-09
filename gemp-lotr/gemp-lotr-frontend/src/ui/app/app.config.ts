@@ -13,8 +13,7 @@ export const appConfig: ApplicationConfig = {
     provideGempHttp(),
     provideRouter(APP_ROUTES),
     // Messages and questions use the browser's own dialogs, as the legacy page did; gd-notifier shows nothing without
-    // DialogNotifier, which comes back with the redesign. App-wide, not in a route: the core services that ask
-    // (GempHttp and the like) are providedIn root, and the root injector doesn't see a route's providers
+    // DialogNotifier, which comes back with the redesign
     WindowNotifier,
     { provide: Notifier, useExisting: WindowNotifier },
     // Nothing is drawn until the theme's stylesheet has loaded, so the page never shows unstyled

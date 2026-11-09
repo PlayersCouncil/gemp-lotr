@@ -2,7 +2,7 @@ import { CollectionItem } from '../api/models';
 import { DeckCard, DeckSlot, DrawCopy } from '../deck/deck-model';
 
 /**
- * What a card on the page stands for (the legacy code kept this as jQuery data "card" on the element): what clicking
+ * What a card on the page stands for: what clicking
  * it does, and which card its details show.
  */
 /** What an item of the collection is. */

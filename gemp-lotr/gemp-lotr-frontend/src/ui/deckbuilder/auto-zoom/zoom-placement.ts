@@ -1,8 +1,8 @@
-import { CardBox } from '../../shared/card/card-hover';
+import { CardBox } from '../../../core/cards/card-hover.service';
 
-/** The remastered card size (CardDisplay.TargetLong / TargetShort). */
-export const TARGET_LONG = 1039;
-export const TARGET_SHORT = 745;
+/** The remastered card size. */
+const TARGET_LONG = 1039;
+const TARGET_SHORT = 745;
 
 export interface ZoomPlacement {
   /** Where the zoomed card goes, in viewport px. */
@@ -27,7 +27,6 @@ export function zoomPlacement(
   const maxLongSide = (windowWidth / windowHeight <= 1 ? windowWidth : windowHeight) * 0.9;
   const targetLong = Math.min(maxLongSide, TARGET_LONG);
   const targetShort = Math.min((maxLongSide * TARGET_SHORT) / TARGET_LONG, TARGET_SHORT);
-  // CardDisplay.resize with the legacy (width, height) limits
   const maxWidth = horizontal ? targetLong : targetShort;
   const maxHeight = horizontal ? targetShort : targetLong;
   const long = Math.min(maxWidth, maxHeight, TARGET_LONG);

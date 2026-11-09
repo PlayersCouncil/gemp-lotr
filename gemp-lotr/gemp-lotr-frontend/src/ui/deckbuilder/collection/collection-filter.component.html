@@ -1,12 +1,12 @@
 @let hidden = query.hiddenCultureGroups();
 
-<ng-template #fieldTemplate let-field>
+<ng-template #fieldTemplate gdFieldRow let-field>
   <!-- eslint-disable-next-line @angular-eslint/template/label-has-associated-control -- it wraps the control, inside the @switch -->
   <label
     class="gd-field"
     [attr.data-field]="fieldName(field)"
     [attr.data-kind]="field.kind"
-    [attr.data-wide]="field.wide || field.kind === 'text' ? '' : null"
+    [attr.data-wide]="isWide(field) ? '' : null"
   >
     <span class="gd-field__label">{{ field.label }}</span>
     <span class="gd-field__control">

@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 
-/** The legacy client's alert for any failure that a call site doesn't handle itself (deckBuildingUi.js processError). */
+/** The message for any failure that a call site doesn't handle itself. */
 export const GENERIC_COMMUNICATION_ERROR = 'There was a problem during communication with server';
 
 /** Status used when the server answered 200 but the body could not be read (e.g. malformed XML). */

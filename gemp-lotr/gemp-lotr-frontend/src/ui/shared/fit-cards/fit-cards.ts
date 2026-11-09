@@ -4,11 +4,11 @@
  */
 
 /** Width / height of an upright card (Card.CardScale). A landscape card is as wide as a row is high. */
-export const CARD_SCALE = 350 / 490;
+const CARD_SCALE = 350 / 490;
 
 /**
  * - `contain`: as large as fits (never above the maximum), so every card is visible without scrolling;
- * - `rows`: the legacy NormalCardGroup's way (see rowsFitHeight), so cards can come out smaller than with `contain`;
+ * - `rows`: the classic layout (see rowsFitHeight), so cards can come out smaller than with `contain`;
  * - `none`: always the maximum height; the cards wrap and the box scrolls.
  */
 export type CardFit = 'contain' | 'rows' | 'none';
@@ -22,7 +22,7 @@ export interface FitCard {
 }
 
 /** The share of a copy's width left showing beside the card in front of it. */
-export const BEHIND_SHOWN = 0.2;
+const BEHIND_SHOWN = 0.2;
 
 export interface FitCardsInput {
   /** The box's content size, in px. */
@@ -41,7 +41,7 @@ export function cardWidth(horizontal: boolean, rowHeight: number): number {
   return horizontal ? Math.floor(rowHeight) : Math.floor(rowHeight * CARD_SCALE);
 }
 
-/** The width a card and the copies behind it take in a row (NormalCardGroup.layoutCard's rounding). */
+/** The width a card and the copies behind it take in a row. */
 export function stackWidth(card: FitCard, rowHeight: number): number {
   const behind = (card.behind ?? []).reduce(
     (sum, landscape) => sum + Math.floor(cardWidth(landscape, rowHeight) * BEHIND_SHOWN),
@@ -159,12 +159,11 @@ function widthForLongSide(horizontal: boolean, size: number): number {
 }
 
 /**
- * NormalCardGroup.layoutCards: the height of one row that holds every card if two rows of it wouldn't fit;
+ * The height of one row that holds every card if two rows of it wouldn't fit;
  * otherwise 2, 3... rows, each `(height - gaps) / rows` high (capped at the maximum), until the cards fit in that
  * many rows.
  *
- * Fixed: when a card was wider than the box at the tried height, the legacy code ignored it, so cards overflowed the
- * box (only in tall, narrow boxes); here more rows are tried.
+ * When a card is wider than the box at the tried height, more rows are tried.
  */
 function rowsFitHeight({ width, height, cards, gap }: FitCardsInput, max: number): { height: number; rows: number } {
   const capped = (rowHeight: number) => Math.min(max, rowHeight);

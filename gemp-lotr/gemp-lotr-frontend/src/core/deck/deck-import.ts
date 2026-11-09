@@ -1,9 +1,9 @@
 /**
- * The decklist text clean-up of the legacy import dialog (deckBuildingUi.parseDecklist / removeNotes), before the
+ * The decklist text clean-up, before the
  * server recognises the cards (GET /collection/import/).
  */
 
-/** removeNotes: drops "(...)" and "[...]" notes, repeatedly, keeping the rest of the line. */
+/** Drops "(...)" and "[...]" notes, repeatedly, keeping the rest of the line. */
 export function removeNotes(line: string): string {
   let processed = line;
   let start = line.indexOf('(');

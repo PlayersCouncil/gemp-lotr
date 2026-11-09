@@ -1,6 +1,7 @@
+import { PageLifetime } from '../platform/page-lifetime.service';
 import { DestroyRef, inject, Injectable, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ApiError, GENERIC_COMMUNICATION_ERROR } from '../api/api-error';
+import { errorMessage } from '../api/api-error';
 import { DeckbuilderApi } from '../api/deckbuilder-api.service';
 import { PackDelivery } from '../api/models';
 import { CollectionBrowser } from '../collection/collection-browser.service';
@@ -17,12 +18,13 @@ export interface ShownCard {
 }
 
 /**
- * Opening packs from the collection (deckBuildingUi.clickCardFunction), the "Choose one" dialog of selection packs,
+ * Opening packs from the collection, the "Choose one" dialog of selection packs,
  * and the "New items - <collection>" dialogs showing what was opened (deckbuilderDeliveryService.js).
  */
 @Injectable()
 export class PacksService {
   private readonly api = inject(DeckbuilderApi);
+  private readonly lifetime = inject(PageLifetime);
   private readonly collection = inject(CollectionBrowser);
   private readonly delivery = inject(PackDeliveryService);
   private readonly notifier = inject(Notifier);
@@ -48,14 +50,10 @@ export class PacksService {
       this.selection.set({ packId: blueprintId, choices: selection ?? [] });
       return;
     }
-    this.api.openPack(this.collection.collectionType(), blueprintId).subscribe({
+    this.lifetime.write(this.api.openPack(this.collection.collectionType(), blueprintId), {
       next: () => this.opened(),
       error: (error: unknown) =>
-        void this.notifier.alert(
-          ApiError.from(error).is(404)
-            ? 'You have no pack of this type in your collection.'
-            : GENERIC_COMMUNICATION_ERROR,
-        ),
+        this.notifier.tell(errorMessage(error, { 404: 'You have no pack of this type in your collection.' })),
     });
   }
 
@@ -66,13 +64,13 @@ export class PacksService {
       return;
     }
     this.selection.set(null);
-    this.api.openSelectionPack(this.collection.collectionType(), selection.packId, blueprintId).subscribe({
+    this.lifetime.write(this.api.openSelectionPack(this.collection.collectionType(), selection.packId, blueprintId), {
       next: () => this.opened(),
       error: (error: unknown) =>
-        void this.notifier.alert(
-          ApiError.from(error).is(404)
-            ? 'You have no pack of this type in your collection or that selection is not available for this pack.'
-            : GENERIC_COMMUNICATION_ERROR,
+        this.notifier.tell(
+          errorMessage(error, {
+            404: 'You have no pack of this type in your collection or that selection is not available for this pack.',
+          }),
         ),
     });
   }
@@ -86,7 +84,7 @@ export class PacksService {
   }
 
   private opened(): void {
-    setTimeout(() => this.delivery.fetch(), DELIVERY_DELAY_MS);
+    this.lifetime.later(() => this.delivery.fetch(), DELIVERY_DELAY_MS);
     this.collection.load();
   }
 

@@ -3,7 +3,7 @@ import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { DeckbuilderActions } from '../../../core/actions/deckbuilder-actions.service';
 import { CardView } from '../../../core/cards/card-view';
-import { CardHover } from './card-hover';
+import { CardHover } from '../../../core/cards/card-hover.service';
 import { CardComponent, DRAG_UP_FOR_INFO, LONG_PRESS_MS } from './card.component';
 
 const CARD: CardView = {

@@ -4,7 +4,8 @@
   "description": "Compares the Angular deck builder with the legacy deckBuild.html in a real browser (see README.md). Not part of the Maven build.",
   "type": "module",
   "scripts": {
-    "check": "node run.mjs"
+    "check": "node run.mjs",
+    "check:stubbed": "node run.mjs --stubbed --out report-stubbed"
   },
   "devDependencies": {
     "playwright": "1.64.1",

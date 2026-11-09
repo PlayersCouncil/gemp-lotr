@@ -24,7 +24,7 @@ export interface CardImageTables {
   packBlueprints: ImageTable;
 }
 
-export const CARD_BACK_BLUEPRINT = '-1_1';
+const CARD_BACK_BLUEPRINT = '-1_1';
 const DECIPHER_IMAGES = 'https://i.lotrtcgpc.net/decipher/';
 /** Absolute here: the legacy relative "images/..." would resolve against the Angular app's base URL. */
 const FUTURE_PRIZE_IMAGE = siteImage('future_prize.jpg');
@@ -73,7 +73,7 @@ export function isTengwar(blueprintId: string): boolean {
   return /(_\d+)T/.test(blueprintId);
 }
 
-/** Card.getFixedImage: the first table (in legacy order) that has an image for this exact ID. */
+/** The first table (in the data files' order) that has an image for this exact ID. */
 export function getFixedImage(tables: CardImageTables, blueprintId: string): string | null {
   return (
     lookup(tables.fixedImages, blueprintId) ??
@@ -84,7 +84,7 @@ export function getFixedImage(tables: CardImageTables, blueprintId: string): str
 }
 
 function lookup(table: ImageTable, key: string): string | null {
-  return Object.hasOwn(table, key) ? table[key] : null;
+  return Object.hasOwn(table, key) ? (table[key] ?? null) : null;
 }
 
 /** Card.isPack */
@@ -101,8 +101,8 @@ export function isPlaceholder(blueprintId: string | null): boolean {
   return separator > 0 && parseInt(blueprintId.substring(0, separator), 10) === 404;
 }
 
-/** Card.getErrata: the remade errata image, if this card has one. */
-export function getErrataImage(setNo: number, cardNo: number): string | null {
+/** The remade errata image, if this card has one. */
+function getErrataImage(setNo: number, cardNo: number): string | null {
   const cards = REMADE_ERRATAS[setNo];
   if (cards?.includes(cardNo)) {
     return siteImage(`erratas/LOTR${formatCardNo(setNo, cardNo)}.jpg`);
@@ -123,12 +123,12 @@ export function isIncomplete(blueprintId: string): boolean {
 }
 
 /** Card.formatSetNo */
-export function formatSetNo(setNo: number): string {
+function formatSetNo(setNo: number): string {
   return setNo < 10 ? `0${setNo}` : `${setNo}`;
 }
 
 /** Card.formatCardNo */
-export function formatCardNo(setNo: number, cardNo: number): string {
+function formatCardNo(setNo: number, cardNo: number): string {
   const setNoStr = formatSetNo(setNo);
   if (cardNo < 10) {
     return `${setNoStr}00${cardNo}`;
@@ -205,7 +205,7 @@ export function getBackSideUrl(tables: CardImageTables): string {
 }
 
 /** Card.isZoneNeverHorizontal */
-export function isZoneNeverHorizontal(zone: string | null | undefined): boolean {
+function isZoneNeverHorizontal(zone: string | null | undefined): boolean {
   return (
     zone === 'DECK' ||
     zone === 'TOP_OF_DISCARD' ||

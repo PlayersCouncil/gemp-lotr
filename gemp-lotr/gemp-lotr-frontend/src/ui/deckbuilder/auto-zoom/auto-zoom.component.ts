@@ -7,7 +7,7 @@ import { CardImageService } from '../../../core/cards/card-image.service';
 import { CardInfoService } from '../../../core/cards/card-info.service';
 import { zoneOf } from '../../../core/cards/card-ref';
 import { AutoZoomSetting } from '../../../core/platform/auto-zoom-setting';
-import { CardHover, HoveredCard } from '../../shared/card/card-hover';
+import { CardHover, HoveredCard } from '../../../core/cards/card-hover.service';
 import { zoomPlacement } from './zoom-placement';
 
 /** The mouse has to rest this long on a card before its zoom shows (AutoZoom.HoverDelay). */
@@ -19,7 +19,7 @@ export const HOVER_COOLDOWN_MS = 500;
 const NO_ZOOM = new Set(['-1_1', '-1_2']);
 
 /**
- * The hover zoom (legacy AutoZoom): resting the mouse on a card for half a second shows it large beside it; moving on
+ * The hover zoom: resting the mouse on a card for half a second shows it large beside it; moving on
  * to another card soon after shows that one at once. Pressing a mouse button hides it; Shift flips a card that has a
  * back. Off when the toolbar's magnifier is off (AutoZoomSetting), on touch devices and while the card information is
  * open. It ignores the mouse.

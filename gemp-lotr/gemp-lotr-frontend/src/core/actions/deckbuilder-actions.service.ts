@@ -5,7 +5,7 @@ import { DeckEditing } from '../deck/deck-editing.service';
 import { PacksService } from '../packs/packs.service';
 
 /**
- * What using a card means (the legacy deckBuildingUi.clickCardFunction), whatever gesture the view maps to it:
+ * What using a card means, whatever gesture the view maps to it:
  *  - activating a collection card adds it to the deck; a deck card is removed (one copy); a pack is opened; a
  *    selection pack's choice is taken. Copies behind a card and the Race card do nothing;
  *  - asking for details shows the card information.

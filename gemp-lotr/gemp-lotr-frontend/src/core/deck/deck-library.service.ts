@@ -1,5 +1,6 @@
+import { PageLifetime } from '../platform/page-lifetime.service';
 import { inject, Injectable, signal } from '@angular/core';
-import { GENERIC_COMMUNICATION_ERROR } from '../api/api-error';
+import { errorMessage } from '../api/api-error';
 import { DeckbuilderApi } from '../api/deckbuilder-api.service';
 import { DeckSummary } from '../api/models';
 import { Notifier } from '../notifier/notifier';
@@ -13,12 +14,12 @@ export interface DeckListState {
 }
 
 /**
- * The player's saved decks and the library, decklist import and notes (deckBuildingUi.loadDeckList, loadLibraryList,
- * importDecklist, editNotes): which of their dialogs are open and what they show. Leaving the current deck (deck list, library, import) first offers to save it.
+ * The player's saved decks and the library, decklist import and notes: which of their dialogs are open and what they show. Leaving the current deck (deck list, library, import) first offers to save it.
  */
 @Injectable()
 export class DeckLibraryService {
   private readonly api = inject(DeckbuilderApi);
+  private readonly lifetime = inject(PageLifetime);
   private readonly saver = inject(DeckSaver);
   private readonly opener = inject(DeckOpener);
   private readonly notifier = inject(Notifier);
@@ -38,9 +39,9 @@ export class DeckLibraryService {
 
   async openLibrary(): Promise<void> {
     await this.saver.savePrompt();
-    this.api.listLibraryDecks().subscribe({
+    this.lifetime.read(this.api.listLibraryDecks(), {
       next: (decks) => this.deckList.set({ kind: 'library', decks }),
-      error: () => this.tell(GENERIC_COMMUNICATION_ERROR),
+      error: (error: unknown) => this.notifier.tell(errorMessage(error)),
     });
   }
 
@@ -76,9 +77,9 @@ export class DeckLibraryService {
 
   /** "Share deck list": the server's public page of the deck, in a new tab. */
   shareDeck(entry: DeckSummary): void {
-    this.api.shareDeckUrl(entry.name).subscribe({
+    this.lifetime.read(this.api.shareDeckUrl(entry.name), {
       next: (url) => this.links.open(url),
-      error: () => this.tell(GENERIC_COMMUNICATION_ERROR),
+      error: (error: unknown) => this.notifier.tell(errorMessage(error)),
     });
   }
 
@@ -91,23 +92,19 @@ export class DeckLibraryService {
     if (!(await this.notifier.confirm('Are you sure you want to delete this deck?'))) {
       return;
     }
-    this.api.deleteDeck(entry.name).subscribe({
+    this.lifetime.write(this.api.deleteDeck(entry.name), {
       next: () => {
         this.saver.deckDeleted(entry.name);
         this.loadDeckList();
       },
-      error: () => this.tell(GENERIC_COMMUNICATION_ERROR),
+      error: (error: unknown) => this.notifier.tell(errorMessage(error)),
     });
   }
 
   private loadDeckList(): void {
-    this.api.listDecks().subscribe({
+    this.lifetime.read(this.api.listDecks(), {
       next: (decks) => this.deckList.set({ kind: 'decks', decks }),
-      error: () => this.tell(GENERIC_COMMUNICATION_ERROR),
+      error: (error: unknown) => this.notifier.tell(errorMessage(error)),
     });
-  }
-
-  private tell(message: string): void {
-    void this.notifier.alert(message);
   }
 }

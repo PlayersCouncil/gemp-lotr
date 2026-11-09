@@ -21,9 +21,8 @@ import {
 } from './parsers';
 
 /**
- * Every server call the deck builder makes, typed. Mirrors the legacy communication.js functions used by
- * deckBuildingUi.js (named in each comment); requests and server behaviour are unchanged.
- * Failures arrive as ApiError; the statuses the legacy page handled specially are noted per method.
+ * Every server call the deck builder makes, typed. Failures arrive as ApiError; the statuses that mean something
+ * special are noted per method.
  */
 @Injectable({ providedIn: 'root' })
 export class DeckbuilderApi {
@@ -74,7 +73,7 @@ export class DeckbuilderApi {
     return this.http.postText('/deck/stats', { targetFormat, collectionName, deckContents, leagueCode });
   }
 
-  /** getFormats: all formats keyed by code. 400 = the legacy page alerted "Could not retrieve formats." */
+  /** getFormats: all formats keyed by code. 400 = the formats could not be retrieved. */
   getFormats(): Observable<FormatsReadout> {
     return this.http.postJson<FormatsReadout>('/deck/formats', { includeEvents: false }, { participant: false });
   }
@@ -96,7 +95,7 @@ export class DeckbuilderApi {
     return this.http.getXml('/deck/library', { deckName }).pipe(map(parseDeck));
   }
 
-  /** The page the legacy library dialog opened in a new tab. */
+  /** The address of a library deck's web page. */
   libraryDeckHtmlUrl(deckName: string): string {
     return `${SERVER_URL}/deck/libraryHtml?deckName=${encodeURIComponent(deckName)}`;
   }
@@ -142,7 +141,7 @@ export class DeckbuilderApi {
     return this.http.getXml('/league').pipe(map(parseLeagues));
   }
 
-  /** The Race to Mount Doom leagues the player is in (what the legacy format dropdown lists). */
+  /** The Race to Mount Doom leagues the player is in (for the format list). */
   getMemberRtmdLeagues(): Observable<League[]> {
     return this.getLeagues().pipe(map((leagues) => leagues.filter((l) => l.type === 'RTMD' && l.member)));
   }
