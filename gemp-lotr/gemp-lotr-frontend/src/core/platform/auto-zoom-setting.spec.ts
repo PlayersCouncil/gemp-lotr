@@ -1,10 +1,20 @@
 import { TestBed } from '@angular/core/testing';
-import { AUTO_ZOOM_COOKIE, AutoZoomSetting } from './auto-zoom-setting';
+import { AUTO_ZOOM_COOKIE_NAME, AutoZoomSetting } from './auto-zoom-setting';
+
+const COOKIE = 'autoZoomInSomePage';
 
 describe('AutoZoomSetting', () => {
   let cookie: string;
   let written: string[];
   let spies: { mockRestore(): void }[];
+
+  function setting(name = COOKIE): AutoZoomSetting {
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({
+      providers: [AutoZoomSetting, { provide: AUTO_ZOOM_COOKIE_NAME, useValue: name }],
+    });
+    return TestBed.inject(AutoZoomSetting);
+  }
 
   beforeEach(() => {
     cookie = '';
@@ -19,22 +29,27 @@ describe('AutoZoomSetting', () => {
   afterEach(() => spies.forEach((spy) => spy.mockRestore()));
 
   it('is on unless the cookie says false', () => {
-    expect(TestBed.inject(AutoZoomSetting).enabled()).toBe(true);
-    TestBed.resetTestingModule();
-    cookie = `${AUTO_ZOOM_COOKIE}=false`;
-    expect(TestBed.inject(AutoZoomSetting).enabled()).toBe(false);
+    expect(setting().enabled()).toBe(true);
+    cookie = `${COOKIE}=false`;
+    expect(setting().enabled()).toBe(false);
+  });
+
+  it("reads its own page's cookie, not another's", () => {
+    cookie = 'autoZoomInGame=false';
+    expect(setting().enabled()).toBe(true);
+    expect(setting('autoZoomInGame').enabled()).toBe(false);
   });
 
   it('remembers a toggle in the cookie shared with the legacy page', () => {
-    const setting = TestBed.inject(AutoZoomSetting);
-    setting.toggle();
-    expect(setting.enabled()).toBe(false);
-    expect(written[0]).toMatch(new RegExp(`^${AUTO_ZOOM_COOKIE}=false; expires=.*; path=/gemp-lotr$`));
-    setting.toggle();
-    expect(written[1]).toMatch(new RegExp(`^${AUTO_ZOOM_COOKIE}=true;`));
+    const zoom = setting();
+    zoom.toggle();
+    expect(zoom.enabled()).toBe(false);
+    expect(written[0]).toMatch(new RegExp(`^${COOKIE}=false; expires=.*; path=/gemp-lotr$`));
+    zoom.toggle();
+    expect(written[1]).toMatch(new RegExp(`^${COOKIE}=true;`));
   });
 
   it('is not offered where the document takes touch events', () => {
-    expect(TestBed.inject(AutoZoomSetting).available).toBe(!('ontouchstart' in document.documentElement));
+    expect(setting().available).toBe(!('ontouchstart' in document.documentElement));
   });
 });

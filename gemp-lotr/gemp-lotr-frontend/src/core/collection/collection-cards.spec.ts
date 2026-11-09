@@ -1,12 +1,18 @@
 import { TestBed } from '@angular/core/testing';
-import { CardImageService } from '../cards/card-image.service';
+import { CardViews } from '../cards/card-views.service';
+import { FoilSetting } from '../platform/foil-setting';
 import { collectionCards } from './collection-cards';
 
 describe('collectionCards', () => {
+  beforeEach(() =>
+    TestBed.configureTestingModule({
+      providers: [CardViews, { provide: FoilSetting, useValue: { overlayImage: () => '/gemp-lotr/images/holo.jpg' } }],
+    }),
+  );
+
   const options = () => ({
-    images: TestBed.inject(CardImageService),
+    views: TestBed.inject(CardViews),
     available: (_: string, count: number) => count - 1,
-    foilImage: '/gemp-lotr/images/holo.jpg',
   });
 
   it('is empty before a page has loaded', () => {

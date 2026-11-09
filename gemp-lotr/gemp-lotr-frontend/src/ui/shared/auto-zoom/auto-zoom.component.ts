@@ -5,7 +5,6 @@ import { stripBlueprintId } from '../../../core/cards/card-blueprint';
 import { cardDisplayData } from '../../../core/cards/card-display';
 import { CardImageService } from '../../../core/cards/card-image.service';
 import { CardInfoService } from '../../../core/cards/card-info.service';
-import { zoneOf } from '../../../core/cards/card-ref';
 import { AutoZoomSetting } from '../../../core/platform/auto-zoom-setting';
 import { CardHover, HoveredCard } from '../../../core/cards/card-hover.service';
 import { zoomPlacement } from './zoom-placement';
@@ -77,13 +76,17 @@ export class AutoZoomComponent {
     if (!shown || !this.window) {
       return null;
     }
-    const ref = shown.card.ref;
-    const image = this.images.resolve(ref.blueprintId, zoneOf(ref));
+    const card = shown.card;
+    const image = this.images.resolve(card.blueprintId, card.zone);
     if (NO_ZOOM.has(image.bareBlueprint)) {
       return null;
     }
-    const overlay = ref.kind === 'race' && ref.overlayBlueprintId ? this.images.imageUrl(ref.overlayBlueprintId) : null;
-    const data = cardDisplayData(image, overlay, true, this.images.imageUrl(stripBlueprintId(ref.blueprintId)));
+    const data = cardDisplayData(
+      image,
+      card.overlayImage,
+      true,
+      this.images.imageUrl(stripBlueprintId(card.blueprintId)),
+    );
     return {
       data,
       place: zoomPlacement(data.horizontal, shown.box, this.window.innerWidth, this.window.innerHeight),

@@ -1,7 +1,6 @@
 import { provideDeckbuilderState } from '../deckbuilder-state';
 import { TestBed } from '@angular/core/testing';
-import { CardInfoService } from '../cards/card-info.service';
-import { CardRef } from '../cards/card-ref';
+import { CardActions } from '../cards/card-actions';
 import { DeckEditing } from '../deck/deck-editing.service';
 import { PacksService } from '../packs/packs.service';
 import { DeckbuilderActions } from './deckbuilder-actions.service';
@@ -66,9 +65,7 @@ describe('DeckbuilderActions', () => {
     expect(deck.addFromCollection).not.toHaveBeenCalled();
   });
 
-  it('shows a card in the card information', () => {
-    const ref: CardRef = { kind: 'race', blueprintId: '90_7', overlayBlueprintId: null };
-    actions.showInfo(ref);
-    expect(TestBed.inject(CardInfoService).card()).toBe(ref);
+  it('is what using a card does on the page', () => {
+    expect(TestBed.inject(CardActions)).toBe(actions);
   });
 });

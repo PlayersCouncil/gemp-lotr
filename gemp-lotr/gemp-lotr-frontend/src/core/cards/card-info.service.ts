@@ -1,10 +1,10 @@
 import { Injectable, signal } from '@angular/core';
-import { CardRef } from './card-ref';
+import { CardView } from './card-view';
 
 /** Whether the card information is shown, and for which card (CardInfoDialog's state). */
 @Injectable()
 export class CardInfoService {
-  readonly card = signal<CardRef | null>(null);
+  readonly card = signal<CardView | null>(null);
   /** Shown by dragging a card up: the click that ends that drag doesn't close it. */
   private dragRelease = false;
 
@@ -12,13 +12,13 @@ export class CardInfoService {
     return this.card() !== null;
   }
 
-  show(ref: CardRef): void {
-    this.card.set(ref);
+  show(card: CardView): void {
+    this.card.set(card);
   }
 
-  showDragged(ref: CardRef): void {
+  showDragged(card: CardView): void {
     this.dragRelease = true;
-    this.card.set(ref);
+    this.card.set(card);
   }
 
   /** Whether this click is the one ending a drag up (it counts only once). */

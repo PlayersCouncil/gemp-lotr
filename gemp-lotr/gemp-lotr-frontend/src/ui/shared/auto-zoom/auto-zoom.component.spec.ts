@@ -1,13 +1,9 @@
-import { provideDeckbuilderState } from '../../../core/deckbuilder-state';
-import { provideGempHttp } from '../../../core/api/gemp-interceptors';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { CardImageService } from '../../../core/cards/card-image.service';
 import { CardInfoService } from '../../../core/cards/card-info.service';
 import { CardView } from '../../../core/cards/card-view';
 import { AutoZoomSetting } from '../../../core/platform/auto-zoom-setting';
-import { PAGE_QUERY_STRING } from '../../../core/platform/page-location';
-import { provideFakeNotifier } from '../../../testing/fake-notifier';
+import { provideTestCardInteractions } from '../../../testing/card-interactions';
 import { CardHover } from '../../../core/cards/card-hover.service';
 import { AutoZoomComponent, HOVER_COOLDOWN_MS, HOVER_DELAY_MS } from './auto-zoom.component';
 
@@ -16,7 +12,9 @@ describe('AutoZoomComponent', () => {
   let setting: AutoZoomSetting;
 
   const card = (blueprintId: string): CardView => ({
-    ref: { kind: 'shown', blueprintId, zone: 'FREE_PEOPLE', choosable: false },
+    blueprintId,
+    zone: 'FREE_PEOPLE',
+    ref: null,
     role: 'card',
     imageUrl: TestBed.inject(CardImageService).imageUrl(blueprintId),
     horizontal: false,
@@ -30,15 +28,7 @@ describe('AutoZoomComponent', () => {
 
   beforeEach(() => {
     vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
-    TestBed.configureTestingModule({
-      providers: [
-        ...provideDeckbuilderState(),
-        provideGempHttp(),
-        provideHttpClientTesting(),
-        provideFakeNotifier(),
-        { provide: PAGE_QUERY_STRING, useValue: '' },
-      ],
-    });
+    TestBed.configureTestingModule({ providers: provideTestCardInteractions() });
     hover = TestBed.inject(CardHover);
     setting = TestBed.inject(AutoZoomSetting);
     Object.defineProperty(setting, 'available', { value: true });
@@ -113,10 +103,17 @@ describe('AutoZoomComponent', () => {
     expect(zoom.hidden).toBe(true);
     setting.enabled.set(true);
 
-    TestBed.inject(CardInfoService).show({ kind: 'shown', blueprintId: '1_1', zone: 'FREE_PEOPLE', choosable: false });
+    TestBed.inject(CardInfoService).show(card('1_1'));
     hover.enter({}, card('1_12'), box);
     step(HOVER_DELAY_MS);
     expect(zoom.hidden).toBe(true);
+  });
+
+  it("draws the card's overlay over it", () => {
+    const { zoom, step } = render();
+    hover.enter({}, { ...card('1_12'), overlayImage: 'https://example.com/modifier.jpg' }, box);
+    step(HOVER_DELAY_MS);
+    expect(zoom.querySelector<HTMLImageElement>('img.gd-zoom__overlay')!.src).toBe('https://example.com/modifier.jpg');
   });
 
   it('flips the zoomed card to its back with Shift (every card has the standard back), face up for the next', () => {

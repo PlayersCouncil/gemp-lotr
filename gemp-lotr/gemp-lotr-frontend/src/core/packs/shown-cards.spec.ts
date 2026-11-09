@@ -1,9 +1,16 @@
 import { TestBed } from '@angular/core/testing';
-import { CardImageService } from '../cards/card-image.service';
+import { CardViews } from '../cards/card-views.service';
+import { FoilSetting } from '../platform/foil-setting';
 import { deliveredCards, selectionChoiceCards } from './shown-cards';
 
 describe('shown cards', () => {
-  const options = () => ({ images: TestBed.inject(CardImageService), foilImage: 'foil.png' });
+  beforeEach(() =>
+    TestBed.configureTestingModule({
+      providers: [CardViews, { provide: FoilSetting, useValue: { overlayImage: () => 'foil.png' } }],
+    }),
+  );
+
+  const options = () => TestBed.inject(CardViews);
 
   it('draws selection choices like collection cards, picked when used', () => {
     const [card] = selectionChoiceCards(['1_2'], options());

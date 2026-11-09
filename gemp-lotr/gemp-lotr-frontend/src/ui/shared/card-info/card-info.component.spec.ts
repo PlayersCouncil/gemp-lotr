@@ -1,15 +1,27 @@
-import { provideDeckbuilderState } from '../../../core/deckbuilder-state';
 import { TestBed } from '@angular/core/testing';
 import { CardInfoService } from '../../../core/cards/card-info.service';
-import { CardRef } from '../../../core/cards/card-ref';
+import { CardView } from '../../../core/cards/card-view';
 import { ThemeService } from '../../../core/platform/theme.service';
+import { provideTestCardInteractions } from '../../../testing/card-interactions';
 import { CardInfoComponent, ZOOM_COOKIE } from './card-info.component';
 
-const CARD: CardRef = { kind: 'shown', blueprintId: '1_2', zone: 'COLLECTION', choosable: false };
-const META_SITE_MODIFIER: CardRef = { kind: 'shown', blueprintId: '90_1', zone: 'COLLECTION', choosable: false };
+const CARD: CardView = {
+  blueprintId: '1_2',
+  zone: 'COLLECTION',
+  ref: null,
+  role: 'card',
+  imageUrl: '',
+  horizontal: false,
+  errata: false,
+  foilImage: null,
+  border: true,
+  count: null,
+  overlayImage: null,
+};
+const META_SITE_MODIFIER: CardView = { ...CARD, blueprintId: '90_1' };
 
 describe('CardInfoComponent', () => {
-  beforeEach(() => TestBed.configureTestingModule({ providers: provideDeckbuilderState() }));
+  beforeEach(() => TestBed.configureTestingModule({ providers: provideTestCardInteractions() }));
 
   let info: CardInfoService;
   let cookies: string[];

@@ -1,11 +1,10 @@
-import { DOCUMENT } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
-import { CardImageService } from '../../../core/cards/card-image.service';
-import { foilOverlayImage, readFoilPresentation } from '../../../core/cards/foil-presentation';
+import { CardViews } from '../../../core/cards/card-views.service';
 import { collectionCards } from '../../../core/collection/collection-cards';
 import { CollectionBrowser } from '../../../core/collection/collection-browser.service';
 import { CollectionCounts } from '../../../core/collection/collection-counts.service';
 import { CardComponent } from '../../shared/card/card.component';
+import { cardFits } from '../../shared/fit-cards/fit-cards';
 import { FitCardsDirective } from '../../shared/fit-cards/fit-cards.directive';
 
 /**
@@ -30,16 +29,14 @@ import { FitCardsDirective } from '../../shared/fit-cards/fit-cards.directive';
 export class CollectionGridComponent {
   private readonly browser = inject(CollectionBrowser);
   private readonly counts = inject(CollectionCounts);
-  private readonly images = inject(CardImageService);
-  private readonly foilImage = foilOverlayImage(readFoilPresentation(inject(DOCUMENT).cookie));
+  private readonly views = inject(CardViews);
 
   protected readonly cards = computed(() =>
     collectionCards(this.browser.page(), {
-      images: this.images,
+      views: this.views,
       available: (blueprintId, count) => this.counts.available(blueprintId, count),
-      foilImage: this.foilImage,
     }),
   );
 
-  protected readonly fitCards = computed(() => this.cards().map((card) => ({ horizontal: card.horizontal })));
+  protected readonly fitCards = computed(() => cardFits(this.cards()));
 }

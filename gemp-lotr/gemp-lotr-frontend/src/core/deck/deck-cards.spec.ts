@@ -1,12 +1,20 @@
 import { TestBed } from '@angular/core/testing';
 import { CardImageService } from '../cards/card-image.service';
+import { CardViews } from '../cards/card-views.service';
+import { FoilSetting } from '../platform/foil-setting';
 import { pileStacks, raceCardView, slotCards } from './deck-cards';
 import { addDrawCopy, addToSlot, EMPTY_DECK } from './deck-model';
 
 describe('deck cards', () => {
-  const options = () => ({ images: TestBed.inject(CardImageService), foilImage: '/gemp-lotr/images/holo.jpg' });
+  beforeEach(() =>
+    TestBed.configureTestingModule({
+      providers: [CardViews, { provide: FoilSetting, useValue: { overlayImage: () => '/gemp-lotr/images/holo.jpg' } }],
+    }),
+  );
 
-  it('shows the cards of a slot and the sites, each removable through its CardRef', () => {
+  const options = () => TestBed.inject(CardViews);
+
+  it('shows the cards of a slot and the sites, each removable through its ref', () => {
     let deck = addToSlot(EMPTY_DECK, 'ringBearer', '1_290');
     deck = addToSlot(deck, 'sites', '1_319');
     deck = addToSlot(deck, 'sites', '1_320');
@@ -16,10 +24,11 @@ describe('deck cards', () => {
     );
     expect(ringBearer.ref).toEqual(expect.objectContaining({ kind: 'slot', slot: 'ringBearer', blueprintId: '1_290' }));
     const sites = slotCards(deck, 'sites', options());
-    expect(sites.map((site) => [site.ref.blueprintId, site.horizontal])).toEqual([
-      ['1_319', true],
-      ['1_320', true],
+    expect(sites.map((site) => [site.ref.blueprintId, site.horizontal, site.wholePixels])).toEqual([
+      ['1_319', true, true],
+      ['1_320', true, true],
     ]);
+    expect(ringBearer.wholePixels).toBe(false);
     expect(slotCards(deck, 'ring', options())).toEqual([]);
   });
 
@@ -43,6 +52,7 @@ describe('deck cards', () => {
     ]);
     const [first] = free;
     expect(first.card.ref.kind).toBe('draw');
+    expect([first.card.zone, first.behind[0].zone]).toEqual(['FREE_PEOPLE', 'attached']);
     expect(first.behind.map((copy) => [copy.role, copy.ref.kind])).toEqual([
       ['copy', 'behind'],
       ['copy', 'behind'],

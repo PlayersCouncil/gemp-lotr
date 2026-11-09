@@ -1,22 +1,19 @@
 import { inject, Injectable } from '@angular/core';
-import { CardInfoService } from '../cards/card-info.service';
-import { CardRef } from '../cards/card-ref';
+import { CardActions } from '../cards/card-actions';
 import { DeckEditing } from '../deck/deck-editing.service';
 import { PacksService } from '../packs/packs.service';
+import { DeckbuilderCardRef } from './deckbuilder-card-ref';
 
 /**
- * What using a card means, whatever gesture the view maps to it:
- *  - activating a collection card adds it to the deck; a deck card is removed (one copy); a pack is opened; a
- *    selection pack's choice is taken. Copies behind a card and the Race card do nothing;
- *  - asking for details shows the card information.
+ * What using a card means on the deck builder: activating a collection card adds it to the deck; a deck card is removed
+ * (one copy); a pack is opened; a selection pack's choice is taken. Copies behind a card and the Race card do nothing.
  */
 @Injectable()
-export class DeckbuilderActions {
+export class DeckbuilderActions extends CardActions {
   private readonly editing = inject(DeckEditing);
   private readonly packs = inject(PacksService);
-  private readonly cardInfo = inject(CardInfoService);
 
-  activate(ref: CardRef): void {
+  activate(ref: DeckbuilderCardRef): void {
     switch (ref.kind) {
       case 'collection':
         if (ref.role === 'card') {
@@ -39,14 +36,5 @@ export class DeckbuilderActions {
       default:
       // Copies behind a card and the Race card do nothing
     }
-  }
-
-  showInfo(ref: CardRef): void {
-    this.cardInfo.show(ref);
-  }
-
-  /** A card dragged upwards: on the release, whether or not the information is already open. */
-  showDraggedInfo(ref: CardRef): void {
-    this.cardInfo.showDragged(ref);
   }
 }

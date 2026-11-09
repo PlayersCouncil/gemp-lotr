@@ -1,12 +1,23 @@
-import { provideDeckbuilderState } from '../deckbuilder-state';
 import { TestBed } from '@angular/core/testing';
 import { CardInfoService } from './card-info.service';
-import { CardRef } from './card-ref';
+import { CardView } from './card-view';
 
-const CARD: CardRef = { kind: 'shown', blueprintId: '1_2', zone: 'COLLECTION', choosable: false };
+const CARD: CardView = {
+  blueprintId: '1_2',
+  zone: 'COLLECTION',
+  ref: null,
+  role: 'card',
+  imageUrl: '',
+  horizontal: false,
+  errata: false,
+  foilImage: null,
+  border: true,
+  count: null,
+  overlayImage: null,
+};
 
 describe('CardInfoService', () => {
-  beforeEach(() => TestBed.configureTestingModule({ providers: provideDeckbuilderState() }));
+  beforeEach(() => TestBed.configureTestingModule({ providers: [CardInfoService] }));
 
   let info: CardInfoService;
 

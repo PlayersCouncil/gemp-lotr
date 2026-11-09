@@ -1,7 +1,6 @@
 import { Provider } from '@angular/core';
 import { DeckbuilderActions } from './actions/deckbuilder-actions.service';
-import { CardHover } from './cards/card-hover.service';
-import { CardInfoService } from './cards/card-info.service';
+import { provideCardInteractions } from './cards/card-interactions';
 import { CollectionBrowser } from './collection/collection-browser.service';
 import { CollectionCounts } from './collection/collection-counts.service';
 import { CollectionQuery } from './collection/collection-query.service';
@@ -18,6 +17,9 @@ import { PackDeliveryService } from './delivery/pack-delivery.service';
 import { FormatsService } from './formats/formats.service';
 import { PacksService } from './packs/packs.service';
 import { PageLifetime } from './platform/page-lifetime.service';
+
+/** Shared with the legacy page. */
+export const DECKBUILDER_AUTO_ZOOM_COOKIE = 'autoZoomInDeckbuilder';
 
 /**
  * The deck builder's state, for the providers of its page: it is created when the page opens and destroyed when the
@@ -41,8 +43,6 @@ export function provideDeckbuilderState(): Provider[] {
     FormatsService,
     PackDeliveryService,
     PacksService,
-    CardInfoService,
-    CardHover,
-    DeckbuilderActions,
+    ...provideCardInteractions({ actions: DeckbuilderActions, autoZoomCookie: DECKBUILDER_AUTO_ZOOM_COOKIE }),
   ];
 }

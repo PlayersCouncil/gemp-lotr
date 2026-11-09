@@ -1,13 +1,11 @@
-import { DOCUMENT } from '@angular/common';
 import { Component, computed, inject, linkedSignal } from '@angular/core';
-import { CardImageService } from '../../../core/cards/card-image.service';
 import { CardView } from '../../../core/cards/card-view';
-import { foilOverlayImage, readFoilPresentation } from '../../../core/cards/foil-presentation';
+import { CardViews } from '../../../core/cards/card-views.service';
 import { PacksService } from '../../../core/packs/packs.service';
 import { deliveredCards, selectionChoiceCards } from '../../../core/packs/shown-cards';
 import { CardComponent } from '../../shared/card/card.component';
 import { DialogComponent } from '../../shared/dialog/dialog.component';
-import { FitCard } from '../../shared/fit-cards/fit-cards';
+import { cardFits, FitCard } from '../../shared/fit-cards/fit-cards';
 import { FitCardsDirective } from '../../shared/fit-cards/fit-cards.directive';
 
 interface ShownGroup {
@@ -16,7 +14,7 @@ interface ShownGroup {
 }
 
 function group(cards: CardView[]): ShownGroup {
-  return { cards, fit: cards.map((card) => ({ horizontal: card.horizontal })) };
+  return { cards, fit: cardFits(cards) };
 }
 
 /**
@@ -69,22 +67,16 @@ function group(cards: CardView[]): ShownGroup {
 })
 export class PackDialogsComponent {
   protected readonly packs = inject(PacksService);
-  private readonly options = {
-    images: inject(CardImageService),
-    foilImage: foilOverlayImage(readFoilPresentation(inject(DOCUMENT).cookie)),
-  };
+  private readonly views = inject(CardViews);
 
   protected readonly selection = computed(() =>
-    group(selectionChoiceCards(this.packs.selection()?.choices ?? [], this.options)),
+    group(selectionChoiceCards(this.packs.selection()?.choices ?? [], this.views)),
   );
 
   protected readonly deliveries = computed(
     () =>
       new Map(
-        [...this.packs.deliveries().entries()].map(([name, cards]) => [
-          name,
-          group(deliveredCards(cards, this.options)),
-        ]),
+        [...this.packs.deliveries().entries()].map(([name, cards]) => [name, group(deliveredCards(cards, this.views))]),
       ),
   );
 

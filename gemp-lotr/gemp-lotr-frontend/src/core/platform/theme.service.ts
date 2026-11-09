@@ -29,7 +29,7 @@ const DEFAULT_THEME: ThemeName = 'classic';
 const MOBILE_THEME: ThemeName = 'classic';
 
 /** Remembers the player's choice on this device (path /gemp-lotr, like the legacy settings cookies). */
-export const THEME_COOKIE = 'deckbuilderTheme';
+export const THEME_COOKIE = 'gempTheme';
 
 /** Set on <html>, so a theme's CSS can tell which theme is active if it needs to. */
 export const THEME_ATTRIBUTE = 'data-theme';

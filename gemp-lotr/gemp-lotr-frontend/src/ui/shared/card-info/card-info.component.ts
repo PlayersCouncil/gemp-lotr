@@ -13,12 +13,11 @@ import { parseBlueprint } from '../../../core/cards/card-blueprint';
 import { cardDisplayData } from '../../../core/cards/card-display';
 import { CardImageService } from '../../../core/cards/card-image.service';
 import { CardInfoService } from '../../../core/cards/card-info.service';
-import { zoneOf } from '../../../core/cards/card-ref';
 import { siteImage } from '../../../core/platform/app-paths';
 import { ThemeService } from '../../../core/platform/theme.service';
 import { readCookie, writeCookie } from '../../../core/platform/cookies';
-import { cardElementOf } from '../../shared/card/card.component';
-import { DocumentPressDirective } from '../../shared/document-press/document-press.directive';
+import { cardElementOf } from '../card/card.component';
+import { DocumentPressDirective } from '../document-press/document-press.directive';
 
 /** Shared with the legacy card information dialog (the zoom slider's last value). */
 export const ZOOM_COOKIE = 'card-info-dialog-slider-last-value';
@@ -125,14 +124,13 @@ export class CardInfoComponent {
   protected sliding = false;
 
   protected readonly view = computed(() => {
-    const ref = this.info.card();
-    if (!ref) {
+    const card = this.info.card();
+    if (!card) {
       return null;
     }
-    const image = this.images.resolve(ref.blueprintId, zoneOf(ref));
-    const overlay = ref.kind === 'race' && ref.overlayBlueprintId ? this.images.imageUrl(ref.overlayBlueprintId) : null;
+    const image = this.images.resolve(card.blueprintId, card.zone);
     return {
-      data: cardDisplayData(image, overlay),
+      data: cardDisplayData(image, card.overlayImage),
       wikiUrl: image.hasWiki ? image.wikiUrl : null,
       flippable: !isMetaSiteModifier(image.bareBlueprint),
     };

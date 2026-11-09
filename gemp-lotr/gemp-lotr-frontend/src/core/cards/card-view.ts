@@ -1,9 +1,13 @@
-import { CardRef } from './card-ref';
-
-/** What a card on the page shows, whatever theme draws it. */
-export interface CardView {
-  /** What the card stands for: what using it does (DeckbuilderActions) and what its details show. */
-  ref: CardRef;
+/**
+ * What a card on a page shows, whatever theme draws it. `Ref` is what the card stands for on that page, handed to the
+ * page's CardActions when the card is used; the shared card code never looks inside it.
+ */
+export interface CardView<Ref = unknown> {
+  /** As given, including markers such as "*" (foil). */
+  blueprintId: string;
+  /** The zone it is shown in (it decides e.g. whether a site is drawn landscape). */
+  zone: string | null;
+  ref: Ref;
   /** The card's role on the page, e.g. a card or a pack in the collection; the themes may tell them apart. */
   role: CardRole;
   imageUrl: string;
@@ -19,6 +23,8 @@ export interface CardView {
   count: number | null;
   /** An RTMD meta-site's modifier, drawn over the lower part of its position card. */
   overlayImage: string | null;
+  /** The theme puts this card on whole pixels on screen, so what is placed beside it rounds its edges too. */
+  wholePixels?: boolean;
 }
 
 /**

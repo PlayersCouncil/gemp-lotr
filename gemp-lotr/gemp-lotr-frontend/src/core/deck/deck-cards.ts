@@ -1,64 +1,56 @@
-import { CardImageService } from '../cards/card-image.service';
-import { CardRef } from '../cards/card-ref';
-import { CardRole, CardView } from '../cards/card-view';
+import { DeckbuilderCardRef, DeckbuilderCardView } from '../actions/deckbuilder-card-ref';
+import { CardRole } from '../cards/card-view';
+import { CardViews, CardViewSpec } from '../cards/card-views.service';
 import { DeckSlot, DeckState, drawPile, DrawSide } from './deck-model';
 import type { RaceCard } from './deck-format-selection.service';
 
-export interface DeckCardsOptions {
-  images: CardImageService;
-  /** Foil layer image for foil cards (from the player's foil setting), or null to show foils plain. */
-  foilImage: string | null;
-}
-
 /** A card of a draw deck pile with its other copies, drawn behind it (oldest first). */
 export interface DeckStack {
-  card: CardView;
-  behind: CardView[];
+  card: DeckbuilderCardView;
+  behind: DeckbuilderCardView[];
 }
 
 /** The cards of a slot (Ring-bearer, Ring, Map) or the sites, as the legacy page showed them. */
-export function slotCards(deck: DeckState, slot: DeckSlot, options: DeckCardsOptions): CardView[] {
+export function slotCards(deck: DeckState, slot: DeckSlot, views: CardViews): DeckbuilderCardView[] {
   return deck[slot].map((card) =>
-    deckCard({ kind: 'slot', slot, blueprintId: card.blueprintId, card }, 'card', 'deck', options),
+    // The theme puts the sites on whole pixels: the hover zoom is placed from those
+    deckCard({ kind: 'slot', slot, blueprintId: card.blueprintId, card }, 'card', 'deck', views, {
+      wholePixels: slot === 'sites',
+    }),
   );
 }
 
 /** A draw deck pile: one stack per card, in the order their first copy was added. */
-export function pileStacks(deck: DeckState, side: DrawSide, options: DeckCardsOptions): DeckStack[] {
+export function pileStacks(deck: DeckState, side: DrawSide, views: CardViews): DeckStack[] {
   return drawPile(deck, side).map((entry) => ({
-    card: deckCard({ kind: 'draw', blueprintId: entry.card.blueprintId, card: entry.card }, 'card', side, options),
+    card: deckCard({ kind: 'draw', blueprintId: entry.card.blueprintId, card: entry.card }, 'card', side, views),
     behind: entry.behind.map((copy) =>
-      deckCard({ kind: 'behind', blueprintId: copy.blueprintId, card: copy }, 'copy', 'attached', options),
+      deckCard({ kind: 'behind', blueprintId: copy.blueprintId, card: copy }, 'copy', 'attached', views),
     ),
   }));
 }
 
 /** The Race to Mount Doom meta-site: its position card with the modifier's lower part over it (display only). */
-export function raceCardView(race: RaceCard | null, options: DeckCardsOptions): CardView | null {
+export function raceCardView(race: RaceCard | null, views: CardViews): DeckbuilderCardView | null {
   if (!race) {
     return null;
   }
-  const view = deckCard(
+  return deckCard(
     { kind: 'race', blueprintId: race.blueprintId, overlayBlueprintId: race.overlayBlueprintId },
     'card',
     'deck',
-    options,
+    views,
+    { overlayBlueprintId: race.overlayBlueprintId },
   );
-  return { ...view, overlayImage: race.overlayBlueprintId ? options.images.imageUrl(race.overlayBlueprintId) : null };
 }
 
 /** A deck card (Card.CreateCardDiv in a deck zone, without tokens). */
-function deckCard(ref: CardRef, role: CardRole, zone: string, { images, foilImage }: DeckCardsOptions): CardView {
-  const image = images.resolve(ref.blueprintId, zone);
-  return {
-    ref,
-    role,
-    imageUrl: image.imageUrl,
-    horizontal: image.horizontal,
-    errata: image.errata,
-    foilImage: image.foil ? foilImage : null,
-    border: !image.pack,
-    count: null,
-    overlayImage: null,
-  };
+function deckCard(
+  ref: DeckbuilderCardRef,
+  role: CardRole,
+  zone: string,
+  views: CardViews,
+  extra: Pick<CardViewSpec<unknown>, 'overlayBlueprintId' | 'wholePixels'> = {},
+): DeckbuilderCardView {
+  return views.create({ ref, blueprintId: ref.blueprintId, zone, role, ...extra });
 }

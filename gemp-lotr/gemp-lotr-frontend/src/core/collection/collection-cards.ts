@@ -1,18 +1,16 @@
+import { CollectionRole, DeckbuilderCardRef, DeckbuilderCardView } from '../actions/deckbuilder-card-ref';
 import { CollectionItem, CollectionPage } from '../api/models';
-import { CardImageService } from '../cards/card-image.service';
-import { CollectionRole } from '../cards/card-ref';
-import { CardView } from '../cards/card-view';
+import { isPlaceholder } from '../cards/card-blueprint';
+import { CardViews, CardViewSpec } from '../cards/card-views.service';
 
 export interface CollectionCardsOptions {
-  images: CardImageService;
+  views: CardViews;
   /** Copies of a card left once the deck's are taken out (CollectionCounts.available). */
   available: (blueprintId: string, count: number) => number;
-  /** Foil layer image for foil cards (from the player's foil setting), or null to show foils plain. */
-  foilImage: string | null;
 }
 
 /** The cards of a collection page, as the legacy page showed them: packs first, then the cards, in server order. */
-export function collectionCards(page: CollectionPage | null, options: CollectionCardsOptions): CardView[] {
+export function collectionCards(page: CollectionPage | null, options: CollectionCardsOptions): DeckbuilderCardView[] {
   if (!page) {
     return [];
   }
@@ -20,42 +18,30 @@ export function collectionCards(page: CollectionPage | null, options: Collection
   return items.map((item) => collectionCard(item, options));
 }
 
-function collectionCard(item: CollectionItem, { images, available, foilImage }: CollectionCardsOptions): CardView {
-  const view = (role: CollectionRole, fields: Omit<CardView, 'ref' | 'role' | 'overlayImage'>): CardView => ({
-    ref: { kind: 'collection', role, blueprintId: item.blueprintId, item },
-    role,
-    overlayImage: null,
-    ...fields,
-  });
+function collectionCard(item: CollectionItem, { views, available }: CollectionCardsOptions): DeckbuilderCardView {
+  const view = (
+    role: CollectionRole,
+    zone: string | null,
+    look: Pick<CardViewSpec<unknown>, 'count' | 'noErrata' | 'noFoil' | 'border'>,
+  ): DeckbuilderCardView =>
+    views.create<DeckbuilderCardRef>({
+      ref: { kind: 'collection', role, blueprintId: item.blueprintId, item },
+      blueprintId: item.blueprintId,
+      zone,
+      role,
+      count: item.count,
+      ...look,
+    });
   if (item.kind === 'pack') {
-    const image = images.resolve(item.blueprintId, 'pack');
-    return view(item.blueprintId.startsWith('(S)') ? 'selection' : 'pack', {
-      imageUrl: image.imageUrl,
-      horizontal: image.horizontal,
-      errata: false,
-      foilImage: null,
+    return view(item.blueprintId.startsWith('(S)') ? 'selection' : 'pack', 'pack', {
+      noErrata: true,
+      noFoil: true,
       border: false,
-      count: item.count,
     });
   }
-  const image = images.resolve(item.blueprintId, item.side);
-  if (image.placeholder) {
+  if (isPlaceholder(item.blueprintId)) {
     // A promised prize: shown, but not something to put in a deck, so it has no deck count
-    return view('placeholder', {
-      imageUrl: image.imageUrl,
-      horizontal: image.horizontal,
-      errata: false,
-      foilImage: null,
-      border: true,
-      count: item.count,
-    });
+    return view('placeholder', item.side, { noErrata: true, noFoil: true, border: true });
   }
-  return view('card', {
-    imageUrl: image.imageUrl,
-    horizontal: image.horizontal,
-    errata: image.errata,
-    foilImage: image.foil ? foilImage : null,
-    border: !image.pack,
-    count: available(item.blueprintId, item.count),
-  });
+  return view('card', item.side, { count: available(item.blueprintId, item.count) });
 }

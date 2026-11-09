@@ -90,6 +90,17 @@ describe('core boundary', () => {
     expect(app).toEqual([]);
   });
 
+  it('keeps the card code free of any one page, so other pages can use it', () => {
+    const pageFolders = ['core/deck/', 'core/collection/', 'core/packs/', 'core/delivery/', 'core/actions/'];
+    const shared = files.filter(({ name }) => name.startsWith('core/cards/') || name.startsWith('core/platform/'));
+    const tied = shared.flatMap(({ file, name, source }) =>
+      importedPaths(file, source)
+        .filter((path) => pageFolders.some((folder) => path.startsWith(folder)))
+        .map((path) => `${name} -> ${path}`),
+    );
+    expect(tied).toEqual([]);
+  });
+
   it('has no styles or templates', () => {
     const viewCode = files.filter(({ source }) => /@Component\(|@Directive\(|\.css'|styleUrl|templateUrl/.test(source));
     expect(viewCode.map(({ name }) => name)).toEqual([]);

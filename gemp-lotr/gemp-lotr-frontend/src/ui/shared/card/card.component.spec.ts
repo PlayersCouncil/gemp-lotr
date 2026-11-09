@@ -1,13 +1,16 @@
-import { provideDeckbuilderState } from '../../../core/deckbuilder-state';
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { DeckbuilderActions } from '../../../core/actions/deckbuilder-actions.service';
+import { CardActions } from '../../../core/cards/card-actions';
+import { CardInfoService } from '../../../core/cards/card-info.service';
 import { CardView } from '../../../core/cards/card-view';
 import { CardHover } from '../../../core/cards/card-hover.service';
+import { provideTestCardInteractions } from '../../../testing/card-interactions';
 import { CardComponent, DRAG_UP_FOR_INFO, LONG_PRESS_MS } from './card.component';
 
 const CARD: CardView = {
-  ref: { kind: 'shown', blueprintId: '1_2', zone: 'COLLECTION', choosable: false },
+  blueprintId: '1_2',
+  zone: 'COLLECTION',
+  ref: { pageOwn: 'whatever the page put here' },
   role: 'card',
   imageUrl: 'https://i.lotrtcgpc.net/decipher/LOTR01002.jpg',
   horizontal: false,
@@ -41,15 +44,17 @@ function pointer(type: string, init: { x?: number; y?: number; pointerType?: str
 describe('CardComponent', () => {
   let actions: {
     activate: ReturnType<typeof vi.fn>;
-    showInfo: ReturnType<typeof vi.fn>;
-    showDraggedInfo: ReturnType<typeof vi.fn>;
+    showInfo: ReturnType<typeof vi.spyOn>;
+    showDraggedInfo: ReturnType<typeof vi.spyOn>;
   };
 
   beforeEach(() => {
-    actions = { activate: vi.fn(), showInfo: vi.fn(), showDraggedInfo: vi.fn() };
+    const activate = vi.fn();
     TestBed.configureTestingModule({
-      providers: [...provideDeckbuilderState(), { provide: DeckbuilderActions, useValue: actions }],
+      providers: [...provideTestCardInteractions(), { provide: CardActions, useValue: { activate } }],
     });
+    const info = TestBed.inject(CardInfoService);
+    actions = { activate, showInfo: vi.spyOn(info, 'show'), showDraggedInfo: vi.spyOn(info, 'showDragged') };
   });
 
   afterEach(() => vi.useRealTimers());
@@ -114,7 +119,7 @@ describe('CardComponent', () => {
     it('shift-click shows the details', async () => {
       const { el } = await render();
       el.dispatchEvent(new MouseEvent('click', { bubbles: true, shiftKey: true }));
-      expect(actions.showInfo).toHaveBeenCalledWith(CARD.ref);
+      expect(actions.showInfo).toHaveBeenCalledWith(CARD);
       expect(actions.activate).not.toHaveBeenCalled();
     });
 
@@ -122,7 +127,7 @@ describe('CardComponent', () => {
       const { el } = await render();
       const info = el.querySelector<HTMLElement>('span.gd-card__info[aria-hidden="true"]')!;
       info.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-      expect(actions.showInfo).toHaveBeenCalledWith(CARD.ref);
+      expect(actions.showInfo).toHaveBeenCalledWith(CARD);
       expect(actions.activate).not.toHaveBeenCalled();
     });
 
@@ -131,7 +136,7 @@ describe('CardComponent', () => {
       el.querySelector('.gd-card__info')!.dispatchEvent(pointer('pointerdown'));
       el.dispatchEvent(pointer('pointerup'));
       el.click();
-      expect(actions.showInfo).toHaveBeenCalledWith(CARD.ref);
+      expect(actions.showInfo).toHaveBeenCalledWith(CARD);
       expect(actions.activate).not.toHaveBeenCalled();
       // The next click elsewhere on the card uses it again
       el.dispatchEvent(pointer('pointerdown'));
@@ -145,7 +150,7 @@ describe('CardComponent', () => {
       const event = new MouseEvent('contextmenu', { bubbles: true, cancelable: true });
       el.dispatchEvent(event);
       expect(event.defaultPrevented).toBe(true);
-      expect(actions.showInfo).toHaveBeenCalledWith(CARD.ref);
+      expect(actions.showInfo).toHaveBeenCalledWith(CARD);
     });
 
     it('a long press on a touch screen shows the details, and the click that ends it does nothing else', async () => {
@@ -155,7 +160,7 @@ describe('CardComponent', () => {
       vi.advanceTimersByTime(LONG_PRESS_MS - 1);
       expect(actions.showInfo).not.toHaveBeenCalled();
       vi.advanceTimersByTime(1);
-      expect(actions.showInfo).toHaveBeenCalledWith(CARD.ref);
+      expect(actions.showInfo).toHaveBeenCalledWith(CARD);
       el.dispatchEvent(pointer('pointerup', { pointerType: 'touch', x: 50, y: 50 }));
       const contextMenu = new MouseEvent('contextmenu', { bubbles: true, cancelable: true });
       el.dispatchEvent(contextMenu);
@@ -191,7 +196,7 @@ describe('CardComponent', () => {
 
       el.dispatchEvent(pointer('pointerdown', { x: 50, y: 100 }));
       el.dispatchEvent(pointer('pointerup', { x: 50, y: 100 - DRAG_UP_FOR_INFO }));
-      expect(actions.showDraggedInfo).toHaveBeenCalledWith(CARD.ref);
+      expect(actions.showDraggedInfo).toHaveBeenCalledWith(CARD);
       el.click();
       expect(actions.showInfo).not.toHaveBeenCalled();
       expect(actions.activate).toHaveBeenCalledTimes(1);
@@ -228,6 +233,21 @@ describe('CardComponent', () => {
       el.dispatchEvent(pointer('pointerenter'));
       fixture.destroy();
       expect(hover.hovered()).toBeNull();
+    });
+
+    it('rounds the edges it reports for a card the theme puts on whole pixels', async () => {
+      const box = { left: 1, top: 2.4, right: 3, bottom: 4.6 } as DOMRect;
+      const hover = TestBed.inject(CardHover);
+
+      const plain = (await render()).el;
+      vi.spyOn(plain, 'getBoundingClientRect').mockReturnValue(box);
+      plain.dispatchEvent(pointer('pointerenter'));
+      expect(hover.hovered()?.box).toEqual({ left: 1, top: 2.4, right: 3, bottom: 4.6 });
+
+      const rounded = (await render({ wholePixels: true })).el;
+      vi.spyOn(rounded, 'getBoundingClientRect').mockReturnValue(box);
+      rounded.dispatchEvent(pointer('pointerenter'));
+      expect(hover.hovered()?.box).toEqual({ left: 1, top: 2, right: 3, bottom: 5 });
     });
 
     it('ignores touch and pen, which do not hover', async () => {

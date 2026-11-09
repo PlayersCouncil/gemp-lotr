@@ -47,6 +47,31 @@ describe('ui boundary', () => {
     expect(outside).toEqual([]);
   });
 
+  it('keeps ui/shared free of any one page, so other pages can use it', () => {
+    const pageOnly = [
+      'ui/deckbuilder/',
+      'core/deck/',
+      'core/collection/',
+      'core/packs/',
+      'core/delivery/',
+      'core/actions/',
+      'core/deckbuilder-state',
+    ];
+    const tied = files
+      .filter(({ name }) => name.startsWith('ui/shared/'))
+      .flatMap(({ file, name, source }) =>
+        [...source.matchAll(/(?:import|export)[^'"]*from\s*'(\.[^']+)'/g)]
+          .map((match) =>
+            relative(SRC_DIR, resolve(file, '..', match[1]))
+              .split(sep)
+              .join('/'),
+          )
+          .filter((path) => pageOnly.some((folder) => path.startsWith(folder)))
+          .map((path) => `${name} -> ${path}`),
+      );
+    expect(tied).toEqual([]);
+  });
+
   it('has no component styles, and no inline styles but `display: contents`', () => {
     const styled = files.flatMap(({ name, source }) => [
       ...[...source.matchAll(/\bstyles\s*:|styleUrls?\s*:/g)].map((match) => `${name}: ${match[0]}`),

@@ -1,8 +1,9 @@
 import { capturePointer } from '../pointer-drag/pointer-drag.directive';
 import { Component, DestroyRef, ElementRef, inject, input } from '@angular/core';
-import { DeckbuilderActions } from '../../../core/actions/deckbuilder-actions.service';
+import { CardActions } from '../../../core/cards/card-actions';
 import { CardView } from '../../../core/cards/card-view';
 import { CardHover } from '../../../core/cards/card-hover.service';
+import { CardInfoService } from '../../../core/cards/card-info.service';
 
 /** How long a touch must be held on a card to show its details. */
 export const LONG_PRESS_MS = 500;
@@ -13,10 +14,10 @@ export const DRAG_UP_FOR_INFO = 20;
 
 /**
  * A card: a native button with the card image and its layers. Using it (click, Enter, Space) does what the card is
- * for (DeckbuilderActions.activate: add it to the deck, open the pack, ...); asking for its details (shift-click,
- * right-click or the context-menu key, a long press on a touch screen, or dragging it upwards with the mouse) shows
- * them (DeckbuilderActions.showInfo). The mouse coming onto it, leaving it and pressing on it are reported to CardHover
- * (for the hover zoom).
+ * for on the page (CardActions); asking for its details (shift-click, right-click or the context-menu key, a long press
+ * on a touch screen, or dragging it upwards with the mouse) shows them (CardInfoService). The mouse coming onto it,
+ * leaving it and pressing on it are reported to CardHover (for the hover zoom). The page provides these with
+ * provideCardInteractions.
  *
  * DOM contract: `button.gd-card` with `data-role` (card, pack, selection, placeholder), `data-orientation`
  * (vertical, horizontal), and `data-errata`, `data-foil`, `data-borderless` when they apply; inside,
@@ -66,7 +67,8 @@ export const DRAG_UP_FOR_INFO = 20;
 export class CardComponent {
   readonly card = input.required<CardView>({ alias: 'gdCard' });
 
-  private readonly actions = inject(DeckbuilderActions);
+  private readonly actions = inject(CardActions);
+  private readonly info = inject(CardInfoService);
   private readonly hover = inject(CardHover);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private press: {
@@ -93,7 +95,7 @@ export class CardComponent {
 
   protected label(): string {
     const card = this.card();
-    return card.count === null ? card.ref.blueprintId : `${card.ref.blueprintId} (${card.count})`;
+    return card.count === null ? card.blueprintId : `${card.blueprintId} (${card.count})`;
   }
 
   protected onClick(event: MouseEvent): void {
@@ -105,7 +107,7 @@ export class CardComponent {
       return;
     }
     if (event.shiftKey || onInfo) {
-      this.actions.showInfo(this.card().ref);
+      this.info.show(this.card());
     } else {
       this.actions.activate(this.card().ref);
     }
@@ -117,7 +119,7 @@ export class CardComponent {
       // The long press already showed the details (touch browsers also send contextmenu for it)
       return;
     }
-    this.actions.showInfo(this.card().ref);
+    this.info.show(this.card());
   }
 
   protected onPointerEnter(event: PointerEvent): void {
@@ -168,7 +170,7 @@ export class CardComponent {
     this.cancelPress();
     if (press?.mouse && press.y - event.clientY >= DRAG_UP_FOR_INFO) {
       this.swallowClick = true;
-      this.actions.showDraggedInfo(this.card().ref);
+      this.info.showDragged(this.card());
     }
   }
 
@@ -179,16 +181,15 @@ export class CardComponent {
     this.press = null;
   }
 
-  /** Sites sit on whole pixels on screen (the theme nudges each by a fraction): the zoom is placed from those. */
+  /** A card the theme puts on whole pixels (nudging it by a fraction): the zoom is placed from those. */
   private snap(edge: number): number {
-    const ref = this.card().ref;
-    return ref.kind === 'slot' && ref.slot === 'sites' ? Math.round(edge) : edge;
+    return this.card().wholePixels ? Math.round(edge) : edge;
   }
 
   private longPress(): void {
     this.press = null;
     this.swallowClick = true;
-    this.actions.showInfo(this.card().ref);
+    this.info.show(this.card());
   }
 }
 

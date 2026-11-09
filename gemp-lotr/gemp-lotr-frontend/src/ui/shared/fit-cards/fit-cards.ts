@@ -21,6 +21,11 @@ export interface FitCard {
   behind?: readonly boolean[];
 }
 
+/** One entry per card, for cards with nothing drawn behind them. */
+export function cardFits(cards: readonly { horizontal: boolean }[]): FitCard[] {
+  return cards.map((card) => ({ horizontal: card.horizontal }));
+}
+
 /** The share of a copy's width left showing beside the card in front of it. */
 const BEHIND_SHOWN = 0.2;
 

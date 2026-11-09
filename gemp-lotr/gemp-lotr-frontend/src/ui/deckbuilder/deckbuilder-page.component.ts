@@ -2,8 +2,8 @@ import { Component, ElementRef, inject, signal, viewChild } from '@angular/core'
 import { DeckStartup } from '../../core/deck/deck-startup.service';
 import { provideDeckbuilderState } from '../../core/deckbuilder-state';
 import { PacksService } from '../../core/packs/packs.service';
-import { AutoZoomComponent } from './auto-zoom/auto-zoom.component';
-import { CardInfoComponent } from './card-info/card-info.component';
+import { AutoZoomComponent } from '../shared/auto-zoom/auto-zoom.component';
+import { CardInfoComponent } from '../shared/card-info/card-info.component';
 import { CollectionFilterComponent } from './collection/collection-filter.component';
 import { CollectionGridComponent } from './collection/collection-grid.component';
 import { DeckAreaComponent } from './deck/deck-area.component';
